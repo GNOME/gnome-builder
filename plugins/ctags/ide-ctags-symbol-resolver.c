@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <errno.h>
 #include <glib/gi18n.h>
 
 #include "ide-ctags-service.h"
@@ -100,6 +101,32 @@ transform_kind (IdeCtagsIndexEntryKind kind)
     default:
       return IDE_SYMBOL_NONE;
     }
+}
+
+static IdeSymbol *
+create_symbol (IdeCtagsSymbolResolver   *self,
+               const IdeCtagsIndexEntry *entry,
+               gint                      line,
+               gint                      line_offset,
+               gint                      offset)
+{
+  g_autoptr(IdeSourceLocation) loc = NULL;
+  g_autoptr(GFile) gfile = NULL;
+  g_autoptr(IdeFile) file = NULL;
+  IdeContext *context;
+
+  context = ide_object_get_context (IDE_OBJECT (self));
+  gfile = g_file_new_for_path (entry->path);
+  file = g_object_new (IDE_TYPE_FILE,
+                       "file", gfile,
+                       "context", context,
+                       NULL);
+  loc = ide_source_location_new (file, line, line_offset, offset);
+
+  return _ide_symbol_new (entry->name,
+                          transform_kind (entry->kind),
+                          0, loc, loc, loc);
+
 }
 
 static gboolean
@@ -228,27 +255,13 @@ regex_worker (GTask        *task,
 
       if (g_match_info_fetch_pos (match_info, 0, &begin, &end))
         {
-          g_autoptr(IdeSourceLocation) loc = NULL;
-          g_autoptr(GFile) gfile = NULL;
-          g_autoptr(IdeFile) file = NULL;
-          IdeContext *context;
           IdeSymbol *symbol;
           gint line = 0;
           gint line_offset = 0;
 
           calculate_offset (data, length, begin, &line, &line_offset);
 
-          context = ide_object_get_context (IDE_OBJECT (self));
-          gfile = g_file_new_for_path (lookup->entry->path);
-          file = g_object_new (IDE_TYPE_FILE,
-                               "file", gfile,
-                               "context", context,
-                               NULL);
-          loc = ide_source_location_new (file, line, line_offset, begin);
-          symbol = _ide_symbol_new (lookup->entry->name,
-                                    transform_kind (lookup->entry->kind),
-                                    0, loc, loc, loc);
-
+          symbol = create_symbol (self, lookup->entry, line, line_offset, begin);
           g_task_return_pointer (task, symbol, (GDestroyNotify)ide_symbol_unref);
 
           g_match_info_free (match_info);
@@ -406,10 +419,22 @@ ide_ctags_symbol_resolver_lookup_symbol_async (IdeSymbolResolver   *resolver,
             }
           else if (is_linenum (entry->pattern))
             {
+              IdeSymbol *symbol;
+              gint64 parsed;
+
+              parsed = g_ascii_strtoll (entry->pattern, NULL, 10);
+
+              if (((parsed == 0) && (errno == ERANGE)) || (parsed > G_MAXINT) || (parsed < 0))
+                goto failure;
+
+              symbol = create_symbol (self, entry, parsed, 0, 0);
+              g_task_return_pointer (task, symbol, (GDestroyNotify)ide_symbol_unref);
+              return;
             }
         }
     }
 
+failure:
   g_task_return_new_error (task,
                            G_IO_ERROR,
                            G_IO_ERROR_NOT_FOUND,
