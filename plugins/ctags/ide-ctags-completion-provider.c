@@ -25,6 +25,7 @@
 #include "ide-ctags-completion-item.h"
 #include "ide-ctags-completion-provider.h"
 #include "ide-ctags-service.h"
+#include "ide-ctags-util.h"
 #include "ide-debug.h"
 #include "ide-macros.h"
 
@@ -328,75 +329,6 @@ sort_wrapper (gconstpointer a,
   return ide_ctags_index_entry_compare (*enta, *entb);
 }
 
-static const gchar * const *
-get_allowed_suffixes (GtkSourceBuffer *buffer)
-{
-  static const gchar *c_languages[] = { ".c", ".h",
-                                        ".cc", ".hh",
-                                        ".cpp", ".hpp",
-                                        ".cxx", ".hxx",
-                                        NULL };
-  static const gchar *vala_languages[] = { ".vala", NULL };
-  static const gchar *python_languages[] = { ".py", NULL };
-  static const gchar *js_languages[] = { ".js", NULL };
-  static const gchar *html_languages[] = { ".html",
-                                           ".htm",
-                                           ".tmpl",
-                                           ".css",
-                                           ".js",
-                                           NULL };
-  GtkSourceLanguage *language;
-  const gchar *lang_id;
-
-  language = gtk_source_buffer_get_language (buffer);
-  if (!language)
-    return NULL;
-
-  lang_id = gtk_source_language_get_id (language);
-
-  /*
-   * NOTE:
-   *
-   * This seems like the type of thing that should be provided as a property
-   * to the ctags provider. However, I'm trying to only have one provider
-   * in process for now, so we hard code things here.
-   *
-   * If we decide to load multiple providers (that all sync with the ctags
-   * service), then we can put this in IdeLanguage:get_completion_providers()
-   * vfunc overrides.
-   */
-
-  if (ide_str_equal0 (lang_id, "c") || ide_str_equal0 (lang_id, "chdr") || ide_str_equal0 (lang_id, "cpp"))
-    return c_languages;
-  else if (ide_str_equal0 (lang_id, "vala"))
-    return vala_languages;
-  else if (ide_str_equal0 (lang_id, "python"))
-    return python_languages;
-  else if (ide_str_equal0 (lang_id, "js"))
-    return js_languages;
-  else if (ide_str_equal0 (lang_id, "html"))
-    return html_languages;
-  else
-    return NULL;
-}
-
-static gboolean
-is_allowed (const IdeCtagsIndexEntry *entry,
-            const gchar * const      *allowed)
-{
-  if (allowed)
-    {
-      const gchar *dotptr = strrchr (entry->path, '.');
-      gsize i;
-
-      for (i = 0; allowed [i]; i++)
-        if (ide_str_equal0 (dotptr, allowed [i]))
-          return TRUE;
-    }
-
-  return FALSE;
-}
-
 static inline gboolean
 too_similar (const IdeCtagsIndexEntry *a,
              const IdeCtagsIndexEntry *b)
@@ -421,6 +353,8 @@ ide_ctags_completion_provider_populate (GtkSourceCompletionProvider *provider,
   g_autoptr(GPtrArray) ar = NULL;
   IdeCtagsIndexEntry *last = NULL;
   GtkSourceBuffer *buffer;
+  GtkSourceLanguage *language;
+  const gchar *lang_id = NULL;
   gsize n_entries;
   GtkTextIter iter;
   GList *list = NULL;
@@ -442,7 +376,9 @@ ide_ctags_completion_provider_populate (GtkSourceCompletionProvider *provider,
     IDE_GOTO (failure);
 
   buffer = GTK_SOURCE_BUFFER (gtk_text_iter_get_buffer (&iter));
-  allowed = get_allowed_suffixes (buffer);
+  if ((language = gtk_source_buffer_get_language (buffer)))
+    lang_id = gtk_source_language_get_id (language);
+  allowed = ide_ctags_get_allowed_suffixes (lang_id);
 
   word = get_word_to_cursor (&iter);
   if (ide_str_empty0 (word) || strlen (word) < self->minimum_word_size)
@@ -467,7 +403,7 @@ ide_ctags_completion_provider_populate (GtkSourceCompletionProvider *provider,
         {
           const IdeCtagsIndexEntry *entry = &entries [i];
 
-          if (is_allowed (entry, allowed))
+          if (ide_ctags_is_allowed (entry, allowed))
             g_ptr_array_add (ar, (gpointer)entry);
         }
     }
