@@ -78,6 +78,15 @@ class JediCompletionProvider(Ide.Object,
 
         _, iter = context.get_iter()
         buffer = iter.get_buffer()
+
+        # ignore completions if we are following whitespace.
+        copy = iter.copy()
+        copy.set_line_offset(0)
+        text = buffer.get_text(copy, iter, True)
+        if not text or text[-1].isspace():
+            context.add_proposals(self, [], True)
+            return
+
         begin, end = buffer.get_bounds()
 
         filename = (iter.get_buffer()
