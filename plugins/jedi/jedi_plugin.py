@@ -104,7 +104,6 @@ class JediCompletionProvider(Ide.Object,
         return GtkSource.CompletionActivation.INTERACTIVE
 
     def do_match(self, context):
-        self.do_activate_proposal
         return HAS_JEDI
 
     def do_get_info_widget(self, proposal):
