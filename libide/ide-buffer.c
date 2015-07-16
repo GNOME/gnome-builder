@@ -37,6 +37,7 @@
 #include "ide-highlighter.h"
 #include "ide-highlight-engine.h"
 #include "ide-internal.h"
+#include "ide-source-iter.h"
 #include "ide-source-location.h"
 #include "ide-source-range.h"
 #include "ide-symbol.h"
@@ -2138,4 +2139,32 @@ ide_buffer_get_symbol_resolver (IdeBuffer *self)
     return ide_extension_adapter_get_extension (priv->symbol_resolver_adapter);
 
   return NULL;
+}
+
+/**
+ * ide_buffer_get_word_at_iter:
+ *
+ * Gets the word found under the position denoted by @iter.
+ *
+ * Returns: (transfer full): A newly allocated string.
+ */
+gchar *
+ide_buffer_get_word_at_iter (IdeBuffer         *self,
+                             const GtkTextIter *iter)
+{
+  GtkTextIter begin;
+  GtkTextIter end;
+
+  g_return_val_if_fail (IDE_IS_BUFFER (self), NULL);
+  g_return_val_if_fail (iter != NULL, NULL);
+
+  end = begin = *iter;
+
+  if (!_ide_source_iter_starts_word (&begin))
+    _ide_source_iter_backward_extra_natural_word_start (&begin);
+
+  if (!_ide_source_iter_ends_word (&end))
+    _ide_source_iter_forward_extra_natural_word_end (&end);
+
+  return gtk_text_iter_get_slice (&begin, &end);
 }

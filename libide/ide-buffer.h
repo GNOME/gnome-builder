@@ -88,6 +88,8 @@ IdeSymbol          *ide_buffer_get_symbol_at_location_finish (IdeBuffer         
                                                               GError              **error);
 void                ide_buffer_hold                          (IdeBuffer            *self);
 void                ide_buffer_release                       (IdeBuffer            *self);
+gchar              *ide_buffer_get_word_at_iter              (IdeBuffer            *self,
+                                                              const GtkTextIter    *iter);
 
 G_END_DECLS
 
