@@ -90,8 +90,5 @@ ide_extension_util_can_use_plugin (PeasEngine     *engine,
                           peas_plugin_info_get_module_name (plugin_info),
                           g_type_name (interface_type));
   settings = g_settings_new_with_path ("org.gnome.builder.extension-type", path);
-  if (g_settings_get_boolean (settings, "disabled"))
-    return FALSE;
-
-  return TRUE;
+  return g_settings_get_boolean (settings, "enabled");
 }
