@@ -35,11 +35,13 @@ struct _IdeCtagsIndex
   GArray    *index;
   GBytes    *buffer;
   GFile     *file;
+  gchar     *path_root;
 };
 
 enum {
   PROP_0,
   PROP_FILE,
+  PROP_PATH_ROOT,
   LAST_PROP
 };
 
@@ -282,6 +284,20 @@ ide_ctags_index_set_file (IdeCtagsIndex *self,
 }
 
 static void
+ide_ctags_index_set_path_root (IdeCtagsIndex *self,
+                               const gchar   *path_root)
+{
+  g_return_if_fail (IDE_IS_CTAGS_INDEX (self));
+
+  if (!ide_str_equal0 (self->path_root, path_root))
+    {
+      g_free (self->path_root);
+      self->path_root = g_strdup (path_root);
+      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_PATH_ROOT]);
+    }
+}
+
+static void
 ide_ctags_index_get_property (GObject    *object,
                               guint       prop_id,
                               GValue     *value,
@@ -293,6 +309,10 @@ ide_ctags_index_get_property (GObject    *object,
     {
     case PROP_FILE:
       g_value_set_object (value, ide_ctags_index_get_file (self));
+      break;
+
+    case PROP_PATH_ROOT:
+      g_value_set_string (value, ide_ctags_index_get_path_root (self));
       break;
 
     default:
@@ -312,6 +332,10 @@ ide_ctags_index_set_property (GObject      *object,
     {
     case PROP_FILE:
       ide_ctags_index_set_file (self, g_value_get_object (value));
+      break;
+
+    case PROP_PATH_ROOT:
+      ide_ctags_index_set_path_root (self, g_value_get_string (value));
       break;
 
     default:
@@ -357,7 +381,15 @@ ide_ctags_index_class_init (IdeCtagsIndexClass *klass)
                          _("The file containing the ctags data."),
                          G_TYPE_FILE,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY |G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_FILE, gParamSpecs [PROP_FILE]);
+
+  gParamSpecs [PROP_PATH_ROOT] =
+    g_param_spec_string ("path-root",
+                         "Path Root",
+                         "The root path to use when resolving relative paths.",
+                         NULL,
+                         (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
+
+  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
 }
 
 static void
@@ -421,11 +453,32 @@ async_initable_iface_init (GAsyncInitableIface *iface)
 }
 
 IdeCtagsIndex *
-ide_ctags_index_new (GFile *file)
+ide_ctags_index_new (GFile       *file,
+                     const gchar *path_root)
 {
+  g_autoptr(GFile) parent = NULL;
+  g_autofree gchar *real_path_root = NULL;
+
+  g_return_val_if_fail (G_IS_FILE (file), NULL);
+
+  if (path_root == NULL)
+    {
+      if ((parent = g_file_get_parent (file)))
+        path_root = real_path_root = g_file_get_path (parent);
+    }
+
   return g_object_new (IDE_TYPE_CTAGS_INDEX,
                        "file", file,
+                       "path-root", path_root,
                        NULL);
+}
+
+const gchar *
+ide_ctags_index_get_path_root (IdeCtagsIndex *self)
+{
+  g_return_val_if_fail (IDE_IS_CTAGS_INDEX (self), NULL);
+
+  return self->path_root;
 }
 
 gsize
@@ -499,6 +552,16 @@ ide_ctags_index_lookup_full (IdeCtagsIndex *self,
     }
 
   return ret;
+}
+
+gchar *
+ide_ctags_index_resolve_path (IdeCtagsIndex *self,
+                              const gchar   *relative_path)
+{
+  g_return_val_if_fail (IDE_IS_CTAGS_INDEX (self), NULL);
+  g_return_val_if_fail (relative_path != NULL, NULL);
+
+  return g_build_filename (self->path_root, relative_path, NULL);
 }
 
 const IdeCtagsIndexEntry *

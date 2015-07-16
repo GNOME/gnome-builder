@@ -70,6 +70,44 @@ ide_ctags_service_build_index_init_cb (GObject      *object,
     g_task_return_pointer (task, g_object_ref (index), g_object_unref);
 }
 
+static gchar *
+resolve_path_root (IdeCtagsService *self,
+                   GFile           *file)
+{
+  IdeContext *context;
+  IdeVcs *vcs;
+  g_autoptr(GFile) parent = NULL;
+  g_autoptr(GFile) cache_file = NULL;
+  g_autofree gchar *cache_path = NULL;
+  GFile *workdir;
+  gchar *tmp;
+
+  context = ide_object_get_context (IDE_OBJECT (self));
+  vcs = ide_context_get_vcs (context);
+  workdir = ide_vcs_get_working_directory (vcs);
+
+  /*
+   * If we are inside the local cache dir, we are relative to the project
+   * working directory.
+   */
+  cache_path = g_build_filename (g_get_user_cache_dir (),
+                                 ide_get_program_name (),
+                                 NULL);
+  cache_file = g_file_new_for_path (cache_path);
+  if ((tmp = g_file_get_relative_path (cache_file, file)))
+    {
+      g_free (tmp);
+      return g_file_get_path (workdir);
+    }
+
+  /*
+   * Else, we are relative to the parent of the tags file.
+   */
+  parent = g_file_get_parent (file);
+
+  return g_file_get_path (parent);
+}
+
 static void
 ide_ctags_service_build_index_cb (EggTaskCache  *cache,
                                   gconstpointer  key,
@@ -80,6 +118,7 @@ ide_ctags_service_build_index_cb (EggTaskCache  *cache,
   g_autoptr(IdeCtagsIndex) index = NULL;
   GFile *file = (GFile *)key;
   g_autofree gchar *uri = NULL;
+  g_autofree gchar *path_root = NULL;
 
   IDE_ENTRY;
 
@@ -88,7 +127,8 @@ ide_ctags_service_build_index_cb (EggTaskCache  *cache,
   g_assert (G_IS_FILE (key));
   g_assert (G_IS_TASK (task));
 
-  index = ide_ctags_index_new (file);
+  path_root = resolve_path_root (self, file);
+  index = ide_ctags_index_new (file, path_root);
 
   uri = g_file_get_uri (file);
   g_debug ("Building ctags in memory index for %s", uri);
