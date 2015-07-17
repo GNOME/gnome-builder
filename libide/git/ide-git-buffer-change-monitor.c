@@ -618,7 +618,7 @@ ide_git_buffer_change_monitor_calculate_threaded (IdeGitBufferChangeMonitor  *se
   data = g_bytes_get_data (diff->content, &data_len);
 
   ggit_diff_blob_to_buffer (diff->blob, relative_path, data, data_len, relative_path,
-                            NULL, NULL, NULL, diff_line_cb, (gpointer)diff->state, error);
+                            NULL, NULL, NULL, NULL, diff_line_cb, (gpointer)diff->state, error);
 
   return ((*error) == NULL);
 }
