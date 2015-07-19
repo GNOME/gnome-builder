@@ -14,4 +14,8 @@ gsettings_SCHEMAS = \
 
 EXTRA_DIST = $(gsettings_SCHEMAS)
 
+GITIGNOREFILES = \
+	org.gnome.builder.code-insight.gschema.xml \
+	$(NULL)
+
 -include $(top_srcdir)/git.mk
