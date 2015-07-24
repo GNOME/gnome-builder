@@ -405,6 +405,7 @@ AC_CONFIG_FILES([
 	plugins/gnome-code-assistance/Makefile
 	plugins/html-completion/Makefile
 	plugins/jedi/Makefile
+        plugins/python-gi-imports-completion/Makefile
 	plugins/mingw/Makefile
 	plugins/python-pack/Makefile
 	plugins/symbol-tree/Makefile

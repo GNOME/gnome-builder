@@ -11,6 +11,7 @@ SUBDIRS = \
 	gnome-code-assistance \
 	html-completion \
 	jedi \
+	python-gi-imports-completion \
 	mingw \
 	python-pack \
 	symbol-tree \
