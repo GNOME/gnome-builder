@@ -61,7 +61,7 @@ gb_preferences_page_insight_init (GbPreferencesPageInsight *self)
                                                NULL);
   gb_preferences_page_set_keywords_for_widget (GB_PREFERENCES_PAGE (self),
   /* To translators: This is a list of keywords for the preferences page */
-                                               _("exhuberant ctags tags autocompletion auto complete"),
+                                               _("exuberant ctags tags autocompletion auto complete"),
                                                self->ctags_autocompletion,
                                                NULL);
 }
