@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2015-07-25 06:16+0000\n"
-"PO-Revision-Date: 2015-07-26 08:05+0100\n"
+"POT-Creation-Date: 2015-07-26 07:07+0000\n"
+"PO-Revision-Date: 2015-07-26 08:08+0100\n"
 "Last-Translator: Pedro Albuquerque <palbuquerque73@gmail.com>\n"
 "Language-Team: Português <palbuquerque73@gmail.com>\n"
 "Language: pt\n"
@@ -174,8 +174,9 @@ msgid "_Reload"
 msgstr "_Recarregar"
 
 #: ../data/gtk/menus.ui.h:8
-msgid "_Printâ€¦"
-msgstr "_Imprimir..."
+#| msgid "_Printâ€¦"
+msgid "_Print…"
+msgstr "_Imprimir…"
 
 #: ../data/gtk/menus.ui.h:9
 msgid "_Fullscreen"
@@ -323,8 +324,9 @@ msgid "_Enable automatic indentation"
 msgstr "_Ativar indentação automática"
 
 #: ../data/ui/gb-editor-tweak-widget.ui.h:1
-msgid "Search highlight modeâ€¦"
-msgstr "Modo de realce da procura..."
+#| msgid "Search highlight modeâ€¦"
+msgid "Search highlight mode…"
+msgstr "Modo de realce da procura…"
 
 #: ../data/ui/gb-editor-tweak-widget.ui.h:2
 msgid "Display line numbers"
@@ -718,8 +720,9 @@ msgid "Preferences"
 msgstr "Preferências"
 
 #: ../data/ui/gb-preferences-window.ui.h:2
-msgid "Search Preferencesâ€¦"
-msgstr "Preferências de procura..."
+#| msgid "Search Preferencesâ€¦"
+msgid "Search Preferences…"
+msgstr "Preferências de procura…"
 
 #: ../data/ui/gb-projects-dialog.ui.h:1
 #: ../src/dialogs/gb-projects-dialog.c:257
