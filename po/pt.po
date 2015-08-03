@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
 "POT-Creation-Date: 2015-07-26 23:15+0000\n"
-"PO-Revision-Date: 2015-08-01 11:06+0100\n"
+"PO-Revision-Date: 2015-08-03 05:31+0100\n"
 "Last-Translator: Pedro Albuquerque <palbuquerque73@gmail.com>\n"
 "Language-Team: Português <palbuquerque73@gmail.com>\n"
 "Language: pt\n"
@@ -53,7 +53,7 @@ msgstr "Rótulo"
 
 #: ../contrib/gd/gd-tagged-entry.c:1028
 msgid "Text to show on the tag."
-msgstr "Texto a mostrar na etqueta"
+msgstr "Texto a mostrar na etiqueta."
 
 #: ../contrib/gd/gd-tagged-entry.c:1031
 msgid "Tag has a close button"
@@ -283,7 +283,7 @@ msgstr "Construtor"
 
 #: ../data/style-schemes/builder.xml.h:2
 msgid "The default color scheme for Builder"
-msgstr "O esquema de cor predefinidio do Construtor"
+msgstr "O esquema de cor predefinido do Construtor"
 
 #: ../data/ui/gb-editor-frame.ui.h:1
 msgid "OVR"
@@ -1027,7 +1027,7 @@ msgstr "O item de navegação atual."
 
 #: ../libide/ide-back-forward-list.c:722
 msgid "File contained invalid UTF-8"
-msgstr "O ficheiro continha UTF-8 inválidos"
+msgstr "O ficheiro continha UTF-8 inválido"
 
 #: ../libide/ide-buffer.c:1112
 msgid "Busy"
@@ -1232,7 +1232,7 @@ msgstr "O sistema de build usado pelo contexto."
 
 #: ../libide/ide-context.c:673
 msgid "Device Manager"
-msgstr "Gestor de dsipositivo"
+msgstr "Gestor de dispositivo"
 
 #: ../libide/ide-context.c:674
 msgid "The device manager for the context."
@@ -2407,7 +2407,7 @@ msgstr "Saiba mais sobre o Construtor GNOME"
 
 #: ../src/app/gb-application-actions.c:169
 msgid "Funded By"
-msgstr "Fundado por"
+msgstr "Financiado por"
 
 #: ../src/app/gb-application.c:639
 msgid "Run Builder in standalone mode"
@@ -2548,7 +2548,7 @@ msgstr "A informação de projeto a entregar."
 
 #: ../src/greeter/gb-greeter-window.c:561
 msgid "The recent projects that have been mined."
-msgstr "Os projetos recentes que foram minerados."
+msgstr "Os projetos recentes que foram explorados."
 
 #: ../src/html/gb-html-document.c:109
 msgid "HTML Preview"
@@ -2918,7 +2918,7 @@ msgstr "Há uma hora"
 
 #: ../src/util/gb-glib.c:59
 msgid "Yesterday"
-msgstr "Ontém"
+msgstr "Ontem"
 
 #: ../src/util/gb-glib.c:65
 msgid "About a year ago"
@@ -3110,8 +3110,7 @@ msgstr "Expirou enquanto esperava que os dispositivos resolvessem.\n"
 #, c-format
 msgid "Waiting up to 60 seconds for devices to settle. Ctrl+C to exit.\n"
 msgstr ""
-"Á espera durante 60 segundos que os dispositivos resolvam. Ctrl+C para "
-"sair.\n"
+"Á espera até 60 segundos que os dispositivos resolvam. Ctrl+C para sair.\n"
 
 #: ../tools/ide-build.c:353
 msgid "The target device we are building for."
