@@ -179,7 +179,7 @@ def load_icon(context, name):
         return _icon_cache[name]
 
     window = context.props.completion.get_info_window()
-    size = 16 * window.get_scale_factor()
+    size = 16
     style_context = window.get_style_context()
     icon_theme = Gtk.IconTheme.get_default()
     icon_info = icon_theme.lookup_icon(name, size, 0)
