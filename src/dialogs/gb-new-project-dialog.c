@@ -211,12 +211,12 @@ gb_new_project_dialog__clone_worker (GTask        *task,
   ggit_clone_options_set_is_bare (clone_options, FALSE);
   ggit_clone_options_set_checkout_branch (clone_options, "master");
   ggit_clone_options_set_fetch_options (clone_options, fetch_options);
-  ggit_fetch_options_free (fetch_options);
+  g_clear_pointer (&fetch_options, ggit_fetch_options_free);
 
   repository = ggit_repository_clone (req->uri, req->location, clone_options, &error);
 
-  g_object_unref (callbacks);
-  ggit_clone_options_free (clone_options);
+  g_clear_object (&callbacks);
+  g_clear_object (&clone_options);
 
   if (repository == NULL)
     {
@@ -227,7 +227,7 @@ gb_new_project_dialog__clone_worker (GTask        *task,
   workdir = ggit_repository_get_workdir (repository);
   g_task_return_pointer (task, g_object_ref (workdir), g_object_unref);
 
-  g_object_unref (repository);
+  g_clear_object (&repository);
 }
 
 static void
