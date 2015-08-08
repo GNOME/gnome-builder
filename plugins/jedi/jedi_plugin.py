@@ -27,15 +27,16 @@ from gi.repository import Ide
 
 try:
     import jedi
-    HAS_JEDI=True
+    HAS_JEDI = True
 except ImportError:
-    HAS_JEDI=False
+    HAS_JEDI = False
 
 # FIXME: Should we be using multiprocessing or something?
 #        Alternatively, this can go in gnome-code-assistance
 #        once we have an API that can transfer completions
 #        relatively fast enough for interactivity.
 import threading
+
 
 class CompletionThread(threading.Thread):
     def __init__(self, provider, context, text, line, column, filename):
@@ -60,7 +61,8 @@ class CompletionThread(threading.Thread):
         self._context.add_proposals(self._provider, self._completions, True)
 
     def complete_in_idle(self):
-        GLib.timeout_add(0, lambda *_: self._complete())
+        GLib.timeout_add(0, self._complete)
+
 
 class JediCompletionProvider(Ide.Object,
                              GtkSource.CompletionProvider,
@@ -125,6 +127,7 @@ class JediCompletionProvider(Ide.Object,
     def do_get_priority(self):
         return 200
 
+
 class JediCompletionProposal(GObject.Object, GtkSource.CompletionProposal):
     def __init__(self, provider, context, completion, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -167,12 +170,14 @@ class JediCompletionProposal(GObject.Object, GtkSource.CompletionProposal):
 
 _icon_cache = {}
 
+
 def purge_cache():
     _icon_cache.clear()
 
 settings = Gtk.Settings.get_default()
 settings.connect('notify::gtk-theme-name', lambda *_: purge_cache())
 settings.connect('notify::gtk-application-prefer-dark-theme', lambda *_: purge_cache())
+
 
 def load_icon(context, name):
     if name in _icon_cache:
