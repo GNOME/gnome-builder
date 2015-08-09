@@ -8,89 +8,2526 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2015-02-13 23:45+0000\n"
-"PO-Revision-Date: 2015-02-18 20:07+0200\n"
+"POT-Creation-Date: 2015-07-26 23:15+0000\n"
+"PO-Revision-Date: 2015-08-09 20:01+0300\n"
 "Last-Translator: Muhammet Kara <muhammetk@gmail.com>\n"
-"Language-Team: Turkish <gnome-turk@gnome.org>\n"
+"Language-Team: Türkçe <gnome-turk@gnome.org>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Gtranslator 2.91.6\n"
+"X-Generator: Gtranslator 2.91.7\n"
 
-#: ../src/animation/gb-animation.c:681
+#: ../contrib/egg/egg-state-machine-action.c:225 ../contrib/rg/rg-column.c:286
+#: ../data/ui/gb-new-project-dialog.ui.h:6
+#: ../data/ui/gb-preferences-page-git.ui.h:3 ../libide/doap/ide-doap.c:462
+#: ../libide/doap/ide-doap.c:463 ../libide/doap/ide-doap-person.c:168
+#: ../libide/ide-project.c:400 ../libide/ide-project-file.c:269
+#: ../libide/ide-project-info.c:430 ../libide/ide-source-view-mode.c:250
+#: ../libide/ide-symbol-node.c:121 ../libide/ide-symbol-node.c:122
+msgid "Name"
+msgstr "İsim"
+
+#: ../contrib/egg/egg-state-machine-action.c:226
+#| msgid "The target of the animation"
+msgid "The name of the action"
+msgstr "Eylemin adı"
+
+#: ../contrib/egg/egg-state-machine-action.c:232
+#: ../contrib/egg/egg-state-machine-action.c:233
+msgid "State Machine"
+msgstr ""
+
+#: ../contrib/gd/gd-tagged-entry.c:940
+msgid "Tag close icon visibility"
+msgstr ""
+
+#: ../contrib/gd/gd-tagged-entry.c:941
+msgid "Whether the close button should be shown in tags."
+msgstr ""
+
+#: ../contrib/gd/gd-tagged-entry.c:1027
+#: ../src/greeter/gb-greeter-pill-box.c:116
+msgid "Label"
+msgstr "Etiket"
+
+#: ../contrib/gd/gd-tagged-entry.c:1028
+msgid "Text to show on the tag."
+msgstr ""
+
+#: ../contrib/gd/gd-tagged-entry.c:1031
+msgid "Tag has a close button"
+msgstr ""
+
+#: ../contrib/gd/gd-tagged-entry.c:1032
+msgid "Whether the tag has a close button."
+msgstr ""
+
+#: ../contrib/gd/gd-tagged-entry.c:1035
+msgid "Style"
+msgstr "Biçem"
+
+#: ../contrib/gd/gd-tagged-entry.c:1036
+msgid "Style of the tag."
+msgstr ""
+
+#: ../contrib/rg/rg-column.c:287
+#| msgid "The name of the icon to use."
+msgid "The name of the column"
+msgstr "Sütunun adı"
+
+#: ../contrib/rg/rg-column.c:293 ../contrib/rg/rg-column.c:294
+msgid "Value Type"
+msgstr "Değer Türü"
+
+#: ../contrib/rg/rg-cpu-graph.c:162 ../contrib/rg/rg-cpu-graph.c:163
+#: ../contrib/rg/rg-table.c:514
+msgid "Timespan"
+msgstr ""
+
+#: ../contrib/rg/rg-cpu-graph.c:170 ../contrib/rg/rg-cpu-graph.c:171
+#: ../contrib/rg/rg-table.c:506 ../contrib/rg/rg-table.c:507
+msgid "Max Samples"
+msgstr ""
+
+#: ../contrib/rg/rg-graph.c:368
+msgid "Table"
+msgstr "Tablo"
+
+#: ../contrib/rg/rg-graph.c:369
+#, fuzzy
+#| msgid "The title of the workspace."
+msgid "The data table for the graph."
+msgstr "Çalışma alanının başlığı."
+
+#: ../contrib/rg/rg-line-renderer.c:250 ../contrib/rg/rg-line-renderer.c:251
+msgid "Column"
+msgstr "Sütun"
+
+#: ../contrib/rg/rg-line-renderer.c:258 ../contrib/rg/rg-line-renderer.c:259
+msgid "Line Width"
+msgstr ""
+
+#: ../contrib/rg/rg-line-renderer.c:266 ../contrib/rg/rg-line-renderer.c:267
+msgid "Stroke Color"
+msgstr ""
+
+#: ../contrib/rg/rg-line-renderer.c:273 ../contrib/rg/rg-line-renderer.c:274
+msgid "Stroke Color RGBA"
+msgstr ""
+
+#: ../contrib/rg/rg-table.c:515
+msgid "Timespan to visualize, in microseconds."
+msgstr ""
+
+#: ../contrib/rg/rg-table.c:522 ../contrib/rg/rg-table.c:523
+msgid "Value Max"
+msgstr ""
+
+#: ../contrib/rg/rg-table.c:530 ../contrib/rg/rg-table.c:531
+msgid "Value Min"
+msgstr ""
+
+#: ../contrib/search/trie.c:790
+#, c-format
+msgid "Traversal order %u is not supported on Trie."
+msgstr ""
+
+#: ../contrib/xml/xml-reader.c:180 ../contrib/xml/xml-reader.c:181
+msgid "Encoding"
+msgstr "Kodlama"
+
+#: ../contrib/xml/xml-reader.c:187 ../contrib/xml/xml-reader.c:188
+#: ../plugins/devhelp/gb-devhelp-document.c:256
+#: ../plugins/devhelp/gb-devhelp-search-result.c:99
+msgid "URI"
+msgstr "URI"
+
+#: ../contrib/xml/xml-reader.c:327
+#, c-format
+msgid "Could not parse XML from stream"
+msgstr "Akıştan XML ayrıştırılamadı"
+
+#: ../data/gtk/menus.ui.h:1
+#| msgid "_New Document"
+msgid "_New Project"
+msgstr "Ye_ni Proje"
+
+#: ../data/gtk/menus.ui.h:2
+#| msgid "Open Document"
+msgid "_Open Project"
+msgstr "Pr_oje Aç"
+
+#: ../data/gtk/menus.ui.h:3
+msgid "_Preferences"
+msgstr "_Tercihler"
+
+#: ../data/gtk/menus.ui.h:4
+msgid "Generate Support Log"
+msgstr "Destek Kaydı Üret"
+
+#: ../data/gtk/menus.ui.h:5
+msgid "_About"
+msgstr "_Hakkında"
+
+#: ../data/gtk/menus.ui.h:6
+msgid "_Quit"
+msgstr "_Çıkış"
+
+#: ../data/gtk/menus.ui.h:7 ../data/ui/gb-editor-view.ui.h:1
+msgid "_Reload"
+msgstr "Yeniden Y_ükle"
+
+#: ../data/gtk/menus.ui.h:8
+msgid "_Print…"
+msgstr "_Yazdır…"
+
+#: ../data/gtk/menus.ui.h:9
+msgid "_Fullscreen"
+msgstr "_Tam Ekran"
+
+#: ../data/gtk/menus.ui.h:10
+msgid "_New Document"
+msgstr "_Yeni Belge"
+
+#: ../data/gtk/menus.ui.h:11
+msgid "_Open"
+msgstr "_Aç"
+
+#: ../data/gtk/menus.ui.h:12
+msgid "Save _All"
+msgstr "_Tümünü Kaydet"
+
+#: ../data/gtk/menus.ui.h:13
+msgid "_Close All"
+msgstr "Tümünü _Kapat"
+
+#: ../data/gtk/menus.ui.h:14
+#, fuzzy
+#| msgid "Display line numbers"
+msgid "Display Options"
+msgstr "Satır numaralarını göster"
+
+#: ../data/gtk/menus.ui.h:15 ../src/tree/gb-tree.c:974
+#: ../src/tree/gb-tree.c:975
+msgid "Show Icons"
+msgstr "Simgeleri Göster"
+
+#: ../data/gtk/menus.ui.h:16 ../src/project-tree/gb-project-tree.c:157
+msgid "Show Ignored Files"
+msgstr ""
+
+#: ../data/gtk/menus.ui.h:17
+msgid "Sort Directories First"
+msgstr ""
+
+#: ../data/gtk/menus.ui.h:18
+#, fuzzy
+#| msgid "_Close All"
+msgid "_Collapse All Nodes"
+msgstr "Tümünü _Kapat"
+
+#: ../data/gtk/menus.ui.h:19
+msgid "_Refresh"
+msgstr "_Tazele"
+
+#: ../data/gtk/menus.ui.h:20 ../data/ui/gb-greeter-window.ui.h:3
+msgid "_New"
+msgstr "Ye_ni"
+
+#: ../data/gtk/menus.ui.h:21
+msgid "_Empty File"
+msgstr "_Boş Dosya"
+
+#: ../data/gtk/menus.ui.h:22
+msgid "_New Folder"
+msgstr "_Yeni Klasör"
+
+#: ../data/gtk/menus.ui.h:23
+msgid "Open _With"
+msgstr "_Birlikte Aç"
+
+#: ../data/gtk/menus.ui.h:24
+msgid "Source Code Editor"
+msgstr "Kaynak Kod Düzenleyici"
+
+#: ../data/gtk/menus.ui.h:25
+msgid "_Open Containing Folder"
+msgstr "İçeren _Klasörü Aç"
+
+#: ../data/gtk/menus.ui.h:26
+msgid "_Open in Terminal"
+msgstr "Uçbirimde _Aç"
+
+#: ../data/gtk/menus.ui.h:27 ../data/ui/gb-rename-file-popover.ui.h:2
+msgid "_Rename"
+msgstr "_Yeniden Adlandır"
+
+#: ../data/gtk/menus.ui.h:28
+msgid "Mo_ve to Trash"
+msgstr "Çöpe _Taşı"
+
+#: ../data/gtk/menus.ui.h:29
+#| msgid "Builder"
+msgid "_Build"
+msgstr "_İnşa Et"
+
+#: ../data/gtk/menus.ui.h:30
+msgid "_Rebuild"
+msgstr "_Yeniden İnşa Et"
+
+#: ../data/style-schemes/builder-dark.xml.h:1
+#| msgid "Builder"
+msgid "Builder Dark"
+msgstr "Builder Dark"
+
+#: ../data/style-schemes/builder-dark.xml.h:2
+msgid "Dark color scheme for Builder using the Tango color palette"
+msgstr ""
+
+#: ../data/style-schemes/builder.xml.h:1
+#: ../data/ui/gb-preferences-page-keybindings.ui.h:3
+#: ../data/ui/gb-workbench.ui.h:1 ../src/main.c:95
+#: ../src/workbench/gb-workbench.c:153
+msgid "Builder"
+msgstr "Builder"
+
+#: ../data/style-schemes/builder.xml.h:2
+msgid "The default color scheme for Builder"
+msgstr ""
+
+#: ../data/ui/gb-editor-frame.ui.h:1
+msgid "OVR"
+msgstr ""
+
+#: ../data/ui/gb-editor-settings-widget.ui.h:1
+msgid "Display right _margin at column:"
+msgstr ""
+
+#: ../data/ui/gb-editor-settings-widget.ui.h:2
+msgid "Trim trailing whitespace when saving document"
+msgstr ""
+
+#: ../data/ui/gb-editor-settings-widget.ui.h:3
+msgid "Insert matching brace, bracket, quotation, and parenthesis."
+msgstr ""
+
+#: ../data/ui/gb-editor-settings-widget.ui.h:4
+msgid "Overwrite closing brace, bracket, quotation, and parenthesis."
+msgstr ""
+
+#: ../data/ui/gb-editor-settings-widget.ui.h:5
+#: ../data/ui/gb-editor-tweak-widget.ui.h:7
+msgid "Indentation"
+msgstr "Girinti"
+
+#: ../data/ui/gb-editor-settings-widget.ui.h:6
+msgid "_Tab width:"
+msgstr "Sekme _genişliği:"
+
+#: ../data/ui/gb-editor-settings-widget.ui.h:7
+msgid "Insert _spaces instead of tabs"
+msgstr "Sekme yerine _boşluk ekle"
+
+#: ../data/ui/gb-editor-settings-widget.ui.h:8
+msgid "_Enable automatic indentation"
+msgstr "Otomatik _girintilemeyi etkinleştir"
+
+#: ../data/ui/gb-editor-tweak-widget.ui.h:1
+msgid "Search highlight mode…"
+msgstr "Arama vurgulama kipi…"
+
+#: ../data/ui/gb-editor-tweak-widget.ui.h:2
+msgid "Display line numbers"
+msgstr "Satır numaralarını göster"
+
+#: ../data/ui/gb-editor-tweak-widget.ui.h:3
+msgid "Display right margin"
+msgstr "Sağ kenar boşluğunu göster"
+
+#: ../data/ui/gb-editor-tweak-widget.ui.h:4
+msgid "Highlight current line"
+msgstr "Geçerli satırı vurgula"
+
+#: ../data/ui/gb-editor-tweak-widget.ui.h:5
+msgid "Auto indent"
+msgstr ""
+
+#: ../data/ui/gb-editor-tweak-widget.ui.h:6
+#: ../data/ui/gb-preferences-page-keybindings.ui.h:12
+msgid "Smart Backspace"
+msgstr ""
+
+#: ../data/ui/gb-editor-tweak-widget.ui.h:8
+msgid "Spaces"
+msgstr "Boşluklar"
+
+#: ../data/ui/gb-editor-tweak-widget.ui.h:9
+msgid "Tabs"
+msgstr "Sekmeler"
+
+#: ../data/ui/gb-editor-tweak-widget.ui.h:10
+msgid "2"
+msgstr "2"
+
+#: ../data/ui/gb-editor-tweak-widget.ui.h:11
+msgid "3"
+msgstr "3"
+
+#: ../data/ui/gb-editor-tweak-widget.ui.h:12
+msgid "4"
+msgstr "4"
+
+#: ../data/ui/gb-editor-tweak-widget.ui.h:13
+msgid "8"
+msgstr "8"
+
+#: ../data/ui/gb-editor-view.ui.h:2 ../data/ui/gb-greeter-window.ui.h:4
+#: ../data/ui/gb-new-project-dialog.ui.h:2
+#: ../data/ui/gb-projects-dialog.ui.h:3
+msgid "_Cancel"
+msgstr "_Vazgeç"
+
+#: ../data/ui/gb-editor-view.ui.h:3
+msgid ""
+"Builder has discovered that this file has been modified externally. Would "
+"you like to reload the file?"
+msgstr ""
+
+#: ../data/ui/gb-editor-view.ui.h:4
+#, fuzzy
+#| msgid "Search Settings"
+msgid "Search Symbols"
+msgstr "Arama Ayarları"
+
+#: ../data/ui/gb-greeter-window.ui.h:1
+msgid "Select a Project"
+msgstr "Proje Seç"
+
+#: ../data/ui/gb-greeter-window.ui.h:2
+msgid "Click an item to select"
+msgstr "Seçmek için bir ögeye tıklayın"
+
+#: ../data/ui/gb-greeter-window.ui.h:5 ../src/greeter/gb-greeter-window.c:560
+msgid "Recent Projects"
+msgstr "Son Projeler"
+
+#: ../data/ui/gb-greeter-window.ui.h:6
+msgid "Other Projects"
+msgstr "Diğer Projeler"
+
+#: ../data/ui/gb-greeter-window.ui.h:7
+msgid "_Remove"
+msgstr "Kaldı_r"
+
+#: ../data/ui/gb-new-file-popover.ui.h:1
+#: ../data/ui/gb-rename-file-popover.ui.h:1
+#: ../src/project-tree/gb-new-file-popover.c:349
+#| msgid "Name"
+msgid "File Name"
+msgstr "Dosya Adı"
+
+#: ../data/ui/gb-new-file-popover.ui.h:2
+#| msgid "Created By:"
+msgid "_Create"
+msgstr "_Oluştur"
+
+#: ../data/ui/gb-new-project-dialog.ui.h:1
+#: ../src/dialogs/gb-new-project-dialog.c:353
+msgid "New Project"
+msgstr "Yeni Proje"
+
+#: ../data/ui/gb-new-project-dialog.ui.h:3
+#| msgid "Context"
+msgid "_Continue"
+msgstr "_Devam"
+
+#: ../data/ui/gb-new-project-dialog.ui.h:4
+msgid "From existing project on this computer"
+msgstr ""
+
+#: ../data/ui/gb-new-project-dialog.ui.h:5
+msgid "From remote source code repository"
+msgstr ""
+
+#: ../data/ui/gb-new-project-dialog.ui.h:7
+#: ../libide/ide-back-forward-item.c:140
+#| msgid "Documentation"
+msgid "Location"
+msgstr "Konum"
+
+#: ../data/ui/gb-new-project-dialog.ui.h:8
+#| msgid "GNOME Builder"
+msgid "GNOME Version"
+msgstr "GNOME Sürümü"
+
+#: ../data/ui/gb-new-project-dialog.ui.h:9 ../libide/ide-diagnostician.c:270
+#: ../libide/ide-diagnostician.c:271 ../libide/ide-file.c:486
+#: ../libide/ide-source-snippet.c:974
+#: ../src/editor/gb-editor-settings-widget.c:179
+msgid "Language"
+msgstr "Dil"
+
+#: ../data/ui/gb-new-project-dialog.ui.h:10
+msgid "Pattern"
+msgstr "Desen"
+
+#: ../data/ui/gb-new-project-dialog.ui.h:11
+msgid "Git"
+msgstr "Git"
+
+#: ../data/ui/gb-new-project-dialog.ui.h:12
+msgid "user@host:repository.git"
+msgstr ""
+
+#: ../data/ui/gb-new-project-dialog.ui.h:13
+msgid "Enter the URL of your project's source code repository."
+msgstr ""
+
+#: ../data/ui/gb-new-project-dialog.ui.h:14
+#: ../libide/autotools/ide-autotools-build-task.c:395
+#: ../libide/ide-project-info.c:437
+#: ../src/project-tree/gb-new-file-popover.c:268
+#: ../src/project-tree/gb-new-file-popover.c:269
+msgid "Directory"
+msgstr "Dizin"
+
+#: ../data/ui/gb-new-project-dialog.ui.h:15
+#: ../libide/git/ide-git-buffer-change-monitor.c:718
+#: ../libide/git/ide-git-vcs.c:388
+msgid "Repository"
+msgstr "Depo"
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:1
+#: ../data/ui/gb-preferences-window.ui.h:3
+msgid "Editor"
+msgstr "Düzenleyici"
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:2
+msgid "Font"
+msgstr "Yazı Tipi"
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:3
+#| msgid "Highlight current line"
+msgid "Highlighting"
+msgstr "Vurgulama"
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:4
+#, fuzzy
+#| msgid "Document Manager"
+msgid "Display Document Changes"
+msgstr "Belge Yöneticisi"
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:5
+msgid ""
+"Display whether a line has been added or modified next to the line number."
+msgstr ""
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:6
+#| msgid "Display line numbers"
+msgid "Display Line Numbers"
+msgstr "Satır Numaralarını Göster"
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:7
+msgid "Display the line numbers next to each line of the document."
+msgstr ""
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:8
+msgid "Highlight Current Line"
+msgstr "Geçerli Satırı Vurgula"
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:9
+msgid "Highlight the line containing the cursor."
+msgstr ""
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:10
+msgid "Highlight Matching Brackets"
+msgstr "Eşleşen Parantezleri Vurgula"
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:11
+msgid "Whether or not matching brackets should be highlighted."
+msgstr ""
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:12
+msgid "Overview Map"
+msgstr ""
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:13
+#, fuzzy
+#| msgid "Display right margin"
+msgid "Display Overview Map"
+msgstr "Sağ kenar boşluğunu göster"
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:14
+msgid "Display an overview map next to the source code editor."
+msgstr ""
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:15
+msgid "Auto Hide Overview Map"
+msgstr ""
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:16
+msgid "Automatically hide the overview map during periods of inactivity."
+msgstr ""
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:17
+msgid "Cursor Placement"
+msgstr ""
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:18
+msgid "Restore Cursor Position"
+msgstr ""
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:19
+msgid ""
+"Restore the insertion cursor to the last position when reopening a file."
+msgstr ""
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:20
+#: ../libide/ide-source-view.c:5265
+msgid "Scroll Offset"
+msgstr ""
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:21
+msgid "Minimal number of lines to keep above and below the cursor."
+msgstr ""
+
+#: ../data/ui/gb-preferences-page-git.ui.h:1
+#: ../data/ui/gb-preferences-window.ui.h:8
+msgid "Version Control"
+msgstr ""
+
+#: ../data/ui/gb-preferences-page-git.ui.h:2
+msgid "Source Code Attribution"
+msgstr ""
+
+#: ../data/ui/gb-preferences-page-git.ui.h:4
+#: ../libide/doap/ide-doap-person.c:161
+msgid "Email"
+msgstr "E-posta"
+
+#: ../data/ui/gb-preferences-page-insight.ui.h:1
+#: ../data/ui/gb-preferences-window.ui.h:5
+msgid "Code Insight"
+msgstr ""
+
+#: ../data/ui/gb-preferences-page-insight.ui.h:2
+msgid "Semantic Language Highlighting"
+msgstr ""
+
+#: ../data/ui/gb-preferences-page-insight.ui.h:3
+msgid ""
+"Highlight additional syntax based upon information found in the document."
+msgstr ""
+
+#: ../data/ui/gb-preferences-page-insight.ui.h:4
+msgid "Auto Completion"
+msgstr ""
+
+#: ../data/ui/gb-preferences-page-insight.ui.h:5
+msgid "Suggest Word Completion"
+msgstr ""
+
+#: ../data/ui/gb-preferences-page-insight.ui.h:6
+msgid "Suggest completion of words found within all open documents."
+msgstr ""
+
+#: ../data/ui/gb-preferences-page-insight.ui.h:7
+msgid "Suggest Completions using Ctags"
+msgstr ""
+
+#: ../data/ui/gb-preferences-page-insight.ui.h:8
+msgid "Use Ctags for completions in supported languages."
+msgstr ""
+
+#: ../data/ui/gb-preferences-page-insight.ui.h:9
+msgid "Suggest Completions using Clang (Experimental)"
+msgstr ""
+
+#: ../data/ui/gb-preferences-page-insight.ui.h:10
+msgid "Use Clang for completions in the C and C++ languages."
+msgstr ""
+
+#: ../data/ui/gb-preferences-page-insight.ui.h:11
+msgid "Suggest Completions using Jedi"
+msgstr ""
+
+#: ../data/ui/gb-preferences-page-insight.ui.h:12
+msgid "Use Jedi for completions in the Python language."
+msgstr ""
+
+#: ../data/ui/gb-preferences-page-keybindings.ui.h:1
+#: ../data/ui/gb-preferences-window.ui.h:6
+msgid "Keyboard"
+msgstr "Klavye"
+
+#: ../data/ui/gb-preferences-page-keybindings.ui.h:2
+msgid "Key Binding Emulation"
+msgstr ""
+
+#: ../data/ui/gb-preferences-page-keybindings.ui.h:4
+msgid "The default keybindings for Builder."
+msgstr ""
+
+#: ../data/ui/gb-preferences-page-keybindings.ui.h:5
+msgid "Emacs Emulation"
+msgstr ""
+
+#: ../data/ui/gb-preferences-page-keybindings.ui.h:6
+msgid "Emulates familiar keybindings from the Emacs text editor."
+msgstr ""
+
+#: ../data/ui/gb-preferences-page-keybindings.ui.h:7
+msgid "Vim Emulation"
+msgstr ""
+
+#: ../data/ui/gb-preferences-page-keybindings.ui.h:8
+msgid "Emulates familiar keybindings from the Vim text editor."
+msgstr ""
+
+#: ../data/ui/gb-preferences-page-keybindings.ui.h:9
+msgid "Keyboard Movement"
+msgstr ""
+
+#: ../data/ui/gb-preferences-page-keybindings.ui.h:10
+msgid "Smart Home End"
+msgstr "Akıllı Home End"
+
+#: ../data/ui/gb-preferences-page-keybindings.ui.h:11
+msgid "Home moves to first non-space character."
+msgstr ""
+
+#: ../data/ui/gb-preferences-page-keybindings.ui.h:13
+msgid ""
+"Backspace will remove extra spaces to keep you aligned with your indentation "
+"width."
+msgstr ""
+
+#: ../data/ui/gb-preferences-page-language.ui.h:1
+#: ../data/ui/gb-preferences-window.ui.h:4
+msgid "Programming Languages"
+msgstr "Programlama Dilleri"
+
+#: ../data/ui/gb-preferences-page-theme.ui.h:1
+#: ../data/ui/gb-preferences-window.ui.h:7
+msgid "Theme"
+msgstr "Tema"
+
+#: ../data/ui/gb-preferences-page-theme.ui.h:2
+msgid "Night Mode"
+msgstr "Gece Kipi"
+
+#: ../data/ui/gb-preferences-page-theme.ui.h:3
+msgid "Use dark colors for the application chrome."
+msgstr ""
+
+#: ../data/ui/gb-preferences-page-theme.ui.h:4
+#, fuzzy
+#| msgid "Display right margin"
+msgid "Display Grid Pattern"
+msgstr "Sağ kenar boşluğunu göster"
+
+#: ../data/ui/gb-preferences-page-theme.ui.h:5
+msgid "Display a grid pattern under the source code."
+msgstr ""
+
+#: ../data/ui/gb-preferences-window.ui.h:1
+msgid "Preferences"
+msgstr "Tercihler"
+
+#: ../data/ui/gb-preferences-window.ui.h:2
+#| msgid "Search Preferences"
+msgid "Search Preferences…"
+msgstr "Arama Tercihleri…"
+
+#: ../data/ui/gb-projects-dialog.ui.h:1
+#: ../src/dialogs/gb-projects-dialog.c:257
+#| msgid "Selection"
+msgid "Select Project"
+msgstr "Proje Seç"
+
+#: ../data/ui/gb-projects-dialog.ui.h:2
+msgid "New"
+msgstr "Yeni"
+
+#: ../data/ui/gb-projects-dialog.ui.h:4
+msgid "Delete"
+msgstr "Sil"
+
+#: ../data/ui/gb-view-stack.ui.h:1
+msgid "Split"
+msgstr ""
+
+#: ../data/ui/gb-view-stack.ui.h:2
+msgid "Move"
+msgstr "Taşı"
+
+#: ../data/ui/gb-view-stack.ui.h:3
+#| msgid "_Preview"
+msgid "Preview"
+msgstr "Önizleme"
+
+#: ../data/ui/gb-view-stack.ui.h:4
+#: ../plugins/terminal/gb-terminal-view-actions.c:309
+#: ../src/editor/gb-editor-view-actions.c:310
+#: ../src/editor/gb-editor-view-actions.c:441
+msgid "Save"
+msgstr "Kaydet"
+
+#: ../data/ui/gb-view-stack.ui.h:5
+#| msgid "Save _As"
+msgid "Save As"
+msgstr "Farklı Kaydet"
+
+#: ../data/ui/gb-view-stack.ui.h:6
+#| msgid "_Close"
+msgid "Close"
+msgstr "Kapat"
+
+#: ../data/ui/gb-workbench.ui.h:2 ../libide/ide-context.c:680
+msgid "Project"
+msgstr "Proje"
+
+#: ../libide/autotools/ide-autotools-builder.c:303
+#: ../libide/autotools/ide-autotools-build-task.c:377
+msgid "Config"
+msgstr ""
+
+#: ../libide/autotools/ide-autotools-builder.c:304
+#, fuzzy
+#| msgid "The size group for the label."
+msgid "The configuration for the build."
+msgstr "Etiket için boyut grubu."
+
+#: ../libide/autotools/ide-autotools-builder.c:312
+#: ../libide/autotools/ide-autotools-build-task.c:386
+#: ../plugins/device-manager/gb-device-manager-panel.c:75
+msgid "Device"
+msgstr "Cihaz"
+
+#: ../libide/autotools/ide-autotools-builder.c:313
+#: ../libide/autotools/ide-autotools-build-task.c:387
+#, fuzzy
+#| msgid "The source view to modify."
+msgid "The device to build for."
+msgstr "Değişiklik yapılacak kaynak görünümü."
+
+#: ../libide/autotools/ide-autotools-build-system.c:172
+#, fuzzy
+#| msgid "Failed to load keybindings."
+msgid "Failed to locate configure.ac"
+msgstr "Tuş kısayolları yüklenemedi."
+
+#: ../libide/autotools/ide-autotools-build-system.c:638
+msgid "Tarball Name"
+msgstr ""
+
+#: ../libide/autotools/ide-autotools-build-system.c:639
+#, fuzzy
+#| msgid "The name of the icon to use."
+msgid "The name of the project tarball."
+msgstr "Kullanılacak simgenin adı."
+
+#: ../libide/autotools/ide-autotools-build-task.c:270
+msgid "Directory must be on a locally mounted filesystem."
+msgstr ""
+
+#: ../libide/autotools/ide-autotools-build-task.c:378
+#, fuzzy
+#| msgid "The duration of the animation"
+msgid "The overlay config for the compilation."
+msgstr "Animasyon süresi"
+
+#: ../libide/autotools/ide-autotools-build-task.c:396
+msgid "The directory to perform the build within."
+msgstr ""
+
+#: ../libide/autotools/ide-autotools-build-task.c:404
+msgid "Require Autogen"
+msgstr ""
+
+#: ../libide/autotools/ide-autotools-build-task.c:405
+msgid "If autogen.sh should be forced to execute."
+msgstr ""
+
+#: ../libide/autotools/ide-autotools-build-task.c:413
+msgid "Require Configure"
+msgstr ""
+
+#: ../libide/autotools/ide-autotools-build-task.c:414
+msgid "If configure should be forced to execute."
+msgstr ""
+
+#: ../libide/autotools/ide-autotools-build-task.c:641
+msgid "Cannot execute build task more than once."
+msgstr ""
+
+#: ../libide/autotools/ide-autotools-build-task.c:726
+#, fuzzy
+#| msgid "Failed to open directory: %s"
+msgid "Failed to create build directory."
+msgstr "Dizin açma başarısız oldu: %s"
+
+#: ../libide/autotools/ide-autotools-build-task.c:735
+#, c-format
+msgid "'%s' is not a directory."
+msgstr "'%s' bir dizin değil."
+
+#: ../libide/autotools/ide-autotools-build-task.c:774
+#, c-format
+msgid "autogen.sh is missing from project directory (%s)."
+msgstr ""
+
+#: ../libide/autotools/ide-autotools-build-task.c:784
+msgid "autogen.sh is not executable."
+msgstr ""
+
+#: ../libide/autotools/ide-autotools-build-task.c:814
+#, c-format
+msgid "autogen.sh failed to create configure (%s)"
+msgstr ""
+
+#: ../libide/autotools/ide-autotools-project-miner.c:388
+#: ../plugins/file-search/gb-file-search-index.c:121
+#: ../plugins/file-search/gb-file-search-index.c:122
+msgid "Root Directory"
+msgstr "Kök Dizin"
+
+#: ../libide/autotools/ide-autotools-project-miner.c:389
+#, fuzzy
+#| msgid "The root object of the tree."
+msgid "The root directory to scan from."
+msgstr "Ağacın kök nesnesi."
+
+#: ../libide/autotools/ide-makecache.c:1004
+msgid "Invalid makefile provided, ignoring."
+msgstr ""
+
+#: ../libide/autotools/ide-makecache.c:1244
+msgid "Makefile"
+msgstr "Makefile"
+
+#: ../libide/autotools/ide-makecache.c:1245
+msgid "The root makefile to be cached."
+msgstr ""
+
+#: ../libide/doap/ide-doap.c:420 ../libide/doap/ide-doap.c:421
+msgid "Bug Database"
+msgstr "Hata Veritabanı"
+
+#: ../libide/doap/ide-doap.c:427 ../libide/doap/ide-doap.c:428
+msgid "Category"
+msgstr "Kategori"
+
+#: ../libide/doap/ide-doap.c:434 ../libide/doap/ide-doap.c:435
+#: ../libide/ide-project-info.c:423 ../libide/ide-source-snippet.c:981
+#: ../src/preferences/gb-preferences-switch.c:321
+msgid "Description"
+msgstr "Açıklama"
+
+#: ../libide/doap/ide-doap.c:441 ../libide/doap/ide-doap.c:442
+msgid "Download Page"
+msgstr "İndirme Sayfası"
+
+#: ../libide/doap/ide-doap.c:448 ../libide/doap/ide-doap.c:449
+msgid "Homepage"
+msgstr "Anasayfa"
+
+#: ../libide/doap/ide-doap.c:455 ../libide/doap/ide-doap.c:456
+#: ../libide/ide-project-info.c:465 ../libide/ide-project-info.c:466
+#| msgid "Language"
+msgid "Languages"
+msgstr "Diller"
+
+#: ../libide/doap/ide-doap.c:469 ../libide/doap/ide-doap.c:470
+msgid "Shortdesc"
+msgstr ""
+
+#: ../libide/doap/ide-doap-person.c:162
+#| msgid "The title of the document."
+msgid "The email of the person."
+msgstr "Kişinin e-posta adresi."
+
+#: ../libide/doap/ide-doap-person.c:169
+#| msgid "The name of the icon to use."
+msgid "The name of the person."
+msgstr "Kişinin adı."
+
+#: ../libide/editorconfig/ide-editorconfig-file-settings.c:153
+#, fuzzy
+#| msgid "No file was selected."
+msgid "No file was provided."
+msgstr "Hiçbir dosya seçilmedi."
+
+#: ../libide/git/ide-git-buffer-change-monitor.c:167
+msgid "Cannot provide diff, no backing file provided."
+msgstr ""
+
+#: ../libide/git/ide-git-buffer-change-monitor.c:537
+#, c-format
+msgid "Repository does not have a working directory."
+msgstr ""
+
+#: ../libide/git/ide-git-buffer-change-monitor.c:548
+#, c-format
+msgid "File is not under control of git working directory."
+msgstr ""
+
+#: ../libide/git/ide-git-buffer-change-monitor.c:614
+#, c-format
+msgid "The requested file does not exist within the git index."
+msgstr ""
+
+#: ../libide/git/ide-git-buffer-change-monitor.c:719
+msgid "The repository to use for calculating diffs."
+msgstr ""
+
+#: ../libide/git/ide-git-remote-callbacks.c:212 ../libide/ide-progress.c:217
+#, fuzzy
+#| msgid "Duration"
+msgid "Fraction"
+msgstr "Süre"
+
+#: ../libide/git/ide-git-remote-callbacks.c:213
+msgid "A fraction containing the operation progress."
+msgstr ""
+
+#: ../libide/git/ide-git-vcs.c:389
+#| msgid "The text of the node."
+msgid "The git repository for the project."
+msgstr "Projenin git deposu."
+
+#: ../libide/gjs/ide-gjs-script.cpp:76
+msgid "Attempt to load a GJS script with no filename."
+msgstr ""
+
+#: ../libide/gjs/ide-gjs-script.cpp:103
+msgid "Failed to create JavaScript context."
+msgstr ""
+
+#: ../libide/gjs/ide-gjs-script.cpp:128
+msgid "Failed to set IdeContext in JavaScript runtime."
+msgstr ""
+
+#: ../libide/gjs/ide-gjs-script.cpp:202
+#: ../libide/pygobject/ide-pygobject-script.c:254
+msgid "The filename for the script was not provided."
+msgstr ""
+
+#: ../libide/gjs/ide-gjs-script.cpp:213
+#: ../libide/pygobject/ide-pygobject-script.c:265
+msgid "The script must be on a local filesystem."
+msgstr ""
+
+#: ../libide/gjs/ide-gjs-script.cpp:222
+#, c-format
+msgid "The script \"%s\" is not a JavaScript file."
+msgstr ""
+
+#: ../libide/gsettings/ide-language-defaults.c:177
+#, c-format
+msgid "%s contained invalid ASCII"
+msgstr ""
+
+#: ../libide/gsettings/ide-language-defaults.c:192
+#, fuzzy, c-format
+#| msgid "Failed to open directory: %s"
+msgid "Failed to parse integer from \"%s\""
+msgstr "Dizin açma başarısız oldu: %s"
+
+#: ../libide/gsettings/ide-language-defaults.c:270
+msgid "language defaults missing version in [global] group."
+msgstr ""
+
+#: ../libide/gsettings/ide-language-defaults.c:362
+msgid "Failed to initialize defaults."
+msgstr ""
+
+#: ../libide/ide-back-forward-item.c:141
+#, fuzzy
+#| msgid "The duration of the animation"
+msgid "The location of the navigation item."
+msgstr "Animasyon süresi"
+
+#: ../libide/ide-back-forward-list.c:426
+msgid "Can Go Backward"
+msgstr ""
+
+#: ../libide/ide-back-forward-list.c:427
+msgid "If there are more backward navigation items."
+msgstr ""
+
+#: ../libide/ide-back-forward-list.c:433
+msgid "Can Go Forward"
+msgstr ""
+
+#: ../libide/ide-back-forward-list.c:434
+msgid "If there are more forward navigation items."
+msgstr ""
+
+#: ../libide/ide-back-forward-list.c:440
+msgid "Current Item"
+msgstr "Geçerli Öge"
+
+#: ../libide/ide-back-forward-list.c:441
+#, fuzzy
+#| msgid "The current item in the navigation list."
+msgid "The current navigation item."
+msgstr "Gezinme listesindeki geçerli öge."
+
+#: ../libide/ide-back-forward-list.c:722
+msgid "File contained invalid UTF-8"
+msgstr ""
+
+#: ../libide/ide-buffer.c:1112
+msgid "Busy"
+msgstr "Meşgul"
+
+#: ../libide/ide-buffer.c:1113
+msgid "If the buffer is performing background work."
+msgstr ""
+
+#: ../libide/ide-buffer.c:1119
+msgid "Changed on Volume"
+msgstr ""
+
+#: ../libide/ide-buffer.c:1120
+msgid "If the file has changed on disk and the buffer is not in sync."
+msgstr ""
+
+#: ../libide/ide-buffer.c:1126 ../libide/ide-object.c:203
+#: ../libide/ide-search-provider.c:71 ../libide/ide-search-provider.c:72
+#: ../libide/ide-source-snippet-chunk.c:314
+#: ../src/search/gb-search-display.c:577 ../src/workbench/gb-workbench.c:708
+msgid "Context"
+msgstr "Bağlam"
+
+#: ../libide/ide-buffer.c:1127
+#, fuzzy
+#| msgid "The text of the node."
+msgid "The IdeContext for the buffer."
+msgstr "Düğüm metni."
+
+#: ../libide/ide-buffer.c:1135 ../libide/ide-file.c:470
+#: ../libide/ide-file-settings.c:290 ../libide/ide-project-file.c:248
+#: ../libide/ide-project-info.c:451 ../libide/ide-script.c:156
+#: ../plugins/clang/ide-clang-symbol-tree.c:294
+#: ../plugins/clang/ide-clang-symbol-tree.c:295
+#: ../plugins/clang/ide-clang-translation-unit.c:580
+#: ../plugins/ctags/ide-ctags-index.c:380
+#: ../src/project-tree/gb-project-file.c:173
+#: ../src/project-tree/gb-project-file.c:174
+#: ../src/project-tree/gb-rename-file-popover.c:308
+#: ../src/project-tree/gb-rename-file-popover.c:309
+msgid "File"
+msgstr "Dosya"
+
+#: ../libide/ide-buffer.c:1136
+msgid "The file represented by the buffer."
+msgstr ""
+
+#: ../libide/ide-buffer.c:1142
+#, fuzzy
+#| msgid "Highlight current line"
+msgid "Highlight Diagnostics"
+msgstr "Geçerli satırı vurgula"
+
+#: ../libide/ide-buffer.c:1143
+msgid "If diagnostic warnings and errors should be highlighted."
+msgstr ""
+
+#: ../libide/ide-buffer.c:1149 ../src/documents/gb-document.c:204
+msgid "Read Only"
+msgstr "Salt Okunur"
+
+#: ../libide/ide-buffer.c:1150
+#, fuzzy
+#| msgid "If the document is read only."
+msgid "If the underlying file is read only."
+msgstr "Belge salt okunur mu."
+
+#: ../libide/ide-buffer.c:1156 ../libide/ide-buffer.c:1157
+msgid "Style Scheme Name"
+msgstr ""
+
+#: ../libide/ide-buffer.c:1163 ../libide/ide-search-result.c:286
+#: ../src/documents/gb-document.c:196
+#: ../src/preferences/gb-preferences-page.c:282
+#: ../src/preferences/gb-preferences-switch.c:314 ../src/views/gb-view.c:279
+msgid "Title"
+msgstr "Başlık"
+
+#: ../libide/ide-buffer.c:1164
+#| msgid "The title of the document."
+msgid "The title of the buffer."
+msgstr "Tampon başlığı."
+
+#: ../libide/ide-buffer.c:1969
+msgid "The current language lacks a symbol resolver."
+msgstr ""
+
+#: ../libide/ide-buffer-change-monitor.c:106
+#: ../libide/ide-highlight-engine.c:851 ../libide/ide-source-snippet.c:946
+#: ../src/html/gb-html-document.c:314
+msgid "Buffer"
+msgstr "Tampon"
+
+#: ../libide/ide-buffer-change-monitor.c:107
+msgid "The IdeBuffer to be monitored."
+msgstr ""
+
+#: ../libide/ide-buffer-manager.c:584
+msgid "File too large to be opened."
+msgstr ""
+
+#: ../libide/ide-buffer-manager.c:1209
+#| msgid "Save"
+msgid "Auto Save"
+msgstr "Otomatik Kaydet"
+
+#: ../libide/ide-buffer-manager.c:1210
+msgid "If the documents should auto save after a configured timeout."
+msgstr ""
+
+#: ../libide/ide-buffer-manager.c:1216
+msgid "Auto Save Timeout"
+msgstr ""
+
+#: ../libide/ide-buffer-manager.c:1217
+msgid "The number of seconds after modification before auto saving."
+msgstr ""
+
+#: ../libide/ide-buffer-manager.c:1225
+#, fuzzy
+#| msgid "Buffer"
+msgid "Focused Buffer"
+msgstr "Tampon"
+
+#: ../libide/ide-buffer-manager.c:1226
+msgid "The currently focused buffer."
+msgstr ""
+
+#: ../libide/ide-buffer-manager.c:1369
+msgid "Words"
+msgstr ""
+
+#: ../libide/ide-buffer-manager.c:1580
+#, fuzzy, c-format
+#| msgid "Save Document As"
+msgid "unsaved document %u"
+msgstr "Belgeyi Farklı Kaydet"
+
+#: ../libide/ide-buffer-manager.c:1614
+msgid "Failed to save buffer, ignoring reclamation."
+msgstr ""
+
+#: ../libide/ide-builder.c:50
+#, c-format
+msgid "%s does not implement build_async()"
+msgstr ""
+
+#: ../libide/ide-builder.c:56
+msgid "No implementation of build_async()"
+msgstr ""
+
+#: ../libide/ide-build-result.c:156
+#, fuzzy
+#| msgid "Failed to open directory: %s"
+msgid "Failed to open stderr stream."
+msgstr "Dizin açma başarısız oldu: %s"
+
+#: ../libide/ide-build-result.c:186
+#, fuzzy
+#| msgid "Failed to open directory: %s"
+msgid "Failed to open stdout stream."
+msgstr "Dizin açma başarısız oldu: %s"
+
+#: ../libide/ide-build-system.c:181 ../libide/ide-context.c:687
+msgid "Project File"
+msgstr "Proje Dosyası"
+
+#: ../libide/ide-build-system.c:182
+#| msgid "The parent node."
+msgid "The project file."
+msgstr "Proje dosyası."
+
+#: ../libide/ide-build-system.c:287
+#, c-format
+msgid "%s() is not supported on %s build system."
+msgstr ""
+
+#: ../libide/ide.c:68
+#, c-format
+msgid "You must call %s() before using libide."
+msgstr ""
+
+#: ../libide/ide.c:146
+msgid "Builder requires libgit2-glib with threading support."
+msgstr ""
+
+#: ../libide/ide.c:152
+msgid "Builder requires libgit2-glib with SSH support."
+msgstr ""
+
+#: ../libide/ide-context.c:652 ../libide/ide-source-view.c:5172
+#: ../src/editor/gb-editor-frame.c:747
+msgid "Back Forward List"
+msgstr ""
+
+#: ../libide/ide-context.c:653
+msgid "Back/forward navigation history for the context."
+msgstr ""
+
+#: ../libide/ide-context.c:659
+#| msgid "Search Manager"
+msgid "Buffer Manager"
+msgstr "Tampon Yöneticisi"
+
+#: ../libide/ide-context.c:660
+#, fuzzy
+#| msgid "The name of the icon to use."
+msgid "The buffer manager for the context."
+msgstr "Kullanılacak simgenin adı."
+
+#: ../libide/ide-context.c:666
+#| msgid "Builder"
+msgid "Build System"
+msgstr "İnşa Sistemi"
+
+#: ../libide/ide-context.c:667
+msgid "The build system used by the context."
+msgstr "Bağlam tarafından kullanılan inşa sistemi."
+
+#: ../libide/ide-context.c:673
+#| msgid "Document Manager"
+msgid "Device Manager"
+msgstr "Aygıt Yöneticisi"
+
+#: ../libide/ide-context.c:674
+#, fuzzy
+#| msgid "The name of the icon to use."
+msgid "The device manager for the context."
+msgstr "Kullanılacak simgenin adı."
+
+#: ../libide/ide-context.c:681
+#, fuzzy
+#| msgid "The root object of the tree."
+msgid "The project for the context."
+msgstr "Ağacın kök nesnesi."
+
+#: ../libide/ide-context.c:688
+#, fuzzy
+#| msgid "The root object of the tree."
+msgid "The project file for the context."
+msgstr "Ağacın kök nesnesi."
+
+#: ../libide/ide-context.c:696
+msgid "Root Build Directory"
+msgstr ""
+
+#: ../libide/ide-context.c:697
+msgid "The root directory to perform builds within."
+msgstr ""
+
+#: ../libide/ide-context.c:703
+#| msgid "Search Manager"
+msgid "Script Manager"
+msgstr "Betik Yöneticisi"
+
+#: ../libide/ide-context.c:704
+#, fuzzy
+#| msgid "The name of the icon to use."
+msgid "The script manager for the context."
+msgstr "Kullanılacak simgenin adı."
+
+#: ../libide/ide-context.c:710
+#| msgid "Search Manager"
+msgid "Search Engine"
+msgstr "Arama Motoru"
+
+#: ../libide/ide-context.c:711
+#, fuzzy
+#| msgid "The name of the icon to use."
+msgid "The search engine for the context."
+msgstr "Kullanılacak simgenin adı."
+
+#: ../libide/ide-context.c:717
+#, fuzzy
+#| msgid "Search Manager"
+msgid "Snippets Manager"
+msgstr "Arama Yöneticisi"
+
+#: ../libide/ide-context.c:718
+#, fuzzy
+#| msgid "The size group for the label."
+msgid "The snippets manager for the context."
+msgstr "Etiket için boyut grubu."
+
+#: ../libide/ide-context.c:724
+msgid "Unsaved Files"
+msgstr "Kaydedilmemiş Dosyalar"
+
+#: ../libide/ide-context.c:725
+#, fuzzy
+#| msgid "The name of the icon to use."
+msgid "The unsaved files in the context."
+msgstr "Kullanılacak simgenin adı."
+
+#: ../libide/ide-context.c:731
+msgid "VCS"
+msgstr "VCS"
+
+#: ../libide/ide-context.c:732
+#, fuzzy
+#| msgid "The name of the icon to use."
+msgid "The VCS for the context."
+msgstr "Kullanılacak simgenin adı."
+
+#: ../libide/ide-context.c:1670
+msgid "An unload request is already pending"
+msgstr ""
+
+#: ../libide/ide-context.c:1785
+msgid "Context has already been restored."
+msgstr ""
+
+#: ../libide/ide-device.c:234 ../src/project-tree/gb-project-file.c:159
+#: ../src/project-tree/gb-project-file.c:160
+#, fuzzy
+#| msgid "Display line numbers"
+msgid "Display Name"
+msgstr "Satır numaralarını göster"
+
+#: ../libide/ide-device.c:235
+#, fuzzy
+#| msgid "The name of the icon to use."
+msgid "The display name of the device."
+msgstr "Kullanılacak simgenin adı."
+
+#: ../libide/ide-device.c:241 ../libide/ide-project.c:393
+msgid "ID"
+msgstr "Kimlik (ID)"
+
+#: ../libide/ide-device.c:242
+msgid "The device identifier."
+msgstr "Cihaz tanıtıcısı."
+
+#: ../libide/ide-device.c:248
+msgid "System Type"
+msgstr "Sistem Türü"
+
+#: ../libide/ide-device.c:249
+msgid "The system type for which to compile."
+msgstr ""
+
+#: ../libide/ide-device-manager.c:144
+#, c-format
+msgid "The device \"%s\" could not be found."
+msgstr ""
+
+#: ../libide/ide-device-manager.c:395 ../libide/ide-file-settings.c:297
+msgid "Settled"
+msgstr ""
+
+#: ../libide/ide-device-manager.c:396
+msgid "If the device providers have settled."
+msgstr ""
+
+#: ../libide/ide-extension-adapter.c:396 ../libide/ide-extension-adapter.c:397
+#: ../libide/ide-extension-set-adapter.c:276
+#: ../libide/ide-extension-set-adapter.c:277
+msgid "Engine"
+msgstr "Motor"
+
+#: ../libide/ide-extension-adapter.c:403
+msgid "Extension"
+msgstr "Uzantı"
+
+#: ../libide/ide-extension-adapter.c:404
+msgid "The extension object."
+msgstr ""
+
+#: ../libide/ide-extension-adapter.c:410
+#: ../libide/ide-extension-set-adapter.c:283
+#: ../libide/ide-extension-set-adapter.c:284
+msgid "Interface Type"
+msgstr ""
+
+#: ../libide/ide-extension-adapter.c:411
+#, fuzzy
+#| msgid "The name of the icon to use."
+msgid "The GType of the extension interface."
+msgstr "Kullanılacak simgenin adı."
+
+#: ../libide/ide-extension-adapter.c:417
+#: ../libide/ide-extension-set-adapter.c:290
+#: ../libide/ide-extension-set-adapter.c:291
+msgid "Key"
+msgstr "Anahtar"
+
+#: ../libide/ide-extension-adapter.c:418
+msgid "The external data key to match from plugin info."
+msgstr ""
+
+#: ../libide/ide-extension-adapter.c:424
+#: ../libide/ide-extension-set-adapter.c:297
+#: ../libide/ide-extension-set-adapter.c:298
+msgid "Value"
+msgstr "Değer"
+
+#: ../libide/ide-extension-adapter.c:425
+msgid "The external data value to match from plugin info."
+msgstr ""
+
+#: ../libide/ide-file.c:471
+#, fuzzy
+#| msgid "The text of the node."
+msgid "The path to the underlying file."
+msgstr "Düğüm metni."
+
+#: ../libide/ide-file.c:479
+msgid "Is Temporary"
+msgstr ""
+
+#: ../libide/ide-file.c:480
+msgid "If the file represents a temporary file."
+msgstr ""
+
+#: ../libide/ide-file.c:487
+msgid "The file language."
+msgstr ""
+
+#: ../libide/ide-file.c:493 ../libide/ide-project-file.c:276
+msgid "Path"
+msgstr "Yol"
+
+#: ../libide/ide-file.c:494
+msgid "The path within the project."
+msgstr ""
+
+#: ../libide/ide-file.c:500
+msgid "Temporary ID"
+msgstr ""
+
+#: ../libide/ide-file.c:501
+msgid "A unique identifier for temporary files."
+msgstr ""
+
+#: ../libide/ide-file-settings.c:291
+msgid "The IdeFile the settings represent."
+msgstr ""
+
+#: ../libide/ide-file-settings.c:298
+msgid "If the file settings implementations have settled."
+msgstr ""
+
+#: ../libide/ide-highlight-engine.c:852
+#, fuzzy
+#| msgid "The buffer "
+msgid "The buffer to highlight."
+msgstr "Tampon"
+
+#: ../libide/ide-highlight-engine.c:858
+#, fuzzy
+#| msgid "Highlight current line"
+msgid "Highlighter"
+msgstr "Geçerli satırı vurgula"
+
+#: ../libide/ide-highlight-engine.c:859
+msgid "The highlighter to use for type information."
+msgstr ""
+
+#: ../libide/ide-object.c:204
+#, fuzzy
+#| msgid "The text of the node."
+msgid "The context that owns the object."
+msgstr "Düğüm metni."
+
+#: ../libide/ide-object.c:274 ../libide/ide-object.c:323
+msgid "No implementations of extension point."
+msgstr ""
+
+#: ../libide/ide-object.c:313
+msgid "No such extension point."
+msgstr ""
+
+#: ../libide/ide-progress.c:210
+msgid "Completed"
+msgstr "Tamamlandı"
+
+#: ../libide/ide-progress.c:211
+msgid "If the progress has completed."
+msgstr ""
+
+#: ../libide/ide-progress.c:218
+#, fuzzy
+#| msgid "The duration of the animation"
+msgid "The fraction of the progress."
+msgstr "Animasyon süresi"
+
+#: ../libide/ide-progress.c:226
+msgid "Message"
+msgstr "İleti"
+
+#: ../libide/ide-progress.c:227
+msgid "A short message for the progress."
+msgstr ""
+
+#: ../libide/ide-project.c:394
+msgid "The unique project identifier."
+msgstr ""
+
+#: ../libide/ide-project.c:401
+#, fuzzy
+#| msgid "The name of the icon to use."
+msgid "The name of the project."
+msgstr "Kullanılacak simgenin adı."
+
+#: ../libide/ide-project.c:407 ../src/tree/gb-tree.c:960
+msgid "Root"
+msgstr "Kök"
+
+#: ../libide/ide-project.c:408
+#, fuzzy
+#| msgid "The root object of the tree."
+msgid "The root object for the project."
+msgstr "Ağacın kök nesnesi."
+
+#: ../libide/ide-project.c:463
+msgid "Destination file must be within the project tree."
+msgstr ""
+
+#: ../libide/ide-project.c:593
+msgid "File must be within the project tree."
+msgstr ""
+
+#: ../libide/ide-project-file.c:249
+msgid "A GFile to the underlying file."
+msgstr ""
+
+#: ../libide/ide-project-file.c:255 ../src/project-tree/gb-project-file.c:180
+#: ../src/project-tree/gb-project-file.c:181
+#| msgid "File"
+msgid "File Info"
+msgstr "Dosya Bilgisi"
+
+#: ../libide/ide-project-file.c:256
+msgid "The file information for the project file."
+msgstr ""
+
+#: ../libide/ide-project-file.c:262 ../libide/ide-project-file.c:263
+#: ../src/project-tree/gb-rename-file-popover.c:315
+#: ../src/project-tree/gb-rename-file-popover.c:316
+msgid "Is Directory"
+msgstr ""
+
+#: ../libide/ide-project-file.c:270
+#| msgid "The name of the icon to use."
+msgid "The short name of the file."
+msgstr "Dosyanın kısa adı."
+
+#: ../libide/ide-project-file.c:277
+msgid "The path for the file within the project tree."
+msgstr ""
+
+#: ../libide/ide-project-info.c:424
+#| msgid "The node selection."
+msgid "The project description."
+msgstr "Proje açıklaması."
+
+#: ../libide/ide-project-info.c:431
+#| msgid "The parent node."
+msgid "The project name."
+msgstr "Proje adı."
+
+#: ../libide/ide-project-info.c:438
+#| msgid "The parent node."
+msgid "The project directory."
+msgstr "Proje dizini."
+
+#: ../libide/ide-project-info.c:444
+msgid "DOAP"
+msgstr "DOAP"
+
+#: ../libide/ide-project-info.c:445
+msgid "A DOAP describing the project."
+msgstr ""
+
+#: ../libide/ide-project-info.c:452
+msgid "The toplevel project file."
+msgstr ""
+
+#: ../libide/ide-project-info.c:458 ../libide/ide-project-info.c:459
+msgid "Is Recent"
+msgstr ""
+
+#: ../libide/ide-project-info.c:472 ../libide/ide-project-info.c:473
+#, fuzzy
+#| msgid "Modified"
+msgid "Last Modified At"
+msgstr "Değiştirildi"
+
+#: ../libide/ide-project-info.c:479
+#: ../plugins/command-bar/gb-command-provider.c:338
+msgid "Priority"
+msgstr "Öncelik"
+
+#: ../libide/ide-project-info.c:480
+msgid "The priority of the project information type."
+msgstr ""
+
+#: ../libide/ide-project-item.c:201 ../src/tree/gb-tree-node.c:630
+msgid "Parent"
+msgstr "Ebeveyn"
+
+#: ../libide/ide-project-item.c:202
+#, fuzzy
+#| msgid "The root object of the tree."
+msgid "The parent project item, if not the root."
+msgstr "Ağacın kök nesnesi."
+
+#: ../libide/ide-recent-projects.c:378
+#, c-format
+msgid "%s() may only be executed once"
+msgstr ""
+
+#: ../libide/ide-script.c:157
+msgid "The file containing the script."
+msgstr ""
+
+#: ../libide/ide-script.c:205
+#, c-format
+msgid "%s has not implemented GAsyncInitable."
+msgstr ""
+
+#: ../libide/ide-script-manager.c:128
+msgid "Scripts Directory"
+msgstr ""
+
+#: ../libide/ide-script-manager.c:129
+msgid "The local path to the directory containing scripts."
+msgstr ""
+
+#: ../libide/ide-search-result.c:279
+#: ../src/search/gb-search-display-group.c:422
+msgid "Provider"
+msgstr "Sağlayıcı"
+
+#: ../libide/ide-search-result.c:280
+#, fuzzy
+#| msgid "The search provider"
+msgid "The Search Provider"
+msgstr "Arama sağlayıcısı"
+
+#: ../libide/ide-search-result.c:287
+#, fuzzy
+#| msgid "The title of the workspace."
+msgid "The title of the search result."
+msgstr "Çalışma alanının başlığı."
+
+#: ../libide/ide-search-result.c:295
+msgid "Subtitle"
+msgstr "Altyazı"
+
+#: ../libide/ide-search-result.c:296
+#, fuzzy
+#| msgid "The title of the workspace."
+msgid "The subtitle of the search result."
+msgstr "Çalışma alanının başlığı."
+
+#: ../libide/ide-search-result.c:304
+msgid "Score"
+msgstr "Puan"
+
+#: ../libide/ide-search-result.c:305
+#, fuzzy
+#| msgid "The title of the workspace."
+msgid "The score of the search result."
+msgstr "Çalışma alanının başlığı."
+
+#: ../libide/ide-settings.c:283
+#| msgid "Search Settings"
+msgid "Ignore Project Settings"
+msgstr "Proje Ayarlarını Gözardı Et"
+
+#: ../libide/ide-settings.c:284
+msgid "If project settings should be ignored."
+msgstr ""
+
+#: ../libide/ide-settings.c:290 ../libide/ide-settings.c:291
+msgid "Relative Path"
+msgstr "Göreli Yol"
+
+#: ../libide/ide-settings.c:297 ../libide/ide-settings.c:298
+msgid "Schema ID"
+msgstr "Şema Kimliği"
+
+#: ../libide/ide-source-snippet.c:345
+msgid "Chunk does not belong to snippet."
+msgstr ""
+
+#: ../libide/ide-source-snippet.c:947
+msgid "The GtkTextBuffer for the snippet."
+msgstr ""
+
+#: ../libide/ide-source-snippet.c:953
+msgid "Mark Begin"
+msgstr ""
+
+#: ../libide/ide-source-snippet.c:954
+msgid "The beginning text mark."
+msgstr ""
+
+#: ../libide/ide-source-snippet.c:960
+msgid "Mark End"
+msgstr ""
+
+#: ../libide/ide-source-snippet.c:961
+msgid "The ending text mark."
+msgstr ""
+
+#: ../libide/ide-source-snippet.c:967
+msgid "Trigger"
+msgstr "Tetikleyici"
+
+#: ../libide/ide-source-snippet.c:968
+msgid "The trigger for the snippet."
+msgstr ""
+
+#: ../libide/ide-source-snippet.c:975
+msgid "The language for the snippet."
+msgstr ""
+
+#: ../libide/ide-source-snippet.c:982
+msgid "The description for the snippet."
+msgstr ""
+
+#: ../libide/ide-source-snippet.c:988 ../libide/ide-source-snippet-chunk.c:328
+msgid "Tab Stop"
+msgstr "Sekme Durağı"
+
+#: ../libide/ide-source-snippet.c:989
+msgid "The current tab stop."
+msgstr ""
+
+#: ../libide/ide-source-snippet-chunk.c:315
+msgid "The snippet context."
+msgstr ""
+
+#: ../libide/ide-source-snippet-chunk.c:321
+msgid "Spec"
+msgstr ""
+
+#: ../libide/ide-source-snippet-chunk.c:322
+msgid "The specification to expand using the context."
+msgstr ""
+
+#: ../libide/ide-source-snippet-chunk.c:329
+msgid "The tab stop for the chunk."
+msgstr ""
+
+#: ../libide/ide-source-snippet-chunk.c:337 ../src/tree/gb-tree-node.c:654
+msgid "Text"
+msgstr "Metin"
+
+#: ../libide/ide-source-snippet-chunk.c:338
+msgid "The text for the chunk."
+msgstr ""
+
+#: ../libide/ide-source-snippet-chunk.c:344
+msgid "Text Set"
+msgstr ""
+
+#: ../libide/ide-source-snippet-chunk.c:345
+msgid "If the text property has been manually set."
+msgstr ""
+
+#: ../libide/ide-source-snippet-completion-item.c:132
+msgid "Snippet"
+msgstr ""
+
+#: ../libide/ide-source-snippet-completion-item.c:133
+msgid "The snippet to insert."
+msgstr ""
+
+#: ../libide/ide-source-snippet-completion-provider.c:167
+#: ../plugins/command-bar/gb-command-vim.c:191
+msgid "Source View"
+msgstr "Kaynak Görünümü"
+
+#: ../libide/ide-source-snippet-completion-provider.c:168
+msgid "The source view to insert snippet into."
+msgstr ""
+
+#: ../libide/ide-source-snippet-completion-provider.c:174
+#: ../libide/ide-source-snippet-completion-provider.c:255
+msgid "Snippets"
+msgstr ""
+
+#: ../libide/ide-source-snippet-completion-provider.c:175
+msgid "The snippets to complete with this provider."
+msgstr ""
+
+#: ../libide/ide-source-snippet-parser.c:493
+#, c-format
+msgid "Invalid snippet at line %d: %s"
+msgstr ""
+
+#: ../libide/ide-source-snippets-manager.c:97
+#, c-format
+msgid "Failed to open directory: %s"
+msgstr "Dizin açma başarısız oldu: %s"
+
+#: ../libide/ide-source-snippets-manager.c:110
+#, c-format
+msgid "Failed to load file: %s: %s"
+msgstr "Dosya yükleme başarısız oldu: %s: %s"
+
+#: ../libide/ide-source-view.c:4530
+#, c-format
+msgid "Insert \"%s\""
+msgstr ""
+
+#: ../libide/ide-source-view.c:4532
+#, c-format
+msgid "Replace \"%s\" with \"%s\""
+msgstr ""
+
+#: ../libide/ide-source-view.c:4637
+msgid "Apply Fix-It"
+msgstr ""
+
+#: ../libide/ide-source-view.c:4677
+msgid "Goto Definition"
+msgstr ""
+
+#: ../libide/ide-source-view.c:5173
+msgid "The back-forward list to track jumps."
+msgstr ""
+
+#: ../libide/ide-source-view.c:5179
+msgid "Count"
+msgstr "Sayı"
+
+#: ../libide/ide-source-view.c:5180
+msgid "The count for movements."
+msgstr ""
+
+#: ../libide/ide-source-view.c:5188
+#| msgid "Search Settings"
+msgid "File Settings"
+msgstr "Dosya Ayarları"
+
+#: ../libide/ide-source-view.c:5189
+msgid "The file settings that have been loaded for the file."
+msgstr ""
+
+#: ../libide/ide-source-view.c:5195
+#| msgid "Description"
+msgid "Font Description"
+msgstr "Yazıtipi Açıklaması"
+
+#: ../libide/ide-source-view.c:5196
+msgid "The Pango font description to use for rendering source."
+msgstr ""
+
+#: ../libide/ide-source-view.c:5202
+msgid "Enable Word Completion"
+msgstr ""
+
+#: ../libide/ide-source-view.c:5203
+msgid "If words from all buffers can be used to autocomplete."
+msgstr ""
+
+#: ../libide/ide-source-view.c:5209 ../plugins/terminal/gb-terminal-view.c:620
+#: ../plugins/terminal/gb-terminal-view.c:621
+msgid "Font Name"
+msgstr "Yazıtipi Adı"
+
+#: ../libide/ide-source-view.c:5210
+msgid "The Pango font name to use for rendering source."
+msgstr ""
+
+#: ../libide/ide-source-view.c:5220 ../libide/ide-source-view.c:5221
+msgid "Indenter"
+msgstr ""
+
+#: ../libide/ide-source-view.c:5227 ../libide/ide-source-view.c:5228
+msgid "Indent Style"
+msgstr ""
+
+#: ../libide/ide-source-view.c:5235
+msgid "Insert Matching Brace"
+msgstr ""
+
+#: ../libide/ide-source-view.c:5236
+msgid "Insert a matching brace/bracket/quotation/parenthesis."
+msgstr ""
+
+#: ../libide/ide-source-view.c:5244
+msgid "Mode Display Name"
+msgstr ""
+
+#: ../libide/ide-source-view.c:5245
+#, fuzzy
+#| msgid "The name of the icon to use."
+msgid "The display name of the keybinding mode."
+msgstr "Kullanılacak simgenin adı."
+
+#: ../libide/ide-source-view.c:5251
+msgid "Overwrite Braces"
+msgstr ""
+
+#: ../libide/ide-source-view.c:5252
+msgid "Overwrite a matching brace/bracket/quotation/parenthesis."
+msgstr ""
+
+#: ../libide/ide-source-view.c:5258
+msgid "Rubberband Search"
+msgstr ""
+
+#: ../libide/ide-source-view.c:5259
+msgid "Auto scroll to next search result without moving insertion caret."
+msgstr ""
+
+#: ../libide/ide-source-view.c:5266
+msgid "The number of lines between the insertion cursor and screen boundary."
+msgstr ""
+
+#: ../libide/ide-source-view.c:5274
+msgid "Search Context"
+msgstr "Arama Bağlamı"
+
+#: ../libide/ide-source-view.c:5275
+#, fuzzy
+#| msgid "The text of the node."
+msgid "The search context for the view."
+msgstr "Düğüm metni."
+
+#: ../libide/ide-source-view.c:5281
+msgid "Show Grid Lines"
+msgstr ""
+
+#: ../libide/ide-source-view.c:5282
+msgid "If the background grid should be shown."
+msgstr ""
+
+#: ../libide/ide-source-view.c:5288
+msgid "Show Line Changes"
+msgstr ""
+
+#: ../libide/ide-source-view.c:5289
+msgid "If line changes should be shown in the left gutter."
+msgstr ""
+
+#: ../libide/ide-source-view.c:5303
+msgid "Show Line Diagnostics"
+msgstr ""
+
+#: ../libide/ide-source-view.c:5304
+msgid "If line changes diagnostics should be shown in the left gutter."
+msgstr ""
+
+#: ../libide/ide-source-view.c:5310
+msgid "Show Search Bubbles"
+msgstr ""
+
+#: ../libide/ide-source-view.c:5311
+msgid "If search bubbles should be rendered."
+msgstr ""
+
+#: ../libide/ide-source-view.c:5317
+msgid "Show Search Shadow"
+msgstr ""
+
+#: ../libide/ide-source-view.c:5318
+msgid "If the shadow should be drawn when performing searches."
+msgstr ""
+
+#: ../libide/ide-source-view.c:5324
+msgid "Snippet Completion"
+msgstr ""
+
+#: ../libide/ide-source-view.c:5325
+msgid "If snippet expansion should be enabled via the completion window."
+msgstr ""
+
+#: ../libide/ide-source-view-capture.c:241
+msgid "View"
+msgstr ""
+
+#: ../libide/ide-source-view-capture.c:242
+#, fuzzy
+#| msgid "The source view to modify."
+msgid "The source view."
+msgstr "Değişiklik yapılacak kaynak görünümü."
+
+#: ../libide/ide-source-view-mode.c:251
+#, fuzzy
+#| msgid "The text of the node."
+msgid "The name of the mode."
+msgstr "Düğüm metni."
+
+#: ../libide/ide-symbol-node.c:128 ../libide/ide-symbol-node.c:129
+msgid "Kind"
+msgstr ""
+
+#: ../libide/ide-symbol-node.c:136 ../libide/ide-symbol-node.c:137
+msgid "Flags"
+msgstr "Bayraklar"
+
+#: ../libide/pygobject/ide-pygobject-script.c:135
+msgid "Attempt to load a PyGObject script with no filename."
+msgstr ""
+
+#: ../libide/pygobject/ide-pygobject-script.c:274
+#, c-format
+msgid "The script \"%s\" is not a PyGObject file."
+msgstr ""
+
+#: ../libide/theatrics/ide-animation.c:702
 #, c-format
 msgid "Cannot locate property %s in class %s"
 msgstr "%s özelliği, %s sınıfında bulunamıyor"
 
-#: ../src/animation/gb-animation.c:817 ../src/credits/gb-credits-widget.c:275
+#: ../libide/theatrics/ide-animation.c:837
 msgid "Duration"
 msgstr "Süre"
 
-#: ../src/animation/gb-animation.c:818
+#: ../libide/theatrics/ide-animation.c:838
 msgid "The duration of the animation"
 msgstr "Animasyon süresi"
 
-#: ../src/animation/gb-animation.c:830
+#: ../libide/theatrics/ide-animation.c:848
 msgid "Frame Clock"
 msgstr ""
 
-#: ../src/animation/gb-animation.c:831
+#: ../libide/theatrics/ide-animation.c:849
 msgid "An optional frame-clock to synchronize with."
 msgstr ""
 
-#: ../src/animation/gb-animation.c:848
+#: ../libide/theatrics/ide-animation.c:864
+#: ../src/keybindings/gb-keybindings.c:265
 msgid "Mode"
 msgstr "Kip"
 
-#: ../src/animation/gb-animation.c:849
+#: ../libide/theatrics/ide-animation.c:865
 msgid "The animation mode"
 msgstr "Animasyon kipi"
 
-#: ../src/animation/gb-animation.c:866 ../src/theatrics/gb-box-theatric.c:289
-#: ../src/theatrics/gb-box-theatric.c:290
+#: ../libide/theatrics/ide-animation.c:880
+#: ../libide/theatrics/ide-box-theatric.c:284
+#: ../libide/theatrics/ide-box-theatric.c:285
 msgid "Target"
 msgstr "Hedef"
 
-#: ../src/animation/gb-animation.c:867
+#: ../libide/theatrics/ide-animation.c:881
 msgid "The target of the animation"
 msgstr "Animasyon hedefi"
 
-#: ../src/animation/gb-animation.c:1027 ../src/animation/gb-animation.c:1033
+#: ../libide/theatrics/ide-animation.c:1046
+#: ../libide/theatrics/ide-animation.c:1052
 #, c-format
 msgid "Failed to find property %s in %s"
 msgstr "%s özelliği, %s içinde bulunamadı"
 
-#: ../src/animation/gb-animation.c:1041
+#: ../libide/theatrics/ide-animation.c:1060
 #, c-format
 msgid "Failed to find property %s in %s or parent %s"
 msgstr "%s özelliği, %s içinde ya da %s ebeveyninde bulunamadı"
 
-#: ../src/animation/gb-animation.c:1051
+#: ../libide/theatrics/ide-animation.c:1070
 #, c-format
 msgid "Failed to retrieve va_list value: %s"
 msgstr "va_list değeri alınamadı: %s"
 
-#: ../src/app/gb-application.c:296
-msgid "Failed to load keybindings."
-msgstr "Tuş kısayolları yüklenemedi."
+#: ../libide/theatrics/ide-box-theatric.c:259
+#: ../libide/theatrics/ide-box-theatric.c:260
+msgid "Alpha"
+msgstr "Alfa"
 
-#: ../src/app/gb-application.c:304
+#: ../libide/theatrics/ide-box-theatric.c:268
+#: ../libide/theatrics/ide-box-theatric.c:269
+msgid "background"
+msgstr ""
+
+#: ../libide/theatrics/ide-box-theatric.c:275
+#: ../libide/theatrics/ide-box-theatric.c:276
+msgid "height"
+msgstr "yükseklik"
+
+#: ../libide/theatrics/ide-box-theatric.c:293
+#: ../libide/theatrics/ide-box-theatric.c:294
+msgid "width"
+msgstr "genişlik"
+
+#: ../libide/theatrics/ide-box-theatric.c:302
+#: ../libide/theatrics/ide-box-theatric.c:303
+msgid "x"
+msgstr "x"
+
+#: ../libide/theatrics/ide-box-theatric.c:311
+#: ../libide/theatrics/ide-box-theatric.c:312
+msgid "y"
+msgstr "y"
+
+#: ../plugins/clang/ide-clang-completion-item.c:413
+#: ../plugins/clang/ide-clang-translation-unit.c:587
+msgid "Index"
+msgstr ""
+
+#: ../plugins/clang/ide-clang-completion-item.c:414
+#, fuzzy
+#| msgid "The name of the icon to use."
+msgid "The index in the result set."
+msgstr "Kullanılacak simgenin adı."
+
+#: ../plugins/clang/ide-clang-completion-item.c:422
+#, fuzzy
+#| msgid "Result"
+msgid "Results"
+msgstr "Sonuç"
+
+#: ../plugins/clang/ide-clang-completion-item.c:423
+#, fuzzy
+#| msgid "The result text if any."
+msgid "The Clang result set."
+msgstr "Eğer varsa, sonuç metni."
+
+#: ../plugins/clang/ide-clang-completion-provider.c:215
+msgid "Clang"
+msgstr ""
+
+#: ../plugins/clang/ide-clang-service.c:266
+msgid "Unknown failure"
+msgstr ""
+
+#: ../plugins/clang/ide-clang-service.c:270
+msgid "Clang crashed"
+msgstr ""
+
+#: ../plugins/clang/ide-clang-service.c:274
+msgid "Invalid arguments"
+msgstr ""
+
+#: ../plugins/clang/ide-clang-service.c:278
+msgid "AST read error"
+msgstr ""
+
+#: ../plugins/clang/ide-clang-service.c:290
+#, fuzzy, c-format
+#| msgid "Failed to retrieve va_list value: %s"
+msgid "Failed to create translation unit: %s"
+msgstr "va_list değeri alınamadı: %s"
+
+#: ../plugins/clang/ide-clang-service.c:399
+msgid "File must be saved locally to parse."
+msgstr ""
+
+#: ../plugins/clang/ide-clang-symbol-node.c:149
+msgid "anonymous"
+msgstr ""
+
+#: ../plugins/clang/ide-clang-symbol-tree.c:301
+#: ../plugins/clang/ide-clang-symbol-tree.c:302
+#: ../plugins/clang/ide-clang-translation-unit.c:594
+#, fuzzy
+#| msgid "Active"
+msgid "Native"
+msgstr "Aktif"
+
+#: ../plugins/clang/ide-clang-translation-unit.c:581
+msgid "The file used to build the translation unit."
+msgstr ""
+
+#: ../plugins/clang/ide-clang-translation-unit.c:588
+msgid "The highlight index for the translation unit."
+msgstr ""
+
+#: ../plugins/clang/ide-clang-translation-unit.c:595
+msgid "The native translation unit pointer."
+msgstr ""
+
+#: ../plugins/clang/ide-clang-translation-unit.c:600
+msgid "Serial"
+msgstr ""
+
+#: ../plugins/clang/ide-clang-translation-unit.c:601
+msgid "A sequence number for the translation unit."
+msgstr ""
+
+#: ../plugins/clang/ide-clang-translation-unit.c:654
+msgid "clang_codeCompleteAt() only works on local files"
+msgstr ""
+
+#: ../plugins/command-bar/gb-command-bar.c:290
 #, c-format
-msgid "Failed to load keybindings: %s"
-msgstr "Tuş kısayolları yüklenemedi: %s"
+msgid "Command not found: %s"
+msgstr ""
 
-#: ../src/app/gb-application.c:316
+#: ../plugins/command-bar/gb-command-bar.c:594
+msgid "Use the entry below to execute a command"
+msgstr ""
+
+#: ../plugins/command-bar/gb-command-bar.c:677
+#: ../plugins/command-bar/gb-command-bar.c:678
+#: ../plugins/command-bar/gb-command-provider.c:354
+#: ../plugins/devhelp/gb-devhelp-panel.c:243
+#: ../plugins/devhelp/gb-devhelp-panel.c:244
+#: ../plugins/symbol-tree/symbol-tree.c:330
+#: ../plugins/symbol-tree/symbol-tree.c:331
+#: ../plugins/sysmon/gb-sysmon-addin.c:125
+#: ../plugins/sysmon/gb-sysmon-addin.c:126
+#: ../plugins/terminal/gb-terminal-workbench-addin.c:162
+#: ../src/workbench/gb-workbench-addin.c:46
+msgid "Workbench"
+msgstr ""
+
+#: ../plugins/command-bar/gb-command-gaction.c:187
+msgid "Action Group"
+msgstr "Eylem Grubu"
+
+#: ../plugins/command-bar/gb-command-gaction.c:188
+msgid "The GActionGroup containing the action."
+msgstr ""
+
+#: ../plugins/command-bar/gb-command-gaction.c:194
+msgid "Action Name"
+msgstr "Eylem Adı"
+
+#: ../plugins/command-bar/gb-command-gaction.c:195
+msgid "The name of the action to execute."
+msgstr ""
+
+#: ../plugins/command-bar/gb-command-gaction.c:201
+msgid "Parameters"
+msgstr ""
+
+#: ../plugins/command-bar/gb-command-gaction.c:202
+msgid "The parameters for the action."
+msgstr ""
+
+#: ../plugins/command-bar/gb-command-provider.c:319
+#: ../src/views/gb-view-stack.c:500 ../src/workbench/gb-workbench.c:686
+#: ../src/workbench/gb-workbench.c:687
+msgid "Active View"
+msgstr ""
+
+#: ../plugins/command-bar/gb-command-provider.c:320
+msgid "The last focused GbView widget."
+msgstr ""
+
+#: ../plugins/command-bar/gb-command-provider.c:339
+msgid "The priority of the command provider."
+msgstr ""
+
+#: ../plugins/command-bar/gb-command-provider.c:355
+msgid "The target workbench."
+msgstr ""
+
+#: ../plugins/command-bar/gb-command-result.c:226
+#: ../plugins/command-bar/gb-command-vim.c:183
+msgid "Command Text"
+msgstr "Komut Metni"
+
+#: ../plugins/command-bar/gb-command-result.c:227
+msgid "The command text if any."
+msgstr "Eğer varsa, komut metni."
+
+#: ../plugins/command-bar/gb-command-result.c:234
+msgid "Is Error"
+msgstr ""
+
+#: ../plugins/command-bar/gb-command-result.c:235
+msgid "If the result is an error."
+msgstr ""
+
+#: ../plugins/command-bar/gb-command-result.c:242
+msgid "Is Running"
+msgstr ""
+
+#: ../plugins/command-bar/gb-command-result.c:243
+msgid "If the command is still running."
+msgstr ""
+
+#: ../plugins/command-bar/gb-command-result.c:250
+msgid "Result Text"
+msgstr "Sonuç Metni"
+
+#: ../plugins/command-bar/gb-command-result.c:251
+msgid "The result text if any."
+msgstr "Eğer varsa, sonuç metni."
+
+#: ../plugins/command-bar/gb-command-vim.c:184
+msgid "The command text to execute"
+msgstr "Yürütülecek komut metni"
+
+#: ../plugins/command-bar/gb-command-vim.c:192
+msgid "The source view to modify."
+msgstr "Değişiklik yapılacak kaynak görünümü."
+
+#: ../plugins/command-bar/gb-vim.c:83
 #, c-format
-msgid "Failed to load local keybindings: %s"
-msgstr "Yerel tuş kısayolları yüklenemedi: %s"
+msgid "Number required"
+msgstr ""
 
-#: ../src/app/gb-application.c:415 ../src/main.c:48
-msgid "Builder"
-msgstr "Builder"
+#: ../plugins/command-bar/gb-vim.c:93
+#, c-format
+msgid "%s is invalid for %s"
+msgstr ""
 
-#: ../src/app/gb-application.c:570
+#: ../plugins/command-bar/gb-vim.c:151
+#, c-format
+msgid "Cannot find language '%s'"
+msgstr ""
+
+#: ../plugins/command-bar/gb-vim.c:348
+#, c-format
+msgid "Unknown option: %s"
+msgstr ""
+
+#: ../plugins/command-bar/gb-vim.c:387
+#, c-format
+msgid "Cannot find colorscheme '%s'"
+msgstr ""
+
+#: ../plugins/command-bar/gb-vim.c:423
+#, fuzzy, c-format
+#| msgid "Failed to open directory: %s"
+msgid "Failed to locate working directory"
+msgstr "Dizin açma başarısız oldu: %s"
+
+#: ../plugins/command-bar/gb-vim.c:547
+#, c-format
+msgid "Invalid :syntax subcommand: %s"
+msgstr ""
+
+#: ../plugins/command-bar/gb-vim.c:874
+#, c-format
+msgid "Invalid search and replace request"
+msgstr ""
+
+#: ../plugins/command-bar/gb-vim.c:960
+#, c-format
+msgid "vim mode requires GtkSourceView"
+msgstr ""
+
+#: ../plugins/command-bar/gb-vim.c:990
+#, c-format
+msgid "Not an editor command: %s"
+msgstr ""
+
+#: ../plugins/c-pack/ide-c-format-provider.c:281
+#: ../plugins/python-pack/ide-python-format-provider.c:238
+msgid "Format Strings"
+msgstr ""
+
+#: ../plugins/ctags/ide-ctags-completion-provider.c:278
+msgid "CTags"
+msgstr ""
+
+#: ../plugins/ctags/ide-ctags-index.c:381
+msgid "The file containing the ctags data."
+msgstr ""
+
+#: ../plugins/devhelp/gb-devhelp-document.c:71
+#, c-format
+msgid "Documentation (%s)"
+msgstr "Belgelendirme (%s)"
+
+#: ../plugins/devhelp/gb-devhelp-document.c:148
+#: ../plugins/devhelp/gb-devhelp-panel.c:96
+#: ../plugins/devhelp/gb-devhelp-search-provider.c:134
+msgid "Documentation"
+msgstr "Belgelendirme"
+
+#: ../plugins/devhelp/gb-devhelp-document.c:257
+msgid "The uri to load."
+msgstr "Yüklenecek kaynak tanımlayıcı (URI)."
+
+#: ../plugins/devhelp/gb-devhelp-search-result.c:100
+#, fuzzy
+#| msgid "The title of the document."
+msgid "The URI to the Devhelp document."
+msgstr "Belge başlığı."
+
+#: ../plugins/devhelp/gb-devhelp-view.c:251
+#: ../plugins/terminal/gb-terminal-view.c:613
+#: ../src/editor/gb-editor-frame.c:754 ../src/editor/gb-editor-view.c:504
+#: ../src/html/gb-html-view.c:321 ../src/views/gb-view.c:265
+msgid "Document"
+msgstr "Belge"
+
+#: ../plugins/devhelp/gb-devhelp-view.c:252
+msgid "The document for the devhelp view."
+msgstr ""
+
+#: ../plugins/file-search/gb-file-search-provider.c:45
+msgid "Switch To"
+msgstr ""
+
+#: ../plugins/gnome-code-assistance/ide-gca-diagnostic-provider.c:336
+msgid "Code assistance requires a local file."
+msgstr ""
+
+#: ../plugins/gnome-code-assistance/ide-gca-service.c:168
+msgid "No language specified"
+msgstr ""
+
+#: ../plugins/mingw/ide-mingw-device-provider.c:95
+msgid "MinGW (64-bit)"
+msgstr ""
+
+#: ../plugins/mingw/ide-mingw-device-provider.c:107
+msgid "MinGW (32-bit)"
+msgstr ""
+
+#: ../plugins/symbol-tree/symbol-tree.c:187
+msgid "Current language does not support symbol resolvers"
+msgstr ""
+
+#: ../plugins/symbol-tree/symbol-tree.c:211
+msgid "Symbol Tree"
+msgstr ""
+
+#: ../plugins/sysmon/gb-sysmon-addin.c:64
+msgid "System Monitor"
+msgstr ""
+
+#: ../plugins/terminal/gb-terminal-document.c:64
+#, c-format
+msgid "Terminal (%s)"
+msgstr ""
+
+#: ../plugins/terminal/gb-terminal-document.c:87
+#: ../plugins/terminal/gb-terminal-workbench-addin.c:101
+msgid "Terminal"
+msgstr ""
+
+#: ../plugins/terminal/gb-terminal-view-actions.c:300
+#, fuzzy
+#| msgid "Save Document As"
+msgid "Save Terminal Content As"
+msgstr "Belgeyi Farklı Kaydet"
+
+#: ../plugins/terminal/gb-terminal-view-actions.c:308
+#: ../src/editor/gb-editor-view-actions.c:309
+#: ../src/editor/gb-editor-view-actions.c:440
+#: ../src/workbench/gb-workbench-actions.c:169
+msgid "Cancel"
+msgstr "Vazgeç"
+
+#: ../plugins/terminal/gb-terminal-view.c:614
+msgid "The document for the VTE terminal view."
+msgstr ""
+
+#: ../plugins/terminal/gb-terminal-workbench-addin.c:163
+#: ../src/workbench/gb-workbench-addin.c:47
+msgid "The workbench window."
+msgstr ""
+
+#: ../src/app/gb-application-actions.c:90
 #, c-format
 msgid ""
 "The support log file has been written to '%s'. Please provide this file as "
@@ -99,325 +2536,98 @@ msgstr ""
 "Destek günlük kaydı dosyası '%s'e yazıldı. Lütfen hata kaydınıza ya da "
 "destek talebinize bu dosyayı ekleyin."
 
-#: ../src/auto-indent/gb-source-auto-indenter-c.c:1467
-#: ../src/auto-indent/gb-source-auto-indenter-c.c:1468
-msgid "Name"
-msgstr "İsim"
-
-#: ../src/code-assistant/gb-source-code-assistant.c:764
-msgid "Active"
-msgstr "Aktif"
-
-#: ../src/code-assistant/gb-source-code-assistant.c:765
-msgid "If code assistance is currently processing."
-msgstr "Kod yardımı şu anda işlem yapıyor mu."
-
-#: ../src/code-assistant/gb-source-code-assistant.c:773
-#: ../src/editor/gb-source-change-monitor.c:867
-#: ../src/html/gb-html-document.c:310 ../src/snippets/gb-source-snippet.c:1023
-msgid "Buffer"
-msgstr "Tampon"
-
-#: ../src/code-assistant/gb-source-code-assistant.c:774
-msgid "The buffer "
-msgstr "Tampon"
-
-#: ../src/code-assistant/gb-source-code-assistant.c:813
-#, c-format
-msgid ""
-"Failed to load DBus connection. Code assistance will be disabled. \"%s\" (%s)"
+#: ../src/app/gb-application-actions.c:156
+msgid "An IDE for GNOME"
 msgstr ""
 
-#: ../src/code-assistant/gb-source-code-assistant-renderer.c:319
-msgid "Code Assistant"
+#: ../src/app/gb-application-actions.c:161
+msgid "GNOME Builder"
+msgstr "GNOME Builder"
+
+#: ../src/app/gb-application-actions.c:163
+msgid "translator-credits"
+msgstr "Muhammet Kara <muhammetk@gmail.com>"
+
+#: ../src/app/gb-application-actions.c:166
+#, fuzzy
+#| msgid "GNOME Builder"
+msgid "Learn more about GNOME Builder"
+msgstr "GNOME Builder"
+
+#: ../src/app/gb-application-actions.c:169
+msgid "Funded By"
 msgstr ""
 
-#: ../src/code-assistant/gb-source-code-assistant-renderer.c:320
-msgid "The code assistant to render."
+#: ../src/app/gb-application.c:639
+msgid "Run Builder in standalone mode"
 msgstr ""
 
-#: ../src/commands/gb-command-bar.c:223
-#, c-format
-msgid "Command not found: %s"
+#: ../src/app/gb-application.c:645
+msgid "Show the application's version"
 msgstr ""
 
-#: ../src/commands/gb-command-bar.c:524
-msgid "Use the entry below to execute a command"
+#: ../src/app/gb-application.c:651
+msgid "Increase verbosity. May be specified multiple times."
 msgstr ""
 
-#: ../src/commands/gb-command-bar-item.c:175
-#: ../src/search/gb-search-display-row.c:159
-#: ../src/search/gb-search-display-row.c:160
-msgid "Result"
-msgstr "Sonuç"
-
-#: ../src/commands/gb-command-bar-item.c:176
-msgid "The result to be visualized in the item."
+#: ../src/dialogs/gb-new-project-dialog.c:346
+msgid "Select Project File"
 msgstr ""
 
-#: ../src/commands/gb-command-gaction.c:186
-msgid "Action Group"
-msgstr "Eylem Grubu"
-
-#: ../src/commands/gb-command-gaction.c:187
-msgid "The GActionGroup containing the action."
+#: ../src/dialogs/gb-new-project-dialog.c:370
+msgid "Clone Repository"
 msgstr ""
 
-#: ../src/commands/gb-command-gaction.c:195
-msgid "Action Name"
-msgstr "Eylem Adı"
-
-#: ../src/commands/gb-command-gaction.c:196
-msgid "The name of the action to execute."
+#: ../src/dialogs/gb-new-project-dialog.c:390
+msgid "Autotools Project (configure.ac)"
 msgstr ""
 
-#: ../src/commands/gb-command-gaction.c:204
-msgid "Parameters"
+#: ../src/dialogs/gb-new-project-dialog.c:396
+msgid "Any Directory"
 msgstr ""
 
-#: ../src/commands/gb-command-gaction.c:205
-msgid "The parameters for the action."
+#: ../src/dialogs/gb-new-project-dialog.c:523
+msgid "A valid Git URL is required"
 msgstr ""
 
-#: ../src/commands/gb-command-provider.c:316
-msgid "Active DocumentView"
+#: ../src/dialogs/gb-new-project-dialog.c:662
+msgid "Directory|Projects"
 msgstr ""
 
-#: ../src/commands/gb-command-provider.c:317
-msgid "The last focused GbDocumentView widget."
+#: ../src/dialogs/gb-projects-dialog.c:246
+msgid "(Click on items to select them)"
 msgstr ""
 
-#: ../src/commands/gb-command-provider.c:338
-msgid "Priority"
-msgstr "Öncelik"
-
-#: ../src/commands/gb-command-provider.c:339
-msgid "The priority of the command provider."
+#: ../src/dialogs/gb-recent-project-row.c:207
+#: ../src/greeter/gb-greeter-project-row.c:324
+msgid "Project Information"
 msgstr ""
 
-#: ../src/commands/gb-command-provider.c:356
-#: ../src/git/gb-git-search-provider.c:523
-#: ../src/navigation/gb-navigation-list.c:299
-msgid "Workbench"
-msgstr ""
+#: ../src/dialogs/gb-recent-project-row.c:208
+#, fuzzy
+#| msgid "The root object of the tree."
+msgid "The project information for the row."
+msgstr "Ağacın kök nesnesi."
 
-#: ../src/commands/gb-command-provider.c:357
-msgid "The target workbench."
-msgstr ""
+#: ../src/dialogs/gb-recent-project-row.c:214
+#: ../src/dialogs/gb-recent-project-row.c:215
+#: ../src/greeter/gb-greeter-project-row.c:310
+#: ../src/greeter/gb-greeter-project-row.c:311
+#, fuzzy
+#| msgid "Selection"
+msgid "Selected"
+msgstr "Seçim"
 
-#: ../src/commands/gb-command-result.c:224
-#: ../src/commands/gb-command-vim.c:189
-msgid "Command Text"
-msgstr "Komut Metni"
+#: ../src/dialogs/gb-recent-project-row.c:221
+#: ../src/dialogs/gb-recent-project-row.c:222
+#: ../src/greeter/gb-greeter-project-row.c:317
+#: ../src/greeter/gb-greeter-project-row.c:318
+#, fuzzy
+#| msgid "Selection"
+msgid "Selection Mode"
+msgstr "Seçim"
 
-#: ../src/commands/gb-command-result.c:225
-msgid "The command text if any."
-msgstr "Eğer varsa, komut metni."
-
-#: ../src/commands/gb-command-result.c:234
-msgid "Is Error"
-msgstr ""
-
-#: ../src/commands/gb-command-result.c:235
-msgid "If the result is an error."
-msgstr ""
-
-#: ../src/commands/gb-command-result.c:244
-msgid "Is Running"
-msgstr ""
-
-#: ../src/commands/gb-command-result.c:245
-msgid "If the command is still running."
-msgstr ""
-
-#: ../src/commands/gb-command-result.c:254
-msgid "Result Text"
-msgstr "Sonuç Metni"
-
-#: ../src/commands/gb-command-result.c:255
-msgid "The result text if any."
-msgstr "Eğer varsa, sonuç metni."
-
-#: ../src/commands/gb-command-vim.c:190
-msgid "The command text to execute"
-msgstr "Yürütülecek komut metni"
-
-#: ../src/commands/gb-command-vim.c:199
-#: ../src/snippets/gb-source-snippet-completion-provider.c:168
-msgid "Source View"
-msgstr "Kaynak Görünümü"
-
-#: ../src/commands/gb-command-vim.c:200
-msgid "The source view to modify."
-msgstr "Değişiklik yapılacak kaynak görünümü."
-
-#: ../src/credits/gb-credits-widget.c:276
-msgid "The duration of the animation in millseconds."
-msgstr "Saniye cinsinden canlandırma süresi."
-
-#: ../src/credits/gb-credits-widget.c:286
-#: ../src/credits/gb-credits-widget.c:287
-#: ../src/editor/gb-editor-document.c:1476
-msgid "Progress"
-msgstr "İlerleme"
-
-#: ../src/credits/gb-credits-widget.c:312
-#, c-format
-msgid "GNOME Builder - %s"
-msgstr "GNOME Builder - %s"
-
-#: ../src/devhelp/gb-devhelp-document.c:71
-#, c-format
-msgid "Documentation (%s)"
-msgstr "Belgelendirme (%s)"
-
-#: ../src/devhelp/gb-devhelp-document.c:151
-msgid "Documentation"
-msgstr "Belgelendirme"
-
-#: ../src/devhelp/gb-devhelp-document.c:257
-msgid "URI"
-msgstr "URI"
-
-#: ../src/devhelp/gb-devhelp-document.c:258
-msgid "The uri to load."
-msgstr "Yüklenecek kaynak tanımlayıcı (URI)."
-
-#: ../src/devhelp/gb-devhelp-view.c:175
-#: ../src/documents/gb-document-view.c:203
-#: ../src/editor/gb-editor-frame.c:1651 ../src/editor/gb-editor-view.c:1080
-#: ../src/html/gb-html-view.c:264
-msgid "Document"
-msgstr "Belge"
-
-#: ../src/devhelp/gb-devhelp-view.c:176
-msgid "The document for the devhelp view."
-msgstr ""
-
-#: ../src/dialogs/gb-close-confirmation-dialog.c:148
-msgid "Question"
-msgstr "Soru"
-
-#: ../src/dialogs/gb-close-confirmation-dialog.c:318
-msgid "Close _without Saving"
-msgstr "Ka_ydetmeden Kapat"
-
-#: ../src/dialogs/gb-close-confirmation-dialog.c:319
-#: ../src/resources/ui/gb-editor-view.ui.h:2
-msgid "_Cancel"
-msgstr "_Vazgeç"
-
-#: ../src/dialogs/gb-close-confirmation-dialog.c:337
-msgid "_Save As…"
-msgstr "Farklı _Kaydet…"
-
-#: ../src/dialogs/gb-close-confirmation-dialog.c:337
-msgid "_Save"
-msgstr "_Kaydet"
-
-#: ../src/dialogs/gb-close-confirmation-dialog.c:354
-#, c-format
-msgid ""
-"If you don't save, changes from the last %ld second will be permanently lost."
-msgid_plural ""
-"If you don't save, changes from the last %ld seconds will be permanently "
-"lost."
-msgstr[0] ""
-msgstr[1] ""
-
-#: ../src/dialogs/gb-close-confirmation-dialog.c:363
-msgid ""
-"If you don't save, changes from the last minute will be permanently lost."
-msgstr ""
-
-#: ../src/dialogs/gb-close-confirmation-dialog.c:369
-#, c-format
-msgid ""
-"If you don't save, changes from the last minute and %ld second will be "
-"permanently lost."
-msgid_plural ""
-"If you don't save, changes from the last minute and %ld seconds will be "
-"permanently lost."
-msgstr[0] ""
-msgstr[1] ""
-
-#: ../src/dialogs/gb-close-confirmation-dialog.c:379
-#, c-format
-msgid ""
-"If you don't save, changes from the last %ld minute will be permanently lost."
-msgid_plural ""
-"If you don't save, changes from the last %ld minutes will be permanently "
-"lost."
-msgstr[0] ""
-msgstr[1] ""
-
-#: ../src/dialogs/gb-close-confirmation-dialog.c:394
-msgid "If you don't save, changes from the last hour will be permanently lost."
-msgstr ""
-
-#: ../src/dialogs/gb-close-confirmation-dialog.c:400
-#, c-format
-msgid ""
-"If you don't save, changes from the last hour and %d minute will be "
-"permanently lost."
-msgid_plural ""
-"If you don't save, changes from the last hour and %d minutes will be "
-"permanently lost."
-msgstr[0] ""
-msgstr[1] ""
-
-#: ../src/dialogs/gb-close-confirmation-dialog.c:415
-#, c-format
-msgid ""
-"If you don't save, changes from the last %d hour will be permanently lost."
-msgid_plural ""
-"If you don't save, changes from the last %d hours will be permanently lost."
-msgstr[0] ""
-msgstr[1] ""
-
-#: ../src/dialogs/gb-close-confirmation-dialog.c:459
-#, c-format
-msgid "Changes to document “%s” will be permanently lost."
-msgstr ""
-
-#: ../src/dialogs/gb-close-confirmation-dialog.c:464
-#, c-format
-msgid "Save changes to document “%s” before closing?"
-msgstr ""
-
-#: ../src/dialogs/gb-close-confirmation-dialog.c:477
-#: ../src/dialogs/gb-close-confirmation-dialog.c:637
-msgid "Saving has been disabled by the system administrator."
-msgstr ""
-
-#: ../src/dialogs/gb-close-confirmation-dialog.c:585
-#, c-format
-msgid "Changes to %d document will be permanently lost."
-msgid_plural "Changes to %d documents will be permanently lost."
-msgstr[0] ""
-msgstr[1] ""
-
-#: ../src/dialogs/gb-close-confirmation-dialog.c:593
-#, c-format
-msgid "There is %d document with unsaved changes. Save changes before closing?"
-msgid_plural ""
-"There are %d documents with unsaved changes. Save changes before closing?"
-msgstr[0] ""
-msgstr[1] ""
-
-#: ../src/dialogs/gb-close-confirmation-dialog.c:613
-msgid "Docum_ents with unsaved changes:"
-msgstr ""
-
-#: ../src/dialogs/gb-close-confirmation-dialog.c:617
-msgid "S_elect the documents you want to save:"
-msgstr ""
-
-#: ../src/dialogs/gb-close-confirmation-dialog.c:641
-msgid "If you don't save, all your changes will be permanently lost."
-msgstr ""
-
-#: ../src/documents/gb-document.c:188
+#: ../src/documents/gb-document.c:188 ../src/views/gb-view.c:272
 msgid "Modified"
 msgstr "Değiştirildi"
 
@@ -425,1409 +2635,964 @@ msgstr "Değiştirildi"
 msgid "If the document has been modified from disk."
 msgstr ""
 
-#: ../src/documents/gb-document.c:196
-#: ../src/preferences/gb-preferences-page.c:214
-#: ../src/search/gb-search-result.c:241 ../src/workbench/gb-workspace.c:151
-msgid "Title"
-msgstr "Başlık"
-
 #: ../src/documents/gb-document.c:197
 msgid "The title of the document."
 msgstr "Belge başlığı."
-
-#: ../src/documents/gb-document.c:204
-msgid "Read Only"
-msgstr "Salt Okunur"
 
 #: ../src/documents/gb-document.c:205
 msgid "If the document is read only."
 msgstr "Belge salt okunur mu."
 
-#: ../src/documents/gb-document-grid.c:918
-#: ../src/documents/gb-document-menu-button.c:667
-#: ../src/documents/gb-document-stack.c:881
-msgid "Document Manager"
-msgstr "Belge Yöneticisi"
-
-#: ../src/documents/gb-document-grid.c:919
-msgid "The document manager for the document grid."
-msgstr ""
-
-#: ../src/documents/gb-document-manager.c:300
-msgid "Count"
-msgstr "Sayı"
-
-#: ../src/documents/gb-document-manager.c:301
-msgid "The number of documents in the manager."
-msgstr "Yöneticideki belge sayısı."
-
-#: ../src/documents/gb-document-menu-button.c:668
-msgid "The document manager for the button."
-msgstr ""
-
-#: ../src/documents/gb-document-stack.c:872
-msgid "Active View"
-msgstr ""
-
-#: ../src/documents/gb-document-stack.c:873
-msgid "The active view within the stack."
-msgstr ""
-
-#: ../src/documents/gb-document-stack.c:882
-msgid "The document manager for the stack."
-msgstr ""
-
-#: ../src/documents/gb-document-view.c:185
-msgid "Can Preview"
-msgstr ""
-
-#: ../src/documents/gb-document-view.c:186
-msgid "If the view can preview."
-msgstr ""
-
-#: ../src/documents/gb-document-view.c:194
-msgid "Controls"
-msgstr ""
-
-#: ../src/documents/gb-document-view.c:195
-msgid "The widget containing the view controls."
-msgstr ""
-
-#: ../src/documents/gb-document-view.c:204
-msgid "The document being viewed."
-msgstr ""
-
-#: ../src/editor/gb-editor-document.c:664
-#, c-format
-msgid "%s (Read Only)"
-msgstr ""
-
-#: ../src/editor/gb-editor-document.c:669
-#, c-format
-msgid "untitled document %u"
-msgstr ""
-
-#: ../src/editor/gb-editor-document.c:791
-msgid "Save Document As"
-msgstr "Belgeyi Farklı Kaydet"
-
-#: ../src/editor/gb-editor-document.c:798
-#: ../src/editor/gb-editor-workspace.c:287
-msgid "Cancel"
-msgstr "Vazgeç"
-
-#: ../src/editor/gb-editor-document.c:799 ../src/resources/gtk/menus.ui.h:17
-msgid "Save"
-msgstr "Kaydet"
-
-#: ../src/editor/gb-editor-document.c:913
-msgid "No file was selected."
-msgstr "Hiçbir dosya seçilmedi."
-
-#: ../src/editor/gb-editor-document.c:1039
-msgid "No file was selected for saving."
-msgstr "Kaydetmek için hiçbir dosya seçilmedi."
-
-#: ../src/editor/gb-editor-document.c:1440
-#: ../src/editor/gb-source-change-gutter-renderer.c:198
-msgid "Change Monitor"
-msgstr ""
-
-#: ../src/editor/gb-editor-document.c:1441
-msgid "The change monitor for the backing file."
-msgstr ""
-
-#: ../src/editor/gb-editor-document.c:1449
-msgid "Error"
-msgstr "Hata"
-
-#: ../src/editor/gb-editor-document.c:1450
-msgid "An error that may have been loaded."
-msgstr ""
-
-#: ../src/editor/gb-editor-document.c:1458
-#: ../src/editor/gb-editor-file-mark.c:214
-#: ../src/editor/gb-editor-navigation-item.c:217
-#: ../src/editor/gb-source-change-monitor.c:878
-msgid "File"
-msgstr "Dosya"
-
-#: ../src/editor/gb-editor-document.c:1459
-msgid "The backing file for the document."
-msgstr ""
-
-#: ../src/editor/gb-editor-document.c:1467
-msgid "File Changed on Volume"
-msgstr ""
-
-#: ../src/editor/gb-editor-document.c:1468
-msgid "If the file has changed underneath the buffer."
-msgstr ""
-
-#: ../src/editor/gb-editor-document.c:1477
-msgid "Loading or saving progress."
-msgstr ""
-
-#: ../src/editor/gb-editor-document.c:1487
-msgid "Style Scheme Name"
-msgstr ""
-
-#: ../src/editor/gb-editor-document.c:1488
-msgid "The style scheme name."
-msgstr ""
-
-#: ../src/editor/gb-editor-document.c:1496
-msgid "Trim Trailing Whitespace"
-msgstr ""
-
-#: ../src/editor/gb-editor-document.c:1497
-msgid "If whitespace should be trimmed before saving."
-msgstr ""
-
-#: ../src/editor/gb-editor-file-mark.c:202
-msgid "Column"
-msgstr "Sütun"
-
-#: ../src/editor/gb-editor-file-mark.c:203
-msgid "The column within the line."
-msgstr ""
-
-#: ../src/editor/gb-editor-file-mark.c:215
-msgid "The file for which to store the mark."
-msgstr ""
-
-#: ../src/editor/gb-editor-file-mark.c:224
-#: ../src/editor/gb-editor-navigation-item.c:228
-msgid "Line"
-msgstr "Satır"
-
-#: ../src/editor/gb-editor-file-mark.c:225
-msgid "The line within the file."
-msgstr ""
-
-#: ../src/editor/gb-editor-frame.c:320
+#: ../src/editor/gb-editor-frame.c:150
 #, c-format
 msgid "%u of %u"
 msgstr ""
 
-#: ../src/editor/gb-editor-frame.c:461
+#: ../src/editor/gb-editor-frame.c:180
 #, c-format
 msgid "Line %u, Column %u"
 msgstr ""
 
-#: ../src/editor/gb-editor-frame.c:1652
-msgid "The document for the editor."
+#: ../src/editor/gb-editor-frame.c:595
+msgid "Re_veal in Project Tree"
 msgstr ""
 
-#: ../src/editor/gb-editor-frame.c:1660
-msgid "Search Direction"
+#: ../src/editor/gb-editor-frame.c:740 ../src/editor/gb-editor-frame.c:741
+msgid "Auto Hide Map"
 msgstr ""
 
-#: ../src/editor/gb-editor-frame.c:1661
-msgid "The direction of the last text searched for."
+#: ../src/editor/gb-editor-frame.c:748
+msgid "The back forward list."
 msgstr ""
 
-#: ../src/editor/gb-editor-navigation-item.c:218
-msgid "The file that is being edited."
+#: ../src/editor/gb-editor-frame.c:755 ../src/editor/gb-editor-view.c:505
+#, fuzzy
+#| msgid "The title of the document."
+msgid "The editor document."
+msgstr "Belge başlığı."
+
+#: ../src/editor/gb-editor-frame.c:761
+msgid "Show Map"
 msgstr ""
 
-#: ../src/editor/gb-editor-navigation-item.c:229
-msgid "The line number within the file."
+#: ../src/editor/gb-editor-frame.c:762
+msgid "If the overview map should be shown."
 msgstr ""
 
-#: ../src/editor/gb-editor-navigation-item.c:241
-msgid "Line Offset"
-msgstr ""
-
-#: ../src/editor/gb-editor-navigation-item.c:242
-msgid "The offset within the line."
-msgstr ""
-
-#: ../src/editor/gb-editor-settings-widget.c:182
-#: ../src/editor/gb-source-formatter.c:337
-#: ../src/snippets/gb-source-snippet.c:1059
-msgid "Language"
-msgstr "Dil"
-
-#: ../src/editor/gb-editor-settings-widget.c:183
+#: ../src/editor/gb-editor-settings-widget.c:180
 msgid "The language to change the settings for."
 msgstr ""
 
-#: ../src/editor/gb-editor-view.c:451
-#, c-format
-msgid "The file “%s” was modified outside of Builder."
-msgstr ""
+#: ../src/editor/gb-editor-view-actions.c:303
+#, fuzzy
+#| msgid "Save Document As"
+msgid "Save Document"
+msgstr "Belgeyi Farklı Kaydet"
 
-#: ../src/editor/gb-editor-view.c:509
+#: ../src/editor/gb-editor-view-actions.c:429
+msgid "Save Document As"
+msgstr "Belgeyi Farklı Kaydet"
+
+#: ../src/editor/gb-editor-view.c:110
 msgid "Plain Text"
 msgstr "Düz Metin"
 
-#: ../src/editor/gb-editor-view.c:1071
-msgid "Auto Indent"
+#: ../src/greeter/gb-greeter-pill-box.c:117
+#, fuzzy
+#| msgid "The name of the icon to use."
+msgid "The label for the pill box."
+msgstr "Kullanılacak simgenin adı."
+
+#: ../src/greeter/gb-greeter-project-row.c:325
+#, fuzzy
+#| msgid "The root object of the tree."
+msgid "The project information to render."
+msgstr "Ağacın kök nesnesi."
+
+#: ../src/greeter/gb-greeter-window.c:561
+msgid "The recent projects that have been mined."
 msgstr ""
 
-#: ../src/editor/gb-editor-view.c:1072
-msgid "If we should use the auto-indentation engine."
-msgstr ""
-
-#: ../src/editor/gb-editor-view.c:1081
-msgid "The document edited by the view."
-msgstr ""
-
-#: ../src/editor/gb-editor-view.c:1089
-msgid "Highlight Current Line"
-msgstr ""
-
-#: ../src/editor/gb-editor-view.c:1090
-msgid "If the current line should be highlighted."
-msgstr ""
-
-#: ../src/editor/gb-editor-view.c:1098
-msgid "Show Line Numbers"
-msgstr ""
-
-#: ../src/editor/gb-editor-view.c:1099
-msgid "If the line numbers should be shown."
-msgstr ""
-
-#: ../src/editor/gb-editor-view.c:1107
-msgid "Show Right Margin"
-msgstr ""
-
-#: ../src/editor/gb-editor-view.c:1108
-msgid "If we should show the right margin."
-msgstr ""
-
-#: ../src/editor/gb-editor-view.c:1116
-msgid "Split Enabled"
-msgstr ""
-
-#: ../src/editor/gb-editor-view.c:1117
-msgid "If the view split is enabled."
-msgstr ""
-
-#: ../src/editor/gb-editor-view.c:1125
-msgid "Tab Width"
-msgstr ""
-
-#: ../src/editor/gb-editor-view.c:1126
-msgid "The width a tab should be drawn as."
-msgstr ""
-
-#: ../src/editor/gb-editor-view.c:1136
-msgid "Use Spaces"
-msgstr ""
-
-#: ../src/editor/gb-editor-view.c:1137
-msgid "If spaces should be used instead of tabs."
-msgstr ""
-
-#: ../src/editor/gb-editor-workspace.c:279
-msgid "Open Document"
-msgstr "Belge Aç"
-
-#: ../src/editor/gb-editor-workspace.c:288
-msgid "Open"
-msgstr "Aç"
-
-#: ../src/editor/gb-source-change-gutter-renderer.c:199
-msgid "The change monitor for the gutter renderer."
-msgstr ""
-
-#: ../src/editor/gb-source-change-monitor.c:417
-msgid "Failed to load git blob"
-msgstr ""
-
-#: ../src/editor/gb-source-change-monitor.c:480
-msgid "No file, cannot load git blob"
-msgstr ""
-
-#: ../src/editor/gb-source-change-monitor.c:518
-msgid "Cannot load git repository from non-local filesystem."
-msgstr ""
-
-#: ../src/editor/gb-source-change-monitor.c:577
-msgid "No filename, cannot discover repository."
-msgstr ""
-
-#: ../src/editor/gb-source-change-monitor.c:868
-msgid "The text buffer to monitor."
-msgstr ""
-
-#: ../src/editor/gb-source-change-monitor.c:879
-msgid "The file for the buffer."
-msgstr ""
-
-#: ../src/editor/gb-source-formatter.c:118
-#, c-format
-msgid "Failed to locate uncrustify configuration."
-msgstr ""
-
-#: ../src/editor/gb-source-formatter.c:144
-#, c-format
-msgid "uncrustify failure: %s"
-msgstr ""
-
-#: ../src/editor/gb-source-formatter.c:241
-#, c-format
-msgid "Failure copying to \"%s\": %s"
-msgstr ""
-
-#: ../src/editor/gb-source-formatter.c:328
-msgid "Can Format"
-msgstr ""
-
-#: ../src/editor/gb-source-formatter.c:329
-msgid "If the source language can be formatted."
-msgstr ""
-
-#: ../src/editor/gb-source-formatter.c:338
-msgid "The language to format."
-msgstr ""
-
-#: ../src/editor/gb-source-search-highlighter.c:338
-#: ../src/editor/gb-source-search-highlighter.c:339
-msgid "Search Context"
-msgstr "Arama Bağlamı"
-
-#: ../src/editor/gb-source-search-highlighter.c:347
-#: ../src/editor/gb-source-search-highlighter.c:348
-msgid "Search Settings"
-msgstr "Arama Ayarları"
-
-#: ../src/editor/gb-source-view.c:2229 ../src/editor/gb-source-view.c:2230
-msgid "Enable Word Completion"
-msgstr ""
-
-#: ../src/editor/gb-source-view.c:2238
-msgid "Font Name"
-msgstr ""
-
-#: ../src/editor/gb-source-view.c:2239
-msgid "The font name to apply to the widget."
-msgstr ""
-
-#: ../src/editor/gb-source-view.c:2247
-msgid "Insert Matching Brace"
-msgstr ""
-
-#: ../src/editor/gb-source-view.c:2248
-msgid "If we should insert matching braces."
-msgstr ""
-
-#: ../src/editor/gb-source-view.c:2256
-msgid "Overwrite Braces"
-msgstr ""
-
-#: ../src/editor/gb-source-view.c:2257
-msgid "If we should overwrite braces, brackets, parenthesis and quotes."
-msgstr ""
-
-#: ../src/editor/gb-source-view.c:2266
-msgid "Show Shadow"
-msgstr ""
-
-#: ../src/editor/gb-source-view.c:2267
-msgid "Show the search shadow"
-msgstr ""
-
-#: ../src/editor/gb-source-view.c:2275 ../src/editor/gb-source-view.c:2276
-msgid "Search Highlighter"
-msgstr ""
-
-#: ../src/editor/gb-source-view.c:2284
-msgid "Smart Home End"
-msgstr ""
-
-#: ../src/editor/gb-source-view.c:2285
-msgid "Enable smart home end in gtksourceview."
-msgstr ""
-
-#: ../src/editor/gb-source-view.c:2293
-msgid "Show Grid Lines"
-msgstr ""
-
-#: ../src/editor/gb-source-view.c:2294
-msgid "Whether to show the grid lines."
-msgstr ""
-
-#: ../src/gd/gd-tagged-entry.c:937
-msgid "Tag close icon visibility"
-msgstr ""
-
-#: ../src/gd/gd-tagged-entry.c:938
-msgid "Whether the close button should be shown in tags."
-msgstr ""
-
-#: ../src/gd/gd-tagged-entry.c:1031 ../src/navigation/gb-navigation-item.c:195
-msgid "Label"
-msgstr "Etiket"
-
-#: ../src/gd/gd-tagged-entry.c:1032
-msgid "Text to show on the tag."
-msgstr ""
-
-#: ../src/gd/gd-tagged-entry.c:1035
-msgid "Tag has a close button"
-msgstr ""
-
-#: ../src/gd/gd-tagged-entry.c:1036
-msgid "Whether the tag has a close button."
-msgstr ""
-
-#: ../src/gd/gd-tagged-entry.c:1039
-msgid "Style"
-msgstr "Biçem"
-
-#: ../src/gd/gd-tagged-entry.c:1040
-msgid "Style of the tag."
-msgstr ""
-
-#: ../src/gedit/gedit-menu-stack-switcher.c:423
-#: ../src/gedit/gedit-menu-stack-switcher.c:424
-msgid "Stack"
-msgstr ""
-
-#: ../src/git/gb-git-search-provider.c:429
-msgid "Switch To"
-msgstr ""
-
-#: ../src/git/gb-git-search-provider.c:512
-msgid "Repository"
-msgstr ""
-
-#: ../src/git/gb-git-search-provider.c:513
-msgid "The repository to use for search data."
-msgstr ""
-
-#: ../src/git/gb-git-search-provider.c:524
-msgid "The workbench window."
-msgstr ""
-
-#: ../src/html/gb-html-document.c:105
+#: ../src/html/gb-html-document.c:109
 msgid "HTML Preview"
-msgstr ""
+msgstr "HTML Önizleme"
 
-#: ../src/html/gb-html-document.c:127
+#: ../src/html/gb-html-document.c:131
 #, c-format
 msgid "%s (Preview)"
 msgstr ""
 
-#: ../src/html/gb-html-document.c:311
+#: ../src/html/gb-html-document.c:315
 msgid "The buffer to monitor for changes."
 msgstr ""
 
-#: ../src/html/gb-html-view.c:265
+#: ../src/html/gb-html-view.c:322
 msgid "The document to view as HTML."
 msgstr ""
 
-#: ../src/nautilus/nautilus-floating-bar.c:314
-msgid "Bar's primary label"
+#: ../src/keybindings/gb-keybindings.c:258
+#| msgid "Selection"
+msgid "Application"
+msgstr "Uygulama"
+
+#: ../src/keybindings/gb-keybindings.c:259
+msgid "The application to register keybindings for."
 msgstr ""
 
-#: ../src/nautilus/nautilus-floating-bar.c:315
-msgid "Primary label displayed by the bar"
-msgstr ""
+#: ../src/keybindings/gb-keybindings.c:266
+#, fuzzy
+#| msgid "The name of the icon to use."
+msgid "The name of the keybindings mode."
+msgstr "Kullanılacak simgenin adı."
 
-#: ../src/nautilus/nautilus-floating-bar.c:320
-msgid "Bar's details label"
-msgstr ""
-
-#: ../src/nautilus/nautilus-floating-bar.c:321
-msgid "Details label displayed by the bar"
-msgstr ""
-
-#: ../src/nautilus/nautilus-floating-bar.c:326
-msgid "Show spinner"
-msgstr ""
-
-#: ../src/nautilus/nautilus-floating-bar.c:327
-msgid "Whether a spinner should be shown in the floating bar"
-msgstr ""
-
-#: ../src/navigation/gb-navigation-item.c:196
-msgid "The label for the navigation item."
-msgstr ""
-
-#: ../src/navigation/gb-navigation-item.c:204
-msgid "Workspace"
-msgstr "Çalışma Alanı"
-
-#: ../src/navigation/gb-navigation-item.c:205
-msgid "The workspace to ensure is focused."
-msgstr ""
-
-#: ../src/navigation/gb-navigation-list.c:269
-msgid "Can Go Backward"
-msgstr ""
-
-#: ../src/navigation/gb-navigation-list.c:270
-msgid "If we can go backwards in the navigation list."
-msgstr ""
-
-#: ../src/navigation/gb-navigation-list.c:279
-msgid "Can Go Forward"
-msgstr ""
-
-#: ../src/navigation/gb-navigation-list.c:280
-msgid "If we can go forward in the navigation list."
-msgstr ""
-
-#: ../src/navigation/gb-navigation-list.c:289
-msgid "Current Item"
-msgstr "Geçerli Öge"
-
-#: ../src/navigation/gb-navigation-list.c:290
-msgid "The current item in the navigation list."
-msgstr "Gezinme listesindeki geçerli öge."
-
-#: ../src/navigation/gb-navigation-list.c:300
-msgid "The workbench the navigation list is for."
-msgstr ""
-
-#: ../src/preferences/gb-preferences-page.c:215
+#: ../src/preferences/gb-preferences-page.c:283
 msgid "The title for the preferences page."
 msgstr ""
 
-#: ../src/preferences/gb-preferences-page-editor.c:186
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-editor.c:95
 msgid "restore insert cursor mark"
 msgstr ""
 
-#: ../src/preferences/gb-preferences-page-editor.c:192
-msgid "word words auto completion suggest found document"
-msgstr ""
-
-#: ../src/preferences/gb-preferences-page-editor.c:198
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-editor.c:100
 msgid "diff renderer gutter changes git vcs"
 msgstr ""
 
-#: ../src/preferences/gb-preferences-page-editor.c:204
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-editor.c:105
 msgid "line numbers"
 msgstr "satır numaraları"
 
-#: ../src/preferences/gb-preferences-page-editor.c:210
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-editor.c:110
 msgid "line lines highlight current"
 msgstr ""
 
-#: ../src/preferences/gb-preferences-page-editor.c:216
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-editor.c:115
 msgid "bracket brackets highlight matching"
 msgstr ""
 
-#: ../src/preferences/gb-preferences-page-editor.c:222
-msgid "smart home end"
-msgstr ""
-
-#: ../src/preferences/gb-preferences-page-editor.c:228
-msgid "show grid lines"
-msgstr ""
-
-#: ../src/preferences/gb-preferences-page-editor.c:234
-msgid "font document editor monospace"
-msgstr ""
-
-#: ../src/preferences/gb-preferences-page-editor.c:239
-msgid "source style scheme source tango solarized builder"
-msgstr ""
-
-#: ../src/preferences/gb-preferences-page-emacs.c:90
-msgid "emacs modal"
-msgstr ""
-
-#: ../src/preferences/gb-preferences-page-git.c:131
-msgid "git author name surname"
-msgstr ""
-
-#: ../src/preferences/gb-preferences-page-git.c:136
-msgid "git author email mail address"
-msgstr ""
-
-#: ../src/preferences/gb-preferences-page-vim.c:101
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-editor.c:120
 msgid "lines margin scrolloff scroll off"
 msgstr ""
 
-#: ../src/preferences/gb-preferences-page-vim.c:107
-msgid "vim modal"
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-editor.c:126
+msgid "font document editor monospace"
 msgstr ""
 
-#: ../src/resources/gtk/menus.ui.h:1
-msgid "_Preferences"
-msgstr "_Tercihler"
-
-#: ../src/resources/gtk/menus.ui.h:2
-msgid "Generate Support Log"
-msgstr "Destek Kaydı Üret"
-
-#: ../src/resources/gtk/menus.ui.h:3
-msgid "_Help"
-msgstr "_Yardım"
-
-#: ../src/resources/gtk/menus.ui.h:4
-msgid "_About"
-msgstr "_Hakkında"
-
-#: ../src/resources/gtk/menus.ui.h:5
-msgid "_Quit"
-msgstr "_Çıkış"
-
-#: ../src/resources/gtk/menus.ui.h:6 ../src/resources/ui/gb-editor-view.ui.h:1
-msgid "_Reload"
-msgstr "Yeniden Y_ükle"
-
-#: ../src/resources/gtk/menus.ui.h:7
-msgid "_Print…"
-msgstr "_Yazdır…"
-
-#: ../src/resources/gtk/menus.ui.h:8
-msgid "_Fullscreen"
-msgstr "_Tam Ekran"
-
-#: ../src/resources/gtk/menus.ui.h:9
-msgid "_New Document"
-msgstr "_Yeni Belge"
-
-#: ../src/resources/gtk/menus.ui.h:10
-msgid "_Open"
-msgstr "_Aç"
-
-#: ../src/resources/gtk/menus.ui.h:11
-msgid "Save _All"
-msgstr "_Tümünü Kaydet"
-
-#: ../src/resources/gtk/menus.ui.h:12
-msgid "_Close All"
-msgstr "Tümünü _Kapat"
-
-#: ../src/resources/gtk/menus.ui.h:13
-msgid "Move Document _Left"
-msgstr "Belgeyi So_la Taşı"
-
-#: ../src/resources/gtk/menus.ui.h:14
-msgid "Move Document _Right"
-msgstr "Belgeyi _Sağa Taşı"
-
-#: ../src/resources/gtk/menus.ui.h:15
-msgid "Split Document Left"
-msgstr "Belgeyi Sola Böl"
-
-#: ../src/resources/gtk/menus.ui.h:16
-msgid "Split Document Right"
-msgstr "Belgeyi Sağa Böl"
-
-#: ../src/resources/gtk/menus.ui.h:18
-msgid "Save _As"
-msgstr "F_arklı Kaydet"
-
-#: ../src/resources/gtk/menus.ui.h:19
-msgid "_Preview"
-msgstr "_Önizleme"
-
-#: ../src/resources/gtk/menus.ui.h:20
-msgid "_Close Document"
-msgstr "Belgeyi _Kapat"
-
-#: ../src/resources/ui/gb-credits-widget.ui.h:1
-msgid "Created By:"
-msgstr "Oluşturanlar:"
-
-#: ../src/resources/ui/gb-credits-widget.ui.h:2
-msgid ""
-"Christian Hergert\n"
-"Alexander Larsson\n"
-"Alexandre Franke\n"
-"Carlos Soriano\n"
-"Cosimo Cecchi\n"
-"Dimitris Zenios\n"
-"Fabiano Fidêncio\n"
-"Florian Bäuerle\n"
-"Florian Müllner\n"
-"Hashem Nasarat\n"
-"Hylke Bons\n"
-"Igor Gnatenko\n"
-"Jakub Steiner\n"
-"Jasper St. Pierre\n"
-"Jonathon Jongsma\n"
-"Mathieu Bridon\n"
-"Megh Parikh\n"
-"Michael Catanzaro\n"
-"Pete Travis\n"
-"Ray Strode\n"
-"Roberto Majadas\n"
-"Ting-Wei Lan\n"
-"Trinh Anh Ngoc\n"
-"Yosef Or Boczko"
-msgstr ""
-"Christian Hergert\n"
-"Alexander Larsson\n"
-"Alexandre Franke\n"
-"Carlos Soriano\n"
-"Cosimo Cecchi\n"
-"Dimitris Zenios\n"
-"Fabiano Fidêncio\n"
-"Florian Bäuerle\n"
-"Florian Müllner\n"
-"Hashem Nasarat\n"
-"Hylke Bons\n"
-"Igor Gnatenko\n"
-"Jakub Steiner\n"
-"Jasper St. Pierre\n"
-"Jonathon Jongsma\n"
-"Mathieu Bridon\n"
-"Megh Parikh\n"
-"Michael Catanzaro\n"
-"Pete Travis\n"
-"Ray Strode\n"
-"Roberto Majadas\n"
-"Ting-Wei Lan\n"
-"Trinh Anh Ngoc\n"
-"Yosef Or Boczko"
-
-#: ../src/resources/ui/gb-credits-widget.ui.h:26
-msgid "Artwork By:"
-msgstr "Sanatsal Ögeler:"
-
-#: ../src/resources/ui/gb-credits-widget.ui.h:27
-msgid ""
-"Allan Day\n"
-"Hylke Bons\n"
-"Jakub Steiner"
-msgstr ""
-"Allan Day\n"
-"Hylke Bons\n"
-"Jakub Steiner"
-
-#: ../src/resources/ui/gb-credits-widget.ui.h:30
-msgid "Translated By:"
-msgstr "Çeviren:"
-
-#. Translate this string with the translator names for your language.
-#: ../src/resources/ui/gb-credits-widget.ui.h:32
-msgid "translator-credits"
-msgstr "Muhammet Kara <muhammetk@gmail.com>"
-
-#: ../src/resources/ui/gb-credits-widget.ui.h:33
-msgid "Funded By:"
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-editor.c:131
+msgid "minimap mini map overview over view"
 msgstr ""
 
-#: ../src/resources/ui/gb-credits-widget.ui.h:34
-msgid ""
-"Christian Hergert\n"
-"Gareth Foster"
-msgstr ""
-"Christian Hergert\n"
-"Gareth Foster"
-
-#: ../src/resources/ui/gb-credits-widget.ui.h:36
-msgid "Special Thanks To:"
-msgstr "Özel Teşekkürler:"
-
-#: ../src/resources/ui/gb-credits-widget.ui.h:37
-msgid ""
-"Andy Hertzfeld and the Eazel Team\n"
-"Alberto Ruiz\n"
-"Bastien Nocera\n"
-"Cosimo Cecchi\n"
-"Emmanuele Bassi\n"
-"Federico Mena Quintero\n"
-"Jasper St Pierre\n"
-"Jon McCann\n"
-"Jonathan Blandford\n"
-"Matthias Clasen\n"
-"Miguel de Icaza\n"
-"Owen Taylor\n"
-"Rob Taylor\n"
-"Spencer Kimball\n"
-"Ximian Team\n"
-"\n"
-"Each and every contributor to GNOME\n"
-"and the Friends of GNOME"
-msgstr ""
-"Andy Hertzfeld ve Eazel Ekibi\n"
-"Alberto Ruiz\n"
-"Bastien Nocera\n"
-"Cosimo Cecchi\n"
-"Emmanuele Bassi\n"
-"Federico Mena Quintero\n"
-"Jasper St Pierre\n"
-"Jon McCann\n"
-"Jonathan Blandford\n"
-"Matthias Clasen\n"
-"Miguel de Icaza\n"
-"Owen Taylor\n"
-"Rob Taylor\n"
-"Spencer Kimball\n"
-"Ximian Team\n"
-"\n"
-"GNOME'a katkıda bulunan herkes\n"
-"ve GNOME Dostları"
-
-#: ../src/resources/ui/gb-credits-widget.ui.h:55
-msgid "GNOME Builder"
-msgstr "GNOME Builder"
-
-#: ../src/resources/ui/gb-credits-widget.ui.h:56
-msgid ""
-"Copyright 2014 Christian Hergert, et al.\n"
-"Licensed under the GNU GPL 3 or newer"
-msgstr ""
-"Telif Hakkı 2014 Christian Hergert, vd.\n"
-"GNU GPL 3 veya daha yeni sürümleri ile lisanlanmıştır"
-
-#: ../src/resources/ui/gb-document-menu-button.ui.h:1
-msgid "Search Documents"
-msgstr "Belgelerde Ara"
-
-#: ../src/resources/ui/gb-document-menu-button.ui.h:2
-#| msgid "No document were found"
-msgid "No documents were found"
-msgstr "Hiçbir belge bulunamadı"
-
-#: ../src/resources/ui/gb-editor-frame.ui.h:1
-msgid "Line 1, Column 1"
-msgstr "Satır 1, Sütun 1"
-
-#: ../src/resources/ui/gb-editor-frame.ui.h:2
-msgid "Currently parsing document"
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-git.c:128
+msgid "git author name surname attribution source code"
 msgstr ""
 
-#: ../src/resources/ui/gb-editor-settings-widget.ui.h:1
-msgid "Display right _margin at column:"
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-git.c:134
+msgid "git author email mail address attribute source code"
 msgstr ""
 
-#: ../src/resources/ui/gb-editor-settings-widget.ui.h:2
-msgid "Trim trailing whitespace when saving document"
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-insight.c:54
+msgid "word words auto completion suggest found document"
 msgstr ""
 
-#: ../src/resources/ui/gb-editor-settings-widget.ui.h:3
-msgid "Insert matching brace, bracket, quotation, and parenthesis."
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-insight.c:59
+msgid "experimental clang autocompletion auto complete"
 msgstr ""
 
-#: ../src/resources/ui/gb-editor-settings-widget.ui.h:4
-msgid "Overwrite closing brace, bracket, quotation, and parenthesis."
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-insight.c:64
+msgid "exuberant ctags tags autocompletion auto complete"
 msgstr ""
 
-#: ../src/resources/ui/gb-editor-settings-widget.ui.h:5
-#: ../src/resources/ui/gb-editor-tweak-widget.ui.h:6
-msgid "Indentation"
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-keybindings.c:64
+#, fuzzy
+#| msgid "Failed to load keybindings."
+msgid "default builder keybindings"
+msgstr "Tuş kısayolları yüklenemedi."
+
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-keybindings.c:69
+msgid "emacs keybindings modal"
 msgstr ""
 
-#: ../src/resources/ui/gb-editor-settings-widget.ui.h:6
-msgid "_Tab width:"
-msgstr "Sekme _genişliği:"
-
-#: ../src/resources/ui/gb-editor-settings-widget.ui.h:7
-msgid "Insert _spaces instead of tabs"
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-keybindings.c:74
+msgid "vim keybindings modal"
 msgstr ""
 
-#: ../src/resources/ui/gb-editor-settings-widget.ui.h:8
-msgid "_Enable automatic indentation"
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-keybindings.c:80
+msgid "smart home end"
 msgstr ""
 
-#: ../src/resources/ui/gb-editor-tweak-widget.ui.h:1
-msgid "Search highlight mode…"
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-keybindings.c:85
+msgid "smart back backspace indent align"
 msgstr ""
 
-#: ../src/resources/ui/gb-editor-tweak-widget.ui.h:2
-msgid "Display line numbers"
-msgstr "Satır numaralarını göster"
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-theme.c:114
+msgid "show grid lines"
+msgstr "ızgara çizgilerini göster"
 
-#: ../src/resources/ui/gb-editor-tweak-widget.ui.h:3
-msgid "Display right margin"
-msgstr "Sağ kenar boşluğunu göster"
-
-#: ../src/resources/ui/gb-editor-tweak-widget.ui.h:4
-msgid "Highlight current line"
-msgstr "Geçerli satırı vurgula"
-
-#: ../src/resources/ui/gb-editor-tweak-widget.ui.h:5
-msgid "Auto indent"
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-theme.c:119
+msgid "source style scheme source tango solarized builder syntax"
 msgstr ""
 
-#: ../src/resources/ui/gb-editor-tweak-widget.ui.h:7
-msgid "Spaces"
-msgstr "Boşluklar"
+#: ../src/preferences/gb-preferences-switch.c:315
+#, fuzzy
+#| msgid "The title of the workspace."
+msgid "The title of the switch."
+msgstr "Çalışma alanının başlığı."
 
-#: ../src/resources/ui/gb-editor-tweak-widget.ui.h:8
-msgid "Tabs"
-msgstr "Sekmeler"
+#: ../src/preferences/gb-preferences-switch.c:322
+#, fuzzy
+#| msgid "The duration of the animation"
+msgid "The description for the switch."
+msgstr "Animasyon süresi"
 
-#: ../src/resources/ui/gb-editor-tweak-widget.ui.h:9
-msgid "2"
-msgstr "2"
-
-#: ../src/resources/ui/gb-editor-tweak-widget.ui.h:10
-msgid "3"
-msgstr "3"
-
-#: ../src/resources/ui/gb-editor-tweak-widget.ui.h:11
-msgid "4"
-msgstr "4"
-
-#: ../src/resources/ui/gb-editor-tweak-widget.ui.h:12
-msgid "8"
-msgstr "8"
-
-#: ../src/resources/ui/gb-editor-view.ui.h:3
-msgid "_Close"
-msgstr "_Kapat"
-
-#: ../src/resources/ui/gb-preferences-page-editor.ui.h:1
-msgid "<b>Restore Cursor Position</b>"
+#: ../src/preferences/gb-preferences-switch.c:328
+msgid "Is Radio"
 msgstr ""
 
-#: ../src/resources/ui/gb-preferences-page-editor.ui.h:2
-msgid ""
-"Restore the insertion cursor to the last position when reopening a file."
+#: ../src/preferences/gb-preferences-switch.c:329
+msgid "If a radio button should be used."
 msgstr ""
 
-#: ../src/resources/ui/gb-preferences-page-editor.ui.h:3
-msgid "<b>Suggest Word Completion</b>"
+#: ../src/preferences/gb-preferences-switch.c:335
+#| msgid "Search Settings"
+msgid "Settings"
+msgstr "Ayarlar"
+
+#: ../src/preferences/gb-preferences-switch.c:336
+msgid "The GSettings for the setting."
 msgstr ""
 
-#: ../src/resources/ui/gb-preferences-page-editor.ui.h:4
-msgid "Suggest completion of words found within the current document."
+#: ../src/preferences/gb-preferences-switch.c:342
+msgid "Settings Schema Key"
 msgstr ""
 
-#: ../src/resources/ui/gb-preferences-page-editor.ui.h:5
-msgid "<b>Display Document Changes</b>"
+#: ../src/preferences/gb-preferences-switch.c:343
+msgid "The settings schema key."
 msgstr ""
 
-#: ../src/resources/ui/gb-preferences-page-editor.ui.h:6
-msgid ""
-"Display whether a line has been added or modified next to the line number."
+#: ../src/preferences/gb-preferences-switch.c:349
+msgid "Settings Schema Value"
 msgstr ""
 
-#: ../src/resources/ui/gb-preferences-page-editor.ui.h:7
-msgid "<b>Show Line Numbers</b>"
+#: ../src/preferences/gb-preferences-switch.c:350
+msgid "An action-target for the settings action."
 msgstr ""
 
-#: ../src/resources/ui/gb-preferences-page-editor.ui.h:8
-msgid "Display line numbers in the document."
+#: ../src/preferences/gb-preferences-switch.c:357
+#: ../src/search/gb-search-display-group.c:429
+msgid "Size Group"
+msgstr "Boyut Grubu"
+
+#: ../src/preferences/gb-preferences-switch.c:358
+#, fuzzy
+#| msgid "The size group for the label."
+msgid "The sizing group for the control."
+msgstr "Etiket için boyut grubu."
+
+#: ../src/project-tree/gb-new-file-popover.c:124
+#: ../src/project-tree/gb-rename-file-popover.c:142
+msgid "A folder with that name already exists."
 msgstr ""
 
-#: ../src/resources/ui/gb-preferences-page-editor.ui.h:9
-msgid "<b>Highlight Current Line</b>"
+#: ../src/project-tree/gb-new-file-popover.c:127
+#: ../src/project-tree/gb-rename-file-popover.c:145
+msgid "A file with that name already exists."
 msgstr ""
 
-#: ../src/resources/ui/gb-preferences-page-editor.ui.h:10
-msgid "Highlight the line containing the cursor."
+#: ../src/project-tree/gb-new-file-popover.c:275
+#| msgid "File"
+msgid "File Type"
+msgstr "Dosya Türü"
+
+#: ../src/project-tree/gb-new-file-popover.c:276
+#| msgid "The title of the document."
+msgid "The file type to create."
+msgstr "Oluşturulacak dosya türü."
+
+#: ../src/project-tree/gb-new-file-popover.c:351
+#| msgid "Author Name"
+msgid "Folder Name"
+msgstr "Klasör Adı"
+
+#: ../src/project-tree/gb-project-file.c:166
+#: ../src/project-tree/gb-project-file.c:167 ../src/tree/gb-tree-node.c:606
+msgid "Icon Name"
+msgstr "Simge Adı"
+
+#: ../src/project-tree/gb-project-tree-builder.c:79
+#| msgid "File"
+msgid "Files"
+msgstr "Dosyalar"
+
+#: ../src/project-tree/gb-project-tree.c:158
+msgid "If files ignored by the VCS should be displayed."
 msgstr ""
 
-#: ../src/resources/ui/gb-preferences-page-editor.ui.h:11
-msgid "<b>Highlight Matching Brackets</b>"
+#: ../src/project-tree/gb-rename-file-popover.c:80
+#, c-format
+msgid "Rename %s"
 msgstr ""
 
-#: ../src/resources/ui/gb-preferences-page-editor.ui.h:12
-msgid "Whether or not matching brackets should be highlighted."
+#: ../src/project-tree/gb-rename-file-popover.c:173
+msgid "File name must not contain subdirectories."
 msgstr ""
 
-#: ../src/resources/ui/gb-preferences-page-editor.ui.h:13
-msgid "<b>Smart Home End</b>"
-msgstr ""
-
-#: ../src/resources/ui/gb-preferences-page-editor.ui.h:14
-msgid "Home moves to first non-space character."
-msgstr ""
-
-#: ../src/resources/ui/gb-preferences-page-editor.ui.h:15
-msgid "<b>Show Grid Lines</b>"
-msgstr ""
-
-#: ../src/resources/ui/gb-preferences-page-editor.ui.h:16
-msgid "Display a grid patten in the document."
-msgstr ""
-
-#: ../src/resources/ui/gb-preferences-page-emacs.ui.h:1
-msgid "<b>EMACS Modal Editing</b>"
-msgstr ""
-
-#: ../src/resources/ui/gb-preferences-page-emacs.ui.h:2
-msgid "Use EMACS style modal editing in the source code editor."
-msgstr ""
-
-#: ../src/resources/ui/gb-preferences-page-git.ui.h:1
-msgid "Author Name"
-msgstr "Yazarın Adı"
-
-#: ../src/resources/ui/gb-preferences-page-git.ui.h:2
-msgid "Author Email"
-msgstr "Yazarın E-posta Adresi"
-
-#: ../src/resources/ui/gb-preferences-page-git.ui.h:3
-#: ../src/resources/ui/gb-preferences-window.ui.h:5
-msgid "Git"
-msgstr "Git"
-
-#: ../src/resources/ui/gb-preferences-page-vim.ui.h:1
-msgid "<b>VIM Modal Editing</b>"
-msgstr ""
-
-#: ../src/resources/ui/gb-preferences-page-vim.ui.h:2
-msgid "Use VIM style modal editing in the source code editor."
-msgstr ""
-
-#: ../src/resources/ui/gb-preferences-page-vim.ui.h:3
-msgid "<b>Scroll Offset</b>"
-msgstr ""
-
-#: ../src/resources/ui/gb-preferences-page-vim.ui.h:4
-msgid "Minimal number of lines to keep above and below the cursor."
-msgstr ""
-
-#: ../src/resources/ui/gb-preferences-window.ui.h:1
-msgid "Preferences"
-msgstr "Tercihler"
-
-#: ../src/resources/ui/gb-preferences-window.ui.h:2
-msgid "Search Preferences"
-msgstr "Arama Tercihleri"
-
-#: ../src/resources/ui/gb-preferences-window.ui.h:3
-#: ../src/resources/ui/gb-workbench.ui.h:4
-msgid "Editor"
-msgstr "Düzenleyici"
-
-#: ../src/resources/ui/gb-preferences-window.ui.h:4
-msgid "Language Settings"
-msgstr "Dil Ayarları"
-
-#: ../src/resources/ui/gb-preferences-window.ui.h:6
-msgid "Vim"
-msgstr "Vim"
-
-#: ../src/resources/ui/gb-preferences-window.ui.h:7
-msgid "Emacs"
-msgstr ""
-
-#: ../src/resources/ui/gb-workbench.ui.h:1
-msgid "Go back in history"
-msgstr ""
-
-#: ../src/resources/ui/gb-workbench.ui.h:2
-msgid "Go forward in history"
-msgstr ""
-
-#: ../src/resources/ui/gb-workbench.ui.h:3
-msgid "Create new document"
-msgstr ""
-
-#: ../src/scrolledwindow/gb-scrolled-window.c:261
+#: ../src/scrolledwindow/gb-scrolled-window.c:254
 msgid "Max Content Height"
-msgstr ""
+msgstr "En Fazla İçerik Yüksekliği"
 
-#: ../src/scrolledwindow/gb-scrolled-window.c:262
+#: ../src/scrolledwindow/gb-scrolled-window.c:255
 msgid "The maximum height request that can be made."
-msgstr ""
+msgstr "Yapılabilecek en fazla yükseklik isteği."
 
-#: ../src/scrolledwindow/gb-scrolled-window.c:272
+#: ../src/scrolledwindow/gb-scrolled-window.c:263
 msgid "Max Content Width"
-msgstr ""
+msgstr "En Fazla İçerik Genişliği"
 
-#: ../src/scrolledwindow/gb-scrolled-window.c:273
+#: ../src/scrolledwindow/gb-scrolled-window.c:264
 msgid "The maximum width request that can be made."
-msgstr ""
+msgstr "Yapılabilecek en fazla genişlik isteği."
 
-#: ../src/search/gb-search-box.c:459
-msgid "Search Manager"
-msgstr "Arama Yöneticisi"
-
-#: ../src/search/gb-search-box.c:460
-msgid "The search manager for the search box."
-msgstr ""
-
-#: ../src/search/gb-search-display.c:215
+#: ../src/search/gb-search-display.c:234
 msgid "Cannot add provider more than once."
 msgstr ""
 
-#: ../src/search/gb-search-display.c:293
+#: ../src/search/gb-search-display.c:316
 msgid "The provider could not be found."
 msgstr ""
 
-#: ../src/search/gb-search-display.c:549
-#: ../src/snippets/gb-source-snippet-chunk.c:298
-msgid "Context"
-msgstr "Bağlam"
-
-#: ../src/search/gb-search-display.c:550
+#: ../src/search/gb-search-display.c:578
 msgid "The active search context."
+msgstr "Aktif arama bağlamı."
+
+#: ../src/search/gb-search-display-group.c:182
+#, c-format
+msgid "%s more"
 msgstr ""
 
-#: ../src/search/gb-search-display-group.c:183
-msgid "%"
-msgstr "%"
-
-#: ../src/search/gb-search-display-group.c:419
-msgid "Provider"
-msgstr "Sağlayıcı"
-
-#: ../src/search/gb-search-display-group.c:420
+#: ../src/search/gb-search-display-group.c:423
 msgid "The search provider"
 msgstr "Arama sağlayıcısı"
 
 #: ../src/search/gb-search-display-group.c:430
-msgid "Size Group"
-msgstr "Boyut Grubu"
-
-#: ../src/search/gb-search-display-group.c:431
 msgid "The size group for the label."
 msgstr "Etiket için boyut grubu."
 
-#: ../src/search/gb-search-result.c:217
-msgid "Score"
-msgstr "Puan"
+#: ../src/search/gb-search-display-row.c:159
+#: ../src/search/gb-search-display-row.c:160
+msgid "Result"
+msgstr "Sonuç"
 
-#: ../src/search/gb-search-result.c:218
-msgid "The result match score."
-msgstr ""
-
-#: ../src/search/gb-search-result.c:230
-msgid "Subtitle"
-msgstr "Altyazı"
-
-#: ../src/search/gb-search-result.c:231 ../src/search/gb-search-result.c:242
-msgid "The pango markup to be rendered."
-msgstr ""
-
-#: ../src/snippets/gb-source-snippet.c:352
-msgid "Chunk does not belong to snippet."
-msgstr ""
-
-#: ../src/snippets/gb-source-snippet.c:1024
-msgid "The GtkTextBuffer for the snippet."
-msgstr ""
-
-#: ../src/snippets/gb-source-snippet.c:1032
-msgid "Mark Begin"
-msgstr ""
-
-#: ../src/snippets/gb-source-snippet.c:1033
-msgid "The beginning text mark."
-msgstr ""
-
-#: ../src/snippets/gb-source-snippet.c:1041
-msgid "Mark End"
-msgstr ""
-
-#: ../src/snippets/gb-source-snippet.c:1042
-msgid "The ending text mark."
-msgstr ""
-
-#: ../src/snippets/gb-source-snippet.c:1050
-msgid "Trigger"
-msgstr ""
-
-#: ../src/snippets/gb-source-snippet.c:1051
-msgid "The trigger for the snippet."
-msgstr ""
-
-#: ../src/snippets/gb-source-snippet.c:1060
-msgid "The language for the snippet."
-msgstr ""
-
-#: ../src/snippets/gb-source-snippet.c:1068
-msgid "Description"
-msgstr "Açıklama"
-
-#: ../src/snippets/gb-source-snippet.c:1069
-msgid "The description for the snippet."
-msgstr ""
-
-#: ../src/snippets/gb-source-snippet.c:1077
-#: ../src/snippets/gb-source-snippet-chunk.c:316
-msgid "Tab Stop"
-msgstr "Sekme Durağı"
-
-#: ../src/snippets/gb-source-snippet.c:1078
-msgid "The current tab stop."
-msgstr ""
-
-#: ../src/snippets/gb-source-snippet-chunk.c:299
-msgid "The snippet context."
-msgstr ""
-
-#: ../src/snippets/gb-source-snippet-chunk.c:307
-msgid "Spec"
-msgstr ""
-
-#: ../src/snippets/gb-source-snippet-chunk.c:308
-msgid "The specification to expand using the contxt."
-msgstr ""
-
-#: ../src/snippets/gb-source-snippet-chunk.c:317
-msgid "The tab stop for the chunk."
-msgstr ""
-
-#: ../src/snippets/gb-source-snippet-chunk.c:327
-#: ../src/tree/gb-tree-node.c:539
-msgid "Text"
-msgstr "Metin"
-
-#: ../src/snippets/gb-source-snippet-chunk.c:328
-msgid "The text for the chunk."
-msgstr ""
-
-#: ../src/snippets/gb-source-snippet-chunk.c:336
-msgid "Text Set"
-msgstr ""
-
-#: ../src/snippets/gb-source-snippet-chunk.c:337
-msgid "If the text property has been manually set."
-msgstr ""
-
-#: ../src/snippets/gb-source-snippet-completion-item.c:134
-msgid "Snippet"
-msgstr ""
-
-#: ../src/snippets/gb-source-snippet-completion-item.c:135
-msgid "The snippet to insert."
-msgstr ""
-
-#: ../src/snippets/gb-source-snippet-completion-provider.c:169
-msgid "The source view to insert snippet into."
-msgstr ""
-
-#: ../src/snippets/gb-source-snippet-completion-provider.c:177
-#: ../src/snippets/gb-source-snippet-completion-provider.c:262
-msgid "Snippets"
-msgstr ""
-
-#: ../src/snippets/gb-source-snippet-completion-provider.c:178
-msgid "The snippets to complete with this provider."
-msgstr ""
-
-#: ../src/snippets/gb-source-snippet-parser.c:503
-#, c-format
-msgid "Invalid snippet at line %d: %s"
-msgstr ""
-
-#: ../src/snippets/gb-source-snippets-manager.c:92
-#, c-format
-msgid "Failed to open directory: %s"
-msgstr "Dizin açma başarısız oldu: %s"
-
-#: ../src/snippets/gb-source-snippets-manager.c:107
-#, c-format
-msgid "Failed to load file: %s: %s"
-msgstr "Dosya yükleme başarısız oldu: %s: %s"
-
-#: ../src/theatrics/gb-box-theatric.c:258
-#: ../src/theatrics/gb-box-theatric.c:259
-msgid "Alpha"
-msgstr "Alfa"
-
-#: ../src/theatrics/gb-box-theatric.c:269
-#: ../src/theatrics/gb-box-theatric.c:270
-msgid "background"
-msgstr ""
-
-#: ../src/theatrics/gb-box-theatric.c:278
-#: ../src/theatrics/gb-box-theatric.c:279
-msgid "height"
-msgstr "yükseklik"
-
-#: ../src/theatrics/gb-box-theatric.c:300
-#: ../src/theatrics/gb-box-theatric.c:301
-msgid "width"
-msgstr "genişlik"
-
-#: ../src/theatrics/gb-box-theatric.c:311
-#: ../src/theatrics/gb-box-theatric.c:312
-msgid "x"
-msgstr "x"
-
-#: ../src/theatrics/gb-box-theatric.c:322
-#: ../src/theatrics/gb-box-theatric.c:323
-msgid "y"
-msgstr "y"
-
-#: ../src/tree/gb-tree-builder.c:288 ../src/tree/gb-tree-node.c:525
+#: ../src/tree/gb-tree-builder.c:220 ../src/tree/gb-tree-node.c:642
 msgid "Tree"
 msgstr "Ağaç"
 
-#: ../src/tree/gb-tree-builder.c:289
+#: ../src/tree/gb-tree-builder.c:221
 msgid "The GbTree the builder belongs to."
 msgstr ""
 
-#: ../src/tree/gb-tree.c:888
-msgid "Root"
-msgstr "Kök"
-
-#: ../src/tree/gb-tree.c:889
+#: ../src/tree/gb-tree.c:961
 msgid "The root object of the tree."
 msgstr "Ağacın kök nesnesi."
 
-#: ../src/tree/gb-tree.c:897
+#: ../src/tree/gb-tree.c:967
 msgid "Selection"
 msgstr "Seçim"
 
-#: ../src/tree/gb-tree.c:898
+#: ../src/tree/gb-tree.c:968
 msgid "The node selection."
 msgstr "Düğüm seçimi."
 
-#: ../src/tree/gb-tree-node.c:483 ../src/workbench/gb-workspace.c:161
-msgid "Icon Name"
-msgstr "Simge Adı"
-
-#: ../src/tree/gb-tree-node.c:484
+#: ../src/tree/gb-tree-node.c:607
 msgid "The icon name to display."
 msgstr "Görüntülenecek simge adı."
 
-#: ../src/tree/gb-tree-node.c:497
+#: ../src/tree/gb-tree-node.c:618
 msgid "Item"
 msgstr "Öge"
 
-#: ../src/tree/gb-tree-node.c:498
+#: ../src/tree/gb-tree-node.c:619
 msgid "Optional object to associate with node."
 msgstr "Düğümle ilişkilendirilecek, isteğe bağlı nesne."
 
-#: ../src/tree/gb-tree-node.c:511
-msgid "Parent"
-msgstr "Ebeveyn"
-
-#: ../src/tree/gb-tree-node.c:512
+#: ../src/tree/gb-tree-node.c:631
 msgid "The parent node."
 msgstr "Ebeveyn düğüm."
 
-#: ../src/tree/gb-tree-node.c:526
+#: ../src/tree/gb-tree-node.c:643
 msgid "The GbTree the node belongs to."
 msgstr "Düğümün ait olduğu GbTree."
 
-#: ../src/tree/gb-tree-node.c:540
+#: ../src/tree/gb-tree-node.c:655
 msgid "The text of the node."
 msgstr "Düğüm metni."
 
-#: ../src/tree/gb-tree-node.c:553
+#: ../src/tree/gb-tree-node.c:666
 msgid "Use Markup"
 msgstr ""
 
-#: ../src/tree/gb-tree-node.c:554
+#: ../src/tree/gb-tree-node.c:667
 msgid "If text should be translated as markup."
 msgstr ""
 
-#: ../src/trie/trie.c:790
+#: ../src/tree/gb-tree-node.c:673
+msgid "Use Dim Label"
+msgstr ""
+
+#: ../src/tree/gb-tree-node.c:674
+msgid "If text should be rendered with a dim label."
+msgstr ""
+
+#: ../src/util/gb-file-manager.c:64
+msgid "File path is NULL"
+msgstr ""
+
+#: ../src/util/gb-file-manager.c:73 ../src/util/gb-file-manager.c:84
+msgid "Error converting UTF-8 filename to wide char"
+msgstr ""
+
+#: ../src/util/gb-file-manager.c:92
+msgid "ILCreateFromPath() failed"
+msgstr ""
+
+#: ../src/util/gb-file-manager.c:129
 #, c-format
-msgid "Traversal order %u is not supported on Trie."
+msgid "Cannot convert '%s' into a valid NSURL."
 msgstr ""
 
-#: ../src/workbench/gb-workbench.c:854
-msgid "Command Manager"
-msgstr "Komut Yöneticisi"
-
-#: ../src/workbench/gb-workbench.c:855
-msgid "The command manager for the workspace."
+#: ../src/util/gb-file-manager.c:157
+msgid "Connecting to org.freedesktop.FileManager1 failed: "
 msgstr ""
 
-#: ../src/workbench/gb-workbench.c:864
-msgid "Navigation List"
-msgstr "Gezinme Listesi"
-
-#: ../src/workbench/gb-workbench.c:865
-msgid "The navigation list for the workbench."
+#: ../src/util/gb-file-manager.c:181
+msgid "Calling ShowItems failed: "
 msgstr ""
 
-#: ../src/workbench/gb-workspace.c:152
-msgid "The title of the workspace."
+#: ../src/util/gb-glib.c:55
+msgid "Just now"
+msgstr "Şimdi"
+
+#: ../src/util/gb-glib.c:57
+msgid "An hour ago"
+msgstr "Bir saat önce"
+
+#: ../src/util/gb-glib.c:59
+msgid "Yesterday"
+msgstr "Dün"
+
+#: ../src/util/gb-glib.c:65
+msgid "About a year ago"
+msgstr "Yaklaşık bir yıl önce"
+
+#: ../src/util/gb-glib.c:69
+#, c-format
+msgid "About %u years ago"
+msgstr "Yaklaşık %u yıl önce"
+
+#: ../src/views/gb-view.c:258
+msgid "Can Split"
+msgstr ""
+
+#: ../src/views/gb-view.c:259
+msgid "If the view can be split."
+msgstr ""
+
+#: ../src/views/gb-view.c:266
+#, fuzzy
+#| msgid "The title of the document."
+msgid "The underlying document."
+msgstr "Belge başlığı."
+
+#: ../src/views/gb-view.c:273
+#, fuzzy
+#| msgid "If the document is read only."
+msgid "If the document has been modified."
+msgstr "Belge salt okunur mu."
+
+#: ../src/views/gb-view.c:280
+msgid "The view title."
+msgstr ""
+
+#: ../src/views/gb-view-stack.c:501
+msgid "The active view."
+msgstr ""
+
+#: ../src/workbench/gb-workbench-actions.c:162
+msgid "Open Document"
+msgstr "Belge Aç"
+
+#: ../src/workbench/gb-workbench-actions.c:170
+msgid "Open"
+msgstr "Aç"
+
+#: ../src/workbench/gb-workbench.c:151
+#, fuzzy, c-format
+#| msgid "Builder"
+msgid "%s - Builder"
+msgstr "Builder"
+
+#: ../src/workbench/gb-workbench.c:693
+#, fuzzy
+#| msgid "Builder"
+msgid "Building"
+msgstr "Builder"
+
+#: ../src/workbench/gb-workbench.c:694
+#, fuzzy
+#| msgid "If the document is read only."
+msgid "If the project is currently building."
+msgstr "Belge salt okunur mu."
+
+#: ../src/workbench/gb-workbench.c:709
+#, fuzzy
+#| msgid "The text of the node."
+msgid "The IdeContext for the workbench."
+msgstr "Düğüm metni."
+
+#: ../src/workbench/gb-workbench.c:940
+#, fuzzy
+#| msgid "Builder"
+msgid "Build Failure"
+msgstr "Builder"
+
+#: ../src/workbench/gb-workbench.c:987
+msgid "Project build system does not support building"
+msgstr ""
+
+#: ../src/workspace/gb-slider.c:755 ../src/workspace/gb-workspace.c:1092
+#: ../src/workspace/gb-workspace-pane.c:281
+#, fuzzy
+#| msgid "Description"
+msgid "Position"
+msgstr "Açıklama"
+
+#: ../src/workspace/gb-slider.c:756
+msgid "Which slider child is visible."
+msgstr ""
+
+#: ../src/workspace/gb-workspace.c:1062
+msgid "Left Pane"
+msgstr ""
+
+#: ../src/workspace/gb-workspace.c:1063
+#, fuzzy
+#| msgid "The title of the workspace."
+msgid "The left workspace pane."
 msgstr "Çalışma alanının başlığı."
 
-#: ../src/workbench/gb-workspace.c:162
-msgid "The name of the icon to use."
-msgstr "Kullanılacak simgenin adı."
+#: ../src/workspace/gb-workspace.c:1069
+msgid "Right Pane"
+msgstr ""
+
+#: ../src/workspace/gb-workspace.c:1070
+#, fuzzy
+#| msgid "The title of the workspace."
+msgid "The right workspace pane."
+msgstr "Çalışma alanının başlığı."
+
+#: ../src/workspace/gb-workspace.c:1076
+msgid "Bottom Pane"
+msgstr ""
+
+#: ../src/workspace/gb-workspace.c:1077
+#, fuzzy
+#| msgid "The title of the workspace."
+msgid "The bottom workspace pane."
+msgstr "Çalışma alanının başlığı."
+
+#: ../src/workspace/gb-workspace.c:1083
+#, fuzzy
+#| msgid "Context"
+msgid "Content Pane"
+msgstr "Bağlam"
+
+#: ../src/workspace/gb-workspace.c:1084
+#, fuzzy
+#| msgid "The title of the workspace."
+msgid "The content workspace pane."
+msgstr "Çalışma alanının başlığı."
+
+#: ../src/workspace/gb-workspace.c:1093
+#, fuzzy
+#| msgid "The duration of the animation in millseconds."
+msgid "The position of the pane relative to its edge."
+msgstr "Saniye cinsinden canlandırma süresi."
+
+#: ../src/workspace/gb-workspace.c:1102
+msgid "Reveal"
+msgstr ""
+
+#: ../src/workspace/gb-workspace.c:1103
+msgid "If the pane should be revealed."
+msgstr ""
+
+#: ../src/workspace/gb-workspace-pane.c:282
+#, fuzzy
+#| msgid "The text of the node."
+msgid "The position of the pane."
+msgstr "Düğüm metni."
+
+#: ../tools/ide-build.c:79 ../tools/ide-build.c:83
+#, c-format
+msgid "===============\n"
+msgstr "===============\n"
+
+#: ../tools/ide-build.c:80
+#, c-format
+msgid " Build Failure: %s\n"
+msgstr " İnşa Başarısız: %s\n"
+
+#: ../tools/ide-build.c:81
+msgid " Build ran for: %"
+msgstr ""
+
+#: ../tools/ide-build.c:88 ../tools/ide-build.c:92
+#, c-format
+msgid "=================\n"
+msgstr "=================\n"
+
+#: ../tools/ide-build.c:89
+#, c-format
+msgid " Build Successful\n"
+msgstr " İnşa Başarılı\n"
+
+#: ../tools/ide-build.c:90
+msgid "   Build ran for: %"
+msgstr ""
+
+#: ../tools/ide-build.c:198 ../tools/ide-build.c:204
+#, c-format
+msgid "========================\n"
+msgstr "========================\n"
+
+#: ../tools/ide-build.c:199
+#, c-format
+msgid "           Project Name: %s\n"
+msgstr "           Proje Adı: %s\n"
+
+#: ../tools/ide-build.c:200
+#, c-format
+msgid " Version Control System: %s\n"
+msgstr " Sürüm Kontrol Sistemi: %s\n"
+
+#: ../tools/ide-build.c:201
+#, c-format
+msgid "           Build System: %s\n"
+msgstr "           İnşa Sistemi: %s\n"
+
+#: ../tools/ide-build.c:202
+#, c-format
+msgid "    Build Date and Time: %s\n"
+msgstr "    İnşa Tarihi ve Saati: %s\n"
+
+#: ../tools/ide-build.c:203
+#, c-format
+msgid "    Building for Device: %s (%s)\n"
+msgstr ""
+
+#: ../tools/ide-build.c:286
+#, c-format
+msgid "Timed out while waiting for devices to settle.\n"
+msgstr ""
+
+#: ../tools/ide-build.c:344
+#, c-format
+msgid "Waiting up to 60 seconds for devices to settle. Ctrl+C to exit.\n"
+msgstr ""
+
+#: ../tools/ide-build.c:353
+msgid "The target device we are building for."
+msgstr ""
+
+#: ../tools/ide-build.c:354
+msgid "DEVICE_ID"
+msgstr ""
+
+#: ../tools/ide-build.c:357
+msgid "Clean and rebuild the project."
+msgstr ""
+
+#: ../tools/ide-build.c:359
+msgid "Increase parallelism in the build."
+msgstr ""
+
+#: ../tools/ide-build.c:360
+msgid "N"
+msgstr ""
+
+#: ../tools/ide-build.c:371
+msgid "- Build the project."
+msgstr ""
+
+#: ../tools/ide-list-build-flags.c:113
+msgid "- Get build flags for a project file"
+msgstr ""
+
+#: ../tools/ide-list-devices.c:107
+msgid "- List devices found on the system."
+msgstr ""
+
+#: ../tools/ide-list-diagnostics.c:185
+#, fuzzy, c-format
+#| msgid "Failed to load file: %s: %s"
+msgid "Failed to diagnose: %s\n"
+msgstr "Dosya yükleme başarısız oldu: %s: %s"
+
+#: ../tools/ide-list-diagnostics.c:248
+#, c-format
+msgid "No such file in project: %s\n"
+msgstr ""
+
+#: ../tools/ide-list-diagnostics.c:282
+msgid "- List diagnostics for a file."
+msgstr ""
+
+#: ../tools/ide-list-files.c:125 ../tools/ide-list-file-settings.c:205
+msgid "- List files found in project."
+msgstr ""
+
+#: ../tools/ide-list-file-settings.c:180
+#, c-format
+msgid "No files provided to load settings for.\n"
+msgstr ""
+
+#: ../tools/ide-mine-projects.c:78
+msgid "- discover projects"
+msgstr ""
+
+#: ../tools/ide-search.c:66
+#, c-format
+msgid "%s results\n"
+msgstr ""
+
+#: ../tools/ide-search.c:118
+msgid "PROJECT_FILE [SEARCH TERMS...]"
+msgstr ""
+
+#~ msgid "Failed to load keybindings: %s"
+#~ msgstr "Tuş kısayolları yüklenemedi: %s"
+
+#~ msgid "Failed to load local keybindings: %s"
+#~ msgstr "Yerel tuş kısayolları yüklenemedi: %s"
+
+#~ msgid "If code assistance is currently processing."
+#~ msgstr "Kod yardımı şu anda işlem yapıyor mu."
+
+#~ msgid "Progress"
+#~ msgstr "İlerleme"
+
+#~ msgid "GNOME Builder - %s"
+#~ msgstr "GNOME Builder - %s"
+
+#~ msgid "Question"
+#~ msgstr "Soru"
+
+#~ msgid "Close _without Saving"
+#~ msgstr "Ka_ydetmeden Kapat"
+
+#~ msgid "_Save As…"
+#~ msgstr "Farklı _Kaydet…"
+
+#~ msgid "_Save"
+#~ msgstr "_Kaydet"
+
+#~ msgid "The number of documents in the manager."
+#~ msgstr "Yöneticideki belge sayısı."
+
+#~ msgid "No file was selected for saving."
+#~ msgstr "Kaydetmek için hiçbir dosya seçilmedi."
+
+#~ msgid "Error"
+#~ msgstr "Hata"
+
+#~ msgid "Line"
+#~ msgstr "Satır"
+
+#~ msgid "Workspace"
+#~ msgstr "Çalışma Alanı"
+
+#~ msgid "_Help"
+#~ msgstr "_Yardım"
+
+#~ msgid "Move Document _Left"
+#~ msgstr "Belgeyi So_la Taşı"
+
+#~ msgid "Move Document _Right"
+#~ msgstr "Belgeyi _Sağa Taşı"
+
+#~ msgid "Split Document Left"
+#~ msgstr "Belgeyi Sola Böl"
+
+#~ msgid "Split Document Right"
+#~ msgstr "Belgeyi Sağa Böl"
+
+#~ msgid "_Close Document"
+#~ msgstr "Belgeyi _Kapat"
+
+#~ msgid ""
+#~ "Christian Hergert\n"
+#~ "Alexander Larsson\n"
+#~ "Alexandre Franke\n"
+#~ "Carlos Soriano\n"
+#~ "Cosimo Cecchi\n"
+#~ "Dimitris Zenios\n"
+#~ "Fabiano Fidêncio\n"
+#~ "Florian Bäuerle\n"
+#~ "Florian Müllner\n"
+#~ "Hashem Nasarat\n"
+#~ "Hylke Bons\n"
+#~ "Igor Gnatenko\n"
+#~ "Jakub Steiner\n"
+#~ "Jasper St. Pierre\n"
+#~ "Jonathon Jongsma\n"
+#~ "Mathieu Bridon\n"
+#~ "Megh Parikh\n"
+#~ "Michael Catanzaro\n"
+#~ "Pete Travis\n"
+#~ "Ray Strode\n"
+#~ "Roberto Majadas\n"
+#~ "Ting-Wei Lan\n"
+#~ "Trinh Anh Ngoc\n"
+#~ "Yosef Or Boczko"
+#~ msgstr ""
+#~ "Christian Hergert\n"
+#~ "Alexander Larsson\n"
+#~ "Alexandre Franke\n"
+#~ "Carlos Soriano\n"
+#~ "Cosimo Cecchi\n"
+#~ "Dimitris Zenios\n"
+#~ "Fabiano Fidêncio\n"
+#~ "Florian Bäuerle\n"
+#~ "Florian Müllner\n"
+#~ "Hashem Nasarat\n"
+#~ "Hylke Bons\n"
+#~ "Igor Gnatenko\n"
+#~ "Jakub Steiner\n"
+#~ "Jasper St. Pierre\n"
+#~ "Jonathon Jongsma\n"
+#~ "Mathieu Bridon\n"
+#~ "Megh Parikh\n"
+#~ "Michael Catanzaro\n"
+#~ "Pete Travis\n"
+#~ "Ray Strode\n"
+#~ "Roberto Majadas\n"
+#~ "Ting-Wei Lan\n"
+#~ "Trinh Anh Ngoc\n"
+#~ "Yosef Or Boczko"
+
+#~ msgid "Artwork By:"
+#~ msgstr "Sanatsal Ögeler:"
+
+#~ msgid ""
+#~ "Allan Day\n"
+#~ "Hylke Bons\n"
+#~ "Jakub Steiner"
+#~ msgstr ""
+#~ "Allan Day\n"
+#~ "Hylke Bons\n"
+#~ "Jakub Steiner"
+
+#~ msgid "Translated By:"
+#~ msgstr "Çeviren:"
+
+#~ msgid ""
+#~ "Christian Hergert\n"
+#~ "Gareth Foster"
+#~ msgstr ""
+#~ "Christian Hergert\n"
+#~ "Gareth Foster"
+
+#~ msgid "Special Thanks To:"
+#~ msgstr "Özel Teşekkürler:"
+
+#~ msgid ""
+#~ "Andy Hertzfeld and the Eazel Team\n"
+#~ "Alberto Ruiz\n"
+#~ "Bastien Nocera\n"
+#~ "Cosimo Cecchi\n"
+#~ "Emmanuele Bassi\n"
+#~ "Federico Mena Quintero\n"
+#~ "Jasper St Pierre\n"
+#~ "Jon McCann\n"
+#~ "Jonathan Blandford\n"
+#~ "Matthias Clasen\n"
+#~ "Miguel de Icaza\n"
+#~ "Owen Taylor\n"
+#~ "Rob Taylor\n"
+#~ "Spencer Kimball\n"
+#~ "Ximian Team\n"
+#~ "\n"
+#~ "Each and every contributor to GNOME\n"
+#~ "and the Friends of GNOME"
+#~ msgstr ""
+#~ "Andy Hertzfeld ve Eazel Ekibi\n"
+#~ "Alberto Ruiz\n"
+#~ "Bastien Nocera\n"
+#~ "Cosimo Cecchi\n"
+#~ "Emmanuele Bassi\n"
+#~ "Federico Mena Quintero\n"
+#~ "Jasper St Pierre\n"
+#~ "Jon McCann\n"
+#~ "Jonathan Blandford\n"
+#~ "Matthias Clasen\n"
+#~ "Miguel de Icaza\n"
+#~ "Owen Taylor\n"
+#~ "Rob Taylor\n"
+#~ "Spencer Kimball\n"
+#~ "Ximian Team\n"
+#~ "\n"
+#~ "GNOME'a katkıda bulunan herkes\n"
+#~ "ve GNOME Dostları"
+
+#~ msgid ""
+#~ "Copyright 2014 Christian Hergert, et al.\n"
+#~ "Licensed under the GNU GPL 3 or newer"
+#~ msgstr ""
+#~ "Telif Hakkı 2014 Christian Hergert, vd.\n"
+#~ "GNU GPL 3 veya daha yeni sürümleri ile lisanlanmıştır"
+
+#~ msgid "Search Documents"
+#~ msgstr "Belgelerde Ara"
+
+#~| msgid "No document were found"
+#~ msgid "No documents were found"
+#~ msgstr "Hiçbir belge bulunamadı"
+
+#~ msgid "Line 1, Column 1"
+#~ msgstr "Satır 1, Sütun 1"
+
+#~ msgid "Author Email"
+#~ msgstr "Yazarın E-posta Adresi"
+
+#~ msgid "Language Settings"
+#~ msgstr "Dil Ayarları"
+
+#~ msgid "Vim"
+#~ msgstr "Vim"
+
+#~ msgid "%"
+#~ msgstr "%"
+
+#~ msgid "Command Manager"
+#~ msgstr "Komut Yöneticisi"
+
+#~ msgid "Navigation List"
+#~ msgstr "Gezinme Listesi"
