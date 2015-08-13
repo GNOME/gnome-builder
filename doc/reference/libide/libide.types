@@ -1,4 +1,4 @@
-ide_animation_mode_get_type
+egg_animation_mode_get_type
 ide_buffer_line_flags_get_type
 ide_debugger_get_type
 ide_diagnostic_get_type

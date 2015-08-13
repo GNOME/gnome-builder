@@ -20,7 +20,7 @@
 
 #include <glib/gi18n.h>
 
-#include "ide-animation.h"
+#include "egg-animation.h"
 #include "ide-box-theatric.h"
 #include "ide-cairo.h"
 

@@ -20,6 +20,7 @@
 
 #include <glib/gi18n.h>
 #include <libgit2-glib/ggit.h>
+#include <egg-animation.h>
 
 #include "gb-new-project-dialog.h"
 #include "gb-string.h"
@@ -161,8 +162,8 @@ gb_new_project_dialog__clone_cb (GObject      *object,
   g_assert (GB_IS_NEW_PROJECT_DIALOG (self));
   g_assert (G_IS_TASK (task));
 
-  ide_object_animate_full (self->clone_progress,
-                           IDE_ANIMATION_EASE_IN_OUT_QUAD,
+  egg_object_animate_full (self->clone_progress,
+                           EGG_ANIMATION_EASE_IN_OUT_QUAD,
                            ANIMATION_DURATION_MSEC,
                            NULL,
                            (GDestroyNotify)gb_widget_fade_hide,

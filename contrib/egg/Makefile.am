@@ -2,10 +2,14 @@ pkglibdir = $(libdir)/gnome-builder
 pkglib_LTLIBRARIES = libegg-private.la
 
 libegg_private_la_SOURCES = \
+	egg-animation.c \
+	egg-animation.h \
 	egg-binding-group.c \
 	egg-binding-group.h \
 	egg-counter.c \
 	egg-counter.h \
+	egg-frame-source.c \
+	egg-frame-source.h \
 	egg-heap.c \
 	egg-heap.h \
 	egg-search-bar.c \

@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <egg-animation.h>
 #include <glib/gi18n.h>
 #include <ide.h>
 #include <string.h>
@@ -23,7 +24,7 @@
 #include "gb-workspace.h"
 #include "gb-workspace-pane.h"
 
-#define ANIMATION_MODE     IDE_ANIMATION_EASE_IN_OUT_QUAD
+#define ANIMATION_MODE     EGG_ANIMATION_EASE_IN_OUT_QUAD
 #define ANIMATION_DURATION 250
 #define HORIZ_GRIP_EXTRA   5
 #define VERT_GRIP_EXTRA    5
@@ -33,7 +34,7 @@ typedef struct
 {
   GtkWidget       *widget;
   GtkAdjustment   *adjustment;
-  IdeAnimation    *animation;
+  EggAnimation    *animation;
   GdkWindow       *handle;
   GtkAllocation    handle_pos;
   GtkAllocation    alloc;
@@ -491,7 +492,7 @@ gb_workspace_child_set_reveal (GbWorkspace *self,
 
   if (item->animation != NULL)
     {
-      ide_animation_stop (item->animation);
+      egg_animation_stop (item->animation);
       ide_clear_weak_pointer (&item->animation);
     }
 
@@ -511,7 +512,7 @@ gb_workspace_child_set_reveal (GbWorkspace *self,
 
   if (gtk_widget_get_realized (GTK_WIDGET (self)))
     {
-      item->animation = ide_object_animate_full (item->adjustment,
+      item->animation = egg_object_animate_full (item->adjustment,
                                                  ANIMATION_MODE,
                                                  ANIMATION_DURATION,
                                                  frame_clock,

@@ -1,6 +1,6 @@
-/* ide-frame-source.h
+/* egg-frame-source.h
  *
- * Copyright (C) 2015 Christian Hergert <christian@hergert.me>
+ * Copyright (C) 2010-2015 Christian Hergert <christian@hergert.me>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,17 +16,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_FRAME_SOURCE_H
-#define IDE_FRAME_SOURCE_H
+#ifndef EGG_FRAME_SOURCE_H
+#define EGG_FRAME_SOURCE_H
 
 #include <glib.h>
 
 G_BEGIN_DECLS
 
-guint ide_frame_source_add (guint       frames_per_sec,
+guint egg_frame_source_add (guint       frames_per_sec,
                             GSourceFunc callback,
                             gpointer    user_data);
 
 G_END_DECLS
 
-#endif /* IDE_FRAME_SOURCE_H */
+#endif /* EGG_FRAME_SOURCE_H */

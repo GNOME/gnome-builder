@@ -1,6 +1,6 @@
-/* ide-frame-source.c
+/* egg-frame-source.c
  *
- * Copyright (C) 2015 Christian Hergert <christian@hergert.me>
+ * Copyright (C) 2010-2015 Christian Hergert <christian@hergert.me>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "ide-frame-source.h"
+#include "egg-frame-source.h"
 
 typedef struct
 {
@@ -24,13 +24,13 @@ typedef struct
    guint   fps;
    guint   frame_count;
    gint64  start_time;
-} IdeFrameSource;
+} EggFrameSource;
 
 static gboolean
-ide_frame_source_prepare (GSource *source,
+egg_frame_source_prepare (GSource *source,
                           gint    *timeout_)
 {
-   IdeFrameSource *fsource = (IdeFrameSource *)(gpointer)source;
+   EggFrameSource *fsource = (EggFrameSource *)(gpointer)source;
    gint64 current_time;
    guint elapsed_time;
    guint new_frame_num;
@@ -66,18 +66,18 @@ ide_frame_source_prepare (GSource *source,
 }
 
 static gboolean
-ide_frame_source_check (GSource *source)
+egg_frame_source_check (GSource *source)
 {
    gint timeout_;
-   return ide_frame_source_prepare(source, &timeout_);
+   return egg_frame_source_prepare(source, &timeout_);
 }
 
 static gboolean
-ide_frame_source_dispatch (GSource     *source,
+egg_frame_source_dispatch (GSource     *source,
                            GSourceFunc  source_func,
                            gpointer     user_data)
 {
-   IdeFrameSource *fsource = (IdeFrameSource *)(gpointer)source;
+   EggFrameSource *fsource = (EggFrameSource *)(gpointer)source;
    gboolean ret;
 
    if ((ret = source_func(user_data)))
@@ -86,13 +86,13 @@ ide_frame_source_dispatch (GSource     *source,
 }
 
 static GSourceFuncs source_funcs = {
-   ide_frame_source_prepare,
-   ide_frame_source_check,
-   ide_frame_source_dispatch,
+   egg_frame_source_prepare,
+   egg_frame_source_check,
+   egg_frame_source_dispatch,
 };
 
 /**
- * ide_frame_source_add:
+ * egg_frame_source_add:
  * @frames_per_sec: (in): Target frames per second.
  * @callback: (in) (scope notified): A #GSourceFunc to execute.
  * @user_data: (in): User data for @callback.
@@ -104,24 +104,24 @@ static GSourceFuncs source_funcs = {
  * Returns: A source id that can be removed with g_source_remove().
  */
 guint
-ide_frame_source_add (guint       frames_per_sec,
+egg_frame_source_add (guint       frames_per_sec,
                       GSourceFunc callback,
                       gpointer    user_data)
 {
-   IdeFrameSource *fsource;
+   EggFrameSource *fsource;
    GSource *source;
    guint ret;
 
    g_return_val_if_fail (frames_per_sec > 0, 0);
    g_return_val_if_fail (frames_per_sec <= 120, 0);
 
-   source = g_source_new(&source_funcs, sizeof(IdeFrameSource));
-   fsource = (IdeFrameSource *)(gpointer)source;
+   source = g_source_new(&source_funcs, sizeof(EggFrameSource));
+   fsource = (EggFrameSource *)(gpointer)source;
    fsource->fps = frames_per_sec;
    fsource->frame_count = 0;
    fsource->start_time = g_get_monotonic_time() / 1000;
    g_source_set_callback(source, callback, user_data, NULL);
-   g_source_set_name(source, "IdeFrameSource");
+   g_source_set_name(source, "EggFrameSource");
 
    ret = g_source_attach(source, NULL);
    g_source_unref(source);

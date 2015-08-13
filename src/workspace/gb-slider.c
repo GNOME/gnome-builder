@@ -16,8 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <egg-animation.h>
 #include <ide.h>
-
 #include <glib/gi18n.h>
 
 #include "gb-slider.h"
@@ -35,8 +35,8 @@ typedef struct
   GtkAdjustment    *h_adj;
   GtkAdjustment    *v_adj;
 
-  IdeAnimation     *h_anim;
-  IdeAnimation     *v_anim;
+  EggAnimation     *h_anim;
+  EggAnimation     *v_anim;
 
   GPtrArray        *children;
 
@@ -60,7 +60,7 @@ enum {
   CHILD_PROP_POSITION,
 };
 
-#define ANIMATION_MODE     IDE_ANIMATION_EASE_IN_QUAD
+#define ANIMATION_MODE     EGG_ANIMATION_EASE_IN_QUAD
 #define ANIMATION_DURATION 150
 
 static GParamSpec *gParamSpecs [LAST_PROP];
@@ -855,18 +855,18 @@ gb_slider_set_position (GbSlider         *self,
   if (priv->position != position)
     {
       GdkFrameClock *frame_clock;
-      IdeAnimation *anim;
+      EggAnimation *anim;
       gdouble v_value;
       gdouble h_value;
 
       priv->position = position;
 
       if (priv->h_anim)
-        ide_animation_stop (priv->h_anim);
+        egg_animation_stop (priv->h_anim);
       ide_clear_weak_pointer (&priv->h_anim);
 
       if (priv->v_anim)
-        ide_animation_stop (priv->v_anim);
+        egg_animation_stop (priv->v_anim);
       ide_clear_weak_pointer (&priv->v_anim);
 
       switch (position)
@@ -903,7 +903,7 @@ gb_slider_set_position (GbSlider         *self,
 
       frame_clock = gtk_widget_get_frame_clock (GTK_WIDGET (self));
 
-      anim = ide_object_animate (priv->h_adj,
+      anim = egg_object_animate (priv->h_adj,
                                  ANIMATION_MODE,
                                  ANIMATION_DURATION,
                                  frame_clock,
@@ -911,7 +911,7 @@ gb_slider_set_position (GbSlider         *self,
                                  NULL);
       ide_set_weak_pointer (&priv->h_anim, anim);
 
-      anim = ide_object_animate (priv->v_adj,
+      anim = egg_object_animate (priv->v_adj,
                                  ANIMATION_MODE,
                                  ANIMATION_DURATION,
                                  frame_clock,

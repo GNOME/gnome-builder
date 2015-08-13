@@ -320,8 +320,8 @@ widget_fade_hide (GtkWidget *widget)
   if (gtk_widget_get_visible (widget))
     {
       frame_clock = gtk_widget_get_frame_clock (widget);
-      ide_object_animate_full (widget,
-                               IDE_ANIMATION_LINEAR,
+      egg_object_animate_full (widget,
+                               EGG_ANIMATION_LINEAR,
                                1000,
                                frame_clock,
                                hide_callback,

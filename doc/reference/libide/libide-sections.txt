@@ -4,19 +4,6 @@ IDE_INSIDE
 </SECTION>
 
 <SECTION>
-<FILE>ide-animation</FILE>
-IDE_TYPE_ANIMATION
-ide_animation_start
-ide_animation_stop
-ide_animation_add_property
-ide_object_animate
-ide_object_animate_full
-<SUBSECTION Standard>
-IDE_TYPE_ANIMATION_MODE
-ide_animation_mode_get_type
-</SECTION>
-
-<SECTION>
 <FILE>ide-autotools-build-system</FILE>
 IDE_TYPE_AUTOTOOLS_BUILD_SYSTEM
 ide_autotools_build_system_get_tarball_name

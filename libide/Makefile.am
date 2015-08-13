@@ -174,8 +174,6 @@ libide_1_0_la_public_sources = \
 	ide.h \
 	local/ide-local-device.c \
 	local/ide-local-device.h \
-	theatrics/ide-animation.c \
-	theatrics/ide-animation.h \
 	$(NULL)
 
 libide_1_0_la_SOURCES = \
@@ -232,8 +230,6 @@ libide_1_0_la_SOURCES = \
 	pygobject/ide-pygobject-script.h \
 	theatrics/ide-box-theatric.c \
 	theatrics/ide-box-theatric.h \
-	theatrics/ide-frame-source.c \
-	theatrics/ide-frame-source.h \
 	util/ide-cairo.c \
 	util/ide-cairo.h \
 	util/ide-doc-seq.c \

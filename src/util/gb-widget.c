@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <egg-animation.h>
 #include <ide.h>
 #include <math.h>
 
@@ -176,8 +177,8 @@ gb_widget_fade_hide (GtkWidget *widget)
   if (gtk_widget_get_visible (widget))
     {
       frame_clock = gtk_widget_get_frame_clock (widget);
-      ide_object_animate_full (widget,
-                               IDE_ANIMATION_LINEAR,
+      egg_object_animate_full (widget,
+                               EGG_ANIMATION_LINEAR,
                                1000,
                                frame_clock,
                                hide_callback,
@@ -199,8 +200,8 @@ gb_widget_fade_show (GtkWidget *widget)
       frame_clock = gtk_widget_get_frame_clock (widget);
       gtk_widget_set_opacity (widget, 0.0);
       gtk_widget_show (widget);
-      ide_object_animate_full (widget,
-                               IDE_ANIMATION_LINEAR,
+      egg_object_animate_full (widget,
+                               EGG_ANIMATION_LINEAR,
                                500,
                                frame_clock,
                                NULL,

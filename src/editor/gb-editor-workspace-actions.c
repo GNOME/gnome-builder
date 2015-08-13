@@ -40,8 +40,8 @@ gb_editor_workspace_actions_show_sidebar (GSimpleAction *action,
   if (!g_variant_get_boolean (variant) && visible)
     {
       gb_project_tree_save_desired_width (self->project_tree);
-      ide_object_animate_full (self->project_paned,
-                               IDE_ANIMATION_EASE_IN_CUBIC,
+      egg_object_animate_full (self->project_paned,
+                               EGG_ANIMATION_EASE_IN_CUBIC,
                                ANIMATION_DURATION_MSEC,
                                NULL,
                                (GDestroyNotify)gtk_widget_hide,
@@ -58,8 +58,8 @@ gb_editor_workspace_actions_show_sidebar (GSimpleAction *action,
       position = gb_project_tree_get_desired_width (self->project_tree);
       gtk_paned_set_position (self->project_paned, 0);
       gtk_widget_show (GTK_WIDGET (self->project_sidebar));
-      ide_object_animate (self->project_paned,
-                          IDE_ANIMATION_EASE_IN_CUBIC,
+      egg_object_animate (self->project_paned,
+                          EGG_ANIMATION_EASE_IN_CUBIC,
                           ANIMATION_DURATION_MSEC,
                           NULL,
                           "position", position,

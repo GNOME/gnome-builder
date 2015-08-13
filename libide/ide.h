@@ -101,7 +101,6 @@ G_BEGIN_DECLS
 #include "git/ide-git-remote-callbacks.h"
 #include "git/ide-git-vcs.h"
 #include "local/ide-local-device.h"
-#include "theatrics/ide-animation.h"
 #include "util/ide-line-reader.h"
 
 #undef IDE_INSIDE

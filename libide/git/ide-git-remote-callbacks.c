@@ -18,7 +18,7 @@
 
 #include <glib/gi18n.h>
 
-#include "ide-animation.h"
+#include "egg-animation.h"
 #include "ide-debug.h"
 #include "ide-git-remote-callbacks.h"
 #include "ide-macros.h"
@@ -30,7 +30,7 @@ struct _IdeGitRemoteCallbacks
 {
   GgitRemoteCallbacks  parent_instance;
 
-  IdeAnimation        *animation;
+  EggAnimation        *animation;
   IdeProgress         *progress;
   gdouble              fraction;
 };
@@ -86,18 +86,18 @@ static gboolean
 ide_git_remote_callbacks__notify_fraction_cb (gpointer data)
 {
   g_autoptr(IdeGitRemoteCallbacks) self = data;
-  IdeAnimation *animation;
+  EggAnimation *animation;
 
   g_assert (IDE_IS_GIT_REMOTE_CALLBACKS (self));
 
   if ((animation = self->animation))
     {
       ide_clear_weak_pointer (&self->animation);
-      ide_animation_stop (animation);
+      egg_animation_stop (animation);
     }
 
-  animation = ide_object_animate (self->progress,
-                                  IDE_ANIMATION_EASE_IN_OUT_QUAD,
+  animation = egg_object_animate (self->progress,
+                                  EGG_ANIMATION_EASE_IN_OUT_QUAD,
                                   ANIMATION_DURATION_MSEC,
                                   NULL,
                                   "fraction", self->fraction,
