@@ -80,7 +80,10 @@ typedef struct
   IdeProgress *progress;
 } SaveState;
 
-G_DEFINE_TYPE (IdeBufferManager, ide_buffer_manager, IDE_TYPE_OBJECT)
+static void list_model_iface_init (GListModelInterface *iface);
+
+G_DEFINE_TYPE_EXTENDED (IdeBufferManager, ide_buffer_manager, IDE_TYPE_OBJECT, 0,
+                        G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL, list_model_iface_init))
 
 EGG_DEFINE_COUNTER (registered, "IdeBufferManager", "Registered Buffers",
                     "The number of buffers registered with the buffer manager.")
@@ -349,6 +352,8 @@ ide_buffer_manager_add_buffer (IdeBufferManager *self,
 
   EGG_COUNTER_INC (registered);
 
+  g_list_model_items_changed (G_LIST_MODEL (self), self->buffers->len - 1, 0, 1);
+
   IDE_EXIT;
 }
 
@@ -360,14 +365,27 @@ ide_buffer_manager_remove_buffer (IdeBufferManager *self,
   IdeContext *context;
   IdeFile *file;
   GFile *gfile;
+  gint position = -1;
+  gint i;
 
   IDE_ENTRY;
 
   g_return_if_fail (IDE_IS_BUFFER_MANAGER (self));
   g_return_if_fail (IDE_IS_BUFFER (buffer));
 
-  if (!g_ptr_array_remove_fast (self->buffers, buffer))
+  for (i = 0; i < self->buffers->len; i++)
+    {
+      if ((gpointer)buffer == g_ptr_array_index (self->buffers, i))
+        {
+          position = i;
+          break;
+        }
+    }
+
+  if (position == -1)
     IDE_EXIT;
+
+  g_ptr_array_remove_index (self->buffers, position);
 
   file = ide_buffer_get_file (buffer);
   gfile = ide_file_get_file (file);
@@ -387,6 +405,8 @@ ide_buffer_manager_remove_buffer (IdeBufferManager *self,
   g_object_unref (buffer);
 
   EGG_COUNTER_DEC (registered);
+
+  g_list_model_items_changed (G_LIST_MODEL (self), position, 1, 0);
 
   IDE_EXIT;
 }
@@ -1101,6 +1121,42 @@ ide_buffer_manager_real_buffer_loaded (IdeBufferManager *self,
   recent_data.is_private = FALSE;
 
   gtk_recent_manager_add_full (recent_manager, uri, &recent_data);
+}
+
+static GType
+ide_buffer_manager_get_item_type (GListModel *self)
+{
+  return IDE_TYPE_BUFFER;
+}
+
+static guint
+ide_buffer_manager_get_n_items (GListModel *model)
+{
+  IdeBufferManager *self = (IdeBufferManager *)model;
+
+  g_return_val_if_fail (IDE_IS_BUFFER_MANAGER (self), 0);
+
+  return self->buffers->len;
+}
+
+static gpointer
+ide_buffer_manager_get_item (GListModel *model,
+                             guint       position)
+{
+  IdeBufferManager *self = (IdeBufferManager *)model;
+
+  g_return_val_if_fail (IDE_IS_BUFFER_MANAGER (self), NULL);
+  g_return_val_if_fail (position < self->buffers->len, NULL);
+
+  return g_object_ref (g_ptr_array_index (self->buffers, position));
+}
+
+static void
+list_model_iface_init (GListModelInterface *iface)
+{
+  iface->get_item_type = ide_buffer_manager_get_item_type;
+  iface->get_n_items = ide_buffer_manager_get_n_items;
+  iface->get_item = ide_buffer_manager_get_item;
 }
 
 static void
