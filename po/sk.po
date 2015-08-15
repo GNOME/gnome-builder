@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2015-07-28 06:15+0000\n"
-"PO-Revision-Date: 2015-07-28 16:33+0200\n"
+"POT-Creation-Date: 2015-07-28 14:34+0000\n"
+"PO-Revision-Date: 2015-08-15 21:21+0200\n"
+"Last-Translator: \n"
 "Language-Team: Slovak <gnome-sk-list@gnome.org>\n"
 "Language: sk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 1 : (n>=2 && n<=4) ? 2 : 0;\n"
-"Last-Translator: \n"
-"X-Generator: Poedit 1.8.2\n"
+"X-Generator: Poedit 1.8.4\n"
 
 #: ../contrib/egg/egg-state-machine-action.c:225 ../contrib/rg/rg-column.c:286
 #: ../data/ui/gb-new-project-dialog.ui.h:6
@@ -159,7 +159,7 @@ msgstr "Nas_tavenia"
 
 #: ../data/gtk/menus.ui.h:4
 msgid "Generate Support Log"
-msgstr ""
+msgstr "Generovať záznam pre podporu"
 
 #: ../data/gtk/menus.ui.h:5
 msgid "_About"
@@ -199,20 +199,20 @@ msgstr "Za_vrieť všetky"
 
 #: ../data/gtk/menus.ui.h:14
 msgid "Display Options"
-msgstr ""
+msgstr "Voľby zobrazenia"
 
 #: ../data/gtk/menus.ui.h:15 ../src/tree/gb-tree.c:974
 #: ../src/tree/gb-tree.c:975
 msgid "Show Icons"
-msgstr ""
+msgstr "Zobraziť ikony"
 
 #: ../data/gtk/menus.ui.h:16 ../src/project-tree/gb-project-tree.c:157
 msgid "Show Ignored Files"
-msgstr ""
+msgstr "Zobraziť ignorované súbory"
 
 #: ../data/gtk/menus.ui.h:17
 msgid "Sort Directories First"
-msgstr ""
+msgstr "Usporiadať adresáre ako prvé"
 
 #: ../data/gtk/menus.ui.h:18
 msgid "_Collapse All Nodes"
@@ -244,7 +244,7 @@ msgstr "Editor zdrojového kódu"
 
 #: ../data/gtk/menus.ui.h:25
 msgid "_Open Containing Folder"
-msgstr ""
+msgstr "_Otvoriť priečinok s obsahom"
 
 #: ../data/gtk/menus.ui.h:26
 msgid "_Open in Terminal"
@@ -291,7 +291,7 @@ msgstr ""
 
 #: ../data/ui/gb-editor-settings-widget.ui.h:1
 msgid "Display right _margin at column:"
-msgstr ""
+msgstr "Zobraziť pravý _okraj na stĺpci:"
 
 #: ../data/ui/gb-editor-settings-widget.ui.h:2
 msgid "Trim trailing whitespace when saving document"
@@ -300,27 +300,29 @@ msgstr ""
 #: ../data/ui/gb-editor-settings-widget.ui.h:3
 msgid "Insert matching brace, bracket, quotation, and parenthesis."
 msgstr ""
+"Vložiť zhodujúcu zloženú zátvorku, hranatú zátvorku, citáciu a zátvorku."
 
 #: ../data/ui/gb-editor-settings-widget.ui.h:4
 msgid "Overwrite closing brace, bracket, quotation, and parenthesis."
 msgstr ""
+"Prepísať uzatvárajúcu zloženú zátvorku, hranatú zátvorku, citáciu a zátvorku."
 
 #: ../data/ui/gb-editor-settings-widget.ui.h:5
 #: ../data/ui/gb-editor-tweak-widget.ui.h:7
 msgid "Indentation"
-msgstr ""
+msgstr "Odsadzovanie"
 
 #: ../data/ui/gb-editor-settings-widget.ui.h:6
 msgid "_Tab width:"
-msgstr ""
+msgstr "Šírka _tabulátora:"
 
 #: ../data/ui/gb-editor-settings-widget.ui.h:7
 msgid "Insert _spaces instead of tabs"
-msgstr ""
+msgstr "Vložiť _medzery namiesto tabulátorov"
 
 #: ../data/ui/gb-editor-settings-widget.ui.h:8
 msgid "_Enable automatic indentation"
-msgstr ""
+msgstr "_Povoliť automatické odsadzovanie"
 
 #: ../data/ui/gb-editor-tweak-widget.ui.h:1
 msgid "Search highlight mode…"
@@ -328,60 +330,62 @@ msgstr ""
 
 #: ../data/ui/gb-editor-tweak-widget.ui.h:2
 msgid "Display line numbers"
-msgstr ""
+msgstr "Zobraziť čísla riadkov"
 
 #: ../data/ui/gb-editor-tweak-widget.ui.h:3
 msgid "Display right margin"
-msgstr ""
+msgstr "Zobraziť pravý okraj"
 
 #: ../data/ui/gb-editor-tweak-widget.ui.h:4
 msgid "Highlight current line"
-msgstr ""
+msgstr "Zvýrazniť aktuálny riadok"
 
 #: ../data/ui/gb-editor-tweak-widget.ui.h:5
 msgid "Auto indent"
-msgstr ""
+msgstr "Automaticky odsadiť"
 
 #: ../data/ui/gb-editor-tweak-widget.ui.h:6
 #: ../data/ui/gb-preferences-page-keybindings.ui.h:12
 msgid "Smart Backspace"
-msgstr ""
+msgstr "Chytrý backspace"
 
 #: ../data/ui/gb-editor-tweak-widget.ui.h:8
 msgid "Spaces"
-msgstr ""
+msgstr "Medzery"
 
 #: ../data/ui/gb-editor-tweak-widget.ui.h:9
 msgid "Tabs"
-msgstr ""
+msgstr "Tabulátory"
 
 #: ../data/ui/gb-editor-tweak-widget.ui.h:10
 msgid "2"
-msgstr ""
+msgstr "2"
 
 #: ../data/ui/gb-editor-tweak-widget.ui.h:11
 msgid "3"
-msgstr ""
+msgstr "3"
 
 #: ../data/ui/gb-editor-tweak-widget.ui.h:12
 msgid "4"
-msgstr ""
+msgstr "4"
 
 #: ../data/ui/gb-editor-tweak-widget.ui.h:13
 msgid "8"
-msgstr ""
+msgstr "8"
 
 #: ../data/ui/gb-editor-view.ui.h:2 ../data/ui/gb-greeter-window.ui.h:4
 #: ../data/ui/gb-new-project-dialog.ui.h:2
 #: ../data/ui/gb-projects-dialog.ui.h:3
 msgid "_Cancel"
-msgstr ""
+msgstr "_Zrušiť"
 
 #: ../data/ui/gb-editor-view.ui.h:3
 msgid ""
 "Builder has discovered that this file has been modified externally. Would "
 "you like to reload the file?"
 msgstr ""
+"Aplikácia Builder zistila, že tento súbor bol upravený externe. Chcete "
+"znovunačítať súbor?"
 
 #: ../data/ui/gb-editor-view.ui.h:4
 msgid "Search Symbols"
@@ -393,78 +397,78 @@ msgstr ""
 
 #: ../data/ui/gb-greeter-window.ui.h:2
 msgid "Click an item to select"
-msgstr ""
+msgstr "Kliknutím na položku ju vyberiete"
 
 #: ../data/ui/gb-greeter-window.ui.h:5 ../src/greeter/gb-greeter-window.c:560
 msgid "Recent Projects"
-msgstr ""
+msgstr "Nedávne projekty"
 
 #: ../data/ui/gb-greeter-window.ui.h:6
 msgid "Other Projects"
-msgstr ""
+msgstr "Ostatné projekty"
 
 #: ../data/ui/gb-greeter-window.ui.h:7
 msgid "_Remove"
-msgstr ""
+msgstr "_Odstrániť"
 
 #: ../data/ui/gb-new-file-popover.ui.h:1
 #: ../data/ui/gb-rename-file-popover.ui.h:1
 #: ../src/project-tree/gb-new-file-popover.c:349
 msgid "File Name"
-msgstr ""
+msgstr "Názov súboru"
 
 #: ../data/ui/gb-new-file-popover.ui.h:2
 msgid "_Create"
-msgstr ""
+msgstr "_Vytvoriť"
 
 #: ../data/ui/gb-new-project-dialog.ui.h:1
 #: ../src/dialogs/gb-new-project-dialog.c:353
 msgid "New Project"
-msgstr ""
+msgstr "Nový projekt"
 
 #: ../data/ui/gb-new-project-dialog.ui.h:3
 msgid "_Continue"
-msgstr ""
+msgstr "_Pokračovať"
 
 #: ../data/ui/gb-new-project-dialog.ui.h:4
 msgid "From existing project on this computer"
-msgstr ""
+msgstr "Z existujúceho projektu v tomto počítači"
 
 #: ../data/ui/gb-new-project-dialog.ui.h:5
 msgid "From remote source code repository"
-msgstr ""
+msgstr "Zo vzdialeného repozitára so zdrojovým kódom"
 
 #: ../data/ui/gb-new-project-dialog.ui.h:7
 #: ../libide/ide-back-forward-item.c:140
 msgid "Location"
-msgstr ""
+msgstr "Umiestnenie"
 
 #: ../data/ui/gb-new-project-dialog.ui.h:8
 msgid "GNOME Version"
-msgstr ""
+msgstr "Verzia prostredia GNOME"
 
 #: ../data/ui/gb-new-project-dialog.ui.h:9 ../libide/ide-diagnostician.c:270
 #: ../libide/ide-diagnostician.c:271 ../libide/ide-file.c:486
 #: ../libide/ide-source-snippet.c:974
 #: ../src/editor/gb-editor-settings-widget.c:179
 msgid "Language"
-msgstr ""
+msgstr "Jazyk"
 
 #: ../data/ui/gb-new-project-dialog.ui.h:10
 msgid "Pattern"
-msgstr ""
+msgstr "Vzor"
 
 #: ../data/ui/gb-new-project-dialog.ui.h:11
 msgid "Git"
-msgstr ""
+msgstr "Git"
 
 #: ../data/ui/gb-new-project-dialog.ui.h:12
 msgid "user@host:repository.git"
-msgstr ""
+msgstr "používateľ@hostiteľ:repozitár.git"
 
 #: ../data/ui/gb-new-project-dialog.ui.h:13
 msgid "Enter the URL of your project's source code repository."
-msgstr ""
+msgstr "Zadajte URL repozitára so zdrojovým kódom vášho projektu."
 
 #: ../data/ui/gb-new-project-dialog.ui.h:14
 #: ../libide/autotools/ide-autotools-build-task.c:395
@@ -472,101 +476,102 @@ msgstr ""
 #: ../src/project-tree/gb-new-file-popover.c:268
 #: ../src/project-tree/gb-new-file-popover.c:269
 msgid "Directory"
-msgstr ""
+msgstr "Adresár"
 
 #: ../data/ui/gb-new-project-dialog.ui.h:15
 #: ../libide/git/ide-git-buffer-change-monitor.c:718
 #: ../libide/git/ide-git-vcs.c:388
 msgid "Repository"
-msgstr ""
+msgstr "Repozitár"
 
 #: ../data/ui/gb-preferences-page-editor.ui.h:1
 #: ../data/ui/gb-preferences-window.ui.h:3
 msgid "Editor"
-msgstr ""
+msgstr "Editor"
 
 #: ../data/ui/gb-preferences-page-editor.ui.h:2
 msgid "Font"
-msgstr ""
+msgstr "Písmo"
 
 #: ../data/ui/gb-preferences-page-editor.ui.h:3
 msgid "Highlighting"
-msgstr ""
+msgstr "Zvýrazňovanie"
 
 #: ../data/ui/gb-preferences-page-editor.ui.h:4
 msgid "Display Document Changes"
-msgstr ""
+msgstr "Zobraziť zmeny v dokumente"
 
 #: ../data/ui/gb-preferences-page-editor.ui.h:5
 msgid ""
 "Display whether a line has been added or modified next to the line number."
-msgstr ""
+msgstr "Zobrazí vedľa čísla riadku, či bol riadok pridaný, alebo upravený."
 
 #: ../data/ui/gb-preferences-page-editor.ui.h:6
 msgid "Display Line Numbers"
-msgstr ""
+msgstr "Zobraziť čísla riadkov"
 
 #: ../data/ui/gb-preferences-page-editor.ui.h:7
 msgid "Display the line numbers next to each line of the document."
-msgstr ""
+msgstr "Zobrazí čísla riadkov v každom riadku dokumentu."
 
 #: ../data/ui/gb-preferences-page-editor.ui.h:8
 msgid "Highlight Current Line"
-msgstr ""
+msgstr "Zvýrazniť aktuálny riadok"
 
 #: ../data/ui/gb-preferences-page-editor.ui.h:9
 msgid "Highlight the line containing the cursor."
-msgstr ""
+msgstr "Zvýrazní riadok, v ktorom sa nachádza kurzor."
 
 #: ../data/ui/gb-preferences-page-editor.ui.h:10
 msgid "Highlight Matching Brackets"
-msgstr ""
+msgstr "Zvýrazniť zodpovedajúce zátvorky"
 
 #: ../data/ui/gb-preferences-page-editor.ui.h:11
 msgid "Whether or not matching brackets should be highlighted."
-msgstr ""
+msgstr "Určuje, či sa majú byť zvýraznené zodpovedajúce zátvorky."
 
 #: ../data/ui/gb-preferences-page-editor.ui.h:12
 msgid "Overview Map"
-msgstr ""
+msgstr "Mapa s prehľadom"
 
 #: ../data/ui/gb-preferences-page-editor.ui.h:13
 msgid "Display Overview Map"
-msgstr ""
+msgstr "Zobraziť mapu s prehľadom"
 
 #: ../data/ui/gb-preferences-page-editor.ui.h:14
 msgid "Display an overview map next to the source code editor."
-msgstr ""
+msgstr "Zobrazí mapu s prehľadom vedľa editoru zdrojového kódu."
 
 #: ../data/ui/gb-preferences-page-editor.ui.h:15
 msgid "Auto Hide Overview Map"
-msgstr ""
+msgstr "Automaticky skryť mapu s prehľadom"
 
 #: ../data/ui/gb-preferences-page-editor.ui.h:16
 msgid "Automatically hide the overview map during periods of inactivity."
-msgstr ""
+msgstr "Automaticky skryje mapu s prehľadom počas doby nečinnosti."
 
 #: ../data/ui/gb-preferences-page-editor.ui.h:17
 msgid "Cursor Placement"
-msgstr ""
+msgstr "Umiestnenie kurzora"
 
 #: ../data/ui/gb-preferences-page-editor.ui.h:18
 msgid "Restore Cursor Position"
-msgstr ""
+msgstr "Obnoviť pozíciu kurzora"
 
 #: ../data/ui/gb-preferences-page-editor.ui.h:19
 msgid ""
 "Restore the insertion cursor to the last position when reopening a file."
 msgstr ""
+"Pri znovuotvorení súboru obnoví kurzor vkladania na jeho poslednú pozíciu."
 
 #: ../data/ui/gb-preferences-page-editor.ui.h:20
 #: ../libide/ide-source-view.c:5265
 msgid "Scroll Offset"
-msgstr ""
+msgstr "Posun rolovania"
 
 #: ../data/ui/gb-preferences-page-editor.ui.h:21
 msgid "Minimal number of lines to keep above and below the cursor."
-msgstr ""
+msgstr "Minimálny počet riadkov na zachovanie nad a pod kurzorom."
 
 #: ../data/ui/gb-preferences-page-git.ui.h:1
 #: ../data/ui/gb-preferences-window.ui.h:8
@@ -580,90 +585,91 @@ msgstr ""
 #: ../data/ui/gb-preferences-page-git.ui.h:4
 #: ../libide/doap/ide-doap-person.c:161
 msgid "Email"
-msgstr ""
+msgstr "Email"
 
 #: ../data/ui/gb-preferences-page-insight.ui.h:1
 #: ../data/ui/gb-preferences-window.ui.h:5
 msgid "Code Insight"
-msgstr ""
+msgstr "Nahliadnutie do kódu"
 
 #: ../data/ui/gb-preferences-page-insight.ui.h:2
 msgid "Semantic Language Highlighting"
-msgstr ""
+msgstr "Sémantické zvýrazňovanie jazyka"
 
 #: ../data/ui/gb-preferences-page-insight.ui.h:3
 msgid ""
 "Highlight additional syntax based upon information found in the document."
 msgstr ""
+"Zvýrazní dodatočný syntax založený na informáciách nájdených v dokumente."
 
 #: ../data/ui/gb-preferences-page-insight.ui.h:4
 msgid "Auto Completion"
-msgstr ""
+msgstr "Automatické dopĺňanie"
 
 #: ../data/ui/gb-preferences-page-insight.ui.h:5
 msgid "Suggest Word Completion"
-msgstr ""
+msgstr "Navrhnúť doplnenie slova"
 
 #: ../data/ui/gb-preferences-page-insight.ui.h:6
 msgid "Suggest completion of words found within all open documents."
-msgstr ""
+msgstr "Navrhne doplnenia slov nájdených vo všetkých otvorených dokumentoch."
 
 #: ../data/ui/gb-preferences-page-insight.ui.h:7
 msgid "Suggest Completions using Ctags"
-msgstr ""
+msgstr "Navrhnúť doplnenia pomocou značiek Ctags"
 
 #: ../data/ui/gb-preferences-page-insight.ui.h:8
 msgid "Use Ctags for completions in supported languages."
-msgstr ""
+msgstr "Použijú sa značky Ctags na doplnenie v podporovaných jazykoch."
 
 #: ../data/ui/gb-preferences-page-insight.ui.h:9
 msgid "Suggest Completions using Clang (Experimental)"
-msgstr ""
+msgstr "Navrhnúť doplnenia pomocou kompilátora Clang (experimentálne)"
 
 #: ../data/ui/gb-preferences-page-insight.ui.h:10
 msgid "Use Clang for completions in the C and C++ languages."
-msgstr ""
+msgstr "Použije sa kompilátor na doplnenie v jazykoch C a C++."
 
 #: ../data/ui/gb-preferences-page-insight.ui.h:11
 msgid "Suggest Completions using Jedi"
-msgstr ""
+msgstr "Navrhnúť doplnenia pomocou nástroja Jedi"
 
 #: ../data/ui/gb-preferences-page-insight.ui.h:12
 msgid "Use Jedi for completions in the Python language."
-msgstr ""
+msgstr "Použije sa nástroj Jedi na doplnenie v jazyku Python."
 
 #: ../data/ui/gb-preferences-page-keybindings.ui.h:1
 #: ../data/ui/gb-preferences-window.ui.h:6
 msgid "Keyboard"
-msgstr ""
+msgstr "Klávesnica"
 
 #: ../data/ui/gb-preferences-page-keybindings.ui.h:2
 msgid "Key Binding Emulation"
-msgstr ""
+msgstr "Emulácia klávesových skratiek"
 
 #: ../data/ui/gb-preferences-page-keybindings.ui.h:4
 msgid "The default keybindings for Builder."
-msgstr ""
+msgstr "Predvolené klávesové skratky pre aplikáciu Builder."
 
 #: ../data/ui/gb-preferences-page-keybindings.ui.h:5
 msgid "Emacs Emulation"
-msgstr ""
+msgstr "Emulácia aplikácie Emacs"
 
 #: ../data/ui/gb-preferences-page-keybindings.ui.h:6
 msgid "Emulates familiar keybindings from the Emacs text editor."
-msgstr ""
+msgstr "Emuluje zaužívané klávesové skratky z textového editora Emacs."
 
 #: ../data/ui/gb-preferences-page-keybindings.ui.h:7
 msgid "Vim Emulation"
-msgstr ""
+msgstr "Emulácia aplikácie Vim"
 
 #: ../data/ui/gb-preferences-page-keybindings.ui.h:8
 msgid "Emulates familiar keybindings from the Vim text editor."
-msgstr ""
+msgstr "Emuluje zaužívané klávesové skratky z textového editora Vim."
 
 #: ../data/ui/gb-preferences-page-keybindings.ui.h:9
 msgid "Keyboard Movement"
-msgstr ""
+msgstr "Pohyb pomocou klávesnice"
 
 #: ../data/ui/gb-preferences-page-keybindings.ui.h:10
 msgid "Smart Home End"
@@ -682,32 +688,32 @@ msgstr ""
 #: ../data/ui/gb-preferences-page-language.ui.h:1
 #: ../data/ui/gb-preferences-window.ui.h:4
 msgid "Programming Languages"
-msgstr ""
+msgstr "Programovacie jazyky"
 
 #: ../data/ui/gb-preferences-page-theme.ui.h:1
 #: ../data/ui/gb-preferences-window.ui.h:7
 msgid "Theme"
-msgstr ""
+msgstr "Téma"
 
 #: ../data/ui/gb-preferences-page-theme.ui.h:2
 msgid "Night Mode"
-msgstr ""
+msgstr "Nočný režim"
 
 #: ../data/ui/gb-preferences-page-theme.ui.h:3
 msgid "Use dark colors for the application chrome."
-msgstr ""
+msgstr "Použije tmavú tému pre rozhranie aplikácie."
 
 #: ../data/ui/gb-preferences-page-theme.ui.h:4
 msgid "Display Grid Pattern"
-msgstr ""
+msgstr "Zobraziť mriežku"
 
 #: ../data/ui/gb-preferences-page-theme.ui.h:5
 msgid "Display a grid pattern under the source code."
-msgstr ""
+msgstr "Zobrazí mriežku pod zdrojovým kódom."
 
 #: ../data/ui/gb-preferences-window.ui.h:1
 msgid "Preferences"
-msgstr ""
+msgstr "Nastavenia"
 
 #: ../data/ui/gb-preferences-window.ui.h:2
 msgid "Search Preferences…"
@@ -720,78 +726,78 @@ msgstr ""
 
 #: ../data/ui/gb-projects-dialog.ui.h:2
 msgid "New"
-msgstr ""
+msgstr "Nový"
 
 #: ../data/ui/gb-projects-dialog.ui.h:4
 msgid "Delete"
-msgstr ""
+msgstr "Odstrániť"
 
 #: ../data/ui/gb-view-stack.ui.h:1
 msgid "Split"
-msgstr ""
+msgstr "Rozdeliť"
 
 #: ../data/ui/gb-view-stack.ui.h:2
 msgid "Move"
-msgstr ""
+msgstr "Presunúť"
 
 #: ../data/ui/gb-view-stack.ui.h:3
 msgid "Preview"
-msgstr ""
+msgstr "Ukážka"
 
 #: ../data/ui/gb-view-stack.ui.h:4
 #: ../plugins/terminal/gb-terminal-view-actions.c:309
 #: ../src/editor/gb-editor-view-actions.c:310
 #: ../src/editor/gb-editor-view-actions.c:441
 msgid "Save"
-msgstr ""
+msgstr "Uložiť"
 
 #: ../data/ui/gb-view-stack.ui.h:5
 msgid "Save As"
-msgstr ""
+msgstr "Uložiť ako"
 
 #: ../data/ui/gb-view-stack.ui.h:6
 msgid "Close"
-msgstr ""
+msgstr "Zavrieť"
 
 #: ../data/ui/gb-workbench.ui.h:2 ../libide/ide-context.c:680
 msgid "Project"
-msgstr ""
+msgstr "Projekt"
 
 #: ../libide/autotools/ide-autotools-builder.c:303
 #: ../libide/autotools/ide-autotools-build-task.c:377
 msgid "Config"
-msgstr ""
+msgstr "Konfigurácia"
 
 #: ../libide/autotools/ide-autotools-builder.c:304
 msgid "The configuration for the build."
-msgstr ""
+msgstr "Konfigurácia pre zostavenie."
 
 #: ../libide/autotools/ide-autotools-builder.c:312
 #: ../libide/autotools/ide-autotools-build-task.c:386
 #: ../plugins/device-manager/gb-device-manager-panel.c:75
 msgid "Device"
-msgstr ""
+msgstr "Zariadenie"
 
 #: ../libide/autotools/ide-autotools-builder.c:313
 #: ../libide/autotools/ide-autotools-build-task.c:387
 msgid "The device to build for."
-msgstr ""
+msgstr "Zariadenie, pre ktoré sa má zostaviť."
 
 #: ../libide/autotools/ide-autotools-build-system.c:172
 msgid "Failed to locate configure.ac"
-msgstr ""
+msgstr "Zlyhalo lokalizovanie súboru configure.ac"
 
 #: ../libide/autotools/ide-autotools-build-system.c:638
 msgid "Tarball Name"
-msgstr ""
+msgstr "Názov balíka tarball"
 
 #: ../libide/autotools/ide-autotools-build-system.c:639
 msgid "The name of the project tarball."
-msgstr ""
+msgstr "Názov balíka tarball pre projekt."
 
 #: ../libide/autotools/ide-autotools-build-task.c:270
 msgid "Directory must be on a locally mounted filesystem."
-msgstr ""
+msgstr "Adresár sa musí nachádzať v miestne pripojenom systéme súborov."
 
 #: ../libide/autotools/ide-autotools-build-task.c:378
 msgid "The overlay config for the compilation."
@@ -1762,7 +1768,7 @@ msgstr ""
 
 #: ../libide/ide-source-view.c:4677
 msgid "Goto Definition"
-msgstr ""
+msgstr "Prejsť na definíciu"
 
 #: ../libide/ide-source-view.c:5173
 msgid "The back-forward list to track jumps."
@@ -2276,28 +2282,28 @@ msgstr ""
 #: ../plugins/devhelp/gb-devhelp-document.c:71
 #, c-format
 msgid "Documentation (%s)"
-msgstr ""
+msgstr "Dokumentácia (%s)"
 
 #: ../plugins/devhelp/gb-devhelp-document.c:148
 #: ../plugins/devhelp/gb-devhelp-panel.c:96
 #: ../plugins/devhelp/gb-devhelp-search-provider.c:134
 msgid "Documentation"
-msgstr ""
+msgstr "Dokumentácia"
 
 #: ../plugins/devhelp/gb-devhelp-document.c:257
 msgid "The uri to load."
-msgstr ""
+msgstr "URI na načítanie."
 
 #: ../plugins/devhelp/gb-devhelp-search-result.c:100
 msgid "The URI to the Devhelp document."
-msgstr ""
+msgstr "URI k dokumentu Devhelp."
 
 #: ../plugins/devhelp/gb-devhelp-view.c:251
 #: ../plugins/terminal/gb-terminal-view.c:613
 #: ../src/editor/gb-editor-frame.c:754 ../src/editor/gb-editor-view.c:504
 #: ../src/html/gb-html-view.c:321 ../src/views/gb-view.c:265
 msgid "Document"
-msgstr ""
+msgstr "Dokument"
 
 #: ../plugins/devhelp/gb-devhelp-view.c:252
 msgid "The document for the devhelp view."
@@ -2313,7 +2319,7 @@ msgstr ""
 
 #: ../plugins/gnome-code-assistance/ide-gca-service.c:168
 msgid "No language specified"
-msgstr ""
+msgstr "Nie je určený žiadny jazyk"
 
 #: ../plugins/mingw/ide-mingw-device-provider.c:95
 msgid "MinGW (64-bit)"
@@ -2329,11 +2335,11 @@ msgstr ""
 
 #: ../plugins/symbol-tree/symbol-tree.c:211
 msgid "Symbol Tree"
-msgstr ""
+msgstr "Strom symbolov"
 
 #: ../plugins/sysmon/gb-sysmon-addin.c:64
 msgid "System Monitor"
-msgstr ""
+msgstr "Monitor systému"
 
 #: ../plugins/terminal/gb-terminal-document.c:64
 #, c-format
@@ -2371,6 +2377,8 @@ msgid ""
 "The support log file has been written to '%s'. Please provide this file as "
 "an attachment on your bug report or support request."
 msgstr ""
+"Súbor záznamu pre podporu bol zapísaný do „%s“. Prosím, poskytnite tento "
+"súbor ako prílohu vo vašom hlásení o chybe alebo požiadavke o podporu."
 
 #: ../src/app/gb-application-actions.c:156
 msgid "An IDE for GNOME"
@@ -2378,7 +2386,7 @@ msgstr "Integrované prostredia IDE pre GNOME"
 
 #: ../src/app/gb-application-actions.c:161
 msgid "GNOME Builder"
-msgstr ""
+msgstr "GNOME Builder"
 
 #: ../src/app/gb-application-actions.c:163
 msgid "translator-credits"
@@ -2386,7 +2394,7 @@ msgstr "Dušan Kazik <prescott66@gmail.com>"
 
 #: ../src/app/gb-application-actions.c:166
 msgid "Learn more about GNOME Builder"
-msgstr ""
+msgstr "Zistite viac o aplikácii GNOME Builder"
 
 #: ../src/app/gb-application-actions.c:169
 msgid "Funded By"
@@ -2404,9 +2412,10 @@ msgstr ""
 msgid "Increase verbosity. May be specified multiple times."
 msgstr ""
 
+# dialog title
 #: ../src/dialogs/gb-new-project-dialog.c:346
 msgid "Select Project File"
-msgstr ""
+msgstr "Výber súboru projektu"
 
 #: ../src/dialogs/gb-new-project-dialog.c:370
 msgid "Clone Repository"
@@ -2414,23 +2423,23 @@ msgstr ""
 
 #: ../src/dialogs/gb-new-project-dialog.c:390
 msgid "Autotools Project (configure.ac)"
-msgstr ""
+msgstr "Projekt Autotools (configure.ac)"
 
 #: ../src/dialogs/gb-new-project-dialog.c:396
 msgid "Any Directory"
-msgstr ""
+msgstr "Akýkoľvek adresár"
 
 #: ../src/dialogs/gb-new-project-dialog.c:523
 msgid "A valid Git URL is required"
-msgstr ""
+msgstr "Požaduje sa platná URL repozitára Git"
 
 #: ../src/dialogs/gb-new-project-dialog.c:662
 msgid "Directory|Projects"
-msgstr ""
+msgstr "Adresár|Projekty"
 
 #: ../src/dialogs/gb-projects-dialog.c:246
 msgid "(Click on items to select them)"
-msgstr ""
+msgstr "(Kliknutím na položky ich vyberiete)"
 
 #: ../src/dialogs/gb-recent-project-row.c:207
 #: ../src/greeter/gb-greeter-project-row.c:324
@@ -2439,7 +2448,7 @@ msgstr "Informácie o projekte"
 
 #: ../src/dialogs/gb-recent-project-row.c:208
 msgid "The project information for the row."
-msgstr ""
+msgstr "Informácie o projekte pre riadok."
 
 #: ../src/dialogs/gb-recent-project-row.c:214
 #: ../src/dialogs/gb-recent-project-row.c:215
@@ -2474,16 +2483,16 @@ msgstr ""
 #: ../src/editor/gb-editor-frame.c:150
 #, c-format
 msgid "%u of %u"
-msgstr ""
+msgstr "%u z %u"
 
 #: ../src/editor/gb-editor-frame.c:180
 #, c-format
 msgid "Line %u, Column %u"
-msgstr ""
+msgstr "Riadok %u, stĺpec %u"
 
 #: ../src/editor/gb-editor-frame.c:595
 msgid "Re_veal in Project Tree"
-msgstr ""
+msgstr "Od_haliť v strome projektu"
 
 #: ../src/editor/gb-editor-frame.c:740 ../src/editor/gb-editor-frame.c:741
 msgid "Auto Hide Map"
@@ -2519,7 +2528,7 @@ msgstr ""
 
 #: ../src/editor/gb-editor-view.c:110
 msgid "Plain Text"
-msgstr ""
+msgstr "Obyčajný text"
 
 #: ../src/greeter/gb-greeter-pill-box.c:117
 msgid "The label for the pill box."
@@ -2535,12 +2544,12 @@ msgstr ""
 
 #: ../src/html/gb-html-document.c:109
 msgid "HTML Preview"
-msgstr ""
+msgstr "Ukážka HTML"
 
 #: ../src/html/gb-html-document.c:131
 #, c-format
 msgid "%s (Preview)"
-msgstr ""
+msgstr "%s (Ukážka)"
 
 #: ../src/html/gb-html-document.c:315
 msgid "The buffer to monitor for changes."
@@ -2552,7 +2561,7 @@ msgstr ""
 
 #: ../src/keybindings/gb-keybindings.c:258
 msgid "Application"
-msgstr ""
+msgstr "Aplikácia"
 
 #: ../src/keybindings/gb-keybindings.c:259
 msgid "The application to register keybindings for."
@@ -2727,24 +2736,24 @@ msgstr ""
 
 #: ../src/project-tree/gb-new-file-popover.c:275
 msgid "File Type"
-msgstr ""
+msgstr "Typ súboru"
 
 #: ../src/project-tree/gb-new-file-popover.c:276
 msgid "The file type to create."
-msgstr ""
+msgstr "Typ súboru na vytvorenie."
 
 #: ../src/project-tree/gb-new-file-popover.c:351
 msgid "Folder Name"
-msgstr ""
+msgstr "Názov priečinka"
 
 #: ../src/project-tree/gb-project-file.c:166
 #: ../src/project-tree/gb-project-file.c:167 ../src/tree/gb-tree-node.c:606
 msgid "Icon Name"
-msgstr ""
+msgstr "Názov ikony"
 
 #: ../src/project-tree/gb-project-tree-builder.c:79
 msgid "Files"
-msgstr ""
+msgstr "Súbory"
 
 #: ../src/project-tree/gb-project-tree.c:158
 msgid "If files ignored by the VCS should be displayed."
@@ -2892,20 +2901,21 @@ msgstr ""
 
 #: ../src/util/gb-glib.c:55
 msgid "Just now"
-msgstr ""
+msgstr "Práve teraz"
 
 #: ../src/util/gb-glib.c:57
 msgid "An hour ago"
-msgstr ""
+msgstr "Pred hodinou"
 
 #: ../src/util/gb-glib.c:59
 msgid "Yesterday"
-msgstr ""
+msgstr "Včera"
 
 #: ../src/util/gb-glib.c:65
 msgid "About a year ago"
-msgstr ""
+msgstr "Pred rokom"
 
+# DK: https://bugzilla.gnome.org/show_bug.cgi?id=753665
 #: ../src/util/gb-glib.c:69
 #, c-format
 msgid "About %u years ago"
