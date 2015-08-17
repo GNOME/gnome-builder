@@ -127,6 +127,7 @@ src/dialogs/gb-projects-dialog.c
 src/dialogs/gb-recent-project-row.c
 src/documents/gb-document.c
 src/editor/gb-editor-frame.c
+src/editor/gb-editor-print-operation.c
 src/editor/gb-editor-settings-widget.c
 src/editor/gb-editor-view-actions.c
 src/editor/gb-editor-view.c
