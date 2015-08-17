@@ -34,6 +34,8 @@ libgnome_builder_la_SOURCES = \
 	editor/gb-editor-frame.h \
 	editor/gb-editor-map-bin.c \
 	editor/gb-editor-map-bin.h \
+	editor/gb-editor-print-operation.c \
+	editor/gb-editor-print-operation.h \
 	editor/gb-editor-settings-widget.c \
 	editor/gb-editor-settings-widget.h \
 	editor/gb-editor-tweak-widget.c \

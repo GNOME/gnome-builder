@@ -23,6 +23,7 @@
 #include <string.h>
 
 #include "gb-editor-frame-private.h"
+#include "gb-editor-print-operation.h"
 #include "gb-editor-view-actions.h"
 #include "gb-editor-view-private.h"
 #include "gb-html-document.h"
@@ -673,6 +674,65 @@ gb_editor_view_actions_reveal (GSimpleAction *action,
   gb_workbench_reveal_file (workbench, gfile);
 }
 
+static void
+handle_print_result (GbEditorView            *self,
+                     GtkPrintOperation       *operation,
+                     GtkPrintOperationResult  result)
+{
+  if (result == GTK_PRINT_OPERATION_RESULT_ERROR)
+    {
+      GError *error = NULL;
+
+      gtk_print_operation_get_error (operation, &error);
+
+      /* info bar */
+      g_warning ("%s", error->message);
+      g_clear_error (&error);
+    }
+}
+
+static void
+print_done (GtkPrintOperation       *operation,
+            GtkPrintOperationResult  result,
+            gpointer                 user_data)
+{
+  GbEditorView *self = user_data;
+
+  handle_print_result (self, operation, result);
+
+  g_object_unref (operation);
+  g_object_unref (self);
+}
+
+static void
+gb_editor_view_actions_print (GSimpleAction *action,
+                              GVariant      *param,
+                              gpointer       user_data)
+{
+  GbEditorView *self = user_data;
+  GtkWidget *toplevel;
+  g_autoptr(GbEditorPrintOperation) operation;
+  GtkPrintOperationResult result;
+
+  g_assert (GB_IS_EDITOR_VIEW (self));
+
+  toplevel = gtk_widget_get_toplevel (GTK_WIDGET (self));
+
+  operation = gb_editor_print_operation_new (self->frame1->source_view);
+
+  /* keep a ref until "done" is emitted */
+  g_object_ref (operation);
+
+  g_signal_connect_after (operation, "done", G_CALLBACK (print_done), g_object_ref (self));
+
+  result = gtk_print_operation_run (GTK_PRINT_OPERATION (operation),
+                                    GTK_PRINT_OPERATION_ACTION_PRINT_DIALOG,
+                                    GTK_WINDOW (toplevel),
+                                    NULL);
+
+  handle_print_result (self, GTK_PRINT_OPERATION (operation), result);
+}
+
 static GActionEntry GbEditorViewActions[] = {
   { "auto-indent", NULL, NULL, "false", gb_editor_view_actions_auto_indent },
   { "close", gb_editor_view_actions_close },
@@ -684,6 +744,7 @@ static GActionEntry GbEditorViewActions[] = {
   { "reveal", gb_editor_view_actions_reveal },
   { "save", gb_editor_view_actions_save },
   { "save-as", gb_editor_view_actions_save_as },
+  { "print", gb_editor_view_actions_print },
   { "show-line-numbers", NULL, NULL, "false", gb_editor_view_actions_show_line_numbers },
   { "show-right-margin", NULL, NULL, "false", gb_editor_view_actions_show_right_margin },
   { "smart-backspace", NULL, NULL, "false", gb_editor_view_actions_smart_backspace },
