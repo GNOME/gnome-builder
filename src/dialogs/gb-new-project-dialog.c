@@ -354,11 +354,14 @@ gb_new_project_dialog__stack_notify_visible_child (GbNewProjectDialog *self,
     }
   else if (visible_child == GTK_WIDGET (self->page_clone_remote))
     {
-      g_autofree gchar *text= NULL;
+      g_autofree gchar *text = NULL;
       GtkClipboard *clipboard;
 
       clipboard = gtk_widget_get_clipboard (GTK_WIDGET (self), GDK_SELECTION_CLIPBOARD);
       text = gtk_clipboard_wait_for_text (clipboard);
+      if (text != NULL)
+        text = g_strstrip (text);
+
       if (!ide_str_empty0 (text) &&
           (strstr (text, "://") || strchr (text, '@')) &&
           ide_vcs_uri_is_valid (text))
