@@ -19,14 +19,43 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
+from gi.importer import DynamicImporter
+from gi.module import IntrospectionModule
 from gi.repository import GLib
 from gi.repository import GObject
 from gi.repository import Gtk
 from gi.repository import GtkSource
 from gi.repository import Ide
+gi_importer = DynamicImporter('gi.repository')
 
 try:
     import jedi
+    from jedi.evaluate.compiled import CompiledObject
+    from jedi.evaluate.imports import Importer
+
+    class PatchedJediCompiledObject(CompiledObject):
+        "A modified version of Jedi CompiledObject to work with GObject Introspection modules"
+        def _cls(self):
+            if self.obj.__class__ == IntrospectionModule:
+                return self
+            else:
+                return super()._cls()
+
+    class PatchedJediImporter(Importer):
+        "A modified version of Jedi Importer to work with GObject Introspection modules"
+        def follow(self):
+            module_list = super().follow()
+            if module_list == []:
+                import_path = '.'.join([str(i) for i in self.import_path])
+                if import_path.startswith('gi.repository'):
+                    try:
+                        module = gi_importer.load_module(import_path)
+                        module_list = [PatchedJediCompiledObject(module)]
+                    except ImportError:
+                        pass
+            return module_list
+
+    jedi.evaluate.imports.Importer = PatchedJediImporter
     HAS_JEDI = True
 except ImportError:
     HAS_JEDI = False
@@ -196,4 +225,3 @@ def load_icon(context, name):
     _icon_cache[name] = icon
 
     return icon
-
