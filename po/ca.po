@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-18 00:15+0200\n"
+"POT-Creation-Date: 2015-08-18 00:18+0200\n"
 "PO-Revision-Date: 2015-08-15 13:41+0100\n"
 "Last-Translator: David Medina <opensusecatala@gmail.com>\n"
 "Language-Team: Catalan <gnome@llistes.softcatala.org>\n"
@@ -51,7 +51,7 @@ msgstr "Etiqueta"
 
 #: ../contrib/gd/gd-tagged-entry.c:1028
 msgid "Text to show on the tag."
-msgstr "Text per mostrar a l'etiqueta"
+msgstr "Text per mostrar a l'etiqueta."
 
 #: ../contrib/gd/gd-tagged-entry.c:1031
 msgid "Tag has a close button"
@@ -67,7 +67,7 @@ msgstr "Etil"
 
 #: ../contrib/gd/gd-tagged-entry.c:1036
 msgid "Style of the tag."
-msgstr "Estil de l'etiqueta"
+msgstr "Estil de l'etiqueta."
 
 #: ../contrib/rg/rg-column.c:287
 msgid "The name of the column"
@@ -774,7 +774,7 @@ msgstr "Configuració"
 
 #: ../libide/autotools/ide-autotools-builder.c:304
 msgid "The configuration for the build."
-msgstr "La configuració per a la construcció"
+msgstr "La configuració per a la construcció."
 
 #: ../libide/autotools/ide-autotools-builder.c:312
 #: ../libide/autotools/ide-autotools-build-task.c:386
@@ -785,7 +785,7 @@ msgstr "Dispositiu"
 #: ../libide/autotools/ide-autotools-builder.c:313
 #: ../libide/autotools/ide-autotools-build-task.c:387
 msgid "The device to build for."
-msgstr "El dispostiu per al qual construir."
+msgstr "El dispositiu per al qual construir."
 
 #: ../libide/autotools/ide-autotools-build-system.c:172
 msgid "Failed to locate configure.ac"
@@ -797,7 +797,7 @@ msgstr "Nom de la tarball"
 
 #: ../libide/autotools/ide-autotools-build-system.c:639
 msgid "The name of the project tarball."
-msgstr "Nom de la tarball del projecte"
+msgstr "Nom de la tarball del projecte."
 
 #: ../libide/autotools/ide-autotools-build-task.c:270
 msgid "Directory must be on a locally mounted filesystem."
@@ -843,7 +843,7 @@ msgstr "«%s» no és un directori."
 #: ../libide/autotools/ide-autotools-build-task.c:774
 #, c-format
 msgid "autogen.sh is missing from project directory (%s)."
-msgstr "autogen.sh falta al direcotori del projecte (%s)."
+msgstr "autogen.sh falta al directori del projecte (%s)."
 
 #: ../libide/autotools/ide-autotools-build-task.c:784
 msgid "autogen.sh is not executable."
@@ -1370,7 +1370,7 @@ msgstr "Tipus d'interfície"
 
 #: ../libide/ide-extension-adapter.c:411
 msgid "The GType of the extension interface."
-msgstr "El GType de la intefície d'extensió."
+msgstr "El GType de la interfície d'extensió."
 
 #: ../libide/ide-extension-adapter.c:417
 #: ../libide/ide-extension-set-adapter.c:290
@@ -2228,7 +2228,7 @@ msgstr "El text del resultat si n'hi ha."
 
 #: ../plugins/command-bar/gb-command-vim.c:184
 msgid "The command text to execute"
-msgstr "El text de l'odre a executar"
+msgstr "El text de l'ordre a executar"
 
 #: ../plugins/command-bar/gb-command-vim.c:192
 msgid "The source view to modify."
@@ -2721,7 +2721,7 @@ msgstr "Tecla d'esquema dels paràmetres"
 
 #: ../src/preferences/gb-preferences-switch.c:343
 msgid "The settings schema key."
-msgstr "La tecla d'esquema dels paràmetres"
+msgstr "La tecla d'esquema dels paràmetres."
 
 #: ../src/preferences/gb-preferences-switch.c:349
 msgid "Settings Schema Value"
@@ -2848,7 +2848,7 @@ msgstr "Selecció"
 
 #: ../src/tree/gb-tree.c:968
 msgid "The node selection."
-msgstr "La selecció de node"
+msgstr "La selecció de node."
 
 #: ../src/tree/gb-tree-node.c:607
 msgid "The icon name to display."
@@ -2942,7 +2942,7 @@ msgstr "Pot dividir-se"
 
 #: ../src/views/gb-view.c:259
 msgid "If the view can be split."
-msgstr "Si la vista pot dividir-se"
+msgstr "Si la vista pot dividir-se."
 
 #: ../src/views/gb-view.c:266
 msgid "The underlying document."
