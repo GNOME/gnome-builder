@@ -38,6 +38,7 @@ struct _IdeSourceSnippet
   gchar                   *trigger;
   gchar                   *language;
   gchar                   *description;
+  gchar                   *snippet_text;
 
   gint                     tab_stop;
   gint                     max_tab_stop;
@@ -49,12 +50,13 @@ struct _IdeSourceSnippet
 enum {
   PROP_0,
   PROP_BUFFER,
+  PROP_DESCRIPTION,
+  PROP_LANGUAGE,
   PROP_MARK_BEGIN,
   PROP_MARK_END,
+  PROP_SNIPPET_TEXT,
   PROP_TAB_STOP,
   PROP_TRIGGER,
-  PROP_LANGUAGE,
-  PROP_DESCRIPTION,
   LAST_PROP
 };
 
@@ -76,6 +78,28 @@ ide_source_snippet_new (const gchar *trigger,
   return ret;
 }
 
+const gchar *
+ide_source_snippet_get_snippet_text (IdeSourceSnippet *self)
+{
+  g_return_val_if_fail (IDE_IS_SOURCE_SNIPPET (self), NULL);
+
+  return self->snippet_text;
+}
+
+void
+ide_source_snippet_set_snippet_text (IdeSourceSnippet *self,
+                                     const gchar      *snippet_text)
+{
+  g_return_if_fail (IDE_IS_SOURCE_SNIPPET (self));
+
+  if (!ide_str_equal0 (snippet_text, self->snippet_text))
+    {
+      g_free (self->snippet_text);
+      self->snippet_text = g_strdup (snippet_text);
+      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_SNIPPET_TEXT]);
+    }
+}
+
 /**
  * ide_source_snippet_copy:
  *
@@ -94,6 +118,7 @@ ide_source_snippet_copy (IdeSourceSnippet *self)
                       "trigger", self->trigger,
                       "language", self->language,
                       "description", self->description,
+                      "snippet-text", self->snippet_text,
                       NULL);
 
   for (i = 0; i < self->chunks->len; i++)
@@ -895,6 +920,10 @@ ide_source_snippet_get_property (GObject    *object,
       g_value_set_string (value, self->description);
       break;
 
+    case PROP_SNIPPET_TEXT:
+      g_value_set_string (value, self->snippet_text);
+      break;
+
     case PROP_TAB_STOP:
       g_value_set_uint (value, self->tab_stop);
       break;
@@ -924,6 +953,10 @@ ide_source_snippet_set_property (GObject      *object,
 
     case PROP_DESCRIPTION:
       ide_source_snippet_set_description (self, g_value_get_string (value));
+      break;
+
+    case PROP_SNIPPET_TEXT:
+      ide_source_snippet_set_snippet_text (self, g_value_get_string (value));
       break;
 
     default:
@@ -992,15 +1025,20 @@ ide_source_snippet_class_init (IdeSourceSnippetClass *klass)
                       -1,
                       (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
+  gParamSpecs [PROP_SNIPPET_TEXT] =
+    g_param_spec_string ("snippet-text",
+                         _("Snippet Text"),
+                         _("The entire snippet text from the source file."),
+                         NULL,
+                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+
   g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
 }
 
 static void
 ide_source_snippet_init (IdeSourceSnippet *self)
 {
-  self->tab_stop = 0;
   self->max_tab_stop = -1;
   self->chunks = g_ptr_array_new_with_free_func (g_object_unref);
   self->runs = g_array_new (FALSE, FALSE, sizeof (gint));
-  self->description = NULL;
 }

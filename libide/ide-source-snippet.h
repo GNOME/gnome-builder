@@ -29,31 +29,34 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeSourceSnippet, ide_source_snippet, IDE, SOURCE_SNIPPET, GObject)
 
-IdeSourceSnippet        *ide_source_snippet_new             (const gchar           *trigger,
-                                                             const gchar           *language);
-IdeSourceSnippet        *ide_source_snippet_copy            (IdeSourceSnippet      *snippet);
-const gchar             *ide_source_snippet_get_trigger     (IdeSourceSnippet      *snippet);
-void                     ide_source_snippet_set_trigger     (IdeSourceSnippet      *snippet,
-                                                             const gchar           *trigger);
-const gchar             *ide_source_snippet_get_language    (IdeSourceSnippet      *snippet);
-void                     ide_source_snippet_set_language    (IdeSourceSnippet      *snippet,
-                                                             const gchar           *language);
-const gchar             *ide_source_snippet_get_description (IdeSourceSnippet      *snippet);
-void                     ide_source_snippet_set_description (IdeSourceSnippet      *snippet,
-                                                             const gchar           *description);
-void                     ide_source_snippet_add_chunk       (IdeSourceSnippet      *snippet,
-                                                             IdeSourceSnippetChunk *chunk);
-guint                    ide_source_snippet_get_n_chunks    (IdeSourceSnippet      *snippet);
-gint                     ide_source_snippet_get_tab_stop    (IdeSourceSnippet      *snippet);
-IdeSourceSnippetChunk   *ide_source_snippet_get_nth_chunk   (IdeSourceSnippet      *snippet,
-                                                             guint                  n);
-void                     ide_source_snippet_get_chunk_range (IdeSourceSnippet      *snippet,
-                                                             IdeSourceSnippetChunk *chunk,
-                                                             GtkTextIter           *begin,
-                                                             GtkTextIter           *end);
-GtkTextMark             *ide_source_snippet_get_mark_begin  (IdeSourceSnippet      *snippet);
-GtkTextMark             *ide_source_snippet_get_mark_end    (IdeSourceSnippet      *snippet);
-IdeSourceSnippetContext *ide_source_snippet_get_context     (IdeSourceSnippet      *snippet);
+IdeSourceSnippet        *ide_source_snippet_new              (const gchar           *trigger,
+                                                              const gchar           *language);
+IdeSourceSnippet        *ide_source_snippet_copy             (IdeSourceSnippet      *snippet);
+const gchar             *ide_source_snippet_get_trigger      (IdeSourceSnippet      *snippet);
+void                     ide_source_snippet_set_trigger      (IdeSourceSnippet      *snippet,
+                                                              const gchar           *trigger);
+const gchar             *ide_source_snippet_get_language     (IdeSourceSnippet      *snippet);
+void                     ide_source_snippet_set_language     (IdeSourceSnippet      *snippet,
+                                                              const gchar           *language);
+const gchar             *ide_source_snippet_get_description  (IdeSourceSnippet      *snippet);
+void                     ide_source_snippet_set_description  (IdeSourceSnippet      *snippet,
+                                                              const gchar           *description);
+void                     ide_source_snippet_add_chunk        (IdeSourceSnippet      *snippet,
+                                                              IdeSourceSnippetChunk *chunk);
+guint                    ide_source_snippet_get_n_chunks     (IdeSourceSnippet      *snippet);
+gint                     ide_source_snippet_get_tab_stop     (IdeSourceSnippet      *snippet);
+IdeSourceSnippetChunk   *ide_source_snippet_get_nth_chunk    (IdeSourceSnippet      *snippet,
+                                                              guint                  n);
+void                     ide_source_snippet_get_chunk_range  (IdeSourceSnippet      *snippet,
+                                                              IdeSourceSnippetChunk *chunk,
+                                                              GtkTextIter           *begin,
+                                                              GtkTextIter           *end);
+GtkTextMark             *ide_source_snippet_get_mark_begin   (IdeSourceSnippet      *snippet);
+GtkTextMark             *ide_source_snippet_get_mark_end     (IdeSourceSnippet      *snippet);
+IdeSourceSnippetContext *ide_source_snippet_get_context      (IdeSourceSnippet      *snippet);
+const gchar             *ide_source_snippet_get_snippet_text (IdeSourceSnippet      *snippet);
+void                     ide_source_snippet_set_snippet_text (IdeSourceSnippet      *snippet,
+                                                              const gchar           *snippet_text);
 
 G_END_DECLS
 

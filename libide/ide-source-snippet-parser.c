@@ -37,11 +37,10 @@ struct _IdeSourceSnippetParser
   gchar   *cur_name;
   gchar   *cur_desc;
   GString *cur_text;
+  GString *snippet_text;
 };
 
-
 G_DEFINE_TYPE (IdeSourceSnippetParser, ide_source_snippet_parser, G_TYPE_OBJECT)
-
 
 IdeSourceSnippetParser *
 ide_source_snippet_parser_new (void)
@@ -74,17 +73,18 @@ ide_source_snippet_parser_store (IdeSourceSnippetParser *parser)
   for (scope_iter = parser->scope; scope_iter; scope_iter = scope_iter->next)
     {
       snippet = ide_source_snippet_new (parser->cur_name, g_strdup(scope_iter->data));
-      ide_source_snippet_set_description(snippet, parser->cur_desc);
+      ide_source_snippet_set_description (snippet, parser->cur_desc);
+      ide_source_snippet_set_snippet_text (snippet, parser->snippet_text->str);
 
       for (chunck_iter = parser->chunks; chunck_iter; chunck_iter = chunck_iter->next)
         {
-        #if 0
+#if 0
           g_printerr ("%s:  Tab: %02d  Link: %02d  Text: %s\n",
                       parser->cur_name,
                       ide_source_snippet_chunk_get_tab_stop (chunck_iter->data),
                       ide_source_snippet_chunk_get_linked_chunk (chunck_iter->data),
                       ide_source_snippet_chunk_get_text (chunck_iter->data));
-        #endif
+#endif
           ide_source_snippet_add_chunk (snippet, chunck_iter->data);
         }
 
@@ -96,22 +96,21 @@ static void
 ide_source_snippet_parser_finish (IdeSourceSnippetParser *parser)
 {
   if (parser->cur_name)
-    {
-      ide_source_snippet_parser_store(parser);
-    }
+    ide_source_snippet_parser_store(parser);
 
   g_clear_pointer (&parser->cur_name, g_free);
 
   g_string_truncate (parser->cur_text, 0);
+  g_string_truncate (parser->snippet_text, 0);
 
   g_list_foreach (parser->chunks, (GFunc) g_object_unref, NULL);
   g_list_free (parser->chunks);
   parser->chunks = NULL;
 
-  g_list_free_full(parser->scope, g_free);
+  g_list_free_full (parser->scope, g_free);
   parser->scope = NULL;
 
-  g_free(parser->cur_desc);
+  g_free (parser->cur_desc);
   parser->cur_desc = NULL;
 }
 
@@ -413,6 +412,8 @@ ide_source_snippet_parser_feed_line (IdeSourceSnippetParser *parser,
                                      gchar                  *basename,
                                      const gchar            *line)
 {
+  const gchar *orig = line;
+
   g_assert (parser);
   g_assert (basename);
   g_assert (line);
@@ -461,6 +462,7 @@ ide_source_snippet_parser_feed_line (IdeSourceSnippetParser *parser,
           break;
         }
 
+    /* Fall through */
     case '-':
       if (parser->cur_text->len || parser->chunks)
         {
@@ -493,6 +495,9 @@ ide_source_snippet_parser_feed_line (IdeSourceSnippetParser *parser,
       g_warning (_("Invalid snippet at line %d: %s"), parser->lineno, line);
       break;
     }
+
+  g_string_append (parser->snippet_text, orig);
+  g_string_append_c (parser->snippet_text, '\n');
 }
 
 gboolean
@@ -569,6 +574,11 @@ ide_source_snippet_parser_finalize (GObject *object)
 
   if (self->cur_text)
     g_string_free (self->cur_text, TRUE);
+  self->cur_text = NULL;
+
+  if (self->snippet_text)
+    g_string_free (self->snippet_text, TRUE);
+  self->snippet_text = NULL;
 
   g_free (self->cur_name);
   self->cur_name = NULL;
@@ -596,6 +606,7 @@ ide_source_snippet_parser_init (IdeSourceSnippetParser *parser)
 {
   parser->lineno = -1;
   parser->cur_text = g_string_new (NULL);
+  parser->snippet_text = g_string_new (NULL);
   parser->scope = NULL;
   parser->cur_desc = NULL;
 }
