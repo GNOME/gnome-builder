@@ -17,6 +17,7 @@
  */
 
 #include <glib/gi18n.h>
+#include <gtksourceview/gtksource.h>
 
 #include "gb-editor-settings-widget.h"
 #include "gb-widget.h"
@@ -78,6 +79,7 @@ foreach_cb (gpointer data,
   row = g_object_new (GTK_TYPE_LIST_BOX_ROW,
                       "visible", TRUE,
                       NULL);
+  g_object_set_data_full (G_OBJECT (row), "SNIPPET", g_object_ref (snippet), g_object_unref);
   hbox = g_object_new (GTK_TYPE_BOX,
                        "visible", TRUE,
                        "orientation", GTK_ORIENTATION_HORIZONTAL,
@@ -177,6 +179,65 @@ gb_editor_settings_widget_set_language (GbEditorSettingsWidget *widget,
 }
 
 static void
+snippet_activated_cb (GbEditorSettingsWidget *self,
+                      GtkListBoxRow          *row,
+                      GtkListBox             *list_box)
+{
+  GtkWindow *window;
+  GtkWidget *toplevel;
+  GtkScrolledWindow *scroller;
+  GtkSourceView *source_view;
+  GtkHeaderBar *header_bar;
+  IdeSourceSnippet *snippet;
+  const gchar *text;
+  GtkTextBuffer *buffer;
+
+  g_assert (GB_IS_EDITOR_SETTINGS_WIDGET (self));
+  g_assert (GTK_IS_LIST_BOX_ROW (row));
+  g_assert (GTK_IS_LIST_BOX (list_box));
+
+  toplevel = gtk_widget_get_toplevel (GTK_WIDGET (row));
+  snippet = g_object_get_data (G_OBJECT (row), "SNIPPET");
+
+  window = g_object_new (GTK_TYPE_WINDOW,
+                         "title", "Edit Snippet",
+                         "default-width", 600,
+                         "default-height", 400,
+                         "transient-for", toplevel,
+                         "type-hint", GDK_WINDOW_TYPE_HINT_DIALOG,
+                         NULL);
+
+  header_bar = g_object_new (GTK_TYPE_HEADER_BAR,
+                             "show-close-button", TRUE,
+                             "visible", TRUE,
+                             NULL);
+  g_object_bind_property (snippet, "trigger",
+                          header_bar, "title",
+                          G_BINDING_SYNC_CREATE);
+  gtk_window_set_titlebar (window, GTK_WIDGET (header_bar));
+
+  scroller = g_object_new (GTK_TYPE_SCROLLED_WINDOW,
+                           "shadow-type", GTK_SHADOW_NONE,
+                           "visible", TRUE,
+                           NULL);
+  gtk_container_add (GTK_CONTAINER (window), GTK_WIDGET (scroller));
+
+  source_view = g_object_new (GTK_SOURCE_TYPE_VIEW,
+                              "editable", FALSE,
+                              "monospace", TRUE,
+                              "show-line-numbers", TRUE,
+                              "visible", TRUE,
+                              NULL);
+  gtk_container_add (GTK_CONTAINER (scroller), GTK_WIDGET (source_view));
+
+  text = ide_source_snippet_get_snippet_text (snippet);
+  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (source_view));
+  gtk_text_buffer_set_text (buffer, text, -1);
+
+  gtk_window_present (window);
+}
+
+static void
 gb_editor_settings_widget_finalize (GObject *object)
 {
   GbEditorSettingsWidget *self = GB_EDITOR_SETTINGS_WIDGET (object);
@@ -260,4 +321,10 @@ static void
 gb_editor_settings_widget_init (GbEditorSettingsWidget *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
+
+  g_signal_connect_object (self->snippets,
+                           "row-activated",
+                           G_CALLBACK (snippet_activated_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
 }
