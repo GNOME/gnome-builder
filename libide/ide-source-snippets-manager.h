@@ -27,18 +27,19 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_SOURCE_SNIPPETS_MANAGER (ide_source_snippets_manager_get_type())
 
-G_DECLARE_FINAL_TYPE (IdeSourceSnippetsManager, ide_source_snippets_manager,
-                      IDE, SOURCE_SNIPPETS_MANAGER, IdeObject)
+G_DECLARE_FINAL_TYPE (IdeSourceSnippetsManager, ide_source_snippets_manager, IDE, SOURCE_SNIPPETS_MANAGER, GObject)
 
-void               ide_source_snippets_manager_load_async       (IdeSourceSnippetsManager  *self,
-                                                                 GCancellable              *cancellable,
-                                                                 GAsyncReadyCallback        callback,
-                                                                 gpointer                   user_data);
-gboolean           ide_source_snippets_manager_load_finish      (IdeSourceSnippetsManager  *self,
-                                                                 GAsyncResult              *result,
-                                                                 GError                   **error);
-IdeSourceSnippets *ide_source_snippets_manager_get_for_language (IdeSourceSnippetsManager  *manager,
-                                                                 GtkSourceLanguage         *language);
+void               ide_source_snippets_manager_load_async          (IdeSourceSnippetsManager  *self,
+                                                                    GCancellable              *cancellable,
+                                                                    GAsyncReadyCallback        callback,
+                                                                    gpointer                   user_data);
+gboolean           ide_source_snippets_manager_load_finish         (IdeSourceSnippetsManager  *self,
+                                                                    GAsyncResult              *result,
+                                                                    GError                   **error);
+IdeSourceSnippets *ide_source_snippets_manager_get_for_language    (IdeSourceSnippetsManager  *manager,
+                                                                    GtkSourceLanguage         *language);
+IdeSourceSnippets *ide_source_snippets_manager_get_for_language_id (IdeSourceSnippetsManager  *manager,
+                                                                    const gchar               *language_id);
 
 G_END_DECLS
 

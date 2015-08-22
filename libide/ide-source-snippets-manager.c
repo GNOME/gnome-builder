@@ -28,12 +28,11 @@
 
 struct _IdeSourceSnippetsManager
 {
-  IdeObject   parent_instance;
-
+  GObject     parent_instance;
   GHashTable *by_language_id;
 };
 
-G_DEFINE_TYPE (IdeSourceSnippetsManager, ide_source_snippets_manager, IDE_TYPE_OBJECT)
+G_DEFINE_TYPE (IdeSourceSnippetsManager, ide_source_snippets_manager, G_TYPE_OBJECT)
 
 #define SNIPPETS_DIRECTORY "/org/gnome/libide/snippets/"
 
@@ -162,6 +161,23 @@ ide_source_snippets_manager_load_finish (IdeSourceSnippetsManager  *self,
   g_return_val_if_fail (G_IS_TASK (task), FALSE);
 
   return g_task_propagate_boolean (task, error);
+}
+
+/**
+ * ide_source_snippets_manager_get_for_language_id:
+ *
+ * Gets the snippets for a given source language.
+ *
+ * Returns: (transfer none) (nullable): An #IdeSourceSnippets or %NULL.
+ */
+IdeSourceSnippets *
+ide_source_snippets_manager_get_for_language_id (IdeSourceSnippetsManager *self,
+                                                 const gchar              *language_id)
+{
+  g_return_val_if_fail (IDE_IS_SOURCE_SNIPPETS_MANAGER (self), NULL);
+  g_return_val_if_fail (language_id != NULL, NULL);
+
+  return g_hash_table_lookup (self->by_language_id, language_id);
 }
 
 /**

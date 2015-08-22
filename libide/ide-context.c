@@ -793,9 +793,7 @@ ide_context_init (IdeContext *self)
                                       "context", self,
                                       NULL);
 
-  self->snippets_manager = g_object_new (IDE_TYPE_SOURCE_SNIPPETS_MANAGER,
-                                         "context", self,
-                                         NULL);
+  self->snippets_manager = g_object_new (IDE_TYPE_SOURCE_SNIPPETS_MANAGER, NULL);
 
   scriptsdir = g_build_filename (g_get_user_config_dir (),
                                  ide_get_program_name (),
