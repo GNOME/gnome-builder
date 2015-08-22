@@ -27,19 +27,19 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_SOURCE_SNIPPETS (ide_source_snippets_get_type())
 
-G_DECLARE_FINAL_TYPE (IdeSourceSnippets, ide_source_snippets,
-                      IDE, SOURCE_SNIPPETS, GObject)
+G_DECLARE_FINAL_TYPE (IdeSourceSnippets, ide_source_snippets, IDE, SOURCE_SNIPPETS, GObject)
 
-void              ide_source_snippets_add            (IdeSourceSnippets *snippets,
-                                                     IdeSourceSnippet  *snippet);
-void              ide_source_snippets_clear          (IdeSourceSnippets *snippets);
-void              ide_source_snippets_merge          (IdeSourceSnippets *snippets,
-                                                     IdeSourceSnippets *other);
-IdeSourceSnippets *ide_source_snippets_new            (void);
-void              ide_source_snippets_foreach        (IdeSourceSnippets *snippets,
-                                                     const gchar      *prefix,
-                                                     GFunc             foreach_func,
-                                                     gpointer          user_data);
+void               ide_source_snippets_add     (IdeSourceSnippets *snippets,
+                                                IdeSourceSnippet  *snippet);
+void               ide_source_snippets_clear   (IdeSourceSnippets *snippets);
+void               ide_source_snippets_merge   (IdeSourceSnippets *snippets,
+                                                IdeSourceSnippets *other);
+guint              ide_source_snippets_count   (IdeSourceSnippets *self);
+IdeSourceSnippets *ide_source_snippets_new     (void);
+void               ide_source_snippets_foreach (IdeSourceSnippets *snippets,
+                                                const gchar       *prefix,
+                                                GFunc              foreach_func,
+                                                gpointer           user_data);
 
 G_END_DECLS
 

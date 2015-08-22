@@ -99,11 +99,11 @@ ide_source_snippets_add (IdeSourceSnippets *snippets,
   trie_insert (snippets->snippets, trigger, g_object_ref (snippet));
 }
 
-gboolean
+static gboolean
 ide_source_snippets_foreach_cb (Trie        *trie,
-                               const gchar *key,
-                               gpointer     value,
-                               gpointer     user_data)
+                                const gchar *key,
+                                gpointer     value,
+                                gpointer     user_data)
 {
   gpointer *closure = user_data;
 
@@ -163,4 +163,33 @@ static void
 ide_source_snippets_init (IdeSourceSnippets *snippets)
 {
   snippets->snippets = trie_new (g_object_unref);
+}
+
+static gboolean
+increment_count (Trie        *trie,
+                 const gchar *key,
+                 gpointer     value,
+                 gpointer     user_data)
+{
+  guint *count = user_data;
+  (*count)++;
+  return FALSE;
+}
+
+guint
+ide_source_snippets_count (IdeSourceSnippets *self)
+{
+  guint count = 0;
+
+  g_return_val_if_fail (IDE_IS_SOURCE_SNIPPETS (self), 0);
+
+  trie_traverse (self->snippets,
+                 "",
+                 G_PRE_ORDER,
+                 G_TRAVERSE_LEAVES,
+                 -1,
+                 increment_count,
+                 &count);
+
+  return count;
 }
