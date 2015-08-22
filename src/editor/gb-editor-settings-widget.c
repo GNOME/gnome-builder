@@ -33,6 +33,8 @@ struct _GbEditorSettingsWidget
   GtkCheckButton *insert_spaces_instead_of_tabs;
   GtkCheckButton *overwrite_braces;
   GtkCheckButton *show_right_margin;
+  GtkListBox     *snippets;
+  GtkBox         *snippets_container;
   GtkSpinButton  *right_margin_position;
   GtkSpinButton  *tab_width;
   GtkCheckButton *trim_trailing_whitespace;
@@ -56,14 +58,79 @@ gb_editor_settings_widget_get_language (GbEditorSettingsWidget *widget)
   return widget->language;
 }
 
+static void
+foreach_cb (gpointer data,
+            gpointer user_data)
+{
+  GtkListBoxRow *row;
+  GtkListBox *box = user_data;
+  IdeSourceSnippet *snippet = data;
+  GtkBox *hbox;
+  GtkLabel *label;
+  const gchar *trigger;
+  const gchar *desc;
+
+  g_assert (GTK_IS_LIST_BOX (box));
+
+  trigger = ide_source_snippet_get_trigger (snippet);
+  desc = ide_source_snippet_get_description (snippet);
+
+  row = g_object_new (GTK_TYPE_LIST_BOX_ROW,
+                      "visible", TRUE,
+                      NULL);
+  hbox = g_object_new (GTK_TYPE_BOX,
+                       "visible", TRUE,
+                       "orientation", GTK_ORIENTATION_HORIZONTAL,
+                       NULL);
+  label = g_object_new (GTK_TYPE_LABEL,
+                        "label", trigger,
+                        "hexpand", TRUE,
+                        "visible", TRUE,
+                        "xalign", 0.0f,
+                        NULL);
+  gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (label));
+  label = g_object_new (GTK_TYPE_LABEL,
+                        "label", desc,
+                        "visible", TRUE,
+                        "xalign", 1.0f,
+                        NULL);
+  gb_widget_add_style_class (GTK_WIDGET (label), "dim-label");
+  gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (label));
+  gtk_container_add (GTK_CONTAINER (row), GTK_WIDGET (hbox));
+  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (row));
+}
+
+static void
+load_snippets_cb (GObject      *object,
+                  GAsyncResult *result,
+                  gpointer      user_data)
+{
+  IdeSourceSnippetsManager *sm = (IdeSourceSnippetsManager *)object;
+  g_autoptr(GbEditorSettingsWidget) self = user_data;
+  IdeSourceSnippets *snippets;
+
+  if (!ide_source_snippets_manager_load_finish (sm, result, NULL))
+    return;
+
+  snippets = ide_source_snippets_manager_get_for_language_id (sm, self->language);
+  if (snippets == NULL)
+    return;
+
+  ide_source_snippets_foreach (snippets, NULL, foreach_cb, self->snippets);
+
+  if (ide_source_snippets_count (snippets) > 0)
+    gtk_widget_show (GTK_WIDGET (self->snippets_container));
+}
+
 void
 gb_editor_settings_widget_set_language (GbEditorSettingsWidget *widget,
                                         const gchar            *language)
 {
   g_return_if_fail (GB_IS_EDITOR_SETTINGS_WIDGET (widget));
 
-  if (language != widget->language)
+  if (!ide_str_equal0 (language, widget->language))
     {
+      IdeSourceSnippetsManager *sm;
       gchar *path;
 
       g_free (widget->language);
@@ -101,6 +168,9 @@ gb_editor_settings_widget_set_language (GbEditorSettingsWidget *widget,
       g_settings_bind (widget->settings, "trim-trailing-whitespace",
                        widget->trim_trailing_whitespace, "active",
                        G_SETTINGS_BIND_DEFAULT);
+
+      sm = g_object_new (IDE_TYPE_SOURCE_SNIPPETS_MANAGER, NULL);
+      ide_source_snippets_manager_load_async (sm, NULL, load_snippets_cb, g_object_ref (widget));
 
       g_object_notify_by_pspec (G_OBJECT (widget), gParamSpecs [PROP_LANGUAGE]);
     }
@@ -171,6 +241,8 @@ gb_editor_settings_widget_class_init (GbEditorSettingsWidgetClass *klass)
   GB_WIDGET_CLASS_BIND (klass, GbEditorSettingsWidget, right_margin_position);
   GB_WIDGET_CLASS_BIND (klass, GbEditorSettingsWidget, overwrite_braces);
   GB_WIDGET_CLASS_BIND (klass, GbEditorSettingsWidget, show_right_margin);
+  GB_WIDGET_CLASS_BIND (klass, GbEditorSettingsWidget, snippets);
+  GB_WIDGET_CLASS_BIND (klass, GbEditorSettingsWidget, snippets_container);
   GB_WIDGET_CLASS_BIND (klass, GbEditorSettingsWidget, tab_width);
   GB_WIDGET_CLASS_BIND (klass, GbEditorSettingsWidget, trim_trailing_whitespace);
 

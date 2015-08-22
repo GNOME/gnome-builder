@@ -242,6 +242,43 @@
         <property name="top_attach">1</property>
       </packing>
     </child>
+    <child>
+      <object class="GtkBox" id="snippets_container">
+        <property name="visible">False</property>
+        <property name="can_focus">False</property>
+        <property name="orientation">vertical</property>
+        <property name="spacing">3</property>
+        <property name="hexpand">True</property>
+        <child>
+          <object class="GtkLabel">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="halign">start</property>
+            <property name="label" translatable="yes">Snippets</property>
+            <property name="margin-bottom">6</property>
+            <attributes>
+                <attribute name="weight" value="bold" />
+            </attributes>
+          </object>
+        </child>
+        <child>
+          <object class="GtkFrame">
+            <property name="margin-start">12</property>
+            <property name="visible">true</property>
+            <child>
+              <object class="GtkListBox" id="snippets">
+                <property name="selection-mode">none</property>
+                <property name="visible">true</property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+      <packing>
+        <property name="left_attach">0</property>
+        <property name="top_attach">2</property>
+      </packing>
+    </child>
   </template>
   <object class="GtkSizeGroup" id="sizegroup1">
     <property name="mode">vertical</property>

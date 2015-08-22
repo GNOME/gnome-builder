@@ -39,6 +39,15 @@ GbPreferencesSwitch:prelight {
 }
 
 
+GbEditorSettingsWidget GtkListBoxRow {
+  padding: 6px;
+  border-bottom: 1px solid @borders;
+}
+GbEditorSettingsWidget GtkListBoxRow:last-child {
+  border-bottom: none;
+}
+
+
 /*
  * Editor Floating Search Entry.
  */
