@@ -25,6 +25,8 @@
 #include <ide.h>
 #include <stdlib.h>
 
+#include "gb-plugins.h"
+
 static GMainLoop *gMainLoop;
 static gint gExitCode = EXIT_SUCCESS;
 static gchar **gPaths;
@@ -222,6 +224,8 @@ main (gint   argc,
   g_ptr_array_add (strv, NULL);
 
   gPaths = (gchar **)g_ptr_array_free (strv, FALSE);
+
+  gb_plugins_init ();
 
   ide_context_new_async (project_file, NULL, context_cb, NULL);
 

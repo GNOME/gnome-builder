@@ -25,6 +25,8 @@
 #include <ide.h>
 #include <stdlib.h>
 
+#include "gb-plugins.h"
+
 static GMainLoop *gMainLoop;
 static gchar *gDeviceId;
 static gint gExitCode = EXIT_SUCCESS;
@@ -386,6 +388,8 @@ main (gint   argc,
 
   if (!gDeviceId)
     gDeviceId = g_strdup ("local");
+
+  gb_plugins_init ();
 
   ide_context_new_async (project_file, NULL, context_cb, NULL);
 

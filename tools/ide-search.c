@@ -25,6 +25,8 @@
 #include <ide.h>
 #include <stdlib.h>
 
+#include "gb-plugins.h"
+
 static GMainLoop *gMainLoop;
 static gint gExitCode = EXIT_SUCCESS;
 static gchar *gSearchTerms;
@@ -134,6 +136,8 @@ main (gint   argc,
   for (i = 2; i < argc; i++)
     g_string_append_printf (search_terms, " %s", argv [i]);
   gSearchTerms = g_string_free (search_terms, FALSE);
+
+  gb_plugins_init ();
 
   ide_context_new_async (project_file, NULL, context_cb, NULL);
 

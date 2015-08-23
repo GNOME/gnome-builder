@@ -25,6 +25,8 @@
 #include <ide.h>
 #include <stdlib.h>
 
+#include "gb-plugins.h"
+
 static GMainLoop *gMainLoop;
 static gint gExitCode = EXIT_SUCCESS;
 static GFile *gFile;
@@ -307,6 +309,9 @@ main (gint   argc,
   gFile = g_file_new_for_path (path);
 
   project_file = g_file_new_for_path (project_path);
+
+  gb_plugins_init ();
+
   ide_context_new_async (project_file, NULL, context_cb, NULL);
 
   g_main_loop_run (gMainLoop);
