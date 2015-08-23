@@ -29,10 +29,15 @@ from gi.repository import Ide
 
 import os
 
+# 2 minutes
+CACHE_EXPIRE_USEC = 2 * 60 * 1000 * 1000
 
 class CompletionProvider(Ide.Object,
                          GtkSource.CompletionProvider,
                          Ide.CompletionProvider):
+    _libraries = None
+    _libraries_expire_at = 0
+
     def do_get_name(self):
         return 'Python GObject Introspection Imports Provider'
 
@@ -44,13 +49,10 @@ class CompletionProvider(Ide.Object,
         _, iter = context.get_iter()
         buffer = iter.get_buffer()
 
-        # ignore completions if we are following whitespace.
         copy = iter.copy()
         copy.set_line_offset(0)
         text = buffer.get_text(copy, iter, True)
-        if not text or text[-1].isspace():
-            context.add_proposals(self, [], True)
-            return
+
         if not text.startswith('from gi.repository import'):
             context.add_proposals(self, [], True)
             return
@@ -60,14 +62,11 @@ class CompletionProvider(Ide.Object,
 
         text = text.replace('from gi.repository import', '').strip().lower()
 
-        # TODO: Cache directory contents? watch for changes?
         proposals = []
-        for directory in GIRepository.Repository.get_search_path():
-            for filename in os.listdir(directory):
-                library_name = filename.split('-')[0]
-                if library_name.lower().startswith(text):
-                    proposals.append(CompletionProposal(self, context,
-                                                        library_name, text))
+        for library_name in self.get_libraries():
+            if library_name.lower().startswith(text):
+                proposal = CompletionProposal(self, context, library_name, text)
+                proposals.append(proposal)
         context.add_proposals(self, proposals, True)
 
     def do_get_activiation(self):
@@ -95,6 +94,26 @@ class CompletionProvider(Ide.Object,
     def do_get_priority(self):
         return 201
 
+    def get_libraries(self):
+        if self._libraries:
+            pass
+
+        now = GLib.get_monotonic_time()
+        if now < self._libraries_expire_at:
+            return self._libraries
+
+        self._libraries = []
+        self._libraries_expire_at = now + CACHE_EXPIRE_USEC
+
+        for directory in GIRepository.Repository.get_search_path():
+            for filename in os.listdir(directory):
+                name = filename.split('-')[0]
+                if name not in self._libraries:
+                    self._libraries.append(name)
+
+        self._libraries.sort()
+
+        return self._libraries
 
 class CompletionProposal(GObject.Object, GtkSource.CompletionProposal):
     def __init__(self, provider, context, completion, start_text, *args, **kwargs):
