@@ -1,0 +1,8 @@
+[Plugin]
+Module=autotools-plugin
+Name=Autotools
+Description=Provides integration with the Autotools build system
+Authors=Christian Hergert <christian@hergert.me>
+Copyright=Copyright © 2015 Christian Hergert
+Builtin=true
+Hidden=true

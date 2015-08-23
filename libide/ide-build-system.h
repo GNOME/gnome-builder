@@ -25,15 +25,15 @@
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_BUILD_SYSTEM            (ide_build_system_get_type())
-#define IDE_BUILD_SYSTEM_EXTENSION_POINT "org.gnome.libide.extensions.build-system"
+#define IDE_TYPE_BUILD_SYSTEM (ide_build_system_get_type())
 
-G_DECLARE_DERIVABLE_TYPE (IdeBuildSystem, ide_build_system, IDE, BUILD_SYSTEM, IdeObject)
+G_DECLARE_INTERFACE (IdeBuildSystem, ide_build_system, IDE, BUILD_SYSTEM, IdeObject)
 
-struct _IdeBuildSystemClass
+struct _IdeBuildSystemInterface
 {
-  IdeObjectClass parent;
+  GTypeInterface parent_iface;
 
+  gint        (*get_priority)           (IdeBuildSystem       *system);
   IdeBuilder *(*get_builder)            (IdeBuildSystem       *system,
                                          GKeyFile             *config,
                                          IdeDevice            *device,
@@ -48,7 +48,7 @@ struct _IdeBuildSystemClass
                                          GError              **error);
 };
 
-GFile          *ide_build_system_get_project_file       (IdeBuildSystem       *self);
+gint            ide_build_system_get_priority           (IdeBuildSystem       *self);
 void            ide_build_system_get_build_flags_async  (IdeBuildSystem       *self,
                                                          IdeFile              *file,
                                                          GCancellable         *cancellable,

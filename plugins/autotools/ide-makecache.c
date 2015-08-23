@@ -33,16 +33,10 @@
 #include <glib/gi18n.h>
 #include <glib/gstdio.h>
 #include <unistd.h>
+#include <ide.h>
 
-#include "ide-context.h"
-#include "ide-debug.h"
-#include "ide-global.h"
 #include "ide-makecache.h"
 #include "ide-makecache-target.h"
-#include "ide-project.h"
-#include "ide-line-reader.h"
-#include "ide-thread-pool.h"
-#include "ide-vcs.h"
 
 #define FAKE_CC  "__LIBIDE_FAKE_CC__"
 #define FAKE_CXX "__LIBIDE_FAKE_CXX__"

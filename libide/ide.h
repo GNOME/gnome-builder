@@ -87,14 +87,13 @@ G_BEGIN_DECLS
 #include "ide-target.h"
 #include "ide-test-case.h"
 #include "ide-test-suite.h"
+#include "ide-thread-pool.h"
 #include "ide-types.h"
 #include "ide-unsaved-file.h"
 #include "ide-unsaved-files.h"
 #include "ide-vcs.h"
 #include "ide-vcs-uri.h"
 
-#include "autotools/ide-autotools-build-system.h"
-#include "directory/ide-directory-build-system.h"
 #include "directory/ide-directory-vcs.h"
 #include "doap/ide-doap-person.h"
 #include "doap/ide-doap.h"
@@ -102,6 +101,7 @@ G_BEGIN_DECLS
 #include "git/ide-git-vcs.h"
 #include "local/ide-local-device.h"
 #include "theatrics/ide-animation.h"
+#include "util/ide-line-reader.h"
 
 #undef IDE_INSIDE
 

@@ -24,27 +24,28 @@
 #include "ide-project-file.h"
 #include "ide-project-item.h"
 
-typedef struct
+struct _IdeDirectoryBuildSystem
 {
-  gpointer dummy;
-} IdeDirectoryBuildSystemPrivate;
+  IdeObject  parent_instance;
+  GFile     *project_file;
+};
 
 static void async_initiable_init (GAsyncInitableIface *iface);
 
 G_DEFINE_TYPE_EXTENDED (IdeDirectoryBuildSystem,
                         ide_directory_build_system,
-                        IDE_TYPE_BUILD_SYSTEM,
+                        IDE_TYPE_OBJECT,
                         0,
-                        G_ADD_PRIVATE (IdeDirectoryBuildSystem)
-                        G_IMPLEMENT_INTERFACE (G_TYPE_ASYNC_INITABLE,
-                                               async_initiable_init))
+                        G_IMPLEMENT_INTERFACE (G_TYPE_ASYNC_INITABLE, async_initiable_init)
+                        G_IMPLEMENT_INTERFACE (IDE_TYPE_BUILD_SYSTEM, NULL))
 
 enum {
   PROP_0,
+  PROP_PROJECT_FILE,
   LAST_PROP
 };
 
-//static GParamSpec *gParamSpecs [LAST_PROP];
+static GParamSpec *gParamSpecs [LAST_PROP];
 
 IdeDirectoryBuildSystem *
 ide_directory_build_system_new (void)
@@ -55,6 +56,10 @@ ide_directory_build_system_new (void)
 static void
 ide_directory_build_system_finalize (GObject *object)
 {
+  IdeDirectoryBuildSystem *self = (IdeDirectoryBuildSystem *)object;
+
+  g_clear_object (&self->project_file);
+
   G_OBJECT_CLASS (ide_directory_build_system_parent_class)->finalize (object);
 }
 
@@ -64,10 +69,14 @@ ide_directory_build_system_get_property (GObject    *object,
                                          GValue     *value,
                                          GParamSpec *pspec)
 {
-  //IdeDirectoryBuildSystem *self = IDE_DIRECTORY_BUILD_SYSTEM (object);
+  IdeDirectoryBuildSystem *self = IDE_DIRECTORY_BUILD_SYSTEM (object);
 
   switch (prop_id)
     {
+    case PROP_PROJECT_FILE:
+      g_value_set_object (value, self->project_file);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -79,10 +88,15 @@ ide_directory_build_system_set_property (GObject      *object,
                                          const GValue *value,
                                          GParamSpec   *pspec)
 {
-  //IdeDirectoryBuildSystem *self = IDE_DIRECTORY_BUILD_SYSTEM (object);
+  IdeDirectoryBuildSystem *self = IDE_DIRECTORY_BUILD_SYSTEM (object);
 
   switch (prop_id)
     {
+    case PROP_PROJECT_FILE:
+      g_clear_object (&self->project_file);
+      self->project_file = g_value_dup_object (value);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -96,6 +110,15 @@ ide_directory_build_system_class_init (IdeDirectoryBuildSystemClass *klass)
   object_class->finalize = ide_directory_build_system_finalize;
   object_class->get_property = ide_directory_build_system_get_property;
   object_class->set_property = ide_directory_build_system_set_property;
+
+  gParamSpecs [PROP_PROJECT_FILE] =
+    g_param_spec_object ("project-file",
+                         _("Project File"),
+                         _("The path of the project file."),
+                         G_TYPE_FILE,
+                         (G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS));
+
+  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
 }
 
 static void

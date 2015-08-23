@@ -23,11 +23,9 @@
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_AUTOTOOLS_PROJECT_MINER     (ide_autotools_project_miner_get_type())
-#define IDE_AUTOTOOLS_PROJECT_MINER_PRIORITY 100
+#define IDE_TYPE_AUTOTOOLS_PROJECT_MINER (ide_autotools_project_miner_get_type())
 
-G_DECLARE_FINAL_TYPE (IdeAutotoolsProjectMiner, ide_autotools_project_miner,
-                      IDE, AUTOTOOLS_PROJECT_MINER, IdeProjectMiner)
+G_DECLARE_FINAL_TYPE (IdeAutotoolsProjectMiner, ide_autotools_project_miner, IDE, AUTOTOOLS_PROJECT_MINER, GObject)
 
 GFile *ide_autotools_project_miner_get_root_directory (IdeAutotoolsProjectMiner *self);
 void   ide_autotools_project_miner_set_root_directory (IdeAutotoolsProjectMiner *self,

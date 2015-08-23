@@ -18,6 +18,7 @@
 
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
+#include <libpeas/peas.h>
 
 #include "ide-global.h"
 #include "ide-project-miner.h"
@@ -258,6 +259,22 @@ ide_recent_projects_get_item (GListModel *model,
 }
 
 static void
+foreach_miner_func (PeasExtensionSet *set,
+                    PeasPluginInfo   *plugin_info,
+                    PeasExtension    *exten,
+                    gpointer          user_data)
+{
+  IdeRecentProjects *self = user_data;
+
+  g_assert (PEAS_IS_EXTENSION_SET (set));
+  g_assert (plugin_info != NULL);
+  g_assert (IDE_IS_PROJECT_MINER (exten));
+  g_assert (IDE_IS_RECENT_PROJECTS (self));
+
+  ide_recent_projects_add_miner (self, IDE_PROJECT_MINER (exten));
+}
+
+static void
 ide_recent_projects_finalize (GObject *object)
 {
   IdeRecentProjects *self = (IdeRecentProjects *)object;
@@ -290,8 +307,8 @@ ide_recent_projects_class_init (IdeRecentProjectsClass *klass)
 static void
 ide_recent_projects_init (IdeRecentProjects *self)
 {
-  GIOExtensionPoint *extension_point;
-  GList *extensions;
+  PeasExtensionSet *set;
+  PeasEngine *engine;
 
   self->projects = g_sequence_new (g_object_unref);
   self->miners = g_ptr_array_new_with_free_func (g_object_unref);
@@ -302,28 +319,10 @@ ide_recent_projects_init (IdeRecentProjects *self)
                                      IDE_RECENT_PROJECTS_BOOKMARK_FILENAME,
                                      NULL);
 
-
-  extension_point = g_io_extension_point_lookup (IDE_PROJECT_MINER_EXTENSION_POINT);
-  extensions = g_io_extension_point_get_extensions (extension_point);
-
-  for (; extensions; extensions = extensions->next)
-    {
-      IdeProjectMiner *miner;
-      GIOExtension *extension = extensions->data;
-      GType type_id;
-
-      type_id = g_io_extension_get_type (extension);
-
-      if (!g_type_is_a (type_id, IDE_TYPE_PROJECT_MINER))
-        {
-          g_warning ("%s is not an IdeProjectMiner", g_type_name (type_id));
-          continue;
-        }
-
-      miner = g_object_new (type_id, NULL);
-      ide_recent_projects_add_miner (self, miner);
-      g_object_unref (miner);
-    }
+  engine = peas_engine_get_default ();
+  set = peas_extension_set_new (engine, IDE_TYPE_PROJECT_MINER, NULL);
+  peas_extension_set_foreach (set, foreach_miner_func, self);
+  g_clear_object (&set);
 }
 
 /**

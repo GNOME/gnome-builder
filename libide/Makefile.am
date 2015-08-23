@@ -7,8 +7,6 @@ pkglibdir = $(libdir)/gnome-builder
 pkglib_LTLIBRARIES = libide-1.0.la
 
 libide_1_0_la_public_sources = \
-	directory/ide-directory-build-system.c \
-	directory/ide-directory-build-system.h \
 	directory/ide-directory-vcs.c \
 	directory/ide-directory-vcs.h \
 	doap/ide-doap-person.c \
@@ -182,18 +180,6 @@ libide_1_0_la_public_sources = \
 
 libide_1_0_la_SOURCES = \
 	$(libide_1_0_la_public_sources) \
-	autotools/ide-autotools-build-system.c \
-	autotools/ide-autotools-build-system.h \
-	autotools/ide-autotools-build-task.c \
-	autotools/ide-autotools-build-task.h \
-	autotools/ide-autotools-builder.c \
-	autotools/ide-autotools-builder.h \
-	autotools/ide-autotools-project-miner.c \
-	autotools/ide-autotools-project-miner.h \
-	autotools/ide-makecache-target.c \
-	autotools/ide-makecache-target.h \
-	autotools/ide-makecache.c \
-	autotools/ide-makecache.h \
 	editorconfig/editorconfig-glib.c \
 	editorconfig/editorconfig-glib.h \
 	editorconfig/ide-editorconfig-file-settings.c \
@@ -269,7 +255,6 @@ libide_1_0_la_includes = \
 	-I$(top_srcdir)/contrib/search \
 	-I$(top_srcdir)/contrib/xml \
 	-I$(srcdir) \
-	-I$(srcdir)/autotools \
 	-I$(srcdir)/directory \
 	-I$(srcdir)/doap \
 	-I$(srcdir)/editorconfig \

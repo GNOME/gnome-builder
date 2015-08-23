@@ -393,12 +393,14 @@ AC_CONFIG_FILES([
 	libide/Makefile
 
 	plugins/Makefile
+	plugins/autotools/Makefile
 	plugins/clang/Makefile
 	plugins/command-bar/Makefile
 	plugins/c-pack/Makefile
 	plugins/ctags/Makefile
 	plugins/devhelp/Makefile
 	plugins/device-manager/Makefile
+	plugins/fallback/Makefile
 	plugins/file-search/Makefile
 	plugins/gnome-code-assistance/Makefile
 	plugins/html-completion/Makefile

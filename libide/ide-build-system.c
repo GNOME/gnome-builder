@@ -22,21 +22,38 @@
 #include "ide-context.h"
 #include "ide-device.h"
 #include "ide-file.h"
+#include "ide-object.h"
 
 typedef struct
 {
   GFile *project_file;
 } IdeBuildSystemPrivate;
 
-G_DEFINE_TYPE_WITH_PRIVATE (IdeBuildSystem, ide_build_system, IDE_TYPE_OBJECT)
+G_DEFINE_INTERFACE (IdeBuildSystem, ide_build_system, IDE_TYPE_OBJECT)
 
 enum {
   PROP_0,
+  PROP_CONTEXT,
   PROP_PROJECT_FILE,
   LAST_PROP
 };
 
 static GParamSpec *gParamSpecs [LAST_PROP];
+
+gint
+ide_build_system_get_priority (IdeBuildSystem *self)
+{
+  IdeBuildSystemInterface *iface;
+
+  g_return_val_if_fail (IDE_IS_BUILD_SYSTEM (self), 0);
+
+  iface = IDE_BUILD_SYSTEM_GET_IFACE (self);
+
+  if (iface->get_priority != NULL)
+    return iface->get_priority (self);
+
+  return 0;
+}
 
 /**
  * ide_build_system_get_build_flags_async:
@@ -58,8 +75,8 @@ ide_build_system_get_build_flags_async (IdeBuildSystem      *self,
   g_return_if_fail (IDE_IS_FILE (file));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  if (IDE_BUILD_SYSTEM_GET_CLASS (self)->get_build_flags_async)
-    return IDE_BUILD_SYSTEM_GET_CLASS (self)->get_build_flags_async (self, file, cancellable,
+  if (IDE_BUILD_SYSTEM_GET_IFACE (self)->get_build_flags_async)
+    return IDE_BUILD_SYSTEM_GET_IFACE (self)->get_build_flags_async (self, file, cancellable,
                                                                      callback, user_data);
 
   task = g_task_new (self, cancellable, callback, user_data);
@@ -81,116 +98,41 @@ ide_build_system_get_build_flags_finish (IdeBuildSystem  *self,
 {
   g_return_val_if_fail (IDE_IS_BUILD_SYSTEM (self), NULL);
 
-  if (IDE_BUILD_SYSTEM_GET_CLASS (self)->get_build_flags_finish)
-    return IDE_BUILD_SYSTEM_GET_CLASS (self)->get_build_flags_finish (self, result, error);
+  if (IDE_BUILD_SYSTEM_GET_IFACE (self)->get_build_flags_finish)
+    return IDE_BUILD_SYSTEM_GET_IFACE (self)->get_build_flags_finish (self, result, error);
 
   return g_new0 (gchar*, 1);
 }
 
-/**
- * ide_build_system_get_project_file:
- * @self: (in): A #IdeBuildSystem.
- *
- * Gets the #IdeBuildSystem:project-file property.
- *
- * Returns: (transfer none): A #GFile.
- */
-GFile *
-ide_build_system_get_project_file (IdeBuildSystem *system)
-{
-  IdeBuildSystemPrivate *priv = ide_build_system_get_instance_private (system);
-
-  g_return_val_if_fail (IDE_IS_BUILD_SYSTEM (system), NULL);
-
-  return priv->project_file;
-}
-
-void
-_ide_build_system_set_project_file (IdeBuildSystem *system,
-                                    GFile          *project_file)
-{
-  IdeBuildSystemPrivate *priv = ide_build_system_get_instance_private (system);
-
-  g_return_if_fail (IDE_IS_BUILD_SYSTEM (system));
-  g_return_if_fail (G_IS_FILE (project_file));
-
-  if (g_set_object (&priv->project_file, project_file))
-    g_object_notify_by_pspec (G_OBJECT (system), gParamSpecs [PROP_PROJECT_FILE]);
-}
-
 static void
-ide_build_system_finalize (GObject *object)
+ide_build_system_default_init (IdeBuildSystemInterface *iface)
 {
-  IdeBuildSystem *self = (IdeBuildSystem *)object;
-  IdeBuildSystemPrivate *priv = ide_build_system_get_instance_private (self);
-
-  g_clear_object (&priv->project_file);
-
-  G_OBJECT_CLASS (ide_build_system_parent_class)->finalize (object);
-}
-
-static void
-ide_build_system_get_property (GObject    *object,
-                               guint       prop_id,
-                               GValue     *value,
-                               GParamSpec *pspec)
-{
-  IdeBuildSystem *self = IDE_BUILD_SYSTEM (object);
-
-  switch (prop_id)
-    {
-    case PROP_PROJECT_FILE:
-      g_value_set_object (value, ide_build_system_get_project_file (self));
-      break;
-
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-    }
-}
-
-static void
-ide_build_system_set_property (GObject      *object,
-                               guint         prop_id,
-                               const GValue *value,
-                               GParamSpec   *pspec)
-{
-  IdeBuildSystem *self = IDE_BUILD_SYSTEM (object);
-
-  switch (prop_id)
-    {
-    case PROP_PROJECT_FILE:
-      _ide_build_system_set_project_file (self, g_value_get_object (value));
-      break;
-
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-    }
-}
-
-static void
-ide_build_system_class_init (IdeBuildSystemClass *klass)
-{
-  GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-  object_class->finalize = ide_build_system_finalize;
-  object_class->get_property = ide_build_system_get_property;
-  object_class->set_property = ide_build_system_set_property;
-
   gParamSpecs [PROP_PROJECT_FILE] =
     g_param_spec_object ("project-file",
                          _("Project File"),
                          _("The project file."),
                          G_TYPE_FILE,
-                         (G_PARAM_READWRITE |
-                          G_PARAM_CONSTRUCT_ONLY |
-                          G_PARAM_STATIC_STRINGS));
+                         (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
+  g_object_interface_install_property (iface, gParamSpecs [PROP_PROJECT_FILE]);
 
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
+  gParamSpecs [PROP_CONTEXT] =
+    g_param_spec_object ("context",
+                         _("Context"),
+                         _("Context"),
+                         IDE_TYPE_CONTEXT,
+                         (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
+  g_object_interface_install_property (iface, gParamSpecs [PROP_CONTEXT]);
 }
 
-static void
-ide_build_system_init (IdeBuildSystem *self)
+static gint
+sort_priority (gconstpointer a,
+               gconstpointer b,
+               gpointer      data)
 {
+  IdeBuildSystem **as = (IdeBuildSystem **)a;
+  IdeBuildSystem **bs = (IdeBuildSystem **)b;
+
+  return ide_build_system_get_priority (*as) - ide_build_system_get_priority (*bs);
 }
 
 /**
@@ -218,16 +160,16 @@ ide_build_system_new_async (IdeContext          *context,
   g_return_if_fail (IDE_IS_CONTEXT (context));
   g_return_if_fail (G_IS_FILE (project_file));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
-  g_return_if_fail (callback);
 
-  ide_object_new_async (IDE_BUILD_SYSTEM_EXTENSION_POINT,
-                        G_PRIORITY_DEFAULT,
-                        cancellable,
-                        callback,
-                        user_data,
-                        "context", context,
-                        "project-file", project_file,
-                        NULL);
+  ide_object_new_for_extension_async (IDE_TYPE_BUILD_SYSTEM,
+                                      sort_priority, NULL,
+                                      G_PRIORITY_DEFAULT,
+                                      cancellable,
+                                      callback,
+                                      user_data,
+                                      "context", context,
+                                      "project-file", project_file,
+                                      NULL);
 }
 
 /**
@@ -248,7 +190,7 @@ ide_build_system_new_finish (GAsyncResult  *result,
 
   ret = ide_object_new_finish (result, error);
 
-  return IDE_BUILD_SYSTEM (ret);
+  return ret ? IDE_BUILD_SYSTEM (ret) : NULL;
 }
 
 /**
@@ -269,17 +211,17 @@ ide_build_system_get_builder (IdeBuildSystem  *system,
                               IdeDevice       *device,
                               GError         **error)
 {
-  IdeBuildSystemClass *klass;
+  IdeBuildSystemInterface *iface;
   IdeBuilder *ret = NULL;
 
   g_return_val_if_fail (IDE_IS_BUILD_SYSTEM (system), NULL);
   g_return_val_if_fail (config, NULL);
   g_return_val_if_fail (IDE_IS_DEVICE (device), NULL);
 
-  klass = IDE_BUILD_SYSTEM_GET_CLASS (system);
+  iface = IDE_BUILD_SYSTEM_GET_IFACE (system);
 
-  if (klass->get_builder)
-    ret = klass->get_builder (system, config, device, error);
+  if (iface->get_builder)
+    ret = iface->get_builder (system, config, device, error);
   else
     g_set_error (error,
                  G_IO_ERROR,

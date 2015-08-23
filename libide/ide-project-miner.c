@@ -20,7 +20,7 @@
 
 #include "ide-project-miner.h"
 
-G_DEFINE_ABSTRACT_TYPE (IdeProjectMiner, ide_project_miner, G_TYPE_OBJECT)
+G_DEFINE_INTERFACE (IdeProjectMiner, ide_project_miner, G_TYPE_OBJECT)
 
 enum {
   DISCOVERED,
@@ -30,7 +30,7 @@ enum {
 static guint gSignals [LAST_SIGNAL];
 
 static void
-ide_project_miner_class_init (IdeProjectMinerClass *klass)
+ide_project_miner_default_init (IdeProjectMinerInterface *iface)
 {
   /**
    * IdeProjectMiner::discovered:
@@ -42,18 +42,13 @@ ide_project_miner_class_init (IdeProjectMinerClass *klass)
    * ide_project_miner_emit_discovered() was used to emit the signal.
    */
   gSignals [DISCOVERED] = g_signal_new ("discovered",
-                                        G_TYPE_FROM_CLASS (klass),
+                                        G_TYPE_FROM_INTERFACE (iface),
                                         G_SIGNAL_RUN_LAST,
-                                        G_STRUCT_OFFSET (IdeProjectMinerClass, discovered),
+                                        G_STRUCT_OFFSET (IdeProjectMinerInterface, discovered),
                                         NULL, NULL, NULL,
                                         G_TYPE_NONE,
                                         1,
                                         IDE_TYPE_PROJECT_INFO);
-}
-
-static void
-ide_project_miner_init (IdeProjectMiner *self)
-{
 }
 
 static gboolean
@@ -95,7 +90,7 @@ ide_project_miner_mine_async (IdeProjectMiner     *self,
   g_return_if_fail (IDE_IS_PROJECT_MINER (self));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  IDE_PROJECT_MINER_GET_CLASS (self)->mine_async (self, cancellable, callback, user_data);
+  IDE_PROJECT_MINER_GET_IFACE (self)->mine_async (self, cancellable, callback, user_data);
 }
 
 gboolean
@@ -106,5 +101,5 @@ ide_project_miner_mine_finish (IdeProjectMiner  *self,
   g_return_val_if_fail (IDE_IS_PROJECT_MINER (self), FALSE);
   g_return_val_if_fail (G_IS_ASYNC_RESULT (result), FALSE);
 
-  return IDE_PROJECT_MINER_GET_CLASS (self)->mine_finish (self, result, error);
+  return IDE_PROJECT_MINER_GET_IFACE (self)->mine_finish (self, result, error);
 }

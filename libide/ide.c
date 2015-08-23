@@ -24,9 +24,6 @@
 #include "gconstructor.h"
 #include "ide.h"
 
-#include "ide-autotools-build-system.h"
-#include "ide-autotools-project-miner.h"
-#include "ide-directory-build-system.h"
 #include "ide-directory-vcs.h"
 #include "ide-editorconfig-file-settings.h"
 #include "ide-file-settings.h"
@@ -80,23 +77,11 @@ ide_init_ctor (void)
   g_irepository_prepend_search_path (LIBDIR"/gnome-builder/girepository-1.0");
 
   g_type_ensure (IDE_TYPE_CONTEXT);
-  g_type_ensure (IDE_TYPE_BUILD_SYSTEM);
   g_type_ensure (IDE_TYPE_VCS);
 
-  g_io_extension_point_register (IDE_BUILD_SYSTEM_EXTENSION_POINT);
   g_io_extension_point_register (IDE_FILE_SETTINGS_EXTENSION_POINT);
-  g_io_extension_point_register (IDE_PROJECT_MINER_EXTENSION_POINT);
   g_io_extension_point_register (IDE_SCRIPT_EXTENSION_POINT);
   g_io_extension_point_register (IDE_VCS_EXTENSION_POINT);
-
-  g_io_extension_point_implement (IDE_BUILD_SYSTEM_EXTENSION_POINT,
-                                  IDE_TYPE_AUTOTOOLS_BUILD_SYSTEM,
-                                  IDE_BUILD_SYSTEM_EXTENSION_POINT".autotools",
-                                  -100);
-  g_io_extension_point_implement (IDE_BUILD_SYSTEM_EXTENSION_POINT,
-                                  IDE_TYPE_DIRECTORY_BUILD_SYSTEM,
-                                  IDE_BUILD_SYSTEM_EXTENSION_POINT".directory",
-                                  -200);
 
   g_io_extension_point_implement (IDE_FILE_SETTINGS_EXTENSION_POINT,
                                   IDE_TYPE_MODELINES_FILE_SETTINGS,
@@ -110,11 +95,6 @@ ide_init_ctor (void)
                                   IDE_TYPE_GSETTINGS_FILE_SETTINGS,
                                   IDE_FILE_SETTINGS_EXTENSION_POINT".gsettings",
                                   -300);
-
-  g_io_extension_point_implement (IDE_PROJECT_MINER_EXTENSION_POINT,
-                                  IDE_TYPE_AUTOTOOLS_PROJECT_MINER,
-                                  IDE_PROJECT_MINER_EXTENSION_POINT".autotools",
-                                  0);
 
   g_io_extension_point_implement (IDE_SCRIPT_EXTENSION_POINT,
                                   IDE_TYPE_GJS_SCRIPT,

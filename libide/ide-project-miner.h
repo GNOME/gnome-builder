@@ -25,14 +25,13 @@
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_PROJECT_MINER            (ide_project_miner_get_type())
-#define IDE_PROJECT_MINER_EXTENSION_POINT "org.gnome.builder.extensions.project-miner"
+#define IDE_TYPE_PROJECT_MINER (ide_project_miner_get_type())
 
-G_DECLARE_DERIVABLE_TYPE (IdeProjectMiner, ide_project_miner, IDE, PROJECT_MINER, GObject)
+G_DECLARE_INTERFACE (IdeProjectMiner, ide_project_miner, IDE, PROJECT_MINER, GObject)
 
-struct _IdeProjectMinerClass
+struct _IdeProjectMinerInterface
 {
-  GObjectClass parent;
+  GTypeInterface parent_iface;
 
   void     (*discovered)  (IdeProjectMiner      *self,
                            IdeProjectInfo       *project_info);

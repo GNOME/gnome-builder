@@ -1,10 +1,12 @@
 SUBDIRS = \
+	autotools \
 	clang \
 	command-bar \
 	c-pack \
 	ctags \
 	devhelp \
 	device-manager \
+	fallback \
 	file-search \
 	gnome-code-assistance \
 	html-completion \

@@ -1,0 +1,9 @@
+[Plugin]
+Module=fallback-plugin
+Name=Fallback
+Description=Provides fallback implementations for Builder subsystems.
+Authors=Christian Hergert <christian@hergert.me>
+Copyright=Copyright © 2015 Christian Hergert
+Builtin=true
+Hidden=true
+X-Build-System-Priority=10000000

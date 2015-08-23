@@ -19,21 +19,22 @@
 #define G_LOG_DOMAIN "ide-autotools-project-miner"
 
 #include <glib/gi18n.h>
+#include <ide.h>
 
 #include "ide-autotools-project-miner.h"
-#include "ide-debug.h"
-#include "ide-doap.h"
-#include "ide-macros.h"
 
 #define MAX_MINE_DEPTH 5
 
 struct _IdeAutotoolsProjectMiner
 {
-  IdeProjectMiner  parent_instance;
-  GFile           *root_directory;
+  GObject  parent_instance;
+  GFile   *root_directory;
 };
 
-G_DEFINE_TYPE (IdeAutotoolsProjectMiner, ide_autotools_project_miner, IDE_TYPE_PROJECT_MINER)
+static void project_miner_iface_init (IdeProjectMinerInterface *iface);
+
+G_DEFINE_TYPE_EXTENDED (IdeAutotoolsProjectMiner, ide_autotools_project_miner, G_TYPE_OBJECT, 0,
+                        G_IMPLEMENT_INTERFACE (IDE_TYPE_PROJECT_MINER, project_miner_iface_init))
 
 enum {
   PROP_0,
@@ -162,7 +163,7 @@ ide_autotools_project_miner_discovered (IdeAutotoolsProjectMiner *self,
                                "last-modified-at", last_modified_at,
                                "languages", languages,
                                "name", name,
-                               "priority", IDE_AUTOTOOLS_PROJECT_MINER_PRIORITY,
+                               "priority", 100,
                                NULL);
 
   ide_project_miner_emit_discovered (IDE_PROJECT_MINER (self), project_info);
@@ -371,17 +372,20 @@ ide_autotools_project_miner_set_property (GObject      *object,
 }
 
 static void
+project_miner_iface_init (IdeProjectMinerInterface *iface)
+{
+  iface->mine_async = ide_autotools_project_miner_mine_async;
+  iface->mine_finish = ide_autotools_project_miner_mine_finish;
+}
+
+static void
 ide_autotools_project_miner_class_init (IdeAutotoolsProjectMinerClass *klass)
 {
-  IdeProjectMinerClass *miner_class = IDE_PROJECT_MINER_CLASS (klass);
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   object_class->finalize = ide_autotools_project_miner_finalize;
   object_class->get_property = ide_autotools_project_miner_get_property;
   object_class->set_property = ide_autotools_project_miner_set_property;
-
-  miner_class->mine_async = ide_autotools_project_miner_mine_async;
-  miner_class->mine_finish = ide_autotools_project_miner_mine_finish;
 
   gParamSpecs [PROP_ROOT_DIRECTORY] =
     g_param_spec_object ("root-directory",

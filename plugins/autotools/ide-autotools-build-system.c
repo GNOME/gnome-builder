@@ -41,24 +41,27 @@
 
 struct _IdeAutotoolsBuildSystem
 {
-  IdeBuildSystem  parent_instance;
+  IdeObject     parent_instance;
 
-  EggTaskCache   *task_cache;
-  gchar          *tarball_name;
+  GFile        *project_file;
+  EggTaskCache *task_cache;
+  gchar        *tarball_name;
 };
 
 static void async_initable_iface_init (GAsyncInitableIface *iface);
+static void build_system_iface_init (IdeBuildSystemInterface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (IdeAutotoolsBuildSystem,
                          ide_autotools_build_system,
-                         IDE_TYPE_BUILD_SYSTEM,
-                         G_IMPLEMENT_INTERFACE (G_TYPE_ASYNC_INITABLE,
-                                                async_initable_iface_init))
+                         IDE_TYPE_OBJECT,
+                         G_IMPLEMENT_INTERFACE (G_TYPE_ASYNC_INITABLE, async_initable_iface_init)
+                         G_IMPLEMENT_INTERFACE (IDE_TYPE_BUILD_SYSTEM, build_system_iface_init))
 
 EGG_DEFINE_COUNTER (build_flags, "Autotools", "Flags Requests", "Requests count for build flags")
 
 enum {
   PROP_0,
+  PROP_PROJECT_FILE,
   PROP_TARBALL_NAME,
   LAST_PROP
 };
@@ -588,6 +591,12 @@ ide_autotools_build_system_constructed (GObject *object)
                            G_CONNECT_SWAPPED);
 }
 
+static gint
+ide_autotools_build_system_get_priority (IdeBuildSystem *system)
+{
+  return -100;
+}
+
 static void
 ide_autotools_build_system_finalize (GObject *object)
 {
@@ -609,6 +618,10 @@ ide_autotools_build_system_get_property (GObject    *object,
 
   switch (prop_id)
     {
+    case PROP_PROJECT_FILE:
+      g_value_set_object (value, self->project_file);
+      break;
+
     case PROP_TARBALL_NAME:
       g_value_set_string (value,
                           ide_autotools_build_system_get_tarball_name (self));
@@ -620,18 +633,43 @@ ide_autotools_build_system_get_property (GObject    *object,
 }
 
 static void
+ide_autotools_build_system_set_property (GObject      *object,
+                                         guint         prop_id,
+                                         const GValue *value,
+                                         GParamSpec   *pspec)
+{
+  IdeAutotoolsBuildSystem *self = IDE_AUTOTOOLS_BUILD_SYSTEM (object);
+
+  switch (prop_id)
+    {
+    case PROP_PROJECT_FILE:
+      g_clear_object (&self->project_file);
+      self->project_file = g_value_dup_object (value);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    }
+}
+
+static void
+build_system_iface_init (IdeBuildSystemInterface *iface)
+{
+  iface->get_priority = ide_autotools_build_system_get_priority;
+  iface->get_builder = ide_autotools_build_system_get_builder;
+  iface->get_build_flags_async = ide_autotools_build_system_get_build_flags_async;
+  iface->get_build_flags_finish = ide_autotools_build_system_get_build_flags_finish;
+}
+
+static void
 ide_autotools_build_system_class_init (IdeAutotoolsBuildSystemClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  IdeBuildSystemClass *build_system_class = IDE_BUILD_SYSTEM_CLASS (klass);
 
   object_class->constructed = ide_autotools_build_system_constructed;
   object_class->finalize = ide_autotools_build_system_finalize;
   object_class->get_property = ide_autotools_build_system_get_property;
-
-  build_system_class->get_builder = ide_autotools_build_system_get_builder;
-  build_system_class->get_build_flags_async = ide_autotools_build_system_get_build_flags_async;
-  build_system_class->get_build_flags_finish = ide_autotools_build_system_get_build_flags_finish;
+  object_class->set_property = ide_autotools_build_system_set_property;
 
   gParamSpecs [PROP_TARBALL_NAME] =
     g_param_spec_string ("tarball-name",
@@ -639,6 +677,13 @@ ide_autotools_build_system_class_init (IdeAutotoolsBuildSystemClass *klass)
                          _("The name of the project tarball."),
                          NULL,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+
+  gParamSpecs [PROP_PROJECT_FILE] =
+    g_param_spec_object ("project-file",
+                         _("Project File"),
+                         _("The path of the project file."),
+                         G_TYPE_FILE,
+                         (G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
 }
@@ -739,7 +784,7 @@ discover_file_cb (GObject      *object,
       return;
     }
 
-  _ide_build_system_set_project_file (IDE_BUILD_SYSTEM (self), file);
+  g_object_set (self, "project-file", file, NULL);
 
   ide_autotools_build_system_parse_async (self,
                                           file,

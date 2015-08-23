@@ -947,8 +947,8 @@ ide_context_init_build_system_cb (GObject      *object,
   g_autoptr(IdeBuildSystem) build_system = NULL;
   g_autoptr(GTask) task = user_data;
   IdeContext *self;
+  g_autoptr(GFile) project_file = NULL;
   GError *error = NULL;
-  GFile *project_file;
 
   self = g_task_get_source_object (task);
 
@@ -961,7 +961,9 @@ ide_context_init_build_system_cb (GObject      *object,
   self->build_system = g_object_ref (build_system);
 
   /* allow the build system to override the project file */
-  project_file = ide_build_system_get_project_file (self->build_system);
+  g_object_get (self->build_system,
+                "project-file", &project_file,
+                NULL);
   if (project_file != NULL)
     ide_context_set_project_file (self, project_file);
 

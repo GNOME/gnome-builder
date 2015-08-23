@@ -1,4 +1,4 @@
-/* ide-directory-build-system.h
+/* fallback-plugin.c
  *
  * Copyright (C) 2015 Christian Hergert <christian@hergert.me>
  *
@@ -16,23 +16,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_DIRECTORY_BUILD_SYSTEM_H
-#define IDE_DIRECTORY_BUILD_SYSTEM_H
+#include <libpeas/peas.h>
+#include <ide.h>
 
-#include "ide-build-system.h"
+#include "ide-directory-build-system.h"
 
-G_BEGIN_DECLS
-
-#define IDE_TYPE_DIRECTORY_BUILD_SYSTEM (ide_directory_build_system_get_type())
-
-G_DECLARE_FINAL_TYPE (IdeDirectoryBuildSystem, ide_directory_build_system,
-                      IDE, DIRECTORY_BUILD_SYSTEM, IdeBuildSystem)
-
-struct _IdeDirectoryBuildSystem
+void
+peas_register_types (PeasObjectModule *module)
 {
-  IdeBuildSystem parent_instance;
-};
-
-G_END_DECLS
-
-#endif /* IDE_DIRECTORY_BUILD_SYSTEM_H */
+  peas_object_module_register_extension_type (module, IDE_TYPE_BUILD_SYSTEM, IDE_TYPE_DIRECTORY_BUILD_SYSTEM);
+}

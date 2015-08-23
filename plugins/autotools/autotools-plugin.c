@@ -1,4 +1,4 @@
-/* ide-autotools-build-system.h
+/* autotools-plugin.c
  *
  * Copyright (C) 2015 Christian Hergert <christian@hergert.me>
  *
@@ -16,20 +16,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_AUTOTOOLS_BUILD_SYSTEM_H
-#define IDE_AUTOTOOLS_BUILD_SYSTEM_H
+#include <libpeas/peas.h>
+#include <ide.h>
 
-#include "ide-build-system.h"
+#include "ide-autotools-build-system.h"
+#include "ide-autotools-project-miner.h"
 
-G_BEGIN_DECLS
-
-#define IDE_TYPE_AUTOTOOLS_BUILD_SYSTEM (ide_autotools_build_system_get_type())
-
-G_DECLARE_FINAL_TYPE (IdeAutotoolsBuildSystem, ide_autotools_build_system,
-                      IDE, AUTOTOOLS_BUILD_SYSTEM, IdeBuildSystem)
-
-const gchar *ide_autotools_build_system_get_tarball_name (IdeAutotoolsBuildSystem *self);
-
-G_END_DECLS
-
-#endif /* IDE_AUTOTOOLS_BUILD_SYSTEM_H */
+void
+peas_register_types (PeasObjectModule *module)
+{
+  peas_object_module_register_extension_type (module, IDE_TYPE_BUILD_SYSTEM, IDE_TYPE_AUTOTOOLS_BUILD_SYSTEM);
+  peas_object_module_register_extension_type (module, IDE_TYPE_PROJECT_MINER, IDE_TYPE_AUTOTOOLS_PROJECT_MINER);
+}
