@@ -28,11 +28,6 @@ data/style-schemes/builder.xml
 [type: gettext/glade]data/ui/gb-rename-file-popover.ui
 [type: gettext/glade]data/ui/gb-view-stack.ui
 [type: gettext/glade]data/ui/gb-workbench.ui
-libide/autotools/ide-autotools-builder.c
-libide/autotools/ide-autotools-build-system.c
-libide/autotools/ide-autotools-build-task.c
-libide/autotools/ide-autotools-project-miner.c
-libide/autotools/ide-makecache.c
 libide/doap/ide-doap.c
 libide/doap/ide-doap-person.c
 libide/editorconfig/ide-editorconfig-file-settings.c
@@ -87,6 +82,11 @@ libide/ide-symbol-node.c
 libide/pygobject/ide-pygobject-script.c
 libide/theatrics/ide-animation.c
 libide/theatrics/ide-box-theatric.c
+plugins/autotools/ide-autotools-builder.c
+plugins/autotools/ide-autotools-build-system.c
+plugins/autotools/ide-autotools-build-task.c
+plugins/autotools/ide-autotools-project-miner.c
+plugins/autotools/ide-makecache.c
 plugins/clang/ide-clang-completion-item.c
 plugins/clang/ide-clang-completion-provider.c
 plugins/clang/ide-clang-service.c
@@ -108,6 +108,7 @@ plugins/devhelp/gb-devhelp-search-provider.c
 plugins/devhelp/gb-devhelp-search-result.c
 plugins/devhelp/gb-devhelp-view.c
 plugins/device-manager/gb-device-manager-panel.c
+plugins/fallback/ide-directory-build-system.c
 plugins/file-search/gb-file-search-index.c
 plugins/file-search/gb-file-search-provider.c
 plugins/gnome-code-assistance/ide-gca-diagnostic-provider.c
