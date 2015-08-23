@@ -24,13 +24,31 @@
 
 #include <libpeas/peas.h>
 
+#include "gb-application.h"
+#include "gb-document.h"
 #include "gb-plugins.h"
+#include "gb-tree-builder.h"
+#include "gb-view.h"
+#include "gb-workbench.h"
+#include "gb-workspace.h"
 
 void
 gb_plugins_init (void)
 {
   PeasEngine *engine;
   const GList *list;
+
+  /*
+   * Ensure plugin-extensible types are registered.
+   * This allows libgnome-builder.la to be linked and not drop
+   * important symbols.
+   */
+  g_type_ensure (GB_TYPE_APPLICATION);
+  g_type_ensure (GB_TYPE_DOCUMENT);
+  g_type_ensure (GB_TYPE_TREE_BUILDER);
+  g_type_ensure (GB_TYPE_VIEW);
+  g_type_ensure (GB_TYPE_WORKBENCH);
+  g_type_ensure (GB_TYPE_WORKSPACE);
 
   engine = peas_engine_get_default ();
 
