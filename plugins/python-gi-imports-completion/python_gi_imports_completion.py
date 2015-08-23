@@ -95,9 +95,6 @@ class CompletionProvider(Ide.Object,
         return 201
 
     def get_libraries(self):
-        if self._libraries:
-            pass
-
         now = GLib.get_monotonic_time()
         if now < self._libraries_expire_at:
             return self._libraries
