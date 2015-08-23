@@ -5,7 +5,7 @@ EXTRA_DIST =
 
 bin_PROGRAMS = gnome-builder
 
-noinst_LTLIBRARIES = libgnome-builder.la
+noinst_LTLIBRARIES = libgnome-builder.la libplugins-util.la
 
 libgnome_builder_la_SOURCES = \
 	$(gnome_builder_built_sources) \
@@ -217,11 +217,27 @@ libgnome_builder_la_CFLAGS = \
 	$(NULL)
 
 
+libplugins_util_la_SOURCES = \
+	util/gb-plugins.c \
+	util/gb-plugins.h \
+	$(NULL)
+libplugins_util_la_CFLAGS = \
+	$(BUILDER_CFLAGS) \
+	-DPACKAGE_DATADIR="\"${datadir}\"" \
+	-DPACKAGE_LOCALE_DIR=\""${datadir}/locale"\" \
+	-DPACKAGE_LIBDIR=\""${libdir}"\" \
+	$(NULL)
+libplugins_util_la_LDFLAGS = \
+	-avoid-version \
+	$(NULL)
+
+
 gnome_builder_SOURCES = main.c
 gnome_builder_CFLAGS = $(libgnome_builder_la_CFLAGS)
 gnome_builder_LDADD = \
 	$(top_builddir)/libide/libide-1.0.la \
 	libgnome-builder.la \
+	libplugins-util.la \
 	$(NULL)
 gnome_builder_LDFLAGS = \
 	-export-dynamic \
