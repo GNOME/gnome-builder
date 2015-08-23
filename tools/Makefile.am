@@ -3,15 +3,22 @@ tools_PROGRAMS =
 tools_cflags = \
 	-I$(top_srcdir)/libide \
 	-I$(top_builddir)/libide \
+	-I$(top_srcdir)/src/util \
 	$(LIBIDE_CFLAGS) \
 	$(NULL)
 
 tools_libs = \
 	$(LIBIDE_LIBS) \
 	$(top_builddir)/libide/libide-1.0.la \
+	$(top_builddir)/src/libplugins-util.la \
 	$(NULL)
 
 toolsdir = $(libexecdir)/gnome-builder
+
+# TODO:
+# 
+#  We should make these utilities require gnome-builder since lots of plugins will
+#  be extending types in the application as well as libide.
 
 tools_PROGRAMS += ide-build
 ide_build_SOURCES = ide-build.c

@@ -19,37 +19,47 @@
 #include <glib/gi18n.h>
 #include <ide.h>
 
-#include "ide-project-miner.h"
-#include "autotools/ide-autotools-project-miner.h"
+#include "gb-plugins.h"
+
+static GMainLoop *main_loop;
 
 static void
-mine_cb (GObject      *object,
-         GAsyncResult *result,
-         gpointer      user_data)
+discover_cb (GObject      *object,
+             GAsyncResult *result,
+             gpointer      user_data)
 {
-  IdeProjectMiner *miner = (IdeProjectMiner *)object;
-  g_autoptr(GError) error = NULL;
-  GMainLoop *main_loop = user_data;
+  IdeRecentProjects *projects = (IdeRecentProjects *)object;
+  GError *error = NULL;
+  guint count;
+  guint i;
 
-  if (!ide_project_miner_mine_finish (miner, result, &error))
-    g_warning ("%s", error->message);
+  if (!ide_recent_projects_discover_finish (projects, result, &error))
+    {
+      g_printerr ("%s\n", error->message);
+      g_clear_error (&error);
+      g_main_loop_quit (main_loop);
+      return;
+    }
+
+  count = g_list_model_get_n_items (G_LIST_MODEL (projects));
+
+  for (i = 0; i < count; i++)
+    {
+      g_autoptr(IdeProjectInfo) info = NULL;
+      GFile *file;
+      gchar *path;
+
+      info = g_list_model_get_item (G_LIST_MODEL (projects), i);
+
+      file = ide_project_info_get_file (info);
+      path = g_file_get_path (file);
+
+      g_print ("%s (%s)\n", path, ide_project_info_get_name (info));
+
+      g_free (path);
+    }
 
   g_main_loop_quit (main_loop);
-}
-
-static void
-discovered_cb (IdeProjectMiner *miner,
-               IdeProjectInfo  *info)
-{
-  GFile *file;
-  gchar *path;
-
-  file = ide_project_info_get_file (info);
-  path = g_file_get_path (file);
-
-  g_print ("%s (%s)\n", path, ide_project_info_get_name (info));
-
-  g_free (path);
 }
 
 static gboolean
@@ -68,9 +78,8 @@ main (int    argc,
       G_OPTION_ARG_CALLBACK, verbose_cb },
     { NULL }
   };
-  IdeProjectMiner *miner;
+  IdeRecentProjects *projects;
   GOptionContext *context;
-  GMainLoop *main_loop;
   GError *error = NULL;
 
   ide_log_init (TRUE, NULL);
@@ -84,15 +93,17 @@ main (int    argc,
       return EXIT_FAILURE;
     }
 
-  miner = g_object_new (IDE_TYPE_AUTOTOOLS_PROJECT_MINER,
-                        "root-directory", NULL,
-                        NULL);
-  g_signal_connect (miner, "discovered", G_CALLBACK (discovered_cb), NULL);
   main_loop = g_main_loop_new (NULL, FALSE);
-  ide_project_miner_mine_async (miner, NULL, mine_cb, main_loop);
-  g_main_loop_run (main_loop);
-  g_main_loop_unref (main_loop);
 
+  gb_plugins_init ();
+
+  projects = ide_recent_projects_new ();
+  ide_recent_projects_discover_async (projects, NULL, discover_cb, NULL);
+
+  g_main_loop_run (main_loop);
+
+  g_clear_object (&projects);
+  g_main_loop_unref (main_loop);
   ide_log_shutdown ();
 
   return 0;
