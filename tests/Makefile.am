@@ -50,6 +50,20 @@ tests_libs = \
 	$(top_builddir)/libide/libide-1.0.la \
 	$(NULL)
 
+tests_ide_context_cflags = \
+	$(egg_cflags) \
+	-I$(top_srcdir)/libide \
+	-I$(top_builddir)/libide \
+	-I$(top_srcdir)/src \
+	-I$(top_srcdir)/plugins/autotools \
+	$(NULL)
+
+tests_ide_context_libs = \
+	$(egg_libs) \
+	$(top_builddir)/libide/libide-1.0.la \
+	$(top_builddir)/plugins/autotools/libautotools-plugin.la \
+	$(NULL)
+
 misc_programs =
 
 TESTS_ENVIRONMENT= \
@@ -64,8 +78,8 @@ LOG_COMPILER = $(top_srcdir)/build/autotools/tap-test
 
 TESTS = test-ide-context
 test_ide_context_SOURCES = test-ide-context.c
-test_ide_context_CFLAGS = $(tests_cflags)
-test_ide_context_LDADD = $(tests_libs)
+test_ide_context_CFLAGS = $(tests_ide_context_cflags)
+test_ide_context_LDADD = $(tests_ide_context_libs)
 
 
 TESTS += test-ide-back-forward-list
