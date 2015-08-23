@@ -37,6 +37,16 @@ struct _IdeObjectClass
 };
 
 IdeContext *ide_object_get_context (IdeObject            *self);
+void        ide_object_new_for_extension_async
+                                   (GType                 interface_gtype,
+                                    GCompareDataFunc      sort_priority_func,
+                                    gpointer              sort_proirity_data,
+                                    int                   io_priority,
+                                    GCancellable         *cancellable,
+                                    GAsyncReadyCallback   callback,
+                                    gpointer              user_data,
+                                    const gchar          *first_property,
+                                    ...);
 void        ide_object_new_async   (const gchar          *extension_point,
                                     int                   io_priority,
                                     GCancellable         *cancellable,

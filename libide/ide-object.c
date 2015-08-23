@@ -19,6 +19,7 @@
 #define G_LOG_DOMAIN "ide-object"
 
 #include <glib/gi18n.h>
+#include <libpeas/peas.h>
 
 #include "ide-context.h"
 #include "ide-debug.h"
@@ -38,7 +39,15 @@ typedef struct
   int    io_priority;
 } InitAsyncState;
 
+typedef struct
+{
+  GPtrArray *plugins;
+  gint       position;
+  gint       io_priority;
+} InitExtensionAsyncState;
+
 static void ide_object_new_async_try_next (InitAsyncState *state);
+static void ide_object_new_for_extension_async_try_next (GTask *task);
 
 G_DEFINE_TYPE_WITH_PRIVATE (IdeObject, ide_object, G_TYPE_OBJECT)
 
@@ -284,6 +293,145 @@ ide_object_new_async_try_next (InitAsyncState *state)
                                g_task_get_cancellable (state->task),
                                ide_object_init_async_cb,
                                state);
+}
+
+static void
+extension_async_state_free (gpointer data)
+{
+  InitExtensionAsyncState *state = data;
+
+  g_ptr_array_unref (state->plugins);
+  g_slice_free (InitExtensionAsyncState, state);
+}
+
+static void
+extensions_foreach_cb (PeasExtensionSet *set,
+                       PeasPluginInfo   *plugin_info,
+                       PeasExtension    *exten,
+                       gpointer          user_data)
+{
+  InitExtensionAsyncState *state = user_data;
+
+  g_assert (state != NULL);
+  g_assert (state->plugins != NULL);
+
+  if (!G_IS_ASYNC_INITABLE (exten))
+    {
+      g_warning ("\"%s\" does not implement GAsyncInitable. Ignoring extension.",
+                 G_OBJECT_TYPE_NAME (exten));
+      return;
+    }
+
+  g_ptr_array_add (state->plugins, g_object_ref (exten));
+}
+
+static void
+extension_init_cb (GObject      *object,
+                   GAsyncResult *result,
+                   gpointer      user_data)
+{
+  g_autoptr(GTask) task = user_data;
+  GAsyncInitable *initable = (GAsyncInitable *)object;
+  GError *error = NULL;
+  InitExtensionAsyncState *state;
+
+  g_assert (G_IS_TASK (task));
+  g_assert (G_IS_ASYNC_INITABLE (initable));
+
+  state = g_task_get_task_data (task);
+
+  if (!g_async_initable_init_finish (initable, result, &error))
+    {
+      if (state->position == state->plugins->len)
+        {
+          g_task_return_error (task, error);
+          return;
+        }
+
+      g_clear_error (&error);
+      ide_object_new_for_extension_async_try_next (task);
+      return;
+    }
+
+  g_task_return_pointer (task, g_object_ref (initable), g_object_unref);
+}
+
+static void
+ide_object_new_for_extension_async_try_next (GTask *task)
+{
+  InitExtensionAsyncState *state;
+  IdeBuildSystem *build_system;
+
+  g_assert (G_IS_TASK (task));
+
+  state = g_task_get_task_data (task);
+
+  if (state->position == state->plugins->len)
+    {
+      g_task_return_new_error (task,
+                               G_IO_ERROR,
+                               G_IO_ERROR_NOT_SUPPORTED,
+                               _("Failed to locate build system plugin."));
+      return;
+    }
+
+  build_system = g_ptr_array_index (state->plugins, state->position++);
+
+  g_async_initable_init_async (G_ASYNC_INITABLE (build_system),
+                               state->io_priority,
+                               g_task_get_cancellable (task),
+                               extension_init_cb,
+                               g_object_ref (task));
+}
+
+/**
+ * ide_object_new_for_extension_async:
+ * @sort_priority_func: (scope call) (allow-none): A #GCompareDataFunc or %NULL.
+ *
+ */
+void
+ide_object_new_for_extension_async (GType                 interface_gtype,
+                                    GCompareDataFunc      sort_priority_func,
+                                    gpointer              sort_priority_data,
+                                    int                   io_priority,
+                                    GCancellable         *cancellable,
+                                    GAsyncReadyCallback   callback,
+                                    gpointer              user_data,
+                                    const gchar          *first_property,
+                                    ...)
+{
+  PeasEngine *engine;
+  PeasExtensionSet *set;
+  g_autoptr(GTask) task = NULL;
+  InitExtensionAsyncState *state;
+  va_list args;
+
+  g_return_if_fail (G_TYPE_IS_INTERFACE (interface_gtype));
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  engine = peas_engine_get_default ();
+
+  va_start (args, first_property);
+  set = peas_extension_set_new_valist (engine, interface_gtype, first_property, args);
+  va_end (args);
+
+  task = g_task_new (NULL, cancellable, callback, user_data);
+
+  state = g_slice_new0 (InitExtensionAsyncState);
+  state->plugins = g_ptr_array_new_with_free_func (g_object_unref);
+  state->position = 0;
+  state->io_priority = io_priority;
+
+  peas_extension_set_foreach (set, extensions_foreach_cb, state);
+
+  if (sort_priority_func != NULL)
+    g_ptr_array_sort_with_data (state->plugins, sort_priority_func, sort_priority_data);
+
+  g_task_set_task_data (task, state, extension_async_state_free);
+
+  ide_object_new_for_extension_async_try_next (task);
+
+  g_clear_object (&set);
 }
 
 void
