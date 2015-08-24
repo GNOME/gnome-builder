@@ -147,7 +147,15 @@ class JediCompletionProvider(Ide.Object,
         return GtkSource.CompletionActivation.INTERACTIVE
 
     def do_match(self, context):
-        return HAS_JEDI
+        if not HAS_JEDI:
+            return False
+        _, iter = context.get_iter()
+        iter.backward_char()
+        buffer = iter.get_buffer()
+        classes = buffer.get_context_classes_at_iter(iter)
+        if 'string' in classes:
+            return False
+        return True
 
     def do_get_info_widget(self, proposal):
         return None
