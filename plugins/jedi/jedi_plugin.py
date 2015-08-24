@@ -70,6 +70,7 @@ try:
     jedi.evaluate.imports.Importer = PatchedJediImporter
     HAS_JEDI = True
 except ImportError:
+    print("jedi not found, python auto-completion not possible.")
     HAS_JEDI = False
 
 # FIXME: Should we be using multiprocessing or something?
