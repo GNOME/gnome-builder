@@ -55,6 +55,18 @@ try:
                         pass
             return module_list
 
+    original_jedi_get_module = jedi.evaluate.compiled.fake.get_module
+
+    def patched_jedi_get_module(obj):
+        "Work around a weird bug in jedi"
+        try:
+            return original_jedi_get_module(obj)
+        except ImportError as e:
+            if e.msg == "No module named 'gi._gobject._gobject'":
+                return original_jedi_get_module('gi._gobject')
+
+    jedi.evaluate.compiled.fake.get_module = patched_jedi_get_module
+
     jedi.evaluate.imports.Importer = PatchedJediImporter
     HAS_JEDI = True
 except ImportError:
