@@ -129,8 +129,8 @@ class CompletionProposal(GObject.Object, GtkSource.CompletionProposal):
     def do_get_text(self):
         return self.complete
 
-    def do_get_icon(self):
-        return load_icon(self.context, 'lang-include-symbolic')
+    def do_get_icon_name(self):
+        return 'lang-include-symbolic'
 
     def do_hash(self):
         return hash(self.completion)
@@ -140,32 +140,3 @@ class CompletionProposal(GObject.Object, GtkSource.CompletionProposal):
 
     def do_changed(self):
         pass
-
-_icon_cache = {}
-
-
-def purge_cache():
-    _icon_cache.clear()
-
-settings = Gtk.Settings.get_default()
-settings.connect('notify::gtk-theme-name', lambda *_: purge_cache())
-settings.connect('notify::gtk-application-prefer-dark-theme', lambda *_: purge_cache())
-
-
-def load_icon(context, name):
-    if name in _icon_cache:
-        return _icon_cache[name]
-
-    window = context.props.completion.get_info_window()
-    size = 16
-    style_context = window.get_style_context()
-    icon_theme = Gtk.IconTheme.get_default()
-    icon_info = icon_theme.lookup_icon(name, size, 0)
-    if not icon_info:
-        icon = None
-    else:
-        icon = icon_info.load_symbolic_for_context(style_context)
-
-    _icon_cache[name] = icon
-
-    return icon

@@ -194,16 +194,16 @@ class JediCompletionProposal(GObject.Object, GtkSource.CompletionProposal):
     def do_get_text(self):
         return self.completion.complete
 
-    def do_get_icon(self):
+    def do_get_icon_name(self):
         if self.completion.type == 'class':
-            return load_icon(self.context, 'lang-class-symbolic')
+            return 'lang-class-symbolic'
         elif self.completion.type == 'instance':
-            return load_icon(self.context, 'lang-variable-symbolic')
+            return 'lang-variable-symbolic'
         elif self.completion.type in ('import', 'module'):
             # FIXME: Would be nice to do something better here.
-            return load_icon(self.context, 'lang-include-symbolic')
+            return 'lang-include-symbolic'
         elif self.completion.type == 'function':
-            return load_icon(self.context, 'lang-function-symbolic')
+            return 'lang-function-symbolic'
         elif self.completion.type == 'keyword':
             # FIXME: And here
             return None
@@ -218,31 +218,3 @@ class JediCompletionProposal(GObject.Object, GtkSource.CompletionProposal):
     def do_changed(self):
         pass
 
-_icon_cache = {}
-
-
-def purge_cache():
-    _icon_cache.clear()
-
-settings = Gtk.Settings.get_default()
-settings.connect('notify::gtk-theme-name', lambda *_: purge_cache())
-settings.connect('notify::gtk-application-prefer-dark-theme', lambda *_: purge_cache())
-
-
-def load_icon(context, name):
-    if name in _icon_cache:
-        return _icon_cache[name]
-
-    window = context.props.completion.get_info_window()
-    size = 16
-    style_context = window.get_style_context()
-    icon_theme = Gtk.IconTheme.get_default()
-    icon_info = icon_theme.lookup_icon(name, size, 0)
-    if not icon_info:
-        icon = None
-    else:
-        icon = icon_info.load_symbolic_for_context(style_context)
-
-    _icon_cache[name] = icon
-
-    return icon
