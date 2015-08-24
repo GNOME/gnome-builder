@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2015-08-17 16:49+0000\n"
-"PO-Revision-Date: 2015-08-21 18:57+0200\n"
+"POT-Creation-Date: 2015-08-23 10:06+0000\n"
+"PO-Revision-Date: 2015-08-24 17:14+0200\n"
 "Last-Translator: Dušan Kazik <prescott66@gmail.com>\n"
 "Language-Team: slovenčina <>\n"
 "Language: sk\n"
@@ -276,7 +276,7 @@ msgstr ""
 
 #: ../data/style-schemes/builder.xml.h:1
 #: ../data/ui/gb-preferences-page-keybindings.ui.h:3
-#: ../data/ui/gb-workbench.ui.h:1 ../src/main.c:95
+#: ../data/ui/gb-workbench.ui.h:1 ../src/main.c:49
 #: ../src/workbench/gb-workbench.c:153
 msgid "Builder"
 msgstr "Builder"
@@ -323,6 +323,12 @@ msgstr "Vložiť _medzery namiesto tabulátorov"
 #: ../data/ui/gb-editor-settings-widget.ui.h:8
 msgid "_Enable automatic indentation"
 msgstr "_Povoliť automatické odsadzovanie"
+
+#: ../data/ui/gb-editor-settings-widget.ui.h:9
+#: ../libide/ide-source-snippet-completion-provider.c:174
+#: ../libide/ide-source-snippet-completion-provider.c:255
+msgid "Snippets"
+msgstr ""
 
 #: ../data/ui/gb-editor-tweak-widget.ui.h:1
 msgid "Search highlight mode…"
@@ -448,8 +454,8 @@ msgstr "Verzia prostredia GNOME"
 
 #: ../data/ui/gb-new-project-dialog.ui.h:9 ../libide/ide-diagnostician.c:270
 #: ../libide/ide-diagnostician.c:271 ../libide/ide-file.c:486
-#: ../libide/ide-source-snippet.c:974
-#: ../src/editor/gb-editor-settings-widget.c:179
+#: ../libide/ide-source-snippet.c:1007
+#: ../src/editor/gb-editor-settings-widget.c:312
 msgid "Language"
 msgstr "Jazyk"
 
@@ -469,9 +475,8 @@ msgstr "používateľ@hostiteľ:repozitár.git"
 msgid "Enter the URL of your project's source code repository."
 msgstr "Zadajte URL repozitára so zdrojovým kódom vášho projektu."
 
-#: ../data/ui/gb-new-project-dialog.ui.h:14
-#: ../libide/autotools/ide-autotools-build-task.c:395
-#: ../libide/ide-project-info.c:437
+#: ../data/ui/gb-new-project-dialog.ui.h:14 ../libide/ide-project-info.c:437
+#: ../plugins/autotools/ide-autotools-build-task.c:395
 #: ../src/project-tree/gb-new-file-popover.c:268
 #: ../src/project-tree/gb-new-file-popover.c:269
 msgid "Directory"
@@ -527,7 +532,7 @@ msgstr "Zvýrazniť zodpovedajúce zátvorky"
 
 #: ../data/ui/gb-preferences-page-editor.ui.h:11
 msgid "Whether or not matching brackets should be highlighted."
-msgstr "Určuje, či sa majú byť zvýraznené zodpovedajúce zátvorky."
+msgstr "Určuje, či majú byť zvýraznené zodpovedajúce zátvorky."
 
 #: ../data/ui/gb-preferences-page-editor.ui.h:12
 msgid "Overview Map"
@@ -767,115 +772,6 @@ msgstr "Zavrieť"
 msgid "Project"
 msgstr "Projekt"
 
-#: ../libide/autotools/ide-autotools-builder.c:303
-#: ../libide/autotools/ide-autotools-build-task.c:377
-msgid "Config"
-msgstr "Konfigurácia"
-
-#: ../libide/autotools/ide-autotools-builder.c:304
-msgid "The configuration for the build."
-msgstr "Konfigurácia pre zostavenie."
-
-#: ../libide/autotools/ide-autotools-builder.c:312
-#: ../libide/autotools/ide-autotools-build-task.c:386
-#: ../plugins/device-manager/gb-device-manager-panel.c:75
-msgid "Device"
-msgstr "Zariadenie"
-
-#: ../libide/autotools/ide-autotools-builder.c:313
-#: ../libide/autotools/ide-autotools-build-task.c:387
-msgid "The device to build for."
-msgstr "Zariadenie, pre ktoré sa má zostaviť."
-
-#: ../libide/autotools/ide-autotools-build-system.c:172
-msgid "Failed to locate configure.ac"
-msgstr "Zlyhalo lokalizovanie súboru configure.ac"
-
-#: ../libide/autotools/ide-autotools-build-system.c:638
-msgid "Tarball Name"
-msgstr "Názov balíka tarball"
-
-#: ../libide/autotools/ide-autotools-build-system.c:639
-msgid "The name of the project tarball."
-msgstr "Názov balíka tarball pre projekt."
-
-#: ../libide/autotools/ide-autotools-build-task.c:270
-msgid "Directory must be on a locally mounted filesystem."
-msgstr "Adresár sa musí nachádzať v miestne pripojenom systéme súborov."
-
-#: ../libide/autotools/ide-autotools-build-task.c:378
-msgid "The overlay config for the compilation."
-msgstr ""
-
-#: ../libide/autotools/ide-autotools-build-task.c:396
-msgid "The directory to perform the build within."
-msgstr ""
-
-#: ../libide/autotools/ide-autotools-build-task.c:404
-msgid "Require Autogen"
-msgstr "Vyžadovať automatické generovanie"
-
-#: ../libide/autotools/ide-autotools-build-task.c:405
-msgid "If autogen.sh should be forced to execute."
-msgstr "Či ma byť vynútené spustenie skriptu autogen.sh."
-
-#: ../libide/autotools/ide-autotools-build-task.c:413
-msgid "Require Configure"
-msgstr "Vyžadovať konfiguráciu"
-
-#: ../libide/autotools/ide-autotools-build-task.c:414
-msgid "If configure should be forced to execute."
-msgstr "Či má byť vynútené spustenie konfigurácie."
-
-#: ../libide/autotools/ide-autotools-build-task.c:641
-msgid "Cannot execute build task more than once."
-msgstr "Úloha zostavenia sa nedá spustiť viac ako raz."
-
-#: ../libide/autotools/ide-autotools-build-task.c:726
-msgid "Failed to create build directory."
-msgstr "Zlyhalo vytvorenie adresára pre zostavenie."
-
-#: ../libide/autotools/ide-autotools-build-task.c:735
-#, c-format
-msgid "'%s' is not a directory."
-msgstr "„%s“ nie je adresárom."
-
-#: ../libide/autotools/ide-autotools-build-task.c:774
-#, c-format
-msgid "autogen.sh is missing from project directory (%s)."
-msgstr ""
-
-#: ../libide/autotools/ide-autotools-build-task.c:784
-msgid "autogen.sh is not executable."
-msgstr ""
-
-#: ../libide/autotools/ide-autotools-build-task.c:814
-#, c-format
-msgid "autogen.sh failed to create configure (%s)"
-msgstr ""
-
-#: ../libide/autotools/ide-autotools-project-miner.c:388
-#: ../plugins/file-search/gb-file-search-index.c:121
-#: ../plugins/file-search/gb-file-search-index.c:122
-msgid "Root Directory"
-msgstr "Koreňový adresár"
-
-#: ../libide/autotools/ide-autotools-project-miner.c:389
-msgid "The root directory to scan from."
-msgstr ""
-
-#: ../libide/autotools/ide-makecache.c:1004
-msgid "Invalid makefile provided, ignoring."
-msgstr ""
-
-#: ../libide/autotools/ide-makecache.c:1244
-msgid "Makefile"
-msgstr ""
-
-#: ../libide/autotools/ide-makecache.c:1245
-msgid "The root makefile to be cached."
-msgstr ""
-
 #: ../libide/doap/ide-doap.c:420 ../libide/doap/ide-doap.c:421
 msgid "Bug Database"
 msgstr "Databáza chýb"
@@ -885,7 +781,7 @@ msgid "Category"
 msgstr "Kategória"
 
 #: ../libide/doap/ide-doap.c:434 ../libide/doap/ide-doap.c:435
-#: ../libide/ide-project-info.c:423 ../libide/ide-source-snippet.c:981
+#: ../libide/ide-project-info.c:423 ../libide/ide-source-snippet.c:1014
 #: ../src/preferences/gb-preferences-switch.c:321
 msgid "Description"
 msgstr "Popis"
@@ -1047,7 +943,8 @@ msgstr ""
 msgid "If the file has changed on disk and the buffer is not in sync."
 msgstr ""
 
-#: ../libide/ide-buffer.c:1126 ../libide/ide-object.c:203
+#: ../libide/ide-buffer.c:1126 ../libide/ide-build-system.c:120
+#: ../libide/ide-build-system.c:121 ../libide/ide-object.c:212
 #: ../libide/ide-search-provider.c:71 ../libide/ide-search-provider.c:72
 #: ../libide/ide-source-snippet-chunk.c:314
 #: ../src/search/gb-search-display.c:577 ../src/workbench/gb-workbench.c:708
@@ -1101,18 +998,18 @@ msgstr ""
 #: ../src/preferences/gb-preferences-page.c:282
 #: ../src/preferences/gb-preferences-switch.c:314 ../src/views/gb-view.c:279
 msgid "Title"
-msgstr ""
+msgstr "Názov"
 
 #: ../libide/ide-buffer.c:1164
 msgid "The title of the buffer."
-msgstr ""
+msgstr "Názov vyrovnávacej pamäte."
 
 #: ../libide/ide-buffer.c:1969
 msgid "The current language lacks a symbol resolver."
 msgstr ""
 
 #: ../libide/ide-buffer-change-monitor.c:106
-#: ../libide/ide-highlight-engine.c:851 ../libide/ide-source-snippet.c:946
+#: ../libide/ide-highlight-engine.c:851 ../libide/ide-source-snippet.c:979
 #: ../src/html/gb-html-document.c:314
 msgid "Buffer"
 msgstr ""
@@ -1121,46 +1018,46 @@ msgstr ""
 msgid "The IdeBuffer to be monitored."
 msgstr ""
 
-#: ../libide/ide-buffer-manager.c:584
+#: ../libide/ide-buffer-manager.c:604
 msgid "File too large to be opened."
-msgstr ""
+msgstr "Súbor je príliš veľký na otvorenie."
 
-#: ../libide/ide-buffer-manager.c:1209
+#: ../libide/ide-buffer-manager.c:1265
 msgid "Auto Save"
 msgstr "Automatické úkladanie"
 
-#: ../libide/ide-buffer-manager.c:1210
+#: ../libide/ide-buffer-manager.c:1266
 msgid "If the documents should auto save after a configured timeout."
 msgstr ""
 "Či majú byť dokumenty automaticky ukladané po nakonfigurovanom časovom "
 "intervale."
 
-#: ../libide/ide-buffer-manager.c:1216
+#: ../libide/ide-buffer-manager.c:1272
 msgid "Auto Save Timeout"
 msgstr "Časový interval automatického ukladania"
 
-#: ../libide/ide-buffer-manager.c:1217
+#: ../libide/ide-buffer-manager.c:1273
 msgid "The number of seconds after modification before auto saving."
 msgstr "Počet sekúnd úpravy pred automatickým uložením."
 
-#: ../libide/ide-buffer-manager.c:1225
+#: ../libide/ide-buffer-manager.c:1281
 msgid "Focused Buffer"
 msgstr ""
 
-#: ../libide/ide-buffer-manager.c:1226
+#: ../libide/ide-buffer-manager.c:1282
 msgid "The currently focused buffer."
 msgstr ""
 
-#: ../libide/ide-buffer-manager.c:1369
+#: ../libide/ide-buffer-manager.c:1425
 msgid "Words"
 msgstr ""
 
-#: ../libide/ide-buffer-manager.c:1580
+#: ../libide/ide-buffer-manager.c:1636
 #, c-format
 msgid "unsaved document %u"
 msgstr "neuložený dokument %u"
 
-#: ../libide/ide-buffer-manager.c:1614
+#: ../libide/ide-buffer-manager.c:1670
 msgid "Failed to save buffer, ignoring reclamation."
 msgstr ""
 
@@ -1175,35 +1072,37 @@ msgstr ""
 
 #: ../libide/ide-build-result.c:156
 msgid "Failed to open stderr stream."
-msgstr ""
+msgstr "Zlyhalo otvorenie prúdu stderr."
 
 #: ../libide/ide-build-result.c:186
 msgid "Failed to open stdout stream."
-msgstr ""
+msgstr "Zlyhalo otvorenie prúdu stdout."
 
-#: ../libide/ide-build-system.c:181 ../libide/ide-context.c:687
+#: ../libide/ide-build-system.c:112 ../libide/ide-context.c:687
+#: ../plugins/autotools/ide-autotools-build-system.c:683
+#: ../plugins/fallback/ide-directory-build-system.c:116
 msgid "Project File"
 msgstr "Súbor pojektu"
 
-#: ../libide/ide-build-system.c:182
+#: ../libide/ide-build-system.c:113
 msgid "The project file."
 msgstr "Súbor s projektom."
 
-#: ../libide/ide-build-system.c:287
+#: ../libide/ide-build-system.c:229
 #, c-format
 msgid "%s() is not supported on %s build system."
 msgstr ""
 
-#: ../libide/ide.c:68
+#: ../libide/ide.c:65
 #, c-format
 msgid "You must call %s() before using libide."
 msgstr ""
 
-#: ../libide/ide.c:146
+#: ../libide/ide.c:126
 msgid "Builder requires libgit2-glib with threading support."
 msgstr ""
 
-#: ../libide/ide.c:152
+#: ../libide/ide.c:132
 msgid "Builder requires libgit2-glib with SSH support."
 msgstr ""
 
@@ -1218,51 +1117,51 @@ msgstr ""
 
 #: ../libide/ide-context.c:659
 msgid "Buffer Manager"
-msgstr ""
+msgstr "Správca vyrovnávacích pamätí"
 
 #: ../libide/ide-context.c:660
 msgid "The buffer manager for the context."
-msgstr ""
+msgstr "Správca vyrovnávacích pamätí pre kontext."
 
 #: ../libide/ide-context.c:666
 msgid "Build System"
-msgstr ""
+msgstr "Systém zostavenia"
 
 #: ../libide/ide-context.c:667
 msgid "The build system used by the context."
-msgstr ""
+msgstr "Systém zostavenia použitý kontextom."
 
 #: ../libide/ide-context.c:673
 msgid "Device Manager"
-msgstr ""
+msgstr "Správca zariadení"
 
 #: ../libide/ide-context.c:674
 msgid "The device manager for the context."
-msgstr ""
+msgstr "Správca zariadení pre kontext."
 
 #: ../libide/ide-context.c:681
 msgid "The project for the context."
-msgstr ""
+msgstr "Projekt pre kontext."
 
 #: ../libide/ide-context.c:688
 msgid "The project file for the context."
-msgstr ""
+msgstr "Súbor projektu pre kontext."
 
 #: ../libide/ide-context.c:696
 msgid "Root Build Directory"
-msgstr ""
+msgstr "Koreňový adresár zostavenia"
 
 #: ../libide/ide-context.c:697
 msgid "The root directory to perform builds within."
-msgstr ""
+msgstr "Koreňový adresár, v ktorom sa majú vykonávať zostavenia."
 
 #: ../libide/ide-context.c:703
 msgid "Script Manager"
-msgstr ""
+msgstr "Správca skriptov"
 
 #: ../libide/ide-context.c:704
 msgid "The script manager for the context."
-msgstr ""
+msgstr "Správca skriptov pre kontext."
 
 #: ../libide/ide-context.c:710
 msgid "Search Engine"
@@ -1282,19 +1181,19 @@ msgstr ""
 
 #: ../libide/ide-context.c:724
 msgid "Unsaved Files"
-msgstr ""
+msgstr "Neuložené súbory"
 
 #: ../libide/ide-context.c:725
 msgid "The unsaved files in the context."
-msgstr ""
+msgstr "Neuložené súbory v kontexte."
 
 #: ../libide/ide-context.c:731
 msgid "VCS"
-msgstr ""
+msgstr "VCS"
 
 #: ../libide/ide-context.c:732
 msgid "The VCS for the context."
-msgstr ""
+msgstr "VCS pre kontext."
 
 #: ../libide/ide-context.c:1670
 msgid "An unload request is already pending"
@@ -1302,16 +1201,16 @@ msgstr ""
 
 #: ../libide/ide-context.c:1785
 msgid "Context has already been restored."
-msgstr ""
+msgstr "Kontext už bol obnovený."
 
 #: ../libide/ide-device.c:234 ../src/project-tree/gb-project-file.c:159
 #: ../src/project-tree/gb-project-file.c:160
 msgid "Display Name"
-msgstr ""
+msgstr "Zobrazovaný názov"
 
 #: ../libide/ide-device.c:235
 msgid "The display name of the device."
-msgstr ""
+msgstr "Zobrazovaný názov zariadenia."
 
 #: ../libide/ide-device.c:241 ../libide/ide-project.c:393
 msgid "ID"
@@ -1323,16 +1222,16 @@ msgstr "Identifikátor zariadenia."
 
 #: ../libide/ide-device.c:248
 msgid "System Type"
-msgstr ""
+msgstr "Typ systému"
 
 #: ../libide/ide-device.c:249
 msgid "The system type for which to compile."
-msgstr ""
+msgstr "Typ systému, pre ktorý sa má kompilovať."
 
 #: ../libide/ide-device-manager.c:144
 #, c-format
 msgid "The device \"%s\" could not be found."
-msgstr ""
+msgstr "Zariadenie „%s“ sa nepodarilo nájsť."
 
 #: ../libide/ide-device-manager.c:395 ../libide/ide-file-settings.c:297
 msgid "Settled"
@@ -1350,11 +1249,11 @@ msgstr ""
 
 #: ../libide/ide-extension-adapter.c:403
 msgid "Extension"
-msgstr ""
+msgstr "Rozšírenie"
 
 #: ../libide/ide-extension-adapter.c:404
 msgid "The extension object."
-msgstr ""
+msgstr "Objekt rozšírenia."
 
 #: ../libide/ide-extension-adapter.c:410
 #: ../libide/ide-extension-set-adapter.c:283
@@ -1388,19 +1287,19 @@ msgstr ""
 
 #: ../libide/ide-file.c:471
 msgid "The path to the underlying file."
-msgstr ""
+msgstr "Cesta k podliehajúcemu súboru."
 
 #: ../libide/ide-file.c:479
 msgid "Is Temporary"
-msgstr ""
+msgstr "Je dočasný"
 
 #: ../libide/ide-file.c:480
 msgid "If the file represents a temporary file."
-msgstr ""
+msgstr "Či súbor reprezentuje dočasný súbor."
 
 #: ../libide/ide-file.c:487
 msgid "The file language."
-msgstr ""
+msgstr "Jazyk súboru."
 
 #: ../libide/ide-file.c:493 ../libide/ide-project-file.c:276
 msgid "Path"
@@ -1412,11 +1311,11 @@ msgstr "Cesta v projekte."
 
 #: ../libide/ide-file.c:500
 msgid "Temporary ID"
-msgstr ""
+msgstr "ID dočasných súborov"
 
 #: ../libide/ide-file.c:501
 msgid "A unique identifier for temporary files."
-msgstr ""
+msgstr "Unikátny identifikátor pre dočasné súbory."
 
 #: ../libide/ide-file-settings.c:291
 msgid "The IdeFile the settings represent."
@@ -1428,63 +1327,68 @@ msgstr ""
 
 #: ../libide/ide-highlight-engine.c:852
 msgid "The buffer to highlight."
-msgstr ""
+msgstr "Vyrovnávacia pamäť, ktorá má byť zvýraznená."
 
 #: ../libide/ide-highlight-engine.c:858
 msgid "Highlighter"
-msgstr ""
+msgstr "Zvýrazňovač"
 
 #: ../libide/ide-highlight-engine.c:859
 msgid "The highlighter to use for type information."
-msgstr ""
+msgstr "Zvýrazňovač použitý pre daný typ informácií."
 
-#: ../libide/ide-object.c:204
+#: ../libide/ide-object.c:213
 msgid "The context that owns the object."
-msgstr ""
+msgstr "Kontext, ktorý vlastní objekt."
 
-#: ../libide/ide-object.c:274 ../libide/ide-object.c:323
+#: ../libide/ide-object.c:283 ../libide/ide-object.c:471
 msgid "No implementations of extension point."
 msgstr ""
 
-#: ../libide/ide-object.c:313
+#: ../libide/ide-object.c:374
+#| msgid "Failed to create build directory."
+msgid "Failed to locate build system plugin."
+msgstr "Zlyhalo lokalizovanie zásuvného modulu systému zostavovania."
+
+#: ../libide/ide-object.c:461
 msgid "No such extension point."
-msgstr ""
+msgstr "Neexistuje bod rozšírenia."
 
 #: ../libide/ide-progress.c:210
 msgid "Completed"
-msgstr ""
+msgstr "Dokončené"
 
 #: ../libide/ide-progress.c:211
 msgid "If the progress has completed."
-msgstr ""
+msgstr "Či je priebeh dokončený."
 
 #: ../libide/ide-progress.c:218
 msgid "The fraction of the progress."
-msgstr ""
+msgstr "Zlomok priebehu."
 
 #: ../libide/ide-progress.c:226
 msgid "Message"
-msgstr ""
+msgstr "Správa"
 
 #: ../libide/ide-progress.c:227
 msgid "A short message for the progress."
-msgstr ""
+msgstr "Krátka správa pre priebeh."
 
 #: ../libide/ide-project.c:394
 msgid "The unique project identifier."
-msgstr ""
+msgstr "Unikátny identifikátor projektu."
 
 #: ../libide/ide-project.c:401
 msgid "The name of the project."
-msgstr ""
+msgstr "Názov projektu."
 
 #: ../libide/ide-project.c:407 ../src/tree/gb-tree.c:960
 msgid "Root"
-msgstr ""
+msgstr "Koreňový objekt"
 
 #: ../libide/ide-project.c:408
 msgid "The root object for the project."
-msgstr ""
+msgstr "Koreňový objekt pre projekt."
 
 #: ../libide/ide-project.c:463
 msgid "Destination file must be within the project tree."
@@ -1492,7 +1396,7 @@ msgstr ""
 
 #: ../libide/ide-project.c:593
 msgid "File must be within the project tree."
-msgstr ""
+msgstr "Súbor sa musí nachádzať v strome projektu."
 
 #: ../libide/ide-project-file.c:249
 msgid "A GFile to the underlying file."
@@ -1501,37 +1405,37 @@ msgstr ""
 #: ../libide/ide-project-file.c:255 ../src/project-tree/gb-project-file.c:180
 #: ../src/project-tree/gb-project-file.c:181
 msgid "File Info"
-msgstr ""
+msgstr "Informačný súbor"
 
 #: ../libide/ide-project-file.c:256
 msgid "The file information for the project file."
-msgstr ""
+msgstr "Súbor s informáciami pre súbor projektu."
 
 #: ../libide/ide-project-file.c:262 ../libide/ide-project-file.c:263
 #: ../src/project-tree/gb-rename-file-popover.c:315
 #: ../src/project-tree/gb-rename-file-popover.c:316
 msgid "Is Directory"
-msgstr ""
+msgstr "Je adresárom"
 
 #: ../libide/ide-project-file.c:270
 msgid "The short name of the file."
-msgstr ""
+msgstr "Skrátený názov súboru."
 
 #: ../libide/ide-project-file.c:277
 msgid "The path for the file within the project tree."
-msgstr ""
+msgstr "Cesta súboru v strome projektu."
 
 #: ../libide/ide-project-info.c:424
 msgid "The project description."
-msgstr ""
+msgstr "Popis projektu."
 
 #: ../libide/ide-project-info.c:431
 msgid "The project name."
-msgstr ""
+msgstr "Názov Projektu."
 
 #: ../libide/ide-project-info.c:438
 msgid "The project directory."
-msgstr ""
+msgstr "Adresár projektu."
 
 #: ../libide/ide-project-info.c:444
 msgid "DOAP"
@@ -1543,24 +1447,24 @@ msgstr ""
 
 #: ../libide/ide-project-info.c:452
 msgid "The toplevel project file."
-msgstr ""
+msgstr "Súbor projektu najvyššej úrovne."
 
 #: ../libide/ide-project-info.c:458 ../libide/ide-project-info.c:459
 msgid "Is Recent"
-msgstr ""
+msgstr "Je aktuálny"
 
 #: ../libide/ide-project-info.c:472 ../libide/ide-project-info.c:473
 msgid "Last Modified At"
-msgstr ""
+msgstr "Čas poslednej úpravy"
 
 #: ../libide/ide-project-info.c:479
 #: ../plugins/command-bar/gb-command-provider.c:338
 msgid "Priority"
-msgstr ""
+msgstr "Priorita"
 
 #: ../libide/ide-project-info.c:480
 msgid "The priority of the project information type."
-msgstr ""
+msgstr "Priorita typu informácií o projekte."
 
 #: ../libide/ide-project-item.c:201 ../src/tree/gb-tree-node.c:630
 msgid "Parent"
@@ -1570,14 +1474,14 @@ msgstr ""
 msgid "The parent project item, if not the root."
 msgstr ""
 
-#: ../libide/ide-recent-projects.c:378
+#: ../libide/ide-recent-projects.c:377
 #, c-format
 msgid "%s() may only be executed once"
-msgstr ""
+msgstr "%s() môže byť spustený iba raz"
 
 #: ../libide/ide-script.c:157
 msgid "The file containing the script."
-msgstr ""
+msgstr "Súbor obsahujúci skript."
 
 #: ../libide/ide-script.c:205
 #, c-format
@@ -1586,20 +1490,20 @@ msgstr ""
 
 #: ../libide/ide-script-manager.c:128
 msgid "Scripts Directory"
-msgstr ""
+msgstr "Adresár so skriptami"
 
 #: ../libide/ide-script-manager.c:129
 msgid "The local path to the directory containing scripts."
-msgstr ""
+msgstr "Miestna cesta k adresáru, ktorý obsahuje skripty."
 
 #: ../libide/ide-search-result.c:279
 #: ../src/search/gb-search-display-group.c:422
 msgid "Provider"
-msgstr ""
+msgstr "Poskytovateľ"
 
 #: ../libide/ide-search-result.c:280
 msgid "The Search Provider"
-msgstr ""
+msgstr "Poskytovateľ vyhľadávania"
 
 #: ../libide/ide-search-result.c:287
 msgid "The title of the search result."
@@ -1637,52 +1541,60 @@ msgstr ""
 msgid "Schema ID"
 msgstr ""
 
-#: ../libide/ide-source-snippet.c:345
+#: ../libide/ide-source-snippet.c:370
 msgid "Chunk does not belong to snippet."
 msgstr ""
 
-#: ../libide/ide-source-snippet.c:947
+#: ../libide/ide-source-snippet.c:980
 msgid "The GtkTextBuffer for the snippet."
 msgstr ""
 
-#: ../libide/ide-source-snippet.c:953
+#: ../libide/ide-source-snippet.c:986
 msgid "Mark Begin"
 msgstr ""
 
-#: ../libide/ide-source-snippet.c:954
+#: ../libide/ide-source-snippet.c:987
 msgid "The beginning text mark."
 msgstr ""
 
-#: ../libide/ide-source-snippet.c:960
+#: ../libide/ide-source-snippet.c:993
 msgid "Mark End"
 msgstr ""
 
-#: ../libide/ide-source-snippet.c:961
+#: ../libide/ide-source-snippet.c:994
 msgid "The ending text mark."
 msgstr ""
 
-#: ../libide/ide-source-snippet.c:967
+#: ../libide/ide-source-snippet.c:1000
 msgid "Trigger"
 msgstr ""
 
-#: ../libide/ide-source-snippet.c:968
+#: ../libide/ide-source-snippet.c:1001
 msgid "The trigger for the snippet."
 msgstr ""
 
-#: ../libide/ide-source-snippet.c:975
+#: ../libide/ide-source-snippet.c:1008
 msgid "The language for the snippet."
 msgstr ""
 
-#: ../libide/ide-source-snippet.c:982
+#: ../libide/ide-source-snippet.c:1015
 msgid "The description for the snippet."
 msgstr ""
 
-#: ../libide/ide-source-snippet.c:988 ../libide/ide-source-snippet-chunk.c:328
+#: ../libide/ide-source-snippet.c:1021 ../libide/ide-source-snippet-chunk.c:328
 msgid "Tab Stop"
 msgstr ""
 
-#: ../libide/ide-source-snippet.c:989
+#: ../libide/ide-source-snippet.c:1022
 msgid "The current tab stop."
+msgstr ""
+
+#: ../libide/ide-source-snippet.c:1030
+msgid "Snippet Text"
+msgstr ""
+
+#: ../libide/ide-source-snippet.c:1031
+msgid "The entire snippet text from the source file."
 msgstr ""
 
 #: ../libide/ide-source-snippet-chunk.c:315
@@ -1734,26 +1646,21 @@ msgstr ""
 msgid "The source view to insert snippet into."
 msgstr ""
 
-#: ../libide/ide-source-snippet-completion-provider.c:174
-#: ../libide/ide-source-snippet-completion-provider.c:255
-msgid "Snippets"
-msgstr ""
-
 #: ../libide/ide-source-snippet-completion-provider.c:175
 msgid "The snippets to complete with this provider."
 msgstr ""
 
-#: ../libide/ide-source-snippet-parser.c:493
+#: ../libide/ide-source-snippet-parser.c:495
 #, c-format
 msgid "Invalid snippet at line %d: %s"
 msgstr ""
 
-#: ../libide/ide-source-snippets-manager.c:97
+#: ../libide/ide-source-snippets-manager.c:96
 #, c-format
 msgid "Failed to open directory: %s"
 msgstr ""
 
-#: ../libide/ide-source-snippets-manager.c:110
+#: ../libide/ide-source-snippets-manager.c:109
 #, c-format
 msgid "Failed to load file: %s: %s"
 msgstr ""
@@ -1922,10 +1829,12 @@ msgid "If snippet expansion should be enabled via the completion window."
 msgstr ""
 
 #: ../libide/ide-source-view-capture.c:241
+#: ../src/editor/gb-editor-print-operation.c:171
 msgid "View"
 msgstr ""
 
 #: ../libide/ide-source-view-capture.c:242
+#: ../src/editor/gb-editor-print-operation.c:172
 msgid "The source view."
 msgstr ""
 
@@ -2009,31 +1918,146 @@ msgstr ""
 #: ../libide/theatrics/ide-box-theatric.c:259
 #: ../libide/theatrics/ide-box-theatric.c:260
 msgid "Alpha"
-msgstr ""
+msgstr "Alfa kanál"
 
 #: ../libide/theatrics/ide-box-theatric.c:268
 #: ../libide/theatrics/ide-box-theatric.c:269
 msgid "background"
-msgstr ""
+msgstr "pozadie"
 
 #: ../libide/theatrics/ide-box-theatric.c:275
 #: ../libide/theatrics/ide-box-theatric.c:276
 msgid "height"
-msgstr ""
+msgstr "výška"
 
 #: ../libide/theatrics/ide-box-theatric.c:293
 #: ../libide/theatrics/ide-box-theatric.c:294
 msgid "width"
-msgstr ""
+msgstr "šírka"
 
 #: ../libide/theatrics/ide-box-theatric.c:302
 #: ../libide/theatrics/ide-box-theatric.c:303
 msgid "x"
-msgstr ""
+msgstr "x"
 
 #: ../libide/theatrics/ide-box-theatric.c:311
 #: ../libide/theatrics/ide-box-theatric.c:312
 msgid "y"
+msgstr "y"
+
+#: ../plugins/autotools/ide-autotools-builder.c:303
+#: ../plugins/autotools/ide-autotools-build-task.c:377
+msgid "Config"
+msgstr "Konfigurácia"
+
+#: ../plugins/autotools/ide-autotools-builder.c:304
+msgid "The configuration for the build."
+msgstr "Konfigurácia pre zostavenie."
+
+#: ../plugins/autotools/ide-autotools-builder.c:312
+#: ../plugins/autotools/ide-autotools-build-task.c:386
+#: ../plugins/device-manager/gb-device-manager-panel.c:75
+msgid "Device"
+msgstr "Zariadenie"
+
+#: ../plugins/autotools/ide-autotools-builder.c:313
+#: ../plugins/autotools/ide-autotools-build-task.c:387
+msgid "The device to build for."
+msgstr "Zariadenie, pre ktoré sa má zostaviť."
+
+#: ../plugins/autotools/ide-autotools-build-system.c:175
+msgid "Failed to locate configure.ac"
+msgstr "Zlyhalo lokalizovanie súboru configure.ac"
+
+#: ../plugins/autotools/ide-autotools-build-system.c:676
+msgid "Tarball Name"
+msgstr "Názov balíka tarball"
+
+#: ../plugins/autotools/ide-autotools-build-system.c:677
+msgid "The name of the project tarball."
+msgstr "Názov balíka tarball pre projekt."
+
+#: ../plugins/autotools/ide-autotools-build-system.c:684
+#: ../plugins/fallback/ide-directory-build-system.c:117
+#| msgid "The path within the project."
+msgid "The path of the project file."
+msgstr "Cesta súboru projektu."
+
+#: ../plugins/autotools/ide-autotools-build-task.c:270
+msgid "Directory must be on a locally mounted filesystem."
+msgstr "Adresár sa musí nachádzať v miestne pripojenom systéme súborov."
+
+#: ../plugins/autotools/ide-autotools-build-task.c:378
+msgid "The overlay config for the compilation."
+msgstr ""
+
+#: ../plugins/autotools/ide-autotools-build-task.c:396
+msgid "The directory to perform the build within."
+msgstr ""
+
+#: ../plugins/autotools/ide-autotools-build-task.c:404
+msgid "Require Autogen"
+msgstr "Vyžadovať automatické generovanie"
+
+#: ../plugins/autotools/ide-autotools-build-task.c:405
+msgid "If autogen.sh should be forced to execute."
+msgstr "Či ma byť vynútené spustenie skriptu autogen.sh."
+
+#: ../plugins/autotools/ide-autotools-build-task.c:413
+msgid "Require Configure"
+msgstr "Vyžadovať konfiguráciu"
+
+#: ../plugins/autotools/ide-autotools-build-task.c:414
+msgid "If configure should be forced to execute."
+msgstr "Či má byť vynútené spustenie konfigurácie."
+
+#: ../plugins/autotools/ide-autotools-build-task.c:641
+msgid "Cannot execute build task more than once."
+msgstr "Úloha zostavenia sa nedá spustiť viac ako raz."
+
+#: ../plugins/autotools/ide-autotools-build-task.c:726
+msgid "Failed to create build directory."
+msgstr "Zlyhalo vytvorenie adresára pre zostavenie."
+
+#: ../plugins/autotools/ide-autotools-build-task.c:735
+#, c-format
+msgid "'%s' is not a directory."
+msgstr "„%s“ nie je adresárom."
+
+#: ../plugins/autotools/ide-autotools-build-task.c:774
+#, c-format
+msgid "autogen.sh is missing from project directory (%s)."
+msgstr ""
+
+#: ../plugins/autotools/ide-autotools-build-task.c:784
+msgid "autogen.sh is not executable."
+msgstr ""
+
+#: ../plugins/autotools/ide-autotools-build-task.c:814
+#, c-format
+msgid "autogen.sh failed to create configure (%s)"
+msgstr ""
+
+#: ../plugins/autotools/ide-autotools-project-miner.c:392
+#: ../plugins/file-search/gb-file-search-index.c:121
+#: ../plugins/file-search/gb-file-search-index.c:122
+msgid "Root Directory"
+msgstr "Koreňový adresár"
+
+#: ../plugins/autotools/ide-autotools-project-miner.c:393
+msgid "The root directory to scan from."
+msgstr ""
+
+#: ../plugins/autotools/ide-makecache.c:998
+msgid "Invalid makefile provided, ignoring."
+msgstr ""
+
+#: ../plugins/autotools/ide-makecache.c:1238
+msgid "Makefile"
+msgstr ""
+
+#: ../plugins/autotools/ide-makecache.c:1239
+msgid "The root makefile to be cached."
 msgstr ""
 
 #: ../plugins/clang/ide-clang-completion-item.c:413
@@ -2149,19 +2173,19 @@ msgstr ""
 
 #: ../plugins/command-bar/gb-command-gaction.c:194
 msgid "Action Name"
-msgstr ""
+msgstr "Názov akcie"
 
 #: ../plugins/command-bar/gb-command-gaction.c:195
 msgid "The name of the action to execute."
-msgstr ""
+msgstr "Názov akcie, ktorá sa má vykonať."
 
 #: ../plugins/command-bar/gb-command-gaction.c:201
 msgid "Parameters"
-msgstr ""
+msgstr "Parametre"
 
 #: ../plugins/command-bar/gb-command-gaction.c:202
 msgid "The parameters for the action."
-msgstr ""
+msgstr "Parametre pre akciu."
 
 #: ../plugins/command-bar/gb-command-provider.c:319
 #: ../src/views/gb-view-stack.c:500 ../src/workbench/gb-workbench.c:686
@@ -2175,11 +2199,11 @@ msgstr ""
 
 #: ../plugins/command-bar/gb-command-provider.c:339
 msgid "The priority of the command provider."
-msgstr ""
+msgstr "Priorita poskytovateľa príkazov."
 
 #: ../plugins/command-bar/gb-command-provider.c:355
 msgid "The target workbench."
-msgstr ""
+msgstr "Cieľový pracovný priestor."
 
 #: ../plugins/command-bar/gb-command-result.c:226
 #: ../plugins/command-bar/gb-command-vim.c:183
@@ -2192,19 +2216,19 @@ msgstr ""
 
 #: ../plugins/command-bar/gb-command-result.c:234
 msgid "Is Error"
-msgstr ""
+msgstr "Je chybou"
 
 #: ../plugins/command-bar/gb-command-result.c:235
 msgid "If the result is an error."
-msgstr ""
+msgstr "Či výsledok reprezentuje chybu."
 
 #: ../plugins/command-bar/gb-command-result.c:242
 msgid "Is Running"
-msgstr ""
+msgstr "Je spustený"
 
 #: ../plugins/command-bar/gb-command-result.c:243
 msgid "If the command is still running."
-msgstr ""
+msgstr "Či je príkaz stále spustený."
 
 #: ../plugins/command-bar/gb-command-result.c:250
 msgid "Result Text"
@@ -2220,37 +2244,37 @@ msgstr ""
 
 #: ../plugins/command-bar/gb-command-vim.c:192
 msgid "The source view to modify."
-msgstr ""
+msgstr "Zobrazenie zdroja na úpravu."
 
 #: ../plugins/command-bar/gb-vim.c:83
 #, c-format
 msgid "Number required"
-msgstr ""
+msgstr "Vyžaduje sa číslo"
 
 #: ../plugins/command-bar/gb-vim.c:93
 #, c-format
 msgid "%s is invalid for %s"
-msgstr ""
+msgstr "%s nie je platným pre %s"
 
 #: ../plugins/command-bar/gb-vim.c:151
 #, c-format
 msgid "Cannot find language '%s'"
-msgstr ""
+msgstr "Nedá sa nájsť jazyk „%s“"
 
 #: ../plugins/command-bar/gb-vim.c:348
 #, c-format
 msgid "Unknown option: %s"
-msgstr ""
+msgstr "Neznáma voľba: %s"
 
 #: ../plugins/command-bar/gb-vim.c:387
 #, c-format
 msgid "Cannot find colorscheme '%s'"
-msgstr ""
+msgstr "Nedá sa nájsť farebná schéma „%s“"
 
 #: ../plugins/command-bar/gb-vim.c:423
 #, c-format
 msgid "Failed to locate working directory"
-msgstr ""
+msgstr "Zlyhalo lokalizovanie pracovného adresára"
 
 #: ../plugins/command-bar/gb-vim.c:547
 #, c-format
@@ -2260,7 +2284,7 @@ msgstr ""
 #: ../plugins/command-bar/gb-vim.c:874
 #, c-format
 msgid "Invalid search and replace request"
-msgstr ""
+msgstr "Nepaltná požiadavka na vyhľadanie a nahradenie"
 
 #: ../plugins/command-bar/gb-vim.c:960
 #, c-format
@@ -2270,7 +2294,7 @@ msgstr ""
 #: ../plugins/command-bar/gb-vim.c:990
 #, c-format
 msgid "Not an editor command: %s"
-msgstr ""
+msgstr "Nie je príkazom editora: %s"
 
 #: ../plugins/c-pack/ide-c-format-provider.c:281
 #: ../plugins/python-pack/ide-python-format-provider.c:238
@@ -2359,7 +2383,7 @@ msgstr "Terminál"
 
 #: ../plugins/terminal/gb-terminal-view-actions.c:300
 msgid "Save Terminal Content As"
-msgstr ""
+msgstr "Uloženie obsahu terminálu ako"
 
 #: ../plugins/terminal/gb-terminal-view-actions.c:308
 #: ../src/editor/gb-editor-view-actions.c:310
@@ -2425,23 +2449,23 @@ msgstr ""
 msgid "Select Project File"
 msgstr "Výber súboru projektu"
 
-#: ../src/dialogs/gb-new-project-dialog.c:370
+#: ../src/dialogs/gb-new-project-dialog.c:373
 msgid "Clone Repository"
 msgstr "Klonovanie repozitára"
 
-#: ../src/dialogs/gb-new-project-dialog.c:390
+#: ../src/dialogs/gb-new-project-dialog.c:393
 msgid "Autotools Project (configure.ac)"
 msgstr "Projekt Autotools (configure.ac)"
 
-#: ../src/dialogs/gb-new-project-dialog.c:396
+#: ../src/dialogs/gb-new-project-dialog.c:399
 msgid "Any Directory"
 msgstr "Akýkoľvek adresár"
 
-#: ../src/dialogs/gb-new-project-dialog.c:523
+#: ../src/dialogs/gb-new-project-dialog.c:526
 msgid "A valid Git URL is required"
 msgstr "Požaduje sa platná URL repozitára Git"
 
-#: ../src/dialogs/gb-new-project-dialog.c:662
+#: ../src/dialogs/gb-new-project-dialog.c:665
 msgid "Directory|Projects"
 msgstr "Adresár|Projekty"
 
@@ -2470,19 +2494,19 @@ msgstr ""
 #: ../src/greeter/gb-greeter-project-row.c:317
 #: ../src/greeter/gb-greeter-project-row.c:318
 msgid "Selection Mode"
-msgstr ""
+msgstr "Režim výberu"
 
 #: ../src/documents/gb-document.c:188 ../src/views/gb-view.c:272
 msgid "Modified"
-msgstr ""
+msgstr "Upravený"
 
 #: ../src/documents/gb-document.c:189
 msgid "If the document has been modified from disk."
-msgstr ""
+msgstr "Či bol dokument upravený na disku."
 
 #: ../src/documents/gb-document.c:197
 msgid "The title of the document."
-msgstr ""
+msgstr "Názov dokumentu."
 
 #: ../src/documents/gb-document.c:205
 msgid "If the document is read only."
@@ -2504,7 +2528,7 @@ msgstr "Od_haliť v strome projektu"
 
 #: ../src/editor/gb-editor-frame.c:740 ../src/editor/gb-editor-frame.c:741
 msgid "Auto Hide Map"
-msgstr ""
+msgstr "Automaticky skryť mapu"
 
 #: ../src/editor/gb-editor-frame.c:748
 msgid "The back forward list."
@@ -2512,7 +2536,7 @@ msgstr ""
 
 #: ../src/editor/gb-editor-frame.c:755 ../src/editor/gb-editor-view.c:505
 msgid "The editor document."
-msgstr ""
+msgstr "Dokument editora."
 
 #: ../src/editor/gb-editor-frame.c:761
 msgid "Show Map"
@@ -2522,17 +2546,17 @@ msgstr "Zobraziť mapu"
 msgid "If the overview map should be shown."
 msgstr "Či sa má zobraziť mapa s prehľadom."
 
-#: ../src/editor/gb-editor-settings-widget.c:180
+#: ../src/editor/gb-editor-settings-widget.c:313
 msgid "The language to change the settings for."
 msgstr "Jazyk, pre ktorý sa majú zmeniť nastavenia."
 
 #: ../src/editor/gb-editor-view-actions.c:304
 msgid "Save Document"
-msgstr ""
+msgstr "Uloženie dokumentu"
 
 #: ../src/editor/gb-editor-view-actions.c:430
 msgid "Save Document As"
-msgstr ""
+msgstr "Uloženie dokumentu ako"
 
 #: ../src/editor/gb-editor-view.c:110
 msgid "Plain Text"
@@ -2577,7 +2601,7 @@ msgstr ""
 
 #: ../src/keybindings/gb-keybindings.c:266
 msgid "The name of the keybindings mode."
-msgstr ""
+msgstr "Názov režimu klávesových skratiek."
 
 #: ../src/preferences/gb-preferences-page.c:283
 msgid "The title for the preferences page."
@@ -2596,7 +2620,7 @@ msgstr ""
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-editor.c:105
 msgid "line numbers"
-msgstr ""
+msgstr "čísla riadkov"
 
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-editor.c:110
@@ -2701,11 +2725,11 @@ msgstr ""
 
 #: ../src/preferences/gb-preferences-switch.c:335
 msgid "Settings"
-msgstr ""
+msgstr "Nastavenia"
 
 #: ../src/preferences/gb-preferences-switch.c:336
 msgid "The GSettings for the setting."
-msgstr ""
+msgstr "Nastavenia GSettings pre nastavenie."
 
 #: ../src/preferences/gb-preferences-switch.c:342
 msgid "Settings Schema Key"
@@ -2717,7 +2741,7 @@ msgstr ""
 
 #: ../src/preferences/gb-preferences-switch.c:349
 msgid "Settings Schema Value"
-msgstr ""
+msgstr "Hodnota schémy nastavení"
 
 #: ../src/preferences/gb-preferences-switch.c:350
 msgid "An action-target for the settings action."
@@ -2726,7 +2750,7 @@ msgstr ""
 #: ../src/preferences/gb-preferences-switch.c:357
 #: ../src/search/gb-search-display-group.c:429
 msgid "Size Group"
-msgstr ""
+msgstr "Skupina veľkostí"
 
 #: ../src/preferences/gb-preferences-switch.c:358
 msgid "The sizing group for the control."
@@ -2740,7 +2764,7 @@ msgstr ""
 #: ../src/project-tree/gb-new-file-popover.c:127
 #: ../src/project-tree/gb-rename-file-popover.c:145
 msgid "A file with that name already exists."
-msgstr ""
+msgstr "Súbor s takým názvom už existuje."
 
 #: ../src/project-tree/gb-new-file-popover.c:275
 msgid "File Type"
@@ -2765,7 +2789,7 @@ msgstr "Súbory"
 
 #: ../src/project-tree/gb-project-tree.c:158
 msgid "If files ignored by the VCS should be displayed."
-msgstr ""
+msgstr "Či majú byť zobrazené súbory ignorované VCS."
 
 #: ../src/project-tree/gb-rename-file-popover.c:80
 #, c-format
@@ -2774,7 +2798,7 @@ msgstr ""
 
 #: ../src/project-tree/gb-rename-file-popover.c:173
 msgid "File name must not contain subdirectories."
-msgstr ""
+msgstr "Názov súboru nesmie obsahovať podadresáre."
 
 #: ../src/scrolledwindow/gb-scrolled-window.c:254
 msgid "Max Content Height"
@@ -3167,7 +3191,7 @@ msgid "No files provided to load settings for.\n"
 msgstr ""
 "Neboli poskytnuté žiadne súbory, pre ktoré sa majú načítať nastavenia.\n"
 
-#: ../tools/ide-mine-projects.c:78
+#: ../tools/ide-mine-projects.c:87
 msgid "- discover projects"
 msgstr "- preskúma projekty"
 
