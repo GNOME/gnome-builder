@@ -83,12 +83,12 @@ msgstr "Type de valeur"
 #: ../contrib/rg/rg-cpu-graph.c:162 ../contrib/rg/rg-cpu-graph.c:163
 #: ../contrib/rg/rg-table.c:514
 msgid "Timespan"
-msgstr ""
+msgstr "Intervalle de temps"
 
 #: ../contrib/rg/rg-cpu-graph.c:170 ../contrib/rg/rg-cpu-graph.c:171
 #: ../contrib/rg/rg-table.c:506 ../contrib/rg/rg-table.c:507
 msgid "Max Samples"
-msgstr ""
+msgstr "Échantillonage max"
 
 #: ../contrib/rg/rg-graph.c:368
 msgid "Table"
@@ -108,7 +108,7 @@ msgstr "Largeur de ligne"
 
 #: ../contrib/rg/rg-line-renderer.c:266 ../contrib/rg/rg-line-renderer.c:267
 msgid "Stroke Color"
-msgstr ""
+msgstr "Couleur du trait"
 
 #: ../contrib/rg/rg-line-renderer.c:273 ../contrib/rg/rg-line-renderer.c:274
 msgid "Stroke Color RGBA"
@@ -116,15 +116,15 @@ msgstr ""
 
 #: ../contrib/rg/rg-table.c:515
 msgid "Timespan to visualize, in microseconds."
-msgstr ""
+msgstr "Intervalle de temps à visualiser, en microsecondes."
 
 #: ../contrib/rg/rg-table.c:522 ../contrib/rg/rg-table.c:523
 msgid "Value Max"
-msgstr ""
+msgstr "Valeur max"
 
 #: ../contrib/rg/rg-table.c:530 ../contrib/rg/rg-table.c:531
 msgid "Value Min"
-msgstr ""
+msgstr "Valeur min"
 
 #: ../contrib/search/trie.c:790
 #, c-format
@@ -133,7 +133,7 @@ msgstr ""
 
 #: ../contrib/xml/xml-reader.c:180 ../contrib/xml/xml-reader.c:181
 msgid "Encoding"
-msgstr ""
+msgstr "Encodage"
 
 #: ../contrib/xml/xml-reader.c:187 ../contrib/xml/xml-reader.c:188
 #: ../plugins/devhelp/gb-devhelp-document.c:256
@@ -557,7 +557,7 @@ msgstr ""
 
 #: ../data/ui/gb-preferences-page-editor.ui.h:17
 msgid "Cursor Placement"
-msgstr ""
+msgstr "Positionnement du curseur"
 
 #: ../data/ui/gb-preferences-page-editor.ui.h:18
 msgid "Restore Cursor Position"
@@ -725,7 +725,7 @@ msgstr "Préférences"
 
 #: ../data/ui/gb-preferences-window.ui.h:2
 msgid "Search Preferences…"
-msgstr "Préférences de recherche…"
+msgstr "Rechercher dans les préférences…"
 
 #: ../data/ui/gb-projects-dialog.ui.h:1
 #: ../src/dialogs/gb-projects-dialog.c:257
