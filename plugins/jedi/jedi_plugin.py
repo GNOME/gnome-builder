@@ -209,7 +209,6 @@ class JediCompletionProvider(Ide.Object,
                 chunk = Ide.SourceSnippetChunk()
                 chunk.set_text('')
                 chunk.set_text_set(True)
-                chunk.set_tab_stop(0)
                 snippet.add_chunk(chunk)
             else:
                 tab_stop = 0
