@@ -81,6 +81,8 @@ import threading
 
 
 class CompletionThread(threading.Thread):
+    cancelled = False
+
     def __init__(self, provider, context, text, line, column, filename):
         super().__init__()
         self._provider = provider
@@ -93,14 +95,20 @@ class CompletionThread(threading.Thread):
 
     def run(self):
         try:
-            script = jedi.Script(self._text, self._line, self._column, self._filename)
-            self._completions = [JediCompletionProposal(self._provider, self._context, info)
-                                 for info in script.completions()]
+            if not self.cancelled:
+                script = jedi.Script(self._text, self._line, self._column, self._filename)
+                completions = []
+                if not self.cancelled:
+                    for info in script.completions():
+                        completion = JediCompletionProposal(self._provider, self._context, info)
+                        completions.append(completion)
+                self._completions = completions
         finally:
             self.complete_in_idle()
 
     def _complete(self):
-        self._context.add_proposals(self._provider, self._completions, True)
+        if not self.cancelled:
+            self._context.add_proposals(self._provider, self._completions, True)
 
     def complete_in_idle(self):
         GLib.timeout_add(0, self._complete)
@@ -109,6 +117,8 @@ class CompletionThread(threading.Thread):
 class JediCompletionProvider(Ide.Object,
                              GtkSource.CompletionProvider,
                              Ide.CompletionProvider):
+    thread = None
+
     def do_get_name(self):
         return 'Jedi Provider'
 
@@ -122,6 +132,8 @@ class JediCompletionProvider(Ide.Object,
 
         _, iter = context.get_iter()
         buffer = iter.get_buffer()
+
+        self.thread = None
 
         # ignore completions if we are following whitespace.
         copy = iter.copy()
@@ -142,7 +154,13 @@ class JediCompletionProvider(Ide.Object,
         line = iter.get_line() + 1
         column = iter.get_line_offset()
 
-        CompletionThread(self, context, text, line, column, filename).start()
+        context.connect('cancelled', lambda *_: self._cancelled())
+        self.thread = CompletionThread(self, context, text, line, column, filename)
+        self.thread.start()
+
+    def _cancelled(self):
+        if self.thread is not None:
+            self.thread.cancelled = True
 
     def do_get_activiation(self):
         return GtkSource.CompletionActivation.INTERACTIVE
