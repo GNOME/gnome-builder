@@ -168,8 +168,63 @@ class JediCompletionProvider(Ide.Object,
         _, iter = context.get_iter()
         return True, iter
 
-    def do_activate_proposal(self, provider, proposal):
-        return False, None
+    def do_activate_proposal(self, proposal, location):
+        # Use snippets to push the replacement text and/or parameters with
+        # tab stops.
+        snippet = Ide.SourceSnippet()
+
+        chunk = Ide.SourceSnippetChunk()
+        chunk.set_text(proposal.completion.complete)
+        chunk.set_text_set(True)
+        snippet.add_chunk(chunk)
+
+        # Add parameter completion for functions.
+        if proposal.completion.type == 'function':
+            chunk = Ide.SourceSnippetChunk()
+            chunk.set_text('(')
+            chunk.set_text_set(True)
+            snippet.add_chunk(chunk)
+
+            params = proposal.completion.params
+
+            if not params:
+                chunk = Ide.SourceSnippetChunk()
+                chunk.set_text('')
+                chunk.set_text_set(True)
+                chunk.set_tab_stop(0)
+                snippet.add_chunk(chunk)
+            else:
+                tab_stop = 0
+
+                for param in params[:-1]:
+                    tab_stop += 1
+                    chunk = Ide.SourceSnippetChunk()
+                    chunk.set_text(param.name)
+                    chunk.set_text_set(True)
+                    chunk.set_tab_stop(tab_stop)
+                    snippet.add_chunk(chunk)
+
+                    chunk = Ide.SourceSnippetChunk()
+                    chunk.set_text(', ')
+                    chunk.set_text_set(True)
+                    snippet.add_chunk(chunk)
+
+                tab_stop += 1
+                chunk = Ide.SourceSnippetChunk()
+                chunk.set_text(params[-1].name)
+                chunk.set_text_set(True)
+                chunk.set_tab_stop(tab_stop)
+                snippet.add_chunk(chunk)
+
+            chunk = Ide.SourceSnippetChunk()
+            chunk.set_text(')')
+            chunk.set_text_set(True)
+            snippet.add_chunk(chunk)
+
+        view = proposal.context.props.completion.props.view
+        view.push_snippet(snippet)
+
+        return True, None
 
     def do_get_interactive_delay(self):
         return -1
