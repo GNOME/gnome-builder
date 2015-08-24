@@ -23,12 +23,16 @@
 #endif
 
 #include <libpeas/peas.h>
+#include <girepository.h>
 
 #include "gb-application.h"
 #include "gb-document.h"
 #include "gb-plugins.h"
+#include "gb-tree.h"
 #include "gb-tree-builder.h"
+#include "gb-tree-node.h"
 #include "gb-view.h"
+#include "gb-view-grid.h"
 #include "gb-workbench.h"
 #include "gb-workspace.h"
 
@@ -45,8 +49,11 @@ gb_plugins_init (void)
    */
   g_type_ensure (GB_TYPE_APPLICATION);
   g_type_ensure (GB_TYPE_DOCUMENT);
+  g_type_ensure (GB_TYPE_TREE);
   g_type_ensure (GB_TYPE_TREE_BUILDER);
+  g_type_ensure (GB_TYPE_TREE_NODE);
   g_type_ensure (GB_TYPE_VIEW);
+  g_type_ensure (GB_TYPE_VIEW_GRID);
   g_type_ensure (GB_TYPE_WORKBENCH);
   g_type_ensure (GB_TYPE_WORKSPACE);
 
@@ -58,7 +65,11 @@ gb_plugins_init (void)
     {
       GDir *dir;
 
-      if ((dir = g_dir_open ("plugins", 0, NULL)))
+      g_irepository_require_private (g_irepository_get_default (),
+                                     BUILDDIR"/libide",
+                                     "Ide", "1.0", 0, NULL);
+
+      if ((dir = g_dir_open (BUILDDIR"/plugins", 0, NULL)))
         {
           const gchar *name;
 
@@ -66,7 +77,7 @@ gb_plugins_init (void)
             {
               gchar *path;
 
-              path = g_build_filename ("plugins", name, NULL);
+              path = g_build_filename (BUILDDIR, "plugins", name, NULL);
               peas_engine_prepend_search_path (engine, path, path);
               g_free (path);
             }

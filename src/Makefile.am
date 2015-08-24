@@ -5,7 +5,8 @@ EXTRA_DIST =
 
 bin_PROGRAMS = gnome-builder
 
-noinst_LTLIBRARIES = libgnome-builder.la
+pkglibdir = $(libdir)/gnome-builder
+pkglib_LTLIBRARIES = libgnome-builder.la
 
 libgnome_builder_la_SOURCES = \
 	$(gnome_builder_built_sources) \
@@ -173,17 +174,23 @@ libgnome_builder_la_LIBADD = \
 	$(OPTIMIZE_LDFLAGS) \
 	$(top_builddir)/data/icons/hicolor/libicons.la \
 	$(top_builddir)/libide/libide-1.0.la \
-	$(top_builddir)/contrib/egg/libegg.la \
+	$(top_builddir)/contrib/egg/libegg-private.la \
 	$(top_builddir)/contrib/gd/libgd.la \
 	$(top_builddir)/contrib/gedit/libgedit.la \
 	$(top_builddir)/contrib/nautilus/libnautilus.la \
 	$(top_builddir)/contrib/rg/librg.la \
 	-lm
 
+libgnome_builder_la_LDFLAGS = \
+	-export-symbols-regex '^gb_.*' \
+	-export-dynamic \
+	$(NULL)
+
 libgnome_builder_la_CFLAGS = \
 	-DPACKAGE_DATADIR="\"${datadir}\"" \
 	-DPACKAGE_LOCALE_DIR=\""${datadir}/locale"\" \
 	-DPACKAGE_LIBDIR=\""${libdir}"\" \
+	-DBUILDDIR=\""${abs_top_builddir}"\" \
 	$(BUILDER_CFLAGS) \
 	$(DEBUG_CFLAGS) \
 	$(OPTIMIZE_CFLAGS) \

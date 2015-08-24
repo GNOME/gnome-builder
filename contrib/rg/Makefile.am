@@ -1,4 +1,5 @@
-noinst_LTLIBRARIES = librg.la
+pkglibdir = $(libdir)/gnome-builder
+pkglib_LTLIBRARIES = librg.la
 
 librg_la_SOURCES = \
 	realtime-graphs.h \
@@ -30,7 +31,7 @@ librg_la_CFLAGS = \
 
 librg_la_LIBADD = \
 	$(RG_LIBS) \
-	$(top_builddir)/contrib/egg/libegg.la \
+	$(top_builddir)/contrib/egg/libegg-private.la \
 	$(NULL)
 
 librg_la_LDFLAGS = \

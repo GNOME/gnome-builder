@@ -24,7 +24,8 @@
 #include <glib.h>
 #include <glib/gi18n.h>
 #include <stdlib.h>
-#include <girepository.h>
+
+#include "gb-plugins.h"
 
 #define ADD_CLASS(widget,name) \
   gtk_style_context_add_class(gtk_widget_get_style_context(GTK_WIDGET(widget)), name)
@@ -727,10 +728,6 @@ main (int argc,
     { NULL }
   };
 
-  g_irepository_require_private (g_irepository_get_default (),
-                                 BUILDDIR,
-                                 "Ide", "1.0", 0, NULL);
-
   ide_set_program_name ("gnome-builder");
   ide_log_init (TRUE, NULL);
 
@@ -755,6 +752,8 @@ main (int argc,
     gFilesToOpen = g_list_append (gFilesToOpen, g_strdup (argv [i]));
 
   project_dir = g_file_new_for_path (".");
+
+  gb_plugins_init ();
 
   ide_context_new_async (project_dir,
                          NULL,

@@ -17,9 +17,10 @@
  */
 
 #include <libpeas/peas.h>
-#include <girepository.h>
 #include <ide.h>
 #include <string.h>
+
+#include "gb-plugins.h"
 
 typedef void (*IndentTestFunc) (IdeContext *context,
                                 GtkWidget  *widget);
@@ -296,9 +297,9 @@ gint
 main (gint argc,
       gchar *argv[])
 {
-  g_irepository_prepend_search_path (BUILDDIR"/../libide");
   gtk_init (&argc, &argv);
   g_test_init (&argc, &argv, NULL);
   g_test_add_func ("/Ide/CIndenter/basic", test_cindenter_basic);
+  gb_plugins_init ();
   return g_test_run ();
 }

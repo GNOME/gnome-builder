@@ -62,7 +62,7 @@ ide_list_counters_CFLAGS = \
 	$(NULL)
 ide_list_counters_LDADD = \
 	$(EGG_LIBS) \
-	$(top_builddir)/contrib/egg/libegg.la \
+	$(top_builddir)/contrib/egg/libegg-private.la \
 	$(SHM_LIB) \
 	$(NULL)
 

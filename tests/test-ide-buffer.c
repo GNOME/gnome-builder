@@ -18,8 +18,9 @@
 
 #include <glib.h>
 #include <glib/gstdio.h>
-#include <girepository.h>
 #include <ide.h>
+
+#include "gb-plugins.h"
 
 typedef struct
 {
@@ -140,12 +141,9 @@ gint
 main (gint   argc,
       gchar *argv[])
 {
-  g_irepository_prepend_search_path (BUILDDIR"/../libide");
   gtk_init (&argc, &argv);
   g_test_init (&argc, &argv, NULL);
-  g_irepository_require_private (g_irepository_get_default (),
-                                 BUILDDIR,
-                                 "Ide", "1.0", 0, NULL);
   g_test_add_func ("/Ide/Buffer/basic", test_buffer_basic);
+  gb_plugins_init ();
   return g_test_run ();
 }

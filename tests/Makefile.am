@@ -3,12 +3,11 @@ egg_cflags = \
 	$(LIBIDE_CFLAGS) \
 	-I$(top_srcdir)/contrib/egg \
 	-DTEST_DATA_DIR="\"$(srcdir)/data\"" \
-	-DBUILDDIR="\"$(builddir)\"" \
 	$(NULL)
 
 egg_libs = \
 	$(LIBIDE_LIBS) \
-	$(top_builddir)/contrib/egg/libegg.la \
+	$(top_builddir)/contrib/egg/libegg-private.la \
 	$(NULL)
 
 rg_cflags = \
@@ -19,7 +18,7 @@ rg_cflags = \
 	$(NULL)
 
 rg_libs = \
-	$(top_builddir)/contrib/egg/libegg.la \
+	$(top_builddir)/contrib/egg/libegg-private.la \
 	$(top_builddir)/contrib/rg/librg.la \
 	$(RG_LIBS) \
 	$(NULL)
@@ -39,29 +38,36 @@ search_libs = \
 
 tests_cflags = \
 	$(egg_cflags) \
+	$(LIBIDE_CFLAGS) \
 	-I$(top_srcdir)/libide \
 	-I$(top_builddir)/libide \
-	-I$(top_srcdir)/src \
+	-I$(top_srcdir)/src/app \
+	-I$(top_srcdir)/src/css \
+	-I$(top_srcdir)/src/dialogs \
+	-I$(top_srcdir)/src/documents \
+	-I$(top_srcdir)/src/editor \
+	-I$(top_srcdir)/src/greeter \
+	-I$(top_srcdir)/src/html \
+	-I$(top_srcdir)/src/keybindings \
+	-I$(top_srcdir)/src/preferences \
+	-I$(top_srcdir)/src/project-tree \
+	-I$(top_srcdir)/src/resources \
+	-I$(top_srcdir)/src/scrolledwindow \
+	-I$(top_srcdir)/src/search \
+	-I$(top_srcdir)/src/support \
+	-I$(top_srcdir)/src/tree \
+	-I$(top_srcdir)/src/util \
+	-I$(top_srcdir)/src/views \
+	-I$(top_srcdir)/src/workbench \
 	-I$(top_srcdir)/src/workspace \
 	$(NULL)
 
 tests_libs = \
-	$(egg_libs) \
-	$(top_builddir)/libide/libide-1.0.la \
+	$(top_builddir)/src/libgnome-builder.la \
 	$(NULL)
 
-tests_ide_context_cflags = \
-	$(egg_cflags) \
-	-I$(top_srcdir)/libide \
-	-I$(top_builddir)/libide \
-	-I$(top_srcdir)/src \
-	-I$(top_srcdir)/plugins/autotools \
-	$(NULL)
-
-tests_ide_context_libs = \
-	$(egg_libs) \
-	$(top_builddir)/libide/libide-1.0.la \
-	$(top_builddir)/plugins/autotools/libautotools-plugin.la \
+tests_ldflags = \
+	-export-dynamic \
 	$(NULL)
 
 misc_programs =
@@ -71,6 +77,7 @@ TESTS_ENVIRONMENT= \
         G_TEST_SRCDIR="$(abs_srcdir)" 		\
         G_TEST_BUILDDIR="$(abs_builddir)" 	\
         G_DEBUG=gc-friendly 			\
+        GB_IN_TREE_PLUGINS=1                    \
         MALLOC_CHECK_=2 			\
         MALLOC_PERTURB_=$$(($${RANDOM:-256} % 256))
 
@@ -78,8 +85,9 @@ LOG_COMPILER = $(top_srcdir)/build/autotools/tap-test
 
 TESTS = test-ide-context
 test_ide_context_SOURCES = test-ide-context.c
-test_ide_context_CFLAGS = $(tests_ide_context_cflags)
-test_ide_context_LDADD = $(tests_ide_context_libs)
+test_ide_context_CFLAGS = $(tests_cflags)
+test_ide_context_LDADD = $(tests_libs)
+test_ide_context_LDFLAGS = $(tests_ldflags)
 
 
 TESTS += test-ide-back-forward-list

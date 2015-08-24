@@ -1,6 +1,7 @@
-noinst_LTLIBRARIES = libegg.la
+pkglibdir = $(libdir)/gnome-builder
+pkglib_LTLIBRARIES = libegg-private.la
 
-libegg_la_SOURCES = \
+libegg_private_la_SOURCES = \
 	egg-binding-group.c \
 	egg-binding-group.h \
 	egg-counter.c \
@@ -23,8 +24,11 @@ libegg_la_SOURCES = \
 	egg-task-cache.h \
 	$(NULL)
 
-libegg_la_CFLAGS = $(EGG_CFLAGS)
-libegg_la_LIBADD = \
+libegg_private_la_CFLAGS = \
+	$(EGG_CFLAGS) \
+	$(NULL)
+
+libegg_private_la_LIBADD = \
 	$(EGG_LIBS) \
 	$(SHM_LIB) \
 	$(NULL)

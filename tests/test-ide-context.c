@@ -16,10 +16,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "ide-autotools-build-system.h"
-
-#include <girepository.h>
 #include <ide.h>
+
+#include "gb-plugins.h"
 
 typedef struct
 {
@@ -47,9 +46,12 @@ test_new_async (void)
   IdeVcs *vcs;
   GFile *project_file;
   const gchar *root_build_dir;
+  const gchar *builddir;
   g_autofree gchar *path = NULL;
 
-  path = g_build_filename (g_get_current_dir (), TEST_DATA_DIR, "project1", "configure.ac", NULL);
+  builddir = g_getenv ("G_TEST_BUILDDIR");
+
+  path = g_build_filename (builddir, "data", "project1", "configure.ac", NULL);
   project_file = g_file_new_for_path (path);
 
   state.main_loop = g_main_loop_new (NULL, FALSE);
@@ -64,7 +66,7 @@ test_new_async (void)
   g_assert (state.context);
 
   bs = ide_context_get_build_system (state.context);
-  g_assert (IDE_IS_AUTOTOOLS_BUILD_SYSTEM (bs));
+  g_assert_cmpstr (G_OBJECT_TYPE_NAME (bs), ==, "IdeAutotoolsBuildSystem");
 
   vcs = ide_context_get_vcs (state.context);
   g_assert (IDE_IS_GIT_VCS (vcs));
@@ -83,12 +85,9 @@ gint
 main (gint   argc,
       gchar *argv[])
 {
-  g_irepository_prepend_search_path (BUILDDIR"/../libide");
   gtk_init (&argc, &argv);
   g_test_init (&argc, &argv, NULL);
-  g_irepository_require_private (g_irepository_get_default (),
-                                 BUILDDIR,
-                                 "Ide", "1.0", 0, NULL);
   g_test_add_func ("/Ide/Context/new_async", test_new_async);
+  gb_plugins_init ();
   return g_test_run ();
 }

@@ -300,7 +300,7 @@ libide_1_0_la_LIBADD = \
 	$(LIBIDE_LIBS) \
 	$(SHM_LIB) \
 	-lm \
-	$(top_builddir)/contrib/egg/libegg.la \
+	$(top_builddir)/contrib/egg/libegg-private.la \
 	$(top_builddir)/contrib/libeditorconfig/libeditorconfig.la \
 	$(top_builddir)/contrib/search/libsearch.la \
 	$(top_builddir)/contrib/xml/libxml.la \
