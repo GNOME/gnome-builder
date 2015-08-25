@@ -30,6 +30,7 @@ struct _GbViewStack
 
   GList              *focus_history;
   IdeBackForwardList *back_forward_list;
+  GtkGesture         *swipe_gesture;
 
   /* Weak references */
   GtkWidget          *active_view;

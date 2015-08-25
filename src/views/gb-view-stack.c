@@ -399,6 +399,26 @@ gb_view_stack__views_listbox_row_activated_cb (GbViewStack   *self,
 }
 
 static void
+gb_view_stack_swipe (GbViewStack     *self,
+                     gdouble          velocity_x,
+                     gdouble          velocity_y,
+                     GtkGestureSwipe *gesture)
+{
+  g_assert (GB_IS_VIEW_STACK (self));
+  g_assert (GTK_IS_GESTURE_SWIPE (gesture));
+
+  if (ABS (velocity_x) > ABS (velocity_y))
+    {
+      if (velocity_x < 0)
+        gb_widget_activate_action (GTK_WIDGET (self), "view-stack", "previous-view", NULL);
+      else if (velocity_x > 0)
+        gb_widget_activate_action (GTK_WIDGET (self), "view-stack", "next-view", NULL);
+    }
+
+  g_print ("SWIPE: %lf %lf\n", velocity_x, velocity_y);
+}
+
+static void
 gb_view_stack_destroy (GtkWidget *widget)
 {
   GbViewStack *self = (GbViewStack *)widget;
@@ -434,6 +454,7 @@ gb_view_stack_finalize (GObject *object)
   ide_clear_weak_pointer (&self->title_binding);
   ide_clear_weak_pointer (&self->active_view);
   g_clear_object (&self->back_forward_list);
+  g_clear_object (&self->swipe_gesture);
 
   G_OBJECT_CLASS (gb_view_stack_parent_class)->finalize (object);
 }
@@ -546,6 +567,14 @@ gb_view_stack_init (GbViewStack *self)
   g_signal_connect_object (self->stack,
                            "notify::visible-child",
                            G_CALLBACK (gb_view_stack__notify_visible_child),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  self->swipe_gesture = gtk_gesture_swipe_new (GTK_WIDGET (self));
+  gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (self->swipe_gesture), TRUE);
+  g_signal_connect_object (self->swipe_gesture,
+                           "swipe",
+                           G_CALLBACK (gb_view_stack_swipe),
                            self,
                            G_CONNECT_SWAPPED);
 
