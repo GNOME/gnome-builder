@@ -8,1916 +8,3627 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2015-03-20 06:58+0000\n"
-"PO-Revision-Date: 2015-03-20 23:22+0800\n"
-"Last-Translator: Cheng-Chia Tseng <pswo10680@gmail.com>\n"
+"POT-Creation-Date: 2015-08-17 16:49+0000\n"
+"PO-Revision-Date: 2015-08-24 20:29+0800\n"
+"Last-Translator: Chao-Hsiung Liao <j_h_liau@yahoo.com.tw>\n"
 "Language-Team: Chinese (Taiwan) <chinese-l10n@googlegroups.com>\n"
 "Language: zh_TW\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 1.7.1\n"
+"X-Generator: Poedit 1.8.4\n"
 
-#: ../src/animation/gb-animation.c:681
+#: ../contrib/egg/egg-state-machine-action.c:225 ../contrib/rg/rg-column.c:286
+#: ../data/ui/gb-new-project-dialog.ui.h:6
+#: ../data/ui/gb-preferences-page-git.ui.h:3 ../libide/doap/ide-doap.c:462
+#: ../libide/doap/ide-doap.c:463 ../libide/doap/ide-doap-person.c:168
+#: ../libide/ide-project.c:400 ../libide/ide-project-file.c:269
+#: ../libide/ide-project-info.c:430 ../libide/ide-source-view-mode.c:250
+#: ../libide/ide-symbol-node.c:121 ../libide/ide-symbol-node.c:122
+msgid "Name"
+msgstr "名稱"
+
+#: ../contrib/egg/egg-state-machine-action.c:226
+msgid "The name of the action"
+msgstr "動作的名稱"
+
+#: ../contrib/egg/egg-state-machine-action.c:232
+#: ../contrib/egg/egg-state-machine-action.c:233
+#, fuzzy
+msgid "State Machine"
+msgstr "省/州："
+
+#: ../contrib/gd/gd-tagged-entry.c:940
+msgid "Tag close icon visibility"
+msgstr "標記關閉圖示可見度"
+
+#: ../contrib/gd/gd-tagged-entry.c:941
+msgid "Whether the close button should be shown in tags."
+msgstr "關閉按鈕是否在標籤中顯示。"
+
+#: ../contrib/gd/gd-tagged-entry.c:1027
+#: ../src/greeter/gb-greeter-pill-box.c:116
+msgid "Label"
+msgstr "標籤"
+
+#: ../contrib/gd/gd-tagged-entry.c:1028
+msgid "Text to show on the tag."
+msgstr "標籤上要顯示的文字。"
+
+#: ../contrib/gd/gd-tagged-entry.c:1031
+msgid "Tag has a close button"
+msgstr "標籤具有關閉按鈕"
+
+#: ../contrib/gd/gd-tagged-entry.c:1032
+msgid "Whether the tag has a close button."
+msgstr "標籤是否包含關閉按鈕。"
+
+#: ../contrib/gd/gd-tagged-entry.c:1035
+msgid "Style"
+msgstr "樣式"
+
+#: ../contrib/gd/gd-tagged-entry.c:1036
+msgid "Style of the tag."
+msgstr "標記的樣式。"
+
+#: ../contrib/rg/rg-column.c:287
+msgid "The name of the column"
+msgstr "欄位的名稱"
+
+#: ../contrib/rg/rg-column.c:293 ../contrib/rg/rg-column.c:294
+msgid "Value Type"
+msgstr "數值類型"
+
+#: ../contrib/rg/rg-cpu-graph.c:162 ../contrib/rg/rg-cpu-graph.c:163
+#: ../contrib/rg/rg-table.c:514
+msgid "Timespan"
+msgstr "時間跨距"
+
+#: ../contrib/rg/rg-cpu-graph.c:170 ../contrib/rg/rg-cpu-graph.c:171
+#: ../contrib/rg/rg-table.c:506 ../contrib/rg/rg-table.c:507
+msgid "Max Samples"
+msgstr "最大樣本數量"
+
+#: ../contrib/rg/rg-graph.c:368
+msgid "Table"
+msgstr "表格"
+
+#: ../contrib/rg/rg-graph.c:369
+msgid "The data table for the graph."
+msgstr "圖表的資料表格。"
+
+#: ../contrib/rg/rg-line-renderer.c:250 ../contrib/rg/rg-line-renderer.c:251
+msgid "Column"
+msgstr "行"
+
+#: ../contrib/rg/rg-line-renderer.c:258 ../contrib/rg/rg-line-renderer.c:259
+#, fuzzy
+#| msgid "Tab Width"
+msgid "Line Width"
+msgstr "格線寬度"
+
+#: ../contrib/rg/rg-line-renderer.c:266 ../contrib/rg/rg-line-renderer.c:267
+msgid "Stroke Color"
+msgstr "刪除線顏色"
+
+#: ../contrib/rg/rg-line-renderer.c:273 ../contrib/rg/rg-line-renderer.c:274
+msgid "Stroke Color RGBA"
+msgstr "刪除線顏色 RGBA"
+
+#: ../contrib/rg/rg-table.c:515
+#, fuzzy
+msgid "Timespan to visualize, in microseconds."
+msgstr "時間跨距"
+
+#: ../contrib/rg/rg-table.c:522 ../contrib/rg/rg-table.c:523
+msgid "Value Max"
+msgstr "數值最大值"
+
+#: ../contrib/rg/rg-table.c:530 ../contrib/rg/rg-table.c:531
+msgid "Value Min"
+msgstr "數值最小值"
+
+#: ../contrib/search/trie.c:790
+#, c-format
+msgid "Traversal order %u is not supported on Trie."
+msgstr ""
+
+#: ../contrib/xml/xml-reader.c:180 ../contrib/xml/xml-reader.c:181
+msgid "Encoding"
+msgstr "編碼"
+
+#: ../contrib/xml/xml-reader.c:187 ../contrib/xml/xml-reader.c:188
+#: ../plugins/devhelp/gb-devhelp-document.c:256
+#: ../plugins/devhelp/gb-devhelp-search-result.c:99
+msgid "URI"
+msgstr "URI"
+
+#: ../contrib/xml/xml-reader.c:327
+#, c-format
+msgid "Could not parse XML from stream"
+msgstr "無法分析來自串流的 XML"
+
+#: ../data/gtk/menus.ui.h:1
+msgid "_New Project"
+msgstr "新專案(_N)"
+
+#: ../data/gtk/menus.ui.h:2
+msgid "_Open Project"
+msgstr "開啟專案(_O)"
+
+#: ../data/gtk/menus.ui.h:3
+msgid "_Preferences"
+msgstr "偏好設定(_P)"
+
+#: ../data/gtk/menus.ui.h:4
+msgid "Generate Support Log"
+msgstr "生成支援記錄"
+
+#: ../data/gtk/menus.ui.h:5
+msgid "_About"
+msgstr "關於(_A)"
+
+#: ../data/gtk/menus.ui.h:6
+msgid "_Quit"
+msgstr "退出(_Q)"
+
+#: ../data/gtk/menus.ui.h:7 ../data/ui/gb-editor-view.ui.h:1
+msgid "_Reload"
+msgstr "重新載入(_R)"
+
+#: ../data/gtk/menus.ui.h:8
+msgid "_Print…"
+msgstr "列印(_P)…"
+
+#: ../data/gtk/menus.ui.h:9
+msgid "_Fullscreen"
+msgstr "全螢幕(_F)"
+
+#: ../data/gtk/menus.ui.h:10
+msgid "_New Document"
+msgstr "新增文件(_N)"
+
+#: ../data/gtk/menus.ui.h:11
+msgid "_Open"
+msgstr "開啟(_O)"
+
+#: ../data/gtk/menus.ui.h:12
+msgid "Save _All"
+msgstr "全部儲存(_A)"
+
+#: ../data/gtk/menus.ui.h:13
+msgid "_Close All"
+msgstr "全部關閉(_C)"
+
+#: ../data/gtk/menus.ui.h:14
+msgid "Display Options"
+msgstr "顯示選項"
+
+#: ../data/gtk/menus.ui.h:15 ../src/tree/gb-tree.c:974
+#: ../src/tree/gb-tree.c:975
+msgid "Show Icons"
+msgstr "顯示圖示"
+
+#: ../data/gtk/menus.ui.h:16 ../src/project-tree/gb-project-tree.c:157
+msgid "Show Ignored Files"
+msgstr "顯示忽略的檔案"
+
+#: ../data/gtk/menus.ui.h:17
+msgid "Sort Directories First"
+msgstr "先排序目錄"
+
+#: ../data/gtk/menus.ui.h:18
+msgid "_Collapse All Nodes"
+msgstr "收摺所有的節點(_C)"
+
+#: ../data/gtk/menus.ui.h:19
+msgid "_Refresh"
+msgstr "重新整理(_R)"
+
+#: ../data/gtk/menus.ui.h:20 ../data/ui/gb-greeter-window.ui.h:3
+msgid "_New"
+msgstr "新增(_N)"
+
+#: ../data/gtk/menus.ui.h:21
+msgid "_Empty File"
+msgstr "空白檔案(_E)"
+
+#: ../data/gtk/menus.ui.h:22
+msgid "_New Folder"
+msgstr "新增資料夾(_N)"
+
+#: ../data/gtk/menus.ui.h:23
+msgid "Open _With"
+msgstr "以此開啟(_W)"
+
+#: ../data/gtk/menus.ui.h:24
+msgid "Source Code Editor"
+msgstr "源碼編輯器"
+
+#: ../data/gtk/menus.ui.h:25
+msgid "_Open Containing Folder"
+msgstr "開啟包含的資料夾(_O)"
+
+#: ../data/gtk/menus.ui.h:26
+msgid "_Open in Terminal"
+msgstr "在終端機開啟(_O)"
+
+#: ../data/gtk/menus.ui.h:27 ../data/ui/gb-rename-file-popover.ui.h:2
+msgid "_Rename"
+msgstr "重新命名(_R)"
+
+#: ../data/gtk/menus.ui.h:28
+msgid "Mo_ve to Trash"
+msgstr "丟進回收筒(_V)"
+
+#: ../data/gtk/menus.ui.h:29
+#, fuzzy
+#| msgid "Builder"
+msgid "_Build"
+msgstr "建置(_B)"
+
+#: ../data/gtk/menus.ui.h:30
+msgid "_Rebuild"
+msgstr "重新組建(_B)"
+
+#: ../data/style-schemes/builder-dark.xml.h:1
+msgid "Builder Dark"
+msgstr "Builder  黑"
+
+#: ../data/style-schemes/builder-dark.xml.h:2
+msgid "Dark color scheme for Builder using the Tango color palette"
+msgstr "使用 Tango 調色盤的 Builder 暗色系配色"
+
+#: ../data/style-schemes/builder.xml.h:1
+#: ../data/ui/gb-preferences-page-keybindings.ui.h:3
+#: ../data/ui/gb-workbench.ui.h:1 ../src/main.c:95
+#: ../src/workbench/gb-workbench.c:153
+msgid "Builder"
+msgstr "Builder"
+
+#: ../data/style-schemes/builder.xml.h:2
+msgid "The default color scheme for Builder"
+msgstr "Builder 預設色彩配色"
+
+#: ../data/ui/gb-editor-frame.ui.h:1
+#, fuzzy
+msgid "OVR"
+msgstr "覆寫"
+
+#: ../data/ui/gb-editor-settings-widget.ui.h:1
+msgid "Display right _margin at column:"
+msgstr "顯示右邊邊界於(_M):"
+
+#: ../data/ui/gb-editor-settings-widget.ui.h:2
+msgid "Trim trailing whitespace when saving document"
+msgstr ""
+
+#: ../data/ui/gb-editor-settings-widget.ui.h:3
+msgid "Insert matching brace, bracket, quotation, and parenthesis."
+msgstr ""
+
+#: ../data/ui/gb-editor-settings-widget.ui.h:4
+msgid "Overwrite closing brace, bracket, quotation, and parenthesis."
+msgstr ""
+
+#: ../data/ui/gb-editor-settings-widget.ui.h:5
+#: ../data/ui/gb-editor-tweak-widget.ui.h:7
+msgid "Indentation"
+msgstr "縮排"
+
+#: ../data/ui/gb-editor-settings-widget.ui.h:6
+msgid "_Tab width:"
+msgstr "_Tab 寬度："
+
+#: ../data/ui/gb-editor-settings-widget.ui.h:7
+msgid "Insert _spaces instead of tabs"
+msgstr "插入空格而非 Tab(_S)"
+
+#: ../data/ui/gb-editor-settings-widget.ui.h:8
+msgid "_Enable automatic indentation"
+msgstr "啟用自動縮排(_E)"
+
+#: ../data/ui/gb-editor-tweak-widget.ui.h:1
+msgid "Search highlight mode…"
+msgstr "搜尋標明模式…"
+
+#: ../data/ui/gb-editor-tweak-widget.ui.h:2
+msgid "Display line numbers"
+msgstr "顯示列號"
+
+#: ../data/ui/gb-editor-tweak-widget.ui.h:3
+msgid "Display right margin"
+msgstr "顯示右邊緣"
+
+#: ../data/ui/gb-editor-tweak-widget.ui.h:4
+msgid "Highlight current line"
+msgstr "標明目前一列"
+
+#: ../data/ui/gb-editor-tweak-widget.ui.h:5
+msgid "Auto indent"
+msgstr "自動縮排"
+
+#: ../data/ui/gb-editor-tweak-widget.ui.h:6
+#: ../data/ui/gb-preferences-page-keybindings.ui.h:12
+msgid "Smart Backspace"
+msgstr "智慧型 BackSpace"
+
+#: ../data/ui/gb-editor-tweak-widget.ui.h:8
+msgid "Spaces"
+msgstr "空格"
+
+#: ../data/ui/gb-editor-tweak-widget.ui.h:9
+msgid "Tabs"
+msgstr "Tab"
+
+#: ../data/ui/gb-editor-tweak-widget.ui.h:10
+msgid "2"
+msgstr "2"
+
+#: ../data/ui/gb-editor-tweak-widget.ui.h:11
+msgid "3"
+msgstr "3"
+
+#: ../data/ui/gb-editor-tweak-widget.ui.h:12
+msgid "4"
+msgstr "4"
+
+#: ../data/ui/gb-editor-tweak-widget.ui.h:13
+msgid "8"
+msgstr "8"
+
+#: ../data/ui/gb-editor-view.ui.h:2 ../data/ui/gb-greeter-window.ui.h:4
+#: ../data/ui/gb-new-project-dialog.ui.h:2 ../data/ui/gb-projects-dialog.ui.h:3
+msgid "_Cancel"
+msgstr "取消(_C)"
+
+#: ../data/ui/gb-editor-view.ui.h:3
+msgid ""
+"Builder has discovered that this file has been modified externally. Would "
+"you like to reload the file?"
+msgstr "Builder 發現到這個檔案在外部修改過。您想要重新載入這個檔案嗎？"
+
+#: ../data/ui/gb-editor-view.ui.h:4
+msgid "Search Symbols"
+msgstr "搜尋符號"
+
+#: ../data/ui/gb-greeter-window.ui.h:1
+msgid "Select a Project"
+msgstr "選擇一個專案"
+
+#: ../data/ui/gb-greeter-window.ui.h:2
+msgid "Click an item to select"
+msgstr "點選想要選擇的項目"
+
+#: ../data/ui/gb-greeter-window.ui.h:5 ../src/greeter/gb-greeter-window.c:560
+msgid "Recent Projects"
+msgstr "最近的專案"
+
+#: ../data/ui/gb-greeter-window.ui.h:6
+msgid "Other Projects"
+msgstr "其他的專案"
+
+#: ../data/ui/gb-greeter-window.ui.h:7
+msgid "_Remove"
+msgstr "移除(_R)"
+
+#: ../data/ui/gb-new-file-popover.ui.h:1
+#: ../data/ui/gb-rename-file-popover.ui.h:1
+#: ../src/project-tree/gb-new-file-popover.c:349
+msgid "File Name"
+msgstr "檔案名稱"
+
+#: ../data/ui/gb-new-file-popover.ui.h:2
+msgid "_Create"
+msgstr "建立(_C)"
+
+#: ../data/ui/gb-new-project-dialog.ui.h:1
+#: ../src/dialogs/gb-new-project-dialog.c:353
+msgid "New Project"
+msgstr "新專案"
+
+#: ../data/ui/gb-new-project-dialog.ui.h:3
+msgid "_Continue"
+msgstr "繼續(_C)"
+
+#: ../data/ui/gb-new-project-dialog.ui.h:4
+msgid "From existing project on this computer"
+msgstr "這臺電腦現有的專案"
+
+#: ../data/ui/gb-new-project-dialog.ui.h:5
+msgid "From remote source code repository"
+msgstr "從遠端源碼倉儲"
+
+#: ../data/ui/gb-new-project-dialog.ui.h:7
+#: ../libide/ide-back-forward-item.c:140
+msgid "Location"
+msgstr "位置"
+
+#: ../data/ui/gb-new-project-dialog.ui.h:8
+msgid "GNOME Version"
+msgstr "GNOME 版本"
+
+#: ../data/ui/gb-new-project-dialog.ui.h:9 ../libide/ide-diagnostician.c:270
+#: ../libide/ide-diagnostician.c:271 ../libide/ide-file.c:486
+#: ../libide/ide-source-snippet.c:974
+#: ../src/editor/gb-editor-settings-widget.c:179
+msgid "Language"
+msgstr "語言"
+
+#: ../data/ui/gb-new-project-dialog.ui.h:10
+msgid "Pattern"
+msgstr "樣式"
+
+#: ../data/ui/gb-new-project-dialog.ui.h:11
+msgid "Git"
+msgstr "Git"
+
+#: ../data/ui/gb-new-project-dialog.ui.h:12
+msgid "user@host:repository.git"
+msgstr "user@host:repository.git"
+
+#: ../data/ui/gb-new-project-dialog.ui.h:13
+msgid "Enter the URL of your project's source code repository."
+msgstr "輸入您的專案源碼倉儲的 URL。"
+
+#: ../data/ui/gb-new-project-dialog.ui.h:14
+#: ../libide/autotools/ide-autotools-build-task.c:395
+#: ../libide/ide-project-info.c:437
+#: ../src/project-tree/gb-new-file-popover.c:268
+#: ../src/project-tree/gb-new-file-popover.c:269
+msgid "Directory"
+msgstr "目錄"
+
+#: ../data/ui/gb-new-project-dialog.ui.h:15
+#: ../libide/git/ide-git-buffer-change-monitor.c:718
+#: ../libide/git/ide-git-vcs.c:388
+msgid "Repository"
+msgstr "倉儲"
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:1
+#: ../data/ui/gb-preferences-window.ui.h:3
+msgid "Editor"
+msgstr "編輯器"
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:2
+msgid "Font"
+msgstr "字型"
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:3
+msgid "Highlighting"
+msgstr "標明"
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:4
+msgid "Display Document Changes"
+msgstr "顯示文件變更"
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:5
+msgid ""
+"Display whether a line has been added or modified next to the line number."
+msgstr ""
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:6
+msgid "Display Line Numbers"
+msgstr "顯示列號"
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:7
+msgid "Display the line numbers next to each line of the document."
+msgstr "在文件每列旁邊顯示列號。"
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:8
+msgid "Highlight Current Line"
+msgstr "標明目前一列"
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:9
+msgid "Highlight the line containing the cursor."
+msgstr "標示游標目前所在的一列。"
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:10
+msgid "Highlight Matching Brackets"
+msgstr "標明成對的括號"
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:11
+msgid "Whether or not matching brackets should be highlighted."
+msgstr "是否應標明成對的弧號。"
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:12
+msgid "Overview Map"
+msgstr "概覽地圖"
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:13
+msgid "Display Overview Map"
+msgstr "顯示概覽地圖"
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:14
+msgid "Display an overview map next to the source code editor."
+msgstr "在源碼編輯器旁顯示概覽地圖。"
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:15
+msgid "Auto Hide Overview Map"
+msgstr "自動隱藏概覽地圖"
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:16
+msgid "Automatically hide the overview map during periods of inactivity."
+msgstr "經過一段時間不使用後自動隱藏概覽地圖。"
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:17
+msgid "Cursor Placement"
+msgstr "游標放置"
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:18
+msgid "Restore Cursor Position"
+msgstr "回復游標位置"
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:19
+msgid ""
+"Restore the insertion cursor to the last position when reopening a file."
+msgstr "重新開啟檔案時還原插入游標上次的位置。"
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:20
+#: ../libide/ide-source-view.c:5265
+msgid "Scroll Offset"
+msgstr "捲動偏移"
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:21
+msgid "Minimal number of lines to keep above and below the cursor."
+msgstr "留在游標之上與之下的最小列數。"
+
+#: ../data/ui/gb-preferences-page-git.ui.h:1
+#: ../data/ui/gb-preferences-window.ui.h:8
+msgid "Version Control"
+msgstr "版本控制"
+
+#: ../data/ui/gb-preferences-page-git.ui.h:2
+#, fuzzy
+msgid "Source Code Attribution"
+msgstr "源碼編輯器"
+
+#: ../data/ui/gb-preferences-page-git.ui.h:4
+#: ../libide/doap/ide-doap-person.c:161
+msgid "Email"
+msgstr "電子郵件"
+
+#: ../data/ui/gb-preferences-page-insight.ui.h:1
+#: ../data/ui/gb-preferences-window.ui.h:5
+#, fuzzy
+#| msgid "Code Assistant"
+msgid "Code Insight"
+msgstr "學習寫程式，透過寫程式學習"
+
+#: ../data/ui/gb-preferences-page-insight.ui.h:2
+msgid "Semantic Language Highlighting"
+msgstr "語意語音標示"
+
+#: ../data/ui/gb-preferences-page-insight.ui.h:3
+msgid ""
+"Highlight additional syntax based upon information found in the document."
+msgstr "根據在文件中找到的資訊標明額外的語法。"
+
+#: ../data/ui/gb-preferences-page-insight.ui.h:4
+msgid "Auto Completion"
+msgstr "自動補完"
+
+#: ../data/ui/gb-preferences-page-insight.ui.h:5
+msgid "Suggest Word Completion"
+msgstr "建議字詞補完"
+
+#: ../data/ui/gb-preferences-page-insight.ui.h:6
+msgid "Suggest completion of words found within all open documents."
+msgstr "利用在所有開啟的文件中找到的字來建議文字補齊。"
+
+#: ../data/ui/gb-preferences-page-insight.ui.h:7
+msgid "Suggest Completions using Ctags"
+msgstr "使用 Ctags 來建議文字補齊"
+
+#: ../data/ui/gb-preferences-page-insight.ui.h:8
+msgid "Use Ctags for completions in supported languages."
+msgstr "使用 Ctags 對支援的語言建議文字補齊。"
+
+#: ../data/ui/gb-preferences-page-insight.ui.h:9
+msgid "Suggest Completions using Clang (Experimental)"
+msgstr "使用 Ctags 來建議文字補齊 (實驗性)"
+
+#: ../data/ui/gb-preferences-page-insight.ui.h:10
+msgid "Use Clang for completions in the C and C++ languages."
+msgstr "使用 Clang 對 C 與 C++ 語言進行文字補齊。"
+
+#: ../data/ui/gb-preferences-page-insight.ui.h:11
+msgid "Suggest Completions using Jedi"
+msgstr "使用 Jedi 建議字詞補完"
+
+#: ../data/ui/gb-preferences-page-insight.ui.h:12
+msgid "Use Jedi for completions in the Python language."
+msgstr "使用 Jedi 對 Python 語言進行文字補齊。"
+
+#: ../data/ui/gb-preferences-page-keybindings.ui.h:1
+#: ../data/ui/gb-preferences-window.ui.h:6
+msgid "Keyboard"
+msgstr "鍵盤"
+
+#: ../data/ui/gb-preferences-page-keybindings.ui.h:2
+msgid "Key Binding Emulation"
+msgstr "組合鍵模擬"
+
+#: ../data/ui/gb-preferences-page-keybindings.ui.h:4
+msgid "The default keybindings for Builder."
+msgstr "Builder 預設組合鍵。"
+
+#: ../data/ui/gb-preferences-page-keybindings.ui.h:5
+msgid "Emacs Emulation"
+msgstr "Emacs 模擬"
+
+#: ../data/ui/gb-preferences-page-keybindings.ui.h:6
+msgid "Emulates familiar keybindings from the Emacs text editor."
+msgstr "模擬 Emacs 文字編輯器中熟悉的組合鍵。"
+
+#: ../data/ui/gb-preferences-page-keybindings.ui.h:7
+msgid "Vim Emulation"
+msgstr "Vim 模擬"
+
+#: ../data/ui/gb-preferences-page-keybindings.ui.h:8
+msgid "Emulates familiar keybindings from the Vim text editor."
+msgstr "模擬 Vim 文字編輯器中熟悉的組合鍵。"
+
+#: ../data/ui/gb-preferences-page-keybindings.ui.h:9
+msgid "Keyboard Movement"
+msgstr "鍵盤移動"
+
+#: ../data/ui/gb-preferences-page-keybindings.ui.h:10
+msgid "Smart Home End"
+msgstr "智慧 Home End"
+
+#: ../data/ui/gb-preferences-page-keybindings.ui.h:11
+msgid "Home moves to first non-space character."
+msgstr "Home 移至第一個非空白字元。"
+
+#: ../data/ui/gb-preferences-page-keybindings.ui.h:13
+msgid ""
+"Backspace will remove extra spaces to keep you aligned with your indentation "
+"width."
+msgstr "Backspace 會移除額外的空白讓您保持對齊縮排寬度。"
+
+#: ../data/ui/gb-preferences-page-language.ui.h:1
+#: ../data/ui/gb-preferences-window.ui.h:4
+msgid "Programming Languages"
+msgstr "程式設計語言"
+
+#: ../data/ui/gb-preferences-page-theme.ui.h:1
+#: ../data/ui/gb-preferences-window.ui.h:7
+msgid "Theme"
+msgstr "布景主題"
+
+#: ../data/ui/gb-preferences-page-theme.ui.h:2
+msgid "Night Mode"
+msgstr "夜晚模式"
+
+#: ../data/ui/gb-preferences-page-theme.ui.h:3
+#, fuzzy
+#| msgid "The parameters for the action."
+msgid "Use dark colors for the application chrome."
+msgstr "動作的參數。"
+
+#: ../data/ui/gb-preferences-page-theme.ui.h:4
+msgid "Display Grid Pattern"
+msgstr "顯示格線圖案"
+
+#: ../data/ui/gb-preferences-page-theme.ui.h:5
+msgid "Display a grid pattern under the source code."
+msgstr "在源碼下顯示格線圖案。"
+
+#: ../data/ui/gb-preferences-window.ui.h:1
+msgid "Preferences"
+msgstr "偏好設定"
+
+#: ../data/ui/gb-preferences-window.ui.h:2
+msgid "Search Preferences…"
+msgstr "搜尋偏好設定…"
+
+#: ../data/ui/gb-projects-dialog.ui.h:1 ../src/dialogs/gb-projects-dialog.c:257
+msgid "Select Project"
+msgstr "選擇專案"
+
+#: ../data/ui/gb-projects-dialog.ui.h:2
+msgid "New"
+msgstr "新增"
+
+#: ../data/ui/gb-projects-dialog.ui.h:4
+msgid "Delete"
+msgstr "Delete"
+
+#: ../data/ui/gb-view-stack.ui.h:1
+msgid "Split"
+msgstr "分割"
+
+#: ../data/ui/gb-view-stack.ui.h:2
+msgid "Move"
+msgstr "移動"
+
+#: ../data/ui/gb-view-stack.ui.h:3
+msgid "Preview"
+msgstr "預覽"
+
+#: ../data/ui/gb-view-stack.ui.h:4
+#: ../plugins/terminal/gb-terminal-view-actions.c:309
+#: ../src/editor/gb-editor-view-actions.c:311
+#: ../src/editor/gb-editor-view-actions.c:442
+msgid "Save"
+msgstr "儲存"
+
+#: ../data/ui/gb-view-stack.ui.h:5
+msgid "Save As"
+msgstr "另存為"
+
+#: ../data/ui/gb-view-stack.ui.h:6
+msgid "Print"
+msgstr "列印"
+
+#: ../data/ui/gb-view-stack.ui.h:7
+msgid "Close"
+msgstr "關閉"
+
+#: ../data/ui/gb-workbench.ui.h:2 ../libide/ide-context.c:680
+msgid "Project"
+msgstr "專案"
+
+#: ../libide/autotools/ide-autotools-builder.c:303
+#: ../libide/autotools/ide-autotools-build-task.c:377
+msgid "Config"
+msgstr "設定"
+
+#: ../libide/autotools/ide-autotools-builder.c:304
+msgid "The configuration for the build."
+msgstr "組建的設定。"
+
+#: ../libide/autotools/ide-autotools-builder.c:312
+#: ../libide/autotools/ide-autotools-build-task.c:386
+#: ../plugins/device-manager/gb-device-manager-panel.c:75
+msgid "Device"
+msgstr "裝置"
+
+#: ../libide/autotools/ide-autotools-builder.c:313
+#: ../libide/autotools/ide-autotools-build-task.c:387
+msgid "The device to build for."
+msgstr "要組建的裝置。"
+
+#: ../libide/autotools/ide-autotools-build-system.c:172
+msgid "Failed to locate configure.ac"
+msgstr "無法定位 configure.ac"
+
+#: ../libide/autotools/ide-autotools-build-system.c:638
+msgid "Tarball Name"
+msgstr "Tarball 名稱"
+
+#: ../libide/autotools/ide-autotools-build-system.c:639
+msgid "The name of the project tarball."
+msgstr "專案 tarball 的名稱。"
+
+#: ../libide/autotools/ide-autotools-build-task.c:270
+msgid "Directory must be on a locally mounted filesystem."
+msgstr "目錄必須為本地端掛載的檔案系統。"
+
+#: ../libide/autotools/ide-autotools-build-task.c:378
+msgid "The overlay config for the compilation."
+msgstr "編譯的覆蓋設定。"
+
+#: ../libide/autotools/ide-autotools-build-task.c:396
+msgid "The directory to perform the build within."
+msgstr "用來執行組建的目錄。"
+
+#: ../libide/autotools/ide-autotools-build-task.c:404
+msgid "Require Autogen"
+msgstr "需要 Autogen"
+
+#: ../libide/autotools/ide-autotools-build-task.c:405
+#| msgid "If spaces should be used instead of tabs."
+msgid "If autogen.sh should be forced to execute."
+msgstr "autogen.sh 是否應強制執行。"
+
+#: ../libide/autotools/ide-autotools-build-task.c:413
+msgid "Require Configure"
+msgstr "需要 Configure"
+
+#: ../libide/autotools/ide-autotools-build-task.c:414
+msgid "If configure should be forced to execute."
+msgstr "configure 是否應強制執行。"
+
+#: ../libide/autotools/ide-autotools-build-task.c:641
+msgid "Cannot execute build task more than once."
+msgstr "不能執行超過一項的組建工作。"
+
+#: ../libide/autotools/ide-autotools-build-task.c:726
+msgid "Failed to create build directory."
+msgstr "無法建立組建目錄。"
+
+#: ../libide/autotools/ide-autotools-build-task.c:735
+#, c-format
+msgid "'%s' is not a directory."
+msgstr "「%s」不是一個目錄。"
+
+#: ../libide/autotools/ide-autotools-build-task.c:774
+#, c-format
+msgid "autogen.sh is missing from project directory (%s)."
+msgstr "在專案目錄中缺少 autogen.sh (%s)。"
+
+#: ../libide/autotools/ide-autotools-build-task.c:784
+msgid "autogen.sh is not executable."
+msgstr "autogen.sh 不是可執行檔。"
+
+#: ../libide/autotools/ide-autotools-build-task.c:814
+#, c-format
+msgid "autogen.sh failed to create configure (%s)"
+msgstr "autogen.sh 無法建立 configure (%s)"
+
+#: ../libide/autotools/ide-autotools-project-miner.c:388
+#: ../plugins/file-search/gb-file-search-index.c:121
+#: ../plugins/file-search/gb-file-search-index.c:122
+msgid "Root Directory"
+msgstr "根目錄"
+
+#: ../libide/autotools/ide-autotools-project-miner.c:389
+msgid "The root directory to scan from."
+msgstr "要掃描的根目錄。"
+
+#: ../libide/autotools/ide-makecache.c:1004
+msgid "Invalid makefile provided, ignoring."
+msgstr "提供了無效的 makefile，略過。"
+
+#: ../libide/autotools/ide-makecache.c:1244
+msgid "Makefile"
+msgstr "Makefile"
+
+#: ../libide/autotools/ide-makecache.c:1245
+msgid "The root makefile to be cached."
+msgstr "要快取的根 makefile。"
+
+#: ../libide/doap/ide-doap.c:420 ../libide/doap/ide-doap.c:421
+msgid "Bug Database"
+msgstr "程式錯誤資料庫"
+
+#: ../libide/doap/ide-doap.c:427 ../libide/doap/ide-doap.c:428
+msgid "Category"
+msgstr "類別"
+
+#: ../libide/doap/ide-doap.c:434 ../libide/doap/ide-doap.c:435
+#: ../libide/ide-project-info.c:423 ../libide/ide-source-snippet.c:981
+#: ../src/preferences/gb-preferences-switch.c:321
+msgid "Description"
+msgstr "描述"
+
+#: ../libide/doap/ide-doap.c:441 ../libide/doap/ide-doap.c:442
+msgid "Download Page"
+msgstr "下載頁面"
+
+#: ../libide/doap/ide-doap.c:448 ../libide/doap/ide-doap.c:449
+msgid "Homepage"
+msgstr "首頁"
+
+#: ../libide/doap/ide-doap.c:455 ../libide/doap/ide-doap.c:456
+#: ../libide/ide-project-info.c:465 ../libide/ide-project-info.c:466
+msgid "Languages"
+msgstr "語言"
+
+#: ../libide/doap/ide-doap.c:469 ../libide/doap/ide-doap.c:470
+msgid "Shortdesc"
+msgstr "短描述"
+
+#: ../libide/doap/ide-doap-person.c:162
+msgid "The email of the person."
+msgstr "個人電子郵件。"
+
+#: ../libide/doap/ide-doap-person.c:169
+msgid "The name of the person."
+msgstr "個人姓名。"
+
+#: ../libide/editorconfig/ide-editorconfig-file-settings.c:153
+msgid "No file was provided."
+msgstr "沒有提供檔案。"
+
+#: ../libide/git/ide-git-buffer-change-monitor.c:167
+msgid "Cannot provide diff, no backing file provided."
+msgstr ""
+
+#: ../libide/git/ide-git-buffer-change-monitor.c:537
+#, c-format
+msgid "Repository does not have a working directory."
+msgstr "倉儲沒有工作目錄。"
+
+#: ../libide/git/ide-git-buffer-change-monitor.c:548
+#, c-format
+msgid "File is not under control of git working directory."
+msgstr "檔案不在 git 工作目錄的控制之下。"
+
+#: ../libide/git/ide-git-buffer-change-monitor.c:614
+#, c-format
+msgid "The requested file does not exist within the git index."
+msgstr "要求的檔案不存在 git 索引中。"
+
+#: ../libide/git/ide-git-buffer-change-monitor.c:719
+msgid "The repository to use for calculating diffs."
+msgstr "用於計算 diffs 的倉儲。"
+
+#: ../libide/git/ide-git-remote-callbacks.c:212 ../libide/ide-progress.c:217
+msgid "Fraction"
+msgstr "片段"
+
+#: ../libide/git/ide-git-remote-callbacks.c:213
+msgid "A fraction containing the operation progress."
+msgstr "包含操作進度的片段。"
+
+#: ../libide/git/ide-git-vcs.c:389
+msgid "The git repository for the project."
+msgstr "專案的 git 倉儲。"
+
+#: ../libide/gjs/ide-gjs-script.cpp:76
+msgid "Attempt to load a GJS script with no filename."
+msgstr "嘗試載入沒有檔案名稱的 GJS 命令稿。"
+
+#: ../libide/gjs/ide-gjs-script.cpp:103
+msgid "Failed to create JavaScript context."
+msgstr "無法建立 JavaScript 脈絡"
+
+#: ../libide/gjs/ide-gjs-script.cpp:128
+msgid "Failed to set IdeContext in JavaScript runtime."
+msgstr "無法在 JavaScript 執行階段設定 IdeContext。"
+
+#: ../libide/gjs/ide-gjs-script.cpp:202
+#: ../libide/pygobject/ide-pygobject-script.c:254
+msgid "The filename for the script was not provided."
+msgstr "沒有提供命令稿的檔案名稱。"
+
+#: ../libide/gjs/ide-gjs-script.cpp:213
+#: ../libide/pygobject/ide-pygobject-script.c:265
+msgid "The script must be on a local filesystem."
+msgstr "命令稿必須是本地端檔案。"
+
+#: ../libide/gjs/ide-gjs-script.cpp:222
+#, c-format
+msgid "The script \"%s\" is not a JavaScript file."
+msgstr "命令稿「%s」不是 JavaScript 檔案。"
+
+#: ../libide/gsettings/ide-language-defaults.c:177
+#, c-format
+msgid "%s contained invalid ASCII"
+msgstr "%s 包含無效的 ASCII"
+
+#: ../libide/gsettings/ide-language-defaults.c:192
+#, c-format
+msgid "Failed to parse integer from \"%s\""
+msgstr "無法從「%s」分析整數"
+
+#: ../libide/gsettings/ide-language-defaults.c:270
+msgid "language defaults missing version in [global] group."
+msgstr "語言預設值在 [global] 群組中缺少版本。"
+
+#: ../libide/gsettings/ide-language-defaults.c:362
+msgid "Failed to initialize defaults."
+msgstr "無法初始化預設值。"
+
+#: ../libide/ide-back-forward-item.c:141
+msgid "The location of the navigation item."
+msgstr "導覽項目的位置。"
+
+#: ../libide/ide-back-forward-list.c:426
+msgid "Can Go Backward"
+msgstr "可以返回走"
+
+#: ../libide/ide-back-forward-list.c:427
+msgid "If there are more backward navigation items."
+msgstr "是否有更多向後導覽項目。"
+
+#: ../libide/ide-back-forward-list.c:433
+msgid "Can Go Forward"
+msgstr "可以往前進"
+
+#: ../libide/ide-back-forward-list.c:434
+msgid "If there are more forward navigation items."
+msgstr "是否有更多向前導覽項目。"
+
+#: ../libide/ide-back-forward-list.c:440
+msgid "Current Item"
+msgstr "目前項目"
+
+#: ../libide/ide-back-forward-list.c:441
+msgid "The current navigation item."
+msgstr "目前的導覽項目。"
+
+#: ../libide/ide-back-forward-list.c:722
+msgid "File contained invalid UTF-8"
+msgstr "檔案包含無效的 UTF-8"
+
+#: ../libide/ide-buffer.c:1112
+msgid "Busy"
+msgstr "忙碌"
+
+#: ../libide/ide-buffer.c:1113
+msgid "If the buffer is performing background work."
+msgstr "緩衝區是否正在進行背景工作。"
+
+#: ../libide/ide-buffer.c:1119
+msgid "Changed on Volume"
+msgstr "儲存區已變更"
+
+#: ../libide/ide-buffer.c:1120
+msgid "If the file has changed on disk and the buffer is not in sync."
+msgstr "磁碟上的檔案是否已變更，而緩衝區尚未同步。"
+
+#: ../libide/ide-buffer.c:1126 ../libide/ide-object.c:203
+#: ../libide/ide-search-provider.c:71 ../libide/ide-search-provider.c:72
+#: ../libide/ide-source-snippet-chunk.c:314
+#: ../src/search/gb-search-display.c:577 ../src/workbench/gb-workbench.c:708
+msgid "Context"
+msgstr "情境"
+
+#: ../libide/ide-buffer.c:1127
+msgid "The IdeContext for the buffer."
+msgstr "緩衝區的 IdeContext。"
+
+#: ../libide/ide-buffer.c:1135 ../libide/ide-file.c:470
+#: ../libide/ide-file-settings.c:290 ../libide/ide-project-file.c:248
+#: ../libide/ide-project-info.c:451 ../libide/ide-script.c:156
+#: ../plugins/clang/ide-clang-symbol-tree.c:294
+#: ../plugins/clang/ide-clang-symbol-tree.c:295
+#: ../plugins/clang/ide-clang-translation-unit.c:580
+#: ../plugins/ctags/ide-ctags-index.c:380
+#: ../src/project-tree/gb-project-file.c:173
+#: ../src/project-tree/gb-project-file.c:174
+#: ../src/project-tree/gb-rename-file-popover.c:308
+#: ../src/project-tree/gb-rename-file-popover.c:309
+msgid "File"
+msgstr "檔案"
+
+#: ../libide/ide-buffer.c:1136
+msgid "The file represented by the buffer."
+msgstr "這個緩衝區代表的檔案。"
+
+#: ../libide/ide-buffer.c:1142
+msgid "Highlight Diagnostics"
+msgstr "標明診斷"
+
+#: ../libide/ide-buffer.c:1143
+msgid "If diagnostic warnings and errors should be highlighted."
+msgstr "是否應該標明診斷警告與錯誤。"
+
+#: ../libide/ide-buffer.c:1149 ../src/documents/gb-document.c:204
+msgid "Read Only"
+msgstr "唯讀"
+
+#: ../libide/ide-buffer.c:1150
+msgid "If the underlying file is read only."
+msgstr "底層檔案是否是唯讀檔案。"
+
+#: ../libide/ide-buffer.c:1156 ../libide/ide-buffer.c:1157
+msgid "Style Scheme Name"
+msgstr "樣式方案名稱"
+
+#: ../libide/ide-buffer.c:1163 ../libide/ide-search-result.c:286
+#: ../src/documents/gb-document.c:196
+#: ../src/preferences/gb-preferences-page.c:282
+#: ../src/preferences/gb-preferences-switch.c:314 ../src/views/gb-view.c:279
+msgid "Title"
+msgstr "標題"
+
+#: ../libide/ide-buffer.c:1164
+msgid "The title of the buffer."
+msgstr "緩衝區的標題。"
+
+#: ../libide/ide-buffer.c:1969
+msgid "The current language lacks a symbol resolver."
+msgstr "目前的語言缺乏符號解譯器。"
+
+#: ../libide/ide-buffer-change-monitor.c:106
+#: ../libide/ide-highlight-engine.c:851 ../libide/ide-source-snippet.c:946
+#: ../src/html/gb-html-document.c:314
+msgid "Buffer"
+msgstr "緩衝"
+
+#: ../libide/ide-buffer-change-monitor.c:107
+msgid "The IdeBuffer to be monitored."
+msgstr "要監視的 IdeBuffer。"
+
+#: ../libide/ide-buffer-manager.c:584
+msgid "File too large to be opened."
+msgstr "檔案太過巨大無法開啟。"
+
+#: ../libide/ide-buffer-manager.c:1209
+msgid "Auto Save"
+msgstr "自動儲存"
+
+#: ../libide/ide-buffer-manager.c:1210
+msgid "If the documents should auto save after a configured timeout."
+msgstr "文件是否應在設定的逾時時間後自動儲存。"
+
+#: ../libide/ide-buffer-manager.c:1216
+msgid "Auto Save Timeout"
+msgstr "自動儲存逾時"
+
+#: ../libide/ide-buffer-manager.c:1217
+msgid "The number of seconds after modification before auto saving."
+msgstr "修改後到自動儲存前的秒數。"
+
+#: ../libide/ide-buffer-manager.c:1225
+msgid "Focused Buffer"
+msgstr "聚焦緩衝區"
+
+#: ../libide/ide-buffer-manager.c:1226
+msgid "The currently focused buffer."
+msgstr "目前聚焦的緩衝區。"
+
+#: ../libide/ide-buffer-manager.c:1369
+msgid "Words"
+msgstr "字詞"
+
+#: ../libide/ide-buffer-manager.c:1580
+#, c-format
+msgid "unsaved document %u"
+msgstr "未儲存文件 %u"
+
+#: ../libide/ide-buffer-manager.c:1614
+msgid "Failed to save buffer, ignoring reclamation."
+msgstr "IP 組態失敗"
+
+#: ../libide/ide-builder.c:50
+#, c-format
+msgid "%s does not implement build_async()"
+msgstr "%s 沒有實作 build_async()"
+
+#: ../libide/ide-builder.c:56
+msgid "No implementation of build_async()"
+msgstr "沒有實作 build_async()"
+
+#: ../libide/ide-build-result.c:156
+msgid "Failed to open stderr stream."
+msgstr "無法開啟 stderr 的串流。"
+
+#: ../libide/ide-build-result.c:186
+msgid "Failed to open stdout stream."
+msgstr "無法開啟 stdout 的串流。"
+
+#: ../libide/ide-build-system.c:181 ../libide/ide-context.c:687
+msgid "Project File"
+msgstr "專案檔案"
+
+#: ../libide/ide-build-system.c:182
+msgid "The project file."
+msgstr "專案檔案。"
+
+#: ../libide/ide-build-system.c:287
+#, c-format
+msgid "%s() is not supported on %s build system."
+msgstr "%s() 在 %s 組建系統中不支援。"
+
+#: ../libide/ide.c:68
+#, c-format
+msgid "You must call %s() before using libide."
+msgstr "使用 libido 前您必須呼叫 %s()。"
+
+#: ../libide/ide.c:146
+msgid "Builder requires libgit2-glib with threading support."
+msgstr "Builder 需要 libgit2-glib 才能支援執行緒。"
+
+#: ../libide/ide.c:152
+msgid "Builder requires libgit2-glib with SSH support."
+msgstr "Builder 需要 libgit2-glib 才能支援 SSH。"
+
+#: ../libide/ide-context.c:652 ../libide/ide-source-view.c:5172
+#: ../src/editor/gb-editor-frame.c:747
+msgid "Back Forward List"
+msgstr "向後向前列表"
+
+#: ../libide/ide-context.c:653
+msgid "Back/forward navigation history for the context."
+msgstr "前後脈絡的向前/向後導覽歷史紀錄。"
+
+#: ../libide/ide-context.c:659
+msgid "Buffer Manager"
+msgstr "緩衝區管理員"
+
+#: ../libide/ide-context.c:660
+msgid "The buffer manager for the context."
+msgstr "脈絡的緩衝區管理員。"
+
+#: ../libide/ide-context.c:666
+msgid "Build System"
+msgstr "組建系統"
+
+#: ../libide/ide-context.c:667
+msgid "The build system used by the context."
+msgstr "脈絡使用的組建系統。"
+
+#: ../libide/ide-context.c:673
+msgid "Device Manager"
+msgstr "裝置管理員"
+
+#: ../libide/ide-context.c:674
+msgid "The device manager for the context."
+msgstr "脈絡的裝置管理員。"
+
+#: ../libide/ide-context.c:681
+msgid "The project for the context."
+msgstr "脈絡的專案。"
+
+#: ../libide/ide-context.c:688
+msgid "The project file for the context."
+msgstr "脈絡的專案檔案。"
+
+#: ../libide/ide-context.c:696
+msgid "Root Build Directory"
+msgstr "根組建目錄"
+
+#: ../libide/ide-context.c:697
+msgid "The root directory to perform builds within."
+msgstr "用來執行組建的根目錄。"
+
+#: ../libide/ide-context.c:703
+msgid "Script Manager"
+msgstr "命令稿管理員"
+
+#: ../libide/ide-context.c:704
+msgid "The script manager for the context."
+msgstr "脈絡的命令稿管理員。"
+
+#: ../libide/ide-context.c:710
+msgid "Search Engine"
+msgstr "搜尋引擎"
+
+#: ../libide/ide-context.c:711
+msgid "The search engine for the context."
+msgstr "脈絡的搜尋引擎。"
+
+#: ../libide/ide-context.c:717
+msgid "Snippets Manager"
+msgstr "文字片段管理員"
+
+#: ../libide/ide-context.c:718
+msgid "The snippets manager for the context."
+msgstr "脈絡的文字片段管理員。"
+
+#: ../libide/ide-context.c:724
+msgid "Unsaved Files"
+msgstr "未儲存的檔案"
+
+#: ../libide/ide-context.c:725
+msgid "The unsaved files in the context."
+msgstr "脈絡的未儲存檔案。"
+
+#: ../libide/ide-context.c:731
+msgid "VCS"
+msgstr "VCS"
+
+#: ../libide/ide-context.c:732
+msgid "The VCS for the context."
+msgstr "脈絡的 VCS。"
+
+#: ../libide/ide-context.c:1670
+msgid "An unload request is already pending"
+msgstr "已經預定一項卸載要求"
+
+#: ../libide/ide-context.c:1785
+msgid "Context has already been restored."
+msgstr "脈絡已經復原了。"
+
+#: ../libide/ide-device.c:234 ../src/project-tree/gb-project-file.c:159
+#: ../src/project-tree/gb-project-file.c:160
+msgid "Display Name"
+msgstr "顯示名稱"
+
+#: ../libide/ide-device.c:235
+msgid "The display name of the device."
+msgstr "裝置的顯示名稱。"
+
+#: ../libide/ide-device.c:241 ../libide/ide-project.c:393
+msgid "ID"
+msgstr "ID"
+
+#: ../libide/ide-device.c:242
+msgid "The device identifier."
+msgstr "裝置的識別符。"
+
+#: ../libide/ide-device.c:248
+msgid "System Type"
+msgstr "系統類型"
+
+#: ../libide/ide-device.c:249
+msgid "The system type for which to compile."
+msgstr "要編譯的系統類型。"
+
+#: ../libide/ide-device-manager.c:144
+#, c-format
+msgid "The device \"%s\" could not be found."
+msgstr "找不到「%s」裝置。"
+
+#: ../libide/ide-device-manager.c:395 ../libide/ide-file-settings.c:297
+msgid "Settled"
+msgstr "已解决"
+
+#: ../libide/ide-device-manager.c:396
+#, fuzzy
+#| msgid "If the view split is enabled."
+msgid "If the device providers have settled."
+msgstr "檔案設定值實作是否已解決。"
+
+#: ../libide/ide-extension-adapter.c:396 ../libide/ide-extension-adapter.c:397
+#: ../libide/ide-extension-set-adapter.c:276
+#: ../libide/ide-extension-set-adapter.c:277
+msgid "Engine"
+msgstr "引擎"
+
+#: ../libide/ide-extension-adapter.c:403
+msgid "Extension"
+msgstr "延伸"
+
+#: ../libide/ide-extension-adapter.c:404
+msgid "The extension object."
+msgstr "延伸物件。"
+
+#: ../libide/ide-extension-adapter.c:410
+#: ../libide/ide-extension-set-adapter.c:283
+#: ../libide/ide-extension-set-adapter.c:284
+msgid "Interface Type"
+msgstr "介面類型"
+
+#: ../libide/ide-extension-adapter.c:411
+msgid "The GType of the extension interface."
+msgstr "延伸介面的 GType。"
+
+#: ../libide/ide-extension-adapter.c:417
+#: ../libide/ide-extension-set-adapter.c:290
+#: ../libide/ide-extension-set-adapter.c:291
+msgid "Key"
+msgstr "設定鍵"
+
+#: ../libide/ide-extension-adapter.c:418
+msgid "The external data key to match from plugin info."
+msgstr "要從外掛程式資訊比對的外部資料鍵。"
+
+#: ../libide/ide-extension-adapter.c:424
+#: ../libide/ide-extension-set-adapter.c:297
+#: ../libide/ide-extension-set-adapter.c:298
+msgid "Value"
+msgstr "數值"
+
+#: ../libide/ide-extension-adapter.c:425
+msgid "The external data value to match from plugin info."
+msgstr "要從外掛程式資訊比對的外部資料數值。"
+
+#: ../libide/ide-file.c:471
+msgid "The path to the underlying file."
+msgstr "底層檔案的路徑。"
+
+#: ../libide/ide-file.c:479
+msgid "Is Temporary"
+msgstr "暫時"
+
+#: ../libide/ide-file.c:480
+msgid "If the file represents a temporary file."
+msgstr "檔案是否為暫存檔案。"
+
+#: ../libide/ide-file.c:487
+msgid "The file language."
+msgstr "檔案語言。"
+
+#: ../libide/ide-file.c:493 ../libide/ide-project-file.c:276
+msgid "Path"
+msgstr "路徑"
+
+#: ../libide/ide-file.c:494
+msgid "The path within the project."
+msgstr "此專案中的路徑。"
+
+#: ../libide/ide-file.c:500
+msgid "Temporary ID"
+msgstr "暫時 ID"
+
+#: ../libide/ide-file.c:501
+msgid "A unique identifier for temporary files."
+msgstr "暫存檔案的獨特識別符。"
+
+#: ../libide/ide-file-settings.c:291
+msgid "The IdeFile the settings represent."
+msgstr "設定值代表的 IdeFile。"
+
+#: ../libide/ide-file-settings.c:298
+msgid "If the file settings implementations have settled."
+msgstr "檔案設定值實作是否已解決。"
+
+#: ../libide/ide-highlight-engine.c:852
+msgid "The buffer to highlight."
+msgstr "要標明的緩衝區。"
+
+#: ../libide/ide-highlight-engine.c:858
+msgid "Highlighter"
+msgstr "標記器"
+
+#: ../libide/ide-highlight-engine.c:859
+msgid "The highlighter to use for type information."
+msgstr "用於類型資訊的標記器。"
+
+#: ../libide/ide-object.c:204
+msgid "The context that owns the object."
+msgstr "擁有此物件的脈絡。"
+
+#: ../libide/ide-object.c:274 ../libide/ide-object.c:323
+msgid "No implementations of extension point."
+msgstr "沒有延伸點的實作。"
+
+#: ../libide/ide-object.c:313
+msgid "No such extension point."
+msgstr "沒有這種延伸點。"
+
+#: ../libide/ide-progress.c:210
+msgid "Completed"
+msgstr "已完成"
+
+#: ../libide/ide-progress.c:211
+msgid "If the progress has completed."
+msgstr "進度是否已完成。"
+
+#: ../libide/ide-progress.c:218
+msgid "The fraction of the progress."
+msgstr "進度列片段"
+
+#: ../libide/ide-progress.c:226
+msgid "Message"
+msgstr "訊息"
+
+#: ../libide/ide-progress.c:227
+msgid "A short message for the progress."
+msgstr "進度的簡短訊息。"
+
+#: ../libide/ide-project.c:394
+msgid "The unique project identifier."
+msgstr "專案的唯一識別符。"
+
+#: ../libide/ide-project.c:401
+msgid "The name of the project."
+msgstr "專案的名稱。"
+
+#: ../libide/ide-project.c:407 ../src/tree/gb-tree.c:960
+msgid "Root"
+msgstr "根"
+
+#: ../libide/ide-project.c:408
+msgid "The root object for the project."
+msgstr "專案的根物件。"
+
+#: ../libide/ide-project.c:463
+msgid "Destination file must be within the project tree."
+msgstr "目的端檔案必須在專案樹中。"
+
+#: ../libide/ide-project.c:593
+msgid "File must be within the project tree."
+msgstr "檔案必須在專案樹中。"
+
+#: ../libide/ide-project-file.c:249
+msgid "A GFile to the underlying file."
+msgstr "底層檔案的 GFile。"
+
+#: ../libide/ide-project-file.c:255 ../src/project-tree/gb-project-file.c:180
+#: ../src/project-tree/gb-project-file.c:181
+msgid "File Info"
+msgstr "檔案資訊"
+
+#: ../libide/ide-project-file.c:256
+msgid "The file information for the project file."
+msgstr "專案檔案的檔案資訊。"
+
+#: ../libide/ide-project-file.c:262 ../libide/ide-project-file.c:263
+#: ../src/project-tree/gb-rename-file-popover.c:315
+#: ../src/project-tree/gb-rename-file-popover.c:316
+msgid "Is Directory"
+msgstr "是目錄"
+
+#: ../libide/ide-project-file.c:270
+msgid "The short name of the file."
+msgstr "該檔案的簡短名稱。"
+
+#: ../libide/ide-project-file.c:277
+msgid "The path for the file within the project tree."
+msgstr "專案樹中的檔案路徑。"
+
+#: ../libide/ide-project-info.c:424
+msgid "The project description."
+msgstr "專案的描述。"
+
+#: ../libide/ide-project-info.c:431
+msgid "The project name."
+msgstr "專案的名稱。"
+
+#: ../libide/ide-project-info.c:438
+msgid "The project directory."
+msgstr "專案的目錄。"
+
+#: ../libide/ide-project-info.c:444
+msgid "DOAP"
+msgstr "DOAP"
+
+#: ../libide/ide-project-info.c:445
+msgid "A DOAP describing the project."
+msgstr "用來描述專案的 DOAP。"
+
+#: ../libide/ide-project-info.c:452
+msgid "The toplevel project file."
+msgstr "頂端層級的專案檔案。"
+
+#: ../libide/ide-project-info.c:458 ../libide/ide-project-info.c:459
+msgid "Is Recent"
+msgstr "是最近使用的"
+
+#: ../libide/ide-project-info.c:472 ../libide/ide-project-info.c:473
+msgid "Last Modified At"
+msgstr "最後修改於"
+
+#: ../libide/ide-project-info.c:479
+#: ../plugins/command-bar/gb-command-provider.c:338
+msgid "Priority"
+msgstr "優先序"
+
+#: ../libide/ide-project-info.c:480
+msgid "The priority of the project information type."
+msgstr "專案資訊型態的優先等級。"
+
+#: ../libide/ide-project-item.c:201 ../src/tree/gb-tree-node.c:630
+msgid "Parent"
+msgstr "親代"
+
+#: ../libide/ide-project-item.c:202
+msgid "The parent project item, if not the root."
+msgstr "母專案項目，如果不是根項目。"
+
+#: ../libide/ide-recent-projects.c:378
+#, c-format
+msgid "%s() may only be executed once"
+msgstr "%s() 只能執行一次"
+
+#: ../libide/ide-script.c:157
+msgid "The file containing the script."
+msgstr "檔案包含命令稿。"
+
+#: ../libide/ide-script.c:205
+#, c-format
+msgid "%s has not implemented GAsyncInitable."
+msgstr "%s 沒有實作 GAsyncInitable。"
+
+#: ../libide/ide-script-manager.c:128
+msgid "Scripts Directory"
+msgstr "命令稿目錄"
+
+#: ../libide/ide-script-manager.c:129
+msgid "The local path to the directory containing scripts."
+msgstr "包含命令稿的目錄的本地端路徑。"
+
+#: ../libide/ide-search-result.c:279
+#: ../src/search/gb-search-display-group.c:422
+msgid "Provider"
+msgstr "提供者"
+
+#: ../libide/ide-search-result.c:280
+msgid "The Search Provider"
+msgstr "搜尋提供者"
+
+#: ../libide/ide-search-result.c:287
+msgid "The title of the search result."
+msgstr "搜尋結果的標題。"
+
+#: ../libide/ide-search-result.c:295
+msgid "Subtitle"
+msgstr "副題"
+
+#: ../libide/ide-search-result.c:296
+msgid "The subtitle of the search result."
+msgstr "搜尋結果的副標題。"
+
+#: ../libide/ide-search-result.c:304
+msgid "Score"
+msgstr "分數"
+
+#: ../libide/ide-search-result.c:305
+msgid "The score of the search result."
+msgstr "搜尋結果的分數。"
+
+#: ../libide/ide-settings.c:283
+msgid "Ignore Project Settings"
+msgstr "忽略專案設定值"
+
+#: ../libide/ide-settings.c:284
+msgid "If project settings should be ignored."
+msgstr "是否應忽略專案設定值。"
+
+#: ../libide/ide-settings.c:290 ../libide/ide-settings.c:291
+msgid "Relative Path"
+msgstr "相對路徑"
+
+#: ../libide/ide-settings.c:297 ../libide/ide-settings.c:298
+msgid "Schema ID"
+msgstr "基模 ID"
+
+#: ../libide/ide-source-snippet.c:345
+#, fuzzy
+msgid "Chunk does not belong to snippet."
+msgstr "%s 不屬於一個群組"
+
+#: ../libide/ide-source-snippet.c:947
+msgid "The GtkTextBuffer for the snippet."
+msgstr "文字片段的 GtkTextBuffer。"
+
+#: ../libide/ide-source-snippet.c:953
+msgid "Mark Begin"
+msgstr "標記開始"
+
+#: ../libide/ide-source-snippet.c:954
+msgid "The beginning text mark."
+msgstr "文字標記開頭。"
+
+#: ../libide/ide-source-snippet.c:960
+msgid "Mark End"
+msgstr "標記結束"
+
+#: ../libide/ide-source-snippet.c:961
+msgid "The ending text mark."
+msgstr "文字標記結尾。"
+
+#: ../libide/ide-source-snippet.c:967
+msgid "Trigger"
+msgstr "觸發"
+
+#: ../libide/ide-source-snippet.c:968
+msgid "The trigger for the snippet."
+msgstr "文字片段觸發器。"
+
+#: ../libide/ide-source-snippet.c:975
+msgid "The language for the snippet."
+msgstr "文字片段的語言。"
+
+#: ../libide/ide-source-snippet.c:982
+msgid "The description for the snippet."
+msgstr "文字片段的描述。"
+
+#: ../libide/ide-source-snippet.c:988 ../libide/ide-source-snippet-chunk.c:328
+msgid "Tab Stop"
+msgstr "Tab 落點"
+
+#: ../libide/ide-source-snippet.c:989
+msgid "The current tab stop."
+msgstr "目前的定位點停止處。"
+
+#: ../libide/ide-source-snippet-chunk.c:315
+msgid "The snippet context."
+msgstr "文字片段脈絡。"
+
+#: ../libide/ide-source-snippet-chunk.c:321
+msgid "Spec"
+msgstr "規格"
+
+#: ../libide/ide-source-snippet-chunk.c:322
+msgid "The specification to expand using the context."
+msgstr "使用脈絡要擴展的規格。"
+
+#: ../libide/ide-source-snippet-chunk.c:329
+#, fuzzy
+msgid "The tab stop for the chunk."
+msgstr "Tab 落點"
+
+#: ../libide/ide-source-snippet-chunk.c:337 ../src/tree/gb-tree-node.c:654
+msgid "Text"
+msgstr "文字"
+
+#: ../libide/ide-source-snippet-chunk.c:338
+#, fuzzy
+msgid "The text for the chunk."
+msgstr "PNG text 區段的內容 %s 無法轉換為 ISO-8859-1 編碼。"
+
+#: ../libide/ide-source-snippet-chunk.c:344
+msgid "Text Set"
+msgstr "文字設定"
+
+#: ../libide/ide-source-snippet-chunk.c:345
+msgid "If the text property has been manually set."
+msgstr "文字屬性是否已手動設定。"
+
+#: ../libide/ide-source-snippet-completion-item.c:132
+msgid "Snippet"
+msgstr "文字片段"
+
+#: ../libide/ide-source-snippet-completion-item.c:133
+msgid "The snippet to insert."
+msgstr "要插入的文字片段。"
+
+#: ../libide/ide-source-snippet-completion-provider.c:167
+#: ../plugins/command-bar/gb-command-vim.c:191
+msgid "Source View"
+msgstr "源碼檢視"
+
+#: ../libide/ide-source-snippet-completion-provider.c:168
+msgid "The source view to insert snippet into."
+msgstr "要插入文字片段的源碼檢視。"
+
+#: ../libide/ide-source-snippet-completion-provider.c:174
+#: ../libide/ide-source-snippet-completion-provider.c:255
+msgid "Snippets"
+msgstr "文字片段"
+
+#: ../libide/ide-source-snippet-completion-provider.c:175
+msgid "The snippets to complete with this provider."
+msgstr "以這個提供者完成的文字片段。"
+
+#: ../libide/ide-source-snippet-parser.c:493
+#, c-format
+msgid "Invalid snippet at line %d: %s"
+msgstr "第 %d 列有無效的文字片段： %s"
+
+#: ../libide/ide-source-snippets-manager.c:97
+#, c-format
+msgid "Failed to open directory: %s"
+msgstr "無法開啟目錄：%s"
+
+#: ../libide/ide-source-snippets-manager.c:110
+#, c-format
+msgid "Failed to load file: %s: %s"
+msgstr "無法載入檔案：%s：%s"
+
+#: ../libide/ide-source-view.c:4530
+#, c-format
+msgid "Insert \"%s\""
+msgstr "插入「%s」"
+
+#: ../libide/ide-source-view.c:4532
+#, c-format
+msgid "Replace \"%s\" with \"%s\""
+msgstr "將「%s」取代為「%s」"
+
+#: ../libide/ide-source-view.c:4637
+msgid "Apply Fix-It"
+msgstr "套用 Fix-It"
+
+#: ../libide/ide-source-view.c:4677
+msgid "Goto Definition"
+msgstr "移至定義"
+
+#: ../libide/ide-source-view.c:5173
+msgid "The back-forward list to track jumps."
+msgstr ""
+
+#: ../libide/ide-source-view.c:5179
+msgid "Count"
+msgstr "數目"
+
+#: ../libide/ide-source-view.c:5180
+msgid "The count for movements."
+msgstr "移動的數目。"
+
+#: ../libide/ide-source-view.c:5188
+msgid "File Settings"
+msgstr "檔案設定值"
+
+#: ../libide/ide-source-view.c:5189
+msgid "The file settings that have been loaded for the file."
+msgstr "已為檔案載入的檔案設定值。"
+
+#: ../libide/ide-source-view.c:5195
+msgid "Font Description"
+msgstr "字型描述"
+
+#: ../libide/ide-source-view.c:5196
+msgid "The Pango font description to use for rendering source."
+msgstr "描繪來源的 Pango 字型描述。"
+
+#: ../libide/ide-source-view.c:5202
+msgid "Enable Word Completion"
+msgstr "啟用字詞補完"
+
+#: ../libide/ide-source-view.c:5203
+msgid "If words from all buffers can be used to autocomplete."
+msgstr "所有緩衝區中的文字是否能用於自動補完。"
+
+#: ../libide/ide-source-view.c:5209 ../plugins/terminal/gb-terminal-view.c:620
+#: ../plugins/terminal/gb-terminal-view.c:621
+msgid "Font Name"
+msgstr "字型名稱"
+
+#: ../libide/ide-source-view.c:5210
+msgid "The Pango font name to use for rendering source."
+msgstr "用來描繪來源的 Pango 字型描述。"
+
+#: ../libide/ide-source-view.c:5220 ../libide/ide-source-view.c:5221
+msgid "Indenter"
+msgstr "縮排器"
+
+#: ../libide/ide-source-view.c:5227 ../libide/ide-source-view.c:5228
+msgid "Indent Style"
+msgstr "縮排樣式"
+
+#: ../libide/ide-source-view.c:5235
+msgid "Insert Matching Brace"
+msgstr "插入對應括號"
+
+#: ../libide/ide-source-view.c:5236
+msgid "Insert a matching brace/bracket/quotation/parenthesis."
+msgstr ""
+
+#: ../libide/ide-source-view.c:5244
+msgid "Mode Display Name"
+msgstr "模式顯示名稱"
+
+#: ../libide/ide-source-view.c:5245
+msgid "The display name of the keybinding mode."
+msgstr "組合鍵模式的顯示名稱。"
+
+#: ../libide/ide-source-view.c:5251
+msgid "Overwrite Braces"
+msgstr "覆寫括號"
+
+#: ../libide/ide-source-view.c:5252
+msgid "Overwrite a matching brace/bracket/quotation/parenthesis."
+msgstr ""
+
+#: ../libide/ide-source-view.c:5258
+#, fuzzy
+msgid "Rubberband Search"
+msgstr "搜尋(_S):"
+
+#: ../libide/ide-source-view.c:5259
+msgid "Auto scroll to next search result without moving insertion caret."
+msgstr ""
+
+#: ../libide/ide-source-view.c:5266
+msgid "The number of lines between the insertion cursor and screen boundary."
+msgstr "插入游標與螢幕邊界之間的行數。"
+
+#: ../libide/ide-source-view.c:5274
+msgid "Search Context"
+msgstr "搜尋情境"
+
+#: ../libide/ide-source-view.c:5275
+msgid "The search context for the view."
+msgstr "該檢視的搜尋情境。"
+
+#: ../libide/ide-source-view.c:5281
+msgid "Show Grid Lines"
+msgstr "顯示格線"
+
+#: ../libide/ide-source-view.c:5282
+msgid "If the background grid should be shown."
+msgstr "是否顯示背景格線。"
+
+#: ../libide/ide-source-view.c:5288
+msgid "Show Line Changes"
+msgstr "顯示列變更"
+
+#: ../libide/ide-source-view.c:5289
+#, fuzzy
+#| msgid "If the line numbers should be shown."
+msgid "If line changes should be shown in the left gutter."
+msgstr "是否應顯示列號。"
+
+#: ../libide/ide-source-view.c:5303
+msgid "Show Line Diagnostics"
+msgstr "顯示列診斷"
+
+#: ../libide/ide-source-view.c:5304
+msgid "If line changes diagnostics should be shown in the left gutter."
+msgstr ""
+
+#: ../libide/ide-source-view.c:5310
+msgid "Show Search Bubbles"
+msgstr "顯示搜尋氣泡"
+
+#: ../libide/ide-source-view.c:5311
+msgid "If search bubbles should be rendered."
+msgstr "是否顯示搜尋氣泡。"
+
+#: ../libide/ide-source-view.c:5317
+msgid "Show Search Shadow"
+msgstr "顯示搜尋陰影"
+
+#: ../libide/ide-source-view.c:5318
+msgid "If the shadow should be drawn when performing searches."
+msgstr "進行搜尋時是否應繪製陰影。"
+
+#: ../libide/ide-source-view.c:5324
+msgid "Snippet Completion"
+msgstr "文字片段補完"
+
+#: ../libide/ide-source-view.c:5325
+msgid "If snippet expansion should be enabled via the completion window."
+msgstr "文字片段擴充功能是否應透過補完視窗啟用。"
+
+#: ../libide/ide-source-view-capture.c:241
+msgid "View"
+msgstr "檢視"
+
+#: ../libide/ide-source-view-capture.c:242
+msgid "The source view."
+msgstr "源碼檢視。"
+
+#: ../libide/ide-source-view-mode.c:251
+msgid "The name of the mode."
+msgstr "模式的名稱。"
+
+#: ../libide/ide-symbol-node.c:128 ../libide/ide-symbol-node.c:129
+msgid "Kind"
+msgstr "類型"
+
+#: ../libide/ide-symbol-node.c:136 ../libide/ide-symbol-node.c:137
+msgid "Flags"
+msgstr "旗標"
+
+#: ../libide/pygobject/ide-pygobject-script.c:135
+msgid "Attempt to load a PyGObject script with no filename."
+msgstr "嘗試載入沒有檔案名稱的 PyGObject 命令稿。"
+
+#: ../libide/pygobject/ide-pygobject-script.c:274
+#, c-format
+msgid "The script \"%s\" is not a PyGObject file."
+msgstr "命令稿「%s」不是 PyGObject 檔案。"
+
+#: ../libide/theatrics/ide-animation.c:702
 #, c-format
 msgid "Cannot locate property %s in class %s"
 msgstr "無法定位 %2$s 類別中的 %1$s 屬性"
 
-#: ../src/animation/gb-animation.c:817 ../src/credits/gb-credits-widget.c:275
+#: ../libide/theatrics/ide-animation.c:837
 msgid "Duration"
 msgstr "時間"
 
-#: ../src/animation/gb-animation.c:818
+#: ../libide/theatrics/ide-animation.c:838
 msgid "The duration of the animation"
 msgstr "動畫的時間"
 
-#: ../src/animation/gb-animation.c:830
+#: ../libide/theatrics/ide-animation.c:848
 msgid "Frame Clock"
 msgstr "框幀時鐘"
 
-#: ../src/animation/gb-animation.c:831
+#: ../libide/theatrics/ide-animation.c:849
 msgid "An optional frame-clock to synchronize with."
 msgstr "選用性的同步用框幀時鐘。"
 
-#: ../src/animation/gb-animation.c:848
+#: ../libide/theatrics/ide-animation.c:864
+#: ../src/keybindings/gb-keybindings.c:265
 msgid "Mode"
 msgstr "模式"
 
-#: ../src/animation/gb-animation.c:849
+#: ../libide/theatrics/ide-animation.c:865
 msgid "The animation mode"
 msgstr "動畫模式"
 
-#: ../src/animation/gb-animation.c:866 ../src/theatrics/gb-box-theatric.c:289
-#: ../src/theatrics/gb-box-theatric.c:290
+#: ../libide/theatrics/ide-animation.c:880
+#: ../libide/theatrics/ide-box-theatric.c:284
+#: ../libide/theatrics/ide-box-theatric.c:285
 msgid "Target"
 msgstr "目標"
 
-#: ../src/animation/gb-animation.c:867
+#: ../libide/theatrics/ide-animation.c:881
 msgid "The target of the animation"
 msgstr "動畫的目標"
 
-#: ../src/animation/gb-animation.c:1027 ../src/animation/gb-animation.c:1033
+#: ../libide/theatrics/ide-animation.c:1046
+#: ../libide/theatrics/ide-animation.c:1052
 #, c-format
 msgid "Failed to find property %s in %s"
 msgstr "%2$s 中找不到 %1$s 屬性"
 
-#: ../src/animation/gb-animation.c:1041
+#: ../libide/theatrics/ide-animation.c:1060
 #, c-format
 msgid "Failed to find property %s in %s or parent %s"
 msgstr "在 %2$s 中或 %3$s 親代中找不到 %1$s 屬性"
 
-#: ../src/animation/gb-animation.c:1051
+#: ../libide/theatrics/ide-animation.c:1070
 #, c-format
 msgid "Failed to retrieve va_list value: %s"
 msgstr "無法擷取 va_list 數值：%s"
 
-#: ../src/app/gb-application.c:296
-msgid "Failed to load keybindings."
-msgstr "無法載入按鍵綁定。"
+#: ../libide/theatrics/ide-box-theatric.c:259
+#: ../libide/theatrics/ide-box-theatric.c:260
+msgid "Alpha"
+msgstr "Alpha"
 
-#: ../src/app/gb-application.c:304
+#: ../libide/theatrics/ide-box-theatric.c:268
+#: ../libide/theatrics/ide-box-theatric.c:269
+msgid "background"
+msgstr "背景"
+
+#: ../libide/theatrics/ide-box-theatric.c:275
+#: ../libide/theatrics/ide-box-theatric.c:276
+msgid "height"
+msgstr "高"
+
+#: ../libide/theatrics/ide-box-theatric.c:293
+#: ../libide/theatrics/ide-box-theatric.c:294
+msgid "width"
+msgstr "寬"
+
+#: ../libide/theatrics/ide-box-theatric.c:302
+#: ../libide/theatrics/ide-box-theatric.c:303
+msgid "x"
+msgstr "x"
+
+#: ../libide/theatrics/ide-box-theatric.c:311
+#: ../libide/theatrics/ide-box-theatric.c:312
+msgid "y"
+msgstr "y"
+
+#: ../plugins/clang/ide-clang-completion-item.c:413
+#: ../plugins/clang/ide-clang-translation-unit.c:587
+msgid "Index"
+msgstr "索引"
+
+#: ../plugins/clang/ide-clang-completion-item.c:414
+msgid "The index in the result set."
+msgstr "結果集中的索引。"
+
+#: ../plugins/clang/ide-clang-completion-item.c:422
+msgid "Results"
+msgstr "結果"
+
+#: ../plugins/clang/ide-clang-completion-item.c:423
+msgid "The Clang result set."
+msgstr "Clang 結果集。"
+
+#: ../plugins/clang/ide-clang-completion-provider.c:215
+msgid "Clang"
+msgstr "Clang"
+
+#: ../plugins/clang/ide-clang-service.c:266
+msgid "Unknown failure"
+msgstr "不明的失敗"
+
+#: ../plugins/clang/ide-clang-service.c:270
+msgid "Clang crashed"
+msgstr "Clang 已當掉"
+
+#: ../plugins/clang/ide-clang-service.c:274
+msgid "Invalid arguments"
+msgstr "無效的引數"
+
+#: ../plugins/clang/ide-clang-service.c:278
+msgid "AST read error"
+msgstr "AST 讀取錯誤"
+
+#: ../plugins/clang/ide-clang-service.c:290
 #, c-format
-msgid "Failed to load keybindings: %s"
-msgstr "無法載入按鍵綁定：%s"
+msgid "Failed to create translation unit: %s"
+msgstr "無法建立轉譯單元：%s"
 
-#: ../src/app/gb-application.c:316
+#: ../plugins/clang/ide-clang-service.c:399
+msgid "File must be saved locally to parse."
+msgstr "檔案必須儲存在本地端才能解析。"
+
+#: ../plugins/clang/ide-clang-symbol-node.c:149
+msgid "anonymous"
+msgstr "匿名"
+
+#: ../plugins/clang/ide-clang-symbol-tree.c:301
+#: ../plugins/clang/ide-clang-symbol-tree.c:302
+#: ../plugins/clang/ide-clang-translation-unit.c:594
+msgid "Native"
+msgstr "原生"
+
+#: ../plugins/clang/ide-clang-translation-unit.c:581
+msgid "The file used to build the translation unit."
+msgstr "用來組建轉譯單元的檔案。"
+
+#: ../plugins/clang/ide-clang-translation-unit.c:588
+msgid "The highlight index for the translation unit."
+msgstr "轉譯單元的標明索引。"
+
+#: ../plugins/clang/ide-clang-translation-unit.c:595
+msgid "The native translation unit pointer."
+msgstr "原生轉譯單元的指標。"
+
+#: ../plugins/clang/ide-clang-translation-unit.c:600
+msgid "Serial"
+msgstr "序號"
+
+#: ../plugins/clang/ide-clang-translation-unit.c:601
+msgid "A sequence number for the translation unit."
+msgstr "轉譯單元的序列號碼。"
+
+#: ../plugins/clang/ide-clang-translation-unit.c:654
+msgid "clang_codeCompleteAt() only works on local files"
+msgstr "clang_codeCompleteAt() 只能用於本地端檔案"
+
+#: ../plugins/command-bar/gb-command-bar.c:290
 #, c-format
-msgid "Failed to load local keybindings: %s"
-msgstr "無法載入本地端按鍵綁定：%s"
+msgid "Command not found: %s"
+msgstr "找不到指令：%s"
 
-#: ../src/app/gb-application.c:415 ../src/main.c:48
-msgid "Builder"
-msgstr "Builder"
+#: ../plugins/command-bar/gb-command-bar.c:594
+msgid "Use the entry below to execute a command"
+msgstr "使用下方的條目以執行指令"
 
-#: ../src/app/gb-application.c:570
+#: ../plugins/command-bar/gb-command-bar.c:677
+#: ../plugins/command-bar/gb-command-bar.c:678
+#: ../plugins/command-bar/gb-command-provider.c:354
+#: ../plugins/devhelp/gb-devhelp-panel.c:243
+#: ../plugins/devhelp/gb-devhelp-panel.c:244
+#: ../plugins/symbol-tree/symbol-tree.c:330
+#: ../plugins/symbol-tree/symbol-tree.c:331
+#: ../plugins/sysmon/gb-sysmon-addin.c:125
+#: ../plugins/sysmon/gb-sysmon-addin.c:126
+#: ../plugins/terminal/gb-terminal-workbench-addin.c:162
+#: ../src/workbench/gb-workbench-addin.c:46
+msgid "Workbench"
+msgstr ""
+
+#: ../plugins/command-bar/gb-command-gaction.c:187
+msgid "Action Group"
+msgstr "動作群組"
+
+#: ../plugins/command-bar/gb-command-gaction.c:188
+msgid "The GActionGroup containing the action."
+msgstr "包含該動作的 GActionGroup。"
+
+#: ../plugins/command-bar/gb-command-gaction.c:194
+msgid "Action Name"
+msgstr "動作名稱"
+
+#: ../plugins/command-bar/gb-command-gaction.c:195
+msgid "The name of the action to execute."
+msgstr "要執行的動作名稱。"
+
+#: ../plugins/command-bar/gb-command-gaction.c:201
+msgid "Parameters"
+msgstr "參數"
+
+#: ../plugins/command-bar/gb-command-gaction.c:202
+msgid "The parameters for the action."
+msgstr "動作的參數。"
+
+#: ../plugins/command-bar/gb-command-provider.c:319
+#: ../src/views/gb-view-stack.c:500 ../src/workbench/gb-workbench.c:686
+#: ../src/workbench/gb-workbench.c:687
+msgid "Active View"
+msgstr "使用中檢視"
+
+#: ../plugins/command-bar/gb-command-provider.c:320
+msgid "The last focused GbView widget."
+msgstr "最近聚焦的 GbView 元件。"
+
+#: ../plugins/command-bar/gb-command-provider.c:339
+msgid "The priority of the command provider."
+msgstr "指令提供者的優先序。"
+
+#: ../plugins/command-bar/gb-command-provider.c:355
+#, fuzzy
+msgid "The target workbench."
+msgstr "目標："
+
+#: ../plugins/command-bar/gb-command-result.c:226
+#: ../plugins/command-bar/gb-command-vim.c:183
+msgid "Command Text"
+msgstr "指令文字"
+
+#: ../plugins/command-bar/gb-command-result.c:227
+msgid "The command text if any."
+msgstr "如果有指令文字。"
+
+#: ../plugins/command-bar/gb-command-result.c:234
+msgid "Is Error"
+msgstr "有錯誤"
+
+#: ../plugins/command-bar/gb-command-result.c:235
+msgid "If the result is an error."
+msgstr "是否結果有錯誤。"
+
+#: ../plugins/command-bar/gb-command-result.c:242
+msgid "Is Running"
+msgstr "正執行中"
+
+#: ../plugins/command-bar/gb-command-result.c:243
+msgid "If the command is still running."
+msgstr "是否指令仍在執行中。"
+
+#: ../plugins/command-bar/gb-command-result.c:250
+msgid "Result Text"
+msgstr "結果文字"
+
+#: ../plugins/command-bar/gb-command-result.c:251
+msgid "The result text if any."
+msgstr "如果有任何的結果文字則顯示。"
+
+#: ../plugins/command-bar/gb-command-vim.c:184
+msgid "The command text to execute"
+msgstr "要執行的指令文字"
+
+#: ../plugins/command-bar/gb-command-vim.c:192
+msgid "The source view to modify."
+msgstr "要修改的源碼檢視。"
+
+#: ../plugins/command-bar/gb-vim.c:83
+#, c-format
+msgid "Number required"
+msgstr "需要數量"
+
+#: ../plugins/command-bar/gb-vim.c:93
+#, c-format
+msgid "%s is invalid for %s"
+msgstr "%s 對 %s 是無效的"
+
+#: ../plugins/command-bar/gb-vim.c:151
+#, c-format
+msgid "Cannot find language '%s'"
+msgstr "找不到語言「%s」"
+
+#: ../plugins/command-bar/gb-vim.c:348
+#, c-format
+msgid "Unknown option: %s"
+msgstr "不明的選項：%s"
+
+#: ../plugins/command-bar/gb-vim.c:387
+#, c-format
+msgid "Cannot find colorscheme '%s'"
+msgstr "找不到色彩方案「%s」"
+
+#: ../plugins/command-bar/gb-vim.c:423
+#, c-format
+msgid "Failed to locate working directory"
+msgstr "無法定位工作目錄"
+
+#: ../plugins/command-bar/gb-vim.c:547
+#, c-format
+msgid "Invalid :syntax subcommand: %s"
+msgstr "無效：語法子命令：%s"
+
+#: ../plugins/command-bar/gb-vim.c:874
+#, c-format
+msgid "Invalid search and replace request"
+msgstr "無效的搜尋及取代要求"
+
+#: ../plugins/command-bar/gb-vim.c:960
+#, c-format
+msgid "vim mode requires GtkSourceView"
+msgstr "vim 模式需要 GtkSourceView"
+
+#: ../plugins/command-bar/gb-vim.c:990
+#, c-format
+msgid "Not an editor command: %s"
+msgstr "並非編輯器指令：%s"
+
+#: ../plugins/c-pack/ide-c-format-provider.c:281
+#: ../plugins/python-pack/ide-python-format-provider.c:238
+msgid "Format Strings"
+msgstr "格式字串"
+
+#: ../plugins/ctags/ide-ctags-completion-provider.c:278
+msgid "CTags"
+msgstr "CTags"
+
+#: ../plugins/ctags/ide-ctags-index.c:381
+msgid "The file containing the ctags data."
+msgstr "包含 ctags 資料的檔案。"
+
+#: ../plugins/devhelp/gb-devhelp-document.c:71
+#, c-format
+msgid "Documentation (%s)"
+msgstr "文件 (%s)"
+
+#: ../plugins/devhelp/gb-devhelp-document.c:148
+#: ../plugins/devhelp/gb-devhelp-panel.c:96
+#: ../plugins/devhelp/gb-devhelp-search-provider.c:134
+msgid "Documentation"
+msgstr "文件"
+
+#: ../plugins/devhelp/gb-devhelp-document.c:257
+msgid "The uri to load."
+msgstr "要載入的 URI。"
+
+#: ../plugins/devhelp/gb-devhelp-search-result.c:100
+msgid "The URI to the Devhelp document."
+msgstr "Devhelp 文件的 URI。"
+
+#: ../plugins/devhelp/gb-devhelp-view.c:251
+#: ../plugins/terminal/gb-terminal-view.c:613
+#: ../src/editor/gb-editor-frame.c:754 ../src/editor/gb-editor-view.c:504
+#: ../src/html/gb-html-view.c:321 ../src/views/gb-view.c:265
+msgid "Document"
+msgstr "文件"
+
+#: ../plugins/devhelp/gb-devhelp-view.c:252
+msgid "The document for the devhelp view."
+msgstr "devhelp 檢視的文件。"
+
+#: ../plugins/file-search/gb-file-search-provider.c:45
+msgid "Switch To"
+msgstr "切換為"
+
+#: ../plugins/gnome-code-assistance/ide-gca-diagnostic-provider.c:336
+msgid "Code assistance requires a local file."
+msgstr "代碼助理需要本地端檔案。"
+
+#: ../plugins/gnome-code-assistance/ide-gca-service.c:168
+msgid "No language specified"
+msgstr "尚未指定語言"
+
+#: ../plugins/mingw/ide-mingw-device-provider.c:95
+msgid "MinGW (64-bit)"
+msgstr "MinGW (64 位元)"
+
+#: ../plugins/mingw/ide-mingw-device-provider.c:107
+msgid "MinGW (32-bit)"
+msgstr "MinGW (32 位元)"
+
+#: ../plugins/symbol-tree/symbol-tree.c:187
+msgid "Current language does not support symbol resolvers"
+msgstr "目前的語言不支援符號解譯器"
+
+#: ../plugins/symbol-tree/symbol-tree.c:211
+msgid "Symbol Tree"
+msgstr "符號樹"
+
+#: ../plugins/sysmon/gb-sysmon-addin.c:64
+msgid "System Monitor"
+msgstr "系統監控"
+
+#: ../plugins/terminal/gb-terminal-document.c:64
+#, c-format
+msgid "Terminal (%s)"
+msgstr "終端機 (%s)"
+
+#: ../plugins/terminal/gb-terminal-document.c:87
+#: ../plugins/terminal/gb-terminal-workbench-addin.c:101
+msgid "Terminal"
+msgstr "終端機"
+
+#: ../plugins/terminal/gb-terminal-view-actions.c:300
+msgid "Save Terminal Content As"
+msgstr "儲存終端機內容為"
+
+#: ../plugins/terminal/gb-terminal-view-actions.c:308
+#: ../src/editor/gb-editor-view-actions.c:310
+#: ../src/editor/gb-editor-view-actions.c:441
+#: ../src/workbench/gb-workbench-actions.c:169
+msgid "Cancel"
+msgstr "取消"
+
+#: ../plugins/terminal/gb-terminal-view.c:614
+msgid "The document for the VTE terminal view."
+msgstr "VTE 終端機檢視的文件。"
+
+#: ../plugins/terminal/gb-terminal-workbench-addin.c:163
+#: ../src/workbench/gb-workbench-addin.c:47
+#, fuzzy
+msgid "The workbench window."
+msgstr "視窗的視窗定位"
+
+#: ../src/app/gb-application-actions.c:90
 #, c-format
 msgid ""
 "The support log file has been written to '%s'. Please provide this file as "
 "an attachment on your bug report or support request."
 msgstr ""
+"支援紀錄檔已寫入「%s」。請在您的程式錯誤回報或支援要求中提供這個檔案做為附"
+"件。"
 
-#: ../src/auto-indent/gb-source-auto-indenter-c.c:1467
-#: ../src/auto-indent/gb-source-auto-indenter-c.c:1468
-msgid "Name"
-msgstr "名稱"
+#: ../src/app/gb-application-actions.c:156
+msgid "An IDE for GNOME"
+msgstr "GNOME 的 IDE"
 
-#: ../src/code-assistant/gb-source-code-assistant.c:764
-msgid "Active"
-msgstr "使用中"
+#: ../src/app/gb-application-actions.c:161
+msgid "GNOME Builder"
+msgstr "GNOME Builder"
 
-#: ../src/code-assistant/gb-source-code-assistant.c:765
-msgid "If code assistance is currently processing."
-msgstr "是否代碼助理正在處理中。"
+#: ../src/app/gb-application-actions.c:163
+msgid "translator-credits"
+msgstr "Cheng-Chia Tseng <pswo10680@gmail.com>, 2015"
 
-#: ../src/code-assistant/gb-source-code-assistant.c:773
-#: ../src/editor/gb-source-change-monitor.c:867
-#: ../src/html/gb-html-document.c:310 ../src/snippets/gb-source-snippet.c:1023
-msgid "Buffer"
-msgstr "緩衝"
+#: ../src/app/gb-application-actions.c:166
+msgid "Learn more about GNOME Builder"
+msgstr "了解更多關於 GNOME Builder"
 
-#: ../src/code-assistant/gb-source-code-assistant.c:774
-msgid "The buffer "
-msgstr "緩衝"
+#: ../src/app/gb-application-actions.c:169
+msgid "Funded By"
+msgstr "資金者："
 
-#: ../src/code-assistant/gb-source-code-assistant.c:813
+#: ../src/app/gb-application.c:639
+msgid "Run Builder in standalone mode"
+msgstr "以單獨模式執行 Builder"
+
+#: ../src/app/gb-application.c:645
+msgid "Show the application's version"
+msgstr "顯示應用程式的版本"
+
+#: ../src/app/gb-application.c:651
+msgid "Increase verbosity. May be specified multiple times."
+msgstr ""
+
+#: ../src/dialogs/gb-new-project-dialog.c:346
+msgid "Select Project File"
+msgstr "選擇專案檔案"
+
+#: ../src/dialogs/gb-new-project-dialog.c:370
+msgid "Clone Repository"
+msgstr "重製倉儲"
+
+#: ../src/dialogs/gb-new-project-dialog.c:390
+msgid "Autotools Project (configure.ac)"
+msgstr "Autotools 專案 (configure.ac)"
+
+#: ../src/dialogs/gb-new-project-dialog.c:396
+msgid "Any Directory"
+msgstr "任何目錄"
+
+#: ../src/dialogs/gb-new-project-dialog.c:523
+msgid "A valid Git URL is required"
+msgstr "需要有效的 Git URL"
+
+#: ../src/dialogs/gb-new-project-dialog.c:662
+msgid "Directory|Projects"
+msgstr "目錄|專案"
+
+#: ../src/dialogs/gb-projects-dialog.c:246
+msgid "(Click on items to select them)"
+msgstr "(點擊項目來選取它們)"
+
+#: ../src/dialogs/gb-recent-project-row.c:207
+#: ../src/greeter/gb-greeter-project-row.c:324
+msgid "Project Information"
+msgstr "專案資訊"
+
+#: ../src/dialogs/gb-recent-project-row.c:208
+msgid "The project information for the row."
+msgstr "此列的專案資訊。"
+
+#: ../src/dialogs/gb-recent-project-row.c:214
+#: ../src/dialogs/gb-recent-project-row.c:215
+#: ../src/greeter/gb-greeter-project-row.c:310
+#: ../src/greeter/gb-greeter-project-row.c:311
+msgid "Selected"
+msgstr "已選取"
+
+#: ../src/dialogs/gb-recent-project-row.c:221
+#: ../src/dialogs/gb-recent-project-row.c:222
+#: ../src/greeter/gb-greeter-project-row.c:317
+#: ../src/greeter/gb-greeter-project-row.c:318
+msgid "Selection Mode"
+msgstr "選擇模式"
+
+#: ../src/documents/gb-document.c:188 ../src/views/gb-view.c:272
+msgid "Modified"
+msgstr "已修改"
+
+#: ../src/documents/gb-document.c:189
+msgid "If the document has been modified from disk."
+msgstr "文件是否在磁碟上已修改。"
+
+#: ../src/documents/gb-document.c:197
+msgid "The title of the document."
+msgstr "該文件的標題。"
+
+#: ../src/documents/gb-document.c:205
+msgid "If the document is read only."
+msgstr "這份文件是否是唯讀。"
+
+#: ../src/editor/gb-editor-frame.c:150
 #, c-format
-msgid ""
-"Failed to load DBus connection. Code assistance will be disabled. \"%s\" (%s)"
-msgstr "無法載入 BBus 連線。代碼助理將停用。「%s」(%s)"
+msgid "%u of %u"
+msgstr "%u / %u"
 
-#: ../src/code-assistant/gb-source-code-assistant-renderer.c:319
-msgid "Code Assistant"
-msgstr "代碼助理"
-
-#: ../src/code-assistant/gb-source-code-assistant-renderer.c:320
-msgid "The code assistant to render."
-msgstr "要呈現的代碼助理。"
-
-#: ../src/commands/gb-command-bar.c:223
+#: ../src/editor/gb-editor-frame.c:180
 #, c-format
-msgid "Command not found: %s"
-msgstr "找不到指令：%s"
+msgid "Line %u, Column %u"
+msgstr "列 %u，行 %u"
 
-#: ../src/commands/gb-command-bar.c:524
-msgid "Use the entry below to execute a command"
-msgstr "使用下方的條目以執行指令"
+#: ../src/editor/gb-editor-frame.c:595
+msgid "Re_veal in Project Tree"
+msgstr "在專案樹中顯現(_V)"
 
-#: ../src/commands/gb-command-bar-item.c:175
+#: ../src/editor/gb-editor-frame.c:740 ../src/editor/gb-editor-frame.c:741
+msgid "Auto Hide Map"
+msgstr "自動隱藏地圖"
+
+#: ../src/editor/gb-editor-frame.c:748
+msgid "The back forward list."
+msgstr "向後向前列表"
+
+#: ../src/editor/gb-editor-frame.c:755 ../src/editor/gb-editor-view.c:505
+msgid "The editor document."
+msgstr "編輯器向文件。"
+
+#: ../src/editor/gb-editor-frame.c:761
+msgid "Show Map"
+msgstr "顯示地圖"
+
+#: ../src/editor/gb-editor-frame.c:762
+msgid "If the overview map should be shown."
+msgstr "是否顯示概覽地圖。"
+
+#: ../src/editor/gb-editor-settings-widget.c:180
+msgid "The language to change the settings for."
+msgstr "設定值要變更成的語言。"
+
+#: ../src/editor/gb-editor-view-actions.c:304
+msgid "Save Document"
+msgstr "儲存文件"
+
+#: ../src/editor/gb-editor-view-actions.c:430
+msgid "Save Document As"
+msgstr "儲存文件為"
+
+#: ../src/editor/gb-editor-view.c:110
+msgid "Plain Text"
+msgstr "純文字"
+
+#: ../src/greeter/gb-greeter-pill-box.c:117
+#, fuzzy
+msgid "The label for the pill box."
+msgstr "標籤(_L)"
+
+#: ../src/greeter/gb-greeter-project-row.c:325
+msgid "The project information to render."
+msgstr "要繪製的專案資訊。"
+
+#: ../src/greeter/gb-greeter-window.c:561
+#, fuzzy
+#| msgid "An error that may have been loaded."
+msgid "The recent projects that have been mined."
+msgstr "加入最近播放過的檔案"
+
+#: ../src/html/gb-html-document.c:109
+msgid "HTML Preview"
+msgstr "HTML 預覽"
+
+#: ../src/html/gb-html-document.c:131
+#, c-format
+msgid "%s (Preview)"
+msgstr "%s (預覽)"
+
+#: ../src/html/gb-html-document.c:315
+msgid "The buffer to monitor for changes."
+msgstr "用來監控變更的緩衝區。"
+
+#: ../src/html/gb-html-view.c:322
+msgid "The document to view as HTML."
+msgstr "以 HTML 檢視的文件。"
+
+#: ../src/keybindings/gb-keybindings.c:258
+msgid "Application"
+msgstr "應用程式"
+
+#: ../src/keybindings/gb-keybindings.c:259
+msgid "The application to register keybindings for."
+msgstr "註冊組合鍵的應用程式。"
+
+#: ../src/keybindings/gb-keybindings.c:266
+msgid "The name of the keybindings mode."
+msgstr "組合鍵模式的名稱。"
+
+#: ../src/preferences/gb-preferences-page.c:283
+msgid "The title for the preferences page."
+msgstr "偏好設定頁面的題名。"
+
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-editor.c:95
+msgid "restore insert cursor mark"
+msgstr "還原游標插入標記"
+
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-editor.c:100
+msgid "diff renderer gutter changes git vcs"
+msgstr "diff renderer gutter changes git vcs"
+
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-editor.c:105
+msgid "line numbers"
+msgstr "line numbers"
+
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-editor.c:110
+msgid "line lines highlight current"
+msgstr "line lines highlight current"
+
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-editor.c:115
+msgid "bracket brackets highlight matching"
+msgstr "bracket brackets highlight matching"
+
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-editor.c:120
+msgid "lines margin scrolloff scroll off"
+msgstr "lines margin scrolloff scroll off 行號 邊界"
+
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-editor.c:126
+msgid "font document editor monospace"
+msgstr "font document editor monospace 字型 文件 編輯器 等寬"
+
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-editor.c:131
+msgid "minimap mini map overview over view"
+msgstr "minimap mini map overview over view 迷你地圖 迷你 地圖"
+
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-git.c:128
+#| msgid "git author name surname"
+msgid "git author name surname attribution source code"
+msgstr "git author name surname attribution source code"
+
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-git.c:134
+#| msgid "git author email mail address"
+msgid "git author email mail address attribute source code"
+msgstr "git author email mail address attribute source code"
+
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-insight.c:54
+msgid "word words auto completion suggest found document"
+msgstr "word words auto completion suggest found document"
+
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-insight.c:59
+msgid "experimental clang autocompletion auto complete"
+msgstr "experimental clang autocompletion auto complete 自動補完"
+
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-insight.c:64
+msgid "exuberant ctags tags autocompletion auto complete"
+msgstr "exuberant ctags tags autocompletion auto complete 自動補完 "
+
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-keybindings.c:64
+#| msgid "Failed to load keybindings."
+msgid "default builder keybindings"
+msgstr "default builder keybindings"
+
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-keybindings.c:69
+#| msgid "emacs modal"
+msgid "emacs keybindings modal"
+msgstr "emacs keybindings modal"
+
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-keybindings.c:74
+#| msgid "vim modal"
+msgid "vim keybindings modal"
+msgstr "vim keybindings modal"
+
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-keybindings.c:80
+msgid "smart home end"
+msgstr "smart home end 智慧"
+
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-keybindings.c:85
+msgid "smart back backspace indent align"
+msgstr "smart back backspace indent align 縮排 對齊"
+
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-theme.c:114
+msgid "show grid lines"
+msgstr "show grid lines 顯示 格線"
+
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-theme.c:119
+msgid "source style scheme source tango solarized builder syntax"
+msgstr "source style scheme source tango solarized builder syntax"
+
+#: ../src/preferences/gb-preferences-switch.c:315
+msgid "The title of the switch."
+msgstr "開關的標題。"
+
+#: ../src/preferences/gb-preferences-switch.c:322
+msgid "The description for the switch."
+msgstr "開關的描述。"
+
+#: ../src/preferences/gb-preferences-switch.c:328
+msgid "Is Radio"
+msgstr "是單選"
+
+#: ../src/preferences/gb-preferences-switch.c:329
+msgid "If a radio button should be used."
+msgstr "是否使用單選按鈕。"
+
+#: ../src/preferences/gb-preferences-switch.c:335
+msgid "Settings"
+msgstr "設定值"
+
+#: ../src/preferences/gb-preferences-switch.c:336
+msgid "The GSettings for the setting."
+msgstr "設定值的 GSettings"
+
+#: ../src/preferences/gb-preferences-switch.c:342
+msgid "Settings Schema Key"
+msgstr "設定值基模設定鍵"
+
+#: ../src/preferences/gb-preferences-switch.c:343
+msgid "The settings schema key."
+msgstr "設定值的基模設定鍵。"
+
+#: ../src/preferences/gb-preferences-switch.c:349
+msgid "Settings Schema Value"
+msgstr "設定值基模數值"
+
+#: ../src/preferences/gb-preferences-switch.c:350
+msgid "An action-target for the settings action."
+msgstr "設定值動作的動作目標。"
+
+#: ../src/preferences/gb-preferences-switch.c:357
+#: ../src/search/gb-search-display-group.c:429
+msgid "Size Group"
+msgstr "大小群組"
+
+#: ../src/preferences/gb-preferences-switch.c:358
+msgid "The sizing group for the control."
+msgstr "控制元的尺寸群組。"
+
+#: ../src/project-tree/gb-new-file-popover.c:124
+#: ../src/project-tree/gb-rename-file-popover.c:142
+msgid "A folder with that name already exists."
+msgstr "同樣名稱的資料夾已經存在。"
+
+#: ../src/project-tree/gb-new-file-popover.c:127
+#: ../src/project-tree/gb-rename-file-popover.c:145
+msgid "A file with that name already exists."
+msgstr "同樣名稱的檔案已經存在。"
+
+#: ../src/project-tree/gb-new-file-popover.c:275
+msgid "File Type"
+msgstr "檔案類型"
+
+#: ../src/project-tree/gb-new-file-popover.c:276
+msgid "The file type to create."
+msgstr "要建立的檔案類型。"
+
+#: ../src/project-tree/gb-new-file-popover.c:351
+msgid "Folder Name"
+msgstr "資料夾名稱"
+
+#: ../src/project-tree/gb-project-file.c:166
+#: ../src/project-tree/gb-project-file.c:167 ../src/tree/gb-tree-node.c:606
+msgid "Icon Name"
+msgstr "圖示名稱"
+
+#: ../src/project-tree/gb-project-tree-builder.c:79
+msgid "Files"
+msgstr "檔案"
+
+#: ../src/project-tree/gb-project-tree.c:158
+msgid "If files ignored by the VCS should be displayed."
+msgstr "是否顯示 VCS 略過的檔案。"
+
+#: ../src/project-tree/gb-rename-file-popover.c:80
+#, c-format
+msgid "Rename %s"
+msgstr "重新命名 %s"
+
+#: ../src/project-tree/gb-rename-file-popover.c:173
+msgid "File name must not contain subdirectories."
+msgstr "檔案名稱不能包含子目錄。"
+
+#: ../src/scrolledwindow/gb-scrolled-window.c:254
+msgid "Max Content Height"
+msgstr "最大內容高度"
+
+#: ../src/scrolledwindow/gb-scrolled-window.c:255
+msgid "The maximum height request that can be made."
+msgstr "能要求的最大寬度。"
+
+#: ../src/scrolledwindow/gb-scrolled-window.c:263
+msgid "Max Content Width"
+msgstr "最大內容寬度"
+
+#: ../src/scrolledwindow/gb-scrolled-window.c:264
+msgid "The maximum width request that can be made."
+msgstr "能要求的最大寬度。"
+
+#: ../src/search/gb-search-display.c:234
+msgid "Cannot add provider more than once."
+msgstr "不能加入超過一個以上的提供者。"
+
+#: ../src/search/gb-search-display.c:316
+msgid "The provider could not be found."
+msgstr "找不到提供者。"
+
+#: ../src/search/gb-search-display.c:578
+msgid "The active search context."
+msgstr "使用中搜尋情境。"
+
+#: ../src/search/gb-search-display-group.c:182
+#, c-format
+msgid "%s more"
+msgstr "還需要 %s"
+
+#: ../src/search/gb-search-display-group.c:423
+msgid "The search provider"
+msgstr "搜尋提供者"
+
+#: ../src/search/gb-search-display-group.c:430
+msgid "The size group for the label."
+msgstr "標籤的大小群組。"
+
 #: ../src/search/gb-search-display-row.c:159
 #: ../src/search/gb-search-display-row.c:160
 msgid "Result"
 msgstr "結果"
 
-#: ../src/commands/gb-command-bar-item.c:176
-#, fuzzy
-msgid "The result to be visualized in the item."
-msgstr "項目中要示現的結果。"
-
-#: ../src/commands/gb-command-gaction.c:186
-msgid "Action Group"
-msgstr "動作群組"
-
-#: ../src/commands/gb-command-gaction.c:187
-msgid "The GActionGroup containing the action."
-msgstr "包含該動作的 GActionGroup。"
-
-#: ../src/commands/gb-command-gaction.c:195
-msgid "Action Name"
-msgstr "動作名稱"
-
-#: ../src/commands/gb-command-gaction.c:196
-msgid "The name of the action to execute."
-msgstr "要執行的動作名稱。"
-
-#: ../src/commands/gb-command-gaction.c:204
-msgid "Parameters"
-msgstr "參數"
-
-#: ../src/commands/gb-command-gaction.c:205
-msgid "The parameters for the action."
-msgstr "動作的參數。"
-
-#: ../src/commands/gb-command-provider.c:316
-msgid "Active DocumentView"
-msgstr "使用中 DocumentView"
-
-#: ../src/commands/gb-command-provider.c:317
-msgid "The last focused GbDocumentView widget."
-msgstr "最後聚焦的 GbDocumentView 元件。"
-
-#: ../src/commands/gb-command-provider.c:338
-msgid "Priority"
-msgstr "優先序"
-
-#: ../src/commands/gb-command-provider.c:339
-msgid "The priority of the command provider."
-msgstr "指令提供者的優先序。"
-
-#: ../src/commands/gb-command-provider.c:356
-#: ../src/git/gb-git-search-provider.c:523
-#: ../src/navigation/gb-navigation-list.c:299
-msgid "Workbench"
-msgstr ""
-
-#: ../src/commands/gb-command-provider.c:357
-#, fuzzy
-msgid "The target workbench."
-msgstr "目標(_T)："
-
-#: ../src/commands/gb-command-result.c:224
-#: ../src/commands/gb-command-vim.c:189
-msgid "Command Text"
-msgstr "指令文字"
-
-#: ../src/commands/gb-command-result.c:225
-msgid "The command text if any."
-msgstr "如果有指令文字。"
-
-#: ../src/commands/gb-command-result.c:234
-msgid "Is Error"
-msgstr "有錯誤"
-
-#: ../src/commands/gb-command-result.c:235
-msgid "If the result is an error."
-msgstr "是否結果有錯誤。"
-
-#: ../src/commands/gb-command-result.c:244
-msgid "Is Running"
-msgstr "正執行中"
-
-#: ../src/commands/gb-command-result.c:245
-msgid "If the command is still running."
-msgstr "是否指令仍在執行中。"
-
-#: ../src/commands/gb-command-result.c:254
-msgid "Result Text"
-msgstr "結果文字"
-
-#: ../src/commands/gb-command-result.c:255
-msgid "The result text if any."
-msgstr "如果有任何的結果文字則顯示。"
-
-#: ../src/commands/gb-command-vim.c:190
-msgid "The command text to execute"
-msgstr "要執行的指令文字"
-
-#: ../src/commands/gb-command-vim.c:199
-#: ../src/snippets/gb-source-snippet-completion-provider.c:168
-msgid "Source View"
-msgstr "源碼檢視"
-
-#: ../src/commands/gb-command-vim.c:200
-msgid "The source view to modify."
-msgstr "要修改的源碼檢視。"
-
-#: ../src/credits/gb-credits-widget.c:276
-msgid "The duration of the animation in millseconds."
-msgstr "動畫的時間，單位為毫秒。"
-
-#: ../src/credits/gb-credits-widget.c:286
-#: ../src/credits/gb-credits-widget.c:287
-#: ../src/editor/gb-editor-document.c:1476
-msgid "Progress"
-msgstr "進度"
-
-#: ../src/credits/gb-credits-widget.c:312
-#, c-format
-msgid "GNOME Builder - %s"
-msgstr "GNOME Builder - %s"
-
-#: ../src/devhelp/gb-devhelp-document.c:71
-#, c-format
-msgid "Documentation (%s)"
-msgstr "文件 (%s)"
-
-#: ../src/devhelp/gb-devhelp-document.c:151
-msgid "Documentation"
-msgstr "文件"
-
-#: ../src/devhelp/gb-devhelp-document.c:257
-msgid "URI"
-msgstr "URI"
-
-#: ../src/devhelp/gb-devhelp-document.c:258
-msgid "The uri to load."
-msgstr "要載入的 URI。"
-
-#: ../src/devhelp/gb-devhelp-view.c:175
-#: ../src/documents/gb-document-view.c:203
-#: ../src/editor/gb-editor-frame.c:1651 ../src/editor/gb-editor-view.c:1080
-#: ../src/html/gb-html-view.c:264
-msgid "Document"
-msgstr "文件"
-
-#: ../src/devhelp/gb-devhelp-view.c:176
-msgid "The document for the devhelp view."
-msgstr "devhelp 檢視的文件。"
-
-#: ../src/dialogs/gb-close-confirmation-dialog.c:148
-msgid "Question"
-msgstr "問題"
-
-#: ../src/dialogs/gb-close-confirmation-dialog.c:318
-msgid "Close _without Saving"
-msgstr "關閉而不儲存(_W)"
-
-#: ../src/dialogs/gb-close-confirmation-dialog.c:319
-#: ../src/resources/ui/gb-editor-view.ui.h:2
-msgid "_Cancel"
-msgstr "取消(_C)"
-
-#: ../src/dialogs/gb-close-confirmation-dialog.c:337
-msgid "_Save As…"
-msgstr "另存為(_S)…"
-
-#: ../src/dialogs/gb-close-confirmation-dialog.c:337
-msgid "_Save"
-msgstr "儲存(_S)"
-
-#: ../src/dialogs/gb-close-confirmation-dialog.c:354
-#, c-format
-msgid ""
-"If you don't save, changes from the last %ld second will be permanently lost."
-msgid_plural ""
-"If you don't save, changes from the last %ld seconds will be permanently "
-"lost."
-msgstr[0] ""
-msgstr[1] ""
-
-#: ../src/dialogs/gb-close-confirmation-dialog.c:363
-#, fuzzy
-msgid ""
-"If you don't save, changes from the last minute will be permanently lost."
-msgstr "如果不儲存，將會永久地失去 1 分鐘前所作的修改。"
-
-#: ../src/dialogs/gb-close-confirmation-dialog.c:369
-#, c-format
-msgid ""
-"If you don't save, changes from the last minute and %ld second will be "
-"permanently lost."
-msgid_plural ""
-"If you don't save, changes from the last minute and %ld seconds will be "
-"permanently lost."
-msgstr[0] ""
-msgstr[1] ""
-
-#: ../src/dialogs/gb-close-confirmation-dialog.c:379
-#, c-format
-msgid ""
-"If you don't save, changes from the last %ld minute will be permanently lost."
-msgid_plural ""
-"If you don't save, changes from the last %ld minutes will be permanently "
-"lost."
-msgstr[0] ""
-msgstr[1] ""
-
-#: ../src/dialogs/gb-close-confirmation-dialog.c:394
-#, fuzzy
-msgid "If you don't save, changes from the last hour will be permanently lost."
-msgstr "如果不儲存，將會永久地失去 1 小時前所作的修改。"
-
-#: ../src/dialogs/gb-close-confirmation-dialog.c:400
-#, c-format
-msgid ""
-"If you don't save, changes from the last hour and %d minute will be "
-"permanently lost."
-msgid_plural ""
-"If you don't save, changes from the last hour and %d minutes will be "
-"permanently lost."
-msgstr[0] ""
-msgstr[1] ""
-
-#: ../src/dialogs/gb-close-confirmation-dialog.c:415
-#, c-format
-msgid ""
-"If you don't save, changes from the last %d hour will be permanently lost."
-msgid_plural ""
-"If you don't save, changes from the last %d hours will be permanently lost."
-msgstr[0] ""
-msgstr[1] ""
-
-#: ../src/dialogs/gb-close-confirmation-dialog.c:459
-#, fuzzy, c-format
-msgid "Changes to document “%s” will be permanently lost."
-msgstr "將會永久地失去對文件“%s”所作的修改。"
-
-#: ../src/dialogs/gb-close-confirmation-dialog.c:464
-#, fuzzy, c-format
-msgid "Save changes to document “%s” before closing?"
-msgstr "在關閉前將變更儲存到文件“%s”？"
-
-#: ../src/dialogs/gb-close-confirmation-dialog.c:477
-#: ../src/dialogs/gb-close-confirmation-dialog.c:637
-#, fuzzy
-msgid "Saving has been disabled by the system administrator."
-msgstr "儲存功能已被系統管理員禁用。"
-
-#: ../src/dialogs/gb-close-confirmation-dialog.c:585
-#, c-format
-msgid "Changes to %d document will be permanently lost."
-msgid_plural "Changes to %d documents will be permanently lost."
-msgstr[0] ""
-msgstr[1] ""
-
-#: ../src/dialogs/gb-close-confirmation-dialog.c:593
-#, c-format
-msgid "There is %d document with unsaved changes. Save changes before closing?"
-msgid_plural ""
-"There are %d documents with unsaved changes. Save changes before closing?"
-msgstr[0] ""
-msgstr[1] ""
-
-#: ../src/dialogs/gb-close-confirmation-dialog.c:613
-#, fuzzy
-msgid "Docum_ents with unsaved changes:"
-msgstr "已修改但未儲存的文件(_E):"
-
-#: ../src/dialogs/gb-close-confirmation-dialog.c:617
-#, fuzzy
-msgid "S_elect the documents you want to save:"
-msgstr "請選擇需要儲存的文件(_E):"
-
-#: ../src/dialogs/gb-close-confirmation-dialog.c:641
-#, fuzzy
-msgid "If you don't save, all your changes will be permanently lost."
-msgstr "如果不儲存，所有已修改的部份將會永久地遺失。"
-
-#: ../src/documents/gb-document.c:188
-msgid "Modified"
-msgstr "已修改"
-
-#: ../src/documents/gb-document.c:189
-#, fuzzy
-msgid "If the document has been modified from disk."
-msgstr "文件已修改。連按兩下以儲存此文件。"
-
-#: ../src/documents/gb-document.c:196
-#: ../src/preferences/gb-preferences-page.c:214
-#: ../src/search/gb-search-result.c:241 ../src/workbench/gb-workspace.c:151
-msgid "Title"
-msgstr "標題"
-
-#: ../src/documents/gb-document.c:197
-#, fuzzy
-msgid "The title of the document."
-msgstr "插入文件標題欄位"
-
-#: ../src/documents/gb-document.c:204
-msgid "Read Only"
-msgstr "唯讀"
-
-#: ../src/documents/gb-document.c:205
-#, fuzzy
-msgid "If the document is read only."
-msgstr ""
-"文件檔案「$(ARG1)」已鎖定，供您在不同的系統中編輯 (自 $(ARG2) 開始)\n"
-"\n"
-"以唯讀模式開啟文件，或忽略自行鎖定檔案並開啟文件以進行編輯。\n"
-"\n"
-
-#: ../src/documents/gb-document-grid.c:918
-#: ../src/documents/gb-document-menu-button.c:667
-#: ../src/documents/gb-document-stack.c:881
-msgid "Document Manager"
-msgstr "文件管理員"
-
-#: ../src/documents/gb-document-grid.c:919
-#, fuzzy
-msgid "The document manager for the document grid."
-msgstr "文件管理員"
-
-#: ../src/documents/gb-document-manager.c:300
-msgid "Count"
-msgstr "數目"
-
-#: ../src/documents/gb-document-manager.c:301
-msgid "The number of documents in the manager."
-msgstr "管理員中的文件數。"
-
-#: ../src/documents/gb-document-menu-button.c:668
-#, fuzzy
-msgid "The document manager for the button."
-msgstr "文件管理員"
-
-#: ../src/documents/gb-document-stack.c:872
-msgid "Active View"
-msgstr "使用中檢視"
-
-#: ../src/documents/gb-document-stack.c:873
-#, fuzzy
-msgid "The active view within the stack."
-msgstr "使用中檢視"
-
-#: ../src/documents/gb-document-stack.c:882
-#, fuzzy
-msgid "The document manager for the stack."
-msgstr "文件管理員"
-
-#: ../src/documents/gb-document-view.c:185
-msgid "Can Preview"
-msgstr "可以預覽"
-
-#: ../src/documents/gb-document-view.c:186
-msgid "If the view can preview."
-msgstr "檢視是否可以預覽。"
-
-#: ../src/documents/gb-document-view.c:194
-msgid "Controls"
-msgstr "控制器"
-
-#: ../src/documents/gb-document-view.c:195
-msgid "The widget containing the view controls."
-msgstr "包含檢視控制器的元件。"
-
-#: ../src/documents/gb-document-view.c:204
-msgid "The document being viewed."
-msgstr "正在檢視的文件。"
-
-#: ../src/editor/gb-editor-document.c:664
-#, c-format
-msgid "%s (Read Only)"
-msgstr "%s (唯讀)"
-
-#: ../src/editor/gb-editor-document.c:669
-#, c-format
-msgid "untitled document %u"
-msgstr "無題文件 %u"
-
-#: ../src/editor/gb-editor-document.c:791
-msgid "Save Document As"
-msgstr "儲存文件為"
-
-#: ../src/editor/gb-editor-document.c:798
-#: ../src/editor/gb-editor-workspace.c:287
-msgid "Cancel"
-msgstr "取消"
-
-#: ../src/editor/gb-editor-document.c:799 ../src/resources/gtk/menus.ui.h:17
-msgid "Save"
-msgstr "儲存"
-
-#: ../src/editor/gb-editor-document.c:913
-msgid "No file was selected."
-msgstr "沒有選取檔案。"
-
-#: ../src/editor/gb-editor-document.c:1039
-msgid "No file was selected for saving."
-msgstr "沒有選取檔案要儲存。"
-
-#: ../src/editor/gb-editor-document.c:1440
-#: ../src/editor/gb-source-change-gutter-renderer.c:198
-msgid "Change Monitor"
-msgstr "變更監視器"
-
-#: ../src/editor/gb-editor-document.c:1441
-#, fuzzy
-msgid "The change monitor for the backing file."
-msgstr "備份檔案"
-
-#: ../src/editor/gb-editor-document.c:1449
-msgid "Error"
-msgstr "錯誤"
-
-#: ../src/editor/gb-editor-document.c:1450
-msgid "An error that may have been loaded."
-msgstr "可能已載入的錯誤。"
-
-#: ../src/editor/gb-editor-document.c:1458
-#: ../src/editor/gb-editor-file-mark.c:214
-#: ../src/editor/gb-editor-navigation-item.c:217
-#: ../src/editor/gb-source-change-monitor.c:878
-msgid "File"
-msgstr "檔案"
-
-#: ../src/editor/gb-editor-document.c:1459
-#, fuzzy
-msgid "The backing file for the document."
-msgstr "備份檔案"
-
-#: ../src/editor/gb-editor-document.c:1467
-#, fuzzy
-msgid "File Changed on Volume"
-msgstr "音量已變更"
-
-#: ../src/editor/gb-editor-document.c:1468
-#, fuzzy
-msgid "If the file has changed underneath the buffer."
-msgstr "在磁碟上的 %s 檔案在開啟之後已變更"
-
-#: ../src/editor/gb-editor-document.c:1477
-#, fuzzy
-msgid "Loading or saving progress."
-msgstr "儲存進度："
-
-#: ../src/editor/gb-editor-document.c:1487
-msgid "Style Scheme Name"
-msgstr "樣式方案名稱"
-
-#: ../src/editor/gb-editor-document.c:1488
-msgid "The style scheme name."
-msgstr "樣式方案名稱。"
-
-#: ../src/editor/gb-editor-document.c:1496
-msgid "Trim Trailing Whitespace"
-msgstr "截去曳尾空白"
-
-#: ../src/editor/gb-editor-document.c:1497
-msgid "If whitespace should be trimmed before saving."
-msgstr "是否在儲存前應截去空白。"
-
-#: ../src/editor/gb-editor-file-mark.c:202
-msgid "Column"
-msgstr "行"
-
-#: ../src/editor/gb-editor-file-mark.c:203
-msgid "The column within the line."
-msgstr "文字的行號。"
-
-#: ../src/editor/gb-editor-file-mark.c:215
-#, fuzzy
-msgid "The file for which to store the mark."
-msgstr "儲存記號的檔案。"
-
-#: ../src/editor/gb-editor-file-mark.c:224
-#: ../src/editor/gb-editor-navigation-item.c:228
-msgid "Line"
-msgstr "列"
-
-#: ../src/editor/gb-editor-file-mark.c:225
-msgid "The line within the file."
-msgstr "檔案內的列號。"
-
-#: ../src/editor/gb-editor-frame.c:320
-#, c-format
-msgid "%u of %u"
-msgstr "%u / %u"
-
-#: ../src/editor/gb-editor-frame.c:461
-#, c-format
-msgid "Line %u, Column %u"
-msgstr "列 %u，行 %u"
-
-#: ../src/editor/gb-editor-frame.c:1652
-msgid "The document for the editor."
-msgstr "編輯器的文件。"
-
-#: ../src/editor/gb-editor-frame.c:1660
-msgid "Search Direction"
-msgstr "搜尋方向"
-
-#: ../src/editor/gb-editor-frame.c:1661
-msgid "The direction of the last text searched for."
-msgstr "上次文字搜尋的方向。"
-
-#: ../src/editor/gb-editor-navigation-item.c:218
-msgid "The file that is being edited."
-msgstr "檔案正在編輯中。"
-
-#: ../src/editor/gb-editor-navigation-item.c:229
-msgid "The line number within the file."
-msgstr "檔案內的列號。"
-
-#: ../src/editor/gb-editor-navigation-item.c:241
-msgid "Line Offset"
-msgstr "列偏移"
-
-#: ../src/editor/gb-editor-navigation-item.c:242
-msgid "The offset within the line."
-msgstr "列內的偏移。"
-
-#: ../src/editor/gb-editor-settings-widget.c:182
-#: ../src/editor/gb-source-formatter.c:337
-#: ../src/snippets/gb-source-snippet.c:1059
-msgid "Language"
-msgstr "語言"
-
-#: ../src/editor/gb-editor-settings-widget.c:183
-msgid "The language to change the settings for."
-msgstr "設定值要變更成的語言。"
-
-#: ../src/editor/gb-editor-view.c:451
-#, c-format
-msgid "The file “%s” was modified outside of Builder."
-msgstr "「%s」檔案已在 Builder 外部經過修改。"
-
-#: ../src/editor/gb-editor-view.c:509
-msgid "Plain Text"
-msgstr "純文字"
-
-#: ../src/editor/gb-editor-view.c:1071
-msgid "Auto Indent"
-msgstr "自動縮排"
-
-#: ../src/editor/gb-editor-view.c:1072
-msgid "If we should use the auto-indentation engine."
-msgstr "是否我們應該使用自動縮排引擎。"
-
-#: ../src/editor/gb-editor-view.c:1081
-msgid "The document edited by the view."
-msgstr "該檢視之下所編輯的文件。"
-
-#: ../src/editor/gb-editor-view.c:1089
-msgid "Highlight Current Line"
-msgstr "標明目前一列"
-
-#: ../src/editor/gb-editor-view.c:1090
-msgid "If the current line should be highlighted."
-msgstr "是否應該標明目前一列。"
-
-#: ../src/editor/gb-editor-view.c:1098
-msgid "Show Line Numbers"
-msgstr "顯示列號"
-
-#: ../src/editor/gb-editor-view.c:1099
-msgid "If the line numbers should be shown."
-msgstr "是否應顯示列號。"
-
-#: ../src/editor/gb-editor-view.c:1107
-msgid "Show Right Margin"
-msgstr "顯示右側邊緣"
-
-#: ../src/editor/gb-editor-view.c:1108
-msgid "If we should show the right margin."
-msgstr "我們是否應顯示右側邊緣。"
-
-#: ../src/editor/gb-editor-view.c:1116
-msgid "Split Enabled"
-msgstr "啟用分割"
-
-#: ../src/editor/gb-editor-view.c:1117
-msgid "If the view split is enabled."
-msgstr "是否啟用分割檢視。"
-
-#: ../src/editor/gb-editor-view.c:1125
-msgid "Tab Width"
-msgstr "Tab 寬度"
-
-#: ../src/editor/gb-editor-view.c:1126
-msgid "The width a tab should be drawn as."
-msgstr "應如何描繪 Tab 的寬度。"
-
-#: ../src/editor/gb-editor-view.c:1136
-msgid "Use Spaces"
-msgstr "使用空格"
-
-#: ../src/editor/gb-editor-view.c:1137
-msgid "If spaces should be used instead of tabs."
-msgstr "是否應使用空格來代替 Tab 字元。"
-
-#: ../src/editor/gb-editor-workspace.c:279
-msgid "Open Document"
-msgstr "開啟文件"
-
-#: ../src/editor/gb-editor-workspace.c:288
-msgid "Open"
-msgstr "開啟"
-
-#: ../src/editor/gb-source-change-gutter-renderer.c:199
-#, fuzzy
-msgid "The change monitor for the gutter renderer."
-msgstr "變更監視器"
-
-#: ../src/editor/gb-source-change-monitor.c:417
-#, fuzzy
-msgid "Failed to load git blob"
-msgstr "，未能載入"
-
-#: ../src/editor/gb-source-change-monitor.c:480
-msgid "No file, cannot load git blob"
-msgstr ""
-
-#: ../src/editor/gb-source-change-monitor.c:518
-msgid "Cannot load git repository from non-local filesystem."
-msgstr ""
-
-#: ../src/editor/gb-source-change-monitor.c:577
-#, fuzzy
-msgid "No filename, cannot discover repository."
-msgstr "不能寫入軟體庫組態"
-
-#: ../src/editor/gb-source-change-monitor.c:868
-#, fuzzy
-msgid "The text buffer to monitor."
-msgstr "顯示器"
-
-#: ../src/editor/gb-source-change-monitor.c:879
-#, fuzzy
-msgid "The file for the buffer."
-msgstr "緩衝區(_B)"
-
-#: ../src/editor/gb-source-formatter.c:118
-#, fuzzy, c-format
-msgid "Failed to locate uncrustify configuration."
-msgstr "IP 組態失敗"
-
-#: ../src/editor/gb-source-formatter.c:144
-#, fuzzy, c-format
-msgid "uncrustify failure: %s"
-msgstr "自動調整寬度於 %s 失敗\n"
-
-#: ../src/editor/gb-source-formatter.c:241
-#, fuzzy, c-format
-msgid "Failure copying to \"%s\": %s"
-msgstr "自動調整寬度於 %s 失敗\n"
-
-#: ../src/editor/gb-source-formatter.c:328
-msgid "Can Format"
-msgstr "可以格式化"
-
-#: ../src/editor/gb-source-formatter.c:329
-#, fuzzy
-msgid "If the source language can be formatted."
-msgstr "此詞彙表的源語言"
-
-#: ../src/editor/gb-source-formatter.c:338
-#, fuzzy
-msgid "The language to format."
-msgstr "語言"
-
-#: ../src/editor/gb-source-search-highlighter.c:338
-#: ../src/editor/gb-source-search-highlighter.c:339
-msgid "Search Context"
-msgstr "搜尋情境"
-
-#: ../src/editor/gb-source-search-highlighter.c:347
-#: ../src/editor/gb-source-search-highlighter.c:348
-msgid "Search Settings"
-msgstr "搜尋設定值"
-
-#: ../src/editor/gb-source-view.c:2229 ../src/editor/gb-source-view.c:2230
-msgid "Enable Word Completion"
-msgstr "啟用字詞補完"
-
-#: ../src/editor/gb-source-view.c:2238
-msgid "Font Name"
-msgstr "字型名稱"
-
-#: ../src/editor/gb-source-view.c:2239
-#, fuzzy
-msgid "The font name to apply to the widget."
-msgstr "字型選擇視窗元件"
-
-#: ../src/editor/gb-source-view.c:2247
-#, fuzzy
-msgid "Insert Matching Brace"
-msgstr "前往對應括號(_B)"
-
-#: ../src/editor/gb-source-view.c:2248
-msgid "If we should insert matching braces."
-msgstr ""
-
-#: ../src/editor/gb-source-view.c:2256
-#, fuzzy
-msgid "Overwrite Braces"
-msgstr "大括號"
-
-#: ../src/editor/gb-source-view.c:2257
-msgid "If we should overwrite braces, brackets, parenthesis and quotes."
-msgstr ""
-
-#: ../src/editor/gb-source-view.c:2266
-msgid "Show Shadow"
-msgstr "顯示陰影"
-
-#: ../src/editor/gb-source-view.c:2267
-msgid "Show the search shadow"
-msgstr "顯示搜尋陰影"
-
-#: ../src/editor/gb-source-view.c:2275 ../src/editor/gb-source-view.c:2276
-msgid "Search Highlighter"
-msgstr "搜尋標明器"
-
-#: ../src/editor/gb-source-view.c:2284
-msgid "Smart Home End"
-msgstr "智慧 Home End"
-
-#: ../src/editor/gb-source-view.c:2285
-msgid "Enable smart home end in gtksourceview."
-msgstr "在 gtksourceview 中啟用智慧式 Home End。"
-
-#: ../src/editor/gb-source-view.c:2293
-msgid "Show Grid Lines"
-msgstr "顯示格線"
-
-#: ../src/editor/gb-source-view.c:2294
-#, fuzzy
-msgid "Whether to show the grid lines."
-msgstr "顯示儲存格格線。"
-
-#: ../src/gd/gd-tagged-entry.c:937
-#, fuzzy
-msgid "Tag close icon visibility"
-msgstr "<b>狀態圖示上的選單可見與否</b>"
-
-#: ../src/gd/gd-tagged-entry.c:938
-msgid "Whether the close button should be shown in tags."
-msgstr ""
-
-#: ../src/gd/gd-tagged-entry.c:1031 ../src/navigation/gb-navigation-item.c:195
-msgid "Label"
-msgstr "標籤"
-
-#: ../src/gd/gd-tagged-entry.c:1032
-#, fuzzy
-msgid "Text to show on the tag."
-msgstr "文字標籤表編輯器"
-
-#: ../src/gd/gd-tagged-entry.c:1035
-#, fuzzy
-msgid "Tag has a close button"
-msgstr "此字串已有指派標籤"
-
-#: ../src/gd/gd-tagged-entry.c:1036
-#, fuzzy
-msgid "Whether the tag has a close button."
-msgstr "是否顯示視窗控制元，例如關閉按鈕。"
-
-#: ../src/gd/gd-tagged-entry.c:1039
-msgid "Style"
-msgstr "樣式"
-
-#: ../src/gd/gd-tagged-entry.c:1040
-msgid "Style of the tag."
-msgstr "標記的樣式。"
-
-#: ../src/gedit/gedit-menu-stack-switcher.c:423
-#: ../src/gedit/gedit-menu-stack-switcher.c:424
-msgid "Stack"
-msgstr "堆疊"
-
-#: ../src/git/gb-git-search-provider.c:429
-msgid "Switch To"
-msgstr "切換為"
-
-#: ../src/git/gb-git-search-provider.c:512
-msgid "Repository"
-msgstr "倉儲"
-
-#: ../src/git/gb-git-search-provider.c:513
-msgid "The repository to use for search data."
-msgstr "用於搜尋資料的倉儲"
-
-#: ../src/git/gb-git-search-provider.c:524
-#, fuzzy
-msgid "The workbench window."
-msgstr "視窗(~W)"
-
-#: ../src/html/gb-html-document.c:105
-msgid "HTML Preview"
-msgstr "HTML 預覽"
-
-#: ../src/html/gb-html-document.c:127
-#, c-format
-msgid "%s (Preview)"
-msgstr "%s (預覽)"
-
-#: ../src/html/gb-html-document.c:311
-#, fuzzy
-msgid "The buffer to monitor for changes."
-msgstr "將不會監控檔案的變更"
-
-#: ../src/html/gb-html-view.c:265
-#, fuzzy
-msgid "The document to view as HTML."
-msgstr "HTML 文件 (主文件)"
-
-#: ../src/nautilus/nautilus-floating-bar.c:314
-#, fuzzy
-msgid "Bar's primary label"
-msgstr "標籤"
-
-#: ../src/nautilus/nautilus-floating-bar.c:315
-msgid "Primary label displayed by the bar"
-msgstr ""
-
-#: ../src/nautilus/nautilus-floating-bar.c:320
-#, fuzzy
-msgid "Bar's details label"
-msgstr "%(label)s %(details)s"
-
-#: ../src/nautilus/nautilus-floating-bar.c:321
-#, fuzzy
-msgid "Details label displayed by the bar"
-msgstr "%(label)s %(details)s"
-
-#: ../src/nautilus/nautilus-floating-bar.c:326
-#, fuzzy
-msgid "Show spinner"
-msgstr "轉輪"
-
-#: ../src/nautilus/nautilus-floating-bar.c:327
-msgid "Whether a spinner should be shown in the floating bar"
-msgstr ""
-
-#: ../src/navigation/gb-navigation-item.c:196
-#, fuzzy
-msgid "The label for the navigation item."
-msgstr "控制項的枚舉項目標籤，如果有的話"
-
-#: ../src/navigation/gb-navigation-item.c:204
-msgid "Workspace"
-msgstr "工作區"
-
-#: ../src/navigation/gb-navigation-item.c:205
-#, fuzzy
-msgid "The workspace to ensure is focused."
-msgstr "Fedora 現在變得更加聚焦"
-
-#: ../src/navigation/gb-navigation-list.c:269
-msgid "Can Go Backward"
-msgstr "可以返回走"
-
-#: ../src/navigation/gb-navigation-list.c:270
-msgid "If we can go backwards in the navigation list."
-msgstr "是否我們可以在導覽清單中返回走。"
-
-#: ../src/navigation/gb-navigation-list.c:279
-msgid "Can Go Forward"
-msgstr "可以往前進"
-
-#: ../src/navigation/gb-navigation-list.c:280
-msgid "If we can go forward in the navigation list."
-msgstr "是否我們可以在導覽清單中往前進。"
-
-#: ../src/navigation/gb-navigation-list.c:289
-msgid "Current Item"
-msgstr "目前項目"
-
-#: ../src/navigation/gb-navigation-list.c:290
-msgid "The current item in the navigation list."
-msgstr "導覽清單中的目前項目"
-
-#: ../src/navigation/gb-navigation-list.c:300
-#, fuzzy
-msgid "The workbench the navigation list is for."
-msgstr "導覽"
-
-#: ../src/preferences/gb-preferences-page.c:215
-msgid "The title for the preferences page."
-msgstr "偏好設定頁面的題名。"
-
-#. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-editor.c:186
-#, fuzzy
-msgid "restore insert cursor mark"
-msgstr "restore insert cursor mark"
-
-#. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-editor.c:192
-#, fuzzy
-msgid "word words auto completion suggest found document"
-msgstr "word words auto completion suggest found document"
-
-#. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-editor.c:198
-#, fuzzy
-msgid "diff renderer gutter changes git vcs"
-msgstr "diff renderer gutter changes git vcs"
-
-#. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-editor.c:204
-#, fuzzy
-msgid "line numbers"
-msgstr "line numbers"
-
-#. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-editor.c:210
-#, fuzzy
-msgid "line lines highlight current"
-msgstr "line lines highlight current"
-
-#. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-editor.c:216
-#, fuzzy
-msgid "bracket brackets highlight matching"
-msgstr "bracket brackets highlight matching"
-
-#. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-editor.c:222
-msgid "smart home end"
-msgstr "smart home end 智慧"
-
-#. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-editor.c:228
-msgid "show grid lines"
-msgstr "show grid lines 顯示 格線"
-
-#. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-editor.c:234
-msgid "font document editor monospace"
-msgstr "font document editor monospace 字型 文件 編輯器 等寬"
-
-#. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-editor.c:239
-#, fuzzy
-msgid "source style scheme source tango solarized builder"
-msgstr "source style scheme source tango solarized builder 源碼 樣式 方案"
-
-#: ../src/preferences/gb-preferences-page-emacs.c:90
-msgid "emacs modal"
-msgstr "emacs 範型"
-
-#: ../src/preferences/gb-preferences-page-git.c:131
-msgid "git author name surname"
-msgstr "git 作者名字與姓氏"
-
-#: ../src/preferences/gb-preferences-page-git.c:136
-msgid "git author email mail address"
-msgstr "git 作者電子郵件位址"
-
-#: ../src/preferences/gb-preferences-page-vim.c:101
-msgid "lines margin scrolloff scroll off"
-msgstr ""
-
-#: ../src/preferences/gb-preferences-page-vim.c:107
-msgid "vim modal"
-msgstr "vim 範型"
-
-#: ../src/resources/gtk/menus.ui.h:1
-msgid "_Preferences"
-msgstr "偏好設定(_P)"
-
-#: ../src/resources/gtk/menus.ui.h:2
-msgid "Generate Support Log"
-msgstr "生成支援記錄"
-
-#: ../src/resources/gtk/menus.ui.h:3
-msgid "_Help"
-msgstr "求助(_H)"
-
-#: ../src/resources/gtk/menus.ui.h:4
-msgid "_About"
-msgstr "關於(_A)"
-
-#: ../src/resources/gtk/menus.ui.h:5
-msgid "_Quit"
-msgstr "退出(_Q)"
-
-#: ../src/resources/gtk/menus.ui.h:6 ../src/resources/ui/gb-editor-view.ui.h:1
-msgid "_Reload"
-msgstr "重新載入(_R)"
-
-#: ../src/resources/gtk/menus.ui.h:7
-msgid "_Print…"
-msgstr "列印(_P)…"
-
-#: ../src/resources/gtk/menus.ui.h:8
-msgid "_Fullscreen"
-msgstr "全螢幕(_F)"
-
-#: ../src/resources/gtk/menus.ui.h:9
-msgid "_New Document"
-msgstr "新增文件(_N)"
-
-#: ../src/resources/gtk/menus.ui.h:10
-msgid "_Open"
-msgstr "開啟(_O)"
-
-#: ../src/resources/gtk/menus.ui.h:11
-msgid "Save _All"
-msgstr "全部儲存(_A)"
-
-#: ../src/resources/gtk/menus.ui.h:12
-msgid "_Close All"
-msgstr "全部關閉(_C)"
-
-#: ../src/resources/gtk/menus.ui.h:13
-msgid "Move Document _Left"
-msgstr "向左移動文件(_L)"
-
-#: ../src/resources/gtk/menus.ui.h:14
-msgid "Move Document _Right"
-msgstr "向右移動文件(_R)"
-
-#: ../src/resources/gtk/menus.ui.h:15
-#, fuzzy
-msgid "Split Document Left"
-msgstr "向左移動文件(_L)"
-
-#: ../src/resources/gtk/menus.ui.h:16
-#, fuzzy
-msgid "Split Document Right"
-msgstr "向右移動文件(_R)"
-
-#: ../src/resources/gtk/menus.ui.h:18
-msgid "Save _As"
-msgstr "另存為(_A)"
-
-#: ../src/resources/gtk/menus.ui.h:19
-msgid "_Preview"
-msgstr "預覽(_P)"
-
-#: ../src/resources/gtk/menus.ui.h:20
-msgid "_Close Document"
-msgstr "關閉文件(_C)"
-
-#: ../src/resources/ui/gb-credits-widget.ui.h:1
-msgid "Created By:"
-msgstr "製作："
-
-#: ../src/resources/ui/gb-credits-widget.ui.h:2
-msgid ""
-"Christian Hergert\n"
-"Alexander Larsson\n"
-"Alexandre Franke\n"
-"Carlos Soriano\n"
-"Cosimo Cecchi\n"
-"Dimitris Zenios\n"
-"Fabiano Fidêncio\n"
-"Florian Bäuerle\n"
-"Florian Müllner\n"
-"Hashem Nasarat\n"
-"Hylke Bons\n"
-"Igor Gnatenko\n"
-"Jakub Steiner\n"
-"Jasper St. Pierre\n"
-"Jonathon Jongsma\n"
-"Mathieu Bridon\n"
-"Megh Parikh\n"
-"Michael Catanzaro\n"
-"Pete Travis\n"
-"Ray Strode\n"
-"Roberto Majadas\n"
-"Ting-Wei Lan\n"
-"Trinh Anh Ngoc\n"
-"Yosef Or Boczko"
-msgstr ""
-"Christian Hergert\n"
-"Alexander Larsson\n"
-"Alexandre Franke\n"
-"Carlos Soriano\n"
-"Cosimo Cecchi\n"
-"Dimitris Zenios\n"
-"Fabiano Fidêncio\n"
-"Florian Bäuerle\n"
-"Florian Müllner\n"
-"Hashem Nasarat\n"
-"Hylke Bons\n"
-"Igor Gnatenko\n"
-"Jakub Steiner\n"
-"Jasper St. Pierre\n"
-"Jonathon Jongsma\n"
-"Mathieu Bridon\n"
-"Megh Parikh\n"
-"Michael Catanzaro\n"
-"Pete Travis\n"
-"Ray Strode\n"
-"Roberto Majadas\n"
-"Ting-Wei Lan\n"
-"Trinh Anh Ngoc\n"
-"Yosef Or Boczko"
-
-#: ../src/resources/ui/gb-credits-widget.ui.h:26
-msgid "Artwork By:"
-msgstr "美工："
-
-#: ../src/resources/ui/gb-credits-widget.ui.h:27
-msgid ""
-"Allan Day\n"
-"Hylke Bons\n"
-"Jakub Steiner"
-msgstr ""
-"Allan Day\n"
-"Hylke Bons\n"
-"Jakub Steiner"
-
-#: ../src/resources/ui/gb-credits-widget.ui.h:30
-msgid "Translated By:"
-msgstr "翻譯："
-
-#. Translate this string with the translator names for your language.
-#: ../src/resources/ui/gb-credits-widget.ui.h:32
-msgid "translator-credits"
-msgstr "Cheng-Chia Tseng <pswo10680@gmail.com>, 2015"
-
-#: ../src/resources/ui/gb-credits-widget.ui.h:33
-msgid "Funded By:"
-msgstr "創立："
-
-#: ../src/resources/ui/gb-credits-widget.ui.h:34
-msgid ""
-"Christian Hergert\n"
-"Gareth Foster"
-msgstr ""
-"Christian Hergert\n"
-"Gareth Foster"
-
-#: ../src/resources/ui/gb-credits-widget.ui.h:36
-msgid "Special Thanks To:"
-msgstr "特別感謝："
-
-#: ../src/resources/ui/gb-credits-widget.ui.h:37
-msgid ""
-"Andy Hertzfeld and the Eazel Team\n"
-"Alberto Ruiz\n"
-"Bastien Nocera\n"
-"Cosimo Cecchi\n"
-"Emmanuele Bassi\n"
-"Federico Mena Quintero\n"
-"Jasper St Pierre\n"
-"Jon McCann\n"
-"Jonathan Blandford\n"
-"Matthias Clasen\n"
-"Miguel de Icaza\n"
-"Owen Taylor\n"
-"Rob Taylor\n"
-"Spencer Kimball\n"
-"Ximian Team\n"
-"\n"
-"Each and every contributor to GNOME\n"
-"and the Friends of GNOME"
-msgstr ""
-"Andy Hertzfeld 與 Eazel 團隊\n"
-"Alberto Ruiz\n"
-"Bastien Nocera\n"
-"Cosimo Cecchi\n"
-"Emmanuele Bassi\n"
-"Federico Mena Quintero\n"
-"Jasper St Pierre\n"
-"Jon McCann\n"
-"Jonathan Blandford\n"
-"Matthias Clasen\n"
-"Miguel de Icaza\n"
-"Owen Taylor\n"
-"Rob Taylor\n"
-"Spencer Kimball\n"
-"Ximian Team\n"
-"\n"
-"各位與每位 GNOME 貢獻者\n"
-"以及 GNOME 之友"
-
-#: ../src/resources/ui/gb-credits-widget.ui.h:55
-msgid "GNOME Builder"
-msgstr "GNOME Builder"
-
-#: ../src/resources/ui/gb-credits-widget.ui.h:56
-msgid ""
-"Copyright 2014 Christian Hergert, et al.\n"
-"Licensed under the GNU GPL 3 or newer"
-msgstr ""
-"著作權所有 2014 Christian Hergert 等人。\n"
-"根據 GNU GPL 3 版或後續版本給予授權"
-
-#: ../src/resources/ui/gb-document-menu-button.ui.h:1
-msgid "Search Documents"
-msgstr "搜尋文件"
-
-#: ../src/resources/ui/gb-document-menu-button.ui.h:2
-msgid "No documents were found"
-msgstr "找不到文件"
-
-#: ../src/resources/ui/gb-editor-frame.ui.h:1
-msgid "Line 1, Column 1"
-msgstr "列 1，行 1"
-
-#: ../src/resources/ui/gb-editor-frame.ui.h:2
-msgid "Currently parsing document"
-msgstr "目前解析的文件"
-
-#: ../src/resources/ui/gb-editor-settings-widget.ui.h:1
-#, fuzzy
-msgid "Display right _margin at column:"
-msgstr "顯示右邊邊界於(_M)："
-
-#: ../src/resources/ui/gb-editor-settings-widget.ui.h:2
-msgid "Trim trailing whitespace when saving document"
-msgstr ""
-
-#: ../src/resources/ui/gb-editor-settings-widget.ui.h:3
-msgid "Insert matching brace, bracket, quotation, and parenthesis."
-msgstr ""
-
-#: ../src/resources/ui/gb-editor-settings-widget.ui.h:4
-msgid "Overwrite closing brace, bracket, quotation, and parenthesis."
-msgstr ""
-
-#: ../src/resources/ui/gb-editor-settings-widget.ui.h:5
-#: ../src/resources/ui/gb-editor-tweak-widget.ui.h:6
-msgid "Indentation"
-msgstr "縮排"
-
-#: ../src/resources/ui/gb-editor-settings-widget.ui.h:6
-msgid "_Tab width:"
-msgstr "_Tab 寬度："
-
-#: ../src/resources/ui/gb-editor-settings-widget.ui.h:7
-msgid "Insert _spaces instead of tabs"
-msgstr "插入空格而非 Tab(_S)"
-
-#: ../src/resources/ui/gb-editor-settings-widget.ui.h:8
-msgid "_Enable automatic indentation"
-msgstr "啟用自動縮排(_E)"
-
-#: ../src/resources/ui/gb-editor-tweak-widget.ui.h:1
-msgid "Search highlight mode…"
-msgstr "搜尋標明模式…"
-
-#: ../src/resources/ui/gb-editor-tweak-widget.ui.h:2
-msgid "Display line numbers"
-msgstr "顯示列號"
-
-#: ../src/resources/ui/gb-editor-tweak-widget.ui.h:3
-msgid "Display right margin"
-msgstr "顯示右邊緣"
-
-#: ../src/resources/ui/gb-editor-tweak-widget.ui.h:4
-msgid "Highlight current line"
-msgstr "標明目前一列"
-
-#: ../src/resources/ui/gb-editor-tweak-widget.ui.h:5
-msgid "Auto indent"
-msgstr "自動縮排"
-
-#: ../src/resources/ui/gb-editor-tweak-widget.ui.h:7
-msgid "Spaces"
-msgstr "空格"
-
-#: ../src/resources/ui/gb-editor-tweak-widget.ui.h:8
-msgid "Tabs"
-msgstr "Tab"
-
-#: ../src/resources/ui/gb-editor-tweak-widget.ui.h:9
-msgid "2"
-msgstr "2"
-
-#: ../src/resources/ui/gb-editor-tweak-widget.ui.h:10
-msgid "3"
-msgstr "3"
-
-#: ../src/resources/ui/gb-editor-tweak-widget.ui.h:11
-msgid "4"
-msgstr "4"
-
-#: ../src/resources/ui/gb-editor-tweak-widget.ui.h:12
-msgid "8"
-msgstr "8"
-
-#: ../src/resources/ui/gb-editor-view.ui.h:3
-msgid "_Close"
-msgstr "關閉(_C)"
-
-#: ../src/resources/ui/gb-preferences-page-editor.ui.h:1
-msgid "<b>Restore Cursor Position</b>"
-msgstr "<b>還原游標位置</b>"
-
-#: ../src/resources/ui/gb-preferences-page-editor.ui.h:2
-msgid ""
-"Restore the insertion cursor to the last position when reopening a file."
-msgstr ""
-
-#: ../src/resources/ui/gb-preferences-page-editor.ui.h:3
-msgid "<b>Suggest Word Completion</b>"
-msgstr "<b>建議字詞補完</b>"
-
-#: ../src/resources/ui/gb-preferences-page-editor.ui.h:4
-msgid "Suggest completion of words found within the current document."
-msgstr ""
-
-#: ../src/resources/ui/gb-preferences-page-editor.ui.h:5
-msgid "<b>Display Document Changes</b>"
-msgstr "<b>顯示文件變動</b>"
-
-#: ../src/resources/ui/gb-preferences-page-editor.ui.h:6
-msgid ""
-"Display whether a line has been added or modified next to the line number."
-msgstr ""
-
-#: ../src/resources/ui/gb-preferences-page-editor.ui.h:7
-msgid "<b>Show Line Numbers</b>"
-msgstr "<b>顯示列號</b>"
-
-#: ../src/resources/ui/gb-preferences-page-editor.ui.h:8
-#, fuzzy
-msgid "Display line numbers in the document."
-msgstr "是否顯示列號"
-
-#: ../src/resources/ui/gb-preferences-page-editor.ui.h:9
-msgid "<b>Highlight Current Line</b>"
-msgstr "<b>標明目前一列</b>"
-
-#: ../src/resources/ui/gb-preferences-page-editor.ui.h:10
-msgid "Highlight the line containing the cursor."
-msgstr "標示游標目前所在的一列。"
-
-#: ../src/resources/ui/gb-preferences-page-editor.ui.h:11
-#, fuzzy
-msgid "<b>Highlight Matching Brackets</b>"
-msgstr "加強顯示成對的括弧"
-
-#: ../src/resources/ui/gb-preferences-page-editor.ui.h:12
-#, fuzzy
-msgid "Whether or not matching brackets should be highlighted."
-msgstr "gedit 是否應以色彩顯示與目前選取的成對的弧號。"
-
-#: ../src/resources/ui/gb-preferences-page-editor.ui.h:13
-msgid "<b>Smart Home End</b>"
-msgstr "<b>智慧 Home、End 鍵</b>"
-
-#: ../src/resources/ui/gb-preferences-page-editor.ui.h:14
-msgid "Home moves to first non-space character."
-msgstr ""
-
-#: ../src/resources/ui/gb-preferences-page-editor.ui.h:15
-msgid "<b>Show Grid Lines</b>"
-msgstr "<b>顯示格線</b>"
-
-#: ../src/resources/ui/gb-preferences-page-editor.ui.h:16
-#, fuzzy
-msgid "Display a grid patten in the document."
-msgstr "格線顯示"
-
-#: ../src/resources/ui/gb-preferences-page-emacs.ui.h:1
-msgid "<b>EMACS Modal Editing</b>"
-msgstr "<b>EMACS 範型編輯</b>"
-
-#: ../src/resources/ui/gb-preferences-page-emacs.ui.h:2
-msgid "Use EMACS style modal editing in the source code editor."
-msgstr "源碼編輯器中使用 EMACS 風格範型編輯。"
-
-#: ../src/resources/ui/gb-preferences-page-git.ui.h:1
-msgid "Author Name"
-msgstr "作者名稱"
-
-#: ../src/resources/ui/gb-preferences-page-git.ui.h:2
-msgid "Author Email"
-msgstr "作者電子信箱"
-
-#: ../src/resources/ui/gb-preferences-page-git.ui.h:3
-#: ../src/resources/ui/gb-preferences-window.ui.h:5
-msgid "Git"
-msgstr "Git"
-
-#: ../src/resources/ui/gb-preferences-page-vim.ui.h:1
-msgid "<b>VIM Modal Editing</b>"
-msgstr "<b>VIM 範型編輯</b>"
-
-#: ../src/resources/ui/gb-preferences-page-vim.ui.h:2
-msgid "Use VIM style modal editing in the source code editor."
-msgstr "源碼編輯器中使用 VIM 風格範型編輯。"
-
-#: ../src/resources/ui/gb-preferences-page-vim.ui.h:3
-msgid "<b>Scroll Offset</b>"
-msgstr "<b>捲動偏移</b>"
-
-#: ../src/resources/ui/gb-preferences-page-vim.ui.h:4
-msgid "Minimal number of lines to keep above and below the cursor."
-msgstr "留在游標之上與之下的最小列數。"
-
-#: ../src/resources/ui/gb-preferences-window.ui.h:1
-msgid "Preferences"
-msgstr "偏好設定"
-
-#: ../src/resources/ui/gb-preferences-window.ui.h:2
-msgid "Search Preferences"
-msgstr "搜尋偏好設定"
-
-#: ../src/resources/ui/gb-preferences-window.ui.h:3
-#: ../src/resources/ui/gb-workbench.ui.h:4
-msgid "Editor"
-msgstr "編輯器"
-
-#: ../src/resources/ui/gb-preferences-window.ui.h:4
-msgid "Language Settings"
-msgstr "語言設定"
-
-#: ../src/resources/ui/gb-preferences-window.ui.h:6
-msgid "Vim"
-msgstr "Vim"
-
-#: ../src/resources/ui/gb-preferences-window.ui.h:7
-msgid "Emacs"
-msgstr "Emacs"
-
-#: ../src/resources/ui/gb-workbench.ui.h:1
-msgid "Go back in history"
-msgstr "返回歷史記錄"
-
-#: ../src/resources/ui/gb-workbench.ui.h:2
-msgid "Go forward in history"
-msgstr "前進歷史記錄"
-
-#: ../src/resources/ui/gb-workbench.ui.h:3
-msgid "Create new document"
-msgstr "建立新聞鍵"
-
-#: ../src/scrolledwindow/gb-scrolled-window.c:261
-msgid "Max Content Height"
-msgstr "最大內容高度"
-
-#: ../src/scrolledwindow/gb-scrolled-window.c:262
-#, fuzzy
-msgid "The maximum height request that can be made."
-msgstr "角色可以跑的最大步高"
-
-#: ../src/scrolledwindow/gb-scrolled-window.c:272
-msgid "Max Content Width"
-msgstr "最大內容寬度"
-
-#: ../src/scrolledwindow/gb-scrolled-window.c:273
-msgid "The maximum width request that can be made."
-msgstr ""
-
-#: ../src/search/gb-search-box.c:463
-msgid "Search Manager"
-msgstr "搜尋管理員"
-
-#: ../src/search/gb-search-box.c:464
-#, fuzzy
-msgid "The search manager for the search box."
-msgstr "搜尋管理員"
-
-#: ../src/search/gb-search-display.c:215
-msgid "Cannot add provider more than once."
-msgstr ""
-
-#: ../src/search/gb-search-display.c:293
-#, fuzzy
-msgid "The provider could not be found."
-msgstr "提供者"
-
-#: ../src/search/gb-search-display.c:549
-#: ../src/snippets/gb-source-snippet-chunk.c:298
-msgid "Context"
-msgstr "情境"
-
-#: ../src/search/gb-search-display.c:550
-msgid "The active search context."
-msgstr "使用中搜尋情境。"
-
-#: ../src/search/gb-search-display-group.c:183
-msgid "%"
-msgstr "%"
-
-#: ../src/search/gb-search-display-group.c:419
-msgid "Provider"
-msgstr "提供者"
-
-#: ../src/search/gb-search-display-group.c:420
-msgid "The search provider"
-msgstr "搜尋提供者"
-
-#: ../src/search/gb-search-display-group.c:430
-msgid "Size Group"
-msgstr "大小群組"
-
-#: ../src/search/gb-search-display-group.c:431
-msgid "The size group for the label."
-msgstr "標籤的大小群組。"
-
-#: ../src/search/gb-search-result.c:217
-msgid "Score"
-msgstr "分數"
-
-#: ../src/search/gb-search-result.c:218
-msgid "The result match score."
-msgstr "結果比對分數。"
-
-#: ../src/search/gb-search-result.c:230
-msgid "Subtitle"
-msgstr "副題"
-
-#: ../src/search/gb-search-result.c:231 ../src/search/gb-search-result.c:242
-#, fuzzy
-msgid "The pango markup to be rendered."
-msgstr "要算繪的 Pango 語法。"
-
-#: ../src/snippets/gb-source-snippet.c:352
-#, fuzzy
-msgid "Chunk does not belong to snippet."
-msgstr "此物不屬於您。"
-
-#: ../src/snippets/gb-source-snippet.c:1024
-#, fuzzy
-msgid "The GtkTextBuffer for the snippet."
-msgstr "加入文字片段…"
-
-#: ../src/snippets/gb-source-snippet.c:1032
-msgid "Mark Begin"
-msgstr "標記開始"
-
-#: ../src/snippets/gb-source-snippet.c:1033
-#, fuzzy
-msgid "The beginning text mark."
-msgstr "標記"
-
-#: ../src/snippets/gb-source-snippet.c:1041
-msgid "Mark End"
-msgstr "標記結束"
-
-#: ../src/snippets/gb-source-snippet.c:1042
-#, fuzzy
-msgid "The ending text mark."
-msgstr "標記"
-
-#: ../src/snippets/gb-source-snippet.c:1050
-msgid "Trigger"
-msgstr "觸發"
-
-#: ../src/snippets/gb-source-snippet.c:1051
-msgid "The trigger for the snippet."
-msgstr ""
-
-#: ../src/snippets/gb-source-snippet.c:1060
-#, fuzzy
-msgid "The language for the snippet."
-msgstr "加入文字片段"
-
-#: ../src/snippets/gb-source-snippet.c:1068
-msgid "Description"
-msgstr "描述"
-
-#: ../src/snippets/gb-source-snippet.c:1069
-#, fuzzy
-msgid "The description for the snippet."
-msgstr "(無描述)"
-
-#: ../src/snippets/gb-source-snippet.c:1077
-#: ../src/snippets/gb-source-snippet-chunk.c:316
-msgid "Tab Stop"
-msgstr "Tab 落點"
-
-#: ../src/snippets/gb-source-snippet.c:1078
-#, fuzzy
-msgid "The current tab stop."
-msgstr "Tab 落點"
-
-#: ../src/snippets/gb-source-snippet-chunk.c:299
-#, fuzzy
-msgid "The snippet context."
-msgstr "加入文字片段…"
-
-#: ../src/snippets/gb-source-snippet-chunk.c:307
-msgid "Spec"
-msgstr "規格"
-
-#: ../src/snippets/gb-source-snippet-chunk.c:308
-msgid "The specification to expand using the contxt."
-msgstr ""
-
-#: ../src/snippets/gb-source-snippet-chunk.c:317
-#, fuzzy
-msgid "The tab stop for the chunk."
-msgstr "Tab 落點"
-
-#: ../src/snippets/gb-source-snippet-chunk.c:327
-#: ../src/tree/gb-tree-node.c:539
-msgid "Text"
-msgstr "文字"
-
-#: ../src/snippets/gb-source-snippet-chunk.c:328
-msgid "The text for the chunk."
-msgstr ""
-
-#: ../src/snippets/gb-source-snippet-chunk.c:336
-#, fuzzy
-msgid "Text Set"
-msgstr "以指定文字替換原文字，並設為已選取"
-
-#: ../src/snippets/gb-source-snippet-chunk.c:337
-msgid "If the text property has been manually set."
-msgstr ""
-
-#: ../src/snippets/gb-source-snippet-completion-item.c:134
-#, fuzzy
-msgid "Snippet"
-msgstr "加入文字片段…"
-
-#: ../src/snippets/gb-source-snippet-completion-item.c:135
-msgid "The snippet to insert."
-msgstr ""
-
-#: ../src/snippets/gb-source-snippet-completion-provider.c:169
-#, fuzzy
-msgid "The source view to insert snippet into."
-msgstr "使用觸發鍵插入文字片段"
-
-#: ../src/snippets/gb-source-snippet-completion-provider.c:177
-#: ../src/snippets/gb-source-snippet-completion-provider.c:262
-#, fuzzy
-msgid "Snippets"
-msgstr "文字片段"
-
-#: ../src/snippets/gb-source-snippet-completion-provider.c:178
-#, fuzzy
-msgid "The snippets to complete with this provider."
-msgstr "文字片段"
-
-#: ../src/snippets/gb-source-snippet-parser.c:503
-#, fuzzy, c-format
-msgid "Invalid snippet at line %d: %s"
-msgstr "無效的草寫位置於 %2$s 的第 %1$d 列"
-
-#: ../src/snippets/gb-source-snippets-manager.c:92
-#, c-format
-msgid "Failed to open directory: %s"
-msgstr "無法開啟目錄：%s"
-
-#: ../src/snippets/gb-source-snippets-manager.c:107
-#, c-format
-msgid "Failed to load file: %s: %s"
-msgstr "無法載入檔案：%s：%s"
-
-#: ../src/theatrics/gb-box-theatric.c:258
-#: ../src/theatrics/gb-box-theatric.c:259
-msgid "Alpha"
-msgstr "Alpha"
-
-#: ../src/theatrics/gb-box-theatric.c:269
-#: ../src/theatrics/gb-box-theatric.c:270
-msgid "background"
-msgstr "背景"
-
-#: ../src/theatrics/gb-box-theatric.c:278
-#: ../src/theatrics/gb-box-theatric.c:279
-msgid "height"
-msgstr "高"
-
-#: ../src/theatrics/gb-box-theatric.c:300
-#: ../src/theatrics/gb-box-theatric.c:301
-msgid "width"
-msgstr "寬"
-
-#: ../src/theatrics/gb-box-theatric.c:311
-#: ../src/theatrics/gb-box-theatric.c:312
-msgid "x"
-msgstr "x"
-
-#: ../src/theatrics/gb-box-theatric.c:322
-#: ../src/theatrics/gb-box-theatric.c:323
-msgid "y"
-msgstr "y"
-
-#: ../src/tree/gb-tree-builder.c:288 ../src/tree/gb-tree-node.c:525
+#: ../src/tree/gb-tree-builder.c:220 ../src/tree/gb-tree-node.c:642
 msgid "Tree"
 msgstr "樹"
 
-#: ../src/tree/gb-tree-builder.c:289
+#: ../src/tree/gb-tree-builder.c:221
 msgid "The GbTree the builder belongs to."
 msgstr "Builder 所屬的 GbTree。"
 
-#: ../src/tree/gb-tree.c:888
-msgid "Root"
-msgstr "根"
-
-#: ../src/tree/gb-tree.c:889
+#: ../src/tree/gb-tree.c:961
 msgid "The root object of the tree."
 msgstr "樹的根物件。"
 
-#: ../src/tree/gb-tree.c:897
+#: ../src/tree/gb-tree.c:967
 msgid "Selection"
 msgstr "選取項目"
 
-#: ../src/tree/gb-tree.c:898
+#: ../src/tree/gb-tree.c:968
 msgid "The node selection."
 msgstr "節點選取項目。"
 
-#: ../src/tree/gb-tree-node.c:483 ../src/workbench/gb-workspace.c:161
-msgid "Icon Name"
-msgstr "圖示名稱"
-
-#: ../src/tree/gb-tree-node.c:484
+#: ../src/tree/gb-tree-node.c:607
 msgid "The icon name to display."
 msgstr "要顯示的圖示名稱。"
 
-#: ../src/tree/gb-tree-node.c:497
+#: ../src/tree/gb-tree-node.c:618
 msgid "Item"
 msgstr "項目"
 
-#: ../src/tree/gb-tree-node.c:498
+#: ../src/tree/gb-tree-node.c:619
 msgid "Optional object to associate with node."
 msgstr "要與節點作關聯的選用物件。"
 
-#: ../src/tree/gb-tree-node.c:511
-msgid "Parent"
-msgstr "親代"
-
-#: ../src/tree/gb-tree-node.c:512
+#: ../src/tree/gb-tree-node.c:631
 msgid "The parent node."
 msgstr "親代節點。"
 
-#: ../src/tree/gb-tree-node.c:526
+#: ../src/tree/gb-tree-node.c:643
 msgid "The GbTree the node belongs to."
 msgstr "節點所屬的 GbTree。"
 
-#: ../src/tree/gb-tree-node.c:540
+#: ../src/tree/gb-tree-node.c:655
 msgid "The text of the node."
 msgstr "節點的文字。"
 
-#: ../src/tree/gb-tree-node.c:553
+#: ../src/tree/gb-tree-node.c:666
 msgid "Use Markup"
 msgstr "使用標記"
 
-#: ../src/tree/gb-tree-node.c:554
+#: ../src/tree/gb-tree-node.c:667
 msgid "If text should be translated as markup."
 msgstr "是否文字應轉譯為標記。"
 
-#: ../src/trie/trie.c:790
+#: ../src/tree/gb-tree-node.c:673
+msgid "Use Dim Label"
+msgstr "使用暗淡標籤"
+
+#: ../src/tree/gb-tree-node.c:674
+msgid "If text should be rendered with a dim label."
+msgstr "文字是否應以暗淡標籤繪製。"
+
+#: ../src/util/gb-file-manager.c:64
+msgid "File path is NULL"
+msgstr "檔案路徑為 NULL"
+
+#: ../src/util/gb-file-manager.c:73 ../src/util/gb-file-manager.c:84
+msgid "Error converting UTF-8 filename to wide char"
+msgstr "轉換 UTF-8 檔案名稱為寬字元時發生錯誤"
+
+#: ../src/util/gb-file-manager.c:92
+msgid "ILCreateFromPath() failed"
+msgstr "ILCreateFromPath() 失敗"
+
+#: ../src/util/gb-file-manager.c:129
 #, c-format
-msgid "Traversal order %u is not supported on Trie."
-msgstr ""
+msgid "Cannot convert '%s' into a valid NSURL."
+msgstr "無法轉換「%s」為有效的 NSURL。"
 
-#: ../src/workbench/gb-workbench.c:854
-msgid "Command Manager"
-msgstr "指令管理員"
+#: ../src/util/gb-file-manager.c:157
+msgid "Connecting to org.freedesktop.FileManager1 failed: "
+msgstr "連線到 org.freedesktop.FileManager1 失敗："
 
-#: ../src/workbench/gb-workbench.c:855
-msgid "The command manager for the workspace."
-msgstr "工作空間的指令管理員。"
+#: ../src/util/gb-file-manager.c:181
+msgid "Calling ShowItems failed: "
+msgstr "呼叫 ShowItems 失敗："
 
-#: ../src/workbench/gb-workbench.c:864
-msgid "Navigation List"
-msgstr "導覽清單"
+#: ../src/util/gb-glib.c:55
+msgid "Just now"
+msgstr "剛剛"
 
-#: ../src/workbench/gb-workbench.c:865
+#: ../src/util/gb-glib.c:57
+msgid "An hour ago"
+msgstr "一小時前"
+
+#: ../src/util/gb-glib.c:59
+msgid "Yesterday"
+msgstr "昨天"
+
+#: ../src/util/gb-glib.c:65
+msgid "About a year ago"
+msgstr "大約一年前"
+
+#: ../src/util/gb-glib.c:69
+#, c-format
+msgid "About %u years ago"
+msgstr "大約 %u 年前"
+
+#: ../src/views/gb-view.c:258
+msgid "Can Split"
+msgstr "可以分割"
+
+#: ../src/views/gb-view.c:259
+msgid "If the view can be split."
+msgstr "檢視是否可以分割。"
+
+#: ../src/views/gb-view.c:266
+msgid "The underlying document."
+msgstr "底層文件。"
+
+#: ../src/views/gb-view.c:273
+msgid "If the document has been modified."
+msgstr "該文件是否已經修改。"
+
+#: ../src/views/gb-view.c:280
+msgid "The view title."
+msgstr "檢視標題。"
+
+#: ../src/views/gb-view-stack.c:501
+msgid "The active view."
+msgstr "使用中檢視。"
+
+#: ../src/workbench/gb-workbench-actions.c:162
+msgid "Open Document"
+msgstr "開啟文件"
+
+#: ../src/workbench/gb-workbench-actions.c:170
+msgid "Open"
+msgstr "開啟"
+
+#: ../src/workbench/gb-workbench.c:151
+#, c-format
+#| msgid "Builder"
+msgid "%s - Builder"
+msgstr "%s - Builder"
+
+#: ../src/workbench/gb-workbench.c:693
+msgid "Building"
+msgstr "組建中"
+
+#: ../src/workbench/gb-workbench.c:694
+msgid "If the project is currently building."
+msgstr "專案目前是否正在組建。"
+
+#: ../src/workbench/gb-workbench.c:709
 #, fuzzy
-msgid "The navigation list for the workbench."
+msgid "The IdeContext for the workbench."
 msgstr "導覽"
 
-#: ../src/workbench/gb-workspace.c:152
-msgid "The title of the workspace."
-msgstr "工作區的題名。"
+#: ../src/workbench/gb-workbench.c:940
+msgid "Build Failure"
+msgstr "組建失敗"
 
-#: ../src/workbench/gb-workspace.c:162
-msgid "The name of the icon to use."
-msgstr "要使用的圖示名稱"
+#: ../src/workbench/gb-workbench.c:987
+msgid "Project build system does not support building"
+msgstr "專案組建系統不支援組建"
+
+#: ../src/workspace/gb-slider.c:755 ../src/workspace/gb-workspace.c:1092
+#: ../src/workspace/gb-workspace-pane.c:281
+msgid "Position"
+msgstr "位置"
+
+#: ../src/workspace/gb-slider.c:756
+msgid "Which slider child is visible."
+msgstr "哪個滑動鈕子項是可視的。"
+
+#: ../src/workspace/gb-workspace.c:1062
+msgid "Left Pane"
+msgstr "左窗格"
+
+#: ../src/workspace/gb-workspace.c:1063
+msgid "The left workspace pane."
+msgstr "左方工作區窗格。"
+
+#: ../src/workspace/gb-workspace.c:1069
+msgid "Right Pane"
+msgstr "右窗格"
+
+#: ../src/workspace/gb-workspace.c:1070
+msgid "The right workspace pane."
+msgstr "右方工作區窗格。"
+
+#: ../src/workspace/gb-workspace.c:1076
+msgid "Bottom Pane"
+msgstr "底部窗格"
+
+#: ../src/workspace/gb-workspace.c:1077
+msgid "The bottom workspace pane."
+msgstr "底部工作區窗格。"
+
+#: ../src/workspace/gb-workspace.c:1083
+msgid "Content Pane"
+msgstr "內容窗格"
+
+#: ../src/workspace/gb-workspace.c:1084
+msgid "The content workspace pane."
+msgstr "內容工作區窗格。"
+
+#: ../src/workspace/gb-workspace.c:1093
+msgid "The position of the pane relative to its edge."
+msgstr "窗格相對於其邊緣的位置。"
+
+#: ../src/workspace/gb-workspace.c:1102
+msgid "Reveal"
+msgstr "顯示"
+
+#: ../src/workspace/gb-workspace.c:1103
+msgid "If the pane should be revealed."
+msgstr "是否應顯示窗格。"
+
+#: ../src/workspace/gb-workspace-pane.c:282
+msgid "The position of the pane."
+msgstr "窗格的位置。"
+
+#: ../tools/ide-build.c:79 ../tools/ide-build.c:83
+#, c-format
+msgid "===============\n"
+msgstr "===============\n"
+
+#: ../tools/ide-build.c:80
+#, c-format
+msgid " Build Failure: %s\n"
+msgstr " 組建失敗：%s\n"
+
+#: ../tools/ide-build.c:81
+msgid " Build ran for: %"
+msgstr " 組建執行於：%"
+
+#: ../tools/ide-build.c:88 ../tools/ide-build.c:92
+#, c-format
+msgid "=================\n"
+msgstr "=================\n"
+
+#: ../tools/ide-build.c:89
+#, c-format
+msgid " Build Successful\n"
+msgstr " 組建成功\n"
+
+#: ../tools/ide-build.c:90
+msgid "   Build ran for: %"
+msgstr "  組建執行於：%"
+
+#: ../tools/ide-build.c:198 ../tools/ide-build.c:204
+#, c-format
+msgid "========================\n"
+msgstr "========================\n"
+
+#: ../tools/ide-build.c:199
+#, c-format
+msgid "           Project Name: %s\n"
+msgstr "           專案名稱：%s\n"
+
+#: ../tools/ide-build.c:200
+#, c-format
+msgid " Version Control System: %s\n"
+msgstr " 版本控制系統：%s\n"
+
+#: ../tools/ide-build.c:201
+#, c-format
+msgid "           Build System: %s\n"
+msgstr "           組建系統：%s\n"
+
+#: ../tools/ide-build.c:202
+#, c-format
+msgid "    Build Date and Time: %s\n"
+msgstr "    組建日期時刻：%s\n"
+
+#: ../tools/ide-build.c:203
+#, c-format
+msgid "    Building for Device: %s (%s)\n"
+msgstr "    組建設備：%s (%s)\n"
+
+#: ../tools/ide-build.c:286
+#, c-format
+msgid "Timed out while waiting for devices to settle.\n"
+msgstr ""
+
+#: ../tools/ide-build.c:344
+#, c-format
+msgid "Waiting up to 60 seconds for devices to settle. Ctrl+C to exit.\n"
+msgstr ""
+
+#: ../tools/ide-build.c:353
+msgid "The target device we are building for."
+msgstr "我們組建的目標裝置。"
+
+#: ../tools/ide-build.c:354
+msgid "DEVICE_ID"
+msgstr "DEVICE_ID"
+
+#: ../tools/ide-build.c:357
+msgid "Clean and rebuild the project."
+msgstr "清除並重新組建專案。"
+
+#: ../tools/ide-build.c:359
+#, fuzzy
+msgid "Increase parallelism in the build."
+msgstr "增加縮排(_I)"
+
+#: ../tools/ide-build.c:360
+msgid "N"
+msgstr "N"
+
+#: ../tools/ide-build.c:371
+msgid "- Build the project."
+msgstr "- 建置專案。"
+
+#: ../tools/ide-list-build-flags.c:113
+msgid "- Get build flags for a project file"
+msgstr "- 取得專案檔案的組建旗標"
+
+#: ../tools/ide-list-devices.c:107
+msgid "- List devices found on the system."
+msgstr "- 列出在系統中找到的裝置。"
+
+#: ../tools/ide-list-diagnostics.c:185
+#, c-format
+msgid "Failed to diagnose: %s\n"
+msgstr "無法診斷：%s\n"
+
+#: ../tools/ide-list-diagnostics.c:248
+#, c-format
+msgid "No such file in project: %s\n"
+msgstr "專案中沒有這樣的檔案：%s\n"
+
+#: ../tools/ide-list-diagnostics.c:282
+msgid "- List diagnostics for a file."
+msgstr "- 列出檔案的診斷。"
+
+#: ../tools/ide-list-files.c:125 ../tools/ide-list-file-settings.c:205
+msgid "- List files found in project."
+msgstr "- 列出專案中找到的檔案。"
+
+#: ../tools/ide-list-file-settings.c:180
+#, c-format
+msgid "No files provided to load settings for.\n"
+msgstr "沒有提供讀取設定值的檔案。\n"
+
+#: ../tools/ide-mine-projects.c:78
+msgid "- discover projects"
+msgstr "- 探索專案"
+
+#: ../tools/ide-search.c:66
+#, c-format
+msgid "%s results\n"
+msgstr "%s 結果\n"
+
+#: ../tools/ide-search.c:118
+msgid "PROJECT_FILE [SEARCH TERMS...]"
+msgstr "PROJECT_FILE [SEARCH TERMS...]"
+
+#~ msgid "Failed to load keybindings: %s"
+#~ msgstr "無法載入按鍵綁定：%s"
+
+#~ msgid "Failed to load local keybindings: %s"
+#~ msgstr "無法載入本地端按鍵綁定：%s"
+
+#~ msgid "If code assistance is currently processing."
+#~ msgstr "是否代碼助理正在處理中。"
+
+#~ msgid "The buffer "
+#~ msgstr "緩衝"
+
+#~ msgid ""
+#~ "Failed to load DBus connection. Code assistance will be disabled. \"%s"
+#~ "\" (%s)"
+#~ msgstr "無法載入 BBus 連線。代碼助理將停用。「%s」(%s)"
+
+#, fuzzy
+#~ msgid "The result to be visualized in the item."
+#~ msgstr "項目中要示現的結果。"
+
+#~ msgid "Active DocumentView"
+#~ msgstr "使用中 DocumentView"
+
+#~ msgid "Progress"
+#~ msgstr "進度"
+
+#~ msgid "GNOME Builder - %s"
+#~ msgstr "GNOME Builder - %s"
+
+#~ msgid "Question"
+#~ msgstr "問題"
+
+#~ msgid "Close _without Saving"
+#~ msgstr "關閉而不儲存(_W)"
+
+#~ msgid "_Save As…"
+#~ msgstr "另存為(_S)…"
+
+#~ msgid "_Save"
+#~ msgstr "儲存(_S)"
+
+#, fuzzy
+#~ msgid ""
+#~ "If you don't save, changes from the last minute will be permanently lost."
+#~ msgstr "如果不儲存，將會永久地失去 1 分鐘前所作的修改。"
+
+#, fuzzy
+#~ msgid ""
+#~ "If you don't save, changes from the last hour will be permanently lost."
+#~ msgstr "如果不儲存，將會永久地失去 1 小時前所作的修改。"
+
+#, fuzzy
+#~ msgid "Changes to document “%s” will be permanently lost."
+#~ msgstr "將會永久地失去對文件“%s”所作的修改。"
+
+#, fuzzy
+#~ msgid "Save changes to document “%s” before closing?"
+#~ msgstr "在關閉前將變更儲存到文件“%s”？"
+
+#, fuzzy
+#~ msgid "Saving has been disabled by the system administrator."
+#~ msgstr "儲存功能已被系統管理員禁用。"
+
+#, fuzzy
+#~ msgid "Docum_ents with unsaved changes:"
+#~ msgstr "已修改但未儲存的文件(_E):"
+
+#, fuzzy
+#~ msgid "S_elect the documents you want to save:"
+#~ msgstr "請選擇需要儲存的文件(_E):"
+
+#, fuzzy
+#~ msgid "If you don't save, all your changes will be permanently lost."
+#~ msgstr "如果不儲存，所有已修改的部份將會永久地遺失。"
+
+#, fuzzy
+#~ msgid "The document manager for the document grid."
+#~ msgstr "文件管理員"
+
+#~ msgid "The number of documents in the manager."
+#~ msgstr "管理員中的文件數。"
+
+#, fuzzy
+#~ msgid "The document manager for the stack."
+#~ msgstr "文件管理員"
+
+#~ msgid "Can Preview"
+#~ msgstr "可以預覽"
+
+#~ msgid "The document being viewed."
+#~ msgstr "正在檢視的文件。"
+
+#~ msgid "%s (Read Only)"
+#~ msgstr "%s (唯讀)"
+
+#~ msgid "No file was selected for saving."
+#~ msgstr "沒有選取檔案要儲存。"
+
+#~ msgid "Error"
+#~ msgstr "錯誤"
+
+#, fuzzy
+#~ msgid "The backing file for the document."
+#~ msgstr "備份檔案"
+
+#, fuzzy
+#~ msgid "Loading or saving progress."
+#~ msgstr "儲存進度："
+
+#~ msgid "Trim Trailing Whitespace"
+#~ msgstr "截去曳尾空白"
+
+#~ msgid "If whitespace should be trimmed before saving."
+#~ msgstr "是否在儲存前應截去空白。"
+
+#~ msgid "The column within the line."
+#~ msgstr "文字的行號。"
+
+#, fuzzy
+#~ msgid "The file for which to store the mark."
+#~ msgstr "儲存記號的檔案。"
+
+#~ msgid "Line"
+#~ msgstr "列"
+
+#~ msgid "The direction of the last text searched for."
+#~ msgstr "上次文字搜尋的方向。"
+
+#~ msgid "The line number within the file."
+#~ msgstr "檔案內的列號。"
+
+#~ msgid "Line Offset"
+#~ msgstr "列偏移"
+
+#~ msgid "The file “%s” was modified outside of Builder."
+#~ msgstr "「%s」檔案已在 Builder 外部經過修改。"
+
+#~ msgid "If we should use the auto-indentation engine."
+#~ msgstr "是否我們應該使用自動縮排引擎。"
+
+#~ msgid "The document edited by the view."
+#~ msgstr "該檢視之下所編輯的文件。"
+
+#~ msgid "Show Right Margin"
+#~ msgstr "顯示右側邊緣"
+
+#~ msgid "If we should show the right margin."
+#~ msgstr "我們是否應顯示右側邊緣。"
+
+#~ msgid "Split Enabled"
+#~ msgstr "啟用分割"
+
+#~ msgid "The width a tab should be drawn as."
+#~ msgstr "應如何描繪 Tab 的寬度。"
+
+#~ msgid "Use Spaces"
+#~ msgstr "使用空格"
+
+#, fuzzy
+#~ msgid "The change monitor for the gutter renderer."
+#~ msgstr "變更監視器"
+
+#, fuzzy
+#~ msgid "Failed to load git blob"
+#~ msgstr "，未能載入"
+
+#, fuzzy
+#~ msgid "No filename, cannot discover repository."
+#~ msgstr "不能寫入軟體庫組態"
+
+#, fuzzy
+#~ msgid "Failure copying to \"%s\": %s"
+#~ msgstr "自動調整寬度於 %s 失敗\n"
+
+#~ msgid "Can Format"
+#~ msgstr "可以格式化"
+
+#, fuzzy
+#~ msgid "If the source language can be formatted."
+#~ msgstr "此詞彙表的源語言"
+
+#, fuzzy
+#~ msgid "The font name to apply to the widget."
+#~ msgstr "字型選擇視窗元件"
+
+#~ msgid "Enable smart home end in gtksourceview."
+#~ msgstr "在 gtksourceview 中啟用智慧式 Home End。"
+
+#, fuzzy
+#~ msgid "Whether to show the grid lines."
+#~ msgstr "顯示儲存格格線。"
+
+#~ msgid "Stack"
+#~ msgstr "堆疊"
+
+#, fuzzy
+#~ msgid "Bar's primary label"
+#~ msgstr "標籤"
+
+#, fuzzy
+#~ msgid "Bar's details label"
+#~ msgstr "%(label)s %(details)s"
+
+#, fuzzy
+#~ msgid "Details label displayed by the bar"
+#~ msgstr "%(label)s %(details)s"
+
+#, fuzzy
+#~ msgid "Show spinner"
+#~ msgstr "轉輪"
+
+#~ msgid "Workspace"
+#~ msgstr "工作區"
+
+#, fuzzy
+#~ msgid "The workspace to ensure is focused."
+#~ msgstr "Fedora 現在變得更加聚焦"
+
+#, fuzzy
+#~ msgid "The workbench the navigation list is for."
+#~ msgstr "導覽"
+
+#~ msgid "_Help"
+#~ msgstr "求助(_H)"
+
+#~ msgid "Move Document _Left"
+#~ msgstr "向左移動文件(_L)"
+
+#~ msgid "Move Document _Right"
+#~ msgstr "向右移動文件(_R)"
+
+#, fuzzy
+#~ msgid "Split Document Left"
+#~ msgstr "向左移動文件(_L)"
+
+#, fuzzy
+#~ msgid "Split Document Right"
+#~ msgstr "向右移動文件(_R)"
+
+#~ msgid "_Close Document"
+#~ msgstr "關閉文件(_C)"
+
+#~ msgid ""
+#~ "Christian Hergert\n"
+#~ "Alexander Larsson\n"
+#~ "Alexandre Franke\n"
+#~ "Carlos Soriano\n"
+#~ "Cosimo Cecchi\n"
+#~ "Dimitris Zenios\n"
+#~ "Fabiano Fidêncio\n"
+#~ "Florian Bäuerle\n"
+#~ "Florian Müllner\n"
+#~ "Hashem Nasarat\n"
+#~ "Hylke Bons\n"
+#~ "Igor Gnatenko\n"
+#~ "Jakub Steiner\n"
+#~ "Jasper St. Pierre\n"
+#~ "Jonathon Jongsma\n"
+#~ "Mathieu Bridon\n"
+#~ "Megh Parikh\n"
+#~ "Michael Catanzaro\n"
+#~ "Pete Travis\n"
+#~ "Ray Strode\n"
+#~ "Roberto Majadas\n"
+#~ "Ting-Wei Lan\n"
+#~ "Trinh Anh Ngoc\n"
+#~ "Yosef Or Boczko"
+#~ msgstr ""
+#~ "Christian Hergert\n"
+#~ "Alexander Larsson\n"
+#~ "Alexandre Franke\n"
+#~ "Carlos Soriano\n"
+#~ "Cosimo Cecchi\n"
+#~ "Dimitris Zenios\n"
+#~ "Fabiano Fidêncio\n"
+#~ "Florian Bäuerle\n"
+#~ "Florian Müllner\n"
+#~ "Hashem Nasarat\n"
+#~ "Hylke Bons\n"
+#~ "Igor Gnatenko\n"
+#~ "Jakub Steiner\n"
+#~ "Jasper St. Pierre\n"
+#~ "Jonathon Jongsma\n"
+#~ "Mathieu Bridon\n"
+#~ "Megh Parikh\n"
+#~ "Michael Catanzaro\n"
+#~ "Pete Travis\n"
+#~ "Ray Strode\n"
+#~ "Roberto Majadas\n"
+#~ "Ting-Wei Lan\n"
+#~ "Trinh Anh Ngoc\n"
+#~ "Yosef Or Boczko"
+
+#~ msgid "Artwork By:"
+#~ msgstr "美工："
+
+#~ msgid ""
+#~ "Allan Day\n"
+#~ "Hylke Bons\n"
+#~ "Jakub Steiner"
+#~ msgstr ""
+#~ "Allan Day\n"
+#~ "Hylke Bons\n"
+#~ "Jakub Steiner"
+
+#~ msgid "Translated By:"
+#~ msgstr "翻譯："
+
+#~ msgid ""
+#~ "Christian Hergert\n"
+#~ "Gareth Foster"
+#~ msgstr ""
+#~ "Christian Hergert\n"
+#~ "Gareth Foster"
+
+#~ msgid "Special Thanks To:"
+#~ msgstr "特別感謝："
+
+#~ msgid ""
+#~ "Andy Hertzfeld and the Eazel Team\n"
+#~ "Alberto Ruiz\n"
+#~ "Bastien Nocera\n"
+#~ "Cosimo Cecchi\n"
+#~ "Emmanuele Bassi\n"
+#~ "Federico Mena Quintero\n"
+#~ "Jasper St Pierre\n"
+#~ "Jon McCann\n"
+#~ "Jonathan Blandford\n"
+#~ "Matthias Clasen\n"
+#~ "Miguel de Icaza\n"
+#~ "Owen Taylor\n"
+#~ "Rob Taylor\n"
+#~ "Spencer Kimball\n"
+#~ "Ximian Team\n"
+#~ "\n"
+#~ "Each and every contributor to GNOME\n"
+#~ "and the Friends of GNOME"
+#~ msgstr ""
+#~ "Andy Hertzfeld 與 Eazel 團隊\n"
+#~ "Alberto Ruiz\n"
+#~ "Bastien Nocera\n"
+#~ "Cosimo Cecchi\n"
+#~ "Emmanuele Bassi\n"
+#~ "Federico Mena Quintero\n"
+#~ "Jasper St Pierre\n"
+#~ "Jon McCann\n"
+#~ "Jonathan Blandford\n"
+#~ "Matthias Clasen\n"
+#~ "Miguel de Icaza\n"
+#~ "Owen Taylor\n"
+#~ "Rob Taylor\n"
+#~ "Spencer Kimball\n"
+#~ "Ximian Team\n"
+#~ "\n"
+#~ "各位與每位 GNOME 貢獻者\n"
+#~ "以及 GNOME 之友"
+
+#~ msgid ""
+#~ "Copyright 2014 Christian Hergert, et al.\n"
+#~ "Licensed under the GNU GPL 3 or newer"
+#~ msgstr ""
+#~ "著作權所有 2014 Christian Hergert 等人。\n"
+#~ "根據 GNU GPL 3 版或後續版本給予授權"
+
+#~ msgid "Search Documents"
+#~ msgstr "搜尋文件"
+
+#~ msgid "No documents were found"
+#~ msgstr "找不到文件"
+
+#~ msgid "Line 1, Column 1"
+#~ msgstr "列 1，行 1"
+
+#~ msgid "<b>Show Line Numbers</b>"
+#~ msgstr "<b>顯示列號</b>"
+
+#~ msgid "<b>Highlight Current Line</b>"
+#~ msgstr "<b>標明目前一列</b>"
+
+#~ msgid "<b>Smart Home End</b>"
+#~ msgstr "<b>智慧 Home、End 鍵</b>"
+
+#~ msgid "<b>Show Grid Lines</b>"
+#~ msgstr "<b>顯示格線</b>"
+
+#~ msgid "<b>EMACS Modal Editing</b>"
+#~ msgstr "<b>EMACS 範型編輯</b>"
+
+#~ msgid "Use EMACS style modal editing in the source code editor."
+#~ msgstr "源碼編輯器中使用 EMACS 風格範型編輯。"
+
+#~ msgid "Author Name"
+#~ msgstr "作者名稱"
+
+#~ msgid "Author Email"
+#~ msgstr "作者電子信箱"
+
+#~ msgid "<b>VIM Modal Editing</b>"
+#~ msgstr "<b>VIM 範型編輯</b>"
+
+#~ msgid "Language Settings"
+#~ msgstr "語言設定"
+
+#~ msgid "Vim"
+#~ msgstr "Vim"
+
+#~ msgid "Emacs"
+#~ msgstr "Emacs"
+
+#~ msgid "Go back in history"
+#~ msgstr "返回歷史記錄"
+
+#~ msgid "Go forward in history"
+#~ msgstr "前進歷史記錄"
+
+#~ msgid "Create new document"
+#~ msgstr "建立新聞鍵"
+
+#~ msgid "%"
+#~ msgstr "%"
+
+#~ msgid "The result match score."
+#~ msgstr "結果比對分數。"
+
+#~ msgid "Command Manager"
+#~ msgstr "指令管理員"
+
+#~ msgid "The command manager for the workspace."
+#~ msgstr "工作空間的指令管理員。"
+
+#~ msgid "Navigation List"
+#~ msgstr "導覽清單"
