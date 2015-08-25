@@ -3,6 +3,7 @@
 #
 # jedi_plugin.py
 #
+# Copyright (C) 2015 Elad Alfassa <elad@fedoraproject.org>
 # Copyright (C) 2015 Christian Hergert <chris@dronelabs.com>
 #
 # This program is free software: you can redistribute it and/or modify
@@ -21,6 +22,7 @@
 
 from gi.importer import DynamicImporter
 from gi.module import IntrospectionModule
+from gi.module import FunctionInfo
 from gi.repository import GLib
 from gi.repository import GObject
 from gi.repository import Gtk
@@ -80,6 +82,12 @@ except ImportError:
 import threading
 
 
+class GIParam(object):
+    "A pygobject ArgInfo wrapper to make it similar to Jedi's Param class"
+    def __init__(self, arg_info):
+        self.name = arg_info.get_name()
+
+
 class CompletionThread(threading.Thread):
     cancelled = False
 
@@ -100,6 +108,16 @@ class CompletionThread(threading.Thread):
                 completions = []
                 if not self.cancelled:
                     for info in script.completions():
+                        if self.cancelled:
+                            break
+                        # we have to use custom names here because .type and .params can't be overriden (they are properties)
+                        if type(info._definition) == CompiledObject and \
+                           type(info._definition.obj) == FunctionInfo:
+                                info.real_type = 'function'
+                                obj = info._definition.obj
+                                info.gi_params = [GIParam(argument) for argument in obj.get_arguments()]
+                        else:
+                            info.real_type = info.type
                         completion = JediCompletionProposal(self._provider, self._context, info)
                         completions.append(completion)
                 self._completions = completions
@@ -197,13 +215,16 @@ class JediCompletionProvider(Ide.Object,
         snippet.add_chunk(chunk)
 
         # Add parameter completion for functions.
-        if proposal.completion.type == 'function':
+        if proposal.completion.real_type == 'function':
             chunk = Ide.SourceSnippetChunk()
             chunk.set_text('(')
             chunk.set_text_set(True)
             snippet.add_chunk(chunk)
 
-            params = proposal.completion.params
+            if hasattr(proposal.completion, 'gi_params'):
+                params = proposal.completion.gi_params
+            else:
+                params = proposal.completion.params
 
             if not params:
                 chunk = Ide.SourceSnippetChunk()
@@ -267,16 +288,16 @@ class JediCompletionProposal(GObject.Object, GtkSource.CompletionProposal):
         return self.completion.complete
 
     def do_get_icon_name(self):
-        if self.completion.type == 'class':
+        if self.completion.real_type == 'class':
             return 'lang-class-symbolic'
-        elif self.completion.type == 'instance':
+        elif self.completion.real_type in ('instance', 'param'):
             return 'lang-variable-symbolic'
-        elif self.completion.type in ('import', 'module'):
+        elif self.completion.real_type in ('import', 'module'):
             # FIXME: Would be nice to do something better here.
             return 'lang-include-symbolic'
-        elif self.completion.type == 'function':
+        elif self.completion.real_type == 'function':
             return 'lang-function-symbolic'
-        elif self.completion.type == 'keyword':
+        elif self.completion.real_type == 'keyword':
             # FIXME: And here
             return None
         return None
@@ -289,4 +310,3 @@ class JediCompletionProposal(GObject.Object, GtkSource.CompletionProposal):
 
     def do_changed(self):
         pass
-
