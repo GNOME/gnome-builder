@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-08-25 22:42+0200\n"
-"PO-Revision-Date: 2015-08-26 00:02+0200\n"
+"PO-Revision-Date: 2015-08-26 14:20+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: gnome-l10n-gl@gnome.org\n"
 "Language: gl\n"
@@ -1333,7 +1333,7 @@ msgstr "O IdleFile ao que representa a configuración."
 
 #: ../libide/ide-file-settings.c:298
 msgid "If the file settings implementations have settled."
-msgstr ""
+msgstr "Se as implementacións das preferencias de ficheiro foron asentadas."
 
 #: ../libide/ide-highlight-engine.c:852
 msgid "The buffer to highlight."
@@ -2047,7 +2047,7 @@ msgstr "augogen.sh non é un executábel."
 #: ../plugins/autotools/ide-autotools-build-task.c:814
 #, c-format
 msgid "autogen.sh failed to create configure (%s)"
-msgstr ""
+msgstr "autogen.sh fallou ao crear o configure (%s)"
 
 #: ../plugins/autotools/ide-autotools-project-miner.c:392
 #: ../plugins/file-search/gb-file-search-index.c:121
@@ -2061,7 +2061,7 @@ msgstr "O cartafol raíz no que analizar."
 
 #: ../plugins/autotools/ide-makecache.c:998
 msgid "Invalid makefile provided, ignoring."
-msgstr ""
+msgstr "O ficheiro makefile fornecido non é válido, ignorándoo."
 
 #: ../plugins/autotools/ide-makecache.c:1238
 msgid "Makefile"
@@ -2129,15 +2129,15 @@ msgstr "Nativo"
 
 #: ../plugins/clang/ide-clang-translation-unit.c:581
 msgid "The file used to build the translation unit."
-msgstr ""
+msgstr "O ficheiro usado para construir a unidade de traducción."
 
 #: ../plugins/clang/ide-clang-translation-unit.c:588
 msgid "The highlight index for the translation unit."
-msgstr ""
+msgstr "O índice de realce para a unidade de tradución."
 
 #: ../plugins/clang/ide-clang-translation-unit.c:595
 msgid "The native translation unit pointer."
-msgstr ""
+msgstr "O punteiro da unidade de tradución nativa."
 
 #: ../plugins/clang/ide-clang-translation-unit.c:600
 msgid "Serial"
@@ -2283,43 +2283,42 @@ msgid "Cannot find colorscheme '%s'"
 msgstr "Non é posíbel atopar o esquema de cor «%s»"
 
 #: ../plugins/command-bar/gb-vim.c:423
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to locate working directory"
-msgstr "Produciuse un fallo ao cargar os atallos de teclado."
+msgstr "Produciuse un fallo ao buscar o cartafol de traballo"
 
 #: ../plugins/command-bar/gb-vim.c:547
 #, c-format
 msgid "Invalid :syntax subcommand: %s"
-msgstr ""
+msgstr "Subcomando :syntax non válido: %s"
 
 #: ../plugins/command-bar/gb-vim.c:874
 #, c-format
 msgid "Invalid search and replace request"
-msgstr ""
+msgstr "Solicitude de buscar e reemprazar non válida"
 
 #: ../plugins/command-bar/gb-vim.c:960
 #, c-format
 msgid "vim mode requires GtkSourceView"
-msgstr ""
+msgstr "o modo vim require GtkSourceView"
 
 #: ../plugins/command-bar/gb-vim.c:990
 #, c-format
 msgid "Not an editor command: %s"
-msgstr ""
+msgstr "Non é unha orde do editor: %s"
 
 #: ../plugins/c-pack/ide-c-format-provider.c:281
 #: ../plugins/python-pack/ide-python-format-provider.c:238
 msgid "Format Strings"
-msgstr ""
+msgstr "Cadeas de formato"
 
 #: ../plugins/ctags/ide-ctags-completion-provider.c:278
 msgid "CTags"
 msgstr "CTags"
 
 #: ../plugins/ctags/ide-ctags-index.c:381
-#, fuzzy
 msgid "The file containing the ctags data."
-msgstr "O GActionGroup que contén a acción."
+msgstr "O ficheiro que conten os datos de ctags."
 
 #: ../plugins/devhelp/gb-devhelp-document.c:71
 #, c-format
@@ -2337,9 +2336,8 @@ msgid "The uri to load."
 msgstr "A uri a cargar."
 
 #: ../plugins/devhelp/gb-devhelp-search-result.c:100
-#, fuzzy
 msgid "The URI to the Devhelp document."
-msgstr "O documento na vista de devhelp."
+msgstr "O URI do documento de Devhelp."
 
 #: ../plugins/devhelp/gb-devhelp-view.c:251
 #: ../plugins/terminal/gb-terminal-view.c:613
@@ -2358,7 +2356,7 @@ msgstr "Cambiar a"
 
 #: ../plugins/gnome-code-assistance/ide-gca-diagnostic-provider.c:336
 msgid "Code assistance requires a local file."
-msgstr ""
+msgstr "A asistencia de código require un ficheiro local."
 
 #: ../plugins/gnome-code-assistance/ide-gca-service.c:168
 msgid "No language specified"
@@ -2374,7 +2372,7 @@ msgstr "MinGW (32-bit)"
 
 #: ../plugins/symbol-tree/symbol-tree.c:187
 msgid "Current language does not support symbol resolvers"
-msgstr ""
+msgstr "O linguaxe actual non admite resolutores de símbolos"
 
 #: ../plugins/symbol-tree/symbol-tree.c:211
 msgid "Symbol Tree"
@@ -2412,7 +2410,7 @@ msgstr "O documento para a vista de terminal VTE."
 #: ../plugins/terminal/gb-terminal-workbench-addin.c:163
 #: ../src/workbench/gb-workbench-addin.c:47
 msgid "The workbench window."
-msgstr ""
+msgstr "A xanela do banco de traballo."
 
 #: ../src/app/gb-application-actions.c:90
 #, c-format
@@ -2453,11 +2451,11 @@ msgstr "Mostrar a versión do aplicativo"
 
 #: ../src/app/gb-application.c:651
 msgid "Increase verbosity. May be specified multiple times."
-msgstr ""
+msgstr "Incrementar o nivel de detall. Pódese especificar varias veces."
 
 #: ../src/dialogs/gb-new-project-dialog.c:346
 msgid "Select Project File"
-msgstr ""
+msgstr "Seleccionar ficheiro de proxecto"
 
 #: ../src/dialogs/gb-new-project-dialog.c:373
 msgid "Clone Repository"
@@ -2465,7 +2463,7 @@ msgstr "Clonar repositorio"
 
 #: ../src/dialogs/gb-new-project-dialog.c:393
 msgid "Autotools Project (configure.ac)"
-msgstr ""
+msgstr "Proxecto de Autotools (configure.ac)"
 
 #: ../src/dialogs/gb-new-project-dialog.c:399
 msgid "Any Directory"
@@ -2473,7 +2471,7 @@ msgstr "Calquera cartafol"
 
 #: ../src/dialogs/gb-new-project-dialog.c:526
 msgid "A valid Git URL is required"
-msgstr ""
+msgstr "Requírese unha URL de git válida"
 
 #: ../src/dialogs/gb-new-project-dialog.c:665
 msgid "Directory|Projects"
@@ -2516,11 +2514,11 @@ msgstr "Indica se o documento foi modificado desde o disco."
 
 #: ../src/documents/gb-document.c:197
 msgid "The title of the document."
-msgstr ""
+msgstr "O título do documento."
 
 #: ../src/documents/gb-document.c:205
 msgid "If the document is read only."
-msgstr ""
+msgstr "Indica se o documento é de só lectura."
 
 #: ../src/editor/gb-editor-frame.c:150
 #, c-format
@@ -2530,11 +2528,11 @@ msgstr "%u de %u"
 #: ../src/editor/gb-editor-frame.c:180
 #, c-format
 msgid "Line %u, Column %u"
-msgstr ""
+msgstr "Liña %u, Columna %u"
 
 #: ../src/editor/gb-editor-frame.c:595
 msgid "Re_veal in Project Tree"
-msgstr ""
+msgstr "_Mostrar no árbore de proxectos"
 
 #: ../src/editor/gb-editor-frame.c:740 ../src/editor/gb-editor-frame.c:741
 msgid "Auto Hide Map"
@@ -2542,7 +2540,7 @@ msgstr "Ocultar automáticamente o mapa"
 
 #: ../src/editor/gb-editor-frame.c:748
 msgid "The back forward list."
-msgstr ""
+msgstr "A lista cara adiante e cara atrás."
 
 #: ../src/editor/gb-editor-frame.c:755 ../src/editor/gb-editor-view.c:505
 msgid "The editor document."
@@ -2573,18 +2571,16 @@ msgid "Plain Text"
 msgstr "Texto plano"
 
 #: ../src/greeter/gb-greeter-pill-box.c:117
-#, fuzzy
 msgid "The label for the pill box."
-msgstr "Os parámetros para a acción."
+msgstr "A etiqueta para a caixa de pastillas."
 
 #: ../src/greeter/gb-greeter-project-row.c:325
-#, fuzzy
 msgid "The project information to render."
-msgstr "O asistente de código a renderizar."
+msgstr "A información do proxecto a renderizar."
 
 #: ../src/greeter/gb-greeter-window.c:561
 msgid "The recent projects that have been mined."
-msgstr ""
+msgstr "Os proxectos recentes que foron extraídos."
 
 #: ../src/html/gb-html-document.c:109
 msgid "HTML Preview"
@@ -2597,11 +2593,11 @@ msgstr "%s (Previsualización)"
 
 #: ../src/html/gb-html-document.c:315
 msgid "The buffer to monitor for changes."
-msgstr ""
+msgstr "O búfer que monitorizar por cambios."
 
 #: ../src/html/gb-html-view.c:322
 msgid "The document to view as HTML."
-msgstr ""
+msgstr "O documento a ver como HTML."
 
 #: ../src/keybindings/gb-keybindings.c:258
 msgid "Application"
@@ -2609,26 +2605,25 @@ msgstr "Aplicativo"
 
 #: ../src/keybindings/gb-keybindings.c:259
 msgid "The application to register keybindings for."
-msgstr ""
+msgstr "O aplicativo para o que rexistrar as combinacións."
 
 #: ../src/keybindings/gb-keybindings.c:266
-#, fuzzy
 msgid "The name of the keybindings mode."
-msgstr "O nome da acción a executar."
+msgstr "O nome do modo das combinacións."
 
 #: ../src/preferences/gb-preferences-page.c:283
 msgid "The title for the preferences page."
-msgstr ""
+msgstr "O título para a páxina de preferencias."
 
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-editor.c:95
 msgid "restore insert cursor mark"
-msgstr ""
+msgstr "restaurar inesrtar punteiro de marca"
 
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-editor.c:100
 msgid "diff renderer gutter changes git vcs"
-msgstr ""
+msgstr "diff diferencia renderizador barra lateral cambis git vcs"
 
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-editor.c:105
@@ -2638,158 +2633,154 @@ msgstr "números de liña"
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-editor.c:110
 msgid "line lines highlight current"
-msgstr ""
+msgstr "liña liñas realzar actual"
 
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-editor.c:115
 msgid "bracket brackets highlight matching"
-msgstr ""
+msgstr "chave chaves realzar coincidente"
 
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-editor.c:120
 msgid "lines margin scrolloff scroll off"
-msgstr ""
+msgstr "liñas marxes desprazamento"
 
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-editor.c:126
 msgid "font document editor monospace"
-msgstr ""
+msgstr "tipo letra documento editor monoespaciado"
 
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-editor.c:131
 msgid "minimap mini map overview over view"
-msgstr ""
+msgstr "minimapa mini mapa vista previa"
 
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-git.c:128
 msgid "git author name surname attribution source code"
-msgstr ""
+msgstr "git autor nome apelido atribución código fonte"
 
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-git.c:134
 msgid "git author email mail address attribute source code"
-msgstr ""
+msgstr "git autor email correo enderezo atribución código fonte"
 
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-insight.c:54
 msgid "word words auto completion suggest found document"
-msgstr ""
+msgstr "palabra palabras auto completado suxerir atopar documento"
 
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-insight.c:59
 msgid "experimental clang autocompletion auto complete"
-msgstr ""
+msgstr "experimental clang autocompletado auto completado"
 
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-insight.c:64
 msgid "exuberant ctags tags autocompletion auto complete"
-msgstr ""
+msgstr "exuberante ctags tags autocompletado auto completoar"
 
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-keybindings.c:64
-#, fuzzy
 msgid "default builder keybindings"
-msgstr "Produciuse un fallo ao cargar os atallos de teclado."
+msgstr "predeterminado construtor combinacións"
 
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-keybindings.c:69
 msgid "emacs keybindings modal"
-msgstr ""
+msgstr "emacs combinacións modal"
 
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-keybindings.c:74
 msgid "vim keybindings modal"
-msgstr ""
+msgstr "modal combinacións vim"
 
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-keybindings.c:80
 msgid "smart home end"
-msgstr ""
+msgstr "intelixente inicio fin"
 
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-keybindings.c:85
 msgid "smart back backspace indent align"
-msgstr ""
+msgstr "intelixente atrás retroceso sangrado aliñado"
 
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-theme.c:114
 msgid "show grid lines"
-msgstr ""
+msgstr "mostrar liñas grella"
 
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-theme.c:119
 msgid "source style scheme source tango solarized builder syntax"
-msgstr ""
+msgstr "fonte estilo esquema orixe tango solarizado construtor sintaxe"
 
 #: ../src/preferences/gb-preferences-switch.c:315
-#, fuzzy
 msgid "The title of the switch."
-msgstr "O obxectivo da animación"
+msgstr "A descrición do trocador."
 
 #: ../src/preferences/gb-preferences-switch.c:322
-#, fuzzy
 msgid "The description for the switch."
-msgstr "A duración da animación"
+msgstr "A descrición para o trocador."
 
 #: ../src/preferences/gb-preferences-switch.c:328
 msgid "Is Radio"
-msgstr ""
+msgstr "É un radio"
 
 #: ../src/preferences/gb-preferences-switch.c:329
 msgid "If a radio button should be used."
-msgstr ""
+msgstr "Indica se se debería usar un botón de radio "
 
 #: ../src/preferences/gb-preferences-switch.c:335
 msgid "Settings"
-msgstr ""
+msgstr "Preferencias"
 
 #: ../src/preferences/gb-preferences-switch.c:336
-#, fuzzy
 msgid "The GSettings for the setting."
-msgstr "Os parámetros para a acción."
+msgstr "O GSettings para a preferencia."
 
 #: ../src/preferences/gb-preferences-switch.c:342
 msgid "Settings Schema Key"
-msgstr ""
+msgstr "Chave do esquema de preferencias."
 
 #: ../src/preferences/gb-preferences-switch.c:343
 msgid "The settings schema key."
-msgstr ""
+msgstr "A chave do esquema de preferencias."
 
 #: ../src/preferences/gb-preferences-switch.c:349
 msgid "Settings Schema Value"
-msgstr ""
+msgstr "Valor do esquema de preferencias."
 
 #: ../src/preferences/gb-preferences-switch.c:350
 msgid "An action-target for the settings action."
-msgstr ""
+msgstr "O acción-obxectivo para a acción das preferencias"
 
 #: ../src/preferences/gb-preferences-switch.c:357
 #: ../src/search/gb-search-display-group.c:429
 msgid "Size Group"
-msgstr ""
+msgstr "Grupo de tamaño"
 
 #: ../src/preferences/gb-preferences-switch.c:358
 msgid "The sizing group for the control."
-msgstr ""
+msgstr "O grupo de tamaño para o control."
 
 #: ../src/project-tree/gb-new-file-popover.c:124
 #: ../src/project-tree/gb-rename-file-popover.c:142
 msgid "A folder with that name already exists."
-msgstr ""
+msgstr "Xa existe un cartafol con ese nome."
 
 #: ../src/project-tree/gb-new-file-popover.c:127
 #: ../src/project-tree/gb-rename-file-popover.c:145
 msgid "A file with that name already exists."
-msgstr ""
+msgstr "Xa existe un ficheiro con ese nome."
 
 #: ../src/project-tree/gb-new-file-popover.c:275
 msgid "File Type"
-msgstr ""
+msgstr "Tipo de ficheiro"
 
 #: ../src/project-tree/gb-new-file-popover.c:276
 msgid "The file type to create."
-msgstr ""
+msgstr "O tipo de ficheiro a crear."
 
 #: ../src/project-tree/gb-new-file-popover.c:351
 msgid "Folder Name"
@@ -2806,7 +2797,7 @@ msgstr "Ficheiros"
 
 #: ../src/project-tree/gb-project-tree.c:158
 msgid "If files ignored by the VCS should be displayed."
-msgstr ""
+msgstr "Indica se os ficheiros ignorados polo VCS deberían mostrarse."
 
 #: ../src/project-tree/gb-rename-file-popover.c:80
 #, c-format
@@ -2815,35 +2806,35 @@ msgstr "Renomear %s"
 
 #: ../src/project-tree/gb-rename-file-popover.c:173
 msgid "File name must not contain subdirectories."
-msgstr ""
+msgstr "O nome de ficheiro non debe conter subcartafoles."
 
 #: ../src/scrolledwindow/gb-scrolled-window.c:254
 msgid "Max Content Height"
-msgstr ""
+msgstr "Alto máximo do contido"
 
 #: ../src/scrolledwindow/gb-scrolled-window.c:255
 msgid "The maximum height request that can be made."
-msgstr ""
+msgstr "O alto máximo solicita o que pode facerse."
 
 #: ../src/scrolledwindow/gb-scrolled-window.c:263
 msgid "Max Content Width"
-msgstr ""
+msgstr "Ancho máximo do contido"
 
 #: ../src/scrolledwindow/gb-scrolled-window.c:264
 msgid "The maximum width request that can be made."
-msgstr ""
+msgstr "O ancho máximo solicita o que pode facerse."
 
 #: ../src/search/gb-search-display.c:234
 msgid "Cannot add provider more than once."
-msgstr ""
+msgstr "Non é posíbel engadir un fornecedor varias veces."
 
 #: ../src/search/gb-search-display.c:316
 msgid "The provider could not be found."
-msgstr ""
+msgstr "Non é posíbel atopar o fornecedor"
 
 #: ../src/search/gb-search-display.c:578
 msgid "The active search context."
-msgstr ""
+msgstr "O conxecto de busca activo."
 
 #: ../src/search/gb-search-display-group.c:182
 #, c-format
@@ -2852,11 +2843,11 @@ msgstr "%s máis"
 
 #: ../src/search/gb-search-display-group.c:423
 msgid "The search provider"
-msgstr ""
+msgstr "O fornecedor de busca"
 
 #: ../src/search/gb-search-display-group.c:430
 msgid "The size group for the label."
-msgstr ""
+msgstr "O grupo de tamaño para a etiqueta."
 
 #: ../src/search/gb-search-display-row.c:159
 #: ../src/search/gb-search-display-row.c:160
@@ -2869,11 +2860,11 @@ msgstr "Árbore"
 
 #: ../src/tree/gb-tree-builder.c:221
 msgid "The GbTree the builder belongs to."
-msgstr ""
+msgstr "O GbTree ao que pertence o construtor."
 
 #: ../src/tree/gb-tree.c:961
 msgid "The root object of the tree."
-msgstr ""
+msgstr "O obxecto raíz para a árbore."
 
 #: ../src/tree/gb-tree.c:967
 msgid "Selection"
@@ -2893,7 +2884,7 @@ msgstr "Elemento"
 
 #: ../src/tree/gb-tree-node.c:619
 msgid "Optional object to associate with node."
-msgstr ""
+msgstr "Obxecto opcional para asociar co nodo."
 
 #: ../src/tree/gb-tree-node.c:631
 msgid "The parent node."
@@ -2901,11 +2892,11 @@ msgstr "O nodo pai."
 
 #: ../src/tree/gb-tree-node.c:643
 msgid "The GbTree the node belongs to."
-msgstr ""
+msgstr "O GbTree ao que pertence o nodo."
 
 #: ../src/tree/gb-tree-node.c:655
 msgid "The text of the node."
-msgstr ""
+msgstr "O texto do nodo."
 
 #: ../src/tree/gb-tree-node.c:666
 msgid "Use Markup"
@@ -2913,40 +2904,41 @@ msgstr "Usar marcado"
 
 #: ../src/tree/gb-tree-node.c:667
 msgid "If text should be translated as markup."
-msgstr ""
+msgstr "Indica se o texto debería traducirse como marcado."
 
 #: ../src/tree/gb-tree-node.c:673
 msgid "Use Dim Label"
-msgstr ""
+msgstr "Usar etiqueta Dim"
 
 #: ../src/tree/gb-tree-node.c:674
 msgid "If text should be rendered with a dim label."
-msgstr ""
+msgstr "Indica se se debería renderizar con unha etiqueta dim."
 
 #: ../src/util/gb-file-manager.c:64
 msgid "File path is NULL"
-msgstr ""
+msgstr "A ruta do ficheiro é NULL"
 
 #: ../src/util/gb-file-manager.c:73 ../src/util/gb-file-manager.c:84
 msgid "Error converting UTF-8 filename to wide char"
 msgstr ""
+"Produciuse un erro ao converter o nome de ficheiro UTF-8 a un caracter ancho"
 
 #: ../src/util/gb-file-manager.c:92
 msgid "ILCreateFromPath() failed"
-msgstr ""
+msgstr "ILCreateFromPath() fallou"
 
 #: ../src/util/gb-file-manager.c:129
 #, c-format
 msgid "Cannot convert '%s' into a valid NSURL."
-msgstr ""
+msgstr "Non foi posíbel converter «%s» nun NSURL válido."
 
 #: ../src/util/gb-file-manager.c:157
 msgid "Connecting to org.freedesktop.FileManager1 failed: "
-msgstr ""
+msgstr "Produciuse un fallo ao conectarse a org.freedesktop.FileManager1:"
 
 #: ../src/util/gb-file-manager.c:181
 msgid "Calling ShowItems failed: "
-msgstr ""
+msgstr "Fallou a chamada a ShowItems:"
 
 #: ../src/util/gb-glib.c:55
 msgid "Just now"
@@ -2975,27 +2967,27 @@ msgstr "Pode partirse"
 
 #: ../src/views/gb-view.c:259
 msgid "If the view can be split."
-msgstr ""
+msgstr "Indica se a vista pode partirse."
 
 #: ../src/views/gb-view.c:266
 msgid "The underlying document."
-msgstr ""
+msgstr "O documento subxacente."
 
 #: ../src/views/gb-view.c:273
 msgid "If the document has been modified."
-msgstr ""
+msgstr "Indica se o documento foi modificado."
 
 #: ../src/views/gb-view.c:280
 msgid "The view title."
-msgstr ""
+msgstr "O título da vista."
 
 #: ../src/views/gb-view-stack.c:501
 msgid "The active view."
-msgstr ""
+msgstr "A vista activa."
 
 #: ../src/workbench/gb-workbench-actions.c:162
 msgid "Open Document"
-msgstr ""
+msgstr "Abrir documento"
 
 #: ../src/workbench/gb-workbench-actions.c:170
 msgid "Open"
@@ -3011,14 +3003,12 @@ msgid "Building"
 msgstr "Construíndo"
 
 #: ../src/workbench/gb-workbench.c:694
-#, fuzzy
 msgid "If the project is currently building."
 msgstr "Se o asistente de código está procesando actualmente."
 
 #: ../src/workbench/gb-workbench.c:709
-#, fuzzy
 msgid "The IdeContext for the workbench."
-msgstr "Os parámetros para a acción."
+msgstr "O IdeContext para o banco de traballo."
 
 #: ../src/workbench/gb-workbench.c:940
 msgid "Build Failure"
@@ -3026,17 +3016,16 @@ msgstr "Fallo de construción"
 
 #: ../src/workbench/gb-workbench.c:987
 msgid "Project build system does not support building"
-msgstr ""
+msgstr "O sistema de construtor de proxecto non admite a construción"
 
 #: ../src/workspace/gb-slider.c:755 ../src/workspace/gb-workspace.c:1092
 #: ../src/workspace/gb-workspace-pane.c:281
-#, fuzzy
 msgid "Position"
-msgstr "Pregunta"
+msgstr "Posición"
 
 #: ../src/workspace/gb-slider.c:756
 msgid "Which slider child is visible."
-msgstr ""
+msgstr "Que deslizador fillo é visíbel."
 
 #: ../src/workspace/gb-workspace.c:1062
 msgid "Left Pane"
@@ -3044,7 +3033,7 @@ msgstr "Panel esquerdo"
 
 #: ../src/workspace/gb-workspace.c:1063
 msgid "The left workspace pane."
-msgstr ""
+msgstr "O panel esquerdo do espazo de traballo."
 
 #: ../src/workspace/gb-workspace.c:1069
 msgid "Right Pane"
@@ -3052,7 +3041,7 @@ msgstr "Panel dereito"
 
 #: ../src/workspace/gb-workspace.c:1070
 msgid "The right workspace pane."
-msgstr ""
+msgstr "O panel dereito do espazo de traballo."
 
 #: ../src/workspace/gb-workspace.c:1076
 msgid "Bottom Pane"
@@ -3060,7 +3049,7 @@ msgstr "Panel inferior"
 
 #: ../src/workspace/gb-workspace.c:1077
 msgid "The bottom workspace pane."
-msgstr ""
+msgstr "O panel inferior do espazo de traballo."
 
 #: ../src/workspace/gb-workspace.c:1083
 msgid "Content Pane"
@@ -3068,12 +3057,11 @@ msgstr "Panel de contido"
 
 #: ../src/workspace/gb-workspace.c:1084
 msgid "The content workspace pane."
-msgstr ""
+msgstr "O panel de contido do espazo de traballo."
 
 #: ../src/workspace/gb-workspace.c:1093
-#, fuzzy
 msgid "The position of the pane relative to its edge."
-msgstr "A duración da animación en milisegundos."
+msgstr "A posición do panel relativa ao seu borde."
 
 #: ../src/workspace/gb-workspace.c:1102
 msgid "Reveal"
@@ -3081,139 +3069,141 @@ msgstr "Mostrar"
 
 #: ../src/workspace/gb-workspace.c:1103
 msgid "If the pane should be revealed."
-msgstr ""
+msgstr "Indica se o panel debería mostrarse."
 
 #: ../src/workspace/gb-workspace-pane.c:282
-#, fuzzy
 msgid "The position of the pane."
-msgstr "A duración da animación"
+msgstr "A posición do panel"
 
 #: ../tools/ide-build.c:81 ../tools/ide-build.c:85
 #, c-format
 msgid "===============\n"
-msgstr ""
+msgstr "===============\n"
 
 #: ../tools/ide-build.c:82
 #, c-format
 msgid " Build Failure: %s\n"
-msgstr ""
+msgstr " Fallo de construción %s\n"
 
 #: ../tools/ide-build.c:83
 msgid " Build ran for: %"
-msgstr ""
+msgstr " A construción executouse durante: %"
 
 #: ../tools/ide-build.c:90 ../tools/ide-build.c:94
 #, c-format
 msgid "=================\n"
-msgstr ""
+msgstr "=================\n"
 
 #: ../tools/ide-build.c:91
 #, c-format
 msgid " Build Successful\n"
-msgstr ""
+msgstr " Construción exitosa\n"
 
 #: ../tools/ide-build.c:92
 msgid "   Build ran for: %"
-msgstr ""
+msgstr "   A construción executouse durante: %"
 
 #: ../tools/ide-build.c:200 ../tools/ide-build.c:206
 #, c-format
 msgid "========================\n"
-msgstr ""
+msgstr "========================\n"
 
 #: ../tools/ide-build.c:201
 #, c-format
 msgid "           Project Name: %s\n"
-msgstr ""
+msgstr "           Nome do proxecto: %s\n"
 
 #: ../tools/ide-build.c:202
 #, c-format
 msgid " Version Control System: %s\n"
-msgstr ""
+msgstr " Sistema de control de versións: %s\n"
 
 #: ../tools/ide-build.c:203
 #, c-format
 msgid "           Build System: %s\n"
-msgstr ""
+msgstr "           Sistema de construción: %s\n"
 
 #: ../tools/ide-build.c:204
 #, c-format
 msgid "    Build Date and Time: %s\n"
-msgstr ""
+msgstr "    Data e hora da construción: %s\n"
 
 #: ../tools/ide-build.c:205
 #, c-format
 msgid "    Building for Device: %s (%s)\n"
-msgstr ""
+msgstr "    Construción para o dispositivo: %s (%s)\n"
 
 #: ../tools/ide-build.c:288
 #, c-format
 msgid "Timed out while waiting for devices to settle.\n"
 msgstr ""
+"Acabouse o tempo máximo de espera agardando polos dispositivos a asentar.\n"
 
 #: ../tools/ide-build.c:346
 #, c-format
 msgid "Waiting up to 60 seconds for devices to settle. Ctrl+C to exit.\n"
 msgstr ""
+"Agardando ate 60 segundos para que os dispositivos se asenten. Ctrl+C para "
+"saír.\n"
 
 #: ../tools/ide-build.c:355
 msgid "The target device we are building for."
-msgstr ""
+msgstr "O dispositivo obxectivo para o que construír."
 
 #: ../tools/ide-build.c:356
 msgid "DEVICE_ID"
-msgstr ""
+msgstr "ID_DISPOSITIVO"
 
 #: ../tools/ide-build.c:359
 msgid "Clean and rebuild the project."
-msgstr ""
+msgstr "Limpar e reconstruír o proxecto."
 
 #: ../tools/ide-build.c:361
 msgid "Increase parallelism in the build."
-msgstr ""
+msgstr "Incrementar paralelismo na construción."
 
 #: ../tools/ide-build.c:362
 msgid "N"
-msgstr ""
+msgstr "N"
 
 #: ../tools/ide-build.c:373
 msgid "- Build the project."
-msgstr ""
+msgstr "- Construír o proxecto."
 
 #: ../tools/ide-list-build-flags.c:115
 msgid "- Get build flags for a project file"
-msgstr ""
+msgstr "- Obter as bandeiras de construción par aun ficheiro de proxecto"
 
 #: ../tools/ide-list-devices.c:109
 msgid "- List devices found on the system."
-msgstr ""
+msgstr "- Listar dispositivos atopados no sistema."
 
 #: ../tools/ide-list-diagnostics.c:187
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to diagnose: %s\n"
-msgstr "Produciuse un fallo ao cargar os atallos de teclado: %s"
+msgstr "Produciuse un fallo ao diagnosticar: %s\n"
 
 #: ../tools/ide-list-diagnostics.c:250
 #, c-format
 msgid "No such file in project: %s\n"
-msgstr ""
+msgstr "Non existe o ficheiro no proxecto: %s\n"
 
 #: ../tools/ide-list-diagnostics.c:284
 msgid "- List diagnostics for a file."
-msgstr ""
+msgstr "- Mostra todos os diagnósticos para un ficheiro."
 
 #: ../tools/ide-list-files.c:127 ../tools/ide-list-file-settings.c:207
 msgid "- List files found in project."
-msgstr ""
+msgstr "- Mostra os ficheiros atopados no proxecto."
 
 #: ../tools/ide-list-file-settings.c:182
 #, c-format
 msgid "No files provided to load settings for.\n"
-msgstr ""
+msgstr "Non se forneceu ningún ficheiro desde onde cargar as preferencias.\n"
 
 #: ../tools/ide-mine-projects.c:87
 msgid "- discover projects"
-msgstr ""
+msgstr "- descubrir proxectos"
 
 #: ../tools/ide-search.c:68
 #, c-format
