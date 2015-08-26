@@ -40,9 +40,22 @@ static void
 gb_shortcuts_window_set_view (GbShortcutsWindow *self,
                               const gchar       *name)
 {
+  GtkWidget *child;
+
   g_assert (GB_IS_SHORTCUTS_WINDOW (self));
 
-  gtk_stack_set_visible_child_name (self->stack, name);
+  child = gtk_stack_get_child_by_name (self->stack, name);
+
+  if (child != NULL)
+    {
+      g_autofree gchar *title = NULL;
+
+      gtk_container_child_get (GTK_CONTAINER (self->stack), child,
+                               "title", &title,
+                               NULL);
+      gtk_button_set_label (GTK_BUTTON (self->menu_button), title);
+      gtk_stack_set_visible_child (self->stack, child);
+    }
 }
 
 static void
