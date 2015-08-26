@@ -1,0 +1,48 @@
+#define GENERAL_GROUP \
+        GROUP ( \
+          _("General"), \
+          SHORTCUT ("F1", _("Editor")) \
+          SHORTCUT ("F2", _("Designer")) \
+          SHORTCUT ("F3", _("Debugger")) \
+          SHORTCUT ("F4", _("Version Control")) \
+        )
+
+VIEWS (
+  VIEW (
+    "editor",
+    _("Editor Shortcuts"),
+    PAGE (
+      COLUMN (
+        GENERAL_GROUP
+        GROUP (
+          _("Touchpad gestures"),
+          GESTURE ("swipe-right", _("Switch to the next document"), _("Two-finger swipe right"))
+          GESTURE ("swipe-left", _("Switch to the previous document"), _("Two-finger swipe left"))
+        )
+      )
+      COLUMN (
+        GROUP (
+          _("Files"),
+          SHORTCUT ("<ctrl>n", _("Create new document"))
+          SHORTCUT ("<ctrl>o", _("Open a document"))
+          SHORTCUT ("<ctrl>s", _("Save the document"))
+          SHORTCUT ("<ctrl>w", _("Close the document"))
+          SHORTCUT ("<ctrl><alt>Page_Down", _("Switch to the next document"))
+          SHORTCUT ("<ctrl><alt>Page_Up", _("Switch to the previous document"))
+        )
+        GROUP (
+          _("Find and replace"),
+          SHORTCUT ("<ctrl>f", _("Find"))
+          SHORTCUT ("<ctrl>g", _("Find the next match"))
+          SHORTCUT ("<ctrl><shift>g", _("Find the previous match"))
+          SHORTCUT ("<ctrl>h", _("Find and replace"))
+          SHORTCUT ("<ctrl><shift>k", _("Clear highlight"))
+          SHORTCUT ("<ctrl>l", _("Go to line"))
+        )
+      )
+    )
+    PAGE ()
+  )
+)
+
+#undef GENERAL_GROUP

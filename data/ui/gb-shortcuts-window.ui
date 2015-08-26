@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <!-- interface-requires gtk+ 3.16 -->
+  <template class="GbShortcutsWindow" parent="GtkWindow">
+    <property name="resizable">false</property>
+    <child type="titlebar">
+      <object class="GtkHeaderBar">
+        <property name="show-close-button">true</property>
+        <property name="visible">true</property>
+        <child type="title">
+          <object class="GtkMenuButton" id="menu_button">
+            <property name="visible">true</property>
+            <style>
+              <class name="flat"/>
+            </style>
+          </object>
+        </child>
+        <child>
+          <object class="GtkToggleButton">
+            <property name="active" bind-source="search_bar" bind-property="search-mode-enabled" bind-flags="bidirectional">false</property>
+            <property name="visible">true</property>
+            <style>
+              <class name="image-button"/>
+            </style>
+            <child>
+              <object class="GtkImage">
+                <property name="icon-name">edit-find-symbolic</property>
+                <property name="visible">true</property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="GtkBox">
+        <property name="orientation">vertical</property>
+        <property name="visible">true</property>
+        <child>
+          <object class="EggSearchBar" id="search_bar">
+            <property name="visible">true</property>
+            <child internal-child="entry">
+              <object class="GtkSearchEntry">
+                <property name="placeholder-text" translatable="yes">Search keyboard shortcuts</property>
+                <property name="width-chars">50</property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkStack" id="stack">
+            <property name="vexpand">true</property>
+            <property name="visible">true</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkStackSwitcher" id="switcher">
+            <property name="visible">true</property>
+            <style>
+              <class name="round"/>
+            </style>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

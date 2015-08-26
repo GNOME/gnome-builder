@@ -125,3 +125,13 @@ GbWorkspacePane {
 GbWorkspacePane .pane-separator {
   background-color: @borders;
 }
+
+
+.round .button {
+  border-radius: 20px;
+  outline-radius: 20px;
+}
+.round GtkLabel {
+  padding-left: 0px;
+  padding-right: 0px;
+}

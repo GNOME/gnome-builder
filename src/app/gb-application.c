@@ -142,6 +142,7 @@ gb_application_load_keybindings (GbApplication *self)
     { "workbench.show-gear-menu", "F10" },
     { "workbench.global-search", "<ctrl>period" },
     { "app.preferences", "<ctrl>comma" },
+    { "app.shortcuts", "<ctrl>question" },
     { NULL }
   };
   gsize i;

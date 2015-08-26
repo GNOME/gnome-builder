@@ -29,6 +29,7 @@
 #include "gb-application-private.h"
 #include "gb-greeter-window.h"
 #include "gb-new-project-dialog.h"
+#include "gb-shortcuts-window.h"
 #include "gb-support.h"
 #include "gb-workbench.h"
 
@@ -280,12 +281,31 @@ cleanup:
   g_list_free (windows);
 }
 
+static void
+gb_application_actions_shortcuts (GSimpleAction *action,
+                                  GVariant      *variant,
+                                  gpointer       user_data)
+{
+  GbApplication *self = user_data;
+  GbShortcutsWindow *window;
+
+  g_assert (GB_IS_APPLICATION (self));
+
+  window = g_object_new (GB_TYPE_SHORTCUTS_WINDOW,
+                         "default-width", 800,
+                         "default-height", 600,
+                         NULL);
+
+  gtk_window_present (GTK_WINDOW (window));
+}
+
 static const GActionEntry GbApplicationActions[] = {
   { "about",        gb_application_actions_about },
   { "open-project", gb_application_actions_open_project },
   { "new-project",  gb_application_actions_new_project },
   { "preferences",  gb_application_actions_preferences },
   { "quit",         gb_application_actions_quit },
+  { "shortcuts",    gb_application_actions_shortcuts },
   { "support",      gb_application_actions_support },
 };
 

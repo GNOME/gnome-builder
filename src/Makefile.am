@@ -60,6 +60,8 @@ libgnome_builder_la_SOURCES = \
 	html/gb-html-view.h \
 	keybindings/gb-keybindings.c \
 	keybindings/gb-keybindings.h \
+	keybindings/gb-shortcuts-window.c \
+	keybindings/gb-shortcuts-window.h \
 	preferences/gb-preferences-page-editor.c \
 	preferences/gb-preferences-page-editor.h \
 	preferences/gb-preferences-page-insight.c \
@@ -163,6 +165,8 @@ libgnome_builder_la_SOURCES = \
 	util/gb-settings.c \
 	util/gb-settings.h \
 	$(NULL)
+
+EXTRA_DIST += keybindings/gb-shortcuts-window.defs
 
 nodist_libgnome_builder_la_SOURCES = \
 	resources/gb-resources.c \
