@@ -18,6 +18,7 @@
 
 #include <glib/gi18n.h>
 
+#include "gb-accel-label.h"
 #include "gb-shortcuts-window.h"
 
 struct _GbShortcutsWindow
@@ -115,8 +116,9 @@ gb_shortcuts_window_build (GbShortcutsWindow *self)
     g_autofree gchar *title = g_strdup_printf ("%u", ++page_count); \
     GtkBox *page; \
     page = g_object_new (GTK_TYPE_BOX, \
-                         "homogeneous", TRUE, \
+                         "homogeneous", FALSE, \
                          "orientation", GTK_ORIENTATION_HORIZONTAL, \
+                         "spacing", 24, \
                          "visible", TRUE, \
                          NULL); \
     _columns \
@@ -143,7 +145,7 @@ gb_shortcuts_window_build (GbShortcutsWindow *self)
     GtkBox *title_label; \
     group = g_object_new (GTK_TYPE_BOX, \
                           "orientation", GTK_ORIENTATION_VERTICAL, \
-                          "spacing", 11, \
+                          "spacing", 10, \
                           "visible", TRUE, \
                           NULL); \
     gtk_container_add (GTK_CONTAINER (column), GTK_WIDGET (group)); \
@@ -159,18 +161,18 @@ gb_shortcuts_window_build (GbShortcutsWindow *self)
 #define SHORTCUT(_accel, _desc) \
   { \
     GtkBox *shortcut; \
-    GtkLabel *accel; \
+    GbAccelLabel *accel; \
     GtkLabel *desc; \
     shortcut = g_object_new (GTK_TYPE_BOX, \
                              "orientation", GTK_ORIENTATION_HORIZONTAL, \
-                             "spacing", 11, \
+                             "spacing", 10, \
                              "visible", TRUE, \
                              NULL); \
     gtk_container_add (GTK_CONTAINER (group), GTK_WIDGET (shortcut)); \
-    accel = g_object_new (GTK_TYPE_LABEL, \
-                          "label", _accel, \
+    accel = g_object_new (GB_TYPE_ACCEL_LABEL, \
+                          "accelerator", _accel, \
+                          "halign", GTK_ALIGN_START, \
                           "visible", TRUE, \
-                          "xalign", 0.0f, \
                           NULL); \
     gtk_size_group_add_widget (size_group, GTK_WIDGET (accel)); \
     gtk_container_add (GTK_CONTAINER (shortcut), GTK_WIDGET (accel)); \

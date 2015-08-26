@@ -58,6 +58,8 @@ libgnome_builder_la_SOURCES = \
 	html/gb-html-document.h \
 	html/gb-html-view.c \
 	html/gb-html-view.h \
+	keybindings/gb-accel-label.c \
+	keybindings/gb-accel-label.h \
 	keybindings/gb-keybindings.c \
 	keybindings/gb-keybindings.h \
 	keybindings/gb-shortcuts-window.c \
