@@ -188,6 +188,8 @@ class JediCompletionProvider(Ide.Object,
             return False
         _, iter = context.get_iter()
         iter.backward_char()
+        if iter.get_char() == ')':
+            return False
         buffer = iter.get_buffer()
         classes = buffer.get_context_classes_at_iter(iter)
         if 'string' in classes:
