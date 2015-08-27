@@ -29,6 +29,10 @@
     <section>
       <attribute name="id">help-section</attribute>
       <item>
+        <attribute name="label" translatable="yes">Keyboard _Shortcuts</attribute>
+        <attribute name="action">app.shortcuts</attribute>
+      </item>
+      <item>
         <attribute name="label" translatable="yes">_About</attribute>
         <attribute name="action">app.about</attribute>
       </item>
