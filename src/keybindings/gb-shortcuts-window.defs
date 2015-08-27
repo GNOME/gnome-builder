@@ -16,8 +16,8 @@ VIEWS (
         GENERAL_GROUP
         GROUP (
           _("Touchpad gestures"),
-          GESTURE ("swipe-right", _("Switch to the next document"), _("Two-finger swipe right"))
-          GESTURE ("swipe-left", _("Switch to the previous document"), _("Two-finger swipe left"))
+          GESTURE ("two-finger-swipe-right", _("Switch to the next document"), _("Two-finger swipe right"))
+          GESTURE ("two-finger-swipe-left", _("Switch to the previous document"), _("Two-finger swipe left"))
         )
       )
       COLUMN (

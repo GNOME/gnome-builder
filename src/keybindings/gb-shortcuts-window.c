@@ -20,6 +20,7 @@
 
 #include "gb-accel-label.h"
 #include "gb-shortcuts-window.h"
+#include "gb-widget.h"
 
 struct _GbShortcutsWindow
 {
@@ -188,7 +189,49 @@ gb_shortcuts_window_build (GbShortcutsWindow *self)
                          NULL); \
     gtk_container_add (GTK_CONTAINER (shortcut), GTK_WIDGET (desc)); \
   }
-#define GESTURE(_accel, _title, _subtitle)
+#define GESTURE(_accel, _title, _subtitle) \
+  { \
+    GtkBox *gesture; \
+    GtkLabel *primary; \
+    GtkLabel *subtitle; \
+    GtkImage *image; \
+    gesture = g_object_new (GTK_TYPE_GRID, \
+                            "column-spacing", 12, \
+                            "visible", TRUE, \
+                            NULL); \
+    gtk_container_add (GTK_CONTAINER (group), GTK_WIDGET (gesture)); \
+    image = g_object_new (GTK_TYPE_IMAGE, \
+                          "resource", "/org/gnome/builder/icons/scalable/actions/gesture-"_accel".svg", \
+                          "halign", GTK_ALIGN_CENTER, \
+                          "valign", GTK_ALIGN_CENTER, \
+                          "visible", TRUE, \
+                          NULL); \
+    gtk_container_add_with_properties (GTK_CONTAINER (gesture), GTK_WIDGET (image), \
+                                       "height", 2, \
+                                       NULL); \
+    primary = g_object_new (GTK_TYPE_LABEL, \
+                            "label", _title, \
+                            "visible", TRUE, \
+                            "valign", GTK_ALIGN_END, \
+                            "xalign", 0.0f, \
+                            "hexpand", TRUE, \
+                            NULL); \
+    gtk_container_add_with_properties (GTK_CONTAINER (gesture), GTK_WIDGET (primary), \
+                                       "left-attach", 1, \
+                                       NULL); \
+    subtitle = g_object_new (GTK_TYPE_LABEL, \
+                             "label", _subtitle, \
+                             "visible", TRUE, \
+                             "valign", GTK_ALIGN_START, \
+                             "xalign", 0.0f, \
+                             "hexpand", TRUE, \
+                             NULL); \
+    gb_widget_add_style_class (GTK_WIDGET (subtitle), "dim-label"); \
+    gtk_container_add_with_properties (GTK_CONTAINER (gesture), GTK_WIDGET (subtitle), \
+                                       "top-attach", 1, \
+                                       "left-attach", 1, \
+                                       NULL); \
+  }
 
 
 #include "gb-shortcuts-window.defs"
