@@ -292,6 +292,7 @@ gb_application_actions_shortcuts (GSimpleAction *action,
   g_assert (GB_IS_APPLICATION (self));
 
   window = g_object_new (GB_TYPE_SHORTCUTS_WINDOW,
+                         "window-position", GTK_WIN_POS_CENTER,
                          "default-width", 800,
                          "default-height", 600,
                          NULL);
