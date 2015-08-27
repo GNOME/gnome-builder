@@ -44,5 +44,5 @@ GbAccelLabel GtkFrame {
   border-color: #555753;
   border-radius: 5px;
   color: #eeeeec;
-  padding: 3px 8 3 8;
+  padding: 3px 8px 3px 8px;
 }
