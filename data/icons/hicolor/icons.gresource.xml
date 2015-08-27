@@ -22,6 +22,8 @@
     <file>scalable/actions/lang-union-symbolic.svg</file>
     <file>scalable/actions/lang-variable-symbolic.svg</file>
     <file>scalable/actions/struct-field-symbolic.svg</file>
+    <file>scalable/actions/gesture-two-finger-swipe-right.svg</file>
+    <file>scalable/actions/gesture-two-finger-swipe-left.svg</file>
 
     <file>256x256/actions/builder-vcs-git.png</file>
     <file>48x48/actions/builder-vcs-git.png</file>
