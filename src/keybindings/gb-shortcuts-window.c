@@ -128,6 +128,7 @@ gb_shortcuts_window_build (GbShortcutsWindow *self)
   { \
     GtkBox *column; \
     GtkSizeGroup *size_group; \
+    GtkSizeGroup *mod_key_group; \
     column = g_object_new (GTK_TYPE_BOX, \
                            "orientation", GTK_ORIENTATION_VERTICAL, \
                            "spacing", 22, \
@@ -135,8 +136,10 @@ gb_shortcuts_window_build (GbShortcutsWindow *self)
                            NULL); \
     gtk_container_add (GTK_CONTAINER (page), GTK_WIDGET (column)); \
     size_group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL); \
+    mod_key_group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL); \
     _groups \
     g_clear_object (&size_group); \
+    g_clear_object (&mod_key_group); \
   }
 #define GROUP(_group_name, _shortcuts) \
   { \
@@ -171,6 +174,7 @@ gb_shortcuts_window_build (GbShortcutsWindow *self)
     gtk_container_add (GTK_CONTAINER (group), GTK_WIDGET (shortcut)); \
     accel = g_object_new (GB_TYPE_ACCEL_LABEL, \
                           "accelerator", _accel, \
+                          "size-group", mod_key_group, \
                           "halign", GTK_ALIGN_START, \
                           "visible", TRUE, \
                           NULL); \
