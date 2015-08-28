@@ -5,6 +5,7 @@
           SHORTCUT ("F2", _("Designer")) \
           SHORTCUT ("F3", _("Debugger")) \
           SHORTCUT ("F4", _("Version Control")) \
+          SHORTCUT ("<ctrl>period", _("Focus global search")) \
         )
 
 VIEWS (
@@ -41,7 +42,26 @@ VIEWS (
         )
       )
     )
-    PAGE ()
+    PAGE (
+      COLUMN (
+        GROUP (
+          _("Panels"),
+          SHORTCUT ("F9", _("Toggle the left panel"))
+          SHORTCUT ("<shift>F9", _("Toggle the right panel"))
+          SHORTCUT ("<ctrl>F9", _("Toggle the bottom panel"))
+          SHORTCUT ("<ctrl><shift>F9", _("Toggle all panels"))
+        )
+        GROUP (
+          _("Zoom"),
+          SHORTCUT ("<ctrl>equal", _("Increase editor font size"))
+          SHORTCUT ("<ctrl>minus", _("Decrease editor font size"))
+        )
+        GROUP (
+          _("Documentation"),
+          SHORTCUT ("<ctrl><shift>f", _("Focus documentation search"))
+        )
+      )
+    )
   )
 )
 
