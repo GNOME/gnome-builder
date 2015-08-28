@@ -291,6 +291,7 @@ gb_shortcuts_window__search_entry__changed (GbShortcutsWindow *self,
 {
   g_autoptr(IdePatternSpec) spec = NULL;
   GHashTableIter iter;
+  g_autofree gchar *query = NULL;
   const gchar *text;
   gpointer key;
   gpointer value;
@@ -306,7 +307,8 @@ gb_shortcuts_window__search_entry__changed (GbShortcutsWindow *self,
       return;
     }
 
-  spec = ide_pattern_spec_new (text);
+  query = g_utf8_casefold (text, -1);
+  spec = ide_pattern_spec_new (query);
 
   g_hash_table_iter_init (&iter, self->widget_keywords);
 
