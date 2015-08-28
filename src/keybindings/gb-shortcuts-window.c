@@ -17,6 +17,7 @@
  */
 
 #include <glib/gi18n.h>
+#include <ide.h>
 
 #include "gb-accel-label.h"
 #include "gb-shortcuts-window.h"
@@ -61,6 +62,19 @@ gb_shortcuts_window_set_view (GbShortcutsWindow *self,
       gtk_button_set_label (GTK_BUTTON (self->menu_button), title);
       gtk_stack_set_visible_child (self->stack, child);
     }
+}
+
+static void
+register_keywords (GbShortcutsWindow *self,
+                   GtkWidget         *widget,
+                   const gchar       *keywords)
+{
+  gchar *casefold;
+
+  g_assert (GB_IS_SHORTCUTS_WINDOW (self));
+
+  casefold = g_utf8_casefold (keywords, -1);
+  g_hash_table_insert (self->widget_keywords, widget, casefold);
 }
 
 static void
@@ -167,10 +181,10 @@ gb_shortcuts_window_build (GbShortcutsWindow *self)
   }
 #define SHORTCUT(_accel, _desc) \
   { \
+    g_autofree gchar *keywords = NULL; \
     GtkBox *shortcut; \
     GbAccelLabel *accel; \
     GtkLabel *desc; \
-    gchar *keywords; \
     shortcut = g_object_new (GTK_TYPE_BOX, \
                              "orientation", GTK_ORIENTATION_HORIZONTAL, \
                              "spacing", 10, \
@@ -193,15 +207,15 @@ gb_shortcuts_window_build (GbShortcutsWindow *self)
                          NULL); \
     gtk_container_add (GTK_CONTAINER (shortcut), GTK_WIDGET (desc)); \
     keywords = g_strdup_printf ("%s %s", _accel, _desc); \
-    g_hash_table_insert (self->widget_keywords, shortcut, keywords); \
+    register_keywords (self, GTK_WIDGET (shortcut), keywords); \
   }
 #define GESTURE(_accel, _title, _subtitle) \
   { \
+    g_autofree gchar *keywords = NULL; \
     GtkBox *gesture; \
     GtkLabel *primary; \
     GtkLabel *subtitle; \
     GtkImage *image; \
-    gchar *keywords; \
     gesture = g_object_new (GTK_TYPE_GRID, \
                             "column-spacing", 12, \
                             "visible", TRUE, \
@@ -239,7 +253,7 @@ gb_shortcuts_window_build (GbShortcutsWindow *self)
                                        "left-attach", 1, \
                                        NULL); \
     keywords = g_strdup_printf ("%s %s %s", _accel, _title, _subtitle); \
-    g_hash_table_insert (self->widget_keywords, gesture, keywords); \
+    register_keywords (self, GTK_WIDGET (gesture), keywords); \
   }
 
 
@@ -253,6 +267,58 @@ gb_shortcuts_window_build (GbShortcutsWindow *self)
 #undef GROUP
 #undef SHORTCUT
 #undef GESTURE
+}
+
+static void
+remove_filter_class (gpointer key,
+                     gpointer value,
+                     gpointer user_data)
+{
+  gtk_style_context_remove_class (gtk_widget_get_style_context (key), "filtered");
+}
+
+static void
+add_filter_class (gpointer key,
+                  gpointer value,
+                  gpointer user_data)
+{
+  gtk_style_context_add_class (gtk_widget_get_style_context (key), "filtered");
+}
+
+static void
+gb_shortcuts_window__search_entry__changed (GbShortcutsWindow *self,
+                                            GtkSearchEntry    *search_entry)
+{
+  g_autoptr(IdePatternSpec) spec = NULL;
+  GHashTableIter iter;
+  const gchar *text;
+  gpointer key;
+  gpointer value;
+
+  g_assert (GB_IS_SHORTCUTS_WINDOW (self));
+  g_assert (GTK_IS_SEARCH_ENTRY (search_entry));
+
+  text = gtk_entry_get_text (GTK_ENTRY (search_entry));
+
+  if (ide_str_empty0 (text))
+    {
+      g_hash_table_foreach (self->widget_keywords, remove_filter_class, NULL);
+      return;
+    }
+
+  spec = ide_pattern_spec_new (text);
+
+  g_hash_table_iter_init (&iter, self->widget_keywords);
+
+  while (g_hash_table_iter_next (&iter, &key, &value))
+    {
+      const gchar *keywords = value;
+
+      if (ide_pattern_spec_match (spec, keywords))
+        remove_filter_class (key, value, NULL);
+      else
+        add_filter_class (key, value, NULL);
+    }
 }
 
 static void
@@ -299,5 +365,12 @@ gb_shortcuts_window_init (GbShortcutsWindow *self)
   self->widget_keywords = g_hash_table_new_full (NULL, NULL, NULL, g_free);
 
   gtk_widget_init_template (GTK_WIDGET (self));
+
   gb_shortcuts_window_build (self);
+
+  g_signal_connect_object (self->search_entry,
+                           "changed",
+                           G_CALLBACK (gb_shortcuts_window__search_entry__changed),
+                           self,
+                           G_CONNECT_SWAPPED);
 }

@@ -135,3 +135,8 @@ GbWorkspacePane .pane-separator {
   padding-left: 0px;
   padding-right: 0px;
 }
+
+
+.filtered {
+  opacity: .30;
+}
