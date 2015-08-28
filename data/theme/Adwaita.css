@@ -45,9 +45,12 @@ GbTree:backdrop.dim-label {
 
 
 GbAccelLabel GtkFrame {
-  color: #555753;
-  border-radius: 5px;
-  padding: 3px 8px 3px 8px;
   background-color: #fefefe;
+  background-image: linear-gradient(#FEFEFE, #EFEFEF);
   border: 1px solid #cecece;
+  border-radius: 5px;
+  box-shadow: 0px 1px 0px #fff inset,
+              0px -2px 0px #dedede inset;
+  color: #555753;
+  padding: 3px 8px 3px 8px;
 }
