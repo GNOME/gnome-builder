@@ -40,7 +40,7 @@
           <object class="EggSearchBar" id="search_bar">
             <property name="visible">true</property>
             <child internal-child="entry">
-              <object class="GtkSearchEntry">
+              <object class="GtkSearchEntry" id="search_entry">
                 <property name="placeholder-text" translatable="yes">Search keyboard shortcuts</property>
                 <property name="width-chars">50</property>
               </object>

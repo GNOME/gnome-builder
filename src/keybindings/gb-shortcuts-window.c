@@ -28,6 +28,7 @@ struct _GbShortcutsWindow
 
   GtkStack      *stack;
   GtkMenuButton *menu_button;
+  GtkSearchEntry *search_entry;
 };
 
 G_DEFINE_TYPE (GbShortcutsWindow, gb_shortcuts_window, GTK_TYPE_WINDOW)
@@ -268,8 +269,9 @@ gb_shortcuts_window_class_init (GbShortcutsWindowClass *klass)
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/ui/gb-shortcuts-window.ui");
 
-  gtk_widget_class_bind_template_child (widget_class, GbShortcutsWindow, stack);
   gtk_widget_class_bind_template_child (widget_class, GbShortcutsWindow, menu_button);
+  gtk_widget_class_bind_template_child (widget_class, GbShortcutsWindow, search_entry);
+  gtk_widget_class_bind_template_child (widget_class, GbShortcutsWindow, stack);
 }
 
 static void
