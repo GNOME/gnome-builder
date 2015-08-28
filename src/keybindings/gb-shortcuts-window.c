@@ -24,10 +24,12 @@
 
 struct _GbShortcutsWindow
 {
-  GtkWindow      parent_instance;
+  GtkWindow       parent_instance;
 
-  GtkStack      *stack;
-  GtkMenuButton *menu_button;
+  GHashTable     *widget_keywords;
+
+  GtkStack       *stack;
+  GtkMenuButton  *menu_button;
   GtkSearchEntry *search_entry;
 };
 
@@ -168,6 +170,7 @@ gb_shortcuts_window_build (GbShortcutsWindow *self)
     GtkBox *shortcut; \
     GbAccelLabel *accel; \
     GtkLabel *desc; \
+    gchar *keywords; \
     shortcut = g_object_new (GTK_TYPE_BOX, \
                              "orientation", GTK_ORIENTATION_HORIZONTAL, \
                              "spacing", 10, \
@@ -189,6 +192,8 @@ gb_shortcuts_window_build (GbShortcutsWindow *self)
                          "hexpand", TRUE, \
                          NULL); \
     gtk_container_add (GTK_CONTAINER (shortcut), GTK_WIDGET (desc)); \
+    keywords = g_strdup_printf ("%s %s", _accel, _desc); \
+    g_hash_table_insert (self->widget_keywords, shortcut, keywords); \
   }
 #define GESTURE(_accel, _title, _subtitle) \
   { \
@@ -196,6 +201,7 @@ gb_shortcuts_window_build (GbShortcutsWindow *self)
     GtkLabel *primary; \
     GtkLabel *subtitle; \
     GtkImage *image; \
+    gchar *keywords; \
     gesture = g_object_new (GTK_TYPE_GRID, \
                             "column-spacing", 12, \
                             "visible", TRUE, \
@@ -232,6 +238,8 @@ gb_shortcuts_window_build (GbShortcutsWindow *self)
                                        "top-attach", 1, \
                                        "left-attach", 1, \
                                        NULL); \
+    keywords = g_strdup_printf ("%s %s %s", _accel, _title, _subtitle); \
+    g_hash_table_insert (self->widget_keywords, gesture, keywords); \
   }
 
 
@@ -260,12 +268,23 @@ gb_shortcuts_window_constructed (GObject *object)
 }
 
 static void
+gb_shortcuts_window_finalize (GObject *object)
+{
+  GbShortcutsWindow *self = (GbShortcutsWindow *)object;
+
+  g_clear_pointer (&self->widget_keywords, g_hash_table_unref);
+
+  G_OBJECT_CLASS (gb_shortcuts_window_parent_class)->finalize (object);
+}
+
+static void
 gb_shortcuts_window_class_init (GbShortcutsWindowClass *klass)
 {
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   object_class->constructed = gb_shortcuts_window_constructed;
+  object_class->finalize = gb_shortcuts_window_finalize;
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/ui/gb-shortcuts-window.ui");
 
@@ -277,6 +296,8 @@ gb_shortcuts_window_class_init (GbShortcutsWindowClass *klass)
 static void
 gb_shortcuts_window_init (GbShortcutsWindow *self)
 {
+  self->widget_keywords = g_hash_table_new_full (NULL, NULL, NULL, g_free);
+
   gtk_widget_init_template (GTK_WIDGET (self));
   gb_shortcuts_window_build (self);
 }
