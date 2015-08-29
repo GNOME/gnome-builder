@@ -335,7 +335,7 @@ ide_unsaved_files_restore_worker (GTask        *task,
         continue;
 
       file = g_file_new_for_uri (lines [i]);
-      if (!file)
+      if (!file || !g_file_query_exists (file, NULL))
         continue;
 
       hash = hash_uri (lines [i]);
