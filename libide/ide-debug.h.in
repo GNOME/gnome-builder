@@ -78,7 +78,7 @@ G_BEGIN_DECLS
 #define _IDE_BUG(Component, Description, File, Line, Func, ...)                         \
   G_STMT_START {                                                                        \
     g_printerr ("-----------------------------------------------------------------\n"); \
-    g_printerr ("You've found a bug in Builder or one of it's dependent libraries.\n"); \
+    g_printerr ("You've found a bug in Builder or one of its dependent libraries.\n");  \
     g_printerr ("Please help us help you by filing a bug report at:\n");                \
     g_printerr ("\n");                                                                  \
     g_printerr ("@BUGREPORT_URL@&component=%s\n", Component);                           \
