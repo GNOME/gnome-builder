@@ -46,7 +46,10 @@
 #include <glib/gi18n.h>
 #include <ide.h>
 
+#include "egg-search-bar.h"
+
 #include "gb-accel-label.h"
+#include "gb-scrolled-window.h"
 #include "gb-shortcuts-window.h"
 #include "gb-widget.h"
 
@@ -56,8 +59,12 @@ struct _GbShortcutsWindow
 
   GHashTable     *widget_keywords;
 
+  GtkListBox     *list_box;
   GtkStack       *stack;
   GtkMenuButton  *menu_button;
+  GtkLabel       *menu_label;
+  GtkPopover     *popover;
+  EggSearchBar   *search_bar;
   GtkSearchEntry *search_entry;
 
   GtkWidget      *previous_view;
@@ -88,7 +95,7 @@ gb_shortcuts_window_set_view (GbShortcutsWindow *self,
       gtk_container_child_get (GTK_CONTAINER (self->stack), child,
                                "title", &title,
                                NULL);
-      gtk_button_set_label (GTK_BUTTON (self->menu_button), title);
+      gtk_label_set_label (self->menu_label, title);
       gtk_stack_set_visible_child (self->stack, child);
     }
 }
@@ -160,6 +167,19 @@ gb_shortcuts_window_build (GbShortcutsWindow *self)
       gtk_widget_show (GTK_WIDGET (switcher)); \
     gtk_style_context_remove_class (gtk_widget_get_style_context (GTK_WIDGET (switcher)), "linked"); \
     gtk_container_foreach (GTK_CONTAINER (switcher), adjust_page_buttons, NULL); \
+    { \
+      GtkListBoxRow *row; \
+      row = g_object_new (GTK_TYPE_LIST_BOX_ROW, \
+                          "visible", TRUE, \
+                          "child", g_object_new (GTK_TYPE_LABEL, \
+                                                 "label", _name, \
+                                                 "visible", TRUE, \
+                                                 "xalign", 0.5f, \
+                                                 NULL), \
+                          NULL); \
+      g_object_set_data (G_OBJECT (row), "view", _ident); \
+      gtk_container_add (GTK_CONTAINER (self->list_box), GTK_WIDGET (row)); \
+    } \
   }
 #define PAGE(_columns) \
   { \
@@ -431,7 +451,34 @@ gb_shortcuts_window__stack__notify_visible_child (GbShortcutsWindow *self,
   gtk_container_child_get (GTK_CONTAINER (stack), visible_child,
                            "title", &title,
                            NULL);
-  gtk_button_set_label (GTK_BUTTON (self->menu_button), title);
+  gtk_label_set_label (self->menu_label, title);
+}
+
+static void
+gb_shortcuts_window__list_box__row_activated (GbShortcutsWindow *self,
+                                              GtkListBoxRow     *row,
+                                              GtkListBox        *list_box)
+{
+  const gchar *view;
+
+  g_assert (GB_IS_SHORTCUTS_WINDOW (self));
+  g_assert (GTK_IS_LIST_BOX_ROW (row));
+  g_assert (GTK_IS_LIST_BOX (list_box));
+
+  view = g_object_get_data (G_OBJECT (row), "view");
+  if (view != NULL)
+    gtk_stack_set_visible_child_name (self->stack, view);
+
+  /*
+   * Ensure search is now hidden.
+   */
+  gtk_entry_set_text (GTK_ENTRY (self->search_entry), "");
+  egg_search_bar_set_search_mode_enabled (self->search_bar, FALSE);
+
+  /*
+   * Apparently we need to hide the popover manually.
+   */
+  gtk_widget_hide (GTK_WIDGET (self->popover));
 }
 
 static void
@@ -467,9 +514,16 @@ gb_shortcuts_window_class_init (GbShortcutsWindowClass *klass)
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/ui/gb-shortcuts-window.ui");
 
+  gtk_widget_class_bind_template_child (widget_class, GbShortcutsWindow, list_box);
   gtk_widget_class_bind_template_child (widget_class, GbShortcutsWindow, menu_button);
+  gtk_widget_class_bind_template_child (widget_class, GbShortcutsWindow, menu_label);
+  gtk_widget_class_bind_template_child (widget_class, GbShortcutsWindow, popover);
+  gtk_widget_class_bind_template_child (widget_class, GbShortcutsWindow, search_bar);
   gtk_widget_class_bind_template_child (widget_class, GbShortcutsWindow, search_entry);
   gtk_widget_class_bind_template_child (widget_class, GbShortcutsWindow, stack);
+
+  g_type_ensure (EGG_TYPE_SEARCH_BAR);
+  g_type_ensure (GB_TYPE_SCROLLED_WINDOW);
 }
 
 static void
@@ -490,6 +544,12 @@ gb_shortcuts_window_init (GbShortcutsWindow *self)
   g_signal_connect_object (self->stack,
                            "notify::visible-child",
                            G_CALLBACK (gb_shortcuts_window__stack__notify_visible_child),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  g_signal_connect_object (self->list_box,
+                           "row-activated",
+                           G_CALLBACK (gb_shortcuts_window__list_box__row_activated),
                            self,
                            G_CONNECT_SWAPPED);
 }

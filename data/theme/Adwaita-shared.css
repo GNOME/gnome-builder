@@ -83,3 +83,15 @@ SymbolTree GtkSearchEntry {
   border-top: none;
   border-radius: 0px;
 }
+
+
+.shortcuts-list-box GtkListBoxRow {
+  border-bottom: 1px solid @borders;
+}
+.shortcuts-list-box GtkListBoxRow:last-child {
+  border-bottom: none;
+}
+
+.shortcuts-list-box GtkLabel {
+  padding: 6px;
+}

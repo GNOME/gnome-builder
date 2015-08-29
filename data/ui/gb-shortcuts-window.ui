@@ -9,10 +9,37 @@
         <property name="visible">true</property>
         <child type="title">
           <object class="GtkMenuButton" id="menu_button">
+            <property name="focus-on-click">false</property>
+            <property name="popover">popover</property>
             <property name="visible">true</property>
             <style>
               <class name="flat"/>
             </style>
+            <child>
+              <object class="GtkBox">
+                <property name="orientation">horizontal</property>
+                <property name="spacing">6</property>
+                <property name="visible">true</property>
+                <style>
+                  <class name="dim-label"/>
+                </style>
+                <child>
+                  <object class="GtkArrow">
+                    <property name="arrow-type">down</property>
+                    <property name="visible">true</property>
+                  </object>
+                  <packing>
+                    <property name="pack-type">end</property>
+                  </packing>
+                </child>
+                <child type="center">
+                  <!-- FIXME: hrmm, child="center" doesn't seem to be working -->
+                  <object class="GtkLabel" id="menu_label">
+                    <property name="visible">true</property>
+                  </object>
+                </child>
+              </object>
+            </child>
           </object>
         </child>
         <child>
@@ -64,4 +91,25 @@
       </object>
     </child>
   </template>
+  <object class="GtkPopover" id="popover">
+    <child>
+      <object class="GbScrolledWindow">
+        <property name="max-content-height">300</property>
+        <property name="max-content-width">300</property>
+        <property name="min-content-width">150</property>
+        <property name="border-width">6</property>
+        <property name="shadow-type">in</property>
+        <property name="visible">true</property>
+        <child>
+          <object class="GtkListBox" id="list_box">
+            <property name="visible">true</property>
+            <property name="selection-mode">none</property>
+            <style>
+              <class name="shortcuts-list-box"/>
+            </style>
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
 </interface>
