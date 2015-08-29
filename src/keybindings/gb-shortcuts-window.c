@@ -417,6 +417,24 @@ gb_shortcuts_window__search_entry__changed (GbShortcutsWindow *self,
 }
 
 static void
+gb_shortcuts_window__stack__notify_visible_child (GbShortcutsWindow *self,
+                                                  GParamSpec        *pspec,
+                                                  GtkStack          *stack)
+{
+  g_autofree gchar *title = NULL;
+  GtkWidget *visible_child;
+
+  g_assert (GB_IS_SHORTCUTS_WINDOW (self));
+  g_assert (GTK_IS_STACK (stack));
+
+  visible_child = gtk_stack_get_visible_child (stack);
+  gtk_container_child_get (GTK_CONTAINER (stack), visible_child,
+                           "title", &title,
+                           NULL);
+  gtk_button_set_label (GTK_BUTTON (self->menu_button), title);
+}
+
+static void
 gb_shortcuts_window_constructed (GObject *object)
 {
   GbShortcutsWindow *self = (GbShortcutsWindow *)object;
@@ -466,6 +484,12 @@ gb_shortcuts_window_init (GbShortcutsWindow *self)
   g_signal_connect_object (self->search_entry,
                            "changed",
                            G_CALLBACK (gb_shortcuts_window__search_entry__changed),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  g_signal_connect_object (self->stack,
+                           "notify::visible-child",
+                           G_CALLBACK (gb_shortcuts_window__stack__notify_visible_child),
                            self,
                            G_CONNECT_SWAPPED);
 }
