@@ -93,13 +93,6 @@ gb_application_make_skeleton_dirs (GbApplication *self)
                            NULL);
   g_mkdir_with_parents (path, 0750);
   g_free (path);
-
-  path = g_build_filename (g_get_user_config_dir (),
-                           "gnome-builder",
-                           "uncrustify",
-                           NULL);
-  g_mkdir_with_parents (path, 0750);
-  g_free (path);
 }
 
 static void
