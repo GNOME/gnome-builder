@@ -16,6 +16,33 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+/*
+ * NOTE:
+ *
+ * Thar be dragons!
+ *
+ * This code uses XMACROS. It's a bit insane, and does lots of
+ * duplication that could be cleaned up next cycle.
+ *
+ * If you want this code for your module, I suggest you refactor
+ * this to use GtkBuilder with custom_tag_start().
+ *
+ * I'd like to see something like:
+ *
+ *  <views>
+ *    <view>
+ *      <page>
+ *        <column>
+ *          <group>
+ *            <shortcut />
+ *            <shortcut />
+ *            <gesture />
+ *
+ * Or whatever else you come up with and are willing to maintain.
+ *
+ * -- Christian
+ */
+
 #include <glib/gi18n.h>
 #include <ide.h>
 
@@ -32,6 +59,8 @@ struct _GbShortcutsWindow
   GtkStack       *stack;
   GtkMenuButton  *menu_button;
   GtkSearchEntry *search_entry;
+
+  GtkWidget      *previous_view;
 };
 
 G_DEFINE_TYPE (GbShortcutsWindow, gb_shortcuts_window, GTK_TYPE_WINDOW)
@@ -92,6 +121,9 @@ adjust_page_buttons (GtkWidget *widget,
 static void
 gb_shortcuts_window_build (GbShortcutsWindow *self)
 {
+  GtkSizeGroup *desc_group = NULL;
+  gboolean do_keywords = FALSE;
+
   g_assert (GB_IS_SHORTCUTS_WINDOW (self));
 
 #define VIEWS(_views) { _views }
@@ -206,8 +238,13 @@ gb_shortcuts_window_build (GbShortcutsWindow *self)
                          "hexpand", TRUE, \
                          NULL); \
     gtk_container_add (GTK_CONTAINER (shortcut), GTK_WIDGET (desc)); \
-    keywords = g_strdup_printf ("%s %s", _accel, _desc); \
-    register_keywords (self, GTK_WIDGET (shortcut), keywords); \
+    if (desc_group != NULL) \
+      gtk_size_group_add_widget (desc_group, GTK_WIDGET (desc)); \
+    if (do_keywords) \
+      { \
+        keywords = g_strdup_printf ("%s %s", _accel, _desc); \
+        register_keywords (self, GTK_WIDGET (shortcut), keywords); \
+      } \
   }
 #define GESTURE(_accel, _title, _subtitle) \
   { \
@@ -223,7 +260,7 @@ gb_shortcuts_window_build (GbShortcutsWindow *self)
     gtk_container_add (GTK_CONTAINER (group), GTK_WIDGET (gesture)); \
     image = g_object_new (GTK_TYPE_IMAGE, \
                           "resource", "/org/gnome/builder/icons/scalable/actions/gesture-"_accel".svg", \
-                          "halign", GTK_ALIGN_CENTER, \
+                          "xalign", 0.0f, \
                           "valign", GTK_ALIGN_CENTER, \
                           "visible", TRUE, \
                           NULL); \
@@ -247,18 +284,68 @@ gb_shortcuts_window_build (GbShortcutsWindow *self)
                              "xalign", 0.0f, \
                              "hexpand", TRUE, \
                              NULL); \
+    if (desc_group != NULL) \
+      gtk_size_group_add_widget (desc_group, GTK_WIDGET (subtitle)); \
     gb_widget_add_style_class (GTK_WIDGET (subtitle), "dim-label"); \
     gtk_container_add_with_properties (GTK_CONTAINER (gesture), GTK_WIDGET (subtitle), \
                                        "top-attach", 1, \
                                        "left-attach", 1, \
                                        NULL); \
-    keywords = g_strdup_printf ("%s %s %s", _accel, _title, _subtitle); \
-    register_keywords (self, GTK_WIDGET (gesture), keywords); \
+    if (do_keywords) \
+      { \
+        keywords = g_strdup_printf ("%s %s %s", _accel, _title, _subtitle); \
+        register_keywords (self, GTK_WIDGET (gesture), keywords); \
+        gtk_size_group_add_widget (size_group, GTK_WIDGET (image)); \
+      } \
   }
-
 
 #include "gb-shortcuts-window.defs"
 
+#undef VIEWS
+#undef VIEW
+#undef PAGE
+#undef COLUMN
+#undef GROUP
+
+  /*
+   * Now add the page where we show search results.
+   */
+  {
+    GtkScrolledWindow *page;
+    GtkSizeGroup *mod_key_group;
+    GtkSizeGroup *size_group;
+    GtkBox *group;
+
+    page = g_object_new (GTK_TYPE_SCROLLED_WINDOW,
+                         "visible", TRUE,
+                         NULL);
+    gtk_stack_add_titled (self->stack,
+                          GTK_WIDGET (page),
+                          "internal-search",
+                          _("Search Results"));
+
+    group = g_object_new (GTK_TYPE_BOX,
+                          "border-width", 24,
+                          "halign", GTK_ALIGN_CENTER,
+                          "orientation", GTK_ORIENTATION_VERTICAL,
+                          "spacing", 12,
+                          "visible", TRUE,
+                          NULL);
+    gtk_container_add (GTK_CONTAINER (page), GTK_WIDGET (group));
+
+    mod_key_group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
+    size_group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
+    desc_group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
+
+    do_keywords = TRUE;
+
+#define VIEWS(_views) {_views}
+#define VIEW(_ident, _title, _pages) {_pages}
+#define PAGE(_columns) {_columns}
+#define COLUMN(_groups) {_groups}
+#define GROUP(_title, _items) {_items}
+
+#include "gb-shortcuts-window.defs"
 
 #undef VIEWS
 #undef VIEW
@@ -267,22 +354,11 @@ gb_shortcuts_window_build (GbShortcutsWindow *self)
 #undef GROUP
 #undef SHORTCUT
 #undef GESTURE
-}
 
-static void
-remove_filter_class (gpointer key,
-                     gpointer value,
-                     gpointer user_data)
-{
-  gtk_style_context_remove_class (gtk_widget_get_style_context (key), "filtered");
-}
-
-static void
-add_filter_class (gpointer key,
-                  gpointer value,
-                  gpointer user_data)
-{
-  gtk_style_context_add_class (gtk_widget_get_style_context (key), "filtered");
+    g_clear_object (&mod_key_group);
+    g_clear_object (&size_group);
+    g_clear_object (&desc_group);
+  }
 }
 
 static void
@@ -292,7 +368,9 @@ gb_shortcuts_window__search_entry__changed (GbShortcutsWindow *self,
   g_autoptr(IdePatternSpec) spec = NULL;
   GHashTableIter iter;
   g_autofree gchar *query = NULL;
+  g_autofree gchar *name = NULL;
   const gchar *text;
+  GtkWidget *visible_child;
   gpointer key;
   gpointer value;
 
@@ -303,8 +381,23 @@ gb_shortcuts_window__search_entry__changed (GbShortcutsWindow *self,
 
   if (ide_str_empty0 (text))
     {
-      g_hash_table_foreach (self->widget_keywords, remove_filter_class, NULL);
+      if (self->previous_view != NULL)
+        gtk_stack_set_visible_child (self->stack, self->previous_view);
+      g_hash_table_foreach (self->widget_keywords,
+                            (GHFunc)gtk_widget_show,
+                            NULL);
       return;
+    }
+
+  visible_child = gtk_stack_get_visible_child (self->stack);
+  gtk_container_child_get (GTK_CONTAINER (self->stack), visible_child,
+                           "name", &name,
+                           NULL);
+
+  if (!ide_str_equal0 (name, "internal-search"))
+    {
+      self->previous_view = visible_child;
+      gtk_stack_set_visible_child_name (self->stack, "internal-search");
     }
 
   query = g_utf8_casefold (text, -1);
@@ -317,9 +410,9 @@ gb_shortcuts_window__search_entry__changed (GbShortcutsWindow *self,
       const gchar *keywords = value;
 
       if (ide_pattern_spec_match (spec, keywords))
-        remove_filter_class (key, value, NULL);
+        gtk_widget_show (key);
       else
-        add_filter_class (key, value, NULL);
+        gtk_widget_hide (key);
     }
 }
 
