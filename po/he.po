@@ -8,9 +8,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-07-19 13:39+0300\n"
-"PO-Revision-Date: 2015-07-19 13:54+0300\n"
-"Last-Translator: Yosef Or Boczko <yoseforb@gnome.org>\n"
+"POT-Creation-Date: 2015-08-30 12:35+0300\n"
+"PO-Revision-Date: 2015-08-30 12:36+0300\n"
+"Last-Translator: Yosef Or Boczko <yoseforb@gmail.com>\n"
 "Language-Team: עברית <>\n"
 "Language: he\n"
 "MIME-Version: 1.0\n"
@@ -276,7 +276,7 @@ msgstr "ערכת צבעים כהה עבור Builder המשתמשת בלוח צב
 
 #: ../data/style-schemes/builder.xml.h:1
 #: ../data/ui/gb-preferences-page-keybindings.ui.h:3
-#: ../data/ui/gb-workbench.ui.h:1 ../src/main.c:95
+#: ../data/ui/gb-workbench.ui.h:1 ../src/main.c:49
 #: ../src/workbench/gb-workbench.c:153
 msgid "Builder"
 msgstr "Builder"
@@ -321,6 +321,12 @@ msgstr "הכנסת _רווחים במקום טאבים."
 #: ../data/ui/gb-editor-settings-widget.ui.h:8
 msgid "_Enable automatic indentation"
 msgstr "_לאפשר הזחה אוטומטית"
+
+#: ../data/ui/gb-editor-settings-widget.ui.h:9
+#: ../libide/ide-source-snippet-completion-provider.c:174
+#: ../libide/ide-source-snippet-completion-provider.c:255
+msgid "Snippets"
+msgstr "Snippets"
 
 #: ../data/ui/gb-editor-tweak-widget.ui.h:1
 msgid "Search highlight mode…"
@@ -445,8 +451,8 @@ msgstr "גרסת GNOME"
 
 #: ../data/ui/gb-new-project-dialog.ui.h:9 ../libide/ide-diagnostician.c:270
 #: ../libide/ide-diagnostician.c:271 ../libide/ide-file.c:486
-#: ../libide/ide-source-snippet.c:974
-#: ../src/editor/gb-editor-settings-widget.c:179
+#: ../libide/ide-source-snippet.c:1007
+#: ../src/editor/gb-editor-settings-widget.c:312
 msgid "Language"
 msgstr "שפה"
 
@@ -466,9 +472,8 @@ msgstr "user@host:repository.git"
 msgid "Enter the URL of your project's source code repository."
 msgstr "יש להזין את כתובת מאגר קוד המקור של המיזם שלך."
 
-#: ../data/ui/gb-new-project-dialog.ui.h:14
-#: ../libide/autotools/ide-autotools-build-task.c:395
-#: ../libide/ide-project-info.c:437
+#: ../data/ui/gb-new-project-dialog.ui.h:14 ../libide/ide-project-info.c:437
+#: ../plugins/autotools/ide-autotools-build-task.c:395
 #: ../src/project-tree/gb-new-file-popover.c:268
 #: ../src/project-tree/gb-new-file-popover.c:269
 msgid "Directory"
@@ -739,8 +744,8 @@ msgstr "תצוגה מקדימה"
 
 #: ../data/ui/gb-view-stack.ui.h:4
 #: ../plugins/terminal/gb-terminal-view-actions.c:309
-#: ../src/editor/gb-editor-view-actions.c:310
-#: ../src/editor/gb-editor-view-actions.c:441
+#: ../src/editor/gb-editor-view-actions.c:311
+#: ../src/editor/gb-editor-view-actions.c:442
 msgid "Save"
 msgstr "שמירה"
 
@@ -749,121 +754,16 @@ msgid "Save As"
 msgstr "שמירה בשם"
 
 #: ../data/ui/gb-view-stack.ui.h:6
+msgid "Print"
+msgstr "הדפסה"
+
+#: ../data/ui/gb-view-stack.ui.h:7
 msgid "Close"
 msgstr "סגירה"
 
 #: ../data/ui/gb-workbench.ui.h:2 ../libide/ide-context.c:680
 msgid "Project"
 msgstr "Project"
-
-#: ../libide/autotools/ide-autotools-builder.c:303
-#: ../libide/autotools/ide-autotools-build-task.c:377
-msgid "Config"
-msgstr "Config"
-
-#: ../libide/autotools/ide-autotools-builder.c:304
-msgid "The configuration for the build."
-msgstr "The configuration for the build."
-
-#: ../libide/autotools/ide-autotools-builder.c:312
-#: ../libide/autotools/ide-autotools-build-task.c:386
-#: ../plugins/device-manager/gb-device-manager-panel.c:75
-msgid "Device"
-msgstr "Device"
-
-#: ../libide/autotools/ide-autotools-builder.c:313
-#: ../libide/autotools/ide-autotools-build-task.c:387
-msgid "The device to build for."
-msgstr "The device to build for."
-
-#: ../libide/autotools/ide-autotools-build-system.c:172
-msgid "Failed to locate configure.ac"
-msgstr "Failed to locate configure.ac"
-
-#: ../libide/autotools/ide-autotools-build-system.c:638
-msgid "Tarball Name"
-msgstr "Tarball Name"
-
-#: ../libide/autotools/ide-autotools-build-system.c:639
-msgid "The name of the project tarball."
-msgstr "The name of the project tarball."
-
-#: ../libide/autotools/ide-autotools-build-task.c:270
-msgid "Directory must be on a locally mounted filesystem."
-msgstr "Directory must be on a locally mounted filesystem."
-
-#: ../libide/autotools/ide-autotools-build-task.c:378
-msgid "The overlay config for the compilation."
-msgstr "The overlay config for the compilation."
-
-#: ../libide/autotools/ide-autotools-build-task.c:396
-msgid "The directory to perform the build within."
-msgstr "The directory to perform the build within."
-
-#: ../libide/autotools/ide-autotools-build-task.c:404
-msgid "Require Autogen"
-msgstr "Require Autogen"
-
-#: ../libide/autotools/ide-autotools-build-task.c:405
-msgid "If autogen.sh should be forced to execute."
-msgstr "If autogen.sh should be forced to execute."
-
-#: ../libide/autotools/ide-autotools-build-task.c:413
-msgid "Require Configure"
-msgstr "Require Configure"
-
-#: ../libide/autotools/ide-autotools-build-task.c:414
-msgid "If configure should be forced to execute."
-msgstr "If configure should be forced to execute."
-
-#: ../libide/autotools/ide-autotools-build-task.c:641
-msgid "Cannot execute build task more than once."
-msgstr "Cannot execute build task more than once."
-
-#: ../libide/autotools/ide-autotools-build-task.c:726
-msgid "Failed to create build directory."
-msgstr "Failed to create build directory."
-
-#: ../libide/autotools/ide-autotools-build-task.c:735
-#, c-format
-msgid "'%s' is not a directory."
-msgstr "'%s' is not a directory."
-
-#: ../libide/autotools/ide-autotools-build-task.c:774
-#, c-format
-msgid "autogen.sh is missing from project directory (%s)."
-msgstr "autogen.sh is missing from project directory (%s)."
-
-#: ../libide/autotools/ide-autotools-build-task.c:784
-msgid "autogen.sh is not executable."
-msgstr "autogen.sh is not executable."
-
-#: ../libide/autotools/ide-autotools-build-task.c:814
-#, c-format
-msgid "autogen.sh failed to create configure (%s)"
-msgstr "autogen.sh failed to create configure (%s)"
-
-#: ../libide/autotools/ide-autotools-project-miner.c:388
-#: ../plugins/file-search/gb-file-search-index.c:121
-#: ../plugins/file-search/gb-file-search-index.c:122
-msgid "Root Directory"
-msgstr "Root Directory"
-
-#: ../libide/autotools/ide-autotools-project-miner.c:389
-msgid "The root directory to scan from."
-msgstr "The root directory to scan from."
-
-#: ../libide/autotools/ide-makecache.c:1004
-msgid "Invalid makefile provided, ignoring."
-msgstr "Invalid makefile provided, ignoring."
-
-#: ../libide/autotools/ide-makecache.c:1244
-msgid "Makefile"
-msgstr "Makefile"
-
-#: ../libide/autotools/ide-makecache.c:1245
-msgid "The root makefile to be cached."
-msgstr "The root makefile to be cached."
 
 #: ../libide/doap/ide-doap.c:420 ../libide/doap/ide-doap.c:421
 msgid "Bug Database"
@@ -874,7 +774,7 @@ msgid "Category"
 msgstr "Category"
 
 #: ../libide/doap/ide-doap.c:434 ../libide/doap/ide-doap.c:435
-#: ../libide/ide-project-info.c:423 ../libide/ide-source-snippet.c:981
+#: ../libide/ide-project-info.c:423 ../libide/ide-source-snippet.c:1014
 #: ../src/preferences/gb-preferences-switch.c:321
 msgid "Description"
 msgstr "Description"
@@ -1036,7 +936,8 @@ msgstr "Changed on Volume"
 msgid "If the file has changed on disk and the buffer is not in sync."
 msgstr "If the file has changed on disk and the buffer is not in sync."
 
-#: ../libide/ide-buffer.c:1126 ../libide/ide-object.c:203
+#: ../libide/ide-buffer.c:1126 ../libide/ide-build-system.c:120
+#: ../libide/ide-build-system.c:121 ../libide/ide-object.c:212
 #: ../libide/ide-search-provider.c:71 ../libide/ide-search-provider.c:72
 #: ../libide/ide-source-snippet-chunk.c:314
 #: ../src/search/gb-search-display.c:577 ../src/workbench/gb-workbench.c:708
@@ -1101,7 +1002,7 @@ msgid "The current language lacks a symbol resolver."
 msgstr "השפה הנוכחית חסרה מאחזר סמלים."
 
 #: ../libide/ide-buffer-change-monitor.c:106
-#: ../libide/ide-highlight-engine.c:851 ../libide/ide-source-snippet.c:946
+#: ../libide/ide-highlight-engine.c:851 ../libide/ide-source-snippet.c:979
 #: ../src/html/gb-html-document.c:314
 msgid "Buffer"
 msgstr "Buffer"
@@ -1110,44 +1011,44 @@ msgstr "Buffer"
 msgid "The IdeBuffer to be monitored."
 msgstr "The IdeBuffer to be monitored."
 
-#: ../libide/ide-buffer-manager.c:584
+#: ../libide/ide-buffer-manager.c:604
 msgid "File too large to be opened."
 msgstr "File too large to be opened."
 
-#: ../libide/ide-buffer-manager.c:1209
+#: ../libide/ide-buffer-manager.c:1265
 msgid "Auto Save"
 msgstr "Auto Save"
 
-#: ../libide/ide-buffer-manager.c:1210
+#: ../libide/ide-buffer-manager.c:1266
 msgid "If the documents should auto save after a configured timeout."
 msgstr "If the documents should auto save after a configured timeout."
 
-#: ../libide/ide-buffer-manager.c:1216
+#: ../libide/ide-buffer-manager.c:1272
 msgid "Auto Save Timeout"
 msgstr "Auto Save Timeout"
 
-#: ../libide/ide-buffer-manager.c:1217
+#: ../libide/ide-buffer-manager.c:1273
 msgid "The number of seconds after modification before auto saving."
 msgstr "The number of seconds after modification before auto saving."
 
-#: ../libide/ide-buffer-manager.c:1225
+#: ../libide/ide-buffer-manager.c:1281
 msgid "Focused Buffer"
 msgstr "Focused Buffer"
 
-#: ../libide/ide-buffer-manager.c:1226
+#: ../libide/ide-buffer-manager.c:1282
 msgid "The currently focused buffer."
 msgstr "The currently focused buffer."
 
-#: ../libide/ide-buffer-manager.c:1369
+#: ../libide/ide-buffer-manager.c:1425
 msgid "Words"
 msgstr "מילים"
 
-#: ../libide/ide-buffer-manager.c:1580
+#: ../libide/ide-buffer-manager.c:1636
 #, c-format
 msgid "unsaved document %u"
 msgstr "מסמך לא נשמר %u"
 
-#: ../libide/ide-buffer-manager.c:1614
+#: ../libide/ide-buffer-manager.c:1670
 msgid "Failed to save buffer, ignoring reclamation."
 msgstr "Failed to save buffer, ignoring reclamation."
 
@@ -1168,29 +1069,31 @@ msgstr "Failed to open stderr stream."
 msgid "Failed to open stdout stream."
 msgstr "Failed to open stdout stream."
 
-#: ../libide/ide-build-system.c:181 ../libide/ide-context.c:687
+#: ../libide/ide-build-system.c:112 ../libide/ide-context.c:687
+#: ../plugins/autotools/ide-autotools-build-system.c:683
+#: ../plugins/fallback/ide-directory-build-system.c:116
 msgid "Project File"
 msgstr "Project File"
 
-#: ../libide/ide-build-system.c:182
+#: ../libide/ide-build-system.c:113
 msgid "The project file."
 msgstr "The project file."
 
-#: ../libide/ide-build-system.c:287
+#: ../libide/ide-build-system.c:229
 #, c-format
 msgid "%s() is not supported on %s build system."
 msgstr "%s() אינו נתמך על מערכת הבנייה %s."
 
-#: ../libide/ide.c:68
+#: ../libide/ide.c:65
 #, c-format
 msgid "You must call %s() before using libide."
 msgstr "You must call %s() before using libide."
 
-#: ../libide/ide.c:146
+#: ../libide/ide.c:126
 msgid "Builder requires libgit2-glib with threading support."
 msgstr "Builder requires libgit2-glib with threading support."
 
-#: ../libide/ide.c:152
+#: ../libide/ide.c:132
 msgid "Builder requires libgit2-glib with SSH support."
 msgstr "Builder requires libgit2-glib with SSH support."
 
@@ -1425,15 +1328,19 @@ msgstr "Highlighter"
 msgid "The highlighter to use for type information."
 msgstr "The highlighter to use for type information."
 
-#: ../libide/ide-object.c:204
+#: ../libide/ide-object.c:213
 msgid "The context that owns the object."
 msgstr "The context that owns the object."
 
-#: ../libide/ide-object.c:274 ../libide/ide-object.c:323
+#: ../libide/ide-object.c:283 ../libide/ide-object.c:471
 msgid "No implementations of extension point."
 msgstr "No implementations of extension point."
 
-#: ../libide/ide-object.c:313
+#: ../libide/ide-object.c:374
+msgid "Failed to locate build system plugin."
+msgstr "Failed to locate build system plugin."
+
+#: ../libide/ide-object.c:461
 msgid "No such extension point."
 msgstr "No such extension point."
 
@@ -1557,7 +1464,7 @@ msgstr "Parent"
 msgid "The parent project item, if not the root."
 msgstr "The parent project item, if not the root."
 
-#: ../libide/ide-recent-projects.c:378
+#: ../libide/ide-recent-projects.c:377
 #, c-format
 msgid "%s() may only be executed once"
 msgstr "%s() may only be executed once"
@@ -1624,53 +1531,61 @@ msgstr "Relative Path"
 msgid "Schema ID"
 msgstr "Schema ID"
 
-#: ../libide/ide-source-snippet.c:345
+#: ../libide/ide-source-snippet.c:370
 msgid "Chunk does not belong to snippet."
 msgstr "Chunk does not belong to snippet."
 
-#: ../libide/ide-source-snippet.c:947
+#: ../libide/ide-source-snippet.c:980
 msgid "The GtkTextBuffer for the snippet."
 msgstr "The GtkTextBuffer for the snippet."
 
-#: ../libide/ide-source-snippet.c:953
+#: ../libide/ide-source-snippet.c:986
 msgid "Mark Begin"
 msgstr "Mark Begin"
 
-#: ../libide/ide-source-snippet.c:954
+#: ../libide/ide-source-snippet.c:987
 msgid "The beginning text mark."
 msgstr "The beginning text mark."
 
-#: ../libide/ide-source-snippet.c:960
+#: ../libide/ide-source-snippet.c:993
 msgid "Mark End"
 msgstr "Mark End"
 
-#: ../libide/ide-source-snippet.c:961
+#: ../libide/ide-source-snippet.c:994
 msgid "The ending text mark."
 msgstr "The ending text mark."
 
-#: ../libide/ide-source-snippet.c:967
+#: ../libide/ide-source-snippet.c:1000
 msgid "Trigger"
 msgstr "Trigger"
 
-#: ../libide/ide-source-snippet.c:968
+#: ../libide/ide-source-snippet.c:1001
 msgid "The trigger for the snippet."
 msgstr "The trigger for the snippet."
 
-#: ../libide/ide-source-snippet.c:975
+#: ../libide/ide-source-snippet.c:1008
 msgid "The language for the snippet."
 msgstr "The language for the snippet."
 
-#: ../libide/ide-source-snippet.c:982
+#: ../libide/ide-source-snippet.c:1015
 msgid "The description for the snippet."
 msgstr "The description for the snippet."
 
-#: ../libide/ide-source-snippet.c:988 ../libide/ide-source-snippet-chunk.c:328
+#: ../libide/ide-source-snippet.c:1021 ../libide/ide-source-snippet-chunk.c:328
 msgid "Tab Stop"
 msgstr "Tab Stop"
 
-#: ../libide/ide-source-snippet.c:989
+#: ../libide/ide-source-snippet.c:1022
 msgid "The current tab stop."
 msgstr "The current tab stop."
+
+#: ../libide/ide-source-snippet.c:1030
+msgid "Snippet Text"
+msgstr "Snippet Text"
+
+#: ../libide/ide-source-snippet.c:1031
+msgid "The entire snippet text from the source file."
+msgstr "The entire snippet text from the source file."
 
 #: ../libide/ide-source-snippet-chunk.c:315
 msgid "The snippet context."
@@ -1721,26 +1636,21 @@ msgstr "Source View"
 msgid "The source view to insert snippet into."
 msgstr "The source view to insert snippet into."
 
-#: ../libide/ide-source-snippet-completion-provider.c:174
-#: ../libide/ide-source-snippet-completion-provider.c:255
-msgid "Snippets"
-msgstr "Snippets"
-
 #: ../libide/ide-source-snippet-completion-provider.c:175
 msgid "The snippets to complete with this provider."
 msgstr "The snippets to complete with this provider."
 
-#: ../libide/ide-source-snippet-parser.c:493
+#: ../libide/ide-source-snippet-parser.c:495
 #, c-format
 msgid "Invalid snippet at line %d: %s"
 msgstr "Invalid snippet at line %d: %s"
 
-#: ../libide/ide-source-snippets-manager.c:97
+#: ../libide/ide-source-snippets-manager.c:96
 #, c-format
 msgid "Failed to open directory: %s"
 msgstr "Failed to open directory: %s"
 
-#: ../libide/ide-source-snippets-manager.c:110
+#: ../libide/ide-source-snippets-manager.c:109
 #, c-format
 msgid "Failed to load file: %s: %s"
 msgstr "Failed to load file: %s: %s"
@@ -1909,10 +1819,12 @@ msgid "If snippet expansion should be enabled via the completion window."
 msgstr "If snippet expansion should be enabled via the completion window."
 
 #: ../libide/ide-source-view-capture.c:241
+#: ../src/editor/gb-editor-print-operation.c:171
 msgid "View"
 msgstr "View"
 
 #: ../libide/ide-source-view-capture.c:242
+#: ../src/editor/gb-editor-print-operation.c:172
 msgid "The source view."
 msgstr "The source view."
 
@@ -2022,6 +1934,120 @@ msgstr "x"
 #: ../libide/theatrics/ide-box-theatric.c:312
 msgid "y"
 msgstr "y"
+
+#: ../plugins/autotools/ide-autotools-builder.c:303
+#: ../plugins/autotools/ide-autotools-build-task.c:377
+msgid "Config"
+msgstr "Config"
+
+#: ../plugins/autotools/ide-autotools-builder.c:304
+msgid "The configuration for the build."
+msgstr "The configuration for the build."
+
+#: ../plugins/autotools/ide-autotools-builder.c:312
+#: ../plugins/autotools/ide-autotools-build-task.c:386
+#: ../plugins/device-manager/gb-device-manager-panel.c:75
+msgid "Device"
+msgstr "Device"
+
+#: ../plugins/autotools/ide-autotools-builder.c:313
+#: ../plugins/autotools/ide-autotools-build-task.c:387
+msgid "The device to build for."
+msgstr "The device to build for."
+
+#: ../plugins/autotools/ide-autotools-build-system.c:175
+msgid "Failed to locate configure.ac"
+msgstr "Failed to locate configure.ac"
+
+#: ../plugins/autotools/ide-autotools-build-system.c:676
+msgid "Tarball Name"
+msgstr "Tarball Name"
+
+#: ../plugins/autotools/ide-autotools-build-system.c:677
+msgid "The name of the project tarball."
+msgstr "The name of the project tarball."
+
+#: ../plugins/autotools/ide-autotools-build-system.c:684
+#: ../plugins/fallback/ide-directory-build-system.c:117
+msgid "The path of the project file."
+msgstr "The path of the project file."
+
+#: ../plugins/autotools/ide-autotools-build-task.c:270
+msgid "Directory must be on a locally mounted filesystem."
+msgstr "Directory must be on a locally mounted filesystem."
+
+#: ../plugins/autotools/ide-autotools-build-task.c:378
+msgid "The overlay config for the compilation."
+msgstr "The overlay config for the compilation."
+
+#: ../plugins/autotools/ide-autotools-build-task.c:396
+msgid "The directory to perform the build within."
+msgstr "The directory to perform the build within."
+
+#: ../plugins/autotools/ide-autotools-build-task.c:404
+msgid "Require Autogen"
+msgstr "Require Autogen"
+
+#: ../plugins/autotools/ide-autotools-build-task.c:405
+msgid "If autogen.sh should be forced to execute."
+msgstr "If autogen.sh should be forced to execute."
+
+#: ../plugins/autotools/ide-autotools-build-task.c:413
+msgid "Require Configure"
+msgstr "Require Configure"
+
+#: ../plugins/autotools/ide-autotools-build-task.c:414
+msgid "If configure should be forced to execute."
+msgstr "If configure should be forced to execute."
+
+#: ../plugins/autotools/ide-autotools-build-task.c:641
+msgid "Cannot execute build task more than once."
+msgstr "Cannot execute build task more than once."
+
+#: ../plugins/autotools/ide-autotools-build-task.c:726
+msgid "Failed to create build directory."
+msgstr "Failed to create build directory."
+
+#: ../plugins/autotools/ide-autotools-build-task.c:735
+#, c-format
+msgid "'%s' is not a directory."
+msgstr "'%s' is not a directory."
+
+#: ../plugins/autotools/ide-autotools-build-task.c:774
+#, c-format
+msgid "autogen.sh is missing from project directory (%s)."
+msgstr "autogen.sh is missing from project directory (%s)."
+
+#: ../plugins/autotools/ide-autotools-build-task.c:784
+msgid "autogen.sh is not executable."
+msgstr "autogen.sh is not executable."
+
+#: ../plugins/autotools/ide-autotools-build-task.c:814
+#, c-format
+msgid "autogen.sh failed to create configure (%s)"
+msgstr "autogen.sh failed to create configure (%s)"
+
+#: ../plugins/autotools/ide-autotools-project-miner.c:392
+#: ../plugins/file-search/gb-file-search-index.c:121
+#: ../plugins/file-search/gb-file-search-index.c:122
+msgid "Root Directory"
+msgstr "Root Directory"
+
+#: ../plugins/autotools/ide-autotools-project-miner.c:393
+msgid "The root directory to scan from."
+msgstr "The root directory to scan from."
+
+#: ../plugins/autotools/ide-makecache.c:998
+msgid "Invalid makefile provided, ignoring."
+msgstr "Invalid makefile provided, ignoring."
+
+#: ../plugins/autotools/ide-makecache.c:1238
+msgid "Makefile"
+msgstr "Makefile"
+
+#: ../plugins/autotools/ide-makecache.c:1239
+msgid "The root makefile to be cached."
+msgstr "The root makefile to be cached."
 
 #: ../plugins/clang/ide-clang-completion-item.c:413
 #: ../plugins/clang/ide-clang-translation-unit.c:587
@@ -2151,7 +2177,7 @@ msgid "The parameters for the action."
 msgstr "The parameters for the action."
 
 #: ../plugins/command-bar/gb-command-provider.c:319
-#: ../src/views/gb-view-stack.c:500 ../src/workbench/gb-workbench.c:686
+#: ../src/views/gb-view-stack.c:521 ../src/workbench/gb-workbench.c:686
 #: ../src/workbench/gb-workbench.c:687
 msgid "Active View"
 msgstr "Active View"
@@ -2349,8 +2375,8 @@ msgid "Save Terminal Content As"
 msgstr "שמירת תוכן המסוך בשם"
 
 #: ../plugins/terminal/gb-terminal-view-actions.c:308
-#: ../src/editor/gb-editor-view-actions.c:309
-#: ../src/editor/gb-editor-view-actions.c:440
+#: ../src/editor/gb-editor-view-actions.c:310
+#: ../src/editor/gb-editor-view-actions.c:441
 #: ../src/workbench/gb-workbench-actions.c:169
 msgid "Cancel"
 msgstr "ביטול"
@@ -2393,15 +2419,15 @@ msgstr "ללמוד עוד על GNOME Builder"
 msgid "Funded By"
 msgstr "מומן על ידי"
 
-#: ../src/app/gb-application.c:639
+#: ../src/app/gb-application.c:632
 msgid "Run Builder in standalone mode"
 msgstr "Run Builder in standalone mode"
 
-#: ../src/app/gb-application.c:645
+#: ../src/app/gb-application.c:638
 msgid "Show the application's version"
 msgstr "Show the application's version"
 
-#: ../src/app/gb-application.c:651
+#: ../src/app/gb-application.c:644
 msgid "Increase verbosity. May be specified multiple times."
 msgstr "Increase verbosity. May be specified multiple times."
 
@@ -2409,23 +2435,23 @@ msgstr "Increase verbosity. May be specified multiple times."
 msgid "Select Project File"
 msgstr "בחיקת קובץ מיזם"
 
-#: ../src/dialogs/gb-new-project-dialog.c:370
+#: ../src/dialogs/gb-new-project-dialog.c:373
 msgid "Clone Repository"
 msgstr "שיבוט מאגר"
 
-#: ../src/dialogs/gb-new-project-dialog.c:390
+#: ../src/dialogs/gb-new-project-dialog.c:393
 msgid "Autotools Project (configure.ac)"
 msgstr "מיזם Autotools‏ (configure.ac)"
 
-#: ../src/dialogs/gb-new-project-dialog.c:396
+#: ../src/dialogs/gb-new-project-dialog.c:399
 msgid "Any Directory"
 msgstr "כל תיקייה"
 
-#: ../src/dialogs/gb-new-project-dialog.c:523
+#: ../src/dialogs/gb-new-project-dialog.c:526
 msgid "A valid Git URL is required"
 msgstr "דרושה כתובת Git תקפה"
 
-#: ../src/dialogs/gb-new-project-dialog.c:662
+#: ../src/dialogs/gb-new-project-dialog.c:665
 msgid "Directory|Projects"
 msgstr "תיקייה|מיזם"
 
@@ -2506,15 +2532,15 @@ msgstr "Show Map"
 msgid "If the overview map should be shown."
 msgstr "If the overview map should be shown."
 
-#: ../src/editor/gb-editor-settings-widget.c:180
+#: ../src/editor/gb-editor-settings-widget.c:313
 msgid "The language to change the settings for."
 msgstr "The language to change the settings for."
 
-#: ../src/editor/gb-editor-view-actions.c:303
+#: ../src/editor/gb-editor-view-actions.c:304
 msgid "Save Document"
 msgstr "שמירת מסמך"
 
-#: ../src/editor/gb-editor-view-actions.c:429
+#: ../src/editor/gb-editor-view-actions.c:430
 msgid "Save Document As"
 msgstr "שמירת מסמך בשם"
 
@@ -2629,7 +2655,7 @@ msgstr "ניסיוני ניסיון clang השלמה אוטומטית אוטומ
 
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-insight.c:64
-msgid "exhuberant ctags tags autocompletion auto complete"
+msgid "exuberant ctags tags autocompletion auto complete"
 msgstr "ניסיוני ניסיון clang השלמה אוטומטית אוטומטי תג תגית תגיות תגים"
 
 #. To translators: This is a list of keywords for the preferences page
@@ -2932,7 +2958,7 @@ msgstr "If the document has been modified."
 msgid "The view title."
 msgstr "The view title."
 
-#: ../src/views/gb-view-stack.c:501
+#: ../src/views/gb-view-stack.c:522
 msgid "The active view."
 msgstr "The active view."
 
@@ -3026,139 +3052,139 @@ msgstr "If the pane should be revealed."
 msgid "The position of the pane."
 msgstr "The position of the pane."
 
-#: ../tools/ide-build.c:79 ../tools/ide-build.c:83
+#: ../tools/ide-build.c:81 ../tools/ide-build.c:85
 #, c-format
 msgid "===============\n"
 msgstr "===============\n"
 
-#: ../tools/ide-build.c:80
+#: ../tools/ide-build.c:82
 #, c-format
 msgid " Build Failure: %s\n"
 msgstr " כישלון בבנייה: %s\n"
 
-#: ../tools/ide-build.c:81
+#: ../tools/ide-build.c:83
 msgid " Build ran for: %"
 msgstr " בנייה רצה עבור: %"
 
-#: ../tools/ide-build.c:88 ../tools/ide-build.c:92
+#: ../tools/ide-build.c:90 ../tools/ide-build.c:94
 #, c-format
 msgid "=================\n"
 msgstr "=================\n"
 
-#: ../tools/ide-build.c:89
+#: ../tools/ide-build.c:91
 #, c-format
 msgid " Build Successful\n"
 msgstr " בנייה הצליחה\n"
 
-#: ../tools/ide-build.c:90
+#: ../tools/ide-build.c:92
 msgid "   Build ran for: %"
 msgstr "   בנייה רצה עבור: %"
 
-#: ../tools/ide-build.c:198 ../tools/ide-build.c:204
+#: ../tools/ide-build.c:200 ../tools/ide-build.c:206
 #, c-format
 msgid "========================\n"
 msgstr "========================\n"
 
-#: ../tools/ide-build.c:199
+#: ../tools/ide-build.c:201
 #, c-format
 msgid "           Project Name: %s\n"
 msgstr "           שם מיזם: %s\n"
 
-#: ../tools/ide-build.c:200
+#: ../tools/ide-build.c:202
 #, c-format
 msgid " Version Control System: %s\n"
 msgstr " מערכת בקרת גרסות: %s\n"
 
-#: ../tools/ide-build.c:201
+#: ../tools/ide-build.c:203
 #, c-format
 msgid "           Build System: %s\n"
 msgstr "           מערכת בנייה: %s\n"
 
-#: ../tools/ide-build.c:202
+#: ../tools/ide-build.c:204
 #, c-format
 msgid "    Build Date and Time: %s\n"
 msgstr "    תאריך בנייה ושעה: %s\n"
 
-#: ../tools/ide-build.c:203
+#: ../tools/ide-build.c:205
 #, c-format
 msgid "    Building for Device: %s (%s)\n"
 msgstr "    בנייה עבור התקן: %s ‏‏‏(%s)\n"
 
-#: ../tools/ide-build.c:286
+#: ../tools/ide-build.c:288
 #, c-format
 msgid "Timed out while waiting for devices to settle.\n"
 msgstr "חלף הזמן שהוקצב להמתנה עבור הגדרת התקנים.\n"
 
-#: ../tools/ide-build.c:344
+#: ../tools/ide-build.c:346
 #, c-format
 msgid "Waiting up to 60 seconds for devices to settle. Ctrl+C to exit.\n"
 msgstr "ממתין עד ל־60 שניות עבור הסדרת ההתקן. Ctrl+C ליציאה.\n"
 
-#: ../tools/ide-build.c:353
+#: ../tools/ide-build.c:355
 msgid "The target device we are building for."
 msgstr "The target device we are building for."
 
-#: ../tools/ide-build.c:354
+#: ../tools/ide-build.c:356
 msgid "DEVICE_ID"
 msgstr "DEVICE_ID"
 
-#: ../tools/ide-build.c:357
+#: ../tools/ide-build.c:359
 msgid "Clean and rebuild the project."
 msgstr "Clean and rebuild the project."
 
-#: ../tools/ide-build.c:359
+#: ../tools/ide-build.c:361
 msgid "Increase parallelism in the build."
 msgstr "Increase parallelism in the build."
 
-#: ../tools/ide-build.c:360
+#: ../tools/ide-build.c:362
 msgid "N"
 msgstr "N"
 
-#: ../tools/ide-build.c:371
+#: ../tools/ide-build.c:373
 msgid "- Build the project."
 msgstr "- Build the project."
 
-#: ../tools/ide-list-build-flags.c:113
+#: ../tools/ide-list-build-flags.c:115
 msgid "- Get build flags for a project file"
 msgstr "- Get build flags for a project file"
 
-#: ../tools/ide-list-devices.c:107
+#: ../tools/ide-list-devices.c:109
 msgid "- List devices found on the system."
 msgstr "- List devices found on the system."
 
-#: ../tools/ide-list-diagnostics.c:185
+#: ../tools/ide-list-diagnostics.c:187
 #, c-format
 msgid "Failed to diagnose: %s\n"
 msgstr "Failed to diagnose: %s\n"
 
-#: ../tools/ide-list-diagnostics.c:248
+#: ../tools/ide-list-diagnostics.c:250
 #, c-format
 msgid "No such file in project: %s\n"
 msgstr "No such file in project: %s\n"
 
-#: ../tools/ide-list-diagnostics.c:282
+#: ../tools/ide-list-diagnostics.c:284
 msgid "- List diagnostics for a file."
 msgstr "- List diagnostics for a file."
 
-#: ../tools/ide-list-files.c:125 ../tools/ide-list-file-settings.c:205
+#: ../tools/ide-list-files.c:127 ../tools/ide-list-file-settings.c:207
 msgid "- List files found in project."
 msgstr "- List files found in project."
 
-#: ../tools/ide-list-file-settings.c:180
+#: ../tools/ide-list-file-settings.c:182
 #, c-format
 msgid "No files provided to load settings for.\n"
 msgstr "No files provided to load settings for.\n"
 
-#: ../tools/ide-mine-projects.c:78
+#: ../tools/ide-mine-projects.c:87
 msgid "- discover projects"
 msgstr "- discover projects"
 
-#: ../tools/ide-search.c:66
+#: ../tools/ide-search.c:68
 #, c-format
 msgid "%s results\n"
 msgstr "%s results\n"
 
-#: ../tools/ide-search.c:118
+#: ../tools/ide-search.c:120
 msgid "PROJECT_FILE [SEARCH TERMS...]"
 msgstr "PROJECT_FILE [SEARCH TERMS...]"
 
