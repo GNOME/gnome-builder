@@ -1,7 +1,7 @@
 snippet class
 - scope vala
 - desc Create Class
-	class ${1:$filename|stripsuffix|camelize} : Object {
+	class ${1:$filename|stripsuffix|camelize} : ${2:Object} {
 		public $1 () {
 			$0
 		}
