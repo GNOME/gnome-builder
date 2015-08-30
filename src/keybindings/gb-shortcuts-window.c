@@ -72,6 +72,13 @@ struct _GbShortcutsWindow
 
 G_DEFINE_TYPE (GbShortcutsWindow, gb_shortcuts_window, GTK_TYPE_WINDOW)
 
+enum {
+  CLOSE,
+  LAST_SIGNAL
+};
+
+static guint gSignals [LAST_SIGNAL];
+
 GtkWidget *
 gb_shortcuts_window_new (void)
 {
@@ -508,9 +515,20 @@ gb_shortcuts_window_class_init (GbShortcutsWindowClass *klass)
 {
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  GtkBindingSet *binding_set;
 
   object_class->constructed = gb_shortcuts_window_constructed;
   object_class->finalize = gb_shortcuts_window_finalize;
+
+  gSignals [CLOSE] =
+    g_signal_new_class_handler ("close",
+                                G_TYPE_FROM_CLASS (klass),
+                                (G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION),
+                                G_CALLBACK (gtk_window_close),
+                                NULL, NULL, NULL, G_TYPE_NONE, 0);
+
+  binding_set = gtk_binding_set_by_class (klass);
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_Escape, 0, "close", 0);
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/ui/gb-shortcuts-window.ui");
 
