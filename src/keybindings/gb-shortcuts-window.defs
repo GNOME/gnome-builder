@@ -1,11 +1,8 @@
 #define GENERAL_GROUP \
         GROUP ( \
           _("General"), \
-          SHORTCUT ("F1", _("Editor")) \
-          SHORTCUT ("F2", _("Designer")) \
-          SHORTCUT ("F3", _("Debugger")) \
-          SHORTCUT ("F4", _("Version Control")) \
-          SHORTCUT ("<ctrl>period", _("Focus global search")) \
+          SHORTCUT ("<ctrl>period", _("Global Search")) \
+          SHORTCUT ("<ctrl>comma", _("Preferences")) \
         )
 
 VIEWS (
@@ -59,6 +56,23 @@ VIEWS (
         GROUP (
           _("Documentation"),
           SHORTCUT ("<ctrl><shift>f", _("Focus documentation search"))
+        )
+      )
+    )
+  )
+
+  VIEW (
+    "terminal",
+    _("Terminal Shortcuts"),
+    PAGE (
+      COLUMN (
+        GENERAL_GROUP
+      )
+      COLUMN (
+        GROUP (
+          _("Copy and Paste"),
+          SHORTCUT ("<ctrl><shift>c", _("Copy selected text to clipboard"))
+          SHORTCUT ("<ctrl><shift>p", _("Paste text from clipboard"))
         )
       )
     )
