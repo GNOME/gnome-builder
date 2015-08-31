@@ -164,8 +164,8 @@ snippet gproperty
 - desc Add GObject property
 	gParamSpecs [PROP_${1:NAME}] =
 		g_param_spec_${2:object} ("${3:$1|lower}",
-		             ${$2|space}  _("${4:$3|camelize}"),
-		             ${$2|space}  _("${5:$3|camelize}"),
+		             ${$2|space}  "${4:$3|camelize}",
+		             ${$2|space}  "${5:$3|camelize}",
 		             ${$2|space}  ${6}
 		             ${$2|space}  (G_PARAM_${7:READWRITE} |
 		             ${$2|space}   G_PARAM_STATIC_STRINGS));
