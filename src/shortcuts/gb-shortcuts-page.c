@@ -34,4 +34,5 @@ static void
 gb_shortcuts_page_init (GbShortcutsPage *self)
 {
   gtk_orientable_set_orientation (GTK_ORIENTABLE (self), GTK_ORIENTATION_HORIZONTAL);
+  gtk_box_set_spacing (GTK_BOX (self), 22);
 }

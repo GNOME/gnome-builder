@@ -21,7 +21,7 @@
 
 struct _GbShortcutsShortcut
 {
-  GtkBox parent_instance;
+  GtkBox        parent_instance;
 
   GbAccelLabel *accelerator;
   GtkLabel     *title;

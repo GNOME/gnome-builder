@@ -41,7 +41,22 @@ typedef struct
   GtkListBox     *list_box;
 } GbShortcutsDialogPrivate;
 
-G_DEFINE_TYPE_WITH_PRIVATE (GbShortcutsDialog, gb_shortcuts_dialog, GTK_TYPE_WINDOW)
+typedef struct
+{
+  GbShortcutsDialog *self;
+  GtkBuilder        *builder;
+  GQueue            *stack;
+  GQueue            *column_image_size_groups;
+  GQueue            *column_desc_size_groups;
+  gchar             *property_name;
+  guint              translatable : 1;
+} ViewsParserData;
+
+static void gtk_buildable_iface_init (GtkBuildableIface *iface);
+
+G_DEFINE_TYPE_EXTENDED (GbShortcutsDialog, gb_shortcuts_dialog, GTK_TYPE_WINDOW, 0,
+                        G_ADD_PRIVATE (GbShortcutsDialog)
+                        G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE, gtk_buildable_iface_init))
 
 enum {
   CLOSE,
@@ -75,7 +90,7 @@ gb_shortcuts_dialog_add_view (GbShortcutsDialog *self,
   label = g_object_new (GTK_TYPE_LABEL,
                         "margin", 6,
                         "label", title,
-                        "xalign", 0.0f,
+                        "xalign", 0.5f,
                         "visible", TRUE,
                         NULL);
   gtk_container_add (GTK_CONTAINER (row), GTK_WIDGET (label));
@@ -130,6 +145,384 @@ gb_shortcuts_dialog__list_box__row_activated (GbShortcutsDialog *self,
   name = g_object_get_data (G_OBJECT (row), "GB_SHORTCUTS_VIEW_NAME");
   gtk_stack_set_visible_child_name (priv->stack, name);
   gtk_widget_hide (GTK_WIDGET (priv->popover));
+}
+
+static gboolean
+check_parent (GMarkupParseContext  *context,
+              const gchar          *element_name,
+              GError              **error)
+{
+  const GSList *stack;
+  const gchar *parent_name;
+  const gchar *our_name;
+
+  stack = g_markup_parse_context_get_element_stack (context);
+  our_name = stack->data;
+  parent_name = stack->next ? stack->next->data : "";
+
+  if (g_strcmp0 (parent_name, element_name) != 0)
+    {
+      gint line;
+      gint col;
+
+      g_markup_parse_context_get_position (context, &line, &col);
+      g_set_error (error,
+                   GTK_BUILDER_ERROR,
+                   GTK_BUILDER_ERROR_INVALID_TAG,
+                   "%d:%d: Element <%s> found in <%s>, expected <%s>.",
+                   line, col, our_name, parent_name, element_name);
+      return FALSE;
+    }
+
+  return TRUE;
+}
+
+static void
+views_parser_start_element (GMarkupParseContext  *context,
+                            const gchar          *element_name,
+                            const gchar         **attribute_names,
+                            const gchar         **attribute_values,
+                            gpointer              user_data,
+                            GError              **error)
+{
+  ViewsParserData *parser_data = user_data;
+  GtkWidget *item;
+
+  g_assert (context != NULL);
+  g_assert (element_name != NULL);
+  g_assert (parser_data != NULL);
+
+  if (g_strcmp0 (element_name, "views") == 0)
+    {
+    }
+  else if (g_strcmp0 (element_name, "view") == 0)
+    {
+      const gchar *name = NULL;
+
+      if (!check_parent (context, "views", error))
+        return;
+
+      if (!g_markup_collect_attributes (element_name, attribute_names, attribute_values, error,
+                                        G_MARKUP_COLLECT_STRING, "name", &name,
+                                        G_MARKUP_COLLECT_INVALID))
+        return;
+
+      item = g_object_new (GB_TYPE_SHORTCUTS_VIEW,
+                           "view-name", name,
+                           "visible", TRUE,
+                           NULL);
+
+      g_queue_push_head (parser_data->stack, g_object_ref_sink (item));
+    }
+  else if (g_strcmp0 (element_name, "page") == 0)
+    {
+      if (!check_parent (context, "view", error))
+        return;
+
+      item = g_object_new (GB_TYPE_SHORTCUTS_PAGE,
+                           "visible", TRUE,
+                           NULL);
+      g_queue_push_head (parser_data->stack, g_object_ref_sink (item));
+    }
+  else if (g_strcmp0 (element_name, "column") == 0)
+    {
+      GtkSizeGroup *size_group;
+
+      if (!check_parent (context, "page", error))
+        return;
+
+      size_group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
+      g_queue_push_head (parser_data->column_image_size_groups, size_group);
+
+      size_group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
+      g_queue_push_head (parser_data->column_desc_size_groups, size_group);
+
+      item = g_object_new (GB_TYPE_SHORTCUTS_COLUMN,
+                           "visible", TRUE,
+                           NULL);
+      g_queue_push_head (parser_data->stack, g_object_ref_sink (item));
+    }
+  else if (g_strcmp0 (element_name, "group") == 0)
+    {
+      if (!check_parent (context, "column", error))
+        return;
+
+      item = g_object_new (GB_TYPE_SHORTCUTS_GROUP,
+                           "visible", TRUE,
+                           NULL);
+      g_queue_push_head (parser_data->stack, g_object_ref_sink (item));
+    }
+  else if (g_strcmp0 (element_name, "shortcut") == 0)
+    {
+      GtkSizeGroup *accel_size_group;
+      GtkSizeGroup *desc_size_group;
+
+      if (!check_parent (context, "group", error))
+        return;
+
+      accel_size_group = g_queue_peek_head (parser_data->column_image_size_groups);
+      desc_size_group = g_queue_peek_head (parser_data->column_desc_size_groups);
+
+      item = g_object_new (GB_TYPE_SHORTCUTS_SHORTCUT,
+                           "accelerator-size-group", accel_size_group,
+                           "title-size-group", desc_size_group,
+                           "visible", TRUE,
+                           NULL);
+      g_queue_push_head (parser_data->stack, g_object_ref_sink (item));
+    }
+  else if (g_strcmp0 (element_name, "gesture") == 0)
+    {
+      GtkSizeGroup *accel_size_group;
+      GtkSizeGroup *desc_size_group;
+
+      if (!check_parent (context, "group", error))
+        return;
+
+      accel_size_group = g_queue_peek_head (parser_data->column_image_size_groups);
+      desc_size_group = g_queue_peek_head (parser_data->column_desc_size_groups);
+
+      item = g_object_new (GB_TYPE_SHORTCUTS_GESTURE,
+                           "desc-size-group", desc_size_group,
+                           "icon-size-group", accel_size_group,
+                           "visible", TRUE,
+                           NULL);
+      g_queue_push_head (parser_data->stack, g_object_ref_sink (item));
+    }
+  else if (g_strcmp0 (element_name, "property") == 0)
+    {
+      const gchar *name = NULL;
+      const gchar *translatable = NULL;
+
+      item = g_queue_peek_head (parser_data->stack);
+
+      if (item == NULL)
+        {
+          g_set_error (error,
+                       GTK_BUILDER_ERROR,
+                       GTK_BUILDER_ERROR_INVALID_TAG,
+                       "Property called without a parent object");
+          return;
+        }
+
+      if (!g_markup_collect_attributes (element_name, attribute_names, attribute_values, error,
+                                        G_MARKUP_COLLECT_STRING, "name", &name,
+                                        G_MARKUP_COLLECT_OPTIONAL | G_MARKUP_COLLECT_STRING, "translatable", &translatable,
+                                        G_MARKUP_COLLECT_INVALID))
+        return;
+
+      g_free (parser_data->property_name);
+      parser_data->property_name = g_strdup (name);
+      parser_data->translatable = (g_strcmp0 (translatable, "yes") == 0);
+    }
+  else
+    {
+      const GSList *stack;
+      const gchar *parent_name;
+      const gchar *our_name;
+      gint line;
+      gint col;
+
+      stack = g_markup_parse_context_get_element_stack (context);
+      our_name = stack->data;
+      parent_name = stack->next ? stack->next->data : "";
+
+      g_markup_parse_context_get_position (context, &line, &col);
+      g_set_error (error,
+                   GTK_BUILDER_ERROR,
+                   GTK_BUILDER_ERROR_INVALID_TAG,
+                   "%d:%d: Unknown element <%s> found in <%s>.",
+                   line, col, our_name, parent_name);
+    }
+}
+
+static void
+views_parser_end_element (GMarkupParseContext  *context,
+                          const gchar          *element_name,
+                          gpointer              user_data,
+                          GError              **error)
+{
+  ViewsParserData *parser_data = user_data;
+  GtkWidget *item;
+
+  g_assert (context != NULL);
+  g_assert (element_name != NULL);
+  g_assert (parser_data != NULL);
+
+  if (g_strcmp0 (element_name, "view") == 0)
+    {
+      item = g_queue_pop_head (parser_data->stack);
+      gb_shortcuts_dialog_add_view (parser_data->self, GB_SHORTCUTS_VIEW (item));
+      g_object_unref (item);
+    }
+  else if ((g_strcmp0 (element_name, "page") == 0) ||
+           (g_strcmp0 (element_name, "column") == 0) ||
+           (g_strcmp0 (element_name, "group") == 0) ||
+           (g_strcmp0 (element_name, "shortcut") == 0) ||
+           (g_strcmp0 (element_name, "gesture") == 0))
+    {
+      GtkWidget *parent;
+
+      item = g_queue_pop_head (parser_data->stack);
+      parent = g_queue_peek_head (parser_data->stack);
+      if (item != NULL && parent != NULL)
+        gtk_container_add (GTK_CONTAINER (parent), GTK_WIDGET (item));
+      g_clear_object (&item);
+
+      if (g_strcmp0 (element_name, "column") == 0)
+        {
+          GtkSizeGroup *size_group;
+
+          size_group = g_queue_pop_head (parser_data->column_image_size_groups);
+          g_clear_object (&size_group);
+
+          size_group = g_queue_pop_head (parser_data->column_desc_size_groups);
+          g_clear_object (&size_group);
+        }
+    }
+  else if (g_strcmp0 (element_name, "property") == 0)
+    {
+      g_clear_pointer (&parser_data->property_name, g_free);
+    }
+}
+
+static void
+views_parser_text (GMarkupParseContext  *context,
+                   const gchar          *text,
+                   gsize                 text_len,
+                   gpointer              user_data,
+                   GError              **error)
+{
+  ViewsParserData *parser_data = user_data;
+  GParamSpec *pspec;
+  GtkWidget *item;
+  GValue value = { 0 };
+
+  g_assert (parser_data != NULL);
+
+  if (parser_data->property_name == NULL)
+    return;
+
+  item = g_queue_peek_head (parser_data->stack);
+
+  if (item == NULL)
+    return;
+
+  pspec = g_object_class_find_property (G_OBJECT_GET_CLASS (item), parser_data->property_name);
+
+  if (pspec == NULL)
+    {
+      g_set_error (error,
+                   GTK_BUILDER_ERROR,
+                   GTK_BUILDER_ERROR_INVALID_PROPERTY,
+                   "No such property: %s",
+                   parser_data->property_name);
+      return;
+    }
+
+  if (parser_data->translatable)
+    text = _(text);
+
+  if (g_type_is_a (pspec->value_type, G_TYPE_OBJECT))
+    {
+      GObject *relative;
+
+      relative = gtk_builder_get_object (parser_data->builder, text);
+
+      if (relative == NULL)
+        {
+          g_set_error (error,
+                       GTK_BUILDER_ERROR,
+                       GTK_BUILDER_ERROR_INVALID_VALUE,
+                       "Unknown object for property '%s': %s",
+                       parser_data->property_name,
+                       text);
+          return;
+        }
+
+      g_value_init (&value, pspec->value_type);
+      g_value_set_object (&value, relative);
+    }
+  else if (!gtk_builder_value_from_string (parser_data->builder,
+                                           pspec, text, &value, error))
+    return;
+
+  g_object_set_property (G_OBJECT (item), parser_data->property_name, &value);
+  g_value_unset (&value);
+}
+
+static GMarkupParser ViewsParser = {
+  views_parser_start_element,
+  views_parser_end_element,
+  views_parser_text,
+};
+
+static gboolean
+gb_shortcuts_dialog_custom_tag_start (GtkBuildable  *buildable,
+                                      GtkBuilder    *builder,
+                                      GObject       *child,
+                                      const gchar   *tagname,
+                                      GMarkupParser *parser,
+                                      gpointer      *data)
+{
+  GbShortcutsDialog *self = (GbShortcutsDialog *)buildable;
+
+  g_assert (GB_IS_SHORTCUTS_DIALOG (self));
+  g_assert (GTK_IS_BUILDER (builder));
+  g_assert (tagname != NULL);
+  g_assert (parser != NULL);
+  g_assert (data != NULL);
+
+  if (g_strcmp0 (tagname, "views") == 0)
+    {
+      ViewsParserData *parser_data;
+
+      parser_data = g_slice_new0 (ViewsParserData);
+      parser_data->self = g_object_ref (buildable);
+      parser_data->builder = g_object_ref (builder);
+      parser_data->stack = g_queue_new ();
+      parser_data->column_image_size_groups = g_queue_new ();
+      parser_data->column_desc_size_groups = g_queue_new ();
+
+      *parser = ViewsParser;
+      *data = parser_data;
+
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+static void
+gb_shortcuts_dialog_custom_finished (GtkBuildable *buildable,
+                                     GtkBuilder   *builder,
+                                     GObject      *child,
+                                     const gchar  *tagname,
+                                     gpointer      user_data)
+{
+  GbShortcutsDialog *self = (GbShortcutsDialog *)buildable;
+
+  g_assert (GB_IS_SHORTCUTS_DIALOG (self));
+  g_assert (GTK_IS_BUILDER (builder));
+  g_assert (tagname != NULL);
+
+  if (g_strcmp0 (tagname, "views") == 0)
+    {
+      ViewsParserData *parser_data = user_data;
+
+      g_object_unref (parser_data->self);
+      g_object_unref (parser_data->builder);
+      g_queue_free_full (parser_data->stack, (GDestroyNotify)g_object_unref);
+      g_queue_free_full (parser_data->column_image_size_groups, (GDestroyNotify)g_object_unref);
+      g_queue_free_full (parser_data->column_desc_size_groups, (GDestroyNotify)g_object_unref);
+      g_slice_free (ViewsParserData, parser_data);
+    }
+}
+
+static void
+gtk_buildable_iface_init (GtkBuildableIface *iface)
+{
+  iface->custom_tag_start = gb_shortcuts_dialog_custom_tag_start;
+  iface->custom_finished = gb_shortcuts_dialog_custom_finished;
 }
 
 static void
@@ -201,6 +594,7 @@ gb_shortcuts_dialog_init (GbShortcutsDialog *self)
   priv->stack = g_object_new (GTK_TYPE_STACK,
                               "expand", TRUE,
                               "homogeneous", TRUE,
+                              "transition-type", GTK_STACK_TRANSITION_TYPE_CROSSFADE,
                               "visible", TRUE,
                               NULL);
   gtk_container_add (GTK_CONTAINER (main_box), GTK_WIDGET (priv->stack));

@@ -21,10 +21,8 @@
 
 struct _GbAccelLabel
 {
-  GtkBox        parent_instance;
-
-  gchar        *accelerator;
-  GtkSizeGroup *size_group;
+  GtkBox  parent_instance;
+  gchar  *accelerator;
 };
 
 G_DEFINE_TYPE (GbAccelLabel, gb_accel_label, GTK_TYPE_BOX)
@@ -32,7 +30,6 @@ G_DEFINE_TYPE (GbAccelLabel, gb_accel_label, GTK_TYPE_BOX)
 enum {
   PROP_0,
   PROP_ACCELERATOR,
-  PROP_SIZE_GROUP,
   LAST_PROP
 };
 
@@ -94,8 +91,8 @@ gb_accel_label_rebuild (GbAccelLabel *self)
        * modifiers together. Not always the case, but simple and easy
        * hack.
        */
-      if ((self->size_group != NULL) && (keys [i + 1] != NULL))
-        gtk_size_group_add_widget (self->size_group, GTK_WIDGET (frame));
+      if (keys [i + 1] != NULL)
+        gtk_widget_set_size_request (GTK_WIDGET (frame), 50, -1);
 
       disp = g_object_new (GTK_TYPE_LABEL,
                            "label", keys [i],
@@ -111,7 +108,6 @@ gb_accel_label_finalize (GObject *object)
   GbAccelLabel *self = (GbAccelLabel *)object;
 
   g_clear_pointer (&self->accelerator, g_free);
-  g_clear_object (&self->size_group);
 
   G_OBJECT_CLASS (gb_accel_label_parent_class)->finalize (object);
 }
@@ -149,10 +145,6 @@ gb_accel_label_set_property (GObject      *object,
       gb_accel_label_set_accelerator (self, g_value_get_string (value));
       break;
 
-    case PROP_SIZE_GROUP:
-      self->size_group = g_value_dup_object (value);
-      break;
-
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -173,13 +165,6 @@ gb_accel_label_class_init (GbAccelLabelClass *klass)
                          "Accelerator",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-
-  gParamSpecs [PROP_SIZE_GROUP] =
-    g_param_spec_object ("size-group",
-                         "Size Group",
-                         "Size Group",
-                         GTK_TYPE_SIZE_GROUP,
-                         (G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
 }
