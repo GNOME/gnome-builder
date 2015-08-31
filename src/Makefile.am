@@ -58,12 +58,8 @@ libgnome_builder_la_SOURCES = \
 	html/gb-html-document.h \
 	html/gb-html-view.c \
 	html/gb-html-view.h \
-	keybindings/gb-accel-label.c \
-	keybindings/gb-accel-label.h \
 	keybindings/gb-keybindings.c \
 	keybindings/gb-keybindings.h \
-	keybindings/gb-shortcuts-window.c \
-	keybindings/gb-shortcuts-window.h \
 	preferences/gb-preferences-page-editor.c \
 	preferences/gb-preferences-page-editor.h \
 	preferences/gb-preferences-page-insight.c \
@@ -97,6 +93,8 @@ libgnome_builder_la_SOURCES = \
 	project-tree/gb-rename-file-popover.h \
 	scrolledwindow/gb-scrolled-window.c \
 	scrolledwindow/gb-scrolled-window.h \
+	shortcuts/gb-accel-label.c \
+	shortcuts/gb-accel-label.h \
 	shortcuts/gb-shortcuts-column.c \
 	shortcuts/gb-shortcuts-column.h \
 	shortcuts/gb-shortcuts-dialog.c \
@@ -111,6 +109,8 @@ libgnome_builder_la_SOURCES = \
 	shortcuts/gb-shortcuts-shortcut.h \
 	shortcuts/gb-shortcuts-view.c \
 	shortcuts/gb-shortcuts-view.h \
+	shortcuts/gb-shortcuts-window.c \
+	shortcuts/gb-shortcuts-window.h \
 	search/gb-search-box.c \
 	search/gb-search-box.h \
 	search/gb-search-display-group.c \
