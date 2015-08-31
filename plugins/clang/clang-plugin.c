@@ -17,6 +17,7 @@
  */
 
 #include <libpeas/peas.h>
+#include <ide.h>
 
 #include "ide-clang-completion-item.h"
 #include "ide-clang-completion-provider.h"
@@ -44,4 +45,7 @@ peas_register_types (PeasObjectModule *module)
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_DIAGNOSTIC_PROVIDER,
                                               IDE_TYPE_CLANG_DIAGNOSTIC_PROVIDER);
+  peas_object_module_register_extension_type (module,
+                                              IDE_TYPE_COMPLETION_PROVIDER,
+                                              IDE_TYPE_CLANG_COMPLETION_PROVIDER);
 }

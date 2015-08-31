@@ -33,6 +33,7 @@ G_BEGIN_DECLS
 #include "ide-buffer.h"
 #include "ide-buffer-change-monitor.h"
 #include "ide-buffer-manager.h"
+#include "ide-completion-provider.h"
 #include "ide-context.h"
 #include "ide-debug.h"
 #include "ide-debugger.h"

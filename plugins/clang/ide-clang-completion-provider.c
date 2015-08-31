@@ -27,6 +27,7 @@
 #include "ide-clang-completion-provider.h"
 #include "ide-clang-service.h"
 #include "ide-clang-translation-unit.h"
+#include "ide-completion-provider.h"
 #include "ide-context.h"
 #include "ide-debug.h"
 #include "ide-file.h"
@@ -38,7 +39,7 @@
 
 struct _IdeClangCompletionProvider
 {
-  GObject parent_instance;
+  IdeObject      parent_instance;
 
   IdeSourceView *view;
   GPtrArray     *last_results;
@@ -58,10 +59,10 @@ static void completion_provider_iface_init (GtkSourceCompletionProviderIface *);
 
 G_DEFINE_TYPE_EXTENDED (IdeClangCompletionProvider,
                         ide_clang_completion_provider,
-                        G_TYPE_OBJECT,
+                        IDE_TYPE_OBJECT,
                         0,
-                        G_IMPLEMENT_INTERFACE (GTK_SOURCE_TYPE_COMPLETION_PROVIDER,
-                                               completion_provider_iface_init))
+                        G_IMPLEMENT_INTERFACE (GTK_SOURCE_TYPE_COMPLETION_PROVIDER, completion_provider_iface_init)
+                        G_IMPLEMENT_INTERFACE (IDE_TYPE_COMPLETION_PROVIDER, NULL))
 
 static DhBookManager *
 get_book_manager (void)
