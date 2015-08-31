@@ -143,6 +143,8 @@ gb_application_load_keybindings (GbApplication *self)
     { "workbench.global-search", "<ctrl>period" },
     { "app.preferences", "<ctrl>comma" },
     { "app.shortcuts", "<ctrl>question" },
+    { "workbench.new-document", "<ctrl>n" },
+    { "workbench.open-document", "<ctrl>o" },
     { NULL }
   };
   gsize i;
