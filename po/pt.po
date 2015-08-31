@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2015-08-31 10:07+0000\n"
-"PO-Revision-Date: 2015-08-31 11:41+0100\n"
+"POT-Creation-Date: 2015-08-31 12:08+0000\n"
+"PO-Revision-Date: 2015-08-31 16:19+0100\n"
 "Last-Translator: Pedro Albuquerque <palbuquerque73@gmail.com>\n"
 "Language-Team: Português <palbuquerque73@gmail.com>\n"
 "Language: pt\n"
@@ -18,6 +18,60 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Gtranslator 2.91.6\n"
+
+#: ../contrib/egg/egg-animation.c:723
+#, c-format
+msgid "Cannot locate property %s in class %s"
+msgstr "Impossível localizar a propriedade %s na classe %s"
+
+#: ../contrib/egg/egg-animation.c:858
+msgid "Duration"
+msgstr "Duração"
+
+#: ../contrib/egg/egg-animation.c:859
+msgid "The duration of the animation"
+msgstr "A duração da animação"
+
+#: ../contrib/egg/egg-animation.c:869
+msgid "Frame Clock"
+msgstr "Relógio moldura"
+
+#: ../contrib/egg/egg-animation.c:870
+msgid "An optional frame-clock to synchronize with."
+msgstr "Um relógio opcional com o qual sincronizar."
+
+#: ../contrib/egg/egg-animation.c:885 ../src/keybindings/gb-keybindings.c:265
+msgid "Mode"
+msgstr "Modo"
+
+#: ../contrib/egg/egg-animation.c:886
+msgid "The animation mode"
+msgstr "O modo de animação"
+
+#: ../contrib/egg/egg-animation.c:901
+#: ../libide/theatrics/ide-box-theatric.c:284
+#: ../libide/theatrics/ide-box-theatric.c:285
+msgid "Target"
+msgstr "Destino"
+
+#: ../contrib/egg/egg-animation.c:902
+msgid "The target of the animation"
+msgstr "O destino da animação"
+
+#: ../contrib/egg/egg-animation.c:1067 ../contrib/egg/egg-animation.c:1073
+#, c-format
+msgid "Failed to find property %s in %s"
+msgstr "Falha ao localizar a propriedade %s em %s"
+
+#: ../contrib/egg/egg-animation.c:1081
+#, c-format
+msgid "Failed to find property %s in %s or parent %s"
+msgstr "Falha ao localizar a propriedade %s em %s ou pai %s"
+
+#: ../contrib/egg/egg-animation.c:1091
+#, c-format
+msgid "Failed to retrieve va_list value: %s"
+msgstr "Falha ao obter valor va_list: %s"
 
 #: ../contrib/egg/egg-state-machine-action.c:225 ../contrib/rg/rg-column.c:286
 #: ../data/ui/gb-new-project-dialog.ui.h:6
@@ -327,7 +381,6 @@ msgid "_Enable automatic indentation"
 msgstr "_Ativar indentação automática"
 
 #: ../data/ui/gb-editor-settings-widget.ui.h:9
-#| msgid "Snippets Manager"
 msgid "Snippets (read-only)"
 msgstr "Snippets (só de leitura)"
 
@@ -429,7 +482,7 @@ msgid "_Create"
 msgstr "_Criar"
 
 #: ../data/ui/gb-new-project-dialog.ui.h:1
-#: ../src/dialogs/gb-new-project-dialog.c:353
+#: ../src/dialogs/gb-new-project-dialog.c:354
 msgid "New Project"
 msgstr "Novo projeto"
 
@@ -722,6 +775,7 @@ msgid "Display a grid pattern under the source code."
 msgstr "Mostrar uma grelha sob o código fonte."
 
 #: ../data/ui/gb-preferences-window.ui.h:1
+#: ../data/ui/gb-shortcuts-window.ui.h:4
 msgid "Preferences"
 msgstr "Preferências"
 
@@ -741,6 +795,251 @@ msgstr "Novo"
 #: ../data/ui/gb-projects-dialog.ui.h:4
 msgid "Delete"
 msgstr "Eliminar"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:1
+#| msgid "Keyboard _Shortcuts"
+msgid "Editor Shortcuts"
+msgstr "Atalhos do editor"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:2
+msgid "General"
+msgstr "Geral"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:3
+#| msgid "Rubberband Search"
+msgid "Global Search"
+msgstr "Procura global"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:5
+#| msgid "Command Text"
+msgid "Command Bar"
+msgstr "Barra de comandos"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:6
+#: ../plugins/terminal/gb-terminal-document.c:87
+#: ../plugins/terminal/gb-terminal-workbench-addin.c:101
+msgid "Terminal"
+msgstr "Terminal"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:7
+#| msgid "Keyboard _Shortcuts"
+msgid "Keyboard Shortcuts"
+msgstr "Atalhos de teclado"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:8
+msgid "Panels"
+msgstr "Painéis"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:9
+msgid "Toggle left panel"
+msgstr "Alternar painel esquerdo"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:10
+#| msgid "The right workspace pane."
+msgid "Toggle right panel"
+msgstr "Alternar painel direito"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:11
+#| msgid "The bottom workspace pane."
+msgid "Toggle bottom panel"
+msgstr "Alternar painel inferior"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:12
+msgid "Touchpad gestures"
+msgstr "Gestos do touchpad"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:13
+#| msgid "The URI to the Devhelp document."
+msgid "Switch to the next document"
+msgstr "Mudar para o documento seguinte"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:14
+msgid "Two finger swipe right"
+msgstr "Varrer à direita com dois dedos"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:15
+#| msgid "The URI to the Devhelp document."
+msgid "Switch to the previous document"
+msgstr "Mudar para o documento anterior"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:16
+msgid "Two finger swipe left"
+msgstr "Varrer à esquerda com dois dedos"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:17
+#: ../src/project-tree/gb-project-tree-builder.c:79
+msgid "Files"
+msgstr "Ficheiros"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:18
+#| msgid "_New Document"
+msgid "Create new document"
+msgstr "Criar novo documento"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:19
+#| msgid "Open Document"
+msgid "Open a document"
+msgstr "Abrir um documento"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:20
+#| msgid "Save Document"
+msgid "Save the document"
+msgstr "Gravar o documento"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:21
+#| msgid "The title of the document."
+msgid "Close the document"
+msgstr "Fechar o documento"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:22
+msgid "Show list of open files"
+msgstr "Mostrar lista de ficheiros abertos"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:23
+msgid "Switch to source or header"
+msgstr "Mudar para origem ou cabeçalho"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:24
+msgid "Find and replace"
+msgstr "Localizar e substituir"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:25
+msgid "Find"
+msgstr "Localizar"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:26
+msgid "Find the next match"
+msgstr "Localizar seguinte"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:27
+msgid "Find the previous match"
+msgstr "Localizar anterior"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:28
+#| msgid "Search highlight mode…"
+msgid "Clear highlight"
+msgstr "Limpar realce"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:29
+msgid "Go to line"
+msgstr "Ir para linha"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:30
+msgid "Copy and Paste"
+msgstr "Copiar e colar"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:31
+msgid "Copy selected text to clipboard"
+msgstr "Copiar o texto selecionado para a área de transferência"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:32
+msgid "Cut selected text to clipboard"
+msgstr "Cortar o texto selecionado para a área de transferência"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:33
+msgid "Paste text from clipboard"
+msgstr "Colar o texto da área de transferência"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:34
+msgid "Undo and Redo"
+msgstr "Desfazer e refazer"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:35
+msgid "Undo previous command"
+msgstr "Desfazer o comando anterior"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:36
+msgid "Redo previous command"
+msgstr "Refazer o comando anterior"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:37
+#| msgid "Editor"
+msgid "Editing"
+msgstr "A editar"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:38
+msgid "Increment number at cursor"
+msgstr "Incrementar número no cursor"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:39
+msgid "Decrement number at cursor"
+msgstr "Decrementar número no cursor"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:40
+msgid "Join selected lines"
+msgstr "Juntar linhas selecionadas"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:41
+msgid "Show completion window"
+msgstr "Mostrar janela de conclusão"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:42
+msgid "Toggle overwrite"
+msgstr "Alternar sobreposição"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:43
+msgid "Navigation"
+msgstr "Navegação"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:44
+msgid "Move to next error in file"
+msgstr "Mover para o erro seguinte no ficheiro"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:45
+msgid "Move to previous error in file"
+msgstr "Mover para o erro anterior no ficheiro"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:46
+msgid "Move to previous edit location"
+msgstr "Mover para a localização de edição anterior"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:47
+msgid "Move to next edit location"
+msgstr "Mover para a localização de edição seguinte"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:48
+msgid "Jump to definition of symbol"
+msgstr "Saltar para definição de símbolo"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:49
+msgid "Move viewport up within the file"
+msgstr "Mover ponto de vista acima no ficheiro"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:50
+msgid "Move viewport down within the file"
+msgstr "Mover ponto de vista abaixo no ficheiro"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:51
+msgid "Move viewport to end of file"
+msgstr "Mover ponto de vista para o fim do ficheiro"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:52
+msgid "Move viewport to beginning of file"
+msgstr "Mover ponto de vista para o início do ficheiro"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:53
+#| msgid "Insert Matching Brace"
+msgid "Move to matching bracket"
+msgstr "Mover para parêntese irmão"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:54
+#| msgid "Selection"
+msgid "Selections"
+msgstr "Seleções"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:55
+#| msgid "Selected"
+msgid "Select all"
+msgstr "Selecionar tudo"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:56
+msgid "Unselect all"
+msgstr "Remover todas as seleções"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:57
+#| msgid "Keyboard _Shortcuts"
+msgid "Terminal Shortcuts"
+msgstr "_Atalhos de terminal"
 
 #: ../data/ui/gb-view-stack.ui.h:1
 msgid "Split"
@@ -1874,62 +2173,6 @@ msgstr "Tentativa de carregar um script PyGObject sem nome de ficheiro."
 msgid "The script \"%s\" is not a PyGObject file."
 msgstr "O script \"%s\" não é um ficheiro PyGObject."
 
-#: ../libide/theatrics/ide-animation.c:702
-#, c-format
-msgid "Cannot locate property %s in class %s"
-msgstr "Impossível localizar a propriedade %s na classe %s"
-
-#: ../libide/theatrics/ide-animation.c:837
-msgid "Duration"
-msgstr "Duração"
-
-#: ../libide/theatrics/ide-animation.c:838
-msgid "The duration of the animation"
-msgstr "A duração da animação"
-
-#: ../libide/theatrics/ide-animation.c:848
-msgid "Frame Clock"
-msgstr "Relógio moldura"
-
-#: ../libide/theatrics/ide-animation.c:849
-msgid "An optional frame-clock to synchronize with."
-msgstr "Um relógio opcional com o qual sincronizar."
-
-#: ../libide/theatrics/ide-animation.c:864
-#: ../src/keybindings/gb-keybindings.c:265
-msgid "Mode"
-msgstr "Modo"
-
-#: ../libide/theatrics/ide-animation.c:865
-msgid "The animation mode"
-msgstr "O modo de animação"
-
-#: ../libide/theatrics/ide-animation.c:880
-#: ../libide/theatrics/ide-box-theatric.c:284
-#: ../libide/theatrics/ide-box-theatric.c:285
-msgid "Target"
-msgstr "Destino"
-
-#: ../libide/theatrics/ide-animation.c:881
-msgid "The target of the animation"
-msgstr "O destino da animação"
-
-#: ../libide/theatrics/ide-animation.c:1046
-#: ../libide/theatrics/ide-animation.c:1052
-#, c-format
-msgid "Failed to find property %s in %s"
-msgstr "Falha ao localizar a propriedade %s em %s"
-
-#: ../libide/theatrics/ide-animation.c:1060
-#, c-format
-msgid "Failed to find property %s in %s or parent %s"
-msgstr "Falha ao localizar a propriedade %s em %s ou pai %s"
-
-#: ../libide/theatrics/ide-animation.c:1070
-#, c-format
-msgid "Failed to retrieve va_list value: %s"
-msgstr "Falha ao obter valor va_list: %s"
-
 #: ../libide/theatrics/ide-box-theatric.c:259
 #: ../libide/theatrics/ide-box-theatric.c:260
 msgid "Alpha"
@@ -2091,7 +2334,7 @@ msgstr "Resultados"
 msgid "The Clang result set."
 msgstr "O grupo de resultados Clang."
 
-#: ../plugins/clang/ide-clang-completion-provider.c:215
+#: ../plugins/clang/ide-clang-completion-provider.c:216
 msgid "Clang"
 msgstr "Clang"
 
@@ -2315,7 +2558,7 @@ msgstr "Não é comando do editor: %s"
 msgid "Format Strings"
 msgstr "Cadeias de formato"
 
-#: ../plugins/ctags/ide-ctags-completion-provider.c:278
+#: ../plugins/ctags/ide-ctags-completion-provider.c:179
 msgid "CTags"
 msgstr "CTags"
 
@@ -2390,11 +2633,6 @@ msgstr "Monitor de sistema"
 msgid "Terminal (%s)"
 msgstr "Terminal (%s)"
 
-#: ../plugins/terminal/gb-terminal-document.c:87
-#: ../plugins/terminal/gb-terminal-workbench-addin.c:101
-msgid "Terminal"
-msgstr "Terminal"
-
 #: ../plugins/terminal/gb-terminal-view-actions.c:300
 msgid "Save Terminal Content As"
 msgstr "Gravar conteúdo do terminal como"
@@ -2456,27 +2694,27 @@ msgstr "Mostrar a versão da aplicação"
 msgid "Increase verbosity. May be specified multiple times."
 msgstr "Aumentar a verbosidade. Pode ser especificado múltiplas vezes."
 
-#: ../src/dialogs/gb-new-project-dialog.c:346
+#: ../src/dialogs/gb-new-project-dialog.c:347
 msgid "Select Project File"
 msgstr "Selecionar ficheiro de projeto"
 
-#: ../src/dialogs/gb-new-project-dialog.c:373
+#: ../src/dialogs/gb-new-project-dialog.c:374
 msgid "Clone Repository"
 msgstr "Clonar repositório"
 
-#: ../src/dialogs/gb-new-project-dialog.c:393
+#: ../src/dialogs/gb-new-project-dialog.c:394
 msgid "Autotools Project (configure.ac)"
 msgstr "Projeto Autotools (configure.ac)"
 
-#: ../src/dialogs/gb-new-project-dialog.c:399
+#: ../src/dialogs/gb-new-project-dialog.c:400
 msgid "Any Directory"
 msgstr "Qualquer pasta"
 
-#: ../src/dialogs/gb-new-project-dialog.c:526
+#: ../src/dialogs/gb-new-project-dialog.c:527
 msgid "A valid Git URL is required"
 msgstr "É necessário um URL Git válido"
 
-#: ../src/dialogs/gb-new-project-dialog.c:665
+#: ../src/dialogs/gb-new-project-dialog.c:666
 msgid "Directory|Projects"
 msgstr "Pasta|projetos"
 
@@ -2799,10 +3037,6 @@ msgstr "Nome da pasta"
 msgid "Icon Name"
 msgstr "Nome do ícone"
 
-#: ../src/project-tree/gb-project-tree-builder.c:79
-msgid "Files"
-msgstr "Ficheiros"
-
 #: ../src/project-tree/gb-project-tree.c:158
 msgid "If files ignored by the VCS should be displayed."
 msgstr "Se ficheiros ignorados pelo VCS devem ser mostrados."
@@ -2861,6 +3095,16 @@ msgstr "O grupo de tamanho para o rótulo."
 #: ../src/search/gb-search-display-row.c:160
 msgid "Result"
 msgstr "Resultado"
+
+#: ../src/shortcuts/gb-shortcuts-dialog.c:924
+#| msgid "Keyboard _Shortcuts"
+msgid "Search Shortcuts"
+msgstr "Procurar atalhos"
+
+#: ../src/shortcuts/gb-shortcuts-dialog.c:951
+#| msgid "Results"
+msgid "Search Results"
+msgstr "Procurar resultados"
 
 #: ../src/tree/gb-tree-builder.c:220 ../src/tree/gb-tree-node.c:642
 msgid "Tree"
@@ -3025,7 +3269,7 @@ msgstr "Falha na build"
 msgid "Project build system does not support building"
 msgstr "O sistema de construção do projeto não suporta construção"
 
-#: ../src/workspace/gb-slider.c:755 ../src/workspace/gb-workspace.c:1092
+#: ../src/workspace/gb-slider.c:755 ../src/workspace/gb-workspace.c:1093
 #: ../src/workspace/gb-workspace-pane.c:281
 msgid "Position"
 msgstr "Posição"
@@ -3034,47 +3278,47 @@ msgstr "Posição"
 msgid "Which slider child is visible."
 msgstr "Qual o deslizador filho visível."
 
-#: ../src/workspace/gb-workspace.c:1062
+#: ../src/workspace/gb-workspace.c:1063
 msgid "Left Pane"
 msgstr "Painel esquerdo"
 
-#: ../src/workspace/gb-workspace.c:1063
+#: ../src/workspace/gb-workspace.c:1064
 msgid "The left workspace pane."
 msgstr "O espaço de trabalho esquerdo."
 
-#: ../src/workspace/gb-workspace.c:1069
+#: ../src/workspace/gb-workspace.c:1070
 msgid "Right Pane"
 msgstr "Painel direito"
 
-#: ../src/workspace/gb-workspace.c:1070
+#: ../src/workspace/gb-workspace.c:1071
 msgid "The right workspace pane."
 msgstr "O espaço de trabalho direito."
 
-#: ../src/workspace/gb-workspace.c:1076
+#: ../src/workspace/gb-workspace.c:1077
 msgid "Bottom Pane"
 msgstr "Painel inferior"
 
-#: ../src/workspace/gb-workspace.c:1077
+#: ../src/workspace/gb-workspace.c:1078
 msgid "The bottom workspace pane."
 msgstr "O espaço de trabalho inferior."
 
-#: ../src/workspace/gb-workspace.c:1083
+#: ../src/workspace/gb-workspace.c:1084
 msgid "Content Pane"
 msgstr "Painel de conteúdo"
 
-#: ../src/workspace/gb-workspace.c:1084
+#: ../src/workspace/gb-workspace.c:1085
 msgid "The content workspace pane."
 msgstr "O espaço de trabalho de conteúdo"
 
-#: ../src/workspace/gb-workspace.c:1093
+#: ../src/workspace/gb-workspace.c:1094
 msgid "The position of the pane relative to its edge."
 msgstr "A posição do painel relativa à sua margem."
 
-#: ../src/workspace/gb-workspace.c:1102
+#: ../src/workspace/gb-workspace.c:1103
 msgid "Reveal"
 msgstr "Revelar"
 
-#: ../src/workspace/gb-workspace.c:1103
+#: ../src/workspace/gb-workspace.c:1104
 msgid "If the pane should be revealed."
 msgstr "Se o painel deve ser revelado."
 
