@@ -267,8 +267,8 @@ ide_diagnostician_class_init (IdeDiagnosticianClass *klass)
 
   gParamSpecs [PROP_LANGUAGE] =
     g_param_spec_object ("language",
-                         _("Language"),
-                         _("Language"),
+                         "Language",
+                         "Language",
                          GTK_SOURCE_TYPE_LANGUAGE,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 

@@ -207,15 +207,15 @@ ide_progress_class_init (IdeProgressClass *klass)
 
   gParamSpecs [PROP_COMPLETED] =
     g_param_spec_boolean ("completed",
-                          _("Completed"),
-                          _("If the progress has completed."),
+                          "Completed",
+                          "If the progress has completed.",
                           FALSE,
                           (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_FRACTION] =
     g_param_spec_double ("fraction",
-                         _("Fraction"),
-                         _("The fraction of the progress."),
+                         "Fraction",
+                         "The fraction of the progress.",
                          0.0,
                          1.0,
                          0.0,
@@ -223,8 +223,8 @@ ide_progress_class_init (IdeProgressClass *klass)
 
   gParamSpecs [PROP_MESSAGE] =
     g_param_spec_string ("message",
-                         _("Message"),
-                         _("A short message for the progress."),
+                         "Message",
+                         "A short message for the progress.",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 

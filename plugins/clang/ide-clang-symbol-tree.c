@@ -291,15 +291,15 @@ ide_clang_symbol_tree_class_init (IdeClangSymbolTreeClass *klass)
 
   gParamSpecs [PROP_FILE] =
     g_param_spec_object ("file",
-                         _("File"),
-                         _("File"),
+                         "File",
+                         "File",
                          G_TYPE_FILE,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_NATIVE] =
     g_param_spec_boxed ("native",
-                        _("Native"),
-                        _("Native"),
+                        "Native",
+                        "Native",
                         IDE_TYPE_REF_PTR,
                         (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 

@@ -5181,15 +5181,15 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
 
   gParamSpecs [PROP_BACK_FORWARD_LIST] =
     g_param_spec_object ("back-forward-list",
-                         _("Back Forward List"),
-                         _("The back-forward list to track jumps."),
+                         "Back Forward List",
+                         "The back-forward list to track jumps.",
                          IDE_TYPE_BACK_FORWARD_LIST,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_COUNT] =
     g_param_spec_uint ("count",
-                       _("Count"),
-                       _("The count for movements."),
+                       "Count",
+                       "The count for movements.",
                        0,
                        G_MAXINT,
                        0,
@@ -5197,29 +5197,29 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
 
   gParamSpecs [PROP_FILE_SETTINGS] =
     g_param_spec_object ("file-settings",
-                         _("File Settings"),
-                         _("The file settings that have been loaded for the file."),
+                         "File Settings",
+                         "The file settings that have been loaded for the file.",
                          IDE_TYPE_FILE_SETTINGS,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_FONT_DESC] =
     g_param_spec_boxed ("font-desc",
-                        _("Font Description"),
-                        _("The Pango font description to use for rendering source."),
+                        "Font Description",
+                        "The Pango font description to use for rendering source.",
                         PANGO_TYPE_FONT_DESCRIPTION,
                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_ENABLE_WORD_COMPLETION] =
     g_param_spec_boolean ("enable-word-completion",
-                          _("Enable Word Completion"),
-                          _("If words from all buffers can be used to autocomplete."),
+                          "Enable Word Completion",
+                          "If words from all buffers can be used to autocomplete.",
                           FALSE,
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_FONT_NAME] =
     g_param_spec_string ("font-name",
-                         _("Font Name"),
-                         _("The Pango font name to use for rendering source."),
+                         "Font Name",
+                         "The Pango font name to use for rendering source.",
                          "Monospace",
                          (G_PARAM_WRITABLE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS));
 
@@ -5229,23 +5229,23 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
 
   gParamSpecs [PROP_INDENTER] =
     g_param_spec_object ("indenter",
-                         _("Indenter"),
-                         _("Indenter"),
+                         "Indenter",
+                         "Indenter",
                          IDE_TYPE_INDENTER,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_INDENT_STYLE] =
     g_param_spec_enum ("indent-style",
-                       _("Indent Style"),
-                       _("Indent Style"),
+                       "Indent Style",
+                       "Indent Style",
                        IDE_TYPE_INDENT_STYLE,
                        IDE_INDENT_STYLE_TABS,
                        (G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_INSERT_MATCHING_BRACE] =
     g_param_spec_boolean ("insert-matching-brace",
-                          _("Insert Matching Brace"),
-                          _("Insert a matching brace/bracket/quotation/parenthesis."),
+                          "Insert Matching Brace",
+                          "Insert a matching brace/bracket/quotation/parenthesis.",
                           FALSE,
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
@@ -5253,29 +5253,29 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
 
   gParamSpecs [PROP_MODE_DISPLAY_NAME] =
     g_param_spec_string ("mode-display-name",
-                         _("Mode Display Name"),
-                         _("The display name of the keybinding mode."),
+                         "Mode Display Name",
+                         "The display name of the keybinding mode.",
                          NULL,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_OVERWRITE_BRACES] =
     g_param_spec_boolean ("overwrite-braces",
-                          _("Overwrite Braces"),
-                          _("Overwrite a matching brace/bracket/quotation/parenthesis."),
+                          "Overwrite Braces",
+                          "Overwrite a matching brace/bracket/quotation/parenthesis.",
                           FALSE,
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_RUBBERBAND_SEARCH] =
     g_param_spec_boolean ("rubberband-search",
-                          _("Rubberband Search"),
-                          _("Auto scroll to next search result without moving insertion caret."),
+                          "Rubberband Search",
+                          "Auto scroll to next search result without moving insertion caret.",
                           FALSE,
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_SCROLL_OFFSET] =
     g_param_spec_uint ("scroll-offset",
-                       _("Scroll Offset"),
-                       _("The number of lines between the insertion cursor and screen boundary."),
+                       "Scroll Offset",
+                       "The number of lines between the insertion cursor and screen boundary.",
                        0,
                        G_MAXUINT,
                        0,
@@ -5283,22 +5283,22 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
 
   gParamSpecs [PROP_SEARCH_CONTEXT] =
     g_param_spec_object ("search-context",
-                         _("Search Context"),
-                         _("The search context for the view."),
+                         "Search Context",
+                         "The search context for the view.",
                          GTK_SOURCE_TYPE_SEARCH_CONTEXT,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_SHOW_GRID_LINES] =
     g_param_spec_boolean ("show-grid-lines",
-                          _("Show Grid Lines"),
-                          _("If the background grid should be shown."),
+                          "Show Grid Lines",
+                          "If the background grid should be shown.",
                           FALSE,
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_SHOW_LINE_CHANGES] =
     g_param_spec_boolean ("show-line-changes",
-                          _("Show Line Changes"),
-                          _("If line changes should be shown in the left gutter."),
+                          "Show Line Changes",
+                          "If line changes should be shown in the left gutter.",
                           FALSE,
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
@@ -5312,29 +5312,29 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
    */
   gParamSpecs [PROP_SHOW_LINE_DIAGNOSTICS] =
     g_param_spec_boolean ("show-line-diagnostics",
-                          _("Show Line Diagnostics"),
-                          _("If line changes diagnostics should be shown in the left gutter."),
+                          "Show Line Diagnostics",
+                          "If line changes diagnostics should be shown in the left gutter.",
                           TRUE,
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_SHOW_SEARCH_BUBBLES] =
     g_param_spec_boolean ("show-search-bubbles",
-                          _("Show Search Bubbles"),
-                          _("If search bubbles should be rendered."),
+                          "Show Search Bubbles",
+                          "If search bubbles should be rendered.",
                           FALSE,
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_SHOW_SEARCH_SHADOW] =
     g_param_spec_boolean ("show-search-shadow",
-                          _("Show Search Shadow"),
-                          _("If the shadow should be drawn when performing searches."),
+                          "Show Search Shadow",
+                          "If the shadow should be drawn when performing searches.",
                           FALSE,
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_SNIPPET_COMPLETION] =
     g_param_spec_boolean ("snippet-completion",
-                          _("Snippet Completion"),
-                          _("If snippet expansion should be enabled via the completion window."),
+                          "Snippet Completion",
+                          "If snippet expansion should be enabled via the completion window.",
                           FALSE,
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 

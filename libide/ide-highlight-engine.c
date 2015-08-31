@@ -848,15 +848,15 @@ ide_highlight_engine_class_init (IdeHighlightEngineClass *klass)
 
   gParamSpecs [PROP_BUFFER] =
     g_param_spec_object ("buffer",
-                         _("Buffer"),
-                         _("The buffer to highlight."),
+                         "Buffer",
+                         "The buffer to highlight.",
                          IDE_TYPE_BUFFER,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_HIGHLIGHTER] =
     g_param_spec_object ("highlighter",
-                         _("Highlighter"),
-                         _("The highlighter to use for type information."),
+                         "Highlighter",
+                         "The highlighter to use for type information.",
                          IDE_TYPE_HIGHLIGHTER,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 

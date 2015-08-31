@@ -156,29 +156,29 @@ gb_project_file_class_init (GbProjectFileClass *klass)
 
   gParamSpecs [PROP_DISPLAY_NAME] =
     g_param_spec_string ("display-name",
-                         _("Display Name"),
-                         _("Display Name"),
+                         "Display Name",
+                         "Display Name",
                          NULL,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_ICON_NAME] =
     g_param_spec_string ("icon-name",
-                         _("Icon Name"),
-                         _("Icon Name"),
+                         "Icon Name",
+                         "Icon Name",
                          NULL,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_FILE] =
     g_param_spec_object ("file",
-                         _("File"),
-                         _("File"),
+                         "File",
+                         "File",
                          G_TYPE_FILE,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_FILE_INFO] =
     g_param_spec_object ("file-info",
-                         _("File Info"),
-                         _("File Info"),
+                         "File Info",
+                         "File Info",
                          G_TYPE_FILE_INFO,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 

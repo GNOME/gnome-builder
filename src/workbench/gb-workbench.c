@@ -683,15 +683,15 @@ gb_workbench_class_init (GbWorkbenchClass *klass)
 
   gParamSpecs [PROP_ACTIVE_VIEW] =
     g_param_spec_object ("active-view",
-                         _("Active View"),
-                         _("Active View"),
+                         "Active View",
+                         "Active View",
                          GB_TYPE_VIEW,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_BUILDING] =
     g_param_spec_boolean ("building",
-                          _("Building"),
-                          _("If the project is currently building."),
+                          "Building",
+                          "If the project is currently building.",
                           FALSE,
                           (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
@@ -705,8 +705,8 @@ gb_workbench_class_init (GbWorkbenchClass *klass)
    */
   gParamSpecs [PROP_CONTEXT] =
     g_param_spec_object ("context",
-                         _("Context"),
-                         _("The IdeContext for the workbench."),
+                         "Context",
+                         "The IdeContext for the workbench.",
                          IDE_TYPE_CONTEXT,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 

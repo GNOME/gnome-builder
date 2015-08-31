@@ -209,8 +209,8 @@ ide_git_remote_callbacks_class_init (IdeGitRemoteCallbacksClass *klass)
 
   gParamSpecs [PROP_FRACTION] =
     g_param_spec_double ("fraction",
-                         _("Fraction"),
-                         _("A fraction containing the operation progress."),
+                         "Fraction",
+                         "A fraction containing the operation progress.",
                          0,
                          1.0,
                          0.0,

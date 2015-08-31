@@ -180,16 +180,16 @@ gb_command_vim_class_init (GbCommandVimClass *klass)
 
   gParamSpecs [PROP_COMMAND_TEXT] =
     g_param_spec_string ("command-text",
-                         _("Command Text"),
-                         _("The command text to execute"),
+                         "Command Text",
+                         "The command text to execute",
                          NULL,
                          (G_PARAM_READWRITE |
                           G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_SOURCE_VIEW] =
     g_param_spec_object ("source-view",
-                         _("Source View"),
-                         _("The source view to modify."),
+                         "Source View"),
+                         "The source view to modify.",
                          IDE_TYPE_SOURCE_VIEW,
                          (G_PARAM_READWRITE |
                           G_PARAM_STATIC_STRINGS));

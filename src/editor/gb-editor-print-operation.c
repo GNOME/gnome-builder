@@ -168,8 +168,8 @@ gb_editor_print_operation_class_init (GbEditorPrintOperationClass *klass)
 
   gParamSpecs [PROP_VIEW] =
     g_param_spec_object ("view",
-                         _("View"),
-                         _("The source view."),
+                         "View",
+                         "The source view.",
                          IDE_TYPE_SOURCE_VIEW,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 

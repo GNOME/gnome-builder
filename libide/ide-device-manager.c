@@ -392,8 +392,8 @@ ide_device_manager_class_init (IdeDeviceManagerClass *klass)
 
   gParamSpecs [PROP_SETTLED] =
     g_param_spec_boolean ("settled",
-                          _("Settled"),
-                          _("If the device providers have settled."),
+                          "Settled",
+                          "If the device providers have settled.",
                           FALSE,
                           (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 

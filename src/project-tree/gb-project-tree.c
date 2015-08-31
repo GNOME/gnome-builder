@@ -154,8 +154,8 @@ gb_project_tree_class_init (GbProjectTreeClass *klass)
 
   gParamSpecs [PROP_SHOW_IGNORED_FILES] =
     g_param_spec_boolean ("show-ignored-files",
-                          _("Show Ignored Files"),
-                          _("If files ignored by the VCS should be displayed."),
+                          "Show Ignored Files",
+                          "If files ignored by the VCS should be displayed.",
                          FALSE,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 

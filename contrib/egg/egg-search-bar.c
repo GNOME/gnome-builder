@@ -297,15 +297,15 @@ egg_search_bar_class_init (EggSearchBarClass *klass)
 
   gParamSpecs [PROP_SEARCH_MODE_ENABLED] =
     g_param_spec_boolean ("search-mode-enabled",
-                          _("Search Mode Enabled"),
-                          _("Search Mode Enabled"),
+                          "Search Mode Enabled",
+                          "Search Mode Enabled",
                           FALSE,
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_SHOW_CLOSE_BUTTON] =
     g_param_spec_boolean ("show-close-button",
-                          _("Show Close Button"),
-                          _("Show Close Button"),
+                          "Show Close Button",
+                          "Show Close Button",
                           FALSE,
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 

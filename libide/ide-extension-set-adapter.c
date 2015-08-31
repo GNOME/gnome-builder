@@ -273,29 +273,29 @@ ide_extension_set_adapter_class_init (IdeExtensionSetAdapterClass *klass)
 
   gParamSpecs [PROP_ENGINE] =
     g_param_spec_object ("engine",
-                         _("Engine"),
-                         _("Engine"),
+                         "Engine",
+                         "Engine",
                          PEAS_TYPE_ENGINE,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_INTERFACE_TYPE] =
     g_param_spec_gtype ("interface-type",
-                        _("Interface Type"),
-                        _("Interface Type"),
+                        "Interface Type",
+                        "Interface Type",
                         G_TYPE_INTERFACE,
                         (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_KEY] =
     g_param_spec_string ("key",
-                         _("Key"),
-                         _("Key"),
+                         "Key",
+                         "Key",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_VALUE] =
     g_param_spec_string ("value",
-                         _("Value"),
-                         _("Value"),
+                         "Value",
+                         "Value",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 

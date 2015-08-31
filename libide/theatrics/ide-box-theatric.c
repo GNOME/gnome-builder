@@ -256,8 +256,8 @@ ide_box_theatric_class_init (IdeBoxTheatricClass *klass)
 
   gParamSpecs[PROP_ALPHA] =
     g_param_spec_double ("alpha",
-                         _("Alpha"),
-                         _("Alpha"),
+                         "Alpha",
+                         "Alpha",
                          0.0,
                          1.0,
                          1.0,
@@ -265,15 +265,15 @@ ide_box_theatric_class_init (IdeBoxTheatricClass *klass)
 
   gParamSpecs[PROP_BACKGROUND] =
     g_param_spec_string ("background",
-                         _("background"),
-                         _("background"),
+                         "background",
+                         "background",
                          "#000000",
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs[PROP_HEIGHT] =
     g_param_spec_int ("height",
-                      _("height"),
-                      _("height"),
+                      "height",
+                      "height",
                       0,
                       G_MAXINT,
                       0,
@@ -281,8 +281,8 @@ ide_box_theatric_class_init (IdeBoxTheatricClass *klass)
 
   gParamSpecs[PROP_TARGET] =
     g_param_spec_object ("target",
-                         _("Target"),
-                         _("Target"),
+                         "Target",
+                         "Target",
                          GTK_TYPE_WIDGET,
                          (G_PARAM_READWRITE |
                           G_PARAM_CONSTRUCT_ONLY |
@@ -290,8 +290,8 @@ ide_box_theatric_class_init (IdeBoxTheatricClass *klass)
 
   gParamSpecs[PROP_WIDTH] =
     g_param_spec_int ("width",
-                      _("width"),
-                      _("width"),
+                      "width",
+                      "width",
                       0,
                       G_MAXINT,
                       0,
@@ -299,8 +299,8 @@ ide_box_theatric_class_init (IdeBoxTheatricClass *klass)
 
   gParamSpecs[PROP_X] =
     g_param_spec_int ("x",
-                      _("x"),
-                      _("x"),
+                      "x",
+                      "x",
                       G_MININT,
                       G_MAXINT,
                       0,
@@ -308,8 +308,8 @@ ide_box_theatric_class_init (IdeBoxTheatricClass *klass)
 
   gParamSpecs[PROP_Y] =
     g_param_spec_int ("y",
-                      _("y"),
-                      _("y"),
+                      "y",
+                      "y",
                       G_MININT,
                       G_MAXINT,
                       0,

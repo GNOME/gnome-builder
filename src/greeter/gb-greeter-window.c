@@ -557,8 +557,8 @@ gb_greeter_window_class_init (GbGreeterWindowClass *klass)
 
   gParamSpecs [PROP_RECENT_PROJECTS] =
     g_param_spec_object ("recent-projects",
-                         _("Recent Projects"),
-                         _("The recent projects that have been mined."),
+                         "Recent Projects",
+                         "The recent projects that have been mined.",
                          IDE_TYPE_RECENT_PROJECTS,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 

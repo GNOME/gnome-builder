@@ -238,8 +238,8 @@ ide_source_view_capture_class_init (IdeSourceViewCaptureClass *klass)
 
  gParamSpecs [PROP_VIEW] =
     g_param_spec_object ("view",
-                         _("View"),
-                         _("The source view."),
+                         "View",
+                         "The source view.",
                          IDE_TYPE_SOURCE_VIEW,
                          (G_PARAM_READWRITE |
                           G_PARAM_CONSTRUCT_ONLY |

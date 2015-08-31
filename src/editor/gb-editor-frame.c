@@ -737,29 +737,29 @@ gb_editor_frame_class_init (GbEditorFrameClass *klass)
 
   gParamSpecs [PROP_AUTO_HIDE_MAP] =
     g_param_spec_boolean ("auto-hide-map",
-                          _("Auto Hide Map"),
-                          _("Auto Hide Map"),
+                          "Auto Hide Map",
+                          "Auto Hide Map",
                           FALSE,
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_BACK_FORWARD_LIST] =
     g_param_spec_object ("back-forward-list",
-                         _("Back Forward List"),
-                         _("The back forward list."),
+                         "Back Forward List",
+                         "The back forward list.",
                          IDE_TYPE_BACK_FORWARD_LIST,
                          (G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_DOCUMENT] =
     g_param_spec_object ("document",
-                         _("Document"),
-                         _("The editor document."),
+                         "Document",
+                         "The editor document.",
                          GB_TYPE_EDITOR_DOCUMENT,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_SHOW_MAP] =
     g_param_spec_boolean ("show-map",
-                          _("Show Map"),
-                          _("If the overview map should be shown."),
+                          "Show Map",
+                          "If the overview map should be shown.",
                           FALSE,
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 

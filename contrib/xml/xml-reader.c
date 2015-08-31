@@ -177,15 +177,15 @@ xml_reader_class_init (XmlReaderClass *klass)
 
   gParamSpecs [PROP_ENCODING] =
     g_param_spec_string ("encoding",
-                         _("Encoding"),
-                         _("Encoding"),
+                         "Encoding",
+                         "Encoding",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_URI] =
     g_param_spec_string ("uri",
-                         _("URI"),
-                         _("URI"),
+                         "URI",
+                         "URI",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 

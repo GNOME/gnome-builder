@@ -222,15 +222,15 @@ egg_state_machine_action_class_init (EggStateMachineActionClass *klass)
 
   gParamSpecs [PROP_NAME] =
     g_param_spec_string ("name",
-                         _("Name"),
-                         _("The name of the action"),
+                         "Name",
+                         "The name of the action",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_STATE_MACHINE] =
     g_param_spec_object ("state-machine",
-                         _("State Machine"),
-                         _("State Machine"),
+                         "State Machine",
+                         "State Machine",
                          EGG_TYPE_STATE_MACHINE,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 

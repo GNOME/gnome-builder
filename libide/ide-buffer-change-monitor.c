@@ -103,8 +103,8 @@ ide_buffer_change_monitor_class_init (IdeBufferChangeMonitorClass *klass)
 
   gParamSpecs [PROP_BUFFER] =
     g_param_spec_object ("buffer",
-                         _("Buffer"),
-                         _("The IdeBuffer to be monitored."),
+                         "Buffer",
+                         "The IdeBuffer to be monitored.",
                          IDE_TYPE_BUFFER,
                          (G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 

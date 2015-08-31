@@ -417,57 +417,57 @@ ide_doap_class_init (IdeDoapClass *klass)
 
   gParamSpecs [PROP_BUG_DATABASE] =
     g_param_spec_string ("bug-database",
-                         _("Bug Database"),
-                         _("Bug Database"),
+                         "Bug Database",
+                         "Bug Database",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_CATEGORY] =
     g_param_spec_string ("category",
-                         _("Category"),
-                         _("Category"),
+                         "Category",
+                         "Category",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_DESCRIPTION] =
     g_param_spec_string ("description",
-                         _("Description"),
-                         _("Description"),
+                         "Description",
+                         "Description",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_DOWNLOAD_PAGE] =
     g_param_spec_string ("download-page",
-                         _("Download Page"),
-                         _("Download Page"),
+                         "Download Page",
+                         "Download Page",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_HOMEPAGE] =
     g_param_spec_string ("homepage",
-                         _("Homepage"),
-                         _("Homepage"),
+                         "Homepage",
+                         "Homepage",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_LANGUAGES] =
     g_param_spec_string ("languages",
-                         _("Languages"),
-                         _("Languages"),
+                         "Languages",
+                         "Languages",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_NAME] =
     g_param_spec_string ("name",
-                         _("Name"),
-                         _("Name"),
+                         "Name",
+                         "Name",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_SHORTDESC] =
     g_param_spec_string ("shortdesc",
-                         _("Shortdesc"),
-                         _("Shortdesc"),
+                         "Shortdesc",
+                         "Shortdesc",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 

@@ -610,15 +610,15 @@ gb_terminal_view_class_init (GbTerminalViewClass *klass)
 
   gParamSpecs [PROP_DOCUMENT] =
     g_param_spec_object ("document",
-                         _("Document"),
-                         _("The document for the VTE terminal view."),
+                         "Document",
+                         "The document for the VTE terminal view.",
                          GB_TYPE_TERMINAL_DOCUMENT,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_FONT_NAME] =
     g_param_spec_string ("font-name",
-                         _("Font Name"),
-                         _("Font Name"),
+                         "Font Name",
+                         "Font Name",
                          NULL,
                          (G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
 

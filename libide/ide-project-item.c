@@ -198,8 +198,8 @@ ide_project_item_class_init (IdeProjectItemClass *klass)
 
   gParamSpecs [PROP_PARENT] =
     g_param_spec_object ("parent",
-                         _("Parent"),
-                         _("The parent project item, if not the root."),
+                         "Parent",
+                         "The parent project item, if not the root.",
                          IDE_TYPE_PROJECT_ITEM,
                          (G_PARAM_READWRITE |
                           G_PARAM_STATIC_STRINGS));

@@ -467,8 +467,8 @@ ide_file_class_init (IdeFileClass *klass)
 
   gParamSpecs [PROP_FILE] =
     g_param_spec_object ("file",
-                         _("File"),
-                         _("The path to the underlying file."),
+                         "File",
+                         "The path to the underlying file.",
                          G_TYPE_FILE,
                          (G_PARAM_READWRITE |
                           G_PARAM_CONSTRUCT_ONLY |
@@ -476,29 +476,29 @@ ide_file_class_init (IdeFileClass *klass)
 
   gParamSpecs [PROP_IS_TEMPORARY] =
     g_param_spec_boolean ("is-temporary",
-                          _("Is Temporary"),
-                          _("If the file represents a temporary file."),
+                          "Is Temporary",
+                          "If the file represents a temporary file.",
                          FALSE,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_LANGUAGE] =
     g_param_spec_object ("language",
-                         _("Language"),
-                         _("The file language."),
+                         "Language",
+                         "The file language.",
                          GTK_SOURCE_TYPE_LANGUAGE,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_PATH] =
     g_param_spec_string ("path",
-                         _("Path"),
-                         _("The path within the project."),
+                         "Path",
+                         "The path within the project.",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_TEMPORARY_ID] =
     g_param_spec_uint ("temporary-id",
-                       _("Temporary ID"),
-                       _("A unique identifier for temporary files."),
+                       "Temporary ID",
+                       "A unique identifier for temporary files.",
                        0,
                        G_MAXUINT,
                        0,

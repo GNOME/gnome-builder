@@ -156,8 +156,8 @@ gb_search_display_row_class_init (GbSearchDisplayRowClass *klass)
 
   gParamSpecs [PROP_RESULT] =
     g_param_spec_object ("result",
-                         _("Result"),
-                         _("Result"),
+                         "Result",
+                         "Result",
                          IDE_TYPE_SEARCH_RESULT,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 

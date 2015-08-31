@@ -649,43 +649,43 @@ ide_context_class_init (IdeContextClass *klass)
 
   gParamSpecs [PROP_BACK_FORWARD_LIST] =
     g_param_spec_object ("back-forward-list",
-                         _("Back Forward List"),
-                         _("Back/forward navigation history for the context."),
+                         "Back Forward List",
+                         "Back/forward navigation history for the context.",
                          IDE_TYPE_BACK_FORWARD_LIST,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_BUFFER_MANAGER] =
     g_param_spec_object ("buffer-manager",
-                         _("Buffer Manager"),
-                         _("The buffer manager for the context."),
+                         "Buffer Manager",
+                         "The buffer manager for the context.",
                          IDE_TYPE_BUFFER_MANAGER,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_BUILD_SYSTEM] =
     g_param_spec_object ("build-system",
-                         _("Build System"),
-                         _("The build system used by the context."),
+                         "Build System",
+                         "The build system used by the context.",
                          IDE_TYPE_BUILD_SYSTEM,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_DEVICE_MANAGER] =
     g_param_spec_object ("device-manager",
-                         _("Device Manager"),
-                         _("The device manager for the context."),
+                         "Device Manager",
+                         "The device manager for the context.",
                          IDE_TYPE_DEVICE_MANAGER,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_PROJECT] =
     g_param_spec_object ("project",
-                         _("Project"),
-                         _("The project for the context."),
+                         "Project",
+                         "The project for the context.",
                          IDE_TYPE_PROJECT,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_PROJECT_FILE] =
     g_param_spec_object ("project-file",
-                         _("Project File"),
-                         _("The project file for the context."),
+                         "Project File",
+                         "The project file for the context.",
                          G_TYPE_FILE,
                          (G_PARAM_READWRITE |
                           G_PARAM_CONSTRUCT_ONLY |
@@ -693,43 +693,43 @@ ide_context_class_init (IdeContextClass *klass)
 
   gParamSpecs [PROP_ROOT_BUILD_DIR] =
     g_param_spec_string ("root-build-dir",
-                         _("Root Build Directory"),
-                         _("The root directory to perform builds within."),
+                         "Root Build Directory",
+                         "The root directory to perform builds within.",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_SCRIPT_MANAGER] =
     g_param_spec_object ("script-manager",
-                         _("Script Manager"),
-                         _("The script manager for the context."),
+                         "Script Manager",
+                         "The script manager for the context.",
                          IDE_TYPE_SCRIPT_MANAGER,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_SEARCH_ENGINE] =
     g_param_spec_object ("search-engine",
-                         _("Search Engine"),
-                         _("The search engine for the context."),
+                         "Search Engine",
+                         "The search engine for the context.",
                          IDE_TYPE_SEARCH_ENGINE,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_SNIPPETS_MANAGER] =
     g_param_spec_object ("snippets-manager",
-                         _("Snippets Manager"),
-                         _("The snippets manager for the context."),
+                         "Snippets Manager",
+                         "The snippets manager for the context.",
                          IDE_TYPE_SOURCE_SNIPPETS_MANAGER,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_UNSAVED_FILES] =
     g_param_spec_object ("unsaved-files",
-                         _("Unsaved Files"),
-                         _("The unsaved files in the context."),
+                         "Unsaved Files",
+                         "The unsaved files in the context.",
                          IDE_TYPE_UNSAVED_FILES,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_VCS] =
     g_param_spec_object ("vcs",
-                         _("VCS"),
-                         _("The VCS for the context."),
+                         "VCS",
+                         "The VCS for the context.",
                          IDE_TYPE_VCS,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 

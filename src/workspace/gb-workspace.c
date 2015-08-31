@@ -1060,29 +1060,29 @@ gb_workspace_class_init (GbWorkspaceClass *klass)
 
   gParamSpecs [PROP_LEFT_PANE] =
     g_param_spec_object ("left-pane",
-                         _("Left Pane"),
-                         _("The left workspace pane."),
+                         "Left Pane",
+                         "The left workspace pane.",
                          GTK_TYPE_WIDGET,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_RIGHT_PANE] =
     g_param_spec_object ("right-pane",
-                         _("Right Pane"),
-                         _("The right workspace pane."),
+                         "Right Pane",
+                         "The right workspace pane.",
                          GTK_TYPE_WIDGET,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_BOTTOM_PANE] =
     g_param_spec_object ("bottom-pane",
-                         _("Bottom Pane"),
-                         _("The bottom workspace pane."),
+                         "Bottom Pane",
+                         "The bottom workspace pane.",
                          GTK_TYPE_WIDGET,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_CONTENT_PANE] =
     g_param_spec_object ("content-pane",
-                         _("Content Pane"),
-                         _("The content workspace pane."),
+                         "Content Pane",
+                         "The content workspace pane.",
                          GTK_TYPE_WIDGET,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
@@ -1090,8 +1090,8 @@ gb_workspace_class_init (GbWorkspaceClass *klass)
 
   gChildParamSpecs [CHILD_PROP_POSITION] =
     g_param_spec_uint ("position",
-                       _("Position"),
-                       _("The position of the pane relative to its edge."),
+                       "Position",
+                       "The position of the pane relative to its edge.",
                        0, G_MAXUINT,
                        0,
                        (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
@@ -1100,8 +1100,8 @@ gb_workspace_class_init (GbWorkspaceClass *klass)
 
   gChildParamSpecs [CHILD_PROP_REVEAL] =
     g_param_spec_boolean ("reveal",
-                          _("Reveal"),
-                          _("If the pane should be revealed."),
+                          "Reveal",
+                          "If the pane should be revealed.",
                           TRUE,
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
   gtk_container_class_install_child_property (container_class, CHILD_PROP_REVEAL,

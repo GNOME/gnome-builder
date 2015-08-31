@@ -253,8 +253,8 @@ gb_devhelp_document_class_init (GbDevhelpDocumentClass *klass)
 
   gParamSpecs [PROP_URI] =
     g_param_spec_string ("uri",
-                         _("URI"),
-                         _("The uri to load."),
+                         "URI",
+                         "The URI to load.",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 

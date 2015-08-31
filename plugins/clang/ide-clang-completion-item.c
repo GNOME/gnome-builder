@@ -389,8 +389,8 @@ ide_clang_completion_item_class_init (IdeClangCompletionItemClass *klass)
 
   gParamSpecs [PROP_INDEX] =
     g_param_spec_uint ("index",
-                         _("Index"),
-                         _("The index in the result set."),
+                         "Index",
+                         "The index in the result set.",
                          0,
                          G_MAXUINT-1,
                          0,
@@ -398,8 +398,8 @@ ide_clang_completion_item_class_init (IdeClangCompletionItemClass *klass)
 
   gParamSpecs [PROP_RESULTS] =
     g_param_spec_boxed ("results",
-                         _("Results"),
-                         _("The Clang result set."),
+                         "Results",
+                         "The Clang result set.",
                          IDE_TYPE_REF_PTR,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 

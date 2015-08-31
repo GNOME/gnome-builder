@@ -247,8 +247,8 @@ ide_source_view_mode_class_init (IdeSourceViewModeClass *klass)
 
   gParamSpecs [PROP_NAME] =
     g_param_spec_string ("name",
-                          _("Name"),
-                          _("The name of the mode."),
+                          "Name",
+                          "The name of the mode.",
                           NULL,
                           (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 

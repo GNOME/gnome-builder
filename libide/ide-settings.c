@@ -280,22 +280,22 @@ ide_settings_class_init (IdeSettingsClass *klass)
 
   gParamSpecs [PROP_IGNORE_PROJECT_SETTINGS] =
     g_param_spec_boolean ("ignore-project-settings",
-                         _("Ignore Project Settings"),
-                         _("If project settings should be ignored."),
+                         "Ignore Project Settings",
+                         "If project settings should be ignored.",
                          FALSE,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_RELATIVE_PATH] =
     g_param_spec_string ("relative-path",
-                         _("Relative Path"),
-                         _("Relative Path"),
+                         "Relative Path",
+                         "Relative Path",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_SCHEMA_ID] =
     g_param_spec_string ("schema-id",
-                         _("Schema ID"),
-                         _("Schema ID"),
+                         "Schema ID",
+                         "Schema ID",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 

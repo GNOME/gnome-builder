@@ -305,15 +305,15 @@ gb_rename_file_popover_class_init (GbRenameFilePopoverClass *klass)
 
   gParamSpecs [PROP_FILE] =
     g_param_spec_object ("file",
-                         _("File"),
-                         _("File"),
+                         "File",
+                         "File",
                          G_TYPE_FILE,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_IS_DIRECTORY] =
     g_param_spec_boolean ("is-directory",
-                          _("Is Directory"),
-                          _("Is Directory"),
+                          "Is Directory",
+                          "Is Directory",
                           FALSE,
                           (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 

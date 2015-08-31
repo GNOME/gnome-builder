@@ -153,8 +153,8 @@ ide_script_class_init (IdeScriptClass *klass)
 
   gParamSpecs [PROP_FILE] =
     g_param_spec_object ("file",
-                         _("File"),
-                         _("The file containing the script."),
+                         "File",
+                         "The file containing the script.",
                          G_TYPE_FILE,
                          (G_PARAM_READWRITE |
                           G_PARAM_CONSTRUCT_ONLY |

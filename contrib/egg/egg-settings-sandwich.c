@@ -216,15 +216,15 @@ egg_settings_sandwich_class_init (EggSettingsSandwichClass *klass)
 
   gParamSpecs [PROP_SCHEMA_ID] =
     g_param_spec_string ("schema-id",
-                         _("Schema Id"),
-                         _("Schema Id"),
+                         "Schema Id",
+                         "Schema Id",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_PATH] =
     g_param_spec_string ("path",
-                         _("Settings Path"),
-                         _("Settings Path"),
+                         "Settings Path",
+                         "Settings Path",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 

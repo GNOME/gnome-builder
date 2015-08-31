@@ -389,8 +389,8 @@ ide_autotools_project_miner_class_init (IdeAutotoolsProjectMinerClass *klass)
 
   gParamSpecs [PROP_ROOT_DIRECTORY] =
     g_param_spec_object ("root-directory",
-                         _("Root Directory"),
-                         _("The root directory to scan from."),
+                         "Root Directory",
+                         "The root directory to scan from.",
                          G_TYPE_FILE,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 

@@ -240,8 +240,8 @@ gb_devhelp_panel_class_init (GbDevhelpPanelClass *klass)
 
   gParamSpecs [PROP_WORKBENCH] =
     g_param_spec_object ("workbench",
-                         _("Workbench"),
-                         _("Workbench"),
+                         "Workbench",
+                         "Workbench",
                          GB_TYPE_WORKBENCH,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 

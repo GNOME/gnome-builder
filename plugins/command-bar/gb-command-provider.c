@@ -316,8 +316,8 @@ gb_command_provider_class_init (GbCommandProviderClass *klass)
 
   gParamSpecs [PROP_ACTIVE_VIEW] =
     g_param_spec_object ("active-tab",
-                         _("Active View"),
-                         _("The last focused GbView widget."),
+                         "Active View",
+                         "The last focused GbView widget.",
                          GB_TYPE_VIEW,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
@@ -335,8 +335,8 @@ gb_command_provider_class_init (GbCommandProviderClass *klass)
    */
   gParamSpecs [PROP_PRIORITY] =
     g_param_spec_int ("priority",
-                      _("Priority"),
-                      _("The priority of the command provider."),
+                      "Priority",
+                      "The priority of the command provider.",
                       G_MININT,
                       G_MAXINT,
                       0,
@@ -351,8 +351,8 @@ gb_command_provider_class_init (GbCommandProviderClass *klass)
    */
   gParamSpecs [PROP_WORKBENCH] =
     g_param_spec_object ("workbench",
-                         _("Workbench"),
-                         _("The target workbench."),
+                         "Workbench",
+                         "The target workbench.",
                          GB_TYPE_WORKBENCH,
                          (G_PARAM_READWRITE |
                           G_PARAM_CONSTRUCT_ONLY |

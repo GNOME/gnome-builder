@@ -603,8 +603,8 @@ gb_tree_node_class_init (GbTreeNodeClass *klass)
    */
   gParamSpecs[PROP_ICON_NAME] =
     g_param_spec_string ("icon-name",
-                         _("Icon Name"),
-                         _("The icon name to display."),
+                         "Icon Name",
+                         "The icon name to display.",
                          NULL,
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
@@ -615,8 +615,8 @@ gb_tree_node_class_init (GbTreeNodeClass *klass)
    */
   gParamSpecs[PROP_ITEM] =
     g_param_spec_object ("item",
-                         _("Item"),
-                         _("Optional object to associate with node."),
+                         "Item",
+                         "Optional object to associate with node.",
                          G_TYPE_OBJECT,
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
@@ -627,8 +627,8 @@ gb_tree_node_class_init (GbTreeNodeClass *klass)
    */
   gParamSpecs [PROP_PARENT] =
     g_param_spec_object ("parent",
-                         _("Parent"),
-                         _("The parent node."),
+                         "Parent",
+                         "The parent node.",
                          GB_TYPE_TREE_NODE,
                          G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
@@ -639,8 +639,8 @@ gb_tree_node_class_init (GbTreeNodeClass *klass)
    */
   gParamSpecs [PROP_TREE] =
     g_param_spec_object ("tree",
-                         _("Tree"),
-                         _("The GbTree the node belongs to."),
+                         "Tree",
+                         "The GbTree the node belongs to.",
                          GB_TYPE_TREE,
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
@@ -651,8 +651,8 @@ gb_tree_node_class_init (GbTreeNodeClass *klass)
    */
   gParamSpecs [PROP_TEXT] =
     g_param_spec_string ("text",
-                         _("Text"),
-                         _("The text of the node."),
+                         "Text",
+                         "The text of the node.",
                          NULL,
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
@@ -663,15 +663,15 @@ gb_tree_node_class_init (GbTreeNodeClass *klass)
    */
   gParamSpecs [PROP_USE_MARKUP] =
     g_param_spec_boolean ("use-markup",
-                          _("Use Markup"),
-                          _("If text should be translated as markup."),
+                          "Use Markup",
+                          "If text should be translated as markup.",
                           FALSE,
                           G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
   gParamSpecs [PROP_USE_DIM_LABEL] =
     g_param_spec_boolean ("use-dim-label",
-                          _("Use Dim Label"),
-                          _("If text should be rendered with a dim label."),
+                          "Use Dim Label",
+                          "If text should be rendered with a dim label.",
                           FALSE,
                           G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 

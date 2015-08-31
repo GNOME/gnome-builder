@@ -251,8 +251,8 @@ gb_scrolled_window_class_init (GbScrolledWindowClass *klass)
 
   gParamSpecs [PROP_MAX_CONTENT_HEIGHT] =
     g_param_spec_int ("max-content-height",
-                      _("Max Content Height"),
-                      _("The maximum height request that can be made."),
+                      "Max Content Height",
+                      "The maximum height request that can be made.",
                       -1,
                       G_MAXINT,
                       -1,
@@ -260,8 +260,8 @@ gb_scrolled_window_class_init (GbScrolledWindowClass *klass)
 
   gParamSpecs [PROP_MAX_CONTENT_WIDTH] =
     g_param_spec_int ("max-content-width",
-                      _("Max Content Width"),
-                      _("The maximum width request that can be made."),
+                      "Max Content Width",
+                      "The maximum width request that can be made.",
                       -1,
                       G_MAXINT,
                       -1,

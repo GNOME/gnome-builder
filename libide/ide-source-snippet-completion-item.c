@@ -129,8 +129,8 @@ ide_source_snippet_completion_item_class_init (IdeSourceSnippetCompletionItemCla
 
   gParamSpecs[PROP_SNIPPET] =
     g_param_spec_object ("snippet",
-                         _("Snippet"),
-                         _("The snippet to insert."),
+                         "Snippet",
+                         "The snippet to insert.",
                          IDE_TYPE_SOURCE_SNIPPET,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 

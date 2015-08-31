@@ -276,15 +276,15 @@ ide_search_result_class_init (IdeSearchResultClass *klass)
 
   gParamSpecs [PROP_PROVIDER] =
     g_param_spec_object ("provider",
-                         _("Provider"),
-                         _("The Search Provider"),
+                         "Provider",
+                         "The Search Provider",
                          IDE_TYPE_SEARCH_PROVIDER,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_TITLE] =
     g_param_spec_string ("title",
-                         _("Title"),
-                         _("The title of the search result."),
+                         "Title",
+                         "The title of the search result.",
                          NULL,
                          (G_PARAM_READWRITE |
                           G_PARAM_CONSTRUCT_ONLY |
@@ -292,8 +292,8 @@ ide_search_result_class_init (IdeSearchResultClass *klass)
 
   gParamSpecs [PROP_SUBTITLE] =
     g_param_spec_string ("subtitle",
-                         _("Subtitle"),
-                         _("The subtitle of the search result."),
+                         "Subtitle",
+                         "The subtitle of the search result.",
                          NULL,
                          (G_PARAM_READWRITE |
                           G_PARAM_CONSTRUCT_ONLY |
@@ -301,8 +301,8 @@ ide_search_result_class_init (IdeSearchResultClass *klass)
 
   gParamSpecs [PROP_SCORE] =
     g_param_spec_float ("score",
-                        _("Score"),
-                        _("The score of the search result."),
+                        "Score",
+                        "The score of the search result.",
                         0.0,
                         1.0,
                         0.0,

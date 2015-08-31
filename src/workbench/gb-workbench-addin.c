@@ -43,8 +43,8 @@ gb_workbench_addin_default_init (GbWorkbenchAddinInterface *iface)
 {
   gParamSpecs [PROP_WORKBENCH] =
     g_param_spec_object ("workbench",
-                         _("Workbench"),
-                         _("The workbench window."),
+                         "Workbench",
+                         "The workbench window.",
                          GB_TYPE_WORKBENCH,
                          (G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
   g_object_interface_install_property (iface, gParamSpecs [PROP_WORKBENCH]);

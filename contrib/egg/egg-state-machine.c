@@ -432,8 +432,8 @@ egg_state_machine_class_init (EggStateMachineClass *klass)
 
   gParamSpecs [PROP_STATE] =
     g_param_spec_string ("state",
-                         _("State"),
-                         _("The current state of the machine."),
+                         "State",
+                         "The current state of the machine.",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 

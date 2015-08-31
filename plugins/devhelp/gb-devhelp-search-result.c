@@ -96,8 +96,8 @@ gb_devhelp_search_result_class_init (GbDevhelpSearchResultClass *klass)
 
   gParamSpecs [PROP_URI] =
     g_param_spec_string ("uri",
-                         _("URI"),
-                         _("The URI to the Devhelp document."),
+                         "URI",
+                         "The URI to the Devhelp document.",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 

@@ -300,8 +300,8 @@ ide_autotools_builder_class_init (IdeAutotoolsBuilderClass *klass)
 
   gParamSpecs [PROP_CONFIG] =
     g_param_spec_boxed ("config",
-                        _("Config"),
-                        _("The configuration for the build."),
+                        "Config",
+                        "The configuration for the build.",
                         G_TYPE_KEY_FILE,
                         (G_PARAM_READWRITE |
                          G_PARAM_CONSTRUCT_ONLY |
@@ -309,8 +309,8 @@ ide_autotools_builder_class_init (IdeAutotoolsBuilderClass *klass)
 
   gParamSpecs [PROP_DEVICE] =
     g_param_spec_object ("device",
-                         _("Device"),
-                         _("The device to build for."),
+                         "Device",
+                         "The device to build for.",
                          IDE_TYPE_DEVICE,
                          (G_PARAM_READWRITE |
                           G_PARAM_CONSTRUCT_ONLY |

@@ -184,22 +184,22 @@ gb_command_gaction_class_init (GbCommandGactionClass *klass)
 
   gParamSpecs [PROP_ACTION_GROUP] =
     g_param_spec_object ("action-group",
-                         _("Action Group"),
-                         _("The GActionGroup containing the action."),
+                         "Action Group",
+                         "The GActionGroup containing the action.",
                          G_TYPE_ACTION_GROUP,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_ACTION_NAME] =
     g_param_spec_string ("action-name",
-                         _("Action Name"),
-                         _("The name of the action to execute."),
+                         "Action Name",
+                         "The name of the action to execute.",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_PARAMETERS] =
     g_param_spec_variant ("parameters",
-                          _("Parameters"),
-                          _("The parameters for the action."),
+                          "Parameters",
+                          "The parameters for the action.",
                           G_VARIANT_TYPE_ANY,
                           NULL,
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));

@@ -508,8 +508,8 @@ egg_signal_group_class_init (EggSignalGroupClass *klass)
    */
   gParamSpecs [PROP_TARGET] =
     g_param_spec_object ("target",
-                         _("Target"),
-                         _("The target instance used when connecting signals."),
+                         "Target",
+                         "The target instance used when connecting signals.",
                          G_TYPE_OBJECT,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
@@ -520,8 +520,8 @@ egg_signal_group_class_init (EggSignalGroupClass *klass)
    */
   gParamSpecs [PROP_TARGET_TYPE] =
     g_param_spec_gtype ("target-type",
-                        _("Target Type"),
-                        _("The GType of the target property."),
+                        "Target Type",
+                        "The GType of the target property.",
                         G_TYPE_OBJECT,
                         (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 

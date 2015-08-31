@@ -715,8 +715,8 @@ ide_git_buffer_change_monitor_class_init (IdeGitBufferChangeMonitorClass *klass)
 
   gParamSpecs [PROP_REPOSITORY] =
     g_param_spec_object ("repository",
-                         _("Repository"),
-                         _("The repository to use for calculating diffs."),
+                         "Repository",
+                         "The repository to use for calculating diffs.",
                          GGIT_TYPE_REPOSITORY,
                          (G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 

@@ -248,8 +248,8 @@ gb_devhelp_view_class_init (GbDevhelpViewClass *klass)
 
   gParamSpecs [PROP_DOCUMENT] =
     g_param_spec_object ("document",
-                         _("Document"),
-                         _("The document for the devhelp view."),
+                         "Document",
+                         "The document for the devhelp view.",
                          GB_TYPE_DEVHELP_DOCUMENT,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 

@@ -674,8 +674,8 @@ gb_command_bar_class_init (GbCommandBarClass *klass)
 
   gParamSpecs [PROP_WORKBENCH] =
     g_param_spec_object ("workbench",
-                         _("Workbench"),
-                         _("Workbench"),
+                         "Workbench",
+                         "Workbench",
                          GB_TYPE_WORKBENCH,
                          (G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 

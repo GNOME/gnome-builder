@@ -125,8 +125,8 @@ ide_script_manager_class_init (IdeScriptManagerClass *klass)
 
   gParamSpecs [PROP_SCRIPTS_DIRECTORY] =
     g_param_spec_string ("scripts-directory",
-                         _("Scripts Directory"),
-                         _("The local path to the directory containing scripts."),
+                         "Scripts Directory",
+                         "The local path to the directory containing scripts.",
                          NULL,
                          (G_PARAM_READWRITE |
                           G_PARAM_CONSTRUCT_ONLY |

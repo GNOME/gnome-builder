@@ -223,32 +223,32 @@ gb_command_result_class_init (GbCommandResultClass *klass)
 
   gParamSpecs [PROP_COMMAND_TEXT] =
     g_param_spec_string ("command-text",
-                         _("Command Text"),
-                         _("The command text if any."),
+                         "Command Text",
+                         "The command text if any.",
                          NULL,
                          (G_PARAM_READWRITE |
                           G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_IS_ERROR] =
     g_param_spec_boolean ("is-error",
-                          _("Is Error"),
-                          _("If the result is an error."),
+                          "Is Error",
+                          "If the result is an error.",
                           FALSE,
                           (G_PARAM_READWRITE |
                            G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_IS_RUNNING] =
     g_param_spec_boolean ("is-running",
-                          _("Is Running"),
-                          _("If the command is still running."),
+                          "Is Running",
+                          "If the command is still running.",
                           FALSE,
                           (G_PARAM_READWRITE |
                            G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_RESULT_TEXT] =
     g_param_spec_string ("result-text",
-                         _("Result Text"),
-                         _("The result text if any."),
+                         "Result Text",
+                         "The result text if any.",
                          NULL,
                          (G_PARAM_READWRITE |
                           G_PARAM_STATIC_STRINGS));

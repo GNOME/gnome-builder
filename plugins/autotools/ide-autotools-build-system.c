@@ -673,15 +673,15 @@ ide_autotools_build_system_class_init (IdeAutotoolsBuildSystemClass *klass)
 
   gParamSpecs [PROP_TARBALL_NAME] =
     g_param_spec_string ("tarball-name",
-                         _("Tarball Name"),
-                         _("The name of the project tarball."),
+                         "Tarball Name",
+                         "The name of the project tarball.",
                          NULL,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_PROJECT_FILE] =
     g_param_spec_object ("project-file",
-                         _("Project File"),
-                         _("The path of the project file."),
+                         "Project File",
+                         "The path of the project file.",
                          G_TYPE_FILE,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS));
 

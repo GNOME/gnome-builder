@@ -185,24 +185,24 @@ gb_document_default_init (GbDocumentInterface *iface)
 {
   gParamSpecs [PROP_MODIFIED] =
     g_param_spec_boolean ("modified",
-                          _("Modified"),
-                          _("If the document has been modified from disk."),
+                          "Modified",
+                          "If the document has been modified from disk.",
                           FALSE,
                           (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
   g_object_interface_install_property (iface, gParamSpecs [PROP_MODIFIED]);
 
   gParamSpecs [PROP_TITLE] =
     g_param_spec_string ("title",
-                         _("Title"),
-                         _("The title of the document."),
+                         "Title",
+                         "The title of the document.",
                          NULL,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
   g_object_interface_install_property (iface, gParamSpecs [PROP_TITLE]);
 
   gParamSpecs [PROP_READ_ONLY] =
     g_param_spec_boolean ("read-only",
-                         _("Read Only"),
-                         _("If the document is read only."),
+                         "Read Only",
+                         "If the document is read only.",
                          FALSE,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
   g_object_interface_install_property (iface, gParamSpecs [PROP_READ_ONLY]);

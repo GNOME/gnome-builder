@@ -738,44 +738,44 @@ egg_task_cache_class_init (EggTaskCacheClass *klass)
 
   gParamSpecs [PROP_KEY_HASH_FUNC] =
     g_param_spec_pointer ("key-hash-func",
-                         _("Key Hash Func"),
-                         _("Key Hash Func"),
+                         "Key Hash Func",
+                         "Key Hash Func",
                          (G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_KEY_EQUAL_FUNC] =
     g_param_spec_pointer ("key-equal-func",
-                         _("Key Equal Func"),
-                         _("Key Equal Func"),
+                         "Key Equal Func",
+                         "Key Equal Func",
                          (G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_KEY_COPY_FUNC] =
     g_param_spec_pointer ("key-copy-func",
-                         _("Key Copy Func"),
-                         _("Key Copy Func"),
+                         "Key Copy Func",
+                         "Key Copy Func",
                          (G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_KEY_DESTROY_FUNC] =
     g_param_spec_pointer ("key-destroy-func",
-                         _("Key Destroy Func"),
-                         _("Key Destroy Func"),
+                         "Key Destroy Func",
+                         "Key Destroy Func",
                          (G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_POPULATE_CALLBACK] =
     g_param_spec_pointer ("populate-callback",
-                         _("Populate Callback"),
-                         _("Populate Callback"),
+                         "Populate Callback",
+                         "Populate Callback",
                          (G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_POPULATE_CALLBACK_DATA] =
     g_param_spec_pointer ("populate-callback-data",
-                         _("Populate Callback Data"),
-                         _("Populate Callback Data"),
+                         "Populate Callback Data",
+                         "Populate Callback Data",
                          (G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_POPULATE_CALLBACK_DATA_DESTROY] =
     g_param_spec_pointer ("populate-callback-data-destroy",
-                         _("Populate Callback Data Destroy"),
-                         _("Populate Callback Data Destroy"),
+                         "Populate Callback Data Destroy",
+                         "Populate Callback Data Destroy",
                          (G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
   /**
@@ -788,8 +788,8 @@ egg_task_cache_class_init (EggTaskCacheClass *klass)
    */
   gParamSpecs [PROP_TIME_TO_LIVE] =
     g_param_spec_int64 ("time-to-live",
-                        _("Time to Live"),
-                        _("The time to live in milliseconds."),
+                        "Time to Live",
+                        "The time to live in milliseconds.",
                         0,
                         G_MAXINT64,
                         30 * 1000,
@@ -797,14 +797,14 @@ egg_task_cache_class_init (EggTaskCacheClass *klass)
 
   gParamSpecs [PROP_VALUE_COPY_FUNC] =
     g_param_spec_pointer ("value-copy-func",
-                         _("Value Copy Func"),
-                         _("Value Copy Func"),
+                         "Value Copy Func",
+                         "Value Copy Func",
                          (G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_VALUE_DESTROY_FUNC] =
     g_param_spec_pointer ("value-destroy-func",
-                         _("Value Destroy Func"),
-                         _("Value Destroy Func"),
+                         "Value Destroy Func",
+                         "Value Destroy Func",
                          (G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);

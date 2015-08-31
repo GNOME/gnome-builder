@@ -377,8 +377,8 @@ ide_ctags_index_class_init (IdeCtagsIndexClass *klass)
 
   gParamSpecs [PROP_FILE] =
     g_param_spec_object ("file",
-                         _("File"),
-                         _("The file containing the ctags data."),
+                         "File",
+                         "The file containing the ctags data.",
                          G_TYPE_FILE,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY |G_PARAM_STATIC_STRINGS));
 

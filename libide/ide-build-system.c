@@ -109,16 +109,16 @@ ide_build_system_default_init (IdeBuildSystemInterface *iface)
 {
   gParamSpecs [PROP_PROJECT_FILE] =
     g_param_spec_object ("project-file",
-                         _("Project File"),
-                         _("The project file."),
+                         "Project File",
+                         "The project file.",
                          G_TYPE_FILE,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
   g_object_interface_install_property (iface, gParamSpecs [PROP_PROJECT_FILE]);
 
   gParamSpecs [PROP_CONTEXT] =
     g_param_spec_object ("context",
-                         _("Context"),
-                         _("Context"),
+                         "Context",
+                         "Context",
                          IDE_TYPE_CONTEXT,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
   g_object_interface_install_property (iface, gParamSpecs [PROP_CONTEXT]);

@@ -324,8 +324,8 @@ gb_editor_settings_widget_class_init (GbEditorSettingsWidgetClass *klass)
 
   gParamSpecs [PROP_LANGUAGE] =
     g_param_spec_string ("language",
-                         _("Language"),
-                         _("The language to change the settings for."),
+                         "Language",
+                         "The language to change the settings for.",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 

@@ -287,15 +287,15 @@ ide_file_settings_class_init (IdeFileSettingsClass *klass)
 
   gParamSpecs [PROP_FILE] =
     g_param_spec_object ("file",
-                         _("File"),
-                         _("The IdeFile the settings represent."),
+                         "File",
+                         "The IdeFile the settings represent.",
                          IDE_TYPE_FILE,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_SETTLED] =
     g_param_spec_boolean ("settled",
-                          _("Settled"),
-                          _("If the file settings implementations have settled."),
+                          "Settled",
+                          "If the file settings implementations have settled.",
                           FALSE,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 

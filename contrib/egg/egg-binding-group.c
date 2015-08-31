@@ -342,8 +342,8 @@ egg_binding_group_class_init (EggBindingGroupClass *klass)
    */
   gParamSpecs [PROP_SOURCE] =
     g_param_spec_object ("source",
-                         _("Source"),
-                         _("The source GObject used for binding properties."),
+                         "Source",
+                         "The source GObject used for binding properties.",
                          G_TYPE_OBJECT,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 

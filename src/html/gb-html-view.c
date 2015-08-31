@@ -318,8 +318,8 @@ gb_html_view_class_init (GbHtmlViewClass *klass)
 
   gParamSpecs [PROP_DOCUMENT] =
     g_param_spec_object ("document",
-                         _("Document"),
-                         _("The document to view as HTML."),
+                         "Document",
+                         "The document to view as HTML.",
                          GB_TYPE_DOCUMENT,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 

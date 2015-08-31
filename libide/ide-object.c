@@ -209,8 +209,8 @@ ide_object_class_init (IdeObjectClass *klass)
 
   gParamSpecs [PROP_CONTEXT] =
     g_param_spec_object ("context",
-                         _("Context"),
-                         _("The context that owns the object."),
+                         "Context",
+                         "The context that owns the object.",
                          IDE_TYPE_CONTEXT,
                          (G_PARAM_READWRITE |
                           G_PARAM_CONSTRUCT_ONLY |

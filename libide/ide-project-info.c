@@ -420,64 +420,64 @@ ide_project_info_class_init (IdeProjectInfoClass *klass)
 
   gParamSpecs [PROP_DESCRIPTION] =
     g_param_spec_string ("description",
-                         _("Description"),
-                         _("The project description."),
+                         "Description",
+                         "The project description.",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_NAME] =
     g_param_spec_string ("name",
-                         _("Name"),
-                         _("The project name."),
+                         "Name",
+                         "The project name.",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_DIRECTORY] =
     g_param_spec_object ("directory",
-                         _("Directory"),
-                         _("The project directory."),
+                         "Directory",
+                         "The project directory.",
                          G_TYPE_FILE,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_DOAP] =
     g_param_spec_object ("doap",
-                         _("DOAP"),
-                         _("A DOAP describing the project."),
+                         "DOAP",
+                         "A DOAP describing the project.",
                          IDE_TYPE_DOAP,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_FILE] =
     g_param_spec_object ("file",
-                         _("File"),
-                         _("The toplevel project file."),
+                         "File",
+                         "The toplevel project file.",
                          G_TYPE_FILE,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_IS_RECENT] =
     g_param_spec_boolean ("is-recent",
-                          _("Is Recent"),
-                          _("Is Recent"),
+                          "Is Recent",
+                          "Is Recent",
                           FALSE,
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_LANGUAGES] =
     g_param_spec_boxed ("languages",
-                        _("Languages"),
-                        _("Languages"),
+                        "Languages",
+                        "Languages",
                         G_TYPE_STRV,
                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_LAST_MODIFIED_AT] =
     g_param_spec_boxed ("last-modified-at",
-                        _("Last Modified At"),
-                        _("Last Modified At"),
+                        "Last Modified At",
+                        "Last Modified At",
                         G_TYPE_DATE_TIME,
                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_PRIORITY] =
     g_param_spec_int ("priority",
-                      _("Priority"),
-                      _("The priority of the project information type."),
+                      "Priority",
+                      "The priority of the project information type.",
                       G_MININT,
                       G_MAXINT,
                       0,

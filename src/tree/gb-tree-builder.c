@@ -217,8 +217,8 @@ gb_tree_builder_class_init (GbTreeBuilderClass *klass)
 
 	gParamSpecs[PROP_TREE] =
 		g_param_spec_object("tree",
-		                    _("Tree"),
-		                    _("The GbTree the builder belongs to."),
+		                    "Tree",
+		                    "The GbTree the builder belongs to.",
 		                    GB_TYPE_TREE,
 		                    G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 

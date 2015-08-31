@@ -265,15 +265,15 @@ gb_new_file_popover_class_init (GbNewFilePopoverClass *klass)
 
   gParamSpecs [PROP_DIRECTORY] =
     g_param_spec_object ("directory",
-                         _("Directory"),
-                         _("Directory"),
+                         "Directory",
+                         "Directory",
                          G_TYPE_FILE,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_FILE_TYPE] =
     g_param_spec_enum ("file-type",
-                       _("File Type"),
-                       _("The file type to create."),
+                       "File Type",
+                       "The file type to create.",
                        G_TYPE_FILE_TYPE,
                        G_FILE_TYPE_REGULAR,
                        (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));

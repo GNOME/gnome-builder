@@ -976,50 +976,50 @@ ide_source_snippet_class_init (IdeSourceSnippetClass *klass)
 
   gParamSpecs[PROP_BUFFER] =
     g_param_spec_object ("buffer",
-                         _("Buffer"),
-                         _("The GtkTextBuffer for the snippet."),
+                         "Buffer",
+                         "The GtkTextBuffer for the snippet.",
                          GTK_TYPE_TEXT_BUFFER,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs[PROP_MARK_BEGIN] =
     g_param_spec_object ("mark-begin",
-                         _("Mark Begin"),
-                         _("The beginning text mark."),
+                         "Mark Begin",
+                         "The beginning text mark.",
                          GTK_TYPE_TEXT_MARK,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs[PROP_MARK_END] =
     g_param_spec_object ("mark-end",
-                         _("Mark End"),
-                         _("The ending text mark."),
+                         "Mark End",
+                         "The ending text mark.",
                          GTK_TYPE_TEXT_MARK,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs[PROP_TRIGGER] =
     g_param_spec_string ("trigger",
-                         _("Trigger"),
-                         _("The trigger for the snippet."),
+                         "Trigger",
+                         "The trigger for the snippet.",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs[PROP_LANGUAGE] =
     g_param_spec_string ("language",
-                         _("Language"),
-                         _("The language for the snippet."),
+                         "Language",
+                         "The language for the snippet.",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs[PROP_DESCRIPTION] =
     g_param_spec_string ("description",
-                         _("Description"),
-                         _("The description for the snippet."),
+                         "Description",
+                         "The description for the snippet.",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs[PROP_TAB_STOP] =
     g_param_spec_int ("tab-stop",
-                      _("Tab Stop"),
-                      _("The current tab stop."),
+                      "Tab Stop",
+                      "The current tab stop.",
                       -1,
                       G_MAXINT,
                       -1,
@@ -1027,8 +1027,8 @@ ide_source_snippet_class_init (IdeSourceSnippetClass *klass)
 
   gParamSpecs [PROP_SNIPPET_TEXT] =
     g_param_spec_string ("snippet-text",
-                         _("Snippet Text"),
-                         _("The entire snippet text from the source file."),
+                         "Snippet Text",
+                         "The entire snippet text from the source file.",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 

@@ -390,22 +390,22 @@ ide_project_class_init (IdeProjectClass *klass)
 
   gParamSpecs [PROP_ID] =
     g_param_spec_string ("id",
-                         _("ID"),
-                         _("The unique project identifier."),
+                         "ID",
+                         "The unique project identifier.",
                          NULL,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_NAME] =
     g_param_spec_string ("name",
-                         _("Name"),
-                         _("The name of the project."),
+                         "Name",
+                         "The name of the project.",
                          NULL,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_ROOT] =
     g_param_spec_object ("root",
-                         _("Root"),
-                         _("The root object for the project."),
+                         "Root",
+                         "The root object for the project.",
                          IDE_TYPE_PROJECT_ITEM,
                          (G_PARAM_READWRITE |
                           G_PARAM_CONSTRUCT_ONLY |

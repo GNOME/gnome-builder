@@ -423,22 +423,22 @@ ide_back_forward_list_class_init (IdeBackForwardListClass *klass)
 
   gParamSpecs [PROP_CAN_GO_BACKWARD] =
     g_param_spec_boolean ("can-go-backward",
-                          _("Can Go Backward"),
-                          _("If there are more backward navigation items."),
+                          "Can Go Backward",
+                          "If there are more backward navigation items.",
                           FALSE,
                           (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_CAN_GO_FORWARD] =
     g_param_spec_boolean ("can-go-forward",
-                          _("Can Go Forward"),
-                          _("If there are more forward navigation items."),
+                          "Can Go Forward",
+                          "If there are more forward navigation items.",
                           FALSE,
                           (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_CURRENT_ITEM] =
     g_param_spec_object ("current-item",
-                         _("Current Item"),
-                         _("The current navigation item."),
+                         "Current Item",
+                         "The current navigation item.",
                          IDE_TYPE_BACK_FORWARD_ITEM,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 

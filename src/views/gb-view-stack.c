@@ -518,8 +518,8 @@ gb_view_stack_class_init (GbViewStackClass *klass)
 
   gParamSpecs [PROP_ACTIVE_VIEW] =
     g_param_spec_object ("active-view",
-                         _("Active View"),
-                         _("The active view."),
+                         "Active View",
+                         "The active view.",
                          GB_TYPE_VIEW,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 

@@ -577,28 +577,28 @@ ide_clang_translation_unit_class_init (IdeClangTranslationUnitClass *klass)
 
   gParamSpecs [PROP_FILE] =
     g_param_spec_object ("file",
-                         _("File"),
-                         _("The file used to build the translation unit."),
+                         "File",
+                         "The file used to build the translation unit.",
                          G_TYPE_FILE,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_INDEX] =
     g_param_spec_boxed ("index",
-                         _("Index"),
-                         _("The highlight index for the translation unit."),
+                         "Index",
+                         "The highlight index for the translation unit.",
                          IDE_TYPE_HIGHLIGHT_INDEX,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_NATIVE] =
     g_param_spec_pointer ("native",
-                          _("Native"),
-                          _("The native translation unit pointer."),
+                          "Native",
+                          "The native translation unit pointer.",
                           (G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_SERIAL] =
     g_param_spec_int64 ("serial",
-                        _("Serial"),
-                        _("A sequence number for the translation unit."),
+                        "Serial",
+                        "A sequence number for the translation unit.",
                         0,
                         G_MAXINT64,
                         0,

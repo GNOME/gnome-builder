@@ -283,15 +283,15 @@ rg_column_class_init (RgColumnClass *klass)
 
   gParamSpecs [PROP_NAME] =
     g_param_spec_string ("name",
-                         _("Name"),
-                         _("The name of the column"),
+                         "Name",
+                         "The name of the column",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_VALUE_TYPE] =
     g_param_spec_gtype ("value-type",
-                        _("Value Type"),
-                        _("Value Type"),
+                        "Value Type",
+                        "Value Type",
                         G_TYPE_NONE,
                         (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 

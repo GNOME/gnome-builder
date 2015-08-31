@@ -247,31 +247,31 @@ rg_line_renderer_class_init (RgLineRendererClass *klass)
 
   gParamSpecs [PROP_COLUMN] =
     g_param_spec_uint ("column",
-                       _("Column"),
-                       _("Column"),
+                       "Column",
+                       "Column",
                        0, G_MAXUINT,
                        0,
                        (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_LINE_WIDTH] =
     g_param_spec_double ("line-width",
-                         _("Line Width"),
-                         _("Line Width"),
+                         "Line Width",
+                         "Line Width",
                          0.0, G_MAXDOUBLE,
                          1.0,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_STROKE_COLOR] =
     g_param_spec_string ("stroke-color",
-                         _("Stroke Color"),
-                         _("Stroke Color"),
+                         "Stroke Color",
+                         "Stroke Color",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_STROKE_COLOR_RGBA] =
     g_param_spec_boxed ("stroke-color-rgba",
-                        _("Stroke Color RGBA"),
-                        _("Stroke Color RGBA"),
+                        "Stroke Color RGBA",
+                        "Stroke Color RGBA",
                         GDK_TYPE_RGBA,
                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 

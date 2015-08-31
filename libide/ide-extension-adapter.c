@@ -393,36 +393,36 @@ ide_extension_adapter_class_init (IdeExtensionAdapterClass *klass)
 
   gParamSpecs [PROP_ENGINE] =
     g_param_spec_object ("engine",
-                         _("Engine"),
-                         _("Engine"),
+                         "Engine",
+                         "Engine",
                          PEAS_TYPE_ENGINE,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_EXTENSION] =
     g_param_spec_object ("extension",
-                         _("Extension"),
-                         _("The extension object."),
+                         "Extension",
+                         "The extension object.",
                          G_TYPE_OBJECT,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_INTERFACE_TYPE] =
     g_param_spec_gtype ("interface-type",
-                        _("Interface Type"),
-                        _("The GType of the extension interface."),
+                        "Interface Type",
+                        "The GType of the extension interface.",
                         G_TYPE_INTERFACE,
                         (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_KEY] =
     g_param_spec_string ("key",
-                         _("Key"),
-                         _("The external data key to match from plugin info."),
+                         "Key",
+                         "The external data key to match from plugin info.",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_VALUE] =
     g_param_spec_string ("value",
-                         _("Value"),
-                         _("The external data value to match from plugin info."),
+                         "Value",
+                         "The external data value to match from plugin info.",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 

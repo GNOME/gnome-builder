@@ -159,8 +159,8 @@ gb_terminal_workbench_addin_class_init (GbTerminalWorkbenchAddinClass *klass)
 
   gParamSpecs [PROP_WORKBENCH] =
     g_param_spec_object ("workbench",
-                         _("Workbench"),
-                         _("The workbench window."),
+                         "Workbench",
+                         "The workbench window.",
                          GB_TYPE_WORKBENCH,
                          (G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 

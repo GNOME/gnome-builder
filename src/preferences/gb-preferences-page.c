@@ -279,8 +279,8 @@ gb_preferences_page_class_init (GbPreferencesPageClass *klass)
 
   gParamSpecs [PROP_TITLE] =
     g_param_spec_string ("title",
-                         _("Title"),
-                         _("The title for the preferences page."),
+                         "Title",
+                         "The title for the preferences page.",
                          NULL,
                          (G_PARAM_READWRITE |
                           G_PARAM_STATIC_STRINGS));

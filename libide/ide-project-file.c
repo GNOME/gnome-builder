@@ -245,36 +245,36 @@ ide_project_file_class_init (IdeProjectFileClass *klass)
 
   gParamSpecs [PROP_FILE] =
     g_param_spec_object ("file",
-                         _("File"),
-                         _("A GFile to the underlying file."),
+                         "File",
+                         "A GFile to the underlying file.",
                          G_TYPE_FILE,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_FILE_INFO] =
     g_param_spec_object ("file-info",
-                         _("File Info"),
-                         _("The file information for the project file."),
+                         "File Info",
+                         "The file information for the project file.",
                          G_TYPE_FILE_INFO,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_IS_DIRECTORY] =
     g_param_spec_boolean ("is-directory",
-                          _("Is Directory"),
-                          _("Is Directory"),
+                          "Is Directory",
+                          "Is Directory",
                           FALSE,
                           (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_NAME] =
     g_param_spec_string ("name",
-                         _("Name"),
-                         _("The short name of the file."),
+                         "Name",
+                         "The short name of the file.",
                          NULL,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_PATH] =
     g_param_spec_string ("path",
-                         _("Path"),
-                         _("The path for the file within the project tree."),
+                         "Path",
+                         "The path for the file within the project tree.",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 

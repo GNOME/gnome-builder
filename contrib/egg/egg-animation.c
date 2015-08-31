@@ -855,8 +855,8 @@ egg_animation_class_init (EggAnimationClass *klass)
    */
   gParamSpecs[PROP_DURATION] =
     g_param_spec_uint ("duration",
-                       _("Duration"),
-                       _("The duration of the animation"),
+                       "Duration",
+                       "The duration of the animation",
                        0,
                        G_MAXUINT,
                        250,
@@ -866,8 +866,8 @@ egg_animation_class_init (EggAnimationClass *klass)
 
   gParamSpecs[PROP_FRAME_CLOCK] =
     g_param_spec_object ("frame-clock",
-                         _("Frame Clock"),
-                         _("An optional frame-clock to synchronize with."),
+                         "Frame Clock",
+                         "An optional frame-clock to synchronize with.",
                          GDK_TYPE_FRAME_CLOCK,
                          (G_PARAM_WRITABLE |
                           G_PARAM_CONSTRUCT_ONLY |
@@ -882,8 +882,8 @@ egg_animation_class_init (EggAnimationClass *klass)
    */
   gParamSpecs[PROP_MODE] =
     g_param_spec_enum ("mode",
-                       _("Mode"),
-                       _("The animation mode"),
+                       "Mode",
+                       "The animation mode",
                        EGG_TYPE_ANIMATION_MODE,
                        EGG_ANIMATION_LINEAR,
                        (G_PARAM_WRITABLE |
@@ -898,8 +898,8 @@ egg_animation_class_init (EggAnimationClass *klass)
    */
   gParamSpecs[PROP_TARGET] =
     g_param_spec_object ("target",
-                         _("Target"),
-                         _("The target of the animation"),
+                         "Target",
+                         "The target of the animation",
                          G_TYPE_OBJECT,
                          (G_PARAM_WRITABLE |
                           G_PARAM_CONSTRUCT_ONLY |

@@ -278,8 +278,8 @@ gb_workspace_pane_class_init (GbWorkspacePaneClass *klass)
    */
   gParamSpecs [PROP_POSITION] =
     g_param_spec_enum ("position",
-                       _("Position"),
-                       _("The position of the pane."),
+                       "Position",
+                       "The position of the pane.",
                        GTK_TYPE_POSITION_TYPE,
                        GTK_POS_LEFT,
                        (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));

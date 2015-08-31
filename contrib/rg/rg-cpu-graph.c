@@ -159,16 +159,16 @@ rg_cpu_graph_class_init (RgCpuGraphClass *klass)
 
   gParamSpecs [PROP_TIMESPAN] =
     g_param_spec_int64 ("timespan",
-                         _("Timespan"),
-                         _("Timespan"),
+                         "Timespan",
+                         "Timespan",
                          0, G_MAXINT64,
                          0,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_MAX_SAMPLES] =
     g_param_spec_uint ("max-samples",
-                       _("Max Samples"),
-                       _("Max Samples"),
+                       "Max Samples",
+                       "Max Samples",
                        0, G_MAXUINT,
                        120,
                        (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));

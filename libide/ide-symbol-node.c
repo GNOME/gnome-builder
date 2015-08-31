@@ -118,23 +118,23 @@ ide_symbol_node_class_init (IdeSymbolNodeClass *klass)
 
   gParamSpecs [PROP_NAME] =
     g_param_spec_string ("name",
-                         _("Name"),
-                         _("Name"),
+                         "Name",
+                         "Name",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_KIND] =
     g_param_spec_enum ("kind",
-                       _("Kind"),
-                       _("Kind"),
+                       "Kind",
+                       "Kind",
                        IDE_TYPE_SYMBOL_KIND,
                        IDE_SYMBOL_NONE,
                        (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_FLAGS] =
     g_param_spec_flags ("flags",
-                        _("Flags"),
-                        _("Flags"),
+                        "Flags",
+                        "Flags",
                         IDE_TYPE_SYMBOL_FLAGS,
                         IDE_SYMBOL_FLAGS_NONE,
                         (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));

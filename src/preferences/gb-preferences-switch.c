@@ -311,51 +311,51 @@ gb_preferences_switch_class_init (GbPreferencesSwitchClass *klass)
 
   gParamSpecs [PROP_TITLE] =
     g_param_spec_string ("title",
-                         _("Title"),
-                         _("The title of the switch."),
+                         "Title",
+                         "The title of the switch.",
                          NULL,
                          (G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_DESCRIPTION] =
     g_param_spec_string ("description",
-                         _("Description"),
-                         _("The description for the switch."),
+                         "Description",
+                         "The description for the switch.",
                          NULL,
                          (G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_IS_RADIO] =
     g_param_spec_boolean ("is-radio",
-                          _("Is Radio"),
-                          _("If a radio button should be used."),
+                          "Is Radio",
+                          "If a radio button should be used.",
                           FALSE,
                           (G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_SETTINGS] =
     g_param_spec_object ("settings",
-                         _("Settings"),
-                         _("The GSettings for the setting."),
+                         "Settings",
+                         "The GSettings for the setting.",
                          G_TYPE_SETTINGS,
                          (G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_SETTINGS_SCHEMA_KEY] =
     g_param_spec_string ("settings-schema-key",
-                         _("Settings Schema Key"),
-                         _("The settings schema key."),
+                         "Settings Schema Key",
+                         "The settings schema key.",
                          NULL,
                          (G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_SETTINGS_SCHEMA_VALUE] =
     g_param_spec_variant ("settings-schema-value",
-                          _("Settings Schema Value"),
-                          _("An action-target for the settings action."),
+                          "Settings Schema Value",
+                          "An action-target for the settings action.",
                           G_VARIANT_TYPE_ANY,
                           NULL,
                           (G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_SIZE_GROUP] =
     g_param_spec_object ("size-group",
-                         _("Size Group"),
-                         _("The sizing group for the control."),
+                         "Size Group",
+                         "The sizing group for the control.",
                          GTK_TYPE_SIZE_GROUP,
                          (G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
 

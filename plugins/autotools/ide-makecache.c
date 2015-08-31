@@ -1235,8 +1235,8 @@ ide_makecache_class_init (IdeMakecacheClass *klass)
 
   gParamSpecs [PROP_MAKEFILE] =
     g_param_spec_object ("makefile",
-                         _("Makefile"),
-                         _("The root makefile to be cached."),
+                         "Makefile",
+                         "The root makefile to be cached.",
                          G_TYPE_FILE,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 

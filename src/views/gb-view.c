@@ -255,29 +255,29 @@ gb_view_class_init (GbViewClass *klass)
 
   gParamSpecs [PROP_CAN_SPLIT] =
     g_param_spec_boolean ("can-split",
-                          _("Can Split"),
-                          _("If the view can be split."),
+                          "Can Split",
+                          "If the view can be split.",
                           FALSE,
                           (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_DOCUMENT] =
     g_param_spec_object ("document",
-                         _("Document"),
-                         _("The underlying document."),
+                         "Document",
+                         "The underlying document.",
                          GB_TYPE_DOCUMENT,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_MODIFIED] =
     g_param_spec_boolean ("modified",
-                          _("Modified"),
-                          _("If the document has been modified."),
+                          "Modified",
+                          "If the document has been modified.",
                           FALSE,
                           (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_TITLE] =
     g_param_spec_string ("title",
-                         _("Title"),
-                         _("The view title."),
+                         "Title",
+                         "The view title.",
                          NULL,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 

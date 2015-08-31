@@ -419,15 +419,15 @@ gb_search_display_group_class_init (GbSearchDisplayGroupClass *klass)
 
   gParamSpecs [PROP_PROVIDER] =
     g_param_spec_object ("provider",
-                         _("Provider"),
-                         _("The search provider"),
+                         "Provider",
+                         "The search provider",
                          IDE_TYPE_SEARCH_PROVIDER,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_SIZE_GROUP] =
     g_param_spec_object ("size-group",
-                         _("Size Group"),
-                         _("The size group for the label."),
+                         "Size Group",
+                         "The size group for the label.",
                          GTK_TYPE_SIZE_GROUP,
                          (G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 

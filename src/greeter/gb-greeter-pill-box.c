@@ -113,8 +113,8 @@ gb_greeter_pill_box_class_init (GbGreeterPillBoxClass *klass)
 
   gParamSpecs [PROP_LABEL] =
     g_param_spec_string ("label",
-                         _("Label"),
-                         _("The label for the pill box."),
+                         "Label",
+                         "The label for the pill box.",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_LABEL, gParamSpecs [PROP_LABEL]);

@@ -311,8 +311,8 @@ gb_html_document_class_init (GbHtmlDocumentClass *klass)
 
   gParamSpecs [PROP_BUFFER] =
     g_param_spec_object ("buffer",
-                         _("Buffer"),
-                         _("The buffer to monitor for changes."),
+                         "Buffer",
+                         "The buffer to monitor for changes.",
                          GTK_TYPE_TEXT_BUFFER,
                          (G_PARAM_READWRITE |
                           G_PARAM_CONSTRUCT_ONLY |

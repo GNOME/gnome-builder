@@ -957,22 +957,22 @@ gb_tree_class_init (GbTreeClass *klass)
 
   gParamSpecs[PROP_ROOT] =
     g_param_spec_object ("root",
-                         _ ("Root"),
-                         _ ("The root object of the tree."),
+                         "Root",
+                         "The root object of the tree.",
                          GB_TYPE_TREE_NODE,
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
   gParamSpecs[PROP_SELECTION] =
     g_param_spec_object ("selection",
-                         _ ("Selection"),
-                         _ ("The node selection."),
+                         "Selection",
+                         "The node selection.",
                          GB_TYPE_TREE_NODE,
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
   gParamSpecs [PROP_SHOW_ICONS] =
     g_param_spec_boolean ("show-icons",
-                          _("Show Icons"),
-                          _("Show Icons"),
+                          "Show Icons",
+                          "Show Icons",
                           FALSE,
                           (G_PARAM_READWRITE |
                            G_PARAM_STATIC_STRINGS));

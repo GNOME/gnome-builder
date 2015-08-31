@@ -1109,22 +1109,22 @@ ide_buffer_class_init (IdeBufferClass *klass)
 
   gParamSpecs [PROP_BUSY] =
     g_param_spec_boolean ("busy",
-                         _("Busy"),
-                         _("If the buffer is performing background work."),
+                         "Busy",
+                         "If the buffer is performing background work.",
                          FALSE,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_CHANGED_ON_VOLUME] =
     g_param_spec_boolean ("changed-on-volume",
-                         _("Changed on Volume"),
-                         _("If the file has changed on disk and the buffer is not in sync."),
+                         "Changed on Volume",
+                         "If the file has changed on disk and the buffer is not in sync.",
                          FALSE,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_CONTEXT] =
     g_param_spec_object ("context",
-                         _("Context"),
-                         _("The IdeContext for the buffer."),
+                         "Context",
+                         "The IdeContext for the buffer.",
                          IDE_TYPE_CONTEXT,
                          (G_PARAM_READWRITE |
                           G_PARAM_CONSTRUCT_ONLY |
@@ -1132,36 +1132,36 @@ ide_buffer_class_init (IdeBufferClass *klass)
 
   gParamSpecs [PROP_FILE] =
     g_param_spec_object ("file",
-                         _("File"),
-                         _("The file represented by the buffer."),
+                         "File",
+                         "The file represented by the buffer.",
                          IDE_TYPE_FILE,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_HIGHLIGHT_DIAGNOSTICS] =
     g_param_spec_boolean ("highlight-diagnostics",
-                          _("Highlight Diagnostics"),
-                          _("If diagnostic warnings and errors should be highlighted."),
+                          "Highlight Diagnostics",
+                          "If diagnostic warnings and errors should be highlighted.",
                           FALSE,
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_READ_ONLY] =
     g_param_spec_boolean ("read-only",
-                          _("Read Only"),
-                          _("If the underlying file is read only."),
+                          "Read Only",
+                          "If the underlying file is read only.",
                           FALSE,
                           (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_STYLE_SCHEME_NAME] =
     g_param_spec_string ("style-scheme-name",
-                         _("Style Scheme Name"),
-                         _("Style Scheme Name"),
+                         "Style Scheme Name",
+                         "Style Scheme Name",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_TITLE] =
     g_param_spec_string ("title",
-                         _("Title"),
-                         _("The title of the buffer."),
+                         "Title",
+                         "The title of the buffer.",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 

@@ -158,15 +158,15 @@ ide_doap_person_class_init (IdeDoapPersonClass *klass)
 
   gParamSpecs [PROP_EMAIL] =
     g_param_spec_string ("email",
-                         _("Email"),
-                         _("The email of the person."),
+                         "Email",
+                         "The email of the person.",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_NAME] =
     g_param_spec_string ("name",
-                         _("Name"),
-                         _("The name of the person."),
+                         "Name",
+                         "The name of the person.",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 

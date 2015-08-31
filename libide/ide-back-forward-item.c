@@ -137,8 +137,8 @@ ide_back_forward_item_class_init (IdeBackForwardItemClass *klass)
    */
   gParamSpecs [PROP_LOCATION] =
     g_param_spec_boxed ("location",
-                        _("Location"),
-                        _("The location of the navigation item."),
+                        "Location",
+                        "The location of the navigation item.",
                         IDE_TYPE_SOURCE_LOCATION,
                         (G_PARAM_READWRITE |
                          G_PARAM_CONSTRUCT_ONLY |

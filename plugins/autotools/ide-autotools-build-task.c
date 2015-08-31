@@ -374,8 +374,8 @@ ide_autotools_build_task_class_init (IdeAutotoolsBuildTaskClass *klass)
 
   gParamSpecs [PROP_CONFIG] =
     g_param_spec_boxed ("config",
-                        _("Config"),
-                        _("The overlay config for the compilation."),
+                        "Config",
+                        "The overlay config for the compilation.",
                         G_TYPE_KEY_FILE,
                         (G_PARAM_READWRITE |
                          G_PARAM_CONSTRUCT_ONLY |
@@ -383,8 +383,8 @@ ide_autotools_build_task_class_init (IdeAutotoolsBuildTaskClass *klass)
 
   gParamSpecs [PROP_DEVICE] =
     g_param_spec_object ("device",
-                         _("Device"),
-                         _("The device to build for."),
+                         "Device",
+                         "The device to build for.",
                          IDE_TYPE_DEVICE,
                          (G_PARAM_READWRITE |
                           G_PARAM_CONSTRUCT_ONLY |
@@ -392,8 +392,8 @@ ide_autotools_build_task_class_init (IdeAutotoolsBuildTaskClass *klass)
 
   gParamSpecs [PROP_DIRECTORY] =
     g_param_spec_object ("directory",
-                         _("Directory"),
-                         _("The directory to perform the build within."),
+                         "Directory",
+                         "The directory to perform the build within.",
                          G_TYPE_FILE,
                          (G_PARAM_READWRITE |
                           G_PARAM_CONSTRUCT_ONLY |
@@ -401,8 +401,8 @@ ide_autotools_build_task_class_init (IdeAutotoolsBuildTaskClass *klass)
 
   gParamSpecs [PROP_REQUIRE_AUTOGEN] =
     g_param_spec_boolean ("require-autogen",
-                          _("Require Autogen"),
-                          _("If autogen.sh should be forced to execute."),
+                          "Require Autogen",
+                          "If autogen.sh should be forced to execute.",
                           FALSE,
                           (G_PARAM_READWRITE |
                            G_PARAM_CONSTRUCT_ONLY |
@@ -410,8 +410,8 @@ ide_autotools_build_task_class_init (IdeAutotoolsBuildTaskClass *klass)
 
   gParamSpecs [PROP_REQUIRE_CONFIGURE] =
     g_param_spec_boolean ("require-configure",
-                          _("Require Configure"),
-                          _("If configure should be forced to execute."),
+                          "Require Configure",
+                          "If configure should be forced to execute.",
                           FALSE,
                           (G_PARAM_READWRITE |
                            G_PARAM_CONSTRUCT_ONLY |

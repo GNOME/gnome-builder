@@ -503,32 +503,32 @@ rg_table_class_init (RgTableClass *klass)
 
   gParamSpecs [PROP_MAX_SAMPLES] =
     g_param_spec_uint ("max-samples",
-                       _("Max Samples"),
-                       _("Max Samples"),
+                       "Max Samples",
+                       "Max Samples",
                        1, G_MAXUINT,
                        120,
                        (G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_TIMESPAN] =
     g_param_spec_int64 ("timespan",
-                        _("Timespan"),
-                        _("Timespan to visualize, in microseconds."),
+                        "Timespan",
+                        "Timespan to visualize, in microseconds.",
                         1, G_MAXINT64,
                         G_USEC_PER_SEC * 60L,
                         (G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_VALUE_MAX] =
     g_param_spec_double ("value-max",
-                         _("Value Max"),
-                         _("Value Max"),
+                         "Value Max",
+                         "Value Max",
                          -G_MINDOUBLE, G_MAXDOUBLE,
                          100.0,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_VALUE_MIN] =
     g_param_spec_double ("value-min",
-                         _("Value Min"),
-                         _("Value Min"),
+                         "Value Min",
+                         "Value Min",
                          -G_MINDOUBLE, G_MAXDOUBLE,
                          100.0,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));

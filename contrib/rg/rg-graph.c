@@ -365,8 +365,8 @@ rg_graph_class_init (RgGraphClass *klass)
 
   gParamSpecs [PROP_TABLE] =
     g_param_spec_object ("table",
-                         _("Table"),
-                         _("The data table for the graph."),
+                         "Table",
+                         "The data table for the graph.",
                          RG_TYPE_TABLE,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 

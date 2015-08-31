@@ -385,8 +385,8 @@ ide_git_vcs_class_init (IdeGitVcsClass *klass)
    */
   gParamSpecs [PROP_REPOSITORY] =
     g_param_spec_object ("repository",
-                         _("Repository"),
-                         _("The git repository for the project."),
+                         "Repository",
+                         "The git repository for the project.",
                          GGIT_TYPE_REPOSITORY,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 

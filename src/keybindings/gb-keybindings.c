@@ -255,15 +255,15 @@ gb_keybindings_class_init (GbKeybindingsClass *klass)
 
   gParamSpecs [PROP_APPLICATION] =
     g_param_spec_object ("application",
-                         _("Application"),
-                         _("The application to register keybindings for."),
+                         "Application",
+                         "The application to register keybindings for.",
                          GTK_TYPE_APPLICATION,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_MODE] =
     g_param_spec_string ("mode",
-                         _("Mode"),
-                         _("The name of the keybindings mode."),
+                         "Mode",
+                         "The name of the keybindings mode.",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS));
 

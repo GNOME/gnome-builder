@@ -1262,15 +1262,15 @@ ide_buffer_manager_class_init (IdeBufferManagerClass *klass)
 
   gParamSpecs [PROP_AUTO_SAVE] =
     g_param_spec_boolean ("auto-save",
-                          _("Auto Save"),
-                          _("If the documents should auto save after a configured timeout."),
+                          "Auto Save",
+                          "If the documents should auto save after a configured timeout.",
                           TRUE,
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_AUTO_SAVE_TIMEOUT] =
     g_param_spec_uint ("auto-save-timeout",
-                       _("Auto Save Timeout"),
-                       _("The number of seconds after modification before auto saving."),
+                       "Auto Save Timeout",
+                       "The number of seconds after modification before auto saving.",
                        0,
                        G_MAXUINT,
                        AUTO_SAVE_TIMEOUT_DEFAULT,
@@ -1278,8 +1278,8 @@ ide_buffer_manager_class_init (IdeBufferManagerClass *klass)
 
   gParamSpecs [PROP_FOCUS_BUFFER] =
     g_param_spec_object ("focus-buffer",
-                         _("Focused Buffer"),
-                         _("The currently focused buffer."),
+                         "Focused Buffer",
+                         "The currently focused buffer.",
                          IDE_TYPE_BUFFER,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 

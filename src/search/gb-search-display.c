@@ -574,8 +574,8 @@ gb_search_display_class_init (GbSearchDisplayClass *klass)
 
   gParamSpecs [PROP_CONTEXT] =
     g_param_spec_object ("context",
-                         _("Context"),
-                         _("The active search context."),
+                         "Context",
+                         "The active search context.",
                          IDE_TYPE_SEARCH_CONTEXT,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 

@@ -307,22 +307,22 @@ gb_greeter_project_row_class_init (GbGreeterProjectRowClass *klass)
 
   gParamSpecs [PROP_SELECTED] =
     g_param_spec_boolean ("selected",
-                          _("Selected"),
-                          _("Selected"),
+                          "Selected",
+                          "Selected",
                           FALSE,
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_SELECTION_MODE] =
     g_param_spec_boolean ("selection-mode",
-                          _("Selection Mode"),
-                          _("Selection Mode"),
+                          "Selection Mode",
+                          "Selection Mode",
                           FALSE,
                           (G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_PROJECT_INFO] =
     g_param_spec_object ("project-info",
-                         _("Project Information"),
-                         _("The project information to render."),
+                         "Project Information",
+                         "The project information to render.",
                          IDE_TYPE_PROJECT_INFO,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 

@@ -311,22 +311,22 @@ ide_source_snippet_chunk_class_init (IdeSourceSnippetChunkClass *klass)
 
   gParamSpecs[PROP_CONTEXT] =
     g_param_spec_object ("context",
-                         _("Context"),
-                         _("The snippet context."),
+                         "Context",
+                         "The snippet context.",
                          IDE_TYPE_SOURCE_SNIPPET_CONTEXT,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs[PROP_SPEC] =
     g_param_spec_string ("spec",
-                         _("Spec"),
-                         _("The specification to expand using the context."),
+                         "Spec",
+                         "The specification to expand using the context.",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs[PROP_TAB_STOP] =
     g_param_spec_int ("tab-stop",
-                      _("Tab Stop"),
-                      _("The tab stop for the chunk."),
+                      "Tab Stop",
+                      "The tab stop for the chunk.",
                       -1,
                       G_MAXINT,
                       -1,
@@ -334,15 +334,15 @@ ide_source_snippet_chunk_class_init (IdeSourceSnippetChunkClass *klass)
 
   gParamSpecs[PROP_TEXT] =
     g_param_spec_string ("text",
-                         _("Text"),
-                         _("The text for the chunk."),
+                         "Text",
+                         "The text for the chunk.",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs[PROP_TEXT_SET] =
     g_param_spec_boolean ("text-set",
-                          _("Text Set"),
-                          _("If the text property has been manually set."),
+                          "Text Set",
+                          "If the text property has been manually set.",
                           FALSE,
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 

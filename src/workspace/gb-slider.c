@@ -752,8 +752,8 @@ gb_slider_class_init (GbSliderClass *klass)
 
   gParamSpecs [PROP_POSITION] =
     g_param_spec_enum ("position",
-                       _("Position"),
-                       _("Which slider child is visible."),
+                       "Position",
+                       "Which slider child is visible.",
                        GB_TYPE_SLIDER_POSITION,
                        GB_SLIDER_NONE,
                        (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));

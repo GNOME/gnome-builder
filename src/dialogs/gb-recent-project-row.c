@@ -204,22 +204,22 @@ gb_recent_project_row_class_init (GbRecentProjectRowClass *klass)
 
   gParamSpecs [PROP_PROJECT_INFO] =
     g_param_spec_object ("project-info",
-                         _("Project Information"),
-                         _("The project information for the row."),
+                         "Project Information",
+                         "The project information for the row.",
                          IDE_TYPE_PROJECT_INFO,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_SELECTED] =
     g_param_spec_boolean ("selected",
-                          _("Selected"),
-                          _("Selected"),
+                          "Selected",
+                          "Selected",
                           FALSE,
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_SELECTION_MODE] =
     g_param_spec_boolean ("selection-mode",
-                          _("Selection Mode"),
-                          _("Selection Mode"),
+                          "Selection Mode",
+                          "Selection Mode",
                           FALSE,
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 

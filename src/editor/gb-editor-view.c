@@ -501,8 +501,8 @@ gb_editor_view_class_init (GbEditorViewClass *klass)
 
   gParamSpecs [PROP_DOCUMENT] =
     g_param_spec_object ("document",
-                         _("Document"),
-                         _("The editor document."),
+                         "Document",
+                         "The editor document.",
                          GB_TYPE_EDITOR_DOCUMENT,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 

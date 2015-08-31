@@ -231,22 +231,22 @@ ide_device_class_init (IdeDeviceClass *klass)
 
   gParamSpecs [PROP_DISPLAY_NAME] =
     g_param_spec_string ("display-name",
-                         _("Display Name"),
-                         _("The display name of the device."),
+                         "Display Name",
+                         "The display name of the device.",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_ID] =
     g_param_spec_string ("id",
-                         _("ID"),
-                         _("The device identifier."),
+                         "ID",
+                         "The device identifier.",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_SYSTEM_TYPE] =
     g_param_spec_string ("system-type",
-                         _("System Type"),
-                         _("The system type for which to compile."),
+                         "System Type",
+                         "The system type for which to compile.",
                          NULL,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
