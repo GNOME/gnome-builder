@@ -178,6 +178,20 @@ gb_editor_settings_widget_set_language (GbEditorSettingsWidget *widget,
     }
 }
 
+static gboolean
+transform_title_func (GBinding     *binding,
+                      const GValue *from_value,
+                      GValue       *to_value,
+                      gpointer      user_data)
+{
+  gchar *title;
+
+  title = g_strdup_printf (_("%s (read-only)"), g_value_get_string (from_value));
+  g_value_take_string (to_value, title);
+
+  return TRUE;
+}
+
 static void
 snippet_activated_cb (GbEditorSettingsWidget *self,
                       GtkListBoxRow          *row,
@@ -200,7 +214,6 @@ snippet_activated_cb (GbEditorSettingsWidget *self,
   snippet = g_object_get_data (G_OBJECT (row), "SNIPPET");
 
   window = g_object_new (GTK_TYPE_WINDOW,
-                         "title", "Edit Snippet",
                          "default-width", 600,
                          "default-height", 400,
                          "transient-for", toplevel,
@@ -211,9 +224,11 @@ snippet_activated_cb (GbEditorSettingsWidget *self,
                              "show-close-button", TRUE,
                              "visible", TRUE,
                              NULL);
-  g_object_bind_property (snippet, "trigger",
-                          header_bar, "title",
-                          G_BINDING_SYNC_CREATE);
+  g_object_bind_property_full (snippet, "trigger",
+                              header_bar, "title",
+                              G_BINDING_SYNC_CREATE,
+                              transform_title_func,
+                              NULL, NULL, NULL);
   gtk_window_set_titlebar (window, GTK_WIDGET (header_bar));
 
   scroller = g_object_new (GTK_TYPE_SCROLLED_WINDOW,

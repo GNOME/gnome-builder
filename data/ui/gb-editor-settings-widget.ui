@@ -254,7 +254,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="halign">start</property>
-            <property name="label" translatable="yes">Snippets</property>
+            <property name="label" translatable="yes">Snippets (read-only)</property>
             <property name="margin-bottom">6</property>
             <attributes>
                 <attribute name="weight" value="bold" />
