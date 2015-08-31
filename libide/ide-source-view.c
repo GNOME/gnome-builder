@@ -206,6 +206,7 @@ enum {
   CAPTURE_MODIFIER,
   CLEAR_COUNT,
   CLEAR_MODIFIER,
+  CLEAR_SEARCH,
   CLEAR_SELECTION,
   CLEAR_SNIPPETS,
   CYCLE_COMPLETION,
@@ -2471,6 +2472,16 @@ ide_source_view_real_clear_modifier (IdeSourceView *self)
   g_assert (IDE_IS_SOURCE_VIEW (self));
 
   priv->modifier = 0;
+}
+
+static void
+ide_source_view_real_clear_search (IdeSourceView *self)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+
+  gtk_source_search_context_set_highlight (priv->search_context, FALSE);
 }
 
 static void
@@ -5133,6 +5144,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
   klass->capture_modifier = ide_source_view_real_capture_modifier;
   klass->clear_count = ide_source_view_real_clear_count;
   klass->clear_modifier = ide_source_view_real_clear_modifier;
+  klass->clear_search = ide_source_view_real_clear_search;
   klass->clear_selection = ide_source_view_real_clear_selection;
   klass->clear_snippets = ide_source_view_clear_snippets;
   klass->cycle_completion = ide_source_view_real_cycle_completion;
@@ -5433,6 +5445,15 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                   G_STRUCT_OFFSET (IdeSourceViewClass, clear_modifier),
+                  NULL, NULL, NULL,
+                  G_TYPE_NONE,
+                  0);
+
+  gSignals [CLEAR_SEARCH] =
+    g_signal_new ("clear-search",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                  G_STRUCT_OFFSET (IdeSourceViewClass, clear_search),
                   NULL, NULL, NULL,
                   G_TYPE_NONE,
                   0);
