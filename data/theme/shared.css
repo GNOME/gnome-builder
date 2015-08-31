@@ -32,7 +32,12 @@
 .preferences.sidebar GtkListBoxRow {
   padding: 10px;
 }
-
+.preferences.sidebar GtkListBoxRow:not(:selected) {
+  background-color: shade(@theme_bg_color, 0.99);
+}
+.preferences.sidebar GtkListBoxRow:hover:not(:selected) {
+  background-color: shade(@theme_bg_color, 1.02);
+}
 
 GbPreferencesSwitch:prelight {
   background-color: shade(@theme_bg_color, 1.01);
