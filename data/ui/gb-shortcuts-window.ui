@@ -18,6 +18,14 @@
                 <property name="title" translatable="yes">Preferences</property>
                 <property name="accelerator">&lt;ctrl&gt;comma</property>
               </shortcut>
+              <shortcut>
+                <property name="title" translatable="yes">Command Bar</property>
+                <property name="accelerator">&lt;ctrl&gt;Return</property>
+              </shortcut>
+              <shortcut>
+                <property name="title" translatable="yes">Terminal</property>
+                <property name="accelerator">&lt;ctrl&gt;&lt;shift&gt;t</property>
+              </shortcut>
             </group>
             <group>
               <property name="title" translatable="yes">Panels</property>
