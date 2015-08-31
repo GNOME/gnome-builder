@@ -183,16 +183,14 @@ gb_command_vim_class_init (GbCommandVimClass *klass)
                          "Command Text",
                          "The command text to execute",
                          NULL,
-                         (G_PARAM_READWRITE |
-                          G_PARAM_STATIC_STRINGS));
+                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_SOURCE_VIEW] =
     g_param_spec_object ("source-view",
-                         "Source View"),
+                         "Source View",
                          "The source view to modify.",
                          IDE_TYPE_SOURCE_VIEW,
-                         (G_PARAM_READWRITE |
-                          G_PARAM_STATIC_STRINGS));
+                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
 }
