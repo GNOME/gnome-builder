@@ -170,6 +170,7 @@ PKG_CHECK_MODULES(EGG,      [glib-2.0 >= glib_required_version
                              gtk+-3.0 >= gtk_required_version])
 PKG_CHECK_MODULES(GD,       [gtk+-3.0 >= gtk_required_version])
 PKG_CHECK_MODULES(ICONS,    [gio-2.0 >= glib_required_version])
+PKG_CHECK_MODULES(LIBGITG,  [libgit2-glib-1.0 >= ggit_required_version])
 PKG_CHECK_MODULES(LIBIDE,   [gio-2.0 >= glib_required_version
                              gio-unix-2.0 >= glib_required_version
                              gtksourceview-3.0 >= gtksourceview_required_version
@@ -187,6 +188,40 @@ PKG_CHECK_MODULES(NAUTILUS, [glib-2.0 >= glib_required_version
                              gtk+-3.0 >= gtk_required_version])
 PKG_CHECK_MODULES(XML,      [gio-2.0 >= glib_required_version
                              libxml-2.0 >= libxml_required_version])
+
+
+dnl ***********************************************************************
+dnl Be extra careful about libgit2-glib requirements
+dnl ***********************************************************************
+cflags_save="${CFLAGS}"
+libs_save="${LIBS}"
+CFLAGS="${CFLAGS} ${LIBGITG_CFLAGS}"
+LIBS="${LIBS} ${LIBGITG_LIBS}"
+# Thread-Safe
+AC_MSG_CHECKING([for thread-safe support in libgit2])
+AC_TRY_RUN([
+	#include <libgit2-glib/ggit.h>
+	int
+	main(int argc, const char *argv[])
+	{
+		ggit_init ();
+		return ((ggit_get_features() & GGIT_FEATURE_THREADS) != 0) ? 0 : 1;
+	}
+],[AC_MSG_RESULT([yes])],[AC_MSG_ERROR([no, please recompile a threadsafe version of libgit2 (-DTHREADSAFE:BOOL=ON)])])
+# SSH
+AC_MSG_CHECKING([for SSH support in libgit2])
+AC_TRY_RUN([
+	#include <libgit2-glib/ggit.h>
+	int
+	main(int argc, const char *argv[])
+	{
+		ggit_init ();
+		return ((ggit_get_features() & GGIT_FEATURE_SSH) != 0) ? 0 : 1;
+	}
+],[AC_MSG_RESULT([yes])],[AC_MSG_ERROR([no, please recompile a libgit2 with ssh support])])
+CFLAGS="${cflags_save}"
+LIBS="${libs_save}"
+
 
 
 dnl ***********************************************************************
