@@ -1,6 +1,14 @@
 @import url("resource:///org/gnome/builder/theme/shared.css");
 
 
+#left_header_bar {
+  border-top-right-radius: 0px;
+}
+#right_header_bar {
+  border-top-left-radius: 0px;
+}
+
+
 /*
  * Preferences styling.
  */
