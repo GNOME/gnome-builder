@@ -17,6 +17,7 @@
  */
 
 #include <glib/gi18n.h>
+#include <ide.h>
 
 #include "egg-search-bar.h"
 
@@ -31,6 +32,12 @@
 
 typedef struct
 {
+  GHashTable     *keywords;
+  gchar          *initial_view;
+  gchar          *last_view_name;
+  GtkSizeGroup   *search_text_group;
+  GtkSizeGroup   *search_image_group;
+
   GtkStack       *stack;
   GtkMenuButton  *menu_button;
   GtkLabel       *menu_label;
@@ -39,6 +46,8 @@ typedef struct
   GtkHeaderBar   *header_bar;
   GtkPopover     *popover;
   GtkListBox     *list_box;
+  GtkBox         *search_gestures;
+  GtkBox         *search_shortcuts;
 } GbShortcutsDialogPrivate;
 
 typedef struct
@@ -46,6 +55,7 @@ typedef struct
   GbShortcutsDialog *self;
   GtkBuilder        *builder;
   GQueue            *stack;
+  GtkWidget         *search_item;
   GQueue            *column_image_size_groups;
   GQueue            *column_desc_size_groups;
   gchar             *property_name;
@@ -63,6 +73,13 @@ enum {
   LAST_SIGNAL
 };
 
+enum {
+  PROP_0,
+  PROP_VIEW_NAME,
+  LAST_PROP
+};
+
+static GParamSpec *gParamSpecs [LAST_PROP];
 static guint gSignals [LAST_SIGNAL];
 
 static void
@@ -128,6 +145,15 @@ gb_shortcuts_dialog__stack__notify_visible_child (GbShortcutsDialog *self,
       title = gb_shortcuts_view_get_title (GB_SHORTCUTS_VIEW (visible_child));
       gtk_label_set_label (priv->menu_label, title);
     }
+  else if (visible_child != NULL)
+    {
+      g_autofree gchar *title = NULL;
+
+      gtk_container_child_get (GTK_CONTAINER (stack), visible_child,
+                               "title", &title,
+                               NULL);
+      gtk_label_set_label (priv->menu_label, title);
+    }
 }
 
 static void
@@ -145,6 +171,112 @@ gb_shortcuts_dialog__list_box__row_activated (GbShortcutsDialog *self,
   name = g_object_get_data (G_OBJECT (row), "GB_SHORTCUTS_VIEW_NAME");
   gtk_stack_set_visible_child_name (priv->stack, name);
   gtk_widget_hide (GTK_WIDGET (priv->popover));
+}
+
+static void
+gb_shortcuts_dialog_add_search_item (GbShortcutsDialog *self,
+                                     GtkWidget         *search_item)
+{
+  GbShortcutsDialogPrivate *priv = gb_shortcuts_dialog_get_instance_private (self);
+  GString *str = g_string_new (NULL);
+  gchar *downcase;
+
+  g_assert (GB_IS_SHORTCUTS_DIALOG (self));
+  g_assert (GB_IS_SHORTCUTS_SHORTCUT (search_item) || GB_IS_SHORTCUTS_GESTURE (search_item));
+
+  if (GB_IS_SHORTCUTS_SHORTCUT (search_item))
+    {
+      g_autofree gchar *accelerator = NULL;
+      g_autofree gchar *title = NULL;
+
+      g_object_get (search_item,
+                    "accelerator", &accelerator,
+                    "title", &title,
+                    NULL);
+
+      g_object_set (search_item,
+                    "accelerator-size-group", priv->search_image_group,
+                    "title-size-group", priv->search_text_group,
+                    NULL);
+
+      g_string_append_printf (str, "%s %s", accelerator, title);
+
+      gtk_container_add (GTK_CONTAINER (priv->search_shortcuts), search_item);
+    }
+  else if (GB_IS_SHORTCUTS_GESTURE (search_item))
+    {
+      g_autofree gchar *subtitle = NULL;
+      g_autofree gchar *title = NULL;
+
+      g_object_get (search_item,
+                    "subtitle", &subtitle,
+                    "title", &title,
+                    NULL);
+
+      g_object_set (search_item,
+                    "icon-size-group", priv->search_image_group,
+                    "desc-size-group", priv->search_text_group,
+                    NULL);
+
+      g_string_append_printf (str, "%s %s", title, subtitle);
+
+      gtk_container_add (GTK_CONTAINER (priv->search_gestures), search_item);
+    }
+
+  downcase = g_utf8_strdown (str->str, str->len);
+  g_hash_table_insert (priv->keywords, search_item, downcase);
+  g_string_free (str, TRUE);
+}
+
+static void
+gb_shortcuts_dialog__entry__changed (GbShortcutsDialog *self,
+                                     GtkSearchEntry    *search_entry)
+{
+  GbShortcutsDialogPrivate *priv = gb_shortcuts_dialog_get_instance_private (self);
+  g_autoptr(IdePatternSpec) spec = NULL;
+  g_autofree gchar *downcase = NULL;
+  GHashTableIter iter;
+  const gchar *text;
+  const gchar *last_view_name;
+  gpointer key;
+  gpointer value;
+
+  g_assert (GB_IS_SHORTCUTS_DIALOG (self));
+  g_assert (GTK_IS_SEARCH_ENTRY (search_entry));
+
+  text = gtk_entry_get_text (GTK_ENTRY (search_entry));
+
+  if (!text || !*text)
+    {
+      if (priv->last_view_name != NULL)
+        {
+          gtk_stack_set_visible_child_name (priv->stack, priv->last_view_name);
+          return;
+        }
+    }
+
+  last_view_name = gtk_stack_get_visible_child_name (priv->stack);
+
+  if (g_strcmp0 (last_view_name, "internal-search") != 0)
+    {
+      g_free (priv->last_view_name);
+      priv->last_view_name = g_strdup (last_view_name);
+    }
+
+  gtk_stack_set_visible_child_name (priv->stack, "internal-search");
+
+  downcase = g_utf8_strdown (text, -1);
+  spec = ide_pattern_spec_new (downcase);
+
+  g_hash_table_iter_init (&iter, priv->keywords);
+
+  while (g_hash_table_iter_next (&iter, &key, &value))
+    {
+      GtkWidget *widget = key;
+      const gchar *keywords = value;
+
+      gtk_widget_set_visible (widget, ide_pattern_spec_match (spec, keywords));
+    }
 }
 
 static gboolean
@@ -263,6 +395,10 @@ views_parser_start_element (GMarkupParseContext  *context,
       accel_size_group = g_queue_peek_head (parser_data->column_image_size_groups);
       desc_size_group = g_queue_peek_head (parser_data->column_desc_size_groups);
 
+      parser_data->search_item = g_object_new (GB_TYPE_SHORTCUTS_SHORTCUT,
+                                               "visible", TRUE,
+                                               NULL);
+
       item = g_object_new (GB_TYPE_SHORTCUTS_SHORTCUT,
                            "accelerator-size-group", accel_size_group,
                            "title-size-group", desc_size_group,
@@ -280,6 +416,10 @@ views_parser_start_element (GMarkupParseContext  *context,
 
       accel_size_group = g_queue_peek_head (parser_data->column_image_size_groups);
       desc_size_group = g_queue_peek_head (parser_data->column_desc_size_groups);
+
+      parser_data->search_item = g_object_new (GB_TYPE_SHORTCUTS_GESTURE,
+                                               "visible", TRUE,
+                                               NULL);
 
       item = g_object_new (GB_TYPE_SHORTCUTS_GESTURE,
                            "desc-size-group", desc_size_group,
@@ -368,6 +508,13 @@ views_parser_end_element (GMarkupParseContext  *context,
         gtk_container_add (GTK_CONTAINER (parent), GTK_WIDGET (item));
       g_clear_object (&item);
 
+      if ((g_strcmp0 (element_name, "shortcut") == 0) ||
+          (g_strcmp0 (element_name, "gesture") == 0))
+        {
+          gb_shortcuts_dialog_add_search_item (parser_data->self, parser_data->search_item);
+          parser_data->search_item = NULL;
+        }
+
       if (g_strcmp0 (element_name, "column") == 0)
         {
           GtkSizeGroup *size_group;
@@ -446,6 +593,10 @@ views_parser_text (GMarkupParseContext  *context,
                                            pspec, text, &value, error))
     return;
 
+  if (parser_data->search_item != NULL)
+    g_object_set_property (G_OBJECT (parser_data->search_item),
+                           parser_data->property_name,
+                           &value);
   g_object_set_property (G_OBJECT (item), parser_data->property_name, &value);
   g_value_unset (&value);
 }
@@ -519,6 +670,34 @@ gb_shortcuts_dialog_custom_finished (GtkBuildable *buildable,
 }
 
 static void
+gb_shortcuts_dialog_constructed (GObject *object)
+{
+  GbShortcutsDialog *self = (GbShortcutsDialog *)object;
+  GbShortcutsDialogPrivate *priv = gb_shortcuts_dialog_get_instance_private (self);
+
+  G_OBJECT_CLASS (gb_shortcuts_dialog_parent_class)->constructed (object);
+
+  if (priv->initial_view != NULL)
+    gtk_stack_set_visible_child_name (priv->stack, priv->initial_view);
+}
+
+static void
+gb_shortcuts_dialog_finalize (GObject *object)
+{
+  GbShortcutsDialog *self = (GbShortcutsDialog *)object;
+  GbShortcutsDialogPrivate *priv = gb_shortcuts_dialog_get_instance_private (self);
+
+  g_clear_pointer (&priv->keywords, g_hash_table_unref);
+  g_clear_pointer (&priv->initial_view, g_free);
+  g_clear_pointer (&priv->last_view_name, g_free);
+
+  g_clear_object (&priv->search_image_group);
+  g_clear_object (&priv->search_text_group);
+
+  G_OBJECT_CLASS (gb_shortcuts_dialog_parent_class)->finalize (object);
+}
+
+static void
 gtk_buildable_iface_init (GtkBuildableIface *iface)
 {
   iface->custom_tag_start = gb_shortcuts_dialog_custom_tag_start;
@@ -526,12 +705,81 @@ gtk_buildable_iface_init (GtkBuildableIface *iface)
 }
 
 static void
+gb_shortcuts_dialog_get_property (GObject    *object,
+                                  guint       prop_id,
+                                  GValue     *value,
+                                  GParamSpec *pspec)
+{
+  GbShortcutsDialog *self = (GbShortcutsDialog *)object;
+  GbShortcutsDialogPrivate *priv = gb_shortcuts_dialog_get_instance_private (self);
+
+  switch (prop_id)
+    {
+    case PROP_VIEW_NAME:
+      {
+        GtkWidget *child = gtk_stack_get_visible_child (priv->stack);
+
+        if (child != NULL)
+          {
+            gchar *name = NULL;
+
+            gtk_container_child_get (GTK_CONTAINER (priv->stack), child,
+                                     "name", &name,
+                                     NULL);
+            g_value_take_string (value, name);
+          }
+      }
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    }
+}
+
+static void
+gb_shortcuts_dialog_set_property (GObject      *object,
+                                  guint         prop_id,
+                                  const GValue *value,
+                                  GParamSpec   *pspec)
+{
+  GbShortcutsDialog *self = (GbShortcutsDialog *)object;
+  GbShortcutsDialogPrivate *priv = gb_shortcuts_dialog_get_instance_private (self);
+
+  switch (prop_id)
+    {
+    case PROP_VIEW_NAME:
+      g_free (priv->initial_view);
+      priv->initial_view = g_value_dup_string (value);
+      gtk_stack_set_visible_child_name (priv->stack, g_value_get_string (value));
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    }
+}
+
+static void
 gb_shortcuts_dialog_class_init (GbShortcutsDialogClass *klass)
 {
   GtkContainerClass *container_class = GTK_CONTAINER_CLASS (klass);
   GtkBindingSet *binding_set = gtk_binding_set_by_class (klass);
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+  object_class->constructed = gb_shortcuts_dialog_constructed;
+  object_class->finalize = gb_shortcuts_dialog_finalize;
+  object_class->get_property = gb_shortcuts_dialog_get_property;
+  object_class->set_property = gb_shortcuts_dialog_set_property;
 
   container_class->add = gb_shortcuts_dialog_add;
+
+  gParamSpecs [PROP_VIEW_NAME] =
+    g_param_spec_string ("view-name",
+                         "ViewName",
+                         "ViewName",
+                         NULL,
+                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+
+  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
 
   gSignals [CLOSE] = g_signal_new ("close",
                                    G_TYPE_FROM_CLASS (klass),
@@ -557,10 +805,16 @@ gb_shortcuts_dialog_init (GbShortcutsDialog *self)
   GtkScrolledWindow *scroller;
   GtkBox *main_box;
   GtkBox *menu_box;
+  GtkBox *box;
   GtkArrow *arrow;
   GtkSearchEntry *entry;
 
   gtk_window_set_resizable (GTK_WINDOW (self), FALSE);
+
+  priv->keywords = g_hash_table_new_full (NULL, NULL, NULL, g_free);
+
+  priv->search_text_group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
+  priv->search_image_group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
 
   priv->header_bar = g_object_new (GTK_TYPE_HEADER_BAR,
                                    "show-close-button", TRUE,
@@ -609,7 +863,7 @@ gb_shortcuts_dialog_init (GbShortcutsDialog *self)
 
   menu_box = g_object_new (GTK_TYPE_BOX,
                            "orientation", GTK_ORIENTATION_HORIZONTAL,
-                           "spacing", 3,
+                           "spacing", 6,
                            "visible", TRUE,
                            NULL);
   gtk_container_add (GTK_CONTAINER (priv->menu_button), GTK_WIDGET (menu_box));
@@ -660,10 +914,45 @@ gb_shortcuts_dialog_init (GbShortcutsDialog *self)
                 "placeholder-text", _("Search Shortcuts"),
                 "width-chars", 40,
                 NULL);
+  g_signal_connect_object (entry,
+                           "changed",
+                           G_CALLBACK (gb_shortcuts_dialog__entry__changed),
+                           self,
+                           G_CONNECT_SWAPPED);
 
   g_signal_connect_object (priv->stack,
                            "notify::visible-child",
                            G_CALLBACK (gb_shortcuts_dialog__stack__notify_visible_child),
                            self,
                            G_CONNECT_SWAPPED);
+
+  scroller = g_object_new (GTK_TYPE_SCROLLED_WINDOW,
+                           "visible", TRUE,
+                           NULL);
+  box = g_object_new (GTK_TYPE_BOX,
+                      "border-width", 24,
+                      "halign", GTK_ALIGN_CENTER,
+                      "spacing", 24,
+                      "orientation", GTK_ORIENTATION_VERTICAL,
+                      "visible", TRUE,
+                      NULL);
+  gtk_container_add (GTK_CONTAINER (scroller), GTK_WIDGET (box));
+  gtk_stack_add_titled (priv->stack, GTK_WIDGET (scroller),
+                        "internal-search", _("Search Results"));
+
+  priv->search_shortcuts = g_object_new (GTK_TYPE_BOX,
+                                         "halign", GTK_ALIGN_CENTER,
+                                         "spacing", 6,
+                                         "orientation", GTK_ORIENTATION_VERTICAL,
+                                         "visible", TRUE,
+                                         NULL);
+  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (priv->search_shortcuts));
+
+  priv->search_gestures = g_object_new (GTK_TYPE_BOX,
+                                        "halign", GTK_ALIGN_CENTER,
+                                        "spacing", 6,
+                                        "orientation", GTK_ORIENTATION_VERTICAL,
+                                        "visible", TRUE,
+                                        NULL);
+  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (priv->search_gestures));
 }

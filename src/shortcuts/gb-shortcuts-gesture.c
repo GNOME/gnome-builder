@@ -71,6 +71,29 @@ gb_shortcuts_gesture_set_icon_name (GbShortcutsGesture *self,
 }
 
 static void
+gb_shortcuts_gesture_get_property (GObject    *object,
+                                   guint       prop_id,
+                                   GValue     *value,
+                                   GParamSpec *pspec)
+{
+  GbShortcutsGesture *self = GB_SHORTCUTS_GESTURE (object);
+
+  switch (prop_id)
+    {
+    case PROP_SUBTITLE:
+      g_value_set_string (value, gtk_label_get_label (self->subtitle));
+      break;
+
+    case PROP_TITLE:
+      g_value_set_string (value, gtk_label_get_label (self->title));
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    }
+}
+
+static void
 gb_shortcuts_gesture_set_property (GObject      *object,
                                    guint         prop_id,
                                    const GValue *value,
@@ -120,6 +143,7 @@ gb_shortcuts_gesture_class_init (GbShortcutsGestureClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
+  object_class->get_property = gb_shortcuts_gesture_get_property;
   object_class->set_property = gb_shortcuts_gesture_set_property;
 
   gParamSpecs [PROP_DESC_SIZE_GROUP] =
@@ -148,14 +172,14 @@ gb_shortcuts_gesture_class_init (GbShortcutsGestureClass *klass)
                          "Subtitle",
                          "Subtitle",
                          NULL,
-                         (G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
+                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_TITLE] =
     g_param_spec_string ("title",
                          "Title",
                          "Title",
                          NULL,
-                         (G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
+                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
 }

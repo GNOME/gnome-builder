@@ -2,6 +2,7 @@
 <interface>
   <!-- interface-requires gtk+ 3.17 -->
   <template class="GbShortcutsWindow" parent="GbShortcutsDialog">
+    <property name="view-name">editor</property>
     <views>
       <view name="editor">
         <property name="title" translatable="yes">Editor Shortcuts</property>

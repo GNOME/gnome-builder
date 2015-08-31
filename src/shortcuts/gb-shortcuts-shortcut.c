@@ -41,6 +41,29 @@ enum {
 static GParamSpec *gParamSpecs [LAST_PROP];
 
 static void
+gb_shortcuts_shortcut_get_property (GObject    *object,
+                                    guint       prop_id,
+                                    GValue     *value,
+                                    GParamSpec *pspec)
+{
+  GbShortcutsShortcut *self = GB_SHORTCUTS_SHORTCUT (object);
+
+  switch (prop_id)
+    {
+    case PROP_TITLE:
+      g_value_set_string (value, gtk_label_get_label (self->title));
+      break;
+
+    case PROP_ACCELERATOR:
+      g_value_set_string (value, gb_accel_label_get_accelerator (self->accelerator));
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    }
+}
+
+static void
 gb_shortcuts_shortcut_set_property (GObject      *object,
                                     guint         prop_id,
                                     const GValue *value,
@@ -86,6 +109,7 @@ gb_shortcuts_shortcut_class_init (GbShortcutsShortcutClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
+  object_class->get_property = gb_shortcuts_shortcut_get_property;
   object_class->set_property = gb_shortcuts_shortcut_set_property;
 
   gParamSpecs [PROP_ACCELERATOR] =
@@ -93,7 +117,7 @@ gb_shortcuts_shortcut_class_init (GbShortcutsShortcutClass *klass)
                          "Accelerator",
                          "Accelerator",
                          NULL,
-                         (G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
+                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_ACCELERATOR_SIZE_GROUP] =
     g_param_spec_object ("accelerator-size-group",
@@ -107,7 +131,7 @@ gb_shortcuts_shortcut_class_init (GbShortcutsShortcutClass *klass)
                          "Title",
                          "Title",
                          NULL,
-                         (G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
+                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_TITLE_SIZE_GROUP] =
     g_param_spec_object ("title-size-group",
