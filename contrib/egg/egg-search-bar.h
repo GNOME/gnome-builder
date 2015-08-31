@@ -39,6 +39,7 @@ void       egg_search_bar_set_search_mode_enabled (EggSearchBar *self,
 gboolean   egg_search_bar_get_show_close_button   (EggSearchBar *self);
 void       egg_search_bar_set_show_close_button   (EggSearchBar *self,
                                                    gboolean      show_close_button);
+GtkWidget *egg_search_bar_get_entry               (EggSearchBar *self);
 
 G_END_DECLS
 

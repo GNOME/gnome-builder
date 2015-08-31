@@ -462,3 +462,13 @@ egg_search_bar_set_show_close_button (EggSearchBar *self,
   gtk_widget_set_visible (GTK_WIDGET (priv->close_button), show_close_button);
   g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_SHOW_CLOSE_BUTTON]);
 }
+
+GtkWidget *
+egg_search_bar_get_entry (EggSearchBar *self)
+{
+  EggSearchBarPrivate *priv = egg_search_bar_get_instance_private (self);
+
+  g_return_val_if_fail (EGG_IS_SEARCH_BAR (self), NULL);
+
+  return GTK_WIDGET (priv->entry);
+}
