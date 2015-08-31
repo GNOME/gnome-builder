@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2015-08-25 09:30+0000\n"
+"POT-Creation-Date: 2015-08-31 09:04+0000\n"
 "PO-Revision-Date: 2015-08-31 \n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Spanish <gnome-es-list@gnome.org>\n"
@@ -165,107 +165,112 @@ msgid "Generate Support Log"
 msgstr "Generar registro de soporte"
 
 #: ../data/gtk/menus.ui.h:5
+#| msgid "Keyboard Movement"
+msgid "Keyboard _Shortcuts"
+msgstr "_Atajos del teclado"
+
+#: ../data/gtk/menus.ui.h:6
 msgid "_About"
 msgstr "_Acerca de"
 
-#: ../data/gtk/menus.ui.h:6
+#: ../data/gtk/menus.ui.h:7
 msgid "_Quit"
 msgstr "_Salir"
 
-#: ../data/gtk/menus.ui.h:7 ../data/ui/gb-editor-view.ui.h:1
+#: ../data/gtk/menus.ui.h:8 ../data/ui/gb-editor-view.ui.h:1
 msgid "_Reload"
 msgstr "_Recargar"
 
-#: ../data/gtk/menus.ui.h:8
+#: ../data/gtk/menus.ui.h:9
 msgid "_Print…"
 msgstr "_Imprimir…"
 
-#: ../data/gtk/menus.ui.h:9
+#: ../data/gtk/menus.ui.h:10
 msgid "_Fullscreen"
 msgstr "_Pantalla completa"
 
-#: ../data/gtk/menus.ui.h:10
+#: ../data/gtk/menus.ui.h:11
 msgid "_New Document"
 msgstr "_Nuevo documento"
 
-#: ../data/gtk/menus.ui.h:11
+#: ../data/gtk/menus.ui.h:12
 msgid "_Open"
 msgstr "_Abrir"
 
-#: ../data/gtk/menus.ui.h:12
+#: ../data/gtk/menus.ui.h:13
 msgid "Save _All"
 msgstr "Guardar todo"
 
-#: ../data/gtk/menus.ui.h:13
+#: ../data/gtk/menus.ui.h:14
 msgid "_Close All"
 msgstr "_Cerrar todo"
 
-#: ../data/gtk/menus.ui.h:14
+#: ../data/gtk/menus.ui.h:15
 msgid "Display Options"
 msgstr "Opciones de visualización"
 
-#: ../data/gtk/menus.ui.h:15 ../src/tree/gb-tree.c:974
+#: ../data/gtk/menus.ui.h:16 ../src/tree/gb-tree.c:974
 #: ../src/tree/gb-tree.c:975
 msgid "Show Icons"
 msgstr "Mostrar iconos"
 
-#: ../data/gtk/menus.ui.h:16 ../src/project-tree/gb-project-tree.c:157
+#: ../data/gtk/menus.ui.h:17 ../src/project-tree/gb-project-tree.c:157
 msgid "Show Ignored Files"
 msgstr "Mostrar archivos ignorados"
 
-#: ../data/gtk/menus.ui.h:17
+#: ../data/gtk/menus.ui.h:18
 msgid "Sort Directories First"
 msgstr "Mostrar las carpetas primero"
 
-#: ../data/gtk/menus.ui.h:18
+#: ../data/gtk/menus.ui.h:19
 msgid "_Collapse All Nodes"
 msgstr "_Contraer todos los nodos"
 
-#: ../data/gtk/menus.ui.h:19
+#: ../data/gtk/menus.ui.h:20
 msgid "_Refresh"
 msgstr "_Actualizar"
 
-#: ../data/gtk/menus.ui.h:20 ../data/ui/gb-greeter-window.ui.h:3
+#: ../data/gtk/menus.ui.h:21 ../data/ui/gb-greeter-window.ui.h:3
 msgid "_New"
 msgstr "_Nuevo"
 
-#: ../data/gtk/menus.ui.h:21
+#: ../data/gtk/menus.ui.h:22
 msgid "_Empty File"
 msgstr "Archivo _vacío"
 
-#: ../data/gtk/menus.ui.h:22
+#: ../data/gtk/menus.ui.h:23
 msgid "_New Folder"
 msgstr "_Nueva carpeta"
 
-#: ../data/gtk/menus.ui.h:23
+#: ../data/gtk/menus.ui.h:24
 msgid "Open _With"
 msgstr "Abrir con"
 
-#: ../data/gtk/menus.ui.h:24
+#: ../data/gtk/menus.ui.h:25
 msgid "Source Code Editor"
 msgstr "Editor de código fuente"
 
-#: ../data/gtk/menus.ui.h:25
+#: ../data/gtk/menus.ui.h:26
 msgid "_Open Containing Folder"
 msgstr "_Abrir la carpeta contenedora"
 
-#: ../data/gtk/menus.ui.h:26
+#: ../data/gtk/menus.ui.h:27
 msgid "_Open in Terminal"
 msgstr "_Abrir en una terminal"
 
-#: ../data/gtk/menus.ui.h:27 ../data/ui/gb-rename-file-popover.ui.h:2
+#: ../data/gtk/menus.ui.h:28 ../data/ui/gb-rename-file-popover.ui.h:2
 msgid "_Rename"
 msgstr "_Renombrar"
 
-#: ../data/gtk/menus.ui.h:28
+#: ../data/gtk/menus.ui.h:29
 msgid "Mo_ve to Trash"
 msgstr "Mo_ver a la papelera"
 
-#: ../data/gtk/menus.ui.h:29
+#: ../data/gtk/menus.ui.h:30
 msgid "_Build"
 msgstr "_Construir"
 
-#: ../data/gtk/menus.ui.h:30
+#: ../data/gtk/menus.ui.h:31
 msgid "_Rebuild"
 msgstr "_Reconstruir"
 
@@ -574,7 +579,7 @@ msgstr ""
 "Restaurar el cursor de inserción a la última posición al reabrir un archivo."
 
 #: ../data/ui/gb-preferences-page-editor.ui.h:20
-#: ../libide/ide-source-view.c:5265
+#: ../libide/ide-source-view.c:5277
 msgid "Scroll Offset"
 msgstr "Desplazamiento"
 
@@ -1123,7 +1128,7 @@ msgstr "Builder necesita libgit2.glib con soporte para hilos."
 msgid "Builder requires libgit2-glib with SSH support."
 msgstr "Builder necesita libgit2.glib con soporte para SSH."
 
-#: ../libide/ide-context.c:652 ../libide/ide-source-view.c:5172
+#: ../libide/ide-context.c:652 ../libide/ide-source-view.c:5184
 #: ../src/editor/gb-editor-frame.c:747
 msgid "Back Forward List"
 msgstr "Lista adelante y atrás"
@@ -1685,172 +1690,172 @@ msgstr "Falló al abrir la carpeta: %s"
 msgid "Failed to load file: %s: %s"
 msgstr "Falló al cargar el archivo: %s: %s"
 
-#: ../libide/ide-source-view.c:4530
+#: ../libide/ide-source-view.c:4541
 #, c-format
 msgid "Insert \"%s\""
 msgstr "Insertar «%s»"
 
-#: ../libide/ide-source-view.c:4532
+#: ../libide/ide-source-view.c:4543
 #, c-format
 msgid "Replace \"%s\" with \"%s\""
 msgstr "Reemplazar «%s» con «%s»"
 
-#: ../libide/ide-source-view.c:4637
+#: ../libide/ide-source-view.c:4648
 msgid "Apply Fix-It"
 msgstr "Aplicar corrección"
 
-#: ../libide/ide-source-view.c:4677
+#: ../libide/ide-source-view.c:4688
 msgid "Goto Definition"
 msgstr "Ir a la definición"
 
-#: ../libide/ide-source-view.c:5173
+#: ../libide/ide-source-view.c:5185
 msgid "The back-forward list to track jumps."
 msgstr "La lista hacia adelante y hacia atrás para registrar saltos."
 
-#: ../libide/ide-source-view.c:5179
+#: ../libide/ide-source-view.c:5191
 msgid "Count"
 msgstr "Contador"
 
-#: ../libide/ide-source-view.c:5180
+#: ../libide/ide-source-view.c:5192
 msgid "The count for movements."
 msgstr "El contador de movimientos."
 
-#: ../libide/ide-source-view.c:5188
+#: ../libide/ide-source-view.c:5200
 msgid "File Settings"
 msgstr "Archivo de configuración"
 
-#: ../libide/ide-source-view.c:5189
+#: ../libide/ide-source-view.c:5201
 msgid "The file settings that have been loaded for the file."
 msgstr "La configuración del archivo que se ha cargado para el archivo."
 
-#: ../libide/ide-source-view.c:5195
+#: ../libide/ide-source-view.c:5207
 msgid "Font Description"
 msgstr "Descripción de la tipografía"
 
-#: ../libide/ide-source-view.c:5196
+#: ../libide/ide-source-view.c:5208
 msgid "The Pango font description to use for rendering source."
 msgstr ""
 "La descripción de la tipografía Pango que usar para renderizar la fuente."
 
-#: ../libide/ide-source-view.c:5202
+#: ../libide/ide-source-view.c:5214
 msgid "Enable Word Completion"
 msgstr "Activar el completado de palabras"
 
-#: ../libide/ide-source-view.c:5203
+#: ../libide/ide-source-view.c:5215
 msgid "If words from all buffers can be used to autocomplete."
 msgstr ""
 "Si se pueden usar las palabras de todos los búferes para el completado "
 "automático."
 
-#: ../libide/ide-source-view.c:5209 ../plugins/terminal/gb-terminal-view.c:620
+#: ../libide/ide-source-view.c:5221 ../plugins/terminal/gb-terminal-view.c:620
 #: ../plugins/terminal/gb-terminal-view.c:621
 msgid "Font Name"
 msgstr "Nombre de la tipografía"
 
-#: ../libide/ide-source-view.c:5210
+#: ../libide/ide-source-view.c:5222
 msgid "The Pango font name to use for rendering source."
 msgstr "El nombre de la tipografía Pango usada para renederizar la fuente."
 
-#: ../libide/ide-source-view.c:5220 ../libide/ide-source-view.c:5221
+#: ../libide/ide-source-view.c:5232 ../libide/ide-source-view.c:5233
 msgid "Indenter"
 msgstr "Sangrador"
 
-#: ../libide/ide-source-view.c:5227 ../libide/ide-source-view.c:5228
+#: ../libide/ide-source-view.c:5239 ../libide/ide-source-view.c:5240
 msgid "Indent Style"
 msgstr "Estilo de sangrado"
 
-#: ../libide/ide-source-view.c:5235
+#: ../libide/ide-source-view.c:5247
 msgid "Insert Matching Brace"
 msgstr "Insertar llave coincidente"
 
-#: ../libide/ide-source-view.c:5236
+#: ../libide/ide-source-view.c:5248
 msgid "Insert a matching brace/bracket/quotation/parenthesis."
 msgstr "Insertar una llave/corchete/cita/paréntesis coincidente."
 
-#: ../libide/ide-source-view.c:5244
+#: ../libide/ide-source-view.c:5256
 msgid "Mode Display Name"
 msgstr "Nombre del modo de visualización"
 
-#: ../libide/ide-source-view.c:5245
+#: ../libide/ide-source-view.c:5257
 msgid "The display name of the keybinding mode."
 msgstr "El nombre que mostrar del modo de asociaciones de teclas."
 
-#: ../libide/ide-source-view.c:5251
+#: ../libide/ide-source-view.c:5263
 msgid "Overwrite Braces"
 msgstr "Sobrescribir llaves"
 
-#: ../libide/ide-source-view.c:5252
+#: ../libide/ide-source-view.c:5264
 msgid "Overwrite a matching brace/bracket/quotation/parenthesis."
 msgstr "Sobrescribir una llave/corchete/cita/paréntesis coincidente."
 
-#: ../libide/ide-source-view.c:5258
+#: ../libide/ide-source-view.c:5270
 msgid "Rubberband Search"
 msgstr "Búsqueda Rubberband"
 
-#: ../libide/ide-source-view.c:5259
+#: ../libide/ide-source-view.c:5271
 msgid "Auto scroll to next search result without moving insertion caret."
 msgstr ""
 "Desplazamiento automático al siguiente resultado de búsqueda sin mover el "
 "punto de inserción."
 
-#: ../libide/ide-source-view.c:5266
+#: ../libide/ide-source-view.c:5278
 msgid "The number of lines between the insertion cursor and screen boundary."
 msgstr ""
 "El número de líneas entre el punto de inserción y el límite de la pantalla."
 
-#: ../libide/ide-source-view.c:5274
+#: ../libide/ide-source-view.c:5286
 msgid "Search Context"
 msgstr "Contexto de la búsqueda"
 
-#: ../libide/ide-source-view.c:5275
+#: ../libide/ide-source-view.c:5287
 msgid "The search context for the view."
 msgstr "El contexto de la búsqueda para la vista."
 
-#: ../libide/ide-source-view.c:5281
+#: ../libide/ide-source-view.c:5293
 msgid "Show Grid Lines"
 msgstr "Mostrar líneas de la rejilla"
 
-#: ../libide/ide-source-view.c:5282
+#: ../libide/ide-source-view.c:5294
 msgid "If the background grid should be shown."
 msgstr "Si se debe mostrar el fondo de la rejilla."
 
-#: ../libide/ide-source-view.c:5288
+#: ../libide/ide-source-view.c:5300
 msgid "Show Line Changes"
 msgstr "Mostrar cambios de líneas"
 
-#: ../libide/ide-source-view.c:5289
+#: ../libide/ide-source-view.c:5301
 msgid "If line changes should be shown in the left gutter."
 msgstr "Si se deben mostrar los cambios de líneas en el lateral izquierdo."
 
-#: ../libide/ide-source-view.c:5303
+#: ../libide/ide-source-view.c:5315
 msgid "Show Line Diagnostics"
 msgstr "Mostrar líneas de diagnóstico"
 
-#: ../libide/ide-source-view.c:5304
+#: ../libide/ide-source-view.c:5316
 msgid "If line changes diagnostics should be shown in the left gutter."
 msgstr "Si se deben mostrar las líneas de diagnóstico en el lateral izquierdo."
 
-#: ../libide/ide-source-view.c:5310
+#: ../libide/ide-source-view.c:5322
 msgid "Show Search Bubbles"
 msgstr "Mostrar burbujas de búsqueda"
 
-#: ../libide/ide-source-view.c:5311
+#: ../libide/ide-source-view.c:5323
 msgid "If search bubbles should be rendered."
 msgstr "Si se deben renderizar las burbujas de búsqueda."
 
-#: ../libide/ide-source-view.c:5317
+#: ../libide/ide-source-view.c:5329
 msgid "Show Search Shadow"
 msgstr "Mostrar sombra de la búsqueda"
 
-#: ../libide/ide-source-view.c:5318
+#: ../libide/ide-source-view.c:5330
 msgid "If the shadow should be drawn when performing searches."
 msgstr "Si se debe dibujar la sombra al realizar búsquedas."
 
-#: ../libide/ide-source-view.c:5324
+#: ../libide/ide-source-view.c:5336
 msgid "Snippet Completion"
 msgstr "Completado de fragmentos"
 
-#: ../libide/ide-source-view.c:5325
+#: ../libide/ide-source-view.c:5337
 msgid "If snippet expansion should be enabled via the completion window."
 msgstr ""
 "Si se debe completar la expansión de fragmentos mediante la ventana de "
@@ -2216,7 +2221,7 @@ msgid "The parameters for the action."
 msgstr "Los parámetros para la acción."
 
 #: ../plugins/command-bar/gb-command-provider.c:319
-#: ../src/views/gb-view-stack.c:500 ../src/workbench/gb-workbench.c:686
+#: ../src/views/gb-view-stack.c:521 ../src/workbench/gb-workbench.c:686
 #: ../src/workbench/gb-workbench.c:687
 msgid "Active View"
 msgstr "Vista activa"
@@ -2429,7 +2434,7 @@ msgstr "El documento para la vista de terminal VTE."
 msgid "The workbench window."
 msgstr "La ventana del banco de trabajo."
 
-#: ../src/app/gb-application-actions.c:90
+#: ../src/app/gb-application-actions.c:91
 #, c-format
 msgid ""
 "The support log file has been written to '%s'. Please provide this file as "
@@ -2438,37 +2443,37 @@ msgstr ""
 "El archivo de registro de soporte se ha escrito en «%s». Proporcione este "
 "archivo como adjunto en su informe de error o en la solicitud de soporte."
 
-#: ../src/app/gb-application-actions.c:156
+#: ../src/app/gb-application-actions.c:157
 msgid "An IDE for GNOME"
 msgstr "Un EID para GNOME"
 
-#: ../src/app/gb-application-actions.c:161
+#: ../src/app/gb-application-actions.c:162
 msgid "GNOME Builder"
 msgstr "GNOME Builder"
 
-#: ../src/app/gb-application-actions.c:163
+#: ../src/app/gb-application-actions.c:164
 msgid "translator-credits"
 msgstr ""
 "Ian Hernandez <ihernandezs@openmailbox.org>, 2015\n"
 "Daniel Mustieles <daniel.mustieles@gmail.com>, 2015"
 
-#: ../src/app/gb-application-actions.c:166
+#: ../src/app/gb-application-actions.c:167
 msgid "Learn more about GNOME Builder"
 msgstr "Aprenda más sobre GNOME Builder"
 
-#: ../src/app/gb-application-actions.c:169
+#: ../src/app/gb-application-actions.c:170
 msgid "Funded By"
 msgstr "Fundado por"
 
-#: ../src/app/gb-application.c:639
+#: ../src/app/gb-application.c:635
 msgid "Run Builder in standalone mode"
 msgstr "Ejecutar Builder en modo individual"
 
-#: ../src/app/gb-application.c:645
+#: ../src/app/gb-application.c:641
 msgid "Show the application's version"
 msgstr "Mostrar la versión de la aplicación"
 
-#: ../src/app/gb-application.c:651
+#: ../src/app/gb-application.c:647
 msgid "Increase verbosity. May be specified multiple times."
 msgstr "Aumentar el nivel de detalle. Se puede especificar varias veces."
 
@@ -2999,7 +3004,7 @@ msgstr "Si el documento se ha modificado."
 msgid "The view title."
 msgstr "El título de la vista"
 
-#: ../src/views/gb-view-stack.c:501
+#: ../src/views/gb-view-stack.c:522
 msgid "The active view."
 msgstr "La vista activa."
 
