@@ -15,6 +15,7 @@
   bind "<alt>period" { "goto-definition" () };
   bind "<ctrl>k" { "action" ("view-stack", "show-list", "") };
   bind "<ctrl>d" { "delete-from-cursor" (paragraphs, 1) };
+  bind "<ctrl>j" { "join-lines" () };
 
   bind "<ctrl>minus" { "decrease-font-size" () };
   bind "<ctrl>plus" { "increase-font-size" () };
