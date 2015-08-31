@@ -20,6 +20,8 @@
 # include "config.h"
 #endif
 
+#include "egg-animation.h"
+
 #include <ide.h>
 #include <glib.h>
 #include <glib/gi18n.h>
