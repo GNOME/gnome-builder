@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2015-08-31 07:52+0000\n"
-"PO-Revision-Date: 2015-08-31 09:47+0100\n"
+"POT-Creation-Date: 2015-08-31 10:07+0000\n"
+"PO-Revision-Date: 2015-08-31 11:41+0100\n"
 "Last-Translator: Pedro Albuquerque <palbuquerque73@gmail.com>\n"
 "Language-Team: Português <palbuquerque73@gmail.com>\n"
 "Language: pt\n"
@@ -162,7 +162,6 @@ msgid "Generate Support Log"
 msgstr "Gerar diário de assistência"
 
 #: ../data/gtk/menus.ui.h:5
-#| msgid "Keyboard Movement"
 msgid "Keyboard _Shortcuts"
 msgstr "_Atalhos de teclado"
 
@@ -328,10 +327,9 @@ msgid "_Enable automatic indentation"
 msgstr "_Ativar indentação automática"
 
 #: ../data/ui/gb-editor-settings-widget.ui.h:9
-#: ../libide/ide-source-snippet-completion-provider.c:174
-#: ../libide/ide-source-snippet-completion-provider.c:255
-msgid "Snippets"
-msgstr "Snippets"
+#| msgid "Snippets Manager"
+msgid "Snippets (read-only)"
+msgstr "Snippets (só de leitura)"
 
 #: ../data/ui/gb-editor-tweak-widget.ui.h:1
 msgid "Search highlight mode…"
@@ -459,7 +457,7 @@ msgstr "Versão GNOME"
 #: ../data/ui/gb-new-project-dialog.ui.h:9 ../libide/ide-diagnostician.c:270
 #: ../libide/ide-diagnostician.c:271 ../libide/ide-file.c:486
 #: ../libide/ide-source-snippet.c:1007
-#: ../src/editor/gb-editor-settings-widget.c:312
+#: ../src/editor/gb-editor-settings-widget.c:327
 msgid "Language"
 msgstr "Linguagem"
 
@@ -1653,6 +1651,11 @@ msgstr "Vista origem"
 msgid "The source view to insert snippet into."
 msgstr "A vista origem onde inserir o snippet."
 
+#: ../libide/ide-source-snippet-completion-provider.c:174
+#: ../libide/ide-source-snippet-completion-provider.c:255
+msgid "Snippets"
+msgstr "Snippets"
+
 #: ../libide/ide-source-snippet-completion-provider.c:175
 msgid "The snippets to complete with this provider."
 msgstr "Os snippets a completar com este fornecedor."
@@ -2071,20 +2074,20 @@ msgstr "Makefile"
 msgid "The root makefile to be cached."
 msgstr "O makefile raiz a pôr em memória."
 
-#: ../plugins/clang/ide-clang-completion-item.c:413
+#: ../plugins/clang/ide-clang-completion-item.c:392
 #: ../plugins/clang/ide-clang-translation-unit.c:587
 msgid "Index"
 msgstr "Índice"
 
-#: ../plugins/clang/ide-clang-completion-item.c:414
+#: ../plugins/clang/ide-clang-completion-item.c:393
 msgid "The index in the result set."
 msgstr "O índice no grupo de resultados."
 
-#: ../plugins/clang/ide-clang-completion-item.c:422
+#: ../plugins/clang/ide-clang-completion-item.c:401
 msgid "Results"
 msgstr "Resultados"
 
-#: ../plugins/clang/ide-clang-completion-item.c:423
+#: ../plugins/clang/ide-clang-completion-item.c:402
 msgid "The Clang result set."
 msgstr "O grupo de resultados Clang."
 
@@ -2554,7 +2557,12 @@ msgstr "Mostrar mapa"
 msgid "If the overview map should be shown."
 msgstr "Se o mapa geral deve ser mostrado."
 
-#: ../src/editor/gb-editor-settings-widget.c:313
+#: ../src/editor/gb-editor-settings-widget.c:189
+#, c-format
+msgid "%s (read-only)"
+msgstr "%s (só de leitura)"
+
+#: ../src/editor/gb-editor-settings-widget.c:328
 msgid "The language to change the settings for."
 msgstr "A linguagem para a qual alterar as definições."
 
