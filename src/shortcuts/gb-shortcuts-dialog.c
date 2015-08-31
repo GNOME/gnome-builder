@@ -167,6 +167,8 @@ gb_shortcuts_dialog_init (GbShortcutsDialog *self)
   GtkArrow *arrow;
   GtkSearchEntry *entry;
 
+  gtk_window_set_resizable (GTK_WINDOW (self), FALSE);
+
   priv->header_bar = g_object_new (GTK_TYPE_HEADER_BAR,
                                    "show-close-button", TRUE,
                                    "visible", TRUE,
