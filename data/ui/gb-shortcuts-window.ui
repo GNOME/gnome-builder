@@ -26,6 +26,10 @@
                 <property name="title" translatable="yes">Terminal</property>
                 <property name="accelerator">&lt;ctrl&gt;&lt;shift&gt;t</property>
               </shortcut>
+              <shortcut>
+                <property name="title" translatable="yes">Keyboard Shortcuts</property>
+                <property name="accelerator">&lt;ctrl&gt;&lt;shift&gt;question</property>
+              </shortcut>
             </group>
             <group>
               <property name="title" translatable="yes">Panels</property>
