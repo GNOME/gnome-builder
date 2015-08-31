@@ -1,3 +1,4 @@
+contrib/egg/egg-animation.c
 contrib/egg/egg-state-machine-action.c
 contrib/gd/gd-tagged-entry.c
 contrib/rg/rg-column.c
@@ -26,6 +27,7 @@ data/style-schemes/builder.xml
 [type: gettext/glade]data/ui/gb-preferences-window.ui
 [type: gettext/glade]data/ui/gb-projects-dialog.ui
 [type: gettext/glade]data/ui/gb-rename-file-popover.ui
+[type: gettext/glade]data/ui/gb-shortcuts-window.ui
 [type: gettext/glade]data/ui/gb-view-stack.ui
 [type: gettext/glade]data/ui/gb-workbench.ui
 libide/doap/ide-doap.c
@@ -80,7 +82,6 @@ libide/ide-source-view-capture.c
 libide/ide-source-view-mode.c
 libide/ide-symbol-node.c
 libide/pygobject/ide-pygobject-script.c
-libide/theatrics/ide-animation.c
 libide/theatrics/ide-box-theatric.c
 plugins/autotools/ide-autotools-builder.c
 plugins/autotools/ide-autotools-build-system.c
@@ -155,6 +156,7 @@ src/scrolledwindow/gb-scrolled-window.c
 src/search/gb-search-display.c
 src/search/gb-search-display-group.c
 src/search/gb-search-display-row.c
+src/shortcuts/gb-shortcuts-dialog.c
 src/tree/gb-tree-builder.c
 src/tree/gb-tree.c
 src/tree/gb-tree-node.c
