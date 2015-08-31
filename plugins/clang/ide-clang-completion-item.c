@@ -36,9 +36,9 @@ struct _IdeClangCompletionItem
   gint              typed_text_index;
   guint             initialized : 1;
 
+  const gchar      *icon_name;
   gchar            *brief_comment;
   gchar            *markup;
-  GdkPixbuf        *icon;
   IdeRefPtr        *results;
   IdeSourceSnippet *snippet;
   gchar            *typed_text;
@@ -58,7 +58,6 @@ enum {
 };
 
 static GParamSpec *gParamSpecs [LAST_PROP];
-static GHashTable *gIcons;
 
 static CXCompletionResult *
 ide_clang_completion_item_get_result (IdeClangCompletionItem *self)
@@ -71,18 +70,11 @@ ide_clang_completion_item_get_result (IdeClangCompletionItem *self)
   return &results->Results [self->index];
 }
 
-static GdkPixbuf *
-get_icon (const gchar *key)
-{
-  return g_hash_table_lookup (gIcons, key);
-}
-
 static void
 ide_clang_completion_item_lazy_init (IdeClangCompletionItem *self)
 {
   CXCompletionResult *result;
   g_autoptr(IdeSourceSnippet) snippet = NULL;
-  GdkPixbuf *icon = NULL;
   GString *markup = NULL;
   unsigned num_chunks;
   unsigned i;
@@ -115,17 +107,17 @@ ide_clang_completion_item_lazy_init (IdeClangCompletionItem *self)
     case CXCursor_MemberRefExpr:
     case CXCursor_ObjCClassMethodDecl:
     case CXCursor_ObjCInstanceMethodDecl:
-      icon = get_icon ("lang-method-symbolic");
+      self->icon_name = "lang-method-symbolic";
       break;
 
     case CXCursor_ConversionFunction:
     case CXCursor_FunctionDecl:
     case CXCursor_FunctionTemplate:
-      icon = get_icon ("lang-function-symbolic");
+      self->icon_name = "lang-function-symbolic";
       break;
 
     case CXCursor_FieldDecl:
-      icon = get_icon ("struct-field-symbolic");
+      self->icon_name = "struct-field-symbolic";
       break;
 
     case CXCursor_VarDecl:
@@ -141,7 +133,7 @@ ide_clang_completion_item_lazy_init (IdeClangCompletionItem *self)
       break;
 
     case CXCursor_StructDecl:
-      icon = get_icon ("lang-struct-symbolic");
+      self->icon_name = "lang-struct-symbolic";
       break;
 
     case CXCursor_UnionDecl:
@@ -160,15 +152,15 @@ ide_clang_completion_item_lazy_init (IdeClangCompletionItem *self)
     case CXCursor_ObjCProtocolRef:
     case CXCursor_TemplateTypeParameter:
     case CXCursor_TemplateTemplateParameter:
-      icon = get_icon ("lang-class-symbolic");
+      self->icon_name  = "lang-class-symbolic";
       break;
 
     case CXCursor_EnumConstantDecl:
-      icon = get_icon ("lang-enum-value-symbolic");
+      self->icon_name = "lang-enum-value-symbolic";
       break;
 
     case CXCursor_EnumDecl:
-      icon = get_icon ("lang-enum-symbolic");
+      self->icon_name = "lang-enum-symbolic";
       break;
 
     case CXCursor_NotImplemented:
@@ -293,7 +285,6 @@ ide_clang_completion_item_lazy_init (IdeClangCompletionItem *self)
 
   self->snippet = g_object_ref (snippet);
   self->markup = g_string_free (markup, FALSE);
-  self->icon = icon ? g_object_ref (icon) : NULL;
 }
 
 static gchar *
@@ -308,8 +299,8 @@ ide_clang_completion_item_get_markup (GtkSourceCompletionProposal *proposal)
   return g_strdup (self->markup);
 }
 
-static GdkPixbuf *
-ide_clang_completion_item_get_icon (GtkSourceCompletionProposal *proposal)
+static const gchar *
+ide_clang_completion_item_get_icon_name (GtkSourceCompletionProposal *proposal)
 {
   IdeClangCompletionItem *self = (IdeClangCompletionItem *)proposal;
 
@@ -317,7 +308,7 @@ ide_clang_completion_item_get_icon (GtkSourceCompletionProposal *proposal)
 
   ide_clang_completion_item_lazy_init (self);
 
-  return self->icon ? g_object_ref (self->icon) : NULL;
+  return self->icon_name;
 }
 
 static void
@@ -325,7 +316,6 @@ ide_clang_completion_item_finalize (GObject *object)
 {
   IdeClangCompletionItem *self = (IdeClangCompletionItem *)object;
 
-  g_clear_object (&self->icon);
   g_clear_object (&self->snippet);
   g_clear_pointer (&self->brief_comment, g_free);
   g_clear_pointer (&self->typed_text, g_free);
@@ -384,7 +374,7 @@ ide_clang_completion_item_set_property (GObject      *object,
 static void
 completion_proposal_iface_init (GtkSourceCompletionProposalIface *iface)
 {
-  iface->get_icon = ide_clang_completion_item_get_icon;
+  iface->get_icon_name = ide_clang_completion_item_get_icon_name;
   iface->get_markup = ide_clang_completion_item_get_markup;
 }
 
@@ -392,17 +382,6 @@ static void
 ide_clang_completion_item_class_init (IdeClangCompletionItemClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  const gchar *icon_names[] = {
-    "lang-class-symbolic",
-    "lang-enum-symbolic",
-    "lang-enum-value-symbolic",
-    "lang-function-symbolic",
-    "lang-method-symbolic",
-    "lang-struct-symbolic",
-    "struct-field-symbolic",
-    NULL
-  };
-  gint i;
 
   object_class->finalize = ide_clang_completion_item_finalize;
   object_class->get_property = ide_clang_completion_item_get_property;
@@ -425,23 +404,6 @@ ide_clang_completion_item_class_init (IdeClangCompletionItemClass *klass)
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
-
-  gIcons = g_hash_table_new (g_str_hash, g_str_equal);
-
-  for (i = 0; icon_names [i]; i++)
-    {
-      g_autofree gchar *path = NULL;
-      g_autoptr(GError) error = NULL;
-      GdkPixbuf *icon;
-
-      path = g_strdup_printf ("/org/gnome/libide/icons/autocomplete/%s.svg", icon_names [i]);
-      icon = gdk_pixbuf_new_from_resource_at_scale (path, 16, 16, TRUE, &error);
-      if (error)
-        g_warning ("%s", error->message);
-      else
-        g_hash_table_insert (gIcons, (gchar *)g_intern_string (icon_names [i]), icon);
-    }
-
 }
 
 static void
