@@ -11,8 +11,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2015-08-23 10:06+0000\n"
-"PO-Revision-Date: 2015-08-25 \n"
+"POT-Creation-Date: 2015-08-25 09:30+0000\n"
+"PO-Revision-Date: 2015-08-31 \n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Spanish <gnome-es-list@gnome.org>\n"
 "Language: \n"
@@ -1252,11 +1252,11 @@ msgstr "No se pudo encontrar el dispositivo «%s»."
 
 #: ../libide/ide-device-manager.c:395 ../libide/ide-file-settings.c:297
 msgid "Settled"
-msgstr ""
+msgstr "Asentado"
 
 #: ../libide/ide-device-manager.c:396
 msgid "If the device providers have settled."
-msgstr ""
+msgstr "Si los proveedores del dispositivo se han asentado."
 
 #: ../libide/ide-extension-adapter.c:396 ../libide/ide-extension-adapter.c:397
 #: ../libide/ide-extension-set-adapter.c:276
@@ -1343,7 +1343,7 @@ msgstr "El IdleFile al que la configuración representa."
 
 #: ../libide/ide-file-settings.c:298
 msgid "If the file settings implementations have settled."
-msgstr ""
+msgstr "Si la implementación de la configuración del archivo se ha asentado."
 
 #: ../libide/ide-highlight-engine.c:852
 msgid "The buffer to highlight."
@@ -1366,7 +1366,6 @@ msgid "No implementations of extension point."
 msgstr "No hay implementaciones para el punto de extensión."
 
 #: ../libide/ide-object.c:374
-#| msgid "Failed to create build directory."
 msgid "Failed to locate build system plugin."
 msgstr "Falló al buscar el complemento del sistema de construcción."
 
@@ -1604,14 +1603,13 @@ msgstr "La descripción para el fragmento."
 #: ../libide/ide-source-snippet.c:1021
 #: ../libide/ide-source-snippet-chunk.c:328
 msgid "Tab Stop"
-msgstr ""
+msgstr "Tabulación"
 
 #: ../libide/ide-source-snippet.c:1022
 msgid "The current tab stop."
-msgstr ""
+msgstr "La tabulación actual."
 
 #: ../libide/ide-source-snippet.c:1030
-#| msgid "Snippet"
 msgid "Snippet Text"
 msgstr "Fragmento de texto"
 
@@ -1633,7 +1631,7 @@ msgstr "La especificación que expandir usando el contexto."
 
 #: ../libide/ide-source-snippet-chunk.c:329
 msgid "The tab stop for the chunk."
-msgstr ""
+msgstr "La tabulación del trozo."
 
 #: ../libide/ide-source-snippet-chunk.c:337 ../src/tree/gb-tree-node.c:654
 msgid "Text"
@@ -2009,7 +2007,6 @@ msgstr "El nombre del archivo tar del proyecto."
 
 #: ../plugins/autotools/ide-autotools-build-system.c:684
 #: ../plugins/fallback/ide-directory-build-system.c:117
-#| msgid "The name of the project."
 msgid "The path of the project file."
 msgstr "La ruta del archivo del proyecto."
 
@@ -2710,12 +2707,12 @@ msgstr "Asociaciones de teclas predeterminadas del constructor"
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-keybindings.c:69
 msgid "emacs keybindings modal"
-msgstr ""
+msgstr "emacs asociación teclas modal"
 
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-keybindings.c:74
 msgid "vim keybindings modal"
-msgstr ""
+msgstr "vim asociación teclas modal"
 
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-keybindings.c:80
@@ -3096,128 +3093,128 @@ msgstr "Si se debe mostrar el panel."
 msgid "The position of the pane."
 msgstr "La posición del panel."
 
-#: ../tools/ide-build.c:79 ../tools/ide-build.c:83
+#: ../tools/ide-build.c:81 ../tools/ide-build.c:85
 #, c-format
 msgid "===============\n"
 msgstr "===============\n"
 
-#: ../tools/ide-build.c:80
+#: ../tools/ide-build.c:82
 #, c-format
 msgid " Build Failure: %s\n"
 msgstr " Fallo al construir: %s\n"
 
-#: ../tools/ide-build.c:81
+#: ../tools/ide-build.c:83
 msgid " Build ran for: %"
 msgstr " Construcción ejecutada para: %"
 
-#: ../tools/ide-build.c:88 ../tools/ide-build.c:92
+#: ../tools/ide-build.c:90 ../tools/ide-build.c:94
 #, c-format
 msgid "=================\n"
 msgstr "=================\n"
 
-#: ../tools/ide-build.c:89
+#: ../tools/ide-build.c:91
 #, c-format
 msgid " Build Successful\n"
 msgstr "Construcción correcta\n"
 
-#: ../tools/ide-build.c:90
+#: ../tools/ide-build.c:92
 msgid "   Build ran for: %"
 msgstr "   Construcción ejecutada para: %"
 
-#: ../tools/ide-build.c:198 ../tools/ide-build.c:204
+#: ../tools/ide-build.c:200 ../tools/ide-build.c:206
 #, c-format
 msgid "========================\n"
 msgstr "========================\n"
 
-#: ../tools/ide-build.c:199
+#: ../tools/ide-build.c:201
 #, c-format
 msgid "           Project Name: %s\n"
 msgstr "           Nombre del proyecto: %s\n"
 
-#: ../tools/ide-build.c:200
+#: ../tools/ide-build.c:202
 #, c-format
 msgid " Version Control System: %s\n"
 msgstr " Sistema de control de versiones: %s\n"
 
-#: ../tools/ide-build.c:201
+#: ../tools/ide-build.c:203
 #, c-format
 msgid "           Build System: %s\n"
 msgstr "           Sistema de construcción: %s\n"
 
-#: ../tools/ide-build.c:202
+#: ../tools/ide-build.c:204
 #, c-format
 msgid "    Build Date and Time: %s\n"
 msgstr "    Fecha y hora de la construcción: %s\n"
 
-#: ../tools/ide-build.c:203
+#: ../tools/ide-build.c:205
 #, c-format
 msgid "    Building for Device: %s (%s)\n"
 msgstr "    Construyendo para el dispositivo: %s(%s)\n"
 
-#: ../tools/ide-build.c:286
+#: ../tools/ide-build.c:288
 #, c-format
 msgid "Timed out while waiting for devices to settle.\n"
 msgstr ""
 "Expiró el tiempo mientras se esperaba que se resolvieran los dispositivos.\n"
 
-#: ../tools/ide-build.c:344
+#: ../tools/ide-build.c:346
 #, c-format
 msgid "Waiting up to 60 seconds for devices to settle. Ctrl+C to exit.\n"
 msgstr ""
 "Esperar hasta 60 segundos para que se resuelvan los dispositivos. Pulse Ctrl"
 "+C para salir.\n"
 
-#: ../tools/ide-build.c:353
+#: ../tools/ide-build.c:355
 msgid "The target device we are building for."
 msgstr "El dispositivo objetico para el que se está construyendo."
 
-#: ../tools/ide-build.c:354
+#: ../tools/ide-build.c:356
 msgid "DEVICE_ID"
 msgstr "ID_DISPOSITIVO"
 
-#: ../tools/ide-build.c:357
+#: ../tools/ide-build.c:359
 msgid "Clean and rebuild the project."
 msgstr "Limpiar y volver a construir el proyecto."
 
-#: ../tools/ide-build.c:359
+#: ../tools/ide-build.c:361
 msgid "Increase parallelism in the build."
 msgstr "Aumentar el paralelismo en la construcción"
 
-#: ../tools/ide-build.c:360
+#: ../tools/ide-build.c:362
 msgid "N"
 msgstr "N"
 
-#: ../tools/ide-build.c:371
+#: ../tools/ide-build.c:373
 msgid "- Build the project."
 msgstr "- Construir el proyecto"
 
-#: ../tools/ide-list-build-flags.c:113
+#: ../tools/ide-list-build-flags.c:115
 msgid "- Get build flags for a project file"
 msgstr "- Obtener las opciones de construcción para un archivo de proyecto"
 
-#: ../tools/ide-list-devices.c:107
+#: ../tools/ide-list-devices.c:109
 msgid "- List devices found on the system."
 msgstr "- Listar los dispositivos encontrados en el sistema."
 
-#: ../tools/ide-list-diagnostics.c:185
+#: ../tools/ide-list-diagnostics.c:187
 #, c-format
 msgid "Failed to diagnose: %s\n"
 msgstr "Falló al diagnossticar: %s\n"
 
-#: ../tools/ide-list-diagnostics.c:248
+#: ../tools/ide-list-diagnostics.c:250
 #, c-format
 msgid "No such file in project: %s\n"
 msgstr "No existe el archivo en el proyecto: %s\n"
 
-#: ../tools/ide-list-diagnostics.c:282
+#: ../tools/ide-list-diagnostics.c:284
 msgid "- List diagnostics for a file."
 msgstr "- Listar diagnósticos para un archivo."
 
-#: ../tools/ide-list-files.c:125 ../tools/ide-list-file-settings.c:205
+#: ../tools/ide-list-files.c:127 ../tools/ide-list-file-settings.c:207
 msgid "- List files found in project."
 msgstr "- Listar los archivos encontrados en el proyecto"
 
-#: ../tools/ide-list-file-settings.c:180
+#: ../tools/ide-list-file-settings.c:182
 #, c-format
 msgid "No files provided to load settings for.\n"
 msgstr ""
@@ -3227,12 +3224,12 @@ msgstr ""
 msgid "- discover projects"
 msgstr "- descubrir proyectos"
 
-#: ../tools/ide-search.c:66
+#: ../tools/ide-search.c:68
 #, c-format
 msgid "%s results\n"
 msgstr "%s resultados\n"
 
-#: ../tools/ide-search.c:118
+#: ../tools/ide-search.c:120
 msgid "PROJECT_FILE [SEARCH TERMS...]"
 msgstr "ARCHIVO_PROYECTO [TÉRMINOS BÚSQUEDA...]"
 
