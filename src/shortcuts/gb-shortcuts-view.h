@@ -1,4 +1,4 @@
-/* gb-shortcuts-window.h
+/* gb-shortcuts-view.h
  *
  * Copyright (C) 2015 Christian Hergert <christian@hergert.me>
  *
@@ -16,17 +16,20 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GB_SHORTCUTS_WINDOW_H
-#define GB_SHORTCUTS_WINDOW_H
+#ifndef GB_SHORTCUTS_VIEW_H
+#define GB_SHORTCUTS_VIEW_H
 
-#include "gb-shortcuts-dialog.h"
+#include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 
-#define GB_TYPE_SHORTCUTS_WINDOW (gb_shortcuts_window_get_type())
+#define GB_TYPE_SHORTCUTS_VIEW (gb_shortcuts_view_get_type())
 
-G_DECLARE_FINAL_TYPE (GbShortcutsWindow, gb_shortcuts_window, GB, SHORTCUTS_WINDOW, GbShortcutsDialog)
+G_DECLARE_FINAL_TYPE (GbShortcutsView, gb_shortcuts_view, GB, SHORTCUTS_VIEW, GtkBox)
+
+const gchar *gb_shortcuts_view_get_view_name (GbShortcutsView *self);
+const gchar *gb_shortcuts_view_get_title     (GbShortcutsView *self);
 
 G_END_DECLS
 
-#endif /* GB_SHORTCUTS_WINDOW_H */
+#endif /* GB_SHORTCUTS_VIEW_H */

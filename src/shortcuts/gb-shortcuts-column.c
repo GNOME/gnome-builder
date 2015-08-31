@@ -1,4 +1,4 @@
-/* gb-shortcuts-window.h
+/* gb-shortcuts-column.c
  *
  * Copyright (C) 2015 Christian Hergert <christian@hergert.me>
  *
@@ -16,17 +16,23 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GB_SHORTCUTS_WINDOW_H
-#define GB_SHORTCUTS_WINDOW_H
+#include "gb-shortcuts-column.h"
 
-#include "gb-shortcuts-dialog.h"
+struct _GbShortcutsColumn
+{
+  GtkBox parent_instance;
+};
 
-G_BEGIN_DECLS
+G_DEFINE_TYPE (GbShortcutsColumn, gb_shortcuts_column, GTK_TYPE_BOX)
 
-#define GB_TYPE_SHORTCUTS_WINDOW (gb_shortcuts_window_get_type())
+static void
+gb_shortcuts_column_class_init (GbShortcutsColumnClass *klass)
+{
+}
 
-G_DECLARE_FINAL_TYPE (GbShortcutsWindow, gb_shortcuts_window, GB, SHORTCUTS_WINDOW, GbShortcutsDialog)
-
-G_END_DECLS
-
-#endif /* GB_SHORTCUTS_WINDOW_H */
+static void
+gb_shortcuts_column_init (GbShortcutsColumn *self)
+{
+  gtk_orientable_set_orientation (GTK_ORIENTABLE (self), GTK_ORIENTATION_VERTICAL);
+  gtk_box_set_spacing (GTK_BOX (self), 22);
+}

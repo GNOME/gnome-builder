@@ -1,58 +1,60 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <!-- interface-requires gtk+ 3.16 -->
-  <template class="GbShortcutsWindow" parent="GtkWindow">
-    <property name="resizable">false</property>
-    <child type="titlebar">
-      <object class="GtkHeaderBar">
-        <property name="show-close-button">true</property>
+  <!-- interface-requires gtk+ 3.17 -->
+  <template class="GbShortcutsWindow" parent="GbShortcutsDialog">
+    <child>
+      <object class="GbShortcutsView">
         <property name="visible">true</property>
-        <child type="title">
-          <object class="GtkMenuButton" id="menu_button">
-            <property name="focus-on-click">false</property>
-            <property name="popover">popover</property>
-            <property name="visible">true</property>
-            <style>
-              <class name="flat"/>
-            </style>
-            <child>
-              <object class="GtkBox">
-                <property name="orientation">horizontal</property>
-                <property name="spacing">6</property>
-                <property name="visible">true</property>
-                <style>
-                  <class name="dim-label"/>
-                </style>
-                <child>
-                  <object class="GtkArrow">
-                    <property name="arrow-type">down</property>
-                    <property name="visible">true</property>
-                  </object>
-                  <packing>
-                    <property name="pack-type">end</property>
-                  </packing>
-                </child>
-                <child type="center">
-                  <!-- FIXME: hrmm, child="center" doesn't seem to be working -->
-                  <object class="GtkLabel" id="menu_label">
-                    <property name="visible">true</property>
-                  </object>
-                </child>
-              </object>
-            </child>
-          </object>
-        </child>
+        <property name="view-name">editor</property>
+        <property name="title" translatable="yes">Editor Shortcuts</property>
         <child>
-          <object class="GtkToggleButton">
-            <property name="active" bind-source="search_bar" bind-property="search-mode-enabled" bind-flags="bidirectional">false</property>
+          <object class="GbShortcutsPage">
             <property name="visible">true</property>
-            <style>
-              <class name="image-button"/>
-            </style>
             <child>
-              <object class="GtkImage">
-                <property name="icon-name">edit-find-symbolic</property>
+              <object class="GbShortcutsColumn">
                 <property name="visible">true</property>
+                <child>
+                  <object class="GbShortcutsGroup">
+                    <property name="title" translatable="yes">General</property>
+                    <property name="visible">true</property>
+                    <child>
+                      <object class="GbShortcutsShortcut">
+                        <property name="accelerator">&lt;ctrl&gt;period</property>
+                        <property name="title" translatable="yes">Global Search</property>
+                        <property name="visible">true</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GbShortcutsShortcut">
+                        <property name="accelerator">&lt;ctrl&gt;comma</property>
+                        <property name="title" translatable="yes">Preferences</property>
+                        <property name="visible">true</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GbShortcutsGroup">
+                    <property name="title" translatable="yes">Touchpad gestures</property>
+                    <property name="visible">true</property>
+                    <child>
+                      <object class="GbShortcutsGesture">
+                        <property name="icon-name">gesture-two-finger-swipe-right</property>
+                        <property name="title" translatable="yes">Switch to the next document</property>
+                        <property name="subtitle" translatable="yes">Two finger swipe right</property>
+                        <property name="visible">true</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GbShortcutsGesture">
+                        <property name="icon-name">gesture-two-finger-swipe-left</property>
+                        <property name="title" translatable="yes">Switch to the previous document</property>
+                        <property name="subtitle" translatable="yes">Two finger swipe left</property>
+                        <property name="visible">true</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
               </object>
             </child>
           </object>
@@ -60,56 +62,11 @@
       </object>
     </child>
     <child>
-      <object class="GtkBox">
-        <property name="orientation">vertical</property>
+      <object class="GbShortcutsView">
         <property name="visible">true</property>
-        <child>
-          <object class="EggSearchBar" id="search_bar">
-            <property name="visible">true</property>
-            <child internal-child="entry">
-              <object class="GtkSearchEntry" id="search_entry">
-                <property name="placeholder-text" translatable="yes">Search keyboard shortcuts</property>
-                <property name="width-chars">50</property>
-              </object>
-            </child>
-          </object>
-        </child>
-        <child>
-          <object class="GtkStack" id="stack">
-            <property name="vexpand">true</property>
-            <property name="visible">true</property>
-          </object>
-        </child>
-        <child>
-          <object class="GtkStackSwitcher" id="switcher">
-            <property name="visible">true</property>
-            <style>
-              <class name="round"/>
-            </style>
-          </object>
-        </child>
+        <property name="view-name">terminal</property>
+        <property name="title" translatable="yes">Terminal Shortcuts</property>
       </object>
     </child>
   </template>
-  <object class="GtkPopover" id="popover">
-    <child>
-      <object class="GbScrolledWindow">
-        <property name="max-content-height">300</property>
-        <property name="max-content-width">300</property>
-        <property name="min-content-width">150</property>
-        <property name="border-width">6</property>
-        <property name="shadow-type">in</property>
-        <property name="visible">true</property>
-        <child>
-          <object class="GtkListBox" id="list_box">
-            <property name="visible">true</property>
-            <property name="selection-mode">none</property>
-            <style>
-              <class name="shortcuts-list-box"/>
-            </style>
-          </object>
-        </child>
-      </object>
-    </child>
-  </object>
 </interface>

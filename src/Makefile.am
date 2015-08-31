@@ -97,6 +97,20 @@ libgnome_builder_la_SOURCES = \
 	project-tree/gb-rename-file-popover.h \
 	scrolledwindow/gb-scrolled-window.c \
 	scrolledwindow/gb-scrolled-window.h \
+	shortcuts/gb-shortcuts-column.c \
+	shortcuts/gb-shortcuts-column.h \
+	shortcuts/gb-shortcuts-dialog.c \
+	shortcuts/gb-shortcuts-dialog.h \
+	shortcuts/gb-shortcuts-gesture.c \
+	shortcuts/gb-shortcuts-gesture.h \
+	shortcuts/gb-shortcuts-group.c \
+	shortcuts/gb-shortcuts-group.h \
+	shortcuts/gb-shortcuts-page.c \
+	shortcuts/gb-shortcuts-page.h \
+	shortcuts/gb-shortcuts-shortcut.c \
+	shortcuts/gb-shortcuts-shortcut.h \
+	shortcuts/gb-shortcuts-view.c \
+	shortcuts/gb-shortcuts-view.h \
 	search/gb-search-box.c \
 	search/gb-search-box.h \
 	search/gb-search-display-group.c \
@@ -215,6 +229,7 @@ libgnome_builder_la_CFLAGS = \
 	-I$(srcdir)/resources \
 	-I$(srcdir)/scrolledwindow \
 	-I$(srcdir)/search \
+	-I$(srcdir)/shortcuts \
 	-I$(srcdir)/support \
 	-I$(srcdir)/tree \
 	-I$(srcdir)/util \
