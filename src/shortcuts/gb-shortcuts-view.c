@@ -184,6 +184,7 @@ gb_shortcuts_view_init (GbShortcutsView *self)
 
   self->stack = g_object_new (GTK_TYPE_STACK,
                               "homogeneous", TRUE,
+                              "transition-type", GTK_STACK_TRANSITION_TYPE_SLIDE_LEFT_RIGHT,
                               "vexpand", TRUE,
                               "visible", TRUE,
                               NULL);
@@ -192,9 +193,11 @@ gb_shortcuts_view_init (GbShortcutsView *self)
   self->switcher = g_object_new (GTK_TYPE_STACK_SWITCHER,
                                  "halign", GTK_ALIGN_CENTER,
                                  "stack", self->stack,
+                                 "spacing", 12,
                                  "visible", TRUE,
                                  NULL);
   gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (self->switcher)), "round");
+  gtk_style_context_remove_class (gtk_widget_get_style_context (GTK_WIDGET (self->switcher)), "linked");
   gtk_container_add (GTK_CONTAINER (self), GTK_WIDGET (self->switcher));
 }
 
