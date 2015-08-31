@@ -670,6 +670,14 @@ gb_shortcuts_dialog_custom_finished (GtkBuildable *buildable,
 }
 
 static void
+gb_shortcuts_dialog_real_close (GbShortcutsDialog *self)
+{
+  g_assert (GB_IS_SHORTCUTS_DIALOG (self));
+
+  gtk_window_close (GTK_WINDOW (self));
+}
+
+static void
 gb_shortcuts_dialog_constructed (GObject *object)
 {
   GbShortcutsDialog *self = (GbShortcutsDialog *)object;
@@ -771,6 +779,8 @@ gb_shortcuts_dialog_class_init (GbShortcutsDialogClass *klass)
   object_class->set_property = gb_shortcuts_dialog_set_property;
 
   container_class->add = gb_shortcuts_dialog_add;
+
+  klass->close = gb_shortcuts_dialog_real_close;
 
   gParamSpecs [PROP_VIEW_NAME] =
     g_param_spec_string ("view-name",
