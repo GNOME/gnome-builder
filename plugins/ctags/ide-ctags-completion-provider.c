@@ -173,105 +173,6 @@ ide_ctags_completion_provider_init (IdeCtagsCompletionProvider *self)
                            G_CONNECT_SWAPPED);
 }
 
-static GdkPixbuf *
-load_pixbuf (IdeCtagsCompletionProvider *self,
-             GtkSourceCompletionContext *context,
-             const gchar                *icon_name,
-             guint                       size)
-{
-  GtkSourceCompletion *completion = NULL;
-  GtkSourceCompletionInfo *window;
-  GtkStyleContext *style_context;
-  GtkIconTheme *icon_theme;
-  GtkIconInfo *icon_info;
-  GdkPixbuf *ret = NULL;
-  gboolean was_symbolic;
-
-  g_assert (IDE_IS_CTAGS_COMPLETION_PROVIDER (self));
-  g_assert (GTK_SOURCE_IS_COMPLETION_CONTEXT (context));
-
-  g_object_get (context, "completion", &completion, NULL);
-  window = gtk_source_completion_get_info_window (completion);
-  style_context = gtk_widget_get_style_context (GTK_WIDGET (window));
-  icon_theme = gtk_icon_theme_get_default ();
-  icon_info = gtk_icon_theme_lookup_icon (icon_theme, icon_name, size, 0);
-  if (icon_info != NULL)
-    ret = gtk_icon_info_load_symbolic_for_context (icon_info, style_context, &was_symbolic, NULL);
-  g_clear_object (&completion);
-  g_clear_object (&icon_info);
-  if (ret != NULL)
-    g_hash_table_insert (self->icons, g_strdup (icon_name), ret);
-
-  return ret;
-}
-
-static GdkPixbuf *
-get_pixbuf (IdeCtagsCompletionProvider *self,
-            GtkSourceCompletionContext *context,
-            const IdeCtagsIndexEntry   *entry)
-{
-  const gchar *icon_name = NULL;
-  GdkPixbuf *pixbuf;
-
-  switch (entry->kind)
-    {
-    case IDE_CTAGS_INDEX_ENTRY_CLASS_NAME:
-      icon_name = "lang-clang-symbolic";
-      break;
-
-    case IDE_CTAGS_INDEX_ENTRY_ENUMERATOR:
-      icon_name = "lang-enum-value-symbolic";
-      break;
-
-    case IDE_CTAGS_INDEX_ENTRY_ENUMERATION_NAME:
-      icon_name = "lang-enum-symbolic";
-      break;
-
-    case IDE_CTAGS_INDEX_ENTRY_PROTOTYPE:
-    case IDE_CTAGS_INDEX_ENTRY_FUNCTION:
-      icon_name = "lang-function-symbolic";
-      break;
-
-    case IDE_CTAGS_INDEX_ENTRY_FILE_NAME:
-      icon_name = "text-x-generic-symbolic";
-      break;
-
-    case IDE_CTAGS_INDEX_ENTRY_MEMBER:
-      icon_name = "lang-struct-field-symbolic";
-      break;
-
-    case IDE_CTAGS_INDEX_ENTRY_UNION:
-      icon_name = "lang-union-symbolic";
-      break;
-
-    case IDE_CTAGS_INDEX_ENTRY_TYPEDEF:
-      icon_name = "lang-typedef-symbolic";
-      break;
-
-    case IDE_CTAGS_INDEX_ENTRY_STRUCTURE:
-      icon_name = "lang-struct-symbolic";
-      break;
-
-    case IDE_CTAGS_INDEX_ENTRY_VARIABLE:
-      icon_name = "lang-variable-symbolic";
-      break;
-
-    case IDE_CTAGS_INDEX_ENTRY_DEFINE:
-      icon_name = "lang-define-symbolic";
-      break;
-
-    case IDE_CTAGS_INDEX_ENTRY_ANCHOR:
-    default:
-      return NULL;
-    }
-
-  pixbuf = g_hash_table_lookup (self->icons, icon_name);
-  if (!pixbuf)
-    pixbuf = load_pixbuf (self, context, icon_name, 16);
-
-  return pixbuf;
-}
-
 static gchar *
 ide_ctags_completion_provider_get_name (GtkSourceCompletionProvider *provider)
 {
@@ -460,16 +361,6 @@ failure:
   g_list_free_full (list, g_object_unref);
 
   IDE_EXIT;
-}
-
-GdkPixbuf *
-ide_ctags_completion_provider_get_proposal_icon (IdeCtagsCompletionProvider *self,
-                                                 GtkSourceCompletionContext *context,
-                                                 const IdeCtagsIndexEntry   *entry)
-{
-  g_return_val_if_fail (IDE_IS_CTAGS_COMPLETION_PROVIDER (self), NULL);
-
-  return get_pixbuf (self, context, entry);
 }
 
 static gint

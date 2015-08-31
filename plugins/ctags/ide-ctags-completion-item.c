@@ -124,17 +124,68 @@ get_text (GtkSourceCompletionProposal *proposal)
   return g_strdup (self->entry->name);
 }
 
-static GdkPixbuf *
-get_icon (GtkSourceCompletionProposal *proposal)
+static const gchar *
+get_icon_name (GtkSourceCompletionProposal *proposal)
 {
   IdeCtagsCompletionItem *self = (IdeCtagsCompletionItem *)proposal;
+  const gchar *icon_name = NULL;
 
-  if (self->context == NULL)
+  if (self->entry == NULL)
     return NULL;
 
-  return ide_ctags_completion_provider_get_proposal_icon (self->provider,
-                                                          self->context,
-                                                          self->entry);
+  switch (self->entry->kind)
+    {
+    case IDE_CTAGS_INDEX_ENTRY_CLASS_NAME:
+      icon_name = "lang-clang-symbolic";
+      break;
+
+    case IDE_CTAGS_INDEX_ENTRY_ENUMERATOR:
+      icon_name = "lang-enum-value-symbolic";
+      break;
+
+    case IDE_CTAGS_INDEX_ENTRY_ENUMERATION_NAME:
+      icon_name = "lang-enum-symbolic";
+      break;
+
+    case IDE_CTAGS_INDEX_ENTRY_PROTOTYPE:
+    case IDE_CTAGS_INDEX_ENTRY_FUNCTION:
+      icon_name = "lang-function-symbolic";
+      break;
+
+    case IDE_CTAGS_INDEX_ENTRY_FILE_NAME:
+      icon_name = "text-x-generic-symbolic";
+      break;
+
+    case IDE_CTAGS_INDEX_ENTRY_MEMBER:
+      icon_name = "lang-struct-field-symbolic";
+      break;
+
+    case IDE_CTAGS_INDEX_ENTRY_UNION:
+      icon_name = "lang-union-symbolic";
+      break;
+
+    case IDE_CTAGS_INDEX_ENTRY_TYPEDEF:
+      icon_name = "lang-typedef-symbolic";
+      break;
+
+    case IDE_CTAGS_INDEX_ENTRY_STRUCTURE:
+      icon_name = "lang-struct-symbolic";
+      break;
+
+    case IDE_CTAGS_INDEX_ENTRY_VARIABLE:
+      icon_name = "lang-variable-symbolic";
+      break;
+
+    case IDE_CTAGS_INDEX_ENTRY_DEFINE:
+      icon_name = "lang-define-symbolic";
+      break;
+
+    case IDE_CTAGS_INDEX_ENTRY_ANCHOR:
+    default:
+      return NULL;
+    }
+
+  return icon_name;
 }
 
 static void
@@ -142,7 +193,7 @@ proposal_iface_init (GtkSourceCompletionProposalIface *iface)
 {
   iface->get_label = get_label;
   iface->get_text = get_text;
-  iface->get_icon = get_icon;
+  iface->get_icon_name = get_icon_name;
 }
 
 void
