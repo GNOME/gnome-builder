@@ -98,18 +98,22 @@
                 <property name="accelerator">&lt;ctrl&gt;&lt;shift&gt;g</property>
                 <property name="title" translatable="yes">Find the previous match</property>
               </shortcut>
+              <!-- not implemented
               <shortcut>
                 <property name="accelerator">&lt;ctrl&gt;h</property>
                 <property name="title" translatable="yes">Find and replace</property>
               </shortcut>
+              -->
               <shortcut>
                 <property name="accelerator">&lt;ctrl&gt;&lt;shift&gt;k</property>
                 <property name="title" translatable="yes">Clear highlight</property>
               </shortcut>
+              <!-- not implemented
               <shortcut>
                 <property name="accelerator">&lt;ctrl&gt;l</property>
                 <property name="title" translatable="yes">Go to line</property>
               </shortcut>
+              -->
             </group>
           </column>
         </page>
