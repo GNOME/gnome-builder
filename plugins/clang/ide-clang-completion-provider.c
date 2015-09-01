@@ -18,8 +18,6 @@
 
 #define G_LOG_DOMAIN "ide-clang-completion"
 
-#include <devhelp/dh-assistant-view.h>
-#include <devhelp/dh-book-manager.h>
 #include <glib/gi18n.h>
 
 #include "ide-buffer.h"
@@ -63,20 +61,6 @@ G_DEFINE_TYPE_EXTENDED (IdeClangCompletionProvider,
                         0,
                         G_IMPLEMENT_INTERFACE (GTK_SOURCE_TYPE_COMPLETION_PROVIDER, completion_provider_iface_init)
                         G_IMPLEMENT_INTERFACE (IDE_TYPE_COMPLETION_PROVIDER, NULL))
-
-static DhBookManager *
-get_book_manager (void)
-{
-  static DhBookManager *instance;
-
-  if (instance == NULL)
-    {
-      instance = dh_book_manager_new ();
-      dh_book_manager_populate (instance);
-    }
-
-  return instance;
-}
 
 static void
 add_proposals_state_free (AddProposalsState *state)
@@ -481,45 +465,6 @@ ide_clang_completion_provider_get_interactive_delay (GtkSourceCompletionProvider
   return -1;
 }
 
-static void
-ide_clang_completion_provider_update_info (GtkSourceCompletionProvider *provider,
-                                           GtkSourceCompletionProposal *proposal,
-                                           GtkSourceCompletionInfo     *info)
-{
-  IdeClangCompletionProvider *self = (IdeClangCompletionProvider *)provider;
-  IdeClangCompletionItem *item = (IdeClangCompletionItem *)proposal;
-  const gchar *typed_text;
-
-  typed_text = ide_clang_completion_item_get_typed_text (item);
-  dh_assistant_view_search (DH_ASSISTANT_VIEW (self->assistant), typed_text);
-
-  if (info)
-    gtk_widget_show (GTK_WIDGET (info));
-}
-
-static GtkWidget *
-ide_clang_completion_provider_get_info_widget (GtkSourceCompletionProvider *provider,
-                                               GtkSourceCompletionProposal *proposal)
-{
-  IdeClangCompletionProvider *self = (IdeClangCompletionProvider *)provider;
-
-  if (self->assistant == NULL)
-    {
-      DhBookManager *book_manager;
-
-      book_manager = get_book_manager ();
-      self->assistant = dh_assistant_view_new ();
-      dh_assistant_view_set_book_manager (DH_ASSISTANT_VIEW (self->assistant), book_manager);
-    }
-
-  ide_clang_completion_provider_update_info (provider, proposal, NULL);
-  gtk_widget_show (self->assistant);
-
-  gtk_widget_set_size_request (self->assistant, 300, 200);
-
-  return self->assistant;
-}
-
 static gint
 ide_clang_completion_provider_get_priority (GtkSourceCompletionProvider *provider)
 {
@@ -534,7 +479,5 @@ completion_provider_iface_init (GtkSourceCompletionProviderIface *iface)
   iface->get_name = ide_clang_completion_provider_get_name;
   iface->get_start_iter = ide_clang_completion_provider_get_start_iter;
   iface->populate = ide_clang_completion_provider_populate;
-  iface->get_info_widget = ide_clang_completion_provider_get_info_widget;
-  iface->update_info = ide_clang_completion_provider_update_info;
   iface->get_priority = ide_clang_completion_provider_get_priority;
 }
