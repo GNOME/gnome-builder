@@ -1,3 +1,5 @@
+if ENABLE_TERMINAL_PLUGIN
+
 DISTCLEANFILES =
 BUILT_SOURCES =
 CLEANFILES =
@@ -55,6 +57,8 @@ glib_resources_h = gb-terminal-resources.h
 glib_resources_xml = gb-terminal.gresource.xml
 glib_resources_namespace = gb_terminal
 include $(top_srcdir)/build/autotools/Makefile.am.gresources
+
+endif
 
 
 -include $(top_srcdir)/git.mk

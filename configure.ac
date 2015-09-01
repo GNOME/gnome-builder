@@ -169,6 +169,9 @@ PKG_CHECK_MODULES(BUILDER,  [gtk+-3.0 >= gtk_required_version
 PKG_CHECK_MODULES(VTE,      [vte-2.91 >= vte_required_version],
                             [have_vte=yes],
                             [have_vte=no])
+PKG_CHECK_MODULES(TERMINAL, [vte-2.91 >= vte_required_version],
+                            [enable_terminal_plugin=yes],
+                            [enable_terminal_plugin=no])
 PKG_CHECK_MODULES(EGG,      [glib-2.0 >= glib_required_version
                              gtk+-3.0 >= gtk_required_version])
 PKG_CHECK_MODULES(GD,       [gtk+-3.0 >= gtk_required_version])
@@ -285,6 +288,8 @@ dnl Define automake conditionals based on what we found
 dnl ***********************************************************************
 AM_CONDITIONAL(ENABLE_PYTHON_SCRIPTING, test x$enable_python_scripting != xno)
 AM_CONDITIONAL(ENABLE_GJS_SCRIPTING, test x$enable_gjs_scripting != xno)
+
+AM_CONDITIONAL(ENABLE_TERMINAL_PLUGIN, test x$enable_terminal_plugin != xno)
 
 
 dnl ***********************************************************************
@@ -551,5 +556,6 @@ echo "  Python Jedi Autocompletion ........... : yes"
 echo "  Python Language Pack ................. : yes"
 echo "  Symbol Monitor ....................... : yes"
 echo "  Symbol Tree .......................... : yes"
+echo "  Terminal ............................. : ${enable_terminal_plugin}"
 echo "  XML Language Pack .................... : yes"
 echo ""
