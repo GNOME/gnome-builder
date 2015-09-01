@@ -53,7 +53,7 @@ G_LOCK_DEFINE (channels_lock);
 static inline gint
 ide_log_get_thread (void)
 {
-#if __linux__
+#ifdef __linux__
   return (gint) syscall (SYS_gettid);
 #else
   return GPOINTER_TO_INT (g_thread_self ());
@@ -139,7 +139,7 @@ ide_log_handler (const gchar    *log_domain,
                  const gchar    *message,
                  gpointer        user_data)
 {
-  struct timespec ts;
+  GTimeVal tv;
   struct tm tt;
   time_t t;
   const gchar *level;
@@ -175,13 +175,13 @@ ide_log_handler (const gchar    *log_domain,
         }
 
       level = log_level_str_func (log_level);
-      clock_gettime (CLOCK_REALTIME, &ts);
-      t = (time_t) ts.tv_sec;
+      g_get_current_time (&tv);
+      t = (time_t) tv.tv_sec;
       tt = *localtime (&t);
       strftime (ftime, sizeof (ftime), "%H:%M:%S", &tt);
       buffer = g_strdup_printf ("%s.%04ld  %30s[%d]: %s: %s\n",
                                 ftime,
-                                ts.tv_nsec / 100000,
+                                tv.tv_usec / 1000,
                                 log_domain,
                                 ide_log_get_thread (),
                                 level,
