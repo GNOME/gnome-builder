@@ -306,7 +306,7 @@ libide_1_0_la_includes += -I$(srcdir)/gjs
 libide_1_0_la_SOURCES += \
 	gjs/ide-gjs-script.cpp \
 	gjs/ide-gjs-script.h
-libide_1_0_la_CFLAGS += \
+libide_1_0_la_CXXFLAGS += \
 	$(GJS_CFLAGS) \
 	-DENABLE_GJS_SCRIPTING
 libide_1_0_la_LIBADD += $(GJS_LIBS)
