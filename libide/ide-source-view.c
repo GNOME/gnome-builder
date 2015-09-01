@@ -4589,6 +4589,15 @@ ide_source_view__fixit_activate (IdeSourceView *self,
 }
 
 static void
+ide_source_view_sort_selected_lines (IdeSourceView *source_view,
+                                     GtkMenuItem   *menu_item)
+{
+  g_assert (IDE_IS_SOURCE_VIEW (source_view));
+
+  ide_source_view_real_sort (source_view, FALSE, FALSE);
+}
+
+static void
 ide_source_view_real_populate_popup (GtkTextView *text_view,
                                      GtkWidget   *popup)
 {
@@ -4598,6 +4607,8 @@ ide_source_view_real_populate_popup (GtkTextView *text_view,
   GtkMenuItem *menu_item;
   GtkTextMark *insert;
   GtkTextIter iter;
+  GtkTextIter begin;
+  GtkTextIter end;
   IdeDiagnostic *diagnostic;
 
   g_assert (GTK_IS_TEXT_VIEW (text_view));
@@ -4611,6 +4622,8 @@ ide_source_view_real_populate_popup (GtkTextView *text_view,
   buffer = gtk_text_view_get_buffer (text_view);
   if (!IDE_IS_BUFFER (buffer))
     return;
+
+  gtk_text_buffer_get_selection_bounds (buffer, &begin, &end);
 
   /*
    * TODO: I'm pretty sure we don't want to use the insert mark, but the
@@ -4679,13 +4692,46 @@ ide_source_view_real_populate_popup (GtkTextView *text_view,
         }
     }
 
+  /*
+   * Sort/Join Lines.
+   */
+  sep = g_object_new (GTK_TYPE_SEPARATOR_MENU_ITEM,
+                      "visible", TRUE,
+                      NULL);
+  gtk_menu_shell_append (GTK_MENU_SHELL (popup), GTK_WIDGET (sep));
+
+  menu_item = g_object_new (GTK_TYPE_MENU_ITEM,
+                            "label", _("Join Lines"),
+                            "sensitive", !gtk_text_iter_equal (&begin, &end),
+                            "visible", TRUE,
+                            NULL);
+  g_signal_connect_swapped (menu_item,
+                            "activate",
+                            G_CALLBACK (ide_source_view_real_join_lines),
+                            self);
+  gtk_menu_shell_append (GTK_MENU_SHELL (popup), GTK_WIDGET (menu_item));
+
+  menu_item = g_object_new (GTK_TYPE_MENU_ITEM,
+                            "label", _("Sort Lines"),
+                            "sensitive", !gtk_text_iter_equal (&begin, &end),
+                            "visible", TRUE,
+                            NULL);
+  g_signal_connect_swapped (menu_item,
+                            "activate",
+                            G_CALLBACK (ide_source_view_sort_selected_lines),
+                            self);
+  gtk_menu_shell_append (GTK_MENU_SHELL (popup), GTK_WIDGET (menu_item));
+
+  /*
+   * Go to definition.
+   */
   sep = g_object_new (GTK_TYPE_SEPARATOR_MENU_ITEM,
                       "visible", TRUE,
                       NULL);
   gtk_menu_shell_prepend (GTK_MENU_SHELL (popup), GTK_WIDGET (sep));
 
   menu_item = g_object_new (GTK_TYPE_MENU_ITEM,
-                            "label", _("Goto Definition"),
+                            "label", _("Go to Definition"),
                             "visible", TRUE,
                             NULL);
   g_signal_connect_swapped (menu_item,
