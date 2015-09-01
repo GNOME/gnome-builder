@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <gdk/gdk.h>
 #include <glib/gstdio.h>
 #include <math.h>
 
@@ -120,6 +121,13 @@ ide_pango_font_description_to_css (const PangoFontDescription *font_desc)
         }
     }
 
+#ifndef GDK_WINDOWING_QUARTZ
+  /*
+   * We seem to get "Condensed" for fonts on the Quartz backend,
+   * which is rather annoying as it results in us always hitting
+   * fallback (stretch) paths. So let's cheat and just disable
+   * stretch support for now on Quartz.
+   */
   if ((mask & PANGO_FONT_MASK_STRETCH))
     {
       switch (pango_font_description_get_stretch (font_desc))
@@ -164,6 +172,7 @@ ide_pango_font_description_to_css (const PangoFontDescription *font_desc)
           break;
         }
     }
+#endif
 
   if ((mask & PANGO_FONT_MASK_SIZE))
     {
