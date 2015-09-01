@@ -32,6 +32,7 @@ nodist_libterminal_la_SOURCES = \
 
 libterminal_la_CFLAGS = \
 	$(BUILDER_CFLAGS) \
+	$(VTE_CFLAGS) \
 	-I$(top_srcdir)/libide \
 	-I$(top_srcdir)/src \
 	-I$(top_srcdir)/src/app \
@@ -45,6 +46,7 @@ libterminal_la_CFLAGS = \
 
 libterminal_la_LIBADD = \
 	$(BUILDER_LIBS) \
+	$(VTE_LIBS) \
 	$(NULL)
 
 libterminal_la_LDFLAGS = \
