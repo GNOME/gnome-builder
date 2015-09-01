@@ -247,6 +247,11 @@ libgnome_builder_la_CFLAGS = \
 	$(NULL)
 
 
+if HAVE_VTE
+libgnome_builder_la_CFLAGS += -DHAVE_VTE
+endif
+
+
 gnome_builder_SOURCES = main.c
 gnome_builder_CFLAGS = $(libgnome_builder_la_CFLAGS)
 gnome_builder_LDADD = \

@@ -166,6 +166,9 @@ PKG_CHECK_MODULES(BUILDER,  [gtk+-3.0 >= gtk_required_version
                              libgit2-glib-1.0 >= ggit_required_version
                              libpeas-1.0 >= peas_required_version
 			     vte-2.91 >= vte_required_version])
+PKG_CHECK_MODULES(VTE,      [vte-2.91 >= vte_required_version],
+                            [have_vte=yes],
+                            [have_vte=no])
 PKG_CHECK_MODULES(EGG,      [glib-2.0 >= glib_required_version
                              gtk+-3.0 >= gtk_required_version])
 PKG_CHECK_MODULES(GD,       [gtk+-3.0 >= gtk_required_version])
@@ -250,6 +253,14 @@ AC_CHECK_HEADER([clang-c/Index.h], [], [
     AC_MSG_ERROR([Failed to locage clang-c/Index.h. Please install clang-devel.])
 ])
 CPPFLAGS=${CPPFLAGS_SAVE}
+
+
+dnl ***********************************************************************
+dnl Additional VTE support in Builder core
+dnl ***********************************************************************
+# FIXME: If we make adding menu items accessable from plugins, then
+#        we don't need this hack.
+AM_CONDITIONAL(HAVE_VTE, test x$have_vte != xno)
 
 
 dnl ***********************************************************************

@@ -20,7 +20,10 @@
 
 #include <glib/gi18n.h>
 #include <gio/gdesktopappinfo.h>
-#include <vte/vte.h>
+
+#ifdef HAVE_VTE
+# include <vte/vte.h>
+#endif
 
 #include "gb-file-manager.h"
 #include "gb-new-file-popover.h"
@@ -283,7 +286,6 @@ gb_project_tree_actions_open_in_terminal (GSimpleAction *action,
   GFile *file;
   g_autofree gchar *workdir = NULL;
   g_autofree gchar *terminal_executable = NULL;
-  g_autofree gchar *shell = NULL;
   const gchar *argv[] = { NULL, NULL };
   g_auto(GStrv) env = NULL;
   GError *error = NULL;
@@ -319,12 +321,20 @@ gb_project_tree_actions_open_in_terminal (GSimpleAction *action,
   argv[0] = terminal_executable;
   g_return_if_fail (terminal_executable != NULL);
 
-  /*
-   * Overwrite SHELL to the users default shell.
-   * Failure to do so typically results in /bin/sh being used.
-   */
-  shell = vte_get_user_shell ();
-  g_setenv ("SHELL", shell, TRUE);
+#ifdef HAVE_VTE
+  {
+    /*
+     * Overwrite SHELL to the users default shell.
+     * Failure to do so typically results in /bin/sh being used.
+     */
+    gchar *shell;
+
+    shell = vte_get_user_shell ();
+    g_setenv ("SHELL", shell, TRUE);
+    g_free (shell);
+  }
+#endif
+
   env = g_get_environ ();
 
   /* Can't use GdkAppLaunchContext as
