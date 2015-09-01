@@ -28,13 +28,19 @@
 #include "ide-editorconfig-file-settings.h"
 #include "ide-file-settings.h"
 #include "ide-git-vcs.h"
-#include "ide-gjs-script.h"
 #include "ide-gsettings-file-settings.h"
 #include "ide-modelines-file-settings.h"
 #include "ide-internal.h"
 #include "ide-project-miner.h"
-#include "ide-pygobject-script.h"
 #include "ide-search-provider.h"
+
+#ifdef ENABLE_GJS_SCRIPTING
+# include "ide-gjs-script.h"
+#endif
+
+#ifdef ENABLE_PYTHON_SCRIPTING
+# include "ide-pygobject-script.h"
+#endif
 
 #include "modeline-parser.h"
 
@@ -96,15 +102,19 @@ ide_init_ctor (void)
                                   IDE_FILE_SETTINGS_EXTENSION_POINT".gsettings",
                                   -300);
 
+#ifdef ENABLE_GJS_SCRIPTING
   g_io_extension_point_implement (IDE_SCRIPT_EXTENSION_POINT,
                                   IDE_TYPE_GJS_SCRIPT,
                                   IDE_SCRIPT_EXTENSION_POINT".gjs",
                                   -100);
+#endif
 
+#ifdef ENABLE_PYTHON_SCRIPTING
   g_io_extension_point_implement (IDE_SCRIPT_EXTENSION_POINT,
                                   IDE_TYPE_PYGOBJECT_SCRIPT,
                                   IDE_SCRIPT_EXTENSION_POINT".py",
                                   -100);
+#endif
 
   g_io_extension_point_implement (IDE_VCS_EXTENSION_POINT,
                                   IDE_TYPE_GIT_VCS,

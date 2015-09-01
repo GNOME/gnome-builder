@@ -188,6 +188,13 @@ PKG_CHECK_MODULES(NAUTILUS, [glib-2.0 >= glib_required_version
                              gtk+-3.0 >= gtk_required_version])
 PKG_CHECK_MODULES(XML,      [gio-2.0 >= glib_required_version
                              libxml-2.0 >= libxml_required_version])
+PKG_CHECK_MODULES(PYGOBJECT,[pygobject-3.0 >= pygobject_required_version],
+                            [have_pygobject=yes],
+                            [have_pygobject=no])
+PKG_CHECK_MODULES(GJS,      [gjs-1.0 >= gjs_required_version
+                             gjs-internals-1.0 >= gjs_required_version],
+                            [enable_gjs_scripting=yes],
+                            [enable_gjs_scripting=no])
 
 
 dnl ***********************************************************************
@@ -248,13 +255,25 @@ CPPFLAGS=${CPPFLAGS_SAVE}
 dnl ***********************************************************************
 dnl Check for Required Python
 dnl ***********************************************************************
-AC_PATH_TOOL(PYTHON3_CONFIG, "python3-config")
-AS_IF([test -z "${PYTHON3_CONFIG}"],[
-  AC_MSG_ERROR([Failed to locate python3-config.])
+enable_python_scripting=no
+AS_IF([test "x$have_pygobject" = "xyes"],[
+	AC_PATH_TOOL(PYTHON3_CONFIG, "python3-config")
+	AS_IF([test -z "${PYTHON3_CONFIG}"],[
+		AC_MSG_RESULT([Failed to locate python3-config.])
+	],[
+		LIBIDE_CFLAGS="${LIBIDE_CFLAGS} `${PYTHON3_CONFIG} --includes`"
+		LIBIDE_LIBS="${LIBIDE_LIBS} `${PYTHON3_CONFIG} --libs`"
+		LIBIDE_LDFLAGS="${LIBIDE_LDFLAGS} `${PYTHON3_CONFIG} --ldflags`"
+		enable_python_scripting=yes
+	])
 ])
-LIBIDE_CFLAGS="${LIBIDE_CFLAGS} `${PYTHON3_CONFIG} --includes`"
-LIBIDE_LIBS="${LIBIDE_LIBS} `${PYTHON3_CONFIG} --libs`"
-LIBIDE_LDFLAGS="${LIBIDE_LDFLAGS} `${PYTHON3_CONFIG} --ldflags`"
+
+
+dnl ***********************************************************************
+dnl Define automake conditionals based on what we found
+dnl ***********************************************************************
+AM_CONDITIONAL(ENABLE_PYTHON_SCRIPTING, test x$enable_python_scripting != xno)
+AM_CONDITIONAL(ENABLE_GJS_SCRIPTING, test x$enable_gjs_scripting != xno)
 
 
 dnl ***********************************************************************
@@ -499,6 +518,11 @@ echo "  Enable Profiling (-pg)................ : ${enable_profiling}"
 echo "  Build Test Suite ..................... : ${enable_tests}"
 echo "  Build API reference .................. : ${enable_gtk_doc}"
 echo "  Use cross-referencing in API docs .... : ${enable_doc_cross_references}"
+echo ""
+echo " Scripting"
+echo ""
+echo "  Python ............................... : ${enable_python_scripting}"
+echo "  GJS .................................. : ${enable_gjs_scripting}"
 echo ""
 echo " Plugins"
 echo ""

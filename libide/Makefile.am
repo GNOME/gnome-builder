@@ -185,8 +185,6 @@ libide_1_0_la_SOURCES = \
 	gconstructor.h \
 	git/ide-git-buffer-change-monitor.c \
 	git/ide-git-buffer-change-monitor.h \
-	gjs/ide-gjs-script.cpp \
-	gjs/ide-gjs-script.h \
 	gsettings/ide-gsettings-file-settings.c \
 	gsettings/ide-gsettings-file-settings.h \
 	gsettings/ide-language-defaults.c \
@@ -226,8 +224,6 @@ libide_1_0_la_SOURCES = \
 	modelines/ide-modelines-file-settings.h \
 	modelines/modeline-parser.c \
 	modelines/modeline-parser.h \
-	pygobject/ide-pygobject-script.c \
-	pygobject/ide-pygobject-script.h \
 	theatrics/ide-box-theatric.c \
 	theatrics/ide-box-theatric.h \
 	util/ide-cairo.c \
@@ -255,11 +251,9 @@ libide_1_0_la_includes = \
 	-I$(srcdir)/doap \
 	-I$(srcdir)/editorconfig \
 	-I$(srcdir)/git \
-	-I$(srcdir)/gjs \
 	-I$(srcdir)/gsettings \
 	-I$(srcdir)/local \
 	-I$(srcdir)/modelines \
-	-I$(srcdir)/pygobject \
 	-I$(srcdir)/resources \
 	-I$(srcdir)/theatrics \
 	-I$(srcdir)/util \
@@ -306,6 +300,28 @@ libide_1_0_la_built_sources = \
 	resources/ide-resources.c \
 	resources/ide-resources.h \
 	$(NULL)
+
+if ENABLE_GJS_SCRIPTING
+libide_1_0_la_includes += -I$(srcdir)/gjs
+libide_1_0_la_SOURCES += \
+	gjs/ide-gjs-script.cpp \
+	gjs/ide-gjs-script.h
+libide_1_0_la_CFLAGS += \
+	$(GJS_CFLAGS) \
+	-DENABLE_GJS_SCRIPTING
+libide_1_0_la_LIBADD += $(GJS_LIBS)
+endif
+
+if ENABLE_PYTHON_SCRIPTING
+libide_1_0_la_includes += -I$(srcdir)/pygobject
+libide_1_0_la_SOURCES += \
+	pygobject/ide-pygobject-script.c \
+	pygobject/ide-pygobject-script.h
+libide_1_0_la_CFLAGS += \
+	$(PYGOBJECT_CFLAGS) \
+	-DENABLE_PYTHON_SCRIPTING
+libide_1_0_la_LIBADD += $(PYGOBJECT_LIBS)
+endif
 
 
 glib_enum_h = ide-enums.h
