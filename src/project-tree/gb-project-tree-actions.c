@@ -844,7 +844,6 @@ gb_project_tree_actions_init (GbProjectTree *self)
   g_autoptr(GSettings) settings = NULL;
   g_autoptr(GSettings) tree_settings = NULL;
   g_autoptr(GSimpleActionGroup) actions = NULL;
-  g_autoptr(GVariant) show_ignored_files = NULL;
   GAction *action;
 
   actions = g_simple_action_group_new ();
