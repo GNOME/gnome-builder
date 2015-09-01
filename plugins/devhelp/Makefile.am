@@ -1,3 +1,5 @@
+if ENABLE_DEVHELP_PLUGIN
+
 DISTCLEANFILES =
 BUILT_SOURCES =
 CLEANFILES =
@@ -52,5 +54,8 @@ glib_resources_h = gb-devhelp-resources.h
 glib_resources_xml = gb-devhelp.gresource.xml
 glib_resources_namespace = gb_devhelp
 include $(top_srcdir)/build/autotools/Makefile.am.gresources
+
+endif
+
 
 -include $(top_srcdir)/git.mk
