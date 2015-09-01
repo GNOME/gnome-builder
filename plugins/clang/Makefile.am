@@ -1,3 +1,5 @@
+if ENABLE_CLANG_PLUGIN
+
 EXTRA_DIST = $(plugin_DATA)
 
 plugindir = $(libdir)/gnome-builder/plugins
@@ -44,5 +46,7 @@ libclang_plugin_la_LDFLAGS = \
 	-avoid-version \
 	-module \
 	$(NULL)
+
+endif
 
 -include $(top_srcdir)/git.mk

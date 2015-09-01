@@ -243,22 +243,22 @@ LIBS="${libs_save}"
 dnl ***********************************************************************
 dnl Check for Clang, Required for C/C++ Diagnostics
 dnl ***********************************************************************
+enable_clang_plugin=no
 AC_CHECK_PROGS([LLVM_CONFIG], [llvm-config-3.5 llvm-config35 llvm-config], [])
-AS_IF([test "x$LLVM_CONFIG" = "x"],[
-	AC_MSG_ERROR([Failed to locate the llvm-config program. Please install llvm-devel.])
+AS_IF([test "x$LLVM_CONFIG" = "x"],[],[
+	CLANG_INCLUDEDIR=`$LLVM_CONFIG --includedir`
+	CLANG_CFLAGS="-I$CLANG_INCLUDEDIR"
+	CLANG_LDFLAGS=`$LLVM_CONFIG --ldflags`
+	AC_SUBST([CLANG_INCLUDEDIR])
+	AC_SUBST([CLANG_CFLAGS])
+	AC_SUBST([CLANG_LDFLAGS])
+	CPPFLAGS_SAVE=${CPPFLAGS}
+	CPPFLAGS=-I${CLANG_INCLUDEDIR}
+	AC_CHECK_HEADER([clang-c/Index.h], [enable_clang_plugin=yes], [
+	    AC_MSG_RESULT([Failed to locage clang-c/Index.h. Please install clang-devel.])
+	])
+	CPPFLAGS=${CPPFLAGS_SAVE}
 ])
-CLANG_INCLUDEDIR=`$LLVM_CONFIG --includedir`
-CLANG_CFLAGS="-I$CLANG_INCLUDEDIR"
-CLANG_LDFLAGS=`$LLVM_CONFIG --ldflags`
-AC_SUBST([CLANG_INCLUDEDIR])
-AC_SUBST([CLANG_CFLAGS])
-AC_SUBST([CLANG_LDFLAGS])
-CPPFLAGS_SAVE=${CPPFLAGS}
-CPPFLAGS=-I${CLANG_INCLUDEDIR}
-AC_CHECK_HEADER([clang-c/Index.h], [], [
-    AC_MSG_ERROR([Failed to locage clang-c/Index.h. Please install clang-devel.])
-])
-CPPFLAGS=${CPPFLAGS_SAVE}
 
 
 dnl ***********************************************************************
@@ -294,6 +294,7 @@ AM_CONDITIONAL(ENABLE_GJS_SCRIPTING, test x$enable_gjs_scripting != xno)
 
 AM_CONDITIONAL(ENABLE_TERMINAL_PLUGIN, test x$enable_terminal_plugin != xno)
 AM_CONDITIONAL(ENABLE_DEVHELP_PLUGIN, test x$enable_devhelp_plugin != xno)
+AM_CONDITIONAL(ENABLE_CLANG_PLUGIN, test x$enable_clang_plugin != xno)
 
 
 dnl ***********************************************************************
@@ -548,6 +549,7 @@ echo " Plugins"
 echo ""
 echo "  Autotools ............................ : yes"
 echo "  C Language Pack ...................... : yes"
+echo "  Clang ................................ : ${enable_clang_plugin}"
 echo "  Command Bar .......................... : yes"
 echo "  Ctags ................................ : yes"
 echo "  Devhelp .............................. : ${enable_devhelp_plugin}"
