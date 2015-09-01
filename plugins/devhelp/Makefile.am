@@ -28,6 +28,7 @@ libdevhelp_plugin_la_SOURCES = \
 
 libdevhelp_plugin_la_CFLAGS = \
 	$(BUILDER_CFLAGS) \
+	$(DEVHELP_CFLAGS) \
 	-I$(top_srcdir)/src \
 	-I$(top_srcdir)/src/documents \
 	-I$(top_srcdir)/src/search \
@@ -40,6 +41,7 @@ libdevhelp_plugin_la_CFLAGS = \
 
 libdevhelp_plugin_la_LIBADD = \
 	$(BUILDER_LIBS) \
+	$(DEVHELP_LIBS) \
 	$(top_builddir)/libide/libide-1.0.la \
 	$(NULL)
 
