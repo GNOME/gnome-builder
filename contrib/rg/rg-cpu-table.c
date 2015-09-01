@@ -16,13 +16,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if !defined(__linux__) && !defined(__FreeBSD__)
-# error "This file only supports Linux and FreeBSD."
-#endif
-
 #include <ctype.h>
 #include <stdio.h>
-#ifdef __FreeBSD__
+#if defined(__FreeBSD__)
 # include <errno.h>
 # include <sys/resource.h>
 # include <sys/sysctl.h>
