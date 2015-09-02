@@ -47,6 +47,7 @@ struct _GbViewStack
   GtkLabel           *modified_label;
   GtkPopover         *popover;
   GtkStack           *stack;
+  GMenuModel         *stack_menu;
   GtkLabel           *title_label;
   GtkListBox         *views_button;
   GtkListBox         *views_listbox;

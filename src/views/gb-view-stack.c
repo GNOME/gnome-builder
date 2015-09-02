@@ -553,6 +553,7 @@ gb_view_stack_class_init (GbViewStackClass *klass)
   GB_WIDGET_CLASS_BIND (klass, GbViewStack, modified_label);
   GB_WIDGET_CLASS_BIND (klass, GbViewStack, popover);
   GB_WIDGET_CLASS_BIND (klass, GbViewStack, stack);
+  GB_WIDGET_CLASS_BIND (klass, GbViewStack, stack_menu);
   GB_WIDGET_CLASS_BIND (klass, GbViewStack, title_label);
   GB_WIDGET_CLASS_BIND (klass, GbViewStack, views_button);
   GB_WIDGET_CLASS_BIND (klass, GbViewStack, views_listbox);
@@ -562,15 +563,9 @@ gb_view_stack_class_init (GbViewStackClass *klass)
 static void
 gb_view_stack_init (GbViewStack *self)
 {
-  GtkApplication *app;
-  GMenu *menu;
-
   gtk_widget_init_template (GTK_WIDGET (self));
 
-  app = GTK_APPLICATION (g_application_get_default ());
-  menu = gtk_application_get_menu_by_id (app, "gb-view-stack-menu");
-
-  gtk_popover_bind_model (self->popover, G_MENU_MODEL (menu), NULL);
+  gtk_popover_bind_model (self->popover, self->stack_menu, NULL);
 
   g_signal_connect_object (self->stack,
                            "notify::visible-child",
