@@ -48,6 +48,7 @@ struct _GbViewClass
                                          IdeSourceLocation  *location);
 };
 
+GMenu       *gb_view_get_menu              (GbView             *self);
 GbView      *gb_view_create_split          (GbView             *self);
 gboolean     gb_view_get_can_preview       (GbView             *self);
 gboolean     gb_view_get_can_split         (GbView             *self);

@@ -23,6 +23,7 @@
 typedef struct
 {
   GtkBox *controls;
+  GMenu  *menu;
 } GbViewPrivate;
 
 static void buildable_iface_init (GtkBuildableIface *iface);
@@ -253,6 +254,9 @@ gb_view_class_init (GbViewClass *klass)
 
   widget_class->destroy = gb_view_destroy;
 
+  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/ui/gb-view.ui");
+  gtk_widget_class_bind_template_child_private (widget_class, GbView, menu);
+
   gParamSpecs [PROP_CAN_SPLIT] =
     g_param_spec_boolean ("can-split",
                           "Can Split",
@@ -290,6 +294,8 @@ gb_view_init (GbView *self)
   GbViewPrivate *priv = gb_view_get_instance_private (self);
   GtkBox *controls;
 
+  gtk_widget_init_template (GTK_WIDGET (self));
+
   controls = g_object_new (GTK_TYPE_BOX,
                            "orientation", GTK_ORIENTATION_HORIZONTAL,
                            "visible", TRUE,
@@ -317,4 +323,14 @@ static void
 buildable_iface_init (GtkBuildableIface *iface)
 {
   iface->get_internal_child = gb_view_get_internal_child;
+}
+
+GMenu *
+gb_view_get_menu (GbView *self)
+{
+  GbViewPrivate *priv = gb_view_get_instance_private (self);
+
+  g_return_val_if_fail (GB_IS_VIEW (self), NULL);
+
+  return priv->menu;
 }
