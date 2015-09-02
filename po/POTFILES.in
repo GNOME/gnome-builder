@@ -23,6 +23,7 @@ data/style-schemes/builder.xml
 [type: gettext/glade]data/ui/gb-rename-file-popover.ui
 [type: gettext/glade]data/ui/gb-shortcuts-window.ui
 [type: gettext/glade]data/ui/gb-view-stack.ui
+[type: gettext/glade]data/ui/gb-view.ui
 [type: gettext/glade]data/ui/gb-workbench.ui
 libide/editorconfig/ide-editorconfig-file-settings.c
 libide/git/ide-git-buffer-change-monitor.c
