@@ -9,10 +9,10 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2015-09-01 08:26+0000\n"
-"PO-Revision-Date: 2015-09-02 00:55+0200\n"
-"Last-Translator: Gabor Kelemen <kelemeng at ubuntu dot com>\n"
-"Language-Team: Hungarian <gnome-hu-list@gnome.org>\n"
+"POT-Creation-Date: 2015-09-02 06:18+0000\n"
+"PO-Revision-Date: 2015-09-02 10:47+0200\n"
+"Last-Translator: Gabor Kelemen <kelemeng at gnome dot hu>\n"
+"Language-Team: Hungarian <openscope at gmail dot com>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -111,70 +111,127 @@ msgid "_Close All"
 msgstr "Összes _bezárása"
 
 #: ../data/gtk/menus.ui.h:15
+msgid "Split"
+msgstr "Szétvágás"
+
+#: ../data/gtk/menus.ui.h:16
+#| msgid "Split"
+msgid "Split Left"
+msgstr "Szétvágás balra"
+
+#: ../data/gtk/menus.ui.h:17
+#| msgid "Split"
+msgid "Split Right"
+msgstr "Szétvágás jobbra"
+
+#: ../data/gtk/menus.ui.h:18
+#| msgid "Split"
+msgid "Split Down"
+msgstr "Szétvágás lefelé"
+
+#: ../data/gtk/menus.ui.h:19
+msgid "Move"
+msgstr "Mozgatás"
+
+#: ../data/gtk/menus.ui.h:20
+#| msgid "Move"
+msgid "Move Left"
+msgstr "Mozgatás balra"
+
+#: ../data/gtk/menus.ui.h:21
+#| msgid "Code Insight"
+msgid "Move Right"
+msgstr "Mozgatás jobbra"
+
+#: ../data/gtk/menus.ui.h:22
+#| msgid "Preview"
+msgid "Pre_view"
+msgstr "_Előnézet"
+
+#: ../data/gtk/menus.ui.h:23
+#| msgid "Save"
+msgid "_Save"
+msgstr "_Mentés"
+
+#: ../data/gtk/menus.ui.h:24
+#| msgid "Save As"
+msgid "_Save As"
+msgstr "Me_ntés másként"
+
+#: ../data/gtk/menus.ui.h:25
+msgid "Print"
+msgstr "Nyomtatás"
+
+#: ../data/gtk/menus.ui.h:26
+#| msgid "Close"
+msgid "_Close"
+msgstr "_Bezárás"
+
+#: ../data/gtk/menus.ui.h:27
 msgid "Display Options"
 msgstr "Megjelenítési beállítások"
 
-#: ../data/gtk/menus.ui.h:16
+#: ../data/gtk/menus.ui.h:28
 msgid "Show Icons"
 msgstr "Ikonok megjelenítése"
 
-#: ../data/gtk/menus.ui.h:17
+#: ../data/gtk/menus.ui.h:29
 msgid "Show Ignored Files"
 msgstr "Figyelmen kívül hagyott fájlok megjelenítése"
 
-#: ../data/gtk/menus.ui.h:18
+#: ../data/gtk/menus.ui.h:30
 msgid "Sort Directories First"
 msgstr "Mappák előre sorolása"
 
-#: ../data/gtk/menus.ui.h:19
+#: ../data/gtk/menus.ui.h:31
 msgid "_Collapse All Nodes"
 msgstr "Összes elem össze_csukása"
 
-#: ../data/gtk/menus.ui.h:20
+#: ../data/gtk/menus.ui.h:32
 msgid "_Refresh"
 msgstr "_Frissítés"
 
-#: ../data/gtk/menus.ui.h:21 ../data/ui/gb-greeter-window.ui.h:3
+#: ../data/gtk/menus.ui.h:33 ../data/ui/gb-greeter-window.ui.h:3
 msgid "_New"
 msgstr "Ú_j"
 
-#: ../data/gtk/menus.ui.h:22
+#: ../data/gtk/menus.ui.h:34
 msgid "_Empty File"
 msgstr "Üres _fájl"
 
-#: ../data/gtk/menus.ui.h:23
+#: ../data/gtk/menus.ui.h:35
 msgid "_New Folder"
 msgstr "Új _mappa"
 
-#: ../data/gtk/menus.ui.h:24
+#: ../data/gtk/menus.ui.h:36
 msgid "Open _With"
 msgstr "Megnyitás _ezzel"
 
-#: ../data/gtk/menus.ui.h:25
+#: ../data/gtk/menus.ui.h:37
 msgid "Source Code Editor"
 msgstr "Forráskód-szerkesztő"
 
-#: ../data/gtk/menus.ui.h:26
+#: ../data/gtk/menus.ui.h:38
 msgid "_Open Containing Folder"
 msgstr "_Tartalmazó mappa megnyitása"
 
-#: ../data/gtk/menus.ui.h:27
+#: ../data/gtk/menus.ui.h:39
 msgid "_Open in Terminal"
 msgstr "Megnyitás _terminálban"
 
-#: ../data/gtk/menus.ui.h:28 ../data/ui/gb-rename-file-popover.ui.h:2
+#: ../data/gtk/menus.ui.h:40 ../data/ui/gb-rename-file-popover.ui.h:2
 msgid "_Rename"
 msgstr "Á_tnevezés"
 
-#: ../data/gtk/menus.ui.h:29
+#: ../data/gtk/menus.ui.h:41
 msgid "Mo_ve to Trash"
 msgstr "Át_helyezés a Kukába"
 
-#: ../data/gtk/menus.ui.h:30
+#: ../data/gtk/menus.ui.h:42
 msgid "_Build"
 msgstr "Öss_zeállítás"
 
-#: ../data/gtk/menus.ui.h:31
+#: ../data/gtk/menus.ui.h:43
 msgid "_Rebuild"
 msgstr "Új_ra-összeállítás"
 
@@ -869,37 +926,6 @@ msgstr "Összes kijelölésének megszüntetése"
 msgid "Terminal Shortcuts"
 msgstr "Terminál gyorsbillentyűi"
 
-#: ../data/ui/gb-view-stack.ui.h:1
-msgid "Split"
-msgstr "Szétvágás"
-
-#: ../data/ui/gb-view-stack.ui.h:2
-msgid "Move"
-msgstr "Mozgatás"
-
-#: ../data/ui/gb-view-stack.ui.h:3
-msgid "Preview"
-msgstr "Előnézet"
-
-#: ../data/ui/gb-view-stack.ui.h:4
-#: ../plugins/terminal/gb-terminal-view-actions.c:309
-#: ../src/editor/gb-editor-view-actions.c:311
-#: ../src/editor/gb-editor-view-actions.c:442
-msgid "Save"
-msgstr "Mentés"
-
-#: ../data/ui/gb-view-stack.ui.h:5
-msgid "Save As"
-msgstr "Mentés másként"
-
-#: ../data/ui/gb-view-stack.ui.h:6
-msgid "Print"
-msgstr "Nyomtatás"
-
-#: ../data/ui/gb-view-stack.ui.h:7
-msgid "Close"
-msgstr "Bezárás"
-
 #: ../data/ui/gb-workbench.ui.h:2
 msgid "Project"
 msgstr "Projekt"
@@ -1109,13 +1135,24 @@ msgstr "A(z) „%s” beszúrása"
 msgid "Replace \"%s\" with \"%s\""
 msgstr "A(z) „%s” cseréje ezzel: „%s”"
 
-#: ../libide/ide-source-view.c:4648
+#: ../libide/ide-source-view.c:4661
 msgid "Apply Fix-It"
 msgstr "Javítás érvényesítése"
 
-#: ../libide/ide-source-view.c:4688
-msgid "Goto Definition"
-msgstr "Ugrások megadása"
+#: ../libide/ide-source-view.c:4704
+#| msgid "Show Grid Lines"
+msgid "Join Lines"
+msgstr "Sorok egyesítése"
+
+#: ../libide/ide-source-view.c:4715
+#| msgid "Show Grid Lines"
+msgid "Sort Lines"
+msgstr "Sorok rendezése"
+
+#: ../libide/ide-source-view.c:4734
+#| msgid "Goto Definition"
+msgid "Go to Definition"
+msgstr "Ugrás definícióra"
 
 #: ../libide/pygobject/ide-pygobject-script.c:135
 msgid "Attempt to load a PyGObject script with no filename."
@@ -1332,6 +1369,12 @@ msgstr "Terminál tartalmának mentése más néven"
 #: ../src/workbench/gb-workbench-actions.c:169
 msgid "Cancel"
 msgstr "Mégse"
+
+#: ../plugins/terminal/gb-terminal-view-actions.c:309
+#: ../src/editor/gb-editor-view-actions.c:311
+#: ../src/editor/gb-editor-view-actions.c:442
+msgid "Save"
+msgstr "Mentés"
 
 #: ../src/app/gb-application-actions.c:91
 #, c-format
@@ -2435,9 +2478,6 @@ msgstr "PROJEKTFÁJL [KERESÉSI KIFEJEZÉSEK…]"
 
 #~ msgid "The search context for the view."
 #~ msgstr "A nézet keresési környezete."
-
-#~ msgid "Show Grid Lines"
-#~ msgstr "Rácsvonalak megjelenítése"
 
 #~ msgid "If the background grid should be shown."
 #~ msgstr "Megjelenjenek-e a rácsvonalak a háttérben."
