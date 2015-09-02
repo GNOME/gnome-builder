@@ -611,7 +611,7 @@ gb_tree_row_activated (GtkTreeView       *tree_view,
   g_return_if_fail (GB_IS_TREE (self));
   g_return_if_fail (path != NULL);
 
-  model = GTK_TREE_MODEL (priv->store);
+  model = gtk_tree_view_get_model (tree_view);
 
   if (gtk_tree_model_get_iter (model, &iter, path))
     {
