@@ -3,7 +3,8 @@
 # Copyright (C) 2015 THE GNOME Builder's COPYRIGHT HOLDER
 # This file is distributed under the same license as the GNOME Builder package.
 # Ian Hernandez <ihernandezs@openmailbox.org>, 2015.
-#
+# 
+# 
 # Daniel Mustieles <daniel.mustieles@gmail.com>, 2015., 2015.
 #
 msgid ""
@@ -11,10 +12,10 @@ msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2015-08-31 21:11+0000\n"
-"PO-Revision-Date: 2015-09-01 \n"
+"POT-Creation-Date: 2015-09-02 11:02+0000\n"
+"PO-Revision-Date: 2015-09-02 18:37+0200\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
-"Language-Team: Spanish <gnome-es-list@gnome.org>\n"
+"Language-Team: Español; Castellano <gnome-es-list@gnome.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -43,7 +44,6 @@ msgid "Failed to retrieve va_list value: %s"
 msgstr "Falló al obtener el valor de va_list: %s"
 
 #: ../contrib/egg/egg-search-bar.c:371
-#| msgid "Search Engine"
 msgid "Search"
 msgstr "Buscar"
 
@@ -239,7 +239,6 @@ msgid "_Enable automatic indentation"
 msgstr "_Activar sangría automática"
 
 #: ../data/ui/gb-editor-settings-widget.ui.h:9
-#| msgid "Snippets Manager"
 msgid "Snippets (read-only)"
 msgstr "Fragmentos (sólo lectura)"
 
@@ -654,7 +653,6 @@ msgid "Delete"
 msgstr "Eliminar"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:1
-#| msgid "Keyboard _Shortcuts"
 msgid "Editor Shortcuts"
 msgstr "Editor de atajos"
 
@@ -663,12 +661,10 @@ msgid "General"
 msgstr "General"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:3
-#| msgid "Rubberband Search"
 msgid "Global Search"
 msgstr "Búsqueda global"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:5
-#| msgid "Command Text"
 msgid "Command Bar"
 msgstr "Barra de comandos"
 
@@ -679,7 +675,6 @@ msgid "Terminal"
 msgstr "Terminal"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:7
-#| msgid "Keyboard _Shortcuts"
 msgid "Keyboard Shortcuts"
 msgstr "Atajos del teclado"
 
@@ -692,12 +687,10 @@ msgid "Toggle left panel"
 msgstr "Conmutar panel izquierdo"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:10
-#| msgid "The right workspace pane."
 msgid "Toggle right panel"
 msgstr "Conmutar panel derecho"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:11
-#| msgid "The bottom workspace pane."
 msgid "Toggle bottom panel"
 msgstr "Conmutar panel inferior"
 
@@ -706,7 +699,6 @@ msgid "Touchpad gestures"
 msgstr "Gestos del «touchpad»"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:13
-#| msgid "The URI to the Devhelp document."
 msgid "Switch to the next document"
 msgstr "cambiar al siguiente documento"
 
@@ -715,7 +707,6 @@ msgid "Two finger swipe right"
 msgstr "Deslizar a la derecha con dos dedos"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:15
-#| msgid "The URI to the Devhelp document."
 msgid "Switch to the previous document"
 msgstr "Cambiar al documento anterior"
 
@@ -729,22 +720,18 @@ msgid "Files"
 msgstr "Archivos"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:18
-#| msgid "_New Document"
 msgid "Create new document"
 msgstr "Crear un nuevo documento"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:19
-#| msgid "Open Document"
 msgid "Open a document"
 msgstr "Abrir un documento"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:20
-#| msgid "Save Document"
 msgid "Save the document"
 msgstr "Guardar el documento"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:21
-#| msgid "The title of the document."
 msgid "Close the document"
 msgstr "Cerrar el documento."
 
@@ -773,7 +760,6 @@ msgid "Find the previous match"
 msgstr "Buscar la coincidencia anterior"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:28
-#| msgid "Search highlight mode…"
 msgid "Clear highlight"
 msgstr "Limpiar resaltado"
 
@@ -810,7 +796,6 @@ msgid "Redo previous command"
 msgstr "Rehacer el comando anterior"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:37
-#| msgid "Editor"
 msgid "Editing"
 msgstr "Editando"
 
@@ -875,17 +860,14 @@ msgid "Move viewport to beginning of file"
 msgstr "Mover la ventana al principio del archivo"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:53
-#| msgid "Highlight matching brackets"
 msgid "Move to matching bracket"
 msgstr "Mover al corchete coincidente"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:54
-#| msgid "Selection"
 msgid "Selections"
 msgstr "Selecciones"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:55
-#| msgid "Selected"
 msgid "Select all"
 msgstr "Seleccionar todo"
 
@@ -894,40 +876,64 @@ msgid "Unselect all"
 msgstr "Deseleccionar todo"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:57
-#| msgid "Keyboard _Shortcuts"
 msgid "Terminal Shortcuts"
 msgstr "Atajos de la terminal"
 
-#: ../data/ui/gb-view-stack.ui.h:1
+#: ../data/ui/gb-view.ui.h:1
 msgid "Split"
 msgstr "Dividir"
 
-#: ../data/ui/gb-view-stack.ui.h:2
+#: ../data/ui/gb-view.ui.h:2
+#| msgid "Split"
+msgid "Split Left"
+msgstr "Dividir por la izquierda"
+
+#: ../data/ui/gb-view.ui.h:3
+#| msgid "Split"
+msgid "Split Right"
+msgstr "Dividir por la derecha"
+
+#: ../data/ui/gb-view.ui.h:4
+#| msgid "Split"
+msgid "Split Down"
+msgstr "Dividir por abajo"
+
+#: ../data/ui/gb-view.ui.h:5
 msgid "Move"
 msgstr "Mover"
 
-#: ../data/ui/gb-view-stack.ui.h:3
-msgid "Preview"
-msgstr "Vista previa"
+#: ../data/ui/gb-view.ui.h:6
+#| msgid "Move"
+msgid "Move Left"
+msgstr "Mover a la izquierda"
 
-#: ../data/ui/gb-view-stack.ui.h:4
-#: ../plugins/terminal/gb-terminal-view-actions.c:309
-#: ../src/editor/gb-editor-view-actions.c:311
-#: ../src/editor/gb-editor-view-actions.c:442
-msgid "Save"
-msgstr "Guardar"
+#: ../data/ui/gb-view.ui.h:7
+#| msgid "Code Insight"
+msgid "Move Right"
+msgstr "Mover a la derecha"
 
-#: ../data/ui/gb-view-stack.ui.h:5
-msgid "Save As"
-msgstr "Guardar como"
+#: ../data/ui/gb-view.ui.h:8
+#| msgid "Preview"
+msgid "Pre_view"
+msgstr "Vista pre_via"
 
-#: ../data/ui/gb-view-stack.ui.h:6
+#: ../data/ui/gb-view.ui.h:9
+msgid "_Save"
+msgstr "_Guardar"
+
+#: ../data/ui/gb-view.ui.h:10
+#| msgid "Save As"
+msgid "_Save As"
+msgstr "Guardar _como"
+
+#: ../data/ui/gb-view.ui.h:11
 msgid "Print"
 msgstr "Imprimir"
 
-#: ../data/ui/gb-view-stack.ui.h:7
-msgid "Close"
-msgstr "Cerrar"
+#: ../data/ui/gb-view.ui.h:12
+#| msgid "Close"
+msgid "_Close"
+msgstr "_Cerrar"
 
 #: ../data/ui/gb-workbench.ui.h:2
 msgid "Project"
@@ -1052,16 +1058,16 @@ msgstr "Falló al abrir el flujo de salida."
 msgid "%s() is not supported on %s build system."
 msgstr "%s() no está soportado en el sistema de construcción %s."
 
-#: ../libide/ide.c:65
+#: ../libide/ide.c:71
 #, c-format
 msgid "You must call %s() before using libide."
 msgstr "Debe llamar a %s() antes de usar libide"
 
-#: ../libide/ide.c:126
+#: ../libide/ide.c:136
 msgid "Builder requires libgit2-glib with threading support."
 msgstr "Builder necesita libgit2.glib con soporte para hilos."
 
-#: ../libide/ide.c:132
+#: ../libide/ide.c:142
 msgid "Builder requires libgit2-glib with SSH support."
 msgstr "Builder necesita libgit2.glib con soporte para SSH."
 
@@ -1141,12 +1147,23 @@ msgstr "Insertar «%s»"
 msgid "Replace \"%s\" with \"%s\""
 msgstr "Reemplazar «%s» con «%s»"
 
-#: ../libide/ide-source-view.c:4648
+#: ../libide/ide-source-view.c:4661
 msgid "Apply Fix-It"
 msgstr "Aplicar corrección"
 
-#: ../libide/ide-source-view.c:4688
-msgid "Goto Definition"
+#: ../libide/ide-source-view.c:4704
+#| msgid "Show Grid Lines"
+msgid "Join Lines"
+msgstr "Unir líneas"
+
+#: ../libide/ide-source-view.c:4715
+#| msgid "Show Grid Lines"
+msgid "Sort Lines"
+msgstr "Ordenar líneas"
+
+#: ../libide/ide-source-view.c:4734
+#| msgid "Goto Definition"
+msgid "Go to Definition"
 msgstr "Ir a la definición"
 
 #: ../libide/pygobject/ide-pygobject-script.c:135
@@ -1197,7 +1214,7 @@ msgstr "autogen.sh falló al crear configure (%s)"
 msgid "Invalid makefile provided, ignoring."
 msgstr "Se ha proporcionado un Makefile no válido, ignorando."
 
-#: ../plugins/clang/ide-clang-completion-provider.c:216
+#: ../plugins/clang/ide-clang-completion-provider.c:200
 msgid "Clang"
 msgstr "Clang"
 
@@ -1366,6 +1383,12 @@ msgstr "Guardar contenido de la terminal como"
 msgid "Cancel"
 msgstr "Cancelar"
 
+#: ../plugins/terminal/gb-terminal-view-actions.c:309
+#: ../src/editor/gb-editor-view-actions.c:311
+#: ../src/editor/gb-editor-view-actions.c:442
+msgid "Save"
+msgstr "Guardar"
+
 #: ../src/app/gb-application-actions.c:91
 #, c-format
 msgid ""
@@ -1397,15 +1420,15 @@ msgstr "Aprenda más sobre GNOME Builder"
 msgid "Funded By"
 msgstr "Fundado por"
 
-#: ../src/app/gb-application.c:635
+#: ../src/app/gb-application.c:642
 msgid "Run Builder in standalone mode"
 msgstr "Ejecutar Builder en modo individual"
 
-#: ../src/app/gb-application.c:641
+#: ../src/app/gb-application.c:648
 msgid "Show the application's version"
 msgstr "Mostrar la versión de la aplicación"
 
-#: ../src/app/gb-application.c:647
+#: ../src/app/gb-application.c:654
 msgid "Increase verbosity. May be specified multiple times."
 msgstr "Aumentar el nivel de detalle. Se puede especificar varias veces."
 
@@ -1614,12 +1637,10 @@ msgid "%s more"
 msgstr "%s más"
 
 #: ../src/shortcuts/gb-shortcuts-dialog.c:924
-#| msgid "Keyboard _Shortcuts"
 msgid "Search Shortcuts"
 msgstr "Atajos de la búsqueda"
 
 #: ../src/shortcuts/gb-shortcuts-dialog.c:951
-#| msgid "Results"
 msgid "Search Results"
 msgstr "Resultados de búsqueda"
 
@@ -2482,9 +2503,6 @@ msgstr "ARCHIVO_PROYECTO [TÉRMINOS BÚSQUEDA...]"
 #~ msgid "The search context for the view."
 #~ msgstr "El contexto de la búsqueda para la vista."
 
-#~ msgid "Show Grid Lines"
-#~ msgstr "Mostrar líneas de la rejilla"
-
 #~ msgid "If the background grid should be shown."
 #~ msgstr "Si se debe mostrar el fondo de la rejilla."
 
@@ -3154,9 +3172,6 @@ msgstr "ARCHIVO_PROYECTO [TÉRMINOS BÚSQUEDA...]"
 
 #~ msgid "Question"
 #~ msgstr "Pregunta"
-
-#~ msgid "_Save"
-#~ msgstr "_Guardar"
 
 #~ msgid ""
 #~ "If you don't save, changes from the last %ld second will be permanently "
