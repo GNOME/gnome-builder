@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2015-08-31 21:11+0000\n"
-"PO-Revision-Date: 2015-09-01 09:37+0100\n"
+"POT-Creation-Date: 2015-09-02 06:18+0000\n"
+"PO-Revision-Date: 2015-09-02 07:54+0100\n"
 "Last-Translator: Pedro Albuquerque <palbuquerque73@gmail.com>\n"
 "Language-Team: Português <palbuquerque73@gmail.com>\n"
 "Language: pt\n"
@@ -40,7 +40,6 @@ msgid "Failed to retrieve va_list value: %s"
 msgstr "Falha ao obter valor va_list: %s"
 
 #: ../contrib/egg/egg-search-bar.c:371
-#| msgid "Global Search"
 msgid "Search"
 msgstr "Procurar"
 
@@ -111,70 +110,127 @@ msgid "_Close All"
 msgstr "_Fechar tudo"
 
 #: ../data/gtk/menus.ui.h:15
+msgid "Split"
+msgstr "Dividir"
+
+#: ../data/gtk/menus.ui.h:16
+#| msgid "Split"
+msgid "Split Left"
+msgstr "Dividir à esquerda"
+
+#: ../data/gtk/menus.ui.h:17
+#| msgid "Split"
+msgid "Split Right"
+msgstr "Dividir à direita"
+
+#: ../data/gtk/menus.ui.h:18
+#| msgid "Split"
+msgid "Split Down"
+msgstr "Dividir abaixo"
+
+#: ../data/gtk/menus.ui.h:19
+msgid "Move"
+msgstr "Mover"
+
+#: ../data/gtk/menus.ui.h:20
+#| msgid "Move"
+msgid "Move Left"
+msgstr "Mover à esquerda"
+
+#: ../data/gtk/menus.ui.h:21
+#| msgid "Code Insight"
+msgid "Move Right"
+msgstr "Mover à direita"
+
+#: ../data/gtk/menus.ui.h:22
+#| msgid "Preview"
+msgid "Pre_view"
+msgstr "_Antever"
+
+#: ../data/gtk/menus.ui.h:23
+#| msgid "Save"
+msgid "_Save"
+msgstr "_Gravar"
+
+#: ../data/gtk/menus.ui.h:24
+#| msgid "Save As"
+msgid "_Save As"
+msgstr "Gravar _Como"
+
+#: ../data/gtk/menus.ui.h:25
+msgid "Print"
+msgstr "Imprimir"
+
+#: ../data/gtk/menus.ui.h:26
+#| msgid "Close"
+msgid "_Close"
+msgstr "_Fechar"
+
+#: ../data/gtk/menus.ui.h:27
 msgid "Display Options"
 msgstr "Mostrar opções"
 
-#: ../data/gtk/menus.ui.h:16
+#: ../data/gtk/menus.ui.h:28
 msgid "Show Icons"
 msgstr "Mostrar ícones"
 
-#: ../data/gtk/menus.ui.h:17
+#: ../data/gtk/menus.ui.h:29
 msgid "Show Ignored Files"
 msgstr "Mostrar ficheiros ignorados"
 
-#: ../data/gtk/menus.ui.h:18
+#: ../data/gtk/menus.ui.h:30
 msgid "Sort Directories First"
 msgstr "Ordenar pastas primeiro"
 
-#: ../data/gtk/menus.ui.h:19
+#: ../data/gtk/menus.ui.h:31
 msgid "_Collapse All Nodes"
 msgstr "_Colapsar todos os nós"
 
-#: ../data/gtk/menus.ui.h:20
+#: ../data/gtk/menus.ui.h:32
 msgid "_Refresh"
 msgstr "_Atualizar"
 
-#: ../data/gtk/menus.ui.h:21 ../data/ui/gb-greeter-window.ui.h:3
+#: ../data/gtk/menus.ui.h:33 ../data/ui/gb-greeter-window.ui.h:3
 msgid "_New"
 msgstr "_Novo"
 
-#: ../data/gtk/menus.ui.h:22
+#: ../data/gtk/menus.ui.h:34
 msgid "_Empty File"
 msgstr "_Ficheiro vazio"
 
-#: ../data/gtk/menus.ui.h:23
+#: ../data/gtk/menus.ui.h:35
 msgid "_New Folder"
 msgstr "_Nova pasta"
 
-#: ../data/gtk/menus.ui.h:24
+#: ../data/gtk/menus.ui.h:36
 msgid "Open _With"
 msgstr "Abrir _Com"
 
-#: ../data/gtk/menus.ui.h:25
+#: ../data/gtk/menus.ui.h:37
 msgid "Source Code Editor"
 msgstr "Editor de código fonte"
 
-#: ../data/gtk/menus.ui.h:26
+#: ../data/gtk/menus.ui.h:38
 msgid "_Open Containing Folder"
 msgstr "_Abrir pasta contentora"
 
-#: ../data/gtk/menus.ui.h:27
+#: ../data/gtk/menus.ui.h:39
 msgid "_Open in Terminal"
 msgstr "_Abrir no terminal"
 
-#: ../data/gtk/menus.ui.h:28 ../data/ui/gb-rename-file-popover.ui.h:2
+#: ../data/gtk/menus.ui.h:40 ../data/ui/gb-rename-file-popover.ui.h:2
 msgid "_Rename"
 msgstr "_Renomear"
 
-#: ../data/gtk/menus.ui.h:29
+#: ../data/gtk/menus.ui.h:41
 msgid "Mo_ve to Trash"
 msgstr "Mo_Ver para o lixo"
 
-#: ../data/gtk/menus.ui.h:30
+#: ../data/gtk/menus.ui.h:42
 msgid "_Build"
 msgstr "_Construir"
 
-#: ../data/gtk/menus.ui.h:31
+#: ../data/gtk/menus.ui.h:43
 msgid "_Rebuild"
 msgstr "_Reconstruir"
 
@@ -871,37 +927,6 @@ msgstr "Remover todas as seleções"
 msgid "Terminal Shortcuts"
 msgstr "_Atalhos de terminal"
 
-#: ../data/ui/gb-view-stack.ui.h:1
-msgid "Split"
-msgstr "Dividir"
-
-#: ../data/ui/gb-view-stack.ui.h:2
-msgid "Move"
-msgstr "Mover"
-
-#: ../data/ui/gb-view-stack.ui.h:3
-msgid "Preview"
-msgstr "Antever"
-
-#: ../data/ui/gb-view-stack.ui.h:4
-#: ../plugins/terminal/gb-terminal-view-actions.c:309
-#: ../src/editor/gb-editor-view-actions.c:311
-#: ../src/editor/gb-editor-view-actions.c:442
-msgid "Save"
-msgstr "Gravar"
-
-#: ../data/ui/gb-view-stack.ui.h:5
-msgid "Save As"
-msgstr "Gravar como"
-
-#: ../data/ui/gb-view-stack.ui.h:6
-msgid "Print"
-msgstr "Imprimir"
-
-#: ../data/ui/gb-view-stack.ui.h:7
-msgid "Close"
-msgstr "Fechar"
-
 #: ../data/ui/gb-workbench.ui.h:2
 msgid "Project"
 msgstr "Projeto"
@@ -1021,16 +1046,16 @@ msgstr "Falha ao abrir o fluxo stdout."
 msgid "%s() is not supported on %s build system."
 msgstr "%s()nãoé suportado no sistema de build %s."
 
-#: ../libide/ide.c:65
+#: ../libide/ide.c:71
 #, c-format
 msgid "You must call %s() before using libide."
 msgstr "Tem de chamar %s() antes de usar libide."
 
-#: ../libide/ide.c:126
+#: ../libide/ide.c:136
 msgid "Builder requires libgit2-glib with threading support."
 msgstr "O Construtor requer o libgit2-glib com suporte a linhas."
 
-#: ../libide/ide.c:132
+#: ../libide/ide.c:142
 msgid "Builder requires libgit2-glib with SSH support."
 msgstr "O Construtor requer libgit2-glib com suporte SSH."
 
@@ -1110,12 +1135,23 @@ msgstr "Inserir \"%s\""
 msgid "Replace \"%s\" with \"%s\""
 msgstr "Substituir \"%s\" por \"%s\""
 
-#: ../libide/ide-source-view.c:4648
+#: ../libide/ide-source-view.c:4661
 msgid "Apply Fix-It"
 msgstr "Aplicar Reparar"
 
-#: ../libide/ide-source-view.c:4688
-msgid "Goto Definition"
+#: ../libide/ide-source-view.c:4704
+#| msgid "Show Grid Lines"
+msgid "Join Lines"
+msgstr "Juntar linhas"
+
+#: ../libide/ide-source-view.c:4715
+#| msgid "Show Grid Lines"
+msgid "Sort Lines"
+msgstr "Ordenar linhas"
+
+#: ../libide/ide-source-view.c:4734
+#| msgid "Goto Definition"
+msgid "Go to Definition"
 msgstr "Ir para definição"
 
 #: ../libide/pygobject/ide-pygobject-script.c:135
@@ -1166,7 +1202,7 @@ msgstr "autogen.sh falhou ao criar o configure (%s)."
 msgid "Invalid makefile provided, ignoring."
 msgstr "makefile fornecido inválido, a ignorar."
 
-#: ../plugins/clang/ide-clang-completion-provider.c:216
+#: ../plugins/clang/ide-clang-completion-provider.c:200
 msgid "Clang"
 msgstr "Clang"
 
@@ -1333,6 +1369,12 @@ msgstr "Gravar conteúdo do terminal como"
 #: ../src/workbench/gb-workbench-actions.c:169
 msgid "Cancel"
 msgstr "Cancelar"
+
+#: ../plugins/terminal/gb-terminal-view-actions.c:309
+#: ../src/editor/gb-editor-view-actions.c:311
+#: ../src/editor/gb-editor-view-actions.c:442
+msgid "Save"
+msgstr "Gravar"
 
 #: ../src/app/gb-application-actions.c:91
 #, c-format
@@ -2464,9 +2506,6 @@ msgstr "FICHEIRO_PROJETO [TERMOS PROCURA...]"
 
 #~ msgid "The search context for the view."
 #~ msgstr "O contexto de procura para a vista."
-
-#~ msgid "Show Grid Lines"
-#~ msgstr "Mostrar linhas de grelha"
 
 #~ msgid "If the background grid should be shown."
 #~ msgstr "Se a grelha deve ou não ser mostrada."
