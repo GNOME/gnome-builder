@@ -136,7 +136,7 @@ get_icon_name (GtkSourceCompletionProposal *proposal)
   switch (self->entry->kind)
     {
     case IDE_CTAGS_INDEX_ENTRY_CLASS_NAME:
-      icon_name = "lang-clang-symbolic";
+      icon_name = "lang-class-symbolic";
       break;
 
     case IDE_CTAGS_INDEX_ENTRY_ENUMERATOR:
@@ -157,7 +157,7 @@ get_icon_name (GtkSourceCompletionProposal *proposal)
       break;
 
     case IDE_CTAGS_INDEX_ENTRY_MEMBER:
-      icon_name = "lang-struct-field-symbolic";
+      icon_name = "struct-field-symbolic";
       break;
 
     case IDE_CTAGS_INDEX_ENTRY_UNION:
@@ -182,7 +182,7 @@ get_icon_name (GtkSourceCompletionProposal *proposal)
 
     case IDE_CTAGS_INDEX_ENTRY_ANCHOR:
     default:
-      return NULL;
+      break;
     }
 
   return icon_name;
