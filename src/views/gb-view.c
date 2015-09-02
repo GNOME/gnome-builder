@@ -325,6 +325,11 @@ buildable_iface_init (GtkBuildableIface *iface)
   iface->get_internal_child = gb_view_get_internal_child;
 }
 
+/**
+ * gb_view_get_menu:
+ *
+ * Returns: (transfer none): A #GMenu that may be modified.
+ */
 GMenu *
 gb_view_get_menu (GbView *self)
 {

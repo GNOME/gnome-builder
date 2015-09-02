@@ -8,24 +8,34 @@ bin_PROGRAMS = gnome-builder
 pkglibdir = $(libdir)/gnome-builder
 pkglib_LTLIBRARIES = libgnome-builder.la
 
-libgnome_builder_la_SOURCES = \
-	$(gnome_builder_built_sources) \
-	app/gb-application-actions.c \
-	app/gb-application-actions.h \
-	app/gb-application-addin.c \
-	app/gb-application-addin.h \
-	app/gb-application-credits.h \
-	app/gb-application-private.h \
+libgnome_builder_public_sources = \
 	app/gb-application.c \
 	app/gb-application.h \
+	app/gb-application-addin.c \
+	app/gb-application-addin.h \
+	documents/gb-document.c \
+	documents/gb-document.h \
+	editor/gb-editor-view.c \
+	editor/gb-editor-view.h \
+	editor/gb-editor-view-addin.c \
+	editor/gb-editor-view-addin.h \
+	views/gb-view.c \
+	views/gb-view.h \
+	$(NULL)
+
+libgnome_builder_la_SOURCES = \
+	$(gnome_builder_built_sources) \
+	$(libgnome_builder_public_sources) \
+	app/gb-application-actions.c \
+	app/gb-application-actions.h \
+	app/gb-application-credits.h \
+	app/gb-application-private.h \
 	dialogs/gb-new-project-dialog.c \
 	dialogs/gb-new-project-dialog.h \
 	dialogs/gb-projects-dialog.c \
 	dialogs/gb-projects-dialog.h \
 	dialogs/gb-recent-project-row.c \
 	dialogs/gb-recent-project-row.h \
-	documents/gb-document.c \
-	documents/gb-document.h \
 	editor/gb-editor-document.c \
 	editor/gb-editor-document.h \
 	editor/gb-editor-frame-actions.c \
@@ -43,11 +53,7 @@ libgnome_builder_la_SOURCES = \
 	editor/gb-editor-tweak-widget.h \
 	editor/gb-editor-view-actions.c \
 	editor/gb-editor-view-actions.h \
-	editor/gb-editor-view-addin.c \
-	editor/gb-editor-view-addin.h \
 	editor/gb-editor-view-private.h \
-	editor/gb-editor-view.c \
-	editor/gb-editor-view.h \
 	greeter/gb-greeter-pill-box.c \
 	greeter/gb-greeter-pill-box.h \
 	greeter/gb-greeter-project-row.c \
@@ -160,8 +166,6 @@ libgnome_builder_la_SOURCES = \
 	views/gb-view-stack-private.h \
 	views/gb-view-stack.c \
 	views/gb-view-stack.h \
-	views/gb-view.c \
-	views/gb-view.h \
 	workbench/gb-workbench-actions.c \
 	workbench/gb-workbench-actions.h \
 	workbench/gb-workbench-addin.c \
@@ -270,6 +274,41 @@ glib_resources_h = resources/gb-resources.h
 glib_resources_xml = resources/gnome-builder.gresource.xml
 glib_resources_namespace = gb
 include $(top_srcdir)/build/autotools/Makefile.am.gresources
+
+
+-include $(INTROSPECTION_MAKEFILE)
+
+INTROSPECTION_GIRS =
+INTROSPECTION_SCANNER_ARGS = --add-include-path=$(srcdir) --warn-all
+INTROSPECTION_COMPILER_ARGS = --includedir=$(srcdir)
+
+if HAVE_INTROSPECTION
+introspection_sources = \
+	$(libgnome_builder_public_sources) \
+	$(NULL)
+
+Builder-1.0.gir: libgnome-builder.la
+Builder_1_0_gir_INCLUDES = Gio-2.0 GtkSource-3.0 Ide-1.0 Peas-1.0
+Builder_1_0_gir_CFLAGS = $(libgnome_builder_la_CFLAGS)
+Builder_1_0_gir_LIBS = libgnome-builder.la
+Builder_1_0_gir_FILES = $(introspection_sources)
+Builder_1_0_gir_SCANNERFLAGS = \
+	--include-uninstalled=$(top_builddir)/libide/Ide-1.0.gir \
+	-n Builder \
+	--identifier-prefix=Gb \
+	--symbol-prefix=gb_ \
+	--nsversion 1.0 \
+	$(NULL)
+INTROSPECTION_GIRS += Builder-1.0.gir
+
+girdir = $(datadir)/gir-1.0
+gir_DATA = $(INTROSPECTION_GIRS)
+
+typelibdir = $(pkglibdir)/girepository-1.0
+typelib_DATA = $(INTROSPECTION_GIRS:.gir=.typelib)
+
+CLEANFILES += $(gir_DATA) $(typelib_DATA)
+endif
 
 
 -include $(top_srcdir)/git.mk

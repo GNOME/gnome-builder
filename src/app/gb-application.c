@@ -301,6 +301,13 @@ cleanup:
   g_application_release (G_APPLICATION (self));
 }
 
+/**
+ * gb_application_open_project_async:
+ * @self: A #GbApplication.
+ * @file: A #GFile.
+ * @additional_files: (element-type GFile) (nullable): A #GPtrArray of #GFile or %NULL.
+ *
+ */
 void
 gb_application_open_project_async (GbApplication       *self,
                                    GFile               *file,

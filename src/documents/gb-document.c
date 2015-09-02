@@ -104,6 +104,11 @@ gb_document_get_title (GbDocument *document)
   return GB_DOCUMENT_GET_IFACE (document)->get_title (document);
 }
 
+/**
+ * gb_document_create_view:
+ *
+ * Returns: (transfer full): A newly created #GbView.
+ */
 GtkWidget *
 gb_document_create_view (GbDocument *document)
 {
@@ -213,7 +218,7 @@ gb_document_default_init (GbDocumentInterface *iface)
    *
    * Creates a new view for the document.
    *
-   * Returns: (ctype GbView*) (transfer full): A #GbView.
+   * Returns: (type GbView) (transfer full): A #GbView.
    */
   gSignals [CREATE_VIEW] =
     g_signal_new ("create-view",
