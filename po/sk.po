@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2015-08-31 21:11+0000\n"
-"PO-Revision-Date: 2015-09-01 18:24+0200\n"
+"POT-Creation-Date: 2015-09-02 06:18+0000\n"
+"PO-Revision-Date: 2015-09-02 10:43+0200\n"
 "Last-Translator: Dušan Kazik <prescott66@gmail.com>\n"
 "Language-Team: slovenčina <>\n"
 "Language: sk\n"
@@ -22,22 +22,22 @@ msgstr ""
 #: ../contrib/egg/egg-animation.c:723
 #, c-format
 msgid "Cannot locate property %s in class %s"
-msgstr ""
+msgstr "Nedá sa lokalizovať vlastnosť %s v triede %s"
 
 #: ../contrib/egg/egg-animation.c:1067 ../contrib/egg/egg-animation.c:1073
 #, c-format
 msgid "Failed to find property %s in %s"
-msgstr ""
+msgstr "Zlyhalo nájdenie vlastnosti %s v %s"
 
 #: ../contrib/egg/egg-animation.c:1081
 #, c-format
 msgid "Failed to find property %s in %s or parent %s"
-msgstr ""
+msgstr "Zlyhalo nájdenie vlastnosti %s v %s alebo rodiča %s"
 
 #: ../contrib/egg/egg-animation.c:1091
 #, c-format
 msgid "Failed to retrieve va_list value: %s"
-msgstr ""
+msgstr "Zlyhalo získanie hodnoty va_list: %s"
 
 #: ../contrib/egg/egg-search-bar.c:371
 msgid "Search"
@@ -110,70 +110,118 @@ msgid "_Close All"
 msgstr "Za_vrieť všetky"
 
 #: ../data/gtk/menus.ui.h:15
+msgid "Split"
+msgstr "Rozdeliť"
+
+#: ../data/gtk/menus.ui.h:16
+msgid "Split Left"
+msgstr "Rozdeliť doľava"
+
+#: ../data/gtk/menus.ui.h:17
+msgid "Split Right"
+msgstr "Rozdeliť doprava"
+
+#: ../data/gtk/menus.ui.h:18
+msgid "Split Down"
+msgstr "Rozdeliť dolu"
+
+#: ../data/gtk/menus.ui.h:19
+msgid "Move"
+msgstr "Presunúť"
+
+#: ../data/gtk/menus.ui.h:20
+msgid "Move Left"
+msgstr "Presunúť doľava"
+
+#: ../data/gtk/menus.ui.h:21
+msgid "Move Right"
+msgstr "Presunúť doprava"
+
+#: ../data/gtk/menus.ui.h:22
+msgid "Pre_view"
+msgstr "U_kážka"
+
+#: ../data/gtk/menus.ui.h:23
+msgid "_Save"
+msgstr "_Uložiť"
+
+#: ../data/gtk/menus.ui.h:24
+msgid "_Save As"
+msgstr "U_ložiť ako"
+
+#: ../data/gtk/menus.ui.h:25
+msgid "Print"
+msgstr "Tlačiť"
+
+#: ../data/gtk/menus.ui.h:26
+msgid "_Close"
+msgstr "_Zavrieť"
+
+#: ../data/gtk/menus.ui.h:27
 msgid "Display Options"
 msgstr "Voľby zobrazenia"
 
-#: ../data/gtk/menus.ui.h:16
+#: ../data/gtk/menus.ui.h:28
 msgid "Show Icons"
 msgstr "Zobraziť ikony"
 
-#: ../data/gtk/menus.ui.h:17
+#: ../data/gtk/menus.ui.h:29
 msgid "Show Ignored Files"
 msgstr "Zobraziť ignorované súbory"
 
-#: ../data/gtk/menus.ui.h:18
+#: ../data/gtk/menus.ui.h:30
 msgid "Sort Directories First"
 msgstr "Usporiadať adresáre ako prvé"
 
-#: ../data/gtk/menus.ui.h:19
+#: ../data/gtk/menus.ui.h:31
 msgid "_Collapse All Nodes"
 msgstr "Z_baliť všetky uzly"
 
-#: ../data/gtk/menus.ui.h:20
+#: ../data/gtk/menus.ui.h:32
 msgid "_Refresh"
 msgstr "_Obnoviť"
 
-#: ../data/gtk/menus.ui.h:21 ../data/ui/gb-greeter-window.ui.h:3
+#: ../data/gtk/menus.ui.h:33 ../data/ui/gb-greeter-window.ui.h:3
 msgid "_New"
 msgstr "_Nový"
 
-#: ../data/gtk/menus.ui.h:22
+#: ../data/gtk/menus.ui.h:34
 msgid "_Empty File"
 msgstr "Prázdny sú_bor"
 
-#: ../data/gtk/menus.ui.h:23
+#: ../data/gtk/menus.ui.h:35
 msgid "_New Folder"
 msgstr "_Nový priečinok"
 
-#: ../data/gtk/menus.ui.h:24
+#: ../data/gtk/menus.ui.h:36
 msgid "Open _With"
 msgstr "Otvoriť _pomocou"
 
-#: ../data/gtk/menus.ui.h:25
+#: ../data/gtk/menus.ui.h:37
 msgid "Source Code Editor"
 msgstr "Editor zdrojového kódu"
 
-#: ../data/gtk/menus.ui.h:26
+#: ../data/gtk/menus.ui.h:38
 msgid "_Open Containing Folder"
 msgstr "_Otvoriť priečinok s obsahom"
 
-#: ../data/gtk/menus.ui.h:27
+#: ../data/gtk/menus.ui.h:39
 msgid "_Open in Terminal"
 msgstr "_Otvoriť v termináli"
 
-#: ../data/gtk/menus.ui.h:28 ../data/ui/gb-rename-file-popover.ui.h:2
+#: ../data/gtk/menus.ui.h:40 ../data/ui/gb-rename-file-popover.ui.h:2
 msgid "_Rename"
 msgstr "_Premenovať"
 
-#: ../data/gtk/menus.ui.h:29
+#: ../data/gtk/menus.ui.h:41
 msgid "Mo_ve to Trash"
 msgstr "Presunúť do _Koša"
 
-#: ../data/gtk/menus.ui.h:30
+#: ../data/gtk/menus.ui.h:42
 msgid "_Build"
 msgstr "_Zostaviť"
 
-#: ../data/gtk/menus.ui.h:31
+#: ../data/gtk/menus.ui.h:43
 msgid "_Rebuild"
 msgstr "_Znovu zostaviť"
 
@@ -183,7 +231,7 @@ msgstr "Tmavý Builder"
 
 #: ../data/style-schemes/builder-dark.xml.h:2
 msgid "Dark color scheme for Builder using the Tango color palette"
-msgstr ""
+msgstr "Tmavá farebná schéma programu Builder využívajúca farebnú paletu Tango"
 
 #: ../data/style-schemes/builder.xml.h:1
 #: ../data/ui/gb-preferences-page-keybindings.ui.h:3
@@ -237,7 +285,7 @@ msgstr "_Povoliť automatické odsadzovanie"
 
 #: ../data/ui/gb-editor-settings-widget.ui.h:9
 msgid "Snippets (read-only)"
-msgstr ""
+msgstr "Úryvky (iba na čítanie)"
 
 #: ../data/ui/gb-editor-tweak-widget.ui.h:1
 msgid "Search highlight mode…"
@@ -870,37 +918,6 @@ msgstr "Zrušenie výberu"
 msgid "Terminal Shortcuts"
 msgstr "Klávesové skratky terminálu"
 
-#: ../data/ui/gb-view-stack.ui.h:1
-msgid "Split"
-msgstr "Rozdeliť"
-
-#: ../data/ui/gb-view-stack.ui.h:2
-msgid "Move"
-msgstr "Presunúť"
-
-#: ../data/ui/gb-view-stack.ui.h:3
-msgid "Preview"
-msgstr "Ukážka"
-
-#: ../data/ui/gb-view-stack.ui.h:4
-#: ../plugins/terminal/gb-terminal-view-actions.c:309
-#: ../src/editor/gb-editor-view-actions.c:311
-#: ../src/editor/gb-editor-view-actions.c:442
-msgid "Save"
-msgstr "Uložiť"
-
-#: ../data/ui/gb-view-stack.ui.h:5
-msgid "Save As"
-msgstr "Uložiť ako"
-
-#: ../data/ui/gb-view-stack.ui.h:6
-msgid "Print"
-msgstr "Tlačiť"
-
-#: ../data/ui/gb-view-stack.ui.h:7
-msgid "Close"
-msgstr "Zavrieť"
-
 #: ../data/ui/gb-workbench.ui.h:2
 msgid "Project"
 msgstr "Projekt"
@@ -930,11 +947,11 @@ msgstr "Požadovaný súbor neexistuje v indexe git."
 
 #: ../libide/gjs/ide-gjs-script.cpp:76
 msgid "Attempt to load a GJS script with no filename."
-msgstr "Pokúsil sa načítať skript GJS bez názvu súboru."
+msgstr "Uskutočnil sa pokus o načítanie skriptu GJS bez názvu súboru."
 
 #: ../libide/gjs/ide-gjs-script.cpp:103
 msgid "Failed to create JavaScript context."
-msgstr ""
+msgstr "Zlyhalo vytvorenie kontextu skriptu JavaScript."
 
 #: ../libide/gjs/ide-gjs-script.cpp:128
 msgid "Failed to set IdeContext in JavaScript runtime."
@@ -948,7 +965,7 @@ msgstr "Nebol poskytnutý názov súbor pre skript."
 #: ../libide/gjs/ide-gjs-script.cpp:213
 #: ../libide/pygobject/ide-pygobject-script.c:265
 msgid "The script must be on a local filesystem."
-msgstr ""
+msgstr "Skript sa musí nachádzať v miestnom systéme súborov."
 
 #: ../libide/gjs/ide-gjs-script.cpp:222
 #, c-format
@@ -958,7 +975,7 @@ msgstr "Skript „%s“ nie je súborom skriptu JavaScript."
 #: ../libide/gsettings/ide-language-defaults.c:177
 #, c-format
 msgid "%s contained invalid ASCII"
-msgstr ""
+msgstr "Súbor %s obsahoval neplatné kódovanie ASCII"
 
 #: ../libide/gsettings/ide-language-defaults.c:192
 #, c-format
@@ -971,7 +988,7 @@ msgstr ""
 
 #: ../libide/gsettings/ide-language-defaults.c:362
 msgid "Failed to initialize defaults."
-msgstr ""
+msgstr "Zlyhala inicializácia predvolených jazykov."
 
 #: ../libide/ide-back-forward-list.c:722
 msgid "File contained invalid UTF-8"
@@ -1020,18 +1037,19 @@ msgstr "Zlyhalo otvorenie prúdu stdout."
 msgid "%s() is not supported on %s build system."
 msgstr ""
 
-#: ../libide/ide.c:65
+#: ../libide/ide.c:71
 #, c-format
 msgid "You must call %s() before using libide."
 msgstr ""
 
-#: ../libide/ide.c:126
+#: ../libide/ide.c:136
 msgid "Builder requires libgit2-glib with threading support."
 msgstr ""
+"Program Builder vyžaduje knižnicu libgit2-glib s podporou viacerých vlákien."
 
-#: ../libide/ide.c:132
+#: ../libide/ide.c:142
 msgid "Builder requires libgit2-glib with SSH support."
-msgstr ""
+msgstr "Program Builder vyžaduje knižnicu libgit2-glib s podporou SSH."
 
 #: ../libide/ide-context.c:1670
 msgid "An unload request is already pending"
@@ -1060,7 +1078,7 @@ msgstr "Neexistuje bod rozšírenia."
 
 #: ../libide/ide-project.c:463
 msgid "Destination file must be within the project tree."
-msgstr ""
+msgstr "Cieľový súbor sa musí nachádzať v strome projektu."
 
 #: ../libide/ide-project.c:593
 msgid "File must be within the project tree."
@@ -1082,49 +1100,57 @@ msgstr ""
 
 #: ../libide/ide-source-snippet-completion-provider.c:255
 msgid "Snippets"
-msgstr ""
+msgstr "Úryvky"
 
 #: ../libide/ide-source-snippet-parser.c:495
 #, c-format
 msgid "Invalid snippet at line %d: %s"
-msgstr ""
+msgstr "Neplatný úryvok na riadku %d: %s"
 
 #: ../libide/ide-source-snippets-manager.c:96
 #, c-format
 msgid "Failed to open directory: %s"
-msgstr ""
+msgstr "Zlyhalo otvorenie adresára: %s"
 
 #: ../libide/ide-source-snippets-manager.c:109
 #, c-format
 msgid "Failed to load file: %s: %s"
-msgstr ""
+msgstr "Zlyhalo načítanie súboru: %s: %s"
 
 #: ../libide/ide-source-view.c:4541
 #, c-format
 msgid "Insert \"%s\""
-msgstr ""
+msgstr "Vložiť „%s“"
 
 #: ../libide/ide-source-view.c:4543
 #, c-format
 msgid "Replace \"%s\" with \"%s\""
-msgstr ""
+msgstr "Nahradiť „%s“ s „%s“"
 
-#: ../libide/ide-source-view.c:4648
+#: ../libide/ide-source-view.c:4661
 msgid "Apply Fix-It"
 msgstr ""
 
-#: ../libide/ide-source-view.c:4688
-msgid "Goto Definition"
+#: ../libide/ide-source-view.c:4704
+msgid "Join Lines"
+msgstr "Spojiť riadky"
+
+#: ../libide/ide-source-view.c:4715
+msgid "Sort Lines"
+msgstr "Usporiadať riadky"
+
+#: ../libide/ide-source-view.c:4734
+msgid "Go to Definition"
 msgstr "Prejsť na definíciu"
 
 #: ../libide/pygobject/ide-pygobject-script.c:135
 msgid "Attempt to load a PyGObject script with no filename."
-msgstr ""
+msgstr "Uskutočnil sa pokus o načítanie skriptu PyGObject bez názvu súboru."
 
 #: ../libide/pygobject/ide-pygobject-script.c:274
 #, c-format
 msgid "The script \"%s\" is not a PyGObject file."
-msgstr ""
+msgstr "Skript „%s“ nie je súborom PyGObject."
 
 #: ../plugins/autotools/ide-autotools-build-system.c:175
 msgid "Failed to locate configure.ac"
@@ -1150,24 +1176,24 @@ msgstr "„%s“ nie je adresárom."
 #: ../plugins/autotools/ide-autotools-build-task.c:774
 #, c-format
 msgid "autogen.sh is missing from project directory (%s)."
-msgstr ""
+msgstr "Súbor autogen.sh chýba v adresári projektu (%s)."
 
 #: ../plugins/autotools/ide-autotools-build-task.c:784
 msgid "autogen.sh is not executable."
-msgstr ""
+msgstr "Súbor autogen.sh nie je spustiteľný."
 
 #: ../plugins/autotools/ide-autotools-build-task.c:814
 #, c-format
 msgid "autogen.sh failed to create configure (%s)"
-msgstr ""
+msgstr "Súbor autogen.sh zlyhal pri tvorbe konfigurácie (%s)"
 
 #: ../plugins/autotools/ide-makecache.c:998
 msgid "Invalid makefile provided, ignoring."
-msgstr ""
+msgstr "Bol poskytnutý neplatný súbor makefile. Ignoruje sa."
 
-#: ../plugins/clang/ide-clang-completion-provider.c:216
+#: ../plugins/clang/ide-clang-completion-provider.c:200
 msgid "Clang"
-msgstr ""
+msgstr "Clang"
 
 #: ../plugins/clang/ide-clang-service.c:266
 msgid "Unknown failure"
@@ -1175,7 +1201,7 @@ msgstr "Neznáme zlyhanie"
 
 #: ../plugins/clang/ide-clang-service.c:270
 msgid "Clang crashed"
-msgstr ""
+msgstr "Kompilátor Clang neočakávane skončil"
 
 #: ../plugins/clang/ide-clang-service.c:274
 msgid "Invalid arguments"
@@ -1183,16 +1209,16 @@ msgstr "Neplatné parametre"
 
 #: ../plugins/clang/ide-clang-service.c:278
 msgid "AST read error"
-msgstr ""
+msgstr "Chyba pri čítaní AST"
 
 #: ../plugins/clang/ide-clang-service.c:290
 #, c-format
 msgid "Failed to create translation unit: %s"
-msgstr ""
+msgstr "Zlyhalo vytvorenie jednotky prekladu: %s"
 
 #: ../plugins/clang/ide-clang-service.c:399
 msgid "File must be saved locally to parse."
-msgstr ""
+msgstr "Súbor musí byť uložený miestne, aby ho bolo možné spracovať."
 
 #: ../plugins/clang/ide-clang-symbol-node.c:149
 msgid "anonymous"
@@ -1209,7 +1235,7 @@ msgstr "Príkaz nenájdený: %s"
 
 #: ../plugins/command-bar/gb-command-bar.c:594
 msgid "Use the entry below to execute a command"
-msgstr ""
+msgstr "Použite "
 
 #: ../plugins/command-bar/gb-vim.c:83
 #, c-format
@@ -1254,7 +1280,7 @@ msgstr "Nepaltná požiadavka na vyhľadanie a nahradenie"
 #: ../plugins/command-bar/gb-vim.c:960
 #, c-format
 msgid "vim mode requires GtkSourceView"
-msgstr ""
+msgstr "Režim vim vyžaduje GtkSourceView"
 
 #: ../plugins/command-bar/gb-vim.c:990
 #, c-format
@@ -1332,6 +1358,12 @@ msgstr "Uloženie obsahu terminálu ako"
 #: ../src/workbench/gb-workbench-actions.c:169
 msgid "Cancel"
 msgstr "Zrušiť"
+
+#: ../plugins/terminal/gb-terminal-view-actions.c:309
+#: ../src/editor/gb-editor-view-actions.c:311
+#: ../src/editor/gb-editor-view-actions.c:442
+msgid "Save"
+msgstr "Uložiť"
 
 #: ../src/app/gb-application-actions.c:91
 #, c-format
@@ -1576,10 +1608,11 @@ msgstr "Poskytovateľ sa nedá pridať viac ako raz."
 msgid "The provider could not be found."
 msgstr "Nepodarilo sa nájsť poskytovateľa."
 
+# DK: https://bugzilla.gnome.org/show_bug.cgi?id=754434
 #: ../src/search/gb-search-display-group.c:182
 #, c-format
 msgid "%s more"
-msgstr ""
+msgstr "%s ďalších"
 
 #: ../src/shortcuts/gb-shortcuts-dialog.c:924
 msgid "Search Shortcuts"
@@ -1752,7 +1785,7 @@ msgstr "- Zostaví projekt."
 
 #: ../tools/ide-list-build-flags.c:115
 msgid "- Get build flags for a project file"
-msgstr ""
+msgstr "- Získa značky zostavenia pre súbor projektu"
 
 #: ../tools/ide-list-devices.c:109
 msgid "- List devices found on the system."
@@ -1786,10 +1819,11 @@ msgstr ""
 msgid "- discover projects"
 msgstr "- preskúma projekty"
 
+# DK: https://bugzilla.gnome.org/show_bug.cgi?id=754434
 #: ../tools/ide-search.c:68
 #, c-format
 msgid "%s results\n"
-msgstr ""
+msgstr "%s výsledkov\n"
 
 #: ../tools/ide-search.c:120
 msgid "PROJECT_FILE [SEARCH TERMS...]"
