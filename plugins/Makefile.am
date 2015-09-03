@@ -10,6 +10,7 @@ SUBDIRS = \
 	file-search \
 	gnome-code-assistance \
 	html-completion \
+	html-preview \
 	jedi \
 	python-gi-imports-completion \
 	mingw \

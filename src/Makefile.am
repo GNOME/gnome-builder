@@ -62,10 +62,6 @@ libgnome_builder_la_SOURCES = \
 	greeter/gb-greeter-project-row.h \
 	greeter/gb-greeter-window.c \
 	greeter/gb-greeter-window.h \
-	html/gb-html-document.c \
-	html/gb-html-document.h \
-	html/gb-html-view.c \
-	html/gb-html-view.h \
 	keybindings/gb-keybindings.c \
 	keybindings/gb-keybindings.h \
 	preferences/gb-preferences-page-editor.c \
@@ -157,8 +153,6 @@ libgnome_builder_la_SOURCES = \
 	util/gb-rgba.h \
 	util/gb-string.c \
 	util/gb-string.h \
-	util/gb-webkit.c \
-	util/gb-webkit.h \
 	util/gb-widget.c \
 	util/gb-widget.h \
 	views/gb-view-grid.c \
@@ -230,7 +224,6 @@ libgnome_builder_la_CFLAGS = \
 	-I$(srcdir)/documents \
 	-I$(srcdir)/editor \
 	-I$(srcdir)/greeter \
-	-I$(srcdir)/html \
 	-I$(srcdir)/keybindings \
 	-I$(srcdir)/preferences \
 	-I$(srcdir)/project-tree \

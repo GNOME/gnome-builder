@@ -26,7 +26,7 @@
 #include "gb-editor-print-operation.h"
 #include "gb-editor-view-actions.h"
 #include "gb-editor-view-private.h"
-#include "gb-html-document.h"
+//#include "gb-html-document.h"
 #include "gb-view-grid.h"
 #include "gb-widget.h"
 #include "gb-workbench.h"
@@ -619,6 +619,7 @@ gb_editor_view_actions_preview (GSimpleAction *action,
   if (!lang_id)
     return;
 
+#if 0
   if (g_str_equal (lang_id, "html"))
     {
       document = g_object_new (GB_TYPE_HTML_DOCUMENT,
@@ -633,6 +634,7 @@ gb_editor_view_actions_preview (GSimpleAction *action,
       gb_html_document_set_transform_func (GB_HTML_DOCUMENT (document),
                                            gb_html_markdown_transform);
     }
+#endif
 
   if (document)
     {

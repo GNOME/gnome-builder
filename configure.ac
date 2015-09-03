@@ -164,8 +164,7 @@ PKG_CHECK_MODULES(BUILDER,  [gtk+-3.0 >= gtk_required_version
                              gio-2.0 >= glib_required_version
                              gtksourceview-3.0 >= gtksourceview_required_version
                              libgit2-glib-1.0 >= ggit_required_version
-                             libpeas-1.0 >= peas_required_version
-                             webkit2gtk-4.0 >= webkit_required_version])
+                             libpeas-1.0 >= peas_required_version])
 PKG_CHECK_MODULES(VTE,      [vte-2.91 >= vte_required_version],
                             [have_vte=yes],
                             [have_vte=no])
@@ -200,6 +199,11 @@ PKG_CHECK_MODULES(GJS,      [gjs-1.0 >= gjs_required_version
                              gjs-internals-1.0 >= gjs_required_version],
                             [enable_gjs_scripting=yes],
                             [enable_gjs_scripting=no])
+
+PKG_CHECK_MODULES(HTML_PREVIEW_PLUGIN, [webkit2gtk-4.0 >= webkit_required_version],
+                                       [enable_html_preview_plugin=yes],
+                                       [enable_html_preview_plugin=no])
+
 
 
 dnl ***********************************************************************
@@ -290,6 +294,7 @@ AM_CONDITIONAL(ENABLE_GJS_SCRIPTING, test x$enable_gjs_scripting != xno)
 
 AM_CONDITIONAL(ENABLE_TERMINAL_PLUGIN, test x$enable_terminal_plugin != xno)
 AM_CONDITIONAL(ENABLE_DEVHELP_PLUGIN, test x$enable_devhelp_plugin != xno)
+AM_CONDITIONAL(ENABLE_HTML_PREVIEW_PLUGIN, test x$enable_html_preview_plugin != xno)
 AM_CONDITIONAL(ENABLE_CLANG_PLUGIN, test x$enable_clang_plugin != xno)
 
 
@@ -481,6 +486,7 @@ AC_CONFIG_FILES([
 	plugins/file-search/Makefile
 	plugins/gnome-code-assistance/Makefile
 	plugins/html-completion/Makefile
+	plugins/html-preview/Makefile
 	plugins/jedi/Makefile
         plugins/python-gi-imports-completion/Makefile
 	plugins/mingw/Makefile
@@ -553,6 +559,7 @@ echo "  Device Manager ....................... : yes"
 echo "  GNOME Code Assistance ................ : yes"
 echo "  Global File Search ................... : yes"
 echo "  HTML Language Pack ................... : yes"
+echo "  HTML and Markdown Preview ............ : ${enable_html_preview_plugin}"
 echo "  MinGW ................................ : yes"
 echo "  Python GObject Introspection ......... : yes"
 echo "  Python Jedi Autocompletion ........... : yes"
