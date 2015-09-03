@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2015-09-02 06:18+0000\n"
-"PO-Revision-Date: 2015-09-02 10:43+0200\n"
+"POT-Creation-Date: 2015-09-02 11:02+0000\n"
+"PO-Revision-Date: 2015-09-03 10:46+0200\n"
 "Last-Translator: Dušan Kazik <prescott66@gmail.com>\n"
 "Language-Team: slovenčina <>\n"
 "Language: sk\n"
@@ -110,118 +110,70 @@ msgid "_Close All"
 msgstr "Za_vrieť všetky"
 
 #: ../data/gtk/menus.ui.h:15
-msgid "Split"
-msgstr "Rozdeliť"
-
-#: ../data/gtk/menus.ui.h:16
-msgid "Split Left"
-msgstr "Rozdeliť doľava"
-
-#: ../data/gtk/menus.ui.h:17
-msgid "Split Right"
-msgstr "Rozdeliť doprava"
-
-#: ../data/gtk/menus.ui.h:18
-msgid "Split Down"
-msgstr "Rozdeliť dolu"
-
-#: ../data/gtk/menus.ui.h:19
-msgid "Move"
-msgstr "Presunúť"
-
-#: ../data/gtk/menus.ui.h:20
-msgid "Move Left"
-msgstr "Presunúť doľava"
-
-#: ../data/gtk/menus.ui.h:21
-msgid "Move Right"
-msgstr "Presunúť doprava"
-
-#: ../data/gtk/menus.ui.h:22
-msgid "Pre_view"
-msgstr "U_kážka"
-
-#: ../data/gtk/menus.ui.h:23
-msgid "_Save"
-msgstr "_Uložiť"
-
-#: ../data/gtk/menus.ui.h:24
-msgid "_Save As"
-msgstr "U_ložiť ako"
-
-#: ../data/gtk/menus.ui.h:25
-msgid "Print"
-msgstr "Tlačiť"
-
-#: ../data/gtk/menus.ui.h:26
-msgid "_Close"
-msgstr "_Zavrieť"
-
-#: ../data/gtk/menus.ui.h:27
 msgid "Display Options"
 msgstr "Voľby zobrazenia"
 
-#: ../data/gtk/menus.ui.h:28
+#: ../data/gtk/menus.ui.h:16
 msgid "Show Icons"
 msgstr "Zobraziť ikony"
 
-#: ../data/gtk/menus.ui.h:29
+#: ../data/gtk/menus.ui.h:17
 msgid "Show Ignored Files"
 msgstr "Zobraziť ignorované súbory"
 
-#: ../data/gtk/menus.ui.h:30
+#: ../data/gtk/menus.ui.h:18
 msgid "Sort Directories First"
 msgstr "Usporiadať adresáre ako prvé"
 
-#: ../data/gtk/menus.ui.h:31
+#: ../data/gtk/menus.ui.h:19
 msgid "_Collapse All Nodes"
 msgstr "Z_baliť všetky uzly"
 
-#: ../data/gtk/menus.ui.h:32
+#: ../data/gtk/menus.ui.h:20
 msgid "_Refresh"
 msgstr "_Obnoviť"
 
-#: ../data/gtk/menus.ui.h:33 ../data/ui/gb-greeter-window.ui.h:3
+#: ../data/gtk/menus.ui.h:21 ../data/ui/gb-greeter-window.ui.h:3
 msgid "_New"
 msgstr "_Nový"
 
-#: ../data/gtk/menus.ui.h:34
+#: ../data/gtk/menus.ui.h:22
 msgid "_Empty File"
 msgstr "Prázdny sú_bor"
 
-#: ../data/gtk/menus.ui.h:35
+#: ../data/gtk/menus.ui.h:23
 msgid "_New Folder"
 msgstr "_Nový priečinok"
 
-#: ../data/gtk/menus.ui.h:36
+#: ../data/gtk/menus.ui.h:24
 msgid "Open _With"
 msgstr "Otvoriť _pomocou"
 
-#: ../data/gtk/menus.ui.h:37
+#: ../data/gtk/menus.ui.h:25
 msgid "Source Code Editor"
 msgstr "Editor zdrojového kódu"
 
-#: ../data/gtk/menus.ui.h:38
+#: ../data/gtk/menus.ui.h:26
 msgid "_Open Containing Folder"
 msgstr "_Otvoriť priečinok s obsahom"
 
-#: ../data/gtk/menus.ui.h:39
+#: ../data/gtk/menus.ui.h:27
 msgid "_Open in Terminal"
 msgstr "_Otvoriť v termináli"
 
-#: ../data/gtk/menus.ui.h:40 ../data/ui/gb-rename-file-popover.ui.h:2
+#: ../data/gtk/menus.ui.h:28 ../data/ui/gb-rename-file-popover.ui.h:2
 msgid "_Rename"
 msgstr "_Premenovať"
 
-#: ../data/gtk/menus.ui.h:41
+#: ../data/gtk/menus.ui.h:29
 msgid "Mo_ve to Trash"
 msgstr "Presunúť do _Koša"
 
-#: ../data/gtk/menus.ui.h:42
+#: ../data/gtk/menus.ui.h:30
 msgid "_Build"
 msgstr "_Zostaviť"
 
-#: ../data/gtk/menus.ui.h:43
+#: ../data/gtk/menus.ui.h:31
 msgid "_Rebuild"
 msgstr "_Znovu zostaviť"
 
@@ -918,6 +870,54 @@ msgstr "Zrušenie výberu"
 msgid "Terminal Shortcuts"
 msgstr "Klávesové skratky terminálu"
 
+#: ../data/ui/gb-view.ui.h:1
+msgid "Split"
+msgstr "Rozdeliť"
+
+#: ../data/ui/gb-view.ui.h:2
+msgid "Split Left"
+msgstr "Rozdeliť doľava"
+
+#: ../data/ui/gb-view.ui.h:3
+msgid "Split Right"
+msgstr "Rozdeliť doprava"
+
+#: ../data/ui/gb-view.ui.h:4
+msgid "Split Down"
+msgstr "Rozdeliť dolu"
+
+#: ../data/ui/gb-view.ui.h:5
+msgid "Move"
+msgstr "Presunúť"
+
+#: ../data/ui/gb-view.ui.h:6
+msgid "Move Left"
+msgstr "Presunúť doľava"
+
+#: ../data/ui/gb-view.ui.h:7
+msgid "Move Right"
+msgstr "Presunúť doprava"
+
+#: ../data/ui/gb-view.ui.h:8
+msgid "Pre_view"
+msgstr "U_kážka"
+
+#: ../data/ui/gb-view.ui.h:9
+msgid "_Save"
+msgstr "_Uložiť"
+
+#: ../data/ui/gb-view.ui.h:10
+msgid "_Save As"
+msgstr "U_ložiť ako"
+
+#: ../data/ui/gb-view.ui.h:11
+msgid "Print"
+msgstr "Tlačiť"
+
+#: ../data/ui/gb-view.ui.h:12
+msgid "_Close"
+msgstr "_Zavrieť"
+
 #: ../data/ui/gb-workbench.ui.h:2
 msgid "Project"
 msgstr "Projekt"
@@ -1222,11 +1222,11 @@ msgstr "Súbor musí byť uložený miestne, aby ho bolo možné spracovať."
 
 #: ../plugins/clang/ide-clang-symbol-node.c:149
 msgid "anonymous"
-msgstr ""
+msgstr "anonymný"
 
 #: ../plugins/clang/ide-clang-translation-unit.c:654
 msgid "clang_codeCompleteAt() only works on local files"
-msgstr ""
+msgstr "Funkcia clang_codeCompleteAt() funguje iba na miestnych súboroch"
 
 #: ../plugins/command-bar/gb-command-bar.c:290
 #, c-format
@@ -1270,7 +1270,7 @@ msgstr "Zlyhalo lokalizovanie pracovného adresára"
 #: ../plugins/command-bar/gb-vim.c:547
 #, c-format
 msgid "Invalid :syntax subcommand: %s"
-msgstr ""
+msgstr "Neplatný :podpríkaz syntaxe: %s"
 
 #: ../plugins/command-bar/gb-vim.c:874
 #, c-format
@@ -1290,7 +1290,7 @@ msgstr "Nie je príkazom editora: %s"
 #: ../plugins/c-pack/ide-c-format-provider.c:281
 #: ../plugins/python-pack/ide-python-format-provider.c:238
 msgid "Format Strings"
-msgstr ""
+msgstr "Formátovať reťazce"
 
 #: ../plugins/ctags/ide-ctags-completion-provider.c:179
 msgid "CTags"
@@ -1317,7 +1317,7 @@ msgstr "Prepnúť na"
 
 #: ../plugins/gnome-code-assistance/ide-gca-diagnostic-provider.c:336
 msgid "Code assistance requires a local file."
-msgstr ""
+msgstr "Asistencia kódu vyžaduje miestny súbor."
 
 #: ../plugins/gnome-code-assistance/ide-gca-service.c:168
 msgid "No language specified"
@@ -1395,18 +1395,18 @@ msgid "Funded By"
 msgstr "Financovali"
 
 # cmd desc
-#: ../src/app/gb-application.c:635
+#: ../src/app/gb-application.c:642
 msgid "Run Builder in standalone mode"
 msgstr "Spustí Builder v samostatnom režime"
 
 # cmd desc
-#: ../src/app/gb-application.c:641
+#: ../src/app/gb-application.c:648
 msgid "Show the application's version"
 msgstr "Zobrazí verziu aplikácie"
 
-#: ../src/app/gb-application.c:647
+#: ../src/app/gb-application.c:654
 msgid "Increase verbosity. May be specified multiple times."
-msgstr ""
+msgstr "Zvýši rozsah výpisov. Nárast môže byť až niekoľkonásobný."
 
 # dialog title
 #: ../src/dialogs/gb-new-project-dialog.c:347
@@ -1485,7 +1485,7 @@ msgstr "obnoviť obnovenie vložiť vloženie kurzor značka"
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-editor.c:100
 msgid "diff renderer gutter changes git vcs"
-msgstr ""
+msgstr "rozdiel vykresľovač gutter zmeny git vcs"
 
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-editor.c:105
@@ -1535,7 +1535,7 @@ msgstr "slovo slová automatické dopĺňanie návrh nájsť dokument"
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-insight.c:59
 msgid "experimental clang autocompletion auto complete"
-msgstr ""
+msgstr "experimentálne clang automatické dopĺňanie automaticky doplniť"
 
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-insight.c:64
@@ -1629,10 +1629,11 @@ msgstr "Cesta k súboru je prázdna (NULL)"
 #: ../src/util/gb-file-manager.c:73 ../src/util/gb-file-manager.c:84
 msgid "Error converting UTF-8 filename to wide char"
 msgstr ""
+"Chyba pri konvertovaní názvu súboru v kódovaní UTF-8 do znakov typu wide"
 
 #: ../src/util/gb-file-manager.c:92
 msgid "ILCreateFromPath() failed"
-msgstr ""
+msgstr "Funkcia ILCreateFromPath() zlyhala"
 
 #: ../src/util/gb-file-manager.c:129
 #, c-format
