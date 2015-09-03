@@ -1,0 +1,28 @@
+[Plugin]
+
+# The plugin loader to use. Currently python3 and omitting this are supported.
+# Omitting the value means the "C" loader, which loads shared libraries. That
+# means you can technically do C/C++/Vala.
+Loader=python3
+
+
+# The module to load. For python3, this means "sample_plugin.py" or
+# "sample_plugin/__init__.py".
+Module=sample_plugin
+
+
+# Some description of the plugin
+Name=A Sample Plugin
+Description=A sample plugin to show how to use Builder plugins
+Authors=Christian Hergert <christian@hergert.me>
+Copyright=Copyright © 2015 Christian Hergert
+
+
+# The following is required because we only allow builtin plugins now
+Builtin=true
+
+
+# We specified a completion provider in our plugin.
+# Here we need to specify which languages it is active for.
+# The language "ID" comes from GtkSourceView language id.
+X-Completion-Provider-Languages=python,python3
