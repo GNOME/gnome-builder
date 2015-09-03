@@ -19,6 +19,8 @@ libgnome_builder_public_sources = \
 	editor/gb-editor-view.h \
 	editor/gb-editor-view-addin.c \
 	editor/gb-editor-view-addin.h \
+	util/gb-menu-extension.c \
+	util/gb-menu-extension.h \
 	views/gb-view.c \
 	views/gb-view.h \
 	$(NULL)
