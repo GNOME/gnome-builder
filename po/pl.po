@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-01 16:59+0200\n"
-"PO-Revision-Date: 2015-09-01 17:00+0200\n"
+"POT-Creation-Date: 2015-09-04 00:04+0200\n"
+"PO-Revision-Date: 2015-09-04 00:05+0200\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <gnomepl@aviary.pl>\n"
 "Language: pl\n"
@@ -880,36 +880,53 @@ msgstr "Odznaczenie wszystkiego"
 msgid "Terminal Shortcuts"
 msgstr "Skróty terminala"
 
-#: ../data/ui/gb-view-stack.ui.h:1
+#: ../data/ui/gb-view.ui.h:1
 msgid "Split"
-msgstr "Podziel"
+msgstr "Podział"
 
-#: ../data/ui/gb-view-stack.ui.h:2
+#: ../data/ui/gb-view.ui.h:2
+msgid "Split Left"
+msgstr "W lewo"
+
+#: ../data/ui/gb-view.ui.h:3
+msgid "Split Right"
+msgstr "W prawo"
+
+#: ../data/ui/gb-view.ui.h:4
+msgid "Split Down"
+msgstr "W dół"
+
+#: ../data/ui/gb-view.ui.h:5
 msgid "Move"
-msgstr "Przenieś"
+msgstr "Przenoszenie"
 
-#: ../data/ui/gb-view-stack.ui.h:3
-msgid "Preview"
-msgstr "Podgląd"
+#: ../data/ui/gb-view.ui.h:6
+msgid "Move Left"
+msgstr "W lewo"
 
-#: ../data/ui/gb-view-stack.ui.h:4
-#: ../plugins/terminal/gb-terminal-view-actions.c:309
-#: ../src/editor/gb-editor-view-actions.c:311
-#: ../src/editor/gb-editor-view-actions.c:442
-msgid "Save"
-msgstr "Zapisz"
+#: ../data/ui/gb-view.ui.h:7
+msgid "Move Right"
+msgstr "W prawo"
 
-#: ../data/ui/gb-view-stack.ui.h:5
-msgid "Save As"
-msgstr "Zapisz jako"
+#: ../data/ui/gb-view.ui.h:8
+msgid "Pre_view"
+msgstr "Po_dgląd"
 
-#: ../data/ui/gb-view-stack.ui.h:6
+#: ../data/ui/gb-view.ui.h:9
+msgid "_Save"
+msgstr "_Zapisz"
+
+#: ../data/ui/gb-view.ui.h:10
+msgid "_Save As"
+msgstr "Z_apisz jako"
+
+#: ../data/ui/gb-view.ui.h:11
 msgid "Print"
 msgstr "Wydrukuj"
 
-#: ../data/ui/gb-view-stack.ui.h:7
-msgid "Close"
-msgstr "Zamknij"
+#: ../data/ui/gb-view.ui.h:12
+msgid "_Close"
+msgstr "Za_mknij"
 
 #: ../data/ui/gb-workbench.ui.h:2
 msgid "Project"
@@ -1121,13 +1138,21 @@ msgstr "Wstaw „%s”"
 msgid "Replace \"%s\" with \"%s\""
 msgstr "Zmień „%s” na „%s”"
 
-#: ../libide/ide-source-view.c:4648
+#: ../libide/ide-source-view.c:4661
 msgid "Apply Fix-It"
 msgstr "Zastosuj „Fix-It”"
 
-#: ../libide/ide-source-view.c:4688
-msgid "Goto Definition"
-msgstr "Definicja instrukcji skoku"
+#: ../libide/ide-source-view.c:4704
+msgid "Join Lines"
+msgstr "Połącz wiersze"
+
+#: ../libide/ide-source-view.c:4715
+msgid "Sort Lines"
+msgstr "Posortuj wiersze"
+
+#: ../libide/ide-source-view.c:4734
+msgid "Go to Definition"
+msgstr "Przejdź do definicji"
 
 #: ../libide/pygobject/ide-pygobject-script.c:135
 msgid "Attempt to load a PyGObject script with no filename."
@@ -1345,6 +1370,12 @@ msgstr "Zapis zawartości terminala jako"
 msgid "Cancel"
 msgstr "Anuluj"
 
+#: ../plugins/terminal/gb-terminal-view-actions.c:309
+#: ../src/editor/gb-editor-view-actions.c:311
+#: ../src/editor/gb-editor-view-actions.c:442
+msgid "Save"
+msgstr "Zapisz"
+
 #: ../src/app/gb-application-actions.c:91
 #, c-format
 msgid ""
@@ -1376,15 +1407,15 @@ msgstr "Więcej informacji o programie GNOME Builder"
 msgid "Funded By"
 msgstr "Wsparte finansowo przez"
 
-#: ../src/app/gb-application.c:635
+#: ../src/app/gb-application.c:642
 msgid "Run Builder in standalone mode"
 msgstr "Uruchamia program Builder w trybie samodzielnym"
 
-#: ../src/app/gb-application.c:641
+#: ../src/app/gb-application.c:648
 msgid "Show the application's version"
 msgstr "Wyświetla wersję programu"
 
-#: ../src/app/gb-application.c:647
+#: ../src/app/gb-application.c:654
 msgid "Increase verbosity. May be specified multiple times."
 msgstr "Zwiększa ilość informacji. Można podawać wielokrotnie."
 
