@@ -20,7 +20,6 @@
 #
 
 from gettext import gettext as _
-import markdown2
 
 import gi
 import os
