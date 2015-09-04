@@ -33,9 +33,10 @@ typedef struct
 
 typedef struct
 {
-  GTask *task;
-  GList *objects;
-  GList *iter;
+  GTask *task;            /* back pointer */
+  GList *objects;         /* list of objects to try */
+  GList *iter;            /* current iter of objects */
+  gchar *extension_point; /* name of extension point */
   int    io_priority;
 } InitAsyncState;
 
@@ -240,6 +241,7 @@ init_async_state_free (gpointer data)
 
   if (state)
     {
+      g_free (state->extension_point);
       g_list_foreach (state->objects, (GFunc)g_object_unref, NULL);
       g_list_free (state->objects);
       g_slice_free (InitAsyncState, state);
@@ -280,7 +282,8 @@ ide_object_new_async_try_next (InitAsyncState *state)
       g_task_return_new_error (state->task,
                                G_IO_ERROR,
                                G_IO_ERROR_NOT_SUPPORTED,
-                               _("No implementations of extension point."));
+                               _("No implementations of extension point \"%s\"."),
+                               state->extension_point);
       g_object_unref (state->task);
       return;
     }
@@ -473,6 +476,7 @@ ide_object_new_async (const gchar          *extension_point,
     }
 
   state = g_slice_new0 (InitAsyncState);
+  state->extension_point = g_strdup (extension_point);
   state->io_priority = io_priority;
   state->task = g_task_new (NULL, cancellable, callback, user_data);
   g_task_set_task_data (state->task, state, init_async_state_free);
