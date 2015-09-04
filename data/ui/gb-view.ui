@@ -4,7 +4,7 @@
   <template class="GbView" parent="GtkBox">
   </template>
   <menu id="menu">
-    <section id="split-section">
+    <section>
       <attribute name="id">splits-section</attribute>
       <attribute name="display-hint">horizontal-buttons</attribute>
       <attribute name="label" translatable="yes">Split</attribute>
@@ -24,7 +24,7 @@
         <attribute name="verb-icon">builder-split-tab-symbolic</attribute>
       </item>
     </section>
-    <section id="move-section">
+    <section>
       <attribute name="id">move-section</attribute>
       <attribute name="display-hint">horizontal-buttons</attribute>
       <attribute name="label" translatable="yes">Move</attribute>
@@ -39,13 +39,11 @@
         <attribute name="verb-icon">builder-move-right-symbolic</attribute>
       </item>
     </section>
-    <section id="preview-section">
-      <item>
-        <attribute name="label" translatable="yes">Pre_view</attribute>
-        <attribute name="action">view.preview</attribute>
-      </item>
+    <section>
+      <attribute name="id">preview-section</attribute>
     </section>
-    <section id="save-section">
+    <section>
+      <attribute name="id">save-section</attribute>
       <item>
         <attribute name="label" translatable="yes">_Save</attribute>
         <attribute name="action">view.save</attribute>
@@ -55,13 +53,15 @@
         <attribute name="action">view.save-as</attribute>
       </item>
     </section>
-    <section id="print-section">
+    <section>
+      <attribute name="id">print-section</attribute>
       <item>
         <attribute name="label" translatable="yes">Print</attribute>
         <attribute name="action">view.print</attribute>
       </item>
     </section>
-    <section id="close-section">
+    <section>
+      <attribute name="id">close-section</attribute>
       <item>
         <attribute name="label" translatable="yes">_Close</attribute>
         <attribute name="action">view-stack.close</attribute>
