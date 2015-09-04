@@ -1,4 +1,4 @@
-/* gb-editor-view-addin.h
+/* gb-editor-view-addin-private.h
  *
  * Copyright (C) 2015 Christian Hergert <christian@hergert.me>
  *
@@ -16,29 +16,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GB_EDITOR_VIEW_ADDIN_H
-#define GB_EDITOR_VIEW_ADDIN_H
+#ifndef GB_EDITOR_VIEW_ADDIN_PRIVATE_H
+#define GB_EDITOR_VIEW_ADDIN_PRIVATE_H
 
-#include "gb-editor-view.h"
+#include "gb-editor-view-addin.h"
 
 G_BEGIN_DECLS
 
-#define GB_TYPE_EDITOR_VIEW_ADDIN (gb_editor_view_addin_get_type ())
-
-G_DECLARE_INTERFACE (GbEditorViewAddin, gb_editor_view_addin, GB, EDITOR_VIEW_ADDIN, GObject)
-
-struct _GbEditorViewAddinInterface
-{
-  GTypeInterface parent;
-
-  void (*load)             (GbEditorViewAddin *self,
-                            GbEditorView      *view);
-  void (*unload)           (GbEditorViewAddin *self,
-                            GbEditorView      *view);
-  void (*language_changed) (GbEditorViewAddin *self,
-                            const gchar       *language_id);
-};
-
+void gb_editor_view_addin_language_changed (GbEditorViewAddin *self,
+                                            const gchar       *language_id);
+void gb_editor_view_addin_load             (GbEditorViewAddin *self,
+                                            GbEditorView      *view);
+void gb_editor_view_addin_unload           (GbEditorViewAddin *self,
+                                            GbEditorView      *view);
 G_END_DECLS
 
-#endif /* GB_EDITOR_VIEW_ADDIN_H */
+#endif /* GB_EDITOR_VIEW_ADDIN_PRIVATE_H */

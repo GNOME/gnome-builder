@@ -52,3 +52,13 @@ gb_editor_view_addin_unload (GbEditorViewAddin *self,
 
   GB_EDITOR_VIEW_ADDIN_GET_IFACE (self)->unload (self, view);
 }
+
+void
+gb_editor_view_addin_language_changed (GbEditorViewAddin *self,
+                                       const gchar       *language_id)
+{
+  g_return_if_fail (GB_IS_EDITOR_VIEW_ADDIN (self));
+
+  if (GB_EDITOR_VIEW_ADDIN_GET_IFACE (self)->language_changed)
+    GB_EDITOR_VIEW_ADDIN_GET_IFACE (self)->language_changed (self, language_id);
+}

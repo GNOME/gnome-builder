@@ -21,9 +21,10 @@
 #include <glib/gi18n.h>
 
 #include "gb-editor-frame-private.h"
-#include "gb-editor-view.h"
 #include "gb-editor-view-actions.h"
 #include "gb-editor-view-addin.h"
+#include "gb-editor-view.h"
+#include "gb-editor-view-addin-private.h"
 #include "gb-editor-view-private.h"
 #include "gb-widget.h"
 
@@ -213,6 +214,39 @@ gb_editor_view__buffer_notify_title (GbEditorView *self,
 }
 
 static void
+notify_language_foreach (PeasExtensionSet *set,
+                         PeasPluginInfo   *plugin_info,
+                         PeasExtension    *exten,
+                         gpointer          user_data)
+{
+  const gchar *language_id = user_data;
+
+  gb_editor_view_addin_language_changed (GB_EDITOR_VIEW_ADDIN (exten), language_id);
+}
+
+static void
+gb_editor_view__buffer_notify_language (GbEditorView     *self,
+                                        GParamSpec       *pspec,
+                                        GbEditorDocument *document)
+{
+  g_assert (GB_IS_EDITOR_VIEW (self));
+  g_assert (GB_IS_EDITOR_DOCUMENT (document));
+
+  if (self->extensions != NULL)
+    {
+      GtkSourceLanguage *language;
+      const gchar *language_id;
+
+      language = gtk_source_buffer_get_language (GTK_SOURCE_BUFFER (document));
+      language_id = language ? gtk_source_language_get_id (language) : NULL;
+
+      peas_extension_set_foreach (self->extensions,
+                                  notify_language_foreach,
+                                  (gchar *)language_id);
+    }
+}
+
+static void
 gb_editor_view_set_document (GbEditorView     *self,
                              GbEditorDocument *document)
 {
@@ -251,12 +285,20 @@ gb_editor_view_set_document (GbEditorView     *self,
                                G_CONNECT_SWAPPED);
 
       g_signal_connect_object (document,
+                               "notify::language",
+                               G_CALLBACK (gb_editor_view__buffer_notify_language),
+                               self,
+                               G_CONNECT_SWAPPED);
+
+      g_signal_connect_object (document,
                                "notify::changed-on-volume",
                                G_CALLBACK (gb_editor_view__buffer_changed_on_volume),
                                self,
                                G_CONNECT_SWAPPED);
 
       g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_DOCUMENT]);
+
+      gb_editor_view__buffer_notify_language (self, NULL, document);
 
       gb_editor_view_actions_update (self);
     }
@@ -379,12 +421,31 @@ gb_editor_view__extension_added (PeasExtensionSet  *set,
                                  GbEditorViewAddin *addin,
                                  GbEditorView      *self)
 {
+  GbDocument *document;
+
   g_assert (PEAS_IS_EXTENSION_SET (set));
   g_assert (info != NULL);
   g_assert (GB_IS_EDITOR_VIEW_ADDIN (addin));
   g_assert (GB_IS_EDITOR_VIEW (self));
 
   gb_editor_view_addin_load (addin, self);
+
+  document = gb_view_get_document (GB_VIEW (self));
+
+  if (document != NULL)
+    {
+      GtkSourceLanguage *language;
+
+      language = gtk_source_buffer_get_language (GTK_SOURCE_BUFFER (document));
+
+      if (language != NULL)
+        {
+          const gchar *language_id;
+
+          language_id = gtk_source_language_get_id (language);
+          gb_editor_view_addin_language_changed (addin, language_id);
+        }
+    }
 }
 
 static void
