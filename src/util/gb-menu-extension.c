@@ -127,6 +127,57 @@ gb_menu_extension_new (GMenu *menu)
 	return g_object_new (GB_TYPE_MENU_EXTENSION, "menu", menu, NULL);
 }
 
+GbMenuExtension *
+gb_menu_extension_new_for_section (GMenu       *menu,
+                                   const gchar *section)
+{
+	guint n_items;
+	guint i;
+
+	n_items = g_menu_model_get_n_items (G_MENU_MODEL (menu));
+
+	for (i = 0; i < n_items; i++)
+	{
+		g_autoptr(GMenuAttributeIter) iter = NULL;
+
+		iter = g_menu_model_iterate_item_attributes (G_MENU_MODEL (menu), i);
+
+                while (g_menu_attribute_iter_next (iter))
+		{
+			g_autoptr(GVariant) variant = NULL;
+			const gchar *name;
+			const gchar *key;
+
+			name = g_menu_attribute_iter_get_name (iter);
+			if (g_strcmp0 (name, "id") != 0)
+				continue;
+
+			variant = g_menu_attribute_iter_get_value (iter);
+			if (!g_variant_is_of_type (variant, G_VARIANT_TYPE_STRING))
+				continue;
+
+			key = g_variant_get_string (variant, NULL);
+			if (g_strcmp0 (key, section) == 0)
+			{
+				GMenuModel *section_menu;
+
+				section_menu = g_menu_model_get_item_link (G_MENU_MODEL (menu), i, G_MENU_LINK_SECTION);
+
+				if (!G_IS_MENU (section_menu))
+					continue;
+
+				return g_object_new (GB_TYPE_MENU_EXTENSION, "menu", section_menu, NULL);
+			}
+		}
+	}
+
+	g_warning ("Failed to locate section \"%s\". "
+	           "Ensure you have set the <attribute name=\"id\"> element.",
+	           section);
+
+	return NULL;
+}
+
 void
 gb_menu_extension_append_menu_item (GbMenuExtension *menu,
                                     GMenuItem       *item)

@@ -31,6 +31,8 @@ G_BEGIN_DECLS
 G_DECLARE_FINAL_TYPE (GbMenuExtension, gb_menu_extension, GB, MENU_EXTENSION, GObject)
 
 GbMenuExtension       *gb_menu_extension_new                 (GMenu           *menu);
+GbMenuExtension       *gb_menu_extension_new_for_section     (GMenu           *menu,
+                                                              const gchar     *section);
 
 void                   gb_menu_extension_append_menu_item    (GbMenuExtension *menu,
                                                               GMenuItem       *item);
