@@ -23,6 +23,8 @@ libgnome_builder_public_sources = \
 	util/gb-menu-extension.h \
 	views/gb-view.c \
 	views/gb-view.h \
+	views/gb-view-stack.c \
+	views/gb-view-stack.h \
 	$(NULL)
 
 libgnome_builder_la_SOURCES = \
@@ -161,8 +163,6 @@ libgnome_builder_la_SOURCES = \
 	views/gb-view-stack-actions.c \
 	views/gb-view-stack-actions.h \
 	views/gb-view-stack-private.h \
-	views/gb-view-stack.c \
-	views/gb-view-stack.h \
 	workbench/gb-workbench-actions.c \
 	workbench/gb-workbench-actions.h \
 	workbench/gb-workbench-addin.c \
