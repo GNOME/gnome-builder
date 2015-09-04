@@ -294,9 +294,9 @@ gb_view_grid_stack_split (GbViewGrid      *self,
       g_object_ref (view);
       gb_view_stack_remove (stack, view);
       gb_view_stack_add (GTK_CONTAINER (target), GTK_WIDGET (view));
+      gb_view_stack_set_active_view (GB_VIEW_STACK (target), GTK_WIDGET (view));
       g_object_unref (view);
 
-      gb_view_stack_focus_document (GB_VIEW_STACK (target), document);
       break;
 
     case GB_VIEW_GRID_SPLIT_RIGHT:
@@ -314,9 +314,9 @@ gb_view_grid_stack_split (GbViewGrid      *self,
       g_object_ref (view);
       gb_view_stack_remove (stack, view);
       gb_view_stack_add (GTK_CONTAINER (target), GTK_WIDGET (view));
+      gb_view_stack_set_active_view (GB_VIEW_STACK (target), GTK_WIDGET (view));
       g_object_unref (view);
 
-      gb_view_stack_focus_document (GB_VIEW_STACK (target), document);
       break;
 
     default:
