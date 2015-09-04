@@ -72,13 +72,13 @@ dist-hook:
 
 run:
 	GB_IN_TREE_PLUGINS=1 \
-	GI_TYPELIB_PATH="libide:src" \
+	GI_TYPELIB_PATH="libide:src:$(GI_TYPELIB_PATH)" \
 	GOBJECT_DEBUG=instance-count \
 	$(LIBTOOL) --mode=execute gdb -ex run --args src/gnome-builder -vvvv -s
 
 strace:
 	GB_IN_TREE_PLUGINS=1 \
-	GI_TYPELIB_PATH="libide:src" \
+	GI_TYPELIB_PATH="libide:src:$(GI_TYPELIB_PATH)" \
 	GOBJECT_DEBUG=instance-count \
 	$(LIBTOOL) --mode=execute strace -T src/gnome-builder -vvvv -s
 
