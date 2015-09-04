@@ -516,6 +516,14 @@ gb_workbench_actions_focus_right (GSimpleAction *action,
                       g_object_unref);
 }
 
+static void
+gb_workbench_actions_inspector (GSimpleAction *action,
+                                GVariant      *param,
+                                gpointer       user_data)
+{
+  gtk_window_set_interactive_debugging (TRUE);
+}
+
 static const GActionEntry GbWorkbenchActions[] = {
   { "build",            gb_workbench_actions_build },
   { "dayhack",          gb_workbench_actions_dayhack },
@@ -523,6 +531,7 @@ static const GActionEntry GbWorkbenchActions[] = {
   { "focus-left",       gb_workbench_actions_focus_left },
   { "focus-right",      gb_workbench_actions_focus_right },
   { "global-search",    gb_workbench_actions_global_search },
+  { "inspector",        gb_workbench_actions_inspector },
   { "new-document",     gb_workbench_actions_new_document },
   { "nighthack",        gb_workbench_actions_nighthack },
   { "open",             gb_workbench_actions_open },
