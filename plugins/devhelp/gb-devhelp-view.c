@@ -22,7 +22,6 @@
 #include <webkit2/webkit2.h>
 
 #include "gb-devhelp-view.h"
-#include "gb-webkit.h"
 #include "gb-widget.h"
 
 struct _GbDevhelpView
@@ -47,6 +46,22 @@ enum {
 };
 
 static GParamSpec *gParamSpecs [LAST_PROP];
+
+static void
+apply_settings (WebKitWebView *view)
+{
+  g_return_if_fail (WEBKIT_IS_WEB_VIEW (view));
+
+  /*
+   * TODO: Consider whether HTML5 local storage should be enabled. It could only
+   * possibly be useful for complex web sites, but if you're building a web site
+   * with Builder then it might be useful to have. But leave disabled until
+   * https://bugs.webkit.org/show_bug.cgi?id=143245 has been fixed.
+   */
+  g_object_set (webkit_web_view_get_settings (view),
+                "enable-html5-local-storage", FALSE,
+                NULL);
+}
 
 GbView *
 gb_devhelp_view_new (GbDevhelpDocument *document)
@@ -152,7 +167,7 @@ gb_devhelp_view_set_split_view (GbView   *view,
       self->web_view2 = g_object_new (WEBKIT_TYPE_WEB_VIEW,
                                       "visible", TRUE,
                                       NULL);
-      gb_webkit_web_view_apply_settings (self->web_view2);
+      apply_settings (self->web_view2);
       gtk_container_add_with_properties (GTK_CONTAINER (self->paned), GTK_WIDGET (self->web_view2),
                                          "shrink", FALSE,
                                          "resize", TRUE,
@@ -267,5 +282,5 @@ gb_devhelp_view_init (GbDevhelpView *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
 
-  gb_webkit_web_view_apply_settings (self->web_view1);
+  apply_settings (self->web_view1);
 }

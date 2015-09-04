@@ -44,9 +44,6 @@ class HtmlPreviewData(GObject.Object, Builder.ApplicationAddin):
     MARKDOWN_VIEW_JS = None
 
     def do_load(self, app):
-        settings = WebKit2.Settings()
-        settings.enable_html5_local_storage = False
-
         HtmlPreviewData.MARKDOWN_CSS = self.get_data('markdown.css')
         HtmlPreviewData.MARKED_JS = self.get_data('marked.js')
         HtmlPreviewData.MARKDOWN_VIEW_JS = self.get_data('markdown-view.js')
@@ -105,6 +102,10 @@ class HtmlPreviewView(Builder.View):
 
         self.webview = WebKit2.WebView(visible=True, expand=True)
         self.add(self.webview)
+
+        settings = self.webview.get_settings()
+        settings.enable_html5_local_storage = False
+
 
         language = document.get_language()
         if language and language.get_id() == 'markdown':
