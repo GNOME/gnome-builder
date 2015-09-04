@@ -1,4 +1,5 @@
-noinst_LTLIBRARIES = libsearch.la
+pkglibdir = $(libdir)/gnome-builder/
+pkglib_LTLIBRARIES = libsearch.la
 
 libsearch_la_SOURCES = \
 	trie.c \
