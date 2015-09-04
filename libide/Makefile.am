@@ -283,7 +283,7 @@ libide_1_0_la_LDFLAGS = \
 	$(OPTIMIZE_LDFLAGS) \
 	-avoid-version \
 	-no-undefined \
-	-export-symbols-regex '^ide_.*' \
+	-export-symbols-regex '^(ide_|_ide_).*' \
 	$(NULL)
 
 libide_1_0_la_LIBADD = \
