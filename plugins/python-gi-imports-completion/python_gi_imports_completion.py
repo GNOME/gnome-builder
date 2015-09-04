@@ -20,14 +20,20 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
+import gi
+import os
+
+gi.require_version('Gtk', '3.0')
+gi.require_version('GtkSource', '3.0')
+gi.require_version('GIRepository', '2.0')
+gi.require_version('Ide', '1.0')
+
 from gi.repository import GIRepository
 from gi.repository import GLib
 from gi.repository import GObject
 from gi.repository import Gtk
 from gi.repository import GtkSource
 from gi.repository import Ide
-
-import os
 
 # 2 minutes
 CACHE_EXPIRE_USEC = 2 * 60 * 1000 * 1000
