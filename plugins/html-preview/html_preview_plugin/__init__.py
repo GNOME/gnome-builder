@@ -51,7 +51,6 @@ class HtmlPreviewData(GObject.Object, Builder.ApplicationAddin):
         engine = Peas.Engine.get_default()
         info = engine.get_plugin_info('html_preview_plugin')
         datadir = info.get_data_dir()
-        print ("DATA_DIR: %s\n", datadir)
         path = os.path.join(datadir, name)
         return open(path, 'r').read()
 
