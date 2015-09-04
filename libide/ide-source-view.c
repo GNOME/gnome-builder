@@ -93,6 +93,7 @@ typedef struct
   GtkSourceGutterRenderer     *line_change_renderer;
   GtkSourceGutterRenderer     *line_diagnostics_renderer;
   IdeSourceViewCapture        *capture;
+  gchar                       *display_name;
   IdeSourceViewMode           *mode;
   GList                       *providers;
   GtkTextMark                 *rubberband_mark;
@@ -2989,6 +2990,25 @@ ide_source_view_save_offset (IdeSourceView *self)
 }
 
 static void
+ide_source_view_update_display_name (IdeSourceView *self)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+  const gchar *display_name = NULL;
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+
+  if (priv->mode != NULL)
+    display_name = ide_source_view_mode_get_display_name (priv->mode);
+
+  if (g_strcmp0 (display_name, priv->display_name) != 0)
+    {
+      g_free (priv->display_name);
+      priv->display_name = g_strdup (display_name);
+      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_MODE_DISPLAY_NAME]);
+    }
+}
+
+static void
 ide_source_view_real_set_mode (IdeSourceView         *self,
                                const gchar           *mode,
                                IdeSourceViewModeType  type)
@@ -3046,7 +3066,7 @@ ide_source_view_real_set_mode (IdeSourceView         *self,
     gtk_text_view_set_overwrite (GTK_TEXT_VIEW (self), overwrite);
   g_object_notify (G_OBJECT (self), "overwrite");
 
-  g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_MODE_DISPLAY_NAME]);
+  ide_source_view_update_display_name (self);
 
   IDE_EXIT;
 }
@@ -4950,6 +4970,7 @@ ide_source_view_finalize (GObject *object)
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
 
   g_clear_object (&priv->completion_providers_signals);
+  g_clear_pointer (&priv->display_name, g_free);
   g_clear_pointer (&priv->font_desc, pango_font_description_free);
   g_clear_pointer (&priv->selections, g_queue_free);
   g_clear_pointer (&priv->snippets, g_queue_free);
@@ -6218,10 +6239,7 @@ ide_source_view_get_mode_display_name (IdeSourceView *self)
 
   g_return_val_if_fail (IDE_IS_SOURCE_VIEW (self), NULL);
 
-  if (priv->mode != NULL)
-    return ide_source_view_mode_get_display_name (priv->mode);
-
-  return NULL;
+  return priv->display_name;
 }
 
 gboolean
