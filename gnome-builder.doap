@@ -7,7 +7,7 @@
 
   <name xml:lang="en">Builder</name>
   <shortdesc xml:lang="en">
-    An IDE for writing GNOME-based software.
+    An IDE for writing GNOME-based software
   </shortdesc>
   <description xml:lang="en">
     Builder is an IDE for writing GNOME-based software.
