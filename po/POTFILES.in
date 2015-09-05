@@ -66,6 +66,7 @@ plugins/device-manager/gb-device-manager-panel.c
 plugins/file-search/gb-file-search-provider.c
 plugins/gnome-code-assistance/ide-gca-diagnostic-provider.c
 plugins/gnome-code-assistance/ide-gca-service.c
+plugins/html-preview/html_preview_plugin/__init__.py
 plugins/mingw/ide-mingw-device-provider.c
 plugins/python-pack/ide-python-format-provider.c
 plugins/symbol-tree/symbol-tree.c
@@ -81,7 +82,6 @@ src/editor/gb-editor-frame.c
 src/editor/gb-editor-settings-widget.c
 src/editor/gb-editor-view-actions.c
 src/editor/gb-editor-view.c
-src/html/gb-html-document.c
 src/main.c
 src/preferences/gb-preferences-page-editor.c
 src/preferences/gb-preferences-page-git.c
