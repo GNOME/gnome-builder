@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2015-09-02 11:02+0000\n"
+"POT-Creation-Date: 2015-09-05 00:35+0000\n"
 "PO-Revision-Date: 2015-09-03 10:46+0200\n"
 "Last-Translator: Dušan Kazik <prescott66@gmail.com>\n"
 "Language-Team: slovenčina <>\n"
@@ -289,7 +289,8 @@ msgid "8"
 msgstr "8"
 
 #: ../data/ui/gb-editor-view.ui.h:2 ../data/ui/gb-greeter-window.ui.h:4
-#: ../data/ui/gb-new-project-dialog.ui.h:2 ../data/ui/gb-projects-dialog.ui.h:3
+#: ../data/ui/gb-new-project-dialog.ui.h:2
+#: ../data/ui/gb-projects-dialog.ui.h:3
 msgid "_Cancel"
 msgstr "_Zrušiť"
 
@@ -631,7 +632,8 @@ msgstr "Nastavenia"
 msgid "Search Preferences…"
 msgstr "Vyhľadajte nastavenia…"
 
-#: ../data/ui/gb-projects-dialog.ui.h:1 ../src/dialogs/gb-projects-dialog.c:257
+#: ../data/ui/gb-projects-dialog.ui.h:1
+#: ../src/dialogs/gb-projects-dialog.c:257
 msgid "Select Project"
 msgstr "Výber projektu"
 
@@ -899,22 +901,18 @@ msgid "Move Right"
 msgstr "Presunúť doprava"
 
 #: ../data/ui/gb-view.ui.h:8
-msgid "Pre_view"
-msgstr "U_kážka"
-
-#: ../data/ui/gb-view.ui.h:9
 msgid "_Save"
 msgstr "_Uložiť"
 
-#: ../data/ui/gb-view.ui.h:10
+#: ../data/ui/gb-view.ui.h:9
 msgid "_Save As"
 msgstr "U_ložiť ako"
 
-#: ../data/ui/gb-view.ui.h:11
+#: ../data/ui/gb-view.ui.h:10
 msgid "Print"
 msgstr "Tlačiť"
 
-#: ../data/ui/gb-view.ui.h:12
+#: ../data/ui/gb-view.ui.h:11
 msgid "_Close"
 msgstr "_Zavrieť"
 
@@ -1064,17 +1062,23 @@ msgstr "Kontext už bol obnovený."
 msgid "The device \"%s\" could not be found."
 msgstr "Zariadenie „%s“ sa nepodarilo nájsť."
 
-#: ../libide/ide-object.c:283 ../libide/ide-object.c:471
-msgid "No implementations of extension point."
-msgstr "Žiadna implementácia rozširujúceho bodu."
+#: ../libide/ide-object.c:285
+#, c-format
+#| msgid "No implementations of extension point."
+msgid "No implementations of extension point \"%s\"."
+msgstr "Žiadna implementácia rozširujúceho bodu „%s“."
 
-#: ../libide/ide-object.c:374
+#: ../libide/ide-object.c:377
 msgid "Failed to locate build system plugin."
 msgstr "Zlyhalo lokalizovanie zásuvného modulu systému zostavovania."
 
-#: ../libide/ide-object.c:461
+#: ../libide/ide-object.c:464
 msgid "No such extension point."
 msgstr "Neexistuje bod rozšírenia."
+
+#: ../libide/ide-object.c:474
+msgid "No implementations of extension point."
+msgstr "Žiadna implementácia rozširujúceho bodu."
 
 #: ../libide/ide-project.c:463
 msgid "Destination file must be within the project tree."
@@ -1117,29 +1121,29 @@ msgstr "Zlyhalo otvorenie adresára: %s"
 msgid "Failed to load file: %s: %s"
 msgstr "Zlyhalo načítanie súboru: %s: %s"
 
-#: ../libide/ide-source-view.c:4541
+#: ../libide/ide-source-view.c:4561
 #, c-format
 msgid "Insert \"%s\""
 msgstr "Vložiť „%s“"
 
-#: ../libide/ide-source-view.c:4543
+#: ../libide/ide-source-view.c:4563
 #, c-format
 msgid "Replace \"%s\" with \"%s\""
 msgstr "Nahradiť „%s“ s „%s“"
 
-#: ../libide/ide-source-view.c:4661
+#: ../libide/ide-source-view.c:4681
 msgid "Apply Fix-It"
 msgstr ""
 
-#: ../libide/ide-source-view.c:4704
+#: ../libide/ide-source-view.c:4724
 msgid "Join Lines"
 msgstr "Spojiť riadky"
 
-#: ../libide/ide-source-view.c:4715
+#: ../libide/ide-source-view.c:4735
 msgid "Sort Lines"
 msgstr "Usporiadať riadky"
 
-#: ../libide/ide-source-view.c:4734
+#: ../libide/ide-source-view.c:4754
 msgid "Go to Definition"
 msgstr "Prejsť na definíciu"
 
@@ -1323,6 +1327,11 @@ msgstr "Asistencia kódu vyžaduje miestny súbor."
 msgid "No language specified"
 msgstr "Nie je určený žiadny jazyk"
 
+#: ../plugins/html-preview/html_preview_plugin/__init__.py:88
+#| msgid "Pre_view"
+msgid "Preview as HTML"
+msgstr "Ukážka v HTML"
+
 #: ../plugins/mingw/ide-mingw-device-provider.c:95
 msgid "MinGW (64-bit)"
 msgstr "MinGW (64-bitový)"
@@ -1464,18 +1473,9 @@ msgstr "Uloženie dokumentu"
 msgid "Save Document As"
 msgstr "Uloženie dokumentu ako"
 
-#: ../src/editor/gb-editor-view.c:110
+#: ../src/editor/gb-editor-view.c:111
 msgid "Plain Text"
 msgstr "Obyčajný text"
-
-#: ../src/html/gb-html-document.c:109
-msgid "HTML Preview"
-msgstr "Ukážka HTML"
-
-#: ../src/html/gb-html-document.c:131
-#, c-format
-msgid "%s (Preview)"
-msgstr "%s (Ukážka)"
 
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-editor.c:95
@@ -1829,6 +1829,12 @@ msgstr "%s výsledkov\n"
 #: ../tools/ide-search.c:120
 msgid "PROJECT_FILE [SEARCH TERMS...]"
 msgstr "SÚBOR_PROJEKTU [HĽADANÉ VÝRAZY...]"
+
+#~ msgid "HTML Preview"
+#~ msgstr "Ukážka HTML"
+
+#~ msgid "%s (Preview)"
+#~ msgstr "%s (Ukážka)"
 
 #~ msgid "The name of the action"
 #~ msgstr "Názov akcie"
