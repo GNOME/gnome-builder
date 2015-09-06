@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-04 00:04+0200\n"
-"PO-Revision-Date: 2015-09-04 00:05+0200\n"
+"POT-Creation-Date: 2015-09-06 20:44+0200\n"
+"PO-Revision-Date: 2015-09-06 20:45+0200\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <gnomepl@aviary.pl>\n"
 "Language: pl\n"
@@ -296,8 +296,7 @@ msgid "8"
 msgstr "8"
 
 #: ../data/ui/gb-editor-view.ui.h:2 ../data/ui/gb-greeter-window.ui.h:4
-#: ../data/ui/gb-new-project-dialog.ui.h:2
-#: ../data/ui/gb-projects-dialog.ui.h:3
+#: ../data/ui/gb-new-project-dialog.ui.h:2 ../data/ui/gb-projects-dialog.ui.h:3
 msgid "_Cancel"
 msgstr "_Anuluj"
 
@@ -640,8 +639,7 @@ msgstr "Preferencje"
 msgid "Search Preferences…"
 msgstr "Przeszukiwanie preferencji…"
 
-#: ../data/ui/gb-projects-dialog.ui.h:1
-#: ../src/dialogs/gb-projects-dialog.c:257
+#: ../data/ui/gb-projects-dialog.ui.h:1 ../src/dialogs/gb-projects-dialog.c:255
 msgid "Select Project"
 msgstr "Wybór projektu"
 
@@ -909,22 +907,18 @@ msgid "Move Right"
 msgstr "W prawo"
 
 #: ../data/ui/gb-view.ui.h:8
-msgid "Pre_view"
-msgstr "Po_dgląd"
-
-#: ../data/ui/gb-view.ui.h:9
 msgid "_Save"
 msgstr "_Zapisz"
 
-#: ../data/ui/gb-view.ui.h:10
+#: ../data/ui/gb-view.ui.h:9
 msgid "_Save As"
 msgstr "Z_apisz jako"
 
-#: ../data/ui/gb-view.ui.h:11
+#: ../data/ui/gb-view.ui.h:10
 msgid "Print"
 msgstr "Wydrukuj"
 
-#: ../data/ui/gb-view.ui.h:12
+#: ../data/ui/gb-view.ui.h:11
 msgid "_Close"
 msgstr "Za_mknij"
 
@@ -1062,11 +1056,11 @@ msgid "Builder requires libgit2-glib with SSH support."
 msgstr ""
 "Program Builder wymaga biblioteki libgit2-glib z obsługą protokołu SSH."
 
-#: ../libide/ide-context.c:1670
+#: ../libide/ide-context.c:1666
 msgid "An unload request is already pending"
 msgstr "Żądanie usunięcia z pamięci jest już wykonywane"
 
-#: ../libide/ide-context.c:1785
+#: ../libide/ide-context.c:1781
 msgid "Context has already been restored."
 msgstr "Kontekst został już przywrócony."
 
@@ -1075,17 +1069,22 @@ msgstr "Kontekst został już przywrócony."
 msgid "The device \"%s\" could not be found."
 msgstr "Nie można odnaleźć urządzenia „%s”."
 
-#: ../libide/ide-object.c:283 ../libide/ide-object.c:471
-msgid "No implementations of extension point."
-msgstr "Brak implementacji punktu rozszerzenia."
+#: ../libide/ide-object.c:285
+#, c-format
+msgid "No implementations of extension point \"%s\"."
+msgstr "Brak implementacji punktu rozszerzenia „%s”."
 
-#: ../libide/ide-object.c:374
+#: ../libide/ide-object.c:377
 msgid "Failed to locate build system plugin."
 msgstr "Ustalenie położenia wtyczki systemu budowania się nie powiodło."
 
-#: ../libide/ide-object.c:461
+#: ../libide/ide-object.c:464
 msgid "No such extension point."
 msgstr "Nie ma takiego punktu rozszerzenia."
+
+#: ../libide/ide-object.c:474
+msgid "No implementations of extension point."
+msgstr "Brak implementacji punktu rozszerzenia."
 
 #: ../libide/ide-project.c:463
 msgid "Destination file must be within the project tree."
@@ -1128,29 +1127,29 @@ msgstr "Otwarcie katalogu się nie powiodło: %s"
 msgid "Failed to load file: %s: %s"
 msgstr "Wczytanie pliku się nie powiodło: %s: %s"
 
-#: ../libide/ide-source-view.c:4541
+#: ../libide/ide-source-view.c:4561
 #, c-format
 msgid "Insert \"%s\""
 msgstr "Wstaw „%s”"
 
-#: ../libide/ide-source-view.c:4543
+#: ../libide/ide-source-view.c:4563
 #, c-format
 msgid "Replace \"%s\" with \"%s\""
 msgstr "Zmień „%s” na „%s”"
 
-#: ../libide/ide-source-view.c:4661
+#: ../libide/ide-source-view.c:4681
 msgid "Apply Fix-It"
 msgstr "Zastosuj „Fix-It”"
 
-#: ../libide/ide-source-view.c:4704
+#: ../libide/ide-source-view.c:4724
 msgid "Join Lines"
 msgstr "Połącz wiersze"
 
-#: ../libide/ide-source-view.c:4715
+#: ../libide/ide-source-view.c:4735
 msgid "Sort Lines"
 msgstr "Posortuj wiersze"
 
-#: ../libide/ide-source-view.c:4734
+#: ../libide/ide-source-view.c:4754
 msgid "Go to Definition"
 msgstr "Przejdź do definicji"
 
@@ -1334,6 +1333,10 @@ msgstr "Asysta podczas pisania kodu wymaga lokalnego pliku."
 msgid "No language specified"
 msgstr "Nie podano żadnego języka"
 
+#: ../plugins/html-preview/html_preview_plugin/__init__.py:88
+msgid "Preview as HTML"
+msgstr "Podgląd jako HTML"
+
 #: ../plugins/mingw/ide-mingw-device-provider.c:95
 msgid "MinGW (64-bit)"
 msgstr "MinGW (64-bitowe)"
@@ -1443,7 +1446,7 @@ msgstr "Wymagany jest prawidłowy adres URL systemu git"
 msgid "Directory|Projects"
 msgstr "Katalog|Projekty"
 
-#: ../src/dialogs/gb-projects-dialog.c:246
+#: ../src/dialogs/gb-projects-dialog.c:244
 msgid "(Click on items to select them)"
 msgstr "(Kliknięcie elementów zaznacza je)"
 
@@ -1474,18 +1477,9 @@ msgstr "Zapis dokumentu"
 msgid "Save Document As"
 msgstr "Zapis dokumentu jako"
 
-#: ../src/editor/gb-editor-view.c:110
+#: ../src/editor/gb-editor-view.c:111
 msgid "Plain Text"
 msgstr "Zwykły tekst"
-
-#: ../src/html/gb-html-document.c:109
-msgid "HTML Preview"
-msgstr "Podgląd HTML"
-
-#: ../src/html/gb-html-document.c:131
-#, c-format
-msgid "%s (Preview)"
-msgstr "%s (podgląd)"
 
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-editor.c:95
@@ -1625,11 +1619,11 @@ msgstr "Nie można odnaleźć dostawcy."
 msgid "%s more"
 msgstr "Więcej: %s"
 
-#: ../src/shortcuts/gb-shortcuts-dialog.c:924
+#: ../src/shortcuts/gb-shortcuts-dialog.c:920
 msgid "Search Shortcuts"
 msgstr "Wyszukiwanie skrótów"
 
-#: ../src/shortcuts/gb-shortcuts-dialog.c:951
+#: ../src/shortcuts/gb-shortcuts-dialog.c:947
 msgid "Search Results"
 msgstr "Wyniki wyszukiwania"
 
