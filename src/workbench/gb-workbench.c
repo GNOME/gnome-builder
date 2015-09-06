@@ -373,26 +373,6 @@ gb_workbench_delete_event (GtkWidget   *widget,
   return FALSE;
 }
 
-static gboolean
-gb_workbench_draw (GtkWidget *widget,
-                   cairo_t   *cr)
-{
-  GbWorkbench *self = (GbWorkbench *)widget;
-  GtkStyleContext *style_context;
-  gboolean ret;
-
-  g_assert (GB_IS_WORKBENCH (self));
-
-  style_context = gtk_widget_get_style_context (widget);
-  gtk_style_context_save (style_context);
-  if (self->building)
-    gtk_style_context_add_class (style_context, "building");
-  ret = GTK_WIDGET_CLASS (gb_workbench_parent_class)->draw (widget, cr);
-  gtk_style_context_restore (style_context);
-
-  return ret;
-}
-
 static void
 gb_workbench_drag_data_received (GtkWidget        *widget,
                                  GdkDragContext   *context,
@@ -675,7 +655,6 @@ gb_workbench_class_init (GbWorkbenchClass *klass)
   widget_class->delete_event = gb_workbench_delete_event;
   widget_class->destroy = gb_workbench_destroy;
   widget_class->drag_data_received = gb_workbench_drag_data_received;
-  widget_class->draw = gb_workbench_draw;
   widget_class->grab_focus = gb_workbench_grab_focus;
   widget_class->realize = gb_workbench_realize;
 
