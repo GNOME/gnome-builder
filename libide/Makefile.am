@@ -379,9 +379,7 @@ dist_gir_DATA = $(INTROSPECTION_GIRS)
 typelibdir = $(pkglibdir)/girepository-1.0
 typelib_DATA = $(INTROSPECTION_GIRS:.gir=.typelib)
 
-CLEANFILES += $(gir_DATA) $(typelib_DATA)
+CLEANFILES += $(dist_gir_DATA) $(typelib_DATA)
 endif
-
-GITIGNOREFILES = Ide-1.0.gir
 
 -include $(top_srcdir)/git.mk
