@@ -299,7 +299,7 @@ Builder_1_0_gir_SCANNERFLAGS = \
 INTROSPECTION_GIRS += Builder-1.0.gir
 
 girdir = $(datadir)/gir-1.0
-gir_DATA = $(INTROSPECTION_GIRS)
+dist_gir_DATA = $(INTROSPECTION_GIRS)
 
 typelibdir = $(pkglibdir)/girepository-1.0
 typelib_DATA = $(INTROSPECTION_GIRS:.gir=.typelib)
