@@ -277,7 +277,9 @@ include $(top_srcdir)/build/autotools/Makefile.am.gresources
 
 INTROSPECTION_GIRS =
 INTROSPECTION_SCANNER_ARGS = --add-include-path=$(srcdir) --warn-all
-INTROSPECTION_COMPILER_ARGS = --includedir=$(srcdir)
+INTROSPECTION_COMPILER_ARGS = \
+	--includedir=$(srcdir) \
+	--includedir=$(top_srcdir)/libide
 
 if HAVE_INTROSPECTION
 introspection_sources = \
@@ -307,5 +309,6 @@ typelib_DATA = $(INTROSPECTION_GIRS:.gir=.typelib)
 CLEANFILES += $(gir_DATA) $(typelib_DATA)
 endif
 
+GITIGNOREFILES = Builder-1.0.gir
 
 -include $(top_srcdir)/git.mk
