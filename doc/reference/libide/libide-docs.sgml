@@ -3,25 +3,22 @@
                "http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd"
 [
   <!ENTITY % local.common.attrib "xmlns:xi  CDATA  #FIXED 'http://www.w3.org/2003/XInclude'">
+  <!ENTITY % gtkdocentities SYSTEM "xml/gtkdocentities.ent">
+  %gtkdocentities;
 ]>
 <book id="index">
   <bookinfo>
-    <title>libide Reference Manual</title>
+    <title>&package_name; Reference Manual</title>
     <releaseinfo>
-      for libide [VERSION].
+      for &package_string;.
       The latest version of this documentation can be found on-line at
-      <ulink role="online-location" url="http://[SERVER]/libide/index.html">http://[SERVER]/libide/</ulink>.
+      <ulink role="online-location" url="http://[SERVER]/&package_name;/index.html">http://[SERVER]/&package_name;/</ulink>.
     </releaseinfo>
   </bookinfo>
 
   <chapter>
     <title>[Insert title here]</title>
         <xi:include href="xml/ide.xml"/>
-    <xi:include href="xml/ide-animation.xml"/>
-    <xi:include href="xml/ide-autotools-build-system.xml"/>
-    <xi:include href="xml/ide-autotools-build-task.xml"/>
-    <xi:include href="xml/ide-autotools-builder.xml"/>
-    <xi:include href="xml/ide-autotools-project-miner.xml"/>
     <xi:include href="xml/ide-back-forward-item.xml"/>
     <xi:include href="xml/ide-back-forward-list.xml"/>
     <xi:include href="xml/ide-buffer.xml"/>
@@ -30,13 +27,8 @@
     <xi:include href="xml/ide-build-result.xml"/>
     <xi:include href="xml/ide-build-system.xml"/>
     <xi:include href="xml/ide-builder.xml"/>
-    <xi:include href="xml/ide-c-language.xml"/>
+    <xi:include href="xml/ide-completion-provider.xml"/>
     <xi:include href="xml/ide-context.xml"/>
-    <xi:include href="xml/ide-ctags-builder.xml"/>
-    <xi:include href="xml/ide-ctags-completion-item.xml"/>
-    <xi:include href="xml/ide-ctags-highlighter.xml"/>
-    <xi:include href="xml/ide-ctags-index.xml"/>
-    <xi:include href="xml/ide-ctags-service.xml"/>
     <xi:include href="xml/ide-debug.xml"/>
     <xi:include href="xml/ide-debugger.xml"/>
     <xi:include href="xml/ide-deployer.xml"/>
@@ -47,13 +39,15 @@
     <xi:include href="xml/ide-diagnostic-provider.xml"/>
     <xi:include href="xml/ide-diagnostician.xml"/>
     <xi:include href="xml/ide-diagnostics.xml"/>
-    <xi:include href="xml/ide-directory-build-system.xml"/>
     <xi:include href="xml/ide-directory-vcs.xml"/>
     <xi:include href="xml/ide-doap.xml"/>
     <xi:include href="xml/ide-doap-person.xml"/>
     <xi:include href="xml/ide-enums.xml"/>
     <xi:include href="xml/ide-executable.xml"/>
     <xi:include href="xml/ide-executer.xml"/>
+    <xi:include href="xml/ide-extension-adapter.xml"/>
+    <xi:include href="xml/ide-extension-set-adapter.xml"/>
+    <xi:include href="xml/ide-extension-util.xml"/>
     <xi:include href="xml/ide-file.xml"/>
     <xi:include href="xml/ide-file-settings.xml"/>
     <xi:include href="xml/ide-fixit.xml"/>
@@ -64,18 +58,13 @@
     <xi:include href="xml/ide-highlight-engine.xml"/>
     <xi:include href="xml/ide-highlight-index.xml"/>
     <xi:include href="xml/ide-highlighter.xml"/>
-    <xi:include href="xml/ide-html-language.xml"/>
     <xi:include href="xml/ide-indent-style.xml"/>
     <xi:include href="xml/ide-indenter.xml"/>
-    <xi:include href="xml/ide-language.xml"/>
     <xi:include href="xml/ide-line-change-gutter-renderer.xml"/>
     <xi:include href="xml/ide-line-diagnostics-gutter-renderer.xml"/>
     <xi:include href="xml/ide-local-device.xml"/>
     <xi:include href="xml/ide-log.xml"/>
     <xi:include href="xml/ide-macros.xml"/>
-    <xi:include href="xml/ide-makecache.xml"/>
-    <xi:include href="xml/ide-makecache-target.xml"/>
-    <xi:include href="xml/ide-mingw-device.xml"/>
     <xi:include href="xml/ide-object.xml"/>
     <xi:include href="xml/ide-pattern-spec.xml"/>
     <xi:include href="xml/ide-process.xml"/>
@@ -86,7 +75,6 @@
     <xi:include href="xml/ide-project-info.xml"/>
     <xi:include href="xml/ide-project-item.xml"/>
     <xi:include href="xml/ide-project-miner.xml"/>
-    <xi:include href="xml/ide-python-language.xml"/>
     <xi:include href="xml/ide-recent-projects.xml"/>
     <xi:include href="xml/ide-refactory.xml"/>
     <xi:include href="xml/ide-script.xml"/>
@@ -118,16 +106,13 @@
     <xi:include href="xml/ide-thread-pool.xml"/>
     <xi:include href="xml/ide-unsaved-file.xml"/>
     <xi:include href="xml/ide-unsaved-files.xml"/>
-    <xi:include href="xml/ide-vala-language.xml"/>
     <xi:include href="xml/ide-vcs.xml"/>
     <xi:include href="xml/ide-vcs-uri.xml"/>
-    <xi:include href="xml/ide-xml-highlighter.xml"/>
-    <xi:include href="xml/ide-xml-language.xml"/>
 
   </chapter>
   <chapter id="object-tree">
     <title>Object Hierarchy</title>
-     <xi:include href="xml/tree_index.sgml"/>
+    <xi:include href="xml/tree_index.sgml"/>
   </chapter>
   <index id="api-index-full">
     <title>API Index</title>
@@ -137,6 +122,5 @@
     <title>Index of deprecated API</title>
     <xi:include href="xml/api-index-deprecated.xml"><xi:fallback /></xi:include>
   </index>
-
   <xi:include href="xml/annotation-glossary.xml"><xi:fallback /></xi:include>
 </book>
