@@ -183,8 +183,6 @@ libgnome_builder_la_SOURCES = \
 	util/gb-settings.h \
 	$(NULL)
 
-EXTRA_DIST += keybindings/gb-shortcuts-window.defs
-
 nodist_libgnome_builder_la_SOURCES = \
 	resources/gb-resources.c \
 	resources/gb-resources.h \
