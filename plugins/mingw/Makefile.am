@@ -2,7 +2,7 @@ EXTRA_DIST = $(plugin_DATA)
 
 plugindir = $(libdir)/gnome-builder/plugins
 plugin_LTLIBRARIES = libmingw-plugin.la
-plugin_DATA = mingw.plugin
+dist_plugin_DATA = mingw.plugin
 
 libmingw_plugin_la_SOURCES = \
 	mingw-plugin.c \

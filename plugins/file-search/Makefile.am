@@ -2,7 +2,7 @@ EXTRA_DIST = $(plugin_DATA)
 
 plugindir = $(libdir)/gnome-builder/plugins
 plugin_LTLIBRARIES = libfile-search.la
-plugin_DATA = file-search.plugin
+dist_plugin_DATA = file-search.plugin
 
 libfile_search_la_SOURCES = \
 	gb-file-search-provider.c \

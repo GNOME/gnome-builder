@@ -5,7 +5,7 @@ EXTRA_DIST = $(plugin_DATA)
 
 plugindir = $(libdir)/gnome-builder/plugins
 plugin_LTLIBRARIES = libdevice-manager.la
-plugin_DATA = device-manager.plugin
+dist_plugin_DATA = device-manager.plugin
 
 libdevice_manager_la_SOURCES = \
 	gb-device-manager-panel.c \

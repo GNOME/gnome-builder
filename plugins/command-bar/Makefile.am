@@ -5,7 +5,7 @@ EXTRA_DIST = $(plugin_DATA)
 
 plugindir = $(libdir)/gnome-builder/plugins
 plugin_LTLIBRARIES = libcommand-bar.la
-plugin_DATA = command-bar.plugin
+dist_plugin_DATA = command-bar.plugin
 
 libcommand_bar_la_SOURCES = \
 	gb-command-bar-resources.c \

@@ -2,7 +2,7 @@ EXTRA_DIST = $(plugin_DATA)
 
 plugindir = $(libdir)/gnome-builder/plugins
 plugin_LTLIBRARIES = libpython-pack-plugin.la
-plugin_DATA = python-pack.plugin
+dist_plugin_DATA = python-pack.plugin
 
 libpython_pack_plugin_la_SOURCES = \
 	ide-python-indenter.c \

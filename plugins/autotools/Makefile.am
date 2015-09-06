@@ -1,6 +1,6 @@
 plugindir = $(libdir)/gnome-builder/plugins
 plugin_LTLIBRARIES = libautotools-plugin.la
-plugin_DATA = autotools.plugin
+dist_plugin_DATA = autotools.plugin
 
 libautotools_plugin_la_SOURCES = \
 	autotools-plugin.c \

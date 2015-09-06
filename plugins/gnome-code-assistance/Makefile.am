@@ -2,7 +2,7 @@ EXTRA_DIST = $(plugin_DATA)
 
 plugindir = $(libdir)/gnome-builder/plugins
 plugin_LTLIBRARIES = libgnome-code-assistance-plugin.la
-plugin_DATA = gnome-code-assistance.plugin
+dist_plugin_DATA = gnome-code-assistance.plugin
 
 libgnome_code_assistance_plugin_la_SOURCES = \
 	gca-diagnostics.c \

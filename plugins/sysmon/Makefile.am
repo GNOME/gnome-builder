@@ -5,7 +5,7 @@ EXTRA_DIST = $(plugin_DATA)
 
 plugindir = $(libdir)/gnome-builder/plugins
 plugin_LTLIBRARIES = libsysmon.la
-plugin_DATA = sysmon.plugin
+dist_plugin_DATA = sysmon.plugin
 
 libsysmon_la_SOURCES = \
 	gb-sysmon-panel.c \

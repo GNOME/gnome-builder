@@ -2,7 +2,7 @@ EXTRA_DIST = $(plugin_DATA)
 
 plugindir = $(libdir)/gnome-builder/plugins
 plugin_LTLIBRARIES = libxml-pack-plugin.la
-plugin_DATA = xml-pack.plugin
+dist_plugin_DATA = xml-pack.plugin
 
 libxml_pack_plugin_la_SOURCES = \
 	ide-xml-highlighter.c \

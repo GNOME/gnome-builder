@@ -2,7 +2,7 @@ EXTRA_DIST = $(plugin_DATA)
 
 plugindir = $(libdir)/gnome-builder/plugins
 plugin_LTLIBRARIES = libhtml-completion-plugin.la
-plugin_DATA = html-completion.plugin
+dist_plugin_DATA = html-completion.plugin
 
 libhtml_completion_plugin_la_SOURCES = \
 	ide-html-completion-provider.c \

@@ -2,7 +2,7 @@ EXTRA_DIST = $(plugin_DATA)
 
 plugindir = $(libdir)/gnome-builder/plugins
 plugin_LTLIBRARIES = libc-pack-plugin.la
-plugin_DATA = c-pack.plugin
+dist_plugin_DATA = c-pack.plugin
 
 libc_pack_plugin_la_SOURCES = \
 	c-pack-plugin.c \

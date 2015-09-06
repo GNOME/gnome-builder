@@ -1,6 +1,6 @@
 plugindir = $(libdir)/gnome-builder/plugins
 plugin_LTLIBRARIES = libctags-plugin.la
-plugin_DATA = ctags.plugin
+dist_plugin_DATA = ctags.plugin
 
 libctags_plugin_la_SOURCES = \
 	ide-ctags-builder.c \

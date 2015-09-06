@@ -1,7 +1,7 @@
 EXTRA_DIST = $(plugin_DATA)
 
 plugindir = $(libdir)/gnome-builder/plugins
-plugin_DATA = \
+dist_plugin_DATA = \
 	python-gi-imports-completion.plugin \
 	python_gi_imports_completion.py
 

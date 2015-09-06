@@ -1,6 +1,6 @@
 plugindir = $(libdir)/gnome-builder/plugins
 plugin_LTLIBRARIES = libfallback-plugin.la
-plugin_DATA = fallback.plugin
+dist_plugin_DATA = fallback.plugin
 
 libfallback_plugin_la_SOURCES = \
 	fallback-plugin.c \

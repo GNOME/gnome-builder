@@ -7,7 +7,7 @@ EXTRA_DIST = $(plugin_DATA)
 
 plugindir = $(libdir)/gnome-builder/plugins
 plugin_LTLIBRARIES = libdevhelp-plugin.la
-plugin_DATA = devhelp.plugin
+dist_plugin_DATA = devhelp.plugin
 
 libdevhelp_plugin_la_SOURCES = \
 	gb-devhelp-document.c \

@@ -5,7 +5,7 @@ EXTRA_DIST = $(plugin_DATA)
 
 plugindir = $(libdir)/gnome-builder/plugins
 plugin_LTLIBRARIES = libsymbol-tree.la
-plugin_DATA = symbol-tree.plugin
+dist_plugin_DATA = symbol-tree.plugin
 
 libsymbol_tree_la_SOURCES = \
 	symbol-tree-builder.c \

@@ -7,7 +7,7 @@ EXTRA_DIST = $(plugin_DATA)
 
 plugindir = $(libdir)/gnome-builder/plugins
 plugin_LTLIBRARIES = libterminal.la
-plugin_DATA = terminal.plugin
+dist_plugin_DATA = terminal.plugin
 
 libterminal_la_SOURCES = \
 	gb-terminal-application-addin.c \
