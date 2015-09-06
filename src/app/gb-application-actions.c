@@ -286,10 +286,7 @@ gb_application_actions_shortcuts (GSimpleAction *action,
                                   GVariant      *variant,
                                   gpointer       user_data)
 {
-  GbApplication *self = user_data;
   GbShortcutsWindow *window;
-
-  g_assert (GB_IS_APPLICATION (self));
 
   window = g_object_new (GB_TYPE_SHORTCUTS_WINDOW,
                          "window-position", GTK_WIN_POS_CENTER,

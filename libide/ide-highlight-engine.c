@@ -507,7 +507,6 @@ ide_highlight_engine__buffer_insert_text_cb (IdeHighlightEngine *self,
                                              gint                len,
                                              IdeBuffer          *buffer)
 {
-  GtkTextBuffer *text_buffer = (GtkTextBuffer *)buffer;
   GtkTextIter begin;
   GtkTextIter end;
 
@@ -517,7 +516,6 @@ ide_highlight_engine__buffer_insert_text_cb (IdeHighlightEngine *self,
   g_assert (location);
   g_assert (text);
   g_assert (IDE_IS_BUFFER (buffer));
-  g_assert (GTK_IS_TEXT_BUFFER (text_buffer));
 
   /*
    * Backward the begin iter len characters from location
@@ -540,7 +538,6 @@ ide_highlight_engine__buffer_delete_range_cb (IdeHighlightEngine *self,
                                               GtkTextIter        *range_end,
                                               IdeBuffer          *buffer)
 {
-  GtkTextBuffer *text_buffer = (GtkTextBuffer *)buffer;
   GtkTextIter begin;
   GtkTextIter end;
 
@@ -549,7 +546,6 @@ ide_highlight_engine__buffer_delete_range_cb (IdeHighlightEngine *self,
   g_assert (IDE_IS_HIGHLIGHT_ENGINE (self));
   g_assert (range_begin);
   g_assert (IDE_IS_BUFFER (buffer));
-  g_assert (GTK_IS_TEXT_BUFFER (text_buffer));
 
   /*
    * No need to use the range_end since everything that

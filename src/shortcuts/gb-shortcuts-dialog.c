@@ -615,9 +615,7 @@ gb_shortcuts_dialog_custom_tag_start (GtkBuildable  *buildable,
                                       GMarkupParser *parser,
                                       gpointer      *data)
 {
-  GbShortcutsDialog *self = (GbShortcutsDialog *)buildable;
-
-  g_assert (GB_IS_SHORTCUTS_DIALOG (self));
+  g_assert (GTK_IS_BUILDABLE (buildable));
   g_assert (GTK_IS_BUILDER (builder));
   g_assert (tagname != NULL);
   g_assert (parser != NULL);
@@ -650,9 +648,7 @@ gb_shortcuts_dialog_custom_finished (GtkBuildable *buildable,
                                      const gchar  *tagname,
                                      gpointer      user_data)
 {
-  GbShortcutsDialog *self = (GbShortcutsDialog *)buildable;
-
-  g_assert (GB_IS_SHORTCUTS_DIALOG (self));
+  g_assert (GB_IS_SHORTCUTS_DIALOG (buildable));
   g_assert (GTK_IS_BUILDER (builder));
   g_assert (tagname != NULL);
 

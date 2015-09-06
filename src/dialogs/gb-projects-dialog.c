@@ -167,11 +167,9 @@ gb_projects_dialog__recent_projects_discover_cb (GObject      *object,
                                                  gpointer      user_data)
 {
   IdeRecentProjects *recent_projects = (IdeRecentProjects *)object;
-  g_autoptr(GbProjectsDialog) self = user_data;
   GError *error = NULL;
 
   g_assert (IDE_IS_RECENT_PROJECTS (recent_projects));
-  g_assert (GB_IS_PROJECTS_DIALOG (self));
 
   if (!ide_recent_projects_discover_finish (recent_projects, result, &error))
     {

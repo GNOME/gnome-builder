@@ -507,11 +507,7 @@ ide_context_loaded (IdeContext *self)
 static void
 ide_context_dispose (GObject *object)
 {
-  IdeContext *self = (IdeContext *)object;
-
   IDE_ENTRY;
-
-  g_return_if_fail (IDE_IS_CONTEXT (self));
 
   /*
    * TODO: Shutdown services.
