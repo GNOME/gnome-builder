@@ -382,4 +382,6 @@ typelib_DATA = $(INTROSPECTION_GIRS:.gir=.typelib)
 CLEANFILES += $(gir_DATA) $(typelib_DATA)
 endif
 
+GITIGNOREFILES = Ide-1.0.gir
+
 -include $(top_srcdir)/git.mk
