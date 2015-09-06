@@ -141,7 +141,7 @@ gb_application_load_keybindings (GbApplication *self)
     { "workbench.focus-stack(5)", "<ctrl>5" },
     { "workbench.show-gear-menu", "F10" },
     { "workbench.global-search", "<ctrl>period" },
-    { "app.preferences", "<ctrl>comma" },
+    { "app.preferences", "<Primary>comma" },
     { "app.shortcuts", "<ctrl>question" },
     { "workbench.new-document", "<ctrl>n" },
     { "workbench.open-document", "<ctrl>o" },
