@@ -285,7 +285,7 @@ introspection_sources = \
 	$(NULL)
 
 Builder-1.0.gir: libgnome-builder.la
-Builder_1_0_gir_INCLUDES = Gio-2.0 GtkSource-3.0 Ide-1.0 Peas-1.0
+Builder_1_0_gir_INCLUDES = Gio-2.0 GtkSource-3.0 Peas-1.0
 Builder_1_0_gir_CFLAGS = $(libgnome_builder_la_CFLAGS)
 Builder_1_0_gir_LIBS = libgnome-builder.la
 Builder_1_0_gir_FILES = $(introspection_sources)
