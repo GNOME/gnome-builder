@@ -257,6 +257,7 @@ endif
 gnome_builder_SOURCES = main.c
 gnome_builder_CFLAGS = $(libgnome_builder_la_CFLAGS)
 gnome_builder_LDADD = \
+	$(BUILDER_LIBS) \
 	$(top_builddir)/libide/libide-1.0.la \
 	libgnome-builder.la \
 	$(NULL)
