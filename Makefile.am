@@ -84,14 +84,14 @@ strace:
 
 debug:
 	GB_IN_TREE_PLUGINS=1 \
-	GI_TYPELIB_PATH="libide:src" \
+	GI_TYPELIB_PATH="libide:src:$(GI_TYPELIB_PATH)" \
 	G_DEBUG=fatal-criticals \
 	GOBJECT_DEBUG=instance-count \
 	$(LIBTOOL) --mode=execute gdb -ex run --args src/gnome-builder -vvvv -s
 
 valgrind:
 	GB_IN_TREE_PLUGINS=1 \
-	GI_TYPELIB_PATH="libide:src" \
+	GI_TYPELIB_PATH="libide:src:$(GI_TYPELIB_PATH)" \
 	G_DEBUG=fatal-criticals \
 	G_SLICE=always-malloc \
 	$(LIBTOOL) --mode=execute valgrind src/gnome-builder -vvvv -s
