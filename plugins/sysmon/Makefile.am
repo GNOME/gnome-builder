@@ -47,3 +47,5 @@ include $(top_srcdir)/build/autotools/Makefile.am.gresources
 
 
 -include $(top_srcdir)/git.mk
+
+include $(top_srcdir)/plugins/Makefile.plugin

@@ -26,3 +26,5 @@ libc_pack_plugin_la_LDFLAGS = \
 	$(NULL)
 
 -include $(top_srcdir)/git.mk
+
+include $(top_srcdir)/plugins/Makefile.plugin

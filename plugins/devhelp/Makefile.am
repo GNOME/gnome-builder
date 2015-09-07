@@ -61,3 +61,5 @@ endif
 
 
 -include $(top_srcdir)/git.mk
+
+include $(top_srcdir)/plugins/Makefile.plugin
