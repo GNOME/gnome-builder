@@ -19,6 +19,7 @@
 #include <ide.h>
 
 #include "gb-plugins.h"
+#include "test-helper.h"
 
 typedef struct
 {
@@ -48,6 +49,8 @@ test_new_async (void)
   const gchar *root_build_dir;
   const gchar *builddir;
   g_autofree gchar *path = NULL;
+
+  test_helper_begin_test ();
 
   builddir = g_getenv ("G_TEST_BUILDDIR");
 
@@ -85,9 +88,7 @@ gint
 main (gint   argc,
       gchar *argv[])
 {
-  gtk_init (&argc, &argv);
-  g_test_init (&argc, &argv, NULL);
+  test_helper_init (&argc, &argv);
   g_test_add_func ("/Ide/Context/new_async", test_new_async);
-  gb_plugins_init ();
   return g_test_run ();
 }

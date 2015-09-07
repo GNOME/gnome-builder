@@ -21,6 +21,7 @@
 #include <ide.h>
 
 #include "gb-plugins.h"
+#include "test-helper.h"
 
 typedef struct
 {
@@ -160,6 +161,8 @@ test_buffer_manager_basic (void)
   g_autofree gchar *path = NULL;
   const gchar *builddir = g_getenv ("G_TEST_BUILDDIR");
 
+  test_helper_begin_test ();
+
   path = g_build_filename (builddir, "data", "project1", "configure.ac", NULL);
   project_file = g_file_new_for_path (path);
 
@@ -194,9 +197,7 @@ gint
 main (gint   argc,
       gchar *argv[])
 {
-  gtk_init (&argc, &argv);
-  g_test_init (&argc, &argv, NULL);
+  test_helper_init (&argc, &argv);
   g_test_add_func ("/Ide/BufferManager/basic", test_buffer_manager_basic);
-  gb_plugins_init ();
   return g_test_run ();
 }

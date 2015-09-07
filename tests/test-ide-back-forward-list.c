@@ -20,6 +20,7 @@
 #include <ide.h>
 
 #include "gb-plugins.h"
+#include "test-helper.h"
 
 typedef struct
 {
@@ -147,6 +148,8 @@ test_basic (void)
   GFile *project_file;
   g_autofree gchar *path = NULL;
 
+  test_helper_begin_test ();
+
   path = g_build_filename (g_get_current_dir (), TEST_DATA_DIR, "project1", "configure.ac", NULL);
   project_file = g_file_new_for_path (path);
 
@@ -172,9 +175,7 @@ gint
 main (gint   argc,
       gchar *argv[])
 {
-  gtk_init (&argc, &argv);
-  g_test_init (&argc, &argv, NULL);
+  test_helper_init (&argc, &argv);
   g_test_add_func ("/Ide/BackForwardList/basic", test_basic);
-  gb_plugins_init ();
   return g_test_run ();
 }

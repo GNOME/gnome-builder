@@ -21,6 +21,7 @@
 
 #include "gb-plugins.h"
 #include "gb-resources.h"
+#include "test-helper.h"
 
 typedef void (*VimTestFunc) (IdeContext *context,
                              GtkWidget  *widget);
@@ -255,6 +256,7 @@ test_vim_basic_cb (IdeContext *context,
 static void
 test_vim_basic (void)
 {
+  test_helper_begin_test ();
   run_test ("test.c", test_vim_basic_cb);
 }
 
@@ -277,10 +279,8 @@ gint
 main (gint argc,
       gchar *argv[])
 {
-  gtk_init (&argc, &argv);
+  test_helper_init (&argc, &argv);
   load_vim_css ();
-  g_test_init (&argc, &argv, NULL);
   g_test_add_func ("/Ide/Vim/basic", test_vim_basic);
-  gb_plugins_init ();
   return g_test_run ();
 }
