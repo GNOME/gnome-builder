@@ -22,5 +22,3 @@ endif
 GITIGNOREFILES = html_preview_plugin/__pycache__
 
 -include $(top_srcdir)/git.mk
-
-include $(top_srcdir)/plugins/Makefile.plugin
