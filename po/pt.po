@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2015-09-02 06:18+0000\n"
-"PO-Revision-Date: 2015-09-02 07:54+0100\n"
+"POT-Creation-Date: 2015-09-05 00:35+0000\n"
+"PO-Revision-Date: 2015-09-07 08:19+0100\n"
 "Last-Translator: Pedro Albuquerque <palbuquerque73@gmail.com>\n"
 "Language-Team: Português <palbuquerque73@gmail.com>\n"
 "Language: pt\n"
@@ -110,127 +110,70 @@ msgid "_Close All"
 msgstr "_Fechar tudo"
 
 #: ../data/gtk/menus.ui.h:15
-msgid "Split"
-msgstr "Dividir"
-
-#: ../data/gtk/menus.ui.h:16
-#| msgid "Split"
-msgid "Split Left"
-msgstr "Dividir à esquerda"
-
-#: ../data/gtk/menus.ui.h:17
-#| msgid "Split"
-msgid "Split Right"
-msgstr "Dividir à direita"
-
-#: ../data/gtk/menus.ui.h:18
-#| msgid "Split"
-msgid "Split Down"
-msgstr "Dividir abaixo"
-
-#: ../data/gtk/menus.ui.h:19
-msgid "Move"
-msgstr "Mover"
-
-#: ../data/gtk/menus.ui.h:20
-#| msgid "Move"
-msgid "Move Left"
-msgstr "Mover à esquerda"
-
-#: ../data/gtk/menus.ui.h:21
-#| msgid "Code Insight"
-msgid "Move Right"
-msgstr "Mover à direita"
-
-#: ../data/gtk/menus.ui.h:22
-#| msgid "Preview"
-msgid "Pre_view"
-msgstr "_Antever"
-
-#: ../data/gtk/menus.ui.h:23
-#| msgid "Save"
-msgid "_Save"
-msgstr "_Gravar"
-
-#: ../data/gtk/menus.ui.h:24
-#| msgid "Save As"
-msgid "_Save As"
-msgstr "Gravar _Como"
-
-#: ../data/gtk/menus.ui.h:25
-msgid "Print"
-msgstr "Imprimir"
-
-#: ../data/gtk/menus.ui.h:26
-#| msgid "Close"
-msgid "_Close"
-msgstr "_Fechar"
-
-#: ../data/gtk/menus.ui.h:27
 msgid "Display Options"
 msgstr "Mostrar opções"
 
-#: ../data/gtk/menus.ui.h:28
+#: ../data/gtk/menus.ui.h:16
 msgid "Show Icons"
 msgstr "Mostrar ícones"
 
-#: ../data/gtk/menus.ui.h:29
+#: ../data/gtk/menus.ui.h:17
 msgid "Show Ignored Files"
 msgstr "Mostrar ficheiros ignorados"
 
-#: ../data/gtk/menus.ui.h:30
+#: ../data/gtk/menus.ui.h:18
 msgid "Sort Directories First"
 msgstr "Ordenar pastas primeiro"
 
-#: ../data/gtk/menus.ui.h:31
+#: ../data/gtk/menus.ui.h:19
 msgid "_Collapse All Nodes"
 msgstr "_Colapsar todos os nós"
 
-#: ../data/gtk/menus.ui.h:32
+#: ../data/gtk/menus.ui.h:20
 msgid "_Refresh"
 msgstr "_Atualizar"
 
-#: ../data/gtk/menus.ui.h:33 ../data/ui/gb-greeter-window.ui.h:3
+#: ../data/gtk/menus.ui.h:21 ../data/ui/gb-greeter-window.ui.h:3
 msgid "_New"
 msgstr "_Novo"
 
-#: ../data/gtk/menus.ui.h:34
+#: ../data/gtk/menus.ui.h:22
 msgid "_Empty File"
 msgstr "_Ficheiro vazio"
 
-#: ../data/gtk/menus.ui.h:35
+#: ../data/gtk/menus.ui.h:23
 msgid "_New Folder"
 msgstr "_Nova pasta"
 
-#: ../data/gtk/menus.ui.h:36
+#: ../data/gtk/menus.ui.h:24
 msgid "Open _With"
 msgstr "Abrir _Com"
 
-#: ../data/gtk/menus.ui.h:37
+#: ../data/gtk/menus.ui.h:25
 msgid "Source Code Editor"
 msgstr "Editor de código fonte"
 
-#: ../data/gtk/menus.ui.h:38
+#: ../data/gtk/menus.ui.h:26
 msgid "_Open Containing Folder"
 msgstr "_Abrir pasta contentora"
 
-#: ../data/gtk/menus.ui.h:39
+#: ../data/gtk/menus.ui.h:27
 msgid "_Open in Terminal"
 msgstr "_Abrir no terminal"
 
-#: ../data/gtk/menus.ui.h:40 ../data/ui/gb-rename-file-popover.ui.h:2
+#: ../data/gtk/menus.ui.h:28 ../data/ui/gb-rename-file-popover.ui.h:2
 msgid "_Rename"
 msgstr "_Renomear"
 
-#: ../data/gtk/menus.ui.h:41
+#: ../data/gtk/menus.ui.h:29
 msgid "Mo_ve to Trash"
 msgstr "Mo_Ver para o lixo"
 
-#: ../data/gtk/menus.ui.h:42
+#: ../data/gtk/menus.ui.h:30
 msgid "_Build"
 msgstr "_Construir"
 
-#: ../data/gtk/menus.ui.h:43
+#: ../data/gtk/menus.ui.h:31
 msgid "_Rebuild"
 msgstr "_Reconstruir"
 
@@ -927,6 +870,50 @@ msgstr "Remover todas as seleções"
 msgid "Terminal Shortcuts"
 msgstr "_Atalhos de terminal"
 
+#: ../data/ui/gb-view.ui.h:1
+msgid "Split"
+msgstr "Dividir"
+
+#: ../data/ui/gb-view.ui.h:2
+msgid "Split Left"
+msgstr "Dividir à esquerda"
+
+#: ../data/ui/gb-view.ui.h:3
+msgid "Split Right"
+msgstr "Dividir à direita"
+
+#: ../data/ui/gb-view.ui.h:4
+msgid "Split Down"
+msgstr "Dividir abaixo"
+
+#: ../data/ui/gb-view.ui.h:5
+msgid "Move"
+msgstr "Mover"
+
+#: ../data/ui/gb-view.ui.h:6
+msgid "Move Left"
+msgstr "Mover à esquerda"
+
+#: ../data/ui/gb-view.ui.h:7
+msgid "Move Right"
+msgstr "Mover à direita"
+
+#: ../data/ui/gb-view.ui.h:8
+msgid "_Save"
+msgstr "_Gravar"
+
+#: ../data/ui/gb-view.ui.h:9
+msgid "_Save As"
+msgstr "Gravar _Como"
+
+#: ../data/ui/gb-view.ui.h:10
+msgid "Print"
+msgstr "Imprimir"
+
+#: ../data/ui/gb-view.ui.h:11
+msgid "_Close"
+msgstr "_Fechar"
+
 #: ../data/ui/gb-workbench.ui.h:2
 msgid "Project"
 msgstr "Projeto"
@@ -1072,17 +1059,23 @@ msgstr "O contexto já foi restaurado."
 msgid "The device \"%s\" could not be found."
 msgstr "O dispositivo \"%s\" não pôde ser encontrado."
 
-#: ../libide/ide-object.c:283 ../libide/ide-object.c:471
-msgid "No implementations of extension point."
-msgstr "Sem implementações do ponto de extensão."
+#: ../libide/ide-object.c:285
+#, c-format
+#| msgid "No implementations of extension point."
+msgid "No implementations of extension point \"%s\"."
+msgstr "Sem implementações do ponto de extensão. \"%s\"."
 
-#: ../libide/ide-object.c:374
+#: ../libide/ide-object.c:377
 msgid "Failed to locate build system plugin."
 msgstr "Falha ao localizar a extensão de sistema de build."
 
-#: ../libide/ide-object.c:461
+#: ../libide/ide-object.c:464
 msgid "No such extension point."
 msgstr "Sem esse ponto de extensão."
+
+#: ../libide/ide-object.c:474
+msgid "No implementations of extension point."
+msgstr "Sem implementações do ponto de extensão."
 
 #: ../libide/ide-project.c:463
 msgid "Destination file must be within the project tree."
@@ -1125,32 +1118,29 @@ msgstr "Falha ao abrir pasta: %s"
 msgid "Failed to load file: %s: %s"
 msgstr "Falha ao carregar ficheiro: %s: %s"
 
-#: ../libide/ide-source-view.c:4541
+#: ../libide/ide-source-view.c:4561
 #, c-format
 msgid "Insert \"%s\""
 msgstr "Inserir \"%s\""
 
-#: ../libide/ide-source-view.c:4543
+#: ../libide/ide-source-view.c:4563
 #, c-format
 msgid "Replace \"%s\" with \"%s\""
 msgstr "Substituir \"%s\" por \"%s\""
 
-#: ../libide/ide-source-view.c:4661
+#: ../libide/ide-source-view.c:4681
 msgid "Apply Fix-It"
 msgstr "Aplicar Reparar"
 
-#: ../libide/ide-source-view.c:4704
-#| msgid "Show Grid Lines"
+#: ../libide/ide-source-view.c:4724
 msgid "Join Lines"
 msgstr "Juntar linhas"
 
-#: ../libide/ide-source-view.c:4715
-#| msgid "Show Grid Lines"
+#: ../libide/ide-source-view.c:4735
 msgid "Sort Lines"
 msgstr "Ordenar linhas"
 
-#: ../libide/ide-source-view.c:4734
-#| msgid "Goto Definition"
+#: ../libide/ide-source-view.c:4754
 msgid "Go to Definition"
 msgstr "Ir para definição"
 
@@ -1334,6 +1324,11 @@ msgstr "Assistência de código requer um ficheiro local."
 msgid "No language specified"
 msgstr "Sem linguagem especificada"
 
+#: ../plugins/html-preview/html_preview_plugin/__init__.py:88
+#| msgid "Pre_view"
+msgid "Preview as HTML"
+msgstr "Antever como HTML"
+
 #: ../plugins/mingw/ide-mingw-device-provider.c:95
 msgid "MinGW (64-bit)"
 msgstr "MinGW (64-bit)"
@@ -1405,15 +1400,15 @@ msgstr "Saiba mais sobre o Construtor GNOME"
 msgid "Funded By"
 msgstr "Financiado por"
 
-#: ../src/app/gb-application.c:635
+#: ../src/app/gb-application.c:642
 msgid "Run Builder in standalone mode"
 msgstr "Executar o Construtor em modo independente"
 
-#: ../src/app/gb-application.c:641
+#: ../src/app/gb-application.c:648
 msgid "Show the application's version"
 msgstr "Mostrar a versão da aplicação"
 
-#: ../src/app/gb-application.c:647
+#: ../src/app/gb-application.c:654
 msgid "Increase verbosity. May be specified multiple times."
 msgstr "Aumentar a verbosidade. Pode ser especificado múltiplas vezes."
 
@@ -1472,18 +1467,9 @@ msgstr "Gravar documento"
 msgid "Save Document As"
 msgstr "Gravar documento como"
 
-#: ../src/editor/gb-editor-view.c:110
+#: ../src/editor/gb-editor-view.c:111
 msgid "Plain Text"
 msgstr "Texto simples"
-
-#: ../src/html/gb-html-document.c:109
-msgid "HTML Preview"
-msgstr "Antevisão HTML"
-
-#: ../src/html/gb-html-document.c:131
-#, c-format
-msgid "%s (Preview)"
-msgstr "%s (antevisão)"
 
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-editor.c:95
@@ -1832,6 +1818,12 @@ msgstr "%s resultados\n"
 #: ../tools/ide-search.c:120
 msgid "PROJECT_FILE [SEARCH TERMS...]"
 msgstr "FICHEIRO_PROJETO [TERMOS PROCURA...]"
+
+#~ msgid "HTML Preview"
+#~ msgstr "Antevisão HTML"
+
+#~ msgid "%s (Preview)"
+#~ msgstr "%s (antevisão)"
 
 #~ msgid "Duration"
 #~ msgstr "Duração"
