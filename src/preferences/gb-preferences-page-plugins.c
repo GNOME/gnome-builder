@@ -100,6 +100,8 @@ gb_preferences_page_plugins_reload (GbPreferencesPagePlugins *self)
   plugins = peas_engine_get_plugin_list (engine);
   for (iter = plugins; iter; iter = iter->next)
     gb_preferences_page_plugins_add_plugin (self, iter->data);
+
+  gtk_list_box_invalidate_sort (self->list_box);
 }
 
 static gint

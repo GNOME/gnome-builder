@@ -108,6 +108,6 @@ SymbolTree GtkSearchEntry {
 GbPreferencesPagePlugins GtkListBoxRow {
   border-bottom: 1px solid shade(@borders, 1.2);
 }
-.shortcuts-list-box GtkListBoxRow:last-child {
+GbPreferencesPagePlugins GtkListBoxRow:last-child {
   border-bottom: none;
 }
