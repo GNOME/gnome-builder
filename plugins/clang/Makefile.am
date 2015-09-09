@@ -47,8 +47,8 @@ libclang_plugin_la_LDFLAGS = \
 	-module \
 	$(NULL)
 
+include $(top_srcdir)/plugins/Makefile.plugin
+
 endif
 
 -include $(top_srcdir)/git.mk
-
-include $(top_srcdir)/plugins/Makefile.plugin
