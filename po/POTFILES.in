@@ -17,6 +17,7 @@ data/style-schemes/builder.xml
 [type: gettext/glade]data/ui/gb-preferences-page-insight.ui
 [type: gettext/glade]data/ui/gb-preferences-page-keybindings.ui
 [type: gettext/glade]data/ui/gb-preferences-page-language.ui
+[type: gettext/glade]data/ui/gb-preferences-page-plugins.ui
 [type: gettext/glade]data/ui/gb-preferences-page-theme.ui
 [type: gettext/glade]data/ui/gb-preferences-window.ui
 [type: gettext/glade]data/ui/gb-projects-dialog.ui
