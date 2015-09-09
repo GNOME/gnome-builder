@@ -97,11 +97,6 @@ dnl ***********************************************************************
 AC_CHECK_PROG([GMAKE], [gmake], [gmake], [make])
 AC_DEFINE_UNQUOTED([GNU_MAKE_NAME], ["$GMAKE"], [Name of GNU make on this system])
 
-dnl ***********************************************************************
-dnl Find Path of Exuberant Ctags
-dnl ***********************************************************************
-AC_CHECK_PROGS([ECTAGS], [ctags-exuberant exctags ectags], [ctags])
-
 
 dnl ***********************************************************************
 dnl Enable high-performance counters
@@ -154,29 +149,23 @@ m4_define([gtksourceview_required_version], [3.17.3])
 m4_define([ggit_required_version], [0.23.5])
 m4_define([gjs_required_version], [1.42.0])
 m4_define([pygobject_required_version], [3.0.0])
-m4_define([devhelp_required_version], [3.16.0])
 m4_define([libxml_required_version], [2.9.0])
 m4_define([peas_required_version], [1.14.1])
-m4_define([vte_required_version], [0.40.2])
-m4_define([webkit_required_version], [2.8.5])
 
 PKG_CHECK_MODULES(BUILDER,  [gtk+-3.0 >= gtk_required_version
                              gio-2.0 >= glib_required_version
                              gtksourceview-3.0 >= gtksourceview_required_version
                              libgit2-glib-1.0 >= ggit_required_version
                              libpeas-1.0 >= peas_required_version])
-PKG_CHECK_MODULES(VTE,      [vte-2.91 >= vte_required_version],
-                            [have_vte=yes],
-                            [have_vte=no])
-PKG_CHECK_MODULES(TERMINAL, [vte-2.91 >= vte_required_version],
-                            [enable_terminal_plugin=yes],
-                            [enable_terminal_plugin=no])
-PKG_CHECK_MODULES(DEVHELP,  [libdevhelp-3.0 >= devhelp_required_version],
-                            [enable_devhelp_plugin=yes],
-                            [enable_devhelp_plugin=no])
 PKG_CHECK_MODULES(EGG,      [glib-2.0 >= glib_required_version
                              gtk+-3.0 >= gtk_required_version])
 PKG_CHECK_MODULES(GD,       [gtk+-3.0 >= gtk_required_version])
+PKG_CHECK_MODULES(GEDIT,    [glib-2.0 >= glib_required_version
+                             gtk+-3.0 >= gtk_required_version])
+PKG_CHECK_MODULES(GJS,      [gjs-1.0 >= gjs_required_version
+                             gjs-internals-1.0 >= gjs_required_version],
+                            [enable_gjs_scripting=yes],
+                            [enable_gjs_scripting=no])
 PKG_CHECK_MODULES(ICONS,    [gio-2.0 >= glib_required_version])
 PKG_CHECK_MODULES(LIBGITG,  [libgit2-glib-1.0 >= ggit_required_version])
 PKG_CHECK_MODULES(LIBIDE,   [gio-2.0 >= glib_required_version
@@ -185,31 +174,21 @@ PKG_CHECK_MODULES(LIBIDE,   [gio-2.0 >= glib_required_version
                              libgit2-glib-1.0 >= ggit_required_version
                              libpeas-1.0 >= peas_required_version
                              libxml-2.0 >= libxml_required_version])
-PKG_CHECK_MODULES(RG,       [gtk+-3.0 >= gtk_required_version])
-PKG_CHECK_MODULES(SEARCH,   [glib-2.0 >= glib_required_version])
-PKG_CHECK_MODULES(GEDIT,    [glib-2.0 >= glib_required_version
-                             gtk+-3.0 >= gtk_required_version])
 PKG_CHECK_MODULES(NAUTILUS, [glib-2.0 >= glib_required_version
                              gtk+-3.0 >= gtk_required_version])
-PKG_CHECK_MODULES(XML,      [gio-2.0 >= glib_required_version
-                             libxml-2.0 >= libxml_required_version])
 PKG_CHECK_MODULES(PYGOBJECT,[pygobject-3.0 >= pygobject_required_version],
                             [have_pygobject=yes],
                             [have_pygobject=no])
-PKG_CHECK_MODULES(GJS,      [gjs-1.0 >= gjs_required_version
-                             gjs-internals-1.0 >= gjs_required_version],
-                            [enable_gjs_scripting=yes],
-                            [enable_gjs_scripting=no])
-
-PKG_CHECK_MODULES(HTML_PREVIEW_PLUGIN, [webkit2gtk-4.0 >= webkit_required_version],
-                                       [enable_html_preview_plugin=yes],
-                                       [enable_html_preview_plugin=no])
-
+PKG_CHECK_MODULES(RG,       [gtk+-3.0 >= gtk_required_version])
+PKG_CHECK_MODULES(SEARCH,   [glib-2.0 >= glib_required_version])
+PKG_CHECK_MODULES(XML,      [gio-2.0 >= glib_required_version
+                             libxml-2.0 >= libxml_required_version])
 
 
 dnl ***********************************************************************
 dnl Be extra careful about libgit2-glib requirements
 dnl ***********************************************************************
+# FIXME: Move git to a plugin. Requires abstraction in new-project-dialog.
 cflags_save="${CFLAGS}"
 libs_save="${LIBS}"
 CFLAGS="${CFLAGS} ${LIBGITG_CFLAGS}"
@@ -240,34 +219,28 @@ CFLAGS="${cflags_save}"
 LIBS="${libs_save}"
 
 
-
 dnl ***********************************************************************
-dnl Check for Clang, Required for C/C++ Diagnostics
+dnl Check for supported plugins
 dnl ***********************************************************************
-enable_clang_plugin=no
-AC_CHECK_PROGS([LLVM_CONFIG], [llvm-config-3.5 llvm-config35 llvm-config], [])
-AS_IF([test "x$LLVM_CONFIG" = "x"],[],[
-	CLANG_INCLUDEDIR=`$LLVM_CONFIG --includedir`
-	CLANG_CFLAGS="-I$CLANG_INCLUDEDIR"
-	CLANG_LDFLAGS=`$LLVM_CONFIG --ldflags`
-	AC_SUBST([CLANG_INCLUDEDIR])
-	AC_SUBST([CLANG_CFLAGS])
-	AC_SUBST([CLANG_LDFLAGS])
-	CPPFLAGS_SAVE=${CPPFLAGS}
-	CPPFLAGS=-I${CLANG_INCLUDEDIR}
-	AC_CHECK_HEADER([clang-c/Index.h], [enable_clang_plugin=yes], [
-	    AC_MSG_RESULT([Failed to locage clang-c/Index.h. Please install clang-devel.])
-	])
-	CPPFLAGS=${CPPFLAGS_SAVE}
-])
-
-
-dnl ***********************************************************************
-dnl Additional VTE support in Builder core
-dnl ***********************************************************************
-# FIXME: If we make adding menu items accessable from plugins, then
-#        we don't need this hack.
-AM_CONDITIONAL(HAVE_VTE, test x$have_vte != xno)
+m4_include([plugins/autotools/configure.ac])
+m4_include([plugins/c-pack/configure.ac])
+m4_include([plugins/clang/configure.ac])
+m4_include([plugins/command-bar/configure.ac])
+m4_include([plugins/ctags/configure.ac])
+m4_include([plugins/devhelp/configure.ac])
+m4_include([plugins/device-manager/configure.ac])
+m4_include([plugins/file-search/configure.ac])
+m4_include([plugins/gnome-code-assistance/configure.ac])
+m4_include([plugins/html-completion/configure.ac])
+m4_include([plugins/html-preview/configure.ac])
+m4_include([plugins/jedi/configure.ac])
+m4_include([plugins/mingw/configure.ac])
+m4_include([plugins/python-gi-imports-completion/configure.ac])
+m4_include([plugins/python-pack/configure.ac])
+m4_include([plugins/symbol-tree/configure.ac])
+m4_include([plugins/sysmon/configure.ac])
+m4_include([plugins/terminal/configure.ac])
+m4_include([plugins/xml-pack/configure.ac])
 
 
 dnl ***********************************************************************
@@ -292,11 +265,6 @@ dnl Define automake conditionals based on what we found
 dnl ***********************************************************************
 AM_CONDITIONAL(ENABLE_PYTHON_SCRIPTING, test x$enable_python_scripting != xno)
 AM_CONDITIONAL(ENABLE_GJS_SCRIPTING, test x$enable_gjs_scripting != xno)
-
-AM_CONDITIONAL(ENABLE_TERMINAL_PLUGIN, test x$enable_terminal_plugin != xno)
-AM_CONDITIONAL(ENABLE_DEVHELP_PLUGIN, test x$enable_devhelp_plugin != xno)
-AM_CONDITIONAL(ENABLE_HTML_PREVIEW_PLUGIN, test x$enable_html_preview_plugin != xno)
-AM_CONDITIONAL(ENABLE_CLANG_PLUGIN, test x$enable_clang_plugin != xno)
 
 
 dnl ***********************************************************************
@@ -401,11 +369,6 @@ AC_ARG_ENABLE(optimizations,
 		     [enable_optimizations="no"],
 		     [enable_optimizations="yes"])])
 AC_MSG_RESULT([$enable_optimizations])
-AC_ARG_ENABLE(lto,
-              AC_HELP_STRING([--enable-lto],
-                             [turn on link time optimizations [default=no]]),
-              [enable_lto=$enableval],
-              [enable_lto=no])
 OPTIMIZE_CFLAGS=""
 OPTIMIZE_LDFLAGS=""
 # Enable -Bsymbolic
@@ -414,13 +377,6 @@ AS_IF([test "$enable_optimizations" != "no"],
                           [OPTIMIZE_LDFLAGS="$OPTIMIZE_LDFLAGS -Wl,-Bsymbolic"])
        AX_CHECK_LINK_FLAG([-fno-plt],
                           [OPTIMIZE_LDFLAGS="$OPTIMIZE_LDFLAGS -fno-plt"])])
-
-
-# Enable Link-Time-Optimization
-GB_ENABLE_LTO
-OPTIMIZE_CFLAGS="$OPTIMIZE_CFLAGS $LTO_CFLAGS"
-
-
 AC_SUBST(OPTIMIZE_CFLAGS)
 AC_SUBST(OPTIMIZE_LDFLAGS)
 
@@ -476,26 +432,7 @@ AC_CONFIG_FILES([
 	libide/Makefile
 
 	plugins/Makefile
-	plugins/autotools/Makefile
-	plugins/clang/Makefile
-	plugins/command-bar/Makefile
-	plugins/c-pack/Makefile
-	plugins/ctags/Makefile
-	plugins/devhelp/Makefile
-	plugins/device-manager/Makefile
 	plugins/fallback/Makefile
-	plugins/file-search/Makefile
-	plugins/gnome-code-assistance/Makefile
-	plugins/html-completion/Makefile
-	plugins/html-preview/Makefile
-	plugins/jedi/Makefile
-        plugins/python-gi-imports-completion/Makefile
-	plugins/mingw/Makefile
-	plugins/python-pack/Makefile
-	plugins/symbol-tree/Makefile
-	plugins/sysmon/Makefile
-	plugins/terminal/Makefile
-	plugins/xml-pack/Makefile
 
 	data/Makefile
 	data/gsettings/org.gnome.builder.code-insight.gschema.xml
@@ -531,7 +468,6 @@ echo ""
 echo "  Prefix ............................... : ${prefix}"
 echo "  Libdir ............................... : ${libdir}"
 echo "  Optimized Build ...................... : ${enable_optimizations}"
-echo "  Link-Time-Optimization (experimental). : ${enable_lto}"
 echo "  rdtscp ............................... : ${enable_rdtscp}"
 echo ""
 echo " Development Options"
@@ -550,23 +486,23 @@ echo "  GJS .................................. : ${enable_gjs_scripting}"
 echo ""
 echo " Plugins"
 echo ""
-echo "  Autotools ............................ : yes"
-echo "  C Language Pack ...................... : yes"
+echo "  Autotools ............................ : ${enable_autotools_plugin}"
+echo "  C Language Pack ...................... : ${enable_c_pack_plugin}"
 echo "  Clang ................................ : ${enable_clang_plugin}"
-echo "  Command Bar .......................... : yes"
-echo "  Ctags ................................ : yes"
+echo "  Command Bar .......................... : ${enable_command_bar_plugin}"
+echo "  Ctags ................................ : ${enable_ctags_plugin}"
 echo "  Devhelp .............................. : ${enable_devhelp_plugin}"
-echo "  Device Manager ....................... : yes"
-echo "  GNOME Code Assistance ................ : yes"
-echo "  Global File Search ................... : yes"
-echo "  HTML Language Pack ................... : yes"
+echo "  Device Manager ....................... : ${enable_device_manager_plugin}"
+echo "  GNOME Code Assistance ................ : ${enable_gnome_code_assistance_plugin}"
+echo "  Global File Search ................... : ${enable_file_search_plugin}"
+echo "  HTML Autocompletion .................. : ${enable_html_completion_plugin}"
 echo "  HTML and Markdown Preview ............ : ${enable_html_preview_plugin}"
-echo "  MinGW ................................ : yes"
-echo "  Python GObject Introspection ......... : yes"
-echo "  Python Jedi Autocompletion ........... : yes"
-echo "  Python Language Pack ................. : yes"
-echo "  Symbol Monitor ....................... : yes"
-echo "  Symbol Tree .......................... : yes"
+echo "  MinGW ................................ : ${enable_mingw_plugin}"
+echo "  Python GObject Introspection ......... : ${enable_python_gi_imports_completion_plugin}"
+echo "  Python Jedi Autocompletion ........... : ${enable_jedi_plugin}"
+echo "  Python Language Pack ................. : ${enable_python_pack_plugin}"
+echo "  System Monitor ....................... : ${enable_sysmon_plugin}"
+echo "  Symbol Tree .......................... : ${enable_symbol_tree_plugin}"
 echo "  Terminal ............................. : ${enable_terminal_plugin}"
-echo "  XML Language Pack .................... : yes"
+echo "  XML Language Pack .................... : ${enable_xml_pack_plugin}"
 echo ""

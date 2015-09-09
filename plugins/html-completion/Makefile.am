@@ -1,3 +1,5 @@
+if ENABLE_HTML_COMPLETION_PLUGIN
+
 EXTRA_DIST = $(plugin_DATA)
 
 plugindir = $(libdir)/gnome-builder/plugins
@@ -21,6 +23,8 @@ libhtml_completion_plugin_la_LDFLAGS = \
 	-module \
 	$(NULL)
 
--include $(top_srcdir)/git.mk
-
 include $(top_srcdir)/plugins/Makefile.plugin
+
+endif
+
+-include $(top_srcdir)/git.mk

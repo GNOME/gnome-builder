@@ -57,9 +57,8 @@ glib_resources_xml = gb-devhelp.gresource.xml
 glib_resources_namespace = gb_devhelp
 include $(top_srcdir)/build/autotools/Makefile.am.gresources
 
+include $(top_srcdir)/plugins/Makefile.plugin
+
 endif
 
-
 -include $(top_srcdir)/git.mk
-
-include $(top_srcdir)/plugins/Makefile.plugin

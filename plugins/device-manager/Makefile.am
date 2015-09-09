@@ -1,3 +1,5 @@
+if ENABLE_DEVICE_MANAGER_PLUGIN
+
 DISTCLEANFILES =
 BUILT_SOURCES =
 CLEANFILES =
@@ -44,7 +46,8 @@ glib_resources_xml = gb-device-manager.gresource.xml
 glib_resources_namespace = gb_device_manager
 include $(top_srcdir)/build/autotools/Makefile.am.gresources
 
+include $(top_srcdir)/plugins/Makefile.plugin
+
+endif
 
 -include $(top_srcdir)/git.mk
-
-include $(top_srcdir)/plugins/Makefile.plugin

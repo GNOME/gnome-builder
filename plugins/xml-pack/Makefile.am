@@ -1,3 +1,5 @@
+if ENABLE_XML_PACK_PLUGIN
+
 EXTRA_DIST = $(plugin_DATA)
 
 plugindir = $(libdir)/gnome-builder/plugins
@@ -27,6 +29,8 @@ libxml_pack_plugin_la_LDFLAGS = \
 	-module \
 	$(NULL)
 
--include $(top_srcdir)/git.mk
-
 include $(top_srcdir)/plugins/Makefile.plugin
+
+endif
+
+-include $(top_srcdir)/git.mk

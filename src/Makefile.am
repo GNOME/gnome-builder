@@ -191,7 +191,7 @@ nodist_libgnome_builder_la_SOURCES = \
 libgnome_builder_la_LIBADD = \
 	$(BUILDER_LIBS) \
 	$(OPTIMIZE_LDFLAGS) \
-	$(VTE_LIBS) \
+	$(TERMINAL_LIBS) \
 	$(top_builddir)/data/icons/hicolor/libicons.la \
 	$(top_builddir)/libide/libide-1.0.la \
 	$(top_builddir)/contrib/egg/libegg-private.la \
@@ -214,7 +214,7 @@ libgnome_builder_la_CFLAGS = \
 	$(BUILDER_CFLAGS) \
 	$(DEBUG_CFLAGS) \
 	$(OPTIMIZE_CFLAGS) \
-	$(VTE_CFLAGS) \
+	$(TERMINAL_CFLAGS) \
 	-I$(builddir)/resources \
 	-I$(builddir)/util \
 	-I$(srcdir)/app \
@@ -247,7 +247,8 @@ libgnome_builder_la_CFLAGS = \
 	$(NULL)
 
 
-if HAVE_VTE
+# FIXME: Move this code to terminal plugin
+if ENABLE_TERMINAL_PLUGIN
 libgnome_builder_la_CFLAGS += -DHAVE_VTE
 endif
 

@@ -1,3 +1,5 @@
+if ENABLE_CTAGS_PLUGIN
+
 plugindir = $(libdir)/gnome-builder/plugins
 plugin_LTLIBRARIES = libctags-plugin.la
 dist_plugin_DATA = ctags.plugin
@@ -34,6 +36,8 @@ libctags_plugin_la_LDFLAGS = \
 	-module \
 	$(NULL)
 
--include $(top_srcdir)/git.mk
-
 include $(top_srcdir)/plugins/Makefile.plugin
+
+endif
+
+-include $(top_srcdir)/git.mk

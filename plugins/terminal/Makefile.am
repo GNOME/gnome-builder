@@ -32,7 +32,7 @@ nodist_libterminal_la_SOURCES = \
 
 libterminal_la_CFLAGS = \
 	$(BUILDER_CFLAGS) \
-	$(VTE_CFLAGS) \
+	$(TERMINAL_CFLAGS) \
 	-I$(top_srcdir)/libide \
 	-I$(top_srcdir)/src \
 	-I$(top_srcdir)/src/app \
@@ -46,7 +46,7 @@ libterminal_la_CFLAGS = \
 
 libterminal_la_LIBADD = \
 	$(BUILDER_LIBS) \
-	$(VTE_LIBS) \
+	$(TERMINAL_LIBS) \
 	$(NULL)
 
 libterminal_la_LDFLAGS = \
@@ -60,9 +60,8 @@ glib_resources_xml = gb-terminal.gresource.xml
 glib_resources_namespace = gb_terminal
 include $(top_srcdir)/build/autotools/Makefile.am.gresources
 
+include $(top_srcdir)/plugins/Makefile.plugin
+
 endif
 
-
 -include $(top_srcdir)/git.mk
-
-include $(top_srcdir)/plugins/Makefile.plugin
