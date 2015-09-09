@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-06 20:44+0200\n"
-"PO-Revision-Date: 2015-09-06 20:45+0200\n"
+"POT-Creation-Date: 2015-09-09 19:07+0200\n"
+"PO-Revision-Date: 2015-09-09 19:08+0200\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <gnomepl@aviary.pl>\n"
 "Language: pl\n"
@@ -608,6 +608,11 @@ msgstr ""
 #: ../data/ui/gb-preferences-window.ui.h:4
 msgid "Programming Languages"
 msgstr "Języki programowania"
+
+#: ../data/ui/gb-preferences-page-plugins.ui.h:1
+#: ../data/ui/gb-preferences-window.ui.h:9
+msgid "Plugins"
+msgstr "Wtyczki"
 
 #: ../data/ui/gb-preferences-page-theme.ui.h:1
 #: ../data/ui/gb-preferences-window.ui.h:7
@@ -1686,11 +1691,11 @@ msgstr "Otwórz"
 msgid "%s - Builder"
 msgstr "%s — Builder"
 
-#: ../src/workbench/gb-workbench.c:940
+#: ../src/workbench/gb-workbench.c:919
 msgid "Build Failure"
 msgstr "Niepowodzenie budowania"
 
-#: ../src/workbench/gb-workbench.c:987
+#: ../src/workbench/gb-workbench.c:966
 msgid "Project build system does not support building"
 msgstr "System budowania projektu nie obsługuje budowania"
 
