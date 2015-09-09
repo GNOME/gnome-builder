@@ -401,7 +401,7 @@ gb_view_grid_make_homogeneous (GbViewGrid *self)
  * Fetches all of the stacks in the grid. The resulting #GList should be
  * freed with g_list_free().
  *
- * Returns: (transfer container) (element-type GbViewStack*): A #GList.
+ * Returns: (transfer container) (element-type Builder.ViewStack): A #GList.
  */
 GList *
 gb_view_grid_get_stacks (GbViewGrid *self)

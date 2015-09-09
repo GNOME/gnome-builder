@@ -534,6 +534,16 @@ gb_view_stack_class_init (GbViewStackClass *klass)
                                 G_TYPE_NONE,
                                 0);
 
+  /**
+   * GbViewStack::split:
+   * @self: A #GbViewStack.
+   * @view: The #GbView to split.
+   * @split_type: (type gint): A #GbViewGridSplit.
+   *
+   * Requests a split to be performed on the view.
+   *
+   * This should only be used by #GbViewGrid.
+   */
   gSignals [SPLIT] = g_signal_new ("split",
                                    G_TYPE_FROM_CLASS (klass),
                                    G_SIGNAL_RUN_LAST,
@@ -601,6 +611,11 @@ gb_view_stack_new (void)
   return g_object_new (GB_TYPE_VIEW_STACK, NULL);
 }
 
+/**
+ * gb_view_stack_get_active_view:
+ *
+ * Returns: (transfer none) (nullable): A #GtkWidget or %NULL.
+ */
 GtkWidget *
 gb_view_stack_get_active_view (GbViewStack *self)
 {
@@ -682,6 +697,11 @@ gb_view_stack_set_active_view (GbViewStack *self,
     }
 }
 
+/**
+ * gb_view_stack_find_with_document:
+ *
+ * Returns: (transfer none) (nullable): A #GtkWidget or %NULL.
+ */
 GtkWidget *
 gb_view_stack_find_with_document (GbViewStack *self,
                                   GbDocument  *document)
@@ -802,6 +822,11 @@ gb_view_stack_focus_location (GbViewStack       *self,
     }
 }
 
+/**
+ * gb_view_stack_find_document_typed:
+ *
+ * Returns: (transfer none) (nullable): A #GbDocument or %NULL.
+ */
 GbDocument *
 gb_view_stack_find_document_typed (GbViewStack *self,
                                    GType        document_type)
@@ -828,7 +853,7 @@ gb_view_stack_find_document_typed (GbViewStack *self,
  *
  * Gets the views belonging to this #GbViewStack.
  *
- * Returns: (transfer container): A #GList of #GbView.
+ * Returns: (transfer container) (element-type Builder.View): A #GList of #GbView.
  */
 GList *
 gb_view_stack_get_views (GbViewStack *self)
