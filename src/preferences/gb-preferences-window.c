@@ -26,6 +26,7 @@
 #include "gb-preferences-page-insight.h"
 #include "gb-preferences-page-keybindings.h"
 #include "gb-preferences-page-language.h"
+#include "gb-preferences-page-plugins.h"
 #include "gb-preferences-page-theme.h"
 #include "gb-preferences-page.h"
 #include "gb-preferences-window.h"
@@ -276,6 +277,7 @@ gb_preferences_window_class_init (GbPreferencesWindowClass *klass)
   g_type_ensure (GB_TYPE_PREFERENCES_PAGE_INSIGHT);
   g_type_ensure (GB_TYPE_PREFERENCES_PAGE_KEYBINDINGS);
   g_type_ensure (GB_TYPE_PREFERENCES_PAGE_LANGUAGE);
+  g_type_ensure (GB_TYPE_PREFERENCES_PAGE_PLUGINS);
   g_type_ensure (GB_TYPE_PREFERENCES_PAGE_THEME);
 }
 

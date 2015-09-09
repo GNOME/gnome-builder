@@ -77,6 +77,8 @@ libgnome_builder_la_SOURCES = \
 	preferences/gb-preferences-page-keybindings.h \
 	preferences/gb-preferences-page-language.c \
 	preferences/gb-preferences-page-language.h \
+	preferences/gb-preferences-page-plugins.c \
+	preferences/gb-preferences-page-plugins.h \
 	preferences/gb-preferences-page-theme.c \
 	preferences/gb-preferences-page-theme.h \
 	preferences/gb-preferences-page.c \
