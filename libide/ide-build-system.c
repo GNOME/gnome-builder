@@ -88,8 +88,8 @@ ide_build_system_get_build_flags_async (IdeBuildSystem      *self,
  *
  * Completes an asynchronous request to get the build flags for a file.
  *
- * Returns: (transfer none): An array of strings containing the build flags, or %NULL upon failure
- *   and @error is set.
+ * Returns: (array zero-terminated=1) (transfer full): An array of strings
+ *   containing the build flags, or %NULL upon failure and @error is set.
  */
 gchar **
 ide_build_system_get_build_flags_finish (IdeBuildSystem  *self,
