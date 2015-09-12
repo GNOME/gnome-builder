@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2015-09-05 00:35+0000\n"
-"PO-Revision-Date: 2015-09-12 13:14+0900\n"
+"POT-Creation-Date: 2015-09-12 04:15+0000\n"
+"PO-Revision-Date: 2015-09-12 13:15+0900\n"
 "Last-Translator: Changwoo Ryu <cwryu@debian.org>\n"
 "Language-Team: GNOME Korea <gnome-kr@googlegroups.com>\n"
 "Language: ko\n"
@@ -594,6 +594,11 @@ msgstr "백스페이스를 누르면 들여쓰기 폭에 맞춰 공백을 지워
 msgid "Programming Languages"
 msgstr "프로그래밍 언어"
 
+#: ../data/ui/gb-preferences-page-plugins.ui.h:1
+#: ../data/ui/gb-preferences-window.ui.h:9
+msgid "Plugins"
+msgstr "플러그인"
+
 #: ../data/ui/gb-preferences-page-theme.ui.h:1
 #: ../data/ui/gb-preferences-window.ui.h:7
 msgid "Theme"
@@ -625,7 +630,7 @@ msgid "Search Preferences…"
 msgstr "검색 기본 설정…"
 
 #: ../data/ui/gb-projects-dialog.ui.h:1
-#: ../src/dialogs/gb-projects-dialog.c:257
+#: ../src/dialogs/gb-projects-dialog.c:255
 msgid "Select Project"
 msgstr "프로젝트 선택"
 
@@ -1040,11 +1045,11 @@ msgstr "버퍼에 스레드 표시 기능을 사용하려면 libgit2-glib이 필
 msgid "Builder requires libgit2-glib with SSH support."
 msgstr "버퍼에 SSH 기능을 사용하려면 libgit2-glib이 필요합니다."
 
-#: ../libide/ide-context.c:1670
+#: ../libide/ide-context.c:1666
 msgid "An unload request is already pending"
 msgstr "해제 요청이 이미 지연 중입니다."
 
-#: ../libide/ide-context.c:1785
+#: ../libide/ide-context.c:1781
 msgid "Context has already been restored."
 msgstr "컨텍스트를 이미 복구했습니다."
 
@@ -1369,7 +1374,9 @@ msgstr "저장"
 msgid ""
 "The support log file has been written to '%s'. Please provide this file as "
 "an attachment on your bug report or support request."
-msgstr "지원용 기록 파일을 '%s' 파일에 기록했습니다. 버그 보고나 지원 요청을 보낼 때 이 파일을 첨부해 주십시오."
+msgstr ""
+"지원용 기록 파일을 '%s' 파일에 기록했습니다. 버그 보고나 지원 요청을 보낼 때 "
+"이 파일을 첨부해 주십시오."
 
 #: ../src/app/gb-application-actions.c:157
 msgid "An IDE for GNOME"
@@ -1427,7 +1434,7 @@ msgstr "올바른 Git URL이 필요합니다"
 msgid "Directory|Projects"
 msgstr "디렉터리|프로젝트"
 
-#: ../src/dialogs/gb-projects-dialog.c:246
+#: ../src/dialogs/gb-projects-dialog.c:244
 msgid "(Click on items to select them)"
 msgstr "(항목을 눌러 선택하십시오)"
 
@@ -1505,27 +1512,35 @@ msgstr "minimap mini map overview over view 미니맵 개요 요약 보기"
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-git.c:128
 msgid "git author name surname attribution source code"
-msgstr "git author name surname attribution source code 개발자 저자 이름 출처 소스 코드"
+msgstr ""
+"git author name surname attribution source code 개발자 저자 이름 출처 소스 코"
+"드"
 
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-git.c:134
 msgid "git author email mail address attribute source code"
-msgstr "git author email mail address attribute source code 개발자 저자 메일 전자메일 이메일 출처 소스 코드"
+msgstr ""
+"git author email mail address attribute source code 개발자 저자 메일 전자메"
+"일 이메일 출처 소스 코드"
 
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-insight.c:54
 msgid "word words auto completion suggest found document"
-msgstr "word words auto completion suggest found document 단어 자동 완성 자동완성 제안 문서"
+msgstr ""
+"word words auto completion suggest found document 단어 자동 완성 자동완성 제"
+"안 문서"
 
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-insight.c:59
 msgid "experimental clang autocompletion auto complete"
-msgstr "experimental clang autocompletion auto complete 실험적 자동 완성 자동완성"
+msgstr ""
+"experimental clang autocompletion auto complete 실험적 자동 완성 자동완성"
 
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-insight.c:64
 msgid "exuberant ctags tags autocompletion auto complete"
-msgstr "exuberant ctags tags autocompletion auto complete 태그 자동 완성 자동완성"
+msgstr ""
+"exuberant ctags tags autocompletion auto complete 태그 자동 완성 자동완성"
 
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-keybindings.c:64
@@ -1560,7 +1575,9 @@ msgstr "show grid lines 격자 표시"
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-theme.c:119
 msgid "source style scheme source tango solarized builder syntax"
-msgstr "source style scheme source tango solarized builder syntax 소스 양식 구성 소스 탱고 빌더 문법 신택스"
+msgstr ""
+"source style scheme source tango solarized builder syntax 소스 양식 구성 소"
+"스 탱고 빌더 문법 신택스"
 
 #: ../src/project-tree/gb-new-file-popover.c:124
 #: ../src/project-tree/gb-rename-file-popover.c:142
@@ -1598,11 +1615,11 @@ msgstr "프로바이더를 찾을 수 없습니다."
 msgid "%s more"
 msgstr "%s 초과"
 
-#: ../src/shortcuts/gb-shortcuts-dialog.c:924
+#: ../src/shortcuts/gb-shortcuts-dialog.c:920
 msgid "Search Shortcuts"
 msgstr "검색 단축키"
 
-#: ../src/shortcuts/gb-shortcuts-dialog.c:951
+#: ../src/shortcuts/gb-shortcuts-dialog.c:947
 msgid "Search Results"
 msgstr "검색 결과"
 
@@ -1665,11 +1682,11 @@ msgstr "열기"
 msgid "%s - Builder"
 msgstr "%s - 빌더"
 
-#: ../src/workbench/gb-workbench.c:940
+#: ../src/workbench/gb-workbench.c:919
 msgid "Build Failure"
 msgstr "빌드 실패"
 
-#: ../src/workbench/gb-workbench.c:987
+#: ../src/workbench/gb-workbench.c:966
 msgid "Project build system does not support building"
 msgstr "프로젝트 빌드 시스템이 빌드를 지원하지 않습니다"
 
@@ -1739,7 +1756,8 @@ msgstr "장치가 안정될 때까지 기다리는 중 제한 시간이 초과�
 #: ../tools/ide-build.c:346
 #, c-format
 msgid "Waiting up to 60 seconds for devices to settle. Ctrl+C to exit.\n"
-msgstr "장치가 안정될 때까지 60초를 기다립니다. 끝내려면 Ctrl+C를 누르십시오.\n"
+msgstr ""
+"장치가 안정될 때까지 60초를 기다립니다. 끝내려면 Ctrl+C를 누르십시오.\n"
 
 #: ../tools/ide-build.c:355
 msgid "The target device we are building for."
