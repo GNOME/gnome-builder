@@ -658,8 +658,29 @@ ide_buffer_delete_range (GtkTextBuffer *buffer,
                          GtkTextIter   *start,
                          GtkTextIter   *end)
 {
+  IDE_ENTRY;
+
+#ifdef IDE_ENABLE_TRACE
+  {
+    gint begin_line, begin_offset;
+    gint end_line, end_offset;
+
+    begin_line = gtk_text_iter_get_line (start);
+    begin_offset = gtk_text_iter_get_line_offset (start);
+    end_line = gtk_text_iter_get_line (end);
+    end_offset = gtk_text_iter_get_line_offset (end);
+
+    IDE_TRACE_MSG ("delete-range (%d:%d, %d:%d)",
+                   begin_line, begin_offset,
+                   end_line, end_offset);
+  }
+#endif
+
   GTK_TEXT_BUFFER_CLASS (ide_buffer_parent_class)->delete_range (buffer, start, end);
+
   ide_buffer_emit_cursor_moved (IDE_BUFFER (buffer));
+
+  IDE_EXIT;
 }
 
 static void
