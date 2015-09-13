@@ -1,37 +1,34 @@
 snippet fail
+- desc Snippet for g_return_if_fail()
 - scope c, chdr
 	g_return_if_fail (${1:`$filename|stripsuffix|functify|namespace|upper`_IS_`$filename|stripsuffix|class|functify|upper` (self)});$0
 snippet vfail
+- desc Snippet for g_return_val_if_fail()
 - scope c, chdr
 	g_return_val_if_fail (${1:`$filename|stripsuffix|functify|namespace|upper`_IS_`$filename|stripsuffix|class|functify|upper` (self)}, ${2:NULL});$0
-snippet W
+snippet Widget
+- desc Quick definition for a GtkWidget local.
 - scope c, chdr
 	GtkWidget *
-snippet c
-- scope c, chdr
-	*${$filename|stripsuffix|instance}
-snippet f
+snippet function_prefix
 - scope c, chdr
 	${$filename|stripsuffix|functify}_
-snippet gp
-- scope c, chdr
-	gpointer 
-snippet gb
-- scope c, chdr
-	gboolean 
-snippet for
+snippet forloop
 - scope c, chdr
 	for (${1:i = 0}; ${2:i < }; ${3:i++})
 	  {
 	    $0
 	  }
-snippet inc
+snippet include
 - scope c, chdr
+- desc Include a file relative to the file or configured include paths.
 	#include "${1}"$0
-snippet Inc
+snippet Include
 - scope c, chdr
+- desc Include a file from the global include path.
 	#include <${1}>$0
-snippet pr
+snippet Private
+- desc Define a local for the GObject's private data.
 - scope c, chdr
 	${$filename|stripsuffix|functify|camelize}Private *priv;$0
 snippet doc
@@ -43,10 +40,10 @@ snippet doc
 	 *
 	 * Returns: ${2}
 	 */$0
-snippet C
+snippet Classname
 - scope c, chdr
 	${$filename|stripsuffix|functify|camelize} $0
-snippet CC
+snippet CLASS_NAME
 - scope c, chdr
 	${$filename|stripsuffix|functify|upper} (${1})$0
 snippet comment
