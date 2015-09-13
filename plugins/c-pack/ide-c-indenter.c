@@ -456,12 +456,8 @@ in_comment (const GtkTextIter *location,
         IDE_RETURN (FALSE);
     }
 
-  g_print ("%d:%d (%02x)\n", gtk_text_iter_get_line (&iter), gtk_text_iter_get_line_offset (&iter), gtk_text_iter_get_char (&iter));
-
   if (!gtk_source_buffer_iter_has_context_class (buffer, &iter, "comment"))
     IDE_RETURN (FALSE);
-
-g_print ("looks like we are in a comment, find start.\n");
 
   copy = iter;
 
