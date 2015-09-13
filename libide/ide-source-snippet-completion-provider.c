@@ -26,8 +26,11 @@ struct _IdeSourceSnippetCompletionProvider
 {
   GObject            parent_instance;
 
+  GSettings         *settings;
   IdeSourceView     *source_view;
   IdeSourceSnippets *snippets;
+
+  guint              enabled : 1;
 };
 
 
@@ -48,6 +51,7 @@ typedef struct
 
 enum {
   PROP_0,
+  PROP_ENABLED,
   PROP_SNIPPETS,
   PROP_SOURCE_VIEW,
   LAST_PROP
@@ -84,12 +88,24 @@ ide_source_snippet_completion_provider_set_snippets (IdeSourceSnippetCompletionP
   g_object_notify_by_pspec (G_OBJECT (provider), gParamSpecs[PROP_SNIPPETS]);
 }
 
+static gboolean
+ide_source_snippet_completion_provider_match (GtkSourceCompletionProvider *provider,
+                                              GtkSourceCompletionContext  *context)
+{
+  IdeSourceSnippetCompletionProvider *self = (IdeSourceSnippetCompletionProvider *)provider;
+
+  g_assert (IDE_IS_SOURCE_SNIPPET_COMPLETION_PROVIDER (self));
+
+  return self->enabled;
+}
+
 static void
 ide_source_snippet_completion_provider_finalize (GObject *object)
 {
   IdeSourceSnippetCompletionProvider *self = IDE_SOURCE_SNIPPET_COMPLETION_PROVIDER (object);
 
   g_clear_object (&self->snippets);
+  g_clear_object (&self->settings);
 
   if (self->source_view)
     g_object_remove_weak_pointer (G_OBJECT (self->source_view),
@@ -108,6 +124,10 @@ ide_source_snippet_completion_provider_get_property (GObject    *object,
 
   switch (prop_id)
     {
+    case PROP_ENABLED:
+      g_value_set_boolean (value, provider->enabled);
+      break;
+
     case PROP_SOURCE_VIEW:
       g_value_set_object (value, provider->source_view);
       break;
@@ -131,6 +151,10 @@ ide_source_snippet_completion_provider_set_property (GObject      *object,
 
   switch (prop_id)
     {
+    case PROP_ENABLED:
+      provider->enabled = g_value_get_boolean (value);
+      break;
+
     case PROP_SOURCE_VIEW:
       if (provider->source_view)
         {
@@ -162,6 +186,13 @@ ide_source_snippet_completion_provider_class_init (IdeSourceSnippetCompletionPro
   object_class->get_property = ide_source_snippet_completion_provider_get_property;
   object_class->set_property = ide_source_snippet_completion_provider_set_property;
 
+  gParamSpecs [PROP_ENABLED] =
+    g_param_spec_boolean ("enabled",
+                          "Enabled",
+                          "If the provider is enabled.",
+                          TRUE,
+                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+
   gParamSpecs[PROP_SOURCE_VIEW] =
     g_param_spec_object ("source-view",
                          "Source View",
@@ -180,8 +211,10 @@ ide_source_snippet_completion_provider_class_init (IdeSourceSnippetCompletionPro
 }
 
 static void
-ide_source_snippet_completion_provider_init (IdeSourceSnippetCompletionProvider *provider)
+ide_source_snippet_completion_provider_init (IdeSourceSnippetCompletionProvider *self)
 {
+  self->settings = g_settings_new ("org.gnome.builder.code-insight");
+  g_settings_bind (self->settings, "snippet-completion", self, "enabled", G_SETTINGS_BIND_GET);
 }
 
 static gboolean
@@ -363,4 +396,5 @@ init_provider (GtkSourceCompletionProviderIface *iface)
   iface->get_name = provider_get_name;
   iface->get_priority = provider_get_priority;
   iface->populate = provider_populate;
+  iface->match = ide_source_snippet_completion_provider_match;
 }

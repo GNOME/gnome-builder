@@ -34,6 +34,16 @@
           </object>
         </child>
         <child>
+          <object class="GbPreferencesSwitch" id="snippet_autocompletion">
+            <property name="title" translatable="yes">Suggest Snippet Completion</property>
+            <property name="description" translatable="yes">Allow snippets to be inserted into the document.</property>
+            <property name="settings">insight_settings</property>
+            <property name="settings-schema-key">snippet-completion</property>
+            <property name="size-group">control_group</property>
+            <property name="visible">true</property>
+          </object>
+        </child>
+        <child>
           <object class="GbPreferencesSwitch" id="word_autocompletion">
             <property name="title" translatable="yes">Suggest Word Completion</property>
             <property name="description" translatable="yes">Suggest completion of words found within all open documents.</property>
