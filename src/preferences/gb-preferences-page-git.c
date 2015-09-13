@@ -27,6 +27,7 @@ struct _GbPreferencesPageGit
   GbPreferencesPage  parent_instance;
 
   GgitConfig        *config;
+
   GtkEntry          *git_author_name_entry;
   GtkEntry          *git_author_email_entry;
   GtkWidget         *name_label;
@@ -58,6 +59,36 @@ on_author_email_changed (GtkEntry             *entry,
                           gtk_entry_get_text (entry), NULL);
 }
 
+static gchar *
+read_config_string (GbPreferencesPageGit  *self,
+                    const gchar           *key,
+                    GError               **error)
+{
+  GgitConfig *config;
+  const gchar *ret;
+
+  g_assert (GB_IS_PREFERENCES_PAGE_GIT (self));
+  g_assert (key != NULL);
+
+  if (self->config == NULL)
+    {
+      g_set_error (error,
+                   G_IO_ERROR,
+                   G_IO_ERROR_FAILED,
+                   "Config not yet loaded");
+      return NULL;
+    }
+
+  if (!(config = ggit_config_snapshot (self->config, error)))
+    return NULL;
+
+  ret = ggit_config_get_string (config, key, error);
+
+  g_clear_object (&config);
+
+  return ret ? g_strdup (ret) : NULL;
+}
+
 static void
 gb_preferences_page_git_constructed (GObject *object)
 {
@@ -67,10 +98,10 @@ gb_preferences_page_git_constructed (GObject *object)
   g_return_if_fail (GB_IS_PREFERENCES_PAGE_GIT (git));
 
   /* set current values from git */
-  value = ggit_config_get_string (git->config, "user.name", NULL);
+  value = read_config_string (git, "user.name", NULL);
   if (value)
     gtk_entry_set_text (git->git_author_name_entry, value);
-  value = ggit_config_get_string (git->config, "user.email", NULL);
+  value = read_config_string (git, "user.email", NULL);
   if (value)
     gtk_entry_set_text (git->git_author_email_entry, value);
 
@@ -119,9 +150,19 @@ gb_preferences_page_git_class_init (GbPreferencesPageGitClass *klass)
 static void
 gb_preferences_page_git_init (GbPreferencesPageGit *self)
 {
+  g_autoptr(GFile) global_file = NULL;
+
   gtk_widget_init_template (GTK_WIDGET (self));
 
-  self->config = ggit_config_new_default (NULL);
+  if (!(global_file = ggit_config_find_global ()))
+    {
+      g_autofree gchar *path = NULL;
+
+      path = g_build_filename (g_get_home_dir (), ".gitconfig", NULL);
+      global_file = g_file_new_for_path (path);
+    }
+
+  self->config = ggit_config_new_from_file (global_file, NULL);
 
   gb_preferences_page_set_keywords_for_widget (GB_PREFERENCES_PAGE (self),
   /* To translators: This is a list of keywords for the preferences page */
