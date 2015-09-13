@@ -482,6 +482,18 @@ ide_clang_service_get_translation_unit_async (IdeClangService     *self,
 
   task = g_task_new (self, cancellable, callback, user_data);
 
+  /*
+   * Clang likes to crash on our temporary files.
+   */
+  if (ide_file_get_is_temporary (file))
+    {
+      g_task_return_new_error (task,
+                               G_IO_ERROR,
+                               G_IO_ERROR_NOT_FOUND,
+                               "File does not yet exist, ignoring translation unit request.");
+      return;
+    }
+
   if (min_serial == 0)
     {
       IdeContext *context;
