@@ -26,9 +26,13 @@ struct _GbPreferencesPageInsight
 {
   GbPreferencesPage    parent_instance;
 
-  GbPreferencesSwitch *word_autocompletion;
-  GbPreferencesSwitch *ctags_autocompletion;
+  GbPreferencesSwitch *semantic_highlighting;
+
   GbPreferencesSwitch *clang_autocompletion;
+  GbPreferencesSwitch *ctags_autocompletion;
+  GbPreferencesSwitch *jedi_autocompletion;
+  GbPreferencesSwitch *snippet_autocompletion;
+  GbPreferencesSwitch *word_autocompletion;
 };
 
 G_DEFINE_TYPE (GbPreferencesPageInsight, gb_preferences_page_insight, GB_TYPE_PREFERENCES_PAGE)
@@ -41,6 +45,9 @@ gb_preferences_page_insight_class_init (GbPreferencesPageInsightClass *klass)
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/ui/gb-preferences-page-insight.ui");
   gtk_widget_class_bind_template_child (widget_class, GbPreferencesPageInsight, ctags_autocompletion);
   gtk_widget_class_bind_template_child (widget_class, GbPreferencesPageInsight, clang_autocompletion);
+  gtk_widget_class_bind_template_child (widget_class, GbPreferencesPageInsight, jedi_autocompletion);
+  gtk_widget_class_bind_template_child (widget_class, GbPreferencesPageInsight, semantic_highlighting);
+  gtk_widget_class_bind_template_child (widget_class, GbPreferencesPageInsight, snippet_autocompletion);
   gtk_widget_class_bind_template_child (widget_class, GbPreferencesPageInsight, word_autocompletion);
 }
 
@@ -63,5 +70,20 @@ gb_preferences_page_insight_init (GbPreferencesPageInsight *self)
   /* To translators: This is a list of keywords for the preferences page */
                                                _("exuberant ctags tags autocompletion auto complete"),
                                                self->ctags_autocompletion,
+                                               NULL);
+  gb_preferences_page_set_keywords_for_widget (GB_PREFERENCES_PAGE (self),
+  /* To translators: This is a list of keywords for the preferences page */
+                                               _("jedi python autocompletion auto complete"),
+                                               self->jedi_autocompletion,
+                                               NULL);
+  gb_preferences_page_set_keywords_for_widget (GB_PREFERENCES_PAGE (self),
+  /* To translators: This is a list of keywords for the preferences page */
+                                               _("snippets autocompletion auto complete"),
+                                               self->snippet_autocompletion,
+                                               NULL);
+  gb_preferences_page_set_keywords_for_widget (GB_PREFERENCES_PAGE (self),
+  /* To translators: This is a list of keywords for the preferences page */
+                                               _("semantic highlighting color goto declaration definition"),
+                                               self->semantic_highlighting,
                                                NULL);
 }
