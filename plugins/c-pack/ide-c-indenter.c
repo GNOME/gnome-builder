@@ -16,6 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define G_LOG_DOMAIN "cindent"
+
 #include <glib/gi18n.h>
 #include <libpeas/peas.h>
 
@@ -49,27 +51,11 @@ static void indenter_iface_init (IdeIndenterInterface *iface);
 G_DEFINE_DYNAMIC_TYPE_EXTENDED (IdeCIndenter, ide_c_indenter, IDE_TYPE_OBJECT, 0,
                                 G_IMPLEMENT_INTERFACE (IDE_TYPE_INDENTER, indenter_iface_init))
 
-static gunichar
-text_iter_peek_next_char (const GtkTextIter *location)
-{
-  GtkTextIter iter = *location;
-
-  if (gtk_text_iter_forward_char (&iter))
-    return gtk_text_iter_get_char (&iter);
-
-  return 0;
-}
-
-static gunichar
-text_iter_peek_prev_char (const GtkTextIter *location)
-{
-  GtkTextIter iter = *location;
-
-  if (gtk_text_iter_backward_char (&iter))
-    return gtk_text_iter_get_char (&iter);
-
-  return 0;
-}
+enum {
+  COMMENT_NONE,
+  COMMENT_C89,
+  COMMENT_C99
+};
 
 static inline void
 build_indent (IdeCIndenter *c,
@@ -141,8 +127,7 @@ iter_ends_c89_comment (const GtkTextIter *iter)
 
       tmp = *iter;
 
-      if (gtk_text_iter_backward_char (&tmp) &&
-          ('*' == gtk_text_iter_get_char (&tmp)))
+      if (gtk_text_iter_backward_char (&tmp) && ('*' == gtk_text_iter_get_char (&tmp)))
         return TRUE;
     }
 
@@ -434,93 +419,85 @@ backward_to_line_first_char (GtkTextIter *iter)
   return FALSE;
 }
 
-/**
- * text_iter_in_c89_comment:
- * @location: (in): A #GtkTextIter containing the target location.
- *
- * The algorith for this is unfortunately trickier than one would expect.
- * Because we could always still have context if we walk backwards that
- * would let us know if we are in a string, we just start from the beginning
- * of the buffer and try to skip forward until we get to our target
- * position.
- *
- * Returns: %TRUE if we think we are in a c89 comment, otherwise %FALSE.
- */
 static gboolean
-in_c89_comment (const GtkTextIter *location,
-                GtkTextIter       *match_begin)
+in_comment (const GtkTextIter *location,
+            GtkTextIter       *match_begin,
+            gint              *comment_type)
 {
-  GtkTextBuffer *buffer;
-  GtkTextIter iter;
-  GtkTextIter after_location;
+  GtkSourceBuffer *buffer = GTK_SOURCE_BUFFER (gtk_text_iter_get_buffer (location));
+  GtkTextIter iter = *location;
+  GtkTextIter copy;
+  gint type = COMMENT_NONE;
 
-  buffer = gtk_text_iter_get_buffer (location);
-  gtk_text_buffer_get_start_iter (buffer, &iter);
+  IDE_ENTRY;
 
-  after_location = *location;
-  gtk_text_iter_forward_char (&after_location);
+  if (comment_type)
+    *comment_type = COMMENT_NONE;
 
-  do
+  /*
+   * A rather esoteric set of heuristics to be able to determine if we are
+   * actually in a GtkSourceView comment context.
+   */
+  if (gtk_text_iter_ends_line (&iter))
     {
-      gunichar ch;
-
-      if (gtk_text_iter_compare (&iter, location) > 0)
-        break;
-
-      ch = gtk_text_iter_get_char (&iter);
-
-      /* skip past the c89 comment */
-      if ((ch == '/') && (text_iter_peek_next_char (&iter) == '*'))
-        {
-          GtkTextIter saved = iter;
-
-          if (!gtk_text_iter_forward_chars (&iter, 2) ||
-              !gtk_text_iter_forward_search (&iter, "*/",
-                                             GTK_TEXT_SEARCH_TEXT_ONLY,
-                                             NULL, &iter, &after_location))
-            {
-              *match_begin = saved;
-              IDE_RETURN (TRUE);
-            }
-        }
-
-      /* skip past a string or character */
-      if ((ch == '\'') || (ch == '"'))
-        {
-          const gchar *match = (ch == '\'') ? "'" : "\"";
-
-        again:
-          if (!gtk_text_iter_forward_search (&iter, match,
-                                             GTK_TEXT_SEARCH_TEXT_ONLY,
-                                             NULL, NULL, NULL))
-            return FALSE;
-
-          /* this one is escaped, keep looking */
-          if (text_iter_peek_prev_char (&iter) == '\\')
-            {
-              if (!gtk_text_iter_forward_char (&iter))
-                return FALSE;
-              goto again;
-            }
-        }
-
-      /* skip past escaped character */
-      if (ch == '\\')
-        {
-          if (!gtk_text_iter_forward_char (&iter))
-            return FALSE;
-        }
+      if (gtk_text_iter_is_end (&iter))
+        gtk_text_iter_backward_char (&iter);
+      gtk_text_iter_backward_char (&iter);
     }
-  while (gtk_text_iter_forward_char (&iter));
 
-  return FALSE;
+  /*
+   * But make sure that our new position isn't the end of a C89 block.
+   */
+  if (gtk_text_iter_get_char (&iter) == '/')
+    {
+      GtkTextIter star = iter;
+
+      if (gtk_text_iter_backward_char (&star) && (gtk_text_iter_get_char (&star) == '*'))
+        IDE_RETURN (FALSE);
+    }
+
+  g_print ("%d:%d (%02x)\n", gtk_text_iter_get_line (&iter), gtk_text_iter_get_line_offset (&iter), gtk_text_iter_get_char (&iter));
+
+  if (!gtk_source_buffer_iter_has_context_class (buffer, &iter, "comment"))
+    IDE_RETURN (FALSE);
+
+g_print ("looks like we are in a comment, find start.\n");
+
+  copy = iter;
+
+  while (gtk_source_buffer_iter_has_context_class (buffer, &iter, "comment"))
+    {
+      copy = iter;
+
+      gtk_text_iter_backward_char (&iter);
+    }
+
+  *match_begin = copy;
+
+  if ((gtk_text_iter_get_char (&copy) == '/') &&
+      !gtk_text_iter_is_end (&copy) &&
+      gtk_text_iter_forward_char (&copy))
+    {
+      if (gtk_text_iter_get_char (&copy) == '/')
+        type = COMMENT_C99;
+      else if (gtk_text_iter_get_char (&copy) == '*')
+        type = COMMENT_C89;
+    }
+
+  if ((type == COMMENT_C99) && (gtk_text_iter_get_line (&copy) != gtk_text_iter_get_line (location)))
+    IDE_RETURN (FALSE);
+
+  if (comment_type)
+    *comment_type = type;
+
+  IDE_RETURN (TRUE);
 }
 
 static gchar *
-c_indenter_indent (IdeCIndenter *c,
-                                  GtkTextView           *view,
-                                  GtkTextBuffer         *buffer,
-                                  GtkTextIter           *iter)
+c_indenter_indent (IdeCIndenter  *c,
+                   GtkTextView   *view,
+                   GtkTextBuffer *buffer,
+                   GtkTextIter   *iter)
 {
   GtkTextIter cur;
   GtkTextIter match_begin;
@@ -528,6 +505,7 @@ c_indenter_indent (IdeCIndenter *c,
   GString *str;
   gchar *ret = NULL;
   gchar *last_word = NULL;
+  gint comment_type;
 
   IDE_ENTRY;
 
@@ -536,7 +514,7 @@ c_indenter_indent (IdeCIndenter *c,
   /*
    * Save our current iter position to restore it later.
    */
-  gtk_text_iter_assign (&cur, iter);
+  cur = *iter;
 
   /*
    * Move to before the character just inserted.
@@ -549,27 +527,26 @@ c_indenter_indent (IdeCIndenter *c,
   str = g_string_new (NULL);
 
   /*
-   * Move backwards to the last non-space character inserted. We need to
-   * start by moving back one character to get to the pre-newline insertion
-   * point.
-   */
-  if (g_unichar_isspace (gtk_text_iter_get_char (iter)))
-    if (!gtk_text_iter_backward_find_char (iter, non_space_predicate, NULL, NULL))
-      IDE_GOTO (cleanup);
-
-  /*
    * If we are in a c89 multi-line comment, try to match the previous comment
    * line. Function will leave iter at original position unless it matched.
    * If so, it will be at the beginning of the comment.
    */
-  if (in_c89_comment (iter, &match_begin))
+  if (in_comment (iter, &match_begin, &comment_type))
     {
       guint offset;
 
       gtk_text_iter_assign (iter, &match_begin);
       offset = gtk_text_iter_get_line_offset (iter);
-      build_indent (c, offset + 1, iter, str);
-      g_string_append (str, "* ");
+      if (comment_type == COMMENT_C89)
+        {
+          build_indent (c, offset + 1, iter, str);
+          g_string_append (str, "* ");
+        }
+      else if (comment_type == COMMENT_C99)
+        {
+          build_indent (c, offset, iter, str);
+          g_string_append (str, "// ");
+        }
       IDE_GOTO (cleanup);
     }
 
@@ -580,6 +557,14 @@ c_indenter_indent (IdeCIndenter *c,
    */
   if (backward_before_c89_comment (iter))
     gtk_text_iter_assign (&cur, iter);
+
+  /*
+   * Move backwards to the last non-space character inserted. This helps us
+   * more accurately locate the type of syntax block we are in.
+   */
+  if (g_unichar_isspace (gtk_text_iter_get_char (iter)))
+    if (!gtk_text_iter_backward_find_char (iter, non_space_predicate, NULL, NULL))
+      IDE_GOTO (cleanup);
 
   /*
    * Get our new character as we possibely moved.
@@ -755,12 +740,13 @@ cleanup:
 
 static gchar *
 maybe_close_comment (IdeCIndenter *c,
-                     GtkTextIter           *begin,
-                     GtkTextIter           *end)
+                     GtkTextIter  *begin,
+                     GtkTextIter  *end)
 {
   GtkTextIter copy;
   GtkTextIter begin_comment;
   gchar *ret = NULL;
+  gint comment_type;
 
   g_return_val_if_fail (IDE_IS_C_INDENTER (c), NULL);
   g_return_val_if_fail (begin, NULL);
@@ -772,7 +758,8 @@ maybe_close_comment (IdeCIndenter *c,
    * Walk backwards ensuring we just inserted a '/' and that it was after
    * a '* ' sequence.
    */
-  if (in_c89_comment (begin, &begin_comment) &&
+  if (in_comment (begin, &begin_comment, &comment_type) &&
+      (comment_type == COMMENT_C89) &&
       gtk_text_iter_backward_char (begin) &&
       ('/' == gtk_text_iter_get_char (begin)) &&
       gtk_text_iter_backward_char (begin) &&
@@ -1055,7 +1042,7 @@ maybe_align_parameters (IdeCIndenter *c,
   g_return_val_if_fail (begin, NULL);
   g_return_val_if_fail (end, NULL);
 
-  if (in_c89_comment (begin, &match_begin))
+  if (in_comment (begin, &match_begin, NULL))
     IDE_RETURN (NULL);
 
   gtk_text_iter_assign (&copy, begin);
@@ -1227,7 +1214,7 @@ maybe_unindent_case_label (IdeCIndenter *c,
 
   gtk_text_iter_assign (&iter, begin);
 
-  if (in_c89_comment (begin, &match_begin))
+  if (in_comment (begin, &match_begin, NULL))
     IDE_RETURN (NULL);
 
   if (!gtk_text_iter_backward_char (&iter))
