@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2015-09-12 04:15+0000\n"
-"PO-Revision-Date: 2015-09-12 13:15+0900\n"
+"POT-Creation-Date: 2015-09-13 00:34+0000\n"
+"PO-Revision-Date: 2015-09-13 18:20+0900\n"
 "Last-Translator: Changwoo Ryu <cwryu@debian.org>\n"
 "Language-Team: GNOME Korea <gnome-kr@googlegroups.com>\n"
 "Language: ko\n"
@@ -511,34 +511,42 @@ msgid "Auto Completion"
 msgstr "자동 완성"
 
 #: ../data/ui/gb-preferences-page-insight.ui.h:5
+msgid "Suggest Snippet Completion"
+msgstr "스니핏 자동 완성 제안"
+
+#: ../data/ui/gb-preferences-page-insight.ui.h:6
+msgid "Allow snippets to be inserted into the document."
+msgstr "문서에 스니핏을 입력합니다."
+
+#: ../data/ui/gb-preferences-page-insight.ui.h:7
 msgid "Suggest Word Completion"
 msgstr "단어 자동 완성 제안"
 
-#: ../data/ui/gb-preferences-page-insight.ui.h:6
+#: ../data/ui/gb-preferences-page-insight.ui.h:8
 msgid "Suggest completion of words found within all open documents."
 msgstr "열린 문서에 있는 단어를 기준으로 자동 완성을 합니다."
 
-#: ../data/ui/gb-preferences-page-insight.ui.h:7
+#: ../data/ui/gb-preferences-page-insight.ui.h:9
 msgid "Suggest Completions using Ctags"
 msgstr "CTags 사용 자동 완성 제안"
 
-#: ../data/ui/gb-preferences-page-insight.ui.h:8
+#: ../data/ui/gb-preferences-page-insight.ui.h:10
 msgid "Use Ctags for completions in supported languages."
 msgstr "지원하는 언어에서 Ctags를 사용해 자동 완성을 합니다."
 
-#: ../data/ui/gb-preferences-page-insight.ui.h:9
+#: ../data/ui/gb-preferences-page-insight.ui.h:11
 msgid "Suggest Completions using Clang (Experimental)"
 msgstr "Clang 사용 자동 완성 제안(실험적)"
 
-#: ../data/ui/gb-preferences-page-insight.ui.h:10
+#: ../data/ui/gb-preferences-page-insight.ui.h:12
 msgid "Use Clang for completions in the C and C++ languages."
 msgstr "C 및 C++ 언어에서 Clang을 사용해 자동 완성을 합니다."
 
-#: ../data/ui/gb-preferences-page-insight.ui.h:11
+#: ../data/ui/gb-preferences-page-insight.ui.h:13
 msgid "Suggest Completions using Jedi"
 msgstr "Jedi 사용 자동 완성 제안"
 
-#: ../data/ui/gb-preferences-page-insight.ui.h:12
+#: ../data/ui/gb-preferences-page-insight.ui.h:14
 msgid "Use Jedi for completions in the Python language."
 msgstr "파이썬 언어에서 Jedi를 사용해 자동 완성을 합니다."
 
@@ -989,7 +997,7 @@ msgstr "기본값 초기화에 실패했습니다."
 msgid "File contained invalid UTF-8"
 msgstr "%s 안에 잘못된 UTF-8 문자가 들어 있습니다"
 
-#: ../libide/ide-buffer.c:1969
+#: ../libide/ide-buffer.c:1990
 msgid "The current language lacks a symbol resolver."
 msgstr "현재 언어에 심볼 알아내기가 없습니다."
 
@@ -1097,7 +1105,7 @@ msgstr "%s에서 GAsyncInitable를 구현하지 않았습니다."
 msgid "Chunk does not belong to snippet."
 msgstr "청크가 스니핏에 속해 있지 않습니다."
 
-#: ../libide/ide-source-snippet-completion-provider.c:255
+#: ../libide/ide-source-snippet-completion-provider.c:288
 msgid "Snippets"
 msgstr "스니핏"
 
@@ -1116,29 +1124,29 @@ msgstr "디렉터리를 여는데 실패했습니다: %s"
 msgid "Failed to load file: %s: %s"
 msgstr "파일을 읽어들이는데 실패했습니다: %s: %s"
 
-#: ../libide/ide-source-view.c:4561
+#: ../libide/ide-source-view.c:4562
 #, c-format
 msgid "Insert \"%s\""
 msgstr "\"%s\" 입력"
 
-#: ../libide/ide-source-view.c:4563
+#: ../libide/ide-source-view.c:4564
 #, c-format
 msgid "Replace \"%s\" with \"%s\""
 msgstr "\"%s\"을(를) \"%s\"(으)로 바꾸기"
 
-#: ../libide/ide-source-view.c:4681
+#: ../libide/ide-source-view.c:4682
 msgid "Apply Fix-It"
 msgstr "바로잡기 적용"
 
-#: ../libide/ide-source-view.c:4724
+#: ../libide/ide-source-view.c:4725
 msgid "Join Lines"
 msgstr "줄 합치기"
 
-#: ../libide/ide-source-view.c:4735
+#: ../libide/ide-source-view.c:4736
 msgid "Sort Lines"
 msgstr "줄 정렬"
 
-#: ../libide/ide-source-view.c:4754
+#: ../libide/ide-source-view.c:4755
 msgid "Go to Definition"
 msgstr "정의로 이동"
 
@@ -1524,23 +1532,38 @@ msgstr ""
 "일 이메일 출처 소스 코드"
 
 #. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-insight.c:54
+#: ../src/preferences/gb-preferences-page-insight.c:61
 msgid "word words auto completion suggest found document"
 msgstr ""
 "word words auto completion suggest found document 단어 자동 완성 자동완성 제"
 "안 문서"
 
 #. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-insight.c:59
+#: ../src/preferences/gb-preferences-page-insight.c:66
 msgid "experimental clang autocompletion auto complete"
 msgstr ""
 "experimental clang autocompletion auto complete 실험적 자동 완성 자동완성"
 
 #. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-insight.c:64
+#: ../src/preferences/gb-preferences-page-insight.c:71
 msgid "exuberant ctags tags autocompletion auto complete"
 msgstr ""
 "exuberant ctags tags autocompletion auto complete 태그 자동 완성 자동완성"
+
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-insight.c:76
+msgid "jedi python autocompletion auto complete"
+msgstr "jedi python autocompletion auto complete 파이썬 자동 완성 자동완성"
+
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-insight.c:81
+msgid "snippets autocompletion auto complete"
+msgstr "snippets autocompletion auto complete 스니핏 자동 완성 자동완성"
+
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-insight.c:86
+msgid "semantic highlighting color goto declaration definition"
+msgstr "semantic highlighting color goto declaration definition 의미적 강조 색 이동 선언 정의"
 
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-keybindings.c:64
