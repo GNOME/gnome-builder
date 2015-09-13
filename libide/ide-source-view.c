@@ -60,6 +60,7 @@
 #include "ide-source-view-mode.h"
 #include "ide-source-view-movements.h"
 #include "ide-symbol.h"
+#include "ide-text-util.h"
 
 #define DEFAULT_FONT_DESC "Monospace 11"
 #define ANIMATION_X_GROW 50
@@ -4925,6 +4926,19 @@ ide_source_view_real_decrease_font_size (IdeSourceView *self)
 }
 
 static void
+ide_source_view_real_delete_from_cursor (GtkTextView   *text_view,
+                                         GtkDeleteType  delete_type,
+                                         gint           count)
+{
+  if (delete_type == GTK_DELETE_PARAGRAPHS)
+    ide_text_util_delete_line (text_view, count);
+  else
+    GTK_TEXT_VIEW_CLASS (ide_source_view_parent_class)->delete_from_cursor (text_view,
+                                                                            delete_type,
+                                                                            count);
+}
+
+static void
 ide_source_view_dispose (GObject *object)
 {
   IdeSourceView *self = (IdeSourceView *)object;
@@ -5197,6 +5211,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
   widget_class->size_allocate = ide_source_view_size_allocate;
   widget_class->style_updated = ide_source_view_real_style_updated;
 
+  text_view_class->delete_from_cursor = ide_source_view_real_delete_from_cursor;
   text_view_class->draw_layer = ide_source_view_real_draw_layer;
   text_view_class->insert_at_cursor = ide_source_view_real_insert_at_cursor;
   text_view_class->populate_popup = ide_source_view_real_populate_popup;
