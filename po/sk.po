@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2015-09-09 03:35+0000\n"
-"PO-Revision-Date: 2015-09-10 19:42+0200\n"
+"POT-Creation-Date: 2015-09-13 00:34+0000\n"
+"PO-Revision-Date: 2015-09-13 10:45+0200\n"
 "Last-Translator: Dušan Kazik <prescott66@gmail.com>\n"
 "Language-Team: slovenčina <>\n"
 "Language: sk\n"
@@ -46,7 +46,7 @@ msgstr "Vyhľadajte"
 #: ../contrib/search/trie.c:790
 #, c-format
 msgid "Traversal order %u is not supported on Trie."
-msgstr ""
+msgstr "Radenie priechodu %u nie je v objekte Trie podporované."
 
 #: ../contrib/xml/xml-reader.c:327
 #, c-format
@@ -514,34 +514,42 @@ msgid "Auto Completion"
 msgstr "Automatické dopĺňanie"
 
 #: ../data/ui/gb-preferences-page-insight.ui.h:5
+msgid "Suggest Snippet Completion"
+msgstr "Navrhnúť doplnenie úryvku"
+
+#: ../data/ui/gb-preferences-page-insight.ui.h:6
+msgid "Allow snippets to be inserted into the document."
+msgstr "Umožní vkladanie úryvkov do dokumentu."
+
+#: ../data/ui/gb-preferences-page-insight.ui.h:7
 msgid "Suggest Word Completion"
 msgstr "Navrhnúť doplnenie slova"
 
-#: ../data/ui/gb-preferences-page-insight.ui.h:6
+#: ../data/ui/gb-preferences-page-insight.ui.h:8
 msgid "Suggest completion of words found within all open documents."
 msgstr "Navrhne doplnenia slov nájdených vo všetkých otvorených dokumentoch."
 
-#: ../data/ui/gb-preferences-page-insight.ui.h:7
+#: ../data/ui/gb-preferences-page-insight.ui.h:9
 msgid "Suggest Completions using Ctags"
 msgstr "Navrhnúť doplnenia pomocou značiek Ctags"
 
-#: ../data/ui/gb-preferences-page-insight.ui.h:8
+#: ../data/ui/gb-preferences-page-insight.ui.h:10
 msgid "Use Ctags for completions in supported languages."
 msgstr "Použijú sa značky Ctags na doplnenie v podporovaných jazykoch."
 
-#: ../data/ui/gb-preferences-page-insight.ui.h:9
+#: ../data/ui/gb-preferences-page-insight.ui.h:11
 msgid "Suggest Completions using Clang (Experimental)"
 msgstr "Navrhnúť doplnenia pomocou kompilátora Clang (experimentálne)"
 
-#: ../data/ui/gb-preferences-page-insight.ui.h:10
+#: ../data/ui/gb-preferences-page-insight.ui.h:12
 msgid "Use Clang for completions in the C and C++ languages."
 msgstr "Použije sa kompilátor na doplnenie v jazykoch C a C++."
 
-#: ../data/ui/gb-preferences-page-insight.ui.h:11
+#: ../data/ui/gb-preferences-page-insight.ui.h:13
 msgid "Suggest Completions using Jedi"
 msgstr "Navrhnúť doplnenia pomocou nástroja Jedi"
 
-#: ../data/ui/gb-preferences-page-insight.ui.h:12
+#: ../data/ui/gb-preferences-page-insight.ui.h:14
 msgid "Use Jedi for completions in the Python language."
 msgstr "Použije sa nástroj Jedi na doplnenie v jazyku Python."
 
@@ -601,6 +609,11 @@ msgstr ""
 msgid "Programming Languages"
 msgstr "Programovacie jazyky"
 
+#: ../data/ui/gb-preferences-page-plugins.ui.h:1
+#: ../data/ui/gb-preferences-window.ui.h:9
+msgid "Plugins"
+msgstr "Zásuvné moduly"
+
 #: ../data/ui/gb-preferences-page-theme.ui.h:1
 #: ../data/ui/gb-preferences-window.ui.h:7
 msgid "Theme"
@@ -630,10 +643,6 @@ msgstr "Nastavenia"
 #: ../data/ui/gb-preferences-window.ui.h:2
 msgid "Search Preferences…"
 msgstr "Vyhľadajte nastavenia…"
-
-#: ../data/ui/gb-preferences-window.ui.h:9
-msgid "Plugins"
-msgstr "Zásuvné moduly"
 
 #: ../data/ui/gb-projects-dialog.ui.h:1 ../src/dialogs/gb-projects-dialog.c:255
 msgid "Select Project"
@@ -840,19 +849,19 @@ msgstr "Skok na definíciu symbolu"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:49
 msgid "Move viewport up within the file"
-msgstr ""
+msgstr "Presun portu zobrazenia nahor v súbore"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:50
 msgid "Move viewport down within the file"
-msgstr ""
+msgstr "Presun portu zobrazenia nadol v súbore"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:51
 msgid "Move viewport to end of file"
-msgstr ""
+msgstr "Presun portu zobrazenia na koniec súboru"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:52
 msgid "Move viewport to beginning of file"
-msgstr ""
+msgstr "Presun portu zobrazenia na začiatok súboru"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:53
 msgid "Move to matching bracket"
@@ -985,6 +994,7 @@ msgstr "Zlyhalo analyzovanie celého čísla z „%s“"
 #: ../libide/gsettings/ide-language-defaults.c:270
 msgid "language defaults missing version in [global] group."
 msgstr ""
+"V predvolených hodnotách jazyka chýba verzia v globálnej skupine [global]."
 
 #: ../libide/gsettings/ide-language-defaults.c:362
 msgid "Failed to initialize defaults."
@@ -994,7 +1004,7 @@ msgstr "Zlyhala inicializácia predvolených jazykov."
 msgid "File contained invalid UTF-8"
 msgstr "Súbor obsahoval neplatné kódovanie UTF-8"
 
-#: ../libide/ide-buffer.c:1969
+#: ../libide/ide-buffer.c:1990
 msgid "The current language lacks a symbol resolver."
 msgstr "Aktuálnemu jazyku chýba rozpoznávanie symbolov."
 
@@ -1013,7 +1023,7 @@ msgstr "neuložený dokument %u"
 
 #: ../libide/ide-buffer-manager.c:1670
 msgid "Failed to save buffer, ignoring reclamation."
-msgstr ""
+msgstr "Zlyhalo uloženie zásobníka. Ignoruje sa opätovné spracovanie."
 
 #: ../libide/ide-builder.c:50
 #, c-format
@@ -1053,7 +1063,7 @@ msgstr "Program Builder vyžaduje knižnicu libgit2-glib s podporou SSH."
 
 #: ../libide/ide-context.c:1666
 msgid "An unload request is already pending"
-msgstr ""
+msgstr "Požiadavka na uvoľnenie už čaká na uskutočnenie."
 
 #: ../libide/ide-context.c:1781
 msgid "Context has already been restored."
@@ -1103,7 +1113,7 @@ msgstr "%s nemá implementovanú funkciu GAsyncInitable."
 msgid "Chunk does not belong to snippet."
 msgstr "Blok nepatrí k úryvku."
 
-#: ../libide/ide-source-snippet-completion-provider.c:255
+#: ../libide/ide-source-snippet-completion-provider.c:288
 msgid "Snippets"
 msgstr "Úryvky"
 
@@ -1122,29 +1132,29 @@ msgstr "Zlyhalo otvorenie adresára: %s"
 msgid "Failed to load file: %s: %s"
 msgstr "Zlyhalo načítanie súboru: %s: %s"
 
-#: ../libide/ide-source-view.c:4561
+#: ../libide/ide-source-view.c:4562
 #, c-format
 msgid "Insert \"%s\""
 msgstr "Vložiť „%s“"
 
-#: ../libide/ide-source-view.c:4563
+#: ../libide/ide-source-view.c:4564
 #, c-format
 msgid "Replace \"%s\" with \"%s\""
 msgstr "Nahradiť „%s“ s „%s“"
 
-#: ../libide/ide-source-view.c:4681
+#: ../libide/ide-source-view.c:4682
 msgid "Apply Fix-It"
 msgstr "Použiť opravu"
 
-#: ../libide/ide-source-view.c:4724
+#: ../libide/ide-source-view.c:4725
 msgid "Join Lines"
 msgstr "Spojiť riadky"
 
-#: ../libide/ide-source-view.c:4735
+#: ../libide/ide-source-view.c:4736
 msgid "Sort Lines"
 msgstr "Usporiadať riadky"
 
-#: ../libide/ide-source-view.c:4754
+#: ../libide/ide-source-view.c:4755
 msgid "Go to Definition"
 msgstr "Prejsť na definíciu"
 
@@ -1528,19 +1538,36 @@ msgid "git author email mail address attribute source code"
 msgstr "git autor tvorca email mail pošta adresa autorstvo zdroj zdrojový kód"
 
 #. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-insight.c:54
+#: ../src/preferences/gb-preferences-page-insight.c:61
 msgid "word words auto completion suggest found document"
 msgstr "slovo slová automatické dopĺňanie návrh nájsť dokument"
 
 #. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-insight.c:59
+#: ../src/preferences/gb-preferences-page-insight.c:66
 msgid "experimental clang autocompletion auto complete"
 msgstr "experimentálne clang automatické dopĺňanie automaticky doplniť"
 
 #. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-insight.c:64
+#: ../src/preferences/gb-preferences-page-insight.c:71
 msgid "exuberant ctags tags autocompletion auto complete"
+msgstr "nadmerné naviazané ctags automatické dopĺňanie automaticky doplniť"
+
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-insight.c:76
+msgid "jedi python autocompletion auto complete"
+msgstr "jedi python automatické dopĺňanie automaticky doplniť"
+
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-insight.c:81
+msgid "snippets autocompletion auto complete"
+msgstr "úryvky automatické dopĺňanie automaticky doplniť"
+
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-insight.c:86
+msgid "semantic highlighting color goto declaration definition"
 msgstr ""
+"sémantické zvýrazňovanie zvýraznenie farba farby prejsť na goto deklarácia "
+"definícia"
 
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-keybindings.c:64
