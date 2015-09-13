@@ -42,6 +42,8 @@ struct _GbTerminalView
 
   GtkWidget           *scrolled_window_bottom;
 
+  gint64               last_respawn;
+
   guint                top_has_spawned : 1;
   guint                bottom_has_spawned : 1;
   guint                bottom_has_focus : 1;

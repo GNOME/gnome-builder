@@ -103,6 +103,7 @@ gb_terminal_respawn (GbTerminalView *self,
   IdeVcs *vcs;
   GFile *workdir;
   GPid child_pid;
+  gint64 now;
 
   g_assert (GB_IS_TERMINAL_VIEW (self));
 
@@ -111,6 +112,12 @@ gb_terminal_respawn (GbTerminalView *self,
   toplevel = gtk_widget_get_toplevel (GTK_WIDGET (self));
   if (!GB_IS_WORKBENCH (toplevel))
     return;
+
+  /* Prevent flapping */
+  now = g_get_monotonic_time ();
+  if ((now - self->last_respawn) < (G_USEC_PER_SEC / 10))
+    return;
+  self->last_respawn = now;
 
   context = gb_workbench_get_context (GB_WORKBENCH (toplevel));
   vcs = ide_context_get_vcs (context);
