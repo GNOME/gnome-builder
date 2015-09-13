@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-09 19:07+0200\n"
-"PO-Revision-Date: 2015-09-09 19:08+0200\n"
+"POT-Creation-Date: 2015-09-13 22:04+0200\n"
+"PO-Revision-Date: 2015-09-13 22:05+0200\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <gnomepl@aviary.pl>\n"
 "Language: pl\n"
@@ -522,37 +522,45 @@ msgid "Auto Completion"
 msgstr "Automatyczne uzupełnianie"
 
 #: ../data/ui/gb-preferences-page-insight.ui.h:5
+msgid "Suggest Snippet Completion"
+msgstr "Sugerowanie uzupełnień wstawek"
+
+#: ../data/ui/gb-preferences-page-insight.ui.h:6
+msgid "Allow snippets to be inserted into the document."
+msgstr "Umożliwia umieszczanie wstawek w dokumencie."
+
+#: ../data/ui/gb-preferences-page-insight.ui.h:7
 msgid "Suggest Word Completion"
 msgstr "Sugerowanie uzupełnień wyrazów"
 
-#: ../data/ui/gb-preferences-page-insight.ui.h:6
+#: ../data/ui/gb-preferences-page-insight.ui.h:8
 msgid "Suggest completion of words found within all open documents."
 msgstr ""
 "Sugerowanie uzupełnień wyrazów odnalezionych we wszystkich otwartych "
 "dokumentach."
 
-#: ../data/ui/gb-preferences-page-insight.ui.h:7
+#: ../data/ui/gb-preferences-page-insight.ui.h:9
 msgid "Suggest Completions using Ctags"
 msgstr "Sugerowanie uzupełnień wyrazów używając Ctags"
 
-#: ../data/ui/gb-preferences-page-insight.ui.h:8
+#: ../data/ui/gb-preferences-page-insight.ui.h:10
 msgid "Use Ctags for completions in supported languages."
 msgstr "Używa Ctags do uzupełniania w obsługiwanych językach."
 
-#: ../data/ui/gb-preferences-page-insight.ui.h:9
+#: ../data/ui/gb-preferences-page-insight.ui.h:11
 msgid "Suggest Completions using Clang (Experimental)"
 msgstr ""
 "Sugerowanie uzupełnień wyrazów używając kompilatora Clang (eksperymentalne)"
 
-#: ../data/ui/gb-preferences-page-insight.ui.h:10
+#: ../data/ui/gb-preferences-page-insight.ui.h:12
 msgid "Use Clang for completions in the C and C++ languages."
 msgstr "Używa kompilatora Clang do uzupełniania w językach C i C++."
 
-#: ../data/ui/gb-preferences-page-insight.ui.h:11
+#: ../data/ui/gb-preferences-page-insight.ui.h:13
 msgid "Suggest Completions using Jedi"
 msgstr "Sugerowanie uzupełnień wyrazów używając Jedi"
 
-#: ../data/ui/gb-preferences-page-insight.ui.h:12
+#: ../data/ui/gb-preferences-page-insight.ui.h:14
 msgid "Use Jedi for completions in the Python language."
 msgstr "Używa biblioteki Jedi do uzupełniania w języku Python."
 
@@ -1004,7 +1012,7 @@ msgstr "Zainicjowanie wartości domyślnych się nie powiodło."
 msgid "File contained invalid UTF-8"
 msgstr "Plik zawiera nieprawidłowe znaki UTF-8"
 
-#: ../libide/ide-buffer.c:1969
+#: ../libide/ide-buffer.c:1990
 msgid "The current language lacks a symbol resolver."
 msgstr "Obecny język nie posiada mechanizmu rozwiązywania symboli."
 
@@ -1113,7 +1121,7 @@ msgstr "GAsyncInitable nie jest zaimplementowane w %s."
 msgid "Chunk does not belong to snippet."
 msgstr "Fragment nie należy do wstawki."
 
-#: ../libide/ide-source-snippet-completion-provider.c:255
+#: ../libide/ide-source-snippet-completion-provider.c:288
 msgid "Snippets"
 msgstr "Wstawki"
 
@@ -1132,29 +1140,29 @@ msgstr "Otwarcie katalogu się nie powiodło: %s"
 msgid "Failed to load file: %s: %s"
 msgstr "Wczytanie pliku się nie powiodło: %s: %s"
 
-#: ../libide/ide-source-view.c:4561
+#: ../libide/ide-source-view.c:4562
 #, c-format
 msgid "Insert \"%s\""
 msgstr "Wstaw „%s”"
 
-#: ../libide/ide-source-view.c:4563
+#: ../libide/ide-source-view.c:4564
 #, c-format
 msgid "Replace \"%s\" with \"%s\""
 msgstr "Zmień „%s” na „%s”"
 
-#: ../libide/ide-source-view.c:4681
+#: ../libide/ide-source-view.c:4682
 msgid "Apply Fix-It"
 msgstr "Zastosuj „Fix-It”"
 
-#: ../libide/ide-source-view.c:4724
+#: ../libide/ide-source-view.c:4725
 msgid "Join Lines"
 msgstr "Połącz wiersze"
 
-#: ../libide/ide-source-view.c:4735
+#: ../libide/ide-source-view.c:4736
 msgid "Sort Lines"
 msgstr "Posortuj wiersze"
 
-#: ../libide/ide-source-view.c:4754
+#: ../libide/ide-source-view.c:4755
 msgid "Go to Definition"
 msgstr "Przejdź do definicji"
 
@@ -1527,31 +1535,46 @@ msgid "minimap mini map overview over view"
 msgstr "minimapa mini mapa podgląd"
 
 #. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-git.c:128
+#: ../src/preferences/gb-preferences-page-git.c:169
 msgid "git author name surname attribution source code"
 msgstr "git autor imię nazwa nazwisko autorstwo atrybucja kod źródłowy"
 
 #. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-git.c:134
+#: ../src/preferences/gb-preferences-page-git.c:175
 msgid "git author email mail address attribute source code"
 msgstr "git autor e-mail email poczta adres autorstwo atrybucja kod źródłowy"
 
 #. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-insight.c:54
+#: ../src/preferences/gb-preferences-page-insight.c:61
 msgid "word words auto completion suggest found document"
 msgstr ""
 "wyraz wyrazy słowo słowa automatyczne uzupełnianie sugestie odnaleziono "
 "znaleziono wyszukano dokument"
 
 #. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-insight.c:59
+#: ../src/preferences/gb-preferences-page-insight.c:66
 msgid "experimental clang autocompletion auto complete"
 msgstr "eksperymentalne clang automatyczne uzupełnianie"
 
 #. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-insight.c:64
+#: ../src/preferences/gb-preferences-page-insight.c:71
 msgid "exuberant ctags tags autocompletion auto complete"
 msgstr "exuberant eksperymentalne ctags znaczniki automatyczne uzupełnianie"
+
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-insight.c:76
+msgid "jedi python autocompletion auto complete"
+msgstr "jedi python automatyczne uzupełnianie"
+
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-insight.c:81
+msgid "snippets autocompletion auto complete"
+msgstr "wstawki automatyczne uzupełnianie"
+
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-insight.c:86
+msgid "semantic highlighting color goto declaration definition"
+msgstr "semantyczne wyróżnianie kolory goto przejdź deklaracja definicja"
 
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-keybindings.c:64
