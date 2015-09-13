@@ -236,6 +236,8 @@ libide_1_0_la_SOURCES = \
 	util/ide-pango.h \
 	util/ide-rgba.c \
 	util/ide-rgba.h \
+	util/ide-text-util.c \
+	util/ide-text-util.h \
 	$(NULL)
 
 libide_1_0_la_includes = \
