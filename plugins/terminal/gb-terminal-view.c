@@ -39,6 +39,7 @@ enum {
 
 static GParamSpec *gParamSpecs [LAST_PROP];
 
+/* TODO: allow palette to come from gnome-terminal. */
 static const GdkRGBA solarized_palette[] =
 {
   /*
