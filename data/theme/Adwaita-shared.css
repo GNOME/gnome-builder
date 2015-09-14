@@ -45,6 +45,13 @@ GbEditorWorkspace > GtkPaned > GtkBox > GtkBox.header.notebook {
 GbNewProjectDialog GtkFileChooserButton.linked-on-right .button {
   border-radius: 3px 0 0 3px;
 }
+GbViewStack GtkBox.header.notebook .button {
+  padding: none;
+  margin: none;
+  border: none;
+  box-shadow: none;
+  background-image: none;
+}
 
 
 /*

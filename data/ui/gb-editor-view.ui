@@ -89,6 +89,7 @@
           <object class="GtkBox">
             <child>
               <object class="GtkMenuButton" id="tweak_button">
+                <property name="focus-on-click">false</property>
                 <property name="popover">popover</property>
                 <property name="visible">true</property>
                 <style>
