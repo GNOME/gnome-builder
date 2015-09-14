@@ -136,6 +136,9 @@ typedef struct
 
   guint                        font_scale;
 
+  guint                        delay_size_allocate_chainup;
+  GtkAllocation                delay_size_allocation;
+
   guint                        auto_indent : 1;
   guint                        completion_blocked : 1;
   guint                        completion_visible : 1;
@@ -4830,6 +4833,77 @@ ide_source_view_replay_scroll (gpointer data)
   return G_SOURCE_REMOVE;
 }
 
+static gboolean
+ide_source_view_do_size_allocate_hack_cb (gpointer data)
+{
+  IdeSourceView *self = data;
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+  GtkAllocation alloc = priv->delay_size_allocation;
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+
+  priv->delay_size_allocate_chainup = 0;
+
+  GTK_WIDGET_CLASS (ide_source_view_parent_class)->size_allocate (GTK_WIDGET (self), &alloc);
+
+  return G_SOURCE_REMOVE;
+}
+
+/*
+ * HACK:
+ *
+ * We really want the panels in Builder to be as smooth as possible when
+ * animating in and out of the scene. However, since these are not floating
+ * panels, we have the challenge of trying to go through the entire relayout,
+ * pixelcache, draw cycle many times per-second. Most systems are simply not
+ * up to the task.
+ *
+ * We can, however, take a shortcut when shrinking the allocation. We can
+ * simply defer the allocation request that would normally be chained up
+ * to GtkTextView and finish that work after the animation has completed.
+ * We use a simple heuristic to determine this, simply "missing" a size
+ * allocation from the typical frame clock cycle.
+ */
+static gboolean
+ide_source_view_do_size_allocate_hack (IdeSourceView *self,
+                                       GtkAllocation *allocation)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+  GtkWidget *widget = (GtkWidget *)self;
+  GtkAllocation old;
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+  g_assert (allocation != NULL);
+
+  /*
+   * If we are shrinking the allocation, we can go forward with the hack.
+   * If not, we will abort our request and do the normal chainup cycle.
+   */
+  gtk_widget_get_allocation (widget, &old);
+  if ((old.width < allocation->width) || (old.height < allocation->height))
+    return FALSE;
+
+  /*
+   * Save the allocation for later. We'll need it to apply after our timeout
+   * which will occur just after the last frame (or sooner if we stall the
+   * drawing pipeline).
+   */
+  priv->delay_size_allocation = *allocation;
+
+  /*
+   * Register our timeout to occur just after a normal frame interval.
+   * If we are animating at 60 FPS, we should get another size-allocate within
+   * the frame cycle, typically 17 msec.
+   */
+  if (priv->delay_size_allocate_chainup)
+    g_source_remove (priv->delay_size_allocate_chainup);
+  priv->delay_size_allocate_chainup = g_timeout_add (30,
+                                                     ide_source_view_do_size_allocate_hack_cb,
+                                                     self);
+
+  return TRUE;
+}
+
 static void
 ide_source_view_size_allocate (GtkWidget     *widget,
                                GtkAllocation *allocation)
@@ -4841,7 +4915,8 @@ ide_source_view_size_allocate (GtkWidget     *widget,
   g_assert (IDE_IS_SOURCE_VIEW (self));
   g_assert (allocation != NULL);
 
-  GTK_WIDGET_CLASS (ide_source_view_parent_class)->size_allocate (widget, allocation);
+  if (!ide_source_view_do_size_allocate_hack (self, allocation))
+    GTK_WIDGET_CLASS (ide_source_view_parent_class)->size_allocate (GTK_WIDGET (self), allocation);
 
   /*
    * If we were in a scroll, and we got a size-allocate, we might need to adjust how far we
@@ -4962,6 +5037,12 @@ ide_source_view_dispose (GObject *object)
     {
       g_source_remove (priv->delayed_scroll_replay);
       priv->delayed_scroll_replay = 0;
+    }
+
+  if (priv->delay_size_allocate_chainup)
+    {
+      g_source_remove (priv->delay_size_allocate_chainup);
+      priv->delay_size_allocate_chainup = 0;
     }
 
   g_clear_object (&priv->capture);
