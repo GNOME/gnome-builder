@@ -86,7 +86,7 @@
                   <object class="GtkMenuButton" id="document_button">
                     <property name="hexpand">true</property>
                     <property name="popover">popover</property>
-		    <!-- Sensitive is not being respected,
+                    <!-- Sensitive is not being respected,
                          likely due to popover being set. -->
                     <property name="sensitive">false</property>
                     <property name="visible">true</property>
