@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-14 15:49+0200\n"
-"PO-Revision-Date: 2015-09-14 15:55+0200\n"
+"POT-Creation-Date: 2015-09-14 16:52+0200\n"
+"PO-Revision-Date: 2015-09-14 16:54+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: gnome-l10n-gl@gnome.org\n"
 "Language: gl\n"
@@ -515,35 +515,43 @@ msgid "Auto Completion"
 msgstr "Autocompletado"
 
 #: ../data/ui/gb-preferences-page-insight.ui.h:5
+msgid "Suggest Snippet Completion"
+msgstr "Suxerir completado de fragmentos"
+
+#: ../data/ui/gb-preferences-page-insight.ui.h:6
+msgid "Allow snippets to be inserted into the document."
+msgstr "Permitir aos fragmentos ser insertados no documento."
+
+#: ../data/ui/gb-preferences-page-insight.ui.h:7
 msgid "Suggest Word Completion"
 msgstr "Suxerir completado de palabras"
 
-#: ../data/ui/gb-preferences-page-insight.ui.h:6
+#: ../data/ui/gb-preferences-page-insight.ui.h:8
 msgid "Suggest completion of words found within all open documents."
 msgstr ""
 "Suxerir compoletado de palabras atopadas en todos os documentos abertos."
 
-#: ../data/ui/gb-preferences-page-insight.ui.h:7
+#: ../data/ui/gb-preferences-page-insight.ui.h:9
 msgid "Suggest Completions using Ctags"
 msgstr "Suxerir completado usando Ctags"
 
-#: ../data/ui/gb-preferences-page-insight.ui.h:8
+#: ../data/ui/gb-preferences-page-insight.ui.h:10
 msgid "Use Ctags for completions in supported languages."
 msgstr "Usar Ctags para o completado dos linguaxes admitidas."
 
-#: ../data/ui/gb-preferences-page-insight.ui.h:9
+#: ../data/ui/gb-preferences-page-insight.ui.h:11
 msgid "Suggest Completions using Clang (Experimental)"
 msgstr "Suxerir completados usando Clang (Experimental)"
 
-#: ../data/ui/gb-preferences-page-insight.ui.h:10
+#: ../data/ui/gb-preferences-page-insight.ui.h:12
 msgid "Use Clang for completions in the C and C++ languages."
 msgstr "Usar Clang para o completado nos linguaxes C e C++."
 
-#: ../data/ui/gb-preferences-page-insight.ui.h:11
+#: ../data/ui/gb-preferences-page-insight.ui.h:13
 msgid "Suggest Completions using Jedi"
 msgstr "Suxerir completado usando Jedi"
 
-#: ../data/ui/gb-preferences-page-insight.ui.h:12
+#: ../data/ui/gb-preferences-page-insight.ui.h:14
 msgid "Use Jedi for completions in the Python language."
 msgstr "Usar Jedi para o completado do linguaxe Python."
 
@@ -603,6 +611,11 @@ msgstr ""
 msgid "Programming Languages"
 msgstr "Linguaxes de programación"
 
+#: ../data/ui/gb-preferences-page-plugins.ui.h:1
+#: ../data/ui/gb-preferences-window.ui.h:9
+msgid "Plugins"
+msgstr "Engadidos"
+
 #: ../data/ui/gb-preferences-page-theme.ui.h:1
 #: ../data/ui/gb-preferences-window.ui.h:7
 msgid "Theme"
@@ -633,7 +646,7 @@ msgstr "Preferencias"
 msgid "Search Preferences…"
 msgstr "Buscar nas preferencias…"
 
-#: ../data/ui/gb-projects-dialog.ui.h:1 ../src/dialogs/gb-projects-dialog.c:257
+#: ../data/ui/gb-projects-dialog.ui.h:1 ../src/dialogs/gb-projects-dialog.c:255
 msgid "Select Project"
 msgstr "Seleccionar proxecto"
 
@@ -901,22 +914,18 @@ msgid "Move Right"
 msgstr "Mover á dereita"
 
 #: ../data/ui/gb-view.ui.h:8
-msgid "Pre_view"
-msgstr "Pre_visualizar"
-
-#: ../data/ui/gb-view.ui.h:9
 msgid "_Save"
 msgstr "_Gardar"
 
-#: ../data/ui/gb-view.ui.h:10
+#: ../data/ui/gb-view.ui.h:9
 msgid "_Save As"
 msgstr "_Gardar como"
 
-#: ../data/ui/gb-view.ui.h:11
+#: ../data/ui/gb-view.ui.h:10
 msgid "Print"
 msgstr "Imprimir"
 
-#: ../data/ui/gb-view.ui.h:12
+#: ../data/ui/gb-view.ui.h:11
 msgid "_Close"
 msgstr "_Pechar"
 
@@ -1000,7 +1009,7 @@ msgstr "Produciuse un fallo ao iniciar os parámetros predeterminados."
 msgid "File contained invalid UTF-8"
 msgstr "O ficheiro contén UTF-8 non é válido"
 
-#: ../libide/ide-buffer.c:1969
+#: ../libide/ide-buffer.c:1990
 msgid "The current language lacks a symbol resolver."
 msgstr "Ao linguaxe actual fáltalle un resolutor de símbolos."
 
@@ -1056,11 +1065,11 @@ msgstr "Builder precisa libgit2-glib con compatibilidade de fíos."
 msgid "Builder requires libgit2-glib with SSH support."
 msgstr "Builder precisa libgit2-glib con compatibilidade de SSH."
 
-#: ../libide/ide-context.c:1670
+#: ../libide/ide-context.c:1666
 msgid "An unload request is already pending"
 msgstr "Xa hai unha solicitude de descarga pendente."
 
-#: ../libide/ide-context.c:1785
+#: ../libide/ide-context.c:1781
 msgid "Context has already been restored."
 msgstr "Xa se restaurou o contexto."
 
@@ -1069,17 +1078,22 @@ msgstr "Xa se restaurou o contexto."
 msgid "The device \"%s\" could not be found."
 msgstr "Non foi posíbel atopar o dispositivo «%s»."
 
-#: ../libide/ide-object.c:283 ../libide/ide-object.c:471
-msgid "No implementations of extension point."
-msgstr "Non hai implementacións para o punto de extensión."
+#: ../libide/ide-object.c:285
+#, c-format
+msgid "No implementations of extension point \"%s\"."
+msgstr "Non hai implementacións para o punto de extensión «%s»."
 
-#: ../libide/ide-object.c:374
+#: ../libide/ide-object.c:377
 msgid "Failed to locate build system plugin."
 msgstr "Produciuse un fallo ao buscar o engadido do sistema de construción."
 
-#: ../libide/ide-object.c:461
+#: ../libide/ide-object.c:464
 msgid "No such extension point."
 msgstr "Non existe o punto de extensión."
+
+#: ../libide/ide-object.c:474
+msgid "No implementations of extension point."
+msgstr "Non hai implementacións para o punto de extensión."
 
 #: ../libide/ide-project.c:463
 msgid "Destination file must be within the project tree."
@@ -1103,7 +1117,7 @@ msgstr "%s non implementa GAsyncInitable."
 msgid "Chunk does not belong to snippet."
 msgstr "O anaco non pertence ao fragmento."
 
-#: ../libide/ide-source-snippet-completion-provider.c:255
+#: ../libide/ide-source-snippet-completion-provider.c:288
 msgid "Snippets"
 msgstr "Fragmentos"
 
@@ -1122,29 +1136,29 @@ msgstr "Produciuse un fallo ao abrir o cartafol: %s"
 msgid "Failed to load file: %s: %s"
 msgstr "Produciuse un fallo ao cargar o ficheiro: %s: %s"
 
-#: ../libide/ide-source-view.c:4541
+#: ../libide/ide-source-view.c:4565
 #, c-format
 msgid "Insert \"%s\""
 msgstr "Inserir «%s»"
 
-#: ../libide/ide-source-view.c:4543
+#: ../libide/ide-source-view.c:4567
 #, c-format
 msgid "Replace \"%s\" with \"%s\""
 msgstr "Substituír «%s» con «%s»"
 
-#: ../libide/ide-source-view.c:4661
+#: ../libide/ide-source-view.c:4685
 msgid "Apply Fix-It"
 msgstr "Aplicar corrección"
 
-#: ../libide/ide-source-view.c:4704
+#: ../libide/ide-source-view.c:4728
 msgid "Join Lines"
 msgstr "Unir liñas"
 
-#: ../libide/ide-source-view.c:4715
+#: ../libide/ide-source-view.c:4739
 msgid "Sort Lines"
 msgstr "Ordenar liñas"
 
-#: ../libide/ide-source-view.c:4734
+#: ../libide/ide-source-view.c:4758
 msgid "Go to Definition"
 msgstr "Ir á definición"
 
@@ -1328,6 +1342,10 @@ msgstr "A asistencia de código require un ficheiro local."
 msgid "No language specified"
 msgstr "Non se especificou un linguaxe"
 
+#: ../plugins/html-preview/html_preview_plugin/__init__.py:88
+msgid "Preview as HTML"
+msgstr "Pre_visualizar como HTML"
+
 #: ../plugins/mingw/ide-mingw-device-provider.c:95
 msgid "MinGW (64-bit)"
 msgstr "MinGW (64-bit)"
@@ -1435,7 +1453,7 @@ msgstr "Requírese unha URL de git válida"
 msgid "Directory|Projects"
 msgstr "Directorio|Proxectos"
 
-#: ../src/dialogs/gb-projects-dialog.c:246
+#: ../src/dialogs/gb-projects-dialog.c:244
 msgid "(Click on items to select them)"
 msgstr "(Prema nun elemento para seleccionalo)"
 
@@ -1466,18 +1484,9 @@ msgstr "Gardar documento"
 msgid "Save Document As"
 msgstr "Gardar documento como"
 
-#: ../src/editor/gb-editor-view.c:110
+#: ../src/editor/gb-editor-view.c:111
 msgid "Plain Text"
 msgstr "Texto plano"
-
-#: ../src/html/gb-html-document.c:109
-msgid "HTML Preview"
-msgstr "Previsualización HTML"
-
-#: ../src/html/gb-html-document.c:131
-#, c-format
-msgid "%s (Preview)"
-msgstr "%s (Previsualización)"
 
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-editor.c:95
@@ -1520,29 +1529,44 @@ msgid "minimap mini map overview over view"
 msgstr "minimapa mini mapa vista previa"
 
 #. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-git.c:128
+#: ../src/preferences/gb-preferences-page-git.c:169
 msgid "git author name surname attribution source code"
 msgstr "git autor nome apelido atribución código fonte"
 
 #. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-git.c:134
+#: ../src/preferences/gb-preferences-page-git.c:175
 msgid "git author email mail address attribute source code"
 msgstr "git autor email correo enderezo atribución código fonte"
 
 #. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-insight.c:54
+#: ../src/preferences/gb-preferences-page-insight.c:61
 msgid "word words auto completion suggest found document"
 msgstr "palabra palabras auto completado suxerir atopar documento"
 
 #. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-insight.c:59
+#: ../src/preferences/gb-preferences-page-insight.c:66
 msgid "experimental clang autocompletion auto complete"
 msgstr "experimental clang autocompletado auto completado"
 
 #. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-insight.c:64
+#: ../src/preferences/gb-preferences-page-insight.c:71
 msgid "exuberant ctags tags autocompletion auto complete"
 msgstr "exuberante ctags tags autocompletado auto completoar"
+
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-insight.c:76
+msgid "jedi python autocompletion auto complete"
+msgstr "experimental jedi autocompletado auto completado"
+
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-insight.c:81
+msgid "snippets autocompletion auto complete"
+msgstr "experimental fragmentos autocompletado auto completado"
+
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-insight.c:86
+msgid "semantic highlighting color goto declaration definition"
+msgstr "semántico realzado color goto declaración ir definición"
 
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-keybindings.c:64
@@ -1615,11 +1639,11 @@ msgstr "Non é posíbel atopar o fornecedor"
 msgid "%s more"
 msgstr "%s máis"
 
-#: ../src/shortcuts/gb-shortcuts-dialog.c:924
+#: ../src/shortcuts/gb-shortcuts-dialog.c:920
 msgid "Search Shortcuts"
 msgstr "Atallos da busca"
 
-#: ../src/shortcuts/gb-shortcuts-dialog.c:951
+#: ../src/shortcuts/gb-shortcuts-dialog.c:947
 msgid "Search Results"
 msgstr "Resultados da busca"
 
@@ -1683,11 +1707,11 @@ msgstr "Abrir"
 msgid "%s - Builder"
 msgstr "%s - Builder"
 
-#: ../src/workbench/gb-workbench.c:940
+#: ../src/workbench/gb-workbench.c:919
 msgid "Build Failure"
 msgstr "Fallo de construción"
 
-#: ../src/workbench/gb-workbench.c:987
+#: ../src/workbench/gb-workbench.c:966
 msgid "Project build system does not support building"
 msgstr "O sistema de construtor de proxecto non admite a construción"
 
@@ -1829,6 +1853,12 @@ msgstr "%s resultados\n"
 #: ../tools/ide-search.c:120
 msgid "PROJECT_FILE [SEARCH TERMS...]"
 msgstr "FICHEIRO_DE_PROXECTO [TERMOS DE BUSCA...]"
+
+#~ msgid "HTML Preview"
+#~ msgstr "Previsualización HTML"
+
+#~ msgid "%s (Preview)"
+#~ msgstr "%s (Previsualización)"
 
 #~ msgid "The name of the action"
 #~ msgstr "O nome da acción"
@@ -2495,9 +2525,6 @@ msgstr "FICHEIRO_DE_PROXECTO [TERMOS DE BUSCA...]"
 
 #~ msgid "If the shadow should be drawn when performing searches."
 #~ msgstr "Indica se se debería debuxar a sombra ao realizar buscas."
-
-#~ msgid "Snippet Completion"
-#~ msgstr "Completado de fragmentos"
 
 #~ msgid "If snippet expansion should be enabled via the completion window."
 #~ msgstr ""
