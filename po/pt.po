@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2015-09-05 00:35+0000\n"
-"PO-Revision-Date: 2015-09-07 08:19+0100\n"
+"POT-Creation-Date: 2015-09-13 00:34+0000\n"
+"PO-Revision-Date: 2015-09-14 08:34+0100\n"
 "Last-Translator: Pedro Albuquerque <palbuquerque73@gmail.com>\n"
 "Language-Team: Português <palbuquerque73@gmail.com>\n"
 "Language: pt\n"
@@ -514,35 +514,44 @@ msgid "Auto Completion"
 msgstr "Conclusão automática"
 
 #: ../data/ui/gb-preferences-page-insight.ui.h:5
+#| msgid "Snippet Completion"
+msgid "Suggest Snippet Completion"
+msgstr "Sugerir conclusão de snippets"
+
+#: ../data/ui/gb-preferences-page-insight.ui.h:6
+msgid "Allow snippets to be inserted into the document."
+msgstr "Permitir que sejam inseridos snippets no documento."
+
+#: ../data/ui/gb-preferences-page-insight.ui.h:7
 msgid "Suggest Word Completion"
 msgstr "Sugerir conclusão de palavras"
 
-#: ../data/ui/gb-preferences-page-insight.ui.h:6
+#: ../data/ui/gb-preferences-page-insight.ui.h:8
 msgid "Suggest completion of words found within all open documents."
 msgstr ""
 "Sugerir conclusão de palavras encontradas em todos os documentos abertos."
 
-#: ../data/ui/gb-preferences-page-insight.ui.h:7
+#: ../data/ui/gb-preferences-page-insight.ui.h:9
 msgid "Suggest Completions using Ctags"
 msgstr "Sugerir conclusão usando Ctags"
 
-#: ../data/ui/gb-preferences-page-insight.ui.h:8
+#: ../data/ui/gb-preferences-page-insight.ui.h:10
 msgid "Use Ctags for completions in supported languages."
 msgstr "Usar Ctags para conclusão em linguagens suportadas."
 
-#: ../data/ui/gb-preferences-page-insight.ui.h:9
+#: ../data/ui/gb-preferences-page-insight.ui.h:11
 msgid "Suggest Completions using Clang (Experimental)"
 msgstr "Sugerir conclusão usando Clang (experimental)"
 
-#: ../data/ui/gb-preferences-page-insight.ui.h:10
+#: ../data/ui/gb-preferences-page-insight.ui.h:12
 msgid "Use Clang for completions in the C and C++ languages."
 msgstr "Usar Clang para conclusão nas linguagens C e C++."
 
-#: ../data/ui/gb-preferences-page-insight.ui.h:11
+#: ../data/ui/gb-preferences-page-insight.ui.h:13
 msgid "Suggest Completions using Jedi"
 msgstr "Sugerir conclusão usando Jedi"
 
-#: ../data/ui/gb-preferences-page-insight.ui.h:12
+#: ../data/ui/gb-preferences-page-insight.ui.h:14
 msgid "Use Jedi for completions in the Python language."
 msgstr "Usar Jedi para conclusão na linguagem Python."
 
@@ -600,6 +609,11 @@ msgstr ""
 msgid "Programming Languages"
 msgstr "Linguagens de programação"
 
+#: ../data/ui/gb-preferences-page-plugins.ui.h:1
+#: ../data/ui/gb-preferences-window.ui.h:9
+msgid "Plugins"
+msgstr "Extensões"
+
 #: ../data/ui/gb-preferences-page-theme.ui.h:1
 #: ../data/ui/gb-preferences-window.ui.h:7
 msgid "Theme"
@@ -631,7 +645,7 @@ msgid "Search Preferences…"
 msgstr "Preferências de procura…"
 
 #: ../data/ui/gb-projects-dialog.ui.h:1
-#: ../src/dialogs/gb-projects-dialog.c:257
+#: ../src/dialogs/gb-projects-dialog.c:255
 msgid "Select Project"
 msgstr "Selecionar projeto"
 
@@ -990,7 +1004,7 @@ msgstr "Falha ao inicializar as predefinições."
 msgid "File contained invalid UTF-8"
 msgstr "O ficheiro continha UTF-8 inválido"
 
-#: ../libide/ide-buffer.c:1969
+#: ../libide/ide-buffer.c:1990
 msgid "The current language lacks a symbol resolver."
 msgstr "A linguagem atual tem um símbolo de solução em falta."
 
@@ -1046,11 +1060,11 @@ msgstr "O Construtor requer o libgit2-glib com suporte a linhas."
 msgid "Builder requires libgit2-glib with SSH support."
 msgstr "O Construtor requer libgit2-glib com suporte SSH."
 
-#: ../libide/ide-context.c:1670
+#: ../libide/ide-context.c:1666
 msgid "An unload request is already pending"
 msgstr "Já está pendente um pedido de descarregamento"
 
-#: ../libide/ide-context.c:1785
+#: ../libide/ide-context.c:1781
 msgid "Context has already been restored."
 msgstr "O contexto já foi restaurado."
 
@@ -1061,7 +1075,6 @@ msgstr "O dispositivo \"%s\" não pôde ser encontrado."
 
 #: ../libide/ide-object.c:285
 #, c-format
-#| msgid "No implementations of extension point."
 msgid "No implementations of extension point \"%s\"."
 msgstr "Sem implementações do ponto de extensão. \"%s\"."
 
@@ -1099,7 +1112,7 @@ msgstr "%s não implementou GAsyncInitable."
 msgid "Chunk does not belong to snippet."
 msgstr "Parte não pertence ao snippet."
 
-#: ../libide/ide-source-snippet-completion-provider.c:255
+#: ../libide/ide-source-snippet-completion-provider.c:288
 msgid "Snippets"
 msgstr "Snippets"
 
@@ -1118,29 +1131,29 @@ msgstr "Falha ao abrir pasta: %s"
 msgid "Failed to load file: %s: %s"
 msgstr "Falha ao carregar ficheiro: %s: %s"
 
-#: ../libide/ide-source-view.c:4561
+#: ../libide/ide-source-view.c:4562
 #, c-format
 msgid "Insert \"%s\""
 msgstr "Inserir \"%s\""
 
-#: ../libide/ide-source-view.c:4563
+#: ../libide/ide-source-view.c:4564
 #, c-format
 msgid "Replace \"%s\" with \"%s\""
 msgstr "Substituir \"%s\" por \"%s\""
 
-#: ../libide/ide-source-view.c:4681
+#: ../libide/ide-source-view.c:4682
 msgid "Apply Fix-It"
 msgstr "Aplicar Reparar"
 
-#: ../libide/ide-source-view.c:4724
+#: ../libide/ide-source-view.c:4725
 msgid "Join Lines"
 msgstr "Juntar linhas"
 
-#: ../libide/ide-source-view.c:4735
+#: ../libide/ide-source-view.c:4736
 msgid "Sort Lines"
 msgstr "Ordenar linhas"
 
-#: ../libide/ide-source-view.c:4754
+#: ../libide/ide-source-view.c:4755
 msgid "Go to Definition"
 msgstr "Ir para definição"
 
@@ -1325,7 +1338,6 @@ msgid "No language specified"
 msgstr "Sem linguagem especificada"
 
 #: ../plugins/html-preview/html_preview_plugin/__init__.py:88
-#| msgid "Pre_view"
 msgid "Preview as HTML"
 msgstr "Antever como HTML"
 
@@ -1436,7 +1448,7 @@ msgstr "É necessário um URL Git válido"
 msgid "Directory|Projects"
 msgstr "Pasta|projetos"
 
-#: ../src/dialogs/gb-projects-dialog.c:246
+#: ../src/dialogs/gb-projects-dialog.c:244
 msgid "(Click on items to select them)"
 msgstr "(clique nos itens para os selecionar)"
 
@@ -1522,19 +1534,36 @@ msgid "git author email mail address attribute source code"
 msgstr "git autor email correio endereço atributo origem código"
 
 #. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-insight.c:54
+#: ../src/preferences/gb-preferences-page-insight.c:61
 msgid "word words auto completion suggest found document"
 msgstr "palavra palavras automático conclusão sugerir encontrado documento"
 
 #. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-insight.c:59
+#: ../src/preferences/gb-preferences-page-insight.c:66
 msgid "experimental clang autocompletion auto complete"
 msgstr "experimental clang conclusão automática completar"
 
 #. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-insight.c:64
+#: ../src/preferences/gb-preferences-page-insight.c:71
 msgid "exuberant ctags tags autocompletion auto complete"
 msgstr "exuberante ctags etiquetas conclusão automática completar"
+
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-insight.c:76
+#| msgid "experimental clang autocompletion auto complete"
+msgid "jedi python autocompletion auto complete"
+msgstr "jedi python conclusão automática completar"
+
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-insight.c:81
+#| msgid "experimental clang autocompletion auto complete"
+msgid "snippets autocompletion auto complete"
+msgstr "snippets conclusão automática completar"
+
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-insight.c:86
+msgid "semantic highlighting color goto declaration definition"
+msgstr "semântica realce cor ir para declaração definição"
 
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-keybindings.c:64
@@ -1607,11 +1636,11 @@ msgstr "Impossível encontrar o fornecedor."
 msgid "%s more"
 msgstr "%s mais"
 
-#: ../src/shortcuts/gb-shortcuts-dialog.c:924
+#: ../src/shortcuts/gb-shortcuts-dialog.c:920
 msgid "Search Shortcuts"
 msgstr "Procurar atalhos"
 
-#: ../src/shortcuts/gb-shortcuts-dialog.c:951
+#: ../src/shortcuts/gb-shortcuts-dialog.c:947
 msgid "Search Results"
 msgstr "Procurar resultados"
 
@@ -1674,11 +1703,11 @@ msgstr "Abrir"
 msgid "%s - Builder"
 msgstr "%s - Construtor"
 
-#: ../src/workbench/gb-workbench.c:940
+#: ../src/workbench/gb-workbench.c:919
 msgid "Build Failure"
 msgstr "Falha na build"
 
-#: ../src/workbench/gb-workbench.c:987
+#: ../src/workbench/gb-workbench.c:966
 msgid "Project build system does not support building"
 msgstr "O sistema de construção do projeto não suporta construção"
 
@@ -2527,9 +2556,6 @@ msgstr "FICHEIRO_PROJETO [TERMOS PROCURA...]"
 
 #~ msgid "If the shadow should be drawn when performing searches."
 #~ msgstr "Se deve ser desenhada uma sombra ao executar procuras."
-
-#~ msgid "Snippet Completion"
-#~ msgstr "Conclusão de snippets"
 
 #~ msgid "If snippet expansion should be enabled via the completion window."
 #~ msgstr "Se a expansão de snippets deve ser ativada via janela de conclusão."
