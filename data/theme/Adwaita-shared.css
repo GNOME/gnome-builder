@@ -35,22 +35,14 @@ GbEditorTweakWidget GtkScrolledWindow {
 GbViewStack GtkBox.header.notebook {
   border-bottom: 1px solid @borders;
 }
-GbViewStack:not(.focused) GtkBox.header.notebook,
-#project_sidebar_header:not(.focused) {
+GbViewStack:not(.focused) GtkBox.header.notebook {
   background-color: shade (@theme_bg_color, 0.95);
 }
-GbEditorWorkspace > GtkPaned > GtkBox > GtkBox.header.notebook {
-  border-bottom: 1px solid @borders;
-}
+
+
+/* New project dialog */
 GbNewProjectDialog GtkFileChooserButton.linked-on-right .button {
   border-radius: 3px 0 0 3px;
-}
-GbViewStack GtkBox.header.notebook .button {
-  padding: none;
-  margin: none;
-  border: none;
-  box-shadow: none;
-  background-image: none;
 }
 
 
