@@ -19,7 +19,7 @@
                 <property name="orientation">horizontal</property>
                 <property name="visible">true</property>
                 <property name="margin-bottom">3</property>
-                <property name="margin-end">9</property>
+                <property name="margin-end">7</property>
                 <property name="margin-start">6</property>
                 <property name="margin-top">3</property>
                 <child>
@@ -32,7 +32,6 @@
                         <property name="action-name">view-stack.go-backward</property>
                         <property name="focus-on-click">false</property>
                         <style>
-                          <class name="dim-label"/>
                           <class name="flat"/>
                           <class name="image-button"/>
                         </style>
@@ -50,7 +49,6 @@
                         <property name="action-name">view-stack.go-forward</property>
                         <property name="focus-on-click">false</property>
                         <style>
-                          <class name="dim-label"/>
                           <class name="flat"/>
                           <class name="image-button"/>
                         </style>
@@ -70,7 +68,6 @@
                     <property name="focus-on-click">false</property>
                     <property name="popover">views_popover</property>
                     <style>
-                      <class name="dim-label"/>
                       <class name="image-button"/>
                       <class name="flat"/>
                     </style>
@@ -95,7 +92,6 @@
                     <property name="sensitive">false</property>
                     <property name="visible">true</property>
                     <style>
-                      <class name="dim-label"/>
                       <class name="flat"/>
                       <class name="text-button"/>
                     </style>
@@ -131,9 +127,6 @@
                             <property name="xalign">0.0</property>
                             <property name="valign">baseline</property>
                             <property name="visible">true</property>
-                            <style>
-                              <class name="dim-label"/>
-                            </style>
                           </object>
                           <packing>
                             <property name="pack-type">end</property>
@@ -150,7 +143,6 @@
                     <property name="visible">true</property>
                     <property name="focus-on-click">false</property>
                     <style>
-                      <class name="dim-label"/>
                       <class name="image-button"/>
                       <class name="flat"/>
                       <class name="small-button"/>
