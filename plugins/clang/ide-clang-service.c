@@ -365,10 +365,10 @@ ide_clang_service_unit_completed_cb (GObject      *object,
 }
 
 static void
-ide_clang_service_get_translaction_unit_worker (EggTaskCache  *cache,
-                                                gconstpointer  key,
-                                                GTask         *task,
-                                                gpointer       user_data)
+ide_clang_service_get_translation_unit_worker (EggTaskCache  *cache,
+                                               gconstpointer  key,
+                                               GTask         *task,
+                                               gpointer       user_data)
 {
   g_autoptr(GTask) real_task = NULL;
   IdeClangService *self = user_data;
@@ -559,7 +559,7 @@ ide_clang_service_start (IdeService *service)
                                           g_object_ref,
                                           g_object_unref,
                                           DEFAULT_EVICTION_MSEC,
-                                          ide_clang_service_get_translaction_unit_worker,
+                                          ide_clang_service_get_translation_unit_worker,
                                           g_object_ref (self),
                                           g_object_unref);
 
