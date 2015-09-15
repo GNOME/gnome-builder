@@ -865,6 +865,7 @@ ide_makecache_get_file_flags_worker (GTask        *task,
   IDE_ENTRY;
 
   g_assert (EGG_IS_TASK_CACHE (source_object));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
   g_assert (G_IS_TASK (task));
   g_assert (lookup != NULL);
   g_assert (lookup->relative_path != NULL);
