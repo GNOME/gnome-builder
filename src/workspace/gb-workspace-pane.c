@@ -161,6 +161,7 @@ workbench_focus_changed (GtkWidget       *toplevel,
                          GbWorkspacePane *self)
 {
   GtkStyleContext *style_context;
+  GtkWidget *parent;
 
   g_assert (GTK_IS_WIDGET (toplevel));
   g_assert (!focus || GTK_IS_WIDGET (focus));
@@ -168,8 +169,17 @@ workbench_focus_changed (GtkWidget       *toplevel,
 
   style_context = gtk_widget_get_style_context (GTK_WIDGET (self));
 
-  if ((focus == NULL) ||
-      ((focus != GTK_WIDGET (self)) && !gtk_widget_is_ancestor (focus, GTK_WIDGET (self))))
+  parent = focus;
+
+  while (parent && (parent != (GtkWidget *)self))
+    {
+      if (GTK_IS_POPOVER (parent))
+        parent = gtk_popover_get_relative_to (GTK_POPOVER (parent));
+      else
+        parent = gtk_widget_get_parent (parent);
+    }
+
+  if (parent == NULL)
     gtk_style_context_remove_class (style_context, "focused");
   else
     gtk_style_context_add_class (style_context, "focused");
