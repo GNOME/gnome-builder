@@ -203,7 +203,7 @@ gb_editor_view__buffer_changed_on_volume (GbEditorView *self,
 }
 
 static const gchar *
-gb_editor_view_get_title (GbView *view)
+gb_editor_view_get_special_title (GbView *view)
 {
   return ((GbEditorView *)view)->title;
 }
@@ -597,7 +597,7 @@ gb_editor_view_class_init (GbEditorViewClass *klass)
 
   view_class->create_split = gb_editor_view_create_split;
   view_class->get_document = gb_editor_view_get_document;
-  view_class->get_title = gb_editor_view_get_title;
+  view_class->get_special_title = gb_editor_view_get_special_title;
   view_class->get_modified = gb_editor_view_get_modified;
   view_class->set_split_view = gb_editor_view_set_split_view;
   view_class->set_back_forward_list = gb_editor_view_set_back_forward_list;

@@ -669,7 +669,7 @@ gb_view_stack_set_active_view (GbViewStack *self,
           self->focus_history = g_list_remove (self->focus_history, active_view);
           self->focus_history = g_list_prepend (self->focus_history, active_view);
 
-          binding = g_object_bind_property (active_view, "title",
+          binding = g_object_bind_property (active_view, "special-title",
                                             self->title_label, "label",
                                             G_BINDING_DEFAULT | G_BINDING_SYNC_CREATE);
           ide_set_weak_pointer (&self->title_binding, binding);

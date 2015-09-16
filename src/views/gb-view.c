@@ -37,6 +37,7 @@ enum {
   PROP_CAN_SPLIT,
   PROP_DOCUMENT,
   PROP_MODIFIED,
+  PROP_SPECIAL_TITLE,
   PROP_TITLE,
   LAST_PROP
 };
@@ -202,6 +203,23 @@ gb_view_get_modified (GbView *self)
 }
 
 static void
+gb_view_notify (GObject    *object,
+                GParamSpec *pspec)
+{
+  /*
+   * XXX:
+   *
+   * This should get removed after 3.18 when path bar lands.
+   * This also notifies of special-title after title is emitted.
+   */
+  if (pspec == gParamSpecs [PROP_TITLE])
+    g_object_notify_by_pspec (object, gParamSpecs [PROP_SPECIAL_TITLE]);
+
+  if (G_OBJECT_CLASS (gb_view_parent_class)->notify)
+    G_OBJECT_CLASS (gb_view_parent_class)->notify (object, pspec);
+}
+
+static void
 gb_view_destroy (GtkWidget *widget)
 {
   GbView *self = (GbView *)widget;
@@ -234,6 +252,10 @@ gb_view_get_property (GObject    *object,
       g_value_set_boolean (value, gb_view_get_modified (self));
       break;
 
+    case PROP_SPECIAL_TITLE:
+      g_value_set_string (value, gb_view_get_special_title (self));
+      break;
+
     case PROP_TITLE:
       g_value_set_string (value, gb_view_get_title (self));
       break;
@@ -243,7 +265,6 @@ gb_view_get_property (GObject    *object,
     }
 }
 
-
 static void
 gb_view_class_init (GbViewClass *klass)
 {
@@ -251,6 +272,7 @@ gb_view_class_init (GbViewClass *klass)
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   object_class->get_property = gb_view_get_property;
+  object_class->notify = gb_view_notify;
 
   widget_class->destroy = gb_view_destroy;
 
@@ -282,6 +304,18 @@ gb_view_class_init (GbViewClass *klass)
     g_param_spec_string ("title",
                          "Title",
                          "The view title.",
+                         NULL,
+                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+
+  /*
+   * XXX:
+   *
+   * This property should be removed after 3.18 when path bar lands.
+   */
+  gParamSpecs [PROP_SPECIAL_TITLE] =
+    g_param_spec_string ("special-title",
+                         "Special Title",
+                         "The special title to be displayed in the document menu button.",
                          NULL,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
@@ -338,4 +372,28 @@ gb_view_get_menu (GbView *self)
   g_return_val_if_fail (GB_IS_VIEW (self), NULL);
 
   return priv->menu;
+}
+
+/*
+ * XXX:
+ *
+ * This function is a hack in place for 3.18 until we get the path bar
+ * which will provide a better view of file paths. It should be removed
+ * after 3.18 when path bar lands. Also remove the "special-title"
+ * property.
+ */
+const gchar *
+gb_view_get_special_title (GbView *self)
+{
+  const gchar *ret = NULL;
+
+  g_return_val_if_fail (GB_IS_VIEW (self), NULL);
+
+  if (GB_VIEW_GET_CLASS (self)->get_special_title)
+    ret = GB_VIEW_GET_CLASS (self)->get_special_title (self);
+
+  if (ret == NULL)
+    ret = gb_view_get_title (self);
+
+  return ret;
 }
