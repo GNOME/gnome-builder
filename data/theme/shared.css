@@ -145,3 +145,17 @@ GbWorkspacePane .pane-separator {
 .filtered {
   opacity: .2;
 }
+
+
+/*
+ * XXX: Address this after 3.18
+ *
+ * allow scrolling past the end of the buffer.
+ * this helps when typing at the bottom of the screen is annoying.
+ *
+ * We probably want to make this configurable and generate the value
+ * with a custom css provider.
+ */
+IdeSourceView {
+  padding-bottom: 250px;
+}
