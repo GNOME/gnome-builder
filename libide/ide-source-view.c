@@ -4481,7 +4481,7 @@ ide_source_view_end_user_action (IdeSourceView *self)
   gtk_text_buffer_end_user_action (buffer);
 }
 
-static gboolean
+gboolean
 ide_source_view_get_overwrite (IdeSourceView *self)
 {
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
@@ -6322,6 +6322,19 @@ ide_source_view_get_insert_matching_brace (IdeSourceView *self)
   g_return_val_if_fail (IDE_IS_SOURCE_VIEW (self), FALSE);
 
   return priv->insert_matching_brace;
+}
+
+const gchar *
+ide_source_view_get_mode_name (IdeSourceView *self)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_SOURCE_VIEW (self), NULL);
+
+  if (priv->mode)
+    return ide_source_view_mode_get_name (priv->mode);
+
+  return NULL;
 }
 
 const gchar *
