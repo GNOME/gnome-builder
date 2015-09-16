@@ -33,6 +33,7 @@ struct _NautilusFloatingBar {
         gchar *primary_label;
         gchar *details_label;
 
+        GtkWidget *labels_box;
         GtkWidget *primary_label_widget;
         GtkWidget *details_label_widget;
         GtkWidget *spinner;
@@ -146,6 +147,8 @@ update_labels (NautilusFloatingBar *self)
 	gtk_label_set_text (GTK_LABEL (self->details_label_widget),
 			    self->details_label);
 	gtk_widget_set_visible (self->details_label_widget, details_visible);
+
+	gtk_widget_set_visible (self->labels_box, primary_visible || details_visible);
 }
 
 static gboolean
@@ -312,7 +315,7 @@ static void
 nautilus_floating_bar_constructed (GObject *obj)
 {
 	NautilusFloatingBar *self = NAUTILUS_FLOATING_BAR (obj);
-	GtkWidget *w, *box, *labels_box;
+	GtkWidget *w, *box;
 
 	G_OBJECT_CLASS (nautilus_floating_bar_parent_class)->constructed (obj);
 
@@ -326,26 +329,26 @@ nautilus_floating_bar_constructed (GObject *obj)
 	gtk_widget_set_size_request (w, 16, 16);
 	gtk_widget_set_margin_start (w, 8);
 
-	labels_box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
-	gtk_box_pack_start (GTK_BOX (box), labels_box, TRUE, TRUE, 0);
-	g_object_set (labels_box,
+	self->labels_box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
+	gtk_box_pack_start (GTK_BOX (box), self->labels_box, TRUE, TRUE, 0);
+	g_object_set (self->labels_box,
 		      "margin-top", 2,
 		      "margin-bottom", 2,
 		      "margin-start", 12,
 		      "margin-end", 12,
 		      NULL);
-	gtk_widget_show (labels_box);
+	gtk_widget_show (self->labels_box);
 
 	w = gtk_label_new (NULL);
 	gtk_label_set_ellipsize (GTK_LABEL (w), PANGO_ELLIPSIZE_MIDDLE);
 	gtk_label_set_single_line_mode (GTK_LABEL (w), TRUE);
-	gtk_container_add (GTK_CONTAINER (labels_box), w);
+	gtk_container_add (GTK_CONTAINER (self->labels_box), w);
 	self->primary_label_widget = w;
 	gtk_widget_show (w);
 
 	w = gtk_label_new (NULL);
 	gtk_label_set_single_line_mode (GTK_LABEL (w), TRUE);
-	gtk_container_add (GTK_CONTAINER (labels_box), w);
+	gtk_container_add (GTK_CONTAINER (self->labels_box), w);
 	self->details_label_widget = w;
 	gtk_widget_show (w);
 }
