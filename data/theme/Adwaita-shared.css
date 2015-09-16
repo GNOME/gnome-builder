@@ -57,7 +57,7 @@ GbViewStack > GtkBox.vertical > GtkBox.header.notebook.horizontal > GtkBox.horiz
   box-shadow: 0px 0px 0px;
   margin: 0px;
   opacity: 0.55;
-  padding: 4px;
+  padding: 6px 4px;
 }
 GbWorkspacePane > GtkBox.vertical > GtkBox.notebook.header > GtkStackSwitcher > .button {
   background-image: none;
