@@ -72,7 +72,7 @@ gb_device_manager_panel_load (GbWorkbenchAddin *addin)
   pane = gb_workspace_get_left_pane (GB_WORKSPACE (workspace));
   gb_workspace_pane_add_page (GB_WORKSPACE_PANE (pane),
                               GTK_WIDGET (self),
-                              _("Device"),
+                              _("Device Manager"),
                               "computer-symbolic");
 }
 
