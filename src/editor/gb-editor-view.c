@@ -202,13 +202,53 @@ gb_editor_view__buffer_changed_on_volume (GbEditorView *self,
     }
 }
 
+static const gchar *
+gb_editor_view_get_title (GbView *view)
+{
+  return ((GbEditorView *)view)->title;
+}
+
 static void
 gb_editor_view__buffer_notify_title (GbEditorView *self,
                                      GParamSpec   *pspec,
                                      IdeBuffer    *buffer)
 {
+  const gchar *title;
+  gchar **parts;
+  gboolean needs_prefix;
+  gchar *str;
+
   g_assert (GB_IS_EDITOR_VIEW (self));
   g_assert (GB_IS_EDITOR_DOCUMENT (buffer));
+
+  g_free (self->title);
+
+  title = ide_buffer_get_title (buffer);
+
+  if (title == NULL)
+    {
+      /* translators: this shouldn't ever happen */
+      self->title = g_strdup ("untitled");
+      return;
+    }
+
+  if ((needs_prefix = (title [0] == G_DIR_SEPARATOR)))
+    title++;
+
+  parts = g_strsplit (title, G_DIR_SEPARATOR_S, 0);
+  str = g_strjoinv (" "G_DIR_SEPARATOR_S" ", parts);
+
+  if (needs_prefix)
+    {
+      self->title = g_strdup_printf (G_DIR_SEPARATOR_S" %s", str);
+      g_free (str);
+    }
+  else
+    {
+      self->title = str;
+    }
+
+  g_strfreev (parts);
 
   g_object_notify (G_OBJECT (self), "title");
 }
@@ -299,6 +339,7 @@ gb_editor_view_set_document (GbEditorView     *self,
       g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_DOCUMENT]);
 
       gb_editor_view__buffer_notify_language (self, NULL, document);
+      gb_editor_view__buffer_notify_title (self, NULL, IDE_BUFFER (document));
 
       gb_editor_view_actions_update (self);
     }
@@ -492,6 +533,7 @@ gb_editor_view_finalize (GObject *object)
 {
   GbEditorView *self = (GbEditorView *)object;
 
+  g_clear_pointer (&self->title, g_free);
   g_clear_object (&self->extensions);
   g_clear_object (&self->document);
   g_clear_object (&self->settings);
@@ -555,6 +597,7 @@ gb_editor_view_class_init (GbEditorViewClass *klass)
 
   view_class->create_split = gb_editor_view_create_split;
   view_class->get_document = gb_editor_view_get_document;
+  view_class->get_title = gb_editor_view_get_title;
   view_class->get_modified = gb_editor_view_get_modified;
   view_class->set_split_view = gb_editor_view_set_split_view;
   view_class->set_back_forward_list = gb_editor_view_set_back_forward_list;

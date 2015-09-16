@@ -36,6 +36,7 @@ struct _GbEditorView
   GbEditorDocument    *document;
   PeasExtensionSet    *extensions;
   GSettings           *settings;
+  gchar               *title;
 
   GbEditorFrame       *frame1;
   GbEditorFrame       *frame2;
