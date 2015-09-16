@@ -1,3 +1,56 @@
+===============
+Version 3.17.92
+===============
+
+Another Builder release is here!
+
+This release is a snapshot before the final 3.18 release expected next week.
+This gives packages a chance to ensure that everything is in working order
+for the 3.18 release.
+
+We'd like to remember everything that Builder is still a beta product and we
+are working hard towards implementing all the requested features.
+
+There are lots of changes this cycle, some more infrastructure than cosmetic.
+A few of them are as follows:
+
+ • Progress on implementing UI designs.
+ • A new shortcuts dialog to help you discover features.
+ • A new plugin engine powered by Libpeas. Currently, only in-tree plugins
+   are supported. Plugins can be written in C or Python3.
+ • A new workspace layout with panels which can be extended by plugins.
+ • Completion with support for GObject Introspection for Python3 using Jedi.
+ • Progress on device manager and CPU graphs.
+ • Symbol tree is now shown in a panel which reduces widget overhead.
+ • Loading of previous buffers is faster.
+ • Read-only snippets viewer has been added to preferences.
+ • Read-only plugin viewer in preferences.
+ • Build systems can now be implemented as plugins.
+ • Support for Terminals using VTE.
+ • Editor overview map has been moved into GtkSourceView.
+ • Smart backspace has been moved into GtkSourceView.
+ • Builder gained printer support.
+
+Thanks again to all our translators that kept things up to date while we
+churned through bugs late in the cycle. We hope to do this less as we come
+out of beta.
+
+For those that are *very* adventurous, Builder should compile on OS X now with
+a properly configured jhbuild toolchain. Additionally, we have maintained
+compatability with FreeBSD and OpenBSD thanks to generous contributions.
+
+Notes to packagers
+
+ • We now install multiple private shared libraries to $prefix/gnome-builder/
+ • Plugins are installed to $prefix/gnome-builder/plugins/
+
+I'd like to thank our nearly 40 contributors this cycle for all your patches
+and time spent on making Builder great!
+
+-- Christian
+
+
+
 ==============
 Version 3.16.3
 ==============
