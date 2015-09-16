@@ -160,10 +160,10 @@
                         </child>
                       </object>
                     </child>
-                    <packing>
-                      <property name="padding">6</property>
-                    </packing>
                   </object>
+                  <packing>
+                    <property name="padding">6</property>
+                  </packing>
                 </child>
                 <child>
                   <object class="GtkButton" id="close_button">
