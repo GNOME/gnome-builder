@@ -158,10 +158,18 @@ gb_widget_snapshot (GtkWidget *widget,
 }
 
 static void
+show_callback (gpointer data)
+{
+  g_object_set_data (data, "FADE_ANIMATION", NULL);
+  g_object_unref (data);
+}
+
+static void
 hide_callback (gpointer data)
 {
   GtkWidget *widget = data;
 
+  g_object_set_data (data, "FADE_ANIMATION", NULL);
   gtk_widget_hide (widget);
   gtk_widget_set_opacity (widget, 1.0);
   g_object_unref (widget);
@@ -171,20 +179,27 @@ void
 gb_widget_fade_hide (GtkWidget *widget)
 {
   GdkFrameClock *frame_clock;
+  EggAnimation *anim;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
   if (gtk_widget_get_visible (widget))
     {
+      anim = g_object_get_data (G_OBJECT (widget), "FADE_ANIMATION");
+      if (anim != NULL)
+        egg_animation_stop (anim);
+
       frame_clock = gtk_widget_get_frame_clock (widget);
-      egg_object_animate_full (widget,
-                               EGG_ANIMATION_LINEAR,
-                               1000,
-                               frame_clock,
-                               hide_callback,
-                               g_object_ref (widget),
-                               "opacity", 0.0,
-                               NULL);
+      anim = egg_object_animate_full (widget,
+                                      EGG_ANIMATION_LINEAR,
+                                      1000,
+                                      frame_clock,
+                                      hide_callback,
+                                      g_object_ref (widget),
+                                      "opacity", 0.0,
+                                      NULL);
+      g_object_set_data_full (G_OBJECT (widget), "FADE_ANIMATION",
+                              g_object_ref (anim), g_object_unref);
     }
 }
 
@@ -192,22 +207,29 @@ void
 gb_widget_fade_show (GtkWidget *widget)
 {
   GdkFrameClock *frame_clock;
+  EggAnimation *anim;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
   if (!gtk_widget_get_visible (widget))
     {
+      anim = g_object_get_data (G_OBJECT (widget), "FADE_ANIMATION");
+      if (anim != NULL)
+        egg_animation_stop (anim);
+
       frame_clock = gtk_widget_get_frame_clock (widget);
       gtk_widget_set_opacity (widget, 0.0);
       gtk_widget_show (widget);
-      egg_object_animate_full (widget,
-                               EGG_ANIMATION_LINEAR,
-                               500,
-                               frame_clock,
-                               NULL,
-                               NULL,
-                               "opacity", 1.0,
-                               NULL);
+      anim = egg_object_animate_full (widget,
+                                      EGG_ANIMATION_LINEAR,
+                                      500,
+                                      frame_clock,
+                                      show_callback,
+                                      g_object_ref (widget),
+                                      "opacity", 1.0,
+                                      NULL);
+      g_object_set_data_full (G_OBJECT (widget), "FADE_ANIMATION",
+                              g_object_ref (anim), g_object_unref);
     }
 }
 
