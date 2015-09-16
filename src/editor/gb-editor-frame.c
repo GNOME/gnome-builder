@@ -117,7 +117,13 @@ gb_editor_frame_update_ruler (GbEditorFrame *self)
       nautilus_floating_bar_set_show_spinner (self->floating_bar, FALSE);
     }
 
-  gtk_widget_set_visible (GTK_WIDGET (self->floating_bar), visible);
+  /* we don't fade while hiding because we likely won't have
+   * any text labels set anyway.
+   */
+  if (!visible && gtk_widget_get_visible (GTK_WIDGET (self->floating_bar)))
+    gtk_widget_hide (GTK_WIDGET (self->floating_bar));
+  else if (visible && !gtk_widget_get_visible (GTK_WIDGET (self->floating_bar)))
+    gb_widget_fade_show (GTK_WIDGET (self->floating_bar));
 }
 
 static void
