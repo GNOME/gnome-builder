@@ -161,7 +161,7 @@ gb_view_stack_add (GtkContainer *container,
 
       gtk_widget_set_sensitive (GTK_WIDGET (self->close_button), TRUE);
       gtk_widget_set_sensitive (GTK_WIDGET (self->document_button), TRUE);
-      gtk_widget_set_visible (GTK_WIDGET (self->views_button), TRUE);
+      gtk_widget_set_sensitive (GTK_WIDGET (self->views_button), TRUE);
 
       self->focus_history = g_list_prepend (self->focus_history, child);
       controls = gb_view_get_controls (GB_VIEW (child));
@@ -271,7 +271,7 @@ gb_view_stack_real_empty (GbViewStack *self)
       gtk_widget_set_sensitive (GTK_WIDGET (self->close_button), FALSE);
       gtk_widget_set_sensitive (GTK_WIDGET (self->document_button), FALSE);
       gtk_widget_set_visible (GTK_WIDGET (self->modified_label), FALSE);
-      gtk_widget_set_visible (GTK_WIDGET (self->views_button), FALSE);
+      gtk_widget_set_sensitive (GTK_WIDGET (self->views_button), FALSE);
     }
 }
 
