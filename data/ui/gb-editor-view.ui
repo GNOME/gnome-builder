@@ -88,6 +88,39 @@
         <child internal-child="controls">
           <object class="GtkBox">
             <child>
+              <object class="GtkSeparator">
+                <property name="margin-start">3</property>
+                <property name="margin-end">3</property>
+                <property name="margin-top">4</property>
+                <property name="margin-bottom">4</property>
+                <property name="orientation">vertical</property>
+                <property name="visible">true</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="cursor_label">
+                <property name="label">1:1</property>
+                <property name="valign">baseline</property>
+                <property name="visible">true</property>
+                <style>
+                  <class name="dim-label"/>
+                </style>
+              </object>
+              <packing>
+                <property name="padding">6</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkSeparator">
+                <property name="margin-start">3</property>
+                <property name="margin-end">3</property>
+                <property name="margin-top">4</property>
+                <property name="margin-bottom">4</property>
+                <property name="orientation">vertical</property>
+                <property name="visible">true</property>
+              </object>
+            </child>
+            <child>
               <object class="GtkMenuButton" id="tweak_button">
                 <property name="focus-on-click">false</property>
                 <property name="popover">popover</property>

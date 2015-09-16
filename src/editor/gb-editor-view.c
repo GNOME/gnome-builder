@@ -287,6 +287,47 @@ gb_editor_view__buffer_notify_language (GbEditorView     *self,
 }
 
 static void
+gb_editor_view__buffer_cursor_moved (GbEditorView      *self,
+                                     const GtkTextIter *iter,
+                                     GtkTextBuffer     *buffer)
+{
+  GtkTextIter bounds;
+  GtkTextMark *mark;
+  gchar *str;
+  guint line;
+  gint column;
+  gint column2;
+
+  g_assert (GB_IS_EDITOR_VIEW (self));
+  g_assert (iter != NULL);
+  g_assert (IDE_IS_BUFFER (buffer));
+
+  ide_source_view_get_visual_position (self->frame1->source_view, &line, (guint *)&column);
+
+  mark = gtk_text_buffer_get_selection_bound (buffer);
+  gtk_text_buffer_get_iter_at_mark (buffer, &bounds, mark);
+
+  if (!gtk_widget_has_focus (GTK_WIDGET (self->frame1->source_view)) ||
+      gtk_text_iter_equal (&bounds, iter) ||
+      (gtk_text_iter_get_line (iter) != gtk_text_iter_get_line (&bounds)))
+    {
+      str = g_strdup_printf ("%d:%d", line + 1, column + 1);
+      gtk_label_set_text (self->cursor_label, str);
+      g_free (str);
+      return;
+    }
+
+  /* We have a selection that is on the same line.
+   * Lets give some detail as to how long the selection is.
+   */
+  column2 = gtk_source_view_get_visual_column (GTK_SOURCE_VIEW (self->frame1->source_view),
+                                               &bounds);
+  str = g_strdup_printf ("%d:%d (%d)", line + 1, column + 1, ABS (column2 - column));
+  gtk_label_set_text (self->cursor_label, str);
+  g_free (str);
+}
+
+static void
 gb_editor_view_set_document (GbEditorView     *self,
                              GbEditorDocument *document)
 {
@@ -307,6 +348,12 @@ gb_editor_view_set_document (GbEditorView     *self,
       g_settings_bind (self->settings, "highlight-matching-brackets",
                        document, "highlight-matching-brackets",
                        G_SETTINGS_BIND_GET);
+
+      g_signal_connect_object (document,
+                               "cursor-moved",
+                               G_CALLBACK (gb_editor_view__buffer_cursor_moved),
+                               self,
+                               G_CONNECT_SWAPPED);
 
       g_object_bind_property_full (document, "language", self->tweak_button,
                                    "label", G_BINDING_SYNC_CREATE,
@@ -614,6 +661,7 @@ gb_editor_view_class_init (GbEditorViewClass *klass)
 
   GB_WIDGET_CLASS_TEMPLATE (klass, "gb-editor-view.ui");
 
+  GB_WIDGET_CLASS_BIND (klass, GbEditorView, cursor_label);
   GB_WIDGET_CLASS_BIND (klass, GbEditorView, frame1);
   GB_WIDGET_CLASS_BIND (klass, GbEditorView, modified_cancel_button);
   GB_WIDGET_CLASS_BIND (klass, GbEditorView, modified_revealer);

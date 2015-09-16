@@ -38,6 +38,7 @@ struct _GbEditorView
   GSettings           *settings;
   gchar               *title;
 
+  GtkLabel            *cursor_label;
   GbEditorFrame       *frame1;
   GbEditorFrame       *frame2;
   GtkButton           *modified_cancel_button;
