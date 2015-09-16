@@ -437,6 +437,7 @@ gb_editor_view_set_split_view (GbView   *view,
   if (split_view)
     {
       self->frame2 = g_object_new (GB_TYPE_EDITOR_FRAME,
+                                   "show-ruler", TRUE,
                                    "document", self->document,
                                    "visible", TRUE,
                                    NULL);

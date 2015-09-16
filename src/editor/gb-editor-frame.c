@@ -40,6 +40,7 @@ enum {
   PROP_BACK_FORWARD_LIST,
   PROP_DOCUMENT,
   PROP_SHOW_MAP,
+  PROP_SHOW_RULER,
   LAST_PROP
 };
 
@@ -48,6 +49,90 @@ enum {
 };
 
 static GParamSpec *gParamSpecs [LAST_PROP];
+
+static void
+gb_editor_frame_update_ruler (GbEditorFrame *self)
+{
+  const gchar *mode_display_name;
+  const gchar *mode_name;
+  GtkTextBuffer *buffer;
+  gboolean visible = FALSE;
+
+  g_assert (GB_IS_EDITOR_FRAME (self));
+
+  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self->source_view));
+
+  /* update line/column text */
+  if (self->show_ruler)
+    {
+      g_autofree gchar *text = NULL;
+      guint ln = 0;
+      guint col = 0;
+
+      ide_source_view_get_visual_position (self->source_view, &ln, &col);
+      text = g_strdup_printf (_("Line %u, Column %u"), ln + 1, col + 1);
+      nautilus_floating_bar_set_primary_label (self->floating_bar, text);
+
+      visible = TRUE;
+    }
+  else
+    {
+      nautilus_floating_bar_set_primary_label (self->floating_bar, NULL);
+    }
+
+  /* update current mode */
+  mode_display_name = ide_source_view_get_mode_display_name (self->source_view);
+  gtk_label_set_label (self->mode_name_label, mode_display_name);
+  gtk_widget_set_visible (GTK_WIDGET (self->mode_name_label), !!mode_display_name);
+  if (mode_display_name != NULL)
+    visible = TRUE;
+
+  /*
+   * Update overwrite label.
+   *
+   * XXX: Hack for 3.18 to ensure we don't have "OVR Replace" in vim mode.
+   */
+  mode_name = ide_source_view_get_mode_name (self->source_view);
+  if (ide_source_view_get_overwrite (self->source_view) &&
+      !ide_str_equal0 (mode_name, "vim-replace"))
+    {
+      gtk_widget_set_visible (GTK_WIDGET (self->overwrite_label), TRUE);
+      visible = TRUE;
+    }
+  else
+    {
+      gtk_widget_set_visible (GTK_WIDGET (self->overwrite_label), FALSE);
+    }
+
+  if (gtk_widget_get_visible (GTK_WIDGET (self->mode_name_label)))
+    visible = TRUE;
+
+  if (ide_buffer_get_busy (IDE_BUFFER (buffer)))
+    {
+      nautilus_floating_bar_set_show_spinner (self->floating_bar, TRUE);
+      visible = TRUE;
+    }
+  else
+    {
+      nautilus_floating_bar_set_show_spinner (self->floating_bar, FALSE);
+    }
+
+  gtk_widget_set_visible (GTK_WIDGET (self->floating_bar), visible);
+}
+
+static void
+gb_editor_frame_set_show_ruler (GbEditorFrame *self,
+                                gboolean       show_ruler)
+{
+  g_assert (GB_IS_EDITOR_FRAME (self));
+
+  if (show_ruler != self->show_ruler)
+    {
+      self->show_ruler = show_ruler;
+      gb_editor_frame_update_ruler (self);
+      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_SHOW_RULER]);
+    }
+}
 
 static void
 gb_editor_frame_animate_map (GbEditorFrame *self,
@@ -168,17 +253,11 @@ on_cursor_moved (GbEditorDocument  *document,
                  const GtkTextIter *location,
                  GbEditorFrame     *self)
 {
-  g_autofree gchar *text = NULL;
-  guint ln = 0;
-  guint col = 0;
 
   g_return_if_fail (GB_IS_EDITOR_FRAME (self));
   g_return_if_fail (GB_IS_EDITOR_DOCUMENT (document));
 
-  ide_source_view_get_visual_position (self->source_view, &ln, &col);
-
-  text = g_strdup_printf (_("Line %u, Column %u"), ln + 1, col + 1);
-  nautilus_floating_bar_set_primary_label (self->floating_bar, text);
+  gb_editor_frame_update_ruler (self);
 
   gb_editor_frame_update_search_position_label (self);
 }
@@ -239,19 +318,6 @@ search_text_transform_from (GBinding     *binding,
   return TRUE;
 }
 
-static gboolean
-string_to_boolean (GBinding     *binding,
-                   const GValue *from_value,
-                   GValue       *to_value,
-                   gpointer      user_data)
-{
-  gboolean visible;
-
-  visible = !gb_str_empty0 (g_value_get_string (from_value));
-  g_value_set_boolean (to_value, visible);
-  return TRUE;
-}
-
 void
 gb_editor_frame_set_document (GbEditorFrame    *self,
                               GbEditorDocument *document)
@@ -266,7 +332,11 @@ gb_editor_frame_set_document (GbEditorFrame    *self,
 
   gtk_text_view_set_buffer (GTK_TEXT_VIEW (self->source_view), GTK_TEXT_BUFFER (document));
   self->cursor_moved_handler = g_signal_connect (document, "cursor-moved", G_CALLBACK (on_cursor_moved), self);
-  g_object_bind_property (document, "busy", self->floating_bar, "show-spinner", G_BINDING_SYNC_CREATE);
+  g_signal_connect_object (document,
+                           "notify::busy",
+                           G_CALLBACK (gb_editor_frame_update_ruler),
+                           self,
+                           G_CONNECT_SWAPPED);
 
   mark = gtk_text_buffer_get_insert (GTK_TEXT_BUFFER (document));
   gtk_text_buffer_get_iter_at_mark (GTK_TEXT_BUFFER (document), &iter, mark);
@@ -286,14 +356,6 @@ gb_editor_frame_set_document (GbEditorFrame    *self,
                            G_CALLBACK (gb_editor_frame_on_search_occurrences_notify),
                            self,
                            G_CONNECT_SWAPPED);
-
-  g_object_bind_property (self->source_view, "mode-display-name",
-                          self->mode_name_label, "label",
-                          G_BINDING_SYNC_CREATE);
-  g_object_bind_property_full (self->source_view, "mode-display-name",
-                               self->mode_name_label, "visible",
-                               G_BINDING_SYNC_CREATE, string_to_boolean, NULL,
-                               NULL, NULL);
 }
 
 static gboolean
@@ -686,6 +748,10 @@ gb_editor_frame_get_property (GObject    *object,
       g_value_set_boolean (value, gb_editor_frame_get_show_map (self));
       break;
 
+    case PROP_SHOW_RULER:
+      g_value_set_boolean (value, self->show_ruler);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -715,6 +781,10 @@ gb_editor_frame_set_property (GObject      *object,
 
     case PROP_SHOW_MAP:
       gb_editor_frame_set_show_map (self, g_value_get_boolean (value));
+      break;
+
+    case PROP_SHOW_RULER:
+      gb_editor_frame_set_show_ruler (self, g_value_get_boolean (value));
       break;
 
     default:
@@ -760,6 +830,13 @@ gb_editor_frame_class_init (GbEditorFrameClass *klass)
     g_param_spec_boolean ("show-map",
                           "Show Map",
                           "If the overview map should be shown.",
+                          FALSE,
+                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+
+  gParamSpecs [PROP_SHOW_RULER] =
+    g_param_spec_boolean ("show-ruler",
+                          "Show Ruler",
+                          "If the ruler should always be shown.",
                           FALSE,
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
@@ -811,7 +888,17 @@ gb_editor_frame_init (GbEditorFrame *self)
   insight_settings = g_settings_new ("org.gnome.builder.code-insight");
   g_settings_bind (insight_settings, "word-completion", self->source_view, "enable-word-completion", G_SETTINGS_BIND_GET);
 
-  g_object_bind_property (self->source_view, "overwrite", self->overwrite_label, "visible", G_BINDING_SYNC_CREATE);
+  g_signal_connect_object (self->source_view,
+                           "notify::overwrite",
+                           G_CALLBACK (gb_editor_frame_update_ruler),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  g_signal_connect_object (self->source_view,
+                           "notify::mode-display-name",
+                           G_CALLBACK (gb_editor_frame_update_ruler),
+                           self,
+                           G_CONNECT_SWAPPED);
 
   /*
    * we want to rubberbanding search until enter has been pressed or next/previous actions
