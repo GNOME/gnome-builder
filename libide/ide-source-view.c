@@ -70,15 +70,11 @@
 #define FIXIT_LABEL_LEN_MAX 30
 #define SCROLL_REPLAY_DELAY 1000
 
-#define _GDK_RECTANGLE_X2(rect) ((rect)->x + (rect)->width)
-#define _GDK_RECTANGLE_Y2(rect) ((rect)->y + (rect)->height)
-#define _GDK_RECTANGLE_CONTAINS(rect,other) \
-  (((rect)->x <= (other)->x) && \
-   (_GDK_RECTANGLE_X2(rect) >= _GDK_RECTANGLE_X2(other)) && \
-   ((rect)->y <= (other)->y) && \
-   (_GDK_RECTANGLE_Y2(rect) >= _GDK_RECTANGLE_Y2(other)))
-#define _GDK_RECTANGLE_CENTER_X(rect) ((rect)->x + ((rect)->width/2))
-#define _GDK_RECTANGLE_CENTER_Y(rect) ((rect)->y + ((rect)->height/2))
+#define _GDK_RECTANGLE_X2(rect) _ide_cairo_rectangle_x2(rect)
+#define _GDK_RECTANGLE_Y2(rect) _ide_cairo_rectangle_y2(rect)
+#define _GDK_RECTANGLE_CONTAINS(rect,other) _ide_cairo_rectangle_contains_rectangle(rect,other)
+#define _GDK_RECTANGLE_CENTER_X(rect) _ide_cairo_rectangle_center(rect)
+#define _GDK_RECTANGLE_CENTER_Y(rect) _ide_cairo_rectangle_middle(rect)
 #define TRACE_RECTANGLE(name, rect) \
   IDE_TRACE_MSG ("%s = Rectangle(x=%d, y=%d, width=%d, height=%d)", \
                  name, (rect)->x, (rect)->y, (rect)->width, (rect)->height)

@@ -29,6 +29,40 @@ void            ide_cairo_rounded_rectangle               (cairo_t            *c
                                                            gint                x_radius,
                                                            gint                y_radius);
 
+static inline gboolean
+_ide_cairo_rectangle_x2 (const cairo_rectangle_int_t *rect)
+{
+  return rect->x + rect->width;
+}
+
+static inline gboolean
+_ide_cairo_rectangle_y2 (const cairo_rectangle_int_t *rect)
+{
+  return rect->y + rect->height;
+}
+
+static inline gboolean
+_ide_cairo_rectangle_center (const cairo_rectangle_int_t *rect)
+{
+  return rect->x + (rect->width/2);
+}
+
+static inline gboolean
+_ide_cairo_rectangle_middle (const cairo_rectangle_int_t *rect)
+{
+  return rect->y + (rect->height/2);
+}
+
+static inline cairo_bool_t
+_ide_cairo_rectangle_contains_rectangle (const cairo_rectangle_int_t *a,
+                                         const cairo_rectangle_int_t *b)
+{
+    return (a->x <= b->x &&
+            a->x + (int) a->width >= b->x + (int) b->width &&
+            a->y <= b->y &&
+            a->y + (int) a->height >= b->y + (int) b->height);
+}
+
 G_END_DECLS
 
 #endif /* IDE_CAIRO_H */
