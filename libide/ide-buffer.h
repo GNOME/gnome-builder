@@ -50,6 +50,7 @@ struct _IdeBufferClass
                         const GtkTextIter *location);
 };
 
+gboolean            ide_buffer_get_busy                      (IdeBuffer            *self);
 gboolean            ide_buffer_get_changed_on_volume         (IdeBuffer            *self);
 GBytes             *ide_buffer_get_content                   (IdeBuffer            *self);
 IdeContext         *ide_buffer_get_context                   (IdeBuffer            *self);

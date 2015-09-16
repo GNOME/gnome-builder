@@ -124,7 +124,7 @@ static void ide_buffer_queue_diagnose (IdeBuffer *self);
 static GParamSpec *gParamSpecs [LAST_PROP];
 static guint gSignals [LAST_SIGNAL];
 
-static gboolean
+gboolean
 ide_buffer_get_busy (IdeBuffer *self)
 {
   IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
