@@ -379,7 +379,7 @@
 
   /* overwrite */
   bind "<shift>r" { "begin-macro" ()
-                    "set-mode" ("vim-insert", permanent)
+                    "set-mode" ("vim-replace", permanent)
                     "set-overwrite" (1) };
 
  /* jump to sub-mode */
@@ -1518,6 +1518,15 @@ IdeSourceViewMode.vim-insert {
   -IdeSourceViewMode-suppress-unbound: false;
   -IdeSourceViewMode-block-cursor: false;
   -IdeSourceViewMode-display-name: "Insert";
+
+  gtk-key-bindings: builder-vim-source-view-insert,
+                    builder-vim-source-view;
+}
+
+IdeSourceViewMode.vim-replace {
+  -IdeSourceViewMode-suppress-unbound: false;
+  -IdeSourceViewMode-block-cursor: false;
+  -IdeSourceViewMode-display-name: "Replace";
 
   gtk-key-bindings: builder-vim-source-view-insert,
                     builder-vim-source-view;
