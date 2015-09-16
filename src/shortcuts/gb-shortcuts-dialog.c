@@ -37,6 +37,7 @@ typedef struct
   gchar          *last_view_name;
   GtkSizeGroup   *search_text_group;
   GtkSizeGroup   *search_image_group;
+  GHashTable     *search_items_hash;
 
   GtkStack       *stack;
   GtkMenuButton  *menu_button;
@@ -188,11 +189,18 @@ gb_shortcuts_dialog_add_search_item (GbShortcutsDialog *self,
     {
       g_autofree gchar *accelerator = NULL;
       g_autofree gchar *title = NULL;
+      g_autofree gchar *hash_key = NULL;
 
       g_object_get (search_item,
                     "accelerator", &accelerator,
                     "title", &title,
                     NULL);
+
+      hash_key = g_strdup_printf ("%s-%s", title, hash_key);
+      if (g_hash_table_contains (priv->search_items_hash, hash_key))
+        return;
+
+      g_hash_table_insert (priv->search_items_hash, g_strdup (hash_key), GINT_TO_POINTER (1));
 
       g_object_set (search_item,
                     "accelerator-size-group", priv->search_image_group,
@@ -207,11 +215,18 @@ gb_shortcuts_dialog_add_search_item (GbShortcutsDialog *self,
     {
       g_autofree gchar *subtitle = NULL;
       g_autofree gchar *title = NULL;
+      g_autofree gchar *hash_key = NULL;
 
       g_object_get (search_item,
                     "subtitle", &subtitle,
                     "title", &title,
                     NULL);
+
+      hash_key = g_strdup_printf ("%s-%s", title, hash_key);
+      if (g_hash_table_contains (priv->search_items_hash, hash_key))
+        return;
+
+      g_hash_table_insert (priv->search_items_hash, g_strdup (hash_key), GINT_TO_POINTER (1));
 
       g_object_set (search_item,
                     "icon-size-group", priv->search_image_group,
@@ -694,6 +709,7 @@ gb_shortcuts_dialog_finalize (GObject *object)
   g_clear_pointer (&priv->keywords, g_hash_table_unref);
   g_clear_pointer (&priv->initial_view, g_free);
   g_clear_pointer (&priv->last_view_name, g_free);
+  g_clear_pointer (&priv->search_items_hash, g_hash_table_unref);
 
   g_clear_object (&priv->search_image_group);
   g_clear_object (&priv->search_text_group);
@@ -818,6 +834,7 @@ gb_shortcuts_dialog_init (GbShortcutsDialog *self)
   gtk_window_set_resizable (GTK_WINDOW (self), FALSE);
 
   priv->keywords = g_hash_table_new_full (NULL, NULL, NULL, g_free);
+  priv->search_items_hash = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
 
   priv->search_text_group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
   priv->search_image_group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
