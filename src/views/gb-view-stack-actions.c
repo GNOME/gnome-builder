@@ -38,6 +38,12 @@ gb_view_stack_actions_close_cb (GObject      *object,
   g_assert (GB_IS_VIEW (view));
 
   gb_view_stack_remove (self, view);
+
+  /*
+   * Force the view to destroy. This helps situation where plugins are holding
+   * onto a reference that can't easily be broken automatically.
+   */
+  gtk_widget_destroy (GTK_WIDGET (view));
 }
 
 
