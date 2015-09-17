@@ -16,10 +16,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
+
 #ifndef _GNU_SOURCE
 # define _GNU_SOURCE
 #endif
 
+#ifdef __linux__
+# include <dlfcn.h>
+#endif
 #include <glib/gprintf.h>
 #include <sys/mman.h>
 #include <sys/stat.h>
@@ -95,6 +102,9 @@ struct _EggCounterArena
 };
 
 G_LOCK_DEFINE_STATIC (reglock);
+
+static void _egg_counter_init_getcpu (void) __attribute__ ((constructor));
+static guint (*_egg_counter_getcpu_helper) (void);
 
 gint64
 egg_counter_get (EggCounter *counter)
@@ -480,4 +490,105 @@ egg_counter_arena_register (EggCounterArena *arena,
   ((ShmHeader *)&arena->cells[0])->n_counters++;
 
   G_UNLOCK (reglock);
+}
+
+#ifdef __linux__
+static void *
+_egg_counter_find_getcpu_in_vdso (void)
+{
+  static const gchar *vdso_names[] = {
+    "linux-vdso.so.1",
+    "linux-vdso32.so.1",
+    "linux-vdso64.so.1",
+    NULL
+  };
+  static const gchar *sym_names[] = {
+    "__kernel_getcpu",
+    "__vdso_getcpu",
+    NULL
+  };
+  gint i;
+
+  for (i = 0; vdso_names [i]; i++)
+    {
+      void *lib;
+      gint j;
+
+      lib = dlopen (vdso_names [i], RTLD_NOW | RTLD_GLOBAL);
+      if (lib == NULL)
+        continue;
+
+      for (j = 0; sym_names [j]; j++)
+        {
+          void *sym;
+
+          sym = dlsym (lib, sym_names [j]);
+          if (!sym)
+            continue;
+
+          return sym;
+        }
+
+      dlclose (lib);
+    }
+
+  return NULL;
+}
+
+static guint (*_egg_counter_getcpu_vdso_raw) (int *cpu,
+                                              int *node,
+                                              void *tcache);
+
+static guint
+_egg_counter_getcpu_vdso_helper (void)
+{
+  int cpu;
+  _egg_counter_getcpu_vdso_raw (&cpu, NULL, NULL);
+  return cpu;
+}
+#endif
+
+static guint
+_egg_counter_getcpu_fallback (void)
+{
+  return 0;
+}
+
+#ifdef EGG_HAVE_RDTSCP
+static guint
+_egg_counter_getcpu_rdtscp (void)
+{
+  return egg_get_current_cpu_rdtscp ();
+}
+#endif
+
+static void
+_egg_counter_init_getcpu (void)
+{
+
+#ifdef EGG_HAVE_RDTSCP
+  _egg_counter_getcpu_helper = _egg_counter_getcpu_rdtscp;
+#endif
+
+#ifdef __linux__
+  _egg_counter_getcpu_vdso_raw = _egg_counter_find_getcpu_in_vdso ();
+
+  if (_egg_counter_getcpu_vdso_raw)
+    {
+      _egg_counter_getcpu_helper = _egg_counter_getcpu_vdso_helper;
+      return;
+    }
+#endif
+
+#ifdef HAVE_SCHED_GETCPU
+  _egg_counter_getcpu_helper = (guint (*) (void))sched_getcpu;
+#endif
+
+  _egg_counter_getcpu_helper = _egg_counter_getcpu_fallback;
+}
+
+guint
+egg_get_current_cpu_call (void)
+{
+  return _egg_counter_getcpu_helper ();
 }

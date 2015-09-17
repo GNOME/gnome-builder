@@ -123,7 +123,7 @@
  *
  * We need to know if rdtscp is available at compile time. In an effort
  * to keep the headers as portable as possible (if that matters here?) we
- * require that you define HAVE_RDTSCP if the instruction is supported.
+ * require that you define EGG_HAVE_RDTSCP if the instruction is supported.
  *
  * An example for autoconf might be similar to the following:
  *
@@ -136,15 +136,15 @@
  *     [have_rdtscp=no])
  *   AC_MSG_RESULT([$have_rdtscp])
  *   AS_IF([test "$have_rdtscp" = "yes"],
- *         [CFLAGS="$CFLAGS -DHAVE_RDTSCP"])
+ *         [CFLAGS="$CFLAGS -DEGG_HAVE_RDTSCP"])
  */
 
 G_BEGIN_DECLS
 
-#ifdef HAVE_RDTSCP
+#ifdef EGG_HAVE_RDTSCP
 # include <x86intrin.h>
   static inline guint
-  egg_get_current_cpu (void)
+  egg_get_current_cpu_rdtscp (void)
   {
     /*
      * This extracts the IA32_TSC_AUX into the ecx register. On Linux,
@@ -155,12 +155,10 @@ G_BEGIN_DECLS
     __builtin_ia32_rdtscp (&aux);
     return aux & 0xFFF;
   }
+# define egg_get_current_cpu() egg_get_current_cpu_rdtscp()
 #elif defined(__linux__)
-# ifndef _GNU_SOURCE
-#  define _GNU_SOURCE
-# endif
-# include <sched.h>
-# define egg_get_current_cpu() sched_getcpu()
+# define egg_get_current_cpu() egg_get_current_cpu_call()
+extern guint egg_get_current_cpu_call (void);
 #else
 # define egg_get_current_cpu() 0
 # define EGG_COUNTER_REQUIRES_ATOMIC 1

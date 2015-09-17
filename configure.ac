@@ -102,6 +102,10 @@ dnl ***********************************************************************
 dnl Enable high-performance counters
 dnl ***********************************************************************
 GB_ENABLE_RDTSCP
+AS_IF([test $enable_rdtscp = yes],[
+	CFLAGS="$CFLAGS -DEGG_HAVE_RDTSCP"
+])
+AC_CHECK_FUNCS([sched_getcpu])
 
 
 dnl ***********************************************************************
