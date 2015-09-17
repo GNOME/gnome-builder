@@ -103,7 +103,7 @@ gb_search_box_delay_cb (gpointer user_data)
   /* TODO: Remove search text */
   context = ide_search_engine_search (search_engine, search_text);
   gb_search_display_set_context (self->display, context);
-  ide_search_context_execute (context, search_text, 5);
+  ide_search_context_execute (context, search_text, 7);
   g_object_unref (context);
 
   return G_SOURCE_REMOVE;
