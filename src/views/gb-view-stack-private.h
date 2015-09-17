@@ -44,6 +44,7 @@ struct _GbViewStack
   GtkMenuButton      *document_button;
   GtkButton          *go_backward;
   GtkButton          *go_forward;
+  GtkEventBox        *header_event_box;
   GtkLabel           *modified_label;
   GtkStack           *stack;
   GtkLabel           *title_label;

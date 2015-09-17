@@ -414,8 +414,26 @@ gb_view_stack_swipe (GbViewStack     *self,
       else if (velocity_x > 0)
         gb_widget_activate_action (GTK_WIDGET (self), "view-stack", "next-view", NULL);
     }
+}
 
-  g_print ("SWIPE: %lf %lf\n", velocity_x, velocity_y);
+static gboolean
+gb_view_stack__header__button_press (GbViewStack    *self,
+                                     GdkEventButton *button,
+                                     GtkEventBox    *event_box)
+{
+  g_assert (GB_IS_VIEW_STACK (self));
+  g_assert (button != NULL);
+  g_assert (GTK_IS_EVENT_BOX (event_box));
+
+  g_print ("button press\n");
+
+  if (button->button == GDK_BUTTON_PRIMARY)
+    {
+      gtk_widget_grab_focus (GTK_WIDGET (self));
+      return GDK_EVENT_STOP;
+    }
+
+  return GDK_EVENT_PROPAGATE;
 }
 
 static void
@@ -438,6 +456,12 @@ gb_view_stack_constructed (GObject *object)
   g_signal_connect_object (self->views_listbox,
                            "row-activated",
                            G_CALLBACK (gb_view_stack__views_listbox_row_activated_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  g_signal_connect_object (self->header_event_box,
+                           "button-press-event",
+                           G_CALLBACK (gb_view_stack__header__button_press),
                            self,
                            G_CONNECT_SWAPPED);
 
@@ -560,6 +584,7 @@ gb_view_stack_class_init (GbViewStackClass *klass)
   GB_WIDGET_CLASS_BIND (klass, GbViewStack, document_button);
   GB_WIDGET_CLASS_BIND (klass, GbViewStack, go_backward);
   GB_WIDGET_CLASS_BIND (klass, GbViewStack, go_forward);
+  GB_WIDGET_CLASS_BIND (klass, GbViewStack, header_event_box);
   GB_WIDGET_CLASS_BIND (klass, GbViewStack, modified_label);
   GB_WIDGET_CLASS_BIND (klass, GbViewStack, stack);
   GB_WIDGET_CLASS_BIND (klass, GbViewStack, title_label);
