@@ -367,7 +367,9 @@ introspection_sources = \
 Ide-1.0.gir: libide-1.0.la
 Ide_1_0_gir_INCLUDES = Gio-2.0 GtkSource-3.0 Ggit-1.0 Peas-1.0
 Ide_1_0_gir_CFLAGS = $(libide_1_0_la_CFLAGS)
-Ide_1_0_gir_LIBS = libide-1.0.la
+Ide_1_0_gir_LIBS = \
+	libide-1.0.la \
+	$(top_builddir)/contrib/egg/libegg-private.la
 Ide_1_0_gir_FILES = $(introspection_sources)
 Ide_1_0_gir_SCANNERFLAGS = \
 	--c-include="ide.h" \
