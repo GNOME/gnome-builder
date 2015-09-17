@@ -882,7 +882,8 @@ ide_buffer_notify_language (IdeBuffer  *self,
   if ((language = gtk_source_buffer_get_language (GTK_SOURCE_BUFFER (self))))
     lang_id = gtk_source_language_get_id (language);
 
-  ide_extension_adapter_set_value (priv->symbol_resolver_adapter, lang_id);
+  if (priv->symbol_resolver_adapter)
+    ide_extension_adapter_set_value (priv->symbol_resolver_adapter, lang_id);
 
   ide_diagnostician_set_language (priv->diagnostician, language);
 }
@@ -2053,6 +2054,8 @@ ide_buffer_reclaim_timeout (gpointer data)
   g_assert (IDE_IS_BUFFER (self));
 
   priv->reclamation_handler = 0;
+
+  g_clear_object (&priv->symbol_resolver_adapter);
 
   buffer_manager = ide_context_get_buffer_manager (priv->context);
 
