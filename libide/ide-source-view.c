@@ -21,6 +21,7 @@
 #include <glib/gi18n.h>
 #include <stdlib.h>
 #include "egg-binding-group.h"
+#include "egg-counter.h"
 #include "egg-signal-group.h"
 
 #include "egg-animation.h"
@@ -167,6 +168,7 @@ typedef struct
 } SearchMovement;
 
 G_DEFINE_TYPE_WITH_PRIVATE (IdeSourceView, ide_source_view, GTK_SOURCE_TYPE_VIEW)
+EGG_DEFINE_COUNTER (instances, "IdeSourceView", "Instances", "Number of IdeSourceView instances")
 
 enum {
   PROP_0,
@@ -5066,6 +5068,8 @@ ide_source_view_finalize (GObject *object)
   g_clear_pointer (&priv->selections, g_queue_free);
   g_clear_pointer (&priv->snippets, g_queue_free);
 
+  EGG_COUNTER_DEC (instances);
+
   G_OBJECT_CLASS (ide_source_view_parent_class)->finalize (object);
 }
 
@@ -6041,6 +6045,8 @@ ide_source_view_init (IdeSourceView *self)
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
   GtkSourceCompletion *completion;
   GtkTargetList *target_list;
+
+  EGG_COUNTER_INC (instances);
 
   priv->target_line_offset = -1;
   priv->snippets = g_queue_new ();
