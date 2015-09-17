@@ -465,7 +465,8 @@ in_comment (const GtkTextIter *location,
     {
       copy = iter;
 
-      gtk_text_iter_backward_char (&iter);
+      if (!gtk_text_iter_backward_char (&iter))
+        break;
     }
 
   *match_begin = copy;
