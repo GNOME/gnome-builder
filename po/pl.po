@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-13 22:04+0200\n"
-"PO-Revision-Date: 2015-09-13 22:05+0200\n"
+"POT-Creation-Date: 2015-09-17 09:17+0200\n"
+"PO-Revision-Date: 2015-09-17 09:18+0200\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <gnomepl@aviary.pl>\n"
 "Language: pl\n"
@@ -1140,29 +1140,29 @@ msgstr "Otwarcie katalogu się nie powiodło: %s"
 msgid "Failed to load file: %s: %s"
 msgstr "Wczytanie pliku się nie powiodło: %s: %s"
 
-#: ../libide/ide-source-view.c:4562
+#: ../libide/ide-source-view.c:4561
 #, c-format
 msgid "Insert \"%s\""
 msgstr "Wstaw „%s”"
 
-#: ../libide/ide-source-view.c:4564
+#: ../libide/ide-source-view.c:4563
 #, c-format
 msgid "Replace \"%s\" with \"%s\""
 msgstr "Zmień „%s” na „%s”"
 
-#: ../libide/ide-source-view.c:4682
+#: ../libide/ide-source-view.c:4681
 msgid "Apply Fix-It"
 msgstr "Zastosuj „Fix-It”"
 
-#: ../libide/ide-source-view.c:4725
+#: ../libide/ide-source-view.c:4724
 msgid "Join Lines"
 msgstr "Połącz wiersze"
 
-#: ../libide/ide-source-view.c:4736
+#: ../libide/ide-source-view.c:4735
 msgid "Sort Lines"
 msgstr "Posortuj wiersze"
 
-#: ../libide/ide-source-view.c:4755
+#: ../libide/ide-source-view.c:4754
 msgid "Go to Definition"
 msgstr "Przejdź do definicji"
 
@@ -1210,7 +1210,7 @@ msgstr "Plik autogen.sh nie jest wykonywalny."
 msgid "autogen.sh failed to create configure (%s)"
 msgstr "Utworzenie pliku configure przez plik autogen.sh się nie powiodło (%s)"
 
-#: ../plugins/autotools/ide-makecache.c:998
+#: ../plugins/autotools/ide-makecache.c:999
 msgid "Invalid makefile provided, ignoring."
 msgstr "Podano nieprawidłowy plik make, ignorowanie."
 
@@ -1331,8 +1331,8 @@ msgid "Documentation"
 msgstr "Dokumentacja"
 
 #: ../plugins/device-manager/gb-device-manager-panel.c:75
-msgid "Device"
-msgstr "Urządzenie"
+msgid "Device Manager"
+msgstr "Menedżer urządzeń"
 
 #: ../plugins/file-search/gb-file-search-provider.c:45
 msgid "Switch To"
@@ -1463,17 +1463,17 @@ msgstr "Katalog|Projekty"
 msgid "(Click on items to select them)"
 msgstr "(Kliknięcie elementów zaznacza je)"
 
-#: ../src/editor/gb-editor-frame.c:150
-#, c-format
-msgid "%u of %u"
-msgstr "%u z %u"
-
-#: ../src/editor/gb-editor-frame.c:180
+#: ../src/editor/gb-editor-frame.c:73
 #, c-format
 msgid "Line %u, Column %u"
 msgstr "Wiersz %u, kolumna %u"
 
-#: ../src/editor/gb-editor-frame.c:595
+#: ../src/editor/gb-editor-frame.c:241
+#, c-format
+msgid "%u of %u"
+msgstr "%u z %u"
+
+#: ../src/editor/gb-editor-frame.c:663
 msgid "Re_veal in Project Tree"
 msgstr "Odkry_wanie w drzewie projektu"
 
@@ -1647,11 +1647,11 @@ msgstr "Nie można odnaleźć dostawcy."
 msgid "%s more"
 msgstr "Więcej: %s"
 
-#: ../src/shortcuts/gb-shortcuts-dialog.c:920
+#: ../src/shortcuts/gb-shortcuts-dialog.c:937
 msgid "Search Shortcuts"
 msgstr "Wyszukiwanie skrótów"
 
-#: ../src/shortcuts/gb-shortcuts-dialog.c:947
+#: ../src/shortcuts/gb-shortcuts-dialog.c:964
 msgid "Search Results"
 msgstr "Wyniki wyszukiwania"
 
