@@ -146,9 +146,14 @@ G_BEGIN_DECLS
   static inline guint
   egg_get_current_cpu (void)
   {
-    guint cpu;
-    __builtin_ia32_rdtscp (&cpu);
-    return cpu;
+    /*
+     * This extracts the IA32_TSC_AUX into the ecx register. On Linux,
+     * that value contains a value with the bottom 12 bits being the
+     * cpu identifier, and the next 10 bits being the node group.
+     */
+    guint aux;
+    __builtin_ia32_rdtscp (&aux);
+    return aux & 0xFFF;
   }
 #elif defined(__linux__)
 # ifndef _GNU_SOURCE
