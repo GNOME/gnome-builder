@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2015-09-09 03:35+0000\n"
-"PO-Revision-Date: 2015-09-12 18:53+0300\n"
+"POT-Creation-Date: 2015-09-16 22:22+0000\n"
+"PO-Revision-Date: 2015-09-17 20:35+0300\n"
 "Last-Translator: Aurimas Černius <aurisc4@gmail.com>\n"
 "Language-Team: Lietuvių <gnome-lt@lists.akl.lt>\n"
 "Language: lt\n"
@@ -512,34 +512,43 @@ msgid "Auto Completion"
 msgstr "Automatinis užbaigimas"
 
 #: ../data/ui/gb-preferences-page-insight.ui.h:5
+#| msgid "Snippet Completion"
+msgid "Suggest Snippet Completion"
+msgstr "Siūlyti iškarpos užbaigimą"
+
+#: ../data/ui/gb-preferences-page-insight.ui.h:6
+msgid "Allow snippets to be inserted into the document."
+msgstr "Leisti į dokumentą įterpti iškarpas."
+
+#: ../data/ui/gb-preferences-page-insight.ui.h:7
 msgid "Suggest Word Completion"
 msgstr "Siūlyti žodžių užbaigimą"
 
-#: ../data/ui/gb-preferences-page-insight.ui.h:6
+#: ../data/ui/gb-preferences-page-insight.ui.h:8
 msgid "Suggest completion of words found within all open documents."
 msgstr "Siūlyti žodžių užbaigimą visuose atvertuose dokumentuose."
 
-#: ../data/ui/gb-preferences-page-insight.ui.h:7
+#: ../data/ui/gb-preferences-page-insight.ui.h:9
 msgid "Suggest Completions using Ctags"
 msgstr "Siūlyti užbaigimus naudojant Ctags"
 
-#: ../data/ui/gb-preferences-page-insight.ui.h:8
+#: ../data/ui/gb-preferences-page-insight.ui.h:10
 msgid "Use Ctags for completions in supported languages."
 msgstr "Naudoti Ctags užbaigimams palaikomose kalbose."
 
-#: ../data/ui/gb-preferences-page-insight.ui.h:9
+#: ../data/ui/gb-preferences-page-insight.ui.h:11
 msgid "Suggest Completions using Clang (Experimental)"
 msgstr "Siūlyti užbaigimus naudojant Clang (eksperimentinis)"
 
-#: ../data/ui/gb-preferences-page-insight.ui.h:10
+#: ../data/ui/gb-preferences-page-insight.ui.h:12
 msgid "Use Clang for completions in the C and C++ languages."
 msgstr "Naudoti Clang užbaigimams C ir C++ kalbose."
 
-#: ../data/ui/gb-preferences-page-insight.ui.h:11
+#: ../data/ui/gb-preferences-page-insight.ui.h:13
 msgid "Suggest Completions using Jedi"
 msgstr "Siūlyti užbaigimus naudojant Jedi"
 
-#: ../data/ui/gb-preferences-page-insight.ui.h:12
+#: ../data/ui/gb-preferences-page-insight.ui.h:14
 msgid "Use Jedi for completions in the Python language."
 msgstr "Naudoti Jedi užbaigimams Python kalboje."
 
@@ -597,6 +606,11 @@ msgstr ""
 msgid "Programming Languages"
 msgstr "Programavimo kalbos"
 
+#: ../data/ui/gb-preferences-page-plugins.ui.h:1
+#: ../data/ui/gb-preferences-window.ui.h:9
+msgid "Plugins"
+msgstr "Įskiepiai"
+
 #: ../data/ui/gb-preferences-page-theme.ui.h:1
 #: ../data/ui/gb-preferences-window.ui.h:7
 msgid "Theme"
@@ -626,10 +640,6 @@ msgstr "Nustatymai"
 #: ../data/ui/gb-preferences-window.ui.h:2
 msgid "Search Preferences…"
 msgstr "Ieškoti nustatymuose…"
-
-#: ../data/ui/gb-preferences-window.ui.h:9
-msgid "Plugins"
-msgstr "Įskiepiai"
 
 #: ../data/ui/gb-projects-dialog.ui.h:1
 #: ../src/dialogs/gb-projects-dialog.c:255
@@ -991,7 +1001,7 @@ msgstr "Nepavyko inicializuotų numatytųjų nustatymų."
 msgid "File contained invalid UTF-8"
 msgstr "Faile buvo netinkamų UTF-8 simbolių"
 
-#: ../libide/ide-buffer.c:1969
+#: ../libide/ide-buffer.c:1990
 msgid "The current language lacks a symbol resolver."
 msgstr "Dabartinei kalbai trūksta simbolių gavėjo."
 
@@ -1099,7 +1109,7 @@ msgstr "%s neturi realizuoto GAsyncInitable."
 msgid "Chunk does not belong to snippet."
 msgstr "Gabalas nepriklauso iškarpai."
 
-#: ../libide/ide-source-snippet-completion-provider.c:255
+#: ../libide/ide-source-snippet-completion-provider.c:288
 msgid "Snippets"
 msgstr "Iškarpos"
 
@@ -1188,7 +1198,7 @@ msgstr "autogen.sh nėra vykdomas failas."
 msgid "autogen.sh failed to create configure (%s)"
 msgstr "autogen.sh nepavyko sukurti configure (%s)"
 
-#: ../plugins/autotools/ide-makecache.c:998
+#: ../plugins/autotools/ide-makecache.c:999
 msgid "Invalid makefile provided, ignoring."
 msgstr "Pateiktas netinkamas Make failas, nepaisoma."
 
@@ -1309,8 +1319,8 @@ msgid "Documentation"
 msgstr "Dokumentacija"
 
 #: ../plugins/device-manager/gb-device-manager-panel.c:75
-msgid "Device"
-msgstr "Įrenginys"
+msgid "Device Manager"
+msgstr "Įrenginio valdyklė"
 
 #: ../plugins/file-search/gb-file-search-provider.c:45
 msgid "Switch To"
@@ -1441,17 +1451,17 @@ msgstr "Katalogas|Projektai"
 msgid "(Click on items to select them)"
 msgstr "(Spauskite ant elementų jiems pažymėti)"
 
-#: ../src/editor/gb-editor-frame.c:150
-#, c-format
-msgid "%u of %u"
-msgstr "%u iš %u"
-
-#: ../src/editor/gb-editor-frame.c:180
+#: ../src/editor/gb-editor-frame.c:73
 #, c-format
 msgid "Line %u, Column %u"
 msgstr "Eilutė %u, stulpelis %u"
 
-#: ../src/editor/gb-editor-frame.c:595
+#: ../src/editor/gb-editor-frame.c:235
+#, c-format
+msgid "%u of %u"
+msgstr "%u iš %u"
+
+#: ../src/editor/gb-editor-frame.c:657
 msgid "Re_veal in Project Tree"
 msgstr "_Parodyti projekto medyje"
 
@@ -1513,29 +1523,46 @@ msgid "minimap mini map overview over view"
 msgstr "mini apžvalga"
 
 #. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-git.c:128
+#: ../src/preferences/gb-preferences-page-git.c:169
 msgid "git author name surname attribution source code"
 msgstr "git autorius vardas atributai kodas"
 
 #. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-git.c:134
+#: ../src/preferences/gb-preferences-page-git.c:175
 msgid "git author email mail address attribute source code"
 msgstr "git autorius el. paštas atributai kodas"
 
 #. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-insight.c:54
+#: ../src/preferences/gb-preferences-page-insight.c:61
 msgid "word words auto completion suggest found document"
 msgstr "žodis žodžiai auto užbaigimas siūlymai rastas dokumentas"
 
 #. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-insight.c:59
+#: ../src/preferences/gb-preferences-page-insight.c:66
 msgid "experimental clang autocompletion auto complete"
 msgstr "eksperimentinis clang auto užbaigimas"
 
 #. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-insight.c:64
+#: ../src/preferences/gb-preferences-page-insight.c:71
 msgid "exuberant ctags tags autocompletion auto complete"
 msgstr "ctags žymos auto užbaigimas"
+
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-insight.c:76
+#| msgid "experimental clang autocompletion auto complete"
+msgid "jedi python autocompletion auto complete"
+msgstr "jedi python auto užbaigimas užbaigti"
+
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-insight.c:81
+#| msgid "experimental clang autocompletion auto complete"
+msgid "snippets autocompletion auto complete"
+msgstr "iškarpos iškarpų auto užbaigimas užbaigti"
+
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-insight.c:86
+msgid "semantic highlighting color goto declaration definition"
+msgstr "semantinis paryškinimas spalva eiti deklaracija apibrėžimas"
 
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-keybindings.c:64
@@ -1608,11 +1635,11 @@ msgstr "Nerastas tiekėjas."
 msgid "%s more"
 msgstr "dar %s"
 
-#: ../src/shortcuts/gb-shortcuts-dialog.c:920
+#: ../src/shortcuts/gb-shortcuts-dialog.c:937
 msgid "Search Shortcuts"
 msgstr "Paieškos trumpiniai"
 
-#: ../src/shortcuts/gb-shortcuts-dialog.c:947
+#: ../src/shortcuts/gb-shortcuts-dialog.c:964
 msgid "Search Results"
 msgstr "Paieškos rezultatai"
 
@@ -1819,6 +1846,9 @@ msgstr "%s rezultatai\n"
 #: ../tools/ide-search.c:120
 msgid "PROJECT_FILE [SEARCH TERMS...]"
 msgstr "PROJEKTO_FAILAS [PAIEŠKOS TERMINAI...]"
+
+#~ msgid "Device"
+#~ msgstr "Įrenginys"
 
 #~ msgid "The name of the action"
 #~ msgstr "Veiksmo pavadinimas"
@@ -2093,9 +2123,6 @@ msgstr "PROJEKTO_FAILAS [PAIEŠKOS TERMINAI...]"
 
 #~ msgid "The build system used by the context."
 #~ msgstr "Konteksto naudojama kūrimo sistema."
-
-#~ msgid "Device Manager"
-#~ msgstr "Įrenginio valdyklė"
 
 #~ msgid "The device manager for the context."
 #~ msgstr "Konteksto įrenginių valdyklė."
@@ -2521,9 +2548,6 @@ msgstr "PROJEKTO_FAILAS [PAIEŠKOS TERMINAI...]"
 
 #~ msgid "If the shadow should be drawn when performing searches."
 #~ msgstr "Ar vykdant paiešką turi būti piešiamas šešėlis."
-
-#~ msgid "Snippet Completion"
-#~ msgstr "Iškarpos užbaigimas"
 
 #~ msgid "If snippet expansion should be enabled via the completion window."
 #~ msgstr "Ar iškarpų užbaigimas turi būti įjungtas užbaigimo lange."
