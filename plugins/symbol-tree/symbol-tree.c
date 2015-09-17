@@ -358,7 +358,7 @@ symbol_tree_init (SymbolTree *self)
                                             g_object_unref,
                                             g_object_ref,
                                             g_object_unref,
-                                            G_USEC_PER_SEC * 20L,
+                                            20 * 1000L,
                                             populate_cache_cb,
                                             self,
                                             NULL);
