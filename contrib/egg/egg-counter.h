@@ -158,7 +158,6 @@ G_BEGIN_DECLS
 # define egg_get_current_cpu() egg_get_current_cpu_rdtscp()
 #elif defined(__linux__)
 # define egg_get_current_cpu() egg_get_current_cpu_call()
-extern guint egg_get_current_cpu_call (void);
 #else
 # define egg_get_current_cpu() 0
 # define EGG_COUNTER_REQUIRES_ATOMIC 1
@@ -268,6 +267,7 @@ struct _EggCounterValue
   gint64          padding [7];
 } __attribute__ ((aligned(8)));
 
+guint            egg_get_current_cpu_call       (void);
 EggCounterArena *egg_counter_arena_get_default  (void);
 EggCounterArena *egg_counter_arena_new_for_pid  (GPid                   pid);
 EggCounterArena *egg_counter_arena_ref          (EggCounterArena       *arena);
