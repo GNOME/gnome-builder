@@ -34,6 +34,7 @@ search_libs = \
 	$(SEARCH_LIBS) \
 	$(top_builddir)/contrib/search/libsearch.la \
 	$(top_builddir)/libide/libide-1.0.la \
+	$(top_builddir)/contrib/egg/libegg-private.la \
 	$(NULL)
 
 tests_cflags = \
@@ -62,7 +63,9 @@ tests_cflags = \
 	$(NULL)
 
 tests_libs = \
+	$(top_builddir)/libide/libide-1.0.la \
 	$(top_builddir)/src/libgnome-builder.la \
+	$(top_builddir)/contrib/egg/libegg-private.la \
 	$(NULL)
 
 tests_ldflags = \
@@ -180,9 +183,7 @@ test_fuzzy_LDADD = $(search_libs)
 misc_programs += test-slider
 test_slider_SOURCES = test-slider.c
 test_slider_CFLAGS = $(tests_cflags)
-test_slider_LDADD = \
-	$(tests_libs) \
-	$(top_builddir)/src/libgnome-builder.la
+test_slider_LDADD = $(tests_libs)
 
 
 #TESTS += test-ide-ctags
