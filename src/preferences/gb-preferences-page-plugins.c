@@ -21,6 +21,7 @@
 #include <libpeas/peas.h>
 
 #include "gb-preferences-page-plugins.h"
+#include "gb-widget.h"
 
 struct _GbPreferencesPagePlugins
 {
@@ -61,6 +62,8 @@ gb_preferences_page_plugins_add_plugin (GbPreferencesPagePlugins *self,
                       "orientation", GTK_ORIENTATION_VERTICAL,
                       "visible", TRUE,
                       NULL);
+  if (!peas_plugin_info_is_loaded (plugin_info))
+    gb_widget_add_style_class (row, "dim-label");
   gtk_container_add (GTK_CONTAINER (row), GTK_WIDGET (box));
 
   label = g_object_new (GTK_TYPE_LABEL,
