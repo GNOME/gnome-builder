@@ -149,8 +149,8 @@ dnl Check for Required Packages
 dnl ***********************************************************************
 m4_define([gtk_required_version], [3.17.8])
 m4_define([glib_required_version], [2.45.8])
-m4_define([gtksourceview_required_version], [3.17.8])
-m4_define([ggit_required_version], [0.23.5])
+m4_define([gtksourceview_required_version], [3.17.7])
+m4_define([ggit_required_version], [0.23.4])
 m4_define([gjs_required_version], [1.42.0])
 m4_define([pygobject_required_version], [3.0.0])
 m4_define([libxml_required_version], [2.9.0])
