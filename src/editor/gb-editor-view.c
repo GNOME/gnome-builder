@@ -577,6 +577,16 @@ gb_editor_view_constructed (GObject *object)
 }
 
 static void
+gb_editor_view_destroy (GtkWidget *widget)
+{
+  GbEditorView *self = (GbEditorView *)widget;
+
+  GTK_WIDGET_CLASS (gb_editor_view_parent_class)->destroy (widget);
+
+  g_clear_object (&self->document);
+}
+
+static void
 gb_editor_view_finalize (GObject *object)
 {
   GbEditorView *self = (GbEditorView *)object;
@@ -639,6 +649,7 @@ gb_editor_view_class_init (GbEditorViewClass *klass)
   object_class->get_property = gb_editor_view_get_property;
   object_class->set_property = gb_editor_view_set_property;
 
+  widget_class->destroy = gb_editor_view_destroy;
   widget_class->grab_focus = gb_editor_view_grab_focus;
   widget_class->get_request_mode = gb_editor_view_get_request_mode;
   widget_class->get_preferred_height = gb_editor_view_get_preferred_height;
