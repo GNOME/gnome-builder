@@ -753,6 +753,7 @@ gb_editor_view_class_init (GbEditorViewClass *klass)
   GB_WIDGET_CLASS_BIND (klass, GbEditorView, progress_bar);
   GB_WIDGET_CLASS_BIND (klass, GbEditorView, tweak_button);
   GB_WIDGET_CLASS_BIND (klass, GbEditorView, tweak_widget);
+  GB_WIDGET_CLASS_BIND (klass, GbEditorView, goto_line_button);
   GB_WIDGET_CLASS_BIND (klass, GbEditorView, goto_line_popover);
 
   g_type_ensure (GB_TYPE_EDITOR_FRAME);

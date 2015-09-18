@@ -735,10 +735,23 @@ gb_editor_view_actions_print (GSimpleAction *action,
   handle_print_result (self, GTK_PRINT_OPERATION (operation), result);
 }
 
+static void
+gb_editor_view_actions_goto_line (GSimpleAction *action,
+                                  GVariant      *param,
+                                  gpointer      user_data)
+{
+  GbEditorView *self = user_data;
+
+  g_assert (GB_IS_EDITOR_VIEW (self));
+
+  gtk_widget_activate (GTK_WIDGET (self->goto_line_button));
+}
+
 static GActionEntry GbEditorViewActions[] = {
   { "auto-indent", NULL, NULL, "false", gb_editor_view_actions_auto_indent },
   { "close", gb_editor_view_actions_close },
   { "find-other-file", gb_editor_view_actions_find_other_file },
+  { "goto-line", gb_editor_view_actions_goto_line },
   { "highlight-current-line", NULL, NULL, "false", gb_editor_view_actions_highlight_current_line },
   { "language", NULL, "s", "''", gb_editor_view_actions_language },
   { "preview", gb_editor_view_actions_preview },

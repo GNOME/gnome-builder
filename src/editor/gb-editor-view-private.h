@@ -48,6 +48,7 @@ struct _GbEditorView
   GtkProgressBar      *progress_bar;
   GtkMenuButton       *tweak_button;
   GbEditorTweakWidget *tweak_widget;
+  GtkMenuButton       *goto_line_button;
   GbSimplePopover     *goto_line_popover;
 };
 
