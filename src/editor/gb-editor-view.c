@@ -19,6 +19,7 @@
 #define G_LOG_DOMAIN "gb-editor-view"
 
 #include <glib/gi18n.h>
+#include <glib/gprintf.h>
 
 #include "gb-editor-frame-private.h"
 #include "gb-editor-view-actions.h"
@@ -26,6 +27,7 @@
 #include "gb-editor-view.h"
 #include "gb-editor-view-addin-private.h"
 #include "gb-editor-view-private.h"
+#include "gb-string.h"
 #include "gb-widget.h"
 
 #define SYMBOL_UPDATE_SECS 10
@@ -505,6 +507,76 @@ gb_editor_view_get_preferred_height (GtkWidget *widget,
 }
 
 static void
+gb_editor_view_goto_line_activate (GbEditorView    *self,
+                                   const gchar     *text,
+                                   GbSimplePopover *popover)
+{
+  gint64 value;
+
+  g_assert (GB_IS_EDITOR_VIEW (self));
+  g_assert (GB_IS_SIMPLE_POPOVER (popover));
+
+  if (!ide_str_empty0 (text))
+    {
+      value = g_ascii_strtoll (text, NULL, 10);
+
+      if ((value > 0) && (value < G_MAXINT))
+        {
+          GtkTextIter iter;
+          GtkTextBuffer *buffer = GTK_TEXT_BUFFER (self->document);
+
+          gtk_widget_grab_focus (GTK_WIDGET (self->frame1->source_view));
+          gtk_text_buffer_get_iter_at_line (buffer, &iter, value - 1);
+          gtk_text_buffer_select_range (buffer, &iter, &iter);
+          ide_source_view_scroll_to_iter (self->frame1->source_view,
+                                          &iter, 0.25, TRUE, 1.0, 0.5, TRUE);
+        }
+    }
+}
+
+static gboolean
+gb_editor_view_goto_line_insert_text (GbEditorView    *self,
+                                      guint            position,
+                                      const gchar     *chars,
+                                      guint            n_chars,
+                                      GbSimplePopover *popover)
+{
+  g_assert (GB_IS_EDITOR_VIEW (self));
+  g_assert (GB_IS_SIMPLE_POPOVER (popover));
+  g_assert (chars != NULL);
+
+  for (; *chars; chars = g_utf8_next_char (chars))
+    {
+      if (!g_unichar_isdigit (g_utf8_get_char (chars)))
+        return GDK_EVENT_STOP;
+    }
+
+  return GDK_EVENT_PROPAGATE;
+}
+
+static void
+gb_editor_view_goto_line_changed (GbEditorView    *self,
+                                  GbSimplePopover *popover)
+{
+  const gchar *text;
+
+  g_assert (GB_IS_EDITOR_VIEW (self));
+  g_assert (GB_IS_SIMPLE_POPOVER (popover));
+
+  text = gb_simple_popover_get_text (popover);
+
+  if (gb_str_empty0 (text))
+    {
+      gb_simple_popover_set_ready (popover, FALSE);
+    }
+  else
+    {
+      /* TODO: check if the line exists */
+      gb_simple_popover_set_ready (popover, TRUE);
+    }
+}
+
+static void
 gb_editor_view__extension_added (PeasExtensionSet  *set,
                                  PeasPluginInfo    *info,
                                  GbEditorViewAddin *addin,
@@ -681,9 +753,11 @@ gb_editor_view_class_init (GbEditorViewClass *klass)
   GB_WIDGET_CLASS_BIND (klass, GbEditorView, progress_bar);
   GB_WIDGET_CLASS_BIND (klass, GbEditorView, tweak_button);
   GB_WIDGET_CLASS_BIND (klass, GbEditorView, tweak_widget);
+  GB_WIDGET_CLASS_BIND (klass, GbEditorView, goto_line_popover);
 
   g_type_ensure (GB_TYPE_EDITOR_FRAME);
   g_type_ensure (GB_TYPE_EDITOR_TWEAK_WIDGET);
+  g_type_ensure (GB_TYPE_SIMPLE_POPOVER);
 }
 
 static void
@@ -698,6 +772,24 @@ gb_editor_view_init (GbEditorView *self)
   g_signal_connect_object (self->modified_cancel_button,
                            "clicked",
                            G_CALLBACK (gb_editor_view_hide_reload_bar),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  g_signal_connect_object (self->goto_line_popover,
+                           "activate",
+                           G_CALLBACK (gb_editor_view_goto_line_activate),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  g_signal_connect_object (self->goto_line_popover,
+                           "insert-text",
+                           G_CALLBACK (gb_editor_view_goto_line_insert_text),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  g_signal_connect_object (self->goto_line_popover,
+                           "changed",
+                           G_CALLBACK (gb_editor_view_goto_line_changed),
                            self,
                            G_CONNECT_SWAPPED);
 }

@@ -25,6 +25,7 @@
 #include "gb-editor-document.h"
 #include "gb-editor-frame.h"
 #include "gb-editor-tweak-widget.h"
+#include "gb-simple-popover.h"
 #include "gb-view.h"
 
 G_BEGIN_DECLS
@@ -47,6 +48,7 @@ struct _GbEditorView
   GtkProgressBar      *progress_bar;
   GtkMenuButton       *tweak_button;
   GbEditorTweakWidget *tweak_widget;
+  GbSimplePopover     *goto_line_popover;
 };
 
 G_END_DECLS
