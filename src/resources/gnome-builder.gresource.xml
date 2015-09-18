@@ -43,6 +43,7 @@
     <file alias="ui/gb-search-display-group.ui">../../data/ui/gb-search-display-group.ui</file>
     <file alias="ui/gb-search-display-row.ui">../../data/ui/gb-search-display-row.ui</file>
     <file alias="ui/gb-shortcuts-window.ui">../../data/ui/gb-shortcuts-window.ui</file>
+    <file alias="ui/gb-simple-popover.ui">../../data/ui/gb-simple-popover.ui</file>
     <file alias="ui/gb-view.ui">../../data/ui/gb-view.ui</file>
     <file alias="ui/gb-view-stack.ui">../../data/ui/gb-view-stack.ui</file>
     <file alias="ui/gb-workbench.ui">../../data/ui/gb-workbench.ui</file>

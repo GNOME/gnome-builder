@@ -156,6 +156,8 @@ libgnome_builder_la_SOURCES = \
 	util/gb-plugins.h \
 	util/gb-rgba.c \
 	util/gb-rgba.h \
+	util/gb-simple-popover.c \
+	util/gb-simple-popover.h \
 	util/gb-string.c \
 	util/gb-string.h \
 	util/gb-widget.c \
