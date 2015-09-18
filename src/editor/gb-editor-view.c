@@ -558,22 +558,43 @@ static void
 gb_editor_view_goto_line_changed (GbEditorView    *self,
                                   GbSimplePopover *popover)
 {
+  gchar *message;
   const gchar *text;
+  GtkTextIter begin;
+  GtkTextIter end;
 
   g_assert (GB_IS_EDITOR_VIEW (self));
   g_assert (GB_IS_SIMPLE_POPOVER (popover));
 
   text = gb_simple_popover_get_text (popover);
 
-  if (gb_str_empty0 (text))
+  gtk_text_buffer_get_bounds (GTK_TEXT_BUFFER (self->document), &begin, &end);
+
+  if (!gb_str_empty0 (text))
     {
-      gb_simple_popover_set_ready (popover, FALSE);
+      gint64 value;
+
+      value = g_ascii_strtoll (text, NULL, 10);
+
+      if (value > 0)
+        {
+          if (value <= gtk_text_iter_get_line (&end) + 1)
+            {
+              gb_simple_popover_set_message (popover, NULL);
+              gb_simple_popover_set_ready (popover, TRUE);
+              return;
+            }
+
+        }
     }
-  else
-    {
-      /* TODO: check if the line exists */
-      gb_simple_popover_set_ready (popover, TRUE);
-    }
+
+  /* translators: the user selected a number outside the value range for the document. */
+  message = g_strdup_printf (_("Provide a number between 1 and %u"),
+                             gtk_text_iter_get_line (&end) + 1);
+  gb_simple_popover_set_message (popover, message);
+  gb_simple_popover_set_ready (popover, FALSE);
+
+  g_free (message);
 }
 
 static void
