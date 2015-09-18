@@ -10,6 +10,7 @@
       <object class="GtkSearchEntry" id="entry">
         <property name="visible">true</property>
         <property name="hexpand">true</property>
+        <property name="max-width-chars">40</property>
       </object>
     </child>
     <child>

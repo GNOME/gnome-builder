@@ -12,7 +12,6 @@
             <property name="margin-end">6</property>
             <property name="margin-start">6</property>
             <property name="visible">true</property>
-            <property name="width_request">540</property>
           </object>
         </child>
         <child>
