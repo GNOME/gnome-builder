@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2015-09-16 22:22+0000\n"
-"PO-Revision-Date: 2015-09-17 20:35+0300\n"
+"POT-Creation-Date: 2015-09-18 23:47+0000\n"
+"PO-Revision-Date: 2015-09-19 18:08+0300\n"
 "Last-Translator: Aurimas Černius <aurisc4@gmail.com>\n"
 "Language-Team: Lietuvių <gnome-lt@lists.akl.lt>\n"
 "Language: lt\n"
@@ -302,8 +302,13 @@ msgstr ""
 "įkelti failą?"
 
 #: ../data/ui/gb-editor-view.ui.h:4
-msgid "Search Symbols"
-msgstr "Ieškoti simbolių"
+#| msgid "Go to line"
+msgid "Go to Line"
+msgstr "Eiti į eilutę"
+
+#: ../data/ui/gb-editor-view.ui.h:5
+msgid "Go"
+msgstr "Eiti"
 
 #: ../data/ui/gb-greeter-window.ui.h:1
 msgid "Select a Project"
@@ -512,7 +517,6 @@ msgid "Auto Completion"
 msgstr "Automatinis užbaigimas"
 
 #: ../data/ui/gb-preferences-page-insight.ui.h:5
-#| msgid "Snippet Completion"
 msgid "Suggest Snippet Completion"
 msgstr "Siūlyti iškarpos užbaigimą"
 
@@ -1001,7 +1005,7 @@ msgstr "Nepavyko inicializuotų numatytųjų nustatymų."
 msgid "File contained invalid UTF-8"
 msgstr "Faile buvo netinkamų UTF-8 simbolių"
 
-#: ../libide/ide-buffer.c:1990
+#: ../libide/ide-buffer.c:1991
 msgid "The current language lacks a symbol resolver."
 msgstr "Dabartinei kalbai trūksta simbolių gavėjo."
 
@@ -1128,29 +1132,29 @@ msgstr "Nepavyko atverti katalogo: %s"
 msgid "Failed to load file: %s: %s"
 msgstr "Nepavyko įkelti failo: %s: %s"
 
-#: ../libide/ide-source-view.c:4561
+#: ../libide/ide-source-view.c:4563
 #, c-format
 msgid "Insert \"%s\""
 msgstr "Įterpti „%s“"
 
-#: ../libide/ide-source-view.c:4563
+#: ../libide/ide-source-view.c:4565
 #, c-format
 msgid "Replace \"%s\" with \"%s\""
 msgstr "Pakeisti „%s“ į „%s“"
 
-#: ../libide/ide-source-view.c:4681
+#: ../libide/ide-source-view.c:4683
 msgid "Apply Fix-It"
 msgstr "Pritaikyti pataisymą"
 
-#: ../libide/ide-source-view.c:4724
+#: ../libide/ide-source-view.c:4726
 msgid "Join Lines"
 msgstr "Sujungti eilutes"
 
-#: ../libide/ide-source-view.c:4735
+#: ../libide/ide-source-view.c:4737
 msgid "Sort Lines"
 msgstr "Rikiuoti eilutes"
 
-#: ../libide/ide-source-view.c:4754
+#: ../libide/ide-source-view.c:4756
 msgid "Go to Definition"
 msgstr "Peršokti prie apibrėžimą"
 
@@ -1456,12 +1460,12 @@ msgstr "(Spauskite ant elementų jiems pažymėti)"
 msgid "Line %u, Column %u"
 msgstr "Eilutė %u, stulpelis %u"
 
-#: ../src/editor/gb-editor-frame.c:235
+#: ../src/editor/gb-editor-frame.c:241
 #, c-format
 msgid "%u of %u"
 msgstr "%u iš %u"
 
-#: ../src/editor/gb-editor-frame.c:657
+#: ../src/editor/gb-editor-frame.c:663
 msgid "Re_veal in Project Tree"
 msgstr "_Parodyti projekto medyje"
 
@@ -1478,9 +1482,15 @@ msgstr "Įrašyti dokumentą"
 msgid "Save Document As"
 msgstr "Įrašyti dokumentą taip"
 
-#: ../src/editor/gb-editor-view.c:111
+#: ../src/editor/gb-editor-view.c:113
 msgid "Plain Text"
 msgstr "Grynasis tekstas"
+
+#. translators: the user selected a number outside the value range for the document.
+#: ../src/editor/gb-editor-view.c:592
+#, c-format
+msgid "Provide a number between 1 and %u"
+msgstr "Nurodykite numerį nuo 1 iki %u"
 
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-editor.c:95
@@ -1549,13 +1559,11 @@ msgstr "ctags žymos auto užbaigimas"
 
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-insight.c:76
-#| msgid "experimental clang autocompletion auto complete"
 msgid "jedi python autocompletion auto complete"
 msgstr "jedi python auto užbaigimas užbaigti"
 
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-insight.c:81
-#| msgid "experimental clang autocompletion auto complete"
 msgid "snippets autocompletion auto complete"
 msgstr "iškarpos iškarpų auto užbaigimas užbaigti"
 
@@ -1846,6 +1854,9 @@ msgstr "%s rezultatai\n"
 #: ../tools/ide-search.c:120
 msgid "PROJECT_FILE [SEARCH TERMS...]"
 msgstr "PROJEKTO_FAILAS [PAIEŠKOS TERMINAI...]"
+
+#~ msgid "Search Symbols"
+#~ msgstr "Ieškoti simbolių"
 
 #~ msgid "Device"
 #~ msgstr "Įrenginys"
