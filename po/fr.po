@@ -71,10 +71,8 @@ msgid "Generate Support Log"
 msgstr "Générer le journal de support"
 
 #: ../data/gtk/menus.ui.h:5
-#, fuzzy
-#| msgid "Keyboard Movement"
 msgid "Keyboard _Shortcuts"
-msgstr "Déplacements au clavier"
+msgstr "_Raccourcis clavier"
 
 #: ../data/gtk/menus.ui.h:6
 msgid "_About"
@@ -521,10 +519,8 @@ msgid "Auto Completion"
 msgstr "Complétion automatique"
 
 #: ../data/ui/gb-preferences-page-insight.ui.h:5
-#, fuzzy
-#| msgid "Snippet Completion"
 msgid "Suggest Snippet Completion"
-msgstr "Complétion d'extraits"
+msgstr "Suggérer la complétion d'extraits"
 
 #: ../data/ui/gb-preferences-page-insight.ui.h:6
 msgid "Allow snippets to be inserted into the document."
@@ -622,7 +618,7 @@ msgstr "Langages de programmation"
 #: ../data/ui/gb-preferences-page-plugins.ui.h:1
 #: ../data/ui/gb-preferences-window.ui.h:9
 msgid "Plugins"
-msgstr ""
+msgstr "Greffons"
 
 #: ../data/ui/gb-preferences-page-theme.ui.h:1
 #: ../data/ui/gb-preferences-window.ui.h:7
@@ -699,37 +695,35 @@ msgstr "Panneaux"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:9
 msgid "Toggle left panel"
-msgstr ""
+msgstr "Basculer le panneau de gauche"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:10
 msgid "Toggle right panel"
-msgstr ""
+msgstr "Basculer le panneau de droite"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:11
 msgid "Toggle bottom panel"
-msgstr ""
+msgstr "Basculer le panneau du bas"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:12
 msgid "Touchpad gestures"
-msgstr ""
+msgstr "Gestes du pavé tactile"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:13
-#, fuzzy
-#| msgid "The title of the document."
 msgid "Switch to the next document"
-msgstr "Le titre du document."
+msgstr "Passer au document suivant"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:14
 msgid "Two finger swipe right"
-msgstr ""
+msgstr "Balayage à deux doigts vers la droite"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:15
 msgid "Switch to the previous document"
-msgstr ""
+msgstr "Passer au document précédent"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:16
 msgid "Two finger swipe left"
-msgstr ""
+msgstr "Balayage à deux doigts vers la gauche"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:17
 #: ../src/project-tree/gb-project-tree-builder.c:79
@@ -749,18 +743,16 @@ msgid "Save the document"
 msgstr "Enregistrer le document"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:21
-#, fuzzy
-#| msgid "The title of the document."
 msgid "Close the document"
-msgstr "Le titre du document."
+msgstr "Fermer le document"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:22
 msgid "Show list of open files"
-msgstr ""
+msgstr "Afficher la liste des fichiers ouverts"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:23
 msgid "Switch to source or header"
-msgstr ""
+msgstr "Passer au source ou à l'en-tête"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:24
 msgid "Find and replace"
@@ -779,18 +771,16 @@ msgid "Find the previous match"
 msgstr ""
 
 #: ../data/ui/gb-shortcuts-window.ui.h:28
-#, fuzzy
-#| msgid "Search highlight mode…"
 msgid "Clear highlight"
-msgstr "Mode de surlignage de recherche…"
+msgstr "Effacer le surlignement"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:29
 msgid "Go to line"
-msgstr ""
+msgstr "Aller à la ligne"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:30
 msgid "Copy and Paste"
-msgstr ""
+msgstr "Copier et coller"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:31
 msgid "Copy selected text to clipboard"
@@ -842,7 +832,7 @@ msgstr ""
 
 #: ../data/ui/gb-shortcuts-window.ui.h:43
 msgid "Navigation"
-msgstr ""
+msgstr "Navigation"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:44
 msgid "Move to next error in file"
@@ -881,10 +871,8 @@ msgid "Move viewport to beginning of file"
 msgstr ""
 
 #: ../data/ui/gb-shortcuts-window.ui.h:53
-#, fuzzy
-#| msgid "Insert Matching Brace"
 msgid "Move to matching bracket"
-msgstr "Insérer les accolades correspondantes"
+msgstr "Aller à l'accolade correspondante"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:54
 msgid "Selections"
@@ -896,7 +884,7 @@ msgstr "Tout sélectionner"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:56
 msgid "Unselect all"
-msgstr ""
+msgstr "Tout désélectionner"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:57
 msgid "Terminal Shortcuts"
@@ -907,48 +895,34 @@ msgid "Split"
 msgstr "Diviser"
 
 #: ../data/ui/gb-view.ui.h:2
-#, fuzzy
-#| msgid "Split"
 msgid "Split Left"
-msgstr "Diviser"
+msgstr "Diviser à gauche"
 
 #: ../data/ui/gb-view.ui.h:3
-#, fuzzy
-#| msgid "Split"
 msgid "Split Right"
-msgstr "Diviser"
+msgstr "Diviser à droite"
 
 #: ../data/ui/gb-view.ui.h:4
-#, fuzzy
-#| msgid "Split"
 msgid "Split Down"
-msgstr "Diviser"
+msgstr "Diviser en bas"
 
 #: ../data/ui/gb-view.ui.h:5
 msgid "Move"
 msgstr "Déplacer"
 
 #: ../data/ui/gb-view.ui.h:6
-#, fuzzy
-#| msgid "Move"
 msgid "Move Left"
-msgstr "Déplacer"
+msgstr "Déplacer à gauche"
 
 #: ../data/ui/gb-view.ui.h:7
-#, fuzzy
-#| msgid "height"
 msgid "Move Right"
-msgstr "hauteur"
+msgstr "Déplacer à droite"
 
 #: ../data/ui/gb-view.ui.h:8
-#, fuzzy
-#| msgid "Save"
 msgid "_Save"
-msgstr "Enregistrer"
+msgstr "_Enregistrer"
 
 #: ../data/ui/gb-view.ui.h:9
-#, fuzzy
-#| msgid "Save As"
 msgid "_Save As"
 msgstr "Enregistrer _sous"
 
@@ -957,10 +931,8 @@ msgid "Print"
 msgstr "Imprimer"
 
 #: ../data/ui/gb-view.ui.h:11
-#, fuzzy
-#| msgid "Close"
 msgid "_Close"
-msgstr "Fermer"
+msgstr "_Fermer"
 
 #: ../data/ui/gb-workbench.ui.h:2
 msgid "Project"
@@ -1180,20 +1152,14 @@ msgid "Apply Fix-It"
 msgstr ""
 
 #: ../libide/ide-source-view.c:4728
-#, fuzzy
-#| msgid "Show Grid Lines"
 msgid "Join Lines"
-msgstr "Montrer la grille"
+msgstr "Grouper les lines"
 
 #: ../libide/ide-source-view.c:4739
-#, fuzzy
-#| msgid "Show Grid Lines"
 msgid "Sort Lines"
-msgstr "Montrer la grille"
+msgstr "Trier les lignes"
 
 #: ../libide/ide-source-view.c:4758
-#, fuzzy
-#| msgid "Goto Definition"
 msgid "Go to Definition"
 msgstr "Aller à la définition"
 
@@ -1378,10 +1344,8 @@ msgid "No language specified"
 msgstr ""
 
 #: ../plugins/html-preview/html_preview_plugin/__init__.py:88
-#, fuzzy
-#| msgid "Preview"
 msgid "Preview as HTML"
-msgstr "Aperçu"
+msgstr "Aperçu en tant que HTML"
 
 #: ../plugins/mingw/ide-mingw-device-provider.c:95
 msgid "MinGW (64-bit)"
@@ -1397,7 +1361,7 @@ msgstr ""
 
 #: ../plugins/symbol-tree/symbol-tree.c:211
 msgid "Symbol Tree"
-msgstr ""
+msgstr "Arbre des symboles"
 
 #: ../plugins/sysmon/gb-sysmon-addin.c:64
 msgid "System Monitor"
@@ -1406,7 +1370,7 @@ msgstr "Moniteur système"
 #: ../plugins/terminal/gb-terminal-document.c:64
 #, c-format
 msgid "Terminal (%s)"
-msgstr ""
+msgstr "Terminal (%s)"
 
 #: ../plugins/terminal/gb-terminal-view-actions.c:300
 msgid "Save Terminal Content As"
@@ -1596,15 +1560,13 @@ msgstr ""
 
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-insight.c:76
-#, fuzzy
-#| msgid "word words auto completion suggest found document"
 msgid "jedi python autocompletion auto complete"
-msgstr "mots suggestion auto-complétion trouvés document"
+msgstr "jedi python auto-complétion"
 
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-insight.c:81
 msgid "snippets autocompletion auto complete"
-msgstr ""
+msgstr "extraits auto-complétion"
 
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-insight.c:86
@@ -1683,10 +1645,8 @@ msgid "%s more"
 msgstr ""
 
 #: ../src/shortcuts/gb-shortcuts-dialog.c:920
-#, fuzzy
-#| msgid "Search Context"
 msgid "Search Shortcuts"
-msgstr "Contexte de recherche."
+msgstr "Raccourcis de recherche"
 
 #: ../src/shortcuts/gb-shortcuts-dialog.c:947
 msgid "Search Results"
