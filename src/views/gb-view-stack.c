@@ -157,16 +157,11 @@ gb_view_stack_add (GtkContainer *container,
 
   if (GB_IS_VIEW (child))
     {
-      GtkWidget *controls;
-
       gtk_widget_set_sensitive (GTK_WIDGET (self->close_button), TRUE);
       gtk_widget_set_sensitive (GTK_WIDGET (self->document_button), TRUE);
       gtk_widget_set_sensitive (GTK_WIDGET (self->views_button), TRUE);
 
       self->focus_history = g_list_prepend (self->focus_history, child);
-      controls = gb_view_get_controls (GB_VIEW (child));
-      if (controls)
-        gtk_container_add (GTK_CONTAINER (self->controls_stack), controls);
       gtk_container_add (GTK_CONTAINER (self->stack), child);
       gb_view_set_back_forward_list (GB_VIEW (child), self->back_forward_list);
       gb_view_stack_add_list_row (self, GB_VIEW (child));
@@ -197,7 +192,7 @@ gb_view_stack_remove (GbViewStack *self,
   self->focus_history = g_list_remove (self->focus_history, view);
   controls = gb_view_get_controls (view);
   if (controls)
-    gtk_container_remove (GTK_CONTAINER (self->controls_stack), controls);
+    gtk_container_remove (GTK_CONTAINER (self->controls), controls);
   gtk_container_remove (GTK_CONTAINER (self->stack), GTK_WIDGET (view));
 
   if (focus_after_close != NULL)
@@ -580,7 +575,7 @@ gb_view_stack_class_init (GbViewStackClass *klass)
 
   GB_WIDGET_CLASS_TEMPLATE (klass, "gb-view-stack.ui");
   GB_WIDGET_CLASS_BIND (klass, GbViewStack, close_button);
-  GB_WIDGET_CLASS_BIND (klass, GbViewStack, controls_stack);
+  GB_WIDGET_CLASS_BIND (klass, GbViewStack, controls);
   GB_WIDGET_CLASS_BIND (klass, GbViewStack, document_button);
   GB_WIDGET_CLASS_BIND (klass, GbViewStack, go_backward);
   GB_WIDGET_CLASS_BIND (klass, GbViewStack, go_forward);
@@ -671,7 +666,7 @@ gb_view_stack_set_active_view (GbViewStack *self,
           ide_clear_weak_pointer (&self->modified_binding);
           gtk_label_set_label (self->title_label, NULL);
           ide_clear_weak_pointer (&self->active_view);
-          gtk_widget_hide (GTK_WIDGET (self->controls_stack));
+          gtk_widget_hide (GTK_WIDGET (self->controls));
         }
 
       if (active_view)
@@ -705,10 +700,23 @@ gb_view_stack_set_active_view (GbViewStack *self,
           ide_set_weak_pointer (&self->modified_binding, binding);
 
           controls = gb_view_get_controls (GB_VIEW (active_view));
-          if (controls)
+
+          if (controls != NULL)
             {
-              gtk_stack_set_visible_child (self->controls_stack, controls);
-              gtk_widget_show (GTK_WIDGET (self->controls_stack));
+              GList *children;
+              GList *iter;
+
+              children = gtk_container_get_children (GTK_CONTAINER (self->controls));
+              for (iter = children; iter; iter = iter->next)
+                gtk_container_remove (GTK_CONTAINER (self->controls), iter->data);
+              g_list_free (children);
+
+              gtk_container_add (GTK_CONTAINER (self->controls), controls);
+              gtk_widget_show (GTK_WIDGET (self->controls));
+            }
+          else
+            {
+              gtk_widget_hide (GTK_WIDGET (self->controls));
             }
 
           group = gtk_widget_get_action_group (active_view, "view");

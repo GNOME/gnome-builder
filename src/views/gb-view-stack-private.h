@@ -39,7 +39,7 @@ struct _GbViewStack
   GBinding           *title_binding;
 
   /* Template references */
-  GtkStack           *controls_stack;
+  GtkBox             *controls;
   GtkButton          *close_button;
   GtkMenuButton      *document_button;
   GtkButton          *go_backward;
