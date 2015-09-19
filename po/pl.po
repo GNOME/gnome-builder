@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-17 09:17+0200\n"
-"PO-Revision-Date: 2015-09-17 09:18+0200\n"
+"POT-Creation-Date: 2015-09-19 09:18+0200\n"
+"PO-Revision-Date: 2015-09-19 09:19+0200\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <gnomepl@aviary.pl>\n"
 "Language: pl\n"
@@ -307,8 +307,12 @@ msgid ""
 msgstr "Wykryto zmianę pliku w innym programie. Wczytać go ponownie?"
 
 #: ../data/ui/gb-editor-view.ui.h:4
-msgid "Search Symbols"
-msgstr "Wyszukiwanie symboli"
+msgid "Go to Line"
+msgstr "Przejście do wiersza"
+
+#: ../data/ui/gb-editor-view.ui.h:5
+msgid "Go"
+msgstr "Przejdź"
 
 #: ../data/ui/gb-greeter-window.ui.h:1
 msgid "Select a Project"
@@ -1012,7 +1016,7 @@ msgstr "Zainicjowanie wartości domyślnych się nie powiodło."
 msgid "File contained invalid UTF-8"
 msgstr "Plik zawiera nieprawidłowe znaki UTF-8"
 
-#: ../libide/ide-buffer.c:1990
+#: ../libide/ide-buffer.c:1991
 msgid "The current language lacks a symbol resolver."
 msgstr "Obecny język nie posiada mechanizmu rozwiązywania symboli."
 
@@ -1140,29 +1144,29 @@ msgstr "Otwarcie katalogu się nie powiodło: %s"
 msgid "Failed to load file: %s: %s"
 msgstr "Wczytanie pliku się nie powiodło: %s: %s"
 
-#: ../libide/ide-source-view.c:4561
+#: ../libide/ide-source-view.c:4563
 #, c-format
 msgid "Insert \"%s\""
 msgstr "Wstaw „%s”"
 
-#: ../libide/ide-source-view.c:4563
+#: ../libide/ide-source-view.c:4565
 #, c-format
 msgid "Replace \"%s\" with \"%s\""
 msgstr "Zmień „%s” na „%s”"
 
-#: ../libide/ide-source-view.c:4681
+#: ../libide/ide-source-view.c:4683
 msgid "Apply Fix-It"
 msgstr "Zastosuj „Fix-It”"
 
-#: ../libide/ide-source-view.c:4724
+#: ../libide/ide-source-view.c:4726
 msgid "Join Lines"
 msgstr "Połącz wiersze"
 
-#: ../libide/ide-source-view.c:4735
+#: ../libide/ide-source-view.c:4737
 msgid "Sort Lines"
 msgstr "Posortuj wiersze"
 
-#: ../libide/ide-source-view.c:4754
+#: ../libide/ide-source-view.c:4756
 msgid "Go to Definition"
 msgstr "Przejdź do definicji"
 
@@ -1473,7 +1477,7 @@ msgstr "Wiersz %u, kolumna %u"
 msgid "%u of %u"
 msgstr "%u z %u"
 
-#: ../src/editor/gb-editor-frame.c:663
+#: ../src/editor/gb-editor-frame.c:661
 msgid "Re_veal in Project Tree"
 msgstr "Odkry_wanie w drzewie projektu"
 
@@ -1490,9 +1494,15 @@ msgstr "Zapis dokumentu"
 msgid "Save Document As"
 msgstr "Zapis dokumentu jako"
 
-#: ../src/editor/gb-editor-view.c:111
+#: ../src/editor/gb-editor-view.c:113
 msgid "Plain Text"
 msgstr "Zwykły tekst"
+
+#. translators: the user selected a number outside the value range for the document.
+#: ../src/editor/gb-editor-view.c:592
+#, c-format
+msgid "Provide a number between 1 and %u"
+msgstr "Należy podać numer między 1 a %u"
 
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-editor.c:95
