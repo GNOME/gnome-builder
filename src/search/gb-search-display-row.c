@@ -64,7 +64,18 @@ gb_search_display_row_connect (GbSearchDisplayRow *row,
 
   fraction = ide_search_result_get_score (result);
   gtk_progress_bar_set_fraction (row->progress, fraction);
+
+#if 0
+  /*
+   * XXX:
+   *
+   * We are disabling this for 3.18 because it isn't really that useful.
+   * I think we should rethink the value of "score" in the future, since they
+   * are not that useful except within the group they are in. And we already
+   * have that visually because they are sorted.
+   */
   gtk_widget_set_visible (GTK_WIDGET (row->progress), (fraction > 0.0));
+#endif
 }
 
 IdeSearchResult *

@@ -35,7 +35,7 @@
         <child>
           <object class="GtkProgressBar" id="progress">
             <property name="inverted">True</property>
-            <property name="visible">True</property>
+            <property name="visible">False</property>
             <property name="valign">center</property>
             <property name="margin_end">6</property>
             <style>
