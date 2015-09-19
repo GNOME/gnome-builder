@@ -441,8 +441,6 @@ gb_editor_frame__drag_data_received (GbEditorFrame    *self,
       break;
 
     default:
-      GTK_WIDGET_CLASS (gb_editor_frame_parent_class)->
-        drag_data_received (widget, context, x, y, selection_data, info, timestamp);
       break;
     }
 }
