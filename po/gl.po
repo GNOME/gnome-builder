@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-14 16:52+0200\n"
-"PO-Revision-Date: 2015-09-14 16:54+0200\n"
+"POT-Creation-Date: 2015-09-20 00:18+0200\n"
+"PO-Revision-Date: 2015-09-20 00:19+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: gnome-l10n-gl@gnome.org\n"
 "Language: gl\n"
@@ -196,7 +196,8 @@ msgstr "Construtor"
 msgid "The default color scheme for Builder"
 msgstr "O esquema de cor predefinido para Builder"
 
-#: ../data/ui/gb-editor-frame.ui.h:1
+#. OVR indicates we are in overwite mode
+#: ../data/ui/gb-editor-frame.ui.h:2
 msgid "OVR"
 msgstr "OVR"
 
@@ -300,8 +301,12 @@ msgstr ""
 "recargar o ficheiro?"
 
 #: ../data/ui/gb-editor-view.ui.h:4
-msgid "Search Symbols"
-msgstr "Buscar símbolos"
+msgid "Go to Line"
+msgstr "Ir á liña"
+
+#: ../data/ui/gb-editor-view.ui.h:5
+msgid "Go"
+msgstr "Ir"
 
 #: ../data/ui/gb-greeter-window.ui.h:1
 msgid "Select a Project"
@@ -1009,7 +1014,7 @@ msgstr "Produciuse un fallo ao iniciar os parámetros predeterminados."
 msgid "File contained invalid UTF-8"
 msgstr "O ficheiro contén UTF-8 non é válido"
 
-#: ../libide/ide-buffer.c:1990
+#: ../libide/ide-buffer.c:1991
 msgid "The current language lacks a symbol resolver."
 msgstr "Ao linguaxe actual fáltalle un resolutor de símbolos."
 
@@ -1136,29 +1141,29 @@ msgstr "Produciuse un fallo ao abrir o cartafol: %s"
 msgid "Failed to load file: %s: %s"
 msgstr "Produciuse un fallo ao cargar o ficheiro: %s: %s"
 
-#: ../libide/ide-source-view.c:4565
+#: ../libide/ide-source-view.c:4563
 #, c-format
 msgid "Insert \"%s\""
 msgstr "Inserir «%s»"
 
-#: ../libide/ide-source-view.c:4567
+#: ../libide/ide-source-view.c:4565
 #, c-format
 msgid "Replace \"%s\" with \"%s\""
 msgstr "Substituír «%s» con «%s»"
 
-#: ../libide/ide-source-view.c:4685
+#: ../libide/ide-source-view.c:4683
 msgid "Apply Fix-It"
 msgstr "Aplicar corrección"
 
-#: ../libide/ide-source-view.c:4728
+#: ../libide/ide-source-view.c:4726
 msgid "Join Lines"
 msgstr "Unir liñas"
 
-#: ../libide/ide-source-view.c:4739
+#: ../libide/ide-source-view.c:4737
 msgid "Sort Lines"
 msgstr "Ordenar liñas"
 
-#: ../libide/ide-source-view.c:4758
+#: ../libide/ide-source-view.c:4756
 msgid "Go to Definition"
 msgstr "Ir á definición"
 
@@ -1206,7 +1211,7 @@ msgstr "augogen.sh non é un executábel."
 msgid "autogen.sh failed to create configure (%s)"
 msgstr "autogen.sh fallou ao crear o configure (%s)"
 
-#: ../plugins/autotools/ide-makecache.c:998
+#: ../plugins/autotools/ide-makecache.c:999
 msgid "Invalid makefile provided, ignoring."
 msgstr "O ficheiro makefile fornecido non é válido, ignorándoo."
 
@@ -1327,8 +1332,8 @@ msgid "Documentation"
 msgstr "Documentación"
 
 #: ../plugins/device-manager/gb-device-manager-panel.c:75
-msgid "Device"
-msgstr "Dispositivo"
+msgid "Device Manager"
+msgstr "Xestor de dispositivos"
 
 #: ../plugins/file-search/gb-file-search-provider.c:45
 msgid "Switch To"
@@ -1457,17 +1462,17 @@ msgstr "Directorio|Proxectos"
 msgid "(Click on items to select them)"
 msgstr "(Prema nun elemento para seleccionalo)"
 
-#: ../src/editor/gb-editor-frame.c:150
-#, c-format
-msgid "%u of %u"
-msgstr "%u de %u"
-
-#: ../src/editor/gb-editor-frame.c:180
+#: ../src/editor/gb-editor-frame.c:73
 #, c-format
 msgid "Line %u, Column %u"
 msgstr "Liña %u, Columna %u"
 
-#: ../src/editor/gb-editor-frame.c:595
+#: ../src/editor/gb-editor-frame.c:241
+#, c-format
+msgid "%u of %u"
+msgstr "%u de %u"
+
+#: ../src/editor/gb-editor-frame.c:661
 msgid "Re_veal in Project Tree"
 msgstr "_Mostrar no árbore de proxectos"
 
@@ -1484,9 +1489,15 @@ msgstr "Gardar documento"
 msgid "Save Document As"
 msgstr "Gardar documento como"
 
-#: ../src/editor/gb-editor-view.c:111
+#: ../src/editor/gb-editor-view.c:113
 msgid "Plain Text"
 msgstr "Texto plano"
+
+#. translators: the user selected a number outside the value range for the document.
+#: ../src/editor/gb-editor-view.c:592
+#, c-format
+msgid "Provide a number between 1 and %u"
+msgstr "Forneza un número entre 1 e %u"
 
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-editor.c:95
@@ -1639,11 +1650,11 @@ msgstr "Non é posíbel atopar o fornecedor"
 msgid "%s more"
 msgstr "%s máis"
 
-#: ../src/shortcuts/gb-shortcuts-dialog.c:920
+#: ../src/shortcuts/gb-shortcuts-dialog.c:937
 msgid "Search Shortcuts"
 msgstr "Atallos da busca"
 
-#: ../src/shortcuts/gb-shortcuts-dialog.c:947
+#: ../src/shortcuts/gb-shortcuts-dialog.c:964
 msgid "Search Results"
 msgstr "Resultados da busca"
 
@@ -1853,6 +1864,12 @@ msgstr "%s resultados\n"
 #: ../tools/ide-search.c:120
 msgid "PROJECT_FILE [SEARCH TERMS...]"
 msgstr "FICHEIRO_DE_PROXECTO [TERMOS DE BUSCA...]"
+
+#~ msgid "Search Symbols"
+#~ msgstr "Buscar símbolos"
+
+#~ msgid "Device"
+#~ msgstr "Dispositivo"
 
 #~ msgid "HTML Preview"
 #~ msgstr "Previsualización HTML"
@@ -2092,9 +2109,6 @@ msgstr "FICHEIRO_DE_PROXECTO [TERMOS DE BUSCA...]"
 
 #~ msgid "The build system used by the context."
 #~ msgstr "O sistema de construción usado polo contexto."
-
-#~ msgid "Device Manager"
-#~ msgstr "Xestor de dispositivos"
 
 #~ msgid "The device manager for the context."
 #~ msgstr "O xestor de dispositivos para o contexto."
