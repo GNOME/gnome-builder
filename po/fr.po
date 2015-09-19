@@ -201,7 +201,7 @@ msgstr "Le thème de couleurs par défaut de Builder"
 
 #: ../data/ui/gb-editor-frame.ui.h:1
 msgid "OVR"
-msgstr ""
+msgstr "ÉCR"
 
 #: ../data/ui/gb-editor-settings-widget.ui.h:1
 msgid "Display right _margin at column:"
