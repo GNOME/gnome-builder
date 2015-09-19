@@ -14,8 +14,7 @@
             <property name="visible">true</property>
             <child>
               <object class="GtkLabel" id="overwrite_label">
-                <!-- translators: OVR indicates we are in overwite mode -->
-                <property name="label" translatable="yes">OVR</property>
+                <property name="label" translatable="yes" comments="OVR indicates we are in overwite mode">OVR</property>
                 <property name="margin-start">12</property>
                 <property name="visible">false</property>
               </object>
