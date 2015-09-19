@@ -461,6 +461,21 @@ gb_view_stack_constructed (GObject *object)
                            G_CONNECT_SWAPPED);
 
   gb_view_stack_actions_init (self);
+
+  /*
+   * FIXME:
+   *
+   * https://bugzilla.gnome.org/show_bug.cgi?id=747060
+   *
+   * Setting sensitive in the template is getting changed out from under us.
+   * Likely due to the popover item being set (conflation of having a popover
+   * vs wanting sensitivity). So we will just override it here.
+   *
+   * Last tested Gtk+ was 3.17.
+   */
+  gtk_widget_set_sensitive (GTK_WIDGET (self->close_button), FALSE);
+  gtk_widget_set_sensitive (GTK_WIDGET (self->views_button), FALSE);
+  gtk_widget_set_sensitive (GTK_WIDGET (self->document_button), FALSE);
 }
 
 static void
@@ -606,21 +621,6 @@ gb_view_stack_init (GbViewStack *self)
                            G_CALLBACK (gb_view_stack_swipe),
                            self,
                            G_CONNECT_SWAPPED);
-
-  /*
-   * FIXME:
-   *
-   * https://bugzilla.gnome.org/show_bug.cgi?id=747060
-   *
-   * Setting sensitive in the template is getting changed out from under us.
-   * Likely due to the popover item being set (conflation of having a popover
-   * vs wanting sensitivity). So we will just override it here.
-   *
-   * Last tested Gtk+ was 3.16.0.
-   */
-  g_object_set (self->document_button,
-                "sensitive", FALSE,
-                NULL);
 
   gb_widget_set_context_handler (self, gb_view_stack_context_handler);
 }
