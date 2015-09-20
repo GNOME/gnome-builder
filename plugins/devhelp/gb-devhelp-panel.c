@@ -25,6 +25,7 @@
 #include "gb-devhelp-resources.h"
 #include "gb-devhelp-view.h"
 #include "gb-document.h"
+#include "gb-editor-view.h"
 #include "gb-view.h"
 #include "gb-view-grid.h"
 #include "gb-workbench-addin.h"
@@ -38,6 +39,9 @@ struct _GbDevhelpPanel
   GbWorkbench       *workbench;
   DhBookManager     *book_manager;
   GbDevhelpDocument *document;
+
+  GbView            *current_view;
+  gulong             current_view_handler;
 
   GtkWidget         *sidebar;
 };
@@ -75,6 +79,50 @@ focus_devhelp_search_cb (GSimpleAction  *action,
                            NULL);
 
   dh_sidebar_set_search_focus (DH_SIDEBAR (self->sidebar));
+}
+
+static void
+request_documentation_cb (GbDevhelpPanel *self,
+                          const gchar    *keywords,
+                          GbEditorView   *view)
+{
+  g_assert (GB_IS_EDITOR_VIEW (view));
+  g_assert (GB_IS_DEVHELP_PANEL (self));
+
+  if (ide_str_empty0 (keywords))
+    return;
+
+  dh_sidebar_set_search_string (DH_SIDEBAR (self->sidebar), keywords);
+  dh_sidebar_set_search_focus (DH_SIDEBAR (self->sidebar));
+}
+
+static void
+notify_active_view_cb (GbDevhelpPanel *self,
+                       GParamSpec     *pspec,
+                       GbWorkbench    *workbench)
+{
+  GtkWidget *view;
+
+  g_assert (GB_IS_DEVHELP_PANEL (self));
+  g_assert (GB_IS_WORKBENCH (workbench));
+
+  if (self->current_view)
+    {
+      g_signal_handler_disconnect (self->current_view, self->current_view_handler);
+      self->current_view_handler = 0;
+      ide_clear_weak_pointer (&self->current_view);
+    }
+
+  view = gb_workbench_get_active_view (workbench);
+  if (!GB_IS_EDITOR_VIEW (view))
+    return;
+
+  ide_set_weak_pointer (&self->current_view, (GbView *)view);
+  self->current_view_handler = g_signal_connect_object (view,
+                                                        "request-documentation",
+                                                        G_CALLBACK (request_documentation_cb),
+                                                        self,
+                                                        G_CONNECT_SWAPPED);
 }
 
 static void
@@ -117,6 +165,12 @@ gb_devhelp_panel_load (GbWorkbenchAddin *addin)
   gtk_widget_show (GTK_WIDGET (self));
 
   gtk_stack_set_visible_child (GTK_STACK (parent), GTK_WIDGET (self));
+
+  g_signal_connect_object (self->workbench,
+                           "notify::active-view",
+                           G_CALLBACK (notify_active_view_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
 }
 
 static void
@@ -190,6 +244,7 @@ gb_devhelp_panel_finalize (GObject *object)
 
   g_clear_object (&self->book_manager);
   g_clear_object (&self->document);
+  ide_clear_weak_pointer (&self->current_view);
 
   G_OBJECT_CLASS (gb_devhelp_panel_parent_class)->finalize (object);
 }

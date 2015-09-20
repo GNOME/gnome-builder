@@ -31,6 +31,7 @@ libdevhelp_plugin_la_CFLAGS = \
 	$(DEVHELP_CFLAGS) \
 	-I$(top_srcdir)/src \
 	-I$(top_srcdir)/src/documents \
+	-I$(top_srcdir)/src/editor \
 	-I$(top_srcdir)/src/search \
 	-I$(top_srcdir)/src/views \
 	-I$(top_srcdir)/src/util \

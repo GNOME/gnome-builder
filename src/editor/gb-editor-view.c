@@ -40,7 +40,13 @@ enum {
   LAST_PROP
 };
 
+enum {
+  REQUEST_DOCUMENTATION,
+  LAST_SIGNAL
+};
+
 static GParamSpec *gParamSpecs [LAST_PROP];
+static guint gSignals [LAST_SIGNAL];
 
 static GbDocument *
 gb_editor_view_get_document (GbView *view)
@@ -423,6 +429,27 @@ gb_editor_view_grab_focus (GtkWidget *widget)
 }
 
 static void
+gb_editor_view_request_documentation (GbEditorView  *self,
+                                      IdeSourceView *source_view)
+{
+  g_autofree gchar *word = NULL;
+  IdeBuffer *buffer;
+  GtkTextMark *mark;
+  GtkTextIter iter;
+
+  g_assert (GB_IS_EDITOR_VIEW (self));
+  g_assert (IDE_IS_SOURCE_VIEW (source_view));
+
+  buffer = IDE_BUFFER (gtk_text_view_get_buffer (GTK_TEXT_VIEW (source_view)));
+  mark = gtk_text_buffer_get_insert (GTK_TEXT_BUFFER (buffer));
+  gtk_text_buffer_get_iter_at_mark (GTK_TEXT_BUFFER (buffer), &iter, mark);
+
+  word = ide_buffer_get_word_at_iter (buffer, &iter);
+
+  g_signal_emit (self, gSignals [REQUEST_DOCUMENTATION], 0, word);
+}
+
+static void
 gb_editor_view_set_split_view (GbView   *view,
                                gboolean  split_view)
 {
@@ -443,6 +470,11 @@ gb_editor_view_set_split_view (GbView   *view,
                                    "document", self->document,
                                    "visible", TRUE,
                                    NULL);
+      g_signal_connect_object (self->frame2->source_view,
+                               "request-documentation",
+                               G_CALLBACK (gb_editor_view_request_documentation),
+                               self,
+                               G_CONNECT_SWAPPED);
       gtk_container_add_with_properties (GTK_CONTAINER (self->paned), GTK_WIDGET (self->frame2),
                                          "shrink", FALSE,
                                          "resize", TRUE,
@@ -764,6 +796,15 @@ gb_editor_view_class_init (GbEditorViewClass *klass)
 
   g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
 
+  gSignals [REQUEST_DOCUMENTATION] =
+    g_signal_new ("request-documentation",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  0, NULL, NULL, NULL,
+                  G_TYPE_NONE,
+                  1,
+                  G_TYPE_STRING);
+
   GB_WIDGET_CLASS_TEMPLATE (klass, "gb-editor-view.ui");
 
   GB_WIDGET_CLASS_BIND (klass, GbEditorView, cursor_label);
@@ -794,6 +835,12 @@ gb_editor_view_init (GbEditorView *self)
   g_signal_connect_object (self->modified_cancel_button,
                            "clicked",
                            G_CALLBACK (gb_editor_view_hide_reload_bar),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  g_signal_connect_object (self->frame1->source_view,
+                           "request-documentation",
+                           G_CALLBACK (gb_editor_view_request_documentation),
                            self,
                            G_CONNECT_SWAPPED);
 
