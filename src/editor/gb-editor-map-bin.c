@@ -136,6 +136,25 @@ gb_editor_map_bin_finalize (GObject *object)
 }
 
 static void
+gb_editor_map_bin_get_property (GObject    *object,
+                                guint       prop_id,
+                                GValue     *value,
+                                GParamSpec *pspec)
+{
+  GbEditorMapBin *self = GB_EDITOR_MAP_BIN (object);
+
+  switch (prop_id)
+    {
+    case PROP_FLOATING_BAR:
+      g_value_set_object (value, self->floating_bar);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    }
+}
+
+static void
 gb_editor_map_bin_set_property (GObject      *object,
                                 guint         prop_id,
                                 const GValue *value,
@@ -162,6 +181,7 @@ gb_editor_map_bin_class_init (GbEditorMapBinClass *klass)
   GtkContainerClass *container_class = GTK_CONTAINER_CLASS (klass);
 
   object_class->finalize = gb_editor_map_bin_finalize;
+  object_class->get_property = gb_editor_map_bin_get_property;
   object_class->set_property = gb_editor_map_bin_set_property;
 
   widget_class->size_allocate = gb_editor_map_bin_size_allocate;
@@ -174,7 +194,7 @@ gb_editor_map_bin_class_init (GbEditorMapBinClass *klass)
                          "Floating Bar",
                          "The floating bar to use for relative allocation size.",
                          GTK_TYPE_WIDGET,
-                         (G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
+                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
 }
