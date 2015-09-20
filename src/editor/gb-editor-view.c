@@ -832,6 +832,16 @@ gb_editor_view_init (GbEditorView *self)
 
   gb_editor_view_actions_init (self);
 
+  /*
+   * XXX: Refactor all of this.
+   *
+   * In frame1, we don't show the floating bar, so no need to alter the
+   * editor map allocation.
+   */
+  g_object_set (self->frame1->source_map_container,
+                "floating-bar", NULL,
+                NULL);
+
   g_signal_connect_object (self->modified_cancel_button,
                            "clicked",
                            G_CALLBACK (gb_editor_view_hide_reload_bar),
