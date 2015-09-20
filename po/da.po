@@ -15,8 +15,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-19 16:20+0200\n"
-"PO-Revision-Date: 2015-09-19 16:16+0200\n"
+"POT-Creation-Date: 2015-09-20 20:21+0200\n"
+"PO-Revision-Date: 2015-09-20 18:51+0200\n"
 "Last-Translator: Ask Hjorth Larsen <asklarsen@gmail.com>\n"
 "Language-Team: Danish <dansk@dansk-gruppen.dk>\n"
 "Language: da\n"
@@ -312,13 +312,12 @@ msgstr ""
 "du genindlæse filen?"
 
 #: ../data/ui/gb-editor-view.ui.h:4
-#, fuzzy
 msgid "Go to Line"
 msgstr "Hop til linje"
 
 #: ../data/ui/gb-editor-view.ui.h:5
 msgid "Go"
-msgstr ""
+msgstr "Gå"
 
 #: ../data/ui/gb-greeter-window.ui.h:1
 msgid "Select a Project"
@@ -1330,7 +1329,7 @@ msgid "Documentation (%s)"
 msgstr "Dokumentation (%s)"
 
 #: ../plugins/devhelp/gb-devhelp-document.c:148
-#: ../plugins/devhelp/gb-devhelp-panel.c:96
+#: ../plugins/devhelp/gb-devhelp-panel.c:144
 #: ../plugins/devhelp/gb-devhelp-search-provider.c:134
 msgid "Documentation"
 msgstr "Dokumentation"
@@ -1471,17 +1470,17 @@ msgstr "Mappe|Projekter"
 msgid "(Click on items to select them)"
 msgstr "(Klik på elementer for at vælge dem)"
 
-#: ../src/editor/gb-editor-frame.c:73
+#: ../src/editor/gb-editor-frame.c:76
 #, c-format
 msgid "Line %u, Column %u"
 msgstr "Linje %u, kolonne %u"
 
-#: ../src/editor/gb-editor-frame.c:241
+#: ../src/editor/gb-editor-frame.c:244
 #, c-format
 msgid "%u of %u"
 msgstr "%u af %u"
 
-#: ../src/editor/gb-editor-frame.c:661
+#: ../src/editor/gb-editor-frame.c:664
 msgid "Re_veal in Project Tree"
 msgstr "_Synliggør i projekttræ"
 
@@ -1498,15 +1497,15 @@ msgstr "Gem dokument"
 msgid "Save Document As"
 msgstr "Gem dokument som"
 
-#: ../src/editor/gb-editor-view.c:113
+#: ../src/editor/gb-editor-view.c:119
 msgid "Plain Text"
 msgstr "Almindelig tekst"
 
 #. translators: the user selected a number outside the value range for the document.
-#: ../src/editor/gb-editor-view.c:592
+#: ../src/editor/gb-editor-view.c:624
 #, c-format
 msgid "Provide a number between 1 and %u"
-msgstr ""
+msgstr "Angiv et tal mellem 1 og %u"
 
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-editor.c:95
