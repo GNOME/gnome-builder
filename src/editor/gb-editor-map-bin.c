@@ -64,6 +64,8 @@ gb_editor_map_bin_set_floating_bar (GbEditorMapBin *self,
 
   if (floating_bar != self->floating_bar)
     {
+      self->cached_height = 0;
+
       if (self->floating_bar)
         {
           ide_clear_signal_handler (self->floating_bar, &self->size_allocate_handler);
@@ -78,13 +80,11 @@ gb_editor_map_bin_set_floating_bar (GbEditorMapBin *self,
                                    G_CALLBACK (gb_editor_map_bin__floating_bar_size_allocate),
                                    self,
                                    G_CONNECT_SWAPPED);
+          gtk_widget_queue_resize (GTK_WIDGET (floating_bar));
         }
 
       gtk_widget_queue_resize (GTK_WIDGET (self));
     }
-
-  if (ide_set_weak_pointer (&self->floating_bar, floating_bar))
-    gtk_widget_queue_resize (GTK_WIDGET (self));
 }
 
 static void
@@ -93,7 +93,8 @@ gb_editor_map_bin_size_allocate (GtkWidget     *widget,
 {
   GbEditorMapBin *self = (GbEditorMapBin *)widget;
 
-  alloc->height -= self->cached_height;
+  if (self->floating_bar != NULL)
+    alloc->height -= self->cached_height;
 
   GTK_WIDGET_CLASS (gb_editor_map_bin_parent_class)->size_allocate (widget, alloc);
 }
