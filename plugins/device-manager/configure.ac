@@ -3,7 +3,7 @@ AC_ARG_ENABLE([enable-device-manager-plugin],
               [AS_HELP_STRING([--enable-device-manager-plugin=@<:@yes/no@:>@],
                               [Build with support for the device manager panel.])],
               [],
-              [enable_device_manager_plugin=yes])
+              [enable_device_manager_plugin=no])
 
 # for if ENABLE_DEVICE_MANAGER_PLUGIN in Makefile.am
 AM_CONDITIONAL(ENABLE_DEVICE_MANAGER_PLUGIN, test x$enable_device_manager_plugin != xno)

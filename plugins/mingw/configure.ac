@@ -3,7 +3,7 @@ AC_ARG_ENABLE([enable-mingw-plugin],
               [AS_HELP_STRING([--enable-mingw-plugin=@<:@yes/no@:>@],
                               [Build with support for the mingw compiler.])],
               [],
-              [enable_mingw_plugin=yes])
+              [enable_mingw_plugin=no])
 
 # for if ENABLE_MINGW_PLUGIN in Makefile.am
 AM_CONDITIONAL(ENABLE_MINGW_PLUGIN, test x$enable_mingw_plugin != xno)
