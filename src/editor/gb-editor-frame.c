@@ -62,6 +62,9 @@ gb_editor_frame_update_ruler (GbEditorFrame *self)
 
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self->source_view));
 
+  if (!IDE_IS_BUFFER (buffer))
+    return;
+
   /* update line/column text */
   if (self->show_ruler)
     {
