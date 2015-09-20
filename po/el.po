@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2015-09-06 06:59+0000\n"
-"PO-Revision-Date: 2015-09-06 10:12+0300\n"
+"POT-Creation-Date: 2015-09-18 23:47+0000\n"
+"PO-Revision-Date: 2015-09-20 12:35+0300\n"
 "Last-Translator: Tom Tryfonidis <tomtryf@gmail.com>\n"
 "Language-Team: Greek <team@lists.gnome.gr>\n"
 "Language: el\n"
@@ -300,8 +300,12 @@ msgstr ""
 "Θέλετε να ανανεώσετε το αρχείο;"
 
 #: ../data/ui/gb-editor-view.ui.h:4
-msgid "Search Symbols"
-msgstr "Αναζήτηση συμβόλων"
+msgid "Go to Line"
+msgstr "Μετάβαση στη γραμμή"
+
+#: ../data/ui/gb-editor-view.ui.h:5
+msgid "Go"
+msgstr "Μετάβαση"
 
 #: ../data/ui/gb-greeter-window.ui.h:1
 msgid "Select a Project"
@@ -514,36 +518,44 @@ msgid "Auto Completion"
 msgstr "Αυτόματη συμπλήρωση"
 
 #: ../data/ui/gb-preferences-page-insight.ui.h:5
+msgid "Suggest Snippet Completion"
+msgstr "Υποδείξεις συμπλήρωσης αποσπασμάτων"
+
+#: ../data/ui/gb-preferences-page-insight.ui.h:6
+msgid "Allow snippets to be inserted into the document."
+msgstr "Επιτρέπει αποσπάσματα κώδικα να εισαχθούν στο έγγραφο."
+
+#: ../data/ui/gb-preferences-page-insight.ui.h:7
 msgid "Suggest Word Completion"
 msgstr "Υποδείξεις συμπλήρωσης λέξεων"
 
-#: ../data/ui/gb-preferences-page-insight.ui.h:6
+#: ../data/ui/gb-preferences-page-insight.ui.h:8
 msgid "Suggest completion of words found within all open documents."
 msgstr ""
 "Υποδεικνύει συμπληρώσεις λέξεων σε όλα τα ανοιχτά έγγραφα που βρέθηκαν."
 
-#: ../data/ui/gb-preferences-page-insight.ui.h:7
+#: ../data/ui/gb-preferences-page-insight.ui.h:9
 msgid "Suggest Completions using Ctags"
 msgstr "Υποδείξεις συμπληρώσεων χρησιμοποιώντας Ctags"
 
-#: ../data/ui/gb-preferences-page-insight.ui.h:8
+#: ../data/ui/gb-preferences-page-insight.ui.h:10
 msgid "Use Ctags for completions in supported languages."
 msgstr ""
 "Χρησιμοποιήστε Ctags για αυτόματη συμπλήρωση στις υποστηριζόμενες γλώσσες."
 
-#: ../data/ui/gb-preferences-page-insight.ui.h:9
+#: ../data/ui/gb-preferences-page-insight.ui.h:11
 msgid "Suggest Completions using Clang (Experimental)"
 msgstr "Υποδείξεις συμπληρώσεων χρησιμοποιώντας Clang (πειραματικό)"
 
-#: ../data/ui/gb-preferences-page-insight.ui.h:10
+#: ../data/ui/gb-preferences-page-insight.ui.h:12
 msgid "Use Clang for completions in the C and C++ languages."
 msgstr "Χρησιμοποιήστε Clang για αυτόματη συμπλήρωση στις γλώσσες C και C++."
 
-#: ../data/ui/gb-preferences-page-insight.ui.h:11
+#: ../data/ui/gb-preferences-page-insight.ui.h:13
 msgid "Suggest Completions using Jedi"
 msgstr "Υποδείξεις συμπληρώσεων χρησιμοποιώντας Jedi"
 
-#: ../data/ui/gb-preferences-page-insight.ui.h:12
+#: ../data/ui/gb-preferences-page-insight.ui.h:14
 msgid "Use Jedi for completions in the Python language."
 msgstr "Χρησιμοποιήστε Jedi για αυτόματη συμπλήρωση στη γλώσσα Python."
 
@@ -600,6 +612,11 @@ msgstr ""
 #: ../data/ui/gb-preferences-window.ui.h:4
 msgid "Programming Languages"
 msgstr "Γλώσσες προγραμματισμού"
+
+#: ../data/ui/gb-preferences-page-plugins.ui.h:1
+#: ../data/ui/gb-preferences-window.ui.h:9
+msgid "Plugins"
+msgstr "Πρόσθετα"
 
 #: ../data/ui/gb-preferences-page-theme.ui.h:1
 #: ../data/ui/gb-preferences-window.ui.h:7
@@ -991,7 +1008,7 @@ msgstr "Αποτυχία αρχικοποίησης των προεπιλεγμ�
 msgid "File contained invalid UTF-8"
 msgstr "Το αρχείο περιέχει μη έγκυρο UTF-8"
 
-#: ../libide/ide-buffer.c:1969
+#: ../libide/ide-buffer.c:1991
 msgid "The current language lacks a symbol resolver."
 msgstr "Η τρέχουσα γλώσσα στερείται από έναν αναλυτή συμβόλων."
 
@@ -1049,7 +1066,7 @@ msgstr "Ο Κατασκευαστής απαιτεί το libgit2-glib με υπ
 
 #: ../libide/ide-context.c:1666
 msgid "An unload request is already pending"
-msgstr ""
+msgstr "Ένα εκτελούμενο αίτημα είναι σε εκκρεμότητα"
 
 #: ../libide/ide-context.c:1781
 msgid "Context has already been restored."
@@ -1099,7 +1116,7 @@ msgstr "Το %s δεν έχει υλοποιήσει GAsyncInitable."
 msgid "Chunk does not belong to snippet."
 msgstr "Το κομμάτι κώδικα δεν ανήκει στο απόσπασμα."
 
-#: ../libide/ide-source-snippet-completion-provider.c:255
+#: ../libide/ide-source-snippet-completion-provider.c:288
 msgid "Snippets"
 msgstr "Αποσπάσματα"
 
@@ -1118,29 +1135,29 @@ msgstr "Αποτυχία ανοίγματος καταλόγου: %s"
 msgid "Failed to load file: %s: %s"
 msgstr "Αδυναμία φόρτωσης αρχείου: %s: %s"
 
-#: ../libide/ide-source-view.c:4561
+#: ../libide/ide-source-view.c:4563
 #, c-format
 msgid "Insert \"%s\""
 msgstr "Εισαγωγή \"%s\""
 
-#: ../libide/ide-source-view.c:4563
+#: ../libide/ide-source-view.c:4565
 #, c-format
 msgid "Replace \"%s\" with \"%s\""
 msgstr "Αντικατάσταση \"%s\" με \"%s\""
 
-#: ../libide/ide-source-view.c:4681
+#: ../libide/ide-source-view.c:4683
 msgid "Apply Fix-It"
 msgstr "Εφαρμογή Fix-It"
 
-#: ../libide/ide-source-view.c:4724
+#: ../libide/ide-source-view.c:4726
 msgid "Join Lines"
 msgstr "Ένωση γραμμών"
 
-#: ../libide/ide-source-view.c:4735
+#: ../libide/ide-source-view.c:4737
 msgid "Sort Lines"
 msgstr "Ταξινόμηση γραμμών"
 
-#: ../libide/ide-source-view.c:4754
+#: ../libide/ide-source-view.c:4756
 msgid "Go to Definition"
 msgstr "Μετάβαση στον ορισμό"
 
@@ -1188,7 +1205,7 @@ msgstr "Δεν είναι εκτελέσιμο το autogen.sh."
 msgid "autogen.sh failed to create configure (%s)"
 msgstr "Το autogen.sh απέτυχε να δημιουργήσει το αρχείο configure (%s)"
 
-#: ../plugins/autotools/ide-makecache.c:998
+#: ../plugins/autotools/ide-makecache.c:999
 msgid "Invalid makefile provided, ignoring."
 msgstr "Δόθηκε μη έγκυρο αρχείο makefile, αγνόηση."
 
@@ -1309,8 +1326,8 @@ msgid "Documentation"
 msgstr "Τεκμηρίωση"
 
 #: ../plugins/device-manager/gb-device-manager-panel.c:75
-msgid "Device"
-msgstr "Συσκευή"
+msgid "Device Manager"
+msgstr "Διαχειριστής συσκευών"
 
 #: ../plugins/file-search/gb-file-search-provider.c:45
 msgid "Switch To"
@@ -1444,17 +1461,17 @@ msgstr "Κατάλογος|Έργα"
 msgid "(Click on items to select them)"
 msgstr "(Πατήστε στα αντικείμενα για να τα επιλέξετε)"
 
-#: ../src/editor/gb-editor-frame.c:150
-#, c-format
-msgid "%u of %u"
-msgstr "%u από %u"
-
-#: ../src/editor/gb-editor-frame.c:180
+#: ../src/editor/gb-editor-frame.c:73
 #, c-format
 msgid "Line %u, Column %u"
 msgstr "Γραμμή %u, Στήλη %u"
 
-#: ../src/editor/gb-editor-frame.c:595
+#: ../src/editor/gb-editor-frame.c:241
+#, c-format
+msgid "%u of %u"
+msgstr "%u από %u"
+
+#: ../src/editor/gb-editor-frame.c:663
 msgid "Re_veal in Project Tree"
 msgstr "Εμ_φάνιση στο δέντρο του έργου"
 
@@ -1471,9 +1488,15 @@ msgstr "Αποθήκευση εγγράφου"
 msgid "Save Document As"
 msgstr "Αποθήκευση εγγράφου ως"
 
-#: ../src/editor/gb-editor-view.c:111
+#: ../src/editor/gb-editor-view.c:113
 msgid "Plain Text"
 msgstr "Απλό κειμένο"
+
+#. translators: the user selected a number outside the value range for the document.
+#: ../src/editor/gb-editor-view.c:592
+#, c-format
+msgid "Provide a number between 1 and %u"
+msgstr "Δώστε έναν αριθμό μεταξύ 1 και %u"
 
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-editor.c:95
@@ -1517,37 +1540,57 @@ msgid "minimap mini map overview over view"
 msgstr "minimap mini map overview over view χάρτης επισκόπηση προβολή"
 
 #. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-git.c:128
+#: ../src/preferences/gb-preferences-page-git.c:169
 msgid "git author name surname attribution source code"
 msgstr ""
 "git author name surname attribution source code πηγαίος κώδικας επώνυμο "
 "όνομα προγραμματιστής"
 
 #. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-git.c:134
+#: ../src/preferences/gb-preferences-page-git.c:175
 msgid "git author email mail address attribute source code"
 msgstr ""
 "git author email mail address attribute source code πηγαίος κώδικας επώνυμο "
 "όνομα προγραμματιστής διεύθυνση"
 
 #. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-insight.c:54
+#: ../src/preferences/gb-preferences-page-insight.c:61
 msgid "word words auto completion suggest found document"
 msgstr ""
 "word words auto completion suggest found document λέξη λέξεις αυτόματη "
 "συμπλήρωση έγγραφο"
 
 #. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-insight.c:59
+#: ../src/preferences/gb-preferences-page-insight.c:66
 msgid "experimental clang autocompletion auto complete"
 msgstr "experimental clang autocompletion auto complete πειραματικό συμπλήρωση"
 
 #. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-insight.c:64
+#: ../src/preferences/gb-preferences-page-insight.c:71
 msgid "exuberant ctags tags autocompletion auto complete"
 msgstr ""
 "exuberant ctags tags autocompletion auto complete ετικέτες συμπλήρωση "
 "αυτόματη"
+
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-insight.c:76
+#| msgid "experimental clang autocompletion auto complete"
+msgid "jedi python autocompletion auto complete"
+msgstr "jedi python autocompletion auto complete συμπλήρωση αυτόματη"
+
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-insight.c:81
+#| msgid "experimental clang autocompletion auto complete"
+msgid "snippets autocompletion auto complete"
+msgstr ""
+"snippets autocompletion auto complete αποσπάσματα κώδικας συμπλήρωση αυτόματη"
+
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-insight.c:86
+msgid "semantic highlighting color goto declaration definition"
+msgstr ""
+"semantic highlighting color goto declaration definition μετάβαση χρώμα "
+"επισήμανση "
 
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-keybindings.c:64
@@ -1622,11 +1665,11 @@ msgstr "Αδυναμία εύρεσης παρόχου."
 msgid "%s more"
 msgstr "%s περισσότερα"
 
-#: ../src/shortcuts/gb-shortcuts-dialog.c:920
+#: ../src/shortcuts/gb-shortcuts-dialog.c:937
 msgid "Search Shortcuts"
 msgstr "Συντομεύσεις αναζήτησης"
 
-#: ../src/shortcuts/gb-shortcuts-dialog.c:947
+#: ../src/shortcuts/gb-shortcuts-dialog.c:964
 msgid "Search Results"
 msgstr "Αποτελέσματα αναζήτησης"
 
@@ -1689,11 +1732,11 @@ msgstr "Άνοιγμα"
 msgid "%s - Builder"
 msgstr "%s - Κατασκευαστής"
 
-#: ../src/workbench/gb-workbench.c:940
+#: ../src/workbench/gb-workbench.c:919
 msgid "Build Failure"
 msgstr "Αποτυχία δόμησης"
 
-#: ../src/workbench/gb-workbench.c:987
+#: ../src/workbench/gb-workbench.c:966
 msgid "Project build system does not support building"
 msgstr "Το σύστημα δόμησης του έργου δεν υποστηρίζει την λειτουργία δόμησης."
 
@@ -1834,6 +1877,12 @@ msgstr "%s αποτελέσματα\n"
 #: ../tools/ide-search.c:120
 msgid "PROJECT_FILE [SEARCH TERMS...]"
 msgstr "ΑΡΧΕΙΟ_ΕΡΓΟΥ [ΟΡΟΙ ΑΝΑΖΗΤΗΣΗΣ...]"
+
+#~ msgid "Search Symbols"
+#~ msgstr "Αναζήτηση συμβόλων"
+
+#~ msgid "Device"
+#~ msgstr "Συσκευή"
 
 #~ msgid "Pre_view"
 #~ msgstr "Προ_επισκόπηση"
@@ -2075,9 +2124,6 @@ msgstr "ΑΡΧΕΙΟ_ΕΡΓΟΥ [ΟΡΟΙ ΑΝΑΖΗΤΗΣΗΣ...]"
 
 #~ msgid "The build system used by the context."
 #~ msgstr "Το σύστημα δόμησης που θα χρησιμοποιηθεί από το περιεχόμενο"
-
-#~ msgid "Device Manager"
-#~ msgstr "Διαχειριστής συσκευών"
 
 #~ msgid "The device manager for the context."
 #~ msgstr "Ο διαχειριστής συσκευών για το περιεχόμενο."
@@ -2647,9 +2693,6 @@ msgstr "ΑΡΧΕΙΟ_ΕΡΓΟΥ [ΟΡΟΙ ΑΝΑΖΗΤΗΣΗΣ...]"
 #, fuzzy
 #~ msgid "Show Search Shadow"
 #~ msgstr "Εμφάνιση επιλογών αναζήτησης"
-
-#~ msgid "Snippet Completion"
-#~ msgstr "Συμπλήρωση αποσπασμάτων"
 
 #~ msgid "View"
 #~ msgstr "Προβολή"
