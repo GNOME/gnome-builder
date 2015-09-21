@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2015-09-16 22:22+0000\n"
-"PO-Revision-Date: 2015-09-17 16:20+0200\n"
+"POT-Creation-Date: 2015-09-18 23:47+0000\n"
+"PO-Revision-Date: 2015-09-21 08:48+0200\n"
 "Last-Translator: Balázs Úr <urbalazs@gmail.com>\n"
 "Language-Team: Hungarian <openscope at gmail dot com>\n"
 "Language: hu\n"
@@ -303,8 +303,13 @@ msgstr ""
 "újratölteni a fájlt?"
 
 #: ../data/ui/gb-editor-view.ui.h:4
-msgid "Search Symbols"
-msgstr "Szimbólumok keresése"
+#| msgid "Go to line"
+msgid "Go to Line"
+msgstr "Ugrás sorra"
+
+#: ../data/ui/gb-editor-view.ui.h:5
+msgid "Go"
+msgstr "Ugrás"
 
 #: ../data/ui/gb-greeter-window.ui.h:1
 msgid "Select a Project"
@@ -516,7 +521,6 @@ msgid "Auto Completion"
 msgstr "Automatikus kódkiegészítés"
 
 #: ../data/ui/gb-preferences-page-insight.ui.h:5
-#| msgid "Snippet Completion"
 msgid "Suggest Snippet Completion"
 msgstr "Töredékkiegészítés javaslata"
 
@@ -1005,7 +1009,7 @@ msgstr "Az alapbeállítások előkészítése meghiúsult."
 msgid "File contained invalid UTF-8"
 msgstr "A fájl érvénytelen UTF-8 karaktereket tartalmaz"
 
-#: ../libide/ide-buffer.c:1990
+#: ../libide/ide-buffer.c:1991
 msgid "The current language lacks a symbol resolver."
 msgstr "Az aktuális nyelvhez nem tartozik szimbólumfeloldó"
 
@@ -1076,7 +1080,6 @@ msgstr "A(z) „%s” eszköz nem található."
 
 #: ../libide/ide-object.c:285
 #, c-format
-#| msgid "No implementations of extension point."
 msgid "No implementations of extension point \"%s\"."
 msgstr "A kiegészítési pont nincs megvalósítva: „%s”."
 
@@ -1133,29 +1136,29 @@ msgstr "A(z) „%s” könyvtár megnyitása meghiúsult"
 msgid "Failed to load file: %s: %s"
 msgstr "Nem sikerült a(z) „%s” fájlt megnyitni: %s"
 
-#: ../libide/ide-source-view.c:4561
+#: ../libide/ide-source-view.c:4563
 #, c-format
 msgid "Insert \"%s\""
 msgstr "A(z) „%s” beszúrása"
 
-#: ../libide/ide-source-view.c:4563
+#: ../libide/ide-source-view.c:4565
 #, c-format
 msgid "Replace \"%s\" with \"%s\""
 msgstr "A(z) „%s” cseréje ezzel: „%s”"
 
-#: ../libide/ide-source-view.c:4681
+#: ../libide/ide-source-view.c:4683
 msgid "Apply Fix-It"
 msgstr "Javítás érvényesítése"
 
-#: ../libide/ide-source-view.c:4724
+#: ../libide/ide-source-view.c:4726
 msgid "Join Lines"
 msgstr "Sorok egyesítése"
 
-#: ../libide/ide-source-view.c:4735
+#: ../libide/ide-source-view.c:4737
 msgid "Sort Lines"
 msgstr "Sorok rendezése"
 
-#: ../libide/ide-source-view.c:4754
+#: ../libide/ide-source-view.c:4756
 msgid "Go to Definition"
 msgstr "Ugrás definícióra"
 
@@ -1340,7 +1343,6 @@ msgid "No language specified"
 msgstr "Nincs nyelv megadva"
 
 #: ../plugins/html-preview/html_preview_plugin/__init__.py:88
-#| msgid "Pre_view"
 msgid "Preview as HTML"
 msgstr "Előnézet HTML-ként"
 
@@ -1462,12 +1464,12 @@ msgstr "(Kattintson az elemekre a kiválasztásukhoz)"
 msgid "Line %u, Column %u"
 msgstr "%u. sor, %u. oszlop"
 
-#: ../src/editor/gb-editor-frame.c:235
+#: ../src/editor/gb-editor-frame.c:241
 #, c-format
 msgid "%u of %u"
 msgstr "%u / %u"
 
-#: ../src/editor/gb-editor-frame.c:657
+#: ../src/editor/gb-editor-frame.c:663
 msgid "Re_veal in Project Tree"
 msgstr "Meg_jelenítés a projektfában"
 
@@ -1484,9 +1486,15 @@ msgstr "Dokumentum mentése"
 msgid "Save Document As"
 msgstr "Dokumentum mentése más néven"
 
-#: ../src/editor/gb-editor-view.c:111
+#: ../src/editor/gb-editor-view.c:113
 msgid "Plain Text"
 msgstr "Egyszerű szöveg"
+
+#. translators: the user selected a number outside the value range for the document.
+#: ../src/editor/gb-editor-view.c:592
+#, c-format
+msgid "Provide a number between 1 and %u"
+msgstr "Adjon meg egy számot 1 és %u között"
 
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-editor.c:95
@@ -1555,13 +1563,11 @@ msgstr "exuberant ctags címke címkék tag automatikus kiegészítés"
 
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-insight.c:76
-#| msgid "experimental clang autocompletion auto complete"
 msgid "jedi python autocompletion auto complete"
 msgstr "jedi python automatikus kiegészítés"
 
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-insight.c:81
-#| msgid "experimental clang autocompletion auto complete"
 msgid "snippets autocompletion auto complete"
 msgstr "töredék töredékek automatikus kiegészítés"
 
@@ -1856,6 +1862,9 @@ msgstr "%s találat\n"
 #: ../tools/ide-search.c:120
 msgid "PROJECT_FILE [SEARCH TERMS...]"
 msgstr "PROJEKTFÁJL [KERESÉSI KIFEJEZÉSEK…]"
+
+#~ msgid "Search Symbols"
+#~ msgstr "Szimbólumok keresése"
 
 #~ msgid "Device"
 #~ msgstr "Eszköz"
