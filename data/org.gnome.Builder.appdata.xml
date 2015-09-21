@@ -49,6 +49,10 @@
   <url type="bugtracker">https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-builder</url>
   <project_group>GNOME</project_group>
 
+  <kudos>
+    <kudo>AppMenu</kudo>
+  </kudos>
+
   <update_contact>ignatenko@src.gnome.org</update_contact>
 
 </component>
