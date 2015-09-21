@@ -1,3 +1,39 @@
+==============
+Version 3.18.0
+==============
+
+GNOME 3.18 is here, and so is Builder!
+
+A short list of updates since 3.17.92:
+
+ • buffer: release symbol resolver aggressively
+ • build: disable device manager/mingw plugins by default
+ • cindent: ensure we don't loop forever looking for context
+ • counters: add vsdo fallback on linux and no rdtscp instruction
+ • counters: mask CPU bits from rdtscp instruction on x86_64
+ • editor: release underlying document aggressively to prevent leaks
+ • editor: <shift>k in vim mode to request documentation
+ • editor: add simple goto line popover, activate with ctr+i in gedit mode
+ • editor: fix crash upon DnD to editor
+ • keybindings: use ctrl+alt+o for global search in gedit mode.
+ • map-bin: ignore size adjustment when floating bar is not used
+ • plugins: show plugin greyed out if it is disabled
+ • search: disable progress bar in search results
+ • search: fix popover bug when clearing search text
+ • search: make the search entry more forgiving to smaller sizes
+ • search: show more search results by default
+ • symbol-tree: fix cache timeout to use milliseconds
+ • theme: fix styling of view controls in stack header
+ • view-stack: allow focusing the view stack by clicking on the header
+
+We have marked the mingw and device manager plugins as experimental because
+they are not implemented to the point of being useful. We suggest that
+packagers do not ship them as part of the 3.18.0 release.
+
+-- Christian
+
+
+
 ===============
 Version 3.17.92
 ===============
