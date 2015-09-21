@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2015-09-13 09:20+0000\n"
-"PO-Revision-Date: 2015-09-13 16:45+0500\n"
+"POT-Creation-Date: 2015-09-21 12:09+0000\n"
+"PO-Revision-Date: 2015-09-21 17:12+0500\n"
+"Last-Translator: Baurzhan Muftakhidinov <baurthefirst@gmail.com>\n"
 "Language-Team: Kazakh <kk_KZ@googlegroups.com>\n"
 "Language: kk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Last-Translator: Baurzhan Muftakhidinov <baurthefirst@gmail.com>\n"
 "X-Generator: Poedit 1.8.4\n"
 
 #: ../contrib/egg/egg-animation.c:723
@@ -195,7 +195,8 @@ msgstr ""
 msgid "The default color scheme for Builder"
 msgstr ""
 
-#: ../data/ui/gb-editor-frame.ui.h:1
+#. OVR indicates we are in overwite mode
+#: ../data/ui/gb-editor-frame.ui.h:2
 msgid "OVR"
 msgstr "ҮСТЖЗ"
 
@@ -298,7 +299,11 @@ msgid ""
 msgstr ""
 
 #: ../data/ui/gb-editor-view.ui.h:4
-msgid "Search Symbols"
+msgid "Go to Line"
+msgstr "Жолға өту"
+
+#: ../data/ui/gb-editor-view.ui.h:5
+msgid "Go"
 msgstr ""
 
 #: ../data/ui/gb-greeter-window.ui.h:1
@@ -994,7 +999,7 @@ msgstr ""
 msgid "File contained invalid UTF-8"
 msgstr ""
 
-#: ../libide/ide-buffer.c:1990
+#: ../libide/ide-buffer.c:1991
 msgid "The current language lacks a symbol resolver."
 msgstr ""
 
@@ -1121,29 +1126,29 @@ msgstr ""
 msgid "Failed to load file: %s: %s"
 msgstr ""
 
-#: ../libide/ide-source-view.c:4562
+#: ../libide/ide-source-view.c:4563
 #, c-format
 msgid "Insert \"%s\""
 msgstr ""
 
-#: ../libide/ide-source-view.c:4564
+#: ../libide/ide-source-view.c:4565
 #, c-format
 msgid "Replace \"%s\" with \"%s\""
 msgstr ""
 
-#: ../libide/ide-source-view.c:4682
+#: ../libide/ide-source-view.c:4683
 msgid "Apply Fix-It"
 msgstr ""
 
-#: ../libide/ide-source-view.c:4725
+#: ../libide/ide-source-view.c:4726
 msgid "Join Lines"
 msgstr ""
 
-#: ../libide/ide-source-view.c:4736
+#: ../libide/ide-source-view.c:4737
 msgid "Sort Lines"
 msgstr ""
 
-#: ../libide/ide-source-view.c:4755
+#: ../libide/ide-source-view.c:4756
 msgid "Go to Definition"
 msgstr ""
 
@@ -1191,7 +1196,7 @@ msgstr ""
 msgid "autogen.sh failed to create configure (%s)"
 msgstr ""
 
-#: ../plugins/autotools/ide-makecache.c:998
+#: ../plugins/autotools/ide-makecache.c:999
 msgid "Invalid makefile provided, ignoring."
 msgstr ""
 
@@ -1306,14 +1311,14 @@ msgid "Documentation (%s)"
 msgstr ""
 
 #: ../plugins/devhelp/gb-devhelp-document.c:148
-#: ../plugins/devhelp/gb-devhelp-panel.c:96
+#: ../plugins/devhelp/gb-devhelp-panel.c:144
 #: ../plugins/devhelp/gb-devhelp-search-provider.c:134
 msgid "Documentation"
 msgstr "Құжаттама"
 
 #: ../plugins/device-manager/gb-device-manager-panel.c:75
-msgid "Device"
-msgstr "Құрылғы"
+msgid "Device Manager"
+msgstr "Құрылғылар басқарушысы"
 
 #: ../plugins/file-search/gb-file-search-provider.c:45
 msgid "Switch To"
@@ -1440,17 +1445,17 @@ msgstr "Бума|Жобалар"
 msgid "(Click on items to select them)"
 msgstr "(Бірнәрсені таңдау үшін оның үстіне шертіңіз)"
 
-#: ../src/editor/gb-editor-frame.c:150
-#, c-format
-msgid "%u of %u"
-msgstr "%u, барлығы %u"
-
-#: ../src/editor/gb-editor-frame.c:180
+#: ../src/editor/gb-editor-frame.c:76
 #, c-format
 msgid "Line %u, Column %u"
 msgstr "Жол %u, баған %u"
 
-#: ../src/editor/gb-editor-frame.c:595
+#: ../src/editor/gb-editor-frame.c:244
+#, c-format
+msgid "%u of %u"
+msgstr "%u, барлығы %u"
+
+#: ../src/editor/gb-editor-frame.c:664
 msgid "Re_veal in Project Tree"
 msgstr ""
 
@@ -1467,9 +1472,15 @@ msgstr "Құжатты сақтау"
 msgid "Save Document As"
 msgstr "Құжатты қалайша сақтау"
 
-#: ../src/editor/gb-editor-view.c:111
+#: ../src/editor/gb-editor-view.c:119
 msgid "Plain Text"
 msgstr "Ашық мәтін"
+
+#. translators: the user selected a number outside the value range for the document.
+#: ../src/editor/gb-editor-view.c:624
+#, c-format
+msgid "Provide a number between 1 and %u"
+msgstr ""
 
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-editor.c:95
@@ -1622,11 +1633,11 @@ msgstr ""
 msgid "%s more"
 msgstr "Тағы %s"
 
-#: ../src/shortcuts/gb-shortcuts-dialog.c:920
+#: ../src/shortcuts/gb-shortcuts-dialog.c:937
 msgid "Search Shortcuts"
 msgstr ""
 
-#: ../src/shortcuts/gb-shortcuts-dialog.c:947
+#: ../src/shortcuts/gb-shortcuts-dialog.c:964
 msgid "Search Results"
 msgstr ""
 
@@ -1822,7 +1833,7 @@ msgstr ""
 
 #: ../tools/ide-mine-projects.c:87
 msgid "- discover projects"
-msgstr ""
+msgstr "- жобаларды щолу"
 
 #: ../tools/ide-search.c:68
 #, c-format
