@@ -33,7 +33,7 @@
     </screenshot>
     <screenshot type="default">
       <caption>Fast global search</caption>
-      <image width="1600" height="900">https://git.gnome.org/browse/gnome-builder/plain/data/appdata/globa-search.png</image>
+      <image width="1600" height="900">https://git.gnome.org/browse/gnome-builder/plain/data/appdata/global-search.png</image>
     </screenshot>
     <screenshot type="default">
       <caption>Integrated project tree</caption>
