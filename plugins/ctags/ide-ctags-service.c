@@ -364,7 +364,7 @@ ide_ctags_service_tags_built_cb (IdeCtagsService *self,
 }
 
 static void
-ide_ctags_service_loaded (IdeService *service)
+ide_ctags_service_context_loaded (IdeService *service)
 {
   IdeCtagsService *self = (IdeCtagsService *)service;
 
@@ -434,7 +434,7 @@ ide_ctags_service_class_init (IdeCtagsServiceClass *klass)
 static void
 service_iface_init (IdeServiceInterface *iface)
 {
-  iface->loaded = ide_ctags_service_loaded;
+  iface->context_loaded = ide_ctags_service_context_loaded;
   iface->start = ide_ctags_service_start;
   iface->stop = ide_ctags_service_stop;
 }

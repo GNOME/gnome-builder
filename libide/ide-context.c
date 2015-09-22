@@ -491,7 +491,7 @@ ide_context_service_notify_loaded (PeasExtensionSet *set,
 {
   g_assert (IDE_IS_SERVICE (exten));
 
-  _ide_service_emit_loaded (IDE_SERVICE (exten));
+  _ide_service_emit_context_loaded (IDE_SERVICE (exten));
 }
 
 static void
