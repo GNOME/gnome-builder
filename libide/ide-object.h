@@ -37,6 +37,8 @@ struct _IdeObjectClass
 };
 
 IdeContext *ide_object_get_context (IdeObject            *self);
+void        ide_object_set_context (IdeObject            *self,
+                                    IdeContext           *context);
 void        ide_object_new_for_extension_async
                                    (GType                 interface_gtype,
                                     GCompareDataFunc      sort_priority_func,
