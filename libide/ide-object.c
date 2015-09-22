@@ -111,7 +111,7 @@ ide_object_get_context (IdeObject *self)
   return priv->context;
 }
 
-static void
+void
 ide_object_set_context (IdeObject  *self,
                         IdeContext *context)
 {
