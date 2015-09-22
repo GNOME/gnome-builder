@@ -293,7 +293,12 @@ msgid "8"
 msgstr "8"
 
 #: ../data/ui/gb-editor-view.ui.h:2 ../data/ui/gb-greeter-window.ui.h:4
+<<<<<<< ab4da0e386527caef497fb9da108e199235b8cd5
 #: ../data/ui/gb-new-project-dialog.ui.h:2 ../data/ui/gb-projects-dialog.ui.h:3
+=======
+#: ../data/ui/gb-new-project-dialog.ui.h:2
+#: ../data/ui/gb-projects-dialog.ui.h:3
+>>>>>>> Updated Serbian translation
 msgid "_Cancel"
 msgstr "_Откажи"
 
@@ -663,7 +668,12 @@ msgstr "Поставке"
 msgid "Search Preferences…"
 msgstr "Поставке претраге..."
 
+<<<<<<< ab4da0e386527caef497fb9da108e199235b8cd5
 #: ../data/ui/gb-projects-dialog.ui.h:1 ../src/dialogs/gb-projects-dialog.c:255
+=======
+#: ../data/ui/gb-projects-dialog.ui.h:1
+#: ../src/dialogs/gb-projects-dialog.c:255
+>>>>>>> Updated Serbian translation
 msgid "Select Project"
 msgstr "Изабери пројекат"
 
