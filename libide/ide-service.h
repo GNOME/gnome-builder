@@ -31,10 +31,10 @@ struct _IdeServiceInterface
 {
   GTypeInterface parent_interface;
 
-  const gchar *(*get_name) (IdeService *service);
-  void         (*loaded)   (IdeService *service);
-  void         (*start)    (IdeService *service);
-  void         (*stop)     (IdeService *service);
+  void         (*context_loaded) (IdeService *service);
+  const gchar *(*get_name)       (IdeService *service);
+  void         (*start)          (IdeService *service);
+  void         (*stop)           (IdeService *service);
 };
 
 const gchar *ide_service_get_name (IdeService *self);

@@ -24,9 +24,7 @@
 G_DEFINE_INTERFACE (IdeService, ide_service, G_TYPE_OBJECT)
 
 enum {
-  LOADED,
-  START,
-  STOP,
+  CONTEXT_LOADED,
   LAST_SIGNAL
 };
 
@@ -45,7 +43,8 @@ ide_service_start (IdeService *service)
 {
   g_return_if_fail (IDE_IS_SERVICE (service));
 
-  g_signal_emit (service, gSignals [START], 0);
+  if (IDE_SERVICE_GET_IFACE (service)->start)
+    IDE_SERVICE_GET_IFACE (service)->start (service);
 }
 
 void
@@ -53,25 +52,16 @@ ide_service_stop (IdeService *service)
 {
   g_return_if_fail (IDE_IS_SERVICE (service));
 
-  g_signal_emit (service, gSignals [STOP], 0);
+  if (IDE_SERVICE_GET_IFACE (service)->stop)
+    IDE_SERVICE_GET_IFACE (service)->stop (service);
 }
 
 void
-_ide_service_emit_loaded (IdeService *service)
+_ide_service_emit_context_loaded (IdeService *service)
 {
   g_return_if_fail (IDE_IS_SERVICE (service));
 
-  g_signal_emit (service, gSignals [LOADED], 0);
-}
-
-static void
-ide_service_real_start (IdeService *service)
-{
-}
-
-static void
-ide_service_real_stop (IdeService *service)
-{
+  g_signal_emit (service, gSignals [CONTEXT_LOADED], 0);
 }
 
 static const gchar *
@@ -83,40 +73,20 @@ ide_service_real_get_name (IdeService *service)
 static void
 ide_service_default_init (IdeServiceInterface *iface)
 {
-  iface->start = ide_service_real_start;
-  iface->start = ide_service_real_stop;
   iface->get_name = ide_service_real_get_name;
 
   g_object_interface_install_property (iface,
-                                       g_param_spec_object ("context",
-                                                            "Context",
-                                                            "Context",
-                                                            IDE_TYPE_CONTEXT,
-                                                            (G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS)));
+    g_param_spec_object ("context",
+                         "Context",
+                         "Context",
+                         IDE_TYPE_CONTEXT,
+                         (G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS)));
 
-  gSignals [LOADED] =
-    g_signal_new ("loaded",
+  gSignals [CONTEXT_LOADED] =
+    g_signal_new ("context-loaded",
                   G_TYPE_FROM_INTERFACE (iface),
                   G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET (IdeServiceInterface, loaded),
-                  NULL, NULL, NULL,
-                  G_TYPE_NONE,
-                  0);
-
-  gSignals [START] =
-    g_signal_new ("start",
-                  G_TYPE_FROM_INTERFACE (iface),
-                  G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET (IdeServiceInterface, start),
-                  NULL, NULL, NULL,
-                  G_TYPE_NONE,
-                  0);
-
-  gSignals [STOP] =
-    g_signal_new ("stop",
-                  G_TYPE_FROM_INTERFACE (iface),
-                  G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET (IdeServiceInterface, stop),
+                  G_STRUCT_OFFSET (IdeServiceInterface, context_loaded),
                   NULL, NULL, NULL,
                   G_TYPE_NONE,
                   0);
