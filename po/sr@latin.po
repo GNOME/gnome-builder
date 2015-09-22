@@ -1,0 +1,3512 @@
+# #-#-#-#-#  sr.po (gnome-builder master)  #-#-#-#-#
+# Serbian translation for gnome-builder.
+# Copyright (C) 2015 gnome-builder's COPYRIGHT HOLDER
+# This file is distributed under the same license as the gnome-builder package.
+# Miroslav Nikolić <miroslavnikolic@rocketmail.com>, 2015.
+# Marko M. Kostić (Marko M. Kostić) <marko.m.kostic@gmail.com>, 2015.
+# Miloš Popović <gpopac@gmail.com>, 2015.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: gnome-builder master\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
+"builder&keywords=I18N+L10N&component=general\n"
+"POT-Creation-Date: 2015-09-21 12:13+0000\n"
+"PO-Revision-Date: 2015-09-22 11:11+0200\n"
+"Last-Translator: Miloš Popović <gpopac@gmail.com>\n"
+"Language-Team: srpski <gnome-sr@googlegroups.org>\n"
+"Language: sr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=n==1? 3 : n%10==1 && n%100!=11 ? 0 : n"
+"%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Gtranslator 2.91.6\n"
+"X-Project-Style: gnome\n"
+
+#: ../contrib/egg/egg-animation.c:723
+#, c-format
+msgid "Cannot locate property %s in class %s"
+msgstr "Ne mogu da nađem svojstvo „%s“ u razredu „%s“"
+
+#: ../contrib/egg/egg-animation.c:1067 ../contrib/egg/egg-animation.c:1073
+#, c-format
+msgid "Failed to find property %s in %s"
+msgstr "Nisam uspeo da nađem svojstvo „%s“ u „%s“"
+
+#: ../contrib/egg/egg-animation.c:1081
+#, c-format
+msgid "Failed to find property %s in %s or parent %s"
+msgstr "Nisam uspeo da nađem svojstvo „%s“ u „%s“ ili u nadređenom „%s“"
+
+#: ../contrib/egg/egg-animation.c:1091
+#, c-format
+msgid "Failed to retrieve va_list value: %s"
+msgstr "Ne mogu da dobijem spisak deljenja sa servera: %s"
+
+#: ../contrib/egg/egg-search-bar.c:371
+msgid "Search"
+msgstr "Pretraga"
+
+#: ../contrib/search/trie.c:790
+#, c-format
+msgid "Traversal order %u is not supported on Trie."
+msgstr "Poprečni redosled %u nije podržan u Triu."
+
+#: ../contrib/xml/xml-reader.c:327
+#, c-format
+msgid "Could not parse XML from stream"
+msgstr "Ne mogu da da obradim Iks-ML (XML) iz toka"
+
+#: ../data/gtk/menus.ui.h:1
+msgid "_New Project"
+msgstr "_Novi projekat"
+
+#: ../data/gtk/menus.ui.h:2
+msgid "_Open Project"
+msgstr "_Otvori projekat"
+
+#: ../data/gtk/menus.ui.h:3
+msgid "_Preferences"
+msgstr "_Postavke"
+
+#: ../data/gtk/menus.ui.h:4
+msgid "Generate Support Log"
+msgstr "Tehnički podaci"
+
+#: ../data/gtk/menus.ui.h:5
+msgid "Keyboard _Shortcuts"
+msgstr "Prečice na ta_staturi"
+
+#: ../data/gtk/menus.ui.h:6
+msgid "_About"
+msgstr "_O programu"
+
+#: ../data/gtk/menus.ui.h:7
+msgid "_Quit"
+msgstr "_Izađi"
+
+#: ../data/gtk/menus.ui.h:8 ../data/ui/gb-editor-view.ui.h:1
+msgid "_Reload"
+msgstr "_Učitaj ponovo"
+
+#: ../data/gtk/menus.ui.h:9
+msgid "_Print…"
+msgstr "_Štampaj…"
+
+#: ../data/gtk/menus.ui.h:10
+msgid "_Fullscreen"
+msgstr "_Preko celog ekrana"
+
+#: ../data/gtk/menus.ui.h:11
+msgid "_New Document"
+msgstr "_Novi dokument"
+
+#: ../data/gtk/menus.ui.h:12
+msgid "_Open"
+msgstr "_Otvori"
+
+#: ../data/gtk/menus.ui.h:13
+msgid "Save _All"
+msgstr "S_ačuvaj sve"
+
+#: ../data/gtk/menus.ui.h:14
+msgid "_Close All"
+msgstr "_Zatvori sve"
+
+#: ../data/gtk/menus.ui.h:15
+msgid "Display Options"
+msgstr "Podešavanja prikaza"
+
+#: ../data/gtk/menus.ui.h:16
+msgid "Show Icons"
+msgstr "Prikaži ikonice"
+
+#: ../data/gtk/menus.ui.h:17
+msgid "Show Ignored Files"
+msgstr "Prikaži zanemarene datoteke"
+
+#: ../data/gtk/menus.ui.h:18
+msgid "Sort Directories First"
+msgstr "Poređaj najpre po imenu fascikle"
+
+#: ../data/gtk/menus.ui.h:19
+msgid "_Collapse All Nodes"
+msgstr "Zatvori s_tablo"
+
+#: ../data/gtk/menus.ui.h:20
+msgid "_Refresh"
+msgstr "_Osveži"
+
+#: ../data/gtk/menus.ui.h:21 ../data/ui/gb-greeter-window.ui.h:3
+msgid "_New"
+msgstr "_Novo"
+
+#: ../data/gtk/menus.ui.h:22
+msgid "_Empty File"
+msgstr "Prazna datot_eka"
+
+#: ../data/gtk/menus.ui.h:23
+msgid "_New Folder"
+msgstr "_Nova fascikla"
+
+#: ../data/gtk/menus.ui.h:24
+msgid "Open _With"
+msgstr "Otvor_i pomoću"
+
+#: ../data/gtk/menus.ui.h:25
+msgid "Source Code Editor"
+msgstr "Uređivač izvornog koda"
+
+#: ../data/gtk/menus.ui.h:26
+msgid "_Open Containing Folder"
+msgstr "_Otvori izabranu fasciklu"
+
+#: ../data/gtk/menus.ui.h:27
+msgid "_Open in Terminal"
+msgstr "_Otvori unutar terminala"
+
+#: ../data/gtk/menus.ui.h:28 ../data/ui/gb-rename-file-popover.ui.h:2
+msgid "_Rename"
+msgstr "P_reimenuj"
+
+#: ../data/gtk/menus.ui.h:29
+msgid "Mo_ve to Trash"
+msgstr "Premesti _u smeće"
+
+#: ../data/gtk/menus.ui.h:30
+msgid "_Build"
+msgstr "_Izgradi"
+
+#: ../data/gtk/menus.ui.h:31
+msgid "_Rebuild"
+msgstr "_Ponovo izgradi"
+
+#: ../data/style-schemes/builder-dark.xml.h:1
+msgid "Builder Dark"
+msgstr "Tamna tema Graditelja"
+
+#: ../data/style-schemes/builder-dark.xml.h:2
+msgid "Dark color scheme for Builder using the Tango color palette"
+msgstr "Tamna šema boja za Graditelja koja koristi Tango paletu boja"
+
+#: ../data/style-schemes/builder.xml.h:1
+#: ../data/ui/gb-preferences-page-keybindings.ui.h:3
+#: ../data/ui/gb-workbench.ui.h:1 ../src/main.c:49
+#: ../src/workbench/gb-workbench.c:153
+msgid "Builder"
+msgstr "Graditelj"
+
+#: ../data/style-schemes/builder.xml.h:2
+msgid "The default color scheme for Builder"
+msgstr "Podrazumevana šema boja za Graditelja"
+
+#. OVR indicates we are in overwite mode
+#: ../data/ui/gb-editor-frame.ui.h:2
+msgid "OVR"
+msgstr "OVR"
+
+#: ../data/ui/gb-editor-settings-widget.ui.h:1
+msgid "Display right _margin at column:"
+msgstr "Prikaži desnu _ivicu za kolonu:"
+
+#: ../data/ui/gb-editor-settings-widget.ui.h:2
+msgid "Trim trailing whitespace when saving document"
+msgstr "Skrati prateću prazninu prilikom čuvanja dokumenta"
+
+#: ../data/ui/gb-editor-settings-widget.ui.h:3
+msgid "Insert matching brace, bracket, quotation, and parenthesis."
+msgstr "Umetni odgovarajuću veliku, srednju, malu zagradu i navodnik."
+
+#: ../data/ui/gb-editor-settings-widget.ui.h:4
+msgid "Overwrite closing brace, bracket, quotation, and parenthesis."
+msgstr "Prepiši zatvarajuću veliku, srednju, malu zagradu i navodnik."
+
+#: ../data/ui/gb-editor-settings-widget.ui.h:5
+#: ../data/ui/gb-editor-tweak-widget.ui.h:7
+msgid "Indentation"
+msgstr "Uvlačenje"
+
+#: ../data/ui/gb-editor-settings-widget.ui.h:6
+msgid "_Tab width:"
+msgstr "Širina _tabulatora:"
+
+#: ../data/ui/gb-editor-settings-widget.ui.h:7
+msgid "Insert _spaces instead of tabs"
+msgstr "Umetni razmake ume_sto tabulatora"
+
+#: ../data/ui/gb-editor-settings-widget.ui.h:8
+msgid "_Enable automatic indentation"
+msgstr "Omogući _samouvlačenje"
+
+#: ../data/ui/gb-editor-settings-widget.ui.h:9
+msgid "Snippets (read-only)"
+msgstr "Isečci (samo čitanje)"
+
+#: ../data/ui/gb-editor-tweak-widget.ui.h:1
+msgid "Search highlight mode…"
+msgstr "Režim isticanja pretrage…"
+
+#: ../data/ui/gb-editor-tweak-widget.ui.h:2
+msgid "Display line numbers"
+msgstr "Prikaži broj reda"
+
+#: ../data/ui/gb-editor-tweak-widget.ui.h:3
+msgid "Display right margin"
+msgstr "Prikaži desnu ivicu"
+
+#: ../data/ui/gb-editor-tweak-widget.ui.h:4
+msgid "Highlight current line"
+msgstr "Istakni tekući red"
+
+#: ../data/ui/gb-editor-tweak-widget.ui.h:5
+msgid "Auto indent"
+msgstr "Samouvlačenje"
+
+#: ../data/ui/gb-editor-tweak-widget.ui.h:6
+#: ../data/ui/gb-preferences-page-keybindings.ui.h:12
+msgid "Smart Backspace"
+msgstr "Pametno brisanje"
+
+#: ../data/ui/gb-editor-tweak-widget.ui.h:8
+msgid "Spaces"
+msgstr "Razmaci"
+
+#: ../data/ui/gb-editor-tweak-widget.ui.h:9
+msgid "Tabs"
+msgstr "Jezičci"
+
+#: ../data/ui/gb-editor-tweak-widget.ui.h:10
+msgid "2"
+msgstr "2"
+
+#: ../data/ui/gb-editor-tweak-widget.ui.h:11
+msgid "3"
+msgstr "3"
+
+#: ../data/ui/gb-editor-tweak-widget.ui.h:12
+msgid "4"
+msgstr "4"
+
+#: ../data/ui/gb-editor-tweak-widget.ui.h:13
+msgid "8"
+msgstr "8"
+
+#: ../data/ui/gb-editor-view.ui.h:2 ../data/ui/gb-greeter-window.ui.h:4
+#: ../data/ui/gb-new-project-dialog.ui.h:2
+#: ../data/ui/gb-projects-dialog.ui.h:3
+msgid "_Cancel"
+msgstr "_Otkaži"
+
+#: ../data/ui/gb-editor-view.ui.h:3
+msgid ""
+"Builder has discovered that this file has been modified externally. Would "
+"you like to reload the file?"
+msgstr ""
+"Graditelj je uočio da je ova datoteka izmenjena van ovog programa. Želite li "
+"da je ponovo učitate?"
+
+#: ../data/ui/gb-editor-view.ui.h:4
+msgid "Go to Line"
+msgstr "Idi na red"
+
+#: ../data/ui/gb-editor-view.ui.h:5
+msgid "Go"
+msgstr "Idi"
+
+#: ../data/ui/gb-greeter-window.ui.h:1
+msgid "Select a Project"
+msgstr "Izaberi projekat"
+
+#: ../data/ui/gb-greeter-window.ui.h:2
+msgid "Click an item to select"
+msgstr "Klikni na stavke ispod za ubacivanje u izbor"
+
+#: ../data/ui/gb-greeter-window.ui.h:5
+msgid "Recent Projects"
+msgstr "Skorašnji projekti"
+
+#: ../data/ui/gb-greeter-window.ui.h:6
+msgid "Other Projects"
+msgstr "Drugi projekti"
+
+#: ../data/ui/gb-greeter-window.ui.h:7
+msgid "_Remove"
+msgstr "_Ukloni"
+
+#: ../data/ui/gb-new-file-popover.ui.h:1
+#: ../data/ui/gb-rename-file-popover.ui.h:1
+#: ../src/project-tree/gb-new-file-popover.c:349
+msgid "File Name"
+msgstr "Ime datoteke"
+
+#: ../data/ui/gb-new-file-popover.ui.h:2
+msgid "_Create"
+msgstr "_Napravi"
+
+#: ../data/ui/gb-new-project-dialog.ui.h:1
+#: ../src/dialogs/gb-new-project-dialog.c:354
+msgid "New Project"
+msgstr "Novi projekat"
+
+#: ../data/ui/gb-new-project-dialog.ui.h:3
+msgid "_Continue"
+msgstr "_Nastavi"
+
+#: ../data/ui/gb-new-project-dialog.ui.h:4
+msgid "From existing project on this computer"
+msgstr "Koristi već postojeći projekat na ovom računaru"
+
+#: ../data/ui/gb-new-project-dialog.ui.h:5
+msgid "From remote source code repository"
+msgstr "Koristi udaljenu riznicu sa izvornim kodom"
+
+#: ../data/ui/gb-new-project-dialog.ui.h:6
+#: ../data/ui/gb-preferences-page-git.ui.h:3
+msgid "Name"
+msgstr "Ime"
+
+#: ../data/ui/gb-new-project-dialog.ui.h:7
+msgid "Location"
+msgstr "Mesto"
+
+#: ../data/ui/gb-new-project-dialog.ui.h:8
+msgid "GNOME Version"
+msgstr "Izdanje Gnoma"
+
+#: ../data/ui/gb-new-project-dialog.ui.h:9
+msgid "Language"
+msgstr "Jezik"
+
+#: ../data/ui/gb-new-project-dialog.ui.h:10
+msgid "Pattern"
+msgstr "Šablon"
+
+#: ../data/ui/gb-new-project-dialog.ui.h:11
+msgid "Git"
+msgstr "Git"
+
+#: ../data/ui/gb-new-project-dialog.ui.h:12
+msgid "user@host:repository.git"
+msgstr "korisničko@adresa:riznica.git"
+
+#: ../data/ui/gb-new-project-dialog.ui.h:13
+msgid "Enter the URL of your project's source code repository."
+msgstr "Unestite URL riznice koja sadrži izvorni kod vašeg projekta."
+
+#: ../data/ui/gb-new-project-dialog.ui.h:14
+msgid "Directory"
+msgstr "Direktorijum"
+
+#: ../data/ui/gb-new-project-dialog.ui.h:15
+msgid "Repository"
+msgstr "Riznica"
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:1
+#: ../data/ui/gb-preferences-window.ui.h:3
+msgid "Editor"
+msgstr "Uređivač"
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:2
+msgid "Font"
+msgstr "Font"
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:3
+msgid "Highlighting"
+msgstr "Isticanje"
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:4
+msgid "Display Document Changes"
+msgstr "Prikaži izmene u dokumentu"
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:5
+msgid ""
+"Display whether a line has been added or modified next to the line number."
+msgstr ""
+"Prikazuje da li je red dodat ili izmenjen pored rednog broja tekućeg reda."
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:6
+msgid "Display Line Numbers"
+msgstr "Prikaži redni broj reda"
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:7
+msgid "Display the line numbers next to each line of the document."
+msgstr ""
+"Omogućava prikaz rednog broja reda, pored tekućeg reda, unutar svakog "
+"otvorenog dokumenta."
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:8
+msgid "Highlight Current Line"
+msgstr "Istakni tekući red"
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:9
+msgid "Highlight the line containing the cursor."
+msgstr "Ističe red u kojem je pokazivač miša."
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:10
+msgid "Highlight Matching Brackets"
+msgstr "Istakni uparene zagrade"
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:11
+msgid "Whether or not matching brackets should be highlighted."
+msgstr "Omogućava isticanje uparenih zagrada."
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:12
+msgid "Overview Map"
+msgstr "Minijaturni pregled koda"
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:13
+msgid "Display Overview Map"
+msgstr "Prikaži minijaturni pregled koda"
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:14
+msgid "Display an overview map next to the source code editor."
+msgstr "Omogućava prikaz minijaturnog pregleda koda pored uređivača teksta."
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:15
+msgid "Auto Hide Overview Map"
+msgstr "Automatski sakrij minijaturni pregled koda"
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:16
+msgid "Automatically hide the overview map during periods of inactivity."
+msgstr ""
+"Omogućava automatsko skrivanje prikaza minijaturnog pregleda koda kada se "
+"uređivač koda ne koristi."
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:17
+msgid "Cursor Placement"
+msgstr "Položaj pokazivača miša"
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:18
+msgid "Restore Cursor Position"
+msgstr "Povrati položaj pokazivača miša"
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:19
+msgid ""
+"Restore the insertion cursor to the last position when reopening a file."
+msgstr ""
+"Vraća pokazivač umetanja na poslednji položaj prilikom ponovnog otvaranja "
+"datoteke."
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:20
+msgid "Scroll Offset"
+msgstr "Opseg klizanja"
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:21
+msgid "Minimal number of lines to keep above and below the cursor."
+msgstr "Najmanji broj redova za iznad i ispod kursora."
+
+#: ../data/ui/gb-preferences-page-git.ui.h:1
+#: ../data/ui/gb-preferences-window.ui.h:8
+msgid "Version Control"
+msgstr "Upravljanje verzijama"
+
+#: ../data/ui/gb-preferences-page-git.ui.h:2
+msgid "Source Code Attribution"
+msgstr "Vlasništvo izvornog koda"
+
+#: ../data/ui/gb-preferences-page-git.ui.h:4
+msgid "Email"
+msgstr "E-pošta"
+
+#: ../data/ui/gb-preferences-page-insight.ui.h:1
+#: ../data/ui/gb-preferences-window.ui.h:5
+msgid "Code Insight"
+msgstr "Programiranje"
+
+#: ../data/ui/gb-preferences-page-insight.ui.h:2
+msgid "Semantic Language Highlighting"
+msgstr "Semantičko isticanje koda"
+
+#: ../data/ui/gb-preferences-page-insight.ui.h:3
+msgid ""
+"Highlight additional syntax based upon information found in the document."
+msgstr ""
+"Omogućava naprednije isticanje koda na osnovu podataka nađenih u dokumentu."
+
+#: ../data/ui/gb-preferences-page-insight.ui.h:4
+msgid "Auto Completion"
+msgstr "Samodovršavanje"
+
+#: ../data/ui/gb-preferences-page-insight.ui.h:5
+msgid "Suggest Snippet Completion"
+msgstr "Predloži dovršavanje isečaka koda"
+
+#: ../data/ui/gb-preferences-page-insight.ui.h:6
+msgid "Allow snippets to be inserted into the document."
+msgstr "Dozvoli ubacivanje isečaka koda u dokument."
+
+#: ../data/ui/gb-preferences-page-insight.ui.h:7
+msgid "Suggest Word Completion"
+msgstr "Dovršavanje reči"
+
+#: ../data/ui/gb-preferences-page-insight.ui.h:8
+msgid "Suggest completion of words found within all open documents."
+msgstr ""
+"Omogućava samodovršavanje reči nađenih unutar svih otvorenih dokumenata."
+
+#: ../data/ui/gb-preferences-page-insight.ui.h:9
+msgid "Suggest Completions using Ctags"
+msgstr "Dovršavanje koda preko Ce-oznaka"
+
+#: ../data/ui/gb-preferences-page-insight.ui.h:10
+msgid "Use Ctags for completions in supported languages."
+msgstr ""
+"Omogućava korišćenje Ce-oznaka (engl. „Ctags“) za dovršavanje koda u podržanim "
+"programskim jezicima."
+
+#: ../data/ui/gb-preferences-page-insight.ui.h:11
+msgid "Suggest Completions using Clang (Experimental)"
+msgstr "Dovršavanje koda preko Ce-langa (u testiranju)"
+
+#: ../data/ui/gb-preferences-page-insight.ui.h:12
+msgid "Use Clang for completions in the C and C++ languages."
+msgstr ""
+"Omogućava korišćenje Ce-langa (engl. „Clang“) za dovršavanje koda u Ce i Ce++ "
+"programskim jezicima."
+
+#: ../data/ui/gb-preferences-page-insight.ui.h:13
+msgid "Suggest Completions using Jedi"
+msgstr "Dovršavanje koda preko Džedija"
+
+#: ../data/ui/gb-preferences-page-insight.ui.h:14
+msgid "Use Jedi for completions in the Python language."
+msgstr ""
+"Omogućava korišćenje Džedija (engl. „Jedi“) za dovršavanje koda u Pajton "
+"programskom jeziku."
+
+#: ../data/ui/gb-preferences-page-keybindings.ui.h:1
+#: ../data/ui/gb-preferences-window.ui.h:6
+msgid "Keyboard"
+msgstr "Tastatura"
+
+#: ../data/ui/gb-preferences-page-keybindings.ui.h:2
+msgid "Key Binding Emulation"
+msgstr "Oponašanje prečica na tastaturi"
+
+#: ../data/ui/gb-preferences-page-keybindings.ui.h:4
+msgid "The default keybindings for Builder."
+msgstr "Podrazumevane prečice Graditelja."
+
+#: ../data/ui/gb-preferences-page-keybindings.ui.h:5
+msgid "Emacs Emulation"
+msgstr "Oponašanje Emaksa"
+
+#: ../data/ui/gb-preferences-page-keybindings.ui.h:6
+msgid "Emulates familiar keybindings from the Emacs text editor."
+msgstr "Oponaša poznate prečice iz Emaks uređivača teksta."
+
+#: ../data/ui/gb-preferences-page-keybindings.ui.h:7
+msgid "Vim Emulation"
+msgstr "Oponašanje Vima"
+
+#: ../data/ui/gb-preferences-page-keybindings.ui.h:8
+msgid "Emulates familiar keybindings from the Vim text editor."
+msgstr "Oponaša poznate prečice iz Vim uređivača teksta."
+
+#: ../data/ui/gb-preferences-page-keybindings.ui.h:9
+msgid "Keyboard Movement"
+msgstr "Kretanje u kodu"
+
+#: ../data/ui/gb-preferences-page-keybindings.ui.h:10
+msgid "Smart Home End"
+msgstr "Pametni „Home/End“ tasteri"
+
+#: ../data/ui/gb-preferences-page-keybindings.ui.h:11
+msgid "Home moves to first non-space character."
+msgstr "„Home“ taster pomiče pokazivač miša na prvi znak koji nije razmak."
+
+#: ../data/ui/gb-preferences-page-keybindings.ui.h:13
+msgid ""
+"Backspace will remove extra spaces to keep you aligned with your indentation "
+"width."
+msgstr ""
+"Taster za brisanje će obrisati dodatne razmake u skladu sa podešavanjem širine "
+"uvlačenja za tekući dokument."
+
+#: ../data/ui/gb-preferences-page-language.ui.h:1
+#: ../data/ui/gb-preferences-window.ui.h:4
+msgid "Programming Languages"
+msgstr "Programski jezici"
+
+#: ../data/ui/gb-preferences-page-plugins.ui.h:1
+#: ../data/ui/gb-preferences-window.ui.h:9
+msgid "Plugins"
+msgstr "Priključci"
+
+#: ../data/ui/gb-preferences-page-theme.ui.h:1
+#: ../data/ui/gb-preferences-window.ui.h:7
+msgid "Theme"
+msgstr "Tema"
+
+#: ../data/ui/gb-preferences-page-theme.ui.h:2
+msgid "Night Mode"
+msgstr "Tamna tema"
+
+#: ../data/ui/gb-preferences-page-theme.ui.h:3
+msgid "Use dark colors for the application chrome."
+msgstr "Koristi tamnu temu programa."
+
+#: ../data/ui/gb-preferences-page-theme.ui.h:4
+msgid "Display Grid Pattern"
+msgstr "Prikaži mrežicu"
+
+#: ../data/ui/gb-preferences-page-theme.ui.h:5
+msgid "Display a grid pattern under the source code."
+msgstr "Prikaži šablon sa mrežicom u pozadini izvornog koda."
+
+#: ../data/ui/gb-preferences-window.ui.h:1
+#: ../data/ui/gb-shortcuts-window.ui.h:4
+msgid "Preferences"
+msgstr "Postavke"
+
+#: ../data/ui/gb-preferences-window.ui.h:2
+msgid "Search Preferences…"
+msgstr "Postavke pretrage..."
+
+#: ../data/ui/gb-projects-dialog.ui.h:1
+#: ../src/dialogs/gb-projects-dialog.c:255
+msgid "Select Project"
+msgstr "Izaberi projekat"
+
+#: ../data/ui/gb-projects-dialog.ui.h:2
+msgid "New"
+msgstr "Novi"
+
+#: ../data/ui/gb-projects-dialog.ui.h:4
+msgid "Delete"
+msgstr "Obriši"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:1
+msgid "Editor Shortcuts"
+msgstr "Prečice uređivača"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:2
+msgid "General"
+msgstr "Opšte"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:3
+msgid "Global Search"
+msgstr "Globalna pretraga"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:5
+msgid "Command Bar"
+msgstr "Komandna traka"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:6
+#: ../plugins/terminal/gb-terminal-document.c:87
+#: ../plugins/terminal/gb-terminal-workbench-addin.c:101
+msgid "Terminal"
+msgstr "Terminal"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:7
+msgid "Keyboard Shortcuts"
+msgstr "Prečice na tastaturi"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:8
+msgid "Panels"
+msgstr "Dodatne površi"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:9
+msgid "Toggle left panel"
+msgstr "Prikaži levu površ"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:10
+msgid "Toggle right panel"
+msgstr "Prikaži desnu površ"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:11
+msgid "Toggle bottom panel"
+msgstr "Prikaži donju površ"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:12
+msgid "Touchpad gestures"
+msgstr "Gestovi dodirne table"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:13
+msgid "Switch to the next document"
+msgstr "Prebaci na sledeći dokument"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:14
+msgid "Two finger swipe right"
+msgstr "Pređi preko dodirne table udesno sa dva prsta"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:15
+msgid "Switch to the previous document"
+msgstr "Prebaci na prethodni dokument"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:16
+msgid "Two finger swipe left"
+msgstr "Pređi preko dodirne table ulevo sa dva prsta"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:17
+#: ../src/project-tree/gb-project-tree-builder.c:79
+msgid "Files"
+msgstr "Datoteke"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:18
+msgid "Create new document"
+msgstr "Napravi novi dokument"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:19
+msgid "Open a document"
+msgstr "Otvori dokument"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:20
+msgid "Save the document"
+msgstr "Sačuvaj dokument"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:21
+msgid "Close the document"
+msgstr "Zatvori dokument"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:22
+msgid "Show list of open files"
+msgstr "Prikaži spisak otvorenih datoteka"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:23
+msgid "Switch to source or header"
+msgstr "Prebaci na izvorni ili na zaglavlje"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:24
+msgid "Find and replace"
+msgstr "Nađi i zameni"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:25
+msgid "Find"
+msgstr "Nađi"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:26
+msgid "Find the next match"
+msgstr "Nađi sledeći pogodak"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:27
+msgid "Find the previous match"
+msgstr "Nađi prethodni pogodak"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:28
+msgid "Clear highlight"
+msgstr "Poništi isticanje"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:29
+msgid "Go to line"
+msgstr "Idi na red"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:30
+msgid "Copy and Paste"
+msgstr "Umnoži i ubaci"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:31
+msgid "Copy selected text to clipboard"
+msgstr "Umnoži izabrani tekst u ostavu"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:32
+msgid "Cut selected text to clipboard"
+msgstr "Iseci umnoženi tekst u ostavu"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:33
+msgid "Paste text from clipboard"
+msgstr "Ubaci tekst iz ostave"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:34
+msgid "Undo and Redo"
+msgstr "Opozovi i ponovi"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:35
+msgid "Undo previous command"
+msgstr "Opozovi prethodnu naredbu"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:36
+msgid "Redo previous command"
+msgstr "Ponovi prethodnu naredbu"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:37
+msgid "Editing"
+msgstr "Uređivanje"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:38
+msgid "Increment number at cursor"
+msgstr "Povećaj broj na pokazivaču"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:39
+msgid "Decrement number at cursor"
+msgstr "Smanji broj na pokazivaču"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:40
+msgid "Join selected lines"
+msgstr "Spoji sledeće redove"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:41
+msgid "Show completion window"
+msgstr "Prikaži prozor za samodopunjavanje"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:42
+msgid "Toggle overwrite"
+msgstr "Uključi prepisivanje"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:43
+msgid "Navigation"
+msgstr "Navigacija"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:44
+msgid "Move to next error in file"
+msgstr "Idi na sledeću grešku u datoteci"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:45
+msgid "Move to previous error in file"
+msgstr "Idi na prethodnu grešku u datoteci"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:46
+msgid "Move to previous edit location"
+msgstr "Idi na prethodnu izmenu"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:47
+msgid "Move to next edit location"
+msgstr "Idi na sledeću izmenu"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:48
+msgid "Jump to definition of symbol"
+msgstr "Skoči na definiciju simbola"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:49
+msgid "Move viewport up within the file"
+msgstr "Pomeri prozorče gore, unutar datoteke"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:50
+msgid "Move viewport down within the file"
+msgstr "Pomeri prozorče dole, unutar datoteke"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:51
+msgid "Move viewport to end of file"
+msgstr "Pomeri prozorče na kraj datoteke"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:52
+msgid "Move viewport to beginning of file"
+msgstr "Pomeri prozorče na početak datoteke"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:53
+msgid "Move to matching bracket"
+msgstr "Idi na uparenu zagradu"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:54
+msgid "Selections"
+msgstr "Izbori"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:55
+msgid "Select all"
+msgstr "Izaberi sve"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:56
+msgid "Unselect all"
+msgstr "Izbaci sve iz izbora"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:57
+msgid "Terminal Shortcuts"
+msgstr "Prečice terminala"
+
+#: ../data/ui/gb-view.ui.h:1
+msgid "Split"
+msgstr "Podeli"
+
+#: ../data/ui/gb-view.ui.h:2
+msgid "Split Left"
+msgstr "Podeli dokument levo"
+
+#: ../data/ui/gb-view.ui.h:3
+msgid "Split Right"
+msgstr "Podeli dokument desno"
+
+#: ../data/ui/gb-view.ui.h:4
+msgid "Split Down"
+msgstr "Podeli na dole"
+
+#: ../data/ui/gb-view.ui.h:5
+msgid "Move"
+msgstr "Pomeri"
+
+#: ../data/ui/gb-view.ui.h:6
+msgid "Move Left"
+msgstr "Pomeri dokument ulevo"
+
+#: ../data/ui/gb-view.ui.h:7
+msgid "Move Right"
+msgstr "Pomeri dokument udesno"
+
+#: ../data/ui/gb-view.ui.h:8
+msgid "_Save"
+msgstr "_Sačuvaj"
+
+#: ../data/ui/gb-view.ui.h:9
+msgid "_Save As"
+msgstr "_Sačuvaj kao"
+
+#: ../data/ui/gb-view.ui.h:10
+msgid "Print"
+msgstr "_Štampaj…"
+
+#: ../data/ui/gb-view.ui.h:11
+msgid "_Close"
+msgstr "_Zatvori"
+
+#: ../data/ui/gb-workbench.ui.h:2
+msgid "Project"
+msgstr "Projekat"
+
+#: ../libide/editorconfig/ide-editorconfig-file-settings.c:153
+msgid "No file was provided."
+msgstr "Nije data nijedna datoteka."
+
+#: ../libide/git/ide-git-buffer-change-monitor.c:167
+msgid "Cannot provide diff, no backing file provided."
+msgstr "Ne mogu da prikažem razliku, rezervna datoteka nije dostavljena."
+
+#: ../libide/git/ide-git-buffer-change-monitor.c:537
+#, c-format
+msgid "Repository does not have a working directory."
+msgstr "U riznici ne postoji radni direktorijum."
+
+#: ../libide/git/ide-git-buffer-change-monitor.c:548
+#, c-format
+msgid "File is not under control of git working directory."
+msgstr "Datoteka se ne nalazi pod upravništvom git radnog direktorijuma."
+
+#: ../libide/git/ide-git-buffer-change-monitor.c:614
+#, c-format
+msgid "The requested file does not exist within the git index."
+msgstr "Tražena datoteka ne postoji unutar sadržaja gita."
+
+#: ../libide/gjs/ide-gjs-script.cpp:76
+msgid "Attempt to load a GJS script with no filename."
+msgstr "Pokušano je učitavanje GJS skripta bez imena datoteke."
+
+#: ../libide/gjs/ide-gjs-script.cpp:103
+msgid "Failed to create JavaScript context."
+msgstr "Ne mogu da napravim Javaskript kontekst."
+
+#: ../libide/gjs/ide-gjs-script.cpp:128
+msgid "Failed to set IdeContext in JavaScript runtime."
+msgstr "Ne mogu da postavim IdeContext unutar Javaskript izvršnog okruženja."
+
+#: ../libide/gjs/ide-gjs-script.cpp:202
+#: ../libide/pygobject/ide-pygobject-script.c:254
+msgid "The filename for the script was not provided."
+msgstr "Nije dato ime za skript."
+
+#: ../libide/gjs/ide-gjs-script.cpp:213
+#: ../libide/pygobject/ide-pygobject-script.c:265
+msgid "The script must be on a local filesystem."
+msgstr "Skript mora da se nalazi u lokalnom sistemu datoteka."
+
+#: ../libide/gjs/ide-gjs-script.cpp:222
+#, c-format
+msgid "The script \"%s\" is not a JavaScript file."
+msgstr "Skript \"%s\" nije Javaskript datoteka."
+
+#: ../libide/gsettings/ide-language-defaults.c:177
+#, c-format
+msgid "%s contained invalid ASCII"
+msgstr "%s sadrži neispravan ASCII"
+
+#: ../libide/gsettings/ide-language-defaults.c:192
+#, c-format
+msgid "Failed to parse integer from \"%s\""
+msgstr "Ne mogu da obradim broj iz \"%s\""
+
+#: ../libide/gsettings/ide-language-defaults.c:270
+msgid "language defaults missing version in [global] group."
+msgstr ""
+"podrazumevane vrednosti jezika nemaju podešenu verziju unutar [global] grupe."
+
+#: ../libide/gsettings/ide-language-defaults.c:362
+msgid "Failed to initialize defaults."
+msgstr "Ne mogu da postavim podrazumevane vrednosti."
+
+#: ../libide/ide-back-forward-list.c:722
+msgid "File contained invalid UTF-8"
+msgstr "Datoteka sadrži neispravan UTF-8"
+
+#: ../libide/ide-buffer.c:1991
+msgid "The current language lacks a symbol resolver."
+msgstr "Za trenutni jezik ne postoji razrešavač simbola."
+
+#: ../libide/ide-buffer-manager.c:604
+msgid "File too large to be opened."
+msgstr "Datoteka je suviše velika za otvaranje."
+
+#: ../libide/ide-buffer-manager.c:1425
+msgid "Words"
+msgstr "Reči"
+
+#: ../libide/ide-buffer-manager.c:1636
+#, c-format
+msgid "unsaved document %u"
+msgstr "nesačuvani dokument %u"
+
+#: ../libide/ide-buffer-manager.c:1670
+msgid "Failed to save buffer, ignoring reclamation."
+msgstr "Ne mogu da sačuvam skladište, zanemarujem reklamaciju."
+
+#: ../libide/ide-builder.c:50
+#, c-format
+msgid "%s does not implement build_async()"
+msgstr "%s nema funkciju build_async()"
+
+#: ../libide/ide-builder.c:56
+msgid "No implementation of build_async()"
+msgstr "Nije sprovedena build_async() funkcija"
+
+#: ../libide/ide-build-result.c:156
+msgid "Failed to open stderr stream."
+msgstr "Ne mogu da otvorim stderr tok."
+
+#: ../libide/ide-build-result.c:186
+msgid "Failed to open stdout stream."
+msgstr "Ne mogu da otvorim stdout tok."
+
+#: ../libide/ide-build-system.c:229
+#, c-format
+msgid "%s() is not supported on %s build system."
+msgstr "%s() nije podržan na %s sistemu za izgradnju."
+
+#: ../libide/ide.c:71
+#, c-format
+msgid "You must call %s() before using libide."
+msgstr "Morate pozvati %s() pre korišćenja libide-a."
+
+#: ../libide/ide.c:136
+msgid "Builder requires libgit2-glib with threading support."
+msgstr "Graditelju je potreban libgit2-glib sa podrškom za niti (threading)."
+
+#: ../libide/ide.c:142
+msgid "Builder requires libgit2-glib with SSH support."
+msgstr "Graditelju je potreban libgit2-glib sa podrškom za SSH protokol."
+
+#: ../libide/ide-context.c:1666
+msgid "An unload request is already pending"
+msgstr "Zahtev za rasterećivanjem se već obrađuje"
+
+#: ../libide/ide-context.c:1781
+msgid "Context has already been restored."
+msgstr "Kontekst je već povraćen."
+
+#: ../libide/ide-device-manager.c:144
+#, c-format
+msgid "The device \"%s\" could not be found."
+msgstr "Ne mogu da pronađem uređaj „%s“."
+
+#: ../libide/ide-object.c:285
+#, c-format
+msgid "No implementations of extension point \"%s\"."
+msgstr "Ne postoji sprovedba tačke proširenja „%s“."
+
+#: ../libide/ide-object.c:377
+msgid "Failed to locate build system plugin."
+msgstr "Ne mogu da nađem priključak za pomoć u izgradnji koda."
+
+#: ../libide/ide-object.c:464
+msgid "No such extension point."
+msgstr "Ne postoji takva tačka proširenja."
+
+#: ../libide/ide-object.c:474
+msgid "No implementations of extension point."
+msgstr "Tačka proširenja nije napravljena."
+
+#: ../libide/ide-project.c:463
+msgid "Destination file must be within the project tree."
+msgstr "Odredišna datoteka mora biti unutar stabla projekta."
+
+#: ../libide/ide-project.c:593
+msgid "File must be within the project tree."
+msgstr "Datoteka mora biti unutar staba projekta."
+
+#: ../libide/ide-recent-projects.c:377
+#, c-format
+msgid "%s() may only be executed once"
+msgstr "%s() funkcija može biti izvršena samo jednom"
+
+#: ../libide/ide-script.c:205
+#, c-format
+msgid "%s has not implemented GAsyncInitable."
+msgstr "%s funkcija nema sprovedenu GAsyncInitable mogućnost."
+
+#: ../libide/ide-source-snippet.c:370
+msgid "Chunk does not belong to snippet."
+msgstr "Deo ne pripada isečku."
+
+#: ../libide/ide-source-snippet-completion-provider.c:288
+msgid "Snippets"
+msgstr "Isečci"
+
+#: ../libide/ide-source-snippet-parser.c:495
+#, c-format
+msgid "Invalid snippet at line %d: %s"
+msgstr "Neispravan isečak u %d. redu: %s"
+
+#: ../libide/ide-source-snippets-manager.c:96
+#, c-format
+msgid "Failed to open directory: %s"
+msgstr "Ne mogu da otvorim fasciklu: %s"
+
+#: ../libide/ide-source-snippets-manager.c:109
+#, c-format
+msgid "Failed to load file: %s: %s"
+msgstr "Ne mogu da učitam datoteku: %s: %s"
+
+#: ../libide/ide-source-view.c:4563
+#, c-format
+msgid "Insert \"%s\""
+msgstr "Ubaci \"%s\""
+
+#: ../libide/ide-source-view.c:4565
+#, c-format
+msgid "Replace \"%s\" with \"%s\""
+msgstr "Zameni \"%s\" sa \"%s\""
+
+#: ../libide/ide-source-view.c:4683
+msgid "Apply Fix-It"
+msgstr "Primeni ispravku"
+
+#: ../libide/ide-source-view.c:4726
+msgid "Join Lines"
+msgstr "Spoji redove"
+
+#: ../libide/ide-source-view.c:4737
+msgid "Sort Lines"
+msgstr "Poređaj redove"
+
+#: ../libide/ide-source-view.c:4756
+msgid "Go to Definition"
+msgstr "Idi na definiciju"
+
+#: ../libide/pygobject/ide-pygobject-script.c:135
+msgid "Attempt to load a PyGObject script with no filename."
+msgstr "Pokušano je učitavanje PyGObject skripte koja nema ime."
+
+#: ../libide/pygobject/ide-pygobject-script.c:274
+#, c-format
+msgid "The script \"%s\" is not a PyGObject file."
+msgstr "Skripta „%s“ nije PyGObject datoteka."
+
+#: ../plugins/autotools/ide-autotools-build-system.c:175
+msgid "Failed to locate configure.ac"
+msgstr "Ne mogu da nađem configure.ac datoteku"
+
+#: ../plugins/autotools/ide-autotools-build-task.c:270
+msgid "Directory must be on a locally mounted filesystem."
+msgstr "Fascikla mora biti lokalno montirani sistem datoteka."
+
+#: ../plugins/autotools/ide-autotools-build-task.c:641
+msgid "Cannot execute build task more than once."
+msgstr "Ne mogu da pokrenem više od jedne izgradnje programa."
+
+#: ../plugins/autotools/ide-autotools-build-task.c:726
+msgid "Failed to create build directory."
+msgstr "Ne mogu da napravim fasciklu za izgradnju."
+
+#: ../plugins/autotools/ide-autotools-build-task.c:735
+#, c-format
+msgid "'%s' is not a directory."
+msgstr "\"%s\" nije fascikla."
+
+#: ../plugins/autotools/ide-autotools-build-task.c:774
+#, c-format
+msgid "autogen.sh is missing from project directory (%s)."
+msgstr "Unutar projektne fascikle (%s) nedostaje autogen.sh datoteka."
+
+#: ../plugins/autotools/ide-autotools-build-task.c:784
+msgid "autogen.sh is not executable."
+msgstr "Datoteka autogen.sh nije izvršna."
+
+#: ../plugins/autotools/ide-autotools-build-task.c:814
+#, c-format
+msgid "autogen.sh failed to create configure (%s)"
+msgstr "autogen.sh ne može da napravi configure (%s)"
+
+#: ../plugins/autotools/ide-makecache.c:999
+msgid "Invalid makefile provided, ignoring."
+msgstr "Dat je neispravan makefile, zanemarujem ga."
+
+#: ../plugins/clang/ide-clang-completion-provider.c:200
+msgid "Clang"
+msgstr "Ce-lang"
+
+#: ../plugins/clang/ide-clang-service.c:266
+msgid "Unknown failure"
+msgstr "Nepoznata greška"
+
+#: ../plugins/clang/ide-clang-service.c:270
+msgid "Clang crashed"
+msgstr "Ce-lang je pukao"
+
+#: ../plugins/clang/ide-clang-service.c:274
+msgid "Invalid arguments"
+msgstr "Neispravni parametri"
+
+#: ../plugins/clang/ide-clang-service.c:278
+msgid "AST read error"
+msgstr "AST greška prilikom čitanja"
+
+#: ../plugins/clang/ide-clang-service.c:290
+#, c-format
+msgid "Failed to create translation unit: %s"
+msgstr "Ne mogu da napravim prevodilačku jedinicu: %s"
+
+#: ../plugins/clang/ide-clang-service.c:399
+msgid "File must be saved locally to parse."
+msgstr "Datoteka mora biti sačuvana lokalno da bih je obradio."
+
+#: ../plugins/clang/ide-clang-symbol-node.c:149
+msgid "anonymous"
+msgstr "anonimno"
+
+#: ../plugins/clang/ide-clang-translation-unit.c:654
+msgid "clang_codeCompleteAt() only works on local files"
+msgstr "clang_codeCompleteAt() funkcija radi samo na lokalnim datotekama"
+
+#: ../plugins/command-bar/gb-command-bar.c:290
+#, c-format
+msgid "Command not found: %s"
+msgstr "Nisam našao naredbu: %s"
+
+#: ../plugins/command-bar/gb-command-bar.c:594
+msgid "Use the entry below to execute a command"
+msgstr "Koristite unos ispod za izvršavanje naredbe"
+
+#: ../plugins/command-bar/gb-vim.c:83
+#, c-format
+msgid "Number required"
+msgstr "Broj je potreban"
+
+#: ../plugins/command-bar/gb-vim.c:93
+#, c-format
+msgid "%s is invalid for %s"
+msgstr "%s je neispravno u/za %s"
+
+#: ../plugins/command-bar/gb-vim.c:151
+#, c-format
+msgid "Cannot find language '%s'"
+msgstr "Ne mogu da nađem jezik '%s'"
+
+#: ../plugins/command-bar/gb-vim.c:348
+#, c-format
+msgid "Unknown option: %s"
+msgstr "Nepoznato podešavanje: %s"
+
+#: ../plugins/command-bar/gb-vim.c:387
+#, c-format
+msgid "Cannot find colorscheme '%s'"
+msgstr "Ne mogu naći šemu boja '%s'"
+
+#: ../plugins/command-bar/gb-vim.c:423
+#, c-format
+msgid "Failed to locate working directory"
+msgstr "Ne mogu da nađem radnu fasciklu"
+
+#: ../plugins/command-bar/gb-vim.c:547
+#, c-format
+msgid "Invalid :syntax subcommand: %s"
+msgstr "Uočena neispravnost: sintaksna podnaredba: %s"
+
+#: ../plugins/command-bar/gb-vim.c:874
+#, c-format
+msgid "Invalid search and replace request"
+msgstr "Neispravan „nađi i zameni“ zahtev"
+
+#: ../plugins/command-bar/gb-vim.c:960
+#, c-format
+msgid "vim mode requires GtkSourceView"
+msgstr "Vim način rada zahteva GtkSourceView"
+
+#: ../plugins/command-bar/gb-vim.c:990
+#, c-format
+msgid "Not an editor command: %s"
+msgstr "%s nije uređivačka naredba"
+
+#: ../plugins/c-pack/ide-c-format-provider.c:281
+#: ../plugins/python-pack/ide-python-format-provider.c:238
+msgid "Format Strings"
+msgstr "Format rečenica"
+
+#: ../plugins/ctags/ide-ctags-completion-provider.c:179
+msgid "CTags"
+msgstr "Ce-oznake"
+
+#: ../plugins/devhelp/gb-devhelp-document.c:71
+#, c-format
+msgid "Documentation (%s)"
+msgstr "Dokumentacija (%s)"
+
+#: ../plugins/devhelp/gb-devhelp-document.c:148
+#: ../plugins/devhelp/gb-devhelp-panel.c:144
+#: ../plugins/devhelp/gb-devhelp-search-provider.c:134
+msgid "Documentation"
+msgstr "Dokumentacija"
+
+#: ../plugins/device-manager/gb-device-manager-panel.c:75
+msgid "Device Manager"
+msgstr "Upravnik uređaja"
+
+#: ../plugins/file-search/gb-file-search-provider.c:45
+msgid "Switch To"
+msgstr "Prebaci na"
+
+#: ../plugins/gnome-code-assistance/ide-gca-diagnostic-provider.c:336
+msgid "Code assistance requires a local file."
+msgstr "Kodna ispomoć traži lokalnu datoteku."
+
+#: ../plugins/gnome-code-assistance/ide-gca-service.c:168
+msgid "No language specified"
+msgstr "Nije postavljen jezik"
+
+#: ../plugins/html-preview/html_preview_plugin/__init__.py:88
+msgid "Preview as HTML"
+msgstr "Prikaži pretpregled kao HTML"
+
+#: ../plugins/mingw/ide-mingw-device-provider.c:95
+msgid "MinGW (64-bit)"
+msgstr "MinGW (64-bitni)"
+
+#: ../plugins/mingw/ide-mingw-device-provider.c:107
+msgid "MinGW (32-bit)"
+msgstr "MinGW (32-bitni)"
+
+#: ../plugins/symbol-tree/symbol-tree.c:187
+msgid "Current language does not support symbol resolvers"
+msgstr "Razrešavači simbola nisu podržani za ovaj programski jezik"
+
+#: ../plugins/symbol-tree/symbol-tree.c:211
+msgid "Symbol Tree"
+msgstr "Stablo simbola"
+
+#: ../plugins/sysmon/gb-sysmon-addin.c:64
+msgid "System Monitor"
+msgstr "Praćenje sistema"
+
+#: ../plugins/terminal/gb-terminal-document.c:64
+#, c-format
+msgid "Terminal (%s)"
+msgstr "Terminal (%s)"
+
+#: ../plugins/terminal/gb-terminal-view-actions.c:300
+msgid "Save Terminal Content As"
+msgstr "Sačuvaj sadržaj terminala kao"
+
+#: ../plugins/terminal/gb-terminal-view-actions.c:308
+#: ../src/editor/gb-editor-view-actions.c:310
+#: ../src/editor/gb-editor-view-actions.c:441
+#: ../src/workbench/gb-workbench-actions.c:169
+msgid "Cancel"
+msgstr "Otkaži"
+
+#: ../plugins/terminal/gb-terminal-view-actions.c:309
+#: ../src/editor/gb-editor-view-actions.c:311
+#: ../src/editor/gb-editor-view-actions.c:442
+msgid "Save"
+msgstr "Sačuvaj"
+
+#: ../src/app/gb-application-actions.c:91
+#, c-format
+msgid ""
+"The support log file has been written to '%s'. Please provide this file as "
+"an attachment on your bug report or support request."
+msgstr ""
+"Zapisnik sa tehničkim podacima je sačuvan u „%s“. Dostavite ga kao dodatak "
+"izveštaju o grešci ili prilikom slanja zahteva za tehničku podršku."
+
+#: ../src/app/gb-application-actions.c:157
+msgid "An IDE for GNOME"
+msgstr "IDE (integrisano razvojno okruženje) za Gnom"
+
+#: ../src/app/gb-application-actions.c:162
+msgid "GNOME Builder"
+msgstr "Gnomov graditelj"
+
+#: ../src/app/gb-application-actions.c:164
+msgid "translator-credits"
+msgstr ""
+"Miroslav Nikolić <miroslavnikolic@rocketmail.com>\n"
+"Marko M. Kostić <marko.m.kostic@gmail.com>\n"
+"\n"
+"http://prevod.org — prevod na srpski jezik"
+
+#: ../src/app/gb-application-actions.c:167
+msgid "Learn more about GNOME Builder"
+msgstr "Saznajte više o Gnomovom graditelju"
+
+#: ../src/app/gb-application-actions.c:170
+msgid "Funded By"
+msgstr "Novčano pomogli"
+
+#: ../src/app/gb-application.c:642
+msgid "Run Builder in standalone mode"
+msgstr "Pokreni Graditelja u samostalnom režimu rada"
+
+#: ../src/app/gb-application.c:648
+msgid "Show the application's version"
+msgstr "Prikaži izdanje programa"
+
+#: ../src/app/gb-application.c:654
+msgid "Increase verbosity. May be specified multiple times."
+msgstr "Povećaj pričljivost. Može se podesiti više puta."
+
+#: ../src/dialogs/gb-new-project-dialog.c:347
+msgid "Select Project File"
+msgstr "Izaberi projektnu datoteku"
+
+#: ../src/dialogs/gb-new-project-dialog.c:374
+msgid "Clone Repository"
+msgstr "Kloniraj riznicu"
+
+#: ../src/dialogs/gb-new-project-dialog.c:394
+msgid "Autotools Project (configure.ac)"
+msgstr "Autotools projekat (configure.ac)"
+
+#: ../src/dialogs/gb-new-project-dialog.c:400
+msgid "Any Directory"
+msgstr "Bilo koja fascikla"
+
+#: ../src/dialogs/gb-new-project-dialog.c:527
+msgid "A valid Git URL is required"
+msgstr "Morate uneti ispravnu URL adresu git riznice"
+
+#: ../src/dialogs/gb-new-project-dialog.c:666
+msgid "Directory|Projects"
+msgstr "Direktorijum|Projekti"
+
+#: ../src/dialogs/gb-projects-dialog.c:244
+msgid "(Click on items to select them)"
+msgstr "(Klikni na stavke ispod za ubacivanje u odabir)"
+
+#: ../src/editor/gb-editor-frame.c:76
+#, c-format
+msgid "Line %u, Column %u"
+msgstr "%u. red, %u. kolona"
+
+#: ../src/editor/gb-editor-frame.c:244
+#, c-format
+msgid "%u of %u"
+msgstr "%u od %u"
+
+#: ../src/editor/gb-editor-frame.c:664
+msgid "Re_veal in Project Tree"
+msgstr "Prikaži u stablu projekta"
+
+#: ../src/editor/gb-editor-settings-widget.c:189
+#, c-format
+msgid "%s (read-only)"
+msgstr "%s (samo za čitanje)"
+
+#: ../src/editor/gb-editor-view-actions.c:304
+msgid "Save Document"
+msgstr "Sačuvaj dokument"
+
+#: ../src/editor/gb-editor-view-actions.c:430
+msgid "Save Document As"
+msgstr "Sačuvaj dokument kao"
+
+#: ../src/editor/gb-editor-view.c:119
+msgid "Plain Text"
+msgstr "Običan tekst"
+
+#. translators: the user selected a number outside the value range for the document.
+#: ../src/editor/gb-editor-view.c:624
+#, c-format
+msgid "Provide a number between 1 and %u"
+msgstr "Pruža broj između 1 i %u"
+
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-editor.c:95
+msgid "restore insert cursor mark"
+msgstr ""
+"restore insert cursor mark povrati prethodni položaj pokazivača miša povrati "
+"prethodni položaj pokazivača miša"
+
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-editor.c:100
+msgid "diff renderer gutter changes git vcs"
+msgstr ""
+"diff renderer gutter changes git vcs razlika dif render iscrtavač obrada "
+"promene git vcs promena dif razlika render iscrtavač obrada promene promena"
+
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-editor.c:105
+msgid "line numbers"
+msgstr "redni brojevi redova line numbers redni brojevi redova"
+
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-editor.c:110
+msgid "line lines highlight current"
+msgstr ""
+"line lines highlight current linija linije označavanje označiti trenutno "
+"trenutna trenutni linija linije označavanje označiti trenutno trenutna "
+"trenutni"
+
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-editor.c:115
+msgid "bracket brackets highlight matching"
+msgstr ""
+"bracket brackets highlight matching zagrada zagrade označavanje označiti "
+"uparene uparena zagrada zagrade označavanje označiti uparene uparena upareno "
+"upareno isticanje istaći isticanje istaći"
+
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-editor.c:120
+msgid "lines margin scrolloff scroll off"
+msgstr ""
+"lines margin scrolloff scroll off linije margine klizač linije margine klizač"
+
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-editor.c:126
+msgid "font document editor monospace"
+msgstr ""
+"font document editor monospace uređivač dokument utvrđene širine monospejs "
+"uređivač dokument utvrđene širine monospejs font slikoslov slikoslov"
+
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-editor.c:131
+msgid "minimap mini map overview over view"
+msgstr ""
+"minimap mini map overview over view minimapa minijaturni pregled koda "
+"minimapa minijaturni pregled koda"
+
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-git.c:169
+msgid "git author name surname attribution source code"
+msgstr ""
+"git author name surname attribution source code autor izvođač ime prezime "
+"vlasništvo izvorni kod git autor izvođač ime prezime vlasništvo izvorni kod"
+
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-git.c:175
+msgid "git author email mail address attribute source code"
+msgstr ""
+"git author email mail address attribute source code git autor izvođač imejl "
+"e-adresa mejl adresa vlasništvo izvorni kod git autor izvođač imejl mejl "
+"adresa e-adresa vlasništvo izvorni kod"
+
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-insight.c:61
+msgid "word words auto completion suggest found document"
+msgstr ""
+"word words auto completion suggest found document reč rečenica automatsko "
+"samostalno dopunjavanje samodopunjavanje predlozi pronađen dokument reč "
+"rečenica  automatsko samostalno dopunjavanje samodopunjavanje predlozi "
+"pronađen dokument dovršavanje dovršavanje"
+
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-insight.c:66
+msgid "experimental clang autocompletion auto complete"
+msgstr ""
+"experimental clang autocompletion auto complete probno probna clang ce-lang "
+"samodopunjavanje autodopunjavanje auto dopunjavanje eksperimentalno probno "
+"probna ce-lang samodopunjavanje autodopunjavanje auto dopunjavanje eksperimentalno"
+
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-insight.c:71
+msgid "exuberant ctags tags autocompletion auto complete"
+msgstr ""
+"experimental clang autocompletion auto ctags complete probno probna clang ce-"
+"lang samodopunjavanje autodopunjavanje auto ce-oznake oznake dopunjavanje "
+"eksperimentalno probno probna ce-lang samodopunjavanje autodopunjavanje auto ce-"
+"oznake oznake dopunjavanje eksperimentalno"
+
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-insight.c:76
+msgid "jedi python autocompletion auto complete"
+msgstr ""
+"experimental clang autocompletion auto complete probno probna clang ce-lang "
+"samodopunjavanje jedi python autodopunjavanje auto džedi piton pajton "
+"dopunjavanje eksperimentalno probno probna ce-lang samodopunjavanje "
+"autodopunjavanje piton pajton auto dopunjavanje eksperimentalno"
+
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-insight.c:81
+msgid "snippets autocompletion auto complete"
+msgstr ""
+"snippets experimental clang autocompletion auto complete probno probna clang "
+"ce-lang samodopunjavanje isečak isečci autodopunjavanje auto dopunjavanje "
+"eksperimentalno probno probna ce-lang samodopunjavanje autodopunjavanje auto "
+"isečak isečci dopunjavanje eksperimentalno"
+
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-insight.c:86
+msgid "semantic highlighting color goto declaration definition"
+msgstr ""
+"semantic highlighting color goto declaration definition semantičko isticanje "
+"koda boja idi na deklaracija definicija semantičko isticanje koda idi na "
+"deklaracija definicija boja"
+
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-keybindings.c:64
+msgid "default builder keybindings"
+msgstr ""
+"default builder keybindings podrazumevane prečice graditelja podrazumevane "
+"prečice graditelja"
+
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-keybindings.c:69
+msgid "emacs keybindings modal"
+msgstr ""
+"emacs keybindings modal modalne prečice emaksa modalne prečice graditelja"
+
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-keybindings.c:74
+msgid "vim keybindings modal"
+msgstr "vim keybindings modal modalne prečice vima modalne prečice vima"
+
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-keybindings.c:80
+msgid "smart home end"
+msgstr ""
+"smart home end pametan pametna pametno kraj početak pametan pametna pametno "
+"pametni pametni kraj početak"
+
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-keybindings.c:85
+msgid "smart back backspace indent align"
+msgstr ""
+"smart back backspace ident align pametan pametna pametno pametni nazad "
+"brisanje uvlačenje poređati ređanje pametan pametna pametno pametni nazad "
+"brisanje uvlačenje poređati ređanje"
+
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-theme.c:114
+msgid "show grid lines"
+msgstr ""
+"show grid lines mreža linije mreže kvadratići mrežu mreža mrežu linije mreže "
+"kvadratići"
+
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-theme.c:119
+msgid "source style scheme source tango solarized builder syntax"
+msgstr ""
+"source style scheme tango solarized builder syntax izvorni stil šema tango "
+"solarizovano bilder graditelj sintaksa izvorni stil šema tango solarizovano "
+"bilder graditelj sintaksa"
+
+#: ../src/project-tree/gb-new-file-popover.c:124
+#: ../src/project-tree/gb-rename-file-popover.c:142
+msgid "A folder with that name already exists."
+msgstr "Direktorijum sa tim imenom već postoji."
+
+#: ../src/project-tree/gb-new-file-popover.c:127
+#: ../src/project-tree/gb-rename-file-popover.c:145
+msgid "A file with that name already exists."
+msgstr "Datoteka sa tim imenom već postoji."
+
+#: ../src/project-tree/gb-new-file-popover.c:351
+msgid "Folder Name"
+msgstr "Ime fascikle"
+
+#: ../src/project-tree/gb-rename-file-popover.c:80
+#, c-format
+msgid "Rename %s"
+msgstr "Preimenuj %s"
+
+#: ../src/project-tree/gb-rename-file-popover.c:173
+msgid "File name must not contain subdirectories."
+msgstr "Ime datoteke ne sme da sadrži ime podfascikle."
+
+#: ../src/search/gb-search-display.c:234
+msgid "Cannot add provider more than once."
+msgstr "Ne mogu da dodam dostavljača više od jednog puta."
+
+#: ../src/search/gb-search-display.c:316
+msgid "The provider could not be found."
+msgstr "Ne mogu da nađem dostavljača."
+
+# Možda je ispravnije Još %s. Treba proveriti gde se ovo javlja.
+#: ../src/search/gb-search-display-group.c:182
+#, c-format
+msgid "%s more"
+msgstr "%s još"
+
+#: ../src/shortcuts/gb-shortcuts-dialog.c:937
+msgid "Search Shortcuts"
+msgstr "Prečice pretrage"
+
+#: ../src/shortcuts/gb-shortcuts-dialog.c:964
+msgid "Search Results"
+msgstr "Rezultati pretrage"
+
+#: ../src/util/gb-file-manager.c:64
+msgid "File path is NULL"
+msgstr "Putanja je nultna (NULL)"
+
+#: ../src/util/gb-file-manager.c:73 ../src/util/gb-file-manager.c:84
+msgid "Error converting UTF-8 filename to wide char"
+msgstr "Greška prilikom pretvaranja UTF-8 imena datoteke u wide char"
+
+#: ../src/util/gb-file-manager.c:92
+msgid "ILCreateFromPath() failed"
+msgstr "Neuspeh prilikom izvršavanja funkcije ILCreateFromPath()"
+
+#: ../src/util/gb-file-manager.c:129
+#, c-format
+msgid "Cannot convert '%s' into a valid NSURL."
+msgstr "Greška prilikom pretvaranja „%s“ u ispravan NSURL."
+
+#: ../src/util/gb-file-manager.c:157
+msgid "Connecting to org.freedesktop.FileManager1 failed: "
+msgstr "Nisam uzpeo da se povežem na org.freedesktop.FileManager1:"
+
+#: ../src/util/gb-file-manager.c:181
+msgid "Calling ShowItems failed: "
+msgstr "Nisam uspeo da pozovem funkciju ShowItems:"
+
+#: ../src/util/gb-glib.c:55
+msgid "Just now"
+msgstr "Upravo sada"
+
+#: ../src/util/gb-glib.c:57
+msgid "An hour ago"
+msgstr "Pre jednog sata"
+
+#: ../src/util/gb-glib.c:59
+msgid "Yesterday"
+msgstr "Juče"
+
+#: ../src/util/gb-glib.c:65
+msgid "About a year ago"
+msgstr "Pre jedne godine"
+
+#: ../src/util/gb-glib.c:69
+#, c-format
+msgid "About %u years ago"
+msgstr "Pre otprilike %u godine"
+
+#: ../src/workbench/gb-workbench-actions.c:162
+msgid "Open Document"
+msgstr "Otvori dokument"
+
+#: ../src/workbench/gb-workbench-actions.c:170
+msgid "Open"
+msgstr "Otvori"
+
+#: ../src/workbench/gb-workbench.c:151
+#, c-format
+msgid "%s - Builder"
+msgstr "%s — Graditelj"
+
+#: ../src/workbench/gb-workbench.c:919
+msgid "Build Failure"
+msgstr "Neuspeh pri izgradnji"
+
+#: ../src/workbench/gb-workbench.c:966
+msgid "Project build system does not support building"
+msgstr "Sistem za izgradnju projekta ne podržava gradnju"
+
+#: ../tools/ide-build.c:81 ../tools/ide-build.c:85
+#, c-format
+msgid "===============\n"
+msgstr "===============\n"
+
+#: ../tools/ide-build.c:82
+#, c-format
+msgid " Build Failure: %s\n"
+msgstr "Neuspeh pri izgradnji: %s\n"
+
+#: ../tools/ide-build.c:83
+msgid " Build ran for: %"
+msgstr "Postupak izgradnje je trajao: %"
+
+#: ../tools/ide-build.c:90 ../tools/ide-build.c:94
+#, c-format
+msgid "=================\n"
+msgstr "=================\n"
+
+#: ../tools/ide-build.c:91
+#, c-format
+msgid " Build Successful\n"
+msgstr "Postupak izgradnje je uspeo\n"
+
+#: ../tools/ide-build.c:92
+msgid "   Build ran for: %"
+msgstr "   postupak izgradnje je trajao: %"
+
+#: ../tools/ide-build.c:200 ../tools/ide-build.c:206
+#, c-format
+msgid "========================\n"
+msgstr "========================\n"
+
+#: ../tools/ide-build.c:201
+#, c-format
+msgid "           Project Name: %s\n"
+msgstr "           Ime projekta: %s\n"
+
+#: ../tools/ide-build.c:202
+#, c-format
+msgid " Version Control System: %s\n"
+msgstr " Sistem za upravljanje kodom: %s\n"
+
+#: ../tools/ide-build.c:203
+#, c-format
+msgid "           Build System: %s\n"
+msgstr "           Sistem za izgradnju: %s\n"
+
+#: ../tools/ide-build.c:204
+#, c-format
+msgid "    Build Date and Time: %s\n"
+msgstr "    Vreme i datum nastanka gradnje: %s\n"
+
+#: ../tools/ide-build.c:205
+#, c-format
+msgid "    Building for Device: %s (%s)\n"
+msgstr "    Cilj gradnje je uređaj: %s (%s)\n"
+
+#: ../tools/ide-build.c:288
+#, c-format
+msgid "Timed out while waiting for devices to settle.\n"
+msgstr "Vreme je isteklo dok se čekalo na uspešno kačenje uređaja.\n"
+
+#: ../tools/ide-build.c:346
+#, c-format
+msgid "Waiting up to 60 seconds for devices to settle. Ctrl+C to exit.\n"
+msgstr "Čekam 60 sekundi dok se uređaj ne zakači. Ctrl+C za prekid čekanja.\n"
+
+#: ../tools/ide-build.c:355
+msgid "The target device we are building for."
+msgstr "Ciljni uređaj gradnje."
+
+#: ../tools/ide-build.c:356
+msgid "DEVICE_ID"
+msgstr "IB_UREĐAJA"
+
+#: ../tools/ide-build.c:359
+msgid "Clean and rebuild the project."
+msgstr "Očisti i ponovo izgradi projekat."
+
+#: ../tools/ide-build.c:361
+msgid "Increase parallelism in the build."
+msgstr "Povećaj broj uporednih gradnji."
+
+#: ../tools/ide-build.c:362
+msgid "N"
+msgstr "N"
+
+#: ../tools/ide-build.c:373
+msgid "- Build the project."
+msgstr "— Izgradi projekat."
+
+#: ../tools/ide-list-build-flags.c:115
+msgid "- Get build flags for a project file"
+msgstr "— Dobavi parametre gradnje za projektnu datoteku"
+
+#: ../tools/ide-list-devices.c:109
+msgid "- List devices found on the system."
+msgstr "— Prikaži spisak sa prepoznatim uređajima na sistemu."
+
+#: ../tools/ide-list-diagnostics.c:187
+#, c-format
+msgid "Failed to diagnose: %s\n"
+msgstr "Neuspeh pri dijagnozi: %s\n"
+
+#: ../tools/ide-list-diagnostics.c:250
+#, c-format
+msgid "No such file in project: %s\n"
+msgstr "U projektu ne postoji datoteka: %s\n"
+
+#: ../tools/ide-list-diagnostics.c:284
+msgid "- List diagnostics for a file."
+msgstr "— Napravi spisak sa dijagnozama za datoteku."
+
+#: ../tools/ide-list-files.c:127 ../tools/ide-list-file-settings.c:207
+msgid "- List files found in project."
+msgstr "— Prikaži datoteke pronađene u projektu."
+
+#: ../tools/ide-list-file-settings.c:182
+#, c-format
+msgid "No files provided to load settings for.\n"
+msgstr "Nije dostavljena nijedna datoteka iz koje bih učitao podešavanja.\n"
+
+#: ../tools/ide-mine-projects.c:87
+msgid "- discover projects"
+msgstr "— otkrij projekte"
+
+#: ../tools/ide-search.c:68
+#, c-format
+msgid "%s results\n"
+msgstr "%s rezultati\n"
+
+#: ../tools/ide-search.c:120
+msgid "PROJECT_FILE [SEARCH TERMS...]"
+msgstr "PROJEKTNA_DATOTEKA [POJMOVI ZA PRETRAGU...]"
+
+#~ msgid "Search Symbols"
+#~ msgstr "Simboli za pretragu"
+
+#~ msgid "Device"
+#~ msgstr "Uređaj"
+
+#~ msgid "_View"
+#~ msgstr "Pr_egled"
+
+#~ msgid "Display Side _Panel"
+#~ msgstr "_Prikaži straničnik"
+
+#~ msgid "Build Project"
+#~ msgstr "Izgradi projekat"
+
+#~ msgid "Rebuild Project"
+#~ msgstr "Ponovo izgradi projekat"
+
+#~ msgid "Close"
+#~ msgstr "Zatvori"
+
+#~ msgid "Use Clang for autocompletion in the C and C++ languages."
+#~ msgstr ""
+#~ "Omogućava korišćenje Ce-langa za samodopunjavanje koda u Ce i Ce++ jezicima."
+
+#~ msgid "Enable auto-completion of words in document"
+#~ msgstr "Omogući samodopunjavanje reči u dokumentu"
+
+#~ msgid ""
+#~ "If enabled, words within the current document will be available for auto-"
+#~ "completion."
+#~ msgstr "Omogućava samostalno dopunjavanje reči u dokumentu."
+
+#~ msgid "Restore last position"
+#~ msgstr "Povrati pređašnji položaj"
+
+#~ msgid "Jump to the last position when reopening a file"
+#~ msgstr "Skoči na poslednje menjani red prilikom ponovnog otvaranja datoteke"
+
+#~ msgid "Show modified lines"
+#~ msgstr "Prikaži izmenjene redove"
+
+#~ msgid ""
+#~ "If enabled, the editor will show line additions and changes next to the "
+#~ "source code."
+#~ msgstr "Omogućava prikaz promena u dokumentu, pored prikaza izvornog koda."
+
+#~ msgid ""
+#~ "If enabled, the editor will highlight the line containing the cursor."
+#~ msgstr "Omogućava isticanje tekućeg reda."
+
+#~ msgid "If enabled, the editor will highlight matching brackets."
+#~ msgstr "Omogućava isticanje uparenih zagrada."
+
+#~ msgid "Show line numbers"
+#~ msgstr "Prikaži broj reda"
+
+#~ msgid "If enabled, the editor will show line numbers."
+#~ msgstr "Omogućava prikaz rednog broja na početku svakog reda."
+
+#~ msgid ""
+#~ "Backspace will remove additional spaces to keep you aligned to the "
+#~ "indentation size."
+#~ msgstr ""
+#~ "Pametno brisanje vrši brisanje prostora na osnovu podešavanja za uvlačenje za "
+#~ "trenutnu vrstu dokumenta."
+
+#~ msgid "Smart Home and End"
+#~ msgstr "Pametni „Home“ i „End“ tasteri"
+
+#~ msgid "Whether or not Home moves to first non-space character."
+#~ msgstr ""
+#~ "Uključuje/isključuje pomak na prvi znak koji nije razmak prilikom pritistka "
+#~ "„Home“ tastera."
+
+#~ msgid "If enabled, the editor will show grid lines in the document."
+#~ msgstr "Omogućava prikaz mreže u pozadini teksta dokumenta."
+
+#~ msgid "Show overview map"
+#~ msgstr "Prikaži minijaturni pregled koda"
+
+#~ msgid ""
+#~ "If enabled, Builder will display an overview map of the source file next "
+#~ "to the editor."
+#~ msgstr ""
+#~ "Omogućava prikaz minijaturnog pregleda koda u Graditelju, pored prikaza "
+#~ "izvornog koda u uređivaču."
+
+#~ msgid "Automatically Hide Overview Map"
+#~ msgstr "Automatski sakrij prikaz minijaturnog pregleda koda"
+
+#~ msgid ""
+#~ "If enabled, Builder will automatically hide the overview map when mouse "
+#~ "focus leaves the editor, or a timeout occurs."
+#~ msgstr ""
+#~ "Omogućava automatsko skrivanje prikaza minijaturnog pregleda koda unutar "
+#~ "Graditelja kada miš nije aktivan unutar prozora uređivača ili kada "
+#~ "određeni vremenski period istekne."
+
+#~ msgid "Draw Spaces"
+#~ msgstr "Označi razmake"
+
+#~ msgid "The various types of space to draw in the editor."
+#~ msgstr "Razne vrste razmake koje će uređivač označiti unutar dokumenta."
+
+#~ msgid "Show Project Sidebar"
+#~ msgstr "Prikaži straničnik u projektu"
+
+#~ msgid "If enabled, the sidebar will be visible in the editor workspace."
+#~ msgstr "Omogućava prikaz straničnika unutar radnog prostora uređivača."
+
+#~ msgid "If enabled, the sidebar will display icons next to each item."
+#~ msgstr "Omogućava prikaz ikonica pored svake stavke u straničniku."
+
+#~ msgid "Project Tree Width"
+#~ msgstr "Širina stabla projekta"
+
+#~ msgid "The width in pixels of the project tree."
+#~ msgstr "Širina stabla projekta, u pikselima."
+
+#~ msgid "Encoding"
+#~ msgstr "Kodiranje znakova"
+
+#~ msgid "URI"
+#~ msgstr "Putanja"
+
+#~ msgid "Tarball Name"
+#~ msgstr "Ime tar arhive"
+
+#~ msgid "The name of the project tarball."
+#~ msgstr "Ime projekta u tar arhivi."
+
+#~ msgid "Config"
+#~ msgstr "Podešavanje"
+
+#~ msgid "The device to build for."
+#~ msgstr "Uređaj za koji se program gradi."
+
+#~ msgid "The directory to perform the build within."
+#~ msgstr "Direktorijum gde se vrši izgradnja programa."
+
+#~ msgid "Require Autogen"
+#~ msgstr "Zahtevaj Autogen"
+
+#~ msgid "If autogen.sh should be forced to execute."
+#~ msgstr "Da li treba obavezno izvršiti autogen.sh."
+
+#~ msgid "Require Configure"
+#~ msgstr "Zahtevaj Configure"
+
+#~ msgid "If configure should be forced to execute."
+#~ msgstr "Da li treba obavezno izvršiti configure."
+
+#~ msgid "The configuration for the build."
+#~ msgstr "Podešavanje za izgradnju programa."
+
+#~ msgid "Root Directory"
+#~ msgstr "Glavni direktorijum"
+
+#~ msgid "The root directory to scan from."
+#~ msgstr "Direktorijum u kojem se vrši potraga."
+
+#~ msgid "Makefile"
+#~ msgstr "Makefile"
+
+#~ msgid "The root makefile to be cached."
+#~ msgstr "Glavni makefile koji je za keširanje."
+
+#~ msgid "C"
+#~ msgstr "Ce"
+
+#~ msgid "Language id does not match a C language."
+#~ msgstr "IB jezika se ne podudara sa IB-om Ce jezika."
+
+#~ msgid "Index"
+#~ msgstr "Sadržaj"
+
+#~ msgid "Results"
+#~ msgstr "Rezultati"
+
+#~ msgid "File"
+#~ msgstr "Datoteka"
+
+#~ msgid "The file used to build the translation unit."
+#~ msgstr "Datoteka pomoću koje se gradi prevodilačka jedinica."
+
+#~ msgid "The highlight index for the translation unit."
+#~ msgstr "Glavni sadržaj prevodilačke jedinice."
+
+#~ msgid "Description"
+#~ msgstr "Opis"
+
+#~ msgid "The repository to use for calculating diffs."
+#~ msgstr "Riznica koja će se koristiti za proračunavanje razlika."
+
+#~ msgid "Fraction"
+#~ msgstr "Deo"
+
+#~ msgid "A fraction containing the operation progress."
+#~ msgstr "Deo koji sadrži trenutni tok zahvata."
+
+#~ msgid "The location of the .git index."
+#~ msgstr "Mesto gde se nalazi .git sadržaj."
+
+#~ msgid "Location must be set to .git directory."
+#~ msgstr "Mesto mora biti podešeno na .git direktorijum."
+
+#~ msgid "The file to be opened."
+#~ msgstr "Datoteka koja će se otvoriti."
+
+#~ msgid "The git repository for the project."
+#~ msgstr "Git riznica za projekat."
+
+#~ msgid "Can Go Backward"
+#~ msgstr "Može nazad"
+
+#~ msgid "Can Go Forward"
+#~ msgstr "Može napred"
+
+#~ msgid "Current Item"
+#~ msgstr "Trenutna stavka"
+
+#~ msgid "The current navigation item."
+#~ msgstr "Trenutna stavka u navigaciji."
+
+#~ msgid "Buffer"
+#~ msgstr "Spremište"
+
+#~ msgid "Auto Save"
+#~ msgstr "Automatsko čuvanje"
+
+#~ msgid "If the documents should auto save after a configured timeout."
+#~ msgstr ""
+#~ "Ukoliko želite da se dokumenti automatski čuvaju nakon podešenog vremena."
+
+#~ msgid "Busy"
+#~ msgstr "Zauzeto"
+
+#~ msgid "If the buffer is performing background work."
+#~ msgstr "Ukoliko spremište radi poslove u pozadini."
+
+#~ msgid "If the file has changed on disk and the buffer is not in sync."
+#~ msgstr "Ukoliko je datoteka promenjena na disku a spremište nije usklađeno."
+
+#~ msgid "Context"
+#~ msgstr "Kontekst"
+
+#~ msgid "The IdeContext for the buffer."
+#~ msgstr "IdeContext za spremište.."
+
+#~ msgid "Read Only"
+#~ msgstr "Samo za čitanje"
+
+#~ msgid "Style Scheme Name"
+#~ msgstr "Naziv šeme stila"
+
+#~ msgid "Title"
+#~ msgstr "Naslov"
+
+#~ msgid "Project File"
+#~ msgstr "Projektna datoteka"
+
+#~ msgid "The project file."
+#~ msgstr "Datoteka koja sadrži podatke o projektu."
+
+#~ msgid "Buffer Manager"
+#~ msgstr "Upravnik spremišta"
+
+#~ msgid "The buffer manager for the context."
+#~ msgstr "Upravnik spremišta koji će se koristiti u kontekstu."
+
+#~ msgid "Build System"
+#~ msgstr "Sistem za izgradnju"
+
+#~ msgid "The build system used by the context."
+#~ msgstr "Sistem za izgradnju koji će se koristiti u kontekstu."
+
+#~ msgid "The device manager for the context."
+#~ msgstr "Upravnik uređaja koji će se koristiti u kontekstu."
+
+#~ msgid "The project file for the context."
+#~ msgstr "Projektna datoteka koja će se koristiti u kontekstu."
+
+#~ msgid "Root Build Directory"
+#~ msgstr "Glavni direktorijum za izgradnju"
+
+#~ msgid "The root directory to perform builds within."
+#~ msgstr "Glavni direktorijum gde će se vršiti gradnja izvornog koda."
+
+#~ msgid "Script Manager"
+#~ msgstr "Upravnik skripti"
+
+#~ msgid "The script manager for the context."
+#~ msgstr "Upravnik skripti koji će se koristiti u kontekstu."
+
+#~ msgid "The search engine for the context."
+#~ msgstr "Pretraživač koji će se koristiti u kontekstu."
+
+#~ msgid "The snippets manager for the context."
+#~ msgstr "Upravnik isečaka koji će se koristiti u kontekstu."
+
+#~ msgid "Unsaved Files"
+#~ msgstr "Nesačuvane datoteke"
+
+#~ msgid "The unsaved files in the context."
+#~ msgstr "Nesaćovane datoteke unutar konteksta."
+
+#~ msgid "ID"
+#~ msgstr "IB"
+
+#~ msgid "The device identifier."
+#~ msgstr "Identifikacioni broj uređaja."
+
+#~ msgid "System Type"
+#~ msgstr "Vrsta sistema"
+
+#~ msgid "The system type for which to compile."
+#~ msgstr "Vrsta sistema za koju treba kompajlirati."
+
+#~ msgid "Priority"
+#~ msgstr "Hitnost"
+
+#~ msgid "Parent"
+#~ msgstr "Roditelj"
+
+#~ msgid "Root"
+#~ msgstr "Koren"
+
+#~ msgid "Subtitle"
+#~ msgstr "Podnaslov"
+
+#~ msgid "Score"
+#~ msgstr "Rezultat"
+
+#~ msgid "The snippet context."
+#~ msgstr "Sadržaj isečka."
+
+#~ msgid "Spec"
+#~ msgstr "Odredba"
+
+# bug(slobo):nesigurno: da li su ovo jezicci ili tabulatori?
+#~ msgid "Tab Stop"
+#~ msgstr "Zaustav jezička"
+
+#~ msgid "The tab stop for the chunk."
+#~ msgstr "Zaustavljanje jezička za deo."
+
+#~ msgid "Text"
+#~ msgstr "Tekst"
+
+#~ msgid "The text for the chunk."
+#~ msgstr "Tekst za deo."
+
+#~ msgid "Text Set"
+#~ msgstr "Postavka teksta"
+
+#~ msgid "If the text property has been manually set."
+#~ msgstr "Da li je svojstvo teksta postavljeno ručno."
+
+#~ msgid "Snippet"
+#~ msgstr "Isečak"
+
+#~ msgid "The snippet to insert."
+#~ msgstr "Isečak za umetanje."
+
+#~ msgid "Source View"
+#~ msgstr "Pregled izvora"
+
+#~ msgid "The source view to insert snippet into."
+#~ msgstr "Pregled izvora u koji umetnuti isečak."
+
+#~ msgid "The snippets to complete with this provider."
+#~ msgstr "Isečci za dovršavanje sa ovim dostavljačem."
+
+#~ msgid "The GtkTextBuffer for the snippet."
+#~ msgstr "GtkTextBuffer za isečak."
+
+#~ msgid "Mark Begin"
+#~ msgstr "Označi početak"
+
+#~ msgid "The beginning text mark."
+#~ msgstr "Oznaka početnog teksta."
+
+#~ msgid "Mark End"
+#~ msgstr "Označi kraj"
+
+#~ msgid "The ending text mark."
+#~ msgstr "Oznaka krajnjeg teksta."
+
+#~ msgid "Trigger"
+#~ msgstr "Okidač"
+
+#~ msgid "The trigger for the snippet."
+#~ msgstr "Okidač za isečak."
+
+#~ msgid "The language for the snippet."
+#~ msgstr "Jezik za isečak."
+
+#~ msgid "The description for the snippet."
+#~ msgstr "Opis za isečak."
+
+#~ msgid "The current tab stop."
+#~ msgstr "Zaustavljanje tekućeg jezička."
+
+#~ msgid "Count"
+#~ msgstr "Ukupno"
+
+#~ msgid "File Settings"
+#~ msgstr "Podešavanja datoteke"
+
+#~ msgid "Enable Word Completion"
+#~ msgstr "Uključuje dovršavanje reči"
+
+#~ msgid "Font Name"
+#~ msgstr "Naziv slova"
+
+#~ msgid "Insert Matching Brace"
+#~ msgstr "Umeće odgovarajuću zagradu"
+
+#~ msgid "Overwrite Braces"
+#~ msgstr "Prepisuje zagrade"
+
+#~ msgid "Search Context"
+#~ msgstr "Kontekst pretrage"
+
+#~ msgid "Duration"
+#~ msgstr "Trajanje"
+
+#~ msgid "The duration of the animation"
+#~ msgstr "Trajanje animacije"
+
+#~ msgid "Frame Clock"
+#~ msgstr "Časovnik kadra"
+
+#~ msgid "An optional frame-clock to synchronize with."
+#~ msgstr "Izborni časovnik kadra za usklađivanje."
+
+#~ msgid "Mode"
+#~ msgstr "Režim"
+
+#~ msgid "The animation mode"
+#~ msgstr "Režim animacije"
+
+# meta?
+#~ msgid "Target"
+#~ msgstr "Odredište"
+
+#~ msgid "The target of the animation"
+#~ msgstr "Odredište animacije"
+
+#~ msgid "Alpha"
+#~ msgstr "Providnost"
+
+#~ msgid "background"
+#~ msgstr "pozadina"
+
+#~ msgid "height"
+#~ msgstr "visina"
+
+#~ msgid "width"
+#~ msgstr "širina"
+
+#~ msgid "x"
+#~ msgstr "x"
+
+#~ msgid "y"
+#~ msgstr "y"
+
+#~ msgid "Result"
+#~ msgstr "Rezultat"
+
+#~ msgid "The result to be visualized in the item."
+#~ msgstr "Rezultat koji će biti prikazan u stavci."
+
+#~ msgid "Action Group"
+#~ msgstr "Grupa radnje"
+
+#~ msgid "The GActionGroup containing the action."
+#~ msgstr "Grupa radnje koja sadrži radnju."
+
+#~ msgid "Action Name"
+#~ msgstr "Naziv radnje"
+
+#~ msgid "The name of the action to execute."
+#~ msgstr "Naziv radnje za izvršavanje."
+
+#~ msgid "Parameters"
+#~ msgstr "Parametri"
+
+#~ msgid "The parameters for the action."
+#~ msgstr "Parametri za radnju."
+
+#~ msgid "Active View"
+#~ msgstr "Radni pregled"
+
+#~ msgid "The priority of the command provider."
+#~ msgstr "Hitnost dostavljača naredbe."
+
+#~ msgid "Workbench"
+#~ msgstr "Radionica"
+
+#~ msgid "The target workbench."
+#~ msgstr "Ciljna radionica."
+
+#~ msgid "Command Text"
+#~ msgstr "Tekst naredbe"
+
+#~ msgid "The command text if any."
+#~ msgstr "Tekst naredbe ako postoji."
+
+#~ msgid "Is Error"
+#~ msgstr "Jeste greška"
+
+#~ msgid "If the result is an error."
+#~ msgstr "Da li je rezultat greška."
+
+#~ msgid "Is Running"
+#~ msgstr "Radi"
+
+#~ msgid "If the command is still running."
+#~ msgstr "Da li se naredba još uvek izvršava."
+
+#~ msgid "Result Text"
+#~ msgstr "Tekst rezultata"
+
+#~ msgid "The result text if any."
+#~ msgstr "Tekst rezultata ako postoji."
+
+#~ msgid "The command text to execute"
+#~ msgstr "Tekst naredbe za izvršavanje"
+
+#~ msgid "The source view to modify."
+#~ msgstr "Pregled izvora za menjanje."
+
+#~ msgid "The uri to load."
+#~ msgstr "Putanja za učitavanje."
+
+#~ msgid "Document"
+#~ msgstr "Dokument"
+
+#~ msgid "The document for the devhelp view."
+#~ msgstr "Dokument za pregled razvojne pomoći."
+
+#~ msgid "Project Information"
+#~ msgstr "Podaci o projektu"
+
+#~ msgid "The project information for the row."
+#~ msgstr "Podaci o projektu za red."
+
+#~ msgid "Selection Mode"
+#~ msgstr "Način biranja"
+
+#~ msgid "Modified"
+#~ msgstr "Izmenjen"
+
+#~ msgid "If the document has been modified from disk."
+#~ msgstr "Ukoliko je dokument izmenjen na disku."
+
+#~ msgid "The title of the document."
+#~ msgstr "Naslov dokumenta."
+
+#~ msgid "If the document is read only."
+#~ msgstr "Ukoliko je dokument samo za čitanje."
+
+#~ msgid "Auto Hide Map"
+#~ msgstr "Automatski sakrij prikaz minijaturnog pregleda koda"
+
+#~ msgid "The editor document."
+#~ msgstr "Dokument u uređivaču."
+
+#~ msgid "Show Map"
+#~ msgstr "Prikaži minijaturni pregled koda"
+
+#~ msgid "If the overview map should be shown."
+#~ msgstr "Podešava prikaz minijaturnog pregleda koda."
+
+#~ msgid "The language to change the settings for."
+#~ msgstr "Jezik za koji izmeniti podešavanja."
+
+#~ msgid "Show Project Tree"
+#~ msgstr "Prikaži stablo projekta"
+
+#~ msgid "Tag close icon visibility"
+#~ msgstr "Vidljivost ikonice zatvaranja oznake"
+
+#~ msgid "Whether the close button should be shown in tags."
+#~ msgstr "Da li se dugme zatvaranja prikazuje u oznakama."
+
+#~ msgid "Label"
+#~ msgstr "Natpis"
+
+#~ msgid "Text to show on the tag."
+#~ msgstr "Tekst za prikaz na oznaci."
+
+#~ msgid "Tag has a close button"
+#~ msgstr "Oznaka ima dugme zatvaranja"
+
+#~ msgid "Whether the tag has a close button."
+#~ msgstr "Da li oznaka ima dugme za zatvaranje."
+
+#~ msgid "Style"
+#~ msgstr "Stil"
+
+#~ msgid "Style of the tag."
+#~ msgstr "Stil oznake."
+
+#~ msgid "The recent projects that have been mined."
+#~ msgstr "Skorašnji projekti koji su analizirani."
+
+#~ msgid "HTML Preview"
+#~ msgstr "HTML pretpregled"
+
+#~ msgid "%s (Preview)"
+#~ msgstr "%s (Pretpregled)"
+
+#~ msgid "The buffer to monitor for changes."
+#~ msgstr "Spremište u kojem će se pratiti izmene."
+
+#~ msgid "The document to view as HTML."
+#~ msgstr "Dokument koji će biti pregledan kao HTML."
+
+#~ msgid "Application"
+#~ msgstr "Program"
+
+#~ msgid "The application to register keybindings for."
+#~ msgstr "Program za koji je potrebno registrovati prečice na tastaturi."
+
+#~ msgid "The name of the keybindings mode."
+#~ msgstr "Ime režima prečica na tastaturi."
+
+#~ msgid "The title for the preferences page."
+#~ msgstr "Naslov za stranicu postavki."
+
+#~ msgid "The title of the switch."
+#~ msgstr "Ime prekidača."
+
+#~ msgid "The description for the switch."
+#~ msgstr "Opis prekidača."
+
+#~ msgid "Is Radio"
+#~ msgstr "Da li je radio"
+
+#~ msgid "If a radio button should be used."
+#~ msgstr "Podešava da li će se koristiti radio dugme."
+
+#~ msgid "Settings"
+#~ msgstr "Podešavanja"
+
+#~ msgid "The GSettings for the setting."
+#~ msgstr "GSettings za podešavanje."
+
+#~ msgid "Settings Schema Key"
+#~ msgstr "Ključ šeme podešavanja"
+
+#~ msgid "The settings schema key."
+#~ msgstr "Ključ šeme podešavanja."
+
+#~ msgid "Settings Schema Value"
+#~ msgstr "Vrednost šeme podešavanja"
+
+#~ msgid "An action-target for the settings action."
+#~ msgstr "Cilj zahvata koje se izvršava za podešavanje."
+
+#~ msgid "Size Group"
+#~ msgstr "Ograničavajuća grupa"
+
+#~ msgid "The sizing group for the control."
+#~ msgstr "Ograničavajuća grupa za kontrolu."
+
+#~ msgid "File Type"
+#~ msgstr "Vrsta datoteke"
+
+#~ msgid "The file type to create."
+#~ msgstr "Koje vrste novonastala datoteka treba biti."
+
+#~ msgid "Max Content Height"
+#~ msgstr "Najveća visina sadržaja"
+
+#~ msgid "The maximum height request that can be made."
+#~ msgstr "Najveći zahtev visine koji može biti odrađen."
+
+#~ msgid "Max Content Width"
+#~ msgstr "Najveća širina sadržaja"
+
+#~ msgid "The maximum width request that can be made."
+#~ msgstr "Najveći zahtev širine koji može biti odrađen."
+
+#~ msgid "Builder does not know how to load %s"
+#~ msgstr "Graditelj ne zna kako da učita %s"
+
+#~ msgid "Provider"
+#~ msgstr "Dostavljač"
+
+#~ msgid "The search provider"
+#~ msgstr "Dostavljač pretrage"
+
+#~ msgid "The size group for the label."
+#~ msgstr "Grupa veličine za natpis."
+
+#~ msgid "The active search context."
+#~ msgstr "Kontekst radne pretrage."
+
+#~ msgid "Tree"
+#~ msgstr "Stablo"
+
+#~ msgid "The GbTree the builder belongs to."
+#~ msgstr "GbTree kojem graditelj pripada."
+
+#~ msgid "Icon Name"
+#~ msgstr "Naziv ikonice"
+
+#~ msgid "The icon name to display."
+#~ msgstr "Naziv ikonice za prikaz."
+
+#~ msgid "Item"
+#~ msgstr "Stavka"
+
+#~ msgid "Optional object to associate with node."
+#~ msgstr "Izborni objekat za pridruživanje čvoru."
+
+#~ msgid "The parent node."
+#~ msgstr "Roditeljski čvor."
+
+#~ msgid "The GbTree the node belongs to."
+#~ msgstr "GbTree kojem čvor pripada."
+
+#~ msgid "The text of the node."
+#~ msgstr "Tekst čvora."
+
+#~ msgid "Use Markup"
+#~ msgstr "Koristi markap"
+
+#~ msgid "If text should be translated as markup."
+#~ msgstr "Da li tekst treba da bude preveden kao markap."
+
+#~ msgid "The root object of the tree."
+#~ msgstr "Koreni objekat stabla."
+
+#~ msgid "The node selection."
+#~ msgstr "Izbor čvora."
+
+#~ msgid "The active view."
+#~ msgstr "Aktivni pregled."
+
+#~ msgid "Can Split"
+#~ msgstr "Dokument je moguće razdvojiti"
+
+#~ msgid "If the view can be split."
+#~ msgstr "Utvrđuje da li je moguće razdvojiti dokument."
+
+#~ msgid "The underlying document."
+#~ msgstr "Dokument u pitanju."
+
+#~ msgid "If the document has been modified."
+#~ msgstr "Da li je dokument izmenjen."
+
+#~ msgid "The view title."
+#~ msgstr "Naslov pri pregledanju."
+
+#~ msgid "Active Workspace"
+#~ msgstr "Aktivni radni prostor"
+
+#~ msgid "The active workspace."
+#~ msgstr "Aktivni radni prostor."
+
+#~ msgid "Building"
+#~ msgstr "Građenje"
+
+#~ msgid "If the project is currently building."
+#~ msgstr "Da li se projekat trenutno gradi."
+
+#~ msgid "The command manager for the workbench."
+#~ msgstr "Upravnik naredbi za radni sto."
+
+#~ msgid "The IdeContext for the workbench."
+#~ msgstr "IdeContext za radni sto."
+
+#~ msgid "The title of the workspace."
+#~ msgstr "Naslov radnog prostora."
+
+#~ msgid "The name of the icon to use."
+#~ msgstr "Naziv ikonice za korišćenje."
+
+#~ msgid "No diagnostician for language \"%s\"\n"
+#~ msgstr "Ne postoji dijagnostičar za jezik \"%s\"\n"
+
+#~ msgid "Suggest completion of words found within the current document."
+#~ msgstr "Predlaže dovršavanje reči nađenih u tekućem dokumentu."
+
+#~ msgid "Show Line Numbers"
+#~ msgstr "Prikaz rednog broja reda"
+
+#~ msgid "Display line numbers in the document."
+#~ msgstr "Prikazuje redne brojeve pored redova u dokumentu."
+
+#~ msgid ""
+#~ "Backspace will remove extra spaces to keep you aligned with your "
+#~ "indentation size."
+#~ msgstr ""
+#~ "Taster za brisanje će ukloniti dodatni prostor u skladu sa podešavanjem "
+#~ "uvlačenja za tekući dokument."
+
+#~ msgid "Display a grid patten in the document."
+#~ msgstr "Omogućava prikaz mreže u pozadini teksta dokumenta."
+
+#~ msgid "Show Overview Map"
+#~ msgstr "Prikaži minijaturni pregled koda"
+
+#~ msgid "Automatically hide the overview map during inactivity."
+#~ msgstr ""
+#~ "Omogućava automatsko skrivanje prikaza minijaturnog pregleda koda ukoliko "
+#~ "korisnik ne radi na dokumentu."
+
+#~ msgid "Experimental"
+#~ msgstr "Probna podešavanja"
+
+#~ msgid "Clang Auto-Completion"
+#~ msgstr "Ce-lang samodopunjavanje"
+
+#~ msgid "Author Name"
+#~ msgstr "Ime autora"
+
+#~ msgid "Author Email"
+#~ msgstr "E-pošta autora"
+
+#~ msgid "Keybindings"
+#~ msgstr "Prečice na tastaturi"
+
+#~ msgid "Language Settings"
+#~ msgstr "Podešavanje programskih jezika"
+
+#~ msgid "Clang based autocompletion"
+#~ msgstr "Samodopunjavanje Ce-langa"
+
+#~ msgid "Uri"
+#~ msgstr "URI"
+
+#~ msgid "Project Info"
+#~ msgstr "Podaci o projektu"
+
+#~ msgid "The project info to render."
+#~ msgstr "Podatke o projektu koje treba iscrtati."
+
+#~ msgid "source style scheme source tango solarized builder"
+#~ msgstr ""
+#~ "source style scheme source tango solarized builder izvorni izvorna stil "
+#~ "šema tango osunčana solarizovana izvorni izvorna stil šema tango osunčana "
+#~ "solarizovana"
+
+#~ msgid "git author name surname"
+#~ msgstr "git author name surname autor ime prezime git autor ime prezime"
+
+#~ msgid "git author email mail address"
+#~ msgstr ""
+#~ "git author email mail address autor imejl mejl adresa e-adresa git autor "
+#~ "imejl mejl adresa e-adresa"
+
+#~ msgid "Failed to compile translation unit"
+#~ msgstr "Neuspeh prilikom kompajliranja prevodilačke jedinice"
+
+#~ msgid "Sequence"
+#~ msgstr "Sekvenca"
+
+#~ msgid "The sequence number when created."
+#~ msgstr "Broj sekvence koji će se koristiti nakon pravljenja."
+
+#~ msgid "%"
+#~ msgstr "%"
+
+#~ msgid "Search Preferences"
+#~ msgstr "Postavke pretrage"
+
+#~ msgid "No file was provided"
+#~ msgstr "Nije data datoteka."
+
+#~ msgid "Failed to retrieve langauge for file."
+#~ msgstr "Neuspeh prilikom određivanja vrste jezika unutar datoteke."
+
+#~ msgid "The file encoding to use."
+#~ msgstr "Kodiranje znakova koje treba koristiti."
+
+#~ msgid "The indent style to use."
+#~ msgstr "Stil uvlačenja koji treba koristiti."
+
+#~ msgid "Indent Width"
+#~ msgstr "Širina uvlačenja"
+
+#~ msgid "The width to use when indenting."
+#~ msgstr "Širinu koju treba koristiti prilikom uvlačenja teksta."
+
+#~ msgid "Insert Trailing Newline"
+#~ msgstr "Unesi prateću novu liniju"
+
+#~ msgid ""
+#~ "If a trailing newline should be implicitly added when saving the file."
+#~ msgstr "Omogućava unošenje prateće nove linije prilikom čuvanja datoteke."
+
+#~ msgid "Newline Type"
+#~ msgstr "Vrsta nove linije"
+
+#~ msgid "The type of newlines to use."
+#~ msgstr "Vrsta linije koja se treba koristiti."
+
+#~ msgid "Right Margin Position"
+#~ msgstr "Položaj desne margine"
+
+#~ msgid "The position of the right margin guide."
+#~ msgstr "Položaj desne margine."
+
+#~ msgid "Tab Width"
+#~ msgstr "Širina tabulatora"
+
+#~ msgid "The width in characters to represent a tab."
+#~ msgstr "Podešava veličinu tabulatora, u karakterima"
+
+#~ msgid "Trim Trailing Whitespace"
+#~ msgstr "Kraćenje prateće praznine"
+
+#~ msgid "If trailing whitespace should be trimmed."
+#~ msgstr "Omogućava skraćivanje prateće praznine."
+
+#~ msgid "Stack"
+#~ msgstr "Spremnik"
+
+#~ msgid "Failed to locate uncrustify configuration."
+#~ msgstr "Nisam uspeo da pronađem podešavanja za uncrustify."
+
+#~ msgid "uncrustify failure: %s"
+#~ msgstr "neuspeh unutar uncrustify programa: %s"
+
+#~ msgid "Failure copying to \"%s\": %s"
+#~ msgstr "Neuspeh umnožavanja u „%s“: %s"
+
+#~ msgid "Can Format"
+#~ msgstr "Može oblikovati"
+
+#~ msgid "If the source language can be formatted."
+#~ msgstr "Da li jezik izvora može biti oblikovan."
+
+#~ msgid "The language to format."
+#~ msgstr "Jezik za oblikovanje."
+
+#~ msgid "Not connected to D-Bus."
+#~ msgstr "Nisam povezan na D-Bus."
+
+#~ msgid ""
+#~ "Failed to load D-Bus connection to session bus. Code assistance will be "
+#~ "disabled. Error was: %s"
+#~ msgstr ""
+#~ "Neuspeh prilikom učitavanja D-Bus veze na sabirnicu sesije. Kodna ispomoć "
+#~ "će biti isključena. Tačna greška je: %s"
+
+#~ msgid "Folder"
+#~ msgstr "Direktorijum"
+
+#~ msgid "Failed to load keybindings."
+#~ msgstr "Nisam uspeo da učitam sveze tastera."
+
+#~ msgid "Failed to load keybindings: %s"
+#~ msgstr "Nisam uspeo da učitam sveze tastera: %s"
+
+#~ msgid "Failed to load local keybindings: %s"
+#~ msgstr "Nisam uspeo da učitam lokalno podešene prečice: %s"
+
+#~ msgid "Active"
+#~ msgstr "Uposlen"
+
+#~ msgid "If code assistance is currently processing."
+#~ msgstr "Da li kodna ispomoć trenutno obrađuje."
+
+#~ msgid "The buffer "
+#~ msgstr "Spremište "
+
+#~ msgid ""
+#~ "Failed to load DBus connection. Code assistance will be disabled. \"%s"
+#~ "\" (%s)"
+#~ msgstr ""
+#~ "Neuspeh pri učitavanju D-Bus veze. Kodna ispomoć biće isključena. „%s“ (%s)"
+
+#~ msgid "Code Assistant"
+#~ msgstr "Kodni pomoćnik"
+
+#~ msgid "The code assistant to render."
+#~ msgstr "Kodni pomoćnik za iscrtavanje."
+
+#~ msgid "Active DocumentView"
+#~ msgstr "Radni pregled dokumenta"
+
+#~ msgid "The last focused GbDocumentView widget."
+#~ msgstr "Poslednji element pregleda Gb dokumenta u prvom planu."
+
+#~ msgid "The duration of the animation in millseconds."
+#~ msgstr "Trajanje animiranja u milisekundama."
+
+#~ msgid "Progress"
+#~ msgstr "Napredovanje"
+
+#~ msgid "GNOME Builder - %s"
+#~ msgstr "Gnomov Graditelj – %s"
+
+#~ msgid "Question"
+#~ msgstr "Pitanje"
+
+#~ msgid "Close _without Saving"
+#~ msgstr "Zatvori _bez čuvanja"
+
+#~ msgid "_Save As…"
+#~ msgstr "Sačuvaj _kao…"
+
+#~ msgid ""
+#~ "If you don't save, changes from the last %ld second will be permanently "
+#~ "lost."
+#~ msgid_plural ""
+#~ "If you don't save, changes from the last %ld seconds will be permanently "
+#~ "lost."
+#~ msgstr[0] ""
+#~ "Izmene u poslednjoj %ld sekundi će biti trajno odbačene ukoliko ne "
+#~ "sačuvate."
+#~ msgstr[1] ""
+#~ "Izmene u poslednje %ld sekunde će biti trajno odbačene ukoliko ne sačuvate."
+#~ msgstr[2] ""
+#~ "Izmene u poslednjih %ld sekundi će biti trajno odbačene ukoliko ne "
+#~ "sačuvate."
+#~ msgstr[3] ""
+#~ "Izmene u poslednjoj sekundi će biti trajno odbačene ukoliko ne sačuvate."
+
+#~ msgid ""
+#~ "If you don't save, changes from the last minute will be permanently lost."
+#~ msgstr "Ako ne sačuvate, izmene u poslednjem minutu biće trajno izgubljene."
+
+#~ msgid ""
+#~ "If you don't save, changes from the last minute and %ld second will be "
+#~ "permanently lost."
+#~ msgid_plural ""
+#~ "If you don't save, changes from the last minute and %ld seconds will be "
+#~ "permanently lost."
+#~ msgstr[0] ""
+#~ "Izmene u poslednjem minutu i %ld sekundi će biti trajno odbačene ukoliko "
+#~ "ne sačuvate."
+#~ msgstr[1] ""
+#~ "Izmene u poslednjem minutu i %ld sekunde će biti trajno odbačene ukoliko "
+#~ "ne sačuvate."
+#~ msgstr[2] ""
+#~ "Izmene u poslednjem minutu i %ld sekundi će biti trajno odbačene ukoliko "
+#~ "ne sačuvate."
+#~ msgstr[3] ""
+#~ "Izmene u poslednjem minutu će biti trajno odbačene ukoliko ne sačuvate."
+
+#~ msgid ""
+#~ "If you don't save, changes from the last %ld minute will be permanently "
+#~ "lost."
+#~ msgid_plural ""
+#~ "If you don't save, changes from the last %ld minutes will be permanently "
+#~ "lost."
+#~ msgstr[0] ""
+#~ "Izmene u poslednjem %ld minutu će biti trajno odbačene ukoliko ne sačuvate."
+#~ msgstr[1] ""
+#~ "Izmene u poslednja %ld minuta će biti trajno odbačene ukoliko ne sačuvate."
+#~ msgstr[2] ""
+#~ "Izmene u poslednjih %ld minuta će biti trajno odbačene ukoliko ne sačuvate."
+#~ msgstr[3] ""
+#~ "Izmene u poslednjem minutu će biti trajno odbačene ukoliko ne sačuvate."
+
+#~ msgid ""
+#~ "If you don't save, changes from the last hour will be permanently lost."
+#~ msgstr ""
+#~ "Izmene tokom poslednjeg časa će biti trajno odbačene ukoliko ne sačuvate."
+
+#~ msgid ""
+#~ "If you don't save, changes from the last hour and %d minute will be "
+#~ "permanently lost."
+#~ msgid_plural ""
+#~ "If you don't save, changes from the last hour and %d minutes will be "
+#~ "permanently lost."
+#~ msgstr[0] ""
+#~ "Izmene u poslednjem času i %d minutu će biti trajno odbačene ukoliko ne "
+#~ "sačuvate."
+#~ msgstr[1] ""
+#~ "Izmene u poslednjem času i %d minuta će biti trajno odbačene ukoliko ne "
+#~ "sačuvate."
+#~ msgstr[2] ""
+#~ "Izmene u poslednjem času i %d minuta će biti trajno odbačene ukoliko ne "
+#~ "sačuvate."
+#~ msgstr[3] ""
+#~ "Izmene u poslednjem času će biti trajno odbačene ukoliko ne sačuvate."
+
+#~ msgid ""
+#~ "If you don't save, changes from the last %d hour will be permanently lost."
+#~ msgid_plural ""
+#~ "If you don't save, changes from the last %d hours will be permanently "
+#~ "lost."
+#~ msgstr[0] ""
+#~ "Izmene u poslednjem %d času će biti trajno odbačene ukoliko ne sačuvate."
+#~ msgstr[1] ""
+#~ "Izmene u poslednja %d časa će biti trajno odbačene ukoliko ne sačuvate."
+#~ msgstr[2] ""
+#~ "Izmene u poslednjih %d časova će biti trajno odbačene ukoliko ne sačuvate."
+#~ msgstr[3] ""
+#~ "Izmene u poslednjem času će biti trajno odbačene ukoliko ne sačuvate."
+
+#~ msgid "Changes to document “%s” will be permanently lost."
+#~ msgstr "Izmene u dokumentu „%s“ biće trajno odbačene."
+
+#~ msgid "Save changes to document “%s” before closing?"
+#~ msgstr "Da sačuvam izmene u dokumentu „%s“ pre zatvaranja?"
+
+#~ msgid "Saving has been disabled by the system administrator."
+#~ msgstr "Administrator sistema je onemogućio čuvanje."
+
+#~ msgid "Changes to %d document will be permanently lost."
+#~ msgid_plural "Changes to %d documents will be permanently lost."
+#~ msgstr[0] "Izmene u %d dokumentu će biti trajno odbačene."
+#~ msgstr[1] "Izmene u %d dokumenta će biti trajno odbačene."
+#~ msgstr[2] "Izmene u %d dokumenata će biti trajno odbačene."
+#~ msgstr[3] "Izmene učinjene u dokumentu će biti trajno odbačene."
+
+#~ msgid ""
+#~ "There is %d document with unsaved changes. Save changes before closing?"
+#~ msgid_plural ""
+#~ "There are %d documents with unsaved changes. Save changes before closing?"
+#~ msgstr[0] "%d dokument ima nesačuvane izmene. Da ih sačuvam pre zatvaranja?"
+#~ msgstr[1] ""
+#~ "%d dokumenta imaju nesačuvane izmene. Da ih sačuvam pre zatvaranja?"
+#~ msgstr[2] ""
+#~ "%d dokumenata imaju nesačuvane izmene. Da ih sačuvam pre zatvaranja?"
+#~ msgstr[3] ""
+#~ "#-#-#-#-#  gtranslator.po (gtranslator)  #-#-#-#-#\n"
+#~ "Dokument ima nesačuvane izmene. Da li da ih sačuvam pre zatvaranja?\n"
+#~ "#-#-#-#-#  gedit.po (gedit)  #-#-#-#-#\n"
+#~ "Dokument ima nesačuvane izmene. Da sačuvam izmene pre zatvaranja?\n"
+#~ "#-#-#-#-#  gedit.master.sr.po (gedit)  #-#-#-#-#\n"
+#~ "Dokument ima nesačuvane izmene. Da sačuvam izmene pre zatvaranja?"
+
+#~ msgid "Docum_ents with unsaved changes:"
+#~ msgstr "Dokum_enti sa nesačuvanim izmenama:"
+
+#~ msgid "S_elect the documents you want to save:"
+#~ msgstr "Izaberite _dokumente koje želite da sačuvate:"
+
+#~ msgid "If you don't save, all your changes will be permanently lost."
+#~ msgstr "Ako ne sačuvate, sve izmene će biti trajno izgubljene."
+
+#~ msgid "Document Manager"
+#~ msgstr "Upravnik dokumenta"
+
+#~ msgid "The document manager for the document grid."
+#~ msgstr "Upravnik dokumenta za mrežu dokumenta."
+
+#~ msgid "The number of documents in the manager."
+#~ msgstr "Broj dokumenata u upravniku."
+
+#~ msgid "The document manager for the button."
+#~ msgstr "Upravnik dokumenta za dugme."
+
+#~ msgid "The active view within the stack."
+#~ msgstr "Radni pregled u spremniku."
+
+#~ msgid "The document manager for the stack."
+#~ msgstr "Upravnik dokumenta za spremnik."
+
+#~ msgid "Can Preview"
+#~ msgstr "Može da pretpregleda"
+
+#~ msgid "If the view can preview."
+#~ msgstr "Da li pregled može da pretpregleda."
+
+#~ msgid "Controls"
+#~ msgstr "Kontrole"
+
+#~ msgid "The widget containing the view controls."
+#~ msgstr "Element koji sadrži kontrole pregleda."
+
+#~ msgid "The document being viewed."
+#~ msgstr "Dokument koji je pregledan."
+
+#~ msgid "untitled document %u"
+#~ msgstr "neimenovani dokument „%u“"
+
+#~ msgid "No file was selected."
+#~ msgstr "Nije izabrana nijedna datoteka."
+
+#~ msgid "No file was selected for saving."
+#~ msgstr "Nije izabrana datoteke za čuvanje."
+
+#~ msgid "The change monitor for the backing file."
+#~ msgstr "Nadzornik izmena za stvaranje rezerve datoteke."
+
+#~ msgid "Error"
+#~ msgstr "Greška"
+
+#~ msgid "An error that may have been loaded."
+#~ msgstr "Greška koja je možda učitana."
+
+#~ msgid "The backing file for the document."
+#~ msgstr "Datoteka rezerve za dokument."
+
+#~ msgid "File Changed on Volume"
+#~ msgstr "Izmenjena datoteka na disku"
+
+#~ msgid "If the file has changed underneath the buffer."
+#~ msgstr "Da li je datoteka izmenjena van spremišta."
+
+#~ msgid "Loading or saving progress."
+#~ msgstr "Napredovanje učitavanja ili čuvanja."
+
+#~ msgid "The style scheme name."
+#~ msgstr "Naziv šeme stila."
+
+#~ msgid "If whitespace should be trimmed before saving."
+#~ msgstr "Da li praznina treba biti skraćena pre čuvanja."
+
+#~ msgid "Column"
+#~ msgstr "Kolona"
+
+#~ msgid "The column within the line."
+#~ msgstr "Kolona u redu."
+
+#~ msgid "The file for which to store the mark."
+#~ msgstr "Datoteka za koju smestiti oznaku."
+
+#~ msgid "Line"
+#~ msgstr "Red"
+
+#~ msgid "The document for the editor."
+#~ msgstr "Dokument za uređivača."
+
+#~ msgid "The file that is being edited."
+#~ msgstr "Datoteka koja je uređivana."
+
+#~ msgid "The line number within the file."
+#~ msgstr "Broj reda u datoteci."
+
+#~ msgid "Line Offset"
+#~ msgstr "Pomeraj reda"
+
+#~ msgid "The offset within the line."
+#~ msgstr "Pomeraj u redu."
+
+#~ msgid "The file “%s” was modified outside of Builder."
+#~ msgstr "Datoteka „%s“ je izmenjena van Graditelja."
+
+#~ msgid "Auto Indent"
+#~ msgstr "Samouvlačenje"
+
+#~ msgid "If we should use the auto-indentation engine."
+#~ msgstr "Da li treba da koristimo pogon samouvlačenja."
+
+#~ msgid "The document edited by the view."
+#~ msgstr "Dokument je uređen pregledom."
+
+#~ msgid "If the current line should be highlighted."
+#~ msgstr "Da li tekući red treba biti istaknut."
+
+#~ msgid "If the line numbers should be shown."
+#~ msgstr "Da li brojevi redova treba da se prikazuju."
+
+#~ msgid "Show Right Margin"
+#~ msgstr "Prikaz desne margine"
+
+#~ msgid "If we should show the right margin."
+#~ msgstr "Da li treba da prikažemo desnu marginu."
+
+#~ msgid "Split Enabled"
+#~ msgstr "Uključena podela"
+
+#~ msgid "If the view split is enabled."
+#~ msgstr "Da li je podela pregleda uključena."
+
+#~ msgid "The width a tab should be drawn as."
+#~ msgstr "Širina za crtanje tabulatora."
+
+#~ msgid "Use Spaces"
+#~ msgstr "Koristi razmake"
+
+#~ msgid "If spaces should be used instead of tabs."
+#~ msgstr "Da li da koristi razmake umesto tabulatora."
+
+#~ msgid "The change monitor for the gutter renderer."
+#~ msgstr "Pratilac izmene za iscrtavača slivnika."
+
+#~ msgid "Failed to load git blob"
+#~ msgstr "Nisam uspeo da učitam blob gita"
+
+#~ msgid "No file, cannot load git blob"
+#~ msgstr "Nema datoteke, ne mogu da učitam blob gita"
+
+#~ msgid "Cannot load git repository from non-local filesystem."
+#~ msgstr "Ne mogu da učitam riznicu gita sa ne-mesnog sistema datoteka."
+
+#~ msgid "No filename, cannot discover repository."
+#~ msgstr "Nema naziva datoteke, ne mogu da pronađem riznicu."
+
+#~ msgid "The text buffer to monitor."
+#~ msgstr "Spremište teksta za nadgledanje."
+
+#~ msgid "The file for the buffer."
+#~ msgstr "Datoteka za međumemoriju."
+
+#~ msgid "The font name to apply to the widget."
+#~ msgstr "Naziv slova za primenu na elementu."
+
+#~ msgid "If we should insert matching braces."
+#~ msgstr "Da li treba da umetne odgovarajuće zagrade."
+
+#~ msgid "If we should overwrite braces, brackets, parenthesis and quotes."
+#~ msgstr "Da li treba prepisati velike, srednje, male zagrade i navodnike."
+
+#~ msgid "Show Shadow"
+#~ msgstr "Pokazuje senku"
+
+#~ msgid "Show the search shadow"
+#~ msgstr "Prikazuje senku pretrage"
+
+#~ msgid "Enable smart home end in gtksourceview."
+#~ msgstr "Uključuje pametni taster „Početak/Kraj“ u pregledu gtk izvora."
+
+#~ msgid "Whether to show the grid lines."
+#~ msgstr "Da li će biti prikazane linije mreže."
+
+#~ msgid "The repository to use for search data."
+#~ msgstr "Skladište koje će se koristiti za podatke pretrage."
+
+#~ msgid "The workbench window."
+#~ msgstr "Prozor radionice."
+
+#~ msgid "Bar's primary label"
+#~ msgstr "Glavni natpis trake"
+
+#~ msgid "Primary label displayed by the bar"
+#~ msgstr "Glavni natpis koji prikazuje traka"
+
+#~ msgid "Bar's details label"
+#~ msgstr "Opširni natpis trake"
+
+#~ msgid "Details label displayed by the bar"
+#~ msgstr "Opširni natpis koji prikazuje traka"
+
+#~ msgid "Show spinner"
+#~ msgstr "Prikazuje vrtešku"
+
+#~ msgid "Whether a spinner should be shown in the floating bar"
+#~ msgstr "Da li vrteška treba biti prikazana u lebdećoj traci"
+
+#~ msgid "The label for the navigation item."
+#~ msgstr "Natpis za stavku navigacije."
+
+#~ msgid "Workspace"
+#~ msgstr "Radni prostor"
+
+#~ msgid "The workspace to ensure is focused."
+#~ msgstr "Radni prostor koji je u prvom planu."
+
+#~ msgid "If we can go backwards in the navigation list."
+#~ msgstr "Da li možemo da idemo nazad u spisku navigacije."
+
+#~ msgid "If we can go forward in the navigation list."
+#~ msgstr "Da li možemo da idemo napred u spisku navigacije."
+
+#~ msgid "The current item in the navigation list."
+#~ msgstr "Trenutna stavka u spisku navigacije."
+
+#~ msgid "The workbench the navigation list is for."
+#~ msgstr "Radionica za koju je spisak navigacije."
+
+#~ msgid "vim modal"
+#~ msgstr "režimski rad vima"
+
+#~ msgid "_Help"
+#~ msgstr "Po_moć"
+
+#~ msgid "Save _As"
+#~ msgstr "Sačuvaj _kao"
+
+#~ msgid "_Preview"
+#~ msgstr "_Pretpregled"
+
+#~ msgid "Created By:"
+#~ msgstr "Autori:"
+
+#~ msgid ""
+#~ "Christian Hergert\n"
+#~ "Alexander Larsson\n"
+#~ "Alexandre Franke\n"
+#~ "Carlos Soriano\n"
+#~ "Cosimo Cecchi\n"
+#~ "Dimitris Zenios\n"
+#~ "Fabiano Fidêncio\n"
+#~ "Florian Bäuerle\n"
+#~ "Florian Müllner\n"
+#~ "Hashem Nasarat\n"
+#~ "Hylke Bons\n"
+#~ "Igor Gnatenko\n"
+#~ "Jakub Steiner\n"
+#~ "Jasper St. Pierre\n"
+#~ "Jonathon Jongsma\n"
+#~ "Mathieu Bridon\n"
+#~ "Megh Parikh\n"
+#~ "Michael Catanzaro\n"
+#~ "Pete Travis\n"
+#~ "Ray Strode\n"
+#~ "Roberto Majadas\n"
+#~ "Ting-Wei Lan\n"
+#~ "Trinh Anh Ngoc\n"
+#~ "Yosef Or Boczko"
+#~ msgstr ""
+#~ "Christian Hergert\n"
+#~ "Alexander Larsson\n"
+#~ "Alexandre Franke\n"
+#~ "Carlos Soriano\n"
+#~ "Cosimo Cecchi\n"
+#~ "Dimitris Zenios\n"
+#~ "Fabiano Fidêncio\n"
+#~ "Florian Bäuerle\n"
+#~ "Florian Müllner\n"
+#~ "Hashem Nasarat\n"
+#~ "Hylke Bons\n"
+#~ "Igor Gnatenko\n"
+#~ "Jakub Steiner\n"
+#~ "Jasper St. Pierre\n"
+#~ "Jonathon Jongsma\n"
+#~ "Mathieu Bridon\n"
+#~ "Megh Parikh\n"
+#~ "Michael Catanzaro\n"
+#~ "Pete Travis\n"
+#~ "Ray Strode\n"
+#~ "Roberto Majadas\n"
+#~ "Ting-Wei Lan\n"
+#~ "Trinh Anh Ngoc\n"
+#~ "Yosef Or Boczko"
+
+#~ msgid "Artwork By:"
+#~ msgstr "Slike su pripremili:"
+
+#~ msgid ""
+#~ "Allan Day\n"
+#~ "Hylke Bons\n"
+#~ "Jakub Steiner"
+#~ msgstr ""
+#~ "Allan Day\n"
+#~ "Hylke Bons\n"
+#~ "Jakub Steiner"
+
+#~ msgid "Translated By:"
+#~ msgstr "Prevodioci:"
+
+#~ msgid "Funded By:"
+#~ msgstr "Osnivači:"
+
+#~ msgid ""
+#~ "Christian Hergert\n"
+#~ "Gareth Foster"
+#~ msgstr ""
+#~ "Christian Hergert\n"
+#~ "Gareth Foster"
+
+#~ msgid "Special Thanks To:"
+#~ msgstr "Posebno se zahvaljujemo:"
+
+#~ msgid ""
+#~ "Andy Hertzfeld and the Eazel Team\n"
+#~ "Alberto Ruiz\n"
+#~ "Bastien Nocera\n"
+#~ "Cosimo Cecchi\n"
+#~ "Emmanuele Bassi\n"
+#~ "Federico Mena Quintero\n"
+#~ "Jasper St Pierre\n"
+#~ "Jon McCann\n"
+#~ "Jonathan Blandford\n"
+#~ "Matthias Clasen\n"
+#~ "Miguel de Icaza\n"
+#~ "Owen Taylor\n"
+#~ "Rob Taylor\n"
+#~ "Spencer Kimball\n"
+#~ "Ximian Team\n"
+#~ "\n"
+#~ "Each and every contributor to GNOME\n"
+#~ "and the Friends of GNOME"
+#~ msgstr ""
+#~ "Andy Hertzfeld and the Eazel Team\n"
+#~ "Alberto Ruiz\n"
+#~ "Bastien Nocera\n"
+#~ "Cosimo Cecchi\n"
+#~ "Emmanuele Bassi\n"
+#~ "Federico Mena Quintero\n"
+#~ "Jasper St Pierre\n"
+#~ "Jon McCann\n"
+#~ "Jonathan Blandford\n"
+#~ "Matthias Clasen\n"
+#~ "Miguel de Icaza\n"
+#~ "Owen Taylor\n"
+#~ "Rob Taylor\n"
+#~ "Spencer Kimball\n"
+#~ "Ximian Team\n"
+#~ "\n"
+#~ "Svim doprinosiocima Gnoma\n"
+#~ "i prijateljima Gnoma"
+
+#~ msgid ""
+#~ "Copyright 2014 Christian Hergert, et al.\n"
+#~ "Licensed under the GNU GPL 3 or newer"
+#~ msgstr ""
+#~ "Autorska prava 2014 Kristijan Hergert, i ostali.\n"
+#~ "Izdato pod Gnuovom OJL 3 ili novijom"
+
+#~ msgid "No document were found"
+#~ msgstr "Nisam pronašao nijedan dokument"
+
+#~ msgid "Line 1, Column 1"
+#~ msgstr "1. red, 1. kolona"
+
+#~ msgid "Currently parsing document"
+#~ msgstr "Trenutno obrađujem dokument"
+
+#~ msgid "<b>Indentation</b>"
+#~ msgstr "<b>Uvlačenje</b>"
+
+#~ msgid "<b>Restore Cursor Position</b>"
+#~ msgstr "<b>Vraćanje položaja kursora</b>"
+
+#~ msgid "<b>Suggest Word Completion</b>"
+#~ msgstr "<b>Predloži dovršavanje reči</b>"
+
+#~ msgid "<b>Display Document Changes</b>"
+#~ msgstr "<b>Prikaži izmene dokumenta</b>"
+
+#~ msgid "<b>Show Line Numbers</b>"
+#~ msgstr "<b>Prikaži brojeve redova</b>"
+
+#~ msgid "<b>Highlight Current Line</b>"
+#~ msgstr "<b>Istakni tekući red</b>"
+
+#~ msgid "<b>Highlight Matching Brackets</b>"
+#~ msgstr "<b>Istakni uparene zagrade</b>"
+
+#~ msgid "<b>Smart Home End</b>"
+#~ msgstr "<b>Pametne „Home/End“ tasteri</b>"
+
+#~ msgid "<b>Show Grid Lines</b>"
+#~ msgstr "<b>Prikaži linije mreže</b>"
+
+#~ msgid "<b>VIM Modal Editing</b>"
+#~ msgstr "<b>Vimovo modalno uređivanje</b>"
+
+#~ msgid "Use VIM style modal editing in the source code editor."
+#~ msgstr "Koristi modalno uređivanje u VIM stilu u uređivaču izvornog koda."
+
+#~ msgid "<b>Scroll Offset</b>"
+#~ msgstr "<b>Pomeraj klizanja</b>"
+
+#~ msgid "Vim"
+#~ msgstr "Vim"
+
+#~ msgid "Go back in history"
+#~ msgstr "Idi unazad u istorijatu"
+
+#~ msgid "Go forward in history"
+#~ msgstr "Idi napred u istorijatu"
+
+#~ msgid "Search Manager"
+#~ msgstr "Upravnik pretrage"
+
+#~ msgid "The search manager for the search box."
+#~ msgstr "Upravnik pretrage za polje pretrage."
+
+#~ msgid "The result match score."
+#~ msgstr "Rezultat odgovara zgoditku."
+
+#~ msgid "The pango markup to be rendered."
+#~ msgstr "Pango oznaka za iscrtavanje."
+
+#~ msgid "The specification to expand using the contxt."
+#~ msgstr "Odredba za širenje korišćenjem konteksta."
+
+#~ msgid "The command manager for the workspace."
+#~ msgstr "Upravnik naredbe za radni prostor."
+
+#~ msgid "The navigation list for the workbench."
+#~ msgstr "Spisak navigacije za radionicu."
