@@ -63,13 +63,18 @@ dnl Check for Required Programs
 dnl ***********************************************************************
 AC_PROG_CC
 AM_PROG_CC_C_O
-AC_PROG_INSTALL
 AC_PROG_CXX
+AM_PROG_VALAC
+AC_PROG_INSTALL
 AC_PATH_PROG([GLIB_GENMARSHAL], [glib-genmarshal])
 AC_PATH_PROG([GLIB_MKENUMS], [glib-mkenums])
 AC_PATH_PROG([GLIB_COMPILE_RESOURCES], [glib-compile-resources])
 AC_HEADER_STDC
 PKG_PROG_PKG_CONFIG([0.22])
+GOBJECT_INTROSPECTION_CHECK([1.42.0])
+VAPIGEN_CHECK
+GLIB_GSETTINGS
+APPSTREAM_XML
 
 
 dnl ***********************************************************************
@@ -320,18 +325,6 @@ AC_C_CONST
 
 
 dnl ***********************************************************************
-dnl Desktop Settings Support
-dnl ***********************************************************************
-GLIB_GSETTINGS
-
-
-dnl ***********************************************************************
-dnl Setup Introspection
-dnl ***********************************************************************
-GOBJECT_INTROSPECTION_CHECK([1.42.0])
-
-
-dnl ***********************************************************************
 dnl Always build tests
 dnl ***********************************************************************
 AC_ARG_ENABLE([tests],
@@ -353,12 +346,6 @@ AC_ARG_ENABLE(doc-cross-references,
               enable_doc_cross_references=$enableval,
               enable_doc_cross_references=yes)
 AM_CONDITIONAL(ENABLE_DOC_CROSS_REFERENCES, test x$enable_doc_cross_references != xno)
-
-
-dnl ***********************************************************************
-dnl Rules for Generating AppStream Information
-dnl ***********************************************************************
-APPSTREAM_XML
 
 
 dnl ***********************************************************************

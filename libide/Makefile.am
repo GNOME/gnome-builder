@@ -353,13 +353,13 @@ nodist_libide_1_0_la_SOURCES = \
 	$(NULL)
 
 
+if HAVE_INTROSPECTION
 -include $(INTROSPECTION_MAKEFILE)
 
 INTROSPECTION_GIRS =
 INTROSPECTION_SCANNER_ARGS = --add-include-path=$(srcdir) --warn-all
 INTROSPECTION_COMPILER_ARGS = --includedir=$(srcdir)
 
-if HAVE_INTROSPECTION
 introspection_sources = \
 	$(libide_1_0_la_public_sources) \
 	$(NULL)
@@ -385,5 +385,29 @@ typelib_DATA = $(INTROSPECTION_GIRS:.gir=.typelib)
 
 CLEANFILES += $(dist_gir_DATA) $(typelib_DATA)
 endif
+
+
+if ENABLE_VAPIGEN
+-include $(VAPIGEN_MAKEFILE)
+
+libide-1.0.vapi: Ide-1.0.gir
+
+VAPIGEN_VAPIS = libide-1.0.vapi
+
+libide_1_0_vapi_DEPS = gio-2.0 gtk+-3.0 gtksourceview-3.0 ggit-1.0 libpeas-1.0
+libide_1_0_vapi_METADATADIRS = $(srcdir)
+libide_1_0_vapi_FILES = Ide-1.0.gir
+
+libide-1.0.deps: Makefile
+	$(AM_V_GEN) echo $(libide_1_0_vapi_DEPS) | tr ' ' '\n' > $@
+
+vapidir = $(VAPIGEN_VAPIDIR)
+vapi_DATA = $(VAPIGEN_VAPIS) $(VAPIGEN_VAPIS:.vapi=.deps)
+
+EXTRA_DIST += Ide-1.0.metadata libide-1.0.deps
+
+DISTCLEANFILES += $(vapi_DATA)
+endif
+
 
 -include $(top_srcdir)/git.mk
