@@ -21,7 +21,7 @@
 #include "ide-context.h"
 #include "ide-service.h"
 
-G_DEFINE_INTERFACE (IdeService, ide_service, IDE_TYPE_OBJECT)
+G_DEFINE_INTERFACE (IdeService, ide_service, G_TYPE_OBJECT)
 
 enum {
   LOADED,

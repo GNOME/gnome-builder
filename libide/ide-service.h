@@ -25,7 +25,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_SERVICE (ide_service_get_type())
 
-G_DECLARE_INTERFACE (IdeService, ide_service, IDE, SERVICE, IdeObject)
+G_DECLARE_INTERFACE (IdeService, ide_service, IDE, SERVICE, GObject)
 
 struct _IdeServiceInterface
 {
