@@ -19,15 +19,25 @@
 #include "gb-string.h"
 
 gchar *
-gb_str_highlight (const gchar *str,
-                  const gchar *match)
+gb_str_highlight_full (const gchar     *str,
+                       const gchar     *match,
+                       gboolean         insensitive,
+                       GbHighlightType  type)
 {
+  const gchar *begin = "<u>";
+  const gchar *end = "</u>";
   GString *ret;
   gunichar str_ch;
   gunichar match_ch;
 
   g_return_val_if_fail (str, NULL);
   g_return_val_if_fail (match, NULL);
+
+  if (type == GB_HIGHLIGHT_BOLD)
+    {
+      begin = "<b>";
+      end = "</b>";
+    }
 
   ret = g_string_new (NULL);
 
@@ -36,12 +46,15 @@ gb_str_highlight (const gchar *str,
       str_ch = g_utf8_get_char (str);
       match_ch = g_utf8_get_char (match);
 
-      if (str_ch == match_ch)
+      if ((str_ch == match_ch) || (insensitive && (g_unichar_tolower (str_ch) == g_unichar_tolower (match_ch))))
         {
-          g_string_append (ret, "<u>");
+          g_string_append (ret, begin);
           g_string_append_unichar (ret, str_ch);
-          g_string_append (ret, "</u>");
+          g_string_append (ret, end);
 
+          /*
+           * TODO: We could seek to the next char and append in a batch.
+           */
           match = g_utf8_next_char (match);
         }
       else
@@ -50,5 +63,14 @@ gb_str_highlight (const gchar *str,
         }
     }
 
+#undef TOGGLE
+
   return g_string_free (ret, FALSE);
+}
+
+gchar *
+gb_str_highlight (const gchar *str,
+                  const gchar *match)
+{
+  return gb_str_highlight_full (str, match, FALSE, GB_HIGHLIGHT_UNDERLINE);
 }
