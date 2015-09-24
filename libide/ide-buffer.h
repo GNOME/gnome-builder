@@ -91,6 +91,7 @@ void                ide_buffer_hold                          (IdeBuffer         
 void                ide_buffer_release                       (IdeBuffer            *self);
 gchar              *ide_buffer_get_word_at_iter              (IdeBuffer            *self,
                                                               const GtkTextIter    *iter);
+void                ide_buffer_sync_to_unsaved_files         (IdeBuffer            *self);
 
 G_END_DECLS
 
