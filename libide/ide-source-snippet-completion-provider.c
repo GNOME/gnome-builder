@@ -279,7 +279,7 @@ provider_get_interactive_delay (GtkSourceCompletionProvider *provider)
 static gint
 provider_get_priority (GtkSourceCompletionProvider *provider)
 {
-  return 200;
+  return 100;
 }
 
 static gchar *
