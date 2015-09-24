@@ -215,7 +215,7 @@ ide_buffer_set_context (IdeBuffer  *self,
                      self);
 }
 
-static void
+void
 ide_buffer_sync_to_unsaved_files (IdeBuffer *self)
 {
   GBytes *content;
