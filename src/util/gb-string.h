@@ -28,8 +28,18 @@ G_BEGIN_DECLS
 #define gb_str_equal0(s1,s2) \
   (((s1) == (s2)) || ((s1) && (s2) && g_str_equal(s1,s2)))
 
-gchar *gb_str_highlight (const gchar *src,
-                         const gchar *match);
+typedef enum
+{
+  GB_HIGHLIGHT_UNDERLINE,
+  GB_HIGHLIGHT_BOLD,
+} GbHighlightType;
+
+gchar *gb_str_highlight      (const gchar     *src,
+                              const gchar     *match);
+gchar *gb_str_highlight_full (const gchar     *str,
+                              const gchar     *match,
+                              gboolean         insensitive,
+                              GbHighlightType  type);
 
 G_END_DECLS
 
