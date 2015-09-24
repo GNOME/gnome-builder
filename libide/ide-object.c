@@ -138,6 +138,9 @@ ide_object_set_context (IdeObject  *self,
                              self);
         }
 
+      if (IDE_OBJECT_GET_CLASS (self)->set_context)
+        IDE_OBJECT_GET_CLASS (self)->set_context (self, context);
+
       g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_CONTEXT]);
     }
 }
