@@ -21,7 +21,7 @@
 #include "ide-context.h"
 #include "ide-indenter.h"
 
-G_DEFINE_INTERFACE (IdeIndenter, ide_indenter, IDE_TYPE_OBJECT)
+G_DEFINE_INTERFACE (IdeIndenter, ide_indenter, G_TYPE_OBJECT)
 
 static gchar *
 ide_indenter_default_format (IdeIndenter *self,
@@ -60,8 +60,8 @@ ide_indenter_default_init (IdeIndenterInterface *iface)
  * @text_view: A #GtkTextView
  * @begin: A #GtkTextIter for the beginning region of text to replace.
  * @end: A #GtkTextIter for the end region of text to replace.
- * @cursor_offset: The offset in characters from @end to place the cursor.
- *   Negative values are okay.
+ * @cursor_offset: (out): The offset in characters from @end to place the
+ *   cursor. Negative values are okay.
  * @event: The #GdkEventKey that triggered the event.
  *
  * This function performs an indentation for the key press activated by @event.
@@ -72,7 +72,7 @@ ide_indenter_default_init (IdeIndenterInterface *iface)
  * @cursor_offset may be set to jump the cursor starting from @end. Negative
  * values are allowed.
  *
- * Returns: (transfer full): A string containing the replacement text, or %NULL.
+ * Returns: (nullable) (transfer full): A string containing the replacement text, or %NULL.
  */
 gchar *
 ide_indenter_format (IdeIndenter *self,

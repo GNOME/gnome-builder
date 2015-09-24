@@ -27,20 +27,22 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_INDENTER (ide_indenter_get_type())
 
-G_DECLARE_INTERFACE (IdeIndenter, ide_indenter, IDE, INDENTER, IdeObject)
+G_DECLARE_INTERFACE (IdeIndenter, ide_indenter, IDE, INDENTER, GObject)
 
 struct _IdeIndenterInterface
 {
   GTypeInterface parent;
 
-  gchar    *(*format)     (IdeIndenter   *self,
-                           GtkTextView   *text_view,
-                           GtkTextIter   *begin,
-                           GtkTextIter   *end,
-                           gint          *cursor_offset,
-                           GdkEventKey   *event);
-  gboolean  (*is_trigger) (IdeIndenter   *self,
-                           GdkEventKey   *event);
+  gchar    *(*format)      (IdeIndenter   *self,
+                            GtkTextView   *text_view,
+                            GtkTextIter   *begin,
+                            GtkTextIter   *end,
+                            gint          *cursor_offset,
+                            GdkEventKey   *event);
+  gboolean  (*is_trigger)  (IdeIndenter   *self,
+                            GdkEventKey   *event);
+  void      (*set_context) (IdeIndenter   *self,
+                            IdeContext    *context);
 };
 
 gboolean  ide_indenter_is_trigger (IdeIndenter *self,
