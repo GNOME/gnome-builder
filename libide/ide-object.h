@@ -33,7 +33,9 @@ struct _IdeObjectClass
 {
   GObjectClass parent;
 
-  void (*destroy) (IdeObject *self);
+  void (*destroy)     (IdeObject  *self);
+  void (*set_context) (IdeObject  *self,
+                       IdeContext *context);
 };
 
 IdeContext *ide_object_get_context (IdeObject            *self);
