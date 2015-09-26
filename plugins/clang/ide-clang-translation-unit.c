@@ -952,8 +952,8 @@ ide_clang_translation_unit_lookup_symbol (IdeClangTranslationUnit  *self,
   symkind = get_symbol_kind (cursor, &symflags);
 
   cxstr = clang_getCursorDisplayName (cursor);
-  ret = _ide_symbol_new (clang_getCString (cxstr), symkind, symflags,
-                         declaration, definition, canonical);
+  ret = ide_symbol_new (clang_getCString (cxstr), symkind, symflags,
+                        declaration, definition, canonical);
 
   /*
    * TODO: We should also get information about the defintion of the symbol.
@@ -985,7 +985,7 @@ create_symbol (CXCursor         cursor,
 
   symkind = get_symbol_kind (cursor, &symflags);
 
-  symbol = _ide_symbol_new (name, symkind, symflags, NULL, NULL, srcloc);
+  symbol = ide_symbol_new (name, symkind, symflags, NULL, NULL, srcloc);
 
   return symbol;
 }

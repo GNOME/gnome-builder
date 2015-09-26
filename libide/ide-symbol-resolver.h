@@ -32,6 +32,8 @@ struct _IdeSymbolResolverInterface
 {
   GTypeInterface parent_interface;
 
+  void           (*set_context)            (IdeSymbolResolver    *self,
+                                            IdeContext           *context);
   void           (*lookup_symbol_async)    (IdeSymbolResolver    *self,
                                             IdeSourceLocation    *location,
                                             GCancellable         *cancellable,

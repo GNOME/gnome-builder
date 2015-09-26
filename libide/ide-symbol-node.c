@@ -177,6 +177,13 @@ ide_symbol_node_get_kind (IdeSymbolNode *self)
   return priv->kind;
 }
 
+/**
+ * ide_symbol_node_get_location:
+ *
+ * Gets the location for the symbol node.
+ *
+ * Returns: (transfer full) (nullable): An #IdeSourceLocation or %NULL.
+ */
 IdeSourceLocation *
 ide_symbol_node_get_location (IdeSymbolNode *self)
 {

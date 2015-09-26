@@ -96,12 +96,6 @@ void                _ide_source_view_set_count              (IdeSourceView      
                                                              guint                  count);
 void                _ide_source_view_set_modifier           (IdeSourceView         *self,
                                                              gunichar               modifier);
-IdeSymbol          *_ide_symbol_new                         (const gchar           *name,
-                                                             IdeSymbolKind          kind,
-                                                             IdeSymbolFlags         flags,
-                                                             IdeSourceLocation     *declaration_location,
-                                                             IdeSourceLocation     *definition_location,
-                                                             IdeSourceLocation     *canonical_location);
 void                _ide_thread_pool_init                   (void);
 IdeUnsavedFile     *_ide_unsaved_file_new                   (GFile                 *file,
                                                              GBytes                *content,

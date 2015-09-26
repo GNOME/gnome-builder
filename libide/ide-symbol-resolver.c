@@ -83,6 +83,16 @@ ide_symbol_resolver_lookup_symbol_finish (IdeSymbolResolver  *self,
   return IDE_SYMBOL_RESOLVER_GET_IFACE (self)->lookup_symbol_finish (self, result, error);
 }
 
+/**
+ * ide_symbol_resolver_get_symbol_tree_async:
+ * @self: An #IdeSymbolResolver
+ * @file: A #GFile
+ * @cancellable: (allow-none): a #GCancellable or %NULL.
+ * @callback: (allow-none): a callback to execute upon completion
+ * @user_data: user data for @callback
+ *
+ * Asynchronously fetch an up to date symbol tree for @file.
+ */
 void
 ide_symbol_resolver_get_symbol_tree_async (IdeSymbolResolver   *self,
                                            GFile               *file,
@@ -101,7 +111,7 @@ ide_symbol_resolver_get_symbol_tree_async (IdeSymbolResolver   *self,
  *
  * Completes an asynchronous request to get the symbol tree for the requested file.
  *
- * Returns: (transfer full): An #IdeSymbolTree; otherwise %NULL and @error is set.
+ * Returns: (nullable) (transfer full): An #IdeSymbolTree; otherwise %NULL and @error is set.
  */
 IdeSymbolTree *
 ide_symbol_resolver_get_symbol_tree_finish (IdeSymbolResolver  *self,

@@ -45,6 +45,9 @@ ide_symbol_tree_get_n_children (IdeSymbolTree *self,
 
 /**
  * ide_symbol_tree_get_nth_child:
+ * @self: An #IdeSymbolTree.
+ * @node: (nullable): an #IdeSymboNode
+ * @nth: the nth child to retrieve.
  *
  * Gets the @nth child node of @node.
  *
