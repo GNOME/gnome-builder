@@ -40,6 +40,17 @@ G_DEFINE_BOXED_TYPE (IdeSymbol, ide_symbol, ide_symbol_ref, ide_symbol_unref)
 
 EGG_DEFINE_COUNTER (instances, "IdeSymbol", "Instances", "Number of symbol instances")
 
+/**
+ * ide_symbol_new:
+ * @name: the symbol name
+ * @kind: the symbol kind
+ * @flags: the symbol flags
+ * @declaration_location: (allow-none): the declaration location
+ * @definition_location: (allow-none): the definition location
+ * @canonical_location: (allow-none): the canonical location
+ *
+ * Returns: (transfer full): a new #IdeSymbol.
+ */
 IdeSymbol *
 ide_symbol_new (const gchar       *name,
                 IdeSymbolKind      kind,

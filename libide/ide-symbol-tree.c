@@ -27,6 +27,8 @@ ide_symbol_tree_default_init (IdeSymbolTreeInterface *iface)
 
 /**
  * ide_symbol_tree_get_n_children:
+ * @self: An @IdeSymbolTree
+ * @node: (allow-none): An #IdeSymbolNode or %NULL.
  *
  * Get the number of children of @node. If @node is NULL, the root node
  * is assumed.
@@ -46,7 +48,7 @@ ide_symbol_tree_get_n_children (IdeSymbolTree *self,
 /**
  * ide_symbol_tree_get_nth_child:
  * @self: An #IdeSymbolTree.
- * @node: (nullable): an #IdeSymboNode
+ * @node: (allow-none): an #IdeSymboNode
  * @nth: the nth child to retrieve.
  *
  * Gets the @nth child node of @node.

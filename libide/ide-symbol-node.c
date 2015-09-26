@@ -91,6 +91,7 @@ ide_symbol_node_set_property (GObject      *object,
   switch (prop_id)
     {
     case PROP_NAME:
+      g_free (priv->name);
       priv->name = g_value_dup_string (value);
       break;
 
@@ -121,7 +122,7 @@ ide_symbol_node_class_init (IdeSymbolNodeClass *klass)
                          "Name",
                          "Name",
                          NULL,
-                         (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
+                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_KIND] =
     g_param_spec_enum ("kind",
@@ -129,7 +130,7 @@ ide_symbol_node_class_init (IdeSymbolNodeClass *klass)
                        "Kind",
                        IDE_TYPE_SYMBOL_KIND,
                        IDE_SYMBOL_NONE,
-                       (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
+                       (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_FLAGS] =
     g_param_spec_flags ("flags",
@@ -137,7 +138,7 @@ ide_symbol_node_class_init (IdeSymbolNodeClass *klass)
                         "Flags",
                         IDE_TYPE_SYMBOL_FLAGS,
                         IDE_SYMBOL_FLAGS_NONE,
-                        (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
+                        (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
 }
