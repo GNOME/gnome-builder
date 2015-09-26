@@ -49,7 +49,7 @@ namespace Ide {
 		Location innermost_begin;
 		Location innermost_end;
 
-		public Vala.Symbol locate (Vala.SourceFile file, int line, int column) {
+		public Vala.Symbol? locate (Vala.SourceFile file, int line, int column) {
 			location = Location (line, column);
 			innermost = null;
 			file.accept_children(this);
