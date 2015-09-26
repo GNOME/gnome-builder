@@ -57,6 +57,8 @@ namespace Ide
 				return "lang-include-symbolic";
 			else if (symbol is Vala.MemberAccess)
 				return "struct-field-symbolic";
+			else if (symbol is Vala.Property)
+				return "struct-field-symbolic";
 			else if (symbol is Vala.Struct)
 				return "lang-struct-symbolic";
 			else if (symbol is Vala.Class)
