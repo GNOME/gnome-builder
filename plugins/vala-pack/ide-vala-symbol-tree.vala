@@ -138,6 +138,8 @@ namespace Ide
 				this.kind = Ide.SymbolKind.CLASS;
 			else if (node is Vala.Struct)
 				this.kind = Ide.SymbolKind.STRUCT;
+			else if (node is Vala.Property)
+				this.kind = Ide.SymbolKind.FIELD;
 		}
 
 		public override Ide.SourceLocation? get_location ()
