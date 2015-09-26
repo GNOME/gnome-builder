@@ -1,4 +1,4 @@
-/* vala-pack-plugin.c
+/* vala-pack-plugin.vala
  *
  * Copyright (C) 2015 Christian Hergert <christian@hergert.me>
  *
@@ -16,15 +16,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <libpeas/peas.h>
+using GLib;
+using Ide;
+using Peas;
 
-#include "ide-vala.h"
-
-void
-peas_register_types (PeasObjectModule *module)
+[ModuleInit]
+public void peas_register_types (GLib.TypeModule module)
 {
-  peas_object_module_register_extension_type (module, IDE_TYPE_SERVICE, IDE_TYPE_VALA_SERVICE);
-  peas_object_module_register_extension_type (module, IDE_TYPE_INDENTER, IDE_TYPE_VALA_INDENTER);
-  peas_object_module_register_extension_type (module, IDE_TYPE_COMPLETION_PROVIDER, IDE_TYPE_VALA_COMPLETION_PROVIDER);
-  peas_object_module_register_extension_type (module, IDE_TYPE_DIAGNOSTIC_PROVIDER, IDE_TYPE_VALA_DIAGNOSTIC_PROVIDER);
+	Peas.ObjectModule peas = (Peas.ObjectModule)module;
+
+	peas.register_extension_type (typeof (Ide.CompletionProvider), typeof (Ide.ValaCompletionProvider));
+	peas.register_extension_type (typeof (Ide.DiagnosticProvider), typeof (Ide.ValaDiagnosticProvider));
+	peas.register_extension_type (typeof (Ide.Indenter), typeof (Ide.ValaIndenter));
+	peas.register_extension_type (typeof (Ide.Service), typeof (Ide.ValaService));
+	peas.register_extension_type (typeof (Ide.SymbolResolver), typeof (Ide.ValaSymbolResolver));
 }

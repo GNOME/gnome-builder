@@ -17,7 +17,7 @@ libvala_pack_plugin_la_SOURCES = \
 	ide-vala-index.vala \
 	ide-vala-locator.vala \
 	ide-vala-source-file.vala \
-	vala-pack-plugin.c \
+	vala-pack-plugin.vala \
 	$(NULL)
 
 libvala_pack_plugin_la_VALAFLAGS = \
@@ -25,10 +25,10 @@ libvala_pack_plugin_la_VALAFLAGS = \
 	--thread \
 	--vapidir $(top_builddir)/libide \
 	--pkg gtksourceview-3.0 \
-	--pkg posix \
-	--pkg libvala-0.30 \
 	--pkg libide-1.0 \
-	-H ide-vala.h \
+	--pkg libpeas-1.0 \
+	--pkg libvala-0.30 \
+	--pkg posix \
 	$(NULL)
 
 libvala_pack_plugin_la_CFLAGS = \
