@@ -420,8 +420,6 @@ gb_view_stack__header__button_press (GbViewStack    *self,
   g_assert (button != NULL);
   g_assert (GTK_IS_EVENT_BOX (event_box));
 
-  g_print ("button press\n");
-
   if (button->button == GDK_BUTTON_PRIMARY)
     {
       gtk_widget_grab_focus (GTK_WIDGET (self));
