@@ -404,7 +404,7 @@ libide-1.0.deps: Makefile
 vapidir = $(VAPIGEN_VAPIDIR)
 vapi_DATA = $(VAPIGEN_VAPIS) $(VAPIGEN_VAPIS:.vapi=.deps)
 
-EXTRA_DIST += Ide-1.0.metadata libide-1.0.deps
+EXTRA_DIST += libide-1.0.deps
 
 DISTCLEANFILES += $(vapi_DATA)
 endif

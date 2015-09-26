@@ -335,7 +335,7 @@ gnome-builder-1.0.deps: Makefile
 vapidir = $(VAPIGEN_VAPIDIR)
 vapi_DATA = $(VAPIGEN_VAPIS) $(VAPIGEN_VAPIS:.vapi=.deps)
 
-EXTRA_DIST += Builder-1.0.metadata gnome-builder-1.0.deps
+EXTRA_DIST += gnome-builder-1.0.deps
 
 DISTCLEANFILES += $(vapi_DATA)
 endif
