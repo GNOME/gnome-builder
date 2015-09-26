@@ -328,9 +328,9 @@ gb_view_stack_context_handler (GtkWidget  *widget,
 }
 
 static void
-gb_view_stack_on_workbench_unload (GbWorkbench *workbench,
-                                   IdeContext  *context,
-                                   GbViewStack *self)
+gb_view_stack__workbench__unload (GbWorkbench *workbench,
+                                  IdeContext  *context,
+                                  GbViewStack *self)
 {
   IdeBackForwardList *back_forward_list;
 
@@ -357,7 +357,7 @@ gb_view_stack_hierarchy_changed (GtkWidget *widget,
   if (GB_IS_WORKBENCH (old_toplevel))
     {
       g_signal_handlers_disconnect_by_func (old_toplevel,
-                                            G_CALLBACK (gb_view_stack_on_workbench_unload),
+                                            G_CALLBACK (gb_view_stack__workbench__unload),
                                             self);
     }
 
@@ -367,15 +367,15 @@ gb_view_stack_hierarchy_changed (GtkWidget *widget,
     {
       g_signal_connect (toplevel,
                         "unload",
-                        G_CALLBACK (gb_view_stack_on_workbench_unload),
+                        G_CALLBACK (gb_view_stack__workbench__unload),
                         self);
     }
 }
 
 static void
-gb_view_stack__views_listbox_row_activated_cb (GbViewStack   *self,
-                                               GtkListBoxRow *row,
-                                               GtkListBox    *list_box)
+gb_view_stack__views_listbox__row_activated_cb (GbViewStack   *self,
+                                                GtkListBoxRow *row,
+                                                GtkListBox    *list_box)
 {
   GbView *view;
 
@@ -448,7 +448,7 @@ gb_view_stack_constructed (GObject *object)
 
   g_signal_connect_object (self->views_listbox,
                            "row-activated",
-                           G_CALLBACK (gb_view_stack__views_listbox_row_activated_cb),
+                           G_CALLBACK (gb_view_stack__views_listbox__row_activated_cb),
                            self,
                            G_CONNECT_SWAPPED);
 
@@ -768,9 +768,9 @@ gb_view_stack_find_with_document (GbViewStack *self,
 }
 
 static void
-gb_view_stack__navigate_to_load_cb (GObject      *object,
-                                    GAsyncResult *result,
-                                    gpointer      user_data)
+gb_view_stack__navigate_to__load_cb (GObject      *object,
+                                     GAsyncResult *result,
+                                     gpointer      user_data)
 {
   IdeBufferManager *buffer_manager = (IdeBufferManager *)object;
   GbViewStack *self;
@@ -848,7 +848,7 @@ gb_view_stack_focus_location (GbViewStack       *self,
       g_task_set_task_data (task, ide_source_location_ref (location),
                             (GDestroyNotify)ide_source_location_unref);
       ide_buffer_manager_load_file_async (buffer_manager, file, FALSE, NULL, NULL,
-                                          gb_view_stack__navigate_to_load_cb,
+                                          gb_view_stack__navigate_to__load_cb,
                                           g_object_ref (task));
     }
 }
