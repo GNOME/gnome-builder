@@ -50,6 +50,7 @@ G_DEFINE_TYPE (GbTreeNode, gb_tree_node, G_TYPE_INITIALLY_UNOWNED)
 
 enum {
   PROP_0,
+  PROP_CHILDREN_POSSIBLE,
   PROP_ICON_NAME,
   PROP_ITEM,
   PROP_PARENT,
@@ -519,6 +520,10 @@ gb_tree_node_get_property (GObject    *object,
 
   switch (prop_id)
     {
+    case PROP_CHILDREN_POSSIBLE:
+      g_value_set_boolean (value, gb_tree_node_get_children_possible (node));
+      break;
+
     case PROP_ICON_NAME:
       g_value_set_string (value, g_quark_to_string (node->icon_name));
       break;
@@ -562,6 +567,10 @@ gb_tree_node_set_property (GObject      *object,
 
   switch (prop_id)
     {
+    case PROP_CHILDREN_POSSIBLE:
+      gb_tree_node_set_children_possible (node, g_value_get_boolean (value));
+      break;
+
     case PROP_ICON_NAME:
       gb_tree_node_set_icon_name (node, g_value_get_string (value));
       break;
@@ -595,6 +604,26 @@ gb_tree_node_class_init (GbTreeNodeClass *klass)
   object_class->finalize = gb_tree_node_finalize;
   object_class->get_property = gb_tree_node_get_property;
   object_class->set_property = gb_tree_node_set_property;
+
+  /**
+   * GbTreeNode:children-possible:
+   *
+   * This property allows for more lazy loading of nodes.
+   *
+   * When a node becomes visible, we normally build it's children nodes
+   * so that we know if we need an expansion arrow. However, that can
+   * be expensive when rendering directories with lots of subdirectories.
+   *
+   * Using this, you can always show an arrow without building the children
+   * and simply hide the arrow if there were in fact no children (upon
+   * expansion).
+   */
+  gParamSpecs [PROP_CHILDREN_POSSIBLE] =
+    g_param_spec_boolean ("children-possible",
+                          "Children Possible",
+                          "Allows for lazy creation of children nodes.",
+                          FALSE,
+                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   /**
    * GbTreeNode:icon-name:
@@ -859,6 +888,14 @@ _gb_tree_node_remove_dummy_child (GbTreeNode *self)
         {
         }
     }
+}
+
+gboolean
+gb_tree_node_get_children_possible (GbTreeNode *self)
+{
+  g_return_val_if_fail (GB_IS_TREE_NODE (self), FALSE);
+
+  return self->children_possible;
 }
 
 /**

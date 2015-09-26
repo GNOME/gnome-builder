@@ -58,6 +58,7 @@ const gchar   *gb_tree_node_get_text              (GbTreeNode   *node);
 void           gb_tree_node_set_text              (GbTreeNode   *node,
                                                    const gchar  *text);
 GbTree        *gb_tree_node_get_tree              (GbTreeNode   *node);
+gboolean       gb_tree_node_get_children_possible (GbTreeNode   *self);
 void           gb_tree_node_set_children_possible (GbTreeNode   *self,
                                                    gboolean      children_possible);
 gboolean       gb_tree_node_get_use_markup        (GbTreeNode   *self);
