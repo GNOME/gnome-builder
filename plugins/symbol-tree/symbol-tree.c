@@ -108,6 +108,9 @@ notify_active_view_cb (SymbolTree  *self,
     {
       /*
        * First, clear the old tree items.
+       *
+       * TODO: Get cross compile names for nodes so that we can
+       *       recompute the open state.
        */
       gb_tree_set_root (self->tree, gb_tree_node_new ());;
 
