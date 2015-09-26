@@ -18,6 +18,7 @@ libvala_pack_plugin_la_SOURCES = \
 	ide-vala-locator.vala \
 	ide-vala-source-file.vala \
 	ide-vala-symbol-resolver.vala \
+	ide-vala-symbol-tree.vala \
 	vala-pack-plugin.vala \
 	$(NULL)
 

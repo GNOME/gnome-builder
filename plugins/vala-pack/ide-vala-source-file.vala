@@ -45,7 +45,7 @@ namespace Ide
 	public class ValaSourceFile: Vala.SourceFile
 	{
 		ArrayList<Ide.Diagnostic> diagnostics;
-		Ide.File file;
+		internal Ide.File file;
 
 		public ValaSourceFile (Vala.CodeContext context,
 		                       Vala.SourceFileType type,

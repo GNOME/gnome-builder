@@ -28,7 +28,12 @@ namespace Ide
 		                                                    GLib.Cancellable? cancellable)
 			throws GLib.Error
 		{
-			return null;
+			var context = this.get_context ();
+			var service = (Ide.ValaService)context.get_service_typed (typeof (Ide.ValaService));
+			var index = service.index;
+			var symbol_tree = yield index.get_symbol_tree (file, cancellable);
+
+			return symbol_tree;
 		}
 
 		public async Ide.Symbol? lookup_symbol_async (Ide.SourceLocation location,
@@ -48,7 +53,7 @@ namespace Ide
 
 			if (symbol != null) {
 				var kind = Ide.SymbolKind.FUNCTION;
-				var flags = Ide.SymbolFlags.SYMBOL_FLAGS_NONE;
+				var flags = Ide.SymbolFlags.NONE;
 				var source_reference = symbol.source_reference;
 
 				if (source_reference != null) {
