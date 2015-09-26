@@ -56,6 +56,8 @@ gint64          ide_unsaved_files_get_sequence      (IdeUnsavedFiles      *files
 IdeUnsavedFile *ide_unsaved_files_get_unsaved_file  (IdeUnsavedFiles      *self,
                                                      GFile                *file);
 void            ide_unsaved_files_clear             (IdeUnsavedFiles      *self);
+gboolean        ide_unsaved_files_contains          (IdeUnsavedFiles      *self,
+                                                     GFile                *file);
 
 G_END_DECLS
 

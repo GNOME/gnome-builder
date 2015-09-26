@@ -601,6 +601,29 @@ ide_unsaved_files_to_array (IdeUnsavedFiles *self)
   return ar;
 }
 
+gboolean
+ide_unsaved_files_contains (IdeUnsavedFiles *self,
+                            GFile           *file)
+{
+  IdeUnsavedFilesPrivate *priv = ide_unsaved_files_get_instance_private (self);
+  guint i;
+
+  g_return_val_if_fail (IDE_IS_UNSAVED_FILES (self), FALSE);
+  g_return_val_if_fail (G_IS_FILE (file), FALSE);
+
+  for (i = 0; i < priv->unsaved_files->len; i++)
+    {
+      UnsavedFile *uf;
+
+      uf = g_ptr_array_index (priv->unsaved_files, i);
+
+      if (g_file_equal (uf->file, file))
+        return TRUE;
+    }
+
+  return FALSE;
+}
+
 /**
  * ide_unsaved_files_get_unsaved_file:
  *

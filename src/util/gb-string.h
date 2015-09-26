@@ -40,6 +40,8 @@ gchar *gb_str_highlight_full (const gchar     *str,
                               const gchar     *match,
                               gboolean         insensitive,
                               GbHighlightType  type);
+gboolean gb_str_simple_match (const gchar     *haystack,
+                              const gchar     *needle_down);
 
 G_END_DECLS
 

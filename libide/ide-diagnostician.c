@@ -154,7 +154,7 @@ ide_diagnostician_diagnose_async (IdeDiagnostician    *self,
   if (count == 0)
     {
       g_task_return_pointer (task,
-                             _ide_diagnostics_new (NULL),
+                             ide_diagnostics_new (NULL),
                              (GDestroyNotify)ide_diagnostics_unref);
       return;
     }
@@ -165,7 +165,7 @@ ide_diagnostician_diagnose_async (IdeDiagnostician    *self,
   state->task = task;
   state->active = count;
   state->total = count;
-  state->diagnostics = _ide_diagnostics_new (NULL);
+  state->diagnostics = ide_diagnostics_new (NULL);
 
   g_task_set_task_data (task, state, diagnose_state_free);
 

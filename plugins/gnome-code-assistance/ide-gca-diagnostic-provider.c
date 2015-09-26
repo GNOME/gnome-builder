@@ -144,7 +144,7 @@ variant_to_diagnostics (DiagnoseState *state,
 #endif
         }
 
-      diag = _ide_diagnostic_new (severity, d, NULL);
+      diag = ide_diagnostic_new (severity, d, NULL);
 
       while (g_variant_iter_next (c, "(x(xx)(xx))", &x1, &x2, &x3, &x4, &x5))
         {
@@ -164,8 +164,8 @@ variant_to_diagnostics (DiagnoseState *state,
           begin = ide_source_location_new (file, x2 - 1, x3 - 1, 0);
           end = ide_source_location_new (file, x4 - 1, x5 - 1, 0);
 
-          range = _ide_source_range_new (begin, end);
-          _ide_diagnostic_take_range (diag, range);
+          range = ide_source_range_new (begin, end);
+          ide_diagnostic_take_range (diag, range);
 
           ide_source_location_unref (begin);
           ide_source_location_unref (end);
@@ -174,7 +174,7 @@ variant_to_diagnostics (DiagnoseState *state,
       g_ptr_array_add (ar, diag);
     }
 
-  return _ide_diagnostics_new (ar);
+  return ide_diagnostics_new (ar);
 }
 
 static void

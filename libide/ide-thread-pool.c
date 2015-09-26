@@ -28,14 +28,28 @@
 
 typedef struct
 {
-  GTask           *task;
-  GTaskThreadFunc  func;
+  int type;
+  union {
+    struct {
+      GTask           *task;
+      GTaskThreadFunc  func;
+    } task;
+    struct {
+      IdeThreadFunc callback;
+      gpointer      data;
+    } func;
+  };
 } WorkItem;
 
 EGG_DEFINE_COUNTER (TotalTasks, "ThreadPool", "Total Tasks", "Total number of tasks processed.")
 EGG_DEFINE_COUNTER (QueuedTasks, "ThreadPool", "Queued Tasks", "Current number of pending tasks.")
 
 static GThreadPool *gThreadPools [IDE_THREAD_POOL_LAST];
+
+enum {
+  TYPE_TASK,
+  TYPE_FUNC,
+};
 
 static inline GThreadPool *
 ide_thread_pool_get_pool (IdeThreadPoolKind kind)
@@ -75,8 +89,9 @@ ide_thread_pool_push_task (IdeThreadPoolKind  kind,
       WorkItem *work_item;
 
       work_item = g_slice_new0 (WorkItem);
-      work_item->task = g_object_ref (task);
-      work_item->func = func;
+      work_item->type = TYPE_TASK;
+      work_item->task.task = g_object_ref (task);
+      work_item->task.func = func;
 
       EGG_COUNTER_INC (QueuedTasks);
 
@@ -85,6 +100,52 @@ ide_thread_pool_push_task (IdeThreadPoolKind  kind,
   else
     {
       g_task_run_in_thread (task, func);
+    }
+
+  IDE_EXIT;
+}
+
+/**
+ * ide_thread_pool_push:
+ * @kind: the threadpool kind to use.
+ * @func: (scope async) (closure func_data): A function to call in the worker thread.
+ * @func_data: (transfer full): user data for @func.
+ *
+ * Runs the callback on the thread pool thread.
+ */
+void
+ide_thread_pool_push (IdeThreadPoolKind kind,
+                      IdeThreadFunc     func,
+                      gpointer          func_data)
+{
+  GThreadPool *pool;
+
+  IDE_ENTRY;
+
+  g_return_if_fail (kind >= 0);
+  g_return_if_fail (kind < IDE_THREAD_POOL_LAST);
+  g_return_if_fail (func != NULL);
+
+  EGG_COUNTER_INC (TotalTasks);
+
+  pool = ide_thread_pool_get_pool (kind);
+
+  if (pool != NULL)
+    {
+      WorkItem *work_item;
+
+      work_item = g_slice_new0 (WorkItem);
+      work_item->type = TYPE_FUNC;
+      work_item->func.callback = func;
+      work_item->func.data = func_data;
+
+      EGG_COUNTER_INC (QueuedTasks);
+
+      g_thread_pool_push (pool, work_item, NULL);
+    }
+  else
+    {
+      g_critical ("No such thread pool %02x", kind);
     }
 
   IDE_EXIT;
@@ -103,13 +164,21 @@ ide_thread_pool_worker (gpointer data,
 
   EGG_COUNTER_DEC (QueuedTasks);
 
-  source_object = g_task_get_source_object (work_item->task);
-  task_data = g_task_get_task_data (work_item->task);
-  cancellable = g_task_get_cancellable (work_item->task);
+  if (work_item->type == TYPE_TASK)
+    {
+      source_object = g_task_get_source_object (work_item->task.task);
+      task_data = g_task_get_task_data (work_item->task.task);
+      cancellable = g_task_get_cancellable (work_item->task.task);
 
-  work_item->func (work_item->task, source_object, task_data, cancellable);
+      work_item->task.func (work_item->task.task, source_object, task_data, cancellable);
 
-  g_object_unref (work_item->task);
+      g_object_unref (work_item->task.task);
+    }
+  else if (work_item->type == TYPE_FUNC)
+    {
+      work_item->func.callback (work_item->func.data);
+    }
+
   g_slice_free (WorkItem, work_item);
 }
 

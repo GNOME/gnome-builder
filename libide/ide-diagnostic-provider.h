@@ -31,6 +31,8 @@ struct _IdeDiagnosticProviderInterface
 {
   GTypeInterface parent_interface;
 
+  void            (*set_context)     (IdeDiagnosticProvider  *self,
+                                      IdeContext             *context);
   void            (*diagnose_async)  (IdeDiagnosticProvider  *self,
                                       IdeFile                *file,
                                       GCancellable           *cancellable,

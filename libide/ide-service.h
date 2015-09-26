@@ -35,6 +35,8 @@ struct _IdeServiceInterface
   const gchar *(*get_name)       (IdeService *service);
   void         (*start)          (IdeService *service);
   void         (*stop)           (IdeService *service);
+  void         (*set_context)    (IdeService *service,
+                                  IdeContext *context);
 };
 
 const gchar *ide_service_get_name (IdeService *self);

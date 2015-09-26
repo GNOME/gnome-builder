@@ -34,8 +34,8 @@ struct _IdeDiagnostics
 };
 
 /**
- * _ide_diagnostics_new:
- * @ar: (transfer full) (nullable): an array of #IdeDiagnostic.
+ * ide_diagnostics_new:
+ * @ar: (transfer full) (element-type Ide.Diagnostic) (allow-none): an array of #IdeDiagnostic.
  *
  * Creates a new #IdeDiagnostics container structure for @ar.
  * Ownership of @ar is transfered to the resulting structure.
@@ -43,7 +43,7 @@ struct _IdeDiagnostics
  * Returns: (transfer full): A newly allocated #IdeDiagnostics.
  */
 IdeDiagnostics *
-_ide_diagnostics_new (GPtrArray *ar)
+ide_diagnostics_new (GPtrArray *ar)
 {
   IdeDiagnostics *ret;
 

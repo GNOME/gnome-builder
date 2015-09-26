@@ -49,6 +49,15 @@ gchar                 *ide_diagnostic_get_text_for_display (IdeDiagnostic *self)
 GType                  ide_diagnostic_get_type             (void);
 IdeDiagnostic         *ide_diagnostic_ref                  (IdeDiagnostic *self);
 void                   ide_diagnostic_unref                (IdeDiagnostic *self);
+IdeDiagnostic         *ide_diagnostic_new                  (IdeDiagnosticSeverity  severity,
+                                                            const gchar           *text,
+                                                            IdeSourceLocation     *location);
+void                   ide_diagnostic_add_range            (IdeDiagnostic         *self,
+                                                            IdeSourceRange        *range);
+void                   ide_diagnostic_take_fixit           (IdeDiagnostic         *self,
+                                                            IdeFixit              *fixit);
+void                   ide_diagnostic_take_range           (IdeDiagnostic         *self,
+                                                            IdeSourceRange        *range);
 
 const gchar           *ide_diagnostic_severity_to_string   (IdeDiagnosticSeverity severity);
 
