@@ -24,6 +24,7 @@
 #include "ide-ctags-util.h"
 #include "ide-internal.h"
 #include "ide-line-reader.h"
+#include "ide-symbol.h"
 
 struct _IdeCtagsSymbolResolver
 {
@@ -123,9 +124,7 @@ create_symbol (IdeCtagsSymbolResolver   *self,
                        NULL);
   loc = ide_source_location_new (file, line, line_offset, offset);
 
-  return _ide_symbol_new (entry->name,
-                          transform_kind (entry->kind),
-                          0, loc, loc, loc);
+  return ide_symbol_new (entry->name, transform_kind (entry->kind), 0, loc, loc, loc);
 
 }
 

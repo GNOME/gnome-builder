@@ -57,6 +57,12 @@ const gchar       *ide_symbol_get_name                 (IdeSymbol *self);
 IdeSourceLocation *ide_symbol_get_canonical_location   (IdeSymbol *self);
 IdeSourceLocation *ide_symbol_get_declaration_location (IdeSymbol *self);
 IdeSourceLocation *ide_symbol_get_definition_location  (IdeSymbol *self);
+IdeSymbol         *ide_symbol_new                      (const gchar           *name,
+                                                        IdeSymbolKind          kind,
+                                                        IdeSymbolFlags         flags,
+                                                        IdeSourceLocation     *declaration_location,
+                                                        IdeSourceLocation     *definition_location,
+                                                        IdeSourceLocation     *canonical_location);
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (IdeSymbol, ide_symbol_unref)
 

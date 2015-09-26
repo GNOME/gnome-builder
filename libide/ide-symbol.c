@@ -41,12 +41,12 @@ G_DEFINE_BOXED_TYPE (IdeSymbol, ide_symbol, ide_symbol_ref, ide_symbol_unref)
 EGG_DEFINE_COUNTER (instances, "IdeSymbol", "Instances", "Number of symbol instances")
 
 IdeSymbol *
-_ide_symbol_new (const gchar       *name,
-                 IdeSymbolKind      kind,
-                 IdeSymbolFlags     flags,
-                 IdeSourceLocation *declaration_location,
-                 IdeSourceLocation *definition_location,
-                 IdeSourceLocation *canonical_location)
+ide_symbol_new (const gchar       *name,
+                IdeSymbolKind      kind,
+                IdeSymbolFlags     flags,
+                IdeSourceLocation *declaration_location,
+                IdeSourceLocation *definition_location,
+                IdeSourceLocation *canonical_location)
 {
   IdeSymbol *ret;
 
