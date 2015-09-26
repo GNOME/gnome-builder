@@ -107,26 +107,27 @@ namespace Ide
 			Vala.CodeContext.pop ();
 		}
 
+		void add_file (GLib.File file)
+		{
+			var path  =file.get_path ();
+			if (path == null)
+				return;
+
+			var source_file = new Ide.ValaSourceFile (this.code_context, Vala.SourceFileType.SOURCE, path, null, false);
+			this.code_context.add_source_file (source_file);
+
+			this.source_files [file] = source_file;
+		}
+
 		public async void add_files (ArrayList<GLib.File> files,
 		                             GLib.Cancellable? cancellable)
 		{
 			Ide.ThreadPool.push (Ide.ThreadPoolKind.COMPILER, () => {
 				lock (this.code_context) {
 					Vala.CodeContext.push (this.code_context);
-
-					foreach (var file in files) {
-						var path = file.get_path ();
-						if (path == null)
-							continue;
-
-						var source_file = new Ide.ValaSourceFile (this.code_context, Vala.SourceFileType.SOURCE, path, null, false);
-						this.code_context.add_source_file (source_file);
-
-						this.source_files[file] = source_file;
-					}
-
+					foreach (var file in files)
+						this.add_file (file);
 					Vala.CodeContext.pop ();
-
 					GLib.Idle.add(add_files.callback);
 				}
 			});
@@ -149,6 +150,9 @@ namespace Ide
 				if ((cancellable == null) || !cancellable.is_cancelled ()) {
 					lock (this.code_context) {
 						Vala.CodeContext.push (this.code_context);
+
+						if (!this.source_files.contains (file))
+							this.add_file (file);
 
 						this.apply_unsaved_files (unsaved_files_copy);
 						this.reparse ();
