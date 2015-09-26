@@ -44,7 +44,7 @@ typedef enum
 {
   IDE_SYMBOL_FLAGS_NONE          = 0,
   IDE_SYMBOL_FLAGS_IS_STATIC     = 1 << 0,
-  IDE_sYMBOL_FLAGS_IS_MEMBER     = 1 << 1,
+  IDE_SYMBOL_FLAGS_IS_MEMBER     = 1 << 1,
   IDE_SYMBOL_FLAGS_IS_DEPRECATED = 1 << 2,
 } IdeSymbolFlags;
 
