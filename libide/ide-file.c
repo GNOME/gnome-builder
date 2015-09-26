@@ -648,3 +648,25 @@ ide_file_find_other_finish (IdeFile       *self,
 
   return g_task_propagate_pointer (task, error);
 }
+
+/**
+ * ide_file_new:
+ * @context: (allow-none): An #IdeContext or %NULL.
+ * @file: a #GFile.
+ *
+ * Creates a new file.
+ *
+ * Returns: (transfer full): An #IdeFile.
+ */
+IdeFile *
+ide_file_new (IdeContext *context,
+              GFile      *file)
+{
+  g_return_val_if_fail (!context || IDE_IS_CONTEXT (context), NULL);
+  g_return_val_if_fail (G_IS_FILE (file), NULL);
+
+  return g_object_new (IDE_TYPE_FILE,
+                       "context", context,
+                       "file", file,
+                       NULL);
+}

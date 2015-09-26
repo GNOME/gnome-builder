@@ -67,16 +67,6 @@ void                _ide_buffer_manager_reclaim             (IdeBufferManager   
 void                _ide_build_system_set_project_file      (IdeBuildSystem        *self,
                                                              GFile                 *project_file);
 gboolean            _ide_context_is_restoring               (IdeContext            *self);
-void                _ide_diagnostic_add_range               (IdeDiagnostic         *self,
-                                                             IdeSourceRange        *range);
-IdeDiagnostic      *_ide_diagnostic_new                     (IdeDiagnosticSeverity  severity,
-                                                             const gchar           *text,
-                                                             IdeSourceLocation     *location);
-void                _ide_diagnostic_take_fixit              (IdeDiagnostic         *diagnostic,
-                                                             IdeFixit              *fixit);
-void                _ide_diagnostic_take_range              (IdeDiagnostic         *self,
-                                                             IdeSourceRange        *range);
-IdeDiagnostics     *_ide_diagnostics_new                    (GPtrArray             *ar);
 const gchar        *_ide_file_get_content_type              (IdeFile               *self);
 GtkSourceFile      *_ide_file_set_content_type              (IdeFile               *self,
                                                              const gchar           *content_type);
@@ -95,8 +85,6 @@ IdeSettings        *_ide_settings_new                       (IdeContext         
                                                              const gchar           *schema_id,
                                                              const gchar           *relative_path,
                                                              gboolean               ignore_project_settings);
-IdeSourceRange     *_ide_source_range_new                   (IdeSourceLocation     *begin,
-                                                             IdeSourceLocation     *end);
 GtkTextMark        *_ide_source_view_get_scroll_mark        (IdeSourceView         *self);
 gboolean            _ide_source_view_mode_do_event          (IdeSourceViewMode     *mode,
                                                              GdkEventKey           *event,

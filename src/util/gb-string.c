@@ -16,6 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <string.h>
+
 #include "gb-string.h"
 
 gchar *
@@ -63,8 +65,6 @@ gb_str_highlight_full (const gchar     *str,
         }
     }
 
-#undef TOGGLE
-
   return g_string_free (ret, FALSE);
 }
 
@@ -72,5 +72,32 @@ gchar *
 gb_str_highlight (const gchar *str,
                   const gchar *match)
 {
-  return gb_str_highlight_full (str, match, FALSE, GB_HIGHLIGHT_UNDERLINE);
+  return gb_str_highlight_full (str, match, FALSE, GB_HIGHLIGHT_BOLD);
+}
+
+gboolean
+gb_str_simple_match (const gchar *haystack,
+                     const gchar *needle_down)
+{
+  if (gb_str_empty0 (haystack))
+    return FALSE;
+  else if (gb_str_empty0 (needle_down))
+    return TRUE;
+
+  for (; *needle_down; needle_down = g_utf8_next_char (needle_down))
+    {
+      gunichar ch = g_utf8_get_char (needle_down);
+      const gchar *tmp;
+
+      tmp = strchr (haystack, ch);
+      if (!tmp)
+        tmp = strchr (haystack, g_unichar_toupper (ch));
+
+      if (!tmp)
+        return FALSE;
+
+      haystack = tmp;
+    }
+
+  return TRUE;
 }

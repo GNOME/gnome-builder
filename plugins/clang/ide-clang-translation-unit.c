@@ -36,6 +36,7 @@
 #include "ide-project.h"
 #include "ide-ref-ptr.h"
 #include "ide-source-location.h"
+#include "ide-source-range.h"
 #include "ide-symbol.h"
 #include "ide-thread-pool.h"
 #include "ide-unsaved-file.h"
@@ -280,7 +281,7 @@ create_range (IdeClangTranslationUnit *self,
   end = create_location (self, project, workpath, cxend);
 
   if ((begin != NULL) && (end != NULL))
-    range = _ide_source_range_new (begin, end);
+    range = ide_source_range_new (begin, end);
 
   return range;
 }
@@ -352,7 +353,7 @@ create_diagnostic (IdeClangTranslationUnit *self,
 
   loc = create_location (self, project, workpath, cxloc);
 
-  diag = _ide_diagnostic_new (severity, spelling, loc);
+  diag = ide_diagnostic_new (severity, spelling, loc);
 
   num_ranges = clang_getDiagnosticNumRanges (cxdiag);
 
@@ -364,7 +365,7 @@ create_diagnostic (IdeClangTranslationUnit *self,
       cxrange = clang_getDiagnosticRange (cxdiag, i);
       range = create_range (self, project, workpath, cxrange);
       if (range != NULL)
-        _ide_diagnostic_take_range (diag, range);
+        ide_diagnostic_take_range (diag, range);
     }
 
   return diag;
@@ -441,7 +442,7 @@ ide_clang_translation_unit_get_diagnostics_for_file (IdeClangTranslationUnit *se
                   clang_disposeString (cxstr);
 
                   if (fixit != NULL)
-                    _ide_diagnostic_take_fixit (diag, fixit);
+                    ide_diagnostic_take_fixit (diag, fixit);
                 }
 
               g_ptr_array_add (diags, diag);
@@ -452,7 +453,7 @@ ide_clang_translation_unit_get_diagnostics_for_file (IdeClangTranslationUnit *se
 
       ide_project_reader_unlock (project);
 
-      g_hash_table_insert (self->diagnostics, g_object_ref (file), _ide_diagnostics_new (diags));
+      g_hash_table_insert (self->diagnostics, g_object_ref (file), ide_diagnostics_new (diags));
     }
 
   return g_hash_table_lookup (self->diagnostics, file);

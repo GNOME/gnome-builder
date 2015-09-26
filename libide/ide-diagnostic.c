@@ -173,10 +173,23 @@ ide_diagnostic_get_location (IdeDiagnostic *self)
   return NULL;
 }
 
+/**
+ * ide_diagnostic_new:
+ * @severity: the severity of the diagnostic
+ * @text: the diagnostic message text
+ * @location: the location of the diagnostic
+ *
+ * Creates a new diagnostic.
+ *
+ * If you want to set a range for the diagnostic, see
+ * ide_diagnostic_add_range() or ide_diagnostic_take_range().
+ *
+ * Returns: (transfer full): An #IdeDiagnostic.
+ */
 IdeDiagnostic *
-_ide_diagnostic_new (IdeDiagnosticSeverity  severity,
-                     const gchar           *text,
-                     IdeSourceLocation     *location)
+ide_diagnostic_new (IdeDiagnosticSeverity  severity,
+                    const gchar           *text,
+                    IdeSourceLocation     *location)
 {
   IdeDiagnostic *ret;
 
@@ -191,9 +204,17 @@ _ide_diagnostic_new (IdeDiagnosticSeverity  severity,
   return ret;
 }
 
+/**
+ * ide_diagnostic_take_fixit:
+ * @self: A #IdeDiagnostic.
+ * @fixit: (transfer full): An #IdeFixit.
+ *
+ * Adds the suggested fixit to the diagnostic while transfering ownership
+ * of @fixit to @self.
+ */
 void
-_ide_diagnostic_take_fixit (IdeDiagnostic *self,
-                            IdeFixit      *fixit)
+ide_diagnostic_take_fixit (IdeDiagnostic *self,
+                           IdeFixit      *fixit)
 {
   g_return_if_fail (self);
   g_return_if_fail (fixit);
@@ -204,9 +225,19 @@ _ide_diagnostic_take_fixit (IdeDiagnostic *self,
   g_ptr_array_add (self->fixits, fixit);
 }
 
+/**
+ * ide_diagnostic_take_range:
+ * @self: A #IdeDiagnostic.
+ * @range: (transfer full): An #IdeSourceRange.
+ *
+ * Steals the ownership of @range and adds to the diagnostic.
+ *
+ * This saves multiple atomic references of @range which could be expensive
+ * if you are doing lots of diagnostics.
+ */
 void
-_ide_diagnostic_take_range (IdeDiagnostic  *self,
-                            IdeSourceRange *range)
+ide_diagnostic_take_range (IdeDiagnostic  *self,
+                           IdeSourceRange *range)
 {
   g_return_if_fail (self);
   g_return_if_fail (range);
@@ -217,14 +248,22 @@ _ide_diagnostic_take_range (IdeDiagnostic  *self,
   g_ptr_array_add (self->ranges, range);
 }
 
+/**
+ * ide_diagnostic_add_range:
+ * @self: An #IdeDiagnostic.
+ * @range: An #IdeSourceRange.
+ *
+ * Adds the range to the diagnostic. This allows diagnostic tools to highlight
+ * the errored text appropriately.
+ */
 void
-_ide_diagnostic_add_range (IdeDiagnostic  *self,
-                           IdeSourceRange *range)
+ide_diagnostic_add_range (IdeDiagnostic  *self,
+                          IdeSourceRange *range)
 {
   g_return_if_fail (self);
   g_return_if_fail (range);
 
-  _ide_diagnostic_take_range (self, ide_source_range_ref (range));
+  ide_diagnostic_take_range (self, ide_source_range_ref (range));
 }
 
 const gchar *

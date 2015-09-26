@@ -29,6 +29,8 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeFile, ide_file, IDE, FILE, IdeObject)
 
+IdeFile           *ide_file_new                  (IdeContext           *context,
+                                                  GFile                *file);
 gboolean           ide_file_get_is_temporary     (IdeFile              *self);
 guint              ide_file_get_temporary_id     (IdeFile              *self);
 GtkSourceLanguage *ide_file_get_language         (IdeFile              *self);

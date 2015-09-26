@@ -36,8 +36,8 @@ struct _IdeSourceRange
 };
 
 IdeSourceRange *
-_ide_source_range_new (IdeSourceLocation *begin,
-                       IdeSourceLocation *end)
+ide_source_range_new (IdeSourceLocation *begin,
+                      IdeSourceLocation *end)
 {
   IdeSourceRange *ret;
 

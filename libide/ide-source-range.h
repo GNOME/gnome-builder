@@ -26,10 +26,12 @@ G_BEGIN_DECLS
 #define IDE_TYPE_SOURCE_RANGE (ide_source_range_get_type())
 
 GType              ide_source_range_get_type  (void);
-IdeSourceRange    *ide_source_range_ref       (IdeSourceRange *self);
-void               ide_source_range_unref     (IdeSourceRange *self);
-IdeSourceLocation *ide_source_range_get_begin (IdeSourceRange *self);
-IdeSourceLocation *ide_source_range_get_end   (IdeSourceRange *self);
+IdeSourceRange    *ide_source_range_ref       (IdeSourceRange    *self);
+void               ide_source_range_unref     (IdeSourceRange    *self);
+IdeSourceLocation *ide_source_range_get_begin (IdeSourceRange    *self);
+IdeSourceLocation *ide_source_range_get_end   (IdeSourceRange    *self);
+IdeSourceRange    *ide_source_range_new       (IdeSourceLocation *begin,
+                                               IdeSourceLocation *end);
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (IdeSourceRange, ide_source_range_unref)
 

@@ -404,7 +404,8 @@ ide_buffer_update_diagnostics (IdeBuffer      *self,
       IdeDiagnostic *diagnostic;
 
       diagnostic = ide_diagnostics_index (diagnostics, i);
-      ide_buffer_update_diagnostic (self, diagnostic);
+      if (diagnostic != NULL)
+        ide_buffer_update_diagnostic (self, diagnostic);
     }
 }
 

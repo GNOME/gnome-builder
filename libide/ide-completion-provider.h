@@ -21,6 +21,8 @@
 
 #include <gtksourceview/gtksource.h>
 
+#include "ide-types.h"
+
 G_BEGIN_DECLS
 
 #define IDE_TYPE_COMPLETION_PROVIDER             (ide_completion_provider_get_type())
@@ -34,6 +36,9 @@ typedef struct _IdeCompletionProviderInterface IdeCompletionProviderInterface;
 struct _IdeCompletionProviderInterface
 {
   GtkSourceCompletionProviderIface parent_interface;
+
+  void (*set_context) (IdeCompletionProvider *self,
+                       IdeContext            *context);
 };
 
 GType ide_completion_provider_get_type (void);

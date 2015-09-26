@@ -23,6 +23,8 @@
 
 G_BEGIN_DECLS
 
+typedef struct _IdeThreadPool IdeThreadPool;
+
 typedef enum
 {
   IDE_THREAD_POOL_COMPILER,
@@ -30,9 +32,19 @@ typedef enum
   IDE_THREAD_POOL_LAST
 } IdeThreadPoolKind;
 
-void ide_thread_pool_push_task (IdeThreadPoolKind  kind,
-                                GTask             *task,
-                                GTaskThreadFunc    func);
+/**
+ * IdeThreadFunc:
+ * @user_data: (closure) (transfer full): The closure for the callback.
+ *
+ */
+typedef void (*IdeThreadFunc) (gpointer user_data);
+
+void     ide_thread_pool_push      (IdeThreadPoolKind     kind,
+                                    IdeThreadFunc         func,
+                                    gpointer              func_data);
+void     ide_thread_pool_push_task (IdeThreadPoolKind     kind,
+                                    GTask                *task,
+                                    GTaskThreadFunc       func);
 
 G_END_DECLS
 

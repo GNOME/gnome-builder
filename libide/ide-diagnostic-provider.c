@@ -54,7 +54,7 @@ ide_diagnostic_provider_diagnose_async  (IdeDiagnosticProvider *self,
  *
  * Completes an asynchronous call to ide_diagnostic_provider_diagnose_async().
  *
- * Returns: (transfer full): #IdeDiagnostics or %NULL and @error is set.
+ * Returns: (transfer full) (nullable): #IdeDiagnostics or %NULL and @error is set.
  */
 IdeDiagnostics *
 ide_diagnostic_provider_diagnose_finish (IdeDiagnosticProvider  *self,

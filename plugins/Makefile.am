@@ -18,6 +18,7 @@ SUBDIRS = \
 	symbol-tree \
 	sysmon \
 	terminal \
+	vala-pack \
 	xml-pack \
 	$(NULL)
 
