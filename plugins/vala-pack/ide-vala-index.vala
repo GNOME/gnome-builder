@@ -291,5 +291,41 @@ namespace Ide
 			line = cursor.line;
 			column = cursor.column;
 		}
+
+		public async Vala.Symbol? find_symbol_at (GLib.File file, int line, int column)
+		{
+			Vala.Symbol? symbol = null;
+
+			/*
+			 * TODO: This isn't quite right because the locator is finding
+			 *       us the nearest block instead of the symbol. We need to
+			 *       adjust the locator to find the exact expression.
+			 */
+
+			Ide.ThreadPool.push (Ide.ThreadPoolKind.COMPILER, () => {
+				lock (this.code_context) {
+					Vala.CodeContext.push (this.code_context);
+
+					if (!this.source_files.contains (file)) {
+						this.add_file (file);
+						this.reparse ();
+					}
+
+					var source_file = this.source_files [file];
+					var locator = new Ide.ValaLocator ();
+
+					symbol = locator.locate (source_file, line, column);
+
+					Vala.CodeContext.pop ();
+				}
+
+				this.find_symbol_at.callback ();
+			});
+
+			yield;
+
+			return symbol;
+		}
 	}
 }
+
