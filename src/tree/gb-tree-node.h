@@ -44,7 +44,7 @@ void           gb_tree_node_set_icon_name         (GbTreeNode   *node,
                                                    const gchar  *icon_name);
 void           gb_tree_node_set_item              (GbTreeNode   *node,
                                                    GObject      *item);
-void           gb_tree_node_expand                (GbTreeNode   *node,
+gboolean       gb_tree_node_expand                (GbTreeNode   *node,
                                                    gboolean      expand_ancestors);
 void           gb_tree_node_collapse              (GbTreeNode   *node);
 void           gb_tree_node_select                (GbTreeNode   *node);
