@@ -7,7 +7,7 @@ AC_ARG_ENABLE([enable-vala-pack-plugin],
 
 AS_IF([test x$enable_vala_pack_plugin != xno],[
 	PKG_CHECK_MODULES(VALA, [libvala-0.30 >= 0.29.3],[enable_vala_pack_plugin=yes],[
-		AS_IF([test x$enable_vala_pack_plugin = yes],[
+		AS_IF([test x$enable_vala_pack_plugin = xyes],[
 			AC_MSG_ERROR([Failed to locate vala. Please install the vala-devel package.])
 		])
 	])

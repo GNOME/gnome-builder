@@ -51,7 +51,7 @@ namespace Ide
 				return "lang-variable-symbolic";
 			else if (symbol is Vala.Field)
 				return "struct-field-symbolic";
-			else if (symbol is Vala.Method || symbol is Vala.MethodCall)
+			else if (symbol is Vala.Subroutine)
 				return "lang-function-symbolic";
 			else if (symbol is Vala.Namespace)
 				return "lang-include-symbolic";
@@ -67,6 +67,8 @@ namespace Ide
 				return "lang-enum-symbolic";
 			else if (symbol is Vala.EnumValue)
 				return "lang-enum-value-symbolic";
+			else if (symbol is Vala.Delegate)
+				return "lang-typedef-symbolic";
 
 			return null;
 		}
