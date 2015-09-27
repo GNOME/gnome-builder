@@ -127,8 +127,6 @@ namespace Ide
 						str.append_printf ("%s, ", (param.variable_type as Vala.DelegateType).delegate_symbol.name);
 					else if (param.variable_type is Vala.DataType)
 						str.append_printf ("%s, ", (param.variable_type as Vala.DataType).to_qualified_string (method.owner));
-					else if (param.variable_type is Vala.ValueType)
-						str.append_printf ("%s, ", (param.variable_type as Vala.ValueType).type_symbol.name);
 					else
 						str.append_printf ("%s, ", param.variable_type.type_name);
 				}
