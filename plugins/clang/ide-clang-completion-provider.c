@@ -306,9 +306,6 @@ ide_clang_completion_provider_populate (GtkSourceCompletionProvider *provider,
 
   g_assert (IDE_IS_CLANG_COMPLETION_PROVIDER (self));
 
-  if (!g_settings_get_boolean (self->settings, "clang-autocompletion"))
-    goto failure;
-
   if (!gtk_source_completion_context_get_iter (context, &iter))
     goto failure;
 
@@ -471,6 +468,46 @@ ide_clang_completion_provider_get_priority (GtkSourceCompletionProvider *provide
   return IDE_CLANG_COMPLETION_PROVIDER_PRIORITY;
 }
 
+static gboolean
+ide_clang_completion_provider_match (GtkSourceCompletionProvider *provider,
+                                     GtkSourceCompletionContext  *context)
+{
+  IdeClangCompletionProvider *self = (IdeClangCompletionProvider *)provider;
+  GtkSourceCompletionActivation activation;
+  GtkTextIter iter;
+  GtkTextBuffer *buffer;
+  IdeFile *file;
+
+  if (!g_settings_get_boolean (self->settings, "clang-autocompletion"))
+    return FALSE;
+
+  if (gtk_source_completion_context_get_iter (context, &iter))
+    return FALSE;
+
+  buffer = gtk_text_iter_get_buffer (&iter);
+  if (!IDE_IS_BUFFER (buffer))
+    return FALSE;
+
+  file = ide_buffer_get_file (IDE_BUFFER (buffer));
+  if (file == NULL || ide_file_get_is_temporary (file))
+    return FALSE;
+
+  activation = gtk_source_completion_context_get_activation (context);
+
+  /*
+   * Do not show activation interactively if we are currently on a space.
+   */
+  if (activation == GTK_SOURCE_COMPLETION_ACTIVATION_INTERACTIVE)
+    {
+      if (gtk_text_iter_starts_line (&iter) ||
+          !gtk_text_iter_backward_char (&iter) ||
+          g_unichar_isspace (gtk_text_iter_get_char (&iter)))
+        return FALSE;
+    }
+
+  return TRUE;
+}
+
 static void
 completion_provider_iface_init (GtkSourceCompletionProviderIface *iface)
 {
@@ -480,4 +517,5 @@ completion_provider_iface_init (GtkSourceCompletionProviderIface *iface)
   iface->get_start_iter = ide_clang_completion_provider_get_start_iter;
   iface->populate = ide_clang_completion_provider_populate;
   iface->get_priority = ide_clang_completion_provider_get_priority;
+  iface->match = ide_clang_completion_provider_match;
 }
