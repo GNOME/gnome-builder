@@ -123,12 +123,7 @@ namespace Ide
 					else if (param.direction == ParameterDirection.REF)
 						str.append ("ref ");
 
-					if (param.variable_type is Vala.DelegateType)
-						str.append_printf ("%s, ", (param.variable_type as Vala.DelegateType).delegate_symbol.name);
-					else if (param.variable_type is Vala.DataType)
-						str.append_printf ("%s, ", (param.variable_type as Vala.DataType).to_qualified_string (method.owner));
-					else
-						str.append_printf ("%s, ", param.variable_type.type_name);
+					str.append_printf ("%s, ", param.variable_type.to_qualified_string (method.owner));
 				}
 				if (parameters.size > 0) {
 					str.truncate (str.len - 2);
