@@ -236,6 +236,11 @@ namespace Ide
 		{
 			return highlight_full (name, this.last_prefix, true, 1);
 		}
+
+		public int get_priority ()
+		{
+			return 200;
+		}
 	}
 
 	[CCode (cheader_filename = "gb-string.h", cname = "gb_str_highlight_full")]
