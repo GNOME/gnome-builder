@@ -19,7 +19,9 @@
 #ifndef IDE_CLANG_COMPLETION_PROVIDER_H
 #define IDE_CLANG_COMPLETION_PROVIDER_H
 
+#include <glib-object.h>
 #include <gtksourceview/gtksourcecompletionprovider.h>
+#include <ide.h>
 
 G_BEGIN_DECLS
 
@@ -27,8 +29,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_CLANG_COMPLETION_PROVIDER (ide_clang_completion_provider_get_type())
 
-G_DECLARE_FINAL_TYPE (IdeClangCompletionProvider, ide_clang_completion_provider,
-                      IDE, CLANG_COMPLETION_PROVIDER, IdeObject)
+G_DECLARE_FINAL_TYPE (IdeClangCompletionProvider, ide_clang_completion_provider, IDE, CLANG_COMPLETION_PROVIDER, IdeObject)
 
 G_END_DECLS
 
