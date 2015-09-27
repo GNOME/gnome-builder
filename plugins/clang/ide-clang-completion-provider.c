@@ -144,13 +144,13 @@ ide_clang_completion_provider_can_replay (IdeClangCompletionProvider *self,
   g_assert (IDE_IS_CLANG_COMPLETION_PROVIDER (self));
 
   if (self->last_results == NULL)
-    { g_print (">>>> %s\n", G_STRLOC); return FALSE; }
+    return FALSE;
 
   if (line == NULL || self->last_line == NULL)
-    { g_print (">>>> %s\n", G_STRLOC); return FALSE; }
+    return FALSE;
 
   if (!g_str_has_prefix (line, self->last_line))
-    { g_print (">>>> %s\n", G_STRLOC); return FALSE; }
+    return FALSE;
 
   suffix = line + strlen (self->last_line);
 
@@ -158,7 +158,7 @@ ide_clang_completion_provider_can_replay (IdeClangCompletionProvider *self,
     {
       gunichar ch = g_utf8_get_char (suffix);
       if (!g_unichar_isalnum (ch) && (ch != '_'))
-        { g_print (">>>> %s\n", G_STRLOC); return FALSE; }
+        return FALSE;
     }
 
   return TRUE;
@@ -462,10 +462,6 @@ ide_clang_completion_provider_populate (GtkSourceCompletionProvider *provider,
     gtk_text_iter_forward_char (&stop);
 
   prefix = g_strstrip (gtk_text_iter_get_slice (&stop, &iter));
-
-  g_print ("RESULTS: %p (%d)\n", self->last_results, self->last_results? self->last_results->len : 0);
-  g_print ("  last_line = %s\n", self->last_line ?: "<null>");
-  g_print ("  last_query = %s\n", self->last_query ?: "<null>");
 
   /*
    * We might be able to reuse the results from our previous query if
