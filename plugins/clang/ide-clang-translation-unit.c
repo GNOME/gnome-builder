@@ -692,6 +692,8 @@ ide_clang_translation_unit_code_complete_worker (GTask        *task,
                                   ufs, j,
                                   clang_defaultCodeCompleteOptions ());
 
+  clang_sortCodeCompletionResults (results->Results, results->NumResults);
+
   /*
    * encapsulate in refptr so we don't need to malloc lots of little strings.
    * we will inflate result strings as necessary.
