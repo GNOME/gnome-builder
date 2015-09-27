@@ -30,6 +30,7 @@ namespace Ide
 
 		Vala.Symbol symbol;
 		ValaCompletionMarkupFunc? markup_func;
+		string label;
 
 		static construct {
 			hash_seed = "IdeValaCompletionItem".hash ();
@@ -38,6 +39,12 @@ namespace Ide
 		public ValaCompletionItem (Vala.Symbol symbol)
 		{
 			this.symbol = symbol;
+
+			/* Unfortunate we have to do this here, because it would
+			 * be better to do this lazy. But that would require access to
+			 * the code context while it could be getting mutated.
+			 */
+			this.build_label ();
 		}
 
 		public void set_markup_func (owned ValaCompletionMarkupFunc? func)
@@ -85,10 +92,61 @@ namespace Ide
 			return this.symbol.name;
 		}
 
+		public void build_label ()
+		{
+			GLib.StringBuilder str = new GLib.StringBuilder ();
+
+			if (this.symbol is Vala.Method) {
+				var method = symbol as Vala.Method;
+				str.append (method.return_type.to_qualified_string (symbol.owner));
+				str.append_printf (" %s", method.name);
+				var type_params = method.get_type_parameters ();
+				if (type_params.size > 0) {
+					str.append ("&lt;");
+					foreach (var type_param in type_params) {
+						str.append (type_param.name);
+						str.append_c (',');
+					}
+					str.truncate (str.len - 1);
+					str.append ("&gt;");
+				}
+				str.append (" (");
+				var parameters = method.get_parameters ();
+				foreach (var param in parameters) {
+					if (param.ellipsis) {
+						str.append ("..., ");
+						break;
+					}
+
+					if (param.direction == ParameterDirection.OUT)
+						str.append ("out ");
+					else if (param.direction == ParameterDirection.REF)
+						str.append ("ref ");
+
+					if (param.variable_type is Vala.DelegateType)
+						str.append_printf ("%s, ", (param.variable_type as Vala.DelegateType).delegate_symbol.name);
+					else if (param.variable_type is Vala.DataType)
+						str.append_printf ("%s, ", (param.variable_type as Vala.DataType).to_qualified_string (method.owner));
+					else if (param.variable_type is Vala.ValueType)
+						str.append_printf ("%s, ", (param.variable_type as Vala.ValueType).type_symbol.name);
+					else
+						str.append_printf ("%s, ", param.variable_type.type_name);
+				}
+				if (parameters.size > 0) {
+					str.truncate (str.len - 2);
+				}
+				str.append_c (')');
+			} else {
+				str.append (this.symbol.name);
+			}
+
+			this.label = str.str;
+		}
+
 		public string get_markup () {
 			if (this.markup_func != null)
-				return this.markup_func (this.symbol.name);
-			return this.symbol.name;
+				return this.markup_func (this.label);
+			return this.label;
 		}
 
 		public string get_text () {
