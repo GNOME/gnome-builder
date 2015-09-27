@@ -704,7 +704,7 @@ ide_clang_translation_unit_code_complete_worker (GTask        *task,
     {
       GtkSourceCompletionProposal *proposal;
 
-      proposal = ide_clang_completion_item_new (refptr, i);
+      proposal = GTK_SOURCE_COMPLETION_PROPOSAL (ide_clang_completion_item_new (refptr, i));
       g_ptr_array_add (ar, proposal);
     }
 
