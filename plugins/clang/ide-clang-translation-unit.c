@@ -25,6 +25,7 @@
 
 #include "ide-context.h"
 #include "ide-clang-completion-item.h"
+#include "ide-clang-completion-item-private.h"
 #include "ide-clang-private.h"
 #include "ide-clang-symbol-tree.h"
 #include "ide-clang-translation-unit.h"
@@ -703,10 +704,7 @@ ide_clang_translation_unit_code_complete_worker (GTask        *task,
     {
       GtkSourceCompletionProposal *proposal;
 
-      proposal = g_object_new (IDE_TYPE_CLANG_COMPLETION_ITEM,
-                               "results", ide_ref_ptr_ref (refptr),
-                               "index", (guint)i,
-                               NULL);
+      proposal = ide_clang_completion_item_new (refptr, i);
       g_ptr_array_add (ar, proposal);
     }
 

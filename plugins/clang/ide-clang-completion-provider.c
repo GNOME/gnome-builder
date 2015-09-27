@@ -86,13 +86,19 @@ ide_clang_completion_state_free (IdeClangCompletionState *state)
 }
 
 static gint
-sort_by_score (gconstpointer a,
-               gconstpointer b)
+sort_by_priority (gconstpointer a,
+                  gconstpointer b)
 {
-  const IdeClangCompletionItem *cia = a;
-  const IdeClangCompletionItem *cib = b;
+  CXCompletionResult *ra = ide_clang_completion_item_get_result (a);
+  CXCompletionResult *rb = ide_clang_completion_item_get_result (b);
+  unsigned prioa = clang_getCompletionPriority (ra->CompletionString);
+  unsigned priob = clang_getCompletionPriority (rb->CompletionString);
 
-  return cia->score - cib->score;
+  if (prioa < priob)
+    return -1;
+  else if (prioa > priob)
+    return 1;
+  return 0;
 }
 
 static void
@@ -100,7 +106,7 @@ ide_clang_completion_provider_sort (IdeClangCompletionProvider *self)
 {
   g_assert (IDE_IS_CLANG_COMPLETION_PROVIDER (self));
 
-  self->head = g_list_sort (self->head, sort_by_score);
+  self->head = g_list_sort (self->head, sort_by_priority);
 }
 
 static gchar *
@@ -268,8 +274,10 @@ ide_clang_completion_provider_refilter (IdeClangCompletionProvider *self,
 
   g_assert (IDE_IS_CLANG_COMPLETION_PROVIDER (self));
   g_assert (results != NULL);
-  g_assert (results->len > 0);
   g_assert (query != NULL);
+
+  if (results->len == 0)
+    return;
 
   /*
    * By traversing the linked list nodes instead of the array, we allow
