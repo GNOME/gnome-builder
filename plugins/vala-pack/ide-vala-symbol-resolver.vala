@@ -52,7 +52,12 @@ namespace Ide
 			if (symbol != null) {
 				var kind = Ide.SymbolKind.NONE;
 				if (symbol is Vala.Class) kind = Ide.SymbolKind.CLASS;
-				else if (symbol is Vala.Subroutine) kind = Ide.SymbolKind.FUNCTION;
+				else if (symbol is Vala.Subroutine) {
+					if (symbol.is_instance_member ())
+						kind = Ide.SymbolKind.METHOD;
+					else
+						kind = Ide.SymbolKind.FUNCTION;
+				}
 				else if (symbol is Vala.Struct) kind = Ide.SymbolKind.STRUCT;
 				else if (symbol is Vala.Field) kind = Ide.SymbolKind.FIELD;
 				else if (symbol is Vala.Enum) kind = Ide.SymbolKind.ENUM;
@@ -60,13 +65,14 @@ namespace Ide
 				else if (symbol is Vala.Variable) kind = Ide.SymbolKind.VARIABLE;
 
 				var flags = Ide.SymbolFlags.NONE;
-				if (symbol.is_class_member ()) {
-					if (symbol.is_instance_member ())
-						flags |= Ide.SymbolFlags.IS_MEMBER;
-					else
-						flags |= Ide.SymbolFlags.IS_STATIC;
-				}
-				if (symbol.check_deprecated ())
+				if (symbol.is_instance_member ())
+					flags |= Ide.SymbolFlags.IS_MEMBER;
+
+				var binding = get_member_binding (symbol);
+				if (binding != null && binding == Vala.MemberBinding.STATIC)
+					flags |= Ide.SymbolFlags.IS_STATIC;
+
+				if (symbol.deprecated)
 					flags |= Ide.SymbolFlags.IS_DEPRECATED;
 
 				var source_reference = symbol.source_reference;
@@ -80,6 +86,22 @@ namespace Ide
 				}
 			}
 
+			return null;
+		}
+
+		// a member binding is Instance, Class, or Static
+		private Vala.MemberBinding? get_member_binding (Vala.Symbol sym)
+		{
+			if (sym is Vala.Constructor)
+				return ((Vala.Constructor)sym).binding;
+			if (sym is Vala.Destructor)
+				return ((Vala.Destructor)sym).binding;
+			if (sym is Vala.Field)
+				return ((Vala.Field)sym).binding;
+			if (sym is Vala.Method)
+				return ((Vala.Method)sym).binding;
+			if (sym is Vala.Property)
+				return ((Vala.Property)sym).binding;
 			return null;
 		}
 	}
