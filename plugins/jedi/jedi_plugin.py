@@ -37,6 +37,9 @@ gi_importer = DynamicImporter('gi.repository')
 try:
     import jedi
     from jedi.evaluate.compiled import CompiledObject
+    from jedi.evaluate.compiled import _create_from_name
+    from jedi.evaluate.compiled import builtin
+    from jedi.evaluate.docstrings import _evaluate_for_statement_string
     from jedi.evaluate.imports import Importer
 
     class PatchedJediCompiledObject(CompiledObject):
@@ -46,6 +49,47 @@ try:
                 return self
             else:
                 return super()._cls()
+
+        @property
+        def py__call__(self):
+            def actual(evaluator, params):
+                # Pasrse the docstring to find the return type:
+                ret_type = self.obj.__doc__.split('->')[1].strip()
+                ret_type = ret_type.replace(' or None', '')
+                if ret_type.startswith('iter:'):
+                    ret_type = ret_type[len('iter:'):]  # we don't care if it's an iterator
+
+                if ret_type in __builtins__:
+                    # The function we're insepcting returns a builtin python type, that's easy
+                    obj = _create_from_name(builtin, builtin, ret_type)
+                    return evaluator.execute(obj, params)
+                else:
+                    # The function we're insepcting returns a GObject type
+                    parent = self.parent.obj.__name__
+                    if parent.startswith('gi.repository'):
+                        parent = parent[len('gi.repository.'):]
+                    else:
+                        # a module with overrides, such as Gtk, behaves differently
+                        parent_module = self.parent.obj.__module__
+                        if parent_module.startswith('gi.overrides'):
+                            parent_module = parent_module[len('gi.overrides.'):]
+                            parent = '%s.%s' % (parent_module, parent)
+
+                    if ret_type.startswith(parent):
+                        # A pygobject type in the same module
+                        ret_type = ret_type[len(parent):]
+                    else:
+                        # A pygobject type in a different module
+                        return_type_parent = ret_type.split('.', 1)[0]
+                        ret_type = 'from gi.repository import %s\n%s' % (return_type_parent,
+                                                                         ret_type)
+                    result = _evaluate_for_statement_string(evaluator,
+                                                            ret_type,
+                                                            self.parent)
+                    return result
+            if type(self.obj) == FunctionInfo:
+                return actual
+            return super().py__call__
 
     class PatchedJediImporter(Importer):
         "A modified version of Jedi Importer to work with GObject Introspection modules"
@@ -74,6 +118,7 @@ try:
     jedi.evaluate.compiled.fake.get_module = patched_jedi_get_module
 
     jedi.evaluate.imports.Importer = PatchedJediImporter
+    jedi.evaluate.compiled.CompiledObject = PatchedJediCompiledObject
     HAS_JEDI = True
 except ImportError:
     print("jedi not found, python auto-completion not possible.")
@@ -115,7 +160,7 @@ class CompletionThread(threading.Thread):
                         if self.cancelled:
                             break
                         # we have to use custom names here because .type and .params can't be overriden (they are properties)
-                        if type(info._definition) == CompiledObject and \
+                        if type(info._definition) == PatchedJediCompiledObject and \
                            type(info._definition.obj) == FunctionInfo:
                                 info.real_type = 'function'
                                 obj = info._definition.obj
@@ -154,6 +199,9 @@ class JediCompletionProvider(Ide.Object,
 
         _, iter = context.get_iter()
         buffer = iter.get_buffer()
+
+        if self.thread is not None:
+            self.thread.cancelled = True
 
         self.thread = None
 
