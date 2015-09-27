@@ -267,12 +267,6 @@ ide_ctags_completion_provider_populate (GtkSourceCompletionProvider *provider,
   g_assert (IDE_IS_CTAGS_COMPLETION_PROVIDER (self));
   g_assert (GTK_SOURCE_IS_COMPLETION_CONTEXT (context));
 
-  if (self->indexes->len == 0)
-    IDE_GOTO (failure);
-
-  if (!g_settings_get_boolean (self->settings, "ctags-autocompletion"))
-    IDE_GOTO (failure);
-
   if (!gtk_source_completion_context_get_iter (context, &iter))
     IDE_GOTO (failure);
 
@@ -369,12 +363,43 @@ ide_ctags_completion_provider_get_priority (GtkSourceCompletionProvider *provide
   return IDE_CTAGS_COMPLETION_PROVIDER_PRIORITY;
 }
 
+static gboolean
+ide_ctags_completion_provider_match (GtkSourceCompletionProvider *provider,
+                                     GtkSourceCompletionContext  *context)
+{
+  IdeCtagsCompletionProvider *self = (IdeCtagsCompletionProvider *)provider;
+  GtkSourceCompletionActivation activation;
+  GtkTextIter iter;
+
+  g_assert (IDE_IS_CTAGS_COMPLETION_PROVIDER (self));
+  g_assert (GTK_SOURCE_IS_COMPLETION_CONTEXT (context));
+
+  if (!gtk_source_completion_context_get_iter (context, &iter))
+    return FALSE;
+
+  activation = gtk_source_completion_context_get_activation (context);
+
+  if (activation == GTK_SOURCE_COMPLETION_ACTIVATION_INTERACTIVE)
+    {
+      if (!gtk_text_iter_starts_line (&iter) ||
+          !gtk_text_iter_backward_char (&iter) ||
+          g_unichar_isspace (gtk_text_iter_get_char (&iter)))
+        return FALSE;
+    }
+
+  if (!g_settings_get_boolean (self->settings, "ctags-autocompletion"))
+    return FALSE;
+
+  return TRUE;
+}
+
 static void
 provider_iface_init (GtkSourceCompletionProviderIface *iface)
 {
   iface->get_name = ide_ctags_completion_provider_get_name;
-  iface->populate = ide_ctags_completion_provider_populate;
   iface->get_priority = ide_ctags_completion_provider_get_priority;
+  iface->match = ide_ctags_completion_provider_match;
+  iface->populate = ide_ctags_completion_provider_populate;
 }
 
 void
