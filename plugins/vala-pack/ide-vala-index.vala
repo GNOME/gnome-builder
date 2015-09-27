@@ -18,7 +18,7 @@
 
 /*
  * The point of Ide.ValaIndex is somewhat analogous to Clang's CXIndex.
- * It is the top-level complent for everything you can do with vala
+ * It is the top-level container for everything you can do with vala
  * files for a particular context. Typically, you would have one index
  * per project. Therefore, we use the singleton-per-project nature of
  * Ide.Service (via Ide.ValaService) to keep an index-per-project.
