@@ -529,3 +529,21 @@ ide_clang_completion_item_get_brief_comment (IdeClangCompletionItem *self)
 
   return self->brief_comment;
 }
+
+IdeClangCompletionItem *
+ide_clang_completion_item_new (IdeRefPtr *results,
+                               guint      index)
+{
+  CXCompletionResult *result;
+  IdeClangCompletionItem *ret;
+
+  ret = g_object_new (IDE_TYPE_CLANG_COMPLETION_ITEM,
+                      "results", results,
+                      "index", index,
+                      NULL);
+
+  result = ide_clang_completion_item_get_result (ret);
+  ret->priority = clang_getCompletionPriority (result->CompletionString);
+
+  return ret;
+}
