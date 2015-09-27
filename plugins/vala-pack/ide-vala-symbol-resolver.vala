@@ -40,8 +40,6 @@ namespace Ide
 		                                              GLib.Cancellable? cancellable)
 			throws GLib.Error
 		{
-			Vala.Symbol? symbol = null;
-
 			var context = this.get_context ();
 			var service = (Ide.ValaService)context.get_service_typed (typeof (Ide.ValaService));
 			var index = service.index;
@@ -49,11 +47,28 @@ namespace Ide
 			var line = (int)location.get_line () + 1;
 			var column = (int)location.get_line_offset () + 1;
 
-			symbol = yield index.find_symbol_at (file.get_file (), line, column);
+			Vala.Symbol? symbol = yield index.find_symbol_at (file.get_file (), line, column);
 
 			if (symbol != null) {
-				var kind = Ide.SymbolKind.FUNCTION;
+				var kind = Ide.SymbolKind.NONE;
+				if (symbol is Vala.Class) kind = Ide.SymbolKind.CLASS;
+				else if (symbol is Vala.Subroutine) kind = Ide.SymbolKind.FUNCTION;
+				else if (symbol is Vala.Struct) kind = Ide.SymbolKind.STRUCT;
+				else if (symbol is Vala.Field) kind = Ide.SymbolKind.FIELD;
+				else if (symbol is Vala.Enum) kind = Ide.SymbolKind.ENUM;
+				else if (symbol is Vala.EnumValue) kind = Ide.SymbolKind.ENUM_VALUE;
+				else if (symbol is Vala.Variable) kind = Ide.SymbolKind.VARIABLE;
+
 				var flags = Ide.SymbolFlags.NONE;
+				if (symbol.is_class_member ()) {
+					if (symbol.is_instance_member ())
+						flags |= Ide.SymbolFlags.IS_MEMBER;
+					else
+						flags |= Ide.SymbolFlags.IS_STATIC;
+				}
+				if (symbol.check_deprecated ())
+					flags |= Ide.SymbolFlags.IS_DEPRECATED;
+
 				var source_reference = symbol.source_reference;
 
 				if (source_reference != null) {
