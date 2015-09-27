@@ -50,7 +50,7 @@ namespace Ide
 	                                     Gtk.SourceCompletionProvider,
 	                                     Ide.CompletionProvider
 	{
-		ArrayList<Ide.ValaCompletionItem>? last_results;
+		GenericArray<Ide.ValaCompletionItem>? last_results;
 		string? last_line;
 		string? last_prefix;
 		int line = -1;
@@ -101,7 +101,8 @@ namespace Ide
 				var results = new GLib.List<Gtk.SourceCompletionProposal> ();
 
 				/* See the comment above about optimizing this. */
-				foreach (var result in this.last_results) {
+				for (int i = 0; i < this.last_results.length; i++) {
+					var result = this.last_results.get (i);
 					if (result.matches (downcase)) {
 						var hash = (void*)result.hash ();
 						if (dedup.contains ((void*)hash))
@@ -160,10 +161,15 @@ namespace Ide
 					this.column = res_column - 1;
 				}
 
+				results.sort ((a,b) => {
+					return -GLib.strcmp (a.symbol.name, b.symbol.name);
+				});
+
 				if (!cancellable.is_cancelled ()) {
 					/* TODO: fix more brain dead slow list conversion stuff */
 					var list = new GLib.List<Ide.ValaCompletionItem> ();
-					foreach (var item in results) {
+					for (int i = 0; i < results.length; i++) {
+						var item = results.get (i);
 						list.prepend (item);
 						item.set_markup_func (this.markup_func);
 					}

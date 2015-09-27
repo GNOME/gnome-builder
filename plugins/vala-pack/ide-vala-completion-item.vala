@@ -28,7 +28,7 @@ namespace Ide
 	{
 		static uint hash_seed;
 
-		Vala.Symbol symbol;
+		internal Vala.Symbol symbol;
 		ValaCompletionMarkupFunc? markup_func;
 		string label;
 
