@@ -22,27 +22,11 @@
 #include <glib/gi18n.h>
 
 #include "ide-clang-completion-item.h"
+#include "ide-clang-completion-item-private.h"
 #include "ide-debug.h"
 #include "ide-ref-ptr.h"
 #include "ide-source-snippet.h"
 #include "ide-source-snippet-chunk.h"
-
-
-struct _IdeClangCompletionItem
-{
-  GObject           parent_instance;
-
-  guint             index;
-  gint              typed_text_index;
-  guint             initialized : 1;
-
-  const gchar      *icon_name;
-  gchar            *brief_comment;
-  gchar            *markup;
-  IdeRefPtr        *results;
-  IdeSourceSnippet *snippet;
-  gchar            *typed_text;
-};
 
 static void completion_proposal_iface_init (GtkSourceCompletionProposalIface *);
 
@@ -58,17 +42,6 @@ enum {
 };
 
 static GParamSpec *gParamSpecs [LAST_PROP];
-
-static CXCompletionResult *
-ide_clang_completion_item_get_result (IdeClangCompletionItem *self)
-{
-  CXCodeCompleteResults *results;
-
-  g_assert (IDE_IS_CLANG_COMPLETION_ITEM (self));
-
-  results = ide_ref_ptr_get (self->results);
-  return &results->Results [self->index];
-}
 
 static void
 ide_clang_completion_item_lazy_init (IdeClangCompletionItem *self)
@@ -409,6 +382,7 @@ ide_clang_completion_item_class_init (IdeClangCompletionItemClass *klass)
 static void
 ide_clang_completion_item_init (IdeClangCompletionItem *self)
 {
+  self->link.data = self;
   self->typed_text_index = -1;
 }
 
@@ -502,7 +476,7 @@ ide_clang_completion_item_get_typed_text (IdeClangCompletionItem *self)
        * This seems like an implausible result, but we are definitely
        * hitting it occasionally.
        */
-      return g_strdup ("");
+      return "";
     }
 
 #ifdef IDE_ENABLE_TRACE
