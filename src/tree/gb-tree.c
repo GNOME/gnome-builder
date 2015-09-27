@@ -1209,7 +1209,7 @@ _gb_tree_get_path (GbTree *self,
 
 /**
  * gb_tree_add_builder:
- * @tree: (in): A #GbTree.
+ * @self: (in): A #GbTree.
  * @builder: (in) (transfer full): A #GbTreeBuilder to add.
  *
  * Removes a builder from the tree.
@@ -1239,7 +1239,7 @@ gb_tree_add_builder (GbTree        *self,
 
 /**
  * gb_tree_remove_builder:
- * @tree: (in): A #GbTree.
+ * @self: (in): A #GbTree.
  * @builder: (in): A #GbTreeBuilder to remove.
  *
  * Removes a builder from the tree.
@@ -1290,7 +1290,7 @@ gb_tree_get_root (GbTree *self)
 
 /**
  * gb_tree_set_root:
- * @tree: (in): A #GbTree.
+ * @self: (in): A #GbTree.
  * @node: (in): A #GbTreeNode.
  *
  * Sets the root node of the #GbTree widget. This is used to build
@@ -1355,7 +1355,7 @@ gb_tree_rebuild (GbTree *self)
 /**
  * gb_tree_find_custom:
  * @self: A #GbTree
- * @equal_func: A #GEqualFunc
+ * @equal_func: (scope call): A #GEqualFunc
  * @key: the key for @equal_func
  *
  * Walks the entire tree looking for the first item that matches given
@@ -1388,6 +1388,15 @@ gb_tree_find_custom (GbTree     *self,
   return lookup.result;
 }
 
+/**
+ * gb_tree_find_item:
+ * @self: A #GbTree.
+ * @item: (allow-none): A #GObject or %NULL.
+ *
+ * Finds a #GbTreeNode with an item property matching @item.
+ *
+ * Returns: (transfer none) (nullable): A #GbTreeNode or %NULL.
+ */
 GbTreeNode *
 gb_tree_find_item (GbTree  *self,
                    GObject *item)
@@ -1472,7 +1481,7 @@ _gb_tree_invalidate (GbTree     *self,
  * gb_tree_find_child_node:
  * @self: A #GbTree
  * @node: A #GbTreeNode
- * @find_func: (call scope): A callback to locate the child
+ * @find_func: (scope call): A callback to locate the child
  * @user_data: user data for @find_func
  *
  * Searches through the direct children of @node for a matching child.
@@ -1578,15 +1587,17 @@ _gb_tree_get_iter (GbTree      *self,
 {
   GbTreePrivate *priv = gb_tree_get_instance_private (self);
   GtkTreePath *path;
-  gboolean ret;
+  gboolean ret = FALSE;
 
   g_return_val_if_fail (GB_IS_TREE (self), FALSE);
   g_return_val_if_fail (GB_IS_TREE_NODE (node), FALSE);
   g_return_val_if_fail (iter, FALSE);
 
-  path = gb_tree_node_get_path (node);
-  ret = gtk_tree_model_get_iter (GTK_TREE_MODEL (priv->store), iter, path);
-  gtk_tree_path_free (path);
+  if ((path = gb_tree_node_get_path (node)) != NULL)
+    {
+      ret = gtk_tree_model_get_iter (GTK_TREE_MODEL (priv->store), iter, path);
+      gtk_tree_path_free (path);
+    }
 
   return ret;
 }

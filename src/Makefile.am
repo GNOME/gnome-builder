@@ -21,6 +21,14 @@ libgnome_builder_public_sources = \
 	editor/gb-editor-view-addin.h \
 	util/gb-menu-extension.c \
 	util/gb-menu-extension.h \
+	tree/gb-tree-builder.c \
+	tree/gb-tree-builder.h \
+	tree/gb-tree.c \
+	tree/gb-tree.h \
+	tree/gb-tree-node.c \
+	tree/gb-tree-node.h \
+	tree/gb-tree-private.h \
+	tree/gb-tree-types.h \
 	views/gb-view.c \
 	views/gb-view.h \
 	views/gb-view-stack.c \
@@ -130,14 +138,6 @@ libgnome_builder_la_SOURCES = \
 	search/gb-search-display.h \
 	support/gb-support.c \
 	support/gb-support.h \
-	tree/gb-tree-builder.c \
-	tree/gb-tree-builder.h \
-	tree/gb-tree.c \
-	tree/gb-tree.h \
-	tree/gb-tree-node.c \
-	tree/gb-tree-node.h \
-	tree/gb-tree-private.h \
-	tree/gb-tree-types.h \
 	util/gb-cairo.c \
 	util/gb-cairo.h \
 	util/gb-dnd.c \

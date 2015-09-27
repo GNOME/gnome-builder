@@ -123,6 +123,15 @@ _gb_tree_node_set_tree (GbTreeNode *node,
     }
 }
 
+/**
+ * gb_tree_node_insert_sorted:
+ * @node: A #GbTreeNode.
+ * @child: A #GbTreeNode.
+ * @compare_func: (scope call): A compare func to compare nodes.
+ * @user_data: (closure compare_func): user data for @compare_func.
+ *
+ * Inserts a @child as a child of @node, sorting it among the other children.
+ */
 void
 gb_tree_node_insert_sorted (GbTreeNode            *node,
                             GbTreeNode            *child,
@@ -138,7 +147,8 @@ gb_tree_node_insert_sorted (GbTreeNode            *node,
 
 /**
  * gb_tree_node_append:
- * @node: (in): A #GbTreeNode.
+ * @node: A #GbTreeNode.
+ * @child: A #GbTreeNode.
  *
  * Appends @child to the list of children owned by @node.
  */
@@ -153,7 +163,8 @@ gb_tree_node_append (GbTreeNode *node,
 
 /**
  * gb_tree_node_prepend:
- * @node: (in): A #GbTreeNode.
+ * @node: A #GbTreeNode.
+ * @child: A #GbTreeNode.
  *
  * Prepends @child to the list of children owned by @node.
  */
@@ -168,7 +179,8 @@ gb_tree_node_prepend (GbTreeNode *node,
 
 /**
  * gb_tree_node_remove:
- * @node: (in): A #GbTreeNode.
+ * @node: A #GbTreeNode.
+ * @child: A #GbTreeNode.
  *
  * Removes @child from the list of children owned by @node.
  */
@@ -394,21 +406,24 @@ gb_tree_node_get_item (GbTreeNode *node)
   return node->item;
 }
 
-void
+gboolean
 gb_tree_node_expand (GbTreeNode *node,
                      gboolean    expand_ancestors)
 {
   GbTree *tree;
   GtkTreePath *path;
+  gboolean ret;
 
-  g_return_if_fail (GB_IS_TREE_NODE (node));
+  g_return_val_if_fail (GB_IS_TREE_NODE (node), FALSE);
 
   tree = gb_tree_node_get_tree (node);
   path = gb_tree_node_get_path (node);
-  gtk_tree_view_expand_row (GTK_TREE_VIEW (tree), path, FALSE);
+  ret = gtk_tree_view_expand_row (GTK_TREE_VIEW (tree), path, FALSE);
   if (expand_ancestors)
     gtk_tree_view_expand_to_path (GTK_TREE_VIEW (tree), path);
   gtk_tree_path_free (path);
+
+  return ret;
 }
 
 void
