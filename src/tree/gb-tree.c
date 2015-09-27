@@ -78,9 +78,9 @@ static GtkBuildableIface *gb_tree_parent_buildable_iface;
 static GParamSpec *gParamSpecs [LAST_PROP];
 static guint gSignals [LAST_SIGNAL];
 
-static void
-gb_tree_build_node (GbTree     *self,
-                    GbTreeNode *node)
+void
+_gb_tree_build_node (GbTree     *self,
+                     GbTreeNode *node)
 {
   GbTreePrivate *priv = gb_tree_get_instance_private (self);
   gsize i;
@@ -532,7 +532,7 @@ gb_tree_add (GbTree     *self,
   gtk_tree_store_set (priv->store, &iter, 0, child, -1);
 
   if (node == priv->root)
-    gb_tree_build_node (self, child);
+    _gb_tree_build_node (self, child);
 
   g_object_unref (child);
 }
@@ -589,7 +589,7 @@ _gb_tree_insert_sorted (GbTree                *self,
 
 inserted:
   if (node == priv->root)
-    gb_tree_build_node (self, child);
+    _gb_tree_build_node (self, child);
 
   g_object_unref (child);
 }
@@ -658,7 +658,7 @@ gb_tree_row_expanded (GtkTreeView *tree_view,
    */
   if (_gb_tree_node_get_needs_build (node))
     {
-      gb_tree_build_node (self, node);
+      _gb_tree_build_node (self, node);
       gb_tree_node_expand (node, FALSE);
       gb_tree_node_select (node);
     }
@@ -1322,7 +1322,7 @@ gb_tree_set_root (GbTree     *self,
           priv->root = g_object_ref_sink (root);
           _gb_tree_node_set_parent (priv->root, NULL);
           _gb_tree_node_set_tree (priv->root, self);
-          gb_tree_build_node (self, priv->root);
+          _gb_tree_build_node (self, priv->root);
         }
 
       g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_ROOT]);
@@ -1348,7 +1348,7 @@ gb_tree_rebuild (GbTree *self)
   if (priv->root != NULL)
     {
       gtk_tree_store_clear (priv->store);
-      gb_tree_build_node (self, priv->root);
+      _gb_tree_build_node (self, priv->root);
     }
 }
 
@@ -1472,7 +1472,7 @@ _gb_tree_invalidate (GbTree     *self,
   parent = gb_tree_node_get_parent (node);
 
   if ((parent == NULL) || gb_tree_node_get_expanded (parent))
-    gb_tree_build_node (self, node);
+    _gb_tree_build_node (self, node);
 
   gtk_tree_path_free (path);
 }
@@ -1516,7 +1516,7 @@ gb_tree_find_child_node (GbTree         *self,
     }
 
   if (_gb_tree_node_get_needs_build (node))
-    gb_tree_build_node (self, node);
+    _gb_tree_build_node (self, node);
 
   model = GTK_TREE_MODEL (priv->store);
   path = gb_tree_node_get_path (node);
