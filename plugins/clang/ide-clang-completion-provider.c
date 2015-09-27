@@ -85,6 +85,24 @@ ide_clang_completion_state_free (IdeClangCompletionState *state)
   g_slice_free (IdeClangCompletionState, state);
 }
 
+static gint
+sort_by_score (gconstpointer a,
+               gconstpointer b)
+{
+  const IdeClangCompletionItem *cia = a;
+  const IdeClangCompletionItem *cib = b;
+
+  return cia->score - cib->score;
+}
+
+static void
+ide_clang_completion_provider_sort (IdeClangCompletionProvider *self)
+{
+  g_assert (IDE_IS_CLANG_COMPLETION_PROVIDER (self));
+
+  self->head = g_list_sort (self->head, sort_by_score);
+}
+
 static gchar *
 ide_clang_completion_provider_get_name (GtkSourceCompletionProvider *provider)
 {
@@ -328,6 +346,7 @@ ide_clang_completion_provider_code_complete_cb (GObject      *object,
       if (results->len > 0)
         {
           ide_clang_completion_provider_refilter (state->self, results, state->query);
+          ide_clang_completion_provider_sort (state->self);
           gtk_source_completion_context_add_proposals (state->context,
                                                        GTK_SOURCE_COMPLETION_PROVIDER (state->self),
                                                        state->self->head, TRUE);
@@ -479,6 +498,7 @@ ide_clang_completion_provider_populate (GtkSourceCompletionProvider *provider,
        * linked list instead of all items.
        */
       ide_clang_completion_provider_refilter (self, self->last_results, prefix);
+      ide_clang_completion_provider_sort (self);
       gtk_source_completion_context_add_proposals (context, provider, self->head, TRUE);
 
       IDE_EXIT;
