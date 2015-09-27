@@ -170,17 +170,17 @@ namespace Ide
 			return true;
 		}
 
-		public async ArrayList<Ide.ValaCompletionItem> code_complete (GLib.File file,
-		                                                              int line,
-		                                                              int column,
-		                                                              string? line_text,
-		                                                              Ide.UnsavedFiles? unsaved_files,
-		                                                              out int result_line,
-		                                                              out int result_column,
-		                                                              GLib.Cancellable? cancellable)
+		public async GenericArray<Ide.ValaCompletionItem> code_complete (GLib.File file,
+		                                                                 int line,
+		                                                                 int column,
+		                                                                 string? line_text,
+		                                                                 Ide.UnsavedFiles? unsaved_files,
+		                                                                 out int result_line,
+		                                                                 out int result_column,
+		                                                                 GLib.Cancellable? cancellable)
 		{
 			var unsaved_files_copy = unsaved_files.to_array ();
-			var result = new ArrayList<Ide.ValaCompletionItem> ();
+			var result = new GenericArray<Ide.ValaCompletionItem> ();
 
 			Ide.ThreadPool.push (Ide.ThreadPoolKind.COMPILER, () => {
 				if ((cancellable == null) || !cancellable.is_cancelled ()) {
@@ -269,7 +269,7 @@ namespace Ide
 		                      ref int column,
 		                      string line_text,
 		                      Vala.Symbol? nearest,
-		                      ArrayList<Ide.ValaCompletionItem> results)
+		                      GenericArray<Ide.ValaCompletionItem> results)
 		{
 			if (!(nearest is Vala.Block))
 				nearest = null;
@@ -285,7 +285,8 @@ namespace Ide
 			var list = completion.run (ref cursor);
 
 			foreach (var symbol in list) {
-				results.add (new Ide.ValaCompletionItem (symbol));
+				if (symbol.name != null && symbol.name[0] != '\0')
+					results.add (new Ide.ValaCompletionItem (symbol));
 			}
 
 			line = cursor.line;
