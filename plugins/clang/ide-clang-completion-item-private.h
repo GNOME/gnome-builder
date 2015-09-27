@@ -36,6 +36,7 @@ struct _IdeClangCompletionItem
 
   guint             index;
   gint              typed_text_index;
+  gint              score : 16;
   guint             initialized : 1;
 
   const gchar      *icon_name;
@@ -60,6 +61,7 @@ ide_clang_completion_item_match (IdeClangCompletionItem *self,
   const gchar *needle = lower_is_ascii;
   const gchar *tmp;
   char ch = *needle;
+  gint score;
 
   if (G_UNLIKELY (haystack == NULL))
     haystack = ide_clang_completion_item_get_typed_text (self);
@@ -76,6 +78,8 @@ ide_clang_completion_item_match (IdeClangCompletionItem *self,
   if (haystack [0] != ch && haystack [1] != ch && haystack [2] != ch && haystack [3] != ch)
     return FALSE;
 
+  self->score = score = 0;
+
   for (; *needle; needle++)
     {
       tmp = strchr (haystack, *needle);
@@ -83,8 +87,11 @@ ide_clang_completion_item_match (IdeClangCompletionItem *self,
         tmp = strchr (haystack, g_ascii_toupper (*needle));
       if (tmp == NULL)
         return FALSE;
+      score += (tmp - haystack);
       haystack = tmp;
     }
+
+  self->score = score + strlen (haystack);
 
   return TRUE;
 }
