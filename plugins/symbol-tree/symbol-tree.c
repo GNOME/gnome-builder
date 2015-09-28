@@ -65,6 +65,8 @@ get_cached_symbol_tree_cb (GObject      *object,
   g_autoptr(IdeSymbolTree) symbol_tree = NULL;
   g_autoptr(GError) error = NULL;
   GbTreeNode *root;
+  GtkTreeIter iter;
+  GtkTreeModel *model;
 
   g_assert (EGG_IS_TASK_CACHE (cache));
   g_assert (G_IS_ASYNC_RESULT (result));
@@ -84,6 +86,21 @@ get_cached_symbol_tree_cb (GObject      *object,
                        "item", symbol_tree,
                        NULL);
   gb_tree_set_root (self->tree, root);
+
+  model = gtk_tree_view_get_model (GTK_TREE_VIEW (self->tree));
+
+  if (gtk_tree_model_get_iter_first (model, &iter))
+    {
+      do
+        {
+          g_autoptr(GbTreeNode) node = NULL;
+
+          gtk_tree_model_get (model, &iter, 0, &node, -1);
+          if (node != NULL)
+            gb_tree_node_expand (node, FALSE);
+        }
+      while (gtk_tree_model_iter_next (model, &iter));
+    }
 }
 
 static void
