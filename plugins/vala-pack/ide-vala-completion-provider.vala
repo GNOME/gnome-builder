@@ -66,6 +66,8 @@ namespace Ide
 				return;
 			}
 
+			var prefix = CompletionProvider.context_current_word (context);
+
 			begin = iter;
 			begin.set_line_offset (0);
 			var line = begin.get_slice (iter);
@@ -77,26 +79,7 @@ namespace Ide
 			 */
 			if (can_replay (line)) {
 				HashTable<void*,bool> dedup = new HashTable<void*,bool> (GLib.direct_hash, GLib.direct_equal);
-				Gtk.TextIter stop = iter;
 
-				/* Move to the just inserted character. */
-				if (!stop.starts_line ())
-					stop.backward_char ();
-
-				/*
-				 * Walk backwards to locate the first character after a stop
-				 * character (anything non-alphanumeric or _).
-				 */
-				while (!stop.starts_line () &&
-					   (stop.get_char ().isalnum () || stop.get_char () == '_') &&
-					   stop.backward_char ()) {
-					/* Do nothing */
-				}
-				var ch = stop.get_char ();
-				if (!ch.isalnum () && (ch != ')') && (stop.compare (iter) < 0))
-					stop.forward_char ();
-
-				var prefix = stop.get_slice (iter).strip ();
 				var downcase = prefix.down ();
 				var results = new GLib.List<Gtk.SourceCompletionProposal> ();
 
