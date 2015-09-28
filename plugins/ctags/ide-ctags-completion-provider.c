@@ -21,24 +21,16 @@
 #include <glib/gi18n.h>
 
 #include "ide-completion-provider.h"
+#include "ide-completion-item.h"
+#include "ide-completion-results.h"
 #include "ide-context.h"
 #include "ide-ctags-completion-item.h"
 #include "ide-ctags-completion-provider.h"
+#include "ide-ctags-completion-provider-private.h"
 #include "ide-ctags-service.h"
 #include "ide-ctags-util.h"
 #include "ide-debug.h"
 #include "ide-macros.h"
-
-struct _IdeCtagsCompletionProvider
-{
-  IdeObject      parent_instance;
-
-  GSettings     *settings;
-  GPtrArray     *indexes;
-  GHashTable    *icons;
-
-  gint           minimum_word_size;
-};
 
 static void provider_iface_init (GtkSourceCompletionProviderIface *iface);
 
@@ -84,17 +76,6 @@ ide_ctags_completion_provider_add_index (IdeCtagsCompletionProvider *self,
 }
 
 static void
-theme_changed_cb (IdeCtagsCompletionProvider *self,
-                  GParamSpec                 *pspec,
-                  GtkSettings                *settings)
-{
-  g_assert (IDE_IS_CTAGS_COMPLETION_PROVIDER (self));
-  g_assert (self->icons != NULL);
-
-  g_hash_table_remove_all (self->icons);
-}
-
-static void
 ide_ctags_completion_provider_constructed (GObject *object)
 {
   IdeCtagsCompletionProvider *self = (IdeCtagsCompletionProvider *)object;
@@ -127,8 +108,10 @@ ide_ctags_completion_provider_finalize (GObject *object)
 {
   IdeCtagsCompletionProvider *self = (IdeCtagsCompletionProvider *)object;
 
+  g_clear_pointer (&self->current_word, g_free);
   g_clear_pointer (&self->indexes, g_ptr_array_unref);
   g_clear_object (&self->settings);
+  g_clear_object (&self->results);
 
   G_OBJECT_CLASS (ide_ctags_completion_provider_parent_class)->finalize (object);
 }
@@ -151,96 +134,33 @@ ide_ctags_completion_provider_class_finalize (IdeCtagsCompletionProviderClass *k
 static void
 ide_ctags_completion_provider_init (IdeCtagsCompletionProvider *self)
 {
-  GtkSettings *settings;
-
   self->minimum_word_size = 3;
   self->indexes = g_ptr_array_new_with_free_func (g_object_unref);
   self->settings = g_settings_new ("org.gnome.builder.code-insight");
-  self->icons = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_object_unref);
-
-  settings = gtk_settings_get_default ();
-
-  g_signal_connect_object (settings,
-                           "notify::gtk-theme-name",
-                           G_CALLBACK (theme_changed_cb),
-                           self,
-                           G_CONNECT_SWAPPED);
-
-  g_signal_connect_object (settings,
-                           "notify::gtk-application-prefer-dark-theme",
-                           G_CALLBACK (theme_changed_cb),
-                           self,
-                           G_CONNECT_SWAPPED);
 }
 
 static gchar *
 ide_ctags_completion_provider_get_name (GtkSourceCompletionProvider *provider)
 {
-  return g_strdup (_("CTags"));
+  return g_strdup (_("CTAGS"));
 }
 
-static inline gboolean
-is_symbol_char (gunichar ch)
+static const gchar * const *
+get_allowed_suffixes (GtkSourceCompletionContext *context)
 {
-  switch (ch)
-    {
-    case '_':
-      return TRUE;
+  GtkTextIter iter;
+  GtkSourceBuffer *buffer;
+  GtkSourceLanguage *language;
+  const gchar *lang_id = NULL;
 
-    default:
-      return g_unichar_isalnum (ch);
-    }
-}
-
-static gchar *
-get_word_to_cursor (const GtkTextIter *location)
-{
-  GtkTextIter iter = *location;
-  GtkTextIter end = *location;
-
-  if (!gtk_text_iter_backward_char (&end))
+  if (!gtk_source_completion_context_get_iter (context, &iter))
     return NULL;
 
-  while (gtk_text_iter_backward_char (&iter))
-    {
-      gunichar ch;
+  buffer = GTK_SOURCE_BUFFER (gtk_text_iter_get_buffer (&iter));
+  if ((language = gtk_source_buffer_get_language (buffer)))
+    lang_id = gtk_source_language_get_id (language);
 
-      ch = gtk_text_iter_get_char (&iter);
-
-      if (!is_symbol_char (ch))
-        break;
-    }
-
-  if (!is_symbol_char (gtk_text_iter_get_char (&iter)))
-    gtk_text_iter_forward_char (&iter);
-
-  if (gtk_text_iter_compare (&iter, &end) >= 0)
-    return NULL;
-
-  return gtk_text_iter_get_slice (&iter, location);
-}
-
-static gint
-sort_wrapper (gconstpointer a,
-              gconstpointer b)
-{
-  IdeCtagsIndexEntry * const *enta = a;
-  IdeCtagsIndexEntry * const *entb = b;
-
-  return ide_ctags_index_entry_compare (*enta, *entb);
-}
-
-static inline gboolean
-too_similar (const IdeCtagsIndexEntry *a,
-             const IdeCtagsIndexEntry *b)
-{
-  if (a->kind == b->kind)
-    {
-      if (ide_str_equal0 (a->name, b->name))
-        return TRUE;
-    }
-
-  return FALSE;
+  return ide_ctags_get_allowed_suffixes (lang_id);
 }
 
 static void
@@ -248,111 +168,83 @@ ide_ctags_completion_provider_populate (GtkSourceCompletionProvider *provider,
                                         GtkSourceCompletionContext  *context)
 {
   IdeCtagsCompletionProvider *self = (IdeCtagsCompletionProvider *)provider;
-  g_autofree gchar *word = NULL;
-  const IdeCtagsIndexEntry *entries;
   const gchar * const *allowed;
-  g_autoptr(GPtrArray) ar = NULL;
-  IdeCtagsIndexEntry *last = NULL;
-  GtkSourceBuffer *buffer;
-  GtkSourceLanguage *language;
-  const gchar *lang_id = NULL;
-  gsize n_entries;
-  GtkTextIter iter;
-  GList *list = NULL;
-  gsize i;
-  gsize j;
+  g_autofree gchar *casefold = NULL;
+  gint word_len;
+  guint i;
+  guint j;
 
   IDE_ENTRY;
 
   g_assert (IDE_IS_CTAGS_COMPLETION_PROVIDER (self));
   g_assert (GTK_SOURCE_IS_COMPLETION_CONTEXT (context));
 
-  if (!gtk_source_completion_context_get_iter (context, &iter))
-    IDE_GOTO (failure);
+  g_clear_pointer (&self->current_word, g_free);
+  self->current_word = ide_completion_provider_context_current_word (context);
 
-  buffer = GTK_SOURCE_BUFFER (gtk_text_iter_get_buffer (&iter));
-  if ((language = gtk_source_buffer_get_language (buffer)))
-    lang_id = gtk_source_language_get_id (language);
-  allowed = ide_ctags_get_allowed_suffixes (lang_id);
+  allowed = get_allowed_suffixes (context);
 
-  word = get_word_to_cursor (&iter);
-  if (ide_str_empty0 (word) || strlen (word) < self->minimum_word_size)
-    IDE_GOTO (failure);
-
-  if (strlen (word) < 3)
-    IDE_GOTO (failure);
-
-  ar = g_ptr_array_new ();
-
-  IDE_TRACE_MSG ("Searching for %s", word);
-
-  for (j = 0; j < self->indexes->len; j++)
+  if (self->results != NULL)
     {
-      IdeCtagsIndex *index = g_ptr_array_index (self->indexes, j);
+      if (ide_completion_results_replay (self->results, self->current_word))
+        {
+          ide_completion_results_present (self->results, provider, context);
+          IDE_EXIT;
+        }
+      g_clear_pointer (&self->results, g_object_unref);
+    }
 
-      entries = ide_ctags_index_lookup_prefix (index, word, &n_entries);
+  word_len = strlen (self->current_word);
+  if (word_len < self->minimum_word_size)
+    IDE_GOTO (word_too_small);
+
+  casefold = g_utf8_casefold (self->current_word, -1);
+
+  self->results = ide_completion_results_new (self->current_word);
+
+  for (i = 0; i < self->indexes->len; i++)
+    {
+      g_autofree gchar *copy = g_strdup (self->current_word);
+      IdeCtagsIndex *index = g_ptr_array_index (self->indexes, i);
+      const IdeCtagsIndexEntry *entries = NULL;
+      guint tmp_len = word_len;
+      gsize n_entries = 0;
+
+      while (entries == NULL && *copy)
+        {
+          if (!(entries = ide_ctags_index_lookup_prefix (index, copy, &n_entries)))
+            copy [--tmp_len] = '\0';
+        }
+
       if ((entries == NULL) || (n_entries == 0))
         continue;
 
-      for (i = 0; i < n_entries; i++)
+      for (j = 0; j < n_entries; j++)
         {
-          const IdeCtagsIndexEntry *entry = &entries [i];
+          const IdeCtagsIndexEntry *entry = &entries [j];
+          IdeCtagsCompletionItem *item;
 
-          if (ide_ctags_is_allowed (entry, allowed))
-            g_ptr_array_add (ar, (gpointer)entry);
+          if (!ide_ctags_is_allowed (entry, allowed))
+            continue;
+
+          item = ide_ctags_completion_item_new (self, entry);
+
+          if (!ide_completion_item_match (IDE_COMPLETION_ITEM (item), self->current_word, casefold))
+            {
+              g_object_unref (item);
+              continue;
+            }
+
+          ide_completion_results_take_proposal (self->results, IDE_COMPLETION_ITEM (item));
         }
     }
 
-  g_ptr_array_sort (ar, sort_wrapper);
+  ide_completion_results_present (self->results, provider, context);
 
-  for (i = ar->len; i > 0; i--)
-    {
-      GtkSourceCompletionProposal *item;
-      IdeCtagsIndexEntry *entry = g_ptr_array_index (ar, i - 1);
+  IDE_EXIT;
 
-      /*
-       * NOTE:
-       *
-       * We walk backwards in this ptrarray so that we can use g_list_prepend() for O(1) access.
-       * I think everyone agrees that using GList for passing completion data around was not
-       * a great choice, but it is what we have to work with.
-       */
-
-      /*
-       * Ignore this item if the previous one looks really similar.
-       * We take the first item instead of the last since the first item (when walking backwards)
-       * tends to be more likely to be the one we care about (based on lexicographical
-       * ordering. For example, something in "gtk-2.0" is less useful than "gtk-3.0".
-       *
-       * This is done here instead of during our initial object creation so that
-       * we can merge items between different indexes. It often happens that the
-       * same headers are included in multiple tags files.
-       */
-      if ((last != NULL) && too_similar (entry, last))
-        continue;
-
-      /*
-       * NOTE:
-       *
-       * Autocompletion is very performance sensitive code. The smallest amount of
-       * extra work has a very negative impact on interactivity. We are trying to
-       * avoid a couple things here based on how completion works.
-       *
-       * 1) Avoiding referencing or copying things.
-       *    Since the provider will always outlive the completion item, we use
-       *    borrowed references for as much as we can.
-       * 2) We delay the work of looking up icons until they are requested.
-       *    No sense in doing that work before hand.
-       */
-      item = ide_ctags_completion_item_new (entry, self, context);
-      list = g_list_prepend (list, item);
-
-      last = entry;
-    }
-
-failure:
-  gtk_source_completion_context_add_proposals (context, provider, list, TRUE);
-  g_list_free_full (list, g_object_unref);
+word_too_small:
+  gtk_source_completion_context_add_proposals (context, provider, NULL, TRUE);
 
   IDE_EXIT;
 }
@@ -381,13 +273,16 @@ ide_ctags_completion_provider_match (GtkSourceCompletionProvider *provider,
 
   if (activation == GTK_SOURCE_COMPLETION_ACTIVATION_INTERACTIVE)
     {
-      if (!gtk_text_iter_starts_line (&iter) ||
+      if (gtk_text_iter_starts_line (&iter) ||
           !gtk_text_iter_backward_char (&iter) ||
           g_unichar_isspace (gtk_text_iter_get_char (&iter)))
         return FALSE;
     }
 
   if (!g_settings_get_boolean (self->settings, "ctags-autocompletion"))
+    return FALSE;
+
+  if (ide_completion_provider_context_in_comment (context))
     return FALSE;
 
   return TRUE;
