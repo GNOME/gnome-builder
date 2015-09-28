@@ -336,6 +336,7 @@ ide_clang_completion_item_set_property (GObject      *object,
       break;
 
     case PROP_RESULTS:
+      g_clear_pointer (&self->results, ide_ref_ptr_unref);
       self->results = g_value_dup_boxed (value);
       break;
 
