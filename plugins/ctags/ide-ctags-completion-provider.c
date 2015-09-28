@@ -143,7 +143,7 @@ ide_ctags_completion_provider_init (IdeCtagsCompletionProvider *self)
 static gchar *
 ide_ctags_completion_provider_get_name (GtkSourceCompletionProvider *provider)
 {
-  return g_strdup (_("CTAGS"));
+  return g_strdup ("Ctags");
 }
 
 static const gchar * const *
