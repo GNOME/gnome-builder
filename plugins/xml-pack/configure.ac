@@ -1,8 +1,8 @@
 # --enable-xml-pack-plugin=yes/no
-AC_ARG_ENABLE([enable-xml-pack-plugin],
+AC_ARG_ENABLE([xml-pack-plugin],
               [AS_HELP_STRING([--enable-xml-pack-plugin=@<:@yes/no@:>@],
                               [Build with support for xml enhancements such as indentation and auto completion.])],
-              [],
+              [enable_xml_pack_plugin=$enableval],
               [enable_xml_pack_plugin=yes])
 
 # for if ENABLE_XML_PACK_PLUGIN in Makefile.am

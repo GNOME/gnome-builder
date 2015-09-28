@@ -3,10 +3,10 @@ PKG_CHECK_MODULES(HTML_PREVIEW,
                   [have_html_preview_deps=yes],
                   [have_html_preview_deps=no])
 
-AC_ARG_ENABLE([enable-html-preview-plugin],
+AC_ARG_ENABLE([html-preview-plugin],
               [AS_HELP_STRING([--enable-html-preview-plugin=@<:@auto/yes/no@:>@],
                               [Build with support for HTML and Markdown live preview.])],
-              [],
+              [enable_html_preview_plugin=$enableval],
               [enable_html_preview_plugin=$have_html_preview_deps])
 
 AS_IF([test "$enable_html_preview_plugin" = "yes" && test "$have_html_preview_deps" = "no"],[

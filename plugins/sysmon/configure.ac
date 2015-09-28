@@ -1,8 +1,8 @@
 # --enable-sysmon-plugin=yes/no
-AC_ARG_ENABLE([enable-sysmon-plugin],
+AC_ARG_ENABLE([sysmon-plugin],
               [AS_HELP_STRING([--enable-sysmon-plugin=@<:@yes/no@:>@],
                               [Build with support for a simple system monitor.])],
-              [],
+              [enable_sysmon_plugin=$enableval],
               [enable_sysmon_plugin=yes])
 
 # for if ENABLE_SYSMON_PLUGIN in Makefile.am

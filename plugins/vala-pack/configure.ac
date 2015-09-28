@@ -1,8 +1,8 @@
-# --enable-vala-pack-plugin=yes/no
-AC_ARG_ENABLE([enable-vala-pack-plugin],
+# --enable-vala-pack-plugin=auto/yes/no
+AC_ARG_ENABLE([vala-pack-plugin],
               [AS_HELP_STRING([--enable-vala-pack-plugin=@<:@auto/yes/no@:>@],
                               [Build with support for vala enhancements such as auto completion.])],
-              [],
+              [enable_vala_pack_plugin=$enableval],
               [enable_vala_pack_plugin=auto])
 
 AS_IF([test x$enable_vala_pack_plugin != xno],[

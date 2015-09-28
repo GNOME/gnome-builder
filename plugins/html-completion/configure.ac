@@ -1,8 +1,8 @@
 # --enable-html-completion-plugin=yes/no
-AC_ARG_ENABLE([enable-html-completion-plugin],
+AC_ARG_ENABLE([html-completion-plugin],
               [AS_HELP_STRING([--enable-html-completion-plugin=@<:@yes/no@:>@],
                               [Build with support for autocompletion in HTML documents.])],
-              [],
+              [enable_html_completion_plugin=$enableval],
               [enable_html_completion_plugin=yes])
 
 # for if ENABLE_HTML_COMPLETION_PLUGIN in Makefile.am

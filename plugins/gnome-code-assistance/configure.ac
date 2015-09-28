@@ -1,8 +1,8 @@
 # --enable-gnome-code-assistance-plugin=yes/no
-AC_ARG_ENABLE([enable-gnome-code-assistance-plugin],
+AC_ARG_ENABLE([gnome-code-assistance-plugin],
               [AS_HELP_STRING([--enable-gnome-code-assistance-plugin=@<:@yes/no@:>@],
                               [Build with support for gnome-code-assistance.])],
-              [],
+              [enable_gnome_code_assistance_plugin=$enableval],
               [enable_gnome_code_assistance_plugin=yes])
 
 # for if ENABLE_GNOME_CODE_ASSISTANCE_PLUGIN in Makefile.am

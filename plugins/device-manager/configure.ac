@@ -1,8 +1,8 @@
 # --enable-device-manager-plugin=yes/no
-AC_ARG_ENABLE([enable-device-manager-plugin],
+AC_ARG_ENABLE([device-manager-plugin],
               [AS_HELP_STRING([--enable-device-manager-plugin=@<:@yes/no@:>@],
                               [Build with support for the device manager panel.])],
-              [],
+              [enable_device_manager_plugin=$enableval],
               [enable_device_manager_plugin=no])
 
 # for if ENABLE_DEVICE_MANAGER_PLUGIN in Makefile.am

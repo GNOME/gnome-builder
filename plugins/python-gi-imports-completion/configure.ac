@@ -1,8 +1,8 @@
 # --enable-python-gi-imports-completion-plugin=yes/no
-AC_ARG_ENABLE([enable-python-gi-imports-completion-plugin],
+AC_ARG_ENABLE([python-gi-imports-completion-plugin],
               [AS_HELP_STRING([--enable-python-gi-imports-completion-plugin=@<:@yes/no@:>@],
                               [Build with support for autocompletion of GObject Introspection in Python. Requires Jedi.])],
-              [],
+              [enable_python_gi_imports_completion_plugin=$enableval],
               [enable_python_gi_imports_completion_plugin=yes])
 
 # for if ENABLE_PYTHON_GI_IMPORTS_COMPLETION_PLUGIN in Makefile.am

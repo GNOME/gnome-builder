@@ -1,8 +1,8 @@
 # --enable-file-search-plugin=yes/no
-AC_ARG_ENABLE([enable-file-search-plugin],
+AC_ARG_ENABLE([file-search-plugin],
               [AS_HELP_STRING([--enable-file-search-plugin=@<:@yes/no@:>@],
                               [Build with support for searching files in global search.])],
-              [],
+              [enable_file_search_plugin=$enableval],
               [enable_file_search_plugin=yes])
 
 # for if ENABLE_FILE_SEARCH_PLUGIN in Makefile.am

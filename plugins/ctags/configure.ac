@@ -1,8 +1,8 @@
 # --enable-ctags-plugin=yes/no
-AC_ARG_ENABLE([enable-ctags-plugin],
+AC_ARG_ENABLE([ctags-plugin],
               [AS_HELP_STRING([--enable-ctags-plugin=@<:@yes/no@:>@],
                               [Build with support for ctags auto-completion.])],
-              [],
+              [enable_ctags_plugin=$enableval],
               [enable_ctags_plugin=yes])
 
 AC_CHECK_PROGS([ECTAGS], [ctags-exuberant exctags ectags], [ctags])

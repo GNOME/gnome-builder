@@ -1,8 +1,8 @@
 # --enable-c-pack-plugin=yes/no
-AC_ARG_ENABLE([enable-c-pack-plugin],
+AC_ARG_ENABLE([c-pack-plugin],
               [AS_HELP_STRING([--enable-c-pack-plugin=@<:@yes/no@:>@],
                               [Build with language features for C such as auto-formatting.])],
-              [],
+              [enable_c_pack_plugin=$enableval],
               [enable_c_pack_plugin=yes])
 
 # for if ENABLE_C_PACK_PLUGIN in Makefile.am
