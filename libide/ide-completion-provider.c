@@ -33,3 +33,56 @@ ide_completion_provider_default_init (IdeCompletionProviderInterface *iface)
                                                             IDE_TYPE_CONTEXT,
                                                             (G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS)));
 }
+
+gboolean
+ide_completion_provider_context_in_comment (GtkSourceCompletionContext *context)
+{
+  GtkTextIter iter;
+
+  g_return_val_if_fail (GTK_SOURCE_IS_COMPLETION_CONTEXT (context), FALSE);
+
+  if (gtk_source_completion_context_get_iter (context, &iter))
+    {
+      GtkSourceBuffer *buffer = GTK_SOURCE_BUFFER (gtk_text_iter_get_buffer (&iter));
+
+      if (gtk_source_buffer_iter_has_context_class (buffer, &iter, "comment"))
+        return TRUE;
+
+      if (!gtk_text_iter_starts_line (&iter))
+        {
+          gtk_text_iter_backward_char (&iter);
+          if (gtk_source_buffer_iter_has_context_class (buffer, &iter, "comment"))
+            return TRUE;
+        }
+    }
+
+  return FALSE;
+}
+
+gchar *
+ide_completion_provider_context_current_word (GtkSourceCompletionContext *context)
+{
+  GtkTextIter end;
+  GtkTextIter begin;
+  gunichar ch = 0;
+
+  g_return_val_if_fail (GTK_SOURCE_IS_COMPLETION_CONTEXT (context), NULL);
+
+  if (!gtk_source_completion_context_get_iter (context, &end))
+    return NULL;
+
+  begin = end;
+
+  do
+    {
+      if (!gtk_text_iter_backward_char (&begin))
+        break;
+      ch = gtk_text_iter_get_char (&begin);
+    }
+  while (g_unichar_isalnum (ch) || (ch == '_'));
+
+  if (ch && !g_unichar_isalnum (ch) && (ch != '_'))
+    gtk_text_iter_forward_char (&begin);
+
+  return gtk_text_iter_get_slice (&begin, &end);
+}
