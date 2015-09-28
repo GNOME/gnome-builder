@@ -888,6 +888,9 @@ ide_makecache_get_file_flags_worker (GTask        *task,
       gchar **lines;
       gchar **ret = NULL;
 
+      if (g_cancellable_is_cancelled (cancellable))
+        break;
+
       target = g_ptr_array_index (lookup->targets, j);
 
       subdir = ide_makecache_target_get_subdir (target);
@@ -974,6 +977,9 @@ ide_makecache_get_file_flags_worker (GTask        *task,
 
       IDE_EXIT;
     }
+
+  if (g_cancellable_is_cancelled (cancellable) && g_task_get_return_on_cancel (task))
+    IDE_EXIT;
 
   g_task_return_new_error (task,
                            G_IO_ERROR,
