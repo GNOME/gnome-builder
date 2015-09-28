@@ -1,0 +1,139 @@
+/* ide-completion-item.c
+ *
+ * Copyright (C) 2015 Christian Hergert <christian@hergert.me>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+#define G_LOG_DOMAIN "ide-completion-item"
+
+#include <string.h>
+
+#include "ide-completion-item.h"
+
+G_DEFINE_ABSTRACT_TYPE_WITH_CODE (IdeCompletionItem, ide_completion_item, G_TYPE_OBJECT,
+                                  G_IMPLEMENT_INTERFACE (GTK_SOURCE_TYPE_COMPLETION_PROPOSAL, NULL))
+
+static gboolean
+ide_completion_item_real_match (IdeCompletionItem *self,
+                                const gchar       *query,
+                                const gchar       *casefold)
+{
+  gchar *text;
+  gboolean ret;
+
+  g_assert (IDE_IS_COMPLETION_ITEM (self));
+  g_assert (query != NULL);
+  g_assert (casefold != NULL);
+
+  text = ide_completion_item_get_column_markup (self, IDE_COMPLETION_COLUMN_PRIMARY);
+  ret = !!strstr (text ?: "", query);
+  g_free (text);
+
+  return ret;
+}
+
+static gchar *
+ide_completion_item_real_get_column_markup (IdeCompletionItem   *self,
+                                            IdeCompletionColumn  column)
+{
+  g_return_val_if_fail (IDE_IS_COMPLETION_ITEM (self), NULL);
+
+  if (column == IDE_COMPLETION_COLUMN_PRIMARY)
+    return gtk_source_completion_proposal_get_markup (GTK_SOURCE_COMPLETION_PROPOSAL (self));
+
+  return NULL;
+}
+
+gboolean
+ide_completion_item_match (IdeCompletionItem *self,
+                           const gchar       *query,
+                           const gchar       *casefold)
+{
+  g_return_val_if_fail (IDE_IS_COMPLETION_ITEM (self), FALSE);
+
+  return IDE_COMPLETION_ITEM_GET_CLASS (self)->match (self, query, casefold);
+}
+
+gchar *
+ide_completion_item_get_column_markup (IdeCompletionItem   *self,
+                                       IdeCompletionColumn  column)
+{
+  g_return_val_if_fail (IDE_IS_COMPLETION_ITEM (self), FALSE);
+
+  return IDE_COMPLETION_ITEM_GET_CLASS (self)->get_column_markup (self, column);
+}
+
+static void
+ide_completion_item_class_init (IdeCompletionItemClass *klass)
+{
+  klass->get_column_markup = ide_completion_item_real_get_column_markup;
+  klass->match = ide_completion_item_real_match;
+}
+
+static void
+ide_completion_item_init (IdeCompletionItem *self)
+{
+  self->parent_instance.link.data = self;
+}
+
+/**
+ * ide_completion_item_fuzzy_match:
+ * @haystack: the string to be searched.
+ * @casefold_needle: A g_utf8_casefold() version of the needle.
+ * @priority: (out) (allow-none): An optional location for the score of the match
+ *
+ * This helper function can do a fuzzy match for you giving a haystack and
+ * casefolded needle. Casefold your needle using g_utf8_casefold() before
+ * running the query against a batch of #IdeCompletionItem for the best performance.
+ *
+ * score will be set with the score of the match upon success. Otherwise,
+ * it will be set to zero.
+ *
+ * Returns: %TRUE if @haystack matched @casefold_needle, otherwise %FALSE.
+ */
+gboolean
+ide_completion_item_fuzzy_match (const gchar *haystack,
+                                 const gchar *casefold_needle,
+                                 guint       *priority)
+{
+  gint real_score = 0;
+
+  for (; *casefold_needle; casefold_needle = g_utf8_next_char (casefold_needle))
+    {
+      gunichar ch = g_utf8_get_char (casefold_needle);
+      const gchar *tmp;
+
+      /*
+       * Note that the following code is not really correct. We want
+       * to be relatively fast here, but we also don't want to convert
+       * strings to casefolded versions for querying on each compare.
+       * So we use the casefold version and compare with upper. This
+       * works relatively well since we are usually dealing with ASCII
+       * for function names and symbols.
+       */
+      tmp = strchr (haystack, ch);
+      if (tmp == NULL)
+        tmp = strchr (haystack, g_unichar_toupper (ch));
+      if (tmp == NULL)
+        return FALSE;
+      real_score += (tmp - haystack);
+      haystack = tmp;
+    }
+
+  if (priority != NULL)
+    *priority = real_score + strlen (haystack);
+
+  return TRUE;
+}
