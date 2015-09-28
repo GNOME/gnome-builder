@@ -11,6 +11,7 @@ libctags_plugin_la_SOURCES = \
 	ide-ctags-completion-item.h \
 	ide-ctags-completion-provider.c \
 	ide-ctags-completion-provider.h \
+	ide-ctags-completion-provider-private.h \
 	ide-ctags-highlighter.c \
 	ide-ctags-highlighter.h \
 	ide-ctags-index.c \
@@ -29,6 +30,7 @@ libctags_plugin_la_CFLAGS = \
 	-I$(top_srcdir)/contrib/egg \
 	-I$(top_srcdir)/libide \
 	-I$(top_srcdir)/libide/util \
+	-I$(top_srcdir)/src/util \
 	$(NULL)
 
 libctags_plugin_la_LDFLAGS = \

@@ -21,53 +21,44 @@
 #include <glib/gi18n.h>
 
 #include "egg-counter.h"
+#include "gb-string.h"
 
+#include "ide-completion-item.h"
 #include "ide-ctags-completion-item.h"
+#include "ide-ctags-completion-provider.h"
+#include "ide-ctags-completion-provider-private.h"
 #include "ide-ctags-index.h"
-
-EGG_DEFINE_COUNTER (instances, "IdeCtagsCompletionItem", "Instances",
-                    "Number of IdeCtagsCompletionItems")
 
 struct _IdeCtagsCompletionItem
 {
-  GObject                     parent_instance;
+  IdeCompletionItem           parent_instance;
   const IdeCtagsIndexEntry   *entry;
   IdeCtagsCompletionProvider *provider;
-  GtkSourceCompletionContext *context;
 };
 
 static void proposal_iface_init (GtkSourceCompletionProposalIface *iface);
 
 G_DEFINE_DYNAMIC_TYPE_EXTENDED (IdeCtagsCompletionItem,
                                 ide_ctags_completion_item,
-                                G_TYPE_OBJECT,
+                                IDE_TYPE_COMPLETION_ITEM,
                                 0,
-                                G_IMPLEMENT_INTERFACE (GTK_SOURCE_TYPE_COMPLETION_PROPOSAL,
-                                                       proposal_iface_init))
+                                G_IMPLEMENT_INTERFACE (GTK_SOURCE_TYPE_COMPLETION_PROPOSAL, proposal_iface_init))
 
-GtkSourceCompletionProposal *
-ide_ctags_completion_item_new (const IdeCtagsIndexEntry   *entry,
-                               IdeCtagsCompletionProvider *provider,
-                               GtkSourceCompletionContext *context)
+EGG_DEFINE_COUNTER (instances, "IdeCtagsCompletionItem", "Instances", "Number of IdeCtagsCompletionItems")
+
+IdeCtagsCompletionItem *
+ide_ctags_completion_item_new (IdeCtagsCompletionProvider *provider,
+                               const IdeCtagsIndexEntry   *entry)
 {
   IdeCtagsCompletionItem *self;
 
-  self= g_object_new (IDE_TYPE_CTAGS_COMPLETION_ITEM, NULL);
+  g_return_val_if_fail (entry != NULL, NULL);
 
-  /*
-   * use borrowed references to avoid the massive amount of reference counting.
-   * we don't need them since we know the provider will outlast us.
-   */
-  self->entry = entry;
+  self = g_object_new (IDE_TYPE_CTAGS_COMPLETION_ITEM, NULL);
   self->provider = provider;
+  self->entry = entry;
 
-  /*
-   * There is the slight chance the context will get disposed out of
-   * our control. I've seen this happen a few times now.
-   */
-  ide_set_weak_pointer (&self->context, context);
-
-  return GTK_SOURCE_COMPLETION_PROPOSAL (self);
+  return self;
 }
 
 gint
@@ -77,13 +68,20 @@ ide_ctags_completion_item_compare (IdeCtagsCompletionItem *itema,
   return ide_ctags_index_entry_compare (itema->entry, itemb->entry);
 }
 
+static gboolean
+ide_ctags_completion_item_match (IdeCompletionItem *item,
+                                 const gchar       *query,
+                                 const gchar       *casefold)
+{
+  IdeCtagsCompletionItem *self = (IdeCtagsCompletionItem *)item;
+  IdeCompletionItemHead *head = (IdeCompletionItemHead *)item;
+
+  return ide_completion_item_fuzzy_match (self->entry->name, casefold, &head->priority);
+}
+
 static void
 ide_ctags_completion_item_finalize (GObject *object)
 {
-  IdeCtagsCompletionItem *self = (IdeCtagsCompletionItem *)object;
-
-  ide_clear_weak_pointer (&self->context);
-
   G_OBJECT_CLASS (ide_ctags_completion_item_parent_class)->finalize (object);
 
   EGG_COUNTER_DEC (instances);
@@ -93,8 +91,11 @@ static void
 ide_ctags_completion_item_class_init (IdeCtagsCompletionItemClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  IdeCompletionItemClass *item_class = IDE_COMPLETION_ITEM_CLASS (klass);
 
   object_class->finalize = ide_ctags_completion_item_finalize;
+
+  item_class->match = ide_ctags_completion_item_match;
 }
 
 static void
@@ -109,9 +110,12 @@ ide_ctags_completion_item_init (IdeCtagsCompletionItem *self)
 }
 
 static gchar *
-get_label (GtkSourceCompletionProposal *proposal)
+get_markup (GtkSourceCompletionProposal *proposal)
 {
   IdeCtagsCompletionItem *self = (IdeCtagsCompletionItem *)proposal;
+
+  if (self->provider->current_word != NULL)
+    return gb_str_highlight (self->entry->name, self->provider->current_word);
 
   return g_strdup (self->entry->name);
 }
@@ -191,7 +195,7 @@ get_icon_name (GtkSourceCompletionProposal *proposal)
 static void
 proposal_iface_init (GtkSourceCompletionProposalIface *iface)
 {
-  iface->get_label = get_label;
+  iface->get_markup = get_markup;
   iface->get_text = get_text;
   iface->get_icon_name = get_icon_name;
 }

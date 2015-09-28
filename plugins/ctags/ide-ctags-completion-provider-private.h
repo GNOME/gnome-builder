@@ -1,4 +1,4 @@
-/* ide-ctags-completion-item.h
+/* ide-ctags-completion-provider-private.h
  *
  * Copyright (C) 2015 Christian Hergert <christian@hergert.me>
  *
@@ -16,25 +16,24 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_CTAGS_COMPLETION_ITEM_H
-#define IDE_CTAGS_COMPLETION_ITEM_H
+#ifndef IDE_CTAGS_COMPLETION_PROVIDER_PRIVATE_H
+#define IDE_CTAGS_COMPLETION_PROVIDER_PRIVATE_H
 
-#include <gtksourceview/gtksource.h>
-
-#include "ide-completion-item.h"
-#include "ide-ctags-index.h"
 #include "ide-ctags-completion-provider.h"
+#include "ide-completion-results.h"
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_CTAGS_COMPLETION_ITEM (ide_ctags_completion_item_get_type())
-
-G_DECLARE_FINAL_TYPE (IdeCtagsCompletionItem, ide_ctags_completion_item, IDE, CTAGS_COMPLETION_ITEM, IdeCompletionItem)
-
-IdeCtagsCompletionItem *
-ide_ctags_completion_item_new (IdeCtagsCompletionProvider *provider,
-                               const IdeCtagsIndexEntry   *entry);
+struct _IdeCtagsCompletionProvider
+{
+  IdeObject             parent_instance;
+  gint                  minimum_word_size;
+  GSettings            *settings;
+  GPtrArray            *indexes;
+  IdeCompletionResults *results;
+  gchar                *current_word;
+};
 
 G_END_DECLS
 
-#endif /* IDE_CTAGS_COMPLETION_ITEM_H */
+#endif /* IDE_CTAGS_COMPLETION_PROVIDER_PRIVATE_H */
