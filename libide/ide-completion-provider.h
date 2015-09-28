@@ -37,11 +37,14 @@ struct _IdeCompletionProviderInterface
 {
   GtkSourceCompletionProviderIface parent_interface;
 
+  /* Pacify Vala */
   void (*set_context) (IdeCompletionProvider *self,
                        IdeContext            *context);
 };
 
-GType ide_completion_provider_get_type (void);
+GType     ide_completion_provider_get_type             (void);
+gboolean  ide_completion_provider_context_in_comment   (GtkSourceCompletionContext *context);
+gchar    *ide_completion_provider_context_current_word (GtkSourceCompletionContext *context);
 
 G_END_DECLS
 
