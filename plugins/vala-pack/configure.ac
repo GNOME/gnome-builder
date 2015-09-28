@@ -10,6 +10,7 @@ AS_IF([test x$enable_vala_pack_plugin != xno],[
 		AS_IF([test x$enable_vala_pack_plugin = xyes],[
 			AC_MSG_ERROR([Failed to locate vala. Please install the vala-devel package.])
 		])
+		enable_vala_pack_plugin=no
 	])
 ])
 
