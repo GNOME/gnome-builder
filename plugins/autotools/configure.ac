@@ -1,8 +1,8 @@
 # --enable-autotools-plugin=yes/no
-AC_ARG_ENABLE([enable-autotools-plugin],
+AC_ARG_ENABLE([autotools-plugin],
               [AS_HELP_STRING([--enable-autotools-plugin=@<:@yes/no@:>@],
                               [Build with support for autotools projects.])],
-              [],
+              [enable_autotools_plugin=$enableval],
               [enable_autotools_plugin=yes])
 
 # for if ENABLE_AUTOTOOLS_PLUGIN in Makefile.am

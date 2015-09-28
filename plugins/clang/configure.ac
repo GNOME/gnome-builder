@@ -1,8 +1,8 @@
 # --enable-clang-plugin=yes/no
-AC_ARG_ENABLE([enable-clang-plugin],
+AC_ARG_ENABLE([clang-plugin],
               [AS_HELP_STRING([--enable-clang-plugin=@<:@auto/yes/no@:>@],
                               [Build with support for the clang compiler toolchain.])],
-              [],
+              [enable_clang_plugin=$enableval],
               [enable_clang_plugin=auto])
 
 # If clang is auto/yes, check that it is available.

@@ -1,8 +1,8 @@
 # --enable-command-bar-plugin=yes/no
-AC_ARG_ENABLE([enable-command-bar-plugin],
+AC_ARG_ENABLE([command-bar-plugin],
               [AS_HELP_STRING([--enable-command-bar-plugin=@<:@yes/no@:>@],
                               [Build with support for the workbench command-bar.])],
-              [],
+              [enable_command_bar_plugin=$enableval],
               [enable_command_bar_plugin=yes])
 
 # for if ENABLE_COMMAND_BAR_PLUGIN in Makefile.am

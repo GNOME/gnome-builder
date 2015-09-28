@@ -448,10 +448,7 @@ ide_clang_completion_provider_populate (GtkSourceCompletionProvider *provider,
   g_return_if_fail (GTK_SOURCE_IS_COMPLETION_CONTEXT (context));
 
   if (!gtk_source_completion_context_get_iter (context, &iter))
-    {
-      gtk_source_completion_context_add_proposals (context, provider, NULL, TRUE);
-      return;
-    }
+    IDE_GOTO (failure);
 
   buffer = gtk_text_iter_get_buffer (&iter);
 
@@ -464,6 +461,9 @@ ide_clang_completion_provider_populate (GtkSourceCompletionProvider *provider,
   stop = iter;
   if (!gtk_text_iter_starts_line (&stop))
     gtk_text_iter_backward_char (&stop);
+
+  if (gtk_text_iter_get_char (&stop) == ';')
+    IDE_GOTO (failure);
 
   /*
    * Walk backwards to locate the first character after a stop character.
@@ -538,6 +538,11 @@ ide_clang_completion_provider_populate (GtkSourceCompletionProvider *provider,
                                                 NULL,
                                                 ide_clang_completion_provider_get_translation_unit_cb,
                                                 state);
+
+  IDE_EXIT;
+
+failure:
+  gtk_source_completion_context_add_proposals (context, provider, NULL, TRUE);
 
   IDE_EXIT;
 }

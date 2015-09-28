@@ -1,8 +1,8 @@
 # --enable-jedi-plugin=yes/no
-AC_ARG_ENABLE([enable-jedi-plugin],
+AC_ARG_ENABLE([jedi-plugin],
               [AS_HELP_STRING([--enable-jedi-plugin=@<:@yes/no@:>@],
                               [Build with support for Python autocompletion using Jedi.])],
-              [],
+              [enable_jedi_plugin=$enableval],
               [enable_jedi_plugin=yes])
 
 # for if ENABLE_JEDI_PLUGIN in Makefile.am

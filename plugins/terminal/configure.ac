@@ -1,15 +1,12 @@
-PKG_CHECK_MODULES(TERMINAL,
-                  [vte-2.91 >= 0.40.2],
-                  [have_vte=yes],
-                  [have_vte=no])
+PKG_CHECK_MODULES(TERMINAL, [vte-2.91 >= 0.40.2], [have_vte=yes], [have_vte=no])
 
-AC_ARG_ENABLE([enable-terminal-plugin],
+AC_ARG_ENABLE([terminal-plugin],
               [AS_HELP_STRING([--enable-terminal-plugin=@<:@auto/yes/no@:>@],
                               [Build with support for a VTE-based terminal.])],
-              [],
+              [enable_terminal_plugin=$enableval],
               [enable_terminal_plugin=$have_vte])
 
-AS_IF([test "$enable_terminal_plugin" = "yes" && test "$have_vte" = "no"],[
+AS_IF([test x$enable_terminal_plugin = xyes && test x$have_vte = xno],[
 	AC_MSG_ERROR([Failed to locate vte dependencies. Try installing vte291-devel.])
 ])
 

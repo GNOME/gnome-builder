@@ -1,8 +1,8 @@
 # --enable-python-pack-plugin=yes/no
-AC_ARG_ENABLE([enable-python-pack-plugin],
+AC_ARG_ENABLE([python-pack-plugin],
               [AS_HELP_STRING([--enable-python-pack-plugin=@<:@yes/no@:>@],
                               [Build with support for Python, including an auto indenter.])],
-              [],
+              [enable_python_pack_plugin=$enableval],
               [enable_python_pack_plugin=yes])
 
 # for if ENABLE_PYTHON_PACK_PLUGIN in Makefile.am
