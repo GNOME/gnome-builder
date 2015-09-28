@@ -632,7 +632,7 @@ ide_clang_translation_unit_code_complete_worker (GTask        *task,
   CXTranslationUnit tu;
   g_autoptr(IdeRefPtr) refptr = NULL;
   struct CXUnsavedFile *ufs;
-  g_autoptr(GPtrArray) ar = NULL;
+  GPtrArray *ar;
   gsize i;
   gsize j = 0;
 
@@ -698,7 +698,7 @@ ide_clang_translation_unit_code_complete_worker (GTask        *task,
    * we will inflate result strings as necessary.
    */
   refptr = ide_ref_ptr_new (results, (GDestroyNotify)clang_disposeCodeCompleteResults);
-  ar = g_ptr_array_new ();
+  ar = g_ptr_array_new_with_free_func (g_object_unref);
 
   for (i = 0; i < results->NumResults; i++)
     {
@@ -708,7 +708,7 @@ ide_clang_translation_unit_code_complete_worker (GTask        *task,
       g_ptr_array_add (ar, proposal);
     }
 
-  g_task_return_pointer (task, g_ptr_array_ref (ar), (GDestroyNotify)g_ptr_array_unref);
+  g_task_return_pointer (task, ar, (GDestroyNotify)g_ptr_array_unref);
 
   /* cleanup malloc'd state */
   for (i = 0; i < j; i++)
