@@ -127,15 +127,17 @@ gb_greeter_project_row_add_languages (GbGreeterProjectRow *self,
 
   if ((languages = ide_project_info_get_languages (project_info)))
     {
+      guint len = g_strv_length (languages);
       gsize i;
 
-      for (i = 0; languages [i]; i++)
+      for (i = len; i > 0; i--)
         {
+          const gchar *name = languages [i - 1];
           GtkWidget *pill;
 
           pill = g_object_new (GB_TYPE_GREETER_PILL_BOX,
                                "visible", TRUE,
-                               "label", languages [i],
+                               "label", name,
                                NULL);
           gtk_container_add (GTK_CONTAINER (self->languages_box), pill);
         }
