@@ -19,6 +19,7 @@
 #define G_LOG_DOMAIN "ide-ctags-completion-provider"
 
 #include <glib/gi18n.h>
+#include <ide.h>
 
 #include "ide-completion-provider.h"
 #include "ide-completion-item.h"
@@ -207,6 +208,7 @@ ide_ctags_completion_provider_populate (GtkSourceCompletionProvider *provider,
       g_autofree gchar *copy = g_strdup (self->current_word);
       IdeCtagsIndex *index = g_ptr_array_index (self->indexes, i);
       const IdeCtagsIndexEntry *entries = NULL;
+      const gchar *last_name = NULL;
       guint tmp_len = word_len;
       gsize n_entries = 0;
 
@@ -223,6 +225,11 @@ ide_ctags_completion_provider_populate (GtkSourceCompletionProvider *provider,
         {
           const IdeCtagsIndexEntry *entry = &entries [j];
           IdeCtagsCompletionItem *item;
+
+          if (ide_str_equal0 (entry->name, last_name))
+            continue;
+
+          last_name = entry->name;
 
           if (!ide_ctags_is_allowed (entry, allowed))
             continue;
