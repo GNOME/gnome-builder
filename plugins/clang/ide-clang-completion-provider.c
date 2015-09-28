@@ -410,9 +410,6 @@ ide_clang_completion_provider_get_translation_unit_cb (GObject      *object,
    */
   if (g_cancellable_is_cancelled (state->cancellable))
     {
-      gtk_source_completion_context_add_proposals (state->context,
-                                                   GTK_SOURCE_COMPLETION_PROVIDER (state->self),
-                                                   NULL, TRUE);
       ide_clang_completion_state_free (state);
       IDE_EXIT;
     }
