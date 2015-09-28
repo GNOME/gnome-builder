@@ -33,8 +33,12 @@ libide_1_0_la_public_sources = \
 	ide-build-system.h \
 	ide-builder.c \
 	ide-builder.h \
+	ide-completion-item.c \
+	ide-completion-item.h \
 	ide-completion-provider.c \
 	ide-completion-provider.h \
+	ide-completion-results.c \
+	ide-completion-results.h \
 	ide-context.c \
 	ide-context.h \
 	ide-debugger.c \
