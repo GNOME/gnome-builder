@@ -3671,18 +3671,6 @@ ide_source_view_constructed (GObject *object)
 }
 
 static void
-ide_source_view_real_undo (GtkSourceView *source_view)
-{
-  GTK_SOURCE_VIEW_CLASS (ide_source_view_parent_class)->undo (source_view);
-}
-
-static void
-ide_source_view_real_redo (GtkSourceView *source_view)
-{
-  GTK_SOURCE_VIEW_CLASS (ide_source_view_parent_class)->redo (source_view);
-}
-
-static void
 ide_source_view_real_insert_at_cursor (GtkTextView *text_view,
                                        const gchar *str)
 {
@@ -5272,7 +5260,6 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   GtkTextViewClass *text_view_class = GTK_TEXT_VIEW_CLASS (klass);
-  GtkSourceViewClass *source_view_class = GTK_SOURCE_VIEW_CLASS (klass);
   GtkBindingSet *binding_set;
   GTypeClass *completion_class;
 
@@ -5296,9 +5283,6 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
   text_view_class->draw_layer = ide_source_view_real_draw_layer;
   text_view_class->insert_at_cursor = ide_source_view_real_insert_at_cursor;
   text_view_class->populate_popup = ide_source_view_real_populate_popup;
-
-  source_view_class->undo = ide_source_view_real_undo;
-  source_view_class->redo = ide_source_view_real_redo;
 
   klass->action = ide_source_view_real_action;
   klass->append_to_count = ide_source_view_real_append_to_count;
