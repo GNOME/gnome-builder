@@ -1583,6 +1583,14 @@ msgid "default builder keybindings"
 msgstr "padrão builder associações teclas keybindings"
 
 #. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-keybindings.c:64
+#, fuzzy
+#| msgid "Failed to load keybindings."
+msgid "default builder keybindings"
+msgstr "Falha ao carregar associações de teclas."
+>>>>>>> Added Brazilian Portuguese translation
+
+#. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-keybindings.c:69
 msgid "emacs keybindings modal"
 msgstr "emacs modal associações teclas keybindings"
