@@ -42,6 +42,7 @@ struct _GbEditorView
   GtkLabel            *cursor_label;
   GbEditorFrame       *frame1;
   GbEditorFrame       *frame2;
+  GbEditorFrame       *last_focused_frame;
   GtkButton           *modified_cancel_button;
   GtkRevealer         *modified_revealer;
   GtkPaned            *paned;
