@@ -847,6 +847,7 @@ gb_workbench_open (GbWorkbench *self,
    */
 
   g_file_query_info_async (file,
+                           G_FILE_ATTRIBUTE_STANDARD_NAME","
                            G_FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE,
                            G_FILE_QUERY_INFO_NONE,
                            G_PRIORITY_DEFAULT,
