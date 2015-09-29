@@ -1309,6 +1309,10 @@ gb_tree_set_root (GbTree     *self,
 
   if (priv->root != root)
     {
+      GtkTreeSelection *selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (self));
+
+      gtk_tree_selection_unselect_all (selection);
+
       if (priv->root != NULL)
         {
           _gb_tree_node_set_parent (priv->root, NULL);
