@@ -84,6 +84,8 @@ typedef struct
   gint                    hold_count;
   guint                   reclamation_handler;
 
+  gsize                   change_count;
+
   guint                   changed_on_volume : 1;
   guint                   diagnostics_dirty : 1;
   guint                   highlight_diagnostics : 1;
@@ -646,6 +648,7 @@ ide_buffer_changed (GtkTextBuffer *buffer)
 
   GTK_TEXT_BUFFER_CLASS (ide_buffer_parent_class)->changed (buffer);
 
+  priv->change_count++;
   priv->diagnostics_dirty = TRUE;
 
   g_clear_pointer (&priv->content, g_bytes_unref);
@@ -2192,4 +2195,14 @@ ide_buffer_get_word_at_iter (IdeBuffer         *self,
     _ide_source_iter_forward_extra_natural_word_end (&end);
 
   return gtk_text_iter_get_slice (&begin, &end);
+}
+
+gsize
+ide_buffer_get_change_count (IdeBuffer *self)
+{
+  IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_BUFFER (self), 0);
+
+  return priv->change_count;
 }
