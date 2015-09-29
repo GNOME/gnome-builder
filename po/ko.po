@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2015-09-13 00:34+0000\n"
-"PO-Revision-Date: 2015-09-13 18:20+0900\n"
+"POT-Creation-Date: 2015-09-21 12:09+0000\n"
+"PO-Revision-Date: 2015-09-29 18:14+0900\n"
 "Last-Translator: Changwoo Ryu <cwryu@debian.org>\n"
 "Language-Team: GNOME Korea <gnome-kr@googlegroups.com>\n"
 "Language: ko\n"
@@ -198,7 +198,8 @@ msgid "The default color scheme for Builder"
 msgstr "빌더의 기본 색 구성"
 
 # overwrite 알림 표시
-#: ../data/ui/gb-editor-frame.ui.h:1
+#. OVR indicates we are in overwite mode
+#: ../data/ui/gb-editor-frame.ui.h:2
 msgid "OVR"
 msgstr "덮기"
 
@@ -289,8 +290,7 @@ msgid "8"
 msgstr "8"
 
 #: ../data/ui/gb-editor-view.ui.h:2 ../data/ui/gb-greeter-window.ui.h:4
-#: ../data/ui/gb-new-project-dialog.ui.h:2
-#: ../data/ui/gb-projects-dialog.ui.h:3
+#: ../data/ui/gb-new-project-dialog.ui.h:2 ../data/ui/gb-projects-dialog.ui.h:3
 msgid "_Cancel"
 msgstr "취소(_C)"
 
@@ -301,8 +301,12 @@ msgid ""
 msgstr "이 파일은 외부에서 수정되었습니다. 파일을 다시 읽어들이시겠습니까?"
 
 #: ../data/ui/gb-editor-view.ui.h:4
-msgid "Search Symbols"
-msgstr "심볼 검색"
+msgid "Go to Line"
+msgstr "줄로 이동"
+
+#: ../data/ui/gb-editor-view.ui.h:5
+msgid "Go"
+msgstr "이동"
 
 #: ../data/ui/gb-greeter-window.ui.h:1
 msgid "Select a Project"
@@ -637,8 +641,7 @@ msgstr "기본 설정"
 msgid "Search Preferences…"
 msgstr "검색 기본 설정…"
 
-#: ../data/ui/gb-projects-dialog.ui.h:1
-#: ../src/dialogs/gb-projects-dialog.c:255
+#: ../data/ui/gb-projects-dialog.ui.h:1 ../src/dialogs/gb-projects-dialog.c:255
 msgid "Select Project"
 msgstr "프로젝트 선택"
 
@@ -997,7 +1000,7 @@ msgstr "기본값 초기화에 실패했습니다."
 msgid "File contained invalid UTF-8"
 msgstr "%s 안에 잘못된 UTF-8 문자가 들어 있습니다"
 
-#: ../libide/ide-buffer.c:1990
+#: ../libide/ide-buffer.c:1991
 msgid "The current language lacks a symbol resolver."
 msgstr "현재 언어에 심볼 알아내기가 없습니다."
 
@@ -1124,29 +1127,29 @@ msgstr "디렉터리를 여는데 실패했습니다: %s"
 msgid "Failed to load file: %s: %s"
 msgstr "파일을 읽어들이는데 실패했습니다: %s: %s"
 
-#: ../libide/ide-source-view.c:4562
+#: ../libide/ide-source-view.c:4563
 #, c-format
 msgid "Insert \"%s\""
 msgstr "\"%s\" 입력"
 
-#: ../libide/ide-source-view.c:4564
+#: ../libide/ide-source-view.c:4565
 #, c-format
 msgid "Replace \"%s\" with \"%s\""
 msgstr "\"%s\"을(를) \"%s\"(으)로 바꾸기"
 
-#: ../libide/ide-source-view.c:4682
+#: ../libide/ide-source-view.c:4683
 msgid "Apply Fix-It"
 msgstr "바로잡기 적용"
 
-#: ../libide/ide-source-view.c:4725
+#: ../libide/ide-source-view.c:4726
 msgid "Join Lines"
 msgstr "줄 합치기"
 
-#: ../libide/ide-source-view.c:4736
+#: ../libide/ide-source-view.c:4737
 msgid "Sort Lines"
 msgstr "줄 정렬"
 
-#: ../libide/ide-source-view.c:4755
+#: ../libide/ide-source-view.c:4756
 msgid "Go to Definition"
 msgstr "정의로 이동"
 
@@ -1194,7 +1197,7 @@ msgstr "autogen.sh 파일이 실행 가능 파일이 아닙니다."
 msgid "autogen.sh failed to create configure (%s)"
 msgstr "autogen.sh에서 configure 파일을 만드는데 실패했습니다(%s)"
 
-#: ../plugins/autotools/ide-makecache.c:998
+#: ../plugins/autotools/ide-makecache.c:999
 msgid "Invalid makefile provided, ignoring."
 msgstr "올바르지 않은 메이크파일입니다. 무시합니다."
 
@@ -1310,14 +1313,14 @@ msgid "Documentation (%s)"
 msgstr "문서(%s)"
 
 #: ../plugins/devhelp/gb-devhelp-document.c:148
-#: ../plugins/devhelp/gb-devhelp-panel.c:96
+#: ../plugins/devhelp/gb-devhelp-panel.c:144
 #: ../plugins/devhelp/gb-devhelp-search-provider.c:134
 msgid "Documentation"
 msgstr "문서"
 
 #: ../plugins/device-manager/gb-device-manager-panel.c:75
-msgid "Device"
-msgstr "장치"
+msgid "Device Manager"
+msgstr "장치 관리"
 
 #: ../plugins/file-search/gb-file-search-provider.c:45
 msgid "Switch To"
@@ -1446,17 +1449,17 @@ msgstr "디렉터리|프로젝트"
 msgid "(Click on items to select them)"
 msgstr "(항목을 눌러 선택하십시오)"
 
-#: ../src/editor/gb-editor-frame.c:150
-#, c-format
-msgid "%u of %u"
-msgstr "%u, 전체 %u"
-
-#: ../src/editor/gb-editor-frame.c:180
+#: ../src/editor/gb-editor-frame.c:76
 #, c-format
 msgid "Line %u, Column %u"
 msgstr "줄 %u, 행 %u"
 
-#: ../src/editor/gb-editor-frame.c:595
+#: ../src/editor/gb-editor-frame.c:244
+#, c-format
+msgid "%u of %u"
+msgstr "%u, 전체 %u"
+
+#: ../src/editor/gb-editor-frame.c:664
 msgid "Re_veal in Project Tree"
 msgstr "프로젝트 트리에서 드러내기(_V)"
 
@@ -1473,64 +1476,81 @@ msgstr "문서 저장"
 msgid "Save Document As"
 msgstr "다른 이름으로 문서 저장"
 
-#: ../src/editor/gb-editor-view.c:111
+#: ../src/editor/gb-editor-view.c:119
 msgid "Plain Text"
 msgstr "일반 텍스트"
 
+#. translators: the user selected a number outside the value range for the document.
+#: ../src/editor/gb-editor-view.c:624
+#, c-format
+msgid "Provide a number between 1 and %u"
+msgstr "1과 %u 사이의 수를 써야 합니다"
+
+# 키워드 번역
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-editor.c:95
 msgid "restore insert cursor mark"
 msgstr "restore insert cursor mark 입력 커서 표시 복구"
 
+# 키워드 번역
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-editor.c:100
 msgid "diff renderer gutter changes git vcs"
 msgstr "diff renderer gutter changes git vcs 차이점 렌더러 차이점 버전 컨트롤"
 
+# 키워드 번역
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-editor.c:105
 msgid "line numbers"
 msgstr "line numbers 줄 행 번호 줄번호 행번호"
 
+# 키워드 번역
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-editor.c:110
 msgid "line lines highlight current"
 msgstr "line lines highlight current 줄 행 강조 현재"
 
+# 키워드 번역
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-editor.c:115
 msgid "bracket brackets highlight matching"
 msgstr "bracket brackets highlight matching 괄호 각괄호 일치 강조"
 
+# 키워드 번역
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-editor.c:120
 msgid "lines margin scrolloff scroll off"
 msgstr "lines margin scrolloff scroll off 줄 여백 스크롤"
 
+# 키워드 번역
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-editor.c:126
 msgid "font document editor monospace"
 msgstr "font document editor monospace 글꼴 문서 편집기 고정폭"
 
+# 키워드 번역
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-editor.c:131
 msgid "minimap mini map overview over view"
 msgstr "minimap mini map overview over view 미니맵 개요 요약 보기"
 
+# 키워드 번역
 #. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-git.c:128
+#: ../src/preferences/gb-preferences-page-git.c:169
 msgid "git author name surname attribution source code"
 msgstr ""
 "git author name surname attribution source code 개발자 저자 이름 출처 소스 코"
 "드"
 
+# 키워드 번역
 #. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-git.c:134
+#: ../src/preferences/gb-preferences-page-git.c:175
 msgid "git author email mail address attribute source code"
 msgstr ""
 "git author email mail address attribute source code 개발자 저자 메일 전자메"
 "일 이메일 출처 소스 코드"
 
+# 키워드 번역
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-insight.c:61
 msgid "word words auto completion suggest found document"
@@ -1538,63 +1558,77 @@ msgstr ""
 "word words auto completion suggest found document 단어 자동 완성 자동완성 제"
 "안 문서"
 
+# 키워드 번역
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-insight.c:66
 msgid "experimental clang autocompletion auto complete"
 msgstr ""
 "experimental clang autocompletion auto complete 실험적 자동 완성 자동완성"
 
+# 키워드 번역
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-insight.c:71
 msgid "exuberant ctags tags autocompletion auto complete"
 msgstr ""
 "exuberant ctags tags autocompletion auto complete 태그 자동 완성 자동완성"
 
+# 키워드 번역
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-insight.c:76
 msgid "jedi python autocompletion auto complete"
 msgstr "jedi python autocompletion auto complete 파이썬 자동 완성 자동완성"
 
+# 키워드 번역
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-insight.c:81
 msgid "snippets autocompletion auto complete"
 msgstr "snippets autocompletion auto complete 스니핏 자동 완성 자동완성"
 
+# 키워드 번역
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-insight.c:86
 msgid "semantic highlighting color goto declaration definition"
-msgstr "semantic highlighting color goto declaration definition 의미적 강조 색 이동 선언 정의"
+msgstr ""
+"semantic highlighting color goto declaration definition 의미적 강조 색 이동 "
+"선언 정의"
 
+# 키워드 번역
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-keybindings.c:64
 msgid "default builder keybindings"
 msgstr "default builder keybindings 기본 빌더 키바인딩"
 
+# 키워드 번역
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-keybindings.c:69
 msgid "emacs keybindings modal"
 msgstr "emacs keybindings modal 이맥스 키바인딩 모달"
 
+# 키워드 번역
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-keybindings.c:74
 msgid "vim keybindings modal"
 msgstr "emacs keybindings modal 빔 키바인딩 모달"
 
+# 키워드 번역
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-keybindings.c:80
 msgid "smart home end"
 msgstr "smart home end 똑똑한"
 
+# 키워드 번역
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-keybindings.c:85
 msgid "smart back backspace indent align"
 msgstr "smart back backspace indent align 똑똑한 백스페이스 들여쓰기 맞추기"
 
+# 키워드 번역
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-theme.c:114
 msgid "show grid lines"
 msgstr "show grid lines 격자 표시"
 
+# 키워드 번역
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-theme.c:119
 msgid "source style scheme source tango solarized builder syntax"
@@ -1638,11 +1672,11 @@ msgstr "프로바이더를 찾을 수 없습니다."
 msgid "%s more"
 msgstr "%s 초과"
 
-#: ../src/shortcuts/gb-shortcuts-dialog.c:920
+#: ../src/shortcuts/gb-shortcuts-dialog.c:937
 msgid "Search Shortcuts"
 msgstr "검색 단축키"
 
-#: ../src/shortcuts/gb-shortcuts-dialog.c:947
+#: ../src/shortcuts/gb-shortcuts-dialog.c:964
 msgid "Search Results"
 msgstr "검색 결과"
 
@@ -1849,3 +1883,6 @@ msgstr "%s 결과\n"
 #: ../tools/ide-search.c:120
 msgid "PROJECT_FILE [SEARCH TERMS...]"
 msgstr "<프로젝트_파일> [검색어...]"
+
+#~ msgid "Search Symbols"
+#~ msgstr "심볼 검색"
