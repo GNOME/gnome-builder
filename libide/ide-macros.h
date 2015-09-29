@@ -37,6 +37,15 @@ G_BEGIN_DECLS
     } \
   } G_STMT_END
 
+#define ide_clear_source(src) \
+  G_STMT_START {\
+    if (*(src) != 0) { \
+      guint __src_handler_id = *(src); \
+      *(src) = 0; \
+      g_source_remove (__src_handler_id); \
+    } \
+  } G_STMT_END
+
 static inline gboolean
 ide_str_empty0 (const gchar *str)
 {
