@@ -61,8 +61,9 @@ gb_editor_view_get_document (GbView *view)
 static GbEditorFrame *
 gb_editor_view_get_last_focused (GbEditorView *self)
 {
-  /* TODO: track focus */
-  return self->frame1;
+  g_assert (self->last_focused_frame != NULL);
+
+  return self->last_focused_frame;
 }
 
 static void
@@ -422,10 +423,9 @@ gb_editor_view_grab_focus (GtkWidget *widget)
   GbEditorView *self = (GbEditorView *)widget;
 
   g_assert (GB_IS_EDITOR_VIEW (self));
+  g_assert (GB_IS_EDITOR_FRAME (self->last_focused_frame));
 
-  /* todo: track last focus frame */
-
-  gtk_widget_grab_focus (GTK_WIDGET (self->frame1->source_view));
+  gtk_widget_grab_focus (GTK_WIDGET (self->last_focused_frame->source_view));
 }
 
 static void
@@ -447,6 +447,42 @@ gb_editor_view_request_documentation (GbEditorView  *self,
   word = ide_buffer_get_word_at_iter (buffer, &iter);
 
   g_signal_emit (self, gSignals [REQUEST_DOCUMENTATION], 0, word);
+}
+
+static void
+gb_editor_view__focused_frame_weak_notify (gpointer  data,
+                                           GObject  *object)
+{
+  GbEditorView  *self = data;
+
+  g_assert (GB_IS_EDITOR_VIEW (self));
+
+  self->last_focused_frame = self->frame1;
+}
+
+static gboolean
+gb_editor_view__focus_in_event (GbEditorView  *self,
+                                GdkEvent      *event,
+                                IdeSourceView *source_view)
+{
+  g_assert (GB_IS_EDITOR_VIEW (self));
+  g_assert (IDE_IS_SOURCE_VIEW (source_view));
+
+  if (self->last_focused_frame && self->last_focused_frame->source_view == source_view)
+      return FALSE;
+
+  if (self->frame2 && self->frame2->source_view == source_view)
+    {
+      self->last_focused_frame = self->frame2;
+      g_object_weak_ref (G_OBJECT (self->frame2), gb_editor_view__focused_frame_weak_notify, self);
+    }
+  else
+    {
+      g_object_weak_unref (G_OBJECT (self->frame2), gb_editor_view__focused_frame_weak_notify, self);
+      self->last_focused_frame = self->frame1;
+    }
+
+  return FALSE;
 }
 
 static void
@@ -475,6 +511,13 @@ gb_editor_view_set_split_view (GbView   *view,
                                G_CALLBACK (gb_editor_view_request_documentation),
                                self,
                                G_CONNECT_SWAPPED);
+
+      g_signal_connect_object (self->frame2->source_view,
+                               "focus-in-event",
+                               G_CALLBACK (gb_editor_view__focus_in_event),
+                               self,
+                               G_CONNECT_SWAPPED);
+
       gtk_container_add_with_properties (GTK_CONTAINER (self->paned), GTK_WIDGET (self->frame2),
                                          "shrink", FALSE,
                                          "resize", TRUE,
@@ -829,6 +872,7 @@ gb_editor_view_init (GbEditorView *self)
   gtk_widget_init_template (GTK_WIDGET (self));
 
   self->settings = g_settings_new ("org.gnome.builder.editor");
+  self->last_focused_frame = self->frame1;
 
   gb_editor_view_actions_init (self);
 
@@ -851,6 +895,12 @@ gb_editor_view_init (GbEditorView *self)
   g_signal_connect_object (self->frame1->source_view,
                            "request-documentation",
                            G_CALLBACK (gb_editor_view_request_documentation),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  g_signal_connect_object (self->frame1->source_view,
+                           "focus-in-event",
+                           G_CALLBACK (gb_editor_view__focus_in_event),
                            self,
                            G_CONNECT_SWAPPED);
 
