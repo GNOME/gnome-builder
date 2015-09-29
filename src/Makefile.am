@@ -8,7 +8,9 @@ bin_PROGRAMS = gnome-builder
 pkglibdir = $(libdir)/gnome-builder
 pkglib_LTLIBRARIES = libgnome-builder.la
 
+# XXX: Keep in sync with gnome-builder.h
 libgnome_builder_public_sources = \
+	gnome-builder.h \
 	app/gb-application.c \
 	app/gb-application.h \
 	app/gb-application-addin.c \
@@ -27,7 +29,6 @@ libgnome_builder_public_sources = \
 	tree/gb-tree.h \
 	tree/gb-tree-node.c \
 	tree/gb-tree-node.h \
-	tree/gb-tree-private.h \
 	tree/gb-tree-types.h \
 	views/gb-view.c \
 	views/gb-view.h \
@@ -140,6 +141,7 @@ libgnome_builder_la_SOURCES = \
 	search/gb-search-display.h \
 	support/gb-support.c \
 	support/gb-support.h \
+	tree/gb-tree-private.h \
 	util/gb-cairo.c \
 	util/gb-cairo.h \
 	util/gb-dnd.c \
@@ -300,6 +302,7 @@ Builder_1_0_gir_LIBS = \
 Builder_1_0_gir_FILES = $(introspection_sources)
 Builder_1_0_gir_SCANNERFLAGS = \
 	--include-uninstalled=$(top_builddir)/libide/Ide-1.0.gir \
+	--c-include="gnome-builder.h" \
 	-n Builder \
 	--identifier-prefix=Gb \
 	--symbol-prefix=gb_ \
