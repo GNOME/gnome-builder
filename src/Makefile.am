@@ -33,6 +33,8 @@ libgnome_builder_public_sources = \
 	views/gb-view.h \
 	views/gb-view-stack.c \
 	views/gb-view-stack.h \
+	workbench/gb-workbench.c \
+	workbench/gb-workbench.h \
 	$(NULL)
 
 libgnome_builder_la_SOURCES = \
@@ -173,8 +175,6 @@ libgnome_builder_la_SOURCES = \
 	workbench/gb-workbench-addin.h \
 	workbench/gb-workbench-private.h \
 	workbench/gb-workbench-types.h \
-	workbench/gb-workbench.c \
-	workbench/gb-workbench.h \
 	workspace/gb-workspace.c \
 	workspace/gb-workspace.h \
 	workspace/gb-workspace-pane.c \
