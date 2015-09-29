@@ -34,6 +34,7 @@ libvala_pack_plugin_la_VALAFLAGS = \
 	$(NULL)
 
 libvala_pack_plugin_la_CFLAGS = \
+	-DG_LOG_DOMAIN=\"vala-pack-plugin\" \
 	$(BUILDER_CFLAGS) \
 	$(VALA_CFLAGS) \
 	-I$(top_srcdir)/libide \
