@@ -26,6 +26,7 @@ libsymbol_tree_la_CFLAGS = \
 	-I$(top_srcdir)/src/editor \
 	-I$(top_srcdir)/src/views \
 	-I$(top_srcdir)/src/tree \
+	-I$(top_srcdir)/src/util \
 	-I$(top_srcdir)/src/workbench \
 	-I$(top_srcdir)/src/workspace \
 	-I$(top_srcdir)/libide \

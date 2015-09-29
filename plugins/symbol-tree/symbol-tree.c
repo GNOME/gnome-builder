@@ -25,10 +25,13 @@
 #include "gb-editor-view.h"
 #include "gb-tree.h"
 #include "gb-workspace.h"
+#include "gb-widget.h"
 
 #include "symbol-tree.h"
 #include "symbol-tree-builder.h"
 #include "symbol-tree-resources.h"
+
+#define REFRESH_TREE_INTERVAL_MSEC (15 * 1000)
 
 struct _SymbolTree
 {
@@ -39,6 +42,8 @@ struct _SymbolTree
   GbWorkbench    *workbench;
   GbTree         *tree;
   GtkSearchEntry *search_entry;
+
+  guint           refresh_tree_timeout;
 };
 
 enum {
@@ -54,6 +59,16 @@ static void workbench_addin_init (GbWorkbenchAddinInterface *iface);
 G_DEFINE_DYNAMIC_TYPE_EXTENDED (SymbolTree, symbol_tree, GTK_TYPE_BOX, 0,
                                 G_IMPLEMENT_INTERFACE_DYNAMIC (GB_TYPE_WORKBENCH_ADDIN,
                                                                workbench_addin_init))
+
+static void refresh_tree (SymbolTree *symbol_tree);
+
+static gboolean
+refresh_tree_timeout (gpointer user_data)
+{
+  SymbolTree *self = user_data;
+  refresh_tree (self);
+  return G_SOURCE_CONTINUE;
+}
 
 static void
 get_cached_symbol_tree_cb (GObject      *object,
@@ -78,6 +93,10 @@ get_cached_symbol_tree_cb (GObject      *object,
         g_warning ("%s", error->message);
       return;
     }
+
+  self->refresh_tree_timeout = g_timeout_add (REFRESH_TREE_INTERVAL_MSEC,
+                                              refresh_tree_timeout,
+                                              self);
 
   gb_tree_set_filter (self->tree, NULL, NULL, NULL);
   gtk_entry_set_text (GTK_ENTRY (self->search_entry), "");
@@ -104,17 +123,16 @@ get_cached_symbol_tree_cb (GObject      *object,
 }
 
 static void
-notify_active_view_cb (SymbolTree  *self,
-                       GParamFlags *pspec,
-                       GbWorkbench *workbench)
+refresh_tree (SymbolTree *self)
 {
-  GbDocument *document = NULL;
   GtkWidget *active_view;
+  GbWorkbench *workbench;
+  GbDocument *document = NULL;
   GbTreeNode *root;
 
   g_assert (SYMBOL_IS_TREE (self));
-  g_assert (pspec != NULL);
-  g_assert (GB_IS_WORKBENCH (workbench));
+
+  workbench = gb_widget_get_workbench (GTK_WIDGET (self));
 
   if ((active_view = gb_workbench_get_active_view (workbench)) && GB_IS_EDITOR_VIEW (active_view))
     document = gb_view_get_document (GB_VIEW (active_view));
@@ -123,8 +141,10 @@ notify_active_view_cb (SymbolTree  *self,
 
   if ((GObject *)document != gb_tree_node_get_item (root))
     {
+      ide_clear_source (&self->refresh_tree_timeout);
+
       /*
-       * First, clear the old tree items.
+       * Clear the old tree items.
        *
        * TODO: Get cross compile names for nodes so that we can
        *       recompute the open state.
@@ -152,6 +172,18 @@ notify_active_view_cb (SymbolTree  *self,
                                     g_object_ref (self));
         }
     }
+}
+
+static void
+notify_active_view_cb (SymbolTree  *self,
+                       GParamFlags *pspec,
+                       GbWorkbench *workbench)
+{
+  g_assert (SYMBOL_IS_TREE (self));
+  g_assert (pspec != NULL);
+  g_assert (GB_IS_WORKBENCH (workbench));
+
+  refresh_tree (self);
 }
 
 static void
@@ -323,6 +355,7 @@ symbol_tree_finalize (GObject *object)
 {
   SymbolTree *self = (SymbolTree *)object;
 
+  ide_clear_source (&self->refresh_tree_timeout);
   ide_clear_weak_pointer (&self->workbench);
   g_clear_object (&self->cancellable);
 
