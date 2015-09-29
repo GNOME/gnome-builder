@@ -1020,6 +1020,14 @@ gb_workbench_get_closing (GbWorkbench *self)
   return (self->unloading || (self->disposing > 0));
 }
 
+/**
+ * gb_workbench_views_foreach:
+ * @self: A #GbWorkbench.
+ * @callback: (scope call): A callback to call for each view.
+ * @callback_data: (closure callback): User data for @callback.
+ *
+ * Invoke @callback for each view in the workbench.
+ */
 void
 gb_workbench_views_foreach (GbWorkbench *self,
                             GtkCallback  callback,
@@ -1051,6 +1059,13 @@ gb_workbench_views_foreach (GbWorkbench *self,
   g_list_free (stacks);
 }
 
+/**
+ * gb_workbench_get_workspace:
+ *
+ *
+ *
+ * Returns: (transfer none): The workspace widget.
+ */
 GtkWidget *
 gb_workbench_get_workspace (GbWorkbench *self)
 {
@@ -1059,6 +1074,11 @@ gb_workbench_get_workspace (GbWorkbench *self)
   return GTK_WIDGET (self->workspace);
 }
 
+/**
+ * gb_workbench_get_view_grid:
+ *
+ * Returns: (transfer none): The view grid for documents and such.
+ */
 GtkWidget *
 gb_workbench_get_view_grid (GbWorkbench *self)
 {
@@ -1152,6 +1172,14 @@ gb_workbench_reveal_file (GbWorkbench *self,
   gb_tree_node_select (node);
 }
 
+/**
+ * gb_workbench_get_slider:
+ *
+ * The slider can be used to to hide things behind the workbench and then
+ * reveal them efficiently.
+ *
+ * Returns: (transfer none): the toplevel slider
+ */
 GtkWidget *
 gb_workbench_get_slider (GbWorkbench *self)
 {
@@ -1160,6 +1188,11 @@ gb_workbench_get_slider (GbWorkbench *self)
   return GTK_WIDGET (self->slider);
 }
 
+/**
+ * gb_workbench_get_active_view:
+ *
+ * Returns: (transfer none): The last focused view.
+ */
 GtkWidget *
 gb_workbench_get_active_view (GbWorkbench *self)
 {
