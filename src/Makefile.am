@@ -328,6 +328,7 @@ gnome_builder_1_0_vapi_DEPS = libide-1.0 gio-2.0 gtk+-3.0 gtksourceview-3.0
 gnome_builder_1_0_vapi_VAPIDIRS = $(top_builddir)/libide
 gnome_builder_1_0_vapi_METADATADIRS = $(srcdir)
 gnome_builder_1_0_vapi_FILES = Builder-1.0.gir
+gnome_builder_1_0_vapi_GIRDIRS = $(top_srcdir)/libide
 
 gnome-builder-1.0.deps: Makefile
 	$(AM_V_GEN) echo $(gnome_builder_1_0_vapi_DEPS) | tr ' ' '\n' > $@
