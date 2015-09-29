@@ -106,14 +106,18 @@ notify_active_view_cb (GbDevhelpPanel *self,
   g_assert (GB_IS_DEVHELP_PANEL (self));
   g_assert (GB_IS_WORKBENCH (workbench));
 
-  if (self->current_view)
+  view = gb_workbench_get_active_view (workbench);
+
+  /* If the active view is NULL, the current view is already destroyed but
+   * the weak pointer has not been call yet so self->current_view is not NULL
+   */
+  if (view != NULL && self->current_view)
     {
       g_signal_handler_disconnect (self->current_view, self->current_view_handler);
       self->current_view_handler = 0;
       ide_clear_weak_pointer (&self->current_view);
     }
 
-  view = gb_workbench_get_active_view (workbench);
   if (!GB_IS_EDITOR_VIEW (view))
     return;
 
