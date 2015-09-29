@@ -1,11 +1,3 @@
-snippet fail
-- desc Snippet for g_return_if_fail()
-- scope c, chdr
-	g_return_if_fail (${1:`$filename|stripsuffix|functify|namespace|upper`_IS_`$filename|stripsuffix|class|functify|upper` (self)});$0
-snippet vfail
-- desc Snippet for g_return_val_if_fail()
-- scope c, chdr
-	g_return_val_if_fail (${1:`$filename|stripsuffix|functify|namespace|upper`_IS_`$filename|stripsuffix|class|functify|upper` (self)}, ${2:NULL});$0
 snippet Widget
 - desc Quick definition for a GtkWidget local.
 - scope c, chdr
@@ -27,19 +19,6 @@ snippet Include
 - scope c, chdr
 - desc Include a file from the global include path.
 	#include <${1}>$0
-snippet Private
-- desc Define a local for the GObject's private data.
-- scope c, chdr
-	${$filename|stripsuffix|functify|camelize}Private *priv;$0
-snippet doc
-- scope c, chdr
-	/**
-	 * ${$filename|stripsuffix|functify}_${1:func}:
-	 *
-	 * ${3}
-	 *
-	 * Returns: ${2}
-	 */$0
 snippet Classname
 - scope c, chdr
 	${$filename|stripsuffix|functify|camelize} $0
