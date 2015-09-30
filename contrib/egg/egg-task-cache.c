@@ -275,8 +275,8 @@ egg_task_cache_evict (EggTaskCache  *self,
  * For that reason, it is important to remember that this function
  * may only be called from the main thread.
  *
- * Returns: (type GObject) (nullable): A #GObject or %NULL if the
- *   key was not found in the cache.
+ * Returns: (type GObject.Object) (nullable) (transfer none): A #GObject or
+ *   %NULL if the key was not found in the cache.
  */
 gpointer
 egg_task_cache_peek (EggTaskCache  *self,
@@ -487,6 +487,13 @@ egg_task_cache_get_async (EggTaskCache        *self,
     }
 }
 
+/**
+ * egg_task_cache_get_finish:
+ *
+ * Finish a call to egg_task_cache_get_async().
+ *
+ * Returns: (transfer full): The result from the cache.
+ */
 gpointer
 egg_task_cache_get_finish (EggTaskCache  *self,
                            GAsyncResult  *result,
@@ -819,6 +826,9 @@ egg_task_cache_init (EggTaskCache *self)
                                    cache_item_compare_evict_at);
 }
 
+/**
+ * egg_task_cache_new: (skip)
+ */
 EggTaskCache *
 egg_task_cache_new (GHashFunc            key_hash_func,
                     GEqualFunc           key_equal_func,
@@ -852,13 +862,13 @@ egg_task_cache_new (GHashFunc            key_hash_func,
 }
 
 /**
- * egg_task_cache_get_values:
+ * egg_task_cache_get_values: (skip)
  *
  * Gets all the values in the cache.
  *
  * The caller owns the resulting GPtrArray, which itself owns a reference to the children.
  *
- * Returns: (transfer container) (element-type gpointer): The values.
+ * Returns: (transfer container): The values.
  */
 GPtrArray *
 egg_task_cache_get_values (EggTaskCache *self)

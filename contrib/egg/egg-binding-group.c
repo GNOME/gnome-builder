@@ -375,7 +375,7 @@ egg_binding_group_new (void)
  *
  * Gets the source object used for binding properties.
  *
- * Returns: (nullable): the source object.
+ * Returns: (transfer none) (nullable): the source object.
  */
 GObject *
 egg_binding_group_get_source (EggBindingGroup *self)

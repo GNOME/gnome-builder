@@ -39,6 +39,8 @@
 
 #include "egg-counter.h"
 
+G_DEFINE_BOXED_TYPE (EggCounterArena, egg_counter_arena, egg_counter_arena_ref, egg_counter_arena_unref)
+
 #define NAME_FORMAT        "/EggCounters-%u"
 #define MAGIC              0x71167125
 #define COUNTER_MAX_SHM    (1024 * 1024 * 4)

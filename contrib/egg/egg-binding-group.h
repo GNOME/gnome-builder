@@ -48,7 +48,7 @@ void      egg_binding_group_bind_full  (EggBindingGroup       *self,
                                         GBindingTransformFunc  transform_to,
                                         GBindingTransformFunc  transform_from,
                                         gpointer               user_data,
-                                        GDestroyNotify         notify);
+                                        GDestroyNotify         user_data_destroy);
 void           egg_binding_group_bind_with_closures
                                        (EggBindingGroup       *self,
                                         const gchar           *source_property,
