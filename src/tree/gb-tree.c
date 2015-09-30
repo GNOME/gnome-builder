@@ -1633,6 +1633,15 @@ gb_tree_model_filter_visible_func (GtkTreeModel *model,
   return ret;
 }
 
+/**
+ * gb_tree_set_filter:
+ * @self: A #GbTree
+ * @filter_func: (scope notified): A callback to determien visibility.
+ * @filter_data: (closure filter_func): User data for @filter_func.
+ * @filter_data_destroy: (destroy filter_data): Destroy notify for @filter_data.
+ *
+ * Sets the filter function to be used to determine visability of a tree node.
+ */
 void
 gb_tree_set_filter (GbTree           *self,
                     GbTreeFilterFunc  filter_func,
