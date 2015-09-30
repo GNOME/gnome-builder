@@ -68,7 +68,7 @@ typedef struct
    * embedded in the IdeCompletionItem structures and we do not
    * allocate them. This is the pointer to the first item in the
    * result set that matches our query. It is not allocated
-   * and do not tree to free it or perform g_list_*() operations
+   * and do not try to free it or perform g_list_*() operations
    * upon it except for g_list_sort().
    */
   GList *head;
@@ -97,6 +97,10 @@ ide_completion_results_new (const gchar *query)
                        NULL);
 }
 
+/**
+ * ide_completion_results_take_proposal:
+ * @proposal: (transfer full): The completion item
+ */
 void
 ide_completion_results_take_proposal (IdeCompletionResults *self,
                                       IdeCompletionItem    *item)
