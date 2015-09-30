@@ -709,8 +709,8 @@ egg_state_machine_add_style (EggStateMachine *self,
  * @state: The state the signal connection should exist within
  * @source: the source object to connect to
  * @detailed_signal: The detailed signal of @source to connect.
- * @callback: (scope async): The callback to execute upon signal emission.
- * @user_data: (closure callback): The user data for @callback.
+ * @callback: (scope async) (closure user_data): The callback to execute upon signal emission.
+ * @user_data: The user data for @callback.
  * @flags: signal connection flags.
  *
  * Connects to the @detailed_signal of @source only when the current

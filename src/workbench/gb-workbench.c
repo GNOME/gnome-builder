@@ -1025,7 +1025,7 @@ gb_workbench_get_closing (GbWorkbench *self)
  * gb_workbench_views_foreach:
  * @self: A #GbWorkbench.
  * @callback: (scope call): A callback to call for each view.
- * @callback_data: (closure callback): User data for @callback.
+ * @callback_data: User data for @callback.
  *
  * Invoke @callback for each view in the workbench.
  */

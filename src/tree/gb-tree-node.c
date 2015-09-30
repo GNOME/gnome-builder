@@ -128,7 +128,7 @@ _gb_tree_node_set_tree (GbTreeNode *node,
  * @node: A #GbTreeNode.
  * @child: A #GbTreeNode.
  * @compare_func: (scope call): A compare func to compare nodes.
- * @user_data: (closure compare_func): user data for @compare_func.
+ * @user_data: user data for @compare_func.
  *
  * Inserts a @child as a child of @node, sorting it among the other children.
  */
