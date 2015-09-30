@@ -206,7 +206,8 @@ struct _IdeSourceViewClass
                                        GtkDirectionType         direction);
   void (*delete_selection)            (IdeSourceView           *self);
   void (*end_macro)                   (IdeSourceView           *self);
-  void (*focus_location)              (IdeSourceView           *self);
+  void (*focus_location)              (IdeSourceView           *self,
+                                       IdeSourceLocation       *location);
   void (*goto_definition)             (IdeSourceView           *self);
   void (*hide_completion)             (IdeSourceView           *self);
   void (*indent_selection)            (IdeSourceView           *self,
