@@ -286,7 +286,7 @@ gb_view_grid_stack_split (GbViewGrid      *self,
       gb_view_stack_focus_document (GB_VIEW_STACK (target), document);
       break;
 
-    case GB_VIEW_GRID_MOVE_LEFT:
+    case GB_VIEW_GRID_SPLIT_MOVE_LEFT:
       target = gb_view_grid_get_stack_before (self, stack);
       if (target == NULL)
         target = gb_view_grid_add_stack_before (self, stack);
@@ -306,7 +306,7 @@ gb_view_grid_stack_split (GbViewGrid      *self,
       gb_view_stack_focus_document (GB_VIEW_STACK (target), document);
       break;
 
-    case GB_VIEW_GRID_MOVE_RIGHT:
+    case GB_VIEW_GRID_SPLIT_MOVE_RIGHT:
       target = gb_view_grid_get_stack_after (self, stack);
       if (target == NULL)
         target = gb_view_grid_add_stack_after (self, stack);
@@ -437,6 +437,11 @@ gb_view_grid_get_stacks (GbViewGrid *self)
   return list;
 }
 
+/**
+ * gb_view_grid_add_stack_before:
+ *
+ * Returns: (transfer none) (type Builder.ViewStack): The new view stack.
+ */
 GtkWidget *
 gb_view_grid_add_stack_before (GbViewGrid  *self,
                                GbViewStack *stack)
@@ -490,6 +495,11 @@ gb_view_grid_add_stack_before (GbViewGrid  *self,
   return GTK_WIDGET (new_stack);
 }
 
+/**
+ * gb_view_grid_add_stack_after:
+ *
+ * Returns: (transfer none) (type Builder.ViewStack): The new view stack.
+ */
 GtkWidget *
 gb_view_grid_add_stack_after (GbViewGrid  *self,
                               GbViewStack *stack)
@@ -541,6 +551,11 @@ gb_view_grid_add_stack_after (GbViewGrid  *self,
   return GTK_WIDGET (new_stack);
 }
 
+/**
+ * gb_view_grid_get_stack_before:
+ *
+ * Returns: (nullable) (transfer none) (type Builder.ViewStack): The view stack.
+ */
 GtkWidget *
 gb_view_grid_get_stack_before (GbViewGrid  *self,
                                GbViewStack *stack)
@@ -562,6 +577,11 @@ gb_view_grid_get_stack_before (GbViewGrid  *self,
   return NULL;
 }
 
+/**
+ * gb_view_grid_get_stack_after:
+ *
+ * Returns: (nullable) (transfer none) (type Builder.ViewStack): The view stack.
+ */
 GtkWidget *
 gb_view_grid_get_stack_after (GbViewGrid  *self,
                               GbViewStack *stack)
@@ -855,28 +875,12 @@ gb_view_grid_init (GbViewGrid *self)
   gtk_widget_insert_action_group (GTK_WIDGET (self), "view-grid", G_ACTION_GROUP (actions));
 }
 
-GType
-gb_view_grid_split_get_type (void)
-{
-  static gsize type_id;
-
-  if (g_once_init_enter (&type_id))
-    {
-      static const GEnumValue values[] = {
-        { GB_VIEW_GRID_SPLIT_LEFT, "GB_VIEW_GRID_SPLIT_LEFT", "split-left" },
-        { GB_VIEW_GRID_SPLIT_RIGHT, "GB_VIEW_GRID_SPLIT_RIGHT", "split-right" },
-        { GB_VIEW_GRID_MOVE_LEFT, "GB_VIEW_GRID_MOVE_LEFT", "move-left" },
-        { GB_VIEW_GRID_MOVE_RIGHT, "GB_VIEW_GRID_MOVE_RIGHT", "move-right" },
-      };
-      gsize _type_id;
-
-      _type_id = g_enum_register_static ("GbViewGridSplit", values);
-      g_once_init_leave (&type_id, _type_id);
-    }
-
-  return type_id;
-}
-
+/**
+ * gb_view_grid_find_document_typed:
+ *
+ * Returns: (transfer none) (nullable): The first document
+ *   matching @document_type or %NULL.
+ */
 GbDocument *
 gb_view_grid_find_document_typed (GbViewGrid *self,
                                   GType       document_type)

@@ -20,11 +20,13 @@
 #include <ide.h>
 
 #include "gb-document.h"
+#include "gb-enums.h"
 #include "gb-view.h"
 #include "gb-view-grid.h"
 #include "gb-view-stack.h"
 #include "gb-view-stack-actions.h"
 #include "gb-view-stack-private.h"
+#include "gb-view-stack-split.h"
 #include "gb-widget.h"
 #include "gb-workbench.h"
 
