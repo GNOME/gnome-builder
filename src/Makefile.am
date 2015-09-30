@@ -314,7 +314,7 @@ Builder_1_0_gir_SCANNERFLAGS = \
 	--c-include="gnome-builder.h" \
 	-n Builder \
 	--identifier-prefix=Gb \
-	--symbol-prefix=gb_ \
+	--symbol-prefix=gb \
 	--nsversion 1.0 \
 	$(NULL)
 INTROSPECTION_GIRS += Builder-1.0.gir
