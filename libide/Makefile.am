@@ -381,7 +381,7 @@ Ide_1_0_gir_SCANNERFLAGS = \
 	$(NULL)
 INTROSPECTION_GIRS += Ide-1.0.gir
 
-girdir = $(datadir)/gir-1.0
+girdir = $(datadir)/gnome-builder/gir-1.0
 dist_gir_DATA = $(INTROSPECTION_GIRS)
 
 typelibdir = $(pkglibdir)/girepository-1.0
