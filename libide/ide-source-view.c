@@ -2832,8 +2832,8 @@ ide_source_view_real_paste_clipboard_extended (IdeSourceView *self,
   /*
    * NOTE:
    *
-   * In this function, we try to improve how pasteing works in GtkTextView. There are some
-   * semenatics that make things easier by tracking the paste of an entire line verses small
+   * In this function, we try to improve how pasting works in GtkTextView. There are some
+   * semantics that make things easier by tracking the paste of an entire line versus small
    * snippets of text.
    *
    * Basically, we are implementing something close to Vim. However that is not a strict
