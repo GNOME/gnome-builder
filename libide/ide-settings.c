@@ -533,10 +533,10 @@ ide_settings_bind (IdeSettings        *self,
  * @object: the object to bind to
  * @property: the property of @object to bind to
  * @flags: flags for the binding
- * @get_mapping: (allow-none) (scope async): variant to value mapping
- * @set_mapping: (allow-none) (scope async): value to variant mapping
+ * @get_mapping: (allow-none) (scope notified): variant to value mapping
+ * @set_mapping: (allow-none) (scope notified): value to variant mapping
  * @user_data: user data for @get_mapping and @set_mapping
- * @destroy: (scope async): destroy function to cleanup @user_data.
+ * @destroy: destroy function to cleanup @user_data.
  *
  * Like ide_settings_bind() but allows transforming to and from settings storage using
  * @get_mapping and @set_mapping transformation functions.

@@ -109,7 +109,7 @@ ide_thread_pool_push_task (IdeThreadPoolKind  kind,
  * ide_thread_pool_push:
  * @kind: the threadpool kind to use.
  * @func: (scope async) (closure func_data): A function to call in the worker thread.
- * @func_data: (transfer full): user data for @func.
+ * @func_data: user data for @func.
  *
  * Runs the callback on the thread pool thread.
  */

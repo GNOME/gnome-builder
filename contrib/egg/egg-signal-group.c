@@ -644,10 +644,10 @@ egg_signal_group_connect_full (EggSignalGroup *self,
 }
 
 /**
- * egg_signal_group_connect_object:
+ * egg_signal_group_connect_object: (skip)
  * @self: a #EggSignalGroup
  * @detailed_signal: a string of the form "signal-name::detail"
- * @c_handler: (scope async): the #GCallback to connect
+ * @c_handler: (scope notified): the #GCallback to connect
  * @object: the #GObject to pass as data to @callback calls
  *
  * Connects @callback to the signal @detailed_signal
@@ -676,7 +676,7 @@ egg_signal_group_connect_object (EggSignalGroup *self,
  * egg_signal_group_connect_data:
  * @self: a #EggSignalGroup
  * @detailed_signal: a string of the form "signal-name::detail"
- * @c_handler: (scope async) (closure data) (destroy notify): the #GCallback to connect
+ * @c_handler: (scope notified) (closure data) (destroy notify): the #GCallback to connect
  * @data: the data to pass to @callback calls
  * @notify: function to be called when disposing of @self
  * @flags: the flags used to create the signal connection
@@ -699,10 +699,10 @@ egg_signal_group_connect_data (EggSignalGroup *self,
 }
 
 /**
- * egg_signal_group_connect:
+ * egg_signal_group_connect: (skip)
  * @self: a #EggSignalGroup
  * @detailed_signal: a string of the form "signal-name::detail"
- * @c_handler: (scope async): the #GCallback to connect
+ * @c_handler: (scope notified): the #GCallback to connect
  * @data: the data to pass to @callback calls
  *
  * Connects @callback to the signal @detailed_signal
@@ -721,10 +721,10 @@ egg_signal_group_connect (EggSignalGroup *self,
 }
 
 /**
- * egg_signal_group_connect_after:
+ * egg_signal_group_connect_after: (skip)
  * @self: a #EggSignalGroup
  * @detailed_signal: a string of the form "signal-name::detail"
- * @c_handler: (scope async): the #GCallback to connect
+ * @c_handler: (scope notified): the #GCallback to connect
  * @data: the data to pass to @callback calls
  *
  * Connects @callback to the signal @detailed_signal
