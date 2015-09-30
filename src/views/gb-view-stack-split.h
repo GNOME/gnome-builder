@@ -1,4 +1,4 @@
-/* gnome-builder.h
+/* gb-view-stack-split.h
  *
  * Copyright (C) 2015 Christian Hergert <christian@hergert.me>
  *
@@ -16,25 +16,31 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GNOME_BUILDER_H
-#define GNOME_BUILDER_H
+#ifndef GB_VIEW_STACK_SPLIT_H
+#define GB_VIEW_STACK_SPLIT_H
 
-#include "app/gb-application.h"
-#include "app/gb-application-addin.h"
-#include "documents/gb-document.h"
-#include "editor/gb-editor-view.h"
-#include "editor/gb-editor-view-addin.h"
-#include "util/gb-menu-extension.h"
-#include "tree/gb-tree-builder.h"
-#include "tree/gb-tree.h"
-#include "tree/gb-tree-node.h"
-#include "tree/gb-tree-types.h"
-#include "views/gb-view.h"
-#include "views/gb-view-grid.h"
-#include "views/gb-view-stack.h"
-#include "views/gb-view-stack-split.h"
-#include "workbench/gb-workbench.h"
+#include <glib-object.h>
 
-#include "gb-enums.h"
+G_BEGIN_DECLS
 
-#endif /* GNOME_BUILDER_H */
+/**
+ * GbViewGridSplit:
+ * %GB_VIEW_GRID_SPLIT_LEFT:
+ * %GB_VIEW_GRID_SPLIT_RIGHT:
+ * %GB_VIEW_GRID_SPLIT_MOVE_LEFT:
+ * %GB_VIEW_GRID_SPLIT_MOVE_RIGHT:
+ *
+ */
+typedef enum
+{
+  GB_VIEW_GRID_SPLIT_LEFT = 1,
+  GB_VIEW_GRID_SPLIT_RIGHT = 2,
+  GB_VIEW_GRID_SPLIT_MOVE_LEFT = 3,
+  GB_VIEW_GRID_SPLIT_MOVE_RIGHT = 4,
+} GbViewGridSplit;
+
+GType gb_view_stack_split_get_type (void);
+
+G_END_DECLS
+
+#endif /* GB_VIEW_STACK_SPLIT_H */

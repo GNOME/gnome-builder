@@ -85,7 +85,7 @@ gb_view_stack_actions_move_left (GSimpleAction *action,
   if (active_view == NULL || !GB_IS_VIEW (active_view))
     return;
 
-  g_signal_emit_by_name (self, "split", active_view, GB_VIEW_GRID_MOVE_LEFT);
+  g_signal_emit_by_name (self, "split", active_view, GB_VIEW_GRID_SPLIT_MOVE_LEFT);
 }
 
 static void
@@ -102,7 +102,7 @@ gb_view_stack_actions_move_right (GSimpleAction *action,
   if (active_view == NULL || !GB_IS_VIEW (active_view))
     return;
 
-  g_signal_emit_by_name (self, "split", active_view, GB_VIEW_GRID_MOVE_RIGHT);
+  g_signal_emit_by_name (self, "split", active_view, GB_VIEW_GRID_SPLIT_MOVE_RIGHT);
 }
 
 static void

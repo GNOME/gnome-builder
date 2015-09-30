@@ -34,6 +34,8 @@ libgnome_builder_public_sources = \
 	views/gb-view.h \
 	views/gb-view-stack.c \
 	views/gb-view-stack.h \
+	views/gb-view-grid.c \
+	views/gb-view-grid.h \
 	workbench/gb-workbench.c \
 	workbench/gb-workbench.h \
 	$(NULL)
@@ -166,8 +168,6 @@ libgnome_builder_la_SOURCES = \
 	util/gb-string.h \
 	util/gb-widget.c \
 	util/gb-widget.h \
-	views/gb-view-grid.c \
-	views/gb-view-grid.h \
 	views/gb-view-stack-actions.c \
 	views/gb-view-stack-actions.h \
 	views/gb-view-stack-private.h \
@@ -187,7 +187,16 @@ libgnome_builder_la_SOURCES = \
 	css/gb-css-provider.h \
 	util/gb-settings.c \
 	util/gb-settings.h \
+	gb-enums.c \
+	gb-enums.h \
 	$(NULL)
+
+glib_enum_h = gb-enums.h
+glib_enum_c = gb-enums.c
+glib_enum_headers =  \
+	views/gb-view-stack-split.h \
+	$(NULL)
+include $(top_srcdir)/build/autotools/Makefile.am.enums
 
 nodist_libgnome_builder_la_SOURCES = \
 	resources/gb-resources.c \
