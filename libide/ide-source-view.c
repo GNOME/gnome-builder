@@ -3564,16 +3564,18 @@ ide_source_view_real_push_selection (IdeSourceView *self)
 static void
 ide_source_view_real_push_snippet (IdeSourceView           *self,
                                    IdeSourceSnippet        *snippet,
-                                   IdeSourceSnippetContext *context,
                                    const GtkTextIter       *location)
 {
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+  IdeSourceSnippetContext *context;
   IdeFile *file;
   GFile *gfile;
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
   g_assert (IDE_IS_SOURCE_SNIPPET (snippet));
-  g_assert (IDE_IS_SOURCE_SNIPPET_CONTEXT (context));
+  g_assert (location != NULL);
+
+  context = ide_source_snippet_get_context (snippet);
 
   if ((priv->buffer != NULL) &&
       (file = ide_buffer_get_file (priv->buffer)) &&
@@ -5311,7 +5313,6 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
   klass->paste_clipboard_extended = ide_source_view_real_paste_clipboard_extended;
   klass->pop_selection = ide_source_view_real_pop_selection;
   klass->push_selection = ide_source_view_real_push_selection;
-  klass->push_snippet = ide_source_view_real_push_snippet;
   klass->rebuild_highlight = ide_source_view_real_rebuild_highlight;
   klass->replay_macro = ide_source_view_real_replay_macro;
   klass->reset_font_size = ide_source_view_real_reset_font_size;
@@ -5840,15 +5841,21 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   G_TYPE_NONE,
                   0);
 
+  /**
+   * IdeSourceView::pop-snippet:
+   * @self: An #IdeSourceView
+   * @snippet: An #IdeSourceSnippet.
+   *
+   * Pops the current snippet from the sourceview if there is one.
+   */
   gSignals [POP_SNIPPET] =
-    g_signal_new ("pop-snippet",
-                  G_TYPE_FROM_CLASS (klass),
-                  G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET (IdeSourceViewClass, pop_snippet),
-                  NULL, NULL, NULL,
-                  G_TYPE_NONE,
-                  1,
-                  IDE_TYPE_SOURCE_SNIPPET);
+    g_signal_new_class_handler ("pop-snippet",
+                                G_TYPE_FROM_CLASS (klass),
+                                G_SIGNAL_RUN_LAST,
+                                NULL,
+                                NULL, NULL, NULL,
+                                G_TYPE_NONE,
+                                0);
 
   /**
    * IdeSourceView::push-selection:
@@ -5866,17 +5873,25 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   G_TYPE_NONE,
                   0);
 
+  /**
+   * IdeSourceView::push-snippet:
+   * @self: An #IdeSourceView
+   * @snippet: An #IdeSourceSnippet.
+   * @iter: (allow-none): The location for the snippet, or %NULL.
+   *
+   * Pushes @snippet onto the snippet stack at either @iter or the insertion
+   * mark if @iter is not provided.
+   */
   gSignals [PUSH_SNIPPET] =
-    g_signal_new ("push-snippet",
-                  G_TYPE_FROM_CLASS (klass),
-                  G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET (IdeSourceViewClass, push_snippet),
-                  NULL, NULL, NULL,
-                  G_TYPE_NONE,
-                  3,
-                  IDE_TYPE_SOURCE_SNIPPET,
-                  IDE_TYPE_SOURCE_SNIPPET_CONTEXT,
-                  GTK_TYPE_TEXT_ITER);
+    g_signal_new_class_handler ("push-snippet",
+                                G_TYPE_FROM_CLASS (klass),
+                                G_SIGNAL_RUN_LAST,
+                                G_CALLBACK (ide_source_view_real_push_snippet),
+                                NULL, NULL, NULL,
+                                G_TYPE_NONE,
+                                2,
+                                IDE_TYPE_SOURCE_SNIPPET,
+                                GTK_TYPE_TEXT_ITER);
 
   gSignals [REBUILD_HIGHLIGHT] =
     g_signal_new ("rebuild-highlight",
@@ -6413,15 +6428,23 @@ ide_source_view_clear_snippets (IdeSourceView *self)
     ide_source_view_pop_snippet (self);
 }
 
+/**
+ * ide_source_view_push_snippet:
+ * @self: An #IdeSourceView
+ * @snippet: An #IdeSourceSnippet.
+ * @location: (allow-none): A location for the snippet or %NULL.
+ *
+ * Pushes a new snippet onto the source view.
+ */
 void
-ide_source_view_push_snippet (IdeSourceView    *self,
-                              IdeSourceSnippet *snippet)
+ide_source_view_push_snippet (IdeSourceView     *self,
+                              IdeSourceSnippet  *snippet,
+                              const GtkTextIter *location)
 {
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
   IdeSourceSnippetContext *context;
   IdeSourceSnippet *previous;
   GtkTextBuffer *buffer;
-  GtkTextMark *mark;
   GtkTextIter iter;
   gboolean has_more_tab_stops;
   gboolean insert_spaces;
@@ -6430,8 +6453,8 @@ ide_source_view_push_snippet (IdeSourceView    *self,
 
   g_return_if_fail (IDE_IS_SOURCE_VIEW (self));
   g_return_if_fail (IDE_IS_SOURCE_SNIPPET (snippet));
-
-  context = ide_source_snippet_get_context (snippet);
+  g_return_if_fail (!location ||
+                    (gtk_text_iter_get_buffer (location) == (void*)priv->buffer));
 
   if ((previous = g_queue_peek_head (priv->snippets)))
     ide_source_snippet_pause (previous);
@@ -6439,8 +6462,13 @@ ide_source_view_push_snippet (IdeSourceView    *self,
   g_queue_push_head (priv->snippets, g_object_ref (snippet));
 
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
-  mark = gtk_text_buffer_get_insert (buffer);
-  gtk_text_buffer_get_iter_at_mark (buffer, &iter, mark);
+
+  if (location != NULL)
+    iter = *location;
+  else
+    gtk_text_buffer_get_iter_at_mark (buffer, &iter, gtk_text_buffer_get_insert (buffer));
+
+  context = ide_source_snippet_get_context (snippet);
 
   insert_spaces = gtk_source_view_get_insert_spaces_instead_of_tabs (GTK_SOURCE_VIEW (self));
   ide_source_snippet_context_set_use_spaces (context, insert_spaces);
@@ -6452,7 +6480,7 @@ ide_source_view_push_snippet (IdeSourceView    *self,
   ide_source_snippet_context_set_line_prefix (context, line_prefix);
   g_free (line_prefix);
 
-  g_signal_emit (self, gSignals [PUSH_SNIPPET], 0, snippet, context, &iter);
+  g_signal_emit (self, gSignals [PUSH_SNIPPET], 0, snippet, &iter);
 
   ide_source_view_block_handlers (self);
   has_more_tab_stops = ide_source_snippet_begin (snippet, buffer, &iter);
@@ -7421,4 +7449,21 @@ _ide_source_view_get_scroll_mark (IdeSourceView *self)
   g_return_val_if_fail (IDE_IS_SOURCE_VIEW (self), NULL);
 
   return priv->scroll_mark;
+}
+
+/**
+ * ide_source_view_get_current_snippet:
+ *
+ * Gets the current snippet if there is one, otherwise %NULL.
+ *
+ * Returns: (transfer none) (nullable): An #IdeSourceSnippet or %NULL.
+ */
+IdeSourceSnippet *
+ide_source_view_get_current_snippet (IdeSourceView *self)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_SOURCE_VIEW (self), NULL);
+
+  return g_queue_peek_head (priv->snippets);
 }

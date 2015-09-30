@@ -1008,7 +1008,7 @@ gb_workbench_add_temporary_buffer (GbWorkbench *self)
 
   context = gb_workbench_get_context (self);
   buffer_manager = ide_context_get_buffer_manager (context);
-  buffer = ide_buffer_manager_create_buffer (buffer_manager);
+  buffer = ide_buffer_manager_create_temporary_buffer (buffer_manager);
 
   g_clear_object (&buffer);
 }

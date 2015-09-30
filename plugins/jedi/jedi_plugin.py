@@ -314,7 +314,7 @@ class JediCompletionProvider(Ide.Object,
             snippet.add_chunk(chunk)
 
         view = proposal.context.props.completion.props.view
-        view.push_snippet(snippet)
+        view.push_snippet(snippet, None)
 
         return True, None
 

@@ -376,8 +376,7 @@ provider_activate_proposal (GtkSourceCompletionProvider *provider,
            * Now push snippet onto the snippet stack of the view.
            */
           snippet = ide_source_snippet_copy (snippet);
-          ide_source_view_push_snippet (IDE_SOURCE_VIEW (self->source_view),
-                                       snippet);
+          ide_source_view_push_snippet (IDE_SOURCE_VIEW (self->source_view), snippet, NULL);
           g_object_unref (snippet);
 
           return TRUE;
