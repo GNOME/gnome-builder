@@ -428,10 +428,10 @@ egg_settings_sandwich_bind (EggSettingsSandwich *self,
  * @object (type GObject.Object): the target object.
  * @property: the property on @object to apply.
  * @flags: flags for the binding.
- * @get_mapping: (scope async): the get mapping function
- * @set_mapping: (scope async): the set mapping function
+ * @get_mapping: (scope notified) (closure user_data) (destroy destroy): the get mapping function
+ * @set_mapping: (scope notified) (closure user_data) (destroy destroy): the set mapping function
  * @user_data: user data for @get_mapping and @set_mapping.
- * @destroy: (destroy user_data): destroy notify for @user_data.
+ * @destroy: destroy notify for @user_data.
  *
  * Creates a new binding similar to g_settings_bind_with_mapping() but applying
  * from the resolved value via the settings sandwich.

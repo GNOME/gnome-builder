@@ -40,7 +40,7 @@ ide_symbol_resolver_default_init (IdeSymbolResolverInterface *iface)
  * @self: An #IdeSymbolResolver.
  * @location: An #IdeSourceLocation.
  * @cancellable: (allow-none): A #GCancellable or %NULL.
- * @callback: (scope async): A callback to execute upon completion.
+ * @callback: A callback to execute upon completion.
  * @user_data: user data for @callback.
  *
  * Asynchronously requests that @self determine the symbol existing at the source location
