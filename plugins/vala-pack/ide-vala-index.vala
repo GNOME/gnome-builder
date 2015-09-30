@@ -90,11 +90,16 @@ namespace Ide
 			this.code_context.add_external_package ("glib-2.0");
 			this.code_context.add_external_package ("gobject-2.0");
 
-			/* TODO: find packages from build system */
+			/* TODO: find packages from build system
+			 *       the following is just to help us while writing vala in builder
+			 *       until the build system works.
+			 */
+			this.code_context.vapi_directories = new string[] { "libide", "src" };
 			this.code_context.add_external_package ("gio-2.0");
 			this.code_context.add_external_package ("libvala-0.30");
 			this.code_context.add_external_package ("libide-1.0");
 			this.code_context.add_external_package ("gtksourceview-3.0");
+			this.code_context.add_external_package ("gnome-builder-1.0");
 
 			this.report = new Ide.ValaDiagnostics ();
 			this.code_context.report = this.report;
