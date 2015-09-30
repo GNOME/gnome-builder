@@ -513,6 +513,18 @@ egg_state_machine_set_state (EggStateMachine *self,
     }
 }
 
+/**
+ * egg_state_machine_create_action:
+ * @self: An #EggStateMachine
+ * @name: the name of the action.
+ *
+ * Creates a new #GAction with the name of @name.
+ *
+ * Setting the state of this action will toggle the state of the state machine.
+ * You should use g_variant_new_string() or similar to create the state.
+ *
+ * Returns: (transfer full): A newly created #GAction.
+ */
 GAction *
 egg_state_machine_create_action (EggStateMachine *self,
                                  const gchar     *name)
@@ -691,6 +703,19 @@ egg_state_machine_add_style (EggStateMachine *self,
     }
 }
 
+/**
+ * egg_state_machine_connect_object:
+ * @self: A #EggStateMachine.
+ * @state: The state the signal connection should exist within
+ * @source: the source object to connect to
+ * @detailed_signal: The detailed signal of @source to connect.
+ * @callback: (scope async): The callback to execute upon signal emission.
+ * @user_data: (closure callback): The user data for @callback.
+ * @flags: signal connection flags.
+ *
+ * Connects to the @detailed_signal of @source only when the current
+ * state of the state machine is @state.
+ */
 void
 egg_state_machine_connect_object (EggStateMachine *self,
                                   const gchar     *state,

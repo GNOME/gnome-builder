@@ -647,7 +647,7 @@ egg_signal_group_connect_full (EggSignalGroup *self,
  * egg_signal_group_connect_object:
  * @self: a #EggSignalGroup
  * @detailed_signal: a string of the form "signal-name::detail"
- * @callback: the #GCallback to connect
+ * @c_handler: (scope async): the #GCallback to connect
  * @object: the #GObject to pass as data to @callback calls
  *
  * Connects @callback to the signal @detailed_signal
@@ -662,13 +662,13 @@ egg_signal_group_connect_full (EggSignalGroup *self,
 void
 egg_signal_group_connect_object (EggSignalGroup *self,
                                  const gchar    *detailed_signal,
-                                 GCallback       callback,
+                                 GCallback       c_handler,
                                  gpointer        object,
                                  GConnectFlags   flags)
 {
   g_return_if_fail (G_IS_OBJECT (object));
 
-  egg_signal_group_connect_full (self, detailed_signal, callback, object, NULL,
+  egg_signal_group_connect_full (self, detailed_signal, c_handler, object, NULL,
                                  flags, TRUE);
 }
 
@@ -676,9 +676,9 @@ egg_signal_group_connect_object (EggSignalGroup *self,
  * egg_signal_group_connect_data:
  * @self: a #EggSignalGroup
  * @detailed_signal: a string of the form "signal-name::detail"
- * @callback: the #GCallback to connect
- * @data: the data to pass to @callback calls
- * @notify: function to be called when disposing of @self
+ * @c_handler: (scope async): the #GCallback to connect
+ * @data: (closure c_handler): the data to pass to @callback calls
+ * @notify: (destroy data): function to be called when disposing of @self
  * @flags: the flags used to create the signal connection
  *
  * Connects @callback to the signal @detailed_signal
@@ -689,12 +689,12 @@ egg_signal_group_connect_object (EggSignalGroup *self,
 void
 egg_signal_group_connect_data (EggSignalGroup *self,
                                const gchar    *detailed_signal,
-                               GCallback       callback,
+                               GCallback       c_handler,
                                gpointer        data,
                                GClosureNotify  notify,
                                GConnectFlags   flags)
 {
-  egg_signal_group_connect_full (self, detailed_signal, callback, data, notify,
+  egg_signal_group_connect_full (self, detailed_signal, c_handler, data, notify,
                                  flags, FALSE);
 }
 
@@ -702,7 +702,7 @@ egg_signal_group_connect_data (EggSignalGroup *self,
  * egg_signal_group_connect:
  * @self: a #EggSignalGroup
  * @detailed_signal: a string of the form "signal-name::detail"
- * @callback: the #GCallback to connect
+ * @c_handler: (scope async): the #GCallback to connect
  * @data: the data to pass to @callback calls
  *
  * Connects @callback to the signal @detailed_signal
@@ -713,10 +713,10 @@ egg_signal_group_connect_data (EggSignalGroup *self,
 void
 egg_signal_group_connect (EggSignalGroup *self,
                           const gchar    *detailed_signal,
-                          GCallback       callback,
+                          GCallback       c_handler,
                           gpointer        data)
 {
-  egg_signal_group_connect_full (self, detailed_signal, callback, data, NULL,
+  egg_signal_group_connect_full (self, detailed_signal, c_handler, data, NULL,
                                  0, FALSE);
 }
 
@@ -724,7 +724,7 @@ egg_signal_group_connect (EggSignalGroup *self,
  * egg_signal_group_connect_after:
  * @self: a #EggSignalGroup
  * @detailed_signal: a string of the form "signal-name::detail"
- * @callback: the #GCallback to connect
+ * @c_handler: (scope async): the #GCallback to connect
  * @data: the data to pass to @callback calls
  *
  * Connects @callback to the signal @detailed_signal
@@ -737,10 +737,10 @@ egg_signal_group_connect (EggSignalGroup *self,
 void
 egg_signal_group_connect_after (EggSignalGroup *self,
                                 const gchar    *detailed_signal,
-                                GCallback       callback,
+                                GCallback       c_handler,
                                 gpointer        data)
 {
-  egg_signal_group_connect_full (self, detailed_signal, callback,
+  egg_signal_group_connect_full (self, detailed_signal, c_handler,
                                  data, NULL, G_CONNECT_AFTER, FALSE);
 }
 
@@ -748,7 +748,7 @@ egg_signal_group_connect_after (EggSignalGroup *self,
  * egg_signal_group_connect_swapped:
  * @self: a #EggSignalGroup
  * @detailed_signal: a string of the form "signal-name::detail"
- * @callback: the #GCallback to connect
+ * @c_handler: (scope async): the #GCallback to connect
  * @data: the data to pass to @callback calls
  *
  * Connects @callback to the signal @detailed_signal
@@ -762,9 +762,9 @@ egg_signal_group_connect_after (EggSignalGroup *self,
 void
 egg_signal_group_connect_swapped (EggSignalGroup *self,
                                   const gchar    *detailed_signal,
-                                  GCallback       callback,
+                                  GCallback       c_handler,
                                   gpointer        data)
 {
-  egg_signal_group_connect_full (self, detailed_signal, callback, data, NULL,
+  egg_signal_group_connect_full (self, detailed_signal, c_handler, data, NULL,
                                  G_CONNECT_SWAPPED, FALSE);
 }

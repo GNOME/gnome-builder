@@ -463,6 +463,11 @@ egg_search_bar_set_show_close_button (EggSearchBar *self,
   g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_SHOW_CLOSE_BUTTON]);
 }
 
+/**
+ * egg_search_bar_get_entry:
+ *
+ * Returns: (transfer none) (type Gtk.SearchEntry): A #GtkSearchEntry.
+ */
 GtkWidget *
 egg_search_bar_get_entry (EggSearchBar *self)
 {

@@ -27,9 +27,6 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (EggStateMachineAction, egg_state_machine_action, EGG, STATE_MACHINE_ACTION, GObject)
 
-GAction *egg_state_machine_action_new (EggStateMachine *state_machine,
-                                       const gchar     *name);
-
 G_END_DECLS
 
 #endif /* EGG_STATE_MACHINE_ACTION_H */

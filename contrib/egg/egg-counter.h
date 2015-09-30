@@ -19,7 +19,7 @@
 #ifndef EGG_COUNTER_H
 #define EGG_COUNTER_H
 
-#include <glib.h>
+#include <glib-object.h>
 
 /*
  * History
@@ -267,6 +267,7 @@ struct _EggCounterValue
   gint64          padding [7];
 } __attribute__ ((aligned(8)));
 
+GType            egg_counter_arena_get_type     (void);
 guint            egg_get_current_cpu_call       (void);
 EggCounterArena *egg_counter_arena_get_default  (void);
 EggCounterArena *egg_counter_arena_new_for_pid  (GPid                   pid);
