@@ -238,12 +238,6 @@ struct _IdeSourceViewClass
                                        gboolean                 place_cursor_at_original);
   void (*push_selection)              (IdeSourceView           *self);
   void (*pop_selection)               (IdeSourceView           *self);
-  void (*pop_snippet)                 (IdeSourceView           *self,
-                                       IdeSourceSnippet        *snippet);
-  void (*push_snippet)                (IdeSourceView           *self,
-                                       IdeSourceSnippet        *snippet,
-                                       IdeSourceSnippetContext *context,
-                                       const GtkTextIter       *location);
   void (*rebuild_highlight)           (IdeSourceView           *self);
   void (*replay_macro)                (IdeSourceView           *self,
                                        gboolean                 use_count);
@@ -270,6 +264,7 @@ struct _IdeSourceViewClass
 };
 
 void                        ide_source_view_clear_snippets            (IdeSourceView              *self);
+IdeSourceSnippet           *ide_source_view_get_current_snippet       (IdeSourceView              *self);
 IdeBackForwardList         *ide_source_view_get_back_forward_list     (IdeSourceView              *self);
 void                        ide_source_view_get_visual_position       (IdeSourceView              *self,
                                                                        guint                      *line,
@@ -299,7 +294,8 @@ void                        ide_source_view_jump                      (IdeSource
                                                                        const GtkTextIter          *location);
 void                        ide_source_view_pop_snippet               (IdeSourceView              *self);
 void                        ide_source_view_push_snippet              (IdeSourceView              *self,
-                                                                       IdeSourceSnippet           *snippet);
+                                                                       IdeSourceSnippet           *snippet,
+                                                                       const GtkTextIter          *location);
 void                        ide_source_view_rollback_search           (IdeSourceView              *self);
 void                        ide_source_view_set_count                 (IdeSourceView              *self,
                                                                        guint                       count);

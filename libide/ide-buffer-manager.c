@@ -1605,7 +1605,7 @@ ide_buffer_manager_set_max_file_size (IdeBufferManager *self,
 }
 
 /**
- * ide_buffer_manager_create_buffer:
+ * ide_buffer_manager_create_temporary_buffer:
  *
  * Creates a new #IdeBuffer that does not yet have a backing file attached to it. Interfaces
  * should perform a save-as operation to save the file to a real file.
@@ -1615,7 +1615,7 @@ ide_buffer_manager_set_max_file_size (IdeBufferManager *self,
  * Returns: (transfer full): A newly created #IdeBuffer
  */
 IdeBuffer *
-ide_buffer_manager_create_buffer (IdeBufferManager *self)
+ide_buffer_manager_create_temporary_buffer (IdeBufferManager *self)
 {
   IdeBuffer *buffer = NULL;
   g_autoptr(IdeFile) file = NULL;
