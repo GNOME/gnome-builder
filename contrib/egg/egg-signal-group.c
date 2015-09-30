@@ -676,9 +676,9 @@ egg_signal_group_connect_object (EggSignalGroup *self,
  * egg_signal_group_connect_data:
  * @self: a #EggSignalGroup
  * @detailed_signal: a string of the form "signal-name::detail"
- * @c_handler: (scope async): the #GCallback to connect
- * @data: (closure c_handler): the data to pass to @callback calls
- * @notify: (destroy data): function to be called when disposing of @self
+ * @c_handler: (scope async) (closure data) (destroy notify): the #GCallback to connect
+ * @data: the data to pass to @callback calls
+ * @notify: function to be called when disposing of @self
  * @flags: the flags used to create the signal connection
  *
  * Connects @callback to the signal @detailed_signal
