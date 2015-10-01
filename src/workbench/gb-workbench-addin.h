@@ -19,8 +19,6 @@
 #ifndef GB_WORKBENCH_ADDIN_H
 #define GB_WORKBENCH_ADDIN_H
 
-#include <glib-object.h>
-
 #include "gb-workbench.h"
 
 G_BEGIN_DECLS
@@ -33,12 +31,16 @@ struct _GbWorkbenchAddinInterface
 {
   GTypeInterface parent;
 
-  void (*load)   (GbWorkbenchAddin *self);
-  void (*unload) (GbWorkbenchAddin *self);
+  void (*load)   (GbWorkbenchAddin *self,
+                  GbWorkbench      *workbench);
+  void (*unload) (GbWorkbenchAddin *self,
+                  GbWorkbench      *workbench);
 };
 
-void gb_workbench_addin_load   (GbWorkbenchAddin *self);
-void gb_workbench_addin_unload (GbWorkbenchAddin *self);
+void gb_workbench_addin_load   (GbWorkbenchAddin *self,
+                                GbWorkbench      *workbench);
+void gb_workbench_addin_unload (GbWorkbenchAddin *self,
+                                GbWorkbench      *workbench);
 
 G_END_DECLS
 

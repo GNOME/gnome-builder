@@ -41,17 +41,9 @@ G_DEFINE_DYNAMIC_TYPE_EXTENDED (GbTerminalWorkbenchAddin,
                                 G_IMPLEMENT_INTERFACE (GB_TYPE_WORKBENCH_ADDIN,
                                                        workbench_addin_iface_init))
 
-enum {
-  PROP_0,
-  PROP_WORKBENCH,
-  LAST_PROP
-};
-
-static GParamSpec *gParamSpecs [LAST_PROP];
-
 static void
-new_terminal_activate_cb (GSimpleAction   *action,
-                          GVariant        *param,
+new_terminal_activate_cb (GSimpleAction            *action,
+                          GVariant                 *param,
                           GbTerminalWorkbenchAddin *self)
 {
   GbTerminalDocument *document;
@@ -67,7 +59,8 @@ new_terminal_activate_cb (GSimpleAction   *action,
 }
 
 static void
-gb_terminal_workbench_addin_load (GbWorkbenchAddin *addin)
+gb_terminal_workbench_addin_load (GbWorkbenchAddin *addin,
+                                  GbWorkbench      *workbench)
 {
   GbTerminalWorkbenchAddin *self = (GbTerminalWorkbenchAddin *)addin;
   GbWorkspace *workspace;
@@ -75,7 +68,9 @@ gb_terminal_workbench_addin_load (GbWorkbenchAddin *addin)
   g_autoptr(GSimpleAction) action = NULL;
 
   g_assert (GB_IS_TERMINAL_WORKBENCH_ADDIN (self));
-  g_assert (GB_IS_WORKBENCH (self->workbench));
+  g_assert (GB_IS_WORKBENCH (workbench));
+
+  ide_set_weak_pointer (&self->workbench, workbench);
 
   action = g_simple_action_new ("new-terminal", NULL);
   g_signal_connect_object (action,
@@ -83,7 +78,7 @@ gb_terminal_workbench_addin_load (GbWorkbenchAddin *addin)
                            G_CALLBACK (new_terminal_activate_cb),
                            self,
                            0);
-  g_action_map_add_action (G_ACTION_MAP (self->workbench), G_ACTION (action));
+  g_action_map_add_action (G_ACTION_MAP (workbench), G_ACTION (action));
 
   if (self->panel_terminal == NULL)
     {
@@ -94,7 +89,7 @@ gb_terminal_workbench_addin_load (GbWorkbenchAddin *addin)
                                  (gpointer *)&self->panel_terminal);
     }
 
-  workspace = GB_WORKSPACE (gb_workbench_get_workspace (self->workbench));
+  workspace = GB_WORKSPACE (gb_workbench_get_workspace (workbench));
   bottom_pane = gb_workspace_get_bottom_pane (workspace);
   gb_workspace_pane_add_page (GB_WORKSPACE_PANE (bottom_pane),
                               GTK_WIDGET (self->panel_terminal),
@@ -103,7 +98,8 @@ gb_terminal_workbench_addin_load (GbWorkbenchAddin *addin)
 }
 
 static void
-gb_terminal_workbench_addin_unload (GbWorkbenchAddin *addin)
+gb_terminal_workbench_addin_unload (GbWorkbenchAddin *addin,
+                                    GbWorkbench      *workbench)
 {
   GbTerminalWorkbenchAddin *self = (GbTerminalWorkbenchAddin *)addin;
 
@@ -121,50 +117,8 @@ gb_terminal_workbench_addin_unload (GbWorkbenchAddin *addin)
 }
 
 static void
-gb_terminal_workbench_addin_finalize (GObject *object)
-{
-  GbTerminalWorkbenchAddin *self = (GbTerminalWorkbenchAddin *)object;
-
-  ide_clear_weak_pointer (&self->workbench);
-
-  G_OBJECT_CLASS (gb_terminal_workbench_addin_parent_class)->finalize (object);
-}
-
-static void
-gb_terminal_workbench_addin_set_property (GObject      *object,
-                                guint         prop_id,
-                                const GValue *value,
-                                GParamSpec   *pspec)
-{
-  GbTerminalWorkbenchAddin *self = GB_TERMINAL_WORKBENCH_ADDIN (object);
-
-  switch (prop_id)
-    {
-    case PROP_WORKBENCH:
-      ide_set_weak_pointer (&self->workbench, g_value_get_object (value));
-      break;
-
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-    }
-}
-
-static void
 gb_terminal_workbench_addin_class_init (GbTerminalWorkbenchAddinClass *klass)
 {
-  GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-  object_class->finalize = gb_terminal_workbench_addin_finalize;
-  object_class->set_property = gb_terminal_workbench_addin_set_property;
-
-  gParamSpecs [PROP_WORKBENCH] =
-    g_param_spec_object ("workbench",
-                         "Workbench",
-                         "The workbench window.",
-                         GB_TYPE_WORKBENCH,
-                         (G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
-
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
 }
 
 static void

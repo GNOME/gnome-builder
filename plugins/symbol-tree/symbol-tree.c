@@ -39,20 +39,11 @@ struct _SymbolTree
 
   GCancellable   *cancellable;
   EggTaskCache   *symbols_cache;
-  GbWorkbench    *workbench;
   GbTree         *tree;
   GtkSearchEntry *search_entry;
 
   guint           refresh_tree_timeout;
 };
-
-enum {
-  PROP_0,
-  PROP_WORKBENCH,
-  LAST_PROP
-};
-
-static GParamSpec *gParamSpecs [LAST_PROP];
 
 static void workbench_addin_init (GbWorkbenchAddinInterface *iface);
 
@@ -241,22 +232,23 @@ populate_cache_cb (EggTaskCache  *cache,
 }
 
 static void
-symbol_tree_load (GbWorkbenchAddin *addin)
+symbol_tree_load (GbWorkbenchAddin *addin,
+                  GbWorkbench      *workbench)
 {
   SymbolTree *self = (SymbolTree *)addin;
   GbWorkspace *workspace;
   GtkWidget *right_pane;
 
   g_assert (SYMBOL_IS_TREE (self));
-  g_assert (GB_IS_WORKBENCH (self->workbench));
+  g_assert (GB_IS_WORKBENCH (workbench));
 
-  g_signal_connect_object (self->workbench,
+  g_signal_connect_object (workbench,
                            "notify::active-view",
                            G_CALLBACK (notify_active_view_cb),
                            self,
                            G_CONNECT_SWAPPED);
 
-  workspace = GB_WORKSPACE (gb_workbench_get_workspace (self->workbench));
+  workspace = GB_WORKSPACE (gb_workbench_get_workspace (workbench));
   right_pane = gb_workspace_get_right_pane (workspace);
   gb_workspace_pane_add_page (GB_WORKSPACE_PANE (right_pane),
                               GTK_WIDGET (self),
@@ -270,28 +262,25 @@ symbol_tree_load (GbWorkbenchAddin *addin)
 }
 
 static void
-symbol_tree_unload (GbWorkbenchAddin *addin)
+symbol_tree_unload (GbWorkbenchAddin *addin,
+                    GbWorkbench      *workbench)
 {
   SymbolTree *self = (SymbolTree *)addin;
-  GbWorkspace *workspace;
-  GtkWidget *right_pane;
 
-  g_assert (SYMBOL_IS_TREE (self));
-  g_assert (GB_IS_WORKBENCH (self->workbench));
-
-  workspace = GB_WORKSPACE (gb_workbench_get_workspace (self->workbench));
-  right_pane = gb_workspace_get_right_pane (workspace);
-  gb_workspace_pane_remove_page (GB_WORKSPACE_PANE (right_pane), GTK_WIDGET (self));
-}
-
-static void
-symbol_tree_set_workbench (SymbolTree  *self,
-                           GbWorkbench *workbench)
-{
   g_assert (SYMBOL_IS_TREE (self));
   g_assert (GB_IS_WORKBENCH (workbench));
 
-  ide_set_weak_pointer (&self->workbench, workbench);
+  /*
+   * TODO: We don't want this to be the addin and the widget added to the pane.
+   *       It makes object lifecycle difficult to manage. We basically rely
+   *       on being destroyed right now until we rewrite this (which will happen soon).
+   */
+
+#if 0
+  workspace = GB_WORKSPACE (gb_workbench_get_workspace (workbench));
+  right_pane = gb_workspace_get_right_pane (workspace);
+  gb_workspace_pane_remove_page (GB_WORKSPACE_PANE (right_pane), GTK_WIDGET (self));
+#endif
 }
 
 static gboolean
@@ -332,31 +321,11 @@ symbol_tree__search_entry_changed (SymbolTree     *self,
 }
 
 static void
-symbol_tree_set_property (GObject      *object,
-                          guint         prop_id,
-                          const GValue *value,
-                          GParamSpec   *pspec)
-{
-  SymbolTree *self = (SymbolTree *)object;
-
-  switch (prop_id)
-    {
-    case PROP_WORKBENCH:
-      symbol_tree_set_workbench (self, g_value_get_object (value));
-      break;
-
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-    }
-}
-
-static void
 symbol_tree_finalize (GObject *object)
 {
   SymbolTree *self = (SymbolTree *)object;
 
   ide_clear_source (&self->refresh_tree_timeout);
-  ide_clear_weak_pointer (&self->workbench);
   g_clear_object (&self->cancellable);
 
   G_OBJECT_CLASS (symbol_tree_parent_class)->finalize (object);
@@ -376,16 +345,6 @@ symbol_tree_class_init (SymbolTreeClass *klass)
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   object_class->finalize = symbol_tree_finalize;
-  object_class->set_property = symbol_tree_set_property;
-
-  gParamSpecs [PROP_WORKBENCH] =
-    g_param_spec_object ("workbench",
-                         "Workbench",
-                         "Workbench",
-                         GB_TYPE_WORKBENCH,
-                         (G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
-
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/plugins/symbol-tree/symbol-tree.ui");
   gtk_widget_class_bind_template_child (widget_class, SymbolTree, tree);

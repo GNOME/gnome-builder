@@ -23,56 +23,33 @@
 
 G_DEFINE_INTERFACE (GbWorkbenchAddin, gb_workbench_addin, G_TYPE_OBJECT)
 
-enum {
-  PROP_0,
-  PROP_WORKBENCH,
-  LAST_PROP
-};
-
-enum {
-  LOAD,
-  UNLOAD,
-  LAST_SIGNAL
-};
-
-static GParamSpec *gParamSpecs [LAST_PROP];
-static guint gSignals [LAST_SIGNAL];
+static void
+gb_workbench_addin_dummy (GbWorkbenchAddin *self,
+                          GbWorkbench      *workbench)
+{
+}
 
 static void
 gb_workbench_addin_default_init (GbWorkbenchAddinInterface *iface)
 {
-  gParamSpecs [PROP_WORKBENCH] =
-    g_param_spec_object ("workbench",
-                         "Workbench",
-                         "The workbench window.",
-                         GB_TYPE_WORKBENCH,
-                         (G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
-  g_object_interface_install_property (iface, gParamSpecs [PROP_WORKBENCH]);
-
-  gSignals [LOAD] = g_signal_new ("load",
-                                  G_TYPE_FROM_INTERFACE (iface),
-                                  G_SIGNAL_RUN_LAST,
-                                  G_STRUCT_OFFSET (GbWorkbenchAddinInterface, load),
-                                  NULL, NULL, NULL, G_TYPE_NONE, 0);
-
-  gSignals [UNLOAD] = g_signal_new ("unload",
-                                    G_TYPE_FROM_INTERFACE (iface),
-                                    G_SIGNAL_RUN_LAST,
-                                    G_STRUCT_OFFSET (GbWorkbenchAddinInterface, unload),
-                                    NULL, NULL, NULL, G_TYPE_NONE, 0);
+  iface->load = gb_workbench_addin_dummy;
+  iface->unload = gb_workbench_addin_dummy;
 }
 
 void
-gb_workbench_addin_load (GbWorkbenchAddin *self)
+gb_workbench_addin_load (GbWorkbenchAddin *self,
+                         GbWorkbench      *workbench)
 {
   g_return_if_fail (GB_IS_WORKBENCH_ADDIN (self));
+  g_return_if_fail (GB_IS_WORKBENCH (workbench));
 
-  g_signal_emit (self, gSignals [LOAD], 0);
+  GB_WORKBENCH_ADDIN_GET_IFACE (self)->load (self, workbench);
 }
 void
-gb_workbench_addin_unload (GbWorkbenchAddin *self)
+gb_workbench_addin_unload (GbWorkbenchAddin *self,
+                           GbWorkbench      *workbench)
 {
   g_return_if_fail (GB_IS_WORKBENCH_ADDIN (self));
 
-  g_signal_emit (self, gSignals [UNLOAD], 0);
+  GB_WORKBENCH_ADDIN_GET_IFACE (self)->unload (self, workbench);
 }
