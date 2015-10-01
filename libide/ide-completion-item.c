@@ -22,38 +22,29 @@
 
 #include "ide-completion-item.h"
 
-G_DEFINE_ABSTRACT_TYPE_WITH_CODE (IdeCompletionItem, ide_completion_item, G_TYPE_OBJECT,
-                                  G_IMPLEMENT_INTERFACE (GTK_SOURCE_TYPE_COMPLETION_PROPOSAL, NULL))
+G_DEFINE_ABSTRACT_TYPE (IdeCompletionItem, ide_completion_item, G_TYPE_OBJECT)
 
 static gboolean
 ide_completion_item_real_match (IdeCompletionItem *self,
                                 const gchar       *query,
                                 const gchar       *casefold)
 {
-  gchar *text;
-  gboolean ret;
+  gboolean ret = FALSE;
 
   g_assert (IDE_IS_COMPLETION_ITEM (self));
   g_assert (query != NULL);
   g_assert (casefold != NULL);
 
-  text = ide_completion_item_get_column_markup (self, IDE_COMPLETION_COLUMN_PRIMARY);
-  ret = !!strstr (text ?: "", query);
-  g_free (text);
+  if (GTK_SOURCE_IS_COMPLETION_PROPOSAL (self))
+    {
+      gchar *text;
+
+      text = gtk_source_completion_proposal_get_label (GTK_SOURCE_COMPLETION_PROPOSAL (self));
+      ret = !!strstr (text ?: "", query);
+      g_free (text);
+    }
 
   return ret;
-}
-
-static gchar *
-ide_completion_item_real_get_column_markup (IdeCompletionItem   *self,
-                                            IdeCompletionColumn  column)
-{
-  g_return_val_if_fail (IDE_IS_COMPLETION_ITEM (self), NULL);
-
-  if (column == IDE_COMPLETION_COLUMN_PRIMARY)
-    return gtk_source_completion_proposal_get_markup (GTK_SOURCE_COMPLETION_PROPOSAL (self));
-
-  return NULL;
 }
 
 gboolean
@@ -66,26 +57,16 @@ ide_completion_item_match (IdeCompletionItem *self,
   return IDE_COMPLETION_ITEM_GET_CLASS (self)->match (self, query, casefold);
 }
 
-gchar *
-ide_completion_item_get_column_markup (IdeCompletionItem   *self,
-                                       IdeCompletionColumn  column)
-{
-  g_return_val_if_fail (IDE_IS_COMPLETION_ITEM (self), FALSE);
-
-  return IDE_COMPLETION_ITEM_GET_CLASS (self)->get_column_markup (self, column);
-}
-
 static void
 ide_completion_item_class_init (IdeCompletionItemClass *klass)
 {
-  klass->get_column_markup = ide_completion_item_real_get_column_markup;
   klass->match = ide_completion_item_real_match;
 }
 
 static void
 ide_completion_item_init (IdeCompletionItem *self)
 {
-  self->parent_instance.link.data = self;
+  self->link.data = self;
 }
 
 /**

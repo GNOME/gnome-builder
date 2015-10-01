@@ -78,8 +78,8 @@ G_DEFINE_TYPE_WITH_PRIVATE (IdeCompletionResults, ide_completion_results, G_TYPE
 
 EGG_DEFINE_COUNTER (instances, "IdeCompletionResults", "Instances", "Number of IdeCompletionResults")
 
-#define GET_ITEM(i) ((IdeCompletionItem*)(g_ptr_array_index((priv)->results, (i))))
-#define GET_ITEM_LINK(item) (&((IdeCompletionItemHead *)(item))->link)
+#define GET_ITEM(i) ((IdeCompletionItem *)(g_ptr_array_index((priv)->results, (i))))
+#define GET_ITEM_LINK(item) (&((IdeCompletionItem *)(item))->link)
 
 enum {
   PROP_0,
@@ -337,9 +337,9 @@ ide_completion_results_compare (IdeCompletionResults *self,
                                 IdeCompletionItem    *left,
                                 IdeCompletionItem    *right)
 {
-  if (left->parent_instance.priority < right->parent_instance.priority)
+  if (left->priority < right->priority)
     return -1;
-  else if (left->parent_instance.priority > right->parent_instance.priority)
+  else if (left->priority > right->priority)
     return 1;
   else
     return 0;

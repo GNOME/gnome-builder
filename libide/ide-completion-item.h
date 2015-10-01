@@ -23,44 +23,29 @@
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_COMPLETION_ITEM (ide_completion_item_get_type())
+#define IDE_TYPE_COMPLETION_ITEM            (ide_completion_item_get_type())
+#define IDE_COMPLETION_ITEM(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), IDE_TYPE_COMPLETION_ITEM, IdeCompletionItem))
+#define IDE_COMPLETION_ITEM_CONST(obj)      (G_TYPE_CHECK_INSTANCE_CAST ((obj), IDE_TYPE_COMPLETION_ITEM, IdeCompletionItem const))
+#define IDE_COMPLETION_ITEM_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass),  IDE_TYPE_COMPLETION_ITEM, IdeCompletionItemClass))
+#define IDE_IS_COMPLETION_ITEM(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), IDE_TYPE_COMPLETION_ITEM))
+#define IDE_IS_COMPLETION_ITEM_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass),  IDE_TYPE_COMPLETION_ITEM))
+#define IDE_COMPLETION_ITEM_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj),  IDE_TYPE_COMPLETION_ITEM, IdeCompletionItemClass))
 
-/*
- * We provide this private, but defined in the header API for IdeCompletionItemHead
- * so that we have a location to store a GList node without allocating one. This is
- * used for sorting of result structures by IdeCompletionResults without allocating
- * GList items for GtkSourceCompletionContext.
- */
-typedef struct
+typedef struct _IdeCompletionItem      IdeCompletionItem;
+typedef struct _IdeCompletionItemClass IdeCompletionItemClass;
+
+struct _IdeCompletionItem
 {
-  GObject parent;
-  /*< semi-public >*/
+  GObject parent_instance;
+
+  /*< private >*/
   GList link;
   guint priority;
-} IdeCompletionItemHead;
-
-/*
- * We require the following cleanup function so that G_DECLARE_DERIVABLE_TYPE() can
- * work with our semi-public IdeCompletionItemHead node.
- */
-G_DEFINE_AUTOPTR_CLEANUP_FUNC (IdeCompletionItemHead, g_object_unref)
-
-G_DECLARE_DERIVABLE_TYPE (IdeCompletionItem,
-                          ide_completion_item,
-                          IDE, COMPLETION_ITEM,
-                          IdeCompletionItemHead)
-
-typedef enum
-{
-  IDE_COMPLETION_COLUMN_PRIMARY = 0,
-  IDE_COMPLETION_COLUMN_PREFIX  = 1,
-  IDE_COMPLETION_COLUMN_SUFFIX  = 2,
-  IDE_COMPLETION_COLUMN_INFO    = 3,
-} IdeCompletionColumn;
+};
 
 struct _IdeCompletionItemClass
 {
-  GObjectClass parent;
+  GObjectClass parent_class;
 
   /**
    * IdeCompletionItem::match:
@@ -78,30 +63,25 @@ struct _IdeCompletionItemClass
   gboolean (*match) (IdeCompletionItem *self,
                      const gchar       *query,
                      const gchar       *casefold);
-
-  /**
-   * IdeCompletionItem::get_column_markup:
-   * @self: An #IdeCompletionItem.
-   * @column: The #IdeCompletionItemColumn to retrieve.
-   *
-   * This function returns the text for a particular column.
-   * This allows for Builder to organize results with aligned
-   * columns in GtkSourceView. NOTE: This is not yet performed
-   * today, but will in the future.
-   */
-  gchar *(*get_column_markup) (IdeCompletionItem   *self,
-                               IdeCompletionColumn  column);
 };
 
-IdeCompletionItem *ide_completion_item_new               (void);
-gboolean           ide_completion_item_match             (IdeCompletionItem   *self,
-                                                          const gchar         *query,
-                                                          const gchar         *casefold);
-gchar             *ide_completion_item_get_column_markup (IdeCompletionItem   *self,
-                                                          IdeCompletionColumn  column);
-gboolean           ide_completion_item_fuzzy_match       (const gchar         *haystack,
-                                                          const gchar         *casefold_needle,
-                                                          guint               *priority);
+G_DEFINE_AUTOPTR_CLEANUP_FUNC (IdeCompletionItem, g_object_unref)
+
+static inline void
+ide_completion_item_set_priority (IdeCompletionItem *self,
+                                  guint              priority)
+{
+  self->priority = priority;
+}
+
+GType              ide_completion_item_get_type    (void);
+IdeCompletionItem *ide_completion_item_new         (void);
+gboolean           ide_completion_item_match       (IdeCompletionItem   *self,
+                                                    const gchar         *query,
+                                                    const gchar         *casefold);
+gboolean           ide_completion_item_fuzzy_match (const gchar         *haystack,
+                                                    const gchar         *casefold_needle,
+                                                    guint               *priority);
 
 G_END_DECLS
 
