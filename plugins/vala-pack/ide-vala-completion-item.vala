@@ -22,14 +22,12 @@ using Vala;
 
 namespace Ide
 {
-	public delegate string ValaCompletionMarkupFunc (string name);
-
-	public class ValaCompletionItem: GLib.Object, Gtk.SourceCompletionProposal
+	public class ValaCompletionItem: Ide.CompletionItem, Gtk.SourceCompletionProposal
 	{
 		static uint hash_seed;
 
 		internal Vala.Symbol symbol;
-		ValaCompletionMarkupFunc? markup_func;
+		weak Ide.ValaCompletionProvider? provider;
 		string label;
 
 		static construct {
@@ -47,9 +45,9 @@ namespace Ide
 			this.build_label ();
 		}
 
-		public void set_markup_func (owned ValaCompletionMarkupFunc? func)
+		internal void set_provider (Ide.ValaCompletionProvider? provider)
 		{
-			this.markup_func = func;
+			this.provider = provider;
 		}
 
 		public unowned string? get_icon_name ()
@@ -82,13 +80,20 @@ namespace Ide
 
 		public bool matches (string? prefix_lower)
 		{
+			uint priority;
+			bool ret;
+
 			if (prefix_lower == null || prefix_lower [0] == '\0')
 				return true;
 
-			return gb_str_simple_match (this.symbol.name, prefix_lower);
+			ret = Ide.CompletionItem.fuzzy_match (this.symbol.name, prefix_lower, out priority);
+			/* TODO: Save priority to use for sorting. */
+
+			return ret;
 		}
 
-		public string get_label () {
+		public string get_label ()
+		{
 			return this.symbol.name;
 		}
 
@@ -137,13 +142,15 @@ namespace Ide
 			this.label = (owned)str.str;
 		}
 
-		public string get_markup () {
-			if (this.markup_func != null)
-				return this.markup_func (this.label);
+		public string get_markup ()
+		{
+			if (this.provider != null)
+				return highlight_full (this.label, this.provider.last_prefix, true, 1);
 			return this.label;
 		}
 
-		public string get_text () {
+		public string get_text ()
+		{
 			return this.symbol.name;
 		}
 
@@ -157,7 +164,6 @@ namespace Ide
 		public string? get_info () { return null; }
 	}
 
-	[CCode (cheader_filename = "gb-string.h", cname = "gb_str_simple_match")]
-	extern bool gb_str_simple_match (string? text, string? prefix_lower);
+	[CCode (cheader_filename = "gb-string.h", cname = "gb_str_highlight_full")]
+	extern string? highlight_full (string haystack, string needle, bool insensitive, int type);
 }
-
