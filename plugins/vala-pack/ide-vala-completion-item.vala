@@ -133,7 +133,8 @@ namespace Ide
 				str.append (this.symbol.name);
 			}
 
-			this.label = str.str;
+			/* Steal the string instead of strdup */
+			this.label = (owned)str.str;
 		}
 
 		public string get_markup () {
