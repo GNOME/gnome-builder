@@ -50,9 +50,9 @@ namespace Ide
 	                                     Gtk.SourceCompletionProvider,
 	                                     Ide.CompletionProvider
 	{
+		internal string? last_prefix;
 		GenericArray<Ide.ValaCompletionItem>? last_results;
 		string? last_line;
-		string? last_prefix;
 		int line = -1;
 		int column = -1;
 
@@ -154,7 +154,7 @@ namespace Ide
 					for (int i = 0; i < results.length; i++) {
 						var item = results.get (i);
 						list.prepend (item);
-						item.set_markup_func (this.markup_func);
+						item.set_provider (this);
 					}
 					context.add_proposals (this, list, true);
 				}
@@ -215,17 +215,9 @@ namespace Ide
 			return true;
 		}
 
-		string markup_func (string name)
-		{
-			return highlight_full (name, this.last_prefix, true, 1);
-		}
-
 		public int get_priority ()
 		{
 			return 200;
 		}
 	}
-
-	[CCode (cheader_filename = "gb-string.h", cname = "gb_str_highlight_full")]
-	extern unowned string? highlight_full (string haystack, string needle, bool insensitive, int type);
 }
