@@ -89,14 +89,12 @@ static gint
 sort_by_priority (gconstpointer a,
                   gconstpointer b)
 {
-  CXCompletionResult *ra = ide_clang_completion_item_get_result (a);
-  CXCompletionResult *rb = ide_clang_completion_item_get_result (b);
-  unsigned prioa = clang_getCompletionPriority (ra->CompletionString);
-  unsigned priob = clang_getCompletionPriority (rb->CompletionString);
+  IdeClangCompletionItem *itema = (IdeClangCompletionItem *)a;
+  IdeClangCompletionItem *itemb = (IdeClangCompletionItem *)b;
 
-  if (prioa < priob)
+  if (itema->priority < itemb->priority)
     return -1;
-  else if (prioa > priob)
+  else if (itema->priority > itemb->priority)
     return 1;
   return 0;
 }
