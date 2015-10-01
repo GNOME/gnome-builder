@@ -31,7 +31,6 @@ G_DECLARE_FINAL_TYPE (IdeClangCompletionItem, ide_clang_completion_item, IDE, CL
 
 IdeSourceSnippet *ide_clang_completion_item_get_snippet       (IdeClangCompletionItem *self);
 const gchar      *ide_clang_completion_item_get_typed_text    (IdeClangCompletionItem *self);
-guint             ide_clang_completion_item_get_priority      (IdeClangCompletionItem *self);
 const gchar      *ide_clang_completion_item_get_brief_comment (IdeClangCompletionItem *self);
 
 G_END_DECLS

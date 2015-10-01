@@ -404,26 +404,6 @@ ide_clang_completion_item_get_snippet (IdeClangCompletionItem *self)
 }
 
 /**
- * ide_clang_completion_item_get_priority:
- * @self: A #IdeClangCompletionItem.
- *
- * Gets the completion priority for sorting within the results.
- *
- * Returns: An unsigned integer.
- */
-guint
-ide_clang_completion_item_get_priority (IdeClangCompletionItem *self)
-{
-  CXCompletionResult *result;
-
-  g_return_val_if_fail (IDE_IS_CLANG_COMPLETION_ITEM (self), 0);
-
-  result = ide_clang_completion_item_get_result (self);
-
-  return clang_getCompletionPriority (result);
-}
-
-/**
  * ide_clang_completion_item_get_typed_text:
  * @self: An #IdeClangCompletionItem.
  *
