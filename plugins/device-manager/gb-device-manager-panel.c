@@ -26,10 +26,8 @@
 
 struct _GbDeviceManagerPanel
 {
-  GtkBox       parent_instance;
-
-  GbWorkbench *workbench;
-  GbTree      *tree;
+  GtkBox  parent_instance;
+  GbTree *tree;
 };
 
 static void workbench_addin_iface_init (GbWorkbenchAddinInterface *iface);
@@ -41,16 +39,10 @@ G_DEFINE_DYNAMIC_TYPE_EXTENDED (GbDeviceManagerPanel,
                                 G_IMPLEMENT_INTERFACE_DYNAMIC (GB_TYPE_WORKBENCH_ADDIN,
                                                                workbench_addin_iface_init))
 
-enum {
-  PROP_0,
-  PROP_WORKBENCH,
-  LAST_PROP
-};
-
-static GParamSpec *gParamSpecs [LAST_PROP];
 
 static void
-gb_device_manager_panel_load (GbWorkbenchAddin *addin)
+gb_device_manager_panel_load (GbWorkbenchAddin *addin,
+                              GbWorkbench      *workbench)
 {
   GbDeviceManagerPanel *self = (GbDeviceManagerPanel *)addin;
   IdeContext *context;
@@ -61,14 +53,14 @@ gb_device_manager_panel_load (GbWorkbenchAddin *addin)
 
   g_return_if_fail (GB_IS_DEVICE_MANAGER_PANEL (self));
 
-  context = gb_workbench_get_context (self->workbench);
+  context = gb_workbench_get_context (workbench);
   device_manager = ide_context_get_device_manager (context);
 
   root = gb_tree_node_new ();
   gb_tree_node_set_item (root, G_OBJECT (device_manager));
   gb_tree_set_root (self->tree, root);
 
-  workspace = gb_workbench_get_workspace (self->workbench);
+  workspace = gb_workbench_get_workspace (workbench);
   pane = gb_workspace_get_left_pane (GB_WORKSPACE (workspace));
   gb_workspace_pane_add_page (GB_WORKSPACE_PANE (pane),
                               GTK_WIDGET (self),
@@ -77,63 +69,19 @@ gb_device_manager_panel_load (GbWorkbenchAddin *addin)
 }
 
 static void
-gb_device_manager_panel_unload (GbWorkbenchAddin *addin)
+gb_device_manager_panel_unload (GbWorkbenchAddin *addin,
+                                GbWorkbench      *workbench)
 {
-  GbDeviceManagerPanel *self = (GbDeviceManagerPanel *)addin;
-  GtkWidget *parent;
-
-  g_return_if_fail (GB_IS_DEVICE_MANAGER_PANEL (self));
-
-  parent = gtk_widget_get_parent (GTK_WIDGET (self));
-  gtk_container_remove (GTK_CONTAINER (parent), GTK_WIDGET (self));
-}
-
-static void
-gb_device_manager_panel_finalize (GObject *object)
-{
-  GbDeviceManagerPanel *self = (GbDeviceManagerPanel *)object;
-
-  ide_clear_weak_pointer (&self->workbench);
-
-  G_OBJECT_CLASS (gb_device_manager_panel_parent_class)->finalize (object);
-}
-
-static void
-gb_device_manager_panel_set_property (GObject      *object,
-                                      guint         prop_id,
-                                      const GValue *value,
-                                      GParamSpec   *pspec)
-{
-  GbDeviceManagerPanel *self = GB_DEVICE_MANAGER_PANEL (object);
-
-  switch (prop_id)
-    {
-    case PROP_WORKBENCH:
-      ide_set_weak_pointer (&self->workbench, g_value_get_object (value));
-      break;
-
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-    }
+  /*
+   * TODO: We shouldn't add/remove ourselves. Instead, we should make
+   *       the addin structure a separate object which adds this panel.
+   */
 }
 
 static void
 gb_device_manager_panel_class_init (GbDeviceManagerPanelClass *klass)
 {
-  GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
-
-  object_class->finalize = gb_device_manager_panel_finalize;
-  object_class->set_property = gb_device_manager_panel_set_property;
-
-  gParamSpecs [PROP_WORKBENCH] =
-    g_param_spec_object ("workbench",
-                         "Workbench",
-                         "Workbench",
-                         GB_TYPE_WORKBENCH,
-                         (G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
-
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/plugins/device-manager/gb-device-manager-panel.ui");
   gtk_widget_class_bind_template_child (widget_class, GbDeviceManagerPanel, tree);

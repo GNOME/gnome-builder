@@ -28,8 +28,6 @@
 struct _GbSysmonAddin
 {
   GObject      parent_instance;
-
-  GbWorkbench *workbench;
   GtkWidget   *panel;
 };
 
@@ -39,70 +37,34 @@ G_DEFINE_DYNAMIC_TYPE_EXTENDED (GbSysmonAddin, gb_sysmon_addin, G_TYPE_OBJECT, 0
                                 G_IMPLEMENT_INTERFACE_DYNAMIC (GB_TYPE_WORKBENCH_ADDIN,
                                                                workbench_addin_iface_init))
 
-enum {
-  PROP_0,
-  PROP_WORKBENCH,
-  LAST_PROP
-};
-
-static GParamSpec *gParamSpecs [LAST_PROP];
-
 static void
-gb_sysmon_addin_load (GbWorkbenchAddin *addin)
+gb_sysmon_addin_load (GbWorkbenchAddin *addin,
+                      GbWorkbench      *workbench)
 {
   GbSysmonAddin *self = (GbSysmonAddin *)addin;
   GtkWidget *workspace;
   GtkWidget *pane;
+  GtkWidget *panel;
 
   g_assert (GB_IS_SYSMON_ADDIN (self));
+  g_assert (GB_IS_WORKBENCH (workbench));
 
-  workspace = gb_workbench_get_workspace (self->workbench);
+  workspace = gb_workbench_get_workspace (workbench);
   pane = gb_workspace_get_bottom_pane (GB_WORKSPACE (workspace));
-  self->panel = g_object_new (GB_TYPE_SYSMON_PANEL, "visible", TRUE, NULL);
+  panel = g_object_new (GB_TYPE_SYSMON_PANEL, "visible", TRUE, NULL);
+  ide_set_weak_pointer (&self->panel, panel);
   gb_workspace_pane_add_page (GB_WORKSPACE_PANE (pane),
-                              GTK_WIDGET (self->panel),
+                              GTK_WIDGET (panel),
                               _("System Monitor"),
                               "utilities-system-monitor-symbolic");
 }
 
 static void
-gb_sysmon_addin_unload (GbWorkbenchAddin *addin)
+gb_sysmon_addin_unload (GbWorkbenchAddin *addin,
+                        GbWorkbench      *workbench)
 {
-  GbSysmonAddin *self = (GbSysmonAddin *)addin;
-  GtkWidget *parent;
-
-  parent = gtk_widget_get_parent (self->panel);
-  gtk_container_remove (GTK_CONTAINER (parent), self->panel);
-  self->panel = NULL;
-}
-
-static void
-gb_sysmon_addin_finalize (GObject *object)
-{
-  GbSysmonAddin *self = (GbSysmonAddin *)object;
-
-  ide_clear_weak_pointer (&self->workbench);
-
-  G_OBJECT_CLASS (gb_sysmon_addin_parent_class)->finalize (object);
-}
-
-static void
-gb_sysmon_addin_set_property (GObject      *object,
-                              guint         prop_id,
-                              const GValue *value,
-                              GParamSpec   *pspec)
-{
-  GbSysmonAddin *self = GB_SYSMON_ADDIN (object);
-
-  switch (prop_id)
-    {
-    case PROP_WORKBENCH:
-      ide_set_weak_pointer (&self->workbench, g_value_get_object (value));
-      break;
-
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-    }
+  g_assert (GB_IS_SYSMON_ADDIN (addin));
+  g_assert (GB_IS_WORKBENCH (workbench));
 }
 
 static void
@@ -115,19 +77,6 @@ workbench_addin_iface_init (GbWorkbenchAddinInterface *iface)
 static void
 gb_sysmon_addin_class_init (GbSysmonAddinClass *klass)
 {
-  GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-  object_class->finalize = gb_sysmon_addin_finalize;
-  object_class->set_property = gb_sysmon_addin_set_property;
-
-  gParamSpecs [PROP_WORKBENCH] =
-    g_param_spec_object ("workbench",
-                         "Workbench",
-                         "Workbench",
-                         GB_TYPE_WORKBENCH,
-                         (G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
-
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
 }
 
 static void

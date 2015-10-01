@@ -74,23 +74,19 @@ enum {
   LAST_SIGNAL
 };
 
-enum {
-  PROP_0,
-  PROP_WORKBENCH,
-  LAST_PROP
-};
-
-static GParamSpec *gParamSpecs [LAST_PROP];
 static guint gSignals [LAST_SIGNAL];
 
 static void
-gb_command_bar_load (GbWorkbenchAddin *addin)
+gb_command_bar_load (GbWorkbenchAddin *addin,
+                     GbWorkbench      *workbench)
 {
   GbCommandBar *self = (GbCommandBar *)addin;
   GbCommandProvider *provider;
   GtkWidget *slider;
 
   g_assert (GB_IS_COMMAND_BAR (self));
+
+  ide_set_weak_pointer (&self->workbench, workbench);
 
   provider = g_object_new (GB_TYPE_COMMAND_GACTION_PROVIDER,
                            "workbench", self->workbench,
@@ -115,19 +111,22 @@ gb_command_bar_load (GbWorkbenchAddin *addin)
 }
 
 static void
-gb_command_bar_unload (GbWorkbenchAddin *addin)
+gb_command_bar_unload (GbWorkbenchAddin *addin,
+                       GbWorkbench      *workbench)
 {
   GbCommandBar *self = (GbCommandBar *)addin;
-  GtkWidget *parent;
 
   g_assert (GB_IS_COMMAND_BAR (self));
+  g_assert (GB_IS_WORKBENCH (workbench));
 
+  /*
+   * TODO: We can't rely on object lifecycle since we are a GtkWidget.
+   *       This plugin should be changed to have a separate addin that
+   *       then adds this widget to the workbench.
+   */
+
+  g_action_map_remove_action (G_ACTION_MAP (workbench), "show-command-bar");
   ide_clear_weak_pointer (&self->workbench);
-
-  parent = gtk_widget_get_parent (GTK_WIDGET (self));
-  gtk_container_remove (GTK_CONTAINER (parent), GTK_WIDGET (self));
-
-  g_action_map_remove_action (G_ACTION_MAP (self->workbench), "show-command-bar");
 }
 
 GtkWidget *
@@ -641,25 +640,6 @@ gb_command_bar_finalize (GObject *object)
 }
 
 static void
-gb_command_bar_set_property (GObject      *object,
-                             guint         prop_id,
-                             const GValue *value,
-                             GParamSpec   *pspec)
-{
-  GbCommandBar *self = (GbCommandBar *)object;
-
-  switch (prop_id)
-    {
-    case PROP_WORKBENCH:
-      ide_set_weak_pointer (&self->workbench, g_value_get_object (value));
-      break;
-
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-    }
-}
-
-static void
 gb_command_bar_class_init (GbCommandBarClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -668,18 +648,8 @@ gb_command_bar_class_init (GbCommandBarClass *klass)
 
   object_class->constructed = gb_command_bar_constructed;
   object_class->finalize = gb_command_bar_finalize;
-  object_class->set_property = gb_command_bar_set_property;
 
   widget_class->grab_focus = gb_command_bar_grab_focus;
-
-  gParamSpecs [PROP_WORKBENCH] =
-    g_param_spec_object ("workbench",
-                         "Workbench",
-                         "Workbench",
-                         GB_TYPE_WORKBENCH,
-                         (G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
-
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
 
   /**
    * GbCommandBar::complete:

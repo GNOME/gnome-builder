@@ -358,6 +358,8 @@ gb_workbench_delete_event (GtkWidget   *widget,
     {
       g_assert (self->unload_cancellable == NULL);
 
+      g_clear_object (&self->extensions);
+
       self->unloading = TRUE;
       self->unload_cancellable = g_cancellable_new ();
       g_signal_emit (self, gSignals [UNLOAD], 0, self->context);
@@ -452,23 +454,42 @@ gb_workbench_active_view_unref (gpointer  data,
 static void
 gb_workbench__extension_added (PeasExtensionSet *set,
                                PeasPluginInfo   *plugin_info,
-                               GbWorkbenchAddin *addin)
+                               GbWorkbenchAddin *addin,
+                               GbWorkbench      *self)
 {
-  gb_workbench_addin_load (addin);
+  g_assert (PEAS_IS_EXTENSION_SET (set));
+  g_assert (plugin_info != NULL);
+  g_assert (GB_IS_WORKBENCH_ADDIN (addin));
+  g_assert (GB_IS_WORKBENCH (self));
+
+  /*
+   * XXX: Temporary hack until we fix plugins to not subclass GtkWidget.
+   */
+  if (G_IS_INITIALLY_UNOWNED (addin))
+    g_object_ref_sink (addin);
+
+  gb_workbench_addin_load (addin, self);
 }
 
 static void
 gb_workbench__extension_removed (PeasExtensionSet *set,
                                  PeasPluginInfo   *plugin_info,
-                                 GbWorkbenchAddin *addin)
+                                 GbWorkbenchAddin *addin,
+                                 GbWorkbench      *self)
 {
-  gb_workbench_addin_unload (addin);
+  g_assert (PEAS_IS_EXTENSION_SET (set));
+  g_assert (plugin_info != NULL);
+  g_assert (GB_IS_WORKBENCH_ADDIN (addin));
+  g_assert (GB_IS_WORKBENCH (self));
+
+  gb_workbench_addin_unload (addin, self);
 }
 
 static void
 gb_workbench_constructed (GObject *object)
 {
   GbWorkbench *self = (GbWorkbench *)object;
+  PeasEngine *engine;
   GtkApplication *app;
   GMenu *menu;
 
@@ -482,13 +503,12 @@ gb_workbench_constructed (GObject *object)
   menu = gtk_application_get_menu_by_id (app, "gear-menu");
   gtk_menu_button_set_menu_model (GTK_MENU_BUTTON (self->gear_menu_button), G_MENU_MODEL (menu));
 
-  self->extensions = peas_extension_set_new (peas_engine_get_default (),
-                                             GB_TYPE_WORKBENCH_ADDIN,
-                                             "workbench", self,
-                                             NULL);
+  engine = peas_engine_get_default ();
+
+  self->extensions = peas_extension_set_new (engine, GB_TYPE_WORKBENCH_ADDIN, NULL);
   peas_extension_set_foreach (self->extensions,
                               (PeasExtensionSetForeachFunc)gb_workbench__extension_added,
-                              NULL);
+                              self);
   g_signal_connect (self->extensions,
                     "extension-added",
                     G_CALLBACK (gb_workbench__extension_added),
@@ -586,7 +606,6 @@ gb_workbench_finalize (GObject *object)
 
   g_clear_object (&self->context);
   g_clear_pointer (&self->current_folder_uri, g_free);
-  g_clear_object (&self->extensions);
 
   G_OBJECT_CLASS (gb_workbench_parent_class)->finalize (object);
 
