@@ -74,9 +74,8 @@ ide_ctags_completion_item_match (IdeCompletionItem *item,
                                  const gchar       *casefold)
 {
   IdeCtagsCompletionItem *self = (IdeCtagsCompletionItem *)item;
-  IdeCompletionItemHead *head = (IdeCompletionItemHead *)item;
 
-  return ide_completion_item_fuzzy_match (self->entry->name, casefold, &head->priority);
+  return ide_completion_item_fuzzy_match (self->entry->name, casefold, &item->priority);
 }
 
 static void
