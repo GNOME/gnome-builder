@@ -259,7 +259,7 @@ gb_command_bar_on_entry_activate (GbCommandBar *self,
 
   gtk_widget_hide (GTK_WIDGET (self->completion_scroller));
 
-  if (!gb_str_empty0 (text))
+  if (!ide_str_empty0 (text))
     {
       GbCommandResult *result = NULL;
       GbCommand *command = NULL;

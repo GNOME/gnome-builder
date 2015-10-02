@@ -95,7 +95,7 @@ item_filter_func (GtkListBoxRow *row,
 
   text = gtk_entry_get_text (entry);
 
-  if (gb_str_empty0 (text))
+  if (ide_str_empty0 (text))
     return TRUE;
   else
     {

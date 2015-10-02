@@ -305,7 +305,7 @@ gb_projects_dialog__search_entry_changed (GbProjectsDialog *self,
   g_clear_pointer (&self->search_pattern, (GDestroyNotify)ide_pattern_spec_unref);
 
   text = gtk_entry_get_text (entry);
-  if (!gb_str_empty0 (text))
+  if (!ide_str_empty0 (text))
     self->search_pattern = ide_pattern_spec_new (text);
 
   gtk_list_box_invalidate_filter (self->listbox);

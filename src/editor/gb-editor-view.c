@@ -645,7 +645,7 @@ gb_editor_view_goto_line_changed (GbEditorView    *self,
 
   gtk_text_buffer_get_bounds (GTK_TEXT_BUFFER (self->document), &begin, &end);
 
-  if (!gb_str_empty0 (text))
+  if (!ide_str_empty0 (text))
     {
       gint64 value;
 

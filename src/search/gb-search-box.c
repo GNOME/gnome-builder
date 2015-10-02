@@ -131,7 +131,7 @@ gb_search_box_entry_focus_in (GbSearchBox   *self,
 
   text = gtk_entry_get_text (GTK_ENTRY (self->entry));
 
-  if (!gb_str_empty0 (text))
+  if (!ide_str_empty0 (text))
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (self->button), TRUE);
 
   return GDK_EVENT_PROPAGATE;
@@ -164,7 +164,7 @@ gb_search_box_entry_changed (GbSearchBox    *self,
 
   button = GTK_TOGGLE_BUTTON (self->button);
   text = gtk_entry_get_text (GTK_ENTRY (entry));
-  active = !gb_str_empty0 (text) ||
+  active = !ide_str_empty0 (text) ||
            (self->delay_timeout != 0) ||
            gtk_widget_has_focus (GTK_WIDGET (entry));
 
