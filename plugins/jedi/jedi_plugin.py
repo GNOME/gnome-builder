@@ -197,6 +197,15 @@ class JediCompletionProvider(Ide.Object,
     def do_get_icon(self):
         return None
 
+    def invalidates(self, line_str):
+        if not line_str.startswith(self.line_str):
+            return True
+        suffix = line_str[len(self.line_str):]
+        for ch in suffix:
+            if ch in (')', '.', ']'):
+                return True
+        return False
+
     def do_populate(self, context):
         self.current_word = Ide.CompletionProvider.context_current_word(context)
         self.current_word_lower = self.current_word.lower()
@@ -216,7 +225,7 @@ class JediCompletionProvider(Ide.Object,
                 self.thread.cancelled = True
                 self.thread = None
 
-        if iter.get_line() == self.line and line_str.startswith(self.line_str):
+        if iter.get_line() == self.line and not self.invalidates(line_str):
             if self.results and self.results.replay(self.current_word):
                 self.results.present(self, context)
                 return
