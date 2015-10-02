@@ -67,16 +67,18 @@ struct _IdeCompletionItemClass
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (IdeCompletionItem, g_object_unref)
 
-GType              ide_completion_item_get_type    (void);
-IdeCompletionItem *ide_completion_item_new         (void);
-gboolean           ide_completion_item_match       (IdeCompletionItem   *self,
-                                                    const gchar         *query,
-                                                    const gchar         *casefold);
-void               ide_completion_item_set_priority(IdeCompletionItem   *self,
-                                                    guint                priority);
-gboolean           ide_completion_item_fuzzy_match (const gchar         *haystack,
-                                                    const gchar         *casefold_needle,
-                                                    guint               *priority);
+GType              ide_completion_item_get_type        (void);
+IdeCompletionItem *ide_completion_item_new             (void);
+gboolean           ide_completion_item_match           (IdeCompletionItem   *self,
+                                                        const gchar         *query,
+                                                        const gchar         *casefold);
+void               ide_completion_item_set_priority    (IdeCompletionItem   *self,
+                                                        guint                priority);
+gboolean           ide_completion_item_fuzzy_match     (const gchar         *haystack,
+                                                        const gchar         *casefold_needle,
+                                                        guint               *priority);
+gchar             *ide_completion_item_fuzzy_highlight (const gchar         *haystack,
+                                                        const gchar         *casefold_query);
 
 G_END_DECLS
 
