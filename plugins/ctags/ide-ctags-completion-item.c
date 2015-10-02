@@ -114,7 +114,7 @@ get_markup (GtkSourceCompletionProposal *proposal)
   IdeCtagsCompletionItem *self = (IdeCtagsCompletionItem *)proposal;
 
   if (self->provider->current_word != NULL)
-    return gb_str_highlight (self->entry->name, self->provider->current_word);
+    return ide_completion_item_fuzzy_highlight (self->entry->name, self->provider->current_word);
 
   return g_strdup (self->entry->name);
 }
