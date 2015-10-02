@@ -193,10 +193,6 @@ class JediCompletionProvider(Ide.Object,
         return None
 
     def do_populate(self, context):
-        if not HAS_JEDI:
-            context.add_proposals(self, [], True)
-            return
-
         _, iter = context.get_iter()
         buffer = iter.get_buffer()
 
