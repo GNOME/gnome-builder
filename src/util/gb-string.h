@@ -23,9 +23,6 @@
 
 G_BEGIN_DECLS
 
-#define gb_str_equal0(s1,s2) \
-  (((s1) == (s2)) || ((s1) && (s2) && g_str_equal(s1,s2)))
-
 typedef enum
 {
   GB_HIGHLIGHT_UNDERLINE,
