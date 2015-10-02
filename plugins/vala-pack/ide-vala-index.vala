@@ -114,7 +114,7 @@ namespace Ide
 
 		void add_file (GLib.File file)
 		{
-			var path  =file.get_path ();
+			var path = file.get_path ();
 			if (path == null)
 				return;
 
@@ -175,17 +175,18 @@ namespace Ide
 			return true;
 		}
 
-		public async GenericArray<Ide.ValaCompletionItem> code_complete (GLib.File file,
-		                                                                 int line,
-		                                                                 int column,
-		                                                                 string? line_text,
-		                                                                 Ide.UnsavedFiles? unsaved_files,
-		                                                                 out int result_line,
-		                                                                 out int result_column,
-		                                                                 GLib.Cancellable? cancellable)
+		public async Ide.CompletionResults code_complete (GLib.File file,
+		                                                  int line,
+		                                                  int column,
+		                                                  string? line_text,
+		                                                  Ide.UnsavedFiles? unsaved_files,
+		                                                  Ide.ValaCompletionProvider provider,
+		                                                  GLib.Cancellable? cancellable,
+		                                                  out int result_line,
+		                                                  out int result_column)
 		{
 			var unsaved_files_copy = unsaved_files.to_array ();
-			var result = new GenericArray<Ide.ValaCompletionItem> ();
+			var result = new Ide.CompletionResults (provider.query);
 
 			Ide.ThreadPool.push (Ide.ThreadPoolKind.COMPILER, () => {
 				if ((cancellable == null) || !cancellable.is_cancelled ()) {
@@ -202,7 +203,7 @@ namespace Ide
 							var locator = new Ide.ValaLocator ();
 							var nearest = locator.locate (source_file, line, column);
 
-							this.add_completions (source_file, ref line, ref column, text, nearest, result);
+							this.add_completions (source_file, ref line, ref column, text, nearest, result, provider);
 						}
 
 						Vala.CodeContext.pop ();
@@ -274,12 +275,10 @@ namespace Ide
 		                      ref int column,
 		                      string line_text,
 		                      Vala.Symbol? nearest,
-		                      GenericArray<Ide.ValaCompletionItem> results)
+		                      Ide.CompletionResults results,
+		                      Ide.ValaCompletionProvider provider)
 		{
-			if (!(nearest is Vala.Block))
-				nearest = null;
-
-			var block = (Vala.Block)nearest;
+			var block = nearest as Vala.Block;
 			Vala.SourceLocation cursor = Vala.SourceLocation (null, line, column);
 
 			// TODO: our list building could use a lot of low-hanging optimizations.
@@ -291,7 +290,7 @@ namespace Ide
 
 			foreach (var symbol in list) {
 				if (symbol.name != null && symbol.name[0] != '\0')
-					results.add (new Ide.ValaCompletionItem (symbol));
+					results.take_proposal (new Ide.ValaCompletionItem (symbol, provider));
 			}
 
 			line = cursor.line;

@@ -27,27 +27,23 @@ namespace Ide
 		static uint hash_seed;
 
 		internal Vala.Symbol symbol;
-		weak Ide.ValaCompletionProvider? provider;
+		weak Ide.ValaCompletionProvider provider;
 		string label;
 
 		static construct {
 			hash_seed = "IdeValaCompletionItem".hash ();
 		}
 
-		public ValaCompletionItem (Vala.Symbol symbol)
+		public ValaCompletionItem (Vala.Symbol symbol, Ide.ValaCompletionProvider provider)
 		{
 			this.symbol = symbol;
+			this.provider = provider;
 
 			/* Unfortunate we have to do this here, because it would
 			 * be better to do this lazy. But that would require access to
 			 * the code context while it could be getting mutated.
 			 */
 			this.build_label ();
-		}
-
-		internal void set_provider (Ide.ValaCompletionProvider? provider)
-		{
-			this.provider = provider;
 		}
 
 		public unowned string? get_icon_name ()
@@ -78,23 +74,12 @@ namespace Ide
 			return null;
 		}
 
-		public bool matches (string? prefix_lower)
+		public override bool match (string query, string casefold)
 		{
-			uint priority;
-			bool ret;
-
-			if (prefix_lower == null || prefix_lower [0] == '\0')
-				return true;
-
-			ret = Ide.CompletionItem.fuzzy_match (this.symbol.name, prefix_lower, out priority);
-			/* TODO: Save priority to use for sorting. */
-
-			return ret;
-		}
-
-		public string get_label ()
-		{
-			return this.symbol.name;
+			uint priority = 0;
+			bool result = Ide.CompletionItem.fuzzy_match (this.symbol.name, casefold, out priority);
+			this.set_priority (priority);
+			return result;
 		}
 
 		public void build_label ()
@@ -142,10 +127,13 @@ namespace Ide
 			this.label = (owned)str.str;
 		}
 
-		public string get_markup ()
-		{
-			if (this.provider != null)
-				return highlight_full (this.label, this.provider.last_prefix, true, 1);
+		public string get_markup () {
+			if (this.provider.query != null)
+				return highlight_full (this.label, this.provider.query, true, 1 /* GB_HIGHLIGHT_BOLD */);
+			return "";
+		}
+
+		public string get_label () {
 			return this.label;
 		}
 
@@ -154,16 +142,20 @@ namespace Ide
 			return this.symbol.name;
 		}
 
+		public string? get_info () {
+			return null;
+		}
+
+		public unowned GLib.Icon? get_gicon () {
+			return null;
+		}
+
 		public uint hash ()
 		{
 			return this.symbol.name.hash () ^ hash_seed;
 		}
-
-		public unowned GLib.Icon? get_gicon () { return null; }
-		public unowned Gdk.Pixbuf? get_icon () { return null; }
-		public string? get_info () { return null; }
 	}
 
 	[CCode (cheader_filename = "gb-string.h", cname = "gb_str_highlight_full")]
-	extern string? highlight_full (string haystack, string needle, bool insensitive, int type);
+	extern unowned string? highlight_full (string haystack, string needle, bool insensitive, int type);
 }
