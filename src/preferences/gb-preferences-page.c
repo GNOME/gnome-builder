@@ -166,7 +166,7 @@ gb_preferences_page_set_title (GbPreferencesPage *page,
 
   g_return_if_fail (GB_IS_PREFERENCES_PAGE (page));
 
-  if (!gb_str_equal0 (title, priv->title))
+  if (!ide_str_equal0 (title, priv->title))
     {
       g_free (priv->title);
       priv->title = g_strdup (title);
