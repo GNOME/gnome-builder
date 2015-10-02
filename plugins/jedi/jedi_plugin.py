@@ -197,6 +197,7 @@ class JediCompletionProvider(Ide.Object,
 
     def do_populate(self, context):
         self.current_word = Ide.CompletionProvider.context_current_word(context)
+        self.current_word_lower = self.current_word.lower()
 
         if self.thread is not None:
             self.thread.cancelled = True
@@ -380,8 +381,17 @@ class JediCompletionProposal(Ide.CompletionItem, GtkSource.CompletionProposal):
     def do_get_label(self):
         return self.completion.name
 
+    def do_match(self, query, casefold):
+        ret, priority = Ide.CompletionItem.fuzzy_match(
+                self.completion.name,
+                self.provider.current_word_lower)
+        self.set_priority(priority)
+        return ret
+
     def do_get_markup(self):
-        return self.completion.name
+        return Ide.CompletionItem.fuzzy_highlight(
+                self.completion.complete,
+                self.provider.current_word_lower)
 
     def do_get_text(self):
         return self.completion.complete
