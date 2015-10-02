@@ -81,7 +81,7 @@ gb_editor_tweak_widget_entry_changed (GbEditorTweakWidget *self,
 
   text = gtk_entry_get_text (entry);
 
-  if (gb_str_empty0 (text))
+  if (ide_str_empty0 (text))
     gtk_list_box_set_filter_func (self->list_box, NULL, NULL, NULL);
   else
     {

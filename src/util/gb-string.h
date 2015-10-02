@@ -23,8 +23,6 @@
 
 G_BEGIN_DECLS
 
-#define gb_str_empty(s)  (!*(s))
-#define gb_str_empty0(s) (!(s) || gb_str_empty(s))
 #define gb_str_equal0(s1,s2) \
   (((s1) == (s2)) || ((s1) && (s2) && g_str_equal(s1,s2)))
 

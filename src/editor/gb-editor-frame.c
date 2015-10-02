@@ -236,7 +236,7 @@ gb_editor_frame_update_search_position_label (GbEditorFrame *self)
   context = gtk_widget_get_style_context (GTK_WIDGET (self->search_entry));
   search_text = gtk_entry_get_text (GTK_ENTRY (self->search_entry));
 
-  if ((count == 0) && !gb_str_empty0 (search_text))
+  if ((count == 0) && !ide_str_empty0 (search_text))
     gtk_style_context_add_class (context, GTK_STYLE_CLASS_ERROR);
   else
     gtk_style_context_remove_class (context, GTK_STYLE_CLASS_ERROR);

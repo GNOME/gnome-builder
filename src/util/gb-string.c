@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <ide.h>
 #include <string.h>
 
 #include "gb-string.h"
@@ -79,9 +80,9 @@ gboolean
 gb_str_simple_match (const gchar *haystack,
                      const gchar *needle_down)
 {
-  if (gb_str_empty0 (haystack))
+  if (ide_str_empty0 (haystack))
     return FALSE;
-  else if (gb_str_empty0 (needle_down))
+  else if (ide_str_empty0 (needle_down))
     return TRUE;
 
   for (; *needle_down; needle_down = g_utf8_next_char (needle_down))

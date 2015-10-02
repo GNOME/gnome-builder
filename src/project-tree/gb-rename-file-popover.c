@@ -164,7 +164,7 @@ gb_rename_file_popover__entry_changed (GbRenameFilePopover *self,
   gtk_label_set_label (self->message, NULL);
 
   text = gtk_entry_get_text (entry);
-  if (gb_str_empty0 (text))
+  if (ide_str_empty0 (text))
     return;
 
   if (strchr (text, G_DIR_SEPARATOR) != NULL)
@@ -219,7 +219,7 @@ gb_rename_file_popover__button_clicked (GbRenameFilePopover *self,
   g_assert (G_IS_FILE (self->file));
 
   path = gtk_entry_get_text (self->entry);
-  if (gb_str_empty0 (path))
+  if (ide_str_empty0 (path))
     return;
 
   parent = g_file_get_parent (self->file);
