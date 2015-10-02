@@ -47,11 +47,9 @@ static void
 ide_clang_completion_item_lazy_init (IdeClangCompletionItem *self)
 {
   CXCompletionResult *result;
-  g_autoptr(IdeSourceSnippet) snippet = NULL;
   GString *markup = NULL;
   unsigned num_chunks;
   unsigned i;
-  guint tab_stop = 0;
 
   g_assert (IDE_IS_CLANG_COMPLETION_ITEM (self));
 
@@ -60,17 +58,12 @@ ide_clang_completion_item_lazy_init (IdeClangCompletionItem *self)
 
   result = ide_clang_completion_item_get_result (self);
   num_chunks = clang_getNumCompletionChunks (result);
-  snippet = ide_source_snippet_new (NULL, NULL);
   markup = g_string_new (NULL);
 
   g_assert (result);
   g_assert (num_chunks);
-  g_assert (IDE_IS_SOURCE_SNIPPET (snippet));
   g_assert (markup);
 
-  /*
-   * Try to determine the icon to use for this result.
-   */
   switch ((int)result->CursorKind)
     {
     case CXCursor_CXXMethod:
@@ -141,10 +134,82 @@ ide_clang_completion_item_lazy_init (IdeClangCompletionItem *self)
       break;
     }
 
-  /*
-   * Walk the chunks, creating our snippet for insertion as well as our markup
-   * for the row in the completion window.
-   */
+  for (i = 0; i < num_chunks; i++)
+    {
+      enum CXCompletionChunkKind kind;
+      const gchar *text;
+      g_autofree gchar *escaped = NULL;
+      CXString cxstr;
+
+      kind = clang_getCompletionChunkKind (result->CompletionString, i);
+      cxstr = clang_getCompletionChunkText (result->CompletionString, i);
+      text = clang_getCString (cxstr);
+
+      if (text)
+        escaped = g_markup_escape_text (text, -1);
+      else
+        escaped = g_strdup ("");
+
+      switch (kind)
+        {
+        case CXCompletionChunk_TypedText:
+          g_string_append_printf (markup, "<b>%s</b>", escaped);
+          break;
+
+        case CXCompletionChunk_Placeholder:
+        case CXCompletionChunk_Text:
+        case CXCompletionChunk_LeftParen:
+        case CXCompletionChunk_RightParen:
+        case CXCompletionChunk_LeftBracket:
+        case CXCompletionChunk_RightBracket:
+        case CXCompletionChunk_LeftBrace:
+        case CXCompletionChunk_RightBrace:
+        case CXCompletionChunk_LeftAngle:
+        case CXCompletionChunk_RightAngle:
+        case CXCompletionChunk_Comma:
+        case CXCompletionChunk_Colon:
+        case CXCompletionChunk_SemiColon:
+        case CXCompletionChunk_Equal:
+        case CXCompletionChunk_HorizontalSpace:
+        case CXCompletionChunk_VerticalSpace:
+        case CXCompletionChunk_CurrentParameter:
+          g_string_append (markup, escaped);
+          break;
+
+        case CXCompletionChunk_Informative:
+          if (ide_str_equal0 (text, "const "))
+            g_string_append (markup, text);
+          break;
+
+        case CXCompletionChunk_ResultType:
+          g_string_append (markup, escaped);
+          g_string_append_c (markup, ' ');
+          break;
+
+        case CXCompletionChunk_Optional:
+        default:
+          break;
+        }
+    }
+
+  self->markup = g_string_free (markup, FALSE);
+}
+
+static IdeSourceSnippet *
+ide_clang_completion_item_create_snippet (IdeClangCompletionItem *self)
+{
+  CXCompletionResult *result;
+  IdeSourceSnippet *snippet;
+  unsigned num_chunks;
+  unsigned i;
+  guint tab_stop = 0;
+
+  g_assert (IDE_IS_CLANG_COMPLETION_ITEM (self));
+
+  result = ide_clang_completion_item_get_result (self);
+  snippet = ide_source_snippet_new (NULL, NULL);
+  num_chunks = clang_getNumCompletionChunks (result);
+
   for (i = 0; i < num_chunks; i++)
     {
       enum CXCompletionChunkKind kind;
@@ -164,11 +229,7 @@ ide_clang_completion_item_lazy_init (IdeClangCompletionItem *self)
 
       switch (kind)
         {
-        case CXCompletionChunk_Optional:
-          break;
-
         case CXCompletionChunk_TypedText:
-          g_string_append_printf (markup, "<b>%s</b>", escaped);
           chunk = ide_source_snippet_chunk_new ();
           ide_source_snippet_chunk_set_text (chunk, text);
           ide_source_snippet_chunk_set_text_set (chunk, TRUE);
@@ -177,7 +238,6 @@ ide_clang_completion_item_lazy_init (IdeClangCompletionItem *self)
           break;
 
         case CXCompletionChunk_Text:
-          g_string_append (markup, escaped);
           chunk = ide_source_snippet_chunk_new ();
           ide_source_snippet_chunk_set_text (chunk, text);
           ide_source_snippet_chunk_set_text_set (chunk, TRUE);
@@ -186,7 +246,6 @@ ide_clang_completion_item_lazy_init (IdeClangCompletionItem *self)
           break;
 
         case CXCompletionChunk_Placeholder:
-          g_string_append (markup, escaped);
           chunk = ide_source_snippet_chunk_new ();
           ide_source_snippet_chunk_set_text (chunk, text);
           ide_source_snippet_chunk_set_text_set (chunk, TRUE);
@@ -195,16 +254,10 @@ ide_clang_completion_item_lazy_init (IdeClangCompletionItem *self)
           g_clear_object (&chunk);
           break;
 
-        case CXCompletionChunk_Informative:
-          if (0 == g_strcmp0 (text, "const "))
-            g_string_append (markup, text);
-          break;
-
         case CXCompletionChunk_CurrentParameter:
           break;
 
         case CXCompletionChunk_LeftParen:
-          g_string_append (markup, " ");
           chunk = ide_source_snippet_chunk_new ();
           ide_source_snippet_chunk_set_text (chunk, " ");
           ide_source_snippet_chunk_set_text_set (chunk, TRUE);
@@ -223,7 +276,6 @@ ide_clang_completion_item_lazy_init (IdeClangCompletionItem *self)
         case CXCompletionChunk_SemiColon:
         case CXCompletionChunk_Equal:
         case CXCompletionChunk_HorizontalSpace:
-          g_string_append (markup, escaped);
           chunk = ide_source_snippet_chunk_new ();
           ide_source_snippet_chunk_set_text (chunk, text);
           ide_source_snippet_chunk_set_text_set (chunk, TRUE);
@@ -232,7 +284,6 @@ ide_clang_completion_item_lazy_init (IdeClangCompletionItem *self)
           break;
 
         case CXCompletionChunk_VerticalSpace:
-          g_string_append (markup, escaped);
           /* insert the vertical space */
           chunk = ide_source_snippet_chunk_new ();
           ide_source_snippet_chunk_set_text (chunk, text);
@@ -247,17 +298,15 @@ ide_clang_completion_item_lazy_init (IdeClangCompletionItem *self)
           g_clear_object (&chunk);
           break;
 
+        case CXCompletionChunk_Informative:
+        case CXCompletionChunk_Optional:
         case CXCompletionChunk_ResultType:
-          g_string_append_printf (markup, "%s ", escaped);
-          break;
-
         default:
           break;
         }
     }
 
-  self->snippet = g_object_ref (snippet);
-  self->markup = g_string_free (markup, FALSE);
+  return snippet;
 }
 
 static gchar *
@@ -399,6 +448,9 @@ IdeSourceSnippet *
 ide_clang_completion_item_get_snippet (IdeClangCompletionItem *self)
 {
   g_return_val_if_fail (IDE_IS_CLANG_COMPLETION_ITEM (self), NULL);
+
+  if (self->snippet == NULL)
+    self->snippet = ide_clang_completion_item_create_snippet (self);
 
   return self->snippet;
 }
