@@ -140,7 +140,7 @@ class GIParam(object):
 class CompletionThread(threading.Thread):
     cancelled = False
 
-    def __init__(self, provider, context, text, line, column, filename):
+    def __init__(self, provider, context, text, line, column, filename, results):
         super().__init__()
         self._provider = provider
         self._context = context
@@ -148,13 +148,12 @@ class CompletionThread(threading.Thread):
         self._line = line
         self._column = column
         self._filename = filename
-        self._completions = []
+        self._results = results
 
     def run(self):
         try:
             if not self.cancelled:
                 script = jedi.Script(self._text, self._line, self._column, self._filename)
-                completions = []
                 if not self.cancelled:
                     for info in script.completions():
                         if self.cancelled:
@@ -168,14 +167,13 @@ class CompletionThread(threading.Thread):
                         else:
                             info.real_type = info.type
                         completion = JediCompletionProposal(self._provider, self._context, info)
-                        completions.append(completion)
-                self._completions = completions
+                        self._results.take_proposal(completion)
         finally:
             self.complete_in_idle()
 
     def _complete(self):
         if not self.cancelled:
-            self._context.add_proposals(self._provider, self._completions, True)
+            self._provider.complete(self._context, self._results)
 
     def complete_in_idle(self):
         GLib.timeout_add(0, self._complete)
@@ -184,7 +182,12 @@ class CompletionThread(threading.Thread):
 class JediCompletionProvider(Ide.Object,
                              GtkSource.CompletionProvider,
                              Ide.CompletionProvider):
+    current_word = None
+    results = None
     thread = None
+    line_str = None
+    line = -1
+    line_offset = -1
 
     def do_get_name(self):
         return 'Jedi Provider'
@@ -193,24 +196,34 @@ class JediCompletionProvider(Ide.Object,
         return None
 
     def do_populate(self, context):
-        _, iter = context.get_iter()
-        buffer = iter.get_buffer()
+        self.current_word = Ide.CompletionProvider.context_current_word(context)
 
         if self.thread is not None:
             self.thread.cancelled = True
-
         self.thread = None
 
-        # ignore completions if we are following whitespace.
-        copy = iter.copy()
-        copy.set_line_offset(0)
-        text = buffer.get_text(copy, iter, True)
-        if not text or text[-1].isspace():
-            context.add_proposals(self, [], True)
+        _, iter = context.get_iter()
+
+        # Make sure the line text matches
+        # what we queried with, or we could
+        # be on the same line, but different
+        # context.
+        begin = iter.copy()
+        begin.set_line_offset(0)
+        line_str = begin.get_slice(iter)
+
+        if iter.get_line() == self.line and \
+           self.results is not None and \
+           line_str.startswith(self.line_str) and \
+           self.results.replay(self.current_word):
+            self.results.present(self, context)
             return
 
-        begin, end = buffer.get_bounds()
+        self.line_str = line_str
 
+        buffer = iter.get_buffer()
+
+        begin, end = buffer.get_bounds()
         filename = (iter.get_buffer()
                         .get_file()
                         .get_file()
@@ -220,8 +233,13 @@ class JediCompletionProvider(Ide.Object,
         line = iter.get_line() + 1
         column = iter.get_line_offset()
 
+        self.line = iter.get_line()
+        self.line_offset = iter.get_line_offset()
+
+        results = Ide.CompletionResults(query=self.current_word)
+
         context.connect('cancelled', lambda *_: self._cancelled())
-        self.thread = CompletionThread(self, context, text, line, column, filename)
+        self.thread = CompletionThread(self, context, text, line, column, filename, results)
         self.thread.start()
 
     def _cancelled(self):
@@ -234,11 +252,10 @@ class JediCompletionProvider(Ide.Object,
         if context.get_activation() == GtkSource.CompletionActivation.INTERACTIVE:
             _, iter = context.get_iter()
             iter.backward_char()
-            if iter.get_char() == ')':
+            if not is_symbol_char(iter.get_char()):
                 return False
             buffer = iter.get_buffer()
-            classes = buffer.get_context_classes_at_iter(iter)
-            if 'string' in classes or 'comment' in classes:
+            if Ide.CompletionProvider.context_in_comment(context):
                 return False
         return True
 
@@ -250,9 +267,33 @@ class JediCompletionProvider(Ide.Object,
 
     def do_get_start_iter(self, context, proposal):
         _, iter = context.get_iter()
+        if self.line != -1 and self.line_offset != -1:
+            iter.set_line(self.line)
+            iter.set_line_offset(0)
+            line_offset = self.line_offset
+            while not iter.ends_line() and line_offset > 0:
+                if not iter.forward_char():
+                    break
+                line_offset -= 1
         return True, iter
 
-    def do_activate_proposal(self, proposal, location):
+    def do_activate_proposal(self, proposal, iter):
+        # We may have generated completions a few characters before
+        # our current insertion mark. So let's delete any of that
+        # transient text.
+        if iter.get_line() == self.line:
+            begin = iter.copy()
+            begin.set_line_offset(0)
+            line_offset = self.line_offset
+            while not begin.ends_line() and line_offset > 0:
+                if not begin.forward_char():
+                    break
+                line_offset -= 1
+            buffer = iter.get_buffer()
+            buffer.begin_user_action()
+            buffer.delete(begin, iter)
+            buffer.end_user_action()
+
         # Use snippets to push the replacement text and/or parameters with
         # tab stops.
         snippet = Ide.SourceSnippet()
@@ -310,6 +351,10 @@ class JediCompletionProvider(Ide.Object,
         view = proposal.context.props.completion.props.view
         view.push_snippet(snippet, None)
 
+        self.results = None
+        self.line = -1
+        self.line_offset = -1
+
         return True, None
 
     def do_get_interactive_delay(self):
@@ -318,8 +363,13 @@ class JediCompletionProvider(Ide.Object,
     def do_get_priority(self):
         return 200
 
+    def complete(self, context, results):
+        self.results = results
+        self.results.present(self, context)
+        self.thread = None
 
-class JediCompletionProposal(GObject.Object, GtkSource.CompletionProposal):
+
+class JediCompletionProposal(Ide.CompletionItem, GtkSource.CompletionProposal):
     def __init__(self, provider, context, completion, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.provider = provider
@@ -358,3 +408,6 @@ class JediCompletionProposal(GObject.Object, GtkSource.CompletionProposal):
 
     def do_changed(self):
         pass
+
+def is_symbol_char(ch):
+    return ch == '_' or ch.isalnum()
