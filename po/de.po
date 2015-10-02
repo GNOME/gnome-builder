@@ -2,24 +2,25 @@
 # Copyright (C) 2015 gnome-builder's COPYRIGHT HOLDER
 # This file is distributed under the same license as the gnome-builder package.
 # Florian Bäuerle <florian.bae@gmail.com>, 2015.
-# Bernd Homuth <dev@hmt.im>, 2015.
 # Christian Kirbach <christian.kirbach@gmail.com>, 2015.
+# Bernd Homuth <dev@hmt.im>, 2015.
+# Wolfgang Stöggl <c72578@yahoo.de>, 2015.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2015-09-17 11:15+0000\n"
-"PO-Revision-Date: 2015-09-12 23:49+0200\n"
-"Last-Translator: Bernd Homuth <dev@hmt.im>\n"
+"POT-Creation-Date: 2015-10-01 19:33+0000\n"
+"PO-Revision-Date: 2015-09-30 22:36+0200\n"
+"Last-Translator: Wolfgang Stoeggl <c72578@yahoo.de>\n"
 "Language-Team: Deutsch <gnome-de@gnome.org>\n"
-"Language: de\n"
+"Language: de_DE\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Gtranslator 2.91.6\n"
+"X-Generator: Poedit 1.8.5\n"
 
 #: ../contrib/egg/egg-animation.c:723
 #, c-format
@@ -165,7 +166,7 @@ msgstr "In einem Terminal ö_ffnen"
 
 #: ../data/gtk/menus.ui.h:28 ../data/ui/gb-rename-file-popover.ui.h:2
 msgid "_Rename"
-msgstr "_Umbennen"
+msgstr "_Umbenennen"
 
 #: ../data/gtk/menus.ui.h:29
 msgid "Mo_ve to Trash"
@@ -198,7 +199,8 @@ msgstr "Builder"
 msgid "The default color scheme for Builder"
 msgstr "Das Standardfarbschema für Builder"
 
-#: ../data/ui/gb-editor-frame.ui.h:1
+#. OVR indicates we are in overwite mode
+#: ../data/ui/gb-editor-frame.ui.h:2
 msgid "OVR"
 msgstr "OVR"
 
@@ -289,8 +291,7 @@ msgid "8"
 msgstr "8"
 
 #: ../data/ui/gb-editor-view.ui.h:2 ../data/ui/gb-greeter-window.ui.h:4
-#: ../data/ui/gb-new-project-dialog.ui.h:2
-#: ../data/ui/gb-projects-dialog.ui.h:3
+#: ../data/ui/gb-new-project-dialog.ui.h:2 ../data/ui/gb-projects-dialog.ui.h:3
 msgid "_Cancel"
 msgstr "_Abbrechen"
 
@@ -303,8 +304,12 @@ msgstr ""
 "Wollen Sie die Datei neu laden?"
 
 #: ../data/ui/gb-editor-view.ui.h:4
-msgid "Search Symbols"
-msgstr "Symbole suchen"
+msgid "Go to Line"
+msgstr "Gehe zu Zeile"
+
+#: ../data/ui/gb-editor-view.ui.h:5
+msgid "Go"
+msgstr "Navigieren"
 
 #: ../data/ui/gb-greeter-window.ui.h:1
 msgid "Select a Project"
@@ -512,22 +517,20 @@ msgstr "Semantische Syntaxhervorhebung"
 msgid ""
 "Highlight additional syntax based upon information found in the document."
 msgstr ""
-"Hebt zusätzlichen Syntax mittels existierender Informationen aus dem "
-"Dokument hervor."
+"Hebt zusätzliche Syntax mittels existierender Informationen aus dem Dokument "
+"hervor."
 
 #: ../data/ui/gb-preferences-page-insight.ui.h:4
 msgid "Auto Completion"
 msgstr "Automatische Vervollständigung"
 
 #: ../data/ui/gb-preferences-page-insight.ui.h:5
-#, fuzzy
-#| msgid "Enable Word Completion"
 msgid "Suggest Snippet Completion"
-msgstr "Wortvervollständigung ermöglichen"
+msgstr "Schnipselvervollständigung ermöglichen"
 
 #: ../data/ui/gb-preferences-page-insight.ui.h:6
 msgid "Allow snippets to be inserted into the document."
-msgstr ""
+msgstr "Das Einfügen von Schnipseln in das Dokument erlauben."
 
 #: ../data/ui/gb-preferences-page-insight.ui.h:7
 msgid "Suggest Word Completion"
@@ -571,7 +574,7 @@ msgstr "Tastatur"
 
 #: ../data/ui/gb-preferences-page-keybindings.ui.h:2
 msgid "Key Binding Emulation"
-msgstr "Tastaturkürzelemulation"
+msgstr "Tastaturkürzel-Emulation"
 
 #: ../data/ui/gb-preferences-page-keybindings.ui.h:4
 msgid "The default keybindings for Builder."
@@ -654,8 +657,7 @@ msgstr "Einstellungen"
 msgid "Search Preferences…"
 msgstr "Sucheinstellungen …"
 
-#: ../data/ui/gb-projects-dialog.ui.h:1
-#: ../src/dialogs/gb-projects-dialog.c:255
+#: ../data/ui/gb-projects-dialog.ui.h:1 ../src/dialogs/gb-projects-dialog.c:255
 msgid "Select Project"
 msgstr "Wählen Sie ein Projekt"
 
@@ -711,7 +713,7 @@ msgstr "Untere Leiste anzeigen/verbergen"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:12
 msgid "Touchpad gestures"
-msgstr "Touchpadgesten"
+msgstr "Tastfeldgesten"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:13
 msgid "Switch to the next document"
@@ -884,7 +886,7 @@ msgstr "Auswahl"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:55
 msgid "Select all"
-msgstr "Alle auswählen"
+msgstr "Alle auswählen"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:56
 msgid "Unselect all"
@@ -1016,7 +1018,7 @@ msgstr "Konnte Standardwerte nicht initialisieren."
 msgid "File contained invalid UTF-8"
 msgstr "Die Datei beinhaltet ungültiges UTF-8"
 
-#: ../libide/ide-buffer.c:1991
+#: ../libide/ide-buffer.c:1995
 msgid "The current language lacks a symbol resolver."
 msgstr "Die aktuelle Sprache benötigt einen Symbolauflöser."
 
@@ -1085,20 +1087,20 @@ msgstr "Der Kontext wurde bereits wiederhergestellt."
 msgid "The device \"%s\" could not be found."
 msgstr "Das Gerät \"%s\" konnte nicht gefunden werden."
 
-#: ../libide/ide-object.c:285
+#: ../libide/ide-object.c:288
 #, c-format
 msgid "No implementations of extension point \"%s\"."
 msgstr "Keine Implementationen des Erweiterungspunkt \"%s\"."
 
-#: ../libide/ide-object.c:377
+#: ../libide/ide-object.c:380
 msgid "Failed to locate build system plugin."
 msgstr "Konnte die Buildsystem-Erweiterung nicht laden."
 
-#: ../libide/ide-object.c:464
+#: ../libide/ide-object.c:467
 msgid "No such extension point."
 msgstr "Kein solcher Erweiterungspunkt."
 
-#: ../libide/ide-object.c:474
+#: ../libide/ide-object.c:477
 msgid "No implementations of extension point."
 msgstr "Keine Implementationen des Erweiterungspunktes."
 
@@ -1143,29 +1145,29 @@ msgstr "Ordner konnte nicht geöffnet werden: %s"
 msgid "Failed to load file: %s: %s"
 msgstr "Datei konnte nicht geladen werden: %s: %s"
 
-#: ../libide/ide-source-view.c:4563
+#: ../libide/ide-source-view.c:4553
 #, c-format
 msgid "Insert \"%s\""
 msgstr "\"%s\" einfügen"
 
-#: ../libide/ide-source-view.c:4565
+#: ../libide/ide-source-view.c:4555
 #, c-format
 msgid "Replace \"%s\" with \"%s\""
 msgstr "\"%s\" durch \"%s\" ersetzen"
 
-#: ../libide/ide-source-view.c:4683
+#: ../libide/ide-source-view.c:4673
 msgid "Apply Fix-It"
 msgstr "Fix-It anwenden"
 
-#: ../libide/ide-source-view.c:4726
+#: ../libide/ide-source-view.c:4716
 msgid "Join Lines"
 msgstr "Zeilen zusammenfügen"
 
-#: ../libide/ide-source-view.c:4737
+#: ../libide/ide-source-view.c:4727
 msgid "Sort Lines"
 msgstr "Zeilen sortieren"
 
-#: ../libide/ide-source-view.c:4756
+#: ../libide/ide-source-view.c:4746
 msgid "Go to Definition"
 msgstr "Zur Definition springen"
 
@@ -1214,13 +1216,9 @@ msgstr "autogen.sh ist nicht ausführbar."
 msgid "autogen.sh failed to create configure (%s)"
 msgstr "autogen.sh konnte configure (%s) nicht erstellen"
 
-#: ../plugins/autotools/ide-makecache.c:999
+#: ../plugins/autotools/ide-makecache.c:1005
 msgid "Invalid makefile provided, ignoring."
 msgstr "Ungültiges Makefile angegeben, wird ignoriert."
-
-#: ../plugins/clang/ide-clang-completion-provider.c:200
-msgid "Clang"
-msgstr "Clang"
 
 #: ../plugins/clang/ide-clang-service.c:266
 msgid "Unknown failure"
@@ -1251,7 +1249,7 @@ msgstr "Die Datei muss zum Einlesen lokal gespeichert sein."
 msgid "anonymous"
 msgstr "anonym"
 
-#: ../plugins/clang/ide-clang-translation-unit.c:654
+#: ../plugins/clang/ide-clang-translation-unit.c:656
 msgid "clang_codeCompleteAt() only works on local files"
 msgstr "clang_codeCompleteAt() funktioniert nur mit lokalen Dateien."
 
@@ -1319,17 +1317,13 @@ msgstr "Kein Editor-Befehl: %s"
 msgid "Format Strings"
 msgstr "Formatstrings"
 
-#: ../plugins/ctags/ide-ctags-completion-provider.c:179
-msgid "CTags"
-msgstr "CTags"
-
 #: ../plugins/devhelp/gb-devhelp-document.c:71
 #, c-format
 msgid "Documentation (%s)"
 msgstr "Handbuch (%s)"
 
 #: ../plugins/devhelp/gb-devhelp-document.c:148
-#: ../plugins/devhelp/gb-devhelp-panel.c:96
+#: ../plugins/devhelp/gb-devhelp-panel.c:148
 #: ../plugins/devhelp/gb-devhelp-search-provider.c:134
 msgid "Documentation"
 msgstr "Handbuch"
@@ -1362,11 +1356,11 @@ msgstr "MinGW (64-bit)"
 msgid "MinGW (32-bit)"
 msgstr "MinGW (32-bit)"
 
-#: ../plugins/symbol-tree/symbol-tree.c:187
+#: ../plugins/symbol-tree/symbol-tree.c:239
 msgid "Current language does not support symbol resolvers"
 msgstr "Die aktuelle Sprache unterstützt keine Symbolauflösung"
 
-#: ../plugins/symbol-tree/symbol-tree.c:211
+#: ../plugins/symbol-tree/symbol-tree.c:263
 msgid "Symbol Tree"
 msgstr "Symbolbaum"
 
@@ -1468,17 +1462,17 @@ msgstr "Ordner|Projekte"
 msgid "(Click on items to select them)"
 msgstr "(Klicken Sie auf Objekte, um Sie auszuwählen)"
 
-#: ../src/editor/gb-editor-frame.c:73
+#: ../src/editor/gb-editor-frame.c:76
 #, c-format
 msgid "Line %u, Column %u"
 msgstr "Zeile %u, Spalte %u"
 
-#: ../src/editor/gb-editor-frame.c:241
+#: ../src/editor/gb-editor-frame.c:244
 #, c-format
 msgid "%u of %u"
 msgstr "%u von %u"
 
-#: ../src/editor/gb-editor-frame.c:663
+#: ../src/editor/gb-editor-frame.c:664
 msgid "Re_veal in Project Tree"
 msgstr "Im Projektbaum an_zeigen"
 
@@ -1495,9 +1489,15 @@ msgstr "Dokument speichern"
 msgid "Save Document As"
 msgstr "Dokument speichern unter"
 
-#: ../src/editor/gb-editor-view.c:111
+#: ../src/editor/gb-editor-view.c:120
 msgid "Plain Text"
 msgstr "Reiner Text"
+
+#. translators: the user selected a number outside the value range for the document.
+#: ../src/editor/gb-editor-view.c:667
+#, c-format
+msgid "Provide a number between 1 and %u"
+msgstr "Geben Sie eine Zahl zwischen 1 und %u an"
 
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-editor.c:95
@@ -1512,7 +1512,7 @@ msgstr "diff anzeigen veränderungen git vcs"
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-editor.c:105
 msgid "line numbers"
-msgstr "zeilennummern"
+msgstr "zeilennummern zeilen nummern"
 
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-editor.c:110
@@ -1566,22 +1566,18 @@ msgstr "ctags tags autovervollständigung auto vervollständigung"
 
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-insight.c:76
-#, fuzzy
-#| msgid "experimental clang autocompletion auto complete"
 msgid "jedi python autocompletion auto complete"
-msgstr "experimentell clang autovervollständigung auto vervollständigung"
+msgstr "autovervollständigung auto vervollständigung jedi python"
 
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-insight.c:81
-#, fuzzy
-#| msgid "experimental clang autocompletion auto complete"
 msgid "snippets autocompletion auto complete"
-msgstr "experimentell clang autovervollständigung auto vervollständigung"
+msgstr "schnipsel snippets autovervollständigung auto vervollständigung"
 
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-insight.c:86
 msgid "semantic highlighting color goto declaration definition"
-msgstr ""
+msgstr "semantische hervorhebung farbe goto deklaration definition"
 
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-keybindings.c:64
@@ -1635,7 +1631,7 @@ msgstr "Ordnername"
 #: ../src/project-tree/gb-rename-file-popover.c:80
 #, c-format
 msgid "Rename %s"
-msgstr "%s umbennen"
+msgstr "%s umbenennen"
 
 #: ../src/project-tree/gb-rename-file-popover.c:173
 msgid "File name must not contain subdirectories."
@@ -1721,13 +1717,13 @@ msgstr "Öffnen"
 msgid "%s - Builder"
 msgstr "%s - Builder"
 
-#: ../src/workbench/gb-workbench.c:919
+#: ../src/workbench/gb-workbench.c:920
 msgid "Build Failure"
 msgstr "Erstellungsproblem"
 
-#: ../src/workbench/gb-workbench.c:966
+#: ../src/workbench/gb-workbench.c:967
 msgid "Project build system does not support building"
-msgstr "Das Projekterstellungssystem ünterstützt keine Erstellung"
+msgstr "Das Projekterstellungssystem unterstützt keine Erstellung"
 
 #: ../tools/ide-build.c:81 ../tools/ide-build.c:85
 #, c-format
@@ -1796,7 +1792,7 @@ msgstr "Zeit abgelaufen beim Warten auf Zielgeräte.\n"
 #, c-format
 msgid "Waiting up to 60 seconds for devices to settle. Ctrl+C to exit.\n"
 msgstr ""
-"Es wird bis zu 60 Sekunden auf Zielgeräte gewartet. Strg+C zum abbrechen.\n"
+"Es wird bis zu 60 Sekunden auf Zielgeräte gewartet. Strg+C zum Abbrechen.\n"
 
 #: ../tools/ide-build.c:355
 msgid "The target device we are building for."
@@ -1865,6 +1861,15 @@ msgstr "%s Ergebnisse\n"
 #: ../tools/ide-search.c:120
 msgid "PROJECT_FILE [SEARCH TERMS...]"
 msgstr "PROJEKTDATEI [SUCHWÖRTER …]"
+
+#~ msgid "Search Symbols"
+#~ msgstr "Symbole suchen"
+
+#~ msgid "Clang"
+#~ msgstr "Clang"
+
+#~ msgid "CTags"
+#~ msgstr "CTags"
 
 #~ msgid "Device"
 #~ msgstr "Gerät "
