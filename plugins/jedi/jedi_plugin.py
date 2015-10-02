@@ -327,7 +327,7 @@ class JediCompletionProvider(Ide.Object,
                 for param in params[:-1]:
                     tab_stop += 1
                     chunk = Ide.SourceSnippetChunk()
-                    chunk.set_text(param.description.replace('\n',''))
+                    chunk.set_text(get_param_description(param))
                     chunk.set_text_set(True)
                     chunk.set_tab_stop(tab_stop)
                     snippet.add_chunk(chunk)
@@ -339,7 +339,7 @@ class JediCompletionProvider(Ide.Object,
 
                 tab_stop += 1
                 chunk = Ide.SourceSnippetChunk()
-                chunk.set_text(params[-1].description.replace('\n',''))
+                chunk.set_text(get_param_description(params[-1]))
                 chunk.set_text_set(True)
                 chunk.set_tab_stop(tab_stop)
                 snippet.add_chunk(chunk)
@@ -400,10 +400,7 @@ class JediCompletionProposal(Ide.CompletionItem, GtkSource.CompletionProposal):
             else:
                 params = self.completion.params
             if params:
-                for param in params[:-1]:
-                    parts.append(param.description.replace('\n',''))
-                    parts.append(', ')
-                parts.append(params[-1].description.replace('\n',''))
+                parts.append(', '.join(get_param_description(p) for p in params))
             parts.append(')')
         return ''.join(parts)
 
@@ -436,3 +433,8 @@ class JediCompletionProposal(Ide.CompletionItem, GtkSource.CompletionProposal):
 
 def is_completable_char(ch):
     return ch in ('_', '.') or ch.isalnum()
+
+def get_param_description(param):
+    if hasattr(param, 'description'):
+        return param.description.replace('\n', '')
+    return param.name
