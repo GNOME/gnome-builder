@@ -24,6 +24,7 @@
 
 #include "ide-completion-results.h"
 #include "ide-debug.h"
+#include "ide-list-inline.h"
 
 typedef struct
 {
@@ -73,6 +74,14 @@ typedef struct
    */
   GList *head;
 } IdeCompletionResultsPrivate;
+
+typedef struct
+{
+  IdeCompletionResults *self;
+  gint (*compare) (IdeCompletionResults *,
+                   IdeCompletionItem *,
+                   IdeCompletionItem *);
+} SortState;
 
 G_DEFINE_TYPE_WITH_PRIVATE (IdeCompletionResults, ide_completion_results, G_TYPE_OBJECT)
 
@@ -298,35 +307,35 @@ compare_fast (const IdeCompletionItem *left,
 
 
 static gint
-ide_completion_results_sorter (gconstpointer a,
-                               gconstpointer b,
-                               gpointer      user_data)
+sort_state_compare (gconstpointer a,
+                    gconstpointer b,
+                    gpointer      user_data)
 {
-  IdeCompletionResults *self = user_data;
+  SortState *state = user_data;
 
-  return IDE_COMPLETION_RESULTS_GET_CLASS (self)->compare (self, (gpointer)a, (gpointer)b);
+  return state->compare (state->self, (IdeCompletionItem *)a, (IdeCompletionItem *)b);
 }
 
 static void
 ide_completion_results_resort (IdeCompletionResults *self)
 {
   IdeCompletionResultsPrivate *priv = ide_completion_results_get_instance_private (self);
-  IdeCompletionResultsClass *klass;
-
-  g_assert (IDE_IS_COMPLETION_RESULTS (self));
-
-  klass = IDE_COMPLETION_RESULTS_GET_CLASS (self);
+  IdeCompletionResultsClass *klass = IDE_COMPLETION_RESULTS_GET_CLASS (self);
+  SortState state;
 
   /*
    * Instead of invoking the vfunc for every item, save ourself an extra
    * dereference and call g_list_sort() directly with our compare funcs.
-   *
-   * TODO: Next step would be to use an inline sort instead of g_list_sort.
    */
   if (G_LIKELY (klass->compare == NULL))
-    priv->head = g_list_sort (priv->head, (GCompareFunc)compare_fast);
-  else
-    priv->head = g_list_sort_with_data (priv->head, ide_completion_results_sorter, self);
+    {
+      priv->head = ide_list_sort (priv->head, (GCompareFunc)compare_fast);
+      return;
+    }
+
+  state.self = self;
+  state.compare = klass->compare;
+  priv->head = ide_list_sort_with_data (priv->head, sort_state_compare, &state);
 }
 
 void
