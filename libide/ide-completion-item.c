@@ -47,6 +47,15 @@ ide_completion_item_real_match (IdeCompletionItem *self,
   return ret;
 }
 
+void
+ide_completion_item_set_priority (IdeCompletionItem *self,
+                                  guint              priority)
+{
+  g_return_if_fail (IDE_IS_COMPLETION_ITEM (self));
+
+  self->priority = priority;
+}
+
 gboolean
 ide_completion_item_match (IdeCompletionItem *self,
                            const gchar       *query,
