@@ -252,7 +252,8 @@ class JediCompletionProvider(Ide.Object,
         if context.get_activation() == GtkSource.CompletionActivation.INTERACTIVE:
             _, iter = context.get_iter()
             iter.backward_char()
-            if not is_symbol_char(iter.get_char()):
+            ch = iter.get_char()
+            if not is_completable_char(ch):
                 return False
             buffer = iter.get_buffer()
             if Ide.CompletionProvider.context_in_comment(context):
@@ -409,5 +410,5 @@ class JediCompletionProposal(Ide.CompletionItem, GtkSource.CompletionProposal):
     def do_changed(self):
         pass
 
-def is_symbol_char(ch):
-    return ch == '_' or ch.isalnum()
+def is_completable_char(ch):
+    return ch in ('_', '.') or ch.isalnum()
