@@ -185,6 +185,22 @@ ide_completion_results_replay (IdeCompletionResults *self,
 
   if (g_str_has_prefix (query, priv->query))
     {
+      const gchar *suffix = query + strlen (priv->query);
+
+      /*
+       * Only allow completing using this result set if we have characters
+       * that could continue a function name, etc. In all the languages we
+       * support this is alpha-numeric only. We could potentially turn this
+       * into a vfunc if we need to support something other than that.
+       */
+      for (; *suffix; suffix = g_utf8_next_char (suffix))
+        {
+          gunichar ch = g_utf8_get_char (suffix);
+          if (G_LIKELY (ch == '_' || g_unichar_isalnum (ch)))
+            continue;
+          IDE_RETURN (FALSE);
+        }
+
       priv->can_reuse_list = (priv->replay != NULL && g_str_has_prefix (query, priv->replay));
       priv->needs_refilter = TRUE;
       priv->needs_sort = TRUE;
