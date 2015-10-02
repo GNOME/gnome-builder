@@ -132,11 +132,12 @@ gchar *
 ide_completion_item_fuzzy_highlight (const gchar *str,
                                      const gchar *match)
 {
-  const gchar *begin = "<b>";
-  const gchar *end = "</b>";
+  static const gchar *begin = "<b>";
+  static const gchar *end = "</b>";
   GString *ret;
   gunichar str_ch;
   gunichar match_ch;
+  gboolean element_open = FALSE;
 
   if (str == NULL || match == NULL)
     return g_strdup (str);
@@ -150,18 +151,31 @@ ide_completion_item_fuzzy_highlight (const gchar *str,
 
       if ((str_ch == match_ch) || (g_unichar_tolower (str_ch) == g_unichar_tolower (match_ch)))
         {
-          g_string_append (ret, begin);
+          if (!element_open)
+            {
+              g_string_append (ret, begin);
+              element_open = TRUE;
+            }
+
           g_string_append_unichar (ret, str_ch);
-          g_string_append (ret, end);
 
           /* TODO: We could seek to the next char and append in a batch. */
           match = g_utf8_next_char (match);
         }
       else
         {
+          if (element_open)
+            {
+              g_string_append (ret, end);
+              element_open = FALSE;
+            }
+
           g_string_append_unichar (ret, str_ch);
         }
     }
+
+  if (element_open)
+    g_string_append (ret, end);
 
   return g_string_free (ret, FALSE);
 }
