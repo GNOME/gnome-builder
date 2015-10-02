@@ -55,11 +55,6 @@ namespace Ide
 				this.results = null;
 			}
 
-			if (this.query.length < 3) {
-				context.add_proposals (this, null, true);
-				return;
-			}
-
 			this.line = -1;
 			this.column = -1;
 
