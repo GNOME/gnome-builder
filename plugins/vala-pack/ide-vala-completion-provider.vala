@@ -48,7 +48,7 @@ namespace Ide
 			var line = begin.get_slice (iter);
 
 			if (this.results != null) {
-				if (this.results.replay (this.query)) {
+				if ((this.line == iter.get_line ()) && this.results.replay (this.query)) {
 					this.results.present (this, context);
 					return;
 				}
