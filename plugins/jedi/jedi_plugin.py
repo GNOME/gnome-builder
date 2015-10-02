@@ -54,8 +54,10 @@ try:
         def py__call__(self):
             def actual(evaluator, params):
                 # Pasrse the docstring to find the return type:
-                ret_type = self.obj.__doc__.split('->')[1].strip()
-                ret_type = ret_type.replace(' or None', '')
+                ret_type = ''
+                if '->' in self.obj.__doc__:
+                    ret_type = self.obj.__doc__.split('->')[1].strip()
+                    ret_type = ret_type.replace(' or None', '')
                 if ret_type.startswith('iter:'):
                     ret_type = ret_type[len('iter:'):]  # we don't care if it's an iterator
 
