@@ -327,7 +327,7 @@ class JediCompletionProvider(Ide.Object,
                 for param in params[:-1]:
                     tab_stop += 1
                     chunk = Ide.SourceSnippetChunk()
-                    chunk.set_text(param.name)
+                    chunk.set_text(param.description.replace('\n',''))
                     chunk.set_text_set(True)
                     chunk.set_tab_stop(tab_stop)
                     snippet.add_chunk(chunk)
@@ -339,7 +339,7 @@ class JediCompletionProvider(Ide.Object,
 
                 tab_stop += 1
                 chunk = Ide.SourceSnippetChunk()
-                chunk.set_text(params[-1].name)
+                chunk.set_text(params[-1].description.replace('\n',''))
                 chunk.set_text_set(True)
                 chunk.set_tab_stop(tab_stop)
                 snippet.add_chunk(chunk)
@@ -384,16 +384,28 @@ class JediCompletionProposal(Ide.CompletionItem, GtkSource.CompletionProposal):
         return self.completion.name
 
     def do_match(self, query, casefold):
-        ret, priority = Ide.CompletionItem.fuzzy_match(
-                self.completion.name,
-                self.provider.current_word_lower)
+        ret, priority = Ide.CompletionItem.fuzzy_match(self.completion.name,
+                                                       self.provider.current_word_lower)
         self.set_priority(priority)
         return ret
 
     def do_get_markup(self):
-        return Ide.CompletionItem.fuzzy_highlight(
-                self.completion.complete,
-                self.provider.current_word_lower)
+        name = Ide.CompletionItem.fuzzy_highlight(self.completion.complete,
+                                                  self.provider.current_word_lower)
+        parts = [name]
+        if self.completion.real_type == 'function':
+            parts.append('(')
+            if hasattr(self.completion, 'gi_params'):
+                params = self.completion.gi_params
+            else:
+                params = self.completion.params
+            if params:
+                for param in params[:-1]:
+                    parts.append(param.description.replace('\n',''))
+                    parts.append(', ')
+                parts.append(params[-1].description.replace('\n',''))
+            parts.append(')')
+        return ''.join(parts)
 
     def do_get_text(self):
         return self.completion.complete
