@@ -232,20 +232,18 @@ class JediCompletionProvider(Ide.Object,
         if self.thread is not None:
             self.thread.cancelled = True
 
-    def do_get_activiation(self):
-        return GtkSource.CompletionActivation.INTERACTIVE
-
     def do_match(self, context):
         if not HAS_JEDI:
             return False
-        _, iter = context.get_iter()
-        iter.backward_char()
-        if iter.get_char() == ')':
-            return False
-        buffer = iter.get_buffer()
-        classes = buffer.get_context_classes_at_iter(iter)
-        if 'string' in classes:
-            return False
+        if context.get_activation() == GtkSource.CompletionActivation.INTERACTIVE:
+            _, iter = context.get_iter()
+            iter.backward_char()
+            if iter.get_char() == ')':
+                return False
+            buffer = iter.get_buffer()
+            classes = buffer.get_context_classes_at_iter(iter)
+            if 'string' in classes or 'comment' in classes:
+                return False
         return True
 
     def do_get_info_widget(self, proposal):
