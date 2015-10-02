@@ -199,26 +199,25 @@ class JediCompletionProvider(Ide.Object,
         self.current_word = Ide.CompletionProvider.context_current_word(context)
         self.current_word_lower = self.current_word.lower()
 
-        if self.thread is not None:
-            self.thread.cancelled = True
-        self.thread = None
-
         _, iter = context.get_iter()
 
-        # Make sure the line text matches
-        # what we queried with, or we could
-        # be on the same line, but different
-        # context.
         begin = iter.copy()
         begin.set_line_offset(0)
         line_str = begin.get_slice(iter)
 
-        if iter.get_line() == self.line and \
-           self.results is not None and \
-           line_str.startswith(self.line_str) and \
-           self.results.replay(self.current_word):
-            self.results.present(self, context)
-            return
+        # If we have no results yet, but a thread is active and mostly matches
+        # our line prefix, then we should just let that one continue but tell
+        # it to deliver to our new context.
+        self.context = context
+        if self.thread is not None:
+            if not line_str.startswith(self.line_str):
+                self.thread.cancelled = True
+                self.thread = None
+
+        if iter.get_line() == self.line and line_str.startswith(self.line_str):
+            if self.results and self.results.replay(self.current_word):
+                self.results.present(self, context)
+                return
 
         self.line_str = line_str
 
@@ -366,9 +365,12 @@ class JediCompletionProvider(Ide.Object,
         return 200
 
     def complete(self, context, results):
+        # If context and self.context are not the same, that means
+        # we stole the results of this task for a later completion.
         self.results = results
-        self.results.present(self, context)
+        self.results.present(self, self.context)
         self.thread = None
+        self.context = None
 
 
 class JediCompletionProposal(Ide.CompletionItem, GtkSource.CompletionProposal):
