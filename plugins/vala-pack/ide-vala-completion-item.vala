@@ -129,8 +129,8 @@ namespace Ide
 
 		public string get_markup () {
 			if (this.provider.query != null)
-				return highlight_full (this.label, this.provider.query, true, 1 /* GB_HIGHLIGHT_BOLD */);
-			return "";
+				return Ide.CompletionItem.fuzzy_highlight (this.label, this.provider.query);
+			return this.label;
 		}
 
 		public string get_label () {
@@ -155,7 +155,4 @@ namespace Ide
 			return this.symbol.name.hash () ^ hash_seed;
 		}
 	}
-
-	[CCode (cheader_filename = "gb-string.h", cname = "gb_str_highlight_full")]
-	extern unowned string? highlight_full (string haystack, string needle, bool insensitive, int type);
 }
