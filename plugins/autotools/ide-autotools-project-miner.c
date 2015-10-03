@@ -75,7 +75,7 @@ ide_autotools_project_miner_find_doap (IdeAutotoolsProjectMiner *self,
       if (name != NULL && g_str_has_suffix (name, ".doap"))
         {
           g_autoptr(GFile) doap_file = g_file_get_child (directory, name);
-          IdeDoap *doap = doap = ide_doap_new ();
+          IdeDoap *doap = ide_doap_new ();
 
           if (!ide_doap_load_from_file (doap, doap_file, cancellable, NULL))
             {
