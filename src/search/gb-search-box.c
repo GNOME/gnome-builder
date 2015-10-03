@@ -88,23 +88,26 @@ gb_search_box_delay_cb (gpointer user_data)
 
   self->delay_timeout = 0;
 
-  context = gb_search_display_get_context (self->display);
-  if (context)
-    ide_search_context_cancel (context);
+  if (self->display)
+    {
+      context = gb_search_display_get_context (self->display);
+      if (context)
+        ide_search_context_cancel (context);
 
-  search_engine = gb_search_box_get_search_engine (self);
-  if (!search_engine)
-    return G_SOURCE_REMOVE;
+      search_engine = gb_search_box_get_search_engine (self);
+      if (!search_engine)
+        return G_SOURCE_REMOVE;
 
-  search_text = gtk_entry_get_text (GTK_ENTRY (self->entry));
-  if (!search_text)
-    return G_SOURCE_REMOVE;
+      search_text = gtk_entry_get_text (GTK_ENTRY (self->entry));
+      if (!search_text)
+        return G_SOURCE_REMOVE;
 
-  /* TODO: Remove search text */
-  context = ide_search_engine_search (search_engine, search_text);
-  gb_search_display_set_context (self->display, context);
-  ide_search_context_execute (context, search_text, 7);
-  g_object_unref (context);
+      /* TODO: Remove search text */
+      context = ide_search_engine_search (search_engine, search_text);
+      gb_search_display_set_context (self->display, context);
+      ide_search_context_execute (context, search_text, 7);
+      g_object_unref (context);
+    }
 
   return G_SOURCE_REMOVE;
 }
