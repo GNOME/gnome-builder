@@ -486,7 +486,7 @@ class PythonIndenter(GObject.Object): #, Ide.Indenter):
             forward_to_nonspace(end)
             text = prev.get_slice(end)
             i = 0
-            while i < column:
+            while i < column and i < len(text):
                 if text[i] == '\t':
                     if i + 4 > column:
                         break
