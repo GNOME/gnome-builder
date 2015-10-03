@@ -509,6 +509,7 @@ int editorconfig_parse(const char* full_filename, editorconfig_handle h)
             sizeof(editorconfig_name_value) * eh->name_value_count);
     if (eh->name_values == NULL) {
         free(hfp.full_filename);
+        free(config_files);
         return EDITORCONFIG_PARSE_MEMORY_ERROR;
     }
 
