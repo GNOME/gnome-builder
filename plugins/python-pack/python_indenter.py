@@ -329,7 +329,8 @@ class Discoveries:
 
         iter.set_line_offset(0)
         while iter.compare(stop) < 0:
-            iter.forward_line()
+            if not iter.forward_line():
+                break
             forward_to_nonspace(iter)
             if iter.get_line_offset() < column:
                 self._mark_ranks_with_mask(Rank.IF | Rank.ELIF | Rank.ELSE)
