@@ -160,12 +160,19 @@ _egg_counter_arena_init_local (EggCounterArena *arena)
   ShmHeader *header;
   gpointer mem;
   unsigned pid;
-  gsize page_size;
   gsize size;
+  gint page_size;
   gint fd;
   gchar name [32];
 
   page_size = sysconf (_SC_PAGE_SIZE);
+
+  /* Implausible, but squashes warnings. */
+  if (page_size < 4096)
+    {
+      size = 4096 * 4;
+      goto use_malloc;
+    }
 
   /*
    * FIXME: https://bugzilla.gnome.org/show_bug.cgi?id=749280
