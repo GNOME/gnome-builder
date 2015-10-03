@@ -488,7 +488,7 @@ class PythonIndenter(GObject.Object): #, Ide.Indenter):
             # indent for the tuple begin position plus a space to move
             # after the opening (. Try to copy as much of the previous
             # line as we can to preserve indentation.
-            indent = self.get_indent_at_visual_column(nearest.column+1, iter)
+            indent = self.get_indent_at_visual_column(nearest.column + 1, iter)
             return '\n' + indent, 0
 
         iter = begin.copy()
