@@ -122,21 +122,16 @@ rg_graph_tick_cb (GtkWidget     *widget,
   g_assert (RG_IS_GRAPH (self));
 
   if ((priv->surface == NULL) || (priv->table == NULL) || !gtk_widget_get_visible (widget))
-    {
-      if (priv->tick_handler != 0)
-        {
-          gtk_widget_remove_tick_callback (widget, priv->tick_handler);
-          priv->tick_handler = 0;
-        }
+    goto remove_handler;
 
-      return G_SOURCE_REMOVE;
-    }
+  timespan = rg_table_get_timespan (priv->table);
+  if (timespan == 0)
+    goto remove_handler;
 
   gtk_widget_get_allocation (widget, &alloc);
 
   frame_time = gdk_frame_clock_get_frame_time (frame_clock);
   end_time = rg_table_get_end_time (priv->table);
-  timespan = rg_table_get_timespan (priv->table);
 
   x_offset = -((frame_time - end_time) / (gdouble)timespan * alloc.width);
 
@@ -147,6 +142,15 @@ rg_graph_tick_cb (GtkWidget     *widget,
     }
 
   return G_SOURCE_CONTINUE;
+
+remove_handler:
+  if (priv->tick_handler != 0)
+    {
+      gtk_widget_remove_tick_callback (widget, priv->tick_handler);
+      priv->tick_handler = 0;
+    }
+
+  return G_SOURCE_REMOVE;
 }
 
 static void
