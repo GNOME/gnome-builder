@@ -419,6 +419,7 @@ class Discoveries:
         return children
 
 class PythonSettings:
+    align_params = True
     indent_width = 4
     insert_spaces = True
 
@@ -471,6 +472,14 @@ class PythonIndenter(GObject.Object): #, Ide.Indenter):
 
         if nearest.rank == Rank.COMMENT:
             return self.copy_indent(view, iter, suffix='# ')
+
+        if self.settings.align_params \
+        and discoveries.select_tail(Rank.FUNCTION, Rank.TUPLE):
+            # indent for the tuple begin position plus a space to move
+            # after the opening (. Try to copy as much of the previous
+            # line as we can to preserve indentation.
+            indent = self.get_indent_at_visual_column(nearest.column+1, iter)
+            return '\n' + indent, 0
 
         iter = begin.copy()
         iter.set_line(nearest.line)
