@@ -402,10 +402,7 @@ class PythonIndenter(GObject.Object): #, Ide.Indenter):
         return text, 0
 
     def format_enter(self, view, begin, end, event):
-        # First, move back to our previous line to get more context.
         iter = begin.copy()
-        iter.backward_line()
-        iter.forward_to_line_end()
 
         # Discover our various rankings
         discoveries = Discoveries(view.get_buffer(), iter)
@@ -491,8 +488,11 @@ class Class2:
         return iter
 
     def assertRankings(self, discoveries, *ranks):
+        if not discoveries.has_run:
+            discoveries._run()
+        self.assertEqual(len(discoveries.discoveries), len(ranks))
         i = 0
-        for rank in ranks:
+        for rank in reversed(ranks):
             self.assertEqual(discoveries.discoveries[i].rank, rank)
             i += 1
 
@@ -521,6 +521,19 @@ class Class2:
         discoveries = Discoveries(text_buffer, iter)
         self.assertEqual(discoveries.nearest.rank, Rank.COMMENT)
 
+    def test_in_func(self):
+        text_buffer = self.get_buffer()
+
+        iter = self.get_iter(4, 40)
+        discoveries = Discoveries(text_buffer, iter)
+        self.assertEqual(discoveries.nearest.rank, Rank.FUNCTION)
+        self.assertRankings(discoveries, Rank.CLASS, Rank.FUNCTION)
+
+        iter = self.get_iter(23, 23)
+        discoveries = Discoveries(text_buffer, iter)
+        self.assertEqual(discoveries.nearest.rank, Rank.FUNCTION)
+        self.assertRankings(discoveries, Rank.CLASS, Rank.FUNCTION)
+
     def test_in_if(self):
         text_buffer = self.get_buffer()
 
@@ -546,8 +559,12 @@ class Class2:
         iter = self.get_iter(12, 40)
         discoveries = Discoveries(text_buffer, iter)
         self.assertEqual(discoveries.nearest.rank, Rank.LIST)
-        self.assertRankings(discoveries, Rank.LIST, Rank.TUPLE, Rank.ELIF,
-                            Rank.FUNCTION, Rank.CLASS)
+        self.assertRankings(discoveries,
+                            Rank.CLASS,
+                            Rank.FUNCTION,
+                            Rank.ELIF,
+                            Rank.TUPLE,
+                            Rank.LIST)
 
     def test_in_call_params(self):
         text_buffer = self.get_buffer()
