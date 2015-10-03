@@ -1,11 +1,14 @@
 #include <fuzzy.h>
 #include <ide-line-reader.h>
+#include <stdlib.h>
+#include <string.h>
 
 int
 main (int argc,
       char *argv[])
 {
   IdeLineReader reader;
+  const gchar *param;
   Fuzzy *fuzzy;
   GArray *ar;
   gchar *contents;
@@ -40,7 +43,21 @@ main (int argc,
 
   g_free (contents);
 
-  ar = fuzzy_match (fuzzy, argv[2], 0);
+  if (!g_utf8_validate (argv[2], -1, NULL))
+    {
+      g_critical ("Invalid UTF-8 discovered, aborting.");
+      return EXIT_FAILURE;
+    }
+
+  if (strlen (argv[2]) > 256)
+    {
+      g_critical ("Only supports searching of up to 256 characters.");
+      return EXIT_FAILURE;
+    }
+
+  param = (const gchar *)argv[2];
+
+  ar = fuzzy_match (fuzzy, param, 0);
 
   for (guint i = 0; i < ar->len; i++)
     {
