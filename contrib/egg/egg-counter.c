@@ -256,6 +256,7 @@ _egg_counter_arena_init_remote (EggCounterArena *arena,
   gchar name [32];
   void *mem = NULL;
   guint ncpu;
+  guint n_counters;
   int i;
   int fd = -1;
 
@@ -279,6 +280,12 @@ _egg_counter_arena_init_remote (EggCounterArena *arena,
       (header.ncpu > g_get_num_processors ()))
     goto failure;
 
+  n_counters = header.n_counters;
+
+  if (header.size <
+      CELLS_PER_HEADER + (((n_counters / COUNTERS_PER_GROUP) + 1) * CELLS_PER_GROUP(header.ncpu)))
+    goto failure;
+
   mem = mmap (NULL, header.size, PROT_READ, MAP_SHARED, fd, 0);
 
   if (mem == MAP_FAILED)
@@ -295,7 +302,7 @@ _egg_counter_arena_init_remote (EggCounterArena *arena,
   if (header.first_offset != CELLS_PER_HEADER)
     goto failure;
 
-  for (i = 0; i < header.n_counters; i++)
+  for (i = 0; i < n_counters; i++)
     {
       CounterInfo *info;
       EggCounter *counter;
