@@ -116,6 +116,39 @@ class Discoveries:
             return result
         return None
 
+    def select_tail(self, *ranks):
+        """
+        Does a selection on the discoveries, but walks backward
+        from the most recent to the most distant. The checks
+        are applied in an order that appears as top-down.
+        Therefore, if you want to find a tuple that is immediately
+        after a function declaration, you would use a ranking search
+        of (Rank.FUNCTION, Rank.TUPLE).
+
+        You may provide a mask instead of an exact rank.
+
+        >>> self.select_tail(Rank.FUNCTION, Rank.TUPLE)
+        """
+        self._run()
+
+        if len(ranks) == 0 or len(ranks) > len(self.discoveries):
+            return False
+
+        selection = []
+
+        node = self.discoveries[0]
+        ranks = list(ranks)
+
+        while len(ranks) and node:
+            rank = ranks.pop()
+            if node.rank & rank == 0:
+                return False
+            selection.append(node)
+            node = self._find_parent(node)
+
+        selection.reverse()
+        return selection
+
     @property
     def nearest(self):
         self._run()
