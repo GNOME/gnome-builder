@@ -607,6 +607,7 @@ ide_makecache_new_worker (GTask        *task,
   g_subprocess_launcher_set_cwd (launcher, workdir);
   g_subprocess_launcher_take_stdout_fd (launcher, fdcopy);
   subprocess = g_subprocess_launcher_spawn (launcher, &error, GNU_MAKE_NAME, "-p", "-n", "-s", NULL);
+  fdcopy = -1;
 
   if (!subprocess)
     {
