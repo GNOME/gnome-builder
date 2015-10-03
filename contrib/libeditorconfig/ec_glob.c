@@ -77,6 +77,9 @@ int ec_glob(const char *pattern, const char *string)
     UT_array *                nums;     /* number ranges */
     int                       ret = 0;
 
+    if (pattern == NULL || string == NULL)
+      return -1;
+
     strcpy(l_pattern, pattern);
     p_pcre = pcre_str + 1;
     pcre_str_end = pcre_str + 2 * PATTERN_MAX;
