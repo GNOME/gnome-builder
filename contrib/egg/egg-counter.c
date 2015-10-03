@@ -276,7 +276,8 @@ _egg_counter_arena_init_remote (EggCounterArena *arena,
 
   g_snprintf (name, sizeof name, NAME_FORMAT, (int)pid);
 
-  if (-1 == (fd = shm_open (name, O_RDONLY, 0)))
+  fd = shm_open (name, O_RDONLY, 0);
+  if (fd < 0)
     return FALSE;
 
   count = pread (fd, &header, sizeof header, 0);
@@ -346,8 +347,7 @@ _egg_counter_arena_init_remote (EggCounterArena *arena,
   return TRUE;
 
 failure:
-  if (fd != -1)
-    close (fd);
+  close (fd);
 
   if ((mem != NULL) && (mem != MAP_FAILED))
     munmap (mem, header.size);
