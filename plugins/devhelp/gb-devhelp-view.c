@@ -84,18 +84,19 @@ gb_devhelp_view_notify_uri (GbDevhelpView     *view,
                             GParamSpec        *pspec,
                             GbDevhelpDocument *document)
 {
-  const gchar *uri;
-
   g_return_if_fail (GB_IS_DEVHELP_VIEW (view));
-  g_return_if_fail (GB_IS_DEVHELP_DOCUMENT (document));
+  g_return_if_fail (!document || GB_IS_DEVHELP_DOCUMENT (document));
 
-  uri = gb_devhelp_document_get_uri (document);
-  if (uri)
+  if (document != NULL)
     {
-      webkit_web_view_load_uri (view->web_view1, uri);
+      const gchar *uri = gb_devhelp_document_get_uri (document);
 
-      if (view->web_view2 != NULL)
-        webkit_web_view_load_uri (view->web_view2, uri);
+      if (uri != NULL)
+        {
+          webkit_web_view_load_uri (view->web_view1, uri);
+          if (view->web_view2 != NULL)
+            webkit_web_view_load_uri (view->web_view2, uri);
+        }
     }
 }
 
@@ -116,7 +117,7 @@ gb_devhelp_view_set_document (GbDevhelpView     *view,
           g_clear_object (&view->document);
         }
 
-      if (document)
+      if (document != NULL)
         {
           view->document = g_object_ref (document);
           g_signal_connect_object (view->document,
