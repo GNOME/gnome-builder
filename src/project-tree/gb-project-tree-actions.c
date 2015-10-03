@@ -610,6 +610,9 @@ gb_project_tree_actions__project_rename_file_cb (GObject      *object,
   g_assert (GB_IS_TREE (tree));
 
   node = gb_tree_get_selected (tree);
+  if (node == NULL)
+    goto cleanup;
+
   parent = gb_tree_node_get_parent (node);
 
   gb_tree_node_invalidate (parent);
@@ -622,6 +625,7 @@ gb_project_tree_actions__project_rename_file_cb (GObject      *object,
   else
     gb_tree_node_select (parent);
 
+cleanup:
   gtk_widget_hide (GTK_WIDGET (popover));
   gtk_widget_destroy (GTK_WIDGET (popover));
 }
