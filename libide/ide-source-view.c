@@ -4502,22 +4502,22 @@ ide_source_view_get_fixit_label (IdeSourceView *self,
   gchar *old_text = NULL;
   gchar *new_text = NULL;
   gchar *tmp;
-  gchar *ret;
+  gchar *ret = NULL;
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
   g_assert (fixit != NULL);
 
   range = ide_fixit_get_range (fixit);
   if (range == NULL)
-    return NULL;
+    goto cleanup;
 
   new_text = g_strdup (ide_fixit_get_text (fixit));
   if (new_text == NULL)
-    return NULL;
+    goto cleanup;
 
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
   if (!IDE_IS_BUFFER (buffer))
-    return NULL;
+    goto cleanup;
 
   begin_loc = ide_source_range_get_begin (range);
   end_loc = ide_source_range_get_end (range);
@@ -4554,6 +4554,7 @@ ide_source_view_get_fixit_label (IdeSourceView *self,
   else
     ret = g_strdup_printf (_("Replace \"%s\" with \"%s\""), old_text, new_text);
 
+cleanup:
   g_free (old_text);
   g_free (new_text);
 
