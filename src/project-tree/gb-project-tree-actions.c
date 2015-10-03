@@ -821,11 +821,16 @@ gb_project_tree_actions_move_to_trash (GSimpleAction *action,
 static gboolean
 is_files_node (GbTreeNode *node)
 {
-  GObject *item = gb_tree_node_get_item (node);
-  GbTreeNode *parent = gb_tree_node_get_parent (node);
-  GObject *parent_item = gb_tree_node_get_item (parent);
+  if (node != NULL)
+    {
+      GObject *item = gb_tree_node_get_item (node);
+      GbTreeNode *parent = gb_tree_node_get_parent (node);
+      GObject *parent_item = gb_tree_node_get_item (parent);
 
-  return (GB_IS_PROJECT_FILE (item) && !GB_IS_PROJECT_FILE (parent_item));
+      return (GB_IS_PROJECT_FILE (item) && !GB_IS_PROJECT_FILE (parent_item));
+    }
+
+  return FALSE;
 }
 
 static GActionEntry GbProjectTreeActions[] = {
