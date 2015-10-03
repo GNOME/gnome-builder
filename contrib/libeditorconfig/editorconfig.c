@@ -139,6 +139,10 @@ static int array_editorconfig_name_value_add(
     /* always use name_lwr but not name, since property names are case
      * insensitive */
     char        name_lwr[MAX_PROPERTY_NAME];
+
+    if (strlen (name) > (MAX_PROPERTY_NAME - 1))
+      return -1;
+
     /* For the first time we came here, aenv->name_values is NULL */
     if (aenv->name_values == NULL) {
         aenv->name_values = (editorconfig_name_value*)malloc(
