@@ -32,7 +32,7 @@ ide_line_reader_init (IdeLineReader *reader,
   if (length < 0)
     length = strlen (contents);
 
-  if ((contents != NULL) && (length <= G_MAXSSIZE))
+  if (contents != NULL)
     {
       reader->contents = contents;
       reader->length = length;
