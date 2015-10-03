@@ -46,6 +46,7 @@ class Rank:
     RETURN   = 1 << 11
     BREAK    = 1 << 12
     CONTINUE = 1 << 13
+    BLOCK    = 1 << 14
 
 _RANK_NAMES = {
     Rank.FUNCTION: 'FUNCTION',
@@ -62,6 +63,7 @@ _RANK_NAMES = {
     Rank.RETURN: 'RETURN',
     Rank.BREAK: 'BREAK',
     Rank.CONTINUE: 'CONTINUE',
+    Rank.BLOCK: 'BLOCK',
 }
 
 class Discovery:
@@ -185,6 +187,7 @@ class Discoveries:
         stop = self.buffer.get_iter_at_offset(self.stop)
 
         self._discover_break(iter, stop)
+        self._discover_blocks(iter, stop)
         self._discover_continue(iter, stop)
         self._discover_class(iter, stop)
         self._discover_comment(iter, stop)
@@ -232,6 +235,14 @@ class Discoveries:
 
     def _discover_pass(self, iter, stop, *, word="pass", rank=Rank.PASS):
         self._discover_simple(iter, stop, word, rank)
+
+    def _discover_blocks(self, iter, stop):
+        self._discover_simple(iter, stop, word='except', rank=Rank.BLOCK)
+        self._discover_simple(iter, stop, word='finally', rank=Rank.BLOCK)
+        self._discover_simple(iter, stop, word='for', rank=Rank.BLOCK)
+        self._discover_simple(iter, stop, word='try', rank=Rank.BLOCK)
+        self._discover_simple(iter, stop, word='while', rank=Rank.BLOCK)
+        self._discover_simple(iter, stop, word='with', rank=Rank.BLOCK)
 
     def _discover_break(self, iter, stop, *, word="break", rank=Rank.PASS):
         self._discover_simple(iter, stop, word, rank)
