@@ -242,6 +242,11 @@ class Discoveries:
         if not iter.starts_line():
             iter.backward_char()
         if self.buffer.iter_has_context_class(iter, word):
+            while self.buffer.iter_has_context_class(iter, word):
+                if not iter.backward_char():
+                    break
+            if not self.buffer.iter_has_context_class(iter, word):
+                iter.forward_char()
             self._add(rank, iter)
 
     def _discover_string(self, iter, stop, *, word='string', rank=Rank.STRING):
