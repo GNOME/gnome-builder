@@ -110,31 +110,29 @@ gb_search_box_delay_cb (gpointer user_data)
 }
 
 static void
-gb_search_box_popover_closed (GbSearchBox *box,
-                              GtkPopover  *popover)
+gb_search_box_popover_set_visible (GbSearchBox *self,
+                                   gboolean     visible)
 {
-  g_return_if_fail (GB_IS_SEARCH_BOX (box));
-  g_return_if_fail (GTK_IS_POPOVER (popover));
+  gboolean entry_has_text;
 
-}
+  g_return_if_fail (GB_IS_SEARCH_BOX (self));
 
-static gboolean
-gb_search_box_entry_focus_in (GbSearchBox   *self,
-                              GdkEventFocus *focus,
-                              GtkWidget     *entry)
-{
-  const gchar *text;
+  entry_has_text = !!(gtk_entry_get_text_length (GTK_ENTRY (self->entry)));
 
-  g_return_val_if_fail (GB_IS_SEARCH_BOX (self), FALSE);
-  g_return_val_if_fail (focus, FALSE);
-  g_return_val_if_fail (GTK_IS_SEARCH_ENTRY (entry), FALSE);
+  if (visible == gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (self->button)))
+    return;
 
-  text = gtk_entry_get_text (GTK_ENTRY (self->entry));
+  if (visible && entry_has_text)
+    {
+      if (!gtk_widget_has_focus (GTK_WIDGET (self->entry)))
+        gtk_widget_grab_focus (GTK_WIDGET (self->entry));
 
-  if (!ide_str_empty0 (text))
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (self->button), TRUE);
-
-  return GDK_EVENT_PROPAGATE;
+      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (self->button), TRUE);
+    }
+  else if (!visible)
+    {
+      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (self->button), FALSE);
+    }
 }
 
 static void
@@ -145,8 +143,6 @@ gb_search_box_entry_activate (GbSearchBox    *self,
   g_return_if_fail (GTK_IS_SEARCH_ENTRY (entry));
 
   gb_search_display_activate (self->display);
-
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (self->button), FALSE);
   gtk_entry_set_text (GTK_ENTRY (self->entry), "");
 }
 
@@ -154,22 +150,23 @@ static void
 gb_search_box_entry_changed (GbSearchBox    *self,
                              GtkSearchEntry *entry)
 {
-  GtkToggleButton *button;
-  const gchar *text;
+  GtkWidget *button;
   gboolean active;
+  gboolean sensitive;
   guint delay_msec = SHORT_DELAY_TIMEOUT_MSEC;
 
   g_return_if_fail (GB_IS_SEARCH_BOX (self));
   g_return_if_fail (GTK_IS_SEARCH_ENTRY (entry));
 
-  button = GTK_TOGGLE_BUTTON (self->button);
-  text = gtk_entry_get_text (GTK_ENTRY (entry));
-  active = !ide_str_empty0 (text) ||
-           (self->delay_timeout != 0) ||
-           gtk_widget_has_focus (GTK_WIDGET (entry));
+  button = GTK_WIDGET (self->button);
+  active = gtk_widget_has_focus (GTK_WIDGET (entry)) || (self->delay_timeout != 0);
+  sensitive = !!(gtk_entry_get_text_length (GTK_ENTRY (self->entry)));
 
-  if (gtk_toggle_button_get_active (button) != active)
-    gtk_toggle_button_set_active (button, active);
+  if (gtk_widget_get_sensitive (button) != sensitive)
+    gtk_widget_set_sensitive (button, sensitive);
+
+  if (active)
+    gb_search_box_popover_set_visible (self, TRUE);
 
   if (!self->delay_timeout)
     {
@@ -200,7 +197,7 @@ gb_search_box_entry_key_press_event (GbSearchBox    *self,
     {
     case GDK_KEY_Escape:
       {
-        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (self->button), FALSE);
+        gb_search_box_popover_set_visible (self, FALSE);
         gtk_widget_grab_focus (gtk_widget_get_toplevel (GTK_WIDGET (entry)));
 
         return GDK_EVENT_STOP;
@@ -237,26 +234,7 @@ gb_search_box_display_result_activated (GbSearchBox     *self,
   g_return_if_fail (IDE_IS_SEARCH_RESULT (result));
   g_return_if_fail (GB_IS_SEARCH_DISPLAY (display));
 
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (self->button), FALSE);
   gtk_entry_set_text (GTK_ENTRY (self->entry), "");
-}
-
-static void
-gb_search_box_button_toggled (GbSearchBox     *self,
-                              GtkToggleButton *button)
-{
-  g_return_if_fail (GB_IS_SEARCH_BOX (self));
-  g_return_if_fail (GTK_IS_TOGGLE_BUTTON (button));
-
-  if (gtk_toggle_button_get_active (button))
-    {
-      if (!gtk_widget_has_focus (GTK_WIDGET (self->entry)))
-        gtk_widget_grab_focus (GTK_WIDGET (self->entry));
-    }
-  else
-    {
-      gtk_widget_hide (GTK_WIDGET (self->popover));
-    }
 }
 
 static void
@@ -283,7 +261,10 @@ gb_search_box_workbench_set_focus (GbSearchBox *self,
        !gtk_widget_is_ancestor (focus, GTK_WIDGET (self->popover))))
     {
       gtk_entry_set_text (GTK_ENTRY (self->entry), "");
-      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (self->button), FALSE);
+    }
+  else
+    {
+      gb_search_box_popover_set_visible (self, TRUE);
     }
 }
 
@@ -297,6 +278,7 @@ gb_search_box_map (GtkWidget *widget)
 
   GTK_WIDGET_CLASS (gb_search_box_parent_class)->map (widget);
 
+  gtk_widget_set_sensitive (GTK_WIDGET (self->button), FALSE);
   toplevel = gtk_widget_get_toplevel (widget);
 
   if (GB_IS_WORKBENCH (toplevel))
@@ -338,16 +320,6 @@ gb_search_box_constructed (GObject *object)
 
   gtk_popover_set_relative_to (self->popover, GTK_WIDGET (self->entry));
 
-  g_signal_connect_object (self->popover,
-                           "closed",
-                           G_CALLBACK (gb_search_box_popover_closed),
-                           self,
-                           G_CONNECT_SWAPPED);
-  g_signal_connect_object (self->entry,
-                           "focus-in-event",
-                           G_CALLBACK (gb_search_box_entry_focus_in),
-                           self,
-                           G_CONNECT_SWAPPED);
   g_signal_connect_object (self->entry,
                            "activate",
                            G_CALLBACK (gb_search_box_entry_activate),
@@ -366,11 +338,6 @@ gb_search_box_constructed (GObject *object)
   g_signal_connect_object (self->display,
                            "result-activated",
                            G_CALLBACK (gb_search_box_display_result_activated),
-                           self,
-                           G_CONNECT_SWAPPED);
-  g_signal_connect_object (self->button,
-                           "toggled",
-                           G_CALLBACK (gb_search_box_button_toggled),
                            self,
                            G_CONNECT_SWAPPED);
 }
