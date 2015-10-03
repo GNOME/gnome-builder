@@ -462,6 +462,10 @@ class PythonIndenter(GObject.Object): #, Ide.Indenter):
         return (' ' * column), 0
 
     def format_enter(self, view, begin, end, event):
+        # Do nothing if they held shift while pressing enter
+        if event.state & Gdk.ModifierType.SHIFT_MASK != 0:
+            return '\n', 0
+
         iter = begin.copy()
 
         # Discover our various rankings
