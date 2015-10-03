@@ -751,6 +751,9 @@ ide_source_snippet_before_delete_range (IdeSourceSnippet *self,
       break;
     }
 
+  if (lower_bound == -1 || upper_bound == -1)
+    return;
+
   for (i = lower_bound; i <= upper_bound; i++)
     {
       chunk = g_ptr_array_index (self->chunks, i);
