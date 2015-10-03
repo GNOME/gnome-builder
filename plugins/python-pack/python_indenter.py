@@ -100,23 +100,23 @@ class Discoveries:
         self.stop = pos.get_offset()
 
     def select(self, *ranks):
-        if not self.has_run:
-            self._run()
+        self._run()
         result = []
         ranks = list(ranks)
+        count = 0
         for discovery in reverse(self.discoveries):
-            if discovery.rank == ranks[0]:
+            if discovery.rank == ranks[count]:
                 result.append(discovery)
-                ranks = ranks[1:]
-                if not ranks:
+                count += 1
+                if len(ranks) == count:
                     break
-        if not ranks:
+        if len(ranks) == count:
             return result
+        return None
 
     @property
     def nearest(self):
-        if not self.has_run:
-            self._run()
+        self._run()
         if self.discoveries:
             return self.discoveries[0]
         return None
@@ -129,8 +129,7 @@ class Discoveries:
 
         Returns a Discovery instance or None.
         """
-        if not self.has_run:
-            self._run()
+        self._run()
         for discovery in self.discoveries:
             if discovery.rank & mask != 0:
                 return discovery
@@ -138,8 +137,7 @@ class Discoveries:
 
     @property
     def all_mask(self):
-        if not self.has_run:
-            self._run()
+        self._run()
         flags = 0
         for discovery in self.discoveries:
             flags |= discovery.rank
@@ -178,6 +176,9 @@ class Discoveries:
         self.discoveries.append(d)
 
     def _run(self):
+        if self.has_run:
+            return
+
         self.has_run = True
 
         iter = self.buffer.get_iter_at_offset(self.offset)
@@ -267,7 +268,7 @@ class Discoveries:
 
     def _is_special(self, iter):
         return (self.buffer.iter_has_context_class(iter, 'string') or
-                self.buffer.iter_has_context_class(iter,'comment'))
+                self.buffer.iter_has_context_class(iter, 'comment'))
 
     def _line_starts_with(self, iter, word):
         begin = iter.copy()
@@ -315,7 +316,7 @@ class Discoveries:
         self.discoveries = survived
 
     def _eliminate_if_elif_else(self):
-        nearest = self.nearest_of(Rank.IF | Rank.ELIF | Rank.ELIF)
+        nearest = self.nearest_of(Rank.IF | Rank.ELIF | Rank.ELSE)
         if nearest is None:
             return
 
@@ -388,7 +389,7 @@ class PythonIndenter(GObject.Object): #, Ide.Indenter):
     def do_format(self, view, begin, end, event):
         if event.keyval in (Gdk.KEY_Return, Gdk.KEY_KP_Enter):
             return self.format_enter(view, begin, end, event)
-        elif event.keyval in (Gdk.KEY_colon,):
+        if event.keyval in (Gdk.KEY_colon,):
             return self.format_colon(view, begin, end, event)
         return '', 0
 
