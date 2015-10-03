@@ -381,14 +381,15 @@ ide_source_snippet_parser_do_snippet_scope (IdeSourceSnippetParser *parser,
       add_scope = TRUE;
       for (iter = parser->scope; iter; iter = iter->next)
         {
-          if (g_strcmp0(iter->data, scope_list[i]) == 0)
+          if (g_strcmp0 (iter->data, scope_list[i]) == 0)
+            {
               add_scope = FALSE;
               break;
+            }
         }
 
       if (add_scope)
-        parser->scope = g_list_append(parser->scope,
-                                    g_strstrip (g_strdup (scope_list[i])));
+        parser->scope = g_list_append(parser->scope, g_strstrip (g_strdup (scope_list[i])));
     }
 
   g_strfreev(scope_list);
