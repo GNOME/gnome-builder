@@ -422,6 +422,7 @@ class PythonSettings:
     align_params = True
     indent_width = 4
     insert_spaces = True
+    continue_comments = True
 
 class PythonIndenter(GObject.Object): #, Ide.Indenter):
     settings = None
@@ -470,8 +471,13 @@ class PythonIndenter(GObject.Object): #, Ide.Indenter):
 
         nearest = discoveries.nearest
 
+        # If we are in a comment, continue the comment on the new line,
+        # possibly adding the prefixing "# ".
         if nearest.rank == Rank.COMMENT:
-            return self.copy_indent(view, iter, suffix='# ')
+            suffix = ''
+            if self.settings.continue_comments:
+                suffix = '# '
+            return self.copy_indent(view, iter, suffix=suffix)
 
         if self.settings.align_params \
         and discoveries.select_tail(Rank.FUNCTION, Rank.TUPLE):
