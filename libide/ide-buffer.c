@@ -827,7 +827,7 @@ ide_buffer__file_notify_file (IdeBuffer  *self,
     {
       GError *error = NULL;
 
-      priv->file_monitor = g_file_monitor_file (gfile, G_FILE_MONITOR_NONE, NULL, NULL);
+      priv->file_monitor = g_file_monitor_file (gfile, G_FILE_MONITOR_NONE, NULL, &error);
 
       if (priv->file_monitor != NULL)
         {
@@ -837,7 +837,7 @@ ide_buffer__file_notify_file (IdeBuffer  *self,
                                    self,
                                    G_CONNECT_SWAPPED);
         }
-      else
+      else if (error != NULL)
         {
           g_debug ("Failed to create GFileMonitor: %s", error->message);
           g_clear_error (&error);
