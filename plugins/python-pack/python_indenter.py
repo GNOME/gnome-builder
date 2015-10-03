@@ -488,6 +488,12 @@ class PythonIndenter(GObject.Object): #, Ide.Indenter):
                 suffix = '# '
             return self.copy_indent(view, iter, suffix=suffix)
 
+        # Copy the indentation for the beginning of the string if we are
+        # possibily in a multi-line string.
+        if nearest.rank == Rank.STRING:
+            indent = self.get_indent_at_visual_column(nearest.column, iter)
+            return '\n' + indent, 0
+
         if self.settings.align_params \
         and discoveries.select_tail(Rank.FUNCTION, Rank.TUPLE):
             # indent for the tuple begin position plus a space to move
