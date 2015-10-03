@@ -342,7 +342,7 @@ rg_table_iter_set (RgTableIter *iter,
       if (column_id >= priv->columns->len)
         {
           g_critical ("No such column %d", column_id);
-          return;
+          goto cleanup;
         }
 
       column = g_ptr_array_index (priv->columns, column_id);
@@ -355,6 +355,7 @@ rg_table_iter_set (RgTableIter *iter,
   if (column_id != -1)
     g_critical ("Invalid column sentinal: %d", column_id);
 
+cleanup:
   va_end (args);
 }
 
@@ -383,7 +384,7 @@ rg_table_iter_get (RgTableIter *iter,
       if (column_id >= priv->columns->len)
         {
           g_critical ("No such column %d", column_id);
-          return;
+          goto cleanup;
         }
 
       column = g_ptr_array_index (priv->columns, column_id);
@@ -396,6 +397,7 @@ rg_table_iter_get (RgTableIter *iter,
   if (column_id != -1)
     g_critical ("Invalid column sentinal: %d", column_id);
 
+cleanup:
   va_end (args);
 }
 
