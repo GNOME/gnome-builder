@@ -501,17 +501,6 @@ ide_clang_completion_item_get_typed_text (IdeClangCompletionItem *self)
         }
     }
 
-  if (self->typed_text_index == -1)
-    {
-      /*
-       * FIXME:
-       *
-       * This seems like an implausible result, but we are definitely
-       * hitting it occasionally.
-       */
-      return "";
-    }
-
 #ifdef IDE_ENABLE_TRACE
   {
     enum CXCompletionChunkKind kind;
