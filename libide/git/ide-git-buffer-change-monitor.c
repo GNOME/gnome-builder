@@ -498,10 +498,12 @@ diff_line_cb (GgitDiffDelta *delta,
     case GGIT_DIFF_LINE_ADD_EOFNL:
     case GGIT_DIFF_LINE_DEL_EOFNL:
     case GGIT_DIFF_LINE_FILE_HDR:
-    case GGIT_DIFF_LINE_HUNK_HDR:
     case GGIT_DIFF_LINE_BINARY:
     default:
       break;
+
+    case GGIT_DIFF_LINE_HUNK_HDR:
+      g_assert_not_reached ();
     }
 
   return 0;
