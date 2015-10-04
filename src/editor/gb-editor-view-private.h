@@ -51,6 +51,7 @@ struct _GbEditorView
   GbEditorTweakWidget *tweak_widget;
   GtkMenuButton       *goto_line_button;
   GbSimplePopover     *goto_line_popover;
+  GtkButton           *warning_button;
 };
 
 G_END_DECLS
