@@ -394,6 +394,10 @@ gb_editor_view_set_document (GbEditorView     *self,
 
       g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_DOCUMENT]);
 
+      g_object_bind_property (document, "has-diagnostics",
+                              self->warning_button, "visible",
+                              G_BINDING_SYNC_CREATE);
+
       gb_editor_view__buffer_notify_language (self, NULL, document);
       gb_editor_view__buffer_notify_title (self, NULL, IDE_BUFFER (document));
 
@@ -720,6 +724,20 @@ gb_editor_view__extension_removed (PeasExtensionSet  *set,
 }
 
 static void
+gb_editor_view_warning_button_clicked (GbEditorView *self,
+                                       GtkButton    *button)
+{
+  GbEditorFrame *frame;
+
+  g_assert (GB_IS_EDITOR_VIEW (self));
+  g_assert (GTK_IS_BUTTON (button));
+
+  frame = gb_editor_view_get_last_focused (self);
+  gtk_widget_grab_focus (GTK_WIDGET (frame));
+  g_signal_emit_by_name (frame->source_view, "move-error", GTK_DIR_DOWN);
+}
+
+static void
 gb_editor_view_constructed (GObject *object)
 {
   GbEditorView *self = (GbEditorView *)object;
@@ -860,6 +878,7 @@ gb_editor_view_class_init (GbEditorViewClass *klass)
   GB_WIDGET_CLASS_BIND (klass, GbEditorView, tweak_widget);
   GB_WIDGET_CLASS_BIND (klass, GbEditorView, goto_line_button);
   GB_WIDGET_CLASS_BIND (klass, GbEditorView, goto_line_popover);
+  GB_WIDGET_CLASS_BIND (klass, GbEditorView, warning_button);
 
   g_type_ensure (GB_TYPE_EDITOR_FRAME);
   g_type_ensure (GB_TYPE_EDITOR_TWEAK_WIDGET);
@@ -919,6 +938,12 @@ gb_editor_view_init (GbEditorView *self)
   g_signal_connect_object (self->goto_line_popover,
                            "changed",
                            G_CALLBACK (gb_editor_view_goto_line_changed),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  g_signal_connect_object (self->warning_button,
+                           "clicked",
+                           G_CALLBACK (gb_editor_view_warning_button_clicked),
                            self,
                            G_CONNECT_SWAPPED);
 }

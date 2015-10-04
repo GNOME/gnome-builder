@@ -88,6 +88,20 @@
         <child internal-child="controls">
           <object class="GtkBox">
             <child>
+              <object class="GtkButton" id="warning_button">
+                <property name="visible">false</property>
+                <child>
+                  <object class="GtkImage">
+                    <property name="icon-name">dialog-warning-symbolic</property>
+                    <property name="visible">true</property>
+                    <style>
+                      <class name="dim-label"/>
+                    </style>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
               <object class="GtkSeparator">
                 <property name="margin-start">3</property>
                 <property name="margin-end">3</property>
