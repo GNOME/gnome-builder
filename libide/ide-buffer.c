@@ -106,6 +106,7 @@ enum {
   PROP_CHANGED_ON_VOLUME,
   PROP_CONTEXT,
   PROP_FILE,
+  PROP_HAS_DIAGNOSTICS,
   PROP_HIGHLIGHT_DIAGNOSTICS,
   PROP_READ_ONLY,
   PROP_STYLE_SCHEME_NAME,
@@ -125,6 +126,19 @@ static void ide_buffer_queue_diagnose (IdeBuffer *self);
 
 static GParamSpec *gParamSpecs [LAST_PROP];
 static guint gSignals [LAST_SIGNAL];
+
+gboolean
+ide_buffer_get_has_diagnostics (IdeBuffer *self)
+{
+  IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_BUFFER (self), FALSE);
+
+  if (priv->diagnostics == NULL)
+    return FALSE;
+
+  return (ide_diagnostics_get_size (priv->diagnostics) > 0);
+}
 
 gboolean
 ide_buffer_get_busy (IdeBuffer *self)
@@ -430,6 +444,7 @@ ide_buffer_set_diagnostics (IdeBuffer      *self,
         ide_buffer_update_diagnostics (self, diagnostics);
 
       g_signal_emit (self, gSignals [LINE_FLAGS_CHANGED], 0);
+      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_HAS_DIAGNOSTICS]);
     }
 }
 
@@ -1064,6 +1079,10 @@ ide_buffer_get_property (GObject    *object,
       g_value_set_object (value, ide_buffer_get_file (self));
       break;
 
+    case PROP_HAS_DIAGNOSTICS:
+      g_value_set_boolean (value, ide_buffer_get_has_diagnostics (self));
+      break;
+
     case PROP_HIGHLIGHT_DIAGNOSTICS:
       g_value_set_boolean (value, ide_buffer_get_highlight_diagnostics (self));
       break;
@@ -1162,6 +1181,13 @@ ide_buffer_class_init (IdeBufferClass *klass)
                          "The file represented by the buffer.",
                          IDE_TYPE_FILE,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+
+  gParamSpecs [PROP_HAS_DIAGNOSTICS] =
+    g_param_spec_boolean ("has-diagnostics",
+                         "Has Diagnostics",
+                         "If the buffer contains diagnostic messages.",
+                         FALSE,
+                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_HIGHLIGHT_DIAGNOSTICS] =
     g_param_spec_boolean ("highlight-diagnostics",
