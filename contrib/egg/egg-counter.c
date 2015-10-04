@@ -170,7 +170,8 @@ _egg_counter_arena_init_local (EggCounterArena *arena)
   /* Implausible, but squashes warnings. */
   if (page_size < 4096)
     {
-      size = 4096 * 4;
+      page_size = 4096;
+      size = page_size * 4;
       goto use_malloc;
     }
 
