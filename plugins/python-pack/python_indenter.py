@@ -480,6 +480,11 @@ class PythonIndenter(GObject.Object): #, Ide.Indenter):
 
         nearest = discoveries.nearest
 
+        # If the previous line is non-zero-width whitespace, we should
+        # just copy that line instead of annoying the user.
+        if line_is_space(begin):
+            return self.copy_indent(view, iter)
+
         # If we are in a comment, continue the comment on the new line,
         # possibly adding the prefixing "# ".
         if nearest.rank == Rank.COMMENT:
@@ -566,6 +571,16 @@ def copy_line(iter):
     if not end.ends_line():
         end.forward_to_line_end()
     return begin.get_slice(end)
+
+def line_is_space(iter):
+    iter = iter.copy()
+    iter.set_line_offset(0)
+    while not iter.ends_line():
+        if iter.get_char().isspace():
+            iter.forward_char()
+            continue
+        return False
+    return iter.get_line_offset() != 0
 
 def forward_to_nonspace(iter):
     """
