@@ -168,6 +168,8 @@ class CompletionThread(threading.Thread):
                                 info.gi_params = [GIParam(argument) for argument in obj.get_arguments()]
                         else:
                             info.real_type = info.type
+                            if hasattr(info, 'params') and len(info.params) > 0 and info.params[0].name == 'self':
+                                del info.params[0]
                         completion = JediCompletionProposal(self._provider, self._context, info)
                         self._results.take_proposal(completion)
         finally:
