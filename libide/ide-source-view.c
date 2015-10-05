@@ -3338,12 +3338,18 @@ ide_source_view_real_move_error (IdeSourceView    *self,
   GtkTextBuffer *buffer;
   GtkTextMark *insert;
   GtkTextIter iter;
+  gboolean wrap_around = TRUE;
   gboolean (*movement) (GtkTextIter *) = NULL;
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
 
   if (!priv->buffer)
     return;
+
+  if (dir == GTK_DIR_RIGHT)
+    dir = GTK_DIR_DOWN;
+  else if (dir == GTK_DIR_LEFT)
+    dir = GTK_DIR_UP;
 
   /*
    * TODO: This is not particularly very efficient. But I didn't feel like
@@ -3353,7 +3359,7 @@ ide_source_view_real_move_error (IdeSourceView    *self,
    *       we should change to that.
    */
 
-  if ((dir == GTK_DIR_DOWN) || (dir == GTK_DIR_RIGHT))
+  if (dir == GTK_DIR_DOWN)
     movement = gtk_text_iter_forward_line;
   else
     movement = gtk_text_iter_backward_line;
@@ -3362,6 +3368,7 @@ ide_source_view_real_move_error (IdeSourceView    *self,
   insert = gtk_text_buffer_get_insert (buffer);
   gtk_text_buffer_get_iter_at_mark (buffer, &iter, insert);
 
+wrapped:
   while (movement (&iter))
     {
       IdeDiagnostic *diag;
@@ -3391,6 +3398,16 @@ ide_source_view_real_move_error (IdeSourceView    *self,
 
           break;
         }
+    }
+
+  if (wrap_around)
+    {
+      if (dir == GTK_DIR_DOWN)
+        gtk_text_buffer_get_start_iter (GTK_TEXT_BUFFER (priv->buffer), &iter);
+      else
+        gtk_text_buffer_get_end_iter (GTK_TEXT_BUFFER (priv->buffer), &iter);
+      wrap_around = FALSE;
+      goto wrapped;
     }
 }
 
