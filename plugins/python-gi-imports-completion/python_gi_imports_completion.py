@@ -109,10 +109,11 @@ class CompletionProvider(Ide.Object,
         self._libraries_expire_at = now + CACHE_EXPIRE_USEC
 
         for directory in GIRepository.Repository.get_search_path():
-            for filename in os.listdir(directory):
-                name = filename.split('-')[0]
-                if name not in self._libraries:
-                    self._libraries.append(name)
+            if os.path.exists(directory):
+                for filename in os.listdir(directory):
+                    name = filename.split('-')[0]
+                    if name not in self._libraries:
+                        self._libraries.append(name)
 
         self._libraries.sort()
 
