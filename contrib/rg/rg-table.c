@@ -175,6 +175,12 @@ rg_table_set_max_samples (RgTable *self,
   g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_MAX_SAMPLES]);
 }
 
+/**
+ * rg_table_push:
+ * @self: Table to push to
+ * @iter: (out): Newly created #RgTableIter
+ * @timestamp: Time of new event
+ */
 void
 rg_table_push (RgTable     *self,
                RgTableIter *iter,
