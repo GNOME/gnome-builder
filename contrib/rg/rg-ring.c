@@ -115,7 +115,7 @@ rg_ring_append_vals (RgRing        *ring,
 /**
  * rg_ring_foreach:
  * @ring: (in): A #RgRing.
- * @func: (in): A #GFunc to call for each element.
+ * @func: (in) (scope call): A #GFunc to call for each element.
  * @user_data: (in): user data for @func.
  *
  * Calls @func for every item in the #RgRing starting from the most recently
