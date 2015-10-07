@@ -100,6 +100,17 @@ ide_source_snippet_completion_provider_match (GtkSourceCompletionProvider *provi
 }
 
 static void
+ide_source_snippet_completion_provider_constructed (GObject *object)
+{
+  IdeSourceSnippetCompletionProvider *self = (IdeSourceSnippetCompletionProvider *)object;
+
+  self->settings = g_settings_new ("org.gnome.builder.code-insight");
+  g_settings_bind (self->settings, "snippet-completion", self, "enabled", G_SETTINGS_BIND_GET);
+
+  G_OBJECT_CLASS (ide_source_snippet_completion_provider_parent_class)->constructed (object);
+}
+
+static void
 ide_source_snippet_completion_provider_finalize (GObject *object)
 {
   IdeSourceSnippetCompletionProvider *self = IDE_SOURCE_SNIPPET_COMPLETION_PROVIDER (object);
@@ -179,9 +190,9 @@ ide_source_snippet_completion_provider_set_property (GObject      *object,
 static void
 ide_source_snippet_completion_provider_class_init (IdeSourceSnippetCompletionProviderClass *klass)
 {
-  GObjectClass *object_class;
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  object_class = G_OBJECT_CLASS (klass);
+  object_class->constructed = ide_source_snippet_completion_provider_constructed;
   object_class->finalize = ide_source_snippet_completion_provider_finalize;
   object_class->get_property = ide_source_snippet_completion_provider_get_property;
   object_class->set_property = ide_source_snippet_completion_provider_set_property;
@@ -213,8 +224,6 @@ ide_source_snippet_completion_provider_class_init (IdeSourceSnippetCompletionPro
 static void
 ide_source_snippet_completion_provider_init (IdeSourceSnippetCompletionProvider *self)
 {
-  self->settings = g_settings_new ("org.gnome.builder.code-insight");
-  g_settings_bind (self->settings, "snippet-completion", self, "enabled", G_SETTINGS_BIND_GET);
 }
 
 static gboolean
