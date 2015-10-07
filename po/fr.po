@@ -456,7 +456,7 @@ msgstr "Afficher une vue d’ensemble à coté de l'éditeur de code source."
 
 #: ../data/ui/gb-preferences-page-editor.ui.h:15
 msgid "Auto Hide Overview Map"
-msgstr "Masquage automatique de la vue d'enssemble"
+msgstr "Masquage automatique de la vue d'ensemble"
 
 #: ../data/ui/gb-preferences-page-editor.ui.h:16
 msgid "Automatically hide the overview map during periods of inactivity."
