@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
 "POT-Creation-Date: 2015-09-29 06:37+0000\n"
-"PO-Revision-Date: 2015-10-09 09:47+0200\n"
+"PO-Revision-Date: 2015-10-09 09:52+0200\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
@@ -111,7 +111,7 @@ msgstr "_Chiudi tutti"
 
 #: ../data/gtk/menus.ui.h:15
 msgid "Display Options"
-msgstr "Opzioni visalizzazione"
+msgstr "Opzioni visualizzazione"
 
 #: ../data/gtk/menus.ui.h:16
 msgid "Show Icons"
