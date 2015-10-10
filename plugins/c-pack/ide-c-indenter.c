@@ -42,8 +42,7 @@ struct _IdeCIndenter
   gint           scope_indent;
   gint           condition_indent;
   gint           directive_indent;
-
-  guint          space_before_paren : 1;
+  gint           extra_label_indent;
 };
 
 static void indenter_iface_init (IdeIndenterInterface *iface);
@@ -161,34 +160,50 @@ line_is_whitespace_until (GtkTextIter *iter)
   return TRUE;
 }
 
-static gboolean
-backward_find_keyword (GtkTextIter *iter,
-                       const gchar *keyword,
-                       GtkTextIter *limit)
+static gboolean is_special (const GtkTextIter *iter)
 {
-  GtkTextIter begin;
-  GtkTextIter end;
+  GtkSourceBuffer *buffer;
 
-  /*
-   * If we find the keyword, check to see that the character before it
-   * is either a newline or some other space character. (ie, not part of a
-   * function name like foo_do().
-   */
-  if (gtk_text_iter_backward_search (iter, keyword, GTK_TEXT_SEARCH_TEXT_ONLY,
-                                     &begin, &end, limit))
+  buffer = GTK_SOURCE_BUFFER (gtk_text_iter_get_buffer (iter));
+  return (gtk_source_buffer_iter_has_context_class (buffer, iter, "string") ||
+          gtk_source_buffer_iter_has_context_class (buffer, iter, "comment"));
+}
+
+static gboolean
+backward_find_keyword (GtkTextIter       *iter,
+                       const gchar       *keyword,
+                       const GtkTextIter *limit)
+{
+  GtkTextIter copy = *iter;
+
+  while (gtk_text_iter_compare (&copy, limit) > 0)
     {
-      GtkTextIter copy;
-      gunichar ch;
+      GtkTextIter begin;
+      GtkTextIter end;
 
-      gtk_text_iter_assign (&copy, &begin);
+      if (!gtk_text_iter_backward_search (&copy, keyword, GTK_TEXT_SEARCH_TEXT_ONLY, &begin, &end, limit))
+        return FALSE;
 
-      if (!gtk_text_iter_backward_char (&copy) ||
-          !(ch = gtk_text_iter_get_char (&copy)) ||
-          g_unichar_isspace (ch))
+      if (!is_special (&begin) &&
+          gtk_text_iter_starts_word (&begin) &&
+          gtk_text_iter_ends_word (&end))
         {
-          gtk_text_iter_assign (iter, &begin);
+          GtkTextIter prev = begin;
+          gunichar ch;
+
+          if (gtk_text_iter_backward_char (&prev) &&
+              (ch = gtk_text_iter_get_char (&prev)) &&
+              !g_unichar_isspace (ch))
+            {
+              goto again;
+            }
+
+          *iter = begin;
           return TRUE;
         }
+
+    again:
+      copy = begin;
     }
 
   return FALSE;
@@ -490,6 +505,9 @@ in_comment (const GtkTextIter *location,
   IDE_RETURN (TRUE);
 }
 
+#define GET_LINE_OFFSET(_iter) \
+  gtk_source_view_get_visual_column(GTK_SOURCE_VIEW(view), _iter)
+
 static gchar *
 c_indenter_indent (IdeCIndenter  *c,
                    GtkTextView   *view,
@@ -533,7 +551,7 @@ c_indenter_indent (IdeCIndenter  *c,
       guint offset;
 
       gtk_text_iter_assign (iter, &match_begin);
-      offset = gtk_text_iter_get_line_offset (iter);
+      offset = GET_LINE_OFFSET (iter);
       if (comment_type == COMMENT_C89)
         {
           build_indent (c, offset + 1, iter, str);
@@ -583,7 +601,7 @@ c_indenter_indent (IdeCIndenter  *c,
           !backward_find_matching_char (iter, '}'))
         IDE_GOTO (cleanup);
 
-      offset = gtk_text_iter_get_line_offset (iter);
+      offset = GET_LINE_OFFSET (iter);
 
       if (gtk_text_iter_get_char (iter) == '(')
         offset++;
@@ -594,7 +612,7 @@ c_indenter_indent (IdeCIndenter  *c,
            * like "enum {".
            */
           if (backward_to_line_first_char (iter))
-            offset = gtk_text_iter_get_line_offset (iter);
+            offset = GET_LINE_OFFSET (iter);
           offset += c->scope_indent;
         }
 
@@ -612,7 +630,7 @@ c_indenter_indent (IdeCIndenter  *c,
 
       if (backward_find_stmt_expr (iter))
         {
-          offset = gtk_text_iter_get_line_offset (iter);
+          offset = GET_LINE_OFFSET (iter);
           build_indent (c, offset, iter, str);
           IDE_GOTO (cleanup);
         }
@@ -628,7 +646,7 @@ c_indenter_indent (IdeCIndenter  *c,
     {
       guint offset;
 
-      offset = gtk_text_iter_get_line_offset (iter);
+      offset = GET_LINE_OFFSET (iter);
       build_indent (c, offset + 1, iter, str);
       IDE_GOTO (cleanup);
     }
@@ -645,11 +663,11 @@ c_indenter_indent (IdeCIndenter  *c,
 
       if (gtk_text_iter_forward_char (iter))
         {
-          guint offset = gtk_text_iter_get_line_offset (iter) - 1;
+          guint offset = GET_LINE_OFFSET (iter) - 1;
 
           if (backward_find_matching_char (iter, '}'))
             {
-              offset = gtk_text_iter_get_line_offset (iter);
+              offset = GET_LINE_OFFSET (iter);
               offset += c->scope_indent;
             }
 
@@ -672,7 +690,7 @@ c_indenter_indent (IdeCIndenter  *c,
       if (backward_find_matching_char (iter, ')') &&
           backward_find_condition_keyword (iter))
         {
-          guint offset = gtk_text_iter_get_line_offset (iter);
+          guint offset = GET_LINE_OFFSET (iter);
           build_indent (c, offset + c->condition_indent, iter, str);
           IDE_GOTO (cleanup);
         }
@@ -694,7 +712,7 @@ c_indenter_indent (IdeCIndenter  *c,
       if (!line_is_whitespace_until (&match_begin))
         backward_to_line_first_char (&match_begin);
 
-      offset = gtk_text_iter_get_line_offset (&match_begin);
+      offset = GET_LINE_OFFSET (&match_begin);
       build_indent (c, offset + c->scope_indent, iter, str);
       IDE_GOTO (cleanup);
     }
@@ -709,7 +727,7 @@ c_indenter_indent (IdeCIndenter  *c,
         {
           guint offset;
 
-          offset = gtk_text_iter_get_line_offset (iter);
+          offset = GET_LINE_OFFSET (iter);
           build_indent (c, offset + c->scope_indent, iter, str);
           IDE_GOTO (cleanup);
         }
@@ -719,7 +737,7 @@ c_indenter_indent (IdeCIndenter  *c,
             {
               guint offset;
 
-              offset = gtk_text_iter_get_line_offset (iter);
+              offset = GET_LINE_OFFSET (iter);
               build_indent (c, offset + c->scope_indent, iter, str);
               IDE_GOTO (cleanup);
             }
@@ -772,8 +790,9 @@ maybe_close_comment (IdeCIndenter *c,
 
 static gchar *
 maybe_unindent_brace (IdeCIndenter *c,
-                      GtkTextIter           *begin,
-                      GtkTextIter           *end)
+                      GtkTextView  *view,
+                      GtkTextIter  *begin,
+                      GtkTextIter  *end)
 {
   GtkTextIter saved;
   gchar *ret = NULL;
@@ -803,7 +822,7 @@ maybe_unindent_brace (IdeCIndenter *c,
       if (!starts_line_space_ok (begin))
         backward_to_line_first_char (begin);
 
-      offset = gtk_text_iter_get_line_offset (begin);
+      offset = GET_LINE_OFFSET (begin);
       str = g_string_new (NULL);
       build_indent (c, offset, begin, str);
       g_string_append_c (str, '}');
@@ -828,8 +847,8 @@ maybe_unindent_brace (IdeCIndenter *c,
 
 static gchar *
 maybe_unindent_hash (IdeCIndenter *c,
-                     GtkTextIter           *begin,
-                     GtkTextIter           *end)
+                     GtkTextIter  *begin,
+                     GtkTextIter  *end)
 {
   GtkTextIter saved;
   gchar *ret = NULL;
@@ -884,53 +903,6 @@ line_starts_with_fuzzy (const GtkTextIter *iter,
 
   return ret;
 }
-
-#if 0
-static gchar *
-maybe_space_before_paren (IdeCIndenter *c,
-                          GtkTextIter           *begin,
-                          GtkTextIter           *end)
-{
-  GtkTextIter match_begin;
-  GtkTextIter copy;
-  gunichar ch;
-
-  g_return_val_if_fail (IDE_IS_C_INDENTER (c), NULL);
-  g_return_val_if_fail (begin, NULL);
-  g_return_val_if_fail (end, NULL);
-
-  if (!c->priv->space_before_paren)
-    return NULL;
-
-  if (in_c89_comment (begin, &match_begin))
-    return NULL;
-
-  /* ignore preprocessor #define */
-  if (line_starts_with_fuzzy (begin, "#"))
-    return NULL;
-
-  gtk_text_iter_assign (&copy, begin);
-
-  /*
-   * Move back to the character just inserted.
-   */
-  if (gtk_text_iter_backward_char (begin) &&
-      (ch = gtk_text_iter_get_char (begin)) &&
-      (ch == '(') &&
-      gtk_text_iter_backward_char (begin) &&
-      (ch = gtk_text_iter_get_char (begin)) &&
-      !g_unichar_isspace (ch) &&
-      g_unichar_isalnum (ch))
-    {
-      gtk_text_iter_forward_char (begin);
-      return g_strdup (" (");
-    }
-
-  gtk_text_iter_assign (begin, &copy);
-
-  return NULL;
-}
-#endif
 
 static gchar *
 format_parameter (const Parameter *param,
@@ -1024,8 +996,8 @@ format_parameters (GtkTextIter *begin,
 
 static gchar *
 maybe_align_parameters (IdeCIndenter *c,
-                        GtkTextIter           *begin,
-                        GtkTextIter           *end)
+                        GtkTextIter  *begin,
+                        GtkTextIter  *end)
 {
   GtkTextIter match_begin;
   GtkTextIter copy;
@@ -1067,55 +1039,6 @@ maybe_align_parameters (IdeCIndenter *c,
 
   IDE_RETURN (ret);
 }
-
-#if 0
-static gchar *
-maybe_add_brace (IdeCIndenter *c,
-                 GtkTextIter           *begin,
-                 GtkTextIter           *end,
-                 gint                  *cursor_offset)
-{
-  GtkTextIter iter;
-
-  gtk_text_iter_assign (&iter, begin);
-
-  if (gtk_text_iter_backward_char (&iter) &&
-      (gtk_text_iter_get_char (&iter) == '{') &&
-      (gtk_text_iter_get_char (begin) != '}'))
-    {
-      GtkTextIter copy = iter;
-
-      gtk_text_iter_assign (&copy, &iter);
-
-      if (gtk_text_iter_backward_word_start (&copy))
-        {
-          GtkTextIter copy2 = copy;
-
-          if (gtk_text_iter_forward_word_end (&copy2))
-            {
-              gchar *word;
-
-              word = gtk_text_iter_get_slice (&copy, &copy2);
-
-              if ((g_strcmp0 (word, "enum") == 0) ||
-                  (g_strcmp0 (word, "struct") == 0))
-                {
-                  *cursor_offset = -2;
-                  g_free (word);
-                  return g_strdup ("};");
-                }
-
-              g_free (word);
-            }
-        }
-
-      *cursor_offset = -1;
-      return g_strdup ("}");
-    }
-
-  return NULL;
-}
-#endif
 
 static gboolean
 line_is_case (const GtkTextIter *line)
@@ -1201,8 +1124,9 @@ line_is_label (const GtkTextIter *line)
 
 static gchar *
 maybe_unindent_case_label (IdeCIndenter *c,
-                           GtkTextIter           *begin,
-                           GtkTextIter           *end)
+                           GtkTextView  *view,
+                           GtkTextIter  *begin,
+                           GtkTextIter  *end)
 {
   GtkTextIter match_begin;
   GtkTextIter iter;
@@ -1227,7 +1151,7 @@ maybe_unindent_case_label (IdeCIndenter *c,
               guint offset;
 
               str = g_string_new (NULL);
-              offset = gtk_text_iter_get_line_offset (&iter);
+              offset = GET_LINE_OFFSET (&iter);
               build_indent (c, offset, &iter, str);
               while (!gtk_text_iter_starts_line (begin))
                 gtk_text_iter_backward_char (begin);
@@ -1250,9 +1174,7 @@ maybe_unindent_case_label (IdeCIndenter *c,
     }
   else if (line_is_label (&iter))
     {
-#if 0
-      TODO ("allow configurable label indent");
-#endif
+      GString *str = g_string_new (NULL);
 
       ITER_INIT_LINE_START (begin, &iter);
       ITER_INIT_LINE_START (end, &iter);
@@ -1261,7 +1183,11 @@ maybe_unindent_case_label (IdeCIndenter *c,
         if (!gtk_text_iter_forward_char (end))
           return NULL;
 
-      return g_strdup ("");
+      if (c->extra_label_indent)
+        for (int i = 0; i < c->extra_label_indent; i++)
+          g_string_append_c (str, ' ');
+
+      return g_string_free (str, FALSE);
     }
 
   IDE_RETURN (NULL);
@@ -1335,9 +1261,9 @@ ide_c_indenter_format (IdeIndenter    *indenter,
         if (backward_find_matching_char (&iter, '}'))
           {
             if (line_is_whitespace_until (&iter))
-              offset = gtk_text_iter_get_line_offset (&iter);
+              offset = GET_LINE_OFFSET (&iter);
             else if (backward_to_line_first_char (&iter))
-              offset = gtk_text_iter_get_line_offset (&iter);
+              offset = GET_LINE_OFFSET (&iter);
             build_indent (c, offset, &iter, str);
             g_string_prepend (str, "\n");
             g_string_prepend (str, ret);
@@ -1356,14 +1282,14 @@ ide_c_indenter_format (IdeIndenter    *indenter,
      * Probably need to unindent this line.
      * TODO: Maybe overwrite character.
      */
-    ret = maybe_unindent_brace (c, begin, end);
+    ret = maybe_unindent_brace (c, view, begin, end);
     break;
 
   case GDK_KEY_colon:
     /*
      * If this is a label or a case, adjust indentation.
      */
-    ret = maybe_unindent_case_label (c, begin, end);
+    ret = maybe_unindent_case_label (c, view, begin, end);
     break;
 
   case GDK_KEY_numbersign:
@@ -1419,7 +1345,6 @@ ide_c_indenter_init (IdeCIndenter *self)
   self->condition_indent = 2;
   self->scope_indent = 2;
   self->directive_indent = G_MININT;
-  self->space_before_paren = TRUE;
 }
 
 void
