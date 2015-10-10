@@ -39,7 +39,8 @@ struct _IdeCIndenter
   /* no reference */
   IdeSourceView *view;
 
-  gint           scope_indent;
+  gint           pre_scope_indent;
+  gint           post_scope_indent;
   gint           condition_indent;
   gint           directive_indent;
   gint           extra_label_indent;
@@ -613,7 +614,7 @@ c_indenter_indent (IdeCIndenter  *c,
            */
           if (backward_to_line_first_char (iter))
             offset = GET_LINE_OFFSET (iter);
-          offset += c->scope_indent;
+          offset += c->post_scope_indent;
         }
 
       build_indent (c, offset, iter, str);
@@ -668,7 +669,7 @@ c_indenter_indent (IdeCIndenter  *c,
           if (backward_find_matching_char (iter, '}'))
             {
               offset = GET_LINE_OFFSET (iter);
-              offset += c->scope_indent;
+              offset += c->post_scope_indent;
             }
 
           build_indent (c, offset, iter, str);
@@ -713,7 +714,7 @@ c_indenter_indent (IdeCIndenter  *c,
         backward_to_line_first_char (&match_begin);
 
       offset = GET_LINE_OFFSET (&match_begin);
-      build_indent (c, offset + c->scope_indent, iter, str);
+      build_indent (c, offset + c->pre_scope_indent, iter, str);
       IDE_GOTO (cleanup);
     }
 
@@ -728,7 +729,7 @@ c_indenter_indent (IdeCIndenter  *c,
           guint offset;
 
           offset = GET_LINE_OFFSET (iter);
-          build_indent (c, offset + c->scope_indent, iter, str);
+          build_indent (c, offset + c->post_scope_indent, iter, str);
           IDE_GOTO (cleanup);
         }
       else
@@ -738,7 +739,7 @@ c_indenter_indent (IdeCIndenter  *c,
               guint offset;
 
               offset = GET_LINE_OFFSET (iter);
-              build_indent (c, offset + c->scope_indent, iter, str);
+              build_indent (c, offset + c->post_scope_indent, iter, str);
               IDE_GOTO (cleanup);
             }
         }
@@ -1343,7 +1344,8 @@ static void
 ide_c_indenter_init (IdeCIndenter *self)
 {
   self->condition_indent = 2;
-  self->scope_indent = 2;
+  self->pre_scope_indent = 2;
+  self->post_scope_indent = 2;
   self->directive_indent = G_MININT;
 }
 
