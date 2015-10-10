@@ -41,6 +41,7 @@
 #include "ide-file.h"
 #include "ide-file-settings.h"
 #include "ide-fixit.h"
+#include "ide-gdk.h"
 #include "ide-highlighter.h"
 #include "ide-internal.h"
 #include "ide-indenter.h"
@@ -234,6 +235,7 @@ enum {
   PUSH_SELECTION,
   PUSH_SNIPPET,
   REBUILD_HIGHLIGHT,
+  REINDENT,
   REPLAY_MACRO,
   REQUEST_DOCUMENTATION,
   RESET_FONT_SIZE,
@@ -3638,6 +3640,60 @@ ide_source_view_real_set_search_text (IdeSourceView *self,
 }
 
 static void
+ide_source_view_real_reindent (IdeSourceView *self)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+  GtkTextBuffer *buffer;
+  IdeIndenter *indenter;
+  GtkTextMark *mark;
+  GtkTextIter begin;
+  GtkTextIter end;
+  GdkEventKey *event;
+  GdkWindow *window;
+  gint cursor_offset = 0;
+  gchar *ret;
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+
+  if (priv->buffer == NULL)
+    return;
+
+  indenter = ide_source_view_get_indenter (self);
+  if (indenter == NULL)
+    return;
+
+  buffer = GTK_TEXT_BUFFER (priv->buffer);
+  mark = gtk_text_buffer_get_insert (buffer);
+  gtk_text_buffer_get_iter_at_mark (buffer, &begin, mark);
+  gtk_text_iter_set_line_offset (&begin, 0);
+
+  end = begin;
+  while (!gtk_text_iter_ends_line (&end) &&
+         g_unichar_isspace (gtk_text_iter_get_char (&end)))
+    gtk_text_iter_forward_char (&end);
+
+  gtk_text_buffer_begin_user_action (buffer);
+
+  if (gtk_text_iter_equal (&begin, &end))
+    gtk_text_buffer_delete (buffer, &begin, &end);
+
+  window = gtk_text_view_get_window (GTK_TEXT_VIEW (self), GTK_TEXT_WINDOW_TEXT);
+  event = ide_gdk_synthesize_event_key (window, '\n');
+  ret = ide_indenter_format (indenter, GTK_TEXT_VIEW (self), &begin, &end, &cursor_offset, event);
+
+  if (ret != NULL)
+    {
+      gtk_text_buffer_delete (buffer, &begin, &end);
+      gtk_text_buffer_insert (buffer, &begin, ret, -1);
+      g_free (ret);
+    }
+
+  gtk_text_buffer_end_user_action (buffer);
+
+  gdk_event_free ((GdkEvent *)event);
+}
+
+static void
 ide_source_view_constructed (GObject *object)
 {
   IdeSourceView *self = (IdeSourceView *)object;
@@ -5919,6 +5975,15 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   NULL, NULL, NULL,
                   G_TYPE_NONE,
                   0);
+
+  gSignals [REINDENT] =
+    g_signal_new_class_handler ("reindent",
+                                G_TYPE_FROM_CLASS (klass),
+                                G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                                G_CALLBACK (ide_source_view_real_reindent),
+                                NULL, NULL, NULL,
+                                G_TYPE_NONE,
+                                0);
 
   /**
    * IdeSourceView:replay-macro:
