@@ -490,6 +490,14 @@
 
   /* window controls */
   bind "<ctrl>w" { "set-mode" ("vim-normal-ctrl-w", transient) };
+
+  /* reindent */
+  bind "equal" { "set-mode" ("vim-normal-equal", transient) };
+}
+
+@binding-set builder-vim-source-view-normal-equal
+{
+  bind "equal" { "reindent" () };
 }
 
 @binding-set builder-vim-source-view-normal-bracket
@@ -1405,6 +1413,14 @@ IdeSourceViewMode.vim-normal-bracket {
 
   gtk-key-bindings: builder-vim-source-view,
                     builder-vim-source-view-normal-bracket;
+}
+
+IdeSourceViewMode.vim-normal-equal {
+  -IdeSourceViewMode-suppress-unbound: true;
+  -IdeSourceViewMode-block-cursor: true;
+
+  gtk-key-bindings: builder-vim-source-view,
+                    builder-vim-source-view-normal-equal;
 }
 
 IdeSourceViewMode.vim-normal-c {
