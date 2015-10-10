@@ -791,10 +791,71 @@ maybe_close_comment (IdeCIndenter *c,
 }
 
 static gchar *
-maybe_unindent_brace (IdeCIndenter *c,
-                      GtkTextView  *view,
-                      GtkTextIter  *begin,
-                      GtkTextIter  *end)
+maybe_unindent_opening_brace (IdeCIndenter *c,
+                              GtkTextView  *view,
+                              GtkTextIter  *begin,
+                              GtkTextIter  *end,
+                              gint         *cursor_offset)
+{
+  GtkTextIter copy;
+
+  g_assert (IDE_IS_C_INDENTER (c));
+  g_assert (begin);
+  g_assert (end);
+
+  copy = *begin;
+
+  /*
+   * Make sure we just inserted a { and then move before it.
+   * Ensure that we only have whitespace before the {.
+   */
+  if (!gtk_text_iter_backward_char (&copy) ||
+      ('{' != gtk_text_iter_get_char (&copy)) ||
+      !gtk_text_iter_backward_char (&copy))
+    return NULL;
+
+  /*
+   * Find the opening of the parent scope.
+   * We should be at that + post_scope_indent, which is where
+   * our conditional would have started.
+   */
+  if (line_is_whitespace_until (&copy) && backward_find_matching_char (&copy, '}'))
+    {
+      guint offset;
+      GString *str;
+
+      backward_to_line_first_char (&copy);
+
+      offset = GET_LINE_OFFSET (&copy);
+      str = g_string_new (NULL);
+      build_indent (c, offset + c->post_scope_indent + c->pre_scope_indent, &copy, str);
+      g_string_append_c (str, '{');
+
+      if (ide_source_view_get_insert_matching_brace (IDE_SOURCE_VIEW (view)))
+        {
+          g_string_append_c (str, '}');
+          *cursor_offset = -1;
+        }
+
+      gtk_text_iter_set_line_offset (begin, 0);
+
+      return g_string_free (str, FALSE);
+    }
+
+  if (ide_source_view_get_insert_matching_brace (IDE_SOURCE_VIEW (view)))
+    {
+      *cursor_offset = -1;
+      return g_strdup ("}");
+    }
+
+  return NULL;
+}
+
+static gchar *
+maybe_unindent_closing_brace (IdeCIndenter *c,
+                              GtkTextView  *view,
+                              GtkTextIter  *begin,
+                              GtkTextIter  *end)
 {
   GtkTextIter saved;
   gchar *ret = NULL;
@@ -1198,6 +1259,7 @@ ide_c_indenter_is_trigger (IdeIndenter *indenter,
         return FALSE;
       /* Fall through */
 
+    case GDK_KEY_braceleft:
     case GDK_KEY_braceright:
     case GDK_KEY_colon:
     case GDK_KEY_numbersign:
@@ -1272,10 +1334,19 @@ ide_c_indenter_format (IdeIndenter    *indenter,
 
   case GDK_KEY_braceright:
     /*
-     * Probably need to unindent this line.
-     * TODO: Maybe overwrite character.
+     * Possibly need to unindent this line.
      */
-    ret = maybe_unindent_brace (c, view, begin, end);
+    ret = maybe_unindent_closing_brace (c, view, begin, end);
+    break;
+
+  case GDK_KEY_braceleft:
+    /*
+     * Maybe unindent the opening brace to match the conditional.
+     * This could happen if we are doing k&r/linux/etc where the open
+     * brace has less indentation than the natural single line conditional
+     * child statement.
+     */
+    ret = maybe_unindent_opening_brace (c, view, begin, end, cursor_offset);
     break;
 
   case GDK_KEY_colon:
