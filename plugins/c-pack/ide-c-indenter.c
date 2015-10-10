@@ -1146,31 +1146,22 @@ maybe_unindent_case_label (IdeCIndenter *c,
     {
       if (backward_find_matching_char (&iter, '}'))
         {
-          if (line_is_whitespace_until (&iter))
-            {
-              GString *str;
-              guint offset;
+          GString *str;
+          guint offset;
 
-              str = g_string_new (NULL);
-              offset = GET_LINE_OFFSET (&iter);
-              build_indent (c, offset, &iter, str);
-              while (!gtk_text_iter_starts_line (begin))
-                gtk_text_iter_backward_char (begin);
-              gtk_text_iter_assign (end, begin);
-              while (g_unichar_isspace (gtk_text_iter_get_char (end)))
-                if (!gtk_text_iter_forward_char (end))
-                  IDE_RETURN (NULL);
-              return g_string_free (str, FALSE);
-            }
-          else
-            {
-              if (backward_to_line_first_char (&iter))
-                {
-#if 0
-                  TODO ("Deal with nested {");
-#endif
-                }
-            }
+          if (!line_is_whitespace_until (&iter))
+            backward_to_line_first_char (&iter);
+
+          str = g_string_new (NULL);
+          offset = GET_LINE_OFFSET (&iter);
+          build_indent (c, offset, &iter, str);
+          while (!gtk_text_iter_starts_line (begin))
+            gtk_text_iter_backward_char (begin);
+          gtk_text_iter_assign (end, begin);
+          while (g_unichar_isspace (gtk_text_iter_get_char (end)))
+            if (!gtk_text_iter_forward_char (end))
+              IDE_RETURN (NULL);
+          return g_string_free (str, FALSE);
         }
     }
   else if (line_is_label (&iter))
