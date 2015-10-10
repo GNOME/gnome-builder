@@ -44,6 +44,7 @@ struct _IdeCIndenter
   gint           condition_indent;
   gint           directive_indent;
   gint           extra_label_indent;
+  gint           case_indent;
 };
 
 static void indenter_iface_init (IdeIndenterInterface *iface);
@@ -1154,7 +1155,7 @@ maybe_unindent_case_label (IdeCIndenter *c,
 
           str = g_string_new (NULL);
           offset = GET_LINE_OFFSET (&iter);
-          build_indent (c, offset, &iter, str);
+          build_indent (c, offset + c->case_indent, &iter, str);
           while (!gtk_text_iter_starts_line (begin))
             gtk_text_iter_backward_char (begin);
           gtk_text_iter_assign (end, begin);
@@ -1338,6 +1339,7 @@ ide_c_indenter_init (IdeCIndenter *self)
   self->pre_scope_indent = 2;
   self->post_scope_indent = 2;
   self->directive_indent = G_MININT;
+  self->case_indent = 0;
 }
 
 void
