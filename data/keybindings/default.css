@@ -53,6 +53,8 @@
   bind "<ctrl>g" { "move-search" (down, 0, 1, 1, 1, 1) };
   bind "<ctrl><shift>g" { "move-search" (up, 0, 1, 0, 1, 1) };
   bind "<ctrl><shift>k" { "clear-search" () };
+
+  bind "<ctrl><alt>i" { "reindent" () };
 }
 
 IdeSourceViewMode.default {
