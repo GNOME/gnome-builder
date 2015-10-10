@@ -234,6 +234,8 @@ libide_1_0_la_SOURCES = \
 	util/ide-cairo.h \
 	util/ide-doc-seq.c \
 	util/ide-doc-seq.h \
+	util/ide-gdk.c \
+	util/ide-gdk.h \
 	util/ide-line-reader.c \
 	util/ide-line-reader.h \
 	util/ide-pango.c \
