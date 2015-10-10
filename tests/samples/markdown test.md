@@ -26,7 +26,8 @@ Hashes at the end are ignored :
 First paragraph first line
 First paragraph same line
 
-Second paragraph first line\n
+Second paragraph first line
+
 Second paragraph second line
 
 ### Character styles:
@@ -67,16 +68,13 @@ Regular characters
   * item 21
     - item 22
 
-      item text\t
+      item text
       on multi-lines
 
 3. Item 3
     1. Item 31
-    	1. Item 1
-	2. Item 2
-	3. Item 3
-    2. Item 31
-    3. Item 31
+    2. Item 32
+    3. Item 33
 
 ### Quotes:
 ---
@@ -87,7 +85,8 @@ Simple quote:
 
 Multi-lines quote:
 
-> quote start\n
+> quote start
+
 > quote end
 
 Nested quote:
@@ -112,7 +111,7 @@ With other elements:
 ---
 
 	a multi-line
-	  identeed line
+	  idented line
 	  <div class="md">escaped html tags</div>
 	code block
 
@@ -191,14 +190,16 @@ work with nested too:
 # Fence code block:
 
 ```
-A code block \r\nwith escaped characters \n
-\tmore code
+A code block
+   with escaped characters \t \r \n
+
+more code
 ```
 
 With syntax highlight (need highlighter):
 
 ```c
-printf ("just a test\\n");
+printf ("just a test\n");
 /* comment */
 ```
 
@@ -251,3 +252,4 @@ _ _ _
 <pre lang="c">
   <code>printf ("Hello");</code>
 </pre>
+
