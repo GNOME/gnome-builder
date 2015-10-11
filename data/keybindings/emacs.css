@@ -101,6 +101,11 @@
   bind "F9" { "action" ("workspace", "toggle-sidebar", "") };
 }
 
+@binding-set builder-emacs-source-view-has-indenter
+{
+  bind "Tab" { "reindent" () };
+}
+
 @binding-set builder-emacs-source-view-x
 {
   bind "<ctrl>c" { "action" ("app", "quit", "") };
@@ -150,6 +155,17 @@ IdeSourceViewMode.default
   -IdeSourceViewMode-repeat-insert-with-count: true;
 
   gtk-key-bindings: builder-emacs-text-entry, builder-emacs-source-view, builder-emacs-text-view;
+}
+
+GtkSourceView,
+IdeSourceViewMode.default.has-indenter
+{
+  -IdeSourceViewMode-repeat-insert-with-count: true;
+
+  gtk-key-bindings: builder-emacs-text-entry,
+                    builder-emacs-source-view-has-indenter,
+                    builder-emacs-source-view,
+                    builder-emacs-text-view;
 }
 
 IdeSourceViewMode.emacs-x {
