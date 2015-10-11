@@ -73,6 +73,12 @@ typedef enum
  * @IDE_SOURCE_VIEW_MOVEMENT_MIDDLE_CHAR: move to the middle character in the line.
  * @IDE_SOURCE_VIEW_MOVEMENT_LAST_CHAR: move to the last character in the line. this can be
  *   inclusve or exclusive. inclusive is equivalent to %IDE_SOURCE_VIEW_MOVEMENT_LINE_END.
+ * @IDE_SOURCE_VIEW_MOVEMENT_NEXT_SUB_WORD_START: move to the next sub-word start, similar
+ *   to the default in GtkTextView. This includes the underline character as a word break,
+ *   as is common in Emacs.
+ * @IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_SUB_WORD_START: move to the previous sub-wird start,
+ *   similar to the default in GtkTextView. This includes the underline character as a
+ *   word break, as is common in Emacs.
  * @IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_WORD_START: move to beginning of previous word.
  * @IDE_SOURCE_VIEW_MOVEMENT_NEXT_WORD_START: move to beginning of next word.
  * @IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_WORD_END: move to end of previous word.
@@ -131,6 +137,8 @@ typedef enum
 
   IDE_SOURCE_VIEW_MOVEMENT_NEXT_WORD_START,
   IDE_SOURCE_VIEW_MOVEMENT_NEXT_FULL_WORD_START,
+  IDE_SOURCE_VIEW_MOVEMENT_NEXT_SUB_WORD_START,
+  IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_SUB_WORD_START,
   IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_WORD_START,
   IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_FULL_WORD_START,
 
