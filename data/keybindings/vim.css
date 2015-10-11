@@ -1060,6 +1060,13 @@
                   "clear-snippets" ()
                   "movement" (previous-char, 0, 1, 0)
                   "set-mode" ("vim-normal", permanent) };
+  bind "<ctrl>bracketleft" { "end-macro" ()
+                             "set-overwrite" (0)
+                             "clear-count" ()
+                             "clear-selection" ()
+                             "clear-snippets" ()
+                             "movement" (previous-char, 0, 1, 0)
+                             "set-mode" ("vim-normal", permanent) };
 }
 
 @binding-set builder-vim-source-view-visual-with-count
