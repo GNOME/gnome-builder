@@ -179,6 +179,9 @@ ide_clang_service_build_index (IdeClangService   *self,
     ide_highlight_index_insert (index, common_defines [i], "c:common-defines");
   ide_highlight_index_insert (index, "TRUE", "c:boolean");
   ide_highlight_index_insert (index, "FALSE", "c:boolean");
+  ide_highlight_index_insert (index, "g_autoptr", "c:storage-class");
+  ide_highlight_index_insert (index, "g_auto", "c:storage-class");
+  ide_highlight_index_insert (index, "g_autofree", "c:storage-class");
 
   cursor = clang_getTranslationUnitCursor (tu);
   clang_visitChildren (cursor, ide_clang_service_build_index_visitor, &client_data);
