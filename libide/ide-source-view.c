@@ -1128,12 +1128,30 @@ ide_source_view__search_settings_notify_search_text (IdeSourceView           *se
       GtkTextIter begin_iter;
       GtkTextIter match_begin;
       GtkTextIter match_end;
+      gboolean search_succeeded;
 
       buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
       gtk_text_buffer_get_iter_at_mark (buffer, &begin_iter, priv->rubberband_insert_mark);
 
-      if (gtk_source_search_context_forward (priv->search_context, &begin_iter,
-                                             &match_begin, &match_end))
+      switch (priv->search_direction)
+        {
+        case GTK_DIR_LEFT:
+        case GTK_DIR_UP:
+          search_succeeded = gtk_source_search_context_backward (priv->search_context, &begin_iter,
+                                                                 &match_begin, &match_end);
+          break;
+        case GTK_DIR_RIGHT:
+        case GTK_DIR_DOWN:
+          search_succeeded = gtk_source_search_context_forward (priv->search_context, &begin_iter,
+                                                                &match_begin, &match_end);
+          break;
+        case GTK_DIR_TAB_FORWARD:
+        case GTK_DIR_TAB_BACKWARD:
+        default:
+          g_return_if_reached ();
+        }
+
+      if (search_succeeded)
         {
           gtk_text_buffer_move_mark (buffer, priv->rubberband_mark, &match_begin);
           ide_source_view_scroll_mark_onscreen (self, priv->rubberband_mark, TRUE, 0.5, 0.5);
