@@ -427,6 +427,7 @@ AC_CONFIG_FILES([
 	plugins/fallback/Makefile
 
 	data/Makefile
+	data/fonts/Makefile
 	data/gsettings/org.gnome.builder.code-insight.gschema.xml
 	data/gsettings/Makefile
 	data/icons/Makefile
