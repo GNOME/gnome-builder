@@ -1040,6 +1040,11 @@
   bind "<ctrl>e" { "movement" (screen-up, 0, 0, 1) };
   bind "<ctrl>y" { "movement" (screen-down, 0, 0, 1) };
 
+  /* raw keycode (to some degree) */
+  bind "<ctrl>v" { "capture-modifier" ()
+                   "insert-modifier" (0)
+                   "clear-modifier" () };
+
   bind "Escape" { "end-macro" ()
                   "set-overwrite" (0)
                   "clear-count" ()
