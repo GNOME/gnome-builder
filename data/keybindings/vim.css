@@ -150,7 +150,7 @@
   bind "period" { "replay-macro" (1) };
 
   /* start search */
-  bind "slash" { "action" ("frame", "find", "") };
+  bind "slash" { "action" ("frame", "find", "3") };
 
   /* insert at cursor */
   bind "i" { "begin-macro" ()
