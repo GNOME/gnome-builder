@@ -1345,6 +1345,15 @@ _ide_source_view_apply_movement (IdeSourceView         *self,
         ide_source_view_movements_next_full_word_end (&mv);
       break;
 
+    case IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_SUB_WORD_START:
+      gtk_text_iter_backward_visible_word_starts (&mv.insert, MAX (1, mv.count));
+      break;
+
+    case IDE_SOURCE_VIEW_MOVEMENT_NEXT_SUB_WORD_START:
+      if (!gtk_text_iter_forward_visible_word_ends (&mv.insert, MAX (1, mv.count)))
+        gtk_text_iter_forward_to_line_end (&mv.insert);
+      break;
+
     case IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_WORD_START:
       for (i = MAX (1, mv.count); i > 0; i--)
         ide_source_view_movements_previous_word_start (&mv);
