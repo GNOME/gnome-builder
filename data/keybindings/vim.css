@@ -149,6 +149,9 @@
   /* replay the last recording */
   bind "period" { "replay-macro" (1) };
 
+  /* start search backward */
+  bind "question" { "action" ("frame", "find", "2") };
+
   /* start search */
   bind "slash" { "action" ("frame", "find", "3") };
 
