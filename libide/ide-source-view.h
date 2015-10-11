@@ -290,6 +290,7 @@ gboolean                    ide_source_view_get_overwrite             (IdeSource
 gboolean                    ide_source_view_get_rubberband_search     (IdeSourceView              *self);
 guint                       ide_source_view_get_scroll_offset         (IdeSourceView              *self);
 GtkSourceSearchContext     *ide_source_view_get_search_context        (IdeSourceView              *self);
+GtkDirectionType            ide_source_view_get_search_direction      (IdeSourceView              *self);
 gboolean                    ide_source_view_get_show_grid_lines       (IdeSourceView              *self);
 gboolean                    ide_source_view_get_show_line_changes     (IdeSourceView              *self);
 gboolean                    ide_source_view_get_show_line_diagnostics (IdeSourceView              *self);
@@ -323,6 +324,8 @@ void                        ide_source_view_set_rubberband_search     (IdeSource
                                                                        gboolean                    rubberband_search);
 void                        ide_source_view_set_scroll_offset         (IdeSourceView              *self,
                                                                        guint                       scroll_offset);
+void                        ide_source_view_set_search_direction      (IdeSourceView              *self,
+                                                                       GtkDirectionType            direction);
 void                        ide_source_view_set_show_grid_lines       (IdeSourceView              *self,
                                                                        gboolean                    show_grid_lines);
 void                        ide_source_view_set_show_line_changes     (IdeSourceView              *self,

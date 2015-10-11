@@ -99,6 +99,7 @@ typedef struct
   GtkTextMark                 *rubberband_insert_mark;
   GtkTextMark                 *scroll_mark;
   gchar                       *saved_search_text;
+  GtkDirectionType             search_direction;
   GQueue                      *selections;
   GQueue                      *snippets;
   GtkSourceCompletionProvider *snippets_provider;
@@ -187,6 +188,7 @@ enum {
   PROP_RUBBERBAND_SEARCH,
   PROP_SCROLL_OFFSET,
   PROP_SEARCH_CONTEXT,
+  PROP_SEARCH_DIRECTION,
   PROP_SHOW_GRID_LINES,
   PROP_SHOW_LINE_CHANGES,
   PROP_SHOW_LINE_DIAGNOSTICS,
@@ -3301,6 +3303,8 @@ ide_source_view_real_move_search (IdeSourceView    *self,
   if (!priv->search_context)
     return;
 
+  priv->search_direction = dir;
+
   gtk_source_search_context_set_highlight (priv->search_context, TRUE);
 
   settings = gtk_source_search_context_get_settings (priv->search_context);
@@ -5229,6 +5233,10 @@ ide_source_view_get_property (GObject    *object,
       g_value_set_object (value, ide_source_view_get_search_context (self));
       break;
 
+    case PROP_SEARCH_DIRECTION:
+      g_value_set_enum (value, ide_source_view_get_search_direction (self));
+      break;
+
     case PROP_SHOW_GRID_LINES:
       g_value_set_boolean (value, ide_source_view_get_show_grid_lines (self));
       break;
@@ -5320,6 +5328,10 @@ ide_source_view_set_property (GObject      *object,
 
     case PROP_SCROLL_OFFSET:
       ide_source_view_set_scroll_offset (self, g_value_get_uint (value));
+      break;
+
+    case PROP_SEARCH_DIRECTION:
+      ide_source_view_set_search_direction (self, g_value_get_enum (value));
       break;
 
     case PROP_SHOW_GRID_LINES:
@@ -5530,6 +5542,14 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                          "The search context for the view.",
                          GTK_SOURCE_TYPE_SEARCH_CONTEXT,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+
+  gParamSpecs [PROP_SEARCH_DIRECTION] =
+    g_param_spec_enum ("search-direction",
+                       "Search Direction",
+                       "The direction searches go for the view.",
+                       GTK_TYPE_DIRECTION_TYPE,
+                       GTK_DIR_DOWN,
+                       (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_SHOW_GRID_LINES] =
     g_param_spec_boolean ("show-grid-lines",
@@ -6156,6 +6176,7 @@ ide_source_view_init (IdeSourceView *self)
   priv->selections = g_queue_new ();
   priv->show_line_diagnostics = TRUE;
   priv->font_scale = FONT_SCALE_NORMAL;
+  priv->search_direction = GTK_DIR_DOWN;
 
   priv->completion_providers_signals = egg_signal_group_new (IDE_TYPE_EXTENSION_SET_ADAPTER);
 
@@ -7256,6 +7277,48 @@ ide_source_view_get_search_context (IdeSourceView *self)
   g_return_val_if_fail (IDE_IS_SOURCE_VIEW (self), NULL);
 
   return priv->search_context;
+}
+
+/**
+ * ide_source_view_get_search_direction:
+ * @self: An #IdeSourceView.
+ *
+ * Returns the current search direction.
+ *
+ * Returns: A #GtkDirectionType
+ */
+GtkDirectionType
+ide_source_view_get_search_direction (IdeSourceView *self)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_SOURCE_VIEW (self), GTK_DIR_DOWN);
+
+  return priv->search_direction;
+}
+
+/**
+ * ide_source_view_set_search_direction:
+ * @self: An #IdeSourceView.
+ *
+ * Returns the current search direction.
+ *
+ * Returns: A #GtkDirectionType
+ */
+void
+ide_source_view_set_search_direction (IdeSourceView    *self,
+                                      GtkDirectionType  direction)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_SOURCE_VIEW (self));
+  g_return_if_fail (direction != GTK_DIR_TAB_BACKWARD && direction != GTK_DIR_TAB_FORWARD);
+
+  if (direction != priv->search_direction)
+    {
+      priv->search_direction = direction;
+      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_SEARCH_DIRECTION]);
+    }
 }
 
 /**
