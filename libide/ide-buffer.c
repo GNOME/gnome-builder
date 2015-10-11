@@ -1564,6 +1564,37 @@ ide_buffer_get_diagnostic_at_iter (IdeBuffer         *self,
   return NULL;
 }
 
+static gboolean
+ide_buffer_can_do_newline_hack (IdeBuffer *self,
+                                guint      len)
+{
+  guint next_pow2;
+
+  g_assert (IDE_IS_BUFFER (self));
+
+  /*
+   * If adding two bytes to our length (one for \n and one for \0) is still under the next
+   * power of two, then we can avoid making a copy of the buffer when saving the buffer
+   * to our drafts.
+   *
+   * HACK: This relies on the fact that GtkTextBuffer returns a GString allocated string
+   *       which grows the string in powers of two.
+   */
+
+  if ((len == 0) || (len & (len - 1)) == 0)
+    return FALSE;
+
+  next_pow2 = len;
+  next_pow2 |= next_pow2 >> 1;
+  next_pow2 |= next_pow2 >> 2;
+  next_pow2 |= next_pow2 >> 4;
+  next_pow2 |= next_pow2 >> 8;
+  next_pow2 |= next_pow2 >> 16;
+  next_pow2++;
+
+  return ((len + 2) < next_pow2);
+}
+
 /**
  * ide_buffer_get_content:
  *
@@ -1604,8 +1635,27 @@ ide_buffer_get_content (IdeBuffer *self)
        */
       len = strlen (text);
       if (gtk_source_buffer_get_implicit_trailing_newline (GTK_SOURCE_BUFFER (self)))
-        text [len++] = '\n';
+        {
+          if (!ide_buffer_can_do_newline_hack (self, len))
+            {
+              gchar *copy;
 
+              copy = g_malloc (len + 2);
+              memcpy (copy, text, len);
+              g_free (text);
+              text = copy;
+            }
+
+          text [len] = '\n';
+          text [++len] = '\0';
+        }
+
+      /*
+       * We pass a buffer that is longer than the length we tell GBytes about.
+       * This way, compilers that don't want to see the trailing \0 can ignore
+       * that data, but compilers that rely on valid C strings can also rely
+       * on the buffer to be valid.
+       */
       priv->content = g_bytes_new_take (text, len);
 
       if ((priv->context != NULL) &&
