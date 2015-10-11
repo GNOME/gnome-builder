@@ -484,10 +484,8 @@ gb_editor_frame__search_key_press_event (GbEditorFrame *self,
 
     case GDK_KEY_KP_Enter:
     case GDK_KEY_Return:
-      if ((event->state & GDK_SHIFT_MASK) == 0)
-        gb_widget_activate_action (GTK_WIDGET (self), "frame", "next-search-result", NULL);
-      else
-        gb_widget_activate_action (GTK_WIDGET (self), "frame", "previous-search-result", NULL);
+      gb_widget_activate_action (GTK_WIDGET (self), "frame", "next-search-result", NULL);
+      gtk_widget_grab_focus (GTK_WIDGET (self->source_view));
       return GDK_EVENT_STOP;
 
     case GDK_KEY_Down:
