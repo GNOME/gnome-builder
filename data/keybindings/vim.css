@@ -1058,7 +1058,7 @@
                   "clear-count" ()
                   "clear-selection" ()
                   "clear-snippets" ()
-		  "movement" (previous-char, 0, 1, 0)
+                  "movement" (previous-char, 0, 1, 0)
                   "set-mode" ("vim-normal", permanent) };
 }
 
