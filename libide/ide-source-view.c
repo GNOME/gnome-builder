@@ -3679,6 +3679,11 @@ ide_source_view_real_reindent (IdeSourceView *self)
     return;
 
   buffer = GTK_TEXT_BUFFER (priv->buffer);
+
+  gtk_text_buffer_get_selection_bounds (buffer, &begin, &end);
+  if (gtk_text_iter_get_line (&begin) != gtk_text_iter_get_line (&end))
+    return;
+
   mark = gtk_text_buffer_get_insert (buffer);
   gtk_text_buffer_get_iter_at_mark (buffer, &begin, mark);
   gtk_text_iter_set_line_offset (&begin, 0);
