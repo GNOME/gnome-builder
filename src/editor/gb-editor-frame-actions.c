@@ -93,7 +93,7 @@ gb_editor_frame_actions_previous_search_result (GSimpleAction *action,
 }
 
 static const GActionEntry GbEditorFrameActions[] = {
-  { "find", gb_editor_frame_actions_find },
+  { "find", gb_editor_frame_actions_find, "i" },
   { "next-search-result", gb_editor_frame_actions_next_search_result },
   { "previous-search-result", gb_editor_frame_actions_previous_search_result },
 };
