@@ -878,10 +878,24 @@ ide_source_view_update_auto_indent_override (IdeSourceView *self)
 
   indenter = ide_source_view_get_indenter (self);
 
+  /*
+   * Updates our override of auto-indent from the GtkSourceView underneath us.
+   * Also updates our mode which needs to know if we have an indenter to
+   * provide different CSS selectors.
+   */
+
   if (priv->auto_indent && (indenter == NULL))
-    gtk_source_view_set_auto_indent (GTK_SOURCE_VIEW (self), TRUE);
+    {
+      gtk_source_view_set_auto_indent (GTK_SOURCE_VIEW (self), TRUE);
+      if (priv->mode != NULL)
+        ide_source_view_mode_set_has_indenter (priv->mode, FALSE);
+    }
   else
-    gtk_source_view_set_auto_indent (GTK_SOURCE_VIEW (self), FALSE);
+    {
+      gtk_source_view_set_auto_indent (GTK_SOURCE_VIEW (self), FALSE);
+      if (priv->mode != NULL)
+        ide_source_view_mode_set_has_indenter (priv->mode, (indenter != NULL));
+    }
 }
 
 static void
@@ -3069,6 +3083,8 @@ ide_source_view_real_set_mode (IdeSourceView         *self,
   if (overwrite != gtk_text_view_get_overwrite (GTK_TEXT_VIEW (self)))
     gtk_text_view_set_overwrite (GTK_TEXT_VIEW (self), overwrite);
   g_object_notify (G_OBJECT (self), "overwrite");
+
+  ide_source_view_update_auto_indent_override (self);
 
   ide_source_view_update_display_name (self);
 
