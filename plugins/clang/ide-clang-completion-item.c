@@ -187,6 +187,9 @@ ide_clang_completion_item_lazy_init (IdeClangCompletionItem *self)
           break;
 
         case CXCompletionChunk_Optional:
+          g_string_append_printf (markup, "<i>%s</i>", escaped);
+          break;
+
         default:
           break;
         }
