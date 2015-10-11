@@ -1,0 +1,1847 @@
+# Finnish translation for gnome-builder.
+# Copyright (C) 2015 gnome-builder's COPYRIGHT HOLDER
+# This file is distributed under the same license as the gnome-builder package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Jiri Grönroos <jiri.gronroos+l10n@iki.fi>, 2015.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: gnome-builder gnome-builder-3-18\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
+"builder&keywords=I18N+L10N&component=general\n"
+"POT-Creation-Date: 2015-10-11 06:42+0000\n"
+"PO-Revision-Date: 2015-10-11 16:33+0300\n"
+"Last-Translator: Jiri Grönroos <jiri.gronroos+l10n@iki.fi>\n"
+"Language-Team: suomi <gnome-fi-laatu@lists.sourceforge.net>\n"
+"Language: fi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Gtranslator 2.91.6\n"
+
+#: ../contrib/egg/egg-animation.c:723
+#, c-format
+msgid "Cannot locate property %s in class %s"
+msgstr ""
+
+#: ../contrib/egg/egg-animation.c:1067 ../contrib/egg/egg-animation.c:1073
+#, c-format
+msgid "Failed to find property %s in %s"
+msgstr ""
+
+#: ../contrib/egg/egg-animation.c:1081
+#, c-format
+msgid "Failed to find property %s in %s or parent %s"
+msgstr ""
+
+#: ../contrib/egg/egg-animation.c:1091
+#, c-format
+msgid "Failed to retrieve va_list value: %s"
+msgstr ""
+
+#: ../contrib/egg/egg-search-bar.c:371
+msgid "Search"
+msgstr ""
+
+#: ../contrib/search/trie.c:790
+#, c-format
+msgid "Traversal order %u is not supported on Trie."
+msgstr ""
+
+#: ../contrib/xml/xml-reader.c:327
+#, c-format
+msgid "Could not parse XML from stream"
+msgstr ""
+
+#: ../data/gtk/menus.ui.h:1
+msgid "_New Project"
+msgstr "_Uusi projekti"
+
+#: ../data/gtk/menus.ui.h:2
+msgid "_Open Project"
+msgstr "_Avaa projekti"
+
+#: ../data/gtk/menus.ui.h:3
+msgid "_Preferences"
+msgstr "A_setukset"
+
+#: ../data/gtk/menus.ui.h:4
+msgid "Generate Support Log"
+msgstr ""
+
+#: ../data/gtk/menus.ui.h:5
+msgid "Keyboard _Shortcuts"
+msgstr "_Pikanäppäimet"
+
+#: ../data/gtk/menus.ui.h:6
+msgid "_About"
+msgstr "_Tietoja"
+
+#: ../data/gtk/menus.ui.h:7
+msgid "_Quit"
+msgstr "_Lopeta"
+
+#: ../data/gtk/menus.ui.h:8 ../data/ui/gb-editor-view.ui.h:1
+msgid "_Reload"
+msgstr "L_ataa uudelleen"
+
+#: ../data/gtk/menus.ui.h:9
+msgid "_Print…"
+msgstr "T_ulosta…"
+
+#: ../data/gtk/menus.ui.h:10
+msgid "_Fullscreen"
+msgstr "_Koko näyttö"
+
+#: ../data/gtk/menus.ui.h:11
+msgid "_New Document"
+msgstr "Uu_si dokumentti"
+
+#: ../data/gtk/menus.ui.h:12
+msgid "_Open"
+msgstr "A_vaa"
+
+#: ../data/gtk/menus.ui.h:13
+msgid "Save _All"
+msgstr "Tall_enna kaikki"
+
+#: ../data/gtk/menus.ui.h:14
+msgid "_Close All"
+msgstr "Sul_je kaikki"
+
+#: ../data/gtk/menus.ui.h:15
+msgid "Display Options"
+msgstr ""
+
+#: ../data/gtk/menus.ui.h:16
+msgid "Show Icons"
+msgstr ""
+
+#: ../data/gtk/menus.ui.h:17
+msgid "Show Ignored Files"
+msgstr ""
+
+#: ../data/gtk/menus.ui.h:18
+msgid "Sort Directories First"
+msgstr ""
+
+#: ../data/gtk/menus.ui.h:19
+msgid "_Collapse All Nodes"
+msgstr ""
+
+#: ../data/gtk/menus.ui.h:20
+msgid "_Refresh"
+msgstr "P_äivitä"
+
+#: ../data/gtk/menus.ui.h:21 ../data/ui/gb-greeter-window.ui.h:3
+msgid "_New"
+msgstr "Uu_si"
+
+#: ../data/gtk/menus.ui.h:22
+msgid "_Empty File"
+msgstr "T_yhjä tiedosto"
+
+#: ../data/gtk/menus.ui.h:23
+msgid "_New Folder"
+msgstr "Uus_i kansio"
+
+#: ../data/gtk/menus.ui.h:24
+msgid "Open _With"
+msgstr "A_vaa sovelluksella"
+
+#: ../data/gtk/menus.ui.h:25
+msgid "Source Code Editor"
+msgstr "Lähdekoodin muokkain"
+
+#: ../data/gtk/menus.ui.h:26
+msgid "_Open Containing Folder"
+msgstr ""
+
+#: ../data/gtk/menus.ui.h:27
+msgid "_Open in Terminal"
+msgstr "Avaa p_äätteessä"
+
+#: ../data/gtk/menus.ui.h:28 ../data/ui/gb-rename-file-popover.ui.h:2
+msgid "_Rename"
+msgstr "Ni_meä uudelleen"
+
+#: ../data/gtk/menus.ui.h:29
+msgid "Mo_ve to Trash"
+msgstr "_Siirrä roskakoriin"
+
+#: ../data/gtk/menus.ui.h:30
+msgid "_Build"
+msgstr ""
+
+#: ../data/gtk/menus.ui.h:31
+msgid "_Rebuild"
+msgstr ""
+
+#: ../data/style-schemes/builder-dark.xml.h:1
+msgid "Builder Dark"
+msgstr ""
+
+#: ../data/style-schemes/builder-dark.xml.h:2
+msgid "Dark color scheme for Builder using the Tango color palette"
+msgstr ""
+
+#: ../data/style-schemes/builder.xml.h:1
+#: ../data/ui/gb-preferences-page-keybindings.ui.h:3
+#: ../data/ui/gb-workbench.ui.h:1 ../src/main.c:49
+#: ../src/workbench/gb-workbench.c:153
+msgid "Builder"
+msgstr ""
+
+#: ../data/style-schemes/builder.xml.h:2
+msgid "The default color scheme for Builder"
+msgstr ""
+
+#. OVR indicates we are in overwite mode
+#: ../data/ui/gb-editor-frame.ui.h:2
+msgid "OVR"
+msgstr ""
+
+#: ../data/ui/gb-editor-settings-widget.ui.h:1
+msgid "Display right _margin at column:"
+msgstr ""
+
+#: ../data/ui/gb-editor-settings-widget.ui.h:2
+msgid "Trim trailing whitespace when saving document"
+msgstr ""
+
+#: ../data/ui/gb-editor-settings-widget.ui.h:3
+msgid "Insert matching brace, bracket, quotation, and parenthesis."
+msgstr ""
+
+#: ../data/ui/gb-editor-settings-widget.ui.h:4
+msgid "Overwrite closing brace, bracket, quotation, and parenthesis."
+msgstr ""
+
+#: ../data/ui/gb-editor-settings-widget.ui.h:5
+#: ../data/ui/gb-editor-tweak-widget.ui.h:7
+msgid "Indentation"
+msgstr ""
+
+#: ../data/ui/gb-editor-settings-widget.ui.h:6
+msgid "_Tab width:"
+msgstr ""
+
+#: ../data/ui/gb-editor-settings-widget.ui.h:7
+msgid "Insert _spaces instead of tabs"
+msgstr ""
+
+#: ../data/ui/gb-editor-settings-widget.ui.h:8
+msgid "_Enable automatic indentation"
+msgstr ""
+
+#: ../data/ui/gb-editor-settings-widget.ui.h:9
+msgid "Snippets (read-only)"
+msgstr ""
+
+#: ../data/ui/gb-editor-tweak-widget.ui.h:1
+msgid "Search highlight mode…"
+msgstr ""
+
+#: ../data/ui/gb-editor-tweak-widget.ui.h:2
+msgid "Display line numbers"
+msgstr ""
+
+#: ../data/ui/gb-editor-tweak-widget.ui.h:3
+msgid "Display right margin"
+msgstr ""
+
+#: ../data/ui/gb-editor-tweak-widget.ui.h:4
+msgid "Highlight current line"
+msgstr ""
+
+#: ../data/ui/gb-editor-tweak-widget.ui.h:5
+msgid "Auto indent"
+msgstr ""
+
+#: ../data/ui/gb-editor-tweak-widget.ui.h:6
+#: ../data/ui/gb-preferences-page-keybindings.ui.h:12
+msgid "Smart Backspace"
+msgstr ""
+
+#: ../data/ui/gb-editor-tweak-widget.ui.h:8
+msgid "Spaces"
+msgstr ""
+
+#: ../data/ui/gb-editor-tweak-widget.ui.h:9
+msgid "Tabs"
+msgstr ""
+
+#: ../data/ui/gb-editor-tweak-widget.ui.h:10
+msgid "2"
+msgstr "2"
+
+#: ../data/ui/gb-editor-tweak-widget.ui.h:11
+msgid "3"
+msgstr "3"
+
+#: ../data/ui/gb-editor-tweak-widget.ui.h:12
+msgid "4"
+msgstr "4"
+
+#: ../data/ui/gb-editor-tweak-widget.ui.h:13
+msgid "8"
+msgstr "8"
+
+#: ../data/ui/gb-editor-view.ui.h:2 ../data/ui/gb-greeter-window.ui.h:4
+#: ../data/ui/gb-new-project-dialog.ui.h:2
+#: ../data/ui/gb-projects-dialog.ui.h:3
+msgid "_Cancel"
+msgstr "_Peru"
+
+#: ../data/ui/gb-editor-view.ui.h:3
+msgid ""
+"Builder has discovered that this file has been modified externally. Would "
+"you like to reload the file?"
+msgstr ""
+
+#: ../data/ui/gb-editor-view.ui.h:4
+msgid "Go to Line"
+msgstr ""
+
+#: ../data/ui/gb-editor-view.ui.h:5
+msgid "Go"
+msgstr ""
+
+#: ../data/ui/gb-greeter-window.ui.h:1
+msgid "Select a Project"
+msgstr "Valitse projekti"
+
+#: ../data/ui/gb-greeter-window.ui.h:2
+msgid "Click an item to select"
+msgstr ""
+
+#: ../data/ui/gb-greeter-window.ui.h:5
+msgid "Recent Projects"
+msgstr "Viimeisimmät projektit"
+
+#: ../data/ui/gb-greeter-window.ui.h:6
+msgid "Other Projects"
+msgstr "Muut projektit"
+
+#: ../data/ui/gb-greeter-window.ui.h:7
+msgid "_Remove"
+msgstr "_Poista"
+
+#: ../data/ui/gb-new-file-popover.ui.h:1
+#: ../data/ui/gb-rename-file-popover.ui.h:1
+#: ../src/project-tree/gb-new-file-popover.c:349
+msgid "File Name"
+msgstr "Tiedoston nimi"
+
+#: ../data/ui/gb-new-file-popover.ui.h:2
+msgid "_Create"
+msgstr "_Luo"
+
+#: ../data/ui/gb-new-project-dialog.ui.h:1
+#: ../src/dialogs/gb-new-project-dialog.c:354
+msgid "New Project"
+msgstr "Uusi projekti"
+
+#: ../data/ui/gb-new-project-dialog.ui.h:3
+msgid "_Continue"
+msgstr "_Jatka"
+
+#: ../data/ui/gb-new-project-dialog.ui.h:4
+msgid "From existing project on this computer"
+msgstr "Tällä tietokoneella olemassa olevasta projektista"
+
+#: ../data/ui/gb-new-project-dialog.ui.h:5
+msgid "From remote source code repository"
+msgstr "Etäällä olevasta lähdekoodin tietovarastosta"
+
+#: ../data/ui/gb-new-project-dialog.ui.h:6
+#: ../data/ui/gb-preferences-page-git.ui.h:3
+msgid "Name"
+msgstr "Nimi"
+
+#: ../data/ui/gb-new-project-dialog.ui.h:7
+msgid "Location"
+msgstr "Sijainti"
+
+#: ../data/ui/gb-new-project-dialog.ui.h:8
+msgid "GNOME Version"
+msgstr ""
+
+#: ../data/ui/gb-new-project-dialog.ui.h:9
+msgid "Language"
+msgstr "Kieli"
+
+#: ../data/ui/gb-new-project-dialog.ui.h:10
+msgid "Pattern"
+msgstr ""
+
+#: ../data/ui/gb-new-project-dialog.ui.h:11
+msgid "Git"
+msgstr "Git"
+
+#: ../data/ui/gb-new-project-dialog.ui.h:12
+msgid "user@host:repository.git"
+msgstr ""
+
+#: ../data/ui/gb-new-project-dialog.ui.h:13
+msgid "Enter the URL of your project's source code repository."
+msgstr ""
+
+#: ../data/ui/gb-new-project-dialog.ui.h:14
+msgid "Directory"
+msgstr "Kansio"
+
+#: ../data/ui/gb-new-project-dialog.ui.h:15
+msgid "Repository"
+msgstr "Tietovarasto"
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:1
+#: ../data/ui/gb-preferences-window.ui.h:3
+msgid "Editor"
+msgstr ""
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:2
+msgid "Font"
+msgstr "Fontti"
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:3
+msgid "Highlighting"
+msgstr ""
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:4
+msgid "Display Document Changes"
+msgstr ""
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:5
+msgid ""
+"Display whether a line has been added or modified next to the line number."
+msgstr ""
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:6
+msgid "Display Line Numbers"
+msgstr "Näytä rivinumerot"
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:7
+msgid "Display the line numbers next to each line of the document."
+msgstr ""
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:8
+msgid "Highlight Current Line"
+msgstr "Korosta nykyinen rivi"
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:9
+msgid "Highlight the line containing the cursor."
+msgstr ""
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:10
+msgid "Highlight Matching Brackets"
+msgstr ""
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:11
+msgid "Whether or not matching brackets should be highlighted."
+msgstr ""
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:12
+msgid "Overview Map"
+msgstr ""
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:13
+msgid "Display Overview Map"
+msgstr ""
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:14
+msgid "Display an overview map next to the source code editor."
+msgstr ""
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:15
+msgid "Auto Hide Overview Map"
+msgstr ""
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:16
+msgid "Automatically hide the overview map during periods of inactivity."
+msgstr ""
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:17
+msgid "Cursor Placement"
+msgstr ""
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:18
+msgid "Restore Cursor Position"
+msgstr ""
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:19
+msgid ""
+"Restore the insertion cursor to the last position when reopening a file."
+msgstr ""
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:20
+msgid "Scroll Offset"
+msgstr ""
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:21
+msgid "Minimal number of lines to keep above and below the cursor."
+msgstr ""
+
+#: ../data/ui/gb-preferences-page-git.ui.h:1
+#: ../data/ui/gb-preferences-window.ui.h:8
+msgid "Version Control"
+msgstr ""
+
+#: ../data/ui/gb-preferences-page-git.ui.h:2
+msgid "Source Code Attribution"
+msgstr ""
+
+#: ../data/ui/gb-preferences-page-git.ui.h:4
+msgid "Email"
+msgstr ""
+
+#: ../data/ui/gb-preferences-page-insight.ui.h:1
+#: ../data/ui/gb-preferences-window.ui.h:5
+msgid "Code Insight"
+msgstr ""
+
+#: ../data/ui/gb-preferences-page-insight.ui.h:2
+msgid "Semantic Language Highlighting"
+msgstr ""
+
+#: ../data/ui/gb-preferences-page-insight.ui.h:3
+msgid ""
+"Highlight additional syntax based upon information found in the document."
+msgstr ""
+
+#: ../data/ui/gb-preferences-page-insight.ui.h:4
+msgid "Auto Completion"
+msgstr ""
+
+#: ../data/ui/gb-preferences-page-insight.ui.h:5
+msgid "Suggest Snippet Completion"
+msgstr ""
+
+#: ../data/ui/gb-preferences-page-insight.ui.h:6
+msgid "Allow snippets to be inserted into the document."
+msgstr ""
+
+#: ../data/ui/gb-preferences-page-insight.ui.h:7
+msgid "Suggest Word Completion"
+msgstr ""
+
+#: ../data/ui/gb-preferences-page-insight.ui.h:8
+msgid "Suggest completion of words found within all open documents."
+msgstr ""
+
+#: ../data/ui/gb-preferences-page-insight.ui.h:9
+msgid "Suggest Completions using Ctags"
+msgstr ""
+
+#: ../data/ui/gb-preferences-page-insight.ui.h:10
+msgid "Use Ctags for completions in supported languages."
+msgstr ""
+
+#: ../data/ui/gb-preferences-page-insight.ui.h:11
+msgid "Suggest Completions using Clang (Experimental)"
+msgstr ""
+
+#: ../data/ui/gb-preferences-page-insight.ui.h:12
+msgid "Use Clang for completions in the C and C++ languages."
+msgstr ""
+
+#: ../data/ui/gb-preferences-page-insight.ui.h:13
+msgid "Suggest Completions using Jedi"
+msgstr ""
+
+#: ../data/ui/gb-preferences-page-insight.ui.h:14
+msgid "Use Jedi for completions in the Python language."
+msgstr ""
+
+#: ../data/ui/gb-preferences-page-keybindings.ui.h:1
+#: ../data/ui/gb-preferences-window.ui.h:6
+msgid "Keyboard"
+msgstr "Näppäimistö"
+
+#: ../data/ui/gb-preferences-page-keybindings.ui.h:2
+msgid "Key Binding Emulation"
+msgstr ""
+
+#: ../data/ui/gb-preferences-page-keybindings.ui.h:4
+msgid "The default keybindings for Builder."
+msgstr ""
+
+#: ../data/ui/gb-preferences-page-keybindings.ui.h:5
+msgid "Emacs Emulation"
+msgstr "Emacs-emulaatio"
+
+#: ../data/ui/gb-preferences-page-keybindings.ui.h:6
+msgid "Emulates familiar keybindings from the Emacs text editor."
+msgstr ""
+
+#: ../data/ui/gb-preferences-page-keybindings.ui.h:7
+msgid "Vim Emulation"
+msgstr "Vim-emulaatio"
+
+#: ../data/ui/gb-preferences-page-keybindings.ui.h:8
+msgid "Emulates familiar keybindings from the Vim text editor."
+msgstr ""
+
+#: ../data/ui/gb-preferences-page-keybindings.ui.h:9
+msgid "Keyboard Movement"
+msgstr ""
+
+#: ../data/ui/gb-preferences-page-keybindings.ui.h:10
+msgid "Smart Home End"
+msgstr ""
+
+#: ../data/ui/gb-preferences-page-keybindings.ui.h:11
+msgid "Home moves to first non-space character."
+msgstr ""
+
+#: ../data/ui/gb-preferences-page-keybindings.ui.h:13
+msgid ""
+"Backspace will remove extra spaces to keep you aligned with your indentation "
+"width."
+msgstr ""
+
+#: ../data/ui/gb-preferences-page-language.ui.h:1
+#: ../data/ui/gb-preferences-window.ui.h:4
+msgid "Programming Languages"
+msgstr "Ohjelmointikielet"
+
+#: ../data/ui/gb-preferences-page-plugins.ui.h:1
+#: ../data/ui/gb-preferences-window.ui.h:9
+msgid "Plugins"
+msgstr "Liitännäiset"
+
+#: ../data/ui/gb-preferences-page-theme.ui.h:1
+#: ../data/ui/gb-preferences-window.ui.h:7
+msgid "Theme"
+msgstr "Teema"
+
+#: ../data/ui/gb-preferences-page-theme.ui.h:2
+msgid "Night Mode"
+msgstr "Yötila"
+
+#: ../data/ui/gb-preferences-page-theme.ui.h:3
+msgid "Use dark colors for the application chrome."
+msgstr ""
+
+#: ../data/ui/gb-preferences-page-theme.ui.h:4
+msgid "Display Grid Pattern"
+msgstr ""
+
+#: ../data/ui/gb-preferences-page-theme.ui.h:5
+msgid "Display a grid pattern under the source code."
+msgstr ""
+
+#: ../data/ui/gb-preferences-window.ui.h:1
+#: ../data/ui/gb-shortcuts-window.ui.h:4
+msgid "Preferences"
+msgstr ""
+
+#: ../data/ui/gb-preferences-window.ui.h:2
+msgid "Search Preferences…"
+msgstr ""
+
+#: ../data/ui/gb-projects-dialog.ui.h:1
+#: ../src/dialogs/gb-projects-dialog.c:255
+msgid "Select Project"
+msgstr "Valitse projekti"
+
+#: ../data/ui/gb-projects-dialog.ui.h:2
+msgid "New"
+msgstr "Uusi"
+
+#: ../data/ui/gb-projects-dialog.ui.h:4
+msgid "Delete"
+msgstr "Poista"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:1
+msgid "Editor Shortcuts"
+msgstr ""
+
+#: ../data/ui/gb-shortcuts-window.ui.h:2
+msgid "General"
+msgstr "Yleiset"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:3
+msgid "Global Search"
+msgstr ""
+
+#: ../data/ui/gb-shortcuts-window.ui.h:5
+msgid "Command Bar"
+msgstr ""
+
+#: ../data/ui/gb-shortcuts-window.ui.h:6
+#: ../plugins/terminal/gb-terminal-document.c:87
+#: ../plugins/terminal/gb-terminal-workbench-addin.c:101
+msgid "Terminal"
+msgstr "Pääte"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:7
+msgid "Keyboard Shortcuts"
+msgstr "Pikanäppäimet"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:8
+msgid "Panels"
+msgstr "Paneelit"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:9
+msgid "Toggle left panel"
+msgstr ""
+
+#: ../data/ui/gb-shortcuts-window.ui.h:10
+msgid "Toggle right panel"
+msgstr ""
+
+#: ../data/ui/gb-shortcuts-window.ui.h:11
+msgid "Toggle bottom panel"
+msgstr ""
+
+#: ../data/ui/gb-shortcuts-window.ui.h:12
+msgid "Touchpad gestures"
+msgstr "Kosketusalustan eleet"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:13
+msgid "Switch to the next document"
+msgstr ""
+
+#: ../data/ui/gb-shortcuts-window.ui.h:14
+msgid "Two finger swipe right"
+msgstr ""
+
+#: ../data/ui/gb-shortcuts-window.ui.h:15
+msgid "Switch to the previous document"
+msgstr ""
+
+#: ../data/ui/gb-shortcuts-window.ui.h:16
+msgid "Two finger swipe left"
+msgstr ""
+
+#: ../data/ui/gb-shortcuts-window.ui.h:17
+#: ../src/project-tree/gb-project-tree-builder.c:79
+msgid "Files"
+msgstr "Tiedostot"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:18
+msgid "Create new document"
+msgstr "Luo uusi dokumentti"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:19
+msgid "Open a document"
+msgstr "Avaa dokumentti"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:20
+msgid "Save the document"
+msgstr "Tallenna dokumentti"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:21
+msgid "Close the document"
+msgstr "Sulje dokumentti"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:22
+msgid "Show list of open files"
+msgstr ""
+
+#: ../data/ui/gb-shortcuts-window.ui.h:23
+msgid "Switch to source or header"
+msgstr ""
+
+#: ../data/ui/gb-shortcuts-window.ui.h:24
+msgid "Find and replace"
+msgstr "Etsi ja korvaa"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:25
+msgid "Find"
+msgstr "Etsi"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:26
+msgid "Find the next match"
+msgstr "Etsi seuraava tulos"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:27
+msgid "Find the previous match"
+msgstr "Etsi edellinen tuos"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:28
+msgid "Clear highlight"
+msgstr ""
+
+#: ../data/ui/gb-shortcuts-window.ui.h:29
+msgid "Go to line"
+msgstr "Siirry riville"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:30
+msgid "Copy and Paste"
+msgstr "Kopioi ja liitä"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:31
+msgid "Copy selected text to clipboard"
+msgstr ""
+
+#: ../data/ui/gb-shortcuts-window.ui.h:32
+msgid "Cut selected text to clipboard"
+msgstr ""
+
+#: ../data/ui/gb-shortcuts-window.ui.h:33
+msgid "Paste text from clipboard"
+msgstr "Liitä leikepöydältä"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:34
+msgid "Undo and Redo"
+msgstr ""
+
+#: ../data/ui/gb-shortcuts-window.ui.h:35
+msgid "Undo previous command"
+msgstr "Kumoa edellinen komento"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:36
+msgid "Redo previous command"
+msgstr "Tee uudelleen edellinen komento"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:37
+msgid "Editing"
+msgstr ""
+
+#: ../data/ui/gb-shortcuts-window.ui.h:38
+msgid "Increment number at cursor"
+msgstr ""
+
+#: ../data/ui/gb-shortcuts-window.ui.h:39
+msgid "Decrement number at cursor"
+msgstr ""
+
+#: ../data/ui/gb-shortcuts-window.ui.h:40
+msgid "Join selected lines"
+msgstr ""
+
+#: ../data/ui/gb-shortcuts-window.ui.h:41
+msgid "Show completion window"
+msgstr ""
+
+#: ../data/ui/gb-shortcuts-window.ui.h:42
+msgid "Toggle overwrite"
+msgstr ""
+
+#: ../data/ui/gb-shortcuts-window.ui.h:43
+msgid "Navigation"
+msgstr ""
+
+#: ../data/ui/gb-shortcuts-window.ui.h:44
+msgid "Move to next error in file"
+msgstr ""
+
+#: ../data/ui/gb-shortcuts-window.ui.h:45
+msgid "Move to previous error in file"
+msgstr ""
+
+#: ../data/ui/gb-shortcuts-window.ui.h:46
+msgid "Move to previous edit location"
+msgstr ""
+
+#: ../data/ui/gb-shortcuts-window.ui.h:47
+msgid "Move to next edit location"
+msgstr ""
+
+#: ../data/ui/gb-shortcuts-window.ui.h:48
+msgid "Jump to definition of symbol"
+msgstr ""
+
+#: ../data/ui/gb-shortcuts-window.ui.h:49
+msgid "Move viewport up within the file"
+msgstr ""
+
+#: ../data/ui/gb-shortcuts-window.ui.h:50
+msgid "Move viewport down within the file"
+msgstr ""
+
+#: ../data/ui/gb-shortcuts-window.ui.h:51
+msgid "Move viewport to end of file"
+msgstr ""
+
+#: ../data/ui/gb-shortcuts-window.ui.h:52
+msgid "Move viewport to beginning of file"
+msgstr ""
+
+#: ../data/ui/gb-shortcuts-window.ui.h:53
+msgid "Move to matching bracket"
+msgstr ""
+
+#: ../data/ui/gb-shortcuts-window.ui.h:54
+msgid "Selections"
+msgstr ""
+
+#: ../data/ui/gb-shortcuts-window.ui.h:55
+msgid "Select all"
+msgstr ""
+
+#: ../data/ui/gb-shortcuts-window.ui.h:56
+msgid "Unselect all"
+msgstr ""
+
+#: ../data/ui/gb-shortcuts-window.ui.h:57
+msgid "Terminal Shortcuts"
+msgstr ""
+
+#: ../data/ui/gb-view.ui.h:1
+msgid "Split"
+msgstr ""
+
+#: ../data/ui/gb-view.ui.h:2
+msgid "Split Left"
+msgstr ""
+
+#: ../data/ui/gb-view.ui.h:3
+msgid "Split Right"
+msgstr ""
+
+#: ../data/ui/gb-view.ui.h:4
+msgid "Split Down"
+msgstr ""
+
+#: ../data/ui/gb-view.ui.h:5
+msgid "Move"
+msgstr ""
+
+#: ../data/ui/gb-view.ui.h:6
+msgid "Move Left"
+msgstr ""
+
+#: ../data/ui/gb-view.ui.h:7
+msgid "Move Right"
+msgstr ""
+
+#: ../data/ui/gb-view.ui.h:8
+msgid "_Save"
+msgstr "_Tallenna"
+
+#: ../data/ui/gb-view.ui.h:9
+msgid "_Save As"
+msgstr "Tallenna _nimellä"
+
+#: ../data/ui/gb-view.ui.h:10
+msgid "Print"
+msgstr "Tulosta"
+
+#: ../data/ui/gb-view.ui.h:11
+msgid "_Close"
+msgstr "_Sulje"
+
+#: ../data/ui/gb-workbench.ui.h:2
+msgid "Project"
+msgstr "Projekti"
+
+#: ../libide/editorconfig/ide-editorconfig-file-settings.c:153
+msgid "No file was provided."
+msgstr ""
+
+#: ../libide/git/ide-git-buffer-change-monitor.c:167
+msgid "Cannot provide diff, no backing file provided."
+msgstr ""
+
+#: ../libide/git/ide-git-buffer-change-monitor.c:537
+#, c-format
+msgid "Repository does not have a working directory."
+msgstr ""
+
+#: ../libide/git/ide-git-buffer-change-monitor.c:548
+#, c-format
+msgid "File is not under control of git working directory."
+msgstr ""
+
+#: ../libide/git/ide-git-buffer-change-monitor.c:614
+#, c-format
+msgid "The requested file does not exist within the git index."
+msgstr ""
+
+#: ../libide/gjs/ide-gjs-script.cpp:76
+msgid "Attempt to load a GJS script with no filename."
+msgstr ""
+
+#: ../libide/gjs/ide-gjs-script.cpp:103
+msgid "Failed to create JavaScript context."
+msgstr ""
+
+#: ../libide/gjs/ide-gjs-script.cpp:128
+msgid "Failed to set IdeContext in JavaScript runtime."
+msgstr ""
+
+#: ../libide/gjs/ide-gjs-script.cpp:202
+#: ../libide/pygobject/ide-pygobject-script.c:254
+msgid "The filename for the script was not provided."
+msgstr ""
+
+#: ../libide/gjs/ide-gjs-script.cpp:213
+#: ../libide/pygobject/ide-pygobject-script.c:265
+msgid "The script must be on a local filesystem."
+msgstr ""
+
+#: ../libide/gjs/ide-gjs-script.cpp:222
+#, c-format
+msgid "The script \"%s\" is not a JavaScript file."
+msgstr ""
+
+#: ../libide/gsettings/ide-language-defaults.c:177
+#, c-format
+msgid "%s contained invalid ASCII"
+msgstr ""
+
+#: ../libide/gsettings/ide-language-defaults.c:192
+#, c-format
+msgid "Failed to parse integer from \"%s\""
+msgstr ""
+
+#: ../libide/gsettings/ide-language-defaults.c:270
+msgid "language defaults missing version in [global] group."
+msgstr ""
+
+#: ../libide/gsettings/ide-language-defaults.c:362
+msgid "Failed to initialize defaults."
+msgstr ""
+
+#: ../libide/ide-back-forward-list.c:722
+msgid "File contained invalid UTF-8"
+msgstr ""
+
+#: ../libide/ide-buffer.c:1991
+msgid "The current language lacks a symbol resolver."
+msgstr ""
+
+#: ../libide/ide-buffer-manager.c:604
+msgid "File too large to be opened."
+msgstr ""
+
+#: ../libide/ide-buffer-manager.c:1425
+msgid "Words"
+msgstr ""
+
+#: ../libide/ide-buffer-manager.c:1636
+#, c-format
+msgid "unsaved document %u"
+msgstr ""
+
+#: ../libide/ide-buffer-manager.c:1670
+msgid "Failed to save buffer, ignoring reclamation."
+msgstr ""
+
+#: ../libide/ide-builder.c:50
+#, c-format
+msgid "%s does not implement build_async()"
+msgstr ""
+
+#: ../libide/ide-builder.c:56
+msgid "No implementation of build_async()"
+msgstr ""
+
+#: ../libide/ide-build-result.c:156
+msgid "Failed to open stderr stream."
+msgstr ""
+
+#: ../libide/ide-build-result.c:186
+msgid "Failed to open stdout stream."
+msgstr ""
+
+#: ../libide/ide-build-system.c:229
+#, c-format
+msgid "%s() is not supported on %s build system."
+msgstr ""
+
+#: ../libide/ide.c:71
+#, c-format
+msgid "You must call %s() before using libide."
+msgstr ""
+
+#: ../libide/ide.c:136
+msgid "Builder requires libgit2-glib with threading support."
+msgstr ""
+
+#: ../libide/ide.c:142
+msgid "Builder requires libgit2-glib with SSH support."
+msgstr ""
+
+#: ../libide/ide-context.c:1666
+msgid "An unload request is already pending"
+msgstr ""
+
+#: ../libide/ide-context.c:1781
+msgid "Context has already been restored."
+msgstr ""
+
+#: ../libide/ide-device-manager.c:144
+#, c-format
+msgid "The device \"%s\" could not be found."
+msgstr ""
+
+#: ../libide/ide-object.c:285
+#, c-format
+msgid "No implementations of extension point \"%s\"."
+msgstr ""
+
+#: ../libide/ide-object.c:377
+msgid "Failed to locate build system plugin."
+msgstr ""
+
+#: ../libide/ide-object.c:464
+msgid "No such extension point."
+msgstr ""
+
+#: ../libide/ide-object.c:474
+msgid "No implementations of extension point."
+msgstr ""
+
+#: ../libide/ide-project.c:463
+msgid "Destination file must be within the project tree."
+msgstr ""
+
+#: ../libide/ide-project.c:593
+msgid "File must be within the project tree."
+msgstr ""
+
+#: ../libide/ide-recent-projects.c:377
+#, c-format
+msgid "%s() may only be executed once"
+msgstr ""
+
+#: ../libide/ide-script.c:205
+#, c-format
+msgid "%s has not implemented GAsyncInitable."
+msgstr ""
+
+#: ../libide/ide-source-snippet.c:370
+msgid "Chunk does not belong to snippet."
+msgstr ""
+
+#: ../libide/ide-source-snippet-completion-provider.c:288
+msgid "Snippets"
+msgstr ""
+
+#: ../libide/ide-source-snippet-parser.c:495
+#, c-format
+msgid "Invalid snippet at line %d: %s"
+msgstr ""
+
+#: ../libide/ide-source-snippets-manager.c:96
+#, c-format
+msgid "Failed to open directory: %s"
+msgstr ""
+
+#: ../libide/ide-source-snippets-manager.c:109
+#, c-format
+msgid "Failed to load file: %s: %s"
+msgstr ""
+
+#: ../libide/ide-source-view.c:4563
+#, c-format
+msgid "Insert \"%s\""
+msgstr ""
+
+#: ../libide/ide-source-view.c:4565
+#, c-format
+msgid "Replace \"%s\" with \"%s\""
+msgstr ""
+
+#: ../libide/ide-source-view.c:4683
+msgid "Apply Fix-It"
+msgstr ""
+
+#: ../libide/ide-source-view.c:4726
+msgid "Join Lines"
+msgstr ""
+
+#: ../libide/ide-source-view.c:4737
+msgid "Sort Lines"
+msgstr ""
+
+#: ../libide/ide-source-view.c:4756
+msgid "Go to Definition"
+msgstr ""
+
+#: ../libide/pygobject/ide-pygobject-script.c:135
+msgid "Attempt to load a PyGObject script with no filename."
+msgstr ""
+
+#: ../libide/pygobject/ide-pygobject-script.c:274
+#, c-format
+msgid "The script \"%s\" is not a PyGObject file."
+msgstr "Skripti \"%s\" ei ole PyGObject-tiedosto."
+
+#: ../plugins/autotools/ide-autotools-build-system.c:175
+msgid "Failed to locate configure.ac"
+msgstr ""
+
+#: ../plugins/autotools/ide-autotools-build-task.c:270
+msgid "Directory must be on a locally mounted filesystem."
+msgstr ""
+
+#: ../plugins/autotools/ide-autotools-build-task.c:641
+msgid "Cannot execute build task more than once."
+msgstr ""
+
+#: ../plugins/autotools/ide-autotools-build-task.c:726
+msgid "Failed to create build directory."
+msgstr ""
+
+#: ../plugins/autotools/ide-autotools-build-task.c:735
+#, c-format
+msgid "'%s' is not a directory."
+msgstr "'%s' ei ole kansio."
+
+#: ../plugins/autotools/ide-autotools-build-task.c:774
+#, c-format
+msgid "autogen.sh is missing from project directory (%s)."
+msgstr ""
+
+#: ../plugins/autotools/ide-autotools-build-task.c:784
+msgid "autogen.sh is not executable."
+msgstr "autogen.sh ei ole suoritettava tiedosto."
+
+#: ../plugins/autotools/ide-autotools-build-task.c:814
+#, c-format
+msgid "autogen.sh failed to create configure (%s)"
+msgstr ""
+
+#: ../plugins/autotools/ide-makecache.c:999
+msgid "Invalid makefile provided, ignoring."
+msgstr ""
+
+#: ../plugins/clang/ide-clang-completion-provider.c:200
+msgid "Clang"
+msgstr ""
+
+#: ../plugins/clang/ide-clang-service.c:266
+msgid "Unknown failure"
+msgstr ""
+
+#: ../plugins/clang/ide-clang-service.c:270
+msgid "Clang crashed"
+msgstr ""
+
+#: ../plugins/clang/ide-clang-service.c:274
+msgid "Invalid arguments"
+msgstr ""
+
+#: ../plugins/clang/ide-clang-service.c:278
+msgid "AST read error"
+msgstr ""
+
+#: ../plugins/clang/ide-clang-service.c:290
+#, c-format
+msgid "Failed to create translation unit: %s"
+msgstr ""
+
+#: ../plugins/clang/ide-clang-service.c:399
+msgid "File must be saved locally to parse."
+msgstr ""
+
+#: ../plugins/clang/ide-clang-symbol-node.c:149
+msgid "anonymous"
+msgstr ""
+
+#: ../plugins/clang/ide-clang-translation-unit.c:654
+msgid "clang_codeCompleteAt() only works on local files"
+msgstr ""
+
+#: ../plugins/command-bar/gb-command-bar.c:290
+#, c-format
+msgid "Command not found: %s"
+msgstr "Komentoa ei löydy: %s"
+
+#: ../plugins/command-bar/gb-command-bar.c:594
+msgid "Use the entry below to execute a command"
+msgstr ""
+
+#: ../plugins/command-bar/gb-vim.c:83
+#, c-format
+msgid "Number required"
+msgstr ""
+
+#: ../plugins/command-bar/gb-vim.c:93
+#, c-format
+msgid "%s is invalid for %s"
+msgstr ""
+
+#: ../plugins/command-bar/gb-vim.c:151
+#, c-format
+msgid "Cannot find language '%s'"
+msgstr ""
+
+#: ../plugins/command-bar/gb-vim.c:348
+#, c-format
+msgid "Unknown option: %s"
+msgstr ""
+
+#: ../plugins/command-bar/gb-vim.c:387
+#, c-format
+msgid "Cannot find colorscheme '%s'"
+msgstr ""
+
+#: ../plugins/command-bar/gb-vim.c:423
+#, c-format
+msgid "Failed to locate working directory"
+msgstr ""
+
+#: ../plugins/command-bar/gb-vim.c:547
+#, c-format
+msgid "Invalid :syntax subcommand: %s"
+msgstr ""
+
+#: ../plugins/command-bar/gb-vim.c:874
+#, c-format
+msgid "Invalid search and replace request"
+msgstr ""
+
+#: ../plugins/command-bar/gb-vim.c:960
+#, c-format
+msgid "vim mode requires GtkSourceView"
+msgstr ""
+
+#: ../plugins/command-bar/gb-vim.c:990
+#, c-format
+msgid "Not an editor command: %s"
+msgstr ""
+
+#: ../plugins/c-pack/ide-c-format-provider.c:281
+#: ../plugins/python-pack/ide-python-format-provider.c:238
+msgid "Format Strings"
+msgstr ""
+
+#: ../plugins/ctags/ide-ctags-completion-provider.c:179
+msgid "CTags"
+msgstr ""
+
+#: ../plugins/devhelp/gb-devhelp-document.c:71
+#, c-format
+msgid "Documentation (%s)"
+msgstr ""
+
+#: ../plugins/devhelp/gb-devhelp-document.c:148
+#: ../plugins/devhelp/gb-devhelp-panel.c:144
+#: ../plugins/devhelp/gb-devhelp-search-provider.c:134
+msgid "Documentation"
+msgstr ""
+
+#: ../plugins/device-manager/gb-device-manager-panel.c:75
+msgid "Device Manager"
+msgstr ""
+
+#: ../plugins/file-search/gb-file-search-provider.c:45
+msgid "Switch To"
+msgstr ""
+
+#: ../plugins/gnome-code-assistance/ide-gca-diagnostic-provider.c:336
+msgid "Code assistance requires a local file."
+msgstr ""
+
+#: ../plugins/gnome-code-assistance/ide-gca-service.c:168
+msgid "No language specified"
+msgstr ""
+
+#: ../plugins/html-preview/html_preview_plugin/__init__.py:88
+msgid "Preview as HTML"
+msgstr "Esikatselu HTML-muodossa"
+
+#: ../plugins/mingw/ide-mingw-device-provider.c:95
+msgid "MinGW (64-bit)"
+msgstr "MinGW (64-bit)"
+
+#: ../plugins/mingw/ide-mingw-device-provider.c:107
+msgid "MinGW (32-bit)"
+msgstr "MinGW (32-bit)"
+
+#: ../plugins/symbol-tree/symbol-tree.c:187
+msgid "Current language does not support symbol resolvers"
+msgstr ""
+
+#: ../plugins/symbol-tree/symbol-tree.c:211
+msgid "Symbol Tree"
+msgstr ""
+
+#: ../plugins/sysmon/gb-sysmon-addin.c:64
+msgid "System Monitor"
+msgstr ""
+
+#: ../plugins/terminal/gb-terminal-document.c:64
+#, c-format
+msgid "Terminal (%s)"
+msgstr ""
+
+#: ../plugins/terminal/gb-terminal-view-actions.c:300
+msgid "Save Terminal Content As"
+msgstr ""
+
+#: ../plugins/terminal/gb-terminal-view-actions.c:308
+#: ../src/editor/gb-editor-view-actions.c:310
+#: ../src/editor/gb-editor-view-actions.c:441
+#: ../src/workbench/gb-workbench-actions.c:169
+msgid "Cancel"
+msgstr "Peru"
+
+#: ../plugins/terminal/gb-terminal-view-actions.c:309
+#: ../src/editor/gb-editor-view-actions.c:311
+#: ../src/editor/gb-editor-view-actions.c:442
+msgid "Save"
+msgstr "Tallenna"
+
+#: ../src/app/gb-application-actions.c:91
+#, c-format
+msgid ""
+"The support log file has been written to '%s'. Please provide this file as "
+"an attachment on your bug report or support request."
+msgstr ""
+
+#: ../src/app/gb-application-actions.c:157
+msgid "An IDE for GNOME"
+msgstr ""
+
+#: ../src/app/gb-application-actions.c:162
+msgid "GNOME Builder"
+msgstr ""
+
+#: ../src/app/gb-application-actions.c:164
+msgid "translator-credits"
+msgstr "Jiri Grönroos"
+
+#: ../src/app/gb-application-actions.c:167
+msgid "Learn more about GNOME Builder"
+msgstr ""
+
+#: ../src/app/gb-application-actions.c:170
+msgid "Funded By"
+msgstr "Rahoittanut"
+
+#: ../src/app/gb-application.c:642
+msgid "Run Builder in standalone mode"
+msgstr ""
+
+#: ../src/app/gb-application.c:648
+msgid "Show the application's version"
+msgstr "Näytä sovelluksen versio"
+
+#: ../src/app/gb-application.c:654
+msgid "Increase verbosity. May be specified multiple times."
+msgstr ""
+
+#: ../src/dialogs/gb-new-project-dialog.c:347
+msgid "Select Project File"
+msgstr "Valitse projektitiedosto"
+
+#: ../src/dialogs/gb-new-project-dialog.c:374
+msgid "Clone Repository"
+msgstr "Kloonaa tietovarasto"
+
+#: ../src/dialogs/gb-new-project-dialog.c:394
+msgid "Autotools Project (configure.ac)"
+msgstr ""
+
+#: ../src/dialogs/gb-new-project-dialog.c:400
+msgid "Any Directory"
+msgstr ""
+
+#: ../src/dialogs/gb-new-project-dialog.c:527
+msgid "A valid Git URL is required"
+msgstr ""
+
+#: ../src/dialogs/gb-new-project-dialog.c:666
+msgid "Directory|Projects"
+msgstr ""
+
+#: ../src/dialogs/gb-projects-dialog.c:244
+msgid "(Click on items to select them)"
+msgstr ""
+
+#: ../src/editor/gb-editor-frame.c:76
+#, c-format
+msgid "Line %u, Column %u"
+msgstr ""
+
+#: ../src/editor/gb-editor-frame.c:244
+#, c-format
+msgid "%u of %u"
+msgstr ""
+
+#: ../src/editor/gb-editor-frame.c:664
+msgid "Re_veal in Project Tree"
+msgstr ""
+
+#: ../src/editor/gb-editor-settings-widget.c:189
+#, c-format
+msgid "%s (read-only)"
+msgstr ""
+
+#: ../src/editor/gb-editor-view-actions.c:304
+msgid "Save Document"
+msgstr ""
+
+#: ../src/editor/gb-editor-view-actions.c:430
+msgid "Save Document As"
+msgstr ""
+
+#: ../src/editor/gb-editor-view.c:119
+msgid "Plain Text"
+msgstr ""
+
+#. translators: the user selected a number outside the value range for the document.
+#: ../src/editor/gb-editor-view.c:624
+#, c-format
+msgid "Provide a number between 1 and %u"
+msgstr ""
+
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-editor.c:95
+msgid "restore insert cursor mark"
+msgstr ""
+
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-editor.c:100
+msgid "diff renderer gutter changes git vcs"
+msgstr ""
+
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-editor.c:105
+msgid "line numbers"
+msgstr ""
+
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-editor.c:110
+msgid "line lines highlight current"
+msgstr ""
+
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-editor.c:115
+msgid "bracket brackets highlight matching"
+msgstr ""
+
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-editor.c:120
+msgid "lines margin scrolloff scroll off"
+msgstr ""
+
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-editor.c:126
+msgid "font document editor monospace"
+msgstr ""
+
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-editor.c:131
+msgid "minimap mini map overview over view"
+msgstr ""
+
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-git.c:169
+msgid "git author name surname attribution source code"
+msgstr ""
+
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-git.c:175
+msgid "git author email mail address attribute source code"
+msgstr ""
+
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-insight.c:61
+msgid "word words auto completion suggest found document"
+msgstr ""
+
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-insight.c:66
+msgid "experimental clang autocompletion auto complete"
+msgstr ""
+
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-insight.c:71
+msgid "exuberant ctags tags autocompletion auto complete"
+msgstr ""
+
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-insight.c:76
+msgid "jedi python autocompletion auto complete"
+msgstr ""
+
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-insight.c:81
+msgid "snippets autocompletion auto complete"
+msgstr ""
+
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-insight.c:86
+msgid "semantic highlighting color goto declaration definition"
+msgstr ""
+
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-keybindings.c:64
+msgid "default builder keybindings"
+msgstr ""
+
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-keybindings.c:69
+msgid "emacs keybindings modal"
+msgstr ""
+
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-keybindings.c:74
+msgid "vim keybindings modal"
+msgstr ""
+
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-keybindings.c:80
+msgid "smart home end"
+msgstr ""
+
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-keybindings.c:85
+msgid "smart back backspace indent align"
+msgstr ""
+
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-theme.c:114
+msgid "show grid lines"
+msgstr ""
+
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-theme.c:119
+msgid "source style scheme source tango solarized builder syntax"
+msgstr ""
+
+#: ../src/project-tree/gb-new-file-popover.c:124
+#: ../src/project-tree/gb-rename-file-popover.c:142
+msgid "A folder with that name already exists."
+msgstr "Kansio samalla nimellä on jo olemassa."
+
+#: ../src/project-tree/gb-new-file-popover.c:127
+#: ../src/project-tree/gb-rename-file-popover.c:145
+msgid "A file with that name already exists."
+msgstr "Tiedosto samalla nimellä on jo olemassa."
+
+#: ../src/project-tree/gb-new-file-popover.c:351
+msgid "Folder Name"
+msgstr "Kansion nimi"
+
+#: ../src/project-tree/gb-rename-file-popover.c:80
+#, c-format
+msgid "Rename %s"
+msgstr ""
+
+#: ../src/project-tree/gb-rename-file-popover.c:173
+msgid "File name must not contain subdirectories."
+msgstr ""
+
+#: ../src/search/gb-search-display.c:234
+msgid "Cannot add provider more than once."
+msgstr ""
+
+#: ../src/search/gb-search-display.c:316
+msgid "The provider could not be found."
+msgstr ""
+
+#: ../src/search/gb-search-display-group.c:182
+#, c-format
+msgid "%s more"
+msgstr ""
+
+#: ../src/shortcuts/gb-shortcuts-dialog.c:937
+msgid "Search Shortcuts"
+msgstr ""
+
+#: ../src/shortcuts/gb-shortcuts-dialog.c:964
+msgid "Search Results"
+msgstr ""
+
+#: ../src/util/gb-file-manager.c:64
+msgid "File path is NULL"
+msgstr ""
+
+#: ../src/util/gb-file-manager.c:73 ../src/util/gb-file-manager.c:84
+msgid "Error converting UTF-8 filename to wide char"
+msgstr ""
+
+#: ../src/util/gb-file-manager.c:92
+msgid "ILCreateFromPath() failed"
+msgstr "ILCreateFromPath() epäonnistui"
+
+#: ../src/util/gb-file-manager.c:129
+#, c-format
+msgid "Cannot convert '%s' into a valid NSURL."
+msgstr ""
+
+#: ../src/util/gb-file-manager.c:157
+msgid "Connecting to org.freedesktop.FileManager1 failed: "
+msgstr ""
+
+#: ../src/util/gb-file-manager.c:181
+msgid "Calling ShowItems failed: "
+msgstr ""
+
+#: ../src/util/gb-glib.c:55
+msgid "Just now"
+msgstr "Juuri nyt"
+
+#: ../src/util/gb-glib.c:57
+msgid "An hour ago"
+msgstr "Tunti sitten"
+
+#: ../src/util/gb-glib.c:59
+msgid "Yesterday"
+msgstr "Eilen"
+
+#: ../src/util/gb-glib.c:65
+msgid "About a year ago"
+msgstr "Noin vuosi sitten"
+
+#: ../src/util/gb-glib.c:69
+#, c-format
+msgid "About %u years ago"
+msgstr "Noin %u vuotta sitten"
+
+#: ../src/workbench/gb-workbench-actions.c:162
+msgid "Open Document"
+msgstr "Avaa dokumentti"
+
+#: ../src/workbench/gb-workbench-actions.c:170
+msgid "Open"
+msgstr "Avaa"
+
+#: ../src/workbench/gb-workbench.c:151
+#, c-format
+msgid "%s - Builder"
+msgstr ""
+
+#: ../src/workbench/gb-workbench.c:919
+msgid "Build Failure"
+msgstr ""
+
+#: ../src/workbench/gb-workbench.c:966
+msgid "Project build system does not support building"
+msgstr ""
+
+#: ../tools/ide-build.c:81 ../tools/ide-build.c:85
+#, c-format
+msgid "===============\n"
+msgstr ""
+
+#: ../tools/ide-build.c:82
+#, c-format
+msgid " Build Failure: %s\n"
+msgstr ""
+
+#: ../tools/ide-build.c:83
+msgid " Build ran for: %"
+msgstr ""
+
+#: ../tools/ide-build.c:90 ../tools/ide-build.c:94
+#, c-format
+msgid "=================\n"
+msgstr ""
+
+#: ../tools/ide-build.c:91
+#, c-format
+msgid " Build Successful\n"
+msgstr ""
+
+#: ../tools/ide-build.c:92
+msgid "   Build ran for: %"
+msgstr ""
+
+#: ../tools/ide-build.c:200 ../tools/ide-build.c:206
+#, c-format
+msgid "========================\n"
+msgstr ""
+
+#: ../tools/ide-build.c:201
+#, c-format
+msgid "           Project Name: %s\n"
+msgstr "           Projektin nimi: %s\n"
+
+#: ../tools/ide-build.c:202
+#, c-format
+msgid " Version Control System: %s\n"
+msgstr ""
+
+#: ../tools/ide-build.c:203
+#, c-format
+msgid "           Build System: %s\n"
+msgstr ""
+
+#: ../tools/ide-build.c:204
+#, c-format
+msgid "    Build Date and Time: %s\n"
+msgstr ""
+
+#: ../tools/ide-build.c:205
+#, c-format
+msgid "    Building for Device: %s (%s)\n"
+msgstr ""
+
+#: ../tools/ide-build.c:288
+#, c-format
+msgid "Timed out while waiting for devices to settle.\n"
+msgstr ""
+
+#: ../tools/ide-build.c:346
+#, c-format
+msgid "Waiting up to 60 seconds for devices to settle. Ctrl+C to exit.\n"
+msgstr ""
+
+#: ../tools/ide-build.c:355
+msgid "The target device we are building for."
+msgstr ""
+
+#: ../tools/ide-build.c:356
+msgid "DEVICE_ID"
+msgstr ""
+
+#: ../tools/ide-build.c:359
+msgid "Clean and rebuild the project."
+msgstr ""
+
+#: ../tools/ide-build.c:361
+msgid "Increase parallelism in the build."
+msgstr ""
+
+#: ../tools/ide-build.c:362
+msgid "N"
+msgstr ""
+
+#: ../tools/ide-build.c:373
+msgid "- Build the project."
+msgstr ""
+
+#: ../tools/ide-list-build-flags.c:115
+msgid "- Get build flags for a project file"
+msgstr ""
+
+#: ../tools/ide-list-devices.c:109
+msgid "- List devices found on the system."
+msgstr ""
+
+#: ../tools/ide-list-diagnostics.c:187
+#, c-format
+msgid "Failed to diagnose: %s\n"
+msgstr ""
+
+#: ../tools/ide-list-diagnostics.c:250
+#, c-format
+msgid "No such file in project: %s\n"
+msgstr ""
+
+#: ../tools/ide-list-diagnostics.c:284
+msgid "- List diagnostics for a file."
+msgstr ""
+
+#: ../tools/ide-list-files.c:127 ../tools/ide-list-file-settings.c:207
+msgid "- List files found in project."
+msgstr ""
+
+#: ../tools/ide-list-file-settings.c:182
+#, c-format
+msgid "No files provided to load settings for.\n"
+msgstr ""
+
+#: ../tools/ide-mine-projects.c:87
+msgid "- discover projects"
+msgstr ""
+
+#: ../tools/ide-search.c:68
+#, c-format
+msgid "%s results\n"
+msgstr ""
+
+#: ../tools/ide-search.c:120
+msgid "PROJECT_FILE [SEARCH TERMS...]"
+msgstr ""
