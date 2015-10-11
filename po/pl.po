@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-19 09:18+0200\n"
-"PO-Revision-Date: 2015-09-19 09:19+0200\n"
+"POT-Creation-Date: 2015-10-11 18:01+0200\n"
+"PO-Revision-Date: 2015-10-11 18:02+0200\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <gnomepl@aviary.pl>\n"
 "Language: pl\n"
@@ -202,7 +202,8 @@ msgstr "Builder"
 msgid "The default color scheme for Builder"
 msgstr "Domyślny schemat kolorów programu Builder"
 
-#: ../data/ui/gb-editor-frame.ui.h:1
+#. OVR indicates we are in overwite mode
+#: ../data/ui/gb-editor-frame.ui.h:2
 msgid "OVR"
 msgstr "ZAS"
 
@@ -686,7 +687,7 @@ msgstr "Pasek poleceń"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:6
 #: ../plugins/terminal/gb-terminal-document.c:87
-#: ../plugins/terminal/gb-terminal-workbench-addin.c:101
+#: ../plugins/terminal/gb-terminal-workbench-addin.c:96
 msgid "Terminal"
 msgstr "Terminal"
 
@@ -836,62 +837,66 @@ msgid "Toggle overwrite"
 msgstr "Przełączenie zastępowania"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:43
+msgid "Reindent line"
+msgstr "Ponowne wcięcie wiersza"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:44
 msgid "Navigation"
 msgstr "Nawigacja"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:44
+#: ../data/ui/gb-shortcuts-window.ui.h:45
 msgid "Move to next error in file"
 msgstr "Przejście do następnego błędu w pliku"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:45
+#: ../data/ui/gb-shortcuts-window.ui.h:46
 msgid "Move to previous error in file"
 msgstr "Przejście do poprzedniego błędu w pliku"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:46
+#: ../data/ui/gb-shortcuts-window.ui.h:47
 msgid "Move to previous edit location"
 msgstr "Przejście do poprzedniego położenia edycji"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:47
+#: ../data/ui/gb-shortcuts-window.ui.h:48
 msgid "Move to next edit location"
 msgstr "Przejście do następnego położenia edycji"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:48
+#: ../data/ui/gb-shortcuts-window.ui.h:49
 msgid "Jump to definition of symbol"
 msgstr "Przejście do definicji symbolu"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:49
+#: ../data/ui/gb-shortcuts-window.ui.h:50
 msgid "Move viewport up within the file"
 msgstr "Przeniesienie portu widoku do góry w pliku"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:50
+#: ../data/ui/gb-shortcuts-window.ui.h:51
 msgid "Move viewport down within the file"
 msgstr "Przeniesienie portu widoku w dół w pliku"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:51
+#: ../data/ui/gb-shortcuts-window.ui.h:52
 msgid "Move viewport to end of file"
 msgstr "Przeniesienie portu widoku na koniec pliku"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:52
+#: ../data/ui/gb-shortcuts-window.ui.h:53
 msgid "Move viewport to beginning of file"
 msgstr "Przeniesienie portu widoku na początek pliku"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:53
+#: ../data/ui/gb-shortcuts-window.ui.h:54
 msgid "Move to matching bracket"
 msgstr "Przeniesienie do pasującego nawiasu"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:54
+#: ../data/ui/gb-shortcuts-window.ui.h:55
 msgid "Selections"
 msgstr "Zaznaczanie"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:55
+#: ../data/ui/gb-shortcuts-window.ui.h:56
 msgid "Select all"
 msgstr "Zaznaczenie wszystkiego"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:56
+#: ../data/ui/gb-shortcuts-window.ui.h:57
 msgid "Unselect all"
 msgstr "Odznaczenie wszystkiego"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:57
+#: ../data/ui/gb-shortcuts-window.ui.h:58
 msgid "Terminal Shortcuts"
 msgstr "Skróty terminala"
 
@@ -951,17 +956,17 @@ msgstr "Nie podano żadnego pliku."
 msgid "Cannot provide diff, no backing file provided."
 msgstr "Nie można dostarczyć różnicy, nie podano pliku na dysku."
 
-#: ../libide/git/ide-git-buffer-change-monitor.c:537
+#: ../libide/git/ide-git-buffer-change-monitor.c:539
 #, c-format
 msgid "Repository does not have a working directory."
 msgstr "Repozytorium nie posiada katalogu roboczego."
 
-#: ../libide/git/ide-git-buffer-change-monitor.c:548
+#: ../libide/git/ide-git-buffer-change-monitor.c:550
 #, c-format
 msgid "File is not under control of git working directory."
 msgstr "Plik nie jest pod kontrolą katalogu roboczego systemu git."
 
-#: ../libide/git/ide-git-buffer-change-monitor.c:614
+#: ../libide/git/ide-git-buffer-change-monitor.c:616
 #, c-format
 msgid "The requested file does not exist within the git index."
 msgstr "Żądany plik nie istnieje w indeksie systemu git."
@@ -1016,7 +1021,7 @@ msgstr "Zainicjowanie wartości domyślnych się nie powiodło."
 msgid "File contained invalid UTF-8"
 msgstr "Plik zawiera nieprawidłowe znaki UTF-8"
 
-#: ../libide/ide-buffer.c:1991
+#: ../libide/ide-buffer.c:2071
 msgid "The current language lacks a symbol resolver."
 msgstr "Obecny język nie posiada mechanizmu rozwiązywania symboli."
 
@@ -1086,20 +1091,20 @@ msgstr "Kontekst został już przywrócony."
 msgid "The device \"%s\" could not be found."
 msgstr "Nie można odnaleźć urządzenia „%s”."
 
-#: ../libide/ide-object.c:285
+#: ../libide/ide-object.c:288
 #, c-format
 msgid "No implementations of extension point \"%s\"."
 msgstr "Brak implementacji punktu rozszerzenia „%s”."
 
-#: ../libide/ide-object.c:377
+#: ../libide/ide-object.c:380
 msgid "Failed to locate build system plugin."
 msgstr "Ustalenie położenia wtyczki systemu budowania się nie powiodło."
 
-#: ../libide/ide-object.c:464
+#: ../libide/ide-object.c:467
 msgid "No such extension point."
 msgstr "Nie ma takiego punktu rozszerzenia."
 
-#: ../libide/ide-object.c:474
+#: ../libide/ide-object.c:477
 msgid "No implementations of extension point."
 msgstr "Brak implementacji punktu rozszerzenia."
 
@@ -1125,11 +1130,11 @@ msgstr "GAsyncInitable nie jest zaimplementowane w %s."
 msgid "Chunk does not belong to snippet."
 msgstr "Fragment nie należy do wstawki."
 
-#: ../libide/ide-source-snippet-completion-provider.c:288
+#: ../libide/ide-source-snippet-completion-provider.c:297
 msgid "Snippets"
 msgstr "Wstawki"
 
-#: ../libide/ide-source-snippet-parser.c:495
+#: ../libide/ide-source-snippet-parser.c:496
 #, c-format
 msgid "Invalid snippet at line %d: %s"
 msgstr "Nieprawidłowa wstawka w wierszu %d: %s"
@@ -1144,29 +1149,29 @@ msgstr "Otwarcie katalogu się nie powiodło: %s"
 msgid "Failed to load file: %s: %s"
 msgstr "Wczytanie pliku się nie powiodło: %s: %s"
 
-#: ../libide/ide-source-view.c:4563
+#: ../libide/ide-source-view.c:4647
 #, c-format
 msgid "Insert \"%s\""
 msgstr "Wstaw „%s”"
 
-#: ../libide/ide-source-view.c:4565
+#: ../libide/ide-source-view.c:4649
 #, c-format
 msgid "Replace \"%s\" with \"%s\""
 msgstr "Zmień „%s” na „%s”"
 
-#: ../libide/ide-source-view.c:4683
+#: ../libide/ide-source-view.c:4768
 msgid "Apply Fix-It"
 msgstr "Zastosuj „Fix-It”"
 
-#: ../libide/ide-source-view.c:4726
+#: ../libide/ide-source-view.c:4811
 msgid "Join Lines"
 msgstr "Połącz wiersze"
 
-#: ../libide/ide-source-view.c:4737
+#: ../libide/ide-source-view.c:4822
 msgid "Sort Lines"
 msgstr "Posortuj wiersze"
 
-#: ../libide/ide-source-view.c:4756
+#: ../libide/ide-source-view.c:4841
 msgid "Go to Definition"
 msgstr "Przejdź do definicji"
 
@@ -1214,13 +1219,9 @@ msgstr "Plik autogen.sh nie jest wykonywalny."
 msgid "autogen.sh failed to create configure (%s)"
 msgstr "Utworzenie pliku configure przez plik autogen.sh się nie powiodło (%s)"
 
-#: ../plugins/autotools/ide-makecache.c:999
+#: ../plugins/autotools/ide-makecache.c:1006
 msgid "Invalid makefile provided, ignoring."
 msgstr "Podano nieprawidłowy plik make, ignorowanie."
-
-#: ../plugins/clang/ide-clang-completion-provider.c:200
-msgid "Clang"
-msgstr "Clang"
 
 #: ../plugins/clang/ide-clang-service.c:266
 msgid "Unknown failure"
@@ -1251,16 +1252,16 @@ msgstr "Plik do przetworzenia musi być zapisany lokalnie."
 msgid "anonymous"
 msgstr "anonimowy"
 
-#: ../plugins/clang/ide-clang-translation-unit.c:654
+#: ../plugins/clang/ide-clang-translation-unit.c:656
 msgid "clang_codeCompleteAt() only works on local files"
 msgstr "Funkcja clang_codeCompleteAt() działania tylko na lokalnych plikach"
 
-#: ../plugins/command-bar/gb-command-bar.c:290
+#: ../plugins/command-bar/gb-command-bar.c:289
 #, c-format
 msgid "Command not found: %s"
 msgstr "Nie odnaleziono polecenia: %s"
 
-#: ../plugins/command-bar/gb-command-bar.c:594
+#: ../plugins/command-bar/gb-command-bar.c:593
 msgid "Use the entry below to execute a command"
 msgstr "Można wykonać polecenie za pomocą pola poniżej"
 
@@ -1319,22 +1320,18 @@ msgstr "Nie jest poleceniem edytora: %s"
 msgid "Format Strings"
 msgstr "Ciągi formatu"
 
-#: ../plugins/ctags/ide-ctags-completion-provider.c:179
-msgid "CTags"
-msgstr "Ctags"
-
 #: ../plugins/devhelp/gb-devhelp-document.c:71
 #, c-format
 msgid "Documentation (%s)"
 msgstr "Dokumentacja (%s)"
 
 #: ../plugins/devhelp/gb-devhelp-document.c:148
-#: ../plugins/devhelp/gb-devhelp-panel.c:96
+#: ../plugins/devhelp/gb-devhelp-panel.c:144
 #: ../plugins/devhelp/gb-devhelp-search-provider.c:134
 msgid "Documentation"
 msgstr "Dokumentacja"
 
-#: ../plugins/device-manager/gb-device-manager-panel.c:75
+#: ../plugins/device-manager/gb-device-manager-panel.c:67
 msgid "Device Manager"
 msgstr "Menedżer urządzeń"
 
@@ -1362,15 +1359,15 @@ msgstr "MinGW (64-bitowe)"
 msgid "MinGW (32-bit)"
 msgstr "MinGW (32-bitowe)"
 
-#: ../plugins/symbol-tree/symbol-tree.c:187
+#: ../plugins/symbol-tree/symbol-tree.c:230
 msgid "Current language does not support symbol resolvers"
 msgstr "Obecny język nie obsługuje mechanizmów rozwiązywania symboli"
 
-#: ../plugins/symbol-tree/symbol-tree.c:211
+#: ../plugins/symbol-tree/symbol-tree.c:255
 msgid "Symbol Tree"
 msgstr "Drzewo symboli"
 
-#: ../plugins/sysmon/gb-sysmon-addin.c:64
+#: ../plugins/sysmon/gb-sysmon-addin.c:58
 msgid "System Monitor"
 msgstr "Monitor systemu"
 
@@ -1467,17 +1464,17 @@ msgstr "Katalog|Projekty"
 msgid "(Click on items to select them)"
 msgstr "(Kliknięcie elementów zaznacza je)"
 
-#: ../src/editor/gb-editor-frame.c:73
+#: ../src/editor/gb-editor-frame.c:76
 #, c-format
 msgid "Line %u, Column %u"
 msgstr "Wiersz %u, kolumna %u"
 
-#: ../src/editor/gb-editor-frame.c:241
+#: ../src/editor/gb-editor-frame.c:244
 #, c-format
 msgid "%u of %u"
 msgstr "%u z %u"
 
-#: ../src/editor/gb-editor-frame.c:661
+#: ../src/editor/gb-editor-frame.c:664
 msgid "Re_veal in Project Tree"
 msgstr "Odkry_wanie w drzewie projektu"
 
@@ -1494,12 +1491,12 @@ msgstr "Zapis dokumentu"
 msgid "Save Document As"
 msgstr "Zapis dokumentu jako"
 
-#: ../src/editor/gb-editor-view.c:113
+#: ../src/editor/gb-editor-view.c:120
 msgid "Plain Text"
 msgstr "Zwykły tekst"
 
 #. translators: the user selected a number outside the value range for the document.
-#: ../src/editor/gb-editor-view.c:592
+#: ../src/editor/gb-editor-view.c:671
 #, c-format
 msgid "Provide a number between 1 and %u"
 msgstr "Należy podać numer między 1 a %u"
@@ -1724,11 +1721,11 @@ msgstr "Otwórz"
 msgid "%s - Builder"
 msgstr "%s — Builder"
 
-#: ../src/workbench/gb-workbench.c:919
+#: ../src/workbench/gb-workbench.c:939
 msgid "Build Failure"
 msgstr "Niepowodzenie budowania"
 
-#: ../src/workbench/gb-workbench.c:966
+#: ../src/workbench/gb-workbench.c:986
 msgid "Project build system does not support building"
 msgstr "System budowania projektu nie obsługuje budowania"
 
