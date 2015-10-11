@@ -897,8 +897,7 @@ gb_slider_set_position (GbSlider         *self,
           break;
 
         default:
-          g_assert_not_reached ();
-          break;
+          g_return_if_reached ();
         }
 
       frame_clock = gtk_widget_get_frame_clock (GTK_WIDGET (self));
