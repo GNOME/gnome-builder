@@ -72,6 +72,11 @@
   bind "<ctrl>equal" { "increase-font-size" () };
   bind "<ctrl>0" { "reset-font-size" () };
 
+  /* allow entering raw code */
+  bind "<ctrl>q" { "capture-modifier" ()
+                   "insert-modifier" (0)
+                   "clear-modifier" () };
+
   /* swap between header/source */
   bind "<alt>o" { "action" ("view", "find-other-file", "") };
 
