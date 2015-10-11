@@ -179,6 +179,10 @@
                 <property name="accelerator">Insert</property>
                 <property name="title" translatable="yes">Toggle overwrite</property>
               </shortcut>
+              <shortcut>
+                <property name="accelerator">&lt;ctrl&gt;&lt;alt&gt;i</property>
+                <property name="title" translatable="yes">Reindent line</property>
+              </shortcut>
             </group>
           </column>
           <column>
