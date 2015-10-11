@@ -3297,13 +3297,40 @@ ide_source_view_real_move_search (IdeSourceView    *self,
 
   g_return_if_fail (GTK_IS_TEXT_VIEW (text_view));
   g_return_if_fail (IDE_IS_SOURCE_VIEW (self));
-  g_return_if_fail ((dir == GTK_DIR_LEFT) || (dir == GTK_DIR_RIGHT) ||
-                    (dir == GTK_DIR_UP) || (dir == GTK_DIR_DOWN));
 
   if (!priv->search_context)
     return;
 
-  priv->search_direction = dir;
+  if (dir == GTK_DIR_TAB_BACKWARD)
+    {
+      switch (priv->search_direction)
+        {
+        case GTK_DIR_LEFT:
+          dir = GTK_DIR_RIGHT;
+          break;
+        case GTK_DIR_RIGHT:
+          dir = GTK_DIR_LEFT;
+          break;
+        case GTK_DIR_UP:
+          dir = GTK_DIR_DOWN;
+          break;
+        case GTK_DIR_DOWN:
+          dir = GTK_DIR_UP;
+          break;
+        case GTK_DIR_TAB_FORWARD:
+        case GTK_DIR_TAB_BACKWARD:
+        default:
+          g_return_if_reached ();
+        }
+    }
+  else if (dir == GTK_DIR_TAB_FORWARD)
+    {
+      dir = priv->search_direction;
+    }
+  else
+    {
+      priv->search_direction = dir;
+    }
 
   gtk_source_search_context_set_highlight (priv->search_context, TRUE);
 
