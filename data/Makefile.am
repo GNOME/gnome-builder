@@ -1,4 +1,4 @@
-SUBDIRS = gsettings icons style-schemes .
+SUBDIRS = gsettings icons style-schemes fonts .
 
 appdatadir = $(datadir)/appdata
 appdata_DATA = org.gnome.Builder.appdata.xml

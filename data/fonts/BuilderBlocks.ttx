@@ -91,6 +91,12 @@
     </TTGlyph>
   </glyf>
 
+  <name>
+    <namerecord nameID="0" platformID="1" platEncID="0" langID="0x0" unicode="True">
+      BuilderBlocks
+    </namerecord>
+  </name>
+
   <cmap ERROR="">
     <!-- Hand-coded format13 table mapping all Unicode
          characters to glyph00001. -->
