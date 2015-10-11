@@ -542,6 +542,14 @@
              "delete-selection" ()
              "clear-modifier" () };
 
+  bind "c" { "begin-macro" ()
+             "movement" (first-char, 0, 1, 0)
+             "movement" (last-char, 1, 0, 0)
+             "copy-clipboard" ()
+             "delete-selection" ()
+             "auto-indent" ()
+             "set-mode" ("vim-insert", permanent) };
+
   bind "<shift>f" { "begin-macro" ()
                     "capture-modifier" ()
                     "set-mode" ("vim-insert", permanent)
