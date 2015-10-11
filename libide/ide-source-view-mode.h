@@ -39,6 +39,8 @@ const gchar           *ide_source_view_mode_get_default_mode             (IdeSou
 const gchar           *ide_source_view_mode_get_display_name             (IdeSourceViewMode *self);
 gboolean               ide_source_view_mode_get_keep_mark_on_char        (IdeSourceViewMode *self);
 IdeSourceViewModeType  ide_source_view_mode_get_mode_type                (IdeSourceViewMode *self);
+void                   ide_source_view_mode_set_has_indenter             (IdeSourceViewMode *self,
+                                                                          gboolean           has_indenter);
 
 G_END_DECLS
 

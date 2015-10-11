@@ -504,3 +504,19 @@ ide_source_view_mode_get_mode_type (IdeSourceViewMode *self)
   g_return_val_if_fail (IDE_IS_SOURCE_VIEW_MODE (self), 0);
   return self->type;
 }
+
+void
+ide_source_view_mode_set_has_indenter (IdeSourceViewMode *self,
+                                       gboolean           has_indenter)
+{
+  GtkStyleContext *style_context;
+
+  g_assert (IDE_IS_SOURCE_VIEW_MODE (self));
+
+  style_context = gtk_widget_get_style_context (GTK_WIDGET (self));
+
+  if (has_indenter)
+    gtk_style_context_add_class (style_context, "has-indenter");
+  else
+    gtk_style_context_remove_class (style_context, "has-indenter");
+}
