@@ -489,11 +489,13 @@ gb_editor_frame__search_key_press_event (GbEditorFrame *self,
       return GDK_EVENT_STOP;
 
     case GDK_KEY_Down:
+      ide_source_view_set_search_direction (self->source_view, GTK_DIR_DOWN);
       gb_widget_activate_action (GTK_WIDGET (self), "frame", "next-search-result", NULL);
       return GDK_EVENT_STOP;
 
     case GDK_KEY_Up:
-      gb_widget_activate_action (GTK_WIDGET (self), "frame", "previous-search-result", NULL);
+      ide_source_view_set_search_direction (self->source_view, GTK_DIR_UP);
+      gb_widget_activate_action (GTK_WIDGET (self), "frame", "next-search-result", NULL);
       return GDK_EVENT_STOP;
 
     default:
