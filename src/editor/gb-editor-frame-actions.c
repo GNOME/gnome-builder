@@ -30,8 +30,13 @@ gb_editor_frame_actions_find (GSimpleAction *action,
   GtkTextBuffer *buffer;
   GtkTextIter start_sel;
   GtkTextIter end_sel;
+  GtkDirectionType search_direction;
 
   g_assert (GB_IS_EDITOR_FRAME (self));
+
+  search_direction = (GtkDirectionType) g_variant_get_int32 (variant);
+  ide_source_view_set_search_direction (self->source_view,
+                                        search_direction);
 
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self->source_view));
 
