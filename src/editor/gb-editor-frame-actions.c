@@ -79,7 +79,7 @@ gb_editor_frame_actions_next_search_result (GSimpleAction *action,
   ide_source_view_set_rubberband_search (self->source_view, FALSE);
 
   IDE_SOURCE_VIEW_GET_CLASS (self->source_view)->move_search
-    (self->source_view, GTK_DIR_DOWN, FALSE, TRUE, TRUE, FALSE, FALSE);
+    (self->source_view, GTK_DIR_TAB_FORWARD, FALSE, TRUE, TRUE, FALSE, FALSE);
 }
 
 static void
@@ -94,7 +94,7 @@ gb_editor_frame_actions_previous_search_result (GSimpleAction *action,
   ide_source_view_set_rubberband_search (self->source_view, FALSE);
 
   IDE_SOURCE_VIEW_GET_CLASS (self->source_view)->move_search
-    (self->source_view, GTK_DIR_UP, FALSE, TRUE, TRUE, FALSE, FALSE);
+    (self->source_view, GTK_DIR_TAB_BACKWARD, FALSE, TRUE, TRUE, FALSE, FALSE);
 }
 
 static const GActionEntry GbEditorFrameActions[] = {
