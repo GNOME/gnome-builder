@@ -72,6 +72,11 @@
   bind "<ctrl>equal" { "increase-font-size" () };
   bind "<ctrl>0" { "reset-font-size" () };
 
+  bind "<ctrl>Right" { "movement" (next-sub-word-start, 0, 0, 0) };
+  bind "<ctrl>Left" { "movement" (previous-sub-word-start, 0, 0, 0) };
+  bind "<ctrl><shift>Right" { "movement" (next-sub-word-start, 1, 0, 0) };
+  bind "<ctrl><shift>Left" { "movement" (previous-sub-word-start, 1, 0, 0) };
+
   /* allow entering raw code */
   bind "<ctrl>q" { "capture-modifier" ()
                    "insert-modifier" (0)
