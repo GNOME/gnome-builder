@@ -18,6 +18,10 @@
 
 #define G_LOG_DOMAIN "ide-autotools-build-system"
 
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
+
 #include <glib/gi18n.h>
 #include <gio/gio.h>
 #include <gtksourceview/gtksource.h>
@@ -35,6 +39,7 @@
 #include "ide-file.h"
 #include "ide-internal.h"
 #include "ide-makecache.h"
+#include "ide-tags-builder.h"
 
 #define MAKECACHE_KEY "makecache"
 #define DEFAULT_MAKECACHE_TTL 0
@@ -50,10 +55,12 @@ struct _IdeAutotoolsBuildSystem
 
 static void async_initable_iface_init (GAsyncInitableIface *iface);
 static void build_system_iface_init (IdeBuildSystemInterface *iface);
+static void tags_builder_iface_init (IdeTagsBuilderInterface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (IdeAutotoolsBuildSystem,
                          ide_autotools_build_system,
                          IDE_TYPE_OBJECT,
+                         G_IMPLEMENT_INTERFACE (IDE_TYPE_TAGS_BUILDER, tags_builder_iface_init)
                          G_IMPLEMENT_INTERFACE (G_TYPE_ASYNC_INITABLE, async_initable_iface_init)
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_BUILD_SYSTEM, build_system_iface_init))
 
@@ -837,4 +844,98 @@ async_initable_iface_init (GAsyncInitableIface *iface)
 {
   iface->init_async = ide_autotools_build_system_init_async;
   iface->init_finish = ide_autotools_build_system_init_finish;
+}
+
+static void
+simple_make_command_cb (GObject      *object,
+                        GAsyncResult *result,
+                        gpointer      user_data)
+{
+  GSubprocess *subprocess = (GSubprocess *)object;
+  g_autoptr(GTask) task = user_data;
+  GError *error = NULL;
+
+  if (!g_subprocess_wait_check_finish (subprocess, result, &error))
+    g_task_return_error (task, error);
+  else
+    g_task_return_boolean (task, TRUE);
+}
+
+static void
+simple_make_command (GFile       *directory,
+                     const gchar *target,
+                     GTask       *task)
+{
+  g_autoptr(GSubprocessLauncher) launcher = NULL;
+  g_autoptr(GSubprocess) subprocess = NULL;
+  GError *error = NULL;
+
+  g_assert (G_IS_FILE (directory));
+  g_assert (target != NULL);
+  g_assert (G_IS_TASK (task));
+
+  if (!g_file_is_native (directory))
+    {
+      g_task_return_new_error (task,
+                               G_IO_ERROR,
+                               G_IO_ERROR_NOT_REGULAR_FILE,
+                               "Cannot use non-local directories.");
+      return;
+    }
+
+  launcher = g_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDERR_SILENCE |
+                                        G_SUBPROCESS_FLAGS_STDOUT_SILENCE);
+  g_subprocess_launcher_set_cwd (launcher, g_file_get_path (directory));
+
+  subprocess = g_subprocess_launcher_spawn (launcher, &error, GNU_MAKE_NAME, target, NULL);
+  if (subprocess == NULL)
+    {
+      g_task_return_error (task, error);
+      return;
+    }
+
+  g_subprocess_wait_check_async (subprocess,
+                                 g_task_get_cancellable (task),
+                                 simple_make_command_cb,
+                                 g_object_ref (task));
+}
+
+static void
+ide_autotools_build_system_build_async (IdeTagsBuilder      *builder,
+                                        GFile               *file_or_directory,
+                                        gboolean             recursive,
+                                        GCancellable        *cancellable,
+                                        GAsyncReadyCallback  callback,
+                                        gpointer             user_data)
+{
+  IdeAutotoolsBuildSystem *self = (IdeAutotoolsBuildSystem *)builder;
+  g_autoptr(GTask) task = NULL;
+
+  g_return_if_fail (IDE_IS_AUTOTOOLS_BUILD_SYSTEM (self));
+  g_return_if_fail (G_IS_FILE (file_or_directory));
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  task = g_task_new (self, cancellable, callback, user_data);
+  simple_make_command (file_or_directory, "ctags", task);
+}
+
+static gboolean
+ide_autotools_build_system_build_finish (IdeTagsBuilder  *builder,
+                                         GAsyncResult    *result,
+                                         GError         **error)
+{
+  IdeAutotoolsBuildSystem *self = (IdeAutotoolsBuildSystem *)builder;
+  GTask *task = (GTask *)result;
+
+  g_return_val_if_fail (IDE_IS_AUTOTOOLS_BUILD_SYSTEM (self), FALSE);
+  g_return_val_if_fail (G_IS_ASYNC_RESULT (result), FALSE);
+
+  return g_task_propagate_boolean (task, error);
+}
+
+static void
+tags_builder_iface_init (IdeTagsBuilderInterface *iface)
+{
+  iface->build_async = ide_autotools_build_system_build_async;
+  iface->build_finish = ide_autotools_build_system_build_finish;
 }
