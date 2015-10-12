@@ -103,6 +103,7 @@ IdeUnsavedFile     *_ide_unsaved_file_new                   (GFile              
                                                              gint64                 sequence);
 void                _ide_highlighter_set_highlighter_engine (IdeHighlighter        *highlighter,
                                                              IdeHighlightEngine    *highlight_engine);
+const gchar        *_ide_source_view_get_mode_name          (IdeSourceView         *self);
 
 G_END_DECLS
 

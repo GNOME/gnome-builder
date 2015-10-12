@@ -6523,6 +6523,19 @@ ide_source_view_get_mode_display_name (IdeSourceView *self)
   return priv->display_name;
 }
 
+const gchar *
+_ide_source_view_get_mode_name (IdeSourceView *self)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_SOURCE_VIEW (self), NULL);
+
+  if (priv->mode != NULL)
+    return ide_source_view_mode_get_name (priv->mode);
+
+  return NULL;
+}
+
 gboolean
 ide_source_view_get_overwrite_braces (IdeSourceView *self)
 {
