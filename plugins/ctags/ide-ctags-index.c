@@ -36,11 +36,14 @@ struct _IdeCtagsIndex
   GBytes    *buffer;
   GFile     *file;
   gchar     *path_root;
+
+  guint64    mtime;
 };
 
 enum {
   PROP_0,
   PROP_FILE,
+  PROP_MTIME,
   PROP_PATH_ROOT,
   LAST_PROP
 };
@@ -311,6 +314,10 @@ ide_ctags_index_get_property (GObject    *object,
       g_value_set_object (value, ide_ctags_index_get_file (self));
       break;
 
+    case PROP_MTIME:
+      g_value_set_uint64 (value, self->mtime);
+      break;
+
     case PROP_PATH_ROOT:
       g_value_set_string (value, ide_ctags_index_get_path_root (self));
       break;
@@ -332,6 +339,10 @@ ide_ctags_index_set_property (GObject      *object,
     {
     case PROP_FILE:
       ide_ctags_index_set_file (self, g_value_get_object (value));
+      break;
+
+    case PROP_MTIME:
+      self->mtime = g_value_get_uint64 (value);
       break;
 
     case PROP_PATH_ROOT:
@@ -381,6 +392,15 @@ ide_ctags_index_class_init (IdeCtagsIndexClass *klass)
                          "The file containing the ctags data.",
                          G_TYPE_FILE,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY |G_PARAM_STATIC_STRINGS));
+
+  gParamSpecs [PROP_MTIME] =
+    g_param_spec_uint64 ("mtime",
+                         "Mtime",
+                         "Mtime",
+                         0,
+                         G_MAXUINT64,
+                         0,
+                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_PATH_ROOT] =
     g_param_spec_string ("path-root",
@@ -454,7 +474,8 @@ async_initable_iface_init (GAsyncInitableIface *iface)
 
 IdeCtagsIndex *
 ide_ctags_index_new (GFile       *file,
-                     const gchar *path_root)
+                     const gchar *path_root,
+                     guint64      mtime)
 {
   g_autoptr(GFile) parent = NULL;
   g_autofree gchar *real_path_root = NULL;
@@ -470,6 +491,7 @@ ide_ctags_index_new (GFile       *file,
   return g_object_new (IDE_TYPE_CTAGS_INDEX,
                        "file", file,
                        "path-root", path_root,
+                       "mtime", mtime,
                        NULL);
 }
 
@@ -609,4 +631,12 @@ void
 _ide_ctags_index_register_type (GTypeModule *module)
 {
   ide_ctags_index_register_type (module);
+}
+
+guint64
+ide_ctags_index_get_mtime (IdeCtagsIndex *self)
+{
+  g_return_val_if_fail (IDE_IS_CTAGS_INDEX (self), 0);
+
+  return self->mtime;
 }

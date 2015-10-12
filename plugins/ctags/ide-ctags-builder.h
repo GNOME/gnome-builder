@@ -27,7 +27,8 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeCtagsBuilder, ide_ctags_builder, IDE, CTAGS_BUILDER, IdeObject)
 
-IdeCtagsBuilder *ide_ctags_builder_new (void);
+IdeCtagsBuilder *ide_ctags_builder_new     (void);
+void             ide_ctags_builder_rebuild (IdeCtagsBuilder *self);
 
 G_END_DECLS
 

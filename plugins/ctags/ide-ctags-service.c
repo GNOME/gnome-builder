@@ -23,28 +23,30 @@
 
 #include "egg-task-cache.h"
 
+#include "ide-buffer-manager.h"
 #include "ide-context.h"
 #include "ide-ctags-builder.h"
 #include "ide-ctags-completion-provider.h"
-#include "ide-ctags-service.h"
+#include "ide-ctags-highlighter.h"
 #include "ide-ctags-index.h"
+#include "ide-ctags-service.h"
 #include "ide-debug.h"
 #include "ide-global.h"
 #include "ide-project.h"
+#include "ide-tags-builder.h"
 #include "ide-vcs.h"
-#include "ide-ctags-highlighter.h"
 
 struct _IdeCtagsService
 {
-  IdeObject                    parent_instance;
+  IdeObject         parent_instance;
 
-  EggTaskCache                *indexes;
-  GCancellable                *cancellable;
-  IdeCtagsBuilder             *builder;
-  GPtrArray                   *highlighters;
-  GPtrArray                   *completions;
+  EggTaskCache     *indexes;
+  GCancellable     *cancellable;
+  IdeCtagsBuilder  *builder;
+  GPtrArray        *highlighters;
+  GPtrArray        *completions;
 
-  guint                        miner_ran : 1;
+  guint             build_tags_timeout;
 };
 
 static void service_iface_init (IdeServiceInterface *iface);
@@ -68,6 +70,18 @@ ide_ctags_service_build_index_init_cb (GObject      *object,
     g_task_return_error (task, error);
   else
     g_task_return_pointer (task, g_object_ref (index), g_object_unref);
+}
+
+static guint64
+get_file_mtime (GFile *file)
+{
+  g_autoptr(GFileInfo) info = NULL;
+
+  if ((info = g_file_query_info (file, G_FILE_ATTRIBUTE_TIME_MODIFIED,
+                                 G_FILE_QUERY_INFO_NONE, NULL, NULL)))
+    return g_file_info_get_attribute_uint64 (info, G_FILE_ATTRIBUTE_TIME_MODIFIED);
+
+  return 0;
 }
 
 static gchar *
@@ -128,7 +142,7 @@ ide_ctags_service_build_index_cb (EggTaskCache  *cache,
   g_assert (G_IS_TASK (task));
 
   path_root = resolve_path_root (self, file);
-  index = ide_ctags_index_new (file, path_root);
+  index = ide_ctags_index_new (file, path_root, get_file_mtime (file));
 
   uri = g_file_get_uri (file);
   g_debug ("Building ctags in memory index for %s", uri);
@@ -183,12 +197,29 @@ ide_ctags_service_tags_loaded_cb (GObject      *object,
 }
 
 static gboolean
+file_is_newer (IdeCtagsIndex *index,
+               GFile         *file)
+{
+  g_assert (IDE_IS_CTAGS_INDEX (index));
+  g_assert (G_IS_FILE (file));
+
+  return get_file_mtime (file) > ide_ctags_index_get_mtime (index);
+}
+
+static gboolean
 do_load (gpointer data)
 {
   struct {
     IdeCtagsService *self;
     GFile *file;
   } *pair = data;
+  IdeCtagsIndex *prev;
+
+  if ((prev = egg_task_cache_peek (pair->self->indexes, pair->file)))
+    {
+      if (!file_is_newer (prev, pair->file))
+        goto cleanup;
+    }
 
   egg_task_cache_get_async (pair->self->indexes,
                             pair->file,
@@ -197,6 +228,7 @@ do_load (gpointer data)
                             ide_ctags_service_tags_loaded_cb,
                             g_object_ref (pair->self));
 
+cleanup:
   g_object_unref (pair->self);
   g_object_unref (pair->file);
   g_slice_free1 (sizeof *pair, pair);
@@ -364,13 +396,99 @@ ide_ctags_service_tags_built_cb (IdeCtagsService *self,
 }
 
 static void
-ide_ctags_service_context_loaded (IdeService *service)
+build_system_tags_cb (GObject      *object,
+                      GAsyncResult *result,
+                      gpointer      user_data)
 {
-  IdeCtagsService *self = (IdeCtagsService *)service;
+  IdeTagsBuilder *builder = (IdeTagsBuilder *)object;
+  g_autoptr(IdeCtagsService) self = user_data;
+
+  g_assert (IDE_IS_TAGS_BUILDER (builder));
+
+  ide_ctags_service_mine (self);
+}
+
+static gboolean
+restart_miner (gpointer data)
+{
+  IdeCtagsService *self = data;
+  IdeContext *context;
 
   g_assert (IDE_IS_CTAGS_SERVICE (self));
 
+  self->build_tags_timeout = 0;
+
+  context = ide_object_get_context (IDE_OBJECT (self));
+
+  if (context != NULL)
+    {
+      IdeBuildSystem *build_system;
+
+      build_system = ide_context_get_build_system (context);
+
+      if (IDE_IS_TAGS_BUILDER (build_system))
+        {
+          IdeVcs *vcs;
+          GFile *workdir;
+
+          vcs = ide_context_get_vcs (context);
+          workdir = ide_vcs_get_working_directory (vcs);
+          ide_tags_builder_build_async (IDE_TAGS_BUILDER (build_system), workdir, TRUE, NULL,
+                                        build_system_tags_cb, g_object_ref (self));;
+          goto finish;
+        }
+    }
+
+  ide_ctags_builder_rebuild (self->builder);
+
+finish:
+
+  return G_SOURCE_REMOVE;
+}
+
+static void
+ide_ctags_service_buffer_saved (IdeCtagsService  *self,
+                                IdeBuffer        *buffer,
+                                IdeBufferManager *buffer_manager)
+{
+  g_assert (IDE_IS_CTAGS_SERVICE (self));
+  g_assert (IDE_IS_BUFFER (buffer));
+  g_assert (IDE_IS_BUFFER_MANAGER (buffer_manager));
+
+  if (self->build_tags_timeout == 0)
+    self->build_tags_timeout = g_timeout_add_seconds (5, restart_miner, self);
+}
+
+static void
+ide_ctags_service_context_loaded (IdeService *service)
+{
+  IdeCtagsService *self = (IdeCtagsService *)service;
+  IdeContext *context;
+  IdeBuildSystem *build_system;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_CTAGS_SERVICE (self));
+
+  context = ide_object_get_context (IDE_OBJECT (self));
+  build_system = ide_context_get_build_system (context);
+
+  if (IDE_IS_TAGS_BUILDER (build_system))
+    {
+      IdeBufferManager *buffer_manager;
+
+      buffer_manager = ide_context_get_buffer_manager (context);
+
+      g_signal_connect_object (buffer_manager,
+                               "buffer-saved",
+                               G_CALLBACK (ide_ctags_service_buffer_saved),
+                               self,
+                               G_CONNECT_SWAPPED);
+    }
+
   ide_ctags_service_mine (self);
+
+  IDE_EXIT;
 }
 
 static void
@@ -402,6 +520,7 @@ ide_ctags_service_stop (IdeService *service)
   if (self->cancellable && !g_cancellable_is_cancelled (self->cancellable))
     g_cancellable_cancel (self->cancellable);
 
+  ide_clear_source (&self->build_tags_timeout);
   g_clear_object (&self->cancellable);
   g_clear_object (&self->builder);
 }
@@ -413,6 +532,7 @@ ide_ctags_service_finalize (GObject *object)
 
   IDE_ENTRY;
 
+  ide_clear_source (&self->build_tags_timeout);
   g_clear_object (&self->indexes);
   g_clear_object (&self->cancellable);
   g_clear_pointer (&self->highlighters, g_ptr_array_unref);

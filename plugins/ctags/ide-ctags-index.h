@@ -56,7 +56,8 @@ typedef struct
 } IdeCtagsIndexEntry;
 
 IdeCtagsIndex            *ide_ctags_index_new           (GFile                *file,
-                                                         const gchar          *path_root);
+                                                         const gchar          *path_root,
+                                                         guint64               mtime);
 void                      ide_ctags_index_load_async    (IdeCtagsIndex        *self,
                                                          GFile                *file,
                                                          GCancellable         *cancellable,
@@ -76,6 +77,7 @@ const IdeCtagsIndexEntry *ide_ctags_index_lookup        (IdeCtagsIndex        *s
 const IdeCtagsIndexEntry *ide_ctags_index_lookup_prefix (IdeCtagsIndex        *self,
                                                          const gchar          *keyword,
                                                          gsize                *length);
+guint64                   ide_ctags_index_get_mtime     (IdeCtagsIndex        *self);
 
 gint                ide_ctags_index_entry_compare (gconstpointer             a,
                                                    gconstpointer             b);

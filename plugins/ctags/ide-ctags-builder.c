@@ -234,12 +234,12 @@ ide_ctags_builder_build_worker (GTask        *task,
                            g_object_ref (task));
 }
 
-static void
-ide_ctags_builder_do_build (IdeCtagsBuilder *self)
+void
+ide_ctags_builder_rebuild (IdeCtagsBuilder *self)
 {
   g_autoptr(GTask) task = NULL;
 
-  g_assert (IDE_IS_CTAGS_BUILDER (self));
+  g_return_if_fail (IDE_IS_CTAGS_BUILDER (self));
 
   /* Make sure we aren't already in shutdown. */
   if (!ide_object_hold (IDE_OBJECT (self)))
@@ -247,51 +247,6 @@ ide_ctags_builder_do_build (IdeCtagsBuilder *self)
 
   task = g_task_new (self, NULL, ide_ctags_builder_build_cb, NULL);
   ide_thread_pool_push_task (IDE_THREAD_POOL_INDEXER, task, ide_ctags_builder_build_worker);
-}
-
-static gboolean
-ide_ctags_builder_build_timeout (gpointer data)
-{
-  IdeCtagsBuilder *self = data;
-
-  g_assert (IDE_IS_CTAGS_BUILDER (self));
-
-  self->build_timeout = 0;
-
-  if (self->is_building == FALSE)
-    {
-      self->is_building = TRUE;
-      ide_ctags_builder_do_build (self);
-    }
-
-  return G_SOURCE_REMOVE;
-}
-
-static void
-ide_ctags_builder__buffer_saved_cb (IdeCtagsBuilder  *self,
-                                    IdeBuffer        *buffer,
-                                    IdeBufferManager *buffer_manager)
-{
-  g_assert (IDE_IS_CTAGS_BUILDER (self));
-  g_assert (IDE_IS_BUFFER (buffer));
-  g_assert (IDE_IS_BUFFER_MANAGER (buffer_manager));
-
-  if (self->build_timeout != 0)
-    {
-      g_source_remove (self->build_timeout);
-      self->build_timeout = 0;
-    }
-
-  /*
-   * TODO: We will need to make ctags code insight check a few keys,
-   *       such as symbol resolving, autocompletion, highlight, etc.
-   */
-  if (!g_settings_get_boolean (self->settings, "ctags-autocompletion"))
-    return;
-
-  self->build_timeout = g_timeout_add_seconds (BUILD_CTAGS_DELAY_SECONDS,
-                                               ide_ctags_builder_build_timeout,
-                                               self);
 }
 
 static void
@@ -307,25 +262,6 @@ ide_ctags_builder__ctags_path_changed (IdeCtagsBuilder *self,
 
   ctags_path = g_settings_get_string (settings, "ctags-path");
   self->ctags_path = g_quark_from_string (ctags_path);
-}
-
-static void
-ide_ctags_builder_constructed (GObject *object)
-{
-  IdeCtagsBuilder *self = (IdeCtagsBuilder *)object;
-  IdeBufferManager *buffer_manager;
-  IdeContext *context;
-
-  context = ide_object_get_context (IDE_OBJECT (self));
-  buffer_manager = ide_context_get_buffer_manager (context);
-
-  g_signal_connect_object (buffer_manager,
-                           "buffer-saved",
-                           G_CALLBACK (ide_ctags_builder__buffer_saved_cb),
-                           self,
-                           G_CONNECT_SWAPPED);
-
-  G_OBJECT_CLASS (ide_ctags_builder_parent_class)->constructed (object);
 }
 
 static void
@@ -351,7 +287,6 @@ ide_ctags_builder_class_init (IdeCtagsBuilderClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  object_class->constructed = ide_ctags_builder_constructed;
   object_class->finalize = ide_ctags_builder_finalize;
 
   gSignals [TAGS_BUILT] =
