@@ -211,6 +211,15 @@ ide_ctags_completion_provider_populate (GtkSourceCompletionProvider *provider,
       const gchar *last_name = NULL;
       guint tmp_len = word_len;
       gsize n_entries = 0;
+      gchar gdata_key[64];
+
+      /*
+       * Make sure we hold a reference to the index for the lifetime of the results.
+       * When the results are released, so could our indexes.
+       */
+      g_snprintf (gdata_key, sizeof gdata_key, "ctags-%d", i);
+      g_object_set_data_full (G_OBJECT (self->results), gdata_key,
+                              g_object_ref (index), g_object_unref);
 
       while (entries == NULL && *copy)
         {
