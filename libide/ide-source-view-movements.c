@@ -45,6 +45,7 @@ typedef struct
   GtkTextIter            insert;                      /* Current insert cursor location */
   GtkTextIter            selection;                   /* Current selection cursor location */
   gint                   count;                       /* Repeat count for movement */
+  gunichar               command;                     /* Command that trigger some movements type. See , and ; in vim */
   gunichar               modifier;                    /* For forward/backward char search */
   guint                  extend_selection : 1;        /* If selection should be extended */
   guint                  exclusive : 1;               /* See ":help exclusive" in vim */
@@ -1246,6 +1247,7 @@ _ide_source_view_apply_movement (IdeSourceView         *self,
                                  gboolean               extend_selection,
                                  gboolean               exclusive,
                                  guint                  count,
+                                 gunichar               command,
                                  gunichar               modifier,
                                  gint                  *target_offset)
 {
@@ -1283,6 +1285,7 @@ _ide_source_view_apply_movement (IdeSourceView         *self,
   mv.count = count;
   mv.ignore_select = FALSE;
   mv.ignore_target_offset = FALSE;
+  mv.command = command;
   mv.modifier = modifier;
 
   ide_source_view_movements_get_selection (&mv);

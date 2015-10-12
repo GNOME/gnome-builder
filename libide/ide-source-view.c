@@ -116,6 +116,7 @@ typedef struct
   guint                        change_sequence;
 
   gint                         target_line_offset;
+  gunichar                     command;
   gunichar                     modifier;
   guint                        count;
 
@@ -242,6 +243,7 @@ enum {
   REQUEST_DOCUMENTATION,
   RESET_FONT_SIZE,
   RESTORE_INSERT_MARK,
+  SAVE_COMMAND,
   SAVE_INSERT_MARK,
   SELECTION_THEATRIC,
   SET_MODE,
@@ -3155,8 +3157,10 @@ ide_source_view_real_movement (IdeSourceView         *self,
   if (priv->scrolling_to_scroll_mark)
     priv->scrolling_to_scroll_mark = FALSE;
 
-  _ide_source_view_apply_movement (self, movement, extend_selection, exclusive,
-                                   count, priv->modifier, &priv->target_line_offset);
+  _ide_source_view_apply_movement (self,
+                                   movement, extend_selection, exclusive,
+                                   count, priv->command, priv->modifier,
+                                   &priv->target_line_offset);
 }
 
 static void
@@ -3553,6 +3557,20 @@ ide_source_view_real_save_insert_mark (IdeSourceView *self)
   priv->saved_selection_line_offset = gtk_text_iter_get_line_offset (&selection);
 
   priv->target_line_offset = priv->saved_line_offset;
+}
+
+static void
+ide_source_view_real_save_command (IdeSourceView *self)
+{
+  GdkEvent *event;
+  guint keyval;
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+
+  event = gtk_get_current_event ();
+  if (event && gdk_event_get_keyval (event, &keyval))
+    priv->command = (gunichar)keyval;
 }
 
 static void
@@ -5470,6 +5488,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
   klass->replay_macro = ide_source_view_real_replay_macro;
   klass->reset_font_size = ide_source_view_real_reset_font_size;
   klass->restore_insert_mark = ide_source_view_real_restore_insert_mark;
+  klass->save_command = ide_source_view_real_save_command;
   klass->save_insert_mark = ide_source_view_real_save_insert_mark;
   klass->selection_theatric = ide_source_view_real_selection_theatric;
   klass->set_mode = ide_source_view_real_set_mode;
@@ -5715,6 +5734,16 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                                 NULL, NULL, NULL,
                                 G_TYPE_NONE,
                                 0);
+
+  gSignals [SAVE_COMMAND] =
+    g_signal_new ("save-command",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                  G_STRUCT_OFFSET (IdeSourceViewClass, save_command),
+                  NULL, NULL,
+                  g_cclosure_marshal_VOID__VOID,
+                  G_TYPE_NONE,
+                  0);
 
   /**
    * IdeSourceView::capture-modifier:
