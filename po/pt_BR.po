@@ -1,15 +1,15 @@
 # Brazilian Portuguese translation for gnome-builder.
 # Copyright (C) 2015 gnome-builder's COPYRIGHT HOLDER
 # This file is distributed under the same license as the gnome-builder package.
-# Rafael Ferreira <rafael.f.f1@gmail.com>, 2015.
+# Rafael Fontenelle <rffontenelle@gmail.com>, 2015.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2015-09-29 18:49+0000\n"
-"PO-Revision-Date: 2015-09-29 16:20-0300\n"
+"POT-Creation-Date: 2015-09-29 19:23+0000\n"
+"PO-Revision-Date: 2015-10-12 17:28-0300\n"
 "Last-Translator: Rafael Fontenelle <rffontenelle@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <gnome-pt_br-list@gnome.org>\n"
 "Language: pt_BR\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 1.8.4\n"
+"X-Generator: Poedit 1.8.5\n"
 
 #: ../contrib/egg/egg-animation.c:723
 #, c-format
@@ -123,7 +123,7 @@ msgstr "Mostrar arquivos ignorados"
 
 #: ../data/gtk/menus.ui.h:18
 msgid "Sort Directories First"
-msgstr "ORdenar primeiro por diretórios"
+msgstr "Ordenar primeiro por diretórios"
 
 #: ../data/gtk/menus.ui.h:19
 msgid "_Collapse All Nodes"
@@ -139,11 +139,11 @@ msgstr "_Novo"
 
 #: ../data/gtk/menus.ui.h:22
 msgid "_Empty File"
-msgstr "_Arquivo Vazio"
+msgstr "_Arquivo vazio"
 
 #: ../data/gtk/menus.ui.h:23
 msgid "_New Folder"
-msgstr "_Nova pasta"
+msgstr "Nova _pasta"
 
 #: ../data/gtk/menus.ui.h:24
 msgid "Open _With"
@@ -153,10 +153,10 @@ msgstr "Abrir _com"
 msgid "Source Code Editor"
 msgstr "Editor de código fonte"
 
+# Tradução literal "contenedora" não me pareceu uma boa, então mudei -- Rafael
 #: ../data/gtk/menus.ui.h:26
-#, fuzzy
 msgid "_Open Containing Folder"
-msgstr "_Abrir pasta contendo"
+msgstr "Abrir pasta _raiz do projeto"
 
 #: ../data/gtk/menus.ui.h:27
 msgid "_Open in Terminal"
@@ -451,7 +451,7 @@ msgstr "Mapa de visão geral"
 
 #: ../data/ui/gb-preferences-page-editor.ui.h:13
 msgid "Display Overview Map"
-msgstr "Exibe um mapa de visão geral"
+msgstr "Exibir um mapa de visão geral"
 
 #: ../data/ui/gb-preferences-page-editor.ui.h:14
 msgid "Display an overview map next to the source code editor."
@@ -468,7 +468,7 @@ msgstr ""
 
 #: ../data/ui/gb-preferences-page-editor.ui.h:17
 msgid "Cursor Placement"
-msgstr "posição do cursor"
+msgstr "Posição do cursor"
 
 #: ../data/ui/gb-preferences-page-editor.ui.h:18
 msgid "Restore Cursor Position"
@@ -482,7 +482,7 @@ msgstr ""
 
 #: ../data/ui/gb-preferences-page-editor.ui.h:20
 msgid "Scroll Offset"
-msgstr "Scroll Offset"
+msgstr "Deslocamento"
 
 #: ../data/ui/gb-preferences-page-editor.ui.h:21
 msgid "Minimal number of lines to keep above and below the cursor."
@@ -526,7 +526,7 @@ msgstr "Sugerir completação de trecho"
 
 #: ../data/ui/gb-preferences-page-insight.ui.h:6
 msgid "Allow snippets to be inserted into the document."
-msgstr "Permita que trechos sejam inseridos no documento."
+msgstr "Permite que trechos sejam inseridos no documento."
 
 #: ../data/ui/gb-preferences-page-insight.ui.h:7
 msgid "Suggest Word Completion"
@@ -548,19 +548,19 @@ msgstr "Usa Ctags para completação na linguagem suportada."
 
 #: ../data/ui/gb-preferences-page-insight.ui.h:11
 msgid "Suggest Completions using Clang (Experimental)"
-msgstr "Sugerir completações usando Clang (Experimental)"
+msgstr "Sugerir completação usando Clang (Experimental)"
 
 #: ../data/ui/gb-preferences-page-insight.ui.h:12
 msgid "Use Clang for completions in the C and C++ languages."
-msgstr "Usa Clang para completações no idiomas C e C++."
+msgstr "Usa Clang para completação no idiomas C e C++."
 
 #: ../data/ui/gb-preferences-page-insight.ui.h:13
 msgid "Suggest Completions using Jedi"
-msgstr "Sugerir completações usando Jedi"
+msgstr "Sugerir completação usando Jedi"
 
 #: ../data/ui/gb-preferences-page-insight.ui.h:14
 msgid "Use Jedi for completions in the Python language."
-msgstr "Usa Jedi para completações na linguagem Python."
+msgstr "Usa Jedi para completação na linguagem Python."
 
 #: ../data/ui/gb-preferences-page-keybindings.ui.h:1
 #: ../data/ui/gb-preferences-window.ui.h:6
@@ -601,14 +601,14 @@ msgstr "Início e fim inteligentes"
 
 #: ../data/ui/gb-preferences-page-keybindings.ui.h:11
 msgid "Home moves to first non-space character."
-msgstr "Home move para o primeiro caractere não-espaço."
+msgstr "'Home' move para o primeiro caractere não-espaço."
 
 #: ../data/ui/gb-preferences-page-keybindings.ui.h:13
 msgid ""
 "Backspace will remove extra spaces to keep you aligned with your indentation "
 "width."
 msgstr ""
-"Backspace removerá espaços extra para manter você alinhado com o comprimento "
+"'Backspace' removerá espaços extra para manter você alinhado com o comprimento "
 "do recuo de texto."
 
 #: ../data/ui/gb-preferences-page-language.ui.h:1
@@ -707,7 +707,7 @@ msgstr "Ativar painel inferior"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:12
 msgid "Touchpad gestures"
-msgstr "Gestor de touchpad"
+msgstr "Gestos no touchpad"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:13
 msgid "Switch to the next document"
@@ -715,15 +715,15 @@ msgstr "Alterar para o próximo documento"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:14
 msgid "Two finger swipe right"
-msgstr "Dois dedos deslizados à direita"
+msgstr "Dois dedos deslizados para a direita"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:15
 msgid "Switch to the previous document"
-msgstr "Alterna para o documento anterior"
+msgstr "Alternar para o documento anterior"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:16
 msgid "Two finger swipe left"
-msgstr "Dois dedos deslizados à esquerda"
+msgstr "Dois dedos deslizados para a esquerda"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:17
 #: ../src/project-tree/gb-project-tree-builder.c:79
@@ -748,31 +748,31 @@ msgstr "Fechar o documento"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:22
 msgid "Show list of open files"
-msgstr "Mostra a lista de arquivos abertos"
+msgstr "Mostrar a lista de arquivos abertos"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:23
 msgid "Switch to source or header"
-msgstr "Alterna para fonte ou cabeçalho"
+msgstr "Alternar para fonte ou cabeçalho"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:24
 msgid "Find and replace"
-msgstr "Localiza e substitui"
+msgstr "Localizar e substituir"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:25
 msgid "Find"
-msgstr "Localiza"
+msgstr "Localizar"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:26
 msgid "Find the next match"
-msgstr "Localiza o próximo correspondente"
+msgstr "Localizar o próximo correspondente"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:27
 msgid "Find the previous match"
-msgstr "Localiza o correspondente anterior"
+msgstr "Localizar o correspondente anterior"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:28
 msgid "Clear highlight"
-msgstr "Limpa realce"
+msgstr "Limpar realce"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:29
 msgid "Go to line"
@@ -780,31 +780,31 @@ msgstr "Ir para a linha"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:30
 msgid "Copy and Paste"
-msgstr "Copia e cola"
+msgstr "Copiar e colar"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:31
 msgid "Copy selected text to clipboard"
-msgstr "Copia o texto selecionado para a área de transferência"
+msgstr "Copiar o texto selecionado para a área de transferência"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:32
 msgid "Cut selected text to clipboard"
-msgstr "Cola o texto selecionado para a área de transferência"
+msgstr "Colar o texto selecionado para a área de transferência"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:33
 msgid "Paste text from clipboard"
-msgstr "Cola o texto da área de transferência"
+msgstr "Colar o texto da área de transferência"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:34
 msgid "Undo and Redo"
-msgstr "Desfaz e refaz"
+msgstr "Desfazer e refazer"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:35
 msgid "Undo previous command"
-msgstr "Desfaz o comando anterior"
+msgstr "Desfazer o comando anterior"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:36
 msgid "Redo previous command"
-msgstr "Refaz o comando anterior"
+msgstr "Refazer o comando anterior"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:37
 msgid "Editing"
@@ -812,23 +812,23 @@ msgstr "Edição"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:38
 msgid "Increment number at cursor"
-msgstr "Incrementa o número no cursor"
+msgstr "Incrementar o número no cursor"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:39
 msgid "Decrement number at cursor"
-msgstr "Decrementa o número no cursor"
+msgstr "Decrementar o número no cursor"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:40
 msgid "Join selected lines"
-msgstr "Junta linha selecionadas"
+msgstr "Juntar as linhas selecionadas"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:41
 msgid "Show completion window"
-msgstr "Mostra janela de completação"
+msgstr "Mostrar janela de completação"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:42
 msgid "Toggle overwrite"
-msgstr "Ativa sobrescrever"
+msgstr "Ativar sobrescrever"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:43
 msgid "Navigation"
@@ -836,47 +836,43 @@ msgstr "Navegação"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:44
 msgid "Move to next error in file"
-msgstr "Move para o próximo erro no arquivo"
+msgstr "Mover para o próximo erro no arquivo"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:45
 msgid "Move to previous error in file"
-msgstr "Move para o erro anterior no arquivo"
+msgstr "Mover para o erro anterior no arquivo"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:46
 msgid "Move to previous edit location"
-msgstr "Move para o local de edição anterior"
+msgstr "Mover para o local de edição anterior"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:47
 msgid "Move to next edit location"
-msgstr "Move para o próximo local de edição"
+msgstr "Mover para o próximo local de edição"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:48
 msgid "Jump to definition of symbol"
 msgstr "Pular para a definição do simbolo"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:49
-#, fuzzy
-#| msgid "The line within the file."
 msgid "Move viewport up within the file"
-msgstr "A linha dentro do arquivo."
+msgstr "Mover ponto de vista acima no arquivo"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:50
-#, fuzzy
-#| msgid "The line within the file."
 msgid "Move viewport down within the file"
-msgstr "A linha dentro do arquivo."
+msgstr "Mover ponto de vista abaixo no arquivo"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:51
 msgid "Move viewport to end of file"
-msgstr ""
+msgstr "Mover ponto de vista para o fim do arquivo"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:52
 msgid "Move viewport to beginning of file"
-msgstr ""
+msgstr "Mover ponto de vista para o começo do arquivo"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:53
 msgid "Move to matching bracket"
-msgstr "Move para colchete correspondente"
+msgstr "Mover para colchete correspondente"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:54
 msgid "Selections"
@@ -1014,7 +1010,7 @@ msgstr "Falha ao inicializar padrões."
 msgid "File contained invalid UTF-8"
 msgstr "O arquivo contém UTF-8 inválido"
 
-#: ../libide/ide-buffer.c:1992
+#: ../libide/ide-buffer.c:1991
 msgid "The current language lacks a symbol resolver."
 msgstr "O idioma atual carece de um resolvedor de símbolos."
 
@@ -1083,20 +1079,20 @@ msgstr "O contexto já foi restaurado."
 msgid "The device \"%s\" could not be found."
 msgstr "O dispositivo \"%s\" não pôde ser encontrado."
 
-#: ../libide/ide-object.c:288
+#: ../libide/ide-object.c:285
 #, c-format
 msgid "No implementations of extension point \"%s\"."
 msgstr "Nenhuma implementação de ponto de extensão \"%s\"."
 
-#: ../libide/ide-object.c:380
+#: ../libide/ide-object.c:377
 msgid "Failed to locate build system plugin."
 msgstr "Falha ao localizar o plug-in do sistema de compilação."
 
-#: ../libide/ide-object.c:467
+#: ../libide/ide-object.c:464
 msgid "No such extension point."
 msgstr "Nenhum ponto de extensão."
 
-#: ../libide/ide-object.c:477
+#: ../libide/ide-object.c:474
 msgid "No implementations of extension point."
 msgstr "Nenhuma implementação de ponto de extensão."
 
@@ -1141,29 +1137,29 @@ msgstr "Falha ao abrir o diretório: %s"
 msgid "Failed to load file: %s: %s"
 msgstr "Falha ao carregar arquivo: %s: %s"
 
-#: ../libide/ide-source-view.c:4551
+#: ../libide/ide-source-view.c:4563
 #, c-format
 msgid "Insert \"%s\""
 msgstr "Insira \"%s\""
 
-#: ../libide/ide-source-view.c:4553
+#: ../libide/ide-source-view.c:4565
 #, c-format
 msgid "Replace \"%s\" with \"%s\""
 msgstr "Substitua \"%s\" com \"%s\""
 
-#: ../libide/ide-source-view.c:4671
+#: ../libide/ide-source-view.c:4683
 msgid "Apply Fix-It"
 msgstr "Aplicar correção"
 
-#: ../libide/ide-source-view.c:4714
+#: ../libide/ide-source-view.c:4726
 msgid "Join Lines"
 msgstr "Juntar linhas"
 
-#: ../libide/ide-source-view.c:4725
+#: ../libide/ide-source-view.c:4737
 msgid "Sort Lines"
 msgstr "Ordenar linhas"
 
-#: ../libide/ide-source-view.c:4744
+#: ../libide/ide-source-view.c:4756
 msgid "Go to Definition"
 msgstr "Ir para a definição"
 
@@ -1211,9 +1207,13 @@ msgstr "autogen.sh não é um executável."
 msgid "autogen.sh failed to create configure (%s)"
 msgstr "autogen.sh falhou ao criar configuração (%s)"
 
-#: ../plugins/autotools/ide-makecache.c:1005
+#: ../plugins/autotools/ide-makecache.c:999
 msgid "Invalid makefile provided, ignoring."
 msgstr "Makefile inválido fornecido, ignorando."
+
+#: ../plugins/clang/ide-clang-completion-provider.c:200
+msgid "Clang"
+msgstr "Clang"
 
 #: ../plugins/clang/ide-clang-service.c:266
 msgid "Unknown failure"
@@ -1228,9 +1228,8 @@ msgid "Invalid arguments"
 msgstr "Argumentos inválidos"
 
 #: ../plugins/clang/ide-clang-service.c:278
-#, fuzzy
 msgid "AST read error"
-msgstr "Erro de leitura do AST"
+msgstr "Erro de leitura AST"
 
 #: ../plugins/clang/ide-clang-service.c:290
 #, c-format
@@ -1245,7 +1244,7 @@ msgstr "O arquivo deve estar salvo localmente para análise."
 msgid "anonymous"
 msgstr "anônimo"
 
-#: ../plugins/clang/ide-clang-translation-unit.c:656
+#: ../plugins/clang/ide-clang-translation-unit.c:654
 msgid "clang_codeCompleteAt() only works on local files"
 msgstr "clang_codeCompleteAt() só funciona em arquivos locais"
 
@@ -1311,11 +1310,11 @@ msgstr "Não é um comando de editor: %s"
 #: ../plugins/c-pack/ide-c-format-provider.c:281
 #: ../plugins/python-pack/ide-python-format-provider.c:238
 msgid "Format Strings"
-msgstr ""
+msgstr "Strings de formato"
 
-#: ../plugins/ctags/ide-ctags-completion-provider.c:146
-msgid "CTAGS"
-msgstr ""
+#: ../plugins/ctags/ide-ctags-completion-provider.c:179
+msgid "CTags"
+msgstr "CTags"
 
 #: ../plugins/devhelp/gb-devhelp-document.c:71
 #, c-format
@@ -1323,7 +1322,7 @@ msgid "Documentation (%s)"
 msgstr "Documentação (%s)"
 
 #: ../plugins/devhelp/gb-devhelp-document.c:148
-#: ../plugins/devhelp/gb-devhelp-panel.c:148
+#: ../plugins/devhelp/gb-devhelp-panel.c:144
 #: ../plugins/devhelp/gb-devhelp-search-provider.c:134
 msgid "Documentation"
 msgstr "Documentação"
@@ -1356,11 +1355,11 @@ msgstr "MinGW (64-bit)"
 msgid "MinGW (32-bit)"
 msgstr "MinGW (32-bit)"
 
-#: ../plugins/symbol-tree/symbol-tree.c:207
+#: ../plugins/symbol-tree/symbol-tree.c:187
 msgid "Current language does not support symbol resolvers"
 msgstr "A linguagem atual não possui suporte a resolvedores de símbolos"
 
-#: ../plugins/symbol-tree/symbol-tree.c:231
+#: ../plugins/symbol-tree/symbol-tree.c:211
 msgid "Symbol Tree"
 msgstr "Árvore de símbolos"
 
@@ -1421,7 +1420,7 @@ msgstr "Fundado por"
 
 #: ../src/app/gb-application.c:642
 msgid "Run Builder in standalone mode"
-msgstr "Executar Builder em modo independente"
+msgstr "Executa Builder em modo independente"
 
 #: ../src/app/gb-application.c:648
 msgid "Show the application's version"
@@ -1486,12 +1485,12 @@ msgstr "Salvar documento"
 msgid "Save Document As"
 msgstr "Salvar documento como"
 
-#: ../src/editor/gb-editor-view.c:120
+#: ../src/editor/gb-editor-view.c:119
 msgid "Plain Text"
 msgstr "Texto simples"
 
 #. translators: the user selected a number outside the value range for the document.
-#: ../src/editor/gb-editor-view.c:667
+#: ../src/editor/gb-editor-view.c:624
 #, c-format
 msgid "Provide a number between 1 and %u"
 msgstr "Forneça um número entre 1 e %u"
@@ -1499,119 +1498,119 @@ msgstr "Forneça um número entre 1 e %u"
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-editor.c:95
 msgid "restore insert cursor mark"
-msgstr ""
+msgstr "restaurar inserir marca cursor"
 
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-editor.c:100
 msgid "diff renderer gutter changes git vcs"
-msgstr ""
+msgstr "diff comparação renderizar gutter alterações git vcs"
 
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-editor.c:105
 msgid "line numbers"
-msgstr ""
+msgstr "números linhas"
 
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-editor.c:110
 msgid "line lines highlight current"
-msgstr ""
+msgstr "linha linhas realce realçar atual"
 
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-editor.c:115
 msgid "bracket brackets highlight matching"
-msgstr ""
+msgstr "colchete colchetes realce coincidir corresponde"
 
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-editor.c:120
 msgid "lines margin scrolloff scroll off"
-msgstr ""
+msgstr "linhas margem deslocamento scroll"
 
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-editor.c:126
 msgid "font document editor monospace"
-msgstr ""
+msgstr "fonte documento editor monoespaço"
 
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-editor.c:131
 msgid "minimap mini map overview over view"
-msgstr ""
+msgstr "minimapa mini mapa visão geral visão-geral"
 
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-git.c:169
 msgid "git author name surname attribution source code"
-msgstr ""
+msgstr "git autor nome sobrenome atribuição código fonte"
 
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-git.c:175
 msgid "git author email mail address attribute source code"
-msgstr ""
+msgstr "git autor email e-mail endereço atributo código fonte"
 
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-insight.c:61
 msgid "word words auto completion suggest found document"
 msgstr ""
+"palavra palavras completação automática auto-completação segurir encontrado "
+"documento"
 
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-insight.c:66
 msgid "experimental clang autocompletion auto complete"
-msgstr ""
+msgstr "experimental clang completação automática auto-completação"
 
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-insight.c:71
 msgid "exuberant ctags tags autocompletion auto complete"
-msgstr ""
+msgstr "exuberante ctags completação automática auto-completação"
 
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-insight.c:76
 msgid "jedi python autocompletion auto complete"
-msgstr ""
+msgstr "jedi python completação automática auto-completação"
 
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-insight.c:81
 msgid "snippets autocompletion auto complete"
-msgstr ""
+msgstr "trechos completação automática auto-completação"
 
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-insight.c:86
 msgid "semantic highlighting color goto declaration definition"
-msgstr ""
+msgstr "semântica realce realçar cor ir para declaração definição"
 
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-keybindings.c:64
-#, fuzzy
-#| msgid "Failed to load keybindings."
 msgid "default builder keybindings"
-msgstr "Falha ao carregar associações de teclas."
+msgstr "padrão builder associações teclas keybindings"
 
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-keybindings.c:69
 msgid "emacs keybindings modal"
-msgstr ""
+msgstr "emacs modal associações teclas keybindings"
 
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-keybindings.c:74
 msgid "vim keybindings modal"
-msgstr ""
+msgstr "vim modal associações teclas keybindings"
 
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-keybindings.c:80
 msgid "smart home end"
-msgstr ""
+msgstr "início fim inteligente inteligentes"
 
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-keybindings.c:85
 msgid "smart back backspace indent align"
-msgstr ""
+msgstr "back backspace inteligente inteligentes recuo alinhamento"
 
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-theme.c:114
 msgid "show grid lines"
-msgstr ""
+msgstr "mostrar mostra grade linhas linha"
 
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-theme.c:119
 msgid "source style scheme source tango solarized builder syntax"
-msgstr ""
+msgstr "fonte estilo esquema fonte tango solaizado builder sintaxe"
 
 #: ../src/project-tree/gb-new-file-popover.c:124
 #: ../src/project-tree/gb-rename-file-popover.c:142
@@ -1861,12 +1860,6 @@ msgstr "%s resultados\n"
 #: ../tools/ide-search.c:120
 msgid "PROJECT_FILE [SEARCH TERMS...]"
 msgstr "ARQUIVO_DE_PROJETO [TERMOS DE PESQUISAS...]"
-
-#~ msgid "Clang"
-#~ msgstr "Clang"
-
-#~ msgid "CTags"
-#~ msgstr "CTags"
 
 #~ msgid "Duration"
 #~ msgstr "Duração"
