@@ -31,7 +31,7 @@ ide_tags_builder_build_async (IdeTagsBuilder      *self,
 {
   g_return_if_fail (IDE_IS_TAGS_BUILDER (self));
   g_return_if_fail (!directory_or_file || G_IS_FILE (directory_or_file));
-  g_return_if_fail (G_IS_CANCELLABLE (cancellable));
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   IDE_TAGS_BUILDER_GET_IFACE (self)->build_async (self, directory_or_file, recursive, cancellable, callback, user_data);
 }
