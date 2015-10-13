@@ -640,7 +640,6 @@ gb_tree_row_expanded (GtkTreeView *tree_view,
                       GtkTreePath *path)
 {
   GbTree *self = (GbTree *)tree_view;
-  GbTreePrivate *priv = gb_tree_get_instance_private (self);
   GtkTreeModel *model;
   GbTreeNode *node;
 
@@ -648,7 +647,7 @@ gb_tree_row_expanded (GtkTreeView *tree_view,
   g_assert (iter != NULL);
   g_assert (path != NULL);
 
-  model = GTK_TREE_MODEL (priv->store);
+  model = gtk_tree_view_get_model (tree_view);
 
   gtk_tree_model_get (model, iter, 0, &node, -1);
 
@@ -1618,6 +1617,36 @@ filter_func_free (gpointer user_data)
 }
 
 static gboolean
+gb_tree_model_filter_recursive (GtkTreeModel *model,
+                                GtkTreeIter  *parent,
+                                FilterFunc   *filter)
+{
+  GtkTreeIter child;
+
+  if (gtk_tree_model_iter_children (model, &child, parent))
+    {
+      do
+        {
+          g_autoptr(GbTreeNode) node = NULL;
+
+          gtk_tree_model_get (model, &child, 0, &node, -1);
+
+          if (node != NULL)
+            {
+              if (filter->filter_func (filter->self, node, filter->filter_data))
+                return TRUE;
+
+              if (gb_tree_model_filter_recursive (model, &child, filter))
+                return TRUE;
+            }
+        }
+      while (gtk_tree_model_iter_next (model, &child));
+    }
+
+  return FALSE;
+}
+
+static gboolean
 gb_tree_model_filter_visible_func (GtkTreeModel *model,
                                    GtkTreeIter  *iter,
                                    gpointer      data)
@@ -1626,11 +1655,40 @@ gb_tree_model_filter_visible_func (GtkTreeModel *model,
   FilterFunc *filter = data;
   gboolean ret;
 
+  /*
+   * This is a rather complex situation.
+   *
+   * We might not match, but one of our children nodes might match.
+   * Furthering the issue, the children might still need to be built.
+   * For some cases, this could be really expensive (think file tree)
+   * but for other things, it could be cheap. If you are going to use
+   * a filter func for your tree, you probably should avoid being
+   * too lazy and ensure the nodes are available.
+   *
+   * Therefore, we will only check available nodes, and ignore the
+   * case where the children nodes need to be built.   *
+   *
+   * TODO: Another option would be to iteratively build the items after
+   *       the initial filter.
+   */
+
   gtk_tree_model_get (model, iter, 0, &node, -1);
   ret = filter->filter_func (filter->self, node, filter->filter_data);
   g_clear_object (&node);
 
-  return ret;
+  /*
+   * Short circuit if we already matched.
+   */
+  if (ret)
+    return TRUE;
+
+  /*
+   * If any of our children match, we should match.
+   */
+  if (gb_tree_model_filter_recursive (model, iter, filter))
+    return TRUE;
+
+  return FALSE;
 }
 
 /**
