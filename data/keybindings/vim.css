@@ -111,6 +111,8 @@
 {
   bind "0" { "append-to-count" (0)
              "set-mode" ("vim-normal-with-count", transient) };
+  bind "KP_0" { "append-to-count" (0)
+                "set-mode" ("vim-normal-with-count", transient) };
   bind "percent" { "movement" (line-percentage, 0, 1, 1)
                    "set-mode" ("vim-normal-with-count", transient) };
 }
@@ -137,6 +139,25 @@
              "set-mode" ("vim-normal-with-count", transient) };
   bind "9" { "append-to-count" (9)
              "set-mode" ("vim-normal-with-count", transient) };
+
+  bind "KP_1" { "append-to-count" (1)
+                "set-mode" ("vim-normal-with-count", transient) };
+  bind "KP_2" { "append-to-count" (2)
+                "set-mode" ("vim-normal-with-count", transient) };
+  bind "KP_3" { "append-to-count" (3)
+                "set-mode" ("vim-normal-with-count", transient) };
+  bind "KP_4" { "append-to-count" (4)
+                "set-mode" ("vim-normal-with-count", transient) };
+  bind "KP_5" { "append-to-count" (5)
+                "set-mode" ("vim-normal-with-count", transient) };
+  bind "KP_6" { "append-to-count" (6)
+                "set-mode" ("vim-normal-with-count", transient) };
+  bind "KP_7" { "append-to-count" (7)
+                "set-mode" ("vim-normal-with-count", transient) };
+  bind "KP_8" { "append-to-count" (8)
+                "set-mode" ("vim-normal-with-count", transient) };
+  bind "KP_9" { "append-to-count" (9)
+                "set-mode" ("vim-normal-with-count", transient) };
 
   bind "colon" { "action" ("win", "show-command-bar", "") };
 
@@ -333,6 +354,8 @@
   /* move to line offset of zero, and first non-whitespace char, end of line */
   bind "0" { "movement" (first-char, 0, 1, 0)
              "clear-count" () };
+  bind "KP_0" { "movement" (first-char, 0, 1, 0)
+                "clear-count" () };
   bind "asciicircum" { "movement" (first-nonspace-char, 0, 1, 0)
                        "clear-count" () };
   bind "dollar" { "movement" (last-char, 0, 1, 0)
@@ -533,6 +556,13 @@
              "copy-clipboard" ()
              "delete-selection" ()
              "end-macro" () };
+  bind "KP_0" { "begin-macro" ()
+                "set-mode" ("vim-insert", permanent)
+                "movement" (first-char, 1, 0, 0)
+                "copy-clipboard" ()
+                "delete-selection" ()
+                "end-macro" () };
+
   bind "<shift>asciicircum" { "begin-macro" ()
                               "set-mode" ("vim-insert", permanent)
                               "movement" (first-nonspace-char, 1, 1, 1)
@@ -776,6 +806,11 @@
              "copy-clipboard" ()
              "delete-selection" ()
              "end-macro" () };
+  bind "KP_0" { "begin-macro" ()
+                "movement" (first-char, 1, 0, 0)
+                "copy-clipboard" ()
+                "delete-selection" ()
+                "end-macro" () };
   bind "<shift>asciicircum" { "begin-macro" ()
                               "movement" (first-nonspace-char, 1, 1, 1)
                               "copy-clipboard" ()
@@ -1096,6 +1131,8 @@
 {
   bind "0" { "append-to-count" (0)
              "set-mode" ("vim-visual-with-count", transient) };
+  bind "KP_0" { "append-to-count" (0)
+                "set-mode" ("vim-visual-with-count", transient) };
   bind "percent" { "movement" (line-percentage, 1, 1, 1)
                    "set-mode" ("vim-visual-with-count", transient) };
 }
@@ -1204,6 +1241,7 @@
                 "set-mode" ("vim-normal", permanent) };
 
   bind "0" { "movement" (first-char, 1, 1, 0) };
+  bind "KP_0" { "movement" (first-char, 1, 1, 0) };
   bind "asciicircum" { "movement" (first-nonspace-char, 1, 0, 0) };
   bind "dollar" { "movement" (last-char, 1, 1, 0) };
   bind "bar" { "movement" (nth-char, 1, 1, 1) };
@@ -1266,6 +1304,8 @@
 {
   bind "0" { "append-to-count" (0)
              "set-mode" ("vim-visual-line-with-count", transient) };
+  bind "KP_0" { "append-to-count" (0)
+                "set-mode" ("vim-visual-line-with-count", transient) };
   bind "percent" { "movement" (line-percentage, 0, 1, 1)
                    "set-mode" ("vim-visual-line-with-count", transient) };
 }
