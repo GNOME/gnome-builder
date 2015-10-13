@@ -30,6 +30,7 @@ void _ide_source_view_apply_movement (IdeSourceView         *source_view,
                                       guint                  count,
                                       gunichar               command,
                                       gunichar               modifier,
+                                      gunichar               search_char,
                                       gint                  *target_offset);
 
 G_END_DECLS

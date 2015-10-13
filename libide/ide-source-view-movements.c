@@ -47,6 +47,7 @@ typedef struct
   gint                   count;                       /* Repeat count for movement */
   gunichar               command;                     /* Command that trigger some movements type. See , and ; in vim */
   gunichar               modifier;                    /* For forward/backward char search */
+  gunichar               search_char;                 /* For forward/backward char search according to fFtT vim modifier */
   guint                  extend_selection : 1;        /* If selection should be extended */
   guint                  exclusive : 1;               /* See ":help exclusive" in vim */
   guint                  ignore_select : 1;           /* Don't update selection after movement */
@@ -1241,6 +1242,88 @@ ide_source_view_movements_previous_match_modifier (Movement *mv)
     }
 }
 
+static gboolean
+find_char (gunichar ch,
+           gpointer data)
+{
+  gunichar ch_searched = GPOINTER_TO_UINT (data);
+
+  return (ch == ch_searched);
+}
+
+static void
+ide_source_view_movement_match_search_char (Movement *mv, gboolean is_next_direction)
+{
+  GtkTextIter insert;
+  GtkTextIter limit;
+  gboolean is_forward;
+  gboolean is_till;
+  gboolean is_inclusive_mode;
+  gboolean is_selection_positive;
+  const gchar *mode_name;
+
+  limit = insert = mv->insert;
+  is_forward = (mv->command == 'f' || mv->command == 't');
+  is_till = (mv->command == 't' || mv->command == 'T');
+
+  mode_name = _ide_source_view_get_mode_name (mv->self);
+  is_inclusive_mode = (g_str_has_prefix (mode_name, "vim-visual") ||
+                       g_str_has_prefix (mode_name, "vim-normal-c") ||
+                       g_str_has_prefix (mode_name, "vim-normal-d"));
+
+  is_selection_positive = (gtk_text_iter_compare (&insert, &mv->selection) >= 0);
+
+  if (mv->modifier == 0)
+    return;
+
+  if ((is_forward && is_next_direction) || (!is_forward && !is_next_direction))
+    {
+      /* We search to the right */
+      gtk_text_iter_forward_to_line_end (&limit);
+
+      if (is_till)
+        gtk_text_iter_forward_char (&insert);
+
+      if (is_inclusive_mode && is_selection_positive)
+        gtk_text_iter_backward_char (&insert);
+
+      if (gtk_text_iter_forward_find_char (&insert, find_char, GUINT_TO_POINTER (mv->modifier), &limit))
+        {
+          if (is_till)
+            gtk_text_iter_backward_char (&insert);
+
+          is_selection_positive = (gtk_text_iter_compare (&insert, &mv->selection) >= 0);
+          if (is_inclusive_mode && is_selection_positive)
+            gtk_text_iter_forward_char (&insert);
+
+          mv->insert = insert;
+        }
+    }
+  else
+    {
+      /* We search to the left */
+      gtk_text_iter_set_line_offset (&limit, 0);
+
+      if (is_till)
+        gtk_text_iter_backward_char (&insert);
+
+      if (is_inclusive_mode && is_selection_positive)
+        gtk_text_iter_backward_char (&insert);
+
+      if (gtk_text_iter_backward_find_char (&insert, find_char, GUINT_TO_POINTER (mv->modifier), &limit))
+        {
+          if (is_till)
+            gtk_text_iter_forward_char (&insert);
+
+          is_selection_positive = (gtk_text_iter_compare (&insert, &mv->selection) >= 0);
+          if (is_inclusive_mode && is_selection_positive)
+            gtk_text_iter_forward_char (&insert);
+
+          mv->insert = insert;
+        }
+    }
+}
+
 void
 _ide_source_view_apply_movement (IdeSourceView         *self,
                                  IdeSourceViewMovement  movement,
@@ -1249,6 +1332,7 @@ _ide_source_view_apply_movement (IdeSourceView         *self,
                                  guint                  count,
                                  gunichar               command,
                                  gunichar               modifier,
+                                 gunichar               search_char,
                                  gint                  *target_offset)
 {
   Movement mv = { 0 };
@@ -1505,6 +1589,18 @@ _ide_source_view_apply_movement (IdeSourceView         *self,
     case IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_MATCH_MODIFIER:
       for (i = MAX (1, mv.count); i > 0; i--)
         ide_source_view_movements_previous_match_modifier (&mv);
+      break;
+
+    case IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_MATCH_SEARCH_CHAR:
+      mv.modifier = search_char;
+      for (i = MAX (1, mv.count); i > 0; i--)
+        ide_source_view_movement_match_search_char (&mv, FALSE);
+      break;
+
+    case IDE_SOURCE_VIEW_MOVEMENT_NEXT_MATCH_SEARCH_CHAR:
+      mv.modifier = search_char;
+      for (i = MAX (1, mv.count); i > 0; i--)
+        ide_source_view_movement_match_search_char (&mv, TRUE);
       break;
 
     default:
