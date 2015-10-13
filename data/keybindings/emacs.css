@@ -48,6 +48,11 @@
 
 @binding-set builder-emacs-source-view
 {
+  bind "Escape" { "clear-search" ()
+                  "clear-modifier" ()
+                  "clear-selection" ()
+                  "clear-count" ()
+                  "clear-snippets" () };
   bind "<ctrl>x" { "set-mode" ("emacs-x", transient) };
   bind "<ctrl>underscore" { "undo" () };
   bind "<alt>x" { "action" ("win", "show-command-bar", "") };
