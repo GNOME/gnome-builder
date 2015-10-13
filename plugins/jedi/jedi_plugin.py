@@ -403,7 +403,7 @@ class JediCompletionProposal(Ide.CompletionItem, GtkSource.CompletionProposal):
         return ret
 
     def do_get_markup(self):
-        name = Ide.CompletionItem.fuzzy_highlight(self.completion.complete,
+        name = Ide.CompletionItem.fuzzy_highlight(self.completion.name,
                                                   self.provider.current_word_lower)
         parts = [name]
         if self.completion.real_type == 'function':
