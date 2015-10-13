@@ -196,7 +196,7 @@ gb_shortcuts_dialog_add_search_item (GbShortcutsDialog *self,
                     "title", &title,
                     NULL);
 
-      hash_key = g_strdup_printf ("%s-%s", title, hash_key);
+      hash_key = g_strdup_printf ("%s-%s", title, accelerator);
       if (g_hash_table_contains (priv->search_items_hash, hash_key))
         return;
 
@@ -222,7 +222,7 @@ gb_shortcuts_dialog_add_search_item (GbShortcutsDialog *self,
                     "title", &title,
                     NULL);
 
-      hash_key = g_strdup_printf ("%s-%s", title, hash_key);
+      hash_key = g_strdup_printf ("%s-%s", title, subtitle);
       if (g_hash_table_contains (priv->search_items_hash, hash_key))
         return;
 
