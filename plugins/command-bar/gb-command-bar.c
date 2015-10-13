@@ -20,6 +20,7 @@
 #include <ide.h>
 #include <libpeas/peas.h>
 
+#include "gb-application.h"
 #include "gb-command.h"
 #include "gb-command-bar-resources.h"
 #include "gb-command-bar.h"
@@ -76,6 +77,26 @@ enum {
 
 static guint gSignals [LAST_SIGNAL];
 
+static gboolean
+key_press_event_cb (GbWorkbench  *workbench,
+                    GdkEventKey  *event,
+                    GbCommandBar *self)
+{
+  if (event->keyval == GDK_KEY_colon)
+    {
+      GbApplication *application = GB_APPLICATION (g_application_get_default ());
+      const gchar *mode = gb_application_get_keybindings_mode (application);
+
+      if (g_strcmp0 ("vim", mode) == 0)
+        {
+          g_action_activate (G_ACTION (self->show_action), NULL);
+          return GDK_EVENT_STOP;
+        }
+    }
+
+  return GDK_EVENT_PROPAGATE;
+}
+
 static void
 gb_command_bar_load (GbWorkbenchAddin *addin,
                      GbWorkbench      *workbench)
@@ -106,6 +127,12 @@ gb_command_bar_load (GbWorkbenchAddin *addin,
                                      NULL);
 
   g_action_map_add_action (G_ACTION_MAP (self->workbench), G_ACTION (self->show_action));
+
+  g_signal_connect_object (workbench,
+                           "key-press-event",
+                           G_CALLBACK (key_press_event_cb),
+                           self,
+                           G_CONNECT_AFTER);
 
   gtk_widget_show (GTK_WIDGET (self));
 }
