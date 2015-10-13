@@ -399,6 +399,9 @@ class JediCompletionProposal(Ide.CompletionItem, GtkSource.CompletionProposal):
     def do_match(self, query, casefold):
         ret, priority = Ide.CompletionItem.fuzzy_match(self.completion.name,
                                                        self.provider.current_word_lower)
+        # Penalize words that start with __ like __eq__.
+        if self.completion.name.startswith('__'):
+            priority += 1000
         self.set_priority(priority)
         return ret
 
