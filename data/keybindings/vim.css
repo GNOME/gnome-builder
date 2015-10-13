@@ -279,19 +279,31 @@
                     "clear-count" () };
 
   /* find matching char */
-  bind "f" { "capture-modifier" ()
+  bind "f" { "save-command" ()
+             "capture-modifier" ()
+             "save-search-char" ()
              "movement" (next-match-modifier, 0, 1, 1)
              "clear-modifier" () };
-  bind "t" { "capture-modifier" ()
+  bind "t" { "save-command" ()
+             "capture-modifier" ()
+             "save-search-char" ()
              "movement" (next-match-modifier, 0, 1, 1)
              "movement" (previous-char, 0, 1, 0)
              "clear-modifier" () };
-  bind "<shift>f" { "capture-modifier" ()
+  bind "<shift>f" { "save-command" ()
+                    "capture-modifier" ()
+                    "save-search-char" ()
                     "movement" (previous-match-modifier, 0, 1, 1)
                     "clear-modifier" () };
-  bind "<shift>t" { "capture-modifier" ()
-                    "movement" (previous-match-modifier, 0, 0, 1)
+  bind "<shift>t" { "save-command" ()
+                    "capture-modifier" ()
+                    "save-search-char" ()
+                    "movement" (previous-match-modifier, 0, 1, 1)
                     "clear-modifier" () };
+  bind "comma" { "movement" (previous-match-search-char, 0, 0, 1)
+                 "clear-count" () };
+  bind "semicolon" { "movement" (next-match-search-char, 0, 0, 1)
+                     "clear-count" () };
 
   bind "n" { "move-search" (tab-forward, 0, 0, 1, 1, 0) };
   bind "<shift>n" { "move-search" (tab-backward, 0, 0, 0, 1, 0) };
@@ -549,7 +561,9 @@
              "delete-selection" () };
 
   bind "f" { "begin-macro" ()
+             "save-command" ()
              "capture-modifier" ()
+             "save-search-char" ()
              "set-mode" ("vim-insert", permanent)
              "movement" (next-match-modifier, 1, 0, 1)
              "copy-clipboard" ()
@@ -558,7 +572,9 @@
              "clear-modifier" () };
 
   bind "t" { "begin-macro" ()
+             "save-command" ()
              "capture-modifier" ()
+             "save-search-char" ()
              "set-mode" ("vim-insert", permanent)
              "movement" (next-match-modifier, 1, 1, 1)
              "copy-clipboard" ()
@@ -575,7 +591,20 @@
              "set-mode" ("vim-insert", permanent) };
 
   bind "<shift>f" { "begin-macro" ()
+                    "save-command" ()
                     "capture-modifier" ()
+                    "save-search-char" ()
+                    "set-mode" ("vim-insert", permanent)
+                    "movement" (previous-match-modifier, 1, 0, 1)
+                    "copy-clipboard" ()
+                    "selection-theatric" (shrink)
+                    "delete-selection" ()
+                    "clear-modifier" () };
+
+  bind "<shift>t" { "begin-macro" ()
+                    "save-command" ()
+                    "capture-modifier" ()
+                    "save-search-char" ()
                     "set-mode" ("vim-insert", permanent)
                     "movement" (previous-match-modifier, 1, 1, 1)
                     "copy-clipboard" ()
@@ -583,14 +612,21 @@
                     "delete-selection" ()
                     "clear-modifier" () };
 
-  bind "<shift>t" { "begin-macro" ()
-                    "capture-modifier" ()
-                    "set-mode" ("vim-insert", permanent)
-                    "movement" (previous-match-modifier, 1, 0, 1)
-                    "copy-clipboard" ()
-                    "selection-theatric" (shrink)
-                    "delete-selection" ()
-                    "clear-modifier" () };
+  bind "comma" { "begin-macro" ()
+                 "movement" (previous-match-search-char, 1, 0, 1)
+                 "set-mode" ("vim-insert", permanent)
+                 "copy-clipboard" ()
+                 "selection-theatric" (shrink)
+                 "delete-selection" ()
+                 "clear-count" () };
+
+  bind "semicolon" { "begin-macro" ()
+                     "movement" (next-match-search-char, 1, 0, 1)
+                     "set-mode" ("vim-insert", permanent)
+                     "copy-clipboard" ()
+                     "selection-theatric" (shrink)
+                     "delete-selection" ()
+                     "clear-count" () };
 }
 
 @binding-set builder-vim-source-view-normal-c-i
@@ -698,7 +734,9 @@
   bind "g" { "set-mode" ("vim-normal-d-g", transient) };
 
   bind "f" { "begin-macro" ()
+             "save-command" ()
              "capture-modifier" ()
+             "save-search-char" ()
              "movement" (next-match-modifier, 1, 0, 1)
              "copy-clipboard" ()
              "selection-theatric" (shrink)
@@ -706,7 +744,9 @@
              "clear-modifier" ()
              "end-macro" () };
   bind "t" { "begin-macro" ()
+             "save-command" ()
              "capture-modifier" ()
+             "save-search-char" ()
              "movement" (next-match-modifier, 1, 1, 1)
              "copy-clipboard" ()
              "selection-theatric" (shrink)
@@ -715,21 +755,41 @@
              "end-macro" () };
 
   bind "<shift>f" { "begin-macro" ()
+                    "save-command" ()
                     "capture-modifier" ()
-                    "movement" (previous-match-modifier, 1, 1, 1)
-                    "copy-clipboard" ()
-                    "selection-theatric" (shrink)
-                    "delete-selection" ()
-                    "clear-modifier" ()
-                    "end-macro" () };
-  bind "<shift>t" { "begin-macro" ()
-                    "capture-modifier" ()
+                    "save-search-char" ()
                     "movement" (previous-match-modifier, 1, 0, 1)
                     "copy-clipboard" ()
                     "selection-theatric" (shrink)
                     "delete-selection" ()
                     "clear-modifier" ()
                     "end-macro" () };
+  bind "<shift>t" { "begin-macro" ()
+                    "save-command" ()
+                    "capture-modifier" ()
+                    "save-search-char" ()
+                    "movement" (previous-match-modifier, 1, 1, 1)
+                    "copy-clipboard" ()
+                    "selection-theatric" (shrink)
+                    "delete-selection" ()
+                    "clear-modifier" ()
+                    "end-macro" () };
+  bind "comma" { "begin-macro" ()
+                 "movement" (previous-match-search-char, 1, 1, 1)
+                 "copy-clipboard" ()
+                 "selection-theatric" (shrink)
+                 "delete-selection" ()
+                 "clear-count" ()
+                 "end-macro" () };
+
+  bind "semicolon" { "begin-macro" ()
+                     "movement" (next-match-search-char, 1, 0, 1)
+                     "copy-clipboard" ()
+                     "selection-theatric" (shrink)
+                     "delete-selection" ()
+                     "clear-count" ()
+                     "end-macro" () };
+
 
   bind "d" { "begin-macro" ()
              "save-insert-mark" ()
@@ -1247,19 +1307,31 @@
   bind "g" { "set-mode" ("vim-visual-g", transient) };
   bind "z" { "set-mode" ("vim-visual-z", transient) };
 
-  bind "f" { "capture-modifier" ()
+  bind "f" { "save-command" ()
+             "capture-modifier" ()
+             "save-search-char" ()
              "movement" (next-match-modifier, 1, 0, 1)
              "clear-modifier" () };
-  bind "t" { "capture-modifier" ()
+  bind "t" { "save-command" ()
+             "capture-modifier" ()
+             "save-search-char" ()
              "movement" (next-match-modifier, 1, 1, 1)
              "clear-modifier" () };
 
-  bind "<shift>f" { "capture-modifier" ()
-                    "movement" (previous-match-modifier, 1, 1, 1)
-                    "clear-modifier" () };
-  bind "<shift>t" { "capture-modifier" ()
+  bind "<shift>f" { "save-command" ()
+                    "capture-modifier" ()
+                    "save-search-char" ()
                     "movement" (previous-match-modifier, 1, 0, 1)
                     "clear-modifier" () };
+  bind "<shift>t" { "save-command" ()
+                    "capture-modifier" ()
+                    "save-search-char" ()
+                    "movement" (previous-match-modifier, 1, 1, 1)
+                    "clear-modifier" () };
+  bind "comma" { "movement" (previous-match-search-char, 1, 0, 1)
+                 "clear-count" () };
+  bind "semicolon" { "movement" (next-match-search-char, 1, 0, 1)
+                     "clear-count" () };
 
   bind "asciitilde" { "selection-theatric" (expand)
                       "change-case" (toggle)

@@ -116,6 +116,8 @@ typedef enum
  * @IDE_SOURCE_VIEW_MOVEMENT_SCROLL_SCREEN_TOP: scroll until insert cursor is at screen top.
  * @IDE_SOURCE_VIEW_MOVEMENT_SCROLL_SCREEN_CENTER: scroll until insert cursor is at screen center.
  * @IDE_SOURCE_VIEW_MOVEMENT_SCROLL_SCREEN_BOTTOM: scroll until insert cursor is at screen bottom.
+ * @IDE_SOURCE_VIEW_MOVEMENT_NEXT_MATCH_SEARCH_CHAR: move to the next matching char according to f and t in vim.
+ * @IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_MATCH_SEARCH_CHAR: move to the previous matching char according to F and T in vim.
  *
  * The type of movement.
  *
@@ -190,6 +192,9 @@ typedef enum
 
   IDE_SOURCE_VIEW_MOVEMENT_NEXT_MATCH_MODIFIER,
   IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_MATCH_MODIFIER,
+
+  IDE_SOURCE_VIEW_MOVEMENT_NEXT_MATCH_SEARCH_CHAR,
+  IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_MATCH_SEARCH_CHAR,
 } IdeSourceViewMovement;
 
 struct _IdeSourceViewClass
@@ -252,6 +257,7 @@ struct _IdeSourceViewClass
   void (*request_documentation)       (IdeSourceView           *self);
   void (*restore_insert_mark)         (IdeSourceView           *self);
   void (*save_command)                (IdeSourceView           *self);
+  void (*save_search_char)            (IdeSourceView           *self);
   void (*save_insert_mark)            (IdeSourceView           *self);
   void (*selection_theatric)          (IdeSourceView           *self,
                                        IdeSourceViewTheatric    theatric);

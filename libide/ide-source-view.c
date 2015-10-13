@@ -118,6 +118,7 @@ typedef struct
   gint                         target_line_offset;
   gunichar                     command;
   gunichar                     modifier;
+  gunichar                     search_char;
   guint                        count;
 
   guint                        delayed_scroll_replay;
@@ -245,6 +246,7 @@ enum {
   RESTORE_INSERT_MARK,
   SAVE_COMMAND,
   SAVE_INSERT_MARK,
+  SAVE_SEARCH_CHAR,
   SELECTION_THEATRIC,
   SET_MODE,
   SET_OVERWRITE,
@@ -3158,8 +3160,13 @@ ide_source_view_real_movement (IdeSourceView         *self,
     priv->scrolling_to_scroll_mark = FALSE;
 
   _ide_source_view_apply_movement (self,
-                                   movement, extend_selection, exclusive,
-                                   count, priv->command, priv->modifier,
+                                   movement,
+                                   extend_selection,
+                                   exclusive,
+                                   count,
+                                   priv->command,
+                                   priv->modifier,
+                                   priv->search_char,
                                    &priv->target_line_offset);
 }
 
@@ -3571,6 +3578,17 @@ ide_source_view_real_save_command (IdeSourceView *self)
   event = gtk_get_current_event ();
   if (event && gdk_event_get_keyval (event, &keyval))
     priv->command = (gunichar)keyval;
+}
+
+static void
+ide_source_view_real_save_search_char (IdeSourceView *self)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+
+  if (priv->modifier)
+    priv->search_char = priv->modifier;
 }
 
 static void
@@ -5490,6 +5508,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
   klass->restore_insert_mark = ide_source_view_real_restore_insert_mark;
   klass->save_command = ide_source_view_real_save_command;
   klass->save_insert_mark = ide_source_view_real_save_insert_mark;
+  klass->save_search_char = ide_source_view_real_save_search_char;
   klass->selection_theatric = ide_source_view_real_selection_theatric;
   klass->set_mode = ide_source_view_real_set_mode;
   klass->set_overwrite = ide_source_view_real_set_overwrite;
@@ -5740,6 +5759,16 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                   G_STRUCT_OFFSET (IdeSourceViewClass, save_command),
+                  NULL, NULL,
+                  g_cclosure_marshal_VOID__VOID,
+                  G_TYPE_NONE,
+                  0);
+
+  gSignals [SAVE_SEARCH_CHAR] =
+    g_signal_new ("save-search-char",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                  G_STRUCT_OFFSET (IdeSourceViewClass, save_search_char),
                   NULL, NULL,
                   g_cclosure_marshal_VOID__VOID,
                   G_TYPE_NONE,
