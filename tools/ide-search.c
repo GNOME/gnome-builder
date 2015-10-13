@@ -65,7 +65,7 @@ on_completed_cb (IdeSearchContext *search_context,
 {
   gchar *gCount_str;
   gCount_str = g_strdup_printf ("%"G_GSIZE_FORMAT, gCount);
-  g_print (ngettext ("%s results\n", "%s results\n", gCount), gCount_str);
+  g_print (ngettext ("%s result\n", "%s results\n", gCount), gCount_str);
   g_free (gCount_str);
   g_object_unref (context);
   quit (gExitCode);
