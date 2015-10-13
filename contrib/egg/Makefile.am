@@ -19,6 +19,8 @@ libegg_private_la_SOURCES = \
 	egg-private.h \
 	egg-search-bar.c \
 	egg-search-bar.h \
+	egg-settings-flag-action.c \
+	egg-settings-flag-action.h \
 	egg-settings-sandwich.c \
 	egg-settings-sandwich.h \
 	egg-signal-group.c \
@@ -57,6 +59,8 @@ introspection_sources = \
 	egg-binding-group.h \
 	egg-search-bar.c \
 	egg-search-bar.h \
+	egg-settings-flag-action.c \
+	egg-settings-flag-action.h \
 	egg-settings-sandwich.c \
 	egg-settings-sandwich.h \
 	egg-signal-group.c \
