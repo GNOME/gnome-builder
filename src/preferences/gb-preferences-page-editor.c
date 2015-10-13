@@ -18,6 +18,7 @@
 
 #define G_LOG_DOMAIN "prefs-page-editor"
 
+#include <egg-settings-flag-action.h>
 #include <glib/gi18n.h>
 #include <gtksourceview/gtksource.h>
 
@@ -40,6 +41,12 @@ struct _GbPreferencesPageEditor
   GtkBox                            *scroll_off_container;
   GtkWidget                         *auto_hide_map_switch;
   GtkWidget                         *show_map_switch;
+  GtkCheckButton                    *draw_spaces_space;
+  GtkCheckButton                    *draw_spaces_tab;
+  GtkCheckButton                    *draw_spaces_newline;
+  GtkCheckButton                    *draw_spaces_nbsp;
+  GtkCheckButton                    *draw_spaces_leading;
+  GtkCheckButton                    *draw_spaces_trailing;
 };
 
 G_DEFINE_TYPE (GbPreferencesPageEditor, gb_preferences_page_editor, GB_TYPE_PREFERENCES_PAGE)
@@ -83,12 +90,33 @@ gb_preferences_page_editor_class_init (GbPreferencesPageEditorClass *klass)
   GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesPageEditor, scroll_off_spin);
   GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesPageEditor, show_diff_switch);
   GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesPageEditor, show_line_numbers_switch);
+  GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesPageEditor, draw_spaces_space);
+  GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesPageEditor, draw_spaces_tab);
+  GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesPageEditor, draw_spaces_newline);
+  GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesPageEditor, draw_spaces_nbsp);
+  GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesPageEditor, draw_spaces_leading);
+  GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesPageEditor, draw_spaces_trailing);
 }
 
 static void
 gb_preferences_page_editor_init (GbPreferencesPageEditor *self)
 {
+  static const gchar *keys[] = { "space", "tab", "newline", "nbsp", "trailing", "leading", NULL };
+  GActionMap *actions;
+  guint i;
+
   gtk_widget_init_template (GTK_WIDGET (self));
+
+  actions = G_ACTION_MAP (g_simple_action_group_new ());
+  gtk_widget_insert_action_group (GTK_WIDGET (self), "editor", G_ACTION_GROUP (actions));
+
+  for (i = 0; keys [i]; i++)
+    {
+      GAction *action;
+
+      action = egg_settings_flag_action_new ("org.gnome.builder.editor", "draw-spaces", keys [i]);
+      g_action_map_add_action (actions, action);
+    }
 
   gb_preferences_page_set_keywords_for_widget (GB_PREFERENCES_PAGE (self),
   /* To translators: This is a list of keywords for the preferences page */
@@ -131,5 +159,15 @@ gb_preferences_page_editor_init (GbPreferencesPageEditor *self)
                                                _("minimap mini map overview over view"),
                                                self->show_map_switch,
                                                self->auto_hide_map_switch,
+                                               NULL);
+  gb_preferences_page_set_keywords_for_widget (GB_PREFERENCES_PAGE (self),
+  /* To translators: This is a list of keywords for the preferences page */
+                                               _("draw spaces space tab newline nbsp non-breaking whitespace trailing leading"),
+                                               self->draw_spaces_space,
+                                               self->draw_spaces_tab,
+                                               self->draw_spaces_newline,
+                                               self->draw_spaces_nbsp,
+                                               self->draw_spaces_leading,
+                                               self->draw_spaces_trailing,
                                                NULL);
 }
