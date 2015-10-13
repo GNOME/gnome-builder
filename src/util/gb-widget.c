@@ -37,6 +37,9 @@ gb_widget_get_workbench (GtkWidget *widget)
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
 
+  if (GB_IS_WORKBENCH (widget))
+    return GB_WORKBENCH (widget);
+
   toplevel = gtk_widget_get_toplevel (widget);
 
   if (GB_IS_WORKBENCH (toplevel))
