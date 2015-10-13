@@ -1,4 +1,52 @@
 ==============
+Version 3.18.1
+==============
+
+Just like the 3.16 cycle, we are moving fast despite the dot release
+nature of this cycle. We have a lot to get done and we want our lovely
+users helping us test this young program.
+
+A short list of updates since 3.18.0:
+
+ • Initial support for Vala. Until we move this out of process, we do
+   expect that things are a bit leaky. This plugin is written in Vala
+   and requires libvala-0.30. It supports autocompletion, as-you-type
+   error highlighting, a symbol tree, and jump to definition. We would
+   love for the vala community continue helping make this plugin great.
+ • You can now write plugins in Vala. *.vapi are generated for libide-1.0
+   and gnome-builder-1.0.
+ • Autocompletion, in most scenarios, will be much faster. Check out
+   https://blogs.gnome.org/chergert/2015/10/05/post-guadec-catchup/ for
+   more information on how this was done.
+ • Most autocompletion engines now support fuzzy completion. This means
+   that "gtkwidshow" will match "gtk_widget_show".
+ • A few crashers were fixed.
+ • --enable-*-plugin now works correctly.
+ • Content type loading was fixed so that Makefile.am are no longer opened
+   by totem.
+ • Python jedi completion has been improved.
+ • Fix some coverity warnings.
+ • A new button has been added to the editor to jump to the next warning
+   or error.
+ • The C indenter is a bit more friendly to alternate coding styles.
+ • Reindent line support has landed (tab in emacs, == in vim, ctrl+alt+i
+   as default).
+ • A new font for the overview map has been enabled. It is called BuilderBlocks
+   and is a generic block font based on Tofu from Behdad Esfahbod.
+ • The ctags plugin can now defer tags generation to automakes `make ctags`.
+ • You can now draw marks for spaces, tabs, newlines, non-breaking whitespace,
+   trailing and leading spaces.
+ • Many translation updates including (French, Hungarian, Kazakh, Korean,
+   Spanish, Finnish, Esperanto, Czech, Italian, Brazilian Portuguese, Polish,
+   German, and Serbian).
+ • Improvements to the search workflow.
+ • Various vim and emacs compatability and stability improvements.
+
+
+Thanks to all of our more than 20 contributors since 3.18.0!
+
+
+==============
 Version 3.18.0
 ==============
 
