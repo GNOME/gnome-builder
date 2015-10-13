@@ -669,3 +669,11 @@ gb_application_get_started_at (GbApplication *self)
 
   return self->started_at;
 }
+
+const gchar *
+gb_application_get_keybindings_mode (GbApplication *self)
+{
+  g_return_val_if_fail (GB_IS_APPLICATION (self), NULL);
+
+  return gb_keybindings_get_mode (self->keybindings);
+}

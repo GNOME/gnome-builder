@@ -27,17 +27,18 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (GbApplication, gb_application, GB, APPLICATION, GtkApplication)
 
-GDateTime *gb_application_get_started_at       (GbApplication        *self);
-void       gb_application_open_project_async   (GbApplication        *self,
-                                                GFile                *file,
-                                                GPtrArray            *additional_files,
-                                                GCancellable         *cancellable,
-                                                GAsyncReadyCallback   callback,
-                                                gpointer              user_data);
-gboolean   gb_application_open_project_finish  (GbApplication        *self,
-                                                GAsyncResult         *result,
-                                                GError              **error);
-void       gb_application_show_projects_window (GbApplication        *self);
+GDateTime   *gb_application_get_started_at       (GbApplication        *self);
+void         gb_application_open_project_async   (GbApplication        *self,
+                                                  GFile                *file,
+                                                  GPtrArray            *additional_files,
+                                                  GCancellable         *cancellable,
+                                                  GAsyncReadyCallback   callback,
+                                                  gpointer              user_data);
+gboolean     gb_application_open_project_finish  (GbApplication        *self,
+                                                  GAsyncResult         *result,
+                                                  GError              **error);
+void         gb_application_show_projects_window (GbApplication        *self);
+const gchar *gb_application_get_keybindings_mode (GbApplication        *self);
 
 G_END_DECLS
 
