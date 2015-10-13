@@ -333,8 +333,8 @@
   /* move to line offset of zero, and first non-whitespace char, end of line */
   bind "0" { "movement" (first-char, 0, 1, 0)
              "clear-count" () };
-  bind "<shift>asciicircum" { "movement" (first-nonspace-char, 0, 1, 0)
-                              "clear-count" () };
+  bind "asciicircum" { "movement" (first-nonspace-char, 0, 1, 0)
+                       "clear-count" () };
   bind "dollar" { "movement" (last-char, 0, 1, 0)
                   "clear-count" () };
   bind "bar" { "movement" (nth-char, 0, 1, 1)
@@ -1184,7 +1184,7 @@
                 "set-mode" ("vim-normal", permanent) };
 
   bind "0" { "movement" (first-char, 1, 1, 0) };
-  bind "<shift>asciicircum" { "movement" (first-nonspace-char, 1, 0, 0) };
+  bind "asciicircum" { "movement" (first-nonspace-char, 1, 0, 0) };
   bind "dollar" { "movement" (last-char, 1, 1, 0) };
   bind "bar" { "movement" (nth-char, 1, 1, 1) };
 
