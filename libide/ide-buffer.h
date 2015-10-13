@@ -52,6 +52,7 @@ struct _IdeBufferClass
 
 gboolean            ide_buffer_get_busy                      (IdeBuffer            *self);
 gboolean            ide_buffer_get_changed_on_volume         (IdeBuffer            *self);
+gsize               ide_buffer_get_change_count              (IdeBuffer            *self);
 GBytes             *ide_buffer_get_content                   (IdeBuffer            *self);
 IdeContext         *ide_buffer_get_context                   (IdeBuffer            *self);
 IdeDiagnostic      *ide_buffer_get_diagnostic_at_iter        (IdeBuffer            *self,
