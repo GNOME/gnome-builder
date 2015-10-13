@@ -42,6 +42,9 @@ struct _SymbolTree
   GbTree         *tree;
   GtkSearchEntry *search_entry;
 
+  GbDocument     *last_document;
+  gsize           last_change_count;
+
   guint           refresh_tree_timeout;
 };
 
@@ -119,20 +122,25 @@ refresh_tree (SymbolTree *self)
   GtkWidget *active_view;
   GbWorkbench *workbench;
   GbDocument *document = NULL;
-  GbTreeNode *root;
+  gsize change_count = 0;
 
   g_assert (SYMBOL_IS_TREE (self));
 
   workbench = gb_widget_get_workbench (GTK_WIDGET (self));
 
   if ((active_view = gb_workbench_get_active_view (workbench)) && GB_IS_EDITOR_VIEW (active_view))
-    document = gb_view_get_document (GB_VIEW (active_view));
+    {
+      document = gb_view_get_document (GB_VIEW (active_view));
+      if (IDE_IS_BUFFER (document))
+        change_count = ide_buffer_get_change_count (IDE_BUFFER (document));
+    }
 
-  root = gb_tree_get_root (self->tree);
-
-  if ((GObject *)document != gb_tree_node_get_item (root))
+  if ((document != self->last_document) || (self->last_change_count < change_count))
     {
       ide_clear_source (&self->refresh_tree_timeout);
+
+      self->last_document = document;
+      self->last_change_count = change_count;
 
       /*
        * Clear the old tree items.
@@ -175,6 +183,7 @@ notify_active_view_cb (SymbolTree  *self,
   g_assert (GB_IS_WORKBENCH (workbench));
 
   refresh_tree (self);
+  gtk_entry_set_text (GTK_ENTRY (self->search_entry), "");
 }
 
 static void
