@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-10-13 20:13+0200\n"
-"PO-Revision-Date: 2015-10-13 20:14+0200\n"
+"POT-Creation-Date: 2015-10-14 00:38+0200\n"
+"PO-Revision-Date: 2015-10-14 00:39+0200\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <gnomepl@aviary.pl>\n"
 "Language: pl\n"
@@ -1502,7 +1502,7 @@ msgstr "Wiersz %u, kolumna %u"
 msgid "%u of %u"
 msgstr "%u z %u"
 
-#: ../src/editor/gb-editor-frame.c:664
+#: ../src/editor/gb-editor-frame.c:662
 msgid "Re_veal in Project Tree"
 msgstr "Odkry_wanie w drzewie projektu"
 
@@ -1689,7 +1689,10 @@ msgstr "Nie można odnaleźć dostawcy."
 #: ../src/search/gb-search-display-group.c:182
 #, c-format
 msgid "%s more"
-msgstr "Więcej: %s"
+msgid_plural "%s more"
+msgstr[0] "Więcej: %s"
+msgstr[1] "Więcej: %s"
+msgstr[2] "Więcej: %s"
 
 #: ../src/shortcuts/gb-shortcuts-dialog.c:937
 msgid "Search Shortcuts"
@@ -1742,8 +1745,11 @@ msgstr "Około rok temu"
 
 #: ../src/util/gb-glib.c:69
 #, c-format
-msgid "About %u years ago"
-msgstr "Około %u lat temu"
+msgid "About %u year ago"
+msgid_plural "About %u years ago"
+msgstr[0] "Około %u rok temu"
+msgstr[1] "Około %u lata temu"
+msgstr[2] "Około %u lat temu"
 
 #: ../src/workbench/gb-workbench-actions.c:162
 msgid "Open Document"
@@ -1895,8 +1901,11 @@ msgstr "— wykrywa projekty"
 
 #: ../tools/ide-search.c:68
 #, c-format
-msgid "%s results\n"
-msgstr "Wyniki: %s\n"
+msgid "%s result\n"
+msgid_plural "%s results\n"
+msgstr[0] "%s wynik\n"
+msgstr[1] "%s wyniki\n"
+msgstr[2] "%s wyników\n"
 
 #: ../tools/ide-search.c:120
 msgid "PROJECT_FILE [SEARCH TERMS...]"
