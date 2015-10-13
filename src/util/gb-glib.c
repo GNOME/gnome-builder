@@ -66,5 +66,5 @@ gb_date_time_format_for_display (GDateTime *self)
 
   years = MAX (2, diff / (60 * 60 * 24 * 365));
 
-  return g_strdup_printf (_("About %u years ago"), years);
+  return g_strdup_printf (ngettext ("About %u year ago", "About %u years ago", years), years);
 }
