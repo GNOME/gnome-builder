@@ -92,9 +92,6 @@ get_cached_symbol_tree_cb (GObject      *object,
                                               refresh_tree_timeout,
                                               self);
 
-  gb_tree_set_filter (self->tree, NULL, NULL, NULL);
-  gtk_entry_set_text (GTK_ENTRY (self->search_entry), "");
-
   root = g_object_new (GB_TYPE_TREE_NODE,
                        "item", symbol_tree,
                        NULL);
