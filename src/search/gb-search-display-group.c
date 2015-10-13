@@ -179,7 +179,7 @@ gb_search_display_group_set_count (GbSearchDisplayGroup *self,
   g_return_if_fail (GB_IS_SEARCH_DISPLAY_GROUP (self));
 
   count_str = g_strdup_printf ("%"G_GUINT64_FORMAT, count);
-  markup = g_strdup_printf (_("%s more"), count_str);
+  markup = g_strdup_printf (ngettext ("%s more", "%s more", count), count_str);
   gtk_label_set_label (self->more_label, markup);
   g_free (markup);
   g_free (count_str);
