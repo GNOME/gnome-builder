@@ -323,6 +323,7 @@ symbol_tree__search_entry_changed (SymbolTree     *self,
                           filter_symbols_cb,
                           spec,
                           (GDestroyNotify)ide_pattern_spec_unref);
+      gtk_tree_view_expand_all (GTK_TREE_VIEW (self->tree));
     }
 }
 
