@@ -56,6 +56,7 @@ struct _GdTaggedEntry {
 };
 
 enum {
+  SIGNAL_ACTION,
   SIGNAL_TAG_CLICKED,
   SIGNAL_TAG_BUTTON_CLICKED,
   LAST_SIGNAL
@@ -854,6 +855,83 @@ gd_tagged_entry_button_press_event (GtkWidget *widget,
 }
 
 static void
+activate_action (GtkWidget   *widget,
+                 const gchar *prefix,
+                 const gchar *action_name,
+                 GVariant    *parameter)
+{
+  GApplication *app;
+  GtkWidget *toplevel;
+  GActionGroup *group = NULL;
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (prefix);
+  g_return_if_fail (action_name);
+
+  g_print ("activate!\n");
+
+  app = g_application_get_default ();
+  toplevel = gtk_widget_get_toplevel (widget);
+
+  while ((group == NULL) && (widget != NULL))
+    {
+      group = gtk_widget_get_action_group (widget, prefix);
+      widget = gtk_widget_get_parent (widget);
+    }
+
+  if (!group && g_str_equal (prefix, "win") && G_IS_ACTION_GROUP (toplevel))
+    group = G_ACTION_GROUP (toplevel);
+
+  if (!group && g_str_equal (prefix, "app") && G_IS_ACTION_GROUP (app))
+    group = G_ACTION_GROUP (app);
+
+  if (group)
+    {
+      if (g_action_group_has_action (group, action_name))
+        {
+          g_print ("Activating %s.%s\n", prefix, action_name);
+          g_action_group_activate_action (group, action_name, parameter);
+          return;
+        }
+    }
+
+  if (parameter && g_variant_is_floating (parameter))
+    {
+      parameter = g_variant_ref_sink (parameter);
+      g_variant_unref (parameter);
+    }
+
+  g_warning ("Failed to resolve action %s.%s", prefix, action_name);
+}
+
+static void
+gd_tagged_entry_action (GdTaggedEntry *self,
+                        const gchar   *prefix,
+                        const gchar   *action_name,
+                        const gchar   *param)
+{
+  GVariant *variant = NULL;
+
+  g_print ("action!!!\n");
+
+  if (*param != 0)
+    {
+      g_autoptr(GError) error = NULL;
+
+      variant = g_variant_parse (NULL, param, NULL, NULL, &error);
+
+      if (variant == NULL)
+        {
+          g_warning ("can't parse keybinding parameters \"%s\": %s",
+                     param, error->message);
+          return;
+        }
+    }
+
+  activate_action (GTK_WIDGET (self), prefix, action_name, variant);
+}
+
+static void
 gd_tagged_entry_init (GdTaggedEntry *self)
 {
   self->button_visible = TRUE;
@@ -921,6 +999,14 @@ gd_tagged_entry_class_init (GdTaggedEntryClass *klass)
 
   eclass->get_text_area_size = gd_tagged_entry_get_text_area_size;
 
+  signals[SIGNAL_ACTION] =
+    g_signal_new_class_handler ("action",
+                                GD_TYPE_TAGGED_ENTRY,
+                                G_SIGNAL_ACTION | G_SIGNAL_RUN_LAST,
+                                G_CALLBACK (gd_tagged_entry_action),
+                                NULL, NULL, NULL,
+                                G_TYPE_NONE,
+                                3, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING);
   signals[SIGNAL_TAG_CLICKED] =
     g_signal_new ("tag-clicked",
                   GD_TYPE_TAGGED_ENTRY,
