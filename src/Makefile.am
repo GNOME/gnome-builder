@@ -320,12 +320,12 @@ Builder_1_0_gir_SCANNERFLAGS = \
 INTROSPECTION_GIRS += Builder-1.0.gir
 
 girdir = $(datadir)/gnome-builder/gir-1.0
-dist_gir_DATA = $(INTROSPECTION_GIRS)
+gir_DATA = $(INTROSPECTION_GIRS)
 
 typelibdir = $(pkglibdir)/girepository-1.0
 typelib_DATA = $(INTROSPECTION_GIRS:.gir=.typelib)
 
-CLEANFILES += $(dist_gir_DATA) $(typelib_DATA)
+CLEANFILES += $(gir_DATA) $(typelib_DATA)
 endif
 
 
@@ -340,7 +340,7 @@ gnome_builder_1_0_vapi_DEPS = libide-1.0 gio-2.0 gtk+-3.0 gtksourceview-3.0
 gnome_builder_1_0_vapi_VAPIDIRS = $(top_builddir)/libide
 gnome_builder_1_0_vapi_METADATADIRS = $(srcdir)
 gnome_builder_1_0_vapi_FILES = Builder-1.0.gir
-gnome_builder_1_0_vapi_GIRDIRS = $(top_srcdir)/libide
+gnome_builder_1_0_vapi_GIRDIRS = $(top_builddir)/libide
 
 gnome-builder-1.0.deps: Makefile
 	$(AM_V_GEN) echo $(gnome_builder_1_0_vapi_DEPS) | tr ' ' '\n' > $@
