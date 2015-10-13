@@ -527,6 +527,26 @@
              "copy-clipboard" ()
              "delete-selection" () };
 
+  bind "0" { "begin-macro" ()
+             "set-mode" ("vim-insert", permanent)
+             "movement" (first-char, 1, 0, 0)
+             "copy-clipboard" ()
+             "delete-selection" ()
+             "end-macro" () };
+  bind "<shift>asciicircum" { "begin-macro" ()
+                              "set-mode" ("vim-insert", permanent)
+                              "movement" (first-nonspace-char, 1, 1, 1)
+                              "copy-clipboard" ()
+                              "delete-selection" ()
+                              "end-macro" () };
+  bind "dollar" { "begin-macro" ()
+                  "set-mode" ("vim-insert", permanent)
+                  "movement" (line-end, 1, 1, 0)
+                  "copy-clipboard" ()
+                  "delete-selection" ()
+                  "end-macro" () };
+
+
   bind "f" { "begin-macro" ()
              "capture-modifier" ()
              "set-mode" ("vim-insert", permanent)
