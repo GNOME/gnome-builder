@@ -147,6 +147,17 @@
   bind "<ctrl>b" { "move-cursor" (display-lines, -1) };
 }
 
+@binding-set builder-emacs-editor-search
+{
+  bind "<ctrl>r" { "action" ("frame", "previous-search-result", "") };
+  bind "<ctrl>s" { "action" ("frame", "next-search-result", "") };
+}
+
+GbEditorFrame GtkFrame.gb-search-slider GdTaggedEntry {
+  gtk-key-bindings: builder-emacs-editor-search,
+                    builder-emacs-text-entry;
+}
+
 GtkEntry {
   gtk-key-bindings: builder-emacs-text-entry;
 }
