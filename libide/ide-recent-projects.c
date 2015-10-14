@@ -39,6 +39,8 @@ struct _IdeRecentProjects
   guint         discovered : 1;
 };
 
+#define MAX_PROJECT_INFOS 100
+
 static void list_model_iface_init (GListModelInterface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (IdeRecentProjects, ide_recent_projects, G_TYPE_OBJECT,
@@ -74,7 +76,10 @@ ide_recent_projects_added (IdeRecentProjects *self,
                                        (GCompareDataFunc)ide_project_info_compare,
                                        NULL);
       position = g_sequence_iter_get_position (iter);
-      g_list_model_items_changed (G_LIST_MODEL (self), position, 0, 1);
+      if (position > MAX_PROJECT_INFOS)
+        g_sequence_remove (iter);
+      else
+        g_list_model_items_changed (G_LIST_MODEL (self), position, 0, 1);
     }
 }
 
