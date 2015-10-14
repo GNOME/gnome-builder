@@ -20,6 +20,8 @@
 
 #include <glib/gi18n.h>
 
+#include "egg-counter.h"
+
 #include "gb-tree.h"
 #include "gb-tree-node.h"
 #include "gb-tree-private.h"
@@ -47,6 +49,7 @@ typedef struct
 } PopupRequest;
 
 G_DEFINE_TYPE (GbTreeNode, gb_tree_node, G_TYPE_INITIALLY_UNOWNED)
+EGG_DEFINE_COUNTER (instances, "GbTreeNode", "Instances", "Number of GbTreeNode instances")
 
 enum {
   PROP_0,
@@ -523,6 +526,8 @@ gb_tree_node_finalize (GObject *object)
     }
 
   G_OBJECT_CLASS (gb_tree_node_parent_class)->finalize (object);
+
+  EGG_COUNTER_DEC (instances);
 }
 
 static void
@@ -725,6 +730,8 @@ gb_tree_node_class_init (GbTreeNodeClass *klass)
 static void
 gb_tree_node_init (GbTreeNode *node)
 {
+  EGG_COUNTER_INC (instances);
+
   node->needs_build = TRUE;
 }
 
