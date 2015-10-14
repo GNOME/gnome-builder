@@ -391,13 +391,10 @@
                    "clear-selection" () };
 
   bind "p" { "begin-macro" ()
-             "save-insert-mark" ()
-             "paste-clipboard-extended" (1, 1, 1)
+             "paste-clipboard-extended" (1, 1, 0)
+             "movement" (previous-char, 0, 1, 0)
              "clear-count" ()
-             "restore-insert-mark" ()
-             "end-macro" ()
-             "movement" (next-line, 0, 0, 0)
-             "movement" (first-nonspace-char, 0, 1, 0) };
+             "end-macro" () };
   bind "<shift>p" { "begin-macro" ()
                     "paste-clipboard-extended" (1, 0, 1)
                     "clear-count" ()
