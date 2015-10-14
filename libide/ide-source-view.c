@@ -2947,7 +2947,8 @@ ide_source_view_real_paste_clipboard_extended (IdeSourceView *self,
       if (after_cursor)
         {
           gtk_text_buffer_get_iter_at_mark (buffer, &iter, insert);
-          gtk_text_iter_forward_char (&iter);
+          if (!gtk_text_iter_ends_line (&iter))
+            gtk_text_iter_forward_char (&iter);
           gtk_text_buffer_select_range (buffer, &iter, &iter);
         }
 
