@@ -863,29 +863,26 @@ _gb_tree_node_set_needs_build (GbTreeNode *self,
 void
 _gb_tree_node_add_dummy_child (GbTreeNode *self)
 {
-  GtkTreeModel *model;
+  GtkTreeStore *model;
   GbTreeNode *dummy;
   GtkTreeIter iter;
   GtkTreeIter parent;
 
   g_assert (GB_IS_TREE_NODE (self));
 
-  model = gtk_tree_view_get_model (GTK_TREE_VIEW (self->tree));
-
+  model = _gb_tree_get_store (self->tree);
   gb_tree_node_get_iter (self, &parent);
-
-  dummy = gb_tree_node_new ();
-  gtk_tree_store_append (GTK_TREE_STORE (model), &iter, &parent);
-  gtk_tree_store_set (GTK_TREE_STORE (model), &iter,
-                      0, g_object_ref_sink (dummy),
-                      -1);
+  dummy = g_object_ref_sink (gb_tree_node_new ());
+  gtk_tree_store_insert_with_values (model, &iter, &parent, -1,
+                                     0, dummy,
+                                     -1);
   g_object_unref (dummy);
 }
 
 void
 _gb_tree_node_remove_dummy_child (GbTreeNode *self)
 {
-  GtkTreeModel *model;
+  GtkTreeStore *model;
   GtkTreeIter iter;
   GtkTreeIter children;
 
@@ -894,14 +891,12 @@ _gb_tree_node_remove_dummy_child (GbTreeNode *self)
   if (self->parent == NULL)
     return;
 
-  model = gtk_tree_view_get_model (GTK_TREE_VIEW (self->tree));
+  model = _gb_tree_get_store (self->tree);
 
   if (gb_tree_node_get_iter (self, &iter) &&
-      gtk_tree_model_iter_children (model, &children, &iter))
+      gtk_tree_model_iter_children (GTK_TREE_MODEL (model), &children, &iter))
     {
-      while (gtk_tree_store_remove (GTK_TREE_STORE (model), &children))
-        {
-        }
+      while (gtk_tree_store_remove (model, &children)) { }
     }
 }
 
