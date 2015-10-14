@@ -371,6 +371,7 @@ ide_ctags_index_finalize (GObject *object)
   g_clear_object (&self->file);
   g_clear_pointer (&self->index, g_array_unref);
   g_clear_pointer (&self->buffer, g_bytes_unref);
+  g_clear_pointer (&self->path_root, g_free);
 
   G_OBJECT_CLASS (ide_ctags_index_parent_class)->finalize (object);
 
