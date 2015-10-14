@@ -1266,7 +1266,7 @@ ide_source_view_movement_match_search_char (Movement *mv, gboolean is_next_direc
   is_forward = (mv->command == 'f' || mv->command == 't');
   is_till = (mv->command == 't' || mv->command == 'T');
 
-  mode_name = _ide_source_view_get_mode_name (mv->self);
+  mode_name = ide_source_view_get_mode_name (mv->self);
   is_inclusive_mode = (g_str_has_prefix (mode_name, "vim-visual") ||
                        g_str_has_prefix (mode_name, "vim-normal-c") ||
                        g_str_has_prefix (mode_name, "vim-normal-d"));
