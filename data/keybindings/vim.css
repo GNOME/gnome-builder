@@ -396,7 +396,8 @@
              "clear-count" ()
              "end-macro" () };
   bind "<shift>p" { "begin-macro" ()
-                    "paste-clipboard-extended" (1, 0, 1)
+                    "paste-clipboard-extended" (1, 0, 0)
+                    "movement" (previous-char, 0, 1, 0)
                     "clear-count" ()
                     "end-macro" () };
 
