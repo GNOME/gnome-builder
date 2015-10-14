@@ -1630,7 +1630,7 @@ gb_tree_model_filter_recursive (GtkTreeModel *model,
 
           gtk_tree_model_get (model, &child, 0, &node, -1);
 
-          if (node != NULL)
+          if ((node != NULL) && !_gb_tree_node_get_needs_build (node))
             {
               if (filter->filter_func (filter->self, node, filter->filter_data))
                 return TRUE;
