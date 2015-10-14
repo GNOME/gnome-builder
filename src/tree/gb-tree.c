@@ -1737,3 +1737,13 @@ gb_tree_set_filter (GbTree           *self,
       g_clear_object (&filter);
     }
 }
+
+GtkTreeStore *
+_gb_tree_get_store (GbTree *self)
+{
+  GbTreePrivate *priv = gb_tree_get_instance_private (self);
+
+  g_return_val_if_fail (GB_IS_TREE (self), NULL);
+
+  return priv->store;
+}
