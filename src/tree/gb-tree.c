@@ -524,12 +524,10 @@ gb_tree_add (GbTree     *self,
       g_clear_pointer (&path, gtk_tree_path_free);
     }
 
-  if (prepend)
-    gtk_tree_store_prepend (priv->store, &iter, parentptr);
-  else
-    gtk_tree_store_append (priv->store, &iter, parentptr);
-
-  gtk_tree_store_set (priv->store, &iter, 0, child, -1);
+  gtk_tree_store_insert_with_values (priv->store, &iter, parentptr,
+                                     prepend ? 0 : -1,
+                                     0, child,
+                                     -1);
 
   if (node == priv->root)
     _gb_tree_build_node (self, child);
