@@ -1654,6 +1654,10 @@ gb_tree_model_filter_visible_func (GtkTreeModel *model,
   FilterFunc *filter = data;
   gboolean ret;
 
+  g_assert (filter != NULL);
+  g_assert (GB_IS_TREE (filter->self));
+  g_assert (filter->filter_func != NULL);
+
   /*
    * This is a rather complex situation.
    *
@@ -1719,6 +1723,7 @@ gb_tree_set_filter (GbTree           *self,
       GtkTreeModel *filter;
 
       data = g_new0 (FilterFunc, 1);
+      data->self = self;
       data->filter_func = filter_func;
       data->filter_data = filter_data;
       data->filter_data_destroy = filter_data_destroy;
