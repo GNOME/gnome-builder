@@ -1303,6 +1303,7 @@ gb_tree_set_root (GbTree     *self,
   if (priv->root != root)
     {
       GtkTreeSelection *selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (self));
+      GtkTreeModel *current;
 
       gtk_tree_selection_unselect_all (selection);
 
@@ -1313,6 +1314,10 @@ gb_tree_set_root (GbTree     *self,
           gtk_tree_store_clear (priv->store);
           g_clear_object (&priv->root);
         }
+
+      current = gtk_tree_view_get_model (GTK_TREE_VIEW (self));
+      if (GTK_IS_TREE_MODEL_FILTER (current))
+        gtk_tree_model_filter_clear_cache (GTK_TREE_MODEL_FILTER (current));
 
       if (root != NULL)
         {
