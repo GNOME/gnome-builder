@@ -295,8 +295,16 @@ filter_symbols_cb (GbTree     *tree,
                    gpointer    user_data)
 {
   IdePatternSpec *spec = user_data;
+  const gchar *text;
 
-  return ide_pattern_spec_match (spec, gb_tree_node_get_text (node));
+  g_assert (GB_IS_TREE (tree));
+  g_assert (GB_IS_TREE_NODE (node));
+  g_assert (spec != NULL);
+
+  if ((text = gb_tree_node_get_text (node)) != NULL)
+    return ide_pattern_spec_match (spec, text);
+
+  return NULL;
 }
 
 static void
