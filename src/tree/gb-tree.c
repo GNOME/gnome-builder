@@ -499,7 +499,7 @@ gb_tree_add (GbTree     *self,
 {
   GbTreePrivate *priv = gb_tree_get_instance_private (self);
   GtkTreePath *path;
-  GtkTreeIter *parentptr;
+  GtkTreeIter *parentptr = NULL;
   GtkTreeIter iter;
   GtkTreeIter parent;
 
@@ -512,11 +512,7 @@ gb_tree_add (GbTree     *self,
 
   g_object_ref_sink (child);
 
-  if (node == priv->root)
-    {
-      parentptr = NULL;
-    }
-  else
+  if (node != priv->root)
     {
       path = gb_tree_node_get_path (node);
       gtk_tree_model_get_iter (GTK_TREE_MODEL (priv->store), &parent, path);
