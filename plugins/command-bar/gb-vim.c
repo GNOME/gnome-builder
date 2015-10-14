@@ -876,6 +876,7 @@ invalid_request:
 }
 
 static const GbVimCommand vim_commands[] = {
+  { "bdelete",     gb_vim_command_quit, NULL },
   { "bnext",       gb_vim_command_bnext , NULL},
   { "bprevious",   gb_vim_command_bprevious, NULL },
   { "buffers",     gb_vim_command_buffers, NULL },
