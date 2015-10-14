@@ -16,3 +16,16 @@
 VteTerminal {
   gtk-key-bindings: builder-vte-terminal;
 }
+
+@binding-set builder-command-bar-entry
+{
+  bind "<ctrl>u" { "move-cursor" (paragraph-ends, -1, 0)
+                   "delete-from-cursor" (paragraph-ends, 1) };
+  bind "<ctrl>h" { "delete-from-cursor" (chars, -1) };
+  bind "<ctrl>w" { "delete-from-cursor" (word-ends, -1) };
+
+}
+
+GtkEntry.gb-command-bar-entry {
+  gtk-key-bindings: builder-command-bar-entry;
+}
