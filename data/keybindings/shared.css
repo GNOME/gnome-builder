@@ -19,6 +19,9 @@ VteTerminal {
 
 @binding-set builder-command-bar-entry
 {
+  bind "<ctrl>a" { "move-cursor" (paragraph-ends, -1, 0) };
+  bind "<ctrl>e" { "move-cursor" (paragraph-ends, 1, 0) };
+
   bind "<ctrl>u" { "move-cursor" (paragraph-ends, -1, 0)
                    "delete-from-cursor" (paragraph-ends, 1) };
   bind "<ctrl>h" { "delete-from-cursor" (chars, -1) };
