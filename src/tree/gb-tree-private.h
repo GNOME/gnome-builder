@@ -45,6 +45,7 @@ void         _gb_tree_remove                  (GbTree        *self,
 gboolean     _gb_tree_get_iter                (GbTree        *self,
                                                GbTreeNode    *node,
                                                GtkTreeIter   *iter);
+GtkTreeStore*_gb_tree_get_store               (GbTree        *self);
 
 void         _gb_tree_node_set_tree           (GbTreeNode    *node,
                                                GbTree        *tree);
