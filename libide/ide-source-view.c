@@ -2408,66 +2408,6 @@ ide_source_view_real_append_to_count (IdeSourceView *self,
 }
 
 static void
-ide_source_view_real_auto_indent (IdeSourceView *self)
-{
-  GtkTextView *text_view = (GtkTextView *)self;
-  IdeIndenter *indenter;
-  GtkTextBuffer *buffer;
-  GtkTextMark *insert;
-  GtkTextIter iter;
-
-  g_assert (IDE_IS_SOURCE_VIEW (self));
-
-  indenter = ide_source_view_get_indenter (self);
-  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
-  insert = gtk_text_buffer_get_insert (buffer);
-  gtk_text_buffer_get_iter_at_mark (buffer, &iter, insert);
-
-  if (!gtk_text_iter_is_start (&iter))
-    {
-      GdkEvent fake_event = { 0 };
-      GtkTextIter copy;
-      gchar str[8] = { 0 };
-      gunichar ch;
-
-      copy = iter;
-
-      gtk_text_iter_backward_char (&copy);
-      ch = gtk_text_iter_get_char (&copy);
-      g_unichar_to_utf8 (ch, str);
-
-      /*
-       * Now delete the character since the indenter will take care of
-       * reinserting it based on the GdkEventKey.
-       */
-      gtk_text_buffer_delete (buffer, &copy, &iter);
-
-      /*
-       * Now insert the last character (presumably something like \n) with a
-       * synthesized event that the indenter can deal with.
-       */
-      fake_event.key.type = GDK_KEY_PRESS;
-      fake_event.key.window = gtk_text_view_get_window (text_view, GTK_TEXT_WINDOW_TEXT);
-      fake_event.key.send_event = FALSE;
-      fake_event.key.time = GDK_CURRENT_TIME;
-      fake_event.key.state = 0;
-      fake_event.key.length = 1;
-      fake_event.key.string = str;
-      fake_event.key.hardware_keycode = 0;
-      fake_event.key.group = 0;
-      fake_event.key.is_modifier = 0;
-
-      /* Be nice during the common case */
-      if (*str == '\n')
-        fake_event.key.keyval = GDK_KEY_KP_Enter;
-      else
-        fake_event.key.keyval = gdk_unicode_to_keyval (ch);
-
-      ide_source_view_do_indent (self, &fake_event.key, indenter);
-    }
-}
-
-static void
 ide_source_view_real_capture_modifier (IdeSourceView *self)
 {
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
@@ -2654,94 +2594,6 @@ ide_source_view_real_indent_selection (IdeSourceView *self,
             gtk_source_view_indent_lines (source_view, &iter, &selection);
         }
     }
-}
-
-static void
-ide_source_view_real_insert_at_cursor_and_indent (IdeSourceView *self,
-                                                  const gchar   *str)
-{
-  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
-  GtkTextView *text_view = (GtkTextView *)self;
-  GtkTextBuffer *buffer;
-  IdeIndenter *indenter;
-  gboolean at_bottom;
-  GdkEvent fake_event = { 0 };
-  GString *gstr;
-
-  IDE_ENTRY;
-
-  g_return_if_fail (IDE_IS_SOURCE_VIEW (self));
-  g_return_if_fail (str);
-
-  buffer = gtk_text_view_get_buffer (text_view);
-
-  at_bottom = ide_source_view_get_at_bottom (self);
-
-  /*
-   * Ignore if there is nothing to do.
-   */
-  if (g_utf8_strlen (str, -1) == 0)
-    IDE_EXIT;
-
-  /*
-   * If we do not have an indenter registered, just go ahead and insert text.
-   */
-  indenter = ide_source_view_get_indenter (self);
-  if (!priv->auto_indent || (indenter == NULL))
-    {
-      g_signal_emit_by_name (self, "insert-at-cursor", str);
-      IDE_GOTO (maybe_scroll);
-    }
-
-  gtk_text_buffer_begin_user_action (buffer);
-
-  /*
-   * insert all but last character at once.
-   */
-  gstr = g_string_new (NULL);
-  for (; *str && *g_utf8_next_char (str); str = g_utf8_next_char (str))
-    g_string_append_unichar (gstr, g_utf8_get_char (str));
-  if (gstr->len)
-    g_signal_emit_by_name (self, "insert-at-cursor", gstr->str);
-  g_string_free (gstr, TRUE);
-
-  /*
-   * Sanity check.
-   */
-  g_assert (str != NULL);
-  g_assert (*str != '\0');
-
-  /*
-   * Now insert the last character (presumably something like \n) with a
-   * synthesized event that the indenter can deal with.
-   */
-  fake_event.key.type = GDK_KEY_PRESS;
-  fake_event.key.window = gtk_text_view_get_window (text_view, GTK_TEXT_WINDOW_TEXT);
-  fake_event.key.send_event = FALSE;
-  fake_event.key.time = GDK_CURRENT_TIME;
-  fake_event.key.state = 0;
-  fake_event.key.length = 1;
-  fake_event.key.string = (gchar *)str;
-  fake_event.key.hardware_keycode = 0;
-  fake_event.key.group = 0;
-  fake_event.key.is_modifier = 0;
-
-  /* Be nice during the common case */
-  if (*str == '\n')
-    fake_event.key.keyval = GDK_KEY_KP_Enter;
-  else
-    fake_event.key.keyval = gdk_unicode_to_keyval (g_utf8_get_char (str));
-
-  ide_source_view_do_indent (self, &fake_event.key, indenter);
-
-  gtk_text_buffer_end_user_action (buffer);
-
-maybe_scroll:
-  ide_source_view_scroll_mark_onscreen (self, gtk_text_buffer_get_insert (buffer), FALSE, 0, 0);
-  if (at_bottom)
-    ide_source_view_scroll_to_bottom (self);
-
-  IDE_EXIT;
 }
 
 static void
@@ -5477,7 +5329,6 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
 
   klass->action = ide_source_view_real_action;
   klass->append_to_count = ide_source_view_real_append_to_count;
-  klass->auto_indent = ide_source_view_real_auto_indent;
   klass->begin_macro = ide_source_view_real_begin_macro;
   klass->capture_modifier = ide_source_view_real_capture_modifier;
   klass->clear_count = ide_source_view_real_clear_count;
@@ -5493,7 +5344,6 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
   klass->hide_completion = ide_source_view_real_hide_completion;
   klass->increase_font_size = ide_source_view_real_increase_font_size;
   klass->indent_selection = ide_source_view_real_indent_selection;
-  klass->insert_at_cursor_and_indent = ide_source_view_real_insert_at_cursor_and_indent;
   klass->insert_modifier = ide_source_view_real_insert_modifier;
   klass->jump = ide_source_view_real_jump;
   klass->move_error = ide_source_view_real_move_error;
@@ -5708,24 +5558,6 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   G_TYPE_NONE,
                   1,
                   G_TYPE_INT);
-
-  /**
-   * IdeSourceView::auto-indent:
-   *
-   * Requests that the auto-indenter perform an indent request using the last
-   * inserted character. For example, if on the first character of a line, the
-   * last inserted character would be a newline and therefore "\n".
-   *
-   * If on the first character of the buffer, this signal will do nothing.
-   */
-  gSignals [AUTO_INDENT] =
-    g_signal_new ("auto-indent",
-                  G_TYPE_FROM_CLASS (klass),
-                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
-                  G_STRUCT_OFFSET (IdeSourceViewClass, auto_indent),
-                  NULL, NULL, NULL,
-                  G_TYPE_NONE,
-                  0);
 
   /**
    * IdeSourceView::begin-macro:
@@ -5944,16 +5776,6 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   G_TYPE_NONE,
                   1,
                   G_TYPE_INT);
-
-  gSignals [INSERT_AT_CURSOR_AND_INDENT] =
-    g_signal_new ("insert-at-cursor-and-indent",
-                  G_TYPE_FROM_CLASS (klass),
-                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
-                  G_STRUCT_OFFSET (IdeSourceViewClass, insert_at_cursor_and_indent),
-                  NULL, NULL, NULL,
-                  G_TYPE_NONE,
-                  1,
-                  G_TYPE_STRING);
 
   /**
    * IdeSourceView::insert-modifier:

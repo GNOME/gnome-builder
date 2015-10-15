@@ -617,7 +617,7 @@
              "movement" (last-char, 1, 0, 0)
              "copy-clipboard" ()
              "delete-selection" ()
-             "auto-indent" ()
+             "reindent" ()
              "set-mode" ("vim-insert", permanent) };
 
   bind "<shift>f" { "begin-macro" ()
