@@ -39,8 +39,6 @@ typedef enum
   GB_VIEW_GRID_SPLIT_MOVE_RIGHT = 4,
 } GbViewGridSplit;
 
-GType gb_view_stack_split_get_type (void);
-
 G_END_DECLS
 
 #endif /* GB_VIEW_STACK_SPLIT_H */

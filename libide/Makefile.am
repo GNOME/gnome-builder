@@ -240,6 +240,7 @@ libide_1_0_la_SOURCES = \
 	util/ide-gdk.h \
 	util/ide-line-reader.c \
 	util/ide-line-reader.h \
+	util/ide-list-inline.h \
 	util/ide-pango.c \
 	util/ide-pango.h \
 	util/ide-rgba.c \
@@ -409,7 +410,7 @@ libide_1_0_vapi_FILES = Ide-1.0.gir
 libide-1.0.deps: Makefile
 	$(AM_V_GEN) echo $(libide_1_0_vapi_DEPS) | tr ' ' '\n' > $@
 
-vapidir = $(VAPIGEN_VAPIDIR)
+vapidir = $(datadir)/gnome-builder/vapi
 vapi_DATA = $(VAPIGEN_VAPIS) $(VAPIGEN_VAPIS:.vapi=.deps)
 
 EXTRA_DIST += libide-1.0.deps

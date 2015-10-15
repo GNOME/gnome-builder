@@ -9,6 +9,7 @@ dist_plugin_DATA = clang.plugin
 libclang_plugin_la_SOURCES = \
 	ide-clang-completion-item.c \
 	ide-clang-completion-item.h \
+	ide-clang-completion-item-private.h \
 	ide-clang-completion-provider.c \
 	ide-clang-completion-provider.h \
 	ide-clang-diagnostic-provider.c \
