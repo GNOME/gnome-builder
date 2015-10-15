@@ -63,12 +63,25 @@ main (int argc,
     {
       FuzzyMatch *m = &g_array_index (ar, FuzzyMatch, i);
 
-      g_print ("%0.3lf: %s\n", m->score, m->key);
+      g_print ("%0.3lf: (%d): %s\n", m->score, m->id, m->key);
     }
 
   g_print ("%d matches\n", ar->len);
 
+  g_print ("Testing removal\n");
+
+  for (guint i = 0; i < ar->len; i++)
+    {
+      FuzzyMatch *m = &g_array_index (ar, FuzzyMatch, i);
+      fuzzy_remove (fuzzy, m->key);
+    }
+
   g_array_unref (ar);
+
+  ar = fuzzy_match (fuzzy, param, 0);
+  g_assert (ar == NULL || ar->len == 0);
+  g_clear_pointer (&ar, g_array_unref);
+  g_print ("success.\n");
 
   fuzzy_unref (fuzzy);
 

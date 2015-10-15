@@ -40,6 +40,7 @@ struct _Fuzzy
   GArray         *id_to_text_offset;
   GPtrArray      *id_to_value;
   GHashTable     *char_tables;
+  GHashTable     *removed;
   guint           in_bulk_insert : 1;
   guint           case_sensitive : 1;
 };
@@ -127,6 +128,7 @@ fuzzy_new (gboolean case_sensitive)
   fuzzy->id_to_text_offset = g_array_new (FALSE, FALSE, sizeof (gsize));
   fuzzy->char_tables = g_hash_table_new_full (NULL, NULL, NULL, (GDestroyNotify)g_array_unref);
   fuzzy->case_sensitive = case_sensitive;
+  fuzzy->removed = g_hash_table_new (g_direct_hash, g_direct_equal);
 
   return fuzzy;
 }
@@ -309,6 +311,9 @@ fuzzy_unref (Fuzzy *fuzzy)
       g_hash_table_unref (fuzzy->char_tables);
       fuzzy->char_tables = NULL;
 
+      g_hash_table_unref (fuzzy->removed);
+      fuzzy->removed = NULL;
+
       g_slice_free (Fuzzy, fuzzy);
     }
 }
@@ -471,9 +476,15 @@ fuzzy_match (Fuzzy       *fuzzy,
 
   while (g_hash_table_iter_next (&iter, &key, &value))
     {
-      match.key = fuzzy_get_string (fuzzy, GPOINTER_TO_INT (key));
+      /* Ignore keys that have a tombstone record. */
+      if (g_hash_table_contains (fuzzy->removed, key))
+        continue;
+
+      match.id = GPOINTER_TO_INT (key);
+      match.key = fuzzy_get_string (fuzzy, match.id);
       match.score = 1.0 / (strlen (match.key) + GPOINTER_TO_INT (value));
-      match.value = g_ptr_array_index (fuzzy->id_to_value, GPOINTER_TO_INT (key));
+      match.value = g_ptr_array_index (fuzzy->id_to_value, match.id);
+
       g_array_append_val (matches, match);
     }
 
@@ -513,4 +524,33 @@ fuzzy_contains (Fuzzy       *fuzzy,
   g_clear_pointer (&ar, g_array_unref);
 
   return ret;
+}
+
+void
+fuzzy_remove (Fuzzy       *fuzzy,
+              const gchar *key)
+{
+  GArray *ar;
+
+  g_return_if_fail (fuzzy != NULL);
+
+  if (!key || !*key)
+    return;
+
+  ar = fuzzy_match (fuzzy, key, 1);
+
+  if (ar != NULL && ar->len > 0)
+    {
+      guint i;
+
+      for (i = 0; i < ar->len; i++)
+        {
+          FuzzyMatch *match = &g_array_index (ar, FuzzyMatch, i);
+
+          if (g_strcmp0 (match->key, key) == 0)
+            g_hash_table_insert (fuzzy->removed, GINT_TO_POINTER (match->id), NULL);
+        }
+    }
+
+  g_clear_pointer (&ar, g_array_unref);
 }

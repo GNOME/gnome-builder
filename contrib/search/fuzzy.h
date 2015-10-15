@@ -31,6 +31,7 @@ struct _FuzzyMatch
    const gchar *key;
    gpointer     value;
    gfloat       score;
+   guint        id;
 };
 
 Fuzzy     *fuzzy_new                (gboolean        case_sensitive);
@@ -48,6 +49,8 @@ void       fuzzy_insert             (Fuzzy          *fuzzy,
 GArray    *fuzzy_match              (Fuzzy          *fuzzy,
                                      const gchar    *needle,
                                      gsize           max_matches);
+void       fuzzy_remove             (Fuzzy          *fuzzy,
+                                     const gchar    *key);
 Fuzzy     *fuzzy_ref                (Fuzzy          *fuzzy);
 void       fuzzy_unref              (Fuzzy          *fuzzy);
 
