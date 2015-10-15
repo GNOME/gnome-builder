@@ -83,7 +83,7 @@ namespace Ide
 			                           line,
 			                           unsaved_files,
 			                           this,
-			                           null,
+			                           cancellable,
 			                           (obj,res) => {
 				int res_line = -1;
 				int res_column = -1;
