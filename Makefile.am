@@ -1,6 +1,6 @@
 SUBDIRS = . build contrib data libide src plugins po tools tests doc
 
-pkgconfigdir = $(libdir)/pkgconfig
+pkgconfigdir = $(libdir)/gnome-builder/pkgconfig
 pkgconfig_DATA = $(top_builddir)/data/libide-1.0.pc
 
 INTLTOOL_FILES = \
