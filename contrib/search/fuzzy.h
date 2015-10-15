@@ -40,6 +40,8 @@ void       fuzzy_set_free_func      (Fuzzy          *fuzzy,
                                      GDestroyNotify  free_func);
 void       fuzzy_begin_bulk_insert  (Fuzzy          *fuzzy);
 void       fuzzy_end_bulk_insert    (Fuzzy          *fuzzy);
+gboolean   fuzzy_contains           (Fuzzy          *fuzzy,
+                                     const gchar    *key);
 void       fuzzy_insert             (Fuzzy          *fuzzy,
                                      const gchar    *key,
                                      gpointer        value);

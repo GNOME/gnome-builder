@@ -232,7 +232,7 @@ fuzzy_insert (Fuzzy       *fuzzy,
   gsize offset;
   guint id;
 
-  if (G_UNLIKELY (!*key || (fuzzy->id_to_text_offset->len == G_MAXUINT)))
+  if (G_UNLIKELY (!key || !*key || (fuzzy->id_to_text_offset->len == G_MAXUINT)))
     return;
 
   if (!fuzzy->case_sensitive)
@@ -295,7 +295,7 @@ fuzzy_unref (Fuzzy *fuzzy)
   g_return_if_fail (fuzzy);
   g_return_if_fail (fuzzy->ref_count > 0);
 
-  if (g_atomic_int_dec_and_test (&fuzzy->ref_count))
+  if (G_UNLIKELY (g_atomic_int_dec_and_test (&fuzzy->ref_count)))
     {
       g_byte_array_unref (fuzzy->heap);
       fuzzy->heap = NULL;
@@ -497,4 +497,20 @@ cleanup:
   g_clear_pointer (&lookup.matches, g_hash_table_unref);
 
   return matches;
+}
+
+gboolean
+fuzzy_contains (Fuzzy       *fuzzy,
+                const gchar *key)
+{
+  GArray *ar;
+  gboolean ret;
+
+  g_return_val_if_fail (fuzzy != NULL, FALSE);
+
+  ar = fuzzy_match (fuzzy, key, 1);
+  ret = (ar != NULL) && (ar->len > 0);
+  g_clear_pointer (&ar, g_array_unref);
+
+  return ret;
 }
