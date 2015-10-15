@@ -41,6 +41,9 @@ A short list of updates since 3.18.0:
    German, and Serbian).
  • Improvements to the search workflow.
  • Various vim and emacs compatability and stability improvements.
+ • Jedi completion proposals now show the correct word and lower probability
+   of functions that start with __.
+ • Symbol tree panel stability improvements.
 
 
 Thanks to all of our more than 20 contributors since 3.18.0!
