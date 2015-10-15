@@ -88,3 +88,56 @@ ide_gdk_synthesize_event_key (GdkWindow *window,
 
   return &ev->key;
 }
+
+GdkEventKey *
+ide_gdk_synthesize_event_keyval (GdkWindow *window,
+                                 guint      keyval)
+{
+  GdkDisplay *display;
+  GdkDeviceManager *device_manager;
+  GdkDevice *client_pointer;
+  GdkEvent *ev;
+  GdkKeymapKey *keys = NULL;
+  gint n_keys = 0;
+  gchar str[8] = { 0 };
+  gunichar ch;
+
+  g_assert (window != NULL);
+  g_assert (GDK_IS_WINDOW (window));
+
+  ch = gdk_keyval_to_unicode (keyval);
+  g_unichar_to_utf8 (ch, str);
+
+  ev = gdk_event_new (GDK_KEY_PRESS);
+  ev->key.window = g_object_ref (window);
+  ev->key.send_event = TRUE;
+  ev->key.time = gtk_get_current_event_time ();
+  ev->key.state = 0;
+  ev->key.hardware_keycode = 0;
+  ev->key.group = 0;
+  ev->key.is_modifier = 0;
+  ev->key.keyval = keyval;
+  ev->key.string = g_strdup (str);
+  ev->key.length = strlen (str);
+
+  gdk_keymap_get_entries_for_keyval (gdk_keymap_get_default (),
+                                     ev->key.keyval,
+                                     &keys,
+                                     &n_keys);
+
+  if (n_keys > 0)
+    {
+      ev->key.hardware_keycode = keys [0].keycode;
+      ev->key.group = keys [0].group;
+      if (keys [0].level == 1)
+        ev->key.state |= GDK_SHIFT_MASK;
+      g_free (keys);
+    }
+
+  display = gdk_window_get_display (ev->any.window);
+  device_manager = gdk_display_get_device_manager (display);
+  client_pointer = gdk_device_manager_get_client_pointer (device_manager);
+  gdk_event_set_device (ev, gdk_device_get_associated_device (client_pointer));
+
+  return &ev->key;
+}

@@ -23,8 +23,10 @@
 
 G_BEGIN_DECLS
 
-GdkEventKey *ide_gdk_synthesize_event_key (GdkWindow *window,
-                                           gunichar   ch);
+GdkEventKey *ide_gdk_synthesize_event_key    (GdkWindow *window,
+                                              gunichar   ch);
+GdkEventKey *ide_gdk_synthesize_event_keyval (GdkWindow *window,
+                                              guint      keyval);
 
 G_END_DECLS
 
