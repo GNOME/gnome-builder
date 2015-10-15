@@ -22,6 +22,7 @@
 #include "gb-plugins.h"
 #include "gb-resources.h"
 #include "test-helper.h"
+#include "util/ide-gdk.h"
 
 typedef void (*VimTestFunc) (IdeContext *context,
                              GtkWidget  *widget);
@@ -117,77 +118,6 @@ run_test (const gchar *path,
   gtk_main ();
 }
 
-static GdkEventKey *
-synthesize_event (GtkTextView *text_view,
-                  gunichar     ch)
-{
-  GdkDisplay *display;
-  GdkDeviceManager *device_manager;
-  GdkDevice *client_pointer;
-  GdkWindow *window;
-  GdkEvent *ev;
-  GdkKeymapKey *keys = NULL;
-  gint n_keys = 0;
-  gchar str[8] = { 0 };
-
-  window = gtk_text_view_get_window (text_view, GTK_TEXT_WINDOW_TEXT);
-  g_assert (window != NULL);
-  g_assert (GDK_IS_WINDOW (window));
-
-  g_unichar_to_utf8 (ch, str);
-
-  ev = gdk_event_new (GDK_KEY_PRESS);
-  ev->key.window = g_object_ref (window);
-  ev->key.send_event = TRUE;
-  ev->key.time = gtk_get_current_event_time ();
-  ev->key.state = 0;
-  ev->key.hardware_keycode = 0;
-  ev->key.group = 0;
-  ev->key.is_modifier = 0;
-
-  switch (ch)
-    {
-    case '\n':
-      ev->key.keyval = GDK_KEY_Return;
-      ev->key.string = g_strdup ("\n");
-      ev->key.length = 1;
-      break;
-
-    case '\e':
-      ev->key.keyval = GDK_KEY_Escape;
-      ev->key.string = g_strdup ("");
-      ev->key.length = 0;
-      break;
-
-    default:
-      ev->key.keyval = gdk_unicode_to_keyval (ch);
-      ev->key.length = strlen (str);
-      ev->key.string = g_strdup (str);
-      break;
-    }
-
-  gdk_keymap_get_entries_for_keyval (gdk_keymap_get_default (),
-                                     ev->key.keyval,
-                                     &keys,
-                                     &n_keys);
-
-  if (n_keys > 0)
-    {
-      ev->key.hardware_keycode = keys [0].keycode;
-      ev->key.group = keys [0].group;
-      if (keys [0].level == 1)
-        ev->key.state |= GDK_SHIFT_MASK;
-      g_free (keys);
-    }
-
-  display = gdk_window_get_display (ev->any.window);
-  device_manager = gdk_display_get_device_manager (display);
-  client_pointer = gdk_device_manager_get_client_pointer (device_manager);
-  gdk_event_set_device (ev, gdk_device_get_associated_device (client_pointer));
-
-  return &ev->key;
-}
-
 /*
  * Converts the input_chars into GdkEventKeys and synthesizes them to
  * the widget. Then ensures that we get the proper string back out.
@@ -202,11 +132,15 @@ assert_keypress_equal (GtkWidget   *widget,
   GtkTextBuffer *buffer;
   GtkTextIter begin;
   GtkTextIter end;
+  GdkWindow *window;
 
   g_assert (GTK_IS_TEXT_VIEW (widget));
 
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (widget));
   g_assert (GTK_IS_TEXT_BUFFER (buffer));
+
+  window = gtk_text_view_get_window (text_view, GTK_TEXT_WINDOW_TEXT);
+  g_assert (GDK_IS_WINDOW (window));
 
   for (; *input_chars; input_chars = g_utf8_next_char (input_chars))
     {
@@ -216,7 +150,7 @@ assert_keypress_equal (GtkWidget   *widget,
       while (gtk_events_pending ())
         gtk_main_iteration ();
 
-      event = synthesize_event (text_view, ch);
+      event = ide_gdk_synthesize_event_key (window, ch);
       gtk_main_do_event ((GdkEvent *)event);
       gdk_event_free ((GdkEvent *)event);
     }
