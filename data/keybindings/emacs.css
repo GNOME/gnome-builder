@@ -52,7 +52,8 @@
                   "clear-modifier" ()
                   "clear-selection" ()
                   "clear-count" ()
-                  "clear-snippets" () };
+                  "clear-snippets" ()
+                  "hide-completion" () };
   bind "<ctrl>x" { "set-mode" ("emacs-x", transient) };
   bind "<ctrl>underscore" { "undo" () };
   bind "<alt>x" { "action" ("win", "show-command-bar", "") };

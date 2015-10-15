@@ -83,12 +83,14 @@
                   "clear-count" ()
                   "clear-selection" ()
                   "clear-snippets" ()
+                  "hide-completion" ()
                   "set-mode" ("vim-normal", permanent) };
   bind "<ctrl>bracketleft" { "end-macro" ()
                              "set-overwrite" (0)
                              "clear-count" ()
                              "clear-selection" ()
                              "clear-snippets" ()
+                             "hide-completion" ()
                              "set-mode" ("vim-normal", permanent) };
 
   bind "<ctrl>comma" { "action" ("app", "preferences", "") };
@@ -1174,6 +1176,7 @@
                   "clear-count" ()
                   "clear-selection" ()
                   "clear-snippets" ()
+                  "hide-completion" ()
                   "movement" (previous-char, 0, 1, 0)
                   "set-mode" ("vim-normal", permanent) };
   bind "<ctrl>bracketleft" { "end-macro" ()
@@ -1181,6 +1184,7 @@
                              "clear-count" ()
                              "clear-selection" ()
                              "clear-snippets" ()
+                             "hide-completion" ()
                              "movement" (previous-char, 0, 1, 0)
                              "set-mode" ("vim-normal", permanent) };
 }
