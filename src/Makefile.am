@@ -34,10 +34,13 @@ libgnome_builder_public_sources = \
 	views/gb-view.h \
 	views/gb-view-stack.c \
 	views/gb-view-stack.h \
+	views/gb-view-stack-split.h \
 	views/gb-view-grid.c \
 	views/gb-view-grid.h \
 	workbench/gb-workbench.c \
 	workbench/gb-workbench.h \
+	gb-enums.c \
+	gb-enums.h \
 	$(NULL)
 
 libgnome_builder_la_SOURCES = \
@@ -187,8 +190,6 @@ libgnome_builder_la_SOURCES = \
 	css/gb-css-provider.h \
 	util/gb-settings.c \
 	util/gb-settings.h \
-	gb-enums.c \
-	gb-enums.h \
 	$(NULL)
 
 glib_enum_h = gb-enums.h
@@ -293,9 +294,7 @@ if HAVE_INTROSPECTION
 
 INTROSPECTION_GIRS =
 INTROSPECTION_SCANNER_ARGS = --add-include-path=$(srcdir) --warn-all
-INTROSPECTION_COMPILER_ARGS = \
-	--includedir=$(srcdir) \
-	--includedir=$(top_srcdir)/libide
+INTROSPECTION_COMPILER_ARGS = --includedir=$(top_builddir)/libide
 
 introspection_sources = \
 	$(libgnome_builder_public_sources) \
@@ -340,12 +339,14 @@ gnome_builder_1_0_vapi_DEPS = libide-1.0 gio-2.0 gtk+-3.0 gtksourceview-3.0
 gnome_builder_1_0_vapi_VAPIDIRS = $(top_builddir)/libide
 gnome_builder_1_0_vapi_METADATADIRS = $(srcdir)
 gnome_builder_1_0_vapi_FILES = Builder-1.0.gir
-gnome_builder_1_0_vapi_GIRDIRS = $(top_builddir)/libide
+gnome_builder_1_0_vapi_GIRDIRS = \
+	$(top_builddir)/libide \
+	$(top_srcdir)/libide
 
 gnome-builder-1.0.deps: Makefile
 	$(AM_V_GEN) echo $(gnome_builder_1_0_vapi_DEPS) | tr ' ' '\n' > $@
 
-vapidir = $(VAPIGEN_VAPIDIR)
+vapidir = $(datadir)/gnome-builder/vapi
 vapi_DATA = $(VAPIGEN_VAPIS) $(VAPIGEN_VAPIS:.vapi=.deps)
 
 EXTRA_DIST += gnome-builder-1.0.deps

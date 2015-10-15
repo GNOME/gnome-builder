@@ -106,10 +106,10 @@ egg_private_vapi_FILES = Egg-1.0.gir
 egg-private.deps: Makefile
 	$(AM_V_GEN) echo $(libegg_private_vapi_DEPS) | tr ' ' '\n' > $@
 
-vapidir = $(VAPIGEN_VAPIDIR)
+vapidir = $(datadir)/gnome-builder/vapi
 vapi_DATA = $(VAPIGEN_VAPIS) $(VAPIGEN_VAPIS:.vapi=.deps)
 
-EXTRA_DIST += libegg-private.deps
+EXTRA_DIST += egg-private.deps
 
 DISTCLEANFILES += $(vapi_DATA)
 endif
