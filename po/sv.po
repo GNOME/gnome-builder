@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2015-09-20 11:40+0000\n"
-"PO-Revision-Date: 2015-09-20 17:40+0200\n"
+"POT-Creation-Date: 2015-10-15 20:16+0000\n"
+"PO-Revision-Date: 2015-10-15 22:25+0200\n"
 "Last-Translator: Anders Jonsson <anders.jonsson@norsjovallen.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "Language: sv\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.8.4\n"
+"X-Generator: Poedit 1.8.5\n"
 
 #: ../contrib/egg/egg-animation.c:723
 #, c-format
@@ -488,6 +488,34 @@ msgstr "Rullningsavstånd"
 msgid "Minimal number of lines to keep above and below the cursor."
 msgstr "Minsta antal rader att behålla ovanför och under markören."
 
+#: ../data/ui/gb-preferences-page-editor.ui.h:22
+msgid "Draw Spaces"
+msgstr "Rita ut blanksteg"
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:23
+msgid "Draw a circle over space characters."
+msgstr "Rita en cirkel över blanksteg."
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:24
+msgid "Draw an arrow over tab characters."
+msgstr "Rita en pil över tabbtecken."
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:25
+msgid "Draw a carriage return over newline characters."
+msgstr "Rita ut vagnretur över nyradstecken."
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:26
+msgid "Draw indicators for non-breaking spaces."
+msgstr "Rita indikatorer för icke-brytande blanksteg."
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:27
+msgid "Draw leading space only."
+msgstr "Rita endast ut inledande blanksteg."
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:28
+msgid "Draw trailing space only."
+msgstr "Rita endast ut avslutande blanksteg."
+
 #: ../data/ui/gb-preferences-page-git.ui.h:1
 #: ../data/ui/gb-preferences-window.ui.h:8
 msgid "Version Control"
@@ -678,7 +706,7 @@ msgstr "Kommandorad"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:6
 #: ../plugins/terminal/gb-terminal-document.c:87
-#: ../plugins/terminal/gb-terminal-workbench-addin.c:101
+#: ../plugins/terminal/gb-terminal-workbench-addin.c:96
 msgid "Terminal"
 msgstr "Terminal"
 
@@ -829,62 +857,66 @@ msgid "Toggle overwrite"
 msgstr "Aktivera/inaktivera överskrivning"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:43
+msgid "Reindent line"
+msgstr "Indentera om rad"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:44
 msgid "Navigation"
 msgstr "Navigering"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:44
+#: ../data/ui/gb-shortcuts-window.ui.h:45
 msgid "Move to next error in file"
 msgstr "Gå till nästa fel i fil"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:45
+#: ../data/ui/gb-shortcuts-window.ui.h:46
 msgid "Move to previous error in file"
 msgstr "Gå till föregående fel i fil"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:46
+#: ../data/ui/gb-shortcuts-window.ui.h:47
 msgid "Move to previous edit location"
 msgstr "Gå till föregående redigeringsplats"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:47
+#: ../data/ui/gb-shortcuts-window.ui.h:48
 msgid "Move to next edit location"
 msgstr "Gå till nästa redigeringsplats"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:48
+#: ../data/ui/gb-shortcuts-window.ui.h:49
 msgid "Jump to definition of symbol"
 msgstr "Hoppa till symboldefinition"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:49
+#: ../data/ui/gb-shortcuts-window.ui.h:50
 msgid "Move viewport up within the file"
 msgstr "Flytta visningsområde uppåt i filen"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:50
+#: ../data/ui/gb-shortcuts-window.ui.h:51
 msgid "Move viewport down within the file"
 msgstr "Flytta visningsområde nedåt i filen"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:51
+#: ../data/ui/gb-shortcuts-window.ui.h:52
 msgid "Move viewport to end of file"
 msgstr "Flytta visningsområde till slutet på filen"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:52
+#: ../data/ui/gb-shortcuts-window.ui.h:53
 msgid "Move viewport to beginning of file"
 msgstr "Flytta visningsområde till början på filen"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:53
+#: ../data/ui/gb-shortcuts-window.ui.h:54
 msgid "Move to matching bracket"
 msgstr "Gå till matchande klammer"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:54
+#: ../data/ui/gb-shortcuts-window.ui.h:55
 msgid "Selections"
 msgstr "Markeringar"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:55
+#: ../data/ui/gb-shortcuts-window.ui.h:56
 msgid "Select all"
 msgstr "Markera allt"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:56
+#: ../data/ui/gb-shortcuts-window.ui.h:57
 msgid "Unselect all"
 msgstr "Avmarkera allt"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:57
+#: ../data/ui/gb-shortcuts-window.ui.h:58
 msgid "Terminal Shortcuts"
 msgstr "Snabbtangenter för terminal"
 
@@ -945,17 +977,17 @@ msgstr "Ingen fil tillhandahölls."
 msgid "Cannot provide diff, no backing file provided."
 msgstr "Kan inte tillhandahålla diff, ingen bakomliggande fil tillhandahållen."
 
-#: ../libide/git/ide-git-buffer-change-monitor.c:537
+#: ../libide/git/ide-git-buffer-change-monitor.c:539
 #, c-format
 msgid "Repository does not have a working directory."
 msgstr "Arkivet har ingen arbetskatalog."
 
-#: ../libide/git/ide-git-buffer-change-monitor.c:548
+#: ../libide/git/ide-git-buffer-change-monitor.c:550
 #, c-format
 msgid "File is not under control of git working directory."
 msgstr "Fil kontrolleras inte av git-arbetskatalog."
 
-#: ../libide/git/ide-git-buffer-change-monitor.c:614
+#: ../libide/git/ide-git-buffer-change-monitor.c:616
 #, c-format
 msgid "The requested file does not exist within the git index."
 msgstr "Den begärda filen existerar inte i git-indexet."
@@ -1010,7 +1042,7 @@ msgstr "Misslyckades med att initiera standardvärden."
 msgid "File contained invalid UTF-8"
 msgstr "Fil innehöll ogiltig UTF-8"
 
-#: ../libide/ide-buffer.c:1991
+#: ../libide/ide-buffer.c:2071
 msgid "The current language lacks a symbol resolver."
 msgstr "Det aktuella språket saknar en symboluppslagare."
 
@@ -1080,20 +1112,20 @@ msgstr "Kontext har redan återställts."
 msgid "The device \"%s\" could not be found."
 msgstr "Enheten ”%s” kunde inte hittas."
 
-#: ../libide/ide-object.c:285
+#: ../libide/ide-object.c:288
 #, c-format
 msgid "No implementations of extension point \"%s\"."
 msgstr "Inga implementationer av tilläggspunkten ”%s”."
 
-#: ../libide/ide-object.c:377
+#: ../libide/ide-object.c:380
 msgid "Failed to locate build system plugin."
 msgstr "Misslyckades med att hitta insticksmodul för byggsystem."
 
-#: ../libide/ide-object.c:464
+#: ../libide/ide-object.c:467
 msgid "No such extension point."
 msgstr "Ingen sådan tilläggspunkt."
 
-#: ../libide/ide-object.c:474
+#: ../libide/ide-object.c:477
 msgid "No implementations of extension point."
 msgstr "Inga implementationer av tilläggspunkt."
 
@@ -1105,7 +1137,7 @@ msgstr "Målfil måste vara i projektträdet."
 msgid "File must be within the project tree."
 msgstr "Fil måste vara i projektträdet."
 
-#: ../libide/ide-recent-projects.c:377
+#: ../libide/ide-recent-projects.c:382
 #, c-format
 msgid "%s() may only be executed once"
 msgstr "%s() kan bara köras en gång"
@@ -1119,11 +1151,11 @@ msgstr "%s har inte implementerat GAsyncInitable."
 msgid "Chunk does not belong to snippet."
 msgstr "Stycke hör inte till textsnutt."
 
-#: ../libide/ide-source-snippet-completion-provider.c:288
+#: ../libide/ide-source-snippet-completion-provider.c:297
 msgid "Snippets"
 msgstr "Textsnuttar"
 
-#: ../libide/ide-source-snippet-parser.c:495
+#: ../libide/ide-source-snippet-parser.c:496
 #, c-format
 msgid "Invalid snippet at line %d: %s"
 msgstr "Ogiltig textsnutt på rad %d: %s"
@@ -1138,30 +1170,30 @@ msgstr "Misslyckades med att öppna katalog: %s"
 msgid "Failed to load file: %s: %s"
 msgstr "Misslyckades med att läsa in fil: %s: %s"
 
-#: ../libide/ide-source-view.c:4563
+#: ../libide/ide-source-view.c:4733
 #, c-format
 msgid "Insert \"%s\""
 msgstr "Infoga ”%s”"
 
-#: ../libide/ide-source-view.c:4565
+#: ../libide/ide-source-view.c:4735
 #, c-format
 msgid "Replace \"%s\" with \"%s\""
 msgstr "Ersätt ”%s” med ”%s”"
 
 # Fix-it: små automatiska fixar för problem
-#: ../libide/ide-source-view.c:4683
+#: ../libide/ide-source-view.c:4854
 msgid "Apply Fix-It"
 msgstr "Tillämpa Fixa-det"
 
-#: ../libide/ide-source-view.c:4726
+#: ../libide/ide-source-view.c:4897
 msgid "Join Lines"
 msgstr "Slå samman rader"
 
-#: ../libide/ide-source-view.c:4737
+#: ../libide/ide-source-view.c:4908
 msgid "Sort Lines"
 msgstr "Sortera rader"
 
-#: ../libide/ide-source-view.c:4756
+#: ../libide/ide-source-view.c:4927
 msgid "Go to Definition"
 msgstr "Gå till definition"
 
@@ -1174,7 +1206,7 @@ msgstr "Försök att läsa in ett PyGObject-skript utan något filnamn."
 msgid "The script \"%s\" is not a PyGObject file."
 msgstr "Skriptet ”%s” är inte en PyGObject-fil."
 
-#: ../plugins/autotools/ide-autotools-build-system.c:175
+#: ../plugins/autotools/ide-autotools-build-system.c:182
 msgid "Failed to locate configure.ac"
 msgstr "Misslyckades med att hitta configure.ac"
 
@@ -1209,36 +1241,32 @@ msgstr "autogen.sh är inte körbar."
 msgid "autogen.sh failed to create configure (%s)"
 msgstr "autogen.sh misslyckades med att skapa configure (%s)"
 
-#: ../plugins/autotools/ide-makecache.c:999
+#: ../plugins/autotools/ide-makecache.c:1006
 msgid "Invalid makefile provided, ignoring."
 msgstr "Ogiltig make-fil tillhandahölls, ignorerar."
 
-#: ../plugins/clang/ide-clang-completion-provider.c:200
-msgid "Clang"
-msgstr "Clang"
-
-#: ../plugins/clang/ide-clang-service.c:266
+#: ../plugins/clang/ide-clang-service.c:269
 msgid "Unknown failure"
 msgstr "Okänt fel"
 
-#: ../plugins/clang/ide-clang-service.c:270
+#: ../plugins/clang/ide-clang-service.c:273
 msgid "Clang crashed"
 msgstr "Clang kraschade"
 
-#: ../plugins/clang/ide-clang-service.c:274
+#: ../plugins/clang/ide-clang-service.c:277
 msgid "Invalid arguments"
 msgstr "Ogiltiga argument"
 
-#: ../plugins/clang/ide-clang-service.c:278
+#: ../plugins/clang/ide-clang-service.c:281
 msgid "AST read error"
 msgstr "AST-läsfel"
 
-#: ../plugins/clang/ide-clang-service.c:290
+#: ../plugins/clang/ide-clang-service.c:293
 #, c-format
 msgid "Failed to create translation unit: %s"
 msgstr "Misslyckades med att skapa översättningsenhet: %s"
 
-#: ../plugins/clang/ide-clang-service.c:399
+#: ../plugins/clang/ide-clang-service.c:402
 msgid "File must be saved locally to parse."
 msgstr "Fil måste vara lokalt sparad för att tolkas."
 
@@ -1246,16 +1274,16 @@ msgstr "Fil måste vara lokalt sparad för att tolkas."
 msgid "anonymous"
 msgstr "anonym"
 
-#: ../plugins/clang/ide-clang-translation-unit.c:654
+#: ../plugins/clang/ide-clang-translation-unit.c:656
 msgid "clang_codeCompleteAt() only works on local files"
 msgstr "clang_codeCompleteAt() fungerar bara på lokala filer"
 
-#: ../plugins/command-bar/gb-command-bar.c:290
+#: ../plugins/command-bar/gb-command-bar.c:316
 #, c-format
 msgid "Command not found: %s"
 msgstr "Kommando kunde inte hittas: %s"
 
-#: ../plugins/command-bar/gb-command-bar.c:594
+#: ../plugins/command-bar/gb-command-bar.c:620
 msgid "Use the entry below to execute a command"
 msgstr "Använd raden nedan för att köra ett kommando"
 
@@ -1299,12 +1327,12 @@ msgstr "Ogiltigt :syntax-underkommando: %s"
 msgid "Invalid search and replace request"
 msgstr "Ogiltig sök och ersätt-begäran"
 
-#: ../plugins/command-bar/gb-vim.c:960
+#: ../plugins/command-bar/gb-vim.c:961
 #, c-format
 msgid "vim mode requires GtkSourceView"
 msgstr "vim-läge kräver GtkSourceView"
 
-#: ../plugins/command-bar/gb-vim.c:990
+#: ../plugins/command-bar/gb-vim.c:991
 #, c-format
 msgid "Not an editor command: %s"
 msgstr "Inte ett redigerarkommando: %s"
@@ -1313,10 +1341,6 @@ msgstr "Inte ett redigerarkommando: %s"
 #: ../plugins/python-pack/ide-python-format-provider.c:238
 msgid "Format Strings"
 msgstr "Formatsträngar"
-
-#: ../plugins/ctags/ide-ctags-completion-provider.c:179
-msgid "CTags"
-msgstr "CTags"
 
 #: ../plugins/devhelp/gb-devhelp-document.c:71
 #, c-format
@@ -1329,7 +1353,7 @@ msgstr "Dokumentation (%s)"
 msgid "Documentation"
 msgstr "Dokumentation"
 
-#: ../plugins/device-manager/gb-device-manager-panel.c:75
+#: ../plugins/device-manager/gb-device-manager-panel.c:67
 msgid "Device Manager"
 msgstr "Enhetshanterare"
 
@@ -1357,15 +1381,15 @@ msgstr "MinGW (64-bit)"
 msgid "MinGW (32-bit)"
 msgstr "MinGW (32-bit)"
 
-#: ../plugins/symbol-tree/symbol-tree.c:187
+#: ../plugins/symbol-tree/symbol-tree.c:236
 msgid "Current language does not support symbol resolvers"
 msgstr "Aktuellt språk stöder inte symboluppslagare"
 
-#: ../plugins/symbol-tree/symbol-tree.c:211
+#: ../plugins/symbol-tree/symbol-tree.c:261
 msgid "Symbol Tree"
 msgstr "Symbolträd"
 
-#: ../plugins/sysmon/gb-sysmon-addin.c:64
+#: ../plugins/sysmon/gb-sysmon-addin.c:58
 msgid "System Monitor"
 msgstr "Systemövervakare"
 
@@ -1473,7 +1497,7 @@ msgstr "Rad %u, kolumn %u"
 msgid "%u of %u"
 msgstr "%u av %u"
 
-#: ../src/editor/gb-editor-frame.c:664
+#: ../src/editor/gb-editor-frame.c:662
 msgid "Re_veal in Project Tree"
 msgstr "V_isa i projektträdet"
 
@@ -1490,56 +1514,63 @@ msgstr "Spara dokument"
 msgid "Save Document As"
 msgstr "Spara dokument som"
 
-#: ../src/editor/gb-editor-view.c:119
+#: ../src/editor/gb-editor-view.c:120
 msgid "Plain Text"
 msgstr "Vanlig text"
 
 #. translators: the user selected a number outside the value range for the document.
-#: ../src/editor/gb-editor-view.c:624
+#: ../src/editor/gb-editor-view.c:671
 #, c-format
 msgid "Provide a number between 1 and %u"
 msgstr "Ange ett tal mellan 1 och %u"
 
 #. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-editor.c:95
+#: ../src/preferences/gb-preferences-page-editor.c:123
 msgid "restore insert cursor mark"
 msgstr "återställ infoga markör markering"
 
 #. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-editor.c:100
+#: ../src/preferences/gb-preferences-page-editor.c:128
 msgid "diff renderer gutter changes git vcs"
 msgstr "diff renderare marginal ändringar git vcs"
 
 #. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-editor.c:105
+#: ../src/preferences/gb-preferences-page-editor.c:133
 msgid "line numbers"
 msgstr "radnummer"
 
 #. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-editor.c:110
+#: ../src/preferences/gb-preferences-page-editor.c:138
 msgid "line lines highlight current"
 msgstr "rad rader färgmarkering aktuell"
 
 #. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-editor.c:115
+#: ../src/preferences/gb-preferences-page-editor.c:143
 msgid "bracket brackets highlight matching"
 msgstr "parentes parenteser färgmarkera matchande"
 
 # scrolloff: minsta antal rader ovan och under markören exempelvis vid sökning
 #. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-editor.c:120
+#: ../src/preferences/gb-preferences-page-editor.c:148
 msgid "lines margin scrolloff scroll off"
 msgstr "rader marginal scrolloff rullningskontext"
 
 #. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-editor.c:126
+#: ../src/preferences/gb-preferences-page-editor.c:154
 msgid "font document editor monospace"
 msgstr "typsnitt dokument redigerare monospace"
 
 #. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-editor.c:131
+#: ../src/preferences/gb-preferences-page-editor.c:159
 msgid "minimap mini map overview over view"
 msgstr "miniatyr karta minikarta översikt"
+
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-editor.c:165
+msgid ""
+"draw spaces space tab newline nbsp non-breaking whitespace trailing leading"
+msgstr ""
+"rita mellanslag blanksteg tabb nyrad nbsp icke-brytande inledande avslutande"
 
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-git.c:169
@@ -1650,7 +1681,9 @@ msgstr "Leverantören kunde inte hittas."
 #: ../src/search/gb-search-display-group.c:182
 #, c-format
 msgid "%s more"
-msgstr "%s till"
+msgid_plural "%s more"
+msgstr[0] "%s till"
+msgstr[1] "%s till"
 
 #: ../src/shortcuts/gb-shortcuts-dialog.c:937
 msgid "Search Shortcuts"
@@ -1703,8 +1736,10 @@ msgstr "Ungefär ett år sedan"
 
 #: ../src/util/gb-glib.c:69
 #, c-format
-msgid "About %u years ago"
-msgstr "Ungefär %u år sedan"
+msgid "About %u year ago"
+msgid_plural "About %u years ago"
+msgstr[0] "Ungefär %u år sedan"
+msgstr[1] "Ungefär %u år sedan"
 
 #: ../src/workbench/gb-workbench-actions.c:162
 msgid "Open Document"
@@ -1719,11 +1754,11 @@ msgstr "Öppna"
 msgid "%s - Builder"
 msgstr "%s - Builder"
 
-#: ../src/workbench/gb-workbench.c:919
+#: ../src/workbench/gb-workbench.c:939
 msgid "Build Failure"
 msgstr "Byggfel"
 
-#: ../src/workbench/gb-workbench.c:966
+#: ../src/workbench/gb-workbench.c:986
 msgid "Project build system does not support building"
 msgstr "Projektets byggsystem stöder inte byggande"
 
@@ -1859,12 +1894,20 @@ msgstr "- upptäck projekt"
 # %s är en siffra
 #: ../tools/ide-search.c:68
 #, c-format
-msgid "%s results\n"
-msgstr "%s resultat\n"
+msgid "%s result\n"
+msgid_plural "%s results\n"
+msgstr[0] "%s resultat\n"
+msgstr[1] "%s resultat\n"
 
 #: ../tools/ide-search.c:120
 msgid "PROJECT_FILE [SEARCH TERMS...]"
 msgstr "PROJEKTFIL [SÖKVILLKOR...]"
+
+#~ msgid "Clang"
+#~ msgstr "Clang"
+
+#~ msgid "CTags"
+#~ msgstr "CTags"
 
 #~ msgid "Search Symbols"
 #~ msgstr "Sök symboler"
