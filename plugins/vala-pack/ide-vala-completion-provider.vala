@@ -76,28 +76,29 @@ namespace Ide
 			context.cancelled.connect(() => {
 				cancellable.cancel ();
 			});
-
-			index.code_complete.begin (file.file,
+			
+			Ide.ThreadPool.push (Ide.ThreadPoolKind.INDEXER, () => {
+				int res_line = -1;
+				int res_column = -1;
+				this.results = index.code_complete (file.file,
 			                           iter.get_line () + 1,
 			                           iter.get_line_offset () + 1,
 			                           line,
 			                           unsaved_files,
 			                           this,
 			                           cancellable,
-			                           (obj,res) => {
-				int res_line = -1;
-				int res_column = -1;
-
-				this.results = index.code_complete.end (res, out res_line, out res_column);
-
-				if (res_line > 0 && res_column > 0) {
+			                           out res_line, 
+			                           out res_column);
+					if (res_line > 0 && res_column > 0) {
 					this.line = res_line - 1;
 					this.column = res_column - 1;
 				}
 
-				if (!cancellable.is_cancelled ()) {
-					this.results.present (this, context);
-				}
+				Idle.add (() => {
+					if (!cancellable.is_cancelled ())
+						this.results.present (this, context);
+					return false;
+				});
 			});
 		}
 

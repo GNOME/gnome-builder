@@ -168,7 +168,7 @@ namespace Ide
 			return true;
 		}
 
-		public async Ide.CompletionResults code_complete (GLib.File file,
+		public Ide.CompletionResults code_complete (GLib.File file,
 		                                                  int line,
 		                                                  int column,
 		                                                  string? line_text,
@@ -181,8 +181,7 @@ namespace Ide
 			var unsaved_files_copy = unsaved_files.to_array ();
 			var result = new Ide.CompletionResults (provider.query);
 
-			Ide.ThreadPool.push (Ide.ThreadPoolKind.COMPILER, () => {
-				if ((cancellable == null) || !cancellable.is_cancelled ()) {
+			if ((cancellable == null) || !cancellable.is_cancelled ()) {
 					lock (this.code_context) {
 						Vala.CodeContext.push (this.code_context);
 
@@ -203,10 +202,6 @@ namespace Ide
 					}
 				}
 
-				GLib.Idle.add(code_complete.callback);
-			});
-
-			yield;
 
 			result_line = line;
 			result_column = column;

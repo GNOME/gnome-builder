@@ -151,8 +151,31 @@ namespace Ide {
 		public override void visit_lock_statement (Vala.LockStatement stmt) {
 			stmt.accept_children(this);
 		}
-		public override void visit_lambda_expression (Vala.LambdaExpression expr) {
-			expr.accept_children(this);
+		public override void visit_expression_statement (Vala.ExpressionStatement stmt) {
+			stmt.accept_children (this);
+		}
+		public override void visit_declaration_statement (Vala.DeclarationStatement stmt) {
+			stmt.accept_children (this);
+		}
+		public override void visit_local_variable (Vala.LocalVariable variable) {
+			variable.accept_children (this);
+		}
+		public override void visit_end_full_expression (Vala.Expression expr) {
+			if (expr is Vala.LambdaExpression)
+				visit_method ((expr as Vala.LambdaExpression).method);
+			if (expr is Vala.MethodCall) {
+				foreach (Vala.Expression e in (expr as Vala.MethodCall).get_argument_list()) {
+					visit_expression (e);
+				}
+			}
+		}
+		public override void visit_expression (Vala.Expression expr) {
+			if (expr is Vala.LambdaExpression)
+				visit_method ((expr as Vala.LambdaExpression).method);
+			if (expr is Vala.MethodCall) {
+				foreach (Vala.Expression e in (expr as Vala.MethodCall).get_argument_list())
+					visit_expression (e);
+			}
 		}
 	}
 }
