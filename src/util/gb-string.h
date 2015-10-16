@@ -25,8 +25,8 @@ G_BEGIN_DECLS
 
 typedef enum
 {
-  GB_HIGHLIGHT_UNDERLINE,
-  GB_HIGHLIGHT_BOLD,
+  GB_HIGHLIGHT_UNDERLINE = 1,
+  GB_HIGHLIGHT_BOLD      = 1 << 1,
 } GbHighlightType;
 
 gchar *gb_str_highlight      (const gchar     *src,

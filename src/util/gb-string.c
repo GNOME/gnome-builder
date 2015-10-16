@@ -27,20 +27,31 @@ gb_str_highlight_full (const gchar     *str,
                        gboolean         insensitive,
                        GbHighlightType  type)
 {
-  const gchar *begin = "<u>";
-  const gchar *end = "</u>";
+  const gchar *begin = NULL;
+  const gchar *end = NULL;
   GString *ret;
   gunichar str_ch;
   gunichar match_ch;
-
-  g_return_val_if_fail (str, NULL);
-  g_return_val_if_fail (match, NULL);
+  gboolean element_open = FALSE;
 
   if (type == GB_HIGHLIGHT_BOLD)
     {
       begin = "<b>";
       end = "</b>";
     }
+  else if (type == GB_HIGHLIGHT_UNDERLINE)
+    {
+      begin = "<u>";
+      end = "</u>";
+    }
+  else if (type == (GB_HIGHLIGHT_UNDERLINE | GB_HIGHLIGHT_BOLD))
+    {
+      begin = "<b><u>";
+      end = "</u></b>";
+    }
+
+  if (str == NULL || match == NULL || begin == NULL || end == NULL)
+    return g_strdup (str);
 
   ret = g_string_new (NULL);
 
@@ -49,22 +60,34 @@ gb_str_highlight_full (const gchar     *str,
       str_ch = g_utf8_get_char (str);
       match_ch = g_utf8_get_char (match);
 
-      if ((str_ch == match_ch) || (insensitive && (g_unichar_tolower (str_ch) == g_unichar_tolower (match_ch))))
+      if ((str_ch == match_ch) ||
+          (insensitive && (g_unichar_tolower (str_ch) == g_unichar_tolower (match_ch))))
         {
-          g_string_append (ret, begin);
-          g_string_append_unichar (ret, str_ch);
-          g_string_append (ret, end);
+          if (!element_open)
+            {
+              g_string_append (ret, begin);
+              element_open = TRUE;
+            }
 
-          /*
-           * TODO: We could seek to the next char and append in a batch.
-           */
+          g_string_append_unichar (ret, str_ch);
+
+          /* TODO: We could seek to the next char and append in a batch. */
           match = g_utf8_next_char (match);
         }
       else
         {
+          if (element_open)
+            {
+              g_string_append (ret, end);
+              element_open = FALSE;
+            }
+
           g_string_append_unichar (ret, str_ch);
         }
     }
+
+  if (element_open)
+    g_string_append (ret, end);
 
   return g_string_free (ret, FALSE);
 }
