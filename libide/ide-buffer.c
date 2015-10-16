@@ -1710,9 +1710,18 @@ ide_buffer_trim_trailing_whitespace (IdeBuffer *self)
     (ch == ' ' || ch == '\t'); \
   })
 
-          if (gtk_text_iter_forward_to_line_end (&iter) && TEXT_ITER_IS_SPACE (&iter))
+          /*
+           * Move to the first character at the end of the line (skipping the newline)
+           * and progress to trip if it is white space.
+           */
+          if (gtk_text_iter_forward_to_line_end (&iter) &&
+              !gtk_text_iter_starts_line (&iter) &&
+              gtk_text_iter_backward_char (&iter) &&
+              TEXT_ITER_IS_SPACE (&iter))
             {
               GtkTextIter begin = iter;
+
+              gtk_text_iter_forward_to_line_end (&iter);
 
               while (TEXT_ITER_IS_SPACE (&begin))
                 {
