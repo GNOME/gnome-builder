@@ -22,6 +22,7 @@
 
 #include "gb-file-search-index.h"
 #include "gb-file-search-result.h"
+#include "gb-string.h"
 
 struct _GbFileSearchIndex
 {
@@ -287,38 +288,6 @@ gb_file_search_index_build_finish (GbFileSearchIndex  *self,
   return g_task_propagate_boolean (task, error);
 }
 
-static gchar *
-str_highlight (const gchar *str,
-               const gchar *match)
-{
-  GString *ret;
-  gunichar str_ch;
-  gunichar match_ch;
-
-  ret = g_string_new (NULL);
-
-  for (; *str; str = g_utf8_next_char (str))
-    {
-      str_ch = g_utf8_get_char (str);
-      match_ch = g_utf8_get_char (match);
-
-      if (str_ch == match_ch)
-        {
-          g_string_append (ret, "<u>");
-          g_string_append_unichar (ret, str_ch);
-          g_string_append (ret, "</u>");
-
-          match = g_utf8_next_char (match);
-        }
-      else
-        {
-          g_string_append_unichar (ret, str_ch);
-        }
-    }
-
-  return g_string_free (ret, FALSE);
-}
-
 void
 gb_file_search_index_populate (GbFileSearchIndex *self,
                                IdeSearchContext  *context,
@@ -356,7 +325,8 @@ gb_file_search_index_populate (GbFileSearchIndex *self,
           g_autoptr(GbFileSearchResult) result = NULL;
           g_autofree gchar *markup = NULL;
 
-          markup = str_highlight (match->key, query);
+          markup = gb_str_highlight_full (match->key, query, TRUE,
+                                          (GB_HIGHLIGHT_BOLD | GB_HIGHLIGHT_UNDERLINE));
           result = g_object_new (GB_TYPE_FILE_SEARCH_RESULT,
                                  "context", icontext,
                                  "provider", provider,
