@@ -55,8 +55,6 @@
 #define TAG_DEPRECATED "diagnostician::deprecated"
 #define TAG_NOTE       "diagnostician::note"
 
-#define TEXT_ITER_IS_SPACE(ptr) g_unichar_isspace(gtk_text_iter_get_char(ptr))
-
 typedef struct
 {
   IdeContext             *context;
@@ -1670,8 +1668,10 @@ ide_buffer_get_content (IdeBuffer *self)
   return g_bytes_ref (priv->content);
 }
 
+
+
 void
-ide_buffer_trim_trailing_whitespace  (IdeBuffer *self)
+ide_buffer_trim_trailing_whitespace (IdeBuffer *self)
 {
   IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
   GtkTextBuffer *buffer;
@@ -1700,6 +1700,16 @@ ide_buffer_trim_trailing_whitespace  (IdeBuffer *self)
         {
           gtk_text_buffer_get_iter_at_line (buffer, &iter, line);
 
+/*
+ * Preserve all whitespace that isn't space or tab.
+ * This could include line feed, form feed, etc.
+ */
+#define TEXT_ITER_IS_SPACE(ptr) \
+  ({  \
+    gunichar ch = gtk_text_iter_get_char (ptr); \
+    (ch == ' ' || ch == '\t'); \
+  })
+
           if (gtk_text_iter_forward_to_line_end (&iter) && TEXT_ITER_IS_SPACE (&iter))
             {
               GtkTextIter begin = iter;
@@ -1719,6 +1729,8 @@ ide_buffer_trim_trailing_whitespace  (IdeBuffer *self)
               if (!gtk_text_iter_equal (&begin, &iter))
                 gtk_text_buffer_delete (buffer, &begin, &iter);
             }
+
+#undef TEXT_ITER_IS_SPACE
         }
     }
 }
