@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2015-10-13 07:22+0000\n"
-"PO-Revision-Date: 2015-10-13 22:03+0200\n"
+"POT-Creation-Date: 2015-10-15 20:29+0000\n"
+"PO-Revision-Date: 2015-10-16 08:33+0200\n"
 "Last-Translator: Dušan Kazik <prescott66@gmail.com>\n"
 "Language-Team: slovenčina <>\n"
 "Language: sk\n"
@@ -1136,7 +1136,7 @@ msgstr "Cieľový súbor sa musí nachádzať v strome projektu."
 msgid "File must be within the project tree."
 msgstr "Súbor sa musí nachádzať v strome projektu."
 
-#: ../libide/ide-recent-projects.c:377
+#: ../libide/ide-recent-projects.c:382
 #, c-format
 msgid "%s() may only be executed once"
 msgstr "%s() môže byť spustený iba raz"
@@ -1169,29 +1169,29 @@ msgstr "Zlyhalo otvorenie adresára: %s"
 msgid "Failed to load file: %s: %s"
 msgstr "Zlyhalo načítanie súboru: %s: %s"
 
-#: ../libide/ide-source-view.c:4696
+#: ../libide/ide-source-view.c:4733
 #, c-format
 msgid "Insert \"%s\""
 msgstr "Vložiť „%s“"
 
-#: ../libide/ide-source-view.c:4698
+#: ../libide/ide-source-view.c:4735
 #, c-format
 msgid "Replace \"%s\" with \"%s\""
 msgstr "Nahradiť „%s“ s „%s“"
 
-#: ../libide/ide-source-view.c:4817
+#: ../libide/ide-source-view.c:4854
 msgid "Apply Fix-It"
 msgstr "Použiť opravu"
 
-#: ../libide/ide-source-view.c:4860
+#: ../libide/ide-source-view.c:4897
 msgid "Join Lines"
 msgstr "Spojiť riadky"
 
-#: ../libide/ide-source-view.c:4871
+#: ../libide/ide-source-view.c:4908
 msgid "Sort Lines"
 msgstr "Usporiadať riadky"
 
-#: ../libide/ide-source-view.c:4890
+#: ../libide/ide-source-view.c:4927
 msgid "Go to Definition"
 msgstr "Prejsť na definíciu"
 
@@ -1325,12 +1325,12 @@ msgstr "Neplatný :podpríkaz syntaxe: %s"
 msgid "Invalid search and replace request"
 msgstr "Nepaltná požiadavka na vyhľadanie a nahradenie"
 
-#: ../plugins/command-bar/gb-vim.c:960
+#: ../plugins/command-bar/gb-vim.c:961
 #, c-format
 msgid "vim mode requires GtkSourceView"
 msgstr "Režim vim vyžaduje GtkSourceView"
 
-#: ../plugins/command-bar/gb-vim.c:990
+#: ../plugins/command-bar/gb-vim.c:991
 #, c-format
 msgid "Not an editor command: %s"
 msgstr "Nie je príkazom editora: %s"
@@ -1495,7 +1495,7 @@ msgstr "Riadok %u, stĺpec %u"
 msgid "%u of %u"
 msgstr "%u z %u"
 
-#: ../src/editor/gb-editor-frame.c:664
+#: ../src/editor/gb-editor-frame.c:662
 msgid "Re_veal in Project Tree"
 msgstr "Od_haliť v strome projektu"
 
@@ -1680,7 +1680,10 @@ msgstr "Nepodarilo sa nájsť poskytovateľa."
 #: ../src/search/gb-search-display-group.c:182
 #, c-format
 msgid "%s more"
-msgstr "%s ďalších"
+msgid_plural "%s more"
+msgstr[0] "%s ďalších"
+msgstr[1] "%s ďalší"
+msgstr[2] "%s ďalšie"
 
 #: ../src/shortcuts/gb-shortcuts-dialog.c:937
 msgid "Search Shortcuts"
@@ -1735,8 +1738,11 @@ msgstr "Pred rokom"
 # DK: https://bugzilla.gnome.org/show_bug.cgi?id=753665
 #: ../src/util/gb-glib.c:69
 #, c-format
-msgid "About %u years ago"
-msgstr "Pred %u rokmi"
+msgid "About %u year ago"
+msgid_plural "About %u years ago"
+msgstr[0] "Pred %u rokmi"
+msgstr[1] "Pred %u rokom"
+msgstr[2] "Pred %u rokmi"
 
 #: ../src/workbench/gb-workbench-actions.c:162
 msgid "Open Document"
@@ -1891,8 +1897,11 @@ msgstr "- preskúma projekty"
 # DK: https://bugzilla.gnome.org/show_bug.cgi?id=754434
 #: ../tools/ide-search.c:68
 #, c-format
-msgid "%s results\n"
-msgstr "%s výsledkov\n"
+msgid "%s result\n"
+msgid_plural "%s results\n"
+msgstr[0] "%s výsledkov\n"
+msgstr[1] "%s výsledok\n"
+msgstr[2] "%s výsledky\n"
 
 #: ../tools/ide-search.c:120
 msgid "PROJECT_FILE [SEARCH TERMS...]"
