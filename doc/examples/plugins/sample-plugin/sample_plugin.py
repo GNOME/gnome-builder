@@ -62,7 +62,7 @@ class EditorViewAddin(GObject.Object, Builder.EditorViewAddin):
     def do_unload(self, editor):
         pass
 
-class CompletionProvider(Ide.Object, Ide.CompletionProvider):
+class CompletionProvider(Ide.Object, GtkSource.CompletionProvider, Ide.CompletionProvider):
     # See GtkSource.CompletionProvider for all the things you can do.
 
     # NOTE: You must set X-Completion-Provider-Languages in .plugin file!
