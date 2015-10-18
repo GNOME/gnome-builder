@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2015-10-13 07:22+0000\n"
-"PO-Revision-Date: 2015-10-13 21:05+0300\n"
+"POT-Creation-Date: 2015-10-15 14:40+0000\n"
+"PO-Revision-Date: 2015-10-18 11:29+0300\n"
 "Last-Translator: Tom Tryfonidis <tomtryf@gmail.com>\n"
 "Language-Team: Greek <team@lists.gnome.gr>\n"
 "Language: el\n"
@@ -1135,7 +1135,7 @@ msgstr "Ο προορισμός πρέπει να είναι μέσα στο δ�
 msgid "File must be within the project tree."
 msgstr "Το αρχείο πρέπει να είναι μέσα στο δέντρο του έργου."
 
-#: ../libide/ide-recent-projects.c:377
+#: ../libide/ide-recent-projects.c:382
 #, c-format
 msgid "%s() may only be executed once"
 msgstr "Το %s() μπορεί να εκτελεστεί μόνο μία φορά"
@@ -1168,29 +1168,29 @@ msgstr "Αποτυχία ανοίγματος καταλόγου: %s"
 msgid "Failed to load file: %s: %s"
 msgstr "Αδυναμία φόρτωσης αρχείου: %s: %s"
 
-#: ../libide/ide-source-view.c:4696
+#: ../libide/ide-source-view.c:4733
 #, c-format
 msgid "Insert \"%s\""
 msgstr "Εισαγωγή \"%s\""
 
-#: ../libide/ide-source-view.c:4698
+#: ../libide/ide-source-view.c:4735
 #, c-format
 msgid "Replace \"%s\" with \"%s\""
 msgstr "Αντικατάσταση \"%s\" με \"%s\""
 
-#: ../libide/ide-source-view.c:4817
+#: ../libide/ide-source-view.c:4854
 msgid "Apply Fix-It"
 msgstr "Εφαρμογή Fix-It"
 
-#: ../libide/ide-source-view.c:4860
+#: ../libide/ide-source-view.c:4897
 msgid "Join Lines"
 msgstr "Ένωση γραμμών"
 
-#: ../libide/ide-source-view.c:4871
+#: ../libide/ide-source-view.c:4908
 msgid "Sort Lines"
 msgstr "Ταξινόμηση γραμμών"
 
-#: ../libide/ide-source-view.c:4890
+#: ../libide/ide-source-view.c:4927
 msgid "Go to Definition"
 msgstr "Μετάβαση στον ορισμό"
 
@@ -1324,12 +1324,12 @@ msgstr "Άκυρη σύνταξη υποεντολής: %s"
 msgid "Invalid search and replace request"
 msgstr "Μη έγκυρο αίτημα αναζήτησης και αντικατάστασης"
 
-#: ../plugins/command-bar/gb-vim.c:960
+#: ../plugins/command-bar/gb-vim.c:961
 #, c-format
 msgid "vim mode requires GtkSourceView"
 msgstr "Η λειτουργία vim απαιτεί το GtkSourceView"
 
-#: ../plugins/command-bar/gb-vim.c:990
+#: ../plugins/command-bar/gb-vim.c:991
 #, c-format
 msgid "Not an editor command: %s"
 msgstr "Δεν είναι εντολή επεξεργαστή: %s"
@@ -1496,7 +1496,7 @@ msgstr "Γραμμή %u, Στήλη %u"
 msgid "%u of %u"
 msgstr "%u από %u"
 
-#: ../src/editor/gb-editor-frame.c:664
+#: ../src/editor/gb-editor-frame.c:662
 msgid "Re_veal in Project Tree"
 msgstr "Εμ_φάνιση στο δέντρο του έργου"
 
@@ -1694,7 +1694,9 @@ msgstr "Αδυναμία εύρεσης παρόχου."
 #: ../src/search/gb-search-display-group.c:182
 #, c-format
 msgid "%s more"
-msgstr "%s περισσότερα"
+msgid_plural "%s more"
+msgstr[0] "%s περισσότερα"
+msgstr[1] "%s περισσότερα"
 
 #: ../src/shortcuts/gb-shortcuts-dialog.c:937
 msgid "Search Shortcuts"
@@ -1747,8 +1749,10 @@ msgstr "Περίπου πριν ένα χρόνο"
 
 #: ../src/util/gb-glib.c:69
 #, c-format
-msgid "About %u years ago"
-msgstr "Περίπου πριν %u χρόνια"
+msgid "About %u year ago"
+msgid_plural "About %u years ago"
+msgstr[0] "Περίπου πριν %u χρόνο"
+msgstr[1] "Περίπου πριν %u χρόνια"
 
 #: ../src/workbench/gb-workbench-actions.c:162
 msgid "Open Document"
@@ -1902,8 +1906,10 @@ msgstr "- ανακάλυψη έργων"
 
 #: ../tools/ide-search.c:68
 #, c-format
-msgid "%s results\n"
-msgstr "%s αποτελέσματα\n"
+msgid "%s result\n"
+msgid_plural "%s results\n"
+msgstr[0] "%s αποτέλεσμα\n"
+msgstr[1] "%s αποτελέσματα\n"
 
 #: ../tools/ide-search.c:120
 msgid "PROJECT_FILE [SEARCH TERMS...]"
