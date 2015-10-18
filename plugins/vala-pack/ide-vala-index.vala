@@ -169,39 +169,38 @@ namespace Ide
 		}
 
 		public Ide.CompletionResults code_complete (GLib.File file,
-		                                                  int line,
-		                                                  int column,
-		                                                  string? line_text,
-		                                                  Ide.UnsavedFiles? unsaved_files,
-		                                                  Ide.ValaCompletionProvider provider,
-		                                                  GLib.Cancellable? cancellable,
-		                                                  out int result_line,
-		                                                  out int result_column)
+		                                            int line,
+		                                            int column,
+		                                            string? line_text,
+		                                            Ide.UnsavedFiles? unsaved_files,
+		                                            Ide.ValaCompletionProvider provider,
+		                                            GLib.Cancellable? cancellable,
+		                                            out int result_line,
+		                                            out int result_column)
 		{
 			var unsaved_files_copy = unsaved_files.to_array ();
 			var result = new Ide.CompletionResults (provider.query);
 
 			if ((cancellable == null) || !cancellable.is_cancelled ()) {
-					lock (this.code_context) {
-						Vala.CodeContext.push (this.code_context);
+				lock (this.code_context) {
+					Vala.CodeContext.push (this.code_context);
 
-						this.apply_unsaved_files (unsaved_files_copy);
-						this.reparse ();
-						this.code_context.check ();
+					this.apply_unsaved_files (unsaved_files_copy);
+					this.reparse ();
+					this.code_context.check ();
 
-						if (this.source_files.contains (file)) {
-							var source_file = this.source_files [file];
-							string? text = (line_text == null) ? source_file.get_source_line (line) : line_text;
-							var locator = new Ide.ValaLocator ();
-							var nearest = locator.locate (source_file, line, column);
+					if (this.source_files.contains (file)) {
+						var source_file = this.source_files [file];
+						string? text = (line_text == null) ? source_file.get_source_line (line) : line_text;
+						var locator = new Ide.ValaLocator ();
+						var nearest = locator.locate (source_file, line, column);
 
-							this.add_completions (source_file, ref line, ref column, text, nearest, result, provider);
-						}
-
-						Vala.CodeContext.pop ();
+						this.add_completions (source_file, ref line, ref column, text, nearest, result, provider);
 					}
-				}
 
+					Vala.CodeContext.pop ();
+				}
+			}
 
 			result_line = line;
 			result_column = column;

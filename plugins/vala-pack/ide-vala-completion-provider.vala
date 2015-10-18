@@ -76,7 +76,7 @@ namespace Ide
 			context.cancelled.connect(() => {
 				cancellable.cancel ();
 			});
-			
+
 			Ide.ThreadPool.push (Ide.ThreadPoolKind.INDEXER, () => {
 				int res_line = -1;
 				int res_column = -1;
@@ -87,7 +87,7 @@ namespace Ide
 			                           unsaved_files,
 			                           this,
 			                           cancellable,
-			                           out res_line, 
+			                           out res_line,
 			                           out res_column);
 					if (res_line > 0 && res_column > 0) {
 					this.line = res_line - 1;
