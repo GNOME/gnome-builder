@@ -57,9 +57,9 @@ test_filesettings (void)
   g_assert_cmpstr (ide_file_settings_get_encoding (settings), ==, "utf-8");
 
   ide_file_settings_set_insert_trailing_newline (settings, FALSE);
-  g_assert_cmpint (ide_file_settings_get_insert_trailing_newline (settings), ==, FALSE);
+  g_assert_false (ide_file_settings_get_insert_trailing_newline (settings));
   ide_file_settings_set_insert_trailing_newline (settings, TRUE);
-  g_assert_cmpint (ide_file_settings_get_insert_trailing_newline (settings), ==, TRUE);
+  g_assert_true (ide_file_settings_get_insert_trailing_newline (settings));
 
   ide_file_settings_set_newline_type (settings, GTK_SOURCE_NEWLINE_TYPE_CR);
   g_assert_cmpint (ide_file_settings_get_newline_type (settings), ==, GTK_SOURCE_NEWLINE_TYPE_CR);
@@ -75,14 +75,14 @@ test_filesettings (void)
   g_assert_cmpint (ide_file_settings_get_indent_style (settings), ==, IDE_INDENT_STYLE_SPACES);
 
   ide_file_settings_set_trim_trailing_whitespace (settings, TRUE);
-  g_assert_cmpint (ide_file_settings_get_trim_trailing_whitespace (settings), ==, TRUE);
+  g_assert_true (ide_file_settings_get_trim_trailing_whitespace (settings));
   ide_file_settings_set_trim_trailing_whitespace (settings, FALSE);
-  g_assert_cmpint (ide_file_settings_get_trim_trailing_whitespace (settings), ==, FALSE);
+  g_assert_false (ide_file_settings_get_trim_trailing_whitespace (settings));
 
   ide_file_settings_set_show_right_margin (settings, TRUE);
-  g_assert_cmpint (ide_file_settings_get_show_right_margin (settings), ==, TRUE);
+  g_assert_true (ide_file_settings_get_show_right_margin (settings));
   ide_file_settings_set_show_right_margin (settings, FALSE);
-  g_assert_cmpint (ide_file_settings_get_show_right_margin (settings), ==, FALSE);
+  g_assert_false (ide_file_settings_get_show_right_margin (settings));
 
   g_object_unref (settings);
   g_assert (settings == NULL);

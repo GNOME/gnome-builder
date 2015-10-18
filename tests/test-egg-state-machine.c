@@ -235,14 +235,14 @@ test_state_machine_basic (void)
   egg_state_machine_add_property (machine, "state2", action, "enabled", FALSE);
   egg_state_machine_add_property (machine, "state3", action, "enabled", FALSE);
 
-  g_assert_cmpint (g_action_get_enabled (G_ACTION (action)), ==, FALSE);
+  g_assert_false (g_action_get_enabled (G_ACTION (action)));
 
   egg_state_machine_set_state (machine, "state1");
   g_assert_cmpstr (egg_state_machine_get_state (machine), ==, "state1");
   g_assert_cmpint (dummy->obj1_count, ==, 0);
   g_assert_cmpint (dummy->obj2_count, ==, 0);
 
-  g_assert_cmpint (g_action_get_enabled (G_ACTION (action)), ==, TRUE);
+  g_assert_true (g_action_get_enabled (G_ACTION (action)));
 
   g_signal_emit_by_name (obj1, "frobnicate");
   g_assert_cmpint (dummy->obj1_count, ==, 1);
@@ -255,7 +255,7 @@ test_state_machine_basic (void)
   egg_state_machine_set_state (machine, "state2");
   g_assert_cmpstr (egg_state_machine_get_state (machine), ==, "state2");
 
-  g_assert_cmpint (g_action_get_enabled (G_ACTION (action)), ==, FALSE);
+  g_assert_false (g_action_get_enabled (G_ACTION (action)));
 
   g_signal_emit_by_name (obj1, "frobnicate");
   g_assert_cmpint (dummy->obj1_count, ==, 1);
@@ -335,7 +335,7 @@ test_state_machine_weak_ref_source (void)
   g_assert_cmpint (dummy->obj1_count, ==, 1);
   g_object_set (obj, "string", "hello world", NULL);
   assert_prop_equal (obj, dummy, "string");
-  g_assert_cmpint (g_action_get_enabled (G_ACTION (action)), ==, TRUE);
+  g_assert_true (g_action_get_enabled (G_ACTION (action)));
   g_assert (has_style_class (widget, "testing"));
 
   /* Destroy the source objects while still in the state */

@@ -36,7 +36,7 @@ test_load_from_file (void)
 
   ret = ide_doap_load_from_file (doap, file, NULL, &error);
   g_assert_no_error (error);
-  g_assert_cmpint (ret, ==, TRUE);
+  g_assert_true (ret);
 
   g_assert_cmpstr (ide_doap_get_name (doap), ==, "Project One");
   g_assert_cmpstr (ide_doap_get_shortdesc (doap), ==, "Short Description of Project1");

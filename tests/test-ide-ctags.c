@@ -40,7 +40,7 @@ init_cb (GObject      *object,
 
   ret = g_async_initable_init_finish (initable, result, &error);
   g_assert_no_error (error);
-  g_assert_cmpint (ret, ==, TRUE);
+  g_assert_true (ret);
   g_assert (index != NULL);
   g_assert (IDE_IS_CTAGS_INDEX (index));
 
