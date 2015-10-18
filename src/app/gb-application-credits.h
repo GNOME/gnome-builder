@@ -79,6 +79,7 @@ static const gchar *gb_application_credits_authors[] = {
   "Kjartan Maraas",
   "Kristjan SCHMIDT",
   "Lars Uebernickel",
+  "Lionel Landwerlin",
   "Marek Černocký",
   "Matej Urbančič",
   "Mathieu Bridon",
@@ -87,6 +88,7 @@ static const gchar *gb_application_credits_authors[] = {
   "Michael Catanzaro",
   "Mohan R",
   "Muhammet Kara",
+  "Мирослав Николић",
   "Paolo Borelli",
   "Patrick Griffis",
   "Pedro Albuquerque",
@@ -103,10 +105,9 @@ static const gchar *gb_application_credits_authors[] = {
   "Tom Tryfonidis",
   "Trinh Anh Ngoc",
   "Wolf Vollprecht",
-  "yannick inizan",
+  "Yannick Inizan",
   "Yosef Or Boczko",
   "zilla@hmt.im",
-  "Мирослав Николић",
   NULL
 };
 
