@@ -22,6 +22,10 @@
 # include "config.h"
 #endif
 
+#ifdef __linux
+# include <sys/prctl.h>
+#endif
+
 #include <glib/gi18n.h>
 #include <gtksourceview/gtksource.h>
 
@@ -62,6 +66,11 @@ gb_application_load_worker (GbApplication *self)
 
   g_assert (GB_IS_APPLICATION (self));
   g_assert (gb_application_is_worker (self));
+
+#ifdef __linux
+  /* Ensure we are killed with our parent */
+  prctl (PR_SET_PDEATHSIG, 15);
+#endif
 
   connection = g_dbus_connection_new_for_address_sync (self->dbus_address,
                                                        G_DBUS_CONNECTION_FLAGS_NONE,
