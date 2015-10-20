@@ -7215,7 +7215,7 @@ ide_source_view_get_search_context (IdeSourceView *self)
  * ide_source_view_get_search_direction:
  * @self: An #IdeSourceView.
  *
- * Returns the current search direction.
+ * Gets the current search direction.
  *
  * Returns: A #GtkDirectionType
  */
@@ -7232,9 +7232,12 @@ ide_source_view_get_search_direction (IdeSourceView *self)
 /**
  * ide_source_view_set_search_direction:
  * @self: An #IdeSourceView.
- * @direction: (out): #GtkDirectionType.
+ * @direction: the direction
  *
- * Set the search direction.
+ * Sets the search direction.
+ *
+ * This can be used to invert the normal search direction so that a forward
+ * movement is towards the beginning of the document.
  */
 void
 ide_source_view_set_search_direction (IdeSourceView    *self,
