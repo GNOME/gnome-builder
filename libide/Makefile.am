@@ -176,6 +176,8 @@ libide_1_0_la_public_sources = \
 	ide-vcs-uri.h \
 	ide-vcs.c \
 	ide-vcs.h \
+	ide-worker.c \
+	ide-worker.h \
 	ide.c \
 	ide.h \
 	local/ide-local-device.c \
@@ -226,6 +228,10 @@ libide_1_0_la_SOURCES = \
 	ide-source-view-movements.h \
 	ide-vim-iter.c \
 	ide-vim-iter.h \
+	ide-worker-manager.c \
+	ide-worker-manager.h \
+	ide-worker-process.c \
+	ide-worker-process.h \
 	modelines/ide-modelines-file-settings.c \
 	modelines/ide-modelines-file-settings.h \
 	modelines/modeline-parser.c \
