@@ -137,17 +137,18 @@ ide_worker_manager_constructed (GObject *object)
                                               NULL,
                                               &error);
 
+  if (error != NULL)
+    {
+      g_printerr ("%s\n", error->message);
+      exit (EXIT_FAILURE);
+    }
+
   g_signal_connect_object (self->dbus_server,
                            "new-connection",
                            G_CALLBACK (ide_worker_manager_new_connection_cb),
                            self,
                            G_CONNECT_SWAPPED);
 
-  if (error != NULL)
-    {
-      g_printerr ("%s\n", error->message);
-      exit (EXIT_FAILURE);
-    }
 
   g_assert (self->dbus_server != NULL);
 }
