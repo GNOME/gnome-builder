@@ -269,7 +269,7 @@ class JediCompletionProvider(Ide.Object,
             if not is_completable_char(ch):
                 return False
             buffer = iter.get_buffer()
-            if Ide.CompletionProvider.context_in_comment(context):
+            if Ide.CompletionProvider.context_in_comment_or_string(context):
                 return False
         return True
 
