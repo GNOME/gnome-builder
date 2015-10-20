@@ -396,6 +396,8 @@ ide_worker_process_get_proxy_async (IdeWorkerProcess    *self,
 {
   g_autoptr(GTask) task = NULL;
 
+  IDE_ENTRY;
+
   g_return_if_fail (IDE_IS_WORKER_PROCESS (self));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
@@ -404,13 +406,15 @@ ide_worker_process_get_proxy_async (IdeWorkerProcess    *self,
   if (self->connection != NULL)
     {
       ide_worker_process_create_proxy_for_task (self, task);
-      return;
+      IDE_EXIT;
     }
 
   if (self->tasks == NULL)
     self->tasks = g_ptr_array_new_with_free_func (g_object_unref);
 
   g_ptr_array_add (self->tasks, g_object_ref (task));
+
+  IDE_EXIT;
 }
 
 GDBusProxy *
@@ -419,9 +423,14 @@ ide_worker_process_get_proxy_finish (IdeWorkerProcess  *self,
                                      GError           **error)
 {
   GTask *task = (GTask *)result;
+  GDBusProxy *ret;
+
+  IDE_ENTRY;
 
   g_return_val_if_fail (IDE_IS_WORKER_PROCESS (self), NULL);
   g_return_val_if_fail (G_IS_TASK (task), NULL);
 
-  return g_task_propagate_pointer (task, error);
+  ret = g_task_propagate_pointer (task, error);
+
+  IDE_RETURN (ret);
 }
