@@ -27,6 +27,7 @@
 
 #include "egg-counter.h"
 
+#include "ide-debug.h"
 #include "ide-worker-process.h"
 #include "ide-worker-manager.h"
 
@@ -78,13 +79,15 @@ ide_worker_manager_new_connection_cb (IdeWorkerManager *self,
   gpointer key, value;
   gboolean handled = FALSE;
 
+  IDE_ENTRY;
+
   g_assert (IDE_IS_WORKER_MANAGER (self));
   g_assert (G_IS_DBUS_CONNECTION (connection));
   g_assert (G_IS_DBUS_SERVER (server));
 
   credentials = g_dbus_connection_get_peer_credentials (connection);
   if ((credentials == NULL) || !g_credentials_get_unix_pid (credentials, NULL))
-    return FALSE;
+    IDE_RETURN (FALSE);
 
   g_hash_table_iter_init (&iter, self->plugin_name_to_worker);
 
@@ -99,7 +102,7 @@ ide_worker_manager_new_connection_cb (IdeWorkerManager *self,
         }
     }
 
-  return handled;
+  IDE_RETURN (handled);
 }
 
 static void
