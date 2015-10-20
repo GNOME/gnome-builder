@@ -39,6 +39,9 @@ struct _GbApplication
   IdeRecentProjects   *recent_projects;
   GtkWindowGroup      *greeter_group;
   PeasExtensionSet    *extensions;
+  gchar               *type;
+  gchar               *dbus_address;
+  gchar               *argv0;
 };
 
 

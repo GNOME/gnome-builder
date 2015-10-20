@@ -39,6 +39,7 @@ gboolean     gb_application_open_project_finish  (GbApplication        *self,
                                                   GError              **error);
 void         gb_application_show_projects_window (GbApplication        *self);
 const gchar *gb_application_get_keybindings_mode (GbApplication        *self);
+const gchar *gb_application_get_argv0            (GbApplication        *self);
 
 G_END_DECLS
 

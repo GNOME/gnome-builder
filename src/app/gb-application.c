@@ -37,7 +37,69 @@
 #include "gb-resources.h"
 #include "gb-workbench.h"
 
+#include "ide-worker.h"
+
 G_DEFINE_TYPE (GbApplication, gb_application, GTK_TYPE_APPLICATION)
+
+static gboolean
+gb_application_is_worker (GbApplication *self)
+{
+  g_assert (GB_IS_APPLICATION (self));
+
+  return (self->type != NULL) && (self->dbus_address != NULL);
+}
+
+static void
+gb_application_load_worker (GbApplication *self)
+{
+  PeasEngine *engine;
+  g_auto(GStrv) loaded_plugins = NULL;
+  g_autoptr(GDBusConnection) connection = NULL;
+  GError *error = NULL;
+  gsize i;
+
+  IDE_ENTRY;
+
+  g_assert (GB_IS_APPLICATION (self));
+  g_assert (gb_application_is_worker (self));
+
+  connection = g_dbus_connection_new_for_address_sync (self->dbus_address,
+                                                       G_DBUS_CONNECTION_FLAGS_NONE,
+                                                       NULL, NULL, &error);
+
+  if (error != NULL)
+    {
+      g_error ("DBus failure: %s", error->message);
+      g_clear_error (&error);
+      IDE_EXIT;
+    }
+
+  engine = peas_engine_get_default ();
+  loaded_plugins = peas_engine_get_loaded_plugins (engine);
+
+  for (i = 0; loaded_plugins [i]; i++)
+    {
+      if (g_strcmp0 (loaded_plugins [i], self->type) == 0)
+        {
+          PeasPluginInfo *plugin_info;
+          PeasExtension *exten;
+
+          plugin_info = peas_engine_get_plugin_info (engine, self->type);
+          exten = peas_engine_create_extension (engine, plugin_info, IDE_TYPE_WORKER, NULL);
+
+          if (exten != NULL)
+            {
+              ide_worker_register_service (IDE_WORKER (exten), connection);
+              g_application_hold (G_APPLICATION (self));
+              IDE_EXIT;
+            }
+        }
+    }
+
+  g_error ("Failed to create \"%s\" worker.", self->type);
+
+  IDE_EXIT;
+}
 
 static void
 gb_application_setup_search_paths (void)
@@ -480,7 +542,10 @@ gb_application_activate (GApplication *application)
 
   g_assert (GB_IS_APPLICATION (self));
 
-  gb_application_show_projects_window (self);
+  if (gb_application_is_worker (self))
+    gb_application_load_worker (self);
+  else
+    gb_application_show_projects_window (self);
 }
 
 static void
@@ -549,19 +614,24 @@ gb_application_startup (GApplication *app)
   g_assert (GB_IS_APPLICATION (self));
 
   self->started_at = g_date_time_new_now_utc ();
-  self->greeter_group = gtk_window_group_new ();
 
   g_resources_register (gb_get_resource ());
   g_application_set_resource_base_path (app, "/org/gnome/builder");
 
+  if (!gb_application_is_worker (self))
+    self->greeter_group = gtk_window_group_new ();
+
   G_APPLICATION_CLASS (gb_application_parent_class)->startup (app);
 
-  gb_application_make_skeleton_dirs (self);
-  gb_application_actions_init (self);
-  gb_application_register_theme_overrides (self);
-  gb_application_setup_search_paths ();
-  gb_application_load_keybindings (self);
-  gb_application_load_extensions (self);
+  if (!gb_application_is_worker (self))
+    {
+      gb_application_make_skeleton_dirs (self);
+      gb_application_actions_init (self);
+      gb_application_register_theme_overrides (self);
+      gb_application_setup_search_paths ();
+      gb_application_load_keybindings (self);
+      gb_application_load_extensions (self);
+    }
 
   IDE_EXIT;
 }
@@ -583,7 +653,7 @@ gb_application_handle_local_options (GApplication *app,
       return 0;
     }
 
-   if (g_variant_dict_contains (options, "standalone"))
+   if (g_variant_dict_contains (options, "standalone") || g_variant_dict_contains (options, "type"))
     {
       GApplicationFlags flags;
 
@@ -592,6 +662,24 @@ gb_application_handle_local_options (GApplication *app,
     }
 
   return -1;
+}
+
+static gboolean
+gb_application_local_command_line (GApplication   *application,
+                                   gchar        ***arguments,
+                                   int            *exit_status)
+{
+  GbApplication *self = (GbApplication *)application;
+
+  g_assert (GB_IS_APPLICATION (self));
+  g_assert (arguments != NULL);
+  g_assert (*arguments != NULL);
+  g_assert (exit_status != NULL);
+
+  self->argv0 = g_strdup ((*arguments) [0]);
+
+  return G_APPLICATION_CLASS (gb_application_parent_class)->
+    local_command_line (application, arguments, exit_status);
 }
 
 static void
@@ -603,6 +691,7 @@ gb_application_finalize (GObject *object)
 
   g_clear_object (&self->extensions);
   g_clear_pointer (&self->started_at, g_date_time_unref);
+  g_clear_pointer (&self->argv0, g_free);
   g_clear_object (&self->keybindings);
   g_clear_object (&self->recent_projects);
   g_clear_object (&self->greeter_group);
@@ -625,6 +714,7 @@ gb_application_class_init (GbApplicationClass *klass)
   app_class->activate = gb_application_activate;
   app_class->startup = gb_application_startup;
   app_class->open = gb_application_open;
+  app_class->local_command_line = gb_application_local_command_line;
   app_class->handle_local_options = gb_application_handle_local_options;
 
   IDE_EXIT;
@@ -633,25 +723,42 @@ gb_application_class_init (GbApplicationClass *klass)
 static void
 gb_application_init (GbApplication *app)
 {
-  static const GOptionEntry options[] = {
+  GOptionEntry options[] = {
     { "standalone",
       's',
       G_OPTION_FLAG_IN_MAIN,
       G_OPTION_ARG_NONE,
       NULL,
       N_("Run Builder in standalone mode") },
+
     { "version",
       0,
       G_OPTION_FLAG_IN_MAIN,
       G_OPTION_ARG_NONE,
       NULL,
       N_("Show the application's version") },
+
     { "verbose",
       'v',
       G_OPTION_FLAG_NO_ARG | G_OPTION_FLAG_IN_MAIN | G_OPTION_FLAG_HIDDEN,
       G_OPTION_ARG_CALLBACK,
       gb_application_increase_verbosity,
       N_("Increase verbosity. May be specified multiple times.") },
+
+    { "dbus-address",
+      0,
+      G_OPTION_FLAG_HIDDEN,
+      G_OPTION_ARG_STRING,
+      &app->dbus_address,
+      N_("The DBus server address for which to connect.") },
+
+    { "type",
+      0,
+      G_OPTION_FLAG_HIDDEN,
+      G_OPTION_ARG_STRING,
+      &app->type,
+      N_("The type of plugin worker process to run.") },
+
     { NULL }
   };
 
@@ -676,4 +783,12 @@ gb_application_get_keybindings_mode (GbApplication *self)
   g_return_val_if_fail (GB_IS_APPLICATION (self), NULL);
 
   return gb_keybindings_get_mode (self->keybindings);
+}
+
+const gchar *
+gb_application_get_argv0 (GbApplication *self)
+{
+  g_return_val_if_fail (GB_IS_APPLICATION (self), NULL);
+
+  return self->argv0;
 }
