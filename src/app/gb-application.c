@@ -56,11 +56,10 @@ gb_application_is_worker (GbApplication *self)
 static void
 gb_application_load_worker (GbApplication *self)
 {
-  PeasEngine *engine;
-  g_auto(GStrv) loaded_plugins = NULL;
   g_autoptr(GDBusConnection) connection = NULL;
+  PeasEngine *engine;
+  PeasPluginInfo *plugin_info;
   GError *error = NULL;
-  gsize i;
 
   IDE_ENTRY;
 
@@ -84,24 +83,19 @@ gb_application_load_worker (GbApplication *self)
     }
 
   engine = peas_engine_get_default ();
-  loaded_plugins = peas_engine_get_loaded_plugins (engine);
+  plugin_info = peas_engine_get_plugin_info (engine, self->type);
 
-  for (i = 0; loaded_plugins [i]; i++)
+  if ((plugin_info != NULL) && peas_plugin_info_is_loaded (plugin_info))
     {
-      if (g_strcmp0 (loaded_plugins [i], self->type) == 0)
+      PeasExtension *exten;
+
+      exten = peas_engine_create_extension (engine, plugin_info, IDE_TYPE_WORKER, NULL);
+
+      if (exten != NULL)
         {
-          PeasPluginInfo *plugin_info;
-          PeasExtension *exten;
-
-          plugin_info = peas_engine_get_plugin_info (engine, self->type);
-          exten = peas_engine_create_extension (engine, plugin_info, IDE_TYPE_WORKER, NULL);
-
-          if (exten != NULL)
-            {
-              ide_worker_register_service (IDE_WORKER (exten), connection);
-              g_application_hold (G_APPLICATION (self));
-              IDE_EXIT;
-            }
+          ide_worker_register_service (IDE_WORKER (exten), connection);
+          g_application_hold (G_APPLICATION (self));
+          IDE_EXIT;
         }
     }
 
