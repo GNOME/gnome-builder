@@ -27,10 +27,15 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeWorkerManager, ide_worker_manager, IDE, WORKER_MANAGER, GObject)
 
-IdeWorkerManager *ide_worker_manager_new        (const gchar       *argv0);
-GDBusProxy       *ide_worker_manager_get_worker (IdeWorkerManager  *self,
-                                                 const gchar       *plugin_name,
-                                                 GError           **error);
+IdeWorkerManager *ide_worker_manager_new               (const gchar          *argv0);
+void              ide_worker_manager_get_worker_async  (IdeWorkerManager     *self,
+                                                        const gchar          *plugin_name,
+                                                        GCancellable         *cancellable,
+                                                        GAsyncReadyCallback   callback,
+                                                        gpointer              user_data);
+GDBusProxy       *ide_worker_manager_get_worker_finish (IdeWorkerManager     *self,
+                                                        GAsyncResult         *result,
+                                                        GError              **error);
 
 G_END_DECLS
 

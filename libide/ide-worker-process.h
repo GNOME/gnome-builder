@@ -27,17 +27,24 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeWorkerProcess, ide_worker_process, IDE, WORKER_PROCESS, GObject)
 
-IdeWorkerProcess *ide_worker_process_new                 (const gchar       *argv0,
-                                                          const gchar       *type,
-                                                          const gchar       *dbus_address);
-void              ide_worker_process_run                 (IdeWorkerProcess  *self);
-void              ide_worker_process_quit                (IdeWorkerProcess  *self);
-gpointer          ide_worker_process_create_proxy        (IdeWorkerProcess  *self,
-                                                          GError           **error);
-gboolean          ide_worker_process_matches_credentials (IdeWorkerProcess  *self,
-                                                          GCredentials      *credentials);
-void              ide_worker_process_set_connection      (IdeWorkerProcess  *self,
-                                                          GDBusConnection   *connection);
+IdeWorkerProcess *ide_worker_process_new                 (const gchar          *argv0,
+                                                          const gchar          *type,
+                                                          const gchar          *dbus_address);
+void              ide_worker_process_run                 (IdeWorkerProcess     *self);
+void              ide_worker_process_quit                (IdeWorkerProcess     *self);
+gpointer          ide_worker_process_create_proxy        (IdeWorkerProcess     *self,
+                                                          GError              **error);
+gboolean          ide_worker_process_matches_credentials (IdeWorkerProcess     *self,
+                                                          GCredentials         *credentials);
+void              ide_worker_process_set_connection      (IdeWorkerProcess     *self,
+                                                          GDBusConnection      *connection);
+void              ide_worker_process_get_proxy_async     (IdeWorkerProcess     *self,
+                                                          GCancellable         *cancellable,
+                                                          GAsyncReadyCallback   callback,
+                                                          gpointer              user_data);
+GDBusProxy       *ide_worker_process_get_proxy_finish    (IdeWorkerProcess     *self,
+                                                          GAsyncResult         *result,
+                                                          GError              **error);
 
 G_END_DECLS
 

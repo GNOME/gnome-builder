@@ -34,11 +34,9 @@ struct _IdeWorkerManager
 {
   GObject      parent_instance;
 
-  GMutex       mutex;
-
   gchar       *argv0;
-  GHashTable  *workers_by_plugin_name;
   GDBusServer *dbus_server;
+  GHashTable  *plugin_name_to_worker;
 };
 
 G_DEFINE_TYPE (IdeWorkerManager, ide_worker_manager, G_TYPE_OBJECT)
@@ -88,9 +86,7 @@ ide_worker_manager_new_connection_cb (IdeWorkerManager *self,
   if ((credentials == NULL) || !g_credentials_get_unix_pid (credentials, NULL))
     return FALSE;
 
-  g_mutex_lock (&self->mutex);
-
-  g_hash_table_iter_init (&iter, self->workers_by_plugin_name);
+  g_hash_table_iter_init (&iter, self->plugin_name_to_worker);
 
   while (g_hash_table_iter_next (&iter, &key, &value))
     {
@@ -102,8 +98,6 @@ ide_worker_manager_new_connection_cb (IdeWorkerManager *self,
           handled = TRUE;
         }
     }
-
-  g_mutex_unlock (&self->mutex);
 
   return handled;
 }
@@ -174,7 +168,8 @@ ide_worker_manager_finalize (GObject *object)
 {
   IdeWorkerManager *self = (IdeWorkerManager *)object;
 
-  g_clear_pointer (&self->workers_by_plugin_name, g_hash_table_unref);
+  g_clear_pointer (&self->plugin_name_to_worker, g_hash_table_unref);
+  g_clear_pointer (&self->argv0, g_free);
   g_clear_object (&self->dbus_server);
 
   G_OBJECT_CLASS (ide_worker_manager_parent_class)->finalize (object);
@@ -225,42 +220,92 @@ ide_worker_manager_init (IdeWorkerManager *self)
 {
   EGG_COUNTER_INC (instances);
 
-  g_mutex_init (&self->mutex);
-
   self->argv0 = g_strdup ("gnome-builder");
 
-  self->workers_by_plugin_name =
+  self->plugin_name_to_worker =
     g_hash_table_new_full (g_str_hash,
                            g_str_equal,
                            g_free,
                            ide_worker_manager_force_exit_worker);
 }
 
-GDBusProxy *
-ide_worker_manager_get_worker (IdeWorkerManager  *self,
-                               const gchar       *plugin_name,
-                               GError           **error)
+static IdeWorkerProcess *
+ide_worker_manager_get_worker_process (IdeWorkerManager *self,
+                                       const gchar      *plugin_name)
 {
-  IdeWorkerProcess *worker;
+  IdeWorkerProcess *worker_process;
 
-  g_return_val_if_fail (IDE_IS_WORKER_MANAGER (self), NULL);
-  g_return_val_if_fail (plugin_name != NULL, NULL);
+  g_assert (IDE_IS_WORKER_MANAGER (self));
+  g_assert (plugin_name != NULL);
 
-  g_mutex_lock (&self->mutex);
+  worker_process = g_hash_table_lookup (self->plugin_name_to_worker, plugin_name);
 
-  worker = g_hash_table_lookup (self->workers_by_plugin_name, plugin_name);
-
-  if (worker == NULL)
+  if (worker_process == NULL)
     {
-      worker = ide_worker_process_new (self->argv0, plugin_name,
-                                       g_dbus_server_get_client_address (self->dbus_server));
-      g_hash_table_insert (self->workers_by_plugin_name, g_strdup (plugin_name), worker);
-      ide_worker_process_run (worker);
+      worker_process = ide_worker_process_new (self->argv0,
+                                               plugin_name,
+                                               g_dbus_server_get_client_address (self->dbus_server));
+      g_hash_table_insert (self->plugin_name_to_worker, g_strdup (plugin_name), worker_process);
+      ide_worker_process_run (worker_process);
     }
 
-  g_mutex_unlock (&self->mutex);
+  return worker_process;
+}
 
-  return ide_worker_process_create_proxy (worker, error);
+static void
+ide_worker_manager_get_worker_cb (GObject      *object,
+                                  GAsyncResult *result,
+                                  gpointer      user_data)
+{
+  IdeWorkerProcess *worker_process = (IdeWorkerProcess *)object;
+  g_autoptr(GTask) task = user_data;
+  GDBusProxy *proxy;
+  GError *error = NULL;
+
+  g_assert (IDE_IS_WORKER_PROCESS (worker_process));
+  g_assert (G_IS_TASK (task));
+
+  proxy = ide_worker_process_get_proxy_finish (worker_process, result, &error);
+
+  if (proxy == NULL)
+    g_task_return_error (task, error);
+  else
+    g_task_return_pointer (task, proxy, g_object_unref);
+}
+
+void
+ide_worker_manager_get_worker_async (IdeWorkerManager    *self,
+                                     const gchar         *plugin_name,
+                                     GCancellable        *cancellable,
+                                     GAsyncReadyCallback  callback,
+                                     gpointer             user_data)
+{
+  IdeWorkerProcess *worker_process;
+  GTask *task;
+
+  g_return_if_fail (IDE_IS_WORKER_MANAGER (self));
+  g_return_if_fail (plugin_name != NULL);
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  task = g_task_new (self, cancellable, callback, user_data);
+  worker_process = ide_worker_manager_get_worker_process (self, plugin_name);
+  ide_worker_process_get_proxy_async (worker_process,
+                                      cancellable,
+                                      ide_worker_manager_get_worker_cb,
+                                      task);
+}
+
+GDBusProxy *
+ide_worker_manager_get_worker_finish (IdeWorkerManager  *self,
+                                      GAsyncResult      *result,
+                                      GError           **error)
+{
+  GTask *task = (GTask *)result;
+
+  g_return_val_if_fail (IDE_IS_WORKER_MANAGER (self), NULL);
+  g_return_val_if_fail (G_IS_TASK (task), NULL);
+
+  return g_task_propagate_pointer (task, error);
 }
 
 IdeWorkerManager *

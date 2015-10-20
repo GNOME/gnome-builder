@@ -41,6 +41,7 @@ ide_worker_register_service (IdeWorker       *self,
  * ide_worker_create_proxy:
  * @self: An #IdeWorker.
  * @connection: A #GDBusConnection connected to the worker process.
+ * @error: (allow-none): a location for a #GError, or %NULL.
  *
  * Creates a new proxy to be connected to the subprocess peer on the other
  * end of @connection.
@@ -48,11 +49,12 @@ ide_worker_register_service (IdeWorker       *self,
  * Returns: (transfer full): A #GDBusProxy or %NULL.
  */
 GDBusProxy *
-ide_worker_create_proxy (IdeWorker       *self,
-                         GDBusConnection *connection)
+ide_worker_create_proxy (IdeWorker        *self,
+                         GDBusConnection  *connection,
+                         GError          **error)
 {
   g_return_val_if_fail (IDE_IS_WORKER (self), NULL);
   g_return_val_if_fail (G_IS_DBUS_CONNECTION (connection), NULL);
 
-  return IDE_WORKER_GET_IFACE (self)->create_proxy (self, connection);
+  return IDE_WORKER_GET_IFACE (self)->create_proxy (self, connection, error);
 }

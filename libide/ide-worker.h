@@ -31,16 +31,18 @@ struct _IdeWorkerInterface
 {
   GTypeInterface parent;
 
-  GDBusProxy *(*create_proxy)     (IdeWorker       *self,
-                                   GDBusConnection *connection);
-  void        (*register_service) (IdeWorker       *self,
-                                   GDBusConnection *connection);
+  GDBusProxy *(*create_proxy)     (IdeWorker        *self,
+                                   GDBusConnection  *connection,
+                                   GError          **error);
+  void        (*register_service) (IdeWorker        *self,
+                                   GDBusConnection  *connection);
 };
 
-GDBusProxy *ide_worker_create_proxy     (IdeWorker       *self,
-                                         GDBusConnection *connection);
-void        ide_worker_register_service (IdeWorker       *self,
-                                         GDBusConnection *connection);
+GDBusProxy *ide_worker_create_proxy     (IdeWorker        *self,
+                                         GDBusConnection  *connection,
+                                         GError          **error);
+void        ide_worker_register_service (IdeWorker        *self,
+                                         GDBusConnection  *connection);
 
 G_END_DECLS
 

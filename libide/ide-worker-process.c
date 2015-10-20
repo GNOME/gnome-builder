@@ -35,11 +35,11 @@ struct _IdeWorkerProcess
   gchar           *plugin_name;
   GSubprocess     *subprocess;
   GDBusConnection *connection;
+  GPtrArray       *tasks;
+  IdeWorker       *worker;
 
   guint            quit : 1;
 };
-
-static void ide_worker_process_respawn (IdeWorkerProcess *self);
 
 G_DEFINE_TYPE (IdeWorkerProcess, ide_worker_process, G_TYPE_OBJECT)
 
@@ -54,6 +54,8 @@ enum {
 };
 
 static GParamSpec *gParamSpecs [LAST_PROP];
+
+static void ide_worker_process_respawn (IdeWorkerProcess *self);
 
 IdeWorkerProcess *
 ide_worker_process_new (const gchar *argv0,
@@ -137,6 +139,22 @@ ide_worker_process_respawn (IdeWorkerProcess *self)
                                  ide_worker_process_wait_check_cb,
                                  g_object_ref (self));
 
+  if (self->worker == NULL)
+    {
+      PeasEngine *engine;
+      PeasExtension *exten;
+      PeasPluginInfo *plugin_info;
+
+      engine = peas_engine_get_default ();
+      plugin_info = peas_engine_get_plugin_info (engine, self->plugin_name);
+
+      if (plugin_info != NULL)
+        {
+          exten = peas_engine_create_extension (engine, plugin_info, IDE_TYPE_WORKER, NULL);
+          self->worker = IDE_WORKER (exten);
+        }
+    }
+
   IDE_EXIT;
 }
 
@@ -187,8 +205,10 @@ ide_worker_process_finalize (GObject *object)
   g_clear_pointer (&self->argv0, g_free);
   g_clear_pointer (&self->plugin_name, g_free);
   g_clear_pointer (&self->dbus_address, g_free);
+  g_clear_pointer (&self->tasks, g_ptr_array_unref);
   g_clear_object (&self->connection);
   g_clear_object (&self->subprocess);
+  g_clear_object (&self->worker);
 
   G_OBJECT_CLASS (ide_worker_process_parent_class)->finalize (object);
 
@@ -289,47 +309,6 @@ ide_worker_process_init (IdeWorkerProcess *self)
   EGG_COUNTER_INC (instances);
 }
 
-gpointer
-ide_worker_process_create_proxy (IdeWorkerProcess  *self,
-                                 GError           **error)
-{
-  PeasEngine *engine;
-  PeasPluginInfo *plugin_info;
-  PeasExtension *exten;
-  GDBusProxy *proxy;
-
-  g_assert (IDE_IS_WORKER_PROCESS (self));
-  g_assert (self->plugin_name != NULL);
-
-  engine = peas_engine_get_default ();
-  plugin_info = peas_engine_get_plugin_info (engine, self->plugin_name);
-
-  if (plugin_info == NULL)
-    {
-      g_set_error (error,
-                   G_IO_ERROR,
-                   G_IO_ERROR_PROXY_FAILED,
-                   "The plugin named \"%s\" could not be found.",
-                   self->plugin_name);
-      return NULL;
-    }
-
-  if (self->connection == NULL)
-    {
-      g_set_error (error,
-                   G_IO_ERROR,
-                   G_IO_ERROR_PROXY_FAILED,
-                   "No connection has been established with the worker process");
-      return NULL;
-    }
-
-  exten = peas_engine_create_extension (engine, plugin_info, IDE_TYPE_WORKER, NULL);
-  proxy = ide_worker_create_proxy (IDE_WORKER (exten), self->connection);
-  g_clear_object (&exten);
-
-  return proxy;
-}
-
 gboolean
 ide_worker_process_matches_credentials (IdeWorkerProcess *self,
                                         GCredentials     *credentials)
@@ -353,6 +332,36 @@ ide_worker_process_matches_credentials (IdeWorkerProcess *self,
   return FALSE;
 }
 
+static void
+ide_worker_process_create_proxy_for_task (IdeWorkerProcess *self,
+                                          GTask            *task)
+{
+  GDBusProxy *proxy;
+  GError *error = NULL;
+
+  g_assert (IDE_IS_WORKER_PROCESS (self));
+  g_assert (G_IS_TASK (task));
+
+  if (self->worker == NULL)
+    {
+      g_task_return_new_error (task,
+                               G_IO_ERROR,
+                               G_IO_ERROR_PROXY_FAILED,
+                               "Failed to create IdeWorker instance.");
+      return;
+    }
+
+  proxy = ide_worker_create_proxy (self->worker, self->connection, &error);
+
+  if (proxy == NULL)
+    {
+      g_task_return_error (task, error);
+      return;
+    }
+
+  g_task_return_pointer (task, proxy, g_object_unref);
+}
+
 void
 ide_worker_process_set_connection (IdeWorkerProcess *self,
                                    GDBusConnection  *connection)
@@ -360,5 +369,59 @@ ide_worker_process_set_connection (IdeWorkerProcess *self,
   g_return_if_fail (IDE_IS_WORKER_PROCESS (self));
   g_return_if_fail (G_IS_DBUS_CONNECTION (connection));
 
-  g_set_object (&self->connection, connection);
+  if (g_set_object (&self->connection, connection))
+    {
+      if (self->tasks != NULL)
+        {
+          g_autoptr(GPtrArray) ar = NULL;
+          guint i;
+
+          ar = self->tasks;
+          self->tasks = NULL;
+
+          for (i = 0; i < ar->len; i++)
+            {
+              GTask *task = g_ptr_array_index (ar, i);
+              ide_worker_process_create_proxy_for_task (self, task);
+            }
+        }
+    }
+}
+
+void
+ide_worker_process_get_proxy_async (IdeWorkerProcess    *self,
+                                    GCancellable        *cancellable,
+                                    GAsyncReadyCallback  callback,
+                                    gpointer             user_data)
+{
+  g_autoptr(GTask) task = NULL;
+
+  g_return_if_fail (IDE_IS_WORKER_PROCESS (self));
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  task = g_task_new (self, cancellable, callback, user_data);
+
+  if (self->connection != NULL)
+    {
+      ide_worker_process_create_proxy_for_task (self, task);
+      return;
+    }
+
+  if (self->tasks == NULL)
+    self->tasks = g_ptr_array_new_with_free_func (g_object_unref);
+
+  g_ptr_array_add (self->tasks, g_object_ref (task));
+}
+
+GDBusProxy *
+ide_worker_process_get_proxy_finish (IdeWorkerProcess  *self,
+                                     GAsyncResult      *result,
+                                     GError           **error)
+{
+  GTask *task = (GTask *)result;
+
+  g_return_val_if_fail (IDE_IS_WORKER_PROCESS (self), NULL);
+  g_return_val_if_fail (G_IS_TASK (task), NULL);
+
+  return g_task_propagate_pointer (task, error);
 }
