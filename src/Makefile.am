@@ -8,6 +8,11 @@ bin_PROGRAMS = gnome-builder
 pkglibdir = $(libdir)/gnome-builder
 pkglib_LTLIBRARIES = libgnome-builder.la
 
+if ENABLE_PYTHON_SCRIPTING
+overridesdir = $(pyoverridesdir)
+overrides_PYTHON = Builder.py
+endif
+
 # XXX: Keep in sync with gnome-builder.h
 libgnome_builder_public_sources = \
 	gnome-builder.h \

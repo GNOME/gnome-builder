@@ -8,6 +8,7 @@ GITIGNOREFILES = \
 	install-sh \
 	ltmain.sh \
 	missing \
+	py-compile \
 	test-driver \
 	$(NULL)
 
