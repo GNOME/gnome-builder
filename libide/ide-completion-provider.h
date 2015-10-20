@@ -42,9 +42,10 @@ struct _IdeCompletionProviderInterface
                        IdeContext            *context);
 };
 
-GType     ide_completion_provider_get_type             (void);
-gboolean  ide_completion_provider_context_in_comment   (GtkSourceCompletionContext *context);
-gchar    *ide_completion_provider_context_current_word (GtkSourceCompletionContext *context);
+GType     ide_completion_provider_get_type                     (void);
+gboolean  ide_completion_provider_context_in_comment           (GtkSourceCompletionContext *context);
+gboolean  ide_completion_provider_context_in_comment_or_string (GtkSourceCompletionContext *context);
+gchar    *ide_completion_provider_context_current_word         (GtkSourceCompletionContext *context);
 
 G_END_DECLS
 

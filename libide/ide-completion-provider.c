@@ -59,6 +59,33 @@ ide_completion_provider_context_in_comment (GtkSourceCompletionContext *context)
   return FALSE;
 }
 
+gboolean
+ide_completion_provider_context_in_comment_or_string (GtkSourceCompletionContext *context)
+{
+  GtkTextIter iter;
+
+  g_return_val_if_fail (GTK_SOURCE_IS_COMPLETION_CONTEXT (context), FALSE);
+
+  if (gtk_source_completion_context_get_iter (context, &iter))
+    {
+      GtkSourceBuffer *buffer = GTK_SOURCE_BUFFER (gtk_text_iter_get_buffer (&iter));
+
+      if (gtk_source_buffer_iter_has_context_class (buffer, &iter, "comment") ||
+          gtk_source_buffer_iter_has_context_class (buffer, &iter, "string"))
+        return TRUE;
+
+      if (!gtk_text_iter_starts_line (&iter))
+        {
+          gtk_text_iter_backward_char (&iter);
+          if (gtk_source_buffer_iter_has_context_class (buffer, &iter, "comment") ||
+              gtk_source_buffer_iter_has_context_class (buffer, &iter, "string"))
+            return TRUE;
+        }
+    }
+
+  return FALSE;
+}
+
 gchar *
 ide_completion_provider_context_current_word (GtkSourceCompletionContext *context)
 {
