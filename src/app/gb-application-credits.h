@@ -340,6 +340,7 @@ static const gchar *gb_application_credits_funders[] = {
   "Martin A Stembel",
   "Martin Andersson",
   "Martin Blanchard",
+  "Martin C Foster",
   "Martin Unzner",
   "Matej Smid",
   "Mathieu Bridon",
