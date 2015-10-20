@@ -24,6 +24,8 @@
 #include <ide.h>
 #include <libpeas/peas.h>
 
+#include "ide-worker-manager.h"
+
 #include "gb-keybindings.h"
 #include "gb-preferences-window.h"
 
@@ -42,6 +44,7 @@ struct _GbApplication
   gchar               *type;
   gchar               *dbus_address;
   gchar               *argv0;
+  IdeWorkerManager    *worker_manager;
 };
 
 

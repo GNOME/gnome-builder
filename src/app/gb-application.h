@@ -40,6 +40,14 @@ gboolean     gb_application_open_project_finish  (GbApplication        *self,
 void         gb_application_show_projects_window (GbApplication        *self);
 const gchar *gb_application_get_keybindings_mode (GbApplication        *self);
 const gchar *gb_application_get_argv0            (GbApplication        *self);
+void         gb_application_get_worker_async     (GbApplication        *self,
+                                                  const gchar          *plugin_name,
+                                                  GCancellable         *cancellable,
+                                                  GAsyncReadyCallback   callback,
+                                                  gpointer              user_data);
+GDBusProxy  *gb_application_get_worker_finish    (GbApplication        *self,
+                                                  GAsyncResult         *result,
+                                                  GError              **error);
 
 G_END_DECLS
 

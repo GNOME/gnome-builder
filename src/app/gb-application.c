@@ -792,3 +792,90 @@ gb_application_get_argv0 (GbApplication *self)
 
   return self->argv0;
 }
+
+static void
+gb_application_get_worker_cb (GObject      *object,
+                              GAsyncResult *result,
+                              gpointer      user_data)
+{
+  IdeWorkerManager *worker_manager = (IdeWorkerManager *)object;
+  g_autoptr(GTask) task = user_data;
+  GError *error = NULL;
+  GDBusProxy *proxy;
+
+  g_assert (IDE_IS_WORKER_MANAGER (worker_manager));
+
+  proxy = ide_worker_manager_get_worker_finish (worker_manager, result, &error);
+
+  if (proxy == NULL)
+    g_task_return_error (task, error);
+  else
+    g_task_return_pointer (task, proxy, g_object_unref);
+}
+
+/**
+ * gb_application_get_worker_async:
+ * @self: A #GbApplication
+ * @plugin_name: The name of the plugin.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @callback: A #GAsyncReadyCallback or %NULL.
+ * @user_data: user data for @callback.
+ *
+ * Asynchronously requests a #GDBusProxy to a service provided in a worker
+ * process. The worker should be an #IdeWorker implemented by the plugin named
+ * @plugin_name. The #IdeWorker is responsible for created both the service
+ * registered on the bus and the proxy to it.
+ *
+ * The #GbApplication is responsible for spawning a subprocess for the worker.
+ *
+ * @callback should call gb_application_get_worker_finish() with the result
+ * provided to retrieve the result.
+ */
+void
+gb_application_get_worker_async (GbApplication       *self,
+                                 const gchar         *plugin_name,
+                                 GCancellable        *cancellable,
+                                 GAsyncReadyCallback  callback,
+                                 gpointer             user_data)
+{
+  GTask *task = NULL;
+
+  g_return_if_fail (GB_IS_APPLICATION (self));
+  g_return_if_fail (plugin_name != NULL);
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  if (self->worker_manager == NULL)
+    self->worker_manager = ide_worker_manager_new (self->argv0);
+
+  task = g_task_new (self, cancellable, callback, user_data);
+
+  ide_worker_manager_get_worker_async (self->worker_manager,
+                                       plugin_name,
+                                       cancellable,
+                                       gb_application_get_worker_cb,
+                                       task);
+}
+
+/**
+ * gb_application_get_worker_finish:
+ * @self: A #GbApplication.
+ * @result: A #GAsyncResult
+ * @error: a location for a #GError, or %NULL.
+ *
+ * Completes an asynchronous request to get a proxy to a worker process.
+ *
+ * Returns: (transfer full): A #GDBusProxy or %NULL.
+ */
+GDBusProxy *
+gb_application_get_worker_finish (GbApplication  *self,
+                                  GAsyncResult   *result,
+                                  GError        **error)
+{
+  GTask *task = (GTask *)result;
+
+  g_return_val_if_fail (GB_IS_APPLICATION (self), NULL);
+  g_return_val_if_fail (G_IS_ASYNC_RESULT (result), NULL);
+  g_return_val_if_fail (G_IS_TASK (task), NULL);
+
+  return g_task_propagate_pointer (task, error);
+}
