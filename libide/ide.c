@@ -143,6 +143,7 @@ ide_init_ctor (void)
       exit (EXIT_FAILURE);
     }
 
+  /* TODO: tune what we startup here once we have IdeApplication/IdeWorkbench/etc. */
   _ide_thread_pool_init ();
 
   _ide_battery_monitor_init ();
