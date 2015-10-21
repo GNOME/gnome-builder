@@ -74,7 +74,7 @@ gb_application_load_worker (GbApplication *self)
   IDE_TRACE_MSG ("Connecting to %s", self->dbus_address);
 
   connection = g_dbus_connection_new_for_address_sync (self->dbus_address,
-                                                       G_DBUS_CONNECTION_FLAGS_NONE,
+                                                       G_DBUS_CONNECTION_FLAGS_AUTHENTICATION_CLIENT,
                                                        NULL, NULL, &error);
 
   if (error != NULL)
