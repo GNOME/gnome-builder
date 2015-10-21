@@ -74,7 +74,8 @@ gb_application_load_worker (GbApplication *self)
   IDE_TRACE_MSG ("Connecting to %s", self->dbus_address);
 
   connection = g_dbus_connection_new_for_address_sync (self->dbus_address,
-                                                       G_DBUS_CONNECTION_FLAGS_AUTHENTICATION_CLIENT,
+                                                       (G_DBUS_CONNECTION_FLAGS_AUTHENTICATION_CLIENT |
+                                                        G_DBUS_CONNECTION_FLAGS_DELAY_MESSAGE_PROCESSING),
                                                        NULL, NULL, &error);
 
   if (error != NULL)
@@ -98,12 +99,17 @@ gb_application_load_worker (GbApplication *self)
       if (exten != NULL)
         {
           ide_worker_register_service (IDE_WORKER (exten), connection);
-          g_application_hold (G_APPLICATION (self));
-          IDE_EXIT;
+          IDE_GOTO (success);
         }
     }
 
   g_error ("Failed to create \"%s\" worker.", self->type);
+
+  IDE_EXIT;
+
+success:
+  g_application_hold (G_APPLICATION (self));
+  g_dbus_connection_start_message_processing (connection);
 
   IDE_EXIT;
 }
