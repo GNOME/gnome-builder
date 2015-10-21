@@ -267,3 +267,9 @@ ide_log_increase_verbosity (void)
 {
   log_verbosity++;
 }
+
+gint
+ide_log_get_verbosity (void)
+{
+  return log_verbosity;
+}
