@@ -230,6 +230,7 @@ static const gchar *gb_application_credits_funders[] = {
   "Florian Over",
   "Florian Schweikert",
   "Florin Florica",
+  "Frank Dietrich",
   "Frank Hansen",
   "Fredrik Schaller",
   "G A Foster",
