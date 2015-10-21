@@ -86,7 +86,7 @@ ide_worker_manager_new_connection_cb (IdeWorkerManager *self,
   g_assert (G_IS_DBUS_SERVER (server));
 
   credentials = g_dbus_connection_get_peer_credentials (connection);
-  if ((credentials == NULL) || !g_credentials_get_unix_pid (credentials, NULL))
+  if ((credentials == NULL) || (-1 == g_credentials_get_unix_pid (credentials, NULL)))
     IDE_RETURN (FALSE);
 
   g_hash_table_iter_init (&iter, self->plugin_name_to_worker);
