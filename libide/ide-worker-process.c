@@ -23,6 +23,7 @@
 #include "egg-counter.h"
 
 #include "ide-debug.h"
+#include "ide-log.h"
 #include "ide-worker-process.h"
 #include "ide-worker.h"
 
@@ -112,7 +113,10 @@ ide_worker_process_respawn (IdeWorkerProcess *self)
   g_autoptr(GSubprocess) subprocess = NULL;
   g_autofree gchar *type = NULL;
   g_autofree gchar *dbus_address = NULL;
+  g_autoptr(GString) verbosearg = NULL;
   GError *error = NULL;
+  gint verbosity;
+  gint i;
 
   IDE_ENTRY;
 
@@ -122,8 +126,18 @@ ide_worker_process_respawn (IdeWorkerProcess *self)
   type = g_strdup_printf ("--type=%s", self->plugin_name);
   dbus_address = g_strdup_printf ("--dbus-address=%s", self->dbus_address);
 
+  verbosearg = g_string_new ("-");
+  verbosity = ide_log_get_verbosity ();
+  for (i = 0; i < verbosity; i++)
+    g_string_append_c (verbosearg, 'v');
+
   launcher = g_subprocess_launcher_new (G_SUBPROCESS_FLAGS_NONE);
-  subprocess = g_subprocess_launcher_spawn (launcher, &error, self->argv0, type, dbus_address, NULL);
+  subprocess = g_subprocess_launcher_spawn (launcher, &error,
+                                            self->argv0,  /* gnome-builder */
+                                            type,         /* --type= */
+                                            dbus_address, /* --dbus-addres= */
+                                            verbosity > 0 ? verbosearg->str : NULL,
+                                            NULL);
 
   if (subprocess == NULL)
     {
