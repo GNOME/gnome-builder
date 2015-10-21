@@ -77,7 +77,6 @@ ide_worker_manager_new_connection_cb (IdeWorkerManager *self,
   GCredentials *credentials;
   GHashTableIter iter;
   gpointer key, value;
-  gboolean handled = FALSE;
 
   IDE_ENTRY;
 
@@ -98,11 +97,11 @@ ide_worker_manager_new_connection_cb (IdeWorkerManager *self,
       if (ide_worker_process_matches_credentials (process, credentials))
         {
           ide_worker_process_set_connection (process, connection);
-          handled = TRUE;
+          IDE_RETURN (TRUE);
         }
     }
 
-  IDE_RETURN (handled);
+  IDE_RETURN (FALSE);
 }
 
 static void
