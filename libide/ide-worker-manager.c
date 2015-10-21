@@ -246,9 +246,13 @@ ide_worker_manager_get_worker_process (IdeWorkerManager *self,
 
   if (worker_process == NULL)
     {
-      worker_process = ide_worker_process_new (self->argv0,
-                                               plugin_name,
-                                               g_dbus_server_get_client_address (self->dbus_server));
+      g_autofree gchar *address = NULL;
+
+      address = g_strdup_printf ("%s,guid=%s",
+                                 g_dbus_server_get_client_address (self->dbus_server),
+                                 g_dbus_server_get_guid (self->dbus_server));
+
+      worker_process = ide_worker_process_new (self->argv0, plugin_name, address);
       g_hash_table_insert (self->plugin_name_to_worker, g_strdup (plugin_name), worker_process);
       ide_worker_process_run (worker_process);
     }
