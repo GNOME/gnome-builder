@@ -146,7 +146,7 @@ ide_worker_manager_constructed (GObject *object)
 
   if (error != NULL)
     {
-      g_printerr ("%s\n", error->message);
+      g_error ("%s", error->message);
       exit (EXIT_FAILURE);
     }
 
@@ -156,8 +156,11 @@ ide_worker_manager_constructed (GObject *object)
                            self,
                            G_CONNECT_SWAPPED);
 
+  IDE_TRACE_MSG ("GDBusServer listening at %s", address);
 
-  g_assert (self->dbus_server != NULL);
+  g_dbus_server_start (self->dbus_server);
+
+  g_assert (g_dbus_server_is_active (self->dbus_server));
 }
 
 static void
