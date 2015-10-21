@@ -59,6 +59,7 @@ main (int   argc,
 
   g_resources_register (gb_icons_get_resource ());
 
+  /* TODO: delay plugin loading based on --type */
   gb_plugins_init ();
 
   app = g_object_new (GB_TYPE_APPLICATION,
