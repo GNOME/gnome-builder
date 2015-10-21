@@ -71,6 +71,8 @@ gb_application_load_worker (GbApplication *self)
   prctl (PR_SET_PDEATHSIG, 15);
 #endif
 
+  IDE_TRACE_MSG ("Connecting to %s", self->dbus_address);
+
   connection = g_dbus_connection_new_for_address_sync (self->dbus_address,
                                                        G_DBUS_CONNECTION_FLAGS_NONE,
                                                        NULL, NULL, &error);
@@ -81,6 +83,8 @@ gb_application_load_worker (GbApplication *self)
       g_clear_error (&error);
       IDE_EXIT;
     }
+
+  g_assert (G_IS_DBUS_CONNECTION (connection));
 
   engine = peas_engine_get_default ();
   plugin_info = peas_engine_get_plugin_info (engine, self->type);
