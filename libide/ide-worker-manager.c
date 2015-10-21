@@ -110,26 +110,31 @@ ide_worker_manager_constructed (GObject *object)
   IdeWorkerManager *self = (IdeWorkerManager *)object;
   g_autofree gchar *guid = NULL;
   g_autofree gchar *address = NULL;
-  g_autofree gchar *tmpdir = NULL;
   GError *error = NULL;
 
-  g_return_if_fail (IDE_IS_WORKER_MANAGER (self));
+  g_assert (IDE_IS_WORKER_MANAGER (self));
 
   G_OBJECT_CLASS (ide_worker_manager_parent_class)->constructed (object);
 
   if (g_unix_socket_address_abstract_names_supported ())
-    tmpdir = g_strdup_printf ("%s/gnome-builder-worker-%u",
-                              g_get_tmp_dir (), getpid ());
-  else
-    tmpdir = g_dir_make_tmp ("gnome-builder-worker-XXXXXX", NULL);
-
-  if (tmpdir == NULL)
     {
-      g_error ("Failed to determine temporary directory for DBus.");
-      exit (EXIT_FAILURE);
+      address = g_strdup_printf ("unix:abstract=/tmp/gnome-builder-%u", (int)getpid ());
+    }
+  else
+    {
+      g_autofree gchar *tmpdir = NULL;
+
+      tmpdir = g_dir_make_tmp ("gnome-builder-worker-XXXXXX", NULL);
+
+      if (tmpdir == NULL)
+        {
+          g_error ("Failed to determine temporary directory for DBus.");
+          exit (EXIT_FAILURE);
+        }
+
+      address = g_strdup_printf ("unix:tmpdir=%s", tmpdir);
     }
 
-  address = g_strdup_printf ("unix:tmpdir=%s", tmpdir);
   guid = g_dbus_generate_guid ();
 
   self->dbus_server = g_dbus_server_new_sync (address,
