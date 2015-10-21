@@ -353,6 +353,8 @@ ide_worker_process_create_proxy_for_task (IdeWorkerProcess *self,
   GDBusProxy *proxy;
   GError *error = NULL;
 
+  IDE_ENTRY;
+
   g_assert (IDE_IS_WORKER_PROCESS (self));
   g_assert (G_IS_TASK (task));
 
@@ -362,18 +364,24 @@ ide_worker_process_create_proxy_for_task (IdeWorkerProcess *self,
                                G_IO_ERROR,
                                G_IO_ERROR_PROXY_FAILED,
                                "Failed to create IdeWorker instance.");
-      return;
+      IDE_EXIT;
     }
 
   proxy = ide_worker_create_proxy (self->worker, self->connection, &error);
 
   if (proxy == NULL)
     {
+      if (error == NULL)
+        error = g_error_new_literal (G_IO_ERROR,
+                                     G_IO_ERROR_PROXY_FAILED,
+                                     "IdeWorker returned NULL and did not set an error.");
       g_task_return_error (task, error);
-      return;
+      IDE_EXIT;
     }
 
   g_task_return_pointer (task, proxy, g_object_unref);
+
+  IDE_EXIT;
 }
 
 void

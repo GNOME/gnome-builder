@@ -277,6 +277,8 @@ ide_worker_manager_get_worker_cb (GObject      *object,
   GDBusProxy *proxy;
   GError *error = NULL;
 
+  IDE_ENTRY;
+
   g_assert (IDE_IS_WORKER_PROCESS (worker_process));
   g_assert (G_IS_TASK (task));
 
@@ -286,6 +288,8 @@ ide_worker_manager_get_worker_cb (GObject      *object,
     g_task_return_error (task, error);
   else
     g_task_return_pointer (task, proxy, g_object_unref);
+
+  IDE_EXIT;
 }
 
 void
