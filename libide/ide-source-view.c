@@ -120,6 +120,8 @@ typedef struct
   gunichar                     modifier;
   gunichar                     search_char;
   guint                        count;
+  gunichar                     inner_left;
+  gunichar                     inner_right;
 
   guint                        delayed_scroll_replay;
 
@@ -247,6 +249,7 @@ enum {
   SAVE_COMMAND,
   SAVE_INSERT_MARK,
   SAVE_SEARCH_CHAR,
+  SELECT_INNER,
   SELECTION_THEATRIC,
   SET_MODE,
   SET_OVERWRITE,
@@ -3444,6 +3447,28 @@ ide_source_view_real_save_search_char (IdeSourceView *self)
 }
 
 static void
+ide_source_view_real_select_inner (IdeSourceView *self,
+                                   const gchar   *inner_left,
+                                   const gchar   *inner_right,
+                                   gboolean       exclusive)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+  gunichar unichar_inner_left;
+  gunichar unichar_inner_right;
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+
+  unichar_inner_left = g_utf8_get_char (inner_left);
+  unichar_inner_right = g_utf8_get_char (inner_right);
+
+  _ide_source_view_select_inner (self,
+                                 unichar_inner_left,
+                                 unichar_inner_right,
+                                 priv->count,
+                                 exclusive);
+}
+
+static void
 ide_source_view__completion_hide_cb (IdeSourceView       *self,
                                      GtkSourceCompletion *completion)
 {
@@ -5359,6 +5384,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
   klass->save_command = ide_source_view_real_save_command;
   klass->save_insert_mark = ide_source_view_real_save_insert_mark;
   klass->save_search_char = ide_source_view_real_save_search_char;
+  klass->select_inner = ide_source_view_real_select_inner;
   klass->selection_theatric = ide_source_view_real_selection_theatric;
   klass->set_mode = ide_source_view_real_set_mode;
   klass->set_overwrite = ide_source_view_real_set_overwrite;
@@ -6004,6 +6030,18 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   NULL, NULL, NULL,
                   G_TYPE_NONE,
                   0);
+
+  signals [SELECT_INNER] =
+    g_signal_new ("select-inner",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                  G_STRUCT_OFFSET (IdeSourceViewClass, select_inner),
+                  NULL, NULL, NULL,
+                  G_TYPE_NONE,
+                  3,
+                  G_TYPE_STRING,
+                  G_TYPE_STRING,
+                  G_TYPE_BOOLEAN);
 
   signals [SELECTION_THEATRIC] =
     g_signal_new ("selection-theatric",

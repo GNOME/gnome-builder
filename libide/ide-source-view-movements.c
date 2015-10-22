@@ -786,6 +786,7 @@ bracket_predicate (gunichar ch,
     state->depth += (state->direction == GTK_DIR_RIGHT) ? -1 : 1;
 
   return (state->depth == 0);
+
 }
 
 /* find the matching char position in 'depth' outer levels */
@@ -1630,4 +1631,39 @@ _ide_source_view_apply_movement (IdeSourceView         *self,
 
   if (!mv.ignore_scroll_to_insert)
     ide_source_view_scroll_mark_onscreen (self, insert, TRUE, 0.5, 0.5);
+}
+
+void
+_ide_source_view_select_inner (IdeSourceView *self,
+                               gunichar       inner_left,
+                               gunichar       inner_right,
+                               guint          count,
+                               gboolean       exclusive)
+{
+  GtkTextBuffer *buffer;
+  GtkTextMark *insert;
+  GtkTextIter start;
+  GtkTextIter end;
+
+  g_return_if_fail (IDE_IS_SOURCE_VIEW (self));
+
+  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
+  insert = gtk_text_buffer_get_insert (buffer);
+  gtk_text_buffer_get_iter_at_mark (buffer, &start, insert);
+
+  count = MAX (1, count);
+
+  if (match_char_with_depth (&start, inner_left, inner_right, GTK_DIR_LEFT, count, !exclusive))
+    {
+      end = start;
+      if (exclusive)
+        gtk_text_iter_backward_char (&end);
+
+      if (match_char_with_depth (&end, inner_left, inner_right, GTK_DIR_RIGHT, 1, exclusive))
+        {
+          gtk_text_buffer_select_range (buffer, &start, &end);
+          gtk_text_view_scroll_mark_onscreen (GTK_TEXT_VIEW (self), insert);
+        }
+
+    }
 }

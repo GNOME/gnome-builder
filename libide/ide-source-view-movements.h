@@ -33,6 +33,12 @@ void _ide_source_view_apply_movement (IdeSourceView         *source_view,
                                       gunichar               search_char,
                                       gint                  *target_offset);
 
+void _ide_source_view_select_inner   (IdeSourceView *self,
+                                      gunichar       inner_left,
+                                      gunichar       inner_right,
+                                      guint          count,
+                                      gboolean       exclusive);
+
 G_END_DECLS
 
 #endif /* IDE_SOURCE_VIEW_HELPER_H */
