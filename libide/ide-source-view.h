@@ -259,6 +259,10 @@ struct _IdeSourceViewClass
   void (*save_command)                (IdeSourceView           *self);
   void (*save_search_char)            (IdeSourceView           *self);
   void (*save_insert_mark)            (IdeSourceView           *self);
+  void (*select_inner)                (IdeSourceView           *self,
+                                       const gchar             *inner_left,
+                                       const gchar             *inner_right,
+                                       gboolean                 exclusive);
   void (*selection_theatric)          (IdeSourceView           *self,
                                        IdeSourceViewTheatric    theatric);
   void (*set_mode)                    (IdeSourceView           *self,

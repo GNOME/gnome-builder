@@ -57,9 +57,10 @@ typedef struct
 
 typedef struct
 {
-  gunichar jump_to;
-  gunichar jump_from;
-  guint    depth;
+  gunichar         jump_to;
+  gunichar         jump_from;
+  GtkDirectionType direction;
+  guint            depth;
 } MatchingBracketState;
 
 static gboolean
@@ -780,71 +781,85 @@ bracket_predicate (gunichar ch,
   MatchingBracketState *state = user_data;
 
   if (ch == state->jump_from)
-    state->depth++;
+    state->depth += (state->direction == GTK_DIR_RIGHT) ? 1 : -1;
   else if (ch == state->jump_to)
-    state->depth--;
+    state->depth += (state->direction == GTK_DIR_RIGHT) ? -1 : 1;
 
   return (state->depth == 0);
+}
+
+/* find the matching char position in 'depth' outer levels */
+static gboolean
+match_char_with_depth (GtkTextIter      *iter,
+                       gunichar          left_char,
+                       gunichar          right_char,
+                       GtkDirectionType  direction,
+                       gint              depth,
+                       gboolean          is_exclusive)
+{
+  MatchingBracketState state;
+  gboolean ret;
+
+  g_return_val_if_fail (direction == GTK_DIR_LEFT || direction == GTK_DIR_RIGHT, FALSE);
+
+  state.jump_from = left_char;
+  state.jump_to = right_char;
+  state.direction = direction;
+  state.depth = depth;
+
+  if (direction == GTK_DIR_LEFT)
+    ret = gtk_text_iter_backward_find_char (iter, bracket_predicate, &state, NULL);
+  else
+    ret = gtk_text_iter_forward_find_char (iter, bracket_predicate, &state, NULL);
+
+  if (ret && !is_exclusive)
+    gtk_text_iter_forward_char (iter);
+
+  return ret;
 }
 
 static void
 ide_source_view_movements_match_special (Movement *mv)
 {
-  MatchingBracketState state;
+  gunichar start_char;
   GtkTextIter copy;
-  gboolean is_forward = FALSE;
   gboolean ret;
 
   copy = mv->insert;
+  start_char = gtk_text_iter_get_char (&mv->insert);
 
-  state.depth = 1;
-  state.jump_from = gtk_text_iter_get_char (&mv->insert);
-
-  switch (state.jump_from)
+  switch (start_char)
     {
     case '{':
-      state.jump_to = '}';
-      is_forward = TRUE;
+      ret = match_char_with_depth (&mv->insert, '{', '}', GTK_DIR_RIGHT, 1, mv->exclusive);
       break;
 
     case '[':
-      state.jump_to = ']';
-      is_forward = TRUE;
+      ret = match_char_with_depth (&mv->insert, '[', ']', GTK_DIR_RIGHT, 1, mv->exclusive);
       break;
 
     case '(':
-      state.jump_to = ')';
-      is_forward = TRUE;
+      ret = match_char_with_depth (&mv->insert, '(', ')', GTK_DIR_RIGHT, 1, mv->exclusive);
       break;
 
     case '}':
-      state.jump_to = '{';
-      is_forward = FALSE;
+      ret = match_char_with_depth (&mv->insert, '{', '}', GTK_DIR_LEFT, 1, mv->exclusive);
       break;
 
     case ']':
-      state.jump_to = '[';
-      is_forward = FALSE;
+      ret = match_char_with_depth (&mv->insert, '[', ']', GTK_DIR_LEFT, 1, mv->exclusive);
       break;
 
     case ')':
-      state.jump_to = '(';
-      is_forward = FALSE;
+      ret = match_char_with_depth (&mv->insert, '(', ')', GTK_DIR_LEFT, 1, mv->exclusive);
       break;
 
     default:
       return;
     }
 
-  if (is_forward)
-    ret = gtk_text_iter_forward_find_char (&mv->insert, bracket_predicate, &state, NULL);
-  else
-    ret = gtk_text_iter_backward_find_char (&mv->insert, bracket_predicate, &state, NULL);
-
   if (!ret)
     mv->insert = copy;
-  else if (!mv->exclusive)
-    gtk_text_iter_forward_char (&mv->insert);
 }
 
 static void
