@@ -774,6 +774,28 @@
                      "copy-clipboard" ()
                      "selection-theatric" (shrink)
                      "delete-selection" () };
+
+  /* ci" ci' ci` */
+    bind "quotedbl" { "begin-macro" ()
+                      "select-inner" ("\"", "\"", 1, 1)
+                      "set-mode" ("vim-insert", permanent)
+                      "copy-clipboard" ()
+                      "selection-theatric" (shrink)
+                      "delete-selection" () };
+
+    bind "apostrophe" { "begin-macro" ()
+                        "select-inner" ("'", "'", 1, 1)
+                        "set-mode" ("vim-insert", permanent)
+                        "copy-clipboard" ()
+                        "selection-theatric" (shrink)
+                        "delete-selection" () };
+
+    bind "grave" { "begin-macro" ()
+                   "select-inner" ("`", "`", 1, 1)
+                   "set-mode" ("vim-insert", permanent)
+                   "copy-clipboard" ()
+                   "selection-theatric" (shrink)
+                   "delete-selection" () };
 }
 
 @binding-set builder-vim-source-view-normal-c-a
@@ -851,6 +873,28 @@
                      "copy-clipboard" ()
                      "selection-theatric" (shrink)
                      "delete-selection" () };
+
+  /* ca" ca' ca` */
+    bind "quotedbl" { "begin-macro" ()
+                      "select-inner" ("\"", "\"", 0, 1)
+                      "set-mode" ("vim-insert", permanent)
+                      "copy-clipboard" ()
+                      "selection-theatric" (shrink)
+                      "delete-selection" () };
+
+    bind "apostrophe" { "begin-macro" ()
+                        "select-inner" ("'", "'", 0, 1)
+                        "set-mode" ("vim-insert", permanent)
+                        "copy-clipboard" ()
+                        "selection-theatric" (shrink)
+                        "delete-selection" () };
+
+    bind "grave" { "begin-macro" ()
+                   "select-inner" ("`", "`", 0, 1)
+                   "set-mode" ("vim-insert", permanent)
+                   "copy-clipboard" ()
+                   "selection-theatric" (shrink)
+                   "delete-selection" () };
 }
 
 @binding-set builder-vim-source-view-normal-d
@@ -1317,6 +1361,28 @@
                      "copy-clipboard" ()
                      "selection-theatric" (shrink)
                      "delete-selection" () };
+
+  /* di" di' di` */
+    bind "quotedbl" { "begin-macro" ()
+                      "select-inner" ("\"", "\"", 1, 1)
+                      "set-mode" ("vim-normal", permanent)
+                      "copy-clipboard" ()
+                      "selection-theatric" (shrink)
+                      "delete-selection" () };
+
+    bind "apostrophe" { "begin-macro" ()
+                        "select-inner" ("'", "'", 1, 1)
+                        "set-mode" ("vim-normal", permanent)
+                        "copy-clipboard" ()
+                        "selection-theatric" (shrink)
+                        "delete-selection" () };
+
+    bind "grave" { "begin-macro" ()
+                   "select-inner" ("`", "`", 1, 1)
+                   "set-mode" ("vim-normal", permanent)
+                   "copy-clipboard" ()
+                   "selection-theatric" (shrink)
+                   "delete-selection" () };
 }
 
 @binding-set builder-vim-source-view-normal-d-a
@@ -1394,6 +1460,28 @@
                      "copy-clipboard" ()
                      "selection-theatric" (shrink)
                      "delete-selection" () };
+
+  /* da" da' da` */
+    bind "quotedbl" { "begin-macro" ()
+                      "select-inner" ("\"", "\"", 0, 1)
+                      "set-mode" ("vim-normal", permanent)
+                      "copy-clipboard" ()
+                      "selection-theatric" (shrink)
+                      "delete-selection" () };
+
+    bind "apostrophe" { "begin-macro" ()
+                        "select-inner" ("'", "'", 0, 1)
+                        "set-mode" ("vim-normal", permanent)
+                        "copy-clipboard" ()
+                        "selection-theatric" (shrink)
+                        "delete-selection" () };
+
+    bind "grave" { "begin-macro" ()
+                   "select-inner" ("`", "`", 0, 1)
+                   "set-mode" ("vim-normal", permanent)
+                   "copy-clipboard" ()
+                   "selection-theatric" (shrink)
+                   "delete-selection" () };
 }
 
 @binding-set builder-vim-source-view-visual-g
@@ -1720,6 +1808,19 @@
     bind "greater" { "begin-macro" ()
                      "select-inner" ("<", ">", 1, 0)
                      "set-mode" ("vim-visual", permanent) };
+
+  /* vi" vi' vi` */
+    bind "quotedbl" { "begin-macro" ()
+                      "select-inner" ("\"", "\"", 1, 1)
+                      "set-mode" ("vim-visual", permanent) };
+
+    bind "apostrophe" { "begin-macro" ()
+                        "select-inner" ("'", "'", 1, 1)
+                        "set-mode" ("vim-visual", permanent) };
+
+    bind "grave" { "begin-macro" ()
+                   "select-inner" ("`", "`", 1, 1)
+                   "set-mode" ("vim-visual", permanent) };
 }
 
 @binding-set builder-vim-source-view-visual-a
@@ -1767,6 +1868,19 @@
     bind "greater" { "begin-macro" ()
                      "select-inner" ("<", ">", 0, 0)
                      "set-mode" ("vim-visual", permanent) };
+
+  /* va" va' va` */
+    bind "quotedbl" { "begin-macro" ()
+                      "select-inner" ("\"", "\"", 0, 1)
+                      "set-mode" ("vim-visual", permanent) };
+
+    bind "apostrophe" { "begin-macro" ()
+                        "select-inner" ("'", "'", 0, 1)
+                        "set-mode" ("vim-visual", permanent) };
+
+    bind "grave" { "begin-macro" ()
+                   "select-inner" ("`", "`", 0, 1)
+                   "set-mode" ("vim-visual", permanent) };
 }
 
 @binding-set builder-vim-source-view-visual-line-with-count
