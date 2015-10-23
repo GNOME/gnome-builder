@@ -1519,6 +1519,8 @@
 
 @binding-set builder-vim-source-view-visual
 {
+  bind "i" { "set-mode" ("vim-visual-i", transient) };
+
   bind "colon" { "action" ("win", "show-command-bar", "") };
 
   bind "percent" { "move-to-matching-bracket" (1) };
@@ -1690,6 +1692,53 @@
                     "clear-selection" ()
                     "end-macro" ()
                     "set-mode" ("vim-normal", permanent) };
+}
+
+@binding-set builder-vim-source-view-visual-i
+{
+  /* vi( , vi) , vib */
+  bind "parenleft" { "begin-macro" ()
+                     "select-inner" ("(", ")", 1)
+                     "set-mode" ("vim-visual", permanent) };
+
+  bind "parenright" { "begin-macro" ()
+                      "select-inner" ("(", ")", 1)
+                      "set-mode" ("vim-visual", permanent) };
+
+  bind "b" { "begin-macro" ()
+             "select-inner" ("(", ")", 1)
+             "set-mode" ("vim-visual", permanent) };
+
+  /* vi[ and vi] */
+  bind "bracketleft" { "begin-macro" ()
+                       "select-inner" ("[", "]", 1)
+                       "set-mode" ("vim-visual", permanent) };
+
+  bind "bracketright" { "begin-macro" ()
+                        "select-inner" ("[", "]", 1)
+                        "set-mode" ("vim-visual", permanent) };
+
+  /* vi{ , vi} , viB */
+  bind "braceleft" { "begin-macro" ()
+                     "select-inner" ("{", "}", 1)
+                     "set-mode" ("vim-visual", permanent) };
+
+  bind "braceright" { "begin-macro" ()
+                      "select-inner" ("{", "}", 1)
+                      "set-mode" ("vim-visual", permanent) };
+
+  bind "<shift>b" { "begin-macro" ()
+                    "select-inner" ("{", "}", 1)
+                    "set-mode" ("vim-visual", permanent) };
+
+  /* vi< and vi> */
+    bind "less" { "begin-macro" ()
+                  "select-inner" ("<", ">", 1)
+                  "set-mode" ("vim-visual", permanent) };
+
+    bind "greater" { "begin-macro" ()
+                     "select-inner" ("<", ">", 1)
+                     "set-mode" ("vim-visual", permanent) };
 }
 
 @binding-set builder-vim-source-view-visual-line-with-count
@@ -2052,6 +2101,15 @@ IdeSourceViewMode.vim-visual {
 
   gtk-key-bindings: builder-vim-source-view,
                     builder-vim-source-view-visual;
+}
+
+IdeSourceViewMode.vim-visual-i {
+  -IdeSourceViewMode-suppress-unbound: true;
+  -IdeSourceViewMode-block-cursor: true;
+  -IdeSourceViewMode-display-name: "Visual";
+
+  gtk-key-bindings: builder-vim-source-view,
+                    builder-vim-source-view-visual-i;
 }
 
 IdeSourceViewMode.vim-visual-with-count {
