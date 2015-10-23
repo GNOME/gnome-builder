@@ -37,7 +37,8 @@ void _ide_source_view_select_inner   (IdeSourceView *self,
                                       gunichar       inner_left,
                                       gunichar       inner_right,
                                       guint          count,
-                                      gboolean       exclusive);
+                                      gboolean       exclusive,
+                                      gboolean       string_mode);
 
 G_END_DECLS
 

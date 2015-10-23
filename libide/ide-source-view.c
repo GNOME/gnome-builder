@@ -3446,11 +3446,16 @@ ide_source_view_real_save_search_char (IdeSourceView *self)
     priv->search_char = priv->modifier;
 }
 
+/* In string mode, the search act only on the current line,
+ * search a string to the right if we are not already in one,
+ * and only inner_left is used ( inner_right is set to it )
+ */
 static void
 ide_source_view_real_select_inner (IdeSourceView *self,
                                    const gchar   *inner_left,
                                    const gchar   *inner_right,
-                                   gboolean       exclusive)
+                                   gboolean       exclusive,
+                                   gboolean       string_mode)
 {
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
   gunichar unichar_inner_left;
@@ -3465,7 +3470,8 @@ ide_source_view_real_select_inner (IdeSourceView *self,
                                  unichar_inner_left,
                                  unichar_inner_right,
                                  priv->count,
-                                 exclusive);
+                                 exclusive,
+                                 string_mode);
 }
 
 static void
@@ -6038,9 +6044,10 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   G_STRUCT_OFFSET (IdeSourceViewClass, select_inner),
                   NULL, NULL, NULL,
                   G_TYPE_NONE,
-                  3,
+                  4,
                   G_TYPE_STRING,
                   G_TYPE_STRING,
+                  G_TYPE_BOOLEAN,
                   G_TYPE_BOOLEAN);
 
   signals [SELECTION_THEATRIC] =

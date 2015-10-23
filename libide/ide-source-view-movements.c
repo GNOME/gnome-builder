@@ -61,6 +61,7 @@ typedef struct
   gunichar         jump_from;
   GtkDirectionType direction;
   guint            depth;
+  gboolean         string_mode;
 } MatchingBracketState;
 
 static gboolean
@@ -780,7 +781,10 @@ bracket_predicate (gunichar ch,
 {
   MatchingBracketState *state = user_data;
 
-  if (ch == state->jump_from)
+  if (ch == state->jump_from && state->string_mode && state->direction == GTK_DIR_LEFT)
+    return  TRUE;
+
+  if (ch == state->jump_from && !state->string_mode)
     state->depth += (state->direction == GTK_DIR_RIGHT) ? 1 : -1;
   else if (ch == state->jump_to)
     state->depth += (state->direction == GTK_DIR_RIGHT) ? -1 : 1;
@@ -796,22 +800,50 @@ match_char_with_depth (GtkTextIter      *iter,
                        gunichar          right_char,
                        GtkDirectionType  direction,
                        gint              depth,
-                       gboolean          is_exclusive)
+                       gboolean          is_exclusive,
+                       gboolean          string_mode)
 {
   MatchingBracketState state;
+  GtkTextIter limit;
   gboolean ret;
 
   g_return_val_if_fail (direction == GTK_DIR_LEFT || direction == GTK_DIR_RIGHT, FALSE);
+  g_return_val_if_fail ((left_char == right_char && string_mode) ||
+                        (left_char != right_char && !string_mode), FALSE);
 
   state.jump_from = left_char;
   state.jump_to = right_char;
   state.direction = direction;
-  state.depth = depth;
+  state.string_mode = string_mode;
+
+  /* We can't yet distinguish nested objects where left and right bounds are the same */
+  state.depth = (left_char == right_char) ? 1 : depth;
+
+  limit = *iter;
 
   if (direction == GTK_DIR_LEFT)
-    ret = gtk_text_iter_backward_find_char (iter, bracket_predicate, &state, NULL);
+    {
+      if (!gtk_text_iter_ends_line(iter) && gtk_text_iter_get_char (iter) != right_char)
+        gtk_text_iter_forward_char (iter);
+
+      if (string_mode)
+        {
+          gtk_text_iter_set_line_offset (&limit, 0);
+          ret = gtk_text_iter_backward_find_char (iter, bracket_predicate, &state, &limit);
+        }
+      else
+        ret = gtk_text_iter_backward_find_char (iter, bracket_predicate, &state, NULL);
+    }
   else
-    ret = gtk_text_iter_forward_find_char (iter, bracket_predicate, &state, NULL);
+    {
+      if (string_mode)
+        {
+          gtk_text_iter_forward_to_line_end (&limit);
+          ret = gtk_text_iter_forward_find_char (iter, bracket_predicate, &state, &limit);
+        }
+      else
+        ret = gtk_text_iter_forward_find_char (iter, bracket_predicate, &state, NULL);
+    }
 
   if (ret && !is_exclusive)
     gtk_text_iter_forward_char (iter);
@@ -832,27 +864,27 @@ ide_source_view_movements_match_special (Movement *mv)
   switch (start_char)
     {
     case '{':
-      ret = match_char_with_depth (&mv->insert, '{', '}', GTK_DIR_RIGHT, 1, mv->exclusive);
+      ret = match_char_with_depth (&mv->insert, '{', '}', GTK_DIR_RIGHT, 1, mv->exclusive, 0);
       break;
 
     case '[':
-      ret = match_char_with_depth (&mv->insert, '[', ']', GTK_DIR_RIGHT, 1, mv->exclusive);
+      ret = match_char_with_depth (&mv->insert, '[', ']', GTK_DIR_RIGHT, 1, mv->exclusive, 0);
       break;
 
     case '(':
-      ret = match_char_with_depth (&mv->insert, '(', ')', GTK_DIR_RIGHT, 1, mv->exclusive);
+      ret = match_char_with_depth (&mv->insert, '(', ')', GTK_DIR_RIGHT, 1, mv->exclusive, 0);
       break;
 
     case '}':
-      ret = match_char_with_depth (&mv->insert, '{', '}', GTK_DIR_LEFT, 1, mv->exclusive);
+      ret = match_char_with_depth (&mv->insert, '{', '}', GTK_DIR_LEFT, 1, mv->exclusive, 0);
       break;
 
     case ']':
-      ret = match_char_with_depth (&mv->insert, '[', ']', GTK_DIR_LEFT, 1, mv->exclusive);
+      ret = match_char_with_depth (&mv->insert, '[', ']', GTK_DIR_LEFT, 1, mv->exclusive, 0);
       break;
 
     case ')':
-      ret = match_char_with_depth (&mv->insert, '(', ')', GTK_DIR_LEFT, 1, mv->exclusive);
+      ret = match_char_with_depth (&mv->insert, '(', ')', GTK_DIR_LEFT, 1, mv->exclusive, 0);
       break;
 
     default:
@@ -1638,28 +1670,53 @@ _ide_source_view_select_inner (IdeSourceView *self,
                                gunichar       inner_left,
                                gunichar       inner_right,
                                guint          count,
-                               gboolean       exclusive)
+                               gboolean       exclusive,
+                               gboolean       string_mode)
 {
   GtkTextBuffer *buffer;
   GtkTextMark *insert;
+  GtkTextMark *selection;
   GtkTextIter start;
   GtkTextIter end;
+  GtkTextIter selection_iter;
+  gboolean ret;
 
   g_return_if_fail (IDE_IS_SOURCE_VIEW (self));
 
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
   insert = gtk_text_buffer_get_insert (buffer);
   gtk_text_buffer_get_iter_at_mark (buffer, &start, insert);
+  selection = gtk_text_buffer_get_selection_bound (buffer);
+  gtk_text_buffer_get_iter_at_mark (buffer, &selection_iter, selection);
 
-  count = MAX (1, count);
+  /* Visual mode start with a selection length of 1. We use the left bound in this case */
+  if ((gtk_text_iter_get_offset (&start) - gtk_text_iter_get_offset (&selection_iter)) == 1)
+    gtk_text_iter_backward_char (&start);
 
-  if (match_char_with_depth (&start, inner_left, inner_right, GTK_DIR_LEFT, count, !exclusive))
+  if (string_mode)
+    {
+      if (gtk_text_iter_ends_line (&start))
+        return;
+
+      count = 1;
+      inner_right = inner_left;
+    }
+  else
+    {
+      count = MAX (1, count);
+    }
+
+  ret = match_char_with_depth (&start, inner_left, inner_right, GTK_DIR_LEFT, count, !exclusive, string_mode);
+  if (!ret && string_mode)
+    ret = match_char_with_depth (&start, inner_left, inner_right, GTK_DIR_RIGHT, count, !exclusive, string_mode);
+
+  if (ret)
     {
       end = start;
       if (exclusive)
         gtk_text_iter_backward_char (&end);
 
-      if (match_char_with_depth (&end, inner_left, inner_right, GTK_DIR_RIGHT, 1, exclusive))
+      if (match_char_with_depth (&end, inner_left, inner_right, GTK_DIR_RIGHT, 1, exclusive, string_mode))
         {
           gtk_text_buffer_select_range (buffer, &start, &end);
           gtk_text_view_scroll_mark_onscreen (GTK_TEXT_VIEW (self), insert);

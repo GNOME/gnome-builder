@@ -262,7 +262,8 @@ struct _IdeSourceViewClass
   void (*select_inner)                (IdeSourceView           *self,
                                        const gchar             *inner_left,
                                        const gchar             *inner_right,
-                                       gboolean                 exclusive);
+                                       gboolean                 exclusive,
+                                       gboolean                 string_mode);
   void (*selection_theatric)          (IdeSourceView           *self,
                                        IdeSourceViewTheatric    theatric);
   void (*set_mode)                    (IdeSourceView           *self,

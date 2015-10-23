@@ -703,21 +703,21 @@
 
   /* ci( , ci) , cib */
   bind "parenleft" { "begin-macro" ()
-                     "select-inner" ("(", ")", 1)
+                     "select-inner" ("(", ")", 1, 0)
                      "set-mode" ("vim-insert", permanent)
                      "copy-clipboard" ()
                      "selection-theatric" (shrink)
                      "delete-selection" () };
 
   bind "parenright" { "begin-macro" ()
-                      "select-inner" ("(", ")", 1)
+                      "select-inner" ("(", ")", 1, 0)
                       "set-mode" ("vim-insert", permanent)
                       "copy-clipboard" ()
                       "selection-theatric" (shrink)
                       "delete-selection" () };
 
   bind "b" { "begin-macro" ()
-             "select-inner" ("(", ")", 1)
+             "select-inner" ("(", ")", 1, 0)
              "set-mode" ("vim-insert", permanent)
              "copy-clipboard" ()
              "selection-theatric" (shrink)
@@ -725,14 +725,14 @@
 
   /* ci[ and ci] */
   bind "bracketleft" { "begin-macro" ()
-                       "select-inner" ("[", "]", 1)
+                       "select-inner" ("[", "]", 1, 0)
                        "set-mode" ("vim-insert", permanent)
                        "copy-clipboard" ()
                        "selection-theatric" (shrink)
                        "delete-selection" () };
 
   bind "bracketright" { "begin-macro" ()
-                        "select-inner" ("[", "]", 1)
+                        "select-inner" ("[", "]", 1, 0)
                         "set-mode" ("vim-insert", permanent)
                         "copy-clipboard" ()
                         "selection-theatric" (shrink)
@@ -740,21 +740,21 @@
 
   /* ci{ , ci} , ciB */
   bind "braceleft" { "begin-macro" ()
-                     "select-inner" ("{", "}", 1)
+                     "select-inner" ("{", "}", 1, 0)
                      "set-mode" ("vim-insert", permanent)
                      "copy-clipboard" ()
                      "selection-theatric" (shrink)
                      "delete-selection" () };
 
   bind "braceright" { "begin-macro" ()
-                      "select-inner" ("{", "}", 1)
+                      "select-inner" ("{", "}", 1, 0)
                       "set-mode" ("vim-insert", permanent)
                       "copy-clipboard" ()
                       "selection-theatric" (shrink)
                       "delete-selection" () };
 
   bind "<shift>b" { "begin-macro" ()
-                    "select-inner" ("{", "}", 1)
+                    "select-inner" ("{", "}", 1, 0)
                     "set-mode" ("vim-insert", permanent)
                     "copy-clipboard" ()
                     "selection-theatric" (shrink)
@@ -762,14 +762,14 @@
 
   /* ci< and ci> */
     bind "less" { "begin-macro" ()
-                  "select-inner" ("<", ">", 1)
+                  "select-inner" ("<", ">", 1, 0)
                   "set-mode" ("vim-insert", permanent)
                   "copy-clipboard" ()
                   "selection-theatric" (shrink)
                   "delete-selection" () };
 
     bind "greater" { "begin-macro" ()
-                     "select-inner" ("<", ">", 1)
+                     "select-inner" ("<", ">", 1, 0)
                      "set-mode" ("vim-insert", permanent)
                      "copy-clipboard" ()
                      "selection-theatric" (shrink)
@@ -780,21 +780,21 @@
 {
   /* ca( , ca) , cab */
   bind "parenleft" { "begin-macro" ()
-                     "select-inner" ("(", ")", 0)
+                     "select-inner" ("(", ")", 0, 0)
                      "set-mode" ("vim-insert", permanent)
                      "copy-clipboard" ()
                      "selection-theatric" (shrink)
                      "delete-selection" () };
 
   bind "parenright" { "begin-macro" ()
-                      "select-inner" ("(", ")", 0)
+                      "select-inner" ("(", ")", 0, 0)
                       "set-mode" ("vim-insert", permanent)
                       "copy-clipboard" ()
                       "selection-theatric" (shrink)
                       "delete-selection" () };
 
   bind "b" { "begin-macro" ()
-             "select-inner" ("(", ")", 0)
+             "select-inner" ("(", ")", 0, 0)
              "set-mode" ("vim-insert", permanent)
              "copy-clipboard" ()
              "selection-theatric" (shrink)
@@ -802,14 +802,14 @@
 
   /* ca[ and ca] */
   bind "bracketleft" { "begin-macro" ()
-                       "select-inner" ("[", "]", 0)
+                       "select-inner" ("[", "]", 0, 0)
                        "set-mode" ("vim-insert", permanent)
                        "copy-clipboard" ()
                        "selection-theatric" (shrink)
                        "delete-selection" () };
 
   bind "bracketright" { "begin-macro" ()
-                        "select-inner" ("[", "]", 0)
+                        "select-inner" ("[", "]", 0, 0)
                         "set-mode" ("vim-insert", permanent)
                         "copy-clipboard" ()
                         "selection-theatric" (shrink)
@@ -817,21 +817,21 @@
 
   /* ca{ , ca} , caB */
   bind "braceleft" { "begin-macro" ()
-                     "select-inner" ("{", "}", 0)
+                     "select-inner" ("{", "}", 0, 0)
                      "set-mode" ("vim-insert", permanent)
                      "copy-clipboard" ()
                      "selection-theatric" (shrink)
                      "delete-selection" () };
 
   bind "braceright" { "begin-macro" ()
-                      "select-inner" ("{", "}", 0)
+                      "select-inner" ("{", "}", 0, 0)
                       "set-mode" ("vim-insert", permanent)
                       "copy-clipboard" ()
                       "selection-theatric" (shrink)
                       "delete-selection" () };
 
   bind "<shift>b" { "begin-macro" ()
-                    "select-inner" ("{", "}", 0)
+                    "select-inner" ("{", "}", 0, 0)
                     "set-mode" ("vim-insert", permanent)
                     "copy-clipboard" ()
                     "selection-theatric" (shrink)
@@ -839,14 +839,14 @@
 
   /* ca< and ca> */
     bind "less" { "begin-macro" ()
-                  "select-inner" ("<", ">", 0)
+                  "select-inner" ("<", ">", 0, 0)
                   "set-mode" ("vim-insert", permanent)
                   "copy-clipboard" ()
                   "selection-theatric" (shrink)
                   "delete-selection" () };
 
     bind "greater" { "begin-macro" ()
-                     "select-inner" ("<", ">", 0)
+                     "select-inner" ("<", ">", 0, 0)
                      "set-mode" ("vim-insert", permanent)
                      "copy-clipboard" ()
                      "selection-theatric" (shrink)
@@ -1246,21 +1246,21 @@
 
   /* di( , di) , dib */
   bind "parenleft" { "begin-macro" ()
-                     "select-inner" ("(", ")", 1)
+                     "select-inner" ("(", ")", 1, 0)
                      "set-mode" ("vim-normal", permanent)
                      "copy-clipboard" ()
                      "selection-theatric" (shrink)
                      "delete-selection" () };
 
   bind "parenright" { "begin-macro" ()
-                      "select-inner" ("(", ")", 1)
+                      "select-inner" ("(", ")", 1, 0)
                       "set-mode" ("vim-normal", permanent)
                       "copy-clipboard" ()
                       "selection-theatric" (shrink)
                       "delete-selection" () };
 
   bind "b" { "begin-macro" ()
-             "select-inner" ("(", ")", 1)
+             "select-inner" ("(", ")", 1, 0)
              "set-mode" ("vim-normal", permanent)
              "copy-clipboard" ()
              "selection-theatric" (shrink)
@@ -1268,14 +1268,14 @@
 
   /* di[ and di] */
   bind "bracketleft" { "begin-macro" ()
-                       "select-inner" ("[", "]", 1)
+                       "select-inner" ("[", "]", 1, 0)
                        "set-mode" ("vim-normal", permanent)
                        "copy-clipboard" ()
                        "selection-theatric" (shrink)
                        "delete-selection" () };
 
   bind "bracketright" { "begin-macro" ()
-                        "select-inner" ("[", "]", 1)
+                        "select-inner" ("[", "]", 1, 0)
                         "set-mode" ("vim-normal", permanent)
                         "copy-clipboard" ()
                         "selection-theatric" (shrink)
@@ -1283,21 +1283,21 @@
 
   /* di{ , di} , diB */
   bind "braceleft" { "begin-macro" ()
-                     "select-inner" ("{", "}", 1)
+                     "select-inner" ("{", "}", 1, 0)
                      "set-mode" ("vim-normal", permanent)
                      "copy-clipboard" ()
                      "selection-theatric" (shrink)
                      "delete-selection" () };
 
   bind "braceright" { "begin-macro" ()
-                      "select-inner" ("{", "}", 1)
+                      "select-inner" ("{", "}", 1, 0)
                       "set-mode" ("vim-normal", permanent)
                       "copy-clipboard" ()
                       "selection-theatric" (shrink)
                       "delete-selection" () };
 
   bind "<shift>b" { "begin-macro" ()
-                    "select-inner" ("{", "}", 1)
+                    "select-inner" ("{", "}", 1, 0)
                     "set-mode" ("vim-normal", permanent)
                     "copy-clipboard" ()
                     "selection-theatric" (shrink)
@@ -1305,14 +1305,14 @@
 
   /* di< and di> */
     bind "less" { "begin-macro" ()
-                  "select-inner" ("<", ">", 1)
+                  "select-inner" ("<", ">", 1, 0)
                   "set-mode" ("vim-normal", permanent)
                   "copy-clipboard" ()
                   "selection-theatric" (shrink)
                   "delete-selection" () };
 
     bind "greater" { "begin-macro" ()
-                     "select-inner" ("<", ">", 1)
+                     "select-inner" ("<", ">", 1, 0)
                      "set-mode" ("vim-normal", permanent)
                      "copy-clipboard" ()
                      "selection-theatric" (shrink)
@@ -1323,21 +1323,21 @@
 {
   /* da( , da) , dab */
   bind "parenleft" { "begin-macro" ()
-                     "select-inner" ("(", ")", 0)
+                     "select-inner" ("(", ")", 0, 0)
                      "set-mode" ("vim-normal", permanent)
                      "copy-clipboard" ()
                      "selection-theatric" (shrink)
                      "delete-selection" () };
 
   bind "parenright" { "begin-macro" ()
-                      "select-inner" ("(", ")", 0)
+                      "select-inner" ("(", ")", 0, 0)
                       "set-mode" ("vim-normal", permanent)
                       "copy-clipboard" ()
                       "selection-theatric" (shrink)
                       "delete-selection" () };
 
   bind "b" { "begin-macro" ()
-             "select-inner" ("(", ")", 0)
+             "select-inner" ("(", ")", 0, 0)
              "set-mode" ("vim-normal", permanent)
              "copy-clipboard" ()
              "selection-theatric" (shrink)
@@ -1345,14 +1345,14 @@
 
   /* da[ and da] */
   bind "bracketleft" { "begin-macro" ()
-                       "select-inner" ("[", "]", 0)
+                       "select-inner" ("[", "]", 0, 0)
                        "set-mode" ("vim-normal", permanent)
                        "copy-clipboard" ()
                        "selection-theatric" (shrink)
                        "delete-selection" () };
 
   bind "bracketright" { "begin-macro" ()
-                        "select-inner" ("[", "]", 0)
+                        "select-inner" ("[", "]", 0, 0)
                         "set-mode" ("vim-normal", permanent)
                         "copy-clipboard" ()
                         "selection-theatric" (shrink)
@@ -1360,21 +1360,21 @@
 
   /* da{ , da} , daB */
   bind "braceleft" { "begin-macro" ()
-                     "select-inner" ("{", "}", 0)
+                     "select-inner" ("{", "}", 0, 0)
                      "set-mode" ("vim-normal", permanent)
                      "copy-clipboard" ()
                      "selection-theatric" (shrink)
                      "delete-selection" () };
 
   bind "braceright" { "begin-macro" ()
-                      "select-inner" ("{", "}", 0)
+                      "select-inner" ("{", "}", 0, 0)
                       "set-mode" ("vim-normal", permanent)
                       "copy-clipboard" ()
                       "selection-theatric" (shrink)
                       "delete-selection" () };
 
   bind "<shift>b" { "begin-macro" ()
-                    "select-inner" ("{", "}", 0)
+                    "select-inner" ("{", "}", 0, 0)
                     "set-mode" ("vim-normal", permanent)
                     "copy-clipboard" ()
                     "selection-theatric" (shrink)
@@ -1382,14 +1382,14 @@
 
   /* da< and da> */
     bind "less" { "begin-macro" ()
-                  "select-inner" ("<", ">", 0)
+                  "select-inner" ("<", ">", 0, 0)
                   "set-mode" ("vim-normal", permanent)
                   "copy-clipboard" ()
                   "selection-theatric" (shrink)
                   "delete-selection" () };
 
     bind "greater" { "begin-macro" ()
-                     "select-inner" ("<", ">", 0)
+                     "select-inner" ("<", ">", 0, 0)
                      "set-mode" ("vim-normal", permanent)
                      "copy-clipboard" ()
                      "selection-theatric" (shrink)
@@ -1679,46 +1679,46 @@
 {
   /* vi( , vi) , vib */
   bind "parenleft" { "begin-macro" ()
-                     "select-inner" ("(", ")", 1)
+                     "select-inner" ("(", ")", 1, 0)
                      "set-mode" ("vim-visual", permanent) };
 
   bind "parenright" { "begin-macro" ()
-                      "select-inner" ("(", ")", 1)
+                      "select-inner" ("(", ")", 1, 0)
                       "set-mode" ("vim-visual", permanent) };
 
   bind "b" { "begin-macro" ()
-             "select-inner" ("(", ")", 1)
+             "select-inner" ("(", ")", 1, 0)
              "set-mode" ("vim-visual", permanent) };
 
   /* vi[ and vi] */
   bind "bracketleft" { "begin-macro" ()
-                       "select-inner" ("[", "]", 1)
+                       "select-inner" ("[", "]", 1, 0)
                        "set-mode" ("vim-visual", permanent) };
 
   bind "bracketright" { "begin-macro" ()
-                        "select-inner" ("[", "]", 1)
+                        "select-inner" ("[", "]", 1, 0)
                         "set-mode" ("vim-visual", permanent) };
 
   /* vi{ , vi} , viB */
   bind "braceleft" { "begin-macro" ()
-                     "select-inner" ("{", "}", 1)
+                     "select-inner" ("{", "}", 1, 0)
                      "set-mode" ("vim-visual", permanent) };
 
   bind "braceright" { "begin-macro" ()
-                      "select-inner" ("{", "}", 1)
+                      "select-inner" ("{", "}", 1, 0)
                       "set-mode" ("vim-visual", permanent) };
 
   bind "<shift>b" { "begin-macro" ()
-                    "select-inner" ("{", "}", 1)
+                    "select-inner" ("{", "}", 1, 0)
                     "set-mode" ("vim-visual", permanent) };
 
   /* vi< and vi> */
     bind "less" { "begin-macro" ()
-                  "select-inner" ("<", ">", 1)
+                  "select-inner" ("<", ">", 1, 0)
                   "set-mode" ("vim-visual", permanent) };
 
     bind "greater" { "begin-macro" ()
-                     "select-inner" ("<", ">", 1)
+                     "select-inner" ("<", ">", 1, 0)
                      "set-mode" ("vim-visual", permanent) };
 }
 
@@ -1726,46 +1726,46 @@
 {
   /* va( , va) , vab */
   bind "parenleft" { "begin-macro" ()
-                     "select-inner" ("(", ")", 0)
+                     "select-inner" ("(", ")", 0, 0)
                      "set-mode" ("vim-normal", permanent) };
 
   bind "parenright" { "begin-macro" ()
-                      "select-inner" ("(", ")", 0)
+                      "select-inner" ("(", ")", 0, 0)
                       "set-mode" ("vim-normal", permanent) };
 
   bind "b" { "begin-macro" ()
-             "select-inner" ("(", ")", 0)
+             "select-inner" ("(", ")", 0, 0)
              "set-mode" ("vim-normal", permanent) };
 
   /* va[ and va] */
   bind "bracketleft" { "begin-macro" ()
-                       "select-inner" ("[", "]", 0)
+                       "select-inner" ("[", "]", 0, 0)
                        "set-mode" ("vim-visual", permanent) };
 
   bind "bracketright" { "begin-macro" ()
-                        "select-inner" ("[", "]", 0)
+                        "select-inner" ("[", "]", 0, 0)
                         "set-mode" ("vim-visual", permanent) };
 
   /* va{ , va} , vaB */
   bind "braceleft" { "begin-macro" ()
-                     "select-inner" ("{", "}", 0)
+                     "select-inner" ("{", "}", 0, 0)
                      "set-mode" ("vim-visual", permanent) };
 
   bind "braceright" { "begin-macro" ()
-                      "select-inner" ("{", "}", 0)
+                      "select-inner" ("{", "}", 0, 0)
                       "set-mode" ("vim-visual", permanent) };
 
   bind "<shift>b" { "begin-macro" ()
-                    "select-inner" ("{", "}", 0)
+                    "select-inner" ("{", "}", 0, 0)
                     "set-mode" ("vim-visual", permanent) };
 
   /* va< and va> */
     bind "less" { "begin-macro" ()
-                  "select-inner" ("<", ">", 0)
+                  "select-inner" ("<", ">", 0, 0)
                   "set-mode" ("vim-visual", permanent) };
 
     bind "greater" { "begin-macro" ()
-                     "select-inner" ("<", ">", 0)
+                     "select-inner" ("<", ">", 0, 0)
                      "set-mode" ("vim-visual", permanent) };
 }
 
