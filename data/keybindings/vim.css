@@ -704,6 +704,83 @@
                     "selection-theatric" (shrink)
                     "delete-selection" ()
                     "clear-count" () };
+
+  /* ci( , ci) , cib */
+  bind "parenleft" { "begin-macro" ()
+                     "select-inner" ("(", ")", 1)
+                     "set-mode" ("vim-insert", permanent)
+                     "copy-clipboard" ()
+                     "selection-theatric" (shrink)
+                     "delete-selection" ()
+                     "clear-count" () };
+
+  bind "parenright" { "begin-macro" ()
+                      "select-inner" ("(", ")", 1)
+                      "set-mode" ("vim-insert", permanent)
+                      "copy-clipboard" ()
+                      "selection-theatric" (shrink)
+                      "delete-selection" ()
+                      "clear-count" () };
+
+  bind "b" { "begin-macro" ()
+             "select-inner" ("(", ")", 1)
+             "set-mode" ("vim-insert", permanent)
+             "copy-clipboard" ()
+             "selection-theatric" (shrink)
+             "delete-selection" ()
+             "clear-count" () };
+
+  /* ci[ and ci] */
+  bind "bracketleft" { "begin-macro" ()
+                       "select-inner" ("[", "]", 1)
+                       "set-mode" ("vim-insert", permanent)
+                       "copy-clipboard" ()
+                       "selection-theatric" (shrink)
+                       "delete-selection" () };
+
+  bind "bracketright" { "begin-macro" ()
+                        "select-inner" ("[", "]", 1)
+                        "set-mode" ("vim-insert", permanent)
+                        "copy-clipboard" ()
+                        "selection-theatric" (shrink)
+                        "delete-selection" () };
+
+  /* ci{ , ci} , ciB */
+  bind "braceleft" { "begin-macro" ()
+                     "select-inner" ("{", "}", 1)
+                     "set-mode" ("vim-insert", permanent)
+                     "copy-clipboard" ()
+                     "selection-theatric" (shrink)
+                     "delete-selection" () };
+
+  bind "braceright" { "begin-macro" ()
+                      "select-inner" ("{", "}", 1)
+                      "set-mode" ("vim-insert", permanent)
+                      "copy-clipboard" ()
+                      "selection-theatric" (shrink)
+                      "delete-selection" () };
+
+  bind "<shift>b" { "begin-macro" ()
+                    "select-inner" ("{", "}", 1)
+                    "set-mode" ("vim-insert", permanent)
+                    "copy-clipboard" ()
+                    "selection-theatric" (shrink)
+                    "delete-selection" () };
+
+  /* ci< and ci> */
+    bind "less" { "begin-macro" ()
+                  "select-inner" ("<", ">", 1)
+                  "set-mode" ("vim-insert", permanent)
+                  "copy-clipboard" ()
+                  "selection-theatric" (shrink)
+                  "delete-selection" () };
+
+    bind "greater" { "begin-macro" ()
+                     "select-inner" ("<", ">", 1)
+                     "set-mode" ("vim-insert", permanent)
+                     "copy-clipboard" ()
+                     "selection-theatric" (shrink)
+                     "delete-selection" () };
 }
 
 @binding-set builder-vim-source-view-normal-d
