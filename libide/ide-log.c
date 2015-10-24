@@ -130,7 +130,6 @@ ide_log_write_to_channel (GIOChannel  *channel,
  * Default log handler that will dispatch log messages to configured logging
  * destinations.
  *
- * Returns: None.
  * Side effects: None.
  */
 static void
