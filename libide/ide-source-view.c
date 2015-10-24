@@ -7232,10 +7232,9 @@ ide_source_view_get_search_direction (IdeSourceView *self)
 /**
  * ide_source_view_set_search_direction:
  * @self: An #IdeSourceView.
+ * @direction: (out): #GtkDirectionType.
  *
- * Returns the current search direction.
- *
- * Returns: A #GtkDirectionType
+ * Set the search direction.
  */
 void
 ide_source_view_set_search_direction (IdeSourceView    *self,
