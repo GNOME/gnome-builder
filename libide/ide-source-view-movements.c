@@ -776,13 +776,28 @@ ide_source_view_movements_move_page (Movement *mv)
 }
 
 static gboolean
-bracket_predicate (gunichar ch,
-                   gpointer user_data)
+bracket_predicate (GtkTextIter *iter,
+                   gunichar     ch,
+                   gpointer     user_data)
 {
   MatchingBracketState *state = user_data;
+  GtkTextIter near;
 
-  if (ch == state->jump_from && state->string_mode && state->direction == GTK_DIR_LEFT)
-    return  TRUE;
+  if (ch == state->jump_from && state->string_mode)
+    {
+      near = *iter;
+
+      if (!gtk_text_iter_starts_line (iter))
+        {
+          gtk_text_iter_backward_char (&near);
+          return (gtk_text_iter_get_char (&near) != '\\');
+        }
+
+      if (state->direction == GTK_DIR_RIGHT)
+        return FALSE;
+
+      return TRUE;
+    }
 
   if (ch == state->jump_from && !state->string_mode)
     state->depth += (state->direction == GTK_DIR_RIGHT) ? 1 : -1;
@@ -823,26 +838,31 @@ match_char_with_depth (GtkTextIter      *iter,
 
   if (direction == GTK_DIR_LEFT)
     {
-      if (!gtk_text_iter_ends_line(iter) && gtk_text_iter_get_char (iter) != right_char)
-        gtk_text_iter_forward_char (iter);
+      /* We handle cases where we are just under the right bound or
+       * at the right of the left bound or at the line start in string mode
+       * with a quote under the cursor !
+       */
+      if (!gtk_text_iter_ends_line(iter))
+          if (state.string_mode ? gtk_text_iter_starts_line (iter) : gtk_text_iter_get_char (iter) != right_char)
+            gtk_text_iter_forward_char (iter);
 
       if (string_mode)
         {
           gtk_text_iter_set_line_offset (&limit, 0);
-          ret = gtk_text_iter_backward_find_char (iter, bracket_predicate, &state, &limit);
+          ret = _ide_vim_iter_backward_find_char (iter, bracket_predicate, &state, &limit);
         }
       else
-        ret = gtk_text_iter_backward_find_char (iter, bracket_predicate, &state, NULL);
+        ret = _ide_vim_iter_backward_find_char (iter, bracket_predicate, &state, NULL);
     }
   else
     {
       if (string_mode)
         {
           gtk_text_iter_forward_to_line_end (&limit);
-          ret = gtk_text_iter_forward_find_char (iter, bracket_predicate, &state, &limit);
+          ret = _ide_vim_iter_forward_find_char (iter, bracket_predicate, &state, &limit);
         }
       else
-        ret = gtk_text_iter_forward_find_char (iter, bracket_predicate, &state, NULL);
+        ret = _ide_vim_iter_forward_find_char (iter, bracket_predicate, &state, NULL);
     }
 
   if (ret && !is_exclusive)
