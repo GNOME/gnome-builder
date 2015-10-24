@@ -23,16 +23,26 @@
 
 G_BEGIN_DECLS
 
-gboolean _ide_vim_iter_forward_word_start       (GtkTextIter *iter);
-gboolean _ide_vim_iter_forward_WORD_start       (GtkTextIter *iter);
-gboolean _ide_vim_iter_forward_word_end         (GtkTextIter *iter);
-gboolean _ide_vim_iter_forward_WORD_end         (GtkTextIter *iter);
-gboolean _ide_vim_iter_backward_paragraph_start (GtkTextIter *iter);
-gboolean _ide_vim_iter_forward_paragraph_end    (GtkTextIter *iter);
-gboolean _ide_vim_iter_backward_sentence_start  (GtkTextIter *iter);
-gboolean _ide_vim_iter_forward_sentence_end     (GtkTextIter *iter);
-gboolean _ide_vim_iter_backward_WORD_end        (GtkTextIter *iter);
-gboolean _ide_vim_iter_backward_word_end        (GtkTextIter *iter);
+typedef gboolean (* VimIterCharPredicate) (GtkTextIter *iter, gunichar ch, gpointer user_data);
+
+gboolean _ide_vim_iter_forward_find_char        (GtkTextIter          *iter,
+                                                 VimIterCharPredicate  pred,
+                                                 gpointer              user_data,
+                                                 const GtkTextIter    *limit);
+gboolean _ide_vim_iter_backward_find_char       (GtkTextIter          *iter,
+                                                 VimIterCharPredicate  pred,
+                                                 gpointer              user_data,
+                                                 const GtkTextIter    *limit);
+gboolean _ide_vim_iter_forward_word_start       (GtkTextIter          *iter);
+gboolean _ide_vim_iter_forward_WORD_start       (GtkTextIter          *iter);
+gboolean _ide_vim_iter_forward_word_end         (GtkTextIter          *iter);
+gboolean _ide_vim_iter_forward_WORD_end         (GtkTextIter          *iter);
+gboolean _ide_vim_iter_backward_paragraph_start (GtkTextIter          *iter);
+gboolean _ide_vim_iter_forward_paragraph_end    (GtkTextIter          *iter);
+gboolean _ide_vim_iter_backward_sentence_start  (GtkTextIter          *iter);
+gboolean _ide_vim_iter_forward_sentence_end     (GtkTextIter          *iter);
+gboolean _ide_vim_iter_backward_WORD_end        (GtkTextIter          *iter);
+gboolean _ide_vim_iter_backward_word_end        (GtkTextIter          *iter);
 
 G_END_DECLS
 

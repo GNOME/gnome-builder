@@ -455,3 +455,69 @@ _ide_vim_iter_backward_WORD_end (GtkTextIter *iter)
 {
   return _ide_vim_iter_backward_classified_end (iter, _ide_vim_WORD_classify);
 }
+
+static gboolean
+matches_pred (GtkTextIter          *iter,
+              VimIterCharPredicate  pred,
+              gpointer              user_data)
+{
+  gint ch;
+
+  ch = gtk_text_iter_get_char (iter);
+
+  return (*pred) (iter, ch, user_data);
+}
+
+/* Similar to gtk_text_iter_forward_find_char but
+ * lets us acces to the iter in the predicate
+ */
+gboolean
+_ide_vim_iter_forward_find_char (GtkTextIter          *iter,
+                                 VimIterCharPredicate  pred,
+                                 gpointer              user_data,
+                                 const GtkTextIter    *limit)
+{
+  g_return_val_if_fail (iter != NULL, FALSE);
+  g_return_val_if_fail (pred != NULL, FALSE);
+
+  if (limit &&
+      gtk_text_iter_compare (iter, limit) >= 0)
+    return FALSE;
+
+  while ((limit == NULL ||
+          !gtk_text_iter_equal (limit, iter)) &&
+         gtk_text_iter_forward_char (iter))
+    {
+      if (matches_pred (iter, pred, user_data))
+        return TRUE;
+    }
+
+  return FALSE;
+}
+
+/* Similar to gtk_text_iter_backward_find_char but
+ * lets us acces to the iter in the predicate
+ */
+gboolean
+_ide_vim_iter_backward_find_char (GtkTextIter          *iter,
+                                  VimIterCharPredicate  pred,
+                                  gpointer              user_data,
+                                  const GtkTextIter    *limit)
+{
+  g_return_val_if_fail (iter != NULL, FALSE);
+  g_return_val_if_fail (pred != NULL, FALSE);
+
+  if (limit &&
+      gtk_text_iter_compare (iter, limit) <= 0)
+    return FALSE;
+
+  while ((limit == NULL ||
+          !gtk_text_iter_equal (limit, iter)) &&
+         gtk_text_iter_backward_char (iter))
+    {
+      if (matches_pred (iter, pred, user_data))
+        return TRUE;
+    }
+
+  return FALSE;
+}
