@@ -222,7 +222,6 @@ egg_animation_alpha_ease_in_out_quad (gdouble offset)
  * Load the begin values for all the properties we are about to
  * animate.
  *
- * Returns: None.
  * Side effects: None.
  */
 static void
@@ -263,7 +262,6 @@ egg_animation_load_begin_values (EggAnimation *animation)
  * Unloads the begin values for the animation. This might be particularly
  * useful once we support pointer types.
  *
- * Returns: None.
  * Side effects: None.
  */
 static void
@@ -328,7 +326,6 @@ egg_animation_get_offset (EggAnimation *animation,
  *
  * Updates the value of a property on an object using @value.
  *
- * Returns: None.
  * Side effects: The property of @target is updated.
  */
 static void
@@ -355,7 +352,6 @@ egg_animation_update_property (EggAnimation  *animation,
  *
  * Updates the value of the parent widget of the target to @value.
  *
- * Returns: None.
  * Side effects: The property of @target<!-- -->'s parent widget is updated.
  */
 static void
@@ -388,7 +384,6 @@ egg_animation_update_child_property (EggAnimation *animation,
  *
  * Retrieves a value for a particular position within the animation.
  *
- * Returns: None.
  * Side effects: None.
  */
 static void
@@ -596,7 +591,6 @@ egg_animation_widget_after_paint_cb (GdkFrameClock *frame_clock,
  * Start the animation. When the animation stops, the internal reference will
  * be dropped and the animation may be finalized.
  *
- * Returns: None.
  * Side effects: None.
  */
 void
@@ -658,7 +652,6 @@ egg_animation_notify (EggAnimation *self)
  * Stops a running animation. The internal reference to the animation is
  * dropped and therefore may cause the object to finalize.
  *
- * Returns: None.
  * Side effects: None.
  */
 void
@@ -696,7 +689,6 @@ egg_animation_stop (EggAnimation *animation)
  * Adds a new property to the set of properties to be animated during the
  * lifetime of the animation.
  *
- * Returns: None.
  * Side effects: None.
  */
 void
@@ -740,7 +732,6 @@ egg_animation_add_property (EggAnimation *animation,
  *
  * Releases any object references the animation contains.
  *
- * Returns: None.
  * Side effects: None.
  */
 static void
@@ -761,7 +752,6 @@ egg_animation_dispose (GObject *object)
  *
  * Finalizes the object and releases any resources allocated.
  *
- * Returns: None.
  * Side effects: None.
  */
 static void
@@ -832,7 +822,6 @@ egg_animation_set_property (GObject      *object,
  *
  * Initializes the GObjectClass.
  *
- * Returns: None.
  * Side effects: Properties, signals, and vtables are initialized.
  */
 static void
@@ -951,7 +940,6 @@ egg_animation_class_init (EggAnimationClass *klass)
  *
  * Initializes the #EggAnimation instance.
  *
- * Returns: None.
  * Side effects: Everything.
  */
 static void
