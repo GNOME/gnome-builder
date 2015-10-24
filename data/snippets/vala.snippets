@@ -12,3 +12,9 @@ snippet comment
 	/*
 	 * $0
 	 */
+snippet async
+- scope vala
+- desc call an async function
+	${1:func}.begin (${2:args, }(obj, res) => {
+		${3:var result = }$1.end (res);$0
+	});
