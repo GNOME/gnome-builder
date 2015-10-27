@@ -8,15 +8,16 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2015-09-21 12:09+0000\n"
-"PO-Revision-Date: 2015-09-21 17:12+0500\n"
+"POT-Creation-Date: 2015-10-15 14:40+0000\n"
+"PO-Revision-Date: 2015-10-26 11:33+0500\n"
 "Last-Translator: Baurzhan Muftakhidinov <baurthefirst@gmail.com>\n"
 "Language-Team: Kazakh <kk_KZ@googlegroups.com>\n"
 "Language: kk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.8.4\n"
+"X-Generator: Poedit 1.8.6\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 
 #: ../contrib/egg/egg-animation.c:723
 #, c-format
@@ -287,8 +288,7 @@ msgid "8"
 msgstr "8"
 
 #: ../data/ui/gb-editor-view.ui.h:2 ../data/ui/gb-greeter-window.ui.h:4
-#: ../data/ui/gb-new-project-dialog.ui.h:2
-#: ../data/ui/gb-projects-dialog.ui.h:3
+#: ../data/ui/gb-new-project-dialog.ui.h:2 ../data/ui/gb-projects-dialog.ui.h:3
 msgid "_Cancel"
 msgstr "Ба_с тарту"
 
@@ -481,6 +481,34 @@ msgstr ""
 msgid "Minimal number of lines to keep above and below the cursor."
 msgstr ""
 
+#: ../data/ui/gb-preferences-page-editor.ui.h:22
+msgid "Draw Spaces"
+msgstr ""
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:23
+msgid "Draw a circle over space characters."
+msgstr ""
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:24
+msgid "Draw an arrow over tab characters."
+msgstr ""
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:25
+msgid "Draw a carriage return over newline characters."
+msgstr ""
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:26
+msgid "Draw indicators for non-breaking spaces."
+msgstr ""
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:27
+msgid "Draw leading space only."
+msgstr ""
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:28
+msgid "Draw trailing space only."
+msgstr ""
+
 #: ../data/ui/gb-preferences-page-git.ui.h:1
 #: ../data/ui/gb-preferences-window.ui.h:8
 msgid "Version Control"
@@ -639,8 +667,7 @@ msgstr "Баптаулар"
 msgid "Search Preferences…"
 msgstr ""
 
-#: ../data/ui/gb-projects-dialog.ui.h:1
-#: ../src/dialogs/gb-projects-dialog.c:255
+#: ../data/ui/gb-projects-dialog.ui.h:1 ../src/dialogs/gb-projects-dialog.c:255
 msgid "Select Project"
 msgstr "Жобаны таңдау"
 
@@ -670,7 +697,7 @@ msgstr ""
 
 #: ../data/ui/gb-shortcuts-window.ui.h:6
 #: ../plugins/terminal/gb-terminal-document.c:87
-#: ../plugins/terminal/gb-terminal-workbench-addin.c:101
+#: ../plugins/terminal/gb-terminal-workbench-addin.c:96
 msgid "Terminal"
 msgstr "Терминал"
 
@@ -820,62 +847,66 @@ msgid "Toggle overwrite"
 msgstr ""
 
 #: ../data/ui/gb-shortcuts-window.ui.h:43
+msgid "Reindent line"
+msgstr ""
+
+#: ../data/ui/gb-shortcuts-window.ui.h:44
 msgid "Navigation"
 msgstr "Навигация"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:44
+#: ../data/ui/gb-shortcuts-window.ui.h:45
 msgid "Move to next error in file"
 msgstr ""
 
-#: ../data/ui/gb-shortcuts-window.ui.h:45
+#: ../data/ui/gb-shortcuts-window.ui.h:46
 msgid "Move to previous error in file"
 msgstr ""
 
-#: ../data/ui/gb-shortcuts-window.ui.h:46
+#: ../data/ui/gb-shortcuts-window.ui.h:47
 msgid "Move to previous edit location"
 msgstr ""
 
-#: ../data/ui/gb-shortcuts-window.ui.h:47
+#: ../data/ui/gb-shortcuts-window.ui.h:48
 msgid "Move to next edit location"
 msgstr ""
 
-#: ../data/ui/gb-shortcuts-window.ui.h:48
+#: ../data/ui/gb-shortcuts-window.ui.h:49
 msgid "Jump to definition of symbol"
 msgstr ""
 
-#: ../data/ui/gb-shortcuts-window.ui.h:49
+#: ../data/ui/gb-shortcuts-window.ui.h:50
 msgid "Move viewport up within the file"
 msgstr ""
 
-#: ../data/ui/gb-shortcuts-window.ui.h:50
+#: ../data/ui/gb-shortcuts-window.ui.h:51
 msgid "Move viewport down within the file"
 msgstr ""
 
-#: ../data/ui/gb-shortcuts-window.ui.h:51
+#: ../data/ui/gb-shortcuts-window.ui.h:52
 msgid "Move viewport to end of file"
 msgstr ""
 
-#: ../data/ui/gb-shortcuts-window.ui.h:52
+#: ../data/ui/gb-shortcuts-window.ui.h:53
 msgid "Move viewport to beginning of file"
 msgstr ""
 
-#: ../data/ui/gb-shortcuts-window.ui.h:53
+#: ../data/ui/gb-shortcuts-window.ui.h:54
 msgid "Move to matching bracket"
 msgstr ""
 
-#: ../data/ui/gb-shortcuts-window.ui.h:54
+#: ../data/ui/gb-shortcuts-window.ui.h:55
 msgid "Selections"
 msgstr ""
 
-#: ../data/ui/gb-shortcuts-window.ui.h:55
+#: ../data/ui/gb-shortcuts-window.ui.h:56
 msgid "Select all"
 msgstr ""
 
-#: ../data/ui/gb-shortcuts-window.ui.h:56
+#: ../data/ui/gb-shortcuts-window.ui.h:57
 msgid "Unselect all"
 msgstr "Барлығынан таңдауды алып тастау"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:57
+#: ../data/ui/gb-shortcuts-window.ui.h:58
 msgid "Terminal Shortcuts"
 msgstr ""
 
@@ -935,17 +966,17 @@ msgstr "Файл ұсынылмады."
 msgid "Cannot provide diff, no backing file provided."
 msgstr ""
 
-#: ../libide/git/ide-git-buffer-change-monitor.c:537
+#: ../libide/git/ide-git-buffer-change-monitor.c:539
 #, c-format
 msgid "Repository does not have a working directory."
 msgstr ""
 
-#: ../libide/git/ide-git-buffer-change-monitor.c:548
+#: ../libide/git/ide-git-buffer-change-monitor.c:550
 #, c-format
 msgid "File is not under control of git working directory."
 msgstr ""
 
-#: ../libide/git/ide-git-buffer-change-monitor.c:614
+#: ../libide/git/ide-git-buffer-change-monitor.c:616
 #, c-format
 msgid "The requested file does not exist within the git index."
 msgstr ""
@@ -999,7 +1030,7 @@ msgstr ""
 msgid "File contained invalid UTF-8"
 msgstr ""
 
-#: ../libide/ide-buffer.c:1991
+#: ../libide/ide-buffer.c:2071
 msgid "The current language lacks a symbol resolver."
 msgstr ""
 
@@ -1068,20 +1099,20 @@ msgstr ""
 msgid "The device \"%s\" could not be found."
 msgstr ""
 
-#: ../libide/ide-object.c:285
+#: ../libide/ide-object.c:288
 #, c-format
 msgid "No implementations of extension point \"%s\"."
 msgstr ""
 
-#: ../libide/ide-object.c:377
+#: ../libide/ide-object.c:380
 msgid "Failed to locate build system plugin."
 msgstr ""
 
-#: ../libide/ide-object.c:464
+#: ../libide/ide-object.c:467
 msgid "No such extension point."
 msgstr ""
 
-#: ../libide/ide-object.c:474
+#: ../libide/ide-object.c:477
 msgid "No implementations of extension point."
 msgstr ""
 
@@ -1093,7 +1124,7 @@ msgstr ""
 msgid "File must be within the project tree."
 msgstr ""
 
-#: ../libide/ide-recent-projects.c:377
+#: ../libide/ide-recent-projects.c:382
 #, c-format
 msgid "%s() may only be executed once"
 msgstr ""
@@ -1107,11 +1138,11 @@ msgstr ""
 msgid "Chunk does not belong to snippet."
 msgstr ""
 
-#: ../libide/ide-source-snippet-completion-provider.c:288
+#: ../libide/ide-source-snippet-completion-provider.c:297
 msgid "Snippets"
 msgstr "Снипеттер"
 
-#: ../libide/ide-source-snippet-parser.c:495
+#: ../libide/ide-source-snippet-parser.c:496
 #, c-format
 msgid "Invalid snippet at line %d: %s"
 msgstr ""
@@ -1126,29 +1157,29 @@ msgstr ""
 msgid "Failed to load file: %s: %s"
 msgstr ""
 
-#: ../libide/ide-source-view.c:4563
+#: ../libide/ide-source-view.c:4733
 #, c-format
 msgid "Insert \"%s\""
 msgstr ""
 
-#: ../libide/ide-source-view.c:4565
+#: ../libide/ide-source-view.c:4735
 #, c-format
 msgid "Replace \"%s\" with \"%s\""
 msgstr ""
 
-#: ../libide/ide-source-view.c:4683
+#: ../libide/ide-source-view.c:4854
 msgid "Apply Fix-It"
 msgstr ""
 
-#: ../libide/ide-source-view.c:4726
+#: ../libide/ide-source-view.c:4897
 msgid "Join Lines"
 msgstr ""
 
-#: ../libide/ide-source-view.c:4737
+#: ../libide/ide-source-view.c:4908
 msgid "Sort Lines"
 msgstr ""
 
-#: ../libide/ide-source-view.c:4756
+#: ../libide/ide-source-view.c:4927
 msgid "Go to Definition"
 msgstr ""
 
@@ -1161,7 +1192,7 @@ msgstr ""
 msgid "The script \"%s\" is not a PyGObject file."
 msgstr ""
 
-#: ../plugins/autotools/ide-autotools-build-system.c:175
+#: ../plugins/autotools/ide-autotools-build-system.c:182
 msgid "Failed to locate configure.ac"
 msgstr ""
 
@@ -1196,36 +1227,32 @@ msgstr ""
 msgid "autogen.sh failed to create configure (%s)"
 msgstr ""
 
-#: ../plugins/autotools/ide-makecache.c:999
+#: ../plugins/autotools/ide-makecache.c:1006
 msgid "Invalid makefile provided, ignoring."
 msgstr ""
 
-#: ../plugins/clang/ide-clang-completion-provider.c:200
-msgid "Clang"
-msgstr "Clang"
-
-#: ../plugins/clang/ide-clang-service.c:266
+#: ../plugins/clang/ide-clang-service.c:269
 msgid "Unknown failure"
 msgstr ""
 
-#: ../plugins/clang/ide-clang-service.c:270
+#: ../plugins/clang/ide-clang-service.c:273
 msgid "Clang crashed"
 msgstr ""
 
-#: ../plugins/clang/ide-clang-service.c:274
+#: ../plugins/clang/ide-clang-service.c:277
 msgid "Invalid arguments"
 msgstr ""
 
-#: ../plugins/clang/ide-clang-service.c:278
+#: ../plugins/clang/ide-clang-service.c:281
 msgid "AST read error"
 msgstr ""
 
-#: ../plugins/clang/ide-clang-service.c:290
+#: ../plugins/clang/ide-clang-service.c:293
 #, c-format
 msgid "Failed to create translation unit: %s"
 msgstr ""
 
-#: ../plugins/clang/ide-clang-service.c:399
+#: ../plugins/clang/ide-clang-service.c:402
 msgid "File must be saved locally to parse."
 msgstr ""
 
@@ -1233,16 +1260,16 @@ msgstr ""
 msgid "anonymous"
 msgstr ""
 
-#: ../plugins/clang/ide-clang-translation-unit.c:654
+#: ../plugins/clang/ide-clang-translation-unit.c:656
 msgid "clang_codeCompleteAt() only works on local files"
 msgstr ""
 
-#: ../plugins/command-bar/gb-command-bar.c:290
+#: ../plugins/command-bar/gb-command-bar.c:316
 #, c-format
 msgid "Command not found: %s"
 msgstr ""
 
-#: ../plugins/command-bar/gb-command-bar.c:594
+#: ../plugins/command-bar/gb-command-bar.c:620
 msgid "Use the entry below to execute a command"
 msgstr ""
 
@@ -1286,12 +1313,12 @@ msgstr ""
 msgid "Invalid search and replace request"
 msgstr ""
 
-#: ../plugins/command-bar/gb-vim.c:960
+#: ../plugins/command-bar/gb-vim.c:961
 #, c-format
 msgid "vim mode requires GtkSourceView"
 msgstr ""
 
-#: ../plugins/command-bar/gb-vim.c:990
+#: ../plugins/command-bar/gb-vim.c:991
 #, c-format
 msgid "Not an editor command: %s"
 msgstr ""
@@ -1299,10 +1326,6 @@ msgstr ""
 #: ../plugins/c-pack/ide-c-format-provider.c:281
 #: ../plugins/python-pack/ide-python-format-provider.c:238
 msgid "Format Strings"
-msgstr ""
-
-#: ../plugins/ctags/ide-ctags-completion-provider.c:179
-msgid "CTags"
 msgstr ""
 
 #: ../plugins/devhelp/gb-devhelp-document.c:71
@@ -1316,7 +1339,7 @@ msgstr ""
 msgid "Documentation"
 msgstr "Құжаттама"
 
-#: ../plugins/device-manager/gb-device-manager-panel.c:75
+#: ../plugins/device-manager/gb-device-manager-panel.c:67
 msgid "Device Manager"
 msgstr "Құрылғылар басқарушысы"
 
@@ -1344,15 +1367,15 @@ msgstr "MinGW (64-бит)"
 msgid "MinGW (32-bit)"
 msgstr "MinGW (32-бит)"
 
-#: ../plugins/symbol-tree/symbol-tree.c:187
+#: ../plugins/symbol-tree/symbol-tree.c:236
 msgid "Current language does not support symbol resolvers"
 msgstr ""
 
-#: ../plugins/symbol-tree/symbol-tree.c:211
+#: ../plugins/symbol-tree/symbol-tree.c:261
 msgid "Symbol Tree"
 msgstr ""
 
-#: ../plugins/sysmon/gb-sysmon-addin.c:64
+#: ../plugins/sysmon/gb-sysmon-addin.c:58
 msgid "System Monitor"
 msgstr "Жүйелік бақылаушы"
 
@@ -1455,7 +1478,7 @@ msgstr "Жол %u, баған %u"
 msgid "%u of %u"
 msgstr "%u, барлығы %u"
 
-#: ../src/editor/gb-editor-frame.c:664
+#: ../src/editor/gb-editor-frame.c:662
 msgid "Re_veal in Project Tree"
 msgstr ""
 
@@ -1472,54 +1495,60 @@ msgstr "Құжатты сақтау"
 msgid "Save Document As"
 msgstr "Құжатты қалайша сақтау"
 
-#: ../src/editor/gb-editor-view.c:119
+#: ../src/editor/gb-editor-view.c:120
 msgid "Plain Text"
 msgstr "Ашық мәтін"
 
 #. translators: the user selected a number outside the value range for the document.
-#: ../src/editor/gb-editor-view.c:624
+#: ../src/editor/gb-editor-view.c:671
 #, c-format
 msgid "Provide a number between 1 and %u"
 msgstr ""
 
 #. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-editor.c:95
+#: ../src/preferences/gb-preferences-page-editor.c:123
 msgid "restore insert cursor mark"
 msgstr ""
 
 #. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-editor.c:100
+#: ../src/preferences/gb-preferences-page-editor.c:128
 msgid "diff renderer gutter changes git vcs"
 msgstr ""
 
 #. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-editor.c:105
+#: ../src/preferences/gb-preferences-page-editor.c:133
 msgid "line numbers"
 msgstr "жолдар нөмірлері"
 
 #. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-editor.c:110
+#: ../src/preferences/gb-preferences-page-editor.c:138
 msgid "line lines highlight current"
 msgstr ""
 
 #. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-editor.c:115
+#: ../src/preferences/gb-preferences-page-editor.c:143
 msgid "bracket brackets highlight matching"
 msgstr ""
 
 #. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-editor.c:120
+#: ../src/preferences/gb-preferences-page-editor.c:148
 msgid "lines margin scrolloff scroll off"
 msgstr ""
 
 #. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-editor.c:126
+#: ../src/preferences/gb-preferences-page-editor.c:154
 msgid "font document editor monospace"
 msgstr ""
 
 #. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-editor.c:131
+#: ../src/preferences/gb-preferences-page-editor.c:159
 msgid "minimap mini map overview over view"
+msgstr ""
+
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-editor.c:165
+msgid ""
+"draw spaces space tab newline nbsp non-breaking whitespace trailing leading"
 msgstr ""
 
 #. To translators: This is a list of keywords for the preferences page
@@ -1630,8 +1659,10 @@ msgstr ""
 
 #: ../src/search/gb-search-display-group.c:182
 #, c-format
+#| msgid "%s more"
 msgid "%s more"
-msgstr "Тағы %s"
+msgid_plural "%s more"
+msgstr[0] "тағы %s"
 
 #: ../src/shortcuts/gb-shortcuts-dialog.c:937
 msgid "Search Shortcuts"
@@ -1684,8 +1715,10 @@ msgstr "Шамамен бір жыл бұрын"
 
 #: ../src/util/gb-glib.c:69
 #, c-format
-msgid "About %u years ago"
-msgstr "Шамамен %u жыл бұрын"
+#| msgid "About %u years ago"
+msgid "About %u year ago"
+msgid_plural "About %u years ago"
+msgstr[0] "Шамамен %u жыл бұрын"
 
 #: ../src/workbench/gb-workbench-actions.c:162
 msgid "Open Document"
@@ -1700,11 +1733,11 @@ msgstr "Ашу"
 msgid "%s - Builder"
 msgstr ""
 
-#: ../src/workbench/gb-workbench.c:919
+#: ../src/workbench/gb-workbench.c:939
 msgid "Build Failure"
 msgstr ""
 
-#: ../src/workbench/gb-workbench.c:966
+#: ../src/workbench/gb-workbench.c:986
 msgid "Project build system does not support building"
 msgstr ""
 
@@ -1837,9 +1870,14 @@ msgstr "- жобаларды щолу"
 
 #: ../tools/ide-search.c:68
 #, c-format
-msgid "%s results\n"
-msgstr "%s нәтиже\n"
+#| msgid "%s results\n"
+msgid "%s result\n"
+msgid_plural "%s results\n"
+msgstr[0] "%s нәтиже\n"
 
 #: ../tools/ide-search.c:120
 msgid "PROJECT_FILE [SEARCH TERMS...]"
 msgstr ""
+
+#~ msgid "Clang"
+#~ msgstr "Clang"
