@@ -8,7 +8,7 @@ TALK="ca.desrt.dconf org.gnome.CodeAssist.v1.*"
 
 BRANCHES[libgit2]="v0.23.3"
 
-CACHEPOINTS="libpeas libgit2-glib gtksourceview devhelp"
+CACHEPOINTS="jedi py2cairo pygobject libpeas libgit2 libgit2-glib gtksourceview devhelp"
 
 CLEANUP_FILES="/app/bin/pygobject-codegen-2.0 /app/bin/peas-demo /app/lib/peas-demo"
 
