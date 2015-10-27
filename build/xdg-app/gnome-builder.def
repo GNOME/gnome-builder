@@ -4,6 +4,7 @@ PLATFORM=org.gnome.Sdk
 SDK_VERSION=3.18
 ICON_FILE=builder.png
 COMMAND=gnome-builder
+TALK="ca.desrt.dconf org.gnome.CodeAssist.v1.*"
 
 BRANCHES[libgit2]="v0.23.3"
 

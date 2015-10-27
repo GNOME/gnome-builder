@@ -216,5 +216,10 @@ if [ "x${CLEANUP_FILES-}" != x ]; then
     xdg-app build app rm -rf ${CLEANUP_FILES-}
 fi
 
-xdg-app build-finish --command=$COMMAND --share=ipc --socket=x11 --socket=pulseaudio --socket=session-bus --filesystem=host --talk-name=ca.desrt.dconf ${FINISH_ARGS-} app
+TALK_NAMES=""
+for talk in $TALK; do
+    TALK_NAMES="$TALK_NAMES --talk-name=${talk}"
+done
+
+xdg-app build-finish --command=$COMMAND --share=ipc --socket=x11 --socket=pulseaudio --socket=session-bus --filesystem=host ${TALK_NAMES} ${FINISH_ARGS-} app
 xdg-app build-export --subject="Nightly build of ${APPID}, `date`" --body="$BODY" ${EXPORT_ARGS-} repo app
