@@ -304,7 +304,7 @@ filter_symbols_cb (GbTree     *tree,
   if ((text = gb_tree_node_get_text (node)) != NULL)
     return ide_pattern_spec_match (spec, text);
 
-  return NULL;
+  return FALSE;
 }
 
 static void
