@@ -139,6 +139,7 @@ static const gchar *gb_application_credits_funders[] = {
   "Alexandros Diavatis",
   "Alfonso de Cala Bravo",
   "Alfred Santacatalina Gea",
+  "Ambrose Andrews",
   "Andreas Nilsson",
   "Andrew Stiegmann",
   "Andrew Walton",
