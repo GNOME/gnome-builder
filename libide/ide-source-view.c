@@ -250,6 +250,7 @@ enum {
   SAVE_INSERT_MARK,
   SAVE_SEARCH_CHAR,
   SELECT_INNER,
+  SELECT_TAG,
   SELECTION_THEATRIC,
   SET_MODE,
   SET_OVERWRITE,
@@ -3475,6 +3476,17 @@ ide_source_view_real_select_inner (IdeSourceView *self,
 }
 
 static void
+ide_source_view_real_select_tag (IdeSourceView *self,
+                                 gboolean       exclusive)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+
+  _ide_source_view_select_tag (self, priv->count, exclusive);
+}
+
+static void
 ide_source_view__completion_hide_cb (IdeSourceView       *self,
                                      GtkSourceCompletion *completion)
 {
@@ -5391,6 +5403,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
   klass->save_insert_mark = ide_source_view_real_save_insert_mark;
   klass->save_search_char = ide_source_view_real_save_search_char;
   klass->select_inner = ide_source_view_real_select_inner;
+  klass->select_tag = ide_source_view_real_select_tag;
   klass->selection_theatric = ide_source_view_real_selection_theatric;
   klass->set_mode = ide_source_view_real_set_mode;
   klass->set_overwrite = ide_source_view_real_set_overwrite;
@@ -6048,6 +6061,16 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   G_TYPE_STRING,
                   G_TYPE_STRING,
                   G_TYPE_BOOLEAN,
+                  G_TYPE_BOOLEAN);
+
+  signals [SELECT_TAG] =
+    g_signal_new ("select-tag",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                  G_STRUCT_OFFSET (IdeSourceViewClass, select_tag),
+                  NULL, NULL, NULL,
+                  G_TYPE_NONE,
+                  1,
                   G_TYPE_BOOLEAN);
 
   signals [SELECTION_THEATRIC] =

@@ -40,6 +40,10 @@ void _ide_source_view_select_inner   (IdeSourceView *self,
                                       gboolean       exclusive,
                                       gboolean       string_mode);
 
+void _ide_source_view_select_tag     (IdeSourceView *self,
+                                      guint          count,
+                                      gboolean       exclusive);
+
 G_END_DECLS
 
 #endif /* IDE_SOURCE_VIEW_HELPER_H */

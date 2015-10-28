@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-source-view"
 
+#include <string.h>
+
 #include "ide-debug.h"
 #include "ide-enums.h"
 #include "ide-internal.h"
@@ -63,6 +65,30 @@ typedef struct
   guint            depth;
   gboolean         string_mode;
 } MatchingBracketState;
+
+typedef enum
+{
+  HTML_TAG_KIND_ERROR,
+  HTML_TAG_KIND_OPEN,
+  HTML_TAG_KIND_CLOSE,
+  HTML_TAG_KIND_EMPTY,
+  HTML_TAG_KIND_STRAY_END,
+  HTML_TAG_KIND_COMMENT
+} HtmlTagKind;
+
+typedef struct
+{
+  GtkTextIter  begin;
+  GtkTextIter  end;
+  gchar       *name;
+  HtmlTagKind  kind;
+} HtmlTag;
+
+typedef struct
+{
+  HtmlTag *left;
+  HtmlTag *right;
+} HtmlElement;
 
 static gboolean
 is_single_line_selection (const GtkTextIter *begin,
@@ -1742,5 +1768,474 @@ _ide_source_view_select_inner (IdeSourceView *self,
           gtk_text_view_scroll_mark_onscreen (GTK_TEXT_VIEW (self), insert);
         }
 
+    }
+}
+
+static gboolean
+html_tag_predicate (GtkTextIter *iter,
+                    gunichar     ch,
+                    gpointer     user_data)
+{
+  GtkTextIter near;
+  gunichar bound = GPOINTER_TO_UINT (user_data);
+
+  if (ch == bound)
+    {
+      if (!gtk_text_iter_starts_line (iter))
+        {
+          near = *iter;
+          gtk_text_iter_backward_char (&near);
+
+          return (gtk_text_iter_get_char (&near) != '\\');
+        }
+
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+/* Iter need to be at the start of the name */
+static gchar *
+get_html_tag_name (GtkTextIter *iter)
+{
+  GtkTextIter start = *iter;
+  gunichar ch;
+
+  do
+    {
+      ch = gtk_text_iter_get_char (iter);
+      if (!(g_unichar_isalnum (ch) || ch == '-' || ch == '_' || ch == '.'))
+        break;
+    } while (gtk_text_iter_forward_char(iter));
+
+  return gtk_text_iter_get_text (&start, iter);
+}
+
+static gboolean
+find_tag_end (GtkTextIter *cursor)
+{
+  gunichar ch;
+  gunichar previous = 0;
+
+  while ((ch = gtk_text_iter_get_char (cursor)))
+    {
+      if (previous == '\\')
+        {
+          previous = 0;
+          gtk_text_iter_forward_char (cursor);
+          continue;
+        }
+
+      if (ch == '>')
+        return TRUE;
+      else if (ch == '<')
+        return FALSE;
+
+      previous = ch;
+      gtk_text_iter_forward_char (cursor);
+    }
+
+  return FALSE;
+}
+
+static gboolean
+find_chars (GtkTextIter *cursor,
+            GtkTextIter *end,
+            const gchar *str,
+            gboolean     only_at_start)
+{
+  const gchar *base_str;
+  const gchar *limit;
+  GtkTextIter base_cursor;
+  gboolean is_buffer_end = FALSE;
+
+  g_return_val_if_fail (!ide_str_empty0 (str), FALSE);
+
+  limit = str + strlen (str);
+  base_str = str;
+  base_cursor = *cursor;
+  do
+    {
+      *cursor = base_cursor;
+      do
+        {
+          if (gtk_text_iter_get_char (cursor) != g_utf8_get_char (str))
+            {
+              if (only_at_start)
+                return FALSE;
+              else
+                break;
+            }
+
+          str = g_utf8_find_next_char (str, limit);
+          if (str == NULL)
+            {
+              *end = *cursor;
+              gtk_text_iter_forward_char (end);
+
+              *cursor = base_cursor;
+              return TRUE;
+            }
+
+        } while ((is_buffer_end = gtk_text_iter_forward_char (cursor)));
+
+      if (is_buffer_end)
+        return FALSE;
+      else
+        str = base_str;
+    } while (gtk_text_iter_forward_char (&base_cursor));
+
+  return FALSE;
+}
+
+/* iter is updated to the left of the tag for a GTK_DIR_LEFT direction or in case
+ * of error in the tag, and to the right of the tag for a GTK_DIR_RIGHT direction.
+ * If no tag can be found, NULL is returned and iter equal the corresponding buffer bound.
+ */
+static HtmlTag *
+find_html_tag (GtkTextIter      *iter,
+               GtkDirectionType  direction)
+{
+  GtkTextIter cursor;
+  GtkTextIter end;
+  HtmlTag *tag;
+  gchar *name;
+  gunichar ch;
+  gboolean ret;
+
+  g_return_val_if_fail (direction == GTK_DIR_LEFT || direction == GTK_DIR_RIGHT, NULL);
+
+  if (direction == GTK_DIR_LEFT)
+    ret = _ide_vim_iter_backward_find_char (iter, html_tag_predicate, GUINT_TO_POINTER ('<'), NULL);
+  else
+    ret = (gtk_text_iter_get_char (iter) == '<') ||
+          _ide_vim_iter_forward_find_char (iter, html_tag_predicate, GUINT_TO_POINTER ('<'), NULL);
+
+  if (!ret)
+    return NULL;
+
+  tag = g_new0 (HtmlTag, 1);
+  tag->kind = HTML_TAG_KIND_OPEN;
+  cursor = tag->begin = tag->end = *iter;
+
+  gtk_text_iter_forward_char (&cursor);
+  if (gtk_text_iter_is_end (&cursor))
+    {
+      tag->kind = HTML_TAG_KIND_ERROR;
+      tag->end = cursor;
+
+      return tag;
+    }
+
+  ch = gtk_text_iter_get_char (&cursor);
+  if (ch == '/')
+    {
+      tag->kind = HTML_TAG_KIND_CLOSE;
+      gtk_text_iter_forward_char (&cursor);
+    }
+  else if (ch == '>')
+    {
+      tag->kind = HTML_TAG_KIND_EMPTY;
+      gtk_text_iter_forward_char (&cursor);
+      if (direction == GTK_DIR_RIGHT)
+        *iter = cursor;
+
+      tag->end = cursor;
+
+      return tag;
+    }
+  else if (find_chars (&cursor, &end, "!--", TRUE))
+    {
+      tag->kind = HTML_TAG_KIND_COMMENT;
+      cursor = end;
+      if (find_chars (&cursor, &end, "-->", FALSE))
+        {
+          tag->end = end;
+          if (direction == GTK_DIR_RIGHT)
+            *iter = tag->end;
+        }
+      else
+        {
+          tag->kind = HTML_TAG_KIND_ERROR;
+          tag->end = cursor;
+        }
+
+      return tag;
+    }
+
+  name = get_html_tag_name (&cursor);
+  if (ide_str_empty0 (name))
+    {
+      g_free (name);
+      tag->kind = HTML_TAG_KIND_ERROR;
+      tag->end = cursor;
+
+      return tag;
+    }
+  else
+    {
+      tag->name = g_utf8_casefold (name, -1);
+      g_free (name);
+    }
+
+  if (!find_tag_end (&cursor))
+    {
+      tag->kind = HTML_TAG_KIND_ERROR;
+      tag->end = cursor;
+
+      return tag;
+    }
+
+  tag->end = cursor;
+  gtk_text_iter_forward_char (&tag->end);
+
+  gtk_text_iter_backward_char (&cursor);
+  if (gtk_text_iter_get_char (&cursor) == '/' && tag->kind != HTML_TAG_KIND_CLOSE)
+    tag->kind = HTML_TAG_KIND_STRAY_END;
+
+  if (direction == GTK_DIR_RIGHT)
+    *iter = tag->end;
+
+  return tag;
+}
+
+static void
+free_html_tag (gpointer data)
+{
+  HtmlTag *tag = (HtmlTag *)data;
+
+  if (tag != NULL)
+    {
+      g_free (tag->name);
+      g_free (tag);
+    }
+}
+
+/* cursor should be at the left of the block cursor */
+static HtmlTag *
+find_non_matching_html_tag_at_left (GtkTextIter *cursor,
+                                    gboolean     block_cursor)
+{
+  GQueue *stack;
+  HtmlTag *tag;
+  HtmlTag *last_closing_tag;
+  GtkTextIter cursor_right;
+
+  stack = g_queue_new ();
+
+  cursor_right = *cursor;
+  if (block_cursor)
+    gtk_text_iter_forward_char (&cursor_right);
+
+  while ((tag = find_html_tag (&cursor_right, GTK_DIR_LEFT)))
+    {
+      if (tag->kind == HTML_TAG_KIND_CLOSE)
+        {
+          if (gtk_text_iter_compare (cursor, &tag->end) >= 0)
+            {
+              g_queue_push_head (stack, tag);
+              continue;
+            }
+          else
+            cursor_right = tag->begin;
+        }
+      else if (tag->kind == HTML_TAG_KIND_OPEN)
+        {
+          last_closing_tag = g_queue_peek_head (stack);
+          if (last_closing_tag != NULL)
+            {
+              if (ide_str_equal0 (tag->name, last_closing_tag->name))
+                {
+                  g_queue_pop_head (stack);
+                  free_html_tag (last_closing_tag);
+                }
+            }
+          else
+            {
+              *cursor = tag->begin;
+              break;
+            }
+        }
+
+      free_html_tag (tag);
+    }
+
+  g_queue_free_full (stack, free_html_tag);
+
+  return tag;
+}
+
+/* cursor should be at the left of the block cursor */
+static HtmlTag *
+find_non_matching_html_tag_at_right (GtkTextIter *cursor,
+                                     gboolean     block_cursor)
+{
+  GQueue *stack;
+  HtmlTag *tag;
+  HtmlTag *last_closing_tag;
+  GtkTextIter cursor_left;
+  GtkTextIter cursor_right;
+
+  stack = g_queue_new ();
+  cursor_left = cursor_right = *cursor;
+
+  if (block_cursor)
+    gtk_text_iter_forward_char (&cursor_right);
+
+  tag = find_html_tag (&cursor_right, GTK_DIR_LEFT);
+  if (tag != NULL && gtk_text_iter_compare (cursor, &tag->end) < 0)
+    {
+      if (tag->kind == HTML_TAG_KIND_CLOSE)
+        cursor_left = tag->begin;
+      else if (tag->kind == HTML_TAG_KIND_OPEN)
+        cursor_left = tag->end;
+    }
+
+  while ((tag = find_html_tag (&cursor_left, GTK_DIR_RIGHT)))
+    {
+      if (tag->kind == HTML_TAG_KIND_OPEN)
+        {
+          g_queue_push_head (stack, tag);
+          continue;
+        }
+      else if (tag->kind == HTML_TAG_KIND_CLOSE)
+        {
+          while ((last_closing_tag = g_queue_pop_head (stack)))
+            {
+              gboolean is_names_equal = ide_str_equal0 (tag->name, last_closing_tag->name);
+
+              free_html_tag (last_closing_tag);
+              if (is_names_equal)
+                break;
+            }
+
+          if (last_closing_tag == NULL)
+            {
+              *cursor = tag->begin;
+              break;
+            }
+        }
+      else if (tag->kind == HTML_TAG_KIND_ERROR)
+        gtk_text_iter_forward_char (&cursor_left);
+
+      free_html_tag (tag);
+    }
+
+  g_queue_free_full (stack, free_html_tag);
+
+  return tag;
+}
+
+static void
+free_html_element (gpointer data)
+{
+  HtmlElement *element = (HtmlElement *)data;
+
+  if (element != NULL)
+    {
+      free_html_tag (element->left);
+      free_html_tag (element->right);
+
+      g_free (element);
+    }
+}
+
+static HtmlElement *
+get_html_element (GtkTextIter cursor_left,
+                  gboolean    block_cursor)
+{
+  HtmlElement *element = NULL;
+  HtmlTag *left_tag;
+  HtmlTag *right_tag;
+
+  right_tag = find_non_matching_html_tag_at_right (&cursor_left, block_cursor);
+  if (right_tag != NULL)
+    {
+      while ((left_tag = find_non_matching_html_tag_at_left (&cursor_left, block_cursor)))
+        {
+          if (!ide_str_equal0 (left_tag->name, right_tag->name))
+            {
+              cursor_left = left_tag->begin;
+              free_html_tag (left_tag);
+              left_tag = NULL;
+
+              if (block_cursor && !gtk_text_iter_backward_char (&cursor_left))
+                break;
+
+            }
+          else
+            break;
+        };
+
+      if (left_tag != NULL)
+        {
+          element = g_new0 (HtmlElement, 1);
+          element->left = left_tag;
+          element->right = right_tag;
+        }
+      else
+        free_html_tag (right_tag);
+    }
+
+  return element;
+}
+
+static HtmlElement *
+get_html_element_parent (HtmlElement *element)
+{
+  g_return_val_if_fail (element != NULL, NULL);
+
+  return get_html_element (element->right->end, FALSE);
+}
+
+void
+_ide_source_view_select_tag (IdeSourceView *self,
+                             guint          count,
+                             gboolean       exclusive)
+{
+  GtkTextBuffer *buffer;
+  GtkTextMark *insert_mark;
+  GtkTextMark *selection_mark;
+  GtkTextIter insert;
+  GtkTextIter selection;
+  GtkTextIter selection_left;
+  HtmlElement *element;
+  HtmlElement *element_parent;
+
+  g_return_if_fail (IDE_IS_SOURCE_VIEW (self));
+
+  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
+  insert_mark = gtk_text_buffer_get_insert (buffer);
+  gtk_text_buffer_get_iter_at_mark (buffer, &insert, insert_mark);
+  selection_mark = gtk_text_buffer_get_selection_bound (buffer);
+  gtk_text_buffer_get_iter_at_mark (buffer, &selection, selection_mark);
+
+  selection_left = selection;
+  if (gtk_text_buffer_get_has_selection (buffer))
+    {
+      /* fix for visual mode selection and fake block cursor */
+      gtk_text_iter_order (&insert, &selection_left);
+      gtk_text_iter_backward_char (&selection_left);
+    }
+
+  element = get_html_element (selection_left, TRUE);
+  while (element != NULL &&
+         (gtk_text_iter_compare (&insert, &element->left->begin) < 0 ||
+          gtk_text_iter_compare (&selection, &element->right->end) > 0))
+    {
+      element_parent = get_html_element_parent (element);
+      free_html_element (element);
+      element = element_parent;
+    }
+
+  if (element != NULL)
+    {
+      if (exclusive)
+        gtk_text_buffer_select_range (buffer, &element->left->end, &element->right->begin);
+      else
+        gtk_text_buffer_select_range (buffer, &element->left->begin, &element->right->end);
+
+      free_html_element (element);
     }
 }
