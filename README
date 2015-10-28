@@ -51,7 +51,7 @@ unfamiliar with jhbuild, the following will help you get started.
   ./autogen.sh
   make
   make install
-  jhbuild -m gnome-world build gnome-builder
+  jhbuild build gnome-builder
   jhbuild run gnome-builder
 
 If you have problems building or running Builder, please contact us on IRC
