@@ -32,11 +32,17 @@ GbEditorTweakWidget GtkScrolledWindow {
 /*
  * View stack styling.
  */
-GbViewStack GtkBox.header.notebook {
+GbViewStack > GtkBox.vertical > GtkBox.header.notebook {
+  background-color: shade (@theme_bg_color, 0.95);
   border-bottom: 1px solid @borders;
 }
-GbViewStack:not(.focused) GtkBox.header.notebook {
-  background-color: shade (@theme_bg_color, 0.95);
+GbViewStack.focused > GtkBox.vertical > GtkBox.header.notebook,
+GbViewStack.backdrop.focused > GtkBox.vetical > GtkBox.header.notebook {
+    background-color: shade (@theme_bg_color, 0.90);
+}
+GbWorkspacePane.focused > GtkBox.vertical > GtkBox.horizontal.notebook.header,
+GbWorkspacePane.focused > GtkBox.vertical > GtkBox.horizontal.notebook.header.backdrop {
+    background-color: shade (@theme_bg_color, 0.90);
 }
 GbViewStack > GtkBox.vertical > GtkBox.header.notebook.horizontal > GtkEventBox > GtkBox.horizontal > .button,
 GbViewStack > GtkBox.vertical > GtkBox.header.notebook.horizontal > GtkEventBox > GtkBox.horizontal > GtkBox > GtkBox > .button {
