@@ -44,7 +44,7 @@ enum {
   LAST_SIGNAL
 };
 
-static guint gSignals [LAST_SIGNAL];
+static guint signals [LAST_SIGNAL];
 
 gboolean
 ide_search_context_get_completed (IdeSearchContext *self)
@@ -63,7 +63,7 @@ ide_search_context_provider_completed (IdeSearchContext  *self,
   g_return_if_fail (g_list_find (self->providers, provider));
 
   if (--self->in_progress == 0)
-    g_signal_emit (self, gSignals [COMPLETED], 0);
+    g_signal_emit (self, signals [COMPLETED], 0);
 }
 
 /**
@@ -91,7 +91,7 @@ ide_search_context_add_result (IdeSearchContext  *self,
   g_return_if_fail (IDE_IS_SEARCH_PROVIDER (provider));
   g_return_if_fail (IDE_IS_SEARCH_RESULT (result));
 
-  g_signal_emit (self, gSignals [RESULT_ADDED], 0, provider, result);
+  g_signal_emit (self, signals [RESULT_ADDED], 0, provider, result);
 }
 
 void
@@ -103,7 +103,7 @@ ide_search_context_remove_result (IdeSearchContext  *self,
   g_return_if_fail (IDE_IS_SEARCH_PROVIDER (provider));
   g_return_if_fail (IDE_IS_SEARCH_RESULT (result));
 
-  g_signal_emit (self, gSignals [RESULT_REMOVED], 0, provider, result);
+  g_signal_emit (self, signals [RESULT_REMOVED], 0, provider, result);
 }
 
 void
@@ -114,7 +114,7 @@ ide_search_context_set_provider_count (IdeSearchContext  *self,
   g_return_if_fail (IDE_IS_SEARCH_CONTEXT (self));
   g_return_if_fail (IDE_IS_SEARCH_PROVIDER (provider));
 
-  g_signal_emit (self, gSignals [COUNT_SET], 0, provider, count);
+  g_signal_emit (self, signals [COUNT_SET], 0, provider, count);
 }
 
 void
@@ -136,7 +136,7 @@ ide_search_context_execute (IdeSearchContext *self,
 
   if (!self->in_progress)
     {
-      g_signal_emit (self, gSignals [COMPLETED], 0);
+      g_signal_emit (self, signals [COMPLETED], 0);
       IDE_EXIT;
     }
 
@@ -195,7 +195,7 @@ ide_search_context_class_init (IdeSearchContextClass *klass)
 
   object_class->finalize = ide_search_context_finalize;
 
-  gSignals [COMPLETED] =
+  signals [COMPLETED] =
     g_signal_new ("completed",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
@@ -204,7 +204,7 @@ ide_search_context_class_init (IdeSearchContextClass *klass)
                   G_TYPE_NONE,
                   0);
 
-  gSignals [COUNT_SET] =
+  signals [COUNT_SET] =
     g_signal_new ("count-set",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
@@ -215,7 +215,7 @@ ide_search_context_class_init (IdeSearchContextClass *klass)
                   IDE_TYPE_SEARCH_PROVIDER,
                   G_TYPE_UINT64);
 
-  gSignals [RESULT_ADDED] =
+  signals [RESULT_ADDED] =
     g_signal_new ("result-added",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
@@ -226,7 +226,7 @@ ide_search_context_class_init (IdeSearchContextClass *klass)
                   IDE_TYPE_SEARCH_PROVIDER,
                   IDE_TYPE_SEARCH_RESULT);
 
-  gSignals [RESULT_REMOVED] =
+  signals [RESULT_REMOVED] =
     g_signal_new ("result-removed",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,

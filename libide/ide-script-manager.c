@@ -42,7 +42,7 @@ enum {
   LAST_PROP
 };
 
-static GParamSpec *gParamSpecs [LAST_PROP];
+static GParamSpec *properties [LAST_PROP];
 
 const gchar *
 ide_script_manager_get_scripts_directory (IdeScriptManager *self)
@@ -123,7 +123,7 @@ ide_script_manager_class_init (IdeScriptManagerClass *klass)
   object_class->get_property = ide_script_manager_get_property;
   object_class->set_property = ide_script_manager_set_property;
 
-  gParamSpecs [PROP_SCRIPTS_DIRECTORY] =
+  properties [PROP_SCRIPTS_DIRECTORY] =
     g_param_spec_string ("scripts-directory",
                          "Scripts Directory",
                          "The local path to the directory containing scripts.",
@@ -132,7 +132,7 @@ ide_script_manager_class_init (IdeScriptManagerClass *klass)
                           G_PARAM_CONSTRUCT_ONLY |
                           G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 }
 
 static void

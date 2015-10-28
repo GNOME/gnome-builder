@@ -51,8 +51,8 @@ enum {
   LAST_STYLE_PROP
 };
 
-static GParamSpec *gParamSpecs [LAST_PROP];
-static GParamSpec *gStyleParamSpecs [LAST_STYLE_PROP];
+static GParamSpec *properties [LAST_PROP];
+static GParamSpec *styleParamSpecs [LAST_STYLE_PROP];
 
 static gboolean
 gb_workspace_pane_draw (GtkWidget *widget,
@@ -286,7 +286,7 @@ gb_workspace_pane_class_init (GbWorkspacePaneClass *klass)
    * being placed on the right, and animations to and from the leftmost
    * of the allocation.
    */
-  gParamSpecs [PROP_POSITION] =
+  properties [PROP_POSITION] =
     g_param_spec_enum ("position",
                        "Position",
                        "The position of the pane.",
@@ -294,9 +294,9 @@ gb_workspace_pane_class_init (GbWorkspacePaneClass *klass)
                        GTK_POS_LEFT,
                        (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 
-  gStyleParamSpecs [STYLE_PROP_HANDLE_SIZE] =
+  styleParamSpecs [STYLE_PROP_HANDLE_SIZE] =
     g_param_spec_int ("handle-size",
                       "Handle Size",
                       "Width of handle.",
@@ -304,7 +304,7 @@ gb_workspace_pane_class_init (GbWorkspacePaneClass *klass)
                       1,
                       (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
   gtk_widget_class_install_style_property (widget_class,
-                                           gStyleParamSpecs [STYLE_PROP_HANDLE_SIZE]);
+                                           styleParamSpecs [STYLE_PROP_HANDLE_SIZE]);
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/ui/gb-workspace-pane.ui");
   gtk_widget_class_bind_template_child (widget_class, GbWorkspacePane, box);
@@ -351,7 +351,7 @@ gb_workspace_pane_set_position (GbWorkspacePane *self,
     {
       self->position = position;
       gtk_widget_queue_resize (GTK_WIDGET (self));
-      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_POSITION]);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_POSITION]);
     }
 }
 

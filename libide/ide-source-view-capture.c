@@ -57,7 +57,7 @@ enum {
   LAST_PROP
 };
 
-static GParamSpec *gParamSpecs [LAST_PROP];
+static GParamSpec *properties [LAST_PROP];
 
 IdeSourceViewCapture *
 ide_source_view_capture_new (IdeSourceView         *view,
@@ -236,7 +236,7 @@ ide_source_view_capture_class_init (IdeSourceViewCaptureClass *klass)
   object_class->get_property = ide_source_view_capture_get_property;
   object_class->set_property = ide_source_view_capture_set_property;
 
- gParamSpecs [PROP_VIEW] =
+ properties [PROP_VIEW] =
     g_param_spec_object ("view",
                          "View",
                          "The source view.",
@@ -245,7 +245,7 @@ ide_source_view_capture_class_init (IdeSourceViewCaptureClass *klass)
                           G_PARAM_CONSTRUCT_ONLY |
                           G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 }
 
 static void

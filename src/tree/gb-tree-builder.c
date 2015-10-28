@@ -47,8 +47,8 @@ enum {
   LAST_SIGNAL
 };
 
-static GParamSpec *gParamSpecs [LAST_PROP];
-static guint gSignals [LAST_SIGNAL];
+static GParamSpec *properties [LAST_PROP];
+static guint signals [LAST_SIGNAL];
 
 gboolean
 _gb_tree_builder_node_activated (GbTreeBuilder *builder,
@@ -59,7 +59,7 @@ _gb_tree_builder_node_activated (GbTreeBuilder *builder,
 	g_return_val_if_fail (GB_IS_TREE_BUILDER(builder), FALSE);
 	g_return_val_if_fail (GB_IS_TREE_NODE(node), FALSE);
 
-  g_signal_emit (builder, gSignals [NODE_ACTIVATED], 0, node, &ret);
+  g_signal_emit (builder, signals [NODE_ACTIVATED], 0, node, &ret);
 
 	return ret;
 }
@@ -73,7 +73,7 @@ _gb_tree_builder_node_popup (GbTreeBuilder *builder,
   g_return_if_fail (GB_IS_TREE_NODE (node));
   g_return_if_fail (G_IS_MENU (menu));
 
-  g_signal_emit (builder, gSignals [NODE_POPUP], 0, node, menu);
+  g_signal_emit (builder, signals [NODE_POPUP], 0, node, menu);
 }
 
 void
@@ -83,7 +83,7 @@ _gb_tree_builder_node_selected (GbTreeBuilder *builder,
 	g_return_if_fail (GB_IS_TREE_BUILDER (builder));
 	g_return_if_fail (GB_IS_TREE_NODE (node));
 
-  g_signal_emit (builder, gSignals [NODE_SELECTED], 0, node);
+  g_signal_emit (builder, signals [NODE_SELECTED], 0, node);
 }
 
 void
@@ -93,7 +93,7 @@ _gb_tree_builder_node_unselected (GbTreeBuilder *builder,
 	g_return_if_fail (GB_IS_TREE_BUILDER (builder));
 	g_return_if_fail (GB_IS_TREE_NODE (node));
 
-  g_signal_emit (builder, gSignals [NODE_UNSELECTED], 0, node);
+  g_signal_emit (builder, signals [NODE_UNSELECTED], 0, node);
 }
 
 void
@@ -103,7 +103,7 @@ _gb_tree_builder_build_node (GbTreeBuilder *builder,
 	g_return_if_fail (GB_IS_TREE_BUILDER (builder));
 	g_return_if_fail (GB_IS_TREE_NODE (node));
 
-  g_signal_emit (builder, gSignals [BUILD_NODE], 0, node);
+  g_signal_emit (builder, signals [BUILD_NODE], 0, node);
 }
 
 void
@@ -113,7 +113,7 @@ _gb_tree_builder_added (GbTreeBuilder *builder,
 	g_return_if_fail (GB_IS_TREE_BUILDER (builder));
 	g_return_if_fail (GB_IS_TREE (tree));
 
-  g_signal_emit (builder, gSignals [ADDED], 0, tree);
+  g_signal_emit (builder, signals [ADDED], 0, tree);
 }
 
 void
@@ -123,7 +123,7 @@ _gb_tree_builder_removed (GbTreeBuilder *builder,
 	g_return_if_fail (GB_IS_TREE_BUILDER (builder));
 	g_return_if_fail (GB_IS_TREE (tree));
 
-  g_signal_emit (builder, gSignals [REMOVED], 0, tree);
+  g_signal_emit (builder, signals [REMOVED], 0, tree);
 }
 
 void
@@ -150,7 +150,7 @@ _gb_tree_builder_set_tree (GbTreeBuilder *builder,
           g_object_add_weak_pointer (G_OBJECT (priv->tree), (gpointer *)&priv->tree);
         }
 
-      g_object_notify_by_pspec (G_OBJECT (builder), gParamSpecs [PROP_TREE]);
+      g_object_notify_by_pspec (G_OBJECT (builder), properties [PROP_TREE]);
     }
 }
 
@@ -215,16 +215,16 @@ gb_tree_builder_class_init (GbTreeBuilderClass *klass)
 	object_class->finalize = gb_tree_builder_finalize;
 	object_class->get_property = gb_tree_builder_get_property;
 
-	gParamSpecs[PROP_TREE] =
+	properties[PROP_TREE] =
 		g_param_spec_object("tree",
 		                    "Tree",
 		                    "The GbTree the builder belongs to.",
 		                    GB_TYPE_TREE,
 		                    G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 
-  gSignals [ADDED] =
+  signals [ADDED] =
     g_signal_new ("added",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
@@ -234,7 +234,7 @@ gb_tree_builder_class_init (GbTreeBuilderClass *klass)
                   1,
                   GB_TYPE_TREE);
 
-  gSignals [BUILD_NODE] =
+  signals [BUILD_NODE] =
     g_signal_new ("build-node",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
@@ -244,7 +244,7 @@ gb_tree_builder_class_init (GbTreeBuilderClass *klass)
                   1,
                   GB_TYPE_TREE_NODE);
 
-  gSignals [NODE_ACTIVATED] =
+  signals [NODE_ACTIVATED] =
     g_signal_new ("node-activated",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
@@ -254,7 +254,7 @@ gb_tree_builder_class_init (GbTreeBuilderClass *klass)
                   1,
                   GB_TYPE_TREE_NODE);
 
-  gSignals [NODE_POPUP] =
+  signals [NODE_POPUP] =
     g_signal_new ("node-popup",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
@@ -265,7 +265,7 @@ gb_tree_builder_class_init (GbTreeBuilderClass *klass)
                   GB_TYPE_TREE_NODE,
                   G_TYPE_MENU);
 
-  gSignals [NODE_SELECTED] =
+  signals [NODE_SELECTED] =
     g_signal_new ("node-selected",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
@@ -275,7 +275,7 @@ gb_tree_builder_class_init (GbTreeBuilderClass *klass)
                   1,
                   GB_TYPE_TREE_NODE);
 
-  gSignals [NODE_UNSELECTED] =
+  signals [NODE_UNSELECTED] =
     g_signal_new ("node-unselected",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
@@ -285,7 +285,7 @@ gb_tree_builder_class_init (GbTreeBuilderClass *klass)
                   1,
                   GB_TYPE_TREE_NODE);
 
-  gSignals [REMOVED] =
+  signals [REMOVED] =
     g_signal_new ("removed",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,

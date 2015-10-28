@@ -27,16 +27,16 @@
 
 #include "gb-plugins.h"
 
-static GMainLoop *gMainLoop;
-static gint gExitCode = EXIT_SUCCESS;
-static gchar *gSearchTerms;
-static gsize gCount;
+static GMainLoop *main_loop;
+static gint exit_code = EXIT_SUCCESS;
+static gchar *search_terms;
+static gsize count;
 
 static void
-quit (gint exit_code)
+quit (gint code)
 {
-  gExitCode = exit_code;
-  g_main_loop_quit (gMainLoop);
+  exit_code = code;
+  g_main_loop_quit (main_loop);
 }
 
 static void
@@ -48,7 +48,7 @@ on_result_added_cb (IdeSearchContext  *search_context,
   const gchar *title;
   const gchar *subtitle;
 
-  gCount++;
+  count++;
 
   title = ide_search_result_get_title (result);
   subtitle = ide_search_result_get_subtitle (result);
@@ -63,12 +63,12 @@ static void
 on_completed_cb (IdeSearchContext *search_context,
                  IdeContext       *context)
 {
-  gchar *gCount_str;
-  gCount_str = g_strdup_printf ("%"G_GSIZE_FORMAT, gCount);
-  g_print (ngettext ("%s result\n", "%s results\n", gCount), gCount_str);
-  g_free (gCount_str);
+  gchar *count_str;
+  count_str = g_strdup_printf ("%"G_GSIZE_FORMAT, count);
+  g_print (ngettext ("%s result\n", "%s results\n", count), count_str);
+  g_free (count_str);
   g_object_unref (context);
-  quit (gExitCode);
+  quit (exit_code);
 }
 
 static void
@@ -91,7 +91,7 @@ context_cb (GObject      *object,
     }
 
   search_engine = ide_context_get_search_engine (context);
-  search_context = ide_search_engine_search (search_engine, gSearchTerms);
+  search_context = ide_search_engine_search (search_engine, search_terms);
   /* FIXME: ^ search terms duplicated */
 
   g_signal_connect (search_context, "result-added",
@@ -100,7 +100,7 @@ context_cb (GObject      *object,
                     G_CALLBACK (on_completed_cb),
                     g_object_ref (context));
 
-  ide_search_context_execute (search_context, gSearchTerms, 0);
+  ide_search_context_execute (search_context, search_terms, 0);
 }
 
 gint
@@ -111,7 +111,7 @@ main (gint   argc,
   g_autoptr(GError) error = NULL;
   g_autoptr(GFile) project_file = NULL;
   const gchar *project_path = ".";
-  GString *search_terms;
+  GString *search_terms_string;
   gint i;
 
   ide_set_program_name ("gnome-builder");
@@ -126,24 +126,24 @@ main (gint   argc,
       return EXIT_FAILURE;
     }
 
-  gMainLoop = g_main_loop_new (NULL, FALSE);
+  main_loop = g_main_loop_new (NULL, FALSE);
 
   if (argc > 1)
     project_path = argv [1];
   project_file = g_file_new_for_path (project_path);
 
-  search_terms = g_string_new (NULL);
+  search_terms_string = g_string_new (NULL);
   for (i = 2; i < argc; i++)
-    g_string_append_printf (search_terms, " %s", argv [i]);
-  gSearchTerms = g_string_free (search_terms, FALSE);
+    g_string_append_printf (search_terms_string, " %s", argv [i]);
+  search_terms = g_string_free (search_terms_string, FALSE);
 
   gb_plugins_init ();
 
   ide_context_new_async (project_file, NULL, context_cb, NULL);
 
-  g_main_loop_run (gMainLoop);
-  g_clear_pointer (&gMainLoop, g_main_loop_unref);
-  g_clear_pointer (&gSearchTerms, g_free);
+  g_main_loop_run (main_loop);
+  g_clear_pointer (&main_loop, g_main_loop_unref);
+  g_clear_pointer (&search_terms, g_free);
 
-  return gExitCode;
+  return exit_code;
 }

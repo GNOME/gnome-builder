@@ -39,7 +39,7 @@ enum {
   LAST_PROP
 };
 
-static GParamSpec *gParamSpecs [LAST_PROP];
+static GParamSpec *properties [LAST_PROP];
 
 gboolean
 ide_project_file_get_is_directory (IdeProjectFile *self)
@@ -76,7 +76,7 @@ ide_project_file_set_path (IdeProjectFile *self,
     {
       g_free (priv->path);
       priv->path = g_strdup (path);
-      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_PATH]);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_PATH]);
     }
 }
 
@@ -122,7 +122,7 @@ ide_project_file_set_file (IdeProjectFile *self,
   g_return_if_fail (!file || G_IS_FILE (file));
 
   if (g_set_object (&priv->file, file))
-    g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_FILE]);
+    g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_FILE]);
 }
 
 /**
@@ -154,8 +154,8 @@ ide_project_file_set_file_info (IdeProjectFile *file,
 
   if (g_set_object (&priv->file_info, file_info))
     {
-      g_object_notify_by_pspec (G_OBJECT (file), gParamSpecs [PROP_FILE_INFO]);
-      g_object_notify_by_pspec (G_OBJECT (file), gParamSpecs [PROP_NAME]);
+      g_object_notify_by_pspec (G_OBJECT (file), properties [PROP_FILE_INFO]);
+      g_object_notify_by_pspec (G_OBJECT (file), properties [PROP_NAME]);
     }
 }
 
@@ -243,42 +243,42 @@ ide_project_file_class_init (IdeProjectFileClass *klass)
   object_class->get_property = ide_project_file_get_property;
   object_class->set_property = ide_project_file_set_property;
 
-  gParamSpecs [PROP_FILE] =
+  properties [PROP_FILE] =
     g_param_spec_object ("file",
                          "File",
                          "A GFile to the underlying file.",
                          G_TYPE_FILE,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_FILE_INFO] =
+  properties [PROP_FILE_INFO] =
     g_param_spec_object ("file-info",
                          "File Info",
                          "The file information for the project file.",
                          G_TYPE_FILE_INFO,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_IS_DIRECTORY] =
+  properties [PROP_IS_DIRECTORY] =
     g_param_spec_boolean ("is-directory",
                           "Is Directory",
                           "Is Directory",
                           FALSE,
                           (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_NAME] =
+  properties [PROP_NAME] =
     g_param_spec_string ("name",
                          "Name",
                          "The short name of the file.",
                          NULL,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_PATH] =
+  properties [PROP_PATH] =
     g_param_spec_string ("path",
                          "Path",
                          "The path for the file within the project tree.",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 }
 
 static void

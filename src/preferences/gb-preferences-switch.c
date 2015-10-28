@@ -53,7 +53,7 @@ enum {
   LAST_PROP
 };
 
-static GParamSpec *gParamSpecs [LAST_PROP];
+static GParamSpec *properties [LAST_PROP];
 
 GtkWidget *
 gb_preferences_switch_new (void)
@@ -309,42 +309,42 @@ gb_preferences_switch_class_init (GbPreferencesSwitchClass *klass)
   widget_class->enter_notify_event = gb_preferences_switch_enter_notify_event;
   widget_class->leave_notify_event = gb_preferences_switch_leave_notify_event;
 
-  gParamSpecs [PROP_TITLE] =
+  properties [PROP_TITLE] =
     g_param_spec_string ("title",
                          "Title",
                          "The title of the switch.",
                          NULL,
                          (G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_DESCRIPTION] =
+  properties [PROP_DESCRIPTION] =
     g_param_spec_string ("description",
                          "Description",
                          "The description for the switch.",
                          NULL,
                          (G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_IS_RADIO] =
+  properties [PROP_IS_RADIO] =
     g_param_spec_boolean ("is-radio",
                           "Is Radio",
                           "If a radio button should be used.",
                           FALSE,
                           (G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_SETTINGS] =
+  properties [PROP_SETTINGS] =
     g_param_spec_object ("settings",
                          "Settings",
                          "The GSettings for the setting.",
                          G_TYPE_SETTINGS,
                          (G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_SETTINGS_SCHEMA_KEY] =
+  properties [PROP_SETTINGS_SCHEMA_KEY] =
     g_param_spec_string ("settings-schema-key",
                          "Settings Schema Key",
                          "The settings schema key.",
                          NULL,
                          (G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_SETTINGS_SCHEMA_VALUE] =
+  properties [PROP_SETTINGS_SCHEMA_VALUE] =
     g_param_spec_variant ("settings-schema-value",
                           "Settings Schema Value",
                           "An action-target for the settings action.",
@@ -352,14 +352,14 @@ gb_preferences_switch_class_init (GbPreferencesSwitchClass *klass)
                           NULL,
                           (G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_SIZE_GROUP] =
+  properties [PROP_SIZE_GROUP] =
     g_param_spec_object ("size-group",
                          "Size Group",
                          "The sizing group for the control.",
                          GTK_TYPE_SIZE_GROUP,
                          (G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 
   GB_WIDGET_CLASS_TEMPLATE (klass, "gb-preferences-switch.ui");
 

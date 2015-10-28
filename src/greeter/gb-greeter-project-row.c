@@ -53,8 +53,8 @@ enum {
   LAST_PROP
 };
 
-static GParamSpec *gParamSpecs [LAST_PROP];
-static GFile      *gHomeDir;
+static GParamSpec *properties [LAST_PROP];
+static GFile      *homeDir;
 
 void
 gb_greeter_project_row_set_selection_mode (GbGreeterProjectRow *self,
@@ -161,7 +161,7 @@ gb_greeter_project_row_set_project_info (GbGreeterProjectRow *self,
           gb_greeter_project_row_create_search_text (self, project_info);
         }
 
-      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_PROJECT_INFO]);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_PROJECT_INFO]);
     }
 }
 
@@ -205,7 +205,7 @@ truncate_location (GBinding     *binding,
     {
       gchar *relative_path;
 
-      if ((relative_path = g_file_get_relative_path (gHomeDir, file)) ||
+      if ((relative_path = g_file_get_relative_path (homeDir, file)) ||
           (relative_path = g_file_get_path (file)))
         {
           g_value_set_string (to_value, relative_path);
@@ -307,30 +307,30 @@ gb_greeter_project_row_class_init (GbGreeterProjectRowClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GbGreeterProjectRow, languages_box);
   gtk_widget_class_bind_template_child (widget_class, GbGreeterProjectRow, title_label);
 
-  gParamSpecs [PROP_SELECTED] =
+  properties [PROP_SELECTED] =
     g_param_spec_boolean ("selected",
                           "Selected",
                           "Selected",
                           FALSE,
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_SELECTION_MODE] =
+  properties [PROP_SELECTION_MODE] =
     g_param_spec_boolean ("selection-mode",
                           "Selection Mode",
                           "Selection Mode",
                           FALSE,
                           (G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_PROJECT_INFO] =
+  properties [PROP_PROJECT_INFO] =
     g_param_spec_object ("project-info",
                          "Project Information",
                          "The project information to render.",
                          IDE_TYPE_PROJECT_INFO,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 
-  gHomeDir = g_file_new_for_path (g_get_home_dir ());
+  homeDir = g_file_new_for_path (g_get_home_dir ());
 }
 
 static void

@@ -32,20 +32,20 @@
 #define ADD_CLASS(widget,name) \
   gtk_style_context_add_class(gtk_widget_get_style_context(GTK_WIDGET(widget)), name)
 
-static IdeContext     *gContext;
-static GtkWindow      *gWindow;
-static GtkStack       *gDocStack;
-static GtkMenuButton  *gDocname;
-static GtkProgressBar *gProgress;
-static GHashTable     *gBufferToView;
-static GList          *gFilesToOpen;
-static gint            gExitCode = EXIT_SUCCESS;
-static gboolean        gWordCompletion;
-static gboolean        gDarkMode;
-static gboolean        gSearchShadow;
-static gboolean        gSmartBackspace;
-static gboolean        gDebugScrollOffset;
-static gchar          *gCss = "\
+static IdeContext     *context;
+static GtkWindow      *window;
+static GtkStack       *docStack;
+static GtkMenuButton  *docname;
+static GtkProgressBar *progress;
+static GHashTable     *bufferToView;
+static GList          *filesToOpen;
+static gint            exit_code = EXIT_SUCCESS;
+static gboolean        wordCompletion;
+static gboolean        darkMode;
+static gboolean        searchShadow;
+static gboolean        smartBackspace;
+static gboolean        debugScrollOffset;
+static gchar          *css = "\
 @binding-set file-keybindings { \
     bind \"<ctrl>s\" { \"action\" (\"file\", \"save\", \"\") }; \
 } \
@@ -57,7 +57,7 @@ IdeSourceView { \
 static void
 quit (int exit_code)
 {
-  gExitCode = exit_code;
+  exit_code = exit_code;
   gtk_main_quit ();
   return;
 }
@@ -92,7 +92,7 @@ idedit__context_unload_cb (GObject      *object,
       g_clear_error (&error);
     }
 
-  gtk_window_close (gWindow);
+  gtk_window_close (window);
 }
 
 static gboolean
@@ -100,13 +100,13 @@ delete_event_cb (GtkWindow *window,
                  GdkEvent  *event,
                  gpointer   user_data)
 {
-  if (gContext)
+  if (context)
     {
-      ide_context_unload_async (gContext,
+      ide_context_unload_async (context,
                                 NULL,
                                 idedit__context_unload_cb,
                                 NULL);
-      g_clear_object (&gContext);
+      g_clear_object (&context);
       return TRUE;
     }
 
@@ -149,9 +149,9 @@ add_buffer (IdeBuffer *buffer)
   IdeSourceView *view;
   IdeBackForwardList *bflist;
 
-  bflist = ide_context_get_back_forward_list (gContext);
+  bflist = ide_context_get_back_forward_list (context);
 
-  view = g_hash_table_lookup (gBufferToView, buffer);
+  view = g_hash_table_lookup (bufferToView, buffer);
 
   if (!view)
     {
@@ -165,29 +165,29 @@ add_buffer (IdeBuffer *buffer)
                            "auto-indent", TRUE,
                            "back-forward-list", bflist,
                            "buffer", buffer,
-                           "enable-word-completion", gWordCompletion,
+                           "enable-word-completion", wordCompletion,
                            "highlight-current-line", TRUE,
                            "insert-matching-brace", TRUE,
                            "overwrite-braces", TRUE,
-                           "scroll-offset", gDebugScrollOffset ? 5 : 0,
+                           "scroll-offset", debugScrollOffset ? 5 : 0,
                            "sensitive", FALSE,
                            "show-grid-lines", TRUE,
                            "show-line-changes", TRUE,
                            "show-line-numbers", TRUE,
                            "show-right-margin", TRUE,
                            "show-search-bubbles", TRUE,
-                           "show-search-shadow", gSearchShadow,
-                           "smart-backspace", gSmartBackspace,
+                           "show-search-shadow", searchShadow,
+                           "smart-backspace", smartBackspace,
                            "snippet-completion", TRUE,
                            "visible", TRUE,
                            NULL);
       completion = gtk_source_view_get_completion (GTK_SOURCE_VIEW (view));
       g_object_set (completion, "show-headers", FALSE, NULL);
-      if (gDebugScrollOffset)
+      if (debugScrollOffset)
         g_signal_connect_after (view, "draw", G_CALLBACK (debug_draw), NULL);
       gtk_container_add (GTK_CONTAINER (scroller), GTK_WIDGET (view));
-      gtk_container_add (GTK_CONTAINER (gDocStack), GTK_WIDGET (scroller));
-      g_hash_table_insert (gBufferToView, buffer, view);
+      gtk_container_add (GTK_CONTAINER (docStack), GTK_WIDGET (scroller));
+      g_hash_table_insert (bufferToView, buffer, view);
     }
 }
 
@@ -216,11 +216,11 @@ switch_to_buffer (IdeBuffer *buffer,
   GtkTextIter iter;
   GtkWidget *parent;
 
-  view = g_hash_table_lookup (gBufferToView, buffer);
+  view = g_hash_table_lookup (bufferToView, buffer);
   g_assert (view);
 
   parent = gtk_widget_get_parent (GTK_WIDGET (view));
-  gtk_stack_set_visible_child (GTK_STACK (gDocStack), parent);
+  gtk_stack_set_visible_child (GTK_STACK (docStack), parent);
 
   gtk_text_buffer_get_iter_at_line (GTK_TEXT_BUFFER (buffer), &iter, line);
   for (; line_offset; line_offset--)
@@ -261,12 +261,12 @@ idedit__bufmgr_load_file_cb (GObject      *object,
       switch_to_buffer (buf, line, line_offset);
     }
 
-  view = g_hash_table_lookup (gBufferToView, buf);
+  view = g_hash_table_lookup (bufferToView, buf);
   if (view)
     {
       GtkSourceStyleScheme *scheme;
       GtkSourceStyleSchemeManager *schememgr;
-      const gchar *name = gDarkMode ? "builder-dark" : "builder";
+      const gchar *name = darkMode ? "builder-dark" : "builder";
 
       schememgr = gtk_source_style_scheme_manager_get_default ();
       scheme = gtk_source_style_scheme_manager_get_scheme (schememgr, name);
@@ -297,8 +297,8 @@ notify_visible_child_cb (GtkStack   *stack,
       view = IDE_SOURCE_VIEW (gtk_bin_get_child (GTK_BIN (child)));
       buffer = IDE_BUFFER (gtk_text_view_get_buffer (GTK_TEXT_VIEW (view)));
       title = ide_buffer_get_title (buffer);
-      gtk_window_set_title (gWindow, title);
-      gtk_button_set_label (GTK_BUTTON (gDocname), title);
+      gtk_window_set_title (window, title);
+      gtk_button_set_label (GTK_BUTTON (docname), title);
     }
 }
 
@@ -348,7 +348,7 @@ save_activate (GSimpleAction *action,
 {
   GtkWidget *current;
 
-  current = gtk_stack_get_visible_child (gDocStack);
+  current = gtk_stack_get_visible_child (docStack);
   if (current != NULL)
     {
       current = gtk_bin_get_child (GTK_BIN (current));
@@ -360,13 +360,13 @@ save_activate (GSimpleAction *action,
           IdeProgress *progress = NULL;
 
           buffer = IDE_BUFFER (gtk_text_view_get_buffer (GTK_TEXT_VIEW (current)));
-          bufmgr = ide_context_get_buffer_manager (gContext);
+          bufmgr = ide_context_get_buffer_manager (context);
           file = ide_buffer_get_file (buffer);
           ide_buffer_manager_save_file_async (bufmgr, buffer, file, &progress, NULL, NULL, NULL);
 
-          g_object_bind_property (progress, "fraction", gProgress, "fraction", G_BINDING_SYNC_CREATE);
-          g_signal_connect (progress, "notify::completed", G_CALLBACK (progress_completed), gProgress);
-          gtk_widget_show (GTK_WIDGET (gProgress));
+          g_object_bind_property (progress, "fraction", progress, "fraction", G_BINDING_SYNC_CREATE);
+          g_signal_connect (progress, "notify::completed", G_CALLBACK (progress_completed), progress);
+          gtk_widget_show (GTK_WIDGET (progress));
         }
     }
 }
@@ -378,7 +378,7 @@ go_forward_activate (GSimpleAction *action,
 {
   IdeBackForwardList *list;
 
-  list = ide_context_get_back_forward_list (gContext);
+  list = ide_context_get_back_forward_list (context);
 
   if (ide_back_forward_list_get_can_go_forward (list))
     ide_back_forward_list_go_forward (list);
@@ -391,7 +391,7 @@ go_backward_activate (GSimpleAction *action,
 {
   IdeBackForwardList *list;
 
-  list = ide_context_get_back_forward_list (gContext);
+  list = ide_context_get_back_forward_list (context);
 
   if (ide_back_forward_list_get_can_go_backward (list))
     ide_back_forward_list_go_backward (list);
@@ -417,7 +417,7 @@ navigate_to_cb (IdeBackForwardList *list,
   line_offset = ide_source_location_get_line_offset (srcloc);
   gfile = ide_file_get_file (file);
 
-  bufmgr = ide_context_get_buffer_manager (gContext);
+  bufmgr = ide_context_get_buffer_manager (context);
   buffer = ide_buffer_manager_find_buffer (bufmgr, gfile);
 
   if (buffer)
@@ -458,29 +458,29 @@ create_window (void)
 
   css = gtk_css_provider_new ();
   g_signal_connect (css, "parsing-error", G_CALLBACK (parsing_error_cb), NULL);
-  gtk_css_provider_load_from_data (css, gCss, -1, NULL);
+  gtk_css_provider_load_from_data (css, css, -1, NULL);
   gtk_style_context_add_provider_for_screen (gdk_screen_get_default (),
                                              GTK_STYLE_PROVIDER (css),
                                              GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
   g_clear_object (&css);
 
-  gWindow = g_object_new (GTK_TYPE_WINDOW,
+  window = g_object_new (GTK_TYPE_WINDOW,
                           "default-width", 1280,
                           "default-height", 720,
                           "title", _("idedit"),
                           NULL);
-  g_signal_connect (gWindow, "delete-event", G_CALLBACK (delete_event_cb), NULL);
+  g_signal_connect (window, "delete-event", G_CALLBACK (delete_event_cb), NULL);
 
-  bflist = ide_context_get_back_forward_list (gContext);
+  bflist = ide_context_get_back_forward_list (context);
   g_signal_connect (bflist, "navigate-to", G_CALLBACK (navigate_to_cb), NULL);
 
   group = g_simple_action_group_new ();
   g_action_map_add_action_entries (G_ACTION_MAP (group), entries, G_N_ELEMENTS (entries), NULL);
-  gtk_widget_insert_action_group (GTK_WIDGET (gWindow), "file", G_ACTION_GROUP (group));
+  gtk_widget_insert_action_group (GTK_WIDGET (window), "file", G_ACTION_GROUP (group));
 
   nav_group = g_simple_action_group_new ();
   g_action_map_add_action_entries (G_ACTION_MAP (nav_group), nav_entries, G_N_ELEMENTS (nav_entries), NULL);
-  gtk_widget_insert_action_group (GTK_WIDGET (gWindow), "navigation", G_ACTION_GROUP (nav_group));
+  gtk_widget_insert_action_group (GTK_WIDGET (window), "navigation", G_ACTION_GROUP (nav_group));
 
   g_object_bind_property (bflist, "can-go-backward",
                           g_action_map_lookup_action (G_ACTION_MAP (nav_group), "go-backward"), "enabled",
@@ -495,13 +495,13 @@ create_window (void)
                          "title", "idedit",
                          "visible", TRUE,
                          NULL);
-  gtk_window_set_titlebar (gWindow, GTK_WIDGET (header));
+  gtk_window_set_titlebar (window, GTK_WIDGET (header));
 
   box = g_object_new (GTK_TYPE_BOX,
                       "orientation", GTK_ORIENTATION_VERTICAL,
                       "visible", TRUE,
                       NULL);
-  gtk_container_add (GTK_CONTAINER (gWindow), GTK_WIDGET (box));
+  gtk_container_add (GTK_CONTAINER (window), GTK_WIDGET (box));
 
   hbox = g_object_new (GTK_TYPE_BOX,
                        "orientation", GTK_ORIENTATION_HORIZONTAL,
@@ -559,14 +559,14 @@ create_window (void)
   gtk_box_pack_start (hbox2, GTK_WIDGET (sep), FALSE, FALSE, 0);
 
   /* document name */
-  gDocname = g_object_new (GTK_TYPE_MENU_BUTTON,
+  docname = g_object_new (GTK_TYPE_MENU_BUTTON,
                           "label", "my-document.c",
                           "hexpand", TRUE,
                           "visible", TRUE,
                           NULL);
-  ADD_CLASS (gDocname, "text-button");
-  ADD_CLASS (gDocname, "flat");
-  gtk_box_set_center_widget (hbox2, GTK_WIDGET (gDocname));
+  ADD_CLASS (docname, "text-button");
+  ADD_CLASS (docname, "flat");
+  gtk_box_set_center_widget (hbox2, GTK_WIDGET (docname));
 
   closebtn = g_object_new (GTK_TYPE_BUTTON,
                            "child", g_object_new (GTK_TYPE_IMAGE,
@@ -611,20 +611,20 @@ create_window (void)
                           NULL);
   gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (overlay));
 
-  gProgress = g_object_new (GTK_TYPE_PROGRESS_BAR,
+  progress = g_object_new (GTK_TYPE_PROGRESS_BAR,
                             "valign", GTK_ALIGN_START,
                             "orientation", GTK_ORIENTATION_HORIZONTAL,
                             "visible", FALSE,
                             NULL);
-  ADD_CLASS (gProgress, "osd");
-  gtk_overlay_add_overlay (overlay, GTK_WIDGET (gProgress));
+  ADD_CLASS (progress, "osd");
+  gtk_overlay_add_overlay (overlay, GTK_WIDGET (progress));
 
-  gDocStack = g_object_new (GTK_TYPE_STACK,
+  docStack = g_object_new (GTK_TYPE_STACK,
                             "expand", TRUE,
                             "visible", TRUE,
                             NULL);
-  g_signal_connect (gDocStack, "notify::visible-child", G_CALLBACK (notify_visible_child_cb), NULL);
-  gtk_container_add (GTK_CONTAINER (overlay), GTK_WIDGET (gDocStack));
+  g_signal_connect (docStack, "notify::visible-child", G_CALLBACK (notify_visible_child_cb), NULL);
+  gtk_container_add (GTK_CONTAINER (overlay), GTK_WIDGET (docStack));
 }
 
 static void
@@ -638,9 +638,9 @@ idedit__context_new_cb (GObject      *object,
   GList *iter;
   gsize i;
 
-  gContext = ide_context_new_finish (result, &error);
+  context = ide_context_new_finish (result, &error);
 
-  if (!gContext)
+  if (!context)
     {
       g_printerr ("%s\n", error->message);
       g_clear_error (&error);
@@ -651,9 +651,9 @@ idedit__context_new_cb (GObject      *object,
   create_window ();
 
   /* now open all the requested buffers */
-  gBufferToView = g_hash_table_new (g_direct_hash, g_direct_equal);
+  bufferToView = g_hash_table_new (g_direct_hash, g_direct_equal);
 
-  bufmgr = ide_context_get_buffer_manager (gContext);
+  bufmgr = ide_context_get_buffer_manager (context);
   g_signal_connect (bufmgr, "load-buffer", G_CALLBACK (load_buffer_cb), NULL);
   g_signal_connect (bufmgr, "buffer-loaded", G_CALLBACK (buffer_loaded_cb), NULL);
 
@@ -661,13 +661,13 @@ idedit__context_new_cb (GObject      *object,
   for (i = 0; i < bufs->len; i++)
     add_buffer (g_ptr_array_index (bufs, i));
 
-  for (iter = gFilesToOpen; iter; iter = iter->next)
+  for (iter = filesToOpen; iter; iter = iter->next)
     {
       const gchar *path = iter->data;
       IdeProject *project;
       IdeFile *file;
 
-      project = ide_context_get_project (gContext);
+      project = ide_context_get_project (context);
       g_assert (project);
       g_assert (IDE_IS_PROJECT (project));
 
@@ -681,7 +681,7 @@ idedit__context_new_cb (GObject      *object,
       g_object_unref (file);
     }
 
-  gtk_window_present (gWindow);
+  gtk_window_present (window);
 }
 
 static gboolean
@@ -716,16 +716,16 @@ main (int argc,
   gboolean vim = FALSE;
   gsize i;
   const GOptionEntry entries[] = {
-    { "words", 'w', 0, G_OPTION_ARG_NONE, &gWordCompletion,
+    { "words", 'w', 0, G_OPTION_ARG_NONE, &wordCompletion,
       N_("Use words in all buffers for autocompletion") },
     { "verbose", 'v', G_OPTION_FLAG_NO_ARG, G_OPTION_ARG_CALLBACK,
       increase_verbosity, N_("Increase logging verbosity.") },
     { "emacs", 'e', 0, G_OPTION_ARG_NONE, &emacs, N_("Use emacs keybindings") },
     { "vim", 'm', 0, G_OPTION_ARG_NONE, &vim, N_("Use Vim keybindings") },
-    { "dark", 'd', 0, G_OPTION_ARG_NONE, &gDarkMode, N_("Use dark mode") },
-    { "shadow", 's', 0, G_OPTION_ARG_NONE, &gSearchShadow, N_("Show shadow when searching") },
-    { "smart-backspace", 'b', 0, G_OPTION_ARG_NONE, &gSmartBackspace, N_("Enable smart backspace") },
-    { "debug-scroll-offset", 0, 0, G_OPTION_ARG_NONE, &gDebugScrollOffset,
+    { "dark", 'd', 0, G_OPTION_ARG_NONE, &darkMode, N_("Use dark mode") },
+    { "shadow", 's', 0, G_OPTION_ARG_NONE, &searchShadow, N_("Show shadow when searching") },
+    { "smart-backspace", 'b', 0, G_OPTION_ARG_NONE, &smartBackspace, N_("Enable smart backspace") },
+    { "debug-scroll-offset", 0, 0, G_OPTION_ARG_NONE, &debugScrollOffset,
       N_("Render a rectangle over the visible region taking scroll offset into account.") },
     { NULL }
   };
@@ -751,7 +751,7 @@ main (int argc,
     }
 
   for (i = 1; i < argc; i++)
-    gFilesToOpen = g_list_append (gFilesToOpen, g_strdup (argv [i]));
+    filesToOpen = g_list_append (filesToOpen, g_strdup (argv [i]));
 
   project_dir = g_file_new_for_path (".");
 
@@ -774,12 +774,12 @@ main (int argc,
   if (vim)
     load_css_resource ("/org/gnome/libide/keybindings/vim.css");
 
-  if (gDarkMode)
+  if (darkMode)
     g_object_set (gtk_settings_get_default (),
                   "gtk-application-prefer-dark-theme", TRUE,
                   NULL);
 
   gtk_main ();
 
-  return gExitCode;
+  return exit_code;
 }

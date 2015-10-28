@@ -55,7 +55,7 @@ enum {
   LAST_SIGNAL
 };
 
-static guint gSignals [LAST_SIGNAL];
+static guint signals [LAST_SIGNAL];
 
 GtkWidget *
 gb_preferences_window_new (void)
@@ -251,7 +251,7 @@ gb_preferences_window_class_init (GbPreferencesWindowClass *klass)
   widget_class->destroy = gb_preferences_window_destroy;
   widget_class->key_press_event = gb_preferences_window_key_press_event;
 
-  gSignals [CLOSE] =
+  signals [CLOSE] =
     g_signal_new_class_handler ("close",
                                 G_TYPE_FROM_CLASS (klass),
                                 (G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION),

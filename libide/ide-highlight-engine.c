@@ -65,8 +65,8 @@ enum {
   LAST_PROP
 };
 
-static GParamSpec *gParamSpecs [LAST_PROP];
-static GQuark      gEngineQuark;
+static GParamSpec *properties [LAST_PROP];
+static GQuark      engineQuark;
 
 static gboolean
 get_invalidation_area (GtkTextIter *begin,
@@ -283,7 +283,7 @@ ide_highlight_engine_apply_style (const GtkTextIter *begin,
   GtkTextTag *tag;
 
   buffer = gtk_text_iter_get_buffer (begin);
-  self = g_object_get_qdata (G_OBJECT (buffer), gEngineQuark);
+  self = g_object_get_qdata (G_OBJECT (buffer), engineQuark);
   tag = get_tag_from_style (self, style_name, TRUE);
 
   gtk_text_buffer_apply_tag (buffer, tag, begin, end);
@@ -496,7 +496,7 @@ ide_highlight_engine_set_highlighter (IdeHighlightEngine *self,
       if (highlighter != NULL)
         IDE_HIGHLIGHTER_GET_IFACE (highlighter)->set_engine (highlighter, self);
       ide_highlight_engine_reload (self);
-      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_HIGHLIGHTER]);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_HIGHLIGHTER]);
     }
 }
 
@@ -632,7 +632,7 @@ ide_highlight_engine__bind_buffer_cb (IdeHighlightEngine *self,
 
   ide_set_weak_pointer (&self->buffer, buffer);
 
-  g_object_set_qdata (G_OBJECT (buffer), gEngineQuark, self);
+  g_object_set_qdata (G_OBJECT (buffer), engineQuark, self);
 
   gtk_text_buffer_get_bounds (text_buffer, &begin, &end);
 
@@ -667,7 +667,7 @@ ide_highlight_engine__unbind_buffer_cb (IdeHighlightEngine  *self,
       self->work_timeout = 0;
     }
 
-  g_object_set_qdata (G_OBJECT (text_buffer), gEngineQuark, NULL);
+  g_object_set_qdata (G_OBJECT (text_buffer), engineQuark, NULL);
 
   tag_table = gtk_text_buffer_get_tag_table (text_buffer);
 
@@ -711,7 +711,7 @@ ide_highlight_engine_set_buffer (IdeHighlightEngine *self,
   if (!buffer || IDE_IS_BUFFER (buffer))
     {
       egg_signal_group_set_target (self->signal_group, buffer);
-      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_BUFFER]);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_BUFFER]);
     }
 }
 
@@ -842,23 +842,23 @@ ide_highlight_engine_class_init (IdeHighlightEngineClass *klass)
   object_class->get_property = ide_highlight_engine_get_property;
   object_class->set_property = ide_highlight_engine_set_property;
 
-  gParamSpecs [PROP_BUFFER] =
+  properties [PROP_BUFFER] =
     g_param_spec_object ("buffer",
                          "Buffer",
                          "The buffer to highlight.",
                          IDE_TYPE_BUFFER,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_HIGHLIGHTER] =
+  properties [PROP_HIGHLIGHTER] =
     g_param_spec_object ("highlighter",
                          "Highlighter",
                          "The highlighter to use for type information.",
                          IDE_TYPE_HIGHLIGHTER,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 
-  gEngineQuark = g_quark_from_string ("IDE_HIGHLIGHT_ENGINE");
+  engineQuark = g_quark_from_string ("IDE_HIGHLIGHT_ENGINE");
 }
 
 static void

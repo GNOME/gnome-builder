@@ -52,7 +52,7 @@ enum {
   LAST_PROP
 };
 
-static GParamSpec *gParamSpecs [LAST_PROP];
+static GParamSpec *properties [LAST_PROP];
 
 /**
  * ide_clang_symbol_tree_get_file:
@@ -289,21 +289,21 @@ ide_clang_symbol_tree_class_init (IdeClangSymbolTreeClass *klass)
   object_class->get_property = ide_clang_symbol_tree_get_property;
   object_class->set_property = ide_clang_symbol_tree_set_property;
 
-  gParamSpecs [PROP_FILE] =
+  properties [PROP_FILE] =
     g_param_spec_object ("file",
                          "File",
                          "File",
                          G_TYPE_FILE,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_NATIVE] =
+  properties [PROP_NATIVE] =
     g_param_spec_boxed ("native",
                         "Native",
                         "Native",
                         IDE_TYPE_REF_PTR,
                         (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 }
 
 static void

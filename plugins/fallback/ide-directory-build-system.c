@@ -45,7 +45,7 @@ enum {
   LAST_PROP
 };
 
-static GParamSpec *gParamSpecs [LAST_PROP];
+static GParamSpec *properties [LAST_PROP];
 
 IdeDirectoryBuildSystem *
 ide_directory_build_system_new (void)
@@ -111,14 +111,14 @@ ide_directory_build_system_class_init (IdeDirectoryBuildSystemClass *klass)
   object_class->get_property = ide_directory_build_system_get_property;
   object_class->set_property = ide_directory_build_system_set_property;
 
-  gParamSpecs [PROP_PROJECT_FILE] =
+  properties [PROP_PROJECT_FILE] =
     g_param_spec_object ("project-file",
                          "Project File",
                          "The path of the project file.",
                          G_TYPE_FILE,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 }
 
 static void

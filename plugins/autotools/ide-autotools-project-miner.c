@@ -42,7 +42,7 @@ enum {
   LAST_PROP
 };
 
-static GParamSpec *gParamSpecs [LAST_PROP];
+static GParamSpec *properties [LAST_PROP];
 
 static IdeDoap *
 ide_autotools_project_miner_find_doap (IdeAutotoolsProjectMiner *self,
@@ -387,14 +387,14 @@ ide_autotools_project_miner_class_init (IdeAutotoolsProjectMinerClass *klass)
   object_class->get_property = ide_autotools_project_miner_get_property;
   object_class->set_property = ide_autotools_project_miner_set_property;
 
-  gParamSpecs [PROP_ROOT_DIRECTORY] =
+  properties [PROP_ROOT_DIRECTORY] =
     g_param_spec_object ("root-directory",
                          "Root Directory",
                          "The root directory to scan from.",
                          G_TYPE_FILE,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 }
 
 static void
@@ -426,5 +426,5 @@ ide_autotools_project_miner_set_root_directory (IdeAutotoolsProjectMiner *self,
   g_return_if_fail (!root_directory || G_IS_FILE (root_directory));
 
   if (g_set_object (&self->root_directory, root_directory))
-    g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_ROOT_DIRECTORY]);
+    g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ROOT_DIRECTORY]);
 }

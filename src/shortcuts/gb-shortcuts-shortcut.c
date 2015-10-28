@@ -38,7 +38,7 @@ enum {
   LAST_PROP
 };
 
-static GParamSpec *gParamSpecs [LAST_PROP];
+static GParamSpec *properties [LAST_PROP];
 
 static void
 gb_shortcuts_shortcut_get_property (GObject    *object,
@@ -112,35 +112,35 @@ gb_shortcuts_shortcut_class_init (GbShortcutsShortcutClass *klass)
   object_class->get_property = gb_shortcuts_shortcut_get_property;
   object_class->set_property = gb_shortcuts_shortcut_set_property;
 
-  gParamSpecs [PROP_ACCELERATOR] =
+  properties [PROP_ACCELERATOR] =
     g_param_spec_string ("accelerator",
                          "Accelerator",
                          "Accelerator",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_ACCELERATOR_SIZE_GROUP] =
+  properties [PROP_ACCELERATOR_SIZE_GROUP] =
     g_param_spec_object ("accelerator-size-group",
                          "Accelerator Size Group",
                          "Accelerator Size Group",
                          GTK_TYPE_SIZE_GROUP,
                          (G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_TITLE] =
+  properties [PROP_TITLE] =
     g_param_spec_string ("title",
                          "Title",
                          "Title",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_TITLE_SIZE_GROUP] =
+  properties [PROP_TITLE_SIZE_GROUP] =
     g_param_spec_object ("title-size-group",
                          "Title Size Group",
                          "Title Size Group",
                          GTK_TYPE_SIZE_GROUP,
                          (G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 }
 
 static void

@@ -27,24 +27,24 @@
 
 #include "gb-plugins.h"
 
-static GMainLoop *gMainLoop;
-static gchar *gDeviceId;
-static gint gExitCode = EXIT_SUCCESS;
-static IdeContext *gContext;
-static guint gTimeout;
-static gulong gAddedHandler;
-static guint64 gBuildStart;
-static gboolean gRebuild;
-static GList *gLogThreads;
-static gboolean gBuildDone;
-static gint gParallel;
+static GMainLoop *main_loop;
+static gchar *deviceId;
+static gint exit_code = EXIT_SUCCESS;
+static IdeContext *ide_context;
+static guint timeout;
+static gulong added_handler;
+static guint64 build_start;
+static gboolean rebuild;
+static GList *log_threads;
+static gboolean build_done;
+static gint parallel;
 
 static void
-quit (gint exit_code)
+quit (gint code)
 {
-  gExitCode = exit_code;
-  g_clear_object (&gContext);
-  g_main_loop_quit (gMainLoop);
+  exit_code = code;
+  g_clear_object (&ide_context);
+  g_main_loop_quit (main_loop);
 }
 
 static void
@@ -52,7 +52,7 @@ flush_logs (void)
 {
   GList *iter;
 
-  for (iter = gLogThreads; iter; iter = iter->next)
+  for (iter = log_threads; iter; iter = iter->next)
     g_thread_join (iter->data);
 }
 
@@ -70,9 +70,9 @@ build_cb (GObject      *object,
   completed_at = g_get_monotonic_time ();
   build_result = ide_builder_build_finish (builder, result, &error);
 
-  total_usec = completed_at - gBuildStart;
+  total_usec = completed_at - build_start;
 
-  g_atomic_int_set (&gBuildDone, TRUE);
+  g_atomic_int_set (&build_done, TRUE);
 
   flush_logs ();
 
@@ -140,7 +140,7 @@ again:
 
   if (!closing)
     {
-      if (g_atomic_int_get (&gBuildDone))
+      if (g_atomic_int_get (&build_done))
         closing = TRUE;
 
       /* one final attempt to flush the logs */
@@ -164,7 +164,7 @@ log_dumper (GInputStream *stream,
   g_object_set_data (G_OBJECT (data_stream), "IS_STDERR", GINT_TO_POINTER (!!is_stderr));
 
   thread = g_thread_new ("LogThread", log_thread, g_object_ref (data_stream));
-  gLogThreads = g_list_prepend (gLogThreads, thread);
+  log_threads = g_list_prepend (log_threads, thread);
 }
 
 static void
@@ -221,11 +221,11 @@ build_for_device (IdeContext *context,
 
   config = g_key_file_new ();
 
-  if (gRebuild)
+  if (rebuild)
     flags |= IDE_BUILDER_BUILD_FLAGS_FORCE_REBUILD;
 
-  if (gParallel)
-    g_key_file_set_integer (config, "parallel", "workers", gParallel);
+  if (parallel)
+    g_key_file_set_integer (config, "parallel", "workers", parallel);
 
   build_system = ide_context_get_build_system (context);
   builder = ide_build_system_get_builder (build_system, config, device, &error);
@@ -238,7 +238,7 @@ build_for_device (IdeContext *context,
       return;
     }
 
-  gBuildStart = g_get_monotonic_time ();
+  build_start = g_get_monotonic_time ();
 
   ide_builder_build_async (builder, flags, &build_result, NULL, build_cb, NULL);
 
@@ -268,17 +268,17 @@ device_added_cb (IdeDeviceManager  *device_manager,
 
   device_id = ide_device_get_id (device);
 
-  if (g_strcmp0 (device_id, gDeviceId) == 0)
+  if (g_strcmp0 (device_id, deviceId) == 0)
     {
-      build_for_device (gContext, device);
+      build_for_device (ide_context, device);
 
-      if (gTimeout)
+      if (timeout)
         {
-          g_source_remove (gTimeout);
-          gTimeout = 0;
+          g_source_remove (timeout);
+          timeout = 0;
         }
 
-      g_signal_handler_disconnect (device_manager, gAddedHandler);
+      g_signal_handler_disconnect (device_manager, added_handler);
     }
 }
 
@@ -310,7 +310,7 @@ context_cb (GObject      *object,
       return;
     }
 
-  gContext = g_object_ref (context);
+  ide_context = g_object_ref (context);
 
   /*
    * Try to locate the device we are building for. If the device is not found,
@@ -329,20 +329,20 @@ context_cb (GObject      *object,
       device = g_ptr_array_index (devices, i);
       device_id = ide_device_get_id (device);
 
-      if (g_strcmp0 (device_id, gDeviceId) == 0)
+      if (g_strcmp0 (device_id, deviceId) == 0)
         {
-          build_for_device (gContext, device);
+          build_for_device (context, device);
           g_ptr_array_unref (devices);
           return;
         }
     }
   g_ptr_array_unref (devices);
 
-  gAddedHandler = g_signal_connect (device_manager,
+  added_handler = g_signal_connect (device_manager,
                                     "device-added",
                                     G_CALLBACK (device_added_cb),
                                     NULL);
-  gTimeout = g_timeout_add_seconds (60, timeout_cb, NULL);
+  timeout = g_timeout_add_seconds (60, timeout_cb, NULL);
   g_printerr (_("Waiting up to 60 seconds for devices to settle. Ctrl+C to exit.\n"));
 }
 
@@ -351,13 +351,13 @@ main (gint   argc,
       gchar *argv[])
 {
   GOptionEntry entries[] = {
-    { "device", 'd', 0, G_OPTION_ARG_STRING, &gDeviceId,
+    { "device", 'd', 0, G_OPTION_ARG_STRING, &deviceId,
       N_("The target device we are building for."),
       N_("DEVICE_ID")
     },
-    { "rebuild", 'r', 0, G_OPTION_ARG_NONE, &gRebuild,
+    { "rebuild", 'r', 0, G_OPTION_ARG_NONE, &rebuild,
       N_("Clean and rebuild the project.") },
-    { "parallel", 'j', 0, G_OPTION_ARG_INT, &gParallel,
+    { "parallel", 'j', 0, G_OPTION_ARG_INT, &parallel,
       N_("Increase parallelism in the build."),
       N_("N") },
     { NULL }
@@ -380,21 +380,21 @@ main (gint   argc,
       return EXIT_FAILURE;
     }
 
-  gMainLoop = g_main_loop_new (NULL, FALSE);
+  main_loop = g_main_loop_new (NULL, FALSE);
 
   if (argc > 1)
     project_path = argv [1];
   project_file = g_file_new_for_path (project_path);
 
-  if (!gDeviceId)
-    gDeviceId = g_strdup ("local");
+  if (!deviceId)
+    deviceId = g_strdup ("local");
 
   gb_plugins_init ();
 
   ide_context_new_async (project_file, NULL, context_cb, NULL);
 
-  g_main_loop_run (gMainLoop);
-  g_clear_pointer (&gMainLoop, g_main_loop_unref);
+  g_main_loop_run (main_loop);
+  g_clear_pointer (&main_loop, g_main_loop_unref);
 
-  return gExitCode;
+  return exit_code;
 }

@@ -50,8 +50,8 @@ enum {
   LAST_SIGNAL
 };
 
-static GParamSpec *gParamSpecs [LAST_PROP];
-static guint       gSignals [LAST_SIGNAL];
+static GParamSpec *properties [LAST_PROP];
+static guint       signals [LAST_SIGNAL];
 
 static void
 gb_new_file_popover__button_clicked (GbNewFilePopover *self,
@@ -72,7 +72,7 @@ gb_new_file_popover__button_clicked (GbNewFilePopover *self,
 
   file = g_file_get_child (self->directory, path);
 
-  g_signal_emit (self, gSignals [CREATE_FILE], 0, file, self->file_type);
+  g_signal_emit (self, signals [CREATE_FILE], 0, file, self->file_type);
 }
 
 static void
@@ -263,14 +263,14 @@ gb_new_file_popover_class_init (GbNewFilePopoverClass *klass)
   object_class->get_property = gb_new_file_popover_get_property;
   object_class->set_property = gb_new_file_popover_set_property;
 
-  gParamSpecs [PROP_DIRECTORY] =
+  properties [PROP_DIRECTORY] =
     g_param_spec_object ("directory",
                          "Directory",
                          "Directory",
                          G_TYPE_FILE,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_FILE_TYPE] =
+  properties [PROP_FILE_TYPE] =
     g_param_spec_enum ("file-type",
                        "File Type",
                        "The file type to create.",
@@ -278,9 +278,9 @@ gb_new_file_popover_class_init (GbNewFilePopoverClass *klass)
                        G_FILE_TYPE_REGULAR,
                        (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 
-  gSignals [CREATE_FILE] =
+  signals [CREATE_FILE] =
     g_signal_new ("create-file",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_FIRST,
@@ -350,7 +350,7 @@ gb_new_file_popover_set_file_type (GbNewFilePopover *self,
       else
         gtk_label_set_label (self->title, _("Folder Name"));
 
-      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_FILE_TYPE]);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_FILE_TYPE]);
     }
 }
 
@@ -367,7 +367,7 @@ gb_new_file_popover_set_directory (GbNewFilePopover *self,
 
       path = gtk_entry_get_text (self->entry);
       gb_new_file_popover_check_exists (self, directory, path);
-      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_DIRECTORY]);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_DIRECTORY]);
     }
 }
 

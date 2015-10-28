@@ -92,8 +92,8 @@ static gboolean step_make_all      (GTask                  *task,
                                     WorkerState            *state,
                                     GCancellable           *cancellable);
 
-static GParamSpec *gParamSpecs [LAST_PROP];
-static WorkStep gWorkSteps [] = {
+static GParamSpec *properties [LAST_PROP];
+static WorkStep workSteps [] = {
   step_mkdirs,
   step_autogen,
   step_configure,
@@ -187,7 +187,7 @@ ide_autotools_build_task_set_config (IdeAutotoolsBuildTask *self,
       g_clear_pointer (&priv->config, g_key_file_unref);
       priv->config = config ? g_key_file_ref (config) : NULL;
       g_object_notify_by_pspec (G_OBJECT (self),
-                                gParamSpecs [PROP_CONFIG]);
+                                properties [PROP_CONFIG]);
     }
 }
 
@@ -223,7 +223,7 @@ ide_autotools_build_task_set_device (IdeAutotoolsBuildTask *self,
   priv = ide_autotools_build_task_get_instance_private (self);
 
   if (g_set_object (&priv->device, device))
-    g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_DEVICE]);
+    g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_DEVICE]);
 }
 
 /**
@@ -275,7 +275,7 @@ ide_autotools_build_task_set_directory (IdeAutotoolsBuildTask *self,
   if (priv->directory != directory)
     if (g_set_object (&priv->directory, directory))
       g_object_notify_by_pspec (G_OBJECT (self),
-                                gParamSpecs [PROP_DIRECTORY]);
+                                properties [PROP_DIRECTORY]);
 }
 
 static void
@@ -372,7 +372,7 @@ ide_autotools_build_task_class_init (IdeAutotoolsBuildTaskClass *klass)
   object_class->get_property = ide_autotools_build_task_get_property;
   object_class->set_property = ide_autotools_build_task_set_property;
 
-  gParamSpecs [PROP_CONFIG] =
+  properties [PROP_CONFIG] =
     g_param_spec_boxed ("config",
                         "Config",
                         "The overlay config for the compilation.",
@@ -381,7 +381,7 @@ ide_autotools_build_task_class_init (IdeAutotoolsBuildTaskClass *klass)
                          G_PARAM_CONSTRUCT_ONLY |
                          G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_DEVICE] =
+  properties [PROP_DEVICE] =
     g_param_spec_object ("device",
                          "Device",
                          "The device to build for.",
@@ -390,7 +390,7 @@ ide_autotools_build_task_class_init (IdeAutotoolsBuildTaskClass *klass)
                           G_PARAM_CONSTRUCT_ONLY |
                           G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_DIRECTORY] =
+  properties [PROP_DIRECTORY] =
     g_param_spec_object ("directory",
                          "Directory",
                          "The directory to perform the build within.",
@@ -399,7 +399,7 @@ ide_autotools_build_task_class_init (IdeAutotoolsBuildTaskClass *klass)
                           G_PARAM_CONSTRUCT_ONLY |
                           G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_REQUIRE_AUTOGEN] =
+  properties [PROP_REQUIRE_AUTOGEN] =
     g_param_spec_boolean ("require-autogen",
                           "Require Autogen",
                           "If autogen.sh should be forced to execute.",
@@ -408,7 +408,7 @@ ide_autotools_build_task_class_init (IdeAutotoolsBuildTaskClass *klass)
                            G_PARAM_CONSTRUCT_ONLY |
                            G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_REQUIRE_CONFIGURE] =
+  properties [PROP_REQUIRE_CONFIGURE] =
     g_param_spec_boolean ("require-configure",
                           "Require Configure",
                           "If configure should be forced to execute.",
@@ -417,7 +417,7 @@ ide_autotools_build_task_class_init (IdeAutotoolsBuildTaskClass *klass)
                            G_PARAM_CONSTRUCT_ONLY |
                            G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 }
 
 static void
@@ -607,10 +607,10 @@ ide_autotools_build_task_execute_worker (GTask        *task,
   g_return_if_fail (state);
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  for (i = 0; gWorkSteps [i]; i++)
+  for (i = 0; workSteps [i]; i++)
     {
       if (g_cancellable_is_cancelled (cancellable) ||
-          !gWorkSteps [i] (task, self, state, cancellable))
+          !workSteps [i] (task, self, state, cancellable))
         return;
     }
 

@@ -39,7 +39,7 @@ enum {
   LAST_PROP
 };
 
-static GParamSpec *gParamSpecs[LAST_PROP];
+static GParamSpec *properties[LAST_PROP];
 
 static gchar *colors[] = {
   "#73d216",
@@ -157,7 +157,7 @@ rg_cpu_graph_class_init (RgCpuGraphClass *klass)
   object_class->get_property = rg_cpu_graph_get_property;
   object_class->set_property = rg_cpu_graph_set_property;
 
-  gParamSpecs [PROP_TIMESPAN] =
+  properties [PROP_TIMESPAN] =
     g_param_spec_int64 ("timespan",
                          "Timespan",
                          "Timespan",
@@ -165,7 +165,7 @@ rg_cpu_graph_class_init (RgCpuGraphClass *klass)
                          0,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_MAX_SAMPLES] =
+  properties [PROP_MAX_SAMPLES] =
     g_param_spec_uint ("max-samples",
                        "Max Samples",
                        "Max Samples",
@@ -173,7 +173,7 @@ rg_cpu_graph_class_init (RgCpuGraphClass *klass)
                        120,
                        (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 }
 
 static void

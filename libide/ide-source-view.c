@@ -272,9 +272,9 @@ enum {
   LAST_FONT_SCALE
 };
 
-static GParamSpec *gParamSpecs [LAST_PROP];
-static guint       gSignals [LAST_SIGNAL];
-static gdouble     gFontScale [LAST_FONT_SCALE] = {
+static GParamSpec *properties [LAST_PROP];
+static guint       signals [LAST_SIGNAL];
+static gdouble     fontScale [LAST_FONT_SCALE] = {
   0.57870, 0.69444, 0.83333,
   1.0,
   1.2, 1.44, 1.728, 2.48832,
@@ -951,7 +951,7 @@ ide_source_view_set_file_settings (IdeSourceView   *self,
           ide_source_view_connect_settings (self, file_settings);
         }
 
-      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_FILE_SETTINGS]);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_FILE_SETTINGS]);
     }
 }
 
@@ -1054,7 +1054,7 @@ ide_source_view__buffer_notify_language_cb (IdeSourceView *self,
   if (priv->indenter_adapter != NULL)
     ide_extension_adapter_set_value (priv->indenter_adapter, lang_id);
   ide_source_view_update_auto_indent_override (self);
-  g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_INDENTER]);
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_INDENTER]);
 
   /*
    * Update the completion providers, which are provided by plugins.
@@ -1193,7 +1193,7 @@ ide_source_view_rebuild_css (IdeSourceView *self)
           gdouble font_scale;
           guint font_size;
 
-          font_scale = gFontScale [priv->font_scale];
+          font_scale = fontScale [priv->font_scale];
 
           copy = pango_font_description_copy (priv->font_desc);
           font_size = pango_font_description_get_size (priv->font_desc);
@@ -2899,7 +2899,7 @@ ide_source_view_update_display_name (IdeSourceView *self)
     {
       g_free (priv->display_name);
       priv->display_name = g_strdup (display_name);
-      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_MODE_DISPLAY_NAME]);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_MODE_DISPLAY_NAME]);
     }
 }
 
@@ -3701,7 +3701,7 @@ ide_source_view_constructed (GObject *object)
                                                   NULL);
   g_object_ref (priv->line_diagnostics_renderer);
   gtk_source_gutter_insert (gutter, priv->line_diagnostics_renderer, -100);
-  g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_SHOW_LINE_DIAGNOSTICS]);
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SHOW_LINE_DIAGNOSTICS]);
 }
 
 static void
@@ -4401,7 +4401,7 @@ ide_source_view_goto_definition_symbol_cb (GObject      *object,
                      filename, line+1, line_offset+1);
 #endif
 
-      g_signal_emit (self, gSignals [FOCUS_LOCATION], 0, srcloc);
+      g_signal_emit (self, signals [FOCUS_LOCATION], 0, srcloc);
     }
 }
 
@@ -5368,14 +5368,14 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
 
   g_object_class_override_property (object_class, PROP_AUTO_INDENT, "auto-indent");
 
-  gParamSpecs [PROP_BACK_FORWARD_LIST] =
+  properties [PROP_BACK_FORWARD_LIST] =
     g_param_spec_object ("back-forward-list",
                          "Back Forward List",
                          "The back-forward list to track jumps.",
                          IDE_TYPE_BACK_FORWARD_LIST,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_COUNT] =
+  properties [PROP_COUNT] =
     g_param_spec_uint ("count",
                        "Count",
                        "The count for movements.",
@@ -5384,28 +5384,28 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                        0,
                        (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_FILE_SETTINGS] =
+  properties [PROP_FILE_SETTINGS] =
     g_param_spec_object ("file-settings",
                          "File Settings",
                          "The file settings that have been loaded for the file.",
                          IDE_TYPE_FILE_SETTINGS,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_FONT_DESC] =
+  properties [PROP_FONT_DESC] =
     g_param_spec_boxed ("font-desc",
                         "Font Description",
                         "The Pango font description to use for rendering source.",
                         PANGO_TYPE_FONT_DESCRIPTION,
                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_ENABLE_WORD_COMPLETION] =
+  properties [PROP_ENABLE_WORD_COMPLETION] =
     g_param_spec_boolean ("enable-word-completion",
                           "Enable Word Completion",
                           "If words from all buffers can be used to autocomplete.",
                           FALSE,
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_FONT_NAME] =
+  properties [PROP_FONT_NAME] =
     g_param_spec_string ("font-name",
                          "Font Name",
                          "The Pango font name to use for rendering source.",
@@ -5416,14 +5416,14 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                                     PROP_HIGHLIGHT_CURRENT_LINE,
                                     "highlight-current-line");
 
-  gParamSpecs [PROP_INDENTER] =
+  properties [PROP_INDENTER] =
     g_param_spec_object ("indenter",
                          "Indenter",
                          "Indenter",
                          IDE_TYPE_INDENTER,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_INDENT_STYLE] =
+  properties [PROP_INDENT_STYLE] =
     g_param_spec_enum ("indent-style",
                        "Indent Style",
                        "Indent Style",
@@ -5431,7 +5431,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                        IDE_INDENT_STYLE_TABS,
                        (G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_INSERT_MATCHING_BRACE] =
+  properties [PROP_INSERT_MATCHING_BRACE] =
     g_param_spec_boolean ("insert-matching-brace",
                           "Insert Matching Brace",
                           "Insert a matching brace/bracket/quotation/parenthesis.",
@@ -5440,28 +5440,28 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
 
   g_object_class_override_property (object_class, PROP_OVERWRITE, "overwrite");
 
-  gParamSpecs [PROP_MODE_DISPLAY_NAME] =
+  properties [PROP_MODE_DISPLAY_NAME] =
     g_param_spec_string ("mode-display-name",
                          "Mode Display Name",
                          "The display name of the keybinding mode.",
                          NULL,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_OVERWRITE_BRACES] =
+  properties [PROP_OVERWRITE_BRACES] =
     g_param_spec_boolean ("overwrite-braces",
                           "Overwrite Braces",
                           "Overwrite a matching brace/bracket/quotation/parenthesis.",
                           FALSE,
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_RUBBERBAND_SEARCH] =
+  properties [PROP_RUBBERBAND_SEARCH] =
     g_param_spec_boolean ("rubberband-search",
                           "Rubberband Search",
                           "Auto scroll to next search result without moving insertion caret.",
                           FALSE,
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_SCROLL_OFFSET] =
+  properties [PROP_SCROLL_OFFSET] =
     g_param_spec_uint ("scroll-offset",
                        "Scroll Offset",
                        "The number of lines between the insertion cursor and screen boundary.",
@@ -5470,14 +5470,14 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                        0,
                        (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_SEARCH_CONTEXT] =
+  properties [PROP_SEARCH_CONTEXT] =
     g_param_spec_object ("search-context",
                          "Search Context",
                          "The search context for the view.",
                          GTK_SOURCE_TYPE_SEARCH_CONTEXT,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_SEARCH_DIRECTION] =
+  properties [PROP_SEARCH_DIRECTION] =
     g_param_spec_enum ("search-direction",
                        "Search Direction",
                        "The direction searches go for the view.",
@@ -5485,14 +5485,14 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                        GTK_DIR_DOWN,
                        (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_SHOW_GRID_LINES] =
+  properties [PROP_SHOW_GRID_LINES] =
     g_param_spec_boolean ("show-grid-lines",
                           "Show Grid Lines",
                           "If the background grid should be shown.",
                           FALSE,
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_SHOW_LINE_CHANGES] =
+  properties [PROP_SHOW_LINE_CHANGES] =
     g_param_spec_boolean ("show-line-changes",
                           "Show Line Changes",
                           "If line changes should be shown in the left gutter.",
@@ -5507,37 +5507,37 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
    * This also requires that IdeBuffer:highlight-diagnostics is set to %TRUE
    * to generate diagnostics.
    */
-  gParamSpecs [PROP_SHOW_LINE_DIAGNOSTICS] =
+  properties [PROP_SHOW_LINE_DIAGNOSTICS] =
     g_param_spec_boolean ("show-line-diagnostics",
                           "Show Line Diagnostics",
                           "If line changes diagnostics should be shown in the left gutter.",
                           TRUE,
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_SHOW_SEARCH_BUBBLES] =
+  properties [PROP_SHOW_SEARCH_BUBBLES] =
     g_param_spec_boolean ("show-search-bubbles",
                           "Show Search Bubbles",
                           "If search bubbles should be rendered.",
                           FALSE,
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_SHOW_SEARCH_SHADOW] =
+  properties [PROP_SHOW_SEARCH_SHADOW] =
     g_param_spec_boolean ("show-search-shadow",
                           "Show Search Shadow",
                           "If the shadow should be drawn when performing searches.",
                           FALSE,
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_SNIPPET_COMPLETION] =
+  properties [PROP_SNIPPET_COMPLETION] =
     g_param_spec_boolean ("snippet-completion",
                           "Snippet Completion",
                           "If snippet expansion should be enabled via the completion window.",
                           FALSE,
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 
-  gSignals [ACTION] =
+  signals [ACTION] =
     g_signal_new ("action",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
@@ -5549,7 +5549,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   G_TYPE_STRING,
                   G_TYPE_STRING);
 
-  gSignals [APPEND_TO_COUNT] =
+  signals [APPEND_TO_COUNT] =
     g_signal_new ("append-to-count",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
@@ -5568,7 +5568,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
    *
    * Pair this with an emission of #IdeSourceView::end-macro to complete the sequence.
    */
-  gSignals [BEGIN_MACRO] =
+  signals [BEGIN_MACRO] =
     g_signal_new ("begin-macro",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
@@ -5577,7 +5577,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   G_TYPE_NONE,
                   0);
 
-  gSignals [BEGIN_USER_ACTION] =
+  signals [BEGIN_USER_ACTION] =
     g_signal_new_class_handler ("begin-user-action",
                                 G_TYPE_FROM_CLASS (klass),
                                 G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
@@ -5586,7 +5586,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                                 G_TYPE_NONE,
                                 0);
 
-  gSignals [SAVE_COMMAND] =
+  signals [SAVE_COMMAND] =
     g_signal_new ("save-command",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
@@ -5596,7 +5596,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   G_TYPE_NONE,
                   0);
 
-  gSignals [SAVE_SEARCH_CHAR] =
+  signals [SAVE_SEARCH_CHAR] =
     g_signal_new ("save-search-char",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
@@ -5617,7 +5617,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
    *
    * Use of this signal is not recommended except in very specific cases.
    */
-  gSignals [CAPTURE_MODIFIER] =
+  signals [CAPTURE_MODIFIER] =
     g_signal_new ("capture-modifier",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
@@ -5630,7 +5630,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                                    G_TYPE_FROM_CLASS (klass),
                                    G_CALLBACK (ide_source_view_real_change_case));
 
-  gSignals [CLEAR_COUNT] =
+  signals [CLEAR_COUNT] =
     g_signal_new ("clear-count",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
@@ -5639,7 +5639,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   G_TYPE_NONE,
                   0);
 
-  gSignals [CLEAR_MODIFIER] =
+  signals [CLEAR_MODIFIER] =
     g_signal_new ("clear-modifier",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
@@ -5648,7 +5648,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   G_TYPE_NONE,
                   0);
 
-  gSignals [CLEAR_SEARCH] =
+  signals [CLEAR_SEARCH] =
     g_signal_new ("clear-search",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
@@ -5657,7 +5657,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   G_TYPE_NONE,
                   0);
 
-  gSignals [CLEAR_SELECTION] =
+  signals [CLEAR_SELECTION] =
     g_signal_new ("clear-selection",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
@@ -5666,7 +5666,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   G_TYPE_NONE,
                   0);
 
-  gSignals [CLEAR_SNIPPETS] =
+  signals [CLEAR_SNIPPETS] =
     g_signal_new ("clear-snippets",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
@@ -5675,7 +5675,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   G_TYPE_NONE,
                   0);
 
-  gSignals [CYCLE_COMPLETION] =
+  signals [CYCLE_COMPLETION] =
     g_signal_new ("cycle-completion",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
@@ -5685,7 +5685,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   1,
                   GTK_TYPE_DIRECTION_TYPE);
 
-  gSignals [DECREASE_FONT_SIZE] =
+  signals [DECREASE_FONT_SIZE] =
     g_signal_new ("decrease-font-size",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
@@ -5694,7 +5694,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   G_TYPE_NONE,
                   0);
 
-  gSignals [DELETE_SELECTION] =
+  signals [DELETE_SELECTION] =
     g_signal_new ("delete-selection",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
@@ -5712,7 +5712,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
    * since #IdeSourceView will only keep the most recent macro recording. This can be
    * helpful when implementing recording sequences such as in Vim.
    */
-  gSignals [END_MACRO] =
+  signals [END_MACRO] =
     g_signal_new ("end-macro",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
@@ -5721,7 +5721,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   G_TYPE_NONE,
                   0);
 
-  gSignals [END_USER_ACTION] =
+  signals [END_USER_ACTION] =
     g_signal_new_class_handler ("end-user-action",
                                 G_TYPE_FROM_CLASS (klass),
                                 G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
@@ -5730,7 +5730,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                                 G_TYPE_NONE,
                                 0);
 
-  gSignals [FOCUS_LOCATION] =
+  signals [FOCUS_LOCATION] =
     g_signal_new ("focus-location",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
@@ -5740,7 +5740,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   1,
                   IDE_TYPE_SOURCE_LOCATION);
 
-  gSignals [GOTO_DEFINITION] =
+  signals [GOTO_DEFINITION] =
     g_signal_new ("goto-definition",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
@@ -5749,7 +5749,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   G_TYPE_NONE,
                   0);
 
-  gSignals [HIDE_COMPLETION] =
+  signals [HIDE_COMPLETION] =
     g_signal_new ("hide-completion",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
@@ -5758,7 +5758,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   G_TYPE_NONE,
                   0);
 
-  gSignals [INCREASE_FONT_SIZE] =
+  signals [INCREASE_FONT_SIZE] =
     g_signal_new ("increase-font-size",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
@@ -5767,7 +5767,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   G_TYPE_NONE,
                   0);
 
-  gSignals [INDENT_SELECTION] =
+  signals [INDENT_SELECTION] =
     g_signal_new ("indent-selection",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
@@ -5786,7 +5786,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
    * If @use_count is %TRUE, then the character will be inserted
    * #IdeSourceView:count times.
    */
-  gSignals [INSERT_MODIFIER] =
+  signals [INSERT_MODIFIER] =
     g_signal_new ("insert-modifier",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
@@ -5800,7 +5800,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                                    G_TYPE_FROM_CLASS (klass),
                                    G_CALLBACK (ide_source_view_real_join_lines));
 
-  gSignals [JUMP] =
+  signals [JUMP] =
     g_signal_new ("jump",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
@@ -5810,7 +5810,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   1,
                   GTK_TYPE_TEXT_ITER);
 
-  gSignals [MOVEMENT] =
+  signals [MOVEMENT] =
     g_signal_new ("movement",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
@@ -5830,7 +5830,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
    *
    * Moves to the next search result either forwards or backwards.
    */
-  gSignals [MOVE_ERROR] =
+  signals [MOVE_ERROR] =
     g_signal_new ("move-error",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
@@ -5840,7 +5840,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   1,
                   GTK_TYPE_DIRECTION_TYPE);
 
-  gSignals [MOVE_SEARCH] =
+  signals [MOVE_SEARCH] =
     g_signal_new ("move-search",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
@@ -5855,7 +5855,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   G_TYPE_BOOLEAN,
                   G_TYPE_BOOLEAN);
 
-  gSignals [PASTE_CLIPBOARD_EXTENDED] =
+  signals [PASTE_CLIPBOARD_EXTENDED] =
     g_signal_new ("paste-clipboard-extended",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
@@ -5873,7 +5873,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
    * Reselects a previousl selected range of text that was saved using
    * IdeSourceView::push-selection.
    */
-  gSignals [POP_SELECTION] =
+  signals [POP_SELECTION] =
     g_signal_new ("pop-selection",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
@@ -5889,7 +5889,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
    *
    * Pops the current snippet from the sourceview if there is one.
    */
-  gSignals [POP_SNIPPET] =
+  signals [POP_SNIPPET] =
     g_signal_new_class_handler ("pop-snippet",
                                 G_TYPE_FROM_CLASS (klass),
                                 G_SIGNAL_RUN_LAST,
@@ -5905,7 +5905,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
    * IdeSourceView::pop-selection. You must pop the selection to keep
    * the selection stack in consistent order.
    */
-  gSignals [PUSH_SELECTION] =
+  signals [PUSH_SELECTION] =
     g_signal_new ("push-selection",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
@@ -5923,7 +5923,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
    * Pushes @snippet onto the snippet stack at either @iter or the insertion
    * mark if @iter is not provided.
    */
-  gSignals [PUSH_SNIPPET] =
+  signals [PUSH_SNIPPET] =
     g_signal_new_class_handler ("push-snippet",
                                 G_TYPE_FROM_CLASS (klass),
                                 G_SIGNAL_RUN_LAST,
@@ -5934,7 +5934,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                                 IDE_TYPE_SOURCE_SNIPPET,
                                 GTK_TYPE_TEXT_ITER);
 
-  gSignals [REBUILD_HIGHLIGHT] =
+  signals [REBUILD_HIGHLIGHT] =
     g_signal_new ("rebuild-highlight",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
@@ -5943,7 +5943,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   G_TYPE_NONE,
                   0);
 
-  gSignals [REINDENT] =
+  signals [REINDENT] =
     g_signal_new_class_handler ("reindent",
                                 G_TYPE_FROM_CLASS (klass),
                                 G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
@@ -5959,7 +5959,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
    * Replays the last series of captured events that were captured between calls
    * to #IdeSourceView::begin-macro and #IdeSourceView::end-macro.
    */
-  gSignals [REPLAY_MACRO] =
+  signals [REPLAY_MACRO] =
     g_signal_new ("replay-macro",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
@@ -5969,7 +5969,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   1,
                   G_TYPE_BOOLEAN);
 
-  gSignals [REQUEST_DOCUMENTATION] =
+  signals [REQUEST_DOCUMENTATION] =
     g_signal_new ("request-documentation",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
@@ -5978,7 +5978,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   G_TYPE_NONE,
                   0);
 
-  gSignals [RESET_FONT_SIZE] =
+  signals [RESET_FONT_SIZE] =
     g_signal_new ("reset-font-size",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
@@ -5987,7 +5987,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   G_TYPE_NONE,
                   0);
 
-  gSignals [RESTORE_INSERT_MARK] =
+  signals [RESTORE_INSERT_MARK] =
     g_signal_new ("restore-insert-mark",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
@@ -5996,7 +5996,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   G_TYPE_NONE,
                   0);
 
-  gSignals [SAVE_INSERT_MARK] =
+  signals [SAVE_INSERT_MARK] =
     g_signal_new ("save-insert-mark",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
@@ -6005,7 +6005,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   G_TYPE_NONE,
                   0);
 
-  gSignals [SELECTION_THEATRIC] =
+  signals [SELECTION_THEATRIC] =
     g_signal_new ("selection-theatric",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
@@ -6015,7 +6015,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   1,
                   IDE_TYPE_SOURCE_VIEW_THEATRIC);
 
-  gSignals [SET_MODE] =
+  signals [SET_MODE] =
     g_signal_new ("set-mode",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
@@ -6026,7 +6026,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   G_TYPE_STRING,
                   IDE_TYPE_SOURCE_VIEW_MODE_TYPE);
 
-  gSignals [SET_OVERWRITE] =
+  signals [SET_OVERWRITE] =
     g_signal_new ("set-overwrite",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
@@ -6036,7 +6036,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   1,
                   G_TYPE_BOOLEAN);
 
-  gSignals [SET_SEARCH_TEXT] =
+  signals [SET_SEARCH_TEXT] =
     g_signal_new ("set-search-text",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
@@ -6056,7 +6056,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
    * This signal is meant to be activated from keybindings to sort the currently selected lines.
    * The lines are sorted using qsort() and either strcmp() or strcasecmp().
    */
-  gSignals [SORT] =
+  signals [SORT] =
     g_signal_new ("sort",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
@@ -6067,7 +6067,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   G_TYPE_BOOLEAN,
                   G_TYPE_BOOLEAN);
 
-  gSignals [SWAP_SELECTION_BOUNDS] =
+  signals [SWAP_SELECTION_BOUNDS] =
     g_signal_new ("swap-selection-bounds",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
@@ -6301,7 +6301,7 @@ ide_source_view_set_show_line_changes (IdeSourceView *self,
       priv->show_line_changes = show_line_changes;
       if (priv->line_change_renderer)
         gtk_source_gutter_renderer_set_visible (priv->line_change_renderer, show_line_changes);
-      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_SHOW_LINE_CHANGES]);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SHOW_LINE_CHANGES]);
     }
 }
 
@@ -6339,7 +6339,7 @@ ide_source_view_set_show_line_diagnostics (IdeSourceView *self,
           gtk_source_gutter_renderer_set_visible (priv->line_diagnostics_renderer, visible);
         }
 
-      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_SHOW_LINE_CHANGES]);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SHOW_LINE_CHANGES]);
     }
 }
 
@@ -6372,7 +6372,7 @@ ide_source_view_set_show_grid_lines (IdeSourceView *self,
       else
         gtk_source_view_set_background_pattern (GTK_SOURCE_VIEW (self),
                                                 GTK_SOURCE_BACKGROUND_PATTERN_TYPE_NONE);
-      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_SHOW_GRID_LINES]);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SHOW_GRID_LINES]);
     }
 }
 
@@ -6432,7 +6432,7 @@ ide_source_view_set_insert_matching_brace (IdeSourceView *self,
   if (insert_matching_brace != priv->insert_matching_brace)
     {
       priv->insert_matching_brace = insert_matching_brace;
-      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_INSERT_MATCHING_BRACE]);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_INSERT_MATCHING_BRACE]);
     }
 }
 
@@ -6449,7 +6449,7 @@ ide_source_view_set_overwrite_braces (IdeSourceView *self,
   if (overwrite_braces != priv->overwrite_braces)
     {
       priv->overwrite_braces = overwrite_braces;
-      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_OVERWRITE_BRACES]);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_OVERWRITE_BRACES]);
     }
 }
 
@@ -6464,7 +6464,7 @@ ide_source_view_pop_snippet (IdeSourceView *self)
   if ((snippet = g_queue_pop_head (priv->snippets)))
     {
       ide_source_snippet_finish (snippet);
-      g_signal_emit (self, gSignals [POP_SNIPPET], 0, snippet);
+      g_signal_emit (self, signals [POP_SNIPPET], 0, snippet);
       g_object_unref (snippet);
     }
 
@@ -6537,7 +6537,7 @@ ide_source_view_push_snippet (IdeSourceView     *self,
   ide_source_snippet_context_set_line_prefix (context, line_prefix);
   g_free (line_prefix);
 
-  g_signal_emit (self, gSignals [PUSH_SNIPPET], 0, snippet, &iter);
+  g_signal_emit (self, signals [PUSH_SNIPPET], 0, snippet, &iter);
 
   ide_source_view_block_handlers (self);
   has_more_tab_stops = ide_source_snippet_begin (snippet, buffer, &iter);
@@ -6636,7 +6636,7 @@ ide_source_view_set_snippet_completion (IdeSourceView *self,
           gtk_source_completion_remove_provider (completion, priv->snippets_provider, NULL);
         }
 
-      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_SNIPPET_COMPLETION]);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SNIPPET_COMPLETION]);
     }
 }
 
@@ -6668,7 +6668,7 @@ ide_source_view_set_back_forward_list (IdeSourceView      *self,
   g_return_if_fail (!back_forward_list || IDE_IS_BACK_FORWARD_LIST (back_forward_list));
 
   if (g_set_object (&priv->back_forward_list, back_forward_list))
-    g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_BACK_FORWARD_LIST]);
+    g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_BACK_FORWARD_LIST]);
 }
 
 void
@@ -6681,7 +6681,7 @@ ide_source_view_jump (IdeSourceView     *self,
   g_return_if_fail (location);
 
   if (priv->buffer && !_ide_buffer_get_loading (priv->buffer))
-    g_signal_emit (self, gSignals [JUMP], 0, location);
+    g_signal_emit (self, signals [JUMP], 0, location);
 }
 
 /**
@@ -6718,7 +6718,7 @@ ide_source_view_set_scroll_offset (IdeSourceView *self,
   if (scroll_offset != priv->scroll_offset)
     {
       priv->scroll_offset = scroll_offset;
-      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_SCROLL_OFFSET]);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SCROLL_OFFSET]);
     }
 }
 
@@ -7189,7 +7189,7 @@ ide_source_view_set_enable_word_completion (IdeSourceView *self,
     {
       priv->enable_word_completion = enable_word_completion;
       ide_source_view_reload_word_completion (self);
-      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_ENABLE_WORD_COMPLETION]);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ENABLE_WORD_COMPLETION]);
     }
 }
 
@@ -7248,7 +7248,7 @@ ide_source_view_set_search_direction (IdeSourceView    *self,
   if (direction != priv->search_direction)
     {
       priv->search_direction = direction;
-      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_SEARCH_DIRECTION]);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SEARCH_DIRECTION]);
     }
 }
 
@@ -7286,7 +7286,7 @@ ide_source_view_set_show_search_bubbles (IdeSourceView *self,
   if (show_search_bubbles != priv->show_search_bubbles)
     {
       priv->show_search_bubbles = show_search_bubbles;
-      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_SHOW_SEARCH_BUBBLES]);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SHOW_SEARCH_BUBBLES]);
       ide_source_view_invalidate_window (self);
     }
 }
@@ -7326,7 +7326,7 @@ ide_source_view_set_show_search_shadow (IdeSourceView *self,
   if (show_search_shadow != priv->show_search_shadow)
     {
       priv->show_search_shadow = show_search_shadow;
-      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_SHOW_SEARCH_SHADOW]);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SHOW_SEARCH_SHADOW]);
       ide_source_view_invalidate_window (self);
     }
 }
@@ -7468,7 +7468,7 @@ ide_source_view_set_count (IdeSourceView *self,
   if (count != priv->count)
     {
       priv->count = count;
-      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_COUNT]);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_COUNT]);
     }
 }
 
@@ -7525,7 +7525,7 @@ ide_source_view_set_rubberband_search (IdeSourceView *self,
           gtk_text_buffer_move_mark (buffer, priv->rubberband_insert_mark, &iter);
         }
 
-      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_RUBBERBAND_SEARCH]);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_RUBBERBAND_SEARCH]);
     }
 }
 

@@ -54,9 +54,9 @@ enum {
   TARGET_URI_LIST = 100
 };
 
-static GParamSpec *gParamSpecs [LAST_PROP];
-static guint gSignals [LAST_SIGNAL];
-static const GtkTargetEntry gDropTypes[] = {
+static GParamSpec *properties [LAST_PROP];
+static guint signals [LAST_SIGNAL];
+static const GtkTargetEntry dropTypes[] = {
   { "text/uri-list", 0, TARGET_URI_LIST}
 };
 
@@ -307,7 +307,7 @@ gb_workbench_set_context (GbWorkbench *self,
           gb_workbench_connect_context (self, context);
         }
 
-      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_CONTEXT]);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CONTEXT]);
     }
 }
 
@@ -362,7 +362,7 @@ gb_workbench_delete_event (GtkWidget   *widget,
 
       self->unloading = TRUE;
       self->unload_cancellable = g_cancellable_new ();
-      g_signal_emit (self, gSignals [UNLOAD], 0, self->context);
+      g_signal_emit (self, signals [UNLOAD], 0, self->context);
       ide_context_unload_async (self->context,
                                 self->unload_cancellable,
                                 gb_workbench__unload_cb,
@@ -448,7 +448,7 @@ gb_workbench_active_view_unref (gpointer  data,
   g_assert (GB_IS_WORKBENCH (self));
 
   self->active_view = NULL;
-  g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_ACTIVE_VIEW]);
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ACTIVE_VIEW]);
 }
 
 static void
@@ -573,7 +573,7 @@ gb_workbench_set_focus (GtkWindow *window,
                          self);
     }
 
-  g_object_notify_by_pspec (G_OBJECT (window), gParamSpecs [PROP_ACTIVE_VIEW]);
+  g_object_notify_by_pspec (G_OBJECT (window), properties [PROP_ACTIVE_VIEW]);
 
 chainup:
   GTK_WINDOW_CLASS (gb_workbench_parent_class)->set_focus (window, widget);
@@ -679,14 +679,14 @@ gb_workbench_class_init (GbWorkbenchClass *klass)
 
   window_class->set_focus = gb_workbench_set_focus;
 
-  gParamSpecs [PROP_ACTIVE_VIEW] =
+  properties [PROP_ACTIVE_VIEW] =
     g_param_spec_object ("active-view",
                          "Active View",
                          "Active View",
                          GB_TYPE_VIEW,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_BUILDING] =
+  properties [PROP_BUILDING] =
     g_param_spec_boolean ("building",
                           "Building",
                           "If the project is currently building.",
@@ -701,16 +701,16 @@ gb_workbench_class_init (GbWorkbenchClass *klass)
    * another window or dialog to choose the project information before
    * creating a workbench window.
    */
-  gParamSpecs [PROP_CONTEXT] =
+  properties [PROP_CONTEXT] =
     g_param_spec_object ("context",
                          "Context",
                          "The IdeContext for the workbench.",
                          IDE_TYPE_CONTEXT,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 
-  gSignals [UNLOAD] =
+  signals [UNLOAD] =
     g_signal_new ("unload",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
@@ -747,7 +747,7 @@ gb_workbench_init (GbWorkbench *self)
   /* Drag and drop support*/
   gtk_drag_dest_set (GTK_WIDGET (self),
                      (GTK_DEST_DEFAULT_MOTION | GTK_DEST_DEFAULT_HIGHLIGHT | GTK_DEST_DEFAULT_DROP),
-                     gDropTypes, G_N_ELEMENTS (gDropTypes), GDK_ACTION_COPY);
+                     dropTypes, G_N_ELEMENTS (dropTypes), GDK_ACTION_COPY);
 
   gb_settings_init_window (GTK_WINDOW (self));
 
@@ -924,7 +924,7 @@ gb_workbench__builder_build_cb (GObject      *object,
   g_assert (GB_IS_WORKBENCH (self));
 
   self->building = FALSE;
-  g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_BUILDING]);
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_BUILDING]);
 
   build_result = ide_builder_build_finish (builder, result, &error);
 
@@ -993,7 +993,7 @@ gb_workbench_build_async (GbWorkbench         *self,
     }
 
   self->building = TRUE;
-  g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_BUILDING]);
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_BUILDING]);
 
   ide_builder_build_async (builder,
                            force_rebuild ? IDE_BUILDER_BUILD_FLAGS_FORCE_REBUILD : 0,

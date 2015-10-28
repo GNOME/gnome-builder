@@ -71,7 +71,7 @@ enum {
   LAST_PROP
 };
 
-static GParamSpec *gParamSpecs [LAST_PROP];
+static GParamSpec *properties [LAST_PROP];
 
 /*#define DEBUG_BINDINGS 1*/
 
@@ -340,14 +340,14 @@ egg_binding_group_class_init (EggBindingGroupClass *klass)
    *
    * The source object used for binding properties.
    */
-  gParamSpecs [PROP_SOURCE] =
+  properties [PROP_SOURCE] =
     g_param_spec_object ("source",
                          "Source",
                          "The source GObject used for binding properties.",
                          G_TYPE_OBJECT,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 }
 
 static void
@@ -463,7 +463,7 @@ egg_binding_group_set_source (EggBindingGroup *self,
         }
     }
 
-  g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_SOURCE]);
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SOURCE]);
 }
 
 void

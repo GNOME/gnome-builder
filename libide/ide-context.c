@@ -107,8 +107,8 @@ enum {
   LAST_SIGNAL
 };
 
-static GParamSpec *gParamSpecs [LAST_PROP];
-static guint gSignals [LAST_SIGNAL];
+static GParamSpec *properties [LAST_PROP];
+static guint signals [LAST_SIGNAL];
 
 /**
  * ide_context_get_recent_manager:
@@ -232,7 +232,7 @@ ide_context_set_root_build_dir (IdeContext  *self,
       g_free (self->root_build_dir);
       self->root_build_dir = g_strdup (root_build_dir);
       g_object_notify_by_pspec (G_OBJECT (self),
-                                gParamSpecs [PROP_ROOT_BUILD_DIR]);
+                                properties [PROP_ROOT_BUILD_DIR]);
     }
 }
 
@@ -391,7 +391,7 @@ ide_context_set_project_file (IdeContext *self,
   g_return_if_fail (IDE_IS_CONTEXT (self));
 
   if (g_set_object (&self->project_file, project_file))
-    g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_PROJECT_FILE]);
+    g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_PROJECT_FILE]);
 }
 
 /**
@@ -643,42 +643,42 @@ ide_context_class_init (IdeContextClass *klass)
   object_class->get_property = ide_context_get_property;
   object_class->set_property = ide_context_set_property;
 
-  gParamSpecs [PROP_BACK_FORWARD_LIST] =
+  properties [PROP_BACK_FORWARD_LIST] =
     g_param_spec_object ("back-forward-list",
                          "Back Forward List",
                          "Back/forward navigation history for the context.",
                          IDE_TYPE_BACK_FORWARD_LIST,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_BUFFER_MANAGER] =
+  properties [PROP_BUFFER_MANAGER] =
     g_param_spec_object ("buffer-manager",
                          "Buffer Manager",
                          "The buffer manager for the context.",
                          IDE_TYPE_BUFFER_MANAGER,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_BUILD_SYSTEM] =
+  properties [PROP_BUILD_SYSTEM] =
     g_param_spec_object ("build-system",
                          "Build System",
                          "The build system used by the context.",
                          IDE_TYPE_BUILD_SYSTEM,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_DEVICE_MANAGER] =
+  properties [PROP_DEVICE_MANAGER] =
     g_param_spec_object ("device-manager",
                          "Device Manager",
                          "The device manager for the context.",
                          IDE_TYPE_DEVICE_MANAGER,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_PROJECT] =
+  properties [PROP_PROJECT] =
     g_param_spec_object ("project",
                          "Project",
                          "The project for the context.",
                          IDE_TYPE_PROJECT,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_PROJECT_FILE] =
+  properties [PROP_PROJECT_FILE] =
     g_param_spec_object ("project-file",
                          "Project File",
                          "The project file for the context.",
@@ -687,49 +687,49 @@ ide_context_class_init (IdeContextClass *klass)
                           G_PARAM_CONSTRUCT_ONLY |
                           G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_ROOT_BUILD_DIR] =
+  properties [PROP_ROOT_BUILD_DIR] =
     g_param_spec_string ("root-build-dir",
                          "Root Build Directory",
                          "The root directory to perform builds within.",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_SCRIPT_MANAGER] =
+  properties [PROP_SCRIPT_MANAGER] =
     g_param_spec_object ("script-manager",
                          "Script Manager",
                          "The script manager for the context.",
                          IDE_TYPE_SCRIPT_MANAGER,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_SEARCH_ENGINE] =
+  properties [PROP_SEARCH_ENGINE] =
     g_param_spec_object ("search-engine",
                          "Search Engine",
                          "The search engine for the context.",
                          IDE_TYPE_SEARCH_ENGINE,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_SNIPPETS_MANAGER] =
+  properties [PROP_SNIPPETS_MANAGER] =
     g_param_spec_object ("snippets-manager",
                          "Snippets Manager",
                          "The snippets manager for the context.",
                          IDE_TYPE_SOURCE_SNIPPETS_MANAGER,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_UNSAVED_FILES] =
+  properties [PROP_UNSAVED_FILES] =
     g_param_spec_object ("unsaved-files",
                          "Unsaved Files",
                          "The unsaved files in the context.",
                          IDE_TYPE_UNSAVED_FILES,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_VCS] =
+  properties [PROP_VCS] =
     g_param_spec_object ("vcs",
                          "VCS",
                          "The VCS for the context.",
                          IDE_TYPE_VCS,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 
   /**
    * IdeContext::loaded:
@@ -739,7 +739,7 @@ ide_context_class_init (IdeContextClass *klass)
    * work that requires subsystems that may not be loaded during context
    * startup.
    */
-  gSignals [LOADED] =
+  signals [LOADED] =
     g_signal_new_class_handler ("loaded",
                                 G_TYPE_FROM_CLASS (klass),
                                 G_SIGNAL_RUN_LAST,
@@ -1350,7 +1350,7 @@ ide_context_init_loaded (gpointer             source_object,
   g_assert (IDE_IS_CONTEXT (self));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  g_signal_emit (self, gSignals [LOADED], 0);
+  g_signal_emit (self, signals [LOADED], 0);
 
   task = g_task_new (self, cancellable, callback, user_data);
   g_task_return_boolean (task, TRUE);

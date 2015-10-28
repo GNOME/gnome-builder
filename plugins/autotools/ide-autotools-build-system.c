@@ -73,7 +73,7 @@ enum {
   LAST_PROP
 };
 
-static GParamSpec *gParamSpecs [LAST_PROP];
+static GParamSpec *properties [LAST_PROP];
 
 const gchar *
 ide_autotools_build_system_get_tarball_name (IdeAutotoolsBuildSystem *self)
@@ -678,21 +678,21 @@ ide_autotools_build_system_class_init (IdeAutotoolsBuildSystemClass *klass)
   object_class->get_property = ide_autotools_build_system_get_property;
   object_class->set_property = ide_autotools_build_system_set_property;
 
-  gParamSpecs [PROP_TARBALL_NAME] =
+  properties [PROP_TARBALL_NAME] =
     g_param_spec_string ("tarball-name",
                          "Tarball Name",
                          "The name of the project tarball.",
                          NULL,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_PROJECT_FILE] =
+  properties [PROP_PROJECT_FILE] =
     g_param_spec_object ("project-file",
                          "Project File",
                          "The path of the project file.",
                          G_TYPE_FILE,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 }
 
 static void

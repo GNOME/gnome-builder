@@ -45,7 +45,7 @@ enum {
   LAST_PROP
 };
 
-static GParamSpec *gParamSpecs [LAST_PROP];
+static GParamSpec *properties [LAST_PROP];
 
 static void
 apply_settings (WebKitWebView *view)
@@ -262,14 +262,14 @@ gb_devhelp_view_class_init (GbDevhelpViewClass *klass)
   view_class->create_split = gb_devhelp_view_create_split;
   view_class->set_split_view =  gb_devhelp_view_set_split_view;
 
-  gParamSpecs [PROP_DOCUMENT] =
+  properties [PROP_DOCUMENT] =
     g_param_spec_object ("document",
                          "Document",
                          "The document for the devhelp view.",
                          GB_TYPE_DEVHELP_DOCUMENT,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/plugins/devhelp/gb-devhelp-view.ui");
   gtk_widget_class_bind_template_child (widget_class, GbDevhelpView, web_view1);

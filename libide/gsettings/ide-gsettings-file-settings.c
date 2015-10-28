@@ -58,7 +58,7 @@ indent_style_get (GValue   *value,
   return TRUE;
 }
 
-static SettingsMapping gLanguageMappings [] = {
+static SettingsMapping language_mappings [] = {
   { "indent-width",                  "indent-width",             NULL             },
   { "insert-spaces-instead-of-tabs", "indent-style",             indent_style_get },
   { "right-margin-position",         "right-margin-position",    NULL             },
@@ -97,9 +97,9 @@ file_notify_language_cb (IdeGsettingsFileSettings *self,
                                                       "org.gnome.builder.editor.language",
                                                       relative_path);
 
-  for (i = 0; i < G_N_ELEMENTS (gLanguageMappings); i++)
+  for (i = 0; i < G_N_ELEMENTS (language_mappings); i++)
     {
-      SettingsMapping *mapping = &gLanguageMappings [i];
+      SettingsMapping *mapping = &language_mappings [i];
 
       ide_settings_bind_with_mapping (self->language_settings,
                                       mapping->key,

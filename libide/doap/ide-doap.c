@@ -61,7 +61,7 @@ enum {
   LAST_PROP
 };
 
-static GParamSpec *gParamSpecs [LAST_PROP];
+static GParamSpec *properties [LAST_PROP];
 
 IdeDoap *
 ide_doap_new (void)
@@ -151,7 +151,7 @@ ide_doap_set_bug_database (IdeDoap     *self,
     {
       g_free (self->bug_database);
       self->bug_database = g_strdup (bug_database);
-      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_BUG_DATABASE]);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_BUG_DATABASE]);
     }
 }
 
@@ -165,7 +165,7 @@ ide_doap_set_category (IdeDoap     *self,
     {
       g_free (self->category);
       self->category = g_strdup (category);
-      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_CATEGORY]);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CATEGORY]);
     }
 }
 
@@ -179,7 +179,7 @@ ide_doap_set_description (IdeDoap     *self,
     {
       g_free (self->description);
       self->description = g_strdup (description);
-      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_DESCRIPTION]);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_DESCRIPTION]);
     }
 }
 
@@ -193,7 +193,7 @@ ide_doap_set_download_page (IdeDoap     *self,
     {
       g_free (self->download_page);
       self->download_page = g_strdup (download_page);
-      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_DOWNLOAD_PAGE]);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_DOWNLOAD_PAGE]);
     }
 }
 
@@ -207,7 +207,7 @@ ide_doap_set_homepage (IdeDoap     *self,
     {
       g_free (self->homepage);
       self->homepage = g_strdup (homepage);
-      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_HOMEPAGE]);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_HOMEPAGE]);
     }
 }
 
@@ -221,7 +221,7 @@ ide_doap_set_name (IdeDoap     *self,
     {
       g_free (self->name);
       self->name = g_strdup (name);
-      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_NAME]);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_NAME]);
     }
 }
 
@@ -235,7 +235,7 @@ ide_doap_set_shortdesc (IdeDoap     *self,
     {
       g_free (self->shortdesc);
       self->shortdesc = g_strdelimit (g_strdup (shortdesc), "\n", ' ');
-      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_SHORTDESC]);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SHORTDESC]);
     }
 }
 
@@ -272,7 +272,7 @@ ide_doap_add_language (IdeDoap     *self,
   g_ptr_array_index (self->languages, self->languages->len - 1) = g_strdup (language);
   g_ptr_array_add (self->languages, NULL);
 
-  g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_LANGUAGES]);
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_LANGUAGES]);
 }
 
 static void
@@ -415,63 +415,63 @@ ide_doap_class_init (IdeDoapClass *klass)
   object_class->get_property = ide_doap_get_property;
   object_class->set_property = ide_doap_set_property;
 
-  gParamSpecs [PROP_BUG_DATABASE] =
+  properties [PROP_BUG_DATABASE] =
     g_param_spec_string ("bug-database",
                          "Bug Database",
                          "Bug Database",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_CATEGORY] =
+  properties [PROP_CATEGORY] =
     g_param_spec_string ("category",
                          "Category",
                          "Category",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_DESCRIPTION] =
+  properties [PROP_DESCRIPTION] =
     g_param_spec_string ("description",
                          "Description",
                          "Description",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_DOWNLOAD_PAGE] =
+  properties [PROP_DOWNLOAD_PAGE] =
     g_param_spec_string ("download-page",
                          "Download Page",
                          "Download Page",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_HOMEPAGE] =
+  properties [PROP_HOMEPAGE] =
     g_param_spec_string ("homepage",
                          "Homepage",
                          "Homepage",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_LANGUAGES] =
+  properties [PROP_LANGUAGES] =
     g_param_spec_string ("languages",
                          "Languages",
                          "Languages",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_NAME] =
+  properties [PROP_NAME] =
     g_param_spec_string ("name",
                          "Name",
                          "Name",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_SHORTDESC] =
+  properties [PROP_SHORTDESC] =
     g_param_spec_string ("shortdesc",
                          "Shortdesc",
                          "Shortdesc",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 }
 
 static void

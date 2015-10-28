@@ -75,7 +75,7 @@ enum {
   LAST_SIGNAL
 };
 
-static guint gSignals [LAST_SIGNAL];
+static guint signals [LAST_SIGNAL];
 
 static gboolean
 key_press_event_cb (GbWorkbench  *workbench,
@@ -682,7 +682,7 @@ gb_command_bar_class_init (GbCommandBarClass *klass)
    * GbCommandBar::complete:
    * @bar: the object which received the signal.
    */
-  gSignals [COMPLETE] =
+  signals [COMPLETE] =
     g_signal_new_class_handler ("complete",
                                 G_TYPE_FROM_CLASS (klass),
                                 G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
@@ -696,7 +696,7 @@ gb_command_bar_class_init (GbCommandBarClass *klass)
    * @bar: the object which received the signal.
    * @direction: direction to move
    */
-  gSignals [MOVE_HISTORY] =
+  signals [MOVE_HISTORY] =
     g_signal_new_class_handler ("move-history",
                                 G_TYPE_FROM_CLASS (klass),
                                 G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,

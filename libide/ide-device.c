@@ -36,7 +36,7 @@ enum {
   LAST_PROP
 };
 
-static GParamSpec *gParamSpecs [LAST_PROP];
+static GParamSpec *properties [LAST_PROP];
 
 /**
  * ide_device_get_config:
@@ -93,7 +93,7 @@ ide_device_set_display_name (IdeDevice   *device,
       g_free (priv->display_name);
       priv->display_name = g_strdup (display_name);
       g_object_notify_by_pspec (G_OBJECT (device),
-                                gParamSpecs [PROP_DISPLAY_NAME]);
+                                properties [PROP_DISPLAY_NAME]);
     }
 }
 
@@ -127,7 +127,7 @@ ide_device_set_id (IdeDevice   *device,
     {
       g_free (priv->id);
       priv->id = g_strdup (id);
-      g_object_notify_by_pspec (G_OBJECT (device), gParamSpecs [PROP_ID]);
+      g_object_notify_by_pspec (G_OBJECT (device), properties [PROP_ID]);
     }
 }
 
@@ -229,28 +229,28 @@ ide_device_class_init (IdeDeviceClass *klass)
   object_class->get_property = ide_device_get_property;
   object_class->set_property = ide_device_set_property;
 
-  gParamSpecs [PROP_DISPLAY_NAME] =
+  properties [PROP_DISPLAY_NAME] =
     g_param_spec_string ("display-name",
                          "Display Name",
                          "The display name of the device.",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_ID] =
+  properties [PROP_ID] =
     g_param_spec_string ("id",
                          "ID",
                          "The device identifier.",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_SYSTEM_TYPE] =
+  properties [PROP_SYSTEM_TYPE] =
     g_param_spec_string ("system-type",
                          "System Type",
                          "The system type for which to compile.",
                          NULL,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 }
 
 static void

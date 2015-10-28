@@ -45,8 +45,8 @@ enum {
   LAST_SIGNAL
 };
 
-static GParamSpec *gParamSpecs [LAST_PROP];
-static guint gSignals [LAST_SIGNAL];
+static GParamSpec *properties [LAST_PROP];
+static guint signals [LAST_SIGNAL];
 
 static GbDocument *
 gb_editor_view_get_document (GbView *view)
@@ -392,7 +392,7 @@ gb_editor_view_set_document (GbEditorView     *self,
                                self,
                                G_CONNECT_SWAPPED);
 
-      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_DOCUMENT]);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_DOCUMENT]);
 
       g_object_bind_property (document, "has-diagnostics",
                               self->warning_button, "visible",
@@ -450,7 +450,7 @@ gb_editor_view_request_documentation (GbEditorView  *self,
 
   word = ide_buffer_get_word_at_iter (buffer, &iter);
 
-  g_signal_emit (self, gSignals [REQUEST_DOCUMENTATION], 0, word);
+  g_signal_emit (self, signals [REQUEST_DOCUMENTATION], 0, word);
 }
 
 static void
@@ -848,16 +848,16 @@ gb_editor_view_class_init (GbEditorViewClass *klass)
   view_class->set_back_forward_list = gb_editor_view_set_back_forward_list;
   view_class->navigate_to = gb_editor_view_navigate_to;
 
-  gParamSpecs [PROP_DOCUMENT] =
+  properties [PROP_DOCUMENT] =
     g_param_spec_object ("document",
                          "Document",
                          "The editor document.",
                          GB_TYPE_EDITOR_DOCUMENT,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 
-  gSignals [REQUEST_DOCUMENTATION] =
+  signals [REQUEST_DOCUMENTATION] =
     g_signal_new ("request-documentation",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,

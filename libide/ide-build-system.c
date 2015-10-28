@@ -38,7 +38,7 @@ enum {
   LAST_PROP
 };
 
-static GParamSpec *gParamSpecs [LAST_PROP];
+static GParamSpec *properties [LAST_PROP];
 
 gint
 ide_build_system_get_priority (IdeBuildSystem *self)
@@ -107,21 +107,21 @@ ide_build_system_get_build_flags_finish (IdeBuildSystem  *self,
 static void
 ide_build_system_default_init (IdeBuildSystemInterface *iface)
 {
-  gParamSpecs [PROP_PROJECT_FILE] =
+  properties [PROP_PROJECT_FILE] =
     g_param_spec_object ("project-file",
                          "Project File",
                          "The project file.",
                          G_TYPE_FILE,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
-  g_object_interface_install_property (iface, gParamSpecs [PROP_PROJECT_FILE]);
+  g_object_interface_install_property (iface, properties [PROP_PROJECT_FILE]);
 
-  gParamSpecs [PROP_CONTEXT] =
+  properties [PROP_CONTEXT] =
     g_param_spec_object ("context",
                          "Context",
                          "Context",
                          IDE_TYPE_CONTEXT,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
-  g_object_interface_install_property (iface, gParamSpecs [PROP_CONTEXT]);
+  g_object_interface_install_property (iface, properties [PROP_CONTEXT]);
 }
 
 static gint

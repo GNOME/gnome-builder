@@ -46,7 +46,7 @@ enum {
   PROP_STATE_TYPE,
 };
 
-static GParamSpec *gParamSpecs [LAST_PROP];
+static GParamSpec *properties [LAST_PROP];
 
 static gboolean
 egg_state_machine_action_get_enabled (GAction *action)
@@ -220,21 +220,21 @@ egg_state_machine_action_class_init (EggStateMachineActionClass *klass)
   object_class->get_property = egg_state_machine_action_get_property;
   object_class->set_property = egg_state_machine_action_set_property;
 
-  gParamSpecs [PROP_NAME] =
+  properties [PROP_NAME] =
     g_param_spec_string ("name",
                          "Name",
                          "The name of the action",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_STATE_MACHINE] =
+  properties [PROP_STATE_MACHINE] =
     g_param_spec_object ("state-machine",
                          "State Machine",
                          "State Machine",
                          EGG_TYPE_STATE_MACHINE,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 
   g_object_class_override_property (object_class, PROP_PARAMETER_TYPE, "parameter-type");
   g_object_class_override_property (object_class, PROP_ENABLED, "enabled");

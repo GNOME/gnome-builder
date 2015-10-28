@@ -34,7 +34,7 @@ enum {
   LAST_PROP
 };
 
-static GParamSpec *gParamSpecs [LAST_PROP];
+static GParamSpec *properties [LAST_PROP];
 
 IdeProjectItem *
 ide_project_item_new (IdeProjectItem *parent)
@@ -134,7 +134,7 @@ ide_project_item_set_parent (IdeProjectItem *item,
   g_return_if_fail (!parent || IDE_IS_PROJECT_ITEM (parent));
 
   if (ide_set_weak_pointer (&priv->parent, parent))
-    g_object_notify_by_pspec (G_OBJECT (item), gParamSpecs [PROP_PARENT]);
+    g_object_notify_by_pspec (G_OBJECT (item), properties [PROP_PARENT]);
 }
 
 static void
@@ -196,7 +196,7 @@ ide_project_item_class_init (IdeProjectItemClass *klass)
   object_class->get_property = ide_project_item_get_property;
   object_class->set_property = ide_project_item_set_property;
 
-  gParamSpecs [PROP_PARENT] =
+  properties [PROP_PARENT] =
     g_param_spec_object ("parent",
                          "Parent",
                          "The parent project item, if not the root.",
@@ -204,7 +204,7 @@ ide_project_item_class_init (IdeProjectItemClass *klass)
                          (G_PARAM_READWRITE |
                           G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 }
 
 static void

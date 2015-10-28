@@ -41,7 +41,7 @@ enum {
   LAST_PROP
 };
 
-static GParamSpec *gParamSpecs [LAST_PROP];
+static GParamSpec *properties [LAST_PROP];
 
 static void
 gb_search_display_row_connect (GbSearchDisplayRow *row,
@@ -103,7 +103,7 @@ gb_search_display_row_set_result (GbSearchDisplayRow *row,
           gb_search_display_row_connect (row, result);
         }
 
-      g_object_notify_by_pspec (G_OBJECT (row), gParamSpecs [PROP_RESULT]);
+      g_object_notify_by_pspec (G_OBJECT (row), properties [PROP_RESULT]);
     }
 }
 
@@ -165,14 +165,14 @@ gb_search_display_row_class_init (GbSearchDisplayRowClass *klass)
   object_class->get_property = gb_search_display_row_get_property;
   object_class->set_property = gb_search_display_row_set_property;
 
-  gParamSpecs [PROP_RESULT] =
+  properties [PROP_RESULT] =
     g_param_spec_object ("result",
                          "Result",
                          "Result",
                          IDE_TYPE_SEARCH_RESULT,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 
   GB_WIDGET_CLASS_TEMPLATE (widget_class, "gb-search-display-row.ui");
   GB_WIDGET_CLASS_BIND (widget_class, GbSearchDisplayRow, progress);

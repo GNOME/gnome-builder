@@ -44,8 +44,8 @@ enum {
   LAST_SIGNAL
 };
 
-static GParamSpec *gParamSpecs [LAST_PROP];
-static guint       gSignals [LAST_SIGNAL];
+static GParamSpec *properties [LAST_PROP];
+static guint       signals [LAST_SIGNAL];
 
 /**
  * ide_script_get_file:
@@ -74,7 +74,7 @@ ide_script_set_file (IdeScript *self,
   g_return_if_fail (G_IS_FILE (file));
 
   if (g_set_object (&priv->file, file))
-    g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_FILE]);
+    g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_FILE]);
 }
 
 void
@@ -82,7 +82,7 @@ ide_script_load (IdeScript *self)
 {
   g_return_if_fail (IDE_IS_SCRIPT (self));
 
-  g_signal_emit (self, gSignals [LOAD], 0);
+  g_signal_emit (self, signals [LOAD], 0);
 }
 
 void
@@ -90,7 +90,7 @@ ide_script_unload (IdeScript *self)
 {
   g_return_if_fail (IDE_IS_SCRIPT (self));
 
-  g_signal_emit (self, gSignals [UNLOAD], 0);
+  g_signal_emit (self, signals [UNLOAD], 0);
 }
 
 static void
@@ -151,7 +151,7 @@ ide_script_class_init (IdeScriptClass *klass)
   object_class->get_property = ide_script_get_property;
   object_class->set_property = ide_script_set_property;
 
-  gParamSpecs [PROP_FILE] =
+  properties [PROP_FILE] =
     g_param_spec_object ("file",
                          "File",
                          "The file containing the script.",
@@ -160,9 +160,9 @@ ide_script_class_init (IdeScriptClass *klass)
                           G_PARAM_CONSTRUCT_ONLY |
                           G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 
-  gSignals [LOAD] =
+  signals [LOAD] =
     g_signal_new ("load",
                   IDE_TYPE_SCRIPT,
                   G_SIGNAL_RUN_LAST,
@@ -171,7 +171,7 @@ ide_script_class_init (IdeScriptClass *klass)
                   G_TYPE_NONE,
                   0);
 
-  gSignals [UNLOAD] =
+  signals [UNLOAD] =
     g_signal_new ("unload",
                   IDE_TYPE_SCRIPT,
                   G_SIGNAL_RUN_LAST,

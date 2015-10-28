@@ -58,7 +58,7 @@ enum {
 
 G_DEFINE_DYNAMIC_TYPE (IdeCtagsBuilder, ide_ctags_builder, IDE_TYPE_OBJECT)
 
-static guint gSignals [LAST_SIGNAL];
+static guint signals [LAST_SIGNAL];
 
 IdeCtagsBuilder *
 ide_ctags_builder_new (void)
@@ -85,7 +85,7 @@ ide_ctags_builder_build_cb (GObject      *object,
     {
       file = g_task_get_task_data (task);
       g_assert (G_IS_FILE (file));
-      g_signal_emit (self, gSignals [TAGS_BUILT], 0, file);
+      g_signal_emit (self, signals [TAGS_BUILT], 0, file);
     }
   else
     {
@@ -289,7 +289,7 @@ ide_ctags_builder_class_init (IdeCtagsBuilderClass *klass)
 
   object_class->finalize = ide_ctags_builder_finalize;
 
-  gSignals [TAGS_BUILT] =
+  signals [TAGS_BUILT] =
     g_signal_new ("tags-built",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,

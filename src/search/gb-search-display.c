@@ -53,8 +53,8 @@ enum {
   LAST_SIGNAL
 };
 
-static GParamSpec *gParamSpecs [LAST_PROP];
-static guint       gSignals [LAST_SIGNAL];
+static GParamSpec *properties [LAST_PROP];
+static guint       signals [LAST_SIGNAL];
 
 static void
 provider_entry_destroy (gpointer data)
@@ -113,7 +113,7 @@ gb_search_display_result_activated (GbSearchDisplay      *self,
   g_return_if_fail (IDE_IS_SEARCH_RESULT (result));
   g_return_if_fail (GB_IS_SEARCH_DISPLAY_GROUP (group));
 
-  g_signal_emit (self, gSignals [RESULT_ACTIVATED], 0, result);
+  g_signal_emit (self, signals [RESULT_ACTIVATED], 0, result);
 }
 
 static void
@@ -484,7 +484,7 @@ gb_search_display_set_context (GbSearchDisplay  *self,
           gb_search_display_connect_context (self, self->context);
         }
 
-      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_CONTEXT]);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CONTEXT]);
     }
 }
 
@@ -572,16 +572,16 @@ gb_search_display_class_init (GbSearchDisplayClass *klass)
   object_class->get_property = gb_search_display_get_property;
   object_class->set_property = gb_search_display_set_property;
 
-  gParamSpecs [PROP_CONTEXT] =
+  properties [PROP_CONTEXT] =
     g_param_spec_object ("context",
                          "Context",
                          "The active search context.",
                          IDE_TYPE_SEARCH_CONTEXT,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 
-  gSignals [RESULT_ACTIVATED] =
+  signals [RESULT_ACTIVATED] =
     g_signal_new_class_handler ("result-activated",
                                 G_TYPE_FROM_CLASS (klass),
                                 G_SIGNAL_RUN_LAST,

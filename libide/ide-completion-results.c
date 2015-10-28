@@ -96,7 +96,7 @@ enum {
   LAST_PROP
 };
 
-static GParamSpec *gParamSpecs [LAST_PROP];
+static GParamSpec *properties [LAST_PROP];
 
 IdeCompletionResults *
 ide_completion_results_new (const gchar *query)
@@ -429,14 +429,14 @@ ide_completion_results_class_init (IdeCompletionResultsClass *klass)
   object_class->get_property = ide_completion_results_get_property;
   object_class->set_property = ide_completion_results_set_property;
 
-  gParamSpecs [PROP_QUERY] =
+  properties [PROP_QUERY] =
     g_param_spec_string ("query",
                          "Query",
                          "Query",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 }
 
 static void

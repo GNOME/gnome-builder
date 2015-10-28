@@ -63,8 +63,8 @@ enum {
   LAST_SIGNAL
 };
 
-static GParamSpec *gParamSpecs [LAST_PROP];
-static guint gSignals [LAST_SIGNAL];
+static GParamSpec *properties [LAST_PROP];
+static guint signals [LAST_SIGNAL];
 
 static void
 ide_object_destroy (IdeObject *self)
@@ -76,7 +76,7 @@ ide_object_destroy (IdeObject *self)
   if (!priv->is_destroyed)
     {
       priv->is_destroyed = TRUE;
-      g_signal_emit (self, gSignals [DESTROY], 0);
+      g_signal_emit (self, signals [DESTROY], 0);
     }
 }
 
@@ -141,7 +141,7 @@ ide_object_set_context (IdeObject  *self,
       if (IDE_OBJECT_GET_CLASS (self)->set_context)
         IDE_OBJECT_GET_CLASS (self)->set_context (self, context);
 
-      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_CONTEXT]);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CONTEXT]);
     }
 }
 
@@ -211,7 +211,7 @@ ide_object_class_init (IdeObjectClass *klass)
   object_class->get_property = ide_object_get_property;
   object_class->set_property = ide_object_set_property;
 
-  gParamSpecs [PROP_CONTEXT] =
+  properties [PROP_CONTEXT] =
     g_param_spec_object ("context",
                          "Context",
                          "The context that owns the object.",
@@ -220,9 +220,9 @@ ide_object_class_init (IdeObjectClass *klass)
                           G_PARAM_CONSTRUCT_ONLY |
                           G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 
-  gSignals [DESTROY] =
+  signals [DESTROY] =
     g_signal_new ("destroy",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,

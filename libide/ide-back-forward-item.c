@@ -38,7 +38,7 @@ enum {
   LAST_PROP
 };
 
-static GParamSpec *gParamSpecs [LAST_PROP];
+static GParamSpec *properties [LAST_PROP];
 
 IdeBackForwardItem *
 ide_back_forward_item_new (IdeContext        *context,
@@ -135,7 +135,7 @@ ide_back_forward_item_class_init (IdeBackForwardItemClass *klass)
    * The #IdeBackForwardItem:location property contains the location within
    * a source file to navigate to.
    */
-  gParamSpecs [PROP_LOCATION] =
+  properties [PROP_LOCATION] =
     g_param_spec_boxed ("location",
                         "Location",
                         "The location of the navigation item.",
@@ -144,7 +144,7 @@ ide_back_forward_item_class_init (IdeBackForwardItemClass *klass)
                          G_PARAM_CONSTRUCT_ONLY |
                          G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 }
 
 static void

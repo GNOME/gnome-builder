@@ -32,7 +32,7 @@ enum {
   LAST_PROP
 };
 
-static GParamSpec *gParamSpecs [LAST_PROP];
+static GParamSpec *properties [LAST_PROP];
 
 static void
 gb_file_search_result_finalize (GObject *object)
@@ -91,14 +91,14 @@ gb_file_search_result_class_init (GbFileSearchResultClass *klass)
   object_class->get_property = gb_file_search_result_get_property;
   object_class->set_property = gb_file_search_result_set_property;
 
-  gParamSpecs [PROP_PATH] =
+  properties [PROP_PATH] =
     g_param_spec_string ("path",
                          "Path",
                          "The relative path to the file.",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 }
 
 static void

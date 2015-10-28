@@ -85,8 +85,8 @@ enum {
 };
 
 static GtkBuildableIface *gb_workspace_parent_buildable_iface;
-static GParamSpec *gParamSpecs [LAST_PROP];
-static GParamSpec *gChildParamSpecs [LAST_CHILD_PROP];
+static GParamSpec *properties [LAST_PROP];
+static GParamSpec *childParamSpecs [LAST_CHILD_PROP];
 
 static void
 gb_workspace_move_resize_handle (GbWorkspace     *self,
@@ -1058,37 +1058,37 @@ gb_workspace_class_init (GbWorkspaceClass *klass)
 
   overlay_class->get_child_position = gb_workspace_get_child_position;
 
-  gParamSpecs [PROP_LEFT_PANE] =
+  properties [PROP_LEFT_PANE] =
     g_param_spec_object ("left-pane",
                          "Left Pane",
                          "The left workspace pane.",
                          GTK_TYPE_WIDGET,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_RIGHT_PANE] =
+  properties [PROP_RIGHT_PANE] =
     g_param_spec_object ("right-pane",
                          "Right Pane",
                          "The right workspace pane.",
                          GTK_TYPE_WIDGET,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_BOTTOM_PANE] =
+  properties [PROP_BOTTOM_PANE] =
     g_param_spec_object ("bottom-pane",
                          "Bottom Pane",
                          "The bottom workspace pane.",
                          GTK_TYPE_WIDGET,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_CONTENT_PANE] =
+  properties [PROP_CONTENT_PANE] =
     g_param_spec_object ("content-pane",
                          "Content Pane",
                          "The content workspace pane.",
                          GTK_TYPE_WIDGET,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 
-  gChildParamSpecs [CHILD_PROP_POSITION] =
+  childParamSpecs [CHILD_PROP_POSITION] =
     g_param_spec_uint ("position",
                        "Position",
                        "The position of the pane relative to its edge.",
@@ -1096,16 +1096,16 @@ gb_workspace_class_init (GbWorkspaceClass *klass)
                        0,
                        (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
   gtk_container_class_install_child_property (container_class, CHILD_PROP_POSITION,
-                                              gChildParamSpecs [CHILD_PROP_POSITION]);
+                                              childParamSpecs [CHILD_PROP_POSITION]);
 
-  gChildParamSpecs [CHILD_PROP_REVEAL] =
+  childParamSpecs [CHILD_PROP_REVEAL] =
     g_param_spec_boolean ("reveal",
                           "Reveal",
                           "If the pane should be revealed.",
                           TRUE,
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
   gtk_container_class_install_child_property (container_class, CHILD_PROP_REVEAL,
-                                              gChildParamSpecs [CHILD_PROP_REVEAL]);
+                                              childParamSpecs [CHILD_PROP_REVEAL]);
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/ui/gb-workspace.ui");
 

@@ -61,7 +61,7 @@ enum {
   LAST_PROP
 };
 
-static GParamSpec *gParamSpecs [LAST_PROP];
+static GParamSpec *properties [LAST_PROP];
 
 static void
 gb_greeter_window_first_visible_cb (GtkWidget *widget,
@@ -335,7 +335,7 @@ gb_greeter_window_set_recent_projects (GbGreeterWindow   *self,
           gb_greeter_window__recent_projects_items_changed (self, 0, 0, n_items, list_model);
         }
 
-      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_RECENT_PROJECTS]);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_RECENT_PROJECTS]);
     }
 }
 
@@ -555,14 +555,14 @@ gb_greeter_window_class_init (GbGreeterWindowClass *klass)
   object_class->get_property = gb_greeter_window_get_property;
   object_class->set_property = gb_greeter_window_set_property;
 
-  gParamSpecs [PROP_RECENT_PROJECTS] =
+  properties [PROP_RECENT_PROJECTS] =
     g_param_spec_object ("recent-projects",
                          "Recent Projects",
                          "The recent projects that have been mined.",
                          IDE_TYPE_RECENT_PROJECTS,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/ui/gb-greeter-window.ui");
   gtk_widget_class_bind_template_child (widget_class, GbGreeterWindow, header_bar);

@@ -33,7 +33,7 @@ enum {
   LAST_PROP
 };
 
-static GParamSpec *gParamSpecs [LAST_PROP];
+static GParamSpec *properties [LAST_PROP];
 
 static void
 gb_accel_label_rebuild (GbAccelLabel *self)
@@ -159,14 +159,14 @@ gb_accel_label_class_init (GbAccelLabelClass *klass)
   object_class->get_property = gb_accel_label_get_property;
   object_class->set_property = gb_accel_label_set_property;
 
-  gParamSpecs [PROP_ACCELERATOR] =
+  properties [PROP_ACCELERATOR] =
     g_param_spec_string ("accelerator",
                          "Accelerator",
                          "Accelerator",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 }
 
 static void
@@ -202,6 +202,6 @@ gb_accel_label_set_accelerator (GbAccelLabel *self,
       g_free (self->accelerator);
       self->accelerator = g_strdup (accelerator);
       gb_accel_label_rebuild (self);
-      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_ACCELERATOR]);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ACCELERATOR]);
     }
 }

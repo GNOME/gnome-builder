@@ -27,15 +27,15 @@
 
 #include "gb-plugins.h"
 
-static GMainLoop *gMainLoop;
-static gint gExitCode = EXIT_SUCCESS;
-static GFile *gFile;
+static GMainLoop *main_loop;
+static gint exit_code = EXIT_SUCCESS;
+GFile *target_file;
 
 static void
-quit (gint exit_code)
+quit (gint code)
 {
-  gExitCode = exit_code;
-  g_main_loop_quit (gMainLoop);
+  exit_code = code;
+  g_main_loop_quit (main_loop);
 }
 
 static const gchar *
@@ -239,7 +239,7 @@ context_cb (GObject      *object,
   project = ide_context_get_project (context);
   vcs = ide_context_get_vcs (context);
   workdir = ide_vcs_get_working_directory (vcs);
-  relpath = g_file_get_relative_path (workdir, gFile);
+  relpath = g_file_get_relative_path (workdir, target_file);
 
   ide_project_reader_lock (project);
   file = ide_project_get_file_for_path (project, relpath);
@@ -289,7 +289,7 @@ main (gint   argc,
       return EXIT_FAILURE;
     }
 
-  gMainLoop = g_main_loop_new (NULL, FALSE);
+  main_loop = g_main_loop_new (NULL, FALSE);
 
   if (argc == 2)
     {
@@ -306,7 +306,7 @@ main (gint   argc,
       return EXIT_FAILURE;
     }
 
-  gFile = g_file_new_for_path (path);
+  target_file = g_file_new_for_path (path);
 
   project_file = g_file_new_for_path (project_path);
 
@@ -314,11 +314,11 @@ main (gint   argc,
 
   ide_context_new_async (project_file, NULL, context_cb, NULL);
 
-  g_main_loop_run (gMainLoop);
+  g_main_loop_run (main_loop);
 
   g_clear_object (&project_file);
-  g_clear_object (&gFile);
-  g_clear_pointer (&gMainLoop, g_main_loop_unref);
+  g_clear_object (&target_file);
+  g_clear_pointer (&main_loop, g_main_loop_unref);
 
-  return gExitCode;
+  return exit_code;
 }

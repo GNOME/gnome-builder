@@ -45,7 +45,7 @@ enum {
   LAST_PROP
 };
 
-static GParamSpec *gParamSpecs[LAST_PROP];
+static GParamSpec *properties[LAST_PROP];
 
 IdeSourceSnippetChunk *
 ide_source_snippet_chunk_new (void)
@@ -136,7 +136,7 @@ ide_source_snippet_chunk_set_context (IdeSourceSnippetChunk   *chunk,
                                      0);
         }
 
-      g_object_notify_by_pspec (G_OBJECT (chunk), gParamSpecs[PROP_CONTEXT]);
+      g_object_notify_by_pspec (G_OBJECT (chunk), properties[PROP_CONTEXT]);
     }
 }
 
@@ -155,7 +155,7 @@ ide_source_snippet_chunk_set_spec (IdeSourceSnippetChunk *chunk,
 
   g_free (chunk->spec);
   chunk->spec = g_strdup (spec);
-  g_object_notify_by_pspec (G_OBJECT (chunk), gParamSpecs[PROP_SPEC]);
+  g_object_notify_by_pspec (G_OBJECT (chunk), properties[PROP_SPEC]);
 }
 
 gint
@@ -171,7 +171,7 @@ ide_source_snippet_chunk_set_tab_stop (IdeSourceSnippetChunk *chunk,
 {
   g_return_if_fail (IDE_IS_SOURCE_SNIPPET_CHUNK (chunk));
   chunk->tab_stop = tab_stop;
-  g_object_notify_by_pspec (G_OBJECT (chunk), gParamSpecs[PROP_TAB_STOP]);
+  g_object_notify_by_pspec (G_OBJECT (chunk), properties[PROP_TAB_STOP]);
 }
 
 const gchar *
@@ -191,7 +191,7 @@ ide_source_snippet_chunk_set_text (IdeSourceSnippetChunk *chunk,
     {
       g_free (chunk->text);
       chunk->text = g_strdup (text);
-      g_object_notify_by_pspec (G_OBJECT (chunk), gParamSpecs[PROP_TEXT]);
+      g_object_notify_by_pspec (G_OBJECT (chunk), properties[PROP_TEXT]);
     }
 }
 
@@ -214,7 +214,7 @@ ide_source_snippet_chunk_set_text_set (IdeSourceSnippetChunk *chunk,
   if (chunk->text_set != text_set)
     {
       chunk->text_set = text_set;
-      g_object_notify_by_pspec (G_OBJECT (chunk), gParamSpecs[PROP_TEXT_SET]);
+      g_object_notify_by_pspec (G_OBJECT (chunk), properties[PROP_TEXT_SET]);
     }
 }
 
@@ -309,21 +309,21 @@ ide_source_snippet_chunk_class_init (IdeSourceSnippetChunkClass *klass)
   object_class->get_property = ide_source_snippet_chunk_get_property;
   object_class->set_property = ide_source_snippet_chunk_set_property;
 
-  gParamSpecs[PROP_CONTEXT] =
+  properties[PROP_CONTEXT] =
     g_param_spec_object ("context",
                          "Context",
                          "The snippet context.",
                          IDE_TYPE_SOURCE_SNIPPET_CONTEXT,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs[PROP_SPEC] =
+  properties[PROP_SPEC] =
     g_param_spec_string ("spec",
                          "Spec",
                          "The specification to expand using the context.",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs[PROP_TAB_STOP] =
+  properties[PROP_TAB_STOP] =
     g_param_spec_int ("tab-stop",
                       "Tab Stop",
                       "The tab stop for the chunk.",
@@ -332,21 +332,21 @@ ide_source_snippet_chunk_class_init (IdeSourceSnippetChunkClass *klass)
                       -1,
                       (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs[PROP_TEXT] =
+  properties[PROP_TEXT] =
     g_param_spec_string ("text",
                          "Text",
                          "The text for the chunk.",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs[PROP_TEXT_SET] =
+  properties[PROP_TEXT_SET] =
     g_param_spec_boolean ("text-set",
                           "Text Set",
                           "If the text property has been manually set.",
                           FALSE,
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 }
 
 static void

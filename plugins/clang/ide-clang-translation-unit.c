@@ -82,7 +82,7 @@ enum {
   LAST_PROP
 };
 
-static GParamSpec *gParamSpecs [LAST_PROP];
+static GParamSpec *properties [LAST_PROP];
 
 static void
 code_complete_state_free (gpointer data)
@@ -139,7 +139,7 @@ ide_clang_translation_unit_set_file (IdeClangTranslationUnit *self,
   g_return_if_fail (G_IS_FILE (file));
 
   if (g_set_object (&self->file, file))
-    g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_FILE]);
+    g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_FILE]);
 }
 
 IdeClangTranslationUnit *
@@ -577,27 +577,27 @@ ide_clang_translation_unit_class_init (IdeClangTranslationUnitClass *klass)
   object_class->get_property = ide_clang_translation_unit_get_property;
   object_class->set_property = ide_clang_translation_unit_set_property;
 
-  gParamSpecs [PROP_FILE] =
+  properties [PROP_FILE] =
     g_param_spec_object ("file",
                          "File",
                          "The file used to build the translation unit.",
                          G_TYPE_FILE,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_INDEX] =
+  properties [PROP_INDEX] =
     g_param_spec_boxed ("index",
                          "Index",
                          "The highlight index for the translation unit.",
                          IDE_TYPE_HIGHLIGHT_INDEX,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_NATIVE] =
+  properties [PROP_NATIVE] =
     g_param_spec_pointer ("native",
                           "Native",
                           "The native translation unit pointer.",
                           (G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_SERIAL] =
+  properties [PROP_SERIAL] =
     g_param_spec_int64 ("serial",
                         "Serial",
                         "A sequence number for the translation unit.",
@@ -606,7 +606,7 @@ ide_clang_translation_unit_class_init (IdeClangTranslationUnitClass *klass)
                         0,
                         (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 }
 
 static void

@@ -43,7 +43,7 @@ enum
 
 G_DEFINE_TYPE (GbKeybindings, gb_keybindings, G_TYPE_OBJECT)
 
-static GParamSpec *gParamSpecs [LAST_PROP];
+static GParamSpec *properties [LAST_PROP];
 
 GbKeybindings *
 gb_keybindings_new (GtkApplication *application,
@@ -106,7 +106,7 @@ gb_keybindings_set_mode (GbKeybindings *self,
       self->mode = g_strdup (mode);
       if (self->constructed)
         gb_keybindings_reload (self);
-      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_MODE]);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_MODE]);
     }
 }
 
@@ -253,21 +253,21 @@ gb_keybindings_class_init (GbKeybindingsClass *klass)
   object_class->get_property = gb_keybindings_get_property;
   object_class->set_property = gb_keybindings_set_property;
 
-  gParamSpecs [PROP_APPLICATION] =
+  properties [PROP_APPLICATION] =
     g_param_spec_object ("application",
                          "Application",
                          "The application to register keybindings for.",
                          GTK_TYPE_APPLICATION,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_MODE] =
+  properties [PROP_MODE] =
     g_param_spec_string ("mode",
                          "Mode",
                          "The name of the keybindings mode.",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 }
 
 static void

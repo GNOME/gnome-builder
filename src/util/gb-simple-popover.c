@@ -47,8 +47,8 @@ enum {
   LAST_SIGNAL
 };
 
-static GParamSpec *gParamSpecs [LAST_PROP];
-static guint gSignals [LAST_SIGNAL];
+static GParamSpec *properties [LAST_PROP];
+static guint signals [LAST_SIGNAL];
 
 const gchar *
 gb_simple_popover_get_button_text (GbSimplePopover *self)
@@ -69,7 +69,7 @@ gb_simple_popover_set_button_text (GbSimplePopover *self,
   g_return_if_fail (GB_IS_SIMPLE_POPOVER (self));
 
   gtk_button_set_label (priv->button, button_text);
-  g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_BUTTON_TEXT]);
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_BUTTON_TEXT]);
 }
 
 const gchar *
@@ -91,7 +91,7 @@ gb_simple_popover_set_message (GbSimplePopover *self,
   g_return_if_fail (GB_IS_SIMPLE_POPOVER (self));
 
   gtk_label_set_label (priv->message, message);
-  g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_MESSAGE]);
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_MESSAGE]);
 }
 
 gboolean
@@ -113,7 +113,7 @@ gb_simple_popover_set_ready (GbSimplePopover *self,
   g_return_if_fail (GB_IS_SIMPLE_POPOVER (self));
 
   gtk_widget_set_sensitive (GTK_WIDGET (priv->button), ready);
-  g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_READY]);
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_READY]);
 }
 
 const gchar *
@@ -135,7 +135,7 @@ gb_simple_popover_set_text (GbSimplePopover *self,
   g_return_if_fail (GB_IS_SIMPLE_POPOVER (self));
 
   gtk_entry_set_text (priv->entry, text);
-  g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_TEXT]);
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_TEXT]);
 }
 
 const gchar *
@@ -157,7 +157,7 @@ gb_simple_popover_set_title (GbSimplePopover *self,
   g_return_if_fail (GB_IS_SIMPLE_POPOVER (self));
 
   gtk_label_set_label (priv->title, title);
-  g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_TITLE]);
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_TITLE]);
 }
 
 static void
@@ -171,7 +171,7 @@ gb_simple_popover_button_clicked (GbSimplePopover *self,
   g_assert (GTK_IS_BUTTON (button));
 
   text = gtk_entry_get_text (GTK_ENTRY (priv->entry));
-  g_signal_emit (self, gSignals [ACTIVATE], 0, text);
+  g_signal_emit (self, signals [ACTIVATE], 0, text);
   gtk_widget_hide (GTK_WIDGET (self));
 }
 
@@ -195,7 +195,7 @@ gb_simple_popover_entry_changed (GbSimplePopover *self,
   g_assert (GB_IS_SIMPLE_POPOVER (self));
   g_assert (GTK_IS_ENTRY (entry));
 
-  g_signal_emit (self, gSignals [CHANGED], 0);
+  g_signal_emit (self, signals [CHANGED], 0);
 }
 
 static void
@@ -216,7 +216,7 @@ gb_simple_popover_entry_insert_text (GbSimplePopover *self,
   pos = *position;
   n_chars = (new_text_length >= 0) ? new_text_length : g_utf8_strlen (new_text, -1);
 
-  g_signal_emit (self, gSignals [INSERT_TEXT], 0, pos, new_text, n_chars, &ret);
+  g_signal_emit (self, signals [INSERT_TEXT], 0, pos, new_text, n_chars, &ret);
 
   if (ret == GDK_EVENT_STOP)
     g_signal_stop_emission_by_name (entry, "insert-text");
@@ -301,44 +301,44 @@ gb_simple_popover_class_init (GbSimplePopoverClass *klass)
   object_class->get_property = gb_simple_popover_get_property;
   object_class->set_property = gb_simple_popover_set_property;
 
-  gParamSpecs [PROP_BUTTON_TEXT] =
+  properties [PROP_BUTTON_TEXT] =
     g_param_spec_string ("button-text",
                          "Button Text",
                          "Button Text",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_MESSAGE] =
+  properties [PROP_MESSAGE] =
     g_param_spec_string ("message",
                          "Message",
                          "Message",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_READY] =
+  properties [PROP_READY] =
     g_param_spec_boolean ("ready",
                           "Ready",
                           "Ready",
                           FALSE,
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_TEXT] =
+  properties [PROP_TEXT] =
     g_param_spec_string ("text",
                          "Text",
                          "Text",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_TITLE] =
+  properties [PROP_TITLE] =
     g_param_spec_string ("title",
                          "Title",
                          "Title",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 
-  gSignals [ACTIVATE] =
+  signals [ACTIVATE] =
     g_signal_new ("activate",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
@@ -348,7 +348,7 @@ gb_simple_popover_class_init (GbSimplePopoverClass *klass)
                   1,
                   G_TYPE_STRING);
 
-  gSignals [CHANGED] =
+  signals [CHANGED] =
     g_signal_new ("changed",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
@@ -357,7 +357,7 @@ gb_simple_popover_class_init (GbSimplePopoverClass *klass)
                   G_TYPE_NONE,
                   0);
 
-  gSignals [INSERT_TEXT] =
+  signals [INSERT_TEXT] =
     g_signal_new ("insert-text",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,

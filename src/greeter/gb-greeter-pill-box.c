@@ -37,7 +37,7 @@ enum {
   LAST_PROP
 };
 
-static GParamSpec *gParamSpecs [LAST_PROP];
+static GParamSpec *properties [LAST_PROP];
 
 const gchar *
 gb_greeter_pill_box_get_label (GbGreeterPillBox *self)
@@ -111,13 +111,13 @@ gb_greeter_pill_box_class_init (GbGreeterPillBoxClass *klass)
   object_class->get_property = gb_greeter_pill_box_get_property;
   object_class->set_property = gb_greeter_pill_box_set_property;
 
-  gParamSpecs [PROP_LABEL] =
+  properties [PROP_LABEL] =
     g_param_spec_string ("label",
                          "Label",
                          "The label for the pill box.",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_LABEL, gParamSpecs [PROP_LABEL]);
+  g_object_class_install_property (object_class, PROP_LABEL, properties [PROP_LABEL]);
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/ui/gb-greeter-pill-box.ui");
   gtk_widget_class_bind_template_child (widget_class, GbGreeterPillBox, label);

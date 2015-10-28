@@ -37,7 +37,7 @@ enum {
   LAST_PROP
 };
 
-static GParamSpec *gParamSpecs [LAST_PROP];
+static GParamSpec *properties [LAST_PROP];
 
 /* TODO: allow palette to come from gnome-terminal. */
 static const GdkRGBA solarized_palette[] =
@@ -616,21 +616,21 @@ gb_terminal_view_class_init (GbTerminalViewClass *klass)
 
   g_type_ensure (VTE_TYPE_TERMINAL);
 
-  gParamSpecs [PROP_DOCUMENT] =
+  properties [PROP_DOCUMENT] =
     g_param_spec_object ("document",
                          "Document",
                          "The document for the VTE terminal view.",
                          GB_TYPE_TERMINAL_DOCUMENT,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_FONT_NAME] =
+  properties [PROP_FONT_NAME] =
     g_param_spec_string ("font-name",
                          "Font Name",
                          "Font Name",
                          NULL,
                          (G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 }
 
 static void

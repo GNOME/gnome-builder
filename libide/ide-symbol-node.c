@@ -39,7 +39,7 @@ enum {
   LAST_PROP
 };
 
-static GParamSpec *gParamSpecs [LAST_PROP];
+static GParamSpec *properties [LAST_PROP];
 
 static void
 ide_symbol_node_finalize (GObject *object)
@@ -117,14 +117,14 @@ ide_symbol_node_class_init (IdeSymbolNodeClass *klass)
   object_class->get_property = ide_symbol_node_get_property;
   object_class->set_property = ide_symbol_node_set_property;
 
-  gParamSpecs [PROP_NAME] =
+  properties [PROP_NAME] =
     g_param_spec_string ("name",
                          "Name",
                          "Name",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_KIND] =
+  properties [PROP_KIND] =
     g_param_spec_enum ("kind",
                        "Kind",
                        "Kind",
@@ -132,7 +132,7 @@ ide_symbol_node_class_init (IdeSymbolNodeClass *klass)
                        IDE_SYMBOL_NONE,
                        (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_FLAGS] =
+  properties [PROP_FLAGS] =
     g_param_spec_flags ("flags",
                         "Flags",
                         "Flags",
@@ -140,7 +140,7 @@ ide_symbol_node_class_init (IdeSymbolNodeClass *klass)
                         IDE_SYMBOL_FLAGS_NONE,
                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 }
 
 static void

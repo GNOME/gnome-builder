@@ -47,7 +47,7 @@ enum
 
 G_DEFINE_TYPE (GbRecentProjectRow, gb_recent_project_row, GTK_TYPE_LIST_BOX_ROW)
 
-static GParamSpec *gParamSpecs [LAST_PROP];
+static GParamSpec *properties [LAST_PROP];
 
 static void
 gb_recent_project_row_set_selection_mode (GbRecentProjectRow *self,
@@ -107,7 +107,7 @@ gb_recent_project_row_set_project_info (GbRecentProjectRow *self,
           gtk_label_set_label (self->date_label, datestr);
         }
 
-      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_PROJECT_INFO]);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_PROJECT_INFO]);
     }
 }
 
@@ -118,7 +118,7 @@ gb_recent_project_row__check_button_toggled (GbRecentProjectRow *self,
   g_assert (GB_IS_RECENT_PROJECT_ROW (self));
   g_assert (GTK_IS_TOGGLE_BUTTON (toggle_button));
 
-  g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_SELECTED]);
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SELECTED]);
 }
 
 static void
@@ -202,28 +202,28 @@ gb_recent_project_row_class_init (GbRecentProjectRowClass *klass)
   GB_WIDGET_CLASS_BIND (klass, GbRecentProjectRow, name_label);
   GB_WIDGET_CLASS_BIND (klass, GbRecentProjectRow, revealer);
 
-  gParamSpecs [PROP_PROJECT_INFO] =
+  properties [PROP_PROJECT_INFO] =
     g_param_spec_object ("project-info",
                          "Project Information",
                          "The project information for the row.",
                          IDE_TYPE_PROJECT_INFO,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_SELECTED] =
+  properties [PROP_SELECTED] =
     g_param_spec_boolean ("selected",
                           "Selected",
                           "Selected",
                           FALSE,
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_SELECTION_MODE] =
+  properties [PROP_SELECTION_MODE] =
     g_param_spec_boolean ("selection-mode",
                           "Selection Mode",
                           "Selection Mode",
                           FALSE,
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 }
 
 static void

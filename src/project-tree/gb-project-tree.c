@@ -31,7 +31,7 @@ enum {
   LAST_PROP
 };
 
-static GParamSpec *gParamSpecs [LAST_PROP];
+static GParamSpec *properties [LAST_PROP];
 
 GtkWidget *
 gb_project_tree_new (void)
@@ -152,14 +152,14 @@ gb_project_tree_class_init (GbProjectTreeClass *klass)
   object_class->get_property = gb_project_tree_get_property;
   object_class->set_property = gb_project_tree_set_property;
 
-  gParamSpecs [PROP_SHOW_IGNORED_FILES] =
+  properties [PROP_SHOW_IGNORED_FILES] =
     g_param_spec_boolean ("show-ignored-files",
                           "Show Ignored Files",
                           "If files ignored by the VCS should be displayed.",
                          FALSE,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 }
 
 static void
@@ -206,7 +206,7 @@ gb_project_tree_set_show_ignored_files (GbProjectTree *self,
   if (show_ignored_files != self->show_ignored_files)
     {
       self->show_ignored_files = show_ignored_files;
-      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_SHOW_IGNORED_FILES]);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SHOW_IGNORED_FILES]);
       gb_tree_rebuild (GB_TREE (self));
     }
 }

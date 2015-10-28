@@ -49,7 +49,7 @@ enum {
   PROP_PARAMETER_TYPE,
 };
 
-static GParamSpec *gParamSpecs [LAST_PROP];
+static GParamSpec *properties [LAST_PROP];
 
 /**
  * egg_settings_flag_action_new:
@@ -168,28 +168,28 @@ egg_settings_flag_action_class_init (EggSettingsFlagActionClass *klass)
   g_object_class_override_property (object_class, PROP_PARAMETER_TYPE, "parameter-type");
   g_object_class_override_property (object_class, PROP_ENABLED, "enabled");
 
-  gParamSpecs [PROP_SCHEMA_ID] =
+  properties [PROP_SCHEMA_ID] =
     g_param_spec_string ("schema-id",
                          "Schema Id",
                          "Schema Id",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_SCHEMA_KEY] =
+  properties [PROP_SCHEMA_KEY] =
     g_param_spec_string ("schema-key",
                          "Schema Key",
                          "Schema Key",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_FLAG_NICK] =
+  properties [PROP_FLAG_NICK] =
     g_param_spec_string ("flag-nick",
                          "Flag Nick",
                          "Flag Nick",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 }
 
 static void

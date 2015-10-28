@@ -55,7 +55,7 @@ enum {
   LAST_PROP
 };
 
-static GParamSpec *gParamSpecs [LAST_PROP];
+static GParamSpec *properties [LAST_PROP];
 
 static GSettings *
 ide_extension_adapter_get_settings (IdeExtensionAdapter *self,
@@ -102,7 +102,7 @@ ide_extension_adapter_set_extension (IdeExtensionAdapter *self,
   if (g_set_object (&self->extension, extension))
     {
       ide_extension_adapter_monitor (self, plugin_info);
-      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_EXTENSION]);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_EXTENSION]);
     }
 }
 
@@ -391,42 +391,42 @@ ide_extension_adapter_class_init (IdeExtensionAdapterClass *klass)
   object_class->get_property = ide_extension_adapter_get_property;
   object_class->set_property = ide_extension_adapter_set_property;
 
-  gParamSpecs [PROP_ENGINE] =
+  properties [PROP_ENGINE] =
     g_param_spec_object ("engine",
                          "Engine",
                          "Engine",
                          PEAS_TYPE_ENGINE,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_EXTENSION] =
+  properties [PROP_EXTENSION] =
     g_param_spec_object ("extension",
                          "Extension",
                          "The extension object.",
                          G_TYPE_OBJECT,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_INTERFACE_TYPE] =
+  properties [PROP_INTERFACE_TYPE] =
     g_param_spec_gtype ("interface-type",
                         "Interface Type",
                         "The GType of the extension interface.",
                         G_TYPE_INTERFACE,
                         (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_KEY] =
+  properties [PROP_KEY] =
     g_param_spec_string ("key",
                          "Key",
                          "The external data key to match from plugin info.",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_VALUE] =
+  properties [PROP_VALUE] =
     g_param_spec_string ("value",
                          "Value",
                          "The external data value to match from plugin info.",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 }
 
 static void
@@ -461,7 +461,7 @@ ide_extension_adapter_set_key (IdeExtensionAdapter *self,
       g_free (self->key);
       self->key = g_strdup (key);
       ide_extension_adapter_queue_reload (self);
-      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_KEY]);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_KEY]);
     }
 }
 
@@ -484,7 +484,7 @@ ide_extension_adapter_set_value (IdeExtensionAdapter *self,
       g_free (self->value);
       self->value = g_strdup (value);
       ide_extension_adapter_reload (self);
-      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_VALUE]);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_VALUE]);
     }
 }
 

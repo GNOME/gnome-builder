@@ -51,7 +51,7 @@ enum {
 
 G_DEFINE_TYPE (IdeBoxTheatric, ide_box_theatric, G_TYPE_OBJECT)
 
-static GParamSpec *gParamSpecs[LAST_PROP];
+static GParamSpec *properties[LAST_PROP];
 
 static void
 get_toplevel_rect (IdeBoxTheatric *theatric,
@@ -254,7 +254,7 @@ ide_box_theatric_class_init (IdeBoxTheatricClass *klass)
   object_class->get_property = ide_box_theatric_get_property;
   object_class->set_property = ide_box_theatric_set_property;
 
-  gParamSpecs[PROP_ALPHA] =
+  properties[PROP_ALPHA] =
     g_param_spec_double ("alpha",
                          "Alpha",
                          "Alpha",
@@ -263,14 +263,14 @@ ide_box_theatric_class_init (IdeBoxTheatricClass *klass)
                          1.0,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs[PROP_BACKGROUND] =
+  properties[PROP_BACKGROUND] =
     g_param_spec_string ("background",
                          "background",
                          "background",
                          "#000000",
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs[PROP_HEIGHT] =
+  properties[PROP_HEIGHT] =
     g_param_spec_int ("height",
                       "height",
                       "height",
@@ -279,7 +279,7 @@ ide_box_theatric_class_init (IdeBoxTheatricClass *klass)
                       0,
                       (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs[PROP_TARGET] =
+  properties[PROP_TARGET] =
     g_param_spec_object ("target",
                          "Target",
                          "Target",
@@ -288,7 +288,7 @@ ide_box_theatric_class_init (IdeBoxTheatricClass *klass)
                           G_PARAM_CONSTRUCT_ONLY |
                           G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs[PROP_WIDTH] =
+  properties[PROP_WIDTH] =
     g_param_spec_int ("width",
                       "width",
                       "width",
@@ -297,7 +297,7 @@ ide_box_theatric_class_init (IdeBoxTheatricClass *klass)
                       0,
                       (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs[PROP_X] =
+  properties[PROP_X] =
     g_param_spec_int ("x",
                       "x",
                       "x",
@@ -306,7 +306,7 @@ ide_box_theatric_class_init (IdeBoxTheatricClass *klass)
                       0,
                       (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs[PROP_Y] =
+  properties[PROP_Y] =
     g_param_spec_int ("y",
                       "y",
                       "y",
@@ -315,7 +315,7 @@ ide_box_theatric_class_init (IdeBoxTheatricClass *klass)
                       0,
                       (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 }
 
 static void

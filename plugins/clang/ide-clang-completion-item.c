@@ -41,7 +41,7 @@ enum {
   LAST_PROP
 };
 
-static GParamSpec *gParamSpecs [LAST_PROP];
+static GParamSpec *properties [LAST_PROP];
 
 static void
 ide_clang_completion_item_lazy_init (IdeClangCompletionItem *self)
@@ -413,7 +413,7 @@ ide_clang_completion_item_class_init (IdeClangCompletionItemClass *klass)
   object_class->get_property = ide_clang_completion_item_get_property;
   object_class->set_property = ide_clang_completion_item_set_property;
 
-  gParamSpecs [PROP_INDEX] =
+  properties [PROP_INDEX] =
     g_param_spec_uint ("index",
                        "Index",
                        "The index in the result set.",
@@ -422,14 +422,14 @@ ide_clang_completion_item_class_init (IdeClangCompletionItemClass *klass)
                        0,
                        (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_RESULTS] =
+  properties [PROP_RESULTS] =
     g_param_spec_boxed ("results",
                         "Results",
                         "The Clang result set.",
                         IDE_TYPE_REF_PTR,
                         (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 }
 
 static void

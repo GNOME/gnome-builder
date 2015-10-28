@@ -44,8 +44,8 @@ enum {
   LAST_SIGNAL
 };
 
-static GParamSpec *gParamSpecs [LAST_PROP];
-static guint       gSignals [LAST_SIGNAL];
+static GParamSpec *properties [LAST_PROP];
+static guint       signals [LAST_SIGNAL];
 
 static void
 gb_view_stack_add_list_row (GbViewStack *self,
@@ -204,7 +204,7 @@ gb_view_stack_remove (GbViewStack *self,
       g_clear_object (&focus_after_close);
     }
   else
-    g_signal_emit (self, gSignals [EMPTY], 0);
+    g_signal_emit (self, signals [EMPTY], 0);
 }
 
 static void
@@ -550,16 +550,16 @@ gb_view_stack_class_init (GbViewStackClass *klass)
   container_class->add = gb_view_stack_add;
   container_class->remove = gb_view_stack_real_remove;
 
-  gParamSpecs [PROP_ACTIVE_VIEW] =
+  properties [PROP_ACTIVE_VIEW] =
     g_param_spec_object ("active-view",
                          "Active View",
                          "The active view.",
                          GB_TYPE_VIEW,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 
-  gSignals [EMPTY] =
+  signals [EMPTY] =
     g_signal_new_class_handler ("empty",
                                 G_TYPE_FROM_CLASS (klass),
                                 G_SIGNAL_RUN_LAST,
@@ -578,7 +578,7 @@ gb_view_stack_class_init (GbViewStackClass *klass)
    *
    * This should only be used by #GbViewGrid.
    */
-  gSignals [SPLIT] = g_signal_new ("split",
+  signals [SPLIT] = g_signal_new ("split",
                                    G_TYPE_FROM_CLASS (klass),
                                    G_SIGNAL_RUN_LAST,
                                    0,
@@ -726,7 +726,7 @@ gb_view_stack_set_active_view (GbViewStack *self,
           gb_view_stack_move_top_list_row (self, GB_VIEW (active_view));
         }
 
-      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_ACTIVE_VIEW]);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ACTIVE_VIEW]);
     }
 }
 

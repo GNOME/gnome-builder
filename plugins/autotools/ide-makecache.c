@@ -77,7 +77,7 @@ enum {
   LAST_PROP
 };
 
-static GParamSpec *gParamSpecs [LAST_PROP];
+static GParamSpec *properties [LAST_PROP];
 
 static void
 file_flags_lookup_free (gpointer data)
@@ -1241,14 +1241,14 @@ ide_makecache_class_init (IdeMakecacheClass *klass)
   object_class->get_property = ide_makecache_get_property;
   object_class->set_property = ide_makecache_set_property;
 
-  gParamSpecs [PROP_MAKEFILE] =
+  properties [PROP_MAKEFILE] =
     g_param_spec_object ("makefile",
                          "Makefile",
                          "The root makefile to be cached.",
                          G_TYPE_FILE,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 }
 
 static void

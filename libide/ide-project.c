@@ -52,7 +52,7 @@ enum {
   LAST_PROP
 };
 
-static GParamSpec *gParamSpecs [LAST_PROP];
+static GParamSpec *properties [LAST_PROP];
 
 void
 ide_project_reader_lock (IdeProject *self)
@@ -121,7 +121,7 @@ _ide_project_set_name (IdeProject  *self,
       g_free (self->name);
       self->name = g_strdup (name);
       self->id = ide_project_create_id (self);
-      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_NAME]);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_NAME]);
     }
 }
 
@@ -170,7 +170,7 @@ ide_project_set_root (IdeProject     *self,
     }
 
   if (g_set_object (&self->root, root))
-    g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_ROOT]);
+    g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ROOT]);
 }
 
 /**
@@ -388,21 +388,21 @@ ide_project_class_init (IdeProjectClass *klass)
   object_class->get_property = ide_project_get_property;
   object_class->set_property = ide_project_set_property;
 
-  gParamSpecs [PROP_ID] =
+  properties [PROP_ID] =
     g_param_spec_string ("id",
                          "ID",
                          "The unique project identifier.",
                          NULL,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_NAME] =
+  properties [PROP_NAME] =
     g_param_spec_string ("name",
                          "Name",
                          "The name of the project.",
                          NULL,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_ROOT] =
+  properties [PROP_ROOT] =
     g_param_spec_object ("root",
                          "Root",
                          "The root object for the project.",
@@ -411,7 +411,7 @@ ide_project_class_init (IdeProjectClass *klass)
                           G_PARAM_CONSTRUCT_ONLY |
                           G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 }
 
 static void

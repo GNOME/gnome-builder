@@ -35,7 +35,7 @@ enum {
   LAST_PROP
 };
 
-static GParamSpec *gParamSpecs [LAST_PROP];
+static GParamSpec *properties [LAST_PROP];
 
 GtkWidget *
 gb_scrolled_window_new (void)
@@ -74,7 +74,7 @@ gb_scrolled_window_set_max_content_height (GbScrolledWindow *self,
   if (max_content_height != priv->max_content_height)
     {
       priv->max_content_height = max_content_height;
-      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_MAX_CONTENT_HEIGHT]);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_MAX_CONTENT_HEIGHT]);
       gtk_widget_queue_resize (GTK_WIDGET (self));
     }
 }
@@ -110,7 +110,7 @@ gb_scrolled_window_set_max_content_width (GbScrolledWindow *self,
   if (max_content_width != priv->max_content_width)
     {
       priv->max_content_width = max_content_width;
-      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_MAX_CONTENT_HEIGHT]);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_MAX_CONTENT_HEIGHT]);
       gtk_widget_queue_resize (GTK_WIDGET (self));
     }
 }
@@ -249,7 +249,7 @@ gb_scrolled_window_class_init (GbScrolledWindowClass *klass)
   widget_class->get_preferred_width = gb_scrolled_window_get_preferred_width;
   widget_class->get_preferred_height = gb_scrolled_window_get_preferred_height;
 
-  gParamSpecs [PROP_MAX_CONTENT_HEIGHT] =
+  properties [PROP_MAX_CONTENT_HEIGHT] =
     g_param_spec_int ("max-content-height",
                       "Max Content Height",
                       "The maximum height request that can be made.",
@@ -258,7 +258,7 @@ gb_scrolled_window_class_init (GbScrolledWindowClass *klass)
                       -1,
                       (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_MAX_CONTENT_WIDTH] =
+  properties [PROP_MAX_CONTENT_WIDTH] =
     g_param_spec_int ("max-content-width",
                       "Max Content Width",
                       "The maximum width request that can be made.",
@@ -267,7 +267,7 @@ gb_scrolled_window_class_init (GbScrolledWindowClass *klass)
                       -1,
                       (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 }
 
 static void

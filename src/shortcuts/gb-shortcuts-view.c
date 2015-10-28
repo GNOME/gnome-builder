@@ -41,7 +41,7 @@ enum {
   LAST_PROP
 };
 
-static GParamSpec *gParamSpecs [LAST_PROP];
+static GParamSpec *properties [LAST_PROP];
 
 static void
 adjust_page_buttons (GtkWidget *widget,
@@ -157,21 +157,21 @@ gb_shortcuts_view_class_init (GbShortcutsViewClass *klass)
 
   container_class->add = gb_shortcuts_view_add;
 
-  gParamSpecs [PROP_VIEW_NAME] =
+  properties [PROP_VIEW_NAME] =
     g_param_spec_string ("view-name",
                          "View Name",
                          "View Name",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_TITLE] =
+  properties [PROP_TITLE] =
     g_param_spec_string ("title",
                          "Title",
                          "Title",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 }
 
 static void

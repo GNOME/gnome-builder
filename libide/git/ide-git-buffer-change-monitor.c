@@ -94,9 +94,9 @@ enum {
   LAST_PROP
 };
 
-static GParamSpec  *gParamSpecs [LAST_PROP];
-static GAsyncQueue *gWorkQueue;
-static GThread     *gWorkThread;
+static GParamSpec  *properties [LAST_PROP];
+static GAsyncQueue *work_queue;
+static GThread     *work_thread;
 
 static void
 diff_task_free (gpointer data)
@@ -179,7 +179,7 @@ ide_git_buffer_change_monitor_calculate_async (IdeGitBufferChangeMonitor *self,
 
   self->in_calculation = TRUE;
 
-  g_async_queue_push (gWorkQueue, g_object_ref (task));
+  g_async_queue_push (work_queue, g_object_ref (task));
 }
 
 static IdeBufferLineChange
@@ -715,19 +715,19 @@ ide_git_buffer_change_monitor_class_init (IdeGitBufferChangeMonitorClass *klass)
   parent_class->set_buffer = ide_git_buffer_change_monitor_set_buffer;
   parent_class->get_change = ide_git_buffer_change_monitor_get_change;
 
-  gParamSpecs [PROP_REPOSITORY] =
+  properties [PROP_REPOSITORY] =
     g_param_spec_object ("repository",
                          "Repository",
                          "The repository to use for calculating diffs.",
                          GGIT_TYPE_REPOSITORY,
                          (G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 
-  gWorkQueue = g_async_queue_new ();
-  gWorkThread = g_thread_new ("IdeGitBufferChangeMonitorWorker",
+  work_queue = g_async_queue_new ();
+  work_thread = g_thread_new ("IdeGitBufferChangeMonitorWorker",
                               ide_git_buffer_change_monitor_worker,
-                              gWorkQueue);
+                              work_queue);
 }
 
 static void

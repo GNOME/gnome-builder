@@ -38,8 +38,8 @@ enum {
   LAST_SIGNAL
 };
 
-static GParamSpec *gParamSpecs [LAST_PROP];
-static guint       gSignals [LAST_SIGNAL];
+static GParamSpec *properties [LAST_PROP];
+static guint       signals [LAST_SIGNAL];
 
 gboolean
 gb_document_is_untitled (GbDocument *document)
@@ -116,7 +116,7 @@ gb_document_create_view (GbDocument *document)
 
   g_return_val_if_fail (GB_IS_DOCUMENT (document), NULL);
 
-  g_signal_emit (document, gSignals [CREATE_VIEW], 0, &ret);
+  g_signal_emit (document, signals [CREATE_VIEW], 0, &ret);
 
   if (!ret)
     g_warning ("%s failed to implement create_view() signal",
@@ -188,29 +188,29 @@ gb_document_save_as_finish (GbDocument    *document,
 static void
 gb_document_default_init (GbDocumentInterface *iface)
 {
-  gParamSpecs [PROP_MODIFIED] =
+  properties [PROP_MODIFIED] =
     g_param_spec_boolean ("modified",
                           "Modified",
                           "If the document has been modified from disk.",
                           FALSE,
                           (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
-  g_object_interface_install_property (iface, gParamSpecs [PROP_MODIFIED]);
+  g_object_interface_install_property (iface, properties [PROP_MODIFIED]);
 
-  gParamSpecs [PROP_TITLE] =
+  properties [PROP_TITLE] =
     g_param_spec_string ("title",
                          "Title",
                          "The title of the document.",
                          NULL,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
-  g_object_interface_install_property (iface, gParamSpecs [PROP_TITLE]);
+  g_object_interface_install_property (iface, properties [PROP_TITLE]);
 
-  gParamSpecs [PROP_READ_ONLY] =
+  properties [PROP_READ_ONLY] =
     g_param_spec_boolean ("read-only",
                          "Read Only",
                          "If the document is read only.",
                          FALSE,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
-  g_object_interface_install_property (iface, gParamSpecs [PROP_READ_ONLY]);
+  g_object_interface_install_property (iface, properties [PROP_READ_ONLY]);
 
   /**
    * GbDocument::create-view:
@@ -220,7 +220,7 @@ gb_document_default_init (GbDocumentInterface *iface)
    *
    * Returns: (type GbView) (transfer full): A #GbView.
    */
-  gSignals [CREATE_VIEW] =
+  signals [CREATE_VIEW] =
     g_signal_new ("create-view",
                   GB_TYPE_DOCUMENT,
                   G_SIGNAL_RUN_LAST,

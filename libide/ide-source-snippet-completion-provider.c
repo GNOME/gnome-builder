@@ -57,7 +57,7 @@ enum {
   LAST_PROP
 };
 
-static GParamSpec *gParamSpecs[LAST_PROP];
+static GParamSpec *properties[LAST_PROP];
 
 GtkSourceCompletionProvider *
 ide_source_snippet_completion_provider_new (IdeSourceView     *source_view,
@@ -85,7 +85,7 @@ ide_source_snippet_completion_provider_set_snippets (IdeSourceSnippetCompletionP
 
   g_clear_object (&provider->snippets);
   provider->snippets = snippets ? g_object_ref (snippets) : NULL;
-  g_object_notify_by_pspec (G_OBJECT (provider), gParamSpecs[PROP_SNIPPETS]);
+  g_object_notify_by_pspec (G_OBJECT (provider), properties[PROP_SNIPPETS]);
 }
 
 static gboolean
@@ -197,28 +197,28 @@ ide_source_snippet_completion_provider_class_init (IdeSourceSnippetCompletionPro
   object_class->get_property = ide_source_snippet_completion_provider_get_property;
   object_class->set_property = ide_source_snippet_completion_provider_set_property;
 
-  gParamSpecs [PROP_ENABLED] =
+  properties [PROP_ENABLED] =
     g_param_spec_boolean ("enabled",
                           "Enabled",
                           "If the provider is enabled.",
                           TRUE,
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs[PROP_SOURCE_VIEW] =
+  properties[PROP_SOURCE_VIEW] =
     g_param_spec_object ("source-view",
                          "Source View",
                          "The source view to insert snippet into.",
                          IDE_TYPE_SOURCE_VIEW,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs[PROP_SNIPPETS] =
+  properties[PROP_SNIPPETS] =
     g_param_spec_object ("snippets",
                          "Snippets",
                          "The snippets to complete with this provider.",
                          IDE_TYPE_SOURCE_SNIPPETS,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 }
 
 static void

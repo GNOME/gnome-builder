@@ -51,7 +51,7 @@ enum {
   PROP_TITLE
 };
 
-static GParamSpec *gParamSpecs [LAST_PROP];
+static GParamSpec *properties [LAST_PROP];
 
 GbDevhelpDocument *
 gb_devhelp_document_new (void)
@@ -92,7 +92,7 @@ gb_devhelp_document_set_uri (GbDevhelpDocument *document,
     {
       g_clear_pointer (&document->uri, g_free);
       document->uri = g_strdup (uri);
-      g_object_notify_by_pspec (G_OBJECT (document), gParamSpecs [PROP_URI]);
+      g_object_notify_by_pspec (G_OBJECT (document), properties [PROP_URI]);
     }
 }
 
@@ -251,14 +251,14 @@ gb_devhelp_document_class_init (GbDevhelpDocumentClass *klass)
   g_object_class_override_property (object_class, PROP_READ_ONLY, "read-only");
   g_object_class_override_property (object_class, PROP_TITLE, "title");
 
-  gParamSpecs [PROP_URI] =
+  properties [PROP_URI] =
     g_param_spec_string ("uri",
                          "URI",
                          "The URI to load.",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 }
 
 static void

@@ -33,7 +33,7 @@ enum {
   LAST_PROP
 };
 
-static GParamSpec *gParamSpecs [LAST_PROP];
+static GParamSpec *properties [LAST_PROP];
 
 static void
 gb_shortcuts_group_get_property (GObject    *object,
@@ -81,14 +81,14 @@ gb_shortcuts_group_class_init (GbShortcutsGroupClass *klass)
   object_class->get_property = gb_shortcuts_group_get_property;
   object_class->set_property = gb_shortcuts_group_set_property;
 
-  gParamSpecs [PROP_TITLE] =
+  properties [PROP_TITLE] =
     g_param_spec_string ("title",
                          "Title",
                          "Title",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 }
 
 static void

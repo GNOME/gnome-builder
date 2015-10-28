@@ -41,7 +41,7 @@ enum {
   LAST_PROP
 };
 
-static GParamSpec *gParamSpecs [LAST_PROP];
+static GParamSpec *properties [LAST_PROP];
 
 static void
 gb_editor_print_operation_dispose (GObject *object)
@@ -166,14 +166,14 @@ gb_editor_print_operation_class_init (GbEditorPrintOperationClass *klass)
   operation_class->draw_page = gb_editor_print_operation_draw_page;
   operation_class->end_print = gb_editor_print_operation_end_print;
 
-  gParamSpecs [PROP_VIEW] =
+  properties [PROP_VIEW] =
     g_param_spec_object ("view",
                          "View",
                          "The source view.",
                          IDE_TYPE_SOURCE_VIEW,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 }
 
 static gboolean

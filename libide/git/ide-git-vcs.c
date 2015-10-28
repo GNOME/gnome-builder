@@ -73,8 +73,8 @@ enum {
   LAST_SIGNAL
 };
 
-static GParamSpec *gParamSpecs [LAST_PROP];
-static guint gSignals [LAST_SIGNAL];
+static GParamSpec *properties [LAST_PROP];
+static guint signals [LAST_SIGNAL];
 
 /**
  * ide_git_vcs_get_repository:
@@ -284,7 +284,7 @@ ide_git_vcs_reload_finish (IdeGitVcs     *self,
   g_return_val_if_fail (IDE_IS_GIT_VCS (self), FALSE);
 
   self->reloading = FALSE;
-  g_signal_emit (self, gSignals [RELOADED], 0, self->change_monitor_repository);
+  g_signal_emit (self, signals [RELOADED], 0, self->change_monitor_repository);
   ret = g_task_propagate_boolean (task, error);
 
   IDE_RETURN (ret);
@@ -383,14 +383,14 @@ ide_git_vcs_class_init (IdeGitVcsClass *klass)
    * You might want to get the #GgitRepository:location property and create your own instance
    * of the repository for threaded operations.
    */
-  gParamSpecs [PROP_REPOSITORY] =
+  properties [PROP_REPOSITORY] =
     g_param_spec_object ("repository",
                          "Repository",
                          "The git repository for the project.",
                          GGIT_TYPE_REPOSITORY,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 
   /**
    * IdeGitVcs::reloaded:
@@ -405,7 +405,7 @@ ide_git_vcs_class_init (IdeGitVcsClass *klass)
    * be used directly except in very specific situations. The gutter change renderer uses this
    * instance in a threaded manner.
    */
-  gSignals [RELOADED] = g_signal_new ("reloaded",
+  signals [RELOADED] = g_signal_new ("reloaded",
                                       G_TYPE_FROM_CLASS (klass),
                                       G_SIGNAL_RUN_LAST,
                                       0,

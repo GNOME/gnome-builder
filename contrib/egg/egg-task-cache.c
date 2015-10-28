@@ -88,7 +88,7 @@ enum {
   LAST_PROP
 };
 
-static GParamSpec *gParamSpecs [LAST_PROP];
+static GParamSpec *properties [LAST_PROP];
 
 static gboolean
 evict_source_check (GSource *source)
@@ -743,43 +743,43 @@ egg_task_cache_class_init (EggTaskCacheClass *klass)
   object_class->finalize = egg_task_cache_finalize;
   object_class->set_property = egg_task_cache_set_property;
 
-  gParamSpecs [PROP_KEY_HASH_FUNC] =
+  properties [PROP_KEY_HASH_FUNC] =
     g_param_spec_pointer ("key-hash-func",
                          "Key Hash Func",
                          "Key Hash Func",
                          (G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_KEY_EQUAL_FUNC] =
+  properties [PROP_KEY_EQUAL_FUNC] =
     g_param_spec_pointer ("key-equal-func",
                          "Key Equal Func",
                          "Key Equal Func",
                          (G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_KEY_COPY_FUNC] =
+  properties [PROP_KEY_COPY_FUNC] =
     g_param_spec_pointer ("key-copy-func",
                          "Key Copy Func",
                          "Key Copy Func",
                          (G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_KEY_DESTROY_FUNC] =
+  properties [PROP_KEY_DESTROY_FUNC] =
     g_param_spec_pointer ("key-destroy-func",
                          "Key Destroy Func",
                          "Key Destroy Func",
                          (G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_POPULATE_CALLBACK] =
+  properties [PROP_POPULATE_CALLBACK] =
     g_param_spec_pointer ("populate-callback",
                          "Populate Callback",
                          "Populate Callback",
                          (G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_POPULATE_CALLBACK_DATA] =
+  properties [PROP_POPULATE_CALLBACK_DATA] =
     g_param_spec_pointer ("populate-callback-data",
                          "Populate Callback Data",
                          "Populate Callback Data",
                          (G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_POPULATE_CALLBACK_DATA_DESTROY] =
+  properties [PROP_POPULATE_CALLBACK_DATA_DESTROY] =
     g_param_spec_pointer ("populate-callback-data-destroy",
                          "Populate Callback Data Destroy",
                          "Populate Callback Data Destroy",
@@ -793,7 +793,7 @@ egg_task_cache_class_init (EggTaskCacheClass *klass)
    *
    * A value of zero indicates no eviction.
    */
-  gParamSpecs [PROP_TIME_TO_LIVE] =
+  properties [PROP_TIME_TO_LIVE] =
     g_param_spec_int64 ("time-to-live",
                         "Time to Live",
                         "The time to live in milliseconds.",
@@ -802,19 +802,19 @@ egg_task_cache_class_init (EggTaskCacheClass *klass)
                         30 * 1000,
                         (G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_VALUE_COPY_FUNC] =
+  properties [PROP_VALUE_COPY_FUNC] =
     g_param_spec_pointer ("value-copy-func",
                          "Value Copy Func",
                          "Value Copy Func",
                          (G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_VALUE_DESTROY_FUNC] =
+  properties [PROP_VALUE_DESTROY_FUNC] =
     g_param_spec_pointer ("value-destroy-func",
                          "Value Destroy Func",
                          "Value Destroy Func",
                          (G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 }
 
 void

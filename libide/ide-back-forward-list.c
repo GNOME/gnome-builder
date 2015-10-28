@@ -61,8 +61,8 @@ enum {
   LAST_SIGNAL
 };
 
-static GParamSpec *gParamSpecs [LAST_PROP];
-static guint       gSignals [LAST_SIGNAL];
+static GParamSpec *properties [LAST_PROP];
+static guint       signals [LAST_SIGNAL];
 
 /**
  * ide_back_forward_list_get_current_item:
@@ -87,7 +87,7 @@ ide_back_forward_list_navigate_to (IdeBackForwardList *self,
   g_return_if_fail (IDE_IS_BACK_FORWARD_LIST (self));
   g_return_if_fail (IDE_IS_BACK_FORWARD_ITEM (item));
 
-  g_signal_emit (self, gSignals [NAVIGATE_TO], 0, item);
+  g_signal_emit (self, signals [NAVIGATE_TO], 0, item);
 }
 
 void
@@ -107,8 +107,8 @@ ide_back_forward_list_go_backward (IdeBackForwardList *self)
       self->current_item = current_item;
       ide_back_forward_list_navigate_to (self, self->current_item);
 
-      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_CAN_GO_BACKWARD]);
-      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_CAN_GO_FORWARD]);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CAN_GO_BACKWARD]);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CAN_GO_FORWARD]);
     }
   else
     g_warning ("Cannot go backward, no more items in queue.");
@@ -131,8 +131,8 @@ ide_back_forward_list_go_forward (IdeBackForwardList *self)
       self->current_item = current_item;
       ide_back_forward_list_navigate_to (self, self->current_item);
 
-      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_CAN_GO_BACKWARD]);
-      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_CAN_GO_FORWARD]);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CAN_GO_BACKWARD]);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CAN_GO_FORWARD]);
     }
   else
     g_warning ("Cannot go forward, no more items in queue.");
@@ -210,8 +210,8 @@ ide_back_forward_list_push (IdeBackForwardList *self,
 
   ide_back_forward_list_prune (self);
 
-  g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_CAN_GO_BACKWARD]);
-  g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_CAN_GO_FORWARD]);
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CAN_GO_BACKWARD]);
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CAN_GO_FORWARD]);
 
   g_return_if_fail (self->forward->length == 0);
 }
@@ -421,30 +421,30 @@ ide_back_forward_list_class_init (IdeBackForwardListClass *klass)
   object_class->dispose = ide_back_forward_list_dispose;
   object_class->get_property = ide_back_forward_list_get_property;
 
-  gParamSpecs [PROP_CAN_GO_BACKWARD] =
+  properties [PROP_CAN_GO_BACKWARD] =
     g_param_spec_boolean ("can-go-backward",
                           "Can Go Backward",
                           "If there are more backward navigation items.",
                           FALSE,
                           (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_CAN_GO_FORWARD] =
+  properties [PROP_CAN_GO_FORWARD] =
     g_param_spec_boolean ("can-go-forward",
                           "Can Go Forward",
                           "If there are more forward navigation items.",
                           FALSE,
                           (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_CURRENT_ITEM] =
+  properties [PROP_CURRENT_ITEM] =
     g_param_spec_object ("current-item",
                          "Current Item",
                          "The current navigation item.",
                          IDE_TYPE_BACK_FORWARD_ITEM,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 
-  gSignals [NAVIGATE_TO] =
+  signals [NAVIGATE_TO] =
     g_signal_new ("navigate-to",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,

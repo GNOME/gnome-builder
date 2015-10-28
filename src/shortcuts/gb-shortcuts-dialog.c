@@ -80,8 +80,8 @@ enum {
   LAST_PROP
 };
 
-static GParamSpec *gParamSpecs [LAST_PROP];
-static guint gSignals [LAST_SIGNAL];
+static GParamSpec *properties [LAST_PROP];
+static guint signals [LAST_SIGNAL];
 
 static void
 gb_shortcuts_dialog_add_view (GbShortcutsDialog *self,
@@ -794,16 +794,16 @@ gb_shortcuts_dialog_class_init (GbShortcutsDialogClass *klass)
 
   klass->close = gb_shortcuts_dialog_real_close;
 
-  gParamSpecs [PROP_VIEW_NAME] =
+  properties [PROP_VIEW_NAME] =
     g_param_spec_string ("view-name",
                          "ViewName",
                          "ViewName",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 
-  gSignals [CLOSE] = g_signal_new ("close",
+  signals [CLOSE] = g_signal_new ("close",
                                    G_TYPE_FROM_CLASS (klass),
                                    G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                                    G_STRUCT_OFFSET (GbShortcutsDialogClass, close),

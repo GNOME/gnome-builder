@@ -40,7 +40,7 @@ enum {
   LAST_PROP
 };
 
-static GParamSpec *gParamSpecs [LAST_PROP];
+static GParamSpec *properties [LAST_PROP];
 
 IdeSearchResult *
 ide_search_result_new (IdeSearchProvider *provider,
@@ -274,14 +274,14 @@ ide_search_result_class_init (IdeSearchResultClass *klass)
   object_class->get_property = ide_search_result_get_property;
   object_class->set_property = ide_search_result_set_property;
 
-  gParamSpecs [PROP_PROVIDER] =
+  properties [PROP_PROVIDER] =
     g_param_spec_object ("provider",
                          "Provider",
                          "The Search Provider",
                          IDE_TYPE_SEARCH_PROVIDER,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_TITLE] =
+  properties [PROP_TITLE] =
     g_param_spec_string ("title",
                          "Title",
                          "The title of the search result.",
@@ -290,7 +290,7 @@ ide_search_result_class_init (IdeSearchResultClass *klass)
                           G_PARAM_CONSTRUCT_ONLY |
                           G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_SUBTITLE] =
+  properties [PROP_SUBTITLE] =
     g_param_spec_string ("subtitle",
                          "Subtitle",
                          "The subtitle of the search result.",
@@ -299,7 +299,7 @@ ide_search_result_class_init (IdeSearchResultClass *klass)
                           G_PARAM_CONSTRUCT_ONLY |
                           G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_SCORE] =
+  properties [PROP_SCORE] =
     g_param_spec_float ("score",
                         "Score",
                         "The score of the search result.",
@@ -310,7 +310,7 @@ ide_search_result_class_init (IdeSearchResultClass *klass)
                          G_PARAM_CONSTRUCT_ONLY |
                          G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 }
 
 static void

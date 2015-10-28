@@ -48,7 +48,7 @@ enum {
   LAST_SIGNAL
 };
 
-static guint gSignals [LAST_SIGNAL];
+static guint signals [LAST_SIGNAL];
 
 static gboolean
 ide_source_map_do_conceal (gpointer data)
@@ -62,7 +62,7 @@ ide_source_map_do_conceal (gpointer data)
   if (self->show_map == TRUE)
     {
       self->show_map = FALSE;
-      g_signal_emit (self, gSignals [HIDE_MAP], 0);
+      g_signal_emit (self, signals [HIDE_MAP], 0);
     }
 
   return G_SOURCE_REMOVE;
@@ -80,7 +80,7 @@ ide_source_map__enter_notify_event (IdeSourceMap     *self,
   if (self->show_map == FALSE)
     {
       self->show_map = TRUE;
-      g_signal_emit (self, gSignals [SHOW_MAP], 0);
+      g_signal_emit (self, signals [SHOW_MAP], 0);
     }
 
   return GDK_EVENT_PROPAGATE;
@@ -101,7 +101,7 @@ ide_source_map_show_map_and_queue_fade (IdeSourceMap *self)
   if (self->show_map == FALSE)
     {
       self->show_map = TRUE;
-      g_signal_emit (self, gSignals [SHOW_MAP], 0);
+      g_signal_emit (self, signals [SHOW_MAP], 0);
     }
 }
 
@@ -235,7 +235,7 @@ ide_source_map_class_init (IdeSourceMapClass *klass)
 
   widget_class->destroy = ide_source_map_destroy;
 
-  gSignals [HIDE_MAP] =
+  signals [HIDE_MAP] =
     g_signal_new ("hide-map",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
@@ -245,7 +245,7 @@ ide_source_map_class_init (IdeSourceMapClass *klass)
                   G_TYPE_NONE,
                   0);
 
-  gSignals [SHOW_MAP] =
+  signals [SHOW_MAP] =
     g_signal_new ("show-map",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,

@@ -70,7 +70,7 @@ enum {
   LAST_PROP
 };
 
-static GParamSpec *gParamSpecs [LAST_PROP];
+static GParamSpec *properties [LAST_PROP];
 
 /**
  * ide_project_info_get_doap:
@@ -94,7 +94,7 @@ ide_project_info_set_doap (IdeProjectInfo *self,
   g_return_if_fail (!doap || IDE_IS_DOAP (doap));
 
   if (g_set_object (&self->doap, doap))
-    g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_DOAP]);
+    g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_DOAP]);
 }
 
 /**
@@ -118,7 +118,7 @@ ide_project_info_set_languages (IdeProjectInfo  *self,
 
   g_strfreev (self->languages);
   self->languages = g_strdupv (languages);
-  g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_LANGUAGES]);
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_LANGUAGES]);
 }
 
 gint
@@ -138,7 +138,7 @@ ide_project_info_set_priority (IdeProjectInfo *self,
   if (self->priority != priority)
     {
       self->priority = priority;
-      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_PRIORITY]);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_PRIORITY]);
     }
 }
 
@@ -208,7 +208,7 @@ ide_project_info_set_description (IdeProjectInfo *self,
     {
       g_free (self->description);
       self->description = g_strdup (description);
-      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_DESCRIPTION]);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_DESCRIPTION]);
     }
 }
 
@@ -230,7 +230,7 @@ ide_project_info_set_name (IdeProjectInfo *self,
     {
       g_free (self->name);
       self->name = g_strdup (name);
-      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_NAME]);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_NAME]);
     }
 }
 
@@ -242,7 +242,7 @@ ide_project_info_set_directory (IdeProjectInfo *self,
   g_return_if_fail (!directory || G_IS_FILE (directory));
 
   if (g_set_object (&self->directory, directory))
-    g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_DIRECTORY]);
+    g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_DIRECTORY]);
 }
 
 void
@@ -253,7 +253,7 @@ ide_project_info_set_file (IdeProjectInfo *self,
   g_return_if_fail (!file || G_IS_FILE (file));
 
   if (g_set_object (&self->file, file))
-    g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_FILE]);
+    g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_FILE]);
 }
 
 void
@@ -266,7 +266,7 @@ ide_project_info_set_last_modified_at (IdeProjectInfo *self,
     {
       g_clear_pointer (&self->last_modified_at, g_date_time_unref);
       self->last_modified_at = last_modified_at ? g_date_time_ref (last_modified_at) : NULL;
-      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_LAST_MODIFIED_AT]);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_LAST_MODIFIED_AT]);
     }
 }
 
@@ -289,7 +289,7 @@ ide_project_info_set_is_recent (IdeProjectInfo *self,
   if (self->is_recent != is_recent)
     {
       self->is_recent = is_recent;
-      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_IS_RECENT]);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_IS_RECENT]);
     }
 }
 
@@ -418,63 +418,63 @@ ide_project_info_class_init (IdeProjectInfoClass *klass)
   object_class->get_property = ide_project_info_get_property;
   object_class->set_property = ide_project_info_set_property;
 
-  gParamSpecs [PROP_DESCRIPTION] =
+  properties [PROP_DESCRIPTION] =
     g_param_spec_string ("description",
                          "Description",
                          "The project description.",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_NAME] =
+  properties [PROP_NAME] =
     g_param_spec_string ("name",
                          "Name",
                          "The project name.",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_DIRECTORY] =
+  properties [PROP_DIRECTORY] =
     g_param_spec_object ("directory",
                          "Directory",
                          "The project directory.",
                          G_TYPE_FILE,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_DOAP] =
+  properties [PROP_DOAP] =
     g_param_spec_object ("doap",
                          "DOAP",
                          "A DOAP describing the project.",
                          IDE_TYPE_DOAP,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_FILE] =
+  properties [PROP_FILE] =
     g_param_spec_object ("file",
                          "File",
                          "The toplevel project file.",
                          G_TYPE_FILE,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_IS_RECENT] =
+  properties [PROP_IS_RECENT] =
     g_param_spec_boolean ("is-recent",
                           "Is Recent",
                           "Is Recent",
                           FALSE,
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_LANGUAGES] =
+  properties [PROP_LANGUAGES] =
     g_param_spec_boxed ("languages",
                         "Languages",
                         "Languages",
                         G_TYPE_STRV,
                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_LAST_MODIFIED_AT] =
+  properties [PROP_LAST_MODIFIED_AT] =
     g_param_spec_boxed ("last-modified-at",
                         "Last Modified At",
                         "Last Modified At",
                         G_TYPE_DATE_TIME,
                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_PRIORITY] =
+  properties [PROP_PRIORITY] =
     g_param_spec_int ("priority",
                       "Priority",
                       "The priority of the project information type.",
@@ -483,7 +483,7 @@ ide_project_info_class_init (IdeProjectInfoClass *klass)
                       0,
                       (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 }
 
 static void

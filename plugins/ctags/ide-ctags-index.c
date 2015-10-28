@@ -58,7 +58,7 @@ EGG_DEFINE_COUNTER (instances, "IdeCtagsIndex", "Instances", "Number of IdeCtags
 EGG_DEFINE_COUNTER (index_entries, "IdeCtagsIndex", "N Entries", "Number of entries in indexes.")
 EGG_DEFINE_COUNTER (heap_size, "IdeCtagsIndex", "Heap Size", "Size of index string heaps.")
 
-static GParamSpec *gParamSpecs [LAST_PROP];
+static GParamSpec *properties [LAST_PROP];
 
 static gint
 ide_ctags_index_entry_compare_keyword (gconstpointer a,
@@ -283,7 +283,7 @@ ide_ctags_index_set_file (IdeCtagsIndex *self,
   g_assert (!file || G_IS_FILE (file));
 
   if (g_set_object (&self->file, file))
-    g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_FILE]);
+    g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_FILE]);
 }
 
 static void
@@ -296,7 +296,7 @@ ide_ctags_index_set_path_root (IdeCtagsIndex *self,
     {
       g_free (self->path_root);
       self->path_root = g_strdup (path_root);
-      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_PATH_ROOT]);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_PATH_ROOT]);
     }
 }
 
@@ -387,14 +387,14 @@ ide_ctags_index_class_init (IdeCtagsIndexClass *klass)
   object_class->get_property = ide_ctags_index_get_property;
   object_class->set_property = ide_ctags_index_set_property;
 
-  gParamSpecs [PROP_FILE] =
+  properties [PROP_FILE] =
     g_param_spec_object ("file",
                          "File",
                          "The file containing the ctags data.",
                          G_TYPE_FILE,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY |G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_MTIME] =
+  properties [PROP_MTIME] =
     g_param_spec_uint64 ("mtime",
                          "Mtime",
                          "Mtime",
@@ -403,14 +403,14 @@ ide_ctags_index_class_init (IdeCtagsIndexClass *klass)
                          0,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_PATH_ROOT] =
+  properties [PROP_PATH_ROOT] =
     g_param_spec_string ("path-root",
                          "Path Root",
                          "The root path to use when resolving relative paths.",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 }
 
 static void

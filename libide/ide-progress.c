@@ -41,7 +41,7 @@ enum {
   LAST_PROP
 };
 
-static GParamSpec *gParamSpecs [LAST_PROP];
+static GParamSpec *properties [LAST_PROP];
 
 gboolean
 ide_progress_get_completed (IdeProgress *self)
@@ -60,7 +60,7 @@ ide_progress_set_completed (IdeProgress *self,
   if (self->completed != completed)
     {
       self->completed = completed;
-      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_COMPLETED]);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_COMPLETED]);
     }
 }
 
@@ -85,7 +85,7 @@ ide_progress_set_fraction (IdeProgress *self,
       self->fraction = fraction;
       if (fraction == 1.0)
         ide_progress_set_completed (self, TRUE);
-      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_FRACTION]);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_FRACTION]);
     }
 }
 
@@ -107,7 +107,7 @@ ide_progress_set_message (IdeProgress *self,
     {
       g_free (self->message);
       self->message = g_strdup (message);
-      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_MESSAGE]);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_MESSAGE]);
     }
 }
 
@@ -205,14 +205,14 @@ ide_progress_class_init (IdeProgressClass *klass)
   object_class->get_property = ide_progress_get_property;
   object_class->set_property = ide_progress_set_property;
 
-  gParamSpecs [PROP_COMPLETED] =
+  properties [PROP_COMPLETED] =
     g_param_spec_boolean ("completed",
                           "Completed",
                           "If the progress has completed.",
                           FALSE,
                           (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_FRACTION] =
+  properties [PROP_FRACTION] =
     g_param_spec_double ("fraction",
                          "Fraction",
                          "The fraction of the progress.",
@@ -221,14 +221,14 @@ ide_progress_class_init (IdeProgressClass *klass)
                          0.0,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_MESSAGE] =
+  properties [PROP_MESSAGE] =
     g_param_spec_string ("message",
                          "Message",
                          "A short message for the progress.",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 }
 
 static void

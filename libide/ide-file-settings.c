@@ -67,7 +67,7 @@ enum {
   LAST_PROP
 };
 
-static GParamSpec *gParamSpecs [LAST_PROP];
+static GParamSpec *properties [LAST_PROP];
 
 #define IDE_FILE_SETTINGS_PROPERTY(_1, name, _2, ret_type, _pname, _3, _4, _5) \
 ret_type ide_file_settings_get_##name (IdeFileSettings *self) \
@@ -107,8 +107,8 @@ void ide_file_settings_set_##name (IdeFileSettings *self, \
   g_return_if_fail (IDE_IS_FILE_SETTINGS (self)); \
   assign_stmt \
   priv->name##_set = TRUE; \
-  g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_##NAME]); \
-  g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_##NAME##_SET]); \
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_##NAME]); \
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_##NAME##_SET]); \
 }
 # include "ide-file-settings.defs"
 #undef IDE_FILE_SETTINGS_PROPERTY
@@ -120,7 +120,7 @@ void ide_file_settings_set_##name##_set (IdeFileSettings *self, \
   IdeFileSettingsPrivate *priv = ide_file_settings_get_instance_private (self); \
   g_return_if_fail (IDE_IS_FILE_SETTINGS (self)); \
   priv->name##_set = !!name##_set; \
-  g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_##NAME##_SET]); \
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_##NAME##_SET]); \
 }
 # include "ide-file-settings.defs"
 #undef IDE_FILE_SETTINGS_PROPERTY
@@ -160,7 +160,7 @@ ide_file_settings_set_file (IdeFileSettings *self,
   if (priv->file != file)
     {
       if (ide_set_weak_pointer (&priv->file, file))
-        g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_FILE]);
+        g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_FILE]);
     }
 }
 
@@ -285,14 +285,14 @@ ide_file_settings_class_init (IdeFileSettingsClass *klass)
   object_class->get_property = ide_file_settings_get_property;
   object_class->set_property = ide_file_settings_set_property;
 
-  gParamSpecs [PROP_FILE] =
+  properties [PROP_FILE] =
     g_param_spec_object ("file",
                          "File",
                          "The IdeFile the settings represent.",
                          IDE_TYPE_FILE,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_SETTLED] =
+  properties [PROP_SETTLED] =
     g_param_spec_boolean ("settled",
                           "Settled",
                           "If the file settings implementations have settled.",
@@ -300,12 +300,12 @@ ide_file_settings_class_init (IdeFileSettingsClass *klass)
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
 #define IDE_FILE_SETTINGS_PROPERTY(NAME, name, _1, _2, _pname, pspec, _4, _5) \
-  gParamSpecs [PROP_##NAME] = pspec;
+  properties [PROP_##NAME] = pspec;
 # include "ide-file-settings.defs"
 #undef IDE_FILE_SETTINGS_PROPERTY
 
 #define IDE_FILE_SETTINGS_PROPERTY(NAME, name, _1, _2, _pname, pspec, _4, _5) \
-  gParamSpecs [PROP_##NAME##_SET] = \
+  properties [PROP_##NAME##_SET] = \
     g_param_spec_boolean (_pname"-set", \
                           _pname"-set", \
                           "If IdeFileSettings:"_pname" is set.", \
@@ -314,7 +314,7 @@ ide_file_settings_class_init (IdeFileSettingsClass *klass)
 # include "ide-file-settings.defs"
 #undef IDE_FILE_SETTINGS_PROPERTY
 
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 }
 
 static void
@@ -385,7 +385,7 @@ ide_file_settings__init_cb (GObject      *object,
     }
 
   if (--priv->unsettled_count == 0)
-    g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_SETTLED]);
+    g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SETTLED]);
 }
 
 IdeFileSettings *
@@ -457,7 +457,7 @@ ide_file_settings_new (IdeFile *file)
     }
 
   if (--priv->unsettled_count == 0)
-    g_object_notify_by_pspec (G_OBJECT (ret), gParamSpecs [PROP_SETTLED]);
+    g_object_notify_by_pspec (G_OBJECT (ret), properties [PROP_SETTLED]);
 
   return ret;
 }

@@ -40,7 +40,7 @@ enum {
   LAST_PROP
 };
 
-static GParamSpec *gParamSpecs [LAST_PROP];
+static GParamSpec *properties [LAST_PROP];
 
 static void
 gb_shortcuts_gesture_set_icon_name (GbShortcutsGesture *self,
@@ -146,42 +146,42 @@ gb_shortcuts_gesture_class_init (GbShortcutsGestureClass *klass)
   object_class->get_property = gb_shortcuts_gesture_get_property;
   object_class->set_property = gb_shortcuts_gesture_set_property;
 
-  gParamSpecs [PROP_DESC_SIZE_GROUP] =
+  properties [PROP_DESC_SIZE_GROUP] =
     g_param_spec_object ("desc-size-group",
                          "Description Size Group",
                          "Description Size Group",
                          GTK_TYPE_SIZE_GROUP,
                          (G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_ICON_NAME] =
+  properties [PROP_ICON_NAME] =
     g_param_spec_string ("icon-name",
                          "Icon Name",
                          "Icon Name",
                          NULL,
                          (G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_ICON_SIZE_GROUP] =
+  properties [PROP_ICON_SIZE_GROUP] =
     g_param_spec_object ("icon-size-group",
                          "Icon Size Group",
                          "Icon Size Group",
                          GTK_TYPE_SIZE_GROUP,
                          (G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_SUBTITLE] =
+  properties [PROP_SUBTITLE] =
     g_param_spec_string ("subtitle",
                          "Subtitle",
                          "Subtitle",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_TITLE] =
+  properties [PROP_TITLE] =
     g_param_spec_string ("title",
                          "Title",
                          "Title",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 }
 
 static void

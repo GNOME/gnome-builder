@@ -97,11 +97,11 @@ enum {
 /*
  * Globals.
  */
-static AlphaFunc   gAlphaFuncs[EGG_ANIMATION_LAST];
-static gboolean    gDebug;
-static GParamSpec *gParamSpecs[LAST_PROP];
-static guint       gSignals[LAST_SIGNAL];
-static TweenFunc   gTweenFuncs[LAST_FUNDAMENTAL];
+static AlphaFunc   alpha_funcs[EGG_ANIMATION_LAST];
+static gboolean    debug;
+static GParamSpec *properties[LAST_PROP];
+static guint       signals[LAST_SIGNAL];
+static TweenFunc   tween_funcs[LAST_FUNDAMENTAL];
 
 
 /*
@@ -403,8 +403,8 @@ egg_animation_get_value_at_offset (EggAnimation *animation,
        * If you hit the following assertion, you need to add a function
        * to create the new value at the given offset.
        */
-      g_assert (gTweenFuncs[value->g_type]);
-      gTweenFuncs[value->g_type](&tween->begin, &tween->end, value, offset);
+      g_assert (tween_funcs[value->g_type]);
+      tween_funcs[value->g_type](&tween->begin, &tween->end, value, offset);
     }
   else
     {
@@ -464,7 +464,7 @@ egg_animation_tick (EggAnimation *animation,
   if (offset == animation->last_offset)
     return offset < 1.0;
 
-  alpha = gAlphaFuncs[animation->mode](offset);
+  alpha = alpha_funcs[animation->mode](offset);
 
   /*
    * Update property values.
@@ -494,7 +494,7 @@ egg_animation_tick (EggAnimation *animation,
   /*
    * Notify anyone interested in the tick signal.
    */
-  g_signal_emit (animation, gSignals[TICK], 0);
+  g_signal_emit (animation, signals[TICK], 0);
 
   /*
    * Flush any outstanding events to the graphics server (in the case of X).
@@ -829,7 +829,7 @@ egg_animation_class_init (EggAnimationClass *klass)
 {
   GObjectClass *object_class;
 
-  gDebug = !!g_getenv ("EGG_ANIMATION_DEBUG");
+  debug = !!g_getenv ("EGG_ANIMATION_DEBUG");
 
   object_class = G_OBJECT_CLASS (klass);
   object_class->dispose = egg_animation_dispose;
@@ -842,7 +842,7 @@ egg_animation_class_init (EggAnimationClass *klass)
    * The "duration" property is the total number of milliseconds that the
    * animation should run before being completed.
    */
-  gParamSpecs[PROP_DURATION] =
+  properties[PROP_DURATION] =
     g_param_spec_uint ("duration",
                        "Duration",
                        "The duration of the animation",
@@ -853,7 +853,7 @@ egg_animation_class_init (EggAnimationClass *klass)
                         G_PARAM_CONSTRUCT_ONLY |
                         G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs[PROP_FRAME_CLOCK] =
+  properties[PROP_FRAME_CLOCK] =
     g_param_spec_object ("frame-clock",
                          "Frame Clock",
                          "An optional frame-clock to synchronize with.",
@@ -869,7 +869,7 @@ egg_animation_class_init (EggAnimationClass *klass)
    * determine the offset within the animation based on the current
    * offset in the animations duration.
    */
-  gParamSpecs[PROP_MODE] =
+  properties[PROP_MODE] =
     g_param_spec_enum ("mode",
                        "Mode",
                        "The animation mode",
@@ -885,7 +885,7 @@ egg_animation_class_init (EggAnimationClass *klass)
    * The "target" property is the #GObject that should have it's properties
    * animated.
    */
-  gParamSpecs[PROP_TARGET] =
+  properties[PROP_TARGET] =
     g_param_spec_object ("target",
                          "Target",
                          "The target of the animation",
@@ -894,14 +894,14 @@ egg_animation_class_init (EggAnimationClass *klass)
                           G_PARAM_CONSTRUCT_ONLY |
                           G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 
   /**
    * EggAnimation::tick:
    *
    * The "tick" signal is emitted on each frame in the animation.
    */
-  gSignals[TICK] = g_signal_new ("tick",
+  signals[TICK] = g_signal_new ("tick",
                                  EGG_TYPE_ANIMATION,
                                  G_SIGNAL_RUN_FIRST,
                                  0,
@@ -910,7 +910,7 @@ egg_animation_class_init (EggAnimationClass *klass)
                                  0);
 
 #define SET_ALPHA(_T, _t) \
-  gAlphaFuncs[EGG_ANIMATION_ ## _T] = egg_animation_alpha_ ## _t
+  alpha_funcs[EGG_ANIMATION_ ## _T] = egg_animation_alpha_ ## _t
 
   SET_ALPHA (LINEAR, linear);
   SET_ALPHA (EASE_IN_QUAD, ease_in_quad);
@@ -922,7 +922,7 @@ egg_animation_class_init (EggAnimationClass *klass)
 #define SET_TWEEN(_T, _t) \
   G_STMT_START { \
     guint idx = G_TYPE_ ## _T; \
-    gTweenFuncs[idx] = tween_ ## _t; \
+    tween_funcs[idx] = tween_ ## _t; \
   } G_STMT_END
 
   SET_TWEEN (INT, int);

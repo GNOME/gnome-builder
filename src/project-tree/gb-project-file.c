@@ -39,7 +39,7 @@ enum {
   LAST_PROP
 };
 
-static GParamSpec *gParamSpecs [LAST_PROP];
+static GParamSpec *properties [LAST_PROP];
 
 gint
 gb_project_file_compare (GbProjectFile *a,
@@ -154,35 +154,35 @@ gb_project_file_class_init (GbProjectFileClass *klass)
   object_class->get_property = gb_project_file_get_property;
   object_class->set_property = gb_project_file_set_property;
 
-  gParamSpecs [PROP_DISPLAY_NAME] =
+  properties [PROP_DISPLAY_NAME] =
     g_param_spec_string ("display-name",
                          "Display Name",
                          "Display Name",
                          NULL,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_ICON_NAME] =
+  properties [PROP_ICON_NAME] =
     g_param_spec_string ("icon-name",
                          "Icon Name",
                          "Icon Name",
                          NULL,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_FILE] =
+  properties [PROP_FILE] =
     g_param_spec_object ("file",
                          "File",
                          "File",
                          G_TYPE_FILE,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_FILE_INFO] =
+  properties [PROP_FILE_INFO] =
     g_param_spec_object ("file-info",
                          "File Info",
                          "File Info",
                          G_TYPE_FILE_INFO,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 }
 
 static void
@@ -219,7 +219,7 @@ gb_project_file_set_file (GbProjectFile *self,
   g_return_if_fail (!file || G_IS_FILE (file));
 
   if (g_set_object (&self->file, file))
-    g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_FILE]);
+    g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_FILE]);
 }
 
 GFileInfo *
@@ -238,7 +238,7 @@ gb_project_file_set_file_info (GbProjectFile *self,
   g_return_if_fail (!file_info || G_IS_FILE_INFO (file_info));
 
   if (g_set_object (&self->file_info, file_info))
-    g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_FILE_INFO]);
+    g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_FILE_INFO]);
 }
 
 gboolean

@@ -122,8 +122,8 @@ enum {
 
 static void ide_buffer_queue_diagnose (IdeBuffer *self);
 
-static GParamSpec *gParamSpecs [LAST_PROP];
-static guint gSignals [LAST_SIGNAL];
+static GParamSpec *properties [LAST_PROP];
+static guint signals [LAST_SIGNAL];
 
 gboolean
 ide_buffer_get_has_diagnostics (IdeBuffer *self)
@@ -158,7 +158,7 @@ ide_buffer_emit_cursor_moved (IdeBuffer *self)
 
   mark = gtk_text_buffer_get_insert (GTK_TEXT_BUFFER (self));
   gtk_text_buffer_get_iter_at_mark (GTK_TEXT_BUFFER (self), &iter, mark);
-  g_signal_emit (self, gSignals [CURSOR_MOVED], 0, &iter);
+  g_signal_emit (self, signals [CURSOR_MOVED], 0, &iter);
 }
 
 static void
@@ -441,8 +441,8 @@ ide_buffer_set_diagnostics (IdeBuffer      *self,
       if (diagnostics)
         ide_buffer_update_diagnostics (self, diagnostics);
 
-      g_signal_emit (self, gSignals [LINE_FLAGS_CHANGED], 0);
-      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_HAS_DIAGNOSTICS]);
+      g_signal_emit (self, signals [LINE_FLAGS_CHANGED], 0);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_HAS_DIAGNOSTICS]);
     }
 }
 
@@ -485,7 +485,7 @@ ide_buffer__diagnostician_diagnose_cb (GObject      *object,
   g_assert (IDE_IS_BUFFER (self));
 
   priv->in_diagnose = FALSE;
-  g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_BUSY]);
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_BUSY]);
 
   diagnostics = ide_diagnostician_diagnose_finish (diagnostician, result, &error);
 
@@ -518,7 +518,7 @@ ide_buffer__diagnose_timeout_cb (gpointer user_data)
     {
       priv->diagnostics_dirty = FALSE;
       priv->in_diagnose = TRUE;
-      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_BUSY]);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_BUSY]);
 
       ide_buffer_sync_to_unsaved_files (self);
       ide_diagnostician_diagnose_async (priv->diagnostician,
@@ -575,7 +575,7 @@ ide_buffer__change_monitor_changed_cb (IdeBuffer              *self,
   g_assert (IDE_IS_BUFFER (self));
   g_assert (IDE_IS_BUFFER_CHANGE_MONITOR (monitor));
 
-  g_signal_emit (self, gSignals [LINE_FLAGS_CHANGED], 0);
+  g_signal_emit (self, signals [LINE_FLAGS_CHANGED], 0);
 
   IDE_EXIT;
 }
@@ -1150,21 +1150,21 @@ ide_buffer_class_init (IdeBufferClass *klass)
   text_buffer_class->insert_text = ide_buffer_insert_text;
   text_buffer_class->mark_set = ide_buffer_mark_set;
 
-  gParamSpecs [PROP_BUSY] =
+  properties [PROP_BUSY] =
     g_param_spec_boolean ("busy",
                          "Busy",
                          "If the buffer is performing background work.",
                          FALSE,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_CHANGED_ON_VOLUME] =
+  properties [PROP_CHANGED_ON_VOLUME] =
     g_param_spec_boolean ("changed-on-volume",
                          "Changed on Volume",
                          "If the file has changed on disk and the buffer is not in sync.",
                          FALSE,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_CONTEXT] =
+  properties [PROP_CONTEXT] =
     g_param_spec_object ("context",
                          "Context",
                          "The IdeContext for the buffer.",
@@ -1173,49 +1173,49 @@ ide_buffer_class_init (IdeBufferClass *klass)
                           G_PARAM_CONSTRUCT_ONLY |
                           G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_FILE] =
+  properties [PROP_FILE] =
     g_param_spec_object ("file",
                          "File",
                          "The file represented by the buffer.",
                          IDE_TYPE_FILE,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_HAS_DIAGNOSTICS] =
+  properties [PROP_HAS_DIAGNOSTICS] =
     g_param_spec_boolean ("has-diagnostics",
                          "Has Diagnostics",
                          "If the buffer contains diagnostic messages.",
                          FALSE,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_HIGHLIGHT_DIAGNOSTICS] =
+  properties [PROP_HIGHLIGHT_DIAGNOSTICS] =
     g_param_spec_boolean ("highlight-diagnostics",
                           "Highlight Diagnostics",
                           "If diagnostic warnings and errors should be highlighted.",
                           FALSE,
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_READ_ONLY] =
+  properties [PROP_READ_ONLY] =
     g_param_spec_boolean ("read-only",
                           "Read Only",
                           "If the underlying file is read only.",
                           FALSE,
                           (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_STYLE_SCHEME_NAME] =
+  properties [PROP_STYLE_SCHEME_NAME] =
     g_param_spec_string ("style-scheme-name",
                          "Style Scheme Name",
                          "Style Scheme Name",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_TITLE] =
+  properties [PROP_TITLE] =
     g_param_spec_string ("title",
                          "Title",
                          "The title of the buffer.",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 
   /**
    * IdeBuffer::cursor-moved:
@@ -1226,7 +1226,7 @@ ide_buffer_class_init (IdeBufferClass *klass)
    * want to attach to this signal to update the location of the insert mark in
    * the display.
    */
-  gSignals [CURSOR_MOVED] =
+  signals [CURSOR_MOVED] =
     g_signal_new ("cursor-moved",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
@@ -1242,7 +1242,7 @@ ide_buffer_class_init (IdeBufferClass *klass)
    * This signal is emitted when the calculated line flags have changed. This occurs when
    * diagnostics and line changes have been recalculated.
    */
-  gSignals [LINE_FLAGS_CHANGED] =
+  signals [LINE_FLAGS_CHANGED] =
     g_signal_new ("line-flags-changed",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
@@ -1256,7 +1256,7 @@ ide_buffer_class_init (IdeBufferClass *klass)
    *
    * This signal is emitted when the buffer manager has completed loading the file.
    */
-  gSignals [LOADED] =
+  signals [LOADED] =
     g_signal_new ("loaded",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
@@ -1270,7 +1270,7 @@ ide_buffer_class_init (IdeBufferClass *klass)
    *
    * This signal is emitted when the buffer manager has completed saving the file.
    */
-  gSignals [SAVED] =
+  signals [SAVED] =
     g_signal_new ("saved",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
@@ -1331,7 +1331,7 @@ ide_buffer_update_title (IdeBuffer *self)
 
   g_clear_pointer (&priv->title, g_free);
   priv->title = g_strdup (title);
-  g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_TITLE]);
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_TITLE]);
 }
 
 /**
@@ -1380,8 +1380,8 @@ ide_buffer_set_file (IdeBuffer *self,
       if (file != NULL)
         ide_buffer__file_notify_file (self, NULL, file);
       ide_buffer_update_title (self);
-      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_FILE]);
-      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_TITLE]);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_FILE]);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_TITLE]);
     }
 }
 
@@ -1492,7 +1492,7 @@ ide_buffer_set_highlight_diagnostics (IdeBuffer *self,
         ide_buffer_clear_diagnostics (self);
       else
         ide_buffer_queue_diagnose (self);
-      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_HIGHLIGHT_DIAGNOSTICS]);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_HIGHLIGHT_DIAGNOSTICS]);
     }
 }
 
@@ -1839,9 +1839,9 @@ _ide_buffer_set_loading (IdeBuffer *self,
           /*
            * Force the views to reload language state.
            */
-          g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_FILE]);
+          g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_FILE]);
 
-          g_signal_emit (self, gSignals [LOADED], 0);
+          g_signal_emit (self, signals [LOADED], 0);
         }
     }
 }
@@ -1869,7 +1869,7 @@ _ide_buffer_set_read_only (IdeBuffer *self,
   if (read_only != priv->read_only)
     {
       priv->read_only = read_only;
-      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_READ_ONLY]);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_READ_ONLY]);
     }
 }
 
@@ -1908,7 +1908,7 @@ _ide_buffer_set_changed_on_volume (IdeBuffer *self,
   if (changed_on_volume != priv->changed_on_volume)
     {
       priv->changed_on_volume = changed_on_volume;
-      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_CHANGED_ON_VOLUME]);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CHANGED_ON_VOLUME]);
     }
 
   IDE_EXIT;

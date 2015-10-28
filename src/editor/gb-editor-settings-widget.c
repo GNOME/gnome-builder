@@ -49,7 +49,7 @@ enum {
   LAST_PROP
 };
 
-static GParamSpec *gParamSpecs [LAST_PROP];
+static GParamSpec *properties [LAST_PROP];
 
 const gchar *
 gb_editor_settings_widget_get_language (GbEditorSettingsWidget *widget)
@@ -174,7 +174,7 @@ gb_editor_settings_widget_set_language (GbEditorSettingsWidget *widget,
       sm = g_object_new (IDE_TYPE_SOURCE_SNIPPETS_MANAGER, NULL);
       ide_source_snippets_manager_load_async (sm, NULL, load_snippets_cb, g_object_ref (widget));
 
-      g_object_notify_by_pspec (G_OBJECT (widget), gParamSpecs [PROP_LANGUAGE]);
+      g_object_notify_by_pspec (G_OBJECT (widget), properties [PROP_LANGUAGE]);
     }
 }
 
@@ -322,14 +322,14 @@ gb_editor_settings_widget_class_init (GbEditorSettingsWidgetClass *klass)
   GB_WIDGET_CLASS_BIND (klass, GbEditorSettingsWidget, tab_width);
   GB_WIDGET_CLASS_BIND (klass, GbEditorSettingsWidget, trim_trailing_whitespace);
 
-  gParamSpecs [PROP_LANGUAGE] =
+  properties [PROP_LANGUAGE] =
     g_param_spec_string ("language",
                          "Language",
                          "The language to change the settings for.",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 }
 
 static void

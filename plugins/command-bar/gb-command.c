@@ -25,7 +25,7 @@ enum {
   LAST_SIGNAL
 };
 
-static guint gSignals [LAST_SIGNAL];
+static guint signals [LAST_SIGNAL];
 
 GbCommand *
 gb_command_new (void)
@@ -44,7 +44,7 @@ gb_command_execute (GbCommand *command)
 {
   GbCommandResult *ret = NULL;
   g_return_val_if_fail (GB_IS_COMMAND (command), NULL);
-  g_signal_emit (command, gSignals [EXECUTE], 0, &ret);
+  g_signal_emit (command, signals [EXECUTE], 0, &ret);
   return ret;
 }
 
@@ -53,7 +53,7 @@ gb_command_class_init (GbCommandClass *klass)
 {
   klass->execute = gb_command_real_execute;
 
-  gSignals [EXECUTE] =
+  signals [EXECUTE] =
     g_signal_new ("execute",
                   GB_TYPE_COMMAND,
                   G_SIGNAL_RUN_LAST,

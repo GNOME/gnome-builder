@@ -276,7 +276,7 @@ gb_view_stack_actions_show_list (GSimpleAction *action,
   g_signal_emit_by_name (self->views_button, "activate");
 }
 
-static const GActionEntry gGbViewStackActions[] = {
+static const GActionEntry gbViewStackActions[] = {
   { "close",         gb_view_stack_actions_close },
   { "go-forward",    gb_view_stack_actions_go_forward },
   { "go-backward",   gb_view_stack_actions_go_backward },
@@ -298,7 +298,7 @@ gb_view_stack_actions_init (GbViewStack *self)
   g_assert (GB_IS_VIEW_STACK (self));
 
   actions = g_simple_action_group_new ();
-  g_action_map_add_action_entries (G_ACTION_MAP (actions), gGbViewStackActions,
-                                   G_N_ELEMENTS (gGbViewStackActions), self);
+  g_action_map_add_action_entries (G_ACTION_MAP (actions), gbViewStackActions,
+                                   G_N_ELEMENTS (gbViewStackActions), self);
   gtk_widget_insert_action_group (GTK_WIDGET (self), "view-stack", G_ACTION_GROUP (actions));
 }

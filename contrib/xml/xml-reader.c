@@ -59,8 +59,8 @@ enum {
 G_DEFINE_QUARK (xml_reader_error, xml_reader_error)
 G_DEFINE_TYPE (XmlReader, xml_reader, G_TYPE_OBJECT)
 
-static GParamSpec *gParamSpecs [LAST_PROP];
-static guint gSignals [LAST_SIGNAL];
+static GParamSpec *properties [LAST_PROP];
+static guint signals [LAST_SIGNAL];
 
 #define XML_NODE_TYPE_ELEMENT      1
 #define XML_NODE_TYPE_END_ELEMENT 15
@@ -175,23 +175,23 @@ xml_reader_class_init (XmlReaderClass *klass)
   object_class->get_property = xml_reader_get_property;
   object_class->set_property = xml_reader_set_property;
 
-  gParamSpecs [PROP_ENCODING] =
+  properties [PROP_ENCODING] =
     g_param_spec_string ("encoding",
                          "Encoding",
                          "Encoding",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_URI] =
+  properties [PROP_URI] =
     g_param_spec_string ("uri",
                          "URI",
                          "URI",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 
-  gSignals [ERROR] =
+  signals [ERROR] =
     g_signal_new ("error",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
@@ -223,7 +223,7 @@ xml_reader_error_cb (void                    *arg,
 
   g_assert (XML_IS_READER (reader));
 
-  g_signal_emit (reader, gSignals [ERROR], 0, msg);
+  g_signal_emit (reader, signals [ERROR], 0, msg);
 }
 
 gboolean

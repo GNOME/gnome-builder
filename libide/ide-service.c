@@ -28,7 +28,7 @@ enum {
   LAST_SIGNAL
 };
 
-static guint gSignals [LAST_SIGNAL];
+static guint signals [LAST_SIGNAL];
 
 const gchar *
 ide_service_get_name (IdeService *service)
@@ -61,7 +61,7 @@ _ide_service_emit_context_loaded (IdeService *service)
 {
   g_return_if_fail (IDE_IS_SERVICE (service));
 
-  g_signal_emit (service, gSignals [CONTEXT_LOADED], 0);
+  g_signal_emit (service, signals [CONTEXT_LOADED], 0);
 }
 
 static const gchar *
@@ -82,7 +82,7 @@ ide_service_default_init (IdeServiceInterface *iface)
                          IDE_TYPE_CONTEXT,
                          (G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS)));
 
-  gSignals [CONTEXT_LOADED] =
+  signals [CONTEXT_LOADED] =
     g_signal_new ("context-loaded",
                   G_TYPE_FROM_INTERFACE (iface),
                   G_SIGNAL_RUN_LAST,

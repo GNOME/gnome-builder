@@ -27,7 +27,7 @@ enum {
   LAST_SIGNAL
 };
 
-static guint gSignals [LAST_SIGNAL];
+static guint signals [LAST_SIGNAL];
 
 static void
 ide_project_miner_default_init (IdeProjectMinerInterface *iface)
@@ -41,7 +41,7 @@ ide_project_miner_default_init (IdeProjectMinerInterface *iface)
    * The signal will always be emitted from the primary thread (Gtk+) as long as
    * ide_project_miner_emit_discovered() was used to emit the signal.
    */
-  gSignals [DISCOVERED] = g_signal_new ("discovered",
+  signals [DISCOVERED] = g_signal_new ("discovered",
                                         G_TYPE_FROM_INTERFACE (iface),
                                         G_SIGNAL_RUN_LAST,
                                         G_STRUCT_OFFSET (IdeProjectMinerInterface, discovered),
@@ -58,7 +58,7 @@ emit_discovered_cb (gpointer user_data)
   g_autoptr(IdeProjectMiner) miner = data[0];
   g_autoptr(IdeProjectInfo) project_info = data[1];
 
-  g_signal_emit (miner, gSignals [DISCOVERED], 0, project_info);
+  g_signal_emit (miner, signals [DISCOVERED], 0, project_info);
 
   g_free (data);
 

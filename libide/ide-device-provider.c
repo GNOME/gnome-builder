@@ -29,7 +29,7 @@ enum {
   LAST_SIGNAL
 };
 
-static guint gSignals [LAST_SIGNAL];
+static guint signals [LAST_SIGNAL];
 
 static GPtrArray *
 default_get_devices (IdeDeviceProvider *self)
@@ -56,7 +56,7 @@ ide_device_provider_default_init (IdeDeviceProviderInterface *iface)
                                                             IDE_TYPE_CONTEXT,
                                                             (G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS)));
 
-  gSignals [DEVICE_ADDED] =
+  signals [DEVICE_ADDED] =
     g_signal_new ("device-added",
                   IDE_TYPE_DEVICE_PROVIDER,
                   G_SIGNAL_RUN_LAST,
@@ -66,7 +66,7 @@ ide_device_provider_default_init (IdeDeviceProviderInterface *iface)
                   1,
                   IDE_TYPE_DEVICE);
 
-  gSignals [DEVICE_REMOVED] =
+  signals [DEVICE_REMOVED] =
     g_signal_new ("device-removed",
                   IDE_TYPE_DEVICE_PROVIDER,
                   G_SIGNAL_RUN_LAST,
@@ -112,7 +112,7 @@ ide_device_provider_emit_device_added (IdeDeviceProvider *provider,
   g_return_if_fail (IDE_IS_DEVICE_PROVIDER (provider));
   g_return_if_fail (IDE_IS_DEVICE (device));
 
-  g_signal_emit (provider, gSignals [DEVICE_ADDED], 0, device);
+  g_signal_emit (provider, signals [DEVICE_ADDED], 0, device);
 }
 
 void
@@ -122,5 +122,5 @@ ide_device_provider_emit_device_removed (IdeDeviceProvider *provider,
   g_return_if_fail (IDE_IS_DEVICE_PROVIDER (provider));
   g_return_if_fail (IDE_IS_DEVICE (device));
 
-  g_signal_emit (provider, gSignals [DEVICE_REMOVED], 0, device);
+  g_signal_emit (provider, signals [DEVICE_REMOVED], 0, device);
 }

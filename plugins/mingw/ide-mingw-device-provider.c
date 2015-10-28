@@ -48,7 +48,7 @@ enum {
   LAST_PROP
 };
 
-static GParamSpec *gParamSpecs [LAST_PROP];
+static GParamSpec *properties [LAST_PROP];
 
 static GPtrArray *
 ide_mingw_device_provider_get_devices (IdeDeviceProvider *provider)
@@ -145,7 +145,7 @@ load_cb (GObject      *object,
     }
 
   self->settled = TRUE;
-  g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_SETTLED]);
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SETTLED]);
 }
 
 static void
@@ -188,14 +188,14 @@ ide_mingw_device_provider_class_init (IdeMingwDeviceProviderClass *klass)
   object_class->constructed = ide_mingw_device_provider_constructed;
   object_class->get_property = ide_mingw_device_provider_get_property;
 
-  gParamSpecs [PROP_SETTLED] =
+  properties [PROP_SETTLED] =
     g_param_spec_boolean ("settled",
                           "Settled",
                           "Settled",
                           FALSE,
                           (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 }
 
 static void

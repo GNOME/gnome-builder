@@ -43,7 +43,7 @@ enum {
   LAST_PROP
 };
 
-static GParamSpec *gParamSpecs [LAST_PROP];
+static GParamSpec *properties [LAST_PROP];
 
 GgitRemoteCallbacks *
 ide_git_remote_callbacks_new (void)
@@ -104,7 +104,7 @@ ide_git_remote_callbacks__notify_fraction_cb (gpointer data)
                                   NULL);
   ide_set_weak_pointer (&self->animation, animation);
 
-  g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_FRACTION]);
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_FRACTION]);
 
   return G_SOURCE_REMOVE;
 }
@@ -207,7 +207,7 @@ ide_git_remote_callbacks_class_init (IdeGitRemoteCallbacksClass *klass)
   callbacks_class->transfer_progress = ide_git_remote_callbacks_real_transfer_progress;
   callbacks_class->credentials = ide_git_remote_callbacks_real_credentials;
 
-  gParamSpecs [PROP_FRACTION] =
+  properties [PROP_FRACTION] =
     g_param_spec_double ("fraction",
                          "Fraction",
                          "A fraction containing the operation progress.",
@@ -216,7 +216,7 @@ ide_git_remote_callbacks_class_init (IdeGitRemoteCallbacksClass *klass)
                          0.0,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 }
 
 static void

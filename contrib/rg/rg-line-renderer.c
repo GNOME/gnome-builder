@@ -45,7 +45,7 @@ enum {
   LAST_PROP
 };
 
-static GParamSpec *gParamSpecs [LAST_PROP];
+static GParamSpec *properties [LAST_PROP];
 
 RgLineRenderer *
 rg_line_renderer_new (void)
@@ -245,7 +245,7 @@ rg_line_renderer_class_init (RgLineRendererClass *klass)
   object_class->get_property = rg_line_renderer_get_property;
   object_class->set_property = rg_line_renderer_set_property;
 
-  gParamSpecs [PROP_COLUMN] =
+  properties [PROP_COLUMN] =
     g_param_spec_uint ("column",
                        "Column",
                        "Column",
@@ -253,7 +253,7 @@ rg_line_renderer_class_init (RgLineRendererClass *klass)
                        0,
                        (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_LINE_WIDTH] =
+  properties [PROP_LINE_WIDTH] =
     g_param_spec_double ("line-width",
                          "Line Width",
                          "Line Width",
@@ -261,21 +261,21 @@ rg_line_renderer_class_init (RgLineRendererClass *klass)
                          1.0,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_STROKE_COLOR] =
+  properties [PROP_STROKE_COLOR] =
     g_param_spec_string ("stroke-color",
                          "Stroke Color",
                          "Stroke Color",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_STROKE_COLOR_RGBA] =
+  properties [PROP_STROKE_COLOR_RGBA] =
     g_param_spec_boxed ("stroke-color-rgba",
                         "Stroke Color RGBA",
                         "Stroke Color RGBA",
                         GDK_TYPE_RGBA,
                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 }
 
 static void
@@ -304,7 +304,7 @@ rg_line_renderer_set_stroke_color_rgba (RgLineRenderer *self,
   if (!gdk_rgba_equal (rgba, &self->stroke_color))
     {
       self->stroke_color = *rgba;
-      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_STROKE_COLOR_RGBA]);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_STROKE_COLOR_RGBA]);
     }
 }
 

@@ -64,7 +64,7 @@ enum {
   LAST_PROP
 };
 
-static GParamSpec *gParamSpecs [LAST_PROP];
+static GParamSpec *properties [LAST_PROP];
 
 /**
  * gb_tree_node_new:
@@ -294,7 +294,7 @@ gb_tree_node_set_icon_name (GbTreeNode  *node,
   g_return_if_fail (GB_IS_TREE_NODE (node));
 
   node->icon_name = g_quark_from_string (icon_name);
-  g_object_notify_by_pspec (G_OBJECT (node), gParamSpecs [PROP_ICON_NAME]);
+  g_object_notify_by_pspec (G_OBJECT (node), properties [PROP_ICON_NAME]);
 }
 
 /**
@@ -313,7 +313,7 @@ gb_tree_node_set_item (GbTreeNode *node,
   g_return_if_fail (!item || G_IS_OBJECT (item));
 
   if (g_set_object (&node->item, item))
-    g_object_notify_by_pspec (G_OBJECT (node), gParamSpecs [PROP_ITEM]);
+    g_object_notify_by_pspec (G_OBJECT (node), properties [PROP_ITEM]);
 }
 
 void
@@ -366,7 +366,7 @@ gb_tree_node_set_text (GbTreeNode  *node,
     {
       g_free (node->text);
       node->text = g_strdup (text);
-      g_object_notify_by_pspec (G_OBJECT (node), gParamSpecs [PROP_TEXT]);
+      g_object_notify_by_pspec (G_OBJECT (node), properties [PROP_TEXT]);
     }
 }
 
@@ -389,7 +389,7 @@ gb_tree_node_set_use_markup (GbTreeNode *self,
   if (self->use_markup != use_markup)
     {
       self->use_markup = use_markup;
-      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_USE_MARKUP]);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_USE_MARKUP]);
     }
 }
 
@@ -638,7 +638,7 @@ gb_tree_node_class_init (GbTreeNodeClass *klass)
    * and simply hide the arrow if there were in fact no children (upon
    * expansion).
    */
-  gParamSpecs [PROP_CHILDREN_POSSIBLE] =
+  properties [PROP_CHILDREN_POSSIBLE] =
     g_param_spec_boolean ("children-possible",
                           "Children Possible",
                           "Allows for lazy creation of children nodes.",
@@ -650,7 +650,7 @@ gb_tree_node_class_init (GbTreeNodeClass *klass)
    *
    * An icon-name to display on the row.
    */
-  gParamSpecs[PROP_ICON_NAME] =
+  properties[PROP_ICON_NAME] =
     g_param_spec_string ("icon-name",
                          "Icon Name",
                          "The icon name to display.",
@@ -662,7 +662,7 @@ gb_tree_node_class_init (GbTreeNodeClass *klass)
    *
    * An optional #GObject to associate with the node.
    */
-  gParamSpecs[PROP_ITEM] =
+  properties[PROP_ITEM] =
     g_param_spec_object ("item",
                          "Item",
                          "Optional object to associate with node.",
@@ -674,7 +674,7 @@ gb_tree_node_class_init (GbTreeNodeClass *klass)
    *
    * The parent of the node.
    */
-  gParamSpecs [PROP_PARENT] =
+  properties [PROP_PARENT] =
     g_param_spec_object ("parent",
                          "Parent",
                          "The parent node.",
@@ -686,7 +686,7 @@ gb_tree_node_class_init (GbTreeNodeClass *klass)
    *
    * The tree the node belongs to.
    */
-  gParamSpecs [PROP_TREE] =
+  properties [PROP_TREE] =
     g_param_spec_object ("tree",
                          "Tree",
                          "The GbTree the node belongs to.",
@@ -698,7 +698,7 @@ gb_tree_node_class_init (GbTreeNodeClass *klass)
    *
    * Text to display on the tree node.
    */
-  gParamSpecs [PROP_TEXT] =
+  properties [PROP_TEXT] =
     g_param_spec_string ("text",
                          "Text",
                          "The text of the node.",
@@ -710,21 +710,21 @@ gb_tree_node_class_init (GbTreeNodeClass *klass)
    *
    * If the "text" property includes #GMarkup.
    */
-  gParamSpecs [PROP_USE_MARKUP] =
+  properties [PROP_USE_MARKUP] =
     g_param_spec_boolean ("use-markup",
                           "Use Markup",
                           "If text should be translated as markup.",
                           FALSE,
                           G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
-  gParamSpecs [PROP_USE_DIM_LABEL] =
+  properties [PROP_USE_DIM_LABEL] =
     g_param_spec_boolean ("use-dim-label",
                           "Use Dim Label",
                           "If text should be rendered with a dim label.",
                           FALSE,
                           G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 }
 
 static void
@@ -965,6 +965,6 @@ gb_tree_node_set_use_dim_label (GbTreeNode *self,
   if (use_dim_label != self->use_dim_label)
     {
       self->use_dim_label = use_dim_label;
-      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_USE_DIM_LABEL]);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_USE_DIM_LABEL]);
     }
 }

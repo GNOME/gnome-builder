@@ -28,9 +28,9 @@
 #define SCHEMA_ID "org.gnome.builder.editor.language"
 #define PATH_BASE "/org/gnome/builder/editor/language/"
 
-static gboolean  gInitialized;
-static gboolean  gInitializing;
-static GList    *gTasks;
+static gboolean  initialized;
+static gboolean  initializing;
+static GList    *tasks;
 
 G_LOCK_DEFINE (lock);
 
@@ -320,11 +320,11 @@ ide_language_defaults_init_worker (GTask        *task,
 
     G_LOCK (lock);
 
-    gInitializing = FALSE;
-    gInitialized = TRUE;
+    initializing = FALSE;
+    initialized = TRUE;
 
-    list = gTasks;
-    gTasks = NULL;
+    list = tasks;
+    tasks = NULL;
 
     G_UNLOCK (lock);
 
@@ -346,11 +346,11 @@ failure:
 
     G_LOCK (lock);
 
-    gInitializing = FALSE;
-    gInitialized = TRUE;
+    initializing = FALSE;
+    initialized = TRUE;
 
-    list = gTasks;
-    gTasks = NULL;
+    list = tasks;
+    tasks = NULL;
 
     G_UNLOCK (lock);
 
@@ -384,17 +384,17 @@ ide_language_defaults_init_async (GCancellable        *cancellable,
 
   G_LOCK (lock);
 
-  if (gInitialized)
+  if (initialized)
     {
       g_task_return_boolean (task, TRUE);
     }
-  else if (gInitializing)
+  else if (initializing)
     {
-      gTasks = g_list_prepend (gTasks, g_object_ref (task));
+      tasks = g_list_prepend (tasks, g_object_ref (task));
     }
   else
     {
-      gInitializing = TRUE;
+      initializing = TRUE;
       g_task_run_in_thread (task, ide_language_defaults_init_worker);
     }
 

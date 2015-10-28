@@ -35,7 +35,7 @@ enum
 
 G_DEFINE_TYPE (GbDevhelpSearchResult, gb_devhelp_search_result, IDE_TYPE_SEARCH_RESULT)
 
-static GParamSpec *gParamSpecs [LAST_PROP];
+static GParamSpec *properties [LAST_PROP];
 
 static void
 gb_devhelp_search_result_finalize (GObject *object)
@@ -94,14 +94,14 @@ gb_devhelp_search_result_class_init (GbDevhelpSearchResultClass *klass)
   object_class->get_property = gb_devhelp_search_result_get_property;
   object_class->set_property = gb_devhelp_search_result_set_property;
 
-  gParamSpecs [PROP_URI] =
+  properties [PROP_URI] =
     g_param_spec_string ("uri",
                          "URI",
                          "The URI to the Devhelp document.",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 }
 
 static void

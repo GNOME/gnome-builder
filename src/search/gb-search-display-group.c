@@ -53,9 +53,9 @@ enum {
   LAST_SIGNAL
 };
 
-static GQuark      gQuarkRow;
-static GParamSpec *gParamSpecs [LAST_PROP];
-static guint       gSignals [LAST_SIGNAL];
+static GQuark      quarkRow;
+static GParamSpec *properties [LAST_PROP];
+static guint       signals [LAST_SIGNAL];
 
 static void
 gb_search_display_group_foreach_cb (GtkWidget *widget,
@@ -131,7 +131,7 @@ gb_search_display_group_create_row (IdeSearchResult *result)
 
   provider = ide_search_result_get_provider (result);
   row = ide_search_provider_create_row (provider, result);
-  g_object_set_qdata (G_OBJECT (result), gQuarkRow, row);
+  g_object_set_qdata (G_OBJECT (result), quarkRow, row);
 
   return row;
 }
@@ -145,7 +145,7 @@ gb_search_display_group_remove_result (GbSearchDisplayGroup *self,
   g_return_if_fail (GB_IS_SEARCH_DISPLAY_GROUP (self));
   g_return_if_fail (IDE_IS_SEARCH_RESULT (result));
 
-  row = g_object_get_qdata (G_OBJECT (result), gQuarkRow);
+  row = g_object_get_qdata (G_OBJECT (result), quarkRow);
 
   if (row)
     gtk_container_remove (GTK_CONTAINER (self->rows), row);
@@ -258,7 +258,7 @@ gb_search_display_group_row_activated (GbSearchDisplayGroup *self,
 
   result = gb_search_display_row_get_result (GB_SEARCH_DISPLAY_ROW (row));
   if (result)
-    g_signal_emit (self, gSignals [RESULT_ACTIVATED], 0, row, result);
+    g_signal_emit (self, signals [RESULT_ACTIVATED], 0, row, result);
 }
 
 static void
@@ -282,7 +282,7 @@ gb_search_display_group_row_selected (GbSearchDisplayGroup *self,
 
           result = gb_search_display_row_get_result (GB_SEARCH_DISPLAY_ROW (child));
           if (result)
-            g_signal_emit (self, gSignals [RESULT_SELECTED], 0, result);
+            g_signal_emit (self, signals [RESULT_SELECTED], 0, result);
         }
     }
 }
@@ -417,23 +417,23 @@ gb_search_display_group_class_init (GbSearchDisplayGroupClass *klass)
   object_class->get_property = gb_search_display_group_get_property;
   object_class->set_property = gb_search_display_group_set_property;
 
-  gParamSpecs [PROP_PROVIDER] =
+  properties [PROP_PROVIDER] =
     g_param_spec_object ("provider",
                          "Provider",
                          "The search provider",
                          IDE_TYPE_SEARCH_PROVIDER,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_SIZE_GROUP] =
+  properties [PROP_SIZE_GROUP] =
     g_param_spec_object ("size-group",
                          "Size Group",
                          "The size group for the label.",
                          GTK_TYPE_SIZE_GROUP,
                          (G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 
-  gSignals [RESULT_ACTIVATED] =
+  signals [RESULT_ACTIVATED] =
     g_signal_new_class_handler ("result-activated",
                                 G_TYPE_FROM_CLASS (klass),
                                 G_SIGNAL_RUN_LAST,
@@ -444,7 +444,7 @@ gb_search_display_group_class_init (GbSearchDisplayGroupClass *klass)
                                 GTK_TYPE_WIDGET,
                                 IDE_TYPE_SEARCH_RESULT);
 
-  gSignals [RESULT_SELECTED] =
+  signals [RESULT_SELECTED] =
     g_signal_new ("result-selected",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
@@ -460,7 +460,7 @@ gb_search_display_group_class_init (GbSearchDisplayGroupClass *klass)
   GB_WIDGET_CLASS_BIND (widget_class, GbSearchDisplayGroup, label);
   GB_WIDGET_CLASS_BIND (widget_class, GbSearchDisplayGroup, rows);
 
-  gQuarkRow = g_quark_from_static_string ("GB_SEARCH_DISPLAY_ROW");
+  quarkRow = g_quark_from_static_string ("GB_SEARCH_DISPLAY_ROW");
 }
 
 static void

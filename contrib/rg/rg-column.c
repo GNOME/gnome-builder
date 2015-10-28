@@ -40,7 +40,7 @@ enum {
   LAST_PROP
 };
 
-static GParamSpec *gParamSpecs [LAST_PROP];
+static GParamSpec *properties [LAST_PROP];
 
 RgColumn *
 rg_column_new (const gchar *name,
@@ -70,7 +70,7 @@ rg_column_set_name (RgColumn    *self,
     {
       g_free (self->name);
       self->name = g_strdup (name);
-      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_NAME]);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_NAME]);
     }
 }
 
@@ -281,21 +281,21 @@ rg_column_class_init (RgColumnClass *klass)
   object_class->get_property = rg_column_get_property;
   object_class->set_property = rg_column_set_property;
 
-  gParamSpecs [PROP_NAME] =
+  properties [PROP_NAME] =
     g_param_spec_string ("name",
                          "Name",
                          "The name of the column",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_VALUE_TYPE] =
+  properties [PROP_VALUE_TYPE] =
     g_param_spec_gtype ("value-type",
                         "Value Type",
                         "Value Type",
                         G_TYPE_NONE,
                         (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 }
 
 static void

@@ -116,8 +116,8 @@ static void register_auto_save   (IdeBufferManager *self,
 static void unregister_auto_save (IdeBufferManager *self,
                                   IdeBuffer        *buffer);
 
-static GParamSpec *gParamSpecs [LAST_PROP];
-static guint gSignals [LAST_SIGNAL];
+static GParamSpec *properties [LAST_PROP];
+static guint signals [LAST_SIGNAL];
 
 static void
 save_state_free (gpointer data)
@@ -190,7 +190,7 @@ ide_buffer_manager_set_auto_save_timeout (IdeBufferManager *self,
     {
       self->auto_save_timeout = auto_save_timeout;
       g_object_notify_by_pspec (G_OBJECT (self),
-                                gParamSpecs [PROP_AUTO_SAVE_TIMEOUT]);
+                                properties [PROP_AUTO_SAVE_TIMEOUT]);
     }
 }
 
@@ -248,7 +248,7 @@ ide_buffer_manager_set_auto_save (IdeBufferManager *self,
         }
 
       g_object_notify_by_pspec (G_OBJECT (self),
-                                gParamSpecs [PROP_AUTO_SAVE]);
+                                properties [PROP_AUTO_SAVE]);
     }
 }
 
@@ -283,13 +283,13 @@ ide_buffer_manager_set_focus_buffer (IdeBufferManager *self,
     {
       /* notify that we left the previous buffer */
       if (previous)
-        g_signal_emit (self, gSignals [BUFFER_FOCUS_LEAVE], 0, previous);
+        g_signal_emit (self, signals [BUFFER_FOCUS_LEAVE], 0, previous);
 
       /* notify of the new buffer, but check for reentrancy */
       if (buffer && (buffer == self->focus_buffer))
-        g_signal_emit (self, gSignals [BUFFER_FOCUS_ENTER], 0, buffer);
+        g_signal_emit (self, signals [BUFFER_FOCUS_ENTER], 0, buffer);
 
-      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_FOCUS_BUFFER]);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_FOCUS_BUFFER]);
     }
 }
 
@@ -550,7 +550,7 @@ emit_signal:
   if (!_ide_context_is_restoring (context))
     ide_buffer_manager_set_focus_buffer (self, state->buffer);
 
-  g_signal_emit (self, gSignals [BUFFER_LOADED], 0, state->buffer);
+  g_signal_emit (self, signals [BUFFER_LOADED], 0, state->buffer);
 
   g_task_return_pointer (task, g_object_ref (state->buffer), g_object_unref);
 }
@@ -622,7 +622,7 @@ ide_buffer_manager__load_file_query_info_cb (GObject      *object,
       _ide_buffer_set_mtime (state->buffer, &tv);
     }
 
-  g_signal_emit (self, gSignals [LOAD_BUFFER], 0, state->buffer);
+  g_signal_emit (self, signals [LOAD_BUFFER], 0, state->buffer);
 
   gtk_source_file_loader_load_async (state->loader,
                                      G_PRIORITY_DEFAULT,
@@ -733,7 +733,7 @@ ide_buffer_manager_load_file_async (IdeBufferManager     *self,
                                   "fraction", 1.0,
                                   NULL);
       g_task_return_pointer (task, g_object_ref (buffer), g_object_unref);
-      g_signal_emit (self, gSignals [LOAD_BUFFER], 0, buffer);
+      g_signal_emit (self, signals [LOAD_BUFFER], 0, buffer);
       ide_buffer_manager_set_focus_buffer (self, buffer);
       IDE_EXIT;
     }
@@ -753,7 +753,7 @@ ide_buffer_manager_load_file_async (IdeBufferManager     *self,
        * Allow application to specify the buffer instance which may be a
        * decendent of IdeBuffer.
        */
-      g_signal_emit (self, gSignals [CREATE_BUFFER], 0, file, &state->buffer);
+      g_signal_emit (self, signals [CREATE_BUFFER], 0, file, &state->buffer);
 
       if ((state->buffer != NULL) && !IDE_IS_BUFFER (state->buffer))
         {
@@ -890,7 +890,7 @@ ide_buffer_manager_save_file__save_cb (GObject      *object,
   ide_unsaved_files_remove (unsaved_files, gfile);
 
   /* Notify signal handlers that the file is saved */
-  g_signal_emit (self, gSignals [BUFFER_SAVED], 0, state->buffer);
+  g_signal_emit (self, signals [BUFFER_SAVED], 0, state->buffer);
   g_signal_emit_by_name (state->buffer, "saved");
 
   /* Reload the mtime for the buffer */
@@ -1049,7 +1049,7 @@ ide_buffer_manager_save_file_async  (IdeBufferManager     *self,
 
   g_task_set_task_data (task, state, save_state_free);
 
-  g_signal_emit (self, gSignals [SAVE_BUFFER], 0, buffer);
+  g_signal_emit (self, signals [SAVE_BUFFER], 0, buffer);
 
   if (progress)
     *progress = g_object_ref (state->progress);
@@ -1260,14 +1260,14 @@ ide_buffer_manager_class_init (IdeBufferManagerClass *klass)
   object_class->get_property = ide_buffer_manager_get_property;
   object_class->set_property = ide_buffer_manager_set_property;
 
-  gParamSpecs [PROP_AUTO_SAVE] =
+  properties [PROP_AUTO_SAVE] =
     g_param_spec_boolean ("auto-save",
                           "Auto Save",
                           "If the documents should auto save after a configured timeout.",
                           TRUE,
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_AUTO_SAVE_TIMEOUT] =
+  properties [PROP_AUTO_SAVE_TIMEOUT] =
     g_param_spec_uint ("auto-save-timeout",
                        "Auto Save Timeout",
                        "The number of seconds after modification before auto saving.",
@@ -1276,14 +1276,14 @@ ide_buffer_manager_class_init (IdeBufferManagerClass *klass)
                        AUTO_SAVE_TIMEOUT_DEFAULT,
                        (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_FOCUS_BUFFER] =
+  properties [PROP_FOCUS_BUFFER] =
     g_param_spec_object ("focus-buffer",
                          "Focused Buffer",
                          "The currently focused buffer.",
                          IDE_TYPE_BUFFER,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 
   /**
    * IdeBufferManager::create-buffer:
@@ -1299,7 +1299,7 @@ ide_buffer_manager_class_init (IdeBufferManagerClass *klass)
    *
    * Returns: (transfer full) (nullable): An #IdeBuffer or %NULL.
    */
-  gSignals [CREATE_BUFFER] = g_signal_new ("create-buffer",
+  signals [CREATE_BUFFER] = g_signal_new ("create-buffer",
                                            G_TYPE_FROM_CLASS (klass),
                                            G_SIGNAL_RUN_LAST,
                                            0,
@@ -1317,7 +1317,7 @@ ide_buffer_manager_class_init (IdeBufferManagerClass *klass)
    * This signal is emitted when a request has been made to save a buffer. Connect to this signal
    * if you'd like to perform mutation of the buffer before it is persisted to storage.
    */
-  gSignals [SAVE_BUFFER] = g_signal_new ("save-buffer",
+  signals [SAVE_BUFFER] = g_signal_new ("save-buffer",
                                          G_TYPE_FROM_CLASS (klass),
                                          G_SIGNAL_RUN_LAST,
                                          0,
@@ -1335,7 +1335,7 @@ ide_buffer_manager_class_init (IdeBufferManagerClass *klass)
    * this signal if you want to know when the modifications have successfully been written to
    * storage.
    */
-  gSignals [BUFFER_SAVED] = g_signal_new ("buffer-saved",
+  signals [BUFFER_SAVED] = g_signal_new ("buffer-saved",
                                           G_TYPE_FROM_CLASS (klass),
                                           G_SIGNAL_RUN_LAST,
                                           0,
@@ -1352,7 +1352,7 @@ ide_buffer_manager_class_init (IdeBufferManagerClass *klass)
    * This signal is emitted when a request has been made to load a buffer from storage. You might
    * connect to this signal to be notified when loading of a buffer has begun.
    */
-  gSignals [LOAD_BUFFER] = g_signal_new ("load-buffer",
+  signals [LOAD_BUFFER] = g_signal_new ("load-buffer",
                                          G_TYPE_FROM_CLASS (klass),
                                          G_SIGNAL_RUN_LAST,
                                          0,
@@ -1369,7 +1369,7 @@ ide_buffer_manager_class_init (IdeBufferManagerClass *klass)
    * This signal is emitted when a buffer has been successfully loaded. You might connect to this
    * signal to be notified when a buffer has completed loading.
    */
-  gSignals [BUFFER_LOADED] =
+  signals [BUFFER_LOADED] =
     g_signal_new_class_handler ("buffer-loaded",
                                 G_TYPE_FROM_CLASS (klass),
                                 G_SIGNAL_RUN_LAST,
@@ -1387,7 +1387,7 @@ ide_buffer_manager_class_init (IdeBufferManagerClass *klass)
    * This signal is emitted when a view for @buffer has received focus. You might connect to this
    * signal when you want to perform an operation while a buffer is in focus.
    */
-  gSignals [BUFFER_FOCUS_ENTER] = g_signal_new ("buffer-focus-enter",
+  signals [BUFFER_FOCUS_ENTER] = g_signal_new ("buffer-focus-enter",
                                                 G_TYPE_FROM_CLASS (klass),
                                                 G_SIGNAL_RUN_LAST,
                                                 0,
@@ -1404,7 +1404,7 @@ ide_buffer_manager_class_init (IdeBufferManagerClass *klass)
    * This signal is emitted when the focus has left the view containing @buffer. You might connect
    * to this signal to stop any work you were performing while the buffer was focused.
    */
-  gSignals [BUFFER_FOCUS_LEAVE] = g_signal_new ("buffer-focus-leave",
+  signals [BUFFER_FOCUS_LEAVE] = g_signal_new ("buffer-focus-leave",
                                                 G_TYPE_FROM_CLASS (klass),
                                                 G_SIGNAL_RUN_LAST,
                                                 0,
@@ -1643,10 +1643,10 @@ ide_buffer_manager_create_temporary_buffer (IdeBufferManager *self)
                        "temporary-id", doc_seq,
                        NULL);
 
-  g_signal_emit (self, gSignals [CREATE_BUFFER], 0, file, &buffer);
-  g_signal_emit (self, gSignals [LOAD_BUFFER], 0, buffer);
+  g_signal_emit (self, signals [CREATE_BUFFER], 0, file, &buffer);
+  g_signal_emit (self, signals [LOAD_BUFFER], 0, buffer);
   ide_buffer_manager_add_buffer (self, buffer);
-  g_signal_emit (self, gSignals [BUFFER_LOADED], 0, buffer);
+  g_signal_emit (self, signals [BUFFER_LOADED], 0, buffer);
 
   return buffer;
 }

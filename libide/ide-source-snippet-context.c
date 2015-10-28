@@ -61,8 +61,8 @@ enum {
 
 typedef gchar *(*InputFilter) (const gchar *input);
 
-static GHashTable *gFilters;
-static guint gSignals[LAST_SIGNAL];
+static GHashTable *filters;
+static guint signals[LAST_SIGNAL];
 
 IdeSourceSnippetContext *
 ide_source_snippet_context_new (void)
@@ -389,7 +389,7 @@ apply_filter (gchar       *input,
   InputFilter filter_func;
   gchar *tmp;
 
-  filter_func = g_hash_table_lookup (gFilters, filter);
+  filter_func = g_hash_table_lookup (filters, filter);
   if (filter_func)
     {
       tmp = input;
@@ -598,7 +598,7 @@ void
 ide_source_snippet_context_emit_changed (IdeSourceSnippetContext *context)
 {
   g_return_if_fail (IDE_IS_SOURCE_SNIPPET_CONTEXT (context));
-  g_signal_emit (context, gSignals[CHANGED], 0);
+  g_signal_emit (context, signals[CHANGED], 0);
 }
 
 static gchar *
@@ -645,7 +645,7 @@ ide_source_snippet_context_class_init (IdeSourceSnippetContextClass *klass)
 
   object_class->finalize = ide_source_snippet_context_finalize;
 
-  gSignals[CHANGED] = g_signal_new ("changed",
+  signals[CHANGED] = g_signal_new ("changed",
                                     IDE_TYPE_SOURCE_SNIPPET_CONTEXT,
                                     G_SIGNAL_RUN_FIRST,
                                     0,
@@ -653,18 +653,18 @@ ide_source_snippet_context_class_init (IdeSourceSnippetContextClass *klass)
                                     G_TYPE_NONE,
                                     0);
 
-  gFilters = g_hash_table_new (g_str_hash, g_str_equal);
-  g_hash_table_insert (gFilters, (gpointer) "lower", filter_lower);
-  g_hash_table_insert (gFilters, (gpointer) "upper", filter_upper);
-  g_hash_table_insert (gFilters, (gpointer) "capitalize", filter_capitalize);
-  g_hash_table_insert (gFilters, (gpointer) "html", filter_html);
-  g_hash_table_insert (gFilters, (gpointer) "camelize", filter_camelize);
-  g_hash_table_insert (gFilters, (gpointer) "functify", filter_functify);
-  g_hash_table_insert (gFilters, (gpointer) "namespace", filter_namespace);
-  g_hash_table_insert (gFilters, (gpointer) "class", filter_class);
-  g_hash_table_insert (gFilters, (gpointer) "space", filter_space);
-  g_hash_table_insert (gFilters, (gpointer) "stripsuffix", filter_stripsuffix);
-  g_hash_table_insert (gFilters, (gpointer) "instance", filter_instance);
+  filters = g_hash_table_new (g_str_hash, g_str_equal);
+  g_hash_table_insert (filters, (gpointer) "lower", filter_lower);
+  g_hash_table_insert (filters, (gpointer) "upper", filter_upper);
+  g_hash_table_insert (filters, (gpointer) "capitalize", filter_capitalize);
+  g_hash_table_insert (filters, (gpointer) "html", filter_html);
+  g_hash_table_insert (filters, (gpointer) "camelize", filter_camelize);
+  g_hash_table_insert (filters, (gpointer) "functify", filter_functify);
+  g_hash_table_insert (filters, (gpointer) "namespace", filter_namespace);
+  g_hash_table_insert (filters, (gpointer) "class", filter_class);
+  g_hash_table_insert (filters, (gpointer) "space", filter_space);
+  g_hash_table_insert (filters, (gpointer) "stripsuffix", filter_stripsuffix);
+  g_hash_table_insert (filters, (gpointer) "instance", filter_instance);
 }
 
 static void

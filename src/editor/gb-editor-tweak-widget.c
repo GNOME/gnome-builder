@@ -35,7 +35,7 @@ struct _GbEditorTweakWidget
 
 G_DEFINE_TYPE (GbEditorTweakWidget, gb_editor_tweak_widget, GTK_TYPE_BIN)
 
-static GQuark gLangQuark;
+static GQuark langQuark;
 
 GtkWidget *
 gb_editor_tweak_widget_new (void)
@@ -58,7 +58,7 @@ gb_editor_tweak_widget_filter_func (GtkListBoxRow *row,
   g_return_val_if_fail (needle, FALSE);
 
   child = gtk_bin_get_child (GTK_BIN (row));
-  language = g_object_get_qdata (G_OBJECT (child), gLangQuark);
+  language = g_object_get_qdata (G_OBJECT (child), langQuark);
   lang_id = gtk_source_language_get_id (language);
   lang_name = gtk_source_language_get_name (language);
   lang_name_cf = g_utf8_casefold (lang_name, -1);
@@ -106,7 +106,7 @@ gb_editor_tweak_widget_row_activated (GbEditorTweakWidget *self,
   g_return_if_fail (GTK_IS_LIST_BOX (list_box));
 
   child = gtk_bin_get_child (GTK_BIN (row));
-  lang = g_object_get_qdata (G_OBJECT (child), gLangQuark);
+  lang = g_object_get_qdata (G_OBJECT (child), langQuark);
 
   if (lang)
     {
@@ -146,7 +146,7 @@ gb_editor_tweak_widget_constructed (GObject *object)
                           "margin-top", 3,
                           "margin-bottom", 3,
                           NULL);
-      g_object_set_qdata (G_OBJECT (row), gLangQuark, lang);
+      g_object_set_qdata (G_OBJECT (row), langQuark, lang);
       gtk_list_box_insert (self->list_box, row, -1);
     }
 
@@ -174,7 +174,7 @@ gb_editor_tweak_widget_class_init (GbEditorTweakWidgetClass *klass)
   GB_WIDGET_CLASS_BIND (klass, GbEditorTweakWidget, entry);
   GB_WIDGET_CLASS_BIND (klass, GbEditorTweakWidget, list_box);
 
-  gLangQuark = g_quark_from_static_string ("GtkSourceLanguage");
+  langQuark = g_quark_from_static_string ("GtkSourceLanguage");
 }
 
 static void

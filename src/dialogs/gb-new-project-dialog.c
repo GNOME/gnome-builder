@@ -73,7 +73,7 @@ enum {
   LAST_SIGNAL
 };
 
-static guint gSignals [LAST_SIGNAL];
+static guint signals [LAST_SIGNAL];
 
 static void
 clone_request_free (gpointer data)
@@ -145,7 +145,7 @@ open_after_timeout (gpointer user_data)
     }
   else
     {
-      g_signal_emit (self, gSignals [OPEN_PROJECT], 0, file);
+      g_signal_emit (self, signals [OPEN_PROJECT], 0, file);
     }
 
   return G_SOURCE_REMOVE;
@@ -304,7 +304,7 @@ gb_new_project_dialog__create_button_clicked (GbNewProjectDialog *self,
 
       file = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (self->file_chooser));
       if (file != NULL)
-        g_signal_emit (self, gSignals [OPEN_PROJECT], 0, file);
+        g_signal_emit (self, signals [OPEN_PROJECT], 0, file);
     }
   else if (visible_child == GTK_WIDGET (self->page_clone_remote))
     {
@@ -429,7 +429,7 @@ gb_new_project_dialog__file_chooser_file_activated (GbNewProjectDialog *self,
 
   file = gtk_file_chooser_get_file (file_chooser);
   if (file != NULL)
-    g_signal_emit (self, gSignals [OPEN_PROJECT], 0, file);
+    g_signal_emit (self, signals [OPEN_PROJECT], 0, file);
 }
 
 static void
@@ -534,7 +534,7 @@ gb_new_project_dialog_class_init (GbNewProjectDialogClass *klass)
 {
   GtkBindingSet *binding_set;
 
-  gSignals [BACK] =
+  signals [BACK] =
     g_signal_new_class_handler ("back",
                                 G_TYPE_FROM_CLASS (klass),
                                 G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
@@ -543,7 +543,7 @@ gb_new_project_dialog_class_init (GbNewProjectDialogClass *klass)
                                 G_TYPE_NONE,
                                 0);
 
-  gSignals [CLOSE] =
+  signals [CLOSE] =
     g_signal_new_class_handler ("close",
                                 G_TYPE_FROM_CLASS (klass),
                                 G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
@@ -552,7 +552,7 @@ gb_new_project_dialog_class_init (GbNewProjectDialogClass *klass)
                                 G_TYPE_NONE,
                                 0);
 
-  gSignals [OPEN_PROJECT] =
+  signals [OPEN_PROJECT] =
     g_signal_new ("open-project",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,

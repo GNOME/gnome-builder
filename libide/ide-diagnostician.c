@@ -61,7 +61,7 @@ enum {
   LAST_PROP
 };
 
-static GParamSpec *gParamSpecs [LAST_PROP];
+static GParamSpec *properties [LAST_PROP];
 
 static void
 diagnose_state_free (gpointer data)
@@ -265,14 +265,14 @@ ide_diagnostician_class_init (IdeDiagnosticianClass *klass)
   object_class->get_property = ide_diagnostician_get_property;
   object_class->set_property = ide_diagnostician_set_property;
 
-  gParamSpecs [PROP_LANGUAGE] =
+  properties [PROP_LANGUAGE] =
     g_param_spec_object ("language",
                          "Language",
                          "Language",
                          GTK_SOURCE_TYPE_LANGUAGE,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 }
 
 static void
@@ -314,6 +314,6 @@ ide_diagnostician_set_language (IdeDiagnostician  *self,
           ide_extension_set_adapter_set_value (self->extensions, lang_id);
         }
 
-      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_LANGUAGE]);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_LANGUAGE]);
     }
 }

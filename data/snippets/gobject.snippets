@@ -15,7 +15,7 @@ snippet gobject
 		LAST_PROP
 	};
 
-	static GParamSpec *gParamSpecs [LAST_PROP];
+	static GParamSpec *properties [LAST_PROP];
 
 	$2 *
 	$3_new (void)
@@ -162,7 +162,7 @@ snippet gobj_clear
 snippet gproperty
 - scope c
 - desc Add GObject property
-	gParamSpecs [PROP_${1:NAME}] =
+	properties [PROP_${1:NAME}] =
 		g_param_spec_${2:object} ("${3:$1|lower}",
 		             ${$2|space}  "${4:$3|camelize}",
 		             ${$2|space}  "${5:$3|camelize}",
@@ -170,11 +170,11 @@ snippet gproperty
 		             ${$2|space}  (G_PARAM_${7:READWRITE} |
 		             ${$2|space}   G_PARAM_STATIC_STRINGS));
 	g_object_class_install_property (object_class, PROP_$1,
-	                                 gParamSpecs [PROP_$1]);
+	                                 properties [PROP_$1]);
 snippet gsignal
 - scope c
 - desc Add GObject signal
-	gSignals [${$1|functify|upper}] =
+	signals [${$1|functify|upper}] =
 		g_signal_new ("${1:name}",
 		              G_TYPE_FROM_CLASS (klass),
 		              ${2:G_SIGNAL_RUN_LAST},

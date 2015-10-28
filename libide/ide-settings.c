@@ -68,8 +68,8 @@ enum {
   LAST_SIGNAL
 };
 
-static GParamSpec *gParamSpecs [LAST_PROP];
-static guint       gSignals [LAST_SIGNAL];
+static GParamSpec *properties [LAST_PROP];
+static guint       signals [LAST_SIGNAL];
 
 static void
 ide_settings_set_ignore_project_settings (IdeSettings *self,
@@ -82,7 +82,7 @@ ide_settings_set_ignore_project_settings (IdeSettings *self,
   if (ignore_project_settings != self->ignore_project_settings)
     {
       self->ignore_project_settings = ignore_project_settings;
-      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_IGNORE_PROJECT_SETTINGS]);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_IGNORE_PROJECT_SETTINGS]);
     }
 }
 
@@ -100,7 +100,7 @@ ide_settings_set_relative_path (IdeSettings *self,
     {
       g_free (self->relative_path);
       self->relative_path = g_strdup (relative_path);
-      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_RELATIVE_PATH]);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_RELATIVE_PATH]);
     }
 }
 
@@ -115,7 +115,7 @@ ide_settings_set_schema_id (IdeSettings *self,
     {
       g_free (self->schema_id);
       self->schema_id = g_strdup (schema_id);
-      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_SCHEMA_ID]);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SCHEMA_ID]);
     }
 }
 
@@ -278,30 +278,30 @@ ide_settings_class_init (IdeSettingsClass *klass)
   object_class->get_property = ide_settings_get_property;
   object_class->set_property = ide_settings_set_property;
 
-  gParamSpecs [PROP_IGNORE_PROJECT_SETTINGS] =
+  properties [PROP_IGNORE_PROJECT_SETTINGS] =
     g_param_spec_boolean ("ignore-project-settings",
                          "Ignore Project Settings",
                          "If project settings should be ignored.",
                          FALSE,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_RELATIVE_PATH] =
+  properties [PROP_RELATIVE_PATH] =
     g_param_spec_string ("relative-path",
                          "Relative Path",
                          "Relative Path",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_SCHEMA_ID] =
+  properties [PROP_SCHEMA_ID] =
     g_param_spec_string ("schema-id",
                          "Schema ID",
                          "Schema ID",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 
-  gSignals [CHANGED] =
+  signals [CHANGED] =
     g_signal_new ("changed",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_DETAILED,

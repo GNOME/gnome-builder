@@ -41,7 +41,7 @@ enum {
   LAST_PROP
 };
 
-static GParamSpec *gParamSpecs [LAST_PROP];
+static GParamSpec *properties [LAST_PROP];
 
 static void
 get_property (GObject    *object,
@@ -102,14 +102,14 @@ test_object_class_init (TestObjectClass *klass)
   obj_class->get_property = get_property;
   obj_class->set_property = set_property;
 
-  gParamSpecs [PROP_STRING] =
+  properties [PROP_STRING] =
     g_param_spec_string ("string",
                          "string",
                          "string",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (obj_class, LAST_PROP, gParamSpecs);
+  g_object_class_install_properties (obj_class, LAST_PROP, properties);
 
   g_signal_new ("frobnicate",
                 G_TYPE_FROM_CLASS (klass),

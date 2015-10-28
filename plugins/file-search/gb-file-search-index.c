@@ -41,7 +41,7 @@ enum {
   LAST_PROP
 };
 
-static GParamSpec *gParamSpecs [LAST_PROP];
+static GParamSpec *properties [LAST_PROP];
 
 static void
 gb_file_search_index_set_root_directory (GbFileSearchIndex *self,
@@ -54,7 +54,7 @@ gb_file_search_index_set_root_directory (GbFileSearchIndex *self,
     {
       g_clear_pointer (&self->fuzzy, fuzzy_unref);
 
-      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_ROOT_DIRECTORY]);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ROOT_DIRECTORY]);
     }
 }
 
@@ -117,14 +117,14 @@ gb_file_search_index_class_init (GbFileSearchIndexClass *klass)
   object_class->get_property = gb_file_search_index_get_property;
   object_class->set_property = gb_file_search_index_set_property;
 
-  gParamSpecs [PROP_ROOT_DIRECTORY] =
+  properties [PROP_ROOT_DIRECTORY] =
     g_param_spec_object ("root-directory",
                          "Root Directory",
                          "Root Directory",
                          G_TYPE_FILE,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 }
 
 static void

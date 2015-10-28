@@ -57,8 +57,8 @@ enum {
 
 G_DEFINE_TYPE_WITH_PRIVATE (RgTable, rg_table, G_TYPE_OBJECT)
 
-static GParamSpec *gParamSpecs [LAST_PROP];
-static guint gSignals [LAST_SIGNAL];
+static GParamSpec *properties [LAST_PROP];
+static guint signals [LAST_SIGNAL];
 
 gint64
 rg_table_get_timespan (RgTable *self)
@@ -81,7 +81,7 @@ rg_table_set_timespan (RgTable   *self,
   if (timespan != priv->timespan)
     {
       priv->timespan = timespan;
-      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_TIMESPAN]);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_TIMESPAN]);
     }
 }
 
@@ -96,7 +96,7 @@ rg_table_set_value_max (RgTable *self,
   if (priv->value_max != value_max)
     {
       priv->value_max = value_max;
-      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_VALUE_MAX]);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_VALUE_MAX]);
     }
 }
 
@@ -111,7 +111,7 @@ rg_table_set_value_min (RgTable *self,
   if (priv->value_min != value_min)
     {
       priv->value_min = value_min;
-      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_VALUE_MIN]);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_VALUE_MIN]);
     }
 }
 
@@ -172,7 +172,7 @@ rg_table_set_max_samples (RgTable *self,
 
   priv->max_samples = max_samples;
 
-  g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_MAX_SAMPLES]);
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_MAX_SAMPLES]);
 }
 
 /**
@@ -212,7 +212,7 @@ rg_table_push (RgTable     *self,
 
   priv->last_index = pos;
 
-  g_signal_emit (self, gSignals [CHANGED], 0);
+  g_signal_emit (self, signals [CHANGED], 0);
 }
 
 gboolean
@@ -509,7 +509,7 @@ rg_table_class_init (RgTableClass *klass)
   object_class->get_property = rg_table_get_property;
   object_class->set_property = rg_table_set_property;
 
-  gParamSpecs [PROP_MAX_SAMPLES] =
+  properties [PROP_MAX_SAMPLES] =
     g_param_spec_uint ("max-samples",
                        "Max Samples",
                        "Max Samples",
@@ -517,7 +517,7 @@ rg_table_class_init (RgTableClass *klass)
                        120,
                        (G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_TIMESPAN] =
+  properties [PROP_TIMESPAN] =
     g_param_spec_int64 ("timespan",
                         "Timespan",
                         "Timespan to visualize, in microseconds.",
@@ -525,7 +525,7 @@ rg_table_class_init (RgTableClass *klass)
                         G_USEC_PER_SEC * 60L,
                         (G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_VALUE_MAX] =
+  properties [PROP_VALUE_MAX] =
     g_param_spec_double ("value-max",
                          "Value Max",
                          "Value Max",
@@ -533,7 +533,7 @@ rg_table_class_init (RgTableClass *klass)
                          100.0,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_VALUE_MIN] =
+  properties [PROP_VALUE_MIN] =
     g_param_spec_double ("value-min",
                          "Value Min",
                          "Value Min",
@@ -541,9 +541,9 @@ rg_table_class_init (RgTableClass *klass)
                          100.0,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 
-  gSignals [CHANGED] = g_signal_new ("changed",
+  signals [CHANGED] = g_signal_new ("changed",
                                      G_TYPE_FROM_CLASS (klass),
                                      G_SIGNAL_RUN_LAST,
                                      0,

@@ -94,8 +94,8 @@ enum {
   LAST_SIGNAL
 };
 
-static GParamSpec *gParamSpecs [LAST_PROP];
-static guint gSignals [LAST_SIGNAL];
+static GParamSpec *properties [LAST_PROP];
+static guint signals [LAST_SIGNAL];
 
 static void
 egg_signal_group_set_target_type (EggSignalGroup *self,
@@ -134,8 +134,8 @@ egg_signal_group__target_weak_notify (gpointer  data,
 
   self->target = NULL;
 
-  g_signal_emit (self, gSignals [UNBIND], 0);
-  g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_TARGET]);
+  g_signal_emit (self, signals [UNBIND], 0);
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_TARGET]);
 }
 
 static void
@@ -218,7 +218,7 @@ egg_signal_group_bind (EggSignalGroup *self,
       egg_signal_group_bind_handler (self, handler);
     }
 
-  g_signal_emit (self, gSignals [BIND], 0, target);
+  g_signal_emit (self, signals [BIND], 0, target);
   g_object_unref (target);
 }
 
@@ -258,7 +258,7 @@ egg_signal_group_unbind (EggSignalGroup *self)
       g_signal_handler_disconnect (target, handler_id);
     }
 
-  g_signal_emit (self, gSignals [UNBIND], 0);
+  g_signal_emit (self, signals [UNBIND], 0);
 }
 
 static gboolean
@@ -400,7 +400,7 @@ egg_signal_group_set_target (EggSignalGroup *self,
 
   egg_signal_group_unbind (self);
   egg_signal_group_bind (self, target);
-  g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_TARGET]);
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_TARGET]);
 }
 
 static void
@@ -506,7 +506,7 @@ egg_signal_group_class_init (EggSignalGroupClass *klass)
    *
    * The target instance used when connecting signals.
    */
-  gParamSpecs [PROP_TARGET] =
+  properties [PROP_TARGET] =
     g_param_spec_object ("target",
                          "Target",
                          "The target instance used when connecting signals.",
@@ -518,14 +518,14 @@ egg_signal_group_class_init (EggSignalGroupClass *klass)
    *
    * The GType of the target property.
    */
-  gParamSpecs [PROP_TARGET_TYPE] =
+  properties [PROP_TARGET_TYPE] =
     g_param_spec_gtype ("target-type",
                         "Target Type",
                         "The GType of the target property.",
                         G_TYPE_OBJECT,
                         (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 
   /**
    * EggSignalGroup::bind:
@@ -537,7 +537,7 @@ egg_signal_group_class_init (EggSignalGroupClass *klass)
    *
    * This signal will only be emitted if the target of @self is non-%NULL.
    */
-  gSignals [BIND] =
+  signals [BIND] =
     g_signal_new ("bind",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
@@ -557,7 +557,7 @@ egg_signal_group_class_init (EggSignalGroupClass *klass)
    * This signal will only be emitted if the previous target
    * of @self is non-%NULL.
    */
-  gSignals [UNBIND] =
+  signals [UNBIND] =
     g_signal_new ("unbind",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,

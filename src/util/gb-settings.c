@@ -22,7 +22,7 @@
 #define GB_WINDOW_MIN_HEIGHT 720
 #define SAVE_TIMEOUT_SECS    1
 
-static GSettings *gSettings;
+static GSettings *settings;
 
 static gboolean
 gb_settings__window_save_settings_cb (gpointer data)
@@ -32,7 +32,7 @@ gb_settings__window_save_settings_cb (gpointer data)
   gboolean maximized;
 
   g_assert (GTK_IS_WINDOW (window));
-  g_assert (G_IS_SETTINGS (gSettings));
+  g_assert (G_IS_SETTINGS (settings));
 
   g_object_set_data (G_OBJECT (window), "SETTINGS_HANDLER_ID", NULL);
 
@@ -40,23 +40,22 @@ gb_settings__window_save_settings_cb (gpointer data)
   gtk_window_get_position (window, &geom.x, &geom.y);
   maximized = gtk_window_is_maximized (window);
 
-  g_settings_set (gSettings, "window-size", "(ii)", geom.width, geom.height);
-  g_settings_set (gSettings, "window-position", "(ii)", geom.x, geom.y);
-  g_settings_set_boolean (gSettings, "window-maximized", maximized);
+  g_settings_set (settings, "window-size", "(ii)", geom.width, geom.height);
+  g_settings_set (settings, "window-position", "(ii)", geom.x, geom.y);
+  g_settings_set_boolean (settings, "window-maximized", maximized);
 
   return G_SOURCE_REMOVE;
 }
 
 static gboolean
 gb_settings__window_configure_event (GtkWindow         *window,
-                                     GdkEventConfigure *event,
-                                     GSettings         *settings)
+                                     GdkEventConfigure *event)
 {
   guint handler;
 
   g_assert (GTK_IS_WINDOW (window));
   g_assert (event != NULL);
-  g_assert (G_IS_SETTINGS (gSettings));
+  g_assert (G_IS_SETTINGS (settings));
 
   handler = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (window), "SETTINGS_HANDLER_ID"));
 
@@ -72,18 +71,17 @@ gb_settings__window_configure_event (GtkWindow         *window,
 }
 
 static void
-gb_settings__window_realize (GtkWindow *window,
-                             GSettings *settings)
+gb_settings__window_realize (GtkWindow *window)
 {
   GdkRectangle geom = { 0 };
   gboolean maximized = FALSE;
 
   g_assert (GTK_IS_WINDOW (window));
-  g_assert (G_IS_SETTINGS (gSettings));
+  g_assert (G_IS_SETTINGS (settings));
 
-  g_settings_get (gSettings, "window-position", "(ii)", &geom.x, &geom.y);
-  g_settings_get (gSettings, "window-size", "(ii)", &geom.width, &geom.height);
-  g_settings_get (gSettings, "window-maximized", "b", &maximized);
+  g_settings_get (settings, "window-position", "(ii)", &geom.x, &geom.y);
+  g_settings_get (settings, "window-size", "(ii)", &geom.width, &geom.height);
+  g_settings_get (settings, "window-maximized", "b", &maximized);
 
   geom.width = MAX (geom.width, GB_WINDOW_MIN_WIDTH);
   geom.height = MAX (geom.height, GB_WINDOW_MIN_HEIGHT);
@@ -96,13 +94,12 @@ gb_settings__window_realize (GtkWindow *window,
 }
 
 static void
-gb_settings__window_destroy (GtkWindow *window,
-                             GSettings *settings)
+gb_settings__window_destroy (GtkWindow *window)
 {
   guint handler;
 
   g_assert (GTK_IS_WINDOW (window));
-  g_assert (G_IS_SETTINGS (gSettings));
+  g_assert (G_IS_SETTINGS (settings));
 
   handler = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (window), "SETTINGS_HANDLER_ID"));
 
@@ -124,20 +121,20 @@ gb_settings__window_destroy (GtkWindow *window,
                                         G_CALLBACK (gb_settings__window_realize),
                                         NULL);
 
-  g_object_unref (gSettings);
+  g_object_unref (settings);
 }
 
 void
 gb_settings_init_window (GtkWindow *window)
 {
-  if (gSettings == NULL)
+  if (settings == NULL)
     {
-      gSettings = g_settings_new ("org.gnome.builder");
-      g_object_add_weak_pointer (G_OBJECT (gSettings), (gpointer *)&gSettings);
+      settings = g_settings_new ("org.gnome.builder");
+      g_object_add_weak_pointer (G_OBJECT (settings), (gpointer *)&settings);
     }
   else
     {
-      g_object_ref (gSettings);
+      g_object_ref (settings);
     }
 
   g_signal_connect (window,

@@ -44,8 +44,8 @@ G_DEFINE_TYPE (IdeLineChangeGutterRenderer,
                ide_line_change_gutter_renderer,
                GTK_SOURCE_TYPE_GUTTER_RENDERER)
 
-static GdkRGBA gRgbaAdded;
-static GdkRGBA gRgbaChanged;
+static GdkRGBA rgbaAdded;
+static GdkRGBA rgbaChanged;
 
 static void
 disconnect_style_scheme (IdeLineChangeGutterRenderer *self)
@@ -228,10 +228,10 @@ ide_line_change_gutter_renderer_draw (GtkSourceGutterRenderer      *renderer,
   flags = ide_buffer_get_line_flags (IDE_BUFFER (buffer), lineno);
 
   if ((flags & IDE_BUFFER_LINE_FLAGS_ADDED) != 0)
-    rgba = self->rgba_added_set ? &self->rgba_added : &gRgbaAdded;
+    rgba = self->rgba_added_set ? &self->rgba_added : &rgbaAdded;
 
   if ((flags & IDE_BUFFER_LINE_FLAGS_CHANGED) != 0)
-    rgba = self->rgba_changed_set ? &self->rgba_changed : &gRgbaChanged;
+    rgba = self->rgba_changed_set ? &self->rgba_changed : &rgbaChanged;
 
   if (rgba)
     {
@@ -259,8 +259,8 @@ ide_line_change_gutter_renderer_class_init (IdeLineChangeGutterRendererClass *kl
 
   renderer_class->draw = ide_line_change_gutter_renderer_draw;
 
-  gdk_rgba_parse (&gRgbaAdded, "#8ae234");
-  gdk_rgba_parse (&gRgbaChanged, "#fcaf3e");
+  gdk_rgba_parse (&rgbaAdded, "#8ae234");
+  gdk_rgba_parse (&rgbaChanged, "#fcaf3e");
 }
 
 static void

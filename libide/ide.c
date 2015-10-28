@@ -44,8 +44,8 @@
 
 #include "modeline-parser.h"
 
-static gboolean     gProgramNameRead;
-static const gchar *gProgramName = "libide";
+static gboolean     programNameRead;
+static const gchar *programName = "libide";
 
 #if defined (G_HAS_CONSTRUCTORS)
 # ifdef G_DEFINE_CONSTRUCTOR_NEEDS_PRAGMA
@@ -59,20 +59,20 @@ G_DEFINE_CONSTRUCTOR(ide_init_ctor)
 const gchar *
 ide_get_program_name (void)
 {
-  gProgramNameRead = 1;
-  return gProgramName;
+  programNameRead = 1;
+  return programName;
 }
 
 void
 ide_set_program_name (const gchar *program_name)
 {
-  if (gProgramNameRead)
+  if (programNameRead)
     {
       g_warning (_("You must call %s() before using libide."), G_STRFUNC);
       return;
     }
 
-  gProgramName = g_intern_string (program_name);
+  programName = g_intern_string (program_name);
 }
 
 static void

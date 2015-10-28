@@ -27,17 +27,17 @@
 
 #include "gb-plugins.h"
 
-static GMainLoop *gMainLoop;
-static gint gExitCode = EXIT_SUCCESS;
-static gchar **gPaths;
-static int gActive;
-static IdeContext *gContext;
+static GMainLoop *main_loop;
+static gint exit_code = EXIT_SUCCESS;
+static gchar **paths;
+static int active;
+static IdeContext *ide_context;
 
 static void
-quit (gint exit_code)
+quit (gint code)
 {
-  gExitCode = exit_code;
-  g_main_loop_quit (gMainLoop);
+  exit_code = code;
+  g_main_loop_quit (main_loop);
 }
 
 static const gchar *
@@ -92,8 +92,8 @@ print_settings (IdeFileSettings *settings)
 static void
 unref_job (void)
 {
-  if (!--gActive)
-    quit (gExitCode);
+  if (!--active)
+    quit (exit_code);
 }
 
 static void
@@ -122,7 +122,7 @@ load_settings_cb (GObject      *object,
     {
       g_printerr ("%s\n", error->message);
       g_clear_error (&error);
-      gExitCode = EXIT_FAILURE;
+      exit_code = EXIT_FAILURE;
       goto cleanup;
     }
 
@@ -164,12 +164,12 @@ context_cb (GObject      *object,
 
   project = ide_context_get_project (context);
 
-  if (gPaths)
+  if (paths)
     {
-      for (i = 0; gPaths [i]; i++)
+      for (i = 0; paths [i]; i++)
         {
-          gActive++;
-          file = ide_project_get_file_for_path (project, gPaths [i]);
+          active++;
+          file = ide_project_get_file_for_path (project, paths [i]);
           ide_file_load_settings_async (file,
                                         NULL,
                                         load_settings_cb,
@@ -177,13 +177,13 @@ context_cb (GObject      *object,
         }
     }
 
-  if (!gActive)
+  if (!active)
     {
       g_printerr (_("No files provided to load settings for.\n"));
       quit (EXIT_FAILURE);
     }
 
-  gContext = g_object_ref (context);
+  ide_context = g_object_ref (context);
 }
 
 gint
@@ -212,7 +212,7 @@ main (gint   argc,
       return EXIT_FAILURE;
     }
 
-  gMainLoop = g_main_loop_new (NULL, FALSE);
+  main_loop = g_main_loop_new (NULL, FALSE);
 
   project_path = argv [1];
 
@@ -223,16 +223,16 @@ main (gint   argc,
     g_ptr_array_add (strv, g_strdup (argv [i]));
   g_ptr_array_add (strv, NULL);
 
-  gPaths = (gchar **)g_ptr_array_free (strv, FALSE);
+  paths = (gchar **)g_ptr_array_free (strv, FALSE);
 
   gb_plugins_init ();
 
   ide_context_new_async (project_file, NULL, context_cb, NULL);
 
-  g_main_loop_run (gMainLoop);
-  g_clear_pointer (&gMainLoop, g_main_loop_unref);
-  g_strfreev (gPaths);
-  g_clear_object (&gContext);
+  g_main_loop_run (main_loop);
+  g_clear_pointer (&main_loop, g_main_loop_unref);
+  g_strfreev (paths);
+  g_clear_object (&context);
 
-  return gExitCode;
+  return exit_code;
 }

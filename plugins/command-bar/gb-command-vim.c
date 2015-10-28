@@ -41,7 +41,7 @@ enum {
   LAST_PROP
 };
 
-static GParamSpec *gParamSpecs [LAST_PROP];
+static GParamSpec *properties [LAST_PROP];
 
 IdeSourceView *
 gb_command_vim_get_source_view (GbCommandVim *vim)
@@ -59,7 +59,7 @@ gb_command_vim_set_source_view (GbCommandVim  *vim,
   g_return_if_fail (IDE_IS_SOURCE_VIEW (source_view));
 
   if (ide_set_weak_pointer (&vim->source_view, source_view))
-    g_object_notify_by_pspec (G_OBJECT (vim), gParamSpecs [PROP_SOURCE_VIEW]);
+    g_object_notify_by_pspec (G_OBJECT (vim), properties [PROP_SOURCE_VIEW]);
 }
 
 const gchar *
@@ -81,7 +81,7 @@ gb_command_vim_set_command_text (GbCommandVim *vim,
     {
       g_free (vim->command_text);
       vim->command_text = g_strdup (command_text);
-      g_object_notify_by_pspec (G_OBJECT (vim), gParamSpecs [PROP_COMMAND_TEXT]);
+      g_object_notify_by_pspec (G_OBJECT (vim), properties [PROP_COMMAND_TEXT]);
     }
 }
 
@@ -178,21 +178,21 @@ gb_command_vim_class_init (GbCommandVimClass *klass)
 
   command_class->execute = gb_command_vim_execute;
 
-  gParamSpecs [PROP_COMMAND_TEXT] =
+  properties [PROP_COMMAND_TEXT] =
     g_param_spec_string ("command-text",
                          "Command Text",
                          "The command text to execute",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_SOURCE_VIEW] =
+  properties [PROP_SOURCE_VIEW] =
     g_param_spec_object ("source-view",
                          "Source View",
                          "The source view to modify.",
                          IDE_TYPE_SOURCE_VIEW,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 }
 
 static void

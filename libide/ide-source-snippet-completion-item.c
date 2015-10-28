@@ -34,7 +34,7 @@ enum {
   LAST_PROP
 };
 
-static GParamSpec *gParamSpecs [LAST_PROP];
+static GParamSpec *properties [LAST_PROP];
 
 static void init_proposal_iface (GtkSourceCompletionProposalIface *iface);
 
@@ -127,14 +127,14 @@ ide_source_snippet_completion_item_class_init (IdeSourceSnippetCompletionItemCla
   object_class->get_property = ide_source_snippet_completion_item_get_property;
   object_class->set_property = ide_source_snippet_completion_item_set_property;
 
-  gParamSpecs[PROP_SNIPPET] =
+  properties[PROP_SNIPPET] =
     g_param_spec_object ("snippet",
                          "Snippet",
                          "The snippet to insert.",
                          IDE_TYPE_SOURCE_SNIPPET,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 }
 
 static void

@@ -50,8 +50,8 @@ enum {
   LAST_SIGNAL
 };
 
-static guint gSignals [LAST_SIGNAL];
-static GParamSpec *gParamSpecs [LAST_PROP];
+static guint signals [LAST_SIGNAL];
+static GParamSpec *properties [LAST_PROP];
 
 static void
 get_settled (PeasExtensionSet *set,
@@ -87,7 +87,7 @@ ide_device_manager__provider_notify_settled (IdeDeviceManager  *self,
   g_return_if_fail (IDE_IS_DEVICE_MANAGER (self));
   g_return_if_fail (IDE_IS_DEVICE_PROVIDER (provider));
 
-  g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_SETTLED]);
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SETTLED]);
 }
 
 static void
@@ -114,7 +114,7 @@ ide_device_manager__provider_device_added (IdeDeviceManager  *self,
   g_return_if_fail (IDE_IS_DEVICE_PROVIDER (provider));
 
   ide_device_manager_do_add_device (self, device);
-  g_signal_emit (self, gSignals [DEVICE_ADDED], 0, provider, device);
+  g_signal_emit (self, signals [DEVICE_ADDED], 0, provider, device);
 }
 
 static void
@@ -136,7 +136,7 @@ ide_device_manager__provider_device_removed (IdeDeviceManager  *self,
         {
           g_ptr_array_remove_index (self->devices, i);
           g_list_model_items_changed (G_LIST_MODEL (self), i, 1, 0);
-          g_signal_emit (self, gSignals [DEVICE_REMOVED], 0, provider, device);
+          g_signal_emit (self, signals [DEVICE_REMOVED], 0, provider, device);
           return;
         }
     }
@@ -390,16 +390,16 @@ ide_device_manager_class_init (IdeDeviceManagerClass *klass)
   object_class->finalize = ide_device_manager_finalize;
   object_class->get_property = ide_device_manager_get_property;
 
-  gParamSpecs [PROP_SETTLED] =
+  properties [PROP_SETTLED] =
     g_param_spec_boolean ("settled",
                           "Settled",
                           "If the device providers have settled.",
                           FALSE,
                           (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 
-  gSignals [DEVICE_ADDED] =
+  signals [DEVICE_ADDED] =
     g_signal_new ("device-added",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
@@ -410,7 +410,7 @@ ide_device_manager_class_init (IdeDeviceManagerClass *klass)
                   IDE_TYPE_DEVICE_PROVIDER,
                   IDE_TYPE_DEVICE);
 
-  gSignals [DEVICE_REMOVED] =
+  signals [DEVICE_REMOVED] =
     g_signal_new ("device-removed",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,

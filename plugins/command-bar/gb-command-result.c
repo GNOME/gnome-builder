@@ -41,7 +41,7 @@ enum {
   LAST_PROP
 };
 
-static GParamSpec *gParamSpecs [LAST_PROP];
+static GParamSpec *properties [LAST_PROP];
 
 GbCommandResult *
 gb_command_result_new (void)
@@ -68,7 +68,7 @@ gb_command_result_set_command_text (GbCommandResult *result,
       g_free (result->command_text);
       result->command_text = g_strdup (command_text);
       g_object_notify_by_pspec (G_OBJECT (result),
-                                gParamSpecs [PROP_COMMAND_TEXT]);
+                                properties [PROP_COMMAND_TEXT]);
     }
 }
 
@@ -91,7 +91,7 @@ gb_command_result_set_result_text (GbCommandResult *result,
       g_free (result->result_text);
       result->result_text = g_strdup (result_text);
       g_object_notify_by_pspec (G_OBJECT (result),
-                                gParamSpecs [PROP_RESULT_TEXT]);
+                                properties [PROP_RESULT_TEXT]);
     }
 }
 
@@ -113,7 +113,7 @@ gb_command_result_set_is_running (GbCommandResult *result,
     {
       result->is_running = !!is_running;
       g_object_notify_by_pspec (G_OBJECT (result),
-                                gParamSpecs [PROP_IS_RUNNING]);
+                                properties [PROP_IS_RUNNING]);
     }
 }
 
@@ -135,7 +135,7 @@ gb_command_result_set_is_error (GbCommandResult *result,
     {
       result->is_error = !!is_error;
       g_object_notify_by_pspec (G_OBJECT (result),
-                                gParamSpecs [PROP_IS_ERROR]);
+                                properties [PROP_IS_ERROR]);
     }
 }
 
@@ -221,7 +221,7 @@ gb_command_result_class_init (GbCommandResultClass *klass)
   object_class->get_property = gb_command_result_get_property;
   object_class->set_property = gb_command_result_set_property;
 
-  gParamSpecs [PROP_COMMAND_TEXT] =
+  properties [PROP_COMMAND_TEXT] =
     g_param_spec_string ("command-text",
                          "Command Text",
                          "The command text if any.",
@@ -229,7 +229,7 @@ gb_command_result_class_init (GbCommandResultClass *klass)
                          (G_PARAM_READWRITE |
                           G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_IS_ERROR] =
+  properties [PROP_IS_ERROR] =
     g_param_spec_boolean ("is-error",
                           "Is Error",
                           "If the result is an error.",
@@ -237,7 +237,7 @@ gb_command_result_class_init (GbCommandResultClass *klass)
                           (G_PARAM_READWRITE |
                            G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_IS_RUNNING] =
+  properties [PROP_IS_RUNNING] =
     g_param_spec_boolean ("is-running",
                           "Is Running",
                           "If the command is still running.",
@@ -245,7 +245,7 @@ gb_command_result_class_init (GbCommandResultClass *klass)
                           (G_PARAM_READWRITE |
                            G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_RESULT_TEXT] =
+  properties [PROP_RESULT_TEXT] =
     g_param_spec_string ("result-text",
                          "Result Text",
                          "The result text if any.",
@@ -253,7 +253,7 @@ gb_command_result_class_init (GbCommandResultClass *klass)
                          (G_PARAM_READWRITE |
                           G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 }
 
 static void

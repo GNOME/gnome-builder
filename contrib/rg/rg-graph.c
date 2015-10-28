@@ -41,7 +41,7 @@ enum {
   LAST_PROP
 };
 
-static GParamSpec *gParamSpecs [LAST_PROP];
+static GParamSpec *properties [LAST_PROP];
 
 GtkWidget *
 rg_graph_new (void)
@@ -89,7 +89,7 @@ rg_graph_set_table (RgGraph *self,
     {
       egg_signal_group_set_target (priv->table_signals, table);
       gtk_widget_queue_resize (GTK_WIDGET (self));
-      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_TABLE]);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_TABLE]);
     }
 }
 
@@ -367,14 +367,14 @@ rg_graph_class_init (RgGraphClass *klass)
   widget_class->draw = rg_graph_draw;
   widget_class->size_allocate = rg_graph_size_allocate;
 
-  gParamSpecs [PROP_TABLE] =
+  properties [PROP_TABLE] =
     g_param_spec_object ("table",
                          "Table",
                          "The data table for the graph.",
                          RG_TYPE_TABLE,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 }
 
 static void

@@ -22,9 +22,9 @@
 
 #define CONSERVE_THRESHOLD 50.0
 
-static GDBusProxy *gUPowerProxy;
-static GDBusProxy *gUPowerDeviceProxy;
-static gint        gUPowerHold;
+static GDBusProxy *u_powerProxy;
+static GDBusProxy *u_powerDeviceProxy;
+static gint        u_powerHold;
 
 G_LOCK_DEFINE_STATIC (proxy_lock);
 
@@ -35,7 +35,7 @@ ide_battery_monitor_get_proxy (void)
 
   G_LOCK (proxy_lock);
 
-  if (!gUPowerProxy)
+  if (!u_powerProxy)
     {
       GDBusConnection *bus;
 
@@ -43,7 +43,7 @@ ide_battery_monitor_get_proxy (void)
 
       if (bus)
         {
-          gUPowerProxy = g_dbus_proxy_new_sync (bus,
+          u_powerProxy = g_dbus_proxy_new_sync (bus,
                                                 G_DBUS_PROXY_FLAGS_GET_INVALIDATED_PROPERTIES,
                                                 NULL,
                                                 "org.freedesktop.UPower",
@@ -55,7 +55,7 @@ ide_battery_monitor_get_proxy (void)
         }
     }
 
-  proxy = gUPowerProxy ? g_object_ref (gUPowerProxy) : NULL;
+  proxy = u_powerProxy ? g_object_ref (u_powerProxy) : NULL;
 
   G_UNLOCK (proxy_lock);
 
@@ -69,7 +69,7 @@ ide_battery_monitor_get_device_proxy (void)
 
   G_LOCK (proxy_lock);
 
-  if (!gUPowerDeviceProxy)
+  if (!u_powerDeviceProxy)
     {
       GDBusConnection *bus;
 
@@ -77,7 +77,7 @@ ide_battery_monitor_get_device_proxy (void)
 
       if (bus)
         {
-          gUPowerDeviceProxy = g_dbus_proxy_new_sync (bus,
+          u_powerDeviceProxy = g_dbus_proxy_new_sync (bus,
                                                       G_DBUS_PROXY_FLAGS_GET_INVALIDATED_PROPERTIES,
                                                       NULL,
                                                       "org.freedesktop.UPower",
@@ -89,7 +89,7 @@ ide_battery_monitor_get_device_proxy (void)
         }
     }
 
-  proxy = gUPowerDeviceProxy ? g_object_ref (gUPowerDeviceProxy) : NULL;
+  proxy = u_powerDeviceProxy ? g_object_ref (u_powerDeviceProxy) : NULL;
 
   G_UNLOCK (proxy_lock);
 
@@ -159,10 +159,10 @@ _ide_battery_monitor_shutdown (void)
 {
   G_LOCK (proxy_lock);
 
-  if (--gUPowerHold == 0)
+  if (--u_powerHold == 0)
     {
-      g_clear_object (&gUPowerProxy);
-      g_clear_object (&gUPowerDeviceProxy);
+      g_clear_object (&u_powerProxy);
+      g_clear_object (&u_powerDeviceProxy);
     }
 
   G_UNLOCK (proxy_lock);
@@ -175,7 +175,7 @@ _ide_battery_monitor_init (void)
   g_autoptr(GDBusProxy) device_proxy = NULL;
 
   G_LOCK (proxy_lock);
-  gUPowerHold++;
+  u_powerHold++;
   G_UNLOCK (proxy_lock);
 
   proxy = ide_battery_monitor_get_proxy ();

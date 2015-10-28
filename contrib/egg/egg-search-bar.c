@@ -55,8 +55,8 @@ enum {
   LAST_SIGNAL
 };
 
-static GParamSpec *gParamSpecs [LAST_PROP];
-static guint       gSignals [LAST_SIGNAL];
+static GParamSpec *properties [LAST_PROP];
+static guint       signals [LAST_SIGNAL];
 
 static void
 egg_search_bar__entry_activate (EggSearchBar   *self,
@@ -65,7 +65,7 @@ egg_search_bar__entry_activate (EggSearchBar   *self,
   g_assert (EGG_IS_SEARCH_BAR (self));
   g_assert (GTK_IS_SEARCH_ENTRY (entry));
 
-  g_signal_emit (self, gSignals [ACTIVATE], 0);
+  g_signal_emit (self, signals [ACTIVATE], 0);
 }
 
 static gboolean
@@ -295,29 +295,29 @@ egg_search_bar_class_init (EggSearchBarClass *klass)
 
   widget_class->hierarchy_changed = egg_search_bar_hierarchy_changed;
 
-  gParamSpecs [PROP_SEARCH_MODE_ENABLED] =
+  properties [PROP_SEARCH_MODE_ENABLED] =
     g_param_spec_boolean ("search-mode-enabled",
                           "Search Mode Enabled",
                           "Search Mode Enabled",
                           FALSE,
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_SHOW_CLOSE_BUTTON] =
+  properties [PROP_SHOW_CLOSE_BUTTON] =
     g_param_spec_boolean ("show-close-button",
                           "Show Close Button",
                           "Show Close Button",
                           FALSE,
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 
-  gSignals [ACTIVATE] =
+  signals [ACTIVATE] =
     g_signal_new ("activate",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                   0, NULL, NULL, NULL, G_TYPE_NONE, 0);
 
-  gSignals [REVEAL] =
+  signals [REVEAL] =
     g_signal_new_class_handler ("reveal",
                                 G_TYPE_FROM_CLASS (klass),
                                 G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
@@ -437,7 +437,7 @@ egg_search_bar_set_search_mode_enabled (EggSearchBar *self,
       if (search_mode_enabled)
         gtk_widget_grab_focus (GTK_WIDGET (priv->entry));
 
-      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_SEARCH_MODE_ENABLED]);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SEARCH_MODE_ENABLED]);
     }
 }
 
@@ -460,7 +460,7 @@ egg_search_bar_set_show_close_button (EggSearchBar *self,
   g_return_if_fail (EGG_IS_SEARCH_BAR (self));
 
   gtk_widget_set_visible (GTK_WIDGET (priv->close_button), show_close_button);
-  g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_SHOW_CLOSE_BUTTON]);
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SHOW_CLOSE_BUTTON]);
 }
 
 /**

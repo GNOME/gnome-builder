@@ -42,7 +42,7 @@ enum {
   LAST_PROP
 };
 
-static GParamSpec *gParamSpecs [LAST_PROP];
+static GParamSpec *properties [LAST_PROP];
 
 /**
  * gb_view_get_can_preview:
@@ -212,8 +212,8 @@ gb_view_notify (GObject    *object,
    * This should get removed after 3.18 when path bar lands.
    * This also notifies of special-title after title is emitted.
    */
-  if (pspec == gParamSpecs [PROP_TITLE])
-    g_object_notify_by_pspec (object, gParamSpecs [PROP_SPECIAL_TITLE]);
+  if (pspec == properties [PROP_TITLE])
+    g_object_notify_by_pspec (object, properties [PROP_SPECIAL_TITLE]);
 
   if (G_OBJECT_CLASS (gb_view_parent_class)->notify)
     G_OBJECT_CLASS (gb_view_parent_class)->notify (object, pspec);
@@ -279,28 +279,28 @@ gb_view_class_init (GbViewClass *klass)
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/ui/gb-view.ui");
   gtk_widget_class_bind_template_child_private (widget_class, GbView, menu);
 
-  gParamSpecs [PROP_CAN_SPLIT] =
+  properties [PROP_CAN_SPLIT] =
     g_param_spec_boolean ("can-split",
                           "Can Split",
                           "If the view can be split.",
                           FALSE,
                           (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_DOCUMENT] =
+  properties [PROP_DOCUMENT] =
     g_param_spec_object ("document",
                          "Document",
                          "The underlying document.",
                          GB_TYPE_DOCUMENT,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_MODIFIED] =
+  properties [PROP_MODIFIED] =
     g_param_spec_boolean ("modified",
                           "Modified",
                           "If the document has been modified.",
                           FALSE,
                           (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_TITLE] =
+  properties [PROP_TITLE] =
     g_param_spec_string ("title",
                          "Title",
                          "The view title.",
@@ -312,14 +312,14 @@ gb_view_class_init (GbViewClass *klass)
    *
    * This property should be removed after 3.18 when path bar lands.
    */
-  gParamSpecs [PROP_SPECIAL_TITLE] =
+  properties [PROP_SPECIAL_TITLE] =
     g_param_spec_string ("special-title",
                          "Special Title",
                          "The special title to be displayed in the document menu button.",
                          NULL,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 }
 
 static void

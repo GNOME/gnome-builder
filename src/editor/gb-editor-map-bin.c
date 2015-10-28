@@ -39,8 +39,8 @@ enum {
   LAST_PROP
 };
 
-static FcConfig *gLocalFontConfig;
-static GParamSpec *gParamSpecs [LAST_PROP];
+static FcConfig *localFontConfig;
+static GParamSpec *properties [LAST_PROP];
 
 static void
 gb_editor_map_bin__floating_bar_size_allocate (GbEditorMapBin *self,
@@ -113,7 +113,7 @@ gb_editor_map_bin_add (GtkContainer *container,
       PangoFontDescription *font_desc;
 
       font_map = pango_cairo_font_map_new_for_font_type (CAIRO_FONT_TYPE_FT);
-      pango_fc_font_map_set_config (PANGO_FC_FONT_MAP (font_map), gLocalFontConfig);
+      pango_fc_font_map_set_config (PANGO_FC_FONT_MAP (font_map), localFontConfig);
       gtk_widget_set_font_map (child, font_map);
 
       font_desc = pango_font_description_from_string ("Builder Blocks 1");
@@ -196,12 +196,12 @@ gb_editor_map_bin_load_font (void)
 {
   const gchar *font_path = PACKAGE_DATADIR"/gnome-builder/fonts/BuilderBlocks.ttf";
 
-  gLocalFontConfig = FcInitLoadConfigAndFonts ();
+  localFontConfig = FcInitLoadConfigAndFonts ();
 
   if (g_getenv ("GB_IN_TREE_FONTS") != NULL)
     font_path = "data/fonts/BuilderBlocks.ttf";
 
-  FcConfigAppFontAddFile (gLocalFontConfig, (const FcChar8 *)font_path);
+  FcConfigAppFontAddFile (localFontConfig, (const FcChar8 *)font_path);
 }
 
 static void
@@ -220,14 +220,14 @@ gb_editor_map_bin_class_init (GbEditorMapBinClass *klass)
   container_class->add = gb_editor_map_bin_add;
   container_class->remove = gb_editor_map_bin_remove;
 
-  gParamSpecs [PROP_FLOATING_BAR] =
+  properties [PROP_FLOATING_BAR] =
     g_param_spec_object ("floating-bar",
                          "Floating Bar",
                          "The floating bar to use for relative allocation size.",
                          GTK_TYPE_WIDGET,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 
   gb_editor_map_bin_load_font ();
 }

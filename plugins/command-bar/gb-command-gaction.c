@@ -42,7 +42,7 @@ enum {
   LAST_PROP
 };
 
-static GParamSpec *gParamSpecs [LAST_PROP];
+static GParamSpec *properties [LAST_PROP];
 
 static void
 gb_command_gaction_set_action_group (GbCommandGaction *gaction,
@@ -182,21 +182,21 @@ gb_command_gaction_class_init (GbCommandGactionClass *klass)
 
   command_class->execute = gb_command_gaction_execute;
 
-  gParamSpecs [PROP_ACTION_GROUP] =
+  properties [PROP_ACTION_GROUP] =
     g_param_spec_object ("action-group",
                          "Action Group",
                          "The GActionGroup containing the action.",
                          G_TYPE_ACTION_GROUP,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_ACTION_NAME] =
+  properties [PROP_ACTION_NAME] =
     g_param_spec_string ("action-name",
                          "Action Name",
                          "The name of the action to execute.",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_PARAMETERS] =
+  properties [PROP_PARAMETERS] =
     g_param_spec_variant ("parameters",
                           "Parameters",
                           "The parameters for the action.",
@@ -204,7 +204,7 @@ gb_command_gaction_class_init (GbCommandGactionClass *klass)
                           NULL,
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 }
 
 static void

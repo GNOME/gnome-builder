@@ -75,8 +75,8 @@ enum {
 };
 
 static GtkBuildableIface *gb_tree_parent_buildable_iface;
-static GParamSpec *gParamSpecs [LAST_PROP];
-static guint gSignals [LAST_SIGNAL];
+static GParamSpec *properties [LAST_PROP];
+static guint signals [LAST_SIGNAL];
 
 void
 _gb_tree_build_node (GbTree     *self,
@@ -270,7 +270,7 @@ gb_tree_popup (GbTree         *self,
   menu_widget = gtk_menu_new_from_model (G_MENU_MODEL (menu));
   g_clear_object (&menu);
 
-  g_signal_emit (self, gSignals [POPULATE_POPUP], 0, menu_widget);
+  g_signal_emit (self, signals [POPULATE_POPUP], 0, menu_widget);
 
   if ((target_x >= 0) && (target_y >= 0))
     {
@@ -366,7 +366,7 @@ gb_tree_selection_changed (GbTree           *self,
         }
     }
 
-  g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_SELECTION]);
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SELECTION]);
 
   IDE_EXIT;
 }
@@ -948,21 +948,21 @@ gb_tree_class_init (GbTreeClass *klass)
 
   klass->action = gb_tree_real_action;
 
-  gParamSpecs[PROP_ROOT] =
+  properties[PROP_ROOT] =
     g_param_spec_object ("root",
                          "Root",
                          "The root object of the tree.",
                          GB_TYPE_TREE_NODE,
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
-  gParamSpecs[PROP_SELECTION] =
+  properties[PROP_SELECTION] =
     g_param_spec_object ("selection",
                          "Selection",
                          "The node selection.",
                          GB_TYPE_TREE_NODE,
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
-  gParamSpecs [PROP_SHOW_ICONS] =
+  properties [PROP_SHOW_ICONS] =
     g_param_spec_boolean ("show-icons",
                           "Show Icons",
                           "Show Icons",
@@ -970,9 +970,9 @@ gb_tree_class_init (GbTreeClass *klass)
                           (G_PARAM_READWRITE |
                            G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 
-  gSignals [ACTION] =
+  signals [ACTION] =
     g_signal_new ("action",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
@@ -984,7 +984,7 @@ gb_tree_class_init (GbTreeClass *klass)
                   G_TYPE_STRING,
                   G_TYPE_STRING);
 
-  gSignals [POPULATE_POPUP] =
+  signals [POPULATE_POPUP] =
     g_signal_new ("populate-popup",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
@@ -1098,7 +1098,7 @@ gb_tree_set_show_icons (GbTree   *self,
       gtk_tree_view_column_set_visible (priv->column, FALSE);
       gtk_tree_view_column_set_visible (priv->column, TRUE);
       g_object_notify_by_pspec (G_OBJECT (self),
-                                gParamSpecs [PROP_SHOW_ICONS]);
+                                properties [PROP_SHOW_ICONS]);
     }
 }
 
@@ -1327,7 +1327,7 @@ gb_tree_set_root (GbTree     *self,
           _gb_tree_build_node (self, priv->root);
         }
 
-      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_ROOT]);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ROOT]);
     }
 
   IDE_EXIT;

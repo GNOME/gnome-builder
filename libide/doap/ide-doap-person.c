@@ -38,7 +38,7 @@ enum {
   LAST_PROP
 };
 
-static GParamSpec *gParamSpecs [LAST_PROP];
+static GParamSpec *properties [LAST_PROP];
 
 IdeDoapPerson *
 ide_doap_person_new (void)
@@ -64,7 +64,7 @@ ide_doap_person_set_name (IdeDoapPerson *self,
     {
       g_free (self->name);
       self->name = g_strdup (name);
-      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_NAME]);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_NAME]);
     }
 }
 
@@ -86,7 +86,7 @@ ide_doap_person_set_email (IdeDoapPerson *self,
     {
       g_free (self->email);
       self->email = g_strdup (email);
-      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_EMAIL]);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_EMAIL]);
     }
 }
 
@@ -156,21 +156,21 @@ ide_doap_person_class_init (IdeDoapPersonClass *klass)
   object_class->get_property = ide_doap_person_get_property;
   object_class->set_property = ide_doap_person_set_property;
 
-  gParamSpecs [PROP_EMAIL] =
+  properties [PROP_EMAIL] =
     g_param_spec_string ("email",
                          "Email",
                          "The email of the person.",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_NAME] =
+  properties [PROP_NAME] =
     g_param_spec_string ("name",
                          "Name",
                          "The name of the person.",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 }
 
 static void

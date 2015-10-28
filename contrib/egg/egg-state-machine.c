@@ -71,7 +71,7 @@ enum {
   LAST_PROP
 };
 
-static GParamSpec *gParamSpecs [LAST_PROP];
+static GParamSpec *properties [LAST_PROP];
 
 static void
 egg_state_machine__property_object_weak_notify (gpointer  data,
@@ -341,7 +341,7 @@ egg_state_machine_transition (EggStateMachine *self,
   if (new_state && (state_obj = egg_state_machine_get_state_obj (self, new_state)))
     egg_state_apply (self, state_obj);
 
-  g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_STATE]);
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_STATE]);
 
   g_object_thaw_notify (G_OBJECT (self));
 }
@@ -430,14 +430,14 @@ egg_state_machine_class_init (EggStateMachineClass *klass)
   object_class->get_property = egg_state_machine_get_property;
   object_class->set_property = egg_state_machine_set_property;
 
-  gParamSpecs [PROP_STATE] =
+  properties [PROP_STATE] =
     g_param_spec_string ("state",
                          "State",
                          "The current state of the machine.",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 }
 
 static void

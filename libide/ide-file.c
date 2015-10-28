@@ -52,7 +52,7 @@ enum {
 
 G_DEFINE_TYPE (IdeFile, ide_file, IDE_TYPE_OBJECT)
 
-static GParamSpec *gParamSpecs [LAST_PROP];
+static GParamSpec *properties [LAST_PROP];
 
 const gchar *
 _ide_file_get_content_type (IdeFile *self)
@@ -77,7 +77,7 @@ _ide_file_set_content_type (IdeFile     *self,
       g_clear_pointer (&self->content_type, g_free);
       g_clear_object (&self->language);
       self->content_type = g_strdup (content_type);
-      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_LANGUAGE]);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_LANGUAGE]);
     }
 }
 
@@ -176,7 +176,7 @@ ide_file_set_file (IdeFile *self,
   if (file != self->file)
     {
       if (g_set_object (&self->file, file))
-        g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_FILE]);
+        g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_FILE]);
     }
 }
 
@@ -465,7 +465,7 @@ ide_file_class_init (IdeFileClass *klass)
   object_class->get_property = ide_file_get_property;
   object_class->set_property = ide_file_set_property;
 
-  gParamSpecs [PROP_FILE] =
+  properties [PROP_FILE] =
     g_param_spec_object ("file",
                          "File",
                          "The path to the underlying file.",
@@ -474,28 +474,28 @@ ide_file_class_init (IdeFileClass *klass)
                           G_PARAM_CONSTRUCT_ONLY |
                           G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_IS_TEMPORARY] =
+  properties [PROP_IS_TEMPORARY] =
     g_param_spec_boolean ("is-temporary",
                           "Is Temporary",
                           "If the file represents a temporary file.",
                          FALSE,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_LANGUAGE] =
+  properties [PROP_LANGUAGE] =
     g_param_spec_object ("language",
                          "Language",
                          "The file language.",
                          GTK_SOURCE_TYPE_LANGUAGE,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_PATH] =
+  properties [PROP_PATH] =
     g_param_spec_string ("path",
                          "Path",
                          "The path within the project.",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_TEMPORARY_ID] =
+  properties [PROP_TEMPORARY_ID] =
     g_param_spec_uint ("temporary-id",
                        "Temporary ID",
                        "A unique identifier for temporary files.",
@@ -504,7 +504,7 @@ ide_file_class_init (IdeFileClass *klass)
                        0,
                        (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 }
 
 static void

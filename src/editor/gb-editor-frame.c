@@ -48,7 +48,7 @@ enum {
   TARGET_URI_LIST = 100
 };
 
-static GParamSpec *gParamSpecs [LAST_PROP];
+static GParamSpec *properties [LAST_PROP];
 
 static void
 gb_editor_frame_update_ruler (GbEditorFrame *self)
@@ -139,7 +139,7 @@ gb_editor_frame_set_show_ruler (GbEditorFrame *self,
     {
       self->show_ruler = show_ruler;
       gb_editor_frame_update_ruler (self);
-      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_SHOW_RULER]);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SHOW_RULER]);
     }
 }
 
@@ -619,7 +619,7 @@ gb_editor_frame_set_show_map (GbEditorFrame *self,
           g_signal_emit_by_name (self->source_map, "show-map");
         }
 
-      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_SHOW_MAP]);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SHOW_MAP]);
     }
 }
 
@@ -634,7 +634,7 @@ gb_editor_frame_set_auto_hide_map (GbEditorFrame *self,
   if (auto_hide_map != self->auto_hide_map)
     {
       self->auto_hide_map = auto_hide_map;
-      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_AUTO_HIDE_MAP]);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_AUTO_HIDE_MAP]);
     }
 }
 
@@ -810,42 +810,42 @@ gb_editor_frame_class_init (GbEditorFrameClass *klass)
 
   widget_class->grab_focus = gb_editor_frame_grab_focus;
 
-  gParamSpecs [PROP_AUTO_HIDE_MAP] =
+  properties [PROP_AUTO_HIDE_MAP] =
     g_param_spec_boolean ("auto-hide-map",
                           "Auto Hide Map",
                           "Auto Hide Map",
                           FALSE,
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_BACK_FORWARD_LIST] =
+  properties [PROP_BACK_FORWARD_LIST] =
     g_param_spec_object ("back-forward-list",
                          "Back Forward List",
                          "The back forward list.",
                          IDE_TYPE_BACK_FORWARD_LIST,
                          (G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_DOCUMENT] =
+  properties [PROP_DOCUMENT] =
     g_param_spec_object ("document",
                          "Document",
                          "The editor document.",
                          GB_TYPE_EDITOR_DOCUMENT,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_SHOW_MAP] =
+  properties [PROP_SHOW_MAP] =
     g_param_spec_boolean ("show-map",
                           "Show Map",
                           "If the overview map should be shown.",
                           FALSE,
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_SHOW_RULER] =
+  properties [PROP_SHOW_RULER] =
     g_param_spec_boolean ("show-ruler",
                           "Show Ruler",
                           "If the ruler should always be shown.",
                           FALSE,
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 
   GB_WIDGET_CLASS_TEMPLATE (klass, "gb-editor-frame.ui");
 

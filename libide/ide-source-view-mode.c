@@ -44,7 +44,7 @@ enum {
   LAST_PROP
 };
 
-static GParamSpec *gParamSpecs [LAST_PROP];
+static GParamSpec *properties [LAST_PROP];
 
 static void
 get_param (IdeSourceViewMode *self,
@@ -245,14 +245,14 @@ ide_source_view_mode_class_init (IdeSourceViewModeClass *klass)
   object_class->finalize = ide_source_view_mode_finalize;
   object_class->get_property = ide_source_view_mode_get_property;
 
-  gParamSpecs [PROP_NAME] =
+  properties [PROP_NAME] =
     g_param_spec_string ("name",
                           "Name",
                           "The name of the mode.",
                           NULL,
                           (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 
   gtk_widget_class_install_style_property (GTK_WIDGET_CLASS (klass),
                                            g_param_spec_boolean ("suppress-unbound",

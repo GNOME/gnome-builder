@@ -51,8 +51,8 @@ enum {
 
 G_DEFINE_TYPE (GbRenameFilePopover, gb_rename_file_popover, GTK_TYPE_POPOVER)
 
-static GParamSpec *gParamSpecs [LAST_PROP];
-static guint gSignals [LAST_SIGNAL];
+static GParamSpec *properties [LAST_PROP];
+static guint signals [LAST_SIGNAL];
 
 GFile *
 gb_rename_file_popover_get_file (GbRenameFilePopover *self)
@@ -85,7 +85,7 @@ gb_rename_file_popover_set_file (GbRenameFilePopover *self,
           g_free (label);
         }
 
-      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_FILE]);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_FILE]);
     }
 }
 
@@ -100,7 +100,7 @@ gb_rename_file_popover_set_is_directory (GbRenameFilePopover *self,
   if (is_directory != self->is_directory)
     {
       self->is_directory = is_directory;
-      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_IS_DIRECTORY]);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_IS_DIRECTORY]);
     }
 }
 
@@ -228,7 +228,7 @@ gb_rename_file_popover__button_clicked (GbRenameFilePopover *self,
   /* only activate once */
   gtk_widget_set_sensitive (GTK_WIDGET (self->button), FALSE);
 
-  g_signal_emit (self, gSignals [RENAME_FILE], 0, self->file, file);
+  g_signal_emit (self, signals [RENAME_FILE], 0, self->file, file);
 }
 
 static void
@@ -303,23 +303,23 @@ gb_rename_file_popover_class_init (GbRenameFilePopoverClass *klass)
   object_class->get_property = gb_rename_file_popover_get_property;
   object_class->set_property = gb_rename_file_popover_set_property;
 
-  gParamSpecs [PROP_FILE] =
+  properties [PROP_FILE] =
     g_param_spec_object ("file",
                          "File",
                          "File",
                          G_TYPE_FILE,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_IS_DIRECTORY] =
+  properties [PROP_IS_DIRECTORY] =
     g_param_spec_boolean ("is-directory",
                           "Is Directory",
                           "Is Directory",
                           FALSE,
                           (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 
-  gSignals [RENAME_FILE] =
+  signals [RENAME_FILE] =
     g_signal_new ("rename-file",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,

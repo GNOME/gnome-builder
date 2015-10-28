@@ -20,12 +20,12 @@ enum {
   LAST_SIGNAL
 };
 
-static guint gSignals [LAST_SIGNAL];
+static guint signals [LAST_SIGNAL];
 
 static void
 signal_target_class_init (SignalTargetClass *klass)
 {
-  gSignals [THE_SIGNAL] =
+  signals [THE_SIGNAL] =
     g_signal_new ("the-signal",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_DETAILED,
@@ -35,7 +35,7 @@ signal_target_class_init (SignalTargetClass *klass)
                   1,
                   G_TYPE_OBJECT);
 
-  gSignals [NEVER_EMITTED] =
+  signals [NEVER_EMITTED] =
     g_signal_new ("never-emitted",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
@@ -219,7 +219,7 @@ assert_signals (SignalTarget   *target,
   g_assert (group == NULL || EGG_IS_SIGNAL_GROUP (group));
 
   global_signal_calls = 0;
-  g_signal_emit (target, gSignals [THE_SIGNAL],
+  g_signal_emit (target, signals [THE_SIGNAL],
                  signal_detail_quark (), group);
   g_assert_cmpint (global_signal_calls, ==, success ? 5 : 0);
 }

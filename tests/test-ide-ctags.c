@@ -20,7 +20,7 @@
 
 #include "ctags/ide-ctags-index.h"
 
-static GMainLoop *gMainLoop;
+static GMainLoop *main_loop;
 
 static void
 init_cb (GObject      *object,
@@ -68,7 +68,7 @@ init_cb (GObject      *object,
   for (i = 0; i < 815; i++)
     g_assert (g_str_has_prefix (entries [i].name, "Ide"));
 
-  g_main_loop_quit (gMainLoop);
+  g_main_loop_quit (main_loop);
 }
 
 static void
@@ -78,7 +78,7 @@ test_ctags_basic (void)
   GFile *test_file;
   gchar *path;
 
-  gMainLoop = g_main_loop_new (NULL, FALSE);
+  main_loop = g_main_loop_new (NULL, FALSE);
 
   path = g_build_filename (TEST_DATA_DIR, "project1", "tags", NULL);
   test_file = g_file_new_for_path (path);
@@ -91,7 +91,7 @@ test_ctags_basic (void)
                                init_cb,
                                NULL);
 
-  g_main_loop_run (gMainLoop);
+  g_main_loop_run (main_loop);
 
   g_object_unref (index);
   g_free (path);

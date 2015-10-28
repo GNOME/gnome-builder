@@ -43,7 +43,7 @@ enum {
   LAST_PROP
 };
 
-static GParamSpec *gParamSpecs [LAST_PROP];
+static GParamSpec *properties [LAST_PROP];
 
 GKeyFile *
 ide_autotools_builder_get_config (IdeAutotoolsBuilder *self)
@@ -64,7 +64,7 @@ ide_autotools_builder_set_config (IdeAutotoolsBuilder *self,
       g_clear_pointer (&self->config, g_key_file_unref);
       if (config)
         self->config = g_key_file_ref (config);
-      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_CONFIG]);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CONFIG]);
     }
 }
 
@@ -85,7 +85,7 @@ ide_autotools_builder_set_device (IdeAutotoolsBuilder *self,
 
   if (self->device != device)
     if (g_set_object (&self->device, device))
-      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_DEVICE]);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_DEVICE]);
 }
 
 static void
@@ -298,7 +298,7 @@ ide_autotools_builder_class_init (IdeAutotoolsBuilderClass *klass)
   builder_class->build_async = ide_autotools_builder_build_async;
   builder_class->build_finish = ide_autotools_builder_build_finish;
 
-  gParamSpecs [PROP_CONFIG] =
+  properties [PROP_CONFIG] =
     g_param_spec_boxed ("config",
                         "Config",
                         "The configuration for the build.",
@@ -307,7 +307,7 @@ ide_autotools_builder_class_init (IdeAutotoolsBuilderClass *klass)
                          G_PARAM_CONSTRUCT_ONLY |
                          G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_DEVICE] =
+  properties [PROP_DEVICE] =
     g_param_spec_object ("device",
                          "Device",
                          "The device to build for.",
@@ -316,7 +316,7 @@ ide_autotools_builder_class_init (IdeAutotoolsBuilderClass *klass)
                           G_PARAM_CONSTRUCT_ONLY |
                           G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 }
 
 static void

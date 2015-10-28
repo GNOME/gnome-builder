@@ -49,7 +49,7 @@ enum {
   LAST_PROP
 };
 
-static GParamSpec *gParamSpecs [LAST_PROP];
+static GParamSpec *properties [LAST_PROP];
 
 static gboolean
 gb_preferences_page_match (const gchar *needle,
@@ -171,7 +171,7 @@ gb_preferences_page_set_title (GbPreferencesPage *page,
       g_free (priv->title);
       priv->title = g_strdup (title);
       g_object_notify_by_pspec (G_OBJECT (page),
-                                gParamSpecs [PROP_TITLE]);
+                                properties [PROP_TITLE]);
     }
 }
 
@@ -277,7 +277,7 @@ gb_preferences_page_class_init (GbPreferencesPageClass *klass)
   object_class->get_property = gb_preferences_page_get_property;
   object_class->set_property = gb_preferences_page_set_property;
 
-  gParamSpecs [PROP_TITLE] =
+  properties [PROP_TITLE] =
     g_param_spec_string ("title",
                          "Title",
                          "The title for the preferences page.",
@@ -285,7 +285,7 @@ gb_preferences_page_class_init (GbPreferencesPageClass *klass)
                          (G_PARAM_READWRITE |
                           G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 
   g_type_ensure (GB_TYPE_PREFERENCES_SWITCH);
 }

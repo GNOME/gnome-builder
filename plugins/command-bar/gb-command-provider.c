@@ -44,8 +44,8 @@ enum {
   LAST_SIGNAL
 };
 
-static GParamSpec *gParamSpecs [LAST_PROP];
-static guint gSignals [LAST_SIGNAL];
+static GParamSpec *properties [LAST_PROP];
+static guint signals [LAST_SIGNAL];
 
 GbCommandProvider *
 gb_command_provider_new (GbWorkbench *workbench)
@@ -97,7 +97,7 @@ gb_command_provider_set_active_view (GbCommandProvider *provider,
     }
 
   g_object_notify_by_pspec (G_OBJECT (provider),
-                            gParamSpecs [PROP_ACTIVE_VIEW]);
+                            properties [PROP_ACTIVE_VIEW]);
 }
 
 static void
@@ -184,7 +184,7 @@ gb_command_provider_set_workbench (GbCommandProvider *provider,
         }
 
       g_object_notify_by_pspec (G_OBJECT (provider),
-                                gParamSpecs [PROP_WORKBENCH]);
+                                properties [PROP_WORKBENCH]);
   }
 }
 
@@ -210,7 +210,7 @@ gb_command_provider_set_priority (GbCommandProvider *provider,
     {
       priv->priority = priority;
       g_object_notify_by_pspec (G_OBJECT (provider),
-                                gParamSpecs [PROP_PRIORITY]);
+                                properties [PROP_PRIORITY]);
     }
 }
 
@@ -231,7 +231,7 @@ gb_command_provider_lookup (GbCommandProvider *provider,
   g_return_val_if_fail (GB_IS_COMMAND_PROVIDER (provider), NULL);
   g_return_val_if_fail (command_text, NULL);
 
-  g_signal_emit (provider, gSignals [LOOKUP], 0, command_text, &ret);
+  g_signal_emit (provider, signals [LOOKUP], 0, command_text, &ret);
 
   return ret;
 }
@@ -252,7 +252,7 @@ gb_command_provider_complete (GbCommandProvider *provider,
   g_return_if_fail (completions);
   g_return_if_fail (initial_command_text);
 
-  g_signal_emit (provider, gSignals [COMPLETE], 0, completions, initial_command_text);
+  g_signal_emit (provider, signals [COMPLETE], 0, completions, initial_command_text);
 }
 
 
@@ -314,7 +314,7 @@ gb_command_provider_class_init (GbCommandProviderClass *klass)
   object_class->get_property = gb_command_provider_get_property;
   object_class->set_property = gb_command_provider_set_property;
 
-  gParamSpecs [PROP_ACTIVE_VIEW] =
+  properties [PROP_ACTIVE_VIEW] =
     g_param_spec_object ("active-tab",
                          "Active View",
                          "The last focused GbView widget.",
@@ -333,7 +333,7 @@ gb_command_provider_class_init (GbCommandProviderClass *klass)
    *
    * A negative priority is allowed;
    */
-  gParamSpecs [PROP_PRIORITY] =
+  properties [PROP_PRIORITY] =
     g_param_spec_int ("priority",
                       "Priority",
                       "The priority of the command provider.",
@@ -349,7 +349,7 @@ gb_command_provider_class_init (GbCommandProviderClass *klass)
    * and the workbench to work on it. It keeps track of the last focused tab
    * for convenience by action providers.
    */
-  gParamSpecs [PROP_WORKBENCH] =
+  properties [PROP_WORKBENCH] =
     g_param_spec_object ("workbench",
                          "Workbench",
                          "The target workbench.",
@@ -358,7 +358,7 @@ gb_command_provider_class_init (GbCommandProviderClass *klass)
                           G_PARAM_CONSTRUCT_ONLY |
                           G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 
   /**
    * GbCommandProvider::lookup:
@@ -372,7 +372,7 @@ gb_command_provider_class_init (GbCommandProviderClass *klass)
    * If successful, the callee can set @parameter, to specify the
    * parameters that should be passed to the resulting action.
    */
-  gSignals [LOOKUP] =
+  signals [LOOKUP] =
     g_signal_new ("lookup",
                   GB_TYPE_COMMAND_PROVIDER,
                   G_SIGNAL_RUN_LAST,
@@ -393,7 +393,7 @@ gb_command_provider_class_init (GbCommandProviderClass *klass)
    * received. All providers should all all possible completions, matching
    * the initial test.
    */
-  gSignals [COMPLETE] =
+  signals [COMPLETE] =
     g_signal_new ("complete",
                   GB_TYPE_COMMAND_PROVIDER,
                   G_SIGNAL_RUN_LAST,

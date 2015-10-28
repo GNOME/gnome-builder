@@ -56,8 +56,8 @@ enum {
   LAST_PROP
 };
 
-static GParamSpec *gParamSpecs [LAST_PROP];
-static guint gSignals [LAST_SIGNAL];
+static GParamSpec *properties [LAST_PROP];
+static guint signals [LAST_SIGNAL];
 
 static void
 add_extension (IdeExtensionSetAdapter *self,
@@ -70,7 +70,7 @@ add_extension (IdeExtensionSetAdapter *self,
   g_assert (g_type_is_a (G_OBJECT_TYPE (exten), self->interface_type));
 
   g_hash_table_insert (self->extensions, plugin_info, exten);
-  g_signal_emit (self, gSignals [EXTENSION_ADDED], 0, plugin_info, exten);
+  g_signal_emit (self, signals [EXTENSION_ADDED], 0, plugin_info, exten);
 }
 
 static void
@@ -85,7 +85,7 @@ remove_extension (IdeExtensionSetAdapter *self,
 
   g_object_ref (exten);
   g_hash_table_remove (self->extensions, plugin_info);
-  g_signal_emit (self, gSignals [EXTENSION_REMOVED], 0, plugin_info, exten);
+  g_signal_emit (self, signals [EXTENSION_REMOVED], 0, plugin_info, exten);
   g_object_unref (exten);
 }
 
@@ -167,7 +167,7 @@ ide_extension_set_adapter_set_engine (IdeExtensionSetAdapter *self,
 
   if (g_set_object (&self->engine, engine))
     {
-      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_ENGINE]);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ENGINE]);
       ide_extension_set_adapter_queue_reload (self);
     }
 }
@@ -182,7 +182,7 @@ ide_extension_set_adapter_set_interface_type (IdeExtensionSetAdapter *self,
   if (interface_type != self->interface_type)
     {
       self->interface_type = interface_type;
-      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_INTERFACE_TYPE]);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_INTERFACE_TYPE]);
       ide_extension_set_adapter_queue_reload (self);
     }
 }
@@ -271,37 +271,37 @@ ide_extension_set_adapter_class_init (IdeExtensionSetAdapterClass *klass)
   object_class->get_property = ide_extension_set_adapter_get_property;
   object_class->set_property = ide_extension_set_adapter_set_property;
 
-  gParamSpecs [PROP_ENGINE] =
+  properties [PROP_ENGINE] =
     g_param_spec_object ("engine",
                          "Engine",
                          "Engine",
                          PEAS_TYPE_ENGINE,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_INTERFACE_TYPE] =
+  properties [PROP_INTERFACE_TYPE] =
     g_param_spec_gtype ("interface-type",
                         "Interface Type",
                         "Interface Type",
                         G_TYPE_INTERFACE,
                         (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_KEY] =
+  properties [PROP_KEY] =
     g_param_spec_string ("key",
                          "Key",
                          "Key",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_VALUE] =
+  properties [PROP_VALUE] =
     g_param_spec_string ("value",
                          "Value",
                          "Value",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 
-  gSignals [EXTENSION_ADDED] =
+  signals [EXTENSION_ADDED] =
     g_signal_new ("extension-added",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
@@ -312,7 +312,7 @@ ide_extension_set_adapter_class_init (IdeExtensionSetAdapterClass *klass)
                   PEAS_TYPE_PLUGIN_INFO,
                   PEAS_TYPE_EXTENSION);
 
-  gSignals [EXTENSION_REMOVED] =
+  signals [EXTENSION_REMOVED] =
     g_signal_new ("extension-removed",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
@@ -371,7 +371,7 @@ ide_extension_set_adapter_set_key (IdeExtensionSetAdapter *self,
     {
       g_free (self->key);
       self->key = g_strdup (key);
-      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_KEY]);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_KEY]);
       ide_extension_set_adapter_queue_reload (self);
     }
 }
@@ -394,7 +394,7 @@ ide_extension_set_adapter_set_value (IdeExtensionSetAdapter *self,
     {
       g_free (self->value);
       self->value = g_strdup (value);
-      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_VALUE]);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_VALUE]);
       ide_extension_set_adapter_queue_reload (self);
     }
 }

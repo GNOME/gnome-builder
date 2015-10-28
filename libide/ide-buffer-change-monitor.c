@@ -34,8 +34,8 @@ enum {
   LAST_SIGNAL
 };
 
-static GParamSpec *gParamSpecs [LAST_PROP];
-static guint gSignals [LAST_SIGNAL];
+static GParamSpec *properties [LAST_PROP];
+static guint signals [LAST_SIGNAL];
 
 IdeBufferLineChange
 ide_buffer_change_monitor_get_change (IdeBufferChangeMonitor *self,
@@ -72,7 +72,7 @@ ide_buffer_change_monitor_emit_changed (IdeBufferChangeMonitor *self)
 {
   g_return_if_fail (IDE_IS_BUFFER_CHANGE_MONITOR (self));
 
-  g_signal_emit (self, gSignals [CHANGED], 0);
+  g_signal_emit (self, signals [CHANGED], 0);
 }
 
 static void
@@ -101,16 +101,16 @@ ide_buffer_change_monitor_class_init (IdeBufferChangeMonitorClass *klass)
 
   object_class->set_property = ide_buffer_change_monitor_set_property;
 
-  gParamSpecs [PROP_BUFFER] =
+  properties [PROP_BUFFER] =
     g_param_spec_object ("buffer",
                          "Buffer",
                          "The IdeBuffer to be monitored.",
                          IDE_TYPE_BUFFER,
                          (G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 
-  gSignals [CHANGED] = g_signal_new ("changed",
+  signals [CHANGED] = g_signal_new ("changed",
                                      G_TYPE_FROM_CLASS (klass),
                                      G_SIGNAL_RUN_LAST,
                                      0,

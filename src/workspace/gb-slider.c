@@ -63,7 +63,7 @@ enum {
 #define ANIMATION_MODE     EGG_ANIMATION_EASE_IN_QUAD
 #define ANIMATION_DURATION 150
 
-static GParamSpec *gParamSpecs [LAST_PROP];
+static GParamSpec *properties [LAST_PROP];
 
 static void
 gb_slider_child_free (GbSliderChild *child)
@@ -750,7 +750,7 @@ gb_slider_class_init (GbSliderClass *klass)
   container_class->remove = gb_slider_remove;
   container_class->set_child_property = gb_slider_set_child_property;
 
-  gParamSpecs [PROP_POSITION] =
+  properties [PROP_POSITION] =
     g_param_spec_enum ("position",
                        "Position",
                        "Which slider child is visible.",
@@ -758,7 +758,7 @@ gb_slider_class_init (GbSliderClass *klass)
                        GB_SLIDER_NONE,
                        (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 
   gtk_container_class_install_child_property (container_class,
                                               CHILD_PROP_POSITION,
@@ -918,7 +918,7 @@ gb_slider_set_position (GbSlider         *self,
                                  NULL);
       ide_set_weak_pointer (&priv->v_anim, anim);
 
-      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_POSITION]);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_POSITION]);
       gtk_widget_queue_resize (GTK_WIDGET (self));
     }
 }

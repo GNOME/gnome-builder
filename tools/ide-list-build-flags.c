@@ -27,17 +27,17 @@
 
 #include "gb-plugins.h"
 
-static GMainLoop *gMainLoop;
-static gint gExitCode = EXIT_SUCCESS;
-static IdeContext *gContext;
-static const gchar *gPath;
+static GMainLoop *main_loop;
+static gint exit_code = EXIT_SUCCESS;
+static IdeContext *ide_context;
+static const gchar *path;
 
 static void
-quit (gint exit_code)
+quit (gint code)
 {
-  gExitCode = exit_code;
-  g_clear_object (&gContext);
-  g_main_loop_quit (gMainLoop);
+  exit_code = code;
+  g_clear_object (&ide_context);
+  g_main_loop_quit (main_loop);
 }
 
 static void
@@ -89,11 +89,11 @@ context_cb (GObject      *object,
       return;
     }
 
-  gContext = g_object_ref (context);
+  ide_context = g_object_ref (context);
 
   build_system = ide_context_get_build_system (context);
   project = ide_context_get_project (context);
-  file = ide_project_get_file_for_path (project, gPath);
+  file = ide_project_get_file_for_path (project, path);
 
   ide_build_system_get_build_flags_async (build_system, file, NULL, get_flags_cb, NULL);
 }
@@ -121,17 +121,17 @@ main (gint   argc,
       return EXIT_FAILURE;
     }
 
-  gMainLoop = g_main_loop_new (NULL, FALSE);
+  main_loop = g_main_loop_new (NULL, FALSE);
 
   if (argc > 2)
     {
       project_path = argv [1];
-      gPath = argv [2];
+      path = argv [2];
     }
   else if (argc > 1)
     {
       project_path = ".";
-      gPath = argv [1];
+      path = argv [1];
     }
   else
     {
@@ -145,8 +145,8 @@ main (gint   argc,
 
   ide_context_new_async (project_file, NULL, context_cb, NULL);
 
-  g_main_loop_run (gMainLoop);
-  g_clear_pointer (&gMainLoop, g_main_loop_unref);
+  g_main_loop_run (main_loop);
+  g_clear_pointer (&main_loop, g_main_loop_unref);
 
-  return gExitCode;
+  return exit_code;
 }

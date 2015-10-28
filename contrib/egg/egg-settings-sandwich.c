@@ -43,7 +43,7 @@ enum {
   LAST_PROP
 };
 
-static GParamSpec *gParamSpecs [LAST_PROP];
+static GParamSpec *properties [LAST_PROP];
 
 static GSettings *
 egg_settings_sandwich_get_primary_settings (EggSettingsSandwich *self)
@@ -214,21 +214,21 @@ egg_settings_sandwich_class_init (EggSettingsSandwichClass *klass)
   object_class->get_property = egg_settings_sandwich_get_property;
   object_class->set_property = egg_settings_sandwich_set_property;
 
-  gParamSpecs [PROP_SCHEMA_ID] =
+  properties [PROP_SCHEMA_ID] =
     g_param_spec_string ("schema-id",
                          "Schema Id",
                          "Schema Id",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_PATH] =
+  properties [PROP_PATH] =
     g_param_spec_string ("path",
                          "Settings Path",
                          "Settings Path",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 }
 
 static void
