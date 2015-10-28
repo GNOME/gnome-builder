@@ -77,9 +77,10 @@ for MODULE in $MODULES; do
         fi
         BODY="$BODY$MODULE: $URL $REV"$'\n'
     elif [[ "$URL" =~ ^\. ]]; then
-        if test -f $BASENAME; then
-            cmp -s "$URL" "$BASENAME"
-            if [[ $? != 0 ]]; then
+        if test -f "$BASENAME" && test -f "$URL"; then
+            OLD_MD5=`md5sum $BASENAME`
+            NEW_MD5=`md5sum $URL`
+            if [ "x$OLD_MD5" != "x$NEW_MD5" ]; then
                 cp "$URL" "$BASENAME"
                 CHANGED="$CHANGED $MODULE"
             fi
