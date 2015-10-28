@@ -164,7 +164,7 @@ GbEditorFrame GtkFrame.gb-search-slider GdTaggedEntry {
                     builder-emacs-text-entry;
 }
 
-GtkEntry {
+entry {
   gtk-key-bindings: builder-emacs-text-entry;
 }
 
