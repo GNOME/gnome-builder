@@ -152,14 +152,14 @@ AC_SUBST(BUGREPORT_URL)
 dnl ***********************************************************************
 dnl Check for Required Packages
 dnl ***********************************************************************
-m4_define([gtk_required_version], [3.17.8])
-m4_define([glib_required_version], [2.45.8])
-m4_define([gtksourceview_required_version], [3.17.7])
+m4_define([gtk_required_version], [3.19.1])
+m4_define([glib_required_version], [2.47.1])
+m4_define([gtksourceview_required_version], [3.19.0])
 m4_define([ggit_required_version], [0.23.4])
 m4_define([gjs_required_version], [1.42.0])
 m4_define([pygobject_required_version], [3.0.0])
 m4_define([libxml_required_version], [2.9.0])
-m4_define([peas_required_version], [1.14.1])
+m4_define([peas_required_version], [1.16.0])
 
 PKG_CHECK_MODULES(BUILDER,  [gtk+-3.0 >= gtk_required_version
                              gio-2.0 >= glib_required_version
