@@ -85,7 +85,7 @@ GtkBox.gb-command-bar-box {
 GtkBox.gb-command-bar-box GtkLabel {
   color: #eeeeec;
 }
-GtkEntry.gb-command-bar-entry {
+entry.gb-command-bar-entry {
   font-family: Monospace;
   background-image: none;
   padding: 6px 6px 6px 6px;
