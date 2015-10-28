@@ -79,9 +79,6 @@
                                 <property name="action-name">frame.previous-search-result</property>
                                 <property name="can-focus">false</property>
                                 <property name="visible">true</property>
-                                <style>
-                                  <class name="image-button"/>
-                                </style>
                                 <child>
                                   <object class="GtkImage">
                                     <property name="icon-name">go-up-symbolic</property>
@@ -96,9 +93,6 @@
                                 <property name="action-name">frame.next-search-result</property>
                                 <property name="can-focus">false</property>
                                 <property name="visible">true</property>
-                                <style>
-                                  <class name="image-button"/>
-                                </style>
                                 <child>
                                   <object class="GtkImage">
                                     <property name="icon-name">go-down-symbolic</property>
