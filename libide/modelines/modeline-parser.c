@@ -722,7 +722,9 @@ modeline_parser_apply_modeline (GtkTextBuffer   *buffer,
 	   we set them before */
 	if (has_option (&options, MODELINE_SET_INSERT_SPACES))
 	{
-		ide_file_settings_set_indent_style (file_settings, IDE_INDENT_STYLE_SPACES);
+		IdeIndentStyle style;
+		style = options.insert_spaces ? IDE_INDENT_STYLE_SPACES : IDE_INDENT_STYLE_TABS;
+		ide_file_settings_set_indent_style (file_settings, style);
 	}
         else
 	{
