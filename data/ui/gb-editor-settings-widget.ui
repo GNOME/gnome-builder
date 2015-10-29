@@ -93,7 +93,7 @@
         </child>
         <child>
           <object class="GtkCheckButton" id="insert_matching_brace">
-            <property name="label" translatable="yes">Insert matching brace, bracket, quotation, and parenthesis.</property>
+            <property name="label" translatable="yes">Insert matching brace, bracket, quotation, and parenthesis</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
@@ -110,7 +110,7 @@
         </child>
         <child>
           <object class="GtkCheckButton" id="overwrite_braces">
-            <property name="label" translatable="yes">Overwrite closing brace, bracket, quotation, and parenthesis.</property>
+            <property name="label" translatable="yes">Overwrite closing brace, bracket, quotation, and parenthesis</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>

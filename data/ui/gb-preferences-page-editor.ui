@@ -214,7 +214,7 @@
             <child>
               <object class="GtkCheckButton" id="draw_spaces_space">
                 <property name="action-name">editor.draw-spaces-space</property>
-                <property name="label" translatable="yes">Draw a circle over space characters.</property>
+                <property name="label" translatable="yes">Draw a circle over space characters</property>
                 <property name="visible">true</property>
                 <property name="focus-on-click">false</property>
                 <property name="margin-start">6</property>
@@ -224,7 +224,7 @@
             <child>
               <object class="GtkCheckButton" id="draw_spaces_tab">
                 <property name="action-name">editor.draw-spaces-tab</property>
-                <property name="label" translatable="yes">Draw an arrow over tab characters.</property>
+                <property name="label" translatable="yes">Draw an arrow over tab characters</property>
                 <property name="visible">true</property>
                 <property name="focus-on-click">false</property>
                 <property name="margin-start">6</property>
@@ -234,7 +234,7 @@
             <child>
               <object class="GtkCheckButton" id="draw_spaces_newline">
                 <property name="action-name">editor.draw-spaces-newline</property>
-                <property name="label" translatable="yes">Draw a carriage return over newline characters.</property>
+                <property name="label" translatable="yes">Draw a carriage return over newline characters</property>
                 <property name="visible">true</property>
                 <property name="focus-on-click">false</property>
                 <property name="margin-start">6</property>
@@ -244,7 +244,7 @@
             <child>
               <object class="GtkCheckButton" id="draw_spaces_nbsp">
                 <property name="action-name">editor.draw-spaces-nbsp</property>
-                <property name="label" translatable="yes">Draw indicators for non-breaking spaces.</property>
+                <property name="label" translatable="yes">Draw indicators for non-breaking spaces</property>
                 <property name="visible">true</property>
                 <property name="focus-on-click">false</property>
                 <property name="margin-start">6</property>
@@ -254,7 +254,7 @@
             <child>
               <object class="GtkCheckButton" id="draw_spaces_leading">
                 <property name="action-name">editor.draw-spaces-leading</property>
-                <property name="label" translatable="yes">Draw leading space only.</property>
+                <property name="label" translatable="yes">Draw leading space only</property>
                 <property name="visible">true</property>
                 <property name="focus-on-click">false</property>
                 <property name="margin-start">6</property>
@@ -264,7 +264,7 @@
             <child>
               <object class="GtkCheckButton" id="draw_spaces_trailing">
                 <property name="action-name">editor.draw-spaces-trailing</property>
-                <property name="label" translatable="yes">Draw trailing space only.</property>
+                <property name="label" translatable="yes">Draw trailing space only</property>
                 <property name="visible">true</property>
                 <property name="focus-on-click">false</property>
                 <property name="margin-start">6</property>
