@@ -12,7 +12,7 @@
 /*
  * Preferences styling.
  */
-GbPreferencesPageLanguage GtkSearchEntry {
+GbPreferencesPageLanguage entry {
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
 }
@@ -138,7 +138,7 @@ GbWorkspacePane GbViewStack GtkBox.header.notebook GtkSeparator.vertical {
 /*
  * Adjust devehlp styling.
  */
-DhSidebar GtkSearchEntry {
+DhSidebar entry {
   border-left: none;
   border-right: none;
   border-top: none;
@@ -149,7 +149,7 @@ DhSidebar GtkSearchEntry {
 /*
  * Adjust symbol panel styling.
  */
-SymbolTree GtkSearchEntry {
+SymbolTree entry {
   border-left: none;
   border-right: none;
   border-top: none;
