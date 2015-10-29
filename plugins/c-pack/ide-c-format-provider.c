@@ -51,7 +51,7 @@ G_DEFINE_DYNAMIC_TYPE_EXTENDED (IdeCFormatProvider,
                                                        completion_provider_iface_init)
                                 G_IMPLEMENT_INTERFACE (IDE_TYPE_COMPLETION_PROVIDER, NULL))
 
-static const FormatItem g_dateTimeFormats[] = {
+static const FormatItem date_time_formats[] = {
   { "%a", "the abbreviated weekday name according to the current locale" },
   { "%A", "the full weekday name according to the current locale" },
   { "%b", "the abbreviated month name according to the current locale" },
@@ -167,18 +167,18 @@ create_matches_g_date_time_format (const gchar *text)
 
   if (text)
     {
-      for (i = 0; g_dateTimeFormats [i].format; i++)
+      for (i = 0; date_time_formats [i].format; i++)
         {
-          if (g_str_has_prefix (g_dateTimeFormats [i].format, text))
+          if (g_str_has_prefix (date_time_formats [i].format, text))
             {
               g_autofree gchar *markup = NULL;
               const gchar *insert;
 
-              insert = g_dateTimeFormats [i].format + strlen (text);
+              insert = date_time_formats [i].format + strlen (text);
 
               markup = g_strdup_printf ("%s - %s",
-                                        g_dateTimeFormats [i].format,
-                                        g_dateTimeFormats [i].description);
+                                        date_time_formats [i].format,
+                                        date_time_formats [i].description);
               list = g_list_prepend (list,
                                      g_object_new (GTK_SOURCE_TYPE_COMPLETION_ITEM,
                                                    "markup", markup,
