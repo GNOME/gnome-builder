@@ -480,12 +480,11 @@ _ide_vim_iter_forward_find_char (GtkTextIter          *iter,
   g_return_val_if_fail (iter != NULL, FALSE);
   g_return_val_if_fail (pred != NULL, FALSE);
 
-  if (limit &&
-      gtk_text_iter_compare (iter, limit) >= 0)
+  if (limit && gtk_text_iter_compare (iter, limit) >= 0)
     return FALSE;
 
   while ((limit == NULL ||
-          !gtk_text_iter_equal (limit, iter)) &&
+         !gtk_text_iter_equal (limit, iter)) &&
          gtk_text_iter_forward_char (iter))
     {
       if (matches_pred (iter, pred, user_data))
@@ -507,12 +506,11 @@ _ide_vim_iter_backward_find_char (GtkTextIter          *iter,
   g_return_val_if_fail (iter != NULL, FALSE);
   g_return_val_if_fail (pred != NULL, FALSE);
 
-  if (limit &&
-      gtk_text_iter_compare (iter, limit) <= 0)
+  if (limit && gtk_text_iter_compare (iter, limit) <= 0)
     return FALSE;
 
   while ((limit == NULL ||
-          !gtk_text_iter_equal (limit, iter)) &&
+         !gtk_text_iter_equal (limit, iter)) &&
          gtk_text_iter_backward_char (iter))
     {
       if (matches_pred (iter, pred, user_data))
