@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2015-10-28 08:01+0000\n"
-"PO-Revision-Date: 2015-10-28 13:30+0100\n"
+"POT-Creation-Date: 2015-10-29 19:57+0000\n"
+"PO-Revision-Date: 2015-10-30 07:08+0100\n"
 "Last-Translator: Marek Černocký <marek@manet.cz>\n"
 "Language-Team: Czech <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
@@ -210,12 +210,12 @@ msgid "Trim trailing whitespace when saving document"
 msgstr "Při ukládání dokumentu odstraňovat koncové mezery"
 
 #: ../data/ui/gb-editor-settings-widget.ui.h:3
-msgid "Insert matching brace, bracket, quotation, and parenthesis."
+msgid "Insert matching brace, bracket, quotation, and parenthesis"
 msgstr ""
 "Vkládat do páru složené závorky, hranaté závorky, kulaté závorky a uvozovky"
 
 #: ../data/ui/gb-editor-settings-widget.ui.h:4
-msgid "Overwrite closing brace, bracket, quotation, and parenthesis."
+msgid "Overwrite closing brace, bracket, quotation, and parenthesis"
 msgstr ""
 "Přepisovat zavírací složené závorky, hranaté závorky, kulaté závorky a "
 "uvozovky"
@@ -291,8 +291,7 @@ msgid "8"
 msgstr "8"
 
 #: ../data/ui/gb-editor-view.ui.h:2 ../data/ui/gb-greeter-window.ui.h:4
-#: ../data/ui/gb-new-project-dialog.ui.h:2
-#: ../data/ui/gb-projects-dialog.ui.h:3
+#: ../data/ui/gb-new-project-dialog.ui.h:2 ../data/ui/gb-projects-dialog.ui.h:3
 msgid "_Cancel"
 msgstr "_Zrušit"
 
@@ -494,28 +493,28 @@ msgid "Draw Spaces"
 msgstr "Vykreslovat mezery"
 
 #: ../data/ui/gb-preferences-page-editor.ui.h:23
-msgid "Draw a circle over space characters."
-msgstr "Vykreslovat tečky v místech mezer."
+msgid "Draw a circle over space characters"
+msgstr "Vykreslovat tečky v místech mezer"
 
 #: ../data/ui/gb-preferences-page-editor.ui.h:24
-msgid "Draw an arrow over tab characters."
-msgstr "Vykreslovat šipky v místech tabulátorů."
+msgid "Draw an arrow over tab characters"
+msgstr "Vykreslovat šipky v místech tabulátorů"
 
 #: ../data/ui/gb-preferences-page-editor.ui.h:25
-msgid "Draw a carriage return over newline characters."
-msgstr "Vykreslovat symbol zalomení v místech přechodu na nový řádek."
+msgid "Draw a carriage return over newline characters"
+msgstr "Vykreslovat symbol zalomení v místech přechodů na nový řádek"
 
 #: ../data/ui/gb-preferences-page-editor.ui.h:26
-msgid "Draw indicators for non-breaking spaces."
-msgstr "Vykreslovat odlišně nezalomitelné mezery."
+msgid "Draw indicators for non-breaking spaces"
+msgstr "Vykreslovat odlišně nezalomitelné mezery"
 
 #: ../data/ui/gb-preferences-page-editor.ui.h:27
-msgid "Draw leading space only."
-msgstr "Vykreslovat jen úvodní mezery."
+msgid "Draw leading space only"
+msgstr "Vykreslovat jen úvodní mezery"
 
 #: ../data/ui/gb-preferences-page-editor.ui.h:28
-msgid "Draw trailing space only."
-msgstr "Vykreslovat jen koncové mezery."
+msgid "Draw trailing space only"
+msgstr "Vykreslovat jen koncové mezery"
 
 #: ../data/ui/gb-preferences-page-git.ui.h:1
 #: ../data/ui/gb-preferences-window.ui.h:8
@@ -679,8 +678,7 @@ msgstr "Předvolby"
 msgid "Search Preferences…"
 msgstr "Předvolby hledání…"
 
-#: ../data/ui/gb-projects-dialog.ui.h:1
-#: ../src/dialogs/gb-projects-dialog.c:255
+#: ../data/ui/gb-projects-dialog.ui.h:1 ../src/dialogs/gb-projects-dialog.c:255
 msgid "Select Project"
 msgstr "Výběr projektu"
 
