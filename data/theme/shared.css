@@ -18,7 +18,7 @@
   background-color: @theme_unfocused_base_color;
   border-color: @unfocused_borders;
 }
-.floating-bar .button {
+.floating-bar button {
   padding: 4px;
 }
 
@@ -132,7 +132,7 @@ GbWorkspacePane .pane-separator {
 }
 
 
-.round .button {
+.round button {
   border-radius: 20px;
   outline-radius: 20px;
 }
