@@ -48,6 +48,7 @@ libide/ide-source-snippet-completion-provider.c
 libide/ide-source-snippet-parser.c
 libide/ide-source-snippets-manager.c
 libide/ide-source-view.c
+libide/ide-worker-manager.c
 libide/pygobject/ide-pygobject-script.c
 plugins/autotools/ide-autotools-build-system.c
 plugins/autotools/ide-autotools-build-task.c
