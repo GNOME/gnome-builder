@@ -44,7 +44,7 @@ typedef struct
 EGG_DEFINE_COUNTER (TotalTasks, "ThreadPool", "Total Tasks", "Total number of tasks processed.")
 EGG_DEFINE_COUNTER (QueuedTasks, "ThreadPool", "Queued Tasks", "Current number of pending tasks.")
 
-static GThreadPool *threadPools [IDE_THREAD_POOL_LAST];
+static GThreadPool *thread_pools [IDE_THREAD_POOL_LAST];
 
 enum {
   TYPE_TASK,
@@ -54,7 +54,7 @@ enum {
 static inline GThreadPool *
 ide_thread_pool_get_pool (IdeThreadPoolKind kind)
 {
-  return threadPools [kind];
+  return thread_pools [kind];
 }
 
 /**
@@ -190,19 +190,19 @@ _ide_thread_pool_init (void)
    * We don't want to consume threads fro other GTask's such as those regarding IO so we manage
    * these work items exclusively.
    */
-  threadPools [IDE_THREAD_POOL_COMPILER] = g_thread_pool_new (ide_thread_pool_worker,
+  thread_pools [IDE_THREAD_POOL_COMPILER] = g_thread_pool_new (ide_thread_pool_worker,
                                                                NULL,
                                                                COMPILER_MAX_THREADS,
-                                                               TRUE,
+                                                               FALSE,
                                                                NULL);
 
   /*
    * Create our pool exclusive to things like indexing. Such examples including building of
    * ctags indexes or highlight indexes.
    */
-  threadPools [IDE_THREAD_POOL_INDEXER] = g_thread_pool_new (ide_thread_pool_worker,
+  thread_pools [IDE_THREAD_POOL_INDEXER] = g_thread_pool_new (ide_thread_pool_worker,
                                                               NULL,
                                                               INDEXER_MAX_THREADS,
-                                                              TRUE,
+                                                              FALSE,
                                                               NULL);
 }
