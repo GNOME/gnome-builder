@@ -51,7 +51,7 @@ def DBusMethod(dbus_interface, in_signature=None, out_signature=None, async=Fals
         func._dbus_method.out_signature = out_signature or ''
 
         func._dbus_method.in_args = []
-        in_signature_list = GLib.Variant.split_signature(in_signature)
+        in_signature_list = GLib.Variant.split_signature('('+in_signature+')')
         arg_names = inspect.getargspec(func).args
         arg_names.pop(0) # eat "self" argument
         if async: arg_names.pop(0) # eat "invocation"
