@@ -21,18 +21,53 @@
 #
 
 import gi
+
+gi.require_version('Builder', '1.0')
 gi.require_version('Gtk', '3.0')
 gi.require_version('GtkSource', '3.0')
 gi.require_version('Ide', '1.0')
+
 from gi.importer import DynamicImporter
 from gi.module import IntrospectionModule
 from gi.module import FunctionInfo
+
+from gi.repository import Builder
+from gi.repository import Gio
 from gi.repository import GLib
 from gi.repository import GObject
 from gi.repository import Gtk
 from gi.repository import GtkSource
 from gi.repository import Ide
+
 gi_importer = DynamicImporter('gi.repository')
+
+_TYPE_KEYWORD = 1
+_TYPE_FUNCTION = 2
+_TYPE_CLASS = 3
+_TYPE_INSTANCE = 4
+_TYPE_PARAM = 5
+_TYPE_IMPORT = 6
+_TYPE_MODULE = 7
+
+_TYPES = {
+    'class': _TYPE_CLASS,
+    'function': _TYPE_FUNCTION,
+    'import': _TYPE_IMPORT,
+    'instance': _TYPE_INSTANCE,
+    'keyword': _TYPE_KEYWORD,
+    'module':  _TYPE_MODULE,
+    'param': _TYPE_PARAM,
+}
+
+_ICONS = {
+    _TYPE_KEYWORD: 'lang-class-symbolic',
+    _TYPE_FUNCTION: 'lang-function-symbolic',
+    _TYPE_CLASS: 'lang-class-symbolic',
+    _TYPE_INSTANCE: 'lang-variable-symbolic',
+    _TYPE_PARAM: 'lang-variable-symbolic',
+    _TYPE_IMPORT: 'lang-include-symbolic',
+    _TYPE_MODULE: 'lang-include-symbolic',
+}
 
 try:
     import jedi
@@ -83,11 +118,8 @@ try:
                     else:
                         # A pygobject type in a different module
                         return_type_parent = ret_type.split('.', 1)[0]
-                        ret_type = 'from gi.repository import %s\n%s' % (return_type_parent,
-                                                                         ret_type)
-                    result = _evaluate_for_statement_string(evaluator,
-                                                            ret_type,
-                                                            self.parent)
+                        ret_type = 'from gi.repository import %s\n%s' % (return_type_parent, ret_type)
+                    result = _evaluate_for_statement_string(evaluator, ret_type, self.parent)
                     return result
             if type(self.obj) == FunctionInfo:
                 return actual
@@ -126,72 +158,18 @@ except ImportError:
     print("jedi not found, python auto-completion not possible.")
     HAS_JEDI = False
 
-# FIXME: Should we be using multiprocessing or something?
-#        Alternatively, this can go in gnome-code-assistance
-#        once we have an API that can transfer completions
-#        relatively fast enough for interactivity.
-import threading
 
-
-class GIParam(object):
-    "A pygobject ArgInfo wrapper to make it similar to Jedi's Param class"
-    def __init__(self, arg_info):
-        self.name = arg_info.get_name()
-
-
-class CompletionThread(threading.Thread):
-    cancelled = False
-
-    def __init__(self, provider, context, text, line, column, filename, results):
-        super().__init__()
-        self._provider = provider
-        self._context = context
-        self._text = text
-        self._line = line
-        self._column = column
-        self._filename = filename
-        self._results = results
-
-    def run(self):
-        try:
-            if not self.cancelled:
-                script = jedi.Script(self._text, self._line, self._column, self._filename)
-                if not self.cancelled:
-                    for info in script.completions():
-                        if self.cancelled:
-                            break
-                        # we have to use custom names here because .type and .params can't be overriden (they are properties)
-                        if type(info._definition) == PatchedJediCompiledObject and \
-                           type(info._definition.obj) == FunctionInfo:
-                                info.real_type = 'function'
-                                obj = info._definition.obj
-                                info.gi_params = [GIParam(argument) for argument in obj.get_arguments()]
-                        else:
-                            info.real_type = info.type
-                            if hasattr(info, 'params') and len(info.params) > 0 and info.params[0].name == 'self':
-                                del info.params[0]
-                        completion = JediCompletionProposal(self._provider, self._context, info)
-                        self._results.take_proposal(completion)
-        finally:
-            self.complete_in_idle()
-
-    def _complete(self):
-        if not self.cancelled:
-            self._provider.complete(self._context, self._results)
-
-    def complete_in_idle(self):
-        GLib.timeout_add(0, self._complete)
-
-
-class JediCompletionProvider(Ide.Object,
-                             GtkSource.CompletionProvider,
-                             Ide.CompletionProvider):
+class JediCompletionProvider(Ide.Object, GtkSource.CompletionProvider, Ide.CompletionProvider):
+    context = None
     current_word = None
     results = None
     thread = None
     line_str = None
     line = -1
     line_offset = -1
+    loading_proxy = False
+
+    proxy = None
 
     def do_get_name(self):
         return 'Jedi Provider'
@@ -208,6 +186,9 @@ class JediCompletionProvider(Ide.Object,
                 return True
         return False
 
+    def _get_worker_cb(self, app, result):
+        self.proxy = app.get_worker_finish(result)
+
     def do_populate(self, context):
         self.current_word = Ide.CompletionProvider.context_current_word(context)
         self.current_word_lower = self.current_word.lower()
@@ -221,11 +202,10 @@ class JediCompletionProvider(Ide.Object,
         # If we have no results yet, but a thread is active and mostly matches
         # our line prefix, then we should just let that one continue but tell
         # it to deliver to our new context.
-        self.context = context
-        if self.thread is not None:
+        if self.context is not None:
             if not line_str.startswith(self.line_str):
-                self.thread.cancelled = True
-                self.thread = None
+                self.cancellable.cancel()
+        self.context = context
 
         if iter.get_line() == self.line and not self.invalidates(line_str):
             if self.results and self.results.replay(self.current_word):
@@ -240,7 +220,7 @@ class JediCompletionProvider(Ide.Object,
         filename = (iter.get_buffer()
                         .get_file()
                         .get_file()
-                        .get_basename())
+                        .get_path())
 
         text = buffer.get_text(begin, end, True)
         line = iter.get_line() + 1
@@ -251,33 +231,57 @@ class JediCompletionProvider(Ide.Object,
 
         results = Ide.CompletionResults(query=self.current_word)
 
-        context.connect('cancelled', lambda *_: self._cancelled())
-        self.thread = CompletionThread(self, context, text, line, column, filename, results)
-        self.thread.start()
+        self.cancellable = cancellable = Gio.Cancellable()
+        context.connect('cancelled', lambda *_: cancellable.cancel())
 
-    def _cancelled(self):
-        if self.thread is not None:
-            self.thread.cancelled = True
+        def async_handler(proxy, result, user_data):
+            (self, results, context) = user_data
+
+            try:
+                variant = proxy.call_finish(result)
+                # unwrap outer tuple
+                variant = variant.get_child_value(0)
+                for i in range(variant.n_children()):
+                    proposal = JediCompletionProposal(self, context, variant, i)
+                    results.take_proposal(proposal)
+                self.complete(context, results)
+            except Exception as ex:
+                if isinstance(ex, GLib.Error) and \
+                   ex.matches(Gio.io_error_quark(), Gio.IOErrorEnum.CANCELLED):
+                    return
+                print(repr(ex))
+                context.add_proposals(self, [], True)
+
+        self.proxy.call('CodeComplete',
+                        GLib.Variant('(siis)', (filename, self.line, self.line_offset, text)),
+                        0, 10000, cancellable, async_handler, (self, results, context))
 
     def do_match(self, context):
         if not HAS_JEDI:
             return False
+
+        if not self.proxy and not self.loading_proxy:
+            def get_worker_cb(app, result):
+                self.loading_proxy = False
+                self.proxy = app.get_worker_finish(result)
+            self.loading_proxy = True
+            app = Gio.Application.get_default()
+            app.get_worker_async('jedi_plugin', None, get_worker_cb)
+
+        if not self.proxy:
+            return False
+
         if context.get_activation() == GtkSource.CompletionActivation.INTERACTIVE:
             _, iter = context.get_iter()
             iter.backward_char()
             ch = iter.get_char()
-            if not is_completable_char(ch):
+            if not (ch in ('_', '.') or ch.isalnum()):
                 return False
             buffer = iter.get_buffer()
             if Ide.CompletionProvider.context_in_comment_or_string(context):
                 return False
+
         return True
-
-    def do_get_info_widget(self, proposal):
-        return None
-
-    def do_update_info(self, proposal, info):
-        pass
 
     def do_get_start_iter(self, context, proposal):
         _, iter = context.get_iter()
@@ -308,62 +312,8 @@ class JediCompletionProvider(Ide.Object,
             buffer.delete(begin, iter)
             buffer.end_user_action()
 
-        # Use snippets to push the replacement text and/or parameters with
-        # tab stops.
-        snippet = Ide.SourceSnippet()
-
-        chunk = Ide.SourceSnippetChunk()
-        chunk.set_text(proposal.completion.complete)
-        chunk.set_text_set(True)
-        snippet.add_chunk(chunk)
-
-        # Add parameter completion for functions.
-        if proposal.completion.real_type == 'function':
-            chunk = Ide.SourceSnippetChunk()
-            chunk.set_text('(')
-            chunk.set_text_set(True)
-            snippet.add_chunk(chunk)
-
-            if hasattr(proposal.completion, 'gi_params'):
-                params = proposal.completion.gi_params
-            else:
-                params = proposal.completion.params
-
-            if not params:
-                chunk = Ide.SourceSnippetChunk()
-                chunk.set_text('')
-                chunk.set_text_set(True)
-                snippet.add_chunk(chunk)
-            else:
-                tab_stop = 0
-
-                for param in params[:-1]:
-                    tab_stop += 1
-                    chunk = Ide.SourceSnippetChunk()
-                    chunk.set_text(get_param_description(param))
-                    chunk.set_text_set(True)
-                    chunk.set_tab_stop(tab_stop)
-                    snippet.add_chunk(chunk)
-
-                    chunk = Ide.SourceSnippetChunk()
-                    chunk.set_text(', ')
-                    chunk.set_text_set(True)
-                    snippet.add_chunk(chunk)
-
-                tab_stop += 1
-                chunk = Ide.SourceSnippetChunk()
-                chunk.set_text(get_param_description(params[-1]))
-                chunk.set_text_set(True)
-                chunk.set_tab_stop(tab_stop)
-                snippet.add_chunk(chunk)
-
-            chunk = Ide.SourceSnippetChunk()
-            chunk.set_text(')')
-            chunk.set_text_set(True)
-            snippet.add_chunk(chunk)
-
-        view = proposal.context.props.completion.props.view
-        view.push_snippet(snippet, None)
+        snippet = JediSnippet(proposal)
+        proposal.context.props.completion.props.view.push_snippet(snippet, None)
 
         self.results = None
         self.line = -1
@@ -382,75 +332,188 @@ class JediCompletionProvider(Ide.Object,
         # we stole the results of this task for a later completion.
         self.results = results
         self.results.present(self, self.context)
-        self.thread = None
         self.context = None
 
 
 class JediCompletionProposal(Ide.CompletionItem, GtkSource.CompletionProposal):
-    def __init__(self, provider, context, completion, *args, **kwargs):
+    def __init__(self, provider, context, variant, index, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.provider = provider
         self.context = context
-        self.completion = completion
+        self._variant = variant
+        self._index = index
+
+    @property
+    def variant(self):
+        return self._variant.get_child_value(self._index)
+
+    @property
+    def completion_type(self):
+        return self.variant.get_child_value(0).get_int32()
+
+    @property
+    def completion_label(self):
+        return self.variant.get_child_value(1).get_string()
+
+    @property
+    def completion_text(self):
+        return self.variant.get_child_value(2).get_string()
+
+    @property
+    def completion_params(self):
+        return self.variant.get_child_value(3).unpack()
 
     def do_get_label(self):
-        return self.completion.name
+        return self.completion_label
 
     def do_match(self, query, casefold):
-        ret, priority = Ide.CompletionItem.fuzzy_match(self.completion.name,
-                                                       self.provider.current_word_lower)
+        label = self.completion_label
+        ret, priority = Ide.CompletionItem.fuzzy_match(label, self.provider.current_word_lower)
         # Penalize words that start with __ like __eq__.
-        if self.completion.name.startswith('__'):
+        if label.startswith('__'):
             priority += 1000
         self.set_priority(priority)
         return ret
 
     def do_get_markup(self):
-        name = Ide.CompletionItem.fuzzy_highlight(self.completion.name,
-                                                  self.provider.current_word_lower)
-        parts = [name]
-        if self.completion.real_type == 'function':
-            parts.append('(')
-            if hasattr(self.completion, 'gi_params'):
-                params = self.completion.gi_params
+        label = self.completion_label
+        name = Ide.CompletionItem.fuzzy_highlight(label, self.provider.current_word_lower)
+        if self.completion_type == _TYPE_FUNCTION:
+            params = self.completion_params
+            if params is not None:
+                return ''.join([name, '(', ', '.join(self.completion_params), ')'])
             else:
-                params = self.completion.params
-            if params:
-                parts.append(', '.join(get_param_description(p) for p in params))
-            parts.append(')')
-        return ''.join(parts)
+                return name + '()'
+        return name
 
     def do_get_text(self):
-        return self.completion.complete
+        return self.completion_text
 
     def do_get_icon_name(self):
-        if self.completion.real_type == 'class':
-            return 'lang-class-symbolic'
-        elif self.completion.real_type in ('instance', 'param'):
-            return 'lang-variable-symbolic'
-        elif self.completion.real_type in ('import', 'module'):
-            # FIXME: Would be nice to do something better here.
-            return 'lang-include-symbolic'
-        elif self.completion.real_type == 'function':
-            return 'lang-function-symbolic'
-        elif self.completion.real_type == 'keyword':
-            # FIXME: And here
-            return None
-        return None
+        return _ICONS.get(self.completion_type, None)
 
-    def do_hash(self):
-        return hash(self.completion.full_name)
+class JediCompletionRequest:
+    did_run = False
+    cancelled = False
 
-    def do_equal(self, other):
+    def __init__(self, invocation, filename, line, column, content):
+        assert(type(line) == int)
+        assert(type(column) == int)
+
+        self.invocation = invocation
+        self.filename = filename
+        self.line = line
+        self.column = column
+        self.content = content
+
+    def run(self):
+        try:
+            if not self.cancelled:
+                self._run()
+        except Exception as ex:
+            self.invocation.return_error_literal(Gio.dbus_error_quark(), Gio.DBusError.IO_ERROR, repr(ex))
+
+    def _run(self):
+        self.did_run = True
+
+        results = []
+
+        # Jedi uses 1-based line indexes, we use 0 throughout Builder.
+        script = jedi.Script(self.content, self.line + 1, self.column, self.filename)
+
+        for info in script.completions():
+            if self.cancelled:
+                return
+
+            params = []
+
+            # we have to use custom names here because .type and .params can't
+            # be overriden (they are properties)
+            if type(info._definition) == PatchedJediCompiledObject and \
+               type(info._definition.obj) == FunctionInfo:
+                    info.real_type = 'function'
+                    obj = info._definition.obj
+                    params = [arg_info.get_name() for arg_info in obj.get_arguments()]
+            else:
+                info.real_type = info.type
+                if hasattr(info, 'params'):
+                    if len(info.params) > 0 and \
+                       info.params[0].name == 'self':
+                        del info.params[0]
+                    for param in info.params:
+                        if hasattr(param, 'description'):
+                            params.append(param.description.replace('\n', ''))
+                        else:
+                            params.append(param.name)
+
+            results.append((_TYPES.get(info.real_type, 0), info.name, info.complete, params))
+
+        self.invocation.return_value(GLib.Variant('(a(issas))', (results,)))
+
+    def cancel(self):
+        if not self.cancelled and not self.did_run:
+            self.cancelled = True
+            self.invocation.return_error_literal(Gio.io_error_quark(), Gio.IOErrorEnum.CANCELLED, "Operation was cancelled")
+
+class JediService(Builder.DBusService):
+    queue = None
+    handler_id = None
+
+    def __init__(self):
+        super().__init__()
+        self.queue = {}
+        self.handler_id = 0
+
+    @Builder.DBusMethod('org.gnome.builder.plugins.jedi', in_signature='siis', out_signature='a(issas)', async=True)
+    def CodeComplete(self, invocation, filename, line, column, content):
+        if filename in self.queue:
+            request = self.queue.pop(filename)
+            request.cancel()
+        self.queue[filename] = JediCompletionRequest(invocation, filename, line, column, content)
+        if not self.handler_id:
+            self.handler_id = GLib.timeout_add(5, self.process)
+
+    def process(self):
+        self.handler_id = 0
+        while self.queue:
+            filename, request = self.queue.popitem()
+            request.run()
         return False
 
-    def do_changed(self):
-        pass
+class JediWorker(GObject.Object, Ide.Worker):
+    _service = None
 
-def is_completable_char(ch):
-    return ch in ('_', '.') or ch.isalnum()
+    def do_register_service(self, connection):
+        self._service = JediService()
+        self._service.export(connection, '/')
 
-def get_param_description(param):
-    if hasattr(param, 'description'):
-        return param.description.replace('\n', '')
-    return param.name
+    def do_create_proxy(self, connection):
+        return Gio.DBusProxy.new_sync(connection,
+                                      (Gio.DBusProxyFlags.DO_NOT_LOAD_PROPERTIES |
+                                       Gio.DBusProxyFlags.DO_NOT_CONNECT_SIGNALS |
+                                       Gio.DBusProxyFlags.DO_NOT_AUTO_START_AT_CONSTRUCTION),
+                                      None,
+                                      None,
+                                      '/',
+                                      'org.gnome.builder.plugins.jedi',
+                                      None)
+
+def JediSnippet(proposal):
+    snippet = Ide.SourceSnippet()
+    snippet.add_chunk(Ide.SourceSnippetChunk(text=proposal.completion_text, text_set=True))
+
+    # Add parameter completion for functions.
+    if proposal.completion_type == _TYPE_FUNCTION:
+        snippet.add_chunk(Ide.SourceSnippetChunk(text='(', text_set=True))
+        params = proposal.completion_params
+        if params:
+            tab_stop = 0
+            for param in params[:-1]:
+                tab_stop += 1
+                snippet.add_chunk(Ide.SourceSnippetChunk(text=param, text_set=True, tab_stop=tab_stop))
+                snippet.add_chunk(Ide.SourceSnippetChunk(text=', ', text_set=True))
+            tab_stop += 1
+            snippet.add_chunk(Ide.SourceSnippetChunk(text=params[-1], text_set=True, tab_stop=tab_stop))
+        snippet.add_chunk(Ide.SourceSnippetChunk(text=')', text_set=True))
+
+    return snippet
