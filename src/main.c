@@ -30,7 +30,6 @@
 
 #include "gb-application.h"
 #include "gb-icons-resources.h"
-#include "gb-plugins.h"
 
 int
 main (int   argc,

@@ -37,6 +37,7 @@
 #include "gb-editor-document.h"
 #include "gb-glib.h"
 #include "gb-greeter-window.h"
+#include "gb-plugins.h"
 #include "gb-projects-dialog.h"
 #include "gb-resources.h"
 #include "gb-workbench.h"
