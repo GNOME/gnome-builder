@@ -388,8 +388,7 @@ egg_search_bar_init (EggSearchBar *self)
                   NULL);
 
   style_context = gtk_widget_get_style_context (GTK_WIDGET (vbox));
-  gtk_style_context_add_class (style_context, "notebook");
-  gtk_style_context_add_class (style_context, "header");
+  gtk_style_context_add_class (style_context, "search-bar");
 
   gtk_container_add (GTK_CONTAINER (priv->revealer), GTK_WIDGET (vbox));
   gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (priv->box));
