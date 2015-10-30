@@ -23,7 +23,7 @@
 
 G_BEGIN_DECLS
 
-void gb_plugins_init (void);
+void gb_plugins_init (const gchar * const *plugin_names);
 
 G_END_DECLS
 

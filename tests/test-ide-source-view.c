@@ -755,7 +755,7 @@ main (int argc,
 
   project_dir = g_file_new_for_path (".");
 
-  gb_plugins_init ();
+  gb_plugins_init (NULL);
 
   ide_context_new_async (project_dir,
                          NULL,

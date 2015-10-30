@@ -38,7 +38,7 @@ test_helper_init (gint    *argc,
 {
   gtk_init (argc, argv);
   g_test_init (argc, argv, NULL);
-  gb_plugins_init ();
+  gb_plugins_init (NULL);
 }
 
 void

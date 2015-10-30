@@ -95,7 +95,7 @@ main (int    argc,
 
   main_loop = g_main_loop_new (NULL, FALSE);
 
-  gb_plugins_init ();
+  gb_plugins_init (NULL);
 
   projects = ide_recent_projects_new ();
   ide_recent_projects_discover_async (projects, NULL, discover_cb, NULL);

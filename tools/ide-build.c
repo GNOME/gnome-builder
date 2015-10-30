@@ -389,7 +389,7 @@ main (gint   argc,
   if (!deviceId)
     deviceId = g_strdup ("local");
 
-  gb_plugins_init ();
+  gb_plugins_init (NULL);
 
   ide_context_new_async (project_file, NULL, context_cb, NULL);
 

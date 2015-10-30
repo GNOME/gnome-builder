@@ -137,7 +137,7 @@ main (gint   argc,
     g_string_append_printf (search_terms_string, " %s", argv [i]);
   search_terms = g_string_free (search_terms_string, FALSE);
 
-  gb_plugins_init ();
+  gb_plugins_init (NULL);
 
   ide_context_new_async (project_file, NULL, context_cb, NULL);
 

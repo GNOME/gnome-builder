@@ -36,8 +36,29 @@
 #include "gb-workbench.h"
 #include "gb-workspace.h"
 
+static gboolean
+can_load_plugin (PeasPluginInfo      *plugin_info,
+                 const gchar * const *plugin_names)
+{
+  const gchar *plugin_name;
+
+  /* Currently we only allow in-tree plugins */
+  if (!peas_plugin_info_is_builtin (plugin_info))
+    return FALSE;
+
+  /*
+   * If plugin_names is specified, we are only loading a subset of the
+   * plugins into this process.
+   */
+  plugin_name = peas_plugin_info_get_module_name (plugin_info);
+  if ((plugin_names != NULL) && !g_strv_contains (plugin_names, plugin_name))
+    return FALSE;
+
+  return TRUE;
+}
+
 void
-gb_plugins_init (void)
+gb_plugins_init (const gchar * const *plugin_names)
 {
   PeasEngine *engine;
   const GList *list;
@@ -96,7 +117,7 @@ gb_plugins_init (void)
 
   for (; list; list = list->next)
     {
-      if (peas_plugin_info_is_builtin (list->data))
+      if (can_load_plugin (list->data, plugin_names))
         peas_engine_load_plugin (engine, list->data);
     }
 }

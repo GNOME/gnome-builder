@@ -225,7 +225,7 @@ main (gint   argc,
 
   paths = (gchar **)g_ptr_array_free (strv, FALSE);
 
-  gb_plugins_init ();
+  gb_plugins_init (NULL);
 
   ide_context_new_async (project_file, NULL, context_cb, NULL);
 

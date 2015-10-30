@@ -552,8 +552,17 @@ static void
 gb_application_activate (GApplication *application)
 {
   GbApplication *self = (GbApplication *)application;
+  gchar *plugins[] = { NULL, NULL };
+  const gchar * const *pluginsptr = (const gchar * const *)plugins;
 
   g_assert (GB_IS_APPLICATION (self));
+
+  if (self->type == NULL)
+    pluginsptr = NULL;
+  else
+    plugins [0] = (gchar *)self->type;
+
+  gb_plugins_init (pluginsptr);
 
   if (gb_application_is_worker (self))
     gb_application_load_worker (self);

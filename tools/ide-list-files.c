@@ -138,7 +138,7 @@ main (gint   argc,
     project_path = argv [1];
   project_file = g_file_new_for_path (project_path);
 
-  gb_plugins_init ();
+  gb_plugins_init (NULL);
 
   ide_context_new_async (project_file, NULL, context_cb, NULL);
 
