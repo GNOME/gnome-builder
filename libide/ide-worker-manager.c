@@ -84,6 +84,8 @@ ide_worker_manager_new_connection_cb (IdeWorkerManager *self,
   g_assert (G_IS_DBUS_CONNECTION (connection));
   g_assert (G_IS_DBUS_SERVER (server));
 
+  g_dbus_connection_set_exit_on_close (connection, FALSE);
+
   credentials = g_dbus_connection_get_peer_credentials (connection);
   if ((credentials == NULL) || (-1 == g_credentials_get_unix_pid (credentials, NULL)))
     IDE_RETURN (FALSE);
