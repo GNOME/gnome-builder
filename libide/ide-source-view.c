@@ -1203,7 +1203,7 @@ ide_source_view_rebuild_css (IdeSourceView *self)
         }
 
       str = ide_pango_font_description_to_css (font_desc);
-      css = g_strdup_printf ("IdeSourceView { %s }", str ?: "");
+      css = g_strdup_printf ("textview { %s }", str ?: "");
       gtk_css_provider_load_from_data (priv->css_provider, css, -1, NULL);
 
       g_clear_pointer (&copy, pango_font_description_free);
