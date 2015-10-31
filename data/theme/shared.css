@@ -96,7 +96,7 @@ entry.gb-command-bar-entry {
 /*
  * Style selector widget.
  */
-GbSourceStyleSchemeWidget GtkSourceView {
+GtkSourceStyleSchemeChooserWidget textview {
   font-family: Monospace;
 }
 
