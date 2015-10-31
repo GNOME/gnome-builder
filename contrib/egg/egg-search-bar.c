@@ -337,7 +337,6 @@ egg_search_bar_init (EggSearchBar *self)
   EggSearchBarPrivate *priv = egg_search_bar_get_instance_private (self);
   GtkStyleContext *style_context;
   GtkBox *vbox;
-  GtkSeparator *sep;
 
   priv->window_signals = egg_signal_group_new (GTK_TYPE_WINDOW);
   egg_signal_group_connect_object (priv->window_signals,
@@ -373,11 +372,6 @@ egg_search_bar_init (EggSearchBar *self)
                                     NULL),
                       "swapped_object_signal::activate", egg_search_bar__entry_activate, self,
                       NULL);
-  sep =
-    g_object_new (GTK_TYPE_SEPARATOR,
-                  "orientation", GTK_ORIENTATION_HORIZONTAL,
-                  "visible", TRUE,
-                  NULL);
   priv->close_button =
     g_object_new (GTK_TYPE_BUTTON,
                   "child", g_object_new (GTK_TYPE_IMAGE,
@@ -392,7 +386,6 @@ egg_search_bar_init (EggSearchBar *self)
 
   gtk_container_add (GTK_CONTAINER (priv->revealer), GTK_WIDGET (vbox));
   gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (priv->box));
-  gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (sep));
   gtk_container_add (GTK_CONTAINER (self), GTK_WIDGET (priv->revealer));
   gtk_container_add_with_properties (GTK_CONTAINER (priv->box),
                                      GTK_WIDGET (priv->close_button),
