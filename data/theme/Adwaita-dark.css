@@ -1,15 +1,15 @@
 @import url("resource:///org/gnome/builder/theme/Adwaita-shared.css");
 
 
-GtkTreeView.view {
+treeview.view {
   color: #eeeeec;
   background-color: mix(#292929, #2e3436, 0.8);
 }
-GtkTreeView.view:backdrop {
+treeview.view:backdrop {
   color: #a1a1a1;
   background-color: #2e3436;
 }
-GtkTreeView.view.cell:selected {
+treeview.view.cell:selected {
   color: #fff;
   background-color: #215d9c;
 }
@@ -29,11 +29,11 @@ GbTerminalView {
 }
 
 
-GbTree.dim-label {
+treeview.dim-label {
   color: #979a99;
 }
 
-GbTree:backdrop.dim-label {
+treeview:backdrop.dim-label {
   color: #6d6f70;
 }
 
