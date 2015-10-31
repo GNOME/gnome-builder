@@ -122,7 +122,8 @@ GbGreeterWindow .frame {
   border-bottom: none;
 }
 /* remove viewport frame */
-GbGreeterWindow .frame > GbScrolledWindow > .frame {
+GbGreeterWindow .frame > GbScrolledWindow > .frame,
+GbGreeterWindow > GtkBox > GtkScrolledWindow > .frame {
   border: none;
 }
 
