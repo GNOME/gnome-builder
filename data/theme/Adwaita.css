@@ -44,7 +44,7 @@ GbTree:backdrop.dim-label {
 }
 
 
-GbAccelLabel GtkFrame {
+GbAccelLabel .frame {
   background-color: #fefefe;
   border: 1px solid #cecece;
   border-radius: 5px;
