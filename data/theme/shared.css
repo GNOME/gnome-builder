@@ -156,6 +156,6 @@ GbWorkspacePane .pane-separator {
  * We probably want to make this configurable and generate the value
  * with a custom css provider.
  */
-IdeSourceView {
+textview {
   padding-bottom: 250px;
 }
