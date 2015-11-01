@@ -796,6 +796,14 @@
                    "copy-clipboard" ()
                    "selection-theatric" (shrink)
                    "delete-selection" () };
+
+  /* cit */
+    bind "t" { "begin-macro" ()
+               "select-tag" (1)
+               "set-mode" ("vim-insert", permanent)
+               "copy-clipboard" ()
+               "selection-theatric" (shrink)
+               "delete-selection" () };
 }
 
 @binding-set builder-vim-source-view-normal-c-a
@@ -895,6 +903,14 @@
                    "copy-clipboard" ()
                    "selection-theatric" (shrink)
                    "delete-selection" () };
+
+  /* cat */
+    bind "t" { "begin-macro" ()
+               "select-tag" (0)
+               "set-mode" ("vim-insert", permanent)
+               "copy-clipboard" ()
+               "selection-theatric" (shrink)
+               "delete-selection" () };
 }
 
 @binding-set builder-vim-source-view-normal-d
@@ -1383,6 +1399,14 @@
                    "copy-clipboard" ()
                    "selection-theatric" (shrink)
                    "delete-selection" () };
+
+  /* dit */
+    bind "t" { "begin-macro" ()
+               "select-tag" (1)
+               "set-mode" ("vim-normal", permanent)
+               "copy-clipboard" ()
+               "selection-theatric" (shrink)
+               "delete-selection" () };
 }
 
 @binding-set builder-vim-source-view-normal-d-a
@@ -1482,6 +1506,14 @@
                    "copy-clipboard" ()
                    "selection-theatric" (shrink)
                    "delete-selection" () };
+
+  /* dat */
+    bind "t" { "begin-macro" ()
+               "select-tag" (0)
+               "set-mode" ("vim-normal", permanent)
+               "copy-clipboard" ()
+               "selection-theatric" (shrink)
+               "delete-selection" () };
 }
 
 @binding-set builder-vim-source-view-visual-g
@@ -1821,6 +1853,11 @@
     bind "grave" { "begin-macro" ()
                    "select-inner" ("`", "`", 1, 1)
                    "set-mode" ("vim-visual", permanent) };
+
+   /* vit */
+    bind "t" { "begin-macro" ()
+               "select-tag" (1)
+               "set-mode" ("vim-visual", permanent) };
 }
 
 @binding-set builder-vim-source-view-visual-a
@@ -1881,6 +1918,11 @@
     bind "grave" { "begin-macro" ()
                    "select-inner" ("`", "`", 0, 1)
                    "set-mode" ("vim-visual", permanent) };
+
+  /* vat */
+    bind "t" { "begin-macro" ()
+               "select-tag" (0)
+               "set-mode" ("vim-visual", permanent) };
 }
 
 @binding-set builder-vim-source-view-visual-line-with-count
