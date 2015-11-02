@@ -336,7 +336,7 @@ ide_worker_process_matches_credentials (IdeWorkerProcess *self,
 
   if ((self->subprocess != NULL) &&
       (identifier = g_subprocess_get_identifier (self->subprocess)) &&
-      (pid = g_credentials_get_unix_pid (credentials, NULL)))
+      (pid = g_credentials_get_unix_pid (credentials, NULL)) != -1)
     {
       str = g_strdup_printf ("%d", (int)pid);
       if (g_strcmp0 (identifier, str) == 0)
