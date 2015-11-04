@@ -88,20 +88,6 @@ layoutpane .pane-separator {
 }
 
 
-/*
- * XXX: Address this after 3.18
- *
- * allow scrolling past the end of the buffer.
- * this helps when typing at the bottom of the screen is annoying.
- *
- * We probably want to make this configurable and generate the value
- * with a custom css provider.
- */
-GbEditorFrame textview {
-  padding-bottom: 250px;
-}
-
-
 workbench IdePreferencesPerspective IdePreferencesGroup row {
   border-bottom: 1px solid shade(@borders, 1.2);
   padding: 10px;
