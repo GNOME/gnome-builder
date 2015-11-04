@@ -183,8 +183,19 @@ ide_thread_pool_worker (gpointer data,
 }
 
 void
-_ide_thread_pool_init (void)
+_ide_thread_pool_init (gboolean is_worker)
 {
+  gint compiler = COMPILER_MAX_THREADS;
+  gint indexer = INDEXER_MAX_THREADS;
+  gboolean shared = FALSE;
+
+  if (is_worker)
+    {
+      compiler = 1;
+      indexer = 1;
+      shared = TRUE;
+    }
+
   /*
    * Create our thread pool exclusive to compiler tasks (such as those from Clang).
    * We don't want to consume threads fro other GTask's such as those regarding IO so we manage
@@ -192,8 +203,8 @@ _ide_thread_pool_init (void)
    */
   thread_pools [IDE_THREAD_POOL_COMPILER] = g_thread_pool_new (ide_thread_pool_worker,
                                                                NULL,
-                                                               COMPILER_MAX_THREADS,
-                                                               FALSE,
+                                                               compiler,
+                                                               shared,
                                                                NULL);
 
   /*
@@ -202,7 +213,7 @@ _ide_thread_pool_init (void)
    */
   thread_pools [IDE_THREAD_POOL_INDEXER] = g_thread_pool_new (ide_thread_pool_worker,
                                                               NULL,
-                                                              INDEXER_MAX_THREADS,
-                                                              FALSE,
+                                                              indexer,
+                                                              shared,
                                                               NULL);
 }

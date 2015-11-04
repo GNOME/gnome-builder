@@ -18,7 +18,6 @@
 
 #include <girepository.h>
 #include <glib/gi18n.h>
-#include <libgit2-glib/ggit.h>
 #include <stdlib.h>
 
 #include "gconstructor.h"
@@ -30,9 +29,6 @@
 #include "ide-git-vcs.h"
 #include "ide-gsettings-file-settings.h"
 #include "ide-modelines-file-settings.h"
-#include "ide-internal.h"
-#include "ide-project-miner.h"
-#include "ide-search-provider.h"
 
 #ifdef ENABLE_GJS_SCRIPTING
 # include "ide-gjs-script.h"
@@ -41,8 +37,6 @@
 #ifdef ENABLE_PYTHON_SCRIPTING
 # include "ide-pygobject-script.h"
 #endif
-
-#include "modeline-parser.h"
 
 static gboolean     programNameRead;
 static const gchar *programName = "libide";
@@ -78,13 +72,6 @@ ide_set_program_name (const gchar *program_name)
 static void
 ide_init_ctor (void)
 {
-  GgitFeatureFlags ggit_flags;
-
-  g_irepository_prepend_search_path (LIBDIR"/gnome-builder/girepository-1.0");
-
-  g_type_ensure (IDE_TYPE_CONTEXT);
-  g_type_ensure (IDE_TYPE_VCS);
-
   g_io_extension_point_register (IDE_FILE_SETTINGS_EXTENSION_POINT);
   g_io_extension_point_register (IDE_SCRIPT_EXTENSION_POINT);
   g_io_extension_point_register (IDE_VCS_EXTENSION_POINT);
@@ -124,27 +111,4 @@ ide_init_ctor (void)
                                   IDE_TYPE_DIRECTORY_VCS,
                                   IDE_VCS_EXTENSION_POINT".directory",
                                   -200);
-
-  modeline_parser_init ();
-
-  ggit_init ();
-
-  ggit_flags = ggit_get_features ();
-
-  if ((ggit_flags & GGIT_FEATURE_THREADS) == 0)
-    {
-      g_error (_("Builder requires libgit2-glib with threading support."));
-      exit (EXIT_FAILURE);
-    }
-
-  if ((ggit_flags & GGIT_FEATURE_SSH) == 0)
-    {
-      g_error (_("Builder requires libgit2-glib with SSH support."));
-      exit (EXIT_FAILURE);
-    }
-
-  /* TODO: tune what we startup here once we have IdeApplication/IdeWorkbench/etc. */
-  _ide_thread_pool_init ();
-
-  _ide_battery_monitor_init ();
 }

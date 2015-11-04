@@ -25,6 +25,7 @@ G_BEGIN_DECLS
 
 #define IDE_INSIDE
 
+#include "ide-application.h"
 #include "ide-back-forward-item.h"
 #include "ide-back-forward-list.h"
 #include "ide-build-result.h"
@@ -56,10 +57,14 @@ G_BEGIN_DECLS
 #include "ide-highlight-engine.h"
 #include "ide-highlighter.h"
 #include "ide-indenter.h"
+#include "ide-layout-manager.h"
 #include "ide-log.h"
 #include "ide-macros.h"
 #include "ide-object.h"
 #include "ide-pattern-spec.h"
+#include "ide-perspective.h"
+#include "ide-preferences.h"
+#include "ide-preferences-addin.h"
 #include "ide-process.h"
 #include "ide-progress.h"
 #include "ide-project.h"
@@ -96,6 +101,7 @@ G_BEGIN_DECLS
 #include "ide-unsaved-files.h"
 #include "ide-vcs.h"
 #include "ide-vcs-uri.h"
+#include "ide-workbench.h"
 
 #include "directory/ide-directory-vcs.h"
 #include "doap/ide-doap-person.h"

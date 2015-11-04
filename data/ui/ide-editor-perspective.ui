@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <!-- interface-requires gtk+ 3.18 -->
+  <template class="IdeEditorPerspective" parent="GtkBin">
+    <child>
+      <object class="GtkLabel">
+        <property name="visible">true</property>
+        <property name="label">Editor Perspective</property>
+      </object>
+    </child>
+  </template>
+  <object class="IdeWorkbenchHeaderBar" id="titlebar">
+    <property name="visible">true</property>
+    <child>
+      <object class="GtkBox">
+        <property name="orientation">horizontal</property>
+        <property name="visible">true</property>
+        <style>
+          <class name="linked"/>
+        </style>
+        <child>
+          <object class="GtkToggleButton">
+            <property name="focus-on-click">false</property>
+            <property name="visible">true</property>
+            <style>
+              <class name="image-button"/>
+            </style>
+            <child>
+              <object class="GtkImage">
+                <property name="icon-name">builder-view-left-pane-symbolic</property>
+                <property name="visible">true</property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkToggleButton">
+            <property name="focus-on-click">false</property>
+            <property name="visible">true</property>
+            <style>
+              <class name="image-button"/>
+            </style>
+            <child>
+              <object class="GtkImage">
+                <property name="icon-name">builder-view-bottom-pane-symbolic</property>
+                <property name="visible">true</property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkToggleButton">
+            <property name="focus-on-click">false</property>
+            <property name="visible">true</property>
+            <style>
+              <class name="image-button"/>
+            </style>
+            <child>
+              <object class="GtkImage">
+                <property name="icon-name">builder-view-right-pane-symbolic</property>
+                <property name="visible">true</property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+      <packing>
+        <property name="position">1</property>
+        <property name="pack-type">end</property>
+      </packing>
+    </child>
+  </object>
+</interface>

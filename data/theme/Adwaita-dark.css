@@ -15,6 +15,12 @@ treeview.view.cell:selected {
 }
 
 
+EggPillBox {
+  background-color: #1e1e1e;
+  border-radius: 3px;
+}
+
+
 RgGraph {
   background-color: #2e3436;
   background-size: 8px 8px;

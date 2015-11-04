@@ -1,4 +1,4 @@
-/* gb-greeter-project-row.c
+/* ide-greeter-project-row.c
  *
  * Copyright (C) 2015 Christian Hergert <christian@hergert.me>
  *
@@ -16,18 +16,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#define G_LOG_DOMAIN "gb-greeter-project-row"
+#define G_LOG_DOMAIN "ide-greeter-project-row"
 
 #include <glib/gi18n.h>
-#include <ide.h>
 
 #include "egg-binding-group.h"
+#include "egg-date-time.h"
 #include "egg-pill-box.h"
 
-#include "gb-glib.h"
-#include "gb-greeter-project-row.h"
+#include "ide-greeter-project-row.h"
 
-struct _GbGreeterProjectRow
+struct _IdeGreeterProjectRow
 {
   GtkListBoxRow    parent_instance;
 
@@ -43,7 +42,7 @@ struct _GbGreeterProjectRow
   GtkCheckButton  *checkbox;
 };
 
-G_DEFINE_TYPE (GbGreeterProjectRow, gb_greeter_project_row, GTK_TYPE_LIST_BOX_ROW)
+G_DEFINE_TYPE (IdeGreeterProjectRow, ide_greeter_project_row, GTK_TYPE_LIST_BOX_ROW)
 
 enum {
   PROP_0,
@@ -54,34 +53,34 @@ enum {
 };
 
 static GParamSpec *properties [LAST_PROP];
-static GFile      *homeDir;
+static GFile      *home_dir;
 
 void
-gb_greeter_project_row_set_selection_mode (GbGreeterProjectRow *self,
-                                           gboolean             selection_mode)
+ide_greeter_project_row_set_selection_mode (IdeGreeterProjectRow *self,
+                                            gboolean              selection_mode)
 {
-  g_return_if_fail (GB_IS_GREETER_PROJECT_ROW (self));
+  g_return_if_fail (IDE_IS_GREETER_PROJECT_ROW (self));
 
   gtk_widget_set_visible (GTK_WIDGET (self->checkbox), selection_mode);
 }
 
 IdeProjectInfo *
-gb_greeter_project_row_get_project_info (GbGreeterProjectRow *self)
+ide_greeter_project_row_get_project_info (IdeGreeterProjectRow *self)
 {
-  g_return_val_if_fail (GB_IS_GREETER_PROJECT_ROW (self), NULL);
+  g_return_val_if_fail (IDE_IS_GREETER_PROJECT_ROW (self), NULL);
 
   return self->project_info;
 }
 
 static void
-gb_greeter_project_row_create_search_text (GbGreeterProjectRow *self,
-                                           IdeProjectInfo      *project_info)
+ide_greeter_project_row_create_search_text (IdeGreeterProjectRow *self,
+                                            IdeProjectInfo       *project_info)
 {
   const gchar *tmp;
   IdeDoap *doap;
   GString *str;
 
-  g_assert (GB_IS_GREETER_PROJECT_ROW (self));
+  g_assert (IDE_IS_GREETER_PROJECT_ROW (self));
 
   str = g_string_new (NULL);
 
@@ -117,12 +116,12 @@ gb_greeter_project_row_create_search_text (GbGreeterProjectRow *self,
 }
 
 static void
-gb_greeter_project_row_add_languages (GbGreeterProjectRow *self,
-                                      IdeProjectInfo      *project_info)
+ide_greeter_project_row_add_languages (IdeGreeterProjectRow *self,
+                                       IdeProjectInfo       *project_info)
 {
   gchar **languages;
 
-  g_return_if_fail (GB_IS_GREETER_PROJECT_ROW (self));
+  g_return_if_fail (IDE_IS_GREETER_PROJECT_ROW (self));
   g_return_if_fail (IDE_IS_PROJECT_INFO (project_info));
 
   if ((languages = ide_project_info_get_languages (project_info)))
@@ -145,10 +144,10 @@ gb_greeter_project_row_add_languages (GbGreeterProjectRow *self,
 }
 
 static void
-gb_greeter_project_row_set_project_info (GbGreeterProjectRow *self,
-                                         IdeProjectInfo      *project_info)
+ide_greeter_project_row_set_project_info (IdeGreeterProjectRow *self,
+                                          IdeProjectInfo       *project_info)
 {
-  g_return_if_fail (GB_IS_GREETER_PROJECT_ROW (self));
+  g_return_if_fail (IDE_IS_GREETER_PROJECT_ROW (self));
   g_return_if_fail (!project_info || IDE_IS_PROJECT_INFO (project_info));
 
   if (g_set_object (&self->project_info, project_info))
@@ -157,8 +156,8 @@ gb_greeter_project_row_set_project_info (GbGreeterProjectRow *self,
 
       if (project_info != NULL)
         {
-          gb_greeter_project_row_add_languages (self, project_info);
-          gb_greeter_project_row_create_search_text (self, project_info);
+          ide_greeter_project_row_add_languages (self, project_info);
+          ide_greeter_project_row_create_search_text (self, project_info);
         }
 
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_PROJECT_INFO]);
@@ -180,7 +179,7 @@ humanize_date_time (GBinding     *binding,
   if (!(dt = g_value_get_boxed (from_value)))
     return FALSE;
 
-  str = gb_date_time_format_for_display (dt);
+  str = egg_date_time_format_for_display (dt);
   g_value_take_string (to_value, str);
 
   return TRUE;
@@ -205,7 +204,7 @@ truncate_location (GBinding     *binding,
     {
       gchar *relative_path;
 
-      if ((relative_path = g_file_get_relative_path (homeDir, file)) ||
+      if ((relative_path = g_file_get_relative_path (home_dir, file)) ||
           (relative_path = g_file_get_path (file)))
         {
           g_value_set_string (to_value, relative_path);
@@ -220,37 +219,37 @@ truncate_location (GBinding     *binding,
 }
 
 const gchar *
-gb_greeter_project_row_get_search_text (GbGreeterProjectRow *self)
+ide_greeter_project_row_get_search_text (IdeGreeterProjectRow *self)
 {
-  g_return_val_if_fail (GB_IS_GREETER_PROJECT_ROW (self), NULL);
+  g_return_val_if_fail (IDE_IS_GREETER_PROJECT_ROW (self), NULL);
 
   return self->search_text;
 }
 
 static void
-gb_greeter_project_row_finalize (GObject *object)
+ide_greeter_project_row_finalize (GObject *object)
 {
-  GbGreeterProjectRow *self = (GbGreeterProjectRow *)object;
+  IdeGreeterProjectRow *self = (IdeGreeterProjectRow *)object;
 
   g_clear_object (&self->project_info);
   g_clear_object (&self->bindings);
   g_clear_pointer (&self->search_text, g_free);
 
-  G_OBJECT_CLASS (gb_greeter_project_row_parent_class)->finalize (object);
+  G_OBJECT_CLASS (ide_greeter_project_row_parent_class)->finalize (object);
 }
 
 static void
-gb_greeter_project_row_get_property (GObject    *object,
-                                     guint       prop_id,
-                                     GValue     *value,
-                                     GParamSpec *pspec)
+ide_greeter_project_row_get_property (GObject    *object,
+                                      guint       prop_id,
+                                      GValue     *value,
+                                      GParamSpec *pspec)
 {
-  GbGreeterProjectRow *self = GB_GREETER_PROJECT_ROW (object);
+  IdeGreeterProjectRow *self = IDE_GREETER_PROJECT_ROW (object);
 
   switch (prop_id)
     {
     case PROP_PROJECT_INFO:
-      g_value_set_object (value, gb_greeter_project_row_get_project_info (self));
+      g_value_set_object (value, ide_greeter_project_row_get_project_info (self));
       break;
 
     case PROP_SELECTED:
@@ -263,12 +262,12 @@ gb_greeter_project_row_get_property (GObject    *object,
 }
 
 static void
-gb_greeter_project_row_set_property (GObject      *object,
-                                     guint         prop_id,
-                                     const GValue *value,
-                                     GParamSpec   *pspec)
+ide_greeter_project_row_set_property (GObject      *object,
+                                      guint         prop_id,
+                                      const GValue *value,
+                                      GParamSpec   *pspec)
 {
-  GbGreeterProjectRow *self = GB_GREETER_PROJECT_ROW (object);
+  IdeGreeterProjectRow *self = IDE_GREETER_PROJECT_ROW (object);
 
   switch (prop_id)
     {
@@ -277,11 +276,11 @@ gb_greeter_project_row_set_property (GObject      *object,
       break;
 
     case PROP_SELECTION_MODE:
-      gb_greeter_project_row_set_selection_mode (self, g_value_get_boolean (value));
+      ide_greeter_project_row_set_selection_mode (self, g_value_get_boolean (value));
       break;
 
     case PROP_PROJECT_INFO:
-      gb_greeter_project_row_set_project_info (self, g_value_get_object (value));
+      ide_greeter_project_row_set_project_info (self, g_value_get_object (value));
       break;
 
     default:
@@ -290,22 +289,22 @@ gb_greeter_project_row_set_property (GObject      *object,
 }
 
 static void
-gb_greeter_project_row_class_init (GbGreeterProjectRowClass *klass)
+ide_greeter_project_row_class_init (IdeGreeterProjectRowClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  object_class->finalize = gb_greeter_project_row_finalize;
-  object_class->get_property = gb_greeter_project_row_get_property;
-  object_class->set_property = gb_greeter_project_row_set_property;
+  object_class->finalize = ide_greeter_project_row_finalize;
+  object_class->get_property = ide_greeter_project_row_get_property;
+  object_class->set_property = ide_greeter_project_row_set_property;
 
-  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/ui/gb-greeter-project-row.ui");
-  gtk_widget_class_bind_template_child (widget_class, GbGreeterProjectRow, checkbox);
-  gtk_widget_class_bind_template_child (widget_class, GbGreeterProjectRow, date_label);
-  gtk_widget_class_bind_template_child (widget_class, GbGreeterProjectRow, description_label);
-  gtk_widget_class_bind_template_child (widget_class, GbGreeterProjectRow, location_label);
-  gtk_widget_class_bind_template_child (widget_class, GbGreeterProjectRow, languages_box);
-  gtk_widget_class_bind_template_child (widget_class, GbGreeterProjectRow, title_label);
+  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/ui/ide-greeter-project-row.ui");
+  gtk_widget_class_bind_template_child (widget_class, IdeGreeterProjectRow, checkbox);
+  gtk_widget_class_bind_template_child (widget_class, IdeGreeterProjectRow, date_label);
+  gtk_widget_class_bind_template_child (widget_class, IdeGreeterProjectRow, description_label);
+  gtk_widget_class_bind_template_child (widget_class, IdeGreeterProjectRow, location_label);
+  gtk_widget_class_bind_template_child (widget_class, IdeGreeterProjectRow, languages_box);
+  gtk_widget_class_bind_template_child (widget_class, IdeGreeterProjectRow, title_label);
 
   properties [PROP_SELECTED] =
     g_param_spec_boolean ("selected",
@@ -330,11 +329,11 @@ gb_greeter_project_row_class_init (GbGreeterProjectRowClass *klass)
 
   g_object_class_install_properties (object_class, LAST_PROP, properties);
 
-  homeDir = g_file_new_for_path (g_get_home_dir ());
+  home_dir = g_file_new_for_path (g_get_home_dir ());
 }
 
 static void
-gb_greeter_project_row_init (GbGreeterProjectRow *self)
+ide_greeter_project_row_init (IdeGreeterProjectRow *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
 

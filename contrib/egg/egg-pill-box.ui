@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <!-- interface-requires gtk+ 3.15 -->
-  <template class="GbGreeterPillBox" parent="GtkEventBox">
+  <!-- interface-requires gtk+ 3.18 -->
+  <template class="EggPillBox" parent="GtkEventBox">
     <style>
       <class name="pill-box"/>
     </style>

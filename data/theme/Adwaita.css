@@ -15,7 +15,7 @@ GbWorkbench treeview.view.cell:selected {
 }
 
 
-GbGreeterPillBox {
+EggPillBox {
   background-color: #eeeeec;
   border-radius: 3px;
 }

@@ -18,5 +18,14 @@
 
     <file alias="keybindings/emacs.css">../../data/keybindings/emacs.css</file>
     <file alias="keybindings/vim.css">../../data/keybindings/vim.css</file>
+
+  </gresource>
+
+  <gresource prefix="/org/gnome/builder">
+    <file alias="ui/ide-editor-perspective.ui">../../data/ui/ide-editor-perspective.ui</file>
+    <file alias="ui/ide-greeter-perspective.ui">../../data/ui/ide-greeter-perspective.ui</file>
+    <file alias="ui/ide-greeter-project-row.ui">../../data/ui/ide-greeter-project-row.ui</file>
+    <file alias="ui/ide-workbench.ui">../../data/ui/ide-workbench.ui</file>
+    <file alias="ui/ide-workbench-header-bar.ui">../../data/ui/ide-workbench-header-bar.ui</file>
   </gresource>
 </gresources>

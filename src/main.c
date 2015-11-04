@@ -28,7 +28,6 @@
 #include <ide.h>
 #include <locale.h>
 
-#include "gb-application.h"
 #include "gb-icons-resources.h"
 
 int
@@ -58,7 +57,7 @@ main (int   argc,
 
   g_resources_register (gb_icons_get_resource ());
 
-  app = g_object_new (GB_TYPE_APPLICATION,
+  app = g_object_new (IDE_TYPE_APPLICATION,
                       "application-id", "org.gnome.Builder",
                       "flags", G_APPLICATION_HANDLES_OPEN,
                       NULL);

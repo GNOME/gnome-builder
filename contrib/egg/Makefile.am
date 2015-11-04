@@ -1,6 +1,7 @@
 CLEANFILES =
 DISTCLEANFILES =
 EXTRA_DIST =
+BUILT_SOURCES =
 
 pkglibdir = $(libdir)/gnome-builder
 pkglib_LTLIBRARIES = libegg-private.la
@@ -12,11 +13,17 @@ libegg_private_la_SOURCES = \
 	egg-binding-group.h \
 	egg-counter.c \
 	egg-counter.h \
+	egg-date-time.c \
+	egg-date-time.h \
 	egg-frame-source.c \
 	egg-frame-source.h \
 	egg-heap.c \
 	egg-heap.h \
+	egg-pill-box.c \
+	egg-pill-box.h \
 	egg-private.h \
+	egg-scrolled-window.c \
+	egg-scrolled-window.h \
 	egg-search-bar.c \
 	egg-search-bar.h \
 	egg-settings-flag-action.c \
@@ -34,6 +41,17 @@ libegg_private_la_SOURCES = \
 	egg-task-cache.c \
 	egg-task-cache.h \
 	$(NULL)
+
+nodist_libegg_private_la_SOURCES = \
+	egg-resources.c \
+	egg-resources.h \
+	$(NULL)
+
+glib_resources_c = egg-resources.c
+glib_resources_h = egg-resources.h
+glib_resources_xml = egg.gresource.xml
+glib_resources_namespace = egg
+include $(top_srcdir)/build/autotools/Makefile.am.gresources
 
 libegg_private_la_CFLAGS = \
 	$(EGG_CFLAGS) \

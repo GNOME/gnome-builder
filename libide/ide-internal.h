@@ -96,7 +96,7 @@ void                _ide_source_view_set_count              (IdeSourceView      
                                                              gint                   count);
 void                _ide_source_view_set_modifier           (IdeSourceView         *self,
                                                              gunichar               modifier);
-void                _ide_thread_pool_init                   (void);
+void                _ide_thread_pool_init                   (gboolean               is_worker);
 IdeUnsavedFile     *_ide_unsaved_file_new                   (GFile                 *file,
                                                              GBytes                *content,
                                                              const gchar           *temp_path,

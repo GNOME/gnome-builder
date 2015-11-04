@@ -42,8 +42,6 @@ G_BEGIN_DECLS
       } \
   } G_STMT_END
 
-gchar *gb_date_time_format_for_display (GDateTime *self);
-
 G_END_DECLS
 
 #endif /* GB_GLIB_H */

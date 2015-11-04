@@ -13,10 +13,16 @@ libide_1_0_la_public_sources = \
 	doap/ide-doap-person.h \
 	doap/ide-doap.c \
 	doap/ide-doap.h \
+	editor/ide-editor-perspective.c \
+	editor/ide-editor-perspective.h \
 	git/ide-git-remote-callbacks.c \
 	git/ide-git-remote-callbacks.h \
 	git/ide-git-vcs.c \
 	git/ide-git-vcs.h \
+	ide-application.c \
+	ide-application.h \
+	ide-application-addin.c \
+	ide-application-addin.h \
 	ide-back-forward-item.c \
 	ide-back-forward-item.h \
 	ide-back-forward-list.c \
@@ -86,9 +92,17 @@ libide_1_0_la_public_sources = \
 	ide-indent-style.h \
 	ide-indenter.c \
 	ide-indenter.h \
+	ide-layout-manager.c \
+	ide-layout-manager.h \
 	ide-log.c \
 	ide-log.h \
 	ide-macros.h \
+	ide-perspective.c \
+	ide-perspective.h \
+	ide-preferences.c \
+	ide-preferences.h \
+	ide-preferences-addin.c \
+	ide-preferences-addin.h \
 	ide-object.c \
 	ide-object.h \
 	ide-pattern-spec.c \
@@ -172,10 +186,18 @@ libide_1_0_la_public_sources = \
 	ide-unsaved-file.h \
 	ide-unsaved-files.c \
 	ide-unsaved-files.h \
+	ide-view.c \
+	ide-view.h \
 	ide-vcs-uri.c \
 	ide-vcs-uri.h \
 	ide-vcs.c \
 	ide-vcs.h \
+	ide-workbench.c \
+	ide-workbench.h \
+	ide-workbench-addin.c \
+	ide-workbench-addin.h \
+	ide-workbench-header-bar.c \
+	ide-workbench-header-bar.h \
 	ide-worker.c \
 	ide-worker.h \
 	ide.c \
@@ -193,14 +215,23 @@ libide_1_0_la_SOURCES = \
 	gconstructor.h \
 	git/ide-git-buffer-change-monitor.c \
 	git/ide-git-buffer-change-monitor.h \
+	greeter/ide-greeter-perspective.c \
+	greeter/ide-greeter-perspective.h \
+	greeter/ide-greeter-project-row.c \
+	greeter/ide-greeter-project-row.h \
 	gsettings/ide-gsettings-file-settings.c \
 	gsettings/ide-gsettings-file-settings.h \
 	gsettings/ide-language-defaults.c \
 	gsettings/ide-language-defaults.h \
+	ide-application-actions.c \
+	ide-application-actions.h \
+	ide-application-private.h \
 	ide-async-helper.c \
 	ide-async-helper.h \
 	ide-battery-monitor.c \
 	ide-battery-monitor.h \
+	ide-css-provider.c \
+	ide-css-provider.h \
 	ide-debug.h \
 	ide-extension-util.c \
 	ide-extension-util.h \
@@ -209,6 +240,8 @@ libide_1_0_la_SOURCES = \
 	ide-line-change-gutter-renderer.h \
 	ide-line-diagnostics-gutter-renderer.c \
 	ide-line-diagnostics-gutter-renderer.h \
+	ide-keybindings.c \
+	ide-keybindings.h \
 	ide-ref-ptr.c \
 	ide-ref-ptr.h \
 	ide-search-reducer.c \
@@ -228,6 +261,7 @@ libide_1_0_la_SOURCES = \
 	ide-source-view-movements.h \
 	ide-text-iter.c \
 	ide-text-iter.h \
+	ide-workbench-private.h \
 	ide-worker-manager.c \
 	ide-worker-manager.h \
 	ide-worker-process.c \
@@ -253,11 +287,16 @@ libide_1_0_la_SOURCES = \
 	util/ide-rgba.h \
 	util/ide-text-util.c \
 	util/ide-text-util.h \
+	util/ide-window-settings.c \
+	util/ide-window-settings.h \
 	$(NULL)
 
 libide_1_0_la_includes = \
 	$(DEBUG_CFLAGS) \
-	-DLIBDIR="\"$(libdir)\"" \
+	-DPACKAGE_DATADIR="\"${datadir}\"" \
+	-DPACKAGE_LOCALE_DIR=\""${datadir}/locale"\" \
+	-DPACKAGE_LIBDIR=\""${libdir}"\" \
+	-DBUILDDIR=\""${abs_top_builddir}"\" \
 	-I$(top_builddir)/libide \
 	-I$(top_srcdir)/contrib/egg \
 	-I$(top_srcdir)/contrib/libeditorconfig \
@@ -266,8 +305,10 @@ libide_1_0_la_includes = \
 	-I$(srcdir) \
 	-I$(srcdir)/directory \
 	-I$(srcdir)/doap \
+	-I$(srcdir)/editor \
 	-I$(srcdir)/editorconfig \
 	-I$(srcdir)/git \
+	-I$(srcdir)/greeter \
 	-I$(srcdir)/gsettings \
 	-I$(srcdir)/local \
 	-I$(srcdir)/modelines \

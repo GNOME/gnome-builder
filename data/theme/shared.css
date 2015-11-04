@@ -110,20 +110,20 @@ GbSearchDisplayGroup GtkListBox .list-row {
 }
 
 
-GbGreeterProjectRow,
+IdeGreeterProjectRow,
 GtkListBoxRow.with-header {
   border-bottom: 1px solid alpha(@borders, 0.4);
 }
 
-GbGreeterWindow .frame {
+IdeGreeterPerspective .frame {
   border-top: 1px solid alpha(@borders, 0.4);
   border-left: 1px solid alpha(@borders, 0.4);
   border-right: 1px solid alpha(@borders, 0.4);
   border-bottom: none;
 }
 /* remove viewport frame */
-GbGreeterWindow .frame > GbScrolledWindow > .frame,
-GbGreeterWindow > GtkBox > GtkScrolledWindow > .frame {
+IdeGreeterPerspective .frame > EggScrolledWindow > .frame,
+IdeGreeterPerspective > GtkBox > EggScrolledWindow > .frame {
   border: none;
 }
 
@@ -164,3 +164,27 @@ GbWorkspacePane .pane-separator {
 GbEditorFrame textview {
   padding-bottom: 250px;
 }
+
+
+/* Workbench perspective selection bar */
+/*
+IdeWorkbench > GtkStack > GtkBox.horizontal > GtkStackSwitcher > button {
+  background-image: none;
+  background-color: transparent;
+  border: none;
+  padding: 10px;
+  box-shadow: none;
+  border-radius: 0px;
+}
+IdeWorkbench > GtkStack > GtkBox.horizontal > GtkStackSwitcher > button:active:hover,
+IdeWorkbench > GtkStack > GtkBox.horizontal > GtkStackSwitcher > button:active:checked,
+IdeWorkbench > GtkStack > GtkBox.horizontal > GtkStackSwitcher > button:active {
+  background-color: mix(@theme_bg_color, @borders, 0.75);
+}
+IdeWorkbench > GtkStack > GtkBox.horizontal > GtkStackSwitcher > button:checked {
+  background-color: mix(@theme_bg_color, @borders, 0.5);
+}
+IdeWorkbench > GtkStack > GtkBox.horizontal > GtkStackSwitcher > button:hover {
+  background-color: mix(@theme_bg_color, @borders, 0.25);
+}
+*/

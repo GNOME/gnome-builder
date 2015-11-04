@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+  <gresource prefix="/org/gnome/libegg-private">
+    <file>egg-pill-box.ui</file>
+  </gresource>
+</gresources>

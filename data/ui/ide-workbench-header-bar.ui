@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <!-- interface-requires gtk+ 3.18 -->
+  <template class="IdeWorkbenchHeaderBar" parent="GtkHeaderBar">
+    <property name="show-close-button">true</property>
+    <child type="title">
+      <object class="GtkSearchEntry" id="search_entry">
+        <property name="hexpand">true</property>
+        <property name="margin-end">6</property>
+        <property name="margin-start">6</property>
+        <property name="max-width-chars">50</property>
+        <property name="visible">true</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuButton" id="menu_button">
+        <property name="focus-on-click">false</property>
+        <property name="visible">true</property>
+        <style>
+          <class name="image-button"/>
+        </style>
+        <child>
+          <object class="GtkImage">
+            <property name="icon-name">open-menu-symbolic</property>
+            <property name="visible">true</property>
+          </object>
+        </child>
+      </object>
+      <packing>
+        <property name="pack-type">end</property>
+        <property name="position">0</property>
+      </packing>
+    </child>
+  </template>
+</interface>

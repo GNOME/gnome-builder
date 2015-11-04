@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <!-- interface-requires gtk+ 3.17 -->
+  <template class="IdeWorkbench" parent="GtkApplicationWindow">
+    <child type="titlebar">
+      <object class="GtkStack" id="titlebar_stack">
+        <property name="visible">true</property>
+        <property name="transition-type">slide-left-right</property>
+        <property name="transition-duration">333</property>
+      </object>
+    </child>
+    <child>
+      <!--
+        top_stack is used so that we can have a perspective,
+        (the greeter perspective) as the initial perspective without
+        a stack switcher. Once we animate in the real perspectives, we
+        want the switcher. also, we want to animate in the switcher
+        as part of that transition, otherwise it looks clunky.
+      -->
+      <object class="GtkStack" id="top_stack">
+        <property name="visible">true</property>
+        <property name="transition-duration">333</property>
+        <property name="transition-type">slide-left-right</property>
+        <child>
+          <object class="GtkBox">
+            <property name="expand">true</property>
+            <property name="orientation">horizontal</property>
+            <property name="visible">true</property>
+            <child>
+              <object class="GtkStackSwitcher" id="perspectives_stack_switcher">
+                <property name="margin">6</property>
+                <property name="orientation">vertical</property>
+                <property name="stack">perspectives_stack</property>
+                <property name="visible">true</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkStack" id="perspectives_stack">
+                <property name="homogeneous">false</property>
+                <property name="transition-type">crossfade</property>
+                <property name="transition-duration">333</property>
+                <property name="visible">true</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="name">perspectives</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

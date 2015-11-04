@@ -80,8 +80,6 @@ libgnome_builder_la_SOURCES = \
 	editor/gb-editor-view-actions.h \
 	editor/gb-editor-view-addin-private.h \
 	editor/gb-editor-view-private.h \
-	greeter/gb-greeter-pill-box.c \
-	greeter/gb-greeter-pill-box.h \
 	greeter/gb-greeter-project-row.c \
 	greeter/gb-greeter-project-row.h \
 	greeter/gb-greeter-window.c \

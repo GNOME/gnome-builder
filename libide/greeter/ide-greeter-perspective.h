@@ -1,4 +1,4 @@
-/* gb-greeter-pill-box.h
+/* ide-greeter-perspective.h
  *
  * Copyright (C) 2015 Christian Hergert <christian@hergert.me>
  *
@@ -16,22 +16,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GB_GREETER_PILL_BOX_H
-#define GB_GREETER_PILL_BOX_H
+#ifndef IDE_GREETER_PERSPECTIVE_H
+#define IDE_GREETER_PERSPECTIVE_H
 
 #include <gtk/gtk.h>
 
+#include "ide-recent-projects.h"
+
 G_BEGIN_DECLS
 
-#define GB_TYPE_GREETER_PILL_BOX (gb_greeter_pill_box_get_type())
+#define IDE_TYPE_GREETER_PERSPECTIVE (ide_greeter_perspective_get_type())
 
-G_DECLARE_FINAL_TYPE (GbGreeterPillBox, gb_greeter_pill_box, GB, GREETER_PILL_BOX, GtkEventBox)
-
-GtkWidget   *gb_greeter_pill_box_new       (const gchar      *label);
-const gchar *gb_greeter_pill_box_get_label (GbGreeterPillBox *self);
-void         gb_greeter_pill_box_set_label (GbGreeterPillBox *self,
-                                            const gchar      *label);
+G_DECLARE_FINAL_TYPE (IdeGreeterPerspective, ide_greeter_perspective, IDE, GREETER_PERSPECTIVE, GtkBin)
 
 G_END_DECLS
 
-#endif /* GB_GREETER_PILL_BOX_H */
+#endif /* IDE_GREETER_PERSPECTIVE_H */

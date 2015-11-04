@@ -21,7 +21,6 @@
     <file alias="ui/gb-editor-settings-widget.ui">../../data/ui/gb-editor-settings-widget.ui</file>
     <file alias="ui/gb-editor-tweak-widget.ui">../../data/ui/gb-editor-tweak-widget.ui</file>
     <file alias="ui/gb-editor-view.ui">../../data/ui/gb-editor-view.ui</file>
-    <file alias="ui/gb-greeter-pill-box.ui">../../data/ui/gb-greeter-pill-box.ui</file>
     <file alias="ui/gb-greeter-project-row.ui">../../data/ui/gb-greeter-project-row.ui</file>
     <file alias="ui/gb-greeter-window.ui">../../data/ui/gb-greeter-window.ui</file>
     <file alias="ui/gb-html-view.ui">../../data/ui/gb-html-view.ui</file>
