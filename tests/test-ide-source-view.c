@@ -32,20 +32,20 @@
 #define ADD_CLASS(widget,name) \
   gtk_style_context_add_class(gtk_widget_get_style_context(GTK_WIDGET(widget)), name)
 
-static IdeContext     *context;
-static GtkWindow      *window;
+static IdeContext     *global_context;
+static GtkWindow      *main_window;
 static GtkStack       *docStack;
 static GtkMenuButton  *docname;
-static GtkProgressBar *progress;
+static GtkProgressBar *global_progress;
 static GHashTable     *bufferToView;
 static GList          *filesToOpen;
-static gint            exit_code = EXIT_SUCCESS;
+static gint            global_exit_code = EXIT_SUCCESS;
 static gboolean        wordCompletion;
 static gboolean        darkMode;
 static gboolean        searchShadow;
 static gboolean        smartBackspace;
 static gboolean        debugScrollOffset;
-static gchar          *css = "\
+static gchar          *css_str = "\
 @binding-set file-keybindings { \
     bind \"<ctrl>s\" { \"action\" (\"file\", \"save\", \"\") }; \
 } \
@@ -57,7 +57,7 @@ IdeSourceView { \
 static void
 quit (int exit_code)
 {
-  exit_code = exit_code;
+  global_exit_code = exit_code;
   gtk_main_quit ();
   return;
 }
@@ -92,7 +92,7 @@ idedit__context_unload_cb (GObject      *object,
       g_clear_error (&error);
     }
 
-  gtk_window_close (window);
+  gtk_window_close (main_window);
 }
 
 static gboolean
@@ -100,13 +100,13 @@ delete_event_cb (GtkWindow *window,
                  GdkEvent  *event,
                  gpointer   user_data)
 {
-  if (context)
+  if (global_context)
     {
-      ide_context_unload_async (context,
+      ide_context_unload_async (global_context,
                                 NULL,
                                 idedit__context_unload_cb,
                                 NULL);
-      g_clear_object (&context);
+      g_clear_object (&global_context);
       return TRUE;
     }
 
@@ -149,7 +149,7 @@ add_buffer (IdeBuffer *buffer)
   IdeSourceView *view;
   IdeBackForwardList *bflist;
 
-  bflist = ide_context_get_back_forward_list (context);
+  bflist = ide_context_get_back_forward_list (global_context);
 
   view = g_hash_table_lookup (bufferToView, buffer);
 
@@ -297,7 +297,7 @@ notify_visible_child_cb (GtkStack   *stack,
       view = IDE_SOURCE_VIEW (gtk_bin_get_child (GTK_BIN (child)));
       buffer = IDE_BUFFER (gtk_text_view_get_buffer (GTK_TEXT_VIEW (view)));
       title = ide_buffer_get_title (buffer);
-      gtk_window_set_title (window, title);
+      gtk_window_set_title (main_window, title);
       gtk_button_set_label (GTK_BUTTON (docname), title);
     }
 }
@@ -360,13 +360,13 @@ save_activate (GSimpleAction *action,
           IdeProgress *progress = NULL;
 
           buffer = IDE_BUFFER (gtk_text_view_get_buffer (GTK_TEXT_VIEW (current)));
-          bufmgr = ide_context_get_buffer_manager (context);
+          bufmgr = ide_context_get_buffer_manager (global_context);
           file = ide_buffer_get_file (buffer);
           ide_buffer_manager_save_file_async (bufmgr, buffer, file, &progress, NULL, NULL, NULL);
 
-          g_object_bind_property (progress, "fraction", progress, "fraction", G_BINDING_SYNC_CREATE);
-          g_signal_connect (progress, "notify::completed", G_CALLBACK (progress_completed), progress);
-          gtk_widget_show (GTK_WIDGET (progress));
+          g_object_bind_property (progress, "fraction", global_progress, "fraction", G_BINDING_SYNC_CREATE);
+          g_signal_connect (progress, "notify::completed", G_CALLBACK (progress_completed), global_progress);
+          gtk_widget_show (GTK_WIDGET (global_progress));
         }
     }
 }
@@ -378,7 +378,7 @@ go_forward_activate (GSimpleAction *action,
 {
   IdeBackForwardList *list;
 
-  list = ide_context_get_back_forward_list (context);
+  list = ide_context_get_back_forward_list (global_context);
 
   if (ide_back_forward_list_get_can_go_forward (list))
     ide_back_forward_list_go_forward (list);
@@ -391,7 +391,7 @@ go_backward_activate (GSimpleAction *action,
 {
   IdeBackForwardList *list;
 
-  list = ide_context_get_back_forward_list (context);
+  list = ide_context_get_back_forward_list (global_context);
 
   if (ide_back_forward_list_get_can_go_backward (list))
     ide_back_forward_list_go_backward (list);
@@ -417,7 +417,7 @@ navigate_to_cb (IdeBackForwardList *list,
   line_offset = ide_source_location_get_line_offset (srcloc);
   gfile = ide_file_get_file (file);
 
-  bufmgr = ide_context_get_buffer_manager (context);
+  bufmgr = ide_context_get_buffer_manager (global_context);
   buffer = ide_buffer_manager_find_buffer (bufmgr, gfile);
 
   if (buffer)
@@ -458,29 +458,29 @@ create_window (void)
 
   css = gtk_css_provider_new ();
   g_signal_connect (css, "parsing-error", G_CALLBACK (parsing_error_cb), NULL);
-  gtk_css_provider_load_from_data (css, css, -1, NULL);
+  gtk_css_provider_load_from_data (css, css_str, -1, NULL);
   gtk_style_context_add_provider_for_screen (gdk_screen_get_default (),
                                              GTK_STYLE_PROVIDER (css),
                                              GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
   g_clear_object (&css);
 
-  window = g_object_new (GTK_TYPE_WINDOW,
-                          "default-width", 1280,
-                          "default-height", 720,
-                          "title", _("idedit"),
-                          NULL);
-  g_signal_connect (window, "delete-event", G_CALLBACK (delete_event_cb), NULL);
+  main_window = g_object_new (GTK_TYPE_WINDOW,
+                              "default-width", 1280,
+                              "default-height", 720,
+                              "title", _("idedit"),
+                              NULL);
+  g_signal_connect (main_window, "delete-event", G_CALLBACK (delete_event_cb), NULL);
 
-  bflist = ide_context_get_back_forward_list (context);
+  bflist = ide_context_get_back_forward_list (global_context);
   g_signal_connect (bflist, "navigate-to", G_CALLBACK (navigate_to_cb), NULL);
 
   group = g_simple_action_group_new ();
   g_action_map_add_action_entries (G_ACTION_MAP (group), entries, G_N_ELEMENTS (entries), NULL);
-  gtk_widget_insert_action_group (GTK_WIDGET (window), "file", G_ACTION_GROUP (group));
+  gtk_widget_insert_action_group (GTK_WIDGET (main_window), "file", G_ACTION_GROUP (group));
 
   nav_group = g_simple_action_group_new ();
   g_action_map_add_action_entries (G_ACTION_MAP (nav_group), nav_entries, G_N_ELEMENTS (nav_entries), NULL);
-  gtk_widget_insert_action_group (GTK_WIDGET (window), "navigation", G_ACTION_GROUP (nav_group));
+  gtk_widget_insert_action_group (GTK_WIDGET (main_window), "navigation", G_ACTION_GROUP (nav_group));
 
   g_object_bind_property (bflist, "can-go-backward",
                           g_action_map_lookup_action (G_ACTION_MAP (nav_group), "go-backward"), "enabled",
@@ -495,13 +495,13 @@ create_window (void)
                          "title", "idedit",
                          "visible", TRUE,
                          NULL);
-  gtk_window_set_titlebar (window, GTK_WIDGET (header));
+  gtk_window_set_titlebar (main_window, GTK_WIDGET (header));
 
   box = g_object_new (GTK_TYPE_BOX,
                       "orientation", GTK_ORIENTATION_VERTICAL,
                       "visible", TRUE,
                       NULL);
-  gtk_container_add (GTK_CONTAINER (window), GTK_WIDGET (box));
+  gtk_container_add (GTK_CONTAINER (main_window), GTK_WIDGET (box));
 
   hbox = g_object_new (GTK_TYPE_BOX,
                        "orientation", GTK_ORIENTATION_HORIZONTAL,
@@ -611,13 +611,13 @@ create_window (void)
                           NULL);
   gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (overlay));
 
-  progress = g_object_new (GTK_TYPE_PROGRESS_BAR,
-                            "valign", GTK_ALIGN_START,
-                            "orientation", GTK_ORIENTATION_HORIZONTAL,
-                            "visible", FALSE,
+  global_progress = g_object_new (GTK_TYPE_PROGRESS_BAR,
+                                  "valign", GTK_ALIGN_START,
+                                  "orientation", GTK_ORIENTATION_HORIZONTAL,
+                                  "visible", FALSE,
                             NULL);
-  ADD_CLASS (progress, "osd");
-  gtk_overlay_add_overlay (overlay, GTK_WIDGET (progress));
+  ADD_CLASS (global_progress, "osd");
+  gtk_overlay_add_overlay (overlay, GTK_WIDGET (global_progress));
 
   docStack = g_object_new (GTK_TYPE_STACK,
                             "expand", TRUE,
@@ -638,9 +638,9 @@ idedit__context_new_cb (GObject      *object,
   GList *iter;
   gsize i;
 
-  context = ide_context_new_finish (result, &error);
+  global_context = ide_context_new_finish (result, &error);
 
-  if (!context)
+  if (!global_context)
     {
       g_printerr ("%s\n", error->message);
       g_clear_error (&error);
@@ -653,7 +653,7 @@ idedit__context_new_cb (GObject      *object,
   /* now open all the requested buffers */
   bufferToView = g_hash_table_new (g_direct_hash, g_direct_equal);
 
-  bufmgr = ide_context_get_buffer_manager (context);
+  bufmgr = ide_context_get_buffer_manager (global_context);
   g_signal_connect (bufmgr, "load-buffer", G_CALLBACK (load_buffer_cb), NULL);
   g_signal_connect (bufmgr, "buffer-loaded", G_CALLBACK (buffer_loaded_cb), NULL);
 
@@ -667,7 +667,7 @@ idedit__context_new_cb (GObject      *object,
       IdeProject *project;
       IdeFile *file;
 
-      project = ide_context_get_project (context);
+      project = ide_context_get_project (global_context);
       g_assert (project);
       g_assert (IDE_IS_PROJECT (project));
 
@@ -681,7 +681,7 @@ idedit__context_new_cb (GObject      *object,
       g_object_unref (file);
     }
 
-  gtk_window_present (window);
+  gtk_window_present (main_window);
 }
 
 static gboolean
@@ -781,5 +781,5 @@ main (int argc,
 
   gtk_main ();
 
-  return exit_code;
+  return global_exit_code;
 }
