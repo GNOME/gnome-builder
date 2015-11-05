@@ -28,7 +28,6 @@ struct _IdeCssProvider
   GtkCssProvider parent_instance;
 
   GtkSettings *settings;
-  gulong       notify_gtk_theme_name_handler;
 };
 
 G_DEFINE_TYPE (IdeCssProvider, ide_css_provider, GTK_TYPE_CSS_PROVIDER)
@@ -129,20 +128,17 @@ ide_css_provider_constructed (GObject *object)
 
   self->settings = g_object_ref (gtk_settings_get_default ());
 
-  self->notify_gtk_theme_name_handler =
-    g_signal_connect_object (self->settings,
-                             "notify::gtk-theme-name",
-                             G_CALLBACK (ide_css_provider__settings_notify_gtk_theme_name),
-                             self,
-                             G_CONNECT_SWAPPED);
+  g_signal_connect_object (self->settings,
+                           "notify::gtk-theme-name",
+                           G_CALLBACK (ide_css_provider__settings_notify_gtk_theme_name),
+                           self,
+                           G_CONNECT_SWAPPED);
 
-  self->notify_gtk_theme_name_handler =
-    g_signal_connect_object (
-      self->settings,
-      "notify::gtk-application-prefer-dark-theme",
-      G_CALLBACK (ide_css_provider__settings_notify_gtk_application_prefer_dark_theme),
-      self,
-      G_CONNECT_SWAPPED);
+  g_signal_connect_object (self->settings,
+                           "notify::gtk-application-prefer-dark-theme",
+                           G_CALLBACK (ide_css_provider__settings_notify_gtk_application_prefer_dark_theme),
+                           self,
+                           G_CONNECT_SWAPPED);
 
   ide_css_provider_update (self);
 }
@@ -152,7 +148,6 @@ ide_css_provider_finalize (GObject *object)
 {
   IdeCssProvider *self = (IdeCssProvider *)object;
 
-  ide_clear_signal_handler (self->settings, &self->notify_gtk_theme_name_handler);
   g_clear_object (&self->settings);
 
   G_OBJECT_CLASS (ide_css_provider_parent_class)->finalize (object);

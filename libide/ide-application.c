@@ -63,7 +63,9 @@ ide_application_can_load_plugin (IdeApplication *self,
     return FALSE;
 
   plugin_name = peas_plugin_info_get_module_name (plugin_info);
-  if (ide_str_equal0 (plugin_name, self->type))
+
+  /* If --type was specified, only that plugin may be loaded */
+  if ((self->type != NULL) && !ide_str_equal0 (plugin_name, self->type))
     return FALSE;
 
   return TRUE;

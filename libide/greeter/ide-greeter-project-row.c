@@ -119,14 +119,16 @@ static void
 ide_greeter_project_row_add_languages (IdeGreeterProjectRow *self,
                                        IdeProjectInfo       *project_info)
 {
-  gchar **languages;
+  const gchar * const *languages;
 
   g_return_if_fail (IDE_IS_GREETER_PROJECT_ROW (self));
   g_return_if_fail (IDE_IS_PROJECT_INFO (project_info));
 
-  if ((languages = ide_project_info_get_languages (project_info)))
+  languages = ide_project_info_get_languages (project_info);
+
+  if (languages != NULL)
     {
-      guint len = g_strv_length (languages);
+      guint len = g_strv_length ((gchar **)languages);
       gsize i;
 
       for (i = len; i > 0; i--)
@@ -207,9 +209,11 @@ truncate_location (GBinding     *binding,
       if ((relative_path = g_file_get_relative_path (home_dir, file)) ||
           (relative_path = g_file_get_path (file)))
         {
-          g_value_set_string (to_value, relative_path);
+          g_value_take_string (to_value, relative_path);
           return TRUE;
         }
+
+      g_free (relative_path);
     }
 
   uri = g_file_get_uri (file);

@@ -102,12 +102,12 @@ ide_project_info_set_doap (IdeProjectInfo *self,
  *
  * Returns: (transfer none): An array of language names.
  */
-gchar **
+const gchar * const *
 ide_project_info_get_languages (IdeProjectInfo *self)
 {
   g_return_val_if_fail (IDE_IS_PROJECT_INFO (self), NULL);
 
-  return self->languages;
+  return (const gchar * const *)self->languages;
 }
 
 void

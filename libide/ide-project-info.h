@@ -38,7 +38,8 @@ GFile        *ide_project_info_get_directory        (IdeProjectInfo  *self);
 gboolean      ide_project_info_get_is_recent        (IdeProjectInfo  *self);
 gint          ide_project_info_get_priority         (IdeProjectInfo  *self);
 GDateTime    *ide_project_info_get_last_modified_at (IdeProjectInfo  *self);
-gchar       **ide_project_info_get_languages        (IdeProjectInfo  *self);
+const gchar * const *
+              ide_project_info_get_languages        (IdeProjectInfo  *self);
 const gchar  *ide_project_info_get_name             (IdeProjectInfo  *self);
 void          ide_project_info_set_file             (IdeProjectInfo  *self,
                                                      GFile           *file);
