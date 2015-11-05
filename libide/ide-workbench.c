@@ -393,4 +393,5 @@ ide_workbench_set_perspective (IdeWorkbench   *self,
 
   actions = ide_perspective_get_actions (perspective);
   gtk_widget_insert_action_group (GTK_WIDGET (self), "perspective", actions);
+  g_clear_object (&actions);
 }

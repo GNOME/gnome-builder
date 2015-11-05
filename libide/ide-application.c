@@ -77,7 +77,7 @@ ide_application_load_plugins (IdeApplication *self)
 
   peas_engine_enable_loader (engine, "python3");
 
-  if (g_getenv ("BUiLDER_IN_TREE_PLUGINS") != NULL)
+  if (g_getenv ("GB_IN_TREE_PLUGINS") != NULL)
     {
       GDir *dir;
 

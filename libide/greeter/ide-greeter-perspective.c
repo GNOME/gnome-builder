@@ -79,7 +79,7 @@ ide_greeter_perspective_get_titlebar (IdePerspective *perspective)
 static GActionGroup *
 ide_greeter_perspective_get_actions (IdePerspective *perspective)
 {
-  return G_ACTION_GROUP (IDE_GREETER_PERSPECTIVE (perspective)->actions);
+  return g_object_ref (IDE_GREETER_PERSPECTIVE (perspective)->actions);
 }
 
 static void

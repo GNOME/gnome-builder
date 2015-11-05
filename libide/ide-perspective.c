@@ -32,16 +32,16 @@ ide_perspective_real_get_actions (IdePerspective *self)
   return NULL;
 }
 
-static const gchar *
+static gchar *
 ide_perspective_real_get_icon_name (IdePerspective *self)
 {
   return NULL;
 }
 
-static const gchar *
+static gchar *
 ide_perspective_real_get_id (IdePerspective *self)
 {
-  return G_OBJECT_TYPE_NAME (self);
+  return g_strdup (G_OBJECT_TYPE_NAME (self));
 }
 
 static gboolean
@@ -50,7 +50,7 @@ ide_perspective_real_get_needs_attention (IdePerspective *self)
   return FALSE;
 }
 
-static const gchar *
+static gchar *
 ide_perspective_real_get_title (IdePerspective *self)
 {
   return NULL;
@@ -117,9 +117,10 @@ ide_perspective_agree_to_shutdown (IdePerspective *self)
  *
  * If you implement an "icon-name" property, the icon may change at runtime.
  *
- * Returns: A named icon as a string which will not be modified or freed.
+ * Returns: (nullable): A newly allcoated string that contains the icon-name
+ *   to use for the perspective.
  */
-const gchar *
+gchar *
 ide_perspective_get_icon_name (IdePerspective *self)
 {
   g_return_val_if_fail (IDE_IS_PERSPECTIVE (self), NULL);
@@ -137,9 +138,9 @@ ide_perspective_get_icon_name (IdePerspective *self)
  *
  * This value should be unique per workspace.
  *
- * Returns: A string identifier for the perspective.
+ * Returns: (nullable): A string identifier for the perspective.
  */
-const gchar *
+gchar *
 ide_perspective_get_id (IdePerspective *self)
 {
   g_return_val_if_fail (IDE_IS_PERSPECTIVE (self), NULL);
@@ -177,7 +178,7 @@ ide_perspective_get_needs_attention (IdePerspective *self)
  *
  * Returns: A string which will not be modified or freed.
  */
-const gchar *
+gchar *
 ide_perspective_get_title (IdePerspective *self)
 {
   g_return_val_if_fail (IDE_IS_PERSPECTIVE (self), NULL);

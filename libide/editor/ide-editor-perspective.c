@@ -94,10 +94,10 @@ ide_editor_perspective_init (IdeEditorPerspective *self)
   gtk_widget_init_template (GTK_WIDGET (self));
 }
 
-static const gchar *
+static gchar *
 ide_editor_perspective_get_title (IdePerspective *perspective)
 {
-  return _("Editor");
+  return g_strdup (_("Editor"));
 }
 
 static GtkWidget *
