@@ -157,10 +157,10 @@ SymbolTree entry {
 }
 
 
-.shortcuts-list-box GtkListBoxRow {
+.shortcuts-list-box row {
   border-bottom: 1px solid @borders;
 }
-.shortcuts-list-box GtkListBoxRow:last-child {
+.shortcuts-list-box row:last-child {
   border-bottom: none;
 }
 
@@ -169,9 +169,9 @@ SymbolTree entry {
 }
 
 
-GbPreferencesPagePlugins GtkListBoxRow {
+GbPreferencesPagePlugins row {
   border-bottom: 1px solid shade(@borders, 1.2);
 }
-GbPreferencesPagePlugins GtkListBoxRow:last-child {
+GbPreferencesPagePlugins row:last-child {
   border-bottom: none;
 }

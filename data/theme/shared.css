@@ -29,13 +29,13 @@
 .preferences.sidebar GtkListBox {
   background-color: shade(@theme_bg_color, 0.99);
 }
-.preferences.sidebar GtkListBoxRow {
+.preferences.sidebar row {
   padding: 10px;
 }
-.preferences.sidebar GtkListBoxRow:not(:selected) {
+.preferences.sidebar row:not(:selected) {
   background-color: shade(@theme_bg_color, 0.99);
 }
-.preferences.sidebar GtkListBoxRow:hover:not(:selected) {
+.preferences.sidebar row:hover:not(:selected) {
   background-color: shade(@theme_bg_color, 1.02);
 }
 
@@ -44,11 +44,11 @@ GbPreferencesSwitch:prelight {
 }
 
 
-GbEditorSettingsWidget GtkListBoxRow {
+GbEditorSettingsWidget row {
   padding: 6px;
   border-bottom: 1px solid @borders;
 }
-GbEditorSettingsWidget GtkListBoxRow:last-child {
+GbEditorSettingsWidget row:last-child {
   border-bottom: none;
 }
 
@@ -111,7 +111,7 @@ GbSearchDisplayGroup GtkListBox .list-row {
 
 
 IdeGreeterProjectRow,
-GtkListBoxRow.with-header {
+row.with-header {
   border-bottom: 1px solid alpha(@borders, 0.4);
 }
 
@@ -189,10 +189,10 @@ IdeWorkbench > GtkStack > GtkBox.horizontal > GtkStackSwitcher > button:hover {
 }
 */
 
-IdeWorkbench IdePreferencesPerspective IdePreferencesGroup GtkListBoxRow {
+workbench IdePreferencesPerspective IdePreferencesGroup row {
   border-bottom: 1px solid shade(@borders, 1.2);
   padding: 10px;
 }
-IdeWorkbench IdePreferencesPerspective IdePreferencesGroup GtkListBoxRow:last-child {
+workbench IdePreferencesPerspective IdePreferencesGroup row:last-child {
   border-bottom: none;
 }

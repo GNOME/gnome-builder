@@ -150,9 +150,8 @@ ide_workbench_class_init (IdeWorkbenchClass *klass)
 
   g_object_class_install_properties (object_class, LAST_PROP, properties);
 
-  gtk_widget_class_set_template_from_resource (widget_class,
-                                               "/org/gnome/builder/ui/ide-workbench.ui");
-
+  gtk_widget_class_set_css_name (widget_class, "workbench");
+  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/ui/ide-workbench.ui");
   gtk_widget_class_bind_template_child (widget_class, IdeWorkbench, perspectives_stack);
   gtk_widget_class_bind_template_child (widget_class, IdeWorkbench, perspectives_stack_switcher);
   gtk_widget_class_bind_template_child (widget_class, IdeWorkbench, titlebar_stack);
