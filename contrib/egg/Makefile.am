@@ -11,6 +11,8 @@ libegg_private_la_SOURCES = \
 	egg-animation.h \
 	egg-binding-group.c \
 	egg-binding-group.h \
+	egg-centering-bin.c \
+	egg-centering-bin.h \
 	egg-counter.c \
 	egg-counter.h \
 	egg-date-time.c \
