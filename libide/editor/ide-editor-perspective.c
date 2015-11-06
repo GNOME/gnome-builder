@@ -106,10 +106,10 @@ ide_editor_perspective_get_titlebar (IdePerspective *perspective)
   return GTK_WIDGET (IDE_EDITOR_PERSPECTIVE (perspective)->titlebar);
 }
 
-static const gchar *
+static gchar *
 ide_editor_perspective_get_icon_name (IdePerspective *perspective)
 {
-  return "text-editor-symbolic";
+  return g_strdup ("text-editor-symbolic");
 }
 
 static void
