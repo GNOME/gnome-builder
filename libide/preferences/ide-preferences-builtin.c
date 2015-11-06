@@ -34,8 +34,8 @@ ide_preferences_builtin_register_plugins (IdePreferences *preferences)
   engine = peas_engine_get_default ();
   list = peas_engine_get_plugin_list (engine);
 
-  ide_preferences_add_page (preferences, "plugins", _("Plugins"), 700);
-  ide_preferences_add_list_group (preferences, "plugins", "plugins", _("Installed Plugins"), 0);
+  ide_preferences_add_page (preferences, "plugins", _("Extensions"), 700);
+  ide_preferences_add_list_group (preferences, "plugins", "plugins", _("Installed Extensions"), 0);
 
   for (; list; list = list->next, i++)
     {
@@ -95,6 +95,21 @@ ide_preferences_builtin_register_appearance (IdePreferences *preferences)
   ide_preferences_add_switch (preferences, "appearance", "draw-spaces", "org.gnome.builder.editor", "draw-spaces", "\"leading\"", _("Leading Only"), NULL, NULL, 6);
 }
 
+static void
+ide_preferences_builtin_register_keyboard (IdePreferences *preferences)
+{
+  ide_preferences_add_page (preferences, "keyboard", _("Keyboard"), 400);
+
+  ide_preferences_add_list_group (preferences, "keyboard", "mode", _("Emulation"), 0);
+  ide_preferences_add_radio (preferences, "keyboard", "mode", "org.gnome.builder.editor", "keybindings", "\"default\"", _("Builder"), _("Default keybinding mode which mimics Gedit"), NULL, 0);
+  ide_preferences_add_radio (preferences, "keyboard", "mode", "org.gnome.builder.editor", "keybindings", "\"emacs\"", _("Emacs"), _("Emulates the Emacs text editor"), NULL, 0);
+  ide_preferences_add_radio (preferences, "keyboard", "mode", "org.gnome.builder.editor", "keybindings", "\"vim\"", _("Vim"), _("Emulates the Vim text editor"), NULL, 0);
+
+  ide_preferences_add_list_group (preferences, "keyboard", "movements", _("Movement"), 100);
+  ide_preferences_add_switch (preferences, "keyboard", "movements", "org.gnome.builder.editor", "smart-home-end", NULL, _("Smart Home and End"), _("Home moves to first non-whitespace character"), NULL, 0);
+  ide_preferences_add_switch (preferences, "keyboard", "movements", "org.gnome.builder.editor", "smart-backspace", NULL, _("Smart Backspace"), _("Backspace will remove extra space to keep you aligned with your indentation"), NULL, 100);
+}
+
 void
 _ide_preferences_builtin_register (IdePreferences *preferences)
 {
@@ -103,7 +118,9 @@ _ide_preferences_builtin_register (IdePreferences *preferences)
   ide_preferences_add_page (preferences, "editor", _("Editor"), 100);
   ide_preferences_add_page (preferences, "languages", _("Programming Languages"), 200);
   ide_preferences_add_page (preferences, "code-insight", _("Code Insight"), 300);
-  ide_preferences_add_page (preferences, "keyboard", _("Keyboard"), 400);
+
+  ide_preferences_builtin_register_keyboard (preferences);
+
   ide_preferences_add_page (preferences, "vcs", _("Version Control"), 600);
 
   ide_preferences_builtin_register_plugins (preferences);
