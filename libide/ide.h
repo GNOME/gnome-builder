@@ -63,8 +63,6 @@ G_BEGIN_DECLS
 #include "ide-object.h"
 #include "ide-pattern-spec.h"
 #include "ide-perspective.h"
-#include "ide-preferences.h"
-#include "ide-preferences-addin.h"
 #include "ide-process.h"
 #include "ide-progress.h"
 #include "ide-project.h"
@@ -109,6 +107,8 @@ G_BEGIN_DECLS
 #include "git/ide-git-remote-callbacks.h"
 #include "git/ide-git-vcs.h"
 #include "local/ide-local-device.h"
+#include "preferences/ide-preferences.h"
+#include "preferences/ide-preferences-addin.h"
 #include "util/ide-line-reader.h"
 #include "util/ide-list-inline.h"
 

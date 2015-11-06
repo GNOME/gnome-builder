@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <!-- interface-requires gtk+ 3.18 -->
+  <template class="IdePreferencesPage" parent="GtkBin">
+    <child>
+      <object class="GtkScrolledWindow">
+        <property name="visible">true</property>
+        <child>
+          <object class="GtkBox" id="box">
+            <property name="halign">center</property>
+            <property name="margin">24</property>
+            <property name="orientation">vertical</property>
+            <property name="spacing">24</property>
+            <property name="visible">true</property>
+            <property name="width-request">500</property>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

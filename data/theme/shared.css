@@ -188,3 +188,11 @@ IdeWorkbench > GtkStack > GtkBox.horizontal > GtkStackSwitcher > button:hover {
   background-color: mix(@theme_bg_color, @borders, 0.25);
 }
 */
+
+IdeWorkbench IdePreferencesPerspective IdePreferencesGroup GtkListBoxRow {
+  border-bottom: 1px solid shade(@borders, 1.2);
+  padding: 10px;
+}
+IdeWorkbench IdePreferencesPerspective IdePreferencesGroup GtkListBoxRow:last-child {
+  border-bottom: none;
+}

@@ -99,10 +99,6 @@ libide_1_0_la_public_sources = \
 	ide-macros.h \
 	ide-perspective.c \
 	ide-perspective.h \
-	ide-preferences.c \
-	ide-preferences.h \
-	ide-preferences-addin.c \
-	ide-preferences-addin.h \
 	ide-object.c \
 	ide-object.h \
 	ide-pattern-spec.c \
@@ -204,6 +200,10 @@ libide_1_0_la_public_sources = \
 	ide.h \
 	local/ide-local-device.c \
 	local/ide-local-device.h \
+	preferences/ide-preferences.c \
+	preferences/ide-preferences.h \
+	preferences/ide-preferences-addin.c \
+	preferences/ide-preferences-addin.h \
 	$(NULL)
 
 libide_1_0_la_SOURCES = \
@@ -270,6 +270,22 @@ libide_1_0_la_SOURCES = \
 	modelines/ide-modelines-file-settings.h \
 	modelines/modeline-parser.c \
 	modelines/modeline-parser.h \
+	preferences/ide-preferences-builtin.c \
+	preferences/ide-preferences-builtin.h \
+	preferences/ide-preferences-container.c \
+	preferences/ide-preferences-container.h \
+	preferences/ide-preferences-font-button.c \
+	preferences/ide-preferences-font-button.h \
+	preferences/ide-preferences-group.c \
+	preferences/ide-preferences-group.h \
+	preferences/ide-preferences-page.c \
+	preferences/ide-preferences-page.h \
+	preferences/ide-preferences-perspective.c \
+	preferences/ide-preferences-perspective.h \
+	preferences/ide-preferences-spin-button.c \
+	preferences/ide-preferences-spin-button.h \
+	preferences/ide-preferences-switch.c \
+	preferences/ide-preferences-switch.h \
 	theatrics/ide-box-theatric.c \
 	theatrics/ide-box-theatric.h \
 	util/ide-cairo.c \
@@ -312,6 +328,7 @@ libide_1_0_la_includes = \
 	-I$(srcdir)/gsettings \
 	-I$(srcdir)/local \
 	-I$(srcdir)/modelines \
+	-I$(srcdir)/preferences \
 	-I$(srcdir)/resources \
 	-I$(srcdir)/theatrics \
 	-I$(srcdir)/util \

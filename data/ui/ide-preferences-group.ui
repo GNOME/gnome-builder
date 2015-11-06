@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <!-- interface-requires gtk+ 3.18 -->
+  <template class="IdePreferencesGroup" parent="GtkBin">
+    <property name="vexpand">false</property>
+    <child>
+      <object class="GtkBox">
+        <property name="orientation">vertical</property>
+        <property name="visible">true</property>
+        <child>
+          <object class="GtkLabel" id="title">
+            <property name="visible">true</property>
+            <property name="hexpand">true</property>
+            <property name="xalign">0.0</property>
+            <attributes>
+              <attribute name="weight" value="bold"/>
+            </attributes>
+          </object>
+          <packing>
+            <property name="padding">12</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkBox">
+            <property name="orientation">vertical</property>
+            <property name="visible">true</property>
+            <child>
+              <object class="GtkBox" id="box">
+                <property name="orientation">vertical</property>
+                <property name="spacing">12</property>
+                <property name="visible">true</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkFrame" id="list_box_frame">
+                <child>
+                  <object class="GtkListBox" id="list_box">
+                    <property name="selection-mode">none</property>
+                    <property name="visible">true</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

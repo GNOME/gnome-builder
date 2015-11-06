@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <!-- interface-requires gtk+ 3.18 -->
+  <template class="IdePreferencesPerspective" parent="GtkBin">
+    <child>
+      <object class="GtkBox">
+        <property name="orientation">horizontal</property>
+        <property name="visible">true</property>
+        <child>
+          <object class="GtkStackSidebar" id="page_stack_sidebar">
+            <property name="stack">page_stack</property>
+            <property name="visible">true</property>
+            <property name="width-request">200</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkStack" id="page_stack">
+            <property name="transition-duration">333</property>
+            <property name="transition-type">crossfade</property>
+            <property name="visible">true</property>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+  <object class="IdeWorkbenchHeaderBar" id="titlebar">
+    <property name="visible">true</property>
+  </object>
+</interface>

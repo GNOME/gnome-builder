@@ -36,6 +36,34 @@ enum {
 static GParamSpec *properties [LAST_PROP];
 
 static void
+ide_workbench_notify_visible_child (IdeWorkbench *self,
+                                    GParamSpec   *pspec,
+                                    GtkStack     *stack)
+{
+  IdePerspective *perspective;
+
+  g_assert (IDE_IS_WORKBENCH (self));
+  g_assert (GTK_IS_STACK (stack));
+
+  perspective = IDE_PERSPECTIVE (gtk_stack_get_visible_child (stack));
+
+  if (perspective != NULL)
+    {
+      GActionGroup *actions;
+      gchar *id;
+
+      id = ide_perspective_get_id (perspective);
+      gtk_stack_set_visible_child_name (self->titlebar_stack, id);
+
+      actions = ide_perspective_get_actions (perspective);
+      gtk_widget_insert_action_group (GTK_WIDGET (self), "perspective", actions);
+
+      g_clear_object (&actions);
+      g_free (id);
+    }
+}
+
+static void
 ide_workbench_finalize (GObject *object)
 {
   IdeWorkbench *self = (IdeWorkbench *)object;
@@ -163,14 +191,31 @@ ide_workbench_init_editor (IdeWorkbench *self)
 }
 
 static void
+ide_workbench_init_preferences (IdeWorkbench *self)
+{
+  g_assert (IDE_IS_WORKBENCH (self));
+
+  self->preferences_perspective = g_object_new (IDE_TYPE_PREFERENCES_PERSPECTIVE,
+                                                "visible", TRUE,
+                                                NULL);
+  ide_workbench_add_perspective (self, IDE_PERSPECTIVE (self->preferences_perspective));
+}
+
+static void
 ide_workbench_init (IdeWorkbench *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
 
   ide_workbench_init_greeter (self);
   ide_workbench_init_editor (self);
-  ide_workbench_init_editor (self);
+  ide_workbench_init_preferences (self);
   ide_window_settings_register (GTK_WINDOW (self));
+
+  g_signal_connect_object (self->perspectives_stack,
+                           "notify::visible-child",
+                           G_CALLBACK (ide_workbench_notify_visible_child),
+                           self,
+                           G_CONNECT_SWAPPED);
 
   gtk_stack_set_visible_child (self->top_stack, GTK_WIDGET (self->greeter_perspective));
 }
@@ -375,12 +420,23 @@ void
 ide_workbench_set_perspective (IdeWorkbench   *self,
                                IdePerspective *perspective)
 {
-  GActionGroup *actions;
-  const gchar *id;
   GtkStack *stack;
+  gchar *id;
 
   g_return_if_fail (IDE_IS_WORKBENCH (self));
   g_return_if_fail (IDE_IS_PERSPECTIVE (perspective));
+
+  /*
+   * NOTE:
+   *
+   * The greeter perspective is special cased. We want to use the same window for the greeter
+   * and the workbench, so it has a toplevel stack with slightly different semantics than the
+   * other perspectives. We don't show the perspective sidebar, and we use a slide-right-left
+   * animation.
+   *
+   * Once we leave the greeter, we do not come back to it. We only use crossfade animations from
+   * then on.
+   */
 
   if (IDE_IS_GREETER_PERSPECTIVE (perspective))
     stack = self->top_stack;
@@ -388,10 +444,11 @@ ide_workbench_set_perspective (IdeWorkbench   *self,
     stack = self->perspectives_stack;
 
   id = ide_perspective_get_id (perspective);
-  gtk_stack_set_visible_child_name (self->titlebar_stack, id);
   gtk_stack_set_visible_child_name (stack, id);
+  gtk_stack_set_visible_child_name (self->titlebar_stack, id);
 
-  actions = ide_perspective_get_actions (perspective);
-  gtk_widget_insert_action_group (GTK_WIDGET (self), "perspective", actions);
-  g_clear_object (&actions);
+  if (!IDE_IS_GREETER_PERSPECTIVE (perspective))
+    gtk_stack_set_transition_type (self->titlebar_stack, GTK_STACK_TRANSITION_TYPE_CROSSFADE);
+
+  g_free (id);
 }
