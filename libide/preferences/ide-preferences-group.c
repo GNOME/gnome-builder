@@ -93,6 +93,7 @@ ide_preferences_group_set_property (GObject      *object,
 
     case PROP_TITLE:
       gtk_label_set_label (self->title, g_value_get_string (value));
+      gtk_widget_set_visible (GTK_WIDGET (self->title), !!g_value_get_string (value));
       break;
 
     default:

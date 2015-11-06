@@ -85,7 +85,10 @@ ide_preferences_builtin_register_appearance (IdePreferences *preferences)
       ide_preferences_add_radio (preferences, "appearance", "schemes", "org.gnome.builder.editor", "style-scheme-name", variant_str, title, NULL, title, i);
     }
 
-  ide_preferences_add_list_group (preferences, "appearance", "draw-spaces", _("Whitespace Characters"), 300);
+  ide_preferences_add_group (preferences, "appearance", "background", NULL, 300);
+  ide_preferences_add_switch (preferences, "appearance", "background", "org.gnome.builder.editor", "show-grid-lines", NULL, _("Grid Pattern"), _("Display a grid pattern beneath the source code"), NULL, 0);
+
+  ide_preferences_add_list_group (preferences, "appearance", "draw-spaces", _("Whitespace Characters"), 400);
   ide_preferences_add_switch (preferences, "appearance", "draw-spaces", "org.gnome.builder.editor", "draw-spaces", "\"space\"", _("Spaces"), NULL, NULL, 0);
   ide_preferences_add_switch (preferences, "appearance", "draw-spaces", "org.gnome.builder.editor", "draw-spaces", "\"tab\"", _("Tabs"), NULL, NULL, 1);
   ide_preferences_add_switch (preferences, "appearance", "draw-spaces", "org.gnome.builder.editor", "draw-spaces", "\"newline\"", _("New line and carriage return"), NULL, NULL, 2);
