@@ -420,6 +420,7 @@ void
 ide_workbench_set_perspective (IdeWorkbench   *self,
                                IdePerspective *perspective)
 {
+  GActionGroup *actions;
   GtkStack *stack;
   gchar *id;
 
@@ -446,6 +447,9 @@ ide_workbench_set_perspective (IdeWorkbench   *self,
   id = ide_perspective_get_id (perspective);
   gtk_stack_set_visible_child_name (stack, id);
   gtk_stack_set_visible_child_name (self->titlebar_stack, id);
+
+  actions = ide_perspective_get_actions (perspective);
+  gtk_widget_insert_action_group (GTK_WIDGET (self), "perspective", actions);
 
   if (!IDE_IS_GREETER_PERSPECTIVE (perspective))
     gtk_stack_set_transition_type (self->titlebar_stack, GTK_STACK_TRANSITION_TYPE_CROSSFADE);
