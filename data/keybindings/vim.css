@@ -92,6 +92,13 @@
                              "clear-snippets" ()
                              "hide-completion" ()
                              "set-mode" ("vim-normal", permanent) };
+  bind "<ctrl>c" { "end-macro" ()
+                   "set-overwrite" (0)
+                   "clear-count" ()
+                   "clear-selection" ()
+                   "clear-snippets" ()
+                   "hide-completion" ()
+                   "set-mode" ("vim-normal", permanent) };
 
   bind "<ctrl>comma" { "action" ("app", "preferences", "") };
   bind "<ctrl>period" { "action" ("workbench", "global-search", "") };
@@ -1544,7 +1551,6 @@
   bind "<ctrl>v" { "action" ("view-stack", "split-right", "") "grab_focus" () };
 
   bind "c" { "action" ("view", "close", "") };
-  bind "<ctrl>c" { "action" ("view", "close", "") };
 
   bind "s" { "action" ("view-stack", "split-down", "") };
 
