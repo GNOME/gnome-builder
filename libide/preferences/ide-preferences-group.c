@@ -163,7 +163,6 @@ ide_preferences_group_add (IdePreferencesGroup *self,
 
       row = g_object_new (GTK_TYPE_LIST_BOX_ROW,
                           "child", widget,
-                          "focus-on-click", FALSE,
                           "visible", TRUE,
                           NULL);
       gtk_container_add (GTK_CONTAINER (self->list_box), row);
