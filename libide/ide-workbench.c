@@ -337,9 +337,9 @@ void
 ide_workbench_add_perspective (IdeWorkbench   *self,
                                IdePerspective *perspective)
 {
-  const gchar *id;
-  const gchar *title;
-  const gchar *icon_name;
+  g_autofree gchar *icon_name = NULL;
+  g_autofree gchar *id = NULL;
+  g_autofree gchar *title = NULL;
   GtkStack *stack;
   GtkWidget *titlebar;
 
