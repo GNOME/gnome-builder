@@ -444,6 +444,7 @@ gb_terminal_set_split_view (GbView   *view,
 
       self->terminal_bottom = g_object_new (VTE_TYPE_TERMINAL,
                                             "audible-bell", FALSE,
+                                            "scrollback-lines", G_MAXUINT,
                                             "expand", TRUE,
                                             "visible", TRUE,
                                             NULL);
