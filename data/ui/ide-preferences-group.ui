@@ -6,6 +6,7 @@
     <child>
       <object class="GtkBox">
         <property name="orientation">vertical</property>
+        <property name="spacing">12</property>
         <property name="visible">true</property>
         <child>
           <object class="GtkLabel" id="title">
@@ -16,9 +17,6 @@
               <attribute name="weight" value="bold"/>
             </attributes>
           </object>
-          <packing>
-            <property name="padding">12</property>
-          </packing>
         </child>
         <child>
           <object class="GtkBox">
