@@ -21,6 +21,7 @@
 #include <libpeas/peas.h>
 
 #include "ide-preferences-builtin.h"
+#include "ide-preferences-entry.h"
 
 static void
 ide_preferences_builtin_register_plugins (IdePreferences *preferences)
@@ -162,6 +163,28 @@ ide_preferences_builtin_register_snippets (IdePreferences *preferences)
   ide_preferences_add_switch (preferences, "snippets", "completion", "org.gnome.builder.code-insight", "snippet-completion", NULL, NULL, _("Suggest code snippets"), _("Improve your efficiency by using the current word to suggest snippets"), NULL, 0);
 }
 
+static void
+ide_preferences_builtin_register_vcs (IdePreferences *preferences)
+{
+  GtkWidget *author;
+  GtkWidget *email;
+
+  ide_preferences_add_page (preferences, "vcs", _("Version Control"), 600);
+
+  author = g_object_new (IDE_TYPE_PREFERENCES_ENTRY,
+                         "title", "Author",
+                         "visible", TRUE,
+                         NULL);
+  email = g_object_new (IDE_TYPE_PREFERENCES_ENTRY,
+                        "title", "Email",
+                        "visible", TRUE,
+                        NULL);
+
+  ide_preferences_add_list_group (preferences, "vcs", "attribution", _("Attribution"), 0);
+  ide_preferences_add_custom (preferences, "vcs", "attribution", author, NULL, 0);
+  ide_preferences_add_custom (preferences, "vcs", "attribution", email, NULL, 0);
+}
+
 void
 _ide_preferences_builtin_register (IdePreferences *preferences)
 {
@@ -171,6 +194,6 @@ _ide_preferences_builtin_register (IdePreferences *preferences)
   ide_preferences_builtin_register_code_insight (preferences);
   ide_preferences_builtin_register_snippets (preferences);
   ide_preferences_builtin_register_keyboard (preferences);
-  ide_preferences_add_page (preferences, "vcs", _("Version Control"), 600);
+  ide_preferences_builtin_register_vcs (preferences);
   ide_preferences_builtin_register_plugins (preferences);
 }
