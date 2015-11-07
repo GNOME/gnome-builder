@@ -50,7 +50,13 @@ enum {
   LAST_PROP
 };
 
+enum {
+  ACTIVATED,
+  LAST_SIGNAL
+};
+
 static GParamSpec *properties [LAST_PROP];
+static guint signals [LAST_SIGNAL];
 
 static void
 ide_preferences_switch_changed (IdePreferencesSwitch *self,
@@ -86,9 +92,14 @@ ide_preferences_switch_changed (IdePreferencesSwitch *self,
   self->updating = TRUE;
 
   if (self->is_radio)
-    gtk_widget_set_visible (GTK_WIDGET (self->image), active);
+    {
+      gtk_widget_set_visible (GTK_WIDGET (self->image), active);
+    }
   else
-    gtk_switch_set_active (self->widget, active);
+    {
+      gtk_switch_set_active (self->widget, active);
+      gtk_switch_set_state (self->widget, active);
+    }
 
   self->updating = FALSE;
 
@@ -129,18 +140,16 @@ chainup:
   G_OBJECT_CLASS (ide_preferences_switch_parent_class)->constructed (object);
 }
 
-static gboolean
-ide_preferences_switch_state_set (IdePreferencesSwitch *self,
-                                  gboolean              state,
-                                  GtkSwitch            *widget)
+static void
+ide_preferences_switch_toggle (IdePreferencesSwitch *self,
+                               gboolean              state)
 {
   GVariant *value;
 
   g_assert (IDE_IS_PREFERENCES_SWITCH (self));
-  g_assert (GTK_IS_SWITCH (widget));
 
   if (self->updating)
-    return FALSE;
+    return;
 
   self->updating = TRUE;
 
@@ -191,11 +200,40 @@ ide_preferences_switch_state_set (IdePreferencesSwitch *self,
 
   g_variant_unref (value);
 
-  gtk_switch_set_state (widget, state);
+  if (self->is_radio)
+    gtk_widget_set_visible (GTK_WIDGET (self->image), state);
+  else
+    gtk_switch_set_state (self->widget, state);
 
   self->updating = FALSE;
+}
+
+static gboolean
+ide_preferences_switch_state_set (IdePreferencesSwitch *self,
+                                  gboolean              state,
+                                  GtkSwitch            *widget)
+{
+  g_assert (IDE_IS_PREFERENCES_SWITCH (self));
+  g_assert (GTK_IS_SWITCH (widget));
+
+  ide_preferences_switch_toggle (self, state);
 
   return TRUE;
+}
+
+static void
+ide_preferences_switch_activate (IdePreferencesSwitch *self)
+{
+  gboolean state;
+
+  g_assert (IDE_IS_PREFERENCES_SWITCH (self));
+
+  if (self->is_radio)
+    state = !gtk_widget_get_visible (GTK_WIDGET (self->image));
+  else
+    state = !gtk_switch_get_active (self->widget);
+
+  ide_preferences_switch_toggle (self, state);
 }
 
 static void
@@ -304,6 +342,15 @@ ide_preferences_switch_class_init (IdePreferencesSwitchClass *klass)
   object_class->finalize = ide_preferences_switch_finalize;
   object_class->get_property = ide_preferences_switch_get_property;
   object_class->set_property = ide_preferences_switch_set_property;
+
+  signals [ACTIVATED] =
+    g_signal_new_class_handler ("activated",
+                                G_TYPE_FROM_CLASS (klass),
+                                G_SIGNAL_RUN_LAST,
+                                G_CALLBACK (ide_preferences_switch_activate),
+                                NULL, NULL, NULL, G_TYPE_NONE, 0);
+
+  widget_class->activate_signal = signals [ACTIVATED];
 
   properties [PROP_IS_RADIO] =
     g_param_spec_boolean ("is-radio",

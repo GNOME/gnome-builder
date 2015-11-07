@@ -45,6 +45,22 @@ enum {
 static GParamSpec *properties [LAST_PROP];
 
 static void
+ide_preferences_group_row_activated (IdePreferencesGroup *self,
+                                     GtkListBoxRow       *row,
+                                     GtkListBox          *list_box)
+{
+  GtkWidget *child;
+
+  g_assert (IDE_IS_PREFERENCES_GROUP (self));
+  g_assert (GTK_IS_LIST_BOX_ROW (row));
+  g_assert (GTK_IS_LIST_BOX (list_box));
+
+  child = gtk_bin_get_child (GTK_BIN (row));
+  if (child != NULL)
+    gtk_widget_activate (child);
+}
+
+static void
 ide_preferences_group_get_property (GObject    *object,
                                     guint       prop_id,
                                     GValue     *value,
@@ -146,6 +162,12 @@ static void
 ide_preferences_group_init (IdePreferencesGroup *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
+
+  g_signal_connect_object (self->list_box,
+                           "row-activated",
+                           G_CALLBACK (ide_preferences_group_row_activated),
+                           self,
+                           G_CONNECT_SWAPPED);
 }
 
 void
