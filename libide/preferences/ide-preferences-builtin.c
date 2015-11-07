@@ -35,20 +35,25 @@ ide_preferences_builtin_register_plugins (IdePreferences *preferences)
   list = peas_engine_get_plugin_list (engine);
 
   ide_preferences_add_page (preferences, "plugins", _("Extensions"), 700);
-  ide_preferences_add_list_group (preferences, "plugins", "plugins", _("Installed Extensions"), 0);
+  ide_preferences_add_list_group (preferences, "plugins", "builtin", _("Bundled Extensions"), 0);
 
   for (; list; list = list->next, i++)
     {
+      g_autofree gchar *path = NULL;
       PeasPluginInfo *plugin_info = list->data;
       const gchar *desc;
       const gchar *name;
 
+      if (!peas_plugin_info_is_builtin (plugin_info))
+        continue;
+
       name = peas_plugin_info_get_name (plugin_info);
       desc = peas_plugin_info_get_description (plugin_info);
 
-      /* TODO: come up with better options here */
-      if (peas_plugin_info_is_builtin (plugin_info))
-        ide_preferences_add_switch (preferences, "plugins", "plugins", "org.gnome.builder.plugin", "__unavailable__", NULL, name, desc, NULL, i);
+      path = g_strdup_printf ("/org/gnome/builder/extension-types/%s/",
+                              peas_plugin_info_get_module_name (plugin_info));
+
+      ide_preferences_add_switch (preferences, "plugins", "builtin", "org.gnome.builder.extension", "enabled", path, NULL, name, desc, NULL, i);
     }
 }
 
@@ -62,7 +67,7 @@ ide_preferences_builtin_register_appearance (IdePreferences *preferences)
   ide_preferences_add_page (preferences, "appearance", _("Appearance"), 0);
 
   ide_preferences_add_group (preferences, "appearance", "basic", NULL, 0);
-  ide_preferences_add_switch (preferences, "appearance", "basic", "org.gnome.builder", "night-mode", NULL, _("Dark Theme"), _("Whether Builder should use a dark theme"), _("dark theme"), 0);
+  ide_preferences_add_switch (preferences, "appearance", "basic", "org.gnome.builder", "night-mode", NULL, NULL, _("Dark Theme"), _("Whether Builder should use a dark theme"), _("dark theme"), 0);
 
   ide_preferences_add_list_group (preferences, "appearance", "font", _("Font"), 100);
   ide_preferences_add_font_button (preferences, "appearance", "font", "org.gnome.builder.editor", "font-name", _("Editor"), _("editor font monospace"), 0);
@@ -86,7 +91,7 @@ ide_preferences_builtin_register_appearance (IdePreferences *preferences)
     }
 
   ide_preferences_add_group (preferences, "appearance", "background", NULL, 300);
-  ide_preferences_add_switch (preferences, "appearance", "background", "org.gnome.builder.editor", "show-grid-lines", NULL, _("Grid Pattern"), _("Display a grid pattern beneath the source code"), NULL, 0);
+  ide_preferences_add_switch (preferences, "appearance", "background", "org.gnome.builder.editor", "show-grid-lines", NULL, NULL, _("Grid Pattern"), _("Display a grid pattern beneath the source code"), NULL, 0);
 }
 
 static void
@@ -100,8 +105,8 @@ ide_preferences_builtin_register_keyboard (IdePreferences *preferences)
   ide_preferences_add_radio (preferences, "keyboard", "mode", "org.gnome.builder.editor", "keybindings", "\"vim\"", _("Vim"), _("Emulates the Vim text editor"), NULL, 0);
 
   ide_preferences_add_list_group (preferences, "keyboard", "movements", _("Movement"), 100);
-  ide_preferences_add_switch (preferences, "keyboard", "movements", "org.gnome.builder.editor", "smart-home-end", NULL, _("Smart Home and End"), _("Home moves to first non-whitespace character"), NULL, 0);
-  ide_preferences_add_switch (preferences, "keyboard", "movements", "org.gnome.builder.editor", "smart-backspace", NULL, _("Smart Backspace"), _("Backspace will remove extra space to keep you aligned with your indentation"), NULL, 100);
+  ide_preferences_add_switch (preferences, "keyboard", "movements", "org.gnome.builder.editor", "smart-home-end", NULL, NULL, _("Smart Home and End"), _("Home moves to first non-whitespace character"), NULL, 0);
+  ide_preferences_add_switch (preferences, "keyboard", "movements", "org.gnome.builder.editor", "smart-backspace", NULL, NULL, _("Smart Backspace"), _("Backspace will remove extra space to keep you aligned with your indentation"), NULL, 100);
 }
 
 static void
@@ -110,28 +115,28 @@ ide_preferences_builtin_register_editor (IdePreferences *preferences)
   ide_preferences_add_page (preferences, "editor", _("Editor"), 100);
 
   ide_preferences_add_group (preferences, "editor", "position", NULL, 0);
-  ide_preferences_add_switch (preferences, "editor", "position", "org.gnome.builder.editor", "restore-insert-mark", NULL, _("Restore cursor position"), _("Restore the cursor position when a file is reopened"), NULL, 0);
+  ide_preferences_add_switch (preferences, "editor", "position", "org.gnome.builder.editor", "restore-insert-mark", NULL, NULL, _("Restore cursor position"), _("Restore the cursor position when a file is reopened"), NULL, 0);
 
   ide_preferences_add_list_group (preferences, "editor", "line", _("Line Information"), 50);
-  ide_preferences_add_switch (preferences, "editor", "line", "org.gnome.builder.editor", "show-line-numbers", NULL, _("Line numbers"), _("Show the line number at the beginning of each line"), NULL, 0);
-  ide_preferences_add_switch (preferences, "editor", "line", "org.gnome.builder.editor", "show-line-changes", NULL, _("Changes to the document"), _("Show if a line was added or modified next to the line number"), NULL, 1);
+  ide_preferences_add_switch (preferences, "editor", "line", "org.gnome.builder.editor", "show-line-numbers", NULL, NULL, _("Line numbers"), _("Show the line number at the beginning of each line"), NULL, 0);
+  ide_preferences_add_switch (preferences, "editor", "line", "org.gnome.builder.editor", "show-line-changes", NULL, NULL, _("Changes to the document"), _("Show if a line was added or modified next to the line number"), NULL, 1);
 
   ide_preferences_add_list_group (preferences, "editor", "highlight", _("Highlight"), 100);
-  ide_preferences_add_switch (preferences, "editor", "highlight", "org.gnome.builder.editor", "highlight-current-line", NULL, _("Current line"), _("Make the current line stand out with highlights"), NULL, 0);
-  ide_preferences_add_switch (preferences, "editor", "highlight", "org.gnome.builder.editor", "highlight-matching-brackets", NULL, _("Matching brackets"), _("Highlight matching brackets based on cursor position"), NULL, 1);
+  ide_preferences_add_switch (preferences, "editor", "highlight", "org.gnome.builder.editor", "highlight-current-line", NULL, NULL, _("Current line"), _("Make the current line stand out with highlights"), NULL, 0);
+  ide_preferences_add_switch (preferences, "editor", "highlight", "org.gnome.builder.editor", "highlight-matching-brackets", NULL, NULL, _("Matching brackets"), _("Highlight matching brackets based on cursor position"), NULL, 1);
 
   ide_preferences_add_list_group (preferences, "editor", "overview", _("Code Overview"), 100);
-  ide_preferences_add_switch (preferences, "editor", "overview", "org.gnome.builder.editor", "show-map", NULL, _("Show overview map"), _("Show an overview map next to the source code to enhance navigation"), NULL, 0);
-  ide_preferences_add_switch (preferences, "editor", "overview", "org.gnome.builder.editor", "auto-hide-map", NULL, _("Automatically hide overview map"), _("Automatically hide the map when the editor loses focus"), NULL, 1);
+  ide_preferences_add_switch (preferences, "editor", "overview", "org.gnome.builder.editor", "show-map", NULL, _("Show overview map"), NULL, _("Show an overview map next to the source code to enhance navigation"), NULL, 0);
+  ide_preferences_add_switch (preferences, "editor", "overview", "org.gnome.builder.editor", "auto-hide-map", NULL, NULL, _("Automatically hide overview map"), _("Automatically hide the map when the editor loses focus"), NULL, 1);
 
   ide_preferences_add_list_group (preferences, "editor", "draw-spaces", _("Whitespace Characters"), 400);
-  ide_preferences_add_switch (preferences, "editor", "draw-spaces", "org.gnome.builder.editor", "draw-spaces", "\"space\"", _("Spaces"), NULL, NULL, 0);
-  ide_preferences_add_switch (preferences, "editor", "draw-spaces", "org.gnome.builder.editor", "draw-spaces", "\"tab\"", _("Tabs"), NULL, NULL, 1);
-  ide_preferences_add_switch (preferences, "editor", "draw-spaces", "org.gnome.builder.editor", "draw-spaces", "\"newline\"", _("New line and carriage return"), NULL, NULL, 2);
-  ide_preferences_add_switch (preferences, "editor", "draw-spaces", "org.gnome.builder.editor", "draw-spaces", "\"nbsp\"", _("Non-breaking spaces"), NULL, NULL, 3);
-  ide_preferences_add_switch (preferences, "editor", "draw-spaces", "org.gnome.builder.editor", "draw-spaces", "\"text\"", _("Spaces inside of text"), NULL, NULL, 4);
-  ide_preferences_add_switch (preferences, "editor", "draw-spaces", "org.gnome.builder.editor", "draw-spaces", "\"trailing\"", _("Trailing Only"), NULL, NULL, 5);
-  ide_preferences_add_switch (preferences, "editor", "draw-spaces", "org.gnome.builder.editor", "draw-spaces", "\"leading\"", _("Leading Only"), NULL, NULL, 6);
+  ide_preferences_add_switch (preferences, "editor", "draw-spaces", "org.gnome.builder.editor", "draw-spaces", NULL, "\"space\"", _("Spaces"), NULL, NULL, 0);
+  ide_preferences_add_switch (preferences, "editor", "draw-spaces", "org.gnome.builder.editor", "draw-spaces", NULL, "\"tab\"", _("Tabs"), NULL, NULL, 1);
+  ide_preferences_add_switch (preferences, "editor", "draw-spaces", "org.gnome.builder.editor", "draw-spaces", NULL, "\"newline\"", _("New line and carriage return"), NULL, NULL, 2);
+  ide_preferences_add_switch (preferences, "editor", "draw-spaces", "org.gnome.builder.editor", "draw-spaces", NULL, "\"nbsp\"", _("Non-breaking spaces"), NULL, NULL, 3);
+  ide_preferences_add_switch (preferences, "editor", "draw-spaces", "org.gnome.builder.editor", "draw-spaces", NULL, "\"text\"", _("Spaces inside of text"), NULL, NULL, 4);
+  ide_preferences_add_switch (preferences, "editor", "draw-spaces", "org.gnome.builder.editor", "draw-spaces", NULL, "\"trailing\"", _("Trailing Only"), NULL, NULL, 5);
+  ide_preferences_add_switch (preferences, "editor", "draw-spaces", "org.gnome.builder.editor", "draw-spaces", NULL, "\"leading\"", _("Leading Only"), NULL, NULL, 6);
 }
 
 static void
@@ -140,12 +145,12 @@ ide_preferences_builtin_register_code_insight (IdePreferences *preferences)
   ide_preferences_add_page (preferences, "code-insight", _("Code Insight"), 300);
 
   ide_preferences_add_group (preferences, "code-insight", "semantic", NULL, 0);
-  ide_preferences_add_switch (preferences, "code-insight", "semantic", "org.gnome.builder.code-insight", "semantic-highlighting", NULL, _("Semantic Highlighting"), _("Use code insignt to highlight additional information discovered in the source file"), NULL, 0);
+  ide_preferences_add_switch (preferences, "code-insight", "semantic", "org.gnome.builder.code-insight", "semantic-highlighting", NULL, NULL, _("Semantic Highlighting"), _("Use code insignt to highlight additional information discovered in the source file"), NULL, 0);
 
   ide_preferences_add_list_group (preferences, "code-insight", "completion", _("Completion"), 100);
-  ide_preferences_add_switch (preferences, "code-insight", "completion", "org.gnome.builder.code-insight", "word-completion", NULL, _("Suggest words found in open files"), _("Suggests completions as you type based on words found in any open document"), NULL, 0);
-  ide_preferences_add_switch (preferences, "code-insight", "completion", "org.gnome.builder.code-insight", "ctags-autocompletion", NULL, _("Suggest completions using Ctags"), _("Create and manages a Ctags database for completing class names, functions, and more"), NULL, 10);
-  ide_preferences_add_switch (preferences, "code-insight", "completion", "org.gnome.builder.code-insight", "clang-autocompletion", NULL, _("Suggest completions using Clang (Experimental)"), _("Use Clang to suggest completions for C and C++ languages"), NULL, 20);
+  ide_preferences_add_switch (preferences, "code-insight", "completion", "org.gnome.builder.code-insight", "word-completion", NULL, NULL, _("Suggest words found in open files"), _("Suggests completions as you type based on words found in any open document"), NULL, 0);
+  ide_preferences_add_switch (preferences, "code-insight", "completion", "org.gnome.builder.code-insight", "ctags-autocompletion", NULL, NULL, _("Suggest completions using Ctags"), _("Create and manages a Ctags database for completing class names, functions, and more"), NULL, 10);
+  ide_preferences_add_switch (preferences, "code-insight", "completion", "org.gnome.builder.code-insight", "clang-autocompletion", NULL, NULL, _("Suggest completions using Clang (Experimental)"), _("Use Clang to suggest completions for C and C++ languages"), NULL, 20);
 }
 
 static void
@@ -154,7 +159,7 @@ ide_preferences_builtin_register_snippets (IdePreferences *preferences)
   ide_preferences_add_page (preferences, "snippets", _("Snippets"), 350);
 
   ide_preferences_add_group (preferences, "snippets", "completion", NULL, 0);
-  ide_preferences_add_switch (preferences, "snippets", "completion", "org.gnome.builder.code-insight", "snippet-completion", NULL, _("Suggest code snippets"), _("Improve your efficiency by using the current word to suggest snippets"), NULL, 0);
+  ide_preferences_add_switch (preferences, "snippets", "completion", "org.gnome.builder.code-insight", "snippet-completion", NULL, NULL, _("Suggest code snippets"), _("Improve your efficiency by using the current word to suggest snippets"), NULL, 0);
 }
 
 void
