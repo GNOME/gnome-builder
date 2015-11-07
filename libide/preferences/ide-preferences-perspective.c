@@ -19,9 +19,11 @@
 #define G_LOG_DOMAIN "ide-preferences-perspective"
 
 #include <glib/gi18n.h>
+#include <libpeas/peas.h>
 
 #include "ide-perspective.h"
 #include "ide-preferences.h"
+#include "ide-preferences-addin.h"
 #include "ide-preferences-builtin.h"
 #include "ide-preferences-container.h"
 #include "ide-preferences-font-button.h"
@@ -38,6 +40,7 @@ struct _IdePreferencesPerspective
 
   guint                  last_widget_id;
 
+  PeasExtensionSet      *extensions;
   GSequence             *pages;
   GHashTable            *widgets;
 
@@ -75,6 +78,28 @@ sort_by_priority (gconstpointer a,
 }
 
 static void
+ide_preferences_perspective_extension_added (PeasExtensionSet *set,
+                                             PeasPluginInfo   *plugin_info,
+                                             PeasExtension    *extension,
+                                             gpointer          user_data)
+{
+  IdePreferencesPerspective *self = user_data;
+
+  ide_preferences_addin_load (IDE_PREFERENCES_ADDIN (extension), IDE_PREFERENCES (self));
+}
+
+static void
+ide_preferences_perspective_extension_removed (PeasExtensionSet *set,
+                                               PeasPluginInfo   *plugin_info,
+                                               PeasExtension    *extension,
+                                               gpointer          user_data)
+{
+  IdePreferencesPerspective *self = user_data;
+
+  ide_preferences_addin_unload (IDE_PREFERENCES_ADDIN (extension), IDE_PREFERENCES (self));
+}
+
+static void
 ide_preferences_perspective_constructed (GObject *object)
 {
   IdePreferencesPerspective *self = (IdePreferencesPerspective *)object;
@@ -82,6 +107,24 @@ ide_preferences_perspective_constructed (GObject *object)
   G_OBJECT_CLASS (ide_preferences_perspective_parent_class)->constructed (object);
 
   _ide_preferences_builtin_register (IDE_PREFERENCES (self));
+
+  self->extensions = peas_extension_set_new (peas_engine_get_default (),
+                                             IDE_TYPE_PREFERENCES_ADDIN,
+                                             NULL);
+
+  g_signal_connect (self->extensions,
+                    "extension-added",
+                    G_CALLBACK (ide_preferences_perspective_extension_added),
+                    self);
+
+  g_signal_connect (self->extensions,
+                    "extension-removed",
+                    G_CALLBACK (ide_preferences_perspective_extension_removed),
+                    self);
+
+  peas_extension_set_foreach (self->extensions,
+                              ide_preferences_perspective_extension_added,
+                              self);
 }
 
 static void
