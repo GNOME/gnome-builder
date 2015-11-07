@@ -1004,46 +1004,172 @@ find_chars_forward (GtkTextIter *cursor,
   return FALSE;
 }
 static gboolean
+vim_percent_predicate (GtkTextIter *iter,
+                       gunichar     ch,
+                       gpointer     user_data)
+{
+  GtkTextIter near;
+
+  if (ch == '(' || ch == ')' ||
+      ch == '[' || ch == ']' ||
+      ch == '{' || ch == '}' ||
+      ch == '/' || ch == '*' ||
+      ch == '#')
+    {
+      if (!gtk_text_iter_starts_line (iter))
+        {
+          near = *iter;
+          gtk_text_iter_backward_char (&near);
+
+          return (gtk_text_iter_get_char (&near) != '\\');
+        }
+
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+static gboolean
+match_comments (GtkTextIter *insert,
+                gunichar     ch)
+{
+  GtkTextIter cursor;
+  GtkTextIter cursor_before;
+  GtkTextIter cursor_after;
+  gunichar ch_before = 0;
+  gunichar ch_after = 0;
+  gboolean comment_start;
+
+  cursor_after = *insert;
+  if (gtk_text_iter_forward_char (&cursor_after))
+    ch_after = gtk_text_iter_get_char (&cursor_after);
+
+  cursor_before = *insert;
+  if (gtk_text_iter_backward_char (&cursor_before))
+    ch_before = gtk_text_iter_get_char (&cursor_before);
+
+  if ((ch == '/' && ch_before == '*' && ch_after == '*') ||
+      (ch == '*' && ch_before == '/' && ch_after == '/'))
+    {
+      *insert = cursor_after;
+      return FALSE;
+    }
+
+  if (ch == '/' && ch_after == '*')
+    {
+      gtk_text_iter_forward_char (&cursor_after);
+      *insert = cursor = cursor_after;
+      comment_start = TRUE;
+    }
+  else if (ch_before == '/' && ch == '*' && ch_after != 0)
+    {
+      *insert = cursor = cursor_after;
+      comment_start = TRUE;
+    }
+  else if (ch == '*' && ch_after == '/' && ch_before != 0)
+    {
+      cursor = *insert;
+      *insert = cursor_after;
+      gtk_text_iter_forward_char (insert);
+      comment_start = FALSE;
+    }
+  else if (ch_before == '*' && ch == '/')
+    {
+      cursor = cursor_before;
+      *insert = cursor_after;
+      comment_start = FALSE;
+    }
+  else
+    {
+      *insert = cursor_after;
+      return FALSE;
+    }
+
+  if (comment_start && !gtk_text_iter_is_end (&cursor))
+    {
+      if (find_chars_forward (&cursor, NULL, "*/", FALSE))
+        {
+          gtk_text_iter_forward_char (&cursor);
+          *insert = cursor;
+
+          return TRUE;
+        }
+    }
+  else if (!comment_start && !gtk_text_iter_is_start (&cursor))
+    {
+      if (find_chars_backward (&cursor, NULL, "/*", FALSE))
+        {
+          *insert = cursor;
+
+          return TRUE;
+        }
+    }
+
+  return FALSE;
+}
 
 static void
 ide_source_view_movements_match_special (Movement *mv)
 {
   gunichar start_char;
   GtkTextIter copy;
-  gboolean ret;
+  GtkTextIter limit;
+  gboolean ret = FALSE;
 
-  copy = mv->insert;
+  limit = copy = mv->insert;
+  gtk_text_iter_forward_to_line_end (&limit);
+
   start_char = gtk_text_iter_get_char (&mv->insert);
+  if (!vim_percent_predicate (&mv->insert, start_char, NULL))
+    {
+loop:
+      if (_ide_vim_iter_forward_find_char (&mv->insert, vim_percent_predicate, NULL, &limit))
+        start_char = gtk_text_iter_get_char (&mv->insert);
+      else
+        {
+          mv->insert = copy;
+          return;
+        }
+    }
+
+  if (start_char == '/' || start_char == '*')
+    {
+      if (match_comments (&mv->insert, start_char))
+        return;
+      else
+        goto loop;
+    }
 
   switch (start_char)
-    {
-    case '{':
-      ret = match_char_with_depth (&mv->insert, '{', '}', GTK_DIR_RIGHT, 1, mv->exclusive, 0);
-      break;
+  {
+  case '{':
+    ret = match_char_with_depth (&mv->insert, '{', '}', GTK_DIR_RIGHT, 1, mv->exclusive, 0);
+    break;
 
-    case '[':
-      ret = match_char_with_depth (&mv->insert, '[', ']', GTK_DIR_RIGHT, 1, mv->exclusive, 0);
-      break;
+  case '[':
+    ret = match_char_with_depth (&mv->insert, '[', ']', GTK_DIR_RIGHT, 1, mv->exclusive, 0);
+    break;
 
-    case '(':
-      ret = match_char_with_depth (&mv->insert, '(', ')', GTK_DIR_RIGHT, 1, mv->exclusive, 0);
-      break;
+  case '(':
+    ret = match_char_with_depth (&mv->insert, '(', ')', GTK_DIR_RIGHT, 1, mv->exclusive, 0);
+    break;
 
-    case '}':
-      ret = match_char_with_depth (&mv->insert, '{', '}', GTK_DIR_LEFT, 1, mv->exclusive, 0);
-      break;
+  case '}':
+    ret = match_char_with_depth (&mv->insert, '{', '}', GTK_DIR_LEFT, 1, mv->exclusive, 0);
+    break;
 
-    case ']':
-      ret = match_char_with_depth (&mv->insert, '[', ']', GTK_DIR_LEFT, 1, mv->exclusive, 0);
-      break;
+  case ']':
+    ret = match_char_with_depth (&mv->insert, '[', ']', GTK_DIR_LEFT, 1, mv->exclusive, 0);
+    break;
 
-    case ')':
-      ret = match_char_with_depth (&mv->insert, '(', ')', GTK_DIR_LEFT, 1, mv->exclusive, 0);
-      break;
+  case ')':
+    ret = match_char_with_depth (&mv->insert, '(', ')', GTK_DIR_LEFT, 1, mv->exclusive, 0);
+    break;
 
-    default:
-      return;
-    }
+  default:
+    return;
+  }
 
   if (!ret)
     mv->insert = copy;
