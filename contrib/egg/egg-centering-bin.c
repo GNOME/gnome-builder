@@ -36,9 +36,18 @@
 typedef struct
 {
   EggSignalGroup *signals;
+  gint            max_width_request;
 } EggCenteringBinPrivate;
 
 G_DEFINE_TYPE_WITH_PRIVATE (EggCenteringBin, egg_centering_bin, GTK_TYPE_BIN)
+
+enum {
+  PROP_0,
+  PROP_MAX_WIDTH_REQUEST,
+  LAST_PROP
+};
+
+static GParamSpec *properties [LAST_PROP];
 
 GtkWidget *
 egg_centering_bin_new (void)
@@ -50,6 +59,8 @@ static void
 egg_centering_bin_size_allocate (GtkWidget     *widget,
                                  GtkAllocation *allocation)
 {
+  EggCenteringBin *self = (EggCenteringBin *)widget;
+  EggCenteringBinPrivate *priv = egg_centering_bin_get_instance_private (self);
   GtkWidget *child;
 
   g_assert (GTK_IS_WIDGET (widget));
@@ -67,6 +78,9 @@ egg_centering_bin_size_allocate (GtkWidget     *widget,
       GtkRequisition nat_child_req;
       gint translated_x;
       gint translated_y;
+      gint border_width;
+
+      border_width = gtk_container_get_border_width (GTK_CONTAINER (self));
 
       gtk_widget_get_allocation (toplevel, &top_allocation);
       gtk_widget_translate_coordinates (toplevel, widget,
@@ -82,8 +96,17 @@ egg_centering_bin_size_allocate (GtkWidget     *widget,
       child_allocation.height = allocation->height;
       child_allocation.width = translated_x * 2;
 
+      child_allocation.y += border_width;
+      child_allocation.height -= border_width * 2;
+
       if (nat_child_req.width > child_allocation.width)
         child_allocation.width = MIN (nat_child_req.width, allocation->width);
+
+      if ((priv->max_width_request > 0) && (child_allocation.width > priv->max_width_request))
+        {
+          child_allocation.x += (child_allocation.width - priv->max_width_request) / 2;
+          child_allocation.width = priv->max_width_request;
+        }
 
       gtk_widget_size_allocate (child, &child_allocation);
     }
@@ -140,6 +163,70 @@ egg_centering_bin_hierarchy_changed (GtkWidget *widget,
 }
 
 static void
+egg_centering_bin_get_preferred_width (GtkWidget *widget,
+                                       gint      *min_width,
+                                       gint      *nat_width)
+{
+  EggCenteringBin *self = (EggCenteringBin *)widget;
+  EggCenteringBinPrivate *priv = egg_centering_bin_get_instance_private (self);
+
+  g_assert (EGG_IS_CENTERING_BIN (self));
+
+  GTK_WIDGET_CLASS (egg_centering_bin_parent_class)->get_preferred_width (widget, min_width, nat_width);
+
+  if ((priv->max_width_request > 0) && (*min_width > priv->max_width_request))
+    *min_width = priv->max_width_request;
+
+  if ((priv->max_width_request > 0) && (*nat_width > priv->max_width_request))
+    *nat_width = priv->max_width_request;
+}
+
+static void
+egg_centering_bin_get_preferred_height_for_width (GtkWidget *widget,
+                                                  gint       width,
+                                                  gint      *min_height,
+                                                  gint      *nat_height)
+{
+  EggCenteringBin *self = (EggCenteringBin *)widget;
+  EggCenteringBinPrivate *priv = egg_centering_bin_get_instance_private (self);
+  GtkWidget *child;
+  gint border_width;
+
+  g_assert (EGG_IS_CENTERING_BIN (self));
+
+  /*
+   * TODO: Something is still not right here. I'm seeing a situation where
+   *       we are not getting the proper height for width. See the extensions
+   *       page in preferences. We are not getting the right height from
+   *       our box child, due to GtkLabel line wrapping.
+   */
+
+  *min_height = 0;
+  *nat_height = 0;
+
+  child = gtk_bin_get_child (GTK_BIN (self));
+  if (child == NULL)
+    return;
+
+  if ((priv->max_width_request) > 0 && (width > priv->max_width_request))
+    width = priv->max_width_request;
+
+  border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
+  width -= border_width * 2;
+
+  gtk_widget_get_preferred_height_for_width (child, width, min_height, nat_height);
+
+  *min_height += border_width * 2;
+  *nat_height += border_width * 2;
+}
+
+static GtkSizeRequestMode
+egg_centering_bin_get_request_mode (GtkWidget *widget)
+{
+  return GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH;
+}
+
+static void
 egg_centering_bin_finalize (GObject *object)
 {
   EggCenteringBin *self = (EggCenteringBin *)object;
@@ -151,15 +238,72 @@ egg_centering_bin_finalize (GObject *object)
 }
 
 static void
+egg_centering_bin_get_property (GObject    *object,
+                                guint       prop_id,
+                                GValue     *value,
+                                GParamSpec *pspec)
+{
+  EggCenteringBin *self = EGG_CENTERING_BIN(object);
+  EggCenteringBinPrivate *priv = egg_centering_bin_get_instance_private (self);
+
+  switch (prop_id)
+    {
+    case PROP_MAX_WIDTH_REQUEST:
+      g_value_set_int (value, priv->max_width_request);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
+    }
+}
+
+static void
+egg_centering_bin_set_property (GObject      *object,
+                                guint         prop_id,
+                                const GValue *value,
+                                GParamSpec   *pspec)
+{
+  EggCenteringBin *self = EGG_CENTERING_BIN(object);
+  EggCenteringBinPrivate *priv = egg_centering_bin_get_instance_private (self);
+
+  switch (prop_id)
+    {
+    case PROP_MAX_WIDTH_REQUEST:
+      priv->max_width_request = g_value_get_int (value);
+      gtk_widget_queue_resize (GTK_WIDGET (self));
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
+    }
+}
+
+static void
 egg_centering_bin_class_init (EggCenteringBinClass *klass)
 {
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   object_class->finalize = egg_centering_bin_finalize;
+  object_class->get_property = egg_centering_bin_get_property;
+  object_class->set_property = egg_centering_bin_set_property;
 
-  widget_class->size_allocate = egg_centering_bin_size_allocate;
+  widget_class->get_preferred_height_for_width = egg_centering_bin_get_preferred_height_for_width;
+  widget_class->get_preferred_width = egg_centering_bin_get_preferred_width;
+  widget_class->get_request_mode = egg_centering_bin_get_request_mode;
   widget_class->hierarchy_changed = egg_centering_bin_hierarchy_changed;
+  widget_class->size_allocate = egg_centering_bin_size_allocate;
+
+  properties [PROP_MAX_WIDTH_REQUEST] =
+    g_param_spec_int ("max-width-request",
+                      "Max Width Request",
+                      "Max Width Request",
+                      -1,
+                      G_MAXINT,
+                      -1,
+                      (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 }
 
 static void
@@ -168,6 +312,7 @@ egg_centering_bin_init (EggCenteringBin *self)
   EggCenteringBinPrivate *priv = egg_centering_bin_get_instance_private (self);
 
   priv->signals = egg_signal_group_new (GTK_TYPE_WINDOW);
+  priv->max_width_request = -1;
 
   egg_signal_group_connect_object (priv->signals,
                                    "size-allocate",
