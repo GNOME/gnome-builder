@@ -126,7 +126,7 @@ ide_preferences_builtin_register_editor (IdePreferences *preferences)
   ide_preferences_add_switch (preferences, "editor", "highlight", "org.gnome.builder.editor", "highlight-matching-brackets", NULL, NULL, _("Matching brackets"), _("Highlight matching brackets based on cursor position"), NULL, 1);
 
   ide_preferences_add_list_group (preferences, "editor", "overview", _("Code Overview"), 100);
-  ide_preferences_add_switch (preferences, "editor", "overview", "org.gnome.builder.editor", "show-map", NULL, _("Show overview map"), NULL, _("Show an overview map next to the source code to enhance navigation"), NULL, 0);
+  ide_preferences_add_switch (preferences, "editor", "overview", "org.gnome.builder.editor", "show-map", NULL, NULL, _("Show overview map"), _("Show an overview map next to the source code to enhance navigation"), NULL, 0);
   ide_preferences_add_switch (preferences, "editor", "overview", "org.gnome.builder.editor", "auto-hide-map", NULL, NULL, _("Automatically hide overview map"), _("Automatically hide the map when the editor loses focus"), NULL, 1);
 
   ide_preferences_add_list_group (preferences, "editor", "draw-spaces", _("Whitespace Characters"), 400);
