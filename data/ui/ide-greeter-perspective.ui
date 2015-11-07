@@ -35,7 +35,7 @@
                     <property name="orientation">vertical</property>
                     <property name="spacing">32</property>
                     <property name="visible">true</property>
-                    <property name="width-request">600</property>
+                    <property name="width-request">550</property>
                     <child>
                       <object class="GtkBox" id="my_projects_container">
                         <property name="orientation">vertical</property>
