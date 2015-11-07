@@ -898,6 +898,91 @@ match_char_with_depth (GtkTextIter      *iter,
 }
 
 static gboolean
+iter_in_string (GtkTextIter *cursor,
+                GtkTextIter *str_start,
+                GtkTextIter *str_end,
+                const gchar *str,
+                gboolean     include_str_bounds)
+{
+  gint len;
+  gint cursor_offset;
+  gint slice_left_pos;
+  gint slice_right_pos;
+  gint slice_len;
+  gint cursor_pos;
+  gint str_pos;
+  gint end_iter_offset;
+  gint res_offset;
+  guint count;
+  g_autofree gchar *slice = NULL;
+  const gchar *slice_ptr;
+  const gchar *str_ptr;
+  GtkTextIter slice_left = *cursor;
+  GtkTextIter slice_right = *cursor;
+  GtkTextIter end_iter;
+  gboolean ret = FALSE;
+
+  g_return_val_if_fail (!ide_str_empty0 (str), FALSE);
+
+  len = g_utf8_strlen (str, -1);
+  cursor_offset = gtk_text_iter_get_offset (cursor);
+  slice_left_pos = MAX(0, cursor_offset - len);
+  gtk_text_iter_set_offset (&slice_left, slice_left_pos);
+
+  cursor_pos = cursor_offset - slice_left_pos;
+
+  gtk_text_buffer_get_end_iter (gtk_text_iter_get_buffer (cursor), &end_iter);
+  end_iter_offset = gtk_text_iter_get_offset (&end_iter);
+
+  slice_right_pos = MIN(end_iter_offset, cursor_offset + len);
+  gtk_text_iter_set_offset (&slice_right, slice_right_pos);
+
+  slice = gtk_text_iter_get_slice (&slice_left, &slice_right);
+  slice_len = slice_right_pos - slice_left_pos;
+
+  slice_ptr = slice;
+  for (count = 0; count < slice_len - len + 1; count++)
+    {
+      str_ptr = strstr (slice_ptr, str);
+      if (str_ptr == NULL)
+        {
+          ret = FALSE;
+          break;
+        }
+
+      str_pos = g_utf8_pointer_to_offset (slice, str_ptr);
+
+      if ((!include_str_bounds && (str_pos < cursor_pos && cursor_pos < str_pos + len)) ||
+          (include_str_bounds && (str_pos <= cursor_pos && cursor_pos <= str_pos + len)))
+        {
+          ret = TRUE;
+          break;
+        }
+
+      slice_ptr = g_utf8_next_char (slice_ptr);
+    }
+
+  if (ret)
+    {
+      res_offset = slice_left_pos + str_pos + count;
+
+      if (str_start != NULL)
+        {
+          *str_start = *cursor;
+          gtk_text_iter_set_offset (str_start, res_offset);
+        }
+
+      if (str_end != NULL)
+        {
+          *str_end = *cursor;
+          gtk_text_iter_set_offset (str_end, res_offset + len);
+        }
+    }
+
+  return ret;
+}
+
+static gboolean
 find_chars_backward (GtkTextIter      *cursor,
                      GtkTextIter      *end,
                      const gchar      *str,
