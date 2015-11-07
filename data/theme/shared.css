@@ -23,7 +23,7 @@
 }
 
 
-.preferences.sidebar GtkViewport {
+.preferences.sidebar viewport {
    border: 0px;
 }
 .preferences.sidebar GtkListBox {
@@ -122,8 +122,7 @@ IdeGreeterPerspective .frame {
   border-bottom: none;
 }
 /* remove viewport frame */
-IdeGreeterPerspective .frame > EggScrolledWindow > .frame,
-IdeGreeterPerspective > GtkBox > EggScrolledWindow > .frame {
+IdeGreeterPerspective viewport.frame {
   border: none;
 }
 
