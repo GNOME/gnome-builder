@@ -190,7 +190,15 @@ ide_preferences_group_add (IdePreferencesGroup *self,
       gtk_container_add (GTK_CONTAINER (self->list_box), row);
     }
   else
-    gtk_container_add_with_properties (GTK_CONTAINER (self->box), widget,
-                                       "position", position,
-                                       NULL);
+    {
+      /* FIXME: Once we can do this with CSS ... */
+      g_object_set (widget,
+                    "margin-start", 11,
+                    "margin-end", 11,
+                    NULL);
+
+      gtk_container_add_with_properties (GTK_CONTAINER (self->box), widget,
+                                         "position", position,
+                                         NULL);
+    }
 }
