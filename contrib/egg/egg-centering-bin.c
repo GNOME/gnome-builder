@@ -17,6 +17,7 @@
  */
 
 #include "egg-centering-bin.h"
+#include "egg-signal-group.h"
 
 /**
  * SECTION:egg-centering-bin:
@@ -32,7 +33,12 @@
  * the toplevel and anchoring the child at TRUE_CENTER-(alloc.width/2).
  */
 
-G_DEFINE_TYPE (EggCenteringBin, egg_centering_bin, GTK_TYPE_BIN)
+typedef struct
+{
+  EggSignalGroup *signals;
+} EggCenteringBinPrivate;
+
+G_DEFINE_TYPE_WITH_PRIVATE (EggCenteringBin, egg_centering_bin, GTK_TYPE_BIN)
 
 GtkWidget *
 egg_centering_bin_new (void)
@@ -53,7 +59,7 @@ egg_centering_bin_size_allocate (GtkWidget     *widget,
 
   child = gtk_bin_get_child (GTK_BIN (widget));
 
-  if (child != NULL)
+  if ((child != NULL) && gtk_widget_get_visible (child))
     {
       GtkWidget *toplevel = gtk_widget_get_toplevel (child);
       GtkAllocation top_allocation;
@@ -83,15 +89,86 @@ egg_centering_bin_size_allocate (GtkWidget     *widget,
     }
 }
 
+static gboolean
+queue_allocate_in_idle (gpointer data)
+{
+  g_autoptr(EggCenteringBin) self = data;
+
+  gtk_widget_queue_allocate (GTK_WIDGET (self));
+
+  return G_SOURCE_REMOVE;
+}
+
+static void
+egg_centering_bin_toplevel_size_allocate (EggCenteringBin *self,
+                                          GtkAllocation   *allocation,
+                                          GtkWindow       *toplevel)
+{
+  g_assert (EGG_IS_CENTERING_BIN (self));
+  g_assert (GTK_IS_WINDOW (toplevel));
+
+  /*
+   * If we ::queue_allocate() immediately, we can get into a state where an
+   * allocation is needed when ::draw() should be called. That causes a
+   * warning on the command line, so instead just delay until we leave
+   * our current main loop iteration.
+   */
+  g_timeout_add (0, queue_allocate_in_idle, g_object_ref (self));
+}
+
+static void
+egg_centering_bin_hierarchy_changed (GtkWidget *widget,
+                                     GtkWidget *previous_toplevel)
+{
+  EggCenteringBin *self = (EggCenteringBin *)widget;
+  EggCenteringBinPrivate *priv = egg_centering_bin_get_instance_private (self);
+  GtkWidget *toplevel;
+
+  g_assert (EGG_IS_CENTERING_BIN (self));
+
+  /*
+   * The hierarcy has changed, so we need to ensure we get allocation change
+   * from the toplevel so we can relayout our child to be centered.
+   */
+
+  toplevel = gtk_widget_get_toplevel (widget);
+  if (GTK_IS_WINDOW (toplevel))
+    egg_signal_group_set_target (priv->signals, toplevel);
+}
+
+static void
+egg_centering_bin_finalize (GObject *object)
+{
+  EggCenteringBin *self = (EggCenteringBin *)object;
+  EggCenteringBinPrivate *priv = egg_centering_bin_get_instance_private (self);
+
+  g_clear_object (&priv->signals);
+
+  G_OBJECT_CLASS (egg_centering_bin_parent_class)->finalize (object);
+}
+
 static void
 egg_centering_bin_class_init (EggCenteringBinClass *klass)
 {
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+  object_class->finalize = egg_centering_bin_finalize;
 
   widget_class->size_allocate = egg_centering_bin_size_allocate;
+  widget_class->hierarchy_changed = egg_centering_bin_hierarchy_changed;
 }
 
 static void
 egg_centering_bin_init (EggCenteringBin *self)
 {
+  EggCenteringBinPrivate *priv = egg_centering_bin_get_instance_private (self);
+
+  priv->signals = egg_signal_group_new (GTK_TYPE_WINDOW);
+
+  egg_signal_group_connect_object (priv->signals,
+                                   "size-allocate",
+                                   G_CALLBACK (egg_centering_bin_toplevel_size_allocate),
+                                   self,
+                                   G_CONNECT_SWAPPED);
 }
