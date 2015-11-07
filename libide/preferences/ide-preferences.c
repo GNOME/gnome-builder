@@ -131,6 +131,7 @@ guint ide_preferences_add_radio (IdePreferences *self,
                                  const gchar    *group_name,
                                  const gchar    *schema_id,
                                  const gchar    *key,
+                                 const gchar    *path,
                                  const gchar    *variant_string,
                                  const gchar    *title,
                                  const gchar    *subtitle,
@@ -144,7 +145,7 @@ guint ide_preferences_add_radio (IdePreferences *self,
   g_return_val_if_fail (key != NULL, 0);
   g_return_val_if_fail (title != NULL, 0);
 
-  return IDE_PREFERENCES_GET_IFACE (self)->add_radio (self, page_name, group_name, schema_id, key, variant_string, title, subtitle, keywords, priority);
+  return IDE_PREFERENCES_GET_IFACE (self)->add_radio (self, page_name, group_name, schema_id, key, path, variant_string, title, subtitle, keywords, priority);
 }
 
 guint
