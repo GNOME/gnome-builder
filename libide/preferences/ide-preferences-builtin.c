@@ -46,8 +46,9 @@ ide_preferences_builtin_register_plugins (IdePreferences *preferences)
       name = peas_plugin_info_get_name (plugin_info);
       desc = peas_plugin_info_get_description (plugin_info);
 
-      /* TODO: support custom path (and use right schema/key) */
-      ide_preferences_add_switch (preferences, "plugins", "plugins", "org.gnome.builder.editor", "show-line-numbers", NULL, name, desc, NULL, i);
+      /* TODO: come up with better options here */
+      if (peas_plugin_info_is_builtin (plugin_info))
+        ide_preferences_add_switch (preferences, "plugins", "plugins", "org.gnome.builder.plugin", "__unavailable__", NULL, name, desc, NULL, i);
     }
 }
 
