@@ -27,6 +27,8 @@ gi.require_version('Gtk', '3.0')
 gi.require_version('GtkSource', '3.0')
 gi.require_version('Ide', '1.0')
 
+from gettext import gettext as _
+
 from gi.importer import DynamicImporter
 from gi.module import IntrospectionModule
 from gi.module import FunctionInfo
@@ -517,3 +519,17 @@ def JediSnippet(proposal):
         snippet.add_chunk(Ide.SourceSnippetChunk(text=')', text_set=True))
 
     return snippet
+
+
+class JediPreferences(GObject.Object, Ide.PreferencesAddin):
+    def do_load(self, prefs):
+        self.completion_id = prefs.add_switch(
+                'code-insight', 'completion',
+                'org.gnome.builder.extension-type', 'enabled', '/',
+                None,
+                _("Suggest Python completions"),
+                _("Use Jedi to provide completions for the Python language"),
+                None, 30)
+
+    def do_unload(self, prefs):
+        self.prefs.remove(self.completion_id)
