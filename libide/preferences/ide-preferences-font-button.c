@@ -20,15 +20,18 @@
 
 struct _IdePreferencesFontButton
 {
-  GtkBin     parent_instance;
+  GtkBin                parent_instance;
 
-  GSettings *settings;
-  gchar     *schema_id;
-  gchar     *key;
+  GSettings            *settings;
+  gchar                *schema_id;
+  gchar                *key;
 
-  GtkLabel  *title;
-  GtkLabel  *font_family;
-  GtkLabel  *font_size;
+  GtkLabel             *title;
+  GtkLabel             *font_family;
+  GtkLabel             *font_size;
+  GtkPopover           *popover;
+  GtkButton            *confirm;
+  GtkFontChooserWidget *chooser;
 };
 
 G_DEFINE_TYPE (IdePreferencesFontButton, ide_preferences_font_button, IDE_TYPE_PREFERENCES_CONTAINER)
@@ -41,7 +44,36 @@ enum {
   LAST_PROP
 };
 
+enum {
+  ACTIVATE,
+  LAST_SIGNAL
+};
+
 static GParamSpec *properties [LAST_PROP];
+static guint signals [LAST_SIGNAL];
+
+static void
+ide_preferences_font_button_show (IdePreferencesFontButton *self)
+{
+  gchar *font = NULL;
+
+  g_assert (IDE_IS_PREFERENCES_FONT_BUTTON (self));
+
+  font = g_settings_get_string (self->settings, self->key);
+  g_object_set (self->chooser, "font", font, NULL);
+  g_free (font);
+
+  gtk_widget_show (GTK_WIDGET (self->popover));
+}
+
+static void
+ide_preferences_font_button_activate (IdePreferencesFontButton *self)
+{
+  g_assert (IDE_IS_PREFERENCES_FONT_BUTTON (self));
+
+  if (!gtk_widget_get_visible (GTK_WIDGET (self->popover)))
+    ide_preferences_font_button_show (self);
+}
 
 static void
 ide_preferences_font_button_changed (IdePreferencesFontButton *self,
@@ -183,6 +215,15 @@ ide_preferences_font_button_class_init (IdePreferencesFontButtonClass *klass)
   object_class->get_property = ide_preferences_font_button_get_property;
   object_class->set_property = ide_preferences_font_button_set_property;
 
+  signals [ACTIVATE] =
+    g_signal_new_class_handler ("activate",
+                                G_TYPE_FROM_CLASS (klass),
+                                G_SIGNAL_RUN_LAST,
+                                G_CALLBACK (ide_preferences_font_button_activate),
+                                NULL, NULL, NULL, G_TYPE_NONE, 0);
+
+  widget_class->activate_signal = signals [ACTIVATE];
+
   properties [PROP_KEY] =
     g_param_spec_string ("key",
                          "Key",
@@ -207,13 +248,70 @@ ide_preferences_font_button_class_init (IdePreferencesFontButtonClass *klass)
   g_object_class_install_properties (object_class, LAST_PROP, properties);
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/ui/ide-preferences-font-button.ui");
-  gtk_widget_class_bind_template_child (widget_class, IdePreferencesFontButton, title);
+  gtk_widget_class_bind_template_child (widget_class, IdePreferencesFontButton, chooser);
+  gtk_widget_class_bind_template_child (widget_class, IdePreferencesFontButton, confirm);
   gtk_widget_class_bind_template_child (widget_class, IdePreferencesFontButton, font_family);
   gtk_widget_class_bind_template_child (widget_class, IdePreferencesFontButton, font_size);
+  gtk_widget_class_bind_template_child (widget_class, IdePreferencesFontButton, popover);
+  gtk_widget_class_bind_template_child (widget_class, IdePreferencesFontButton, title);
+}
+
+static gboolean
+transform_to (GBinding     *binding,
+              const GValue *value,
+              GValue       *to_value,
+              gpointer      user_data)
+{
+  g_value_set_boolean (to_value, !!g_value_get_boxed (value));
+  return TRUE;
+}
+
+static void
+ide_preferences_font_button_clicked (IdePreferencesFontButton *self,
+                                     GtkButton                *button)
+{
+  g_autofree gchar *font = NULL;
+
+  g_assert (IDE_IS_PREFERENCES_FONT_BUTTON (self));
+  g_assert (GTK_IS_BUTTON (button));
+
+  g_object_get (self->chooser, "font", &font, NULL);
+  g_settings_set_string (self->settings, self->key, font);
+  gtk_widget_hide (GTK_WIDGET (self->popover));
+}
+
+static void
+ide_preferences_font_button_font_activated (IdePreferencesFontButton *self,
+                                            const gchar              *font,
+                                            GtkFontChooser           *chooser)
+{
+  g_assert (IDE_IS_PREFERENCES_FONT_BUTTON (self));
+  g_assert (GTK_IS_FONT_CHOOSER (chooser));
+
+  g_settings_set_string (self->settings, self->key, font);
+  gtk_widget_hide (GTK_WIDGET (self->popover));
 }
 
 static void
 ide_preferences_font_button_init (IdePreferencesFontButton *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
+
+  g_object_bind_property_full (self->chooser, "font-desc",
+                               self->confirm, "sensitive",
+                               G_BINDING_SYNC_CREATE,
+                               transform_to,
+                               NULL, NULL, NULL);
+
+  g_signal_connect_object (self->chooser,
+                           "font-activated",
+                           G_CALLBACK (ide_preferences_font_button_font_activated),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  g_signal_connect_object (self->confirm,
+                           "clicked",
+                           G_CALLBACK (ide_preferences_font_button_clicked),
+                           self,
+                           G_CONNECT_SWAPPED);
 }

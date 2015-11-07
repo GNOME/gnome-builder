@@ -3,7 +3,7 @@
   <!-- interface-requires gtk+ 3.18 -->
   <template class="IdePreferencesFontButton" parent="IdePreferencesContainer">
     <child>
-      <object class="GtkBox">
+      <object class="GtkBox" id="box">
         <property name="orientation">horizontal</property>
         <property name="spacing">18</property>
         <property name="visible">true</property>
@@ -34,4 +34,33 @@
       </object>
     </child>
   </template>
+  <object class="GtkPopover" id="popover">
+    <property name="relative-to">box</property>
+    <property name="position">bottom</property>
+    <property name="width-request">600</property>
+    <property name="border-width">12</property>
+    <child>
+      <object class="GtkBox">
+        <property name="orientation">vertical</property>
+        <property name="spacing">12</property>
+        <property name="visible">true</property>
+        <child>
+          <object class="GtkFontChooserWidget" id="chooser">
+            <property name="visible">true</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkButton" id="confirm">
+            <property name="halign">end</property>
+            <property name="label" translatable="yes">_Select</property>
+            <property name="use-underline">true</property>
+            <property name="visible">true</property>
+            <style>
+              <class name="suggested-action"/>
+            </style>
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
 </interface>
