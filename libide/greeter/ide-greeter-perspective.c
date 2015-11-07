@@ -607,6 +607,7 @@ ide_greeter_perspective_class_init (IdeGreeterPerspectiveClass *klass)
   g_object_class_install_properties (object_class, LAST_PROP, properties);
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/ui/ide-greeter-perspective.ui");
+  gtk_widget_class_set_css_name (widget_class, "greeter");
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterPerspective, titlebar);
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterPerspective, my_projects_container);
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterPerspective, my_projects_list_box);
