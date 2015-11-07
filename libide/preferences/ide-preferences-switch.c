@@ -56,17 +56,32 @@ ide_preferences_switch_changed (IdePreferencesSwitch *self,
                                 GSettings            *settings)
 {
   GVariant *value;
-  gboolean active;
+  gboolean active = FALSE;
 
   g_assert (IDE_IS_PREFERENCES_SWITCH (self));
   g_assert (key != NULL);
   g_assert (G_IS_SETTINGS (settings));
 
   value = g_settings_get_value (settings, key);
-  active = g_variant_equal (value, self->target);
 
-  gtk_switch_set_active (self->widget, active);
-  gtk_widget_set_visible (GTK_WIDGET (self->image), active);
+  if (g_variant_is_of_type (value, G_VARIANT_TYPE_BOOLEAN))
+    active = g_variant_get_boolean (value);
+  else if ((self->target != NULL) &&
+           g_variant_is_of_type (value, g_variant_get_type (self->target)))
+    active = g_variant_equal (value, self->target);
+  else if ((self->target != NULL) &&
+           g_variant_is_of_type (self->target, G_VARIANT_TYPE_STRING) &&
+           g_variant_is_of_type (value, G_VARIANT_TYPE_STRING_ARRAY))
+    {
+      g_autofree const gchar **strv = g_variant_get_strv (value, NULL);
+      const gchar *flag = g_variant_get_string (self->target, NULL);
+      active = g_strv_contains (strv, flag);
+    }
+
+  if (self->is_radio)
+    gtk_widget_set_visible (GTK_WIDGET (self->image), active);
+  else
+    gtk_switch_set_active (self->widget, active);
 }
 
 static void
