@@ -62,7 +62,6 @@ ide_preferences_builtin_register_appearance (IdePreferences *preferences)
 
   ide_preferences_add_group (preferences, "appearance", "basic", NULL, 0);
   ide_preferences_add_switch (preferences, "appearance", "basic", "org.gnome.builder", "night-mode", NULL, _("Dark Theme"), _("Whether Builder should use a dark theme"), _("dark theme"), 0);
-  ide_preferences_add_switch (preferences, "appearance", "basic", "org.gnome.builder", "animations", NULL, _("Animations"), _("Whether animations should be used when appropriate"), _("animations"), 100);
 
   ide_preferences_add_list_group (preferences, "appearance", "font", _("Font"), 100);
   ide_preferences_add_font_button (preferences, "appearance", "font", "org.gnome.builder.editor", "font-name", _("Editor"), _("editor font monospace"), 0);
