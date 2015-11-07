@@ -28,6 +28,7 @@ struct _IdePreferencesSwitch
 
   gchar     *key;
   gchar     *schema_id;
+  gchar     *path;
   GSettings *settings;
   GVariant  *target;
 
@@ -42,11 +43,12 @@ G_DEFINE_TYPE (IdePreferencesSwitch, ide_preferences_switch, IDE_TYPE_PREFERENCE
 enum {
   PROP_0,
   PROP_IS_RADIO,
+  PROP_KEY,
+  PROP_PATH,
+  PROP_SCHEMA_ID,
   PROP_SUBTITLE,
   PROP_TARGET,
   PROP_TITLE,
-  PROP_SCHEMA_ID,
-  PROP_KEY,
   LAST_PROP
 };
 
@@ -125,7 +127,11 @@ ide_preferences_switch_constructed (GObject *object)
       goto chainup;
     }
 
-  self->settings = g_settings_new (self->schema_id);
+  if (self->path != NULL)
+    self->settings = g_settings_new_with_path (self->schema_id, self->path);
+  else
+    self->settings = g_settings_new (self->schema_id);
+
   signal_detail = g_strdup_printf ("changed::%s", self->key);
 
   g_signal_connect_object (self->settings,
@@ -246,6 +252,7 @@ ide_preferences_switch_finalize (GObject *object)
 
   g_clear_pointer (&self->key, g_free);
   g_clear_pointer (&self->schema_id, g_free);
+  g_clear_pointer (&self->path, g_free);
   g_clear_pointer (&self->target, g_variant_unref);
   g_clear_object (&self->settings);
 
@@ -272,6 +279,10 @@ ide_preferences_switch_get_property (GObject    *object,
 
     case PROP_KEY:
       g_value_set_string (value, self->key);
+      break;
+
+    case PROP_PATH:
+      g_value_set_string (value, self->path);
       break;
 
     case PROP_TARGET:
@@ -313,6 +324,10 @@ ide_preferences_switch_set_property (GObject      *object,
 
     case PROP_KEY:
       self->key = g_value_dup_string (value);
+      break;
+
+    case PROP_PATH:
+      self->path = g_value_dup_string (value);
       break;
 
     case PROP_TARGET:
@@ -381,6 +396,13 @@ ide_preferences_switch_class_init (IdePreferencesSwitchClass *klass)
     g_param_spec_string ("key",
                          "Key",
                          "Key",
+                         NULL,
+                         (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_PATH] =
+    g_param_spec_string ("path",
+                         "Path",
+                         "Path",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
