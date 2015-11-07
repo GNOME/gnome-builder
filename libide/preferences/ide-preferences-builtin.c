@@ -185,12 +185,44 @@ ide_preferences_builtin_register_vcs (IdePreferences *preferences)
   ide_preferences_add_custom (preferences, "vcs", "attribution", email, NULL, 0);
 }
 
+static void
+ide_preferences_builtin_register_languages (IdePreferences *preferences)
+{
+  GtkSourceLanguageManager *manager;
+  const gchar * const *language_ids;
+  gint i;
+
+  ide_preferences_add_page (preferences, "languages", _("Programming Languages"), 200);
+
+  manager = gtk_source_language_manager_get_default ();
+  language_ids = gtk_source_language_manager_get_language_ids (manager);
+
+  ide_preferences_add_list_group (preferences, "languages", "list", NULL, 0);
+
+  for (i = 0; language_ids [i]; i++)
+    {
+      GtkSourceLanguage *language;
+      const gchar *name;
+
+      language = gtk_source_language_manager_get_language (manager, language_ids [i]);
+      name = gtk_source_language_get_name (language);
+
+      ide_preferences_add_custom (preferences, "languages", "list",
+                                  g_object_new (GTK_TYPE_LABEL,
+                                                "xalign", 0.0f,
+                                                "visible", TRUE,
+                                                "label", name,
+                                                NULL),
+                                  NULL, 0);
+    }
+}
+
 void
 _ide_preferences_builtin_register (IdePreferences *preferences)
 {
   ide_preferences_builtin_register_appearance (preferences);
   ide_preferences_builtin_register_editor (preferences);
-  ide_preferences_add_page (preferences, "languages", _("Programming Languages"), 200);
+  ide_preferences_builtin_register_languages (preferences);
   ide_preferences_builtin_register_code_insight (preferences);
   ide_preferences_builtin_register_snippets (preferences);
   ide_preferences_builtin_register_keyboard (preferences);
