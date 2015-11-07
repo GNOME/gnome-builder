@@ -230,19 +230,21 @@ ide_preferences_switch_state_set (IdePreferencesSwitch *self,
 static void
 ide_preferences_switch_activate (IdePreferencesSwitch *self)
 {
-  gboolean state;
-
   g_assert (IDE_IS_PREFERENCES_SWITCH (self));
 
   if (!gtk_widget_get_sensitive (GTK_WIDGET (self)) || (self->settings == NULL))
     return;
 
   if (self->is_radio)
-    state = !gtk_widget_get_visible (GTK_WIDGET (self->image));
-  else
-    state = !gtk_switch_get_active (self->widget);
+    {
+      gboolean state;
 
-  ide_preferences_switch_toggle (self, state);
+      state = !gtk_widget_get_visible (GTK_WIDGET (self->image));
+      ide_preferences_switch_toggle (self, state);
+    }
+  else
+    gtk_widget_activate (GTK_WIDGET (self->widget));
+
 }
 
 static void
