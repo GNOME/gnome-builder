@@ -228,6 +228,9 @@ ide_preferences_switch_activate (IdePreferencesSwitch *self)
 
   g_assert (IDE_IS_PREFERENCES_SWITCH (self));
 
+  if (!gtk_widget_get_sensitive (GTK_WIDGET (self)) || (self->settings == NULL))
+    return;
+
   if (self->is_radio)
     state = !gtk_widget_get_visible (GTK_WIDGET (self->image));
   else
