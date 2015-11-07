@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "ide-macros.h"
 #include "ide-preferences-switch.h"
 
 struct _IdePreferencesSwitch
@@ -23,6 +24,7 @@ struct _IdePreferencesSwitch
   IdePreferencesContainer parent_instance;
 
   guint     is_radio : 1;
+  guint     updating : 1;
 
   gchar     *key;
   gchar     *schema_id;
@@ -62,6 +64,9 @@ ide_preferences_switch_changed (IdePreferencesSwitch *self,
   g_assert (key != NULL);
   g_assert (G_IS_SETTINGS (settings));
 
+  if (self->updating == TRUE)
+    return;
+
   value = g_settings_get_value (settings, key);
 
   if (g_variant_is_of_type (value, G_VARIANT_TYPE_BOOLEAN))
@@ -78,10 +83,16 @@ ide_preferences_switch_changed (IdePreferencesSwitch *self,
       active = g_strv_contains (strv, flag);
     }
 
+  self->updating = TRUE;
+
   if (self->is_radio)
     gtk_widget_set_visible (GTK_WIDGET (self->image), active);
   else
     gtk_switch_set_active (self->widget, active);
+
+  self->updating = FALSE;
+
+  g_variant_unref (value);
 }
 
 static void
@@ -116,6 +127,75 @@ ide_preferences_switch_constructed (GObject *object)
 
 chainup:
   G_OBJECT_CLASS (ide_preferences_switch_parent_class)->constructed (object);
+}
+
+static gboolean
+ide_preferences_switch_state_set (IdePreferencesSwitch *self,
+                                  gboolean              state,
+                                  GtkSwitch            *widget)
+{
+  GVariant *value;
+
+  g_assert (IDE_IS_PREFERENCES_SWITCH (self));
+  g_assert (GTK_IS_SWITCH (widget));
+
+  if (self->updating)
+    return FALSE;
+
+  self->updating = TRUE;
+
+  value = g_settings_get_value (self->settings, self->key);
+
+  if (g_variant_is_of_type (value, G_VARIANT_TYPE_BOOLEAN))
+    {
+      g_settings_set_boolean (self->settings, self->key, state);
+    }
+  else if ((self->target != NULL) &&
+           g_variant_is_of_type (self->target, G_VARIANT_TYPE_STRING) &&
+           g_variant_is_of_type (value, G_VARIANT_TYPE_STRING_ARRAY))
+    {
+      g_autofree const gchar **strv = g_variant_get_strv (value, NULL);
+      g_autoptr(GPtrArray) ar = g_ptr_array_new ();
+      const gchar *flag = g_variant_get_string (self->target, NULL);
+      gboolean found = FALSE;
+      gint i;
+
+      for (i = 0; strv [i]; i++)
+        {
+          if (!state && ide_str_equal0 (strv [i], flag))
+            continue;
+          if (ide_str_equal0 (strv [i], flag))
+            found = TRUE;
+          g_ptr_array_add (ar, (gchar *)strv [i]);
+        }
+
+      if (state && !found)
+        g_ptr_array_add (ar, (gchar *)flag);
+
+      g_ptr_array_add (ar, NULL);
+
+      g_settings_set_strv (self->settings, self->key, (const gchar * const *)ar->pdata);
+    }
+  else if ((self->target != NULL) &&
+           g_variant_is_of_type (value, g_variant_get_type (self->target)))
+    {
+      g_settings_set_value (self->settings, self->key, self->target);
+    }
+  else
+    {
+      g_warning ("I don't know how to set a variant of type %s to %s",
+                 (const gchar *)g_variant_get_type (value),
+                 self->target ? (const gchar *)g_variant_get_type (self->target) : "(nil)");
+    }
+
+
+  g_variant_unref (value);
+
+  gtk_switch_set_state (widget, state);
+
+  self->updating = FALSE;
+
+  return TRUE;
 }
 
 static void
@@ -281,4 +361,10 @@ static void
 ide_preferences_switch_init (IdePreferencesSwitch *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
+
+  g_signal_connect_object (self->widget,
+                           "state-set",
+                           G_CALLBACK (ide_preferences_switch_state_set),
+                           self,
+                           G_CONNECT_SWAPPED);
 }
