@@ -897,6 +897,114 @@ match_char_with_depth (GtkTextIter      *iter,
   return ret;
 }
 
+static gboolean
+find_chars_backward (GtkTextIter      *cursor,
+                     GtkTextIter      *end,
+                     const gchar      *str,
+                     gboolean          only_at_start)
+{
+  const gchar *base_str;
+  const gchar *limit;
+  GtkTextIter base_cursor;
+
+  g_return_val_if_fail (!ide_str_empty0 (str), FALSE);
+
+  if (!gtk_text_iter_backward_char (cursor))
+    return FALSE;
+
+  limit = str;
+  base_str = str = str + strlen (str) - 1;
+  base_cursor = *cursor;
+  do
+    {
+      *cursor = base_cursor;
+      do
+        {
+          if (gtk_text_iter_get_char (cursor) != g_utf8_get_char (str))
+            {
+              if (only_at_start)
+                return FALSE;
+              else
+                break;
+            }
+
+          str = g_utf8_find_prev_char (limit, str);
+          if (str == NULL)
+            {
+              if (end)
+                {
+                  *end = base_cursor;
+                  gtk_text_iter_forward_char (end);
+                }
+
+              return TRUE;
+            }
+
+        } while ((gtk_text_iter_backward_char (cursor)));
+
+      if (gtk_text_iter_is_start (cursor))
+        return FALSE;
+      else
+        str = base_str;
+
+    } while (gtk_text_iter_backward_char (&base_cursor));
+
+  return FALSE;
+}
+
+static gboolean
+find_chars_forward (GtkTextIter *cursor,
+                    GtkTextIter *end,
+                    const gchar *str,
+                    gboolean     only_at_start)
+{
+  const gchar *base_str;
+  const gchar *limit;
+  GtkTextIter base_cursor;
+
+  g_return_val_if_fail (!ide_str_empty0 (str), FALSE);
+
+  limit = str + strlen (str);
+  base_str = str;
+  base_cursor = *cursor;
+  do
+    {
+      *cursor = base_cursor;
+      do
+        {
+          if (gtk_text_iter_get_char (cursor) != g_utf8_get_char (str))
+            {
+              if (only_at_start)
+                return FALSE;
+              else
+                break;
+            }
+
+          str = g_utf8_find_next_char (str, limit);
+          if (str == NULL)
+            {
+              if (end)
+                {
+                  *end = *cursor;
+                  gtk_text_iter_forward_char (end);
+                }
+
+              *cursor = base_cursor;
+              return TRUE;
+            }
+
+        } while ((gtk_text_iter_forward_char (cursor)));
+
+      if (gtk_text_iter_is_end (cursor))
+        return FALSE;
+      else
+        str = base_str;
+    } while (gtk_text_iter_forward_char (&base_cursor));
+
+  return FALSE;
+}
+static gboolean
+
 static void
 ide_source_view_movements_match_special (Movement *mv)
 {
@@ -1839,56 +1947,6 @@ find_tag_end (GtkTextIter *cursor)
   return FALSE;
 }
 
-static gboolean
-find_chars (GtkTextIter *cursor,
-            GtkTextIter *end,
-            const gchar *str,
-            gboolean     only_at_start)
-{
-  const gchar *base_str;
-  const gchar *limit;
-  GtkTextIter base_cursor;
-  gboolean is_buffer_end = FALSE;
-
-  g_return_val_if_fail (!ide_str_empty0 (str), FALSE);
-
-  limit = str + strlen (str);
-  base_str = str;
-  base_cursor = *cursor;
-  do
-    {
-      *cursor = base_cursor;
-      do
-        {
-          if (gtk_text_iter_get_char (cursor) != g_utf8_get_char (str))
-            {
-              if (only_at_start)
-                return FALSE;
-              else
-                break;
-            }
-
-          str = g_utf8_find_next_char (str, limit);
-          if (str == NULL)
-            {
-              *end = *cursor;
-              gtk_text_iter_forward_char (end);
-
-              *cursor = base_cursor;
-              return TRUE;
-            }
-
-        } while ((is_buffer_end = gtk_text_iter_forward_char (cursor)));
-
-      if (is_buffer_end)
-        return FALSE;
-      else
-        str = base_str;
-    } while (gtk_text_iter_forward_char (&base_cursor));
-
-  return FALSE;
-}
-
 /* iter is updated to the left of the tag for a GTK_DIR_LEFT direction or in case
  * of error in the tag, and to the right of the tag for a GTK_DIR_RIGHT direction.
  * If no tag can be found, NULL is returned and iter equal the corresponding buffer bound.
@@ -1945,11 +2003,11 @@ find_html_tag (GtkTextIter      *iter,
 
       return tag;
     }
-  else if (find_chars (&cursor, &end, "!--", TRUE))
+  else if (find_chars_forward (&cursor, &end, "!--", TRUE))
     {
       tag->kind = HTML_TAG_KIND_COMMENT;
       cursor = end;
-      if (find_chars (&cursor, &end, "-->", FALSE))
+      if (find_chars_forward (&cursor, &end, "-->", FALSE))
         {
           tag->end = end;
           if (direction == GTK_DIR_RIGHT)
