@@ -132,8 +132,11 @@ egg_centering_bin_hierarchy_changed (GtkWidget *widget,
    */
 
   toplevel = gtk_widget_get_toplevel (widget);
-  if ((toplevel == NULL) || GTK_IS_WINDOW (toplevel))
+
+  if (GTK_IS_WINDOW (toplevel))
     egg_signal_group_set_target (priv->signals, toplevel);
+  else
+    egg_signal_group_set_target (priv->signals, NULL);
 }
 
 static void
