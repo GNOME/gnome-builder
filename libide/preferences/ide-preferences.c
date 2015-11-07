@@ -52,6 +52,15 @@ ide_preferences_add_group (IdePreferences *self,
   IDE_PREFERENCES_GET_IFACE (self)->add_group (self, page_name, group_name, title, priority);
 }
 
+/**
+ * ide_preferences_add_switch:
+ * @path: (nullable): An optional path
+ * @variant_string: (nullable): An optional gvariant string
+ * @title: (nullable): An optional title
+ * @subtitle: (nullable): An optional subtitle
+ * @keywords: (nullable): Optional keywords for search
+ *
+ */
 guint
 ide_preferences_add_switch (IdePreferences *self,
                             const gchar    *page_name,
