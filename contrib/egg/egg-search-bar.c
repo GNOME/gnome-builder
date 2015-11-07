@@ -336,7 +336,7 @@ egg_search_bar_init (EggSearchBar *self)
 {
   EggSearchBarPrivate *priv = egg_search_bar_get_instance_private (self);
   GtkStyleContext *style_context;
-  GtkBox *vbox;
+  GtkBox *box;
 
   priv->window_signals = egg_signal_group_new (GTK_TYPE_WINDOW);
   egg_signal_group_connect_object (priv->window_signals,
@@ -355,14 +355,17 @@ egg_search_bar_init (EggSearchBar *self)
                   "transition-type", GTK_REVEALER_TRANSITION_TYPE_SLIDE_DOWN,
                   "visible", TRUE,
                   NULL);
-  vbox =
+  /* outer box used for styling */
+  box =
     g_object_new (GTK_TYPE_BOX,
-                  "orientation", GTK_ORIENTATION_VERTICAL,
+                  "orientation", GTK_ORIENTATION_HORIZONTAL,
                   "visible", TRUE,
                   NULL);
   priv->box =
     g_object_new (GTK_TYPE_BOX,
+                  "hexpand", TRUE,
                   "margin", 6,
+                  "orientation", GTK_ORIENTATION_HORIZONTAL,
                   "visible", TRUE,
                   NULL);
   priv->entry =
@@ -381,11 +384,11 @@ egg_search_bar_init (EggSearchBar *self)
                   "visible", FALSE,
                   NULL);
 
-  style_context = gtk_widget_get_style_context (GTK_WIDGET (vbox));
+  style_context = gtk_widget_get_style_context (GTK_WIDGET (box));
   gtk_style_context_add_class (style_context, "search-bar");
 
-  gtk_container_add (GTK_CONTAINER (priv->revealer), GTK_WIDGET (vbox));
-  gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (priv->box));
+  gtk_container_add (GTK_CONTAINER (priv->revealer), GTK_WIDGET (box));
+  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (priv->box));
   gtk_container_add (GTK_CONTAINER (self), GTK_WIDGET (priv->revealer));
   gtk_container_add_with_properties (GTK_CONTAINER (priv->box),
                                      GTK_WIDGET (priv->close_button),
