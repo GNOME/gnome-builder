@@ -117,6 +117,7 @@ ide_preferences_builtin_register_editor (IdePreferences *preferences)
 
   ide_preferences_add_list_group (preferences, "editor", "position", NULL, 0);
   ide_preferences_add_switch (preferences, "editor", "position", "org.gnome.builder.editor", "restore-insert-mark", NULL, NULL, _("Restore cursor position"), _("Restore the cursor position when a file is reopened"), NULL, 0);
+  ide_preferences_add_spin_button (preferences, "editor", "position", "org.gnome.builder.editor", "scroll-offset", NULL, _("Scroll Offset"), _("Minimum number of lines to keep above and below the cursor"), NULL, 10);
 
   ide_preferences_add_list_group (preferences, "editor", "line", _("Line Information"), 50);
   ide_preferences_add_switch (preferences, "editor", "line", "org.gnome.builder.editor", "show-line-numbers", NULL, NULL, _("Line numbers"), _("Show the line number at the beginning of each line"), NULL, 0);
