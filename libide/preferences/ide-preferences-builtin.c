@@ -161,7 +161,7 @@ ide_preferences_builtin_register_snippets (IdePreferences *preferences)
   ide_preferences_add_page (preferences, "snippets", _("Snippets"), 350);
 
   ide_preferences_add_list_group (preferences, "snippets", "completion", NULL, 0);
-  ide_preferences_add_switch (preferences, "snippets", "completion", "org.gnome.builder.code-insight", "snippet-completion", NULL, NULL, _("Suggest code snippets"), _("Improve your efficiency by using current word to suggest snippets"), NULL, 0);
+  ide_preferences_add_switch (preferences, "snippets", "completion", "org.gnome.builder.code-insight", "snippet-completion", NULL, NULL, _("Code snippets"), _("Use code fragments to increase typing efficiency"), NULL, 0);
 }
 
 static void
