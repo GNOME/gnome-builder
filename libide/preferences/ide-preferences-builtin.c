@@ -67,7 +67,7 @@ ide_preferences_builtin_register_appearance (IdePreferences *preferences)
 
   ide_preferences_add_page (preferences, "appearance", _("Appearance"), 0);
 
-  ide_preferences_add_group (preferences, "appearance", "basic", NULL, 0);
+  ide_preferences_add_list_group (preferences, "appearance", "basic", NULL, 0);
   ide_preferences_add_switch (preferences, "appearance", "basic", "org.gnome.builder", "night-mode", NULL, NULL, _("Dark Theme"), _("Whether Builder should use a dark theme"), _("dark theme"), 0);
 
   ide_preferences_add_list_group (preferences, "appearance", "font", _("Font"), 100);
@@ -115,7 +115,7 @@ ide_preferences_builtin_register_editor (IdePreferences *preferences)
 {
   ide_preferences_add_page (preferences, "editor", _("Editor"), 100);
 
-  ide_preferences_add_group (preferences, "editor", "position", NULL, 0);
+  ide_preferences_add_list_group (preferences, "editor", "position", NULL, 0);
   ide_preferences_add_switch (preferences, "editor", "position", "org.gnome.builder.editor", "restore-insert-mark", NULL, NULL, _("Restore cursor position"), _("Restore the cursor position when a file is reopened"), NULL, 0);
 
   ide_preferences_add_list_group (preferences, "editor", "line", _("Line Information"), 50);
@@ -145,7 +145,7 @@ ide_preferences_builtin_register_code_insight (IdePreferences *preferences)
 {
   ide_preferences_add_page (preferences, "code-insight", _("Code Insight"), 300);
 
-  ide_preferences_add_group (preferences, "code-insight", "semantic", NULL, 0);
+  ide_preferences_add_list_group (preferences, "code-insight", "semantic", NULL, 0);
   ide_preferences_add_switch (preferences, "code-insight", "semantic", "org.gnome.builder.code-insight", "semantic-highlighting", NULL, NULL, _("Semantic Highlighting"), _("Use code insignt to highlight additional information discovered in the source file"), NULL, 0);
 
   ide_preferences_add_list_group (preferences, "code-insight", "completion", _("Completion"), 100);
@@ -159,7 +159,7 @@ ide_preferences_builtin_register_snippets (IdePreferences *preferences)
 {
   ide_preferences_add_page (preferences, "snippets", _("Snippets"), 350);
 
-  ide_preferences_add_group (preferences, "snippets", "completion", NULL, 0);
+  ide_preferences_add_list_group (preferences, "snippets", "completion", NULL, 0);
   ide_preferences_add_switch (preferences, "snippets", "completion", "org.gnome.builder.code-insight", "snippet-completion", NULL, NULL, _("Suggest code snippets"), _("Improve your efficiency by using the current word to suggest snippets"), NULL, 0);
 }
 

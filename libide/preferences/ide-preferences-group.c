@@ -191,12 +191,6 @@ ide_preferences_group_add (IdePreferencesGroup *self,
     }
   else
     {
-      /* FIXME: Once we can do this with CSS ... */
-      g_object_set (widget,
-                    "margin-start", 11,
-                    "margin-end", 11,
-                    NULL);
-
       gtk_container_add_with_properties (GTK_CONTAINER (self->box), widget,
                                          "position", position,
                                          NULL);
