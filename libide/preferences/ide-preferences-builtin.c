@@ -92,7 +92,7 @@ ide_preferences_builtin_register_appearance (IdePreferences *preferences)
     }
 
   ide_preferences_add_list_group (preferences, "appearance", "background", NULL, 300);
-  ide_preferences_add_switch (preferences, "appearance", "background", "org.gnome.builder.editor", "show-grid-lines", NULL, NULL, _("Grid Pattern"), _("Display a grid pattern underneath the source code"), NULL, 0);
+  ide_preferences_add_switch (preferences, "appearance", "background", "org.gnome.builder.editor", "show-grid-lines", NULL, NULL, _("Grid Pattern"), _("Display a grid pattern underneath source code"), NULL, 0);
 }
 
 static void
@@ -116,20 +116,20 @@ ide_preferences_builtin_register_editor (IdePreferences *preferences)
   ide_preferences_add_page (preferences, "editor", _("Editor"), 100);
 
   ide_preferences_add_list_group (preferences, "editor", "position", NULL, 0);
-  ide_preferences_add_switch (preferences, "editor", "position", "org.gnome.builder.editor", "restore-insert-mark", NULL, NULL, _("Restore cursor position"), _("Restore the cursor position when a file is reopened"), NULL, 0);
+  ide_preferences_add_switch (preferences, "editor", "position", "org.gnome.builder.editor", "restore-insert-mark", NULL, NULL, _("Restore cursor position"), _("Restore cursor position when a file is reopened"), NULL, 0);
   ide_preferences_add_spin_button (preferences, "editor", "position", "org.gnome.builder.editor", "scroll-offset", NULL, _("Scroll Offset"), _("Minimum number of lines to keep above and below the cursor"), NULL, 10);
 
   ide_preferences_add_list_group (preferences, "editor", "line", _("Line Information"), 50);
-  ide_preferences_add_switch (preferences, "editor", "line", "org.gnome.builder.editor", "show-line-numbers", NULL, NULL, _("Line numbers"), _("Show the line number at the beginning of each line"), NULL, 0);
-  ide_preferences_add_switch (preferences, "editor", "line", "org.gnome.builder.editor", "show-line-changes", NULL, NULL, _("Line changes"), _("Show if a line was added or modified next to the line number"), NULL, 1);
+  ide_preferences_add_switch (preferences, "editor", "line", "org.gnome.builder.editor", "show-line-numbers", NULL, NULL, _("Line numbers"), _("Show line number at beginning of each line"), NULL, 0);
+  ide_preferences_add_switch (preferences, "editor", "line", "org.gnome.builder.editor", "show-line-changes", NULL, NULL, _("Line changes"), _("Show if a line was added or modified next to line number"), NULL, 1);
 
   ide_preferences_add_list_group (preferences, "editor", "highlight", _("Highlight"), 100);
-  ide_preferences_add_switch (preferences, "editor", "highlight", "org.gnome.builder.editor", "highlight-current-line", NULL, NULL, _("Current line"), _("Make the current line stand out with highlights"), NULL, 0);
+  ide_preferences_add_switch (preferences, "editor", "highlight", "org.gnome.builder.editor", "highlight-current-line", NULL, NULL, _("Current line"), _("Make current line stand out with highlights"), NULL, 0);
   ide_preferences_add_switch (preferences, "editor", "highlight", "org.gnome.builder.editor", "highlight-matching-brackets", NULL, NULL, _("Matching brackets"), _("Highlight matching brackets based on cursor position"), NULL, 1);
 
   ide_preferences_add_list_group (preferences, "editor", "overview", _("Code Overview"), 100);
-  ide_preferences_add_switch (preferences, "editor", "overview", "org.gnome.builder.editor", "show-map", NULL, NULL, _("Show overview map"), _("Show an overview map next to the source code to enhance navigation"), NULL, 0);
-  ide_preferences_add_switch (preferences, "editor", "overview", "org.gnome.builder.editor", "auto-hide-map", NULL, NULL, _("Automatically hide overview map"), _("Automatically hide the map when the editor loses focus"), NULL, 1);
+  ide_preferences_add_switch (preferences, "editor", "overview", "org.gnome.builder.editor", "show-map", NULL, NULL, _("Show overview map"), _("A zoomed out view to enhance navigating source code"), NULL, 0);
+  ide_preferences_add_switch (preferences, "editor", "overview", "org.gnome.builder.editor", "auto-hide-map", NULL, NULL, _("Automatically hide overview map"), _("Automatically hide map when editor loses focus"), NULL, 1);
 
   ide_preferences_add_list_group (preferences, "editor", "draw-spaces", _("Whitespace Characters"), 400);
   ide_preferences_add_radio (preferences, "editor", "draw-spaces", "org.gnome.builder.editor", "draw-spaces", NULL, "\"space\"", _("Spaces"), NULL, NULL, 0);
@@ -147,7 +147,7 @@ ide_preferences_builtin_register_code_insight (IdePreferences *preferences)
   ide_preferences_add_page (preferences, "code-insight", _("Code Insight"), 300);
 
   ide_preferences_add_list_group (preferences, "code-insight", "semantic", NULL, 0);
-  ide_preferences_add_switch (preferences, "code-insight", "semantic", "org.gnome.builder.code-insight", "semantic-highlighting", NULL, NULL, _("Semantic Highlighting"), _("Use code insignt to highlight additional information discovered in the source file"), NULL, 0);
+  ide_preferences_add_switch (preferences, "code-insight", "semantic", "org.gnome.builder.code-insight", "semantic-highlighting", NULL, NULL, _("Semantic Highlighting"), _("Use code insignt to highlight additional information discovered in source file"), NULL, 0);
 
   ide_preferences_add_list_group (preferences, "code-insight", "completion", _("Completion"), 100);
   ide_preferences_add_switch (preferences, "code-insight", "completion", "org.gnome.builder.code-insight", "word-completion", NULL, NULL, _("Suggest words found in open files"), _("Suggests completions as you type based on words found in any open document"), NULL, 0);
@@ -161,7 +161,7 @@ ide_preferences_builtin_register_snippets (IdePreferences *preferences)
   ide_preferences_add_page (preferences, "snippets", _("Snippets"), 350);
 
   ide_preferences_add_list_group (preferences, "snippets", "completion", NULL, 0);
-  ide_preferences_add_switch (preferences, "snippets", "completion", "org.gnome.builder.code-insight", "snippet-completion", NULL, NULL, _("Suggest code snippets"), _("Improve your efficiency by using the current word to suggest snippets"), NULL, 0);
+  ide_preferences_add_switch (preferences, "snippets", "completion", "org.gnome.builder.code-insight", "snippet-completion", NULL, NULL, _("Suggest code snippets"), _("Improve your efficiency by using current word to suggest snippets"), NULL, 0);
 }
 
 static void
