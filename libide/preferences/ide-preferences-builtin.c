@@ -221,6 +221,7 @@ ide_preferences_builtin_register_vcs (IdePreferences *preferences)
   g_autofree gchar *email_text = NULL;
   g_autoptr(GFile) global_file = NULL;
   GgitConfig *config;
+  GtkSizeGroup *size_group;
   GtkWidget *author;
   GtkWidget *email;
 
@@ -264,6 +265,11 @@ ide_preferences_builtin_register_vcs (IdePreferences *preferences)
   ide_preferences_add_list_group (preferences, "vcs", "attribution", _("Attribution"), 0);
   ide_preferences_add_custom (preferences, "vcs", "attribution", author, NULL, 0);
   ide_preferences_add_custom (preferences, "vcs", "attribution", email, NULL, 0);
+
+  size_group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
+  gtk_size_group_add_widget (size_group, ide_preferences_entry_get_title_widget (IDE_PREFERENCES_ENTRY (author)));
+  gtk_size_group_add_widget (size_group, ide_preferences_entry_get_title_widget (IDE_PREFERENCES_ENTRY (email)));
+  g_clear_object (&size_group);
 }
 
 static void

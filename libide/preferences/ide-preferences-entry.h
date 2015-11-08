@@ -34,6 +34,8 @@ struct _IdePreferencesEntryClass
   IdePreferencesContainerClass parent_class;
 };
 
+GtkWidget *ide_preferences_entry_get_title_widget (IdePreferencesEntry *self);
+
 G_END_DECLS
 
 #endif /* IDE_PREFERENCES_ENTRY_H */
