@@ -90,6 +90,7 @@ ide_preferences_add_spin_button (IdePreferences *self,
                                  const gchar    *group_name,
                                  const gchar    *schema_id,
                                  const gchar    *key,
+                                 const gchar    *path,
                                  const gchar    *title,
                                  const gchar    *subtitle,
                                  const gchar    *keywords,
@@ -102,7 +103,7 @@ ide_preferences_add_spin_button (IdePreferences *self,
   g_return_val_if_fail (key != NULL, 0);
   g_return_val_if_fail (title != NULL, 0);
 
-  return IDE_PREFERENCES_GET_IFACE (self)->add_spin_button (self, page_name, group_name, schema_id, key, title, subtitle, keywords, priority);
+  return IDE_PREFERENCES_GET_IFACE (self)->add_spin_button (self, page_name, group_name, schema_id, key, path, title, subtitle, keywords, priority);
 }
 
 guint

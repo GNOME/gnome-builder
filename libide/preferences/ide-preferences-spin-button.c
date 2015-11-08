@@ -16,28 +16,200 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "ide-macros.h"
 #include "ide-preferences-spin-button.h"
 
 struct _IdePreferencesSpinButton
 {
-  GtkBin         parent_instance;
+  IdePreferencesContainer  parent_instance;
 
-  GtkSpinButton *spin_button;
+  guint                    updating : 1;
+
+  gchar                   *key;
+  gchar                   *path;
+  gchar                   *schema_id;
+  GSettings               *settings;
+
+  GtkSpinButton           *spin_button;
+  GtkLabel                *title;
+  GtkLabel                *subtitle;
 };
 
-G_DEFINE_TYPE (IdePreferencesSpinButton, ide_preferences_spin_button, GTK_TYPE_BIN)
+G_DEFINE_TYPE (IdePreferencesSpinButton, ide_preferences_spin_button, IDE_TYPE_PREFERENCES_CONTAINER)
 
 enum {
   PROP_0,
+  PROP_KEY,
+  PROP_PATH,
+  PROP_SCHEMA_ID,
+  PROP_SUBTITLE,
+  PROP_TITLE,
   LAST_PROP
 };
 
+enum {
+  ACTIVATE,
+  LAST_SIGNAL
+};
+
 static GParamSpec *properties [LAST_PROP];
+static guint signals [LAST_SIGNAL];
+
+static void
+ide_preferences_spin_button_activate (IdePreferencesSpinButton *self)
+{
+  g_assert (IDE_IS_PREFERENCES_SPIN_BUTTON (self));
+
+  gtk_widget_grab_focus (GTK_WIDGET (self->spin_button));
+}
+
+static void
+apply_value (GtkAdjustment *adj,
+             GVariant      *value,
+             const gchar   *property)
+{
+  GValue val = { 0 };
+  gdouble v = 0.0;
+
+  g_assert (GTK_IS_ADJUSTMENT (adj));
+  g_assert (value != NULL);
+  g_assert (property != NULL);
+
+  if (g_variant_is_of_type (value, G_VARIANT_TYPE_DOUBLE))
+    v = g_variant_get_double (value);
+
+  else if (g_variant_is_of_type (value, G_VARIANT_TYPE_INT16))
+    v = g_variant_get_int16 (value);
+  else if (g_variant_is_of_type (value, G_VARIANT_TYPE_UINT16))
+    v = g_variant_get_uint16 (value);
+
+  else if (g_variant_is_of_type (value, G_VARIANT_TYPE_INT32))
+    v = g_variant_get_int32 (value);
+  else if (g_variant_is_of_type (value, G_VARIANT_TYPE_UINT32))
+    v = g_variant_get_uint32 (value);
+
+  else if (g_variant_is_of_type (value, G_VARIANT_TYPE_INT64))
+    v = g_variant_get_int64 (value);
+  else if (g_variant_is_of_type (value, G_VARIANT_TYPE_UINT64))
+    v = g_variant_get_uint64 (value);
+
+  else
+    g_warning ("Unknown variant type: %s\n", (gchar *)g_variant_get_type (value));
+
+  g_value_init (&val, G_TYPE_DOUBLE);
+  g_value_set_double (&val, v);
+  g_object_set_property (G_OBJECT (adj), property, &val);
+  g_value_unset (&val);
+}
+
+static void
+ide_preferences_spin_button_changed (IdePreferencesSpinButton *self,
+                                     const gchar              *key,
+                                     GSettings                *settings)
+{
+  GtkAdjustment *adj;
+  GVariant *value;
+
+  g_assert (IDE_IS_PREFERENCES_SPIN_BUTTON (self));
+  g_assert (key != NULL);
+  g_assert (G_IS_SETTINGS (settings));
+
+  if (self->updating)
+    return;
+
+  self->updating = TRUE;
+
+  adj = gtk_spin_button_get_adjustment (self->spin_button);
+
+  value = g_settings_get_value (settings, key);
+  apply_value (adj, value, "value");
+  g_variant_unref (value);
+
+  self->updating = FALSE;
+}
+
+static void
+ide_preferences_spin_button_constructed (GObject *object)
+{
+  IdePreferencesSpinButton *self = (IdePreferencesSpinButton *)object;
+  GSettingsSchemaSource *source;
+  GSettingsSchema *schema = NULL;
+  GSettingsSchemaKey *key = NULL;
+  GVariant *range = NULL;
+  GVariant *values = NULL;
+  GVariant *lower = NULL;
+  GVariant *upper = NULL;
+  gchar *type = NULL;
+  gchar *signal_detail = NULL;
+  GtkAdjustment *adj;
+  GVariantIter iter;
+
+  g_assert (IDE_IS_PREFERENCES_SPIN_BUTTON (self));
+
+  source = g_settings_schema_source_get_default ();
+  schema = g_settings_schema_source_lookup (source, self->schema_id, TRUE);
+
+  if (schema == NULL || !g_settings_schema_has_key (schema, self->key))
+    {
+      gtk_widget_set_sensitive (GTK_WIDGET (self), FALSE);
+      goto chainup;
+    }
+
+  adj = gtk_spin_button_get_adjustment (self->spin_button);
+  key = g_settings_schema_get_key (schema, self->key);
+  range = g_settings_schema_key_get_range (key);
+
+  g_variant_get (range, "(sv)", &type, &values);
+
+  if (!ide_str_equal0 (type, "range") || (2 != g_variant_iter_init (&iter, values)))
+    {
+      gtk_widget_set_sensitive (GTK_WIDGET (self), FALSE);
+      goto chainup;
+    }
+
+  lower = g_variant_iter_next_value (&iter);
+  upper = g_variant_iter_next_value (&iter);
+
+  apply_value (adj, lower, "lower");
+  apply_value (adj, upper, "upper");
+
+  if (self->path != NULL)
+    self->settings = g_settings_new_with_path (self->schema_id, self->path);
+  else
+    self->settings = g_settings_new (self->schema_id);
+
+  signal_detail = g_strdup_printf ("changed::%s", self->key);
+
+  g_signal_connect_object (self->settings,
+                           signal_detail,
+                           G_CALLBACK (ide_preferences_spin_button_changed),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  ide_preferences_spin_button_changed (self, self->key, self->settings);
+
+chainup:
+  G_OBJECT_CLASS (ide_preferences_spin_button_parent_class)->constructed (object);
+
+  g_clear_pointer (&key, g_settings_schema_key_unref);
+  g_clear_pointer (&type, g_free);
+  g_clear_pointer (&signal_detail, g_free);
+  g_clear_pointer (&range, g_variant_unref);
+  g_clear_pointer (&values, g_variant_unref);
+  g_clear_pointer (&lower, g_variant_unref);
+  g_clear_pointer (&upper, g_variant_unref);
+  g_clear_pointer (&schema, g_settings_schema_unref);
+}
 
 static void
 ide_preferences_spin_button_finalize (GObject *object)
 {
   IdePreferencesSpinButton *self = (IdePreferencesSpinButton *)object;
+
+  g_clear_pointer (&self->key, g_free);
+  g_clear_pointer (&self->path, g_free);
+  g_clear_pointer (&self->schema_id, g_free);
+  g_clear_object (&self->settings);
 
   G_OBJECT_CLASS (ide_preferences_spin_button_parent_class)->finalize (object);
 }
@@ -52,6 +224,26 @@ ide_preferences_spin_button_get_property (GObject    *object,
 
   switch (prop_id)
     {
+    case PROP_KEY:
+      g_value_set_string (value, self->key);
+      break;
+
+    case PROP_PATH:
+      g_value_set_string (value, self->path);
+      break;
+
+    case PROP_SCHEMA_ID:
+      g_value_set_string (value, self->schema_id);
+      break;
+
+    case PROP_SUBTITLE:
+      g_value_set_string (value, gtk_label_get_label (self->subtitle));
+      break;
+
+    case PROP_TITLE:
+      g_value_set_string (value, gtk_label_get_label (self->title));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -67,6 +259,26 @@ ide_preferences_spin_button_set_property (GObject      *object,
 
   switch (prop_id)
     {
+    case PROP_KEY:
+      self->key = g_value_dup_string (value);
+      break;
+
+    case PROP_PATH:
+      self->path = g_value_dup_string (value);
+      break;
+
+    case PROP_SCHEMA_ID:
+      self->schema_id = g_value_dup_string (value);
+      break;
+
+    case PROP_SUBTITLE:
+      gtk_label_set_label (self->subtitle, g_value_get_string (value));
+      break;
+
+    case PROP_TITLE:
+      gtk_label_set_label (self->title, g_value_get_string (value));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -78,16 +290,74 @@ ide_preferences_spin_button_class_init (IdePreferencesSpinButtonClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
+  object_class->constructed = ide_preferences_spin_button_constructed;
   object_class->finalize = ide_preferences_spin_button_finalize;
   object_class->get_property = ide_preferences_spin_button_get_property;
   object_class->set_property = ide_preferences_spin_button_set_property;
 
+  signals [ACTIVATE] =
+    g_signal_new_class_handler ("activate",
+                                G_TYPE_FROM_CLASS (klass),
+                                G_SIGNAL_RUN_LAST,
+                                G_CALLBACK (ide_preferences_spin_button_activate),
+                                NULL, NULL, NULL, G_TYPE_NONE, 0);
+
+  widget_class->activate_signal = signals [ACTIVATE];
+
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/ui/ide-preferences-spin-button.ui");
   gtk_widget_class_bind_template_child (widget_class, IdePreferencesSpinButton, spin_button);
+  gtk_widget_class_bind_template_child (widget_class, IdePreferencesSpinButton, subtitle);
+  gtk_widget_class_bind_template_child (widget_class, IdePreferencesSpinButton, title);
+
+  properties [PROP_KEY] =
+    g_param_spec_string ("key",
+                         "Key",
+                         "Key",
+                         NULL,
+                         (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_SCHEMA_ID] =
+    g_param_spec_string ("schema-id",
+                         "schema-id",
+                         "schema-id",
+                         NULL,
+                         (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_PATH] =
+    g_param_spec_string ("path",
+                         "path",
+                         "path",
+                         NULL,
+                         (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_SUBTITLE] =
+    g_param_spec_string ("subtitle",
+                         "subtitle",
+                         "subtitle",
+                         NULL,
+                         (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_TITLE] =
+    g_param_spec_string ("title",
+                         "title",
+                         "title",
+                         NULL,
+                         (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
+
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 }
 
 static void
 ide_preferences_spin_button_init (IdePreferencesSpinButton *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
+
+  g_object_set (gtk_spin_button_get_adjustment (self->spin_button),
+                "value", 0.0,
+                "lower", 0.0,
+                "upper", 0.0,
+                "step-increment", 1.0,
+                "page-increment", 10.0,
+                "page-size", 10.0,
+                NULL);
 }
