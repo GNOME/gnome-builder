@@ -33,9 +33,16 @@ enum {
   LAST_PROP
 };
 
+enum {
+  ACTIVATE,
+  CHANGED,
+  LAST_SIGNAL
+};
+
 G_DEFINE_TYPE_WITH_PRIVATE (IdePreferencesEntry, ide_preferences_entry, IDE_TYPE_PREFERENCES_CONTAINER)
 
 static GParamSpec *properties [LAST_PROP];
+static guint signals [LAST_SIGNAL];
 
 static void
 ide_preferences_entry_get_property (GObject    *object,
@@ -86,6 +93,29 @@ ide_preferences_entry_set_property (GObject      *object,
 }
 
 static void
+ide_preferences_entry_activate (IdePreferencesEntry *self)
+{
+  IdePreferencesEntryPrivate *priv = ide_preferences_entry_get_instance_private (self);
+
+  g_assert (IDE_IS_PREFERENCES_ENTRY (self));
+
+  gtk_widget_grab_focus (GTK_WIDGET (priv->entry));
+}
+
+static void
+ide_preferences_entry_changed (IdePreferencesEntry *self,
+                               GtkEntry            *entry)
+{
+  const gchar *text;
+
+  g_assert (IDE_IS_PREFERENCES_ENTRY (self));
+  g_assert (GTK_IS_ENTRY (entry));
+
+  text = gtk_entry_get_text (entry);
+  g_signal_emit (self, signals [CHANGED], 0, text);
+}
+
+static void
 ide_preferences_entry_class_init (IdePreferencesEntryClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -93,6 +123,22 @@ ide_preferences_entry_class_init (IdePreferencesEntryClass *klass)
 
   object_class->get_property = ide_preferences_entry_get_property;
   object_class->set_property = ide_preferences_entry_set_property;
+
+  signals [ACTIVATE] =
+    g_signal_new_class_handler ("activate",
+                                G_TYPE_FROM_CLASS (klass),
+                                G_SIGNAL_RUN_LAST,
+                                G_CALLBACK (ide_preferences_entry_activate),
+                                NULL, NULL, NULL, G_TYPE_NONE, 0);
+
+  signals [CHANGED] =
+    g_signal_new_class_handler ("changed",
+                                G_TYPE_FROM_CLASS (klass),
+                                G_SIGNAL_RUN_LAST,
+                                NULL, NULL, NULL, NULL,
+                                G_TYPE_NONE, 1, G_TYPE_STRING);
+
+  widget_class->activate_signal = signals [ACTIVATE];
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/ui/ide-preferences-entry.ui");
   gtk_widget_class_bind_template_child_private (widget_class, IdePreferencesEntry, entry);
@@ -118,5 +164,13 @@ ide_preferences_entry_class_init (IdePreferencesEntryClass *klass)
 static void
 ide_preferences_entry_init (IdePreferencesEntry *self)
 {
+  IdePreferencesEntryPrivate *priv = ide_preferences_entry_get_instance_private (self);
+
   gtk_widget_init_template (GTK_WIDGET (self));
+
+  g_signal_connect_object (priv->entry,
+                           "changed",
+                           G_CALLBACK (ide_preferences_entry_changed),
+                           self,
+                           G_CONNECT_SWAPPED);
 }
