@@ -21,6 +21,19 @@
 #
 
 import gi
+# lxml is faster than the Python standard library xml, and can ignore invalid
+# characters (which occur in some .gir files).
+# gnome-code-assistance also needs lxml, so I think it's okay to use it here.
+try:
+    import lxml.etree
+    HAS_LXML = True
+except ImportError:
+    HAS_LXML = False
+    print('Warning: python3-lxml is not installed, no documentation will be available in Python auto-completion')
+import os
+import os.path
+import sqlite3
+import threading
 
 gi.require_version('Gtk', '3.0')
 gi.require_version('GtkSource', '3.0')
@@ -38,6 +51,8 @@ from gi.repository import GObject
 from gi.repository import Gtk
 from gi.repository import GtkSource
 from gi.repository import Ide
+from gi.types import GObjectMeta
+from gi.types import StructMeta
 
 gi_importer = DynamicImporter('gi.repository')
 
@@ -157,6 +172,94 @@ try:
 except ImportError:
     print("jedi not found, python auto-completion not possible.")
     HAS_JEDI = False
+
+
+class DocumentationDB(object):
+    def __init__(self):
+        self.db = None
+        self.cursor = None
+
+    def close(self):
+        "Close the DB if open"
+        if self.db is not None:
+            self.cursor.close()
+            self.db.close()
+            self.cursor = None
+            self.db = None
+
+    def open(self):
+        "Open the DB (if needed)"
+        if self.db is None:
+            doc_db_path = os.path.join(GLib.get_user_data_dir(), 'gnome-builder', 'jedi', 'girdoc.db')
+            self.db = sqlite3.connect(doc_db_path)
+            self.cursor = self.db.cursor()
+            # Create the tables if they don't exist to prevent exceptions later on
+            self.cursor.execute('CREATE TABLE IF NOT EXISTS doc (symbol text, library_version text, doc text, gir_file text)')
+            self.cursor.execute('CREATE TABLE IF NOT EXISTS girfiles (file text, last_modified integer)')
+
+    def query(self, symbol, version):
+        "Query the documentation DB"
+        self.open()
+        self.cursor.execute('SELECT doc FROM doc WHERE symbol=? AND library_version=?', (symbol, version))
+        result = self.cursor.fetchone()
+        if result is not None:
+            return result[0]
+        else:
+            return None
+
+    def update(self, close_when_done=False):
+        "Build the documentation DB and ensure it's up to date"
+        if not HAS_LXML:
+            return  # Can't process the gir files without lxml
+        gir_path = '/usr/share/gir-1.0'
+        ns = {'core': 'http://www.gtk.org/introspection/core/1.0',
+              'c': 'http://www.gtk.org/introspection/c/1.0'}
+        self.open()
+        cursor = self.cursor
+
+        # I would use scandir for better performance, but it requires newer Python
+        for gir_file in os.listdir(gir_path):
+            filename = os.path.join(gir_path, gir_file)
+            mtime = os.stat(filename).st_mtime
+            cursor.execute('SELECT * from girfiles WHERE file=?', (filename,))
+            result = cursor.fetchone()
+            if result is None:
+                cursor.execute('INSERT INTO girfiles VALUES (?, ?)', (filename, mtime))
+            else:
+                if result[1] >= mtime:
+                    continue
+                else:
+                    # updated
+                    cursor.execute('DELETE FROM doc WHERE gir_file=?', (filename,))
+                    cursor.execute('UPDATE girfiles SET last_modified=? WHERE file=?', (mtime, filename))
+            parser = lxml.etree.XMLParser(recover=True)
+            tree = lxml.etree.parse(filename, parser=parser)
+            namespace = tree.find('core:namespace', namespaces=ns)
+            library_version = namespace.attrib['version']
+            for node in namespace.findall('core:class', namespaces=ns):
+                doc = node.find('core:doc', namespaces=ns)
+                if doc is not None:
+                    symbol = node.attrib['{http://www.gtk.org/introspection/glib/1.0}type-name']
+                    cursor.execute("INSERT INTO doc VALUES (?, ?, ?, ?)",
+                                   (symbol, library_version, doc.text, filename))
+            for method in namespace.findall('core:method', namespaces=ns) + \
+                          namespace.findall('core:constructor', namespaces=ns) + \
+                          namespace.findall('core:function', namespaces=ns):
+                doc = method.find('core:doc', namespaces=ns)
+                if doc is not None:
+                    symbol = method.attrib['{http://www.gtk.org/introspection/c/1.0}identifier']
+                    cursor.execute("INSERT INTO doc VALUES (?, ?, ?, ?)",
+                                   (symbol, library_version, doc.text, filename))
+        self.db.commit()
+        if close_when_done:
+            self.close()
+
+
+def update_doc_db_on_startup():
+    db = DocumentationDB()
+    threading.Thread(target=db.update, args={'close_when_done': True}).start()
+
+update_doc_db_on_startup()
 
 
 class JediCompletionProvider(Ide.Object, GtkSource.CompletionProvider, Ide.CompletionProvider):
@@ -363,6 +466,10 @@ class JediCompletionProposal(Ide.CompletionItem, GtkSource.CompletionProposal):
     def completion_params(self):
         return self.variant.get_child_value(3).unpack()
 
+    @property
+    def completion_doc(self):
+        return self.variant.get_child_value(4).get_string()
+
     def do_get_label(self):
         return self.completion_label
 
@@ -391,6 +498,10 @@ class JediCompletionProposal(Ide.CompletionItem, GtkSource.CompletionProposal):
 
     def do_get_icon_name(self):
         return _ICONS.get(self.completion_type, None)
+
+    def do_get_info(self):
+        return self.completion_doc
+
 
 class JediCompletionRequest:
     did_run = False
@@ -421,6 +532,7 @@ class JediCompletionRequest:
         # Jedi uses 1-based line indexes, we use 0 throughout Builder.
         script = jedi.Script(self.content, self.line + 1, self.column, self.filename)
 
+        db = DocumentationDB()
         for info in script.completions():
             if self.cancelled:
                 return
@@ -446,9 +558,40 @@ class JediCompletionRequest:
                         else:
                             params.append(param.name)
 
-            results.append((_TYPES.get(info.real_type, 0), info.name, info.complete, params))
+            doc = info.docstring()
+            if hasattr(info._definition, 'obj'):
+                obj = info._definition.obj
+                symbol = None
+                namespace = None
 
-        self.invocation.return_value(GLib.Variant('(a(issas))', (results,)))
+                if type(obj) == GObjectMeta or type(obj) == StructMeta:
+                    if hasattr(obj, '__info__'):
+                        symbol = obj.__info__.get_type_name()
+                        namespace = obj.__info__.get_namespace()
+                elif type(obj) == FunctionInfo:
+                    symbol = obj.get_symbol()
+                    namespace = obj.get_namespace()
+
+                if symbol is not None:
+                    # we need to walk down the path to find the module so we can get the version
+                    parent = info._definition.parent
+                    found = False
+                    while not found:
+                        new_parent = parent.parent
+                        if new_parent is None:
+                            found = True
+                        else:
+                            parent = new_parent
+                    version = parent.obj._version
+                    result = db.query(symbol, version)
+                    if result is not None:
+                        doc = result
+
+            results.append((_TYPES.get(info.real_type, 0), info.name, info.complete, params, doc))
+
+        db.close()
+
+        self.invocation.return_value(GLib.Variant('(a(issass))', (results,)))
 
     def cancel(self):
         if not self.cancelled and not self.did_run:
@@ -464,7 +607,7 @@ class JediService(Ide.DBusService):
         self.queue = {}
         self.handler_id = 0
 
-    @Ide.DBusMethod('org.gnome.builder.plugins.jedi', in_signature='siis', out_signature='a(issas)', async=True)
+    @Ide.DBusMethod('org.gnome.builder.plugins.jedi', in_signature='siis', out_signature='a(issass)', async=True)
     def CodeComplete(self, invocation, filename, line, column, content):
         if filename in self.queue:
             request = self.queue.pop(filename)
