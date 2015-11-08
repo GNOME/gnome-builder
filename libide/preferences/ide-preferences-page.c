@@ -132,12 +132,19 @@ ide_preferences_page_add_group (IdePreferencesPage  *self,
   g_return_if_fail (IDE_IS_PREFERENCES_PAGE (self));
   g_return_if_fail (IDE_IS_PREFERENCES_GROUP (group));
 
+  g_object_get (group, "name", &name, NULL);
+
+  if (g_hash_table_contains (self->groups_by_name, name))
+    {
+      g_free (name);
+      return;
+    }
+
+  g_hash_table_insert (self->groups_by_name, name, group);
+
   gtk_container_add_with_properties (GTK_CONTAINER (self->box), GTK_WIDGET (group),
                                      "position", position,
                                      NULL);
-
-  g_object_get (group, "name", &name, NULL);
-  g_hash_table_insert (self->groups_by_name, name, group);
 }
 
 IdePreferencesGroup *
