@@ -30,6 +30,8 @@ struct _IdePreferencesSpinButton
   gchar                   *schema_id;
   GSettings               *settings;
 
+  const GVariantType      *type;
+
   GtkSpinButton           *spin_button;
   GtkLabel                *title;
   GtkLabel                *subtitle;
@@ -103,9 +105,45 @@ apply_value (GtkAdjustment *adj,
 }
 
 static void
-ide_preferences_spin_button_changed (IdePreferencesSpinButton *self,
-                                     const gchar              *key,
-                                     GSettings                *settings)
+ide_preferences_spin_button_value_changed (IdePreferencesSpinButton *self,
+                                           GParamSpec               *pspec,
+                                           GtkSpinButton            *spin_button)
+{
+  GVariant *variant = NULL;
+  gdouble value;
+
+  g_assert (IDE_IS_PREFERENCES_SPIN_BUTTON (self));
+  g_assert (pspec != NULL);
+  g_assert (GTK_IS_SPIN_BUTTON (spin_button));
+
+  value = gtk_spin_button_get_value (spin_button);
+
+  if (g_variant_type_equal (self->type, G_VARIANT_TYPE_DOUBLE))
+    variant = g_variant_new_double (value);
+  else if (g_variant_type_equal (self->type, G_VARIANT_TYPE_INT16))
+    variant = g_variant_new_int16 (value);
+  else if (g_variant_type_equal (self->type, G_VARIANT_TYPE_UINT16))
+    variant = g_variant_new_uint16 (value);
+  else if (g_variant_type_equal (self->type, G_VARIANT_TYPE_INT32))
+    variant = g_variant_new_int32 (value);
+  else if (g_variant_type_equal (self->type, G_VARIANT_TYPE_UINT32))
+    variant = g_variant_new_uint32 (value);
+  else if (g_variant_type_equal (self->type, G_VARIANT_TYPE_INT64))
+    variant = g_variant_new_int64 (value);
+  else if (g_variant_type_equal (self->type, G_VARIANT_TYPE_UINT64))
+    variant = g_variant_new_uint64 (value);
+  else
+    g_return_if_reached ();
+
+  g_variant_ref_sink (variant);
+  g_settings_set_value (self->settings, self->key, variant);
+  g_clear_pointer (&variant, g_variant_unref);
+}
+
+static void
+ide_preferences_spin_button_setting_changed (IdePreferencesSpinButton *self,
+                                             const gchar              *key,
+                                             GSettings                *settings)
 {
   GtkAdjustment *adj;
   GVariant *value;
@@ -170,6 +208,8 @@ ide_preferences_spin_button_constructed (GObject *object)
   lower = g_variant_iter_next_value (&iter);
   upper = g_variant_iter_next_value (&iter);
 
+  self->type = g_variant_get_type (lower);
+
   apply_value (adj, lower, "lower");
   apply_value (adj, upper, "upper");
 
@@ -182,11 +222,17 @@ ide_preferences_spin_button_constructed (GObject *object)
 
   g_signal_connect_object (self->settings,
                            signal_detail,
-                           G_CALLBACK (ide_preferences_spin_button_changed),
+                           G_CALLBACK (ide_preferences_spin_button_setting_changed),
                            self,
                            G_CONNECT_SWAPPED);
 
-  ide_preferences_spin_button_changed (self, self->key, self->settings);
+  ide_preferences_spin_button_setting_changed (self, self->key, self->settings);
+
+  g_signal_connect_object (self->spin_button,
+                           "notify::value",
+                           G_CALLBACK (ide_preferences_spin_button_value_changed),
+                           self,
+                           G_CONNECT_SWAPPED);
 
 chainup:
   G_OBJECT_CLASS (ide_preferences_spin_button_parent_class)->constructed (object);
