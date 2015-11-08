@@ -120,7 +120,7 @@ ide_preferences_builtin_register_editor (IdePreferences *preferences)
 
   ide_preferences_add_list_group (preferences, "editor", "line", _("Line Information"), 50);
   ide_preferences_add_switch (preferences, "editor", "line", "org.gnome.builder.editor", "show-line-numbers", NULL, NULL, _("Line numbers"), _("Show the line number at the beginning of each line"), NULL, 0);
-  ide_preferences_add_switch (preferences, "editor", "line", "org.gnome.builder.editor", "show-line-changes", NULL, NULL, _("Changes to the document"), _("Show if a line was added or modified next to the line number"), NULL, 1);
+  ide_preferences_add_switch (preferences, "editor", "line", "org.gnome.builder.editor", "show-line-changes", NULL, NULL, _("Line changes"), _("Show if a line was added or modified next to the line number"), NULL, 1);
 
   ide_preferences_add_list_group (preferences, "editor", "highlight", _("Highlight"), 100);
   ide_preferences_add_switch (preferences, "editor", "highlight", "org.gnome.builder.editor", "highlight-current-line", NULL, NULL, _("Current line"), _("Make the current line stand out with highlights"), NULL, 0);
