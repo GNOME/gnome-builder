@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2015-10-29 19:57+0000\n"
-"PO-Revision-Date: 2015-10-30 07:08+0100\n"
+"POT-Creation-Date: 2015-11-09 08:02+0000\n"
+"PO-Revision-Date: 2015-11-09 16:16+0100\n"
 "Last-Translator: Marek Černocký <marek@manet.cz>\n"
 "Language-Team: Czech <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
@@ -39,7 +39,7 @@ msgstr "Selhalo vyhledání vlastnosti %s v %s nebo rodiči %s"
 msgid "Failed to retrieve va_list value: %s"
 msgstr "Selhalo získání hodnoty va_list: %s"
 
-#: ../contrib/egg/egg-search-bar.c:371
+#: ../contrib/egg/egg-search-bar.c:370
 msgid "Search"
 msgstr "hledat"
 
@@ -187,7 +187,7 @@ msgstr "Tmavé barevné schéma pro Builder používající barevnou paletu Tang
 
 #: ../data/style-schemes/builder.xml.h:1
 #: ../data/ui/gb-preferences-page-keybindings.ui.h:3
-#: ../data/ui/gb-workbench.ui.h:1 ../src/main.c:49
+#: ../data/ui/gb-workbench.ui.h:1 ../src/main.c:48
 #: ../src/workbench/gb-workbench.c:153
 msgid "Builder"
 msgstr "Builder"
@@ -291,7 +291,8 @@ msgid "8"
 msgstr "8"
 
 #: ../data/ui/gb-editor-view.ui.h:2 ../data/ui/gb-greeter-window.ui.h:4
-#: ../data/ui/gb-new-project-dialog.ui.h:2 ../data/ui/gb-projects-dialog.ui.h:3
+#: ../data/ui/gb-new-project-dialog.ui.h:2
+#: ../data/ui/gb-projects-dialog.ui.h:3
 msgid "_Cancel"
 msgstr "_Zrušit"
 
@@ -678,7 +679,8 @@ msgstr "Předvolby"
 msgid "Search Preferences…"
 msgstr "Předvolby hledání…"
 
-#: ../data/ui/gb-projects-dialog.ui.h:1 ../src/dialogs/gb-projects-dialog.c:255
+#: ../data/ui/gb-projects-dialog.ui.h:1
+#: ../src/dialogs/gb-projects-dialog.c:255
 msgid "Select Project"
 msgstr "Výběr projektu"
 
@@ -1168,31 +1170,39 @@ msgstr "Selhalo otevření složky: %s"
 msgid "Failed to load file: %s: %s"
 msgstr "Selhalo načtení souboru: %s: %s"
 
-#: ../libide/ide-source-view.c:4585
+#: ../libide/ide-source-view.c:4628
 #, c-format
 msgid "Insert \"%s\""
 msgstr "Vložit „%s“"
 
-#: ../libide/ide-source-view.c:4587
+#: ../libide/ide-source-view.c:4630
 #, c-format
 msgid "Replace \"%s\" with \"%s\""
 msgstr "Nahradit „%s“ pomocí „%s“"
 
-#: ../libide/ide-source-view.c:4706
+#: ../libide/ide-source-view.c:4749
 msgid "Apply Fix-It"
 msgstr "Použít opravu"
 
-#: ../libide/ide-source-view.c:4749
+#: ../libide/ide-source-view.c:4792
 msgid "Join Lines"
 msgstr "Spojit řádky"
 
-#: ../libide/ide-source-view.c:4760
+#: ../libide/ide-source-view.c:4803
 msgid "Sort Lines"
 msgstr "Seřadit řádky"
 
-#: ../libide/ide-source-view.c:4779
+#: ../libide/ide-source-view.c:4822
 msgid "Go to Definition"
 msgstr "Přejít na definici"
+
+#: ../libide/ide-worker-manager.c:223
+msgid "Argv0"
+msgstr "Argv0"
+
+#: ../libide/ide-worker-manager.c:224
+msgid "The path to the process to spawn."
+msgstr "Cesta k procesu, který má vzniknout."
 
 #: ../libide/pygobject/ide-pygobject-script.c:135
 msgid "Attempt to load a PyGObject script with no filename."
@@ -1441,17 +1451,25 @@ msgstr "Zjistěte si více o aplikaci Builder GNOME"
 msgid "Funded By"
 msgstr "Financovali"
 
-#: ../src/app/gb-application.c:642
+#: ../src/app/gb-application.c:755
 msgid "Run Builder in standalone mode"
 msgstr "Spustit Builder v samostatném režimu"
 
-#: ../src/app/gb-application.c:648
+#: ../src/app/gb-application.c:762
 msgid "Show the application's version"
 msgstr "Zobrazit verzi aplikace"
 
-#: ../src/app/gb-application.c:654
+#: ../src/app/gb-application.c:769
 msgid "Increase verbosity. May be specified multiple times."
 msgstr "Více podrobností. Může být zadáno vícekrát."
+
+#: ../src/app/gb-application.c:776
+msgid "The DBus server address for which to connect."
+msgstr "Adresa serveru DBus, ke kterému se připojuje."
+
+#: ../src/app/gb-application.c:783
+msgid "The type of plugin worker process to run."
+msgstr ""
 
 #: ../src/dialogs/gb-new-project-dialog.c:347
 msgid "Select Project File"
