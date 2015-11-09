@@ -90,6 +90,17 @@ typedef struct
   HtmlTag *right;
 } HtmlElement;
 
+typedef enum
+{
+  MACRO_COND_NONE,
+  MACRO_COND_IF,
+  MACRO_COND_IFDEF,
+  MACRO_COND_IFNDEF,
+  MACRO_COND_ELIF,
+  MACRO_COND_ELSE,
+  MACRO_COND_ENDIF
+} MacroCond;
+
 static gboolean
 is_single_line_selection (const GtkTextIter *begin,
                           const GtkTextIter *end)
@@ -1108,8 +1119,7 @@ vim_percent_predicate (GtkTextIter *iter,
   if (ch == '(' || ch == ')' ||
       ch == '[' || ch == ']' ||
       ch == '{' || ch == '}' ||
-      ch == '/' || ch == '*' ||
-      ch == '#')
+      ch == '/' || ch == '*')
     {
       if (!gtk_text_iter_starts_line (iter))
         {
@@ -1120,6 +1130,180 @@ vim_percent_predicate (GtkTextIter *iter,
         }
 
       return TRUE;
+    }
+
+  return FALSE;
+}
+
+static MacroCond
+macro_conditionals_qualify_iter (GtkTextIter *insert,
+                                 GtkTextIter *cond_start,
+                                 GtkTextIter *cond_end,
+                                 gboolean     include_str_bounds)
+{
+  if (iter_in_string (insert, cond_start, cond_end, "#ifdef", include_str_bounds))
+    return MACRO_COND_IFDEF;
+  else if (iter_in_string (insert, cond_start, cond_end, "#ifndef", include_str_bounds))
+    return MACRO_COND_IFNDEF;
+  else if (iter_in_string (insert, cond_start, cond_end, "#if", include_str_bounds))
+    return MACRO_COND_IF;
+  else if (iter_in_string (insert, cond_start, cond_end, "#elif", include_str_bounds))
+    return MACRO_COND_ELIF;
+  else if (iter_in_string (insert, cond_start, cond_end, "#else", include_str_bounds))
+    return MACRO_COND_ELSE;
+  else if (iter_in_string (insert, cond_start, cond_end, "#endif", include_str_bounds))
+    return MACRO_COND_ENDIF;
+  else
+    return MACRO_COND_NONE;
+}
+
+static MacroCond
+find_macro_conditionals_backward (GtkTextIter *insert,
+                                  GtkTextIter *cond_end)
+{
+  MacroCond cond;
+
+  while (gtk_text_iter_backward_find_char (insert, find_char_predicate, GUINT_TO_POINTER ('#'), NULL))
+    {
+      cond = macro_conditionals_qualify_iter (insert, NULL, cond_end, TRUE);
+      if (cond != MACRO_COND_NONE)
+        return cond;
+    }
+
+  return MACRO_COND_NONE;
+}
+
+static MacroCond
+find_macro_conditionals_forward (GtkTextIter *insert,
+                                 GtkTextIter *cond_end)
+{
+  MacroCond cond;
+
+  while (gtk_text_iter_forward_find_char (insert, find_char_predicate, GUINT_TO_POINTER ('#'), NULL))
+    {
+      cond = macro_conditionals_qualify_iter (insert, NULL, cond_end, TRUE);
+      if (cond == MACRO_COND_NONE)
+        gtk_text_iter_forward_char (insert);
+      else
+        return cond;
+    }
+
+  return MACRO_COND_NONE;
+}
+
+/* Skip a whole macro conditional block backward and
+ * setup insert to the previous macro conditional directive.
+ */
+static MacroCond
+macro_conditionals_skip_block_backward (GtkTextIter *insert)
+{
+  GtkTextIter insert_copy;
+  MacroCond cond;
+  guint depth = 0;
+
+  insert_copy = *insert;
+
+  while ((cond = find_macro_conditionals_backward (insert, NULL)))
+    {
+      if (cond == MACRO_COND_ENDIF)
+        depth++;
+      else if (cond == MACRO_COND_IFDEF || cond == MACRO_COND_IFNDEF || cond == MACRO_COND_IF)
+        {
+          if (depth == 0)
+            return cond;
+          else
+            --depth;
+        }
+      else if (cond == MACRO_COND_ELIF || cond == MACRO_COND_ELSE)
+        {
+          if (depth == 0)
+            return cond;
+        }
+      else
+        g_assert_not_reached ();
+    }
+
+  *insert = insert_copy;
+
+  return MACRO_COND_NONE;
+}
+
+/* Skip a whole macro conditional block forward and
+ * setup insert to the next macro conditional directive.
+ */
+static MacroCond
+macro_conditionals_skip_block_forward (GtkTextIter *insert)
+{
+  GtkTextIter insert_copy;
+  GtkTextIter cond_end;
+  MacroCond cond;
+  guint depth = 0;
+
+  insert_copy = *insert;
+
+  while ((cond = find_macro_conditionals_forward (insert, &cond_end)))
+    {
+      if (cond == MACRO_COND_IFDEF || cond == MACRO_COND_IFNDEF || cond == MACRO_COND_IF)
+        depth++;
+      else if (cond == MACRO_COND_ENDIF)
+        {
+          if (depth == 0)
+            return cond;
+          else
+            --depth;
+        }
+      else if (cond == MACRO_COND_ELIF || cond == MACRO_COND_ELSE)
+        {
+          if (depth == 0)
+            return cond;
+        }
+      else
+        g_assert_not_reached ();
+
+      *insert = cond_end;
+    }
+
+  *insert = insert_copy;
+
+  return MACRO_COND_NONE;
+}
+
+static gboolean
+match_macro_conditionals (GtkTextIter *insert)
+{
+  GtkTextIter cursor;
+  GtkTextIter cond_start;
+  GtkTextIter cond_end;
+  MacroCond next_cond;
+  MacroCond cond;
+
+  cond = macro_conditionals_qualify_iter (insert, &cond_start, &cond_end, TRUE);
+  if (cond == MACRO_COND_NONE)
+    return FALSE;
+
+  if (cond == MACRO_COND_ENDIF)
+    {
+      cursor = cond_start;
+      while ((next_cond = macro_conditionals_skip_block_backward (&cursor)))
+        {
+          if (next_cond == MACRO_COND_IFDEF || next_cond == MACRO_COND_IFNDEF || next_cond == MACRO_COND_IF)
+            {
+              *insert = cursor;
+
+              return TRUE;
+            }
+        }
+    }
+  else
+    {
+      cursor = cond_end;
+      if (macro_conditionals_skip_block_forward (&cursor))
+        {
+          *insert = cursor;
+
+          return TRUE;
+        }
+
     }
 
   return FALSE;
@@ -1210,10 +1394,31 @@ ide_source_view_movements_match_special (Movement *mv)
   gunichar start_char;
   GtkTextIter copy;
   GtkTextIter limit;
+  GtkTextIter cond_end;
   gboolean ret = FALSE;
 
-  limit = copy = mv->insert;
-  gtk_text_iter_forward_to_line_end (&limit);
+  copy = mv->insert;
+  gtk_text_iter_set_line_offset (&mv->insert, 0);
+
+  while (!gtk_text_iter_ends_line (&mv->insert) &&
+         (start_char = gtk_text_iter_get_char (&mv->insert)) &&
+         g_unichar_isspace (start_char))
+    gtk_text_iter_forward_char (&mv->insert);
+
+  start_char = gtk_text_iter_get_char (&mv->insert);
+
+  if (start_char == '#' &&
+      macro_conditionals_qualify_iter (&mv->insert, NULL, &cond_end, TRUE) &&
+      gtk_text_iter_compare (&copy, &cond_end) < 0)
+    {
+      mv->insert = cond_end;
+      if (match_macro_conditionals (&mv->insert))
+        return;
+    }
+
+  limit = mv->insert = copy;
+  if (!gtk_text_iter_ends_line(&limit))
+    gtk_text_iter_forward_to_line_end (&limit);
 
   start_char = gtk_text_iter_get_char (&mv->insert);
   if (!vim_percent_predicate (&mv->insert, start_char, NULL))
