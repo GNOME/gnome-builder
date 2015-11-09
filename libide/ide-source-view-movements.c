@@ -1088,6 +1088,16 @@ find_chars_forward (GtkTextIter *cursor,
 
   return FALSE;
 }
+
+static gboolean
+find_char_predicate (gunichar ch,
+                     gpointer data)
+{
+  gunichar ch_searched = GPOINTER_TO_UINT (data);
+
+  return (ch == ch_searched);
+}
+
 static gboolean
 vim_percent_predicate (GtkTextIter *iter,
                        gunichar     ch,
@@ -1655,15 +1665,6 @@ ide_source_view_movements_previous_match_modifier (Movement *mv)
     }
 }
 
-static gboolean
-find_char (gunichar ch,
-           gpointer data)
-{
-  gunichar ch_searched = GPOINTER_TO_UINT (data);
-
-  return (ch == ch_searched);
-}
-
 static void
 ide_source_view_movement_match_search_char (Movement *mv, gboolean is_next_direction)
 {
@@ -1700,7 +1701,7 @@ ide_source_view_movement_match_search_char (Movement *mv, gboolean is_next_direc
       if (is_inclusive_mode && is_selection_positive)
         gtk_text_iter_backward_char (&insert);
 
-      if (gtk_text_iter_forward_find_char (&insert, find_char, GUINT_TO_POINTER (mv->modifier), &limit))
+      if (gtk_text_iter_forward_find_char (&insert, find_char_predicate, GUINT_TO_POINTER (mv->modifier), &limit))
         {
           if (is_till)
             gtk_text_iter_backward_char (&insert);
@@ -1723,7 +1724,7 @@ ide_source_view_movement_match_search_char (Movement *mv, gboolean is_next_direc
       if (is_inclusive_mode && is_selection_positive)
         gtk_text_iter_backward_char (&insert);
 
-      if (gtk_text_iter_backward_find_char (&insert, find_char, GUINT_TO_POINTER (mv->modifier), &limit))
+      if (gtk_text_iter_backward_find_char (&insert, find_char_predicate, GUINT_TO_POINTER (mv->modifier), &limit))
         {
           if (is_till)
             gtk_text_iter_forward_char (&insert);
