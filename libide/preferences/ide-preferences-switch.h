@@ -19,13 +19,13 @@
 #ifndef IDE_PREFERENCES_SWITCH_H
 #define IDE_PREFERENCES_SWITCH_H
 
-#include "ide-preferences-container.h"
+#include "ide-preferences-bin.h"
 
 G_BEGIN_DECLS
 
 #define IDE_TYPE_PREFERENCES_SWITCH (ide_preferences_switch_get_type())
 
-G_DECLARE_FINAL_TYPE (IdePreferencesSwitch, ide_preferences_switch, IDE, PREFERENCES_SWITCH, IdePreferencesContainer)
+G_DECLARE_FINAL_TYPE (IdePreferencesSwitch, ide_preferences_switch, IDE, PREFERENCES_SWITCH, IdePreferencesBin)
 
 G_END_DECLS
 

@@ -21,7 +21,7 @@
 
 struct _IdePreferencesSwitch
 {
-  IdePreferencesContainer parent_instance;
+  IdePreferencesBin parent_instance;
 
   guint     is_radio : 1;
   guint     updating : 1;
@@ -36,7 +36,7 @@ struct _IdePreferencesSwitch
   GtkImage  *image;
 };
 
-G_DEFINE_TYPE (IdePreferencesSwitch, ide_preferences_switch, IDE_TYPE_PREFERENCES_CONTAINER)
+G_DEFINE_TYPE (IdePreferencesSwitch, ide_preferences_switch, IDE_TYPE_PREFERENCES_BIN)
 
 enum {
   PROP_0,
@@ -112,7 +112,7 @@ ide_preferences_switch_constructed (GObject *object)
 
   g_assert (IDE_IS_PREFERENCES_SWITCH (self));
 
-  self->settings = ide_preferences_container_get_settings (IDE_PREFERENCES_CONTAINER (self));
+  self->settings = ide_preferences_bin_get_settings (IDE_PREFERENCES_BIN (self));
 
   if (self->settings == NULL)
     {

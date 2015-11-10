@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "ide-preferences-container.h"
+#include "ide-preferences-bin.h"
 #include "ide-preferences-group.h"
 
 struct _IdePreferencesGroup
@@ -177,7 +177,7 @@ ide_preferences_group_add (IdePreferencesGroup *self,
   gint position = -1;
 
   g_return_if_fail (IDE_IS_PREFERENCES_GROUP (self));
-  g_return_if_fail (IDE_IS_PREFERENCES_CONTAINER (widget));
+  g_return_if_fail (IDE_IS_PREFERENCES_BIN (widget));
 
   if (self->is_list)
     {

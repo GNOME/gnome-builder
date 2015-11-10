@@ -1,4 +1,4 @@
-/* ide-preferences-container.c
+/* ide-preferences-bin.c
  *
  * Copyright (C) 2015 Christian Hergert <chergert@redhat.com>
  *
@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "ide-preferences-container.h"
+#include "ide-preferences-bin.h"
 
 typedef struct
 {
@@ -29,9 +29,9 @@ typedef struct
   gchar      *path;
   GSettings  *settings;
   GHashTable *map;
-} IdePreferencesContainerPrivate;
+} IdePreferencesBinPrivate;
 
-G_DEFINE_TYPE_WITH_PRIVATE (IdePreferencesContainer, ide_preferences_container, GTK_TYPE_BIN)
+G_DEFINE_TYPE_WITH_PRIVATE (IdePreferencesBin, ide_preferences_bin, GTK_TYPE_BIN)
 
 enum {
   PROP_0,
@@ -46,10 +46,10 @@ static GParamSpec *properties [LAST_PROP];
 static GHashTable *settings_cache;
 
 static void
-ide_preferences_container_finalize (GObject *object)
+ide_preferences_bin_finalize (GObject *object)
 {
-  IdePreferencesContainer *self = (IdePreferencesContainer *)object;
-  IdePreferencesContainerPrivate *priv = ide_preferences_container_get_instance_private (self);
+  IdePreferencesBin *self = (IdePreferencesBin *)object;
+  IdePreferencesBinPrivate *priv = ide_preferences_bin_get_instance_private (self);
 
   g_clear_pointer (&priv->schema_id, g_free);
   g_clear_pointer (&priv->path, g_free);
@@ -57,17 +57,17 @@ ide_preferences_container_finalize (GObject *object)
   g_clear_pointer (&priv->map, g_hash_table_unref);
   g_clear_object (&priv->settings);
 
-  G_OBJECT_CLASS (ide_preferences_container_parent_class)->finalize (object);
+  G_OBJECT_CLASS (ide_preferences_bin_parent_class)->finalize (object);
 }
 
 static void
-ide_preferences_container_get_property (GObject    *object,
+ide_preferences_bin_get_property (GObject    *object,
                                         guint       prop_id,
                                         GValue     *value,
                                         GParamSpec *pspec)
 {
-  IdePreferencesContainer *self = IDE_PREFERENCES_CONTAINER (object);
-  IdePreferencesContainerPrivate *priv = ide_preferences_container_get_instance_private (self);
+  IdePreferencesBin *self = IDE_PREFERENCES_BIN (object);
+  IdePreferencesBinPrivate *priv = ide_preferences_bin_get_instance_private (self);
 
   switch (prop_id)
     {
@@ -93,13 +93,13 @@ ide_preferences_container_get_property (GObject    *object,
 }
 
 static void
-ide_preferences_container_set_property (GObject      *object,
+ide_preferences_bin_set_property (GObject      *object,
                                         guint         prop_id,
                                         const GValue *value,
                                         GParamSpec   *pspec)
 {
-  IdePreferencesContainer *self = IDE_PREFERENCES_CONTAINER (object);
-  IdePreferencesContainerPrivate *priv = ide_preferences_container_get_instance_private (self);
+  IdePreferencesBin *self = IDE_PREFERENCES_BIN (object);
+  IdePreferencesBinPrivate *priv = ide_preferences_bin_get_instance_private (self);
 
   switch (prop_id)
     {
@@ -125,13 +125,13 @@ ide_preferences_container_set_property (GObject      *object,
 }
 
 static void
-ide_preferences_container_class_init (IdePreferencesContainerClass *klass)
+ide_preferences_bin_class_init (IdePreferencesBinClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  object_class->finalize = ide_preferences_container_finalize;
-  object_class->get_property = ide_preferences_container_get_property;
-  object_class->set_property = ide_preferences_container_set_property;
+  object_class->finalize = ide_preferences_bin_finalize;
+  object_class->get_property = ide_preferences_bin_get_property;
+  object_class->set_property = ide_preferences_bin_set_property;
 
   properties [PROP_KEYWORDS] =
     g_param_spec_string ("keywords",
@@ -169,21 +169,21 @@ ide_preferences_container_class_init (IdePreferencesContainerClass *klass)
 }
 
 static void
-ide_preferences_container_init (IdePreferencesContainer *self)
+ide_preferences_bin_init (IdePreferencesBin *self)
 {
 }
 
 static gchar *
-ide_preferences_container_expand (IdePreferencesContainer *self,
+ide_preferences_bin_expand (IdePreferencesBin *self,
                                   const gchar             *spec)
 {
-  IdePreferencesContainerPrivate *priv = ide_preferences_container_get_instance_private (self);
+  IdePreferencesBinPrivate *priv = ide_preferences_bin_get_instance_private (self);
   GHashTableIter iter;
   const gchar *key;
   const gchar *value;
   gchar *expanded;
 
-  g_assert (IDE_IS_PREFERENCES_CONTAINER (self));
+  g_assert (IDE_IS_PREFERENCES_BIN (self));
 
   if (spec == NULL)
     return NULL;
@@ -211,7 +211,7 @@ ide_preferences_container_expand (IdePreferencesContainer *self,
 }
 
 static void
-ide_preferences_container_evict_settings (gpointer  data,
+ide_preferences_bin_evict_settings (gpointer  data,
                                           GObject  *where_object_was)
 {
   g_assert (data != NULL);
@@ -221,7 +221,7 @@ ide_preferences_container_evict_settings (gpointer  data,
 }
 
 static void
-ide_preferences_container_cache_settings (const gchar *hash_key,
+ide_preferences_bin_cache_settings (const gchar *hash_key,
                                           GSettings   *settings)
 {
   gchar *key;
@@ -231,20 +231,20 @@ ide_preferences_container_cache_settings (const gchar *hash_key,
 
   key = g_strdup (hash_key);
   g_hash_table_insert (settings_cache, key, settings);
-  g_object_weak_ref (G_OBJECT (settings), ide_preferences_container_evict_settings, key);
+  g_object_weak_ref (G_OBJECT (settings), ide_preferences_bin_evict_settings, key);
 }
 
 /**
- * ide_preferences_container_get_settings:
+ * ide_preferences_bin_get_settings:
  *
  * Returns: (nullable) (transfer full): A #GSettings
  */
 GSettings *
-ide_preferences_container_get_settings (IdePreferencesContainer *self)
+ide_preferences_bin_get_settings (IdePreferencesBin *self)
 {
-  IdePreferencesContainerPrivate *priv = ide_preferences_container_get_instance_private (self);
+  IdePreferencesBinPrivate *priv = ide_preferences_bin_get_instance_private (self);
 
-  g_return_val_if_fail (IDE_IS_PREFERENCES_CONTAINER (self), NULL);
+  g_return_val_if_fail (IDE_IS_PREFERENCES_BIN (self), NULL);
 
   if (priv->settings == NULL)
     {
@@ -255,8 +255,8 @@ ide_preferences_container_get_settings (IdePreferencesContainer *self)
       if (priv->schema_id == NULL)
         return NULL;
 
-      resolved_schema_id = ide_preferences_container_expand (self, priv->schema_id);
-      resolved_path = ide_preferences_container_expand (self, priv->path);
+      resolved_schema_id = ide_preferences_bin_expand (self, priv->schema_id);
+      resolved_path = ide_preferences_bin_expand (self, priv->path);
       hash_key = g_strdup_printf ("%s|%s",
                                   resolved_schema_id ?: "",
                                   resolved_path ?: "");
@@ -275,7 +275,7 @@ ide_preferences_container_get_settings (IdePreferencesContainer *self)
                 priv->settings = g_settings_new_with_path (resolved_schema_id, resolved_path);
               else
                 priv->settings = g_settings_new (resolved_schema_id);
-              ide_preferences_container_cache_settings (hash_key, priv->settings);
+              ide_preferences_bin_cache_settings (hash_key, priv->settings);
             }
 
           g_clear_pointer (&schema, g_settings_schema_unref);
@@ -294,12 +294,12 @@ ide_preferences_container_get_settings (IdePreferencesContainer *self)
 }
 
 void
-_ide_preferences_container_set_map (IdePreferencesContainer *self,
+_ide_preferences_bin_set_map (IdePreferencesBin *self,
                                     GHashTable              *map)
 {
-  IdePreferencesContainerPrivate *priv = ide_preferences_container_get_instance_private (self);
+  IdePreferencesBinPrivate *priv = ide_preferences_bin_get_instance_private (self);
 
-  g_return_if_fail (IDE_IS_PREFERENCES_CONTAINER (self));
+  g_return_if_fail (IDE_IS_PREFERENCES_BIN (self));
 
   if (map != priv->map)
     {

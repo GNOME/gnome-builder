@@ -21,7 +21,7 @@
 
 struct _IdePreferencesSpinButton
 {
-  IdePreferencesContainer  parent_instance;
+  IdePreferencesBin  parent_instance;
 
   guint                    updating : 1;
 
@@ -35,7 +35,7 @@ struct _IdePreferencesSpinButton
   GtkLabel                *subtitle;
 };
 
-G_DEFINE_TYPE (IdePreferencesSpinButton, ide_preferences_spin_button, IDE_TYPE_PREFERENCES_CONTAINER)
+G_DEFINE_TYPE (IdePreferencesSpinButton, ide_preferences_spin_button, IDE_TYPE_PREFERENCES_BIN)
 
 enum {
   PROP_0,
@@ -179,7 +179,7 @@ ide_preferences_spin_button_constructed (GObject *object)
 
   g_assert (IDE_IS_PREFERENCES_SPIN_BUTTON (self));
 
-  self->settings = ide_preferences_container_get_settings (IDE_PREFERENCES_CONTAINER (self));
+  self->settings = ide_preferences_bin_get_settings (IDE_PREFERENCES_BIN (self));
 
   if (self->settings == NULL)
     {

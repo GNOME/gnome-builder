@@ -272,9 +272,9 @@ libide_1_0_la_SOURCES = \
 	modelines/modeline-parser.h \
 	preferences/ide-preferences-builtin.c \
 	preferences/ide-preferences-builtin.h \
-	preferences/ide-preferences-container.c \
-	preferences/ide-preferences-container.h \
-	preferences/ide-preferences-container-private.h \
+	preferences/ide-preferences-bin.c \
+	preferences/ide-preferences-bin.h \
+	preferences/ide-preferences-bin-private.h \
 	preferences/ide-preferences-entry.c \
 	preferences/ide-preferences-entry.h \
 	preferences/ide-preferences-font-button.c \

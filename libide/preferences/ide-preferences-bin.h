@@ -1,4 +1,4 @@
-/* ide-preferences-container-private.h
+/* ide-preferences-bin.h
  *
  * Copyright (C) 2015 Christian Hergert <chergert@redhat.com>
  *
@@ -16,16 +16,24 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_PREFERENCES_CONTAINER_PRIVATE_H
-#define IDE_PREFERENCES_CONTAINER_PRIVATE_H
+#ifndef IDE_PREFERENCES_BIN_H
+#define IDE_PREFERENCES_BIN_H
 
-#include "ide-preferences-container.h"
+#include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 
-void _ide_preferences_container_set_map (IdePreferencesContainer *self,
-                                         GHashTable              *map);
+#define IDE_TYPE_PREFERENCES_BIN (ide_preferences_bin_get_type())
+
+G_DECLARE_DERIVABLE_TYPE (IdePreferencesBin, ide_preferences_bin, IDE, PREFERENCES_BIN, GtkBin)
+
+struct _IdePreferencesBinClass
+{
+  GtkBinClass parent_class;
+};
+
+GSettings *ide_preferences_bin_get_settings (IdePreferencesBin *self);
 
 G_END_DECLS
 
-#endif /* IDE_PREFERENCES_CONTAINER_PRIVATE_H */
+#endif /* IDE_PREFERENCES_BIN_H */

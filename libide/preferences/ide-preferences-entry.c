@@ -39,7 +39,7 @@ enum {
   LAST_SIGNAL
 };
 
-G_DEFINE_TYPE_WITH_PRIVATE (IdePreferencesEntry, ide_preferences_entry, IDE_TYPE_PREFERENCES_CONTAINER)
+G_DEFINE_TYPE_WITH_PRIVATE (IdePreferencesEntry, ide_preferences_entry, IDE_TYPE_PREFERENCES_BIN)
 
 static GParamSpec *properties [LAST_PROP];
 static guint signals [LAST_SIGNAL];

@@ -21,13 +21,13 @@
 
 #include <gtk/gtk.h>
 
-#include "ide-preferences-container.h"
+#include "ide-preferences-bin.h"
 
 G_BEGIN_DECLS
 
 #define IDE_TYPE_PREFERENCES_SPIN_BUTTON (ide_preferences_spin_button_get_type())
 
-G_DECLARE_FINAL_TYPE (IdePreferencesSpinButton, ide_preferences_spin_button, IDE, PREFERENCES_SPIN_BUTTON, IdePreferencesContainer)
+G_DECLARE_FINAL_TYPE (IdePreferencesSpinButton, ide_preferences_spin_button, IDE, PREFERENCES_SPIN_BUTTON, IdePreferencesBin)
 
 G_END_DECLS
 

@@ -21,17 +21,17 @@
 
 #include <gtk/gtk.h>
 
-#include "ide-preferences-container.h"
+#include "ide-preferences-bin.h"
 
 G_BEGIN_DECLS
 
 #define IDE_TYPE_PREFERENCES_ENTRY (ide_preferences_entry_get_type())
 
-G_DECLARE_DERIVABLE_TYPE (IdePreferencesEntry, ide_preferences_entry, IDE, PREFERENCES_ENTRY, IdePreferencesContainer)
+G_DECLARE_DERIVABLE_TYPE (IdePreferencesEntry, ide_preferences_entry, IDE, PREFERENCES_ENTRY, IdePreferencesBin)
 
 struct _IdePreferencesEntryClass
 {
-  IdePreferencesContainerClass parent_class;
+  IdePreferencesBinClass parent_class;
 };
 
 GtkWidget *ide_preferences_entry_get_title_widget (IdePreferencesEntry *self);

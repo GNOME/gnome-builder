@@ -25,7 +25,6 @@
 #include "ide-preferences.h"
 #include "ide-preferences-addin.h"
 #include "ide-preferences-builtin.h"
-#include "ide-preferences-container.h"
 #include "ide-preferences-font-button.h"
 #include "ide-preferences-group.h"
 #include "ide-preferences-page.h"
@@ -574,7 +573,7 @@ ide_preferences_perspective_add_custom (IdePreferences *preferences,
                                         gint            priority)
 {
   IdePreferencesPerspective *self = (IdePreferencesPerspective *)preferences;
-  IdePreferencesContainer *container;
+  IdePreferencesBin *container;
   IdePreferencesGroup *group;
   GtkWidget *page;
   guint widget_id;
@@ -601,7 +600,7 @@ ide_preferences_perspective_add_custom (IdePreferences *preferences,
       return 0;
     }
 
-  container = g_object_new (IDE_TYPE_PREFERENCES_CONTAINER,
+  container = g_object_new (IDE_TYPE_PREFERENCES_BIN,
                             "child", widget,
                             "keywords", keywords,
                             "priority", priority,

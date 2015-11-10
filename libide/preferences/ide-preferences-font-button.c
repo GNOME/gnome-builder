@@ -33,7 +33,7 @@ struct _IdePreferencesFontButton
   GtkFontChooserWidget *chooser;
 };
 
-G_DEFINE_TYPE (IdePreferencesFontButton, ide_preferences_font_button, IDE_TYPE_PREFERENCES_CONTAINER)
+G_DEFINE_TYPE (IdePreferencesFontButton, ide_preferences_font_button, IDE_TYPE_PREFERENCES_BIN)
 
 enum {
   PROP_0,
@@ -110,7 +110,7 @@ ide_preferences_font_button_constructed (GObject *object)
 
   g_assert (IDE_IS_PREFERENCES_FONT_BUTTON (self));
 
-  self->settings = ide_preferences_container_get_settings (IDE_PREFERENCES_CONTAINER (self));
+  self->settings = ide_preferences_bin_get_settings (IDE_PREFERENCES_BIN (self));
 
   if (self->settings == NULL)
     {

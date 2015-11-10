@@ -19,7 +19,7 @@
 #ifndef IDE_PREFERENCES_FONT_BUTTON_H
 #define IDE_PREFERENCES_FONT_BUTTON_H
 
-#include "ide-preferences-container.h"
+#include "ide-preferences-bin.h"
 
 G_BEGIN_DECLS
 
