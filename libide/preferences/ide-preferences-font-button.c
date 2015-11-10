@@ -23,7 +23,6 @@ struct _IdePreferencesFontButton
   GtkBin                parent_instance;
 
   GSettings            *settings;
-  gchar                *schema_id;
   gchar                *key;
 
   GtkLabel             *title;
@@ -39,7 +38,6 @@ G_DEFINE_TYPE (IdePreferencesFontButton, ide_preferences_font_button, IDE_TYPE_P
 enum {
   PROP_0,
   PROP_KEY,
-  PROP_SCHEMA_ID,
   PROP_TITLE,
   LAST_PROP
 };
@@ -108,22 +106,18 @@ static void
 ide_preferences_font_button_constructed (GObject *object)
 {
   IdePreferencesFontButton *self = (IdePreferencesFontButton *)object;
-  GSettingsSchemaSource *source;
-  g_autoptr(GSettingsSchema) schema = NULL;
   g_autofree gchar *signal_detail = NULL;
 
   g_assert (IDE_IS_PREFERENCES_FONT_BUTTON (self));
 
-  source = g_settings_schema_source_get_default ();
-  schema = g_settings_schema_source_lookup (source, self->schema_id, TRUE);
+  self->settings = ide_preferences_container_get_settings (IDE_PREFERENCES_CONTAINER (self));
 
-  if (schema == NULL || !g_settings_schema_has_key (schema, self->key))
+  if (self->settings == NULL)
     {
-      gtk_widget_set_sensitive (GTK_WIDGET (self), FALSE);
+      g_warning ("Failed to load settings for font button.");
       goto chainup;
     }
 
-  self->settings = g_settings_new (self->schema_id);
   signal_detail = g_strdup_printf ("changed::%s", self->key);
 
   g_signal_connect_object (self->settings,
@@ -144,7 +138,6 @@ ide_preferences_font_button_finalize (GObject *object)
   IdePreferencesFontButton *self = (IdePreferencesFontButton *)object;
 
   g_clear_object (&self->settings);
-  g_clear_pointer (&self->schema_id, g_free);
   g_clear_pointer (&self->key, g_free);
 
   G_OBJECT_CLASS (ide_preferences_font_button_parent_class)->finalize (object);
@@ -162,10 +155,6 @@ ide_preferences_font_button_get_property (GObject    *object,
     {
     case PROP_KEY:
       g_value_set_string (value, self->key);
-      break;
-
-    case PROP_SCHEMA_ID:
-      g_value_set_string (value, self->schema_id);
       break;
 
     case PROP_TITLE:
@@ -189,10 +178,6 @@ ide_preferences_font_button_set_property (GObject      *object,
     {
     case PROP_KEY:
       self->key = g_value_dup_string (value);
-      break;
-
-    case PROP_SCHEMA_ID:
-      self->schema_id = g_value_dup_string (value);
       break;
 
     case PROP_TITLE:
@@ -228,13 +213,6 @@ ide_preferences_font_button_class_init (IdePreferencesFontButtonClass *klass)
     g_param_spec_string ("key",
                          "Key",
                          "Key",
-                         NULL,
-                         (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
-
-  properties [PROP_SCHEMA_ID] =
-    g_param_spec_string ("schema-id",
-                         "Schema Id",
-                         "Schema Id",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 

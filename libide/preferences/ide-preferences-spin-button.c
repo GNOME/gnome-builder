@@ -26,8 +26,6 @@ struct _IdePreferencesSpinButton
   guint                    updating : 1;
 
   gchar                   *key;
-  gchar                   *path;
-  gchar                   *schema_id;
   GSettings               *settings;
 
   const GVariantType      *type;
@@ -42,8 +40,6 @@ G_DEFINE_TYPE (IdePreferencesSpinButton, ide_preferences_spin_button, IDE_TYPE_P
 enum {
   PROP_0,
   PROP_KEY,
-  PROP_PATH,
-  PROP_SCHEMA_ID,
   PROP_SUBTITLE,
   PROP_TITLE,
   LAST_PROP
@@ -170,7 +166,6 @@ static void
 ide_preferences_spin_button_constructed (GObject *object)
 {
   IdePreferencesSpinButton *self = (IdePreferencesSpinButton *)object;
-  GSettingsSchemaSource *source;
   GSettingsSchema *schema = NULL;
   GSettingsSchemaKey *key = NULL;
   GVariant *range = NULL;
@@ -184,14 +179,15 @@ ide_preferences_spin_button_constructed (GObject *object)
 
   g_assert (IDE_IS_PREFERENCES_SPIN_BUTTON (self));
 
-  source = g_settings_schema_source_get_default ();
-  schema = g_settings_schema_source_lookup (source, self->schema_id, TRUE);
+  self->settings = ide_preferences_container_get_settings (IDE_PREFERENCES_CONTAINER (self));
 
-  if (schema == NULL || !g_settings_schema_has_key (schema, self->key))
+  if (self->settings == NULL)
     {
-      gtk_widget_set_sensitive (GTK_WIDGET (self), FALSE);
+      g_warning ("Failed to load settings for spin button");
       goto chainup;
     }
+
+  g_object_get (self->settings, "settings-schema", &schema, NULL);
 
   adj = gtk_spin_button_get_adjustment (self->spin_button);
   key = g_settings_schema_get_key (schema, self->key);
@@ -212,11 +208,6 @@ ide_preferences_spin_button_constructed (GObject *object)
 
   apply_value (adj, lower, "lower");
   apply_value (adj, upper, "upper");
-
-  if (self->path != NULL)
-    self->settings = g_settings_new_with_path (self->schema_id, self->path);
-  else
-    self->settings = g_settings_new (self->schema_id);
 
   signal_detail = g_strdup_printf ("changed::%s", self->key);
 
@@ -253,8 +244,6 @@ ide_preferences_spin_button_finalize (GObject *object)
   IdePreferencesSpinButton *self = (IdePreferencesSpinButton *)object;
 
   g_clear_pointer (&self->key, g_free);
-  g_clear_pointer (&self->path, g_free);
-  g_clear_pointer (&self->schema_id, g_free);
   g_clear_object (&self->settings);
 
   G_OBJECT_CLASS (ide_preferences_spin_button_parent_class)->finalize (object);
@@ -272,14 +261,6 @@ ide_preferences_spin_button_get_property (GObject    *object,
     {
     case PROP_KEY:
       g_value_set_string (value, self->key);
-      break;
-
-    case PROP_PATH:
-      g_value_set_string (value, self->path);
-      break;
-
-    case PROP_SCHEMA_ID:
-      g_value_set_string (value, self->schema_id);
       break;
 
     case PROP_SUBTITLE:
@@ -307,14 +288,6 @@ ide_preferences_spin_button_set_property (GObject      *object,
     {
     case PROP_KEY:
       self->key = g_value_dup_string (value);
-      break;
-
-    case PROP_PATH:
-      self->path = g_value_dup_string (value);
-      break;
-
-    case PROP_SCHEMA_ID:
-      self->schema_id = g_value_dup_string (value);
       break;
 
     case PROP_SUBTITLE:
@@ -359,20 +332,6 @@ ide_preferences_spin_button_class_init (IdePreferencesSpinButtonClass *klass)
     g_param_spec_string ("key",
                          "Key",
                          "Key",
-                         NULL,
-                         (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
-
-  properties [PROP_SCHEMA_ID] =
-    g_param_spec_string ("schema-id",
-                         "schema-id",
-                         "schema-id",
-                         NULL,
-                         (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
-
-  properties [PROP_PATH] =
-    g_param_spec_string ("path",
-                         "path",
-                         "path",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 

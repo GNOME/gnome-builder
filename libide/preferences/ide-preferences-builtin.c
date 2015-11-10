@@ -289,18 +289,32 @@ ide_preferences_builtin_register_languages (IdePreferences *preferences)
   for (i = 0; language_ids [i]; i++)
     {
       GtkSourceLanguage *language;
+      GtkBox *box;
+      GtkImage *arrow;
+      GtkLabel *title;
       const gchar *name;
 
       language = gtk_source_language_manager_get_language (manager, language_ids [i]);
       name = gtk_source_language_get_name (language);
 
-      ide_preferences_add_custom (preferences, "languages", "list",
-                                  g_object_new (GTK_TYPE_LABEL,
-                                                "xalign", 0.0f,
-                                                "visible", TRUE,
-                                                "label", name,
-                                                NULL),
-                                  NULL, 0);
+      box = g_object_new (GTK_TYPE_BOX,
+                          "visible", TRUE,
+                          "orientation", GTK_ORIENTATION_HORIZONTAL,
+                          NULL);
+      title = g_object_new (GTK_TYPE_LABEL,
+                            "hexpand", TRUE,
+                            "label", name,
+                            "visible", TRUE,
+                            "xalign", 0.0f,
+                            NULL);
+      arrow = g_object_new (GTK_TYPE_IMAGE,
+                            "icon-name", "pan-end-symbolic",
+                            "visible", TRUE,
+                            NULL);
+      gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (title));
+      gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (arrow));
+
+      ide_preferences_add_custom (preferences, "languages", "list", GTK_WIDGET (box), NULL, 0);
     }
 }
 

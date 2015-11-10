@@ -274,6 +274,7 @@ libide_1_0_la_SOURCES = \
 	preferences/ide-preferences-builtin.h \
 	preferences/ide-preferences-container.c \
 	preferences/ide-preferences-container.h \
+	preferences/ide-preferences-container-private.h \
 	preferences/ide-preferences-entry.c \
 	preferences/ide-preferences-entry.h \
 	preferences/ide-preferences-font-button.c \

@@ -27,10 +27,8 @@ struct _IdePreferencesSwitch
   guint     updating : 1;
 
   gchar     *key;
-  gchar     *schema_id;
-  gchar     *path;
-  GSettings *settings;
   GVariant  *target;
+  GSettings *settings;
 
   GtkLabel  *subtitle;
   GtkLabel  *title;
@@ -44,8 +42,6 @@ enum {
   PROP_0,
   PROP_IS_RADIO,
   PROP_KEY,
-  PROP_PATH,
-  PROP_SCHEMA_ID,
   PROP_SUBTITLE,
   PROP_TARGET,
   PROP_TITLE,
@@ -112,25 +108,17 @@ static void
 ide_preferences_switch_constructed (GObject *object)
 {
   IdePreferencesSwitch *self = (IdePreferencesSwitch *)object;
-  GSettingsSchemaSource *source;
-  g_autoptr(GSettingsSchema) schema = NULL;
   g_autofree gchar *signal_detail = NULL;
 
   g_assert (IDE_IS_PREFERENCES_SWITCH (self));
 
-  source = g_settings_schema_source_get_default ();
-  schema = g_settings_schema_source_lookup (source, self->schema_id, TRUE);
+  self->settings = ide_preferences_container_get_settings (IDE_PREFERENCES_CONTAINER (self));
 
-  if (schema == NULL || !g_settings_schema_has_key (schema, self->key))
+  if (self->settings == NULL)
     {
-      gtk_widget_set_sensitive (GTK_WIDGET (self), FALSE);
+      g_warning ("Failed to load settings for switch");
       goto chainup;
     }
-
-  if (self->path != NULL)
-    self->settings = g_settings_new_with_path (self->schema_id, self->path);
-  else
-    self->settings = g_settings_new (self->schema_id);
 
   signal_detail = g_strdup_printf ("changed::%s", self->key);
 
@@ -253,8 +241,6 @@ ide_preferences_switch_finalize (GObject *object)
   IdePreferencesSwitch *self = (IdePreferencesSwitch *)object;
 
   g_clear_pointer (&self->key, g_free);
-  g_clear_pointer (&self->schema_id, g_free);
-  g_clear_pointer (&self->path, g_free);
   g_clear_pointer (&self->target, g_variant_unref);
   g_clear_object (&self->settings);
 
@@ -275,16 +261,8 @@ ide_preferences_switch_get_property (GObject    *object,
       g_value_set_boolean (value, self->is_radio);
       break;
 
-    case PROP_SCHEMA_ID:
-      g_value_set_string (value, self->schema_id);
-      break;
-
     case PROP_KEY:
       g_value_set_string (value, self->key);
-      break;
-
-    case PROP_PATH:
-      g_value_set_string (value, self->path);
       break;
 
     case PROP_TARGET:
@@ -320,16 +298,8 @@ ide_preferences_switch_set_property (GObject      *object,
       gtk_widget_set_visible (GTK_WIDGET (self->image), self->is_radio);
       break;
 
-    case PROP_SCHEMA_ID:
-      self->schema_id = g_value_dup_string (value);
-      break;
-
     case PROP_KEY:
       self->key = g_value_dup_string (value);
-      break;
-
-    case PROP_PATH:
-      self->path = g_value_dup_string (value);
       break;
 
     case PROP_TARGET:
@@ -379,12 +349,6 @@ ide_preferences_switch_class_init (IdePreferencesSwitchClass *klass)
                          FALSE,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
-  properties [PROP_SCHEMA_ID] =
-    g_param_spec_string ("schema-id",
-                         "Schema Id",
-                         "Schema Id",
-                         NULL,
-                         (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_TARGET] =
     g_param_spec_variant ("target",
@@ -398,13 +362,6 @@ ide_preferences_switch_class_init (IdePreferencesSwitchClass *klass)
     g_param_spec_string ("key",
                          "Key",
                          "Key",
-                         NULL,
-                         (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
-
-  properties [PROP_PATH] =
-    g_param_spec_string ("path",
-                         "Path",
-                         "Path",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
