@@ -196,7 +196,8 @@ workbench IdePreferencesPerspective IdePreferencesGroup row:last-child {
   border-bottom: none;
 }
 
-workbench IdePreferencesContainer entry {
-  background: none;
+workbench IdePreferencesBin entry {
+  background: transparent;
+  box-shadow: none;
   opacity: 0.50;
 }
