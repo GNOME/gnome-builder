@@ -30,9 +30,12 @@ G_DECLARE_DERIVABLE_TYPE (IdePreferencesBin, ide_preferences_bin, IDE, PREFERENC
 struct _IdePreferencesBinClass
 {
   GtkBinClass parent_class;
-};
 
-GSettings *ide_preferences_bin_get_settings (IdePreferencesBin *self);
+  void (*connect)    (IdePreferencesBin *self,
+                      GSettings         *settings);
+  void (*disconnect) (IdePreferencesBin *self,
+                      GSettings         *settings);
+};
 
 G_END_DECLS
 

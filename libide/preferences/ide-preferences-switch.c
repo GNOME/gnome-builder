@@ -26,6 +26,8 @@ struct _IdePreferencesSwitch
   guint     is_radio : 1;
   guint     updating : 1;
 
+  gulong    handler;
+
   gchar     *key;
   GVariant  *target;
   GSettings *settings;
@@ -105,33 +107,38 @@ ide_preferences_switch_changed (IdePreferencesSwitch *self,
 }
 
 static void
-ide_preferences_switch_constructed (GObject *object)
+ide_preferences_switch_connect (IdePreferencesBin *bin,
+                                GSettings         *settings)
 {
-  IdePreferencesSwitch *self = (IdePreferencesSwitch *)object;
+  IdePreferencesSwitch *self = (IdePreferencesSwitch *)bin;
   g_autofree gchar *signal_detail = NULL;
 
   g_assert (IDE_IS_PREFERENCES_SWITCH (self));
 
-  self->settings = ide_preferences_bin_get_settings (IDE_PREFERENCES_BIN (self));
-
-  if (self->settings == NULL)
-    {
-      g_warning ("Failed to load settings for switch");
-      goto chainup;
-    }
-
   signal_detail = g_strdup_printf ("changed::%s", self->key);
 
-  g_signal_connect_object (self->settings,
-                           signal_detail,
-                           G_CALLBACK (ide_preferences_switch_changed),
-                           self,
-                           G_CONNECT_SWAPPED);
+  self->settings = g_object_ref (settings);
 
-  ide_preferences_switch_changed (self, self->key, self->settings);
+  self->handler =
+    g_signal_connect_object (settings,
+                             signal_detail,
+                             G_CALLBACK (ide_preferences_switch_changed),
+                             self,
+                             G_CONNECT_SWAPPED);
 
-chainup:
-  G_OBJECT_CLASS (ide_preferences_switch_parent_class)->constructed (object);
+  ide_preferences_switch_changed (self, self->key, settings);
+}
+
+static void
+ide_preferences_switch_disconnect (IdePreferencesBin *bin,
+                                   GSettings         *settings)
+{
+  IdePreferencesSwitch *self = (IdePreferencesSwitch *)bin;
+
+  g_assert (IDE_IS_PREFERENCES_SWITCH (self));
+
+  g_signal_handler_disconnect (settings, self->handler);
+  self->handler = 0;
 }
 
 static void
@@ -327,11 +334,14 @@ ide_preferences_switch_class_init (IdePreferencesSwitchClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+  IdePreferencesBinClass *bin_class = IDE_PREFERENCES_BIN_CLASS (klass);
 
-  object_class->constructed = ide_preferences_switch_constructed;
   object_class->finalize = ide_preferences_switch_finalize;
   object_class->get_property = ide_preferences_switch_get_property;
   object_class->set_property = ide_preferences_switch_set_property;
+
+  bin_class->connect = ide_preferences_switch_connect;
+  bin_class->disconnect = ide_preferences_switch_disconnect;
 
   signals [ACTIVATED] =
     g_signal_new_class_handler ("activated",

@@ -21,7 +21,9 @@
 
 struct _IdePreferencesSpinButton
 {
-  IdePreferencesBin  parent_instance;
+  IdePreferencesBin        parent_instance;
+
+  gulong                   handler;
 
   guint                    updating : 1;
 
@@ -163,9 +165,10 @@ ide_preferences_spin_button_setting_changed (IdePreferencesSpinButton *self,
 }
 
 static void
-ide_preferences_spin_button_constructed (GObject *object)
+ide_preferences_spin_button_connect (IdePreferencesBin *bin,
+                                     GSettings         *settings)
 {
-  IdePreferencesSpinButton *self = (IdePreferencesSpinButton *)object;
+  IdePreferencesSpinButton *self = (IdePreferencesSpinButton *)bin;
   GSettingsSchema *schema = NULL;
   GSettingsSchemaKey *key = NULL;
   GVariant *range = NULL;
@@ -179,13 +182,7 @@ ide_preferences_spin_button_constructed (GObject *object)
 
   g_assert (IDE_IS_PREFERENCES_SPIN_BUTTON (self));
 
-  self->settings = ide_preferences_bin_get_settings (IDE_PREFERENCES_BIN (self));
-
-  if (self->settings == NULL)
-    {
-      g_warning ("Failed to load settings for spin button");
-      goto chainup;
-    }
+  self->settings = g_object_ref (settings);
 
   g_object_get (self->settings, "settings-schema", &schema, NULL);
 
@@ -198,7 +195,7 @@ ide_preferences_spin_button_constructed (GObject *object)
   if (!ide_str_equal0 (type, "range") || (2 != g_variant_iter_init (&iter, values)))
     {
       gtk_widget_set_sensitive (GTK_WIDGET (self), FALSE);
-      goto chainup;
+      goto cleanup;
     }
 
   lower = g_variant_iter_next_value (&iter);
@@ -211,23 +208,16 @@ ide_preferences_spin_button_constructed (GObject *object)
 
   signal_detail = g_strdup_printf ("changed::%s", self->key);
 
-  g_signal_connect_object (self->settings,
-                           signal_detail,
-                           G_CALLBACK (ide_preferences_spin_button_setting_changed),
-                           self,
-                           G_CONNECT_SWAPPED);
+  self->handler =
+    g_signal_connect_object (self->settings,
+                             signal_detail,
+                             G_CALLBACK (ide_preferences_spin_button_setting_changed),
+                             self,
+                             G_CONNECT_SWAPPED);
 
   ide_preferences_spin_button_setting_changed (self, self->key, self->settings);
 
-  g_signal_connect_object (self->spin_button,
-                           "notify::value",
-                           G_CALLBACK (ide_preferences_spin_button_value_changed),
-                           self,
-                           G_CONNECT_SWAPPED);
-
-chainup:
-  G_OBJECT_CLASS (ide_preferences_spin_button_parent_class)->constructed (object);
-
+cleanup:
   g_clear_pointer (&key, g_settings_schema_key_unref);
   g_clear_pointer (&type, g_free);
   g_clear_pointer (&signal_detail, g_free);
@@ -236,6 +226,18 @@ chainup:
   g_clear_pointer (&lower, g_variant_unref);
   g_clear_pointer (&upper, g_variant_unref);
   g_clear_pointer (&schema, g_settings_schema_unref);
+}
+
+static void
+ide_preferences_spin_button_disconnect (IdePreferencesBin *bin,
+                                        GSettings         *settings)
+{
+  IdePreferencesSpinButton *self = (IdePreferencesSpinButton *)bin;
+
+  g_assert (IDE_IS_PREFERENCES_SPIN_BUTTON (self));
+
+  g_signal_handler_disconnect (settings, self->handler);
+  self->handler = 0;
 }
 
 static void
@@ -308,11 +310,14 @@ ide_preferences_spin_button_class_init (IdePreferencesSpinButtonClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+  IdePreferencesBinClass *bin_class = IDE_PREFERENCES_BIN_CLASS (klass);
 
-  object_class->constructed = ide_preferences_spin_button_constructed;
   object_class->finalize = ide_preferences_spin_button_finalize;
   object_class->get_property = ide_preferences_spin_button_get_property;
   object_class->set_property = ide_preferences_spin_button_set_property;
+
+  bin_class->connect = ide_preferences_spin_button_connect;
+  bin_class->disconnect = ide_preferences_spin_button_disconnect;
 
   signals [ACTIVATE] =
     g_signal_new_class_handler ("activate",
@@ -365,4 +370,10 @@ ide_preferences_spin_button_init (IdePreferencesSpinButton *self)
                 "page-increment", 10.0,
                 "page-size", 10.0,
                 NULL);
+
+  g_signal_connect_object (self->spin_button,
+                           "notify::value",
+                           G_CALLBACK (ide_preferences_spin_button_value_changed),
+                           self,
+                           G_CONNECT_SWAPPED);
 }

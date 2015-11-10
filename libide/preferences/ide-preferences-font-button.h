@@ -25,7 +25,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_PREFERENCES_FONT_BUTTON (ide_preferences_font_button_get_type())
 
-G_DECLARE_FINAL_TYPE (IdePreferencesFontButton, ide_preferences_font_button, IDE, PREFERENCES_FONT_BUTTON, GtkBin)
+G_DECLARE_FINAL_TYPE (IdePreferencesFontButton, ide_preferences_font_button, IDE, PREFERENCES_FONT_BUTTON, IdePreferencesBin)
 
 G_END_DECLS
 
