@@ -946,10 +946,11 @@
 
   bind "Up"    { "begin-macro" ()
                  "movement" (line-end, 0, 0, 0)
-                 "movement" (previous-line, 1, 1, 0)
-                 "movement" (previous-line, 1, 1, 1)
+                 "movement" (previous-line, 1, 0, 0)
+                 "movement" (previous-line, 1, 0, 1)
                  "copy-clipboard" ()
                  "delete-selection" ()
+                 "movement" (first-nonspace-char, 0, 1, 0)
                  "end-macro" () };
   bind "k"     { "begin-macro" ()
                  "movement" (line-end, 0, 0, 0)
@@ -957,6 +958,7 @@
                  "movement" (previous-line, 1, 0, 1)
                  "copy-clipboard" ()
                  "delete-selection" ()
+                 "movement" (first-nonspace-char, 0, 1, 0)
                  "end-macro" () };
 
   bind "Down"  { "begin-macro" ()
@@ -965,6 +967,7 @@
                  "movement" (next-line, 1, 0, 1)
                  "copy-clipboard" ()
                  "delete-selection" ()
+                 "movement" (first-nonspace-char, 0, 1, 0)
                  "end-macro" () };
   bind "j"     { "begin-macro" ()
                  "movement" (first-char, 0, 1, 0)
@@ -972,6 +975,7 @@
                  "movement" (next-line, 1, 0, 1)
                  "copy-clipboard" ()
                  "delete-selection" ()
+                 "movement" (first-nonspace-char, 0, 1, 0)
                  "end-macro" () };
 
   bind "i" { "set-mode" ("vim-normal-d-i", transient) };
