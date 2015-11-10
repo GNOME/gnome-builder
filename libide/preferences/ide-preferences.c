@@ -16,6 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <string.h>
+
 #include "ide-preferences.h"
 
 G_DEFINE_INTERFACE (IdePreferences, ide_preferences, G_TYPE_OBJECT)
@@ -33,7 +35,7 @@ ide_preferences_add_page (IdePreferences *self,
 {
   g_return_if_fail (IDE_IS_PREFERENCES (self));
   g_return_if_fail (page_name != NULL);
-  g_return_if_fail (title != NULL);
+  g_return_if_fail ((title != NULL) || (strchr (page_name, '.') != NULL));
 
   IDE_PREFERENCES_GET_IFACE (self)->add_page (self, page_name, title, priority);
 }

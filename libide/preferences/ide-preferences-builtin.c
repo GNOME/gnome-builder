@@ -316,6 +316,20 @@ ide_preferences_builtin_register_languages (IdePreferences *preferences)
 
       ide_preferences_add_custom (preferences, "languages", "list", GTK_WIDGET (box), NULL, 0);
     }
+
+  ide_preferences_add_page (preferences, "languages.id", NULL, 0);
+
+  ide_preferences_add_list_group (preferences, "languages.id", "basic", NULL, 0);
+  ide_preferences_add_switch (preferences, "languages.id", "basic", "org.gnome.builder.editor.language", "trim-trailing-whitespace", "/org/gnome/builder/editor/language/{id}", NULL, _("Trim trialing whitespace"), _("Upon saving, trailing whitespcae from modified lines will be trimmed."), NULL, 10);
+
+  ide_preferences_add_list_group (preferences, "languages.id", "margin", NULL, 0);
+  ide_preferences_add_radio (preferences, "languages.id", "margin", "org.gnome.builder.editor.language", "show-right-margin", "/org/gnome/builder/editor/language/{id}", NULL, _("Show right margin"), NULL, NULL, 0);
+  ide_preferences_add_spin_button (preferences, "languages.id", "margin", "org.gnome.builder.editor.language", "right-margin-position", "/org/gnome/builder/editor/language/{id}", _("Right margin position"), NULL, NULL, 10);
+
+  ide_preferences_add_list_group (preferences, "languages.id", "indentation", _("Indentation"), 100);
+  ide_preferences_add_spin_button (preferences, "languages.id", "indentation", "org.gnome.builder.editor.language", "tab-width", "/org/gnome/builder/editor/language/{id}", _("Tab width"), NULL, NULL, 10);
+  ide_preferences_add_radio (preferences, "languages.id", "indentation", "org.gnome.builder.editor.language", "insert-spaces-instead-of-tabs", "/org/gnome/builder/editor/language/{id}", NULL, _("Insert spaces instead of tabs"), NULL, NULL, 20);
+  ide_preferences_add_radio (preferences, "languages.id", "indentation", "org.gnome.builder.editor.language", "auto-indent", "/org/gnome/builder/editor/language/{id}", NULL, _("Auto indent"), _("Indent source code as you type"), NULL, 30);
 }
 
 void

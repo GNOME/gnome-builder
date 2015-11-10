@@ -45,6 +45,8 @@ struct _IdePreferencesPerspective
 
   GtkStack              *page_stack;
   GtkStackSwitcher      *page_stack_sidebar;
+  GtkStack              *subpage_stack;
+  GtkStack              *top_stack;
   IdeWorkbenchHeaderBar *titlebar;
 };
 
@@ -54,13 +56,6 @@ static void ide_perspective_iface_init (IdePerspectiveInterface *iface);
 G_DEFINE_TYPE_EXTENDED (IdePreferencesPerspective, ide_preferences_perspective, GTK_TYPE_BIN, 0,
                         G_IMPLEMENT_INTERFACE (IDE_TYPE_PREFERENCES, ide_preferences_iface_init)
                         G_IMPLEMENT_INTERFACE (IDE_TYPE_PERSPECTIVE, ide_perspective_iface_init))
-
-enum {
-  PROP_0,
-  LAST_PROP
-};
-
-static GParamSpec *properties [LAST_PROP];
 
 static gint
 sort_by_priority (gconstpointer a,
@@ -138,36 +133,6 @@ ide_preferences_perspective_finalize (GObject *object)
 }
 
 static void
-ide_preferences_perspective_get_property (GObject    *object,
-                                          guint       prop_id,
-                                          GValue     *value,
-                                          GParamSpec *pspec)
-{
-  //IdePreferencesPerspective *self = IDE_PREFERENCES_PERSPECTIVE (object);
-
-  switch (prop_id)
-    {
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-    }
-}
-
-static void
-ide_preferences_perspective_set_property (GObject      *object,
-                                          guint         prop_id,
-                                          const GValue *value,
-                                          GParamSpec   *pspec)
-{
-  //IdePreferencesPerspective *self = IDE_PREFERENCES_PERSPECTIVE (object);
-
-  switch (prop_id)
-    {
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-    }
-}
-
-static void
 ide_preferences_perspective_class_init (IdePreferencesPerspectiveClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -175,13 +140,13 @@ ide_preferences_perspective_class_init (IdePreferencesPerspectiveClass *klass)
 
   object_class->constructed = ide_preferences_perspective_constructed;
   object_class->finalize = ide_preferences_perspective_finalize;
-  object_class->get_property = ide_preferences_perspective_get_property;
-  object_class->set_property = ide_preferences_perspective_set_property;
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/ui/ide-preferences-perspective.ui");
   gtk_widget_class_bind_template_child (widget_class, IdePreferencesPerspective, page_stack_sidebar);
   gtk_widget_class_bind_template_child (widget_class, IdePreferencesPerspective, page_stack);
+  gtk_widget_class_bind_template_child (widget_class, IdePreferencesPerspective, subpage_stack);
   gtk_widget_class_bind_template_child (widget_class, IdePreferencesPerspective, titlebar);
+  gtk_widget_class_bind_template_child (widget_class, IdePreferencesPerspective, top_stack);
 }
 
 static void
@@ -191,6 +156,21 @@ ide_preferences_perspective_init (IdePreferencesPerspective *self)
 
   self->pages = g_sequence_new (NULL);
   self->widgets = g_hash_table_new (g_direct_hash, g_direct_equal);
+
+  gtk_stack_set_visible_child (self->top_stack, GTK_WIDGET (self->page_stack));
+}
+
+static GtkWidget *
+ide_preferences_perspective_get_page (IdePreferencesPerspective *self,
+                                      const gchar               *page_name)
+{
+  g_assert (IDE_IS_PREFERENCES_PERSPECTIVE (self));
+  g_assert (page_name != NULL);
+
+  if (strchr (page_name, '.') != NULL)
+    return gtk_stack_get_child_by_name (self->subpage_stack, page_name);
+  else
+    return gtk_stack_get_child_by_name (self->page_stack, page_name);
 }
 
 static void
@@ -202,26 +182,35 @@ ide_preferences_perspective_add_page (IdePreferences *preferences,
   IdePreferencesPerspective *self = (IdePreferencesPerspective *)preferences;
   IdePreferencesPage *page;
   GSequenceIter *iter;
+  GtkStack *stack;
+  gint position = -1;
 
   g_assert (IDE_IS_PREFERENCES (preferences));
   g_assert (IDE_IS_PREFERENCES_PERSPECTIVE (self));
   g_assert (page_name != NULL);
-  g_assert (title != NULL);
+  g_assert (title != NULL || strchr (page_name, '.'));
 
-  if (gtk_stack_get_child_by_name (self->page_stack, page_name))
-    {
-      g_warning ("A preference page named %s has already been registered.",
-                 page_name);
-      return;
-    }
+  if (strchr (page_name, '.') != NULL)
+    stack = self->subpage_stack;
+  else
+    stack = self->page_stack;
+
+  if (gtk_stack_get_child_by_name (stack, page_name))
+    return;
 
   page = g_object_new (IDE_TYPE_PREFERENCES_PAGE,
                        "priority", priority,
                        "visible", TRUE,
                        NULL);
-  iter = g_sequence_insert_sorted (self->pages, page, sort_by_priority, NULL);
-  gtk_container_add_with_properties (GTK_CONTAINER (self->page_stack), GTK_WIDGET (page),
-                                     "position", g_sequence_iter_get_position (iter),
+
+  if (stack == self->page_stack)
+    {
+      iter = g_sequence_insert_sorted (self->pages, page, sort_by_priority, NULL);
+      position = g_sequence_iter_get_position (iter);
+    }
+
+  gtk_container_add_with_properties (GTK_CONTAINER (stack), GTK_WIDGET (page),
+                                     "position", position,
                                      "name", page_name,
                                      "title", title,
                                      NULL);
@@ -242,7 +231,7 @@ ide_preferences_perspective_add_group (IdePreferences *preferences,
   g_assert (page_name != NULL);
   g_assert (group_name != NULL);
 
-  page = gtk_stack_get_child_by_name (self->page_stack, page_name);
+  page = ide_preferences_perspective_get_page (self, page_name);
 
   if (page == NULL)
     {
@@ -274,7 +263,7 @@ ide_preferences_perspective_add_list_group  (IdePreferences *preferences,
   g_assert (page_name != NULL);
   g_assert (group_name != NULL);
 
-  page = gtk_stack_get_child_by_name (self->page_stack, page_name);
+  page = ide_preferences_perspective_get_page (self, page_name);
 
   if (page == NULL)
     {
@@ -319,7 +308,7 @@ ide_preferences_perspective_add_radio (IdePreferences *preferences,
   g_assert (key != NULL);
   g_assert (title != NULL);
 
-  page = gtk_stack_get_child_by_name (self->page_stack, page_name);
+  page = ide_preferences_perspective_get_page (self, page_name);
 
   if (page == NULL)
     {
@@ -396,7 +385,7 @@ ide_preferences_perspective_add_switch (IdePreferences *preferences,
   g_assert (key != NULL);
   g_assert (title != NULL);
 
-  page = gtk_stack_get_child_by_name (self->page_stack, page_name);
+  page = ide_preferences_perspective_get_page (self, page_name);
 
   if (page == NULL)
     {
@@ -470,7 +459,7 @@ ide_preferences_perspective_add_spin_button (IdePreferences *preferences,
   g_assert (key != NULL);
   g_assert (title != NULL);
 
-  page = gtk_stack_get_child_by_name (self->page_stack, page_name);
+  page = ide_preferences_perspective_get_page (self, page_name);
 
   if (page == NULL)
     {
@@ -530,7 +519,7 @@ ide_preferences_perspective_add_font_button (IdePreferences *preferences,
   g_assert (key != NULL);
   g_assert (title != NULL);
 
-  page = gtk_stack_get_child_by_name (self->page_stack, page_name);
+  page = ide_preferences_perspective_get_page (self, page_name);
 
   if (page == NULL)
     {
@@ -583,7 +572,7 @@ ide_preferences_perspective_add_custom (IdePreferences *preferences,
   g_assert (group_name != NULL);
   g_assert (GTK_IS_WIDGET (widget));
 
-  page = gtk_stack_get_child_by_name (self->page_stack, page_name);
+  page = ide_preferences_perspective_get_page (self, page_name);
 
   if (page == NULL)
     {
