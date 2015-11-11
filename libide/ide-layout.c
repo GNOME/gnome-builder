@@ -1067,6 +1067,8 @@ ide_layout_class_init (IdeLayoutClass *klass)
   widget_class->size_allocate = ide_layout_size_allocate;
   widget_class->grab_focus = ide_layout_grab_focus;
 
+  gtk_widget_class_set_css_name (widget_class, "layout");
+
   container_class->get_child_property = ide_layout_get_child_property;
   container_class->set_child_property = ide_layout_set_child_property;
 

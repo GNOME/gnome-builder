@@ -3,25 +3,25 @@
   <!-- interface-requires gtk+ 3.8 -->
   <template class="IdeLayout" parent="GtkOverlay">
     <child type="overlay">
-      <object class="GbWorkspacePane" id="left_pane">
+      <object class="IdeLayoutPane" id="left_pane">
         <property name="position">left</property>
         <property name="visible">true</property>
       </object>
     </child>
     <child type="overlay">
-      <object class="GbWorkspacePane" id="right_pane">
+      <object class="IdeLayoutPane" id="right_pane">
         <property name="position">right</property>
         <property name="visible">true</property>
       </object>
     </child>
     <child type="overlay">
-      <object class="GbWorkspacePane" id="bottom_pane">
+      <object class="IdeLayoutPane" id="bottom_pane">
         <property name="position">bottom</property>
         <property name="visible">true</property>
       </object>
     </child>
     <child type="overlay">
-      <object class="GbWorkspacePane" id="content_pane">
+      <object class="IdeLayoutPane" id="content_pane">
         <property name="position">top</property>
         <property name="visible">true</property>
       </object>

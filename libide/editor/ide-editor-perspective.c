@@ -112,9 +112,16 @@ ide_editor_perspective_get_icon_name (IdePerspective *perspective)
   return g_strdup ("text-editor-symbolic");
 }
 
+static gchar *
+ide_editor_perspective_get_id (IdePerspective *perspective)
+{
+  return g_strdup ("editor");
+}
+
 static void
 ide_perspective_iface_init (IdePerspectiveInterface *iface)
 {
+  iface->get_id = ide_editor_perspective_get_id;
   iface->get_title = ide_editor_perspective_get_title;
   iface->get_titlebar = ide_editor_perspective_get_titlebar;
   iface->get_icon_name = ide_editor_perspective_get_icon_name;

@@ -127,11 +127,11 @@ greeter > GtkBox.vertical > scrolledwindow > viewport.frame {
 }
 
 
-GbWorkspacePane {
-  -GbWorkspacePane-handle-size: 1;
+layoutpane {
+  -IdeLayoutPane-handle-size: 1;
   -gtk-icon-source: none;
 }
-GbWorkspacePane .pane-separator {
+layoutpane .pane-separator {
   background-color: @borders;
 }
 

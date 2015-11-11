@@ -98,9 +98,11 @@ G_BEGIN_DECLS
 #include "ide-types.h"
 #include "ide-unsaved-file.h"
 #include "ide-unsaved-files.h"
+#include "ide-view.h"
 #include "ide-vcs.h"
 #include "ide-vcs-uri.h"
 #include "ide-workbench.h"
+#include "ide-workbench-addin.h"
 
 #include "directory/ide-directory-vcs.h"
 #include "doap/ide-doap-person.h"

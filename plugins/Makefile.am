@@ -12,6 +12,7 @@ SUBDIRS = \
 	html-completion \
 	html-preview \
 	jedi \
+	project-tree \
 	python-gi-imports-completion \
 	mingw \
 	python-pack \

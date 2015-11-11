@@ -276,6 +276,8 @@ ide_layout_pane_class_init (IdeLayoutPaneClass *klass)
   widget_class->hierarchy_changed = ide_layout_pane_hierarchy_changed;
   widget_class->size_allocate = ide_layout_pane_size_allocate;
 
+  gtk_widget_class_set_css_name (widget_class, "layoutpane");
+
   /**
    * IdeLayoutPane:position:
    *
