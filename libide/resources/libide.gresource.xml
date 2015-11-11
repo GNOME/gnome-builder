@@ -28,6 +28,7 @@
     <file alias="ui/ide-preferences-entry.ui">../../data/ui/ide-preferences-entry.ui</file>
     <file alias="ui/ide-preferences-font-button.ui">../../data/ui/ide-preferences-font-button.ui</file>
     <file alias="ui/ide-preferences-group.ui">../../data/ui/ide-preferences-group.ui</file>
+    <file alias="ui/ide-preferences-language-row.ui">../../data/ui/ide-preferences-language-row.ui</file>
     <file alias="ui/ide-preferences-page.ui">../../data/ui/ide-preferences-page.ui</file>
     <file alias="ui/ide-preferences-perspective.ui">../../data/ui/ide-preferences-perspective.ui</file>
     <file alias="ui/ide-preferences-spin-button.ui">../../data/ui/ide-preferences-spin-button.ui</file>

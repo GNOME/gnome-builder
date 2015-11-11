@@ -179,3 +179,14 @@ ide_preferences_add_font_button (IdePreferences *self,
 
   return IDE_PREFERENCES_GET_IFACE (self)->add_font_button (self, page_name, group_name, schema_id, key, title, keywords, priority);
 }
+
+void
+ide_preferences_set_page (IdePreferences *self,
+                          const gchar    *page_name,
+                          GHashTable     *map)
+{
+  g_return_if_fail (IDE_IS_PREFERENCES (self));
+  g_return_if_fail (page_name != NULL);
+
+  IDE_PREFERENCES_GET_IFACE (self)->set_page (self, page_name, map);
+}

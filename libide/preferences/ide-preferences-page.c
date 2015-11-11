@@ -19,7 +19,9 @@
 #include <glib/gi18n.h>
 
 #include "ide-preferences-group.h"
+#include "ide-preferences-group-private.h"
 #include "ide-preferences-page.h"
+#include "ide-preferences-page-private.h"
 
 struct _IdePreferencesPage
 {
@@ -155,4 +157,19 @@ ide_preferences_page_get_group (IdePreferencesPage *self,
   g_return_val_if_fail (name != NULL, NULL);
 
   return g_hash_table_lookup (self->groups_by_name, name);
+}
+
+void
+_ide_preferences_page_set_map (IdePreferencesPage *self,
+                               GHashTable         *map)
+{
+  IdePreferencesGroup *group;
+  GHashTableIter iter;
+
+  g_return_if_fail (IDE_IS_PREFERENCES_PAGE (self));
+
+  g_hash_table_iter_init (&iter, self->groups_by_name);
+
+  while (g_hash_table_iter_next (&iter, NULL, (gpointer *)&group))
+    _ide_preferences_group_set_map (group, map);
 }

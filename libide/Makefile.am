@@ -281,8 +281,12 @@ libide_1_0_la_SOURCES = \
 	preferences/ide-preferences-font-button.h \
 	preferences/ide-preferences-group.c \
 	preferences/ide-preferences-group.h \
+	preferences/ide-preferences-group-private.h \
+	preferences/ide-preferences-language-row.c \
+	preferences/ide-preferences-language-row.h \
 	preferences/ide-preferences-page.c \
 	preferences/ide-preferences-page.h \
+	preferences/ide-preferences-page-private.h \
 	preferences/ide-preferences-perspective.c \
 	preferences/ide-preferences-perspective.h \
 	preferences/ide-preferences-spin-button.c \

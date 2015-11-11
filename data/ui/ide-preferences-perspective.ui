@@ -39,5 +39,16 @@
   </template>
   <object class="IdeWorkbenchHeaderBar" id="titlebar">
     <property name="visible">true</property>
+    <child>
+			<object class="GtkButton" id="back_button">
+				<property name="action-name">perspective.go-back</property>
+				<child>
+					<object class="GtkImage">
+						<property name="icon-name">go-previous-symbolic</property>
+						<property name="visible">true</property>
+					</object>
+				</child>
+			</object>
+    </child>
   </object>
 </interface>

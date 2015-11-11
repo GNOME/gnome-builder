@@ -31,6 +31,9 @@ struct _IdePreferencesInterface
 {
   GTypeInterface parent_interface;
 
+  void  (*set_page)        (IdePreferences *self,
+                            const gchar    *page_name,
+                            GHashTable     *map);
   void  (*add_page)        (IdePreferences *self,
                             const gchar    *page_name,
                             const gchar    *title,
@@ -153,6 +156,10 @@ guint ide_preferences_add_font_button (IdePreferences *self,
                                        const gchar    *title,
                                        const gchar    *keywords,
                                        gint            priority);
+void  ide_preferences_set_page        (IdePreferences *self,
+                                       const gchar    *page_name,
+                                       GHashTable     *map);
+
 
 G_END_DECLS
 

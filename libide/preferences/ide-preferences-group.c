@@ -17,6 +17,7 @@
  */
 
 #include "ide-preferences-bin.h"
+#include "ide-preferences-bin-private.h"
 #include "ide-preferences-group.h"
 
 struct _IdePreferencesGroup
@@ -30,6 +31,8 @@ struct _IdePreferencesGroup
   GtkBox     *box;
   GtkListBox *list_box;
   GtkFrame   *list_box_frame;
+
+  GPtrArray  *widgets;
 };
 
 G_DEFINE_TYPE (IdePreferencesGroup, ide_preferences_group, GTK_TYPE_BIN)
@@ -45,6 +48,16 @@ enum {
 static GParamSpec *properties [LAST_PROP];
 
 static void
+ide_preferences_group_widget_destroy (IdePreferencesGroup *self,
+                                      GtkWidget           *widget)
+{
+  g_assert (IDE_IS_PREFERENCES_GROUP (self));
+  g_assert (GTK_IS_WIDGET (widget));
+
+  g_ptr_array_remove (self->widgets, widget);
+}
+
+static void
 ide_preferences_group_row_activated (IdePreferencesGroup *self,
                                      GtkListBoxRow       *row,
                                      GtkListBox          *list_box)
@@ -58,6 +71,16 @@ ide_preferences_group_row_activated (IdePreferencesGroup *self,
   child = gtk_bin_get_child (GTK_BIN (row));
   if (child != NULL)
     gtk_widget_activate (child);
+}
+
+static void
+ide_preferences_group_finalize (GObject *object)
+{
+  IdePreferencesGroup *self = (IdePreferencesGroup *)object;
+
+  g_clear_pointer (&self->widgets, g_ptr_array_unref);
+
+  G_OBJECT_CLASS (ide_preferences_group_parent_class)->finalize (object);
 }
 
 static void
@@ -123,6 +146,7 @@ ide_preferences_group_class_init (IdePreferencesGroupClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
+  object_class->finalize = ide_preferences_group_finalize;
   object_class->get_property = ide_preferences_group_get_property;
   object_class->set_property = ide_preferences_group_set_property;
 
@@ -161,6 +185,8 @@ ide_preferences_group_class_init (IdePreferencesGroupClass *klass)
 static void
 ide_preferences_group_init (IdePreferencesGroup *self)
 {
+  self->widgets = g_ptr_array_new ();
+
   gtk_widget_init_template (GTK_WIDGET (self));
 
   g_signal_connect_object (self->list_box,
@@ -179,14 +205,26 @@ ide_preferences_group_add (IdePreferencesGroup *self,
   g_return_if_fail (IDE_IS_PREFERENCES_GROUP (self));
   g_return_if_fail (IDE_IS_PREFERENCES_BIN (widget));
 
+  g_ptr_array_add (self->widgets, widget);
+
+  g_signal_connect_object (widget,
+                           "destroy",
+                           G_CALLBACK (ide_preferences_group_widget_destroy),
+                           self,
+                           G_CONNECT_SWAPPED);
+
   if (self->is_list)
     {
       GtkWidget *row;
 
-      row = g_object_new (GTK_TYPE_LIST_BOX_ROW,
-                          "child", widget,
-                          "visible", TRUE,
-                          NULL);
+      if (GTK_IS_LIST_BOX_ROW (widget))
+        row = widget;
+      else
+        row = g_object_new (GTK_TYPE_LIST_BOX_ROW,
+                            "child", widget,
+                            "visible", TRUE,
+                            NULL);
+
       gtk_container_add (GTK_CONTAINER (self->list_box), row);
     }
   else
@@ -194,5 +232,22 @@ ide_preferences_group_add (IdePreferencesGroup *self,
       gtk_container_add_with_properties (GTK_CONTAINER (self->box), widget,
                                          "position", position,
                                          NULL);
+    }
+}
+
+void
+_ide_preferences_group_set_map (IdePreferencesGroup *self,
+                                GHashTable          *map)
+{
+  guint i;
+
+  g_return_if_fail (IDE_IS_PREFERENCES_GROUP (self));
+
+  for (i = 0; i < self->widgets->len; i++)
+    {
+      GtkWidget *widget = g_ptr_array_index (self->widgets, i);
+
+      if (IDE_IS_PREFERENCES_BIN (widget))
+        _ide_preferences_bin_set_map (IDE_PREFERENCES_BIN (widget), map);
     }
 }

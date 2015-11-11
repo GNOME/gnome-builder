@@ -28,6 +28,7 @@
 #include "ide-preferences-font-button.h"
 #include "ide-preferences-group.h"
 #include "ide-preferences-page.h"
+#include "ide-preferences-page-private.h"
 #include "ide-preferences-perspective.h"
 #include "ide-preferences-spin-button.h"
 #include "ide-preferences-switch.h"
@@ -39,10 +40,12 @@ struct _IdePreferencesPerspective
 
   guint                  last_widget_id;
 
+  GActionGroup          *actions;
   PeasExtensionSet      *extensions;
   GSequence             *pages;
   GHashTable            *widgets;
 
+  GtkButton             *back_button;
   GtkStack              *page_stack;
   GtkStackSwitcher      *page_stack_sidebar;
   GtkStack              *subpage_stack;
@@ -128,6 +131,7 @@ ide_preferences_perspective_finalize (GObject *object)
 
   g_clear_pointer (&self->pages, g_sequence_free);
   g_clear_pointer (&self->widgets, g_hash_table_unref);
+  g_clear_object (&self->actions);
 
   G_OBJECT_CLASS (ide_preferences_perspective_parent_class)->finalize (object);
 }
@@ -142,6 +146,7 @@ ide_preferences_perspective_class_init (IdePreferencesPerspectiveClass *klass)
   object_class->finalize = ide_preferences_perspective_finalize;
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/ui/ide-preferences-perspective.ui");
+  gtk_widget_class_bind_template_child (widget_class, IdePreferencesPerspective, back_button);
   gtk_widget_class_bind_template_child (widget_class, IdePreferencesPerspective, page_stack_sidebar);
   gtk_widget_class_bind_template_child (widget_class, IdePreferencesPerspective, page_stack);
   gtk_widget_class_bind_template_child (widget_class, IdePreferencesPerspective, subpage_stack);
@@ -150,12 +155,33 @@ ide_preferences_perspective_class_init (IdePreferencesPerspectiveClass *klass)
 }
 
 static void
+go_back_activate (GSimpleAction *action,
+                  GVariant      *parameter,
+                  gpointer       user_data)
+{
+  IdePreferencesPerspective *self = user_data;
+
+  g_assert (IDE_IS_PREFERENCES_PERSPECTIVE (self));
+
+  gtk_stack_set_visible_child (self->top_stack, GTK_WIDGET (self->page_stack));
+  gtk_widget_hide (GTK_WIDGET (self->back_button));
+}
+
+static void
 ide_preferences_perspective_init (IdePreferencesPerspective *self)
 {
+  static const GActionEntry entries[] = {
+    { "go-back", go_back_activate },
+  };
+
   gtk_widget_init_template (GTK_WIDGET (self));
 
   self->pages = g_sequence_new (NULL);
   self->widgets = g_hash_table_new (g_direct_hash, g_direct_equal);
+
+  self->actions = G_ACTION_GROUP (g_simple_action_group_new ());
+  g_action_map_add_action_entries (G_ACTION_MAP (self->actions),
+                                   entries, G_N_ELEMENTS (entries), self);
 
   gtk_stack_set_visible_child (self->top_stack, GTK_WIDGET (self->page_stack));
 }
@@ -589,12 +615,15 @@ ide_preferences_perspective_add_custom (IdePreferences *preferences,
       return 0;
     }
 
-  container = g_object_new (IDE_TYPE_PREFERENCES_BIN,
-                            "child", widget,
-                            "keywords", keywords,
-                            "priority", priority,
-                            "visible", TRUE,
-                            NULL);
+  if (IDE_IS_PREFERENCES_BIN (widget))
+    container = IDE_PREFERENCES_BIN (widget);
+  else
+    container = g_object_new (IDE_TYPE_PREFERENCES_BIN,
+                              "child", widget,
+                              "keywords", keywords,
+                              "priority", priority,
+                              "visible", TRUE,
+                              NULL);
 
   ide_preferences_group_add (group, GTK_WIDGET (container));
 
@@ -602,6 +631,38 @@ ide_preferences_perspective_add_custom (IdePreferences *preferences,
   g_hash_table_insert (self->widgets, GINT_TO_POINTER (widget_id), widget);
 
   return widget_id;
+}
+
+static void
+ide_preferences_perspective_set_page (IdePreferences *preferences,
+                                      const gchar    *page_name,
+                                      GHashTable     *map)
+{
+  IdePreferencesPerspective *self = (IdePreferencesPerspective *)preferences;
+  GtkWidget *page;
+
+  g_assert (IDE_IS_PREFERENCES_PERSPECTIVE (self));
+  g_assert (page_name != NULL);
+
+  page = ide_preferences_perspective_get_page (self, page_name);
+
+  if (page == NULL)
+    {
+      g_warning ("No such page \"%s\"", page_name);
+      return;
+    }
+
+  if (strchr (page_name, '.') != NULL)
+    {
+      _ide_preferences_page_set_map (IDE_PREFERENCES_PAGE (page), map);
+      gtk_stack_set_visible_child (self->subpage_stack, page);
+      gtk_stack_set_visible_child (self->top_stack, GTK_WIDGET (self->subpage_stack));
+      gtk_widget_set_visible (GTK_WIDGET (self->back_button), TRUE);
+      return;
+    }
+
+  gtk_stack_set_visible_child (self->page_stack, page);
+  gtk_widget_set_visible (GTK_WIDGET (self->back_button), FALSE);
 }
 
 static void
@@ -615,6 +676,7 @@ ide_preferences_iface_init (IdePreferencesInterface *iface)
   iface->add_switch = ide_preferences_perspective_add_switch;
   iface->add_spin_button = ide_preferences_perspective_add_spin_button;
   iface->add_custom = ide_preferences_perspective_add_custom;
+  iface->set_page = ide_preferences_perspective_set_page;
 }
 
 static gchar *
@@ -635,10 +697,21 @@ ide_preferences_perspective_get_titlebar (IdePerspective *perspective)
   return GTK_WIDGET (IDE_PREFERENCES_PERSPECTIVE (perspective)->titlebar);
 }
 
+static GActionGroup *
+ide_preferences_perspective_get_actions (IdePerspective *perspective)
+{
+  IdePreferencesPerspective *self = (IdePreferencesPerspective *)perspective;
+
+  g_assert (IDE_IS_PREFERENCES_PERSPECTIVE (self));
+
+  return g_object_ref (self->actions);
+}
+
 static void
 ide_perspective_iface_init (IdePerspectiveInterface *iface)
 {
   iface->get_icon_name = ide_preferences_perspective_get_icon_name;
   iface->get_title = ide_preferences_perspective_get_title;
   iface->get_titlebar = ide_preferences_perspective_get_titlebar;
+  iface->get_actions = ide_preferences_perspective_get_actions;
 }

@@ -1,6 +1,6 @@
-/* ide-preferences-bin-private.h
+/* ide-preferences-language-row.h
  *
- * Copyright (C) 2015 Christian Hergert <chergert@redhat.com>
+ * Copyright (C) 2015 Christian Hergert <christian@hergert.me>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,16 +16,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_PREFERENCES_BIN_PRIVATE_H
-#define IDE_PREFERENCES_BIN_PRIVATE_H
+#ifndef IDE_PREFERENCES_LANGUAGE_ROW_H
+#define IDE_PREFERENCES_LANGUAGE_ROW_H
 
 #include "ide-preferences-bin.h"
 
 G_BEGIN_DECLS
 
-void _ide_preferences_bin_set_map (IdePreferencesBin *self,
-                                   GHashTable        *map);
+#define IDE_TYPE_PREFERENCES_LANGUAGE_ROW (ide_preferences_language_row_get_type())
+
+G_DECLARE_FINAL_TYPE (IdePreferencesLanguageRow, ide_preferences_language_row, IDE, PREFERENCES_LANGUAGE_ROW, IdePreferencesBin)
 
 G_END_DECLS
 
-#endif /* IDE_PREFERENCES_BIN_PRIVATE_H */
+#endif /* IDE_PREFERENCES_LANGUAGE_ROW_H */

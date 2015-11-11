@@ -1,6 +1,6 @@
-/* ide-preferences-bin-private.h
+/* ide-preferences-page-private.h
  *
- * Copyright (C) 2015 Christian Hergert <chergert@redhat.com>
+ * Copyright (C) 2015 Christian Hergert <christian@hergert.me>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,16 +16,16 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_PREFERENCES_BIN_PRIVATE_H
-#define IDE_PREFERENCES_BIN_PRIVATE_H
+#ifndef IDE_PREFERENCES_PAGE_PRIVATE_H
+#define IDE_PREFERENCES_PAGE_PRIVATE_H
 
-#include "ide-preferences-bin.h"
+#include "ide-preferences-page.h"
 
 G_BEGIN_DECLS
 
-void _ide_preferences_bin_set_map (IdePreferencesBin *self,
-                                   GHashTable        *map);
+void _ide_preferences_page_set_map (IdePreferencesPage *self,
+                                    GHashTable         *map);
 
 G_END_DECLS
 
-#endif /* IDE_PREFERENCES_BIN_PRIVATE_H */
+#endif /* IDE_PREFERENCES_PAGE_PRIVATE_H */
