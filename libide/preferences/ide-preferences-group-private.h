@@ -19,12 +19,15 @@
 #ifndef IDE_PREFERENCES_GROUP_PRIVATE_H
 #define IDE_PREFERENCES_GROUP_PRIVATE_H
 
+#include "ide-pattern-spec.h"
 #include "ide-preferences-group.h"
 
 G_BEGIN_DECLS
 
-void _ide_preferences_group_set_map (IdePreferencesGroup *self,
-                                     GHashTable          *map);
+void  _ide_preferences_group_set_map  (IdePreferencesGroup *self,
+                                       GHashTable          *map);
+guint _ide_preferences_group_refilter (IdePreferencesGroup *self,
+                                       IdePatternSpec      *spec);
 
 G_END_DECLS
 

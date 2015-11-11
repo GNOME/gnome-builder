@@ -23,8 +23,10 @@
 
 G_BEGIN_DECLS
 
-void _ide_preferences_bin_set_map (IdePreferencesBin *self,
-                                   GHashTable        *map);
+void     _ide_preferences_bin_set_map (IdePreferencesBin *self,
+                                       GHashTable        *map);
+gboolean _ide_preferences_bin_matches (IdePreferencesBin *self,
+                                       IdePatternSpec    *spec);
 
 G_END_DECLS
 

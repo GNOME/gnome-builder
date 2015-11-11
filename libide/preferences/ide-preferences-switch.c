@@ -242,6 +242,30 @@ ide_preferences_switch_activate (IdePreferencesSwitch *self)
 
 }
 
+static gboolean
+ide_preferences_switch_matches (IdePreferencesBin *bin,
+                                IdePatternSpec    *spec)
+{
+  IdePreferencesSwitch *self = (IdePreferencesSwitch *)bin;
+  const gchar *tmp;
+
+  g_assert (IDE_IS_PREFERENCES_SWITCH (self));
+  g_assert (spec != NULL);
+
+  tmp = gtk_label_get_label (self->title);
+  if (tmp && ide_pattern_spec_match (spec, tmp))
+    return TRUE;
+
+  tmp = gtk_label_get_label (self->subtitle);
+  if (tmp && ide_pattern_spec_match (spec, tmp))
+    return TRUE;
+
+  if (self->key && ide_pattern_spec_match (spec, self->key))
+    return TRUE;
+
+  return FALSE;
+}
+
 static void
 ide_preferences_switch_finalize (GObject *object)
 {
@@ -342,6 +366,7 @@ ide_preferences_switch_class_init (IdePreferencesSwitchClass *klass)
 
   bin_class->connect = ide_preferences_switch_connect;
   bin_class->disconnect = ide_preferences_switch_disconnect;
+  bin_class->matches = ide_preferences_switch_matches;
 
   signals [ACTIVATED] =
     g_signal_new_class_handler ("activated",

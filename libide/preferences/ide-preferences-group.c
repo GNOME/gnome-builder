@@ -19,6 +19,7 @@
 #include "ide-preferences-bin.h"
 #include "ide-preferences-bin-private.h"
 #include "ide-preferences-group.h"
+#include "ide-preferences-group-private.h"
 
 struct _IdePreferencesGroup
 {
@@ -250,4 +251,60 @@ _ide_preferences_group_set_map (IdePreferencesGroup *self,
       if (IDE_IS_PREFERENCES_BIN (widget))
         _ide_preferences_bin_set_map (IDE_PREFERENCES_BIN (widget), map);
     }
+}
+
+static void
+ide_preferences_group_refilter_cb (GtkWidget *widget,
+                                   gpointer   user_data)
+{
+  IdePreferencesBin *bin = NULL;
+  struct {
+    IdePatternSpec *spec;
+    guint matches;
+  } *lookup = user_data;
+  gboolean matches;
+
+  if (IDE_IS_PREFERENCES_BIN (widget))
+    bin = IDE_PREFERENCES_BIN (widget);
+  else if (GTK_IS_BIN (widget) && IDE_IS_PREFERENCES_BIN (gtk_bin_get_child (GTK_BIN (widget))))
+    bin = IDE_PREFERENCES_BIN (gtk_bin_get_child (GTK_BIN (widget)));
+  else
+    return;
+
+  if (lookup->spec == NULL)
+    matches = TRUE;
+  else
+    matches = _ide_preferences_bin_matches (bin, lookup->spec);
+
+  gtk_widget_set_visible (widget, matches);
+
+  lookup->matches += matches;
+}
+
+guint
+_ide_preferences_group_refilter (IdePreferencesGroup *self,
+                                 IdePatternSpec      *spec)
+{
+  struct {
+    IdePatternSpec *spec;
+    guint matches;
+  } lookup = { spec, 0 };
+  const gchar *tmp;
+
+  g_return_val_if_fail (IDE_IS_PREFERENCES_GROUP (self), 0);
+
+  tmp = gtk_label_get_label (self->title);
+  if (spec && tmp && ide_pattern_spec_match (spec, tmp))
+    lookup.spec = NULL;
+
+  gtk_container_foreach (GTK_CONTAINER (self->list_box),
+                         ide_preferences_group_refilter_cb,
+                         &lookup);
+  gtk_container_foreach (GTK_CONTAINER (self->box),
+                         ide_preferences_group_refilter_cb,
+                         &lookup);
+
+  gtk_widget_set_visible (GTK_WIDGET (self), lookup.matches > 0);
+
+  return lookup.matches;
 }

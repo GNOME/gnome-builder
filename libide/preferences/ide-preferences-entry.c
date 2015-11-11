@@ -115,14 +115,39 @@ ide_preferences_entry_changed (IdePreferencesEntry *self,
   g_signal_emit (self, signals [CHANGED], 0, text);
 }
 
+static gboolean
+ide_preferences_entry_matches (IdePreferencesBin *bin,
+                               IdePatternSpec    *spec)
+{
+  IdePreferencesEntry *self = (IdePreferencesEntry *)bin;
+  IdePreferencesEntryPrivate *priv = ide_preferences_entry_get_instance_private (self);
+  const gchar *tmp;
+
+  g_assert (IDE_IS_PREFERENCES_ENTRY (self));
+  g_assert (spec != NULL);
+
+  tmp = gtk_label_get_label (priv->title);
+  if (tmp && ide_pattern_spec_match (spec, tmp))
+    return TRUE;
+
+  tmp = gtk_entry_get_text (GTK_ENTRY (priv->entry));
+  if (tmp && ide_pattern_spec_match (spec, tmp))
+    return TRUE;
+
+  return FALSE;
+}
+
 static void
 ide_preferences_entry_class_init (IdePreferencesEntryClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+  IdePreferencesBinClass *bin_class = IDE_PREFERENCES_BIN_CLASS (klass);
 
   object_class->get_property = ide_preferences_entry_get_property;
   object_class->set_property = ide_preferences_entry_set_property;
+
+  bin_class->matches = ide_preferences_entry_matches;
 
   signals [ACTIVATE] =
     g_signal_new_class_handler ("activate",

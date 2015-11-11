@@ -21,6 +21,8 @@
 #include <glib/gi18n.h>
 #include <libpeas/peas.h>
 
+#include "ide-macros.h"
+#include "ide-pattern-spec.h"
 #include "ide-perspective.h"
 #include "ide-preferences.h"
 #include "ide-preferences-addin.h"
@@ -48,6 +50,7 @@ struct _IdePreferencesPerspective
   GtkButton             *back_button;
   GtkStack              *page_stack;
   GtkStackSwitcher      *page_stack_sidebar;
+  GtkSearchEntry        *search_entry;
   GtkStack              *subpage_stack;
   GtkStack              *top_stack;
   IdeWorkbenchHeaderBar *titlebar;
@@ -59,6 +62,39 @@ static void ide_perspective_iface_init (IdePerspectiveInterface *iface);
 G_DEFINE_TYPE_EXTENDED (IdePreferencesPerspective, ide_preferences_perspective, GTK_TYPE_BIN, 0,
                         G_IMPLEMENT_INTERFACE (IDE_TYPE_PREFERENCES, ide_preferences_iface_init)
                         G_IMPLEMENT_INTERFACE (IDE_TYPE_PERSPECTIVE, ide_perspective_iface_init))
+
+static void
+ide_preferences_perspective_refilter_cb (GtkWidget *widget,
+                                         gpointer   user_data)
+{
+  IdePreferencesPage *page = (IdePreferencesPage *)widget;
+  IdePatternSpec *spec = user_data;
+
+  g_assert (IDE_IS_PREFERENCES_PAGE (page));
+
+  _ide_preferences_page_refilter (page, spec);
+}
+
+static void
+ide_preferences_perspective_refilter (IdePreferencesPerspective *self,
+                                      const gchar               *search_text)
+{
+  IdePatternSpec *spec = NULL;
+
+  g_assert (IDE_IS_PREFERENCES_PERSPECTIVE (self));
+
+  if (search_text != NULL)
+    spec = ide_pattern_spec_new (search_text);
+
+  gtk_container_foreach (GTK_CONTAINER (self->page_stack),
+                         ide_preferences_perspective_refilter_cb,
+                         spec);
+  gtk_container_foreach (GTK_CONTAINER (self->subpage_stack),
+                         ide_preferences_perspective_refilter_cb,
+                         spec);
+
+  g_clear_pointer (&spec, ide_pattern_spec_unref);
+}
 
 static gint
 sort_by_priority (gconstpointer a,
@@ -160,6 +196,7 @@ ide_preferences_perspective_class_init (IdePreferencesPerspectiveClass *klass)
   gtk_widget_class_bind_template_child (widget_class, IdePreferencesPerspective, back_button);
   gtk_widget_class_bind_template_child (widget_class, IdePreferencesPerspective, page_stack_sidebar);
   gtk_widget_class_bind_template_child (widget_class, IdePreferencesPerspective, page_stack);
+  gtk_widget_class_bind_template_child (widget_class, IdePreferencesPerspective, search_entry);
   gtk_widget_class_bind_template_child (widget_class, IdePreferencesPerspective, subpage_stack);
   gtk_widget_class_bind_template_child (widget_class, IdePreferencesPerspective, titlebar);
   gtk_widget_class_bind_template_child (widget_class, IdePreferencesPerspective, top_stack);
@@ -179,6 +216,22 @@ go_back_activate (GSimpleAction *action,
 }
 
 static void
+ide_preferences_perspective_search_entry_changed (IdePreferencesPerspective *self,
+                                                  GtkSearchEntry            *search_entry)
+{
+  const gchar *text;
+
+  g_assert (IDE_IS_PREFERENCES_PERSPECTIVE (self));
+  g_assert (GTK_IS_SEARCH_ENTRY (search_entry));
+
+  text = gtk_entry_get_text (GTK_ENTRY (search_entry));
+  if (ide_str_empty0 (text))
+    text = NULL;
+
+  ide_preferences_perspective_refilter (self, text);
+}
+
+static void
 ide_preferences_perspective_init (IdePreferencesPerspective *self)
 {
   static const GActionEntry entries[] = {
@@ -186,6 +239,12 @@ ide_preferences_perspective_init (IdePreferencesPerspective *self)
   };
 
   gtk_widget_init_template (GTK_WIDGET (self));
+
+  g_signal_connect_object (self->search_entry,
+                           "changed",
+                           G_CALLBACK (ide_preferences_perspective_search_entry_changed),
+                           self,
+                           G_CONNECT_SWAPPED);
 
   g_signal_connect_object (self->page_stack,
                            "notify::visible-child",

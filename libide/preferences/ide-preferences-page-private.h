@@ -19,12 +19,15 @@
 #ifndef IDE_PREFERENCES_PAGE_PRIVATE_H
 #define IDE_PREFERENCES_PAGE_PRIVATE_H
 
+#include "ide-pattern-spec.h"
 #include "ide-preferences-page.h"
 
 G_BEGIN_DECLS
 
-void _ide_preferences_page_set_map (IdePreferencesPage *self,
-                                    GHashTable         *map);
+void _ide_preferences_page_set_map  (IdePreferencesPage *self,
+                                     GHashTable         *map);
+void _ide_preferences_page_refilter (IdePreferencesPage *self,
+                                     IdePatternSpec     *spec);
 
 G_END_DECLS
 

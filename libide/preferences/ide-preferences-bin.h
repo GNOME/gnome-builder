@@ -21,6 +21,8 @@
 
 #include <gtk/gtk.h>
 
+#include "ide-pattern-spec.h"
+
 G_BEGIN_DECLS
 
 #define IDE_TYPE_PREFERENCES_BIN (ide_preferences_bin_get_type())
@@ -31,10 +33,12 @@ struct _IdePreferencesBinClass
 {
   GtkBinClass parent_class;
 
-  void (*connect)    (IdePreferencesBin *self,
-                      GSettings         *settings);
-  void (*disconnect) (IdePreferencesBin *self,
-                      GSettings         *settings);
+  void     (*connect)    (IdePreferencesBin *self,
+                          GSettings         *settings);
+  void     (*disconnect) (IdePreferencesBin *self,
+                          GSettings         *settings);
+  gboolean (*matches)    (IdePreferencesBin *self,
+                          IdePatternSpec    *spec);
 };
 
 G_END_DECLS

@@ -393,3 +393,29 @@ _ide_preferences_bin_set_map (IdePreferencesBin *self,
       ide_preferences_bin_reload (self);
     }
 }
+
+gboolean
+_ide_preferences_bin_matches (IdePreferencesBin *self,
+                              IdePatternSpec    *spec)
+{
+  IdePreferencesBinPrivate *priv = ide_preferences_bin_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_PREFERENCES_BIN (self), FALSE);
+
+  if (spec == NULL)
+    return TRUE;
+
+  if (priv->keywords && ide_pattern_spec_match (spec, priv->keywords))
+    return TRUE;
+
+  if (priv->schema_id && ide_pattern_spec_match (spec, priv->schema_id))
+    return TRUE;
+
+  if (priv->path && ide_pattern_spec_match (spec, priv->path))
+    return TRUE;
+
+  if (IDE_PREFERENCES_BIN_GET_CLASS (self)->matches)
+    return IDE_PREFERENCES_BIN_GET_CLASS (self)->matches (self, spec);
+
+  return FALSE;
+}

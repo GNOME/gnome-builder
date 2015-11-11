@@ -173,3 +173,19 @@ _ide_preferences_page_set_map (IdePreferencesPage *self,
   while (g_hash_table_iter_next (&iter, NULL, (gpointer *)&group))
     _ide_preferences_group_set_map (group, map);
 }
+
+void
+_ide_preferences_page_refilter (IdePreferencesPage *self,
+                                IdePatternSpec     *spec)
+{
+  IdePreferencesGroup *group;
+  GHashTableIter iter;
+  guint count = 0;
+
+  g_return_if_fail (IDE_IS_PREFERENCES_PAGE (self));
+
+  g_hash_table_iter_init (&iter, self->groups_by_name);
+  while (g_hash_table_iter_next (&iter, NULL, (gpointer *)&group))
+    count += _ide_preferences_group_refilter (group, spec);
+  gtk_widget_set_visible (GTK_WIDGET (self), count > 0);
+}
