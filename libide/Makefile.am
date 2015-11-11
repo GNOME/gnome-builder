@@ -92,8 +92,10 @@ libide_1_0_la_public_sources = \
 	ide-indent-style.h \
 	ide-indenter.c \
 	ide-indenter.h \
-	ide-layout-manager.c \
-	ide-layout-manager.h \
+	ide-layout.c \
+	ide-layout.h \
+	ide-layout-pane.c \
+	ide-layout-pane.h \
 	ide-log.c \
 	ide-log.h \
 	ide-macros.h \
