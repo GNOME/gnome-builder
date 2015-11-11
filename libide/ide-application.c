@@ -282,7 +282,7 @@ ide_application_load_keybindings (IdeApplication *self)
     { "workbench.focus-stack(4)", "<ctrl>4" },
     { "workbench.focus-stack(5)", "<ctrl>5" },
     { "workbench.show-gear-menu", "F10" },
-    { "workbench.global-search", "<ctrl>period" },
+    { "perspective.global-search", "<ctrl>period" },
     { "app.preferences", "<Primary>comma" },
     { "app.shortcuts", "<ctrl>question" },
     { "workbench.new-document", "<ctrl>n" },

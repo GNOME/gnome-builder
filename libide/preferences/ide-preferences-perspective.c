@@ -216,6 +216,18 @@ go_back_activate (GSimpleAction *action,
 }
 
 static void
+global_search_activate (GSimpleAction *action,
+                        GVariant      *parameter,
+                        gpointer       user_data)
+{
+  IdePreferencesPerspective *self = user_data;
+
+  g_assert (IDE_IS_PREFERENCES_PERSPECTIVE (self));
+
+  gtk_widget_grab_focus (GTK_WIDGET (self->search_entry));
+}
+
+static void
 ide_preferences_perspective_search_entry_changed (IdePreferencesPerspective *self,
                                                   GtkSearchEntry            *search_entry)
 {
@@ -236,6 +248,7 @@ ide_preferences_perspective_init (IdePreferencesPerspective *self)
 {
   static const GActionEntry entries[] = {
     { "go-back", go_back_activate },
+    { "global-search", global_search_activate },
   };
 
   gtk_widget_init_template (GTK_WIDGET (self));
