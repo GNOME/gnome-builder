@@ -29,7 +29,7 @@ G_DEFINE_TYPE (IdeWorkbench, ide_workbench, GTK_TYPE_APPLICATION_WINDOW)
 
 enum {
   PROP_0,
-  PROP_PERSPECTIVE,
+  PROP_VISIBLE_PERSPECTIVE,
   LAST_PROP
 };
 
@@ -100,8 +100,8 @@ ide_workbench_get_property (GObject    *object,
 
   switch (prop_id)
     {
-    case PROP_PERSPECTIVE:
-      g_value_set_object (value, ide_workbench_get_perspective (self));
+    case PROP_VISIBLE_PERSPECTIVE:
+      g_value_set_object (value, ide_workbench_get_visible_perspective (self));
       break;
 
     default:
@@ -119,8 +119,8 @@ ide_workbench_set_property (GObject      *object,
 
   switch (prop_id)
     {
-    case PROP_PERSPECTIVE:
-      ide_workbench_set_perspective (self, g_value_get_object (value));
+    case PROP_VISIBLE_PERSPECTIVE:
+      ide_workbench_set_visible_perspective (self, g_value_get_object (value));
       break;
 
     default:
@@ -141,10 +141,10 @@ ide_workbench_class_init (IdeWorkbenchClass *klass)
 
   widget_class->destroy = ide_workbench_destroy;
 
-  properties [PROP_PERSPECTIVE] =
-    g_param_spec_object ("perspective",
-                         "Perspective",
-                         "Perspective",
+  properties [PROP_VISIBLE_PERSPECTIVE] =
+    g_param_spec_object ("visible-perspective",
+                         "visible-Perspective",
+                         "visible-Perspective",
                          IDE_TYPE_PERSPECTIVE,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
@@ -175,7 +175,7 @@ ide_workbench_init_greeter (IdeWorkbench *self)
                            GTK_WIDGET (self->greeter_perspective),
                            "position", 0,
                            NULL);
-  ide_workbench_set_perspective (self, IDE_PERSPECTIVE (self->greeter_perspective));
+  ide_workbench_set_visible_perspective (self, IDE_PERSPECTIVE (self->greeter_perspective));
 }
 
 static void
@@ -328,7 +328,7 @@ _ide_workbench_set_context (IdeWorkbench *self,
 
   peas_extension_set_foreach (self->addins, ide_workbench_addin_added, self);
 
-  ide_workbench_set_perspective (self, IDE_PERSPECTIVE (self->editor_perspective));
+  ide_workbench_set_visible_perspective (self, IDE_PERSPECTIVE (self->editor_perspective));
 
   gtk_stack_set_visible_child_name (self->top_stack, "perspectives");
 }
@@ -396,7 +396,31 @@ ide_workbench_remove_perspective (IdeWorkbench   *self,
 }
 
 /**
- * ide_workbench_get_perspective:
+ * ide_workbench_get_perspective_by_name:
+ *
+ * Gets the perspective by it's registered name as defined in
+ * ide_perspective_get_id().
+ *
+ * Returns: (nullable) (transfer none): An #IdePerspective or %NULL.
+ */
+IdePerspective *
+ide_workbench_get_perspective_by_name (IdeWorkbench *self,
+                                       const gchar  *name)
+{
+  GtkWidget *ret;
+
+  g_return_val_if_fail (IDE_IS_WORKBENCH (self), NULL);
+  g_return_val_if_fail (name != NULL, NULL);
+
+  ret = gtk_stack_get_child_by_name (self->perspectives_stack, name);
+  if (ret == NULL)
+    ret = gtk_stack_get_child_by_name (self->top_stack, name);
+
+  return IDE_PERSPECTIVE (ret);
+}
+
+/**
+ * ide_workbench_get_visible_perspective:
  * @self: An #IdeWorkbench.
  *
  * Gets the current perspective.
@@ -404,7 +428,7 @@ ide_workbench_remove_perspective (IdeWorkbench   *self,
  * Returns: (transfer none): An #IdePerspective.
  */
 IdePerspective *
-ide_workbench_get_perspective (IdeWorkbench *self)
+ide_workbench_get_visible_perspective (IdeWorkbench *self)
 {
   GtkWidget *visible_child;
 
@@ -416,8 +440,8 @@ ide_workbench_get_perspective (IdeWorkbench *self)
 }
 
 void
-ide_workbench_set_perspective (IdeWorkbench   *self,
-                               IdePerspective *perspective)
+ide_workbench_set_visible_perspective (IdeWorkbench   *self,
+                                       IdePerspective *perspective)
 {
   GActionGroup *actions;
   GtkStack *stack;

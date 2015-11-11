@@ -30,39 +30,41 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeWorkbench, ide_workbench, IDE, WORKBENCH, GtkApplicationWindow)
 
-void            ide_workbench_open_async         (IdeWorkbench         *self,
-                                                  GFile               **files,
-                                                  gint                  n_files,
-                                                  GCancellable         *cancellable,
-                                                  GAsyncReadyCallback   callback,
-                                                  gpointer              user_data);
-gboolean        ide_workbench_open_finish        (IdeWorkbench         *self,
-                                                  GAsyncResult         *result,
-                                                  GError              **error);
-void            ide_workbench_save_all_async     (IdeWorkbench         *self,
-                                                  GCancellable         *cancellable,
-                                                  GAsyncReadyCallback   callback,
-                                                  gpointer              user_data);
-gboolean        ide_workbench_save_all_finish    (IdeWorkbench         *self,
-                                                  GAsyncResult         *result,
-                                                  GError              **error);
-void            ide_workbench_focus              (IdeWorkbench         *self,
-                                                  GtkWidget            *widget);
-void            ide_workbench_close              (IdeWorkbench         *self);
-IdeContext     *ide_workbench_get_context        (IdeWorkbench         *self);
-void            ide_workbench_add_perspective    (IdeWorkbench         *self,
-                                                  IdePerspective       *perspective);
-void            ide_workbench_remove_perspective (IdeWorkbench         *self,
-                                                  IdePerspective       *perspective);
-IdePerspective *ide_workbench_get_perspective    (IdeWorkbench         *self);
-void            ide_workbench_set_perspective    (IdeWorkbench         *self,
-                                                  IdePerspective       *perspective);
-gboolean        ide_workbench_get_fullscreen     (IdeWorkbench         *self);
-void            ide_workbench_set_fullscreen     (IdeWorkbench         *self,
-                                                  gboolean              fullscreen);
-void            ide_workbench_views_foreach      (IdeWorkbench         *self,
-                                                  GtkCallback           callback,
-                                                  gpointer              user_data);
+void            ide_workbench_open_async                 (IdeWorkbench         *self,
+                                                          GFile               **files,
+                                                          gint                  n_files,
+                                                          GCancellable         *cancellable,
+                                                          GAsyncReadyCallback   callback,
+                                                          gpointer              user_data);
+gboolean        ide_workbench_open_finish                (IdeWorkbench         *self,
+                                                          GAsyncResult         *result,
+                                                          GError              **error);
+void            ide_workbench_save_all_async             (IdeWorkbench         *self,
+                                                          GCancellable         *cancellable,
+                                                          GAsyncReadyCallback   callback,
+                                                          gpointer              user_data);
+gboolean        ide_workbench_save_all_finish            (IdeWorkbench         *self,
+                                                          GAsyncResult         *result,
+                                                          GError              **error);
+void            ide_workbench_focus                      (IdeWorkbench         *self,
+                                                          GtkWidget            *widget);
+void            ide_workbench_close                      (IdeWorkbench         *self);
+IdeContext     *ide_workbench_get_context                (IdeWorkbench         *self);
+void            ide_workbench_add_perspective            (IdeWorkbench         *self,
+                                                          IdePerspective       *perspective);
+void            ide_workbench_remove_perspective         (IdeWorkbench         *self,
+                                                          IdePerspective       *perspective);
+IdePerspective *ide_workbench_get_perspective_by_name    (IdeWorkbench         *self,
+                                                          const gchar          *name);
+IdePerspective *ide_workbench_get_visible_perspective    (IdeWorkbench         *self);
+void            ide_workbench_set_visible_perspective    (IdeWorkbench         *self,
+                                                          IdePerspective       *perspective);
+gboolean        ide_workbench_get_fullscreen             (IdeWorkbench         *self);
+void            ide_workbench_set_fullscreen             (IdeWorkbench         *self,
+                                                          gboolean              fullscreen);
+void            ide_workbench_views_foreach              (IdeWorkbench         *self,
+                                                          GtkCallback           callback,
+                                                          gpointer              user_data);
 
 G_END_DECLS
 
