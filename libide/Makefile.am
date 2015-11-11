@@ -99,12 +99,16 @@ libide_1_0_la_public_sources = \
 	ide-log.c \
 	ide-log.h \
 	ide-macros.h \
-	ide-perspective.c \
-	ide-perspective.h \
 	ide-object.c \
 	ide-object.h \
 	ide-pattern-spec.c \
 	ide-pattern-spec.h \
+	ide-perspective.c \
+	ide-perspective.h \
+	ide-preferences-addin.c \
+	ide-preferences-addin.h \
+	ide-preferences.c \
+	ide-preferences.h \
 	ide-process.c \
 	ide-process.h \
 	ide-progress.c \
@@ -202,10 +206,6 @@ libide_1_0_la_public_sources = \
 	ide.h \
 	local/ide-local-device.c \
 	local/ide-local-device.h \
-	preferences/ide-preferences.c \
-	preferences/ide-preferences.h \
-	preferences/ide-preferences-addin.c \
-	preferences/ide-preferences-addin.h \
 	$(NULL)
 
 libide_1_0_la_SOURCES = \
