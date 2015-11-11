@@ -25,14 +25,14 @@
 
 struct _IdeEditorPerspective
 {
-  GtkBin                 parent_instance;
+  IdeLayout              parent_instance;
 
   IdeWorkbenchHeaderBar *titlebar;
 };
 
 static void ide_perspective_iface_init (IdePerspectiveInterface *iface);
 
-G_DEFINE_TYPE_EXTENDED (IdeEditorPerspective, ide_editor_perspective, GTK_TYPE_BIN, 0,
+G_DEFINE_TYPE_EXTENDED (IdeEditorPerspective, ide_editor_perspective, IDE_TYPE_LAYOUT, 0,
                         G_IMPLEMENT_INTERFACE (IDE_TYPE_PERSPECTIVE, ide_perspective_iface_init))
 
 enum {

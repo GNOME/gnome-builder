@@ -21,13 +21,14 @@
 
 #include <gtk/gtk.h>
 
+#include "ide-layout.h"
 #include "ide-perspective.h"
 
 G_BEGIN_DECLS
 
 #define IDE_TYPE_EDITOR_PERSPECTIVE (ide_editor_perspective_get_type())
 
-G_DECLARE_FINAL_TYPE (IdeEditorPerspective, ide_editor_perspective, IDE, EDITOR_PERSPECTIVE, GtkBin)
+G_DECLARE_FINAL_TYPE (IdeEditorPerspective, ide_editor_perspective, IDE, EDITOR_PERSPECTIVE, IdeLayout)
 
 G_END_DECLS
 

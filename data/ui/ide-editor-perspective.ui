@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.18 -->
-  <template class="IdeEditorPerspective" parent="GtkBin">
+  <template class="IdeEditorPerspective" parent="IdeLayout">
     <child>
       <object class="GtkLabel">
         <property name="visible">true</property>
