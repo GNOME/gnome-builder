@@ -97,6 +97,17 @@ ide_preferences_perspective_extension_removed (PeasExtensionSet *set,
 }
 
 static void
+ide_preferences_perspective_notify_visible_child (IdePreferencesPerspective *self,
+                                                  GParamSpec                *pspec,
+                                                  GtkStack                  *stack)
+{
+  g_assert (IDE_IS_PREFERENCES_PERSPECTIVE (self));
+
+  gtk_stack_set_visible_child (self->top_stack, GTK_WIDGET (self->page_stack));
+  gtk_widget_hide (GTK_WIDGET (self->back_button));
+}
+
+static void
 ide_preferences_perspective_constructed (GObject *object)
 {
   IdePreferencesPerspective *self = (IdePreferencesPerspective *)object;
@@ -175,6 +186,12 @@ ide_preferences_perspective_init (IdePreferencesPerspective *self)
   };
 
   gtk_widget_init_template (GTK_WIDGET (self));
+
+  g_signal_connect_object (self->page_stack,
+                           "notify::visible-child",
+                           G_CALLBACK (ide_preferences_perspective_notify_visible_child),
+                           self,
+                           G_CONNECT_SWAPPED);
 
   self->pages = g_sequence_new (NULL);
   self->widgets = g_hash_table_new (g_direct_hash, g_direct_equal);
