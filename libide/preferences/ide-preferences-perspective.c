@@ -83,7 +83,7 @@ ide_preferences_perspective_refilter (IdePreferencesPerspective *self,
 
   g_assert (IDE_IS_PREFERENCES_PERSPECTIVE (self));
 
-  if (search_text != NULL)
+  if (!ide_str_empty0 (search_text))
     spec = ide_pattern_spec_new (search_text);
 
   gtk_container_foreach (GTK_CONTAINER (self->page_stack),
@@ -117,8 +117,17 @@ ide_preferences_perspective_extension_added (PeasExtensionSet *set,
                                              gpointer          user_data)
 {
   IdePreferencesPerspective *self = user_data;
+  const gchar *text;
+
+  g_assert (PEAS_IS_EXTENSION_SET (set));
+  g_assert (plugin_info != NULL);
+  g_assert (IDE_IS_PREFERENCES_ADDIN (extension));
+  g_assert (IDE_IS_PREFERENCES_PERSPECTIVE (self));
 
   ide_preferences_addin_load (IDE_PREFERENCES_ADDIN (extension), IDE_PREFERENCES (self));
+
+  text = gtk_entry_get_text (GTK_ENTRY (self->search_entry));
+  ide_preferences_perspective_refilter (self, text);
 }
 
 static void
@@ -128,8 +137,17 @@ ide_preferences_perspective_extension_removed (PeasExtensionSet *set,
                                                gpointer          user_data)
 {
   IdePreferencesPerspective *self = user_data;
+  const gchar *text;
+
+  g_assert (PEAS_IS_EXTENSION_SET (set));
+  g_assert (plugin_info != NULL);
+  g_assert (IDE_IS_PREFERENCES_ADDIN (extension));
+  g_assert (IDE_IS_PREFERENCES_PERSPECTIVE (self));
 
   ide_preferences_addin_unload (IDE_PREFERENCES_ADDIN (extension), IDE_PREFERENCES (self));
+
+  text = gtk_entry_get_text (GTK_ENTRY (self->search_entry));
+  ide_preferences_perspective_refilter (self, text);
 }
 
 static void
@@ -237,9 +255,6 @@ ide_preferences_perspective_search_entry_changed (IdePreferencesPerspective *sel
   g_assert (GTK_IS_SEARCH_ENTRY (search_entry));
 
   text = gtk_entry_get_text (GTK_ENTRY (search_entry));
-  if (ide_str_empty0 (text))
-    text = NULL;
-
   ide_preferences_perspective_refilter (self, text);
 }
 
