@@ -244,6 +244,7 @@ m4_include([plugins/html-completion/configure.ac])
 m4_include([plugins/html-preview/configure.ac])
 m4_include([plugins/jedi/configure.ac])
 m4_include([plugins/mingw/configure.ac])
+m4_include([plugins/project-tree/configure.ac])
 m4_include([plugins/python-gi-imports-completion/configure.ac])
 m4_include([plugins/python-pack/configure.ac])
 m4_include([plugins/symbol-tree/configure.ac])
@@ -494,6 +495,7 @@ echo "  GNOME Code Assistance ................ : ${enable_gnome_code_assistance_
 echo "  Global File Search ................... : ${enable_file_search_plugin}"
 echo "  HTML Autocompletion .................. : ${enable_html_completion_plugin}"
 echo "  HTML and Markdown Preview ............ : ${enable_html_preview_plugin}"
+echo "  Project Tree ......................... : ${enable_project_tree_plugin}"
 echo "  Python GObject Introspection ......... : ${enable_python_gi_imports_completion_plugin}"
 echo "  Python Jedi Autocompletion ........... : ${enable_jedi_plugin}"
 echo "  Python Language Pack ................. : ${enable_python_pack_plugin}"
