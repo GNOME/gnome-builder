@@ -30,6 +30,7 @@ G_DEFINE_TYPE (IdeWorkbench, ide_workbench, GTK_TYPE_APPLICATION_WINDOW)
 enum {
   PROP_0,
   PROP_VISIBLE_PERSPECTIVE,
+  PROP_VISIBLE_PERSPECTIVE_NAME,
   LAST_PROP
 };
 
@@ -104,6 +105,10 @@ ide_workbench_get_property (GObject    *object,
       g_value_set_object (value, ide_workbench_get_visible_perspective (self));
       break;
 
+    case PROP_VISIBLE_PERSPECTIVE_NAME:
+      g_value_set_string (value, ide_workbench_get_visible_perspective_name (self));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -121,6 +126,10 @@ ide_workbench_set_property (GObject      *object,
     {
     case PROP_VISIBLE_PERSPECTIVE:
       ide_workbench_set_visible_perspective (self, g_value_get_object (value));
+      break;
+
+    case PROP_VISIBLE_PERSPECTIVE_NAME:
+      ide_workbench_set_visible_perspective_name (self, g_value_get_string (value));
       break;
 
     default:
@@ -146,6 +155,13 @@ ide_workbench_class_init (IdeWorkbenchClass *klass)
                          "visible-Perspective",
                          "visible-Perspective",
                          IDE_TYPE_PERSPECTIVE,
+                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_VISIBLE_PERSPECTIVE_NAME] =
+    g_param_spec_string ("visible-perspective-name",
+                         "visible-Perspective-name",
+                         "visible-Perspective-name",
+                         NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, LAST_PROP, properties);
@@ -478,4 +494,43 @@ ide_workbench_set_visible_perspective (IdeWorkbench   *self,
     gtk_stack_set_transition_type (self->titlebar_stack, GTK_STACK_TRANSITION_TYPE_CROSSFADE);
 
   g_free (id);
+}
+
+const gchar *
+ide_workbench_get_visible_perspective_name (IdeWorkbench *self)
+{
+  IdePerspective *perspective;
+
+  g_return_val_if_fail (IDE_IS_WORKBENCH (self), NULL);
+
+  perspective = ide_workbench_get_visible_perspective (self);
+
+  if (perspective != NULL)
+    {
+      GtkWidget *parent;
+
+      /*
+       * Normally we would call ide_perspective_get_id(), but we want to be
+       * able to return a const gchar*. So instead we just use the registered
+       * name in the stack, which is the same thing.
+       */
+      parent = gtk_widget_get_parent (GTK_WIDGET (perspective));
+      return gtk_stack_get_visible_child_name (GTK_STACK (parent));
+    }
+
+  return NULL;
+}
+
+void
+ide_workbench_set_visible_perspective_name (IdeWorkbench *self,
+                                            const gchar  *name)
+{
+  IdePerspective *perspective;
+
+  g_return_if_fail (IDE_IS_WORKBENCH (self));
+  g_return_if_fail (name != NULL);
+
+  perspective = ide_workbench_get_perspective_by_name (self, name);
+  if (perspective != NULL)
+    ide_workbench_set_visible_perspective (self, perspective);
 }
