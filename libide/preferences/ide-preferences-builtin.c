@@ -47,7 +47,7 @@ ide_preferences_builtin_register_plugins (IdePreferences *preferences)
       const gchar *desc;
       const gchar *name;
 
-      if (!peas_plugin_info_is_builtin (plugin_info))
+      if (peas_plugin_info_is_hidden (plugin_info))
         continue;
 
       name = peas_plugin_info_get_name (plugin_info);
