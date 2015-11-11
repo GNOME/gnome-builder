@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <!-- interface-requires gtk+ 3.8 -->
-  <template class="GbCommandBar" parent="GtkBin">
+  <!-- interface-requires gtk+ 3.18 -->
+  <template class="GbCommandBar" parent="GtkRevealer">
+    <property name="valign">end</property>
     <child>
       <object class="GtkBox" id="vbox1">
         <property name="visible">True</property>

@@ -32,14 +32,15 @@
 #include "gb-string.h"
 #include "gb-view-stack.h"
 #include "gb-widget.h"
-#include "gb-workbench.h"
-#include "gb-workbench-addin.h"
+
+#include "ide-workbench.h"
+#include "ide-workbench-addin.h"
 
 struct _GbCommandBar
 {
-  GtkBin             parent_instance;
+  GtkRevealer        parent_instance;
 
-  GbWorkbench       *workbench;
+  IdeWorkbench      *workbench;
   GbCommandManager  *command_manager;
 
   GSimpleAction     *show_action;
@@ -50,6 +51,7 @@ struct _GbCommandBar
   GtkScrolledWindow *scroller;
   GtkScrolledWindow *completion_scroller;
   GtkFlowBox        *flow_box;
+  GtkRevealer       *revealer;
 
   gchar             *last_completion;
   GtkWidget         *last_focus;
@@ -61,10 +63,10 @@ struct _GbCommandBar
   gboolean           saved_position_valid;
 };
 
-static void workbench_addin_init (GbWorkbenchAddinInterface *iface);
+static void workbench_addin_init (IdeWorkbenchAddinInterface *iface);
 
-G_DEFINE_DYNAMIC_TYPE_EXTENDED (GbCommandBar, gb_command_bar, GTK_TYPE_BIN, 0,
-                                G_IMPLEMENT_INTERFACE_DYNAMIC (GB_TYPE_WORKBENCH_ADDIN,
+G_DEFINE_DYNAMIC_TYPE_EXTENDED (GbCommandBar, gb_command_bar, GTK_TYPE_REVEALER, 0,
+                                G_IMPLEMENT_INTERFACE_DYNAMIC (IDE_TYPE_WORKBENCH_ADDIN,
                                                                workbench_addin_init))
 
 #define HISTORY_LENGTH 30
@@ -78,14 +80,14 @@ enum {
 static guint signals [LAST_SIGNAL];
 
 static gboolean
-key_press_event_cb (GbWorkbench  *workbench,
+key_press_event_cb (IdeWorkbench  *workbench,
                     GdkEventKey  *event,
                     GbCommandBar *self)
 {
   if (event->keyval == GDK_KEY_colon)
     {
-      GbApplication *application = GB_APPLICATION (g_application_get_default ());
-      const gchar *mode = gb_application_get_keybindings_mode (application);
+      IdeApplication *application = IDE_APPLICATION (g_application_get_default ());
+      const gchar *mode = ide_application_get_keybindings_mode (application);
 
       if (g_strcmp0 ("vim", mode) == 0)
         {
@@ -98,12 +100,12 @@ key_press_event_cb (GbWorkbench  *workbench,
 }
 
 static void
-gb_command_bar_load (GbWorkbenchAddin *addin,
-                     GbWorkbench      *workbench)
+gb_command_bar_load (IdeWorkbenchAddin *addin,
+                     IdeWorkbench      *workbench)
 {
   GbCommandBar *self = (GbCommandBar *)addin;
   GbCommandProvider *provider;
-  GtkWidget *slider;
+  GtkWidget *box;
 
   g_assert (GB_IS_COMMAND_BAR (self));
 
@@ -121,10 +123,8 @@ gb_command_bar_load (GbWorkbenchAddin *addin,
   gb_command_manager_add_provider (self->command_manager, provider);
   g_clear_object (&provider);
 
-  slider = gb_workbench_get_slider (self->workbench);
-  gtk_container_add_with_properties (GTK_CONTAINER (slider), GTK_WIDGET (self),
-                                     "position", GB_SLIDER_BOTTOM,
-                                     NULL);
+  box = gtk_bin_get_child (GTK_BIN (self->workbench));
+  gtk_overlay_add_overlay (GTK_OVERLAY (box), GTK_WIDGET (self));
 
   g_action_map_add_action (G_ACTION_MAP (self->workbench), G_ACTION (self->show_action));
 
@@ -138,13 +138,13 @@ gb_command_bar_load (GbWorkbenchAddin *addin,
 }
 
 static void
-gb_command_bar_unload (GbWorkbenchAddin *addin,
-                       GbWorkbench      *workbench)
+gb_command_bar_unload (IdeWorkbenchAddin *addin,
+                       IdeWorkbench      *workbench)
 {
   GbCommandBar *self = (GbCommandBar *)addin;
 
   g_assert (GB_IS_COMMAND_BAR (self));
-  g_assert (GB_IS_WORKBENCH (workbench));
+  g_assert (IDE_IS_WORKBENCH (workbench));
 
   /*
    * TODO: We can't rely on object lifecycle since we are a GtkWidget.
@@ -202,15 +202,10 @@ void
 gb_command_bar_hide (GbCommandBar *self)
 {
   GtkWidget *focus;
-  GbSlider *slider;
 
   g_return_if_fail (GB_IS_COMMAND_BAR (self));
 
-  slider = GB_SLIDER (gb_workbench_get_slider (self->workbench));
-  if (gb_slider_get_position (slider) != GB_SLIDER_BOTTOM)
-    return;
-
-  gb_slider_set_position (slider, GB_SLIDER_NONE);
+  gtk_revealer_set_reveal_child (GTK_REVEALER (self), FALSE);
 
   if (self->last_focus)
     focus = find_alternate_focus (self->last_focus);
@@ -240,16 +235,10 @@ void
 gb_command_bar_show (GbCommandBar *self)
 {
   GtkWidget *focus;
-  GbSlider *slider;
 
   g_return_if_fail (GB_IS_COMMAND_BAR (self));
 
-  slider = GB_SLIDER (gb_workbench_get_slider (self->workbench));
-
-  if (gb_slider_get_position (slider) == GB_SLIDER_BOTTOM)
-    return;
-
-  gb_slider_set_position (slider, GB_SLIDER_BOTTOM);
+  gtk_revealer_set_reveal_child (GTK_REVEALER (self), TRUE);
 
   focus = gtk_window_get_focus (GTK_WINDOW (self->workbench));
   gb_command_bar_set_last_focus (self, focus);
@@ -754,7 +743,7 @@ gb_command_bar_init (GbCommandBar *self)
 }
 
 static void
-workbench_addin_init (GbWorkbenchAddinInterface *iface)
+workbench_addin_init (IdeWorkbenchAddinInterface *iface)
 {
   iface->load = gb_command_bar_load;
   iface->unload = gb_command_bar_unload;
@@ -766,6 +755,6 @@ peas_register_types (PeasObjectModule *module)
   gb_command_bar_register_type (G_TYPE_MODULE (module));
 
   peas_object_module_register_extension_type (module,
-                                              GB_TYPE_WORKBENCH_ADDIN,
+                                              IDE_TYPE_WORKBENCH_ADDIN,
                                               GB_TYPE_COMMAND_BAR);
 }
