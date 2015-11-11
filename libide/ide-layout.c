@@ -1173,6 +1173,11 @@ ide_layout_new (void)
   return g_object_new (IDE_TYPE_LAYOUT, NULL);
 }
 
+/**
+ * ide_layout_get_left_pane:
+ *
+ * Returns: (transfer none): A #GtkWidget.
+ */
 GtkWidget *
 ide_layout_get_left_pane (IdeLayout *self)
 {
@@ -1186,6 +1191,11 @@ ide_layout_get_left_pane (IdeLayout *self)
     return priv->children [GTK_POS_LEFT].widget;
 }
 
+/**
+ * ide_layout_get_right_pane:
+ *
+ * Returns: (transfer none): A #GtkWidget.
+ */
 GtkWidget *
 ide_layout_get_right_pane (IdeLayout *self)
 {
@@ -1199,6 +1209,11 @@ ide_layout_get_right_pane (IdeLayout *self)
     return priv->children [GTK_POS_RIGHT].widget;
 }
 
+/**
+ * ide_layout_get_bottom_pane:
+ *
+ * Returns: (transfer none): A #GtkWidget.
+ */
 GtkWidget *
 ide_layout_get_bottom_pane (IdeLayout *self)
 {
@@ -1209,6 +1224,11 @@ ide_layout_get_bottom_pane (IdeLayout *self)
   return priv->children [GTK_POS_BOTTOM].widget;
 }
 
+/**
+ * ide_layout_get_content_pane:
+ *
+ * Returns: (transfer none): A #GtkWidget.
+ */
 GtkWidget *
 ide_layout_get_content_pane (IdeLayout *self)
 {
