@@ -32,6 +32,7 @@
         </style>
         <child>
           <object class="GtkToggleButton">
+            <property name="action-name">panels.left</property>
             <property name="focus-on-click">false</property>
             <property name="visible">true</property>
             <style>
@@ -47,6 +48,7 @@
         </child>
         <child>
           <object class="GtkToggleButton">
+            <property name="action-name">panels.bottom</property>
             <property name="focus-on-click">false</property>
             <property name="visible">true</property>
             <style>
@@ -62,6 +64,7 @@
         </child>
         <child>
           <object class="GtkToggleButton">
+            <property name="action-name">panels.right</property>
             <property name="focus-on-click">false</property>
             <property name="visible">true</property>
             <style>

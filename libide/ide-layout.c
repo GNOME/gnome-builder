@@ -1136,9 +1136,67 @@ ide_layout_class_init (IdeLayoutClass *klass)
 }
 
 static void
+ide_layout_activate_left (GSimpleAction *action,
+                          GVariant      *param,
+                          gpointer       user_data)
+{
+  IdeLayout *self = user_data;
+  GtkWidget *child;
+  gboolean reveal;
+
+  g_assert (G_IS_SIMPLE_ACTION (action));
+  g_assert (IDE_IS_LAYOUT (self));
+
+  child = ide_layout_get_left_pane (self);
+  reveal = ide_layout_child_get_reveal (self, child);
+  gtk_container_child_set (GTK_CONTAINER (self), child, "reveal", !reveal, NULL);
+}
+
+static void
+ide_layout_activate_right (GSimpleAction *action,
+                           GVariant      *param,
+                           gpointer       user_data)
+{
+  IdeLayout *self = user_data;
+  GtkWidget *child;
+  gboolean reveal;
+
+  g_assert (G_IS_SIMPLE_ACTION (action));
+  g_assert (IDE_IS_LAYOUT (self));
+
+  child = ide_layout_get_right_pane (self);
+  reveal = ide_layout_child_get_reveal (self, child);
+  gtk_container_child_set (GTK_CONTAINER (self), child, "reveal", !reveal, NULL);
+}
+
+static void
+ide_layout_activate_bottom (GSimpleAction *action,
+                            GVariant      *param,
+                            gpointer       user_data)
+{
+  IdeLayout *self = user_data;
+  GtkWidget *child;
+  gboolean reveal;
+
+  g_assert (G_IS_SIMPLE_ACTION (action));
+  g_assert (IDE_IS_LAYOUT (self));
+
+  child = ide_layout_get_bottom_pane (self);
+  reveal = ide_layout_child_get_reveal (self, child);
+  gtk_container_child_set (GTK_CONTAINER (self), child, "reveal", !reveal, NULL);
+}
+
+static const GActionEntry action_entries[] = {
+  { "left", ide_layout_activate_left, NULL, "true" },
+  { "right", ide_layout_activate_right, NULL, "false" },
+  { "bottom", ide_layout_activate_bottom, NULL, "false" },
+};
+
+static void
 ide_layout_init (IdeLayout *self)
 {
   IdeLayoutPrivate *priv = ide_layout_get_instance_private (self);
+  g_autoptr(GSimpleActionGroup) actions = NULL;
 
   priv->children [GTK_POS_LEFT].type = GTK_POS_LEFT;
   priv->children [GTK_POS_LEFT].reveal = TRUE;
@@ -1165,6 +1223,13 @@ ide_layout_init (IdeLayout *self)
   priv->pan_gesture = ide_layout_create_pan_gesture (self, GTK_ORIENTATION_HORIZONTAL);
 
   gtk_widget_init_template (GTK_WIDGET (self));
+
+  actions = g_simple_action_group_new ();
+  g_action_map_add_action_entries (G_ACTION_MAP (actions),
+                                   action_entries,
+                                   G_N_ELEMENTS (action_entries),
+                                   self);
+  gtk_widget_insert_action_group (GTK_WIDGET (self), "panels", G_ACTION_GROUP (actions));
 }
 
 GtkWidget *
