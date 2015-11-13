@@ -15,7 +15,7 @@ treeview.view.cell:selected {
 }
 
 
-EggPillBox {
+pillbox {
   background-color: #1e1e1e;
   border-radius: 3px;
 }

@@ -1,26 +1,6 @@
 @import url("resource:///org/gnome/builder/theme/shared.css");
 
 
-#left_header_bar {
-  border-top-right-radius: 0px;
-}
-#right_header_bar {
-  border-top-left-radius: 0px;
-}
-
-
-/*
- * Preferences styling.
- */
-GbPreferencesPageLanguage entry {
-  border-bottom-left-radius: 0;
-  border-bottom-right-radius: 0;
-}
-GbPreferencesPageLanguage GtkScrolledWindow {
-  border-top-width: 0;
-}
-
-
 /*
  * Editor tweak widget.
  */
@@ -154,24 +134,4 @@ SymbolTree entry {
   border-right: none;
   border-top: none;
   border-radius: 0px;
-}
-
-
-.shortcuts-list-box row {
-  border-bottom: 1px solid @borders;
-}
-.shortcuts-list-box row:last-child {
-  border-bottom: none;
-}
-
-.shortcuts-list-box GtkLabel {
-  padding: 6px;
-}
-
-
-GbPreferencesPagePlugins row {
-  border-bottom: 1px solid shade(@borders, 1.2);
-}
-GbPreferencesPagePlugins row:last-child {
-  border-bottom: none;
 }

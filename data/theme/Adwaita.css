@@ -1,21 +1,21 @@
 @import url("resource:///org/gnome/builder/theme/Adwaita-shared.css");
 
 
-GbWorkbench treeview.view {
+workbench treeview.view {
   color: #555753;
   background-color: #eeeeec;
 }
-GbWorkbench treeview.view:backdrop {
+workbench treeview.view:backdrop {
   color: #888a85;
   background-color: #efefef;
 }
-GbWorkbench treeview.view.cell:selected {
+workbench treeview.view.cell:selected {
   color: #fff;
   background-color: #4a90d9;
 }
 
 
-EggPillBox {
+pillbox {
   background-color: #eeeeec;
   border-radius: 3px;
 }

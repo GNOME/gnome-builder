@@ -23,27 +23,6 @@
 }
 
 
-.preferences.sidebar viewport {
-   border: 0px;
-}
-.preferences.sidebar GtkListBox {
-  background-color: shade(@theme_bg_color, 0.99);
-}
-.preferences.sidebar row {
-  padding: 10px;
-}
-.preferences.sidebar row:not(:selected) {
-  background-color: shade(@theme_bg_color, 0.99);
-}
-.preferences.sidebar row:hover:not(:selected) {
-  background-color: shade(@theme_bg_color, 1.02);
-}
-
-GbPreferencesSwitch:prelight {
-  background-color: shade(@theme_bg_color, 1.01);
-}
-
-
 GbEditorSettingsWidget row {
   padding: 6px;
   border-bottom: 1px solid @borders;
@@ -82,7 +61,7 @@ GtkBox.gb-command-bar-box {
   background-image: linear-gradient(to bottom, #2e3436, #555753 10%);
   box-shadow: inset 0px 3px 6px #2e3436;
 }
-GtkBox.gb-command-bar-box GtkLabel {
+GtkBox.gb-command-bar-box label {
   color: #eeeeec;
 }
 entry.gb-command-bar-entry {
@@ -140,7 +119,7 @@ layoutpane .pane-separator {
   border-radius: 20px;
   outline-radius: 20px;
 }
-.round GtkLabel {
+.round label {
   padding-left: 0px;
   padding-right: 0px;
 }
