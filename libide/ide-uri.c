@@ -861,14 +861,13 @@ ide_uri_unref (IdeUri *uri)
  * ide_uri_split:
  * @uri_string: a string containing a relative or absolute URI
  * @strict: whether to parse @uri_string strictly
- * @scheme: (out) (allow-none): on return, contains the scheme, or %NULL
- * @userinfo: (out) (allow-none): on return, contains the userinfo, or %NULL
- * @host: (out) (allow-none): on return, contains the host, or %NULL
- * @port: (out) (allow-none): on return, contains the port, or %NULL
- * @path: (out) (allow-none): on return, contains the path, or %NULL
- * @query: (out) (allow-none): on return, contains the query, or %NULL
- * @fragment: (out) (allow-none): on return, contains the fragment, or %NULL
- * @error: #GError for error reporting, or %NULL to ignore.
+ * @scheme: (out) (nullable): on return, contains the scheme, or %NULL
+ * @userinfo: (out) (nullable): on return, contains the userinfo, or %NULL
+ * @host: (out) (nullable): on return, contains the host, or %NULL
+ * @port: (out) (nullable): on return, contains the port, or %NULL
+ * @path: (out) (nullable): on return, contains the path, or %NULL
+ * @query: (out) (nullable): on return, contains the query, or %NULL
+ * @fragment: (out) (nullable): on return, contains the fragment, or %NULL
  *
  * Parses @uri_string more-or-less according to the generic grammar of
  * RFC 3986 ("more" if @strict is %TRUE, "less" if %FALSE), and
@@ -1054,7 +1053,7 @@ str_ascii_case_equal (gconstpointer v1,
  * @length: the length of @params, or -1 if it is NUL-terminated
  * @separator: the separator character between parameters.
  *   (usually ';', but sometimes '&')
- * @case_insentitive: whether to match parameter names case-insensitively
+ * @case_insensitive: whether to match parameter names case-insensitively
  *
  * Many URI schemes include one or more attribute/value pairs
  * as part of the URI value. This method can be used to parse them
@@ -1069,10 +1068,10 @@ str_ascii_case_equal (gconstpointer v1,
  * was parsed with %IDE_URI_PARSE_STRICT, then you already know that it
  * does not contain any invalid encoding.)
  *
- * Return value: (element-type utf8 utf8): a hash table of
- * attribute/value pairs. Both names and values will be fully-decoded.
- * If @params cannot be parsed (eg, it contains two @separator
- * characters in a row), then %NULL is returned.
+ * Return value: (element-type utf8 utf8) (transfer container): a hash table
+ * of attribute/value pairs. Both names and values will be fully-decoded. If
+ * @params cannot be parsed (eg, it contains two @separator characters in a
+ * row), then %NULL is returned.
  */
 GHashTable *
 ide_uri_parse_params (const gchar *params,
