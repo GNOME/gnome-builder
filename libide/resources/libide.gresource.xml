@@ -27,6 +27,8 @@
     <file alias="ui/ide-greeter-project-row.ui">../../data/ui/ide-greeter-project-row.ui</file>
     <file alias="ui/ide-layout.ui">../../data/ui/ide-layout.ui</file>
     <file alias="ui/ide-layout-pane.ui">../../data/ui/ide-layout-pane.ui</file>
+    <file alias="ui/ide-layout-stack.ui">../../data/ui/ide-layout-stack.ui</file>
+    <file alias="ui/ide-layout-view.ui">../../data/ui/ide-layout-view.ui</file>
     <file alias="ui/ide-preferences-entry.ui">../../data/ui/ide-preferences-entry.ui</file>
     <file alias="ui/ide-preferences-font-button.ui">../../data/ui/ide-preferences-font-button.ui</file>
     <file alias="ui/ide-preferences-group.ui">../../data/ui/ide-preferences-group.ui</file>

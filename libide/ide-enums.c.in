@@ -10,6 +10,7 @@
 #include "ide-doap.h"
 #include "ide-highlighter.h"
 #include "ide-indent-style.h"
+#include "ide-layout-stack-split.h"
 #include "ide-source-view.h"
 #include "ide-symbol.h"
 #include "ide-thread-pool.h"

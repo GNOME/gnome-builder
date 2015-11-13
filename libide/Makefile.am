@@ -94,8 +94,19 @@ libide_1_0_la_public_sources = \
 	ide-indenter.h \
 	ide-layout.c \
 	ide-layout.h \
+	ide-layout-grid.c \
+	ide-layout-grid.h \
 	ide-layout-pane.c \
 	ide-layout-pane.h \
+	ide-layout-stack.c \
+	ide-layout-stack.h \
+	ide-layout-stack-actions.c \
+	ide-layout-stack-actions.h \
+	ide-layout-stack-private.h \
+	ide-layout-view.c \
+	ide-layout-view.h \
+	ide-loader.c \
+	ide-loader.h \
 	ide-log.c \
 	ide-log.h \
 	ide-macros.h \
@@ -420,6 +431,7 @@ glib_enum_headers =  \
 	ide-diagnostic.h \
 	ide-highlighter.h \
 	ide-indent-style.h \
+	ide-layout-stack-split.h \
 	ide-source-view.h \
 	ide-symbol.h \
 	ide-thread-pool.h \

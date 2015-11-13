@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <!-- interface-requires gtk+ 3.18 -->
+  <template class="IdeLayoutView" parent="GtkBox">
+  </template>
+  <menu id="menu">
+    <section>
+      <attribute name="id">splits-section</attribute>
+      <attribute name="display-hint">horizontal-buttons</attribute>
+      <attribute name="label" translatable="yes">Split</attribute>
+      <item>
+        <attribute name="label" translatable="yes">Split Left</attribute>
+        <attribute name="action">view-stack.split-left</attribute>
+        <attribute name="verb-icon">builder-split-tab-left-symbolic</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Split Right</attribute>
+        <attribute name="action">view-stack.split-right</attribute>
+        <attribute name="verb-icon">builder-split-tab-right-symbolic</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Split Down</attribute>
+        <attribute name="action">view-stack.split-down</attribute>
+        <attribute name="verb-icon">builder-split-tab-symbolic</attribute>
+      </item>
+    </section>
+    <section>
+      <attribute name="id">move-section</attribute>
+      <attribute name="display-hint">horizontal-buttons</attribute>
+      <attribute name="label" translatable="yes">Move</attribute>
+      <item>
+        <attribute name="label" translatable="yes">Move Left</attribute>
+        <attribute name="action">view-stack.move-left</attribute>
+        <attribute name="verb-icon">builder-move-left-symbolic</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Move Right</attribute>
+        <attribute name="action">view-stack.move-right</attribute>
+        <attribute name="verb-icon">builder-move-right-symbolic</attribute>
+      </item>
+    </section>
+    <section>
+      <attribute name="id">preview-section</attribute>
+    </section>
+    <section>
+      <attribute name="id">save-section</attribute>
+      <item>
+        <attribute name="label" translatable="yes">_Save</attribute>
+        <attribute name="action">view.save</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">_Save As</attribute>
+        <attribute name="action">view.save-as</attribute>
+      </item>
+    </section>
+    <section>
+      <attribute name="id">print-section</attribute>
+      <item>
+        <attribute name="label" translatable="yes">Print</attribute>
+        <attribute name="action">view.print</attribute>
+      </item>
+    </section>
+    <section>
+      <attribute name="id">close-section</attribute>
+      <item>
+        <attribute name="label" translatable="yes">_Close</attribute>
+        <attribute name="action">view-stack.close</attribute>
+      </item>
+    </section>
+  </menu>
+</interface>
