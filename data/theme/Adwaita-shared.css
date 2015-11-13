@@ -32,20 +32,20 @@ GbEditorTweakWidget GtkScrolledWindow {
 /*
  * View stack styling.
  */
-GbViewStack > GtkBox.vertical > GtkBox.header.notebook {
+layoutstack > GtkBox.vertical > GtkBox.header.notebook {
   background-color: shade (@theme_bg_color, 0.95);
   border-bottom: 1px solid @borders;
 }
-GbViewStack.focused > GtkBox.vertical > GtkBox.header.notebook,
-GbViewStack.backdrop.focused > GtkBox.vetical > GtkBox.header.notebook {
+layoutstack.focused > GtkBox.vertical > GtkBox.header.notebook,
+layoutstack.backdrop.focused > GtkBox.vetical > GtkBox.header.notebook {
     background-color: shade (@theme_bg_color, 0.90);
 }
 layoutpane.focused > GtkBox.vertical > GtkBox.horizontal.notebook.header,
 layoutpane.focused > GtkBox.vertical > GtkBox.horizontal.notebook.header.backdrop {
     background-color: shade (@theme_bg_color, 0.90);
 }
-GbViewStack > GtkBox.vertical > GtkBox.header.notebook.horizontal > GtkEventBox > GtkBox.horizontal > button,
-GbViewStack > GtkBox.vertical > GtkBox.header.notebook.horizontal > GtkEventBox > GtkBox.horizontal > GtkBox > GtkBox > button {
+layoutstack > GtkBox.vertical > GtkBox.header.notebook.horizontal > GtkEventBox > GtkBox.horizontal > button,
+layoutstack > GtkBox.vertical > GtkBox.header.notebook.horizontal > GtkEventBox > GtkBox.horizontal > GtkBox > GtkBox > button {
   background-image: none;
   border-bottom: 1px solid transparent;
   border-radius: 0px;
@@ -55,7 +55,7 @@ GbViewStack > GtkBox.vertical > GtkBox.header.notebook.horizontal > GtkEventBox 
   opacity: 0.55;
   padding: 3px 8px 4px;
 }
-GbViewStack > GtkBox.vertical > GtkBox.header.notebook.horizontal > GtkEventBox > GtkBox.horizontal > GtkBox.navigation > button {
+layoutstack > GtkBox.vertical > GtkBox.header.notebook.horizontal > GtkEventBox > GtkBox.horizontal > GtkBox.navigation > button {
   background-image: none;
   border-bottom: 1px solid transparent;
   border-radius: 0px;
@@ -76,26 +76,26 @@ layoutpane > GtkBox.vertical > GtkBox.notebook.header > stackswitcher > button {
   padding: 3px 0px 3px;
 }
 layoutpane > GtkBox.vertical > GtkBox.horizontal.notebook.header > stackswitcher button:checked,
-GbViewStack > GtkBox.vertical > GtkBox.header.notebook.horizontal > GtkEventBox > GtkBox.horizontal > GtkBox > GtkBox > button:checked,
-GbViewStack > GtkBox.vertical > GtkBox.header.notebook.horizontal > GtkEventBox > GtkBox.horizontal > button:checked {
+layoutstack > GtkBox.vertical > GtkBox.header.notebook.horizontal > GtkEventBox > GtkBox.horizontal > GtkBox > GtkBox > button:checked,
+layoutstack > GtkBox.vertical > GtkBox.header.notebook.horizontal > GtkEventBox > GtkBox.horizontal > button:checked {
   box-shadow: 0px 2px 0px @theme_fg_color;
   color: @theme_fg_color;
 }
 layoutpane > GtkBox.vertical > GtkBox.notebook.header.horizontal > stackswitcher > button:hover,
-GbViewStack > GtkBox.vertical > GtkBox.header.notebook.horizontal > GtkEventBox > GtkBox.horizontal > GtkBox.navigation > button:hover,
-GbViewStack > GtkBox.vertical > GtkBox.header.notebook.horizontal > GtkEventBox > GtkBox.horizontal > button:hover,
-GbViewStack > GtkBox.vertical > GtkBox.header.notebook.horizontal > GtkEventBox > GtkBox.horizontal > GtkBox > GtkBox > button:hover {
+layoutstack > GtkBox.vertical > GtkBox.header.notebook.horizontal > GtkEventBox > GtkBox.horizontal > GtkBox.navigation > button:hover,
+layoutstack > GtkBox.vertical > GtkBox.header.notebook.horizontal > GtkEventBox > GtkBox.horizontal > button:hover,
+layoutstack > GtkBox.vertical > GtkBox.header.notebook.horizontal > GtkEventBox > GtkBox.horizontal > GtkBox > GtkBox > button:hover {
   border: 1px solid transparent;
   box-shadow: 0px 2px 0px mix(@theme_fg_color, @theme_bg_color, 0.25);
 }
-GbViewStack > GtkBox.vertical > GtkBox.header.notebook > GtkEventBox > GtkBox.horizontal > GtkBox.navigation > button {
+layoutstack > GtkBox.vertical > GtkBox.header.notebook > GtkEventBox > GtkBox.horizontal > GtkBox.navigation > button {
   padding-left: 4px;
   padding-right: 4px;
 }
-GbViewStack > GtkBox.vertical > GtkBox.header.notebook.horizontal > GtkEventBox > GtkBox.horizontal > button.document-button {
+layoutstack > GtkBox.vertical > GtkBox.header.notebook.horizontal > GtkEventBox > GtkBox.horizontal > button.document-button {
   padding: 0px;
 }
-GbViewStack > GtkBox.vertical > GtkBox.header.notebook.horizontal > GtkEventBox > GtkBox.horizontal > button.document-button > GtkBox > GtkArrow {
+layoutstack > GtkBox.vertical > GtkBox.header.notebook.horizontal > GtkEventBox > GtkBox.horizontal > button.document-button > GtkBox > GtkArrow {
   opacity: 0.35;
   padding-right: 0px;
   margin-right: 0px;
@@ -130,7 +130,7 @@ layoutpane stackswitcher button {
 layoutpane stackswitcher button:checked {
   opacity: 1.0;
 }
-layoutpane GbViewStack GtkBox.header.notebook GtkSeparator.vertical {
+layoutpane layoutstack GtkBox.header.notebook GtkSeparator.vertical {
   opacity: 0.75;
 }
 

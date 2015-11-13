@@ -597,6 +597,7 @@ ide_layout_stack_class_init (IdeLayoutStackClass *klass)
                                    IDE_TYPE_LAYOUT_VIEW,
                                    IDE_TYPE_LAYOUT_GRID_SPLIT);
 
+  gtk_widget_class_set_css_name (widget_class, "layoutstack");
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/ui/ide-layout-stack.ui");
   gtk_widget_class_bind_template_child (widget_class, IdeLayoutStack, close_button);
   gtk_widget_class_bind_template_child (widget_class, IdeLayoutStack, controls);
