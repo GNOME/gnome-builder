@@ -2,10 +2,22 @@
 <interface>
   <!-- interface-requires gtk+ 3.18 -->
   <template class="IdeEditorPerspective" parent="IdeLayout">
-    <child>
-      <object class="GtkLabel">
-        <property name="visible">true</property>
-        <property name="label">Editor Perspective</property>
+    <child internal-child="content_pane">
+      <object class="IdeLayoutPane">
+        <child internal-child="stack_switcher">
+          <object class="GtkStackSwitcher">
+            <property name="visible">false</property>
+          </object>
+        </child>
+        <child internal-child="stack">
+          <object class="GtkStack">
+            <child>
+              <object class="IdeLayoutGrid" id="grid">
+                <property name="visible">true</property>
+              </object>
+            </child>
+          </object>
+        </child>
       </object>
     </child>
   </template>
