@@ -188,6 +188,8 @@ libide_1_0_la_public_sources = \
 	ide-unsaved-file.h \
 	ide-unsaved-files.c \
 	ide-unsaved-files.h \
+	ide-uri.c \
+	ide-uri.h \
 	ide-view.c \
 	ide-view.h \
 	ide-vcs-uri.c \
