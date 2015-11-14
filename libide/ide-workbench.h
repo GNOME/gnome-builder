@@ -22,7 +22,6 @@
 #include <gtk/gtk.h>
 
 #include "ide-context.h"
-#include "ide-loader.h"
 #include "ide-perspective.h"
 
 G_BEGIN_DECLS
@@ -51,10 +50,6 @@ void            ide_workbench_focus                        (IdeWorkbench        
                                                             GtkWidget            *widget);
 void            ide_workbench_close                        (IdeWorkbench         *self);
 IdeContext     *ide_workbench_get_context                  (IdeWorkbench         *self);
-void            ide_workbench_add_loader                   (IdeWorkbench         *self,
-                                                            IdeLoader            *loader);
-void            ide_workbench_remove_loader                (IdeWorkbench         *self,
-                                                            IdeLoader            *loader);
 void            ide_workbench_add_perspective              (IdeWorkbench         *self,
                                                             IdePerspective       *perspective);
 void            ide_workbench_remove_perspective           (IdeWorkbench         *self,

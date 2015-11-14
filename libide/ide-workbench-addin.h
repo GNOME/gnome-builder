@@ -19,6 +19,7 @@
 #ifndef IDE_WORKBENCH_ADDIN_H
 #define IDE_WORKBENCH_ADDIN_H
 
+#include "ide-uri.h"
 #include "ide-workbench.h"
 
 G_BEGIN_DECLS
@@ -31,16 +32,43 @@ struct _IdeWorkbenchAddinInterface
 {
   GTypeInterface parent;
 
-  void (*load)   (IdeWorkbenchAddin *self,
-                  IdeWorkbench      *workbench);
-  void (*unload) (IdeWorkbenchAddin *self,
-                  IdeWorkbench      *workbench);
+  void     (*load)        (IdeWorkbenchAddin    *self,
+                           IdeWorkbench         *workbench);
+  void     (*unload)      (IdeWorkbenchAddin    *self,
+                           IdeWorkbench         *workbench);
+  gboolean (*can_open)    (IdeWorkbenchAddin    *self,
+                           IdeUri               *uri,
+                           const gchar          *content_type,
+                           gint                 *priority);
+  void     (*open_async)  (IdeWorkbenchAddin    *self,
+                           IdeUri               *uri,
+                           const gchar          *content_type,
+                           GCancellable         *cancellable,
+                           GAsyncReadyCallback   callback,
+                           gpointer              user_data);
+  gboolean (*open_finish) (IdeWorkbenchAddin    *self,
+                           GAsyncResult         *result,
+                           GError              **error);
+
 };
 
-void ide_workbench_addin_load   (IdeWorkbenchAddin *self,
-                                 IdeWorkbench      *workbench);
-void ide_workbench_addin_unload (IdeWorkbenchAddin *self,
-                                 IdeWorkbench      *workbench);
+void     ide_workbench_addin_load        (IdeWorkbenchAddin    *self,
+                                          IdeWorkbench         *workbench);
+void     ide_workbench_addin_unload      (IdeWorkbenchAddin    *self,
+                                          IdeWorkbench         *workbench);
+gboolean ide_workbench_addin_can_open    (IdeWorkbenchAddin    *self,
+                                          IdeUri               *uri,
+                                          const gchar          *content_type,
+                                          gint                 *priority);
+void     ide_workbench_addin_open_async  (IdeWorkbenchAddin    *self,
+                                          IdeUri               *uri,
+                                          const gchar          *content_type,
+                                          GCancellable         *cancellable,
+                                          GAsyncReadyCallback   callback,
+                                          gpointer              user_data);
+gboolean ide_workbench_addin_open_finish (IdeWorkbenchAddin    *self,
+                                          GAsyncResult         *result,
+                                          GError              **error);
 
 G_END_DECLS
 

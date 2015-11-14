@@ -105,8 +105,6 @@ libide_1_0_la_public_sources = \
 	ide-layout-stack-private.h \
 	ide-layout-view.c \
 	ide-layout-view.h \
-	ide-loader.c \
-	ide-loader.h \
 	ide-log.c \
 	ide-log.h \
 	ide-macros.h \

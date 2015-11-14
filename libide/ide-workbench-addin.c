@@ -34,11 +34,22 @@ ide_workbench_addin_real_unload (IdeWorkbenchAddin *self,
 {
 }
 
+static gboolean
+ide_workbench_addin_real_can_open (IdeWorkbenchAddin *self,
+                                   IdeUri            *uri,
+                                   const gchar       *content_type,
+                                   gint              *priority)
+{
+  *priority = 0;
+  return FALSE;
+}
+
 static void
 ide_workbench_addin_default_init (IdeWorkbenchAddinInterface *iface)
 {
   iface->load = ide_workbench_addin_real_load;
   iface->unload = ide_workbench_addin_real_unload;
+  iface->can_open = ide_workbench_addin_real_can_open;
 }
 
 /**
@@ -80,4 +91,73 @@ ide_workbench_addin_unload (IdeWorkbenchAddin *self,
   g_return_if_fail (IDE_IS_WORKBENCH (workbench));
 
   IDE_WORKBENCH_ADDIN_GET_IFACE (self)->unload (self, workbench);
+}
+
+/**
+ * ide_workbench_addin_can_open:
+ * @self: An #IdeWorkbenchAddin.
+ * @uri: An #IdeUri.
+ * @content_type: (nullable): A content-type or %NULL.
+ * @priority: (out): the priority at which this loader should be used.
+ *
+ * This interface method indicates if the workbench addin can load the content
+ * found at @uri. If so, @priority should be set to an integer priority
+ * indicating how important it is for this addin to load @uri.
+ *
+ * The lowest integer value wins. However, a load fails, the next addin which
+ * returned %TRUE from this method will be consulted.
+ *
+ * Returns: %TRUE if @self and open @uri.
+ */
+gboolean
+ide_workbench_addin_can_open (IdeWorkbenchAddin *self,
+                              IdeUri            *uri,
+                              const gchar       *content_type,
+                              gint              *priority)
+{
+  g_return_val_if_fail (IDE_IS_WORKBENCH_ADDIN (self), FALSE);
+  g_return_val_if_fail (uri != NULL, FALSE);
+  g_return_val_if_fail (priority != NULL, FALSE);
+
+  return IDE_WORKBENCH_ADDIN_GET_IFACE (self)->can_open (self, uri, content_type, priority);
+}
+
+void
+ide_workbench_addin_open_async (IdeWorkbenchAddin   *self,
+                                IdeUri              *uri,
+                                const gchar         *content_type,
+                                GCancellable        *cancellable,
+                                GAsyncReadyCallback  callback,
+                                gpointer             user_data)
+{
+  g_return_if_fail (IDE_IS_WORKBENCH_ADDIN (self));
+  g_return_if_fail (uri != NULL);
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  if ((IDE_WORKBENCH_ADDIN_GET_IFACE (self)->open_async == NULL) ||
+      (IDE_WORKBENCH_ADDIN_GET_IFACE (self)->open_finish == NULL))
+    g_return_if_reached ();
+
+  IDE_WORKBENCH_ADDIN_GET_IFACE (self)->open_async (self, uri, content_type, cancellable, callback, user_data);
+}
+
+gboolean
+ide_workbench_addin_open_finish (IdeWorkbenchAddin  *self,
+                                 GAsyncResult       *result,
+                                 GError            **error)
+{
+  g_return_val_if_fail (IDE_IS_WORKBENCH_ADDIN (self), FALSE);
+  g_return_val_if_fail (G_IS_ASYNC_RESULT (result), FALSE);
+
+  if (IDE_WORKBENCH_ADDIN_GET_IFACE (self)->open_finish == NULL)
+    {
+      g_set_error (error,
+                   G_IO_ERROR,
+                   G_IO_ERROR_INVAL,
+                   "%s does not contain open_finish",
+                   G_OBJECT_TYPE_NAME (self));
+      return FALSE;
+    }
+
+  return IDE_WORKBENCH_ADDIN_GET_IFACE (self)->open_finish (self, result, error);
 }
