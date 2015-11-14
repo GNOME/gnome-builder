@@ -1875,15 +1875,15 @@
   /* va( , va) , vab */
   bind "parenleft" { "begin-macro" ()
                      "select-inner" ("(", ")", 0, 0)
-                     "set-mode" ("vim-normal", permanent) };
+                     "set-mode" ("vim-visual", permanent) };
 
   bind "parenright" { "begin-macro" ()
                       "select-inner" ("(", ")", 0, 0)
-                      "set-mode" ("vim-normal", permanent) };
+                      "set-mode" ("vim-visual", permanent) };
 
   bind "b" { "begin-macro" ()
              "select-inner" ("(", ")", 0, 0)
-             "set-mode" ("vim-normal", permanent) };
+             "set-mode" ("vim-visual", permanent) };
 
   /* va[ and va] */
   bind "bracketleft" { "begin-macro" ()
