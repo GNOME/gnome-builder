@@ -21,7 +21,7 @@
 #ifndef __IDE_URI_H__
 #define __IDE_URI_H__
 
-#include <glib-object.h>
+#include <gio/gio.h>
 
 G_BEGIN_DECLS
 
@@ -39,13 +39,14 @@ typedef enum
   IDE_URI_PARSE_UTF8_ONLY   = 1 << 7
 } IdeUriParseFlags;
 
-IdeUri *       ide_uri_new          (const gchar        *uri_string,
-                                     IdeUriParseFlags    flags,
-                                     GError            **error);
-IdeUri *       ide_uri_new_relative (IdeUri             *base_uri,
-                                     const gchar        *uri_string,
-                                     IdeUriParseFlags    flags,
-                                     GError            **error);
+IdeUri *       ide_uri_new           (const gchar        *uri_string,
+                                      IdeUriParseFlags    flags,
+                                      GError            **error);
+IdeUri *       ide_uri_new_relative  (IdeUri             *base_uri,
+                                      const gchar        *uri_string,
+                                      IdeUriParseFlags    flags,
+                                      GError            **error);
+IdeUri *       ide_uri_new_from_file (GFile              *file);
 
 typedef enum
 {

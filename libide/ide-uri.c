@@ -1494,3 +1494,26 @@ ide_uri_error_quark (void)
 {
   return g_quark_from_static_string ("ide-uri-error-quark");
 }
+
+/**
+ * ide_uri_new_from_file:
+ * @file: A #GFile.
+ *
+ * Creates a new #IdeUri from the uri provided by @file.
+ *
+ * Returns: (transfer full): A newly allcoated #IdeUri.
+ */
+IdeUri *
+ide_uri_new_from_file (GFile *file)
+{
+  IdeUri *uri;
+  gchar *uristr;
+
+  g_return_val_if_fail (G_IS_FILE (file), NULL);
+
+  uristr = g_file_get_uri (file);
+  uri = ide_uri_new (uristr, 0, NULL);
+  g_free (uristr);
+
+  return uri;
+}
