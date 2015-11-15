@@ -72,6 +72,8 @@
 #define FIXIT_LABEL_LEN_MAX 30
 #define SCROLL_REPLAY_DELAY 1000
 
+#define ALL_ACCELS_MASK (GDK_CONTROL_MASK | GDK_SHIFT_MASK | GDK_MOD1_MASK)
+
 #define _GDK_RECTANGLE_X2(rect) _ide_cairo_rectangle_x2(rect)
 #define _GDK_RECTANGLE_Y2(rect) _ide_cairo_rectangle_y2(rect)
 #define _GDK_RECTANGLE_CONTAINS(rect,other) _ide_cairo_rectangle_contains_rectangle(rect,other)
@@ -116,6 +118,7 @@ typedef struct
   guint                        change_sequence;
 
   gint                         target_line_offset;
+  GString                     *command_str;
   gunichar                     command;
   gunichar                     modifier;
   gunichar                     search_char;
@@ -2001,12 +2004,112 @@ ide_source_view_do_indent (IdeSourceView *self,
   IDE_EXIT;
 }
 
+static inline gboolean
+compare_keys (GdkKeymap       *keymap,
+              GdkEventKey     *event,
+              GtkBindingEntry *binding_entry,
+              guint           *new_keyval,
+              GdkModifierType *state_consumed)
+{
+  gdk_keymap_translate_keyboard_state (keymap,
+                                       event->hardware_keycode, event->state, event->group,
+                                       new_keyval, NULL, NULL, state_consumed);
+
+  if (g_ascii_isupper (*new_keyval))
+    {
+      *new_keyval = gdk_keyval_to_lower (*new_keyval);
+      *state_consumed &= ~GDK_SHIFT_MASK;
+    }
+
+  return (*new_keyval == binding_entry->keyval &&
+          (event->state & ~(*state_consumed) & ALL_ACCELS_MASK) == (binding_entry->modifiers & ALL_ACCELS_MASK));
+}
+
+static gboolean
+is_key_vim_binded (GtkWidget       *widget,
+                   GdkEventKey     *event,
+                   guint           *new_keyval,
+                   GdkModifierType *state_consumed)
+{
+  GdkKeymap *keymap;
+  GtkBindingSet *binding_set;
+  GtkBindingEntry *binding_entry;
+  GtkStyleContext *context;
+  GtkStateFlags state;
+  GPtrArray *binding_set_array;
+
+
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (IDE_SOURCE_VIEW (widget));
+
+  context = gtk_widget_get_style_context (GTK_WIDGET (priv->mode));
+  keymap = gdk_keymap_get_default ();
+  state = gtk_widget_get_state_flags (GTK_WIDGET (priv->mode));
+
+  gtk_style_context_get (context, state, "gtk-key-bindings", &binding_set_array, NULL);
+  if (binding_set_array)
+    {
+      for (gint i = 0; i < binding_set_array->len; i++)
+        {
+          binding_set = g_ptr_array_index (binding_set_array, i);
+          if (g_str_has_prefix (binding_set->set_name, "builder-vim"))
+            {
+              binding_entry = binding_set->entries;
+              while (binding_entry)
+                {
+                  if (compare_keys (keymap, event, binding_entry, new_keyval, state_consumed))
+                    {
+                      g_ptr_array_unref (binding_set_array);
+                      return TRUE;
+                    }
+
+                  binding_entry = binding_entry->set_next;
+                }
+            }
+        }
+
+      g_ptr_array_unref (binding_set_array);
+    }
+
+  return FALSE;
+}
+
+static void
+command_string_append_to (GString         *command_str,
+                          guint            keyval,
+                          GdkModifierType  state)
+{
+  if (state & GDK_CONTROL_MASK)
+    g_string_append (command_str, "<ctrl>");
+
+  if (state & GDK_SHIFT_MASK)
+    g_string_append (command_str, "<shift>");
+
+  if (state & GDK_MOD1_MASK)
+    g_string_append (command_str, "<alt>");
+
+  if (keyval >= '!' && keyval <= '~' )
+    g_string_append_c (command_str, keyval);
+  else
+    {
+      if (!ide_str_empty0 (command_str->str) &&
+          (state & ALL_ACCELS_MASK) == 0 &&
+          *(command_str->str + command_str->len - 1) != ' ')
+        g_string_append (command_str, " ");
+
+      g_string_append (command_str, gdk_keyval_name (keyval));
+      g_string_append (command_str, " ");
+    }
+}
+
 static gboolean
 ide_source_view_do_mode (IdeSourceView *self,
                          GdkEventKey   *event)
 {
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
   g_autofree gchar *suggested_default = NULL;
+  guint new_keyval;
+  GdkModifierType state;
+  GdkModifierType state_consumed;
   gboolean ret = FALSE;
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
@@ -2034,6 +2137,12 @@ ide_source_view_do_mode (IdeSourceView *self,
       /* hold a reference incase binding changes mode */
       mode = g_object_ref (priv->mode);
 
+      if (is_key_vim_binded (GTK_WIDGET (self), event, &new_keyval, &state_consumed))
+        {
+          state = event->state & ~(state_consumed);
+          command_string_append_to (priv->command_str, new_keyval, state);
+        }
+
       /* lookup what this mode thinks our next default should be */
       suggested_default = g_strdup (ide_source_view_mode_get_default_mode (priv->mode));
 
@@ -2054,6 +2163,9 @@ ide_source_view_do_mode (IdeSourceView *self,
 
   if (!priv->mode)
     ide_source_view_real_set_mode (self, suggested_default, IDE_SOURCE_VIEW_MODE_TYPE_PERMANENT);
+
+  if (ide_source_view_mode_get_mode_type (priv->mode) == IDE_SOURCE_VIEW_MODE_TYPE_PERMANENT)
+    g_string_erase (priv->command_str, 0, -1);
 
   if (ide_source_view_mode_get_keep_mark_on_char (priv->mode))
     {
@@ -2126,7 +2238,19 @@ ide_source_view_key_press_event (GtkWidget   *widget,
   if (priv->waiting_for_capture)
     {
       if (!is_modifier_key (event))
-        _ide_source_view_set_modifier (self, gdk_keyval_to_unicode (event->keyval));
+        {
+          guint new_keyval;
+          GdkModifierType state_consumed;
+          GdkKeymap *keymap = gdk_keymap_get_default ();
+
+          _ide_source_view_set_modifier (self, gdk_keyval_to_unicode (event->keyval));
+          gdk_keymap_translate_keyboard_state (keymap,
+                                               event->hardware_keycode, event->state, event->group,
+                                               &new_keyval, NULL, NULL, &state_consumed);
+
+          command_string_append_to (priv->command_str, new_keyval, event->state & ~(state_consumed));
+        }
+
       return TRUE;
     }
 
@@ -3020,6 +3144,7 @@ ide_source_view_real_movement (IdeSourceView         *self,
                                    extend_selection,
                                    exclusive,
                                    count,
+                                   priv->command_str,
                                    priv->command,
                                    priv->modifier,
                                    priv->search_char,
@@ -5119,6 +5244,8 @@ ide_source_view_dispose (GObject *object)
   g_clear_object (&priv->buffer_signals);
   g_clear_object (&priv->file_setting_bindings);
 
+  g_clear_pointer (&priv->command_str, g_string_free);
+
   G_OBJECT_CLASS (ide_source_view_parent_class)->dispose (object);
 }
 
@@ -6177,6 +6304,7 @@ ide_source_view_init (IdeSourceView *self)
   priv->show_line_diagnostics = TRUE;
   priv->font_scale = FONT_SCALE_NORMAL;
   priv->search_direction = GTK_DIR_DOWN;
+  priv->command_str = g_string_sized_new (32);
 
   priv->completion_providers_signals = egg_signal_group_new (IDE_TYPE_EXTENSION_SET_ADAPTER);
 
