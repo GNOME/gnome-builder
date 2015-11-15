@@ -1089,14 +1089,12 @@
                      "clear-count" ()
                      "end-macro" () };
 
-
   bind "d" { "begin-macro" ()
-             "save-insert-mark" ()
              "movement" (first-char, 0, 1, 0)
              "movement" (next-line, 1, 0, 1)
              "copy-clipboard" ()
              "delete-selection" ()
-             "restore-insert-mark" ()
+             "movement" (first-nonspace-char, 0, 1, 0)
              "end-macro" () };
 
   bind "plus" { "begin-macro" ()
