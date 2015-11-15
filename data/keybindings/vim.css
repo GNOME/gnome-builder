@@ -220,9 +220,22 @@
   bind "minus" { "movement" (previous-line, 0, 1, 1)
                  "movement" (first-nonspace-char, 0, 1, 0)
                  "clear-count" () };
+
   bind "plus" { "movement" (next-line, 0, 1, 1)
                  "movement" (first-nonspace-char, 0, 1, 0)
                  "clear-count" () };
+  bind "KP_Enter" { "movement" (next-line, 0, 1, 1)
+                    "movement" (first-nonspace-char, 0, 1, 0)
+                    "clear-count" () };
+  bind "<shift>KP_Enter" { "movement" (next-line, 0, 1, 1)
+                           "movement" (first-nonspace-char, 0, 1, 0)
+                           "clear-count" () };
+  bind "Return" { "movement" (next-line, 0, 1, 1)
+                  "movement" (first-nonspace-char, 0, 1, 0)
+                  "clear-count" () };
+  bind "<shift>Return" { "movement" (next-line, 0, 1, 0)
+                         "movement" (first-nonspace-char, 0, 1, 0)
+                         "clear-count" () };
 
   bind "<shift>k" { "clear-selection" ()
                     "save-insert-mark" ()
@@ -499,15 +512,6 @@
                      "clear-count" () };
   bind "space" { "movement" (next-offset, 0, 1, 1)
                  "clear-count" () };
-
-  bind "KP_Enter" { "movement" (next-line, 0, 1, 1)
-                    "clear-count" () };
-  bind "<shift>KP_Enter" { "movement" (next-line, 0, 1, 1)
-                           "clear-count" () };
-  bind "Return" { "movement" (next-line, 0, 1, 1)
-                  "clear-count" () };
-  bind "<shift>Return" { "movement" (next-line, 0, 1, 0)
-                         "clear-count" () };
 
   /* copy */
   bind "y" { "set-mode" ("vim-normal-y", transient) };
