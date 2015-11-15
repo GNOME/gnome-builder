@@ -29,6 +29,7 @@ G_DEFINE_TYPE (IdeWorkbench, ide_workbench, GTK_TYPE_APPLICATION_WINDOW)
 
 enum {
   PROP_0,
+  PROP_CONTEXT,
   PROP_VISIBLE_PERSPECTIVE,
   PROP_VISIBLE_PERSPECTIVE_NAME,
   LAST_PROP
@@ -101,6 +102,10 @@ ide_workbench_get_property (GObject    *object,
 
   switch (prop_id)
     {
+    case PROP_CONTEXT:
+      g_value_set_object (value, ide_workbench_get_context (self));
+      break;
+
     case PROP_VISIBLE_PERSPECTIVE:
       g_value_set_object (value, ide_workbench_get_visible_perspective (self));
       break;
@@ -149,6 +154,13 @@ ide_workbench_class_init (IdeWorkbenchClass *klass)
   object_class->set_property = ide_workbench_set_property;
 
   widget_class->destroy = ide_workbench_destroy;
+
+  properties [PROP_CONTEXT] =
+    g_param_spec_object ("context",
+                         "Context",
+                         "Context",
+                         IDE_TYPE_CONTEXT,
+                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_VISIBLE_PERSPECTIVE] =
     g_param_spec_object ("visible-perspective",
