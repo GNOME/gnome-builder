@@ -211,6 +211,7 @@ libide_1_0_la_public_sources = \
 	ide-workbench-addin.h \
 	ide-workbench-header-bar.c \
 	ide-workbench-header-bar.h \
+	ide-workbench-open.c \
 	ide-worker.c \
 	ide-worker.h \
 	ide.c \

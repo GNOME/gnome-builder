@@ -546,18 +546,3 @@ ide_workbench_set_visible_perspective_name (IdeWorkbench *self,
   if (perspective != NULL)
     ide_workbench_set_visible_perspective (self, perspective);
 }
-
-void
-ide_workbench_open_async (IdeWorkbench         *self,
-                          GFile               **files,
-                          gint                  n_files,
-                          GCancellable         *cancellable,
-                          GAsyncReadyCallback   callback,
-                          gpointer              user_data)
-{
-  g_return_if_fail (IDE_IS_WORKBENCH (self));
-  g_return_if_fail (n_files > 0);
-  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
-
-  /* TODO */
-}

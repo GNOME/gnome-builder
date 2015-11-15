@@ -23,6 +23,7 @@
 
 #include "ide-context.h"
 #include "ide-perspective.h"
+#include "ide-uri.h"
 
 G_BEGIN_DECLS
 
@@ -30,13 +31,21 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeWorkbench, ide_workbench, IDE, WORKBENCH, GtkApplicationWindow)
 
-void            ide_workbench_open_async                   (IdeWorkbench         *self,
-                                                            GFile               **files,
-                                                            gint                  n_files,
+void            ide_workbench_open_uri_async               (IdeWorkbench         *self,
+                                                            IdeUri               *uri,
                                                             GCancellable         *cancellable,
                                                             GAsyncReadyCallback   callback,
                                                             gpointer              user_data);
-gboolean        ide_workbench_open_finish                  (IdeWorkbench         *self,
+gboolean        ide_workbench_open_uri_finish              (IdeWorkbench         *self,
+                                                            GAsyncResult         *result,
+                                                            GError              **error);
+void            ide_workbench_open_files_async             (IdeWorkbench         *self,
+                                                            GFile               **files,
+                                                            guint                 n_files,
+                                                            GCancellable         *cancellable,
+                                                            GAsyncReadyCallback   callback,
+                                                            gpointer              user_data);
+gboolean        ide_workbench_open_files_finish            (IdeWorkbench         *self,
                                                             GAsyncResult         *result,
                                                             GError              **error);
 void            ide_workbench_save_all_async               (IdeWorkbench         *self,
