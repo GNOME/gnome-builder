@@ -393,6 +393,12 @@
                 "clear-count" () };
   bind "asciicircum" { "movement" (first-nonspace-char, 0, 1, 0)
                        "clear-count" () };
+
+  /* this is a count - 1 motion, we handle this specific case in C code */
+  bind "underscore" { "movement" (next-line, 0, 1, 1)
+                      "movement" (first-nonspace-char, 0, 1, 0)
+                      "clear-count" () };
+
   bind "dollar" { "movement" (last-char, 0, 1, 0)
                   "clear-count" () };
   bind "bar" { "movement" (nth-char, 0, 1, 1)
