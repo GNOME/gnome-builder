@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2015-10-15 20:29+0000\n"
-"PO-Revision-Date: 2015-10-16 08:37+0200\n"
+"POT-Creation-Date: 2015-10-16 18:05+0000\n"
+"PO-Revision-Date: 2015-11-15 13:00+0100\n"
 "Last-Translator: Milo Casagrande <milo@milo.name>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.8.5\n"
+"X-Generator: Poedit 1.8.6\n"
 
 #: ../contrib/egg/egg-animation.c:723
 #, c-format
@@ -207,7 +207,7 @@ msgstr "Visualizzare il _margine destro alla colonna:"
 
 #: ../data/ui/gb-editor-settings-widget.ui.h:2
 msgid "Trim trailing whitespace when saving document"
-msgstr "Elimina gli spazi bianchi terminanti al salvataggio"
+msgstr "Elimina gli spazi bianchi terminali al salvataggio"
 
 #: ../data/ui/gb-editor-settings-widget.ui.h:3
 msgid "Insert matching brace, bracket, quotation, and parenthesis."
@@ -347,7 +347,7 @@ msgstr "_Continua"
 
 #: ../data/ui/gb-new-project-dialog.ui.h:4
 msgid "From existing project on this computer"
-msgstr "Da un progetto esistete sul computer"
+msgstr "Da un progetto esistente sul computer"
 
 #: ../data/ui/gb-new-project-dialog.ui.h:5
 msgid "From remote source code repository"
@@ -364,7 +364,7 @@ msgstr "Posizione"
 
 #: ../data/ui/gb-new-project-dialog.ui.h:8
 msgid "GNOME Version"
-msgstr "Versione di GNOME:"
+msgstr "Versione di GNOME"
 
 #: ../data/ui/gb-new-project-dialog.ui.h:9
 msgid "Language"
@@ -393,7 +393,7 @@ msgstr "Directory"
 
 #: ../data/ui/gb-new-project-dialog.ui.h:15
 msgid "Repository"
-msgstr "Aggiungi repository"
+msgstr "Repository"
 
 #: ../data/ui/gb-preferences-page-editor.ui.h:1
 #: ../data/ui/gb-preferences-window.ui.h:3
@@ -432,7 +432,7 @@ msgstr "Evidenzia riga corrente"
 
 #: ../data/ui/gb-preferences-page-editor.ui.h:9
 msgid "Highlight the line containing the cursor."
-msgstr "Evidenzia la riga corrente dove è posizionato il cursore"
+msgstr "Evidenzia la riga dove è posizionato il cursore"
 
 #: ../data/ui/gb-preferences-page-editor.ui.h:10
 msgid "Highlight Matching Brackets"
@@ -574,7 +574,7 @@ msgstr "Usa Ctags per il completamento con i linguaggi supportati."
 
 #: ../data/ui/gb-preferences-page-insight.ui.h:11
 msgid "Suggest Completions using Clang (Experimental)"
-msgstr "Completamento via Ctags (sperimentale)"
+msgstr "Completamento via Clang (sperimentale)"
 
 #: ../data/ui/gb-preferences-page-insight.ui.h:12
 msgid "Use Clang for completions in the C and C++ languages."
@@ -838,7 +838,7 @@ msgstr "Modifica"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:38
 msgid "Increment number at cursor"
-msgstr "Incremento il numero sul cursore"
+msgstr "Incrementa il numero sul cursore"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:39
 msgid "Decrement number at cursor"
@@ -1011,7 +1011,7 @@ msgstr "Non è stato fornito il nome del file per lo script."
 #: ../libide/gjs/ide-gjs-script.cpp:213
 #: ../libide/pygobject/ide-pygobject-script.c:265
 msgid "The script must be on a local filesystem."
-msgstr "Lo script deve essere su un file locale"
+msgstr "Lo script deve essere in un file locale"
 
 #: ../libide/gjs/ide-gjs-script.cpp:222
 #, c-format
@@ -1199,7 +1199,7 @@ msgstr "Vai alla definizione"
 
 #: ../libide/pygobject/ide-pygobject-script.c:135
 msgid "Attempt to load a PyGObject script with no filename."
-msgstr "Tentato il caricamento di uno script PyGobject senza nome del file."
+msgstr "Tentato il caricamento di uno script PyGObject senza nome del file."
 
 #: ../libide/pygobject/ide-pygobject-script.c:274
 #, c-format
@@ -1355,7 +1355,7 @@ msgstr "Documentazione"
 
 #: ../plugins/device-manager/gb-device-manager-panel.c:67
 msgid "Device Manager"
-msgstr "Gestore dispositivo"
+msgstr "Gestore dispositivi"
 
 #: ../plugins/file-search/gb-file-search-provider.c:45
 msgid "Switch To"
@@ -1375,11 +1375,11 @@ msgstr "Anteprima come HTML"
 
 #: ../plugins/mingw/ide-mingw-device-provider.c:95
 msgid "MinGW (64-bit)"
-msgstr "sistema x86 64 bit"
+msgstr "MinGW (64 bit)"
 
 #: ../plugins/mingw/ide-mingw-device-provider.c:107
 msgid "MinGW (32-bit)"
-msgstr "sistema x86 32 bit"
+msgstr "MinGW (32 bit)"
 
 #: ../plugins/symbol-tree/symbol-tree.c:236
 msgid "Current language does not support symbol resolvers"
@@ -1446,7 +1446,7 @@ msgstr "Reso possibile da"
 
 #: ../src/app/gb-application.c:642
 msgid "Run Builder in standalone mode"
-msgstr "Esegue il programma in modalità standalone"
+msgstr "Esegue il programma in modalità autonoma"
 
 #: ../src/app/gb-application.c:648
 msgid "Show the application's version"
@@ -1492,7 +1492,7 @@ msgstr "Riga %u, Colonna %u"
 #: ../src/editor/gb-editor-frame.c:244
 #, c-format
 msgid "%u of %u"
-msgstr "%u su %u"
+msgstr "%u di %u"
 
 #: ../src/editor/gb-editor-frame.c:662
 msgid "Re_veal in Project Tree"
@@ -1607,7 +1607,7 @@ msgstr "snippet completamento automatico auto"
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-insight.c:86
 msgid "semantic highlighting color goto declaration definition"
-msgstr "semantica evidenziazione colore goto dichiarazione definizionare"
+msgstr "semantica evidenziazione colore goto dichiarazione definizione"
 
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-keybindings.c:64
