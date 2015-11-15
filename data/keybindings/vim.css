@@ -589,6 +589,52 @@
                 "delete-selection" ()
                 "end-macro" () };
 
+  bind "plus" { "begin-macro" ()
+                "movement" (first-char, 0, 1, 0)
+                "movement" (next-line, 1, 0, 1)
+                "movement" (last-char, 1, 0, 0)
+                "copy-clipboard" ()
+                "delete-selection" ()
+                "reindent" ()
+                "clear-count" ()
+                "set-mode" ("vim-insert", permanent) };
+  bind "KP_Enter" { "begin-macro" ()
+                    "movement" (first-char, 0, 1, 0)
+                    "movement" (next-line, 1, 0, 1)
+                    "movement" (last-char, 1, 0, 0)
+                    "copy-clipboard" ()
+                    "delete-selection" ()
+                    "reindent" ()
+                    "clear-count" ()
+                    "set-mode" ("vim-insert", permanent) };
+  bind "<shift>KP_Enter" { "begin-macro" ()
+                           "movement" (first-char, 0, 1, 0)
+                           "movement" (next-line, 1, 0, 1)
+                           "movement" (last-char, 1, 0, 0)
+                           "copy-clipboard" ()
+                           "delete-selection" ()
+                           "reindent" ()
+                           "clear-count" ()
+                           "set-mode" ("vim-insert", permanent) };
+  bind "Return" { "begin-macro" ()
+                  "movement" (first-char, 0, 1, 0)
+                  "movement" (next-line, 1, 0, 1)
+                  "movement" (last-char, 1, 0, 0)
+                  "copy-clipboard" ()
+                  "delete-selection" ()
+                  "reindent" ()
+                  "clear-count" ()
+                  "set-mode" ("vim-insert", permanent) };
+  bind "<shift>Return" { "begin-macro" ()
+                         "movement" (first-char, 0, 1, 0)
+                         "movement" (next-line, 1, 0, 1)
+                         "movement" (last-char, 1, 0, 0)
+                         "copy-clipboard" ()
+                         "delete-selection" ()
+                         "reindent" ()
+                         "clear-count" ()
+                         "set-mode" ("vim-insert", permanent) };
+
   bind "<shift>asciicircum" { "begin-macro" ()
                               "set-mode" ("vim-insert", permanent)
                               "movement" (first-nonspace-char, 1, 1, 1)
@@ -1052,6 +1098,47 @@
              "delete-selection" ()
              "restore-insert-mark" ()
              "end-macro" () };
+
+  bind "plus" { "begin-macro" ()
+                "movement" (first-char, 0, 1, 0)
+                "movement" (next-line, 1, 0, 0)
+                "movement" (next-line, 1, 0, 1)
+                "copy-clipboard" ()
+                "delete-selection" ()
+                "movement" (first-nonspace-char, 0, 1, 0)
+                "clear-count" () };
+  bind "KP_Enter" { "begin-macro" ()
+                    "movement" (first-char, 0, 1, 0)
+                    "movement" (next-line, 1, 0, 0)
+                    "movement" (next-line, 1, 0, 1)
+                    "copy-clipboard" ()
+                    "delete-selection" ()
+                    "movement" (first-nonspace-char, 0, 1, 0)
+                    "clear-count" () };
+  bind "<shift>KP_Enter" { "begin-macro" ()
+                           "movement" (first-char, 0, 1, 0)
+                           "movement" (next-line, 1, 0, 0)
+                           "movement" (next-line, 1, 0, 1)
+                           "copy-clipboard" ()
+                           "delete-selection" ()
+                           "movement" (first-nonspace-char, 0, 1, 0)
+                           "clear-count" () };
+  bind "Return" { "begin-macro" ()
+                  "movement" (first-char, 0, 1, 0)
+                  "movement" (next-line, 1, 0, 0)
+                  "movement" (next-line, 1, 0, 1)
+                  "copy-clipboard" ()
+                  "delete-selection" ()
+                  "movement" (first-nonspace-char, 0, 1, 0)
+                  "clear-count" () };
+  bind "<shift>Return" { "begin-macro" ()
+                         "movement" (first-char, 0, 1, 0)
+                         "movement" (next-line, 1, 0, 0)
+                         "movement" (next-line, 1, 0, 1)
+                         "copy-clipboard" ()
+                         "delete-selection" ()
+                         "movement" (first-nonspace-char, 0, 1, 0)
+                         "clear-count" () };
 
   bind "b" { "begin-macro" ()
              "movement" (previous-word-end, 1, 0, 1)
@@ -1807,6 +1894,27 @@
                     "clear-selection" ()
                     "end-macro" ()
                     "set-mode" ("vim-normal", permanent) };
+
+  bind "plus" { "begin-macro" ()
+                "movement" (next-line, 1, 0, 1)
+                "movement" (first-nonspace-char, 1, 1, 0)
+                "clear-count" () };
+  bind "KP_Enter" { "begin-macro" ()
+                    "movement" (next-line, 1, 0, 1)
+                    "movement" (first-nonspace-char, 1, 1, 0)
+                    "clear-count" () };
+  bind "<shift>KP_Enter" { "begin-macro" ()
+                           "movement" (next-line, 1, 0, 1)
+                           "movement" (first-nonspace-char, 1, 1, 0)
+                           "clear-count" () };
+  bind "Return" { "begin-macro" ()
+                  "movement" (next-line, 1, 0, 1)
+                  "movement" (first-nonspace-char, 1, 1, 0)
+                  "clear-count" () };
+  bind "<shift>Return" { "begin-macro" ()
+                         "movement" (next-line, 1, 0, 1)
+                         "movement" (first-nonspace-char, 1, 1, 0)
+                         "clear-count" () };
 }
 
 @binding-set builder-vim-source-view-visual-i
