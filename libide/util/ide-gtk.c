@@ -16,6 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "egg-animation.h"
+
 #include "ide-gtk.h"
 
 gboolean
@@ -123,4 +125,98 @@ ide_widget_set_context_handler (gpointer                widget,
 
   if ((toplevel = gtk_widget_get_toplevel (widget)))
     ide_widget_hierarchy_changed (widget, NULL, NULL);
+}
+
+static void
+show_callback (gpointer data)
+{
+  g_object_set_data (data, "FADE_ANIMATION", NULL);
+  g_object_unref (data);
+}
+
+static void
+hide_callback (gpointer data)
+{
+  GtkWidget *widget = data;
+
+  g_object_set_data (data, "FADE_ANIMATION", NULL);
+  gtk_widget_hide (widget);
+  gtk_widget_set_opacity (widget, 1.0);
+  g_object_unref (widget);
+}
+
+void
+ide_widget_hide_with_fade (GtkWidget *widget)
+{
+  GdkFrameClock *frame_clock;
+  EggAnimation *anim;
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  if (gtk_widget_get_visible (widget))
+    {
+      anim = g_object_get_data (G_OBJECT (widget), "FADE_ANIMATION");
+      if (anim != NULL)
+        egg_animation_stop (anim);
+
+      frame_clock = gtk_widget_get_frame_clock (widget);
+      anim = egg_object_animate_full (widget,
+                                      EGG_ANIMATION_LINEAR,
+                                      1000,
+                                      frame_clock,
+                                      hide_callback,
+                                      g_object_ref (widget),
+                                      "opacity", 0.0,
+                                      NULL);
+      g_object_set_data_full (G_OBJECT (widget), "FADE_ANIMATION",
+                              g_object_ref (anim), g_object_unref);
+    }
+}
+
+void
+ide_widget_show_with_fade (GtkWidget *widget)
+{
+  GdkFrameClock *frame_clock;
+  EggAnimation *anim;
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  if (!gtk_widget_get_visible (widget))
+    {
+      anim = g_object_get_data (G_OBJECT (widget), "FADE_ANIMATION");
+      if (anim != NULL)
+        egg_animation_stop (anim);
+
+      frame_clock = gtk_widget_get_frame_clock (widget);
+      gtk_widget_set_opacity (widget, 0.0);
+      gtk_widget_show (widget);
+      anim = egg_object_animate_full (widget,
+                                      EGG_ANIMATION_LINEAR,
+                                      500,
+                                      frame_clock,
+                                      show_callback,
+                                      g_object_ref (widget),
+                                      "opacity", 1.0,
+                                      NULL);
+      g_object_set_data_full (G_OBJECT (widget), "FADE_ANIMATION",
+                              g_object_ref (anim), g_object_unref);
+    }
+}
+
+IdeWorkbench *
+ide_widget_get_workbench (GtkWidget *widget)
+{
+  GtkWidget *ancestor;
+
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
+
+  ancestor = gtk_widget_get_ancestor (widget, IDE_TYPE_WORKBENCH);
+  if (IDE_IS_WORKBENCH (ancestor))
+    return IDE_WORKBENCH (ancestor);
+
+  /*
+   * TODO: Add "IDE_WORKBENCH" gdata for popout windows.
+   */
+
+  return NULL;
 }

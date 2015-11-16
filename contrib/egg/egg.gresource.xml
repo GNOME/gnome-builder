@@ -2,5 +2,6 @@
 <gresources>
   <gresource prefix="/org/gnome/libegg-private">
     <file>egg-pill-box.ui</file>
+    <file>egg-simple-popover.ui</file>
   </gresource>
 </gresources>

@@ -46,7 +46,7 @@ get_source_view (GbCommandProvider *provider)
 
   /* Make sure we have a workbench */
   workbench = gb_command_provider_get_workbench (provider);
-  if (!GB_IS_WORKBENCH (workbench))
+  if (!IDE_IS_WORKBENCH (workbench))
     return NULL;
 
   /* Make sure we have an editor tab last focused */

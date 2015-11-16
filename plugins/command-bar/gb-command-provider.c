@@ -105,7 +105,7 @@ on_workbench_set_focus (GbCommandProvider *provider,
                         IdeWorkbench       *workbench)
 {
   g_return_if_fail (GB_IS_COMMAND_PROVIDER (provider));
-  g_return_if_fail (GB_IS_WORKBENCH (workbench));
+  g_return_if_fail (IDE_IS_WORKBENCH (workbench));
   g_return_if_fail (!widget || GTK_IS_WIDGET (widget));
 
   /* walk the hierarchy to find a tab */
@@ -124,7 +124,7 @@ gb_command_provider_connect (GbCommandProvider *provider,
                              IdeWorkbench       *workbench)
 {
   g_return_if_fail (GB_IS_COMMAND_PROVIDER (provider));
-  g_return_if_fail (GB_IS_WORKBENCH (workbench));
+  g_return_if_fail (IDE_IS_WORKBENCH (workbench));
 
   g_signal_connect_object (workbench,
                            "set-focus",
@@ -138,7 +138,7 @@ gb_command_provider_disconnect (GbCommandProvider *provider,
                                 IdeWorkbench       *workbench)
 {
   g_return_if_fail (GB_IS_COMMAND_PROVIDER (provider));
-  g_return_if_fail (GB_IS_WORKBENCH (workbench));
+  g_return_if_fail (IDE_IS_WORKBENCH (workbench));
 
   g_signal_handlers_disconnect_by_func (workbench,
                                         G_CALLBACK (on_workbench_set_focus),
@@ -162,7 +162,7 @@ gb_command_provider_set_workbench (GbCommandProvider *provider,
   GbCommandProviderPrivate *priv = gb_command_provider_get_instance_private (provider);
 
   g_return_if_fail (GB_IS_COMMAND_PROVIDER (provider));
-  g_return_if_fail (!workbench || GB_IS_WORKBENCH (workbench));
+  g_return_if_fail (!workbench || IDE_IS_WORKBENCH (workbench));
 
   if (priv->workbench != workbench)
     {
@@ -317,7 +317,7 @@ gb_command_provider_class_init (GbCommandProviderClass *klass)
     g_param_spec_object ("active-tab",
                          "Active View",
                          "The last focused IdeLayoutView widget.",
-                         GB_TYPE_VIEW,
+                         IDE_TYPE_LAYOUT_VIEW,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   /**

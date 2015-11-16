@@ -41,6 +41,9 @@
 
   <gresource prefix="/org/gnome/builder/ui">
     <file alias="ide-editor-perspective.ui">../../data/ui/ide-editor-perspective.ui</file>
+    <file alias="ide-editor-frame.ui">../../data/ui/ide-editor-frame.ui</file>
+    <file alias="ide-editor-tweak-widget.ui">../../data/ui/ide-editor-tweak-widget.ui</file>
+    <file alias="ide-editor-view.ui">../../data/ui/ide-editor-view.ui</file>
     <file alias="ide-greeter-perspective.ui">../../data/ui/ide-greeter-perspective.ui</file>
     <file alias="ide-greeter-project-row.ui">../../data/ui/ide-greeter-project-row.ui</file>
     <file alias="ide-layout.ui">../../data/ui/ide-layout.ui</file>

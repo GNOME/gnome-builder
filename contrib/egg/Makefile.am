@@ -34,6 +34,8 @@ libegg_private_la_SOURCES = \
 	egg-settings-sandwich.h \
 	egg-signal-group.c \
 	egg-signal-group.h \
+	egg-simple-popover.c \
+	egg-simple-popover.h \
 	egg-slider.c \
 	egg-slider.h \
 	egg-state-machine.c \

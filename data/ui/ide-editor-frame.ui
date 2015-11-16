@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.15 -->
-  <template class="GbEditorFrame" parent="GtkBin">
+  <template class="IdeEditorFrame" parent="GtkBin">
     <child>
       <object class="GtkOverlay" id="frame_overlay">
         <property name="expand">true</property>
@@ -145,7 +145,7 @@
                 <property name="reveal-child">false</property>
                 <property name="transition-type">slide-left</property>
                 <child>
-                  <object class="GbEditorMapBin" id="source_map_container">
+                  <object class="IdeEditorMapBin" id="source_map_container">
                     <property name="floating-bar">floating_bar</property>
                     <property name="visible">true</property>
                   </object>

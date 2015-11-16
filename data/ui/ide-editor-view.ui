@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.15 -->
-  <template class="GbEditorView" parent="GbView">
+  <template class="IdeEditorView" parent="IdeLayoutView">
     <child>
       <object class="GtkBox">
         <property name="orientation">vertical</property>
@@ -73,7 +73,7 @@
                 <property name="orientation">vertical</property>
                 <property name="visible">true</property>
                 <child>
-                  <object class="GbEditorFrame" id="frame1">
+                  <object class="IdeEditorFrame" id="frame1">
                     <property name="visible">true</property>
                   </object>
                   <packing>
@@ -159,13 +159,13 @@
   </template>
   <object class="GtkPopover" id="popover">
     <child>
-      <object class="GbEditorTweakWidget" id="tweak_widget">
+      <object class="IdeEditorTweakWidget" id="tweak_widget">
         <property name="border-width">12</property>
         <property name="visible">true</property>
       </object>
     </child>
   </object>
-  <object class="GbSimplePopover" id="goto_line_popover">
+  <object class="IdeSimplePopover" id="goto_line_popover">
     <property name="visible">true</property>
     <property name="title" translatable="yes">Go to Line</property>
     <property name="button-text" translatable="yes">Go</property>

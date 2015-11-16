@@ -15,6 +15,10 @@ libide_1_0_la_public_sources = \
 	doap/ide-doap.h \
 	editor/ide-editor-perspective.c \
 	editor/ide-editor-perspective.h \
+	editor/ide-editor-view-addin.c \
+	editor/ide-editor-view-addin.h \
+	editor/ide-editor-view.c \
+	editor/ide-editor-view.h \
 	git/ide-git-remote-callbacks.c \
 	git/ide-git-remote-callbacks.h \
 	git/ide-git-vcs.c \
@@ -227,6 +231,21 @@ libide_1_0_la_SOURCES = \
 	editorconfig/editorconfig-glib.h \
 	editorconfig/ide-editorconfig-file-settings.c \
 	editorconfig/ide-editorconfig-file-settings.h \
+	editor/ide-editor-frame-actions.c \
+	editor/ide-editor-frame-actions.h \
+	editor/ide-editor-frame.c \
+	editor/ide-editor-frame.h \
+	editor/ide-editor-frame-private.h \
+	editor/ide-editor-map-bin.c \
+	editor/ide-editor-map-bin.h \
+	editor/ide-editor-print-operation.c \
+	editor/ide-editor-print-operation.h \
+	editor/ide-editor-tweak-widget.c \
+	editor/ide-editor-tweak-widget.h \
+	editor/ide-editor-view-actions.c \
+	editor/ide-editor-view-actions.h \
+	editor/ide-editor-view-addin-private.h \
+	editor/ide-editor-view-private.h \
 	gconstructor.h \
 	git/ide-git-buffer-change-monitor.c \
 	git/ide-git-buffer-change-monitor.h \
@@ -314,6 +333,8 @@ libide_1_0_la_SOURCES = \
 	theatrics/ide-box-theatric.h \
 	util/ide-cairo.c \
 	util/ide-cairo.h \
+	util/ide-dnd.c \
+	util/ide-dnd.h \
 	util/ide-doc-seq.c \
 	util/ide-doc-seq.h \
 	util/ide-gdk.c \
@@ -341,6 +362,8 @@ libide_1_0_la_includes = \
 	-DBUILDDIR=\""${abs_top_builddir}"\" \
 	-I$(top_builddir)/libide \
 	-I$(top_srcdir)/contrib/egg \
+	-I$(top_srcdir)/contrib/gd \
+	-I$(top_srcdir)/contrib/nautilus \
 	-I$(top_srcdir)/contrib/libeditorconfig \
 	-I$(top_srcdir)/contrib/search \
 	-I$(top_srcdir)/contrib/xml \
@@ -392,7 +415,9 @@ libide_1_0_la_LIBADD = \
 	$(SHM_LIB) \
 	-lm \
 	$(top_builddir)/contrib/egg/libegg-private.la \
+	$(top_builddir)/contrib/gd/libgd.la \
 	$(top_builddir)/contrib/libeditorconfig/libeditorconfig.la \
+	$(top_builddir)/contrib/nautilus/libnautilus.la \
 	$(top_builddir)/contrib/search/libsearch.la \
 	$(top_builddir)/contrib/xml/libxml.la \
 	$(NULL)
