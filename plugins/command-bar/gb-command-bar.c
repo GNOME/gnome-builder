@@ -644,7 +644,7 @@ gb_command_bar_finalize (GObject *object)
   g_clear_pointer (&self->last_completion, g_free);
   g_clear_pointer (&self->saved_text, g_free);
   g_queue_free_full (self->history, g_free);
-  gb_clear_weak_pointer (&self->last_focus);
+  ide_clear_weak_pointer (&self->last_focus);
 
   G_OBJECT_CLASS (gb_command_bar_parent_class)->finalize (object);
 }

@@ -20,12 +20,13 @@
 
 #include <ide.h>
 
+#include "ide-editor-frame.h"
+#include "ide-editor-frame-private.h"
+#include "ide-editor-view-private.h"
+#include "ide-gtk.h"
+
 #include "gb-command-vim.h"
 #include "gb-command-vim-provider.h"
-#include "gb-editor-frame.h"
-#include "gb-editor-frame-private.h"
-#include "gb-editor-view.h"
-#include "gb-editor-view-private.h"
 #include "gb-vim.h"
 
 struct _GbCommandVimProvider
@@ -51,11 +52,11 @@ get_source_view (GbCommandProvider *provider)
 
   /* Make sure we have an editor tab last focused */
   active_view = gb_command_provider_get_active_view (provider);
-  if (!GB_IS_EDITOR_VIEW (active_view))
+  if (!IDE_IS_EDITOR_VIEW (active_view))
     return NULL;
 
   /* TODO: Perhaps get the last focused frame? */
-  source_view = GB_EDITOR_VIEW (active_view)->frame1->source_view;
+  source_view = IDE_EDITOR_VIEW (active_view)->frame1->source_view;
   if (!IDE_IS_SOURCE_VIEW (source_view))
     return NULL;
 

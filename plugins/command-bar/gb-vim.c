@@ -22,9 +22,9 @@
 #include <glib/gi18n.h>
 #include <ide.h>
 
-#include "gb-string.h"
+#include "ide-gtk.h"
+
 #include "gb-vim.h"
-#include "gb-widget.h"
 
 G_DEFINE_QUARK (gb-vim-error-quark, gb_vim_error)
 
@@ -407,11 +407,11 @@ gb_vim_command_edit (GtkSourceView  *source_view,
 
   if (ide_str_empty0 (options))
     {
-      gb_widget_activate_action (GTK_WIDGET (source_view), "workbench", "open", NULL);
+      ide_widget_action (GTK_WIDGET (source_view), "workbench", "open", NULL);
       return TRUE;
     }
 
-  if (!(workbench = gb_widget_get_workbench (GTK_WIDGET (source_view))) ||
+  if (!(workbench = ide_widget_get_workbench (GTK_WIDGET (source_view))) ||
       !(context = ide_workbench_get_context (workbench)) ||
       !(vcs = ide_context_get_vcs (context)) ||
       !(workdir = ide_vcs_get_working_directory (vcs)))
@@ -428,7 +428,7 @@ gb_vim_command_edit (GtkSourceView  *source_view,
   else
     file = g_file_get_child (workdir, options);
 
-  ide_workbench_open (workbench, file);
+  ide_workbench_open_files_async (workbench, &file, 1, NULL, NULL, NULL);
 
   g_clear_object (&file);
 
@@ -444,7 +444,7 @@ gb_vim_command_tabe (GtkSourceView  *source_view,
   if (!ide_str_empty0 (options))
     return gb_vim_command_edit (source_view, command, options, error);
 
-  gb_widget_activate_action (GTK_WIDGET (source_view), "workbench", "new-document", NULL);
+  ide_widget_action (GTK_WIDGET (source_view), "workbench", "new-document", NULL);
 
   return TRUE;
 }
@@ -455,8 +455,8 @@ gb_vim_command_quit (GtkSourceView  *source_view,
                      const gchar    *options,
                      GError        **error)
 {
-  gb_widget_activate_action (GTK_WIDGET (source_view), "view", "save", NULL);
-  gb_widget_activate_action (GTK_WIDGET (source_view), "view", "close", NULL);
+  ide_widget_action (GTK_WIDGET (source_view), "view", "save", NULL);
+  ide_widget_action (GTK_WIDGET (source_view), "view", "close", NULL);
   return TRUE;
 }
 
@@ -466,7 +466,7 @@ gb_vim_command_split (GtkSourceView  *source_view,
                       const gchar    *options,
                       GError        **error)
 {
-  gb_widget_activate_action (GTK_WIDGET (source_view), "view-stack", "split-down", NULL);
+  ide_widget_action (GTK_WIDGET (source_view), "view-stack", "split-down", NULL);
   return TRUE;
 }
 
@@ -476,7 +476,7 @@ gb_vim_command_vsplit (GtkSourceView  *source_view,
                        const gchar    *options,
                        GError        **error)
 {
-  gb_widget_activate_action (GTK_WIDGET (source_view), "view-stack", "split-left", NULL);
+  ide_widget_action (GTK_WIDGET (source_view), "view-stack", "split-left", NULL);
   return TRUE;
 }
 
@@ -486,7 +486,7 @@ gb_vim_command_write (GtkSourceView  *source_view,
                       const gchar    *options,
                       GError        **error)
 {
-  gb_widget_activate_action (GTK_WIDGET (source_view), "view", "save", NULL);
+  ide_widget_action (GTK_WIDGET (source_view), "view", "save", NULL);
   return TRUE;
 }
 
@@ -524,7 +524,7 @@ gb_vim_command_make (GtkSourceView  *source_view,
                      const gchar    *options,
                      GError        **error)
 {
-  gb_widget_activate_action (GTK_WIDGET (source_view), "workbench", "build", NULL);
+  ide_widget_action (GTK_WIDGET (source_view), "workbench", "build", NULL);
   return TRUE;
 }
 
@@ -574,7 +574,7 @@ gb_vim_command_bnext (GtkSourceView  *source_view,
                       const gchar    *options,
                       GError        **error)
 {
-  gb_widget_activate_action (GTK_WIDGET (source_view), "view-stack", "next-view", NULL);
+  ide_widget_action (GTK_WIDGET (source_view), "view-stack", "next-view", NULL);
   return TRUE;
 }
 
@@ -584,7 +584,7 @@ gb_vim_command_bprevious (GtkSourceView  *source_view,
                           const gchar    *options,
                           GError        **error)
 {
-  gb_widget_activate_action (GTK_WIDGET (source_view), "view-stack", "previous-view", NULL);
+  ide_widget_action (GTK_WIDGET (source_view), "view-stack", "previous-view", NULL);
   return TRUE;
 }
 
@@ -616,7 +616,7 @@ gb_vim_command_buffers (GtkSourceView  *source_view,
                         const gchar    *options,
                         GError        **error)
 {
-  gb_widget_activate_action (GTK_WIDGET (source_view), "view-stack", "show-list", NULL);
+  ide_widget_action (GTK_WIDGET (source_view), "view-stack", "show-list", NULL);
   return TRUE;
 }
 
@@ -661,7 +661,7 @@ gb_vim_command_help (GtkSourceView  *source_view,
   GVariant *param;
 
   param = g_variant_new_string (options);
-  gb_widget_activate_action (GTK_WIDGET (source_view), "workbench", "search-docs", param);
+  ide_widget_action (GTK_WIDGET (source_view), "workbench", "search-docs", param);
   return TRUE;
 }
 
@@ -1088,7 +1088,7 @@ gb_vim_complete_edit_files (GtkSourceView *source_view,
   g_assert (ar);
   g_assert (prefix);
 
-  if (!(workbench = gb_widget_get_workbench (GTK_WIDGET (source_view))) ||
+  if (!(workbench = ide_widget_get_workbench (GTK_WIDGET (source_view))) ||
       !(context = ide_workbench_get_context (workbench)) ||
       !(vcs = ide_context_get_vcs (context)) ||
       !(workdir = ide_vcs_get_working_directory (vcs)))

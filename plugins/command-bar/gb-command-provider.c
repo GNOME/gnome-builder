@@ -352,7 +352,7 @@ gb_command_provider_class_init (GbCommandProviderClass *klass)
     g_param_spec_object ("workbench",
                          "Workbench",
                          "The target workbench.",
-                         GB_TYPE_WORKBENCH,
+                         IDE_TYPE_WORKBENCH,
                          (G_PARAM_READWRITE |
                           G_PARAM_CONSTRUCT_ONLY |
                           G_PARAM_STATIC_STRINGS));

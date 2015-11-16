@@ -36,6 +36,7 @@ gboolean      ide_widget_action              (GtkWidget               *widget,
 void          ide_widget_set_context_handler (gpointer                 widget,
                                               IdeWidgetContextHandler  handler);
 void          ide_widget_hide_with_fade      (GtkWidget               *widget);
+void          ide_widget_show_with_fade      (GtkWidget               *widget);
 IdeWorkbench *ide_widget_get_workbench       (GtkWidget               *widget);
 
 G_END_DECLS

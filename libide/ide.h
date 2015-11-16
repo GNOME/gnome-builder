@@ -109,6 +109,9 @@ G_BEGIN_DECLS
 #include "ide-workbench.h"
 #include "ide-workbench-addin.h"
 
+#include "editor/ide-editor-view.h"
+#include "editor/ide-editor-view-addin.h"
+
 #include "directory/ide-directory-vcs.h"
 #include "doap/ide-doap-person.h"
 #include "doap/ide-doap.h"
