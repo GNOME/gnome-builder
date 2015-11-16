@@ -19,13 +19,12 @@
 #include <glib/gi18n.h>
 
 #include "gb-command-provider.h"
-#include "gb-workbench.h"
 
 typedef struct
 {
-  GbWorkbench *workbench;
-  GbView      *active_view;
-  gint         priority;
+  IdeWorkbench  *workbench;
+  IdeLayoutView *active_view;
+  gint           priority;
 } GbCommandProviderPrivate;
 
 G_DEFINE_TYPE_WITH_PRIVATE (GbCommandProvider, gb_command_provider, G_TYPE_OBJECT)
@@ -48,7 +47,7 @@ static GParamSpec *properties [LAST_PROP];
 static guint signals [LAST_SIGNAL];
 
 GbCommandProvider *
-gb_command_provider_new (GbWorkbench *workbench)
+gb_command_provider_new (IdeWorkbench *workbench)
 {
   return g_object_new (GB_TYPE_COMMAND_PROVIDER,
                        "workbench", workbench,
@@ -61,9 +60,9 @@ gb_command_provider_new (GbWorkbench *workbench)
  * Returns the "active-tab" property. The active-tab is the last tab that
  * was focused in the workbench.
  *
- * Returns: (transfer none): A #GbView or %NULL.
+ * Returns: (transfer none): A #IdeLayoutView or %NULL.
  */
-GbView *
+IdeLayoutView *
 gb_command_provider_get_active_view (GbCommandProvider *provider)
 {
   GbCommandProviderPrivate *priv = gb_command_provider_get_instance_private (provider);
@@ -75,12 +74,12 @@ gb_command_provider_get_active_view (GbCommandProvider *provider)
 
 static void
 gb_command_provider_set_active_view (GbCommandProvider *provider,
-                                    GbView             *tab)
+                                    IdeLayoutView             *tab)
 {
   GbCommandProviderPrivate *priv = gb_command_provider_get_instance_private (provider);
 
   g_return_if_fail (GB_IS_COMMAND_PROVIDER (provider));
-  g_return_if_fail (!tab || GB_IS_VIEW (tab));
+  g_return_if_fail (!tab || IDE_IS_LAYOUT_VIEW (tab));
 
   if (priv->active_view)
     {
@@ -103,7 +102,7 @@ gb_command_provider_set_active_view (GbCommandProvider *provider,
 static void
 on_workbench_set_focus (GbCommandProvider *provider,
                         GtkWidget         *widget,
-                        GbWorkbench       *workbench)
+                        IdeWorkbench       *workbench)
 {
   g_return_if_fail (GB_IS_COMMAND_PROVIDER (provider));
   g_return_if_fail (GB_IS_WORKBENCH (workbench));
@@ -111,18 +110,18 @@ on_workbench_set_focus (GbCommandProvider *provider,
 
   /* walk the hierarchy to find a tab */
   if (widget)
-    while (!GB_IS_VIEW (widget))
+    while (!IDE_IS_LAYOUT_VIEW (widget))
       if (!(widget = gtk_widget_get_parent (widget)))
         break;
 
-  if (GB_IS_VIEW (widget))
+  if (IDE_IS_LAYOUT_VIEW (widget))
     gb_command_provider_set_active_view (provider,
-                                         GB_VIEW (widget));
+                                         IDE_LAYOUT_VIEW (widget));
 }
 
 static void
 gb_command_provider_connect (GbCommandProvider *provider,
-                             GbWorkbench       *workbench)
+                             IdeWorkbench       *workbench)
 {
   g_return_if_fail (GB_IS_COMMAND_PROVIDER (provider));
   g_return_if_fail (GB_IS_WORKBENCH (workbench));
@@ -136,7 +135,7 @@ gb_command_provider_connect (GbCommandProvider *provider,
 
 static void
 gb_command_provider_disconnect (GbCommandProvider *provider,
-                                GbWorkbench       *workbench)
+                                IdeWorkbench       *workbench)
 {
   g_return_if_fail (GB_IS_COMMAND_PROVIDER (provider));
   g_return_if_fail (GB_IS_WORKBENCH (workbench));
@@ -146,7 +145,7 @@ gb_command_provider_disconnect (GbCommandProvider *provider,
                                         provider);
 }
 
-GbWorkbench *
+IdeWorkbench *
 gb_command_provider_get_workbench (GbCommandProvider *provider)
 {
   GbCommandProviderPrivate *priv = gb_command_provider_get_instance_private (provider);
@@ -158,7 +157,7 @@ gb_command_provider_get_workbench (GbCommandProvider *provider)
 
 static void
 gb_command_provider_set_workbench (GbCommandProvider *provider,
-                                   GbWorkbench       *workbench)
+                                   IdeWorkbench       *workbench)
 {
   GbCommandProviderPrivate *priv = gb_command_provider_get_instance_private (provider);
 
@@ -317,7 +316,7 @@ gb_command_provider_class_init (GbCommandProviderClass *klass)
   properties [PROP_ACTIVE_VIEW] =
     g_param_spec_object ("active-tab",
                          "Active View",
-                         "The last focused GbView widget.",
+                         "The last focused IdeLayoutView widget.",
                          GB_TYPE_VIEW,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 

@@ -20,18 +20,12 @@
 #include <ide.h>
 #include <libpeas/peas.h>
 
-#include "gb-application.h"
 #include "gb-command.h"
 #include "gb-command-bar-resources.h"
 #include "gb-command-bar.h"
 #include "gb-command-gaction-provider.h"
 #include "gb-command-manager.h"
 #include "gb-command-vim-provider.h"
-#include "gb-glib.h"
-#include "gb-slider.h"
-#include "gb-string.h"
-#include "gb-view-stack.h"
-#include "gb-widget.h"
 
 #include "ide-workbench.h"
 #include "ide-workbench-addin.h"

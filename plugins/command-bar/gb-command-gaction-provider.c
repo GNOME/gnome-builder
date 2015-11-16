@@ -26,7 +26,6 @@
 
 #include "gb-command-gaction-provider.h"
 #include "gb-command-gaction.h"
-#include "gb-view.h"
 
 struct _GbCommandGactionProvider
 {
@@ -120,7 +119,7 @@ show_prefix_actions (GObject *object)
 }
 
 GbCommandProvider *
-gb_command_gaction_provider_new (GbWorkbench *workbench)
+gb_command_gaction_provider_new (IdeWorkbench *workbench)
 {
   return g_object_new (GB_TYPE_COMMAND_GACTION_PROVIDER,
                        "workbench", workbench,

@@ -18,10 +18,10 @@
 
 #define G_LOG_DOMAIN "command-manager"
 
+#include <ide.h>
 #include <string.h>
 
 #include "gb-command-manager.h"
-#include "gb-workbench.h"
 
 struct _GbCommandManager
 {

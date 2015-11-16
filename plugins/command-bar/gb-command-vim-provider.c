@@ -27,7 +27,6 @@
 #include "gb-editor-view.h"
 #include "gb-editor-view-private.h"
 #include "gb-vim.h"
-#include "gb-workbench.h"
 
 struct _GbCommandVimProvider
 {
@@ -39,8 +38,8 @@ G_DEFINE_TYPE (GbCommandVimProvider, gb_command_vim_provider, GB_TYPE_COMMAND_PR
 GtkWidget *
 get_source_view (GbCommandProvider *provider)
 {
-  GbWorkbench *workbench;
-  GbView *active_view;
+  IdeWorkbench *workbench;
+  IdeLayoutView *active_view;
   IdeSourceView *source_view;
 
   g_assert (GB_IS_COMMAND_VIM_PROVIDER (provider));

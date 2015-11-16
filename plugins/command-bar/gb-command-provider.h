@@ -20,10 +20,9 @@
 #define GB_COMMAND_PROVIDER_H
 
 #include <gio/gio.h>
+#include <ide.h>
 
 #include "gb-command.h"
-#include "gb-view.h"
-#include "gb-workbench-types.h"
 
 G_BEGIN_DECLS
 
@@ -42,9 +41,9 @@ struct _GbCommandProviderClass
                           const gchar       *command_text);
 };
 
-GbCommandProvider *gb_command_provider_new             (GbWorkbench       *workbench);
-GbWorkbench       *gb_command_provider_get_workbench   (GbCommandProvider *provider);
-GbView            *gb_command_provider_get_active_view (GbCommandProvider *provider);
+GbCommandProvider *gb_command_provider_new             (IdeWorkbench      *workbench);
+IdeWorkbench      *gb_command_provider_get_workbench   (GbCommandProvider *provider);
+IdeLayoutView     *gb_command_provider_get_active_view (GbCommandProvider *provider);
 gint               gb_command_provider_get_priority    (GbCommandProvider *provider);
 void               gb_command_provider_set_priority    (GbCommandProvider *provider,
                                                         gint               priority);

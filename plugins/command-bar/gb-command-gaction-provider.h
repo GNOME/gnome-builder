@@ -28,7 +28,7 @@ G_BEGIN_DECLS
 G_DECLARE_FINAL_TYPE (GbCommandGactionProvider, gb_command_gaction_provider,
                       GB, COMMAND_GACTION_PROVIDER, GbCommandProvider)
 
-GbCommandProvider *gb_command_gaction_provider_new (GbWorkbench *workbench);
+GbCommandProvider *gb_command_gaction_provider_new (IdeWorkbench *workbench);
 
 G_END_DECLS
 
