@@ -34,7 +34,7 @@ struct _IdeSourceSnippetsManager
 
 G_DEFINE_TYPE (IdeSourceSnippetsManager, ide_source_snippets_manager, G_TYPE_OBJECT)
 
-#define SNIPPETS_DIRECTORY "/org/gnome/libide/snippets/"
+#define SNIPPETS_DIRECTORY "/org/gnome/builder/snippets/"
 
 static gboolean
 ide_source_snippets_manager_load_file (IdeSourceSnippetsManager  *self,

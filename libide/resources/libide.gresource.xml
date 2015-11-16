@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
-  <gresource prefix="/org/gnome/libide/snippets">
+  <gresource prefix="/org/gnome/builder/snippets">
     <file alias="c.snippets">../../data/snippets/c.snippets</file>
     <file alias="chdr.snippets">../../data/snippets/chdr.snippets</file>
     <file alias="gobject.snippets">../../data/snippets/gobject.snippets</file>
@@ -24,11 +24,11 @@
     <file alias="shared.css">../../data/theme/shared.css</file>
   </gresource>
 
-  <gresource prefix="/org/gnome/libide/modelines">
+  <gresource prefix="/org/gnome/builder/modelines">
     <file alias="language-mappings">../modelines/language-mappings</file>
   </gresource>
 
-  <gresource prefix="/org/gnome/libide/file-settings">
+  <gresource prefix="/org/gnome/builder/file-settings">
     <file alias="defaults.ini">../../data/file-settings/defaults.ini</file>
   </gresource>
 

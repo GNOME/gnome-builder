@@ -27,7 +27,7 @@
 
 #include "modeline-parser.h"
 
-#define MODELINES_LANGUAGE_MAPPINGS_FILE "/org/gnome/libide/modelines/language-mappings"
+#define MODELINES_LANGUAGE_MAPPINGS_FILE "/org/gnome/builder/modelines/language-mappings"
 #define gedit_debug_message(ignored,fmt,...) g_debug(fmt,__VA_ARGS__)
 
 /* Mappings: language name -> Gedit language ID */

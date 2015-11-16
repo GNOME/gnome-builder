@@ -200,7 +200,7 @@ ide_language_defaults_get_current_version (const gchar  *path,
 static GBytes *
 ide_language_defaults_get_defaults (GError **error)
 {
-  return g_resources_lookup_data ("/org/gnome/libide/file-settings/defaults.ini",
+  return g_resources_lookup_data ("/org/gnome/builder/file-settings/defaults.ini",
                                   G_RESOURCE_LOOKUP_FLAGS_NONE, error);
 }
 
