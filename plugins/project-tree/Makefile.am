@@ -38,6 +38,10 @@ libproject_tree_plugin_la_CFLAGS = \
 	-I$(top_srcdir)/src/util \
 	$(NULL)
 
+if ENABLE_TERMINAL_PLUGIN
+libproject_tree_plugin_la_CFLAGS += -DHAVE_VTE
+endif
+
 libproject_tree_plugin_la_LIBADD = \
 	$(LIBIDE_LIBS) \
 	$(BUILDER_LIBS) \

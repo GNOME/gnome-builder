@@ -19,9 +19,9 @@
 #include <glib/gi18n.h>
 #include <ide.h>
 
+#include "egg-scrolled-window.h"
 #include "egg-search-bar.h"
 
-#include "gb-scrolled-window.h"
 #include "gb-shortcuts-column.h"
 #include "gb-shortcuts-dialog.h"
 #include "gb-shortcuts-gesture.h"
@@ -911,7 +911,7 @@ gb_shortcuts_dialog_init (GbShortcutsDialog *self)
                                 NULL);
   gtk_menu_button_set_popover (priv->menu_button, GTK_WIDGET (priv->popover));
 
-  scroller = g_object_new (GB_TYPE_SCROLLED_WINDOW,
+  scroller = g_object_new (EGG_TYPE_SCROLLED_WINDOW,
                            "min-content-width", 150,
                            "max-content-width", 300,
                            "min-content-height", 10,

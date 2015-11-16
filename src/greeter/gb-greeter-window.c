@@ -29,7 +29,6 @@
 #include "gb-greeter-project-row.h"
 #include "gb-greeter-window.h"
 #include "gb-gtk.h"
-#include "gb-scrolled-window.h"
 #include "gb-settings.h"
 
 struct _GbGreeterWindow
@@ -578,7 +577,6 @@ gb_greeter_window_class_init (GbGreeterWindowClass *klass)
   g_type_ensure (EGG_TYPE_SEARCH_BAR);
   g_type_ensure (EGG_TYPE_STATE_MACHINE);
   g_type_ensure (GB_TYPE_GREETER_PROJECT_ROW);
-  g_type_ensure (GB_TYPE_SCROLLED_WINDOW);
 }
 
 static void

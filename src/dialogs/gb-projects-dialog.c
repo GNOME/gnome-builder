@@ -28,7 +28,6 @@
 #include "gb-new-project-dialog.h"
 #include "gb-projects-dialog.h"
 #include "gb-recent-project-row.h"
-#include "gb-scrolled-window.h"
 #include "gb-settings.h"
 #include "gb-string.h"
 #include "gb-widget.h"
@@ -514,8 +513,6 @@ gb_projects_dialog_class_init (GbProjectsDialogClass *klass)
   GB_WIDGET_CLASS_BIND (klass, GbProjectsDialog, search_button);
   GB_WIDGET_CLASS_BIND (klass, GbProjectsDialog, search_entry);
   GB_WIDGET_CLASS_BIND (klass, GbProjectsDialog, select_button);
-
-  g_type_ensure (GB_TYPE_SCROLLED_WINDOW);
 }
 
 static void

@@ -21,7 +21,6 @@
 #include <glib/gi18n.h>
 
 #include "gb-glib.h"
-#include "gb-scrolled-window.h"
 #include "gb-search-box.h"
 #include "gb-search-display.h"
 #include "gb-string.h"
@@ -379,7 +378,6 @@ gb_search_box_class_init (GbSearchBoxClass *klass)
   GB_WIDGET_CLASS_BIND (klass, GbSearchBox, popover);
 
   g_type_ensure (GB_TYPE_SEARCH_DISPLAY);
-  g_type_ensure (GB_TYPE_SCROLLED_WINDOW);
 }
 
 static void

@@ -37,7 +37,7 @@
     <property name="modal">false</property>
     <property name="relative-to">entry</property>
     <child>
-      <object class="GbScrolledWindow" id="scroller">
+      <object class="EggScrolledWindow" id="scroller">
         <property name="max-content-height">800</property>
         <property name="min-content-height">50</property>
         <property name="min-content-width">775</property>

@@ -70,7 +70,7 @@
                 <property name="expand">true</property>
                 <property name="visible">true</property>
                 <child type="center">
-                  <object class="GbScrolledWindow">
+                  <object class="EggScrolledWindow">
                     <property name="halign">center</property>
                     <property name="hexpand">false</property>
                     <property name="max-content-height">600</property>
