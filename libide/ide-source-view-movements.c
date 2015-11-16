@@ -1958,7 +1958,7 @@ _ide_source_view_apply_movement (IdeSourceView         *self,
   Movement mv = { 0 };
   GtkTextBuffer *buffer;
   GtkTextMark *insert;
-  gint min_count;
+  gint min_count = 1;
   gsize i;
 
   g_return_if_fail (IDE_IS_SOURCE_VIEW (self));
@@ -1983,14 +1983,10 @@ _ide_source_view_apply_movement (IdeSourceView         *self,
   insert = gtk_text_buffer_get_insert (buffer);
 
   /* specific processing for underscore motion */
-  if (g_str_has_suffix (command_str->str, "_"))
+  if (g_str_has_suffix (command_str->str, "_") && count > 0)
     {
       min_count = 0;
       --count;
-    }
-  else
-    {
-      min_count = 1;
     }
 
   mv.self = self;

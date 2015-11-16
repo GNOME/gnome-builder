@@ -3134,7 +3134,7 @@ ide_source_view_real_movement (IdeSourceView         *self,
   g_assert (IDE_IS_SOURCE_VIEW (self));
 
   if (apply_count)
-    count = priv->count;
+    count = MAX(1, priv->count);
 
   if (priv->scrolling_to_scroll_mark)
     priv->scrolling_to_scroll_mark = FALSE;
