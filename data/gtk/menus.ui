@@ -69,14 +69,14 @@
     </section>
     <section>
       <item>
-        <attribute name="label" translatable="yes">_New Document</attribute>
+        <attribute name="label" translatable="yes">_New File</attribute>
         <attribute name="action">workbench.new-document</attribute>
       </item>
     </section>
     <section>
       <item>
-        <attribute name="label" translatable="yes">_Open</attribute>
-        <attribute name="action">workbench.open</attribute>
+        <attribute name="label" translatable="yes">_Open File</attribute>
+        <attribute name="action">win.open-with-dialog</attribute>
       </item>
     </section>
     <section>

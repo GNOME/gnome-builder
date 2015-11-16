@@ -53,8 +53,9 @@ typedef struct
   gpointer    user_data;
 } IdeWorkbenchForeach;
 
-void _ide_workbench_set_context (IdeWorkbench *workbench,
+void ide_workbench_set_context  (IdeWorkbench *workbench,
                                  IdeContext   *context);
+void ide_workbench_actions_init (IdeWorkbench *self);
 
 G_END_DECLS
 

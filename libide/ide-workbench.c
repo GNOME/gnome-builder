@@ -233,9 +233,12 @@ ide_workbench_init (IdeWorkbench *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
 
+  ide_workbench_actions_init (self);
+
   ide_workbench_init_greeter (self);
   ide_workbench_init_editor (self);
   ide_workbench_init_preferences (self);
+
   ide_window_settings_register (GTK_WINDOW (self));
 
   g_signal_connect_object (self->perspectives_stack,
@@ -331,8 +334,8 @@ ide_workbench_get_context (IdeWorkbench *self)
 }
 
 void
-_ide_workbench_set_context (IdeWorkbench *self,
-                            IdeContext   *context)
+ide_workbench_set_context (IdeWorkbench *self,
+                           IdeContext   *context)
 {
   g_return_if_fail (IDE_IS_WORKBENCH (self));
   g_return_if_fail (IDE_IS_CONTEXT (context));

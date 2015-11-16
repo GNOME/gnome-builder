@@ -278,6 +278,7 @@ libide_1_0_la_SOURCES = \
 	ide-source-view-movements.h \
 	ide-text-iter.c \
 	ide-text-iter.h \
+	ide-workbench-actions.c \
 	ide-workbench-private.h \
 	ide-worker-manager.c \
 	ide-worker-manager.h \

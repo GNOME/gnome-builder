@@ -422,7 +422,7 @@ ide_greeter_perspective_context_cb (GObject      *object,
     }
 
   workbench = IDE_WORKBENCH (gtk_widget_get_toplevel (GTK_WIDGET (self)));
-  _ide_workbench_set_context (workbench, context);
+  ide_workbench_set_context (workbench, context);
 }
 
 static void
