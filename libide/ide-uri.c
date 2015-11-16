@@ -744,6 +744,14 @@ ide_uri_to_string (IdeUri              *uri,
 
   g_return_val_if_fail (uri != NULL, NULL);
 
+  if (g_strcmp0 (uri->scheme, "file") == 0)
+    {
+      if (uri->fragment)
+        return g_strdup_printf ("file://%s#%s", uri->path, uri->fragment);
+      else
+        return g_strdup_printf ("file://%s", uri->path);
+    }
+
   str = g_string_new (uri->scheme);
   g_string_append_c (str, ':');
 
