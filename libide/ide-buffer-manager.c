@@ -25,6 +25,7 @@
 
 #include "ide-back-forward-item.h"
 #include "ide-back-forward-list.h"
+#include "ide-back-forward-list-private.h"
 #include "ide-buffer.h"
 #include "ide-buffer-manager.h"
 #include "ide-context.h"
@@ -50,6 +51,7 @@ struct _IdeBufferManager
   GHashTable               *timeouts;
   IdeBuffer                *focus_buffer;
   GtkSourceCompletionWords *word_completion;
+  GSettings                *settings;
 
   gsize                     max_file_size;
 
@@ -505,19 +507,28 @@ ide_buffer_manager_load_file__load_cb (GObject      *object,
   back_forward_list = ide_context_get_back_forward_list (context);
   item = _ide_back_forward_list_find (back_forward_list, state->file);
 
-  if (item != NULL)
+  gtk_text_buffer_get_start_iter (GTK_TEXT_BUFFER (state->buffer), &iter);
+
+  if (item != NULL && g_settings_get_boolean (self->settings, "restore-insert-mark"))
     {
-      IdeSourceLocation *item_loc;
-      guint line;
-      guint line_offset;
+      const gchar *fragment;
+      IdeUri *uri;
 
-      item_loc = ide_back_forward_item_get_location (item);
-      line = ide_source_location_get_line (item_loc);
-      line_offset = ide_source_location_get_line_offset (item_loc);
+      uri = ide_back_forward_item_get_uri (item);
+      fragment = ide_uri_get_fragment (uri);
 
-      IDE_TRACE_MSG ("Restoring insert mark to %u:%u", line, line_offset);
+      if (fragment != NULL)
+        {
+          guint line = 0;
+          guint line_offset = 0;
 
-      gtk_text_buffer_get_iter_at_line_offset (GTK_TEXT_BUFFER (state->buffer), &iter, line, line_offset);
+          if (1 == sscanf (fragment, "L%u_%u", &line, &line_offset))
+            {
+              IDE_TRACE_MSG ("Restoring insert mark to %u:%u", line, line_offset);
+              gtk_text_buffer_get_iter_at_line_offset (GTK_TEXT_BUFFER (state->buffer), &iter,
+                                                       line, line_offset);
+            }
+        }
     }
   else
     {
@@ -1189,6 +1200,7 @@ ide_buffer_manager_finalize (GObject *object)
 
   g_clear_pointer (&self->buffers, g_ptr_array_unref);
   g_clear_pointer (&self->timeouts, g_hash_table_unref);
+  g_clear_object (&self->settings);
 
   G_OBJECT_CLASS (ide_buffer_manager_parent_class)->finalize (object);
 }
@@ -1420,6 +1432,7 @@ ide_buffer_manager_init (IdeBufferManager *self)
   self->max_file_size = MAX_FILE_SIZE_BYTES_DEFAULT;
   self->timeouts = g_hash_table_new (g_direct_hash, g_direct_equal);
   self->word_completion = gtk_source_completion_words_new (_("Words"), NULL);
+  self->settings = g_settings_new ("org.gnome.builder.editor");
 }
 
 static void

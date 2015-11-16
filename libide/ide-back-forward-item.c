@@ -26,49 +26,50 @@
 
 struct _IdeBackForwardItem
 {
-  IdeObject          parent_instance;
-  IdeSourceLocation *location;
+  IdeObject  parent_instance;
+  IdeUri    *uri;
 };
 
 G_DEFINE_TYPE (IdeBackForwardItem, ide_back_forward_item, IDE_TYPE_OBJECT)
 
 enum {
   PROP_0,
-  PROP_LOCATION,
+  PROP_URI,
   LAST_PROP
 };
 
 static GParamSpec *properties [LAST_PROP];
 
 IdeBackForwardItem *
-ide_back_forward_item_new (IdeContext        *context,
-                           IdeSourceLocation *location)
+ide_back_forward_item_new (IdeContext *context,
+                           IdeUri     *uri)
 {
   return g_object_new (IDE_TYPE_BACK_FORWARD_ITEM,
                        "context", context,
-                       "location", location,
+                       "uri", uri,
                        NULL);
 }
 
-IdeSourceLocation *
-ide_back_forward_item_get_location (IdeBackForwardItem *self)
+IdeUri *
+ide_back_forward_item_get_uri (IdeBackForwardItem *self)
 {
   g_return_val_if_fail (IDE_IS_BACK_FORWARD_ITEM (self), NULL);
 
-  return self->location;
+  return self->uri;
 }
 
 static void
-ide_back_forward_item_set_location (IdeBackForwardItem *self,
-                                    IdeSourceLocation  *location)
+ide_back_forward_item_set_uri (IdeBackForwardItem *self,
+                               IdeUri             *uri)
 {
   g_return_if_fail (IDE_IS_BACK_FORWARD_ITEM (self));
-  g_return_if_fail (location);
+  g_return_if_fail (uri != NULL);
 
-  if (location != self->location)
+  if (uri != self->uri)
     {
-      g_clear_pointer (&self->location, ide_source_location_unref);
-      self->location = ide_source_location_ref (location);
+      g_clear_pointer (&self->uri, ide_uri_unref);
+      self->uri = ide_uri_ref (uri);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_URI]);
     }
 }
 
@@ -77,7 +78,7 @@ ide_back_forward_item_finalize (GObject *object)
 {
   IdeBackForwardItem *self = (IdeBackForwardItem *)object;
 
-  g_clear_pointer (&self->location, ide_source_location_unref);
+  g_clear_pointer (&self->uri, ide_uri_unref);
 
   G_OBJECT_CLASS (ide_back_forward_item_parent_class)->finalize (object);
 }
@@ -92,8 +93,8 @@ ide_back_forward_item_get_property (GObject    *object,
 
   switch (prop_id)
     {
-    case PROP_LOCATION:
-      g_value_set_boxed (value, ide_back_forward_item_get_location (self));
+    case PROP_URI:
+      g_value_set_boxed (value, ide_back_forward_item_get_uri (self));
       break;
 
     default:
@@ -111,8 +112,8 @@ ide_back_forward_item_set_property (GObject      *object,
 
   switch (prop_id)
     {
-    case PROP_LOCATION:
-      ide_back_forward_item_set_location (self, g_value_get_boxed (value));
+    case PROP_URI:
+      ide_back_forward_item_set_uri (self, g_value_get_boxed (value));
       break;
 
     default:
@@ -130,16 +131,21 @@ ide_back_forward_item_class_init (IdeBackForwardItemClass *klass)
   object_class->set_property = ide_back_forward_item_set_property;
 
   /**
-   * IdeBackForwardItem:location:
+   * IdeBackForwardItem:uri:
    *
-   * The #IdeBackForwardItem:location property contains the location within
-   * a source file to navigate to.
+   * The #IdeBackForwardItem:uri property contains the location for the
+   * back/forward item.
+   *
+   * This might be a uri to a file, including a line number.
+   *
+   * #IdeWorkbenchAddin can hook how these are loaded, by implementing the
+   * IdeWorkbenchAddin::can_open() vfunc and associated functions.
    */
-  properties [PROP_LOCATION] =
-    g_param_spec_boxed ("location",
-                        "Location",
+  properties [PROP_URI] =
+    g_param_spec_boxed ("uri",
+                        "Uri",
                         "The location of the navigation item.",
-                        IDE_TYPE_SOURCE_LOCATION,
+                        IDE_TYPE_URI,
                         (G_PARAM_READWRITE |
                          G_PARAM_CONSTRUCT_ONLY |
                          G_PARAM_STATIC_STRINGS));
@@ -156,33 +162,43 @@ gboolean
 ide_back_forward_item_chain (IdeBackForwardItem *self,
                              IdeBackForwardItem *other)
 {
-  IdeSourceLocation *loc1;
-  IdeSourceLocation *loc2;
-  IdeFile *file1;
-  IdeFile *file2;
-  gint line1;
-  gint line2;
+  const gchar *tmp1;
+  const gchar *tmp2;
+  gint line1 = 0;
+  gint line2 = 0;
 
   g_return_val_if_fail (IDE_IS_BACK_FORWARD_ITEM (self), FALSE);
   g_return_val_if_fail (IDE_IS_BACK_FORWARD_ITEM (other), FALSE);
 
-  loc1 = ide_back_forward_item_get_location (self);
-  loc2 = ide_back_forward_item_get_location (other);
-
-  file1 = ide_source_location_get_file (loc1);
-  file2 = ide_source_location_get_file (loc2);
-
-  if (!ide_file_equal (file1, file2))
+  tmp1 = ide_uri_get_scheme (self->uri);
+  tmp2 = ide_uri_get_scheme (other->uri);
+  if (!ide_str_equal0 (tmp1, tmp2))
     return FALSE;
 
-  line1 = ide_source_location_get_line (loc1);
-  line2 = ide_source_location_get_line (loc2);
+  tmp1 = ide_uri_get_host (self->uri);
+  tmp2 = ide_uri_get_host (other->uri);
+  if (!ide_str_equal0 (tmp1, tmp2))
+    return FALSE;
 
-  if (ABS (line1 - line2) <= NUM_LINES_CHAIN_MAX)
-    {
-      ide_back_forward_item_set_location (self, other->location);
-      return TRUE;
-    }
+  tmp1 = ide_uri_get_path (self->uri);
+  tmp2 = ide_uri_get_path (other->uri);
+  if (!ide_str_equal0 (tmp1, tmp2))
+    return FALSE;
+
+  tmp1 = ide_uri_get_fragment (self->uri);
+  tmp2 = ide_uri_get_fragment (other->uri);
+  if ((tmp1 == NULL) || (tmp2 == NULL))
+    return FALSE;
+
+  if ((1 != sscanf (tmp1, "L%u_", &line1)) ||
+      (1 != sscanf (tmp2, "L%u_", &line2)))
+    return FALSE;
+
+  if (line1 >= G_MAXINT || line2 >= G_MAXINT)
+    return FALSE;
+
+  if (ABS (line1 - line2) < 10)
+    return TRUE;
 
   return FALSE;
 }

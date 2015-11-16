@@ -26,6 +26,8 @@ libide_1_0_la_public_sources = \
 	ide-back-forward-item.c \
 	ide-back-forward-item.h \
 	ide-back-forward-list.c \
+	ide-back-forward-list-load.c \
+	ide-back-forward-list-save.c \
 	ide-back-forward-list.h \
 	ide-buffer-change-monitor.c \
 	ide-buffer-change-monitor.h \
@@ -242,6 +244,7 @@ libide_1_0_la_SOURCES = \
 	ide-application-private.h \
 	ide-async-helper.c \
 	ide-async-helper.h \
+	ide-back-forward-list-private.h \
 	ide-battery-monitor.c \
 	ide-battery-monitor.h \
 	ide-css-provider.c \

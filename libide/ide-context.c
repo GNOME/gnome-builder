@@ -23,6 +23,7 @@
 
 #include "ide-async-helper.h"
 #include "ide-back-forward-list.h"
+#include "ide-back-forward-list-private.h"
 #include "ide-buffer-manager.h"
 #include "ide-buffer.h"
 #include "ide-build-system.h"

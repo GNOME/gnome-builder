@@ -20,6 +20,7 @@
 #define IDE_BACK_FORWARD_ITEM_H
 
 #include "ide-object.h"
+#include "ide-uri.h"
 
 G_BEGIN_DECLS
 
@@ -27,11 +28,11 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeBackForwardItem, ide_back_forward_item, IDE, BACK_FORWARD_ITEM, IdeObject)
 
-IdeBackForwardItem *ide_back_forward_item_new          (IdeContext         *context,
-                                                        IdeSourceLocation  *location);
-IdeSourceLocation  *ide_back_forward_item_get_location (IdeBackForwardItem *self);
-gboolean            ide_back_forward_item_chain        (IdeBackForwardItem *self,
-                                                        IdeBackForwardItem *other);
+IdeBackForwardItem *ide_back_forward_item_new     (IdeContext         *context,
+                                                   IdeUri             *uri);
+IdeUri             *ide_back_forward_item_get_uri (IdeBackForwardItem *self);
+gboolean            ide_back_forward_item_chain   (IdeBackForwardItem *self,
+                                                   IdeBackForwardItem *other);
 
 G_END_DECLS
 

@@ -33,8 +33,7 @@
 #include "ide-project.h"
 #include "ide-source-location.h"
 
-#define MAX_ITEMS_PER_FILE 5
-#define MAX_ITEMS_TOTAL    100
+#define MAX_ITEMS_TOTAL 100
 
 struct _IdeBackForwardList
 {
@@ -462,7 +461,7 @@ ide_back_forward_list_init (IdeBackForwardList *self)
   self->forward = g_queue_new ();
 }
 
-static void
+void
 _ide_back_forward_list_foreach (IdeBackForwardList *self,
                                 GFunc               callback,
                                 gpointer            user_data)
@@ -487,10 +486,9 @@ find_by_file (gpointer data,
               gpointer user_data)
 {
   IdeBackForwardItem *item = data;
-  IdeSourceLocation *item_loc;
-  IdeFile *item_file;
+  IdeUri *uri;
   struct {
-    IdeFile *file;
+    GFile *file;
     IdeBackForwardItem *result;
   } *lookup = user_data;
 
@@ -501,10 +499,11 @@ find_by_file (gpointer data,
   if (lookup->result)
     return;
 
-  item_loc = ide_back_forward_item_get_location (item);
-  item_file = ide_source_location_get_file (item_loc);
+  uri = ide_back_forward_item_get_uri (item);
+  if (uri == NULL)
+    return;
 
-  if (ide_file_equal (item_file, lookup->file))
+  if (ide_uri_is_file (uri, lookup->file))
     lookup->result = item;
 }
 
@@ -526,297 +525,17 @@ _ide_back_forward_list_find (IdeBackForwardList *self,
                              IdeFile            *file)
 {
   struct {
-    IdeFile *file;
+    GFile *file;
     IdeBackForwardItem *result;
-  } lookup = { file, NULL };
+  } lookup;
 
   g_return_val_if_fail (IDE_IS_BACK_FORWARD_LIST (self), NULL);
   g_return_val_if_fail (IDE_IS_FILE (file), NULL);
 
+  lookup.file = ide_file_get_file (file);
+  lookup.result = NULL;
+
   _ide_back_forward_list_foreach (self, find_by_file, &lookup);
 
   return lookup.result;
-}
-
-static void
-add_item_string (gpointer data,
-                 gpointer user_data)
-{
-  IdeBackForwardItem *item = data;
-  IdeSourceLocation *item_loc;
-  g_autofree gchar *uri = NULL;
-  IdeFile *file;
-  GFile *gfile;
-  struct {
-    GHashTable *counts;
-    GString *str;
-    guint count;
-  } *save_state = user_data;
-  guint count;
-  guint line;
-  guint line_offset;
-
-  g_assert (IDE_IS_BACK_FORWARD_ITEM (item));
-  g_assert (save_state);
-  g_assert (save_state->str);
-  g_assert (save_state->counts);
-
-  item_loc = ide_back_forward_item_get_location (item);
-  file = ide_source_location_get_file (item_loc);
-
-  count = GPOINTER_TO_INT (g_hash_table_lookup (save_state->counts, file));
-  if (count >= MAX_ITEMS_PER_FILE)
-    return;
-
-  if (save_state->count == MAX_ITEMS_TOTAL)
-    return;
-
-  save_state->count++;
-
-  g_hash_table_replace (save_state->counts, file, GINT_TO_POINTER (++count));
-
-  line = ide_source_location_get_line (item_loc);
-  line_offset = ide_source_location_get_line_offset (item_loc);
-
-  gfile = ide_file_get_file (file);
-  uri = g_file_get_uri (gfile);
-
-  g_string_append_printf (save_state->str, "%u %u %s\n", line, line_offset, uri);
-}
-
-static void
-ide_back_forward_list__replace_contents_cb (GObject      *object,
-                                            GAsyncResult *result,
-                                            gpointer      user_data)
-{
-  GFile *file = (GFile *)object;
-  g_autoptr(GTask) task = user_data;
-  GError *error = NULL;
-
-  g_assert (G_IS_FILE (file));
-  g_assert (G_IS_TASK (task));
-
-  if (!g_file_replace_contents_finish (file, result, NULL, &error))
-    g_task_return_error (task, error);
-  else
-    g_task_return_boolean (task, TRUE);
-}
-
-void
-_ide_back_forward_list_save_async (IdeBackForwardList  *self,
-                                   GFile               *file,
-                                   GCancellable        *cancellable,
-                                   GAsyncReadyCallback  callback,
-                                   gpointer             user_data)
-{
-  g_autoptr(GTask) task = NULL;
-  g_autoptr(GBytes) contents = NULL;
-  struct {
-    GHashTable *counts;
-    GString *str;
-    guint count;
-  } save_state = { 0 };
-  gsize len;
-
-  g_assert (IDE_IS_BACK_FORWARD_LIST (self));
-  g_assert (G_IS_FILE (file));
-  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
-
-#ifdef IDE_ENABLE_TRACE
-  {
-    g_autofree gchar *path = NULL;
-
-    path = g_file_get_path (file);
-    IDE_TRACE_MSG ("Saving %s", path);
-  }
-#endif
-
-  task = g_task_new (self, cancellable, callback, user_data);
-
-  save_state.counts = g_hash_table_new ((GHashFunc)ide_file_hash,
-                                        (GEqualFunc)ide_file_equal);
-  save_state.str = g_string_new (NULL);
-  _ide_back_forward_list_foreach (self, add_item_string, &save_state);
-  len = save_state.str->len;
-  contents = g_bytes_new_take (g_string_free (save_state.str, FALSE), len);
-  g_hash_table_destroy (save_state.counts);
-
-  g_file_replace_contents_bytes_async (file, contents, NULL, FALSE,
-                                       G_FILE_CREATE_REPLACE_DESTINATION,
-                                       cancellable,
-                                       ide_back_forward_list__replace_contents_cb,
-                                       g_object_ref (task));
-}
-
-gboolean
-_ide_back_forward_list_save_finish (IdeBackForwardList  *self,
-                                    GAsyncResult        *result,
-                                    GError             **error)
-{
-  GTask *task = (GTask *)result;
-
-  g_return_val_if_fail (IDE_IS_BACK_FORWARD_LIST (self), FALSE);
-  g_return_val_if_fail (G_IS_TASK (task), FALSE);
-
-  return g_task_propagate_boolean (task, error);
-}
-
-static IdeSourceLocation *
-create_source_location (IdeBackForwardList *self,
-                        GFile              *gfile,
-                        guint               line,
-                        guint               line_offset)
-{
-  IdeContext *context;
-  IdeProject *project;
-  g_autoptr(IdeFile) file = NULL;
-  IdeSourceLocation *ret;
-
-  g_assert (IDE_IS_BACK_FORWARD_LIST (self));
-  g_assert (G_IS_FILE (gfile));
-
-  context = ide_object_get_context (IDE_OBJECT (self));
-  project = ide_context_get_project (context);
-  file = ide_project_get_project_file (project, gfile);
-
-  ret = ide_source_location_new (file, line, line_offset, 0);
-
-  return ret;
-}
-
-static void
-ide_back_forward_list__load_contents_cb (GObject      *object,
-                                         GAsyncResult *result,
-                                         gpointer      user_data)
-{
-  GFile *file = (GFile *)object;
-  IdeBackForwardList *self;
-  g_autoptr(GTask) task = user_data;
-  g_autofree gchar *contents = NULL;
-  IdeContext *context;
-  GError *error = NULL;
-  gsize length = 0;
-  gchar **lines = NULL;
-  gssize line_count;
-  gssize i;
-
-  IDE_ENTRY;
-
-  g_assert (G_IS_FILE (file));
-  g_assert (G_IS_TASK (task));
-
-  self = g_task_get_source_object (task);
-  context = ide_object_get_context (IDE_OBJECT (self));
-
-  if (!g_file_load_contents_finish (file, result, &contents, &length, NULL, &error))
-    {
-      g_task_return_error (task, error);
-      IDE_EXIT;
-    }
-
-  if (!g_utf8_validate (contents, length, NULL))
-    {
-      g_task_return_new_error (task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_INVALID_DATA,
-                               _("File contained invalid UTF-8"));
-      IDE_EXIT;
-    }
-
-  lines = g_strsplit (contents, "\n", 0);
-  line_count = g_strv_length (lines);
-
-  for (i = line_count - 1; i >= 0; i--)
-    {
-      gchar **parts;
-
-      g_strstrip (lines [i]);
-
-      if (!lines [i][0])
-        continue;
-
-      parts = g_strsplit (lines [i], " ", 3);
-
-      if (g_strv_length (parts) == 3)
-        {
-          if (g_str_is_ascii (parts [0]) && g_str_is_ascii (parts [1]))
-            {
-              gint64 line;
-              gint64 line_offset;
-
-              line = g_ascii_strtoll (parts [0], NULL, 10);
-              line_offset = g_ascii_strtoll (parts [1], NULL, 10);
-
-              /*
-               * g_ascii_strtoll() will return G_MAXINT64/G_MININT64 and set errno to ERANGE. We
-               * don't really care about anything other than it being out of range.
-               */
-              if ((line >= 0) && (line <= G_MAXUINT) &&
-                  (line_offset >= 0) && (line_offset <= G_MAXUINT))
-                {
-                  g_autoptr(IdeSourceLocation) srcloc = NULL;
-                  g_autoptr(IdeBackForwardItem) item = NULL;
-                  g_autoptr(GFile) jump_file = NULL;
-
-                  jump_file = g_file_new_for_uri (parts [2]);
-                  srcloc = create_source_location (self, jump_file, line, line_offset);
-                  item = ide_back_forward_item_new (context, srcloc);
-
-                  ide_back_forward_list_push (self, item);
-                }
-            }
-        }
-
-      g_strfreev (parts);
-    }
-
-  g_strfreev (lines);
-
-  g_task_return_boolean (task, TRUE);
-
-  IDE_EXIT;
-}
-
-
-void
-_ide_back_forward_list_load_async (IdeBackForwardList  *self,
-                                   GFile               *file,
-                                   GCancellable        *cancellable,
-                                   GAsyncReadyCallback  callback,
-                                   gpointer             user_data)
-{
-  g_autoptr(GTask) task = NULL;
-
-  g_assert (IDE_IS_BACK_FORWARD_LIST (self));
-  g_assert (G_IS_FILE (file));
-  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
-
-#ifdef IDE_ENABLE_TRACE
-  {
-    g_autofree gchar *path = NULL;
-
-    path = g_file_get_path (file);
-    IDE_TRACE_MSG ("Loading %s", path);
-  }
-#endif
-
-  task = g_task_new (self, cancellable, callback, user_data);
-
-  g_file_load_contents_async (file,
-                              cancellable,
-                              ide_back_forward_list__load_contents_cb,
-                              g_object_ref (task));
-}
-
-gboolean
-_ide_back_forward_list_load_finish (IdeBackForwardList  *self,
-                                    GAsyncResult        *result,
-                                    GError             **error)
-{
-  GTask *task = (GTask *)result;
-
-  g_return_val_if_fail (IDE_IS_BACK_FORWARD_LIST (self), FALSE);
-  g_return_val_if_fail (G_IS_TASK (task), FALSE);
-
-  return g_task_propagate_boolean (task, error);
 }

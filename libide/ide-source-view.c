@@ -2792,13 +2792,13 @@ ide_source_view_real_jump (IdeSourceView     *self,
                            const GtkTextIter *location)
 {
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
-  g_autoptr(IdeSourceLocation) srcloc = NULL;
-  g_autoptr(IdeBackForwardItem) item = NULL;
+  IdeBackForwardItem *item;
   IdeContext *context;
   IdeFile *file;
+  IdeUri *uri;
+  gchar *fragment;
   guint line;
   guint line_offset;
-  guint offset;
 
   IDE_ENTRY;
 
@@ -2819,14 +2819,17 @@ ide_source_view_real_jump (IdeSourceView     *self,
   if (file == NULL)
     IDE_EXIT;
 
+  uri = ide_uri_new_from_file (ide_file_get_file (file));
   line = gtk_text_iter_get_line (location);
   line_offset = gtk_text_iter_get_line_offset (location);
-  offset = gtk_text_iter_get_offset (location);
-
-  srcloc = ide_source_location_new (file, line, line_offset, offset);
-  item = ide_back_forward_item_new (context, srcloc);
-
+  fragment = g_strdup_printf ("L%u_%u", line, line_offset);
+  ide_uri_set_fragment (uri, fragment);
+  item = ide_back_forward_item_new (context, uri);
   ide_back_forward_list_push (priv->back_forward_list, item);
+
+  g_object_unref (item);
+  ide_uri_unref (uri);
+  g_free (fragment);
 
   IDE_EXIT;
 }
