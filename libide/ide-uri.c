@@ -1517,3 +1517,28 @@ ide_uri_new_from_file (GFile *file)
 
   return uri;
 }
+
+gboolean
+ide_uri_is_file (IdeUri *uri,
+                 GFile  *file)
+{
+  gchar *file_uri;
+  gchar *str;
+  gboolean ret;
+
+  g_return_val_if_fail (uri != NULL, FALSE);
+  g_return_val_if_fail (G_IS_FILE (file), FALSE);
+
+  if (uri->host && uri->host [0])
+    return FALSE;
+
+  file_uri = g_file_get_uri (file);
+  str = g_strdup_printf ("%s://%s", uri->scheme ?: "", uri->path ?: "");
+
+  ret = (g_strcmp0 (file_uri, str) == 0);
+
+  g_free (file_uri);
+  g_free (str);
+
+  return ret;
+}

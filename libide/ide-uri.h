@@ -130,6 +130,9 @@ gchar *      ide_uri_build           (const gchar        *scheme,
                                       const gchar        *query,
                                       const gchar        *fragment);
 
+gboolean     ide_uri_is_file         (IdeUri             *uri,
+                                      GFile              *file);
+
 
 /**
  * IDE_URI_ERROR:
