@@ -510,4 +510,10 @@ DISTCLEANFILES += $(vapi_DATA)
 endif
 
 
+if ENABLE_PYTHON_SCRIPTING
+overridesdir = $(pyoverridesdir)
+overrides_PYTHON = Ide.py
+endif
+
+
 -include $(top_srcdir)/git.mk

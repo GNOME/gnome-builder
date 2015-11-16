@@ -22,7 +22,6 @@
 
 import gi
 
-gi.require_version('Builder', '1.0')
 gi.require_version('Gtk', '3.0')
 gi.require_version('GtkSource', '3.0')
 gi.require_version('Ide', '1.0')
@@ -33,7 +32,6 @@ from gi.importer import DynamicImporter
 from gi.module import IntrospectionModule
 from gi.module import FunctionInfo
 
-from gi.repository import Builder
 from gi.repository import Gio
 from gi.repository import GLib
 from gi.repository import GObject
@@ -457,7 +455,7 @@ class JediCompletionRequest:
             self.cancelled = True
             self.invocation.return_error_literal(Gio.io_error_quark(), Gio.IOErrorEnum.CANCELLED, "Operation was cancelled")
 
-class JediService(Builder.DBusService):
+class JediService(Ide.DBusService):
     queue = None
     handler_id = None
 
@@ -466,7 +464,7 @@ class JediService(Builder.DBusService):
         self.queue = {}
         self.handler_id = 0
 
-    @Builder.DBusMethod('org.gnome.builder.plugins.jedi', in_signature='siis', out_signature='a(issas)', async=True)
+    @Ide.DBusMethod('org.gnome.builder.plugins.jedi', in_signature='siis', out_signature='a(issas)', async=True)
     def CodeComplete(self, invocation, filename, line, column, content):
         if filename in self.queue:
             request = self.queue.pop(filename)
