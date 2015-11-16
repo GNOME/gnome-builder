@@ -34,28 +34,37 @@ ide_application_actions_preferences (GSimpleAction *action,
                                      GVariant      *parameter,
                                      gpointer       user_data)
 {
-#if 0
   IdeApplication *self = user_data;
+  GList *windows;
 
   IDE_ENTRY;
 
   g_assert (IDE_IS_APPLICATION (self));
 
-  if (self->preferences_window == NULL)
-    {
-      IdePreferencesWindow *window;
+  /*
+   * TODO: Make this work at the greeter screen too.
+   */
 
-      window = g_object_new (IDE_TYPE_PREFERENCES_WINDOW,
-                             "type-hint", GDK_WINDOW_TYPE_HINT_DIALOG,
-                             "window-position", GTK_WIN_POS_CENTER,
-                             NULL);
-      ide_set_weak_pointer (&self->preferences_window, window);
+  windows = gtk_application_get_windows (GTK_APPLICATION (self));
+
+  for (; windows; windows = windows->next)
+    {
+      GtkWindow *window = windows->data;
+      const gchar *name;
+
+      if (!IDE_IS_WORKBENCH (window))
+        continue;
+
+      name = ide_workbench_get_visible_perspective_name (IDE_WORKBENCH (window));
+
+      if (!ide_str_equal0 (name, "greeter"))
+        {
+          ide_workbench_set_visible_perspective_name (IDE_WORKBENCH (window), "preferences");
+          IDE_EXIT;
+        }
     }
 
-  gtk_window_present (GTK_WINDOW (self->preferences_window));
-
   IDE_EXIT;
-#endif
 }
 
 #if 0

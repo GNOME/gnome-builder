@@ -784,6 +784,12 @@ ide_preferences_iface_init (IdePreferencesInterface *iface)
 }
 
 static gchar *
+ide_preferences_perspective_get_id (IdePerspective *perspective)
+{
+  return g_strdup ("preferences");
+}
+
+static gchar *
 ide_preferences_perspective_get_title (IdePerspective *perspective)
 {
   return g_strdup (_("Preferences"));
@@ -814,6 +820,7 @@ ide_preferences_perspective_get_actions (IdePerspective *perspective)
 static void
 ide_perspective_iface_init (IdePerspectiveInterface *iface)
 {
+  iface->get_id = ide_preferences_perspective_get_id;
   iface->get_icon_name = ide_preferences_perspective_get_icon_name;
   iface->get_title = ide_preferences_perspective_get_title;
   iface->get_titlebar = ide_preferences_perspective_get_titlebar;

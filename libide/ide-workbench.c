@@ -458,13 +458,12 @@ ide_workbench_get_perspective_by_name (IdeWorkbench *self,
 IdePerspective *
 ide_workbench_get_visible_perspective (IdeWorkbench *self)
 {
-  GtkWidget *visible_child;
-
   g_return_val_if_fail (IDE_IS_WORKBENCH (self), NULL);
 
-  visible_child = gtk_stack_get_visible_child (self->perspectives_stack);
+  if (gtk_stack_get_visible_child (self->top_stack) == GTK_WIDGET (self->greeter_perspective))
+    return IDE_PERSPECTIVE (self->greeter_perspective);
 
-  return IDE_PERSPECTIVE (visible_child);
+  return IDE_PERSPECTIVE (gtk_stack_get_visible_child (self->perspectives_stack));
 }
 
 void
