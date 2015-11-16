@@ -277,8 +277,8 @@ gnome_builder_CFLAGS = $(libgnome_builder_la_CFLAGS)
 gnome_builder_LDADD = \
 	$(BUILDER_LIBS) \
 	$(top_builddir)/contrib/egg/libegg-private.la \
+	$(top_builddir)/data/icons/hicolor/libicons.la \
 	$(top_builddir)/libide/libide-1.0.la \
-	libgnome-builder.la \
 	$(NULL)
 gnome_builder_LDFLAGS = \
 	-export-dynamic \

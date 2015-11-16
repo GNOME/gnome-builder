@@ -1,21 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
   <gresource prefix="/org/gnome/builder">
-    <file alias="gtk/menus.ui">../../data/gtk/menus.ui</file>
 
-    <file alias="markdown/markdown.css">../../data/markdown/markdown.css</file>
-    <file alias="markdown/marked.js">../../data/markdown/marked.js</file>
-    <file alias="markdown/markdown-view.js">../../data/markdown/markdown-view.js</file>
-
-    <file alias="keybindings/default.css">../../data/keybindings/default.css</file>
-    <file alias="keybindings/emacs.css">../../data/keybindings/emacs.css</file>
-    <file alias="keybindings/shared.css">../../data/keybindings/shared.css</file>
-    <file alias="keybindings/vim.css">../../data/keybindings/vim.css</file>
-
-    <file alias="theme/Adwaita.css">../../data/theme/Adwaita.css</file>
-    <file alias="theme/Adwaita-dark.css">../../data/theme/Adwaita-dark.css</file>
-    <file alias="theme/Adwaita-shared.css">../../data/theme/Adwaita-shared.css</file>
-    <file alias="theme/shared.css">../../data/theme/shared.css</file>
 
     <file alias="ui/gb-editor-frame.ui">../../data/ui/gb-editor-frame.ui</file>
     <file alias="ui/gb-editor-settings-widget.ui">../../data/ui/gb-editor-settings-widget.ui</file>

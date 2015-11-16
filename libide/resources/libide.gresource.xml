@@ -1,43 +1,61 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
-  <gresource prefix="/org/gnome/libide">
-    <file alias="snippets/c.snippets">../../data/snippets/c.snippets</file>
-    <file alias="snippets/chdr.snippets">../../data/snippets/chdr.snippets</file>
-    <file alias="snippets/gobject.snippets">../../data/snippets/gobject.snippets</file>
-    <file alias="snippets/licenses.snippets">../../data/snippets/licenses.snippets</file>
-    <file alias="snippets/main.snippets">../../data/snippets/main.snippets</file>
-    <file alias="snippets/python.snippets">../../data/snippets/python.snippets</file>
-    <file alias="snippets/rpmspec.snippets">../../data/snippets/rpmspec.snippets</file>
-    <file alias="snippets/shebang.snippets">../../data/snippets/shebang.snippets</file>
-    <file alias="snippets/vala.snippets">../../data/snippets/vala.snippets</file>
-    <file alias="snippets/xml.snippets">../../data/snippets/xml.snippets</file>
-
-    <file alias="modelines/language-mappings">../modelines/language-mappings</file>
-
-    <file alias="file-settings/defaults.ini">../../data/file-settings/defaults.ini</file>
-
-    <file alias="keybindings/emacs.css">../../data/keybindings/emacs.css</file>
-    <file alias="keybindings/vim.css">../../data/keybindings/vim.css</file>
-
+  <gresource prefix="/org/gnome/libide/snippets">
+    <file alias="c.snippets">../../data/snippets/c.snippets</file>
+    <file alias="chdr.snippets">../../data/snippets/chdr.snippets</file>
+    <file alias="gobject.snippets">../../data/snippets/gobject.snippets</file>
+    <file alias="licenses.snippets">../../data/snippets/licenses.snippets</file>
+    <file alias="main.snippets">../../data/snippets/main.snippets</file>
+    <file alias="python.snippets">../../data/snippets/python.snippets</file>
+    <file alias="rpmspec.snippets">../../data/snippets/rpmspec.snippets</file>
+    <file alias="shebang.snippets">../../data/snippets/shebang.snippets</file>
+    <file alias="vala.snippets">../../data/snippets/vala.snippets</file>
+    <file alias="xml.snippets">../../data/snippets/xml.snippets</file>
   </gresource>
 
-  <gresource prefix="/org/gnome/builder">
-    <file alias="ui/ide-editor-perspective.ui">../../data/ui/ide-editor-perspective.ui</file>
-    <file alias="ui/ide-greeter-perspective.ui">../../data/ui/ide-greeter-perspective.ui</file>
-    <file alias="ui/ide-greeter-project-row.ui">../../data/ui/ide-greeter-project-row.ui</file>
-    <file alias="ui/ide-layout.ui">../../data/ui/ide-layout.ui</file>
-    <file alias="ui/ide-layout-pane.ui">../../data/ui/ide-layout-pane.ui</file>
-    <file alias="ui/ide-layout-stack.ui">../../data/ui/ide-layout-stack.ui</file>
-    <file alias="ui/ide-layout-view.ui">../../data/ui/ide-layout-view.ui</file>
-    <file alias="ui/ide-preferences-entry.ui">../../data/ui/ide-preferences-entry.ui</file>
-    <file alias="ui/ide-preferences-font-button.ui">../../data/ui/ide-preferences-font-button.ui</file>
-    <file alias="ui/ide-preferences-group.ui">../../data/ui/ide-preferences-group.ui</file>
-    <file alias="ui/ide-preferences-language-row.ui">../../data/ui/ide-preferences-language-row.ui</file>
-    <file alias="ui/ide-preferences-page.ui">../../data/ui/ide-preferences-page.ui</file>
-    <file alias="ui/ide-preferences-perspective.ui">../../data/ui/ide-preferences-perspective.ui</file>
-    <file alias="ui/ide-preferences-spin-button.ui">../../data/ui/ide-preferences-spin-button.ui</file>
-    <file alias="ui/ide-preferences-switch.ui">../../data/ui/ide-preferences-switch.ui</file>
-    <file alias="ui/ide-workbench-header-bar.ui">../../data/ui/ide-workbench-header-bar.ui</file>
-    <file alias="ui/ide-workbench.ui">../../data/ui/ide-workbench.ui</file>
+  <gresource prefix="/org/gnome/builder/gtk">
+    <file alias="menus.ui">../../data/gtk/menus.ui</file>
+  </gresource>
+
+  <gresource prefix="/org/gnome/builder/theme">
+    <file alias="Adwaita.css">../../data/theme/Adwaita.css</file>
+    <file alias="Adwaita-dark.css">../../data/theme/Adwaita-dark.css</file>
+    <file alias="Adwaita-shared.css">../../data/theme/Adwaita-shared.css</file>
+    <file alias="shared.css">../../data/theme/shared.css</file>
+  </gresource>
+
+  <gresource prefix="/org/gnome/libide/modelines">
+    <file alias="language-mappings">../modelines/language-mappings</file>
+  </gresource>
+
+  <gresource prefix="/org/gnome/libide/file-settings">
+    <file alias="defaults.ini">../../data/file-settings/defaults.ini</file>
+  </gresource>
+
+  <gresource prefix="/org/gnome/builder/keybindings">
+    <file alias="default.css">../../data/keybindings/default.css</file>
+    <file alias="emacs.css">../../data/keybindings/emacs.css</file>
+    <file alias="shared.css">../../data/keybindings/shared.css</file>
+    <file alias="vim.css">../../data/keybindings/vim.css</file>
+  </gresource>
+
+  <gresource prefix="/org/gnome/builder/ui">
+    <file alias="ide-editor-perspective.ui">../../data/ui/ide-editor-perspective.ui</file>
+    <file alias="ide-greeter-perspective.ui">../../data/ui/ide-greeter-perspective.ui</file>
+    <file alias="ide-greeter-project-row.ui">../../data/ui/ide-greeter-project-row.ui</file>
+    <file alias="ide-layout.ui">../../data/ui/ide-layout.ui</file>
+    <file alias="ide-layout-pane.ui">../../data/ui/ide-layout-pane.ui</file>
+    <file alias="ide-layout-stack.ui">../../data/ui/ide-layout-stack.ui</file>
+    <file alias="ide-layout-view.ui">../../data/ui/ide-layout-view.ui</file>
+    <file alias="ide-preferences-entry.ui">../../data/ui/ide-preferences-entry.ui</file>
+    <file alias="ide-preferences-font-button.ui">../../data/ui/ide-preferences-font-button.ui</file>
+    <file alias="ide-preferences-group.ui">../../data/ui/ide-preferences-group.ui</file>
+    <file alias="ide-preferences-language-row.ui">../../data/ui/ide-preferences-language-row.ui</file>
+    <file alias="ide-preferences-page.ui">../../data/ui/ide-preferences-page.ui</file>
+    <file alias="ide-preferences-perspective.ui">../../data/ui/ide-preferences-perspective.ui</file>
+    <file alias="ide-preferences-spin-button.ui">../../data/ui/ide-preferences-spin-button.ui</file>
+    <file alias="ide-preferences-switch.ui">../../data/ui/ide-preferences-switch.ui</file>
+    <file alias="ide-workbench-header-bar.ui">../../data/ui/ide-workbench-header-bar.ui</file>
+    <file alias="ide-workbench.ui">../../data/ui/ide-workbench.ui</file>
   </gresource>
 </gresources>
