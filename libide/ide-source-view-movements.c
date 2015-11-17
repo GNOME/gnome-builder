@@ -649,6 +649,8 @@ ide_source_view_movements_screen_top (Movement *mv)
   ide_source_view_get_visible_rect (mv->self, &rect);
   gtk_text_view_get_iter_at_location (text_view, &mv->insert, rect.x, rect.y);
   gtk_text_iter_set_line_offset (&mv->insert, 0);
+
+  mv->ignore_scroll_to_insert = TRUE;
 }
 
 static void
@@ -660,6 +662,8 @@ ide_source_view_movements_screen_middle (Movement *mv)
   ide_source_view_get_visible_rect (mv->self, &rect);
   gtk_text_view_get_iter_at_location (text_view, &mv->insert, rect.x, rect.y + (rect.height / 2));
   gtk_text_iter_set_line_offset (&mv->insert, 0);
+
+  mv->ignore_scroll_to_insert = TRUE;
 }
 
 static void
@@ -671,6 +675,8 @@ ide_source_view_movements_screen_bottom (Movement *mv)
   ide_source_view_get_visible_rect (mv->self, &rect);
   gtk_text_view_get_iter_at_location (text_view, &mv->insert, rect.x, rect.y + rect.height - 1);
   gtk_text_iter_set_line_offset (&mv->insert, 0);
+
+  mv->ignore_scroll_to_insert = TRUE;
 }
 
 static void
@@ -736,6 +742,8 @@ ide_source_view_movements_scroll (Movement *mv)
   mark = gtk_text_buffer_get_insert (buffer);
   gtk_text_buffer_get_iter_at_mark (buffer, &mv->insert, mark);
   ide_source_view_move_mark_onscreen (mv->self, mark);
+
+  mv->ignore_scroll_to_insert = TRUE;
 }
 
 static void
