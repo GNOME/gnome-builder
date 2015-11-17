@@ -134,7 +134,7 @@ ide_editor_workbench_addin_open_cb (GObject      *object,
 {
   IdeBufferManager *buffer_manager = (IdeBufferManager *)object;
   g_autoptr(IdeBuffer) buffer = NULL;
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(GTask) task = user_data;
   GError *error = NULL;
 
   g_assert (IDE_IS_BUFFER_MANAGER (buffer_manager));
