@@ -23,7 +23,8 @@
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_PREFERENCES_PERSPECTIVE (ide_preferences_perspective_get_type())
+#define IDE_TYPE_PREFERENCES_PERSPECTIVE     (ide_preferences_perspective_get_type())
+#define IDE_PREFERENCES_PERSPECTIVE_PRIORITY 10000
 
 G_DECLARE_FINAL_TYPE (IdePreferencesPerspective, ide_preferences_perspective, IDE, PREFERENCES_PERSPECTIVE, GtkBin)
 

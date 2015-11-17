@@ -817,6 +817,12 @@ ide_preferences_perspective_get_actions (IdePerspective *perspective)
   return g_object_ref (self->actions);
 }
 
+static gint
+ide_preferences_perspective_get_priority (IdePerspective *perspective)
+{
+  return IDE_PREFERENCES_PERSPECTIVE_PRIORITY;
+}
+
 static void
 ide_perspective_iface_init (IdePerspectiveInterface *iface)
 {
@@ -825,4 +831,5 @@ ide_perspective_iface_init (IdePerspectiveInterface *iface)
   iface->get_title = ide_preferences_perspective_get_title;
   iface->get_titlebar = ide_preferences_perspective_get_titlebar;
   iface->get_actions = ide_preferences_perspective_get_actions;
+  iface->get_priority = ide_preferences_perspective_get_priority;
 }
