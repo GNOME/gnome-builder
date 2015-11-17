@@ -65,6 +65,41 @@ ide_workbench_notify_visible_child (IdeWorkbench *self,
     }
 }
 
+static gint
+ide_workbench_compare_perspective (gconstpointer a,
+                                   gconstpointer b)
+{
+  IdePerspective *perspective_a = (IdePerspective *)a;
+  IdePerspective *perspective_b = (IdePerspective *)b;
+
+  return (ide_perspective_get_priority (perspective_a) -
+          ide_perspective_get_priority (perspective_b));
+}
+
+static void
+ide_workbench_resort_perspectives (IdeWorkbench *self)
+{
+  GList *children;
+  const GList *iter;
+  gint i = 0;
+
+  g_assert (IDE_IS_WORKBENCH (self));
+
+  children = gtk_container_get_children (GTK_CONTAINER (self->perspectives_stack));
+  children = g_list_sort (children, ide_workbench_compare_perspective);
+
+  for (iter = children; iter; iter = iter->next, i++)
+    {
+      GtkWidget *child = iter->data;
+
+      gtk_container_child_set (GTK_CONTAINER (self->perspectives_stack), child,
+                               "position", i,
+                               NULL);
+    }
+
+  g_list_free (children);
+}
+
 static void
 ide_workbench_finalize (GObject *object)
 {
@@ -400,6 +435,8 @@ ide_workbench_add_perspective (IdeWorkbench   *self,
   gtk_container_add_with_properties (GTK_CONTAINER (self->titlebar_stack), titlebar,
                                      "name", id,
                                      NULL);
+
+  ide_workbench_resort_perspectives (self);
 }
 
 void
