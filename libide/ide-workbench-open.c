@@ -31,10 +31,12 @@ typedef struct
 
 typedef struct
 {
-  GTask  *task;
-  IdeUri *uri;
-  GArray *loaders;
-  gchar  *content_type;
+  IdeWorkbench *self;
+  GTask        *task;
+  IdeUri       *uri;
+  GArray       *loaders;
+  gchar        *content_type;
+  guint         did_collect : 1;
 } IdeWorkbenchOpenUriState;
 
 typedef struct
@@ -135,6 +137,15 @@ ide_workbench_open_uri_try_next (IdeWorkbenchOpenUriState *open_uri_state)
   g_assert (open_uri_state->loaders != NULL);
   g_assert (open_uri_state->uri != NULL);
 
+  if (open_uri_state->did_collect == FALSE)
+    {
+      open_uri_state->did_collect = TRUE;
+      peas_extension_set_foreach (open_uri_state->self->addins,
+                                  ide_workbench_collect_loaders,
+                                  open_uri_state);
+      g_array_sort (open_uri_state->loaders, ide_workbench_loader_compare);
+    }
+
   if (open_uri_state->loaders->len == 0)
     {
       gchar *uristr;
@@ -143,8 +154,8 @@ ide_workbench_open_uri_try_next (IdeWorkbenchOpenUriState *open_uri_state)
       g_task_return_new_error (open_uri_state->task,
                                G_IO_ERROR,
                                G_IO_ERROR_NOT_SUPPORTED,
-                               "No handler responded to %s",
-                               uristr);
+                               "No handler responded to \"%s\" with content-type \"%s\"",
+                               uristr, open_uri_state->content_type ?: "");
 
       g_clear_object (&open_uri_state->task);
       g_free (uristr);
@@ -162,6 +173,60 @@ ide_workbench_open_uri_try_next (IdeWorkbenchOpenUriState *open_uri_state)
                                   open_uri_state);
 }
 
+static void
+ide_workbench_open_discover_content_type_cb (GObject      *object,
+                                             GAsyncResult *result,
+                                             gpointer      user_data)
+{
+  IdeWorkbenchOpenUriState *open_uri_state = user_data;
+  GFileInfo *file_info;
+  GFile *file = (GFile *)object;
+  GError *error = NULL;
+
+  g_assert (G_IS_FILE (file));
+  g_assert (open_uri_state != NULL);
+  g_assert (G_IS_TASK (open_uri_state->task));
+
+  file_info = g_file_query_info_finish (file, result, &error);
+
+  if (file_info == NULL)
+    {
+      g_warning ("%s", error->message);
+      g_clear_error (&error);
+    }
+  else
+    {
+      open_uri_state->content_type = g_strdup (g_file_info_get_content_type (file_info));
+      g_clear_object (&file_info);
+    }
+
+  ide_workbench_open_uri_try_next (open_uri_state);
+}
+
+static void
+ide_workbench_open_discover_content_type (IdeWorkbenchOpenUriState *open_uri_state)
+{
+  g_autoptr(GFile) file = NULL;
+
+  g_assert (open_uri_state != NULL);
+  g_assert (G_IS_TASK (open_uri_state->task));
+  g_assert (open_uri_state->loaders != NULL);
+  g_assert (open_uri_state->uri != NULL);
+
+  file = ide_uri_to_file (open_uri_state->uri);
+
+  if (file != NULL)
+    g_file_query_info_async (file,
+                             G_FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE,
+                             G_FILE_QUERY_INFO_NONE,
+                             G_PRIORITY_DEFAULT,
+                             g_task_get_cancellable (open_uri_state->task),
+                             ide_workbench_open_discover_content_type_cb,
+                             open_uri_state);
+  else
+    ide_workbench_open_uri_try_next (open_uri_state);
+}
+
 void
 ide_workbench_open_uri_async (IdeWorkbench        *self,
                               IdeUri              *uri,
@@ -176,15 +241,20 @@ ide_workbench_open_uri_async (IdeWorkbench        *self,
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   open_uri_state = g_new0 (IdeWorkbenchOpenUriState, 1);
+  open_uri_state->self = self;
   open_uri_state->uri = ide_uri_ref (uri);
+  open_uri_state->content_type = NULL;
   open_uri_state->loaders = g_array_new (FALSE, FALSE, sizeof (IdeWorkbenchLoader));
   open_uri_state->task = g_task_new (self, cancellable, callback, user_data);
-  g_array_set_clear_func (open_uri_state->loaders, ide_workbench_loader_destroy);
-  peas_extension_set_foreach (self->addins, ide_workbench_collect_loaders, open_uri_state);
-  g_array_sort (open_uri_state->loaders, ide_workbench_loader_compare);
-  g_task_set_task_data (open_uri_state->task, open_uri_state, ide_workbench_open_uri_state_free);
 
-  ide_workbench_open_uri_try_next (open_uri_state);
+  g_array_set_clear_func (open_uri_state->loaders,
+                          ide_workbench_loader_destroy);
+
+  g_task_set_task_data (open_uri_state->task,
+                        open_uri_state,
+                        ide_workbench_open_uri_state_free);
+
+  ide_workbench_open_discover_content_type (open_uri_state);
 }
 
 gboolean
