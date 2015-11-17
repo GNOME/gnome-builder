@@ -5,7 +5,7 @@
     <child type="titlebar">
       <object class="GtkStack" id="titlebar_stack">
         <property name="visible">true</property>
-        <property name="transition-type">slide-left-right</property>
+        <property name="transition-type">crossfade</property>
         <property name="transition-duration">333</property>
       </object>
     </child>
@@ -22,7 +22,7 @@
           -->
           <object class="GtkStack" id="top_stack">
             <property name="transition-duration">333</property>
-            <property name="transition-type">slide-left-right</property>
+            <property name="transition-type">crossfade</property>
             <property name="vexpand">true</property>
             <property name="visible">true</property>
             <child>
