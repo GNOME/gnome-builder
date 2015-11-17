@@ -93,7 +93,7 @@ IdeSourceViewMode  *_ide_source_view_mode_new               (GtkWidget          
                                                              const char            *mode,
                                                              IdeSourceViewModeType  type);
 void                _ide_source_view_set_count              (IdeSourceView         *self,
-                                                             guint                  count);
+                                                             gint                   count);
 void                _ide_source_view_set_modifier           (IdeSourceView         *self,
                                                              gunichar               modifier);
 void                _ide_thread_pool_init                   (void);

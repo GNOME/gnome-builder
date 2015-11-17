@@ -1956,7 +1956,7 @@ _ide_source_view_apply_movement (IdeSourceView         *self,
                                  IdeSourceViewMovement  movement,
                                  gboolean               extend_selection,
                                  gboolean               exclusive,
-                                 guint                  count,
+                                 gint                   count,
                                  GString               *command_str,
                                  gunichar               command,
                                  gunichar               modifier,
@@ -1991,10 +1991,13 @@ _ide_source_view_apply_movement (IdeSourceView         *self,
   insert = gtk_text_buffer_get_insert (buffer);
 
   /* specific processing for underscore motion */
-  if (g_str_has_suffix (command_str->str, "_") && count > 0)
+  if (g_str_has_suffix (command_str->str, "_"))
     {
       min_count = 0;
-      --count;
+      if (count > 0)
+        --count;
+      else
+        count = 0;
     }
 
   mv.self = self;
@@ -2021,30 +2024,37 @@ _ide_source_view_apply_movement (IdeSourceView         *self,
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_NTH_CHAR:
+      mv.count = MAX (1, mv.count);
       ide_source_view_movements_nth_char (&mv);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_CHAR:
+      mv.count = MAX (1, mv.count);
       ide_source_view_movements_previous_char (&mv);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_NEXT_CHAR:
+      mv.count = MAX (1, mv.count);
       ide_source_view_movements_next_char (&mv);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_FIRST_CHAR:
+      mv.count = MAX (1, mv.count);
       ide_source_view_movements_first_char (&mv);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_FIRST_NONSPACE_CHAR:
+      mv.count = MAX (1, mv.count);
       ide_source_view_movements_first_nonspace_char (&mv);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_MIDDLE_CHAR:
+      mv.count = MAX (1, mv.count);
       ide_source_view_movements_middle_char (&mv);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_LAST_CHAR:
+      mv.count = MAX (1, mv.count);
       ide_source_view_movements_last_char (&mv);
       break;
 
@@ -2138,26 +2148,32 @@ _ide_source_view_apply_movement (IdeSourceView         *self,
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_FIRST_LINE:
+      mv.count = MAX (1, mv.count);
       ide_source_view_movements_first_line (&mv);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_NTH_LINE:
+      mv.count = MAX (1, mv.count);
       ide_source_view_movements_nth_line (&mv);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_LAST_LINE:
+      mv.count = MAX (1, mv.count);
       ide_source_view_movements_last_line (&mv);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_LINE_PERCENTAGE:
+      mv.count = MAX (1, mv.count);
       ide_source_view_movements_line_percentage (&mv);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_LINE_CHARS:
+      mv.count = MAX (1, mv.count);
       ide_source_view_movements_line_chars (&mv);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_LINE_END:
+      mv.count = MAX (1, mv.count);
       ide_source_view_movements_line_end (&mv);
       break;
 
@@ -2176,18 +2192,22 @@ _ide_source_view_apply_movement (IdeSourceView         *self,
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_SCREEN_TOP:
+      mv.count = MAX (1, mv.count);
       ide_source_view_movements_screen_top (&mv);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_SCREEN_MIDDLE:
+      mv.count = MAX (1, mv.count);
       ide_source_view_movements_screen_middle (&mv);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_SCREEN_BOTTOM:
+      mv.count = MAX (1, mv.count);
       ide_source_view_movements_screen_bottom (&mv);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_MATCH_SPECIAL:
+      mv.count = MAX (1, mv.count);
       ide_source_view_movements_match_special (&mv);
       break;
 
@@ -2257,7 +2277,7 @@ void
 _ide_source_view_select_inner (IdeSourceView *self,
                                gunichar       inner_left,
                                gunichar       inner_right,
-                               guint          count,
+                               gint           count,
                                gboolean       exclusive,
                                gboolean       string_mode)
 {
@@ -2683,7 +2703,7 @@ get_html_element_parent (HtmlElement *element)
 
 void
 _ide_source_view_select_tag (IdeSourceView *self,
-                             guint          count,
+                             gint           count,
                              gboolean       exclusive)
 {
   GtkTextBuffer *buffer;

@@ -122,7 +122,7 @@ typedef struct
   gunichar                     command;
   gunichar                     modifier;
   gunichar                     search_char;
-  guint                        count;
+  gint                         count;
   gunichar                     inner_left;
   gunichar                     inner_right;
 
@@ -168,7 +168,7 @@ typedef struct
 typedef struct
 {
   gint              ref_count;
-  guint             count;
+  gint              count;
   IdeSourceView    *self;
   guint             is_forward : 1;
   guint             extend_selection : 1;
@@ -391,7 +391,7 @@ ide_source_view_sync_rubberband_mark (IdeSourceView *self)
 
 void
 _ide_source_view_set_count (IdeSourceView *self,
-                            guint          count)
+                            gint           count)
 {
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
 
@@ -2732,7 +2732,7 @@ ide_source_view_real_insert_modifier (IdeSourceView *self,
   GtkTextBuffer *buffer;
   gchar str[8] = { 0 };
   gsize i;
-  guint count = 1;
+  gint count = 1;
   gint len;
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
@@ -3129,12 +3129,12 @@ ide_source_view_real_movement (IdeSourceView         *self,
                                gboolean               apply_count)
 {
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
-  guint count = 0;
+  gint count = -1;
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
 
   if (apply_count)
-    count = MAX(1, priv->count);
+    count = priv->count;
 
   if (priv->scrolling_to_scroll_mark)
     priv->scrolling_to_scroll_mark = FALSE;
@@ -4487,7 +4487,7 @@ ide_source_view_real_begin_macro (IdeSourceView *self)
   GdkEvent *event;
   const gchar *mode_name;
   gunichar modifier;
-  guint count;
+  gint count;
 
   IDE_ENTRY;
 
@@ -4613,7 +4613,7 @@ ide_source_view_real_replay_macro (IdeSourceView *self,
 {
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
   IdeSourceViewCapture *capture;
-  guint count = 1;
+  gint count = 1;
   gsize i;
 
   IDE_ENTRY;
@@ -5286,7 +5286,7 @@ ide_source_view_get_property (GObject    *object,
       break;
 
     case PROP_COUNT:
-      g_value_set_uint (value, ide_source_view_get_count (self));
+      g_value_set_int (value, ide_source_view_get_count (self));
       break;
 
     case PROP_ENABLE_WORD_COMPLETION:
@@ -5391,7 +5391,7 @@ ide_source_view_set_property (GObject      *object,
       break;
 
     case PROP_COUNT:
-      ide_source_view_set_count (self, g_value_get_uint (value));
+      ide_source_view_set_count (self, g_value_get_int (value));
       break;
 
     case PROP_ENABLE_WORD_COMPLETION:
@@ -5548,13 +5548,13 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_COUNT] =
-    g_param_spec_uint ("count",
-                       "Count",
-                       "The count for movements.",
-                       0,
-                       G_MAXINT,
-                       0,
-                       (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+    g_param_spec_int ("count",
+                      "Count",
+                      "The count for movements.",
+                      -1,
+                      G_MAXINT,
+                      0,
+                      (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_FILE_SETTINGS] =
     g_param_spec_object ("file-settings",
@@ -7645,7 +7645,7 @@ ide_source_view_clear_search (IdeSourceView *self)
   gtk_source_search_settings_set_search_text (search_settings, "");
 }
 
-guint
+gint
 ide_source_view_get_count (IdeSourceView *self)
 {
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
@@ -7657,7 +7657,7 @@ ide_source_view_get_count (IdeSourceView *self)
 
 void
 ide_source_view_set_count (IdeSourceView *self,
-                           guint          count)
+                           gint           count)
 {
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
 

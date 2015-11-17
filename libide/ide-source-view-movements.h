@@ -27,7 +27,7 @@ void _ide_source_view_apply_movement (IdeSourceView         *source_view,
                                       IdeSourceViewMovement  movement,
                                       gboolean               extend_selection,
                                       gboolean               exclusive,
-                                      guint                  count,
+                                      gint                   count,
                                       GString               *command_str,
                                       gunichar               command,
                                       gunichar               modifier,
@@ -37,12 +37,12 @@ void _ide_source_view_apply_movement (IdeSourceView         *source_view,
 void _ide_source_view_select_inner   (IdeSourceView *self,
                                       gunichar       inner_left,
                                       gunichar       inner_right,
-                                      guint          count,
+                                      gint           count,
                                       gboolean       exclusive,
                                       gboolean       string_mode);
 
 void _ide_source_view_select_tag     (IdeSourceView *self,
-                                      guint          count,
+                                      gint           count,
                                       gboolean       exclusive);
 
 G_END_DECLS
