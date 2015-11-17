@@ -931,6 +931,11 @@ ide_editor_view_init (IdeEditorView *self)
                            G_CONNECT_SWAPPED);
 }
 
+/**
+ * ide_editor_view_get_document:
+ *
+ * Returns: (transfer none): An #IdeBuffer.
+ */
 IdeBuffer *
 ide_editor_view_get_document (IdeEditorView *self)
 {
