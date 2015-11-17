@@ -165,7 +165,7 @@
       </object>
     </child>
   </object>
-  <object class="IdeSimplePopover" id="goto_line_popover">
+  <object class="EggSimplePopover" id="goto_line_popover">
     <property name="visible">true</property>
     <property name="title" translatable="yes">Go to Line</property>
     <property name="button-text" translatable="yes">Go</property>
