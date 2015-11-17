@@ -1489,9 +1489,28 @@ ide_source_view_movements_scroll_center (Movement *mv)
   GtkTextView *text_view = (GtkTextView *)mv->self;
   GtkTextMark *insert;
   GtkTextBuffer *buffer;
+  gint line_count;
+  gint x_offset;
+  gint line_len;
 
   buffer = gtk_text_view_get_buffer (text_view);
   insert = gtk_text_buffer_get_insert (buffer);
+
+  if (mv->count > 0)
+    {
+      line_count = gtk_text_buffer_get_line_count (buffer);
+      if (mv->count > line_count)
+        return;
+
+      x_offset = gtk_text_iter_get_line_offset (&mv->insert);
+
+      gtk_text_iter_set_line (&mv->insert, mv->count - 1);
+      line_len = gtk_text_iter_get_chars_in_line (&mv->insert);
+      x_offset = MIN (x_offset, line_len -1);
+      gtk_text_iter_set_line_offset (&mv->insert, x_offset);
+
+      gtk_text_buffer_move_mark (buffer, insert, &mv->insert);
+    }
 
   switch ((int)mv->type)
     {
@@ -1510,6 +1529,8 @@ ide_source_view_movements_scroll_center (Movement *mv)
     default:
       break;
     }
+
+  mv->ignore_scroll_to_insert = TRUE;
 }
 
 static void
