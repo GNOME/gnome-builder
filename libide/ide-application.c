@@ -110,6 +110,10 @@ ide_application_load_plugins (IdeApplication *self)
                                        PACKAGE_DATADIR"/gnome-builder/plugins");
     }
 
+  peas_engine_prepend_search_path (engine,
+                                   "resource:///org/gnome/builder/plugins/editor",
+                                   "resource:///org/gnome/builder/plugins/editor");
+
   list = peas_engine_get_plugin_list (engine);
 
   for (; list; list = list->next)

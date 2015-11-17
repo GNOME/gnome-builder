@@ -61,4 +61,8 @@
     <file alias="ide-workbench-header-bar.ui">../../data/ui/ide-workbench-header-bar.ui</file>
     <file alias="ide-workbench.ui">../../data/ui/ide-workbench.ui</file>
   </gresource>
+
+  <gresource prefix="/org/gnome/builder/plugins/editor">
+    <file alias="editor.plugin">../editor/editor.plugin</file>
+  </gresource>
 </gresources>

@@ -238,6 +238,7 @@ libide_1_0_la_SOURCES = \
 	editor/ide-editor-frame-private.h \
 	editor/ide-editor-map-bin.c \
 	editor/ide-editor-map-bin.h \
+	editor/ide-editor-plugin.c \
 	editor/ide-editor-print-operation.c \
 	editor/ide-editor-print-operation.h \
 	editor/ide-editor-tweak-widget.c \
