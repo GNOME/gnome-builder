@@ -73,7 +73,7 @@ class DBusService:
     def __init__(self, object_path=None):
         self.__dbus_info = self.__class__._DBusInfo()
         self.__dbus_info.object_path = object_path
-    
+
         # set up the vtable maps, for more efficient lookups at runtime
         self.__dbus_info.methods = {}
         for id in dir(self):
@@ -90,7 +90,7 @@ class DBusService:
         @object_path: an optional path to register at
 
         Exports the service onto the Gio.DBusConnection provided.
- 
+
         If @object_path is None, then the object path registered during object
         creation will be used.
         """
