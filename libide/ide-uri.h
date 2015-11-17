@@ -50,8 +50,8 @@ IdeUri *       ide_uri_new_from_file (GFile              *file);
 
 typedef enum
 {
-  IDE_URI_HIDE_PASSWORD    = 1 << 0,
-  IDE_URI_HIDE_AUTH_PARAMS = 1 << 1
+  IDE_URI_HIDE_AUTH_PARAMS = 1 << 0,
+  IDE_URI_HIDE_FRAGMENT    = 1 << 1,
 } IdeUriToStringFlags;
 
 #define IDE_TYPE_URI (ide_uri_get_type())
@@ -132,6 +132,8 @@ gchar *      ide_uri_build           (const gchar        *scheme,
 
 gboolean     ide_uri_is_file         (IdeUri             *uri,
                                       GFile              *file);
+
+GFile       *ide_uri_to_file         (IdeUri             *uri);
 
 
 /**

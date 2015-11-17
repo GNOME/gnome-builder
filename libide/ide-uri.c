@@ -746,7 +746,7 @@ ide_uri_to_string (IdeUri              *uri,
 
   if (g_strcmp0 (uri->scheme, "file") == 0)
     {
-      if (uri->fragment)
+      if (uri->fragment && !(flags & IDE_URI_HIDE_FRAGMENT))
         return g_strdup_printf ("file://%s#%s", uri->path, uri->fragment);
       else
         return g_strdup_printf ("file://%s", uri->path);
@@ -758,14 +758,15 @@ ide_uri_to_string (IdeUri              *uri,
   if (uri->host)
     {
       g_string_append (str, "//");
-      if (uri->encoded_userinfo)
+
+      if (uri->encoded_userinfo && !(flags & IDE_URI_HIDE_AUTH_PARAMS))
         {
           g_string_append (str, uri->encoded_userinfo);
           g_string_append_c (str, '@');
         }
 
       if (uri->host)
-         g_string_append (str, uri->host);
+       g_string_append (str, uri->host);
 
       if (uri->port)
         g_string_append_printf (str, ":%d", uri->port);
@@ -779,7 +780,7 @@ ide_uri_to_string (IdeUri              *uri,
       g_string_append_c (str, '?');
       g_string_append (str, uri->encoded_query);
     }
-  if (uri->encoded_fragment)
+  if (uri->encoded_fragment && !(flags & IDE_URI_HIDE_FRAGMENT))
     {
       g_string_append_c (str, '#');
       g_string_append (str, uri->encoded_fragment);
@@ -1546,6 +1547,29 @@ ide_uri_is_file (IdeUri *uri,
   ret = (g_strcmp0 (file_uri, str) == 0);
 
   g_free (file_uri);
+  g_free (str);
+
+  return ret;
+}
+
+/**
+ * ide_uri_to_file:
+ * @uri: An #IdeUri
+ *
+ * Creates a #GFile that represents the resource @uri.
+ *
+ * Returns: (transfer full) (nullable): A #GFile or %NULL upon failure.
+ */
+GFile *
+ide_uri_to_file (IdeUri *uri)
+{
+  GFile *ret;
+  gchar *str;
+
+  g_return_val_if_fail (uri != NULL, NULL);
+
+  str = ide_uri_to_string (uri, IDE_URI_HIDE_FRAGMENT);
+  ret = g_file_new_for_uri (str);
   g_free (str);
 
   return ret;
