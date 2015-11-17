@@ -18,12 +18,11 @@
 
 #include <glib/gi18n.h>
 #include <libpeas/peas.h>
+#include <ide.h>
 
 #include "gb-sysmon-addin.h"
 #include "gb-sysmon-panel.h"
 #include "gb-sysmon-resources.h"
-#include "gb-workbench-addin.h"
-#include "gb-workspace.h"
 
 struct _GbSysmonAddin
 {
@@ -31,44 +30,49 @@ struct _GbSysmonAddin
   GtkWidget   *panel;
 };
 
-static void workbench_addin_iface_init (GbWorkbenchAddinInterface *iface);
+static void workbench_addin_iface_init (IdeWorkbenchAddinInterface *iface);
 
 G_DEFINE_DYNAMIC_TYPE_EXTENDED (GbSysmonAddin, gb_sysmon_addin, G_TYPE_OBJECT, 0,
-                                G_IMPLEMENT_INTERFACE_DYNAMIC (GB_TYPE_WORKBENCH_ADDIN,
+                                G_IMPLEMENT_INTERFACE_DYNAMIC (IDE_TYPE_WORKBENCH_ADDIN,
                                                                workbench_addin_iface_init))
 
 static void
-gb_sysmon_addin_load (GbWorkbenchAddin *addin,
-                      GbWorkbench      *workbench)
+gb_sysmon_addin_load (IdeWorkbenchAddin *addin,
+                      IdeWorkbench      *workbench)
 {
   GbSysmonAddin *self = (GbSysmonAddin *)addin;
-  GtkWidget *workspace;
+  IdePerspective *editor;
   GtkWidget *pane;
   GtkWidget *panel;
 
   g_assert (GB_IS_SYSMON_ADDIN (self));
-  g_assert (GB_IS_WORKBENCH (workbench));
+  g_assert (IDE_IS_WORKBENCH (workbench));
 
-  workspace = gb_workbench_get_workspace (workbench);
-  pane = gb_workspace_get_bottom_pane (GB_WORKSPACE (workspace));
-  panel = g_object_new (GB_TYPE_SYSMON_PANEL, "visible", TRUE, NULL);
+  editor = ide_workbench_get_perspective_by_name (workbench, "editor");
+  g_assert (editor != NULL);
+  g_assert (IDE_IS_LAYOUT (editor));
+
+  pane = ide_layout_get_bottom_pane (IDE_LAYOUT (editor));
+  panel = g_object_new (GB_TYPE_SYSMON_PANEL,
+                        "visible", TRUE,
+                        NULL);
   ide_set_weak_pointer (&self->panel, panel);
-  gb_workspace_pane_add_page (GB_WORKSPACE_PANE (pane),
-                              GTK_WIDGET (panel),
-                              _("System Monitor"),
-                              "utilities-system-monitor-symbolic");
+  ide_layout_pane_add_page (IDE_LAYOUT_PANE (pane),
+                            GTK_WIDGET (panel),
+                            _("System Monitor"),
+                            "utilities-system-monitor-symbolic");
 }
 
 static void
-gb_sysmon_addin_unload (GbWorkbenchAddin *addin,
-                        GbWorkbench      *workbench)
+gb_sysmon_addin_unload (IdeWorkbenchAddin *addin,
+                        IdeWorkbench      *workbench)
 {
   g_assert (GB_IS_SYSMON_ADDIN (addin));
-  g_assert (GB_IS_WORKBENCH (workbench));
+  g_assert (IDE_IS_WORKBENCH (workbench));
 }
 
 static void
-workbench_addin_iface_init (GbWorkbenchAddinInterface *iface)
+workbench_addin_iface_init (IdeWorkbenchAddinInterface *iface)
 {
   iface->load = gb_sysmon_addin_load;
   iface->unload = gb_sysmon_addin_unload;
@@ -95,6 +99,6 @@ peas_register_types (PeasObjectModule *module)
   gb_sysmon_addin_register_type (G_TYPE_MODULE (module));
 
   peas_object_module_register_extension_type (module,
-                                              GB_TYPE_WORKBENCH_ADDIN,
+                                              IDE_TYPE_WORKBENCH_ADDIN,
                                               GB_TYPE_SYSMON_ADDIN);
 }
