@@ -226,7 +226,6 @@ ide_editor_perspective_class_init (IdeEditorPerspectiveClass *klass)
   object_class->get_property = ide_editor_perspective_get_property;
   object_class->set_property = ide_editor_perspective_set_property;
 
-  gtk_widget_class_set_css_name (widget_class, "editorperspective");
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/ui/ide-editor-perspective.ui");
   gtk_widget_class_bind_template_child (widget_class, IdeEditorPerspective, grid);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorPerspective, titlebar);
