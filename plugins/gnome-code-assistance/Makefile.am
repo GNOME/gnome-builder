@@ -21,7 +21,7 @@ libgnome_code_assistance_plugin_la_SOURCES = \
 	$(NULL)
 
 libgnome_code_assistance_plugin_la_CFLAGS = \
-	$(BUILDER_CFLAGS) \
+	$(LIBIDE_CFLAGS) \
 	-I$(top_srcdir)/libide \
 	$(NULL)
 

@@ -9,11 +9,13 @@ libfallback_plugin_la_SOURCES = \
 	$(NULL)
 
 libfallback_plugin_la_CFLAGS = \
-	$(BUILDER_CFLAGS) \
+	$(LIBIDE_CFLAGS) \
+	$(OPTIMIZE_CFLAGS) \
 	-I$(top_srcdir)/libide \
 	$(NULL)
 
 libfallback_plugin_la_LDFLAGS = \
+	$(OPTIMIZE_LDFLAGS) \
 	-avoid-version \
 	-module \
 	$(NULL)

@@ -12,7 +12,8 @@ libhtml_completion_plugin_la_SOURCES = \
 	$(NULL)
 
 libhtml_completion_plugin_la_CFLAGS = \
-	$(BUILDER_CFLAGS) \
+	$(LIBIDE_CFLAGS) \
+	$(OPTIMIZE_CFLAGS) \
 	-I$(top_srcdir)/contrib/search \
 	-I$(top_srcdir)/libide \
 	$(NULL)

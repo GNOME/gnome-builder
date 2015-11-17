@@ -35,11 +35,10 @@ libvala_pack_plugin_la_VALAFLAGS = \
 
 libvala_pack_plugin_la_CFLAGS = \
 	-DG_LOG_DOMAIN=\"vala-pack-plugin\" \
-	$(BUILDER_CFLAGS) \
+	$(LIBIDE_CFLAGS) \
 	$(VALA_CFLAGS) \
 	-I$(top_srcdir)/libide \
 	-I$(top_srcdir)/contrib/egg \
-	-I$(top_srcdir)/src/util \
 	$(NULL)
 
 libvala_pack_plugin_la_LDFLAGS = \

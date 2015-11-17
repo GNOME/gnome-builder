@@ -17,7 +17,7 @@ libxml_pack_plugin_la_SOURCES = \
 	$(NULL)
 
 libxml_pack_plugin_la_CFLAGS = \
-	$(BUILDER_CFLAGS) \
+	$(LIBIDE_CFLAGS) \
 	-I$(top_srcdir)/libide \
 	-I$(top_srcdir)/contrib/egg \
 	-I$(top_srcdir)/contrib/xml \

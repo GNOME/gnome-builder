@@ -31,15 +31,9 @@ nodist_libterminal_la_SOURCES = \
 	$(NULL)
 
 libterminal_la_CFLAGS = \
+	$(LIBIDE_CFLAGS) \
 	$(TERMINAL_CFLAGS) \
 	-I$(top_srcdir)/libide \
-	-I$(top_srcdir)/src \
-	-I$(top_srcdir)/src/app \
-	-I$(top_srcdir)/src/documents \
-	-I$(top_srcdir)/src/util \
-	-I$(top_srcdir)/src/views \
-	-I$(top_srcdir)/src/workbench \
-	-I$(top_srcdir)/src/workspace \
 	-I$(top_srcdir)/contrib/egg \
 	$(NULL)
 

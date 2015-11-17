@@ -18,22 +18,11 @@ libsymbol_tree_la_SOURCES = \
 	symbol-tree.h \
 	$(NULL)
 
-# XXX: temporary, since we need to extract lots of src/ into plugins
 libsymbol_tree_la_CFLAGS = \
-	-I$(top_srcdir)/src \
-	-I$(top_srcdir)/src/documents \
-	-I$(top_srcdir)/src/editor \
-	-I$(top_srcdir)/src/views \
-	-I$(top_srcdir)/src/tree \
-	-I$(top_srcdir)/src/util \
-	-I$(top_srcdir)/src/workbench \
-	-I$(top_srcdir)/src/workspace \
+	$(LIBIDE_CFLAGS) \
+	$(OPTIMIZE_CFLAGS) \
 	-I$(top_srcdir)/libide \
 	-I$(top_srcdir)/contrib/egg \
-	$(NULL)
-
-libsymbol_tree_la_LIBADD = \
-	$(top_builddir)/libide/libide-1.0.la \
 	$(NULL)
 
 libsymbol_tree_la_LDFLAGS = \
