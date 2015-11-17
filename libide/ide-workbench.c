@@ -242,12 +242,16 @@ static void
 ide_workbench_views_foreach_cb (GtkWidget *widget,
                                 gpointer   user_data)
 {
-  IdeWorkbenchForeach *foreach_data = user_data;
+  struct {
+    GtkCallback callback;
+    gpointer    user_data;
+  } *closure = user_data;
 
-  g_assert (foreach_data);
-  g_assert (foreach_data->callback);
+  g_assert (IDE_IS_PERSPECTIVE (widget));
+  g_assert (closure != NULL);
+  g_assert (closure->callback != NULL);
 
-  foreach_data->callback (widget, foreach_data->user_data);
+  ide_perspective_views_foreach (IDE_PERSPECTIVE (widget), closure->callback, closure->user_data);
 }
 
 /**
@@ -263,14 +267,17 @@ ide_workbench_views_foreach (IdeWorkbench *self,
                              GtkCallback   callback,
                              gpointer      user_data)
 {
-  IdeWorkbenchForeach foreach = { callback, user_data };
+  struct {
+    GtkCallback callback;
+    gpointer    user_data;
+  } closure = { callback, user_data };
 
   g_return_if_fail (IDE_IS_WORKBENCH (self));
   g_return_if_fail (callback != NULL);
 
   gtk_container_foreach (GTK_CONTAINER (self->perspectives_stack),
                          ide_workbench_views_foreach_cb,
-                         &foreach);
+                         &closure);
 }
 
 static void

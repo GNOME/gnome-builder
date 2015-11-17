@@ -45,12 +45,6 @@ struct _IdeWorkbench
   GtkPopover                *perspectives_popover;
 };
 
-typedef struct
-{
-  GtkCallback callback;
-  gpointer    user_data;
-} IdeWorkbenchForeach;
-
 void ide_workbench_set_context  (IdeWorkbench *workbench,
                                  IdeContext   *context);
 void ide_workbench_actions_init (IdeWorkbench *self);
