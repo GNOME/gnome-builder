@@ -67,6 +67,8 @@ ide_css_provider_update (IdeCssProvider *self)
       resource_path = g_strdup ("/org/gnome/builder/theme/shared.css");
     }
 
+  IDE_TRACE_MSG ("Loading css overrides \"%s\"", resource_path);
+
   gtk_css_provider_load_from_resource (GTK_CSS_PROVIDER (self), resource_path);
 
   IDE_EXIT;
