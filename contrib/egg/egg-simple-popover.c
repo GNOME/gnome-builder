@@ -369,7 +369,7 @@ egg_simple_popover_class_init (EggSimplePopoverClass *klass)
                   G_TYPE_STRING,
                   G_TYPE_UINT);
 
-  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/ui/egg-simple-popover.ui");
+  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/libegg-private/egg-simple-popover.ui");
   gtk_widget_class_bind_template_child_private (widget_class, EggSimplePopover, title);
   gtk_widget_class_bind_template_child_private (widget_class, EggSimplePopover, message);
   gtk_widget_class_bind_template_child_private (widget_class, EggSimplePopover, entry);
