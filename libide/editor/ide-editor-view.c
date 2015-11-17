@@ -930,3 +930,11 @@ ide_editor_view_init (IdeEditorView *self)
                            self,
                            G_CONNECT_SWAPPED);
 }
+
+IdeBuffer *
+ide_editor_view_get_document (IdeEditorView *self)
+{
+  g_return_val_if_fail (IDE_IS_EDITOR_VIEW (self), NULL);
+
+  return self->document;
+}

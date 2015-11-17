@@ -20,14 +20,26 @@
 
 #include <glib/gi18n.h>
 
+#include "egg-signal-group.h"
+
+#include "ide-buffer.h"
+#include "ide-buffer-manager.h"
+#include "ide-context.h"
+#include "ide-debug.h"
 #include "ide-editor-perspective.h"
+#include "ide-editor-view.h"
+#include "ide-gtk.h"
+#include "ide-layout-grid.h"
 #include "ide-workbench-header-bar.h"
 
 struct _IdeEditorPerspective
 {
   IdeLayout              parent_instance;
 
+  IdeLayoutGrid         *grid;
   IdeWorkbenchHeaderBar *titlebar;
+
+  EggSignalGroup        *buffer_manager_signals;
 };
 
 static void ide_perspective_iface_init (IdePerspectiveInterface *iface);
@@ -80,8 +92,101 @@ ide_editor_perspective_restore_panel_state (IdeEditorPerspective *self)
 }
 
 static void
+ide_editor_perspective_context_set (GtkWidget  *widget,
+                                    IdeContext *context)
+{
+  IdeEditorPerspective *self = (IdeEditorPerspective *)widget;
+  IdeBufferManager *buffer_manager = NULL;
+
+  g_assert (IDE_IS_EDITOR_PERSPECTIVE (self));
+  g_assert (!context || IDE_IS_CONTEXT (context));
+
+  if (context != NULL)
+    buffer_manager = ide_context_get_buffer_manager (context);
+
+  egg_signal_group_set_target (self->buffer_manager_signals, buffer_manager);
+}
+
+static void
+ide_editor_perspective_load_buffer (IdeEditorPerspective *self,
+                                    IdeBuffer            *buffer,
+                                    IdeBufferManager     *buffer_manager)
+{
+  IdeEditorView *view;
+  GtkWidget *stack;
+
+  g_assert (IDE_IS_EDITOR_PERSPECTIVE (self));
+  g_assert (IDE_IS_BUFFER (buffer));
+  g_assert (IDE_IS_BUFFER_MANAGER (buffer_manager));
+
+  IDE_TRACE_MSG ("Loading %s", ide_buffer_get_title (buffer));
+
+  view = g_object_new (IDE_TYPE_EDITOR_VIEW,
+                       "document", buffer,
+                       "visible", TRUE,
+                       NULL);
+
+  stack = ide_layout_grid_get_last_focus (self->grid);
+
+  gtk_container_add (GTK_CONTAINER (stack), GTK_WIDGET (view));
+}
+
+static void
+ide_editor_perspective_locate_buffer (GtkWidget *view,
+                                      gpointer   user_data)
+{
+  IdeBuffer **buffer = user_data;
+
+  g_assert (IDE_IS_LAYOUT_VIEW (view));
+  g_assert (buffer != NULL);
+  g_assert (!*buffer || IDE_IS_BUFFER (*buffer));
+
+  if (!*buffer)
+    return;
+
+  if (IDE_IS_EDITOR_VIEW (view))
+    {
+      if (*buffer == ide_editor_view_get_document (IDE_EDITOR_VIEW (view)))
+        {
+          GtkWidget *stack;
+
+          stack = gtk_widget_get_ancestor (view, IDE_TYPE_LAYOUT_STACK);
+
+          if (stack != NULL)
+            {
+              ide_layout_stack_set_active_view (IDE_LAYOUT_STACK (stack), view);
+              *buffer = NULL;
+            }
+        }
+    }
+}
+
+static void
+ide_editor_perspective_focus_buffer (IdeEditorPerspective *self,
+                                     GParamSpec           *pspec,
+                                     IdeBufferManager     *buffer_manager)
+{
+  IdeBuffer *buffer;
+
+  g_assert (IDE_IS_EDITOR_PERSPECTIVE (self));
+  g_assert (IDE_IS_BUFFER_MANAGER (buffer_manager));
+
+  buffer = ide_buffer_manager_get_focus_buffer (buffer_manager);
+  if (buffer == NULL)
+    return;
+
+  ide_layout_grid_foreach_view (self->grid,
+                                ide_editor_perspective_locate_buffer,
+                                &buffer);
+}
+
+static void
 ide_editor_perspective_finalize (GObject *object)
 {
+  IdeEditorPerspective *self = (IdeEditorPerspective *)object;
+
+  g_clear_object (&self->buffer_manager_signals);
+
   G_OBJECT_CLASS (ide_editor_perspective_parent_class)->finalize (object);
 }
 
@@ -121,7 +226,9 @@ ide_editor_perspective_class_init (IdeEditorPerspectiveClass *klass)
   object_class->get_property = ide_editor_perspective_get_property;
   object_class->set_property = ide_editor_perspective_set_property;
 
+  gtk_widget_class_set_css_name (widget_class, "editorperspective");
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/ui/ide-editor-perspective.ui");
+  gtk_widget_class_bind_template_child (widget_class, IdeEditorPerspective, grid);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorPerspective, titlebar);
 }
 
@@ -130,12 +237,29 @@ ide_editor_perspective_init (IdeEditorPerspective *self)
 {
   GActionGroup *actions;
 
+  self->buffer_manager_signals = egg_signal_group_new (IDE_TYPE_BUFFER_MANAGER);
+
+  egg_signal_group_connect_object (self->buffer_manager_signals,
+                                   "load-buffer",
+                                   G_CALLBACK (ide_editor_perspective_load_buffer),
+                                   self,
+                                   G_CONNECT_SWAPPED);
+
+  egg_signal_group_connect_object (self->buffer_manager_signals,
+                                   "notify::focus-buffer",
+                                   G_CALLBACK (ide_editor_perspective_focus_buffer),
+                                   self,
+                                   G_CONNECT_SWAPPED);
+
   gtk_widget_init_template (GTK_WIDGET (self));
 
   actions = gtk_widget_get_action_group (GTK_WIDGET (self), "panels");
   gtk_widget_insert_action_group (GTK_WIDGET (self->titlebar), "panels", actions);
 
   ide_editor_perspective_restore_panel_state (self);
+
+  ide_widget_set_context_handler (GTK_WIDGET (self),
+                                  ide_editor_perspective_context_set);
 }
 
 static gchar *

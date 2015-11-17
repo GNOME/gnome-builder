@@ -22,6 +22,7 @@
 #include <gtk/gtk.h>
 #include <gtksourceview/completion-providers/words/gtksourcecompletionwords.h>
 
+#include "ide-file.h"
 #include "ide-object.h"
 
 G_BEGIN_DECLS

@@ -659,18 +659,20 @@ ide_editor_view_actions_reveal (GSimpleAction *action,
                                 gpointer       user_data)
 {
   IdeEditorView *self = user_data;
+#if 0
   IdeWorkbench *workbench;
   IdeFile *file;
   GFile *gfile;
+#endif
 
   g_assert (G_IS_SIMPLE_ACTION (action));
   g_assert (IDE_IS_EDITOR_VIEW (self));
 
+#if 0
   file = ide_buffer_get_file (IDE_BUFFER (self->document));
   gfile = ide_file_get_file (file);
   workbench = ide_widget_get_workbench (GTK_WIDGET (self));
 
-#if 0
   gb_workbench_reveal_file (workbench, gfile);
 #endif
 }

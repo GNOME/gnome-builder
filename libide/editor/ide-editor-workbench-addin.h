@@ -1,4 +1,4 @@
-/* ide-editor-view.h
+/* ide-editor-workbench-addin.h
  *
  * Copyright (C) 2015 Christian Hergert <christian@hergert.me>
  *
@@ -16,20 +16,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_EDITOR_VIEW_H
-#define IDE_EDITOR_VIEW_H
+#ifndef IDE_EDITOR_WORKBENCH_ADDIN_H
+#define IDE_EDITOR_WORKBENCH_ADDIN_H
 
-#include "ide-buffer.h"
-#include "ide-layout-view.h"
+#include "ide-workbench-addin.h"
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_EDITOR_VIEW (ide_editor_view_get_type())
+#define IDE_TYPE_EDITOR_WORKBENCH_ADDIN (ide_editor_workbench_addin_get_type())
 
-G_DECLARE_FINAL_TYPE (IdeEditorView, ide_editor_view, IDE, EDITOR_VIEW, IdeLayoutView)
-
-IdeBuffer *ide_editor_view_get_document (IdeEditorView *self);
+G_DECLARE_FINAL_TYPE (IdeEditorWorkbenchAddin, ide_editor_workbench_addin, IDE, EDITOR_WORKBENCH_ADDIN, GObject)
 
 G_END_DECLS
 
-#endif /* IDE_EDITOR_VIEW_H */
+#endif /* IDE_EDITOR_WORKBENCH_ADDIN_H */

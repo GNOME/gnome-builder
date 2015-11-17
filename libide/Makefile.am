@@ -246,6 +246,8 @@ libide_1_0_la_SOURCES = \
 	editor/ide-editor-view-actions.h \
 	editor/ide-editor-view-addin-private.h \
 	editor/ide-editor-view-private.h \
+	editor/ide-editor-workbench-addin.c \
+	editor/ide-editor-workbench-addin.h \
 	gconstructor.h \
 	git/ide-git-buffer-change-monitor.c \
 	git/ide-git-buffer-change-monitor.h \
