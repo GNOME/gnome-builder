@@ -207,17 +207,6 @@ ide_workbench_init_greeter (IdeWorkbench *self)
 }
 
 static void
-ide_workbench_init_editor (IdeWorkbench *self)
-{
-  g_assert (IDE_IS_WORKBENCH (self));
-
-  self->editor_perspective = g_object_new (IDE_TYPE_EDITOR_PERSPECTIVE,
-                                           "visible", TRUE,
-                                           NULL);
-  ide_workbench_add_perspective (self, IDE_PERSPECTIVE (self->editor_perspective));
-}
-
-static void
 ide_workbench_init_preferences (IdeWorkbench *self)
 {
   g_assert (IDE_IS_WORKBENCH (self));
@@ -236,7 +225,6 @@ ide_workbench_init (IdeWorkbench *self)
   ide_workbench_actions_init (self);
 
   ide_workbench_init_greeter (self);
-  ide_workbench_init_editor (self);
   ide_workbench_init_preferences (self);
 
   ide_window_settings_register (GTK_WINDOW (self));
@@ -359,7 +347,7 @@ ide_workbench_set_context (IdeWorkbench *self,
 
   peas_extension_set_foreach (self->addins, ide_workbench_addin_added, self);
 
-  ide_workbench_set_visible_perspective (self, IDE_PERSPECTIVE (self->editor_perspective));
+  ide_workbench_set_visible_perspective_name (self, "editor");
 
   gtk_stack_set_visible_child_name (self->top_stack, "perspectives");
 }

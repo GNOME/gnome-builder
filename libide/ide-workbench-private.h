@@ -21,7 +21,6 @@
 
 #include <libpeas/peas.h>
 
-#include "ide-editor-perspective.h"
 #include "ide-greeter-perspective.h"
 #include "ide-preferences-perspective.h"
 #include "ide-workbench.h"
@@ -39,7 +38,6 @@ struct _IdeWorkbench
 
   GtkStack                  *top_stack;
   GtkStack                  *titlebar_stack;
-  IdeEditorPerspective      *editor_perspective;
   IdeGreeterPerspective     *greeter_perspective;
   IdePreferencesPerspective *preferences_perspective;
   GtkStack                  *perspectives_stack;
