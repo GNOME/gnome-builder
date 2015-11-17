@@ -41,13 +41,9 @@ libcommand_bar_la_CFLAGS = \
 	-I$(top_srcdir)/contrib/egg \
 	-I$(top_srcdir)/contrib/gd \
 	-I$(top_srcdir)/contrib/nautilus \
-	$(BUILDER_CFLAGS) \
+	$(LIBIDE_CFLAGS) \
 	$(DEBUG_CFLAGS) \
 	$(OPTIMIZE_CFLAGS) \
-	$(NULL)
-
-libcommand_bar_la_LIBADD = \
-	$(BUILDER_LIBS) \
 	$(NULL)
 
 libcommand_bar_la_LDFLAGS = \

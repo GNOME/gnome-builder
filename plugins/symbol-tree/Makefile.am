@@ -20,7 +20,6 @@ libsymbol_tree_la_SOURCES = \
 
 # XXX: temporary, since we need to extract lots of src/ into plugins
 libsymbol_tree_la_CFLAGS = \
-	$(BUILDER_CFLAGS) \
 	-I$(top_srcdir)/src \
 	-I$(top_srcdir)/src/documents \
 	-I$(top_srcdir)/src/editor \
@@ -34,7 +33,6 @@ libsymbol_tree_la_CFLAGS = \
 	$(NULL)
 
 libsymbol_tree_la_LIBADD = \
-	$(BUILDER_LIBS) \
 	$(top_builddir)/libide/libide-1.0.la \
 	$(NULL)
 

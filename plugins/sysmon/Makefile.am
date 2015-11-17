@@ -22,17 +22,13 @@ nodist_libsysmon_la_SOURCES = \
 	$(NULL)
 
 libsysmon_la_CFLAGS = \
-	$(BUILDER_CFLAGS) \
+	$(LIBIDE_CFLAGS) \
 	-I$(top_srcdir)/libide \
-	-I$(top_srcdir)/src \
-	-I$(top_srcdir)/src/workbench \
-	-I$(top_srcdir)/src/workspace \
 	-I$(top_srcdir)/contrib/egg \
 	-I$(top_srcdir)/contrib/rg \
 	$(NULL)
 
 libsysmon_la_LIBADD = \
-	$(BUILDER_LIBS) \
 	$(top_builddir)/contrib/rg/librg.la \
 	$(NULL)
 

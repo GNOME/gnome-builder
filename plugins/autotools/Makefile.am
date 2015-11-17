@@ -21,7 +21,7 @@ libautotools_plugin_la_SOURCES = \
 	$(NULL)
 
 libautotools_plugin_la_CFLAGS = \
-	$(BUILDER_CFLAGS) \
+	$(LIBIDE_CFLAGS) \
 	-I$(top_srcdir)/contrib/egg \
 	-I$(top_srcdir)/libide \
 	$(NULL)

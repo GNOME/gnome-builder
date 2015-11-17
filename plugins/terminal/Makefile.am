@@ -31,7 +31,6 @@ nodist_libterminal_la_SOURCES = \
 	$(NULL)
 
 libterminal_la_CFLAGS = \
-	$(BUILDER_CFLAGS) \
 	$(TERMINAL_CFLAGS) \
 	-I$(top_srcdir)/libide \
 	-I$(top_srcdir)/src \
@@ -45,7 +44,6 @@ libterminal_la_CFLAGS = \
 	$(NULL)
 
 libterminal_la_LIBADD = \
-	$(BUILDER_LIBS) \
 	$(TERMINAL_LIBS) \
 	$(NULL)
 

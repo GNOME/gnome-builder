@@ -4,7 +4,7 @@ gnome_builder_SOURCES = main.c
 
 gnome_builder_CFLAGS = \
 	-DPACKAGE_LOCALE_DIR=\""${datadir}/locale"\" \
-	$(BUILDER_CFLAGS) \
+	$(LIBIDE_CFLAGS) \
 	$(DEBUG_CFLAGS) \
 	$(OPTIMIZE_CFLAGS) \
 	$(TERMINAL_CFLAGS) \
@@ -14,7 +14,7 @@ gnome_builder_CFLAGS = \
 	$(NULL)
 
 gnome_builder_LDADD = \
-	$(BUILDER_LIBS) \
+	$(LIBIDE_LIBS) \
 	$(top_builddir)/contrib/egg/libegg-private.la \
 	$(top_builddir)/data/icons/hicolor/libicons.la \
 	$(top_builddir)/libide/libide-1.0.la \

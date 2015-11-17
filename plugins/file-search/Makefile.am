@@ -14,7 +14,6 @@ libfile_search_la_SOURCES = \
 	$(NULL)
 
 libfile_search_la_CFLAGS = \
-	$(BUILDER_CFLAGS) \
 	-I$(top_srcdir)/libide \
 	-I$(top_srcdir)/src \
 	-I$(top_srcdir)/src/search \
@@ -24,7 +23,6 @@ libfile_search_la_CFLAGS = \
 	$(NULL)
 
 libfile_search_la_LIBADD = \
-	$(BUILDER_LIBS) \
 	$(top_builddir)/contrib/search/libsearch.la \
 	$(NULL)
 

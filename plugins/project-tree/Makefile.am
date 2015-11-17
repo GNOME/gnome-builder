@@ -30,9 +30,9 @@ libproject_tree_plugin_la_SOURCES = \
 
 libproject_tree_plugin_la_CFLAGS = \
 	$(LIBIDE_CFLAGS) \
-	$(BUILDER_CFLAGS) \
 	$(OPTIMIZE_CFLAGS) \
 	$(DEBUG_CFLAGS) \
+	$(TERMINAL_CFLAGS) \
 	-I$(top_srcdir)/libide \
 	-I$(top_srcdir)/src/tree \
 	-I$(top_srcdir)/src/util \
@@ -44,7 +44,6 @@ endif
 
 libproject_tree_plugin_la_LIBADD = \
 	$(LIBIDE_LIBS) \
-	$(BUILDER_LIBS) \
 	$(top_builddir)/libide/libide-1.0.la \
 	$(NULL)
 

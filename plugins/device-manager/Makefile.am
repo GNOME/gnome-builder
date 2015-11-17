@@ -17,17 +17,8 @@ libdevice_manager_la_SOURCES = \
 	$(NULL)
 
 libdevice_manager_la_CFLAGS = \
-	$(BUILDER_CFLAGS) \
-	-I$(top_srcdir)/src \
-	-I$(top_srcdir)/src/tree \
-	-I$(top_srcdir)/src/workbench \
-	-I$(top_srcdir)/src/workspace \
+	$(LIBIDE_CFLAGS) \
 	-I$(top_srcdir)/libide \
-	$(NULL)
-
-libdevice_manager_la_LIBADD = \
-	$(BUILDER_LIBS) \
-	$(top_builddir)/libide/libide-1.0.la \
 	$(NULL)
 
 libdevice_manager_la_LDFLAGS = \
@@ -38,7 +29,6 @@ libdevice_manager_la_LDFLAGS = \
 nodist_libdevice_manager_la_SOURCES = \
 	gb-device-manager-resources.c \
 	gb-device-manager-resources.h
-
 
 glib_resources_c = gb-device-manager-resources.c
 glib_resources_h = gb-device-manager-resources.h

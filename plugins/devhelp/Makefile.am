@@ -27,23 +27,13 @@ libdevhelp_plugin_la_SOURCES = \
 	$(NULL)
 
 libdevhelp_plugin_la_CFLAGS = \
-	$(BUILDER_CFLAGS) \
+	$(LIBIDE_CFLAGS) \
 	$(DEVHELP_CFLAGS) \
-	-I$(top_srcdir)/src \
-	-I$(top_srcdir)/src/documents \
-	-I$(top_srcdir)/src/editor \
-	-I$(top_srcdir)/src/search \
-	-I$(top_srcdir)/src/views \
-	-I$(top_srcdir)/src/util \
-	-I$(top_srcdir)/src/workbench \
-	-I$(top_srcdir)/src/workspace \
 	-I$(top_srcdir)/libide \
 	$(NULL)
 
 libdevhelp_plugin_la_LIBADD = \
-	$(BUILDER_LIBS) \
 	$(DEVHELP_LIBS) \
-	$(top_builddir)/libide/libide-1.0.la \
 	$(NULL)
 
 libdevhelp_plugin_la_LDFLAGS = \
