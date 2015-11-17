@@ -49,6 +49,13 @@ gb_sysmon_addin_load (IdeWorkbenchAddin *addin,
   g_assert (IDE_IS_WORKBENCH (workbench));
 
   editor = ide_workbench_get_perspective_by_name (workbench, "editor");
+
+  /*
+   * TODO: Editor might not be loaded yet!
+   */
+  if (editor == NULL)
+    return;
+
   g_assert (editor != NULL);
   g_assert (IDE_IS_LAYOUT (editor));
 
