@@ -77,6 +77,8 @@
 #define FIXIT_LABEL_LEN_MAX 30
 #define SCROLL_REPLAY_DELAY 1000
 #define DEFAULT_OVERSCROLL_NUM_LINES 1
+#define TAG_DEFINITION "action::hover-definition"
+#define DEFINITION_HIGHLIGHT_MODIFIER GDK_CONTROL_MASK
 
 #define ALL_ACCELS_MASK (GDK_CONTROL_MASK | GDK_SHIFT_MASK | GDK_MOD1_MASK)
 
@@ -151,6 +153,10 @@ typedef struct
   guint                        delay_size_allocate_chainup;
   GtkAllocation                delay_size_allocation;
 
+  GtkTextIter                  definition_highlight_start;
+  GtkTextIter                  definition_highlight_end;
+  IdeSourceLocation           *definition_src_location;
+
   guint                        auto_indent : 1;
   guint                        completion_blocked : 1;
   guint                        completion_visible : 1;
@@ -183,6 +189,13 @@ typedef struct
   guint             select_match : 1;
   guint             exclusive : 1;
 } SearchMovement;
+
+typedef struct
+{
+  IdeSourceView    *self;
+  GtkTextIter       word_start;
+  GtkTextIter       word_end;
+} DefinitionHighlightData;
 
 G_DEFINE_TYPE_WITH_PRIVATE (IdeSourceView, ide_source_view, GTK_SOURCE_TYPE_VIEW)
 EGG_DEFINE_COUNTER (instances, "IdeSourceView", "Instances", "Number of IdeSourceView instances")
@@ -1377,6 +1390,54 @@ ide_source_view__completion_provider_removed (IdeExtensionSetAdapter *adapter,
 }
 
 static void
+ide_source_view_set_cursor_from_name (IdeSourceView *self,
+                                      const gchar   *cursor_name)
+{
+  GdkDisplay *display;
+  GdkCursor *cursor;
+  GdkWindow *window = gtk_text_view_get_window (GTK_TEXT_VIEW (self),
+                                                GTK_TEXT_WINDOW_TEXT);
+
+  if (!window)
+    return;
+
+  display = gdk_window_get_display (window);
+  cursor = gdk_cursor_new_from_name (display, cursor_name);
+
+  gdk_window_set_cursor (window, cursor);
+}
+
+static void
+ide_source_view_reset_definition_highlight (IdeSourceView *self)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+
+  if (priv->definition_src_location)
+    {
+      ide_source_location_unref (priv->definition_src_location);
+      priv->definition_src_location = NULL;
+    }
+
+  if (!gtk_text_iter_equal (&priv->definition_highlight_start,
+                            &priv->definition_highlight_end))
+    {
+      gtk_text_buffer_remove_tag_by_name (GTK_TEXT_BUFFER (priv->buffer),
+                                          TAG_DEFINITION,
+                                          &priv->definition_highlight_start,
+                                          &priv->definition_highlight_end);
+    }
+
+  if (priv->buffer)
+    {
+      gtk_text_buffer_get_end_iter (GTK_TEXT_BUFFER (priv->buffer),
+                                    &priv->definition_highlight_end);
+      priv->definition_highlight_start = priv->definition_highlight_end;
+    }
+
+  ide_source_view_set_cursor_from_name (self, "text");
+}
+
+static void
 ide_source_view_bind_buffer (IdeSourceView  *self,
                              IdeBuffer      *buffer,
                              EggSignalGroup *group)
@@ -1395,6 +1456,12 @@ ide_source_view_bind_buffer (IdeSourceView  *self,
   g_assert (EGG_IS_SIGNAL_GROUP (group));
 
   priv->buffer = buffer;
+
+  gtk_text_buffer_create_tag (GTK_TEXT_BUFFER (priv->buffer), TAG_DEFINITION,
+                              "underline", PANGO_UNDERLINE_SINGLE,
+                              NULL);
+
+  ide_source_view_reset_definition_highlight (self);
 
   ide_buffer_hold (buffer);
 
@@ -2294,6 +2361,70 @@ ide_source_view_key_press_event (GtkWidget   *widget,
 }
 
 static gboolean
+ide_source_view_key_release_event (GtkWidget   *widget,
+                                   GdkEventKey *event)
+{
+  IdeSourceView *self = (IdeSourceView *) widget;
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+  GtkWidgetClass *klass = GTK_WIDGET_CLASS (ide_source_view_parent_class);
+  gboolean ret = klass->key_release_event (widget, event);
+
+  if (priv->definition_src_location)
+    {
+      ide_source_view_reset_definition_highlight (self);
+    }
+
+  return ret;
+}
+
+static gboolean
+ide_source_view_process_press_on_definition (IdeSourceView  *self,
+                                             GdkEventButton *event)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+  GtkTextView *text_view = (GtkTextView *) self;
+  GtkTextIter iter;
+  GtkTextWindowType window_type;
+  gint buffer_x, buffer_y;
+
+  window_type = gtk_text_view_get_window_type (text_view, event->window);
+  gtk_text_view_window_to_buffer_coords (text_view,
+                                         window_type,
+                                         event->x,
+                                         event->y,
+                                         &buffer_x,
+                                         &buffer_y);
+  gtk_text_view_get_iter_at_location (text_view,
+                                      &iter,
+                                      buffer_x,
+                                      buffer_y);
+
+  if (priv->definition_src_location)
+    {
+      if (gtk_text_iter_in_range (&iter,
+                                  &priv->definition_highlight_start,
+                                  &priv->definition_highlight_end))
+        {
+          IdeSourceLocation *src_location = priv->definition_src_location;
+          ide_source_location_ref (src_location);
+
+          ide_source_view_reset_definition_highlight (self);
+
+          g_signal_emit (self,
+                         signals [FOCUS_LOCATION],
+                         0,
+                         src_location);
+
+          ide_source_location_unref (src_location);
+        }
+
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+static gboolean
 ide_source_view_real_button_press_event (GtkWidget      *widget,
                                          GdkEventButton *event)
 {
@@ -2304,6 +2435,9 @@ ide_source_view_real_button_press_event (GtkWidget      *widget,
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
   g_assert (GTK_IS_TEXT_VIEW (text_view));
+
+  if (ide_source_view_process_press_on_definition (self, event))
+    return TRUE;
 
   ret = GTK_WIDGET_CLASS (ide_source_view_parent_class)->button_press_event (widget, event);
 
@@ -2342,6 +2476,165 @@ ide_source_view_real_button_press_event (GtkWidget      *widget,
    * to the previous offset.
    */
   ide_source_view_save_offset (self);
+
+  return ret;
+}
+
+static gboolean
+ide_source_get_word_from_iter (const GtkTextIter *iter,
+                               GtkTextIter *word_start,
+                               GtkTextIter *word_end)
+{
+  /* Just using forward/backward to word start/end is not enough
+   * because _ break words when using those functions while they
+   * are commonly used in the same word in code */
+
+  gtk_text_iter_assign (word_start, iter);
+  gtk_text_iter_assign (word_end, iter);
+
+  do
+    {
+      const gunichar c = gtk_text_iter_get_char (word_end);
+      if (!(g_unichar_isalnum (c) || c == '_'))
+        break;
+    }
+  while (gtk_text_iter_forward_char (word_end));
+
+  if (gtk_text_iter_equal (word_start, word_end))
+    {
+      /* Iter is not inside a word */
+      return FALSE;
+    }
+
+  while (gtk_text_iter_backward_char (word_start))
+    {
+      const gunichar c = gtk_text_iter_get_char (word_start);
+      if (!(g_unichar_isalnum (c) || c == '_'))
+        {
+          gtk_text_iter_forward_char (word_start);
+          break;
+        }
+    }
+
+  return !gtk_text_iter_equal (word_start, word_end);
+}
+
+static void
+ide_source_view_get_definition_on_mouse_over_cb (GObject      *object,
+                                                 GAsyncResult *result,
+                                                 gpointer      user_data)
+{
+  DefinitionHighlightData *data = (DefinitionHighlightData *) user_data;
+  IdeBuffer *buffer = (IdeBuffer *) object;
+  g_autoptr(IdeSourceView) self = data->self;
+  g_autoptr(IdeSymbol) symbol = NULL;
+  g_autoptr(GError) error = NULL;
+  IdeSourceLocation *srcloc;
+
+  g_assert (IDE_IS_BUFFER (buffer));
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+
+  symbol = ide_buffer_get_symbol_at_location_finish (buffer, result, &error);
+
+  if (symbol == NULL)
+    {
+      g_warning ("%s", error->message);
+      return;
+    }
+
+  srcloc = ide_symbol_get_definition_location (symbol);
+
+  if (srcloc != NULL)
+    {
+      IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+
+      if (priv->definition_src_location &&
+          priv->definition_src_location != srcloc)
+        {
+          ide_source_location_unref (priv->definition_src_location);
+          priv->definition_src_location = NULL;
+        }
+
+      priv->definition_highlight_start = data->word_start;
+      priv->definition_highlight_end = data->word_end;
+
+      priv->definition_src_location = srcloc;
+      ide_source_location_ref (priv->definition_src_location);
+
+      gtk_text_buffer_apply_tag_by_name (GTK_TEXT_BUFFER (priv->buffer),
+                                         TAG_DEFINITION,
+                                         &priv->definition_highlight_start,
+                                         &priv->definition_highlight_end);
+
+      ide_source_view_set_cursor_from_name (self, "pointer");
+    }
+  else
+    {
+      ide_source_view_reset_definition_highlight (self);
+    }
+}
+
+static gboolean
+ide_source_view_real_motion_notify_event (GtkWidget      *widget,
+                                          GdkEventMotion *event)
+{
+  IdeSourceView  *self = (IdeSourceView  *) widget;
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+  GtkWidgetClass *klass = GTK_WIDGET_CLASS (ide_source_view_parent_class);
+  GtkTextIter iter, start_iter, end_iter;
+  gint buffer_x, buffer_y;
+  GtkTextWindowType window_type;
+  DefinitionHighlightData *data;
+  gboolean ret;
+
+  ret = klass->motion_notify_event (widget, event);
+
+  if (event->state != DEFINITION_HIGHLIGHT_MODIFIER)
+    {
+      if (priv->definition_src_location)
+        ide_source_view_reset_definition_highlight (self);
+
+      return ret;
+    }
+
+  window_type = gtk_text_view_get_window_type (GTK_TEXT_VIEW (self),
+                                               event->window);
+  gtk_text_view_window_to_buffer_coords (GTK_TEXT_VIEW (self),
+                                         window_type,
+                                         event->x,
+                                         event->y,
+                                         &buffer_x,
+                                         &buffer_y);
+  gtk_text_view_get_iter_at_location (GTK_TEXT_VIEW (self),
+                                      &iter,
+                                      buffer_x,
+                                      buffer_y);
+
+  if (!ide_source_get_word_from_iter (&iter, &start_iter, &end_iter))
+    {
+      ide_source_view_reset_definition_highlight (self);
+      return ret;
+    }
+
+  if (priv->definition_src_location)
+    {
+      if (gtk_text_iter_equal (&priv->definition_highlight_start, &start_iter)
+          && gtk_text_iter_equal (&priv->definition_highlight_end, &end_iter))
+        return ret;
+
+      ide_source_view_reset_definition_highlight (self);
+    }
+
+  data = g_slice_new (DefinitionHighlightData);
+  data->self = g_object_ref (self);
+  gtk_text_iter_assign (&data->word_start, &start_iter);
+  gtk_text_iter_assign (&data->word_end, &end_iter);
+
+  ide_buffer_get_symbol_at_location_async (priv->buffer,
+                                           &iter,
+                                           NULL,
+                                           ide_source_view_get_definition_on_mouse_over_cb,
+                                           data);
 
   return ret;
 }
@@ -3766,6 +4059,9 @@ ide_source_view_constructed (GObject *object)
   g_object_ref (priv->line_diagnostics_renderer);
   gtk_source_gutter_insert (gutter, priv->line_diagnostics_renderer, -100);
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SHOW_LINE_DIAGNOSTICS]);
+
+  priv->definition_src_location = NULL;
+  ide_source_view_reset_definition_highlight (self);
 }
 
 static void
@@ -5369,10 +5665,12 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
   object_class->set_property = ide_source_view_set_property;
 
   widget_class->button_press_event = ide_source_view_real_button_press_event;
+  widget_class->motion_notify_event = ide_source_view_real_motion_notify_event;
   widget_class->draw = ide_source_view_real_draw;
   widget_class->focus_in_event = ide_source_view_focus_in_event;
   widget_class->focus_out_event = ide_source_view_focus_out_event;
   widget_class->key_press_event = ide_source_view_key_press_event;
+  widget_class->key_release_event = ide_source_view_key_release_event;
   widget_class->query_tooltip = ide_source_view_query_tooltip;
   widget_class->scroll_event = ide_source_view_scroll_event;
   widget_class->size_allocate = ide_source_view_size_allocate;
