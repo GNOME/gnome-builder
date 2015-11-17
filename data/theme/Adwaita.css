@@ -67,3 +67,19 @@ GtkBox.horizontal.search-bar:backdrop {
   background-color: #d5d5d5;
   box-shadow: none;
 }
+
+
+workbench > GtkOverlay > stack > GtkBox > stackswitcher.vertical:first-child {
+  background: #f4f4f4;
+}
+workbench > GtkOverlay > stack > GtkBox > stackswitcher.vertical:first-child button {
+  padding: 12px;
+  color: #bebebe;
+  background: transparent;
+  box-shadow: none;
+  border: none;
+  border-radius: 0px;
+}
+workbench > GtkOverlay > stack > GtkBox > stackswitcher.vertical:first-child button:checked {
+  color: #2e3436;
+}
