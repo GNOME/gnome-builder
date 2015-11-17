@@ -76,6 +76,7 @@ ide_application_load_plugins (IdeApplication *self)
 {
   PeasEngine *engine = peas_engine_get_default ();
   const GList *list;
+  const GList *iter;
 
   peas_engine_enable_loader (engine, "python3");
 
@@ -114,12 +115,22 @@ ide_application_load_plugins (IdeApplication *self)
                                    "resource:///org/gnome/builder/plugins/editor",
                                    "resource:///org/gnome/builder/plugins/editor");
 
+  peas_engine_rescan_plugins (engine);
+
   list = peas_engine_get_plugin_list (engine);
 
-  for (; list; list = list->next)
+  for (iter = list; iter; iter = iter->next)
+    g_debug ("Discovered plugin \"%s\"", peas_plugin_info_get_module_name (iter->data));
+
+  for (iter = list; iter; iter = iter->next)
     {
-      if (ide_application_can_load_plugin (self, list->data))
-        peas_engine_load_plugin (engine, list->data);
+      PeasPluginInfo *plugin_info = iter->data;
+
+      if (ide_application_can_load_plugin (self, plugin_info))
+        {
+          g_debug ("Loading plugin \"%s\"", peas_plugin_info_get_module_name (plugin_info));
+          peas_engine_load_plugin (engine, plugin_info);
+        }
     }
 }
 
