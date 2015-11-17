@@ -493,7 +493,7 @@ find_by_file (gpointer data,
   } *lookup = user_data;
 
   g_assert (lookup);
-  g_assert (IDE_IS_FILE (lookup->file));
+  g_assert (G_IS_FILE (lookup->file));
   g_assert (IDE_IS_BACK_FORWARD_ITEM (item));
 
   if (lookup->result)
