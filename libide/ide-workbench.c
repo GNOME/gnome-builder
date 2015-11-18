@@ -222,6 +222,10 @@ ide_workbench_class_init (IdeWorkbenchClass *klass)
 
   /**
    * IdeWorkbench::set-perspective:
+   * @self: An #IdeWorkbench
+   * @name: the name of the perspective
+   *
+   * This signal is meant for keybindings to change the current perspective.
    */
   signals [SET_PERSPECTIVE] =
     g_signal_new_class_handler ("set-perspective",
