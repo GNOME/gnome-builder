@@ -1531,6 +1531,14 @@ ide_source_view_movements_scroll_center (Movement *mv)
       break;
     }
 
+  g_printf ("str:'%s'\n", mv->command_str->str);
+
+  if (g_str_has_suffix (mv->command_str->str, "-") ||
+      g_str_has_suffix (mv->command_str->str, ".") ||
+      g_str_has_suffix (mv->command_str->str, "[Return]") ||
+      g_str_has_suffix (mv->command_str->str, "[KP_Enter]"))
+    ide_source_view_movements_first_nonspace_char (mv);
+
   mv->ignore_scroll_to_insert = TRUE;
 }
 
