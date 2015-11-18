@@ -183,7 +183,6 @@ ide_application_actions_about (GSimpleAction *action,
   gtk_window_present (GTK_WINDOW (dialog));
 }
 
-#if 0
 static void
 ide_application_actions_open_project (GSimpleAction *action,
                                       GVariant      *variant,
@@ -196,6 +195,7 @@ ide_application_actions_open_project (GSimpleAction *action,
   ide_application_show_projects_window (self);
 }
 
+#if 0
 static void
 ide_application_actions_open_project_cb (GObject      *object,
                                          GAsyncResult *result,
@@ -310,7 +310,7 @@ ide_application_actions_shortcuts (GSimpleAction *action,
 
 static const GActionEntry IdeApplicationActions[] = {
   { "about",        ide_application_actions_about },
-  //{ "open-project", ide_application_actions_open_project },
+  { "open-project", ide_application_actions_open_project },
   //{ "new-project",  ide_application_actions_new_project },
   { "preferences",  ide_application_actions_preferences },
   { "quit",         ide_application_actions_quit },

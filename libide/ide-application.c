@@ -575,8 +575,7 @@ ide_application_open (GApplication  *application,
 void
 ide_application_show_projects_window (IdeApplication *self)
 {
-#if 0
-  IdeProjectsDialog *window;
+  GtkWindow *window;
   GList *windows;
 
   g_assert (IDE_IS_APPLICATION (self));
@@ -585,26 +584,26 @@ ide_application_show_projects_window (IdeApplication *self)
 
   for (; windows; windows = windows->next)
     {
-      if (IDE_IS_GREETER_WINDOW (windows->data))
+      window = windows->data;
+
+      if (IDE_IS_WORKBENCH (window))
         {
-          gtk_window_present (windows->data);
-          return;
+          const gchar *name;
+
+          name = ide_workbench_get_visible_perspective_name (IDE_WORKBENCH (window));
+
+          if (ide_str_equal0 ("greeter", name))
+            {
+              gtk_window_present (windows->data);
+              return;
+            }
         }
     }
 
-  if (self->recent_projects == NULL)
-    {
-      self->recent_projects = ide_recent_projects_new ();
-      ide_recent_projects_discover_async (self->recent_projects, NULL, NULL, NULL);
-    }
-
-  window = g_object_new (IDE_TYPE_GREETER_WINDOW,
+  window = g_object_new (IDE_TYPE_WORKBENCH,
                          "application", self,
-                         "recent-projects", self->recent_projects,
                          NULL);
-  gtk_window_group_add_window (self->greeter_group, GTK_WINDOW (window));
-  gtk_window_present (GTK_WINDOW (window));
-#endif
+  gtk_window_present (window);
 }
 
 static void
@@ -636,7 +635,6 @@ ide_application_activate (GApplication *application)
   workbench = g_object_new (IDE_TYPE_WORKBENCH,
                             "application", self,
                             NULL);
-  gtk_window_maximize (GTK_WINDOW (workbench));
   gtk_window_present (GTK_WINDOW (workbench));
 }
 
