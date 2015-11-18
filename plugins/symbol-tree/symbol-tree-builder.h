@@ -19,14 +19,13 @@
 #ifndef SYMBOL_TREE_BUILDER_H
 #define SYMBOL_TREE_BUILDER_H
 
-#include "gb-editor-document.h"
-#include "gb-tree-builder.h"
+#include <ide.h>
 
 G_BEGIN_DECLS
 
 #define SYMBOL_TYPE_TREE_BUILDER (symbol_tree_builder_get_type())
 
-G_DECLARE_FINAL_TYPE (SymbolTreeBuilder, symbol_tree_builder, SYMBOL, TREE_BUILDER, GbTreeBuilder)
+G_DECLARE_FINAL_TYPE (SymbolTreeBuilder, symbol_tree_builder, SYMBOL, TREE_BUILDER, IdeTreeBuilder)
 
 G_END_DECLS
 

@@ -21,8 +21,6 @@
 
 #include <gtk/gtk.h>
 
-#include "gb-workbench-addin.h"
-
 G_BEGIN_DECLS
 
 #define SYMBOL_TYPE_TREE (symbol_tree_get_type())

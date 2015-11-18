@@ -4,5 +4,6 @@ Name=Symbol Tree
 Description=Provides a Symbol Tree for the currently focused document.
 Authors=Christian Hergert <christian@hergert.me>
 Copyright=Copyright © 2015 Christian Hergert
+Depends=editor
 Builtin=true
 Hidden=true

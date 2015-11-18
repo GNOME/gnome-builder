@@ -16,16 +16,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define G_LOG_DOMAIN "symbol-tree"
+
 #include <glib/gi18n.h>
 #include <ide.h>
 #include <libpeas/peas.h>
 
 #include "egg-task-cache.h"
-
-#include "gb-editor-view.h"
-#include "gb-tree.h"
-#include "gb-workspace.h"
-#include "gb-widget.h"
 
 #include "symbol-tree.h"
 #include "symbol-tree-builder.h"
@@ -39,19 +36,19 @@ struct _SymbolTree
 
   GCancellable   *cancellable;
   EggTaskCache   *symbols_cache;
-  GbTree         *tree;
+  IdeTree        *tree;
   GtkSearchEntry *search_entry;
 
-  GbDocument     *last_document;
+  IdeBuffer      *last_document;
   gsize           last_change_count;
 
   guint           refresh_tree_timeout;
 };
 
-static void workbench_addin_init (GbWorkbenchAddinInterface *iface);
+static void workbench_addin_init (IdeWorkbenchAddinInterface *iface);
 
 G_DEFINE_DYNAMIC_TYPE_EXTENDED (SymbolTree, symbol_tree, GTK_TYPE_BOX, 0,
-                                G_IMPLEMENT_INTERFACE_DYNAMIC (GB_TYPE_WORKBENCH_ADDIN,
+                                G_IMPLEMENT_INTERFACE_DYNAMIC (IDE_TYPE_WORKBENCH_ADDIN,
                                                                workbench_addin_init))
 
 static void refresh_tree (SymbolTree *symbol_tree);
@@ -73,9 +70,11 @@ get_cached_symbol_tree_cb (GObject      *object,
   g_autoptr(SymbolTree) self = user_data;
   g_autoptr(IdeSymbolTree) symbol_tree = NULL;
   g_autoptr(GError) error = NULL;
-  GbTreeNode *root;
+  IdeTreeNode *root;
   GtkTreeIter iter;
   GtkTreeModel *model;
+
+  IDE_ENTRY;
 
   g_assert (EGG_IS_TASK_CACHE (cache));
   g_assert (G_IS_ASYNC_RESULT (result));
@@ -92,10 +91,10 @@ get_cached_symbol_tree_cb (GObject      *object,
                                               refresh_tree_timeout,
                                               self);
 
-  root = g_object_new (GB_TYPE_TREE_NODE,
+  root = g_object_new (IDE_TYPE_TREE_NODE,
                        "item", symbol_tree,
                        NULL);
-  gb_tree_set_root (self->tree, root);
+  ide_tree_set_root (self->tree, root);
 
   model = gtk_tree_view_get_model (GTK_TREE_VIEW (self->tree));
 
@@ -103,31 +102,42 @@ get_cached_symbol_tree_cb (GObject      *object,
     {
       do
         {
-          g_autoptr(GbTreeNode) node = NULL;
+          g_autoptr(IdeTreeNode) node = NULL;
 
           gtk_tree_model_get (model, &iter, 0, &node, -1);
           if (node != NULL)
-            gb_tree_node_expand (node, FALSE);
+            ide_tree_node_expand (node, FALSE);
         }
       while (gtk_tree_model_iter_next (model, &iter));
     }
+
+  IDE_EXIT;
 }
 
 static void
 refresh_tree (SymbolTree *self)
 {
   GtkWidget *active_view;
-  GbWorkbench *workbench;
-  GbDocument *document = NULL;
+  IdePerspective *perspective;
+  IdeWorkbench *workbench;
+  IdeBuffer *document = NULL;
   gsize change_count = 0;
+
+  IDE_ENTRY;
 
   g_assert (SYMBOL_IS_TREE (self));
 
-  workbench = gb_widget_get_workbench (GTK_WIDGET (self));
+  workbench = IDE_WORKBENCH (gtk_widget_get_ancestor (GTK_WIDGET (self), IDE_TYPE_WORKBENCH));
+  if (workbench == NULL)
+    IDE_EXIT;
 
-  if ((active_view = gb_workbench_get_active_view (workbench)) && GB_IS_EDITOR_VIEW (active_view))
+  perspective = ide_workbench_get_perspective_by_name (workbench, "editor");
+  g_assert (perspective != NULL);
+
+  if ((active_view = ide_layout_get_active_view (IDE_LAYOUT (perspective))) &&
+      IDE_IS_EDITOR_VIEW (active_view))
     {
-      document = gb_view_get_document (GB_VIEW (active_view));
+      document = ide_editor_view_get_document (IDE_EDITOR_VIEW  (active_view));
       if (IDE_IS_BUFFER (document))
         change_count = ide_buffer_get_change_count (IDE_BUFFER (document));
     }
@@ -145,7 +155,7 @@ refresh_tree (SymbolTree *self)
        * TODO: Get cross compile names for nodes so that we can
        *       recompute the open state.
        */
-      gb_tree_set_root (self->tree, gb_tree_node_new ());;
+      ide_tree_set_root (self->tree, ide_tree_node_new ());;
 
       /*
        * Fetch the symbols via the transparent cache.
@@ -168,19 +178,25 @@ refresh_tree (SymbolTree *self)
                                     g_object_ref (self));
         }
     }
+
+  IDE_EXIT;
 }
 
 static void
 notify_active_view_cb (SymbolTree  *self,
                        GParamFlags *pspec,
-                       GbWorkbench *workbench)
+                       IdeLayout   *layout)
 {
+  IDE_ENTRY;
+
   g_assert (SYMBOL_IS_TREE (self));
   g_assert (pspec != NULL);
-  g_assert (GB_IS_WORKBENCH (workbench));
+  g_assert (IDE_IS_LAYOUT (layout));
 
   refresh_tree (self);
   gtk_entry_set_text (GTK_ENTRY (self->search_entry), "");
+
+  IDE_EXIT;
 }
 
 static void
@@ -193,6 +209,8 @@ get_symbol_tree_cb (GObject      *object,
   g_autoptr(IdeSymbolTree) symbol_tree = NULL;
   GError *error = NULL;
 
+  IDE_ENTRY;
+
   g_assert (IDE_IS_SYMBOL_RESOLVER (resolver));
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (G_IS_TASK (task));
@@ -203,6 +221,8 @@ get_symbol_tree_cb (GObject      *object,
     g_task_return_error (task, error);
   else
     g_task_return_pointer (task, g_object_ref (symbol_tree), g_object_unref);
+
+  IDE_EXIT;
 }
 
 static void
@@ -211,12 +231,14 @@ populate_cache_cb (EggTaskCache  *cache,
                    GTask         *task,
                    gpointer       user_data)
 {
-  GbEditorDocument *document = (GbEditorDocument *)key;
+  IdeBuffer *document = (IdeBuffer *)key;
   IdeSymbolResolver *resolver;
   IdeFile *file;
 
+  IDE_ENTRY;
+
   g_assert (EGG_IS_TASK_CACHE (cache));
-  g_assert (GB_IS_EDITOR_DOCUMENT (document));
+  g_assert (IDE_IS_BUFFER (document));
   g_assert (G_IS_TASK (task));
 
   if ((resolver = ide_buffer_get_symbol_resolver (IDE_BUFFER (document))) &&
@@ -235,31 +257,38 @@ populate_cache_cb (EggTaskCache  *cache,
                                G_IO_ERROR_NOT_SUPPORTED,
                                _("Current language does not support symbol resolvers"));
     }
+
+  IDE_EXIT;
 }
 
 static void
-symbol_tree_load (GbWorkbenchAddin *addin,
-                  GbWorkbench      *workbench)
+symbol_tree_load (IdeWorkbenchAddin *addin,
+                  IdeWorkbench      *workbench)
 {
   SymbolTree *self = (SymbolTree *)addin;
-  GbWorkspace *workspace;
+  IdePerspective *perspective;
   GtkWidget *right_pane;
 
   g_assert (SYMBOL_IS_TREE (self));
-  g_assert (GB_IS_WORKBENCH (workbench));
+  g_assert (IDE_IS_WORKBENCH (workbench));
 
-  g_signal_connect_object (workbench,
+  perspective = ide_workbench_get_perspective_by_name (workbench, "editor");
+  g_assert (perspective != NULL);
+  g_assert (IDE_IS_LAYOUT (perspective));
+
+  g_signal_connect_object (perspective,
                            "notify::active-view",
                            G_CALLBACK (notify_active_view_cb),
                            self,
                            G_CONNECT_SWAPPED);
 
-  workspace = GB_WORKSPACE (gb_workbench_get_workspace (workbench));
-  right_pane = gb_workspace_get_right_pane (workspace);
-  gb_workspace_pane_add_page (GB_WORKSPACE_PANE (right_pane),
-                              GTK_WIDGET (self),
-                              _("Symbol Tree"),
-                              "lang-function-symbolic");
+  right_pane = ide_layout_get_right_pane (IDE_LAYOUT (perspective));
+  g_assert (right_pane != NULL);
+
+  ide_layout_pane_add_page (IDE_LAYOUT_PANE (right_pane),
+                            GTK_WIDGET (self),
+                            _("Symbol Tree"),
+                            "lang-function-symbolic");
 
   gtk_container_child_set (GTK_CONTAINER (gtk_widget_get_parent (GTK_WIDGET (self))),
                            GTK_WIDGET (self),
@@ -268,13 +297,13 @@ symbol_tree_load (GbWorkbenchAddin *addin,
 }
 
 static void
-symbol_tree_unload (GbWorkbenchAddin *addin,
-                    GbWorkbench      *workbench)
+symbol_tree_unload (IdeWorkbenchAddin *addin,
+                    IdeWorkbench      *workbench)
 {
   SymbolTree *self = (SymbolTree *)addin;
 
   g_assert (SYMBOL_IS_TREE (self));
-  g_assert (GB_IS_WORKBENCH (workbench));
+  g_assert (IDE_IS_WORKBENCH (workbench));
 
   /*
    * TODO: We don't want this to be the addin and the widget added to the pane.
@@ -283,25 +312,25 @@ symbol_tree_unload (GbWorkbenchAddin *addin,
    */
 
 #if 0
-  workspace = GB_WORKSPACE (gb_workbench_get_workspace (workbench));
-  right_pane = gb_workspace_get_right_pane (workspace);
-  gb_workspace_pane_remove_page (GB_WORKSPACE_PANE (right_pane), GTK_WIDGET (self));
+  workspace = IDE_LAYOUT (ide_workbench_get_workspace (workbench));
+  right_pane = ide_workspace_get_right_pane (workspace);
+  ide_workspace_pane_remove_page (IDE_LAYOUT_PANE (right_pane), GTK_WIDGET (self));
 #endif
 }
 
 static gboolean
-filter_symbols_cb (GbTree     *tree,
-                   GbTreeNode *node,
+filter_symbols_cb (IdeTree     *tree,
+                   IdeTreeNode *node,
                    gpointer    user_data)
 {
   IdePatternSpec *spec = user_data;
   const gchar *text;
 
-  g_assert (GB_IS_TREE (tree));
-  g_assert (GB_IS_TREE_NODE (node));
+  g_assert (IDE_IS_TREE (tree));
+  g_assert (IDE_IS_TREE_NODE (node));
   g_assert (spec != NULL);
 
-  if ((text = gb_tree_node_get_text (node)) != NULL)
+  if ((text = ide_tree_node_get_text (node)) != NULL)
     return ide_pattern_spec_match (spec, text);
 
   return FALSE;
@@ -320,14 +349,14 @@ symbol_tree__search_entry_changed (SymbolTree     *self,
 
   if (ide_str_empty0 (text))
     {
-      gb_tree_set_filter (self->tree, NULL, NULL, NULL);
+      ide_tree_set_filter (self->tree, NULL, NULL, NULL);
     }
   else
     {
       IdePatternSpec *spec;
 
       spec = ide_pattern_spec_new (text);
-      gb_tree_set_filter (self->tree,
+      ide_tree_set_filter (self->tree,
                           filter_symbols_cb,
                           spec,
                           (GDestroyNotify)ide_pattern_spec_unref);
@@ -347,7 +376,7 @@ symbol_tree_finalize (GObject *object)
 }
 
 static void
-workbench_addin_init (GbWorkbenchAddinInterface *iface)
+workbench_addin_init (IdeWorkbenchAddinInterface *iface)
 {
   iface->load = symbol_tree_load;
   iface->unload = symbol_tree_unload;
@@ -365,7 +394,7 @@ symbol_tree_class_init (SymbolTreeClass *klass)
   gtk_widget_class_bind_template_child (widget_class, SymbolTree, tree);
   gtk_widget_class_bind_template_child (widget_class, SymbolTree, search_entry);
 
-  g_type_ensure (GB_TYPE_TREE);
+  g_type_ensure (IDE_TYPE_TREE);
 }
 
 static void
@@ -376,8 +405,8 @@ symbol_tree_class_finalize (SymbolTreeClass *klass)
 static void
 symbol_tree_init (SymbolTree *self)
 {
-  GbTreeNode *root;
-  GbTreeBuilder *builder;
+  IdeTreeNode *root;
+  IdeTreeBuilder *builder;
 
   self->symbols_cache = egg_task_cache_new (g_direct_hash,
                                             g_direct_equal,
@@ -392,11 +421,11 @@ symbol_tree_init (SymbolTree *self)
 
   gtk_widget_init_template (GTK_WIDGET (self));
 
-  root = gb_tree_node_new ();
-  gb_tree_set_root (self->tree, root);
+  root = ide_tree_node_new ();
+  ide_tree_set_root (self->tree, root);
 
   builder = g_object_new (SYMBOL_TYPE_TREE_BUILDER, NULL);
-  gb_tree_add_builder (self->tree, builder);
+  ide_tree_add_builder (self->tree, builder);
 
   g_signal_connect_object (self->search_entry,
                            "changed",
@@ -411,6 +440,6 @@ peas_register_types (PeasObjectModule *module)
   symbol_tree_register_type (G_TYPE_MODULE (module));
 
   peas_object_module_register_extension_type (module,
-                                              GB_TYPE_WORKBENCH_ADDIN,
+                                              IDE_TYPE_WORKBENCH_ADDIN,
                                               SYMBOL_TYPE_TREE);
 }
