@@ -39,6 +39,7 @@ GtkWidget *ide_layout_get_left_pane    (IdeLayout *self);
 GtkWidget *ide_layout_get_right_pane   (IdeLayout *self);
 GtkWidget *ide_layout_get_bottom_pane  (IdeLayout *self);
 GtkWidget *ide_layout_get_content_pane (IdeLayout *self);
+GtkWidget *ide_layout_get_active_view  (IdeLayout *self);
 
 G_END_DECLS
 

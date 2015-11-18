@@ -54,9 +54,13 @@ typedef struct
 typedef struct
 {
   IdeLayoutChild    children[4];
+
   GtkGesture       *pan_gesture;
   IdeLayoutChild   *drag_child;
   gdouble           drag_position;
+
+  GtkWidget        *active_view;
+  gulong            focus_handler;
 } IdeLayoutPrivate;
 
 static void buildable_init_iface (GtkBuildableIface *iface);
@@ -67,6 +71,7 @@ G_DEFINE_TYPE_WITH_CODE (IdeLayout, ide_layout, GTK_TYPE_OVERLAY,
 
 enum {
   PROP_0,
+  PROP_ACTIVE_VIEW,
   PROP_BOTTOM_PANE,
   PROP_CONTENT_PANE,
   PROP_LEFT_PANE,
@@ -974,6 +979,49 @@ ide_layout_grab_focus (GtkWidget *widget)
 }
 
 static void
+ide_layout_toplevel_set_focus (IdeLayout *self,
+                               GtkWidget *widget,
+                               GtkWidget *toplevel)
+{
+  IdeLayoutPrivate *priv = ide_layout_get_instance_private (self);
+
+  g_assert (IDE_IS_LAYOUT (self));
+
+  if (widget != NULL && !IDE_IS_LAYOUT_VIEW (widget))
+    widget = gtk_widget_get_ancestor (widget, IDE_TYPE_LAYOUT_VIEW);
+
+  if (widget != NULL && ide_set_weak_pointer (&priv->active_view, widget))
+    g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ACTIVE_VIEW]);
+}
+
+static void
+ide_layout_hierarchy_changed (GtkWidget *widget,
+                              GtkWidget *old_toplevel)
+{
+  IdeLayout *self = (IdeLayout *)widget;
+  IdeLayoutPrivate *priv = ide_layout_get_instance_private (self);
+  GtkWidget *toplevel;
+
+  g_assert (IDE_IS_LAYOUT (self));
+
+  if ((old_toplevel != NULL) && (priv->focus_handler != 0))
+    {
+      g_signal_handler_disconnect (old_toplevel, priv->focus_handler);
+      priv->focus_handler = 0;
+      ide_clear_weak_pointer (&priv->active_view);
+    }
+
+  toplevel = gtk_widget_get_toplevel (widget);
+
+  if (GTK_IS_WINDOW (toplevel))
+    priv->focus_handler =
+      g_signal_connect_swapped (toplevel,
+                                "set-focus",
+                                G_CALLBACK (ide_layout_toplevel_set_focus),
+                                self);
+}
+
+static void
 ide_layout_finalize (GObject *object)
 {
   IdeLayout *self = (IdeLayout *)object;
@@ -988,6 +1036,7 @@ ide_layout_finalize (GObject *object)
       g_clear_object (&child->adjustment);
     }
 
+  ide_clear_weak_pointer (&priv->active_view);
   g_clear_object (&priv->pan_gesture);
 
   G_OBJECT_CLASS (ide_layout_parent_class)->finalize (object);
@@ -1003,6 +1052,10 @@ ide_layout_get_property (GObject    *object,
 
   switch (prop_id)
     {
+    case PROP_ACTIVE_VIEW:
+      g_value_set_object (value, ide_layout_get_active_view (self));
+      break;
+
     case PROP_LEFT_PANE:
       g_value_set_object (value, ide_layout_get_left_pane (self));
       break;
@@ -1019,19 +1072,6 @@ ide_layout_get_property (GObject    *object,
       g_value_set_object (value, ide_layout_get_content_pane (self));
       break;
 
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-    }
-}
-
-static void
-ide_layout_set_property (GObject      *object,
-                         guint         prop_id,
-                         const GValue *value,
-                         GParamSpec   *pspec)
-{
-  switch (prop_id)
-    {
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -1055,11 +1095,11 @@ ide_layout_class_init (IdeLayoutClass *klass)
 
   object_class->finalize = ide_layout_finalize;
   object_class->get_property = ide_layout_get_property;
-  object_class->set_property = ide_layout_set_property;
 
   widget_class->get_preferred_height = ide_layout_get_preferred_height;
   widget_class->get_preferred_width = ide_layout_get_preferred_width;
   widget_class->get_request_mode = ide_layout_get_request_mode;
+  widget_class->hierarchy_changed = ide_layout_hierarchy_changed;
   widget_class->map = ide_layout_map;
   widget_class->unmap = ide_layout_unmap;
   widget_class->realize = ide_layout_realize;
@@ -1099,6 +1139,13 @@ ide_layout_class_init (IdeLayoutClass *klass)
     g_param_spec_object ("content-pane",
                          "Content Pane",
                          "The content workspace pane.",
+                         GTK_TYPE_WIDGET,
+                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_ACTIVE_VIEW] =
+    g_param_spec_object ("active-view",
+                         "Active View",
+                         "Active View",
                          GTK_TYPE_WIDGET,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
@@ -1302,4 +1349,19 @@ ide_layout_get_content_pane (IdeLayout *self)
   g_return_val_if_fail (IDE_IS_LAYOUT (self), NULL);
 
   return priv->children [GTK_POS_TOP].widget;
+}
+
+/**
+ * ide_layout_get_active_view:
+ *
+ * Returns: (transfer none) (nullable): An #IdeLayoutView or %NULL.
+ */
+GtkWidget *
+ide_layout_get_active_view (IdeLayout *self)
+{
+  IdeLayoutPrivate *priv = ide_layout_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_LAYOUT (self), NULL);
+
+  return priv->active_view;
 }
