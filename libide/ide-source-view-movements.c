@@ -47,6 +47,7 @@ typedef struct
   GtkTextIter            insert;                      /* Current insert cursor location */
   GtkTextIter            selection;                   /* Current selection cursor location */
   gint                   count;                       /* Repeat count for movement */
+  GString               *command_str;                 /* Current command string */
   gunichar               command;                     /* Command that trigger some movements type. See , and ; in vim */
   gunichar               modifier;                    /* For forward/backward char search */
   gunichar               search_char;                 /* For forward/backward char search according to fFtT vim modifier */
@@ -2029,6 +2030,7 @@ _ide_source_view_apply_movement (IdeSourceView         *self,
   mv.count = count;
   mv.ignore_select = FALSE;
   mv.ignore_target_offset = FALSE;
+  mv.command_str = command_str;
   mv.command = command;
   mv.modifier = modifier;
 
