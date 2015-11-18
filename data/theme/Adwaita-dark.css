@@ -74,7 +74,7 @@ workbench > GtkOverlay > stack > GtkBox > stackswitcher.vertical:first-child {
   background: #313434;
 }
 workbench > GtkOverlay > stack > GtkBox > stackswitcher.vertical:first-child button {
-  padding: 8 10 8 10;
+  padding: 8px 10px 8px 10px;
   color: #979a99;
   background: transparent;
   box-shadow: none;
