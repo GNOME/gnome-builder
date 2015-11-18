@@ -36,7 +36,13 @@ enum {
   LAST_PROP
 };
 
+enum {
+  SET_PERSPECTIVE,
+  LAST_SIGNAL
+};
+
 static GParamSpec *properties [LAST_PROP];
+static guint signals [LAST_SIGNAL];
 
 static void
 ide_workbench_notify_visible_child (IdeWorkbench *self,
@@ -214,6 +220,17 @@ ide_workbench_class_init (IdeWorkbenchClass *klass)
 
   g_object_class_install_properties (object_class, LAST_PROP, properties);
 
+  /**
+   * IdeWorkbench::set-perspective:
+   */
+  signals [SET_PERSPECTIVE] =
+    g_signal_new_class_handler ("set-perspective",
+                                G_TYPE_FROM_CLASS (klass),
+                                G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
+                                G_CALLBACK (ide_workbench_set_visible_perspective_name),
+                                NULL, NULL, NULL,
+                                G_TYPE_NONE, 1, G_TYPE_STRING);
+
   gtk_widget_class_set_css_name (widget_class, "workbench");
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/ui/ide-workbench.ui");
   gtk_widget_class_bind_template_child (widget_class, IdeWorkbench, perspectives_stack);
@@ -331,6 +348,9 @@ ide_workbench_addin_added (PeasExtensionSet *set,
 
   IDE_TRACE_MSG ("Loading workbench addin for %s",
                  peas_plugin_info_get_module_name (plugin_info));
+
+  g_print ("================ ADDED: %s\n",
+           peas_plugin_info_get_module_name (plugin_info));
 
   ide_workbench_addin_load (IDE_WORKBENCH_ADDIN (extension), self);
 }

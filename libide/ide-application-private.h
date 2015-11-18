@@ -1,4 +1,4 @@
-/* gb-application-private.h
+/* ide-application-private.h
  *
  * Copyright (C) 2015 Christian Hergert <christian@hergert.me>
  *
@@ -19,10 +19,10 @@
 #ifndef IDE_APPLICATION_PRIVATE_H
 #define IDE_APPLICATION_PRIVATE_H
 
-#include <gtk/gtk.h>
 #include <gio/gio.h>
 #include <libpeas/peas.h>
 
+#include "ide-application.h"
 #include "ide-keybindings.h"
 #include "ide-recent-projects.h"
 #include "ide-worker-manager.h"
@@ -31,20 +31,32 @@ G_BEGIN_DECLS
 
 struct _IdeApplication
 {
-  GtkApplication        parent_instance;
+  GtkApplication       parent_instance;
 
-  gchar                *argv0;
-  gchar                *dbus_address;
-  PeasExtensionSet     *extensions;
-  GtkWindowGroup       *greeter_group;
-  IdeKeybindings       *keybindings;
-  GtkWindow            *preferences_window;
-  IdeRecentProjects    *recent_projects;
-  GDateTime            *startup_time;
-  gchar                *type;
-  IdeWorkerManager     *worker_manager;
+  IdeApplicationMode   mode;
+
+  PeasExtensionSet    *addins;
+  gchar               *dbus_address;
+
+  PeasPluginInfo      *tool;
+  gchar              **tool_arguments;
+
+  PeasPluginInfo      *worker;
+
+  IdeWorkerManager    *worker_manager;
+
+  IdeKeybindings      *keybindings;
+
+  IdeRecentProjects   *recent_projects;
 };
+
+void     ide_application_discover_plugins   (IdeApplication   *self) G_GNUC_INTERNAL;
+void     ide_application_load_plugins       (IdeApplication   *self) G_GNUC_INTERNAL;
+void     ide_application_load_addins        (IdeApplication   *self) G_GNUC_INTERNAL;
+gboolean ide_application_local_command_line (GApplication     *application,
+                                             gchar          ***arguments,
+                                             gint             *exit_status) G_GNUC_INTERNAL;
 
 G_END_DECLS
 
-#endif /* GB_APPLICATION_PRIVATE_H */
+#endif /* IDE_APPLICATION_PRIVATE_H */

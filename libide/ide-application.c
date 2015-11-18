@@ -1,6 +1,6 @@
 /* ide-application.c
  *
- * Copyright (C) 2014 Christian Hergert <christian@hergert.me>
+ * Copyright (C) 2015 Christian Hergert <christian@hergert.me>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,32 +16,28 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#define G_LOG_DOMAIN "ide-application"
-
 #ifdef HAVE_CONFIG_H
 # include "config.h"
 #endif
 
-#ifdef __linux
-# include <sys/prctl.h>
-#endif
-
 #include <glib/gi18n.h>
+#include <girepository.h>
 #include <gtksourceview/gtksource.h>
 #include <libgit2-glib/ggit.h>
+#include <locale.h>
+#include <stdlib.h>
+#include <sys/prctl.h>
 
 #include "ide-application.h"
-#include "ide-application-actions.h"
-#include "ide-application-addin.h"
 #include "ide-application-private.h"
+#include "ide-application-tool.h"
 #include "ide-css-provider.h"
 #include "ide-debug.h"
+#include "ide-global.h"
+#include "ide-icons-resources.h"
 #include "ide-internal.h"
-#include "ide-file.h"
-#include "ide-log.h"
 #include "ide-macros.h"
 #include "ide-resources.h"
-#include "ide-vcs.h"
 #include "ide-workbench.h"
 #include "ide-worker.h"
 
@@ -49,111 +45,151 @@
 
 G_DEFINE_TYPE (IdeApplication, ide_application, GTK_TYPE_APPLICATION)
 
-static gboolean
-ide_application_can_load_plugin (IdeApplication *self,
-                                 PeasPluginInfo *plugin_info)
+static void
+ide_application_make_skeleton_dirs (IdeApplication *self)
 {
-  const gchar *plugin_name;
+  gchar *path;
 
-  g_assert (IDE_IS_APPLICATION (self));
-  g_assert (plugin_info != NULL);
+  IDE_ENTRY;
 
-  /* Currently we only allow in-tree plugins */
-  if (!peas_plugin_info_is_builtin (plugin_info))
-    return FALSE;
+  g_return_if_fail (IDE_IS_APPLICATION (self));
 
-  plugin_name = peas_plugin_info_get_module_name (plugin_info);
+  path = g_build_filename (g_get_user_data_dir (), "gnome-builder", NULL);
+  g_mkdir_with_parents (path, 0750);
+  g_free (path);
 
-  /* If --type was specified, only that plugin may be loaded */
-  if ((self->type != NULL) && !ide_str_equal0 (plugin_name, self->type))
-    return FALSE;
+  path = g_build_filename (g_get_user_config_dir (), "gnome-builder", NULL);
+  g_mkdir_with_parents (path, 0750);
+  g_free (path);
 
-  return TRUE;
+  path = g_build_filename (g_get_user_config_dir (), "gnome-builder", "snippets", NULL);
+  g_mkdir_with_parents (path, 0750);
+  g_free (path);
+
+  IDE_EXIT;
 }
 
 static void
-ide_application_load_plugins (IdeApplication *self)
+ide_application_register_theme_overrides (IdeApplication *self)
 {
-  PeasEngine *engine = peas_engine_get_default ();
-  const GList *list;
-  const GList *iter;
+  g_autoptr(GSettings) settings = NULL;
+  g_autoptr(GtkCssProvider) provider = NULL;
+  GtkSettings *gtk_settings;
+  GdkScreen *screen;
 
-  peas_engine_enable_loader (engine, "python3");
+  IDE_ENTRY;
 
-  if (g_getenv ("GB_IN_TREE_PLUGINS") != NULL)
-    {
-      GDir *dir;
-
-      g_irepository_require_private (g_irepository_get_default (),
-                                     BUILDDIR"/libide",
-                                     "Ide", "1.0", 0, NULL);
-
-      if ((dir = g_dir_open (BUILDDIR"/plugins", 0, NULL)))
-        {
-          const gchar *name;
-
-          while ((name = g_dir_read_name (dir)))
-            {
-              gchar *path;
-
-              path = g_build_filename (BUILDDIR, "plugins", name, NULL);
-              peas_engine_prepend_search_path (engine, path, path);
-              g_free (path);
-            }
-
-          g_dir_close (dir);
-        }
-    }
-  else
-    {
-      peas_engine_prepend_search_path (engine,
-                                       PACKAGE_LIBDIR"/gnome-builder/plugins",
-                                       PACKAGE_DATADIR"/gnome-builder/plugins");
-    }
-
-  peas_engine_prepend_search_path (engine,
-                                   "resource:///org/gnome/builder/plugins/editor",
-                                   "resource:///org/gnome/builder/plugins/editor");
-
-  peas_engine_rescan_plugins (engine);
-
-  list = peas_engine_get_plugin_list (engine);
-
-  for (iter = list; iter; iter = iter->next)
-    g_debug ("Discovered plugin \"%s\"", peas_plugin_info_get_module_name (iter->data));
-
-  for (iter = list; iter; iter = iter->next)
-    {
-      PeasPluginInfo *plugin_info = iter->data;
-
-      if (ide_application_can_load_plugin (self, plugin_info))
-        {
-          g_debug ("Loading plugin \"%s\"", peas_plugin_info_get_module_name (plugin_info));
-          peas_engine_load_plugin (engine, plugin_info);
-        }
-    }
-}
-
-static gboolean
-ide_application_is_worker (IdeApplication *self)
-{
   g_assert (IDE_IS_APPLICATION (self));
 
-  return (self->type != NULL) && (self->dbus_address != NULL);
+  gtk_icon_theme_add_resource_path (gtk_icon_theme_get_default (),
+                                    "/org/gnome/builder/icons/");
+
+  provider = ide_css_provider_new ();
+  screen = gdk_screen_get_default ();
+  gtk_style_context_add_provider_for_screen (screen, GTK_STYLE_PROVIDER (provider),
+                                             GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+
+  gtk_settings = gtk_settings_get_for_screen (screen);
+  settings = g_settings_new ("org.gnome.builder");
+  g_settings_bind (settings, "night-mode",
+                   gtk_settings, "gtk-application-prefer-dark-theme",
+                   G_SETTINGS_BIND_DEFAULT);
+
+  IDE_EXIT;
 }
 
 static void
-ide_application_load_worker (IdeApplication *self)
+ide_application_register_keybindings (IdeApplication *self)
+{
+  g_autoptr(GSettings) settings = NULL;
+  g_autofree gchar *name = NULL;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_APPLICATION (self));
+
+  settings = g_settings_new ("org.gnome.builder.editor");
+  name = g_settings_get_string (settings, "keybindings");
+  self->keybindings = ide_keybindings_new (GTK_APPLICATION (self), name);
+  g_settings_bind (settings, "keybindings", self->keybindings, "mode", G_SETTINGS_BIND_GET);
+
+  IDE_EXIT;
+}
+
+static void
+ide_application_register_search_paths (IdeApplication *self)
+{
+  g_assert (IDE_IS_APPLICATION (self));
+
+  gtk_source_style_scheme_manager_append_search_path (gtk_source_style_scheme_manager_get_default (),
+                                                      PACKAGE_DATADIR"/gtksourceview-3.0/styles/");
+  g_irepository_prepend_search_path (PACKAGE_LIBDIR"/gnome-builder/girepository-1.0");
+}
+
+static void
+ide_application_register_ggit (IdeApplication *self)
+{
+  GgitFeatureFlags ggit_flags;
+
+  g_assert (IDE_IS_APPLICATION (self));
+
+  ggit_init ();
+
+  ggit_flags = ggit_get_features ();
+
+  if ((ggit_flags & GGIT_FEATURE_THREADS) == 0)
+    {
+      g_error (_("Builder requires libgit2-glib with threading support."));
+      exit (EXIT_FAILURE);
+    }
+
+  if ((ggit_flags & GGIT_FEATURE_SSH) == 0)
+    {
+      g_error (_("Builder requires libgit2-glib with SSH support."));
+      exit (EXIT_FAILURE);
+    }
+}
+
+static void
+ide_application_activate_primary (IdeApplication *self)
+{
+  GtkWindow *window;
+  GList *windows;
+
+  g_assert (IDE_IS_APPLICATION (self));
+
+  windows = gtk_application_get_windows (GTK_APPLICATION (self));
+
+  for (; windows; windows = windows->next)
+    {
+      window = windows->data;
+
+      if (IDE_IS_WORKBENCH (window))
+        {
+          gtk_window_present (window);
+          return;
+        }
+    }
+
+  window = g_object_new (IDE_TYPE_WORKBENCH,
+                         "application", self,
+                         NULL);
+  gtk_window_present (window);
+}
+
+static void
+ide_application_activate_worker (IdeApplication *self)
 {
   g_autoptr(GDBusConnection) connection = NULL;
+  PeasExtension *extension;
   PeasEngine *engine;
-  PeasPluginInfo *plugin_info;
   GError *error = NULL;
 
   IDE_ENTRY;
 
   g_assert (IDE_IS_APPLICATION (self));
-  g_assert (ide_application_is_worker (self));
+  g_assert (self->worker != NULL);
+  g_assert (self->dbus_address != NULL);
 
 #ifdef __linux
   /* Ensure we are killed with our parent */
@@ -174,29 +210,17 @@ ide_application_load_worker (IdeApplication *self)
       IDE_EXIT;
     }
 
-  g_assert (G_IS_DBUS_CONNECTION (connection));
-
   engine = peas_engine_get_default ();
-  plugin_info = peas_engine_get_plugin_info (engine, self->type);
+  extension = peas_engine_create_extension (engine, self->worker, IDE_TYPE_WORKER, NULL);
 
-  if ((plugin_info != NULL) && peas_plugin_info_is_loaded (plugin_info))
+  if (extension == NULL)
     {
-      PeasExtension *exten;
-
-      exten = peas_engine_create_extension (engine, plugin_info, IDE_TYPE_WORKER, NULL);
-
-      if (exten != NULL)
-        {
-          ide_worker_register_service (IDE_WORKER (exten), connection);
-          IDE_GOTO (success);
-        }
+      g_error ("Failed to create \"%s\" worker",
+               peas_plugin_info_get_module_name (self->worker));
+      IDE_EXIT;
     }
 
-  g_error ("Failed to create \"%s\" worker.", self->type);
-
-  IDE_EXIT;
-
-success:
+  ide_worker_register_service (IDE_WORKER (extension), connection);
   g_application_hold (G_APPLICATION (self));
   g_dbus_connection_start_message_processing (connection);
 
@@ -204,321 +228,109 @@ success:
 }
 
 static void
-ide_application_setup_search_paths (void)
+ide_application_activate_tool_cb (GObject      *object,
+                                  GAsyncResult *result,
+                                  gpointer      user_data)
 {
-  GtkSourceStyleSchemeManager *style_scheme_manager;
-  static gboolean initialized;
-
-  if (initialized)
-    return;
-
-  style_scheme_manager = gtk_source_style_scheme_manager_get_default ();
-  gtk_source_style_scheme_manager_append_search_path (style_scheme_manager,
-                                                      PACKAGE_DATADIR"/gtksourceview-3.0/styles/");
-  initialized = TRUE;
-}
-
-/**
- * ide_application_make_skeleton_dirs:
- * @self: A #IdeApplication.
- *
- * Creates all the directories we might need later. Simpler to just ensure they
- * are created during startup.
- */
-static void
-ide_application_make_skeleton_dirs (IdeApplication *self)
-{
-  gchar *path;
-
-  g_return_if_fail (IDE_IS_APPLICATION (self));
-
-  path = g_build_filename (g_get_user_data_dir (),
-                           "gnome-builder",
-                           NULL);
-  g_mkdir_with_parents (path, 0750);
-  g_free (path);
-
-  path = g_build_filename (g_get_user_config_dir (),
-                           "gnome-builder",
-                           NULL);
-  g_mkdir_with_parents (path, 0750);
-  g_free (path);
-
-  path = g_build_filename (g_get_user_config_dir (),
-                           "gnome-builder",
-                           "snippets",
-                           NULL);
-  g_mkdir_with_parents (path, 0750);
-  g_free (path);
-}
-
-static void
-ide_application_register_theme_overrides (IdeApplication *application)
-{
-  g_autoptr(GSettings) settings = NULL;
-  g_autoptr(GtkCssProvider) provider = NULL;
-  GtkSettings *gtk_settings;
-  GdkScreen *screen;
-
-  IDE_ENTRY;
-
-  gtk_icon_theme_add_resource_path (gtk_icon_theme_get_default (), "/org/gnome/builder/icons/");
-
-  provider = ide_css_provider_new ();
-  screen = gdk_screen_get_default ();
-  gtk_style_context_add_provider_for_screen (screen, GTK_STYLE_PROVIDER (provider),
-                                             GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-
-  gtk_settings = gtk_settings_get_for_screen (screen);
-  settings = g_settings_new ("org.gnome.builder");
-  g_settings_bind (settings, "night-mode", gtk_settings, "gtk-application-prefer-dark-theme",
-                   G_SETTINGS_BIND_DEFAULT);
-
-  IDE_EXIT;
-}
-
-static void
-ide_application_load_keybindings (IdeApplication *self)
-{
-  g_autoptr(GSettings) settings = NULL;
-  g_autofree gchar *name = NULL;
-
-  /* TODO: Move this to keybindings */
-  static const struct { gchar *name; gchar *binding; } shared_bindings[] = {
-    { "workbench.show-left-pane", "F9" },
-    { "workbench.show-right-pane", "<shift>F9" },
-    { "workbench.show-bottom-pane", "<ctrl>F9" },
-    { "workbench.toggle-panels", "<ctrl><shift>F9" },
-    { "workbench.focus-left", "<ctrl>grave" },
-    { "workbench.focus-right", "<ctrl>9" },
-    { "workbench.focus-stack(1)", "<ctrl>1" },
-    { "workbench.focus-stack(2)", "<ctrl>2" },
-    { "workbench.focus-stack(3)", "<ctrl>3" },
-    { "workbench.focus-stack(4)", "<ctrl>4" },
-    { "workbench.focus-stack(5)", "<ctrl>5" },
-    { "workbench.show-gear-menu", "F10" },
-    { "perspective.global-search", "<ctrl>period" },
-    { "app.preferences", "<Primary>comma" },
-    { "app.shortcuts", "<ctrl>question" },
-    { "workbench.new-document", "<ctrl>n" },
-    { "workbench.open-document", "<ctrl>o" },
-    { NULL }
-  };
-  gsize i;
-
-  g_assert (IDE_IS_APPLICATION (self));
-
-  settings = g_settings_new ("org.gnome.builder.editor");
-  name = g_settings_get_string (settings, "keybindings");
-  self->keybindings = ide_keybindings_new (GTK_APPLICATION (self), name);
-  g_settings_bind (settings, "keybindings", self->keybindings, "mode", G_SETTINGS_BIND_GET);
-
-  for (i = 0; shared_bindings [i].name; i++)
-    {
-      const gchar *accels[2] = { shared_bindings [i].binding, NULL };
-      gtk_application_set_accels_for_action (GTK_APPLICATION (self),
-                                             shared_bindings [i].name,
-                                             accels);
-    }
-}
-
-static IdeWorkbench *
-ide_application_find_workbench_for_file (IdeApplication *self,
-                                        GFile         *file)
-{
-  GList *iter;
-  GList *workbenches;
-
-  g_assert (IDE_IS_APPLICATION (self));
-  g_assert (G_IS_FILE (file));
-
-  workbenches = gtk_application_get_windows (GTK_APPLICATION (self));
-
-  /*
-   * Find the a project that contains this file in its working directory.
-   */
-  for (iter = workbenches; iter; iter = iter->next)
-    {
-      if (IDE_IS_WORKBENCH (iter->data))
-        {
-          IdeWorkbench *workbench = iter->data;
-          g_autofree gchar *relpath = NULL;
-          IdeContext *context;
-          IdeVcs *vcs;
-          GFile *workdir;
-
-          context = ide_workbench_get_context (workbench);
-          vcs = ide_context_get_vcs (context);
-          workdir = ide_vcs_get_working_directory (vcs);
-
-          relpath = g_file_get_relative_path (workdir, file);
-
-          if (relpath != NULL)
-            return workbench;
-        }
-    }
-
-  /*
-   * No matches found, take the first workbench we find.
-   */
-  for (iter = workbenches; iter; iter = iter->next)
-    if (IDE_IS_WORKBENCH (iter->data))
-      return iter->data;
-
-  return NULL;
-}
-
-static void
-ide_application__context_new_cb (GObject      *object,
-                                GAsyncResult *result,
-                                gpointer      user_data)
-{
-  g_autoptr(GTask) task = user_data;
-  g_autoptr(IdeContext) context = NULL;
-  IdeApplication *self;
-  IdeWorkbench *workbench;
-  GPtrArray *ar;
+  IdeApplicationTool *tool = (IdeApplicationTool *)object;
+  g_autoptr(IdeApplication) self = user_data;
   GError *error = NULL;
-  gsize i;
-
-  g_assert (G_IS_TASK (task));
-
-  self = g_task_get_source_object (task);
-  ar = g_task_get_task_data (task);
+  gint exit_code;
 
   g_assert (IDE_IS_APPLICATION (self));
-  g_assert (ar);
+  g_assert (IDE_IS_APPLICATION_TOOL (tool));
 
-  context = ide_context_new_finish (result, &error);
+  exit_code = ide_application_tool_run_finish (tool, result, &error);
 
-  if (!context)
+  if (error != NULL)
     {
-      g_task_return_error (task, error);
-      goto cleanup;
+      g_printerr ("%s\n", error->message);
+      g_clear_error (&error);
     }
 
-  {
-    IdeVcs *vcs;
-    GFile *workdir;
-    g_autofree gchar *path = NULL;
+  /* GApplication does not provide a way to pass exit code. */
+  if (exit_code != 0)
+    exit (exit_code);
 
-    vcs = ide_context_get_vcs (context);
-    workdir = ide_vcs_get_working_directory (vcs);
-    path = g_file_get_path (workdir);
-
-    g_debug ("Project working directory: %s", path);
-  }
-
-  workbench = g_object_new (IDE_TYPE_WORKBENCH,
-                            "application", self,
-                            "context", context,
-                            NULL);
-
-  for (i = 0; i < ar->len; i++)
-    {
-      GFile *file;
-
-      file = g_ptr_array_index (ar, i);
-      g_assert (G_IS_FILE (file));
-
-      //ide_workbench_open (workbench, file);
-    }
-
-  gtk_window_present (GTK_WINDOW (workbench));
-
-  g_task_return_boolean (task, TRUE);
-
-cleanup:
-  g_application_unmark_busy (G_APPLICATION (self));
   g_application_release (G_APPLICATION (self));
 }
 
-/**
- * ide_application_open_project_async:
- * @self: A #IdeApplication.
- * @file: A #GFile.
- * @additional_files: (element-type GFile) (nullable): A #GPtrArray of #GFile or %NULL.
- *
- */
-void
-ide_application_open_project_async (IdeApplication      *self,
-                                    GFile               *file,
-                                    GPtrArray           *additional_files,
-                                    GCancellable        *cancellable,
-                                    GAsyncReadyCallback  callback,
-                                    gpointer             user_data)
+static void
+ide_application_activate_tool (IdeApplication *self)
 {
-  g_autoptr(GFile) directory = NULL;
-  g_autoptr(GTask) task = NULL;
-  g_autoptr(GPtrArray) ar = NULL;
-  GList *windows;
-  GList *iter;
+  PeasEngine *engine;
+  PeasExtension *tool;
 
-  g_return_if_fail (IDE_IS_APPLICATION (self));
-  g_return_if_fail (G_IS_FILE (file));
-  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+  g_assert (IDE_IS_APPLICATION (self));
+  g_assert (self->tool != NULL);
+  g_assert (self->tool_arguments != NULL);
 
-  task = g_task_new (self, cancellable, callback, user_data);
+  engine = peas_engine_get_default ();
+  tool = peas_engine_create_extension (engine,
+                                       self->tool,
+                                       IDE_TYPE_APPLICATION_TOOL,
+                                       NULL);
+  if (tool == NULL)
+    return;
 
-  windows = gtk_application_get_windows (GTK_APPLICATION (self));
-
-  for (iter = windows; iter; iter = iter->next)
-    {
-      if (IDE_IS_WORKBENCH (iter->data))
-        {
-          IdeContext *context;
-
-          context = ide_workbench_get_context (iter->data);
-
-          if (context != NULL)
-            {
-              GFile *project_file;
-
-              project_file = ide_context_get_project_file (context);
-
-              if (g_file_equal (file, project_file))
-                {
-                  gtk_window_present (iter->data);
-                  g_task_return_boolean (task, TRUE);
-                  return;
-                }
-            }
-        }
-    }
-
-  if (additional_files)
-    ar = g_ptr_array_ref (additional_files);
-  else
-    ar = g_ptr_array_new ();
-
-  g_task_set_task_data (task, g_ptr_array_ref (ar), (GDestroyNotify)g_ptr_array_unref);
-
-  if (g_file_query_file_type (file, 0, NULL) == G_FILE_TYPE_DIRECTORY)
-    directory = g_object_ref (file);
-  else
-    directory = g_file_get_parent (file);
-
-  g_application_mark_busy (G_APPLICATION (self));
   g_application_hold (G_APPLICATION (self));
 
-  ide_context_new_async (directory,
-                         NULL,
-                         ide_application__context_new_cb,
-                         g_object_ref (task));
+  ide_application_tool_run_async (IDE_APPLICATION_TOOL (tool),
+                                  (const gchar * const *)self->tool_arguments,
+                                  NULL,
+                                  ide_application_activate_tool_cb,
+                                  g_object_ref (self));
+
+  g_object_unref (tool);
 }
 
-gboolean
-ide_application_open_project_finish (IdeApplication  *self,
-                                     GAsyncResult    *result,
-                                     GError         **error)
+static void
+ide_application_activate (GApplication *application)
 {
-  GTask *task = (GTask *)result;
+  IdeApplication *self = (IdeApplication *)application;
 
-  g_return_val_if_fail (IDE_IS_APPLICATION (self), FALSE);
-  g_return_val_if_fail (G_IS_ASYNC_RESULT (result), FALSE);
-  g_return_val_if_fail (G_IS_TASK (task), FALSE);
+  g_assert (IDE_IS_APPLICATION (self));
 
-  return g_task_propagate_boolean (task, error);
+  if (self->mode == IDE_APPLICATION_MODE_PRIMARY)
+    ide_application_activate_primary (self);
+  else if (self->mode == IDE_APPLICATION_MODE_WORKER)
+    ide_application_activate_worker (self);
+  else if (self->mode == IDE_APPLICATION_MODE_TOOL)
+    ide_application_activate_tool (self);
+}
+
+static void
+ide_application_startup (GApplication *application)
+{
+  IdeApplication *self = (IdeApplication *)application;
+  gboolean small_thread_pool;
+
+  g_assert (IDE_IS_APPLICATION (self));
+
+  g_resources_register (ide_get_resource ());
+  g_resources_register (ide_icons_get_resource ());
+
+  g_application_set_resource_base_path (application, "/org/gnome/builder");
+  ide_application_register_search_paths (self);
+
+  small_thread_pool = (self->mode != IDE_APPLICATION_MODE_PRIMARY);
+  _ide_thread_pool_init (small_thread_pool);
+
+  if (self->mode == IDE_APPLICATION_MODE_PRIMARY)
+    {
+      ide_application_make_skeleton_dirs (self);
+      ide_application_register_theme_overrides (self);
+      ide_application_register_keybindings (self);
+      ide_application_register_ggit (self);
+
+      modeline_parser_init ();
+    }
+
+  _ide_battery_monitor_init ();
+
+  G_APPLICATION_CLASS (ide_application_parent_class)->startup (application);
+
+  ide_application_load_addins (self);
 }
 
 static void
@@ -527,275 +339,8 @@ ide_application_open (GApplication  *application,
                       gint           n_files,
                       const gchar   *hint)
 {
-  IdeApplication *self = (IdeApplication *)application;
-  IdeWorkbench *workbench;
-  g_autoptr(GPtrArray) ar = NULL;
-  guint i;
+  g_assert (IDE_IS_APPLICATION (application));
 
-  IDE_ENTRY;
-
-  g_assert (IDE_IS_APPLICATION (self));
-
-  /*
-   * Try to open the files using an existing workbench.
-   */
-  for (i = 0; i < n_files; i++)
-    {
-      GFile *file = files [i];
-
-      g_assert (G_IS_FILE (file));
-
-      workbench = ide_application_find_workbench_for_file (self, file);
-
-      if (workbench != NULL)
-        {
-          //ide_workbench_open (workbench, file);
-          gtk_window_present (GTK_WINDOW (workbench));
-          continue;
-        }
-
-      if (!ar)
-        ar = g_ptr_array_new_with_free_func (g_object_unref);
-      g_ptr_array_add (ar, g_object_ref (file));
-    }
-
-  /*
-   * No workbench found for these files, let's create one!
-   */
-  if (ar && ar->len)
-    {
-      GFile *file = g_ptr_array_index (ar, 0);
-
-      ide_application_open_project_async (self, file, ar, NULL, NULL, NULL);
-    }
-
-  IDE_EXIT;
-}
-
-void
-ide_application_show_projects_window (IdeApplication *self)
-{
-  GtkWindow *window;
-  GList *windows;
-
-  g_assert (IDE_IS_APPLICATION (self));
-
-  windows = gtk_application_get_windows (GTK_APPLICATION (self));
-
-  for (; windows; windows = windows->next)
-    {
-      window = windows->data;
-
-      if (IDE_IS_WORKBENCH (window))
-        {
-          const gchar *name;
-
-          name = ide_workbench_get_visible_perspective_name (IDE_WORKBENCH (window));
-
-          if (ide_str_equal0 ("greeter", name))
-            {
-              gtk_window_present (windows->data);
-              return;
-            }
-        }
-    }
-
-  window = g_object_new (IDE_TYPE_WORKBENCH,
-                         "application", self,
-                         NULL);
-  gtk_window_present (window);
-}
-
-static void
-ide_application_activate (GApplication *application)
-{
-  IdeApplication *self = (IdeApplication *)application;
-  IdeWorkbench *workbench;
-  GList *list;
-
-  g_assert (IDE_IS_APPLICATION (self));
-
-  if (ide_application_is_worker (self))
-    {
-      ide_application_load_worker (self);
-      return;
-    }
-
-  list = gtk_application_get_windows (GTK_APPLICATION (application));
-
-  for (; list; list = list->next)
-    {
-      if (IDE_IS_WORKBENCH (list->data))
-        {
-          gtk_window_present (GTK_WINDOW (list->data));
-          return;
-        }
-    }
-
-  workbench = g_object_new (IDE_TYPE_WORKBENCH,
-                            "application", self,
-                            NULL);
-  gtk_window_present (GTK_WINDOW (workbench));
-}
-
-static void
-ide_application__extension_added (PeasExtensionSet    *extensions,
-                                  PeasPluginInfo      *plugin_info,
-                                  IdeApplicationAddin *addin,
-                                  IdeApplication      *self)
-{
-  g_assert (IDE_IS_APPLICATION (self));
-  g_assert (plugin_info != NULL);
-  g_assert (IDE_IS_APPLICATION_ADDIN (addin));
-  g_assert (PEAS_IS_EXTENSION_SET (extensions));
-
-  ide_application_addin_load (addin, self);
-}
-
-static void
-ide_application__extension_removed (PeasExtensionSet    *extensions,
-                                    PeasPluginInfo      *plugin_info,
-                                    IdeApplicationAddin *addin,
-                                    IdeApplication      *self)
-{
-  g_assert (IDE_IS_APPLICATION (self));
-  g_assert (plugin_info != NULL);
-  g_assert (IDE_IS_APPLICATION_ADDIN (addin));
-  g_assert (PEAS_IS_EXTENSION_SET (extensions));
-
-  ide_application_addin_unload (addin, self);
-}
-
-static void
-ide_application_load_addins (IdeApplication *self)
-{
-  PeasEngine *engine;
-
-  g_assert (IDE_IS_APPLICATION (self));
-
-  engine = peas_engine_get_default ();
-
-  self->extensions = peas_extension_set_new (engine, IDE_TYPE_APPLICATION_ADDIN, NULL);
-
-  peas_extension_set_foreach (self->extensions,
-                              (PeasExtensionSetForeachFunc)ide_application__extension_added,
-                              self);
-
-  g_signal_connect_object (self->extensions,
-                           "extension-added",
-                           G_CALLBACK (ide_application__extension_added),
-                           self,
-                           0);
-
-  g_signal_connect_object (self->extensions,
-                           "extension-removed",
-                           G_CALLBACK (ide_application__extension_removed),
-                           self,
-                           0);
-}
-
-static void
-ide_application_startup (GApplication *app)
-{
-  IdeApplication *self = (IdeApplication *)app;
-  GgitFeatureFlags ggit_flags;
-
-  IDE_ENTRY;
-
-  g_assert (IDE_IS_APPLICATION (self));
-
-  self->startup_time = g_date_time_new_now_utc ();
-
-  g_resources_register (ide_get_resource ());
-
-  g_application_set_resource_base_path (app, "/org/gnome/builder");
-
-  g_irepository_prepend_search_path (PACKAGE_LIBDIR"/gnome-builder/girepository-1.0");
-
-  if (!ide_application_is_worker (self))
-    self->greeter_group = gtk_window_group_new ();
-
-  _ide_battery_monitor_init ();
-  _ide_thread_pool_init (ide_application_is_worker (self));
-
-  modeline_parser_init ();
-
-  ggit_init ();
-
-  ggit_flags = ggit_get_features ();
-
-  if ((ggit_flags & GGIT_FEATURE_THREADS) == 0)
-    {
-      g_error (_("Builder requires libgit2-glib with threading support."));
-      exit (EXIT_FAILURE);
-    }
-
-  if ((ggit_flags & GGIT_FEATURE_SSH) == 0)
-    {
-      g_error (_("Builder requires libgit2-glib with SSH support."));
-      exit (EXIT_FAILURE);
-    }
-
-  G_APPLICATION_CLASS (ide_application_parent_class)->startup (app);
-
-  if (!ide_application_is_worker (self))
-    {
-      ide_application_make_skeleton_dirs (self);
-      ide_application_actions_init (self);
-      ide_application_register_theme_overrides (self);
-      ide_application_setup_search_paths ();
-      ide_application_load_keybindings (self);
-      ide_application_load_plugins (self);
-      ide_application_load_addins (self);
-    }
-
-  IDE_EXIT;
-}
-
-static gboolean
-ide_application_increase_verbosity (void)
-{
-  ide_log_increase_verbosity ();
-  return TRUE;
-}
-
-static gint
-ide_application_handle_local_options (GApplication *app,
-                                      GVariantDict *options)
-{
-  if (g_variant_dict_contains (options, "version"))
-    {
-      g_print ("%s - Version %s\n", g_get_application_name (), VERSION);
-      return 0;
-    }
-
-   if (g_variant_dict_contains (options, "standalone") || g_variant_dict_contains (options, "type"))
-    {
-      GApplicationFlags flags;
-
-      flags = g_application_get_flags (app);
-      g_application_set_flags (app, flags | G_APPLICATION_NON_UNIQUE);
-    }
-
-  return -1;
-}
-
-static gboolean
-ide_application_local_command_line (GApplication   *application,
-                                    gchar        ***arguments,
-                                    int            *exit_status)
-{
-  IdeApplication *self = (IdeApplication *)application;
-
-  g_assert (IDE_IS_APPLICATION (self));
-  g_assert (arguments != NULL);
-  g_assert (*arguments != NULL);
-  g_assert (exit_status != NULL);
-
-  self->argv0 = g_strdup ((*arguments) [0]);
-
-  return G_APPLICATION_CLASS (ide_application_parent_class)->
-    local_command_line (application, arguments, exit_status);
 }
 
 static void
@@ -803,102 +348,61 @@ ide_application_finalize (GObject *object)
 {
   IdeApplication *self = (IdeApplication *)object;
 
-  IDE_ENTRY;
-
-  g_clear_object (&self->extensions);
-  g_clear_pointer (&self->startup_time, g_date_time_unref);
-  g_clear_pointer (&self->argv0, g_free);
+  g_clear_pointer (&self->dbus_address, g_free);
+  g_clear_pointer (&self->tool_arguments, g_strfreev);
+  g_clear_object (&self->worker_manager);
   g_clear_object (&self->keybindings);
   g_clear_object (&self->recent_projects);
-  g_clear_object (&self->greeter_group);
 
   G_OBJECT_CLASS (ide_application_parent_class)->finalize (object);
-
-  IDE_EXIT;
 }
 
 static void
 ide_application_class_init (IdeApplicationClass *klass)
 {
-  GApplicationClass *app_class = G_APPLICATION_CLASS (klass);
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-  IDE_ENTRY;
+  GApplicationClass *g_app_class = G_APPLICATION_CLASS (klass);
 
   object_class->finalize = ide_application_finalize;
 
-  app_class->activate = ide_application_activate;
-  app_class->startup = ide_application_startup;
-  app_class->open = ide_application_open;
-  app_class->local_command_line = ide_application_local_command_line;
-  app_class->handle_local_options = ide_application_handle_local_options;
-
-  IDE_EXIT;
+  g_app_class->activate = ide_application_activate;
+  g_app_class->local_command_line = ide_application_local_command_line;
+  g_app_class->open = ide_application_open;
+  g_app_class->startup = ide_application_startup;
 }
 
 static void
-ide_application_init (IdeApplication *app)
+ide_application_init (IdeApplication *self)
 {
-  GOptionEntry options[] = {
-    { "standalone",
-      's',
-      G_OPTION_FLAG_IN_MAIN,
-      G_OPTION_ARG_NONE,
-      NULL,
-      N_("Run Builder in standalone mode") },
+  ide_set_program_name (PACKAGE_NAME);
 
-    { "version",
-      0,
-      G_OPTION_FLAG_IN_MAIN,
-      G_OPTION_ARG_NONE,
-      NULL,
-      N_("Show the application's version") },
+  self->mode = IDE_APPLICATION_MODE_PRIMARY;
 
-    { "verbose",
-      'v',
-      G_OPTION_FLAG_NO_ARG | G_OPTION_FLAG_IN_MAIN | G_OPTION_FLAG_HIDDEN,
-      G_OPTION_ARG_CALLBACK,
-      ide_application_increase_verbosity,
-      N_("Increase verbosity. May be specified multiple times.") },
+  setlocale (LC_ALL, "");
 
-    { "dbus-address",
-      0,
-      G_OPTION_FLAG_HIDDEN,
-      G_OPTION_ARG_STRING,
-      &app->dbus_address,
-      N_("The DBus server address for which to connect.") },
+  bindtextdomain (GETTEXT_PACKAGE, PACKAGE_LOCALE_DIR);
+  bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
+  textdomain (GETTEXT_PACKAGE);
 
-    { "type",
-      0,
-      G_OPTION_FLAG_HIDDEN,
-      G_OPTION_ARG_STRING,
-      &app->type,
-      N_("The type of plugin worker process to run.") },
-
-    { NULL }
-  };
-
-  IDE_ENTRY;
-
-  g_application_add_main_option_entries (G_APPLICATION (app), options);
-
-  IDE_EXIT;
+  g_set_application_name (_("Builder"));
 }
 
-GDateTime *
-ide_application_get_startup_time (IdeApplication *self)
+IdeApplication *
+ide_application_new (void)
 {
-  g_return_val_if_fail (IDE_IS_APPLICATION (self), NULL);
+  return g_object_new (IDE_TYPE_APPLICATION,
+                       "application-id", "org.gnome.Builder",
+                       "flags", G_APPLICATION_HANDLES_OPEN,
+                       NULL);
 
-  return self->startup_time;
 }
 
-const gchar *
-ide_application_get_keybindings_mode (IdeApplication *self)
+IdeApplicationMode
+ide_application_get_mode (IdeApplication *self)
 {
-  g_return_val_if_fail (IDE_IS_APPLICATION (self), NULL);
+  g_return_val_if_fail (IDE_IS_APPLICATION (self), 0);
 
-  return ide_keybindings_get_mode (self->keybindings);
+  return self->mode;
 }
 
 static void
@@ -952,8 +456,11 @@ ide_application_get_worker_async (IdeApplication      *self,
   g_return_if_fail (plugin_name != NULL);
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
+  if (self->mode != IDE_APPLICATION_MODE_PRIMARY)
+    return NULL;
+
   if (self->worker_manager == NULL)
-    self->worker_manager = ide_worker_manager_new (self->argv0);
+    self->worker_manager = ide_worker_manager_new ("gnome-builder-worker");
 
   task = g_task_new (self, cancellable, callback, user_data);
 
@@ -1007,6 +514,9 @@ ide_application_get_recent_projects (IdeApplication *self)
 {
   g_return_val_if_fail (IDE_IS_APPLICATION (self), NULL);
 
+  if (self->mode != IDE_APPLICATION_MODE_PRIMARY)
+    return NULL;
+
   if (self->recent_projects == NULL)
     {
       self->recent_projects = ide_recent_projects_new ();
@@ -1014,4 +524,52 @@ ide_application_get_recent_projects (IdeApplication *self)
     }
 
   return self->recent_projects;
+}
+
+void
+ide_application_show_projects_window (IdeApplication *self)
+{
+  GtkWindow *window;
+  GList *windows;
+
+  g_assert (IDE_IS_APPLICATION (self));
+
+  if (self->mode != IDE_APPLICATION_MODE_PRIMARY)
+    return;
+
+  windows = gtk_application_get_windows (GTK_APPLICATION (self));
+
+  for (; windows; windows = windows->next)
+    {
+      window = windows->data;
+
+      if (IDE_IS_WORKBENCH (window))
+        {
+          const gchar *name;
+
+          name = ide_workbench_get_visible_perspective_name (IDE_WORKBENCH (window));
+
+          if (ide_str_equal0 ("greeter", name))
+            {
+              gtk_window_present (windows->data);
+              return;
+            }
+        }
+    }
+
+  window = g_object_new (IDE_TYPE_WORKBENCH,
+                         "application", self,
+                         NULL);
+  gtk_window_present (window);
+}
+
+const gchar *
+ide_application_get_keybindings_mode (IdeApplication *self)
+{
+  g_return_val_if_fail (IDE_IS_APPLICATION (self), NULL);
+
+  if (self->mode == IDE_APPLICATION_MODE_PRIMARY)
+    return ide_keybindings_get_mode (self->keybindings);
+
+  return NULL;
 }

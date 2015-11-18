@@ -1,6 +1,6 @@
 /* ide-application.h
  *
- * Copyright (C) 2014 Christian Hergert <christian@hergert.me>
+ * Copyright (C) 2015 Christian Hergert <christian@hergert.me>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,32 +25,31 @@
 
 G_BEGIN_DECLS
 
-#define IDE_APPLICATION_DEFAULT (IDE_APPLICATION(g_application_get_default()))
 #define IDE_TYPE_APPLICATION    (ide_application_get_type())
+#define IDE_APPLICATION_DEFAULT (IDE_APPLICATION (g_application_get_default()))
 
 G_DECLARE_FINAL_TYPE (IdeApplication, ide_application, IDE, APPLICATION, GtkApplication)
 
-const gchar       *ide_application_get_keybindings_mode (IdeApplication        *self);
-GDateTime         *ide_application_get_startup_time     (IdeApplication        *self);
-IdeRecentProjects *ide_application_get_recent_projects (IdeApplication *self);
-void               ide_application_show_projects_window (IdeApplication        *self);
-void               ide_application_open_project_async   (IdeApplication        *self,
-                                                        GFile                *file,
-                                                        GPtrArray            *additional_files,
-                                                        GCancellable         *cancellable,
-                                                        GAsyncReadyCallback   callback,
-                                                        gpointer              user_data);
-gboolean           ide_application_open_project_finish  (IdeApplication        *self,
-                                                        GAsyncResult         *result,
-                                                        GError              **error);
-void               ide_application_get_worker_async     (IdeApplication        *self,
-                                                        const gchar          *plugin_name,
-                                                        GCancellable         *cancellable,
-                                                        GAsyncReadyCallback   callback,
-                                                        gpointer              user_data);
-GDBusProxy        *ide_application_get_worker_finish    (IdeApplication        *self,
-                                                        GAsyncResult         *result,
-                                                        GError              **error);
+typedef enum
+{
+  IDE_APPLICATION_MODE_PRIMARY,
+  IDE_APPLICATION_MODE_WORKER,
+  IDE_APPLICATION_MODE_TOOL,
+} IdeApplicationMode;
+
+IdeApplicationMode  ide_application_get_mode             (IdeApplication       *self);
+IdeApplication     *ide_application_new                  (void);
+IdeRecentProjects  *ide_application_get_recent_projects  (IdeApplication       *self);
+void                ide_application_show_projects_window (IdeApplication       *self);
+const gchar        *ide_application_get_keybindings_mode (IdeApplication       *self);
+void                ide_application_get_worker_async     (IdeApplication       *self,
+                                                          const gchar          *plugin_name,
+                                                          GCancellable         *cancellable,
+                                                          GAsyncReadyCallback   callback,
+                                                          gpointer              user_data);
+GDBusProxy         *ide_application_get_worker_finish    (IdeApplication       *self,
+                                                          GAsyncResult         *result,
+                                                          GError              **error);
 
 G_END_DECLS
 

@@ -19,9 +19,9 @@
 #define G_LOG_DOMAIN "ide-css-provider"
 
 #include <glib/gi18n.h>
-#include <ide.h>
 
 #include "ide-css-provider.h"
+#include "ide-debug.h"
 
 struct _IdeCssProvider
 {

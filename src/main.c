@@ -16,37 +16,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#define G_LOG_DOMAIN "Builder"
-
-#ifdef HAVE_CONFIG_H
-# include "config.h"
-#endif
-
-#include <glib.h>
-#include <glib/gi18n.h>
-#include <gtk/gtk.h>
 #include <ide.h>
-#include <locale.h>
-
-#include "gb-icons-resources.h"
 
 int
 main (int   argc,
       char *argv[])
 {
-  GApplication *app;
+  IdeApplication *app;
   int ret;
-
-  setlocale (LC_ALL, "");
-
-  bindtextdomain (GETTEXT_PACKAGE, PACKAGE_LOCALE_DIR);
-  bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
-  textdomain (GETTEXT_PACKAGE);
-
-  g_set_prgname (PACKAGE_TARNAME);
-  g_set_application_name (_("Builder"));
-
-  ide_set_program_name ("gnome-builder");
 
   ide_log_init (TRUE, NULL);
 
@@ -55,13 +32,8 @@ main (int   argc,
              gtk_get_minor_version (),
              gtk_get_micro_version ());
 
-  g_resources_register (gb_icons_get_resource ());
-
-  app = g_object_new (IDE_TYPE_APPLICATION,
-                      "application-id", "org.gnome.Builder",
-                      "flags", G_APPLICATION_HANDLES_OPEN,
-                      NULL);
-  ret = g_application_run (app, argc, argv);
+  app = ide_application_new ();
+  ret = g_application_run (G_APPLICATION (app), argc, argv);
   g_clear_object (&app);
 
   ide_log_shutdown ();

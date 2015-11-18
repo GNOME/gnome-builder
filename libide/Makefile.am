@@ -27,6 +27,8 @@ libide_1_0_la_public_sources = \
 	ide-application.h \
 	ide-application-addin.c \
 	ide-application-addin.h \
+	ide-application-tool.c \
+	ide-application-tool.h \
 	ide-back-forward-item.c \
 	ide-back-forward-item.h \
 	ide-back-forward-list.c \
@@ -260,8 +262,10 @@ libide_1_0_la_SOURCES = \
 	gsettings/ide-gsettings-file-settings.h \
 	gsettings/ide-language-defaults.c \
 	gsettings/ide-language-defaults.h \
+	ide-application-command-line.c \
 	ide-application-actions.c \
 	ide-application-actions.h \
+	ide-application-plugins.c \
 	ide-application-private.h \
 	ide-async-helper.c \
 	ide-async-helper.h \
@@ -370,6 +374,7 @@ libide_1_0_la_includes = \
 	-I$(top_srcdir)/contrib/libeditorconfig \
 	-I$(top_srcdir)/contrib/search \
 	-I$(top_srcdir)/contrib/xml \
+	-I$(top_srcdir)/data/icons/hicolor \
 	-I$(srcdir) \
 	-I$(srcdir)/directory \
 	-I$(srcdir)/doap \
@@ -417,6 +422,7 @@ libide_1_0_la_LIBADD = \
 	$(LIBIDE_LIBS) \
 	$(SHM_LIB) \
 	-lm \
+	$(top_builddir)/data/icons/hicolor/libicons.la \
 	$(top_builddir)/contrib/egg/libegg-private.la \
 	$(top_builddir)/contrib/gd/libgd.la \
 	$(top_builddir)/contrib/libeditorconfig/libeditorconfig.la \

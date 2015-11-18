@@ -19,8 +19,8 @@
 #define G_LOG_DOMAIN "ide-keybindings"
 
 #include <glib/gi18n.h>
-#include <ide.h>
 
+#include "ide-debug.h"
 #include "ide-keybindings.h"
 
 struct _IdeKeybindings
