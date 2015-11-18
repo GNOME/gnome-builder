@@ -103,19 +103,25 @@ typedef enum
  *   inclusive will select the newline.
  * @IDE_SOURCE_VIEW_MOVEMENT_HALF_PAGE_UP: move half a page up.
  * @IDE_SOURCE_VIEW_MOVEMENT_HALF_PAGE_DOWN: move half a page down.
+ * @IDE_SOURCE_VIEW_MOVEMENT_HALF_PAGE_LEFT: move half a page left.
+ * @IDE_SOURCE_VIEW_MOVEMENT_HALF_PAGE_RIGHT: move half a page right.
  * @IDE_SOURCE_VIEW_MOVEMENT_PAGE_UP: move a full page up.
  * @IDE_SOURCE_VIEW_MOVEMENT_PAGE_DOWN: move a full page down.
  * @IDE_SOURCE_VIEW_MOVEMENT_SCREEN_UP: move to viewport up by visible line, adjusting cursor
  *   to stay on screen if necessary.
  * @IDE_SOURCE_VIEW_MOVEMENT_SCREEN_DOWN: move to viewport down by visible line, adjusting cursor
  *   to stay on screen if necessary.
+ * @IDE_SOURCE_VIEW_MOVEMENT_SCREEN_LEFT: move to viewport left by visible char, adjusting cursor
+ *   to stay on screen if necessary.
+ * @IDE_SOURCE_VIEW_MOVEMENT_SCREEN_RIGHT: move to viewport right by visible char, adjusting cursor
+ *   to stay on screen if necessary.
  * @IDE_SOURCE_VIEW_MOVEMENT_SCREEN_TOP: move to the top of the screen.
  * @IDE_SOURCE_VIEW_MOVEMENT_SCREEN_MIDDLE: move to the middle of the screen.
  * @IDE_SOURCE_VIEW_MOVEMENT_SCREEN_BOTTOM: move to the bottom of the screen.
  * @IDE_SOURCE_VIEW_MOVEMENT_MATCH_SPECIAL: move to match of brace, bracket, comment.
- * @IDE_SOURCE_VIEW_MOVEMENT_SCROLL_SCREEN_TOP: scroll until insert cursor is at screen top.
- * @IDE_SOURCE_VIEW_MOVEMENT_SCROLL_SCREEN_CENTER: scroll until insert cursor is at screen center.
- * @IDE_SOURCE_VIEW_MOVEMENT_SCROLL_SCREEN_BOTTOM: scroll until insert cursor is at screen bottom.
+ * @IDE_SOURCE_VIEW_MOVEMENT_SCROLL_SCREEN_TOP: scroll until insert cursor or [count]th line is at screen top.
+ * @IDE_SOURCE_VIEW_MOVEMENT_SCROLL_SCREEN_CENTER: scroll until insert cursor or [count]th line is at screen center.
+ * @IDE_SOURCE_VIEW_MOVEMENT_SCROLL_SCREEN_BOTTOM: scroll until insert cursor or [count]th line is at screen bottom.
  * @IDE_SOURCE_VIEW_MOVEMENT_NEXT_MATCH_SEARCH_CHAR: move to the next matching char according to f and t in vim.
  * @IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_MATCH_SEARCH_CHAR: move to the previous matching char according to F and T in vim.
  *
@@ -168,12 +174,16 @@ typedef enum
 
   IDE_SOURCE_VIEW_MOVEMENT_HALF_PAGE_UP,
   IDE_SOURCE_VIEW_MOVEMENT_HALF_PAGE_DOWN,
+  IDE_SOURCE_VIEW_MOVEMENT_HALF_PAGE_LEFT,
+  IDE_SOURCE_VIEW_MOVEMENT_HALF_PAGE_RIGHT,
 
   IDE_SOURCE_VIEW_MOVEMENT_PAGE_UP,
   IDE_SOURCE_VIEW_MOVEMENT_PAGE_DOWN,
 
   IDE_SOURCE_VIEW_MOVEMENT_SCREEN_UP,
   IDE_SOURCE_VIEW_MOVEMENT_SCREEN_DOWN,
+  IDE_SOURCE_VIEW_MOVEMENT_SCREEN_LEFT,
+  IDE_SOURCE_VIEW_MOVEMENT_SCREEN_RIGHT,
   IDE_SOURCE_VIEW_MOVEMENT_SCREEN_TOP,
   IDE_SOURCE_VIEW_MOVEMENT_SCREEN_MIDDLE,
   IDE_SOURCE_VIEW_MOVEMENT_SCREEN_BOTTOM,

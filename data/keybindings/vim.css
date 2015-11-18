@@ -1249,6 +1249,12 @@
 
   bind "b" { "movement" (scroll-screen-bottom, 0, 0, 1) };
   bind "minus" { "movement" (scroll-screen-bottom, 0, 1, 1) };
+
+  bind "l" { "movement" (screen-left, 0, 0, 1) };
+  bind "Left" { "movement" (screen-left, 0, 0, 1) };
+
+  bind "h" { "movement" (screen-right, 0, 0, 1) };
+  bind "Right" { "movement" (screen-right, 0, 0, 1) };
 }
 
 @binding-set builder-vim-source-view-normal-Z

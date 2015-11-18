@@ -23,6 +23,7 @@
 #include "ide-debug.h"
 #include "ide-enums.h"
 #include "ide-internal.h"
+#include "ide-cairo.h"
 #include "ide-source-iter.h"
 #include "ide-source-view-movements.h"
 #include "ide-vim-iter.h"
@@ -681,6 +682,48 @@ ide_source_view_movements_screen_bottom (Movement *mv)
 }
 
 static void
+ide_source_view_movements_scroll_by_chars (Movement *mv,
+                                           gint      chars)
+{
+  GtkTextView *text_view = (GtkTextView *)mv->self;
+  GtkAdjustment *hadj;
+  GtkTextBuffer *buffer;
+  GdkRectangle rect;
+  gdouble amount;
+  gdouble value;
+  gdouble new_value;
+  gdouble upper;
+  gdouble page_size;
+
+  if (chars == 0)
+    return;
+
+  hadj = gtk_scrollable_get_hadjustment (GTK_SCROLLABLE (mv->self));
+  buffer = gtk_text_view_get_buffer (text_view);
+
+  gtk_text_view_get_iter_location (text_view, &mv->insert, &rect);
+
+  amount = chars * rect.width;
+
+  value = gtk_adjustment_get_value (hadj);
+  upper = gtk_adjustment_get_upper (hadj);
+  page_size = gtk_adjustment_get_page_size (hadj);
+
+  if (chars < 0 && value <= 0)
+    return;
+  else if (chars > 0 && value >= upper - page_size)
+    return;
+
+  new_value = CLAMP (value + amount, 0, upper - page_size);
+  gtk_adjustment_set_value (hadj, new_value);
+
+  if (chars > 0 && (rect.x < (gint)new_value))
+    gtk_text_view_get_iter_at_location (text_view, &mv->insert, new_value, rect.y);
+  else if (_ide_cairo_rectangle_x2 (&rect) > (gint)(new_value + page_size))
+    gtk_text_view_get_iter_at_location (text_view, &mv->insert, new_value + page_size - rect.width, rect.y);
+}
+
+static void
 ide_source_view_movements_scroll_by_lines (Movement *mv,
                                            gint      lines)
 {
@@ -723,7 +766,6 @@ ide_source_view_movements_scroll_by_lines (Movement *mv,
   upper = gtk_adjustment_get_upper (vadj);
   gtk_adjustment_set_value (vadj, CLAMP (value + amount, 0, upper));
 
-  mv->ignore_scroll_to_insert = TRUE;
   ide_source_view_place_cursor_onscreen (mv->self);
 }
 
@@ -734,15 +776,21 @@ ide_source_view_movements_scroll (Movement *mv)
   GtkTextMark *mark;
   gint count = MAX (1, mv->count);
 
-  if (mv->type == IDE_SOURCE_VIEW_MOVEMENT_SCREEN_DOWN)
+  if (mv->type == IDE_SOURCE_VIEW_MOVEMENT_SCREEN_DOWN ||
+      mv->type == IDE_SOURCE_VIEW_MOVEMENT_SCREEN_LEFT)
     count = -count;
 
-  ide_source_view_movements_scroll_by_lines (mv, count);
-
-  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (mv->self));
-  mark = gtk_text_buffer_get_insert (buffer);
-  gtk_text_buffer_get_iter_at_mark (buffer, &mv->insert, mark);
-  ide_source_view_move_mark_onscreen (mv->self, mark);
+  g_printf ("count:%i\n", count);
+  if (mv->type == IDE_SOURCE_VIEW_MOVEMENT_SCREEN_DOWN ||
+      mv->type == IDE_SOURCE_VIEW_MOVEMENT_SCREEN_UP)
+    {
+      ide_source_view_movements_scroll_by_lines (mv, count);
+      buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (mv->self));
+      mark = gtk_text_buffer_get_insert (buffer);
+      gtk_text_buffer_get_iter_at_mark (buffer, &mv->insert, mark);
+    }
+  else
+    ide_source_view_movements_scroll_by_chars (mv, count);
 
   mv->ignore_scroll_to_insert = TRUE;
 }
@@ -2210,6 +2258,8 @@ _ide_source_view_apply_movement (IdeSourceView         *self,
 
     case IDE_SOURCE_VIEW_MOVEMENT_HALF_PAGE_UP:
     case IDE_SOURCE_VIEW_MOVEMENT_HALF_PAGE_DOWN:
+    case IDE_SOURCE_VIEW_MOVEMENT_HALF_PAGE_LEFT:
+    case IDE_SOURCE_VIEW_MOVEMENT_HALF_PAGE_RIGHT:
     case IDE_SOURCE_VIEW_MOVEMENT_PAGE_UP:
     case IDE_SOURCE_VIEW_MOVEMENT_PAGE_DOWN:
       for (i = MAX (1, mv.count); i > 0; i--)
@@ -2218,8 +2268,9 @@ _ide_source_view_apply_movement (IdeSourceView         *self,
 
     case IDE_SOURCE_VIEW_MOVEMENT_SCREEN_DOWN:
     case IDE_SOURCE_VIEW_MOVEMENT_SCREEN_UP:
-      for (i = MAX (1, mv.count); i > 0; i--)
-        ide_source_view_movements_scroll (&mv);
+    case IDE_SOURCE_VIEW_MOVEMENT_SCREEN_LEFT:
+    case IDE_SOURCE_VIEW_MOVEMENT_SCREEN_RIGHT:
+      ide_source_view_movements_scroll (&mv);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_SCREEN_TOP:
