@@ -313,7 +313,7 @@ ide_workbench_views_foreach_cb (GtkWidget *widget,
  * @callback: (scope call): The callback to execute
  * @user_data: user data for @callback.
  *
- * Executes @callback for every #IdeView across all perspectives.
+ * Executes @callback for every #IdeLayoutView across all perspectives.
  */
 void
 ide_workbench_views_foreach (IdeWorkbench *self,

@@ -237,7 +237,7 @@ ide_perspective_set_fullscreen (IdePerspective *self,
  * @callback: (scope call): A #GtkCallback.
  * @user_data: user data for @callback.
  *
- * This interface method is used to iterate all #IdeView's that are descendents of @self.
+ * This interface method is used to iterate all #IdeLayoutView's that are descendents of @self.
  */
 void
 ide_perspective_views_foreach (IdePerspective *self,
