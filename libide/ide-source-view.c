@@ -2087,17 +2087,15 @@ command_string_append_to (GString         *command_str,
   if (state & GDK_MOD1_MASK)
     g_string_append (command_str, "<alt>");
 
-  if (keyval >= '!' && keyval <= '~' )
+  if ((keyval >= '!' && keyval <= '~' ) && keyval != GDK_KEY_bracketleft && keyval != GDK_KEY_bracketright)
     g_string_append_c (command_str, keyval);
+  else if (keyval >= GDK_KEY_KP_0 && keyval <= GDK_KEY_KP_9)
+    g_string_append_c (command_str, keyval - GDK_KEY_KP_0 + '0');
   else
     {
-      if (!ide_str_empty0 (command_str->str) &&
-          (state & ALL_ACCELS_MASK) == 0 &&
-          *(command_str->str + command_str->len - 1) != ' ')
-        g_string_append (command_str, " ");
-
+      g_string_append_c (command_str, '[');
       g_string_append (command_str, gdk_keyval_name (keyval));
-      g_string_append (command_str, " ");
+      g_string_append_c (command_str, ']');
     }
 }
 
