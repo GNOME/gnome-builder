@@ -71,6 +71,7 @@ dist-hook:
 .PHONY: AUTHORS
 
 run:
+	PEAS_DEBUG=1 \
 	GB_IN_TREE_PLUGINS=1 \
 	GB_IN_TREE_FONTS=1 \
 	GI_TYPELIB_PATH="libide:src:$(GI_TYPELIB_PATH)" \
@@ -78,6 +79,7 @@ run:
 	$(LIBTOOL) --mode=execute gdb -ex run --args src/gnome-builder -vvvv -s
 
 strace:
+	PEAS_DEBUG=1 \
 	GB_IN_TREE_PLUGINS=1 \
 	GB_IN_TREE_FONTS=1 \
 	GI_TYPELIB_PATH="libide:src:$(GI_TYPELIB_PATH)" \
@@ -85,6 +87,7 @@ strace:
 	$(LIBTOOL) --mode=execute strace -T src/gnome-builder -vvvv -s
 
 debug:
+	PEAS_DEBUG=1 \
 	GB_IN_TREE_PLUGINS=1 \
 	GB_IN_TREE_FONTS=1 \
 	GI_TYPELIB_PATH="libide:src:$(GI_TYPELIB_PATH)" \
@@ -93,6 +96,7 @@ debug:
 	$(LIBTOOL) --mode=execute gdb -ex run --args src/gnome-builder -vvvv -s
 
 valgrind:
+	PEAS_DEBUG=1 \
 	GB_IN_TREE_PLUGINS=1 \
 	GB_IN_TREE_FONTS=1 \
 	GI_TYPELIB_PATH="libide:src:$(GI_TYPELIB_PATH)" \

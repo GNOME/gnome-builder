@@ -18,6 +18,7 @@
 
 #define G_LOG_DOMAIN "ide-workbench"
 
+#include "ide-debug.h"
 #include "ide-macros.h"
 #include "ide-window-settings.h"
 #include "ide-workbench.h"
@@ -327,6 +328,9 @@ ide_workbench_addin_added (PeasExtensionSet *set,
   g_assert (plugin_info != NULL);
   g_assert (IDE_IS_WORKBENCH_ADDIN (extension));
   g_assert (IDE_IS_WORKBENCH (self));
+
+  IDE_TRACE_MSG ("Loading workbench addin for %s",
+                 peas_plugin_info_get_module_name (plugin_info));
 
   ide_workbench_addin_load (IDE_WORKBENCH_ADDIN (extension), self);
 }
