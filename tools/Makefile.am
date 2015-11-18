@@ -10,7 +10,6 @@ tools_cflags = \
 tools_libs = \
 	$(LIBIDE_LIBS) \
 	$(top_builddir)/libide/libide-1.0.la \
-	$(top_builddir)/src/libgnome-builder.la \
 	$(top_builddir)/contrib/egg/libegg-private.la \
 	$(NULL)
 
