@@ -1260,20 +1260,41 @@
 {
   bind "z" { "movement" (scroll-screen-center, 1, 0, 0)
              "set-mode" ("vim-visual", permanent) };
+  bind "period" { "movement" (scroll-screen-center, 1, 1, 0)
+                  "set-mode" ("vim-visual", permanent) };
+
   bind "t" { "movement" (scroll-screen-top, 1, 0, 0)
              "set-mode" ("vim-visual", permanent) };
+  bind "Return" { "movement" (scroll-screen-top, 1, 1, 0)
+                  "set-mode" ("vim-visual", permanent) };
+  bind "KP_Enter" { "movement" (scroll-screen-top, 1, 1, 0)
+                    "set-mode" ("vim-visual", permanent) };
+
   bind "b" { "movement" (scroll-screen-bottom, 1, 0, 0)
              "set-mode" ("vim-visual", permanent) };
+  bind "minus" { "movement" (scroll-screen-bottom, 1, 1, 0)
+                 "set-mode" ("vim-visual", permanent) };
 }
 
 @binding-set builder-vim-source-view-visual-line-z
 {
   bind "z" { "movement" (scroll-screen-center, 1, 0, 0)
              "set-mode" ("vim-visual-line", permanent) };
+  bind "period" { "movement" (scroll-screen-center, 1, 1, 0)
+                  "set-mode" ("vim-visual-line", permanent) };
+
   bind "t" { "movement" (scroll-screen-top, 1, 0, 0)
              "set-mode" ("vim-visual-line", permanent) };
+  bind "Return" { "movement" (scroll-screen-top, 1, 1, 0)
+                  "set-mode" ("vim-visual-line", permanent) };
+  bind "KP_Enter" { "movement" (scroll-screen-top, 1, 1, 0)
+                    "set-mode" ("vim-visual-line", permanent) };
+
   bind "b" { "movement" (scroll-screen-bottom, 1, 0, 0)
              "set-mode" ("vim-visual-line", permanent) };
+  bind "minus" { "movement" (scroll-screen-bottom, 1, 1, 0)
+                 "set-mode" ("vim-visual-line", permanent) };
+
 }
 
 @binding-set builder-vim-source-view-normal-y
