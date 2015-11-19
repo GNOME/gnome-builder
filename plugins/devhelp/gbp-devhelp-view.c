@@ -50,10 +50,25 @@ gbp_devhelp_view_set_uri (GbpDevhelpView *self,
   webkit_web_view_load_uri (self->web_view1, uri);
 }
 
-static void
-gbp_devhelp_view_finalize (GObject *object)
+static const gchar *
+gbp_devhelp_view_get_title (IdeLayoutView *view)
 {
-  G_OBJECT_CLASS (gbp_devhelp_view_parent_class)->finalize (object);
+  GbpDevhelpView *self = (GbpDevhelpView *)view;
+
+  g_assert (GBP_IS_DEVHELP_VIEW (view));
+
+  return webkit_web_view_get_title (self->web_view1);
+}
+
+static void
+gbp_devhelp_view_notify_title (GbpDevhelpView *self,
+                               GParamSpec     *pspec,
+                               WebKitWebView  *web_view)
+{
+  g_assert (GBP_IS_DEVHELP_VIEW (self));
+  g_assert (WEBKIT_IS_WEB_VIEW (web_view));
+
+  g_object_notify (G_OBJECT (self), "title");
 }
 
 static void
@@ -80,9 +95,11 @@ gbp_devhelp_view_class_init (GbpDevhelpViewClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+  IdeLayoutViewClass *view_class = IDE_LAYOUT_VIEW_CLASS (klass);
 
-  object_class->finalize = gbp_devhelp_view_finalize;
   object_class->set_property = gbp_devhelp_view_set_property;
+
+  view_class->get_title = gbp_devhelp_view_get_title;
 
   properties [PROP_URI] =
     g_param_spec_string ("uri",
@@ -103,4 +120,10 @@ static void
 gbp_devhelp_view_init (GbpDevhelpView *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
+
+  g_signal_connect_object (self->web_view1,
+                           "notify::title",
+                           G_CALLBACK (gbp_devhelp_view_notify_title),
+                           self,
+                           G_CONNECT_SWAPPED);
 }
