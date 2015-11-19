@@ -1551,6 +1551,47 @@ loop:
 }
 
 static void
+ide_source_view_movements_scroll_to_horizontal_bounds (Movement *mv)
+{
+  GtkTextView *text_view = (GtkTextView *)mv->self;
+  GtkTextMark *insert;
+  GtkTextBuffer *buffer;
+  GtkAdjustment *hadj;
+  GtkTextIter insert_iter;
+  GdkRectangle screen_rect;
+  GdkRectangle insert_rect;
+  gdouble value;
+  gdouble offset = 0.0;
+
+  buffer = gtk_text_view_get_buffer (text_view);
+  insert = gtk_text_buffer_get_insert (buffer);
+  hadj = gtk_scrollable_get_hadjustment (GTK_SCROLLABLE (mv->self));
+
+  ide_source_view_get_visible_rect (mv->self, &screen_rect);
+  gtk_text_buffer_get_iter_at_mark (buffer, &insert_iter, insert);
+  gtk_text_view_get_iter_location (text_view, &insert_iter, &insert_rect);
+  value = gtk_adjustment_get_value (hadj);
+
+  switch ((int)mv->type)
+    {
+    case IDE_SOURCE_VIEW_MOVEMENT_SCROLL_SCREEN_LEFT:
+      offset = screen_rect.x - insert_rect.x;
+      break;
+
+    case IDE_SOURCE_VIEW_MOVEMENT_SCROLL_SCREEN_RIGHT:
+      offset = _ide_cairo_rectangle_x2 (&screen_rect) - _ide_cairo_rectangle_x2 (&insert_rect);
+      break;
+
+    default:
+      break;
+    }
+
+  gtk_adjustment_set_value (hadj, value - offset);
+
+  mv->ignore_scroll_to_insert = TRUE;
+}
+
+static void
 ide_source_view_movements_scroll_center (Movement *mv)
 {
   GtkTextView *text_view = (GtkTextView *)mv->self;
@@ -2315,6 +2356,11 @@ _ide_source_view_apply_movement (IdeSourceView         *self,
     case IDE_SOURCE_VIEW_MOVEMENT_SCROLL_SCREEN_CENTER:
     case IDE_SOURCE_VIEW_MOVEMENT_SCROLL_SCREEN_BOTTOM:
       ide_source_view_movements_scroll_center (&mv);
+      break;
+
+    case IDE_SOURCE_VIEW_MOVEMENT_SCROLL_SCREEN_LEFT:
+    case IDE_SOURCE_VIEW_MOVEMENT_SCROLL_SCREEN_RIGHT:
+      ide_source_view_movements_scroll_to_horizontal_bounds (&mv);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_UNMATCHED_BRACE:

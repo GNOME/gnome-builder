@@ -122,6 +122,8 @@ typedef enum
  * @IDE_SOURCE_VIEW_MOVEMENT_SCROLL_SCREEN_TOP: scroll until insert cursor or [count]th line is at screen top.
  * @IDE_SOURCE_VIEW_MOVEMENT_SCROLL_SCREEN_CENTER: scroll until insert cursor or [count]th line is at screen center.
  * @IDE_SOURCE_VIEW_MOVEMENT_SCROLL_SCREEN_BOTTOM: scroll until insert cursor or [count]th line is at screen bottom.
+ * @IDE_SOURCE_VIEW_MOVEMENT_SCROLL_SCREEN_LEFT: scroll until insert cursor or [count]th char is at screen left.
+ * @IDE_SOURCE_VIEW_MOVEMENT_SCROLL_SCREEN_RIGHT: scroll until insert cursor or [count]th char is at screen right.
  * @IDE_SOURCE_VIEW_MOVEMENT_NEXT_MATCH_SEARCH_CHAR: move to the next matching char according to f and t in vim.
  * @IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_MATCH_SEARCH_CHAR: move to the previous matching char according to F and T in vim.
  *
@@ -193,6 +195,8 @@ typedef enum
   IDE_SOURCE_VIEW_MOVEMENT_SCROLL_SCREEN_TOP,
   IDE_SOURCE_VIEW_MOVEMENT_SCROLL_SCREEN_CENTER,
   IDE_SOURCE_VIEW_MOVEMENT_SCROLL_SCREEN_BOTTOM,
+  IDE_SOURCE_VIEW_MOVEMENT_SCROLL_SCREEN_LEFT,
+  IDE_SOURCE_VIEW_MOVEMENT_SCROLL_SCREEN_RIGHT,
 
   IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_UNMATCHED_BRACE,
   IDE_SOURCE_VIEW_MOVEMENT_NEXT_UNMATCHED_BRACE,

@@ -1261,6 +1261,9 @@
 
   bind "<shift>h" { "movement" (half-page-right, 0, 0, 1)
                     "clear-count" () };
+
+  bind "s" { "movement" (scroll-screen-left, 0, 0, 1) };
+  bind "e" { "movement" (scroll-screen-right, 0, 0, 1) };
 }
 
 @binding-set builder-vim-source-view-normal-Z
