@@ -687,7 +687,6 @@ ide_source_view_movements_scroll_by_chars (Movement *mv,
 {
   GtkTextView *text_view = (GtkTextView *)mv->self;
   GtkAdjustment *hadj;
-  GtkTextBuffer *buffer;
   GdkRectangle rect;
   gdouble amount;
   gdouble value;
@@ -699,7 +698,6 @@ ide_source_view_movements_scroll_by_chars (Movement *mv,
     return;
 
   hadj = gtk_scrollable_get_hadjustment (GTK_SCROLLABLE (mv->self));
-  buffer = gtk_text_view_get_buffer (text_view);
 
   gtk_text_view_get_iter_location (text_view, &mv->insert, &rect);
 
@@ -783,7 +781,6 @@ ide_source_view_movements_scroll (Movement *mv)
       mv->type == IDE_SOURCE_VIEW_MOVEMENT_SCREEN_LEFT)
     count = -count;
 
-  g_printf ("count:%i\n", count);
   if (mv->type == IDE_SOURCE_VIEW_MOVEMENT_SCREEN_DOWN ||
       mv->type == IDE_SOURCE_VIEW_MOVEMENT_SCREEN_UP)
     {
@@ -1637,8 +1634,6 @@ ide_source_view_movements_scroll_center (Movement *mv)
     default:
       break;
     }
-
-  g_printf ("str:'%s'\n", mv->command_str->str);
 
   if (g_str_has_suffix (mv->command_str->str, "-") ||
       g_str_has_suffix (mv->command_str->str, ".") ||
