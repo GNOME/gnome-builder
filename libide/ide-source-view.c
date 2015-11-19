@@ -75,6 +75,7 @@
 #define LARGE_SCROLL_DURATION_MSEC 250
 #define FIXIT_LABEL_LEN_MAX 30
 #define SCROLL_REPLAY_DELAY 1000
+#define DEFAULT_OVERSCROLL_NUM_LINES 1
 
 #define ALL_ACCELS_MASK (GDK_CONTROL_MASK | GDK_SHIFT_MASK | GDK_MOD1_MASK)
 
@@ -168,6 +169,7 @@ typedef struct
   guint                        show_search_shadow : 1;
   guint                        snippet_completion : 1;
   guint                        waiting_for_capture : 1;
+  gint                         overscroll_num_lines;
 } IdeSourceViewPrivate;
 
 typedef struct
@@ -207,6 +209,7 @@ enum {
   PROP_SHOW_SEARCH_BUBBLES,
   PROP_SHOW_SEARCH_SHADOW,
   PROP_SNIPPET_COMPLETION,
+  PROP_OVERSCROLL,
   LAST_PROP,
 
   /* These are overridden */
@@ -3752,6 +3755,25 @@ ide_source_view_real_reindent (IdeSourceView *self)
 }
 
 static void
+ide_source_view_set_overscroll_num_lines (IdeSourceView *self,
+                                          gint           num_lines)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+  gint height = gtk_widget_get_allocated_height (GTK_WIDGET (self));
+  gint new_margin;
+
+  priv->overscroll_num_lines = num_lines;
+  new_margin = priv->overscroll_num_lines * priv->cached_char_height;
+
+  if (new_margin < 0)
+    new_margin = height + new_margin;
+
+  new_margin = CLAMP (new_margin, 0, height);
+
+  g_object_set (self, "bottom-margin", new_margin, NULL);
+}
+
+static void
 ide_source_view_constructed (GObject *object)
 {
   IdeSourceView *self = (IdeSourceView *)object;
@@ -5002,6 +5024,8 @@ ide_source_view_size_allocate (GtkWidget     *widget,
   if (!ide_source_view_do_size_allocate_hack (self, allocation))
     GTK_WIDGET_CLASS (ide_source_view_parent_class)->size_allocate (GTK_WIDGET (self), allocation);
 
+  ide_source_view_set_overscroll_num_lines (self, priv->overscroll_num_lines);
+
   /*
    * If we were in a scroll, and we got a size-allocate, we might need to adjust how far we
    * are scrolling. This could happen while the view is calculating text layout sizes and
@@ -5273,6 +5297,10 @@ ide_source_view_get_property (GObject    *object,
       g_value_set_boolean (value, ide_source_view_get_snippet_completion (self));
       break;
 
+    case PROP_OVERSCROLL:
+      g_value_set_int (value, priv->overscroll_num_lines);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -5368,6 +5396,10 @@ ide_source_view_set_property (GObject      *object,
 
     case PROP_SNIPPET_COMPLETION:
       ide_source_view_set_snippet_completion (self, g_value_get_boolean (value));
+      break;
+
+    case PROP_OVERSCROLL:
+      ide_source_view_set_overscroll_num_lines (self, g_value_get_int (value));
       break;
 
     default:
@@ -5613,6 +5645,17 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                           "If snippet expansion should be enabled via the completion window.",
                           FALSE,
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_OVERSCROLL] =
+    g_param_spec_int ("overscroll",
+                      "Overscroll",
+                      "The number of lines to scroll beyond the end of the "
+                      "buffer. A negative number of lines will scroll until "
+                      "only that number of lines is visible",
+                      G_MININT,
+                      G_MAXINT,
+                      DEFAULT_OVERSCROLL_NUM_LINES,
+                      (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, LAST_PROP, properties);
 
@@ -6216,6 +6259,7 @@ ide_source_view_init (IdeSourceView *self)
   priv->font_scale = FONT_SCALE_NORMAL;
   priv->search_direction = GTK_DIR_DOWN;
   priv->command_str = g_string_sized_new (32);
+  priv->overscroll_num_lines = DEFAULT_OVERSCROLL_NUM_LINES;
 
   priv->completion_providers_signals = egg_signal_group_new (IDE_TYPE_EXTENSION_SET_ADAPTER);
 
