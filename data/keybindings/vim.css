@@ -1253,8 +1253,14 @@
   bind "l" { "movement" (screen-left, 0, 0, 1) };
   bind "Left" { "movement" (screen-left, 0, 0, 1) };
 
+  bind "<shift>l" { "movement" (half-page-left, 0, 0, 1)
+                    "clear-count" () };
+
   bind "h" { "movement" (screen-right, 0, 0, 1) };
   bind "Right" { "movement" (screen-right, 0, 0, 1) };
+
+  bind "<shift>h" { "movement" (half-page-right, 0, 0, 1)
+                    "clear-count" () };
 }
 
 @binding-set builder-vim-source-view-normal-Z

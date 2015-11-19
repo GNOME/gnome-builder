@@ -715,6 +715,9 @@ ide_source_view_movements_scroll_by_chars (Movement *mv,
     return;
 
   new_value = CLAMP (value + amount, 0, upper - page_size);
+  if (new_value == value)
+    return;
+
   gtk_adjustment_set_value (hadj, new_value);
 
   if (chars > 0 && (rect.x < (gint)new_value))
@@ -800,13 +803,15 @@ ide_source_view_movements_move_page (Movement *mv)
 {
   GtkTextView *text_view = (GtkTextView *)mv->self;
   GtkTextBuffer *buffer;
+  GtkAdjustment *hadj;
   GtkTextMark *mark;
   GdkRectangle rect;
   GtkTextIter iter_top;
   GtkTextIter iter_bottom;
   GtkTextIter scroll_iter;
   gint scrolloff;
-  gint half_page;
+  gint half_page_vertical;
+  gint half_page_horizontal;
   gint line_top;
   gint line_bottom;
 
@@ -821,19 +826,32 @@ ide_source_view_movements_move_page (Movement *mv)
   line_top = gtk_text_iter_get_line (&iter_top);
   line_bottom = gtk_text_iter_get_line (&iter_bottom);
 
-  half_page = MAX (1, (line_bottom - line_top) / 2);
-  scrolloff = MIN (ide_source_view_get_scroll_offset (mv->self), half_page);
+  half_page_vertical = MAX (1, (line_bottom - line_top) / 2);
+  scrolloff = MIN (ide_source_view_get_scroll_offset (mv->self), half_page_vertical);
+
+  hadj = gtk_scrollable_get_hadjustment (GTK_SCROLLABLE (mv->self));
+  gtk_text_view_get_iter_location (text_view, &mv->insert, &rect);
+
+  half_page_horizontal = gtk_adjustment_get_page_size (hadj) / (rect.width * 2.0);
 
   switch ((int)mv->type)
     {
     case IDE_SOURCE_VIEW_MOVEMENT_HALF_PAGE_UP:
-      ide_source_view_movements_scroll_by_lines (mv, -half_page);
-      gtk_text_iter_backward_lines (&mv->insert, half_page);
+      ide_source_view_movements_scroll_by_lines (mv, -half_page_vertical);
+      gtk_text_iter_backward_lines (&mv->insert, half_page_vertical);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_HALF_PAGE_DOWN:
-      ide_source_view_movements_scroll_by_lines (mv, half_page);
-      gtk_text_iter_forward_lines (&mv->insert, half_page);
+      ide_source_view_movements_scroll_by_lines (mv, half_page_vertical);
+      gtk_text_iter_forward_lines (&mv->insert, half_page_vertical);
+      break;
+
+    case IDE_SOURCE_VIEW_MOVEMENT_HALF_PAGE_LEFT:
+      ide_source_view_movements_scroll_by_chars (mv, -half_page_horizontal);
+      break;
+
+    case IDE_SOURCE_VIEW_MOVEMENT_HALF_PAGE_RIGHT:
+      ide_source_view_movements_scroll_by_chars (mv, half_page_horizontal);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_PAGE_UP:
