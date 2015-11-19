@@ -1289,6 +1289,27 @@
              "set-mode" ("vim-visual", permanent) };
   bind "minus" { "movement" (scroll-screen-bottom, 1, 1, 0)
                  "set-mode" ("vim-visual", permanent) };
+
+  bind "l" { "movement" (screen-left, 1, 0, 1)
+             "set-mode" ("vim-visual", permanent) };
+  bind "Left" { "movement" (screen-left, 1, 0, 1)
+                "set-mode" ("vim-visual", permanent) };
+
+  bind "<shift>l" { "movement" (half-page-left, 1, 0, 1)
+                    "set-mode" ("vim-visual", permanent) };
+
+  bind "h" { "movement" (screen-right, 1, 0, 1)
+             "set-mode" ("vim-visual", permanent) };
+  bind "Right" { "movement" (screen-right, 1, 0, 1)
+                 "set-mode" ("vim-visual", permanent) };
+
+  bind "<shift>h" { "movement" (half-page-right, 1, 0, 1)
+                    "set-mode" ("vim-visual", permanent) };
+
+  bind "s" { "movement" (scroll-screen-left, 1, 0, 1)
+             "set-mode" ("vim-visual", permanent) };
+  bind "e" { "movement" (scroll-screen-right, 1, 0, 1)
+             "set-mode" ("vim-visual", permanent) };
 }
 
 @binding-set builder-vim-source-view-visual-line-z
@@ -1309,7 +1330,6 @@
              "set-mode" ("vim-visual-line", permanent) };
   bind "minus" { "movement" (scroll-screen-bottom, 1, 1, 0)
                  "set-mode" ("vim-visual-line", permanent) };
-
 }
 
 @binding-set builder-vim-source-view-normal-y
