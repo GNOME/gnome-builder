@@ -1,6 +1,6 @@
-/* gb-devhelp-panel.h
+/* gbp-devhelp-panel.h
  *
- * Copyright (C) 2015 Christian Hergert <christian@hergert.me>
+ * Copyright (C) 2015 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,20 +16,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GB_DEVHELP_PANEL_H
-#define GB_DEVHELP_PANEL_H
+#ifndef GBP_DEVHELP_PANEL_H
+#define GBP_DEVHELP_PANEL_H
 
 #include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 
-#define GB_TYPE_DEVHELP_PANEL (gb_devhelp_panel_get_type())
+#define GBP_TYPE_DEVHELP_PANEL (gbp_devhelp_panel_get_type())
 
-G_DECLARE_FINAL_TYPE (GbDevhelpPanel, gb_devhelp_panel, GB, DEVHELP_PANEL, GtkBin)
-
-void gb_devhelp_panel_set_uri (GbDevhelpPanel *self,
-                               const gchar    *uri);
+G_DECLARE_FINAL_TYPE (GbpDevhelpPanel, gbp_devhelp_panel, GBP, DEVHELP_PANEL, GtkBin)
 
 G_END_DECLS
 
-#endif /* GB_DEVHELP_PANEL_H */
+#endif /* GBP_DEVHELP_PANEL_H */

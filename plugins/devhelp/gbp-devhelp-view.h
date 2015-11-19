@@ -1,6 +1,6 @@
-/* gb-devhelp-view.h
+/* gbp-devhelp-view.h
  *
- * Copyright (C) 2014 Christian Hergert <christian@hergert.me>
+ * Copyright (C) 2015 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,20 +16,20 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GB_DEVHELP_VIEW_H
-#define GB_DEVHELP_VIEW_H
+#ifndef GBP_DEVHELP_VIEW_H
+#define GBP_DEVHELP_VIEW_H
 
-#include "gb-devhelp-document.h"
-#include "gb-view.h"
+#include <ide.h>
 
 G_BEGIN_DECLS
 
-#define GB_TYPE_DEVHELP_VIEW (gb_devhelp_view_get_type())
+#define GBP_TYPE_DEVHELP_VIEW (gbp_devhelp_view_get_type())
 
-G_DECLARE_FINAL_TYPE (GbDevhelpView, gb_devhelp_view, GB, DEVHELP_VIEW, GbView)
+G_DECLARE_FINAL_TYPE (GbpDevhelpView, gbp_devhelp_view, GBP, DEVHELP_VIEW, IdeLayoutView)
 
-GbView *gb_devhelp_view_new      (GbDevhelpDocument *document);
+void gbp_devhelp_view_set_uri (GbpDevhelpView *self,
+                               const gchar    *uri);
 
 G_END_DECLS
 
-#endif /* GB_DEVHELP_VIEW_H */
+#endif /* GBP_DEVHELP_VIEW_H */

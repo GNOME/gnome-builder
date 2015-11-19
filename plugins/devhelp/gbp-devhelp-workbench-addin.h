@@ -1,6 +1,6 @@
-/* gb-devhelp-private.h
+/* gbp-devhelp-workbench-addin.h
  *
- * Copyright (C) 2015 Christian Hergert <christian@hergert.me>
+ * Copyright (C) 2015 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,16 +16,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GB_DEVHELP_PRIVATE_H
-#define GB_DEVHELP_PRIVATE_H
+#ifndef GBP_DEVHELP_WORKBENCH_ADDIN_H
+#define GBP_DEVHELP_WORKBENCH_ADDIN_H
 
 #include <glib-object.h>
 
 G_BEGIN_DECLS
 
-void _gb_devhelp_panel_register_type           (GTypeModule *module);
-void _gb_devhelp_search_provider_register_type (GTypeModule *module);
+#define GBP_TYPE_DEVHELP_WORKBENCH_ADDIN (gbp_devhelp_workbench_addin_get_type())
+
+G_DECLARE_FINAL_TYPE (GbpDevhelpWorkbenchAddin, gbp_devhelp_workbench_addin, GBP, DEVHELP_WORKBENCH_ADDIN, GObject)
 
 G_END_DECLS
 
-#endif /* GB_DEVHELP_PRIVATE_H */
+#endif /* GBP_DEVHELP_WORKBENCH_ADDIN_H */

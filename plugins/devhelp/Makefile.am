@@ -10,42 +10,39 @@ plugin_LTLIBRARIES = libdevhelp-plugin.la
 dist_plugin_DATA = devhelp.plugin
 
 libdevhelp_plugin_la_SOURCES = \
-	gb-devhelp-document.c \
-	gb-devhelp-document.h \
-	gb-devhelp-panel.c \
-	gb-devhelp-panel.h \
-	gb-devhelp-plugin.c \
-	gb-devhelp-private.h \
-	gb-devhelp-resources.c \
-	gb-devhelp-resources.h \
-	gb-devhelp-search-provider.c \
-	gb-devhelp-search-provider.h \
-	gb-devhelp-search-result.c \
-	gb-devhelp-search-result.h \
-	gb-devhelp-view.c \
-	gb-devhelp-view.h \
+	gbp-devhelp-panel.c \
+	gbp-devhelp-panel.h \
+	gbp-devhelp-plugin.c \
+	gbp-devhelp-view.c \
+	gbp-devhelp-view.h \
+	gbp-devhelp-workbench-addin.c \
+	gbp-devhelp-workbench-addin.h \
 	$(NULL)
+
+nodist_libdevhelp_plugin_la_SOURCES = \
+	gbp-devhelp-resources.c \
+	gbp-devhelp-resources.h
 
 libdevhelp_plugin_la_CFLAGS = \
 	$(LIBIDE_CFLAGS) \
 	$(DEVHELP_CFLAGS) \
+	$(OPTIMIZE_CFLAGS) \
 	-I$(top_srcdir)/libide \
 	$(NULL)
 
-libdevhelp_plugin_la_LIBADD = \
-	$(DEVHELP_LIBS) \
-	$(NULL)
+libdevhelp_plugin_la_LIBADD = $(DEVHELP_LIBS)
 
 libdevhelp_plugin_la_LDFLAGS = \
 	$(OPTIMIZE_LDFLAGS) \
 	-avoid-version \
 	-module \
+	-export-regex peas_register_types \
 	$(NULL)
 
-glib_resources_c = gb-devhelp-resources.c
-glib_resources_h = gb-devhelp-resources.h
-glib_resources_xml = gb-devhelp.gresource.xml
-glib_resources_namespace = gb_devhelp
+glib_resources_c = gbp-devhelp-resources.c
+glib_resources_h = gbp-devhelp-resources.h
+glib_resources_xml = gbp-devhelp-resources.gresource.xml
+glib_resources_namespace = gbp_devhelp
 include $(top_srcdir)/build/autotools/Makefile.am.gresources
 
 include $(top_srcdir)/plugins/Makefile.plugin

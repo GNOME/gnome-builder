@@ -1,8 +1,8 @@
 [Plugin]
 Module=devhelp-plugin
 Name=Devhelp
-Description=Provides devhelp documentation
+Description=Integration with devhelp documentation
 Authors=Christian Hergert <christian@hergert.me>
 Copyright=Copyright © 2015 Christian Hergert
+Depends=editor
 Builtin=true
-Hidden=true

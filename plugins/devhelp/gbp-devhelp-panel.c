@@ -1,0 +1,170 @@
+/* gbp-devhelp-panel.c
+ *
+ * Copyright (C) 2015 Christian Hergert <chergert@redhat.com>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+#include <devhelp/devhelp.h>
+#include <ide.h>
+
+#include "gbp-devhelp-panel.h"
+#include "gbp-devhelp-view.h"
+
+struct _GbpDevhelpPanel
+{
+  GtkBin         parent_instance;
+  DhBookManager *books;
+  DhSidebar     *sidebar;
+};
+
+G_DEFINE_TYPE (GbpDevhelpPanel, gbp_devhelp_panel, GTK_TYPE_BIN)
+
+enum {
+  PROP_0,
+  PROP_BOOK_MANAGER,
+  LAST_PROP
+};
+
+static GParamSpec *properties [LAST_PROP];
+
+static void
+fixup_box_border_width (GtkWidget *widget,
+                        gpointer   user_data)
+{
+  if (GTK_IS_BOX (widget))
+    gtk_container_set_border_width (GTK_CONTAINER (widget), 0);
+}
+
+static void
+gbp_devhelp_panel_find_view (GtkWidget *widget,
+                             gpointer   user_data)
+{
+  GbpDevhelpView **view = user_data;
+
+  if (*view != NULL)
+    return;
+
+  if (GBP_IS_DEVHELP_VIEW (widget))
+    *view = GBP_DEVHELP_VIEW (widget);
+}
+
+static void
+gbp_devhelp_panel_link_selected (GbpDevhelpPanel *self,
+                                 DhLink          *link,
+                                 DhSidebar       *sidebar)
+{
+  GbpDevhelpView *view = NULL;
+  IdePerspective *perspective;
+  IdeWorkbench *workbench;
+  gchar *uri;
+
+  g_assert (GBP_IS_DEVHELP_PANEL (self));
+  g_assert (link != NULL);
+  g_assert (DH_IS_SIDEBAR (sidebar));
+
+  workbench = ide_widget_get_workbench (GTK_WIDGET (self));
+  g_assert (IDE_IS_WORKBENCH (workbench));
+
+  perspective = ide_workbench_get_perspective_by_name (workbench, "editor");
+  g_assert (IDE_IS_LAYOUT (perspective));
+
+  ide_perspective_views_foreach (perspective, gbp_devhelp_panel_find_view, &view);
+
+  if (view == NULL)
+    {
+      view = g_object_new (GBP_TYPE_DEVHELP_VIEW,
+                           "visible", TRUE,
+                           NULL);
+      gtk_container_add (GTK_CONTAINER (perspective), GTK_WIDGET (view));
+    }
+
+  uri = dh_link_get_uri (link);
+  gbp_devhelp_view_set_uri (view, uri);
+  g_free (uri);
+}
+
+static void
+gbp_devhelp_panel_constructed (GObject *object)
+{
+  GbpDevhelpPanel *self = (GbpDevhelpPanel *)object;
+
+  G_OBJECT_CLASS (gbp_devhelp_panel_parent_class)->constructed (object);
+
+  g_assert (self->books != NULL);
+
+  self->sidebar = DH_SIDEBAR (dh_sidebar_new (self->books));
+  gtk_container_foreach (GTK_CONTAINER (self->sidebar), fixup_box_border_width, NULL);
+  gtk_container_add (GTK_CONTAINER (self), GTK_WIDGET (self->sidebar));
+  gtk_widget_show (GTK_WIDGET (self->sidebar));
+
+  g_signal_connect_object (self->sidebar,
+                           "link-selected",
+                           G_CALLBACK (gbp_devhelp_panel_link_selected),
+                           self,
+                           G_CONNECT_SWAPPED);
+}
+
+static void
+gbp_devhelp_panel_finalize (GObject *object)
+{
+  GbpDevhelpPanel *self = (GbpDevhelpPanel *)object;
+
+  g_clear_object (&self->books);
+
+  G_OBJECT_CLASS (gbp_devhelp_panel_parent_class)->finalize (object);
+}
+
+static void
+gbp_devhelp_panel_set_property (GObject      *object,
+                                guint         prop_id,
+                                const GValue *value,
+                                GParamSpec   *pspec)
+{
+  GbpDevhelpPanel *self = GBP_DEVHELP_PANEL(object);
+
+  switch (prop_id)
+    {
+    case PROP_BOOK_MANAGER:
+      self->books = g_value_dup_object (value);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
+    }
+}
+
+static void
+gbp_devhelp_panel_class_init (GbpDevhelpPanelClass *klass)
+{
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+  object_class->constructed = gbp_devhelp_panel_constructed;
+  object_class->finalize = gbp_devhelp_panel_finalize;
+  object_class->set_property = gbp_devhelp_panel_set_property;
+
+  properties [PROP_BOOK_MANAGER] =
+    g_param_spec_object ("book-manager",
+                         "Book Manager",
+                         "Book Manager",
+                         DH_TYPE_BOOK_MANAGER,
+                         (G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
+
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
+}
+
+static void
+gbp_devhelp_panel_init (GbpDevhelpPanel *self)
+{
+}

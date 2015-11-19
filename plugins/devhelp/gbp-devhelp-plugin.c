@@ -1,6 +1,6 @@
-/* gb-devhelp-plugin.c
+/* gbp-devhelp-plugin.c
  *
- * Copyright (C) 2015 Christian Hergert <christian@hergert.me>
+ * Copyright (C) 2015 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,21 +19,12 @@
 #include <ide.h>
 #include <libpeas/peas.h>
 
-#include "gb-devhelp-panel.h"
-#include "gb-devhelp-private.h"
-#include "gb-devhelp-search-provider.h"
-#include "gb-workbench-addin.h"
+#include "gbp-devhelp-workbench-addin.h"
 
 void
 peas_register_types (PeasObjectModule *module)
 {
-  _gb_devhelp_panel_register_type (G_TYPE_MODULE (module));
-  _gb_devhelp_search_provider_register_type (G_TYPE_MODULE (module));
-
   peas_object_module_register_extension_type (module,
-                                              GB_TYPE_WORKBENCH_ADDIN,
-                                              GB_TYPE_DEVHELP_PANEL);
-  peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_SEARCH_PROVIDER,
-                                              GB_TYPE_DEVHELP_SEARCH_PROVIDER);
+                                              IDE_TYPE_WORKBENCH_ADDIN,
+                                              GBP_TYPE_DEVHELP_WORKBENCH_ADDIN);
 }

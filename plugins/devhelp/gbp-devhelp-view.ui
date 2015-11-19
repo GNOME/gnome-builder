@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <!-- interface-requires gtk+ 3.14 -->
-  <template class="GbDevhelpView" parent="GbView">
+  <!-- interface-requires gtk+ 3.18 -->
+  <template class="GbpDevhelpView" parent="IdeLayoutView">
     <child internal-child="controls">
       <object class="GtkBox">
         <property name="visible">true</property>
