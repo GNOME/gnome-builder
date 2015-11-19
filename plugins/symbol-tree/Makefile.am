@@ -12,11 +12,13 @@ dist_plugin_DATA = symbol-tree.plugin
 libsymbol_tree_la_SOURCES = \
 	symbol-tree-builder.c \
 	symbol-tree-builder.h \
-	symbol-tree-resources.c \
-	symbol-tree-resources.h \
 	symbol-tree.c \
 	symbol-tree.h \
 	$(NULL)
+
+nodist_libsymbol_tree_la_SOURCES = \
+	symbol-tree-resources.c \
+	symbol-tree-resources.h
 
 libsymbol_tree_la_CFLAGS = \
 	$(LIBIDE_CFLAGS) \
