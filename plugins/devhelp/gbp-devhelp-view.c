@@ -71,6 +71,24 @@ gbp_devhelp_view_notify_title (GbpDevhelpView *self,
   g_object_notify (G_OBJECT (self), "title");
 }
 
+static IdeLayoutView *
+gbp_devhelp_view_create_split (IdeLayoutView *view)
+{
+  GbpDevhelpView *self = (GbpDevhelpView *)view;
+  GbpDevhelpView *other;
+  const gchar *uri;
+
+  g_assert (GBP_IS_DEVHELP_VIEW (self));
+
+  uri = webkit_web_view_get_uri (self->web_view1);
+  other = g_object_new (GBP_TYPE_DEVHELP_VIEW,
+                        "visible", TRUE,
+                        "uri", uri,
+                        NULL);
+
+  return IDE_LAYOUT_VIEW (other);
+}
+
 static void
 gbp_devhelp_view_set_property (GObject      *object,
                                guint         prop_id,
@@ -100,6 +118,7 @@ gbp_devhelp_view_class_init (GbpDevhelpViewClass *klass)
   object_class->set_property = gbp_devhelp_view_set_property;
 
   view_class->get_title = gbp_devhelp_view_get_title;
+  view_class->create_split = gbp_devhelp_view_create_split;
 
   properties [PROP_URI] =
     g_param_spec_string ("uri",
