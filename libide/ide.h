@@ -121,6 +121,8 @@ G_BEGIN_DECLS
 #include "git/ide-git-remote-callbacks.h"
 #include "git/ide-git-vcs.h"
 #include "local/ide-local-device.h"
+#include "util/ide-file-manager.h"
+#include "util/ide-gtk.h"
 #include "util/ide-line-reader.h"
 #include "util/ide-list-inline.h"
 

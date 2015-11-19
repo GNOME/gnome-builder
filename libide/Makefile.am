@@ -230,6 +230,8 @@ libide_1_0_la_public_sources = \
 	ide.h \
 	local/ide-local-device.c \
 	local/ide-local-device.h \
+	util/ide-file-manager.c \
+	util/ide-file-manager.h \
 	$(NULL)
 
 libide_1_0_la_SOURCES = \

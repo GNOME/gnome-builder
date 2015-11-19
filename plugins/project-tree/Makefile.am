@@ -28,30 +28,37 @@ libproject_tree_plugin_la_SOURCES = \
 	project-tree-plugin.c \
 	$(NULL)
 
+nodist_libproject_tree_plugin_la_SOURCES = \
+	gb-project-tree-resources.c \
+	gb-project-tree-resources.h
+
 libproject_tree_plugin_la_CFLAGS = \
 	$(LIBIDE_CFLAGS) \
 	$(OPTIMIZE_CFLAGS) \
 	$(DEBUG_CFLAGS) \
-	$(TERMINAL_CFLAGS) \
 	-I$(top_srcdir)/libide \
-	-I$(top_srcdir)/src/tree \
-	-I$(top_srcdir)/src/util \
 	$(NULL)
+
+libproject_tree_plugin_la_LIBADD =
 
 if ENABLE_TERMINAL_PLUGIN
-libproject_tree_plugin_la_CFLAGS += -DHAVE_VTE
+libproject_tree_plugin_la_LIBADD += $(TERMINAL_LIBS)
+libproject_tree_plugin_la_CFLAGS += \
+	$(TERMINAL_CFLAGS) \
+	-DHAVE_VTE
 endif
-
-libproject_tree_plugin_la_LIBADD = \
-	$(LIBIDE_LIBS) \
-	$(top_builddir)/libide/libide-1.0.la \
-	$(NULL)
 
 libproject_tree_plugin_la_LDFLAGS = \
 	$(OPTIMIZE_LDFLAGS) \
 	-avoid-version \
 	-module \
 	$(NULL)
+
+glib_resources_c = gb-project-tree-resources.c
+glib_resources_h = gb-project-tree-resources.h
+glib_resources_xml = gb-project-tree.gresource.xml
+glib_resources_namespace = gb_project_tree
+include $(top_srcdir)/build/autotools/Makefile.am.gresources
 
 include $(top_srcdir)/plugins/Makefile.plugin
 

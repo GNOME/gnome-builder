@@ -291,7 +291,7 @@ gb_new_file_popover_class_init (GbNewFilePopoverClass *klass)
                   G_TYPE_FILE,
                   G_TYPE_FILE_TYPE);
 
-  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/ui/gb-new-file-popover.ui");
+  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/plugins/project-tree/gb-new-file-popover.ui");
   gtk_widget_class_bind_template_child (widget_class, GbNewFilePopover, button);
   gtk_widget_class_bind_template_child (widget_class, GbNewFilePopover, entry);
   gtk_widget_class_bind_template_child (widget_class, GbNewFilePopover, message);

@@ -16,6 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define G_LOG_DOMAIN "project-tree"
+
 #include <glib/gi18n.h>
 
 #include "gb-project-tree.h"
@@ -23,7 +25,7 @@
 #include "gb-project-tree-builder.h"
 #include "gb-project-tree-private.h"
 
-G_DEFINE_TYPE (GbProjectTree, gb_project_tree, GB_TYPE_TREE)
+G_DEFINE_TYPE (GbProjectTree, gb_project_tree, IDE_TYPE_TREE)
 
 enum {
   PROP_0,
@@ -42,13 +44,13 @@ gb_project_tree_new (void)
 IdeContext *
 gb_project_tree_get_context (GbProjectTree *self)
 {
-  GbTreeNode *root;
+  IdeTreeNode *root;
   GObject *item;
 
   g_return_val_if_fail (GB_IS_PROJECT_TREE (self), NULL);
 
-  if ((root = gb_tree_get_root (GB_TREE (self))) &&
-      (item = gb_tree_node_get_item (root)) &&
+  if ((root = ide_tree_get_root (IDE_TREE (self))) &&
+      (item = ide_tree_node_get_item (root)) &&
       IDE_IS_OBJECT (item))
     return ide_object_get_context (IDE_OBJECT (item));
 
@@ -61,16 +63,16 @@ gb_project_tree_set_context (GbProjectTree *self,
 {
   GtkTreeModel *model;
   GtkTreeIter iter;
-  GbTreeNode *root;
+  IdeTreeNode *root;
 
   g_return_if_fail (GB_IS_PROJECT_TREE (self));
   g_return_if_fail (!context || IDE_IS_CONTEXT (context));
 
   model = gtk_tree_view_get_model (GTK_TREE_VIEW (self));
 
-  root = gb_tree_node_new ();
-  gb_tree_node_set_item (root, G_OBJECT (context));
-  gb_tree_set_root (GB_TREE (self), root);
+  root = ide_tree_node_new ();
+  ide_tree_node_set_item (root, G_OBJECT (context));
+  ide_tree_set_root (IDE_TREE (self), root);
 
   /*
    * If we only have one toplevel item (underneath root), expand it.
@@ -78,11 +80,11 @@ gb_project_tree_set_context (GbProjectTree *self,
   if ((gtk_tree_model_iter_n_children (model, NULL) == 1) &&
       gtk_tree_model_get_iter_first (model, &iter))
     {
-      g_autoptr(GbTreeNode) node = NULL;
+      g_autoptr(IdeTreeNode) node = NULL;
 
       gtk_tree_model_get (model, &iter, 0, &node, -1);
       if (node != NULL)
-        gb_tree_node_expand (node, FALSE);
+        ide_tree_node_expand (node, FALSE);
     }
 }
 
@@ -165,7 +167,7 @@ gb_project_tree_class_init (GbProjectTreeClass *klass)
 static void
 gb_project_tree_init (GbProjectTree *self)
 {
-  GbTreeBuilder *builder;
+  IdeTreeBuilder *builder;
 
   self->settings = g_settings_new ("org.gnome.builder.project-tree");
 
@@ -177,7 +179,7 @@ gb_project_tree_init (GbProjectTree *self)
                    G_SETTINGS_BIND_DEFAULT);
 
   builder = gb_project_tree_builder_new ();
-  gb_tree_add_builder (GB_TREE (self), builder);
+  ide_tree_add_builder (IDE_TREE (self), builder);
 
   g_signal_connect (self,
                     "notify::selection",
@@ -207,6 +209,6 @@ gb_project_tree_set_show_ignored_files (GbProjectTree *self,
     {
       self->show_ignored_files = show_ignored_files;
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SHOW_IGNORED_FILES]);
-      gb_tree_rebuild (GB_TREE (self));
+      ide_tree_rebuild (IDE_TREE (self));
     }
 }

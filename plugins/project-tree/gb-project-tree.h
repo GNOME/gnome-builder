@@ -21,13 +21,11 @@
 
 #include <ide.h>
 
-#include "gb-tree.h"
-
 G_BEGIN_DECLS
 
 #define GB_TYPE_PROJECT_TREE (gb_project_tree_get_type())
 
-G_DECLARE_FINAL_TYPE (GbProjectTree, gb_project_tree, GB, PROJECT_TREE, GbTree)
+G_DECLARE_FINAL_TYPE (GbProjectTree, gb_project_tree, GB, PROJECT_TREE, IdeTree)
 
 GtkWidget  *gb_project_tree_new                    (void);
 void        gb_project_tree_set_context            (GbProjectTree *self,

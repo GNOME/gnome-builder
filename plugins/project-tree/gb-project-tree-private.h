@@ -19,13 +19,13 @@
 #ifndef GB_PROJECT_TREE_PRIVATE_H
 #define GB_PROJECT_TREE_PRIVATE_H
 
-#include "gb-tree.h"
+#include <ide.h>
 
 G_BEGIN_DECLS
 
 struct _GbProjectTree
 {
-  GbTree     parent_instance;
+  IdeTree     parent_instance;
 
   GSettings *settings;
 

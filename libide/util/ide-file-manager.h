@@ -1,4 +1,4 @@
-/* gb-project-tree-builder.h
+/* ide-file-manager.h
  *
  * Copyright (C) 2015 Christian Hergert <christian@hergert.me>
  *
@@ -16,19 +16,16 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GB_PROJECT_TREE_BUILDER_H
-#define GB_PROJECT_TREE_BUILDER_H
+#ifndef IDE_FILE_MANAGER_H
+#define IDE_FILE_MANAGER_H
 
-#include <ide.h>
+#include <gio/gio.h>
 
 G_BEGIN_DECLS
 
-#define GB_TYPE_PROJECT_TREE_BUILDER (gb_project_tree_builder_get_type())
-
-G_DECLARE_FINAL_TYPE (GbProjectTreeBuilder, gb_project_tree_builder, GB, PROJECT_TREE_BUILDER, IdeTreeBuilder)
-
-IdeTreeBuilder *gb_project_tree_builder_new (void);
+gboolean ide_file_manager_show (GFile   *file,
+                                GError **error);
 
 G_END_DECLS
 
-#endif /* GB_PROJECT_TREE_BUILDER_H */
+#endif /* IDE_FILE_MANAGER_H */

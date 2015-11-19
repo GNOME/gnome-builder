@@ -22,20 +22,19 @@
 #include "gb-project-file.h"
 #include "gb-project-tree.h"
 #include "gb-project-tree-builder.h"
-#include "gb-tree.h"
 
 struct _GbProjectTreeBuilder
 {
-  GbTreeBuilder  parent_instance;
+  IdeTreeBuilder  parent_instance;
 
-  GSettings     *file_chooser_settings;
+  GSettings      *file_chooser_settings;
 
-  guint          sort_directories_first : 1;
+  guint           sort_directories_first : 1;
 };
 
-G_DEFINE_TYPE (GbProjectTreeBuilder, gb_project_tree_builder, GB_TYPE_TREE_BUILDER)
+G_DEFINE_TYPE (GbProjectTreeBuilder, gb_project_tree_builder, IDE_TYPE_TREE_BUILDER)
 
-GbTreeBuilder *
+IdeTreeBuilder *
 gb_project_tree_builder_new (void)
 {
   return g_object_new (GB_TYPE_PROJECT_TREE_BUILDER, NULL);
@@ -43,20 +42,20 @@ gb_project_tree_builder_new (void)
 
 static void
 build_context (GbProjectTreeBuilder *self,
-               GbTreeNode           *node)
+               IdeTreeNode          *node)
 {
   g_autoptr(GbProjectFile) item = NULL;
   g_autoptr(GFileInfo) file_info = NULL;
   g_autofree gchar *name = NULL;
-  GbTreeNode *child;
+  IdeTreeNode *child;
   IdeContext *context;
   IdeVcs *vcs;
   GFile *workdir;
 
   g_return_if_fail (GB_IS_PROJECT_TREE_BUILDER (self));
-  g_return_if_fail (GB_IS_TREE_NODE (node));
+  g_return_if_fail (IDE_IS_TREE_NODE (node));
 
-  context = IDE_CONTEXT (gb_tree_node_get_item (node));
+  context = IDE_CONTEXT (ide_tree_node_get_item (node));
   vcs = ide_context_get_vcs (context);
   workdir = ide_vcs_get_working_directory (vcs);
 
@@ -73,37 +72,37 @@ build_context (GbProjectTreeBuilder *self,
                        "file-info", file_info,
                        NULL);
 
-  child = g_object_new (GB_TYPE_TREE_NODE,
+  child = g_object_new (IDE_TYPE_TREE_NODE,
                         "item", item,
                         "text", _("Files"),
                         "icon-name", "folder-symbolic",
                         NULL);
-  gb_tree_node_append (node, child);
+  ide_tree_node_append (node, child);
 }
 
 static IdeVcs *
-get_vcs (GbTreeNode *node)
+get_vcs (IdeTreeNode *node)
 {
-  GbTree *tree;
-  GbTreeNode *root;
+  IdeTree *tree;
+  IdeTreeNode *root;
   IdeContext *context;
 
-  g_assert (GB_IS_TREE_NODE (node));
+  g_assert (IDE_IS_TREE_NODE (node));
 
-  tree = gb_tree_node_get_tree (node);
-  root = gb_tree_get_root (tree);
-  context = IDE_CONTEXT (gb_tree_node_get_item (root));
+  tree = ide_tree_node_get_tree (node);
+  root = ide_tree_get_root (tree);
+  context = IDE_CONTEXT (ide_tree_node_get_item (root));
 
   return ide_context_get_vcs (context);
 }
 
 static gint
-compare_nodes_func (GbTreeNode *a,
-                    GbTreeNode *b,
-                    gpointer    user_data)
+compare_nodes_func (IdeTreeNode *a,
+                    IdeTreeNode *b,
+                    gpointer     user_data)
 {
-  GbProjectFile *file_a = GB_PROJECT_FILE (gb_tree_node_get_item (a));
-  GbProjectFile *file_b = GB_PROJECT_FILE (gb_tree_node_get_item (b));
+  GbProjectFile *file_a = GB_PROJECT_FILE (ide_tree_node_get_item (a));
+  GbProjectFile *file_b = GB_PROJECT_FILE (ide_tree_node_get_item (b));
   GbProjectTreeBuilder *self = user_data;
 
   if (self->sort_directories_first)
@@ -114,22 +113,22 @@ compare_nodes_func (GbTreeNode *a,
 
 static void
 build_file (GbProjectTreeBuilder *self,
-            GbTreeNode           *node)
+            IdeTreeNode          *node)
 {
   g_autoptr(GFileEnumerator) enumerator = NULL;
   GbProjectFile *project_file;
   gpointer file_info_ptr;
   IdeVcs *vcs;
   GFile *file;
-  GbTree *tree;
+  IdeTree *tree;
   gboolean show_ignored_files;
 
   g_return_if_fail (GB_IS_PROJECT_TREE_BUILDER (self));
-  g_return_if_fail (GB_IS_TREE_NODE (node));
+  g_return_if_fail (IDE_IS_TREE_NODE (node));
 
-  project_file = GB_PROJECT_FILE (gb_tree_node_get_item (node));
+  project_file = GB_PROJECT_FILE (ide_tree_node_get_item (node));
 
-  tree = gb_tree_builder_get_tree (GB_TREE_BUILDER (self));
+  tree = ide_tree_builder_get_tree (IDE_TREE_BUILDER (self));
   show_ignored_files = gb_project_tree_get_show_ignored_files (GB_PROJECT_TREE (tree));
 
   vcs = get_vcs (node);
@@ -159,7 +158,7 @@ build_file (GbProjectTreeBuilder *self,
       g_autoptr(GFileInfo) item_file_info = file_info_ptr;
       g_autoptr(GFile) item_file = NULL;
       g_autoptr(GbProjectFile) item = NULL;
-      GbTreeNode *child;
+      IdeTreeNode *child;
       const gchar *name;
       const gchar *display_name;
       const gchar *icon_name;
@@ -177,30 +176,30 @@ build_file (GbProjectTreeBuilder *self,
       display_name = gb_project_file_get_display_name (item);
       icon_name = gb_project_file_get_icon_name (item);
 
-      child = g_object_new (GB_TYPE_TREE_NODE,
+      child = g_object_new (IDE_TYPE_TREE_NODE,
                             "icon-name", icon_name,
                             "text", display_name,
                             "item", item,
                             "use-dim-label", ignored,
                             NULL);
 
-      gb_tree_node_insert_sorted (node, child, compare_nodes_func, self);
+      ide_tree_node_insert_sorted (node, child, compare_nodes_func, self);
 
       if (g_file_info_get_file_type (item_file_info) == G_FILE_TYPE_DIRECTORY)
-        gb_tree_node_set_children_possible (child, TRUE);
+        ide_tree_node_set_children_possible (child, TRUE);
     }
 }
 
 static void
-gb_project_tree_builder_build_node (GbTreeBuilder *builder,
-                                    GbTreeNode    *node)
+gb_project_tree_builder_build_node (IdeTreeBuilder *builder,
+                                    IdeTreeNode    *node)
 {
   GbProjectTreeBuilder *self = (GbProjectTreeBuilder *)builder;
   GObject *item;
 
   g_return_if_fail (GB_IS_PROJECT_TREE_BUILDER (self));
 
-  item = gb_tree_node_get_item (node);
+  item = ide_tree_node_get_item (node);
 
   if (IDE_IS_CONTEXT (item))
     build_context (self, node);
@@ -265,9 +264,9 @@ populate_mime_handlers (GMenu         *menu,
 }
 
 static void
-gb_project_tree_builder_node_popup (GbTreeBuilder *builder,
-                                    GbTreeNode    *node,
-                                    GMenu         *menu)
+gb_project_tree_builder_node_popup (IdeTreeBuilder *builder,
+                                    IdeTreeNode    *node,
+                                    GMenu          *menu)
 {
   GtkApplication *app;
   GObject *item;
@@ -277,11 +276,11 @@ gb_project_tree_builder_node_popup (GbTreeBuilder *builder,
   GFile *file;
 
   g_assert (GB_IS_PROJECT_TREE_BUILDER (builder));
-  g_assert (GB_IS_TREE_NODE (node));
+  g_assert (IDE_IS_TREE_NODE (node));
   g_assert (G_IS_MENU (menu));
 
   app = GTK_APPLICATION (g_application_get_default ());
-  item = gb_tree_node_get_item (node);
+  item = ide_tree_node_get_item (node);
 
   if (GB_IS_PROJECT_FILE (item))
     {
@@ -328,19 +327,19 @@ gb_project_tree_builder_node_popup (GbTreeBuilder *builder,
 }
 
 static gboolean
-gb_project_tree_builder_node_activated (GbTreeBuilder *builder,
-                                        GbTreeNode    *node)
+gb_project_tree_builder_node_activated (IdeTreeBuilder *builder,
+                                        IdeTreeNode    *node)
 {
   GObject *item;
 
   g_assert (GB_IS_PROJECT_TREE_BUILDER (builder));
 
-  item = gb_tree_node_get_item (node);
+  item = ide_tree_node_get_item (node);
 
   if (GB_IS_PROJECT_FILE (item))
     {
       GtkWidget *workbench;
-      GbTree *tree;
+      IdeTree *tree;
       GFile *file;
 
       if (gb_project_file_get_is_directory (GB_PROJECT_FILE (item)))
@@ -350,12 +349,12 @@ gb_project_tree_builder_node_activated (GbTreeBuilder *builder,
       if (!file)
         goto failure;
 
-      tree = gb_tree_node_get_tree (node);
+      tree = ide_tree_node_get_tree (node);
       if (!tree)
         goto failure;
 
       workbench = gtk_widget_get_ancestor (GTK_WIDGET (tree), IDE_TYPE_WORKBENCH);
-      ide_workbench_open_async (IDE_WORKBENCH (workbench), &file, 1, NULL, NULL, NULL);
+      ide_workbench_open_files_async (IDE_WORKBENCH (workbench), &file, 1, NULL, NULL, NULL);
 
       return TRUE;
     }
@@ -369,7 +368,7 @@ gb_project_tree_builder_rebuild (GSettings            *settings,
                                  const gchar          *key,
                                  GbProjectTreeBuilder *self)
 {
-  GbTree *tree;
+  IdeTree *tree;
   gboolean sort_directories_first;
 
   g_assert (G_IS_SETTINGS (settings));
@@ -380,8 +379,8 @@ gb_project_tree_builder_rebuild (GSettings            *settings,
   if (sort_directories_first != self->sort_directories_first)
     {
       self->sort_directories_first = sort_directories_first;
-      if ((tree = gb_tree_builder_get_tree (GB_TREE_BUILDER (self))))
-        gb_tree_rebuild (tree);
+      if ((tree = ide_tree_builder_get_tree (IDE_TREE_BUILDER (self))))
+        ide_tree_rebuild (tree);
     }
 }
 
@@ -399,7 +398,7 @@ static void
 gb_project_tree_builder_class_init (GbProjectTreeBuilderClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  GbTreeBuilderClass *tree_builder_class = GB_TREE_BUILDER_CLASS (klass);
+  IdeTreeBuilderClass *tree_builder_class = IDE_TREE_BUILDER_CLASS (klass);
 
   object_class->finalize = gb_project_tree_builder_finalize;
 
