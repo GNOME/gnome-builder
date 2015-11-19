@@ -191,29 +191,24 @@ ide_editor_perspective_finalize (GObject *object)
 }
 
 static void
-ide_editor_perspective_get_property (GObject    *object,
-                                     guint       prop_id,
-                                     GValue     *value,
-                                     GParamSpec *pspec)
+ide_editor_perspective_add (GtkContainer *container,
+                            GtkWidget    *widget)
 {
-  switch (prop_id)
-    {
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-    }
-}
+  IdeEditorPerspective *self = (IdeEditorPerspective *)container;
 
-static void
-ide_editor_perspective_set_property (GObject      *object,
-                                     guint         prop_id,
-                                     const GValue *value,
-                                     GParamSpec   *pspec)
-{
-  switch (prop_id)
+  g_assert (IDE_IS_EDITOR_PERSPECTIVE (self));
+  g_assert (GTK_IS_WIDGET (widget));
+
+  if (IDE_IS_LAYOUT_VIEW (widget))
     {
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      GtkWidget *last_focus;
+
+      last_focus = ide_layout_grid_get_last_focus (self->grid);
+      gtk_container_add (GTK_CONTAINER (last_focus), widget);
+      return;
     }
+
+  GTK_CONTAINER_CLASS (ide_editor_perspective_parent_class)->add (container, widget);
 }
 
 static void
@@ -221,10 +216,11 @@ ide_editor_perspective_class_init (IdeEditorPerspectiveClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+  GtkContainerClass *container_class = GTK_CONTAINER_CLASS (klass);
 
   object_class->finalize = ide_editor_perspective_finalize;
-  object_class->get_property = ide_editor_perspective_get_property;
-  object_class->set_property = ide_editor_perspective_set_property;
+
+  container_class->add = ide_editor_perspective_add;
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/ui/ide-editor-perspective.ui");
   gtk_widget_class_bind_template_child (widget_class, IdeEditorPerspective, grid);
@@ -286,10 +282,23 @@ ide_editor_perspective_get_id (IdePerspective *perspective)
 }
 
 static void
+ide_editor_perspective_views_foreach (IdePerspective *perspective,
+                                      GtkCallback     callback,
+                                      gpointer        user_data)
+{
+  IdeEditorPerspective *self = (IdeEditorPerspective *)perspective;
+
+  g_assert (IDE_IS_EDITOR_PERSPECTIVE (self));
+
+  ide_layout_grid_foreach_view (self->grid, callback, user_data);
+}
+
+static void
 ide_perspective_iface_init (IdePerspectiveInterface *iface)
 {
   iface->get_id = ide_editor_perspective_get_id;
   iface->get_title = ide_editor_perspective_get_title;
   iface->get_titlebar = ide_editor_perspective_get_titlebar;
   iface->get_icon_name = ide_editor_perspective_get_icon_name;
+  iface->views_foreach = ide_editor_perspective_views_foreach;
 }
