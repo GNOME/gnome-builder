@@ -118,6 +118,8 @@ libide_1_0_la_public_sources = \
 	ide-log.c \
 	ide-log.h \
 	ide-macros.h \
+	ide-menu-extension.c \
+	ide-menu-extension.h \
 	ide-object.c \
 	ide-object.h \
 	ide-pattern-spec.c \

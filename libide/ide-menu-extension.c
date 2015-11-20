@@ -18,13 +18,13 @@
  * along with gb. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "gb-menu-extension.h"
+#include "ide-menu-extension.h"
 
 #include <string.h>
 
 static guint last_merge_id = 0;
 
-struct _GbMenuExtension
+struct _IdeMenuExtension
 {
 	GObject parent_instance;
 
@@ -39,31 +39,31 @@ enum
 	PROP_MENU
 };
 
-G_DEFINE_TYPE (GbMenuExtension, gb_menu_extension, G_TYPE_OBJECT)
+G_DEFINE_TYPE (IdeMenuExtension, ide_menu_extension, G_TYPE_OBJECT)
 
 static void
-gb_menu_extension_dispose (GObject *object)
+ide_menu_extension_dispose (GObject *object)
 {
-	GbMenuExtension *menu = GB_MENU_EXTENSION (object);
+	IdeMenuExtension *menu = IDE_MENU_EXTENSION (object);
 
 	if (!menu->dispose_has_run)
 	{
-		gb_menu_extension_remove_items (menu);
+		ide_menu_extension_remove_items (menu);
 		menu->dispose_has_run = TRUE;
 	}
 
 	g_clear_object (&menu->menu);
 
-	G_OBJECT_CLASS (gb_menu_extension_parent_class)->dispose (object);
+	G_OBJECT_CLASS (ide_menu_extension_parent_class)->dispose (object);
 }
 
 static void
-gb_menu_extension_get_property (GObject    *object,
+ide_menu_extension_get_property (GObject    *object,
                                 guint       prop_id,
                                 GValue     *value,
                                 GParamSpec *pspec)
 {
-	GbMenuExtension *menu = GB_MENU_EXTENSION (object);
+	IdeMenuExtension *menu = IDE_MENU_EXTENSION (object);
 
 	switch (prop_id)
 	{
@@ -77,12 +77,12 @@ gb_menu_extension_get_property (GObject    *object,
 }
 
 static void
-gb_menu_extension_set_property (GObject     *object,
+ide_menu_extension_set_property (GObject     *object,
                                    guint         prop_id,
                                    const GValue *value,
                                    GParamSpec   *pspec)
 {
-	GbMenuExtension *menu = GB_MENU_EXTENSION (object);
+	IdeMenuExtension *menu = IDE_MENU_EXTENSION (object);
 
 	switch (prop_id)
 	{
@@ -96,13 +96,13 @@ gb_menu_extension_set_property (GObject     *object,
 }
 
 static void
-gb_menu_extension_class_init (GbMenuExtensionClass *klass)
+ide_menu_extension_class_init (IdeMenuExtensionClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-	object_class->dispose = gb_menu_extension_dispose;
-	object_class->get_property = gb_menu_extension_get_property;
-	object_class->set_property = gb_menu_extension_set_property;
+	object_class->dispose = ide_menu_extension_dispose;
+	object_class->get_property = ide_menu_extension_get_property;
+	object_class->set_property = ide_menu_extension_set_property;
 
 	g_object_class_install_property (object_class,
 	                                 PROP_MENU,
@@ -116,19 +116,19 @@ gb_menu_extension_class_init (GbMenuExtensionClass *klass)
 }
 
 static void
-gb_menu_extension_init (GbMenuExtension *menu)
+ide_menu_extension_init (IdeMenuExtension *menu)
 {
 	menu->merge_id = ++last_merge_id;
 }
 
-GbMenuExtension *
-gb_menu_extension_new (GMenu *menu)
+IdeMenuExtension *
+ide_menu_extension_new (GMenu *menu)
 {
-	return g_object_new (GB_TYPE_MENU_EXTENSION, "menu", menu, NULL);
+	return g_object_new (IDE_TYPE_MENU_EXTENSION, "menu", menu, NULL);
 }
 
-GbMenuExtension *
-gb_menu_extension_new_for_section (GMenu       *menu,
+IdeMenuExtension *
+ide_menu_extension_new_for_section (GMenu       *menu,
                                    const gchar *section)
 {
 	guint n_items;
@@ -166,7 +166,7 @@ gb_menu_extension_new_for_section (GMenu       *menu,
 				if (!G_IS_MENU (section_menu))
 					continue;
 
-				return g_object_new (GB_TYPE_MENU_EXTENSION, "menu", section_menu, NULL);
+				return g_object_new (IDE_TYPE_MENU_EXTENSION, "menu", section_menu, NULL);
 			}
 		}
 	}
@@ -179,10 +179,10 @@ gb_menu_extension_new_for_section (GMenu       *menu,
 }
 
 void
-gb_menu_extension_append_menu_item (GbMenuExtension *menu,
+ide_menu_extension_append_menu_item (IdeMenuExtension *menu,
                                     GMenuItem       *item)
 {
-	g_return_if_fail (GB_IS_MENU_EXTENSION (menu));
+	g_return_if_fail (IDE_IS_MENU_EXTENSION (menu));
 	g_return_if_fail (G_IS_MENU_ITEM (item));
 
 	if (menu->menu != NULL)
@@ -193,10 +193,10 @@ gb_menu_extension_append_menu_item (GbMenuExtension *menu,
 }
 
 void
-gb_menu_extension_prepend_menu_item (GbMenuExtension *menu,
+ide_menu_extension_prepend_menu_item (IdeMenuExtension *menu,
                                      GMenuItem       *item)
 {
-	g_return_if_fail (GB_IS_MENU_EXTENSION (menu));
+	g_return_if_fail (IDE_IS_MENU_EXTENSION (menu));
 	g_return_if_fail (G_IS_MENU_ITEM (item));
 
 	if (menu->menu != NULL)
@@ -207,11 +207,11 @@ gb_menu_extension_prepend_menu_item (GbMenuExtension *menu,
 }
 
 void
-gb_menu_extension_remove_items (GbMenuExtension *menu)
+ide_menu_extension_remove_items (IdeMenuExtension *menu)
 {
 	gint i, n_items;
 
-	g_return_if_fail (GB_IS_MENU_EXTENSION (menu));
+	g_return_if_fail (IDE_IS_MENU_EXTENSION (menu));
 
 	n_items = g_menu_model_get_n_items (G_MENU_MODEL (menu->menu));
 	i = 0;
