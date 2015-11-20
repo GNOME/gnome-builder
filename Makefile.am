@@ -76,6 +76,7 @@ run:
 	GB_IN_TREE_FONTS=1 \
 	GI_TYPELIB_PATH="libide:src:$(GI_TYPELIB_PATH)" \
 	GOBJECT_DEBUG=instance-count \
+	PATH=$(top_builddir)/src:${PATH} \
 	$(LIBTOOL) --mode=execute gdb -ex run --args src/gnome-builder -vvvv -s
 
 strace:
@@ -84,6 +85,7 @@ strace:
 	GB_IN_TREE_FONTS=1 \
 	GI_TYPELIB_PATH="libide:src:$(GI_TYPELIB_PATH)" \
 	GOBJECT_DEBUG=instance-count \
+	PATH=$(top_builddir)/src:${PATH} \
 	$(LIBTOOL) --mode=execute strace -T src/gnome-builder -vvvv -s
 
 debug:
@@ -93,6 +95,7 @@ debug:
 	GI_TYPELIB_PATH="libide:src:$(GI_TYPELIB_PATH)" \
 	G_DEBUG=fatal-criticals \
 	GOBJECT_DEBUG=instance-count \
+	PATH=$(top_builddir)/src:${PATH} \
 	$(LIBTOOL) --mode=execute gdb -ex run --args src/gnome-builder -vvvv -s
 
 valgrind:
@@ -102,6 +105,7 @@ valgrind:
 	GI_TYPELIB_PATH="libide:src:$(GI_TYPELIB_PATH)" \
 	G_DEBUG=fatal-criticals \
 	G_SLICE=always-malloc \
+	PATH=$(top_builddir)/src:${PATH} \
 	$(LIBTOOL) --mode=execute valgrind src/gnome-builder -vvvv -s
 
 -include $(top_srcdir)/git.mk

@@ -1,8 +1,6 @@
-bin_PROGRAMS = gnome-builder
+bin_PROGRAMS = gnome-builder gnome-builder-worker
 
-gnome_builder_SOURCES = main.c
-
-gnome_builder_CFLAGS = \
+AM_CPPFLAGS = \
 	-DPACKAGE_LOCALE_DIR=\""${datadir}/locale"\" \
 	$(LIBIDE_CFLAGS) \
 	$(DEBUG_CFLAGS) \
@@ -13,14 +11,18 @@ gnome_builder_CFLAGS = \
 	-I$(top_srcdir)/libide \
 	$(NULL)
 
-gnome_builder_LDADD = \
+gnome_builder_libs = \
 	$(LIBIDE_LIBS) \
-	$(top_builddir)/contrib/egg/libegg-private.la \
 	$(top_builddir)/data/icons/hicolor/libicons.la \
 	$(top_builddir)/libide/libide-1.0.la \
 	$(NULL)
 
-gnome_builder_LDFLAGS = -export-dynamic
+AM_LDFLAGS = -export-dynamic
 
+gnome_builder_SOURCES = main.c
+gnome_builder_LDADD = $(gnome_builder_libs)
+
+gnome_builder_worker_SOURCES = main.c
+gnome_builder_worker_LDADD = $(gnome_builder_libs)
 
 -include $(top_srcdir)/git.mk

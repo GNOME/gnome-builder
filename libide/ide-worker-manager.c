@@ -35,7 +35,6 @@ struct _IdeWorkerManager
 {
   GObject      parent_instance;
 
-  gchar       *argv0;
   GDBusServer *dbus_server;
   GHashTable  *plugin_name_to_worker;
 };
@@ -43,31 +42,6 @@ struct _IdeWorkerManager
 G_DEFINE_TYPE (IdeWorkerManager, ide_worker_manager, G_TYPE_OBJECT)
 
 EGG_DEFINE_COUNTER (instances, "IdeWorkerManager", "Instances", "Number of IdeWorkerManager instances")
-
-enum {
-  PROP_0,
-  PROP_ARGV0,
-  LAST_PROP
-};
-
-static GParamSpec *gParamSpecs [LAST_PROP];
-
-static void
-ide_worker_manager_set_argv0 (IdeWorkerManager *self,
-                              const gchar      *argv0)
-{
-  g_return_if_fail (IDE_IS_WORKER_MANAGER (self));
-
-  if (argv0 == NULL)
-    argv0 = "gnome-builder";
-
-  if (g_strcmp0 (argv0, self->argv0) != 0)
-    {
-      g_free (self->argv0);
-      self->argv0 = g_strdup (argv0);
-      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_ARGV0]);
-    }
-}
 
 static gboolean
 ide_worker_manager_new_connection_cb (IdeWorkerManager *self,
@@ -182,31 +156,11 @@ ide_worker_manager_finalize (GObject *object)
   IdeWorkerManager *self = (IdeWorkerManager *)object;
 
   g_clear_pointer (&self->plugin_name_to_worker, g_hash_table_unref);
-  g_clear_pointer (&self->argv0, g_free);
   g_clear_object (&self->dbus_server);
 
   G_OBJECT_CLASS (ide_worker_manager_parent_class)->finalize (object);
 
   EGG_COUNTER_DEC (instances);
-}
-
-static void
-ide_worker_manager_set_property (GObject      *object,
-                                 guint         prop_id,
-                                 const GValue *value,
-                                 GParamSpec   *pspec)
-{
-  IdeWorkerManager *self = IDE_WORKER_MANAGER (object);
-
-  switch (prop_id)
-    {
-    case PROP_ARGV0:
-      ide_worker_manager_set_argv0 (self, g_value_get_string (value));
-      break;
-
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-    }
 }
 
 static void
@@ -216,24 +170,12 @@ ide_worker_manager_class_init (IdeWorkerManagerClass *klass)
 
   object_class->constructed = ide_worker_manager_constructed;
   object_class->finalize = ide_worker_manager_finalize;
-  object_class->set_property = ide_worker_manager_set_property;
-
-  gParamSpecs [PROP_ARGV0] =
-    g_param_spec_string ("argv0",
-                         _("Argv0"),
-                         _("The path to the process to spawn."),
-                         "gnome-builder",
-                         (G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
-
-  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
 }
 
 static void
 ide_worker_manager_init (IdeWorkerManager *self)
 {
   EGG_COUNTER_INC (instances);
-
-  self->argv0 = g_strdup ("gnome-builder");
 
   self->plugin_name_to_worker =
     g_hash_table_new_full (g_str_hash,
@@ -261,7 +203,7 @@ ide_worker_manager_get_worker_process (IdeWorkerManager *self,
                                  g_dbus_server_get_client_address (self->dbus_server),
                                  g_dbus_server_get_guid (self->dbus_server));
 
-      worker_process = ide_worker_process_new (self->argv0, plugin_name, address);
+      worker_process = ide_worker_process_new ("gnome-builder-worker", plugin_name, address);
       g_hash_table_insert (self->plugin_name_to_worker, g_strdup (plugin_name), worker_process);
       ide_worker_process_run (worker_process);
     }
@@ -330,11 +272,7 @@ ide_worker_manager_get_worker_finish (IdeWorkerManager  *self,
 }
 
 IdeWorkerManager *
-ide_worker_manager_new (const gchar *argv0)
+ide_worker_manager_new (void)
 {
-  g_return_val_if_fail (argv0 != NULL, NULL);
-
-  return g_object_new (IDE_TYPE_WORKER_MANAGER,
-                       "argv0", argv0,
-                       NULL);
+  return g_object_new (IDE_TYPE_WORKER_MANAGER, NULL);
 }

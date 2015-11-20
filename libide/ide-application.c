@@ -291,6 +291,8 @@ ide_application_activate (GApplication *application)
 
   g_assert (IDE_IS_APPLICATION (self));
 
+  g_print ("~!!!! mode is %d\n", self->mode);
+
   if (self->mode == IDE_APPLICATION_MODE_PRIMARY)
     ide_application_activate_primary (self);
   else if (self->mode == IDE_APPLICATION_MODE_WORKER)
@@ -460,7 +462,7 @@ ide_application_get_worker_async (IdeApplication      *self,
     return NULL;
 
   if (self->worker_manager == NULL)
-    self->worker_manager = ide_worker_manager_new ("gnome-builder-worker");
+    self->worker_manager = ide_worker_manager_new ();
 
   task = g_task_new (self, cancellable, callback, user_data);
 
