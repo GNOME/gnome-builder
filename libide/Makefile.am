@@ -111,8 +111,6 @@ libide_1_0_la_public_sources = \
 	ide-layout-pane.h \
 	ide-layout-stack.c \
 	ide-layout-stack.h \
-	ide-layout-stack-actions.c \
-	ide-layout-stack-private.h \
 	ide-layout-view.c \
 	ide-layout-view.h \
 	ide-log.c \
@@ -290,6 +288,8 @@ libide_1_0_la_SOURCES = \
 	ide-extension-util.c \
 	ide-extension-util.h \
 	ide-internal.h \
+	ide-layout-stack-actions.c \
+	ide-layout-stack-private.h \
 	ide-line-change-gutter-renderer.c \
 	ide-line-change-gutter-renderer.h \
 	ide-line-diagnostics-gutter-renderer.c \
