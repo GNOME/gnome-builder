@@ -353,9 +353,6 @@ ide_workbench_addin_added (PeasExtensionSet *set,
   IDE_TRACE_MSG ("Loading workbench addin for %s",
                  peas_plugin_info_get_module_name (plugin_info));
 
-  g_print ("================ ADDED: %s\n",
-           peas_plugin_info_get_module_name (plugin_info));
-
   ide_workbench_addin_load (IDE_WORKBENCH_ADDIN (extension), self);
 }
 
