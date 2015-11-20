@@ -852,6 +852,7 @@ ide_editor_frame_init (IdeEditorFrame *self)
   g_settings_bind (settings, "draw-spaces", self->source_view, "draw-spaces", G_SETTINGS_BIND_DEFAULT);
   g_settings_bind (settings, "font-name", self->source_view, "font-name", G_SETTINGS_BIND_GET);
   g_settings_bind (settings, "highlight-current-line", self->source_view, "highlight-current-line", G_SETTINGS_BIND_GET);
+  g_settings_bind (settings, "overscroll", self->source_view, "overscroll", G_SETTINGS_BIND_GET);
   g_settings_bind (settings, "scroll-offset", self->source_view, "scroll-offset", G_SETTINGS_BIND_GET);
   g_settings_bind (settings, "show-grid-lines", self->source_view, "show-grid-lines", G_SETTINGS_BIND_GET);
   g_settings_bind (settings, "show-line-changes", self->source_view, "show-line-changes", G_SETTINGS_BIND_GET);
