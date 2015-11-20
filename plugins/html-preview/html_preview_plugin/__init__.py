@@ -24,11 +24,9 @@ from gettext import gettext as _
 import gi
 import os
 
-gi.require_version('Builder', '1.0')
 gi.require_version('Ide', '1.0')
 gi.require_version('WebKit2', '4.0')
 
-from gi.repository import Builder
 from gi.repository import GLib
 from gi.repository import Gio
 from gi.repository import Gtk
@@ -37,7 +35,7 @@ from gi.repository import Ide
 from gi.repository import WebKit2
 from gi.repository import Peas
 
-class HtmlPreviewData(GObject.Object, Builder.ApplicationAddin):
+class HtmlPreviewData(GObject.Object, Ide.ApplicationAddin):
     MARKDOWN_CSS = None
     MARKED_JS = None
     MARKDOWN_VIEW_JS = None
@@ -55,7 +53,7 @@ class HtmlPreviewData(GObject.Object, Builder.ApplicationAddin):
         return open(path, 'r').read()
 
 
-class HtmlPreviewAddin(GObject.Object, Builder.EditorViewAddin):
+class HtmlPreviewAddin(GObject.Object, Ide.EditorViewAddin):
     def do_load(self, editor):
         self.menu = HtmlPreviewMenu(editor.get_menu())
 
@@ -75,14 +73,15 @@ class HtmlPreviewAddin(GObject.Object, Builder.EditorViewAddin):
     def preview_activated(self, editor):
         document = editor.get_document()
         view = HtmlPreviewView(document, visible=True)
-        stack = editor.get_ancestor(Builder.ViewStack)
+        stack = editor.get_ancestor(Ide.LayoutStack)
+        print (stack)
         stack.add(view)
 
 class HtmlPreviewMenu:
     exten = None
 
     def __init__(self, menu):
-        self.exten = Builder.MenuExtension.new_for_section(menu, 'preview-section')
+        self.exten = Ide.MenuExtension.new_for_section(menu, 'preview-section')
 
     def show(self):
         item = Gio.MenuItem.new(_("Preview as HTML"), 'view.preview-as-html')
@@ -91,7 +90,7 @@ class HtmlPreviewMenu:
     def hide(self):
         self.exten.remove_items()
 
-class HtmlPreviewView(Builder.View):
+class HtmlPreviewView(Ide.LayoutView):
     markdown = False
 
     def __init__(self, document, *args, **kwargs):
