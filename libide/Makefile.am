@@ -19,6 +19,9 @@ libide_1_0_la_public_sources = \
 	editor/ide-editor-view-addin.h \
 	editor/ide-editor-view.c \
 	editor/ide-editor-view.h \
+	fallback/ide-directory-build-system.c \
+	fallback/ide-directory-build-system.h \
+	fallback/ide-fallback-plugin.c \
 	git/ide-git-remote-callbacks.c \
 	git/ide-git-remote-callbacks.h \
 	git/ide-git-vcs.c \

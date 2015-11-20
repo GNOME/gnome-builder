@@ -17,12 +17,14 @@
  */
 
 #include <libpeas/peas.h>
-#include <ide.h>
 
+#include "ide-build-system.h"
 #include "ide-directory-build-system.h"
 
 void
-peas_register_types (PeasObjectModule *module)
+ide_fallback_register_types (PeasObjectModule *module)
 {
-  peas_object_module_register_extension_type (module, IDE_TYPE_BUILD_SYSTEM, IDE_TYPE_DIRECTORY_BUILD_SYSTEM);
+  peas_object_module_register_extension_type (module,
+                                              IDE_TYPE_BUILD_SYSTEM,
+                                              IDE_TYPE_DIRECTORY_BUILD_SYSTEM);
 }

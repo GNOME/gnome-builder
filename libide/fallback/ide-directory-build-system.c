@@ -116,7 +116,7 @@ ide_directory_build_system_class_init (IdeDirectoryBuildSystemClass *klass)
                          "Project File",
                          "The path of the project file.",
                          G_TYPE_FILE,
-                         (G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS));
+                         (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, LAST_PROP, properties);
 }

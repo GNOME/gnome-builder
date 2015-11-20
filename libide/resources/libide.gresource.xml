@@ -65,4 +65,8 @@
   <gresource prefix="/org/gnome/builder/plugins/editor">
     <file alias="editor.plugin">../editor/editor.plugin</file>
   </gresource>
+
+  <gresource prefix="/org/gnome/builder/plugins/fallback">
+    <file alias="editor.plugin">../fallback/fallback.plugin</file>
+  </gresource>
 </gresources>

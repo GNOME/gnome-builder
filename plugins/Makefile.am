@@ -5,8 +5,6 @@ SUBDIRS = \
 	c-pack \
 	ctags \
 	devhelp \
-	device-manager \
-	fallback \
 	file-search \
 	gnome-code-assistance \
 	html-completion \
@@ -22,6 +20,11 @@ SUBDIRS = \
 	vala-pack \
 	xml-pack \
 	$(NULL)
+
+# XXX: device-manager
+# device-manager is disabled because it didn't do anything yet and
+# we want to write it as a perspective with device management such
+# as listing apps, deploying, etc.
 
 EXTRA_DIST = Makefile.plugin
 

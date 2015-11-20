@@ -7,3 +7,4 @@ Copyright=Copyright © 2015 Christian Hergert
 Builtin=true
 Hidden=true
 X-Build-System-Priority=10000000
+Embedded=ide_fallback_register_types
