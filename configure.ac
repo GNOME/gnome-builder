@@ -426,7 +426,6 @@ AC_CONFIG_FILES([
 	libide/Makefile
 
 	plugins/Makefile
-	plugins/fallback/Makefile
 
 	data/Makefile
 	data/fonts/Makefile
