@@ -981,198 +981,6 @@ match_char_with_depth (GtkTextIter      *iter,
 }
 
 static gboolean
-iter_in_string (GtkTextIter *cursor,
-                GtkTextIter *str_start,
-                GtkTextIter *str_end,
-                const gchar *str,
-                gboolean     include_str_bounds)
-{
-  gint len;
-  gint cursor_offset;
-  gint slice_left_pos;
-  gint slice_right_pos;
-  gint slice_len;
-  gint cursor_pos;
-  gint str_pos;
-  gint end_iter_offset;
-  gint res_offset;
-  guint count;
-  g_autofree gchar *slice = NULL;
-  const gchar *slice_ptr;
-  const gchar *str_ptr;
-  GtkTextIter slice_left = *cursor;
-  GtkTextIter slice_right = *cursor;
-  GtkTextIter end_iter;
-  gboolean ret = FALSE;
-
-  g_return_val_if_fail (!ide_str_empty0 (str), FALSE);
-
-  len = g_utf8_strlen (str, -1);
-  cursor_offset = gtk_text_iter_get_offset (cursor);
-  slice_left_pos = MAX(0, cursor_offset - len);
-  gtk_text_iter_set_offset (&slice_left, slice_left_pos);
-
-  cursor_pos = cursor_offset - slice_left_pos;
-
-  gtk_text_buffer_get_end_iter (gtk_text_iter_get_buffer (cursor), &end_iter);
-  end_iter_offset = gtk_text_iter_get_offset (&end_iter);
-
-  slice_right_pos = MIN(end_iter_offset, cursor_offset + len);
-  gtk_text_iter_set_offset (&slice_right, slice_right_pos);
-
-  slice = gtk_text_iter_get_slice (&slice_left, &slice_right);
-  slice_len = slice_right_pos - slice_left_pos;
-
-  slice_ptr = slice;
-  for (count = 0; count < slice_len - len + 1; count++)
-    {
-      str_ptr = strstr (slice_ptr, str);
-      if (str_ptr == NULL)
-        {
-          ret = FALSE;
-          break;
-        }
-
-      str_pos = g_utf8_pointer_to_offset (slice, str_ptr);
-
-      if ((!include_str_bounds && (str_pos < cursor_pos && cursor_pos < str_pos + len)) ||
-          (include_str_bounds && (str_pos <= cursor_pos && cursor_pos <= str_pos + len)))
-        {
-          ret = TRUE;
-          break;
-        }
-
-      slice_ptr = g_utf8_next_char (slice_ptr);
-    }
-
-  if (ret)
-    {
-      res_offset = slice_left_pos + str_pos + count;
-
-      if (str_start != NULL)
-        {
-          *str_start = *cursor;
-          gtk_text_iter_set_offset (str_start, res_offset);
-        }
-
-      if (str_end != NULL)
-        {
-          *str_end = *cursor;
-          gtk_text_iter_set_offset (str_end, res_offset + len);
-        }
-    }
-
-  return ret;
-}
-
-static gboolean
-find_chars_backward (GtkTextIter      *cursor,
-                     GtkTextIter      *end,
-                     const gchar      *str,
-                     gboolean          only_at_start)
-{
-  const gchar *base_str;
-  const gchar *limit;
-  GtkTextIter base_cursor;
-
-  g_return_val_if_fail (!ide_str_empty0 (str), FALSE);
-
-  if (!gtk_text_iter_backward_char (cursor))
-    return FALSE;
-
-  limit = str;
-  base_str = str = str + strlen (str) - 1;
-  base_cursor = *cursor;
-  do
-    {
-      *cursor = base_cursor;
-      do
-        {
-          if (gtk_text_iter_get_char (cursor) != g_utf8_get_char (str))
-            {
-              if (only_at_start)
-                return FALSE;
-              else
-                break;
-            }
-
-          str = g_utf8_find_prev_char (limit, str);
-          if (str == NULL)
-            {
-              if (end)
-                {
-                  *end = base_cursor;
-                  gtk_text_iter_forward_char (end);
-                }
-
-              return TRUE;
-            }
-
-        } while ((gtk_text_iter_backward_char (cursor)));
-
-      if (gtk_text_iter_is_start (cursor))
-        return FALSE;
-      else
-        str = base_str;
-
-    } while (gtk_text_iter_backward_char (&base_cursor));
-
-  return FALSE;
-}
-
-static gboolean
-find_chars_forward (GtkTextIter *cursor,
-                    GtkTextIter *end,
-                    const gchar *str,
-                    gboolean     only_at_start)
-{
-  const gchar *base_str;
-  const gchar *limit;
-  GtkTextIter base_cursor;
-
-  g_return_val_if_fail (!ide_str_empty0 (str), FALSE);
-
-  limit = str + strlen (str);
-  base_str = str;
-  base_cursor = *cursor;
-  do
-    {
-      *cursor = base_cursor;
-      do
-        {
-          if (gtk_text_iter_get_char (cursor) != g_utf8_get_char (str))
-            {
-              if (only_at_start)
-                return FALSE;
-              else
-                break;
-            }
-
-          str = g_utf8_find_next_char (str, limit);
-          if (str == NULL)
-            {
-              if (end)
-                {
-                  *end = *cursor;
-                  gtk_text_iter_forward_char (end);
-                }
-
-              *cursor = base_cursor;
-              return TRUE;
-            }
-
-        } while ((gtk_text_iter_forward_char (cursor)));
-
-      if (gtk_text_iter_is_end (cursor))
-        return FALSE;
-      else
-        str = base_str;
-    } while (gtk_text_iter_forward_char (&base_cursor));
-
-  return FALSE;
-}
-
-static gboolean
 find_char_predicate (gunichar ch,
                      gpointer data)
 {
@@ -1213,17 +1021,17 @@ macro_conditionals_qualify_iter (GtkTextIter *insert,
                                  GtkTextIter *cond_end,
                                  gboolean     include_str_bounds)
 {
-  if (iter_in_string (insert, cond_start, cond_end, "#ifdef", include_str_bounds))
+  if (_ide_vim_iter_in_string (insert, "#ifdef", cond_start, cond_end, include_str_bounds))
     return MACRO_COND_IFDEF;
-  else if (iter_in_string (insert, cond_start, cond_end, "#ifndef", include_str_bounds))
+  else if (_ide_vim_iter_in_string (insert, "#ifndef", cond_start, cond_end, include_str_bounds))
     return MACRO_COND_IFNDEF;
-  else if (iter_in_string (insert, cond_start, cond_end, "#if", include_str_bounds))
+  else if (_ide_vim_iter_in_string (insert, "#if", cond_start, cond_end, include_str_bounds))
     return MACRO_COND_IF;
-  else if (iter_in_string (insert, cond_start, cond_end, "#elif", include_str_bounds))
+  else if (_ide_vim_iter_in_string (insert, "#elif", cond_start, cond_end, include_str_bounds))
     return MACRO_COND_ELIF;
-  else if (iter_in_string (insert, cond_start, cond_end, "#else", include_str_bounds))
+  else if (_ide_vim_iter_in_string (insert, "#else", cond_start, cond_end, include_str_bounds))
     return MACRO_COND_ELSE;
-  else if (iter_in_string (insert, cond_start, cond_end, "#endif", include_str_bounds))
+  else if (_ide_vim_iter_in_string (insert, "#endif", cond_start, cond_end, include_str_bounds))
     return MACRO_COND_ENDIF;
   else
     return MACRO_COND_NONE;
@@ -1439,7 +1247,7 @@ match_comments (GtkTextIter *insert,
 
   if (comment_start && !gtk_text_iter_is_end (&cursor))
     {
-      if (find_chars_forward (&cursor, NULL, "*/", FALSE))
+      if (_ide_vim_find_chars_forward (&cursor, NULL, "*/", FALSE))
         {
           gtk_text_iter_forward_char (&cursor);
           *insert = cursor;
@@ -1449,7 +1257,7 @@ match_comments (GtkTextIter *insert,
     }
   else if (!comment_start && !gtk_text_iter_is_start (&cursor))
     {
-      if (find_chars_backward (&cursor, NULL, "/*", FALSE))
+      if (_ide_vim_find_chars_backward (&cursor, NULL, "/*", FALSE))
         {
           *insert = cursor;
 
@@ -2598,11 +2406,11 @@ find_html_tag (GtkTextIter      *iter,
 
       return tag;
     }
-  else if (find_chars_forward (&cursor, &end, "!--", TRUE))
+  else if (_ide_vim_find_chars_forward (&cursor, &end, "!--", TRUE))
     {
       tag->kind = HTML_TAG_KIND_COMMENT;
       cursor = end;
-      if (find_chars_forward (&cursor, &end, "-->", FALSE))
+      if (_ide_vim_find_chars_forward (&cursor, &end, "-->", FALSE))
         {
           tag->end = end;
           if (direction == GTK_DIR_RIGHT)

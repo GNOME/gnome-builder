@@ -43,6 +43,19 @@ gboolean _ide_vim_iter_backward_sentence_start  (GtkTextIter          *iter);
 gboolean _ide_vim_iter_forward_sentence_end     (GtkTextIter          *iter);
 gboolean _ide_vim_iter_backward_WORD_end        (GtkTextIter          *iter);
 gboolean _ide_vim_iter_backward_word_end        (GtkTextIter          *iter);
+gboolean _ide_vim_iter_in_string                (GtkTextIter          *iter,
+                                                 const gchar          *str,
+                                                 GtkTextIter          *str_start,
+                                                 GtkTextIter          *str_end,
+                                                 gboolean              include_str_bounds);
+gboolean _ide_vim_find_chars_backward           (GtkTextIter          *iter,
+                                                 GtkTextIter          *end,
+                                                 const gchar          *str,
+                                                 gboolean              only_at_start);
+gboolean _ide_vim_find_chars_forward            (GtkTextIter          *iter,
+                                                 GtkTextIter          *end,
+                                                 const gchar          *str,
+                                                 gboolean              only_at_start);
 
 G_END_DECLS
 

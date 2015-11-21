@@ -16,9 +16,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <string.h>
+
 #include <gtk/gtk.h>
 
 #include "ide-debug.h"
+#include "ide-macros.h"
 #include "ide-vim-iter.h"
 
 typedef enum
@@ -519,3 +522,234 @@ _ide_vim_iter_backward_find_char (GtkTextIter          *iter,
 
   return FALSE;
 }
+
+/**
+ * ide_vim_iter_in_string:
+ * @iter: A #GtkTextIter indicating the position to check for.
+ * @str: A C type string.
+ * @str_start: (out): A #GtkTextIter returning the str start iter (if found).
+ * @str_end: (out): A #GtkTextIter returning the str end iter (if found).
+ * @include_str_bounds: %TRUE if we take into account the str limits as possible @iter positions.
+ *
+ * Check if @iter position in the buffer is part of @str.
+ *
+ * Returns: %TRUE if case of succes, %FALSE otherwise.
+ */
+gboolean
+_ide_vim_iter_in_string (GtkTextIter *iter,
+                         const gchar *str,
+                         GtkTextIter *str_start,
+                         GtkTextIter *str_end,
+                         gboolean     include_str_bounds)
+{
+  gint len;
+  gint cursor_offset;
+  gint slice_left_pos;
+  gint slice_right_pos;
+  gint slice_len;
+  gint cursor_pos;
+  gint str_pos;
+  gint end_iter_offset;
+  gint res_offset;
+  guint count;
+  g_autofree gchar *slice = NULL;
+  const gchar *slice_ptr;
+  const gchar *str_ptr;
+  GtkTextIter slice_left = *iter;
+  GtkTextIter slice_right = *iter;
+  GtkTextIter end_iter;
+  gboolean ret = FALSE;
+
+  g_return_val_if_fail (!ide_str_empty0 (str), FALSE);
+
+  len = g_utf8_strlen (str, -1);
+  cursor_offset = gtk_text_iter_get_offset (iter);
+  slice_left_pos = MAX(0, cursor_offset - len);
+  gtk_text_iter_set_offset (&slice_left, slice_left_pos);
+
+  cursor_pos = cursor_offset - slice_left_pos;
+
+  gtk_text_buffer_get_end_iter (gtk_text_iter_get_buffer (iter), &end_iter);
+  end_iter_offset = gtk_text_iter_get_offset (&end_iter);
+
+  slice_right_pos = MIN(end_iter_offset, cursor_offset + len);
+  gtk_text_iter_set_offset (&slice_right, slice_right_pos);
+
+  slice = gtk_text_iter_get_slice (&slice_left, &slice_right);
+  slice_len = slice_right_pos - slice_left_pos;
+
+  slice_ptr = slice;
+  for (count = 0; count < slice_len - len + 1; count++)
+    {
+      str_ptr = strstr (slice_ptr, str);
+      if (str_ptr == NULL)
+        {
+          ret = FALSE;
+          break;
+        }
+
+      str_pos = g_utf8_pointer_to_offset (slice, str_ptr);
+
+      if ((!include_str_bounds && (str_pos < cursor_pos && cursor_pos < str_pos + len)) ||
+          (include_str_bounds && (str_pos <= cursor_pos && cursor_pos <= str_pos + len)))
+        {
+          ret = TRUE;
+          break;
+        }
+
+      slice_ptr = g_utf8_next_char (slice_ptr);
+    }
+
+  if (ret)
+    {
+      res_offset = slice_left_pos + str_pos + count;
+
+      if (str_start != NULL)
+        {
+          *str_start = *iter;
+          gtk_text_iter_set_offset (str_start, res_offset);
+        }
+
+      if (str_end != NULL)
+        {
+          *str_end = *iter;
+          gtk_text_iter_set_offset (str_end, res_offset + len);
+        }
+    }
+
+  return ret;
+}
+
+/**
+ * _ide_vim_find_chars_backward:
+ * @iter: A #GtkTextIter indicating the start position to check for.
+ * end: (out): A #GtkTextIter returning the str end iter (if found).
+ * @str: A C type string.
+ * @only_at_start: %TRUE if the searched @str string should be constrained to start @iter position.
+ *
+ * Search backward for a @str string, starting at @iter position.
+ * In case of succes, @iter is updated to @str start position.
+ *
+ * Notice that for @str to be found, @iter need to be at least on the @str last char
+ *
+ * Returns: %TRUE if case of succes, %FALSE otherwise.
+ */
+gboolean
+_ide_vim_find_chars_backward (GtkTextIter *iter,
+                              GtkTextIter *end,
+                              const gchar *str,
+                              gboolean     only_at_start)
+{
+  const gchar *base_str;
+  const gchar *limit;
+  GtkTextIter base_cursor;
+
+  g_return_val_if_fail (!ide_str_empty0 (str), FALSE);
+
+  if (!gtk_text_iter_backward_char (iter))
+    return FALSE;
+
+  limit = str;
+  base_str = str = str + strlen (str) - 1;
+  base_cursor = *iter;
+  do
+    {
+      *iter = base_cursor;
+      do
+        {
+          if (gtk_text_iter_get_char (iter) != g_utf8_get_char (str))
+            {
+              if (only_at_start)
+                return FALSE;
+              else
+                break;
+            }
+
+          str = g_utf8_find_prev_char (limit, str);
+          if (str == NULL)
+            {
+              if (end)
+                {
+                  *end = base_cursor;
+                  gtk_text_iter_forward_char (end);
+                }
+
+              return TRUE;
+            }
+
+        } while ((gtk_text_iter_backward_char (iter)));
+
+      if (gtk_text_iter_is_start (iter))
+        return FALSE;
+      else
+        str = base_str;
+
+    } while (gtk_text_iter_backward_char (&base_cursor));
+
+  return FALSE;
+}
+
+/**
+ * _ide_vim_find_chars_forward:
+ * @iter: A #GtkTextIter indicating the start position to check for.
+ * end: (out): A #GtkTextIter returning the str end iter (if found).
+ * @str: A C type string.
+ * @only_at_start: %TRUE if the searched @str string should be constrained to start @iter position.
+ *
+ * Search forward for a @str string, starting at @iter position.
+ * In case of succes, @iter is updated to @str start position.
+ *
+ * Returns: %TRUE if case of succes, %FALSE otherwise.
+ */
+gboolean
+_ide_vim_find_chars_forward (GtkTextIter *iter,
+                             GtkTextIter *end,
+                             const gchar *str,
+                             gboolean     only_at_start)
+{
+  const gchar *base_str;
+  const gchar *limit;
+  GtkTextIter base_cursor;
+
+  g_return_val_if_fail (!ide_str_empty0 (str), FALSE);
+
+  limit = str + strlen (str);
+  base_str = str;
+  base_cursor = *iter;
+  do
+    {
+      *iter = base_cursor;
+      do
+        {
+          if (gtk_text_iter_get_char (iter) != g_utf8_get_char (str))
+            {
+              if (only_at_start)
+                return FALSE;
+              else
+                break;
+            }
+
+          str = g_utf8_find_next_char (str, limit);
+          if (str == NULL)
+            {
+              if (end)
+                {
+                  *end = *iter;
+                  gtk_text_iter_forward_char (end);
+                }
+
+              *iter = base_cursor;
+              return TRUE;
+            }
+
+        } while ((gtk_text_iter_forward_char (iter)));
+
+      if (gtk_text_iter_is_end (iter))
+        return FALSE;
+      else
+        str = base_str;
+    } while (gtk_text_iter_forward_char (&base_cursor));
+
+  return FALSE;
+}
+
