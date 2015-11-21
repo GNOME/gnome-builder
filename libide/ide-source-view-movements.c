@@ -26,7 +26,7 @@
 #include "ide-cairo.h"
 #include "ide-source-iter.h"
 #include "ide-source-view-movements.h"
-#include "ide-vim-iter.h"
+#include "ide-text-iter.h"
 
 #define ANCHOR_BEGIN "SELECTION_ANCHOR_BEGIN"
 #define ANCHOR_END   "SELECTION_ANCHOR_END"
@@ -958,20 +958,20 @@ match_char_with_depth (GtkTextIter      *iter,
       if (string_mode)
         {
           gtk_text_iter_set_line_offset (&limit, 0);
-          ret = _ide_vim_iter_backward_find_char (iter, bracket_predicate, &state, &limit);
+          ret = _ide_text_iter_backward_find_char (iter, bracket_predicate, &state, &limit);
         }
       else
-        ret = _ide_vim_iter_backward_find_char (iter, bracket_predicate, &state, NULL);
+        ret = _ide_text_iter_backward_find_char (iter, bracket_predicate, &state, NULL);
     }
   else
     {
       if (string_mode)
         {
           gtk_text_iter_forward_to_line_end (&limit);
-          ret = _ide_vim_iter_forward_find_char (iter, bracket_predicate, &state, &limit);
+          ret = _ide_text_iter_forward_find_char (iter, bracket_predicate, &state, &limit);
         }
       else
-        ret = _ide_vim_iter_forward_find_char (iter, bracket_predicate, &state, NULL);
+        ret = _ide_text_iter_forward_find_char (iter, bracket_predicate, &state, NULL);
     }
 
   if (ret && !is_exclusive)
@@ -1021,17 +1021,17 @@ macro_conditionals_qualify_iter (GtkTextIter *insert,
                                  GtkTextIter *cond_end,
                                  gboolean     include_str_bounds)
 {
-  if (_ide_vim_iter_in_string (insert, "#ifdef", cond_start, cond_end, include_str_bounds))
+  if (_ide_text_iter_in_string (insert, "#ifdef", cond_start, cond_end, include_str_bounds))
     return MACRO_COND_IFDEF;
-  else if (_ide_vim_iter_in_string (insert, "#ifndef", cond_start, cond_end, include_str_bounds))
+  else if (_ide_text_iter_in_string (insert, "#ifndef", cond_start, cond_end, include_str_bounds))
     return MACRO_COND_IFNDEF;
-  else if (_ide_vim_iter_in_string (insert, "#if", cond_start, cond_end, include_str_bounds))
+  else if (_ide_text_iter_in_string (insert, "#if", cond_start, cond_end, include_str_bounds))
     return MACRO_COND_IF;
-  else if (_ide_vim_iter_in_string (insert, "#elif", cond_start, cond_end, include_str_bounds))
+  else if (_ide_text_iter_in_string (insert, "#elif", cond_start, cond_end, include_str_bounds))
     return MACRO_COND_ELIF;
-  else if (_ide_vim_iter_in_string (insert, "#else", cond_start, cond_end, include_str_bounds))
+  else if (_ide_text_iter_in_string (insert, "#else", cond_start, cond_end, include_str_bounds))
     return MACRO_COND_ELSE;
-  else if (_ide_vim_iter_in_string (insert, "#endif", cond_start, cond_end, include_str_bounds))
+  else if (_ide_text_iter_in_string (insert, "#endif", cond_start, cond_end, include_str_bounds))
     return MACRO_COND_ENDIF;
   else
     return MACRO_COND_NONE;
@@ -1247,7 +1247,7 @@ match_comments (GtkTextIter *insert,
 
   if (comment_start && !gtk_text_iter_is_end (&cursor))
     {
-      if (_ide_vim_find_chars_forward (&cursor, NULL, "*/", FALSE))
+      if (_ide_text_iter_find_chars_forward (&cursor, NULL, "*/", FALSE))
         {
           gtk_text_iter_forward_char (&cursor);
           *insert = cursor;
@@ -1257,7 +1257,7 @@ match_comments (GtkTextIter *insert,
     }
   else if (!comment_start && !gtk_text_iter_is_start (&cursor))
     {
-      if (_ide_vim_find_chars_backward (&cursor, NULL, "/*", FALSE))
+      if (_ide_text_iter_find_chars_backward (&cursor, NULL, "/*", FALSE))
         {
           *insert = cursor;
 
@@ -1304,7 +1304,7 @@ ide_source_view_movements_match_special (Movement *mv)
   if (!vim_percent_predicate (&mv->insert, start_char, NULL))
     {
 loop:
-      if (_ide_vim_iter_forward_find_char (&mv->insert, vim_percent_predicate, NULL, &limit))
+      if (_ide_text_iter_forward_find_char (&mv->insert, vim_percent_predicate, NULL, &limit))
         start_char = gtk_text_iter_get_char (&mv->insert);
       else
         {
@@ -1459,7 +1459,7 @@ ide_source_view_movements_next_word_end (Movement *mv)
 
   copy = mv->insert;
 
-  _ide_vim_iter_forward_word_end (&mv->insert);
+  _ide_text_iter_forward_word_end (&mv->insert);
 
   /* prefer an empty line before word */
   text_iter_forward_to_empty_line (&copy, &mv->insert);
@@ -1477,7 +1477,7 @@ ide_source_view_movements_next_full_word_end (Movement *mv)
 
   copy = mv->insert;
 
-  _ide_vim_iter_forward_WORD_end (&mv->insert);
+  _ide_text_iter_forward_WORD_end (&mv->insert);
 
   /* prefer an empty line before word */
   text_iter_forward_to_empty_line (&copy, &mv->insert);
@@ -1495,7 +1495,7 @@ ide_source_view_movements_next_word_start (Movement *mv)
 
   copy = mv->insert;
 
-  _ide_vim_iter_forward_word_start (&mv->insert);
+  _ide_text_iter_forward_word_start (&mv->insert);
 
   /* prefer an empty line before word */
   text_iter_forward_to_empty_line (&copy, &mv->insert);
@@ -1513,7 +1513,7 @@ ide_source_view_movements_next_full_word_start (Movement *mv)
 
   copy = mv->insert;
 
-  _ide_vim_iter_forward_WORD_start (&mv->insert);
+  _ide_text_iter_forward_WORD_start (&mv->insert);
 
   /* prefer an empty line before word */
   text_iter_forward_to_empty_line (&copy, &mv->insert);
@@ -1571,7 +1571,7 @@ ide_source_view_movements_previous_word_end (Movement *mv)
 
   copy = mv->insert;
 
-  _ide_vim_iter_backward_word_end (&mv->insert);
+  _ide_text_iter_backward_word_end (&mv->insert);
 
   /*
    * Vim treats an empty line as a word.
@@ -1595,7 +1595,7 @@ ide_source_view_movements_previous_full_word_end (Movement *mv)
 
   copy = mv->insert;
 
-  _ide_vim_iter_backward_WORD_end (&mv->insert);
+  _ide_text_iter_backward_WORD_end (&mv->insert);
 
   /*
    * Vim treats an empty line as a word.
@@ -1615,7 +1615,7 @@ ide_source_view_movements_previous_full_word_end (Movement *mv)
 static void
 ide_source_view_movements_paragraph_start (Movement *mv)
 {
-  _ide_vim_iter_backward_paragraph_start (&mv->insert);
+  _ide_text_iter_backward_paragraph_start (&mv->insert);
 
   if (mv->exclusive)
     {
@@ -1630,7 +1630,7 @@ ide_source_view_movements_paragraph_start (Movement *mv)
 static void
 ide_source_view_movements_paragraph_end (Movement *mv)
 {
-  _ide_vim_iter_forward_paragraph_end (&mv->insert);
+  _ide_text_iter_forward_paragraph_end (&mv->insert);
 
   if (mv->exclusive)
     {
@@ -1651,13 +1651,13 @@ ide_source_view_movements_paragraph_end (Movement *mv)
 static void
 ide_source_view_movements_sentence_start (Movement *mv)
 {
-  _ide_vim_iter_backward_sentence_start (&mv->insert);
+  _ide_text_iter_backward_sentence_start (&mv->insert);
 }
 
 static void
 ide_source_view_movements_sentence_end (Movement *mv)
 {
-  _ide_vim_iter_forward_sentence_end (&mv->insert);
+  _ide_text_iter_forward_sentence_end (&mv->insert);
 }
 
 static void
@@ -2368,10 +2368,10 @@ find_html_tag (GtkTextIter      *iter,
   g_return_val_if_fail (direction == GTK_DIR_LEFT || direction == GTK_DIR_RIGHT, NULL);
 
   if (direction == GTK_DIR_LEFT)
-    ret = _ide_vim_iter_backward_find_char (iter, html_tag_predicate, GUINT_TO_POINTER ('<'), NULL);
+    ret = _ide_text_iter_backward_find_char (iter, html_tag_predicate, GUINT_TO_POINTER ('<'), NULL);
   else
     ret = (gtk_text_iter_get_char (iter) == '<') ||
-          _ide_vim_iter_forward_find_char (iter, html_tag_predicate, GUINT_TO_POINTER ('<'), NULL);
+          _ide_text_iter_forward_find_char (iter, html_tag_predicate, GUINT_TO_POINTER ('<'), NULL);
 
   if (!ret)
     return NULL;
@@ -2406,11 +2406,11 @@ find_html_tag (GtkTextIter      *iter,
 
       return tag;
     }
-  else if (_ide_vim_find_chars_forward (&cursor, &end, "!--", TRUE))
+  else if (_ide_text_iter_find_chars_forward (&cursor, &end, "!--", TRUE))
     {
       tag->kind = HTML_TAG_KIND_COMMENT;
       cursor = end;
-      if (_ide_vim_find_chars_forward (&cursor, &end, "-->", FALSE))
+      if (_ide_text_iter_find_chars_forward (&cursor, &end, "-->", FALSE))
         {
           tag->end = end;
           if (direction == GTK_DIR_RIGHT)

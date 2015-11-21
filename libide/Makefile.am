@@ -226,8 +226,8 @@ libide_1_0_la_SOURCES = \
 	ide-source-view-capture.h \
 	ide-source-view-movements.c \
 	ide-source-view-movements.h \
-	ide-vim-iter.c \
-	ide-vim-iter.h \
+	ide-text-iter.c \
+	ide-text-iter.h \
 	ide-worker-manager.c \
 	ide-worker-manager.h \
 	ide-worker-process.c \

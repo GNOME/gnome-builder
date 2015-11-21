@@ -1,4 +1,4 @@
-/* ide-vim-iter.c
+/* ide-text-iter.c
  *
  * Copyright (C) 2015 Christian Hergert <christian@hergert.me>
  *
@@ -22,7 +22,7 @@
 
 #include "ide-debug.h"
 #include "ide-macros.h"
-#include "ide-vim-iter.h"
+#include "ide-text-iter.h"
 
 typedef enum
 {
@@ -40,7 +40,7 @@ enum
 };
 
 static int
-_ide_vim_word_classify (gunichar ch)
+_ide_text_word_classify (gunichar ch)
 {
   switch (ch)
     {
@@ -67,7 +67,7 @@ _ide_vim_word_classify (gunichar ch)
 }
 
 static int
-_ide_vim_WORD_classify (gunichar ch)
+_ide_text_WORD_classify (gunichar ch)
 {
   if (g_unichar_isspace (ch))
     return CLASS_SPACE;
@@ -75,13 +75,13 @@ _ide_vim_WORD_classify (gunichar ch)
 }
 
 static gboolean
-_ide_vim_iter_line_is_empty (GtkTextIter *iter)
+_ide_text_iter_line_is_empty (GtkTextIter *iter)
 {
   return gtk_text_iter_starts_line (iter) && gtk_text_iter_ends_line (iter);
 }
 
 /**
- * _ide_vim_iter_backward_paragraph_start:
+ * _ide_text_iter_backward_paragraph_start:
  * @iter: A #GtkTextIter
  *
  * Searches backwards until we find the beginning of a paragraph.
@@ -89,18 +89,18 @@ _ide_vim_iter_line_is_empty (GtkTextIter *iter)
  * Returns: %TRUE if we are not at the beginning of the buffer; otherwise %FALSE.
  */
 gboolean
-_ide_vim_iter_backward_paragraph_start (GtkTextIter *iter)
+_ide_text_iter_backward_paragraph_start (GtkTextIter *iter)
 {
   g_return_val_if_fail (iter, FALSE);
 
   /* Work our way past the current empty lines */
-  if (_ide_vim_iter_line_is_empty (iter))
-    while (_ide_vim_iter_line_is_empty (iter))
+  if (_ide_text_iter_line_is_empty (iter))
+    while (_ide_text_iter_line_is_empty (iter))
       if (!gtk_text_iter_backward_line (iter))
         return FALSE;
 
   /* Now find first line that is empty */
-  while (!_ide_vim_iter_line_is_empty (iter))
+  while (!_ide_text_iter_line_is_empty (iter))
     if (!gtk_text_iter_backward_line (iter))
       return FALSE;
 
@@ -108,7 +108,7 @@ _ide_vim_iter_backward_paragraph_start (GtkTextIter *iter)
 }
 
 /**
- * _ide_vim_iter_forward_paragraph_end:
+ * _ide_text_iter_forward_paragraph_end:
  * @iter: A #GtkTextIter
  *
  * Searches forward until the end of a paragraph has been hit.
@@ -116,18 +116,18 @@ _ide_vim_iter_backward_paragraph_start (GtkTextIter *iter)
  * Returns: %TRUE if we are not at the end of the buffer; otherwise %FALSE.
  */
 gboolean
-_ide_vim_iter_forward_paragraph_end (GtkTextIter *iter)
+_ide_text_iter_forward_paragraph_end (GtkTextIter *iter)
 {
   g_return_val_if_fail (iter, FALSE);
 
   /* Work our way past the current empty lines */
-  if (_ide_vim_iter_line_is_empty (iter))
-    while (_ide_vim_iter_line_is_empty (iter))
+  if (_ide_text_iter_line_is_empty (iter))
+    while (_ide_text_iter_line_is_empty (iter))
       if (!gtk_text_iter_forward_line (iter))
         return FALSE;
 
   /* Now find first line that is empty */
-  while (!_ide_vim_iter_line_is_empty (iter))
+  while (!_ide_text_iter_line_is_empty (iter))
     if (!gtk_text_iter_forward_line (iter))
       return FALSE;
 
@@ -151,7 +151,7 @@ sentence_end_chars (gunichar ch,
 }
 
 static SentenceStatus
-_ide_vim_iter_backward_sentence_end (GtkTextIter *iter)
+_ide_text_iter_backward_sentence_end (GtkTextIter *iter)
 {
   GtkTextIter end_bounds;
   GtkTextIter start_bounds;
@@ -161,7 +161,7 @@ _ide_vim_iter_backward_sentence_end (GtkTextIter *iter)
 
   end_bounds = *iter;
   start_bounds = *iter;
-  found_para = _ide_vim_iter_backward_paragraph_start (&start_bounds);
+  found_para = _ide_text_iter_backward_paragraph_start (&start_bounds);
 
   if (!found_para)
     gtk_text_buffer_get_start_iter (gtk_text_iter_get_buffer (iter), &start_bounds);
@@ -207,7 +207,7 @@ _ide_vim_iter_backward_sentence_end (GtkTextIter *iter)
 }
 
 gboolean
-_ide_vim_iter_forward_sentence_end (GtkTextIter *iter)
+_ide_text_iter_forward_sentence_end (GtkTextIter *iter)
 {
   GtkTextIter end_bounds;
   gboolean found_para;
@@ -215,7 +215,7 @@ _ide_vim_iter_forward_sentence_end (GtkTextIter *iter)
   g_return_val_if_fail (iter, FALSE);
 
   end_bounds = *iter;
-  found_para = _ide_vim_iter_forward_paragraph_end (&end_bounds);
+  found_para = _ide_text_iter_forward_paragraph_end (&end_bounds);
 
   if (!found_para)
     gtk_text_buffer_get_end_iter (gtk_text_iter_get_buffer (iter), &end_bounds);
@@ -266,7 +266,7 @@ _ide_vim_iter_forward_sentence_end (GtkTextIter *iter)
 }
 
 gboolean
-_ide_vim_iter_backward_sentence_start (GtkTextIter *iter)
+_ide_text_iter_backward_sentence_start (GtkTextIter *iter)
 {
   GtkTextIter tmp;
   SentenceStatus status;
@@ -274,7 +274,7 @@ _ide_vim_iter_backward_sentence_start (GtkTextIter *iter)
   g_return_val_if_fail (iter, FALSE);
 
   tmp = *iter;
-  status = _ide_vim_iter_backward_sentence_end (&tmp);
+  status = _ide_text_iter_backward_sentence_end (&tmp);
 
   switch (status)
     {
@@ -305,8 +305,8 @@ _ide_vim_iter_backward_sentence_start (GtkTextIter *iter)
 }
 
 static gboolean
-_ide_vim_iter_forward_classified_start (GtkTextIter *iter,
-                                        gint (*classify) (gunichar))
+_ide_text_iter_forward_classified_start (GtkTextIter  *iter,
+                                         gint        (*classify) (gunichar))
 {
   gint begin_class;
   gint cur_class;
@@ -352,20 +352,20 @@ _ide_vim_iter_forward_classified_start (GtkTextIter *iter,
 }
 
 gboolean
-_ide_vim_iter_forward_word_start (GtkTextIter *iter)
+_ide_text_iter_forward_word_start (GtkTextIter *iter)
 {
-  return _ide_vim_iter_forward_classified_start (iter, _ide_vim_word_classify);
+  return _ide_text_iter_forward_classified_start (iter, _ide_text_word_classify);
 }
 
 gboolean
-_ide_vim_iter_forward_WORD_start (GtkTextIter *iter)
+_ide_text_iter_forward_WORD_start (GtkTextIter *iter)
 {
-  return _ide_vim_iter_forward_classified_start (iter, _ide_vim_WORD_classify);
+  return _ide_text_iter_forward_classified_start (iter, _ide_text_WORD_classify);
 }
 
 gboolean
-_ide_vim_iter_forward_classified_end (GtkTextIter *iter,
-                                      gint (*classify) (gunichar))
+_ide_text_iter_forward_classified_end (GtkTextIter  *iter,
+                                       gint        (*classify) (gunichar))
 {
   gunichar ch;
   gint begin_class;
@@ -379,7 +379,7 @@ _ide_vim_iter_forward_classified_end (GtkTextIter *iter,
   /* If we are on space, walk to the start of the next word. */
   ch = gtk_text_iter_get_char (iter);
   if (classify (ch) == CLASS_SPACE)
-    if (!_ide_vim_iter_forward_classified_start (iter, classify))
+    if (!_ide_text_iter_forward_classified_start (iter, classify))
       return FALSE;
 
   ch = gtk_text_iter_get_char (iter);
@@ -404,20 +404,20 @@ _ide_vim_iter_forward_classified_end (GtkTextIter *iter,
 }
 
 gboolean
-_ide_vim_iter_forward_word_end (GtkTextIter *iter)
+_ide_text_iter_forward_word_end (GtkTextIter *iter)
 {
-  return _ide_vim_iter_forward_classified_end (iter, _ide_vim_word_classify);
+  return _ide_text_iter_forward_classified_end (iter, _ide_text_word_classify);
 }
 
 gboolean
-_ide_vim_iter_forward_WORD_end (GtkTextIter *iter)
+_ide_text_iter_forward_WORD_end (GtkTextIter *iter)
 {
-  return _ide_vim_iter_forward_classified_end (iter, _ide_vim_WORD_classify);
+  return _ide_text_iter_forward_classified_end (iter, _ide_text_WORD_classify);
 }
 
 static gboolean
-_ide_vim_iter_backward_classified_end (GtkTextIter *iter,
-                                       gint (*classify) (gunichar))
+_ide_text_iter_backward_classified_end (GtkTextIter  *iter,
+                                        gint        (*classify) (gunichar))
 {
   gunichar ch;
   gint begin_class;
@@ -448,21 +448,21 @@ _ide_vim_iter_backward_classified_end (GtkTextIter *iter,
 }
 
 gboolean
-_ide_vim_iter_backward_word_end (GtkTextIter *iter)
+_ide_text_iter_backward_word_end (GtkTextIter *iter)
 {
-  return _ide_vim_iter_backward_classified_end (iter, _ide_vim_word_classify);
+  return _ide_text_iter_backward_classified_end (iter, _ide_text_word_classify);
 }
 
 gboolean
-_ide_vim_iter_backward_WORD_end (GtkTextIter *iter)
+_ide_text_iter_backward_WORD_end (GtkTextIter *iter)
 {
-  return _ide_vim_iter_backward_classified_end (iter, _ide_vim_WORD_classify);
+  return _ide_text_iter_backward_classified_end (iter, _ide_text_WORD_classify);
 }
 
 static gboolean
-matches_pred (GtkTextIter          *iter,
-              VimIterCharPredicate  pred,
-              gpointer              user_data)
+matches_pred (GtkTextIter              *iter,
+              IdeTextIterCharPredicate  pred,
+              gpointer                  user_data)
 {
   gint ch;
 
@@ -475,10 +475,10 @@ matches_pred (GtkTextIter          *iter,
  * lets us acces to the iter in the predicate
  */
 gboolean
-_ide_vim_iter_forward_find_char (GtkTextIter          *iter,
-                                 VimIterCharPredicate  pred,
-                                 gpointer              user_data,
-                                 const GtkTextIter    *limit)
+_ide_text_iter_forward_find_char (GtkTextIter              *iter,
+                                  IdeTextIterCharPredicate  pred,
+                                  gpointer                  user_data,
+                                  const GtkTextIter        *limit)
 {
   g_return_val_if_fail (iter != NULL, FALSE);
   g_return_val_if_fail (pred != NULL, FALSE);
@@ -501,10 +501,10 @@ _ide_vim_iter_forward_find_char (GtkTextIter          *iter,
  * lets us acces to the iter in the predicate
  */
 gboolean
-_ide_vim_iter_backward_find_char (GtkTextIter          *iter,
-                                  VimIterCharPredicate  pred,
-                                  gpointer              user_data,
-                                  const GtkTextIter    *limit)
+_ide_text_iter_backward_find_char (GtkTextIter              *iter,
+                                   IdeTextIterCharPredicate  pred,
+                                   gpointer                  user_data,
+                                   const GtkTextIter        *limit)
 {
   g_return_val_if_fail (iter != NULL, FALSE);
   g_return_val_if_fail (pred != NULL, FALSE);
@@ -524,7 +524,7 @@ _ide_vim_iter_backward_find_char (GtkTextIter          *iter,
 }
 
 /**
- * ide_vim_iter_in_string:
+ * ide_text_iter_in_string:
  * @iter: A #GtkTextIter indicating the position to check for.
  * @str: A C type string.
  * @str_start: (out): A #GtkTextIter returning the str start iter (if found).
@@ -536,11 +536,11 @@ _ide_vim_iter_backward_find_char (GtkTextIter          *iter,
  * Returns: %TRUE if case of succes, %FALSE otherwise.
  */
 gboolean
-_ide_vim_iter_in_string (GtkTextIter *iter,
-                         const gchar *str,
-                         GtkTextIter *str_start,
-                         GtkTextIter *str_end,
-                         gboolean     include_str_bounds)
+_ide_text_iter_in_string (GtkTextIter *iter,
+                          const gchar *str,
+                          GtkTextIter *str_start,
+                          GtkTextIter *str_end,
+                          gboolean     include_str_bounds)
 {
   gint len;
   gint cursor_offset;
@@ -621,7 +621,7 @@ _ide_vim_iter_in_string (GtkTextIter *iter,
 }
 
 /**
- * _ide_vim_find_chars_backward:
+ * _ide_text_iter_find_chars_backward:
  * @iter: A #GtkTextIter indicating the start position to check for.
  * end: (out): A #GtkTextIter returning the str end iter (if found).
  * @str: A C type string.
@@ -635,10 +635,10 @@ _ide_vim_iter_in_string (GtkTextIter *iter,
  * Returns: %TRUE if case of succes, %FALSE otherwise.
  */
 gboolean
-_ide_vim_find_chars_backward (GtkTextIter *iter,
-                              GtkTextIter *end,
-                              const gchar *str,
-                              gboolean     only_at_start)
+_ide_text_iter_find_chars_backward (GtkTextIter *iter,
+                                    GtkTextIter *end,
+                                    const gchar *str,
+                                    gboolean     only_at_start)
 {
   const gchar *base_str;
   const gchar *limit;
@@ -690,7 +690,7 @@ _ide_vim_find_chars_backward (GtkTextIter *iter,
 }
 
 /**
- * _ide_vim_find_chars_forward:
+ * _ide_text_iter_find_chars_forward:
  * @iter: A #GtkTextIter indicating the start position to check for.
  * end: (out): A #GtkTextIter returning the str end iter (if found).
  * @str: A C type string.
@@ -702,10 +702,10 @@ _ide_vim_find_chars_backward (GtkTextIter *iter,
  * Returns: %TRUE if case of succes, %FALSE otherwise.
  */
 gboolean
-_ide_vim_find_chars_forward (GtkTextIter *iter,
-                             GtkTextIter *end,
-                             const gchar *str,
-                             gboolean     only_at_start)
+_ide_text_iter_find_chars_forward (GtkTextIter *iter,
+                                   GtkTextIter *end,
+                                   const gchar *str,
+                                   gboolean     only_at_start)
 {
   const gchar *base_str;
   const gchar *limit;
@@ -752,4 +752,3 @@ _ide_vim_find_chars_forward (GtkTextIter *iter,
 
   return FALSE;
 }
-
