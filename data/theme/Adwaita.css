@@ -55,24 +55,24 @@ GbAccelLabel .frame {
 }
 
 
-GtkBox.horizontal.search-bar {
+box.horizontal.search-bar {
   background: none;
   background-color: #d6d6d6;
   box-shadow: inset 0 2px 3px -1px #b6b6b6, 0 1px white;
   border: none;
   border-bottom: 1px solid #a1a1a1;
 }
-GtkBox.horizontal.search-bar:backdrop {
+box.horizontal.search-bar:backdrop {
   border-color: darkgrey;
   background-color: #d5d5d5;
   box-shadow: none;
 }
 
 
-workbench > GtkOverlay > stack > GtkBox > stackswitcher.vertical:first-child {
+workbench > GtkOverlay > stack > box > stackswitcher.vertical:first-child {
   background: #f4f4f4;
 }
-workbench > GtkOverlay > stack > GtkBox > stackswitcher.vertical:first-child button {
+workbench > GtkOverlay > stack > box > stackswitcher.vertical:first-child button {
   padding: 8px 10px 8px 10px;
   color: #bebebe;
   background: transparent;
@@ -80,6 +80,6 @@ workbench > GtkOverlay > stack > GtkBox > stackswitcher.vertical:first-child but
   border: none;
   border-radius: 0px;
 }
-workbench > GtkOverlay > stack > GtkBox > stackswitcher.vertical:first-child button:checked {
+workbench > GtkOverlay > stack > box > stackswitcher.vertical:first-child button:checked {
   color: #2e3436;
 }

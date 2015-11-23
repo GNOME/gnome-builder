@@ -56,12 +56,12 @@ GdTaggedEntry {
 /*
  * Command Bar styling.
  */
-GtkBox.gb-command-bar-box {
+box.gb-command-bar-box {
   border: none;
   background-image: linear-gradient(to bottom, #2e3436, #555753 10%);
   box-shadow: inset 0px 3px 6px #2e3436;
 }
-GtkBox.gb-command-bar-box label {
+box.gb-command-bar-box label {
   color: #eeeeec;
 }
 entry.gb-command-bar-entry {
@@ -101,7 +101,7 @@ greeter .frame {
     border-bottom: none;
 }
 /* remove viewport frame */
-greeter > GtkBox.vertical > scrolledwindow > viewport.frame {
+greeter > box.vertical > scrolledwindow > viewport.frame {
   border: none;
 }
 
@@ -146,7 +146,7 @@ GbEditorFrame textview {
 
 /* Workbench perspective selection bar */
 /*
-IdeWorkbench > GtkStack > GtkBox.horizontal > GtkStackSwitcher > button {
+IdeWorkbench > GtkStack > box.horizontal > GtkStackSwitcher > button {
   background-image: none;
   background-color: transparent;
   border: none;
@@ -154,15 +154,15 @@ IdeWorkbench > GtkStack > GtkBox.horizontal > GtkStackSwitcher > button {
   box-shadow: none;
   border-radius: 0px;
 }
-IdeWorkbench > GtkStack > GtkBox.horizontal > GtkStackSwitcher > button:active:hover,
-IdeWorkbench > GtkStack > GtkBox.horizontal > GtkStackSwitcher > button:active:checked,
-IdeWorkbench > GtkStack > GtkBox.horizontal > GtkStackSwitcher > button:active {
+IdeWorkbench > GtkStack > box.horizontal > GtkStackSwitcher > button:active:hover,
+IdeWorkbench > GtkStack > box.horizontal > GtkStackSwitcher > button:active:checked,
+IdeWorkbench > GtkStack > box.horizontal > GtkStackSwitcher > button:active {
   background-color: mix(@theme_bg_color, @borders, 0.75);
 }
-IdeWorkbench > GtkStack > GtkBox.horizontal > GtkStackSwitcher > button:checked {
+IdeWorkbench > GtkStack > box.horizontal > GtkStackSwitcher > button:checked {
   background-color: mix(@theme_bg_color, @borders, 0.5);
 }
-IdeWorkbench > GtkStack > GtkBox.horizontal > GtkStackSwitcher > button:hover {
+IdeWorkbench > GtkStack > box.horizontal > GtkStackSwitcher > button:hover {
   background-color: mix(@theme_bg_color, @borders, 0.25);
 }
 */
