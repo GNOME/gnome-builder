@@ -146,6 +146,7 @@ ide_application_local_command_line (GApplication   *application,
   GOptionContext *context = NULL;
   GOptionGroup *group;
   const gchar *shortdesc = NULL;
+  const gchar *prgname;
   GError *error = NULL;
   gchar *type = NULL;
   gchar *dbus_address = NULL;
@@ -202,7 +203,11 @@ ide_application_local_command_line (GApplication   *application,
 
   *exit_status = EXIT_SUCCESS;
 
-  if (g_str_equal (g_get_prgname (), "ide"))
+  prgname = g_get_prgname ();
+  if (prgname && g_str_has_prefix (prgname, "lt-"))
+    prgname += strlen ("lt-");
+
+  if (g_str_equal (prgname, "ide"))
     shortdesc = _("COMMAND");
 
   context = g_option_context_new (shortdesc);
@@ -221,8 +226,7 @@ ide_application_local_command_line (GApplication   *application,
    * If we are the "ide" program, then we want to setup ourselves for
    * verb style commands and add a commands group for help.
    */
-  if (g_str_equal (g_get_prgname (), "ide") ||
-      g_str_equal (g_get_prgname (), "lt-ide"))
+  if (g_str_equal (prgname, "ide"))
     {
       gchar *command_help;
 
@@ -234,8 +238,7 @@ ide_application_local_command_line (GApplication   *application,
       g_option_context_set_summary (context, command_help);
       g_free (command_help);
     }
-  else if (g_str_equal (g_get_prgname (), "gnome-builder-worker") ||
-           g_str_equal (g_get_prgname (), "lt-gnome-builder-worker"))
+  else if (g_str_equal (prgname, "gnome-builder-worker"))
     {
       self->mode = IDE_APPLICATION_MODE_WORKER;
     }
