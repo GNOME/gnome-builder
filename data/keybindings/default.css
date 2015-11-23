@@ -64,9 +64,9 @@
 }
 
 IdeSourceViewMode.default {
-  gtk-key-bindings: default-ide-source-view;
+  -gtk-key-bindings: default-ide-source-view;
 }
 
 GbProjectTree {
-  gtk-key-bindings: builder-gb-project-tree;
+  -gtk-key-bindings: builder-gb-project-tree;
 }

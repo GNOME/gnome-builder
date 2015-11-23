@@ -14,7 +14,7 @@
 }
 
 VteTerminal {
-  gtk-key-bindings: builder-vte-terminal;
+  -gtk-key-bindings: builder-vte-terminal;
 }
 
 @binding-set builder-command-bar-entry
@@ -35,9 +35,9 @@ VteTerminal {
 }
 
 entry.gb-command-bar-entry {
-  gtk-key-bindings: builder-command-bar-entry;
+  -gtk-key-bindings: builder-command-bar-entry;
 }
 
 workbench {
-  gtk-key-bindings: builder-workbench-bindings;
+  -gtk-key-bindings: builder-workbench-bindings;
 }

@@ -160,16 +160,16 @@
 }
 
 GbEditorFrame GtkFrame.gb-search-slider GdTaggedEntry {
-  gtk-key-bindings: builder-emacs-editor-search,
+  -gtk-key-bindings: builder-emacs-editor-search,
                     builder-emacs-text-entry;
 }
 
 entry {
-  gtk-key-bindings: builder-emacs-text-entry;
+  -gtk-key-bindings: builder-emacs-text-entry;
 }
 
 GtkTextView {
-  gtk-key-bindings: builder-emacs-text-entry, builder-emacs-text-view;
+  -gtk-key-bindings: builder-emacs-text-entry, builder-emacs-text-view;
 }
 
 GtkSourceView,
@@ -177,7 +177,7 @@ IdeSourceViewMode.default
 {
   -IdeSourceViewMode-repeat-insert-with-count: true;
 
-  gtk-key-bindings: builder-emacs-text-entry, builder-emacs-source-view, builder-emacs-text-view;
+  -gtk-key-bindings: builder-emacs-text-entry, builder-emacs-source-view, builder-emacs-text-view;
 }
 
 GtkSourceView,
@@ -185,7 +185,7 @@ IdeSourceViewMode.default.has-indenter
 {
   -IdeSourceViewMode-repeat-insert-with-count: true;
 
-  gtk-key-bindings: builder-emacs-text-entry,
+  -gtk-key-bindings: builder-emacs-text-entry,
                     builder-emacs-source-view-has-indenter,
                     builder-emacs-source-view,
                     builder-emacs-text-view;
@@ -194,18 +194,18 @@ IdeSourceViewMode.default.has-indenter
 IdeSourceViewMode.emacs-x {
   -IdeSourceViewMode-display-name: "C-x";
 
-  gtk-key-bindings: builder-emacs-source-view-x;
+  -gtk-key-bindings: builder-emacs-source-view-x;
 }
 
 GtkTreeView {
-  gtk-key-bindings: builder-emacs-tree-view;
+  -gtk-key-bindings: builder-emacs-tree-view;
 }
 
 GtkListBox {
-  gtk-key-bindings: builder-emacs-list-box;
+  -gtk-key-bindings: builder-emacs-list-box;
 }
 
 GbProjectTree {
-  gtk-key-bindings: builder-emacs-tree-view,
+  -gtk-key-bindings: builder-emacs-tree-view,
                     builder-gb-project-tree;
 }
