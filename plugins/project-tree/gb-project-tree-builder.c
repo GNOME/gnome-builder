@@ -354,7 +354,7 @@ gb_project_tree_builder_node_activated (IdeTreeBuilder *builder,
         goto failure;
 
       workbench = gtk_widget_get_ancestor (GTK_WIDGET (tree), IDE_TYPE_WORKBENCH);
-      ide_workbench_open_files_async (IDE_WORKBENCH (workbench), &file, 1, NULL, NULL, NULL);
+      ide_workbench_open_files_async (IDE_WORKBENCH (workbench), &file, 1, NULL, NULL, NULL, NULL);
 
       return TRUE;
     }

@@ -144,7 +144,7 @@ gb_project_tree_actions_open (GSimpleAction *action,
       if (!file)
         return;
 
-      ide_workbench_open_files_async (workbench, &file, 1, NULL, NULL, NULL);
+      ide_workbench_open_files_async (workbench, &file, 1, NULL, NULL, NULL, NULL);
     }
 }
 
@@ -191,7 +191,6 @@ gb_project_tree_actions_open_with_editor (GSimpleAction *action,
                                           GVariant      *variant,
                                           gpointer       user_data)
 {
-#if 0
   IdeWorkbench *workbench;
   GbProjectTree *self = user_data;
   GFileInfo *file_info;
@@ -210,8 +209,7 @@ gb_project_tree_actions_open_with_editor (GSimpleAction *action,
       !(workbench = ide_widget_get_workbench (GTK_WIDGET (self))))
     return;
 
-  ide_workbench_open_with_editor (workbench, file);
-#endif
+  ide_workbench_open_files_async (workbench, &file, 1, "editor", NULL, NULL, NULL);
 }
 
 static void
@@ -400,7 +398,7 @@ gb_project_tree_actions__create_cb (GObject      *object,
   if (workbench == NULL)
     return;
 
-  ide_workbench_open_files_async (workbench, &file, 1, NULL, NULL, NULL);
+  ide_workbench_open_files_async (workbench, &file, 1, NULL, NULL, NULL, NULL);
 
   ide_tree_node_invalidate (node);
   ide_tree_node_expand (node, FALSE);
