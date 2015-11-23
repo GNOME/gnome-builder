@@ -291,8 +291,6 @@ ide_application_activate (GApplication *application)
 
   g_assert (IDE_IS_APPLICATION (self));
 
-  g_print ("~!!!! mode is %d\n", self->mode);
-
   if (self->mode == IDE_APPLICATION_MODE_PRIMARY)
     ide_application_activate_primary (self);
   else if (self->mode == IDE_APPLICATION_MODE_WORKER)
