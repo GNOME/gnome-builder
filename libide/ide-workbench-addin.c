@@ -22,6 +22,12 @@
 
 G_DEFINE_INTERFACE (IdeWorkbenchAddin, ide_workbench_addin, G_TYPE_OBJECT)
 
+static gchar *
+ide_workbench_addin_real_get_id (IdeWorkbenchAddin *self)
+{
+  return g_strdup (G_OBJECT_TYPE_NAME (self));
+}
+
 static void
 ide_workbench_addin_real_load (IdeWorkbenchAddin *self,
                                IdeWorkbench      *workbench)
@@ -47,9 +53,10 @@ ide_workbench_addin_real_can_open (IdeWorkbenchAddin *self,
 static void
 ide_workbench_addin_default_init (IdeWorkbenchAddinInterface *iface)
 {
+  iface->can_open = ide_workbench_addin_real_can_open;
+  iface->get_id = ide_workbench_addin_real_get_id;
   iface->load = ide_workbench_addin_real_load;
   iface->unload = ide_workbench_addin_real_unload;
-  iface->can_open = ide_workbench_addin_real_can_open;
 }
 
 /**
@@ -160,4 +167,24 @@ ide_workbench_addin_open_finish (IdeWorkbenchAddin  *self,
     }
 
   return IDE_WORKBENCH_ADDIN_GET_IFACE (self)->open_finish (self, result, error);
+}
+
+/**
+ * ide_workbench_addin_get_id:
+ * @self: An #IdeWorkbenchAddin.
+ *
+ * Gets the identifier for this workbench addin. By default this is the
+ * name of the classes GType (such as "MyObject").
+ *
+ * This can be used as the hint to various open operations in IdeWorkbench
+ * to prefer a given loader.
+ *
+ * Returns: (transfer full): a newly allocated string.
+ */
+gchar *
+ide_workbench_addin_get_id (IdeWorkbenchAddin *self)
+{
+  g_return_val_if_fail (IDE_IS_WORKBENCH_ADDIN (self), NULL);
+
+  return IDE_WORKBENCH_ADDIN_GET_IFACE (self)->get_id (self);
 }

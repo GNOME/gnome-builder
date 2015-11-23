@@ -428,7 +428,7 @@ gb_vim_command_edit (GtkSourceView  *source_view,
   else
     file = g_file_get_child (workdir, options);
 
-  ide_workbench_open_files_async (workbench, &file, 1, NULL, NULL, NULL);
+  ide_workbench_open_files_async (workbench, &file, 1, "editor", NULL, NULL, NULL);
 
   g_clear_object (&file);
 

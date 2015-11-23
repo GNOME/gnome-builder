@@ -511,7 +511,7 @@ find_other_file_cb (GObject      *object,
 
       gfile = ide_file_get_file (ret);
       workbench = ide_widget_get_workbench (GTK_WIDGET (self));
-      ide_workbench_open_files_async (workbench, &gfile, 1, NULL, NULL, NULL);
+      ide_workbench_open_files_async (workbench, &gfile, 1, "editor", NULL, NULL, NULL);
     }
 }
 

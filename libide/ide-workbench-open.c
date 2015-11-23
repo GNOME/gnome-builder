@@ -36,6 +36,7 @@ typedef struct
   IdeUri       *uri;
   GArray       *loaders;
   gchar        *content_type;
+  gchar        *hint;
   guint         did_collect : 1;
 } IdeWorkbenchOpenUriState;
 
@@ -77,10 +78,30 @@ ide_workbench_collect_loaders (PeasExtensionSet *set,
 
 static gint
 ide_workbench_loader_compare (gconstpointer a,
-                              gconstpointer b)
+                              gconstpointer b,
+                              gpointer      user_data)
 {
   const IdeWorkbenchLoader *loadera = a;
   const IdeWorkbenchLoader *loaderb = b;
+  const gchar *hint = user_data;
+
+  if (hint != NULL)
+    {
+      gboolean match;
+      gchar *name;
+
+      name = ide_workbench_addin_get_id (loadera->addin);
+      match = g_strcmp0 (hint, name);
+      g_free (name);
+      if (match)
+        return -1;
+
+      name = ide_workbench_addin_get_id (loaderb->addin);
+      match = g_strcmp0 (hint, name);
+      g_free (name);
+      if (match)
+        return 1;
+    }
 
   return loadera->priority - loaderb->priority;
 }
@@ -102,6 +123,7 @@ ide_workbench_open_uri_state_free (gpointer data)
   g_clear_pointer (&open_uri_state->loaders, g_array_unref);
   g_clear_pointer (&open_uri_state->uri, ide_uri_unref);
   g_clear_pointer (&open_uri_state->content_type, g_free);
+  g_clear_pointer (&open_uri_state->hint, g_free);
   g_free (open_uri_state);
 }
 
@@ -143,7 +165,9 @@ ide_workbench_open_uri_try_next (IdeWorkbenchOpenUriState *open_uri_state)
       peas_extension_set_foreach (open_uri_state->self->addins,
                                   ide_workbench_collect_loaders,
                                   open_uri_state);
-      g_array_sort (open_uri_state->loaders, ide_workbench_loader_compare);
+      g_array_sort_with_data (open_uri_state->loaders,
+                              ide_workbench_loader_compare,
+                              open_uri_state->hint);
     }
 
   if (open_uri_state->loaders->len == 0)
@@ -230,6 +254,7 @@ ide_workbench_open_discover_content_type (IdeWorkbenchOpenUriState *open_uri_sta
 void
 ide_workbench_open_uri_async (IdeWorkbench        *self,
                               IdeUri              *uri,
+                              const gchar         *hint,
                               GCancellable        *cancellable,
                               GAsyncReadyCallback  callback,
                               gpointer             user_data)
@@ -246,6 +271,7 @@ ide_workbench_open_uri_async (IdeWorkbench        *self,
   open_uri_state->content_type = NULL;
   open_uri_state->loaders = g_array_new (FALSE, FALSE, sizeof (IdeWorkbenchLoader));
   open_uri_state->task = g_task_new (self, cancellable, callback, user_data);
+  open_uri_state->hint = g_strdup (hint);
 
   g_array_set_clear_func (open_uri_state->loaders,
                           ide_workbench_loader_destroy);
@@ -312,6 +338,7 @@ void
 ide_workbench_open_files_async (IdeWorkbench         *self,
                                 GFile               **files,
                                 guint                 n_files,
+                                const gchar          *hint,
                                 GCancellable         *cancellable,
                                 GAsyncReadyCallback   callback,
                                 gpointer              user_data)
@@ -349,6 +376,7 @@ ide_workbench_open_files_async (IdeWorkbench         *self,
       uri = ide_uri_new_from_file (files [i]);
       ide_workbench_open_uri_async (self,
                                     uri,
+                                    hint,
                                     cancellable,
                                     ide_workbench_open_files_cb,
                                     open_files_state);

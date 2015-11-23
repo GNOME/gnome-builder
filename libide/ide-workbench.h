@@ -33,6 +33,7 @@ G_DECLARE_FINAL_TYPE (IdeWorkbench, ide_workbench, IDE, WORKBENCH, GtkApplicatio
 
 void            ide_workbench_open_uri_async               (IdeWorkbench         *self,
                                                             IdeUri               *uri,
+                                                            const gchar          *hint,
                                                             GCancellable         *cancellable,
                                                             GAsyncReadyCallback   callback,
                                                             gpointer              user_data);
@@ -42,6 +43,7 @@ gboolean        ide_workbench_open_uri_finish              (IdeWorkbench        
 void            ide_workbench_open_files_async             (IdeWorkbench         *self,
                                                             GFile               **files,
                                                             guint                 n_files,
+                                                            const gchar          *hint,
                                                             GCancellable         *cancellable,
                                                             GAsyncReadyCallback   callback,
                                                             gpointer              user_data);

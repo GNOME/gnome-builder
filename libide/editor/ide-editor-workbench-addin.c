@@ -214,12 +214,19 @@ ide_editor_workbench_addin_open_finish (IdeWorkbenchAddin  *addin,
   return g_task_propagate_boolean (G_TASK (result), error);
 }
 
+static gchar *
+ide_editor_workbench_addin_get_id (IdeWorkbenchAddin *addin)
+{
+  return g_strdup ("editor");
+}
+
 static void
 ide_workbench_addin_iface_init (IdeWorkbenchAddinInterface *iface)
 {
-  iface->load = ide_editor_workbench_addin_load;
-  iface->unload = ide_editor_workbench_addin_unload;
   iface->can_open = ide_editor_workbench_addin_can_open;
+  iface->get_id = ide_editor_workbench_addin_get_id;
+  iface->load = ide_editor_workbench_addin_load;
   iface->open_async = ide_editor_workbench_addin_open_async;
   iface->open_finish = ide_editor_workbench_addin_open_finish;
+  iface->unload = ide_editor_workbench_addin_unload;
 }

@@ -85,7 +85,7 @@ ide_workbench_actions_open_with_dialog (GSimpleAction *action,
       IDE_PROBE;
 
       file = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (dialog));
-      ide_workbench_open_files_async (self, &file, 1, NULL,
+      ide_workbench_open_files_async (self, &file, 1, NULL, NULL,
                                       ide_workbench_actions_open_with_dialog_cb,
                                       NULL);
     }
