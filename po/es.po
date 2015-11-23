@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2015-11-16 08:00+0000\n"
-"PO-Revision-Date: 2015-11-17 16:44+0100\n"
+"POT-Creation-Date: 2015-11-17 20:00+0000\n"
+"PO-Revision-Date: 2015-11-23 10:02+0100\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Español; Castellano <gnome-es-list@gnome.org>\n"
 "Language: \n"
@@ -215,12 +215,10 @@ msgid "Trim trailing whitespace when saving document"
 msgstr "Eliminar espacios en blanco al guardar el documento"
 
 #: ../data/ui/gb-editor-settings-widget.ui.h:3
-#| msgid "Insert matching brace, bracket, quotation, and parenthesis."
 msgid "Insert matching brace, bracket, quotation, and parenthesis"
 msgstr "Insertar parejas de llaves, corchetes, comillas y paréntesis"
 
 #: ../data/ui/gb-editor-settings-widget.ui.h:4
-#| msgid "Overwrite closing brace, bracket, quotation, and parenthesis."
 msgid "Overwrite closing brace, bracket, quotation, and parenthesis"
 msgstr "Sobrescribir parejas de llaves, corchetes, comillas y paréntesis"
 
@@ -309,13 +307,12 @@ msgstr ""
 "¿Quiere recargarlo?"
 
 #: ../data/ui/gb-editor-view.ui.h:4
-#| msgid "Go to line"
 msgid "Go to Line"
 msgstr "Ir a la línea"
 
 #: ../data/ui/gb-editor-view.ui.h:5
 msgid "Go"
-msgstr ""
+msgstr "Ir"
 
 #: ../data/ui/gb-greeter-window.ui.h:1
 msgid "Select a Project"
@@ -513,15 +510,15 @@ msgstr "Dibujar un retorno de carro sobre los caracteres de nueva línea"
 
 #: ../data/ui/gb-preferences-page-editor.ui.h:26
 msgid "Draw indicators for non-breaking spaces"
-msgstr ""
+msgstr "Dibujar indicadores para espacios de no ruptura"
 
 #: ../data/ui/gb-preferences-page-editor.ui.h:27
 msgid "Draw leading space only"
-msgstr ""
+msgstr "Dibujar solo espacios iniciales"
 
 #: ../data/ui/gb-preferences-page-editor.ui.h:28
 msgid "Draw trailing space only"
-msgstr ""
+msgstr "Dibujar solo espacios finales"
 
 #: ../data/ui/gb-preferences-page-git.ui.h:1
 #: ../data/ui/gb-preferences-window.ui.h:8
@@ -869,10 +866,9 @@ msgid "Toggle overwrite"
 msgstr "Conmutar sobrescritura"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:43
-#, fuzzy
 #| msgid "Indent Style"
 msgid "Reindent line"
-msgstr "Estilo de sangrado"
+msgstr "Volver a sangrar la línea"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:44
 msgid "Navigation"
@@ -1216,7 +1212,6 @@ msgid "Argv0"
 msgstr "Argv0"
 
 #: ../libide/ide-worker-manager.c:224
-#| msgid "The path of the project file."
 msgid "The path to the process to spawn."
 msgstr "La ruta del proceso que lanzar."
 
@@ -1483,14 +1478,13 @@ msgid "Increase verbosity. May be specified multiple times."
 msgstr "Aumentar el nivel de detalle. Se puede especificar varias veces."
 
 #: ../src/app/gb-application.c:776
-#, fuzzy
 #| msgid "The system type for which to compile."
 msgid "The DBus server address for which to connect."
-msgstr "El tipo de sistema para el que compilar."
+msgstr "La dirección del servidor DBus para el que conectar."
 
 #: ../src/app/gb-application.c:783
 msgid "The type of plugin worker process to run."
-msgstr ""
+msgstr "El tipo de proceso trabajador del complemento que ejecutar."
 
 #: ../src/dialogs/gb-new-project-dialog.c:347
 msgid "Select Project File"
@@ -1602,6 +1596,8 @@ msgstr "minimapa mini mapa vista general"
 msgid ""
 "draw spaces space tab newline nbsp non-breaking whitespace trailing leading"
 msgstr ""
+"dibujar espacios espacio tabulador nueva línea nbsp no-ruptura finales "
+"iniciales"
 
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-git.c:169
@@ -1711,7 +1707,6 @@ msgstr "No se pudo encontrar el proveedor."
 
 #: ../src/search/gb-search-display-group.c:182
 #, c-format
-#| msgid "%s more"
 msgid "%s more"
 msgid_plural "%s more"
 msgstr[0] "%s más"
@@ -1768,7 +1763,6 @@ msgstr "Hace un año"
 
 #: ../src/util/gb-glib.c:69
 #, c-format
-#| msgid "About %u years ago"
 msgid "About %u year ago"
 msgid_plural "About %u years ago"
 msgstr[0] "Hace %u año aproximadamente"
@@ -1928,7 +1922,6 @@ msgstr "- descubrir proyectos"
 
 #: ../tools/ide-search.c:68
 #, c-format
-#| msgid "%s results\n"
 msgid "%s result\n"
 msgid_plural "%s results\n"
 msgstr[0] "%s resultado\n"
