@@ -118,7 +118,7 @@ layoutpane layoutstack box.header.notebook GtkSeparator.vertical {
 /*
  * Adjust devhelp styling.
  */
-DhSidebar entry {
+devhelppanel entry:first-child {
   border-left: none;
   border-right: none;
   border-top: none;

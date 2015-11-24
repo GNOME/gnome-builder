@@ -1,6 +1,6 @@
-/* gbp-devhelp-panel.h
+/* gbp-devhelp-search-result.h
  *
- * Copyright (C) 2015 Christian Hergert <chergert@redhat.com>
+ * Copyright (C) 2015 Christian Hergert <christian@hergert.me>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,20 +16,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GBP_DEVHELP_PANEL_H
-#define GBP_DEVHELP_PANEL_H
+#ifndef GBP_DEVHELP_SEARCH_RESULT_H
+#define GBP_DEVHELP_SEARCH_RESULT_H
 
-#include <gtk/gtk.h>
+#include "ide-search-result.h"
 
 G_BEGIN_DECLS
 
-#define GBP_TYPE_DEVHELP_PANEL (gbp_devhelp_panel_get_type())
+#define GBP_TYPE_DEVHELP_SEARCH_RESULT (gbp_devhelp_search_result_get_type())
 
-G_DECLARE_FINAL_TYPE (GbpDevhelpPanel, gbp_devhelp_panel, GBP, DEVHELP_PANEL, GtkBin)
-
-void gbp_devhelp_panel_set_uri (GbpDevhelpPanel *self,
-                                const gchar     *uri);
+G_DECLARE_FINAL_TYPE (GbpDevhelpSearchResult, gbp_devhelp_search_result, GBP, DEVHELP_SEARCH_RESULT, IdeSearchResult)
 
 G_END_DECLS
 
-#endif /* GBP_DEVHELP_PANEL_H */
+#endif /* GBP_DEVHELP_SEARCH_RESULT_H */

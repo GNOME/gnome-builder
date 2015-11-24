@@ -38,6 +38,8 @@ void          ide_widget_set_context_handler (gpointer                 widget,
 void          ide_widget_hide_with_fade      (GtkWidget               *widget);
 void          ide_widget_show_with_fade      (GtkWidget               *widget);
 IdeWorkbench *ide_widget_get_workbench       (GtkWidget               *widget);
+gpointer      ide_widget_find_child_typed    (GtkWidget               *widget,
+                                              GType                    type);
 
 G_END_DECLS
 

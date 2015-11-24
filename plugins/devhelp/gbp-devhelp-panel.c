@@ -40,14 +40,6 @@ enum {
 static GParamSpec *properties [LAST_PROP];
 
 static void
-fixup_box_border_width (GtkWidget *widget,
-                        gpointer   user_data)
-{
-  if (GTK_IS_BOX (widget))
-    gtk_container_set_border_width (GTK_CONTAINER (widget), 0);
-}
-
-static void
 gbp_devhelp_panel_find_view (GtkWidget *widget,
                              gpointer   user_data)
 {
@@ -95,17 +87,32 @@ gbp_devhelp_panel_link_selected (GbpDevhelpPanel *self,
   g_free (uri);
 }
 
+void
+gbp_devhelp_panel_set_uri (GbpDevhelpPanel *self,
+                           const gchar     *uri)
+{
+  g_return_if_fail (GBP_IS_DEVHELP_PANEL (self));
+  g_return_if_fail (uri != NULL);
+
+  dh_sidebar_select_uri (self->sidebar, uri);
+}
+
 static void
 gbp_devhelp_panel_constructed (GObject *object)
 {
   GbpDevhelpPanel *self = (GbpDevhelpPanel *)object;
+  GtkWidget *entry;
 
   G_OBJECT_CLASS (gbp_devhelp_panel_parent_class)->constructed (object);
 
   g_assert (self->books != NULL);
 
   self->sidebar = DH_SIDEBAR (dh_sidebar_new (self->books));
-  gtk_container_foreach (GTK_CONTAINER (self->sidebar), fixup_box_border_width, NULL);
+
+  entry = ide_widget_find_child_typed (GTK_WIDGET (self->sidebar), GTK_TYPE_ENTRY);
+  if (entry != NULL)
+    g_object_set (entry, "margin", 0, NULL);
+
   gtk_container_add (GTK_CONTAINER (self), GTK_WIDGET (self->sidebar));
   gtk_widget_show (GTK_WIDGET (self->sidebar));
 
@@ -149,10 +156,13 @@ static void
 gbp_devhelp_panel_class_init (GbpDevhelpPanelClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   object_class->constructed = gbp_devhelp_panel_constructed;
   object_class->finalize = gbp_devhelp_panel_finalize;
   object_class->set_property = gbp_devhelp_panel_set_property;
+
+  gtk_widget_class_set_css_name (widget_class, "devhelppanel");
 
   properties [PROP_BOOK_MANAGER] =
     g_param_spec_object ("book-manager",
