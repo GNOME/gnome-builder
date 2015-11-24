@@ -22,7 +22,6 @@
 
 #include "gb-file-search-index.h"
 #include "gb-file-search-result.h"
-#include "gb-string.h"
 
 struct _GbFileSearchIndex
 {
@@ -325,8 +324,7 @@ gb_file_search_index_populate (GbFileSearchIndex *self,
           g_autoptr(GbFileSearchResult) result = NULL;
           g_autofree gchar *markup = NULL;
 
-          markup = gb_str_highlight_full (match->key, query, TRUE,
-                                          (GB_HIGHLIGHT_BOLD | GB_HIGHLIGHT_UNDERLINE));
+          markup = ide_completion_item_fuzzy_highlight (match->key, query);
           result = g_object_new (GB_TYPE_FILE_SEARCH_RESULT,
                                  "context", icontext,
                                  "provider", provider,

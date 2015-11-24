@@ -349,6 +349,14 @@ libide_1_0_la_SOURCES = \
 	preferences/ide-preferences-spin-button.h \
 	preferences/ide-preferences-switch.c \
 	preferences/ide-preferences-switch.h \
+	search/ide-omni-search-display.c \
+	search/ide-omni-search-display.h \
+	search/ide-omni-search-entry.c \
+	search/ide-omni-search-entry.h \
+	search/ide-omni-search-group.c \
+	search/ide-omni-search-group.h \
+	search/ide-omni-search-row.c \
+	search/ide-omni-search-row.h \
 	theatrics/ide-box-theatric.c \
 	theatrics/ide-box-theatric.h \
 	util/ide-cairo.c \

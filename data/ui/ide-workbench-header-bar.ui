@@ -4,11 +4,10 @@
   <template class="IdeWorkbenchHeaderBar" parent="GtkHeaderBar">
     <property name="show-close-button">true</property>
     <child type="title">
-      <object class="GtkSearchEntry" id="search_entry">
+      <object class="IdeOmniSearchEntry" id="search_entry">
         <property name="hexpand">true</property>
         <property name="margin-end">6</property>
         <property name="margin-start">6</property>
-        <property name="max-width-chars">50</property>
         <property name="visible">true</property>
       </object>
     </child>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.14 -->
-  <template class="GbSearchBox" parent="GtkBox">
+  <template class="IdeOmniSearchEntry" parent="GtkBox">
     <property name="orientation">horizontal</property>
     <style>
       <class name="linked"/>
@@ -16,7 +16,7 @@
     <child>
       <object class="GtkMenuButton" id="button">
         <property name="focus-on-click">false</property>
-        <property name="visible">true</property>
+        <property name="visible">false</property>
         <property name="popover">popover</property>
         <style>
           <class name="button"/>
@@ -39,11 +39,11 @@
     <child>
       <object class="EggScrolledWindow" id="scroller">
         <property name="max-content-height">800</property>
-        <property name="min-content-height">50</property>
-        <property name="min-content-width">775</property>
+        <property name="min-content-height">30</property>
+        <property name="min-content-width">550</property>
         <property name="visible">True</property>
         <child>
-          <object class="GbSearchDisplay" id="display">
+          <object class="IdeOmniSearchDisplay" id="display">
             <property name="visible">true</property>
           </object>
         </child>

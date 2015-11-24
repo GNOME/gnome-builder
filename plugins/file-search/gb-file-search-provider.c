@@ -17,12 +17,11 @@
  */
 
 #include <glib/gi18n.h>
+#include <ide.h>
 #include <libpeas/peas.h>
 
 #include "gb-file-search-provider.h"
 #include "gb-file-search-index.h"
-#include "gb-search-display-row.h"
-#include "gb-workbench.h"
 
 struct _GbFileSearchProvider
 {
@@ -91,7 +90,8 @@ gb_file_search_provider_create_row (IdeSearchProvider *provider,
   g_assert (IDE_IS_SEARCH_PROVIDER (provider));
   g_assert (IDE_IS_SEARCH_RESULT (result));
 
-  return g_object_new (GB_TYPE_SEARCH_DISPLAY_ROW,
+  return g_object_new (IDE_TYPE_OMNI_SEARCH_ROW,
+                       "icon-name", "text-x-generic-symbolic",
                        "result", result,
                        "visible", TRUE,
                        NULL);
@@ -110,7 +110,7 @@ gb_file_search_provider_activate (IdeSearchProvider *provider,
 
   toplevel = gtk_widget_get_toplevel (row);
 
-  if (GB_IS_WORKBENCH (toplevel))
+  if (IDE_IS_WORKBENCH (toplevel))
     {
       g_autofree gchar *path = NULL;
       g_autoptr(GFile) file = NULL;
@@ -118,13 +118,13 @@ gb_file_search_provider_activate (IdeSearchProvider *provider,
       IdeVcs *vcs;
       GFile *workdir;
 
-      context = gb_workbench_get_context (GB_WORKBENCH (toplevel));
+      context = ide_workbench_get_context (IDE_WORKBENCH (toplevel));
       vcs = ide_context_get_vcs (context);
       workdir = ide_vcs_get_working_directory (vcs);
       g_object_get (result, "path", &path, NULL);
       file = g_file_get_child (workdir, path);
 
-      gb_workbench_open (GB_WORKBENCH (toplevel), file);
+      ide_workbench_open_files_async (IDE_WORKBENCH (toplevel), &file, 1, NULL, NULL, NULL, NULL);
     }
 }
 

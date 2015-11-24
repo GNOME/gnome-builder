@@ -155,6 +155,7 @@ ide_editor_perspective_locate_buffer (GtkWidget *view,
           if (stack != NULL)
             {
               ide_layout_stack_set_active_view (IDE_LAYOUT_STACK (stack), view);
+              gtk_widget_grab_focus (GTK_WIDGET (view));
               *buffer = NULL;
             }
         }

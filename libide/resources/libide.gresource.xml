@@ -50,6 +50,9 @@
     <file alias="ide-layout-pane.ui">../../data/ui/ide-layout-pane.ui</file>
     <file alias="ide-layout-stack.ui">../../data/ui/ide-layout-stack.ui</file>
     <file alias="ide-layout-view.ui">../../data/ui/ide-layout-view.ui</file>
+    <file alias="ide-omni-search-entry.ui">../../data/ui/ide-omni-search-entry.ui</file>
+    <file alias="ide-omni-search-group.ui">../../data/ui/ide-omni-search-group.ui</file>
+    <file alias="ide-omni-search-row.ui">../../data/ui/ide-omni-search-row.ui</file>
     <file alias="ide-preferences-entry.ui">../../data/ui/ide-preferences-entry.ui</file>
     <file alias="ide-preferences-font-button.ui">../../data/ui/ide-preferences-font-button.ui</file>
     <file alias="ide-preferences-group.ui">../../data/ui/ide-preferences-group.ui</file>

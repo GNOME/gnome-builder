@@ -84,3 +84,8 @@ workbench > GtkOverlay > stack > box > stackswitcher.vertical:first-child button
 workbench > GtkOverlay > stack > box > stackswitcher.vertical:first-child button:checked {
   color: #babdb6;
 }
+
+
+omnisearchrow {
+  color: #eeeeec;
+}
