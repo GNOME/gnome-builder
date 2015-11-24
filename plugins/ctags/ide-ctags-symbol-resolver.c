@@ -349,14 +349,7 @@ ide_ctags_symbol_resolver_lookup_symbol_async (IdeSymbolResolver   *resolver,
     lang_id = gtk_source_language_get_id (language);
   allowed = ide_ctags_get_allowed_suffixes (lang_id);
 
-  gtk_text_buffer_get_iter_at_line (GTK_TEXT_BUFFER (buffer), &iter, line);
-
-  for (i = 0; i < line_offset; i++)
-    {
-      if (gtk_text_iter_ends_line (&iter))
-        break;
-      gtk_text_iter_forward_char (&iter);
-    }
+  gtk_text_buffer_get_iter_at_line_offset (GTK_TEXT_BUFFER (buffer), &iter, line, line_offset);
 
   keyword = ide_buffer_get_word_at_iter (buffer, &iter);
 

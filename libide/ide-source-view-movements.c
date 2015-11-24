@@ -526,7 +526,10 @@ ide_source_view_movements_next_line (Movement *mv)
       gtk_text_iter_set_line (&mv->insert, target_line);
 
       if (target_line != gtk_text_iter_get_line (&mv->insert))
+      {
+        gtk_text_buffer_get_end_iter (buffer, &mv->insert);
         goto select_to_end;
+      }
 
       select_range (mv, &mv->insert, &mv->selection);
       ensure_anchor_selected (mv);
@@ -539,33 +542,17 @@ ide_source_view_movements_next_line (Movement *mv)
         *mv->target_offset = ++offset;
     }
 
-  gtk_text_buffer_get_iter_at_line (buffer, &mv->insert, line + 1);
-  if ((line + 1) == gtk_text_iter_get_line (&mv->insert))
+  gtk_text_buffer_get_iter_at_line_offset (buffer, &mv->insert, line + 1, offset);
+
+select_to_end:
+
+  if (has_selection)
     {
-      for (; offset; offset--)
-        if (!gtk_text_iter_ends_line (&mv->insert))
-          if (!gtk_text_iter_forward_char (&mv->insert))
-            break;
-      if (has_selection)
-        {
-          select_range (mv, &mv->insert, &mv->selection);
-          ensure_anchor_selected (mv);
-        }
-      else
-        gtk_text_buffer_select_range (buffer, &mv->insert, &mv->insert);
+      select_range (mv, &mv->insert, &mv->selection);
+      ensure_anchor_selected (mv);
     }
   else
-    {
-select_to_end:
-      gtk_text_buffer_get_end_iter (buffer, &mv->insert);
-      if (has_selection)
-        {
-          select_range (mv, &mv->insert, &mv->selection);
-          ensure_anchor_selected (mv);
-        }
-      else
-        gtk_text_buffer_select_range (buffer, &mv->insert, &mv->insert);
-    }
+    gtk_text_buffer_select_range (buffer, &mv->insert, &mv->insert);
 
   /* make sure selection/insert are up to date */
   if (!gtk_text_buffer_get_has_selection (buffer))
@@ -621,10 +608,7 @@ ide_source_view_movements_previous_line (Movement *mv)
   gtk_text_buffer_get_iter_at_line (buffer, &mv->insert, line - 1);
   if ((line - 1) == gtk_text_iter_get_line (&mv->insert))
     {
-      for (; offset; offset--)
-        if (!gtk_text_iter_ends_line (&mv->insert))
-          if (!gtk_text_iter_forward_char (&mv->insert))
-            break;
+      gtk_text_buffer_get_iter_at_line_offset (buffer, &mv->insert, line - 1, offset);
 
       if (has_selection)
         {

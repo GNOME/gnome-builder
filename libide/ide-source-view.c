@@ -2944,10 +2944,7 @@ ide_source_view_real_paste_clipboard_extended (IdeSourceView *self,
         }
     }
 
-  gtk_text_buffer_get_iter_at_line (buffer, &iter, target_line);
-  for (; target_line_offset; target_line_offset--)
-    if (gtk_text_iter_ends_line (&iter) || !gtk_text_iter_forward_char (&iter))
-      break;
+  gtk_text_buffer_get_iter_at_line_offset (buffer, &iter, target_line, target_line_offset);
   gtk_text_buffer_select_range (buffer, &iter, &iter);
 
   gtk_text_buffer_end_user_action (buffer);
@@ -3477,29 +3474,16 @@ ide_source_view_real_restore_insert_mark_full (IdeSourceView *self,
   GtkTextBuffer *buffer;
   GtkTextIter iter;
   GtkTextIter selection;
-  guint line_offset;
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
 
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
-  gtk_text_buffer_get_iter_at_line (buffer, &iter, priv->saved_line);
-  gtk_text_buffer_get_iter_at_line (buffer, &selection, priv->saved_selection_line);
 
-  line_offset = priv->saved_line_offset;
-
-  for (; line_offset; line_offset--)
-    {
-      if (gtk_text_iter_ends_line (&iter) || !gtk_text_iter_forward_char (&iter))
-        break;
-    }
-
-  line_offset = priv->saved_selection_line_offset;
-
-  for (; line_offset; line_offset--)
-    {
-      if (gtk_text_iter_ends_line (&selection) || !gtk_text_iter_forward_char (&selection))
-        break;
-    }
+  gtk_text_buffer_get_iter_at_line_offset (buffer, &iter, priv->saved_line, priv->saved_line_offset);
+  gtk_text_buffer_get_iter_at_line_offset (buffer,
+                                           &selection,
+                                           priv->saved_selection_line,
+                                           priv->saved_selection_line_offset);
 
   gtk_text_buffer_select_range (buffer, &iter, &selection);
 
@@ -7596,15 +7580,7 @@ ide_source_view_get_visual_position (IdeSourceView *self,
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
 
   if (!gtk_widget_has_focus (GTK_WIDGET (self)))
-    {
-      gint offset;
-
-      gtk_text_buffer_get_iter_at_line (buffer, &iter, priv->saved_line);
-
-      for (offset = priv->saved_line_offset; offset; offset--)
-        if (gtk_text_iter_ends_line (&iter) || !gtk_text_iter_forward_char (&iter))
-          break;
-    }
+    gtk_text_buffer_get_iter_at_line_offset (buffer, &iter, priv->saved_line, priv->saved_line_offset);
   else
     {
       GtkTextMark *mark;

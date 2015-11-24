@@ -517,10 +517,7 @@ ide_buffer_manager_load_file__load_cb (GObject      *object,
 
       IDE_TRACE_MSG ("Restoring insert mark to %u:%u", line, line_offset);
 
-      gtk_text_buffer_get_iter_at_line (GTK_TEXT_BUFFER (state->buffer), &iter, line);
-      for (; line_offset; line_offset--)
-        if (gtk_text_iter_ends_line (&iter) || !gtk_text_iter_forward_char (&iter))
-          break;
+      gtk_text_buffer_get_iter_at_line_offset (GTK_TEXT_BUFFER (state->buffer), &iter, line, line_offset);
     }
   else
     {

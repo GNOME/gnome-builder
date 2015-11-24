@@ -222,10 +222,8 @@ switch_to_buffer (IdeBuffer *buffer,
   parent = gtk_widget_get_parent (GTK_WIDGET (view));
   gtk_stack_set_visible_child (GTK_STACK (docStack), parent);
 
-  gtk_text_buffer_get_iter_at_line (GTK_TEXT_BUFFER (buffer), &iter, line);
-  for (; line_offset; line_offset--)
-    if (gtk_text_iter_ends_line (&iter) || !gtk_text_iter_forward_char (&iter))
-      break;
+  gtk_text_buffer_get_iter_at_line_offset (GTK_TEXT_BUFFER (buffer), &iter, line, line_offset);
+
   gtk_text_buffer_select_range (GTK_TEXT_BUFFER (buffer), &iter, &iter);
   gtk_text_view_scroll_to_mark (GTK_TEXT_VIEW (view),
                                 gtk_text_buffer_get_insert (GTK_TEXT_BUFFER (buffer)),

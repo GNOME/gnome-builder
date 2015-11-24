@@ -89,10 +89,7 @@ gb_editor_view_navigate_to (GbView            *view,
   line = ide_source_location_get_line (location);
   line_offset = ide_source_location_get_line_offset (location);
 
-  gtk_text_buffer_get_iter_at_line (buffer, &iter, line);
-  for (; line_offset; line_offset--)
-    if (gtk_text_iter_ends_line (&iter) || !gtk_text_iter_forward_char (&iter))
-      break;
+  gtk_text_buffer_get_iter_at_line_offset (buffer, &iter, line, line_offset);
 
   gtk_text_buffer_select_range (buffer, &iter, &iter);
 

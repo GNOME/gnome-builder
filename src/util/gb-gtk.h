@@ -23,11 +23,6 @@
 
 G_BEGIN_DECLS
 
-gboolean gb_gtk_text_buffer_get_iter_at_line_and_offset (GtkTextBuffer *buffer,
-                                                         GtkTextIter   *iter,
-                                                         guint          line,
-                                                         guint          line_offset);
-
 void gb_gtk_text_view_scroll_to_iter (GtkTextView *text_view,
                                       GtkTextIter *iter,
                                       gdouble      within_margin,

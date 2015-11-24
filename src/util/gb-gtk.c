@@ -29,41 +29,6 @@ struct ScrollState
   gdouble      yalign;
 };
 
-/*
- * This function is like gtk_text_buffer_get_iter_at_line_offset() except that
- * the line offset does not need to exist. It will work forward as far as
- * possible on that line.
- */
-gboolean
-gb_gtk_text_buffer_get_iter_at_line_and_offset (GtkTextBuffer *buffer,
-                                                GtkTextIter   *iter,
-                                                guint          line,
-                                                guint          line_offset)
-{
-  g_return_val_if_fail (GTK_IS_TEXT_BUFFER (buffer), FALSE);
-  g_return_val_if_fail (iter, FALSE);
-
-  gtk_text_buffer_get_iter_at_line (buffer, iter, line);
-
-  if (gtk_text_iter_get_line (iter) == line)
-    {
-      for (; line_offset; line_offset--)
-        {
-          if (gtk_text_iter_ends_line (iter))
-            break;
-          if (!gtk_text_iter_forward_char (iter))
-            {
-              gtk_text_buffer_get_end_iter (buffer, iter);
-              break;
-            }
-        }
-
-      return (line_offset == 0);
-    }
-
-  return FALSE;
-}
-
 static gboolean
 gb_gtk_text_view_scroll_to_iter_cb (gpointer data)
 {
@@ -76,8 +41,8 @@ gb_gtk_text_view_scroll_to_iter_cb (gpointer data)
 
   buffer = gtk_text_view_get_buffer (state->view);
 
-  gb_gtk_text_buffer_get_iter_at_line_and_offset (buffer, &iter, state->line,
-                                                  state->line_offset);
+  gtk_text_buffer_get_iter_at_line_offset (buffer, &iter, state->line,
+                                           state->line_offset);
 
   gb_gtk_text_view_scroll_to_iter (state->view, &iter, state->within_margin,
                                    state->use_align, state->xalign,
@@ -92,7 +57,7 @@ gb_gtk_text_view_scroll_to_iter_cb (gpointer data)
 /**
  * gb_gtk_text_view_scroll_to_iter:
  *
- * This function is a wrapper function for gb_gtk_text_view_scroll_to_iter()
+ * This function is a wrapper function for gtk_text_view_scroll_to_iter()
  * that will check to see if the text_view has calculated enough of it's
  * internal sizing to be able to scroll to the given iter.
  *

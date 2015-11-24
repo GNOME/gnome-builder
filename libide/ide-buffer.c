@@ -176,13 +176,7 @@ ide_buffer_get_iter_at_location (IdeBuffer         *self,
   line = ide_source_location_get_line (location);
   line_offset = ide_source_location_get_line_offset (location);
 
-  gtk_text_buffer_get_iter_at_line (GTK_TEXT_BUFFER (self), iter, line);
-
-  while (line_offset && !gtk_text_iter_ends_line (iter))
-    {
-      gtk_text_iter_forward_char (iter);
-      line_offset--;
-    }
+  gtk_text_buffer_get_iter_at_line_offset (GTK_TEXT_BUFFER (self), iter, line, line_offset);
 }
 
 static void
@@ -2017,10 +2011,7 @@ ide_buffer_get_iter_at_source_location (IdeBuffer         *self,
   line = ide_source_location_get_line (location);
   line_offset = ide_source_location_get_line_offset (location);
 
-  gtk_text_buffer_get_iter_at_line (GTK_TEXT_BUFFER (self), iter, line);
-  for (; line_offset; line_offset--)
-    if (gtk_text_iter_ends_line (iter) || !gtk_text_iter_forward_char (iter))
-      break;
+  gtk_text_buffer_get_iter_at_line_offset (GTK_TEXT_BUFFER (self), iter, line, line_offset);
 }
 
 void
