@@ -747,6 +747,19 @@ ide_editor_view_constructed (GObject *object)
                               self);
 }
 
+static const gchar *
+ide_editor_view_get_title (IdeLayoutView *view)
+{
+  IdeEditorView *self = (IdeEditorView *)view;
+
+  g_assert (IDE_IS_EDITOR_VIEW (self));
+
+  if (self->document)
+    return ide_buffer_get_title (self->document);
+
+  return NULL;
+}
+
 static void
 ide_editor_view_destroy (GtkWidget *widget)
 {
@@ -831,6 +844,7 @@ ide_editor_view_class_init (IdeEditorViewClass *klass)
   view_class->set_split_view = ide_editor_view_set_split_view;
   view_class->set_back_forward_list = ide_editor_view_set_back_forward_list;
   view_class->navigate_to = ide_editor_view_navigate_to;
+  view_class->get_title = ide_editor_view_get_title;
 
   properties [PROP_DOCUMENT] =
     g_param_spec_object ("document",
