@@ -101,7 +101,7 @@
                    "set-mode" ("vim-normal", permanent) };
 
   bind "<ctrl>comma" { "action" ("app", "preferences", "") };
-  bind "<ctrl>period" { "action" ("workbench", "global-search", "") };
+  bind "<ctrl>period" { "action" ("perspective", "global-search", "") };
   bind "<ctrl>s" { "action" ("view", "save", "") };
   bind "<ctrl><shift>s" { "action" ("view", "save-as", "") };
   bind "<ctrl><shift>o" { "action" ("workbench", "open", "") };
@@ -2303,6 +2303,11 @@
   bind "colon" { "action" ("win", "show-command-bar", "") };
 }
 
+@binding-set builder-vim-workbench
+{
+  bind "<ctrl>period" { "action" ("perspective", "global-search", "") };
+}
+
 /*
  * Sadly, this will draw from the middle, so it does not result in our
  * cursor being over the actual character, but between two characters.
@@ -2590,16 +2595,20 @@ IdeSourceViewMode.vim-visual-block {
   -gtk-key-bindings: builder-vim-source-view, builder-vim-source-view-visual-block;
 }
 
-GtkTreeView {
+treeview {
   -gtk-key-bindings: builder-vim-tree-view;
 }
 
 GbProjectTree {
   -gtk-key-bindings: builder-vim-tree-view,
-                    builder-gb-project-tree-vim,
-                    builder-gb-project-tree;
+                     builder-gb-project-tree-vim,
+                     builder-gb-project-tree;
 }
 
-GtkListBox {
+list {
   -gtk-key-bindings: builder-vim-list-box;
+}
+
+workbench {
+  -gtk-key-bindings: builder-vim-workbench;
 }
