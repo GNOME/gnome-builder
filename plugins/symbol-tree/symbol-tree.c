@@ -390,6 +390,7 @@ symbol_tree_class_init (SymbolTreeClass *klass)
 
   object_class->finalize = symbol_tree_finalize;
 
+  gtk_widget_class_set_css_name (widget_class, "symboltree");
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/plugins/symbol-tree/symbol-tree.ui");
   gtk_widget_class_bind_template_child (widget_class, SymbolTree, tree);
   gtk_widget_class_bind_template_child (widget_class, SymbolTree, search_entry);

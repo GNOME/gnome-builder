@@ -129,7 +129,7 @@ devhelppanel entry:first-child {
 /*
  * Adjust symbol panel styling.
  */
-SymbolTree entry {
+symboltree entry {
   border-left: none;
   border-right: none;
   border-top: none;
