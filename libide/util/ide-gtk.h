@@ -33,6 +33,10 @@ gboolean      ide_widget_action              (GtkWidget               *widget,
                                               const gchar             *group,
                                               const gchar             *name,
                                               GVariant                *param);
+gboolean      ide_widget_action_with_string  (GtkWidget               *widget,
+                                              const gchar             *group,
+                                              const gchar             *name,
+                                              const gchar             *param);
 void          ide_widget_set_context_handler (gpointer                 widget,
                                               IdeWidgetContextHandler  handler);
 void          ide_widget_hide_with_fade      (GtkWidget               *widget);

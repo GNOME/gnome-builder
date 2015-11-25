@@ -18,6 +18,7 @@
 
 #include "egg-animation.h"
 
+#include "ide-debug.h"
 #include "ide-gtk.h"
 
 gboolean
@@ -62,6 +63,43 @@ ide_widget_action (GtkWidget   *widget,
     }
 
   return FALSE;
+}
+
+gboolean
+ide_widget_action_with_string (GtkWidget   *widget,
+                               const gchar *group,
+                               const gchar *name,
+                               const gchar *param)
+{
+  GVariant *variant = NULL;
+  gboolean ret;
+
+  IDE_ENTRY;
+
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
+  g_return_val_if_fail (group != NULL, FALSE);
+  g_return_val_if_fail (name != NULL, FALSE);
+
+  if (param == NULL)
+    param = "";
+
+  if (*param != 0)
+    {
+      g_autoptr(GError) error = NULL;
+
+      variant = g_variant_parse (NULL, param, NULL, NULL, &error);
+
+      if (variant == NULL)
+        {
+          g_warning ("can't parse keybinding parameters \"%s\": %s",
+                     param, error->message);
+          IDE_RETURN (FALSE);
+        }
+    }
+
+  ret = ide_widget_action (widget, group, name, variant);
+
+  IDE_RETURN (ret);
 }
 
 static void

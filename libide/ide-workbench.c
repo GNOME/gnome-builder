@@ -19,6 +19,7 @@
 #define G_LOG_DOMAIN "ide-workbench"
 
 #include "ide-debug.h"
+#include "ide-gtk.h"
 #include "ide-macros.h"
 #include "ide-window-settings.h"
 #include "ide-workbench.h"
@@ -37,6 +38,7 @@ enum {
 };
 
 enum {
+  ACTION,
   SET_PERSPECTIVE,
   LAST_SIGNAL
 };
@@ -219,6 +221,18 @@ ide_workbench_class_init (IdeWorkbenchClass *klass)
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, LAST_PROP, properties);
+
+  signals [ACTION] =
+    g_signal_new_class_handler ("action",
+                                G_TYPE_FROM_CLASS (klass),
+                                G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
+                                G_CALLBACK (ide_widget_action_with_string),
+                                NULL, NULL, NULL,
+                                G_TYPE_NONE,
+                                3,
+                                G_TYPE_STRING,
+                                G_TYPE_STRING,
+                                G_TYPE_STRING);
 
   /**
    * IdeWorkbench::set-perspective:

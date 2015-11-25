@@ -215,10 +215,6 @@ struct _IdeSourceViewClass
 {
   GtkSourceViewClass parent_class;
 
-  void (*action)                      (IdeSourceView           *self,
-                                       const gchar             *prefix,
-                                       const gchar             *action_name,
-                                       const gchar             *param);
   void (*append_to_count)             (IdeSourceView           *self,
                                        gint                     digit);
   void (*auto_indent)                 (IdeSourceView           *self);
