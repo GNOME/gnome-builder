@@ -29,7 +29,6 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeOmniSearchDisplay, ide_omni_search_display, IDE, OMNI_SEARCH_DISPLAY, GtkBin)
 
-void              ide_omni_search_display_activate    (IdeOmniSearchDisplay *display);
 IdeSearchContext *ide_omni_search_display_get_context (IdeOmniSearchDisplay *display);
 void              ide_omni_search_display_set_context (IdeOmniSearchDisplay *display,
                                                        IdeSearchContext     *context);

@@ -46,6 +46,7 @@ enum {
 };
 
 enum {
+  ACTIVATE,
   RESULT_ACTIVATED,
   LAST_SIGNAL
 };
@@ -185,12 +186,12 @@ ide_omni_search_display_keynav_failed (IdeOmniSearchDisplay *self,
   return ret;
 }
 
-void
+static void
 ide_omni_search_display_activate (IdeOmniSearchDisplay *self)
 {
   gsize i;
 
-  g_return_if_fail (IDE_IS_OMNI_SEARCH_DISPLAY (self));
+  g_assert (IDE_IS_OMNI_SEARCH_DISPLAY (self));
 
   for (i = 0; i < self->providers->len; i++)
     {
@@ -577,6 +578,13 @@ ide_omni_search_display_class_init (IdeOmniSearchDisplayClass *klass)
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, LAST_PROP, properties);
+
+  signals [ACTIVATE] = widget_class->activate_signal =
+    g_signal_new_class_handler ("activate",
+                                G_TYPE_FROM_CLASS (klass),
+                                G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                                G_CALLBACK (ide_omni_search_display_activate),
+                                NULL, NULL, NULL, G_TYPE_NONE, 0);
 
   signals [RESULT_ACTIVATED] =
     g_signal_new_class_handler ("result-activated",
