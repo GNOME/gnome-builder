@@ -125,6 +125,14 @@ static void ide_buffer_queue_diagnose (IdeBuffer *self);
 static GParamSpec *properties [LAST_PROP];
 static guint signals [LAST_SIGNAL];
 
+/**
+ * ide_buffer_get_has_diagnostics:
+ *
+ * Gets the #IdeBuffer:has-diagnostics property.
+ * Return whether the buffer contains diagnostic messages or not.
+ *
+ * Returns: %TRUE if the #IdeBuffer has diagnostics messages. Otherwise %FALSE.
+ */
 gboolean
 ide_buffer_get_has_diagnostics (IdeBuffer *self)
 {
@@ -138,6 +146,14 @@ ide_buffer_get_has_diagnostics (IdeBuffer *self)
   return (ide_diagnostics_get_size (priv->diagnostics) > 0);
 }
 
+/**
+ * ide_buffer_get_busy:
+ *
+ * Gets the #IdeBuffer:busy property.
+ * Return whether the buffer is performing background work or not.
+ *
+ * Returns: %TRUE if the #IdeBuffer is performing background work. Otherwise %FALSE.
+ */
 gboolean
 ide_buffer_get_busy (IdeBuffer *self)
 {
@@ -1347,6 +1363,7 @@ ide_buffer_get_file (IdeBuffer *self)
 
 /**
  * ide_buffer_set_file:
+ * @file: An #IdeFile.
  *
  * Sets the underlying file to use when saving and loading @self to and and from storage.
  */
@@ -1396,6 +1413,15 @@ ide_buffer_get_context (IdeBuffer *self)
   return priv->context;
 }
 
+/**
+ * ide_buffer_get_line_flags:
+ * @line: a buffer line number.
+ *
+ * Return the flags set for the #IdeBuffer @line number.
+ * (diagnostics and errors messages, line changed or added, notes)
+ *
+ * Returns: (transfer full): An #IdeBufferLineFlags.
+ */
 IdeBufferLineFlags
 ide_buffer_get_line_flags (IdeBuffer *self,
                            guint      line)
@@ -1459,6 +1485,14 @@ ide_buffer_get_line_flags (IdeBuffer *self,
   return flags;
 }
 
+/**
+ * ide_buffer_get_highlight_diagnostics:
+ *
+ * Gets the #IdeBuffer:highlight-diagnostics property.
+ * Return whether the diagnostic warnings and errors should be highlighted.
+ *
+ * Returns: %TRUE if diagnostics are highlighted. Otherwise %FALSE.
+ */
 gboolean
 ide_buffer_get_highlight_diagnostics (IdeBuffer *self)
 {
@@ -1469,6 +1503,13 @@ ide_buffer_get_highlight_diagnostics (IdeBuffer *self)
   return priv->highlight_diagnostics;
 }
 
+/**
+ * ide_buffer_set_highlight_diagnostics:
+ *
+ * Sets the #IdeBuffer:highlight-diagnostics property.
+ * Sets whether the diagnostic warnings and errors should be highlighted.
+ *
+ */
 void
 ide_buffer_set_highlight_diagnostics (IdeBuffer *self,
                                       gboolean   highlight_diagnostics)
@@ -1662,8 +1703,12 @@ ide_buffer_get_content (IdeBuffer *self)
   return g_bytes_ref (priv->content);
 }
 
-
-
+/**
+ * ide_buffer_trim_trailing_whitespace:
+ *
+ * Trim trailing whitespaces from the buffer.
+ *
+ */
 void
 ide_buffer_trim_trailing_whitespace (IdeBuffer *self)
 {
@@ -1756,6 +1801,14 @@ ide_buffer_get_title (IdeBuffer *self)
   return priv->title;
 }
 
+/**
+ * ide_buffer_get_style_scheme_name:
+ *
+ * Gets the #IdeBuffer:style-scheme-name property.
+ * This property contains the current style scheme used by the buffer.
+ *
+ * Returns: (tranfer none): A string containing the name of the currently used style scheme.
+ */
 const gchar *
 ide_buffer_get_style_scheme_name (IdeBuffer *self)
 {
@@ -1770,6 +1823,13 @@ ide_buffer_get_style_scheme_name (IdeBuffer *self)
   return NULL;
 }
 
+/**
+ * ide_buffer_set_style_scheme_name:
+ * @style_scheme_name: A string containing the name of the style scheme to use.
+ *
+ * Sets the #IdeBuffer:style-scheme-name property.
+ * Sets the style scheme to be used by this buffer.
+ */
 void
 ide_buffer_set_style_scheme_name (IdeBuffer   *self,
                                   const gchar *style_scheme_name)
@@ -1840,6 +1900,13 @@ _ide_buffer_set_loading (IdeBuffer *self,
     }
 }
 
+/**
+ * ide_buffer_get_read_only:
+ *
+ * Gets the #IdeBuffer:read-only property. This property indicate if the underlying file is read only or not.
+ *
+ * Returns: %TRUE if the #IdeBuffer is read only. Otherwise %FALSE.
+ */
 gboolean
 ide_buffer_get_read_only (IdeBuffer *self)
 {
@@ -1946,6 +2013,13 @@ ide_buffer__check_for_volume_cb (GObject      *object,
     }
 }
 
+/**
+ * ide_buffer_check_for_volume_change:
+ *
+ * Update the #IdeBuffer:read-only property and the corresponding
+ * modification time (mtime).
+ *
+ */
 void
 ide_buffer_check_for_volume_change (IdeBuffer *self)
 {
@@ -1996,6 +2070,14 @@ _ide_buffer_set_mtime (IdeBuffer      *self,
   IDE_EXIT;
 }
 
+/**
+ * ide_buffer_get_iter_at_source_location:
+ * @iter: (out): a #GtkTextIter.
+ * @location: a #IdeSourceLocation.
+ *
+ * Fill @iter with the position designated by @location.
+ *
+ */
 void
 ide_buffer_get_iter_at_source_location (IdeBuffer         *self,
                                         GtkTextIter       *iter,
@@ -2014,6 +2096,12 @@ ide_buffer_get_iter_at_source_location (IdeBuffer         *self,
   gtk_text_buffer_get_iter_at_line_offset (GTK_TEXT_BUFFER (self), iter, line, line_offset);
 }
 
+/**
+ * ide_buffer_rehighlight:
+ *
+ * Force the #IdeBuffer to rebuild the highlight.
+ *
+ */
 void
 ide_buffer_rehighlight (IdeBuffer *self)
 {
@@ -2052,6 +2140,13 @@ ide_buffer__symbol_provider_lookup_symbol_cb (GObject      *object,
   g_task_return_pointer (task, ide_symbol_ref (symbol), (GDestroyNotify)ide_symbol_unref);
 }
 
+/**
+ * ide_buffer_get_symbol_at_location_async:
+ * @location: a #GtkTextIter indicating a position to search for a symbol.
+ *
+ * Asynchronously get a possible symbol at @location.
+ *
+ */
 void
 ide_buffer_get_symbol_at_location_async (IdeBuffer           *self,
                                          const GtkTextIter   *location,
