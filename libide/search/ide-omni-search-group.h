@@ -39,6 +39,7 @@ void               ide_omni_search_group_focus_first   (IdeOmniSearchGroup *grou
 void               ide_omni_search_group_focus_last    (IdeOmniSearchGroup *group);
 IdeSearchResult   *ide_omni_search_group_get_first     (IdeOmniSearchGroup *group);
 gboolean           ide_omni_search_group_activate      (IdeOmniSearchGroup *group);
+guint64            ide_omni_search_group_get_count     (IdeOmniSearchGroup *self);
 
 G_END_DECLS
 

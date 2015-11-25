@@ -447,3 +447,11 @@ ide_omni_search_group_activate (IdeOmniSearchGroup *group)
 
   return FALSE;
 }
+
+guint64
+ide_omni_search_group_get_count (IdeOmniSearchGroup *self)
+{
+  g_return_val_if_fail (IDE_IS_OMNI_SEARCH_GROUP (self), 0);
+
+  return self->count;
+}
