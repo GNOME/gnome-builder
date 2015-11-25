@@ -32,7 +32,7 @@ G_DECLARE_FINAL_TYPE (IdeOmniSearchDisplay, ide_omni_search_display, IDE, OMNI_S
 void              ide_omni_search_display_activate    (IdeOmniSearchDisplay *display);
 IdeSearchContext *ide_omni_search_display_get_context (IdeOmniSearchDisplay *display);
 void              ide_omni_search_display_set_context (IdeOmniSearchDisplay *display,
-                                                      IdeSearchContext    *context);
+                                                       IdeSearchContext     *context);
 guint64           ide_omni_search_display_get_count   (IdeOmniSearchDisplay *display);
 
 G_END_DECLS

@@ -92,7 +92,7 @@ ide_omni_search_display_new (void)
 
 static void
 ide_omni_search_display_real_result_activated (IdeOmniSearchDisplay *self,
-                                              IdeSearchResult     *result)
+                                               IdeSearchResult      *result)
 {
   g_return_if_fail (IDE_IS_OMNI_SEARCH_DISPLAY (self));
   g_return_if_fail (IDE_IS_SEARCH_RESULT (result));
@@ -101,9 +101,9 @@ ide_omni_search_display_real_result_activated (IdeOmniSearchDisplay *self,
 
 static void
 ide_omni_search_display_result_activated (IdeOmniSearchDisplay *self,
-                                         GtkWidget           *widget,
-                                         IdeSearchResult     *result,
-                                         IdeOmniSearchGroup  *group)
+                                          GtkWidget            *widget,
+                                          IdeSearchResult      *result,
+                                          IdeOmniSearchGroup   *group)
 {
   g_return_if_fail (IDE_IS_OMNI_SEARCH_DISPLAY (self));
   g_return_if_fail (GTK_IS_WIDGET (widget));
@@ -115,8 +115,8 @@ ide_omni_search_display_result_activated (IdeOmniSearchDisplay *self,
 
 static void
 ide_omni_search_display_result_selected (IdeOmniSearchDisplay *self,
-                                        IdeSearchResult     *result,
-                                        IdeOmniSearchGroup  *group)
+                                         IdeSearchResult      *result,
+                                         IdeOmniSearchGroup   *group)
 {
   guint i;
 
@@ -136,8 +136,8 @@ ide_omni_search_display_result_selected (IdeOmniSearchDisplay *self,
 
 static gboolean
 ide_omni_search_display_keynav_failed (IdeOmniSearchDisplay *self,
-                                      GtkDirectionType     dir,
-                                      IdeOmniSearchGroup  *group)
+                                       GtkDirectionType      dir,
+                                       IdeOmniSearchGroup   *group)
 {
   GList *list = NULL;
   GList *iter;
@@ -208,7 +208,7 @@ ide_omni_search_display_activate (IdeOmniSearchDisplay *self)
 
 static void
 ide_omni_search_display_add_provider (IdeOmniSearchDisplay *self,
-                                     IdeSearchProvider   *provider)
+                                      IdeSearchProvider    *provider)
 {
   ProviderEntry *entry;
   guint i;
@@ -285,7 +285,7 @@ ide_omni_search_display_add_provider (IdeOmniSearchDisplay *self,
 
 static void
 ide_omni_search_display_remove_provider (IdeOmniSearchDisplay *self,
-                                        IdeSearchProvider   *provider)
+                                         IdeSearchProvider    *provider)
 {
   guint i;
 
@@ -314,9 +314,9 @@ ide_omni_search_display_remove_provider (IdeOmniSearchDisplay *self,
 
 static void
 ide_omni_search_display_result_added (IdeOmniSearchDisplay *self,
-                                     IdeSearchProvider   *provider,
-                                     IdeSearchResult     *result,
-                                     IdeSearchContext    *context)
+                                      IdeSearchProvider    *provider,
+                                      IdeSearchResult      *result,
+                                      IdeSearchContext     *context)
 {
   guint i;
 
@@ -345,9 +345,9 @@ ide_omni_search_display_result_added (IdeOmniSearchDisplay *self,
 
 static void
 ide_omni_search_display_result_removed (IdeOmniSearchDisplay *self,
-                                       IdeSearchProvider   *provider,
-                                       IdeSearchResult     *result,
-                                       IdeSearchContext    *context)
+                                        IdeSearchProvider    *provider,
+                                        IdeSearchResult      *result,
+                                        IdeSearchContext     *context)
 {
   guint i;
 
@@ -373,9 +373,9 @@ ide_omni_search_display_result_removed (IdeOmniSearchDisplay *self,
 
 static void
 ide_omni_search_display_count_set (IdeOmniSearchDisplay *self,
-                                  IdeSearchProvider   *provider,
-                                  guint64              count,
-                                  IdeSearchContext    *context)
+                                   IdeSearchProvider    *provider,
+                                   guint64               count,
+                                   IdeSearchContext     *context)
 {
 #if 0
   guint i;
@@ -402,7 +402,7 @@ ide_omni_search_display_count_set (IdeOmniSearchDisplay *self,
 
 static void
 ide_omni_search_display_connect_context (IdeOmniSearchDisplay *self,
-                                        IdeSearchContext    *context)
+                                         IdeSearchContext     *context)
 {
   const GList *providers;
   const GList *iter;
@@ -434,7 +434,7 @@ ide_omni_search_display_connect_context (IdeOmniSearchDisplay *self,
 
 static void
 ide_omni_search_display_disconnect_context (IdeOmniSearchDisplay *self,
-                                           IdeSearchContext    *context)
+                                            IdeSearchContext     *context)
 {
   g_return_if_fail (IDE_IS_OMNI_SEARCH_DISPLAY (self));
   g_return_if_fail (IDE_IS_SEARCH_CONTEXT (context));
@@ -463,7 +463,7 @@ ide_omni_search_display_get_context (IdeOmniSearchDisplay *self)
 
 void
 ide_omni_search_display_set_context (IdeOmniSearchDisplay *self,
-                                    IdeSearchContext    *context)
+                                     IdeSearchContext     *context)
 {
   g_return_if_fail (IDE_IS_OMNI_SEARCH_DISPLAY (self));
   g_return_if_fail (!context || IDE_IS_SEARCH_CONTEXT (context));
@@ -521,9 +521,9 @@ ide_omni_search_display_dispose (GObject *object)
 
 static void
 ide_omni_search_display_get_property (GObject    *object,
-                                guint       prop_id,
-                                GValue     *value,
-                                GParamSpec *pspec)
+                                      guint       prop_id,
+                                      GValue     *value,
+                                      GParamSpec *pspec)
 {
   IdeOmniSearchDisplay *self = IDE_OMNI_SEARCH_DISPLAY (object);
 
@@ -540,9 +540,9 @@ ide_omni_search_display_get_property (GObject    *object,
 
 static void
 ide_omni_search_display_set_property (GObject      *object,
-                                guint         prop_id,
-                                const GValue *value,
-                                GParamSpec   *pspec)
+                                      guint         prop_id,
+                                      const GValue *value,
+                                      GParamSpec   *pspec)
 {
   IdeOmniSearchDisplay *self = IDE_OMNI_SEARCH_DISPLAY (object);
 
