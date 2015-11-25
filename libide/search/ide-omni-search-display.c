@@ -596,3 +596,20 @@ ide_omni_search_display_init (IdeOmniSearchDisplay *self)
 
   gtk_orientable_set_orientation (GTK_ORIENTABLE (self), GTK_ORIENTATION_VERTICAL);
 }
+
+guint64
+ide_omni_search_display_get_count (IdeOmniSearchDisplay *self)
+{
+  guint64 count = 0;
+  gint i;
+
+  g_return_val_if_fail (IDE_IS_OMNI_SEARCH_DISPLAY (self), 0);
+
+  for (i = 0; i < self->providers->len; i++)
+    {
+      ProviderEntry *provider = g_ptr_array_index (self->providers, i);
+      count += ide_omni_search_group_get_count (provider->group);
+    }
+
+  return count;
+}

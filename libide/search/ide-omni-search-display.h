@@ -33,6 +33,7 @@ void              ide_omni_search_display_activate    (IdeOmniSearchDisplay *dis
 IdeSearchContext *ide_omni_search_display_get_context (IdeOmniSearchDisplay *display);
 void              ide_omni_search_display_set_context (IdeOmniSearchDisplay *display,
                                                       IdeSearchContext    *context);
+guint64           ide_omni_search_display_get_count   (IdeOmniSearchDisplay *display);
 
 G_END_DECLS
 
