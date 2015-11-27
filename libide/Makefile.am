@@ -300,6 +300,8 @@ libide_1_0_la_SOURCES = \
 	ide-ref-ptr.h \
 	ide-search-reducer.c \
 	ide-search-reducer.h \
+	ide-shortcuts-window.c \
+	ide-shortcuts-window.h \
 	ide-source-iter.c \
 	ide-source-iter.h \
 	ide-source-snippet-completion-item.c \

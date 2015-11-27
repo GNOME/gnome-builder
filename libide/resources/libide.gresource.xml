@@ -60,6 +60,7 @@
     <file alias="ide-preferences-perspective.ui">../../data/ui/ide-preferences-perspective.ui</file>
     <file alias="ide-preferences-spin-button.ui">../../data/ui/ide-preferences-spin-button.ui</file>
     <file alias="ide-preferences-switch.ui">../../data/ui/ide-preferences-switch.ui</file>
+    <file alias="ide-shortcuts-window.ui">../../data/ui/ide-shortcuts-window.ui</file>
     <file alias="ide-workbench-header-bar.ui">../../data/ui/ide-workbench-header-bar.ui</file>
     <file alias="ide-workbench.ui">../../data/ui/ide-workbench.ui</file>
   </gresource>

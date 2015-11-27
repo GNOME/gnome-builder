@@ -27,6 +27,7 @@
 #include "ide-application-credits.h"
 #include "ide-application-private.h"
 #include "ide-debug.h"
+#include "ide-shortcuts-window.h"
 #include "ide-workbench.h"
 
 static void
@@ -290,23 +291,44 @@ ide_application_actions_new_project (GSimpleAction *action,
 cleanup:
   g_list_free (windows);
 }
+#endif
 
 static void
 ide_application_actions_shortcuts (GSimpleAction *action,
                                    GVariant      *variant,
                                    gpointer       user_data)
 {
-  IdeShortcutsWindow *window;
+  IdeApplication *self = user_data;
+  GtkWindow *window;
+  GtkWindow *parent = NULL;
+  GList *list;
+
+  g_assert (IDE_IS_APPLICATION (self));
+
+  list = gtk_application_get_windows (GTK_APPLICATION (self));
+
+  for (; list; list = list->next)
+    {
+      window = list->data;
+
+      if (IDE_IS_SHORTCUTS_WINDOW (window))
+        {
+          gtk_window_present (window);
+          return;
+        }
+
+      if (IDE_IS_WORKBENCH (window))
+        parent = window;
+    }
 
   window = g_object_new (IDE_TYPE_SHORTCUTS_WINDOW,
+                         "application", self,
                          "window-position", GTK_WIN_POS_CENTER,
-                         "default-width", 800,
-                         "default-height", 600,
+                         "transient-for", parent,
                          NULL);
 
   gtk_window_present (GTK_WINDOW (window));
 }
-#endif
 
 static const GActionEntry IdeApplicationActions[] = {
   { "about",        ide_application_actions_about },
@@ -314,7 +336,7 @@ static const GActionEntry IdeApplicationActions[] = {
   //{ "new-project",  ide_application_actions_new_project },
   { "preferences",  ide_application_actions_preferences },
   { "quit",         ide_application_actions_quit },
-  //{ "shortcuts",    ide_application_actions_shortcuts },
+  { "shortcuts",    ide_application_actions_shortcuts },
   //{ "support",      ide_application_actions_support },
 };
 
