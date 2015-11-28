@@ -26,6 +26,7 @@ G_BEGIN_DECLS
 #define IDE_INSIDE
 
 #include "ide-application.h"
+#include "ide-application-addin.h"
 #include "ide-back-forward-item.h"
 #include "ide-back-forward-list.h"
 #include "ide-build-result.h"
