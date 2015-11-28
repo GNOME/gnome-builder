@@ -23,34 +23,34 @@ struct _GbTerminalApplicationAddin
   GObject parent_instance;
 };
 
-static void application_addin_iface_init (GbApplicationAddinInterface *iface);
+static void application_addin_iface_init (IdeApplicationAddinInterface *iface);
 
 G_DEFINE_DYNAMIC_TYPE_EXTENDED (GbTerminalApplicationAddin,
                                 gb_terminal_application_addin,
                                 G_TYPE_OBJECT,
                                 0,
-                                G_IMPLEMENT_INTERFACE (GB_TYPE_APPLICATION_ADDIN,
+                                G_IMPLEMENT_INTERFACE (IDE_TYPE_APPLICATION_ADDIN,
                                                        application_addin_iface_init))
 
 static void
-gb_terminal_application_addin_load (GbApplicationAddin *addin,
-                                    GbApplication      *application)
+gb_terminal_application_addin_load (IdeApplicationAddin *addin,
+                                    IdeApplication      *application)
 {
   const gchar *new_terminal_accels[] = { "<ctrl><shift>t", NULL };
 
   g_assert (GB_IS_TERMINAL_APPLICATION_ADDIN (addin));
-  g_assert (GB_IS_APPLICATION (application));
+  g_assert (IDE_IS_APPLICATION (application));
 
   gtk_application_set_accels_for_action (GTK_APPLICATION (application), "win.new-terminal",
                                          new_terminal_accels);
 }
 
 static void
-gb_terminal_application_addin_unload (GbApplicationAddin *addin,
-                                      GbApplication      *application)
+gb_terminal_application_addin_unload (IdeApplicationAddin *addin,
+                                      IdeApplication      *application)
 {
   g_assert (GB_IS_TERMINAL_APPLICATION_ADDIN (addin));
-  g_assert (GB_IS_APPLICATION (application));
+  g_assert (IDE_IS_APPLICATION (application));
 
   gtk_application_set_accels_for_action (GTK_APPLICATION (application), "win.new-terminal", NULL);
 }
@@ -71,7 +71,7 @@ gb_terminal_application_addin_init (GbTerminalApplicationAddin *self)
 }
 
 static void
-application_addin_iface_init (GbApplicationAddinInterface *iface)
+application_addin_iface_init (IdeApplicationAddinInterface *iface)
 {
   iface->load = gb_terminal_application_addin_load;
   iface->unload = gb_terminal_application_addin_unload;

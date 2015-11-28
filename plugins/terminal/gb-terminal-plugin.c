@@ -17,13 +17,12 @@
  */
 
 #include <libpeas/peas.h>
+#include <ide.h>
 
-#include "gb-application-addin.h"
 #include "gb-terminal-application-addin.h"
 #include "gb-terminal-private.h"
 #include "gb-terminal-resources.h"
 #include "gb-terminal-workbench-addin.h"
-#include "gb-workbench-addin.h"
 
 void
 peas_register_types (PeasObjectModule *module)
@@ -32,9 +31,9 @@ peas_register_types (PeasObjectModule *module)
   _gb_terminal_workbench_addin_register_type (G_TYPE_MODULE (module));
 
   peas_object_module_register_extension_type (module,
-                                              GB_TYPE_APPLICATION_ADDIN,
+                                              IDE_TYPE_APPLICATION_ADDIN,
                                               GB_TYPE_TERMINAL_APPLICATION_ADDIN);
   peas_object_module_register_extension_type (module,
-                                              GB_TYPE_WORKBENCH_ADDIN,
+                                              IDE_TYPE_WORKBENCH_ADDIN,
                                               GB_TYPE_TERMINAL_WORKBENCH_ADDIN);
 }

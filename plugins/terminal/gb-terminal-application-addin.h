@@ -19,7 +19,7 @@
 #ifndef GB_TERMINAL_APPLICATION_ADDIN_H
 #define GB_TERMINAL_APPLICATION_ADDIN_H
 
-#include "gb-application-addin.h"
+#include <ide.h>
 
 G_BEGIN_DECLS
 
