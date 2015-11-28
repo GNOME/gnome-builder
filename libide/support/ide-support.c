@@ -1,4 +1,4 @@
-/* gb-support.c
+/* ide-support.c
  *
  * Copyright (C) 2014 Christian Hergert <christian@hergert.me>
  *
@@ -20,8 +20,9 @@
 #include <string.h>
 
 #include "egg-counter.h"
-#include "gb-application.h"
-#include "gb-support.h"
+
+#include "ide-application.h"
+#include "ide-support.h"
 
 static gchar *
 str_to_key (const gchar *str)
@@ -43,9 +44,8 @@ counter_arena_foreach_cb (EggCounter *counter,
 }
 
 gchar *
-gb_get_support_log (void)
+ide_get_support_log (void)
 {
-  GApplication *app;
   GChecksum *checksum;
   GDateTime *now;
   GDateTime *started_at;
@@ -54,8 +54,6 @@ gb_get_support_log (void)
   gchar **env;
   guint i;
   guint n_monitors;
-
-  app = g_application_get_default ();
 
   str = g_string_new (NULL);
 
@@ -77,7 +75,7 @@ gb_get_support_log (void)
   g_string_append_printf (str, "current_dir = \"%s\"\n", tmp);
   g_free (tmp);
 
-  started_at = gb_application_get_started_at (GB_APPLICATION (app));
+  started_at = ide_application_get_started_at (IDE_APPLICATION_DEFAULT);
   tmp = g_date_time_format (started_at, "%FT%H:%M:%SZ");
   g_string_append_printf (str, "started-at = \"%s\"\n", tmp);
   g_free (tmp);

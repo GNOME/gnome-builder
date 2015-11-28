@@ -48,6 +48,8 @@ struct _IdeApplication
   IdeKeybindings      *keybindings;
 
   IdeRecentProjects   *recent_projects;
+
+  GDateTime           *started_at;
 };
 
 void     ide_application_discover_plugins   (IdeApplication   *self) G_GNUC_INTERNAL;

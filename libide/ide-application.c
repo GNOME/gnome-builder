@@ -352,6 +352,7 @@ ide_application_finalize (GObject *object)
 
   g_clear_pointer (&self->dbus_address, g_free);
   g_clear_pointer (&self->tool_arguments, g_strfreev);
+  g_clear_pointer (&self->started_at, g_date_time_unref);
   g_clear_object (&self->worker_manager);
   g_clear_object (&self->keybindings);
   g_clear_object (&self->recent_projects);
@@ -378,6 +379,7 @@ ide_application_init (IdeApplication *self)
 {
   ide_set_program_name (PACKAGE_NAME);
 
+  self->started_at = g_date_time_new_now_utc ();
   self->mode = IDE_APPLICATION_MODE_PRIMARY;
 
   setlocale (LC_ALL, "");
@@ -574,4 +576,18 @@ ide_application_get_keybindings_mode (IdeApplication *self)
     return ide_keybindings_get_mode (self->keybindings);
 
   return NULL;
+}
+
+/**
+ * ide_application_get_started_at:
+ * @self: A #IdeApplication.
+ *
+ * Gets the startup time of the application.
+ *
+ * Returns: (transfer none): A #GDateTime.
+ */
+GDateTime *
+ide_application_get_started_at (IdeApplication *self)
+{
+  return self->started_at;
 }

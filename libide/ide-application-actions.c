@@ -28,6 +28,7 @@
 #include "ide-application-private.h"
 #include "ide-debug.h"
 #include "ide-shortcuts-window.h"
+#include "ide-support.h"
 #include "ide-workbench.h"
 
 static void
@@ -68,7 +69,6 @@ ide_application_actions_preferences (GSimpleAction *action,
   IDE_EXIT;
 }
 
-#if 0
 static void
 ide_application_actions_support (GSimpleAction *action,
                                  GVariant      *parameter,
@@ -119,7 +119,6 @@ cleanup:
   g_free (str);
   g_free (log_path);
 }
-#endif
 
 static void
 ide_application_actions_quit (GSimpleAction *action,
@@ -337,7 +336,7 @@ static const GActionEntry IdeApplicationActions[] = {
   { "preferences",  ide_application_actions_preferences },
   { "quit",         ide_application_actions_quit },
   { "shortcuts",    ide_application_actions_shortcuts },
-  //{ "support",      ide_application_actions_support },
+  { "support",      ide_application_actions_support },
 };
 
 void

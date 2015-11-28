@@ -1,4 +1,4 @@
-/* gb-support.h
+/* ide-support.h
  *
  * Copyright (C) 2014 Christian Hergert <christian@hergert.me>
  *
@@ -16,15 +16,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GB_SUPPORT_H
-#define GB_SUPPORT_H
+#ifndef IDE_SUPPORT_H
+#define IDE_SUPPORT_H
 
 #include <glib.h>
 
 G_BEGIN_DECLS
 
-gchar *gb_get_support_log (void);
+gchar *ide_get_support_log (void);
 
 G_END_DECLS
 
-#endif /* GB_SUPPORT_H */
+#endif /* IDE_SUPPORT_H */

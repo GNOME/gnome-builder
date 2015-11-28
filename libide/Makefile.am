@@ -360,6 +360,8 @@ libide_1_0_la_SOURCES = \
 	search/ide-omni-search-group.h \
 	search/ide-omni-search-row.c \
 	search/ide-omni-search-row.h \
+	support/ide-support.c \
+	support/ide-support.h \
 	theatrics/ide-box-theatric.c \
 	theatrics/ide-box-theatric.h \
 	util/ide-cairo.c \
@@ -410,6 +412,7 @@ libide_1_0_la_includes = \
 	-I$(srcdir)/modelines \
 	-I$(srcdir)/preferences \
 	-I$(srcdir)/resources \
+	-I$(srcdir)/support \
 	-I$(srcdir)/theatrics \
 	-I$(srcdir)/util \
 	$(NULL)
