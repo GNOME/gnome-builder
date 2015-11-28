@@ -51,6 +51,8 @@
 
   <kudos>
     <kudo>AppMenu</kudo>
+    <kudo>HiDpiIcon</kudo>
+    <kudo>ModernToolkit</kudo>
   </kudos>
 
   <update_contact>ignatenko@src.gnome.org</update_contact>
