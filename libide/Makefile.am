@@ -7,8 +7,6 @@ pkglibdir = $(libdir)/gnome-builder
 pkglib_LTLIBRARIES = libide-1.0.la
 
 libide_1_0_la_public_sources = \
-	directory/ide-directory-vcs.c \
-	directory/ide-directory-vcs.h \
 	doap/ide-doap-person.c \
 	doap/ide-doap-person.h \
 	doap/ide-doap.c \
@@ -21,6 +19,8 @@ libide_1_0_la_public_sources = \
 	editor/ide-editor-view.h \
 	fallback/ide-directory-build-system.c \
 	fallback/ide-directory-build-system.h \
+	fallback/ide-directory-vcs.c \
+	fallback/ide-directory-vcs.h \
 	fallback/ide-fallback-plugin.c \
 	git/ide-git-remote-callbacks.c \
 	git/ide-git-remote-callbacks.h \
@@ -264,6 +264,7 @@ libide_1_0_la_SOURCES = \
 	gconstructor.h \
 	git/ide-git-buffer-change-monitor.c \
 	git/ide-git-buffer-change-monitor.h \
+	git/ide-git-plugin.c \
 	greeter/ide-greeter-perspective.c \
 	greeter/ide-greeter-perspective.h \
 	greeter/ide-greeter-project-row.c \
@@ -399,7 +400,6 @@ libide_1_0_la_includes = \
 	-I$(top_srcdir)/contrib/xml \
 	-I$(top_srcdir)/data/icons/hicolor \
 	-I$(srcdir) \
-	-I$(srcdir)/directory \
 	-I$(srcdir)/doap \
 	-I$(srcdir)/editor \
 	-I$(srcdir)/editorconfig \

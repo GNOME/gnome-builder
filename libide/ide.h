@@ -115,7 +115,6 @@ G_BEGIN_DECLS
 #include "editor/ide-editor-view.h"
 #include "editor/ide-editor-view-addin.h"
 
-#include "directory/ide-directory-vcs.h"
 #include "doap/ide-doap-person.h"
 #include "doap/ide-doap.h"
 #include "git/ide-git-remote-callbacks.h"

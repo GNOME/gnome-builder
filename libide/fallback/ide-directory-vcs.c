@@ -24,18 +24,18 @@
 
 struct _IdeDirectoryVcs
 {
-  IdeVcs  parent_instance;
-
-  GFile  *working_directory;
+  IdeObject  parent_instances;
+  GFile     *working_directory;
 };
 
 #define LOAD_MAX_FILES 5000
 
 static void async_initable_iface_init (GAsyncInitableIface *iface);
+static void vcs_iface_init            (IdeVcsInterface     *iface);
 
-G_DEFINE_TYPE_EXTENDED (IdeDirectoryVcs, ide_directory_vcs, IDE_TYPE_VCS, 0,
-                        G_IMPLEMENT_INTERFACE (G_TYPE_ASYNC_INITABLE,
-                                               async_initable_iface_init))
+G_DEFINE_TYPE_EXTENDED (IdeDirectoryVcs, ide_directory_vcs, IDE_TYPE_OBJECT, 0,
+                        G_IMPLEMENT_INTERFACE (IDE_TYPE_VCS, vcs_iface_init)
+                        G_IMPLEMENT_INTERFACE (G_TYPE_ASYNC_INITABLE, async_initable_iface_init))
 
 static GFile *
 ide_directory_vcs_get_working_directory (IdeVcs *vcs)
@@ -93,11 +93,7 @@ ide_directory_vcs_dispose (GObject *object)
 static void
 ide_directory_vcs_class_init (IdeDirectoryVcsClass *klass)
 {
-  IdeVcsClass *vcs_class = IDE_VCS_CLASS (klass);
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-  vcs_class->get_working_directory = ide_directory_vcs_get_working_directory;
-  vcs_class->is_ignored = ide_directory_vcs_is_ignored;
 
   object_class->dispose = ide_directory_vcs_dispose;
 }
@@ -186,4 +182,18 @@ async_initable_iface_init (GAsyncInitableIface *iface)
 {
   iface->init_async = ide_directory_vcs_init_async;
   iface->init_finish = ide_directory_vcs_init_finish;
+}
+
+static gint
+ide_directory_vcs_get_priority (IdeVcs *vcs)
+{
+  return G_MAXINT;
+}
+
+static void
+vcs_iface_init (IdeVcsInterface *iface)
+{
+  iface->get_working_directory = ide_directory_vcs_get_working_directory;
+  iface->is_ignored = ide_directory_vcs_is_ignored;
+  iface->get_priority = ide_directory_vcs_get_priority;
 }

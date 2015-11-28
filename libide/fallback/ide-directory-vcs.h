@@ -1,4 +1,4 @@
-/* fallback-plugin.c
+/* ide-directory-vcs.h
  *
  * Copyright (C) 2015 Christian Hergert <christian@hergert.me>
  *
@@ -16,19 +16,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <libpeas/peas.h>
+#ifndef IDE_DIRECTORY_VCS_H
+#define IDE_DIRECTORY_VCS_H
 
-#include "ide-build-system.h"
-#include "ide-directory-build-system.h"
-#include "ide-directory-vcs.h"
+#include "ide-vcs.h"
 
-void
-ide_fallback_register_types (PeasObjectModule *module)
-{
-  peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_BUILD_SYSTEM,
-                                              IDE_TYPE_DIRECTORY_BUILD_SYSTEM);
-  peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_VCS,
-                                              IDE_TYPE_DIRECTORY_VCS);
-}
+G_BEGIN_DECLS
+
+#define IDE_TYPE_DIRECTORY_VCS (ide_directory_vcs_get_type())
+
+G_DECLARE_FINAL_TYPE (IdeDirectoryVcs, ide_directory_vcs, IDE, DIRECTORY_VCS, IdeObject)
+
+G_END_DECLS
+
+#endif /* IDE_DIRECTORY_VCS_H */

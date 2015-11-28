@@ -1,6 +1,6 @@
-/* ide-directory-vcs.h
+/* ide-git-plugin.c
  *
- * Copyright (C) 2015 Christian Hergert <christian@hergert.me>
+ * Copyright (C) 2015 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,18 +16,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_DIRECTORY_VCS_H
-#define IDE_DIRECTORY_VCS_H
+#include <libpeas/peas.h>
 
+#include "ide-git-vcs.h"
 #include "ide-vcs.h"
 
-G_BEGIN_DECLS
-
-#define IDE_TYPE_DIRECTORY_VCS (ide_directory_vcs_get_type())
-
-G_DECLARE_FINAL_TYPE (IdeDirectoryVcs, ide_directory_vcs,
-                      IDE, DIRECTORY_VCS, IdeVcs)
-
-G_END_DECLS
-
-#endif /* IDE_DIRECTORY_VCS_H */
+void
+ide_git_register_types (PeasObjectModule *module)
+{
+  peas_object_module_register_extension_type (module, IDE_TYPE_VCS, IDE_TYPE_GIT_VCS);
+}

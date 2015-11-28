@@ -56,7 +56,9 @@ void
 ide_application_discover_plugins (IdeApplication *self)
 {
   PeasEngine *engine = peas_engine_get_default ();
+  static const gchar *embedded [] = { "editor", "fallback", "git", NULL };
   const GList *list;
+  gint i;
 
   g_return_if_fail (IDE_IS_APPLICATION (self));
 
@@ -93,9 +95,14 @@ ide_application_discover_plugins (IdeApplication *self)
                                        PACKAGE_DATADIR"/gnome-builder/plugins");
     }
 
-  peas_engine_prepend_search_path (engine,
-                                   "resource:///org/gnome/builder/plugins/editor",
-                                   "resource:///org/gnome/builder/plugins/editor");
+  for (i = 0; embedded [i]; i++)
+    {
+      gchar *path;
+
+      path = g_strdup_printf ("resource:///org/gnome/builder/plugins/%s", embedded [i]);
+      peas_engine_prepend_search_path (engine, path, path);
+      g_free (path);
+    }
 
   peas_engine_rescan_plugins (engine);
 

@@ -35,7 +35,7 @@
 
 struct _IdeGitVcs
 {
-  IdeVcs parent_instance;
+  IdeObject       parent_instance;
 
   GgitRepository *repository;
   GgitRepository *change_monitor_repository;
@@ -50,6 +50,7 @@ struct _IdeGitVcs
 };
 
 static void     g_async_initable_init_interface (GAsyncInitableIface  *iface);
+static void     ide_git_vcs_init_iface          (IdeVcsInterface      *iface);
 static void     ide_git_vcs_reload_async        (IdeGitVcs            *self,
                                                  GCancellable         *cancellable,
                                                  GAsyncReadyCallback   callback,
@@ -58,7 +59,8 @@ static gboolean ide_git_vcs_reload_finish       (IdeGitVcs            *self,
                                                  GAsyncResult         *result,
                                                  GError              **error);
 
-G_DEFINE_TYPE_EXTENDED (IdeGitVcs, ide_git_vcs, IDE_TYPE_VCS, 0,
+G_DEFINE_TYPE_EXTENDED (IdeGitVcs, ide_git_vcs, IDE_TYPE_OBJECT, 0,
+                        G_IMPLEMENT_INTERFACE (IDE_TYPE_VCS, ide_git_vcs_init_iface)
                         G_IMPLEMENT_INTERFACE (G_TYPE_ASYNC_INITABLE,
                                                g_async_initable_init_interface))
 
@@ -361,17 +363,20 @@ ide_git_vcs_get_property (GObject    *object,
 }
 
 static void
+ide_git_vcs_init_iface (IdeVcsInterface *iface)
+{
+  iface->get_working_directory = ide_git_vcs_get_working_directory;
+  iface->get_buffer_change_monitor = ide_git_vcs_get_buffer_change_monitor;
+  iface->is_ignored = ide_git_vcs_is_ignored;
+}
+
+static void
 ide_git_vcs_class_init (IdeGitVcsClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  IdeVcsClass *vcs_class = IDE_VCS_CLASS (klass);
 
   object_class->dispose = ide_git_vcs_dispose;
   object_class->get_property = ide_git_vcs_get_property;
-
-  vcs_class->get_working_directory = ide_git_vcs_get_working_directory;
-  vcs_class->get_buffer_change_monitor = ide_git_vcs_get_buffer_change_monitor;
-  vcs_class->is_ignored = ide_git_vcs_is_ignored;
 
   /**
    * IdeGitVcs:repository:
