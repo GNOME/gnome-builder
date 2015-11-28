@@ -174,6 +174,7 @@ ide_application_actions_about (GSimpleAction *action,
                          "version", PACKAGE_VERSION,
                          "website", "https://wiki.gnome.org/Apps/Builder",
                          "website-label", _("Learn more about GNOME Builder"),
+                         "window-position", GTK_WIN_POS_CENTER,
                          NULL);
   gtk_about_dialog_add_credit_section (GTK_ABOUT_DIALOG (dialog),
                                        _("Funded By"),
