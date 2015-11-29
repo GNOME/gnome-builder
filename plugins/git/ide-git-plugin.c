@@ -22,7 +22,7 @@
 #include "ide-vcs.h"
 
 void
-ide_git_register_types (PeasObjectModule *module)
+peas_register_types (PeasObjectModule *module)
 {
   peas_object_module_register_extension_type (module, IDE_TYPE_VCS, IDE_TYPE_GIT_VCS);
 }

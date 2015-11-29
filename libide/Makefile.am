@@ -22,10 +22,6 @@ libide_1_0_la_public_sources = \
 	fallback/ide-directory-vcs.c \
 	fallback/ide-directory-vcs.h \
 	fallback/ide-fallback-plugin.c \
-	git/ide-git-remote-callbacks.c \
-	git/ide-git-remote-callbacks.h \
-	git/ide-git-vcs.c \
-	git/ide-git-vcs.h \
 	ide-application.c \
 	ide-application.h \
 	ide-application-addin.c \
@@ -262,9 +258,6 @@ libide_1_0_la_SOURCES = \
 	editor/ide-editor-workbench-addin.c \
 	editor/ide-editor-workbench-addin.h \
 	gconstructor.h \
-	git/ide-git-buffer-change-monitor.c \
-	git/ide-git-buffer-change-monitor.h \
-	git/ide-git-plugin.c \
 	greeter/ide-greeter-perspective.c \
 	greeter/ide-greeter-perspective.h \
 	greeter/ide-greeter-project-row.c \
@@ -405,7 +398,6 @@ libide_1_0_la_includes = \
 	-I$(srcdir)/doap \
 	-I$(srcdir)/editor \
 	-I$(srcdir)/editorconfig \
-	-I$(srcdir)/git \
 	-I$(srcdir)/greeter \
 	-I$(srcdir)/gsettings \
 	-I$(srcdir)/local \
@@ -525,7 +517,7 @@ introspection_sources = \
 	$(NULL)
 
 Ide-1.0.gir: libide-1.0.la
-Ide_1_0_gir_INCLUDES = Gio-2.0 GtkSource-3.0 Ggit-1.0 Peas-1.0
+Ide_1_0_gir_INCLUDES = Gio-2.0 GtkSource-3.0 Peas-1.0
 Ide_1_0_gir_CFLAGS = $(libide_1_0_la_CFLAGS)
 Ide_1_0_gir_LIBS = \
 	libide-1.0.la \
@@ -554,7 +546,7 @@ libide-1.0.vapi: Ide-1.0.gir
 
 VAPIGEN_VAPIS = libide-1.0.vapi
 
-libide_1_0_vapi_DEPS = gio-2.0 gtk+-3.0 gtksourceview-3.0 ggit-1.0 libpeas-1.0
+libide_1_0_vapi_DEPS = gio-2.0 gtk+-3.0 gtksourceview-3.0 libpeas-1.0
 libide_1_0_vapi_METADATADIRS = $(srcdir)
 libide_1_0_vapi_FILES = Ide-1.0.gir
 

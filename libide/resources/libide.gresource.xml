@@ -72,8 +72,4 @@
   <gresource prefix="/org/gnome/builder/plugins/fallback">
     <file alias="fallback.plugin">../fallback/fallback.plugin</file>
   </gresource>
-
-  <gresource prefix="/org/gnome/builder/plugins/git">
-    <file alias="git.plugin">../git/git.plugin</file>
-  </gresource>
 </gresources>

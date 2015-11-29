@@ -235,6 +235,7 @@ m4_include([plugins/ctags/configure.ac])
 m4_include([plugins/devhelp/configure.ac])
 m4_include([plugins/device-manager/configure.ac])
 m4_include([plugins/file-search/configure.ac])
+m4_include([plugins/git/configure.ac])
 m4_include([plugins/gnome-code-assistance/configure.ac])
 m4_include([plugins/html-completion/configure.ac])
 m4_include([plugins/html-preview/configure.ac])
@@ -486,8 +487,9 @@ echo "  Clang ................................ : ${enable_clang_plugin}"
 echo "  Command Bar .......................... : ${enable_command_bar_plugin}"
 echo "  Ctags ................................ : ${enable_ctags_plugin}"
 echo "  Devhelp .............................. : ${enable_devhelp_plugin}"
-echo "  GNOME Code Assistance ................ : ${enable_gnome_code_assistance_plugin}"
+echo "  Git Version Control .................. : ${enable_git_plugin}"
 echo "  Global File Search ................... : ${enable_file_search_plugin}"
+echo "  GNOME Code Assistance ................ : ${enable_gnome_code_assistance_plugin}"
 echo "  HTML Autocompletion .................. : ${enable_html_completion_plugin}"
 echo "  HTML and Markdown Preview ............ : ${enable_html_preview_plugin}"
 echo "  Project Tree ......................... : ${enable_project_tree_plugin}"

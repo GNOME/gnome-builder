@@ -110,8 +110,8 @@ sort_by_priority (gconstpointer a,
                   gconstpointer b,
                   gpointer      user_data)
 {
-  IdeVcs *vcs_a = (IdeVcs *)a;
-  IdeVcs *vcs_b = (IdeVcs *)b;
+  IdeVcs *vcs_a = *(IdeVcs **)a;
+  IdeVcs *vcs_b = *(IdeVcs **)b;
 
   return ide_vcs_get_priority (vcs_a) - ide_vcs_get_priority (vcs_b);
 }
