@@ -2078,7 +2078,6 @@ _ide_source_view_apply_movement (IdeSourceView         *self,
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_NTH_LINE:
-      mv.count = MAX (1, mv.count);
       ide_source_view_movements_nth_line (&mv);
       break;
 
