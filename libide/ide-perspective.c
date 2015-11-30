@@ -277,3 +277,18 @@ ide_perspective_get_priority (IdePerspective *self)
 
   return IDE_PERSPECTIVE_GET_IFACE (self)->get_priority (self);
 }
+
+/**
+ * ide_perspective_is_early:
+ *
+ * If %TRUE, the perspective can be used before loading a project.
+ */
+gboolean
+ide_perspective_is_early (IdePerspective *self)
+{
+  g_return_val_if_fail (IDE_IS_PERSPECTIVE (self), FALSE);
+
+  if (IDE_PERSPECTIVE_GET_IFACE (self)->is_early)
+    return IDE_PERSPECTIVE_GET_IFACE (self)->is_early (self);
+  return FALSE;
+}

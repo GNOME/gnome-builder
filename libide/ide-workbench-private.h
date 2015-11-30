@@ -21,8 +21,7 @@
 
 #include <libpeas/peas.h>
 
-#include "ide-greeter-perspective.h"
-#include "ide-preferences-perspective.h"
+#include "ide-perspective.h"
 #include "ide-workbench.h"
 
 G_BEGIN_DECLS
@@ -38,8 +37,6 @@ struct _IdeWorkbench
 
   GtkStack                  *top_stack;
   GtkStack                  *titlebar_stack;
-  IdeGreeterPerspective     *greeter_perspective;
-  IdePreferencesPerspective *preferences_perspective;
   GtkStack                  *perspectives_stack;
   GtkStackSwitcher          *perspectives_stack_switcher;
   GtkPopover                *perspectives_popover;

@@ -88,12 +88,19 @@ ide_greeter_perspective_get_id (IdePerspective *perspective)
   return g_strdup ("greeter");
 }
 
+static gboolean
+ide_greeter_perspective_is_early (IdePerspective *perspective)
+{
+  return TRUE;
+};
+
 static void
 ide_perspective_iface_init (IdePerspectiveInterface *iface)
 {
   iface->get_id = ide_greeter_perspective_get_id;
   iface->get_actions = ide_greeter_perspective_get_actions;
   iface->get_titlebar = ide_greeter_perspective_get_titlebar;
+  iface->is_early = ide_greeter_perspective_is_early;
 }
 
 static void

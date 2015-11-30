@@ -208,7 +208,8 @@
     </child>
     <child>
       <object class="GtkButton" id="new_button">
-        <property name="action-name">app.new-project</property>
+        <property name="action-name">win.perspective</property>
+        <property name="action-target">'genesis'</property>
         <property name="visible">true</property>
         <property name="label" translatable="yes">_New</property>
         <property name="use-underline">true</property>

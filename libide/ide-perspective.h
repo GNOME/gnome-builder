@@ -39,6 +39,7 @@ struct _IdePerspectiveInterface
   gint          (*get_priority)        (IdePerspective *self);
   gchar        *(*get_title)           (IdePerspective *self);
   GtkWidget    *(*get_titlebar)        (IdePerspective *self);
+  gboolean      (*is_early)            (IdePerspective *self);
   void          (*set_fullscreen)      (IdePerspective *self,
                                         gboolean        fullscreen);
   void          (*views_foreach)       (IdePerspective *self,
@@ -54,6 +55,7 @@ gboolean      ide_perspective_get_needs_attention (IdePerspective *self);
 gint          ide_perspective_get_priority        (IdePerspective *self);
 gchar        *ide_perspective_get_title           (IdePerspective *self);
 GtkWidget    *ide_perspective_get_titlebar        (IdePerspective *self);
+gboolean      ide_perspective_is_early            (IdePerspective *self);
 void          ide_perspective_set_fullscreen      (IdePerspective *self,
                                                    gboolean        fullscreen);
 void          ide_perspective_views_foreach       (IdePerspective *self,
