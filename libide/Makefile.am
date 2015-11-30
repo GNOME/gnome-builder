@@ -22,6 +22,10 @@ libide_1_0_la_public_sources = \
 	editor/ide-editor-view-addin.h \
 	editor/ide-editor-view.c \
 	editor/ide-editor-view.h \
+	genesis/ide-genesis-perspective.c \
+	genesis/ide-genesis-perspective.h \
+	genesis/ide-genesis-addin.c \
+	genesis/ide-genesis-addin.h \
 	ide-application.c \
 	ide-application.h \
 	ide-application-addin.c \
@@ -399,6 +403,7 @@ libide_1_0_la_includes = \
 	-I$(srcdir)/editor \
 	-I$(srcdir)/editorconfig \
 	-I$(srcdir)/greeter \
+	-I$(srcdir)/genesis \
 	-I$(srcdir)/gsettings \
 	-I$(srcdir)/local \
 	-I$(srcdir)/modelines \

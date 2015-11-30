@@ -159,3 +159,14 @@ greeter list row {
 greeter list row:last-child {
   border-bottom: none;
 }
+
+
+genesisperspective frame {
+  border: 1px solid alpha(@borders, 0.4);
+}
+genesisperspective list row {
+  border-bottom: 1px solid alpha(@borders, 0.2);
+}
+genesisperspective list row:last-child {
+  border-bottom: none;
+}

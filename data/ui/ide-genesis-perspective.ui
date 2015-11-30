@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <!-- interface-requires gtk+ 3.18 -->
+  <template class="IdeGenesisPerspective" parent="GtkBin">
+    <child>
+      <object class="GtkStack" id="stack">
+        <property name="transition-duration">250</property>
+        <property name="transition-type">crossfade</property>
+        <property name="expand">true</property>
+        <property name="visible">true</property>
+        <child>
+          <object class="EggBox">
+            <property name="halign">center</property>
+            <property name="max-width-request">550</property>
+            <property name="valign">center</property>
+            <property name="visible">true</property>
+            <child>
+              <object class="GtkFrame">
+                <property name="visible">true</property>
+                <child>
+                  <object class="GtkListBox" id="list_box">
+                    <property name="visible">true</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+  <object class="GtkHeaderBar" id="header_bar">
+    <property name="show-close-button">true</property>
+    <property name="visible">true</property>
+    <child>
+      <object class="GtkButton">
+        <property name="action-name">win.perspective</property>
+        <property name="action-target">'greeter'</property>
+        <property name="visible">true</property>
+        <style>
+          <class name="image-button"/>
+        </style>
+        <child>
+          <object class="GtkImage">
+            <property name="icon-name">go-previous-symbolic</property>
+            <property name="visible">true</property>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child type="title">
+      <object class="GtkLabel">
+        <property name="label" translatable="yes">New Project</property>
+        <property name="visible">true</property>
+      </object>
+    </child>
+  </object>
+</interface>

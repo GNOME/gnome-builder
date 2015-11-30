@@ -19,6 +19,7 @@
 #define G_LOG_DOMAIN "ide-workbench"
 
 #include "ide-debug.h"
+#include "ide-genesis-perspective.h"
 #include "ide-greeter-perspective.h"
 #include "ide-gtk.h"
 #include "ide-macros.h"
@@ -268,6 +269,10 @@ ide_workbench_init (IdeWorkbench *self)
 
   ide_workbench_add_perspective (self,
                                  g_object_new (IDE_TYPE_GREETER_PERSPECTIVE,
+                                               "visible", TRUE,
+                                               NULL));
+  ide_workbench_add_perspective (self,
+                                 g_object_new (IDE_TYPE_GENESIS_PERSPECTIVE,
                                                "visible", TRUE,
                                                NULL));
   ide_workbench_add_perspective (self,
