@@ -44,7 +44,7 @@ ide_genesis_addin_get_icon_name (IdeGenesisAddin *self)
 /**
  * ide_genesis_addin_get_widget:
  *
- * Returns: (transfer full): A #GtkWidget.
+ * Returns: (transfer none): A #GtkWidget.
  */
 GtkWidget *
 ide_genesis_addin_get_widget (IdeGenesisAddin *self)

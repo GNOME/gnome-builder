@@ -116,6 +116,8 @@ G_BEGIN_DECLS
 #include "editor/ide-editor-view.h"
 #include "editor/ide-editor-view-addin.h"
 
+#include "genesis/ide-genesis-addin.h"
+
 #include "doap/ide-doap-person.h"
 #include "doap/ide-doap.h"
 #include "local/ide-local-device.h"

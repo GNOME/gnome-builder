@@ -20,7 +20,9 @@
 
 #include "ide-build-system.h"
 #include "ide-directory-build-system.h"
+#include "ide-directory-genesis-addin.h"
 #include "ide-directory-vcs.h"
+#include "ide-genesis-addin.h"
 
 void
 ide_directory_register_types (PeasObjectModule *module)
@@ -28,6 +30,9 @@ ide_directory_register_types (PeasObjectModule *module)
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_BUILD_SYSTEM,
                                               IDE_TYPE_DIRECTORY_BUILD_SYSTEM);
+  peas_object_module_register_extension_type (module,
+                                              IDE_TYPE_GENESIS_ADDIN,
+                                              IDE_TYPE_DIRECTORY_GENESIS_ADDIN);
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_VCS,
                                               IDE_TYPE_DIRECTORY_VCS);

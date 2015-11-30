@@ -166,6 +166,7 @@ genesisperspective frame {
 }
 genesisperspective list row {
   border-bottom: 1px solid alpha(@borders, 0.2);
+  padding: 12px;
 }
 genesisperspective list row:last-child {
   border-bottom: none;

@@ -12,6 +12,8 @@ dist_plugin_DATA = git.plugin
 libgit_plugin_la_SOURCES = \
 	ide-git-buffer-change-monitor.c \
 	ide-git-buffer-change-monitor.h \
+	ide-git-genesis-addin.c \
+	ide-git-genesis-addin.h \
 	ide-git-plugin.c \
 	ide-git-remote-callbacks.c \
 	ide-git-remote-callbacks.h \

@@ -1,4 +1,4 @@
-/* ide-git-plugin.c
+/* ide-git-genesis-addin.h
  *
  * Copyright (C) 2015 Christian Hergert <chergert@redhat.com>
  *
@@ -16,19 +16,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <libpeas/peas.h>
-#include <ide.h>
+#ifndef IDE_GIT_GENESIS_ADDIN_H
+#define IDE_GIT_GENESIS_ADDIN_H
 
-#include "ide-git-genesis-addin.h"
-#include "ide-git-vcs.h"
+#include <gtk/gtk.h>
 
-void
-peas_register_types (PeasObjectModule *module)
-{
-  peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_VCS,
-                                              IDE_TYPE_GIT_VCS);
-  peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_GENESIS_ADDIN,
-                                              IDE_TYPE_GIT_GENESIS_ADDIN);
-}
+G_BEGIN_DECLS
+
+#define IDE_TYPE_GIT_GENESIS_ADDIN (ide_git_genesis_addin_get_type())
+
+G_DECLARE_FINAL_TYPE (IdeGitGenesisAddin, ide_git_genesis_addin, IDE, GIT_GENESIS_ADDIN, GObject)
+
+G_END_DECLS
+
+#endif /* IDE_GIT_GENESIS_ADDIN_H */

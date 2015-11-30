@@ -45,11 +45,48 @@ ide_genesis_perspective_addin_added (PeasExtensionSet *set,
                                      gpointer          user_data)
 {
   IdeGenesisPerspective *self = user_data;
+  g_autofree gchar *icon_name = NULL;
+  g_autofree gchar *title = NULL;
+  GtkListBoxRow *row;
+  GtkBox *box;
+  GtkImage *image;
+  GtkLabel *label;
 
   g_assert (PEAS_IS_EXTENSION_SET (set));
   g_assert (plugin_info != NULL);
   g_assert (IDE_IS_GENESIS_ADDIN (exten));
   g_assert (IDE_IS_GENESIS_PERSPECTIVE (self));
+
+  icon_name = ide_genesis_addin_get_icon_name (IDE_GENESIS_ADDIN (exten));
+  title = ide_genesis_addin_get_title (IDE_GENESIS_ADDIN (exten));
+
+  row = g_object_new (GTK_TYPE_LIST_BOX_ROW,
+                      "visible", TRUE,
+                      NULL);
+  box = g_object_new (GTK_TYPE_BOX,
+                      "orientation", GTK_ORIENTATION_HORIZONTAL,
+                      "spacing", 12,
+                      "visible", TRUE,
+                      NULL);
+  image = g_object_new (GTK_TYPE_IMAGE,
+                        "hexpand", FALSE,
+                        "icon-name", icon_name,
+                        "pixel-size", 32,
+                        "visible", TRUE,
+                        NULL);
+  label = g_object_new (GTK_TYPE_LABEL,
+                        "label", title,
+                        "wrap", TRUE,
+                        "xalign", 0.0f,
+                        "visible", TRUE,
+                        NULL);
+
+  g_object_set_data (G_OBJECT (row), "IDE_GENESIS_ADDIN", exten);
+
+  gtk_container_add (GTK_CONTAINER (row), GTK_WIDGET (box));
+  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (image));
+  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (label));
+  gtk_container_add (GTK_CONTAINER (self->list_box), GTK_WIDGET (row));
 }
 
 static void
@@ -59,11 +96,51 @@ ide_genesis_perspective_addin_removed (PeasExtensionSet *set,
                                        gpointer          user_data)
 {
   IdeGenesisPerspective *self = user_data;
+  GList *children;
+  GList *iter;
 
   g_assert (PEAS_IS_EXTENSION_SET (set));
   g_assert (plugin_info != NULL);
   g_assert (IDE_IS_GENESIS_ADDIN (exten));
   g_assert (IDE_IS_GENESIS_PERSPECTIVE (self));
+
+  children = gtk_container_get_children (GTK_CONTAINER (self->list_box));
+
+  for (iter = children; iter; iter = iter->next)
+    {
+      gpointer data = g_object_get_data (iter->data, "IDE_GENESIS_ADDIN");
+
+      if (data == (gpointer)exten)
+        {
+          gtk_container_remove (GTK_CONTAINER (self->list_box), iter->data);
+          break;
+        }
+    }
+
+  g_list_free (children);
+}
+
+static void
+ide_genesis_perspective_row_activated (IdeGenesisPerspective *self,
+                                       GtkListBoxRow         *row,
+                                       GtkListBox            *list_box)
+{
+  IdeGenesisAddin *addin;
+  GtkWidget *child;
+
+  g_assert (GTK_IS_LIST_BOX (list_box));
+  g_assert (GTK_IS_LIST_BOX_ROW (row));
+  g_assert (IDE_IS_GENESIS_PERSPECTIVE (self));
+
+  addin = g_object_get_data (G_OBJECT (row), "IDE_GENESIS_ADDIN");
+  if (addin == NULL)
+    return;
+
+  child = ide_genesis_addin_get_widget (addin);
+  if (child == NULL)
+    return;
+
+  gtk_stack_set_visible_child (self->stack, child);
 }
 
 static void
@@ -119,6 +196,12 @@ static void
 ide_genesis_perspective_init (IdeGenesisPerspective *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
+
+  g_signal_connect_object (self->list_box,
+                           "row-activated",
+                           G_CALLBACK (ide_genesis_perspective_row_activated),
+                           self,
+                           G_CONNECT_SWAPPED);
 }
 
 static gchar *
