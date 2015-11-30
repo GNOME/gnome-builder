@@ -1,4 +1,4 @@
-/* fallback-plugin.c
+/* ide-directory-plugin.c
  *
  * Copyright (C) 2015 Christian Hergert <christian@hergert.me>
  *
@@ -23,7 +23,7 @@
 #include "ide-directory-vcs.h"
 
 void
-ide_fallback_register_types (PeasObjectModule *module)
+ide_directory_register_types (PeasObjectModule *module)
 {
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_BUILD_SYSTEM,

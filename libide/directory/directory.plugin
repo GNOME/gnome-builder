@@ -1,10 +1,10 @@
 [Plugin]
-Module=fallback-plugin
+Module=directory-plugin
 Name=Fallback
-Description=Provides fallback implementations for Builder subsystems.
+Description=Provides simple directory based implementations of core services
 Authors=Christian Hergert <christian@hergert.me>
 Copyright=Copyright © 2015 Christian Hergert
 Builtin=true
 Hidden=true
 X-Build-System-Priority=10000000
-Embedded=ide_fallback_register_types
+Embedded=ide_directory_register_types
