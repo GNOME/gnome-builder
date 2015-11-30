@@ -98,9 +98,13 @@ ide_workbench_actions_open_with_dialog (GSimpleAction *action,
 void
 ide_workbench_actions_init (IdeWorkbench *self)
 {
+  GPropertyAction *action;
   const GActionEntry actions[] = {
     { "open-with-dialog", ide_workbench_actions_open_with_dialog },
   };
 
   g_action_map_add_action_entries (G_ACTION_MAP (self), actions, G_N_ELEMENTS (actions), self);
+
+  action = g_property_action_new ("perspective", self, "visible-perspective-name");
+  g_action_map_add_action (G_ACTION_MAP (self), G_ACTION (action));
 }
