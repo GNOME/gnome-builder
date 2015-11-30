@@ -22,8 +22,6 @@ libide_1_0_la_public_sources = \
 	editor/ide-editor-view-addin.h \
 	editor/ide-editor-view.c \
 	editor/ide-editor-view.h \
-	greeter/ide-greeter-assistant.c \
-	greeter/ide-greeter-assistant.h \
 	ide-application.c \
 	ide-application.h \
 	ide-application-addin.c \
