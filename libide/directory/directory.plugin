@@ -1,6 +1,6 @@
 [Plugin]
 Module=directory-plugin
-Name=Fallback
+Name=Directory
 Description=Provides simple directory based implementations of core services
 Authors=Christian Hergert <christian@hergert.me>
 Copyright=Copyright © 2015 Christian Hergert
