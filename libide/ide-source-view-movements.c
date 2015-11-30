@@ -449,7 +449,7 @@ ide_source_view_movements_last_char (Movement *mv)
 static void
 ide_source_view_movements_first_line (Movement *mv)
 {
-  gtk_text_iter_set_line (&mv->insert, mv->count);
+  gtk_text_iter_set_line (&mv->insert, 0);
   gtk_text_iter_set_line_offset (&mv->insert, 0);
 }
 
@@ -2073,7 +2073,6 @@ _ide_source_view_apply_movement (IdeSourceView         *self,
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_FIRST_LINE:
-      mv.count = MAX (1, mv.count);
       ide_source_view_movements_first_line (&mv);
       break;
 
