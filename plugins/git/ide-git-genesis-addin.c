@@ -53,7 +53,7 @@ ide_git_genesis_addin_get_icon_name (IdeGenesisAddin *addin)
 static gchar *
 ide_git_genesis_addin_get_title (IdeGenesisAddin *addin)
 {
-  return g_strdup (_("From a Git source code repository"));
+  return g_strdup (_("From a existing project in a Git repository"));
 }
 
 static GtkWidget *

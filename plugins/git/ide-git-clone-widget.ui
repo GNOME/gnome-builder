@@ -50,7 +50,7 @@
                         <property name="hexpand">true</property>
                         <property name="width-chars">35</property>
                         <property name="placeholder-text" translatable="yes">user@host:repository.git</property>
-                        <property name="tooltip-text" translatable="yes">Enter the URL of your project's source code repository.</property>
+                        <property name="tooltip-text" translatable="yes">Enter the URL of your project's source code repository</property>
                         <property name="valign">baseline</property>
                         <property name="visible">true</property>
                       </object>
@@ -78,6 +78,7 @@
                           <object class="GtkEntry" id="clone_location_entry">
                             <property name="hexpand">true</property>
                             <property name="placeholder-text" translatable="yes">Directory</property>
+                            <property name="tooltip-text" translatable="yes">Enter the name of the directory to create</property>
                             <property name="valign">baseline</property>
                             <property name="visible">true</property>
                           </object>
@@ -128,15 +129,26 @@
               </object>
             </child>
             <child>
+              <object class="GtkLabel">
+                <property name="visible">true</property>
+                <property name="vexpand">true</property>
+              </object>
+              <packing>
+                <property name="pack-type">end</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
               <object class="GtkLabel" id="clone_error_label">
                 <property name="valign">start</property>
                 <property name="vexpand">true</property>
-                <property name="visible">false</property>
+                <property name="visible">true</property>
                 <style>
                   <class name="error-label"/>
                 </style>
               </object>
               <packing>
+                <property name="position">1</property>
                 <property name="pack-type">end</property>
               </packing>
             </child>
@@ -150,6 +162,23 @@
               </object>
               <packing>
                 <property name="pack-type">end</property>
+                <property name="position">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="clone_button">
+                <property name="halign">center</property>
+                <property name="visible">true</property>
+                <property name="margin-top">24</property>
+                <property name="label" translatable="yes">Cl_one Repository</property>
+                <property name="use-underline">true</property>
+                <style>
+                  <class name="suggested-action"/>
+                </style>
+              </object>
+              <packing>
+                <property name="pack-type">end</property>
+                <property name="position">3</property>
               </packing>
             </child>
           </object>

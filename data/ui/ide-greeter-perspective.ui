@@ -175,11 +175,11 @@
                       </object>
                     </child>
                   </object>
-                  <packing>
-                    <property name="name">assistants</property>
-                  </packing>
                 </child>
               </object>
+              <packing>
+                <property name="name">assistants</property>
+              </packing>
             </child>
           </object>
         </child>

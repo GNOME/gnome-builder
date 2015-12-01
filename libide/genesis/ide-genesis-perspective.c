@@ -21,15 +21,19 @@
 
 #include "ide-genesis-addin.h"
 #include "ide-genesis-perspective.h"
+#include "ide-gtk.h"
+#include "ide-workbench.h"
 
 struct _IdeGenesisPerspective
 {
   GtkBin            parent_instance;
 
+  GActionGroup     *actions;
   PeasExtensionSet *addins;
 
   GtkHeaderBar     *header_bar;
   GtkListBox       *list_box;
+  GtkWidget        *main_page;
   GtkStack         *stack;
 };
 
@@ -117,6 +121,9 @@ ide_genesis_perspective_addin_removed (PeasExtensionSet *set,
     {
       gpointer data = g_object_get_data (iter->data, "IDE_GENESIS_ADDIN");
 
+      if (data == NULL)
+        continue;
+
       if (data == (gpointer)exten)
         {
           gtk_container_remove (GTK_CONTAINER (self->list_box), iter->data);
@@ -172,19 +179,20 @@ ide_genesis_perspective_constructed (GObject *object)
                     G_CALLBACK (ide_genesis_perspective_addin_added),
                     self);
   g_signal_connect (self->addins,
-                    "extension-rmeoved",
+                    "extension-removed",
                     G_CALLBACK (ide_genesis_perspective_addin_removed),
                     self);
 }
 
 static void
-ide_genesis_perspective_finalize (GObject *object)
+ide_genesis_perspective_destroy (GtkWidget *widget)
 {
-  IdeGenesisPerspective *self = (IdeGenesisPerspective *)object;
+  IdeGenesisPerspective *self = (IdeGenesisPerspective *)widget;
 
+  g_clear_object (&self->actions);
   g_clear_object (&self->addins);
 
-  G_OBJECT_CLASS (ide_genesis_perspective_parent_class)->finalize (object);
+  GTK_WIDGET_CLASS (ide_genesis_perspective_parent_class)->destroy (widget);
 }
 
 static void
@@ -194,11 +202,13 @@ ide_genesis_perspective_class_init (IdeGenesisPerspectiveClass *klass)
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   object_class->constructed = ide_genesis_perspective_constructed;
-  object_class->finalize = ide_genesis_perspective_finalize;
+
+  widget_class->destroy = ide_genesis_perspective_destroy;
 
   gtk_widget_class_set_css_name (widget_class, "genesisperspective");
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/ui/ide-genesis-perspective.ui");
   gtk_widget_class_bind_template_child (widget_class, IdeGenesisPerspective, list_box);
+  gtk_widget_class_bind_template_child (widget_class, IdeGenesisPerspective, main_page);
   gtk_widget_class_bind_template_child (widget_class, IdeGenesisPerspective, stack);
   gtk_widget_class_bind_template_child (widget_class, IdeGenesisPerspective, header_bar);
 }
@@ -230,9 +240,55 @@ ide_genesis_perspective_is_early (IdePerspective *perspective)
 static GtkWidget *
 ide_genesis_perspective_get_titlebar (IdePerspective *perspective)
 {
-  g_return_val_if_fail (IDE_IS_GENESIS_PERSPECTIVE (perspective), NULL);
+  g_assert (IDE_IS_GENESIS_PERSPECTIVE (perspective));
 
   return GTK_WIDGET (IDE_GENESIS_PERSPECTIVE (perspective)->header_bar);
+}
+
+static void
+go_previous (GSimpleAction *action,
+             GVariant      *variant,
+             gpointer       user_data)
+{
+  IdeGenesisPerspective *self = user_data;
+  IdeWorkbench *workbench;
+  GtkWidget *visible_child;
+
+  g_assert (IDE_IS_GENESIS_PERSPECTIVE (self));
+
+  visible_child = gtk_stack_get_visible_child (self->stack);
+
+  if (visible_child != self->main_page)
+    {
+      gtk_stack_set_visible_child (self->stack, self->main_page);
+      return;
+    }
+
+  workbench = ide_widget_get_workbench (GTK_WIDGET (self));
+  ide_workbench_set_visible_perspective_name (workbench, "greeter");
+}
+
+static GActionGroup *
+ide_genesis_perspective_get_actions (IdePerspective *perspective)
+{
+  IdeGenesisPerspective *self = (IdeGenesisPerspective *)perspective;
+
+  g_assert (IDE_IS_GENESIS_PERSPECTIVE (self));
+
+  if (self->actions == NULL)
+    {
+      const GActionEntry entries[] = {
+        { "go-previous", go_previous },
+      };
+
+      self->actions = G_ACTION_GROUP (g_simple_action_group_new ());
+      g_action_map_add_action_entries (G_ACTION_MAP (self->actions),
+                                       entries, G_N_ELEMENTS (entries), self);
+    }
+
+  g_assert (G_IS_ACTION_GROUP (self->actions));
+
+  return self->actions;
 }
 
 static void
@@ -241,4 +297,5 @@ perspective_iface_init (IdePerspectiveInterface *iface)
   iface->get_id = ide_genesis_perspective_get_id;
   iface->is_early = ide_genesis_perspective_is_early;
   iface->get_titlebar = ide_genesis_perspective_get_titlebar;
+  iface->get_actions = ide_genesis_perspective_get_actions;
 }

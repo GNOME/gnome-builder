@@ -9,7 +9,7 @@
         <property name="expand">true</property>
         <property name="visible">true</property>
         <child>
-          <object class="EggBox">
+          <object class="EggBox" id="main_page">
             <property name="halign">center</property>
             <property name="width-request">550</property>
             <property name="max-width-request">550</property>
@@ -37,8 +37,7 @@
     <property name="visible">true</property>
     <child>
       <object class="GtkButton">
-        <property name="action-name">win.perspective</property>
-        <property name="action-target">'greeter'</property>
+        <property name="action-name">perspective.go-previous</property>
         <property name="visible">true</property>
         <style>
           <class name="image-button"/>
