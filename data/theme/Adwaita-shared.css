@@ -82,9 +82,11 @@ layoutstack > box.vertical > box.header.notebook.horizontal > GtkEventBox > box.
 }
 
 
-/* New project dialog */
-GbNewProjectDialog button.linked-on-right button {
-  border-radius: 3px 0 0 3px;
+/* FileChooserButton|Entry */
+box.linked-on-right button {
+  border-top-right-radius: 0px;
+  border-bottom-right-radius: 0px;
+  border-right: 0px;
 }
 
 

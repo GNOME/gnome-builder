@@ -51,6 +51,7 @@ ide_genesis_perspective_addin_added (PeasExtensionSet *set,
   GtkBox *box;
   GtkImage *image;
   GtkLabel *label;
+  GtkWidget *widget;
 
   g_assert (PEAS_IS_EXTENSION_SET (set));
   g_assert (plugin_info != NULL);
@@ -59,13 +60,14 @@ ide_genesis_perspective_addin_added (PeasExtensionSet *set,
 
   icon_name = ide_genesis_addin_get_icon_name (IDE_GENESIS_ADDIN (exten));
   title = ide_genesis_addin_get_title (IDE_GENESIS_ADDIN (exten));
+  widget = ide_genesis_addin_get_widget (IDE_GENESIS_ADDIN (exten));
 
   row = g_object_new (GTK_TYPE_LIST_BOX_ROW,
                       "visible", TRUE,
                       NULL);
   box = g_object_new (GTK_TYPE_BOX,
                       "orientation", GTK_ORIENTATION_HORIZONTAL,
-                      "spacing", 12,
+                      "spacing", 18,
                       "visible", TRUE,
                       NULL);
   image = g_object_new (GTK_TYPE_IMAGE,
@@ -76,9 +78,10 @@ ide_genesis_perspective_addin_added (PeasExtensionSet *set,
                         NULL);
   label = g_object_new (GTK_TYPE_LABEL,
                         "label", title,
+                        "valign", GTK_ALIGN_BASELINE,
+                        "visible", TRUE,
                         "wrap", TRUE,
                         "xalign", 0.0f,
-                        "visible", TRUE,
                         NULL);
 
   g_object_set_data (G_OBJECT (row), "IDE_GENESIS_ADDIN", exten);
@@ -87,6 +90,9 @@ ide_genesis_perspective_addin_added (PeasExtensionSet *set,
   gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (image));
   gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (label));
   gtk_container_add (GTK_CONTAINER (self->list_box), GTK_WIDGET (row));
+
+  if (widget != NULL)
+    gtk_container_add (GTK_CONTAINER (self->stack), widget);
 }
 
 static void
@@ -96,6 +102,7 @@ ide_genesis_perspective_addin_removed (PeasExtensionSet *set,
                                        gpointer          user_data)
 {
   IdeGenesisPerspective *self = user_data;
+  GtkWidget *widget;
   GList *children;
   GList *iter;
 
@@ -118,6 +125,10 @@ ide_genesis_perspective_addin_removed (PeasExtensionSet *set,
     }
 
   g_list_free (children);
+
+  widget = ide_genesis_addin_get_widget (IDE_GENESIS_ADDIN (exten));
+  if (widget != NULL)
+    gtk_container_remove (GTK_CONTAINER (self->stack), widget);
 }
 
 static void

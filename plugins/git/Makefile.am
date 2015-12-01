@@ -12,6 +12,8 @@ dist_plugin_DATA = git.plugin
 libgit_plugin_la_SOURCES = \
 	ide-git-buffer-change-monitor.c \
 	ide-git-buffer-change-monitor.h \
+	ide-git-clone-widget.c \
+	ide-git-clone-widget.h \
 	ide-git-genesis-addin.c \
 	ide-git-genesis-addin.h \
 	ide-git-plugin.c \
@@ -20,6 +22,10 @@ libgit_plugin_la_SOURCES = \
 	ide-git-vcs.c \
 	ide-git-vcs.h \
 	$(NULL)
+
+nodist_libgit_plugin_la_SOURCES = \
+	ide-git-resources.c \
+	ide-git-resources.h
 
 libgit_plugin_la_CFLAGS = \
 	$(LIBIDE_CFLAGS) \
@@ -36,6 +42,12 @@ libgit_plugin_la_LDFLAGS = \
 	-module \
 	-export-regex peas_register_types \
 	$(NULL)
+
+glib_resources_c = ide-git-resources.c
+glib_resources_h = ide-git-resources.h
+glib_resources_xml = ide-git-resources.gresource.xml
+glib_resources_namespace = ide_git
+include $(top_srcdir)/build/autotools/Makefile.am.gresources
 
 include $(top_srcdir)/plugins/Makefile.plugin
 

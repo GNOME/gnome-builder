@@ -19,11 +19,14 @@
 #include <glib/gi18n.h>
 #include <ide.h>
 
+#include "ide-git-clone-widget.h"
 #include "ide-git-genesis-addin.h"
 
 struct _IdeGitGenesisAddin
 {
-  GObject parent_instance;
+  GObject    parent_instance;
+
+  GtkWidget *clone_widget;
 };
 
 static void genesis_addin_iface_init (IdeGenesisAddinInterface *iface);
@@ -56,7 +59,16 @@ ide_git_genesis_addin_get_title (IdeGenesisAddin *addin)
 static GtkWidget *
 ide_git_genesis_addin_get_widget (IdeGenesisAddin *addin)
 {
-  return NULL;
+  IdeGitGenesisAddin *self = (IdeGitGenesisAddin *)addin;
+
+  g_assert (IDE_IS_GIT_GENESIS_ADDIN (self));
+
+  if (self->clone_widget == NULL)
+    self->clone_widget = g_object_new (IDE_TYPE_GIT_CLONE_WIDGET,
+                                       "visible", TRUE,
+                                       NULL);
+
+  return self->clone_widget;
 }
 
 static void
