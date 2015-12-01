@@ -31,6 +31,14 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeWorkbench, ide_workbench, IDE, WORKBENCH, GtkApplicationWindow)
 
+void            ide_workbench_open_project_async           (IdeWorkbench         *self,
+                                                            GFile                *file_or_directory,
+                                                            GCancellable         *cancellable,
+                                                            GAsyncReadyCallback   callback,
+                                                            gpointer              user_data);
+gboolean        ide_workbench_open_project_finish          (IdeWorkbench         *self,
+                                                            GAsyncResult         *result,
+                                                            GError              **error);
 void            ide_workbench_open_uri_async               (IdeWorkbench         *self,
                                                             IdeUri               *uri,
                                                             const gchar          *hint,

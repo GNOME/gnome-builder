@@ -18,6 +18,7 @@
 
 #include <libpeas/peas.h>
 
+#include "ide-application.h"
 #include "ide-uri.h"
 #include "ide-workbench.h"
 #include "ide-workbench-addin.h"
@@ -395,4 +396,80 @@ ide_workbench_open_files_finish (IdeWorkbench  *self,
   g_return_val_if_fail (G_IS_TASK (task), FALSE);
 
   return g_task_propagate_boolean (task, error);
+}
+
+static void
+ide_workbench_open_project_cb (GObject      *object,
+                               GAsyncResult *result,
+                               gpointer      user_data)
+{
+  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeContext) context = NULL;
+  IdeWorkbench *workbench;
+  guint32 present_time;
+  GError *error = NULL;
+
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (G_IS_TASK (task));
+
+  context = ide_context_new_finish (result, &error);
+
+  if (context == NULL)
+    {
+      g_task_return_error (task, error);
+      return;
+    }
+
+  workbench = g_task_get_source_object (task);
+
+  if (workbench->context != NULL)
+    {
+      present_time = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (task), "GDK_CURRENT_TIME"));
+      workbench = g_object_new (IDE_TYPE_WORKBENCH,
+                                "application", IDE_APPLICATION_DEFAULT,
+                                "visible", TRUE,
+                                NULL);
+      gtk_window_present_with_time  (GTK_WINDOW (workbench), present_time);
+    }
+
+  ide_workbench_set_context (workbench, context);
+  ide_workbench_set_visible_perspective_name (workbench, "editor");
+
+  g_task_return_boolean (task, TRUE);
+}
+
+void
+ide_workbench_open_project_async (IdeWorkbench        *self,
+                                  GFile               *file_or_directory,
+                                  GCancellable        *cancellable,
+                                  GAsyncReadyCallback  callback,
+                                  gpointer             user_data)
+{
+  g_autoptr(GTask) task = NULL;
+
+  g_assert (IDE_IS_WORKBENCH (self));
+  g_assert (G_IS_FILE (file_or_directory));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  task = g_task_new (self, cancellable, callback, user_data);
+
+  g_object_set_data (G_OBJECT (task),
+                     "GDK_CURRENT_TIME",
+                     GINT_TO_POINTER (GDK_CURRENT_TIME));
+
+  ide_context_new_async (file_or_directory,
+                         cancellable,
+                         ide_workbench_open_project_cb,
+                         g_object_ref (task));
+}
+
+gboolean
+ide_workbench_open_project_finish (IdeWorkbench  *self,
+                                   GAsyncResult  *result,
+                                   GError       **error)
+{
+  g_return_val_if_fail (IDE_IS_WORKBENCH (self), FALSE);
+  g_return_val_if_fail (G_IS_TASK (result), FALSE);
+
+  return g_task_propagate_boolean (G_TASK (result), error);
 }
