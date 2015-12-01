@@ -212,8 +212,7 @@ open_after_timeout (gpointer user_data)
     }
   else
     {
-      //g_signal_emit (self, signals [OPEN_PROJECT], 0, file);
-      ide_workbench_set_visible_perspective_name (workbench, "editor");
+      ide_workbench_open_project_async (workbench, file, NULL, NULL, NULL);
     }
 
   return G_SOURCE_REMOVE;
