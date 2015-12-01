@@ -23,7 +23,9 @@
 
 struct _IdeDirectoryGenesisAddin
 {
-  GObject parent_instance;
+  GObject               parent_instance;
+
+  GtkFileChooserWidget *widget;
 };
 
 static void genesis_addin_iface_init (IdeGenesisAddinInterface *iface);
@@ -56,7 +58,19 @@ ide_directory_genesis_addin_get_title (IdeGenesisAddin *addin)
 static GtkWidget *
 ide_directory_genesis_addin_get_widget (IdeGenesisAddin *addin)
 {
-  return NULL;
+  IdeDirectoryGenesisAddin *self = (IdeDirectoryGenesisAddin *)addin;
+
+  g_assert (IDE_IS_DIRECTORY_GENESIS_ADDIN (self));
+
+  if (self->widget == NULL)
+    {
+      self->widget = g_object_new (GTK_TYPE_FILE_CHOOSER_WIDGET,
+                                   "action", GTK_FILE_CHOOSER_ACTION_OPEN,
+                                   "visible", TRUE,
+                                   NULL);
+    }
+
+  return GTK_WIDGET (self->widget);
 }
 
 static void
