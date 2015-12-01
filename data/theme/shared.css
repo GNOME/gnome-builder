@@ -161,13 +161,13 @@ greeter list row:last-child {
 }
 
 
-genesisperspective frame {
+genesisperspective > stack > box > frame {
   border: 1px solid alpha(@borders, 0.4);
 }
-genesisperspective list row {
+genesisperspective > stack > box > frame > list > row {
   border-bottom: 1px solid alpha(@borders, 0.2);
   padding: 12px;
 }
-genesisperspective list row:last-child {
+genesisperspective > stack > box > frame > list > row:last-child {
   border-bottom: none;
 }
