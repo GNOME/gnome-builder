@@ -196,54 +196,6 @@ ide_application_actions_open_project (GSimpleAction *action,
   ide_application_show_projects_window (self);
 }
 
-#if 0
-static void
-ide_application_actions_open_project_cb (GObject      *object,
-                                         GAsyncResult *result,
-                                         gpointer      user_data)
-{
-  IdeApplication *self = (IdeApplication *)object;
-  g_autoptr(IdeNewProjectDialog) window = user_data;
-  g_autoptr(GError) error = NULL;
-  GtkWindow *transient_for;
-
-  g_assert (IDE_IS_NEW_PROJECT_DIALOG (window));
-
-  if (!ide_application_open_project_finish (self, result, &error))
-    {
-      /* todo: warning message */
-      g_warning ("%s", error->message);
-    }
-
-  transient_for = gtk_window_get_transient_for (GTK_WINDOW (window));
-
-  if (IDE_IS_GREETER_WINDOW (transient_for))
-    g_object_ref (transient_for);
-  else
-    transient_for = NULL;
-
-  gtk_widget_destroy (GTK_WIDGET (window));
-
-  if (transient_for != NULL)
-    {
-      gtk_widget_destroy (GTK_WIDGET (transient_for));
-      g_object_unref (transient_for);
-    }
-}
-
-static void
-ide_application_actions__window_open_project (IdeApplication      *self,
-                                              GFile               *project_file,
-                                              IdeNewProjectDialog *window)
-{
-  g_assert (IDE_IS_APPLICATION (self));
-  g_assert (G_IS_FILE (project_file));
-  g_assert (IDE_IS_NEW_PROJECT_DIALOG (window));
-
-  ide_application_open_project_async (self, project_file, NULL, NULL,
-                                     ide_application_actions_open_project_cb,
-                                     g_object_ref (window));
-}
 
 static void
 ide_application_actions_new_project (GSimpleAction *action,
@@ -251,47 +203,38 @@ ide_application_actions_new_project (GSimpleAction *action,
                                      gpointer       user_data)
 {
   IdeApplication *self = user_data;
-  GtkWindow *transient_for = NULL;
-  GtkWindow *window;
-  GList *windows;
+  IdeWorkbench *workbench = NULL;
+  const GList *list;
 
   g_assert (IDE_IS_APPLICATION (self));
 
-  for (windows = gtk_window_group_list_windows (self->greeter_group);
-       windows;
-       windows = windows->next)
+  list = gtk_application_get_windows (GTK_APPLICATION (self));
+
+  for (; list != NULL; list = list->next)
     {
-      if (IDE_IS_NEW_PROJECT_DIALOG (windows->data))
+      GtkWindow *window = list->data;
+
+      if (IDE_IS_WORKBENCH (window))
         {
-          gtk_window_present (windows->data);
-          goto cleanup;
-        }
-      else if (IDE_IS_GREETER_WINDOW (windows->data))
-        {
-          transient_for = windows->data;
+          if (ide_workbench_get_context (IDE_WORKBENCH (window)) == NULL)
+            {
+              workbench = IDE_WORKBENCH (window);
+              break;
+            }
         }
     }
 
-  window = g_object_new (IDE_TYPE_NEW_PROJECT_DIALOG,
-                         "type-hint", GDK_WINDOW_TYPE_HINT_DIALOG,
-                         "transient-for", transient_for,
-                         "window-position", transient_for ? GTK_WIN_POS_CENTER_ON_PARENT
-                                                          : GTK_WIN_POS_CENTER,
-                         NULL);
+  if (workbench == NULL)
+    {
+      workbench = g_object_new (IDE_TYPE_WORKBENCH,
+                                "application", self,
+                                NULL);
+    }
 
-  g_signal_connect_object (window,
-                           "open-project",
-                           G_CALLBACK (ide_application_actions__window_open_project),
-                           self,
-                           G_CONNECT_SWAPPED);
+  ide_workbench_set_visible_perspective_name (workbench, "genesis");
 
-  gtk_window_group_add_window (self->greeter_group, GTK_WINDOW (window));
-  gtk_window_present (window);
-
-cleanup:
-  g_list_free (windows);
+  gtk_window_present (GTK_WINDOW (workbench));
 }
-#endif
 
 static void
 ide_application_actions_shortcuts (GSimpleAction *action,
@@ -333,7 +276,7 @@ ide_application_actions_shortcuts (GSimpleAction *action,
 static const GActionEntry IdeApplicationActions[] = {
   { "about",        ide_application_actions_about },
   { "open-project", ide_application_actions_open_project },
-  //{ "new-project",  ide_application_actions_new_project },
+  { "new-project",  ide_application_actions_new_project },
   { "preferences",  ide_application_actions_preferences },
   { "quit",         ide_application_actions_quit },
   { "shortcuts",    ide_application_actions_shortcuts },
