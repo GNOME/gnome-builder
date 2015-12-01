@@ -427,7 +427,6 @@ ide_workbench_open_project_cb (GObject      *object,
       present_time = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (task), "GDK_CURRENT_TIME"));
       workbench = g_object_new (IDE_TYPE_WORKBENCH,
                                 "application", IDE_APPLICATION_DEFAULT,
-                                "visible", TRUE,
                                 NULL);
       gtk_window_present_with_time  (GTK_WINDOW (workbench), present_time);
     }
