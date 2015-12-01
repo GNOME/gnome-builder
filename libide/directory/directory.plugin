@@ -7,4 +7,6 @@ Copyright=Copyright © 2015 Christian Hergert
 Builtin=true
 Hidden=true
 X-Build-System-Priority=10000000
+X-Project-File-Filter-Name=Directory
+X-Project-File-Filter-Content-Type=inode/directory
 Embedded=ide_directory_register_types

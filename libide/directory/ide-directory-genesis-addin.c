@@ -17,6 +17,7 @@
  */
 
 #include <glib/gi18n.h>
+#include <libpeas/peas.h>
 
 #include "ide-directory-genesis-addin.h"
 #include "ide-genesis-addin.h"
@@ -55,6 +56,62 @@ ide_directory_genesis_addin_get_title (IdeGenesisAddin *addin)
   return g_strdup (_("From an existing project on this computer"));
 }
 
+static void
+ide_directory_genesis_addin_add_filters (GtkFileChooser *chooser)
+{
+  PeasEngine *engine = peas_engine_get_default ();
+  const GList *list = peas_engine_get_plugin_list (engine);
+
+  for (; list != NULL; list = list->next)
+    {
+      PeasPluginInfo *plugin_info = list->data;
+      GtkFileFilter *filter;
+      const gchar *pattern;
+      const gchar *content_type;
+      const gchar *name;
+      gchar **patterns;
+      gchar **content_types;
+      gint i;
+
+      if (!peas_plugin_info_is_loaded (plugin_info))
+        continue;
+
+      name = peas_plugin_info_get_external_data (plugin_info, "X-Project-File-Filter-Name");
+      if (name == NULL)
+        continue;
+
+      pattern = peas_plugin_info_get_external_data (plugin_info, "X-Project-File-Filter-Pattern");
+      content_type = peas_plugin_info_get_external_data (plugin_info, "X-Project-File-Filter-Content-Type");
+
+      if (pattern == NULL && content_type == NULL)
+        continue;
+
+      patterns = g_strsplit (pattern ?: "", ",", 0);
+      content_types = g_strsplit (content_type ?: "", ",", 0);
+
+      filter = gtk_file_filter_new ();
+
+      gtk_file_filter_set_name (filter, name);
+
+      for (i = 0; patterns [i] != NULL; i++)
+        {
+          if (*patterns [i])
+            gtk_file_filter_add_pattern (filter, patterns [i]);
+        }
+
+      for (i = 0; content_types [i] != NULL; i++)
+        {
+          if (*content_types [i])
+            gtk_file_filter_add_mime_type (filter, content_types [i]);
+        }
+
+      gtk_file_chooser_add_filter (chooser, filter);
+
+      g_strfreev (patterns);
+      g_strfreev (content_types);
+    }
+}
+
 static GtkWidget *
 ide_directory_genesis_addin_get_widget (IdeGenesisAddin *addin)
 {
@@ -68,6 +125,7 @@ ide_directory_genesis_addin_get_widget (IdeGenesisAddin *addin)
                                    "action", GTK_FILE_CHOOSER_ACTION_OPEN,
                                    "visible", TRUE,
                                    NULL);
+      ide_directory_genesis_addin_add_filters (GTK_FILE_CHOOSER (self->widget));
     }
 
   return GTK_WIDGET (self->widget);
