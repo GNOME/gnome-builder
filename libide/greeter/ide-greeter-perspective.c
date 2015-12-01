@@ -27,6 +27,7 @@
 #include "ide-application.h"
 #include "ide-greeter-perspective.h"
 #include "ide-greeter-project-row.h"
+#include "ide-gtk.h"
 #include "ide-macros.h"
 #include "ide-pattern-spec.h"
 #include "ide-perspective.h"
@@ -408,36 +409,12 @@ ide_greeter_perspective_filter_row (GtkListBoxRow *row,
 }
 
 static void
-ide_greeter_perspective_context_cb (GObject      *object,
-                                    GAsyncResult *result,
-                                    gpointer      user_data)
-{
-  g_autoptr(IdeGreeterPerspective) self = user_data;
-  IdeWorkbench *workbench;
-  IdeContext *context;
-  GError *error = NULL;
-
-  g_assert (IDE_IS_GREETER_PERSPECTIVE (self));
-  g_assert (G_IS_ASYNC_RESULT (result));
-
-  context = ide_context_new_finish (result, &error);
-
-  if (context == NULL)
-    {
-      /* TODO: error handling */
-      g_error ("%s", error->message);
-    }
-
-  workbench = IDE_WORKBENCH (gtk_widget_get_toplevel (GTK_WIDGET (self)));
-  ide_workbench_set_context (workbench, context);
-}
-
-static void
 ide_greeter_perspective__row_activated (IdeGreeterPerspective *self,
                                         IdeGreeterProjectRow  *row,
                                         GtkListBox            *list_box)
 {
   IdeProjectInfo *project_info;
+  IdeWorkbench *workbench;
   GFile *project_file;
 
   g_assert (IDE_IS_GREETER_PERSPECTIVE (self));
@@ -463,10 +440,8 @@ ide_greeter_perspective__row_activated (IdeGreeterPerspective *self,
    * TODO: Check if the project is already open somewhere else.
    */
 
-  ide_context_new_async (project_file,
-                         NULL,
-                         ide_greeter_perspective_context_cb,
-                         g_object_ref (self));
+  workbench = ide_widget_get_workbench (GTK_WIDGET (self));
+  ide_workbench_open_project_async (workbench, project_file, NULL, NULL, NULL);
 
   ide_project_info_set_is_recent (project_info, TRUE);
 }
