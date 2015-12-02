@@ -136,7 +136,7 @@ GbWorkspacePane GbViewStack GtkBox.header.notebook GtkSeparator.vertical {
 
 
 /*
- * Adjust devehlp styling.
+ * Adjust devhelp styling.
  */
 DhSidebar entry {
   border-left: none;
