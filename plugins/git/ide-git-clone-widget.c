@@ -34,21 +34,26 @@ struct _IdeGitCloneWidget
   GtkFileChooserButton *clone_location_button;
   GtkEntry             *clone_location_entry;
   GtkEntry             *clone_uri_entry;
-  GtkButton            *clone_button;
   GtkLabel             *clone_error_label;
   GtkProgressBar       *clone_progress;
-  GtkSpinner           *clone_spinner;
+
+  guint                 is_ready : 1;
 };
 
 typedef struct
 {
   gchar *uri;
   GFile *location;
+  GFile *project_file;
 } CloneRequest;
 
-G_DEFINE_TYPE (IdeGitCloneWidget, ide_git_clone_widget, GTK_TYPE_BIN)
+enum {
+  PROP_0,
+  PROP_IS_READY,
+  LAST_PROP
+};
 
-static void ide_git_clone_widget_begin_clone (IdeGitCloneWidget *self);
+G_DEFINE_TYPE (IdeGitCloneWidget, ide_git_clone_widget, GTK_TYPE_BIN)
 
 static void
 clone_request_free (gpointer data)
@@ -59,6 +64,7 @@ clone_request_free (gpointer data)
     {
       g_clear_pointer (&req->uri, g_free);
       g_clear_object (&req->location);
+      g_clear_object (&req->project_file);
       g_slice_free (CloneRequest, req);
     }
 }
@@ -75,6 +81,7 @@ clone_request_new (const gchar *uri,
   req = g_slice_new0 (CloneRequest);
   req->uri = g_strdup (uri);
   req->location = g_object_ref (location);
+  req->project_file = NULL;
 
   return req;
 }
@@ -85,6 +92,7 @@ ide_git_clone_widget_uri_changed (IdeGitCloneWidget *self,
 {
   g_autoptr(IdeVcsUri) uri = NULL;
   const gchar *text;
+  gboolean is_ready = FALSE;
 
   g_assert (IDE_IS_GIT_CLONE_WIDGET (self));
   g_assert (GTK_IS_ENTRY (entry));
@@ -113,6 +121,8 @@ ide_git_clone_widget_uri_changed (IdeGitCloneWidget *self,
             gtk_entry_set_text (self->clone_location_entry, name);
           g_free (name);
         }
+
+      is_ready = TRUE;
     }
   else
     {
@@ -121,16 +131,12 @@ ide_git_clone_widget_uri_changed (IdeGitCloneWidget *self,
                     "secondary-icon-tooltip-text", _("A valid Git URL is required"),
                     NULL);
     }
-}
 
-static void
-ide_git_clone_widget_clone_button_clicked (IdeGitCloneWidget *self,
-                                           GtkButton         *button)
-{
-  g_assert (IDE_IS_GIT_CLONE_WIDGET (self));
-  g_assert (GTK_IS_BUTTON (button));
-
-  ide_git_clone_widget_begin_clone (self);
+  if (is_ready != self->is_ready)
+    {
+      self->is_ready = is_ready;
+      g_object_notify (G_OBJECT (self), "is-ready");
+    }
 }
 
 static void
@@ -140,21 +146,47 @@ ide_git_clone_widget_finalize (GObject *object)
 }
 
 static void
+ide_git_clone_widget_get_property (GObject    *object,
+                                   guint       prop_id,
+                                   GValue     *value,
+                                   GParamSpec *pspec)
+{
+  IdeGitCloneWidget *self = IDE_GIT_CLONE_WIDGET(object);
+
+  switch (prop_id)
+    {
+    case PROP_IS_READY:
+      g_value_set_boolean (value, self->is_ready);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
+    }
+}
+
+static void
 ide_git_clone_widget_class_init (IdeGitCloneWidgetClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   object_class->finalize = ide_git_clone_widget_finalize;
+  object_class->get_property = ide_git_clone_widget_get_property;
+
+  g_object_class_install_property (object_class,
+                                   PROP_IS_READY,
+                                   g_param_spec_boolean ("is-ready",
+                                                         "Is Ready",
+                                                         "If the widget is ready to continue.",
+                                                         FALSE,
+                                                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS)));
 
   gtk_widget_class_set_css_name (widget_class, "gitclonewidget");
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/plugins/git/ide-git-clone-widget.ui");
-  gtk_widget_class_bind_template_child (widget_class, IdeGitCloneWidget, clone_button);
   gtk_widget_class_bind_template_child (widget_class, IdeGitCloneWidget, clone_error_label);
   gtk_widget_class_bind_template_child (widget_class, IdeGitCloneWidget, clone_location_button);
   gtk_widget_class_bind_template_child (widget_class, IdeGitCloneWidget, clone_location_entry);
   gtk_widget_class_bind_template_child (widget_class, IdeGitCloneWidget, clone_progress);
-  gtk_widget_class_bind_template_child (widget_class, IdeGitCloneWidget, clone_spinner);
   gtk_widget_class_bind_template_child (widget_class, IdeGitCloneWidget, clone_uri_entry);
 }
 
@@ -175,12 +207,6 @@ ide_git_clone_widget_init (IdeGitCloneWidget *self)
                            G_CALLBACK (ide_git_clone_widget_uri_changed),
                            self,
                            G_CONNECT_SWAPPED);
-
-  g_signal_connect_object (self->clone_button,
-                           "clicked",
-                           G_CALLBACK (ide_git_clone_widget_clone_button_clicked),
-                           self,
-                           G_CONNECT_SWAPPED);
 }
 
 static gboolean
@@ -191,18 +217,19 @@ open_after_timeout (gpointer user_data)
   g_autoptr(GTask) task = user_data;
   g_autoptr(GFile) file = NULL;
   g_autoptr(GError) error = NULL;
+  CloneRequest *req;
+
+  IDE_ENTRY;
 
   g_assert (G_IS_TASK (task));
 
   self = g_task_get_source_object (task);
+  req = g_task_get_task_data (task);
   workbench = ide_widget_get_workbench (GTK_WIDGET (self));
 
+  g_assert (req != NULL);
   g_assert (IDE_IS_GIT_CLONE_WIDGET (self));
   g_assert (IDE_IS_WORKBENCH (workbench));
-
-  gtk_widget_hide (GTK_WIDGET (self->clone_spinner));
-
-  file = g_task_propagate_pointer (task, &error);
 
   if (error)
     {
@@ -212,22 +239,25 @@ open_after_timeout (gpointer user_data)
     }
   else
     {
-      ide_workbench_open_project_async (workbench, file, NULL, NULL, NULL);
+      ide_workbench_open_project_async (workbench, req->project_file, NULL, NULL, NULL);
     }
 
-  return G_SOURCE_REMOVE;
+  g_task_return_boolean (task, TRUE);
+
+  IDE_RETURN (G_SOURCE_REMOVE);
 }
 
-static void
-ide_git_clone_widget_clone_cb (GObject      *object,
-                               GAsyncResult *result,
-                               gpointer      user_data)
+static gboolean
+finish_animation_in_idle (gpointer data)
 {
-  IdeGitCloneWidget *self = (IdeGitCloneWidget *)object;
-  GTask *task = (GTask *)result;
+  g_autoptr(GTask) task = data;
+  IdeGitCloneWidget *self;
 
-  g_assert (IDE_IS_GIT_CLONE_WIDGET (self));
+  IDE_ENTRY;
+
   g_assert (G_IS_TASK (task));
+  self = g_task_get_source_object (task);
+  g_assert (IDE_IS_GIT_CLONE_WIDGET (self));
 
   egg_object_animate_full (self->clone_progress,
                            EGG_ANIMATION_EASE_IN_OUT_QUAD,
@@ -243,6 +273,8 @@ ide_git_clone_widget_clone_cb (GObject      *object,
    * the project. Otherwise, it's pretty jarring to the user.
    */
   g_timeout_add (ANIMATION_DURATION_MSEC, open_after_timeout, g_object_ref (task));
+
+  IDE_RETURN (G_SOURCE_REMOVE);
 }
 
 static void
@@ -290,14 +322,17 @@ ide_git_clone_widget_worker (GTask        *task,
       return;
     }
 
-  workdir = ggit_repository_get_workdir (repository);
-  g_task_return_pointer (task, g_object_ref (workdir), g_object_unref);
+  req->project_file = ggit_repository_get_workdir (repository);
+  g_timeout_add (0, finish_animation_in_idle, g_object_ref (task));
 
   g_clear_object (&repository);
 }
 
-static void
-ide_git_clone_widget_begin_clone (IdeGitCloneWidget *self)
+void
+ide_git_clone_widget_clone_async (IdeGitCloneWidget   *self,
+                                  GCancellable        *cancellable,
+                                  GAsyncReadyCallback  callback,
+                                  gpointer             user_data)
 {
   g_autoptr(GTask) task = NULL;
   g_autoptr(GFile) location = NULL;
@@ -306,11 +341,10 @@ ide_git_clone_widget_begin_clone (IdeGitCloneWidget *self)
   const gchar *uri;
   const gchar *child_name;
 
-  g_assert (IDE_IS_GIT_CLONE_WIDGET (self));
+  g_return_if_fail (IDE_IS_GIT_CLONE_WIDGET (self));
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  gtk_widget_set_sensitive (GTK_WIDGET (self->clone_button), FALSE);
   gtk_label_set_label (self->clone_error_label, NULL);
-  gtk_widget_show (GTK_WIDGET (self->clone_spinner));
 
   uri = gtk_entry_get_text (self->clone_uri_entry);
   child_name = gtk_entry_get_text (self->clone_location_entry);
@@ -326,7 +360,18 @@ ide_git_clone_widget_begin_clone (IdeGitCloneWidget *self)
       req = clone_request_new (uri, location);
     }
 
-  task = g_task_new (self, NULL, ide_git_clone_widget_clone_cb, self);
+  task = g_task_new (self, cancellable, callback, user_data);
   g_task_set_task_data (task, req, clone_request_free);
   g_task_run_in_thread (task, ide_git_clone_widget_worker);
+}
+
+gboolean
+ide_git_clone_widget_clone_finish (IdeGitCloneWidget  *self,
+                                   GAsyncResult       *result,
+                                   GError            **error)
+{
+  g_return_val_if_fail (IDE_IS_GIT_CLONE_WIDGET (self), FALSE);
+  g_return_val_if_fail (G_IS_TASK (result), FALSE);
+
+  return g_task_propagate_boolean (G_TASK (result), error);
 }

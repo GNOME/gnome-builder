@@ -36,7 +36,7 @@
     <property name="show-close-button">true</property>
     <property name="visible">true</property>
     <child>
-      <object class="GtkButton">
+      <object class="GtkButton" id="cancel_button">
         <property name="action-name">perspective.go-previous</property>
         <property name="visible">true</property>
         <style>
@@ -55,6 +55,19 @@
         <property name="label" translatable="yes">New Project</property>
         <property name="visible">true</property>
       </object>
+    </child>
+    <child>
+      <object class="GtkButton" id="continue_button">
+        <property name="label" translatable="yes">Co_ntinue</property>
+        <property name="use-underline">true</property>
+        <property name="sensitive">false</property>
+        <style>
+          <class name="suggested-action"/>
+        </style>
+      </object>
+      <packing>
+        <property name="pack-type">end</property>
+      </packing>
     </child>
   </object>
 </interface>

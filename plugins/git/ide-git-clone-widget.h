@@ -27,6 +27,14 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeGitCloneWidget, ide_git_clone_widget, IDE, GIT_CLONE_WIDGET, GtkBin)
 
+void     ide_git_clone_widget_clone_async  (IdeGitCloneWidget    *self,
+                                            GCancellable         *cancellable,
+                                            GAsyncReadyCallback   callback,
+                                            gpointer              user_data);
+gboolean ide_git_clone_widget_clone_finish (IdeGitCloneWidget    *self,
+                                            GAsyncResult         *result,
+                                            GError              **error);
+
 G_END_DECLS
 
 #endif /* IDE_GIT_CLONE_WIDGET_H */

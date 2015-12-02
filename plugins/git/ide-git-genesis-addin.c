@@ -24,9 +24,8 @@
 
 struct _IdeGitGenesisAddin
 {
-  GObject    parent_instance;
-
-  GtkWidget *clone_widget;
+  GObject            parent_instance;
+  IdeGitCloneWidget *clone_widget;
 };
 
 static void genesis_addin_iface_init (IdeGenesisAddinInterface *iface);
@@ -34,9 +33,47 @@ static void genesis_addin_iface_init (IdeGenesisAddinInterface *iface);
 G_DEFINE_TYPE_EXTENDED (IdeGitGenesisAddin, ide_git_genesis_addin, G_TYPE_OBJECT, 0,
                         G_IMPLEMENT_INTERFACE (IDE_TYPE_GENESIS_ADDIN, genesis_addin_iface_init))
 
+enum {
+  PROP_0,
+  PROP_IS_READY
+};
+
+static void
+ide_git_genesis_addin_get_property (GObject    *object,
+                                    guint       prop_id,
+                                    GValue     *value,
+                                    GParamSpec *pspec)
+{
+  IdeGitGenesisAddin *self = IDE_GIT_GENESIS_ADDIN(object);
+
+  switch (prop_id)
+    {
+    case PROP_IS_READY:
+      if (self->clone_widget != NULL)
+        g_object_get_property (G_OBJECT (self->clone_widget), "is-ready", value);
+      else
+        g_value_set_boolean (value, FALSE);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
+    }
+}
+
 static void
 ide_git_genesis_addin_class_init (IdeGitGenesisAddinClass *klass)
 {
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+  object_class->get_property = ide_git_genesis_addin_get_property;
+
+  g_object_class_install_property (object_class,
+                                   PROP_IS_READY,
+                                   g_param_spec_boolean ("is-ready",
+                                                         "Is Ready",
+                                                         "If the widget is ready to continue.",
+                                                         FALSE,
+                                                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS)));
 }
 
 static void
@@ -56,6 +93,16 @@ ide_git_genesis_addin_get_title (IdeGenesisAddin *addin)
   return g_strdup (_("From a existing project in a Git repository"));
 }
 
+static void
+widget_is_ready (GtkWidget          *widget,
+                 GParamSpec         *pspec,
+                 IdeGitGenesisAddin *self)
+{
+  g_assert (IDE_IS_GIT_GENESIS_ADDIN (self));
+
+  g_object_notify (G_OBJECT (self), "is-ready");
+}
+
 static GtkWidget *
 ide_git_genesis_addin_get_widget (IdeGenesisAddin *addin)
 {
@@ -64,11 +111,65 @@ ide_git_genesis_addin_get_widget (IdeGenesisAddin *addin)
   g_assert (IDE_IS_GIT_GENESIS_ADDIN (self));
 
   if (self->clone_widget == NULL)
-    self->clone_widget = g_object_new (IDE_TYPE_GIT_CLONE_WIDGET,
-                                       "visible", TRUE,
-                                       NULL);
+    {
+      self->clone_widget = g_object_new (IDE_TYPE_GIT_CLONE_WIDGET,
+                                         "visible", TRUE,
+                                         NULL);
+      g_signal_connect (self->clone_widget,
+                        "notify::is-ready",
+                        G_CALLBACK (widget_is_ready),
+                        self);
+    }
 
-  return self->clone_widget;
+  return GTK_WIDGET (self->clone_widget);
+}
+
+static void
+ide_git_genesis_addin_run_cb (GObject      *object,
+                              GAsyncResult *result,
+                              gpointer      user_data)
+{
+  IdeGitCloneWidget *widget = (IdeGitCloneWidget *)object;
+  g_autoptr(GTask) task = user_data;
+  GError *error = NULL;
+
+  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_GIT_CLONE_WIDGET (widget));
+
+  if (!ide_git_clone_widget_clone_finish (widget, result, &error))
+    g_task_return_error (task, error);
+  else
+    g_task_return_boolean (task, TRUE);
+}
+
+static void
+ide_git_genesis_addin_run_async (IdeGenesisAddin     *addin,
+                                 GCancellable        *cancellable,
+                                 GAsyncReadyCallback  callback,
+                                 gpointer             user_data)
+{
+  IdeGitGenesisAddin *self = (IdeGitGenesisAddin *)addin;
+  GTask *task;
+
+  g_return_if_fail (IDE_IS_GIT_GENESIS_ADDIN (addin));
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  task = g_task_new (self, cancellable, callback, user_data);
+  ide_git_clone_widget_clone_async (self->clone_widget,
+                                    cancellable,
+                                    ide_git_genesis_addin_run_cb,
+                                    task);
+}
+
+static gboolean
+ide_git_genesis_addin_run_finish (IdeGenesisAddin  *addin,
+                                  GAsyncResult     *result,
+                                  GError          **error)
+{
+  g_return_val_if_fail (IDE_IS_GIT_GENESIS_ADDIN (addin), FALSE);
+  g_return_val_if_fail (G_IS_TASK (result), FALSE);
+
+  return g_task_propagate_boolean (G_TASK (result), error);
 }
 
 static void
@@ -77,4 +178,6 @@ genesis_addin_iface_init (IdeGenesisAddinInterface *iface)
   iface->get_title = ide_git_genesis_addin_get_title;
   iface->get_icon_name = ide_git_genesis_addin_get_icon_name;
   iface->get_widget = ide_git_genesis_addin_get_widget;
+  iface->run_async = ide_git_genesis_addin_run_async;
+  iface->run_finish = ide_git_genesis_addin_run_finish;
 }

@@ -22,6 +22,7 @@
 #include "ide-genesis-addin.h"
 #include "ide-genesis-perspective.h"
 #include "ide-gtk.h"
+#include "ide-macros.h"
 #include "ide-workbench.h"
 
 struct _IdeGenesisPerspective
@@ -30,11 +31,15 @@ struct _IdeGenesisPerspective
 
   GActionGroup     *actions;
   PeasExtensionSet *addins;
+  GBinding         *continue_binding;
+  IdeGenesisAddin  *current_addin;
 
   GtkHeaderBar     *header_bar;
   GtkListBox       *list_box;
   GtkWidget        *main_page;
   GtkStack         *stack;
+  GtkButton        *continue_button;
+  GtkButton        *cancel_button;
 };
 
 static void perspective_iface_init (IdePerspectiveInterface *iface);
@@ -145,6 +150,7 @@ ide_genesis_perspective_row_activated (IdeGenesisPerspective *self,
 {
   IdeGenesisAddin *addin;
   GtkWidget *child;
+  GBinding *binding;
 
   g_assert (GTK_IS_LIST_BOX (list_box));
   g_assert (GTK_IS_LIST_BOX_ROW (row));
@@ -158,7 +164,65 @@ ide_genesis_perspective_row_activated (IdeGenesisPerspective *self,
   if (child == NULL)
     return;
 
+  binding = g_object_bind_property (addin, "is-ready",
+                                    self->continue_button, "sensitive",
+                                    G_BINDING_SYNC_CREATE);
+  ide_set_weak_pointer (&self->continue_binding, binding);
+
+  gtk_widget_show (GTK_WIDGET (self->continue_button));
+  gtk_header_bar_set_show_close_button (self->header_bar, FALSE);
+
   gtk_stack_set_visible_child (self->stack, child);
+
+  self->current_addin = addin;
+}
+
+static void
+ide_genesis_perspective_run_cb (GObject      *object,
+                                GAsyncResult *result,
+                                gpointer      user_data)
+{
+  IdeGenesisAddin *addin = (IdeGenesisAddin *)object;
+  g_autoptr(IdeGenesisPerspective) self = user_data;
+  g_autoptr(GError) error = NULL;
+
+  g_assert (IDE_IS_GENESIS_ADDIN (addin));
+  g_assert (IDE_IS_GENESIS_PERSPECTIVE (self));
+
+  if (!ide_genesis_addin_run_finish (addin, result, &error))
+    {
+      GtkWidget *dialog;
+
+      dialog = gtk_message_dialog_new (NULL,
+                                       GTK_DIALOG_USE_HEADER_BAR,
+                                       GTK_MESSAGE_ERROR,
+                                       GTK_BUTTONS_CLOSE,
+                                       _("Failed to load the project"));
+      g_object_set (dialog,
+                    "secondary-text", error->message,
+                    NULL);
+
+      gtk_dialog_run (GTK_DIALOG (dialog));
+      gtk_widget_destroy (dialog);
+
+      /*
+       * TODO: Destroy workbench.
+       */
+    }
+}
+
+static void
+ide_genesis_perspective_continue_clicked (IdeGenesisPerspective *self,
+                                          GtkButton             *button)
+{
+  g_assert (IDE_IS_GENESIS_PERSPECTIVE (self));
+  g_assert (GTK_IS_BUTTON (button));
+  g_assert (self->current_addin != NULL);
+
+  ide_genesis_addin_run_async (self->current_addin,
+                               NULL,
+                               ide_genesis_perspective_run_cb,
+                               g_object_ref (self));
 }
 
 static void
@@ -178,10 +242,17 @@ ide_genesis_perspective_constructed (GObject *object)
                     "extension-added",
                     G_CALLBACK (ide_genesis_perspective_addin_added),
                     self);
+
   g_signal_connect (self->addins,
                     "extension-removed",
                     G_CALLBACK (ide_genesis_perspective_addin_removed),
                     self);
+
+  g_signal_connect_object (self->continue_button,
+                           "clicked",
+                           G_CALLBACK (ide_genesis_perspective_continue_clicked),
+                           self,
+                           G_CONNECT_SWAPPED);
 }
 
 static void
@@ -207,10 +278,12 @@ ide_genesis_perspective_class_init (IdeGenesisPerspectiveClass *klass)
 
   gtk_widget_class_set_css_name (widget_class, "genesisperspective");
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/ui/ide-genesis-perspective.ui");
+  gtk_widget_class_bind_template_child (widget_class, IdeGenesisPerspective, cancel_button);
+  gtk_widget_class_bind_template_child (widget_class, IdeGenesisPerspective, continue_button);
+  gtk_widget_class_bind_template_child (widget_class, IdeGenesisPerspective, header_bar);
   gtk_widget_class_bind_template_child (widget_class, IdeGenesisPerspective, list_box);
   gtk_widget_class_bind_template_child (widget_class, IdeGenesisPerspective, main_page);
   gtk_widget_class_bind_template_child (widget_class, IdeGenesisPerspective, stack);
-  gtk_widget_class_bind_template_child (widget_class, IdeGenesisPerspective, header_bar);
 }
 
 static void
@@ -255,6 +328,15 @@ go_previous (GSimpleAction *action,
   GtkWidget *visible_child;
 
   g_assert (IDE_IS_GENESIS_PERSPECTIVE (self));
+
+  if (self->continue_binding)
+    {
+      g_binding_unbind (self->continue_binding);
+      ide_clear_weak_pointer (&self->continue_binding);
+    }
+
+  gtk_widget_hide (GTK_WIDGET (self->continue_button));
+  gtk_header_bar_set_show_close_button (self->header_bar, TRUE);
 
   visible_child = gtk_stack_get_visible_child (self->stack);
 

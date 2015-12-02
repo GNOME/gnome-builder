@@ -31,14 +31,28 @@ struct _IdeGenesisAddinInterface
 {
   GTypeInterface parent_interface;
 
-  gchar     *(*get_title)     (IdeGenesisAddin *self);
-  gchar     *(*get_icon_name) (IdeGenesisAddin *self);
-  GtkWidget *(*get_widget)    (IdeGenesisAddin *self);
+  gchar     *(*get_title)     (IdeGenesisAddin      *self);
+  gchar     *(*get_icon_name) (IdeGenesisAddin      *self);
+  GtkWidget *(*get_widget)    (IdeGenesisAddin      *self);
+  void       (*run_async)     (IdeGenesisAddin      *self,
+                               GCancellable         *cancellable,
+                               GAsyncReadyCallback   callback,
+                               gpointer              user_data);
+  gboolean   (*run_finish)    (IdeGenesisAddin      *self,
+                               GAsyncResult         *result,
+                               GError              **error);
 };
 
-gchar     *ide_genesis_addin_get_title     (IdeGenesisAddin *self);
-gchar     *ide_genesis_addin_get_icon_name (IdeGenesisAddin *self);
-GtkWidget *ide_genesis_addin_get_widget    (IdeGenesisAddin *self);
+gchar     *ide_genesis_addin_get_title     (IdeGenesisAddin      *self);
+gchar     *ide_genesis_addin_get_icon_name (IdeGenesisAddin      *self);
+GtkWidget *ide_genesis_addin_get_widget    (IdeGenesisAddin      *self);
+void       ide_genesis_addin_run_async     (IdeGenesisAddin      *self,
+                                            GCancellable         *cancellable,
+                                            GAsyncReadyCallback   callback,
+                                            gpointer              user_data);
+gboolean   ide_genesis_addin_run_finish    (IdeGenesisAddin      *self,
+                                            GAsyncResult         *result,
+                                            GError              **error);
 
 G_END_DECLS
 

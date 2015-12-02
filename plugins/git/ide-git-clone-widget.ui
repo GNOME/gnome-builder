@@ -152,35 +152,6 @@
                 <property name="pack-type">end</property>
               </packing>
             </child>
-            <child>
-              <object class="GtkSpinner" id="clone_spinner">
-                <property name="vexpand">false</property>
-                <property name="active">true</property>
-                <property name="margin">24</property>
-                <property name="width-request">24</property>
-                <property name="height-request">24</property>
-              </object>
-              <packing>
-                <property name="pack-type">end</property>
-                <property name="position">2</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="clone_button">
-                <property name="halign">center</property>
-                <property name="visible">true</property>
-                <property name="margin-top">24</property>
-                <property name="label" translatable="yes">Cl_one Repository</property>
-                <property name="use-underline">true</property>
-                <style>
-                  <class name="suggested-action"/>
-                </style>
-              </object>
-              <packing>
-                <property name="pack-type">end</property>
-                <property name="position">3</property>
-              </packing>
-            </child>
           </object>
         </child>
       </object>

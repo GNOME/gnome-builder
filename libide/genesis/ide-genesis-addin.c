@@ -23,6 +23,12 @@ G_DEFINE_INTERFACE (IdeGenesisAddin, ide_genesis_addin, G_TYPE_OBJECT)
 static void
 ide_genesis_addin_default_init (IdeGenesisAddinInterface *iface)
 {
+  g_object_interface_install_property (iface,
+                                       g_param_spec_boolean ("is-ready",
+                                                             "Is Ready",
+                                                             "If the project genesis can be executed",
+                                                             FALSE,
+                                                             G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 }
 
 gchar *
@@ -52,4 +58,26 @@ ide_genesis_addin_get_widget (IdeGenesisAddin *self)
   g_return_val_if_fail (IDE_IS_GENESIS_ADDIN (self), NULL);
 
   return IDE_GENESIS_ADDIN_GET_IFACE (self)->get_widget (self);
+}
+
+void
+ide_genesis_addin_run_async (IdeGenesisAddin     *self,
+                             GCancellable        *cancellable,
+                             GAsyncReadyCallback  callback,
+                             gpointer             user_data)
+{
+  g_return_if_fail (IDE_IS_GENESIS_ADDIN (self));
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  IDE_GENESIS_ADDIN_GET_IFACE (self)->run_async (self, cancellable, callback, user_data);
+}
+
+gboolean
+ide_genesis_addin_run_finish (IdeGenesisAddin  *self,
+                              GAsyncResult     *result,
+                              GError          **error)
+{
+  g_return_val_if_fail (IDE_IS_GENESIS_ADDIN (self), FALSE);
+
+  return IDE_GENESIS_ADDIN_GET_IFACE (self)->run_finish (self, result, error);
 }
