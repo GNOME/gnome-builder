@@ -288,14 +288,16 @@ libide_1_0_la_SOURCES = \
 	ide-extension-util.c \
 	ide-extension-util.h \
 	ide-internal.h \
+	ide-keybindings.c \
+	ide-keybindings.h \
 	ide-layout-stack-actions.c \
 	ide-layout-stack-private.h \
 	ide-line-change-gutter-renderer.c \
 	ide-line-change-gutter-renderer.h \
 	ide-line-diagnostics-gutter-renderer.c \
 	ide-line-diagnostics-gutter-renderer.h \
-	ide-keybindings.c \
-	ide-keybindings.h \
+	ide-menu-merger.c \
+	ide-menu-merger.h \
 	ide-ref-ptr.c \
 	ide-ref-ptr.h \
 	ide-search-reducer.c \

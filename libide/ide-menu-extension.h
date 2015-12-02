@@ -30,17 +30,21 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeMenuExtension, ide_menu_extension, IDE, MENU_EXTENSION, GObject)
 
-IdeMenuExtension       *ide_menu_extension_new                 (GMenu           *menu);
-IdeMenuExtension       *ide_menu_extension_new_for_section     (GMenu           *menu,
-                                                              const gchar     *section);
+IdeMenuExtension       *ide_menu_extension_new               (GMenu            *menu);
+IdeMenuExtension       *ide_menu_extension_new_for_section   (GMenu            *menu,
+                                                              const gchar      *section);
 
-void                   ide_menu_extension_append_menu_item    (IdeMenuExtension *menu,
-                                                              GMenuItem       *item);
+void                   ide_menu_extension_append_menu_item   (IdeMenuExtension *menu,
+                                                              GMenuItem        *item);
 
-void                   ide_menu_extension_prepend_menu_item   (IdeMenuExtension *menu,
-                                                              GMenuItem       *item);
+void                   ide_menu_extension_insert_menu_item   (IdeMenuExtension *menu,
+							      gint              position,
+							      GMenuItem        *item);
 
-void                   ide_menu_extension_remove_items        (IdeMenuExtension *menu);
+void                   ide_menu_extension_prepend_menu_item  (IdeMenuExtension *menu,
+                                                              GMenuItem        *item);
+
+void                   ide_menu_extension_remove_items       (IdeMenuExtension *menu);
 
 G_END_DECLS
 

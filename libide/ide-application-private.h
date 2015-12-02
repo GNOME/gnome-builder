@@ -23,6 +23,7 @@
 #include <libpeas/peas.h>
 
 #include "ide-application.h"
+#include "ide-menu-merger.h"
 #include "ide-keybindings.h"
 #include "ide-recent-projects.h"
 #include "ide-theme-manager.h"
@@ -52,6 +53,8 @@ struct _IdeApplication
   GDateTime           *started_at;
 
   IdeThemeManager     *theme_manager;
+
+  IdeMenuMerger       *menu_merger;
 };
 
 void     ide_application_discover_plugins   (IdeApplication   *self) G_GNUC_INTERNAL;

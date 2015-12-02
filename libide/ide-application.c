@@ -116,6 +116,18 @@ ide_application_register_keybindings (IdeApplication *self)
 }
 
 static void
+ide_application_register_menus (IdeApplication *self)
+{
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_APPLICATION (self));
+
+  self->menu_merger = ide_menu_merger_new ();
+
+  IDE_EXIT;
+}
+
+static void
 ide_application_register_search_paths (IdeApplication *self)
 {
   g_assert (IDE_IS_APPLICATION (self));
@@ -330,6 +342,9 @@ ide_application_startup (GApplication *application)
 
   G_APPLICATION_CLASS (ide_application_parent_class)->startup (application);
 
+  if (self->mode == IDE_APPLICATION_MODE_PRIMARY)
+    ide_application_register_menus (self);
+
   ide_application_load_addins (self);
 }
 
@@ -355,6 +370,7 @@ ide_application_finalize (GObject *object)
   g_clear_object (&self->keybindings);
   g_clear_object (&self->recent_projects);
   g_clear_object (&self->theme_manager);
+  g_clear_object (&self->menu_merger);
 
   G_OBJECT_CLASS (ide_application_parent_class)->finalize (object);
 }

@@ -59,9 +59,9 @@ ide_menu_extension_dispose (GObject *object)
 
 static void
 ide_menu_extension_get_property (GObject    *object,
-                                guint       prop_id,
-                                GValue     *value,
-                                GParamSpec *pspec)
+				 guint       prop_id,
+				 GValue     *value,
+				 GParamSpec *pspec)
 {
 	IdeMenuExtension *menu = IDE_MENU_EXTENSION (object);
 
@@ -77,10 +77,10 @@ ide_menu_extension_get_property (GObject    *object,
 }
 
 static void
-ide_menu_extension_set_property (GObject     *object,
-                                   guint         prop_id,
-                                   const GValue *value,
-                                   GParamSpec   *pspec)
+ide_menu_extension_set_property (GObject      *object,
+				 guint         prop_id,
+				 const GValue *value,
+				 GParamSpec   *pspec)
 {
 	IdeMenuExtension *menu = IDE_MENU_EXTENSION (object);
 
@@ -129,7 +129,7 @@ ide_menu_extension_new (GMenu *menu)
 
 IdeMenuExtension *
 ide_menu_extension_new_for_section (GMenu       *menu,
-                                   const gchar *section)
+				    const gchar *section)
 {
 	guint n_items;
 	guint i;
@@ -180,28 +180,43 @@ ide_menu_extension_new_for_section (GMenu       *menu,
 
 void
 ide_menu_extension_append_menu_item (IdeMenuExtension *menu,
-                                    GMenuItem       *item)
+				     GMenuItem        *item)
 {
 	g_return_if_fail (IDE_IS_MENU_EXTENSION (menu));
 	g_return_if_fail (G_IS_MENU_ITEM (item));
 
 	if (menu->menu != NULL)
 	{
-		g_menu_item_set_attribute (item, "gb-merge-id", "u", menu->merge_id);
+		g_menu_item_set_attribute (item, "ide-merge-id", "u", menu->merge_id);
 		g_menu_append_item (menu->menu, item);
 	}
 }
 
 void
-ide_menu_extension_prepend_menu_item (IdeMenuExtension *menu,
-                                     GMenuItem       *item)
+ide_menu_extension_insert_menu_item (IdeMenuExtension *menu,
+				     gint              position,
+				     GMenuItem        *item)
 {
 	g_return_if_fail (IDE_IS_MENU_EXTENSION (menu));
 	g_return_if_fail (G_IS_MENU_ITEM (item));
 
 	if (menu->menu != NULL)
 	{
-		g_menu_item_set_attribute (item, "gb-merge-id", "u", menu->merge_id);
+		g_menu_item_set_attribute (item, "ide-merge-id", "u", menu->merge_id);
+		g_menu_insert_item (menu->menu, position, item);
+	}
+}
+
+void
+ide_menu_extension_prepend_menu_item (IdeMenuExtension *menu,
+				      GMenuItem        *item)
+{
+	g_return_if_fail (IDE_IS_MENU_EXTENSION (menu));
+	g_return_if_fail (G_IS_MENU_ITEM (item));
+
+	if (menu->menu != NULL)
+	{
+		g_menu_item_set_attribute (item, "ide-merge-id", "u", menu->merge_id);
 		g_menu_prepend_item (menu->menu, item);
 	}
 }
@@ -220,7 +235,7 @@ ide_menu_extension_remove_items (IdeMenuExtension *menu)
 		guint id = 0;
 
 		if (g_menu_model_get_item_attribute (G_MENU_MODEL (menu->menu),
-		                                     i, "gb-merge-id", "u", &id) &&
+		                                     i, "ide-merge-id", "u", &id) &&
 		    id == menu->merge_id)
 		{
 			g_menu_remove (menu->menu, i);
