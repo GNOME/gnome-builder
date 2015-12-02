@@ -21,7 +21,6 @@
 #include <glib/gi18n.h>
 
 #include "egg-counter.h"
-#include "gb-string.h"
 
 #include "ide-completion-item.h"
 #include "ide-ctags-completion-item.h"
