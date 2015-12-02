@@ -158,8 +158,8 @@ ide_source_location_new (IdeFile *file,
   ret = g_slice_new0 (IdeSourceLocation);
   ret->ref_count = 1;
   ret->file = g_object_ref (file);
-  ret->line = line;
-  ret->line_offset = line_offset;
+  ret->line = MIN (G_MAXINT, line);
+  ret->line_offset = MIN (G_MAXINT, line_offset);
   ret->offset = offset;
 
   EGG_COUNTER_INC (instances);
