@@ -1,0 +1,20 @@
+box.gb-command-bar-box {
+  border: none;
+  background-image: linear-gradient(to bottom, #2e3436, #555753 10%);
+  box-shadow: inset 0px 3px 6px #2e3436;
+}
+box.gb-command-bar-box label {
+  color: #eeeeec;
+}
+entry.gb-command-bar-entry {
+  font-family: Monospace;
+  background-image: none;
+  padding: 6px 6px 6px 6px;
+  color: #eeeeec;
+}
+flowbox.gb-command-bar {
+  background: @theme_bg_color;
+  opacity: 0.9;
+  padding: 24px;
+  color: @theme_fg_color;
+}

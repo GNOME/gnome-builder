@@ -26,6 +26,13 @@
           </object>
         </child>
         <child>
+          <object class="GtkSeparator">
+            <property name="visible">true</property>
+            <property name="hexpand">true</property>
+            <property name="orientation">horizontal</property>
+          </object>
+        </child>
+        <child>
           <object class="GtkScrolledWindow" id="completion_scroller">
             <property name="hscrollbar_policy">GTK_POLICY_NEVER</property>
             <property name="visible">False</property>
@@ -33,6 +40,9 @@
             <property name="vexpand">False</property>
             <child>
               <object class="GtkFlowBox" id="flow_box">
+                <style>
+                  <class name="gb-command-bar"/>
+                </style>
                 <property name="visible">True</property>
                 <property name="max-children-per-line">20</property>
                 <property name="column-spacing">16</property>
