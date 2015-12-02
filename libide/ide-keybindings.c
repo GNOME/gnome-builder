@@ -19,9 +19,11 @@
 #define G_LOG_DOMAIN "ide-keybindings"
 
 #include <glib/gi18n.h>
+#include <libpeas/peas.h>
 
 #include "ide-debug.h"
 #include "ide-keybindings.h"
+#include "ide-macros.h"
 
 struct _IdeKeybindings
 {
@@ -30,6 +32,8 @@ struct _IdeKeybindings
   GtkApplication *application;
   GtkCssProvider *css_provider;
   gchar          *mode;
+  GHashTable     *plugin_providers;
+
   guint           constructed : 1;
 };
 
@@ -58,30 +62,125 @@ ide_keybindings_new (GtkApplication *application,
 }
 
 static void
-ide_keybindings_reload (IdeKeybindings *self)
+ide_keybindings_load_plugin (IdeKeybindings *self,
+                             PeasPluginInfo *plugin_info,
+                             PeasEngine     *engine)
 {
-  const gchar *mode;
   g_autofree gchar *path = NULL;
+  const gchar *module_name;
   g_autoptr(GBytes) bytes = NULL;
   g_autoptr(GError) error = NULL;
+  g_autoptr(GtkCssProvider) provider = NULL;
+
+  g_assert (IDE_IS_KEYBINDINGS (self));
+  g_assert (plugin_info != NULL);
+  g_assert (PEAS_IS_ENGINE (engine));
+
+  if (!self->mode || !self->plugin_providers)
+    return;
+
+  module_name = peas_plugin_info_get_module_name (plugin_info);
+  path = g_strdup_printf ("/org/gnome/builder/plugins/%s/keybindings/%s.css",
+                          module_name, self->mode);
+  bytes = g_resources_lookup_data (path, 0, NULL);
+  if (bytes == NULL)
+    return;
+
+  IDE_TRACE_MSG ("Loading %s keybindings for \"%s\" plugin", self->mode, module_name);
+
+  provider = gtk_css_provider_new ();
+  gtk_css_provider_load_from_resource (provider, path);
+  gtk_style_context_add_provider_for_screen (gdk_screen_get_default (),
+                                             GTK_STYLE_PROVIDER (provider),
+                                             GTK_STYLE_PROVIDER_PRIORITY_APPLICATION + 1);
+  g_hash_table_insert (self->plugin_providers, g_strdup (module_name), g_object_ref (provider));
+}
+
+static void
+ide_keybindings_unload_plugin (IdeKeybindings *self,
+                               PeasPluginInfo *plugin_info,
+                               PeasEngine     *engine)
+{
+  GtkStyleProvider *provider;
+  const gchar *module_name;
+
+  g_assert (IDE_IS_KEYBINDINGS (self));
+  g_assert (plugin_info != NULL);
+  g_assert (PEAS_IS_ENGINE (engine));
+
+  if (self->plugin_providers == NULL)
+    return;
+
+  module_name = peas_plugin_info_get_module_name (plugin_info);
+  provider = g_hash_table_lookup (self->plugin_providers, module_name);
+  if (provider == NULL)
+    return;
+
+  gtk_style_context_remove_provider_for_screen (gdk_screen_get_default (), provider);
+  g_hash_table_remove (self->plugin_providers, module_name);
+}
+
+static void
+ide_keybindings_reload (IdeKeybindings *self)
+{
+  GdkScreen *screen;
+  PeasEngine *engine;
+  const GList *list;
 
   IDE_ENTRY;
 
   g_assert (IDE_IS_KEYBINDINGS (self));
 
-  mode = self->mode ? self->mode : "default";
-  IDE_TRACE_MSG ("Loading %s keybindings", mode);
-  path = g_strdup_printf ("/org/gnome/builder/keybindings/%s.css", mode);
-  bytes = g_resources_lookup_data (path, G_RESOURCE_LOOKUP_FLAGS_NONE, &error);
+  {
+    g_autofree gchar *path = NULL;
+    g_autoptr(GBytes) bytes = NULL;
+    g_autoptr(GError) error = NULL;
 
-  if (error == NULL)
-    gtk_css_provider_load_from_data (self->css_provider,
-                                     g_bytes_get_data (bytes, NULL),
-                                     g_bytes_get_size (bytes),
-                                     &error);
+    if (self->mode == NULL)
+      self->mode = g_strdup ("default");
 
-  if (error)
-    g_warning ("%s", error->message);
+    IDE_TRACE_MSG ("Loading %s keybindings", self->mode);
+    path = g_strdup_printf ("/org/gnome/builder/keybindings/%s.css", self->mode);
+    bytes = g_resources_lookup_data (path, G_RESOURCE_LOOKUP_FLAGS_NONE, &error);
+
+    if (error == NULL)
+      gtk_css_provider_load_from_data (self->css_provider,
+                                       g_bytes_get_data (bytes, NULL),
+                                       g_bytes_get_size (bytes),
+                                       &error);
+
+    if (error)
+      g_warning ("%s", error->message);
+  }
+
+  engine = peas_engine_get_default ();
+  screen = gdk_screen_get_default ();
+
+  if (self->plugin_providers != NULL)
+    {
+      GHashTableIter iter;
+      GtkStyleProvider *provider;
+
+      g_hash_table_iter_init (&iter, self->plugin_providers);
+      while (g_hash_table_iter_next (&iter, NULL, (gpointer *)&provider))
+        gtk_style_context_remove_provider_for_screen (screen, provider);
+
+      g_clear_pointer (&self->plugin_providers, g_hash_table_unref);
+    }
+
+  self->plugin_providers = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_object_unref);
+
+  list = peas_engine_get_plugin_list (engine);
+
+  for (; list != NULL; list = list->next)
+    {
+      PeasPluginInfo *plugin_info = list->data;
+
+      if (!peas_plugin_info_is_loaded (plugin_info))
+        continue;
+
+      ide_keybindings_load_plugin (self, plugin_info, engine);
+    }
 
   IDE_EXIT;
 }
@@ -100,12 +199,14 @@ ide_keybindings_set_mode (IdeKeybindings *self,
 {
   g_return_if_fail (IDE_IS_KEYBINDINGS (self));
 
-  if (mode != self->mode)
+  if (!ide_str_equal0 (self->mode, mode))
     {
       g_free (self->mode);
       self->mode = g_strdup (mode);
+
       if (self->constructed)
         ide_keybindings_reload (self);
+
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_MODE]);
     }
 }
@@ -164,17 +265,32 @@ static void
 ide_keybindings_constructed (GObject *object)
 {
   IdeKeybindings *self = (IdeKeybindings *)object;
+  PeasEngine *engine;
   GdkScreen *screen;
 
   IDE_ENTRY;
 
+  self->constructed = TRUE;
+
   G_OBJECT_CLASS (ide_keybindings_parent_class)->constructed (object);
 
   screen = gdk_screen_get_default ();
+  engine = peas_engine_get_default ();
+
+  g_signal_connect_object (engine,
+                           "load-plugin",
+                           G_CALLBACK (ide_keybindings_load_plugin),
+                           self,
+                           G_CONNECT_AFTER | G_CONNECT_SWAPPED);
+
+  g_signal_connect_object (engine,
+                           "unload-plugin",
+                           G_CALLBACK (ide_keybindings_unload_plugin),
+                           self,
+                           G_CONNECT_SWAPPED);
+
   gtk_style_context_add_provider_for_screen (screen, GTK_STYLE_PROVIDER (self->css_provider),
                                              GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-
-  self->constructed = TRUE;
 
   ide_keybindings_reload (self);
 
