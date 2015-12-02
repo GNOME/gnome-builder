@@ -1,6 +1,6 @@
-/* ide-css-provider.h
+/* ide-theme-manager.h
  *
- * Copyright (C) 2015 Christian Hergert <christian@hergert.me>
+ * Copyright (C) 2015 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,19 +16,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_CSS_PROVIDER_H
-#define IDE_CSS_PROVIDER_H
+#ifndef IDE_THEME_MANAGER_H
+#define IDE_THEME_MANAGER_H
 
 #include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_CSS_PROVIDER (ide_css_provider_get_type())
+#define IDE_TYPE_THEME_MANAGER (ide_theme_manager_get_type())
 
-G_DECLARE_FINAL_TYPE (IdeCssProvider, ide_css_provider, IDE, CSS_PROVIDER, GtkCssProvider)
+G_DECLARE_FINAL_TYPE (IdeThemeManager, ide_theme_manager, IDE, THEME_MANAGER, GObject)
 
-GtkCssProvider *ide_css_provider_new (const gchar *base_path);
+IdeThemeManager *ide_theme_manager_new (void);
 
 G_END_DECLS
 
-#endif /* IDE_CSS_PROVIDER_H */
+#endif /* IDE_THEME_MANAGER_H */

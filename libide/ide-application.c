@@ -41,6 +41,7 @@
 #include "ide-internal.h"
 #include "ide-macros.h"
 #include "ide-resources.h"
+#include "ide-theme-manager.h"
 #include "ide-workbench.h"
 #include "ide-worker.h"
 
@@ -84,14 +85,9 @@ ide_application_register_theme_overrides (IdeApplication *self)
 
   g_assert (IDE_IS_APPLICATION (self));
 
-  gtk_icon_theme_add_resource_path (gtk_icon_theme_get_default (),
-                                    "/org/gnome/builder/icons/");
+  self->theme_manager = ide_theme_manager_new ();
 
-  provider = ide_css_provider_new ();
   screen = gdk_screen_get_default ();
-  gtk_style_context_add_provider_for_screen (screen, GTK_STYLE_PROVIDER (provider),
-                                             GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-
   gtk_settings = gtk_settings_get_for_screen (screen);
   settings = g_settings_new ("org.gnome.builder");
   g_settings_bind (settings, "night-mode",
@@ -358,6 +354,7 @@ ide_application_finalize (GObject *object)
   g_clear_object (&self->worker_manager);
   g_clear_object (&self->keybindings);
   g_clear_object (&self->recent_projects);
+  g_clear_object (&self->theme_manager);
 
   G_OBJECT_CLASS (ide_application_parent_class)->finalize (object);
 }

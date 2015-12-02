@@ -25,6 +25,7 @@
 #include "ide-application.h"
 #include "ide-keybindings.h"
 #include "ide-recent-projects.h"
+#include "ide-theme-manager.h"
 #include "ide-worker-manager.h"
 
 G_BEGIN_DECLS
@@ -42,7 +43,6 @@ struct _IdeApplication
   gchar              **tool_arguments;
 
   PeasPluginInfo      *worker;
-
   IdeWorkerManager    *worker_manager;
 
   IdeKeybindings      *keybindings;
@@ -50,6 +50,8 @@ struct _IdeApplication
   IdeRecentProjects   *recent_projects;
 
   GDateTime           *started_at;
+
+  IdeThemeManager     *theme_manager;
 };
 
 void     ide_application_discover_plugins   (IdeApplication   *self) G_GNUC_INTERNAL;

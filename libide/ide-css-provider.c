@@ -25,17 +25,27 @@
 
 struct _IdeCssProvider
 {
-  GtkCssProvider parent_instance;
-
-  GtkSettings *settings;
+  GtkCssProvider  parent_instance;
+  GtkSettings    *settings;
+  gchar          *base_path;
 };
 
 G_DEFINE_TYPE (IdeCssProvider, ide_css_provider, GTK_TYPE_CSS_PROVIDER)
 
+enum {
+  PROP_0,
+  PROP_BASE_PATH,
+  LAST_PROP
+};
+
+static GParamSpec *properties [LAST_PROP];
+
 GtkCssProvider *
-ide_css_provider_new (void)
+ide_css_provider_new (const gchar *base_path)
 {
-  return g_object_new (IDE_TYPE_CSS_PROVIDER, NULL);
+  return g_object_new (IDE_TYPE_CSS_PROVIDER,
+                       "base-path", base_path,
+                       NULL);
 }
 
 static void
@@ -57,15 +67,19 @@ ide_css_provider_update (IdeCssProvider *self)
                 "gtk-application-prefer-dark-theme", &prefer_dark_theme,
                 NULL);
 
-  resource_path = g_strdup_printf ("/org/gnome/builder/theme/%s%s.css",
-                                   theme_name,
-                                   prefer_dark_theme ? "-dark" : "");
+  resource_path = g_strdup_printf ("%s/theme/%s%s.css",
+                                   self->base_path,
+                                   theme_name, prefer_dark_theme ? "-dark" : "");
 
   if (!g_resources_get_info (resource_path, G_RESOURCE_LOOKUP_FLAGS_NONE, &len, &flags, NULL))
     {
       g_free (resource_path);
-      resource_path = g_strdup ("/org/gnome/builder/theme/shared.css");
+      resource_path = g_strdup_printf ("%s/theme/shared.css", self->base_path);
     }
+
+  /* Nothing to load */
+  if (!g_resources_get_info (resource_path, G_RESOURCE_LOOKUP_FLAGS_NONE, &len, &flags, NULL))
+    return;
 
   IDE_TRACE_MSG ("Loading css overrides \"%s\"", resource_path);
 
@@ -151,8 +165,47 @@ ide_css_provider_finalize (GObject *object)
   IdeCssProvider *self = (IdeCssProvider *)object;
 
   g_clear_object (&self->settings);
+  g_clear_pointer (&self->base_path, g_free);
 
   G_OBJECT_CLASS (ide_css_provider_parent_class)->finalize (object);
+}
+
+static void
+ide_css_provider_get_property (GObject    *object,
+                               guint       prop_id,
+                               GValue     *value,
+                               GParamSpec *pspec)
+{
+  IdeCssProvider *self = IDE_CSS_PROVIDER(object);
+
+  switch (prop_id)
+    {
+    case PROP_BASE_PATH:
+      g_value_set_string (value, self->base_path);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
+    }
+}
+
+static void
+ide_css_provider_set_property (GObject      *object,
+                               guint         prop_id,
+                               const GValue *value,
+                               GParamSpec   *pspec)
+{
+  IdeCssProvider *self = IDE_CSS_PROVIDER(object);
+
+  switch (prop_id)
+    {
+    case PROP_BASE_PATH:
+      self->base_path = g_value_dup_string (value);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
+    }
 }
 
 static void
@@ -161,10 +214,21 @@ ide_css_provider_class_init (IdeCssProviderClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkCssProviderClass *provider_class = GTK_CSS_PROVIDER_CLASS (klass);
 
-  object_class->finalize = ide_css_provider_finalize;
   object_class->constructed = ide_css_provider_constructed;
+  object_class->finalize = ide_css_provider_finalize;
+  object_class->get_property = ide_css_provider_get_property;
+  object_class->set_property = ide_css_provider_set_property;
 
   provider_class->parsing_error = ide_css_provider_parsing_error;
+
+  properties [PROP_BASE_PATH] =
+    g_param_spec_string ("base-path",
+                         "Base Path",
+                         "The base resource path to discover themes",
+                         NULL,
+                         (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
+
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 }
 
 static void
