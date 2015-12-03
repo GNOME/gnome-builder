@@ -118,6 +118,7 @@ ide_application_register_keybindings (IdeApplication *self)
 static void
 ide_application_register_menus (IdeApplication *self)
 {
+  GMenu *app_menu;
   IDE_ENTRY;
 
   g_assert (IDE_IS_APPLICATION (self));
@@ -125,6 +126,9 @@ ide_application_register_menus (IdeApplication *self)
   self->menu_manager = egg_menu_manager_new ();
   egg_menu_manager_add_resource (self->menu_manager, "/org/gnome/builder/gtk/menus.ui", NULL);
   ide_application_init_plugin_menus (self);
+
+  app_menu = egg_menu_manager_get_menu_by_id (self->menu_manager, "app-menu");
+  gtk_application_set_app_menu (GTK_APPLICATION (self), G_MENU_MODEL (app_menu));
 
   IDE_EXIT;
 }
