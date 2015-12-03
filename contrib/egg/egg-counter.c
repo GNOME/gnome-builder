@@ -240,6 +240,8 @@ use_malloc:
              "Counters will not be available to external processes.");
 
   arena->data_is_mmapped = FALSE;
+  arena->cells = g_malloc0 (size << 1);
+  arena->n_cells = (size / DATA_CELL_SIZE);
   arena->data_length = size;
 
   /*
@@ -247,12 +249,20 @@ use_malloc:
    * malloc. Since we are at least a page size, we should pretty much
    * be guaranteed this, but better to check with posix_memalign().
    */
-  arena->cells = g_malloc0 (size << 1);
   if (posix_memalign ((void *)&arena->cells, page_size, size << 1) != 0)
     {
       perror ("posix_memalign()");
       abort ();
     }
+
+  header = (void *)arena->cells;
+  header->magic = MAGIC;
+  header->ncpu = g_get_num_processors ();
+  header->first_offset = CELLS_PER_HEADER;
+
+  EGG_MEMORY_BARRIER;
+
+  header->size = (guint32)arena->data_length;
 }
 
 static gboolean
