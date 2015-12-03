@@ -122,7 +122,9 @@ ide_application_register_menus (IdeApplication *self)
 
   g_assert (IDE_IS_APPLICATION (self));
 
-  self->menu_merger = ide_menu_merger_new ();
+  self->menu_manager = egg_menu_manager_new ();
+  egg_menu_manager_add_resource (self->menu_manager, "/org/gnome/builder/gtk/menus.ui", NULL);
+  ide_application_init_plugin_menus (self);
 
   IDE_EXIT;
 }
@@ -366,11 +368,12 @@ ide_application_finalize (GObject *object)
   g_clear_pointer (&self->dbus_address, g_free);
   g_clear_pointer (&self->tool_arguments, g_strfreev);
   g_clear_pointer (&self->started_at, g_date_time_unref);
+  g_clear_pointer (&self->merge_ids, g_hash_table_unref);
   g_clear_object (&self->worker_manager);
   g_clear_object (&self->keybindings);
   g_clear_object (&self->recent_projects);
   g_clear_object (&self->theme_manager);
-  g_clear_object (&self->menu_merger);
+  g_clear_object (&self->menu_manager);
 
   G_OBJECT_CLASS (ide_application_parent_class)->finalize (object);
 }
@@ -476,7 +479,7 @@ ide_application_get_worker_async (IdeApplication      *self,
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   if (self->mode != IDE_APPLICATION_MODE_PRIMARY)
-    return NULL;
+    return;
 
   if (self->worker_manager == NULL)
     self->worker_manager = ide_worker_manager_new ();
@@ -605,4 +608,29 @@ GDateTime *
 ide_application_get_started_at (IdeApplication *self)
 {
   return self->started_at;
+}
+
+/**
+ * ide_application_get_menu_by_id:
+ * @self: An #IdeApplication.
+ * @id: The id of the menu to lookup.
+ *
+ * Similar to gtk_application_get_menu_by_id() but takes into account merging
+ * the menus provided by, and extended by, plugins.
+ *
+ * Returns: (transfer none): A #GMenu.
+ */
+GMenu *
+ide_application_get_menu_by_id (IdeApplication *self,
+                                const gchar    *id)
+{
+  g_return_val_if_fail (IDE_IS_APPLICATION (self), NULL);
+  g_return_val_if_fail (id != NULL, NULL);
+
+  if (self->menu_manager != NULL)
+    return egg_menu_manager_get_menu_by_id (self->menu_manager, id);
+
+  g_critical ("%s() called by non-UI process", G_STRFUNC);
+
+  return NULL;
 }

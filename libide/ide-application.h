@@ -51,6 +51,8 @@ void                ide_application_get_worker_async     (IdeApplication       *
 GDBusProxy         *ide_application_get_worker_finish    (IdeApplication       *self,
                                                           GAsyncResult         *result,
                                                           GError              **error);
+GMenu              *ide_application_get_menu_by_id       (IdeApplication       *self,
+                                                          const gchar          *id);
 
 G_END_DECLS
 

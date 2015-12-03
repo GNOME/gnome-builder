@@ -22,8 +22,9 @@
 #include <gio/gio.h>
 #include <libpeas/peas.h>
 
+#include "egg-menu-manager.h"
+
 #include "ide-application.h"
-#include "ide-menu-merger.h"
 #include "ide-keybindings.h"
 #include "ide-recent-projects.h"
 #include "ide-theme-manager.h"
@@ -54,12 +55,14 @@ struct _IdeApplication
 
   IdeThemeManager     *theme_manager;
 
-  IdeMenuMerger       *menu_merger;
+  EggMenuManager      *menu_manager;
+  GHashTable          *merge_ids;
 };
 
 void     ide_application_discover_plugins   (IdeApplication   *self) G_GNUC_INTERNAL;
 void     ide_application_load_plugins       (IdeApplication   *self) G_GNUC_INTERNAL;
 void     ide_application_load_addins        (IdeApplication   *self) G_GNUC_INTERNAL;
+void     ide_application_init_plugin_menus  (IdeApplication   *self) G_GNUC_INTERNAL;
 gboolean ide_application_local_command_line (GApplication     *application,
                                              gchar          ***arguments,
                                              gint             *exit_status) G_GNUC_INTERNAL;

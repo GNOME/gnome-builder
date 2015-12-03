@@ -189,3 +189,75 @@ ide_application_load_addins (IdeApplication *self)
                               ide_application_addin_added,
                               self);
 }
+
+static void
+ide_application_load_plugin_menus (IdeApplication *self,
+                                   PeasPluginInfo *plugin_info,
+                                   PeasEngine     *engine)
+{
+  const gchar *module_name;
+  gchar *path;
+  guint merge_id;
+
+  g_assert (IDE_IS_APPLICATION (self));
+  g_assert (plugin_info != NULL);
+  g_assert (PEAS_IS_ENGINE (engine));
+
+  module_name = peas_plugin_info_get_module_name (plugin_info);
+  path = g_strdup_printf ("/org/gnome/builder/plugins/%s/gtk/menus.ui", module_name);
+  g_print ("Loading %s\n", path);
+  merge_id = egg_menu_manager_add_resource (self->menu_manager, path, NULL);
+  if (merge_id != 0)
+    g_hash_table_insert (self->merge_ids, g_strdup (module_name), GINT_TO_POINTER (merge_id));
+  g_print (" merge_id = %d\n", merge_id);
+  g_free (path);
+}
+
+static void
+ide_application_unload_plugin_menus (IdeApplication *self,
+                                     PeasPluginInfo *plugin_info,
+                                     PeasEngine     *engine)
+{
+  const gchar *module_name;
+  guint merge_id;
+
+  g_assert (IDE_IS_APPLICATION (self));
+  g_assert (plugin_info != NULL);
+  g_assert (PEAS_IS_ENGINE (engine));
+
+  module_name = peas_plugin_info_get_module_name (plugin_info);
+  merge_id = GPOINTER_TO_INT (g_hash_table_lookup (self->merge_ids, module_name));
+  if (merge_id != 0)
+    egg_menu_manager_remove (self->menu_manager, merge_id);
+  g_hash_table_remove (self->merge_ids, module_name);
+}
+
+void
+ide_application_init_plugin_menus (IdeApplication *self)
+{
+  const GList *list;
+  PeasEngine *engine;
+
+  g_assert (IDE_IS_APPLICATION (self));
+
+  self->merge_ids = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
+
+  engine = peas_engine_get_default ();
+
+  g_signal_connect_object (engine,
+                           "load-plugin",
+                           G_CALLBACK (ide_application_load_plugin_menus),
+                           self,
+                           G_CONNECT_AFTER | G_CONNECT_SWAPPED);
+
+  g_signal_connect_object (engine,
+                           "unload-plugin",
+                           G_CALLBACK (ide_application_unload_plugin_menus),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  list = peas_engine_get_plugin_list (engine);
+
+  for (; list != NULL; list = list->next)
+    ide_application_load_plugin_menus (self, list->data, engine);
+}
