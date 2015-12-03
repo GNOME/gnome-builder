@@ -31,6 +31,9 @@ EggMenuManager *egg_menu_manager_new            (void);
 guint           egg_menu_manager_add_filename   (EggMenuManager  *self,
                                                  const gchar     *filename,
                                                  GError         **error);
+guint           egg_menu_manager_add_resource   (EggMenuManager  *self,
+                                                 const gchar     *resource,
+                                                 GError         **error);
 void            egg_menu_manager_remove         (EggMenuManager  *self,
                                                  guint            merge_id);
 GMenu          *egg_menu_manager_get_menu_by_id (EggMenuManager  *self,

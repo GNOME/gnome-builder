@@ -499,3 +499,29 @@ egg_menu_manager_get_menu_by_id (EggMenuManager *self,
 
   return menu;
 }
+
+guint
+egg_menu_manager_add_resource (EggMenuManager  *self,
+                               const gchar     *resource,
+                               GError         **error)
+{
+  GtkBuilder *builder;
+  guint merge_id;
+
+  g_return_val_if_fail (EGG_IS_MENU_MANAGER (self), 0);
+  g_return_val_if_fail (resource != NULL, 0);
+
+  builder = gtk_builder_new ();
+
+  if (!gtk_builder_add_from_resource (builder, resource, error))
+    {
+      g_object_unref (builder);
+      return 0;
+    }
+
+  merge_id = ++self->last_merge_id;
+  egg_menu_manager_merge (self, builder, merge_id);
+  g_object_unref (builder);
+
+  return merge_id;
+}
