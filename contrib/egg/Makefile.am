@@ -23,6 +23,8 @@ libegg_private_la_SOURCES = \
 	egg-frame-source.h \
 	egg-heap.c \
 	egg-heap.h \
+	egg-menu-manager.c \
+	egg-menu-manager.h \
 	egg-pill-box.c \
 	egg-pill-box.h \
 	egg-private.h \

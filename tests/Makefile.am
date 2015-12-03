@@ -1,3 +1,5 @@
+EXTRA_DIST =
+
 egg_cflags = \
 	$(DEBUG_CFLAGS) \
 	$(LIBIDE_CFLAGS) \
@@ -199,6 +201,19 @@ test_egg_binding_group_CFLAGS = $(egg_cflags)
 test_egg_binding_group_LDADD = $(egg_libs)
 
 
+TESTS += test-egg-menu-manager
+test_egg_menu_manager_SOURCES = test-egg-menu-manager.c
+test_egg_menu_manager_CFLAGS = $(egg_cflags)
+test_egg_menu_manager_LDADD = $(egg_libs)
+EXTRA_DIST += \
+	menus-exten-1.ui \
+	menus-exten-2.ui \
+	menus-exten-3.ui \
+	menus-exten-4.ui \
+	menus-exten-5.ui \
+	menus.ui
+
+
 TESTS += test-egg-signal-group
 test_egg_signal_group_SOURCES = test-egg-signal-group.c
 test_egg_signal_group_CFLAGS = $(egg_cflags)
@@ -229,7 +244,7 @@ endif
 
 check_PROGRAMS = $(TESTS) $(misc_programs)
 
-EXTRA_DIST = \
+EXTRA_DIST += \
 	data/project1/configure.ac \
 	data/project1/.editorconfig \
 	data/project1/project1.doap \
