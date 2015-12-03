@@ -118,8 +118,6 @@ libide_1_0_la_public_sources = \
 	ide-log.c \
 	ide-log.h \
 	ide-macros.h \
-	ide-menu-extension.c \
-	ide-menu-extension.h \
 	ide-object.c \
 	ide-object.h \
 	ide-pattern-spec.c \
@@ -296,8 +294,6 @@ libide_1_0_la_SOURCES = \
 	ide-line-change-gutter-renderer.h \
 	ide-line-diagnostics-gutter-renderer.c \
 	ide-line-diagnostics-gutter-renderer.h \
-	ide-menu-merger.c \
-	ide-menu-merger.h \
 	ide-ref-ptr.c \
 	ide-ref-ptr.h \
 	ide-search-reducer.c \
