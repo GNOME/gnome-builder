@@ -1,4 +1,6 @@
-SUBDIRS = . build contrib data libide src plugins po tools tests doc
+SUBDIRS = . build contrib data libide src plugins po tests doc
+
+# disabling tools until they are ported to plugins
 
 pkgconfigdir = $(libdir)/gnome-builder/pkgconfig
 pkgconfig_DATA = $(top_builddir)/data/libide-1.0.pc
