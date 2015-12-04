@@ -1,4 +1,4 @@
-/* project-tree-plugin.c
+/* gb-project-tree-editor-addin.h
  *
  * Copyright (C) 2015 Christian Hergert <chergert@redhat.com>
  *
@@ -16,19 +16,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <libpeas/peas.h>
+#ifndef GB_PROJECT_TREE_EDITOR_ADDIN_H
+#define GB_PROJECT_TREE_EDITOR_ADDIN_H
+
 #include <ide.h>
 
-#include "gb-project-tree-addin.h"
-#include "gb-project-tree-editor-addin.h"
+G_BEGIN_DECLS
 
-void
-peas_register_types (PeasObjectModule *module)
-{
-  peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_WORKBENCH_ADDIN,
-                                              GB_TYPE_PROJECT_TREE_ADDIN);
-  peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_EDITOR_VIEW_ADDIN,
-                                              GB_TYPE_PROJECT_TREE_EDITOR_ADDIN);
-}
+#define GB_TYPE_PROJECT_TREE_EDITOR_ADDIN (gb_project_tree_editor_addin_get_type())
+
+G_DECLARE_FINAL_TYPE (GbProjectTreeEditorAddin, gb_project_tree_editor_addin, GB, PROJECT_TREE_EDITOR_ADDIN, GObject)
+
+G_END_DECLS
+
+#endif /* GB_PROJECT_TREE_EDITOR_ADDIN_H */

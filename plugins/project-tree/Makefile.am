@@ -20,6 +20,8 @@ libproject_tree_plugin_la_SOURCES = \
 	gb-project-tree-builder.h \
 	gb-project-tree.c \
 	gb-project-tree.h \
+	gb-project-tree-editor-addin.c \
+	gb-project-tree-editor-addin.h \
 	gb-project-tree-private.h \
 	gb-rename-file-popover.c \
 	gb-rename-file-popover.h \

@@ -34,6 +34,8 @@ IdeContext *gb_project_tree_get_context            (GbProjectTree *self);
 gboolean    gb_project_tree_get_show_ignored_files (GbProjectTree *self);
 void        gb_project_tree_set_show_ignored_files (GbProjectTree *self,
                                                     gboolean       show_ignored_files);
+void        gb_project_tree_reveal                 (GbProjectTree *self,
+                                                    GFile         *file);
 
 G_END_DECLS
 

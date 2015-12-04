@@ -77,6 +77,8 @@ gb_project_tree_addin_load (IdeWorkbenchAddin *addin,
                             _("Project Tree"), "folder-symbolic");
 
   ide_widget_set_context_handler (self->tree, gb_project_tree_addin_context_set);
+
+  g_object_set_data (G_OBJECT (workbench), "GB_PROJECT_TREE", self->tree);
 }
 
 static void

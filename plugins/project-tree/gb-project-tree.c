@@ -20,6 +20,7 @@
 
 #include <glib/gi18n.h>
 
+#include "gb-project-file.h"
 #include "gb-project-tree.h"
 #include "gb-project-tree-actions.h"
 #include "gb-project-tree-builder.h"
@@ -51,8 +52,8 @@ gb_project_tree_get_context (GbProjectTree *self)
 
   if ((root = ide_tree_get_root (IDE_TREE (self))) &&
       (item = ide_tree_node_get_item (root)) &&
-      IDE_IS_OBJECT (item))
-    return ide_object_get_context (IDE_OBJECT (item));
+      IDE_IS_CONTEXT (item))
+    return IDE_CONTEXT (item);
 
   return NULL;
 }
@@ -211,4 +212,94 @@ gb_project_tree_set_show_ignored_files (GbProjectTree *self,
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SHOW_IGNORED_FILES]);
       ide_tree_rebuild (IDE_TREE (self));
     }
+}
+
+static gboolean
+find_child_node (IdeTree     *tree,
+                 IdeTreeNode *node,
+                 IdeTreeNode *child,
+                 gpointer    user_data)
+{
+  const gchar *name = user_data;
+  GObject *item;
+
+  g_assert (IDE_IS_TREE (tree));
+  g_assert (IDE_IS_TREE_NODE (node));
+  g_assert (IDE_IS_TREE_NODE (child));
+
+  item = ide_tree_node_get_item (child);
+
+  if (GB_IS_PROJECT_FILE (item))
+    {
+      const gchar *item_name;
+
+      item_name = gb_project_file_get_display_name (GB_PROJECT_FILE (item));
+
+      return ide_str_equal0 (item_name, name);
+    }
+
+  return FALSE;
+}
+
+static gboolean
+find_files_node (IdeTree     *tree,
+                 IdeTreeNode *node,
+                 IdeTreeNode *child,
+                 gpointer    user_data)
+{
+  GObject *item;
+
+  g_assert (IDE_IS_TREE (tree));
+  g_assert (IDE_IS_TREE_NODE (node));
+  g_assert (IDE_IS_TREE_NODE (child));
+
+  item = ide_tree_node_get_item (child);
+
+  return GB_IS_PROJECT_FILE (item);
+}
+
+void
+gb_project_tree_reveal (GbProjectTree *self,
+                        GFile         *file)
+{
+  g_autofree gchar *relpath = NULL;
+  g_auto(GStrv) parts = NULL;
+  IdeContext *context;
+  IdeTreeNode *node;
+  IdeVcs *vcs;
+  GFile *workdir;
+  guint i;
+
+  g_return_if_fail (GB_IS_PROJECT_TREE (self));
+  g_return_if_fail (G_IS_FILE (file));
+
+  context = gb_project_tree_get_context (self);
+  g_assert (IDE_IS_CONTEXT (context));
+
+  if (context == NULL)
+    return;
+
+  vcs = ide_context_get_vcs (context);
+  workdir = ide_vcs_get_working_directory (vcs);
+  relpath = g_file_get_relative_path (workdir, file);
+
+  if (relpath == NULL)
+    return;
+
+  node = ide_tree_find_child_node (IDE_TREE (self), NULL, find_files_node, NULL);
+  if (node == NULL)
+    return;
+
+  parts = g_strsplit (relpath, G_DIR_SEPARATOR_S, 0);
+
+  for (i = 0; parts [i]; i++)
+    {
+      node = ide_tree_find_child_node (IDE_TREE (self), node, find_child_node, parts [i]);
+      if (node == NULL)
+        return;
+    }
+
+  ide_tree_expand_to_node (IDE_TREE (self), node);
+  ide_tree_scroll_to_node (IDE_TREE (self), node);
+  ide_tree_node_select (node);
 }
