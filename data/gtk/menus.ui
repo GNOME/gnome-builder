@@ -61,32 +61,23 @@
       </item>
     </section>
 -->
-    <section>
-      <attribute name="id">file-section</attribute>
-    </section>
-    <section>
+    <section id="gear-menu-new-section">
       <item>
         <attribute name="label" translatable="yes">_New File</attribute>
-        <attribute name="action">workbench.new-document</attribute>
+        <attribute name="action">win.new-document</attribute>
       </item>
     </section>
-    <section>
+    <section id="gear-menu-open-section">
       <item>
         <attribute name="label" translatable="yes">_Open File</attribute>
         <attribute name="action">win.open-with-dialog</attribute>
       </item>
     </section>
-    <section>
+    <section id="gear-menu-save-section">
       <item>
         <attribute name="label" translatable="yes">Save _All</attribute>
         <attribute name="action">win.save-all</attribute>
       </item>
-    </section>
-    <section>
-      <attribute name="id">edit-section</attribute>
-    </section>
-    <section>
-      <attribute name="id">edit-section-1</attribute>
     </section>
 <!--
     <section>
