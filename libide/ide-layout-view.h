@@ -48,7 +48,6 @@ struct _IdeLayoutViewClass
                                            IdeSourceLocation         *location);
 };
 
-GMenu         *ide_layout_view_get_menu              (IdeLayoutView             *self);
 IdeLayoutView *ide_layout_view_create_split          (IdeLayoutView             *self);
 gboolean       ide_layout_view_get_can_preview       (IdeLayoutView             *self);
 gboolean       ide_layout_view_get_can_split         (IdeLayoutView             *self);

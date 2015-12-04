@@ -320,19 +320,6 @@ buildable_iface_init (GtkBuildableIface *iface)
   iface->get_internal_child = ide_layout_view_get_internal_child;
 }
 
-/**
- * ide_layout_view_get_menu:
- *
- * Returns: (transfer none): A #GMenu that may be modified.
- */
-GMenu *
-ide_layout_view_get_menu (IdeLayoutView *self)
-{
-  g_return_val_if_fail (IDE_IS_LAYOUT_VIEW (self), NULL);
-
-  return ide_application_get_menu_by_id (IDE_APPLICATION_DEFAULT, "ide-layout-view-menu");
-}
-
 /*
  * XXX:
  *
