@@ -20,6 +20,7 @@
 
 #include <glib/gi18n.h>
 
+#include "ide-buffer-manager.h"
 #include "ide-debug.h"
 #include "ide-workbench.h"
 #include "ide-workbench-private.h"
@@ -95,12 +96,32 @@ ide_workbench_actions_open_with_dialog (GSimpleAction *action,
   IDE_EXIT;
 }
 
+static void
+ide_workbench_actions_save_all (GSimpleAction *action,
+                                GVariant      *variant,
+                                gpointer       user_data)
+{
+  IdeWorkbench *workbench = user_data;
+  IdeContext *context;
+  IdeBufferManager *bufmgr;
+
+  g_assert (IDE_IS_WORKBENCH (workbench));
+
+  context = ide_workbench_get_context (workbench);
+  if (context == NULL)
+    return;
+
+  bufmgr = ide_context_get_buffer_manager (context);
+  ide_buffer_manager_save_all_async (bufmgr, NULL, NULL, NULL);
+}
+
 void
 ide_workbench_actions_init (IdeWorkbench *self)
 {
   GPropertyAction *action;
   const GActionEntry actions[] = {
     { "open-with-dialog", ide_workbench_actions_open_with_dialog },
+    { "save-all", ide_workbench_actions_save_all },
   };
 
   g_action_map_add_action_entries (G_ACTION_MAP (self), actions, G_N_ELEMENTS (actions), self);
