@@ -56,3 +56,15 @@ ide_workbench_header_bar_init (IdeWorkbenchHeaderBar *self)
   popover = gtk_popover_new_from_model (NULL, G_MENU_MODEL (model));
   gtk_menu_button_set_popover (priv->menu_button, popover);
 }
+
+void
+ide_workbench_header_bar_focus_search (IdeWorkbenchHeaderBar *self)
+{
+  GtkWidget *entry;
+
+  g_return_if_fail (IDE_IS_WORKBENCH_HEADER_BAR (self));
+
+  entry = gtk_header_bar_get_custom_title (GTK_HEADER_BAR (self));
+  if (GTK_IS_ENTRY (entry))
+    gtk_widget_grab_focus (GTK_WIDGET (entry));
+}

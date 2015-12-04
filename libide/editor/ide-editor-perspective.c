@@ -38,6 +38,7 @@ struct _IdeEditorPerspective
 
   IdeLayoutGrid         *grid;
   IdeWorkbenchHeaderBar *titlebar;
+  GSimpleActionGroup    *actions;
 
   EggSignalGroup        *buffer_manager_signals;
 };
@@ -46,13 +47,6 @@ static void ide_perspective_iface_init (IdePerspectiveInterface *iface);
 
 G_DEFINE_TYPE_EXTENDED (IdeEditorPerspective, ide_editor_perspective, IDE_TYPE_LAYOUT, 0,
                         G_IMPLEMENT_INTERFACE (IDE_TYPE_PERSPECTIVE, ide_perspective_iface_init))
-
-enum {
-  PROP_0,
-  LAST_PROP
-};
-
-static GParamSpec *properties [LAST_PROP];
 
 static void
 ide_editor_perspective_restore_panel_state (IdeEditorPerspective *self)
@@ -182,6 +176,18 @@ ide_editor_perspective_focus_buffer (IdeEditorPerspective *self,
 }
 
 static void
+global_search_activate (GSimpleAction *action,
+                        GVariant      *param,
+                        gpointer       user_data)
+{
+  IdeEditorPerspective *self = user_data;
+
+  g_assert (IDE_IS_EDITOR_PERSPECTIVE (self));
+
+  ide_workbench_header_bar_focus_search (self->titlebar);
+}
+
+static void
 ide_editor_perspective_finalize (GObject *object)
 {
   IdeEditorPerspective *self = (IdeEditorPerspective *)object;
@@ -224,6 +230,7 @@ ide_editor_perspective_class_init (IdeEditorPerspectiveClass *klass)
   container_class->add = ide_editor_perspective_add;
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/ui/ide-editor-perspective.ui");
+  gtk_widget_class_bind_template_child (widget_class, IdeEditorPerspective, actions);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorPerspective, grid);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorPerspective, titlebar);
 }
@@ -232,6 +239,9 @@ static void
 ide_editor_perspective_init (IdeEditorPerspective *self)
 {
   GActionGroup *actions;
+  static const GActionEntry entries[] = {
+    { "global-search", global_search_activate },
+  };
 
   self->buffer_manager_signals = egg_signal_group_new (IDE_TYPE_BUFFER_MANAGER);
 
@@ -248,6 +258,9 @@ ide_editor_perspective_init (IdeEditorPerspective *self)
                                    G_CONNECT_SWAPPED);
 
   gtk_widget_init_template (GTK_WIDGET (self));
+
+  g_action_map_add_action_entries (G_ACTION_MAP (self->actions), entries,
+                                   G_N_ELEMENTS (entries), self);
 
   actions = gtk_widget_get_action_group (GTK_WIDGET (self), "panels");
   gtk_widget_insert_action_group (GTK_WIDGET (self->titlebar), "panels", actions);
@@ -294,9 +307,20 @@ ide_editor_perspective_views_foreach (IdePerspective *perspective,
   ide_layout_grid_foreach_view (self->grid, callback, user_data);
 }
 
+static GActionGroup *
+ide_editor_perspective_get_actions (IdePerspective *perspective)
+{
+  IdeEditorPerspective *self = (IdeEditorPerspective *)perspective;
+
+  g_return_val_if_fail (IDE_IS_EDITOR_PERSPECTIVE (self), NULL);
+
+  return g_object_ref (self->actions);
+}
+
 static void
 ide_perspective_iface_init (IdePerspectiveInterface *iface)
 {
+  iface->get_actions = ide_editor_perspective_get_actions;
   iface->get_id = ide_editor_perspective_get_id;
   iface->get_title = ide_editor_perspective_get_title;
   iface->get_titlebar = ide_editor_perspective_get_titlebar;

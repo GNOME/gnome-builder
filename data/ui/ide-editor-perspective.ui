@@ -85,4 +85,6 @@
       </packing>
     </child>
   </object>
+  <object class="GSimpleActionGroup" id="actions">
+  </object>
 </interface>

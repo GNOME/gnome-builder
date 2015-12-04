@@ -32,7 +32,8 @@ struct _IdeWorkbenchHeaderBarClass
   GtkHeaderBarClass parent;
 };
 
-GtkWidget *ide_workbench_header_bar_new (void);
+GtkWidget *ide_workbench_header_bar_new          (void);
+void       ide_workbench_header_bar_focus_search (IdeWorkbenchHeaderBar *self);
 
 G_END_DECLS
 
