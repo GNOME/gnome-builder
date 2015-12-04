@@ -36,9 +36,9 @@ G_BEGIN_DECLS
  * Returns: %TRUE if @child matched
  */
 typedef gboolean (*IdeTreeFindFunc) (IdeTree     *tree,
-                                    IdeTreeNode *node,
-                                    IdeTreeNode *child,
-                                    gpointer    user_data);
+                                     IdeTreeNode *node,
+                                     IdeTreeNode *child,
+                                     gpointer     user_data);
 
 /**
  * IdeTreeFilterFunc:
@@ -48,50 +48,53 @@ typedef gboolean (*IdeTreeFindFunc) (IdeTree     *tree,
  * Returns: %TRUE if @node should be visible.
  */
 typedef gboolean (*IdeTreeFilterFunc) (IdeTree     *tree,
-                                      IdeTreeNode *node,
-                                      gpointer    user_data);
+                                       IdeTreeNode *node,
+                                       gpointer     user_data);
 
 struct _IdeTreeClass
 {
 	GtkTreeViewClass parent_class;
 
-  void (*action)         (IdeTree      *self,
+  void (*action)         (IdeTree     *self,
                           const gchar *action_group,
                           const gchar *action_name,
                           const gchar *param);
-  void (*populate_popup) (IdeTree      *self,
+  void (*populate_popup) (IdeTree     *self,
                           GtkWidget   *widget);
 };
 
-void          ide_tree_add_builder     (IdeTree           *self,
-                                       IdeTreeBuilder    *builder);
-void          ide_tree_remove_builder  (IdeTree           *self,
-                                       IdeTreeBuilder    *builder);
+void          ide_tree_add_builder      (IdeTree           *self,
+                                         IdeTreeBuilder    *builder);
+void          ide_tree_remove_builder   (IdeTree           *self,
+                                         IdeTreeBuilder    *builder);
 IdeTreeNode   *ide_tree_find_item       (IdeTree           *self,
-                                       GObject          *item);
+                                         GObject           *item);
 IdeTreeNode   *ide_tree_find_custom     (IdeTree           *self,
-                                       GEqualFunc        equal_func,
-                                       gpointer          key);
+                                         GEqualFunc         equal_func,
+                                         gpointer           key);
 IdeTreeNode   *ide_tree_get_selected    (IdeTree           *self);
-void          ide_tree_rebuild         (IdeTree           *self);
-void          ide_tree_set_root        (IdeTree           *self,
-                                       IdeTreeNode       *node);
+void          ide_tree_rebuild          (IdeTree           *self);
+void          ide_tree_set_root         (IdeTree           *self,
+                                         IdeTreeNode       *node);
 IdeTreeNode   *ide_tree_get_root        (IdeTree           *self);
-void          ide_tree_set_show_icons  (IdeTree           *self,
-                                       gboolean          show_icons);
-gboolean      ide_tree_get_show_icons  (IdeTree           *self);
-void          ide_tree_scroll_to_node  (IdeTree           *self,
-                                       IdeTreeNode       *node);
-void          ide_tree_expand_to_node  (IdeTree           *self,
-                                       IdeTreeNode       *node);
+void          ide_tree_set_show_icons   (IdeTree           *self,
+                                         gboolean           show_icons);
+gboolean      ide_tree_get_show_icons   (IdeTree           *self);
+void          ide_tree_scroll_to_node   (IdeTree           *self,
+                                         IdeTreeNode       *node);
+void          ide_tree_expand_to_node   (IdeTree           *self,
+                                         IdeTreeNode       *node);
 IdeTreeNode   *ide_tree_find_child_node (IdeTree           *self,
-                                       IdeTreeNode       *node,
-                                       IdeTreeFindFunc    find_func,
-                                       gpointer          user_data);
-void          ide_tree_set_filter      (IdeTree           *self,
-                                       IdeTreeFilterFunc  filter_func,
-                                       gpointer          filter_data,
-                                       GDestroyNotify    filter_data_destroy);
+                                         IdeTreeNode       *node,
+                                         IdeTreeFindFunc    find_func,
+                                         gpointer           user_data);
+void          ide_tree_set_filter       (IdeTree           *self,
+                                         IdeTreeFilterFunc  filter_func,
+                                         gpointer           filter_data,
+                                         GDestroyNotify     filter_data_destroy);
+GMenuModel   *ide_tree_get_context_menu (IdeTree           *self);
+void          ide_tree_set_context_menu (IdeTree           *self,
+                                         GMenuModel        *context_menu);
 
 G_END_DECLS
 

@@ -35,6 +35,7 @@ typedef struct
   GtkCellRenderer   *cell_pixbuf;
   GtkCellRenderer   *cell_text;
   GtkTreeStore      *store;
+  GMenuModel        *context_menu;
   GdkRGBA            dim_foreground;
   guint              show_icons : 1;
 } IdeTreePrivate;
@@ -62,6 +63,7 @@ G_DEFINE_TYPE_WITH_CODE (IdeTree, ide_tree, GTK_TYPE_TREE_VIEW,
 
 enum {
   PROP_0,
+  PROP_CONTEXT_MENU,
   PROP_ROOT,
   PROP_SELECTION,
   PROP_SHOW_ICONS,
@@ -77,6 +79,34 @@ enum {
 static GtkBuildableIface *ide_tree_parent_buildable_iface;
 static GParamSpec *properties [LAST_PROP];
 static guint signals [LAST_SIGNAL];
+
+/**
+ * ide_tree_get_context_menu:
+ *
+ * Returns: (transfer none) (nullable): A #GMenuModel or %NULL.
+ */
+GMenuModel *
+ide_tree_get_context_menu (IdeTree *self)
+{
+  IdeTreePrivate *priv = ide_tree_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_TREE (self), NULL);
+
+  return priv->context_menu;
+}
+
+void
+ide_tree_set_context_menu (IdeTree    *self,
+                           GMenuModel *model)
+{
+  IdeTreePrivate *priv = ide_tree_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_TREE (self));
+  g_return_if_fail (!model || G_IS_MENU_MODEL (model));
+
+  if (g_set_object (&priv->context_menu, model))
+    g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CONTEXT_MENU]);
+}
 
 void
 _ide_tree_build_node (IdeTree     *self,
@@ -223,41 +253,17 @@ check_visible_foreach (GtkWidget *widget,
     *at_least_one_visible = gtk_widget_get_visible (widget);
 }
 
-static GMenu *
-ide_tree_create_menu (IdeTree     *self,
-                     IdeTreeNode *node)
+static void
+ide_tree_popup (IdeTree        *self,
+                IdeTreeNode    *node,
+                GdkEventButton *event,
+                gint            target_x,
+                gint            target_y)
 {
   IdeTreePrivate *priv = ide_tree_get_instance_private (self);
-  GMenu *menu;
-  guint i;
-
-  g_return_val_if_fail (IDE_IS_TREE (self), NULL);
-  g_return_val_if_fail (IDE_IS_TREE_NODE (node), NULL);
-
-  menu = g_menu_new ();
-
-  for (i = 0; i < priv->builders->len; i++)
-    {
-      IdeTreeBuilder *builder;
-
-      builder = g_ptr_array_index (priv->builders, i);
-      _ide_tree_builder_node_popup (builder, node, menu);
-    }
-
-  return menu;
-}
-
-static void
-ide_tree_popup (IdeTree         *self,
-               IdeTreeNode     *node,
-               GdkEventButton *event,
-               gint            target_x,
-               gint            target_y)
-{
   GdkPoint loc = { -1, -1 };
   gboolean at_least_one_visible = FALSE;
   GtkWidget *menu_widget;
-  GMenu *menu;
   gint button;
   gint event_time;
 
@@ -266,9 +272,17 @@ ide_tree_popup (IdeTree         *self,
   g_return_if_fail (IDE_IS_TREE (self));
   g_return_if_fail (IDE_IS_TREE_NODE (node));
 
-  menu = ide_tree_create_menu (self, node);
-  menu_widget = gtk_menu_new_from_model (G_MENU_MODEL (menu));
-  g_clear_object (&menu);
+  for (gint i = 0; i < priv->builders->len; i++)
+    {
+      IdeTreeBuilder *builder = g_ptr_array_index (priv->builders, i);
+
+      _ide_tree_builder_node_popup (builder, node, G_MENU (priv->context_menu));
+    }
+
+  if (priv->context_menu != NULL)
+    menu_widget = gtk_menu_new_from_model (G_MENU_MODEL (priv->context_menu));
+  else
+    menu_widget = gtk_menu_new ();
 
   g_signal_emit (self, signals [POPULATE_POPUP], 0, menu_widget);
 
@@ -876,6 +890,10 @@ ide_tree_get_property (GObject    *object,
 
   switch (prop_id)
     {
+    case PROP_CONTEXT_MENU:
+      g_value_set_object (value, priv->context_menu);
+      break;
+
     case PROP_ROOT:
       g_value_set_object (value, priv->root);
       break;
@@ -903,6 +921,10 @@ ide_tree_set_property (GObject      *object,
 
   switch (prop_id)
     {
+    case PROP_CONTEXT_MENU:
+      ide_tree_set_context_menu (self, g_value_get_object (value));
+      break;
+
     case PROP_ROOT:
       ide_tree_set_root (self, g_value_get_object (value));
       break;
@@ -948,17 +970,24 @@ ide_tree_class_init (IdeTreeClass *klass)
 
   klass->action = ide_tree_real_action;
 
+  properties[PROP_CONTEXT_MENU] =
+    g_param_spec_object ("context-menu",
+                         "Context Menu",
+                         "The context menu to display",
+                         G_TYPE_MENU_MODEL,
+                         G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
+
   properties[PROP_ROOT] =
     g_param_spec_object ("root",
                          "Root",
-                         "The root object of the tree.",
+                         "The root object of the tree",
                          IDE_TYPE_TREE_NODE,
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
   properties[PROP_SELECTION] =
     g_param_spec_object ("selection",
                          "Selection",
-                         "The node selection.",
+                         "The node selection",
                          IDE_TYPE_TREE_NODE,
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
