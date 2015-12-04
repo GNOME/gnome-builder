@@ -123,9 +123,9 @@
   bind "<ctrl>c" { "action" ("app", "quit", "") };
   bind "0" { "action" ("view", "close", "") };
   bind "k" { "action" ("view", "close", "") };
-  bind "<ctrl>f" { "action" ("workbench", "open", "") };
+  bind "<ctrl>f" { "action" ("win", "open-with-dialog", "") };
   bind "<ctrl>s" { "action" ("view", "save", "") };
-  bind "s" { "action" ("workbench", "save-all", "") };
+  bind "s" { "action" ("win", "save-all", "") };
   bind "b" { "action" ("perspective", "global-search", "") };
   bind "<ctrl>b" { "action" ("view-stack", "show-list", "") };
   bind "<ctrl>w" { "action" ("view", "save-as", "") };

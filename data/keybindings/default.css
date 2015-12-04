@@ -13,7 +13,7 @@
   bind "<ctrl>period" { "action" ("perspective", "global-search", "") };
   bind "<ctrl><alt>o" { "action" ("perspective", "global-search", "") };
   bind "<ctrl>n" { "action" ("workbench", "new-document", "") };
-  bind "<ctrl>o" { "action" ("workbench", "open", "") };
+  bind "<ctrl>o" { "action" ("win", "open-with-dialog", "") };
   bind "<ctrl>s" { "action" ("view", "save", "") };
   bind "<ctrl><shift>s" { "action" ("view", "save-as", "") };
   bind "<alt><shift>Left" { "action" ("view-stack", "go-backward", "") };

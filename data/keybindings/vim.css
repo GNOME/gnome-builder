@@ -104,7 +104,7 @@
   bind "<ctrl>period" { "action" ("perspective", "global-search", "") };
   bind "<ctrl>s" { "action" ("view", "save", "") };
   bind "<ctrl><shift>s" { "action" ("view", "save-as", "") };
-  bind "<ctrl><shift>o" { "action" ("workbench", "open", "") };
+  bind "<ctrl><shift>o" { "action" ("win", "open-with-dialog", "") };
   bind "<ctrl>k" { "action" ("view-stack", "show-list", "") };
   bind "<ctrl>minus" { "decrease-font-size" () };
   bind "<ctrl>plus" { "increase-font-size" () };
