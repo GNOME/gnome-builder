@@ -474,25 +474,17 @@ ide_layout_stack_constructed (GObject *object)
 
   _ide_layout_stack_actions_init (self);
 
-  /*
-   * FIXME:
-   *
-   * https://bugzilla.gnome.org/show_bug.cgi?id=747060
-   *
-   * Setting sensitive in the template is getting changed out from under us.
-   * Likely due to the popover item being set (conflation of having a popover
-   * vs wanting sensitivity). So we will just override it here.
-   *
-   * Last tested Gtk+ was 3.17.
-   */
-  gtk_widget_set_sensitive (GTK_WIDGET (self->close_button), FALSE);
-  gtk_widget_set_sensitive (GTK_WIDGET (self->views_button), FALSE);
-  gtk_widget_set_sensitive (GTK_WIDGET (self->document_button), FALSE);
-
   menu = ide_application_get_menu_by_id (IDE_APPLICATION_DEFAULT, "ide-layout-stack-menu");
   popover = g_object_new (GTK_TYPE_POPOVER, NULL);
   gtk_popover_bind_model (popover, G_MENU_MODEL (menu), NULL);
   gtk_menu_button_set_popover (self->document_button, GTK_WIDGET (popover));
+
+  /*
+   * Disable things until children have been added.
+   */
+  gtk_widget_set_sensitive (GTK_WIDGET (self->close_button), FALSE);
+  gtk_widget_set_sensitive (GTK_WIDGET (self->views_button), FALSE);
+  gtk_widget_set_sensitive (GTK_WIDGET (self->document_button), FALSE);
 }
 
 static void
