@@ -64,6 +64,8 @@ ide_widget_action (GtkWidget   *widget,
       g_variant_unref (parameter);
     }
 
+  g_warning ("Failed to locate action %s.%s", prefix, action_name);
+
   return FALSE;
 }
 
