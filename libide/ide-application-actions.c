@@ -28,7 +28,6 @@
 #include "ide-application-private.h"
 #include "ide-debug.h"
 #include "ide-shortcuts-window.h"
-#include "ide-support.h"
 #include "ide-workbench.h"
 
 static void
@@ -67,57 +66,6 @@ ide_application_actions_preferences (GSimpleAction *action,
     }
 
   IDE_EXIT;
-}
-
-static void
-ide_application_actions_support (GSimpleAction *action,
-                                 GVariant      *parameter,
-                                 gpointer       user_data)
-{
-  IdeApplication *self = user_data;
-  GtkWidget *dialog;
-  gchar *text = NULL;
-  GList *windows;
-  GError *error = NULL;
-  gchar *str = NULL;
-  gchar *log_path = NULL;
-  gchar *name = NULL;
-
-  name = g_strdup_printf ("gnome-builder-%u.log", (int)getpid ());
-  log_path = g_build_filename (g_get_home_dir (), name, NULL);
-  g_free (name);
-
-  windows = gtk_application_get_windows (GTK_APPLICATION (self));
-
-  str = ide_get_support_log ();
-
-  if (!g_file_set_contents (log_path, str, -1, &error))
-    {
-      g_printerr ("%s\n", error->message);
-      goto cleanup;
-    }
-
-  text = g_strdup_printf (_("The support log file has been written to '%s'. "
-                            "Please provide this file as an attachment on "
-                            "your bug report or support request."),
-                            log_path);
-
-  g_message ("%s", text);
-
-  dialog = gtk_message_dialog_new (windows ? windows->data : NULL,
-                                   GTK_DIALOG_DESTROY_WITH_PARENT,
-                                   GTK_MESSAGE_INFO,
-                                   GTK_BUTTONS_CLOSE,
-                                   "%s", text);
-  gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
-  g_signal_connect (dialog, "response", G_CALLBACK (gtk_widget_destroy), NULL);
-  gtk_window_present (GTK_WINDOW (dialog));
-
-cleanup:
-  g_free (text);
-  g_clear_error (&error);
-  g_free (str);
-  g_free (log_path);
 }
 
 static void
@@ -280,7 +228,6 @@ static const GActionEntry IdeApplicationActions[] = {
   { "preferences",  ide_application_actions_preferences },
   { "quit",         ide_application_actions_quit },
   { "shortcuts",    ide_application_actions_shortcuts },
-  { "support",      ide_application_actions_support },
 };
 
 void

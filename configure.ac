@@ -244,6 +244,7 @@ m4_include([plugins/mingw/configure.ac])
 m4_include([plugins/project-tree/configure.ac])
 m4_include([plugins/python-gi-imports-completion/configure.ac])
 m4_include([plugins/python-pack/configure.ac])
+m4_include([plugins/support/configure.ac])
 m4_include([plugins/symbol-tree/configure.ac])
 m4_include([plugins/sysmon/configure.ac])
 m4_include([plugins/terminal/configure.ac])
@@ -496,6 +497,7 @@ echo "  Project Tree ......................... : ${enable_project_tree_plugin}"
 echo "  Python GObject Introspection ......... : ${enable_python_gi_imports_completion_plugin}"
 echo "  Python Jedi Autocompletion ........... : ${enable_jedi_plugin}"
 echo "  Python Language Pack ................. : ${enable_python_pack_plugin}"
+echo "  Support .............................. : ${enable_support_plugin}"
 echo "  System Monitor ....................... : ${enable_sysmon_plugin}"
 echo "  Symbol Tree .......................... : ${enable_symbol_tree_plugin}"
 echo "  Terminal ............................. : ${enable_terminal_plugin}"

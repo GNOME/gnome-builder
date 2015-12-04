@@ -15,6 +15,7 @@ SUBDIRS = \
 	python-gi-imports-completion \
 	mingw \
 	python-pack \
+	support \
 	symbol-tree \
 	sysmon \
 	terminal \

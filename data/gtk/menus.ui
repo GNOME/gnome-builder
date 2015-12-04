@@ -12,18 +12,14 @@
         <attribute name="action">app.open-project</attribute>
       </item>
     </section>
+    <section id="app-menu-placeholder-1"/>
     <section id="app-menu-preferences-section">
       <item>
         <attribute name="label" translatable="yes">_Preferences</attribute>
         <attribute name="action">app.preferences</attribute>
       </item>
     </section>
-    <section id="app-menu-support-section">
-      <item>
-        <attribute name="label" translatable="yes">Generate Support Log</attribute>
-        <attribute name="action">app.support</attribute>
-      </item>
-    </section>
+    <section id="app-menu-placeholder-2"/>
     <section id="app-menu-help-section">
       <attribute name="id">help-section</attribute>
       <item>
@@ -35,6 +31,7 @@
         <attribute name="action">app.about</attribute>
       </item>
     </section>
+    <section id="app-menu-placeholder-3"/>
     <section id="app-menu-quit-section">
       <item>
         <attribute name="label" translatable="yes">_Quit</attribute>
