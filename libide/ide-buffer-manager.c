@@ -1135,10 +1135,15 @@ static IdeBuffer *
 ide_buffer_manager_real_create_buffer (IdeBufferManager *self,
                                        IdeFile          *file)
 {
+  IdeContext *context;
+
   g_return_val_if_fail (IDE_IS_BUFFER_MANAGER (self), NULL);
   g_return_val_if_fail (IDE_IS_FILE (file), NULL);
 
+  context = ide_object_get_context (IDE_OBJECT (self));
+
   return g_object_new (IDE_TYPE_BUFFER,
+                       "context", context,
                        "file", file,
                        NULL);
 }
