@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<interface>
+  <menu id="ide-source-view-popup-menu">
+    <section id="ide-source-view-popup-menu-reveal-section">
+      <item>
+        <attribute name="label" translatable="yes">Re_veal in Project Tree</attribute>
+        <attribute name="action">project-tree.reveal</attribute>
+      </item>
+    </section>
+  </menu>
+</interface>

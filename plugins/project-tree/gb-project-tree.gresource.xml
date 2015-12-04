@@ -2,5 +2,6 @@
 <gresources>
   <gresource prefix="/org/gnome/builder/plugins/project-tree-plugin">
     <file>gb-new-file-popover.ui</file>
+    <file>gtk/menus.ui</file>
   </gresource>
 </gresources>
