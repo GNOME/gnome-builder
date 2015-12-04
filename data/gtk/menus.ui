@@ -64,7 +64,7 @@
     <section id="gear-menu-new-section">
       <item>
         <attribute name="label" translatable="yes">_New File</attribute>
-        <attribute name="action">win.new-document</attribute>
+        <attribute name="action">perspective.new-file</attribute>
       </item>
     </section>
     <section id="gear-menu-open-section">

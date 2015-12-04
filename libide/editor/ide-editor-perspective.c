@@ -188,6 +188,27 @@ global_search_activate (GSimpleAction *action,
 }
 
 static void
+new_file_activate (GSimpleAction *action,
+                   GVariant      *param,
+                   gpointer       user_data)
+{
+  IdeEditorPerspective *self = user_data;
+  IdeWorkbench *workbench;
+  IdeContext *context;
+  IdeBufferManager *bufmgr;
+  IdeBuffer *buffer;
+
+  g_assert (IDE_IS_EDITOR_PERSPECTIVE (self));
+
+  workbench = ide_widget_get_workbench (GTK_WIDGET (self));
+  context = ide_workbench_get_context (workbench);
+  bufmgr = ide_context_get_buffer_manager (context);
+  buffer = ide_buffer_manager_create_temporary_buffer (bufmgr);
+
+  g_clear_object (&buffer);
+}
+
+static void
 ide_editor_perspective_finalize (GObject *object)
 {
   IdeEditorPerspective *self = (IdeEditorPerspective *)object;
@@ -240,6 +261,7 @@ ide_editor_perspective_init (IdeEditorPerspective *self)
 {
   GActionGroup *actions;
   static const GActionEntry entries[] = {
+    { "new-file", new_file_activate },
     { "global-search", global_search_activate },
   };
 
