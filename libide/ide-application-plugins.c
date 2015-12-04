@@ -205,11 +205,9 @@ ide_application_load_plugin_menus (IdeApplication *self,
 
   module_name = peas_plugin_info_get_module_name (plugin_info);
   path = g_strdup_printf ("/org/gnome/builder/plugins/%s/gtk/menus.ui", module_name);
-  g_print ("Loading %s\n", path);
   merge_id = egg_menu_manager_add_resource (self->menu_manager, path, NULL);
   if (merge_id != 0)
     g_hash_table_insert (self->merge_ids, g_strdup (module_name), GINT_TO_POINTER (merge_id));
-  g_print (" merge_id = %d\n", merge_id);
   g_free (path);
 }
 
