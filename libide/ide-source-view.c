@@ -20,11 +20,14 @@
 
 #include <glib/gi18n.h>
 #include <stdlib.h>
+
+#include "egg-animation.h"
 #include "egg-binding-group.h"
 #include "egg-counter.h"
 #include "egg-signal-group.h"
+#include "egg-widget-action-group.h"
 
-#include "egg-animation.h"
+#include "ide-application.h"
 #include "ide-back-forward-item.h"
 #include "ide-back-forward-list.h"
 #include "ide-box-theatric.h"
@@ -1437,6 +1440,7 @@ ide_source_view_bind_buffer (IdeSourceView  *self,
   GtkTextMark *insert;
   GtkTextIter iter;
   IdeContext *context;
+  GActionGroup *actions;
 
   IDE_ENTRY;
 
@@ -1516,6 +1520,16 @@ ide_source_view_bind_buffer (IdeSourceView  *self,
 
   insert = gtk_text_buffer_get_insert (GTK_TEXT_BUFFER (buffer));
   ide_source_view_scroll_mark_onscreen (self, insert, TRUE, 0.5, 0.5);
+
+  actions = gtk_widget_get_action_group (GTK_WIDGET (self), "sourceview");
+
+  g_object_bind_property (buffer, "can-redo",
+                          g_action_map_lookup_action (G_ACTION_MAP (actions), "redo"), "enabled",
+                          G_BINDING_SYNC_CREATE);
+
+  g_object_bind_property (buffer, "can-undo",
+                          g_action_map_lookup_action (G_ACTION_MAP (actions), "undo"), "enabled",
+                          G_BINDING_SYNC_CREATE);
 
   IDE_EXIT;
 }
@@ -4710,15 +4724,6 @@ ide_source_view__fixit_activate (IdeSourceView *self,
 }
 
 static void
-ide_source_view_sort_selected_lines (IdeSourceView *source_view,
-                                     GtkMenuItem   *menu_item)
-{
-  g_assert (IDE_IS_SOURCE_VIEW (source_view));
-
-  ide_source_view_real_sort (source_view, FALSE, FALSE);
-}
-
-static void
 ide_source_view_real_populate_popup (GtkTextView *text_view,
                                      GtkWidget   *popup)
 {
@@ -4731,6 +4736,7 @@ ide_source_view_real_populate_popup (GtkTextView *text_view,
   GtkTextIter begin;
   GtkTextIter end;
   IdeDiagnostic *diagnostic;
+  GMenu *model;
 
   g_assert (GTK_IS_TEXT_VIEW (text_view));
   g_assert (GTK_IS_WIDGET (popup));
@@ -4743,6 +4749,9 @@ ide_source_view_real_populate_popup (GtkTextView *text_view,
   buffer = gtk_text_view_get_buffer (text_view);
   if (!IDE_IS_BUFFER (buffer))
     return;
+
+  model = ide_application_get_menu_by_id (IDE_APPLICATION_DEFAULT, "ide-source-view-popup-menu");
+  gtk_menu_shell_bind_model (GTK_MENU_SHELL (popup), G_MENU_MODEL (model), NULL, TRUE);
 
   gtk_text_buffer_get_selection_bounds (buffer, &begin, &end);
 
@@ -4812,54 +4821,6 @@ ide_source_view_real_populate_popup (GtkTextView *text_view,
             }
         }
     }
-
-  /*
-   * Sort/Join Lines.
-   */
-  sep = g_object_new (GTK_TYPE_SEPARATOR_MENU_ITEM,
-                      "visible", TRUE,
-                      NULL);
-  gtk_menu_shell_append (GTK_MENU_SHELL (popup), GTK_WIDGET (sep));
-
-  menu_item = g_object_new (GTK_TYPE_MENU_ITEM,
-                            "label", _("Join Lines"),
-                            "sensitive", !gtk_text_iter_equal (&begin, &end),
-                            "visible", TRUE,
-                            NULL);
-  g_signal_connect_swapped (menu_item,
-                            "activate",
-                            G_CALLBACK (ide_source_view_real_join_lines),
-                            self);
-  gtk_menu_shell_append (GTK_MENU_SHELL (popup), GTK_WIDGET (menu_item));
-
-  menu_item = g_object_new (GTK_TYPE_MENU_ITEM,
-                            "label", _("Sort Lines"),
-                            "sensitive", !gtk_text_iter_equal (&begin, &end),
-                            "visible", TRUE,
-                            NULL);
-  g_signal_connect_swapped (menu_item,
-                            "activate",
-                            G_CALLBACK (ide_source_view_sort_selected_lines),
-                            self);
-  gtk_menu_shell_append (GTK_MENU_SHELL (popup), GTK_WIDGET (menu_item));
-
-  /*
-   * Go to definition.
-   */
-  sep = g_object_new (GTK_TYPE_SEPARATOR_MENU_ITEM,
-                      "visible", TRUE,
-                      NULL);
-  gtk_menu_shell_prepend (GTK_MENU_SHELL (popup), GTK_WIDGET (sep));
-
-  menu_item = g_object_new (GTK_TYPE_MENU_ITEM,
-                            "label", _("Go to Definition"),
-                            "visible", TRUE,
-                            NULL);
-  g_signal_connect_swapped (menu_item,
-                            "activate",
-                            G_CALLBACK (ide_source_view_real_goto_definition),
-                            self);
-  gtk_menu_shell_prepend (GTK_MENU_SHELL (popup), GTK_WIDGET (menu_item));
 }
 
 static void
@@ -6329,6 +6290,8 @@ ide_source_view_init (IdeSourceView *self)
   target_list = gtk_drag_dest_get_target_list (GTK_WIDGET (self));
   if (target_list)
     gtk_target_list_add_uri_targets (target_list, TARGET_URI_LIST);
+
+  egg_widget_action_group_attach (self, "sourceview");
 }
 
 const PangoFontDescription *

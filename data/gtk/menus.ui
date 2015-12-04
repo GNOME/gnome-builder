@@ -213,4 +213,111 @@
       </item>
     </section>
   </menu>
+  <menu id="ide-source-view-popup-menu">
+    <section id="ide-source-view-popup-menu-jump-section">
+      <item>
+        <attribute name="label" translatable="yes">_Go to Definition</attribute>
+        <attribute name="action">sourceview.goto-definition</attribute>
+      </item>
+    </section>
+    <section id="ide-source-view-popup-menu-undo-section">
+      <item>
+        <attribute name="label" translatable="yes">_Undo</attribute>
+        <attribute name="action">sourceview.undo</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">_Redo</attribute>
+        <attribute name="action">sourceview.redo</attribute>
+      </item>
+    </section>
+    <section id="ide-source-view-popup-menu-clipboard-section">
+      <item>
+        <attribute name="label" translatable="yes">C_ut</attribute>
+        <attribute name="action">sourceview.cut-clipboard</attribute>
+      </item>
+      <item>
+        <attribute name="id">copy</attribute>
+        <attribute name="label" translatable="yes">_Copy</attribute>
+        <attribute name="action">sourceview.copy-clipboard</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">_Paste</attribute>
+        <attribute name="action">sourceview.paste-clipboard</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">_Delete</attribute>
+        <attribute name="action">sourceview.delete-selection</attribute>
+      </item>
+    </section>
+    <section id="ide-source-view-popup-menu-selection-section">
+      <submenu id="ide-source-view-popup-menu-selection-submenu">
+        <attribute name="label" translatable="yes">Selection</attribute>
+        <item>
+          <attribute name="label" translatable="yes">Select _All</attribute>
+          <attribute name="action">sourceview.select-all</attribute>
+          <attribute name="target" type="(b)">(true,)</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="yes">Select _None</attribute>
+          <attribute name="action">sourceview.select-all</attribute>
+          <attribute name="target" type="(b)">(false,)</attribute>
+        </item>
+        <section id="ide-source-view-popup-menu-case-section">
+          <item>
+            <attribute name="label" translatable="yes">All _Upper Case</attribute>
+            <attribute name="action">sourceview.change-case</attribute>
+            <attribute name="target" type="(u)">(1,)</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="yes">All _Lower Case</attribute>
+            <attribute name="action">sourceview.change-case</attribute>
+            <attribute name="target" type="(u)">(0,)</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="yes">_Invert Case</attribute>
+            <attribute name="action">sourceview.change-case</attribute>
+            <attribute name="target" type="(u)">(2,)</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="yes">_Title Case</attribute>
+            <attribute name="action">sourceview.change-case</attribute>
+            <attribute name="target" type="(u)">(3,)</attribute>
+          </item>
+        </section>
+        <section id="ide-source-view-popup-menu-line-section">
+          <item>
+            <attribute name="label" translatable="yes">Join Lines</attribute>
+            <attribute name="action">sourceview.join-lines</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="yes">Sort Lines</attribute>
+            <attribute name="action">sourceview.sort</attribute>
+            <attribute name="target" type="(bb)">(false,false)</attribute>
+          </item>
+        </section>
+      </submenu>
+    </section>
+    <section id="ide-source-view-popup-menu-zoom-section">
+      <submenu id="ide-source-view-popup-menu-zoom-section-submenu">
+        <attribute name="label" translatable="yes">Zoom</attribute>
+        <item>
+          <attribute name="label" translatable="yes">Zoom _In</attribute>
+          <attribute name="action">sourceview.increase-font-size</attribute>
+            <attribute name="accel">&lt;control&gt;plus</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="yes">Zoom _Out</attribute>
+          <attribute name="action">sourceview.decrease-font-size</attribute>
+            <attribute name="accel">&lt;control&gt;minus</attribute>
+        </item>
+        <section id="ide-source-view-popup-menu-zoom-section-submenu-reset">
+          <item>
+            <attribute name="label" translatable="yes">Reset</attribute>
+            <attribute name="action">sourceview.reset-font-size</attribute>
+            <attribute name="accel">&lt;control&gt;0</attribute>
+          </item>
+        </section>
+      </submenu>
+    </section>
+  </menu>
 </interface>
