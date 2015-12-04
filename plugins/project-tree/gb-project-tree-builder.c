@@ -268,9 +268,7 @@ gb_project_tree_builder_node_popup (IdeTreeBuilder *builder,
                                     IdeTreeNode    *node,
                                     GMenu          *menu)
 {
-  GtkApplication *app;
   GObject *item;
-  GMenu *submenu;
   IdeVcs *vcs;
   GFile *workdir;
   GFile *file;
@@ -279,15 +277,7 @@ gb_project_tree_builder_node_popup (IdeTreeBuilder *builder,
   g_assert (IDE_IS_TREE_NODE (node));
   g_assert (G_IS_MENU (menu));
 
-  app = GTK_APPLICATION (g_application_get_default ());
   item = ide_tree_node_get_item (node);
-
-  if (GB_IS_PROJECT_FILE (item))
-    {
-      submenu = gtk_application_get_menu_by_id (app, "gb-project-tree-build");
-      g_menu_prepend_section (menu, NULL, G_MENU_MODEL (submenu));
-    }
-
   vcs = get_vcs (node);
   workdir = ide_vcs_get_working_directory (vcs);
 
@@ -295,35 +285,12 @@ gb_project_tree_builder_node_popup (IdeTreeBuilder *builder,
       (file = gb_project_file_get_file (GB_PROJECT_FILE (item))) &&
       !g_file_equal (file, workdir))
     {
-      submenu = gtk_application_get_menu_by_id (app, "gb-project-tree-move-to-trash");
-      g_menu_prepend_section (menu, NULL, G_MENU_MODEL (submenu));
+      GMenu *mime_section;
 
-      submenu = gtk_application_get_menu_by_id (app, "gb-project-tree-rename");
-      g_menu_prepend_section (menu, NULL, G_MENU_MODEL (submenu));
-
-      submenu = gtk_application_get_menu_by_id (app, "gb-project-tree-open-containing");
-      g_menu_prepend_section (menu, NULL, G_MENU_MODEL (submenu));
-
-      submenu = gtk_application_get_menu_by_id (app, "gb-project-tree-open");
-      g_menu_prepend_section (menu, NULL, G_MENU_MODEL (submenu));
-
-      submenu = gtk_application_get_menu_by_id (app, "gb-project-tree-open-by-mime-section");
-      populate_mime_handlers (submenu, GB_PROJECT_FILE (item));
-
-      submenu = gtk_application_get_menu_by_id (app, "gb-project-tree-new");
-      g_menu_prepend_section (menu, NULL, G_MENU_MODEL (submenu));
+      mime_section = ide_application_get_menu_by_id (IDE_APPLICATION_DEFAULT,
+                                                     "gb-project-tree-open-by-mime-section");
+      populate_mime_handlers (mime_section, GB_PROJECT_FILE (item));
     }
-  else if (GB_IS_PROJECT_FILE (item))
-    {
-      submenu = gtk_application_get_menu_by_id (app, "gb-project-tree-open-containing");
-      g_menu_prepend_section (menu, NULL, G_MENU_MODEL (submenu));
-
-      submenu = gtk_application_get_menu_by_id (app, "gb-project-tree-new");
-      g_menu_prepend_section (menu, NULL, G_MENU_MODEL (submenu));
-    }
-
-  submenu = gtk_application_get_menu_by_id (app, "gb-project-tree-display-options");
-  g_menu_append_section (menu, NULL, G_MENU_MODEL (submenu));
 }
 
 static gboolean

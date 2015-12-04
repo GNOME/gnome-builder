@@ -169,6 +169,7 @@ static void
 gb_project_tree_init (GbProjectTree *self)
 {
   IdeTreeBuilder *builder;
+  GMenu *menu;
 
   self->settings = g_settings_new ("org.gnome.builder.project-tree");
 
@@ -188,6 +189,9 @@ gb_project_tree_init (GbProjectTree *self)
                     NULL);
 
   gb_project_tree_actions_init (self);
+
+  menu = ide_application_get_menu_by_id (IDE_APPLICATION_DEFAULT, "gb-project-tree-popup-menu");
+  ide_tree_set_context_menu (IDE_TREE (self), G_MENU_MODEL (menu));
 }
 
 gboolean
