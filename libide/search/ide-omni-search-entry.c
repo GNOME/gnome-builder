@@ -31,7 +31,7 @@
 
 struct _IdeOmniSearchEntry
 {
-  GtkBox                parent_instance;
+  GtkEntry              parent_instance;
 
   /* Template references */
   IdeOmniSearchDisplay *display;

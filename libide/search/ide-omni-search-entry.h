@@ -26,12 +26,12 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_OMNI_SEARCH_ENTRY (ide_omni_search_entry_get_type())
 
-G_DECLARE_FINAL_TYPE (IdeOmniSearchEntry, ide_omni_search_entry, IDE, OMNI_SEARCH_ENTRY, GtkBox)
+G_DECLARE_FINAL_TYPE (IdeOmniSearchEntry, ide_omni_search_entry, IDE, OMNI_SEARCH_ENTRY, GtkEntry)
 
 GtkWidget       *ide_omni_search_entry_new                (void);
-IdeSearchEngine *ide_omni_search_entry_get_search_engine  (IdeOmniSearchEntry     *box);
-void             ide_omni_search_entry_set_search_engine  (IdeOmniSearchEntry     *box,
-                                                   IdeSearchEngine *search_engine);
+IdeSearchEngine *ide_omni_search_entry_get_search_engine  (IdeOmniSearchEntry *self);
+void             ide_omni_search_entry_set_search_engine  (IdeOmniSearchEntry *self,
+                                                           IdeSearchEngine    *search_engine);
 
 G_END_DECLS
 
