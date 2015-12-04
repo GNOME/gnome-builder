@@ -152,3 +152,15 @@ genesisperspective > stack > box > frame > list > row {
 genesisperspective > stack > box > frame > list > row:last-child {
   border-bottom: none;
 }
+
+
+progressbar.osd trough {
+  background-image: none;
+  background: transparent;
+  border-style: none;
+  border-radius: 0;
+}
+progressbar.osd progress {
+  border-style: none;
+  border-radius: 0;
+}
