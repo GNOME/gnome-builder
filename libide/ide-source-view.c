@@ -155,6 +155,7 @@ typedef struct
   guint                        enable_word_completion : 1;
   guint                        highlight_current_line : 1;
   guint                        in_replay_macro : 1;
+  guint                        insert_mark_cleared : 1;
   guint                        insert_matching_brace : 1;
   guint                        overwrite_braces : 1;
   guint                        recording_macro : 1;
@@ -3417,6 +3418,12 @@ ide_source_view_real_restore_insert_mark_full (IdeSourceView *self,
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
 
+  if (priv->insert_mark_cleared)
+    {
+      priv->insert_mark_cleared = FALSE;
+      return;
+    }
+
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
 
   gtk_text_buffer_get_iter_at_line_offset (buffer, &iter, priv->saved_line, priv->saved_line_offset);
@@ -3453,6 +3460,8 @@ ide_source_view_real_save_insert_mark (IdeSourceView *self)
   GtkTextIter selection;
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
+
+  priv->insert_mark_cleared = FALSE;
 
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
   insert = gtk_text_buffer_get_insert (buffer);
@@ -5072,6 +5081,19 @@ ide_source_view_real_delete_from_cursor (GtkTextView   *text_view,
 }
 
 static void
+ide_source_view_real_select_all (IdeSourceView *self,
+                                 gboolean       select_)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+
+  g_signal_chain_from_overridden_handler (self, select_);
+
+  priv->insert_mark_cleared = TRUE;
+}
+
+static void
 ide_source_view_dispose (GObject *object)
 {
   IdeSourceView *self = (IdeSourceView *)object;
@@ -6044,6 +6066,10 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   NULL, NULL, NULL,
                   G_TYPE_NONE,
                   0);
+
+  g_signal_override_class_handler ("select-all",
+                                   G_TYPE_FROM_CLASS (klass),
+                                   G_CALLBACK (ide_source_view_real_select_all));
 
   signals [SELECT_INNER] =
     g_signal_new ("select-inner",
