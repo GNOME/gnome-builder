@@ -50,6 +50,8 @@ libegg_private_la_SOURCES = \
 	egg-state-machine-buildable.h \
 	egg-task-cache.c \
 	egg-task-cache.h \
+	egg-widget-action-group.c \
+	egg-widget-action-group.h \
 	$(NULL)
 
 nodist_libegg_private_la_SOURCES = \
