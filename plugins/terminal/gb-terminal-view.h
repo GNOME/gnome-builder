@@ -19,16 +19,13 @@
 #ifndef GB_TERMINAL_VIEW_H
 #define GB_TERMINAL_VIEW_H
 
-#include "gb-terminal-document.h"
-#include "gb-view.h"
+#include <ide.h>
 
 G_BEGIN_DECLS
 
 #define GB_TYPE_TERMINAL_VIEW (gb_terminal_view_get_type())
 
-G_DECLARE_FINAL_TYPE (GbTerminalView, gb_terminal_view, GB, TERMINAL_VIEW, GbView)
-
-GbView *gb_terminal_view_new      (GbTerminalDocument *document);
+G_DECLARE_FINAL_TYPE (GbTerminalView, gb_terminal_view, GB, TERMINAL_VIEW, IdeLayoutView)
 
 G_END_DECLS
 

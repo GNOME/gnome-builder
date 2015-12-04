@@ -4,5 +4,6 @@ Name=Terminal
 Description=A terminal for Builder
 Authors=Christian Hergert <christian@hergert.me>
 Copyright=Copyright © 2015 Christian Hergert
+Depends=editor
 Builtin=true
 Hidden=true

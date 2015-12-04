@@ -19,18 +19,14 @@
 #ifndef GB_TERMINAL_VIEW_PRIVATE_H
 #define GB_TERMINAL_VIEW_PRIVATE_H
 
+#include <ide.h>
 #include <vte/vte.h>
-
-#include "gb-terminal-document.h"
-#include "gb-view.h"
 
 G_BEGIN_DECLS
 
 struct _GbTerminalView
 {
-  GbView               parent_instance;
-
-  GbTerminalDocument  *document;
+  IdeLayoutView        parent_instance;
 
   VteTerminal         *terminal_top;
   VteTerminal         *terminal_bottom;

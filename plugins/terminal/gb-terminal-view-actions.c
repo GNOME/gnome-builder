@@ -24,9 +24,6 @@
 
 #include "gb-terminal-view-actions.h"
 #include "gb-terminal-view-private.h"
-#include "gb-view-grid.h"
-#include "gb-widget.h"
-#include "gb-workbench.h"
 
 typedef struct
 {

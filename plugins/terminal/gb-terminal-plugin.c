@@ -27,9 +27,6 @@
 void
 peas_register_types (PeasObjectModule *module)
 {
-  _gb_terminal_application_addin_register_type (G_TYPE_MODULE (module));
-  _gb_terminal_workbench_addin_register_type (G_TYPE_MODULE (module));
-
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_APPLICATION_ADDIN,
                                               GB_TYPE_TERMINAL_APPLICATION_ADDIN);

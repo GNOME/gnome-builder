@@ -19,15 +19,13 @@
 #ifndef GB_TERMINAL_WORKBENCH_ADDIN_H
 #define GB_TERMINAL_WORKBENCH_ADDIN_H
 
-#include "gb-workbench-addin.h"
+#include <glib-object.h>
 
 G_BEGIN_DECLS
 
 #define GB_TYPE_TERMINAL_WORKBENCH_ADDIN (gb_terminal_workbench_addin_get_type())
 
-G_DECLARE_FINAL_TYPE (GbTerminalWorkbenchAddin, gb_terminal_workbench_addin,
-                      GB, TERMINAL_WORKBENCH_ADDIN,
-                      GObject)
+G_DECLARE_FINAL_TYPE (GbTerminalWorkbenchAddin, gb_terminal_workbench_addin, GB, TERMINAL_WORKBENCH_ADDIN, GObject)
 
 G_END_DECLS
 

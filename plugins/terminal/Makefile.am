@@ -12,8 +12,6 @@ dist_plugin_DATA = terminal.plugin
 libterminal_la_SOURCES = \
 	gb-terminal-application-addin.c \
 	gb-terminal-application-addin.h \
-	gb-terminal-document.c \
-	gb-terminal-document.h \
 	gb-terminal-plugin.c \
 	gb-terminal-private.h \
 	gb-terminal-view.c \

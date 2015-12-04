@@ -17,58 +17,59 @@
  */
 
 #include <glib/gi18n.h>
+#include <ide.h>
 
 #include "gb-terminal-view.h"
-#include "gb-terminal-document.h"
 #include "gb-terminal-workbench-addin.h"
-#include "gb-view-grid.h"
-#include "gb-workspace.h"
 
 struct _GbTerminalWorkbenchAddin
 {
   GObject         parent_instance;
 
-  GbWorkbench    *workbench;
+  IdeWorkbench   *workbench;
   GbTerminalView *panel_terminal;
 };
 
-static void workbench_addin_iface_init (GbWorkbenchAddinInterface *iface);
+static void workbench_addin_iface_init (IdeWorkbenchAddinInterface *iface);
 
-G_DEFINE_DYNAMIC_TYPE_EXTENDED (GbTerminalWorkbenchAddin,
-                                gb_terminal_workbench_addin,
-                                G_TYPE_OBJECT,
-                                0,
-                                G_IMPLEMENT_INTERFACE (GB_TYPE_WORKBENCH_ADDIN,
-                                                       workbench_addin_iface_init))
+G_DEFINE_TYPE_EXTENDED (GbTerminalWorkbenchAddin,
+                        gb_terminal_workbench_addin,
+                        G_TYPE_OBJECT,
+                        0,
+                        G_IMPLEMENT_INTERFACE (IDE_TYPE_WORKBENCH_ADDIN, workbench_addin_iface_init))
 
 static void
 new_terminal_activate_cb (GSimpleAction            *action,
                           GVariant                 *param,
                           GbTerminalWorkbenchAddin *self)
 {
-  GbTerminalDocument *document;
-  GbViewGrid *view_grid;
+  GbTerminalView *view;
+  IdePerspective *perspective;
 
   g_assert (G_IS_SIMPLE_ACTION (action));
   g_assert (GB_IS_TERMINAL_WORKBENCH_ADDIN (self));
 
-  view_grid = GB_VIEW_GRID (gb_workbench_get_view_grid (self->workbench));
+  perspective = ide_workbench_get_perspective_by_name (self->workbench, "editor");
+  g_assert (IDE_IS_LAYOUT (perspective));
 
-  document = g_object_new (GB_TYPE_TERMINAL_DOCUMENT, NULL);
-  gb_view_grid_focus_document (view_grid, GB_DOCUMENT (document));
+  view = g_object_new (GB_TYPE_TERMINAL_VIEW,
+                       "visible", TRUE,
+                       NULL);
+  gtk_container_add (GTK_CONTAINER (perspective), GTK_WIDGET (view));
+  gtk_widget_grab_focus (GTK_WIDGET (view));
 }
 
 static void
-gb_terminal_workbench_addin_load (GbWorkbenchAddin *addin,
-                                  GbWorkbench      *workbench)
+gb_terminal_workbench_addin_load (IdeWorkbenchAddin *addin,
+                                  IdeWorkbench      *workbench)
 {
   GbTerminalWorkbenchAddin *self = (GbTerminalWorkbenchAddin *)addin;
-  GbWorkspace *workspace;
+  IdePerspective *perspective;
   GtkWidget *bottom_pane;
   g_autoptr(GSimpleAction) action = NULL;
 
   g_assert (GB_IS_TERMINAL_WORKBENCH_ADDIN (self));
-  g_assert (GB_IS_WORKBENCH (workbench));
+  g_assert (IDE_IS_WORKBENCH (workbench));
 
   ide_set_weak_pointer (&self->workbench, workbench);
 
@@ -89,17 +90,19 @@ gb_terminal_workbench_addin_load (GbWorkbenchAddin *addin,
                                  (gpointer *)&self->panel_terminal);
     }
 
-  workspace = GB_WORKSPACE (gb_workbench_get_workspace (workbench));
-  bottom_pane = gb_workspace_get_bottom_pane (workspace);
-  gb_workspace_pane_add_page (GB_WORKSPACE_PANE (bottom_pane),
-                              GTK_WIDGET (self->panel_terminal),
-                              _("Terminal"),
-                              "utilities-terminal-symbolic");
+  perspective = ide_workbench_get_perspective_by_name (workbench, "editor");
+  g_assert (IDE_IS_LAYOUT (perspective));
+
+  bottom_pane = ide_layout_get_bottom_pane (IDE_LAYOUT (perspective));
+  ide_layout_pane_add_page (IDE_LAYOUT_PANE (bottom_pane),
+                            GTK_WIDGET (self->panel_terminal),
+                            _("Terminal"),
+                            "utilities-terminal-symbolic");
 }
 
 static void
-gb_terminal_workbench_addin_unload (GbWorkbenchAddin *addin,
-                                    GbWorkbench      *workbench)
+gb_terminal_workbench_addin_unload (IdeWorkbenchAddin *addin,
+                                    IdeWorkbench      *workbench)
 {
   GbTerminalWorkbenchAddin *self = (GbTerminalWorkbenchAddin *)addin;
 
@@ -122,24 +125,13 @@ gb_terminal_workbench_addin_class_init (GbTerminalWorkbenchAddinClass *klass)
 }
 
 static void
-gb_terminal_workbench_addin_class_finalize (GbTerminalWorkbenchAddinClass *klass)
-{
-}
-
-static void
 gb_terminal_workbench_addin_init (GbTerminalWorkbenchAddin *self)
 {
 }
 
 static void
-workbench_addin_iface_init (GbWorkbenchAddinInterface *iface)
+workbench_addin_iface_init (IdeWorkbenchAddinInterface *iface)
 {
   iface->load = gb_terminal_workbench_addin_load;
   iface->unload = gb_terminal_workbench_addin_unload;
-}
-
-void
-_gb_terminal_workbench_addin_register_type (GTypeModule *module)
-{
-  gb_terminal_workbench_addin_register_type (module);
 }

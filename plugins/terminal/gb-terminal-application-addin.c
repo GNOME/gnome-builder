@@ -25,12 +25,11 @@ struct _GbTerminalApplicationAddin
 
 static void application_addin_iface_init (IdeApplicationAddinInterface *iface);
 
-G_DEFINE_DYNAMIC_TYPE_EXTENDED (GbTerminalApplicationAddin,
-                                gb_terminal_application_addin,
-                                G_TYPE_OBJECT,
-                                0,
-                                G_IMPLEMENT_INTERFACE (IDE_TYPE_APPLICATION_ADDIN,
-                                                       application_addin_iface_init))
+G_DEFINE_TYPE_EXTENDED (GbTerminalApplicationAddin,
+                        gb_terminal_application_addin,
+                        G_TYPE_OBJECT,
+                        0,
+                        G_IMPLEMENT_INTERFACE (IDE_TYPE_APPLICATION_ADDIN, application_addin_iface_init))
 
 static void
 gb_terminal_application_addin_load (IdeApplicationAddin *addin,
@@ -61,11 +60,6 @@ gb_terminal_application_addin_class_init (GbTerminalApplicationAddinClass *klass
 }
 
 static void
-gb_terminal_application_addin_class_finalize (GbTerminalApplicationAddinClass *klass)
-{
-}
-
-static void
 gb_terminal_application_addin_init (GbTerminalApplicationAddin *self)
 {
 }
@@ -75,10 +69,4 @@ application_addin_iface_init (IdeApplicationAddinInterface *iface)
 {
   iface->load = gb_terminal_application_addin_load;
   iface->unload = gb_terminal_application_addin_unload;
-}
-
-void
-_gb_terminal_application_addin_register_type (GTypeModule *module)
-{
-  gb_terminal_application_addin_register_type (module);
 }

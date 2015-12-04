@@ -20,19 +20,14 @@
 #include <ide.h>
 #include <vte/vte.h>
 
-#include "gb-terminal-document.h"
 #include "gb-terminal-view.h"
 #include "gb-terminal-view-private.h"
 #include "gb-terminal-view-actions.h"
-#include "gb-view.h"
-#include "gb-widget.h"
-#include "gb-workbench.h"
 
-G_DEFINE_TYPE (GbTerminalView, gb_terminal_view, GB_TYPE_VIEW)
+G_DEFINE_TYPE (GbTerminalView, gb_terminal_view, IDE_TYPE_LAYOUT_VIEW)
 
 enum {
   PROP_0,
-  PROP_DOCUMENT,
   PROP_FONT_NAME,
   LAST_PROP
 };
@@ -66,32 +61,6 @@ static const GdkRGBA solarized_palette[] =
 
 static void gb_terminal_view_connect_terminal    (GbTerminalView *self, VteTerminal *terminal);
 
-static GbDocument *
-gb_terminal_view_get_document (GbView *view)
-{
-  g_return_val_if_fail (GB_IS_TERMINAL_VIEW (view), NULL);
-
-  return GB_DOCUMENT (GB_TERMINAL_VIEW (view)->document);
-}
-
-static void
-gb_terminal_view_set_document (GbTerminalView     *view,
-                               GbTerminalDocument *document)
-{
-  g_return_if_fail (GB_IS_TERMINAL_VIEW (view));
-
-  if (view->document != document)
-    {
-      if (view->document)
-        g_clear_object (&view->document);
-
-      if (document)
-        view->document = g_object_ref (document);
-
-      g_object_notify (G_OBJECT (view), "document");
-    }
-}
-
 static void
 gb_terminal_respawn (GbTerminalView *self,
                      VteTerminal    *terminal)
@@ -111,7 +80,7 @@ gb_terminal_respawn (GbTerminalView *self,
   vte_terminal_reset (terminal, TRUE, TRUE);
 
   toplevel = gtk_widget_get_toplevel (GTK_WIDGET (self));
-  if (!GB_IS_WORKBENCH (toplevel))
+  if (!IDE_IS_WORKBENCH (toplevel))
     return;
 
   /* Prevent flapping */
@@ -120,7 +89,7 @@ gb_terminal_respawn (GbTerminalView *self,
     return;
   self->last_respawn = now;
 
-  context = gb_workbench_get_context (GB_WORKBENCH (toplevel));
+  context = ide_workbench_get_context (IDE_WORKBENCH (toplevel));
   vcs = ide_context_get_vcs (context);
   workdir = ide_vcs_get_working_directory (vcs);
   workpath = g_file_get_path (workdir);
@@ -159,7 +128,7 @@ child_exited_cb (VteTerminal    *terminal,
   g_assert (VTE_IS_TERMINAL (terminal));
   g_assert (GB_IS_TERMINAL_VIEW (self));
 
-  if (!gb_widget_activate_action (GTK_WIDGET (self), "view-stack", "close", NULL))
+  if (!ide_widget_action (GTK_WIDGET (self), "view-stack", "close", NULL))
     {
       if (!gtk_widget_in_destruction (GTK_WIDGET (terminal)))
         gb_terminal_respawn (self, terminal);
@@ -298,7 +267,7 @@ notification_received_cb (VteTerminal    *terminal,
 }
 
 static const gchar *
-gb_terminal_get_title (GbView *view)
+gb_terminal_get_title (IdeLayoutView *view)
 {
   const gchar *title;
   GbTerminalView *self = (GbTerminalView *)view;
@@ -318,16 +287,10 @@ focus_in_event_cb (VteTerminal    *terminal,
                    GdkEvent       *event,
                    GbTerminalView *self)
 {
-  const gchar *title;
-
   g_assert (VTE_IS_TERMINAL (terminal));
   g_assert (GB_IS_TERMINAL_VIEW (self));
 
   self->bottom_has_focus = (terminal != self->terminal_top);
-
-  title = gb_terminal_get_title (GB_VIEW (self));
-  if (self->document)
-    gb_terminal_document_set_title (self->document, title);
 
   if (terminal == self->terminal_top)
     {
@@ -339,8 +302,6 @@ focus_in_event_cb (VteTerminal    *terminal,
       self->bottom_has_needs_attention = FALSE;
       gb_terminal_set_needs_attention (self, FALSE, GTK_POS_BOTTOM);
     }
-
-  g_object_notify (G_OBJECT (self), "title");
 
   return GDK_EVENT_PROPAGATE;
 }
@@ -385,15 +346,14 @@ style_context_changed (GtkStyleContext *style_context,
                              G_N_ELEMENTS (solarized_palette));
 }
 
-static GbView *
-gb_terminal_create_split (GbView *view)
+static IdeLayoutView *
+gb_terminal_create_split (IdeLayoutView *view)
 {
-  GbView *new_view;
+  IdeLayoutView *new_view;
 
   g_assert (GB_IS_TERMINAL_VIEW (view));
 
   new_view = g_object_new (GB_TYPE_TERMINAL_VIEW,
-                          "document", gb_terminal_view_get_document (view),
                           "visible", TRUE,
                           NULL);
 
@@ -423,7 +383,7 @@ gb_terminal_view_set_font_name (GbTerminalView *self,
 }
 
 static void
-gb_terminal_set_split_view (GbView   *view,
+gb_terminal_set_split_view (IdeLayoutView   *view,
                             gboolean  split_view)
 {
   GbTerminalView *self = (GbTerminalView *)view;
@@ -540,31 +500,11 @@ gb_terminal_view_finalize (GObject *object)
 {
   GbTerminalView *self = GB_TERMINAL_VIEW (object);
 
-  g_clear_object (&self->document);
   g_clear_object (&self->save_as_file_top);
   g_clear_object (&self->save_as_file_bottom);
   g_clear_pointer (&self->selection_buffer, g_free);
 
   G_OBJECT_CLASS (gb_terminal_view_parent_class)->finalize (object);
-}
-
-static void
-gb_terminal_view_get_property (GObject    *object,
-                               guint       prop_id,
-                               GValue     *value,
-                               GParamSpec *pspec)
-{
-  GbTerminalView *self = GB_TERMINAL_VIEW (object);
-
-  switch (prop_id)
-    {
-    case PROP_DOCUMENT:
-      g_value_set_object (value, self->document);
-      break;
-
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-    }
 }
 
 static void
@@ -581,10 +521,6 @@ gb_terminal_view_set_property (GObject      *object,
       gb_terminal_view_set_font_name (self, g_value_get_string (value));
       break;
 
-    case PROP_DOCUMENT:
-      gb_terminal_view_set_document (self, g_value_get_object (value));
-      break;
-
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -595,10 +531,9 @@ gb_terminal_view_class_init (GbTerminalViewClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
-  GbViewClass *view_class = GB_VIEW_CLASS (klass);
+  IdeLayoutViewClass *view_class = IDE_LAYOUT_VIEW_CLASS (klass);
 
   object_class->finalize = gb_terminal_view_finalize;
-  object_class->get_property = gb_terminal_view_get_property;
   object_class->set_property = gb_terminal_view_set_property;
 
   widget_class->realize = gb_terminal_realize;
@@ -607,7 +542,6 @@ gb_terminal_view_class_init (GbTerminalViewClass *klass)
   widget_class->grab_focus = gb_terminal_grab_focus;
 
   view_class->get_title = gb_terminal_get_title;
-  view_class->get_document = gb_terminal_view_get_document;
   view_class->create_split = gb_terminal_create_split;
   view_class->set_split_view =  gb_terminal_set_split_view;
 
@@ -616,13 +550,6 @@ gb_terminal_view_class_init (GbTerminalViewClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GbTerminalView, scrolled_window_bottom);
 
   g_type_ensure (VTE_TYPE_TERMINAL);
-
-  properties [PROP_DOCUMENT] =
-    g_param_spec_object ("document",
-                         "Document",
-                         "The document for the VTE terminal view.",
-                         GB_TYPE_TERMINAL_DOCUMENT,
-                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_FONT_NAME] =
     g_param_spec_string ("font-name",
