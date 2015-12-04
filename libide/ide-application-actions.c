@@ -221,8 +221,40 @@ ide_application_actions_shortcuts (GSimpleAction *action,
   gtk_window_present (GTK_WINDOW (window));
 }
 
+static void
+ide_application_actions_nighthack (GSimpleAction *action,
+                                   GVariant      *variant,
+                                   gpointer       user_data)
+{
+  g_autoptr(GSettings) settings = NULL;
+
+  g_object_set (gtk_settings_get_default (),
+                "gtk-application-prefer-dark-theme", TRUE,
+                NULL);
+
+  settings = g_settings_new ("org.gnome.builder.editor");
+  g_settings_set_string (settings, "style-scheme-name", "builder-dark");
+}
+
+static void
+ide_application_actions_dayhack (GSimpleAction *action,
+                                 GVariant      *variant,
+                                 gpointer       user_data)
+{
+  g_autoptr(GSettings) settings = NULL;
+
+  g_object_set (gtk_settings_get_default (),
+                "gtk-application-prefer-dark-theme", FALSE,
+                NULL);
+
+  settings = g_settings_new ("org.gnome.builder.editor");
+  g_settings_set_string (settings, "style-scheme-name", "builder");
+}
+
 static const GActionEntry IdeApplicationActions[] = {
   { "about",        ide_application_actions_about },
+  { "dayhack",      ide_application_actions_dayhack },
+  { "nighthack",    ide_application_actions_nighthack },
   { "open-project", ide_application_actions_open_project },
   { "new-project",  ide_application_actions_new_project },
   { "preferences",  ide_application_actions_preferences },
