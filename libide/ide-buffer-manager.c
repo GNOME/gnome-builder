@@ -1131,6 +1131,18 @@ ide_buffer_manager_real_buffer_loaded (IdeBufferManager *self,
   gtk_recent_manager_add_full (recent_manager, uri, &recent_data);
 }
 
+static IdeBuffer *
+ide_buffer_manager_real_create_buffer (IdeBufferManager *self,
+                                       IdeFile          *file)
+{
+  g_return_val_if_fail (IDE_IS_BUFFER_MANAGER (self), NULL);
+  g_return_val_if_fail (IDE_IS_FILE (file), NULL);
+
+  return g_object_new (IDE_TYPE_BUFFER,
+                       "file", file,
+                       NULL);
+}
+
 static GType
 ide_buffer_manager_get_item_type (GListModel *self)
 {
@@ -1308,15 +1320,15 @@ ide_buffer_manager_class_init (IdeBufferManagerClass *klass)
    *
    * Returns: (transfer full) (nullable): An #IdeBuffer or %NULL.
    */
-  signals [CREATE_BUFFER] = g_signal_new ("create-buffer",
-                                           G_TYPE_FROM_CLASS (klass),
-                                           G_SIGNAL_RUN_LAST,
-                                           0,
-                                           g_signal_accumulator_first_wins,
-                                           NULL, NULL,
-                                           IDE_TYPE_BUFFER,
-                                           1,
-                                           IDE_TYPE_FILE);
+  signals [CREATE_BUFFER] = g_signal_new_class_handler ("create-buffer",
+                                                        G_TYPE_FROM_CLASS (klass),
+                                                        G_SIGNAL_RUN_LAST,
+                                                        G_CALLBACK (ide_buffer_manager_real_create_buffer),
+                                                        g_signal_accumulator_first_wins,
+                                                        NULL, NULL,
+                                                        IDE_TYPE_BUFFER,
+                                                        1,
+                                                        IDE_TYPE_FILE);
 
   /**
    * IdeBufferManager::save-buffer:
