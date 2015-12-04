@@ -18,12 +18,12 @@
 
 #include <glib/gi18n.h>
 
+#include "ide-application.h"
 #include "ide-layout-view.h"
 
 typedef struct
 {
   GtkBox *controls;
-  GMenu  *menu;
 } IdeLayoutViewPrivate;
 
 static void buildable_iface_init (GtkBuildableIface *iface);
@@ -249,9 +249,6 @@ ide_layout_view_class_init (IdeLayoutViewClass *klass)
 
   widget_class->destroy = ide_layout_view_destroy;
 
-  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/ui/ide-layout-view.ui");
-  gtk_widget_class_bind_template_child_private (widget_class, IdeLayoutView, menu);
-
   properties [PROP_CAN_SPLIT] =
     g_param_spec_boolean ("can-split",
                           "Can Split",
@@ -294,8 +291,6 @@ ide_layout_view_init (IdeLayoutView *self)
   IdeLayoutViewPrivate *priv = ide_layout_view_get_instance_private (self);
   GtkBox *controls;
 
-  gtk_widget_init_template (GTK_WIDGET (self));
-
   controls = g_object_new (GTK_TYPE_BOX,
                            "orientation", GTK_ORIENTATION_HORIZONTAL,
                            "visible", TRUE,
@@ -333,11 +328,9 @@ buildable_iface_init (GtkBuildableIface *iface)
 GMenu *
 ide_layout_view_get_menu (IdeLayoutView *self)
 {
-  IdeLayoutViewPrivate *priv = ide_layout_view_get_instance_private (self);
-
   g_return_val_if_fail (IDE_IS_LAYOUT_VIEW (self), NULL);
 
-  return priv->menu;
+  return ide_application_get_menu_by_id (IDE_APPLICATION_DEFAULT, "ide-layout-view-menu");
 }
 
 /*

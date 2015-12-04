@@ -18,6 +18,7 @@
 
 #include <glib/gi18n.h>
 
+#include "ide-application.h"
 #include "ide-back-forward-item.h"
 #include "ide-buffer.h"
 #include "ide-buffer-manager.h"
@@ -454,6 +455,8 @@ static void
 ide_layout_stack_constructed (GObject *object)
 {
   IdeLayoutStack *self = (IdeLayoutStack *)object;
+  GtkPopover *popover;
+  GMenu *menu;
 
   G_OBJECT_CLASS (ide_layout_stack_parent_class)->constructed (object);
 
@@ -485,6 +488,11 @@ ide_layout_stack_constructed (GObject *object)
   gtk_widget_set_sensitive (GTK_WIDGET (self->close_button), FALSE);
   gtk_widget_set_sensitive (GTK_WIDGET (self->views_button), FALSE);
   gtk_widget_set_sensitive (GTK_WIDGET (self->document_button), FALSE);
+
+  menu = ide_application_get_menu_by_id (IDE_APPLICATION_DEFAULT, "ide-layout-stack-menu");
+  popover = g_object_new (GTK_TYPE_POPOVER, NULL);
+  gtk_popover_bind_model (popover, G_MENU_MODEL (menu), NULL);
+  gtk_menu_button_set_popover (self->document_button, GTK_WIDGET (popover));
 }
 
 static void
@@ -684,17 +692,10 @@ ide_layout_stack_set_active_view (IdeLayoutStack *self,
           GtkWidget *controls;
           GBinding *binding;
           GActionGroup *group;
-          GMenu *menu;
-          GtkPopover *popover;
 
           ide_set_weak_pointer (&self->active_view, active_view);
           if (active_view != gtk_stack_get_visible_child (self->stack))
             gtk_stack_set_visible_child (self->stack, active_view);
-
-          menu = ide_layout_view_get_menu (IDE_LAYOUT_VIEW (active_view));
-          popover = g_object_new (GTK_TYPE_POPOVER, NULL);
-          gtk_popover_bind_model (popover, G_MENU_MODEL (menu), NULL);
-          gtk_menu_button_set_popover (self->document_button, GTK_WIDGET (popover));
 
           self->focus_history = g_list_remove (self->focus_history, active_view);
           self->focus_history = g_list_prepend (self->focus_history, active_view);
