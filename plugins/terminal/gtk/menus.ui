@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<interface>
+  <menu id="gear-menu">
+    <section id="gear-menu-new-section">
+      <item>
+        <attribute name="label" translatable="yes">_New Terminal</attribute>
+        <attribute name="action">win.new-terminal</attribute>
+        <attribute name="accel">&lt;ctrl&gt;&lt;shift&gt;t</attribute>
+      </item>
+    </section>
+  </menu>
+</interface>

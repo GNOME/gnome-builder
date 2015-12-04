@@ -2,5 +2,6 @@
 <gresources>
   <gresource prefix="/org/gnome/builder/plugins/terminal">
     <file>gb-terminal-view.ui</file>
+    <file>gtk/menus.ui</file>
   </gresource>
 </gresources>
