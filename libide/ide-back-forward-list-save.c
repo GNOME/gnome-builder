@@ -63,7 +63,8 @@ ide_back_forward_list_save_collect (gpointer data,
   g_hash_table_insert (state->counter, hash_key, GSIZE_TO_POINTER (count + 1));
 
   str = ide_uri_to_string (uri, 0);
-  g_string_append_printf (state->content, "%s\n", str);
+  if (str != NULL)
+    g_string_append_printf (state->content, "%s\n", str);
 }
 
 static void
@@ -114,7 +115,7 @@ _ide_back_forward_list_save_async (IdeBackForwardList  *self,
   state.counter = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
 
   _ide_back_forward_list_foreach (self, ide_back_forward_list_save_collect, &state);
-  bytes = g_bytes_new_take (state.content->str, state.content->len + 1);
+  bytes = g_bytes_new_take (state.content->str, state.content->len);
   g_string_free (state.content, FALSE);
   g_hash_table_unref (state.counter);
 
