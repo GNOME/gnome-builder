@@ -21,21 +21,6 @@
 #include "ide-preferences-group.h"
 #include "ide-preferences-group-private.h"
 
-struct _IdePreferencesGroup
-{
-  GtkBin      parent_instance;
-
-  gint        priority;
-  guint       is_list : 1;
-
-  GtkLabel   *title;
-  GtkBox     *box;
-  GtkListBox *list_box;
-  GtkFrame   *list_box_frame;
-
-  GPtrArray  *widgets;
-};
-
 G_DEFINE_TYPE (IdePreferencesGroup, ide_preferences_group, GTK_TYPE_BIN)
 
 enum {
@@ -72,6 +57,18 @@ ide_preferences_group_row_activated (IdePreferencesGroup *self,
   child = gtk_bin_get_child (GTK_BIN (row));
   if (child != NULL)
     gtk_widget_activate (child);
+}
+
+const gchar *
+ide_preferences_group_get_title (IdePreferencesGroup *self)
+{
+  const gchar *title;
+
+  g_return_val_if_fail (IDE_IS_PREFERENCES_GROUP (self), NULL);
+
+  title = gtk_label_get_label (self->title);
+
+  return (!title || !*title) ? NULL : title;
 }
 
 static void

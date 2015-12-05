@@ -335,6 +335,8 @@ libide_1_0_la_SOURCES = \
 	preferences/ide-preferences-bin-private.h \
 	preferences/ide-preferences-entry.c \
 	preferences/ide-preferences-entry.h \
+	preferences/ide-preferences-flow-box.c \
+	preferences/ide-preferences-flow-box.h \
 	preferences/ide-preferences-font-button.c \
 	preferences/ide-preferences-font-button.h \
 	preferences/ide-preferences-group.c \

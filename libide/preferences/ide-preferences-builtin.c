@@ -69,13 +69,11 @@ ide_preferences_builtin_register_appearance (IdePreferences *preferences)
 
   ide_preferences_add_page (preferences, "appearance", _("Appearance"), 0);
 
-  ide_preferences_add_list_group (preferences, "appearance", "basic", NULL, 0);
+  ide_preferences_add_list_group (preferences, "appearance", "basic", _("Themes"), 0);
   ide_preferences_add_switch (preferences, "appearance", "basic", "org.gnome.builder", "night-mode", NULL, NULL, _("Dark Theme"), _("Whether Builder should use a dark theme"), _("dark theme"), 0);
+  ide_preferences_add_switch (preferences, "appearance", "basic", "org.gnome.builder.editor", "show-grid-lines", NULL, NULL, _("Grid Pattern"), _("Display a grid pattern underneath source code"), NULL, 0);
 
-  ide_preferences_add_list_group (preferences, "appearance", "font", _("Font"), 100);
-  ide_preferences_add_font_button (preferences, "appearance", "font", "org.gnome.builder.editor", "font-name", _("Editor"), _("editor font monospace"), 0);
-
-  ide_preferences_add_list_group (preferences, "appearance", "schemes", _("Themes"), 200);
+  ide_preferences_add_list_group (preferences, "appearance", "schemes", NULL, 100);
 
   manager = gtk_source_style_scheme_manager_get_default ();
   scheme_ids = gtk_source_style_scheme_manager_get_scheme_ids (manager);
@@ -93,8 +91,8 @@ ide_preferences_builtin_register_appearance (IdePreferences *preferences)
       ide_preferences_add_radio (preferences, "appearance", "schemes", "org.gnome.builder.editor", "style-scheme-name", NULL, variant_str, title, NULL, title, i);
     }
 
-  ide_preferences_add_list_group (preferences, "appearance", "background", NULL, 300);
-  ide_preferences_add_switch (preferences, "appearance", "background", "org.gnome.builder.editor", "show-grid-lines", NULL, NULL, _("Grid Pattern"), _("Display a grid pattern underneath source code"), NULL, 0);
+  ide_preferences_add_list_group (preferences, "appearance", "font", _("Font"), 200);
+  ide_preferences_add_font_button (preferences, "appearance", "font", "org.gnome.builder.editor", "font-name", _("Editor"), _("editor font monospace"), 0);
 }
 
 static void
@@ -117,7 +115,7 @@ ide_preferences_builtin_register_editor (IdePreferences *preferences)
 {
   ide_preferences_add_page (preferences, "editor", _("Editor"), 100);
 
-  ide_preferences_add_list_group (preferences, "editor", "position", NULL, 0);
+  ide_preferences_add_list_group (preferences, "editor", "position", _("Cursor"), 0);
   ide_preferences_add_switch (preferences, "editor", "position", "org.gnome.builder.editor", "restore-insert-mark", NULL, NULL, _("Restore cursor position"), _("Restore cursor position when a file is reopened"), NULL, 0);
   ide_preferences_add_spin_button (preferences, "editor", "position", "org.gnome.builder.editor", "scroll-offset", NULL, _("Scroll Offset"), _("Minimum number of lines to keep above and below the cursor"), NULL, 10);
 

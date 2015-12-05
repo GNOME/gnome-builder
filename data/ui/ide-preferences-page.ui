@@ -4,21 +4,11 @@
   <template class="IdePreferencesPage" parent="GtkBin">
     <child>
       <object class="GtkScrolledWindow">
+        <property name="hscrollbar-policy">never</property>
         <property name="visible">true</property>
         <child>
-          <object class="EggCenteringBin">
-            <property name="max-width-request">550</property>
+          <object class="IdePreferencesFlowBox" id="box">
             <property name="visible">true</property>
-            <child>
-              <object class="GtkBox" id="box">
-                <property name="halign">center</property>
-                <property name="margin">24</property>
-                <property name="orientation">vertical</property>
-                <property name="spacing">24</property>
-                <property name="visible">true</property>
-                <property name="width-request">550</property>
-              </object>
-            </child>
           </object>
         </child>
       </object>

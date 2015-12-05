@@ -1,4 +1,4 @@
-/* ide-preferences-group.h
+/* ide-preferences-flow-box.h
  *
  * Copyright (C) 2015 Christian Hergert <chergert@redhat.com>
  *
@@ -16,21 +16,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_PREFERENCES_GROUP_H
-#define IDE_PREFERENCES_GROUP_H
+#ifndef IDE_PREFERENCES_FLOW_BOX_H
+#define IDE_PREFERENCES_FLOW_BOX_H
 
 #include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_PREFERENCES_GROUP (ide_preferences_group_get_type())
+#define IDE_TYPE_PREFERENCES_FLOW_BOX (ide_preferences_flow_box_get_type())
 
-G_DECLARE_FINAL_TYPE (IdePreferencesGroup, ide_preferences_group, IDE, PREFERENCES_GROUP, GtkBin)
-
-void         ide_preferences_group_add       (IdePreferencesGroup *self,
-                                              GtkWidget           *widget);
-const gchar *ide_preferences_group_get_title (IdePreferencesGroup *self);
+G_DECLARE_FINAL_TYPE (IdePreferencesFlowBox, ide_preferences_flow_box, IDE, PREFERENCES_FLOW_BOX, GtkBox)
 
 G_END_DECLS
 
-#endif /* IDE_PREFERENCES_GROUP_H */
+#endif /* IDE_PREFERENCES_FLOW_BOX_H */

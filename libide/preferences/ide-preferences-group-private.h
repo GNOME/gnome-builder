@@ -24,6 +24,21 @@
 
 G_BEGIN_DECLS
 
+struct _IdePreferencesGroup
+{
+  GtkBin      parent_instance;
+
+  gint        priority;
+  guint       is_list : 1;
+
+  GtkLabel   *title;
+  GtkBox     *box;
+  GtkListBox *list_box;
+  GtkFrame   *list_box_frame;
+
+  GPtrArray  *widgets;
+};
+
 void  _ide_preferences_group_set_map  (IdePreferencesGroup *self,
                                        GHashTable          *map);
 guint _ide_preferences_group_refilter (IdePreferencesGroup *self,

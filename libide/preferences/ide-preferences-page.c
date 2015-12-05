@@ -18,6 +18,7 @@
 
 #include <glib/gi18n.h>
 
+#include "ide-preferences-flow-box.h"
 #include "ide-preferences-group.h"
 #include "ide-preferences-group-private.h"
 #include "ide-preferences-page.h"
@@ -25,12 +26,12 @@
 
 struct _IdePreferencesPage
 {
-  GtkBin      parent_instance;
+  GtkBin                 parent_instance;
 
-  gint        priority;
+  gint                   priority;
 
-  GtkBox     *box;
-  GHashTable *groups_by_name;
+  IdePreferencesFlowBox *box;
+  GHashTable            *groups_by_name;
 };
 
 enum {
@@ -129,7 +130,6 @@ ide_preferences_page_add_group (IdePreferencesPage  *self,
                                 IdePreferencesGroup *group)
 {
   gchar *name = NULL;
-  gint position = -1;
 
   g_return_if_fail (IDE_IS_PREFERENCES_PAGE (self));
   g_return_if_fail (IDE_IS_PREFERENCES_GROUP (group));
@@ -144,9 +144,7 @@ ide_preferences_page_add_group (IdePreferencesPage  *self,
 
   g_hash_table_insert (self->groups_by_name, name, group);
 
-  gtk_container_add_with_properties (GTK_CONTAINER (self->box), GTK_WIDGET (group),
-                                     "position", position,
-                                     NULL);
+  gtk_container_add (GTK_CONTAINER (self->box), GTK_WIDGET (group));
 }
 
 IdePreferencesGroup *
