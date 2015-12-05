@@ -86,6 +86,43 @@ ide_editor_perspective_restore_panel_state (IdeEditorPerspective *self)
 }
 
 static void
+ide_editor_perspective_save_panel_state (IdeEditorPerspective *self)
+{
+  g_autoptr(GSettings) settings = NULL;
+  GtkWidget *pane;
+  gboolean reveal;
+  guint position;
+
+  g_assert (IDE_IS_EDITOR_PERSPECTIVE (self));
+
+  settings = g_settings_new ("org.gnome.builder.workbench");
+
+  pane = ide_layout_get_left_pane (IDE_LAYOUT (self));
+  gtk_container_child_get (GTK_CONTAINER (IDE_LAYOUT (self)), pane,
+                           "reveal", &reveal,
+                           "position", &position,
+                           NULL);
+  g_settings_set_boolean (settings, "left-visible", reveal);
+  g_settings_set_int (settings, "left-position", position);
+
+  pane = ide_layout_get_right_pane (IDE_LAYOUT (self));
+  gtk_container_child_get (GTK_CONTAINER (IDE_LAYOUT (self)), pane,
+                           "reveal", &reveal,
+                           "position", &position,
+                           NULL);
+  g_settings_set_boolean (settings, "right-visible", reveal);
+  g_settings_set_int (settings, "right-position", position);
+
+  pane = ide_layout_get_bottom_pane (IDE_LAYOUT (self));
+  gtk_container_child_get (GTK_CONTAINER (IDE_LAYOUT (self)), pane,
+                           "reveal", &reveal,
+                           "position", &position,
+                           NULL);
+  g_settings_set_boolean (settings, "bottom-visible", reveal);
+  g_settings_set_int (settings, "bottom-position", position);
+}
+
+static void
 ide_editor_perspective_context_set (GtkWidget  *widget,
                                     IdeContext *context)
 {
@@ -339,13 +376,26 @@ ide_editor_perspective_get_actions (IdePerspective *perspective)
   return g_object_ref (self->actions);
 }
 
+static gboolean
+ide_editor_perspective_agree_to_shutdown (IdePerspective *perspective)
+{
+  IdeEditorPerspective *self = (IdeEditorPerspective *)perspective;
+
+  g_assert (IDE_IS_EDITOR_PERSPECTIVE (self));
+
+  ide_editor_perspective_save_panel_state (self);
+
+  return TRUE;
+}
+
 static void
 ide_perspective_iface_init (IdePerspectiveInterface *iface)
 {
+  iface->agree_to_shutdown = ide_editor_perspective_agree_to_shutdown;
   iface->get_actions = ide_editor_perspective_get_actions;
+  iface->get_icon_name = ide_editor_perspective_get_icon_name;
   iface->get_id = ide_editor_perspective_get_id;
   iface->get_title = ide_editor_perspective_get_title;
   iface->get_titlebar = ide_editor_perspective_get_titlebar;
-  iface->get_icon_name = ide_editor_perspective_get_icon_name;
   iface->views_foreach = ide_editor_perspective_views_foreach;
 }
