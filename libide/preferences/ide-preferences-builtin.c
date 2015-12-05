@@ -307,7 +307,7 @@ ide_preferences_builtin_register_languages (IdePreferences *preferences)
   ide_preferences_add_list_group (preferences, "languages.id", "basic", NULL, 0);
   ide_preferences_add_switch (preferences, "languages.id", "basic", "org.gnome.builder.editor.language", "trim-trailing-whitespace", "/org/gnome/builder/editor/language/{id}/", NULL, _("Trim trialing whitespace"), _("Upon saving, trailing whitespcae from modified lines will be trimmed."), NULL, 10);
 
-  ide_preferences_add_list_group (preferences, "languages.id", "margin", NULL, 0);
+  ide_preferences_add_list_group (preferences, "languages.id", "margin", _("Margins"), 0);
   ide_preferences_add_radio (preferences, "languages.id", "margin", "org.gnome.builder.editor.language", "show-right-margin", "/org/gnome/builder/editor/language/{id}/", NULL, _("Show right margin"), NULL, NULL, 0);
   ide_preferences_add_spin_button (preferences, "languages.id", "margin", "org.gnome.builder.editor.language", "right-margin-position", "/org/gnome/builder/editor/language/{id}/", _("Right margin position"), _("Position in spaces for the right margin"), NULL, 10);
 
