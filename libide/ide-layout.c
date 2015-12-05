@@ -55,6 +55,7 @@ typedef struct
 {
   IdeLayoutChild    children[4];
 
+  GActionMap       *actions;
   GtkGesture       *pan_gesture;
   IdeLayoutChild   *drag_child;
   gdouble           drag_position;
@@ -64,6 +65,7 @@ typedef struct
 } IdeLayoutPrivate;
 
 static void buildable_init_iface (GtkBuildableIface *iface);
+static const gchar *action_names[] = { "left", "right", NULL, "bottom" };
 
 G_DEFINE_TYPE_WITH_CODE (IdeLayout, ide_layout, GTK_TYPE_OVERLAY,
                          G_ADD_PRIVATE (IdeLayout)
@@ -487,6 +489,7 @@ ide_layout_child_set_reveal (IdeLayout *self,
                              GtkWidget *child,
                              gboolean   reveal)
 {
+  IdeLayoutPrivate *priv = ide_layout_get_instance_private (self);
   IdeLayoutChild *item;
   GdkFrameClock *frame_clock;
 
@@ -535,6 +538,17 @@ ide_layout_child_set_reveal (IdeLayout *self,
       item->reveal = reveal;
       gtk_adjustment_set_value (item->adjustment, reveal ? 0.0 : 1.0);
       gtk_container_child_notify (GTK_CONTAINER (self), item->widget, "reveal");
+    }
+
+  if (action_names [item->type] != NULL)
+    {
+      GAction *action;
+
+      action = g_action_map_lookup_action (priv->actions, action_names [item->type]);
+
+      if (G_IS_SIMPLE_ACTION (action))
+        g_simple_action_set_state (G_SIMPLE_ACTION (action),
+                                   g_variant_new_boolean (reveal));
     }
 
   gtk_widget_queue_allocate (GTK_WIDGET (self));
@@ -1038,6 +1052,7 @@ ide_layout_finalize (GObject *object)
 
   ide_clear_weak_pointer (&priv->active_view);
   g_clear_object (&priv->pan_gesture);
+  g_clear_object (&priv->actions);
 
   G_OBJECT_CLASS (ide_layout_parent_class)->finalize (object);
 }
@@ -1195,8 +1210,8 @@ ide_layout_activate_left (GSimpleAction *action,
   g_assert (IDE_IS_LAYOUT (self));
 
   child = ide_layout_get_left_pane (self);
-  reveal = ide_layout_child_get_reveal (self, child);
-  gtk_container_child_set (GTK_CONTAINER (self), child, "reveal", !reveal, NULL);
+  reveal = g_variant_get_boolean (param);
+  gtk_container_child_set (GTK_CONTAINER (self), child, "reveal", reveal, NULL);
 }
 
 static void
@@ -1212,8 +1227,8 @@ ide_layout_activate_right (GSimpleAction *action,
   g_assert (IDE_IS_LAYOUT (self));
 
   child = ide_layout_get_right_pane (self);
-  reveal = ide_layout_child_get_reveal (self, child);
-  gtk_container_child_set (GTK_CONTAINER (self), child, "reveal", !reveal, NULL);
+  reveal = g_variant_get_boolean (param);
+  gtk_container_child_set (GTK_CONTAINER (self), child, "reveal", reveal, NULL);
 }
 
 static void
@@ -1229,21 +1244,20 @@ ide_layout_activate_bottom (GSimpleAction *action,
   g_assert (IDE_IS_LAYOUT (self));
 
   child = ide_layout_get_bottom_pane (self);
-  reveal = ide_layout_child_get_reveal (self, child);
-  gtk_container_child_set (GTK_CONTAINER (self), child, "reveal", !reveal, NULL);
+  reveal = g_variant_get_boolean (param);
+  gtk_container_child_set (GTK_CONTAINER (self), child, "reveal", reveal, NULL);
 }
 
 static const GActionEntry action_entries[] = {
-  { "left", ide_layout_activate_left, NULL, "true" },
-  { "right", ide_layout_activate_right, NULL, "false" },
-  { "bottom", ide_layout_activate_bottom, NULL, "false" },
+  { "left", NULL, NULL, "true", ide_layout_activate_left },
+  { "right", NULL, NULL, "true", ide_layout_activate_right },
+  { "bottom", NULL, NULL, "true", ide_layout_activate_bottom  },
 };
 
 static void
 ide_layout_init (IdeLayout *self)
 {
   IdeLayoutPrivate *priv = ide_layout_get_instance_private (self);
-  g_autoptr(GSimpleActionGroup) actions = NULL;
 
   priv->children [GTK_POS_LEFT].type = GTK_POS_LEFT;
   priv->children [GTK_POS_LEFT].reveal = TRUE;
@@ -1271,12 +1285,13 @@ ide_layout_init (IdeLayout *self)
 
   gtk_widget_init_template (GTK_WIDGET (self));
 
-  actions = g_simple_action_group_new ();
-  g_action_map_add_action_entries (G_ACTION_MAP (actions),
+  priv->actions = G_ACTION_MAP (g_simple_action_group_new ());
+  g_action_map_add_action_entries (G_ACTION_MAP (priv->actions),
                                    action_entries,
                                    G_N_ELEMENTS (action_entries),
                                    self);
-  gtk_widget_insert_action_group (GTK_WIDGET (self), "panels", G_ACTION_GROUP (actions));
+  gtk_widget_insert_action_group (GTK_WIDGET (self), "panels",
+                                  G_ACTION_GROUP (priv->actions));
 }
 
 GtkWidget *
