@@ -35,8 +35,8 @@ ide_back_forward_list_save_collect (gpointer data,
 {
   IdeBackForwardListSave *state = user_data;
   IdeBackForwardItem *item = data;
-  g_autofree gchar *hash_key = NULL;
   g_autofree gchar *str = NULL;
+  gchar *hash_key = NULL;
   IdeUri *uri;
   gsize count;
 
@@ -91,8 +91,8 @@ _ide_back_forward_list_save_async (IdeBackForwardList  *self,
                                    GAsyncReadyCallback  callback,
                                    gpointer             user_data)
 {
+  IdeBackForwardListSave state = { 0 };
   g_autoptr(GTask) task = NULL;
-  GString *content;
   GBytes *bytes;
 
   g_return_if_fail (IDE_IS_BACK_FORWARD_LIST (self));
@@ -110,10 +110,13 @@ _ide_back_forward_list_save_async (IdeBackForwardList  *self,
 
   task = g_task_new (self, cancellable, callback, user_data);
 
-  content = g_string_new (NULL);
-  _ide_back_forward_list_foreach (self, ide_back_forward_list_save_collect, content);
-  bytes = g_bytes_new_take (content->str, content->len + 1);
-  g_string_free (content, FALSE);
+  state.content = g_string_new (NULL);
+  state.counter = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
+
+  _ide_back_forward_list_foreach (self, ide_back_forward_list_save_collect, &state);
+  bytes = g_bytes_new_take (state.content->str, state.content->len + 1);
+  g_string_free (state.content, FALSE);
+  g_hash_table_unref (state.counter);
 
   g_file_replace_contents_bytes_async (file,
                                        bytes,
