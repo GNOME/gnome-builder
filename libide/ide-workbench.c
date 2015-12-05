@@ -129,6 +129,33 @@ ide_workbench_unload_cb (GObject      *object,
 }
 
 static gboolean
+ide_workbench_agree_to_shutdown (IdeWorkbench *self)
+{
+  GList *children;
+  const GList *iter;
+  gboolean ret = TRUE;
+
+  g_assert (IDE_IS_WORKBENCH (self));
+
+  children = gtk_container_get_children (GTK_CONTAINER (self->perspectives_stack));
+
+  for (iter = children; iter; iter = iter->next)
+    {
+      IdePerspective *perspective = iter->data;
+
+      if (!ide_perspective_agree_to_shutdown (perspective))
+        {
+          ret = FALSE;
+          break;
+        }
+    }
+
+  g_list_free (children);
+
+  return ret;
+}
+
+static gboolean
 ide_workbench_delete_event (GtkWidget   *widget,
                             GdkEventAny *event)
 {
@@ -142,6 +169,9 @@ ide_workbench_delete_event (GtkWidget   *widget,
       g_cancellable_cancel (self->cancellable);
       return GDK_EVENT_STOP;
     }
+
+  if (!ide_workbench_agree_to_shutdown (self))
+    return GDK_EVENT_STOP;
 
   self->unloading = TRUE;
 
