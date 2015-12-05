@@ -851,18 +851,17 @@ ide_tree_style_updated (GtkWidget *widget)
   IdeTree *self = (IdeTree *)widget;
   IdeTreePrivate *priv = ide_tree_get_instance_private (self);
   GtkStyleContext *style_context;
-  GtkStateFlags flags;
 
   g_assert (IDE_IS_TREE (self));
 
   GTK_WIDGET_CLASS (ide_tree_parent_class)->style_updated (widget);
 
-  flags = gtk_widget_get_state_flags (widget);
-
   style_context = gtk_widget_get_style_context (widget);
   gtk_style_context_save (style_context);
   gtk_style_context_add_class (style_context, "dim-label");
-  gtk_style_context_get_color (style_context, flags, &priv->dim_foreground);
+  gtk_style_context_get_color (style_context,
+                               gtk_style_context_get_state (style_context),
+                               &priv->dim_foreground);
   gtk_style_context_restore (style_context);
 }
 
