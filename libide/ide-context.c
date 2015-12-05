@@ -1113,17 +1113,15 @@ ide_context__back_forward_list_load_cb (GObject      *object,
   g_assert (IDE_IS_BACK_FORWARD_LIST (back_forward_list));
   g_assert (G_IS_TASK (task));
 
+  /*
+   * Failing to load the back-forward list is non-fatal. We'll fix it during
+   * our next write to the file.
+   */
   if (!_ide_back_forward_list_load_finish (back_forward_list, result, &error))
     {
-      if (g_error_matches (error, G_IO_ERROR, G_IO_ERROR_NOT_FOUND))
-        {
-          g_clear_error (&error);
-        }
-      else
-        {
-          g_task_return_error (task, error);
-          return;
-        }
+      if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_NOT_FOUND))
+        g_warning ("%s", error->message);
+      g_clear_error (&error);
     }
 
   g_task_return_boolean (task, TRUE);
