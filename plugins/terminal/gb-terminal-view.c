@@ -572,10 +572,7 @@ gb_terminal_view_init (GbTerminalView *self)
   gb_terminal_view_connect_terminal (self, self->terminal_top);
   gb_terminal_view_actions_init (self);
 
-  /*
-   * FIXME: Should we allow setting the terminal font independently from editor?
-   */
-  settings = g_settings_new ("org.gnome.builder.editor");
+  settings = g_settings_new ("org.gnome.builder.terminal");
   g_settings_bind (settings, "font-name", self, "font-name", G_SETTINGS_BIND_GET);
 
   style_context = gtk_widget_get_style_context (GTK_WIDGET (self));

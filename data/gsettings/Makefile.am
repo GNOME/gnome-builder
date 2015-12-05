@@ -5,6 +5,7 @@ gsettings_SCHEMAS = \
 	org.gnome.builder.extension-type.gschema.xml \
 	org.gnome.builder.gschema.xml \
 	org.gnome.builder.project-tree.gschema.xml \
+	org.gnome.builder.terminal.gschema.xml \
 	org.gnome.builder.workbench.gschema.xml \
 	$(NULL)
 
