@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<interface>
+  <menu id="ide-layout-stack-menu">
+    <section id="ide-layout-stack-menu-preview-section">
+      <item>
+        <attribute name="label" translatable="yes">Preview as HTML</attribute>
+        <attribute name="action">view.preview-as-html</attribute>
+      </item>
+    </section>
+  </menu>
+</interface>

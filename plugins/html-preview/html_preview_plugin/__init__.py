@@ -55,20 +55,19 @@ class HtmlPreviewData(GObject.Object, Ide.ApplicationAddin):
 
 class HtmlPreviewAddin(GObject.Object, Ide.EditorViewAddin):
     def do_load(self, editor):
-        self.menu = HtmlPreviewMenu(editor.get_menu())
+        self.action = Gio.SimpleAction(name='preview-as-html', enabled=True)
+        self.action.connect('activate', lambda *_: self.preview_activated(editor))
 
         actions = editor.get_action_group('view')
-        action = Gio.SimpleAction(name='preview-as-html', enabled=True)
-        action.connect('activate', lambda *_: self.preview_activated(editor))
-        actions.add_action(action)
+        actions.add_action(self.action)
 
     def do_unload(self, editor):
-        self.menu.hide()
+        actions = editor.get_action_group('view')
+        actions.remove_action('preview-as-html')
 
     def do_language_changed(self, language_id):
-        self.menu.hide()
-        if language_id in ('html', 'markdown'):
-            self.menu.show()
+        enabled = (language_id in ('html', 'markdown'))
+        self.action.set_enabled(enabled)
 
     def preview_activated(self, editor):
         document = editor.get_document()
@@ -76,19 +75,6 @@ class HtmlPreviewAddin(GObject.Object, Ide.EditorViewAddin):
         stack = editor.get_ancestor(Ide.LayoutStack)
         print (stack)
         stack.add(view)
-
-class HtmlPreviewMenu:
-    exten = None
-
-    def __init__(self, menu):
-        self.exten = Ide.MenuExtension.new_for_section(menu, 'preview-section')
-
-    def show(self):
-        item = Gio.MenuItem.new(_("Preview as HTML"), 'view.preview-as-html')
-        self.exten.append_menu_item(item)
-
-    def hide(self):
-        self.exten.remove_items()
 
 class HtmlPreviewView(Ide.LayoutView):
     markdown = False
