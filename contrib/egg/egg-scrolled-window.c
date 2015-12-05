@@ -142,7 +142,7 @@ egg_scrolled_window_get_preferred_height (GtkWidget *widget,
             return;
 
           style = gtk_widget_get_style_context (widget);
-          gtk_style_context_get_border (style, gtk_widget_get_state_flags (widget), &border);
+          gtk_style_context_get_border (style, gtk_style_context_get_state (style), &border);
           additional = border.top + border.bottom;
 
           gtk_widget_get_preferred_height (child, &child_min_height, &child_nat_height);
@@ -180,7 +180,7 @@ egg_scrolled_window_get_preferred_width (GtkWidget *widget,
             return;
 
           style = gtk_widget_get_style_context (widget);
-          gtk_style_context_get_border (style, gtk_widget_get_state_flags (widget), &border);
+          gtk_style_context_get_border (style, gtk_style_context_get_state (style), &border);
           additional = border.left = border.right + 1;
 
           gtk_widget_get_preferred_width (child, &child_min_width, &child_nat_width);
