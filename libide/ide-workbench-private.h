@@ -30,7 +30,10 @@ struct _IdeWorkbench
 {
   GtkApplicationWindow       parent;
 
+  guint                      unloading : 1;
+
   IdeContext                *context;
+  GCancellable              *cancellable;
   PeasExtensionSet          *addins;
 
   IdePerspective            *perspective;

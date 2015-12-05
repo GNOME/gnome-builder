@@ -43,6 +43,7 @@ enum {
 enum {
   ACTION,
   SET_PERSPECTIVE,
+  UNLOAD,
   LAST_SIGNAL
 };
 
@@ -113,30 +114,64 @@ ide_workbench_resort_perspectives (IdeWorkbench *self)
 }
 
 static void
+ide_workbench_unload_cb (GObject      *object,
+                         GAsyncResult *result,
+                         gpointer      user_data)
+{
+  g_autoptr(IdeWorkbench) self = user_data;
+  IdeContext *context = (IdeContext *)object;
+
+  g_return_if_fail (IDE_IS_WORKBENCH (self));
+
+  ide_context_unload_finish (context, result, NULL);
+
+  gtk_widget_destroy (GTK_WIDGET (self));
+}
+
+static gboolean
+ide_workbench_delete_event (GtkWidget   *widget,
+                            GdkEventAny *event)
+{
+  IdeWorkbench *self = (IdeWorkbench *)widget;
+
+  g_assert (IDE_IS_WORKBENCH (self));
+  g_assert (event != NULL);
+
+  if (self->unloading)
+    {
+      g_cancellable_cancel (self->cancellable);
+      return GDK_EVENT_STOP;
+    }
+
+  self->unloading = TRUE;
+
+  g_signal_emit (self, signals [UNLOAD], 0, self->context);
+
+  if (self->context != NULL)
+    {
+      self->cancellable = g_cancellable_new ();
+      ide_context_unload_async (self->context,
+                                self->cancellable,
+                                ide_workbench_unload_cb,
+                                g_object_ref (self));
+      return GDK_EVENT_STOP;
+    }
+
+  g_clear_object (&self->addins);
+
+  return GDK_EVENT_PROPAGATE;
+}
+
+static void
 ide_workbench_finalize (GObject *object)
 {
   IdeWorkbench *self = (IdeWorkbench *)object;
 
   ide_clear_weak_pointer (&self->perspective);
   g_clear_object (&self->context);
+  g_clear_object (&self->cancellable);
 
   G_OBJECT_CLASS (ide_workbench_parent_class)->finalize (object);
-}
-
-static void
-ide_workbench_constructed (GObject *object)
-{
-  G_OBJECT_CLASS (ide_workbench_parent_class)->constructed (object);
-}
-
-static void
-ide_workbench_destroy (GtkWidget *widget)
-{
-  IdeWorkbench *self = (IdeWorkbench *)widget;
-
-  g_assert (IDE_IS_WORKBENCH (self));
-
-  GTK_WIDGET_CLASS (ide_workbench_parent_class)->destroy (widget);
 }
 
 static void
@@ -195,12 +230,11 @@ ide_workbench_class_init (IdeWorkbenchClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  object_class->constructed = ide_workbench_constructed;
   object_class->finalize = ide_workbench_finalize;
   object_class->get_property = ide_workbench_get_property;
   object_class->set_property = ide_workbench_set_property;
 
-  widget_class->destroy = ide_workbench_destroy;
+  widget_class->delete_event = ide_workbench_delete_event;
 
   properties [PROP_CONTEXT] =
     g_param_spec_object ("context",
@@ -251,6 +285,16 @@ ide_workbench_class_init (IdeWorkbenchClass *klass)
                                 G_CALLBACK (ide_workbench_set_visible_perspective_name),
                                 NULL, NULL, NULL,
                                 G_TYPE_NONE, 1, G_TYPE_STRING);
+
+  signals [UNLOAD] =
+    g_signal_new ("unload",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  0,
+                  NULL, NULL,
+                  NULL,
+                  G_TYPE_NONE,
+                  1, IDE_TYPE_CONTEXT);
 
   gtk_widget_class_set_css_name (widget_class, "workbench");
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/ui/ide-workbench.ui");
