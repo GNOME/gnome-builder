@@ -407,7 +407,7 @@ ide_layout_animation_cb (gpointer data)
   item->hiding = FALSE;
   item->reveal = gtk_adjustment_get_value (item->adjustment) == 0.0;
 
-  gtk_widget_queue_resize (GTK_WIDGET (self));
+  gtk_widget_queue_allocate (GTK_WIDGET (self));
 
   gtk_container_child_notify (GTK_CONTAINER (self), child, "reveal");
 }
@@ -462,7 +462,7 @@ ide_layout_child_set_position (IdeLayout *self,
 
   item->position = position;
 
-  gtk_widget_queue_resize (GTK_WIDGET (self));
+  gtk_widget_queue_allocate (GTK_WIDGET (self));
 
   gtk_container_child_notify (GTK_CONTAINER (self), child, "position");
 }
@@ -537,7 +537,7 @@ ide_layout_child_set_reveal (IdeLayout *self,
       gtk_container_child_notify (GTK_CONTAINER (self), item->widget, "reveal");
     }
 
-  gtk_widget_queue_resize (GTK_WIDGET (self));
+  gtk_widget_queue_allocate (GTK_WIDGET (self));
 }
 
 static void
@@ -668,7 +668,7 @@ ide_layout_create_adjustment (IdeLayout *self)
 
   g_signal_connect_object (adj,
                            "value-changed",
-                           G_CALLBACK (gtk_widget_queue_resize),
+                           G_CALLBACK (gtk_widget_queue_allocate),
                            self,
                            G_CONNECT_SWAPPED);
 
@@ -845,7 +845,7 @@ ide_layout_pan_cb (IdeLayout       *self,
 
   priv->drag_child->position = MAX (0, target_position);
 
-  gtk_widget_queue_resize (GTK_WIDGET (self));
+  gtk_widget_queue_allocate (GTK_WIDGET (self));
 }
 
 static GtkGesture *
