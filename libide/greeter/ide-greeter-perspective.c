@@ -409,6 +409,35 @@ ide_greeter_perspective_filter_row (GtkListBoxRow *row,
 }
 
 static void
+ide_greeter_perspective_open_project_cb (GObject      *object,
+                                         GAsyncResult *result,
+                                         gpointer      user_data)
+{
+  IdeWorkbench *workbench = (IdeWorkbench *)object;
+  g_autoptr(GError) error = NULL;
+
+  g_assert (IDE_IS_WORKBENCH (workbench));
+
+  if (!ide_workbench_open_project_finish (workbench, result, &error))
+    {
+      GtkWidget *dialog;
+
+      dialog = gtk_message_dialog_new (NULL,
+                                       GTK_DIALOG_USE_HEADER_BAR,
+                                       GTK_MESSAGE_ERROR,
+                                       GTK_BUTTONS_CLOSE,
+                                       _("Failed to load the project"));
+      g_object_set (dialog,
+                    "secondary-text", error->message,
+                    NULL);
+
+      gtk_dialog_run (GTK_DIALOG (dialog));
+      gtk_widget_destroy (dialog);
+      gtk_widget_destroy (GTK_WIDGET (workbench));
+    }
+}
+
+static void
 ide_greeter_perspective__row_activated (IdeGreeterPerspective *self,
                                         IdeGreeterProjectRow  *row,
                                         GtkListBox            *list_box)
@@ -441,7 +470,11 @@ ide_greeter_perspective__row_activated (IdeGreeterPerspective *self,
    */
 
   workbench = ide_widget_get_workbench (GTK_WIDGET (self));
-  ide_workbench_open_project_async (workbench, project_file, NULL, NULL, NULL);
+  ide_workbench_open_project_async (workbench,
+                                    project_file,
+                                    NULL,
+                                    ide_greeter_perspective_open_project_cb,
+                                    NULL);
 
   ide_project_info_set_is_recent (project_info, TRUE);
 }
