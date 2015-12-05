@@ -88,7 +88,7 @@ rg_graph_set_table (RgGraph *self,
   if (g_set_object (&priv->table, table))
     {
       egg_signal_group_set_target (priv->table_signals, table);
-      gtk_widget_queue_resize (GTK_WIDGET (self));
+      gtk_widget_queue_allocate (GTK_WIDGET (self));
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_TABLE]);
     }
 }
@@ -388,19 +388,19 @@ rg_graph_init (RgGraph *self)
 
   egg_signal_group_connect_object (priv->table_signals,
                                    "notify::value-max",
-                                   G_CALLBACK (gtk_widget_queue_resize),
+                                   G_CALLBACK (gtk_widget_queue_allocate),
                                    self,
                                    G_CONNECT_SWAPPED);
 
   egg_signal_group_connect_object (priv->table_signals,
                                    "notify::value-min",
-                                   G_CALLBACK (gtk_widget_queue_resize),
+                                   G_CALLBACK (gtk_widget_queue_allocate),
                                    self,
                                    G_CONNECT_SWAPPED);
 
   egg_signal_group_connect_object (priv->table_signals,
                                    "notify::timespan",
-                                   G_CALLBACK (gtk_widget_queue_resize),
+                                   G_CALLBACK (gtk_widget_queue_allocate),
                                    self,
                                    G_CONNECT_SWAPPED);
 
