@@ -230,9 +230,7 @@
         <attribute name="verb-icon">builder-move-right-symbolic</attribute>
       </item>
     </section>
-    <section id="ide-layout-stack-menu-preview-section">
-      <attribute name="label" translatable="yes">Preview</attribute>
-    </section>
+    <section id="ide-layout-stack-menu-preview-section"/>
     <section id="ide-layout-stack-menu-save-section">
       <item>
         <attribute name="label" translatable="yes">_Save</attribute>
