@@ -1,11 +1,10 @@
 [Plugin]
 Module=vala-pack-plugin
-Name=Vala Language Pack
-Description=Provides support for the Vala programming language.
+Name=Vala Langugae Pack
+Description=Provides an auto-indenter, auto-completion, diagnostics, and symbol resolver for Vala
 Authors=Christian Hergert <christian@hergert.me>
 Copyright=Copyright © 2015 Christian Hergert
 Builtin=true
-Hidden=true
 X-Completion-Provider-Languages=vala
 X-Diagnostic-Provider-Languages=vala
 X-Indenter-Languages=vala

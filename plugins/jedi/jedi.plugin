@@ -1,10 +1,9 @@
 [Plugin]
 Module=jedi_plugin
 Loader=python3
-Name=Jedi Auto-Completion
+Name=Python Auto-Completion (Jedi)
 Description=Provides autocompletion features for the Python programming language.
 Authors=Christian Hergert <christian@hergert.me>
 Copyright=Copyright © 2015 Christian Hergert
 Builtin=true
-Hidden=true
 X-Completion-Provider-Languages=python,python3
