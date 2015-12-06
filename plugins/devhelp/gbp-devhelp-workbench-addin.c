@@ -68,6 +68,7 @@ gbp_devhelp_workbench_addin_load (IdeWorkbenchAddin *addin,
   IdePerspective *perspective;
   GtkWidget *pane;
   GSimpleAction *action;
+  const gchar *focus_accel[] = { "<control><shift>f", NULL };
 
   g_assert (IDE_IS_WORKBENCH_ADDIN (self));
   g_assert (IDE_IS_WORKBENCH (workbench));
@@ -91,6 +92,9 @@ gbp_devhelp_workbench_addin_load (IdeWorkbenchAddin *addin,
   action = g_simple_action_new ("focus-devhelp-search", NULL);
   g_signal_connect_object (action, "activate", G_CALLBACK (focus_devhelp_search), self, 0);
   g_action_map_add_action (G_ACTION_MAP (workbench), G_ACTION (action));
+
+  gtk_application_set_accels_for_action (GTK_APPLICATION (IDE_APPLICATION_DEFAULT),
+                                         "win.focus-devhelp-search", focus_accel);
 }
 
 static void
@@ -115,6 +119,9 @@ gbp_devhelp_workbench_addin_unload (IdeWorkbenchAddin *addin,
   ide_layout_pane_remove_page (IDE_LAYOUT_PANE (pane), GTK_WIDGET (self->panel));
 
   g_action_map_remove_action (G_ACTION_MAP (workbench), "focus-devhelp-search");
+
+  gtk_application_set_accels_for_action (GTK_APPLICATION (IDE_APPLICATION_DEFAULT),
+                                         "win.focus-devhelp-search", NULL);
 }
 
 static void
