@@ -25,6 +25,7 @@
 struct _GbpDevhelpPanel
 {
   GtkBin         parent_instance;
+
   DhBookManager *books;
   DhSidebar     *sidebar;
 };
@@ -180,4 +181,16 @@ gbp_devhelp_panel_class_init (GbpDevhelpPanelClass *klass)
 static void
 gbp_devhelp_panel_init (GbpDevhelpPanel *self)
 {
+}
+
+void
+gbp_devhelp_panel_focus_search (GbpDevhelpPanel *self)
+{
+  IdeWorkbench *workbench;
+
+  g_return_if_fail (GBP_IS_DEVHELP_PANEL (self));
+
+  workbench = ide_widget_get_workbench (GTK_WIDGET (self));
+  ide_workbench_focus (workbench, GTK_WIDGET (self->sidebar));
+  dh_sidebar_set_search_focus (self->sidebar);
 }

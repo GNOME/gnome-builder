@@ -49,12 +49,25 @@ gbp_devhelp_workbench_addin_init (GbpDevhelpWorkbenchAddin *self)
 }
 
 static void
+focus_devhelp_search (GSimpleAction *action,
+                      GVariant      *param,
+                      gpointer       user_data)
+{
+  GbpDevhelpWorkbenchAddin *self = user_data;
+
+  g_assert (GBP_IS_DEVHELP_WORKBENCH_ADDIN (self));
+
+  gbp_devhelp_panel_focus_search (self->panel);
+}
+
+static void
 gbp_devhelp_workbench_addin_load (IdeWorkbenchAddin *addin,
                                   IdeWorkbench      *workbench)
 {
   GbpDevhelpWorkbenchAddin *self = (GbpDevhelpWorkbenchAddin *)addin;
   IdePerspective *perspective;
   GtkWidget *pane;
+  GSimpleAction *action;
 
   g_assert (IDE_IS_WORKBENCH_ADDIN (self));
   g_assert (IDE_IS_WORKBENCH (workbench));
@@ -74,6 +87,10 @@ gbp_devhelp_workbench_addin_load (IdeWorkbenchAddin *addin,
                               NULL);
   ide_layout_pane_add_page (IDE_LAYOUT_PANE (pane), GTK_WIDGET (self->panel),
                             _("Devhelp"), "devhelp-symbolic");
+
+  action = g_simple_action_new ("focus-devhelp-search", NULL);
+  g_signal_connect_object (action, "activate", G_CALLBACK (focus_devhelp_search), self, 0);
+  g_action_map_add_action (G_ACTION_MAP (workbench), G_ACTION (action));
 }
 
 static void
@@ -96,6 +113,8 @@ gbp_devhelp_workbench_addin_unload (IdeWorkbenchAddin *addin,
   g_assert (IDE_IS_LAYOUT_PANE (pane));
 
   ide_layout_pane_remove_page (IDE_LAYOUT_PANE (pane), GTK_WIDGET (self->panel));
+
+  g_action_map_remove_action (G_ACTION_MAP (workbench), "focus-devhelp-search");
 }
 
 static void

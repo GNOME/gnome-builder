@@ -27,8 +27,9 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (GbpDevhelpPanel, gbp_devhelp_panel, GBP, DEVHELP_PANEL, GtkBin)
 
-void gbp_devhelp_panel_set_uri (GbpDevhelpPanel *self,
-                                const gchar     *uri);
+void gbp_devhelp_panel_set_uri      (GbpDevhelpPanel *self,
+                                     const gchar     *uri);
+void gbp_devhelp_panel_focus_search (GbpDevhelpPanel *self);
 
 G_END_DECLS
 
