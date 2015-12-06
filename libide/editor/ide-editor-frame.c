@@ -25,6 +25,8 @@
 #include "ide-editor-map-bin.h"
 #include "ide-gtk.h"
 #include "ide-layout-stack.h"
+#include "ide-source-location.h"
+#include "ide-workbench.h"
 
 #define MINIMAP_HIDE_DURATION 1000
 #define MINIMAP_SHOW_DURATION 250
@@ -541,23 +543,17 @@ ide_editor_frame__source_view_focus_location (IdeEditorFrame    *self,
                                               IdeSourceLocation *location,
                                               IdeSourceView     *source_view)
 {
-  GtkWidget *toplevel;
+  IdeWorkbench *workbench;
+  IdePerspective *editor;
 
   g_assert (IDE_IS_EDITOR_FRAME (self));
   g_assert (location != NULL);
   g_assert (IDE_IS_SOURCE_VIEW (source_view));
 
-  toplevel = gtk_widget_get_ancestor (GTK_WIDGET (self), IDE_TYPE_WORKBENCH);
+  workbench = ide_widget_get_workbench (GTK_WIDGET (self));
+  editor = ide_workbench_get_perspective_by_name (workbench, "editor");
 
-  if (IDE_IS_WORKBENCH (toplevel))
-    {
-      /*
-       * Convert location to Uri and open.
-       */
-#if 0
-      ide_layout_stack_focus_location (IDE_LAYOUT_STACK (widget), location);
-#endif
-    }
+  ide_editor_perspective_focus_location (IDE_EDITOR_PERSPECTIVE (editor), location);
 }
 
 static void
