@@ -399,3 +399,61 @@ ide_perspective_iface_init (IdePerspectiveInterface *iface)
   iface->get_titlebar = ide_editor_perspective_get_titlebar;
   iface->views_foreach = ide_editor_perspective_views_foreach;
 }
+
+static void
+ide_editor_perspective_find_source_location (GtkWidget *widget,
+                                             gpointer   user_data)
+{
+  struct {
+    IdeFile       *file;
+    IdeEditorView *view;
+  } *lookup = user_data;
+  IdeBuffer *buffer;
+  IdeFile *file;
+
+  g_return_if_fail (IDE_IS_LAYOUT_VIEW (widget));
+
+  if (lookup->view != NULL)
+    return;
+
+  if (!IDE_IS_EDITOR_VIEW (widget))
+    return;
+
+  buffer = ide_editor_view_get_document (IDE_EDITOR_VIEW (widget));
+  file = ide_buffer_get_file (buffer);
+
+  if (ide_file_equal (file, lookup->file))
+    lookup->view = IDE_EDITOR_VIEW (widget);
+}
+
+void
+ide_editor_perspective_focus_location (IdeEditorPerspective *self,
+                                       IdeSourceLocation    *location)
+{
+  struct {
+    IdeFile       *file;
+    IdeEditorView *view;
+  } lookup = { 0 };
+  GtkWidget *stack;
+
+  g_return_if_fail (IDE_IS_EDITOR_PERSPECTIVE (self));
+  g_return_if_fail (location != NULL);
+
+  lookup.file = ide_source_location_get_file (location);
+  lookup.view = NULL;
+
+  ide_perspective_views_foreach (IDE_PERSPECTIVE (self),
+                                 ide_editor_perspective_find_source_location,
+                                 &lookup);
+
+  if (lookup.view == NULL)
+    {
+      /* TODO: create view */
+      return;
+    }
+
+  stack = gtk_widget_get_ancestor (GTK_WIDGET (lookup.view), IDE_TYPE_LAYOUT_STACK);
+  ide_layout_stack_set_active_view (IDE_LAYOUT_STACK (stack), GTK_WIDGET (lookup.view));
+  ide_layout_view_navigate_to (IDE_LAYOUT_VIEW (lookup.view), location);
+  gtk_widget_grab_focus (GTK_WIDGET (lookup.view));
+}

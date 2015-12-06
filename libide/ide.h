@@ -113,6 +113,7 @@ G_BEGIN_DECLS
 #include "ide-workbench.h"
 #include "ide-workbench-addin.h"
 
+#include "editor/ide-editor-perspective.h"
 #include "editor/ide-editor-view.h"
 #include "editor/ide-editor-view-addin.h"
 

@@ -23,12 +23,16 @@
 
 #include "ide-layout.h"
 #include "ide-perspective.h"
+#include "ide-source-location.h"
 
 G_BEGIN_DECLS
 
 #define IDE_TYPE_EDITOR_PERSPECTIVE (ide_editor_perspective_get_type())
 
 G_DECLARE_FINAL_TYPE (IdeEditorPerspective, ide_editor_perspective, IDE, EDITOR_PERSPECTIVE, IdeLayout)
+
+void ide_editor_perspective_focus_location (IdeEditorPerspective *self,
+                                            IdeSourceLocation    *location);
 
 G_END_DECLS
 
