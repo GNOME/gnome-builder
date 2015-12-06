@@ -79,7 +79,7 @@ ide_css_provider_update (IdeCssProvider *self)
 
   /* Nothing to load */
   if (!g_resources_get_info (resource_path, G_RESOURCE_LOOKUP_FLAGS_NONE, &len, &flags, NULL))
-    return;
+    IDE_EXIT;
 
   IDE_TRACE_MSG ("Loading css overrides \"%s\"", resource_path);
 
