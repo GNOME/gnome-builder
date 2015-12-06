@@ -81,11 +81,21 @@ gbp_devhelp_workbench_addin_unload (IdeWorkbenchAddin *addin,
                                     IdeWorkbench      *workbench)
 {
   GbpDevhelpWorkbenchAddin *self = (GbpDevhelpWorkbenchAddin *)addin;
+  IdePerspective *perspective;
+  GtkWidget *pane;
 
   g_assert (IDE_IS_WORKBENCH_ADDIN (self));
   g_assert (IDE_IS_WORKBENCH (workbench));
 
   g_clear_object (&self->books);
+
+  perspective = ide_workbench_get_perspective_by_name (workbench, "editor");
+  g_assert (IDE_IS_LAYOUT (perspective));
+
+  pane = ide_layout_get_right_pane (IDE_LAYOUT (perspective));
+  g_assert (IDE_IS_LAYOUT_PANE (pane));
+
+  ide_layout_pane_remove_page (IDE_LAYOUT_PANE (pane), GTK_WIDGET (self->panel));
 }
 
 static void
