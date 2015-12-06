@@ -22,6 +22,10 @@
 #include "ide-genesis-perspective.h"
 #include "ide-greeter-perspective.h"
 #include "ide-gtk.h"
+#include "ide-layout.h"
+#include "ide-layout-pane.h"
+#include "ide-layout-view.h"
+#include "ide-layout-stack.h"
 #include "ide-macros.h"
 #include "ide-preferences-perspective.h"
 #include "ide-window-settings.h"
@@ -662,4 +666,42 @@ ide_workbench_set_visible_perspective_name (IdeWorkbench *self,
   perspective = ide_workbench_get_perspective_by_name (self, name);
   if (perspective != NULL)
     ide_workbench_set_visible_perspective (self, perspective);
+}
+
+static void
+ide_workbench_show_parents (GtkWidget *widget)
+{
+  GtkWidget *parent;
+
+  g_assert (GTK_IS_WIDGET (widget));
+
+  parent = gtk_widget_get_parent (widget);
+
+  if (IDE_IS_LAYOUT_PANE (widget))
+    {
+      gtk_container_child_set (GTK_CONTAINER (parent), widget,
+                               "reveal", TRUE,
+                               NULL);
+    }
+
+  if (IDE_IS_PERSPECTIVE (widget))
+    ide_workbench_set_visible_perspective (ide_widget_get_workbench (widget),
+                                           IDE_PERSPECTIVE (widget));
+
+  if (GTK_IS_STACK (parent))
+    gtk_stack_set_visible_child (GTK_STACK (parent), widget);
+
+  if (parent != NULL)
+    ide_workbench_show_parents (parent);
+}
+
+void
+ide_workbench_focus (IdeWorkbench *self,
+                     GtkWidget    *widget)
+{
+  g_return_if_fail (IDE_IS_WORKBENCH (self));
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  ide_workbench_show_parents (widget);
+  gtk_widget_grab_focus (widget);
 }
