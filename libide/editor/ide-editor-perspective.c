@@ -166,6 +166,8 @@ ide_editor_perspective_load_buffer (IdeEditorPerspective *self,
   stack = ide_layout_grid_get_last_focus (self->grid);
 
   gtk_container_add (GTK_CONTAINER (stack), GTK_WIDGET (view));
+
+  gtk_widget_grab_focus (GTK_WIDGET (view));
 }
 
 static void
