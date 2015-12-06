@@ -215,7 +215,6 @@ open_after_timeout (gpointer user_data)
   IdeGitCloneWidget *self;
   IdeWorkbench *workbench;
   g_autoptr(GTask) task = user_data;
-  g_autoptr(GFile) file = NULL;
   g_autoptr(GError) error = NULL;
   CloneRequest *req;
 
@@ -285,7 +284,6 @@ ide_git_clone_widget_worker (GTask        *task,
 {
   IdeGitCloneWidget *self = source_object;
   GgitRepository *repository;
-  g_autoptr(GFile) workdir = NULL;
   CloneRequest *req = task_data;
   GgitCloneOptions *clone_options;
   GgitFetchOptions *fetch_options;
