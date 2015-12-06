@@ -4468,9 +4468,9 @@ ide_source_view_goto_definition_symbol_cb (GObject      *object,
                                            GAsyncResult *result,
                                            gpointer      user_data)
 {
-  IdeBuffer *buffer = (IdeBuffer *)object;
   g_autoptr(IdeSourceView) self = user_data;
   g_autoptr(IdeSymbol) symbol = NULL;
+  IdeBuffer *buffer = (IdeBuffer *)object;
   g_autoptr(GError) error = NULL;
   IdeSourceLocation *srcloc;
 
@@ -4489,16 +4489,33 @@ ide_source_view_goto_definition_symbol_cb (GObject      *object,
 
   if (srcloc != NULL)
     {
-#ifdef IDE_ENABLE_TRACE
       guint line = ide_source_location_get_line (srcloc);
       guint line_offset = ide_source_location_get_line_offset (srcloc);
       IdeFile *file = ide_source_location_get_file (srcloc);
+      IdeFile *our_file = ide_buffer_get_file (buffer);
+
+#ifdef IDE_ENABLE_TRACE
       const gchar *filename = ide_file_get_path (file);
 
       IDE_TRACE_MSG ("%s => %s +%u:%u",
                      ide_symbol_get_name (symbol),
                      filename, line+1, line_offset+1);
 #endif
+
+      /*
+       * If we are navigating within this file, just stay captive instead of
+       * potentially allowing jumping to the file in another editor.
+       */
+      if (ide_file_equal (file, our_file))
+        {
+          GtkTextIter iter;
+
+          gtk_text_buffer_get_iter_at_line_offset (GTK_TEXT_BUFFER (buffer),
+                                                   &iter, line, line_offset);
+          gtk_text_buffer_select_range (GTK_TEXT_BUFFER (buffer), &iter, &iter);
+          ide_source_view_scroll_to_insert (self);
+          return;
+        }
 
       g_signal_emit (self, signals [FOCUS_LOCATION], 0, srcloc);
     }
