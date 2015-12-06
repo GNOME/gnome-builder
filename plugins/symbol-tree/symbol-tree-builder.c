@@ -123,22 +123,16 @@ symbol_tree_builder_node_activated (IdeTreeBuilder *builder,
                                     IdeTreeNode    *node)
 {
   SymbolTreeBuilder *self = (SymbolTreeBuilder *)builder;
-#if 0
-  GtkWidget *workbench;
-  GtkWidget *view_grid;
-  GtkWidget *stack;
+  IdePerspective *editor;
+  IdeWorkbench *workbench;
   IdeTree *tree;
   GObject *item;
-#endif
 
   g_assert (SYMBOL_IS_TREE_BUILDER (self));
 
-#if 0
   tree = ide_tree_builder_get_tree (builder);
-  workbench = gtk_widget_get_ancestor (GTK_WIDGET (tree), IDE_TYPE_WORKBENCH);
-
-  view_grid = gb_workbench_get_view_grid (IDE_WORKBENCH (workbench));
-  stack = ide_layout_grid_get_last_focus (IDE_LAYOUT_GRID (view_grid));
+  workbench = ide_widget_get_workbench (GTK_WIDGET (tree));
+  editor = ide_workbench_get_perspective_by_name (workbench, "editor");
 
   item = ide_tree_node_get_item (node);
 
@@ -147,13 +141,13 @@ symbol_tree_builder_node_activated (IdeTreeBuilder *builder,
       g_autoptr(IdeSourceLocation) location = NULL;
 
       location = ide_symbol_node_get_location (IDE_SYMBOL_NODE (item));
+
       if (location != NULL)
         {
-          gb_view_stack_focus_location (IDE_LAYOUT_STACK (stack), location);
+          ide_editor_perspective_focus_location (IDE_EDITOR_PERSPECTIVE (editor), location);
           return TRUE;
         }
     }
-#endif
 
   g_warning ("IdeSymbolNode did not create a source location");
 
