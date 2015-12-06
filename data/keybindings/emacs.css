@@ -59,7 +59,6 @@
   bind "<alt>x" { "action" ("win", "show-command-bar", "") };
   bind "<ctrl>r" { "action" ("frame", "find", "2") };
   bind "<ctrl>s" { "action" ("frame", "find", "3") };
-  bind "<ctrl>period" { "action" ("perspective", "global-search", "") };
   bind "<alt>period" { "goto-definition" () };
   bind "<alt>n" { "move-error" (down) };
   bind "<alt>p" { "move-error" (up) };
@@ -125,7 +124,6 @@
   bind "<ctrl>f" { "action" ("win", "open-with-dialog", "") };
   bind "<ctrl>s" { "action" ("view", "save", "") };
   bind "s" { "action" ("win", "save-all", "") };
-  bind "b" { "action" ("perspective", "global-search", "") };
   bind "<ctrl>b" { "action" ("view-stack", "show-list", "") };
   bind "<ctrl>w" { "action" ("view", "save-as", "") };
   bind "u" { "redo" () };

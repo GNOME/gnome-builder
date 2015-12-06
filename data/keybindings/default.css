@@ -9,8 +9,6 @@
                   "clear-snippets" ()
                   "hide-completion" () };
   bind "<ctrl>f" { "action" ("frame", "find", "3") };
-  bind "<ctrl>period" { "action" ("perspective", "global-search", "") };
-  bind "<ctrl><alt>o" { "action" ("perspective", "global-search", "") };
   bind "<ctrl>n" { "action" ("workbench", "new-document", "") };
   bind "<ctrl>o" { "action" ("win", "open-with-dialog", "") };
   bind "<ctrl>s" { "action" ("view", "save", "") };

@@ -100,7 +100,6 @@
                    "hide-completion" ()
                    "set-mode" ("vim-normal", permanent) };
 
-  bind "<ctrl>period" { "action" ("perspective", "global-search", "") };
   bind "<ctrl>s" { "action" ("view", "save", "") };
   bind "<ctrl><shift>s" { "action" ("view", "save-as", "") };
   bind "<ctrl><shift>o" { "action" ("win", "open-with-dialog", "") };
