@@ -61,7 +61,6 @@
   bind "<ctrl>s" { "action" ("frame", "find", "3") };
   bind "<ctrl>period" { "action" ("perspective", "global-search", "") };
   bind "<alt>period" { "goto-definition" () };
-  bind "<ctrl>comma" { "action" ("app", "preferences", "") };
   bind "<alt>n" { "move-error" (down) };
   bind "<alt>p" { "move-error" (up) };
   bind "<ctrl>j" { "action" ("view-grid", "focus-neighbor", "3") };

@@ -268,6 +268,7 @@ ide_application_actions_init (IdeApplication *self)
   static const gchar *left[] = { "F9", NULL };
   static const gchar *right[] = { "<shift>F9", NULL };
   static const gchar *bottom[] = { "<control>F9", NULL };
+  static const gchar *preferences[] = { "<control>comma", NULL };
 
   g_action_map_add_action_entries (G_ACTION_MAP (self), IdeApplicationActions,
                                    G_N_ELEMENTS (IdeApplicationActions), self);
@@ -278,4 +279,5 @@ ide_application_actions_init (IdeApplication *self)
   gtk_application_set_accels_for_action (GTK_APPLICATION (self), "panels.left", left);
   gtk_application_set_accels_for_action (GTK_APPLICATION (self), "panels.right", right);
   gtk_application_set_accels_for_action (GTK_APPLICATION (self), "panels.bottom", bottom);
+  gtk_application_set_accels_for_action (GTK_APPLICATION (self), "app.preferences", preferences);
 }
