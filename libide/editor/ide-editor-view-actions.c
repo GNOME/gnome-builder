@@ -596,88 +596,6 @@ ide_editor_view_actions_reload_buffer (GSimpleAction *action,
 }
 
 static void
-ide_editor_view_actions_preview (GSimpleAction *action,
-                                 GVariant      *param,
-                                 gpointer       user_data)
-{
-#if 0
-  IdeEditorView *self = user_data;
-  GtkSourceLanguage *language;
-  const gchar *lang_id = NULL;
-  g_autoptr(GbDocument) document = NULL;
-
-  g_assert (IDE_IS_EDITOR_VIEW (self));
-
-  language = gtk_source_buffer_get_language (GTK_SOURCE_BUFFER (self->document));
-  if (!language)
-    return;
-
-  lang_id = gtk_source_language_get_id (language);
-  if (!lang_id)
-    return;
-
-  if (g_str_equal (lang_id, "html"))
-    {
-      document = g_object_new (GB_TYPE_HTML_DOCUMENT,
-                               "buffer", self->document,
-                               NULL);
-    }
-  else if (g_str_equal (lang_id, "markdown"))
-    {
-      document = g_object_new (GB_TYPE_HTML_DOCUMENT,
-                               "buffer", self->document,
-                               NULL);
-      gb_html_document_set_transform_func (GB_HTML_DOCUMENT (document),
-                                           gb_html_markdown_transform);
-    }
-
-  if (document)
-    {
-      GtkWidget *parent = gtk_widget_get_parent (GTK_WIDGET (self));
-
-      while (parent && !IDE_IS_LAYOUT_GRID (parent))
-        parent = gtk_widget_get_parent (parent);
-
-      if (parent == NULL)
-        {
-          while (parent && !IDE_IS_LAYOUT_STACK (parent))
-            parent = gtk_widget_get_parent (parent);
-          g_assert (IDE_IS_LAYOUT_STACK (parent));
-          ide_layout_stack_focus_document (IDE_LAYOUT_STACK (parent), document);
-          return;
-        }
-
-      g_assert (IDE_IS_LAYOUT_GRID (parent));
-      gb_view_grid_focus_document (IDE_LAYOUT_GRID (parent), document);
-    }
-#endif
-}
-
-static void
-ide_editor_view_actions_reveal (GSimpleAction *action,
-                                GVariant      *param,
-                                gpointer       user_data)
-{
-  IdeEditorView *self = user_data;
-#if 0
-  IdeWorkbench *workbench;
-  IdeFile *file;
-  GFile *gfile;
-#endif
-
-  g_assert (G_IS_SIMPLE_ACTION (action));
-  g_assert (IDE_IS_EDITOR_VIEW (self));
-
-#if 0
-  file = ide_buffer_get_file (IDE_BUFFER (self->document));
-  gfile = ide_file_get_file (file);
-  workbench = ide_widget_get_workbench (GTK_WIDGET (self));
-
-  gb_workbench_reveal_file (workbench, gfile);
-#endif
-}
-
-static void
 handle_print_result (IdeEditorView           *self,
                      GtkPrintOperation       *operation,
                      GtkPrintOperationResult  result)
@@ -755,9 +673,7 @@ static GActionEntry IdeEditorViewActions[] = {
   { "goto-line", ide_editor_view_actions_goto_line },
   { "highlight-current-line", NULL, NULL, "false", ide_editor_view_actions_highlight_current_line },
   { "language", NULL, "s", "''", ide_editor_view_actions_language },
-  { "preview", ide_editor_view_actions_preview },
   { "reload-buffer", ide_editor_view_actions_reload_buffer },
-  { "reveal", ide_editor_view_actions_reveal },
   { "save", ide_editor_view_actions_save },
   { "save-as", ide_editor_view_actions_save_as },
   { "print", ide_editor_view_actions_print },
