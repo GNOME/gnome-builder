@@ -111,7 +111,10 @@ gbp_devhelp_panel_constructed (GObject *object)
 
   entry = ide_widget_find_child_typed (GTK_WIDGET (self->sidebar), GTK_TYPE_ENTRY);
   if (entry != NULL)
-    g_object_set (entry, "margin", 0, NULL);
+    {
+      g_object_set (entry, "margin", 0, NULL);
+      gtk_container_set_border_width (GTK_CONTAINER (gtk_widget_get_parent (entry)), 0);
+    }
 
   gtk_container_add (GTK_CONTAINER (self), GTK_WIDGET (self->sidebar));
   gtk_widget_show (GTK_WIDGET (self->sidebar));
