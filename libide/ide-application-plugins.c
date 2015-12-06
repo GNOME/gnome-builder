@@ -110,6 +110,34 @@ ide_application_discover_plugins (IdeApplication *self)
     }
 }
 
+static void
+ide_application_plugins_enabled_changed (IdeApplication *self,
+                                         const gchar    *key,
+                                         GSettings      *settings)
+{
+  PeasPluginInfo *plugin_info;
+  PeasEngine *engine;
+  gboolean enabled;
+
+  g_assert (IDE_IS_APPLICATION (self));
+  g_assert (ide_str_equal0 (key, "enabled"));
+  g_assert (G_IS_SETTINGS (settings));
+
+  enabled = g_settings_get_boolean (settings, key);
+
+  engine = peas_engine_get_default ();
+
+  plugin_info = g_object_get_data (G_OBJECT (settings), "PEAS_PLUGIN_INFO");
+  g_assert (plugin_info != NULL);
+
+  if (enabled &&
+      ide_application_can_load_plugin (self, plugin_info) &&
+      !peas_plugin_info_is_loaded (plugin_info))
+    peas_engine_load_plugin (engine, plugin_info);
+  else if (!enabled && peas_plugin_info_is_loaded (plugin_info))
+    peas_engine_unload_plugin (engine, plugin_info);
+}
+
 void
 ide_application_load_plugins (IdeApplication *self)
 {
@@ -124,6 +152,24 @@ ide_application_load_plugins (IdeApplication *self)
   for (; list; list = list->next)
     {
       PeasPluginInfo *plugin_info = list->data;
+      GSettings *settings;
+      g_autofree gchar *path = NULL;
+      const gchar *module_name;
+
+      module_name = peas_plugin_info_get_module_name (plugin_info);
+      path = g_strdup_printf ("/org/gnome/builder/plugins/%s/", module_name);
+      settings = g_settings_new_with_path ("org.gnome.builder.plugin", path);
+
+      g_object_set_data (G_OBJECT (settings), "PEAS_PLUGIN_INFO", plugin_info);
+
+      g_signal_connect_object (settings,
+                               "changed::enabled",
+                               G_CALLBACK (ide_application_plugins_enabled_changed),
+                               self,
+                               G_CONNECT_SWAPPED);
+
+      if (!g_settings_get_boolean (settings, "enabled"))
+        continue;
 
       if (ide_application_can_load_plugin (self, plugin_info))
         {

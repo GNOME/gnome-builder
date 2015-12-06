@@ -53,10 +53,10 @@ ide_preferences_builtin_register_plugins (IdePreferences *preferences)
       name = peas_plugin_info_get_name (plugin_info);
       desc = peas_plugin_info_get_description (plugin_info);
 
-      path = g_strdup_printf ("/org/gnome/builder/extension-types/%s/",
+      path = g_strdup_printf ("/org/gnome/builder/plugins/%s/",
                               peas_plugin_info_get_module_name (plugin_info));
 
-      ide_preferences_add_switch (preferences, "plugins", "builtin", "org.gnome.builder.extension", "enabled", path, NULL, name, desc, NULL, i);
+      ide_preferences_add_switch (preferences, "plugins", "builtin", "org.gnome.builder.plugin", "enabled", path, NULL, name, desc, NULL, i);
     }
 }
 
