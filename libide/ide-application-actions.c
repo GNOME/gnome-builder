@@ -270,6 +270,7 @@ ide_application_actions_init (IdeApplication *self)
   static const gchar *bottom[] = { "<control>F9", NULL };
   static const gchar *preferences[] = { "<control>comma", NULL };
   static const gchar *global_search[] = { "<control>period", NULL };
+  static const gchar *new_file[] = { "<control>n", NULL };
 
   g_action_map_add_action_entries (G_ACTION_MAP (self), IdeApplicationActions,
                                    G_N_ELEMENTS (IdeApplicationActions), self);
@@ -282,4 +283,5 @@ ide_application_actions_init (IdeApplication *self)
   gtk_application_set_accels_for_action (GTK_APPLICATION (self), "panels.bottom", bottom);
   gtk_application_set_accels_for_action (GTK_APPLICATION (self), "app.preferences", preferences);
   gtk_application_set_accels_for_action (GTK_APPLICATION (self), "perspective.global-search", global_search);
+  gtk_application_set_accels_for_action (GTK_APPLICATION (self), "perspective.new-file", new_file);
 }
