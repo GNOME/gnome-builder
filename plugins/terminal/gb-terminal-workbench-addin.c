@@ -50,7 +50,7 @@ new_terminal_activate_cb (GSimpleAction            *action,
   g_assert (GB_IS_TERMINAL_WORKBENCH_ADDIN (self));
 
   perspective = ide_workbench_get_perspective_by_name (self->workbench, "editor");
-  g_assert (IDE_IS_LAYOUT (perspective));
+  ide_workbench_set_visible_perspective (self->workbench, perspective);
 
   view = g_object_new (GB_TYPE_TERMINAL_VIEW,
                        "visible", TRUE,
