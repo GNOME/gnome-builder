@@ -813,6 +813,8 @@ ide_layout_grid_class_init (IdeLayoutGridClass *klass)
   widget_class->grab_focus = ide_layout_grid_grab_focus;
   widget_class->hierarchy_changed = ide_layout_grid_hierarchy_changed;
   widget_class->size_allocate = ide_layout_grid_size_allocate;
+
+  gtk_widget_class_set_css_name (widget_class, "layoutgrid");
 }
 
 static void

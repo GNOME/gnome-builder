@@ -71,7 +71,7 @@ box.horizontal.search-bar:backdrop {
 
 
 workbench > GtkOverlay > stack > box > stackswitcher.vertical:first-child {
-  background: #313434;
+  background: #2e3436;
 }
 workbench > GtkOverlay > stack > box > stackswitcher.vertical:first-child button {
   padding: 8px 10px 8px 10px;
@@ -86,6 +86,137 @@ workbench > GtkOverlay > stack > box > stackswitcher.vertical:first-child button
 }
 
 
+
 omnisearchrow {
   color: #eeeeec;
+}
+
+
+
+
+layouttabbar {
+  background-image: none;
+  background-color: #2e3436;
+  border-style: none;
+  border-radius: 0px;
+  border-bottom: 1px solid #1c1f1f;
+  color: #2e3436;
+  box-shadow: 0px 5px 5px -10px #101010 inset;
+}
+
+layouttabbar button {
+  background-image: none;
+  background-color: transparent;
+  color: #585858;
+  border-style: none;
+  border-radius: 0px;
+  box-shadow: none;
+  padding: 9px;
+}
+
+layouttabbar > box > button:hover {
+  color: #eeeeec;
+}
+
+layouttab {
+  background-image: none;
+  background-color: transparent;
+  border-style: none;
+  border-radius: 0 0 3px 3px;
+  border-bottom: 1px solid @borders;
+  color: #c8c8c8;
+}
+
+layoutstack.focused layouttab {
+  background-color: #343939;
+  border-bottom: 3px solid #215d9c;
+  border-left: 1px solid #282b2b;
+  border-right: 1px solid #282b2b;
+  box-shadow: 0px 5px 5px -10px #101010 inset;
+}
+
+layouttab button {
+  background-image: none;
+  background-color: transparent;
+  color: #6c6f6e;
+  border-style: none;
+  border-radius: 0px;
+  box-shadow: none;
+}
+
+layouttab label {
+  color: #eeeeec;
+  font-size: 0.9em;
+  text-shadow: 0 1px #101010;
+}
+
+layouttab label:hover {
+  color: black;
+}
+
+layouttab label:backdrop {
+  text-shadow: none;
+}
+
+layouttab separator {
+  color: transparent;
+}
+
+layoutstack.focused layouttab separator {
+  color: #484848;
+}
+
+layouttab:backdrop, layouttabbar:backdrop {
+  box-shadow: none;
+}
+
+layoutstack.empty layouttab,
+layoutstack.empty layouttab button,
+layoutstack.empty layouttab separator {
+  color: transparent;
+  background-color: transparent;
+}
+
+layoutstack layouttab button.close {
+  border-style: solid;
+  border-radius: 5px;
+  border-width: 1px;
+  border-color: transparent;
+  color: #acadae;
+  padding: 1px;
+  margin: 0px;
+}
+
+layoutstack layouttab button.close:hover {
+  border-color: #1c1f1f;
+  color: #eeeeec;
+}
+
+layoutstack layouttab button.close:active {
+  border-color: #1c1f1f;
+  color: #eeeeec;
+  background-image: linear-gradient(#2e3436, #2d3232);
+}
+
+.views-list row {
+  padding: 6px;
+}
+
+.views-list row button {
+  box-shadow: none;
+  padding: 0px;
+  border-style: none;
+  border-width: 0px;
+  background-image: none;
+  background-color: transparent;
+  color: #acadae;
+  opacity: 0.0;
+}
+
+.views-list row:selected button {
+  color: white;
+}
+
+.views-list row:hover button {
+  opacity: 1.0;
 }

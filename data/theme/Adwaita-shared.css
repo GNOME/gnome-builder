@@ -9,78 +9,6 @@ GbEditorTweakWidget GtkScrolledWindow {
 }
 
 
-/*
- * View stack styling.
- */
-layoutstack > box.vertical > box.header.notebook {
-  background-color: shade (@theme_bg_color, 0.95);
-  border-bottom: 1px solid @borders;
-}
-layoutstack.focused > box.vertical > box.header.notebook,
-layoutstack.backdrop.focused > box.vetical > box.header.notebook {
-    background-color: shade (@theme_bg_color, 0.90);
-}
-layoutpane.focused > box.vertical > box.horizontal.notebook.header,
-layoutpane.focused > box.vertical > box.horizontal.notebook.header.backdrop {
-    background-color: shade (@theme_bg_color, 0.90);
-}
-layoutstack > box.vertical > box.header.notebook.horizontal > GtkEventBox > box.horizontal > button,
-layoutstack > box.vertical > box.header.notebook.horizontal > GtkEventBox > box.horizontal > box > box > button {
-  background-image: none;
-  border-bottom: 1px solid transparent;
-  border-radius: 0px;
-  border: 1px solid transparent;
-  box-shadow: 0px 0px 0px;
-  margin: 0px;
-  opacity: 0.55;
-  padding: 3px 8px 4px;
-}
-layoutstack > box.vertical > box.header.notebook.horizontal > GtkEventBox > box.horizontal > box.navigation > button {
-  background-image: none;
-  border-bottom: 1px solid transparent;
-  border-radius: 0px;
-  border: 1px solid transparent;
-  box-shadow: 0px 0px 0px;
-  margin: 0px;
-  opacity: 0.55;
-  padding: 6px 4px;
-}
-layoutpane > box.vertical > box.notebook.header > stackswitcher > button {
-  background-image: none;
-  border-bottom: 1px solid transparent;
-  border-radius: 0px;
-  border: 1px solid transparent;
-  box-shadow: 0px 0px 0px;
-  margin: 0px;
-  opacity: 0.55;
-  padding: 3px 0px 3px;
-}
-layoutpane > box.vertical > box.horizontal.notebook.header > stackswitcher button:checked,
-layoutstack > box.vertical > box.header.notebook.horizontal > GtkEventBox > box.horizontal > box > box > button:checked,
-layoutstack > box.vertical > box.header.notebook.horizontal > GtkEventBox > box.horizontal > button:checked {
-  box-shadow: 0px 2px 0px @theme_fg_color;
-  color: @theme_fg_color;
-}
-layoutpane > box.vertical > box.notebook.header.horizontal > stackswitcher > button:hover,
-layoutstack > box.vertical > box.header.notebook.horizontal > GtkEventBox > box.horizontal > box.navigation > button:hover,
-layoutstack > box.vertical > box.header.notebook.horizontal > GtkEventBox > box.horizontal > button:hover,
-layoutstack > box.vertical > box.header.notebook.horizontal > GtkEventBox > box.horizontal > box > box > button:hover {
-  border: 1px solid transparent;
-  box-shadow: 0px 2px 0px mix(@theme_fg_color, @theme_bg_color, 0.25);
-}
-layoutstack > box.vertical > box.header.notebook > GtkEventBox > box.horizontal > box.navigation > button {
-  padding-left: 4px;
-  padding-right: 4px;
-}
-layoutstack > box.vertical > box.header.notebook.horizontal > GtkEventBox > box.horizontal > button.document-button {
-  padding: 0px;
-}
-layoutstack > box.vertical > box.header.notebook.horizontal > GtkEventBox > box.horizontal > button.document-button > box > GtkArrow {
-  opacity: 0.35;
-  padding-right: 0px;
-  margin-right: 0px;
-}
-
 
 /* FileChooserButton|Entry */
 box.linked-on-right button {
@@ -93,6 +21,7 @@ box.linked-on-right button {
 /*
  * layout pane header styling.
  */
+/*
 layoutpane box.header.notebook {
   border-bottom: 1px solid @borders;
 }
@@ -115,6 +44,7 @@ layoutpane stackswitcher button:checked {
 layoutpane layoutstack box.header.notebook GtkSeparator.vertical {
   opacity: 0.75;
 }
+*/
 
 
 /*

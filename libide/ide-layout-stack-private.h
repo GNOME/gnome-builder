@@ -23,6 +23,7 @@
 
 #include "ide-context.h"
 #include "ide-back-forward-list.h"
+#include "ide-layout-tab-bar.h"
 
 G_BEGIN_DECLS
 
@@ -30,6 +31,7 @@ struct _IdeLayoutStack
 {
   GtkBin              parent_instance;
 
+  GSimpleActionGroup *actions;
   GList              *focus_history;
   IdeBackForwardList *back_forward_list;
   GtkGesture         *swipe_gesture;
@@ -37,22 +39,10 @@ struct _IdeLayoutStack
   /* Weak references */
   GtkWidget          *active_view;
   IdeContext         *context;
-  GBinding           *modified_binding;
-  GBinding           *title_binding;
 
   /* Template references */
-  GtkBox             *controls;
-  GtkButton          *close_button;
-  GtkMenuButton      *document_button;
-  GtkButton          *go_backward;
-  GtkButton          *go_forward;
-  GtkEventBox        *header_event_box;
-  GtkLabel           *modified_label;
   GtkStack           *stack;
-  GtkLabel           *title_label;
-  GtkListBox         *views_button;
-  GtkListBox         *views_listbox;
-  GtkPopover         *views_popover;
+  IdeLayoutTabBar    *tab_bar;
 
   guint               destroyed : 1;
   guint               focused : 1;

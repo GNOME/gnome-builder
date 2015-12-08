@@ -105,8 +105,8 @@
               <object class="GtkSeparator">
                 <property name="margin-start">3</property>
                 <property name="margin-end">3</property>
-                <property name="margin-top">4</property>
-                <property name="margin-bottom">4</property>
+                <property name="margin-top">10</property>
+                <property name="margin-bottom">10</property>
                 <property name="orientation">vertical</property>
                 <property name="visible">true</property>
               </object>
@@ -116,11 +116,6 @@
                 <property name="popover">goto_line_popover</property>
                 <property name="focus-on-click">false</property>
                 <property name="visible">true</property>
-                <style>
-                  <class name="dim-label"/>
-                  <class name="text-button"/>
-                  <class name="flat"/>
-                </style>
                 <child>
                   <object class="GtkLabel" id="cursor_label">
                     <property name="label">1:1</property>
@@ -134,8 +129,8 @@
               <object class="GtkSeparator">
                 <property name="margin-start">3</property>
                 <property name="margin-end">3</property>
-                <property name="margin-top">4</property>
-                <property name="margin-bottom">4</property>
+                <property name="margin-top">10</property>
+                <property name="margin-bottom">10</property>
                 <property name="orientation">vertical</property>
                 <property name="visible">true</property>
               </object>
@@ -143,13 +138,8 @@
             <child>
               <object class="GtkMenuButton" id="tweak_button">
                 <property name="focus-on-click">false</property>
-                <property name="popover">popover</property>
+                <property name="popover">tweak_popover</property>
                 <property name="visible">true</property>
-                <style>
-                  <class name="dim-label"/>
-                  <class name="text-button"/>
-                  <class name="flat"/>
-                </style>
               </object>
             </child>
           </object>
@@ -157,7 +147,7 @@
       </object>
     </child>
   </template>
-  <object class="GtkPopover" id="popover">
+  <object class="GtkPopover" id="tweak_popover">
     <child>
       <object class="IdeEditorTweakWidget" id="tweak_widget">
         <property name="border-width">12</property>
@@ -166,7 +156,6 @@
     </child>
   </object>
   <object class="EggSimplePopover" id="goto_line_popover">
-    <property name="visible">true</property>
     <property name="title" translatable="yes">Go to Line</property>
     <property name="button-text" translatable="yes">Go</property>
   </object>

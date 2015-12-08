@@ -48,6 +48,8 @@
     <file alias="ide-greeter-perspective.ui">../../data/ui/ide-greeter-perspective.ui</file>
     <file alias="ide-greeter-project-row.ui">../../data/ui/ide-greeter-project-row.ui</file>
     <file alias="ide-layout.ui">../../data/ui/ide-layout.ui</file>
+    <file alias="ide-layout-tab.ui">../../data/ui/ide-layout-tab.ui</file>
+    <file alias="ide-layout-tab-bar.ui">../../data/ui/ide-layout-tab-bar.ui</file>
     <file alias="ide-layout-pane.ui">../../data/ui/ide-layout-pane.ui</file>
     <file alias="ide-layout-stack.ui">../../data/ui/ide-layout-stack.ui</file>
     <file alias="ide-omni-search-group.ui">../../data/ui/ide-omni-search-group.ui</file>

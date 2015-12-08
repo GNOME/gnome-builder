@@ -31,6 +31,7 @@
 #include "ide-layout-stack-actions.h"
 #include "ide-layout-stack-private.h"
 #include "ide-layout-stack-split.h"
+#include "ide-layout-tab-bar.h"
 #include "ide-workbench.h"
 
 G_DEFINE_TYPE (IdeLayoutStack, ide_layout_stack, GTK_TYPE_BIN)
@@ -50,108 +51,6 @@ enum {
 static GParamSpec *properties [LAST_PROP];
 static guint       signals [LAST_SIGNAL];
 
-static void
-ide_layout_stack_add_list_row (IdeLayoutStack *self,
-                               IdeLayoutView  *child)
-{
-  GtkWidget *row;
-  GtkWidget *label;
-  GtkWidget *box;
-
-  g_assert (IDE_IS_LAYOUT_STACK (self));
-  g_assert (IDE_IS_LAYOUT_VIEW (child));
-
-  row = g_object_new (GTK_TYPE_LIST_BOX_ROW,
-                      "visible", TRUE,
-                      NULL);
-  g_object_set_data (G_OBJECT (row), "IDE_LAYOUT_VIEW", child);
-
-  box = g_object_new (GTK_TYPE_BOX,
-                      "orientation", GTK_ORIENTATION_HORIZONTAL,
-                      "visible", TRUE,
-                      NULL);
-  gtk_container_add (GTK_CONTAINER (row), box);
-
-  label = g_object_new (GTK_TYPE_LABEL,
-                        "margin-bottom", 3,
-                        "margin-end", 6,
-                        "margin-start", 6,
-                        "margin-top", 3,
-                        "visible", TRUE,
-                        "xalign", 0.0f,
-                        NULL);
-  g_object_bind_property (child, "title", label, "label", G_BINDING_SYNC_CREATE);
-  gtk_container_add (GTK_CONTAINER (box), label);
-
-  label = g_object_new (GTK_TYPE_LABEL,
-                        "visible", FALSE,
-                        "label", "•",
-                        "margin-start", 3,
-                        "margin-end", 3,
-                        NULL);
-  g_object_bind_property (child, "modified", label, "visible", G_BINDING_SYNC_CREATE);
-  gtk_container_add (GTK_CONTAINER (box), label);
-
-  gtk_container_add (GTK_CONTAINER (self->views_listbox), row);
-}
-
-static void
-ide_layout_stack_remove_list_row (IdeLayoutStack *self,
-                                  IdeLayoutView  *child)
-{
-  GList *children;
-  GList *iter;
-
-  g_assert (IDE_IS_LAYOUT_STACK (self));
-  g_assert (IDE_IS_LAYOUT_VIEW (child));
-
-  children = gtk_container_get_children (GTK_CONTAINER (self->views_listbox));
-
-  for (iter = children; iter; iter = iter->next)
-    {
-      IdeLayoutView *view = g_object_get_data (iter->data, "IDE_LAYOUT_VIEW");
-
-      if (view == child)
-        {
-          gtk_container_remove (GTK_CONTAINER (self->views_listbox), iter->data);
-          break;
-        }
-    }
-
-  g_list_free (children);
-}
-
-static void
-ide_layout_stack_move_top_list_row (IdeLayoutStack *self,
-                                    IdeLayoutView  *view)
-{
-  GList *children;
-  GList *iter;
-
-  g_assert (IDE_IS_LAYOUT_STACK (self));
-  g_assert (IDE_IS_LAYOUT_VIEW (view));
-
-  children = gtk_container_get_children (GTK_CONTAINER (self->views_listbox));
-
-  for (iter = children; iter; iter = iter->next)
-    {
-      GtkWidget *row = iter->data;
-      IdeLayoutView *item = g_object_get_data (G_OBJECT (row), "IDE_LAYOUT_VIEW");
-
-      if (item == view)
-        {
-          g_object_ref (row);
-          gtk_container_remove (GTK_CONTAINER (self->views_listbox), row);
-          gtk_list_box_prepend (self->views_listbox, row);
-          gtk_list_box_select_row (self->views_listbox, GTK_LIST_BOX_ROW (row));
-          g_object_unref (row);
-          break;
-        }
-    }
-
-  g_list_free (children);
-}
-
 void
 ide_layout_stack_add (GtkContainer *container,
                       GtkWidget    *child)
@@ -162,15 +61,15 @@ ide_layout_stack_add (GtkContainer *container,
 
   if (IDE_IS_LAYOUT_VIEW (child))
     {
-      gtk_widget_set_sensitive (GTK_WIDGET (self->close_button), TRUE);
-      gtk_widget_set_sensitive (GTK_WIDGET (self->document_button), TRUE);
-      gtk_widget_set_sensitive (GTK_WIDGET (self->views_button), TRUE);
+      GtkStyleContext *context;
 
       self->focus_history = g_list_prepend (self->focus_history, child);
       gtk_container_add (GTK_CONTAINER (self->stack), child);
       ide_layout_view_set_back_forward_list (IDE_LAYOUT_VIEW (child), self->back_forward_list);
-      ide_layout_stack_add_list_row (self, IDE_LAYOUT_VIEW (child));
       gtk_stack_set_visible_child (self->stack, child);
+
+      context = gtk_widget_get_style_context (GTK_WIDGET (self));
+      gtk_style_context_remove_class (context, "empty");
     }
   else
     {
@@ -182,7 +81,6 @@ void
 ide_layout_stack_remove (IdeLayoutStack *self,
                          GtkWidget      *view)
 {
-  GtkWidget *controls;
   GtkWidget *focus_after_close = NULL;
 
   g_return_if_fail (IDE_IS_LAYOUT_STACK (self));
@@ -192,12 +90,7 @@ ide_layout_stack_remove (IdeLayoutStack *self,
   if (focus_after_close != NULL)
     g_object_ref (focus_after_close);
 
-  ide_layout_stack_remove_list_row (self, IDE_LAYOUT_VIEW (view));
-
   self->focus_history = g_list_remove (self->focus_history, view);
-  controls = ide_layout_view_get_controls (IDE_LAYOUT_VIEW (view));
-  if (controls)
-    gtk_container_remove (GTK_CONTAINER (self->controls), controls);
   gtk_container_remove (GTK_CONTAINER (self->stack), view);
 
   if (focus_after_close != NULL)
@@ -207,7 +100,14 @@ ide_layout_stack_remove (IdeLayoutStack *self,
       g_clear_object (&focus_after_close);
     }
   else
-    g_signal_emit (self, signals [EMPTY], 0);
+    {
+      GtkStyleContext *context;
+
+      context = gtk_widget_get_style_context (GTK_WIDGET (self));
+      gtk_style_context_add_class (context, "empty");
+
+      g_signal_emit (self, signals [EMPTY], 0);
+    }
 }
 
 static void
@@ -252,29 +152,6 @@ ide_layout_stack_grab_focus (GtkWidget *widget)
     gtk_widget_grab_focus (visible_child);
 }
 
-static gboolean
-ide_layout_stack_is_empty (IdeLayoutStack *self)
-{
-  g_return_val_if_fail (IDE_IS_LAYOUT_STACK (self), FALSE);
-
-  return (self->focus_history == NULL);
-}
-
-static void
-ide_layout_stack_real_empty (IdeLayoutStack *self)
-{
-  g_assert (IDE_IS_LAYOUT_STACK (self));
-
-  /* its possible for a widget to be added during "empty" emission. */
-  if (ide_layout_stack_is_empty (self) && !self->destroyed)
-    {
-      gtk_widget_set_sensitive (GTK_WIDGET (self->close_button), FALSE);
-      gtk_widget_set_sensitive (GTK_WIDGET (self->document_button), FALSE);
-      gtk_widget_set_visible (GTK_WIDGET (self->modified_label), FALSE);
-      gtk_widget_set_sensitive (GTK_WIDGET (self->views_button), FALSE);
-    }
-}
-
 #if 0
 static void
 navigate_to_cb (IdeLayoutStack     *self,
@@ -304,6 +181,7 @@ ide_layout_stack_context_handler (GtkWidget  *widget,
 
   if (context)
     {
+      GAction *action;
       GList *children;
       GList *iter;
 
@@ -325,12 +203,13 @@ ide_layout_stack_context_handler (GtkWidget  *widget,
                                G_CONNECT_SWAPPED);
 #endif
 
+      action = g_action_map_lookup_action (G_ACTION_MAP (self->actions), "go-backward");
       g_object_bind_property (self->back_forward_list, "can-go-backward",
-                              self->go_backward, "sensitive",
-                              G_BINDING_SYNC_CREATE);
+                              action, "enabled", G_BINDING_SYNC_CREATE);
+
+      action = g_action_map_lookup_action (G_ACTION_MAP (self->actions), "go-forward");
       g_object_bind_property (self->back_forward_list, "can-go-forward",
-                              self->go_forward, "sensitive",
-                              G_BINDING_SYNC_CREATE);
+                              action, "enabled", G_BINDING_SYNC_CREATE);
 
       children = gtk_container_get_children (GTK_CONTAINER (self->stack));
       for (iter = children; iter; iter = iter->next)
@@ -385,27 +264,6 @@ ide_layout_stack_hierarchy_changed (GtkWidget *widget,
 }
 
 static void
-ide_layout_stack__views_listbox__row_activated_cb (IdeLayoutStack *self,
-                                                   GtkListBoxRow  *row,
-                                                   GtkListBox     *list_box)
-{
-  IdeLayoutView *view;
-
-  g_assert (IDE_IS_LAYOUT_STACK (self));
-  g_assert (GTK_IS_LIST_BOX_ROW (row));
-  g_assert (GTK_IS_LIST_BOX (list_box));
-
-  view = g_object_get_data (G_OBJECT (row), "IDE_LAYOUT_VIEW");
-
-  if (IDE_IS_LAYOUT_VIEW (view))
-    {
-      gtk_widget_hide (GTK_WIDGET (self->views_popover));
-      ide_layout_stack_set_active_view (self, GTK_WIDGET (view));
-      gtk_widget_grab_focus (GTK_WIDGET (view));
-    }
-}
-
-static void
 ide_layout_stack_swipe (IdeLayoutStack  *self,
                         gdouble          velocity_x,
                         gdouble          velocity_y,
@@ -424,13 +282,13 @@ ide_layout_stack_swipe (IdeLayoutStack  *self,
 }
 
 static gboolean
-ide_layout_stack__header__button_press (IdeLayoutStack *self,
-                                        GdkEventButton *button,
-                                        GtkEventBox    *event_box)
+ide_layout_stack__tab_bar__button_press (IdeLayoutStack  *self,
+                                         GdkEventButton  *button,
+                                         IdeLayoutTabBar *tab_bar)
 {
   g_assert (IDE_IS_LAYOUT_STACK (self));
   g_assert (button != NULL);
-  g_assert (GTK_IS_EVENT_BOX (event_box));
+  g_assert (GTK_IS_EVENT_BOX (tab_bar));
 
   if (button->button == GDK_BUTTON_PRIMARY)
     {
@@ -455,36 +313,16 @@ static void
 ide_layout_stack_constructed (GObject *object)
 {
   IdeLayoutStack *self = (IdeLayoutStack *)object;
-  GtkPopover *popover;
-  GMenu *menu;
 
   G_OBJECT_CLASS (ide_layout_stack_parent_class)->constructed (object);
 
-  g_signal_connect_object (self->views_listbox,
-                           "row-activated",
-                           G_CALLBACK (ide_layout_stack__views_listbox__row_activated_cb),
-                           self,
-                           G_CONNECT_SWAPPED);
-
-  g_signal_connect_object (self->header_event_box,
+  g_signal_connect_object (self->tab_bar,
                            "button-press-event",
-                           G_CALLBACK (ide_layout_stack__header__button_press),
+                           G_CALLBACK (ide_layout_stack__tab_bar__button_press),
                            self,
                            G_CONNECT_SWAPPED);
 
   _ide_layout_stack_actions_init (self);
-
-  menu = ide_application_get_menu_by_id (IDE_APPLICATION_DEFAULT, "ide-layout-stack-menu");
-  popover = g_object_new (GTK_TYPE_POPOVER, NULL);
-  gtk_popover_bind_model (popover, G_MENU_MODEL (menu), NULL);
-  gtk_menu_button_set_popover (self->document_button, GTK_WIDGET (popover));
-
-  /*
-   * Disable things until children have been added.
-   */
-  gtk_widget_set_sensitive (GTK_WIDGET (self->close_button), FALSE);
-  gtk_widget_set_sensitive (GTK_WIDGET (self->views_button), FALSE);
-  gtk_widget_set_sensitive (GTK_WIDGET (self->document_button), FALSE);
 }
 
 static void
@@ -494,10 +332,10 @@ ide_layout_stack_finalize (GObject *object)
 
   g_clear_pointer (&self->focus_history, g_list_free);
   ide_clear_weak_pointer (&self->context);
-  ide_clear_weak_pointer (&self->title_binding);
   ide_clear_weak_pointer (&self->active_view);
   g_clear_object (&self->back_forward_list);
   g_clear_object (&self->swipe_gesture);
+  g_clear_object (&self->actions);
 
   G_OBJECT_CLASS (ide_layout_stack_parent_class)->finalize (object);
 }
@@ -572,7 +410,7 @@ ide_layout_stack_class_init (IdeLayoutStackClass *klass)
     g_signal_new_class_handler ("empty",
                                 G_TYPE_FROM_CLASS (klass),
                                 G_SIGNAL_RUN_LAST,
-                                G_CALLBACK (ide_layout_stack_real_empty),
+                                NULL,
                                 NULL, NULL, NULL,
                                 G_TYPE_NONE,
                                 0);
@@ -599,24 +437,21 @@ ide_layout_stack_class_init (IdeLayoutStackClass *klass)
 
   gtk_widget_class_set_css_name (widget_class, "layoutstack");
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/ui/ide-layout-stack.ui");
-  gtk_widget_class_bind_template_child (widget_class, IdeLayoutStack, close_button);
-  gtk_widget_class_bind_template_child (widget_class, IdeLayoutStack, controls);
-  gtk_widget_class_bind_template_child (widget_class, IdeLayoutStack, document_button);
-  gtk_widget_class_bind_template_child (widget_class, IdeLayoutStack, go_backward);
-  gtk_widget_class_bind_template_child (widget_class, IdeLayoutStack, go_forward);
-  gtk_widget_class_bind_template_child (widget_class, IdeLayoutStack, header_event_box);
-  gtk_widget_class_bind_template_child (widget_class, IdeLayoutStack, modified_label);
   gtk_widget_class_bind_template_child (widget_class, IdeLayoutStack, stack);
-  gtk_widget_class_bind_template_child (widget_class, IdeLayoutStack, title_label);
-  gtk_widget_class_bind_template_child (widget_class, IdeLayoutStack, views_button);
-  gtk_widget_class_bind_template_child (widget_class, IdeLayoutStack, views_listbox);
-  gtk_widget_class_bind_template_child (widget_class, IdeLayoutStack, views_popover);
+  gtk_widget_class_bind_template_child (widget_class, IdeLayoutStack, tab_bar);
+
+  g_type_ensure (IDE_TYPE_LAYOUT_TAB_BAR);
 }
 
 static void
 ide_layout_stack_init (IdeLayoutStack *self)
 {
+  GtkStyleContext *context;
+
   gtk_widget_init_template (GTK_WIDGET (self));
+
+  context = gtk_widget_get_style_context (GTK_WIDGET (self));
+  gtk_style_context_add_class (context, "empty");
 
   g_signal_connect_object (self->stack,
                            "notify::visible-child",
@@ -666,68 +501,24 @@ ide_layout_stack_set_active_view (IdeLayoutStack *self,
 
   if (self->active_view != active_view)
     {
-      if (self->active_view)
-        {
-          if (self->title_binding)
-            g_binding_unbind (self->title_binding);
-          ide_clear_weak_pointer (&self->title_binding);
-          if (self->modified_binding)
-            g_binding_unbind (self->modified_binding);
-          ide_clear_weak_pointer (&self->modified_binding);
-          gtk_label_set_label (self->title_label, NULL);
-          ide_clear_weak_pointer (&self->active_view);
-          gtk_widget_hide (GTK_WIDGET (self->controls));
-        }
+      gtk_widget_insert_action_group (GTK_WIDGET (self), "view", NULL);
 
-      if (active_view)
+      if (ide_set_weak_pointer (&self->active_view, active_view))
         {
-          GtkWidget *controls;
-          GBinding *binding;
           GActionGroup *group;
 
-          ide_set_weak_pointer (&self->active_view, active_view);
           if (active_view != gtk_stack_get_visible_child (self->stack))
             gtk_stack_set_visible_child (self->stack, active_view);
 
           self->focus_history = g_list_remove (self->focus_history, active_view);
           self->focus_history = g_list_prepend (self->focus_history, active_view);
 
-          binding = g_object_bind_property (active_view, "special-title",
-                                            self->title_label, "label",
-                                            G_BINDING_DEFAULT | G_BINDING_SYNC_CREATE);
-          ide_set_weak_pointer (&self->title_binding, binding);
-
-          binding = g_object_bind_property (active_view, "modified",
-                                            self->modified_label, "visible",
-                                            G_BINDING_SYNC_CREATE);
-          ide_set_weak_pointer (&self->modified_binding, binding);
-
-          controls = ide_layout_view_get_controls (IDE_LAYOUT_VIEW (active_view));
-
-          if (controls != NULL)
-            {
-              GList *children;
-              GList *iter;
-
-              children = gtk_container_get_children (GTK_CONTAINER (self->controls));
-              for (iter = children; iter; iter = iter->next)
-                gtk_container_remove (GTK_CONTAINER (self->controls), iter->data);
-              g_list_free (children);
-
-              gtk_container_add (GTK_CONTAINER (self->controls), controls);
-              gtk_widget_show (GTK_WIDGET (self->controls));
-            }
-          else
-            {
-              gtk_widget_hide (GTK_WIDGET (self->controls));
-            }
-
           group = gtk_widget_get_action_group (active_view, "view");
           if (group)
             gtk_widget_insert_action_group (GTK_WIDGET (self), "view", group);
-
-          ide_layout_stack_move_top_list_row (self, IDE_LAYOUT_VIEW (active_view));
         }
+
+      ide_layout_tab_bar_set_view (self->tab_bar, active_view);
 
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ACTIVE_VIEW]);
     }

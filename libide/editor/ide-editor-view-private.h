@@ -49,6 +49,7 @@ struct _IdeEditorView
   GtkPaned             *paned;
   GtkProgressBar       *progress_bar;
   GtkMenuButton        *tweak_button;
+  GtkPopover           *tweak_popover;
   IdeEditorTweakWidget *tweak_widget;
   GtkMenuButton        *goto_line_button;
   EggSimplePopover     *goto_line_popover;

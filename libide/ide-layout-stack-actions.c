@@ -273,7 +273,7 @@ ide_layout_stack_actions_show_list (GSimpleAction *action,
 
   g_assert (IDE_IS_LAYOUT_STACK (self));
 
-  g_signal_emit_by_name (self->views_button, "activate");
+  ide_layout_tab_bar_show_list (self->tab_bar);
 }
 
 static const GActionEntry gbViewStackActions[] = {
@@ -293,12 +293,10 @@ static const GActionEntry gbViewStackActions[] = {
 void
 _ide_layout_stack_actions_init (IdeLayoutStack *self)
 {
-  GSimpleActionGroup *actions;
-
   g_assert (IDE_IS_LAYOUT_STACK (self));
 
-  actions = g_simple_action_group_new ();
-  g_action_map_add_action_entries (G_ACTION_MAP (actions), gbViewStackActions,
+  self->actions = g_simple_action_group_new ();
+  g_action_map_add_action_entries (G_ACTION_MAP (self->actions), gbViewStackActions,
                                    G_N_ELEMENTS (gbViewStackActions), self);
-  gtk_widget_insert_action_group (GTK_WIDGET (self), "view-stack", G_ACTION_GROUP (actions));
+  gtk_widget_insert_action_group (GTK_WIDGET (self), "view-stack", G_ACTION_GROUP (self->actions));
 }

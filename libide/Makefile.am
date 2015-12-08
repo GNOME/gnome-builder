@@ -290,6 +290,10 @@ libide_1_0_la_SOURCES = \
 	ide-keybindings.h \
 	ide-layout-stack-actions.c \
 	ide-layout-stack-private.h \
+	ide-layout-tab.c \
+	ide-layout-tab.h \
+	ide-layout-tab-bar.c \
+	ide-layout-tab-bar.h \
 	ide-line-change-gutter-renderer.c \
 	ide-line-change-gutter-renderer.h \
 	ide-line-diagnostics-gutter-renderer.c \
