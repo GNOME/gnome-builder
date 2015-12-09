@@ -29,7 +29,7 @@ libvala_pack_plugin_la_VALAFLAGS = \
 	--pkg gtksourceview-3.0 \
 	--pkg libide-1.0 \
 	--pkg libpeas-1.0 \
-	--pkg libvala-0.30 \
+	--pkg libvala-$(VALA_VERSION) \
 	--pkg posix \
 	$(NULL)
 
