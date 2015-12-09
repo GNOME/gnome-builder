@@ -146,6 +146,30 @@ ide_layout_tab_set_view (IdeLayoutTab *self,
     }
 }
 
+static gboolean
+ide_layout_tab_enter_notify_event (GtkWidget        *widget,
+                                   GdkEventCrossing *crossing)
+{
+  g_assert (GTK_IS_WIDGET (widget));
+  g_assert (crossing != NULL);
+
+  gtk_widget_set_state_flags (widget, GTK_STATE_FLAG_PRELIGHT, FALSE);
+
+  return GDK_EVENT_PROPAGATE;
+}
+
+static gboolean
+ide_layout_tab_leave_notify_event (GtkWidget        *widget,
+                                   GdkEventCrossing *crossing)
+{
+  g_assert (GTK_IS_WIDGET (widget));
+  g_assert (crossing != NULL);
+
+  gtk_widget_unset_state_flags (widget, GTK_STATE_FLAG_PRELIGHT);
+
+  return GDK_EVENT_PROPAGATE;
+}
+
 static void
 ide_layout_tab_destroy (GtkWidget *widget)
 {
@@ -208,6 +232,8 @@ ide_layout_tab_class_init (IdeLayoutTabClass *klass)
   object_class->set_property = ide_layout_tab_set_property;
 
   widget_class->destroy = ide_layout_tab_destroy;
+  widget_class->enter_notify_event = ide_layout_tab_enter_notify_event;
+  widget_class->leave_notify_event = ide_layout_tab_leave_notify_event;
 
   properties [PROP_VIEW] =
     g_param_spec_object ("view",
@@ -236,6 +262,8 @@ ide_layout_tab_init (IdeLayoutTab *self)
   GtkWidget *popover;
 
   gtk_widget_init_template (GTK_WIDGET (self));
+
+  gtk_widget_add_events (GTK_WIDGET (self), GDK_ENTER_NOTIFY | GDK_LEAVE_NOTIFY);
 
   menu = ide_application_get_menu_by_id (IDE_APPLICATION_DEFAULT, "ide-layout-stack-menu");
   popover = gtk_popover_new_from_model (self->title_menu_button, G_MENU_MODEL (menu));
