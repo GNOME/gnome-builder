@@ -170,6 +170,7 @@ ide_editor_tweak_widget_class_init (IdeEditorTweakWidgetClass *klass)
 
   object_class->constructed = ide_editor_tweak_widget_constructed;
 
+  gtk_widget_class_set_css_name (widget_class, "editortweak");
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/ui/ide-editor-tweak-widget.ui");
   gtk_widget_class_bind_template_child (widget_class, IdeEditorTweakWidget, entry);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorTweakWidget, list_box);

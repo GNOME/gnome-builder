@@ -172,3 +172,11 @@ layouttab box.navigation button:first-child {
 layouttab box.navigation button:last-child {
   padding-left: 6px;
 }
+
+
+editortweak box.indentation button {
+  padding: 0px;
+}
+editortweak box.indentation button label {
+  padding: 2px 12px 2px 12;
+}

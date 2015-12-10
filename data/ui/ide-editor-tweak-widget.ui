@@ -108,6 +108,9 @@
                 <property name="orientation">horizontal</property>
                 <property name="halign">center</property>
                 <property name="spacing">12</property>
+                <style>
+                  <class name="indentation"/>
+                </style>
                 <child>
                   <object class="GtkBox">
                     <property name="visible">true</property>
@@ -117,25 +120,23 @@
                       <class name="linked"/>
                     </style>
                     <child>
-                      <object class="GtkModelButton">
+                      <object class="GtkToggleButton">
                         <property name="visible">true</property>
-                        <property name="text" translatable="yes">Spaces</property>
+                        <property name="label" translatable="yes">Spaces</property>
                         <property name="focus-on-click">false</property>
                         <property name="halign">fill</property>
                         <property name="action-name">view.use-spaces</property>
                         <property name="action-target">true</property>
-                        <property name="iconic">true</property>
                       </object>
                     </child>
                     <child>
-                      <object class="GtkModelButton">
+                      <object class="GtkToggleButton" id="tabs_button">
                         <property name="visible">true</property>
-                        <property name="text" translatable="yes">Tabs</property>
+                        <property name="label" translatable="yes">Tabs</property>
                         <property name="focus-on-click">false</property>
                         <property name="halign">fill</property>
                         <property name="action-name">view.use-spaces</property>
                         <property name="action-target">false</property>
-                        <property name="iconic">true</property>
                       </object>
                     </child>
                   </object>
@@ -149,10 +150,9 @@
                       <class name="linked"/>
                     </style>
                     <child>
-                      <object class="GtkModelButton">
-                        <property name="iconic">True</property>
+                      <object class="GtkToggleButton">
                         <property name="visible">true</property>
-                        <property name="text" translatable="yes">2</property>
+                        <property name="label" translatable="yes">2</property>
                         <property name="focus-on-click">false</property>
                         <property name="halign">fill</property>
                         <property name="action-name">view.tab-width</property>
@@ -160,10 +160,9 @@
                       </object>
                     </child>
                     <child>
-                      <object class="GtkModelButton">
-                        <property name="iconic">True</property>
+                      <object class="GtkToggleButton">
                         <property name="visible">true</property>
-                        <property name="text" translatable="yes">3</property>
+                        <property name="label" translatable="yes">3</property>
                         <property name="focus-on-click">false</property>
                         <property name="halign">fill</property>
                         <property name="action-name">view.tab-width</property>
@@ -171,10 +170,9 @@
                       </object>
                     </child>
                     <child>
-                      <object class="GtkModelButton">
-                        <property name="iconic">True</property>
+                      <object class="GtkToggleButton">
                         <property name="visible">true</property>
-                        <property name="text" translatable="yes">4</property>
+                        <property name="label" translatable="yes">4</property>
                         <property name="focus-on-click">false</property>
                         <property name="halign">fill</property>
                         <property name="action-name">view.tab-width</property>
@@ -182,10 +180,9 @@
                       </object>
                     </child>
                     <child>
-                      <object class="GtkModelButton">
-                        <property name="iconic">True</property>
+                      <object class="GtkToggleButton">
                         <property name="visible">true</property>
-                        <property name="text" translatable="yes">8</property>
+                        <property name="label" translatable="yes">8</property>
                         <property name="focus-on-click">false</property>
                         <property name="halign">fill</property>
                         <property name="action-name">view.tab-width</property>
