@@ -160,7 +160,10 @@ layoutstack.focused layouttab separator {
   color: #babdb6;
 }
 
-layouttab:backdrop, layouttabbar:backdrop {
+layoutstack.focused layouttabbar layouttab:backdrop,
+layoutstack layouttabbar layouttab:backdrop,
+layoutstack layouttabbar layouttab:hover:backdrop,
+layouttabbar:backdrop {
   box-shadow: none;
 }
 
