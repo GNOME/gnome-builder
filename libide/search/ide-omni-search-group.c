@@ -455,3 +455,123 @@ ide_omni_search_group_get_count (IdeOmniSearchGroup *self)
 
   return self->count;
 }
+
+static void
+find_nth_row_cb (GtkWidget *widget,
+                 gpointer   user_data)
+{
+  struct {
+    GtkListBox    *list;
+    GtkListBoxRow *row;
+    gint           nth;
+    gint           last_n;
+  } *lookup = user_data;
+  gint position;
+
+  /*
+   * This tries to find a matching index, but also handles the special case of
+   * -1, where we are trying to find the last row by position. This would not
+   *  be very efficient if the lists were long, but currently the lists are
+   *  all < 10 items.
+   */
+
+  if ((lookup->row != NULL) && (lookup->nth != -1))
+    return;
+
+  position = gtk_list_box_row_get_index (GTK_LIST_BOX_ROW (widget));
+
+  if (position == lookup->nth)
+    lookup->row = GTK_LIST_BOX_ROW (widget);
+  else if ((lookup->nth == -1) && (position > lookup->last_n))
+    {
+      lookup->row = GTK_LIST_BOX_ROW (widget);
+      lookup->last_n = position;
+    }
+}
+
+static GtkListBoxRow *
+find_nth_row (GtkListBox *list,
+              gint        nth)
+{
+  struct {
+    GtkListBox    *list;
+    GtkListBoxRow *row;
+    gint           nth;
+    gint           last_n;
+  } lookup = { list, NULL, nth, -1 };
+
+  g_assert (GTK_IS_LIST_BOX (list));
+  g_assert (nth >= -1);
+
+  gtk_container_foreach (GTK_CONTAINER (list), find_nth_row_cb, &lookup);
+
+  return lookup.row;
+}
+
+gboolean
+ide_omni_search_group_move_next (IdeOmniSearchGroup *self)
+{
+  GtkListBoxRow *row;
+
+  g_return_val_if_fail (IDE_IS_OMNI_SEARCH_GROUP (self), FALSE);
+
+  row = gtk_list_box_get_selected_row (self->rows);
+
+  if (row != NULL)
+    {
+      gint position;
+
+      position = gtk_list_box_row_get_index (row);
+      row = find_nth_row (self->rows, position + 1);
+    }
+  else
+    row = find_nth_row (self->rows, 0);
+
+  if (row != NULL)
+    {
+      gtk_list_box_select_row (self->rows, row);
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+gboolean
+ide_omni_search_group_move_previous (IdeOmniSearchGroup *self)
+{
+  GtkListBoxRow *row;
+
+  g_return_val_if_fail (IDE_IS_OMNI_SEARCH_GROUP (self), FALSE);
+
+  row = gtk_list_box_get_selected_row (self->rows);
+
+  if (row != NULL)
+    {
+      gint position;
+
+      position = gtk_list_box_row_get_index (row);
+
+      if (position == 0)
+        return FALSE;
+
+      row = find_nth_row (self->rows, position - 1);
+    }
+  else
+    row = find_nth_row (self->rows, -1);
+
+  if (row != NULL)
+    {
+      gtk_list_box_select_row (self->rows, row);
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+gboolean
+ide_omni_search_group_has_selection (IdeOmniSearchGroup *self)
+{
+  g_return_val_if_fail (IDE_IS_OMNI_SEARCH_GROUP (self), FALSE);
+
+  return !!gtk_list_box_get_selected_row (self->rows);
+}

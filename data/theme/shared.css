@@ -124,10 +124,17 @@ workbench IdePreferencesBin entry {
 
 
 omnisearchrow {
+  background-image: none;
+  background-color: transparent;
   padding-top: 9px;
   padding-left: 12px;
   padding-right: 12px;
   padding-bottom: 9px;
+}
+
+omnisearchrow:selected {
+  background-color: @theme_selected_bg_color;
+  color: @theme_selected_fg_color;
 }
 
 

@@ -29,10 +29,12 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeOmniSearchDisplay, ide_omni_search_display, IDE, OMNI_SEARCH_DISPLAY, GtkBin)
 
-IdeSearchContext *ide_omni_search_display_get_context (IdeOmniSearchDisplay *display);
-void              ide_omni_search_display_set_context (IdeOmniSearchDisplay *display,
-                                                       IdeSearchContext     *context);
-guint64           ide_omni_search_display_get_count   (IdeOmniSearchDisplay *display);
+IdeSearchContext *ide_omni_search_display_get_context          (IdeOmniSearchDisplay *self);
+void              ide_omni_search_display_set_context          (IdeOmniSearchDisplay *self,
+                                                                IdeSearchContext     *context);
+guint64           ide_omni_search_display_get_count            (IdeOmniSearchDisplay *self);
+void              ide_omni_search_display_move_next_result     (IdeOmniSearchDisplay *self);
+void              ide_omni_search_display_move_previous_result (IdeOmniSearchDisplay *self);
 
 G_END_DECLS
 

@@ -135,6 +135,83 @@ ide_omni_search_display_result_selected (IdeOmniSearchDisplay *self,
     }
 }
 
+void
+ide_omni_search_display_move_next_result (IdeOmniSearchDisplay *self)
+{
+  gint i;
+
+  g_return_if_fail (IDE_IS_OMNI_SEARCH_DISPLAY (self));
+
+  for (i = 0; i < self->providers->len; i++)
+    {
+      ProviderEntry *ptr = g_ptr_array_index (self->providers, i);
+
+      if (ide_omni_search_group_has_selection (ptr->group))
+        {
+          while (ptr && !ide_omni_search_group_move_next (ptr->group))
+            {
+              ide_omni_search_group_unselect (ptr->group);
+
+              if (i < (self->providers->len - 1))
+                ptr = g_ptr_array_index (self->providers, ++i);
+              else
+                ptr = NULL;
+            }
+
+          if (ptr == NULL)
+            break;
+
+          return;
+        }
+    }
+
+  for (i = 0; i < self->providers->len; i++)
+    {
+      ProviderEntry *ptr = g_ptr_array_index (self->providers, i);
+
+      if (ide_omni_search_group_move_next (ptr->group))
+        break;
+    }
+}
+
+void
+ide_omni_search_display_move_previous_result (IdeOmniSearchDisplay *self)
+{
+  gint i;
+
+  g_return_if_fail (IDE_IS_OMNI_SEARCH_DISPLAY (self));
+
+  for (i = self->providers->len - 1; i >= 0; i--)
+    {
+      ProviderEntry *ptr = g_ptr_array_index (self->providers, i);
+
+      if (ide_omni_search_group_has_selection (ptr->group))
+        {
+          while (ptr && !ide_omni_search_group_move_previous (ptr->group))
+            {
+              ide_omni_search_group_unselect (ptr->group);
+              if (i > 0)
+                ptr = g_ptr_array_index (self->providers, --i);
+              else
+                ptr = NULL;
+            }
+
+          if (ptr == NULL)
+            break;
+
+          return;
+        }
+    }
+
+  for (i = self->providers->len - 1; i >= 0; i--)
+    {
+      ProviderEntry *ptr = g_ptr_array_index (self->providers, i);
+
+      if (ide_omni_search_group_move_previous (ptr->group))
+        return;
+    }
+}
+
 static gboolean
 ide_omni_search_display_keynav_failed (IdeOmniSearchDisplay *self,
                                        GtkDirectionType      dir,

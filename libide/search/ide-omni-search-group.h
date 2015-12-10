@@ -40,6 +40,9 @@ void               ide_omni_search_group_focus_last    (IdeOmniSearchGroup *grou
 IdeSearchResult   *ide_omni_search_group_get_first     (IdeOmniSearchGroup *group);
 gboolean           ide_omni_search_group_activate      (IdeOmniSearchGroup *group);
 guint64            ide_omni_search_group_get_count     (IdeOmniSearchGroup *self);
+gboolean           ide_omni_search_group_has_selection (IdeOmniSearchGroup *self);
+gboolean           ide_omni_search_group_move_next     (IdeOmniSearchGroup *self);
+gboolean           ide_omni_search_group_move_previous (IdeOmniSearchGroup *self);
 
 G_END_DECLS
 

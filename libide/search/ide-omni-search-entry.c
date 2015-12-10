@@ -45,6 +45,8 @@ G_DEFINE_TYPE (IdeOmniSearchEntry, ide_omni_search_entry, GTK_TYPE_ENTRY)
 
 enum {
   CLEAR_SEARCH,
+  MOVE_NEXT_RESULT,
+  MOVE_PREVIOUS_RESULT,
   LAST_SIGNAL
 };
 
@@ -234,6 +236,22 @@ ide_omni_search_entry_popover_key_press_event (IdeOmniSearchEntry *self,
 }
 
 static void
+ide_omni_search_entry_move_next_result (IdeOmniSearchEntry *self)
+{
+  g_assert (IDE_IS_OMNI_SEARCH_ENTRY (self));
+
+  ide_omni_search_display_move_next_result (self->display);
+}
+
+static void
+ide_omni_search_entry_move_previous_result (IdeOmniSearchEntry *self)
+{
+  g_assert (IDE_IS_OMNI_SEARCH_ENTRY (self));
+
+  ide_omni_search_display_move_previous_result (self->display);
+}
+
+static void
 ide_omni_search_entry_destroy (GtkWidget *widget)
 {
   IdeOmniSearchEntry *self = (IdeOmniSearchEntry *)widget;
@@ -263,10 +281,26 @@ ide_omni_search_entry_class_init (IdeOmniSearchEntryClass *klass)
                                 G_CALLBACK (ide_omni_search_entry_clear_search),
                                 NULL, NULL, NULL, G_TYPE_NONE, 0);
 
+  signals [MOVE_NEXT_RESULT] =
+    g_signal_new_class_handler ("move-next-result",
+                                G_TYPE_FROM_CLASS (klass),
+                                G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
+                                G_CALLBACK (ide_omni_search_entry_move_next_result),
+                                NULL, NULL, NULL, G_TYPE_NONE, 0);
+
+  signals [MOVE_PREVIOUS_RESULT] =
+    g_signal_new_class_handler ("move-previous-result",
+                                G_TYPE_FROM_CLASS (klass),
+                                G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
+                                G_CALLBACK (ide_omni_search_entry_move_previous_result),
+                                NULL, NULL, NULL, G_TYPE_NONE, 0);
+
   binding_set = gtk_binding_set_by_class (klass);
   gtk_binding_entry_add_signal (binding_set, GDK_KEY_Escape, 0, "clear-search", 0);
   gtk_binding_entry_add_signal (binding_set, GDK_KEY_Return, 0, "activate", 0);
   gtk_binding_entry_add_signal (binding_set, GDK_KEY_KP_Enter, 0, "activate", 0);
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_Down, 0, "move-next-result", 0);
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_Up, 0, "move-previous-result", 0);
 }
 
 static void
