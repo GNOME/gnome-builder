@@ -993,19 +993,63 @@ ide_layout_grab_focus (GtkWidget *widget)
 }
 
 static void
-ide_layout_toplevel_set_focus (IdeLayout *self,
-                               GtkWidget *widget,
-                               GtkWidget *toplevel)
+ide_layout_active_view_weak_cb (IdeLayout *self,
+                                GtkWidget *where_view_was)
 {
   IdeLayoutPrivate *priv = ide_layout_get_instance_private (self);
 
   g_assert (IDE_IS_LAYOUT (self));
 
+  if (where_view_was == priv->active_view)
+    {
+      priv->active_view = NULL;
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ACTIVE_VIEW]);
+    }
+}
+
+static void
+ide_layout_set_active_view (IdeLayout *self,
+                            GtkWidget *active_view)
+{
+  IdeLayoutPrivate *priv = ide_layout_get_instance_private (self);
+
+  g_assert (IDE_IS_LAYOUT (self));
+  g_assert (!active_view || GTK_IS_WIDGET (active_view));
+
+  if (active_view != priv->active_view)
+    {
+      if (priv->active_view != NULL)
+        {
+          g_object_weak_unref (G_OBJECT (priv->active_view),
+                               (GWeakNotify)ide_layout_active_view_weak_cb,
+                               self);
+          priv->active_view = NULL;
+        }
+
+      if (active_view != NULL)
+        {
+          priv->active_view = active_view;
+          g_object_weak_ref (G_OBJECT (priv->active_view),
+                             (GWeakNotify)ide_layout_active_view_weak_cb,
+                             self);
+        }
+
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ACTIVE_VIEW]);
+    }
+}
+
+static void
+ide_layout_toplevel_set_focus (IdeLayout *self,
+                               GtkWidget *widget,
+                               GtkWidget *toplevel)
+{
+  g_assert (IDE_IS_LAYOUT (self));
+
   if (widget != NULL && !IDE_IS_LAYOUT_VIEW (widget))
     widget = gtk_widget_get_ancestor (widget, IDE_TYPE_LAYOUT_VIEW);
 
-  if (widget != NULL && ide_set_weak_pointer (&priv->active_view, widget))
-    g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ACTIVE_VIEW]);
+  if (widget != NULL)
+    ide_layout_set_active_view (self, widget);
 }
 
 static void
@@ -1050,7 +1094,14 @@ ide_layout_finalize (GObject *object)
       g_clear_object (&child->adjustment);
     }
 
-  ide_clear_weak_pointer (&priv->active_view);
+  if (priv->active_view)
+    {
+      g_object_weak_unref (G_OBJECT (priv->active_view),
+                           (GWeakNotify)ide_layout_active_view_weak_cb,
+                           self);
+      priv->active_view = NULL;
+    }
+
   g_clear_object (&priv->pan_gesture);
   g_clear_object (&priv->actions);
 
