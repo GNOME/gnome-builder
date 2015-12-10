@@ -145,10 +145,17 @@ ide_omni_search_entry_delay_cb (gpointer user_data)
 static void
 ide_omni_search_entry_clear_search (IdeOmniSearchEntry *self)
 {
+  IdeWorkbench *workbench;
+  IdePerspective *perspective;
+
   g_assert (IDE_IS_OMNI_SEARCH_ENTRY (self));
 
   gtk_widget_hide (GTK_WIDGET (self->popover));
   gtk_entry_set_text (GTK_ENTRY (self), "");
+
+  workbench = ide_widget_get_workbench (GTK_WIDGET (self));
+  perspective = ide_workbench_get_visible_perspective (workbench);
+  gtk_widget_grab_focus (GTK_WIDGET (perspective));
 }
 
 static void
