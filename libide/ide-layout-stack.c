@@ -152,22 +152,22 @@ ide_layout_stack_grab_focus (GtkWidget *widget)
     gtk_widget_grab_focus (visible_child);
 }
 
-#if 0
 static void
 navigate_to_cb (IdeLayoutStack     *self,
                 IdeBackForwardItem *item,
                 IdeBackForwardList *back_forward_list)
 {
-  IdeSourceLocation *srcloc;
+  IdeWorkbench *workbench;
+  IdeUri *uri;
 
   g_assert (IDE_IS_LAYOUT_STACK (self));
   g_assert (IDE_IS_BACK_FORWARD_ITEM (item));
   g_assert (IDE_IS_BACK_FORWARD_LIST (back_forward_list));
 
-  srcloc = ide_back_forward_item_get_location (item);
-  ide_layout_stack_focus_location (self, srcloc);
+  uri = ide_back_forward_item_get_uri (item);
+  workbench = ide_widget_get_workbench (GTK_WIDGET (self));
+  ide_workbench_open_uri_async (workbench, uri, NULL, NULL, NULL, NULL);
 }
-#endif
 
 static void
 ide_layout_stack_context_handler (GtkWidget  *widget,
@@ -192,16 +192,11 @@ ide_layout_stack_context_handler (GtkWidget  *widget,
       g_clear_object (&self->back_forward_list);
       self->back_forward_list = ide_back_forward_list_branch (back_forward);
 
-#if 0
-      /*
-       * TODO: We need to make BackForwardItem use IdeUri.
-       */
       g_signal_connect_object (self->back_forward_list,
                                "navigate-to",
                                G_CALLBACK (navigate_to_cb),
                                self,
                                G_CONNECT_SWAPPED);
-#endif
 
       action = g_action_map_lookup_action (G_ACTION_MAP (self->actions), "go-backward");
       g_object_bind_property (self->back_forward_list, "can-go-backward",
