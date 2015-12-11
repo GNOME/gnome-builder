@@ -138,6 +138,10 @@ layouttab button {
   box-shadow: none;
 }
 
+layouttab button:insensitive {
+  opacity: 0.3;
+}
+
 layouttab label {
   color: #2e3436;
   font-size: 0.9em;

@@ -114,6 +114,10 @@ layouttabbar button {
   padding: 9px;
 }
 
+layouttab button:insensitive {
+  opacity: 0.3;
+}
+
 layouttabbar > box > button:hover {
   color: #eeeeec;
 }
