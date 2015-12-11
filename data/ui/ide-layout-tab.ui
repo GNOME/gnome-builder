@@ -13,7 +13,7 @@
             </style>
             <child>
               <object class="GtkButton" id="backward_button">
-                <property name="action-name">go-backward</property>
+                <property name="action-name">view-stack.go-backward</property>
                 <property name="focus-on-click">false</property>
                 <property name="visible">true</property>
                 <child>
@@ -26,7 +26,7 @@
             </child>
             <child>
               <object class="GtkButton" id="forward_button">
-                <property name="action-name">go-forward</property>
+                <property name="action-name">view-stack.go-forward</property>
                 <property name="focus-on-click">false</property>
                 <property name="visible">true</property>
                 <child>
