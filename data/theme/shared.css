@@ -32,24 +32,12 @@ GbEditorSettingsWidget row:last-child {
 }
 
 
-/*
- * Editor Floating Search Entry.
- */
-GbEditorFrame .gb-search-slider {
-  background-color: @theme_base_color;
+frame.gb-search-frame {
+  background-image: linear-gradient(shade(@theme_bg_color,1.05), @theme_bg_color);
+  border-bottom-left-radius: 5px;
+  border-top-style: none;
+  font-size: 0.9em;
   padding: 6px;
-  border-color: shade (@theme_base_color, 0.60);
-  border-radius: 0 0 5px 5px;
-  border-width: 0 1px 1px 1px;
-  border-style: solid;
-}
-.gb-search-entry-occurrences-tag {
-  color: shade (@theme_unfocused_fg_color, 0.8);
-  margin: 2px;
-  padding: 2px;
-}
-GdTaggedEntry {
-  color: @theme_fg_color;
 }
 
 
@@ -185,5 +173,5 @@ editortweak box.indentation button {
   padding: 0px;
 }
 editortweak box.indentation button label {
-  padding: 2px 12px 2px 12;
+  padding: 2px 12px 2px 12px;
 }

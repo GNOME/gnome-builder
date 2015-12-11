@@ -194,7 +194,6 @@ ide_editor_frame_set_position_label (IdeEditorFrame *self,
   if (!self->search_entry_tag)
     {
       self->search_entry_tag = gd_tagged_entry_tag_new ("");
-      gd_tagged_entry_tag_set_style (self->search_entry_tag, "gb-search-entry-occurrences-tag");
       gd_tagged_entry_add_tag (self->search_entry, self->search_entry_tag);
     }
 

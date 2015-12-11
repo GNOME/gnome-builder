@@ -55,7 +55,7 @@
                         <property name="visible">true</property>
                         <property name="margin-end">12</property>
                         <style>
-                          <class name="gb-search-slider"/>
+                          <class name="gb-search-frame"/>
                         </style>
                         <child>
                           <object class="GtkBox">
