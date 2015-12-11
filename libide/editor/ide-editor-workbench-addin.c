@@ -19,6 +19,7 @@
 #define G_LOG_DOMAIN "ide-editor-workbench-addin"
 
 #include <gtksourceview/gtksource.h>
+#include <string.h>
 
 #include "ide-buffer.h"
 #include "ide-buffer-manager.h"
@@ -136,6 +137,8 @@ ide_editor_workbench_addin_open_cb (GObject      *object,
   g_autoptr(IdeBuffer) buffer = NULL;
   g_autoptr(GTask) task = user_data;
   GError *error = NULL;
+  const gchar *fragment;
+  IdeUri *uri;
 
   g_assert (IDE_IS_BUFFER_MANAGER (buffer_manager));
   g_assert (G_IS_TASK (task));
@@ -143,9 +146,30 @@ ide_editor_workbench_addin_open_cb (GObject      *object,
   buffer = ide_buffer_manager_load_file_finish (buffer_manager, result, &error);
 
   if (buffer == NULL)
-    g_task_return_error (task, error);
-  else
-    g_task_return_boolean (task, TRUE);
+    {
+      g_task_return_error (task, error);
+      return;
+    }
+
+  uri = g_task_get_task_data (task);
+  fragment = ide_uri_get_fragment (uri);
+
+  if (fragment != NULL)
+    {
+      guint line = 0;
+      guint column = 0;
+
+      if (sscanf (fragment, "L%u_%u", &line, &column) >= 1)
+        {
+          GtkTextIter iter;
+
+          /* Reminder this is only safe on 3.20 */
+          gtk_text_buffer_get_iter_at_line_offset (GTK_TEXT_BUFFER (buffer), &iter, line, column);
+          gtk_text_buffer_select_range (GTK_TEXT_BUFFER (buffer), &iter, &iter);
+        }
+    }
+
+  g_task_return_boolean (task, TRUE);
 }
 
 static void
@@ -169,6 +193,7 @@ ide_editor_workbench_addin_open_async (IdeWorkbenchAddin   *addin,
   g_assert (IDE_IS_WORKBENCH (self->workbench));
 
   task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_task_data (task, ide_uri_ref (uri), (GDestroyNotify)ide_uri_unref);
 
   context = ide_workbench_get_context (self->workbench);
   buffer_manager = ide_context_get_buffer_manager (context);
