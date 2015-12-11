@@ -741,7 +741,6 @@ ide_buffer_manager_load_file_async (IdeBufferManager     *self,
                                   "fraction", 1.0,
                                   NULL);
       g_task_return_pointer (task, g_object_ref (buffer), g_object_unref);
-      g_signal_emit (self, signals [LOAD_BUFFER], 0, buffer);
       ide_buffer_manager_set_focus_buffer (self, buffer);
       IDE_EXIT;
     }
