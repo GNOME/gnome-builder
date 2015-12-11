@@ -302,6 +302,23 @@ ide_layout_tab_bar_set_stack (IdeLayoutTabBar *self,
 }
 
 static void
+ide_layout_tab_bar_hierarchy_changed (GtkWidget *widget,
+                                      GtkWidget *old_toplevel)
+{
+  IdeLayoutTabBar *self = (IdeLayoutTabBar *)widget;
+  GtkWidget *toplevel;
+
+  g_assert (IDE_IS_LAYOUT_TAB_BAR (self));
+
+  toplevel = gtk_widget_get_toplevel (GTK_WIDGET (self));
+  if (!GTK_IS_WINDOW (toplevel))
+    toplevel = NULL;
+
+  if (IDE_IS_WORKBENCH (toplevel))
+    gtk_size_group_add_widget (IDE_WORKBENCH (toplevel)->header_size_group, widget);
+}
+
+static void
 ide_layout_tab_bar_get_property (GObject    *object,
                                  guint       prop_id,
                                  GValue     *value,
@@ -347,6 +364,8 @@ ide_tab_layout_bar_class_init (IdeLayoutTabBarClass *klass)
 
   object_class->get_property = ide_layout_tab_bar_get_property;
   object_class->set_property = ide_layout_tab_bar_set_property;
+
+  widget_class->hierarchy_changed = ide_layout_tab_bar_hierarchy_changed;
 
   properties [PROP_STACK] =
     g_param_spec_object ("stack",

@@ -21,6 +21,8 @@
 #include "egg-signal-group.h"
 
 #include "ide-layout-pane.h"
+#include "ide-workbench.h"
+#include "ide-workbench-private.h"
 
 struct _IdeLayoutPane
 {
@@ -199,6 +201,10 @@ ide_layout_pane_hierarchy_changed (GtkWidget *widget,
     toplevel = NULL;
 
   egg_signal_group_set_target (self->toplevel_signals, toplevel);
+
+  if (IDE_IS_WORKBENCH (toplevel) && gtk_widget_get_visible (GTK_WIDGET (self->stack_switcher)))
+    gtk_size_group_add_widget (IDE_WORKBENCH (toplevel)->header_size_group,
+                               GTK_WIDGET (self->stack_switcher));
 }
 
 static void

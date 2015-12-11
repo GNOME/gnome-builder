@@ -43,6 +43,8 @@ struct _IdeWorkbench
   GtkStack                  *perspectives_stack;
   GtkStackSwitcher          *perspectives_stack_switcher;
   GtkPopover                *perspectives_popover;
+
+  GtkSizeGroup              *header_size_group;
 };
 
 void ide_workbench_set_context  (IdeWorkbench *workbench,

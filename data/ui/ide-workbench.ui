@@ -62,4 +62,7 @@
       </object>
     </child>
   </template>
+  <object class="GtkSizeGroup" id="header_size_group">
+    <property name="mode">vertical</property>
+  </object>
 </interface>
