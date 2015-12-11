@@ -491,6 +491,8 @@ ide_workbench_set_context (IdeWorkbench *self,
   ide_workbench_set_visible_perspective_name (self, "editor");
 
   gtk_stack_set_visible_child_name (self->top_stack, "perspectives");
+
+  ide_context_restore_async (context, NULL, NULL, NULL);
 }
 
 void
