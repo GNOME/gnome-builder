@@ -156,9 +156,9 @@
   bind "<ctrl>s" { "action" ("frame", "next-search-result", "") };
 }
 
-GbEditorFrame GtkFrame.gb-search-slider GdTaggedEntry {
+frame.gb-search-frame entry {
   -gtk-key-bindings: builder-emacs-editor-search,
-                    builder-emacs-text-entry;
+                     builder-emacs-text-entry;
 }
 
 entry {

@@ -51,6 +51,7 @@ struct _GdTaggedEntryPrivate {
 };
 
 enum {
+  SIGNAL_ACTION,
   SIGNAL_TAG_CLICKED,
   SIGNAL_TAG_BUTTON_CLICKED,
   LAST_SIGNAL
@@ -86,6 +87,84 @@ static gint gd_tagged_entry_tag_get_width (GdTaggedEntryTag *tag,
                                            GdTaggedEntry *entry);
 static GtkStyleContext * gd_tagged_entry_tag_get_context (GdTaggedEntryTag *tag,
                                                           GdTaggedEntry *entry);
+
+static gboolean
+_gtk_widget_action (GtkWidget   *widget,
+                    const gchar *prefix,
+                    const gchar *action_name,
+                    GVariant    *parameter)
+{
+  GtkWidget *toplevel;
+  GApplication *app;
+  GActionGroup *group = NULL;
+
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
+  g_return_val_if_fail (prefix, FALSE);
+  g_return_val_if_fail (action_name, FALSE);
+
+  app = g_application_get_default ();
+  toplevel = gtk_widget_get_toplevel (widget);
+
+  while ((group == NULL) && (widget != NULL))
+    {
+      group = gtk_widget_get_action_group (widget, prefix);
+      widget = gtk_widget_get_parent (widget);
+    }
+
+  if (!group && g_str_equal (prefix, "win") && G_IS_ACTION_GROUP (toplevel))
+    group = G_ACTION_GROUP (toplevel);
+
+  if (!group && g_str_equal (prefix, "app") && G_IS_ACTION_GROUP (app))
+    group = G_ACTION_GROUP (app);
+
+  if (group && g_action_group_has_action (group, action_name))
+    {
+      g_action_group_activate_action (group, action_name, parameter);
+      return TRUE;
+    }
+
+  if (parameter && g_variant_is_floating (parameter))
+    {
+      parameter = g_variant_ref_sink (parameter);
+      g_variant_unref (parameter);
+    }
+
+  g_warning ("Failed to locate action %s.%s", prefix, action_name);
+
+  return FALSE;
+}
+
+static gboolean
+_gtk_widget_action_with_string (GtkWidget   *widget,
+                                const gchar *group,
+                                const gchar *name,
+                                const gchar *param)
+{
+  GVariant *variant = NULL;
+
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
+  g_return_val_if_fail (group != NULL, FALSE);
+  g_return_val_if_fail (name != NULL, FALSE);
+
+  if (param == NULL)
+    param = "";
+
+  if (*param != 0)
+    {
+      g_autoptr(GError) error = NULL;
+
+      variant = g_variant_parse (NULL, param, NULL, NULL, &error);
+
+      if (variant == NULL)
+        {
+          g_warning ("can't parse keybinding parameters \"%s\": %s",
+                     param, error->message);
+          return FALSE;
+        }
+    }
+
+  return _gtk_widget_action (widget, group, name, variant);
+}
 
 static void
 gd_tagged_entry_tag_get_margin (GdTaggedEntryTag *tag,
@@ -956,6 +1035,14 @@ gd_tagged_entry_class_init (GdTaggedEntryClass *klass)
 
   eclass->get_text_area_size = gd_tagged_entry_get_text_area_size;
 
+  signals[SIGNAL_ACTION] =
+    g_signal_new_class_handler ("action",
+                                GD_TYPE_TAGGED_ENTRY,
+                                G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                                G_CALLBACK (_gtk_widget_action_with_string),
+                                NULL, NULL, NULL,
+                                G_TYPE_BOOLEAN,
+                                3, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING);
   signals[SIGNAL_TAG_CLICKED] =
     g_signal_new ("tag-clicked",
                   GD_TYPE_TAGGED_ENTRY,
