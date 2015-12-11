@@ -23,6 +23,8 @@
 #include "ide-layout-tab.h"
 #include "ide-layout-tab-bar.h"
 #include "ide-layout-view.h"
+#include "ide-workbench.h"
+#include "ide-workbench-private.h"
 
 struct _IdeLayoutTabBar
 {
@@ -33,6 +35,7 @@ struct _IdeLayoutTabBar
   guint          child_count;
 
   IdeLayoutTab  *tab;
+  GtkWidget     *tab_expander;
   GtkMenuButton *views_list_button;
   GtkButton     *views_add_button;
   GtkStack      *stack;
@@ -153,6 +156,9 @@ ide_layout_tab_bar_add (IdeLayoutTabBar *self,
 
   if (self->child_count > 1)
     gtk_widget_show (GTK_WIDGET (self->views_list_button));
+
+  gtk_widget_hide (GTK_WIDGET (self->tab_expander));
+  gtk_widget_show (GTK_WIDGET (self->tab));
 }
 
 static void
@@ -213,6 +219,12 @@ ide_layout_tab_bar_remove (IdeLayoutTabBar *self,
 
       if (self->child_count <= 1)
         gtk_widget_hide (GTK_WIDGET (self->views_list_button));
+
+      if (self->child_count == 0)
+        {
+          gtk_widget_hide (GTK_WIDGET (self->tab));
+          gtk_widget_show (GTK_WIDGET (self->tab_expander));
+        }
     }
 }
 
@@ -379,6 +391,7 @@ ide_tab_layout_bar_class_init (IdeLayoutTabBarClass *klass)
   gtk_widget_class_set_css_name (widget_class, "layouttabbar");
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/ui/ide-layout-tab-bar.ui");
   gtk_widget_class_bind_template_child (widget_class, IdeLayoutTabBar, tab);
+  gtk_widget_class_bind_template_child (widget_class, IdeLayoutTabBar, tab_expander);
   gtk_widget_class_bind_template_child (widget_class, IdeLayoutTabBar, views_add_button);
   gtk_widget_class_bind_template_child (widget_class, IdeLayoutTabBar, views_list_button);
   gtk_widget_class_bind_template_child (widget_class, IdeLayoutTabBar, views_list_box);

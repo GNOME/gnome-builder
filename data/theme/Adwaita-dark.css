@@ -181,13 +181,6 @@ layouttabbar:backdrop {
   box-shadow: none;
 }
 
-layoutstack.empty layouttab,
-layoutstack.empty layouttab button,
-layoutstack.empty layouttab separator {
-  color: transparent;
-  background-color: transparent;
-}
-
 layoutstack layouttab button.close {
   border-style: solid;
   border-radius: 5px;
