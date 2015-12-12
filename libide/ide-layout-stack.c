@@ -498,7 +498,9 @@ ide_layout_stack_set_active_view (IdeLayoutStack *self,
     {
       gtk_widget_insert_action_group (GTK_WIDGET (self), "view", NULL);
 
-      if (ide_set_weak_pointer (&self->active_view, active_view))
+      ide_set_weak_pointer (&self->active_view, active_view);
+
+      if (active_view != NULL)
         {
           GActionGroup *group;
 
