@@ -425,18 +425,18 @@ ide_omni_search_group_init (IdeOmniSearchGroup *self)
 gboolean
 ide_omni_search_group_activate (IdeOmniSearchGroup *group)
 {
-  GtkListBoxRow *row = NULL;
+  GtkListBoxRow *row;
 
   g_return_val_if_fail (IDE_IS_OMNI_SEARCH_GROUP (group), FALSE);
 
-  gtk_container_foreach (GTK_CONTAINER (group->rows),
-                         ide_omni_search_group_foreach_cb,
-                         &row);
+  row = gtk_list_box_get_selected_row (group->rows);
 
-  if (IDE_IS_OMNI_SEARCH_ROW (row))
+  if (row != NULL)
     {
       IdeSearchResult *result;
       IdeSearchProvider *provider;
+
+      g_assert (IDE_IS_OMNI_SEARCH_ROW (row));
 
       result = ide_omni_search_row_get_result (IDE_OMNI_SEARCH_ROW (row));
       provider = ide_search_result_get_provider (result);
