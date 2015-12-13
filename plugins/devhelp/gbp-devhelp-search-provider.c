@@ -178,12 +178,15 @@ gbp_devhelp_search_provider_activate (IdeSearchProvider *provider,
   g_assert (pane != NULL);
 
   panel = ide_widget_find_child_typed (pane, GBP_TYPE_DEVHELP_PANEL);
-  g_assert (pane != NULL);
+  g_assert (panel != NULL);
 
   g_object_get (result, "uri", &uri, NULL);
 
   if (panel != NULL)
-    gbp_devhelp_panel_set_uri (panel, uri);
+    {
+      gbp_devhelp_panel_set_uri (panel, uri);
+      ide_workbench_focus (IDE_WORKBENCH (toplevel), GTK_WIDGET (panel));
+    }
 
   g_free (uri);
 }
