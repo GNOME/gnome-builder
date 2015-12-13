@@ -236,23 +236,23 @@ ide_omni_search_group_row_selected (IdeOmniSearchGroup *self,
 }
 
 void
-ide_omni_search_group_focus_first (IdeOmniSearchGroup *self)
+ide_omni_search_group_select_first (IdeOmniSearchGroup *self)
 {
   GtkListBoxRow *row;
 
   g_return_if_fail (IDE_IS_OMNI_SEARCH_GROUP (self));
 
-  row = gtk_list_box_get_row_at_y (self->rows, 1);
+  row = gtk_list_box_get_row_at_index (self->rows, 0);
 
   if (row)
     {
       gtk_list_box_unselect_all (self->rows);
-      gtk_widget_child_focus (GTK_WIDGET (self->rows), GTK_DIR_DOWN);
+      gtk_list_box_select_row (self->rows, row);
     }
 }
 
 void
-ide_omni_search_group_focus_last (IdeOmniSearchGroup *self)
+ide_omni_search_group_select_last (IdeOmniSearchGroup *self)
 {
   GtkAllocation alloc;
   GtkListBoxRow *row;

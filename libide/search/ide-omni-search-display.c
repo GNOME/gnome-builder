@@ -29,6 +29,8 @@ struct _IdeOmniSearchDisplay
 
   IdeSearchContext    *context;
   GPtrArray           *providers;
+
+  guint                do_autoselect : 1;
 };
 
 typedef struct
@@ -142,6 +144,8 @@ ide_omni_search_display_move_next_result (IdeOmniSearchDisplay *self)
 
   g_return_if_fail (IDE_IS_OMNI_SEARCH_DISPLAY (self));
 
+  self->do_autoselect = FALSE;
+
   for (i = 0; i < self->providers->len; i++)
     {
       ProviderEntry *ptr = g_ptr_array_index (self->providers, i);
@@ -181,6 +185,8 @@ ide_omni_search_display_move_previous_result (IdeOmniSearchDisplay *self)
 
   g_return_if_fail (IDE_IS_OMNI_SEARCH_DISPLAY (self));
 
+  self->do_autoselect = FALSE;
+
   for (i = self->providers->len - 1; i >= 0; i--)
     {
       ProviderEntry *ptr = g_ptr_array_index (self->providers, i);
@@ -210,57 +216,6 @@ ide_omni_search_display_move_previous_result (IdeOmniSearchDisplay *self)
       if (ide_omni_search_group_move_previous (ptr->group))
         return;
     }
-}
-
-static gboolean
-ide_omni_search_display_keynav_failed (IdeOmniSearchDisplay *self,
-                                       GtkDirectionType      dir,
-                                       IdeOmniSearchGroup   *group)
-{
-  GList *list = NULL;
-  GList *iter;
-  gint position = -1;
-  gboolean ret = FALSE;
-
-  g_return_val_if_fail (IDE_IS_OMNI_SEARCH_DISPLAY (self), FALSE);
-  g_return_val_if_fail (IDE_IS_OMNI_SEARCH_GROUP (group), FALSE);
-
-  gtk_container_child_get (GTK_CONTAINER (self), GTK_WIDGET (group),
-                           "position", &position,
-                           NULL);
-
-  if (dir == GTK_DIR_DOWN)
-    {
-      list = gtk_container_get_children (GTK_CONTAINER (self));
-      iter = g_list_nth (list, position + 1);
-      for (; iter; iter = iter->next)
-        {
-          if (ide_omni_search_group_get_first (iter->data))
-            {
-              ide_omni_search_group_unselect (group);
-              ide_omni_search_group_focus_first (iter->data);
-              ret = TRUE;
-            }
-        }
-    }
-  else if (dir == GTK_DIR_UP && position > 0)
-    {
-      list = gtk_container_get_children (GTK_CONTAINER (self));
-      iter = g_list_nth (list, position - 1);
-      for (; iter; iter = iter->prev)
-        {
-          if (ide_omni_search_group_get_first (iter->data))
-            {
-              ide_omni_search_group_unselect (group);
-              ide_omni_search_group_focus_last (iter->data);
-              ret = TRUE;
-            }
-        }
-    }
-
-  g_list_free (list);
-
-  return ret;
 }
 
 static void
@@ -330,11 +285,6 @@ ide_omni_search_display_add_provider (IdeOmniSearchDisplay *self,
   g_signal_connect_object (entry->group,
                            "result-selected",
                            G_CALLBACK (ide_omni_search_display_result_selected),
-                           self,
-                           G_CONNECT_SWAPPED);
-  g_signal_connect_object (entry->group,
-                           "keynav-failed",
-                           G_CALLBACK (ide_omni_search_display_keynav_failed),
                            self,
                            G_CONNECT_SWAPPED);
   g_ptr_array_add (self->providers, entry);
@@ -415,6 +365,13 @@ ide_omni_search_display_result_added (IdeOmniSearchDisplay *self,
             {
               ide_omni_search_group_add_result (ptr->group, result);
               gtk_widget_show (GTK_WIDGET (ptr->group));
+
+              /*
+               * If this is the first group and we are still auto-selecting
+               * the first row, we might need to update the selection.
+               */
+              if ((i == 0) && self->do_autoselect)
+                ide_omni_search_group_select_first (ptr->group);
             }
           break;
         }
@@ -487,6 +444,8 @@ ide_omni_search_display_connect_context (IdeOmniSearchDisplay *self,
 
   g_return_if_fail (IDE_IS_OMNI_SEARCH_DISPLAY (self));
   g_return_if_fail (IDE_IS_SEARCH_CONTEXT (context));
+
+  self->do_autoselect = TRUE;
 
   providers = ide_search_context_get_providers (context);
 

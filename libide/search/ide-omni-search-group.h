@@ -28,17 +28,17 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeOmniSearchGroup, ide_omni_search_group, IDE, OMNI_SEARCH_GROUP, GtkBox)
 
-void               ide_omni_search_group_clear         (IdeOmniSearchGroup *group);
-IdeSearchProvider *ide_omni_search_group_get_provider  (IdeOmniSearchGroup *group);
-void               ide_omni_search_group_add_result    (IdeOmniSearchGroup *group,
+void               ide_omni_search_group_clear         (IdeOmniSearchGroup *self);
+IdeSearchProvider *ide_omni_search_group_get_provider  (IdeOmniSearchGroup *self);
+void               ide_omni_search_group_add_result    (IdeOmniSearchGroup *self,
                                                         IdeSearchResult    *result);
-void               ide_omni_search_group_remove_result (IdeOmniSearchGroup *group,
+void               ide_omni_search_group_remove_result (IdeOmniSearchGroup *self,
                                                         IdeSearchResult    *result);
-void               ide_omni_search_group_unselect      (IdeOmniSearchGroup *group);
-void               ide_omni_search_group_focus_first   (IdeOmniSearchGroup *group);
-void               ide_omni_search_group_focus_last    (IdeOmniSearchGroup *group);
-IdeSearchResult   *ide_omni_search_group_get_first     (IdeOmniSearchGroup *group);
-gboolean           ide_omni_search_group_activate      (IdeOmniSearchGroup *group);
+void               ide_omni_search_group_unselect      (IdeOmniSearchGroup *self);
+void               ide_omni_search_group_select_first  (IdeOmniSearchGroup *self);
+void               ide_omni_search_group_select_last   (IdeOmniSearchGroup *self);
+IdeSearchResult   *ide_omni_search_group_get_first     (IdeOmniSearchGroup *self);
+gboolean           ide_omni_search_group_activate      (IdeOmniSearchGroup *self);
 guint64            ide_omni_search_group_get_count     (IdeOmniSearchGroup *self);
 gboolean           ide_omni_search_group_has_selection (IdeOmniSearchGroup *self);
 gboolean           ide_omni_search_group_move_next     (IdeOmniSearchGroup *self);
