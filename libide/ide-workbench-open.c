@@ -221,7 +221,22 @@ ide_workbench_open_discover_content_type_cb (GObject      *object,
     }
   else
     {
-      open_uri_state->content_type = g_strdup (g_file_info_get_content_type (file_info));
+      g_autofree gchar *name = NULL;
+      const gchar *content_type;
+
+      name = g_file_get_basename (file);
+      content_type = g_file_info_get_content_type (file_info);
+
+      /*
+       * TODO: Make various overrides a bit more generic.
+       *       It should support globs and such.
+       */
+      if ((g_strcmp0 (name, "Makefile.am") == 0) ||
+          (g_strcmp0 (name, "GNUMakefile.am") == 0))
+        content_type = "text/plain";
+
+      open_uri_state->content_type = g_strdup (content_type);
+
       g_clear_object (&file_info);
     }
 
