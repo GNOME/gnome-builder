@@ -452,14 +452,15 @@ egg_menu_manager_remove (EggMenuManager *self,
 
   while (g_hash_table_iter_next (&iter, NULL, (gpointer *)&menu))
     {
-      guint n_items;
+      gint n_items;
       gint i;
 
       g_assert (G_IS_MENU (menu));
 
       n_items = g_menu_model_get_n_items (G_MENU_MODEL (menu));
 
-      for (i = 0; i < n_items; i++)
+      /* Iterate backward so we have a stable loop variable. */
+      for (i = n_items - 1; i >= 0; i--)
         {
           guint item_merge_id;
 
@@ -467,10 +468,7 @@ egg_menu_manager_remove (EggMenuManager *self,
                                                i,
                                                EGG_MENU_ATTRIBUTE_MERGE_ID,
                                                "u", &item_merge_id))
-            {
-              g_menu_remove (menu, i);
-              i--;
-            }
+            g_menu_remove (menu, i);
         }
     }
 }
