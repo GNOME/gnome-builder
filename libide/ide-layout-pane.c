@@ -370,7 +370,9 @@ ide_layout_pane_add_page (IdeLayoutPane *self,
                           const gchar   *icon_name)
 {
   gtk_container_add_with_properties (GTK_CONTAINER (self->stack), page,
+#if 0
                                      "icon-name", icon_name,
+#endif
                                      "title", title,
                                      NULL);
 }

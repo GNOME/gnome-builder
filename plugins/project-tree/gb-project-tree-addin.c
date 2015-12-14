@@ -74,7 +74,7 @@ gb_project_tree_addin_load (IdeWorkbenchAddin *addin,
   gtk_container_add (GTK_CONTAINER (scroller), GTK_WIDGET (self->tree));
 
   ide_layout_pane_add_page (IDE_LAYOUT_PANE (pane), scroller,
-                            _("Project Tree"), "folder-symbolic");
+                            _("Project"), "folder-symbolic");
 
   ide_widget_set_context_handler (self->tree, gb_project_tree_addin_context_set);
 

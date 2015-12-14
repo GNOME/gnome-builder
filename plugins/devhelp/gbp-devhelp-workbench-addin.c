@@ -87,7 +87,7 @@ gbp_devhelp_workbench_addin_load (IdeWorkbenchAddin *addin,
                               "visible", TRUE,
                               NULL);
   ide_layout_pane_add_page (IDE_LAYOUT_PANE (pane), GTK_WIDGET (self->panel),
-                            _("Devhelp"), "devhelp-symbolic");
+                            _("Documentation"), "devhelp-symbolic");
 
   action = g_simple_action_new ("focus-devhelp-search", NULL);
   g_signal_connect_object (action, "activate", G_CALLBACK (focus_devhelp_search), self, 0);

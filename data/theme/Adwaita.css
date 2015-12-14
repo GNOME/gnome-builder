@@ -233,11 +233,16 @@ layoutpane > box > box:first-child > stackswitcher > button {
   background-color: transparent;
   border-style: none;
   border-radius: 0px;
+  border-bottom: 3px solid transparent;
   box-shadow: none;
   padding: 6px 1px 7px 1px;
   color: #888a85;
+  text-shadow: none;
+  font-weight: bold;
 }
 
 layoutpane > box > box:first-child > stackswitcher > button:checked {
+  border-bottom: 3px solid @theme_selected_bg_color;
   color: #2e3436;
+  text-shadow: 0 1px #eeeeec;
 }

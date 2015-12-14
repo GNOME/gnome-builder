@@ -287,7 +287,7 @@ symbol_tree_load (IdeWorkbenchAddin *addin,
 
   ide_layout_pane_add_page (IDE_LAYOUT_PANE (right_pane),
                             GTK_WIDGET (self),
-                            _("Symbol Tree"),
+                            _("Symbols"),
                             "lang-function-symbolic");
 
   gtk_container_child_set (GTK_CONTAINER (gtk_widget_get_parent (GTK_WIDGET (self))),
