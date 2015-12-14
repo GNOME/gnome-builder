@@ -161,10 +161,6 @@ layouttab label {
   text-shadow: 0 1px #101010;
 }
 
-layouttab label:hover {
-  color: black;
-}
-
 layouttab label:backdrop {
   text-shadow: none;
 }
@@ -245,11 +241,16 @@ layoutpane > box > box:first-child > stackswitcher > button {
   background-color: transparent;
   border-style: none;
   border-radius: 0px;
+  border-bottom: 3px solid transparent;
   box-shadow: none;
   padding: 6px 1px 7px 1px;
   color: #888a85;
+  text-shadow: none;
+  font-weight: bold;
 }
 
 layoutpane > box > box:first-child > stackswitcher > button:checked {
-  color: white;
+  border-bottom: 3px solid @theme_selected_bg_color;
+  color: #fafafa;
+  text-shadow: 0 1px #101010;
 }
