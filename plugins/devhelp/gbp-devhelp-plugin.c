@@ -19,12 +19,16 @@
 #include <ide.h>
 #include <libpeas/peas.h>
 
+#include "gbp-devhelp-editor-view-addin.h"
 #include "gbp-devhelp-search-provider.h"
 #include "gbp-devhelp-workbench-addin.h"
 
 void
 peas_register_types (PeasObjectModule *module)
 {
+  peas_object_module_register_extension_type (module,
+                                              IDE_TYPE_EDITOR_VIEW_ADDIN,
+                                              GBP_TYPE_DEVHELP_EDITOR_VIEW_ADDIN);
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_WORKBENCH_ADDIN,
                                               GBP_TYPE_DEVHELP_WORKBENCH_ADDIN);

@@ -1,4 +1,4 @@
-/* gbp-devhelp-panel.h
+/* gbp-devhelp-editor-view-addin.h
  *
  * Copyright (C) 2015 Christian Hergert <chergert@redhat.com>
  *
@@ -16,22 +16,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GBP_DEVHELP_PANEL_H
-#define GBP_DEVHELP_PANEL_H
+#ifndef GBP_DEVHELP_EDITOR_VIEW_ADDIN_H
+#define GBP_DEVHELP_EDITOR_VIEW_ADDIN_H
 
-#include <gtk/gtk.h>
+#include <ide.h>
 
 G_BEGIN_DECLS
 
-#define GBP_TYPE_DEVHELP_PANEL (gbp_devhelp_panel_get_type())
+#define GBP_TYPE_DEVHELP_EDITOR_VIEW_ADDIN (gbp_devhelp_editor_view_addin_get_type())
 
-G_DECLARE_FINAL_TYPE (GbpDevhelpPanel, gbp_devhelp_panel, GBP, DEVHELP_PANEL, GtkBin)
-
-void gbp_devhelp_panel_set_uri      (GbpDevhelpPanel *self,
-                                     const gchar     *uri);
-void gbp_devhelp_panel_focus_search (GbpDevhelpPanel *self,
-                                     const gchar     *keyword);
+G_DECLARE_FINAL_TYPE (GbpDevhelpEditorViewAddin, gbp_devhelp_editor_view_addin, GBP, DEVHELP_EDITOR_VIEW_ADDIN, GObject)
 
 G_END_DECLS
 
-#endif /* GBP_DEVHELP_PANEL_H */
+#endif /* GBP_DEVHELP_EDITOR_VIEW_ADDIN_H */

@@ -57,7 +57,7 @@ focus_devhelp_search (GSimpleAction *action,
 
   g_assert (GBP_IS_DEVHELP_WORKBENCH_ADDIN (self));
 
-  gbp_devhelp_panel_focus_search (self->panel);
+  gbp_devhelp_panel_focus_search (self->panel, NULL);
 }
 
 static void

@@ -184,7 +184,8 @@ gbp_devhelp_panel_init (GbpDevhelpPanel *self)
 }
 
 void
-gbp_devhelp_panel_focus_search (GbpDevhelpPanel *self)
+gbp_devhelp_panel_focus_search (GbpDevhelpPanel *self,
+                                const gchar     *keyword)
 {
   IdeWorkbench *workbench;
 
@@ -192,5 +193,9 @@ gbp_devhelp_panel_focus_search (GbpDevhelpPanel *self)
 
   workbench = ide_widget_get_workbench (GTK_WIDGET (self));
   ide_workbench_focus (workbench, GTK_WIDGET (self->sidebar));
+
   dh_sidebar_set_search_focus (self->sidebar);
+
+  if (keyword)
+    dh_sidebar_set_search_string (self->sidebar, keyword);
 }

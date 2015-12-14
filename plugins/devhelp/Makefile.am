@@ -10,6 +10,8 @@ plugin_LTLIBRARIES = libdevhelp-plugin.la
 dist_plugin_DATA = devhelp.plugin
 
 libdevhelp_plugin_la_SOURCES = \
+	gbp-devhelp-editor-view-addin.c \
+	gbp-devhelp-editor-view-addin.h \
 	gbp-devhelp-panel.c \
 	gbp-devhelp-panel.h \
 	gbp-devhelp-plugin.c \

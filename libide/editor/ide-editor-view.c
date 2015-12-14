@@ -422,8 +422,8 @@ ide_editor_view_grab_focus (GtkWidget *widget)
 }
 
 static void
-ide_editor_view_request_documentation (IdeEditorView  *self,
-                                      IdeSourceView *source_view)
+ide_editor_view_request_documentation (IdeEditorView *self,
+                                       IdeSourceView *source_view)
 {
   g_autofree gchar *word = NULL;
   IdeBuffer *buffer;

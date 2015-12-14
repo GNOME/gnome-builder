@@ -555,27 +555,6 @@ ide_editor_frame__source_view_focus_location (IdeEditorFrame    *self,
   ide_editor_perspective_focus_location (IDE_EDITOR_PERSPECTIVE (editor), location);
 }
 
-static void
-ide_editor_frame__source_view_request_documentation (IdeEditorFrame *self,
-                                                     IdeSourceView  *source_view)
-{
-  GtkTextBuffer *buffer;
-  GtkTextIter begin;
-  GtkTextIter end;
-  GVariant *param;
-  g_autofree gchar *text = NULL;
-
-  g_assert (IDE_IS_EDITOR_FRAME (self));
-  g_assert (IDE_IS_SOURCE_VIEW (source_view));
-
-  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (source_view));
-  gtk_text_buffer_get_selection_bounds (buffer, &begin, &end);
-  text = gtk_text_iter_get_slice (&begin, &end);
-
-  param = g_variant_new_string (text);
-  ide_widget_action (GTK_WIDGET (self), "workbench", "search-docs", param);
-}
-
 static gboolean
 ide_editor_frame_get_show_map (IdeEditorFrame *self)
 {
@@ -695,12 +674,6 @@ ide_editor_frame_constructed (GObject *object)
   g_signal_connect_object (self->source_view,
                            "populate-popup",
                            G_CALLBACK (ide_editor_frame__source_view_populate_popup),
-                           self,
-                           G_CONNECT_SWAPPED);
-
-  g_signal_connect_object (self->source_view,
-                           "request-documentation",
-                           G_CALLBACK (ide_editor_frame__source_view_request_documentation),
                            self,
                            G_CONNECT_SWAPPED);
 
