@@ -6,6 +6,7 @@ SUBDIRS = \
 	ctags \
 	devhelp \
 	file-search \
+	fpaste \
 	git \
 	gnome-code-assistance \
 	html-completion \
