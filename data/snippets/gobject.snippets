@@ -12,10 +12,10 @@ snippet gobject
 
 	enum {
 		PROP_0,
-		LAST_PROP
+		N_PROPS
 	};
 
-	static GParamSpec *properties [LAST_PROP];
+	static GParamSpec *properties [N_PROPS];
 
 	$2 *
 	$3_new (void)
