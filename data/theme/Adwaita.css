@@ -144,7 +144,7 @@ layouttab button:insensitive {
 
 layouttab label {
   color: #2e3436;
-  text-shadow: 0 1px white;
+  text-shadow: 0 1px #eeeeec;
 }
 
 layouttab label:hover {
