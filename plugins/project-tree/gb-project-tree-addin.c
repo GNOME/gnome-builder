@@ -85,10 +85,11 @@ static void
 gb_project_tree_addin_unload (IdeWorkbenchAddin *addin,
                               IdeWorkbench      *workbench)
 {
+  GbProjectTreeAddin *self = (GbProjectTreeAddin *)addin;
   IdePerspective *editor;
   GtkWidget *pane;
 
-  g_assert (IDE_IS_WORKBENCH_ADDIN (addin));
+  g_assert (IDE_IS_WORKBENCH_ADDIN (self));
   g_assert (IDE_IS_WORKBENCH (workbench));
 
   editor = ide_workbench_get_perspective_by_name (workbench, "editor");
@@ -97,6 +98,8 @@ gb_project_tree_addin_unload (IdeWorkbenchAddin *addin,
   pane = ide_layout_get_left_pane (IDE_LAYOUT (editor));
   g_assert (pane != NULL);
 
+  ide_layout_pane_remove_page (IDE_LAYOUT_PANE (pane),
+                               gtk_widget_get_parent (GTK_WIDGET (self->tree)));
 }
 
 static void
