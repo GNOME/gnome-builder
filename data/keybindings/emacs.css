@@ -106,9 +106,6 @@
   bind "<alt>7" { "append-to-count" (7) };
   bind "<alt>8" { "append-to-count" (8) };
   bind "<alt>9" { "append-to-count" (9) };
-
-  bind "F6" { "action" ("view", "preview", "") };
-  bind "F9" { "action" ("workspace", "toggle-sidebar", "") };
 }
 
 @binding-set builder-emacs-source-view-has-indenter
