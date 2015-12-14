@@ -646,6 +646,8 @@ gb_vim_jump_to_line (GtkSourceView  *source_view,
                          IDE_SOURCE_VIEW_MOVEMENT_NTH_LINE,
                          extend_selection, TRUE, TRUE);
 
+  ide_source_view_set_count (IDE_SOURCE_VIEW (source_view), 0);
+
   g_signal_emit_by_name (source_view, "save-insert-mark");
 
   return TRUE;
