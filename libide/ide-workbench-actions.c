@@ -20,6 +20,7 @@
 
 #include <glib/gi18n.h>
 
+#include "ide-application.h"
 #include "ide-buffer-manager.h"
 #include "ide-debug.h"
 #include "ide-workbench.h"
@@ -115,6 +116,49 @@ ide_workbench_actions_save_all (GSimpleAction *action,
   ide_buffer_manager_save_all_async (bufmgr, NULL, NULL, NULL);
 }
 
+static void
+save_all_quit_cb (GObject      *object,
+                  GAsyncResult *result,
+                  gpointer      user_data)
+{
+  IdeBufferManager *bufmgr = (IdeBufferManager *)object;
+  g_autoptr(IdeWorkbench) self = user_data;
+  g_autoptr(GError) error = NULL;
+
+  g_assert (IDE_IS_BUFFER_MANAGER (bufmgr));
+  g_assert (IDE_IS_WORKBENCH (self));
+
+  if (!ide_buffer_manager_save_all_finish (bufmgr, result, &error))
+    {
+      g_warning ("%s", error->message);
+      return;
+    }
+
+  g_application_quit (G_APPLICATION (IDE_APPLICATION_DEFAULT));
+}
+
+static void
+ide_workbench_actions_save_all_quit (GSimpleAction *action,
+                                     GVariant      *variant,
+                                     gpointer       user_data)
+{
+  IdeWorkbench *workbench = user_data;
+  IdeContext *context;
+  IdeBufferManager *bufmgr;
+
+  g_assert (IDE_IS_WORKBENCH (workbench));
+
+  context = ide_workbench_get_context (workbench);
+  if (context == NULL)
+    return;
+
+  bufmgr = ide_context_get_buffer_manager (context);
+  ide_buffer_manager_save_all_async (bufmgr,
+                                     NULL,
+                                     save_all_quit_cb,
+                                     g_object_ref (workbench));
+}
+
 void
 ide_workbench_actions_init (IdeWorkbench *self)
 {
@@ -122,6 +166,7 @@ ide_workbench_actions_init (IdeWorkbench *self)
   const GActionEntry actions[] = {
     { "open-with-dialog", ide_workbench_actions_open_with_dialog },
     { "save-all", ide_workbench_actions_save_all },
+    { "save-all-quit", ide_workbench_actions_save_all_quit },
   };
 
   g_action_map_add_action_entries (G_ACTION_MAP (self), actions, G_N_ELEMENTS (actions), self);

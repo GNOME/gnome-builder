@@ -1266,7 +1266,7 @@
 
 @binding-set builder-vim-source-view-normal-Z
 {
-  bind "<shift>z" { "action" ("workbench", "save-all-quit", "") };
+  bind "<shift>z" { "action" ("win", "save-all-quit", "") };
 }
 
 @binding-set builder-vim-source-view-visual-z
