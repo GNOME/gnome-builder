@@ -363,6 +363,14 @@ ide_layout_pane_set_position (IdeLayoutPane   *self,
     }
 }
 
+/**
+ * ide_layout_pane_add_page:
+ * @self: An #IdeLayoutPane
+ * @page: A #GtkWidget
+ * @title: the title for the page
+ * @icon_name: (nullable): the icon name
+ *
+ */
 void
 ide_layout_pane_add_page (IdeLayoutPane *self,
                           GtkWidget     *page,
