@@ -1836,6 +1836,11 @@
              "end-macro" ()
              "set-mode" ("vim-normal", permanent) };
 
+  bind "c" { "copy-clipboard" ()
+             "selection-theatric" (shrink)
+             "delete-selection" ()
+             "set-mode" ("vim-insert", permanent) };
+
   bind "d" { "copy-clipboard" ()
              "delete-selection" ()
              "end-macro" ()
@@ -2207,6 +2212,14 @@ bind "KP_Multiply" { "save-insert-mark" ()
                     "delete-selection" ()
                     "end-macro" ()
                     "set-mode" ("vim-normal", permanent) };
+
+  bind "c"        { "copy-clipboard" ()
+                    "selection-theatric" (shrink)
+                    "delete-selection" ()
+                    "set-mode" ("vim-insert", permanent)
+                    "insert-at-cursor" ("\n")
+                    "move-cursor" (display-lines, -1, 0)
+                    "reindent" () };
 
   bind "<shift>x" { "copy-clipboard" ()
                     "delete-selection" ()
