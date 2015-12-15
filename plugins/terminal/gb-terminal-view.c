@@ -59,7 +59,8 @@ static const GdkRGBA solarized_palette[] =
   { 0.992156, 0.964705, 0.890196, 1 },
 };
 
-static void gb_terminal_view_connect_terminal    (GbTerminalView *self, VteTerminal *terminal);
+static void gb_terminal_view_connect_terminal (GbTerminalView *self,
+                                               VteTerminal *terminal);
 
 static void
 gb_terminal_respawn (GbTerminalView *self,
@@ -320,15 +321,18 @@ static void
 style_context_changed (GtkStyleContext *style_context,
                        GbTerminalView  *self)
 {
+  GtkStateFlags state;
   GdkRGBA fg;
   GdkRGBA bg;
 
   g_assert (GTK_IS_STYLE_CONTEXT (style_context));
   g_assert (GB_IS_TERMINAL_VIEW (self));
 
-  gtk_style_context_get_color (style_context, GTK_STATE_FLAG_NORMAL, &fg);
+  state = gtk_style_context_get_state (style_context);
+
   G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-  gtk_style_context_get_background_color (style_context, GTK_STATE_FLAG_NORMAL, &bg);
+  gtk_style_context_get_color (style_context, state, &fg);
+  gtk_style_context_get_background_color (style_context, state, &bg);
   G_GNUC_END_IGNORE_DEPRECATIONS;
 
   if (bg.alpha == 0.0)
