@@ -412,8 +412,8 @@ gb_terminal_set_split_view (IdeLayoutView   *view,
                                             "expand", TRUE,
                                             "visible", TRUE,
                                             NULL);
-      gtk_container_add (GTK_CONTAINER (self->scrolled_window_bottom), GTK_WIDGET (self->terminal_bottom));
-      gtk_widget_show (self->scrolled_window_bottom);
+      gtk_container_add (GTK_CONTAINER (self->bottom_container), GTK_WIDGET (self->terminal_bottom));
+      gtk_widget_show (self->bottom_container);
 
       gb_terminal_view_connect_terminal (self, self->terminal_bottom);
       style_context_changed (style_context, GB_TERMINAL_VIEW (view));
@@ -428,9 +428,9 @@ gb_terminal_set_split_view (IdeLayoutView   *view,
     }
   else
     {
-      gtk_container_remove (GTK_CONTAINER (self->scrolled_window_bottom),
+      gtk_container_remove (GTK_CONTAINER (self->bottom_container),
                             GTK_WIDGET (self->terminal_bottom));
-      gtk_widget_hide (self->scrolled_window_bottom);
+      gtk_widget_hide (self->bottom_container);
 
       self->terminal_bottom = NULL;
       self->bottom_has_focus = FALSE;
@@ -551,7 +551,7 @@ gb_terminal_view_class_init (GbTerminalViewClass *klass)
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/plugins/terminal/gb-terminal-view.ui");
   gtk_widget_class_bind_template_child (widget_class, GbTerminalView, terminal_top);
-  gtk_widget_class_bind_template_child (widget_class, GbTerminalView, scrolled_window_bottom);
+  gtk_widget_class_bind_template_child (widget_class, GbTerminalView, bottom_container);
 
   g_type_ensure (VTE_TYPE_TERMINAL);
 

@@ -36,7 +36,7 @@ struct _GbTerminalView
 
   gchar               *selection_buffer;
 
-  GtkWidget           *scrolled_window_bottom;
+  GtkWidget           *bottom_container;
 
   gint64               last_respawn;
 
