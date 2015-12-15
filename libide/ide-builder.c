@@ -23,6 +23,11 @@
 
 G_DEFINE_ABSTRACT_TYPE (IdeBuilder, ide_builder, IDE_TYPE_OBJECT)
 
+/**
+ * ide_builder_build_async:
+ * @result: (out) (transfer none): A location for an #IdeBuildResult.
+ *
+ */
 void
 ide_builder_build_async (IdeBuilder           *builder,
                          IdeBuilderBuildFlags  flags,

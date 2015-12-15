@@ -1,0 +1,9 @@
+[Plugin]
+Module=build-tools-plugin
+Name=Build Tools
+Description=Build panel and command line tools
+Authors=Christian Hergert <christian@hergert.me>
+Copyright=Copyright © 2015 Christian Hergert
+Depends=editor
+Hidden=true
+Builtin=true

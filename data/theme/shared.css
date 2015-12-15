@@ -175,3 +175,10 @@ editortweak box.indentation button {
 editortweak box.indentation button label {
   padding: 2px 12px 2px 12px;
 }
+
+
+
+box.build-status {
+  background-image: none;
+  background-color: shade(@theme_bg_color, 1.05);
+}

@@ -1,0 +1,19 @@
+buildpanel button.popup:active,
+buildpanel button.popup:checked,
+buildpanel button.popup {
+  background-image: none;
+  background-color: transparent;
+  box-shadow: none;
+  border-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+list.buildpanel row {
+  padding: 10px;
+  border-bottom: 1px solid @borders;
+}
+
+list.buildpanel row:last-child {
+  border-bottom: none;
+}

@@ -1,5 +1,6 @@
 SUBDIRS = \
 	autotools \
+	build-tools \
 	clang \
 	command-bar \
 	c-pack \

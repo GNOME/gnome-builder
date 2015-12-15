@@ -196,7 +196,7 @@ ide_build_system_new_finish (GAsyncResult  *result,
 /**
  * ide_build_system_get_builder:
  * @system: The #IdeBuildSystem to perform the build.
- * @config: The configuration options for the build.
+ * @config: (nullable): The configuration options for the build.
  * @device: The #IdeDevice the result should be able to run on.
  *
  * This function should return an #IdeBuilder that can be used to perform a
@@ -213,10 +213,13 @@ ide_build_system_get_builder (IdeBuildSystem  *system,
 {
   IdeBuildSystemInterface *iface;
   IdeBuilder *ret = NULL;
+  g_autoptr(GKeyFile) local = NULL;
 
   g_return_val_if_fail (IDE_IS_BUILD_SYSTEM (system), NULL);
-  g_return_val_if_fail (config, NULL);
   g_return_val_if_fail (IDE_IS_DEVICE (device), NULL);
+
+  if (config == NULL)
+    config = local = g_key_file_new ();
 
   iface = IDE_BUILD_SYSTEM_GET_IFACE (system);
 

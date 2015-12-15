@@ -1,0 +1,22 @@
+<interface>
+  <template class="GbpBuildPanelRow" parent="GtkListBoxRow">
+    <child>
+      <object class="GtkBox">
+        <property name="orientation">vertical</property>
+        <property name="visible">true</property>
+        <child>
+          <object class="GtkLabel" id="file_label">
+            <property name="visible">true</property>
+            <property name="xalign">0.0</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel" id="message_label">
+            <property name="visible">true</property>
+            <property name="xalign">0.0</property>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>
