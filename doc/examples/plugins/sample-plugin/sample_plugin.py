@@ -68,8 +68,12 @@ class CompletionProvider(Ide.Object, GtkSource.CompletionProvider, Ide.Completio
     # NOTE: You must set X-Completion-Provider-Languages in .plugin file!
 
     def do_populate(self, context):
-        item = GtkSource.CompletionItem(label='Hi', text='Hi')
-        context.add_proposals(self, [item], True)
+        iter = context.props.iter
+
+        # only add our items after a `.'
+        if iter.backward_char() and iter.get_char() == '.':
+            item = GtkSource.CompletionItem(label='do_something()', text='do_something()')
+            context.add_proposals(self, [item], True)
 
 class SampleDevice(Ide.Device):
     def __init__(self):
