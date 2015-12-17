@@ -21,6 +21,7 @@
 
 #include <gio/gio.h>
 
+#include "ide-diagnostic.h"
 #include "ide-object.h"
 
 G_BEGIN_DECLS
@@ -32,12 +33,24 @@ G_DECLARE_DERIVABLE_TYPE (IdeBuildResult, ide_build_result, IDE, BUILD_RESULT, I
 struct _IdeBuildResultClass
 {
   IdeObjectClass parent;
+
+  void (*diagnostic) (IdeBuildResult *self,
+                      IdeDiagnostic  *diagnostic);
 };
 
 GInputStream  *ide_build_result_get_stdout_stream (IdeBuildResult *result);
 GInputStream  *ide_build_result_get_stderr_stream (IdeBuildResult *result);
 void           ide_build_result_log_subprocess    (IdeBuildResult *result,
                                                    GSubprocess    *subprocess);
+GTimeSpan      ide_build_result_get_running_time  (IdeBuildResult *self);
+gboolean       ide_build_result_get_running       (IdeBuildResult *self);
+void           ide_build_result_set_running       (IdeBuildResult *self,
+                                                   gboolean        running);
+void           ide_build_result_emit_diagnostic   (IdeBuildResult *self,
+                                                   IdeDiagnostic  *diagnostic);
+gchar         *ide_build_result_get_mode          (IdeBuildResult *self);
+void           ide_build_result_set_mode          (IdeBuildResult *self,
+                                                   const gchar    *mode);
 void           ide_build_result_log_stdout        (IdeBuildResult *result,
                                                    const gchar    *format,
                                                    ...) G_GNUC_PRINTF (2, 3);

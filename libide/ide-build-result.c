@@ -31,9 +31,29 @@ typedef struct
 
   GInputStream  *stderr_reader;
   GOutputStream *stderr_writer;
+
+  GTimer        *timer;
+  gchar         *mode;
+
+  guint          running : 1;
 } IdeBuildResultPrivate;
 
 G_DEFINE_TYPE_WITH_PRIVATE (IdeBuildResult, ide_build_result, IDE_TYPE_OBJECT)
+
+enum {
+  PROP_0,
+  PROP_MODE,
+  PROP_RUNNING,
+  LAST_PROP
+};
+
+enum {
+  DIAGNOSTIC,
+  LAST_SIGNAL
+};
+
+static GParamSpec *properties [LAST_PROP];
+static guint signals [LAST_SIGNAL];
 
 static gboolean
 _ide_build_result_open_log (IdeBuildResult  *self,
@@ -277,7 +297,56 @@ ide_build_result_finalize (GObject *object)
   g_clear_object (&priv->stdout_reader);
   g_clear_object (&priv->stdout_writer);
 
+  g_clear_pointer (&priv->mode, g_free);
+  g_clear_pointer (&priv->timer, g_timer_destroy);
+
   G_OBJECT_CLASS (ide_build_result_parent_class)->finalize (object);
+}
+
+static void
+ide_build_result_get_property (GObject    *object,
+                               guint       prop_id,
+                               GValue     *value,
+                               GParamSpec *pspec)
+{
+  IdeBuildResult *self = IDE_BUILD_RESULT(object);
+
+  switch (prop_id)
+    {
+    case PROP_RUNNING:
+      g_value_set_boolean (value, ide_build_result_get_running (self));
+      break;
+
+    case PROP_MODE:
+      g_value_take_string (value, ide_build_result_get_mode (self));
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
+    }
+}
+
+static void
+ide_build_result_set_property (GObject      *object,
+                               guint         prop_id,
+                               const GValue *value,
+                               GParamSpec   *pspec)
+{
+  IdeBuildResult *self = IDE_BUILD_RESULT(object);
+
+  switch (prop_id)
+    {
+    case PROP_RUNNING:
+      ide_build_result_set_running (self, g_value_get_boolean (value));
+      break;
+
+    case PROP_MODE:
+      ide_build_result_set_mode (self, g_value_get_string (value));
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
+    }
 }
 
 static void
@@ -286,6 +355,32 @@ ide_build_result_class_init (IdeBuildResultClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   object_class->finalize = ide_build_result_finalize;
+  object_class->get_property = ide_build_result_get_property;
+  object_class->set_property = ide_build_result_set_property;
+
+  properties [PROP_MODE] =
+    g_param_spec_string ("mode",
+                         "Mode",
+                         "The name of the current build step",
+                         NULL,
+                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_RUNNING] =
+    g_param_spec_boolean ("running",
+                          "Running",
+                          "If the build process is still running.",
+                          FALSE,
+                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
+
+  signals [DIAGNOSTIC] =
+    g_signal_new ("diagnostic",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (IdeBuildResultClass, diagnostic),
+                  NULL, NULL, NULL,
+                  G_TYPE_NONE, 1, IDE_TYPE_DIAGNOSTIC);
 }
 
 static void
@@ -294,4 +389,120 @@ ide_build_result_init (IdeBuildResult *self)
   IdeBuildResultPrivate *priv = ide_build_result_get_instance_private (self);
 
   g_mutex_init (&priv->mutex);
+
+  priv->timer = g_timer_new ();
+}
+
+GTimeSpan
+ide_build_result_get_running_time (IdeBuildResult *self)
+{
+  IdeBuildResultPrivate *priv = ide_build_result_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_BUILD_RESULT (self), 0);
+
+  return g_timer_elapsed (priv->timer, NULL) * G_USEC_PER_SEC;
+}
+
+gchar *
+ide_build_result_get_mode (IdeBuildResult *self)
+{
+  IdeBuildResultPrivate *priv = ide_build_result_get_instance_private (self);
+  gchar *copy;
+
+  g_return_val_if_fail (IDE_IS_BUILD_RESULT (self), NULL);
+
+  g_mutex_lock (&priv->mutex);
+  copy = g_strdup (priv->mode);
+  g_mutex_unlock (&priv->mutex);
+
+  return copy;
+}
+
+void
+ide_build_result_set_mode (IdeBuildResult *self,
+                           const gchar    *mode)
+{
+  IdeBuildResultPrivate *priv = ide_build_result_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_BUILD_RESULT (self));
+
+  g_mutex_lock (&priv->mutex);
+  if (!ide_str_equal0 (priv->mode, mode))
+    {
+      g_free (priv->mode);
+      priv->mode = g_strdup (mode);
+      ide_object_notify_in_main (self, properties [PROP_MODE]);
+    }
+  g_mutex_unlock (&priv->mutex);
+}
+
+gboolean
+ide_build_result_get_running (IdeBuildResult *self)
+{
+  IdeBuildResultPrivate *priv = ide_build_result_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_BUILD_RESULT (self), FALSE);
+
+  return priv->running;
+}
+
+void
+ide_build_result_set_running (IdeBuildResult *self,
+                              gboolean        running)
+{
+  IdeBuildResultPrivate *priv = ide_build_result_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_BUILD_RESULT (self));
+
+  running = !!running;
+
+  g_mutex_lock (&priv->mutex);
+  if (priv->running != running)
+    {
+      priv->running = running;
+      if (!running)
+        g_timer_stop (priv->timer);
+      ide_object_notify_in_main (self, properties [PROP_RUNNING]);
+    }
+  g_mutex_unlock (&priv->mutex);
+}
+
+static gboolean
+ide_build_result_emit_diagnostic_cb (gpointer data)
+{
+  struct {
+    IdeBuildResult *result;
+    IdeDiagnostic  *diagnostic;
+  } *pair = data;
+
+  g_assert (pair != NULL);
+  g_assert (IDE_IS_BUILD_RESULT (pair->result));
+  g_assert (pair->diagnostic != NULL);
+
+  g_signal_emit (pair->result, signals [DIAGNOSTIC], 0, pair->diagnostic);
+
+  g_object_unref (pair->result);
+  ide_diagnostic_unref (pair->diagnostic);
+  g_slice_free1 (sizeof *pair, pair);
+
+  return G_SOURCE_REMOVE;
+}
+
+void
+ide_build_result_emit_diagnostic (IdeBuildResult *self,
+                                  IdeDiagnostic  *diagnostic)
+{
+  struct {
+    IdeBuildResult *result;
+    IdeDiagnostic  *diagnostic;
+  } *pair;
+
+  g_return_if_fail (IDE_IS_BUILD_RESULT (self));
+  g_return_if_fail (diagnostic != NULL);
+
+  pair = g_slice_alloc0 (sizeof *pair);
+  pair->result = g_object_ref (self);
+  pair->diagnostic = ide_diagnostic_ref (diagnostic);
+
+  g_timeout_add (0, ide_build_result_emit_diagnostic_cb, pair);
 }
