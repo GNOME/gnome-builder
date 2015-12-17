@@ -2368,8 +2368,8 @@ IdeSourceViewMode.vim-normal-c-a {
   -IdeSourceViewMode-suppress-unbound: true;
   -IdeSourceViewMode-block-cursor: true;
 
-  gtk-key-bindings: builder-vim-source-view,
-                    builder-vim-source-view-normal-c-a;
+  -gtk-key-bindings: builder-vim-source-view,
+                     builder-vim-source-view-normal-c-a;
 }
 
 IdeSourceViewMode.vim-normal-d {
@@ -2401,8 +2401,8 @@ IdeSourceViewMode.vim-normal-d-a {
   -IdeSourceViewMode-suppress-unbound: true;
   -IdeSourceViewMode-block-cursor: true;
 
-  gtk-key-bindings: builder-vim-source-view,
-                    builder-vim-source-view-normal-d-a;
+  -gtk-key-bindings: builder-vim-source-view,
+                     builder-vim-source-view-normal-d-a;
 }
 
 IdeSourceViewMode.vim-normal-g {
@@ -2503,8 +2503,8 @@ IdeSourceViewMode.vim-visual-i {
   -IdeSourceViewMode-block-cursor: true;
   -IdeSourceViewMode-display-name: "Visual";
 
-  gtk-key-bindings: builder-vim-source-view,
-                    builder-vim-source-view-visual-i;
+  -gtk-key-bindings: builder-vim-source-view,
+                     builder-vim-source-view-visual-i;
 }
 
 IdeSourceViewMode.vim-visual-a {
@@ -2512,8 +2512,8 @@ IdeSourceViewMode.vim-visual-a {
   -IdeSourceViewMode-block-cursor: true;
   -IdeSourceViewMode-display-name: "Visual";
 
-  gtk-key-bindings: builder-vim-source-view,
-                    builder-vim-source-view-visual-a;
+  -gtk-key-bindings: builder-vim-source-view,
+                     builder-vim-source-view-visual-a;
 }
 
 IdeSourceViewMode.vim-visual-with-count {
