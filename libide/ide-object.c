@@ -573,3 +573,43 @@ ide_object_release (IdeObject *self)
 
   ide_context_release (priv->context);
 }
+
+static gboolean
+ide_object_notify_in_main_cb (gpointer data)
+{
+  struct {
+    GObject    *object;
+    GParamSpec *pspec;
+  } *notify = data;
+
+  g_assert (notify != NULL);
+  g_assert (G_IS_OBJECT (notify->object));
+  g_assert (notify->pspec != NULL);
+
+  g_object_notify_by_pspec (notify->object, notify->pspec);
+
+  g_object_unref (notify->object);
+  g_param_spec_unref (notify->pspec);
+  g_slice_free1 (sizeof *notify, notify);
+
+  return G_SOURCE_REMOVE;
+}
+
+void
+ide_object_notify_in_main (gpointer    instance,
+                           GParamSpec *pspec)
+{
+  struct {
+    GObject    *object;
+    GParamSpec *pspec;
+  } *notify;
+
+  g_return_if_fail (G_IS_OBJECT (instance));
+  g_return_if_fail (pspec != NULL);
+
+  notify = g_slice_alloc0 (sizeof *notify);
+  notify->object = g_object_ref (instance);
+  notify->pspec = g_param_spec_ref (pspec);
+
+  g_timeout_add (0, ide_object_notify_in_main_cb, notify);
+}

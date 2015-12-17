@@ -38,30 +38,31 @@ struct _IdeObjectClass
                        IdeContext *context);
 };
 
-IdeContext *ide_object_get_context (IdeObject            *self);
-void        ide_object_set_context (IdeObject            *self,
-                                    IdeContext           *context);
-void        ide_object_new_for_extension_async
-                                   (GType                 interface_gtype,
-                                    GCompareDataFunc      sort_priority_func,
-                                    gpointer              sort_proirity_data,
-                                    int                   io_priority,
-                                    GCancellable         *cancellable,
-                                    GAsyncReadyCallback   callback,
-                                    gpointer              user_data,
-                                    const gchar          *first_property,
-                                    ...);
-void        ide_object_new_async   (const gchar          *extension_point,
-                                    int                   io_priority,
-                                    GCancellable         *cancellable,
-                                    GAsyncReadyCallback   callback,
-                                    gpointer              user_data,
-                                    const gchar          *first_property,
-                                    ...);
-IdeObject  *ide_object_new_finish  (GAsyncResult         *result,
-                                    GError              **error);
-gboolean    ide_object_hold        (IdeObject            *self);
-void        ide_object_release     (IdeObject            *self);
+IdeContext *ide_object_get_context             (IdeObject            *self);
+void        ide_object_set_context             (IdeObject            *self,
+                                                IdeContext           *context);
+void        ide_object_new_for_extension_async (GType                 interface_gtype,
+                                                GCompareDataFunc      sort_priority_func,
+                                                gpointer              sort_proirity_data,
+                                                int                   io_priority,
+                                                GCancellable         *cancellable,
+                                                GAsyncReadyCallback   callback,
+                                                gpointer              user_data,
+                                                const gchar          *first_property,
+                                                ...);
+void        ide_object_new_async               (const gchar          *extension_point,
+                                                int                   io_priority,
+                                                GCancellable         *cancellable,
+                                                GAsyncReadyCallback   callback,
+                                                gpointer              user_data,
+                                                const gchar          *first_property,
+                                                ...);
+IdeObject  *ide_object_new_finish              (GAsyncResult         *result,
+                                                GError              **error);
+gboolean    ide_object_hold                    (IdeObject            *self);
+void        ide_object_release                 (IdeObject            *self);
+void        ide_object_notify_in_main          (gpointer              instance,
+                                                GParamSpec           *pspec);
 
 G_END_DECLS
 
