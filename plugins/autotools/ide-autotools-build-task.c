@@ -561,7 +561,11 @@ worker_state_new (IdeAutotoolsBuildTask *self)
       g_ptr_array_add (make_targets, g_strdup ("clean"));
     }
 
-  g_ptr_array_add (make_targets, g_strdup ("all"));
+  if (priv->config && g_key_file_get_boolean (priv->config, "autotools", "clean-only", NULL))
+    g_ptr_array_add (make_targets, g_strdup ("clean"));
+  else
+    g_ptr_array_add (make_targets, g_strdup ("all"));
+
   g_ptr_array_add (make_targets, NULL);
   state->make_targets = (gchar **)g_ptr_array_free (make_targets, FALSE);
 
@@ -785,6 +789,8 @@ step_autogen (GTask                 *task,
       return FALSE;
     }
 
+  ide_build_result_set_mode (IDE_BUILD_RESULT (self), _("Autogening…"));
+
   launcher = g_subprocess_launcher_new ((G_SUBPROCESS_FLAGS_STDOUT_PIPE |
                                          G_SUBPROCESS_FLAGS_STDERR_PIPE));
   g_subprocess_launcher_set_cwd (launcher, state->project_path);
@@ -845,6 +851,8 @@ step_configure (GTask                 *task,
       if (g_file_test (makefile_path, G_FILE_TEST_EXISTS))
         return TRUE;
     }
+
+  ide_build_result_set_mode (IDE_BUILD_RESULT (self), _("Configuring…"));
 
   launcher = g_subprocess_launcher_new ((G_SUBPROCESS_FLAGS_STDERR_PIPE |
                                          G_SUBPROCESS_FLAGS_STDOUT_PIPE));
@@ -911,6 +919,11 @@ step_make_all  (GTask                 *task,
   for (i = 0; targets [i]; i++)
     {
       const gchar *target = targets [i];
+
+      if (ide_str_equal0 (target, "clean"))
+        ide_build_result_set_mode (IDE_BUILD_RESULT (self), _("Cleaning…"));
+      else
+        ide_build_result_set_mode (IDE_BUILD_RESULT (self), _("Building…"));
 
       process = log_and_spawn (self, launcher, &error, GNU_MAKE_NAME, target, state->parallel, NULL);
 

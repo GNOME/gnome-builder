@@ -100,11 +100,20 @@ ide_autotools_builder_build_cb (GObject      *object,
   g_return_if_fail (IDE_IS_AUTOTOOLS_BUILD_TASK (build_result));
   g_return_if_fail (G_IS_TASK (task));
 
+  ide_build_result_set_running (IDE_BUILD_RESULT (build_result), FALSE);
+
   if (!ide_autotools_build_task_execute_finish (build_result, result, &error))
     {
+      if (g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+        ide_build_result_set_mode (IDE_BUILD_RESULT (build_result), _("Cancelled"));
+      else
+        ide_build_result_set_mode (IDE_BUILD_RESULT (build_result), _("Failed"));
+
       g_task_return_error (task, error);
       return;
     }
+
+  ide_build_result_set_mode (IDE_BUILD_RESULT (build_result), _("Finished"));
 
   g_task_return_pointer (task, g_object_ref (build_result), g_object_unref);
 }
@@ -193,6 +202,10 @@ ide_autotools_builder_build_async (IdeBuilder           *builder,
   if (flags & IDE_BUILDER_BUILD_FLAGS_FORCE_REBUILD)
     g_key_file_set_boolean (self->config, "autotools", "rebuild", TRUE);
 
+  /* TODO: This belongs as its own vfunc */
+  if (flags & IDE_BUILDER_BUILD_FLAGS_CLEAN)
+    g_key_file_set_boolean (self->config, "autotools", "clean-only", TRUE);
+
   task = g_task_new (self, cancellable, callback, user_data);
 
   context = ide_object_get_context (IDE_OBJECT (builder));
@@ -204,6 +217,8 @@ ide_autotools_builder_build_async (IdeBuilder           *builder,
                                "config", self->config,
                                "device", device,
                                "directory", directory,
+                               "mode", _("Building…"),
+                               "running", TRUE,
                                NULL);
 
   if (result)

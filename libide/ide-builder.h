@@ -30,7 +30,10 @@ G_DECLARE_DERIVABLE_TYPE (IdeBuilder, ide_builder, IDE, BUILDER, IdeObject)
 typedef enum
 {
   IDE_BUILDER_BUILD_FLAGS_NONE          = 0,
-  IDE_BUILDER_BUILD_FLAGS_FORCE_REBUILD = 1 << 0
+  IDE_BUILDER_BUILD_FLAGS_FORCE_REBUILD = 1 << 0,
+
+  /* TODO: this belongs as a vfunc instead */
+  IDE_BUILDER_BUILD_FLAGS_CLEAN         = 1 << 1,
 } IdeBuilderBuildFlags;
 
 struct _IdeBuilderClass
