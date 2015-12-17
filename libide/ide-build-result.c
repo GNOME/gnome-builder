@@ -363,14 +363,14 @@ ide_build_result_class_init (IdeBuildResultClass *klass)
                          "Mode",
                          "The name of the current build step",
                          NULL,
-                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY));
 
   properties [PROP_RUNNING] =
     g_param_spec_boolean ("running",
                           "Running",
                           "If the build process is still running.",
                           FALSE,
-                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY));
 
   g_object_class_install_properties (object_class, LAST_PROP, properties);
 
