@@ -166,3 +166,27 @@ ide_source_location_new (IdeFile *file,
 
   return ret;
 }
+
+/**
+ * ide_source_location_get_uri:
+ * @self: (in): A #IdeSourceLocation.
+ *
+ * Returns: (transfer full): A newly allocated #IdeUri.
+ */
+IdeUri *
+ide_source_location_get_uri (IdeSourceLocation *self)
+{
+  GFile *file;
+  IdeUri *ret;
+  gchar *fragment;
+
+  g_return_val_if_fail (self != NULL, NULL);
+
+  file = ide_file_get_file (self->file);
+  ret = ide_uri_new_from_file (file);
+  fragment = g_strdup_printf ("L%u_%u", self->line, self->line_offset);
+  ide_uri_set_fragment (ret, fragment);
+  g_free (fragment);
+
+  return ret;
+}

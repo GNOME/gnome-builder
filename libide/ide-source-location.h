@@ -20,6 +20,7 @@
 #define IDE_SOURCE_LOCATION_H
 
 #include "ide-types.h"
+#include "ide-uri.h"
 
 G_BEGIN_DECLS
 
@@ -36,6 +37,7 @@ guint              ide_source_location_get_line        (IdeSourceLocation *self)
 guint              ide_source_location_get_line_offset (IdeSourceLocation *self);
 guint              ide_source_location_get_offset      (IdeSourceLocation *self);
 IdeFile           *ide_source_location_get_file        (IdeSourceLocation *self);
+IdeUri            *ide_source_location_get_uri         (IdeSourceLocation *self);
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (IdeSourceLocation, ide_source_location_unref)
 
