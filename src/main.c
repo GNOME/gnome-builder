@@ -16,7 +16,37 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define G_LOG_DOMAIN "builder"
+
 #include <ide.h>
+
+static gboolean
+verbose_cb (const gchar  *option_name,
+            const gchar  *value,
+            gpointer      data,
+            GError      **error)
+{
+  ide_log_increase_verbosity ();
+  return TRUE;
+}
+
+static void
+early_verbose_check (gint    *argc,
+                     gchar ***argv)
+{
+  GOptionContext *context;
+  static const GOptionEntry entries[] = {
+    { "verbose", 'v', G_OPTION_FLAG_NO_ARG, G_OPTION_ARG_CALLBACK, verbose_cb },
+    { NULL }
+  };
+
+  context = g_option_context_new (NULL);
+  g_option_context_set_ignore_unknown_options (context, TRUE);
+  g_option_context_set_help_enabled (context, FALSE);
+  g_option_context_add_main_entries (context, entries, NULL);
+  g_option_context_parse (context, argc, argv, NULL);
+  g_option_context_free (context);
+}
 
 int
 main (int   argc,
@@ -26,6 +56,8 @@ main (int   argc,
   int ret;
 
   ide_log_init (TRUE, NULL);
+
+  early_verbose_check (&argc, &argv);
 
   g_message ("Initializing with Gtk+ version %d.%d.%d.",
              gtk_get_major_version (),

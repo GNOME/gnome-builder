@@ -133,7 +133,7 @@ ide_application_get_command_help (IdeApplication *self,
 static gboolean
 ide_application_increase_verbosity (void)
 {
-  ide_log_increase_verbosity ();
+  /* handled during early init */
   return TRUE;
 }
 
