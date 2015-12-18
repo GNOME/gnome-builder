@@ -11,7 +11,7 @@ buildpanel button.popup {
 
 list.buildpanel row {
   padding: 10px;
-  border-bottom: 1px solid @borders;
+  border-bottom: 1px solid alpha(@borders, 0.4);
 }
 
 list.buildpanel row:last-child {
