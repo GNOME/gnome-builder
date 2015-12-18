@@ -17,3 +17,20 @@ list.buildpanel row {
 list.buildpanel row:last-child {
   border-bottom: none;
 }
+
+buildpanel list row {
+  padding: 6px;
+  border-bottom: 1px solid alpha(@borders, 0.4);
+}
+
+buildpanel list row:last-child {
+  border-bottom: none;
+}
+
+buildpanel list row label.file {
+  opacity: 0.5;
+}
+
+buildpanel list row image {
+  opacity: 0.5;
+}

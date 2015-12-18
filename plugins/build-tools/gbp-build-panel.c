@@ -17,6 +17,7 @@
  */
 
 #include <glib/gi18n.h>
+#include <ide.h>
 
 #include "egg-binding-group.h"
 #include "egg-signal-group.h"
@@ -266,6 +267,36 @@ gbp_build_panel_device_activated (GbpBuildPanel *self,
 }
 
 static void
+gbp_build_panel_diagnostic_activated (GbpBuildPanel *self,
+                                      GtkListBoxRow *row,
+                                      GtkListBox    *list_box)
+{
+  g_autoptr(IdeUri) uri = NULL;
+  IdeDiagnostic *diagnostic;
+  IdeSourceLocation *loc;
+  IdeWorkbench *workbench;
+
+  g_assert (GBP_IS_BUILD_PANEL (self));
+  g_assert (GTK_IS_LIST_BOX_ROW (row));
+  g_assert (GTK_IS_LIST_BOX (list_box));
+
+  diagnostic = gbp_build_panel_row_get_diagnostic (GBP_BUILD_PANEL_ROW (row));
+  if (diagnostic == NULL)
+    return;
+
+  loc = ide_diagnostic_get_location (diagnostic);
+  if (loc == NULL)
+    return;
+
+  uri = ide_source_location_get_uri (loc);
+  if (uri == NULL)
+    return;
+
+  workbench = ide_widget_get_workbench (GTK_WIDGET (self));
+  ide_workbench_open_uri_async (workbench, uri, "editor", NULL, NULL, NULL);
+}
+
+static void
 gbp_build_panel_destroy (GtkWidget *widget)
 {
   GbpBuildPanel *self = (GbpBuildPanel *)widget;
@@ -398,6 +429,12 @@ gbp_build_panel_init (GbpBuildPanel *self)
   g_signal_connect_object (self->devices,
                            "row-activated",
                            G_CALLBACK (gbp_build_panel_device_activated),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  g_signal_connect_object (self->diagnostics,
+                           "row-activated",
+                           G_CALLBACK (gbp_build_panel_diagnostic_activated),
                            self,
                            G_CONNECT_SWAPPED);
 

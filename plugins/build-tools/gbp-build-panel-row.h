@@ -16,14 +16,20 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#pragma once
+#ifndef GBP_BUILD_PANEL_ROW_H
+#define GBP_BUILD_PANEL_ROW_H
 
 #include <gtk/gtk.h>
+#include <ide.h>
 
 G_BEGIN_DECLS
 
 #define GBP_TYPE_BUILD_PANEL_ROW (gbp_build_panel_row_get_type())
 
-G_DECLARE_FINAL_TYPE (GbpBuildPanelRow, gbp_build_panel_row, GBP, BUILD_PANEL_ROW, GObject)
+G_DECLARE_FINAL_TYPE (GbpBuildPanelRow, gbp_build_panel_row, GBP, BUILD_PANEL_ROW, GtkListBoxRow)
+
+IdeDiagnostic *gbp_build_panel_row_get_diagnostic (GbpBuildPanelRow *self);
 
 G_END_DECLS
+
+#endif /* GBP_BUILD_PANEL_ROW_H */

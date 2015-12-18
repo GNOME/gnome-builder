@@ -16,7 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#pragma once
+#ifndef GBP_BUILD_PANEL_H
+#define GBP_BUILD_PANEL_H
 
 #include <gtk/gtk.h>
 #include <ide.h>
@@ -33,3 +34,5 @@ void gbp_build_panel_add_error  (GbpBuildPanel  *self,
                                  const gchar    *message);
 
 G_END_DECLS
+
+#endif /* GBP_BUILD_PANEL_H */

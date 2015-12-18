@@ -16,6 +16,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define G_LOG_DOMAIN "build-panel"
+
+#include <glib/gi18n.h>
 #include <ide.h>
 
 #include "gbp-build-panel-row.h"
@@ -44,14 +47,39 @@ static void
 gbp_build_panel_row_set_diagnostic (GbpBuildPanelRow *self,
                                     IdeDiagnostic    *diagnostic)
 {
-  gchar *text;
-
   g_return_if_fail (GBP_IS_BUILD_PANEL_ROW (self));
-  g_return_if_fail (diagnostic != NULL);
 
-  text = ide_diagnostic_get_text_for_display (diagnostic);
-  gtk_label_set_label (self->message_label, text);
-  g_free (text);
+  if ((diagnostic != NULL) && (self->diagnostic != diagnostic))
+    {
+      IdeSourceLocation *location;
+      const gchar *path = NULL;
+      IdeFile *file;
+      const gchar *text;
+
+      self->diagnostic = ide_diagnostic_ref (diagnostic);
+
+      if ((location = ide_diagnostic_get_location (diagnostic)) &&
+          (file = ide_source_location_get_file (location)))
+        path = ide_file_get_path (file);
+
+      if (path)
+        gtk_label_set_label (self->file_label, path);
+      else
+        gtk_label_set_label (self->file_label, _("Unknown file"));
+
+      text = ide_diagnostic_get_text (diagnostic);
+      gtk_label_set_label (self->message_label, text);
+    }
+}
+
+static void
+gbp_build_panel_row_finalize (GObject *object)
+{
+  GbpBuildPanelRow *self = (GbpBuildPanelRow *)object;
+
+  g_clear_pointer (&self->diagnostic, ide_diagnostic_unref);
+
+  G_OBJECT_CLASS (gbp_build_panel_row_parent_class)->finalize (object);
 }
 
 static void
@@ -98,6 +126,7 @@ gbp_build_panel_row_class_init (GbpBuildPanelRowClass *klass)
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
+  object_class->finalize = gbp_build_panel_row_finalize;
   object_class->get_property = gbp_build_panel_row_get_property;
   object_class->set_property = gbp_build_panel_row_set_property;
 
@@ -111,7 +140,6 @@ gbp_build_panel_row_class_init (GbpBuildPanelRowClass *klass)
   g_object_class_install_properties (object_class, LAST_PROP, properties);
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/plugins/build-tools-plugin/gbp-build-panel-row.ui");
-  gtk_widget_class_set_css_name (widget_class, "buildpanelrow");
   gtk_widget_class_bind_template_child (widget_class, GbpBuildPanelRow, file_label);
   gtk_widget_class_bind_template_child (widget_class, GbpBuildPanelRow, message_label);
 }
@@ -120,4 +148,12 @@ static void
 gbp_build_panel_row_init (GbpBuildPanelRow *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
+}
+
+IdeDiagnostic *
+gbp_build_panel_row_get_diagnostic (GbpBuildPanelRow *self)
+{
+  g_return_val_if_fail (GBP_IS_BUILD_PANEL_ROW (self), NULL);
+
+  return self->diagnostic;
 }
