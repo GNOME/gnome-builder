@@ -58,7 +58,7 @@ IdeContext         *ide_buffer_get_context                   (IdeBuffer         
 IdeDiagnostic      *ide_buffer_get_diagnostic_at_iter        (IdeBuffer            *self,
                                                               const GtkTextIter    *iter);
 IdeFile            *ide_buffer_get_file                      (IdeBuffer            *self);
-IdeBufferLineFlags  ide_buffer_get_line_flags                (IdeBuffer            *buffer,
+IdeBufferLineFlags  ide_buffer_get_line_flags                (IdeBuffer            *self,
                                                               guint                 line);
 gboolean            ide_buffer_get_read_only                 (IdeBuffer            *self);
 gboolean            ide_buffer_get_highlight_diagnostics     (IdeBuffer            *self);
