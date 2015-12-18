@@ -670,3 +670,22 @@ ide_file_new (IdeContext *context,
                        "file", file,
                        NULL);
 }
+
+IdeFile *
+ide_file_new_for_path (IdeContext  *context,
+                       const gchar *path)
+{
+  g_autoptr(GFile) file = NULL;
+  IdeFile *ret;
+
+  g_return_val_if_fail (!context || IDE_IS_CONTEXT (context), NULL);
+  g_return_val_if_fail (path != NULL, NULL);
+
+  file = g_file_new_for_path (path);
+  ret = g_object_new (IDE_TYPE_FILE,
+                      "context", context,
+                      "file", file,
+                      NULL);
+
+  return ret;
+}
