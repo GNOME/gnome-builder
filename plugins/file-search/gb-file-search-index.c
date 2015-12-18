@@ -146,6 +146,9 @@ populate_from_dir (Fuzzy        *fuzzy,
   g_assert (G_IS_FILE (directory));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
+  if (ide_vcs_is_ignored (vcs, directory, NULL))
+    return;
+
   enumerator = g_file_enumerate_children (directory,
                                           G_FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME","
                                           G_FILE_ATTRIBUTE_STANDARD_TYPE,
