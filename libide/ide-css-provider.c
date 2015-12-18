@@ -57,8 +57,6 @@ ide_css_provider_update (IdeCssProvider *self)
   gsize len = 0;
   guint32 flags = 0;
 
-  IDE_ENTRY;
-
   g_assert (IDE_IS_CSS_PROVIDER (self));
   g_assert (GTK_IS_SETTINGS (self->settings));
 
@@ -79,13 +77,11 @@ ide_css_provider_update (IdeCssProvider *self)
 
   /* Nothing to load */
   if (!g_resources_get_info (resource_path, G_RESOURCE_LOOKUP_FLAGS_NONE, &len, &flags, NULL))
-    IDE_EXIT;
+    return;
 
   IDE_TRACE_MSG ("Loading css overrides \"%s\"", resource_path);
 
   gtk_css_provider_load_from_resource (GTK_CSS_PROVIDER (self), resource_path);
-
-  IDE_EXIT;
 }
 
 static void
