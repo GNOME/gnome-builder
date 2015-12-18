@@ -113,7 +113,7 @@ ide_autotools_builder_build_cb (GObject      *object,
       return;
     }
 
-  ide_build_result_set_mode (IDE_BUILD_RESULT (build_result), _("Finished"));
+  ide_build_result_set_mode (IDE_BUILD_RESULT (build_result), _("Success"));
 
   g_task_return_pointer (task, g_object_ref (build_result), g_object_unref);
 }
