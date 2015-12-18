@@ -43,8 +43,13 @@ struct _GbpBuildPanel
   GtkLabel         *device_label;
   GtkListBox       *devices;
   GtkPopover       *device_popover;
+  GtkLabel         *errors_label;
+  GtkLabel         *warnings_label;
 
   guint             running_time_source;
+
+  guint             error_count;
+  guint             warning_count;
 };
 
 G_DEFINE_TYPE (GbpBuildPanel, gbp_build_panel, GTK_TYPE_BIN)
@@ -140,11 +145,30 @@ gbp_build_panel_diagnostic (GbpBuildPanel  *self,
                             IdeDiagnostic  *diagnostic,
                             IdeBuildResult *result)
 {
+  IdeDiagnosticSeverity severity;
   GtkWidget *row;
+  gchar *str;
 
   g_assert (GBP_IS_BUILD_PANEL (self));
   g_assert (diagnostic != NULL);
   g_assert (IDE_IS_BUILD_RESULT (result));
+
+  severity = ide_diagnostic_get_severity (diagnostic);
+
+  if (severity == IDE_DIAGNOSTIC_WARNING)
+    {
+      self->warning_count++;
+      str = g_strdup_printf (ngettext ("%d warning", "%d warnings", self->warning_count), self->warning_count);
+      gtk_label_set_label (self->warnings_label, str);
+      g_free (str);
+    }
+  else if (severity == IDE_DIAGNOSTIC_ERROR)
+    {
+      self->error_count++;
+      str = g_strdup_printf (ngettext ("%d error", "%d errors", self->error_count), self->error_count);
+      gtk_label_set_label (self->errors_label, str);
+      g_free (str);
+    }
 
   row = g_object_new (GBP_TYPE_BUILD_PANEL_ROW,
                       "diagnostic", diagnostic,
@@ -189,6 +213,11 @@ gbp_build_panel_connect (GbpBuildPanel  *self,
   g_return_if_fail (self->result == NULL);
 
   self->result = g_object_ref (result);
+  self->error_count = 0;
+  self->warning_count = 0;
+
+  gtk_label_set_label (self->warnings_label, _("No warnings"));
+  gtk_label_set_label (self->errors_label, _("No errors"));
 
   egg_signal_group_set_target (self->signals, result);
   egg_binding_group_set_source (self->bindings, result);
@@ -230,6 +259,10 @@ gbp_build_panel_set_result (GbpBuildPanel  *self,
 
       if (result)
         gbp_build_panel_connect (self, result);
+
+      gtk_container_foreach (GTK_CONTAINER (self->diagnostics),
+                             (GtkCallback)gtk_widget_destroy,
+                             NULL);
     }
 }
 
@@ -402,9 +435,11 @@ gbp_build_panel_class_init (GbpBuildPanelClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GbpBuildPanel, device_popover);
   gtk_widget_class_bind_template_child (widget_class, GbpBuildPanel, devices);
   gtk_widget_class_bind_template_child (widget_class, GbpBuildPanel, diagnostics);
+  gtk_widget_class_bind_template_child (widget_class, GbpBuildPanel, errors_label);
   gtk_widget_class_bind_template_child (widget_class, GbpBuildPanel, running_time_label);
   gtk_widget_class_bind_template_child (widget_class, GbpBuildPanel, status_label);
   gtk_widget_class_bind_template_child (widget_class, GbpBuildPanel, status_revealer);
+  gtk_widget_class_bind_template_child (widget_class, GbpBuildPanel, warnings_label);
 }
 
 static void
