@@ -291,6 +291,9 @@ ide_ctags_service_mine_directory (IdeCtagsService *self,
                                           cancellable,
                                           NULL);
 
+  if (!enumerator)
+    return;
+
   while ((infoptr = g_file_enumerator_next_file (enumerator, cancellable, NULL)))
     {
       g_autoptr(GFileInfo) file_info = infoptr;
