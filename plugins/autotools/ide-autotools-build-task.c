@@ -794,6 +794,7 @@ step_autogen (GTask                 *task,
   launcher = g_subprocess_launcher_new ((G_SUBPROCESS_FLAGS_STDOUT_PIPE |
                                          G_SUBPROCESS_FLAGS_STDERR_PIPE));
   g_subprocess_launcher_set_cwd (launcher, state->project_path);
+  g_subprocess_launcher_setenv (launcher, "LANG", "C", TRUE);
   g_subprocess_launcher_setenv (launcher, "NOCONFIGURE", "1", TRUE);
 
   process = log_and_spawn (self, launcher, &error, autogen_sh_path, NULL);
@@ -857,6 +858,7 @@ step_configure (GTask                 *task,
   launcher = g_subprocess_launcher_new ((G_SUBPROCESS_FLAGS_STDERR_PIPE |
                                          G_SUBPROCESS_FLAGS_STDOUT_PIPE));
   g_subprocess_launcher_set_cwd (launcher, state->directory_path);
+  g_subprocess_launcher_setenv (launcher, "LANG", "C", TRUE);
 
   config_log = g_strjoinv (" ", state->configure_argv);
   ide_build_result_log_stdout (IDE_BUILD_RESULT (self), "%s", config_log);
@@ -910,6 +912,7 @@ step_make_all  (GTask                 *task,
   launcher = g_subprocess_launcher_new ((G_SUBPROCESS_FLAGS_STDERR_PIPE |
                                          G_SUBPROCESS_FLAGS_STDOUT_PIPE));
   g_subprocess_launcher_set_cwd (launcher, state->directory_path);
+  g_subprocess_launcher_setenv (launcher, "LANG", "C", TRUE);
 
   if (!g_strv_length (state->make_targets))
     targets = (const gchar * const *)default_targets;
