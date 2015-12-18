@@ -46,6 +46,8 @@ G_BEGIN_DECLS
     } \
   } G_STMT_END
 
+#define IDE_LITERAL_LENGTH(s) ((sizeof s)-1)
+
 static inline gboolean
 ide_str_empty0 (const gchar *str)
 {
