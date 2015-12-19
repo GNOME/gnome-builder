@@ -19,35 +19,6 @@ box.linked-on-right button {
 
 
 /*
- * layout pane header styling.
- */
-/*
-layoutpane box.header.notebook {
-  border-bottom: 1px solid @borders;
-}
-layoutpane:not(.focused) box.header.notebook
-{
-  background-color: shade (@theme_bg_color, 0.95);
-}
-layoutpane stackswitcher button {
-  border: none;
-  box-shadow: none;
-  background: none;
-  opacity: 0.55;
-  border-radius: 0px;
-  border-top: 1px solid transparent;
-  border-bottom: 1px solid transparent;
-}
-layoutpane stackswitcher button:checked {
-  opacity: 1.0;
-}
-layoutpane layoutstack box.header.notebook GtkSeparator.vertical {
-  opacity: 0.75;
-}
-*/
-
-
-/*
  * Adjust devhelp styling.
  */
 devhelppanel entry:first-child {
