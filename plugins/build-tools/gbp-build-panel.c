@@ -216,8 +216,8 @@ gbp_build_panel_connect (GbpBuildPanel  *self,
   self->error_count = 0;
   self->warning_count = 0;
 
-  gtk_label_set_label (self->warnings_label, _("No warnings"));
-  gtk_label_set_label (self->errors_label, _("No errors"));
+  gtk_label_set_label (self->warnings_label, "—");
+  gtk_label_set_label (self->errors_label, "—");
 
   egg_signal_group_set_target (self->signals, result);
   egg_binding_group_set_source (self->bindings, result);
