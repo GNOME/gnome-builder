@@ -126,7 +126,7 @@ omnisearchrow:selected {
 }
 
 
-greeter frame {
+greeter scrolledwindow frame {
   border: 1px solid alpha(@borders, 0.4);
 }
 greeter list row {
