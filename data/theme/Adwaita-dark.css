@@ -247,6 +247,7 @@ layoutpane > box > box:first-child > stackswitcher > button {
   color: #888a85;
   text-shadow: none;
   font-weight: bold;
+  min-width: 0;
 }
 
 layoutpane > box > box:first-child > stackswitcher > button:checked {
