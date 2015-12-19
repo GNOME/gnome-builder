@@ -23,6 +23,12 @@
 }
 
 
+stack.titlebar {
+  padding: 0 0 0 0;
+  border-bottom: none;
+}
+
+
 GbEditorSettingsWidget row {
   padding: 6px;
   border-bottom: 1px solid @borders;
