@@ -159,6 +159,7 @@ layouttab button {
 layouttab label {
   color: #eeeeec;
   text-shadow: 0 1px #101010;
+  margin-bottom: -2px;
 }
 
 layouttab label:backdrop {
@@ -248,6 +249,11 @@ layoutpane > box > box:first-child > stackswitcher > button {
   text-shadow: none;
   font-weight: bold;
   min-width: 0;
+}
+
+layoutpane > box > box:first-child > stackswitcher > button > label {
+  margin-top: 2px;
+  margin-bottom: -2px;
 }
 
 layoutpane > box > box:first-child > stackswitcher > button:checked {

@@ -29,6 +29,7 @@ struct _IdeLayoutPane
   GtkBin            parent_instance;
 
   GtkBox           *box;
+  GtkBox           *header;
   GtkStackSwitcher *stack_switcher;
   GtkStack         *stack;
 
@@ -317,6 +318,7 @@ ide_layout_pane_class_init (IdeLayoutPaneClass *klass)
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/ui/ide-layout-pane.ui");
   gtk_widget_class_bind_template_child (widget_class, IdeLayoutPane, box);
   gtk_widget_class_bind_template_child_internal (widget_class, IdeLayoutPane, stack);
+  gtk_widget_class_bind_template_child_internal (widget_class, IdeLayoutPane, header);
   gtk_widget_class_bind_template_child_internal (widget_class, IdeLayoutPane, stack_switcher);
 }
 

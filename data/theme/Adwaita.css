@@ -145,6 +145,7 @@ layouttab button:insensitive {
 layouttab label {
   color: #2e3436;
   text-shadow: 0 1px #eeeeec;
+  margin-bottom: -2px;
 }
 
 layouttab label:hover {
@@ -223,9 +224,10 @@ layoutpane > box > box:first-child {
   background-color: #d6d6d6;
   border-style: none;
   border-radius: 0px;
-  border-bottom: 1px solid #919191;
+  border-width: 0px;
   color: #2e3436;
-  box-shadow: 0px 5px 5px -10px #2e3436 inset;
+  box-shadow: 0px 5px 5px -10px #2e3436 inset,
+              0px -1px 0px @borders inset;
 }
 
 layoutpane > box > box:first-child > stackswitcher > button {
@@ -240,6 +242,11 @@ layoutpane > box > box:first-child > stackswitcher > button {
   text-shadow: none;
   font-weight: bold;
   min-width: 0;
+}
+
+layoutpane > box > box:first-child > stackswitcher > button > label {
+  margin-top: 2px;
+  margin-bottom: -2px;
 }
 
 layoutpane > box > box:first-child > stackswitcher > button:checked {

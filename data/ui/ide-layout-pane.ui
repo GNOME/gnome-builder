@@ -7,7 +7,7 @@
         <property name="orientation">vertical</property>
         <property name="visible">true</property>
         <child>
-          <object class="GtkBox">
+          <object class="GtkBox" id="header">
             <property name="visible">true</property>
             <property name="vexpand">false</property>
             <child type="center">

@@ -4,8 +4,8 @@
   <template class="IdeEditorPerspective" parent="IdeLayout">
     <child internal-child="content_pane">
       <object class="IdeLayoutPane">
-        <child internal-child="stack_switcher">
-          <object class="GtkStackSwitcher">
+        <child internal-child="header">
+          <object class="GtkBox">
             <property name="visible">false</property>
           </object>
         </child>
