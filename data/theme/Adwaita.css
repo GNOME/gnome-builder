@@ -242,6 +242,11 @@ layoutpane > box > box:first-child > stackswitcher > button {
   text-shadow: none;
   font-weight: bold;
   min-width: 0;
+  margin-right: 6px;
+}
+
+layoutpane > box > box:first-child > stackswitcher > button:last-child {
+  margin-right: 0px;
 }
 
 layoutpane > box > box:first-child > stackswitcher > button > label {
