@@ -157,11 +157,10 @@ layouttab label:backdrop {
 }
 
 layouttab separator {
-  color: transparent;
-}
-
-layoutstack.focused layouttab separator {
-  color: #babdb6;
+  margin: 7px 0 8px 0;
+  padding: 0;
+  background-color: alpha(@borders,.2);
+  min-width: 0px;
 }
 
 layoutstack.focused layouttabbar layouttab:backdrop,

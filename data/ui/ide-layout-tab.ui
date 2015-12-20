@@ -41,8 +41,6 @@
         </child>
         <child>
           <object class="GtkSeparator">
-            <property name="margin-bottom">10</property>
-            <property name="margin-top">10</property>
             <property name="orientation">vertical</property>
             <property name="visible">true</property>
           </object>
@@ -106,8 +104,6 @@
         </child>
         <child>
           <object class="GtkSeparator">
-            <property name="margin-bottom">10</property>
-            <property name="margin-top">10</property>
             <property name="orientation">vertical</property>
             <property name="visible">true</property>
           </object>
