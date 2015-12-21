@@ -107,15 +107,52 @@ gbp_build_workbench_addin_build_cb (GObject      *object,
 }
 
 static void
+gbp_build_workbench_addin_save_all_cb (GObject      *object,
+                                       GAsyncResult *result,
+                                       gpointer      user_data)
+{
+  IdeBufferManager *bufmgr = (IdeBufferManager *)object;
+  g_autoptr(IdeBuildResult) build_result = NULL;
+  struct {
+    GbpBuildWorkbenchAddin *self;
+    IdeBuilder *builder;
+    IdeBuilderBuildFlags flags;
+  } *state = user_data;
+
+  g_assert (IDE_IS_BUFFER_MANAGER (bufmgr));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (GBP_IS_BUILD_WORKBENCH_ADDIN (state->self));
+
+  ide_buffer_manager_save_all_finish (bufmgr, result, NULL);
+
+  ide_builder_build_async (state->builder,
+                           state->flags,
+                           &build_result,
+                           state->self->cancellable,
+                           gbp_build_workbench_addin_build_cb,
+                           g_object_ref (state->self));
+
+  gbp_build_workbench_addin_set_result (state->self, build_result);
+
+  g_object_unref (state->self);
+  g_object_unref (state->builder);
+  g_slice_free1 (sizeof *state, state);
+}
+
+static void
 gbp_build_workbench_addin_do_build (GbpBuildWorkbenchAddin *self,
                                     IdeBuilderBuildFlags    flags)
 {
-  g_autoptr(IdeBuildResult) build_result = NULL;
   g_autoptr(IdeBuilder) builder = NULL;
   g_autoptr(GError) error = NULL;
   IdeBuildSystem *build_system;
   IdeWorkbench *workbench;
   IdeContext *context;
+  struct {
+    GbpBuildWorkbenchAddin *self;
+    IdeBuilder *builder;
+    IdeBuilderBuildFlags flags;
+  } *state;
 
   g_assert (GBP_IS_BUILD_WORKBENCH_ADDIN (self));
 
@@ -135,14 +172,15 @@ gbp_build_workbench_addin_do_build (GbpBuildWorkbenchAddin *self,
   g_clear_object (&self->cancellable);
   self->cancellable = g_cancellable_new ();
 
-  ide_builder_build_async (builder,
-                           flags,
-                           &build_result,
-                           self->cancellable,
-                           gbp_build_workbench_addin_build_cb,
-                           g_object_ref (self));
+  state = g_slice_alloc0 (sizeof *state);
+  state->self = g_object_ref (self);
+  state->builder = g_object_ref (builder);
+  state->flags = flags;
 
-  gbp_build_workbench_addin_set_result (self, build_result);
+  ide_buffer_manager_save_all_async (ide_context_get_buffer_manager (context),
+                                     self->cancellable,
+                                     gbp_build_workbench_addin_save_all_cb,
+                                     state);
 }
 
 static void
