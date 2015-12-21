@@ -9,7 +9,7 @@
             <property name="border-width">12</property>
             <property name="column-spacing">12</property>
             <property name="column-homogeneous">true</property>
-            <property name="row-spacing">6</property>
+            <property name="row-spacing">3</property>
             <property name="visible">true</property>
             <child>
               <object class="GtkLabel" id="label1">
@@ -174,7 +174,7 @@
                     <property name="border-width">12</property>
                     <property name="column-spacing">12</property>
                     <property name="column-homogeneous">true</property>
-                    <property name="row-spacing">6</property>
+                    <property name="row-spacing">3</property>
                     <property name="visible">true</property>
                     <child>
                       <object class="GtkLabel" id="label4">
