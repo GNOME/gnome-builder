@@ -1,7 +1,1 @@
-contrib/egg/egg-binding-group.c
-contrib/egg/egg-settings-sandwich.c
-contrib/egg/egg-signal-group.c
-contrib/egg/egg-state-machine-action.c
-contrib/egg/egg-state-machine.c
-contrib/egg/egg-task-cache.c
-libide/ctags/ide-ctags-index.c
+tests/menus.ui

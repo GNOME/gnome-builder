@@ -1,36 +1,33 @@
 contrib/egg/egg-animation.c
+contrib/egg/egg-date-time.c
 contrib/egg/egg-search-bar.c
 contrib/search/trie.c
 contrib/xml/xml-reader.c
 [type: gettext/glade]data/gtk/menus.ui
 data/style-schemes/builder-dark.xml
 data/style-schemes/builder.xml
-[type: gettext/glade]data/ui/gb-editor-frame.ui
-[type: gettext/glade]data/ui/gb-editor-settings-widget.ui
-[type: gettext/glade]data/ui/gb-editor-tweak-widget.ui
-[type: gettext/glade]data/ui/gb-editor-view.ui
-[type: gettext/glade]data/ui/gb-greeter-window.ui
-[type: gettext/glade]data/ui/gb-new-file-popover.ui
 [type: gettext/glade]data/ui/gb-new-project-dialog.ui
-[type: gettext/glade]data/ui/gb-preferences-page-editor.ui
-[type: gettext/glade]data/ui/gb-preferences-page-git.ui
-[type: gettext/glade]data/ui/gb-preferences-page-insight.ui
-[type: gettext/glade]data/ui/gb-preferences-page-keybindings.ui
-[type: gettext/glade]data/ui/gb-preferences-page-language.ui
-[type: gettext/glade]data/ui/gb-preferences-page-plugins.ui
-[type: gettext/glade]data/ui/gb-preferences-page-theme.ui
-[type: gettext/glade]data/ui/gb-preferences-window.ui
 [type: gettext/glade]data/ui/gb-projects-dialog.ui
-[type: gettext/glade]data/ui/gb-rename-file-popover.ui
-[type: gettext/glade]data/ui/gb-shortcuts-window.ui
-[type: gettext/glade]data/ui/gb-view-stack.ui
-[type: gettext/glade]data/ui/gb-view.ui
-[type: gettext/glade]data/ui/gb-workbench.ui
+[type: gettext/glade]data/ui/ide-editor-frame.ui
+[type: gettext/glade]data/ui/ide-editor-tweak-widget.ui
+[type: gettext/glade]data/ui/ide-editor-view.ui
+[type: gettext/glade]data/ui/ide-genesis-perspective.ui
+[type: gettext/glade]data/ui/ide-greeter-perspective.ui
+[type: gettext/glade]data/ui/ide-preferences-font-button.ui
+[type: gettext/glade]data/ui/ide-shortcuts-window.ui
+libide/directory/ide-directory-genesis-addin.c
 libide/editorconfig/ide-editorconfig-file-settings.c
-libide/git/ide-git-buffer-change-monitor.c
+libide/editor/ide-editor-frame.c
+libide/editor/ide-editor-perspective.c
+libide/editor/ide-editor-view-actions.c
+libide/editor/ide-editor-view.c
+libide/genesis/ide-genesis-perspective.c
 libide/gjs/ide-gjs-script.cpp
+libide/greeter/ide-greeter-perspective.c
 libide/gsettings/ide-language-defaults.c
-libide/ide-back-forward-list.c
+libide/ide-application-actions.c
+libide/ide-application.c
+libide/ide-application-command-line.c
 libide/ide-buffer.c
 libide/ide-buffer-manager.c
 libide/ide-builder.c
@@ -39,6 +36,7 @@ libide/ide-build-system.c
 libide/ide.c
 libide/ide-context.c
 libide/ide-device-manager.c
+libide/ide-layout-view.c
 libide/ide-object.c
 libide/ide-project.c
 libide/ide-recent-projects.c
@@ -48,58 +46,56 @@ libide/ide-source-snippet-completion-provider.c
 libide/ide-source-snippet-parser.c
 libide/ide-source-snippets-manager.c
 libide/ide-source-view.c
-libide/ide-worker-manager.c
+libide/ide-uri.c
+libide/ide-workbench-actions.c
+libide/preferences/ide-preferences-builtin.c
+libide/preferences/ide-preferences-perspective.c
 libide/pygobject/ide-pygobject-script.c
+libide/search/ide-omni-search-display.c
+libide/util/ide-file-manager.c
+plugins/autotools/ide-autotools-builder.c
 plugins/autotools/ide-autotools-build-system.c
 plugins/autotools/ide-autotools-build-task.c
 plugins/autotools/ide-makecache.c
-plugins/clang/ide-clang-completion-provider.c
+plugins/build-tools/gbp-build-panel-row.c
+[type: gettext/glade]plugins/build-tools/gbp-build-panel.ui
+plugins/build-tools/gbp-build-workbench-addin.c
 plugins/clang/ide-clang-service.c
 plugins/clang/ide-clang-symbol-node.c
 plugins/clang/ide-clang-translation-unit.c
 plugins/command-bar/gb-command-bar.c
 plugins/command-bar/gb-vim.c
 plugins/c-pack/ide-c-format-provider.c
-plugins/ctags/ide-ctags-completion-provider.c
-plugins/devhelp/gb-devhelp-document.c
-plugins/devhelp/gb-devhelp-panel.c
-plugins/devhelp/gb-devhelp-search-provider.c
+plugins/devhelp/gbp-devhelp-search-provider.c
+plugins/devhelp/gbp-devhelp-workbench-addin.c
 plugins/device-manager/gb-device-manager-panel.c
 plugins/file-search/gb-file-search-provider.c
+[type: gettext/glade]plugins/fpaste/fpaste_plugin/gtk/menus.ui
+plugins/fpaste/fpaste_plugin/__init__.py
+plugins/git/ide-git-buffer-change-monitor.c
+plugins/git/ide-git-clone-widget.c
+[type: gettext/glade]plugins/git/ide-git-clone-widget.ui
+plugins/git/ide-git-genesis-addin.c
 plugins/gnome-code-assistance/ide-gca-diagnostic-provider.c
 plugins/gnome-code-assistance/ide-gca-service.c
-plugins/html-preview/html_preview_plugin/__init__.py
+[type: gettext/glade]plugins/html-preview/html_preview_plugin/gtk/menus.ui
+plugins/jedi/jedi_plugin.py
 plugins/mingw/ide-mingw-device-provider.c
+plugins/project-tree/gb-new-file-popover.c
+[type: gettext/glade]plugins/project-tree/gb-new-file-popover.ui
+plugins/project-tree/gb-project-tree-addin.c
+plugins/project-tree/gb-project-tree-builder.c
+plugins/project-tree/gb-rename-file-popover.c
+[type: gettext/glade]plugins/project-tree/gb-rename-file-popover.ui
+[type: gettext/glade]plugins/project-tree/gtk/menus.ui
 plugins/python-pack/ide-python-format-provider.c
+[type: gettext/glade]plugins/support/gtk/menus.ui
+plugins/support/ide-support-application-addin.c
 plugins/symbol-tree/symbol-tree.c
 plugins/sysmon/gb-sysmon-addin.c
-plugins/terminal/gb-terminal-document.c
 plugins/terminal/gb-terminal-view-actions.c
 plugins/terminal/gb-terminal-workbench-addin.c
-src/app/gb-application-actions.c
-src/app/gb-application.c
-src/dialogs/gb-new-project-dialog.c
-src/dialogs/gb-projects-dialog.c
-src/editor/gb-editor-frame.c
-src/editor/gb-editor-settings-widget.c
-src/editor/gb-editor-view-actions.c
-src/editor/gb-editor-view.c
-src/main.c
-src/preferences/gb-preferences-page-editor.c
-src/preferences/gb-preferences-page-git.c
-src/preferences/gb-preferences-page-insight.c
-src/preferences/gb-preferences-page-keybindings.c
-src/preferences/gb-preferences-page-theme.c
-src/project-tree/gb-new-file-popover.c
-src/project-tree/gb-project-tree-builder.c
-src/project-tree/gb-rename-file-popover.c
-src/search/gb-search-display.c
-src/search/gb-search-display-group.c
-src/shortcuts/gb-shortcuts-dialog.c
-src/util/gb-file-manager.c
-src/util/gb-glib.c
-src/workbench/gb-workbench-actions.c
-src/workbench/gb-workbench.c
+[type: gettext/glade]plugins/terminal/gtk/menus.ui
 tools/ide-build.c
 tools/ide-list-build-flags.c
 tools/ide-list-devices.c
