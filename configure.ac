@@ -234,7 +234,6 @@ m4_include([plugins/clang/configure.ac])
 m4_include([plugins/command-bar/configure.ac])
 m4_include([plugins/ctags/configure.ac])
 m4_include([plugins/devhelp/configure.ac])
-m4_include([plugins/device-manager/configure.ac])
 m4_include([plugins/file-search/configure.ac])
 m4_include([plugins/fpaste/configure.ac])
 m4_include([plugins/git/configure.ac])
@@ -508,9 +507,5 @@ echo "  Symbol Tree .......................... : ${enable_symbol_tree_plugin}"
 echo "  Terminal ............................. : ${enable_terminal_plugin}"
 echo "  Vala Language Pack ................... : ${enable_vala_pack_plugin}"
 echo "  XML Language Pack .................... : ${enable_xml_pack_plugin}"
-echo ""
-echo "Experimental Plugins"
-echo ""
-echo "  Device Manager ....................... : ${enable_device_manager_plugin}"
 echo ""
 
