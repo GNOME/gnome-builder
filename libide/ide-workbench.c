@@ -463,10 +463,24 @@ ide_workbench_get_context (IdeWorkbench *self)
   return self->context;
 }
 
+static gboolean
+restore_in_timeout (gpointer data)
+{
+  g_autoptr(IdeContext) context = data;
+
+  g_assert (IDE_IS_CONTEXT (context));
+
+  ide_context_restore_async (context, NULL, NULL, NULL);
+
+  return G_SOURCE_REMOVE;
+}
+
 void
 ide_workbench_set_context (IdeWorkbench *self,
                            IdeContext   *context)
 {
+  guint duration;
+
   g_return_if_fail (IDE_IS_WORKBENCH (self));
   g_return_if_fail (IDE_IS_CONTEXT (context));
   g_return_if_fail (self->context == NULL);
@@ -493,7 +507,14 @@ ide_workbench_set_context (IdeWorkbench *self,
 
   gtk_stack_set_visible_child_name (self->top_stack, "perspectives");
 
-  ide_context_restore_async (context, NULL, NULL, NULL);
+  /*
+   * When restoring, previous buffers may get loaded. This causes new
+   * widgets to be created and added to the workspace. Doing so during
+   * the stack transition results in non-smooth transitions. So instead,
+   * we will delay until the transition has completed.
+   */
+  duration = gtk_stack_get_transition_duration (self->top_stack);
+  g_timeout_add (duration, restore_in_timeout, g_object_ref (context));
 }
 
 void
