@@ -411,6 +411,7 @@ ide_application_init (IdeApplication *self)
   textdomain (GETTEXT_PACKAGE);
 
   g_set_application_name (_("Builder"));
+  gtk_window_set_default_icon_name("builder");
 }
 
 IdeApplication *
