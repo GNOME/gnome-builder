@@ -68,7 +68,6 @@ plugins/command-bar/gb-vim.c
 plugins/c-pack/ide-c-format-provider.c
 plugins/devhelp/gbp-devhelp-search-provider.c
 plugins/devhelp/gbp-devhelp-workbench-addin.c
-plugins/device-manager/gb-device-manager-panel.c
 plugins/file-search/gb-file-search-provider.c
 [type: gettext/glade]plugins/fpaste/fpaste_plugin/gtk/menus.ui
 plugins/fpaste/fpaste_plugin/__init__.py
