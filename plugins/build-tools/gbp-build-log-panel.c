@@ -198,8 +198,8 @@ gbp_build_log_panel_class_init (GbpBuildLogPanelClass *klass)
 
   properties [PROP_RESULT] =
     g_param_spec_object ("result",
-                         _("Result"),
-                         _("Result"),
+                         "Result",
+                         "Result",
                          IDE_TYPE_BUILD_RESULT,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
