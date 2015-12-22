@@ -2,14 +2,15 @@
 # Copyright (C) 2015 gnome-builder's COPYRIGHT HOLDER
 # This file is distributed under the same license as the gnome-builder package.
 # Rafael Fontenelle <rffontenelle@gmail.com>, 2015.
+# Gustavo Marques <gutodisse@gmail.com>, 2015.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2015-10-13 07:22+0000\n"
-"PO-Revision-Date: 2015-10-13 13:11-0300\n"
+"POT-Creation-Date: 2015-11-25 19:59+0000\n"
+"PO-Revision-Date: 2015-11-26 01:26-0300\n"
 "Last-Translator: Rafael Fontenelle <rffontenelle@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <gnome-pt_br-list@gnome.org>\n"
 "Language: pt_BR\n"
@@ -17,29 +18,29 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 1.8.5\n"
+"X-Generator: Poedit 1.8.6\n"
 
-#: ../contrib/egg/egg-animation.c:723
+#: ../contrib/egg/egg-animation.c:715
 #, c-format
 msgid "Cannot locate property %s in class %s"
 msgstr "Não foi possível localizar a propriedade %s na classe %s"
 
-#: ../contrib/egg/egg-animation.c:1067 ../contrib/egg/egg-animation.c:1073
+#: ../contrib/egg/egg-animation.c:1055 ../contrib/egg/egg-animation.c:1061
 #, c-format
 msgid "Failed to find property %s in %s"
 msgstr "Falha ao localizar a propriedade %s em %s"
 
-#: ../contrib/egg/egg-animation.c:1081
+#: ../contrib/egg/egg-animation.c:1069
 #, c-format
 msgid "Failed to find property %s in %s or parent %s"
 msgstr "Falha ao localizar a propriedade %s em %s ou pai %s"
 
-#: ../contrib/egg/egg-animation.c:1091
+#: ../contrib/egg/egg-animation.c:1079
 #, c-format
 msgid "Failed to retrieve va_list value: %s"
 msgstr "Falha ao recuperar o valor de va_list: %s"
 
-#: ../contrib/egg/egg-search-bar.c:371
+#: ../contrib/egg/egg-search-bar.c:370
 msgid "Search"
 msgstr "Pesquisa"
 
@@ -189,7 +190,7 @@ msgstr ""
 
 #: ../data/style-schemes/builder.xml.h:1
 #: ../data/ui/gb-preferences-page-keybindings.ui.h:3
-#: ../data/ui/gb-workbench.ui.h:1 ../src/main.c:49
+#: ../data/ui/gb-workbench.ui.h:1 ../src/main.c:48
 #: ../src/workbench/gb-workbench.c:153
 msgid "Builder"
 msgstr "Builder"
@@ -212,11 +213,11 @@ msgid "Trim trailing whitespace when saving document"
 msgstr "Apagar espaço em branco ao final da linha quando salvar documento"
 
 #: ../data/ui/gb-editor-settings-widget.ui.h:3
-msgid "Insert matching brace, bracket, quotation, and parenthesis."
+msgid "Insert matching brace, bracket, quotation, and parenthesis"
 msgstr "Inserir chaves, colchetes, aspas e parêntesis correspondentes"
 
 #: ../data/ui/gb-editor-settings-widget.ui.h:4
-msgid "Overwrite closing brace, bracket, quotation, and parenthesis."
+msgid "Overwrite closing brace, bracket, quotation, and parenthesis"
 msgstr "Sobrescrever chaves, colchetes, aspas e parênteses finalizadores"
 
 #: ../data/ui/gb-editor-settings-widget.ui.h:5
@@ -493,27 +494,33 @@ msgid "Draw Spaces"
 msgstr "Desenhar espaços"
 
 #: ../data/ui/gb-preferences-page-editor.ui.h:23
-msgid "Draw a circle over space characters."
+#, fuzzy
+msgid "Draw a circle over space characters"
 msgstr "Desenha um círculo sobre caracteres de espaço."
 
 #: ../data/ui/gb-preferences-page-editor.ui.h:24
-msgid "Draw an arrow over tab characters."
+#, fuzzy
+msgid "Draw an arrow over tab characters"
 msgstr "Desenha uma seta sobre os caracteres de tabulação."
 
 #: ../data/ui/gb-preferences-page-editor.ui.h:25
-msgid "Draw a carriage return over newline characters."
+#, fuzzy
+msgid "Draw a carriage return over newline characters"
 msgstr "Desenha um retorno (carriage return) sobre caracteres de nova linha."
 
 #: ../data/ui/gb-preferences-page-editor.ui.h:26
-msgid "Draw indicators for non-breaking spaces."
+#, fuzzy
+#| msgid "Draw indicators for non-breaking spaces."
+msgid "Draw indicators for non-breaking spaces"
 msgstr "Desenha indicadores para espaços não-quebra."
 
 #: ../data/ui/gb-preferences-page-editor.ui.h:27
-msgid "Draw leading space only."
+msgid "Draw leading space only"
 msgstr "Desenha espaço no começo da linha apenas."
 
 #: ../data/ui/gb-preferences-page-editor.ui.h:28
-msgid "Draw trailing space only."
+#, fuzzy
+msgid "Draw trailing space only"
 msgstr "Desenha espaço ao final apenas."
 
 #: ../data/ui/gb-preferences-page-git.ui.h:1
@@ -1042,24 +1049,24 @@ msgstr "Falha ao inicializar padrões."
 msgid "File contained invalid UTF-8"
 msgstr "O arquivo contém UTF-8 inválido"
 
-#: ../libide/ide-buffer.c:2071
+#: ../libide/ide-buffer.c:2202
 msgid "The current language lacks a symbol resolver."
 msgstr "O idioma atual carece de um resolvedor de símbolos."
 
-#: ../libide/ide-buffer-manager.c:604
+#: ../libide/ide-buffer-manager.c:601
 msgid "File too large to be opened."
 msgstr "Arquivo grande demais para ser aberto."
 
-#: ../libide/ide-buffer-manager.c:1425
+#: ../libide/ide-buffer-manager.c:1422
 msgid "Words"
 msgstr "Palavras"
 
-#: ../libide/ide-buffer-manager.c:1636
+#: ../libide/ide-buffer-manager.c:1633
 #, c-format
 msgid "unsaved document %u"
 msgstr "documetno não salvo %u"
 
-#: ../libide/ide-buffer-manager.c:1670
+#: ../libide/ide-buffer-manager.c:1667
 msgid "Failed to save buffer, ignoring reclamation."
 msgstr "Falha ao salvar o buffer, ignorando reclamação."
 
@@ -1136,7 +1143,7 @@ msgstr "Destinação de arquivo deve estar dentro da árvore do projeto."
 msgid "File must be within the project tree."
 msgstr "Arquivo deve estar dentro da árvore do projeto."
 
-#: ../libide/ide-recent-projects.c:377
+#: ../libide/ide-recent-projects.c:382
 #, c-format
 msgid "%s() may only be executed once"
 msgstr "%s() só pode ser executado uma vez"
@@ -1169,31 +1176,41 @@ msgstr "Falha ao abrir o diretório: %s"
 msgid "Failed to load file: %s: %s"
 msgstr "Falha ao carregar arquivo: %s: %s"
 
-#: ../libide/ide-source-view.c:4696
+#: ../libide/ide-source-view.c:4735
 #, c-format
 msgid "Insert \"%s\""
 msgstr "Insira \"%s\""
 
-#: ../libide/ide-source-view.c:4698
+#: ../libide/ide-source-view.c:4737
 #, c-format
 msgid "Replace \"%s\" with \"%s\""
 msgstr "Substitua \"%s\" com \"%s\""
 
-#: ../libide/ide-source-view.c:4817
+#: ../libide/ide-source-view.c:4856
 msgid "Apply Fix-It"
 msgstr "Aplicar correção"
 
-#: ../libide/ide-source-view.c:4860
+#: ../libide/ide-source-view.c:4899
 msgid "Join Lines"
 msgstr "Juntar linhas"
 
-#: ../libide/ide-source-view.c:4871
+#: ../libide/ide-source-view.c:4910
 msgid "Sort Lines"
 msgstr "Ordenar linhas"
 
-#: ../libide/ide-source-view.c:4890
+#: ../libide/ide-source-view.c:4929
 msgid "Go to Definition"
 msgstr "Ir para a definição"
+
+#: ../libide/ide-worker-manager.c:223
+msgid "Argv0"
+msgstr "Argv0"
+
+#: ../libide/ide-worker-manager.c:224
+#, fuzzy
+#| msgid "The name of the icon to use."
+msgid "The path to the process to spawn."
+msgstr "O nome do ícone a ser usado."
 
 #: ../libide/pygobject/ide-pygobject-script.c:135
 msgid "Attempt to load a PyGObject script with no filename."
@@ -1325,12 +1342,12 @@ msgstr "Subcomando :syntax inválido: %s"
 msgid "Invalid search and replace request"
 msgstr "Requisição de pesquisa e substituição inválida"
 
-#: ../plugins/command-bar/gb-vim.c:960
+#: ../plugins/command-bar/gb-vim.c:961
 #, c-format
 msgid "vim mode requires GtkSourceView"
 msgstr "o modo vim requer GtkSourceView"
 
-#: ../plugins/command-bar/gb-vim.c:990
+#: ../plugins/command-bar/gb-vim.c:991
 #, c-format
 msgid "Not an editor command: %s"
 msgstr "Não é um comando de editor: %s"
@@ -1432,7 +1449,9 @@ msgstr "GNOME Builder"
 
 #: ../src/app/gb-application-actions.c:164
 msgid "translator-credits"
-msgstr "Rafael Ferreira - Brazilian Portuguese"
+msgstr ""
+"Rafael Ferreira - Brazilian Portuguese\n"
+"Gustavo Marques - Brazilian Portuguese"
 
 #: ../src/app/gb-application-actions.c:167
 msgid "Learn more about GNOME Builder"
@@ -1442,17 +1461,25 @@ msgstr "Aprenda mais sobre o GNOME Builder"
 msgid "Funded By"
 msgstr "Fundado por"
 
-#: ../src/app/gb-application.c:642
+#: ../src/app/gb-application.c:755
 msgid "Run Builder in standalone mode"
 msgstr "Executa Builder em modo independente"
 
-#: ../src/app/gb-application.c:648
+#: ../src/app/gb-application.c:762
 msgid "Show the application's version"
 msgstr "Mostra a versão do aplicativo"
 
-#: ../src/app/gb-application.c:654
+#: ../src/app/gb-application.c:769
 msgid "Increase verbosity. May be specified multiple times."
 msgstr "Aumentar a verbosidade. Pode ser especificado várias vezes."
+
+#: ../src/app/gb-application.c:776
+msgid "The DBus server address for which to connect."
+msgstr "O endereço do servidor DBus para o qual se conectar"
+
+#: ../src/app/gb-application.c:783
+msgid "The type of plugin worker process to run."
+msgstr ""
 
 #: ../src/dialogs/gb-new-project-dialog.c:347
 msgid "Select Project File"
@@ -1492,7 +1519,7 @@ msgstr "Linha %u, coluna %u"
 msgid "%u of %u"
 msgstr "%u de %u"
 
-#: ../src/editor/gb-editor-frame.c:664
+#: ../src/editor/gb-editor-frame.c:662
 msgid "Re_veal in Project Tree"
 msgstr "Re_velar em árvore de projeto"
 
@@ -1509,12 +1536,12 @@ msgstr "Salvar documento"
 msgid "Save Document As"
 msgstr "Salvar documento como"
 
-#: ../src/editor/gb-editor-view.c:120
+#: ../src/editor/gb-editor-view.c:117
 msgid "Plain Text"
 msgstr "Texto simples"
 
 #. translators: the user selected a number outside the value range for the document.
-#: ../src/editor/gb-editor-view.c:671
+#: ../src/editor/gb-editor-view.c:668
 #, c-format
 msgid "Provide a number between 1 and %u"
 msgstr "Forneça um número entre 1 e %u"
@@ -1564,7 +1591,8 @@ msgstr "minimapa mini mapa visão geral visão-geral"
 msgid ""
 "draw spaces space tab newline nbsp non-breaking whitespace trailing leading"
 msgstr ""
-"desenha espaços espaço tab tabulação nova linha nbsp não-quebra espaço branco início final"
+"desenha espaços espaço tab tabulação nova linha nbsp não-quebra espaço "
+"branco início final"
 
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-git.c:169
@@ -1677,7 +1705,9 @@ msgstr "O provedor não pôde ser encontrado."
 #: ../src/search/gb-search-display-group.c:182
 #, c-format
 msgid "%s more"
-msgstr "%s mais"
+msgid_plural "%s more"
+msgstr[0] "%s mais"
+msgstr[1] "%s mais"
 
 #: ../src/shortcuts/gb-shortcuts-dialog.c:937
 msgid "Search Shortcuts"
@@ -1730,8 +1760,10 @@ msgstr "Cerca de ano atrás"
 
 #: ../src/util/gb-glib.c:69
 #, c-format
-msgid "About %u years ago"
-msgstr "Cerca de %u anos atrás"
+msgid "About %u year ago"
+msgid_plural "About %u years ago"
+msgstr[0] "Cerca de %u ano atrás"
+msgstr[1] "Cerca de %u anos atrás"
 
 #: ../src/workbench/gb-workbench-actions.c:162
 msgid "Open Document"
@@ -1885,8 +1917,10 @@ msgstr "- Descobre projetos"
 
 #: ../tools/ide-search.c:68
 #, c-format
-msgid "%s results\n"
-msgstr "%s resultados\n"
+msgid "%s result\n"
+msgid_plural "%s results\n"
+msgstr[0] "%s resultado\n"
+msgstr[1] "%s resultados\n"
 
 #: ../tools/ide-search.c:120
 msgid "PROJECT_FILE [SEARCH TERMS...]"
@@ -2682,6 +2716,3 @@ msgstr "ARQUIVO_DE_PROJETO [TERMOS DE PESQUISAS...]"
 #, fuzzy
 #~ msgid "The title of the workspace."
 #~ msgstr "O título do workbench."
-
-#~ msgid "The name of the icon to use."
-#~ msgstr "O nome do ícone a ser usado."
