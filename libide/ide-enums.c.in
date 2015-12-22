@@ -6,6 +6,7 @@
 #include "ide-enums.h"
 
 #include "ide-buffer.h"
+#include "ide-build-result.h"
 #include "ide-diagnostic.h"
 #include "ide-doap.h"
 #include "ide-highlighter.h"

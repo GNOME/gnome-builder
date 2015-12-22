@@ -30,12 +30,21 @@ G_BEGIN_DECLS
 
 G_DECLARE_DERIVABLE_TYPE (IdeBuildResult, ide_build_result, IDE, BUILD_RESULT, IdeObject)
 
+typedef enum
+{
+  IDE_BUILD_RESULT_LOG_STDOUT,
+  IDE_BUILD_RESULT_LOG_STDERR,
+} IdeBuildResultLog;
+
 struct _IdeBuildResultClass
 {
   IdeObjectClass parent;
 
-  void (*diagnostic) (IdeBuildResult *self,
-                      IdeDiagnostic  *diagnostic);
+  void (*diagnostic) (IdeBuildResult    *self,
+                      IdeDiagnostic     *diagnostic);
+  void (*log)        (IdeBuildResult    *self,
+                      IdeBuildResultLog  log,
+                      const gchar       *message);
 };
 
 GInputStream  *ide_build_result_get_stdout_stream (IdeBuildResult *result);

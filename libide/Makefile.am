@@ -482,6 +482,7 @@ glib_enum_c = ide-enums.c
 glib_enum_headers =  \
 	doap/ide-doap.h \
 	ide-buffer.h \
+	ide-build-result.h \
 	ide-diagnostic.h \
 	ide-highlighter.h \
 	ide-indent-style.h \

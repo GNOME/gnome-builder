@@ -22,6 +22,7 @@
 #include <libpeas/peas.h>
 
 #include "ide-build-result.h"
+#include "ide-enums.h"
 #include "ide-file.h"
 #include "ide-source-location.h"
 
@@ -45,8 +46,9 @@ typedef struct
 
 typedef struct
 {
-  IdeBuildResult *self;
-  GOutputStream  *writer;
+  IdeBuildResult    *self;
+  GOutputStream     *writer;
+  IdeBuildResultLog  log;
 } Tail;
 
 G_DEFINE_TYPE_WITH_PRIVATE (IdeBuildResult, ide_build_result, IDE_TYPE_OBJECT)
@@ -60,6 +62,7 @@ enum {
 
 enum {
   DIAGNOSTIC,
+  LOG,
   LAST_SIGNAL
 };
 
@@ -255,9 +258,10 @@ _ide_build_result_open_log (IdeBuildResult  *self,
 }
 
 static void
-_ide_build_result_log (IdeBuildResult *self,
-                       GOutputStream  *stream,
-                       const gchar    *message)
+_ide_build_result_log (IdeBuildResult    *self,
+                       IdeBuildResultLog  log,
+                       GOutputStream     *stream,
+                       const gchar       *message)
 {
   g_autofree gchar *buffer = NULL;
 
@@ -272,11 +276,35 @@ _ide_build_result_log (IdeBuildResult *self,
    *       like date/time, but I didn't think it was necessary in the long
    *       run. Would be nice to remove the printf as well. We need to do the
    *       write as a single item in case we have multiple threads appending.
+   *
+   *       We could probably replace the \0 with \n and pass string lengths
+   *       around, but it would be nice for the callers to have a valid
+   *       copy of the string.
+   *
+   *       However, even worse, is that the signal emit may result in a
+   *       string copy anyway. We could get around this by using an
+   *       intermediate structure such as "IdeBuildResultEvent" or
+   *       similar.
    */
 
   buffer = g_strdup_printf ("%s\n", message);
-  g_output_stream_write_all (stream, buffer, strlen (buffer),
-                             NULL, NULL, NULL);
+  g_output_stream_write_all (stream, buffer, strlen (buffer), NULL, NULL, NULL);
+
+  /*
+   * XXX:
+   *
+   * This is rather non-ideal today. Signal emission requires a global lock
+   * to access the signal information. However, we'll be in the Gtk main loop
+   * at this point, and signals generally aren't used in other threads. So
+   * the lock should most likely be non-contended. Still feels a bit heavy
+   * though since @message will get strdup()'d in most cases.
+   *
+   * I'm also non-plus'd at our use of read_line_async() to get the next line.
+   * It results in re-entering the main loop for ever log message in the build
+   * result. We already have IdeLineReader, which could help us lower the cost
+   * while doing larger buffered reads.
+   */
+  g_signal_emit (self, signals [LOG], 0, log, buffer);
 }
 
 void
@@ -297,7 +325,7 @@ ide_build_result_log_stdout (IdeBuildResult *self,
       msg = g_strdup_vprintf (format, args);
       va_end (args);
 
-      _ide_build_result_log (self, priv->stdout_writer, msg);
+      _ide_build_result_log (self, IDE_BUILD_RESULT_LOG_STDOUT, priv->stdout_writer, msg);
     }
 }
 
@@ -319,7 +347,7 @@ ide_build_result_log_stderr (IdeBuildResult *self,
       msg = g_strdup_vprintf (format, args);
       va_end (args);
 
-      _ide_build_result_log (self, priv->stderr_writer, msg);
+      _ide_build_result_log (self, IDE_BUILD_RESULT_LOG_STDERR, priv->stderr_writer, msg);
     }
 }
 
@@ -402,7 +430,7 @@ ide_build_result_tail_cb (GObject      *object,
 
   if (line)
     {
-      _ide_build_result_log (tail->self, tail->writer, line);
+      _ide_build_result_log (tail->self, tail->log, tail->writer, line);
       g_data_input_stream_read_line_async (reader,
                                            G_PRIORITY_DEFAULT,
                                            NULL,
@@ -418,9 +446,10 @@ ide_build_result_tail_cb (GObject      *object,
 }
 
 static void
-ide_build_result_tail_into (IdeBuildResult *self,
-                            GInputStream   *reader,
-                            GOutputStream  *writer)
+ide_build_result_tail_into (IdeBuildResult    *self,
+                            IdeBuildResultLog  log,
+                            GInputStream      *reader,
+                            GOutputStream     *writer)
 {
   g_autoptr(GDataInputStream) data_reader = NULL;
   Tail *tail;
@@ -434,6 +463,7 @@ ide_build_result_tail_into (IdeBuildResult *self,
   tail = g_slice_alloc0 (sizeof *tail);
   tail->self = g_object_ref (self);
   tail->writer = g_object_ref (writer);
+  tail->log = log;
 
   g_data_input_stream_read_line_async (data_reader,
                                        G_PRIORITY_DEFAULT,
@@ -459,11 +489,17 @@ ide_build_result_log_subprocess (IdeBuildResult *self,
 
   stderr_stream = g_subprocess_get_stderr_pipe (subprocess);
   if (stderr_stream)
-    ide_build_result_tail_into (self, stderr_stream, priv->stderr_writer);
+    ide_build_result_tail_into (self,
+                                IDE_BUILD_RESULT_LOG_STDERR,
+                                stderr_stream,
+                                priv->stderr_writer);
 
   stdout_stream = g_subprocess_get_stdout_pipe (subprocess);
   if (stdout_stream)
-    ide_build_result_tail_into (self, stdout_stream, priv->stdout_writer);
+    ide_build_result_tail_into (self,
+                                IDE_BUILD_RESULT_LOG_STDOUT,
+                                stdout_stream,
+                                priv->stdout_writer);
 }
 
 static void
@@ -564,6 +600,14 @@ ide_build_result_class_init (IdeBuildResultClass *klass)
                   G_STRUCT_OFFSET (IdeBuildResultClass, diagnostic),
                   NULL, NULL, NULL,
                   G_TYPE_NONE, 1, IDE_TYPE_DIAGNOSTIC);
+
+  signals [LOG] =
+    g_signal_new ("log",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (IdeBuildResultClass, log),
+                  NULL, NULL, NULL,
+                  G_TYPE_NONE, 2, IDE_TYPE_BUILD_RESULT_LOG, G_TYPE_STRING);
 
   errorformats = g_ptr_array_new ();
 
