@@ -191,7 +191,7 @@ gbp_build_workbench_addin_do_build (GbpBuildWorkbenchAddin *self,
    */
   gtk_widget_show (GTK_WIDGET (self->build_log_panel));
   ide_workbench_focus (workbench, GTK_WIDGET (self->build_log_panel));
-
+  ide_workbench_focus (workbench, GTK_WIDGET (self->panel));
 }
 
 static void
