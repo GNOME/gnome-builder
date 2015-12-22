@@ -156,7 +156,6 @@ m4_define([gtk_required_version], [3.19.1])
 m4_define([glib_required_version], [2.47.1])
 m4_define([gtksourceview_required_version], [3.19.0])
 m4_define([ggit_required_version], [0.23.4])
-m4_define([gjs_required_version], [1.42.0])
 m4_define([pygobject_required_version], [3.0.0])
 m4_define([libxml_required_version], [2.9.0])
 m4_define([peas_required_version], [1.16.0])
@@ -166,10 +165,6 @@ PKG_CHECK_MODULES(EGG,      [glib-2.0 >= glib_required_version
 PKG_CHECK_MODULES(GD,       [gtk+-3.0 >= gtk_required_version])
 PKG_CHECK_MODULES(GEDIT,    [glib-2.0 >= glib_required_version
                              gtk+-3.0 >= gtk_required_version])
-PKG_CHECK_MODULES(GJS,      [gjs-1.0 >= gjs_required_version
-                             gjs-internals-1.0 >= gjs_required_version],
-                            [enable_gjs_scripting=yes],
-                            [enable_gjs_scripting=no])
 PKG_CHECK_MODULES(ICONS,    [gio-2.0 >= glib_required_version])
 PKG_CHECK_MODULES(LIBGITG,  [libgit2-glib-1.0 >= ggit_required_version])
 PKG_CHECK_MODULES(LIBIDE,   [gio-2.0 >= glib_required_version
@@ -279,7 +274,6 @@ dnl ***********************************************************************
 dnl Define automake conditionals based on what we found
 dnl ***********************************************************************
 AM_CONDITIONAL(ENABLE_PYTHON_SCRIPTING, test x$enable_python_scripting != xno)
-AM_CONDITIONAL(ENABLE_GJS_SCRIPTING, test x$enable_gjs_scripting != xno)
 
 
 dnl ***********************************************************************
@@ -479,7 +473,6 @@ echo ""
 echo " Scripting"
 echo ""
 echo "  Python ............................... : ${enable_python_scripting}"
-echo "  GJS .................................. : ${enable_gjs_scripting}"
 echo ""
 echo " Plugins"
 echo ""

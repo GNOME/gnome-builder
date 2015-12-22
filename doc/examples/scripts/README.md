@@ -1,11 +1,13 @@
 # IDE Scripting Examples
 
 This directory contains various examples you can take inspiration from when
-writing your own IDE extensions.
+writing a simple script for GNOME Builder.
 
-Extensions are placed in ~/.config/gnome-builder/scripts/. Currently,
-JavaScript and Python 3 are supported. However, more languages may be
-added in the future based on demands.
+Scripting is different from plugins in that scripting allows the user to
+write short, one-off extensions to their workflow that does not warrant
+a full plugin.
 
-Simply place a `*.js` or `*.py` file in the proper directory, and it will
-be loaded when the `Ide.Context` is initialized.
+Such an example might be updating ane external resource when a file is saved.
+
+Simply place your `*.py` file in the proper directory, and it will be loaded
+when the `Ide.Context` is initialized.

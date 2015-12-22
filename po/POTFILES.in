@@ -22,7 +22,6 @@ libide/editor/ide-editor-perspective.c
 libide/editor/ide-editor-view-actions.c
 libide/editor/ide-editor-view.c
 libide/genesis/ide-genesis-perspective.c
-libide/gjs/ide-gjs-script.cpp
 libide/greeter/ide-greeter-perspective.c
 libide/gsettings/ide-language-defaults.c
 libide/ide-application-actions.c

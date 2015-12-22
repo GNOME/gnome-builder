@@ -28,10 +28,6 @@
 #include "ide-gsettings-file-settings.h"
 #include "ide-modelines-file-settings.h"
 
-#ifdef ENABLE_GJS_SCRIPTING
-# include "ide-gjs-script.h"
-#endif
-
 #ifdef ENABLE_PYTHON_SCRIPTING
 # include "ide-pygobject-script.h"
 #endif
@@ -85,13 +81,6 @@ ide_init_ctor (void)
                                   IDE_TYPE_GSETTINGS_FILE_SETTINGS,
                                   IDE_FILE_SETTINGS_EXTENSION_POINT".gsettings",
                                   -300);
-
-#ifdef ENABLE_GJS_SCRIPTING
-  g_io_extension_point_implement (IDE_SCRIPT_EXTENSION_POINT,
-                                  IDE_TYPE_GJS_SCRIPT,
-                                  IDE_SCRIPT_EXTENSION_POINT".gjs",
-                                  -100);
-#endif
 
 #ifdef ENABLE_PYTHON_SCRIPTING
   g_io_extension_point_implement (IDE_SCRIPT_EXTENSION_POINT,
