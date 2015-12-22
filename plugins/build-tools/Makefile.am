@@ -10,6 +10,8 @@ plugin_LTLIBRARIES = libbuild-tools-plugin.la
 dist_plugin_DATA = build-tools.plugin
 
 libbuild_tools_plugin_la_SOURCES = \
+	gbp-build-log-panel.c \
+	gbp-build-log-panel.h \
 	gbp-build-panel.c \
 	gbp-build-panel.h \
 	gbp-build-panel-row.c \

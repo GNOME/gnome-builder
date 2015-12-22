@@ -21,6 +21,7 @@
 #include "egg-binding-group.h"
 
 #include "gbp-build-panel.h"
+#include "gbp-build-log-panel.h"
 #include "gbp-build-workbench-addin.h"
 
 struct _GbpBuildWorkbenchAddin
@@ -30,6 +31,7 @@ struct _GbpBuildWorkbenchAddin
   /* Unowned */
   GbpBuildPanel      *panel;
   IdeWorkbench       *workbench;
+  GbpBuildLogPanel   *build_log_panel;
 
   /* Owned */
   EggBindingGroup    *bindings;
@@ -133,6 +135,7 @@ gbp_build_workbench_addin_save_all_cb (GObject      *object,
                            g_object_ref (state->self));
 
   gbp_build_workbench_addin_set_result (state->self, build_result);
+  gbp_build_log_panel_set_result (state->self->build_log_panel, build_result);
 
   g_object_unref (state->self);
   g_object_unref (state->builder);
@@ -181,6 +184,14 @@ gbp_build_workbench_addin_do_build (GbpBuildWorkbenchAddin *self,
                                      self->cancellable,
                                      gbp_build_workbench_addin_save_all_cb,
                                      state);
+
+  /* Ensure the build output is visible */
+  /* XXX: we might want to find a way to add a "hold" on the panel
+   *      visibility so that it can be hidden after a timeout.
+   */
+  gtk_widget_show (GTK_WIDGET (self->build_log_panel));
+  ide_workbench_focus (workbench, GTK_WIDGET (self->build_log_panel));
+
 }
 
 static void
@@ -318,6 +329,12 @@ gbp_build_workbench_addin_load (IdeWorkbenchAddin *addin,
   ide_layout_pane_add_page (IDE_LAYOUT_PANE (pane),
                             GTK_WIDGET (self->panel),
                             _("Build"), NULL);
+
+  pane = ide_layout_get_bottom_pane (IDE_LAYOUT (editor));
+  self->build_log_panel = g_object_new (GBP_TYPE_BUILD_LOG_PANEL, NULL);
+  ide_layout_pane_add_page (IDE_LAYOUT_PANE (pane),
+                            GTK_WIDGET (self->build_log_panel),
+                            _("Build Output"), NULL);
 
   gtk_widget_insert_action_group (GTK_WIDGET (workbench), "build-tools",
                                   G_ACTION_GROUP (self->actions));

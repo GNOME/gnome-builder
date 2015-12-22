@@ -34,3 +34,7 @@ buildpanel list row label.file {
 buildpanel list row image {
   opacity: 0.5;
 }
+
+buildlogpanel textview {
+  padding: 3px;
+}
