@@ -3831,21 +3831,17 @@ ide_source_view_real_insert_at_cursor (GtkTextView *text_view,
 {
   IdeSourceView *self = (IdeSourceView *)text_view;
   GtkTextBuffer *buffer;
-  gboolean at_bottom;
+  GtkTextMark *insert;
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
   g_assert (GTK_IS_TEXT_VIEW (text_view));
   g_assert (str);
 
-  at_bottom = ide_source_view_get_at_bottom (self);
-
   GTK_TEXT_VIEW_CLASS (ide_source_view_parent_class)->insert_at_cursor (text_view, str);
 
   buffer = gtk_text_view_get_buffer (text_view);
-  ide_source_view_scroll_mark_onscreen (self, gtk_text_buffer_get_insert (buffer), FALSE, 0, 0);
-
-  if (at_bottom)
-    ide_source_view_scroll_to_bottom (self);
+  insert = gtk_text_buffer_get_insert (buffer);
+  ide_source_view_scroll_mark_onscreen (self, insert, FALSE, 0, 0);
 }
 
 static void
