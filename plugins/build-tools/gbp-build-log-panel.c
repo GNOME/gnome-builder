@@ -56,6 +56,7 @@ gbp_build_log_panel_log (GbpBuildLogPanel  *self,
                          IdeBuildResult    *result)
 {
   GtkTextIter iter;
+  GtkTextMark *insert;
 
   g_assert (GBP_IS_BUILD_LOG_PANEL (self));
   g_assert (message != NULL);
@@ -78,8 +79,9 @@ gbp_build_log_panel_log (GbpBuildLogPanel  *self,
       gtk_text_buffer_apply_tag (self->buffer, self->stderr_tag, &begin, &iter);
     }
 
-  gtk_text_view_scroll_mark_onscreen (self->text_view,
-                                      gtk_text_buffer_get_insert (self->buffer));
+  insert = gtk_text_buffer_get_insert (self->buffer);
+  gtk_text_buffer_move_mark (self->buffer, insert, &iter);
+  gtk_text_view_scroll_mark_onscreen (self->text_view, insert);
 }
 
 void
