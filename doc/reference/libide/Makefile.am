@@ -52,40 +52,8 @@ CFILE_GLOB = \
 	$(top_srcdir)/libide/*/ide-*.c \
 	$(NULL)
 
-# Header files to ignore when scanning (These are internal to libide).
-IGNORE_HFILES = \
-	$(top_srcdir)/libide/c/c-parse-helper.h \
-	$(top_srcdir)/libide/git/ide-git-search-index.h \
-	$(top_srcdir)/libide/ide-async-helper.h \
-	$(top_srcdir)/libide/ide-battery-monitor.h \
-	$(top_srcdir)/libide/ide-ref-ptr.h \
-	$(top_srcdir)/libide/ide-search-reducer.h \
-	$(top_srcdir)/libide/ide-source-snippet-completion-provider.h \
-	$(top_srcdir)/libide/ide-source-snippet-parser.h \
-	$(top_srcdir)/libide/ide-source-view-capture.h \
-	$(top_srcdir)/libide/ide-source-view-mode.h \
-	$(top_srcdir)/libide/ide-types.h \
-	$(top_srcdir)/libide/theatrics/ide-box-theatric.h \
-	$(top_srcdir)/libide/theatrics/ide-frame-source.h \
-	$(wildcard $(top_srcdir)/libide/*/ide-*-completion-provider.h) \
-	$(wildcard $(top_srcdir)/libide/*/ide-*-device-provider.h) \
-	$(wildcard $(top_srcdir)/libide/*/ide-*-diagnostic-provider.h) \
-	$(wildcard $(top_srcdir)/libide/*/ide-*-file-settings.h) \
-	$(wildcard $(top_srcdir)/libide/*/ide-*-format-provider.h) \
-	$(wildcard $(top_srcdir)/libide/*/ide-*-gutter-renderer.h) \
-	$(wildcard $(top_srcdir)/libide/*/ide-*-indenter.h) \
-	$(wildcard $(top_srcdir)/libide/*/ide-*-search-provider.h) \
-	$(wildcard $(top_srcdir)/libide/clang/*.h) \
-	$(wildcard $(top_srcdir)/libide/editorconfig/*.h) \
-	$(wildcard $(top_srcdir)/libide/gca/*.h) \
-	$(wildcard $(top_srcdir)/libide/gjs/*.h) \
-	$(wildcard $(top_srcdir)/libide/gsettings/*.h) \
-	$(wildcard $(top_srcdir)/libide/modelines/*.h) \
-	$(wildcard $(top_srcdir)/libide/pygobject/*.h) \
-	$(wildcard $(top_srcdir)/libide/resources/*.h) \
-	$(wildcard $(top_srcdir)/libide/tasks/*.h) \
-	$(wildcard $(top_srcdir)/libide/util/*.h) \
-	$(NULL)
+# Header files to ignore when scanning.
+IGNORE_HFILES = 
 
 # Images to copy into HTML directory.
 HTML_IMAGES =
