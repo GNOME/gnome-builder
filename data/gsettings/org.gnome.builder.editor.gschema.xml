@@ -85,7 +85,7 @@
       <description>The various types of space to draw in the editor.</description>
     </key>
     <key name="overscroll" type="i">
-      <default>1</default>
+      <default>10</default>
       <range min="-999" max="999"/>
       <summary>Overscroll</summary>
       <description>The number of lines to scroll beyond the end of the buffer.</description>
