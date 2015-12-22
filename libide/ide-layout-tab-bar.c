@@ -96,6 +96,7 @@ create_row (IdeLayoutTabBar *self,
                       NULL);
 
   label = g_object_new (GTK_TYPE_LABEL,
+                        "ellipsize", PANGO_ELLIPSIZE_MIDDLE,
                         "visible", TRUE,
                         "xalign", 0.0f,
                         NULL);
