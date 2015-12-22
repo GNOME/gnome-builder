@@ -19,6 +19,8 @@
 #include <glib/gi18n.h>
 #include <ide.h>
 
+#include "util/ide-pango.h"
+
 #include "egg-signal-group.h"
 
 #include "gbp-build-log-panel.h"
@@ -29,6 +31,8 @@ struct _GbpBuildLogPanel
 
   IdeBuildResult *result;
   EggSignalGroup *signals;
+  GtkCssProvider *css;
+  GSettings      *settings;
 
   GtkTextBuffer  *buffer;
   GtkTextView    *text_view;
@@ -92,12 +96,47 @@ gbp_build_log_panel_set_result (GbpBuildLogPanel *self,
 }
 
 static void
+gbp_build_log_panel_changed_font_name (GbpBuildLogPanel *self,
+                                       const gchar      *key,
+                                       GSettings        *settings)
+{
+  gchar *font_name;
+  PangoFontDescription *font_desc;
+
+  g_assert (GBP_IS_BUILD_LOG_PANEL (self));
+  g_assert (g_strcmp0 (key, "font-name") == 0);
+  g_assert (G_IS_SETTINGS (settings));
+
+  font_name = g_settings_get_string (settings, key);
+  font_desc = pango_font_description_from_string (font_name);
+
+  if (font_desc != NULL)
+    {
+      gchar *fragment;
+      gchar *css;
+
+      fragment = ide_pango_font_description_to_css (font_desc);
+      css = g_strdup_printf ("textview { %s }", fragment);
+
+      gtk_css_provider_load_from_data (self->css, css, -1, NULL);
+
+      pango_font_description_free (font_desc);
+      g_free (fragment);
+      g_free (css);
+    }
+
+  g_free (font_name);
+}
+
+static void
 gbp_build_log_panel_finalize (GObject *object)
 {
   GbpBuildLogPanel *self = (GbpBuildLogPanel *)object;
 
   g_clear_object (&self->result);
   g_clear_object (&self->signals);
+  g_clear_object (&self->css);
+  g_clear_object (&self->settings);
 
   G_OBJECT_CLASS (gbp_build_log_panel_parent_class)->finalize (object);
 }
@@ -168,6 +207,8 @@ gbp_build_log_panel_class_init (GbpBuildLogPanelClass *klass)
 static void
 gbp_build_log_panel_init (GbpBuildLogPanel *self)
 {
+  GtkStyleContext *context;
+
   gtk_widget_init_template (GTK_WIDGET (self));
 
   self->stderr_tag = gtk_text_buffer_create_tag (self->buffer,
@@ -183,4 +224,18 @@ gbp_build_log_panel_init (GbpBuildLogPanel *self)
                                    G_CALLBACK (gbp_build_log_panel_log),
                                    self,
                                    G_CONNECT_SWAPPED);
+
+  self->css = gtk_css_provider_new ();
+  context = gtk_widget_get_style_context (GTK_WIDGET (self->text_view));
+  gtk_style_context_add_provider (context,
+                                  GTK_STYLE_PROVIDER (self->css),
+                                  GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+
+  self->settings = g_settings_new ("org.gnome.builder.terminal");
+  g_signal_connect_object (self->settings,
+                           "changed::font-name",
+                           G_CALLBACK (gbp_build_log_panel_changed_font_name),
+                           self,
+                           G_CONNECT_SWAPPED);
+  gbp_build_log_panel_changed_font_name (self, "font-name", self->settings);
 }
