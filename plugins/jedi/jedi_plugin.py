@@ -191,6 +191,10 @@ class DocumentationDB(object):
         "Open the DB (if needed)"
         if self.db is None:
             doc_db_path = os.path.join(GLib.get_user_data_dir(), 'gnome-builder', 'jedi', 'girdoc.db')
+            try:
+                os.makedirs(os.path.dirname(doc_db_path))
+            except:
+                pass
             self.db = sqlite3.connect(doc_db_path)
             self.cursor = self.db.cursor()
             # Create the tables if they don't exist to prevent exceptions later on
