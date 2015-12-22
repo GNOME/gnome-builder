@@ -56,7 +56,7 @@
             <child>
               <object class="GtkBox">
                 <property name="visible">true</property>
-                <property name="margin-top">6</property>
+                <property name="margin-top">12</property>
                 <property name="halign">end</property>
                 <property name="hexpand">true</property>
                 <property name="spacing">6</property>
