@@ -56,7 +56,6 @@ plugins/autotools/ide-autotools-builder.c
 plugins/autotools/ide-autotools-build-system.c
 plugins/autotools/ide-autotools-build-task.c
 plugins/autotools/ide-makecache.c
-plugins/build-tools/gbp-build-log-panel.c
 plugins/build-tools/gbp-build-panel-row.c
 [type: gettext/glade]plugins/build-tools/gbp-build-panel.ui
 plugins/build-tools/gbp-build-workbench-addin.c
