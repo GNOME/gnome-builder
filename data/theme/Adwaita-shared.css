@@ -38,3 +38,15 @@ symboltree entry {
   border-top: none;
   border-radius: 0px;
 }
+
+
+/*
+ * WORKAROUND:
+ *
+ * Currently, the separator color is wrong in GtkTextView's popup menu.
+ * See https://bugzilla.gnome.org/show_bug.cgi?id=759765
+ */
+menu separator {
+  color: alpha(@borders, 0.2);
+  background-color: alpha(@borders, 0.2);
+}
