@@ -282,7 +282,7 @@
                         <property name="homogeneous">true</property>
                         <child>
                           <object class="GtkButton">
-                            <property name="action-name">build-tools.cancel</property>
+                            <property name="action-name">build-tools.cancel-build</property>
                             <property name="label" translatable="yes">Cancel</property>
                             <property name="use-underline">true</property>
                             <property name="visible">true</property>

@@ -292,7 +292,7 @@ static const GActionEntry actions[] = {
   { "build", gbp_build_workbench_addin_build },
   { "rebuild", gbp_build_workbench_addin_rebuild },
   { "clean", gbp_build_workbench_addin_clean },
-  { "cancel", gbp_build_workbench_addin_cancel },
+  { "cancel-build", gbp_build_workbench_addin_cancel },
   { "deploy", gbp_build_workbench_addin_deploy },
   { "export", gbp_build_workbench_addin_export },
   { "device", NULL, "s", "'local'", gbp_build_workbench_addin_device },
@@ -463,7 +463,7 @@ gbp_build_workbench_addin_init (GbpBuildWorkbenchAddin *self)
     { "running", "build", G_BINDING_INVERT_BOOLEAN },
     { "running", "rebuild", G_BINDING_INVERT_BOOLEAN },
     { "running", "clean", G_BINDING_INVERT_BOOLEAN },
-    { "running", "cancel", 0 },
+    { "running", "cancel-build", 0 },
     { "running", "deploy", G_BINDING_INVERT_BOOLEAN },
     { "running", "export", G_BINDING_INVERT_BOOLEAN },
     { NULL }
