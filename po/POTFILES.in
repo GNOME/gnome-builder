@@ -6,8 +6,6 @@ contrib/xml/xml-reader.c
 [type: gettext/glade]data/gtk/menus.ui
 data/style-schemes/builder-dark.xml
 data/style-schemes/builder.xml
-[type: gettext/glade]data/ui/gb-new-project-dialog.ui
-[type: gettext/glade]data/ui/gb-projects-dialog.ui
 [type: gettext/glade]data/ui/ide-editor-frame.ui
 [type: gettext/glade]data/ui/ide-editor-tweak-widget.ui
 [type: gettext/glade]data/ui/ide-editor-view.ui
