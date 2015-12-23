@@ -112,6 +112,7 @@ G_BEGIN_DECLS
 #include "ide-vcs-uri.h"
 #include "ide-workbench.h"
 #include "ide-workbench-addin.h"
+#include "ide-workbench-header-bar.h"
 
 #include "editor/ide-editor-perspective.h"
 #include "editor/ide-editor-view.h"
