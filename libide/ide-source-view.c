@@ -455,81 +455,6 @@ ide_source_view_unblock_handlers (IdeSourceView *self)
   egg_signal_group_unblock (priv->buffer_signals);
 }
 
-static gboolean
-ide_source_view_get_at_bottom (IdeSourceView *self)
-{
-  GtkAdjustment *vadj;
-  gdouble value;
-  gdouble page_size;
-  gdouble upper;
-
-  g_assert (IDE_IS_SOURCE_VIEW (self));
-
-  vadj = gtk_scrollable_get_vadjustment (GTK_SCROLLABLE (self));
-  value = gtk_adjustment_get_value (vadj);
-  upper = gtk_adjustment_get_upper (vadj);
-  page_size = gtk_adjustment_get_page_size (vadj);
-
-  return ((value + page_size) == upper);
-}
-
-static void
-ide_source_view_scroll_to_bottom__changed_cb (GtkAdjustment *vadj,
-                                              GParamSpec    *pspec,
-                                              gpointer       user_data)
-{
-  gdouble page_size;
-  gdouble upper;
-  gdouble value;
-
-  g_assert (GTK_IS_ADJUSTMENT (vadj));
-
-  g_signal_handlers_disconnect_by_func (vadj,
-                                        G_CALLBACK (ide_source_view_scroll_to_bottom__changed_cb),
-                                        NULL);
-
-  page_size = gtk_adjustment_get_page_size (vadj);
-  upper = gtk_adjustment_get_upper (vadj);
-  value = upper - page_size;
-
-  gtk_adjustment_set_value (vadj, value);
-}
-
-static void
-ide_source_view_scroll_to_bottom (IdeSourceView *self)
-{
-  GtkAdjustment *vadj;
-  gdouble page_size;
-  gdouble upper;
-  gdouble value;
-  gdouble new_value;
-
-  g_assert (IDE_IS_SOURCE_VIEW (self));
-
-  vadj = gtk_scrollable_get_vadjustment (GTK_SCROLLABLE (self));
-  upper = gtk_adjustment_get_upper (vadj);
-  page_size = gtk_adjustment_get_page_size (vadj);
-  value = gtk_adjustment_get_value (vadj);
-  new_value = upper - page_size;
-
-  if (new_value == value)
-    {
-      /*
-       * HACK:
-       *
-       * GtkTextView wont calculate the new heights until an idle handler.
-       * So wait until that happens and then jump.
-       */
-      g_signal_connect (vadj,
-                        "notify::upper",
-                        G_CALLBACK (ide_source_view_scroll_to_bottom__changed_cb),
-                        NULL);
-      return;
-    }
-
-  gtk_adjustment_set_value (vadj, new_value);
-}
-
 static void
 get_rect_for_iters (GtkTextView       *text_view,
                     const GtkTextIter *iter1,
@@ -1905,7 +1830,6 @@ ide_source_view_do_indent (IdeSourceView *self,
   g_autofree gchar *indent = NULL;
   GtkTextIter begin;
   GtkTextIter end;
-  gboolean at_bottom;
   gint cursor_offset = 0;
 
   IDE_ENTRY;
@@ -1913,8 +1837,6 @@ ide_source_view_do_indent (IdeSourceView *self,
   g_assert (IDE_IS_SOURCE_VIEW (self));
   g_assert (event);
   g_assert (!indenter || IDE_IS_INDENTER (indenter));
-
-  at_bottom = ide_source_view_get_at_bottom (self);
 
   buffer = gtk_text_view_get_buffer (text_view);
 
@@ -1955,12 +1877,6 @@ ide_source_view_do_indent (IdeSourceView *self,
        * Make sure we stay in the visible rect.
        */
       ide_source_view_scroll_mark_onscreen (self, insert, FALSE, 0, 0);
-
-      /*
-       * Keep our selves pinned to the bottom of the document if that makes sense.
-       */
-      if (at_bottom)
-        ide_source_view_scroll_to_bottom (self);
 
       /*
        * Place the cursor, as it could be somewhere within our indent text.
