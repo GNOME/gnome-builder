@@ -158,7 +158,7 @@ m4_define([gtksourceview_required_version], [3.19.4])
 m4_define([ggit_required_version], [0.23.7])
 m4_define([pygobject_required_version], [5.0.0])
 m4_define([libxml_required_version], [2.9.0])
-m4_define([peas_required_version], [1.16.0])
+m4_define([peas_required_version], [1.16.1])
 
 PKG_CHECK_MODULES(EGG,      [glib-2.0 >= glib_required_version
                              gtk+-3.0 >= gtk_required_version])
