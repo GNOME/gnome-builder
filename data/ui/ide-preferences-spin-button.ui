@@ -45,6 +45,8 @@
         <child>
           <object class="GtkSpinButton" id="spin_button">
             <property name="visible">true</property>
+            <!-- width-chars does not seem to work well (3.19.5) -->
+            <property name="width-request">120</property>
             <property name="valign">center</property>
           </object>
         </child>
