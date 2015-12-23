@@ -320,6 +320,15 @@ ide_preferences_builtin_register_languages (IdePreferences *preferences)
   ide_preferences_add_radio (preferences, "languages.id", "indentation", "org.gnome.builder.editor.language", "auto-indent", "/org/gnome/builder/editor/language/{id}/", NULL, _("Automatically indent"), _("Indent source code as you type"), NULL, 30);
 }
 
+static void
+ide_preferences_builtin_register_build (IdePreferences *preferences)
+{
+  ide_preferences_add_page (preferences, "build", _("Build"), 500);
+
+  ide_preferences_add_list_group (preferences, "build", "basic", _("General"), 0);
+  ide_preferences_add_spin_button (preferences, "build", "basic", "org.gnome.builder.build", "parallel", "/org/gnome/builder/build/", _("Build Workers"), _("Number of parallel build workers"), NULL, 0);
+}
+
 void
 _ide_preferences_builtin_register (IdePreferences *preferences)
 {
@@ -331,4 +340,5 @@ _ide_preferences_builtin_register (IdePreferences *preferences)
   ide_preferences_builtin_register_keyboard (preferences);
   ide_preferences_builtin_register_vcs (preferences);
   ide_preferences_builtin_register_plugins (preferences);
+  ide_preferences_builtin_register_build (preferences);
 }
