@@ -1,4 +1,5 @@
 gsettings_SCHEMAS = \
+	org.gnome.builder.build.gschema.xml \
 	org.gnome.builder.code-insight.gschema.xml \
 	org.gnome.builder.editor.gschema.xml \
 	org.gnome.builder.editor.language.gschema.xml \

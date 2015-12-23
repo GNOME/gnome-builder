@@ -45,6 +45,23 @@ enum {
 
 static GParamSpec *properties [LAST_PROP];
 
+static void
+ide_autotools_builder_merge_defaults (IdeAutotoolsBuilder *self,
+                                      GKeyFile            *key_file)
+{
+  g_return_if_fail (IDE_IS_AUTOTOOLS_BUILDER (self));
+  g_return_if_fail (key_file != NULL);
+
+  if (!g_key_file_has_key (key_file, "parallel", "workers", NULL))
+    {
+      g_autoptr(GSettings) settings = g_settings_new ("org.gnome.builder.build");
+
+      g_key_file_set_integer (key_file,
+                              "parallel", "workers",
+                              g_settings_get_int (settings, "parallel"));
+    }
+}
+
 GKeyFile *
 ide_autotools_builder_get_config (IdeAutotoolsBuilder *self)
 {
@@ -62,8 +79,13 @@ ide_autotools_builder_set_config (IdeAutotoolsBuilder *self,
   if (self->config != config)
     {
       g_clear_pointer (&self->config, g_key_file_unref);
-      if (config)
-        self->config = g_key_file_ref (config);
+
+      if (config != NULL)
+        {
+          self->config = g_key_file_ref (config);
+          ide_autotools_builder_merge_defaults (self, config);
+        }
+
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CONFIG]);
     }
 }

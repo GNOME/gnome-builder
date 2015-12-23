@@ -547,10 +547,14 @@ worker_state_new (IdeAutotoolsBuildTask *self)
   state->project_path = g_file_get_path (project_dir);
   state->system_type = g_strdup (ide_device_get_system_type (priv->device));
 
-  if ((val32 = g_key_file_get_integer (priv->config, "parallel", "workers", NULL)))
-    state->parallel = g_strdup_printf ("-j%u", val32);
+  val32 = g_key_file_get_integer (priv->config, "parallel", "workers", NULL);
+
+  if (val32 == -1)
+    state->parallel = g_strdup_printf ("-j%u", g_get_num_processors () + 1);
+  else if (val32 == 0)
+    state->parallel = g_strdup_printf ("-j%u", g_get_num_processors ());
   else
-    state->parallel = g_strdup ("-j1");
+    state->parallel = g_strdup_printf ("-j%u", val32);
 
   make_targets = g_ptr_array_new ();
 
