@@ -156,7 +156,7 @@ m4_define([gtk_required_version], [3.19.5])
 m4_define([glib_required_version], [2.47.4])
 m4_define([gtksourceview_required_version], [3.19.4])
 m4_define([ggit_required_version], [0.23.7])
-m4_define([pygobject_required_version], [5.0.0])
+m4_define([pygobject_required_version], [3.19.3])
 m4_define([libxml_required_version], [2.9.0])
 m4_define([peas_required_version], [1.17.0])
 
