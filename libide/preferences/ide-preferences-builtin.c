@@ -21,6 +21,7 @@
 #include <libgit2-glib/ggit.h>
 #include <libpeas/peas.h>
 
+#include "ide-macros.h"
 #include "ide-preferences-builtin.h"
 #include "ide-preferences-entry.h"
 #include "ide-preferences-language-row.h"
@@ -279,30 +280,44 @@ ide_preferences_builtin_register_languages (IdePreferences *preferences)
 {
   GtkSourceLanguageManager *manager;
   const gchar * const *language_ids;
+  g_autoptr(GHashTable) sections = NULL;
+  guint section_count = 0;
   gint i;
+
+  sections = g_hash_table_new (g_str_hash, g_str_equal);
 
   ide_preferences_add_page (preferences, "languages", _("Programming Languages"), 200);
 
   manager = gtk_source_language_manager_get_default ();
   language_ids = gtk_source_language_manager_get_language_ids (manager);
 
-  ide_preferences_add_list_group (preferences, "languages", "list", NULL, 0);
-
   for (i = 0; language_ids [i]; i++)
     {
       IdePreferencesLanguageRow *row;
       GtkSourceLanguage *language;
       const gchar *name;
+      const gchar *section;
+
+      if (ide_str_equal0 (language_ids [i], "def"))
+        continue;
 
       language = gtk_source_language_manager_get_language (manager, language_ids [i]);
       name = gtk_source_language_get_name (language);
+      section = gtk_source_language_get_section (language);
+
+      if (!g_hash_table_contains (sections, section))
+        {
+          ide_preferences_add_list_group (preferences, "languages",
+                                          section, section, section_count++);
+          g_hash_table_insert (sections, (gchar *)section, NULL);
+        }
 
       row = g_object_new (IDE_TYPE_PREFERENCES_LANGUAGE_ROW,
                           "id", language_ids [i],
                           "title", name,
                           "visible", TRUE,
                           NULL);
-      ide_preferences_add_custom (preferences, "languages", "list", GTK_WIDGET (row), NULL, 0);
+      ide_preferences_add_custom (preferences, "languages", section, GTK_WIDGET (row), NULL, 0);
     }
 
   ide_preferences_add_page (preferences, "languages.id", NULL, 0);
