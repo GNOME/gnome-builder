@@ -25,7 +25,7 @@ G_BEGIN_DECLS
 
 #define GBP_TYPE_GCC_BUILD_RESULT_ADDIN (gbp_gcc_build_result_addin_get_type())
 
-G_DECLARE_FINAL_TYPE (GbpGccBuildResultAddin, gbp_gcc_build_result_addin, GBP, GCC_BUILD_RESULT_ADDIN, GObject)
+G_DECLARE_FINAL_TYPE (GbpGccBuildResultAddin, gbp_gcc_build_result_addin, GBP, GCC_BUILD_RESULT_ADDIN, IdeObject)
 
 G_END_DECLS
 

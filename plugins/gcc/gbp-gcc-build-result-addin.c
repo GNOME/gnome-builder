@@ -32,7 +32,7 @@
 
 struct _GbpGccBuildResultAddin
 {
-  GObject         parent_instance;
+  IdeObject       parent_instance;
 
   EggSignalGroup *signals;
   gchar          *current_dir;
@@ -40,7 +40,7 @@ struct _GbpGccBuildResultAddin
 
 static void build_result_addin_iface_init (IdeBuildResultAddinInterface *iface);
 
-G_DEFINE_TYPE_EXTENDED (GbpGccBuildResultAddin, gbp_gcc_build_result_addin, G_TYPE_OBJECT, 0,
+G_DEFINE_TYPE_EXTENDED (GbpGccBuildResultAddin, gbp_gcc_build_result_addin, IDE_TYPE_OBJECT, 0,
                         G_IMPLEMENT_INTERFACE (IDE_TYPE_BUILD_RESULT_ADDIN,
                                                build_result_addin_iface_init))
 
