@@ -1,0 +1,8 @@
+[Plugin]
+Module=gcc-plugin
+Name=GCC
+Description=Provides various GCC integration hooks
+Authors=Christian Hergert <christian@hergert.me>
+Copyright=Copyright © 2015 Christian Hergert
+Builtin=true
+Hidden=true

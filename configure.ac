@@ -231,6 +231,7 @@ m4_include([plugins/ctags/configure.ac])
 m4_include([plugins/devhelp/configure.ac])
 m4_include([plugins/file-search/configure.ac])
 m4_include([plugins/fpaste/configure.ac])
+m4_include([plugins/gcc/configure.ac])
 m4_include([plugins/git/configure.ac])
 m4_include([plugins/gnome-code-assistance/configure.ac])
 m4_include([plugins/html-completion/configure.ac])
@@ -484,6 +485,7 @@ echo "  Command Bar .......................... : ${enable_command_bar_plugin}"
 echo "  Ctags ................................ : ${enable_ctags_plugin}"
 echo "  Devhelp .............................. : ${enable_devhelp_plugin}"
 echo "  Fpaste.org ........................... : ${enable_fpaste_plugin}"
+echo "  GCC .................................. : ${enable_gcc_plugin}"
 echo "  Git Version Control .................. : ${enable_git_plugin}"
 echo "  Global File Search ................... : ${enable_file_search_plugin}"
 echo "  GNOME Code Assistance ................ : ${enable_gnome_code_assistance_plugin}"

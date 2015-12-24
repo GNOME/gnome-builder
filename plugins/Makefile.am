@@ -8,6 +8,7 @@ SUBDIRS = \
 	devhelp \
 	file-search \
 	fpaste \
+	gcc \
 	git \
 	gnome-code-assistance \
 	html-completion \
