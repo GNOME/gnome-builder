@@ -155,11 +155,13 @@ ide_application_local_command_line (GApplication   *application,
   gboolean list_commands = FALSE;
 
   GOptionEntry entries[] = {
+    /* keep list-commands as first entry */
     { "list-commands",
       0,
       G_OPTION_FLAG_HIDDEN,
       G_OPTION_ARG_NONE,
-      &list_commands},
+      &list_commands,
+      N_("List available subcommands") },
 
     { "standalone",
       's',
@@ -192,7 +194,7 @@ ide_application_local_command_line (GApplication   *application,
       G_OPTION_FLAG_NO_ARG | G_OPTION_FLAG_IN_MAIN,
       G_OPTION_ARG_CALLBACK,
       ide_application_increase_verbosity,
-      N_("Increase verbosity. May be specified multiple times.") },
+      N_("Increase verbosity, may specify multiple times") },
 
     { NULL }
   };
@@ -208,7 +210,11 @@ ide_application_local_command_line (GApplication   *application,
     prgname += strlen ("lt-");
 
   if (g_str_equal (prgname, "ide"))
-    shortdesc = _("COMMAND");
+    {
+      g_assert_cmpstr (entries [0].long_name, ==, "list-commands");
+      entries [0].flags = 0;
+      shortdesc = _("COMMAND");
+    }
 
   context = g_option_context_new (shortdesc);
 
