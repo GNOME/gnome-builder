@@ -452,7 +452,8 @@ gb_command_gaction_provider_complete (GbCommandProvider *provider,
               continue;
             }
 
-          if (g_str_has_prefix (names [i], initial_command_text))
+          if (g_str_has_prefix (names [i], initial_command_text) &&
+              g_action_group_get_action_enabled (group, names [i]))
             g_ptr_array_add (completions, g_strdup (names [i]));
         }
 
