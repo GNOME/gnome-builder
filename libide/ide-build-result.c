@@ -42,8 +42,6 @@ typedef struct
   GTimer           *timer;
   gchar            *mode;
 
-  gchar            *current_dir;
-
   guint             running : 1;
 } IdeBuildResultPrivate;
 
@@ -71,164 +69,6 @@ enum {
 
 static GParamSpec *properties [LAST_PROP];
 static guint signals [LAST_SIGNAL];
-static GPtrArray *errorformats;
-
-static void
-ide_build_result_add_error_format (const gchar *format)
-{
-  g_autoptr(GError) error = NULL;
-  GRegex *regex;
-
-  g_assert (format != NULL);
-
-  regex = g_regex_new (format, G_REGEX_OPTIMIZE | G_REGEX_CASELESS, 0, &error);
-
-  if (regex == NULL)
-    g_warning ("%s", error->message);
-  else
-    g_ptr_array_add (errorformats, regex);
-}
-
-static IdeDiagnosticSeverity
-parse_severity (const gchar *str)
-{
-  g_autofree gchar *lower = NULL;
-
-  if (str == NULL)
-    return IDE_DIAGNOSTIC_WARNING;
-
-  lower = g_utf8_strdown (str, -1);
-
-  if (strstr (lower, "fatal") != NULL)
-    return IDE_DIAGNOSTIC_FATAL;
-
-  if (strstr (lower, "error") != NULL)
-    return IDE_DIAGNOSTIC_ERROR;
-
-  if (strstr (lower, "warning") != NULL)
-    return IDE_DIAGNOSTIC_WARNING;
-
-  if (strstr (lower, "ignored") != NULL)
-    return IDE_DIAGNOSTIC_IGNORED;
-
-  if (strstr (lower, "deprecated") != NULL)
-    return IDE_DIAGNOSTIC_DEPRECATED;
-
-  if (strstr (lower, "note") != NULL)
-    return IDE_DIAGNOSTIC_NOTE;
-
-  return IDE_DIAGNOSTIC_WARNING;
-}
-
-static IdeDiagnostic *
-ide_build_result_create_diagnostic (IdeBuildResult *self,
-                                    GMatchInfo     *match_info)
-{
-  IdeBuildResultPrivate *priv = ide_build_result_get_instance_private (self);
-  g_autofree gchar *filename = NULL;
-  g_autofree gchar *line = NULL;
-  g_autofree gchar *column = NULL;
-  g_autofree gchar *message = NULL;
-  g_autofree gchar *level = NULL;
-  g_autoptr(IdeFile) file = NULL;
-  g_autoptr(IdeSourceLocation) location = NULL;
-  IdeDiagnostic *diagnostic;
-  IdeContext *context;
-  struct {
-    gint64 line;
-    gint64 column;
-    IdeDiagnosticSeverity severity;
-  } parsed;
-
-  g_assert (IDE_IS_BUILD_RESULT (self));
-  g_assert (match_info != NULL);
-
-  filename = g_match_info_fetch_named (match_info, "filename");
-  line = g_match_info_fetch_named (match_info, "line");
-  column = g_match_info_fetch_named (match_info, "column");
-  message = g_match_info_fetch_named (match_info, "message");
-  level = g_match_info_fetch_named (match_info, "level");
-
-  parsed.line = g_ascii_strtoll (line, NULL, 10);
-  if (parsed.line < 1 || parsed.line > G_MAXINT32)
-    return NULL;
-  parsed.line--;
-
-  parsed.column = g_ascii_strtoll (column, NULL, 10);
-  if (parsed.column < 1 || parsed.column > G_MAXINT32)
-    return NULL;
-  parsed.column--;
-
-  parsed.severity = parse_severity (level);
-
-  context = ide_object_get_context (IDE_OBJECT (self));
-
-  if (priv->current_dir)
-    {
-      gchar *path;
-
-      path = g_build_filename (priv->current_dir, filename, NULL);
-      g_free (filename);
-      filename = path;
-    }
-
-  file = ide_file_new_for_path (context, filename);
-  location = ide_source_location_new (file, parsed.line, parsed.column, 0);
-  diagnostic = ide_diagnostic_new (parsed.severity, message, location);
-
-  return diagnostic;
-}
-
-static void
-_ide_build_result_extract (IdeBuildResult *self,
-                           const gchar    *line)
-{
-  IdeBuildResultPrivate *priv = ide_build_result_get_instance_private (self);
-  const gchar *enterdir;
-  guint i;
-
-  g_assert (IDE_IS_BUILD_RESULT (self));
-  g_assert (line != NULL);
-
-  /*
-   * TODO: This should all be abstracted into log observers.  Various build
-   *       systems will need to do different tricks to track the current dir,
-   *       as well as errorformat extractions.
-   */
-
-  if ((enterdir = strstr (line, "Entering directory '")))
-    {
-      gsize len;
-
-      enterdir += IDE_LITERAL_LENGTH ("Entering directory '");
-      len = strlen (enterdir);
-
-      if (len > 0)
-        {
-          g_free (priv->current_dir);
-          priv->current_dir = g_strndup (enterdir, len - 1);
-        }
-    }
-
-  for (i = 0; i < errorformats->len; i++)
-    {
-      GRegex *regex = g_ptr_array_index (errorformats, i);
-      GMatchInfo *match_info = NULL;
-
-      if (g_regex_match (regex, line, 0, &match_info))
-        {
-          IdeDiagnostic *diagnostic;
-
-          if ((diagnostic = ide_build_result_create_diagnostic (self, match_info)))
-            {
-              g_signal_emit (self, signals [DIAGNOSTIC], 0, diagnostic);
-              ide_diagnostic_unref (diagnostic);
-            }
-        }
-
-      g_match_info_free (match_info);
-    }
-}
 
 static gboolean
 _ide_build_result_open_log (IdeBuildResult  *self,
@@ -270,8 +110,6 @@ _ide_build_result_log (IdeBuildResult    *self,
 
   g_assert (G_IS_OUTPUT_STREAM (stream));
   g_assert (message != NULL);
-
-  _ide_build_result_extract (self, message);
 
   /*
    * TODO: Is there a better way we can do this to just add a newline
@@ -669,14 +507,6 @@ ide_build_result_class_init (IdeBuildResultClass *klass)
                   G_STRUCT_OFFSET (IdeBuildResultClass, log),
                   NULL, NULL, NULL,
                   G_TYPE_NONE, 2, IDE_TYPE_BUILD_RESULT_LOG, G_TYPE_STRING);
-
-  errorformats = g_ptr_array_new ();
-
-  ide_build_result_add_error_format ("(?<filename>[a-zA-Z0-9\\-\\.]+):"
-                                     "(?<line>\\d+):"
-                                     "(?<column>\\d+): "
-                                     "(?<level>[\\w\\s]+): "
-                                     "(?<message>.*)");
 }
 
 static void
