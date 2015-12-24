@@ -704,9 +704,8 @@ gb_command_bar_class_init (GbCommandBarClass *klass)
                                 "move-history", 1,
                                 GTK_TYPE_DIRECTION_TYPE, GTK_DIR_DOWN);
 
-  gtk_widget_class_set_template_from_resource (widget_class,
-                                               "/org/gnome/builder/plugins/command-bar/gb-command-bar.ui");
-
+  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/plugins/command-bar/gb-command-bar.ui");
+  gtk_widget_class_set_css_name (widget_class, "commandbar");
   gtk_widget_class_bind_template_child (widget_class, GbCommandBar, entry);
   gtk_widget_class_bind_template_child (widget_class, GbCommandBar, list_box);
   gtk_widget_class_bind_template_child (widget_class, GbCommandBar, scroller);
