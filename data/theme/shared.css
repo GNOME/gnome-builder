@@ -73,16 +73,6 @@ layoutpane .pane-separator {
 }
 
 
-.round button {
-  border-radius: 20px;
-  outline-radius: 20px;
-}
-.round label {
-  padding-left: 0px;
-  padding-right: 0px;
-}
-
-
 .filtered {
   opacity: .2;
 }
