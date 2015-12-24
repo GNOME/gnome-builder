@@ -48,6 +48,8 @@ libide_1_0_la_public_sources = \
 	ide-buffer.h \
 	ide-build-result.c \
 	ide-build-result.h \
+	ide-build-result-addin.c \
+	ide-build-result-addin.h \
 	ide-build-system.c \
 	ide-build-system.h \
 	ide-builder.c \

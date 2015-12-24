@@ -30,6 +30,7 @@ G_BEGIN_DECLS
 #include "ide-back-forward-item.h"
 #include "ide-back-forward-list.h"
 #include "ide-build-result.h"
+#include "ide-build-result-addin.h"
 #include "ide-build-system.h"
 #include "ide-builder.h"
 #include "ide-buffer.h"

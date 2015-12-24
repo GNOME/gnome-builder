@@ -22,26 +22,29 @@
 #include <libpeas/peas.h>
 
 #include "ide-build-result.h"
+#include "ide-build-result-addin.h"
 #include "ide-enums.h"
 #include "ide-file.h"
 #include "ide-source-location.h"
 
 typedef struct
 {
-  GMutex         mutex;
+  GMutex            mutex;
 
-  GInputStream  *stdout_reader;
-  GOutputStream *stdout_writer;
+  GInputStream     *stdout_reader;
+  GOutputStream    *stdout_writer;
 
-  GInputStream  *stderr_reader;
-  GOutputStream *stderr_writer;
+  GInputStream     *stderr_reader;
+  GOutputStream    *stderr_writer;
 
-  GTimer        *timer;
-  gchar         *mode;
+  PeasExtensionSet *addins;
 
-  gchar         *current_dir;
+  GTimer           *timer;
+  gchar            *mode;
 
-  guint          running : 1;
+  gchar            *current_dir;
+
+  guint             running : 1;
 } IdeBuildResultPrivate;
 
 typedef struct
@@ -503,12 +506,67 @@ ide_build_result_log_subprocess (IdeBuildResult *self,
 }
 
 static void
+ide_build_result_addin_added (PeasExtensionSet    *set,
+                              PeasPluginInfo      *plugin_info,
+                              IdeBuildResultAddin *addin,
+                              IdeBuildResult      *self)
+{
+  g_assert (PEAS_IS_EXTENSION_SET (set));
+  g_assert (plugin_info != NULL);
+  g_assert (IDE_IS_BUILD_RESULT_ADDIN (addin));
+  g_assert (IDE_IS_BUILD_RESULT (self));
+
+  ide_build_result_addin_load (addin, self);
+}
+
+static void
+ide_build_result_addin_removed (PeasExtensionSet    *set,
+                                PeasPluginInfo      *plugin_info,
+                                IdeBuildResultAddin *addin,
+                                IdeBuildResult      *self)
+{
+  g_assert (PEAS_IS_EXTENSION_SET (set));
+  g_assert (plugin_info != NULL);
+  g_assert (IDE_IS_BUILD_RESULT_ADDIN (addin));
+  g_assert (IDE_IS_BUILD_RESULT (self));
+
+  ide_build_result_addin_unload (addin, self);
+}
+
+static void
+ide_build_result_constructed (GObject *object)
+{
+  IdeBuildResult *self = (IdeBuildResult *)object;
+  IdeBuildResultPrivate *priv = ide_build_result_get_instance_private (self);
+  PeasEngine *engine = peas_engine_get_default ();
+
+  G_OBJECT_CLASS (ide_build_result_parent_class)->constructed (object);
+
+  priv->addins = peas_extension_set_new (engine,
+                                         IDE_TYPE_BUILD_RESULT_ADDIN,
+                                         NULL);
+  peas_extension_set_foreach (priv->addins,
+                              (PeasExtensionSetForeachFunc)ide_build_result_addin_added,
+                              self);
+  g_signal_connect_object (priv->addins,
+                           "extension-added",
+                           G_CALLBACK (ide_build_result_addin_added),
+                           self,
+                           0);
+  g_signal_connect_object (priv->addins,
+                           "extension-removed",
+                           G_CALLBACK (ide_build_result_addin_removed),
+                           self,
+                           0);
+}
+
+static void
 ide_build_result_finalize (GObject *object)
 {
   IdeBuildResult *self = (IdeBuildResult *)object;
   IdeBuildResultPrivate *priv = ide_build_result_get_instance_private (self);
 
-  g_mutex_clear (&priv->mutex);
+  g_clear_object (&priv->addins);
 
   g_clear_object (&priv->stderr_reader);
   g_clear_object (&priv->stderr_writer);
@@ -518,6 +576,8 @@ ide_build_result_finalize (GObject *object)
 
   g_clear_pointer (&priv->mode, g_free);
   g_clear_pointer (&priv->timer, g_timer_destroy);
+
+  g_mutex_clear (&priv->mutex);
 
   G_OBJECT_CLASS (ide_build_result_parent_class)->finalize (object);
 }
@@ -573,6 +633,7 @@ ide_build_result_class_init (IdeBuildResultClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
+  object_class->constructed = ide_build_result_constructed;
   object_class->finalize = ide_build_result_finalize;
   object_class->get_property = ide_build_result_get_property;
   object_class->set_property = ide_build_result_set_property;
