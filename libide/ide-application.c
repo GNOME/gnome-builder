@@ -140,7 +140,6 @@ ide_application_register_search_paths (IdeApplication *self)
 
   gtk_source_style_scheme_manager_append_search_path (gtk_source_style_scheme_manager_get_default (),
                                                       PACKAGE_DATADIR"/gtksourceview-3.0/styles/");
-  g_irepository_prepend_search_path (PACKAGE_LIBDIR"/gnome-builder/girepository-1.0");
 }
 
 static void

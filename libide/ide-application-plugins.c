@@ -88,6 +88,8 @@ ide_application_discover_plugins (IdeApplication *self)
     }
   else
     {
+      g_irepository_prepend_search_path (PACKAGE_LIBDIR"/gnome-builder/girepository-1.0");
+
       peas_engine_prepend_search_path (engine,
                                        PACKAGE_LIBDIR"/gnome-builder/plugins",
                                        PACKAGE_DATADIR"/gnome-builder/plugins");
