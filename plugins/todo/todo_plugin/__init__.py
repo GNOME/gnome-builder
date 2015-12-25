@@ -218,7 +218,7 @@ class TodoPanel(Gtk.Bin):
         iter = self.model.get_iter(path)
         item, = self.model.get(iter, 0)
         uri = Ide.Uri.new_from_file(item.props.file)
-        uri.set_fragment('L%u' % item.props.line)
+        uri.set_fragment('L%u' % max(1, item.props.line - 1))
 
         workbench = self.get_ancestor(Ide.Workbench)
         workbench.open_uri_async(uri, 'editor', None, None, None)
