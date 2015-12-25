@@ -92,6 +92,7 @@ plugins/sysmon/gb-sysmon-addin.c
 plugins/terminal/gb-terminal-view-actions.c
 plugins/terminal/gb-terminal-workbench-addin.c
 [type: gettext/glade]plugins/terminal/gtk/menus.ui
+plugins/todo/todo_plugin/__init__.py
 tools/ide-build.c
 tools/ide-list-build-flags.c
 tools/ide-list-devices.c
