@@ -151,6 +151,7 @@ ide_editor_perspective_load_buffer (IdeEditorPerspective *self,
 {
   IdeEditorView *view;
   GtkWidget *stack;
+  IdeWorkbench *workbench;
 
   g_assert (IDE_IS_EDITOR_PERSPECTIVE (self));
   g_assert (IDE_IS_BUFFER (buffer));
@@ -167,7 +168,8 @@ ide_editor_perspective_load_buffer (IdeEditorPerspective *self,
 
   gtk_container_add (GTK_CONTAINER (stack), GTK_WIDGET (view));
 
-  gtk_widget_grab_focus (GTK_WIDGET (view));
+  workbench = ide_widget_get_workbench (GTK_WIDGET (stack));
+  ide_workbench_focus (workbench, GTK_WIDGET (view));
 }
 
 static void
@@ -193,9 +195,13 @@ ide_editor_perspective_locate_buffer (GtkWidget *view,
 
           if (stack != NULL)
             {
+              IdeWorkbench *workbench;
+
               ide_layout_stack_set_active_view (IDE_LAYOUT_STACK (stack), view);
-              gtk_widget_grab_focus (GTK_WIDGET (view));
               *buffer = NULL;
+
+              workbench = ide_widget_get_workbench (GTK_WIDGET (stack));
+              ide_workbench_focus (workbench, GTK_WIDGET (view));
             }
         }
     }
