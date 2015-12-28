@@ -1,6 +1,6 @@
-/* gbp-build-plugin.c
+/* gbp-build-tool.h
  *
- * Copyright (C) 2015 Christian Hergert <chergert@redhat.com>
+ * Copyright (C) 2015 Christian Hergert <christian@hergert.me>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,19 +16,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <libpeas/peas.h>
+#ifndef GBP_BUILD_TOOL_H
+#define GBP_BUILD_TOOL_H
+
 #include <ide.h>
 
-#include "gbp-build-tool.h"
-#include "gbp-build-workbench-addin.h"
+G_BEGIN_DECLS
 
-void
-peas_register_types (PeasObjectModule *module)
-{
-  peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_APPLICATION_TOOL,
-                                              GBP_TYPE_BUILD_TOOL);
-  peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_WORKBENCH_ADDIN,
-                                              GBP_TYPE_BUILD_WORKBENCH_ADDIN);
-}
+#define GBP_TYPE_BUILD_TOOL (gbp_build_tool_get_type())
+
+G_DECLARE_FINAL_TYPE (GbpBuildTool, gbp_build_tool, GBP, BUILD_TOOL, GObject)
+
+G_END_DECLS
+
+#endif /* GBP_BUILD_TOOL_H */

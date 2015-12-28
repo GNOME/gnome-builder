@@ -17,6 +17,8 @@ libbuild_tools_plugin_la_SOURCES = \
 	gbp-build-panel-row.c \
 	gbp-build-panel-row.h \
 	gbp-build-plugin.c \
+	gbp-build-tool.c \
+	gbp-build-tool.h \
 	gbp-build-workbench-addin.c \
 	gbp-build-workbench-addin.h \
 	$(NULL)

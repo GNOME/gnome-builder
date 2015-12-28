@@ -7,3 +7,5 @@ Copyright=Copyright © 2015 Christian Hergert
 Depends=editor
 Hidden=true
 Builtin=true
+X-Tool-Name=build
+X-Tool-Description=Build a project
