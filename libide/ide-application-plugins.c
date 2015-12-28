@@ -41,8 +41,11 @@ ide_application_can_load_plugin (IdeApplication *self,
 
   if (self->mode == IDE_APPLICATION_MODE_TOOL)
     {
-      if (self->tool != plugin_info)
-        return FALSE;
+      /*
+       * Plugins might provide critical features needed
+       * to load a project (build system, vcs, etc).
+       */
+      return TRUE;
     }
 
   /*
