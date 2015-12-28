@@ -143,30 +143,6 @@ ide_application_register_search_paths (IdeApplication *self)
 }
 
 static void
-ide_application_register_ggit (IdeApplication *self)
-{
-  GgitFeatureFlags ggit_flags;
-
-  g_assert (IDE_IS_APPLICATION (self));
-
-  ggit_init ();
-
-  ggit_flags = ggit_get_features ();
-
-  if ((ggit_flags & GGIT_FEATURE_THREADS) == 0)
-    {
-      g_error (_("Builder requires libgit2-glib with threading support."));
-      exit (EXIT_FAILURE);
-    }
-
-  if ((ggit_flags & GGIT_FEATURE_SSH) == 0)
-    {
-      g_error (_("Builder requires libgit2-glib with SSH support."));
-      exit (EXIT_FAILURE);
-    }
-}
-
-static void
 ide_application_activate_primary (IdeApplication *self)
 {
   GtkWindow *window;
@@ -337,7 +313,6 @@ ide_application_startup (GApplication *application)
       ide_application_make_skeleton_dirs (self);
       ide_application_register_theme_overrides (self);
       ide_application_register_keybindings (self);
-      ide_application_register_ggit (self);
       ide_application_actions_init (self);
 
       modeline_parser_init ();

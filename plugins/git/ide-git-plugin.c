@@ -22,13 +22,41 @@
 #include "ide-git-genesis-addin.h"
 #include "ide-git-vcs.h"
 
+static gboolean
+register_ggit (void)
+{
+  GgitFeatureFlags ggit_flags;
+
+  ggit_init ();
+
+  ggit_flags = ggit_get_features ();
+
+  if ((ggit_flags & GGIT_FEATURE_THREADS) == 0)
+    {
+      g_printerr ("Builder requires libgit2-glib with threading support.");
+      return FALSE;
+    }
+
+  if ((ggit_flags & GGIT_FEATURE_SSH) == 0)
+    {
+      g_printerr ("Builder requires libgit2-glib with SSH support.");
+      return FALSE;
+    }
+
+  return TRUE;
+}
+
+
 void
 peas_register_types (PeasObjectModule *module)
 {
-  peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_VCS,
-                                              IDE_TYPE_GIT_VCS);
-  peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_GENESIS_ADDIN,
-                                              IDE_TYPE_GIT_GENESIS_ADDIN);
+  if (register_ggit ())
+    {
+      peas_object_module_register_extension_type (module,
+                                                  IDE_TYPE_VCS,
+                                                  IDE_TYPE_GIT_VCS);
+      peas_object_module_register_extension_type (module,
+                                                  IDE_TYPE_GENESIS_ADDIN,
+                                                  IDE_TYPE_GIT_GENESIS_ADDIN);
+    }
 }
