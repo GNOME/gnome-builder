@@ -177,11 +177,15 @@ gbp_build_tool_run_async (IdeApplicationTool  *tool,
   g_autoptr(GOptionContext) opt_context = NULL;
   g_autoptr(GKeyFile) config = NULL;
   g_auto(GStrv) strv = NULL;
+  gint parallel = -1;
   GError *error = NULL;
   const GOptionEntry entries[] = {
     { "device", 'd', 0, G_OPTION_ARG_STRING, &device_id,
       N_("The id of the device to build for"),
       N_("local") },
+    { "parallel", 'j', 0, G_OPTION_ARG_INT, &parallel,
+      N_("Number of workers to use when building"),
+      N_("N") },
     { "project", 'p', 0, G_OPTION_ARG_FILENAME, &project_path,
       N_("Path to project file, defaults to current directory"),
       N_("PATH") },
@@ -213,6 +217,9 @@ gbp_build_tool_run_async (IdeApplicationTool  *tool,
     device_id = g_strdup ("local");
 
   config = g_key_file_new ();
+
+  if (parallel >= -1)
+    g_key_file_set_integer (config, "parallel", "workers", parallel);
 
   g_object_set_data_full (G_OBJECT (task), "DEVICE_ID", g_strdup (device_id), g_free);
   g_object_set_data_full (G_OBJECT (task), "CONFIG", g_key_file_ref (config), (GDestroyNotify)g_key_file_unref);
