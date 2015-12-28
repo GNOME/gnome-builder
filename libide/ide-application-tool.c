@@ -25,6 +25,17 @@ ide_application_tool_default_init (IdeApplicationToolInterface *iface)
 {
 }
 
+/**
+ * ide_application_tool_run_async:
+ * @self: An #IdeApplicationTool
+ * @arguments: (array zero-terminated=1) (element-type utf8): argv for the command
+ * @cancellable: (nullable): A #GCancellable or %NULL
+ * @callback: A callback to execute upon completion
+ * @user_data: User data for @callback
+ *
+ * Asynchronously runs an application tool. This is typically done on the
+ * command line using the `ide` command.
+ */
 void
 ide_application_tool_run_async (IdeApplicationTool  *self,
                                 const gchar * const *arguments,
