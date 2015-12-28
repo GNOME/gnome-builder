@@ -27,6 +27,7 @@ G_BEGIN_DECLS
 
 #include "ide-application.h"
 #include "ide-application-addin.h"
+#include "ide-application-tool.h"
 #include "ide-back-forward-item.h"
 #include "ide-back-forward-list.h"
 #include "ide-build-result.h"
