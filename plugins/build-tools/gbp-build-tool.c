@@ -98,6 +98,7 @@ gbp_build_tool_new_context_cb (GObject      *object,
   g_autoptr(IdeDevice) device = NULL;
   IdeDeviceManager *device_manager;
   IdeBuildSystem *build_system;
+  GKeyFile *config;
   const gchar *device_id;
   GError *error = NULL;
 
@@ -110,6 +111,8 @@ gbp_build_tool_new_context_cb (GObject      *object,
       g_task_return_error (task, error);
       return;
     }
+
+  config = g_object_get_data (G_OBJECT (task), "CONFIG");
 
   device_id = g_object_get_data (G_OBJECT (task), "DEVICE_ID");
   device_manager = ide_context_get_device_manager (context);
@@ -129,7 +132,7 @@ gbp_build_tool_new_context_cb (GObject      *object,
   /* TODO: Support custom configs */
 
   build_system = ide_context_get_build_system (context);
-  builder = ide_build_system_get_builder (build_system, NULL, device, &error);
+  builder = ide_build_system_get_builder (build_system, config, device, &error);
 
   if (builder == NULL)
     {
@@ -172,6 +175,7 @@ gbp_build_tool_run_async (IdeApplicationTool  *tool,
   g_autofree gchar *device_id = NULL;
   g_autoptr(GFile) project_file = NULL;
   g_autoptr(GOptionContext) opt_context = NULL;
+  g_autoptr(GKeyFile) config = NULL;
   g_auto(GStrv) strv = NULL;
   GError *error = NULL;
   const GOptionEntry entries[] = {
@@ -208,7 +212,10 @@ gbp_build_tool_run_async (IdeApplicationTool  *tool,
   if (device_id == NULL)
     device_id = g_strdup ("local");
 
+  config = g_key_file_new ();
+
   g_object_set_data_full (G_OBJECT (task), "DEVICE_ID", g_strdup (device_id), g_free);
+  g_object_set_data_full (G_OBJECT (task), "CONFIG", g_key_file_ref (config), (GDestroyNotify)g_key_file_unref);
 
   ide_context_new_async (project_file,
                          cancellable,
