@@ -63,6 +63,8 @@ plugins/clang/ide-clang-symbol-node.c
 plugins/clang/ide-clang-translation-unit.c
 plugins/command-bar/gb-command-bar.c
 plugins/command-bar/gb-vim.c
+plugins/contributing/contributing_plugin.py
+plugins/contributing/helper.py
 plugins/c-pack/ide-c-format-provider.c
 plugins/devhelp/gbp-devhelp-search-provider.c
 plugins/devhelp/gbp-devhelp-workbench-addin.c
