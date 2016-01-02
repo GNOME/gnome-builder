@@ -907,7 +907,8 @@ msgstr "Použít opravu"
 #: ../libide/ide-uri.c:172
 #, c-format
 msgid "Invalid %-encoding in URI"
-msgstr "Neplatné kódování pomocí % v adrese URI"
+msgstr ""
+# msgstr "Neplatné kódování pomocí % v adrese URI"
 
 #: ../libide/ide-uri.c:212
 msgid "Non-UTF8 characters in URI"
