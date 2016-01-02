@@ -1,15 +1,15 @@
 # Czech translation for gnome-builder.
 # Copyright (C) 2015 gnome-builder's COPYRIGHT HOLDER
 # This file is distributed under the same license as the gnome-builder package.
-# Marek Černocký <marek@manet.cz>, 2015.
+# Marek Černocký <marek@manet.cz>, 2015, 2016.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2015-12-24 07:59+0000\n"
-"PO-Revision-Date: 2015-12-24 17:09+0100\n"
+"POT-Creation-Date: 2016-01-02 08:01+0000\n"
+"PO-Revision-Date: 2016-01-02 11:36+0100\n"
 "Last-Translator: Marek Černocký <marek@manet.cz>\n"
 "Language-Team: Czech <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
@@ -158,8 +158,6 @@ msgid "_Delete"
 msgstr "_Smazat"
 
 #: ../data/gtk/menus.ui.h:21
-#, fuzzy
-#| msgid "Selections"
 msgid "Selection"
 msgstr "Výběr"
 
@@ -263,7 +261,7 @@ msgstr "Tmavý Builder"
 msgid "Dark color scheme for Builder using the Tango color palette"
 msgstr "Tmavé barevné schéma pro Builder používající barevnou paletu Tango"
 
-#: ../data/style-schemes/builder.xml.h:1 ../libide/ide-application.c:413
+#: ../data/style-schemes/builder.xml.h:1 ../libide/ide-application.c:387
 #: ../libide/preferences/ide-preferences-builtin.c:107
 msgid "Builder"
 msgstr "Builder"
@@ -639,7 +637,7 @@ msgstr "%u z %u"
 msgid "Re_veal in Project Tree"
 msgstr "Ukázat v projekto_vém stromu"
 
-#: ../libide/editor/ide-editor-perspective.c:344
+#: ../libide/editor/ide-editor-perspective.c:350
 #: ../libide/preferences/ide-preferences-builtin.c:96
 #: ../libide/preferences/ide-preferences-builtin.c:119
 msgid "Editor"
@@ -720,57 +718,51 @@ msgstr "Zjistěte si více o aplikaci Builder GNOME"
 msgid "Funded By"
 msgstr "Financovali"
 
-#: ../libide/ide-application.c:159
-msgid "Builder requires libgit2-glib with threading support."
-msgstr "Builder vyžaduje libgit2-glib s podporou vláken."
-
-#: ../libide/ide-application.c:165
-msgid "Builder requires libgit2-glib with SSH support."
-msgstr "Builder vyžaduje libgit2-glib s podporou SSH."
-
 #: ../libide/ide-application-command-line.c:102
 msgid "Commands:"
 msgstr "Příkazy:"
 
-#: ../libide/ide-application-command-line.c:169
+#: ../libide/ide-application-command-line.c:164
+msgid "List available subcommands"
+msgstr "Vypsat dostupné dílčí příkazy"
+
+#: ../libide/ide-application-command-line.c:171
 msgid "Run Builder in standalone mode"
 msgstr "Spustit Builder v samostatném režimu"
 
-#: ../libide/ide-application-command-line.c:176
+#: ../libide/ide-application-command-line.c:178
 msgid "Show the application's version"
 msgstr "Zobrazit verzi aplikace"
 
-#: ../libide/ide-application-command-line.c:195
-msgid "Increase verbosity. May be specified multiple times."
-msgstr "Více podrobností. Může být zadáno vícekrát."
+#: ../libide/ide-application-command-line.c:197
+msgid "Increase verbosity, may specify multiple times"
+msgstr "Více podrobností, může být zadáno vícekrát."
 
-#: ../libide/ide-application-command-line.c:211
+#: ../libide/ide-application-command-line.c:216
 msgid "COMMAND"
 msgstr "PŘÍKAZ"
 
-#: ../libide/ide-application-command-line.c:258
+#: ../libide/ide-application-command-line.c:264
 msgid "No commands available"
 msgstr "Nejsou k dispozici žádné příkazy"
 
-#: ../libide/ide-application-command-line.c:287
-#, fuzzy
-#| msgid "Redo previous command"
+#: ../libide/ide-application-command-line.c:293
 msgid "Please provide a command"
-msgstr "Znovu provést předchozí příkaz"
+msgstr "Zadejte prosím příkaz"
 
-#: ../libide/ide-application-command-line.c:297
+#: ../libide/ide-application-command-line.c:303
 msgid "No such tool"
 msgstr "Takový nástroj neexistuje"
 
-#: ../libide/ide-application-command-line.c:311
+#: ../libide/ide-application-command-line.c:317
 msgid "Please provide a worker type"
 msgstr ""
 
-#: ../libide/ide-application-command-line.c:318
+#: ../libide/ide-application-command-line.c:324
 msgid "Please provide a dbus address"
-msgstr ""
+msgstr "Zadejte prosím adresu D-Bus"
 
-#: ../libide/ide-application-command-line.c:327
+#: ../libide/ide-application-command-line.c:333
 msgid "No such worker"
 msgstr ""
 
@@ -915,7 +907,7 @@ msgstr "Použít opravu"
 #: ../libide/ide-uri.c:172
 #, c-format
 msgid "Invalid %-encoding in URI"
-msgstr ""
+msgstr "Neplatné kódování pomocí % v adrese URI"
 
 #: ../libide/ide-uri.c:212
 msgid "Non-UTF8 characters in URI"
@@ -970,10 +962,8 @@ msgid "URI '%s' has no host component"
 msgstr "Adresa URI „%s“ nemá část určující hostitele"
 
 #: ../libide/ide-workbench-actions.c:64
-#, fuzzy
-#| msgid "Open _With"
 msgid "Open File"
-msgstr "Otevřít po_mocí"
+msgstr "Otevření souboru"
 
 #: ../libide/ide-workbench-actions.c:68
 msgid "Open"
@@ -1005,7 +995,7 @@ msgstr "Jestli má Builder používat tmavý motiv"
 
 #: ../libide/preferences/ide-preferences-builtin.c:74
 msgid "dark theme"
-msgstr ""
+msgstr "tmavý motiv"
 
 #: ../libide/preferences/ide-preferences-builtin.c:75
 msgid "Grid Pattern"
@@ -1020,14 +1010,12 @@ msgid "Font"
 msgstr "Písmo"
 
 #: ../libide/preferences/ide-preferences-builtin.c:96
-#, fuzzy
-#| msgid "font document editor monospace"
 msgid "editor font monospace"
-msgstr "písmo font dokument editor monospace pevná šířka"
+msgstr "editor font písmo monospace"
 
 #: ../libide/preferences/ide-preferences-builtin.c:98
 msgid "terminal font monospace"
-msgstr ""
+msgstr "terminal font písmo monospace"
 
 #: ../libide/preferences/ide-preferences-builtin.c:104
 msgid "Keyboard"
@@ -1039,7 +1027,7 @@ msgstr "Emulace"
 
 #: ../libide/preferences/ide-preferences-builtin.c:107
 msgid "Default keybinding mode which mimics Gedit"
-msgstr ""
+msgstr "Výchozí režim klávesových zkratek, který napodobuje gedit."
 
 #: ../libide/preferences/ide-preferences-builtin.c:108
 msgid "Emacs"
@@ -1064,56 +1052,39 @@ msgid "Movement"
 msgstr "Přesunout doleva"
 
 #: ../libide/preferences/ide-preferences-builtin.c:112
-#, fuzzy
-#| msgid "Smart Home End"
 msgid "Smart Home and End"
 msgstr "Chytrý Home a End"
 
 #: ../libide/preferences/ide-preferences-builtin.c:112
-#, fuzzy
-#| msgid "Home moves to first non-space character."
 msgid "Home moves to first non-whitespace character"
-msgstr "Klávesa Home přesouvá na první nebílý znak."
+msgstr "Klávesa Home přesouvá na první nebílý znak"
 
 #: ../libide/preferences/ide-preferences-builtin.c:113
-#, fuzzy
-#| msgid ""
-#| "Backspace will remove extra spaces to keep you aligned with your "
-#| "indentation width."
 msgid ""
 "Backspace will remove extra space to keep you aligned with your indentation"
 msgstr ""
-"Backspace bude odstraňovat nadbytečné mezery, aby zůstalo zachováno "
-"zarovnání podle vaší šířky odsazení."
+"Backspace bude odstraňovat nadbytečnou mezeru, aby zůstalo zachováno "
+"zarovnání podle vašeho odsazení."
 
 #: ../libide/preferences/ide-preferences-builtin.c:121
 msgid "Cursor"
-msgstr ""
+msgstr "Kurzor"
 
 #: ../libide/preferences/ide-preferences-builtin.c:122
-#, fuzzy
-#| msgid "Restore Cursor Position"
 msgid "Restore cursor position"
 msgstr "Obnovovat umístění kurzoru"
 
 #: ../libide/preferences/ide-preferences-builtin.c:122
-#, fuzzy
-#| msgid ""
-#| "Restore the insertion cursor to the last position when reopening a file."
 msgid "Restore cursor position when a file is reopened"
-msgstr ""
-"Při opětovném otevření souboru obnovit umístění kurzoru tam, kde se nacházel "
-"na posledy."
+msgstr "Při opětovném otevření souboru obnovit umístění kurzoru."
 
 #: ../libide/preferences/ide-preferences-builtin.c:123
 msgid "Scroll Offset"
 msgstr "Odsazení při posuvu"
 
 #: ../libide/preferences/ide-preferences-builtin.c:123
-#, fuzzy
-#| msgid "Minimal number of lines to keep above and below the cursor."
 msgid "Minimum number of lines to keep above and below the cursor"
-msgstr "Minimální počet řádků, které se mají zachovat nad a pod kurzorem."
+msgstr "Minimální počet řádků, které se mají zachovat nad a pod kurzorem"
 
 #: ../libide/preferences/ide-preferences-builtin.c:124
 msgid "Overscroll"
@@ -1125,112 +1096,87 @@ msgstr ""
 
 #: ../libide/preferences/ide-preferences-builtin.c:126
 msgid "Line Information"
-msgstr ""
+msgstr "Informace o řádku"
 
 #: ../libide/preferences/ide-preferences-builtin.c:127
-#, fuzzy
-#| msgid "line numbers"
 msgid "Line numbers"
-msgstr "čísla číslování řádků řádek řádky"
+msgstr "Čísla řádků"
 
 #: ../libide/preferences/ide-preferences-builtin.c:127
-#, fuzzy
-#| msgid "Move viewport to beginning of file"
 msgid "Show line number at beginning of each line"
-msgstr "Posunout se pohledem na začátek souboru"
+msgstr "Na začátku každého řádku zobrazovat jeho číslo"
 
 #: ../libide/preferences/ide-preferences-builtin.c:128
 msgid "Line changes"
-msgstr ""
+msgstr "Změny řádku"
 
 #: ../libide/preferences/ide-preferences-builtin.c:128
-#, fuzzy
-#| msgid ""
-#| "Display whether a line has been added or modified next to the line number."
 msgid "Show if a line was added or modified next to line number"
 msgstr "Vedle čísla řádku zobrazovat, jestli byl řádek přidán nebo změněn."
 
 #: ../libide/preferences/ide-preferences-builtin.c:130
-#, fuzzy
-#| msgid "Highlighting"
 msgid "Highlight"
-msgstr "Zvýrazňování"
+msgstr "Zvýrazňovat"
 
 #: ../libide/preferences/ide-preferences-builtin.c:131
-#, fuzzy
-#| msgid "Highlight current line"
 msgid "Current line"
-msgstr "Zvýrazňovat aktuální řádek"
+msgstr "Aktuální řádek"
 
 #: ../libide/preferences/ide-preferences-builtin.c:131
 msgid "Make current line stand out with highlights"
-msgstr ""
+msgstr "Aktuální řádek odlišit pomocí zvýraznění"
 
 #: ../libide/preferences/ide-preferences-builtin.c:132
-#, fuzzy
-#| msgid "Move to matching bracket"
 msgid "Matching brackets"
-msgstr "Přesunout se na odpovídající závorku"
+msgstr "Odpovídající závorky"
 
 #: ../libide/preferences/ide-preferences-builtin.c:132
-#, fuzzy
-#| msgid "Highlight Matching Brackets"
 msgid "Highlight matching brackets based on cursor position"
-msgstr "Zvýrazňovat párové závorky"
+msgstr "Zvýrazňovat párové závorky v místě kurzoru"
 
 #: ../libide/preferences/ide-preferences-builtin.c:134
-#, fuzzy
-#| msgid "Auto Hide Overview Map"
 msgid "Code Overview"
-msgstr "Automaticky skrývat přehledovou mapu"
+msgstr "Přehledová mapa"
 
 #: ../libide/preferences/ide-preferences-builtin.c:135
-#, fuzzy
-#| msgid "Overview Map"
 msgid "Show overview map"
-msgstr "Přehledová mapa"
+msgstr "Zobrazovat přehledovou mapu"
 
 #: ../libide/preferences/ide-preferences-builtin.c:135
 msgid "A zoomed out view to enhance navigating source code"
 msgstr ""
 
 #: ../libide/preferences/ide-preferences-builtin.c:136
-#, fuzzy
-#| msgid "Auto Hide Overview Map"
 msgid "Automatically hide overview map"
 msgstr "Automaticky skrývat přehledovou mapu"
 
 #: ../libide/preferences/ide-preferences-builtin.c:136
 msgid "Automatically hide map when editor loses focus"
-msgstr ""
+msgstr "Když editor není zaměřený, automaticky skrýt přehledovou mapu"
 
 #: ../libide/preferences/ide-preferences-builtin.c:138
-#, fuzzy
-#| msgid "Draw a circle over space characters"
 msgid "Whitespace Characters"
-msgstr "Vykreslovat tečky v místech mezer"
+msgstr "Bílé znaky"
 
 #: ../libide/preferences/ide-preferences-builtin.c:141
 msgid "New line and carriage return"
-msgstr ""
+msgstr "Zalomení řádku a návrat kurzoru"
 
 #: ../libide/preferences/ide-preferences-builtin.c:142
-#, fuzzy
-#| msgid "Draw indicators for non-breaking spaces"
 msgid "Non-breaking spaces"
-msgstr "Vykreslovat odlišně nezalomitelné mezery"
+msgstr "Nezalomitelné mezery"
 
 #: ../libide/preferences/ide-preferences-builtin.c:143
 msgid "Spaces inside of text"
-msgstr ""
+msgstr "Mezery v textu"
 
 #: ../libide/preferences/ide-preferences-builtin.c:144
 msgid "Trailing Only"
-msgstr ""
+msgstr "Jen úvodní"
 
 #: ../libide/preferences/ide-preferences-builtin.c:145
 msgid "Leading Only"
-msgstr ""
+msgstr "Jen koncové"
 
 #: ../libide/preferences/ide-preferences-builtin.c:151
 msgid "Code Insight"
@@ -1241,10 +1187,8 @@ msgid "Highlighting"
 msgstr "Zvýrazňování"
 
 #: ../libide/preferences/ide-preferences-builtin.c:154
-#, fuzzy
-#| msgid "Semantic Language Highlighting"
 msgid "Semantic Highlighting"
-msgstr "Zvýrazňování sémantiky jazyka"
+msgstr "Zvýrazňování sémantiky"
 
 #: ../libide/preferences/ide-preferences-builtin.c:154
 msgid ""
@@ -1253,45 +1197,39 @@ msgid ""
 msgstr ""
 
 #: ../libide/preferences/ide-preferences-builtin.c:156
-#, fuzzy
-#| msgid "Auto Completion"
 msgid "Completion"
-msgstr "Automatické dokončování"
+msgstr "Dokončování"
 
 #: ../libide/preferences/ide-preferences-builtin.c:157
-#, fuzzy
-#| msgid "Suggest completion of words found within all open documents."
 msgid "Suggest words found in open files"
-msgstr ""
-"Navrhovat dokončení slov podle nalezených v rámci všech otevřených dokumentů."
+msgstr "Navrhovat slova nalezená v otevřených souborech"
 
 #: ../libide/preferences/ide-preferences-builtin.c:157
-#, fuzzy
-#| msgid "Suggest completion of words found within all open documents."
 msgid ""
 "Suggests completions as you type based on words found in any open document"
 msgstr ""
-"Navrhovat dokončení slov podle nalezených v rámci všech otevřených dokumentů."
+"Navrhovat při psaní dokončení slov podle slov nalezených v rámci všech "
+"otevřených dokumentů"
 
 #: ../libide/preferences/ide-preferences-builtin.c:158
 msgid "Suggest completions using Ctags"
-msgstr "Navrhovat dokončení slov pomocí CTags"
+msgstr "Navrhovat dokončení slov pomocí Ctags"
 
 #: ../libide/preferences/ide-preferences-builtin.c:158
 msgid ""
 "Create and manages a Ctags database for completing class names, functions, "
 "and more"
 msgstr ""
+"Vytvořit a spravovat databázi Ctags pro dokončování názvů tříd, funkcí a "
+"dalších věcí"
 
 #: ../libide/preferences/ide-preferences-builtin.c:159
 msgid "Suggest completions using Clang (Experimental)"
 msgstr "Navrhovat dokončení slov pomocí Clang (experimentální)"
 
 #: ../libide/preferences/ide-preferences-builtin.c:159
-#, fuzzy
-#| msgid "Use Clang for completions in the C and C++ languages."
 msgid "Use Clang to suggest completions for C and C++ languages"
-msgstr "Používat Clang pro automatické dokončování v jazycích C a C++."
+msgstr "Používat Clang pro návrhy dokončování v jazycích C a C++"
 
 #: ../libide/preferences/ide-preferences-builtin.c:168
 msgid "Code snippets"
@@ -1510,7 +1448,7 @@ msgstr ""
 
 #: ../plugins/build-tools/gbp-build-panel.ui.h:3
 msgid "Packaging:"
-msgstr ""
+msgstr "Balení:"
 
 #: ../plugins/build-tools/gbp-build-panel.ui.h:4
 #: ../plugins/project-tree/gtk/menus.ui.h:12
@@ -1524,7 +1462,7 @@ msgstr "_Znovu sestavit"
 
 #: ../plugins/build-tools/gbp-build-panel.ui.h:6
 msgid "_Clean"
-msgstr ""
+msgstr "_Vyčistit"
 
 #: ../plugins/build-tools/gbp-build-panel.ui.h:7
 msgid "framework"
@@ -1532,7 +1470,7 @@ msgstr ""
 
 #: ../plugins/build-tools/gbp-build-panel.ui.h:8
 msgid "packaging"
-msgstr ""
+msgstr "balení"
 
 #: ../plugins/build-tools/gbp-build-panel.ui.h:9
 msgid "Status:"
@@ -1556,7 +1494,54 @@ msgstr ""
 
 #: ../plugins/build-tools/gbp-build-panel.ui.h:15
 msgid "Export"
+msgstr "Export"
+
+#.
+#. * TODO: We should consider supporting packaging/xdg-app/deployment stuff
+#. *       here too. It would be nice if we could say, go build this project,
+#. *       for this device, and then deploy.
+#.
+#: ../plugins/build-tools/gbp-build-tool.c:84
+#, c-format
+msgid "Success.\n"
+msgstr "Úspěšné.\n"
+
+#: ../plugins/build-tools/gbp-build-tool.c:129
+#, c-format
+msgid "Failed to locate device \"%s\""
+msgstr "Selhalo vyhledání zařízení „%s“"
+
+#: ../plugins/build-tools/gbp-build-tool.c:188
+#, fuzzy
+#| msgid "Clean and rebuild the project."
+msgid "Clean the project"
+msgstr "Vyčistit a znovu sestavit projekt."
+
+#: ../plugins/build-tools/gbp-build-tool.c:190
+#, fuzzy
+#| msgid "The target device we are building for."
+msgid "The id of the device to build for"
+msgstr "Cílové zařízení, pro které se sestavuje."
+
+#: ../plugins/build-tools/gbp-build-tool.c:191
+msgid "local"
 msgstr ""
+
+#: ../plugins/build-tools/gbp-build-tool.c:193
+msgid "Number of workers to use when building"
+msgstr ""
+
+#: ../plugins/build-tools/gbp-build-tool.c:194 ../tools/ide-build.c:362
+msgid "N"
+msgstr "N"
+
+#: ../plugins/build-tools/gbp-build-tool.c:196
+msgid "Path to project file, defaults to current directory"
+msgstr "Cesta k projektovému souboru, výchozí je aktuální složka"
+
+#: ../plugins/build-tools/gbp-build-tool.c:197
+msgid "PATH"
+msgstr "CESTA"
 
 #: ../plugins/build-tools/gbp-build-workbench-addin.c:337
 msgid "Build Output"
@@ -1654,6 +1639,42 @@ msgstr "Režim vim vyžaduje GtkSourceView"
 msgid "Not an editor command: %s"
 msgstr "Nejedná se o příkaz editoru: %s"
 
+#: ../plugins/contributing/contributing_plugin.py:54
+msgid "Missing project name"
+msgstr "Schází název projektu"
+
+#: ../plugins/contributing/contributing_plugin.py:68
+msgid ""
+"Usage:\n"
+"  ide contribute PROJECT_NAME\n"
+"\n"
+"  This command will bootstrap your system to begin contributing to the "
+"project\n"
+"  denoted by PROJECT_NAME. This includes fetching the sources, ensuring "
+"that\n"
+"  you have the required dependencies to build, and bootstraps the first "
+"build\n"
+"  of the project.\n"
+"\n"
+"Examples:\n"
+"  ide contribute gnome-builder\n"
+"  ide contribute gnome-maps\n"
+"\n"
+msgstr ""
+
+#: ../plugins/contributing/contributing_plugin.py:226
+msgid "Username"
+msgstr "Uživatelské jméno"
+
+#: ../plugins/contributing/helper.py:73
+#, python-format
+msgid ""
+"Usage:\n"
+"  %(prgname) %(command) OPTIONS\n"
+msgstr ""
+"Použití:\n"
+"  %(prgname) %(command) VOLBY\n"
+
 #: ../plugins/c-pack/ide-c-format-provider.c:281
 #: ../plugins/python-pack/ide-python-format-provider.c:238
 msgid "Format Strings"
@@ -1744,16 +1765,12 @@ msgid "Preview as HTML"
 msgstr "Náhled v podobě HTML"
 
 #: ../plugins/jedi/jedi_plugin.py:675
-#, fuzzy
-#| msgid "Suggest Word Completion"
 msgid "Suggest Python completions"
-msgstr "Navrhovat dokončení slov"
+msgstr "Navrhovat dokončování pro Python"
 
 #: ../plugins/jedi/jedi_plugin.py:676
-#, fuzzy
-#| msgid "Use Jedi for completions in the Python language."
 msgid "Use Jedi to provide completions for the Python language"
-msgstr "Používat Jedi pro automatické dokončování v jazyce Python."
+msgstr "Používat Jedi pro dokončování v jazyce Python."
 
 #: ../plugins/mingw/ide-mingw-device-provider.c:95
 msgid "MinGW 64-bit"
@@ -1894,6 +1911,10 @@ msgstr "Uložení obsahu terminálu jako"
 msgid "_New Terminal"
 msgstr "_Nový terminál"
 
+#: ../plugins/todo/todo_plugin/__init__.py:60
+msgid "Todo"
+msgstr "Úkoly"
+
 #: ../tools/ide-build.c:81 ../tools/ide-build.c:85
 #, c-format
 msgid "===============\n"
@@ -1978,10 +1999,6 @@ msgstr "Vyčistit a znovu sestavit projekt."
 #: ../tools/ide-build.c:361
 msgid "Increase parallelism in the build."
 msgstr "Zvýšit paralelní zpracování při sestavování."
-
-#: ../tools/ide-build.c:362
-msgid "N"
-msgstr "N"
 
 #: ../tools/ide-build.c:373
 msgid "- Build the project."
