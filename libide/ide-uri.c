@@ -169,6 +169,7 @@ uri_decoder (const gchar       *part,
               if (flags & IDE_URI_PARSE_STRICT)
                 {
                   g_set_error_literal (error, IDE_URI_ERROR, parse_error,
+                                       /* xgettext: no-c-format */
                                        _("Invalid %-encoding in URI"));
                   g_free (decoded);
                   return FALSE;
