@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-01-02 08:01+0000\n"
-"PO-Revision-Date: 2016-01-02 11:36+0100\n"
+"POT-Creation-Date: 2016-01-03 08:02+0000\n"
+"PO-Revision-Date: 2016-01-03 12:07+0100\n"
 "Last-Translator: Marek Černocký <marek@manet.cz>\n"
 "Language-Team: Czech <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
@@ -904,60 +904,61 @@ msgstr "Nahradit „%s“ pomocí „%s“"
 msgid "Apply Fix-It"
 msgstr "Použít opravu"
 
-#: ../libide/ide-uri.c:172
-#, c-format
+#: ../libide/ide-uri.c:173
+#, no-c-format
 msgid "Invalid %-encoding in URI"
-msgstr ""
-# msgstr "Neplatné kódování pomocí % v adrese URI"
+msgstr "Neplatné kódování pomocí % v adrese URI"
 
-#: ../libide/ide-uri.c:212
+# msgstr "Neplatné kódování pomocí % v adrese URI"
+#: ../libide/ide-uri.c:213
 msgid "Non-UTF8 characters in URI"
 msgstr "Jiné znaky než UTF-8 v adrese URI"
 
-#: ../libide/ide-uri.c:359 ../libide/ide-uri.c:370
+#: ../libide/ide-uri.c:360 ../libide/ide-uri.c:371
 #, c-format
 msgid "Invalid IP literal '%s' in URI"
 msgstr "Neplatná adresa IP, konkrétně „%s“, v adrese URI"
 
-#: ../libide/ide-uri.c:404
+#: ../libide/ide-uri.c:405
 #, c-format
 msgid "Invalid encoded IP literal '%s' in URI"
 msgstr "Neplatně kódovaná adresa IP, konkrétně „%s“, v adrese URI"
 
-#: ../libide/ide-uri.c:413
+#: ../libide/ide-uri.c:414
 #, c-format
 msgid "Invalid non-ASCII hostname '%s' in URI"
 msgstr "Jiné znaky než ASCII v názvu hostitele „%s“ v adrese URI"
 
-#: ../libide/ide-uri.c:428
+#: ../libide/ide-uri.c:429
 #, c-format
 msgid "Non-ASCII hostname '%s' forbidden in this URI"
 msgstr ""
+"V této adrese URI není dovolený název hostitele „%s“ s jinými znaky než ASCII"
 
-#: ../libide/ide-uri.c:450
+#: ../libide/ide-uri.c:451
 #, c-format
 msgid "Could not parse port '%s' in URI"
 msgstr "Nelze zpracovat port „%s“ v adrese URI"
 
-#: ../libide/ide-uri.c:457
+#: ../libide/ide-uri.c:458
 #, c-format
 msgid "Port '%s' in URI is out of range"
 msgstr "Port „%s“ v adrese URI je mimo rozsah"
 
-#: ../libide/ide-uri.c:583
+#: ../libide/ide-uri.c:584
 msgid "Base URI is not absolute"
 msgstr "Základní adresa URI není absolutní"
 
-#: ../libide/ide-uri.c:610
+#: ../libide/ide-uri.c:611
 msgid "URI is not absolute, and no base URI was provided"
 msgstr "Adresa URI není absolutní a není určena žádná základní adresa URI"
 
-#: ../libide/ide-uri.c:655
+#: ../libide/ide-uri.c:656
 #, c-format
 msgid "Could not parse '%s' as absolute URI"
 msgstr "Nelze zpracovat „%s“ jako absolutní URI"
 
-#: ../libide/ide-uri.c:1183
+#: ../libide/ide-uri.c:1184
 #, c-format
 msgid "URI '%s' has no host component"
 msgstr "Adresa URI „%s“ nemá část určující hostitele"
@@ -976,7 +977,7 @@ msgstr "Rozšíření"
 
 #: ../libide/preferences/ide-preferences-builtin.c:42
 msgid "Bundled Extensions"
-msgstr ""
+msgstr "Přibalená rozšíření"
 
 #: ../libide/preferences/ide-preferences-builtin.c:71
 msgid "Appearance"
@@ -1145,7 +1146,7 @@ msgstr "Zobrazovat přehledovou mapu"
 
 #: ../libide/preferences/ide-preferences-builtin.c:135
 msgid "A zoomed out view to enhance navigating source code"
-msgstr ""
+msgstr "Pohled na zdrojový kód z dálky pro lepší celkový přehled"
 
 #: ../libide/preferences/ide-preferences-builtin.c:136
 msgid "Automatically hide overview map"
@@ -1513,16 +1514,14 @@ msgid "Failed to locate device \"%s\""
 msgstr "Selhalo vyhledání zařízení „%s“"
 
 #: ../plugins/build-tools/gbp-build-tool.c:188
-#, fuzzy
 #| msgid "Clean and rebuild the project."
 msgid "Clean the project"
-msgstr "Vyčistit a znovu sestavit projekt."
+msgstr "Vyčistit projekt"
 
 #: ../plugins/build-tools/gbp-build-tool.c:190
-#, fuzzy
 #| msgid "The target device we are building for."
 msgid "The id of the device to build for"
-msgstr "Cílové zařízení, pro které se sestavuje."
+msgstr "ID zařízení, pro které se sestavuje"
 
 #: ../plugins/build-tools/gbp-build-tool.c:191
 msgid "local"
@@ -1546,7 +1545,7 @@ msgstr "CESTA"
 
 #: ../plugins/build-tools/gbp-build-workbench-addin.c:337
 msgid "Build Output"
-msgstr ""
+msgstr "Výpis ze sestavení"
 
 #: ../plugins/clang/ide-clang-service.c:269
 msgid "Unknown failure"
@@ -1645,6 +1644,7 @@ msgid "Missing project name"
 msgstr "Schází název projektu"
 
 #: ../plugins/contributing/contributing_plugin.py:68
+#, fuzzy
 msgid ""
 "Usage:\n"
 "  ide contribute PROJECT_NAME\n"
@@ -1662,6 +1662,21 @@ msgid ""
 "  ide contribute gnome-maps\n"
 "\n"
 msgstr ""
+"Použití:\n"
+"  ide contribute NÁZEV_PROJEKTU\n"
+"\n"
+"  This command will bootstrap your system to begin contributing to the "
+"project\n"
+"  denoted by PROJECT_NAME. This includes fetching the sources, ensuring "
+"that\n"
+"  you have the required dependencies to build, and bootstraps the first "
+"build\n"
+"  of the project.\n"
+"\n"
+"Příklady:\n"
+"  ide contribute gnome-builder\n"
+"  ide contribute gnome-maps\n"
+"\n"
 
 #: ../plugins/contributing/contributing_plugin.py:226
 msgid "Username"
