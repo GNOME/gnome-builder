@@ -141,8 +141,20 @@ ide_source_view_capture_record_modifier (IdeSourceViewCapture *self,
                                          gunichar              modifier)
 {
   CaptureFrame frame = { 0 };
+  CaptureFrame* last;
 
   g_assert (IDE_IS_SOURCE_VIEW_CAPTURE (self));
+
+  if (self->frames->len > 0)
+    {
+      last = &g_array_index (self->frames, CaptureFrame, self->frames->len - 1);
+      if (last->modifier == 0)
+        {
+          last->modifier = modifier;
+
+          return;
+        }
+    }
 
   frame.type = FRAME_MODIFIER;
   frame.count = 0;
