@@ -28,7 +28,9 @@
 #include <libgit2-glib/ggit.h>
 #include <locale.h>
 #include <stdlib.h>
-#include <sys/prctl.h>
+#ifdef __linux
+# include <sys/prctl.h>
+#endif
 
 #include "ide-application.h"
 #include "ide-application-actions.h"
