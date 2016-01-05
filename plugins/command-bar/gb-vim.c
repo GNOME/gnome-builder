@@ -407,7 +407,7 @@ gb_vim_command_edit (GtkSourceView  *source_view,
 
   if (ide_str_empty0 (options))
     {
-      ide_widget_action (GTK_WIDGET (source_view), "workbench", "open", NULL);
+      ide_widget_action (GTK_WIDGET (source_view), "win", "open-with-dialog", NULL);
       return TRUE;
     }
 
@@ -444,7 +444,7 @@ gb_vim_command_tabe (GtkSourceView  *source_view,
   if (!ide_str_empty0 (options))
     return gb_vim_command_edit (source_view, command, options, error);
 
-  ide_widget_action (GTK_WIDGET (source_view), "workbench", "new-document", NULL);
+  ide_widget_action (GTK_WIDGET (source_view), "perspective", "new-file", NULL);
 
   return TRUE;
 }
