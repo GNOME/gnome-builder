@@ -151,7 +151,7 @@ ide_preferences_builtin_register_code_insight (IdePreferences *preferences)
   ide_preferences_add_page (preferences, "code-insight", _("Code Insight"), 300);
 
   ide_preferences_add_list_group (preferences, "code-insight", "highlighting", _("Highlighting"), 0);
-  ide_preferences_add_switch (preferences, "code-insight", "highlighting", "org.gnome.builder.code-insight", "semantic-highlighting", NULL, NULL, _("Semantic Highlighting"), _("Use code insignt to highlight additional information discovered in source file"), NULL, 0);
+  ide_preferences_add_switch (preferences, "code-insight", "highlighting", "org.gnome.builder.code-insight", "semantic-highlighting", NULL, NULL, _("Semantic Highlighting"), _("Use code insight to highlight additional information discovered in source file"), NULL, 0);
 
   ide_preferences_add_list_group (preferences, "code-insight", "completion", _("Completion"), 100);
   ide_preferences_add_switch (preferences, "code-insight", "completion", "org.gnome.builder.code-insight", "word-completion", NULL, NULL, _("Suggest words found in open files"), _("Suggests completions as you type based on words found in any open document"), NULL, 0);
