@@ -113,7 +113,7 @@ layouttab {
   transition-timing-function: ease;
 }
 
-layoutstack.focused layouttab {
+layoutstack.focus layouttab {
   background-color: #e1e1e1;
   border-bottom: 3px solid #4a90d9;
   border-left: 1px solid #c0c0c0;
@@ -121,7 +121,7 @@ layoutstack.focused layouttab {
   box-shadow: 0px 5px 5px -10px #2e3436 inset;
 }
 
-layoutstack:not(.focused) layouttab:hover {
+layoutstack:not(.focus) layouttab:hover {
   background-color: transparent;
   border-bottom: 3px solid #888a85;
   border-left: 1px solid #c0c0c0;
@@ -138,7 +138,7 @@ layouttab button {
   box-shadow: none;
 }
 
-layouttab button:insensitive {
+layouttab button:disabled {
   opacity: 0.3;
 }
 
@@ -163,7 +163,7 @@ layouttab separator {
   min-width: 0px;
 }
 
-layoutstack.focused layouttabbar layouttab:backdrop,
+layoutstack.focus layouttabbar layouttab:backdrop,
 layoutstack layouttabbar layouttab:backdrop,
 layoutstack layouttabbar layouttab:hover:backdrop,
 layouttabbar:backdrop {

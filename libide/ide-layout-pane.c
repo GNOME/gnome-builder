@@ -183,9 +183,9 @@ workbench_focus_changed (GtkWidget     *toplevel,
     }
 
   if (parent == NULL)
-    gtk_style_context_remove_class (style_context, "focused");
+    gtk_style_context_remove_class (style_context, "focus");
   else
-    gtk_style_context_add_class (style_context, "focused");
+    gtk_style_context_add_class (style_context, "focus");
 }
 
 static void
