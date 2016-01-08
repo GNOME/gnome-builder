@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2015-12-24 07:59+0000\n"
-"PO-Revision-Date: 2016-01-07 10:05+0100\n"
+"POT-Creation-Date: 2016-01-07 22:10+0000\n"
+"PO-Revision-Date: 2016-01-08 14:15+0100\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Español; Castellano <gnome-es-list@gnome.org>\n"
 "Language: \n"
@@ -169,7 +169,6 @@ msgid "Select _All"
 msgstr "Seleccionar _todo"
 
 #: ../data/gtk/menus.ui.h:23
-#| msgid "Selections"
 msgid "Select _None"
 msgstr "No seleccionar _nada"
 
@@ -182,12 +181,10 @@ msgid "All _Lower Case"
 msgstr "Todo en mi_núsculas"
 
 #: ../data/gtk/menus.ui.h:26
-#| msgid "Insert \"%s\""
 msgid "_Invert Case"
 msgstr "_Insertar mayúsculas y minúsculas"
 
 #: ../data/gtk/menus.ui.h:27
-#| msgid "Title"
 msgid "_Title Case"
 msgstr "Mayúsculas y minúsculas del _título"
 
@@ -268,7 +265,7 @@ msgid "Dark color scheme for Builder using the Tango color palette"
 msgstr ""
 "Esquema de colores oscuros para Builder usando la paleta de colores Tango"
 
-#: ../data/style-schemes/builder.xml.h:1 ../libide/ide-application.c:413
+#: ../data/style-schemes/builder.xml.h:1 ../libide/ide-application.c:389
 #: ../libide/preferences/ide-preferences-builtin.c:107
 msgid "Builder"
 msgstr "Builder"
@@ -578,22 +575,18 @@ msgid "Jump to definition of symbol"
 msgstr "Saltar a la definición del símbolo"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:45
-#| msgid "Move viewport up within the file"
 msgid "Move sectionport up within the file"
 msgstr "Mover la sección hacia arriba en el archivo"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:46
-#| msgid "Move viewport down within the file"
 msgid "Move sectionport down within the file"
 msgstr "Mover la sección hacia abajo en el archivo"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:47
-#| msgid "Move viewport to end of file"
 msgid "Move sectionport to end of file"
 msgstr "Mover la sección al final del archivo"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:48
-#| msgid "Move viewport to beginning of file"
 msgid "Move sectionport to beginning of file"
 msgstr "Mover la sección al principio del archivo"
 
@@ -640,7 +633,7 @@ msgstr "%u de %u"
 msgid "Re_veal in Project Tree"
 msgstr "_Mostrar en el árbol del proyectos"
 
-#: ../libide/editor/ide-editor-perspective.c:344
+#: ../libide/editor/ide-editor-perspective.c:350
 #: ../libide/preferences/ide-preferences-builtin.c:96
 #: ../libide/preferences/ide-preferences-builtin.c:119
 msgid "Editor"
@@ -725,55 +718,52 @@ msgstr "Aprenda más sobre GNOME Builder"
 msgid "Funded By"
 msgstr "Fundado por"
 
-#: ../libide/ide-application.c:159
-msgid "Builder requires libgit2-glib with threading support."
-msgstr "Builder necesita libgit2.glib con soporte para hilos."
-
-#: ../libide/ide-application.c:165
-msgid "Builder requires libgit2-glib with SSH support."
-msgstr "Builder necesita libgit2.glib con soporte para SSH."
-
 #: ../libide/ide-application-command-line.c:102
 msgid "Commands:"
 msgstr "Comandos:"
 
-#: ../libide/ide-application-command-line.c:169
+#: ../libide/ide-application-command-line.c:164
+msgid "List available subcommands"
+msgstr "Lista de subcomandos disponibles"
+
+#: ../libide/ide-application-command-line.c:171
 msgid "Run Builder in standalone mode"
 msgstr "Ejecutar Builder en modo individual"
 
-#: ../libide/ide-application-command-line.c:176
+#: ../libide/ide-application-command-line.c:178
 msgid "Show the application's version"
 msgstr "Mostrar la versión de la aplicación"
 
-#: ../libide/ide-application-command-line.c:195
-msgid "Increase verbosity. May be specified multiple times."
+#: ../libide/ide-application-command-line.c:197
+#| msgid "Increase verbosity. May be specified multiple times."
+msgid "Increase verbosity, may specify multiple times"
 msgstr "Aumentar el nivel de detalle. Se puede especificar varias veces."
 
-#: ../libide/ide-application-command-line.c:211
+#: ../libide/ide-application-command-line.c:216
 msgid "COMMAND"
 msgstr "COMANDO"
 
-#: ../libide/ide-application-command-line.c:258
+#: ../libide/ide-application-command-line.c:264
 msgid "No commands available"
 msgstr "No hay comandos disponibles"
 
-#: ../libide/ide-application-command-line.c:287
+#: ../libide/ide-application-command-line.c:293
 msgid "Please provide a command"
 msgstr "Proporcione un comando"
 
-#: ../libide/ide-application-command-line.c:297
+#: ../libide/ide-application-command-line.c:303
 msgid "No such tool"
 msgstr "No existe la herramienta"
 
-#: ../libide/ide-application-command-line.c:311
+#: ../libide/ide-application-command-line.c:317
 msgid "Please provide a worker type"
 msgstr "Proporcione un tipo de trabajador"
 
-#: ../libide/ide-application-command-line.c:318
+#: ../libide/ide-application-command-line.c:324
 msgid "Please provide a dbus address"
 msgstr "Proporcione una dirección de D-Bus"
 
-#: ../libide/ide-application-command-line.c:327
+#: ../libide/ide-application-command-line.c:333
 msgid "No such worker"
 msgstr "No existe el trabajador"
 
@@ -915,59 +905,59 @@ msgstr "Reemplazar «%s» con «%s»"
 msgid "Apply Fix-It"
 msgstr "Aplicar corrección"
 
-#: ../libide/ide-uri.c:172
-#, c-format
+#: ../libide/ide-uri.c:173
+#, no-c-format
 msgid "Invalid %-encoding in URI"
 msgstr "Codificación %-e del URI no válida"
 
-#: ../libide/ide-uri.c:212
+#: ../libide/ide-uri.c:213
 msgid "Non-UTF8 characters in URI"
 msgstr "Caracteres no UTF-8 en el URI"
 
-#: ../libide/ide-uri.c:359 ../libide/ide-uri.c:370
+#: ../libide/ide-uri.c:360 ../libide/ide-uri.c:371
 #, c-format
 msgid "Invalid IP literal '%s' in URI"
 msgstr "IP «%s» literal no válida en el URI"
 
-#: ../libide/ide-uri.c:404
+#: ../libide/ide-uri.c:405
 #, c-format
 msgid "Invalid encoded IP literal '%s' in URI"
 msgstr "IP literal codificada «%s» en URI no válida"
 
-#: ../libide/ide-uri.c:413
+#: ../libide/ide-uri.c:414
 #, c-format
 msgid "Invalid non-ASCII hostname '%s' in URI"
 msgstr "Nombre de equipo no ASCII «%s» en URI no válido"
 
-#: ../libide/ide-uri.c:428
+#: ../libide/ide-uri.c:429
 #, c-format
 msgid "Non-ASCII hostname '%s' forbidden in this URI"
 msgstr "Nombre de equipo no ASCII «%s» prohibido en este URI"
 
-#: ../libide/ide-uri.c:450
+#: ../libide/ide-uri.c:451
 #, c-format
 msgid "Could not parse port '%s' in URI"
 msgstr "No se pudo analizar el puerto «%s» en el URI"
 
-#: ../libide/ide-uri.c:457
+#: ../libide/ide-uri.c:458
 #, c-format
 msgid "Port '%s' in URI is out of range"
 msgstr "El puerto «%s» en el URI está fuera de rango"
 
-#: ../libide/ide-uri.c:583
+#: ../libide/ide-uri.c:584
 msgid "Base URI is not absolute"
 msgstr "El URI base no es absoluto"
 
-#: ../libide/ide-uri.c:610
+#: ../libide/ide-uri.c:611
 msgid "URI is not absolute, and no base URI was provided"
 msgstr "El URI no es absoluto y no se ha proporcionado un URI base"
 
-#: ../libide/ide-uri.c:655
+#: ../libide/ide-uri.c:656
 #, c-format
 msgid "Could not parse '%s' as absolute URI"
 msgstr "No se pudo analizar «%s» como URI absoluto"
 
-#: ../libide/ide-uri.c:1183
+#: ../libide/ide-uri.c:1184
 #, c-format
 msgid "URI '%s' has no host component"
 msgstr "El URI «%s» no tiene componente de equipo"
@@ -985,7 +975,6 @@ msgid "Extensions"
 msgstr "Extensiones"
 
 #: ../libide/preferences/ide-preferences-builtin.c:42
-#| msgid "Extension"
 msgid "Bundled Extensions"
 msgstr "Extensiones incluídas"
 
@@ -1115,7 +1104,6 @@ msgid "Line numbers"
 msgstr "Números de línea"
 
 #: ../libide/preferences/ide-preferences-builtin.c:127
-#| msgid "Move viewport to beginning of file"
 msgid "Show line number at beginning of each line"
 msgstr "Mover número de línea al principio de cada línea"
 
@@ -1124,8 +1112,6 @@ msgid "Line changes"
 msgstr "Cambios de líneas"
 
 #: ../libide/preferences/ide-preferences-builtin.c:128
-#| msgid ""
-#| "Display whether a line has been added or modified next to the line number."
 msgid "Show if a line was added or modified next to line number"
 msgstr ""
 "Mostrar junto al número de línea si se ha añadido o modificado una línea"
@@ -1147,7 +1133,6 @@ msgid "Matching brackets"
 msgstr "Corchetes coincidente"
 
 #: ../libide/preferences/ide-preferences-builtin.c:132
-#| msgid "Highlight Matching Brackets"
 msgid "Highlight matching brackets based on cursor position"
 msgstr ""
 "Resaltar parejas de corchetes coincidentes basándose en la posición del "
@@ -1174,7 +1159,6 @@ msgid "Automatically hide map when editor loses focus"
 msgstr "Ocultar el mapa automáticamente cuando el editor pierde el foco"
 
 #: ../libide/preferences/ide-preferences-builtin.c:138
-#| msgid "Draw a circle over space characters"
 msgid "Whitespace Characters"
 msgstr "Caracteres de espacios en blanco"
 
@@ -1195,7 +1179,6 @@ msgid "Trailing Only"
 msgstr "Sólo al final"
 
 #: ../libide/preferences/ide-preferences-builtin.c:145
-#| msgid "Read Only"
 msgid "Leading Only"
 msgstr "Sólo al principio"
 
@@ -1212,8 +1195,11 @@ msgid "Semantic Highlighting"
 msgstr "Resaltado semántico"
 
 #: ../libide/preferences/ide-preferences-builtin.c:154
+#| msgid ""
+#| "Use code insignt to highlight additional information discovered in source "
+#| "file"
 msgid ""
-"Use code insignt to highlight additional information discovered in source "
+"Use code insight to highlight additional information discovered in source "
 "file"
 msgstr ""
 "Usar la percepción del código para resaltar información adicional "
@@ -1312,7 +1298,6 @@ msgid "Insert spaces instead of tabs"
 msgstr "Insertar espacios en lugar de tabuladores"
 
 #: ../libide/preferences/ide-preferences-builtin.c:334
-#| msgid "Insert _spaces instead of tabs"
 msgid "Prefer spaces over use of tabs"
 msgstr "Insertar espacios en lugar de tabuladores"
 
@@ -1330,7 +1315,6 @@ msgid "Build"
 msgstr "Construir"
 
 #: ../libide/preferences/ide-preferences-builtin.c:344
-#| msgid "Builder"
 msgid "Build Workers"
 msgstr "Construir trabajadores"
 
@@ -1518,6 +1502,53 @@ msgstr "Desplegar"
 msgid "Export"
 msgstr "Exportar"
 
+#.
+#. * TODO: We should consider supporting packaging/xdg-app/deployment stuff
+#. *       here too. It would be nice if we could say, go build this project,
+#. *       for this device, and then deploy.
+#.
+#: ../plugins/build-tools/gbp-build-tool.c:84
+#, c-format
+#| msgid "Success"
+msgid "Success.\n"
+msgstr "Correto.\n"
+
+#: ../plugins/build-tools/gbp-build-tool.c:129
+#, c-format
+#| msgid "Failed to load file: %s: %s"
+msgid "Failed to locate device \"%s\""
+msgstr "Falló al buscar el dispositivo «%s»"
+
+#: ../plugins/build-tools/gbp-build-tool.c:188
+#| msgid "Clean and rebuild the project."
+msgid "Clean the project"
+msgstr "Limpiar el proyecto"
+
+#: ../plugins/build-tools/gbp-build-tool.c:190
+#| msgid "The device to build for."
+msgid "The id of the device to build for"
+msgstr "El ID del dispositivo para el que construir"
+
+#: ../plugins/build-tools/gbp-build-tool.c:191
+msgid "local"
+msgstr "local"
+
+#: ../plugins/build-tools/gbp-build-tool.c:193
+msgid "Number of workers to use when building"
+msgstr "Número de trabajadores que usar al construir"
+
+#: ../plugins/build-tools/gbp-build-tool.c:194 ../tools/ide-build.c:362
+msgid "N"
+msgstr "N"
+
+#: ../plugins/build-tools/gbp-build-tool.c:196
+msgid "Path to project file, defaults to current directory"
+msgstr "Ruta al archivo del proyecto. Lo predeterminado es la carpeta actual"
+
+#: ../plugins/build-tools/gbp-build-tool.c:197
+msgid "PATH"
+msgstr "RUTA"
+
 #: ../plugins/build-tools/gbp-build-workbench-addin.c:337
 msgid "Build Output"
 msgstr "Salida de la construcción"
@@ -1615,6 +1646,59 @@ msgstr "el modo de vim necesita GtkSourceView"
 msgid "Not an editor command: %s"
 msgstr "No es un comando del editor: %s"
 
+#: ../plugins/contributing/contributing_plugin.py:54
+#| msgid "The project name."
+msgid "Missing project name"
+msgstr "Falta el nombre del proyecto"
+
+#: ../plugins/contributing/contributing_plugin.py:68
+msgid ""
+"Usage:\n"
+"  ide contribute PROJECT_NAME\n"
+"\n"
+"  This command will bootstrap your system to begin contributing to the "
+"project\n"
+"  denoted by PROJECT_NAME. This includes fetching the sources, ensuring "
+"that\n"
+"  you have the required dependencies to build, and bootstraps the first "
+"build\n"
+"  of the project.\n"
+"\n"
+"Examples:\n"
+"  ide contribute gnome-builder\n"
+"  ide contribute gnome-maps\n"
+"\n"
+msgstr ""
+"Uso:\n"
+"  ide contribute NOMBRE_PROYECTO\n"
+"\n"
+"  Este comando inicializará su sistema para empezar a contribuir con el "
+"proyecto\n"
+"  indicado en NOMBRE_PROYECTO. Esto incluye obtener las fuentes, asegurarse "
+"de que\n"
+"  tiene todas las dependencias necesarias para construir e inicializar la "
+"primera\n"
+"  construcción del proyecto.\n"
+"\n"
+"Ejemplos:\n"
+"  ide contribute gnome-builder\n"
+"  ide contribute gnome-maps\n"
+"\n"
+
+#: ../plugins/contributing/contributing_plugin.py:226
+#| msgid "_Rename"
+msgid "Username"
+msgstr "Nombre de usuario"
+
+#: ../plugins/contributing/helper.py:73
+#, python-format
+msgid ""
+"Usage:\n"
+"  %(prgname) %(command) OPTIONS\n"
+msgstr ""
+"Uso:\n"
+"  %(prgname) %(command) OPCIONES\n"
+
 #: ../plugins/c-pack/ide-c-format-provider.c:281
 #: ../plugins/python-pack/ide-python-format-provider.c:238
 msgid "Format Strings"
@@ -1691,7 +1775,6 @@ msgid "Location"
 msgstr "Ubicación"
 
 #: ../plugins/git/ide-git-genesis-addin.c:93
-#| msgid "From existing project on this computer"
 msgid "From a existing project in a Git repository"
 msgstr "Desde un proyecto existente en un repositorio Git"
 
@@ -1854,6 +1937,10 @@ msgstr "Guardar contenido de la terminal como"
 msgid "_New Terminal"
 msgstr "_Nueva terminal"
 
+#: ../plugins/todo/todo_plugin/__init__.py:60
+msgid "Todo"
+msgstr "Por hacer"
+
 #: ../tools/ide-build.c:81 ../tools/ide-build.c:85
 #, c-format
 msgid "===============\n"
@@ -1941,10 +2028,6 @@ msgstr "Limpiar y volver a construir el proyecto."
 msgid "Increase parallelism in the build."
 msgstr "Aumentar el paralelismo en la construcción"
 
-#: ../tools/ide-build.c:362
-msgid "N"
-msgstr "N"
-
 #: ../tools/ide-build.c:373
 msgid "- Build the project."
 msgstr "- Construir el proyecto"
@@ -1995,6 +2078,12 @@ msgstr[1] "%s resultados\n"
 #: ../tools/ide-search.c:120
 msgid "PROJECT_FILE [SEARCH TERMS...]"
 msgstr "ARCHIVO_PROYECTO [TÉRMINOS BÚSQUEDA...]"
+
+#~ msgid "Builder requires libgit2-glib with threading support."
+#~ msgstr "Builder necesita libgit2.glib con soporte para hilos."
+
+#~ msgid "Builder requires libgit2-glib with SSH support."
+#~ msgstr "Builder necesita libgit2.glib con soporte para SSH."
 
 #~ msgid "_Continue"
 #~ msgstr "_Continuar"
@@ -2731,9 +2820,6 @@ msgstr "ARCHIVO_PROYECTO [TÉRMINOS BÚSQUEDA...]"
 #~ msgid "The project description."
 #~ msgstr "La descripción del proyecto"
 
-#~ msgid "The project name."
-#~ msgstr "El nombre del proyecto."
-
 #~ msgid "The project directory."
 #~ msgstr "La carpeta del proyecto."
 
@@ -3044,9 +3130,6 @@ msgstr "ARCHIVO_PROYECTO [TÉRMINOS BÚSQUEDA...]"
 
 #~ msgid "The configuration for the build."
 #~ msgstr "La configuración para la construcción."
-
-#~ msgid "The device to build for."
-#~ msgstr "El dispositivo para el que construir."
 
 #~ msgid "Tarball Name"
 #~ msgstr "Nombre del archivo tar"
