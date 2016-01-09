@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <string.h>
 #include <sys/utsname.h>
 
 #include "ide-local-device.h"
@@ -32,12 +33,16 @@ static gchar *
 get_system_type (void)
 {
   g_autofree gchar *os_lower = NULL;
+  const gchar *machine = NULL;
   struct utsname u;
 
   if (uname (&u) < 0)
     return g_strdup ("unknown");
 
   os_lower = g_utf8_strdown (u.sysname, -1);
+
+  /* config.sub doesn't accept amd64-OS */
+  machine = strcmp (u.machine, "amd64") ? u.machine : "x86_64";
 
   /*
    * TODO: Clearly we want to discover "gnu", but that should be just fine
@@ -48,9 +53,9 @@ get_system_type (void)
    */
 
 #ifdef __GLIBC__
-  return g_strdup_printf ("%s-%s-%s", u.machine, os_lower, "gnu");
+  return g_strdup_printf ("%s-%s-%s", machine, os_lower, "gnu");
 #else
-  return g_strdup_printf ("%s-%s", u.machine, os_lower);
+  return g_strdup_printf ("%s-%s", machine, os_lower);
 #endif
 }
 
