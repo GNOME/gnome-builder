@@ -2,6 +2,7 @@
 <interface>
   <!-- interface-requires gtk+ 3.17 -->
   <template class="IdeWorkbench" parent="GtkApplicationWindow">
+    <property name="show-menubar">false</property>
     <child type="titlebar">
       <object class="GtkStack" id="titlebar_stack">
         <property name="visible">true</property>
