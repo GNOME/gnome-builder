@@ -79,7 +79,6 @@ static void
 ide_application_register_theme_overrides (IdeApplication *self)
 {
   g_autoptr(GSettings) settings = NULL;
-  g_autoptr(GtkCssProvider) provider = NULL;
   GtkSettings *gtk_settings;
   GdkScreen *screen;
 

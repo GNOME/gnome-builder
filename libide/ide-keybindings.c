@@ -69,7 +69,6 @@ ide_keybindings_load_plugin (IdeKeybindings *self,
   g_autofree gchar *path = NULL;
   const gchar *module_name;
   g_autoptr(GBytes) bytes = NULL;
-  g_autoptr(GError) error = NULL;
   g_autoptr(GtkCssProvider) provider = NULL;
 
   g_assert (IDE_IS_KEYBINDINGS (self));
