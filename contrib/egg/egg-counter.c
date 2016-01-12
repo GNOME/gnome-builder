@@ -24,10 +24,8 @@
 # define _GNU_SOURCE
 #endif
 
-#ifdef __linux__
-# include <dlfcn.h>
-#endif
 #include <glib/gprintf.h>
+#include <gmodule.h>
 #include <sys/mman.h>
 #include <sys/stat.h>
 #include <sys/types.h>
@@ -538,25 +536,25 @@ _egg_counter_find_getcpu_in_vdso (void)
 
   for (i = 0; vdso_names [i]; i++)
     {
-      void *lib;
+      GModule *lib;
       gint j;
 
-      lib = dlopen (vdso_names [i], RTLD_NOW | RTLD_GLOBAL);
+      lib = g_module_open (vdso_names [i], 0);
       if (lib == NULL)
         continue;
 
       for (j = 0; sym_names [j]; j++)
         {
-          void *sym;
+          void *sym = NULL;
 
-          sym = dlsym (lib, sym_names [j]);
+          g_module_symbol (lib, sym_names [j], &sym);
           if (!sym)
             continue;
 
           return sym;
         }
 
-      dlclose (lib);
+      g_module_close (lib);
     }
 
   return NULL;
