@@ -173,4 +173,5 @@ ide_workbench_actions_init (IdeWorkbench *self)
 
   action = g_property_action_new ("perspective", self, "visible-perspective-name");
   g_action_map_add_action (G_ACTION_MAP (self), G_ACTION (action));
+  g_object_unref (action);
 }
