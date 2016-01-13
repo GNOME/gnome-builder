@@ -44,30 +44,11 @@ tests_cflags = \
 	$(LIBIDE_CFLAGS) \
 	-I$(top_srcdir)/libide \
 	-I$(top_builddir)/libide \
-	-I$(top_srcdir)/src/app \
-	-I$(top_srcdir)/src/css \
-	-I$(top_srcdir)/src/dialogs \
-	-I$(top_srcdir)/src/documents \
-	-I$(top_srcdir)/src/editor \
-	-I$(top_srcdir)/src/greeter \
-	-I$(top_srcdir)/src/keybindings \
-	-I$(top_srcdir)/src/preferences \
-	-I$(top_srcdir)/src/project-tree \
-	-I$(top_srcdir)/src/resources \
-	-I$(top_srcdir)/src/scrolledwindow \
-	-I$(top_srcdir)/src/search \
-	-I$(top_srcdir)/src/support \
-	-I$(top_srcdir)/src/tree \
-	-I$(top_srcdir)/src/util \
-	-I$(top_srcdir)/src/views \
-	-I$(top_srcdir)/src/workbench \
-	-I$(top_srcdir)/src/workspace \
 	$(NULL)
 
 tests_libs = \
 	$(LIBIDE_LIBS) \
 	$(top_builddir)/libide/libide-1.0.la \
-	$(top_builddir)/src/libgnome-builder.la \
 	$(top_builddir)/contrib/egg/libegg-private.la \
 	$(NULL)
 
@@ -82,14 +63,14 @@ test_files = \
 misc_programs =
 
 TESTS_ENVIRONMENT= \
-        GI_TYPELIB_PATH="$(top_builddir)/libide:$(top_builddir)/src:$(GI_TYPELIB_PATH)" \
-	GB_IN_TREE_PLUGINS=1                                                            \
-        G_TEST_SRCDIR="$(abs_srcdir)" 		                                        \
-        G_TEST_BUILDDIR="$(abs_builddir)" 	                                        \
-        G_DEBUG=gc-friendly 			                                        \
-        GB_IN_TREE_PLUGINS=1                                                            \
-        MALLOC_CHECK_=2 			                                        \
-        MALLOC_PERTURB_=$$(($${RANDOM:-256} % 256))
+	GI_TYPELIB_PATH="$(top_builddir)/libide:$(GI_TYPELIB_PATH)" \
+	GB_IN_TREE_PLUGINS=1                                        \
+	G_TEST_SRCDIR="$(abs_srcdir)" 		                    \
+	G_TEST_BUILDDIR="$(abs_builddir)" 	                    \
+	G_DEBUG=gc-friendly 			                    \
+	GB_IN_TREE_PLUGINS=1                                        \
+	MALLOC_CHECK_=2 			                    \
+	MALLOC_PERTURB_=$$(($${RANDOM:-256} % 256))
 
 LOG_COMPILER = $(top_srcdir)/build/autotools/tap-test
 
