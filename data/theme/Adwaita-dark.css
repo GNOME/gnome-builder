@@ -114,7 +114,7 @@ layouttabbar button {
   padding: 9px;
 }
 
-layouttab button:insensitive {
+layouttab button:disabled {
   opacity: 0.3;
 }
 
