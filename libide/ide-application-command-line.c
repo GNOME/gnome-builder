@@ -143,6 +143,7 @@ ide_application_local_command_line (GApplication   *application,
                                     gint           *exit_status)
 {
   IdeApplication *self = (IdeApplication *)application;
+  g_autofree gchar *path_copy = NULL;
   GOptionContext *context = NULL;
   GOptionGroup *group;
   const gchar *shortdesc = NULL;
@@ -206,6 +207,17 @@ ide_application_local_command_line (GApplication   *application,
   *exit_status = EXIT_SUCCESS;
 
   prgname = g_get_prgname ();
+
+  /*
+   * Sometimes we can get a path like "/foo/bar/lt-test-foo"
+   * and this let's us strip it to lt-test-foo.
+   */
+  if (g_path_is_absolute (prgname))
+    {
+      path_copy = g_path_get_basename (prgname);
+      prgname = path_copy;
+    }
+
   if (prgname && g_str_has_prefix (prgname, "lt-"))
     prgname += strlen ("lt-");
 
@@ -247,6 +259,16 @@ ide_application_local_command_line (GApplication   *application,
   else if (g_str_equal (prgname, "gnome-builder-worker"))
     {
       self->mode = IDE_APPLICATION_MODE_WORKER;
+    }
+  else if (g_str_has_prefix (prgname, "test-"))
+    {
+      self->mode = IDE_APPLICATION_MODE_TESTS;
+
+      if (!g_test_initialized ())
+        {
+          g_error ("Attempt to start IdeApplication in test mode, "
+                   "but g_test_init() has not been called.");
+        }
     }
 
   if (!g_option_context_parse_strv (context, arguments, &error))

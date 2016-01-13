@@ -57,6 +57,8 @@ struct _IdeApplication
 
   EggMenuManager      *menu_manager;
   GHashTable          *merge_ids;
+
+  GList               *test_funcs;
 };
 
 void     ide_application_discover_plugins   (IdeApplication   *self) G_GNUC_INTERNAL;
@@ -66,6 +68,7 @@ void     ide_application_init_plugin_menus  (IdeApplication   *self) G_GNUC_INTE
 gboolean ide_application_local_command_line (GApplication     *application,
                                              gchar          ***arguments,
                                              gint             *exit_status) G_GNUC_INTERNAL;
+void     ide_application_run_tests          (IdeApplication   *self);
 
 G_END_DECLS
 

@@ -277,6 +277,8 @@ libide_1_0_la_SOURCES = \
 	ide-application-actions.h \
 	ide-application-plugins.c \
 	ide-application-private.h \
+	ide-application-tests.c \
+	ide-application-tests.h \
 	ide-async-helper.c \
 	ide-async-helper.h \
 	ide-back-forward-list-private.h \

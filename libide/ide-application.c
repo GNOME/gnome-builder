@@ -35,6 +35,7 @@
 #include "ide-application.h"
 #include "ide-application-actions.h"
 #include "ide-application-private.h"
+#include "ide-application-tests.h"
 #include "ide-application-tool.h"
 #include "ide-css-provider.h"
 #include "ide-debug.h"
@@ -278,6 +279,14 @@ ide_application_activate_tool (IdeApplication *self)
 }
 
 static void
+ide_application_activate_tests (IdeApplication *self)
+{
+  g_assert (IDE_IS_APPLICATION (self));
+
+  ide_application_run_tests (self);
+}
+
+static void
 ide_application_activate (GApplication *application)
 {
   IdeApplication *self = (IdeApplication *)application;
@@ -290,6 +299,8 @@ ide_application_activate (GApplication *application)
     ide_application_activate_worker (self);
   else if (self->mode == IDE_APPLICATION_MODE_TOOL)
     ide_application_activate_tool (self);
+  else if (self->mode == IDE_APPLICATION_MODE_TESTS)
+    ide_application_activate_tests (self);
 }
 
 static void
@@ -309,7 +320,7 @@ ide_application_startup (GApplication *application)
   small_thread_pool = (self->mode != IDE_APPLICATION_MODE_PRIMARY);
   _ide_thread_pool_init (small_thread_pool);
 
-  if (self->mode == IDE_APPLICATION_MODE_PRIMARY)
+  if ((self->mode == IDE_APPLICATION_MODE_PRIMARY) || (self->mode == IDE_APPLICATION_MODE_TESTS))
     {
       ide_application_make_skeleton_dirs (self);
       ide_application_register_theme_overrides (self);
@@ -344,6 +355,7 @@ ide_application_finalize (GObject *object)
 {
   IdeApplication *self = (IdeApplication *)object;
 
+  g_clear_pointer (&self->test_funcs, g_list_free);
   g_clear_pointer (&self->dbus_address, g_free);
   g_clear_pointer (&self->tool_arguments, g_strfreev);
   g_clear_pointer (&self->started_at, g_date_time_unref);

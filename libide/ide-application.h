@@ -35,6 +35,7 @@ typedef enum
   IDE_APPLICATION_MODE_PRIMARY,
   IDE_APPLICATION_MODE_WORKER,
   IDE_APPLICATION_MODE_TOOL,
+  IDE_APPLICATION_MODE_TESTS,
 } IdeApplicationMode;
 
 IdeApplicationMode  ide_application_get_mode             (IdeApplication       *self);
