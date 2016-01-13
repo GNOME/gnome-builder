@@ -27,6 +27,7 @@ void ide_log_init               (gboolean     stdout_,
                                  const gchar *filename);
 void ide_log_increase_verbosity (void);
 gint ide_log_get_verbosity      (void);
+void ide_log_set_verbosity      (gint         level);
 void ide_log_shutdown           (void);
 
 G_END_DECLS

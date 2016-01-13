@@ -273,3 +273,9 @@ ide_log_get_verbosity (void)
 {
   return log_verbosity;
 }
+
+void
+ide_log_set_verbosity (gint level)
+{
+  log_verbosity = level;
+}
