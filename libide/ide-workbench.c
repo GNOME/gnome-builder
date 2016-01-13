@@ -197,6 +197,16 @@ ide_workbench_delete_event (GtkWidget   *widget,
 }
 
 static void
+ide_workbench_constructed (GObject *object)
+{
+  IdeWorkbench *self = (IdeWorkbench *)object;
+
+  G_OBJECT_CLASS (ide_workbench_parent_class)->constructed (object);
+
+  ide_workbench_actions_init (self);
+}
+
+static void
 ide_workbench_finalize (GObject *object)
 {
   IdeWorkbench *self = (IdeWorkbench *)object;
@@ -264,6 +274,7 @@ ide_workbench_class_init (IdeWorkbenchClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
+  object_class->constructed = ide_workbench_constructed;
   object_class->finalize = ide_workbench_finalize;
   object_class->get_property = ide_workbench_get_property;
   object_class->set_property = ide_workbench_set_property;
@@ -343,8 +354,6 @@ static void
 ide_workbench_init (IdeWorkbench *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
-
-  ide_workbench_actions_init (self);
 
   ide_workbench_add_perspective (self,
                                  g_object_new (IDE_TYPE_GREETER_PERSPECTIVE,
