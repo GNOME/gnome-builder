@@ -18,7 +18,6 @@
 
 #include <ide.h>
 
-#include "gb-plugins.h"
 #include "test-helper.h"
 
 typedef struct
@@ -72,7 +71,7 @@ test_new_async (void)
   g_assert_cmpstr (G_OBJECT_TYPE_NAME (bs), ==, "IdeAutotoolsBuildSystem");
 
   vcs = ide_context_get_vcs (state.context);
-  g_assert (IDE_IS_GIT_VCS (vcs));
+  g_assert_cmpstr (G_OBJECT_TYPE_NAME (vcs), ==, "IdeGitVcs");
 
   root_build_dir = ide_context_get_root_build_dir (state.context);
   g_assert (g_str_has_suffix (root_build_dir, "/libide/builds"));
