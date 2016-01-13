@@ -2057,16 +2057,21 @@ ide_source_view_do_mode (IdeSourceView *self,
     {
       GtkTextBuffer *buffer;
       GtkTextMark *insert;
-      GtkTextIter iter;
+      GtkTextMark *selection;
+      GtkTextIter insert_iter;
+      GtkTextIter selection_iter;
 
       buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
       insert = gtk_text_buffer_get_insert (buffer);
-      gtk_text_buffer_get_iter_at_mark (buffer, &iter, insert);
+      selection = gtk_text_buffer_get_selection_bound (buffer);
 
-      if (gtk_text_iter_ends_line (&iter) && !gtk_text_iter_starts_line (&iter))
+      gtk_text_buffer_get_iter_at_mark (buffer, &insert_iter, insert);
+      gtk_text_buffer_get_iter_at_mark (buffer, &selection_iter, selection);
+
+      if (gtk_text_iter_ends_line (&insert_iter) && !gtk_text_iter_starts_line (&insert_iter))
         {
-          gtk_text_iter_backward_char (&iter);
-          gtk_text_buffer_select_range (buffer, &iter, &iter);
+          gtk_text_iter_backward_char (&insert_iter);
+          gtk_text_buffer_select_range (buffer, &insert_iter, &selection_iter);
         }
     }
 
