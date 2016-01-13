@@ -67,6 +67,7 @@
 #include "ide-source-view-movements.h"
 #include "ide-symbol.h"
 #include "ide-text-util.h"
+#include "ide-workbench-private.h"
 
 #define DEFAULT_FONT_DESC "Monospace 11"
 #define ANIMATION_X_GROW 50
@@ -1249,6 +1250,22 @@ ide_source_view__buffer_mark_set_cb (IdeSourceView *self,
         ide_source_view_pop_snippet (self);
       ide_source_view_unblock_handlers (self);
     }
+}
+
+static void
+ide_source_view__buffer_notify_has_selection_cb (IdeSourceView *self,
+                                                 GParamSpec    *pspec,
+                                                 IdeBuffer     *buffer)
+{
+  IdeWorkbench *workbench = ide_widget_get_workbench (GTK_WIDGET (self));
+
+  if (workbench == NULL)
+    return;
+
+  if (gtk_text_buffer_get_has_selection (GTK_TEXT_BUFFER (buffer)))
+    ide_workbench_set_selection_owner (workbench, G_OBJECT (self));
+  else if (ide_workbench_get_selection_owner (workbench) == G_OBJECT (self))
+    ide_workbench_set_selection_owner (workbench, NULL);
 }
 
 static void
@@ -4288,6 +4305,7 @@ ide_source_view_focus_in_event (GtkWidget     *widget,
   IdeSourceView *self = (IdeSourceView *)widget;
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
   GtkSourceCompletion *completion;
+  IdeWorkbench *workbench;
   gboolean ret;
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
@@ -4303,8 +4321,13 @@ ide_source_view_focus_in_event (GtkWidget     *widget,
    * will stay looking selected, as the other frame could be a view into our
    * own buffer).
    */
-  priv->saved_selection_line = priv->saved_line;
-  priv->saved_selection_line_offset = priv->saved_line_offset;
+  workbench = ide_widget_get_workbench (GTK_WIDGET (widget));
+  if (!workbench || ide_workbench_get_selection_owner (workbench) != G_OBJECT (self))
+    {
+      priv->saved_selection_line = priv->saved_line;
+      priv->saved_selection_line_offset = priv->saved_line_offset;
+    }
+
   ide_source_view_real_restore_insert_mark_full (self, FALSE);
 
   /* restore line highlight if enabled */
@@ -6264,6 +6287,11 @@ ide_source_view_init (IdeSourceView *self)
   egg_signal_group_connect_object (priv->buffer_signals,
                                    "loaded",
                                    G_CALLBACK (ide_source_view__buffer_loaded_cb),
+                                   self,
+                                   G_CONNECT_SWAPPED);
+  egg_signal_group_connect_object (priv->buffer_signals,
+                                   "notify::has-selection",
+                                   G_CALLBACK (ide_source_view__buffer_notify_has_selection_cb),
                                    self,
                                    G_CONNECT_SWAPPED);
   g_signal_connect_object (priv->buffer_signals,

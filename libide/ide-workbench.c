@@ -159,6 +159,24 @@ ide_workbench_agree_to_shutdown (IdeWorkbench *self)
   return ret;
 }
 
+void
+ide_workbench_set_selection_owner (IdeWorkbench *self,
+                                   GObject      *object)
+{
+  g_assert (IDE_IS_WORKBENCH (self));
+  g_assert (G_IS_OBJECT (object) || object == NULL);
+
+  self->selection_owner = object;
+}
+
+GObject *
+ide_workbench_get_selection_owner (IdeWorkbench *self)
+{
+  g_assert (IDE_IS_WORKBENCH (self));
+
+  return self->selection_owner;
+}
+
 static gboolean
 ide_workbench_delete_event (GtkWidget   *widget,
                             GdkEventAny *event)

@@ -45,11 +45,16 @@ struct _IdeWorkbench
   GtkPopover                *perspectives_popover;
 
   GtkSizeGroup              *header_size_group;
+
+  GObject                   *selection_owner;
 };
 
-void ide_workbench_set_context  (IdeWorkbench *workbench,
-                                 IdeContext   *context);
-void ide_workbench_actions_init (IdeWorkbench *self);
+void     ide_workbench_set_context         (IdeWorkbench *workbench,
+                                            IdeContext   *context);
+void     ide_workbench_actions_init        (IdeWorkbench *self);
+void     ide_workbench_set_selection_owner (IdeWorkbench *self,
+                                            GObject      *object);
+GObject *ide_workbench_get_selection_owner (IdeWorkbench *self);
 
 G_END_DECLS
 
