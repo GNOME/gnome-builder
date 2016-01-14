@@ -293,9 +293,6 @@ class JediCompletionProvider(Ide.Object, GtkSource.CompletionProvider, Ide.Compl
                 return True
         return False
 
-    def _get_worker_cb(self, app, result):
-        self.proxy = app.get_worker_finish(result)
-
     def do_populate(self, context):
         self.current_word = Ide.CompletionProvider.context_current_word(context)
         self.current_word_lower = self.current_word.lower()
