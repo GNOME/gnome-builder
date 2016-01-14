@@ -16,18 +16,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using GLib;
-using Ide;
 using Vala;
 
-namespace Ide
-{
-	public class ValaSymbolResolver: Ide.Object, Ide.SymbolResolver
-	{
+namespace Ide {
+	public class ValaSymbolResolver : Ide.Object, Ide.SymbolResolver {
 		public async Ide.SymbolTree? get_symbol_tree_async (GLib.File file,
-		                                                    GLib.Cancellable? cancellable)
-			throws GLib.Error
-		{
+		                                                    Cancellable? cancellable) throws GLib.Error {
 			var context = this.get_context ();
 			var service = (Ide.ValaService)context.get_service_typed (typeof (Ide.ValaService));
 			var index = service.index;
@@ -37,9 +31,7 @@ namespace Ide
 		}
 
 		public async Ide.Symbol? lookup_symbol_async (Ide.SourceLocation location,
-		                                              GLib.Cancellable? cancellable)
-			throws GLib.Error
-		{
+		                                              Cancellable? cancellable) throws GLib.Error {
 			var context = this.get_context ();
 			var service = (Ide.ValaService)context.get_service_typed (typeof (Ide.ValaService));
 			var index = service.index;
@@ -51,29 +43,39 @@ namespace Ide
 
 			if (symbol != null) {
 				var kind = Ide.SymbolKind.NONE;
-				if (symbol is Vala.Class) kind = Ide.SymbolKind.CLASS;
-				else if (symbol is Vala.Subroutine) {
-					if (symbol.is_instance_member ())
+				if (symbol is Vala.Class) {
+					kind = Ide.SymbolKind.CLASS;
+				} else if (symbol is Vala.Subroutine) {
+					if (symbol.is_instance_member ()) {
 						kind = Ide.SymbolKind.METHOD;
-					else
+					} else {
 						kind = Ide.SymbolKind.FUNCTION;
+					}
+				} else if (symbol is Vala.Struct) {
+					kind = Ide.SymbolKind.STRUCT;
+				} else if (symbol is Vala.Field) {
+					kind = Ide.SymbolKind.FIELD;
+				} else if (symbol is Vala.Enum) {
+					kind = Ide.SymbolKind.ENUM;
+				} else if (symbol is Vala.EnumValue) {
+					kind = Ide.SymbolKind.ENUM_VALUE;
+				} else if (symbol is Vala.Variable) {
+					kind = Ide.SymbolKind.VARIABLE;
 				}
-				else if (symbol is Vala.Struct) kind = Ide.SymbolKind.STRUCT;
-				else if (symbol is Vala.Field) kind = Ide.SymbolKind.FIELD;
-				else if (symbol is Vala.Enum) kind = Ide.SymbolKind.ENUM;
-				else if (symbol is Vala.EnumValue) kind = Ide.SymbolKind.ENUM_VALUE;
-				else if (symbol is Vala.Variable) kind = Ide.SymbolKind.VARIABLE;
 
 				var flags = Ide.SymbolFlags.NONE;
-				if (symbol.is_instance_member ())
+				if (symbol.is_instance_member ()) {
 					flags |= Ide.SymbolFlags.IS_MEMBER;
+				}
 
 				var binding = get_member_binding (symbol);
-				if (binding != null && binding == Vala.MemberBinding.STATIC)
+				if (binding != null && binding == Vala.MemberBinding.STATIC) {
 					flags |= Ide.SymbolFlags.IS_STATIC;
+				}
 
-				if (symbol.deprecated)
+				if (symbol.deprecated) {
 					flags |= Ide.SymbolFlags.IS_DEPRECATED;
+				}
 
 				var source_reference = symbol.source_reference;
 
@@ -90,18 +92,22 @@ namespace Ide
 		}
 
 		// a member binding is Instance, Class, or Static
-		private Vala.MemberBinding? get_member_binding (Vala.Symbol sym)
-		{
-			if (sym is Vala.Constructor)
+		private Vala.MemberBinding? get_member_binding (Vala.Symbol sym) {
+			if (sym is Vala.Constructor) {
 				return ((Vala.Constructor)sym).binding;
-			if (sym is Vala.Destructor)
+			}
+			if (sym is Vala.Destructor) {
 				return ((Vala.Destructor)sym).binding;
-			if (sym is Vala.Field)
+			}
+			if (sym is Vala.Field) {
 				return ((Vala.Field)sym).binding;
-			if (sym is Vala.Method)
+			}
+			if (sym is Vala.Method) {
 				return ((Vala.Method)sym).binding;
-			if (sym is Vala.Property)
+			}
+			if (sym is Vala.Property) {
 				return ((Vala.Property)sym).binding;
+			}
 			return null;
 		}
 	}

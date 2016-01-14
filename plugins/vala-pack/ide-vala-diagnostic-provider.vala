@@ -16,18 +16,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using GLib;
-using Ide;
 using Vala;
 
-namespace Ide
-{
-	public class ValaDiagnosticProvider: Ide.Object, Ide.DiagnosticProvider
-	{
-		public async Ide.Diagnostics? diagnose_async (Ide.File file,
-		                                              GLib.Cancellable? cancellable)
-			throws GLib.Error
-		{
+namespace Ide {
+	public class ValaDiagnosticProvider : Ide.Object, Ide.DiagnosticProvider {
+		public async Ide.Diagnostics? diagnose_async (Ide.File file, Cancellable? cancellable) throws GLib.Error {
 			var context = this.get_context ();
 			var service = (Ide.ValaService)context.get_service_typed (typeof (Ide.ValaService));
 			yield service.index.parse_file (file.file, context.unsaved_files, cancellable);

@@ -16,19 +16,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using GLib;
-using Ide;
 using Vala;
 
-namespace Ide
-{
-	public class ValaSymbolTreeVisitor: Vala.CodeVisitor
-	{
+namespace Ide {
+	public class ValaSymbolTreeVisitor : Vala.CodeVisitor {
 		HashMap<Vala.CodeNode?,ArrayList<Vala.CodeNode>> table;
 		GLib.Queue<ArrayList<Vala.CodeNode>> queue;
 
-		public ValaSymbolTreeVisitor ()
-		{
+		public ValaSymbolTreeVisitor () {
 			this.table = new HashMap<Vala.CodeNode?,ArrayList<Vala.CodeNode>> ();
 			this.queue = new GLib.Queue<ArrayList<Vala.CodeNode>> ();
 
@@ -37,13 +32,11 @@ namespace Ide
 			this.queue.push_head (root);
 		}
 
-		public Ide.SymbolTree? build_tree ()
-		{
+		public Ide.SymbolTree? build_tree () {
 			return new Ide.ValaSymbolTree (this.table);
 		}
 
-		void visit_generic (Vala.CodeNode node)
-		{
+		void visit_generic (Vala.CodeNode node) {
 			var current = this.queue.peek_head ();
 			current.add (node);
 
@@ -72,19 +65,16 @@ namespace Ide
 		public override void visit_source_file (Vala.SourceFile source_file) { source_file.accept_children (this); }
 	}
 
-	public class ValaSymbolTree : GLib.Object, Ide.SymbolTree
-	{
+	public class ValaSymbolTree : GLib.Object, Ide.SymbolTree {
 		HashMap<Vala.CodeNode?,ArrayList<Vala.CodeNode>> table;
 
-		public ValaSymbolTree (HashMap<Vala.CodeNode?,ArrayList<Vala.CodeNode>> table)
-		{
+		public ValaSymbolTree (HashMap<Vala.CodeNode?,ArrayList<Vala.CodeNode>> table) {
 			this.table = table;
 
 			debug ("Tree created with %u rows", table.size);
 		}
 
-		ArrayList<Vala.CodeNode>? find (Ide.SymbolNode? node)
-		{
+		ArrayList<Vala.CodeNode>? find (Ide.SymbolNode? node) {
 			Ide.ValaSymbolNode? symbol_node = (Ide.ValaSymbolNode)node;
 			Vala.CodeNode? key = null;
 
@@ -97,53 +87,51 @@ namespace Ide
 			return this.table [key];
 		}
 
-		public uint get_n_children (Ide.SymbolNode? node)
-		{
+		public uint get_n_children (Ide.SymbolNode? node) {
 			var list = find (node);
 
-			if (list == null)
+			if (list == null) {
 				debug ("Failed to find child! %p", node);
-			else
+			} else {
 				debug ("node has %u children.", list.size);
+			}
 
 			return list != null ? list.size : 0;
 		}
 
-		public Ide.SymbolNode? get_nth_child (Ide.SymbolNode? node, uint nth)
-		{
+		public Ide.SymbolNode? get_nth_child (Ide.SymbolNode? node, uint nth) {
 			var list = find (node);
 
-			if (list != null && list.size > nth)
+			if (list != null && list.size > nth) {
 				return new Ide.ValaSymbolNode (list [(int)nth]);
+			}
 
 			return null;
 		}
 	}
 
-	public class ValaSymbolNode : Ide.SymbolNode
-	{
+	public class ValaSymbolNode : Ide.SymbolNode {
 		public Vala.CodeNode? node;
 
-		public ValaSymbolNode (Vala.CodeNode node)
-		{
+		public ValaSymbolNode (Vala.CodeNode node) {
 			this.node = node;
 
 			this.name = (node as Vala.Symbol).name;
 			this.kind = Ide.SymbolKind.NONE;
 			this.flags = Ide.SymbolFlags.NONE;
 
-			if (node is Vala.Method)
+			if (node is Vala.Method) {
 				this.kind = Ide.SymbolKind.FUNCTION;
-			else if (node is Vala.Class)
+			} else if (node is Vala.Class) {
 				this.kind = Ide.SymbolKind.CLASS;
-			else if (node is Vala.Struct)
+			} else if (node is Vala.Struct) {
 				this.kind = Ide.SymbolKind.STRUCT;
-			else if (node is Vala.Property)
+			} else if (node is Vala.Property) {
 				this.kind = Ide.SymbolKind.FIELD;
+			}
 		}
 
-		public override Ide.SourceLocation? get_location ()
-		{
+		public override Ide.SourceLocation? get_location () {
 			var source_reference = this.node.source_reference;
 			var file = (source_reference.file as Ide.ValaSourceFile).file;
 

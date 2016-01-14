@@ -16,14 +16,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using GLib;
 using Gtk;
 using Vala;
 
-namespace Ide
-{
-	public class ValaCompletionItem: Ide.CompletionItem, Gtk.SourceCompletionProposal
-	{
+namespace Ide {
+	public class ValaCompletionItem: Ide.CompletionItem, Gtk.SourceCompletionProposal {
 		static uint hash_seed;
 
 		internal Vala.Symbol symbol;
@@ -34,8 +31,7 @@ namespace Ide
 			hash_seed = "IdeValaCompletionItem".hash ();
 		}
 
-		public ValaCompletionItem (Vala.Symbol symbol, Ide.ValaCompletionProvider provider)
-		{
+		public ValaCompletionItem (Vala.Symbol symbol, Ide.ValaCompletionProvider provider) {
 			this.symbol = symbol;
 			this.provider = provider;
 
@@ -46,44 +42,42 @@ namespace Ide
 			this.build_label ();
 		}
 
-		public unowned string? get_icon_name ()
-		{
-			if (symbol is Vala.LocalVariable)
+		public unowned string? get_icon_name () {
+			if (symbol is Vala.LocalVariable) {
 				return "lang-variable-symbolic";
-			else if (symbol is Vala.Field)
+			} else if (symbol is Vala.Field) {
 				return "struct-field-symbolic";
-			else if (symbol is Vala.Subroutine)
+			} else if (symbol is Vala.Subroutine) {
 				return "lang-function-symbolic";
-			else if (symbol is Vala.Namespace)
+			} else if (symbol is Vala.Namespace) {
 				return "lang-include-symbolic";
-			else if (symbol is Vala.MemberAccess)
+			} else if (symbol is Vala.MemberAccess) {
 				return "struct-field-symbolic";
-			else if (symbol is Vala.Property)
+			} else if (symbol is Vala.Property) {
 				return "struct-field-symbolic";
-			else if (symbol is Vala.Struct)
+			} else if (symbol is Vala.Struct) {
 				return "lang-struct-symbolic";
-			else if (symbol is Vala.Class)
+			} else if (symbol is Vala.Class) {
 				return "lang-class-symbolic";
-			else if (symbol is Vala.Enum)
+			} else if (symbol is Vala.Enum) {
 				return "lang-enum-symbolic";
-			else if (symbol is Vala.EnumValue)
+			} else if (symbol is Vala.EnumValue) {
 				return "lang-enum-value-symbolic";
-			else if (symbol is Vala.Delegate)
+			} else if (symbol is Vala.Delegate) {
 				return "lang-typedef-symbolic";
+			}
 
 			return null;
 		}
 
-		public override bool match (string query, string casefold)
-		{
+		public override bool match (string query, string casefold) {
 			uint priority = 0;
 			bool result = Ide.CompletionItem.fuzzy_match (this.symbol.name, casefold, out priority);
 			this.set_priority (priority);
 			return result;
 		}
 
-		public void build_label ()
-		{
+		public void build_label () {
 			GLib.StringBuilder str = new GLib.StringBuilder ();
 
 			if (this.symbol is Vala.Method) {
@@ -108,10 +102,11 @@ namespace Ide
 						break;
 					}
 
-					if (param.direction == ParameterDirection.OUT)
+					if (param.direction == ParameterDirection.OUT) {
 						str.append ("out ");
-					else if (param.direction == ParameterDirection.REF)
+					} else if (param.direction == ParameterDirection.REF) {
 						str.append ("ref ");
+					}
 
 					str.append_printf ("%s, ", param.variable_type.to_qualified_string (method.owner));
 				}
@@ -137,8 +132,7 @@ namespace Ide
 			return this.label;
 		}
 
-		public string get_text ()
-		{
+		public string get_text () {
 			return this.symbol.name;
 		}
 
@@ -150,8 +144,7 @@ namespace Ide
 			return null;
 		}
 
-		public uint hash ()
-		{
+		public uint hash () {
 			return this.symbol.name.hash () ^ hash_seed;
 		}
 	}

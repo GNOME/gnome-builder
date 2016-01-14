@@ -24,23 +24,18 @@
  * Ide.Service (via Ide.ValaService) to keep an index-per-project.
  */
 
-using GLib;
 using Gtk;
-using Ide;
 using Vala;
 
-namespace Ide
-{
-	public class ValaIndex: GLib.Object
-	{
+namespace Ide {
+	public class ValaIndex : GLib.Object {
 		Vala.CodeContext code_context;
 		Vala.Parser parser;
 		HashMap<GLib.File,Ide.ValaSourceFile> source_files;
 		Ide.ValaDiagnostics report;
 
-		public ValaIndex ()
-		{
-			this.source_files = new HashMap<GLib.File,Ide.ValaSourceFile> (GLib.File.hash, (GLib.EqualFunc)GLib.File.equal);
+		public ValaIndex () {
+			this.source_files = new HashMap<GLib.File, Ide.ValaSourceFile> (GLib.File.hash, (GLib.EqualFunc)GLib.File.equal);
 
 			this.code_context = new Vala.CodeContext ();
 
@@ -109,8 +104,7 @@ namespace Ide
 			Vala.CodeContext.pop ();
 		}
 
-		void add_file (GLib.File file)
-		{
+		void add_file (GLib.File file) {
 			var path = file.get_path ();
 			if (path == null)
 				return;
@@ -121,14 +115,13 @@ namespace Ide
 			this.source_files [file] = source_file;
 		}
 
-		public async void add_files (ArrayList<GLib.File> files,
-		                             GLib.Cancellable? cancellable)
-		{
+		public async void add_files (ArrayList<GLib.File> files, GLib.Cancellable? cancellable) {
 			Ide.ThreadPool.push (Ide.ThreadPoolKind.COMPILER, () => {
 				lock (this.code_context) {
 					Vala.CodeContext.push (this.code_context);
-					foreach (var file in files)
+					foreach (var file in files) {
 						this.add_file (file);
+					}
 					Vala.CodeContext.pop ();
 					GLib.Idle.add(add_files.callback);
 				}
@@ -139,9 +132,7 @@ namespace Ide
 
 		public async bool parse_file (GLib.File file,
 		                              Ide.UnsavedFiles? unsaved_files,
-		                              GLib.Cancellable? cancellable)
-			throws GLib.Error
-		{
+		                              GLib.Cancellable? cancellable) throws GLib.Error {
 			GLib.GenericArray<UnsavedFile>? unsaved_files_copy = null;
 
 			if (unsaved_files != null) {
@@ -153,8 +144,9 @@ namespace Ide
 					lock (this.code_context) {
 						Vala.CodeContext.push (this.code_context);
 
-						if (!this.source_files.contains (file))
+						if (!this.source_files.contains (file)) {
 							this.add_file (file);
+						}
 
 						this.apply_unsaved_files (unsaved_files_copy);
 						this.reparse ();
@@ -180,8 +172,7 @@ namespace Ide
 		                                            Ide.ValaCompletionProvider provider,
 		                                            GLib.Cancellable? cancellable,
 		                                            out int result_line,
-		                                            out int result_column)
-		{
+		                                            out int result_column) {
 			var unsaved_files_copy = unsaved_files.to_array ();
 			var result = new Ide.CompletionResults (provider.query);
 
@@ -212,9 +203,7 @@ namespace Ide
 			return result;
 		}
 
-		public async Ide.Diagnostics? get_diagnostics (GLib.File file,
-		                                               GLib.Cancellable? cancellable = null)
-		{
+		public async Ide.Diagnostics? get_diagnostics (GLib.File file, Cancellable? cancellable = null) {
 			Ide.Diagnostics? diagnostics = null;
 
 			Ide.ThreadPool.push (Ide.ThreadPoolKind.COMPILER, () => {
@@ -235,8 +224,7 @@ namespace Ide
 			return diagnostics;
 		}
 
-		void apply_unsaved_files (GLib.GenericArray<Ide.UnsavedFile> unsaved_files)
-		{
+		void apply_unsaved_files (GLib.GenericArray<Ide.UnsavedFile> unsaved_files) {
 			foreach (var source_file in this.code_context.get_source_files ()) {
 				if ((source_file.file_type == Vala.SourceFileType.SOURCE) &&
 				    (source_file is Ide.ValaSourceFile)) {
@@ -245,8 +233,7 @@ namespace Ide
 			}
 		}
 
-		void reparse ()
-		{
+		void reparse () {
 			this.report.clear ();
 
 			foreach (var source_file in this.code_context.get_source_files ()) {
@@ -267,8 +254,7 @@ namespace Ide
 		                      string line_text,
 		                      Vala.Symbol? nearest,
 		                      Ide.CompletionResults results,
-		                      Ide.ValaCompletionProvider provider)
-		{
+		                      Ide.ValaCompletionProvider provider) {
 			var block = nearest as Vala.Block;
 			Vala.SourceLocation cursor = Vala.SourceLocation (null, line, column);
 
@@ -280,16 +266,16 @@ namespace Ide
 			var list = completion.run (ref cursor);
 
 			foreach (var symbol in list) {
-				if (symbol.name != null && symbol.name[0] != '\0')
+				if (symbol.name != null && symbol.name[0] != '\0') {
 					results.take_proposal (new Ide.ValaCompletionItem (symbol, provider));
+				}
 			}
 
 			line = cursor.line;
 			column = cursor.column;
 		}
 
-		public async Vala.Symbol? find_symbol_at (GLib.File file, int line, int column)
-		{
+		public async Vala.Symbol? find_symbol_at (GLib.File file, int line, int column) {
 			Vala.Symbol? symbol = null;
 
 			/*
@@ -323,10 +309,7 @@ namespace Ide
 			return symbol;
 		}
 
-		public async Ide.SymbolTree? get_symbol_tree (GLib.File file,
-		                                              GLib.Cancellable? cancellable)
-			throws GLib.Error
-		{
+		public async Ide.SymbolTree? get_symbol_tree (GLib.File file, Cancellable? cancellable) throws GLib.Error {
 			Ide.SymbolTree? ret = null;
 
 			Ide.ThreadPool.push (Ide.ThreadPoolKind.COMPILER, () => {

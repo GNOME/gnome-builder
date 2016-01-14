@@ -36,14 +36,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using GLib;
-using Ide;
 using Vala;
 
-namespace Ide
-{
-	public class ValaSourceFile: Vala.SourceFile
-	{
+namespace Ide {
+	public class ValaSourceFile : Vala.SourceFile {
 		ArrayList<Ide.Diagnostic> diagnostics;
 		internal Ide.File file;
 
@@ -51,8 +47,7 @@ namespace Ide
 		                       Vala.SourceFileType type,
 		                       string filename,
 		                       string? content,
-		                       bool cmdline)
-		{
+		                       bool cmdline) {
 			base (context, type, filename, content, cmdline);
 
 			this.file = new Ide.File (null, GLib.File.new_for_path (filename));
@@ -64,13 +59,11 @@ namespace Ide
 
 		public bool dirty { get; set; }
 
-		public GLib.File get_file ()
-		{
+		public GLib.File get_file () {
 			return this.file.file;
 		}
 
-		public void reset ()
-		{
+		public void reset () {
 			this.diagnostics.clear ();
 
 			/* Copy the node list since we will be mutating while iterating */
@@ -99,8 +92,7 @@ namespace Ide
 			this.dirty = true;
 		}
 
-		public void sync (GenericArray<Ide.UnsavedFile> unsaved_files)
-		{
+		public void sync (GenericArray<Ide.UnsavedFile> unsaved_files) {
 			var gfile = this.file.file;
 			unsaved_files.foreach((unsaved_file) => {
 				if (unsaved_file.get_file ().equal (gfile)) {
@@ -117,8 +109,7 @@ namespace Ide
 
 		public void report (Vala.SourceReference source_reference,
 		                    string message,
-		                    Ide.DiagnosticSeverity severity)
-		{
+		                    Ide.DiagnosticSeverity severity) {
 			var begin = new Ide.SourceLocation (this.file,
 			                                    source_reference.begin.line - 1,
 			                                    source_reference.begin.column - 1,
@@ -133,8 +124,7 @@ namespace Ide
 			this.diagnostics.add (diag);
 		}
 
-		public Ide.Diagnostics? diagnose ()
-		{
+		public Ide.Diagnostics? diagnose () {
 			var ar = new GLib.GenericArray<Ide.Diagnostic> ();
 			foreach (var diag in this.diagnostics) {
 				ar.add (diag);
@@ -142,8 +132,7 @@ namespace Ide
 			return new Ide.Diagnostics (ar);
 		}
 
-		void add_default_namespace ()
-		{
+		void add_default_namespace () {
 			this.current_using_directives = new ArrayList<Vala.UsingDirective> ();
 
 			var unres = new Vala.UnresolvedSymbol (null, "GLib");

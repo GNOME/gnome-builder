@@ -16,14 +16,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using GLib;
-using Ide;
 using Vala;
 
-namespace Ide
-{
-	public class ValaService: Ide.Object, Ide.Service
-	{
+namespace Ide {
+	public class ValaService : Ide.Object, Ide.Service {
 		Ide.ValaIndex _index;
 
 		construct {
@@ -58,8 +54,7 @@ namespace Ide
 
 		public void load_directory (GLib.File directory,
 		                            GLib.Cancellable? cancellable,
-		                            ArrayList<GLib.File> files)
-		{
+		                            ArrayList<GLib.File> files) {
 			try {
 				var enumerator = directory.enumerate_children (FileAttribute.STANDARD_NAME+","+FileAttribute.STANDARD_TYPE, 0, cancellable);
 				var directories = new ArrayList<GLib.File> ();

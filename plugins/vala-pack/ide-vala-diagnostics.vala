@@ -16,25 +16,21 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using GLib;
 using Vala;
 
-namespace Ide
-{
-	public class ValaDiagnostics: Vala.Report
-	{
-		public void clear ()
-		{
+namespace Ide {
+	public class ValaDiagnostics : Vala.Report {
+		public void clear () {
 			this.errors = 0;
 			this.warnings = 0;
 		}
 
 		void add (Vala.SourceReference?  source_reference,
 		          string                 message,
-		          Ide.DiagnosticSeverity severity)
-		{
-			if (source_reference == null)
+		          Ide.DiagnosticSeverity severity) {
+			if (source_reference == null) {
 				return;
+			}
 
 			if (source_reference.file is Ide.ValaSourceFile) {
 				var file = (Ide.ValaSourceFile)source_reference.file;

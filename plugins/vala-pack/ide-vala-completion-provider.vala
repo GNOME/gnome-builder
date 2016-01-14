@@ -16,23 +16,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using GLib;
-using Ide;
 using Vala;
 
-namespace Ide
-{
-	public class ValaCompletionProvider: Ide.Object,
-	                                     Gtk.SourceCompletionProvider,
-	                                     Ide.CompletionProvider
-	{
+namespace Ide {
+	public class ValaCompletionProvider : Ide.Object,
+	                                      Gtk.SourceCompletionProvider,
+	                                      Ide.CompletionProvider {
 		internal string? query;
 		int line = -1;
 		int column = -1;
 		Ide.CompletionResults? results;
 
-		public void populate (Gtk.SourceCompletionContext context)
-		{
+		public void populate (Gtk.SourceCompletionContext context) {
 			Gtk.TextIter iter;
 			Gtk.TextIter begin;
 
@@ -89,25 +84,26 @@ namespace Ide
 			                           cancellable,
 			                           out res_line,
 			                           out res_column);
-					if (res_line > 0 && res_column > 0) {
+				if (res_line > 0 && res_column > 0) {
 					this.line = res_line - 1;
 					this.column = res_column - 1;
 				}
 
 				Idle.add (() => {
-					if (!cancellable.is_cancelled ())
+					if (!cancellable.is_cancelled ()) {
 						this.results.present (this, context);
+					}
 					return false;
 				});
 			});
 		}
 
-		public bool match (Gtk.SourceCompletionContext context)
-		{
+		public bool match (Gtk.SourceCompletionContext context) {
 			Gtk.TextIter iter;
 
-			if (!context.get_iter (out iter))
+			if (!context.get_iter (out iter)) {
 				return false;
+			}
 
 			var buffer = iter.get_buffer () as Ide.Buffer;
 
@@ -120,12 +116,14 @@ namespace Ide
 			 * whitespace.
 			 */
 			if (context.activation != Gtk.SourceCompletionActivation.USER_REQUESTED) {
-				if (iter.starts_line () || !iter.backward_char () || iter.get_char ().isspace ())
+				if (iter.starts_line () || !iter.backward_char () || iter.get_char ().isspace ()) {
 					return false;
+				}
 			}
 
-			if (Ide.CompletionProvider.context_in_comment (context))
+			if (Ide.CompletionProvider.context_in_comment (context)) {
 				return false;
+			}
 
 			return true;
 		}
@@ -134,8 +132,7 @@ namespace Ide
 			return "Vala";
 		}
 
-		public int get_priority ()
-		{
+		public int get_priority () {
 			return 200;
 		}
 	}

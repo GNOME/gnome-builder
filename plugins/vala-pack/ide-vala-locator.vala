@@ -18,7 +18,7 @@
 
 /* Finds the innermost block containing the given location */
 namespace Ide {
-	public class ValaLocator: Vala.CodeVisitor {
+	public class ValaLocator : Vala.CodeVisitor {
 		struct Location {
 			int line;
 			int column;
@@ -36,10 +36,11 @@ namespace Ide {
 			}
 
 			public bool before (Location other) {
-				if (line > other.line)
+				if (line > other.line) {
 					return false;
-				else if (line == other.line && column > other.column)
+				} else if (line == other.line && column > other.column) {
 					return false;
+				}
 				return true;
 			}
 		}
@@ -57,25 +58,27 @@ namespace Ide {
 		}
 
 		bool update_location (Vala.Symbol s) {
-			if (!location.inside (s.source_reference))
+			if (!location.inside (s.source_reference)) {
 				return false;
+			}
 
 			var begin = Location (s.source_reference.begin.line, s.source_reference.begin.column);
 			var end = Location (s.source_reference.end.line, s.source_reference.end.column);
 
 			if (innermost == null || (innermost_begin.before(begin) && end.before(innermost_end))) {
-					innermost = s;
-					innermost_begin = begin;
-					innermost_end = end;
-					return true;
+				innermost = s;
+				innermost_begin = begin;
+				innermost_end = end;
+				return true;
 			}
 
 			return false;
 		}
 
 		public override void visit_block (Vala.Block b) {
-			if (update_location (b))
+			if (update_location (b)) {
 				b.accept_children(this);
+			}
 		}
 
 		public override void visit_namespace (Vala.Namespace ns) {
@@ -84,29 +87,34 @@ namespace Ide {
 		}
 		public override void visit_class (Vala.Class cl) {
 			/* the location of a class contains only its declaration, not its content */
-			if (update_location (cl))
+			if (update_location (cl)) {
 				return;
+			}
 			cl.accept_children(this);
 		}
 		public override void visit_struct (Vala.Struct st) {
-			if (update_location (st))
+			if (update_location (st)) {
 				return;
+			}
 			st.accept_children(this);
 		}
 		public override void visit_interface (Vala.Interface iface) {
-			if (update_location (iface))
+			if (update_location (iface)) {
 				return;
+			}
 			iface.accept_children(this);
 		}
 
 		public override void visit_method (Vala.Method m) {
-			if (update_location (m))
+			if (update_location (m)) {
 				return;
+			}
 			m.accept_children(this);
 		}
 		public override void visit_creation_method (Vala.CreationMethod m) {
-			if (update_location (m))
+			if (update_location (m)) {
 				return;
+			}
 			m.accept_children(this);
 		}
 		public override void visit_property (Vala.Property prop) {
@@ -161,8 +169,9 @@ namespace Ide {
 			variable.accept_children (this);
 		}
 		public override void visit_end_full_expression (Vala.Expression expr) {
-			if (expr is Vala.LambdaExpression)
+			if (expr is Vala.LambdaExpression) {
 				visit_method ((expr as Vala.LambdaExpression).method);
+			}
 			if (expr is Vala.MethodCall) {
 				foreach (Vala.Expression e in (expr as Vala.MethodCall).get_argument_list()) {
 					visit_expression (e);
@@ -170,11 +179,13 @@ namespace Ide {
 			}
 		}
 		public override void visit_expression (Vala.Expression expr) {
-			if (expr is Vala.LambdaExpression)
+			if (expr is Vala.LambdaExpression) {
 				visit_method ((expr as Vala.LambdaExpression).method);
+			}
 			if (expr is Vala.MethodCall) {
-				foreach (Vala.Expression e in (expr as Vala.MethodCall).get_argument_list())
+				foreach (Vala.Expression e in (expr as Vala.MethodCall).get_argument_list()) {
 					visit_expression (e);
+				}
 			}
 		}
 	}

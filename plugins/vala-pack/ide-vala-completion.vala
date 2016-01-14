@@ -19,14 +19,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using GLib;
 using Gtk;
 using Vala;
 
-namespace Ide
-{
-	public class ValaCompletion: GLib.Object
-	{
+namespace Ide {
+	public class ValaCompletion : GLib.Object {
 		static Regex member_access;
 		static Regex member_access_split;
 		static Regex function_call;
@@ -49,22 +46,21 @@ namespace Ide
 		public ValaCompletion (Vala.CodeContext context,
 		                       Vala.SourceLocation location,
 		                       string current_text,
-		                       Vala.Block? nearest)
-		{
+		                       Vala.Block? nearest) {
 			this.context = context;
 			this.location = location;
 			this.current_text = current_text;
 			this.nearest = nearest;
 		}
 
-		public GLib.List<Vala.Symbol>? run (ref Vala.SourceLocation start_pos)
-		{
+		public GLib.List<Vala.Symbol>? run (ref Vala.SourceLocation start_pos) {
 			MatchInfo match_info;
 
-			if (!member_access.match (current_text, 0, out match_info))
+			if (!member_access.match (current_text, 0, out match_info)) {
 				return null;
-			else if (match_info.fetch(0).length < 2)
+			} else if (match_info.fetch(0).length < 2) {
 				return null;
+			}
 
 			start_pos.line = this.location.line;
 			start_pos.column = this.location.column - (int)match_info.fetch (2).length;
@@ -79,12 +75,12 @@ namespace Ide
 			return syms;
 		}
 
-		GLib.List<Vala.Symbol> lookup_symbol (Vala.Expression? inner, string name, bool prefix_match, Vala.Block? block)
-		{
+		GLib.List<Vala.Symbol> lookup_symbol (Vala.Expression? inner, string name, bool prefix_match, Vala.Block? block) {
 			var matching_symbols = new GLib.List<Vala.Symbol> ();
 
-			if (block == null)
+			if (block == null) {
 				return matching_symbols;
+			}
 
 			if (inner == null) {
 				for (var sym = (Vala.Symbol) block; sym != null; sym = sym.parent_symbol) {
@@ -95,12 +91,13 @@ namespace Ide
 					matching_symbols.concat (symbol_lookup_inherited (ns.namespace_symbol, name, prefix_match));
 				}
 			} else if (inner.symbol_reference != null) {
-					matching_symbols.concat (symbol_lookup_inherited (inner.symbol_reference, name, prefix_match));
+				matching_symbols.concat (symbol_lookup_inherited (inner.symbol_reference, name, prefix_match));
 			} else if (inner is Vala.MemberAccess) {
 				var inner_ma = (Vala.MemberAccess) inner;
 				var matching = lookup_symbol (inner_ma.inner, inner_ma.member_name, false, block);
-				if (matching != null)
+				if (matching != null) {
 					matching_symbols.concat (symbol_lookup_inherited (matching.data, name, prefix_match));
+				}
 			} else if (inner is Vala.MethodCall) {
 				var inner_inv = (Vala.MethodCall) inner;
 				var inner_ma = inner_inv.call as Vala.MemberAccess;
@@ -117,13 +114,13 @@ namespace Ide
 		GLib.List<Vala.Symbol> symbol_lookup_inherited (Vala.Symbol? sym,
 		                                                string name,
 		                                                bool prefix_match,
-		                                                bool invocation = false)
-		{
+		                                                bool invocation = false) {
 			GLib.List<Vala.Symbol> result = null;
 
 			// This may happen if we cannot find all the needed packages
-			if (sym == null)
+			if (sym == null) {
 				return result;
+			}
 
 			var symbol_table = sym.scope.get_symbol_table ();
 
@@ -168,8 +165,7 @@ namespace Ide
 			return result;
 		}
 
-		Vala.Expression construct_member_access (string[] names)
-		{
+		Vala.Expression construct_member_access (string[] names) {
 			Vala.Expression expr = null;
 
 			for (var i = 0; names[i] != null; i++) {

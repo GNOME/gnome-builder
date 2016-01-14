@@ -17,14 +17,10 @@
  */
 
 using Gtk;
-using Ide;
 
-namespace Ide
-{
-	public class ValaIndenter: Ide.Object, Ide.Indenter
-	{
-		public bool is_trigger (Gdk.EventKey evkey)
-		{
+namespace Ide {
+	public class ValaIndenter : Ide.Object, Ide.Indenter {
+		public bool is_trigger (Gdk.EventKey evkey) {
 			switch (evkey.keyval) {
 
 			/* newline indents */
@@ -45,8 +41,7 @@ namespace Ide
 		                       Gtk.TextIter begin,
 		                       Gtk.TextIter end,
 		                       out int      cursor_offset,
-		                       Gdk.EventKey evkey)
-		{
+		                       Gdk.EventKey evkey) {
 			Gtk.SourceView source_view = (text_view as Gtk.SourceView);
 			bool was_newline = is_newline_keyval (evkey.keyval);
 			Gtk.TextIter copy = end;
@@ -69,32 +64,33 @@ namespace Ide
 					}
 				}
 
-				if (was_newline)
+				if (was_newline) {
 					return indent_comment (text_view, copy);
+				}
 			}
 
 			if (is_newline_in_braces (copy)) {
 				string prefix = copy_indent (text_view, copy);
 				string indent;
 
-				if (source_view.insert_spaces_instead_of_tabs)
+				if (source_view.insert_spaces_instead_of_tabs) {
 					indent = "    ";
-				else
+				} else {
 					indent = "\t";
+				}
 
 				cursor_offset = -prefix.length - 1;
 				return (prefix + indent + "\n" + prefix);
 			}
 
-			if (was_newline)
+			if (was_newline) {
 				return copy_indent (text_view, copy);
+			}
 
 			return null;
 		}
 
-		string? copy_indent (Gtk.TextView text_view,
-		                     Gtk.TextIter iter)
-		{
+		string? copy_indent (Gtk.TextView text_view, Gtk.TextIter iter) {
 			Gtk.TextIter begin = iter;
 			Gtk.TextIter end;
 
@@ -108,48 +104,47 @@ namespace Ide
 			return begin.get_slice (end);
 		}
 
-		string get_line_text (Gtk.TextIter iter)
-		{
+		string get_line_text (Gtk.TextIter iter) {
 			Gtk.TextIter begin = iter;
 			Gtk.TextIter end = iter;
 
 			begin.set_line_offset (0);
-			if (!end.ends_line ())
+			if (!end.ends_line ()) {
 				end.forward_to_line_end ();
+			}
 
 			return begin.get_slice (end);
 		}
 
-		string? indent_comment (Gtk.TextView text_view,
-		                        Gtk.TextIter iter)
-		{
+		string? indent_comment (Gtk.TextView text_view, Gtk.TextIter iter) {
 			string line = get_line_text (iter).strip ();
 
 			/* continue with another single line comment */
-			if (line.has_prefix ("//"))
+			if (line.has_prefix ("//")) {
 				return copy_indent (text_view, iter) + "// ";
+			}
 
 			/* comment is closed, copy indent, possibly trimming extra space */
 			if (line.has_suffix ("*/")) {
 				if (line.has_prefix ("*")) {
 					var str = new GLib.StringBuilder (copy_indent (text_view, iter));
-					if (str.str.has_suffix (" "))
+					if (str.str.has_suffix (" ")) {
 						str.truncate (str.len - 1);
+					}
 					return str.str;
 				}
 			}
 
-			if (line.has_prefix ("/*") && !line.has_suffix ("*/"))
+			if (line.has_prefix ("/*") && !line.has_suffix ("*/")) {
 				return copy_indent (text_view, iter) + " * ";
-			else if (line.has_prefix ("*"))
+			} else if (line.has_prefix ("*")) {
 				return copy_indent (text_view, iter) + "* ";
+			}
 
 			return copy_indent (text_view, iter);
 		}
 
-		bool in_comment (Gtk.TextView text_view,
-		                 Gtk.TextIter iter)
-		{
+		bool in_comment (Gtk.TextView text_view, Gtk.TextIter iter) {
 			Gtk.SourceBuffer buffer = text_view.buffer as Gtk.SourceBuffer;
 			Gtk.TextIter copy = iter;
 
@@ -158,8 +153,7 @@ namespace Ide
 			return buffer.iter_has_context_class (copy, "comment");
 		}
 
-		bool is_newline_keyval (uint keyval)
-		{
+		bool is_newline_keyval (uint keyval) {
 			switch (keyval) {
 			case Gdk.Key.Return:
 			case Gdk.Key.KP_Enter:
@@ -170,8 +164,7 @@ namespace Ide
 			}
 		}
 
-		bool is_newline_in_braces (Gtk.TextIter iter)
-		{
+		bool is_newline_in_braces (Gtk.TextIter iter) {
 			Gtk.TextIter prev = iter;
 			Gtk.TextIter next = iter;
 
