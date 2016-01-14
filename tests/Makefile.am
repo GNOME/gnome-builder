@@ -160,7 +160,6 @@ test_egg_binding_group_CFLAGS = $(egg_cflags)
 test_egg_binding_group_LDADD = $(egg_libs)
 
 
-TESTS += test-egg-menu-manager
 test_egg_menu_manager_SOURCES = test-egg-menu-manager.c
 test_egg_menu_manager_CFLAGS = $(egg_cflags)
 test_egg_menu_manager_LDADD = $(egg_libs)
