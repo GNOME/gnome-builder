@@ -17,10 +17,10 @@
  */
 
 #include <glib.h>
+#include <stdlib.h>
 #include <ide.h>
 
-#include "gb-plugins.h"
-#include "test-helper.h"
+#include "ide-application-tests.h"
 
 typedef struct
 {
@@ -31,65 +31,46 @@ typedef struct
 } test_state_t;
 
 static IdeBackForwardItem *
-parse_item (test_state_t *state,
-            const gchar  *str)
+parse_item (IdeContext  *context,
+            const gchar *str)
 {
   IdeBackForwardItem *ret;
-  IdeSourceLocation *location;
-  IdeFile *file;
-  gchar **parts;
-  GFile *gfile;
+  IdeUri *uri;
+  GError *error = NULL;
 
-  parts = g_strsplit (str, " ", 0);
-
-  if (g_strv_length (parts) != 4)
-    {
-      g_strfreev (parts);
-      return NULL;
-    }
-
-  gfile = g_file_new_for_path (parts [0]);
-
-  file = g_object_new (IDE_TYPE_FILE,
-                       "context", state->context,
-                       "file", gfile,
-                       NULL);
-
-  location = ide_source_location_new (file,
-                                      atoi (parts[1]),
-                                      atoi(parts[2]),
-                                      atoi(parts[3]));
+  uri = ide_uri_new (str, 0, &error);
+  g_assert_no_error (error);
+  g_assert (uri != NULL);
 
   ret = g_object_new (IDE_TYPE_BACK_FORWARD_ITEM,
-                      "context", state->context,
-                      "location", location,
+                      "context", context,
+                      "uri", uri,
                       NULL);
 
-  g_clear_object (&gfile);
-  g_clear_object (&file);
-  g_strfreev (parts);
+  g_clear_pointer (&uri, ide_uri_unref);
 
   return ret;
 }
 
 static void
-exercise1 (test_state_t       *state,
-           IdeBackForwardList *list)
+exercise1 (IdeBackForwardList *list)
 {
+  IdeContext *context;
   const gchar *items[] = {
-    "test.c 10 10 100",
-    "test.c 20 10 200",
-    "test.h 0 0 0",
-    "test.c 1 2 3",
-    "test.h 1 2 3",
+    "file:///home/christian/Projects/gnome-builder/libide/template/ide-template-state.c#L120_43",
+    "file:///home/christian/Projects/gnome-builder/libide/template/ide-template.h#L35_0",
+    "file:///home/christian/Projects/gnome-builder/libide/template/ide-template-parser.h#L29_0",
+    "file:///home/christian/Projects/%20spaces/foo#L30_1",
   };
   gsize i;
+
+  context = ide_object_get_context (IDE_OBJECT (list));
 
   for (i = 0; i < G_N_ELEMENTS (items); i++)
     {
       IdeBackForwardItem *item;
 
-      item = parse_item (state, items [i]);
+      item = parse_item (context, items [i]);
       ide_back_forward_list_push (list, item);
       g_assert (item == ide_back_forward_list_get_current_item (list));
       g_assert (!ide_back_forward_list_get_can_go_forward (list));
@@ -126,56 +107,54 @@ test_basic_cb (GObject      *object,
                GAsyncResult *result,
                gpointer      user_data)
 {
-  test_state_t *state = user_data;
+  IdeBackForwardList *list;
+  IdeContext *context;
+  g_autoptr(GTask) task = user_data;
+  GError *error = NULL;
 
-  state->context = ide_context_new_finish (result, &state->error);
+  context = ide_context_new_finish (result, &error);
+  g_assert_no_error (error);
+  g_assert (context != NULL);
 
-  if (state->context)
-    {
-      IdeBackForwardList *list;
+  list = ide_context_get_back_forward_list (context);
+  exercise1 (list);
 
-      list = ide_context_get_back_forward_list (state->context);
-      exercise1 (state, list);
-    }
+  g_task_return_boolean (task, TRUE);
 
-  g_main_loop_quit (state->main_loop);
+  g_object_unref (context);
 }
 
 static void
-test_basic (void)
+test_basic (GCancellable        *cancellable,
+            GAsyncReadyCallback  callback,
+            gpointer             user_data)
 {
-  test_state_t state = { 0 };
-  GFile *project_file;
   g_autofree gchar *path = NULL;
-
-  test_helper_begin_test ();
+  GFile *project_file;
+  GTask *task;
 
   path = g_build_filename (g_get_current_dir (), TEST_DATA_DIR, "project1", "configure.ac", NULL);
   project_file = g_file_new_for_path (path);
-
-  state.main_loop = g_main_loop_new (NULL, FALSE);
-  state.cancellable = g_cancellable_new ();
-
-  ide_context_new_async (project_file, state.cancellable,
-                         test_basic_cb, &state);
-
-  g_main_loop_run (state.main_loop);
-
-  g_assert_no_error (state.error);
-  g_assert (IDE_IS_CONTEXT (state.context));
-
-  g_main_loop_unref (state.main_loop);
-  g_clear_object (&state.cancellable);
-  g_clear_object (&state.context);
-  g_clear_object (&project_file);
-  g_clear_error (&state.error);
+  task = g_task_new (NULL, cancellable, callback, user_data);
+  ide_context_new_async (project_file, cancellable, test_basic_cb, task);
 }
 
 gint
 main (gint   argc,
       gchar *argv[])
 {
-  test_helper_init (&argc, &argv);
-  g_test_add_func ("/Ide/BackForwardList/basic", test_basic);
-  return g_test_run ();
+  IdeApplication *app;
+  gint ret;
+
+  g_test_init (&argc, &argv, NULL);
+
+  ide_log_init (TRUE, NULL);
+  ide_log_set_verbosity (4);
+
+  app = ide_application_new ();
+  ide_application_add_test (app, "/Ide/BackForwardList/basic", test_basic, NULL);
+  ret = g_application_run (G_APPLICATION (app), argc, argv);
+  g_object_unref (app);
+
+  return ret;
 }

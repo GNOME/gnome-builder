@@ -56,10 +56,6 @@ tests_ldflags = \
 	-export-dynamic \
 	$(NULL)
 
-test_files = \
-	test-helper.c \
-	test-helper.h
-
 misc_programs =
 
 TESTS_ENVIRONMENT= \
@@ -75,50 +71,50 @@ TESTS_ENVIRONMENT= \
 LOG_COMPILER = $(top_srcdir)/build/autotools/tap-test
 
 TESTS = test-ide-context
-test_ide_context_SOURCES = test-ide-context.c $(test_files)
+test_ide_context_SOURCES = test-ide-context.c
 test_ide_context_CFLAGS = $(tests_cflags)
 test_ide_context_LDADD = $(tests_libs)
 test_ide_context_LDFLAGS = $(tests_ldflags)
 
 
 TESTS += test-ide-back-forward-list
-test_ide_back_forward_list_SOURCES = test-ide-back-forward-list.c $(test_files)
+test_ide_back_forward_list_SOURCES = test-ide-back-forward-list.c
 test_ide_back_forward_list_CFLAGS = $(tests_cflags)
 test_ide_back_forward_list_LDADD = $(tests_libs)
 
 
 TESTS += test-ide-buffer-manager
-test_ide_buffer_manager_SOURCES = test-ide-buffer-manager.c $(test_files)
+test_ide_buffer_manager_SOURCES = test-ide-buffer-manager.c
 test_ide_buffer_manager_CFLAGS = $(tests_cflags)
 test_ide_buffer_manager_LDADD = $(tests_libs)
 
 
 TESTS += test-ide-buffer
-test_ide_buffer_SOURCES = test-ide-buffer.c $(test_files)
+test_ide_buffer_SOURCES = test-ide-buffer.c
 test_ide_buffer_CFLAGS = $(tests_cflags)
 test_ide_buffer_LDADD = $(tests_libs)
 
 
 TESTS += test-ide-doap
-test_ide_doap_SOURCES = test-ide-doap.c $(test_files)
+test_ide_doap_SOURCES = test-ide-doap.c
 test_ide_doap_CFLAGS = $(tests_cflags)
 test_ide_doap_LDADD = $(tests_libs)
 
 
 TESTS += test-ide-file-settings
-test_ide_file_settings_SOURCES = test-ide-file-settings.c $(test_files)
+test_ide_file_settings_SOURCES = test-ide-file-settings.c
 test_ide_file_settings_CFLAGS = $(tests_cflags)
 test_ide_file_settings_LDADD = $(tests_libs)
 
 
 TESTS += test-ide-indenter
-test_ide_indenter_SOURCES = test-ide-indenter.c $(test_files)
+test_ide_indenter_SOURCES = test-ide-indenter.c
 test_ide_indenter_CFLAGS = $(tests_cflags)
 test_ide_indenter_LDADD = $(tests_libs)
 
 
 TESTS += test-ide-vcs-uri
-test_ide_vcs_uri_SOURCES = test-ide-vcs-uri.c $(test_files)
+test_ide_vcs_uri_SOURCES = test-ide-vcs-uri.c
 test_ide_vcs_uri_CFLAGS = $(tests_cflags)
 test_ide_vcs_uri_LDADD = $(tests_libs)
 
@@ -134,7 +130,7 @@ test_ide_vcs_uri_LDADD = $(tests_libs)
 
 
 TESTS += test-vim
-test_vim_SOURCES = test-vim.c $(test_files)
+test_vim_SOURCES = test-vim.c
 test_vim_CFLAGS = \
 	$(tests_cflags) \
 	-I$(top_srcdir)/src/resources \

@@ -18,76 +18,75 @@
 
 #include <ide.h>
 
-#include "test-helper.h"
-
-typedef struct
-{
-  GMainLoop    *main_loop;
-  IdeContext   *context;
-  GCancellable *cancellable;
-  GError       *error;
-} test_new_async_state;
+#include "ide-application-tests.h"
 
 static void
 test_new_async_cb1 (GObject      *object,
                     GAsyncResult *result,
                     gpointer      user_data)
 {
-  test_new_async_state *state = user_data;
-  state->context = ide_context_new_finish (result, &state->error);
-  g_main_loop_quit (state->main_loop);
+  const gchar *root_build_dir;
+  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeContext) context = NULL;
+  IdeVcs *vcs;
+  IdeBuildSystem *bs;
+  GError *error = NULL;
+
+  context = ide_context_new_finish (result, &error);
+  g_assert_no_error (error);
+  g_assert (context != NULL);
+
+  bs = ide_context_get_build_system (context);
+  g_assert_cmpstr (G_OBJECT_TYPE_NAME (bs), ==, "IdeAutotoolsBuildSystem");
+
+  vcs = ide_context_get_vcs (context);
+  g_assert_cmpstr (G_OBJECT_TYPE_NAME (vcs), ==, "IdeGitVcs");
+
+  root_build_dir = ide_context_get_root_build_dir (context);
+  g_print ("%s\n", root_build_dir);
+  g_assert (g_str_has_suffix (root_build_dir, "/libide/builds"));
+
+  g_task_return_boolean (task, TRUE);
 }
 
 static void
-test_new_async (void)
+test_new_async (GCancellable        *cancellable,
+                GAsyncReadyCallback  callback,
+                gpointer             user_data)
 {
-  test_new_async_state state = { 0 };
-  IdeBuildSystem *bs;
-  IdeVcs *vcs;
-  GFile *project_file;
-  const gchar *root_build_dir;
-  const gchar *builddir;
   g_autofree gchar *path = NULL;
-
-  test_helper_begin_test ();
+  g_autoptr(GFile) project_file = NULL;
+  const gchar *builddir;
+  GTask *task;
 
   builddir = g_getenv ("G_TEST_BUILDDIR");
 
+  task = g_task_new (NULL, cancellable, callback, user_data);
   path = g_build_filename (builddir, "data", "project1", "configure.ac", NULL);
   project_file = g_file_new_for_path (path);
 
-  state.main_loop = g_main_loop_new (NULL, FALSE);
-  state.cancellable = g_cancellable_new ();
-
-  ide_context_new_async (project_file, state.cancellable,
-                         test_new_async_cb1, &state);
-
-  g_main_loop_run (state.main_loop);
-
-  g_assert_no_error (state.error);
-  g_assert (state.context);
-
-  bs = ide_context_get_build_system (state.context);
-  g_assert_cmpstr (G_OBJECT_TYPE_NAME (bs), ==, "IdeAutotoolsBuildSystem");
-
-  vcs = ide_context_get_vcs (state.context);
-  g_assert_cmpstr (G_OBJECT_TYPE_NAME (vcs), ==, "IdeGitVcs");
-
-  root_build_dir = ide_context_get_root_build_dir (state.context);
-  g_assert (g_str_has_suffix (root_build_dir, "/libide/builds"));
-
-  g_clear_object (&state.cancellable);
-  g_clear_object (&state.context);
-  g_clear_error (&state.error);
-  g_main_loop_unref (state.main_loop);
-  g_clear_object (&project_file);
+  ide_context_new_async (project_file,
+                         cancellable,
+                         test_new_async_cb1,
+                         task);
 }
 
 gint
 main (gint   argc,
       gchar *argv[])
 {
-  test_helper_init (&argc, &argv);
-  g_test_add_func ("/Ide/Context/new_async", test_new_async);
-  return g_test_run ();
+  IdeApplication *app;
+  gint ret;
+
+  g_test_init (&argc, &argv, NULL);
+
+  ide_log_init (TRUE, NULL);
+  ide_log_set_verbosity (4);
+
+  app = ide_application_new ();
+  ide_application_add_test (app, "/Ide/Context/new_async", test_new_async, NULL);
+  ret = g_application_run (G_APPLICATION (app), argc, argv);
+  g_object_unref (app);
+
+  return ret;
 }
