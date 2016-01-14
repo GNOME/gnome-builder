@@ -43,8 +43,7 @@ test_new_async_cb1 (GObject      *object,
   g_assert_cmpstr (G_OBJECT_TYPE_NAME (vcs), ==, "IdeGitVcs");
 
   root_build_dir = ide_context_get_root_build_dir (context);
-  g_print ("%s\n", root_build_dir);
-  g_assert (g_str_has_suffix (root_build_dir, "/libide/builds"));
+  g_assert (g_str_has_suffix (root_build_dir, "/gnome-builder/builds"));
 
   g_task_return_boolean (task, TRUE);
 }
