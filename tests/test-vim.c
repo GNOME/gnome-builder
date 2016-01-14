@@ -54,7 +54,7 @@ new_context_cb (GObject      *object,
                 GAsyncResult *result,
                 gpointer      user_data)
 {
-  g_autoptr(GTask) test = user_data;
+  g_autoptr(GTask) task = user_data;
   GtkWidget *window;
   GtkWidget *widget;
   IdeBuffer *buffer;
@@ -99,14 +99,7 @@ new_context_cb (GObject      *object,
       vim_tests [i].func (context, widget);
     }
 
-#if 0
-  ide_context_unload_async (context,
-                            NULL,
-                            (GAsyncReadyCallback)gtk_main_quit,
-                            NULL);
-#else
-  gtk_main_quit ();
-#endif
+  g_task_return_boolean (task, TRUE);
 }
 
 static void
