@@ -729,6 +729,8 @@ ide_buffer_manager_load_file_async (IdeBufferManager     *self,
   task = g_task_new (self, cancellable, callback, user_data);
 
   context = ide_object_get_context (IDE_OBJECT (self));
+  ide_context_hold_for_object (context, task);
+
   buffer = ide_buffer_manager_get_buffer (self, file);
 
   /*
@@ -1037,6 +1039,7 @@ ide_buffer_manager_save_file_async  (IdeBufferManager     *self,
                                      gpointer              user_data)
 {
   g_autoptr(GTask) task = NULL;
+  IdeContext *context;
   SaveState *state;
 
   if (progress)
@@ -1048,6 +1051,9 @@ ide_buffer_manager_save_file_async  (IdeBufferManager     *self,
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = g_task_new (self, cancellable, callback, user_data);
+
+  context = ide_object_get_context (IDE_OBJECT (self));
+  ide_context_hold_for_object (context, task);
 
   state = g_slice_new0 (SaveState);
   state->file = g_object_ref (file);
