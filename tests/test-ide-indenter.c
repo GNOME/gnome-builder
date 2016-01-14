@@ -97,6 +97,8 @@ new_context_cb (GObject      *object,
       g_object_unref (buffer);
       g_object_unref (file);
     }
+
+  g_task_return_boolean (task, TRUE);
 }
 
 /*
