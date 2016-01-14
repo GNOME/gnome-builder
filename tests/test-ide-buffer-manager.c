@@ -20,34 +20,26 @@
 #include <glib/gstdio.h>
 #include <ide.h>
 
-#include "gb-plugins.h"
-#include "test-helper.h"
+#include "ide-application-tests.h"
 
-typedef struct
-{
-  GMainLoop    *main_loop;
-  IdeContext   *context;
-  GCancellable *cancellable;
-  GError       *error;
-  gchar        *tmpfile;
-  gint          load_count;
-  gint          save_count;
-} test_buffer_manager_basic_state;
+static gint   save_count;
+static gint   load_count;
+static gchar *tmpfilename;
 
 static void
-save_buffer_cb (IdeBufferManager                *buffer_manager,
-                IdeBuffer                       *buffer,
-                test_buffer_manager_basic_state *state)
+save_buffer_cb (IdeBufferManager *buffer_manager,
+                IdeBuffer        *buffer,
+                gpointer          user_data)
 {
-  state->save_count++;
+  save_count++;
 }
 
 static void
-buffer_loaded_cb (IdeBufferManager                *buffer_manager,
-                  IdeBuffer                       *buffer,
-                  test_buffer_manager_basic_state *state)
+buffer_loaded_cb (IdeBufferManager *buffer_manager,
+                  IdeBuffer        *buffer,
+                  gpointer          user_data)
 {
-  state->load_count++;
+  load_count++;
 }
 
 static void
@@ -56,15 +48,19 @@ test_buffer_manager_basic_cb3 (GObject      *object,
                                gpointer      user_data)
 {
   IdeBufferManager *buffer_manager = (IdeBufferManager *)object;
-  test_buffer_manager_basic_state *state = user_data;
+  g_autoptr(GTask) task = user_data;
+  GError *error = NULL;
   gboolean ret;
 
-  ret = ide_buffer_manager_save_file_finish (buffer_manager, result, &state->error);
+  g_unlink (tmpfilename);
+  g_free (tmpfilename);
+  tmpfilename = NULL;
 
-  g_assert_no_error (state->error);
+  ret = ide_buffer_manager_save_file_finish (buffer_manager, result, &error);
+  g_assert_no_error (error);
   g_assert (ret);
 
-  g_main_loop_quit (state->main_loop);
+  g_task_return_boolean (task, TRUE);
 }
 
 static void
@@ -75,36 +71,40 @@ test_buffer_manager_basic_cb2 (GObject      *object,
   g_autoptr(IdeBuffer) buffer = NULL;
   IdeBufferManager *buffer_manager = (IdeBufferManager *)object;
   g_autoptr(IdeProgress) progress = NULL;
+  g_autoptr(GTask) task = user_data;
+  IdeContext *context;
   IdeProject *project;
   GtkTextIter begin, end;
   IdeFile *file;
-  test_buffer_manager_basic_state *state = user_data;
   g_autofree gchar *text = NULL;
-  int fd;
+  GError *error = NULL;
+  int tmpfd;
 
-  buffer = ide_buffer_manager_load_file_finish (buffer_manager, result, &state->error);
+  context = ide_object_get_context (IDE_OBJECT (buffer_manager));
+
+  buffer = ide_buffer_manager_load_file_finish (buffer_manager, result, &error);
+  g_assert_no_error (error);
+  g_assert (!buffer || IDE_IS_BUFFER (buffer));
+
   gtk_text_buffer_get_bounds (GTK_TEXT_BUFFER (buffer), &begin, &end);
   text = gtk_text_buffer_get_text (GTK_TEXT_BUFFER (buffer), &begin, &end, TRUE);
   g_assert_cmpstr (text, ==, "LT_INIT");
 
-  g_assert_no_error (state->error);
-  g_assert (!buffer || IDE_IS_BUFFER (buffer));
+  tmpfd = g_file_open_tmp (NULL, &tmpfilename, &error);
+  g_assert_no_error (error);
+  g_assert_cmpint (-1, !=, tmpfd);
+  close (tmpfd); /* not secure, but okay for tests */
 
-  fd = g_file_open_tmp (NULL, &state->tmpfile, &state->error);
-  g_assert_no_error (state->error);
-  g_assert_cmpint (-1, !=, fd);
-  close (fd); /* not secure, but okay for tests */
-
-  project = ide_context_get_project (state->context);
-  file = ide_project_get_file_for_path (project, state->tmpfile);
+  project = ide_context_get_project (context);
+  file = ide_project_get_file_for_path (project, tmpfilename);
 
   ide_buffer_manager_save_file_async (buffer_manager,
                                       buffer,
                                       file,
                                       &progress,
-                                      state->cancellable,
+                                      g_task_get_cancellable (task),
                                       test_buffer_manager_basic_cb3,
-                                      state);
+                                      g_object_ref (task));
 
   g_assert (IDE_IS_PROGRESS (progress));
 }
@@ -114,24 +114,24 @@ test_buffer_manager_basic_cb1 (GObject      *object,
                                GAsyncResult *result,
                                gpointer      user_data)
 {
-  test_buffer_manager_basic_state *state = user_data;
   g_autoptr(IdeFile) file = NULL;
+  g_autoptr(GTask) task = user_data;
   g_autoptr(IdeProgress) progress = NULL;
+  g_autoptr(IdeContext) context = NULL;
   IdeBufferManager *buffer_manager;
   IdeProject *project;
   g_autofree gchar *path = NULL;
+  GError *error = NULL;
 
-  state->context = ide_context_new_finish (result, &state->error);
+  context = ide_context_new_finish (result, &error);
+  g_assert_no_error (error);
+  g_assert (context != NULL);
 
-  if (!state->context)
-    goto failure;
+  buffer_manager = ide_context_get_buffer_manager (context);
+  g_signal_connect (buffer_manager, "save-buffer", G_CALLBACK (save_buffer_cb), task);
+  g_signal_connect (buffer_manager, "buffer-loaded", G_CALLBACK (buffer_loaded_cb), task);
 
-  buffer_manager = ide_context_get_buffer_manager (state->context);
-
-  g_signal_connect (buffer_manager, "save-buffer", G_CALLBACK (save_buffer_cb), state);
-  g_signal_connect (buffer_manager, "buffer-loaded", G_CALLBACK (buffer_loaded_cb), state);
-
-  project = ide_context_get_project (state->context);
+  project = ide_context_get_project (context);
 
   path = g_build_filename (g_get_current_dir (), TEST_DATA_DIR, "project1", "configure.ac", NULL);
   file = ide_project_get_file_for_path (project, path);
@@ -140,64 +140,50 @@ test_buffer_manager_basic_cb1 (GObject      *object,
                                       file,
                                       FALSE,
                                       &progress,
-                                      state->cancellable,
+                                      g_task_get_cancellable (task),
                                       test_buffer_manager_basic_cb2,
-                                      state);
+                                      g_object_ref (task));
 
   g_assert (IDE_IS_PROGRESS (progress));
-
-  return;
-
-failure:
-  g_main_loop_quit (state->main_loop);
 }
 
 static void
-test_buffer_manager_basic (void)
+test_buffer_manager_basic (GCancellable        *cancellable,
+                           GAsyncReadyCallback  callback,
+                           gpointer             user_data)
 {
-  test_buffer_manager_basic_state state = { 0 };
-  IdeBufferManager *buffer_manager;
-  GFile *project_file;
+  g_autoptr(GFile) project_file = NULL;
   g_autofree gchar *path = NULL;
   const gchar *builddir = g_getenv ("G_TEST_BUILDDIR");
+  g_autoptr(GTask) task = NULL;
 
-  test_helper_begin_test ();
+  task = g_task_new (NULL, cancellable, callback, user_data);
 
   path = g_build_filename (builddir, "data", "project1", "configure.ac", NULL);
   project_file = g_file_new_for_path (path);
 
-  state.main_loop = g_main_loop_new (NULL, FALSE);
-  state.cancellable = g_cancellable_new ();
-
-  ide_context_new_async (project_file, state.cancellable,
-                         test_buffer_manager_basic_cb1, &state);
-
-  g_main_loop_run (state.main_loop);
-
-  if (state.tmpfile)
-    g_unlink (state.tmpfile);
-
-  g_assert_no_error (state.error);
-  g_assert (state.context);
-
-  buffer_manager = ide_context_get_buffer_manager (state.context);
-  g_assert (IDE_IS_BUFFER_MANAGER (buffer_manager));
-
-  g_assert_cmpint (state.load_count, ==, 1);
-  g_assert_cmpint (state.save_count, ==, 1);
-
-  g_clear_object (&state.cancellable);
-  g_clear_object (&state.context);
-  g_clear_error (&state.error);
-  g_main_loop_unref (state.main_loop);
-  g_clear_object (&project_file);
+  ide_context_new_async (project_file,
+                         cancellable,
+                         test_buffer_manager_basic_cb1,
+                         g_object_ref (task));
 }
 
 gint
 main (gint   argc,
       gchar *argv[])
 {
-  test_helper_init (&argc, &argv);
-  g_test_add_func ("/Ide/BufferManager/basic", test_buffer_manager_basic);
-  return g_test_run ();
+  IdeApplication *app;
+  gint ret;
+
+  g_test_init (&argc, &argv, NULL);
+
+  ide_log_init (TRUE, NULL);
+  ide_log_set_verbosity (4);
+
+  app = ide_application_new ();
+  ide_application_add_test (app, "/Ide/BufferManager/basic", test_buffer_manager_basic, NULL);
+  ret = g_application_run (G_APPLICATION (app), argc, argv);
+  g_object_unref (app);
+
+  return ret;
 }
