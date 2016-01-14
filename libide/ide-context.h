@@ -71,6 +71,8 @@ gboolean                  ide_context_restore_finish        (IdeContext         
                                                              GAsyncResult         *result,
                                                              GError              **error);
 void                      ide_context_hold                  (IdeContext           *self);
+void                      ide_context_hold_for_object       (IdeContext           *self,
+                                                             gpointer              instance);
 void                      ide_context_release               (IdeContext           *self);
 
 G_END_DECLS

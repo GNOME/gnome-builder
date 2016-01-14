@@ -1876,6 +1876,24 @@ ide_context_hold (IdeContext *self)
 }
 
 /**
+ * ide_context_hold_for_object:
+ * @self: An #IdeContext
+ * @instance: (type GObject.Object): A #GObject instance
+ *
+ * Adds a hold on @self for the lifetime of @instance.
+ */
+void
+ide_context_hold_for_object (IdeContext *self,
+                             gpointer    instance)
+{
+  g_return_if_fail (IDE_IS_CONTEXT (self));
+  g_return_if_fail (G_IS_OBJECT (instance));
+
+  ide_context_hold (self);
+  g_object_set_data_full (instance, "IDE_CONTEXT", self, (GDestroyNotify)ide_context_release);
+}
+
+/**
  * ide_context_release:
  * @self: the #IdeContext
  *
