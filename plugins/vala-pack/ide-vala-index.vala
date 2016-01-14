@@ -93,6 +93,10 @@ namespace Ide
 			/* TODO: find packages from build system */
 			this.code_context.add_external_package ("gio-2.0");
 			this.code_context.add_external_package ("gtk+-3.0");
+			this.code_context.add_external_package ("gtksourceview-3.0");
+			this.code_context.add_external_package ("libide-1.0");
+			this.code_context.add_external_package ("libpeas-1.0");
+			this.code_context.add_external_package ("libvala-0.32");
 
 			this.report = new Ide.ValaDiagnostics ();
 			this.code_context.report = this.report;

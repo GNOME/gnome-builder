@@ -124,7 +124,7 @@ namespace Ide
 					return false;
 			}
 
-			if (Ide.CompletionProvider.context_in_comment (context))
+			if (Ide.CompletionProvider.context_in_comment_or_string (context))
 				return false;
 
 			return true;

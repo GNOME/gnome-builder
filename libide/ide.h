@@ -115,6 +115,7 @@ G_BEGIN_DECLS
 #include "ide-workbench.h"
 #include "ide-workbench-addin.h"
 #include "ide-workbench-header-bar.h"
+#include "ide-worker.h"
 
 #include "editor/ide-editor-perspective.h"
 #include "editor/ide-editor-view.h"
