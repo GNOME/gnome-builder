@@ -85,15 +85,6 @@ new_context_cb (GObject      *object,
 
       indent_tests [i].func (context, widget);
 
-#if 0
-      ide_context_unload_async (context,
-                                NULL,
-                                (GAsyncReadyCallback)gtk_main_quit,
-                                NULL);
-#else
-      gtk_main_quit ();
-#endif
-
       g_object_unref (buffer);
       g_object_unref (file);
     }
