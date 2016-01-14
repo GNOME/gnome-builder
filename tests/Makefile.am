@@ -64,6 +64,7 @@ TESTS_ENVIRONMENT= \
 	G_TEST_SRCDIR="$(abs_srcdir)" 		                    \
 	G_TEST_BUILDDIR="$(abs_builddir)" 	                    \
 	G_DEBUG=gc-friendly 			                    \
+	G_SETTINGS_BACKEND=memory                                   \
 	GB_IN_TREE_PLUGINS=1                                        \
 	MALLOC_CHECK_=2 			                    \
 	MALLOC_PERTURB_=$$(($${RANDOM:-256} % 256))
@@ -131,21 +132,8 @@ test_ide_vcs_uri_LDADD = $(tests_libs)
 
 TESTS += test-vim
 test_vim_SOURCES = test-vim.c
-test_vim_CFLAGS = \
-	$(tests_cflags) \
-	-I$(top_srcdir)/src/resources \
-	-I$(top_builddir)/src/resources \
-	$(NULL)
-test_vim_LDADD = \
-	$(tests_libs) \
-	$(top_builddir)/src/libgnome-builder.la \
-	$(NULL)
-
-
-misc_programs += test-ide-source-view
-test_ide_source_view_SOURCES = test-ide-source-view.c
-test_ide_source_view_CFLAGS = $(tests_cflags)
-test_ide_source_view_LDADD = $(tests_libs)
+test_vim_CFLAGS = $(tests_cflags)
+test_vim_LDADD = $(tests_libs)
 
 
 misc_programs += test-cpu-graph
@@ -158,12 +146,6 @@ misc_programs += test-fuzzy
 test_fuzzy_SOURCES = test-fuzzy.c
 test_fuzzy_CFLAGS = $(search_cflags)
 test_fuzzy_LDADD = $(search_libs)
-
-
-misc_programs += test-slider
-test_slider_SOURCES = test-slider.c
-test_slider_CFLAGS = $(tests_cflags)
-test_slider_LDADD = $(tests_libs)
 
 
 #TESTS += test-ide-ctags

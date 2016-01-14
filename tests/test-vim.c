@@ -19,26 +19,42 @@
 #include <ide.h>
 #include <string.h>
 
-#include "gb-plugins.h"
-#include "gb-resources.h"
-#include "test-helper.h"
+#include "ide-application-tests.h"
 #include "util/ide-gdk.h"
 
 typedef void (*VimTestFunc) (IdeContext *context,
                              GtkWidget  *widget);
 
-typedef struct
-{
+static void test_vim_basic_cb (IdeContext *context,
+                               GtkWidget  *widget);
+
+struct {
+  const gchar *path;
   VimTestFunc  func;
-  gchar       *path;
-} VimTest;
+} vim_tests [] = {
+  { "test.c", test_vim_basic_cb },
+  { NULL }
+};
+
+static void
+load_vim_css (void)
+{
+  GtkCssProvider *provider;
+
+  provider = gtk_css_provider_new ();
+  gtk_css_provider_load_from_resource (provider, "/org/gnome/builder/keybindings/vim.css");
+  gtk_style_context_add_provider_for_screen (gdk_screen_get_default (),
+                                             GTK_STYLE_PROVIDER (provider),
+                                             GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+  g_clear_object (&provider);
+}
 
 static void
 new_context_cb (GObject      *object,
                 GAsyncResult *result,
                 gpointer      user_data)
 {
-  VimTest *test = user_data;
+  g_autoptr(GTask) test = user_data;
   GtkWidget *window;
   GtkWidget *widget;
   IdeBuffer *buffer;
@@ -48,40 +64,40 @@ new_context_cb (GObject      *object,
   IdeFile *file;
   GError *error = NULL;
 
-  g_assert (test != NULL);
-  g_assert (test->func != NULL);
-  g_assert (test->path != NULL);
-
   context = ide_context_new_finish (result, &error);
   g_assert_no_error (error);
   g_assert (context != NULL);
   g_assert (IDE_IS_CONTEXT (context));
 
   project = ide_context_get_project (context);
-  file = ide_project_get_file_for_path (project, test->path);
 
-  buffer = g_object_new (IDE_TYPE_BUFFER,
-                         "context", context,
-                         "file", file,
-                         NULL);
+  for (gint i = 0; vim_tests [i].path; i++)
+    {
+      file = ide_project_get_file_for_path (project, vim_tests [i].path);
 
-  window = gtk_offscreen_window_new ();
-  widget = g_object_new (IDE_TYPE_SOURCE_VIEW,
-                         "auto-indent", TRUE,
-                         "buffer", buffer,
-                         "visible", TRUE,
-                         NULL);
-  gtk_container_add (GTK_CONTAINER (window), widget);
+      buffer = g_object_new (IDE_TYPE_BUFFER,
+                             "context", context,
+                             "file", file,
+                             NULL);
 
-  completion = gtk_source_view_get_completion (GTK_SOURCE_VIEW (widget));
-  gtk_source_completion_block_interactive (completion);
+      window = gtk_offscreen_window_new ();
+      widget = g_object_new (IDE_TYPE_SOURCE_VIEW,
+                             "auto-indent", TRUE,
+                             "buffer", buffer,
+                             "visible", TRUE,
+                             NULL);
+      gtk_container_add (GTK_CONTAINER (window), widget);
 
-  gtk_window_present (GTK_WINDOW (window));
+      completion = gtk_source_view_get_completion (GTK_SOURCE_VIEW (widget));
+      gtk_source_completion_block_interactive (completion);
 
-  while (gtk_events_pending ())
-    gtk_main_iteration ();
+      gtk_window_present (GTK_WINDOW (window));
 
-  test->func (context, widget);
+      while (gtk_events_pending ())
+        gtk_main_iteration ();
+
+      vim_tests [i].func (context, widget);
+    }
 
 #if 0
   ide_context_unload_async (context,
@@ -91,31 +107,25 @@ new_context_cb (GObject      *object,
 #else
   gtk_main_quit ();
 #endif
-
-  g_object_unref (buffer);
-  g_object_unref (file);
-  g_free (test->path);
-  g_free (test);
 }
 
 static void
-run_test (const gchar *path,
-          VimTestFunc  func)
+test_vim_basic (GCancellable        *cancellable,
+                GAsyncReadyCallback  callback,
+                gpointer             user_data)
 {
   g_autoptr(GFile) project_file = NULL;
-  VimTest *test;
+  GTask *task;
 
-  test = g_new0 (VimTest, 1);
-  test->path = g_strdup (path);
-  test->func = func;
+  load_vim_css ();
 
+  task = g_task_new (NULL, cancellable, callback, user_data);
   project_file = g_file_new_for_path (TEST_DATA_DIR"/project1/configure.ac");
   ide_context_new_async (project_file,
                          NULL,
                          new_context_cb,
-                         test);
+                         task);
 
-  gtk_main ();
 }
 
 /*
@@ -187,34 +197,22 @@ test_vim_basic_cb (IdeContext *context,
 #endif
 }
 
-static void
-test_vim_basic (void)
-{
-  test_helper_begin_test ();
-  run_test ("test.c", test_vim_basic_cb);
-}
-
-static void
-load_vim_css (void)
-{
-  GtkCssProvider *provider;
-
-  g_resources_register (gb_get_resource ());
-
-  provider = gtk_css_provider_new ();
-  gtk_css_provider_load_from_resource (provider, "/org/gnome/builder/keybindings/vim.css");
-  gtk_style_context_add_provider_for_screen (gdk_screen_get_default (),
-                                             GTK_STYLE_PROVIDER (provider),
-                                             GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-  g_clear_object (&provider);
-}
-
 gint
-main (gint argc,
+main (gint   argc,
       gchar *argv[])
 {
-  test_helper_init (&argc, &argv);
-  load_vim_css ();
-  g_test_add_func ("/Ide/Vim/basic", test_vim_basic);
-  return g_test_run ();
+  IdeApplication *app;
+  gint ret;
+
+  g_test_init (&argc, &argv, NULL);
+
+  ide_log_init (TRUE, NULL);
+  ide_log_set_verbosity (4);
+
+  app = ide_application_new ();
+  ide_application_add_test (app, "/Ide/Vim/basic", test_vim_basic, NULL);
+  ret = g_application_run (G_APPLICATION (app), argc, argv);
+  g_object_unref (app);
+
+  return ret;
 }

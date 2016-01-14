@@ -20,36 +20,36 @@
 #include <ide.h>
 #include <string.h>
 
-#include "gb-plugins.h"
-#include "test-helper.h"
+#include "ide-application-tests.h"
 
 typedef void (*IndentTestFunc) (IdeContext *context,
                                 GtkWidget  *widget);
 
-typedef struct
-{
+static void test_cindenter_basic_check (IdeContext *context,
+                                        GtkWidget  *widget);
+
+struct {
+  const gchar    *path;
   IndentTestFunc  func;
-  gchar          *path;
-} IndentTest;
+} indent_tests [] = {
+  { "test.c", test_cindenter_basic_check },
+  { NULL }
+};
 
 static void
 new_context_cb (GObject      *object,
                 GAsyncResult *result,
                 gpointer      user_data)
 {
-  IndentTest *test = user_data;
+  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeContext) context = NULL;
   GtkWidget *window;
   GtkWidget *widget;
   IdeBuffer *buffer;
   GtkSourceCompletion *completion;
-  IdeContext *context;
   IdeProject *project;
   IdeFile *file;
   GError *error = NULL;
-
-  g_assert (test != NULL);
-  g_assert (test->func != NULL);
-  g_assert (test->path != NULL);
 
   context = ide_context_new_finish (result, &error);
   g_assert_no_error (error);
@@ -57,135 +57,46 @@ new_context_cb (GObject      *object,
   g_assert (IDE_IS_CONTEXT (context));
 
   project = ide_context_get_project (context);
-  file = ide_project_get_file_for_path (project, test->path);
 
-  buffer = g_object_new (IDE_TYPE_BUFFER,
-                         "context", context,
-                         "file", file,
-                         NULL);
+  for (gint i = 0; indent_tests [i].path; i++)
+    {
+      file = ide_project_get_file_for_path (project, indent_tests [i].path);
 
-  window = gtk_offscreen_window_new ();
-  widget = g_object_new (IDE_TYPE_SOURCE_VIEW,
-                         "auto-indent", TRUE,
-                         "buffer", buffer,
-                         "visible", TRUE,
-                         NULL);
-  gtk_container_add (GTK_CONTAINER (window), widget);
+      buffer = g_object_new (IDE_TYPE_BUFFER,
+                             "context", context,
+                             "file", file,
+                             NULL);
 
-  completion = gtk_source_view_get_completion (GTK_SOURCE_VIEW (widget));
-  gtk_source_completion_block_interactive (completion);
+      window = gtk_offscreen_window_new ();
+      widget = g_object_new (IDE_TYPE_SOURCE_VIEW,
+                             "auto-indent", TRUE,
+                             "buffer", buffer,
+                             "visible", TRUE,
+                             NULL);
+      gtk_container_add (GTK_CONTAINER (window), widget);
 
-  gtk_window_present (GTK_WINDOW (window));
+      completion = gtk_source_view_get_completion (GTK_SOURCE_VIEW (widget));
+      gtk_source_completion_block_interactive (completion);
 
-  while (gtk_events_pending ())
-    gtk_main_iteration ();
+      gtk_window_present (GTK_WINDOW (window));
 
-  test->func (context, widget);
+      while (gtk_events_pending ())
+        gtk_main_iteration ();
+
+      indent_tests [i].func (context, widget);
 
 #if 0
-  ide_context_unload_async (context,
-                            NULL,
-                            (GAsyncReadyCallback)gtk_main_quit,
-                            NULL);
+      ide_context_unload_async (context,
+                                NULL,
+                                (GAsyncReadyCallback)gtk_main_quit,
+                                NULL);
 #else
-  gtk_main_quit ();
+      gtk_main_quit ();
 #endif
 
-  g_object_unref (buffer);
-  g_object_unref (file);
-  g_free (test->path);
-  g_free (test);
-}
-
-static void
-run_test (const gchar    *path,
-          IndentTestFunc  func)
-{
-  g_autoptr(GFile) project_file = NULL;
-  IndentTest *test;
-
-  test = g_new0 (IndentTest, 1);
-  test->path = g_strdup (path);
-  test->func = func;
-
-  project_file = g_file_new_for_path (TEST_DATA_DIR"/project1/configure.ac");
-  ide_context_new_async (project_file,
-                         NULL,
-                         new_context_cb,
-                         test);
-
-  gtk_main ();
-}
-
-static GdkEventKey *
-synthesize_event (GtkTextView *text_view,
-                  gunichar     ch)
-{
-  GdkDisplay *display;
-  GdkDeviceManager *device_manager;
-  GdkDevice *client_pointer;
-  GdkWindow *window;
-  GdkEvent *ev;
-  GdkKeymapKey *keys = NULL;
-  gint n_keys = 0;
-  gchar str[8] = { 0 };
-
-  window = gtk_text_view_get_window (text_view, GTK_TEXT_WINDOW_TEXT);
-  g_assert (window != NULL);
-  g_assert (GDK_IS_WINDOW (window));
-
-  g_unichar_to_utf8 (ch, str);
-
-  ev = gdk_event_new (GDK_KEY_PRESS);
-  ev->key.window = g_object_ref (window);
-  ev->key.send_event = TRUE;
-  ev->key.time = gtk_get_current_event_time ();
-  ev->key.state = 0;
-  ev->key.hardware_keycode = 0;
-  ev->key.group = 0;
-  ev->key.is_modifier = 0;
-
-  switch (ch)
-    {
-    case '\n':
-      ev->key.keyval = GDK_KEY_Return;
-      ev->key.string = g_strdup ("\n");
-      ev->key.length = 1;
-      break;
-
-    case '\e':
-      ev->key.keyval = GDK_KEY_Escape;
-      ev->key.string = g_strdup ("");
-      ev->key.length = 0;
-      break;
-
-    default:
-      ev->key.keyval = gdk_unicode_to_keyval (ch);
-      ev->key.length = strlen (str);
-      ev->key.string = g_strdup (str);
-      break;
+      g_object_unref (buffer);
+      g_object_unref (file);
     }
-
-  gdk_keymap_get_entries_for_keyval (gdk_keymap_get_default (),
-                                     ev->key.keyval,
-                                     &keys,
-                                     &n_keys);
-
-  if (n_keys > 0)
-    {
-      ev->key.hardware_keycode = keys [0].keycode;
-      ev->key.group = keys [0].group;
-      if (keys [0].level == 1)
-        ev->key.state |= GDK_SHIFT_MASK;
-      g_free (keys);
-    }
-
-  display = gdk_window_get_display (ev->any.window);
-  device_manager = gdk_display_get_device_manager (display);
-  client_pointer = gdk_device_manager_get_client_pointer (device_manager);
-  gdk_event_set_device (ev, gdk_device_get_associated_device (client_pointer));
-
-  return &ev->key;
 }
 
 /*
@@ -202,11 +113,14 @@ assert_keypress_equal (GtkWidget   *widget,
   GtkTextBuffer *buffer;
   GtkTextIter begin;
   GtkTextIter end;
+  GdkWindow *window;
 
   g_assert (GTK_IS_TEXT_VIEW (widget));
 
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (widget));
   g_assert (GTK_IS_TEXT_BUFFER (buffer));
+
+  window = gtk_widget_get_window (GTK_WIDGET (text_view));
 
   for (; *input_chars; input_chars = g_utf8_next_char (input_chars))
     {
@@ -216,7 +130,7 @@ assert_keypress_equal (GtkWidget   *widget,
       while (gtk_events_pending ())
         gtk_main_iteration ();
 
-      event = synthesize_event (text_view, ch);
+      event = ide_gdk_synthesize_event_key (window, ch);
       gtk_main_do_event ((GdkEvent *)event);
       gdk_event_free ((GdkEvent *)event);
     }
@@ -230,8 +144,8 @@ assert_keypress_equal (GtkWidget   *widget,
 }
 
 static void
-test_cindenter_basic_cb (IdeContext *context,
-                         GtkWidget  *widget)
+test_cindenter_basic_check (IdeContext *context,
+                            GtkWidget  *widget)
 {
   g_object_set (widget,
                 "insert-matching-brace", TRUE,
@@ -247,18 +161,34 @@ test_cindenter_basic_cb (IdeContext *context,
 }
 
 static void
-test_cindenter_basic (void)
+test_cindenter_basic (GCancellable        *cancellable,
+                      GAsyncReadyCallback  callback,
+                      gpointer             user_data)
 {
-  test_helper_begin_test ();
+  g_autoptr(GFile) project_file = NULL;
+  GTask *task;
 
-  run_test ("test.c", test_cindenter_basic_cb);
+  task = g_task_new (NULL, cancellable, callback, user_data);
+  project_file = g_file_new_for_path (TEST_DATA_DIR"/project1/configure.ac");
+  ide_context_new_async (project_file, NULL, new_context_cb, task);
 }
 
 gint
 main (gint argc,
       gchar *argv[])
 {
-  test_helper_init (&argc, &argv);
-  g_test_add_func ("/Ide/CIndenter/basic", test_cindenter_basic);
-  return g_test_run ();
+  IdeApplication *app;
+  gint ret;
+
+  g_test_init (&argc, &argv, NULL);
+
+  ide_log_init (TRUE, NULL);
+  ide_log_set_verbosity (4);
+
+  app = ide_application_new ();
+  ide_application_add_test (app, "/Ide/CIndenter/basic", test_cindenter_basic, NULL);
+  ret = g_application_run (G_APPLICATION (app), argc, argv);
+  g_object_unref (app);
+
+  return ret;
 }

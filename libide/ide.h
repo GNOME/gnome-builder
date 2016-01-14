@@ -127,6 +127,7 @@ G_BEGIN_DECLS
 #include "local/ide-local-device.h"
 #include "search/ide-omni-search-row.h"
 #include "util/ide-file-manager.h"
+#include "util/ide-gdk.h"
 #include "util/ide-gtk.h"
 #include "util/ide-line-reader.h"
 #include "util/ide-list-inline.h"
