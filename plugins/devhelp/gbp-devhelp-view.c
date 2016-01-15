@@ -129,7 +129,7 @@ gbp_devhelp_view_class_init (GbpDevhelpViewClass *klass)
 
   g_object_class_install_properties (object_class, LAST_PROP, properties);
 
-  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/plugins/devhelp/gbp-devhelp-view.ui");
+  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/plugins/devhelp-plugin/gbp-devhelp-view.ui");
   gtk_widget_class_bind_template_child (widget_class, GbpDevhelpView, web_view1);
 
   g_type_ensure (WEBKIT_TYPE_WEB_VIEW);
