@@ -60,10 +60,26 @@ ide_css_provider_update (IdeCssProvider *self)
   g_assert (IDE_IS_CSS_PROVIDER (self));
   g_assert (GTK_IS_SETTINGS (self->settings));
 
-  g_object_get (self->settings,
-                "gtk-theme-name", &theme_name,
-                "gtk-application-prefer-dark-theme", &prefer_dark_theme,
-                NULL);
+  if ((theme_name = g_strdup(g_getenv ("GTK_THEME"))))
+    {
+      char *p;
+
+      /* Theme variants are specified with the syntax
+       * "<theme>:<variant>" e.g. "Adwaita:dark" */
+      if ((p = strrchr (theme_name, ':')))
+        {
+          *p = '\0';
+          p++;
+          prefer_dark_theme = g_strcmp0 (p, "dark") == 0;
+        }
+    }
+  else
+    {
+      g_object_get (self->settings,
+                    "gtk-theme-name", &theme_name,
+                    "gtk-application-prefer-dark-theme", &prefer_dark_theme,
+                    NULL);
+    }
 
   resource_path = g_strdup_printf ("%s/theme/%s%s.css",
                                    self->base_path,
