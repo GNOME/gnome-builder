@@ -182,7 +182,7 @@ ide_git_clone_widget_class_init (IdeGitCloneWidgetClass *klass)
                                                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS)));
 
   gtk_widget_class_set_css_name (widget_class, "gitclonewidget");
-  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/plugins/git/ide-git-clone-widget.ui");
+  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/plugins/git-plugin/ide-git-clone-widget.ui");
   gtk_widget_class_bind_template_child (widget_class, IdeGitCloneWidget, clone_error_label);
   gtk_widget_class_bind_template_child (widget_class, IdeGitCloneWidget, clone_location_button);
   gtk_widget_class_bind_template_child (widget_class, IdeGitCloneWidget, clone_location_entry);
