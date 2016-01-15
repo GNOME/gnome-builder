@@ -122,8 +122,6 @@ egg_menu_manager_menu_contains (EggMenuManager *self,
                                 GMenu          *menu,
                                 GMenuItem      *item)
 {
-  g_autoptr(GMenuModel) section = NULL;
-  g_autoptr(GMenuModel) submenu = NULL;
   const gchar *link_id;
   const gchar *label;
 
