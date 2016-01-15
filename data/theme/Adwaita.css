@@ -50,8 +50,12 @@ layouttab:backdrop {
 
 
 layoutpane > box.vertical:first-child > box.horizontal {
-  background: #d6d6d6;
-  box-shadow: inset 0 2px 3px -1px #b6b6b6;
+  background-color: #d6d6d6;
+  box-shadow: 0 4px 3px -5px #aaa inset,
+              0 -1px 0 #a1a1a1 inset;
+}
+layoutpane:backdrop > box.vertical:first-child > box.horizontal {
+  box-shadow: 0 -1px 0 #a1a1a1 inset;
 }
 layoutpane stackswitcher button:checked {
   box-shadow: 0 -2px 0 #4a90d9 inset;
