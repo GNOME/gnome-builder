@@ -80,6 +80,7 @@ workbench preferences preferencesgroup list row:last-child {
 }
 workbench preferences preferencesgroup list entry {
   background: none;
+  min-height: 0px;
 }
 
 
