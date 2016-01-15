@@ -370,6 +370,8 @@ ide_preferences_bin_class_init (IdePreferencesBinClass *klass)
 
   g_object_class_install_properties (object_class, LAST_PROP, properties);
 
+  gtk_widget_class_set_css_name (widget_class, "preferencesbin");
+
   settings_cache = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
 }
 

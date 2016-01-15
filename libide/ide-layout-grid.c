@@ -645,7 +645,7 @@ ide_layout_grid_set_focus (IdeLayoutGrid  *self,
       GtkStyleContext *style_context;
 
       style_context = gtk_widget_get_style_context (GTK_WIDGET (self->last_focus));
-      gtk_style_context_remove_class (style_context, "focus");
+      gtk_style_context_remove_class (style_context, "focus-stack");
       ide_clear_weak_pointer (&self->last_focus);
     }
 
@@ -654,7 +654,7 @@ ide_layout_grid_set_focus (IdeLayoutGrid  *self,
       GtkStyleContext *style_context;
 
       style_context = gtk_widget_get_style_context (GTK_WIDGET (stack));
-      gtk_style_context_add_class (style_context, "focus");
+      gtk_style_context_add_class (style_context, "focus-stack");
       ide_set_weak_pointer (&self->last_focus, stack);
     }
 }
@@ -678,7 +678,7 @@ ide_layout_grid_toplevel_set_focus (GtkWidget     *toplevel,
       GtkStyleContext *style_context;
 
       style_context = gtk_widget_get_style_context (GTK_WIDGET (self->last_focus));
-      gtk_style_context_remove_class (style_context, "focus");
+      gtk_style_context_remove_class (style_context, "focus-stack");
     }
 
   if (focus != NULL)

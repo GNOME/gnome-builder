@@ -317,6 +317,8 @@ ide_preferences_flow_box_class_init (IdePreferencesFlowBoxClass *klass)
   widget_class->get_preferred_width = ide_preferences_flow_box_get_preferred_width;
 
   container_class->add = ide_preferences_flow_box_add;
+
+  gtk_widget_class_set_css_name (widget_class, "preferencesflowbox");
 }
 
 static void

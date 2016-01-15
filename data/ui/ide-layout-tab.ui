@@ -7,6 +7,7 @@
         <property name="visible">true</property>
         <child>
           <object class="GtkBox">
+            <property name="margin-start">3</property>
             <property name="visible">true</property>
             <style>
               <class name="navigation"/>

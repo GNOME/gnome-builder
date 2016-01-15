@@ -174,6 +174,7 @@ ide_preferences_group_class_init (IdePreferencesGroupClass *klass)
   g_object_class_install_properties (object_class, LAST_PROP, properties);
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/ui/ide-preferences-group.ui");
+  gtk_widget_class_set_css_name (widget_class, "preferencesgroup");
   gtk_widget_class_bind_template_child (widget_class, IdePreferencesGroup, box);
   gtk_widget_class_bind_template_child (widget_class, IdePreferencesGroup, list_box);
   gtk_widget_class_bind_template_child (widget_class, IdePreferencesGroup, list_box_frame);

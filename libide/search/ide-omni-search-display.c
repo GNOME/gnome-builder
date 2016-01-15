@@ -631,6 +631,8 @@ ide_omni_search_display_class_init (IdeOmniSearchDisplayClass *klass)
                                 G_TYPE_NONE,
                                 1,
                                 IDE_TYPE_SEARCH_RESULT);
+
+  gtk_widget_class_set_css_name (widget_class, "omnisearchdisplay");
 }
 
 static void

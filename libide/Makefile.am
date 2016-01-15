@@ -302,6 +302,8 @@ libide_1_0_la_SOURCES = \
 	ide-line-change-gutter-renderer.h \
 	ide-line-diagnostics-gutter-renderer.c \
 	ide-line-diagnostics-gutter-renderer.h \
+	ide-perspective-switcher.c \
+	ide-perspective-switcher.h \
 	ide-ref-ptr.c \
 	ide-ref-ptr.h \
 	ide-search-reducer.c \

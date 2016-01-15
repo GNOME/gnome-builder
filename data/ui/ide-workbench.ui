@@ -32,7 +32,7 @@
                 <property name="orientation">horizontal</property>
                 <property name="visible">true</property>
                 <child>
-                  <object class="GtkStackSwitcher" id="perspectives_stack_switcher">
+                  <object class="IdePerspectiveSwitcher" id="perspectives_stack_switcher">
                     <property name="icon-size">3</property>
                     <property name="orientation">vertical</property>
                     <property name="stack">perspectives_stack</property>

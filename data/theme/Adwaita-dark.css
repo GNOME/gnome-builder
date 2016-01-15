@@ -1,268 +1,60 @@
 @import url("resource:///org/gnome/builder/theme/Adwaita-shared.css");
 
 
-treeview.view {
+eggsearchbar box.search-bar {
+  background-color: #303535;
+  box-shadow: 0 4px 3px -5px #2c3030 inset,
+              0 -1px 0 #1c1f1f inset;
+}
+eggsearchbar:backdrop box.search-bar {
+  box-shadow: 0 -1px 0 #2c3030 inset;
+}
+
+
+perspectiveswitcher {
+  background-color: #303535;
+}
+perspectiveswitcher button {
+  color: #696c6b;
+}
+perspectiveswitcher button:checked,
+perspectiveswitcher button:checked:hover {
   color: #eeeeec;
-  background-color: mix(#292929, #2e3436, 0.8);
 }
-treeview.view:backdrop {
-  color: #a1a1a1;
-  background-color: #2e3436;
-}
-treeview.view.cell:selected {
-  color: #fff;
-  background-color: #215d9c;
+perspectiveswitcher button:hover {
+  color: #b2b4b2;
 }
 
 
 pillbox {
-  background-color: #1e1e1e;
-  border-radius: 3px;
+  background-color: #333435;
 }
-
-
-RgGraph {
-  background-color: #2e3436;
-  background-size: 8px 8px;
-  background-image: repeating-linear-gradient(0deg, #32383a, #32383a 1px, transparent 1px, transparent 8px),
-                    repeating-linear-gradient(-90deg, #32383a, #32383a 1px, transparent 1px, transparent 8px);
-}
-
-
-GbTerminalView {
-  background-color: #2e3436;
-  color: #babdb6;
-}
-
-
-treeview.dim-label {
-  color: #979a99;
-}
-
-treeview:backdrop.dim-label {
-  color: #6d6f70;
-}
-
-
-GbAccelLabel .frame {
-  background-color: #222;
-  border: 1px solid #cecece;
-  border-color: #1c1f1f;
-  border-radius: 5px;
-  color: #eeeeec;
-  padding: 3px 8px 3px 8px;
-  box-shadow: 0px 1px 0px #333 inset,
-              0px -1px 0px #111 inset;
-}
-
-
-box.horizontal.search-bar {
-  background: none;
-  background-color: #303535;
-  box-shadow: inset 0 2px 3px -1px #242828, 0 1px rgba(238, 238, 236, 0.1);
-  border: none;
-  border-bottom: 1px solid #1c1f1f;
-}
-box.horizontal.search-bar:backdrop {
-  border-color: #1f2222;
-  background-color: #303535;
-  box-shadow: none;
-}
-
-
-workbench > GtkOverlay > stack > box > stackswitcher.vertical:first-child {
-  background: #2e3436;
-}
-workbench > GtkOverlay > stack > box > stackswitcher.vertical:first-child button {
-  padding: 6px;
-  color: #979a99;
-  background: transparent;
-  box-shadow: none;
-  border: none;
-  border-radius: 0px;
-}
-workbench > GtkOverlay > stack > box > stackswitcher.vertical:first-child button:checked {
-  color: #babdb6;
-}
-
-
-
-omnisearchrow {
-  color: #eeeeec;
-}
-
-
 
 
 layouttabbar {
-  background-image: none;
-  background-color: #2e3436;
-  border-style: none;
-  border-radius: 0px;
-  border-bottom: 1px solid #1c1f1f;
-  color: #2e3436;
-  box-shadow: 0px 5px 5px -10px #101010 inset;
+  background-color: #303535;
+  box-shadow: 0 4px 3px -5px #2c3030 inset,
+              0 -1px 0 #1c1f1f inset;
 }
-
-layouttabbar button {
-  background-image: none;
-  background-color: transparent;
-  color: #585858;
-  border-style: none;
-  border-radius: 0px;
-  box-shadow: none;
-  padding: 9px;
-}
-
-layouttab button:disabled {
-  opacity: 0.3;
-}
-
-layouttabbar > box > button:hover {
-  color: #eeeeec;
-}
-
-layouttab {
-  background-image: none;
-  background-color: transparent;
-  border-style: none;
-  border-radius: 0 0 3px 3px;
-  border-bottom: 1px solid @borders;
-  color: #c8c8c8;
-}
-
-layoutstack.focus layouttab {
-  background-color: #343939;
-  border-bottom: 3px solid #215d9c;
-  border-left: 1px solid #282b2b;
-  border-right: 1px solid #282b2b;
-  box-shadow: 0px 5px 5px -10px #101010 inset;
-}
-
-layoutstack:not(.focus) layouttab:hover {
-  background-color: transparent;
-  border-bottom: 3px solid #888a85;
-  border-left: 1px solid #282b2b;
-  border-right: 1px solid #282b2b;
-  box-shadow: 0px 5px 5px -10px #101010 inset;
-}
-
-layouttab button {
-  background-image: none;
-  background-color: transparent;
-  color: #6c6f6e;
-  border-style: none;
-  border-radius: 0px;
-  box-shadow: none;
-}
-
-layouttab label {
-  color: #eeeeec;
-  text-shadow: 0 1px #101010;
-  margin-bottom: -2px;
-}
-
-layouttab label:backdrop {
-  text-shadow: none;
-}
-
-layouttab separator {
-  margin: 7px 0 8px 0;
-  padding: 0;
-  background-color: alpha(@borders,.2);
-  min-width: 0px;
-}
-
-layoutstack.focus layouttabbar layouttab:backdrop,
-layoutstack layouttabbar layouttab:backdrop,
-layoutstack layouttabbar layouttab:hover:backdrop,
 layouttabbar:backdrop {
+  box-shadow: 0 -1px 0 #2c3030 inset;
+}
+layouttab {
+  border-bottom-color: #215d9c;
+  box-shadow: 0 4px 3px -5px #2c3030 inset;
+}
+layouttab:backdrop {
+  background-color: #393f3f;
+  border-right-color: alpha(@borders, 0.5);
+  border-left-color: alpha(@borders, 0.5);
   box-shadow: none;
 }
 
-layoutstack layouttab button.close {
-  border-style: solid;
-  border-radius: 5px;
-  border-width: 1px;
-  border-color: transparent;
-  color: #acadae;
-  padding: 1px;
-  margin: 0px;
+
+layoutpane > box.vertical:first-child > box.horizontal {
+  background: #d6d6d6;
+  box-shadow: inset 0 2px 3px -1px #b6b6b6;
 }
-
-layoutstack layouttab button.close:hover {
-  border-color: #1c1f1f;
-  color: #eeeeec;
-}
-
-layoutstack layouttab button.close:active {
-  border-color: #1c1f1f;
-  color: #eeeeec;
-  background-image: linear-gradient(#2e3436, #2d3232);
-}
-
-.views-list row {
-  padding: 6px;
-}
-
-.views-list row button {
-  box-shadow: none;
-  padding: 0px;
-  border-style: none;
-  border-width: 0px;
-  background-image: none;
-  background-color: transparent;
-  color: #acadae;
-  opacity: 0.0;
-}
-
-.views-list row:selected button {
-  color: white;
-}
-
-.views-list row:hover button {
-  opacity: 1.0;
-}
-
-
-/* this still needs better alignment with non-11pt cantarell */
-layoutpane > box > box:first-child {
-  background-image: none;
-  background-color: #2e3436;
-  border-style: none;
-  border-radius: 0px;
-  border-width: 0px;
-  color: #2e3436;
-  box-shadow: 0px 5px 5px -10px #101010 inset,
-              0px -1px 0px #1c1f1f inset;
-}
-
-layoutpane > box > box:first-child > stackswitcher > button {
-  background-image: none;
-  background-color: transparent;
-  border-style: none;
-  border-radius: 0px;
-  border-bottom: 3px solid transparent;
-  box-shadow: none;
-  padding: 6px 1px 7px 1px;
-  color: #888a85;
-  text-shadow: none;
-  font-weight: bold;
-  min-width: 0;
-  margin-right: 6px;
-}
-
-layoutpane > box > box:first-child > stackswitcher > button:last-child {
-  margin-right: 0px;
-}
-
-layoutpane > box > box:first-child > stackswitcher > button > label {
-  margin-top: 2px;
-  margin-bottom: -2px;
-}
-
-layoutpane > box > box:first-child > stackswitcher > button:checked {
-  border-bottom: 3px solid @theme_selected_bg_color;
-  color: #fafafa;
-  text-shadow: 0 1px #101010;
+layoutpane stackswitcher button:checked {
+  box-shadow: 0 -2px 0 #4a90d9 inset;
 }

@@ -269,25 +269,6 @@ ide_omni_search_group_select_last (IdeOmniSearchGroup *self)
     }
 }
 
-static void
-ide_omni_search_group_header_cb (GtkListBoxRow *row,
-                                 GtkListBoxRow *before,
-                                 gpointer       user_data)
-{
-  g_return_if_fail (GTK_IS_LIST_BOX_ROW (row));
-
-  if (row)
-    {
-      GtkWidget *header;
-
-      header = g_object_new (GTK_TYPE_SEPARATOR,
-                             "orientation", GTK_ORIENTATION_HORIZONTAL,
-                             "visible", TRUE,
-                             NULL);
-      gtk_list_box_row_set_header (row, header);
-    }
-}
-
 static gboolean
 ide_omni_search_group_keynav_failed (IdeOmniSearchGroup *self,
                                      GtkDirectionType    dir,
@@ -392,6 +373,7 @@ ide_omni_search_group_class_init (IdeOmniSearchGroupClass *klass)
                   IDE_TYPE_SEARCH_RESULT);
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/ui/ide-omni-search-group.ui");
+  gtk_widget_class_set_css_name (widget_class, "omnisearchgroup");
   gtk_widget_class_bind_template_child (widget_class, IdeOmniSearchGroup, rows);
 
   quarkRow = g_quark_from_static_string ("IDE_OMNI_SEARCH_ROW");
@@ -419,7 +401,6 @@ ide_omni_search_group_init (IdeOmniSearchGroup *self)
                            G_CONNECT_SWAPPED);
 
   gtk_list_box_set_sort_func (self->rows, compare_cb, NULL, NULL);
-  gtk_list_box_set_header_func (self->rows, ide_omni_search_group_header_cb, NULL, NULL);
 }
 
 gboolean

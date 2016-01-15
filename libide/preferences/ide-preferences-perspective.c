@@ -211,6 +211,7 @@ ide_preferences_perspective_class_init (IdePreferencesPerspectiveClass *klass)
   object_class->finalize = ide_preferences_perspective_finalize;
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/ui/ide-preferences-perspective.ui");
+  gtk_widget_class_set_css_name (widget_class, "preferences");
   gtk_widget_class_bind_template_child (widget_class, IdePreferencesPerspective, back_button);
   gtk_widget_class_bind_template_child (widget_class, IdePreferencesPerspective, page_stack_sidebar);
   gtk_widget_class_bind_template_child (widget_class, IdePreferencesPerspective, page_stack);
