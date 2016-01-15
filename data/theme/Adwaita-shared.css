@@ -186,6 +186,10 @@ layouttab > box > button:last-child:backdrop image {
 /*
  * The following tweaks the layout panel headers
  */
+layoutpane {
+  -IdeLayoutPane-handle-size: 1;
+  -gtk-icon-source: none;
+}
 layoutpane stackswitcher button {
   min-width: 0;
   border: none;
@@ -193,6 +197,9 @@ layoutpane stackswitcher button {
   box-shadow: none;
   padding: 0 3px 0 3px;
   border-radius: 0;
+}
+layoutpane .pane-separator {
+  background-color: @borders;
 }
 
 
