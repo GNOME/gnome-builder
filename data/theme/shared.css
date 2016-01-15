@@ -1,0 +1,4 @@
+/* work around some gtk padding issue */
+filechooser actionbar button.combo {
+  padding: 0;
+}
