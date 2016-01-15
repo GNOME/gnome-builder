@@ -58,6 +58,8 @@ struct _IdeApplication
   EggMenuManager      *menu_manager;
   GHashTable          *merge_ids;
 
+  GHashTable          *plugin_css;
+
   GList               *test_funcs;
 };
 

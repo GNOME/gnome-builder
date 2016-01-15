@@ -360,6 +360,7 @@ ide_application_finalize (GObject *object)
   g_clear_pointer (&self->tool_arguments, g_strfreev);
   g_clear_pointer (&self->started_at, g_date_time_unref);
   g_clear_pointer (&self->merge_ids, g_hash_table_unref);
+  g_clear_pointer (&self->plugin_css, g_hash_table_unref);
   g_clear_object (&self->worker_manager);
   g_clear_object (&self->keybindings);
   g_clear_object (&self->recent_projects);

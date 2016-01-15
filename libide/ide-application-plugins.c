@@ -24,6 +24,7 @@
 #include "ide-application.h"
 #include "ide-application-addin.h"
 #include "ide-application-private.h"
+#include "ide-css-provider.h"
 #include "ide-macros.h"
 
 static gboolean
@@ -300,6 +301,57 @@ ide_application_unload_plugin_menus (IdeApplication *self,
   g_hash_table_remove (self->merge_ids, module_name);
 }
 
+static void
+ide_application_load_plugin_css (IdeApplication *self,
+                                 PeasPluginInfo *plugin_info,
+                                 PeasEngine     *engine)
+{
+  g_autofree gchar *base_path = NULL;
+  GtkCssProvider *provider;
+  const gchar *module_name;
+  GdkScreen *screen;
+
+  g_assert (IDE_IS_APPLICATION (self));
+  g_assert (plugin_info != NULL);
+  g_assert (PEAS_IS_ENGINE (engine));
+
+  if (self->plugin_css == NULL)
+    self->plugin_css = g_hash_table_new_full (NULL, NULL, NULL, g_object_unref);
+
+  module_name = peas_plugin_info_get_module_name (plugin_info);
+  base_path = g_strdup_printf ("/org/gnome/builder/plugins/%s", module_name);
+  provider = ide_css_provider_new (base_path);
+
+  screen = gdk_screen_get_default ();
+  gtk_style_context_add_provider_for_screen (screen,
+                                             GTK_STYLE_PROVIDER (provider),
+                                             GTK_STYLE_PROVIDER_PRIORITY_APPLICATION + 1);
+
+  g_hash_table_insert (self->plugin_css, plugin_info, provider);
+}
+
+static void
+ide_application_unload_plugin_css (IdeApplication *self,
+                                   PeasPluginInfo *plugin_info,
+                                   PeasEngine     *engine)
+{
+  GtkStyleProvider *provider;
+
+  g_assert (IDE_IS_APPLICATION (self));
+  g_assert (plugin_info != NULL);
+  g_assert (PEAS_IS_ENGINE (engine));
+
+  provider = g_hash_table_lookup (self->plugin_css, plugin_info);
+
+  if (provider != NULL)
+    {
+      GdkScreen *screen = gdk_screen_get_default ();
+
+      gtk_style_context_remove_provider_for_screen (screen, provider);
+      g_hash_table_remove (self->plugin_css, plugin_info);
+    }
+}
+
 void
 ide_application_init_plugin_menus (IdeApplication *self)
 {
@@ -317,10 +369,20 @@ ide_application_init_plugin_menus (IdeApplication *self)
                            G_CALLBACK (ide_application_load_plugin_menus),
                            self,
                            G_CONNECT_AFTER | G_CONNECT_SWAPPED);
+  g_signal_connect_object (engine,
+                           "load-plugin",
+                           G_CALLBACK (ide_application_load_plugin_css),
+                           self,
+                           G_CONNECT_AFTER | G_CONNECT_SWAPPED);
 
   g_signal_connect_object (engine,
                            "unload-plugin",
                            G_CALLBACK (ide_application_unload_plugin_menus),
+                           self,
+                           G_CONNECT_SWAPPED);
+  g_signal_connect_object (engine,
+                           "unload-plugin",
+                           G_CALLBACK (ide_application_unload_plugin_css),
                            self,
                            G_CONNECT_SWAPPED);
 
