@@ -258,3 +258,15 @@ eggsearchbar entry {
 pillbox {
   border-radius: 3px;
 }
+
+
+/*
+ * Styling in the genesis (create project) perspective.
+ */
+genesisperspective stack > box:first-child list row {
+  padding: 10px;
+  border-bottom: 1px solid alpha(@borders, 0.2);
+}
+genesisperspective stack > box:first-child list row:last-child {
+  border-bottom: none;
+}
