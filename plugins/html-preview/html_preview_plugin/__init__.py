@@ -74,7 +74,6 @@ class HtmlPreviewAddin(GObject.Object, Ide.EditorViewAddin):
         document = editor.get_document()
         view = HtmlPreviewView(document, visible=True)
         stack = editor.get_ancestor(Ide.LayoutStack)
-        print (stack)
         stack.add(view)
 
 class HtmlPreviewView(Ide.LayoutView):
@@ -89,7 +88,6 @@ class HtmlPreviewView(Ide.LayoutView):
 
         settings = self.webview.get_settings()
         settings.enable_html5_local_storage = False
-
 
         language = document.get_language()
         if language and language.get_id() == 'markdown':
