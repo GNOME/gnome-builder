@@ -141,6 +141,14 @@ G_DEFINE_BOXED_TYPE (IdeUri, ide_uri, ide_uri_ref, ide_uri_unref)
 #define XDIGIT(c) ((c) <= '9' ? (c) - '0' : ((c) & 0x4F) - 'A' + 10)
 #define HEXCHAR(s) ((XDIGIT (s[1]) << 4) + XDIGIT (s[2]))
 
+static gboolean
+ide_uri_char_is_unreserved (gchar ch)
+{
+  if (g_ascii_isalnum (ch))
+    return TRUE;
+  return ch == '-' || ch == '.' || ch == '_' || ch == '~';
+}
+
 static gchar *
 uri_decoder (const gchar       *part,
              gboolean           just_normalize,
@@ -149,7 +157,7 @@ uri_decoder (const gchar       *part,
              GError           **error)
 {
   gchar *decoded;
-  guchar *s, *d;
+  guchar *s, *d, c;
   const gchar *invalid;
 
 #if 0
@@ -183,7 +191,6 @@ uri_decoder (const gchar       *part,
               continue;
             }
 
-#if 0
           c = HEXCHAR (s);
           if (just_normalize && !ide_uri_char_is_unreserved (c))
             {
@@ -195,7 +202,6 @@ uri_decoder (const gchar       *part,
               *d++ = c;
               s += 2;
             }
-#endif
         }
       else
         *d++ = *s;
