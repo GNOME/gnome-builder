@@ -335,15 +335,7 @@ egg_slider_size_allocate (GtkWidget     *widget,
     {
       EggSliderChild *child = g_ptr_array_index (priv->children, i);
 
-      if (gtk_widget_get_mapped (widget))
-        {
-          if (gtk_widget_get_visible (child->widget))
-            gdk_window_show (child->window);
-          else
-            gdk_window_hide (child->window);
-        }
-
-      if (gtk_widget_get_realized (child->widget))
+      if (gtk_widget_get_mapped (child->widget))
         {
           GtkAllocation window_allocation;
           GtkAllocation child_allocation;
@@ -355,6 +347,10 @@ egg_slider_size_allocate (GtkWidget     *widget,
                                   window_allocation.y,
                                   window_allocation.width,
                                   window_allocation.height);
+
+          /* raise the window edges */
+          if (child->position != EGG_SLIDER_NONE)
+            gdk_window_show (child->window);
 
           gtk_widget_size_allocate (child->widget, &child_allocation);
         }
@@ -563,8 +559,7 @@ egg_slider_realize (GtkWidget *widget)
   gtk_widget_set_realized (widget, TRUE);
 
   window = gtk_widget_get_parent_window (widget);
-  gtk_widget_set_window (widget, window);
-  g_object_ref (window);
+  gtk_widget_set_window (widget, g_object_ref (window));
 
   for (i = 0; i < priv->children->len; i++)
     {
