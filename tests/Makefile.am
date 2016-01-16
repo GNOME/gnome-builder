@@ -148,6 +148,12 @@ test_fuzzy_CFLAGS = $(search_cflags)
 test_fuzzy_LDADD = $(search_libs)
 
 
+misc_programs += test-egg-slider
+test_egg_slider_SOURCES = test-egg-slider.c
+test_egg_slider_CFLAGS = $(egg_cflags)
+test_egg_slider_LDADD = $(egg_libs)
+
+
 #TESTS += test-ide-ctags
 #test_ide_ctags_SOURCES = test-ide-ctags.c
 #test_ide_ctags_CFLAGS = $(tests_cflags)
