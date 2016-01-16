@@ -39,6 +39,7 @@ struct _IdeOmniSearchEntry
   GtkPopover           *popover;
 
   guint                 delay_timeout;
+  gboolean              has_results;
 };
 
 G_DEFINE_TYPE (IdeOmniSearchEntry, ide_omni_search_entry, GTK_TYPE_ENTRY)
@@ -51,6 +52,10 @@ enum {
 };
 
 static guint signals [LAST_SIGNAL];
+
+static void ide_omni_search_entry_changed         (IdeOmniSearchEntry *self);
+static void ide_omni_search_entry_popover_hide    (IdeOmniSearchEntry *self,
+                                                   GtkPopover         *popover);
 
 GtkWidget *
 ide_omni_search_entry_new (void)
@@ -86,6 +91,57 @@ ide_omni_search_entry_get_search_engine (IdeOmniSearchEntry *self)
 }
 
 static void
+ide_omni_search_entry_hide_popover (IdeOmniSearchEntry *self,
+                                    gboolean            leave_entry)
+{
+  g_autofree gchar *text = NULL;
+  IdeWorkbench *workbench;
+  IdePerspective *perspective;
+  gint position = 0;
+
+  /*
+   * Hiding the popover will cause the entry to get focus,
+   * thereby selecting all available text. We don't want
+   * that to happen.
+   */
+  g_signal_handlers_block_by_func (self, ide_omni_search_entry_changed, NULL);
+  g_signal_handlers_block_by_func (self->popover, ide_omni_search_entry_popover_hide, self);
+
+  if (!leave_entry)
+    {
+      text = g_strdup (gtk_entry_get_text (GTK_ENTRY (self)));
+      position = gtk_editable_get_position (GTK_EDITABLE (self));
+    }
+
+  gtk_entry_set_text (GTK_ENTRY (self), "");
+  gtk_widget_hide (GTK_WIDGET (self->popover));
+
+  if (!leave_entry)
+    {
+      gtk_entry_set_text (GTK_ENTRY (self), text);
+      gtk_editable_set_position (GTK_EDITABLE (self), position);
+    }
+
+  g_signal_handlers_unblock_by_func (self->popover, ide_omni_search_entry_popover_hide, self);
+  g_signal_handlers_unblock_by_func (self, ide_omni_search_entry_changed, NULL);
+
+  if (leave_entry)
+    {
+      workbench = ide_widget_get_workbench (GTK_WIDGET (self));
+      perspective = ide_workbench_get_visible_perspective (workbench);
+      gtk_widget_grab_focus (GTK_WIDGET (perspective));
+
+      self->has_results = FALSE;
+    }
+}
+
+static void
+ide_omni_search_entry_clear_search (IdeOmniSearchEntry *self)
+{
+  ide_omni_search_entry_hide_popover (self, TRUE);
+}
+
+static void
 ide_omni_search_entry_completed (IdeOmniSearchEntry *self,
                                  IdeSearchContext   *context)
 {
@@ -94,16 +150,16 @@ ide_omni_search_entry_completed (IdeOmniSearchEntry *self,
 
   if (ide_omni_search_display_get_count (self->display) == 0)
     {
-      gint position;
+      self->has_results = FALSE;
 
-      /*
-       * Hiding the popover will cause the entry to get focus,
-       * thereby selecting all available text. We don't want
-       * that to happen.
-       */
-      position = gtk_editable_get_position (GTK_EDITABLE (self));
-      gtk_widget_hide (GTK_WIDGET (self->popover));
-      gtk_editable_set_position (GTK_EDITABLE (self), position);
+      ide_omni_search_entry_hide_popover (self, FALSE);
+    }
+  else
+    {
+      self->has_results = TRUE;
+
+      gtk_widget_set_visible (GTK_WIDGET (self->popover), TRUE);
+      gtk_entry_grab_focus_without_selecting (GTK_ENTRY (self));
     }
 }
 
@@ -145,28 +201,12 @@ ide_omni_search_entry_delay_cb (gpointer user_data)
 }
 
 static void
-ide_omni_search_entry_clear_search (IdeOmniSearchEntry *self)
-{
-  IdeWorkbench *workbench;
-  IdePerspective *perspective;
-
-  g_assert (IDE_IS_OMNI_SEARCH_ENTRY (self));
-
-  gtk_widget_hide (GTK_WIDGET (self->popover));
-  gtk_entry_set_text (GTK_ENTRY (self), "");
-
-  workbench = ide_widget_get_workbench (GTK_WIDGET (self));
-  perspective = ide_workbench_get_visible_perspective (workbench);
-  gtk_widget_grab_focus (GTK_WIDGET (perspective));
-}
-
-static void
 ide_omni_search_entry_activate (IdeOmniSearchEntry *self)
 {
   g_assert (IDE_IS_OMNI_SEARCH_ENTRY (self));
 
   gtk_widget_activate (GTK_WIDGET (self->display));
-  ide_omni_search_entry_clear_search (self);
+  ide_omni_search_entry_hide_popover (self, TRUE);
 }
 
 static void
@@ -182,8 +222,6 @@ ide_omni_search_entry_changed (IdeOmniSearchEntry *self)
   had_focus = gtk_widget_has_focus (GTK_WIDGET (self));
   position = gtk_editable_get_position (GTK_EDITABLE (self));
 
-  gtk_widget_set_visible (GTK_WIDGET (self->popover), (text != NULL));
-
   /*
    * Showing the popover could steal focus, so reset the focus to the
    * entry and reset the position which might get mucked up by focus
@@ -191,7 +229,7 @@ ide_omni_search_entry_changed (IdeOmniSearchEntry *self)
    */
   if (had_focus)
     {
-      gtk_widget_grab_focus (GTK_WIDGET (self));
+      gtk_entry_grab_focus_without_selecting (GTK_ENTRY (self));
       gtk_editable_set_position (GTK_EDITABLE (self), position);
     }
 
@@ -220,7 +258,7 @@ ide_omni_search_entry_display_result_activated (IdeOmniSearchEntry   *self,
   g_return_if_fail (IDE_IS_SEARCH_RESULT (result));
   g_return_if_fail (IDE_IS_OMNI_SEARCH_DISPLAY (display));
 
-  ide_omni_search_entry_clear_search (self);
+  ide_omni_search_entry_hide_popover (self, TRUE);
 }
 
 static gboolean
@@ -233,6 +271,17 @@ ide_omni_search_entry_popover_key_press_event (IdeOmniSearchEntry *self,
   g_assert (GTK_IS_POPOVER (popover));
 
   return GTK_WIDGET_GET_CLASS (self)->key_press_event (GTK_WIDGET (self), event);
+}
+
+static void
+ide_omni_search_entry_popover_hide (IdeOmniSearchEntry *self,
+                                    GtkPopover         *popover)
+{
+  g_assert (IDE_IS_OMNI_SEARCH_ENTRY (self));
+  g_assert (GTK_IS_POPOVER (popover));
+
+  if (self->has_results)
+    ide_omni_search_entry_hide_popover (self, TRUE);
 }
 
 static void
@@ -322,6 +371,12 @@ ide_omni_search_entry_init (IdeOmniSearchEntry *self)
   g_signal_connect_object (self->popover,
                            "key-press-event",
                            G_CALLBACK (ide_omni_search_entry_popover_key_press_event),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  g_signal_connect_object (self->popover,
+                           "hide",
+                           G_CALLBACK (ide_omni_search_entry_popover_hide),
                            self,
                            G_CONNECT_SWAPPED);
 
