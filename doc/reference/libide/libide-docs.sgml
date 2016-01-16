@@ -51,9 +51,6 @@
     <xi:include href="xml/ide-file.xml"/>
     <xi:include href="xml/ide-file-settings.xml"/>
     <xi:include href="xml/ide-fixit.xml"/>
-    <xi:include href="xml/ide-git-buffer-change-monitor.xml"/>
-    <xi:include href="xml/ide-git-remote-callbacks.xml"/>
-    <xi:include href="xml/ide-git-vcs.xml"/>
     <xi:include href="xml/ide-global.xml"/>
     <xi:include href="xml/ide-highlight-engine.xml"/>
     <xi:include href="xml/ide-highlight-index.xml"/>

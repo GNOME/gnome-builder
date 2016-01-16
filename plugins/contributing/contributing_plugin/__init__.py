@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 #
-# contributing_plugin.py
+# __init__.py
 #
 # Copyright (C) 2015 Christian Hergert <chris@dronelabs.com>
 #
@@ -29,7 +29,7 @@ import time
 
 gi.require_version('Ggit', '1.0')
 
-import helper
+from contributing_plugin import helper
 
 from gi.repository import GLib
 from gi.repository import GObject

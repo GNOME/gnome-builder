@@ -3,6 +3,7 @@ SUBDIRS = \
 	build-tools \
 	clang \
 	command-bar \
+	contributing \
 	c-pack \
 	ctags \
 	devhelp \

@@ -1,1 +1,9 @@
 tests/menus.ui
+tools/ide-build.c
+tools/ide-list-build-flags.c
+tools/ide-list-devices.c
+tools/ide-list-diagnostics.c
+tools/ide-list-files.c
+tools/ide-list-file-settings.c
+tools/ide-mine-projects.c
+tools/ide-search.c

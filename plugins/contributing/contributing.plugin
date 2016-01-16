@@ -7,5 +7,5 @@ Authors=Christian Hergert <christian@hergert.me>
 Copyright=Copyright © 2015 Christian Hergert
 Builtin=true
 Hidden=true
-X-Tool-Name=contribute
+X-Tool-Name=contribute-to
 X-Tool-Description=Get started contributing to an existing GNOME project

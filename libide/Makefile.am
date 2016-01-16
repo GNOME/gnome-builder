@@ -32,6 +32,7 @@ libide_1_0_la_public_sources = \
 	ide-application.h \
 	ide-application-addin.c \
 	ide-application-addin.h \
+	ide-application-credits.h \
 	ide-application-tool.c \
 	ide-application-tool.h \
 	ide-back-forward-item.c \
@@ -115,6 +116,7 @@ libide_1_0_la_public_sources = \
 	ide-layout-pane.h \
 	ide-layout-stack.c \
 	ide-layout-stack.h \
+	ide-layout-stack-split.h \
 	ide-layout-view.c \
 	ide-layout-view.h \
 	ide-log.c \
@@ -293,6 +295,7 @@ libide_1_0_la_SOURCES = \
 	ide-keybindings.c \
 	ide-keybindings.h \
 	ide-layout-stack-actions.c \
+	ide-layout-stack-actions.h \
 	ide-layout-stack-private.h \
 	ide-layout-tab.c \
 	ide-layout-tab.h \
@@ -409,7 +412,7 @@ libide_1_0_la_includes = \
 	-I$(top_srcdir)/contrib/libeditorconfig \
 	-I$(top_srcdir)/contrib/search \
 	-I$(top_srcdir)/contrib/xml \
-	-I$(top_srcdir)/data/icons/hicolor \
+	-I$(top_builddir)/data/icons/hicolor \
 	-I$(srcdir) \
 	-I$(srcdir)/doap \
 	-I$(srcdir)/editor \
@@ -420,7 +423,7 @@ libide_1_0_la_includes = \
 	-I$(srcdir)/local \
 	-I$(srcdir)/modelines \
 	-I$(srcdir)/preferences \
-	-I$(srcdir)/resources \
+	-I$(builddir)/resources \
 	-I$(srcdir)/theatrics \
 	-I$(srcdir)/util \
 	$(NULL)
