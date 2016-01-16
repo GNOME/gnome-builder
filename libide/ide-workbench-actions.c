@@ -159,11 +159,27 @@ ide_workbench_actions_save_all_quit (GSimpleAction *action,
                                      g_object_ref (workbench));
 }
 
+static void
+ide_workbench_actions_opacity (GSimpleAction *action,
+                               GVariant      *variant,
+                               gpointer       user_data)
+{
+  IdeWorkbench *workbench = user_data;
+  gdouble opacity;
+
+  g_assert (IDE_IS_WORKBENCH (workbench));
+  g_assert (g_variant_is_of_type (variant, G_VARIANT_TYPE_INT32));
+
+  opacity = CLAMP (g_variant_get_int32 (variant), 10, 100) / 100.0;
+  gtk_widget_set_opacity (GTK_WIDGET (workbench), opacity);
+}
+
 void
 ide_workbench_actions_init (IdeWorkbench *self)
 {
   GPropertyAction *action;
   const GActionEntry actions[] = {
+    { "opacity", NULL, "i", "100", ide_workbench_actions_opacity },
     { "open-with-dialog", ide_workbench_actions_open_with_dialog },
     { "save-all", ide_workbench_actions_save_all },
     { "save-all-quit", ide_workbench_actions_save_all_quit },
