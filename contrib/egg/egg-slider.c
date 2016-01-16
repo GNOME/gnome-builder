@@ -29,23 +29,23 @@
 
 typedef struct
 {
-  GtkWidget     *widget;
-  GdkWindow     *window;
-  GtkAllocation  allocation;
-  guint          position : 3;
+  GtkWidget         *widget;
+  GdkWindow         *window;
+  GtkAllocation      allocation;
+  EggSliderPosition  position : 3;
 } EggSliderChild;
 
 typedef struct
 {
-  GtkAdjustment    *h_adj;
-  GtkAdjustment    *v_adj;
+  GtkAdjustment     *h_adj;
+  GtkAdjustment     *v_adj;
 
-  EggAnimation     *h_anim;
-  EggAnimation     *v_anim;
+  EggAnimation      *h_anim;
+  EggAnimation      *v_anim;
 
-  GPtrArray        *children;
+  GPtrArray         *children;
 
-  EggSliderPosition  position;
+  EggSliderPosition  position : 3;
 } EggSliderPrivate;
 
 static void buildable_iface_init (GtkBuildableIface *iface);
@@ -78,8 +78,8 @@ egg_slider_child_free (EggSliderChild *child)
 
 static void
 egg_slider_compute_margin (EggSlider *self,
-                          gint     *x_margin,
-                          gint     *y_margin)
+                           gint      *x_margin,
+                           gint      *y_margin)
 {
   EggSliderPrivate *priv = egg_slider_get_instance_private (self);
   gdouble x_ratio;
@@ -138,21 +138,21 @@ egg_slider_compute_margin (EggSlider *self,
   else if (x_ratio > 0.0)
     *x_margin = x_ratio * real_right_margin;
   else
-    *x_margin = 0.0;
+    *x_margin = 0;
 
   if (y_ratio < 0.0)
     *y_margin = y_ratio * real_bottom_margin;
   else if (y_ratio > 0.0)
     *y_margin = y_ratio * real_top_margin;
   else
-    *y_margin = 0.0;
+    *y_margin = 0;
 }
 
 static void
 egg_slider_compute_child_allocation (EggSlider      *self,
-                                    EggSliderChild *child,
-                                    GtkAllocation *window_allocation,
-                                    GtkAllocation *child_allocation)
+                                     EggSliderChild *child,
+                                     GtkAllocation  *window_allocation,
+                                     GtkAllocation  *child_allocation)
 {
   GtkAllocation real_window_allocation;
   GtkAllocation real_child_allocation;
@@ -172,7 +172,7 @@ egg_slider_compute_child_allocation (EggSlider      *self,
   if (child->position == EGG_SLIDER_NONE)
     {
       real_child_allocation.y = y_margin;
-      real_child_allocation.x = 0;
+      real_child_allocation.x = x_margin;
       real_child_allocation.width = real_window_allocation.width;
       real_child_allocation.height = real_window_allocation.height;
     }
@@ -180,7 +180,10 @@ egg_slider_compute_child_allocation (EggSlider      *self,
     {
       gtk_widget_get_preferred_height (child->widget, NULL, &nat_height);
 
-      real_child_allocation.y = -nat_height;
+      real_window_allocation.y = real_window_allocation.y - nat_height + y_margin;
+      real_window_allocation.height = nat_height;
+
+      real_child_allocation.y = 0;
       real_child_allocation.x = 0;
       real_child_allocation.height = nat_height;
       real_child_allocation.width = real_window_allocation.width;
@@ -189,7 +192,7 @@ egg_slider_compute_child_allocation (EggSlider      *self,
     {
       gtk_widget_get_preferred_height (child->widget, NULL, &nat_height);
 
-      real_window_allocation.y += real_window_allocation.height + y_margin;
+      real_window_allocation.y = real_window_allocation.y + real_window_allocation.height + y_margin;
       real_window_allocation.height = nat_height;
 
       real_child_allocation.y = 0;
@@ -201,8 +204,11 @@ egg_slider_compute_child_allocation (EggSlider      *self,
     {
       gtk_widget_get_preferred_width (child->widget, NULL, &nat_width);
 
+      real_window_allocation.x = real_window_allocation.x + real_window_allocation.width + x_margin;
+      real_window_allocation.width = nat_width;
+
       real_child_allocation.y = 0;
-      real_child_allocation.x = real_window_allocation.width;
+      real_child_allocation.x = 0;
       real_child_allocation.height = real_window_allocation.height;
       real_child_allocation.width = nat_width;
     }
@@ -210,10 +216,17 @@ egg_slider_compute_child_allocation (EggSlider      *self,
     {
       gtk_widget_get_preferred_width (child->widget, NULL, &nat_width);
 
+      real_window_allocation.x = real_window_allocation.x - nat_width + x_margin;
+      real_window_allocation.width = nat_width;
+
       real_child_allocation.y = 0;
-      real_child_allocation.x = -nat_width;
+      real_child_allocation.x = 0;
       real_child_allocation.height = real_window_allocation.height;
       real_child_allocation.width = nat_width;
+    }
+  else
+    {
+      g_assert_not_reached ();
     }
 
   if (window_allocation)
@@ -225,7 +238,7 @@ egg_slider_compute_child_allocation (EggSlider      *self,
 
 static GdkWindow *
 egg_slider_create_child_window (EggSlider      *self,
-                               EggSliderChild *child)
+                                EggSliderChild *child)
 {
   GtkWidget *widget = (GtkWidget *)self;
   GdkWindow *window;
@@ -258,7 +271,7 @@ egg_slider_create_child_window (EggSlider      *self,
 
 static void
 egg_slider_add (GtkContainer *container,
-               GtkWidget    *widget)
+                GtkWidget    *widget)
 {
   EggSlider *self = (EggSlider *)container;
   EggSliderPrivate *priv = egg_slider_get_instance_private (self);
@@ -281,7 +294,7 @@ egg_slider_add (GtkContainer *container,
 
 static void
 egg_slider_remove (GtkContainer *container,
-                  GtkWidget    *widget)
+                   GtkWidget    *widget)
 {
   EggSlider *self = (EggSlider *)container;
   EggSliderPrivate *priv = egg_slider_get_instance_private (self);
@@ -299,7 +312,7 @@ egg_slider_remove (GtkContainer *container,
         {
           gtk_widget_unparent (widget);
           g_ptr_array_remove_index (priv->children, i);
-          gtk_widget_queue_resize (GTK_WIDGET (self));
+          gtk_widget_queue_allocate (GTK_WIDGET (self));
           break;
         }
     }
@@ -307,11 +320,11 @@ egg_slider_remove (GtkContainer *container,
 
 static void
 egg_slider_size_allocate (GtkWidget     *widget,
-                         GtkAllocation *allocation)
+                          GtkAllocation *allocation)
 {
   EggSlider *self = (EggSlider *)widget;
   EggSliderPrivate *priv = egg_slider_get_instance_private (self);
-  gsize i;
+  guint i;
 
   g_assert (EGG_IS_SLIDER (self));
   g_assert (allocation != NULL);
@@ -350,9 +363,9 @@ egg_slider_size_allocate (GtkWidget     *widget,
 
 static void
 egg_slider_forall (GtkContainer *container,
-                  gboolean      include_internals,
-                  GtkCallback   callback,
-                  gpointer      callback_data)
+                   gboolean      include_internals,
+                   GtkCallback   callback,
+                   gpointer      callback_data)
 {
   EggSlider *self = (EggSlider *)container;
   EggSliderPrivate *priv = egg_slider_get_instance_private (self);
@@ -370,8 +383,8 @@ egg_slider_forall (GtkContainer *container,
 }
 
 static EggSliderChild *
-egg_slider_get_child (EggSlider  *self,
-                     GtkWidget *widget)
+egg_slider_get_child (EggSlider *self,
+                      GtkWidget *widget)
 {
   EggSliderPrivate *priv = egg_slider_get_instance_private (self);
   gsize i;
@@ -396,8 +409,8 @@ egg_slider_get_child (EggSlider  *self,
 }
 
 static EggSliderPosition
-egg_slider_child_get_position (EggSlider  *self,
-                              GtkWidget *widget)
+egg_slider_child_get_position (EggSlider *self,
+                               GtkWidget *widget)
 {
   EggSliderChild *child;
 
@@ -411,8 +424,8 @@ egg_slider_child_get_position (EggSlider  *self,
 
 static void
 egg_slider_child_set_position (EggSlider         *self,
-                              GtkWidget        *widget,
-                              EggSliderPosition  position)
+                               GtkWidget         *widget,
+                               EggSliderPosition  position)
 {
   EggSliderChild *child;
 
@@ -427,16 +440,16 @@ egg_slider_child_set_position (EggSlider         *self,
     {
       child->position = position;
       gtk_container_child_notify (GTK_CONTAINER (self), widget, "position");
-      gtk_widget_queue_resize (GTK_WIDGET (self));
+      gtk_widget_queue_allocate (GTK_WIDGET (self));
     }
 }
 
 static void
 egg_slider_get_child_property (GtkContainer *container,
-                              GtkWidget    *child,
-                              guint         prop_id,
-                              GValue       *value,
-                              GParamSpec   *pspec)
+                               GtkWidget    *child,
+                               guint         prop_id,
+                               GValue       *value,
+                               GParamSpec   *pspec)
 {
   EggSlider *self = (EggSlider *)container;
 
@@ -453,10 +466,10 @@ egg_slider_get_child_property (GtkContainer *container,
 
 static void
 egg_slider_set_child_property (GtkContainer *container,
-                              GtkWidget    *child,
-                              guint         prop_id,
-                              const GValue *value,
-                              GParamSpec   *pspec)
+                               GtkWidget    *child,
+                               guint         prop_id,
+                               const GValue *value,
+                               GParamSpec   *pspec)
 {
   EggSlider *self = (EggSlider *)container;
 
@@ -473,8 +486,8 @@ egg_slider_set_child_property (GtkContainer *container,
 
 static void
 egg_slider_get_preferred_height (GtkWidget *widget,
-                                gint      *min_height,
-                                gint      *nat_height)
+                                 gint      *min_height,
+                                 gint      *nat_height)
 {
   EggSlider *self = (EggSlider *)widget;
   EggSliderPrivate *priv = egg_slider_get_instance_private (self);
@@ -639,12 +652,14 @@ egg_slider_unmap (GtkWidget *widget)
 
 static void
 egg_slider_add_child (GtkBuildable *buildable,
-                     GtkBuilder   *builder,
-                     GObject      *child,
-                     const gchar  *type)
+                      GtkBuilder   *builder,
+                      GObject      *child,
+                      const gchar  *type)
 {
   EggSliderPosition position = EGG_SLIDER_NONE;
+  EggSlider *self = (EggSlider *)buildable;
 
+  g_assert (EGG_IS_SLIDER (self));
   g_assert (GTK_IS_BUILDABLE (buildable));
   g_assert (GTK_IS_BUILDER (builder));
   g_assert (G_IS_OBJECT (child));
@@ -652,11 +667,13 @@ egg_slider_add_child (GtkBuildable *buildable,
   if (!GTK_IS_WIDGET (child))
     {
       g_warning ("Child \"%s\" must be of type GtkWidget.",
-                 g_type_name (G_OBJECT_TYPE (child)));
+                 G_OBJECT_TYPE_NAME (child));
       return;
     }
 
-  if (g_str_equal (type, "bottom"))
+  if (type == NULL)
+    position = EGG_SLIDER_NONE;
+  else if (g_str_equal (type, "bottom"))
     position = EGG_SLIDER_BOTTOM;
   else if (g_str_equal (type, "top"))
     position = EGG_SLIDER_TOP;
@@ -664,10 +681,10 @@ egg_slider_add_child (GtkBuildable *buildable,
     position = EGG_SLIDER_LEFT;
   else if (g_str_equal (type, "right"))
     position = EGG_SLIDER_RIGHT;
+  else
+    g_warning ("Unknown child type \"%s\"", type);
 
-  gtk_container_add_with_properties (GTK_CONTAINER (buildable), GTK_WIDGET (child),
-                                     "position", position,
-                                     NULL);
+  egg_slider_add_slider (self, GTK_WIDGET (child), position);
 }
 
 static void
@@ -688,9 +705,9 @@ egg_slider_finalize (GObject *object)
 
 static void
 egg_slider_get_property (GObject    *object,
-                        guint       prop_id,
-                        GValue     *value,
-                        GParamSpec *pspec)
+                         guint       prop_id,
+                         GValue     *value,
+                         GParamSpec *pspec)
 {
   EggSlider *self = EGG_SLIDER (object);
 
@@ -707,9 +724,9 @@ egg_slider_get_property (GObject    *object,
 
 static void
 egg_slider_set_property (GObject      *object,
-                        guint         prop_id,
-                        const GValue *value,
-                        GParamSpec   *pspec)
+                         guint         prop_id,
+                         const GValue *value,
+                         GParamSpec   *pspec)
 {
   EggSlider *self = EGG_SLIDER (object);
 
@@ -790,7 +807,7 @@ egg_slider_init (EggSlider *self)
                               NULL);
   g_signal_connect_object (priv->v_adj,
                            "value-changed",
-                           G_CALLBACK (gtk_widget_queue_resize),
+                           G_CALLBACK (gtk_widget_queue_allocate),
                            self,
                            G_CONNECT_SWAPPED);
 
@@ -801,7 +818,7 @@ egg_slider_init (EggSlider *self)
                               NULL);
   g_signal_connect_object (priv->h_adj,
                            "value-changed",
-                           G_CALLBACK (gtk_widget_queue_resize),
+                           G_CALLBACK (gtk_widget_queue_allocate),
                            self,
                            G_CONNECT_SWAPPED);
 
@@ -818,6 +835,7 @@ egg_slider_position_get_type (void)
     { EGG_SLIDER_RIGHT, "EGG_SLIDER_RIGHT", "right" },
     { EGG_SLIDER_BOTTOM, "EGG_SLIDER_BOTTOM", "bottom" },
     { EGG_SLIDER_LEFT, "EGG_SLIDER_LEFT", "left" },
+    { 0 }
   };
 
   if (g_once_init_enter (&type_id))
@@ -849,7 +867,7 @@ egg_slider_get_position (EggSlider *self)
 
 void
 egg_slider_set_position (EggSlider         *self,
-                        EggSliderPosition  position)
+                         EggSliderPosition  position)
 {
   EggSliderPrivate *priv = egg_slider_get_instance_private (self);
 
@@ -924,6 +942,21 @@ egg_slider_set_position (EggSlider         *self,
       set_weak_pointer (&priv->v_anim, anim);
 
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_POSITION]);
-      gtk_widget_queue_resize (GTK_WIDGET (self));
+      gtk_widget_queue_allocate (GTK_WIDGET (self));
     }
+}
+
+void
+egg_slider_add_slider (EggSlider         *self,
+                       GtkWidget         *widget,
+                       EggSliderPosition  position)
+{
+  g_return_if_fail (EGG_IS_SLIDER (self));
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (position >= EGG_SLIDER_NONE);
+  g_return_if_fail (position <= EGG_SLIDER_LEFT);
+
+  gtk_container_add_with_properties (GTK_CONTAINER (self), widget,
+                                     "position", position,
+                                     NULL);
 }

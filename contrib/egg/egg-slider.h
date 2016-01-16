@@ -42,14 +42,14 @@ struct _EggSliderClass
   GtkContainerClass parent_instance;
 };
 
-GType             egg_slider_position_get_type (void);
-GtkWidget        *egg_slider_new               (void);
-void              egg_slider_add_slider        (EggSlider        *self,
-                                               GtkWidget       *widget,
-                                               GtkPositionType  position);
+GType              egg_slider_position_get_type (void);
+GtkWidget         *egg_slider_new               (void);
+void               egg_slider_add_slider        (EggSlider         *self,
+                                                 GtkWidget         *widget,
+                                                 EggSliderPosition  position);
 EggSliderPosition  egg_slider_get_position      (EggSlider         *self);
-void              egg_slider_set_position      (EggSlider         *self,
-                                               EggSliderPosition  position);
+void               egg_slider_set_position      (EggSlider         *self,
+                                                 EggSliderPosition  position);
 
 G_END_DECLS
 
