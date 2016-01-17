@@ -2088,7 +2088,10 @@ ide_source_view_do_mode (IdeSourceView *self,
       if (gtk_text_iter_ends_line (&insert_iter) && !gtk_text_iter_starts_line (&insert_iter))
         {
           gtk_text_iter_backward_char (&insert_iter);
-          gtk_text_buffer_select_range (buffer, &insert_iter, &selection_iter);
+          if (gtk_text_buffer_get_has_selection (buffer))
+            gtk_text_buffer_select_range (buffer, &insert_iter, &selection_iter);
+          else
+            gtk_text_buffer_select_range (buffer, &insert_iter, &insert_iter);
         }
     }
 
