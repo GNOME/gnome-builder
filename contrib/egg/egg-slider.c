@@ -365,17 +365,36 @@ egg_slider_forall (GtkContainer *container,
 {
   EggSlider *self = (EggSlider *)container;
   EggSliderPrivate *priv = egg_slider_get_instance_private (self);
-  gsize i;
+  GtkWidget **children;
+  guint len;
+  guint i;
 
   g_assert (EGG_IS_SLIDER (self));
 
-  for (i = 0; i < priv->children->len; i++)
-    {
-      EggSliderChild *child;
+  /*
+   * We need to be widget re-entrant safe, meaning that the callback could
+   * remove a child during callback(), using gtk_widget_destroy or similar. So
+   * we create a local array containing a ref'd copy of all of the widgets in
+   * case the callback removes widgets.
+   */
 
-      child = g_ptr_array_index (priv->children, i);
-      callback (child->widget, callback_data);
+  len = priv->children->len;
+  children = g_new0 (GtkWidget *, len);
+
+  for (i = 0; i < len; i++)
+    {
+      EggSliderChild *child = g_ptr_array_index (priv->children, i);
+
+      children [i] = g_object_ref (child->widget);
     }
+
+  for (i = 0; i < len; i++)
+    {
+      callback (children [i], callback_data);
+      g_object_unref (children [i]);
+    }
+
+  g_free (children);
 }
 
 static EggSliderChild *
