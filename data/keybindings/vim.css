@@ -180,6 +180,7 @@
 
   /* start search */
   bind "slash" { "action" ("frame", "find", "3") };
+  bind "KP_Divide" { "action" ("frame", "find", "3") };
 
   /* insert at cursor */
   bind "i" { "begin-macro" ()
@@ -338,6 +339,12 @@
                     "movement" (next-word-end, 1, 0, 1)
                     "set-search-text" ("", 1)
                     "move-search" (down, 0, 0, 1, 1, 1) };
+
+  bind "KP_Multiply" { "movement" (previous-word-end, 0, 1, 1)
+                       "movement" (next-word-start, 0, 1, 0)
+                       "movement" (next-word-end, 1, 0, 1)
+                       "set-search-text" ("", 1)
+                       "move-search" (down, 0, 0, 1, 1, 1) };
 
   /* page movements */
   bind "<ctrl>b" { "movement" (page-up, 0, 0, 1)
@@ -1888,6 +1895,14 @@
                     "restore-insert-mark" ()
                     "move-search" (down, 1, 0, 1, 1, 1) };
 
+bind "KP_Multiply" { "save-insert-mark" ()
+                     "movement" (previous-word-end, 0, 1, 1)
+                     "movement" (next-word-start, 0, 1, 0)
+                     "movement" (next-word-end, 1, 0, 1)
+                     "set-search-text" ("", 1)
+                     "restore-insert-mark" ()
+                     "move-search" (down, 1, 0, 1, 1, 1) };
+
   bind "<ctrl>b" { "movement" (page-up, 1, 0, 1) };
   bind "<ctrl>f" { "movement" (page-down, 1, 0, 1) };
   bind "<ctrl>u" { "movement" (half-page-up, 1, 0, 1) };
@@ -2286,6 +2301,7 @@
   bind "<ctrl>n" { "move-cursor" (display-lines, 1) };
   bind "<ctrl>p" { "move-cursor" (display-lines, -1) };
   bind "slash" { "start-interactive-search" () };
+  bind "KP_Divide" { "start-interactive-search" () };
 }
 
 @binding-set builder-vim-list-box
