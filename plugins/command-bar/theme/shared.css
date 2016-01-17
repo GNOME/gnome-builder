@@ -11,6 +11,7 @@ commandbar entry {
   min-height: 0px;
   color: #eeeeec;
   border: none;
+  padding: 6px;
 }
 commandbar flowbox {
   background-color: @theme_bg_color;
