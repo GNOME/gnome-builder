@@ -2095,6 +2095,9 @@ ide_source_view_do_mode (IdeSourceView *self,
         }
     }
 
+  gtk_text_view_reset_blink_time (GTK_TEXT_VIEW (self));
+  gtk_text_view_pend_cursor_blink (GTK_TEXT_VIEW (self));
+
   return ret;
 }
 
