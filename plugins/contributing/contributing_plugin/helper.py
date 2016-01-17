@@ -18,6 +18,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
+import gi
+
+gi.require_version('Ide', '1.0')
 
 from getopt import getopt, GetoptError
 from gettext import gettext as _
