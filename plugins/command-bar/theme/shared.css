@@ -8,13 +8,14 @@ commandbar entry {
   font-family: Monospace;
   background-image: none;
   background-color: transparent;
-  padding: 6px 6px 6px 6px;
+  min-height: 0px;
   color: #eeeeec;
+  border: none;
 }
 commandbar flowbox {
   background-color: @theme_bg_color;
   opacity: 0.9;
-  padding: 24px;
+  padding: 12px;
   color: @theme_fg_color;
 }
 commandbar viewport {
