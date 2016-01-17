@@ -19,7 +19,6 @@
 #include <glib/gi18n.h>
 
 #include "ide-doap-person.h"
-#include "ide-macros.h"
 
 struct _IdeDoapPerson
 {
@@ -60,7 +59,7 @@ ide_doap_person_set_name (IdeDoapPerson *self,
 {
   g_return_if_fail (IDE_IS_DOAP_PERSON (self));
 
-  if (!ide_str_equal0 (self->name, name))
+  if (g_strcmp0 (self->name, name) != 0)
     {
       g_free (self->name);
       self->name = g_strdup (name);
@@ -82,7 +81,7 @@ ide_doap_person_set_email (IdeDoapPerson *self,
 {
   g_return_if_fail (IDE_IS_DOAP_PERSON (self));
 
-  if (!ide_str_equal0 (self->email, email))
+  if (g_strcmp0 (self->email, email) != 0)
     {
       g_free (self->email);
       self->email = g_strdup (email);

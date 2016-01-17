@@ -21,7 +21,6 @@
 #include <glib/gi18n.h>
 
 #include "ide-doap.h"
-#include "ide-macros.h"
 
 #include "xml-reader.h"
 
@@ -147,7 +146,7 @@ ide_doap_set_bug_database (IdeDoap     *self,
 {
   g_return_if_fail (IDE_IS_DOAP (self));
 
-  if (!ide_str_equal0 (self->bug_database, bug_database))
+  if (g_strcmp0 (self->bug_database, bug_database) != 0)
     {
       g_free (self->bug_database);
       self->bug_database = g_strdup (bug_database);
@@ -161,7 +160,7 @@ ide_doap_set_category (IdeDoap     *self,
 {
   g_return_if_fail (IDE_IS_DOAP (self));
 
-  if (!ide_str_equal0 (self->category, category))
+  if (g_strcmp0 (self->category, category) != 0)
     {
       g_free (self->category);
       self->category = g_strdup (category);
@@ -175,7 +174,7 @@ ide_doap_set_description (IdeDoap     *self,
 {
   g_return_if_fail (IDE_IS_DOAP (self));
 
-  if (!ide_str_equal0 (self->description, description))
+  if (g_strcmp0 (self->description, description) != 0)
     {
       g_free (self->description);
       self->description = g_strdup (description);
@@ -189,7 +188,7 @@ ide_doap_set_download_page (IdeDoap     *self,
 {
   g_return_if_fail (IDE_IS_DOAP (self));
 
-  if (!ide_str_equal0 (self->download_page, download_page))
+  if (g_strcmp0 (self->download_page, download_page) != 0)
     {
       g_free (self->download_page);
       self->download_page = g_strdup (download_page);
@@ -203,7 +202,7 @@ ide_doap_set_homepage (IdeDoap     *self,
 {
   g_return_if_fail (IDE_IS_DOAP (self));
 
-  if (!ide_str_equal0 (self->homepage, homepage))
+  if (g_strcmp0 (self->homepage, homepage) != 0)
     {
       g_free (self->homepage);
       self->homepage = g_strdup (homepage);
@@ -217,7 +216,7 @@ ide_doap_set_name (IdeDoap     *self,
 {
   g_return_if_fail (IDE_IS_DOAP (self));
 
-  if (!ide_str_equal0 (self->name, name))
+  if (g_strcmp0 (self->name, name) != 0)
     {
       g_free (self->name);
       self->name = g_strdup (name);
@@ -231,7 +230,7 @@ ide_doap_set_shortdesc (IdeDoap     *self,
 {
   g_return_if_fail (IDE_IS_DOAP (self));
 
-  if (!ide_str_equal0 (self->shortdesc, shortdesc))
+  if (g_strcmp0 (self->shortdesc, shortdesc) != 0)
     {
       g_free (self->shortdesc);
       self->shortdesc = g_strdelimit (g_strdup (shortdesc), "\n", ' ');
@@ -506,7 +505,7 @@ ide_doap_parse_maintainer (IdeDoap   *self,
                   gchar *str;
 
                   str = xml_reader_get_attribute (reader, "rdf:resource");
-                  if (!ide_str_empty0 (str) && g_str_has_prefix (str, "mailto:"))
+                  if (str != NULL && str[0] != '\0' && g_str_has_prefix (str, "mailto:"))
                     ide_doap_person_set_email (person, str + strlen ("mailto:"));
                   g_free (str);
                 }
@@ -558,9 +557,9 @@ ide_doap_load_from_file (IdeDoap       *self,
 
       element_name = xml_reader_get_local_name (reader);
 
-      if (ide_str_equal0 (element_name, "name") ||
-          ide_str_equal0 (element_name, "shortdesc") ||
-          ide_str_equal0 (element_name, "description"))
+      if (g_strcmp0 (element_name, "name") == 0 ||
+          g_strcmp0 (element_name, "shortdesc") == 0 ||
+          g_strcmp0 (element_name, "description") == 0)
         {
           gchar *str;
 
@@ -569,10 +568,10 @@ ide_doap_load_from_file (IdeDoap       *self,
             g_object_set (self, element_name, g_strstrip (str), NULL);
           g_free (str);
         }
-      else if (ide_str_equal0 (element_name, "category") ||
-               ide_str_equal0 (element_name, "homepage") ||
-               ide_str_equal0 (element_name, "download-page") ||
-               ide_str_equal0 (element_name, "bug-database"))
+      else if (g_strcmp0 (element_name, "category") == 0 ||
+               g_strcmp0 (element_name, "homepage") == 0 ||
+               g_strcmp0 (element_name, "download-page") == 0 ||
+               g_strcmp0 (element_name, "bug-database") == 0)
         {
           gchar *str;
 
@@ -581,16 +580,16 @@ ide_doap_load_from_file (IdeDoap       *self,
             g_object_set (self, element_name, g_strstrip (str), NULL);
           g_free (str);
         }
-      else if (ide_str_equal0 (element_name, "programming-language"))
+      else if (g_strcmp0 (element_name, "programming-language") == 0)
         {
           gchar *str;
 
           str = xml_reader_read_string (reader);
-          if (!ide_str_empty0 (str))
+          if (str != NULL && str[0] != '\0')
             ide_doap_add_language (self, g_strstrip (str));
           g_free (str);
         }
-      else if (ide_str_equal0 (element_name, "maintainer"))
+      else if (g_strcmp0 (element_name, "maintainer") == 0)
         {
           if (!ide_doap_parse_maintainer (self, reader))
             break;
