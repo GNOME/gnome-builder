@@ -77,7 +77,7 @@ ide_greeter_project_row_create_search_text (IdeGreeterProjectRow *self,
                                             IdeProjectInfo       *project_info)
 {
   const gchar *tmp;
-  IdeDoap *doap;
+  DoapDocument *doap;
   GString *str;
 
   g_assert (IDE_IS_GREETER_PROJECT_ROW (self));
@@ -104,7 +104,7 @@ ide_greeter_project_row_create_search_text (IdeGreeterProjectRow *self,
 
   if (doap != NULL)
     {
-      if ((tmp = ide_doap_get_description (doap)))
+      if ((tmp = doap_document_get_description (doap)))
         {
           g_string_append (str, tmp);
           g_string_append (str, " ");

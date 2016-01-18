@@ -5,10 +5,10 @@ libdoap_la_CPPFLAGS = \
 	$(NULL)
 
 libdoap_la_SOURCES = \
-	ide-doap.c \
-	ide-doap.h \
-	ide-doap-person.c \
-	ide-doap-person.h \
+	doap-document.c \
+	doap-document.h \
+	doap-person.c \
+	doap-person.h \
 	$(NULL)
 
 libdoap_la_CFLAGS = \

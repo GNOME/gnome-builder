@@ -46,7 +46,7 @@
 #include "ide-vcs.h"
 #include "ide-recent-projects.h"
 
-#include "ide-doap.h"
+#include "doap-document.h"
 
 #define RESTORE_FILES_MAX_FILES 20
 
@@ -58,7 +58,7 @@ struct _IdeContext
   IdeBufferManager         *buffer_manager;
   IdeBuildSystem           *build_system;
   IdeDeviceManager         *device_manager;
-  IdeDoap                  *doap;
+  DoapDocument             *doap;
   GtkRecentManager         *recent_manager;
   IdeScriptManager         *script_manager;
   IdeSearchEngine          *search_engine;
@@ -845,16 +845,16 @@ ide_context_load_doap_worker (GTask        *task,
           if (!ide_str_empty0 (filename) && g_str_has_suffix (filename, ".doap"))
             {
               g_autoptr(GFile) file = NULL;
-              g_autoptr(IdeDoap) doap = NULL;
+              g_autoptr(DoapDocument) doap = NULL;
 
               file = g_file_get_child (directory, filename);
-              doap = ide_doap_new ();
+              doap = doap_document_new ();
 
-              if (ide_doap_load_from_file (doap, file, cancellable, NULL))
+              if (doap_document_load_from_file (doap, file, cancellable, NULL))
                 {
                   const gchar *doap_name;
 
-                  if ((doap_name = ide_doap_get_name (doap)))
+                  if ((doap_name = doap_document_get_name (doap)))
                     {
                       g_free (name);
                       name = g_strdup (doap_name);
@@ -1277,7 +1277,7 @@ ide_context_init_add_recent (gpointer             source_object,
 
   /* attach project description to recent info */
   if (self->doap != NULL)
-    g_bookmark_file_set_description (projects_file, uri, ide_doap_get_shortdesc (self->doap));
+    g_bookmark_file_set_description (projects_file, uri, doap_document_get_shortdesc (self->doap));
 
   /* attach discovered languages to recent info */
   groups = g_ptr_array_new_with_free_func (g_free);
@@ -1287,7 +1287,7 @@ ide_context_init_add_recent (gpointer             source_object,
       gchar **languages;
       gsize i;
 
-      if ((languages = ide_doap_get_languages (self->doap)))
+      if ((languages = doap_document_get_languages (self->doap)))
         {
           for (i = 0; languages [i]; i++)
             g_ptr_array_add (groups,

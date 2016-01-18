@@ -1,4 +1,4 @@
-/* ide-doap.c
+/* doap-document.c
  *
  * Copyright (C) 2015 Christian Hergert <christian@hergert.me>
  *
@@ -16,11 +16,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#define G_LOG_DOMAIN "ide-doap"
+#define G_LOG_DOMAIN "doap"
 
 #include <glib/gi18n.h>
 
-#include "ide-doap.h"
+#include "doap-document.h"
 
 #include "xml-reader.h"
 
@@ -28,7 +28,7 @@
  * TODO: We don't do any XMLNS checking or anything here.
  */
 
-struct _IdeDoap
+struct _DoapDocument
 {
   GObject parent_instance;
 
@@ -44,8 +44,8 @@ struct _IdeDoap
   GList     *maintainers;
 };
 
-G_DEFINE_QUARK (ide_doap_error, ide_doap_error)
-G_DEFINE_TYPE (IdeDoap, ide_doap, G_TYPE_OBJECT)
+G_DEFINE_QUARK (doap_document_error, doap_document_error)
+G_DEFINE_TYPE (DoapDocument, doap_document, G_TYPE_OBJECT)
 
 enum {
   PROP_0,
@@ -62,77 +62,77 @@ enum {
 
 static GParamSpec *properties [LAST_PROP];
 
-IdeDoap *
-ide_doap_new (void)
+DoapDocument *
+doap_document_new (void)
 {
-  return g_object_new (IDE_TYPE_DOAP, NULL);
+  return g_object_new (DOAP_TYPE_DOCUMENT, NULL);
 }
 
 const gchar *
-ide_doap_get_name (IdeDoap *self)
+doap_document_get_name (DoapDocument *self)
 {
-  g_return_val_if_fail (IDE_IS_DOAP (self), NULL);
+  g_return_val_if_fail (DOAP_IS_DOCUMENT (self), NULL);
 
   return self->name;
 }
 
 const gchar *
-ide_doap_get_shortdesc (IdeDoap *self)
+doap_document_get_shortdesc (DoapDocument *self)
 {
-  g_return_val_if_fail (IDE_IS_DOAP (self), NULL);
+  g_return_val_if_fail (DOAP_IS_DOCUMENT (self), NULL);
 
   return self->shortdesc;
 }
 
 const gchar *
-ide_doap_get_description (IdeDoap *self)
+doap_document_get_description (DoapDocument *self)
 {
-  g_return_val_if_fail (IDE_IS_DOAP (self), NULL);
+  g_return_val_if_fail (DOAP_IS_DOCUMENT (self), NULL);
 
   return self->description;
 }
 
 const gchar *
-ide_doap_get_bug_database (IdeDoap *self)
+doap_document_get_bug_database (DoapDocument *self)
 {
-  g_return_val_if_fail (IDE_IS_DOAP (self), NULL);
+  g_return_val_if_fail (DOAP_IS_DOCUMENT (self), NULL);
 
   return self->bug_database;
 }
 
 const gchar *
-ide_doap_get_download_page (IdeDoap *self)
+doap_document_get_download_page (DoapDocument *self)
 {
-  g_return_val_if_fail (IDE_IS_DOAP (self), NULL);
+  g_return_val_if_fail (DOAP_IS_DOCUMENT (self), NULL);
 
   return self->download_page;
 }
 
 const gchar *
-ide_doap_get_homepage (IdeDoap *self)
+doap_document_get_homepage (DoapDocument *self)
 {
-  g_return_val_if_fail (IDE_IS_DOAP (self), NULL);
+  g_return_val_if_fail (DOAP_IS_DOCUMENT (self), NULL);
 
   return self->homepage;
 }
 
 const gchar *
-ide_doap_get_category (IdeDoap *self)
+doap_document_get_category (DoapDocument *self)
 {
-  g_return_val_if_fail (IDE_IS_DOAP (self), NULL);
+  g_return_val_if_fail (DOAP_IS_DOCUMENT (self), NULL);
 
   return self->category;
 }
 
 /**
- * ide_doap_get_languages:
+ * doap_document_get_languages:
  *
  * Returns: (transfer none): A #GStrv.
  */
 gchar **
-ide_doap_get_languages (IdeDoap *self)
+doap_document_get_languages (DoapDocument *self)
 {
-  g_return_val_if_fail (IDE_IS_DOAP (self), NULL);
+  g_return_val_if_fail (DOAP_IS_DOCUMENT (self), NULL);
 
   if (self->languages != NULL)
     return (gchar **)self->languages->pdata;
@@ -141,10 +141,10 @@ ide_doap_get_languages (IdeDoap *self)
 }
 
 static void
-ide_doap_set_bug_database (IdeDoap     *self,
-                           const gchar *bug_database)
+doap_document_set_bug_database (DoapDocument *self,
+                                const gchar  *bug_database)
 {
-  g_return_if_fail (IDE_IS_DOAP (self));
+  g_return_if_fail (DOAP_IS_DOCUMENT (self));
 
   if (g_strcmp0 (self->bug_database, bug_database) != 0)
     {
@@ -155,10 +155,10 @@ ide_doap_set_bug_database (IdeDoap     *self,
 }
 
 static void
-ide_doap_set_category (IdeDoap     *self,
-                       const gchar *category)
+doap_document_set_category (DoapDocument *self,
+                            const gchar  *category)
 {
-  g_return_if_fail (IDE_IS_DOAP (self));
+  g_return_if_fail (DOAP_IS_DOCUMENT (self));
 
   if (g_strcmp0 (self->category, category) != 0)
     {
@@ -169,10 +169,10 @@ ide_doap_set_category (IdeDoap     *self,
 }
 
 static void
-ide_doap_set_description (IdeDoap     *self,
-                          const gchar *description)
+doap_document_set_description (DoapDocument *self,
+                               const gchar  *description)
 {
-  g_return_if_fail (IDE_IS_DOAP (self));
+  g_return_if_fail (DOAP_IS_DOCUMENT (self));
 
   if (g_strcmp0 (self->description, description) != 0)
     {
@@ -183,10 +183,10 @@ ide_doap_set_description (IdeDoap     *self,
 }
 
 static void
-ide_doap_set_download_page (IdeDoap     *self,
-                            const gchar *download_page)
+doap_document_set_download_page (DoapDocument *self,
+                                 const gchar  *download_page)
 {
-  g_return_if_fail (IDE_IS_DOAP (self));
+  g_return_if_fail (DOAP_IS_DOCUMENT (self));
 
   if (g_strcmp0 (self->download_page, download_page) != 0)
     {
@@ -197,10 +197,10 @@ ide_doap_set_download_page (IdeDoap     *self,
 }
 
 static void
-ide_doap_set_homepage (IdeDoap     *self,
-                       const gchar *homepage)
+doap_document_set_homepage (DoapDocument *self,
+                            const gchar  *homepage)
 {
-  g_return_if_fail (IDE_IS_DOAP (self));
+  g_return_if_fail (DOAP_IS_DOCUMENT (self));
 
   if (g_strcmp0 (self->homepage, homepage) != 0)
     {
@@ -211,10 +211,10 @@ ide_doap_set_homepage (IdeDoap     *self,
 }
 
 static void
-ide_doap_set_name (IdeDoap     *self,
-                   const gchar *name)
+doap_document_set_name (DoapDocument *self,
+                        const gchar  *name)
 {
-  g_return_if_fail (IDE_IS_DOAP (self));
+  g_return_if_fail (DOAP_IS_DOCUMENT (self));
 
   if (g_strcmp0 (self->name, name) != 0)
     {
@@ -225,10 +225,10 @@ ide_doap_set_name (IdeDoap     *self,
 }
 
 static void
-ide_doap_set_shortdesc (IdeDoap     *self,
-                        const gchar *shortdesc)
+doap_document_set_shortdesc (DoapDocument *self,
+                             const gchar  *shortdesc)
 {
-  g_return_if_fail (IDE_IS_DOAP (self));
+  g_return_if_fail (DOAP_IS_DOCUMENT (self));
 
   if (g_strcmp0 (self->shortdesc, shortdesc) != 0)
     {
@@ -239,25 +239,25 @@ ide_doap_set_shortdesc (IdeDoap     *self,
 }
 
 /**
- * ide_doap_get_maintainers:
+ * doap_document_get_maintainers:
  *
  *
  *
- * Returns: (transfer none) (element-type IdeDoapPerson*): A #GList of #IdeDoapPerson.
+ * Returns: (transfer none) (element-type DoapDocumentPerson*): A #GList of #DoapDocumentPerson.
  */
 GList *
-ide_doap_get_maintainers (IdeDoap *self)
+doap_document_get_maintainers (DoapDocument *self)
 {
-  g_return_val_if_fail (IDE_IS_DOAP (self), NULL);
+  g_return_val_if_fail (DOAP_IS_DOCUMENT (self), NULL);
 
   return self->maintainers;
 }
 
 static void
-ide_doap_add_language (IdeDoap     *self,
-                       const gchar *language)
+doap_document_add_language (DoapDocument *self,
+                            const gchar  *language)
 {
-  g_return_if_fail (IDE_IS_DOAP (self));
+  g_return_if_fail (DOAP_IS_DOCUMENT (self));
   g_return_if_fail (language != NULL);
 
   if (self->languages == NULL)
@@ -275,26 +275,26 @@ ide_doap_add_language (IdeDoap     *self,
 }
 
 static void
-ide_doap_set_languages (IdeDoap  *self,
-                        gchar   **languages)
+doap_document_set_languages (DoapDocument  *self,
+                             gchar        **languages)
 {
   gsize i;
 
-  g_return_if_fail (IDE_IS_DOAP (self));
+  g_return_if_fail (DOAP_IS_DOCUMENT (self));
 
   if ((self->languages != NULL) && (self->languages->len > 0))
     g_ptr_array_remove_range (self->languages, 0, self->languages->len);
 
   g_object_freeze_notify (G_OBJECT (self));
   for (i = 0; languages [i]; i++)
-    ide_doap_add_language (self, languages [i]);
+    doap_document_add_language (self, languages [i]);
   g_object_thaw_notify (G_OBJECT (self));
 }
 
 static void
-ide_doap_finalize (GObject *object)
+doap_document_finalize (GObject *object)
 {
-  IdeDoap *self = (IdeDoap *)object;
+  DoapDocument *self = (DoapDocument *)object;
 
   g_clear_pointer (&self->bug_database, g_free);
   g_clear_pointer (&self->category, g_free);
@@ -308,49 +308,49 @@ ide_doap_finalize (GObject *object)
   g_list_free_full (self->maintainers, g_object_unref);
   self->maintainers = NULL;
 
-  G_OBJECT_CLASS (ide_doap_parent_class)->finalize (object);
+  G_OBJECT_CLASS (doap_document_parent_class)->finalize (object);
 }
 
 static void
-ide_doap_get_property (GObject    *object,
-                       guint       prop_id,
-                       GValue     *value,
-                       GParamSpec *pspec)
+doap_document_get_property (GObject    *object,
+                            guint       prop_id,
+                            GValue     *value,
+                            GParamSpec *pspec)
 {
-  IdeDoap *self = IDE_DOAP (object);
+  DoapDocument *self = DOAP_DOCUMENT (object);
 
   switch (prop_id)
     {
     case PROP_BUG_DATABASE:
-      g_value_set_string (value, ide_doap_get_bug_database (self));
+      g_value_set_string (value, doap_document_get_bug_database (self));
       break;
 
     case PROP_CATEGORY:
-      g_value_set_string (value, ide_doap_get_category (self));
+      g_value_set_string (value, doap_document_get_category (self));
       break;
 
     case PROP_DESCRIPTION:
-      g_value_set_string (value, ide_doap_get_description (self));
+      g_value_set_string (value, doap_document_get_description (self));
       break;
 
     case PROP_DOWNLOAD_PAGE:
-      g_value_set_string (value, ide_doap_get_download_page (self));
+      g_value_set_string (value, doap_document_get_download_page (self));
       break;
 
     case PROP_HOMEPAGE:
-      g_value_set_string (value, ide_doap_get_homepage (self));
+      g_value_set_string (value, doap_document_get_homepage (self));
       break;
 
     case PROP_LANGUAGES:
-      g_value_set_boxed (value, ide_doap_get_languages (self));
+      g_value_set_boxed (value, doap_document_get_languages (self));
       break;
 
     case PROP_NAME:
-      g_value_set_string (value, ide_doap_get_name (self));
+      g_value_set_string (value, doap_document_get_name (self));
       break;
 
     case PROP_SHORTDESC:
-      g_value_set_string (value, ide_doap_get_shortdesc (self));
+      g_value_set_string (value, doap_document_get_shortdesc (self));
       break;
 
     default:
@@ -359,45 +359,45 @@ ide_doap_get_property (GObject    *object,
 }
 
 static void
-ide_doap_set_property (GObject      *object,
-                       guint         prop_id,
-                       const GValue *value,
-                       GParamSpec   *pspec)
+doap_document_set_property (GObject      *object,
+                            guint         prop_id,
+                            const GValue *value,
+                            GParamSpec   *pspec)
 {
-  IdeDoap *self = IDE_DOAP (object);
+  DoapDocument *self = DOAP_DOCUMENT (object);
 
   switch (prop_id)
     {
     case PROP_BUG_DATABASE:
-      ide_doap_set_bug_database (self, g_value_get_string (value));
+      doap_document_set_bug_database (self, g_value_get_string (value));
       break;
 
     case PROP_CATEGORY:
-      ide_doap_set_category (self, g_value_get_string (value));
+      doap_document_set_category (self, g_value_get_string (value));
       break;
 
     case PROP_DESCRIPTION:
-      ide_doap_set_description (self, g_value_get_string (value));
+      doap_document_set_description (self, g_value_get_string (value));
       break;
 
     case PROP_DOWNLOAD_PAGE:
-      ide_doap_set_download_page (self, g_value_get_string (value));
+      doap_document_set_download_page (self, g_value_get_string (value));
       break;
 
     case PROP_HOMEPAGE:
-      ide_doap_set_homepage (self, g_value_get_string (value));
+      doap_document_set_homepage (self, g_value_get_string (value));
       break;
 
     case PROP_LANGUAGES:
-      ide_doap_set_languages (self, g_value_get_boxed (value));
+      doap_document_set_languages (self, g_value_get_boxed (value));
       break;
 
     case PROP_NAME:
-      ide_doap_set_name (self, g_value_get_string (value));
+      doap_document_set_name (self, g_value_get_string (value));
       break;
 
     case PROP_SHORTDESC:
-      ide_doap_set_shortdesc (self, g_value_get_string (value));
+      doap_document_set_shortdesc (self, g_value_get_string (value));
       break;
 
     default:
@@ -406,13 +406,13 @@ ide_doap_set_property (GObject      *object,
 }
 
 static void
-ide_doap_class_init (IdeDoapClass *klass)
+doap_document_class_init (DoapDocumentClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  object_class->finalize = ide_doap_finalize;
-  object_class->get_property = ide_doap_get_property;
-  object_class->set_property = ide_doap_set_property;
+  object_class->finalize = doap_document_finalize;
+  object_class->get_property = doap_document_get_property;
+  object_class->set_property = doap_document_set_property;
 
   properties [PROP_BUG_DATABASE] =
     g_param_spec_string ("bug-database",
@@ -474,15 +474,15 @@ ide_doap_class_init (IdeDoapClass *klass)
 }
 
 static void
-ide_doap_init (IdeDoap *self)
+doap_document_init (DoapDocument *self)
 {
 }
 
 static gboolean
-ide_doap_parse_maintainer (IdeDoap   *self,
-                           XmlReader *reader)
+doap_document_parse_maintainer (DoapDocument *self,
+                                XmlReader    *reader)
 {
-  g_assert (IDE_IS_DOAP (self));
+  g_assert (DOAP_IS_DOCUMENT (self));
   g_assert (XML_IS_READER (reader));
 
   if (!xml_reader_read (reader))
@@ -492,13 +492,13 @@ ide_doap_parse_maintainer (IdeDoap   *self,
     {
       if (xml_reader_is_a_local (reader, "Person") && xml_reader_read (reader))
         {
-          g_autoptr(IdeDoapPerson) person = ide_doap_person_new ();
+          g_autoptr(DoapPerson) person = doap_person_new ();
 
           do
             {
               if (xml_reader_is_a_local (reader, "name"))
                 {
-                  ide_doap_person_set_name (person, xml_reader_read_string (reader));
+                  doap_person_set_name (person, xml_reader_read_string (reader));
                 }
               else if (xml_reader_is_a_local (reader, "mbox"))
                 {
@@ -506,13 +506,13 @@ ide_doap_parse_maintainer (IdeDoap   *self,
 
                   str = xml_reader_get_attribute (reader, "rdf:resource");
                   if (str != NULL && str[0] != '\0' && g_str_has_prefix (str, "mailto:"))
-                    ide_doap_person_set_email (person, str + strlen ("mailto:"));
+                    doap_person_set_email (person, str + strlen ("mailto:"));
                   g_free (str);
                 }
             }
           while (xml_reader_read_to_next (reader));
 
-          if (ide_doap_person_get_name (person) || ide_doap_person_get_email (person))
+          if (doap_person_get_name (person) || doap_person_get_email (person))
             self->maintainers = g_list_append (self->maintainers, g_object_ref (person));
         }
     }
@@ -522,14 +522,14 @@ ide_doap_parse_maintainer (IdeDoap   *self,
 }
 
 gboolean
-ide_doap_load_from_file (IdeDoap       *self,
-                         GFile         *file,
-                         GCancellable  *cancellable,
-                         GError       **error)
+doap_document_load_from_file (DoapDocument  *self,
+                              GFile         *file,
+                              GCancellable  *cancellable,
+                              GError       **error)
 {
   g_autoptr(XmlReader) reader = NULL;
 
-  g_return_val_if_fail (IDE_IS_DOAP (self), FALSE);
+  g_return_val_if_fail (DOAP_IS_DOCUMENT (self), FALSE);
   g_return_val_if_fail (G_IS_FILE (file), FALSE);
   g_return_val_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable), FALSE);
 
@@ -541,8 +541,8 @@ ide_doap_load_from_file (IdeDoap       *self,
   if (!xml_reader_read_start_element (reader, "Project"))
     {
       g_set_error (error,
-                   IDE_DOAP_ERROR,
-                   IDE_DOAP_ERROR_INVALID_FORMAT,
+                   DOAP_DOCUMENT_ERROR,
+                   DOAP_DOCUMENT_ERROR_INVALID_FORMAT,
                    "Project element is missing from doap.");
       return FALSE;
     }
@@ -586,12 +586,12 @@ ide_doap_load_from_file (IdeDoap       *self,
 
           str = xml_reader_read_string (reader);
           if (str != NULL && str[0] != '\0')
-            ide_doap_add_language (self, g_strstrip (str));
+            doap_document_add_language (self, g_strstrip (str));
           g_free (str);
         }
       else if (g_strcmp0 (element_name, "maintainer") == 0)
         {
-          if (!ide_doap_parse_maintainer (self, reader))
+          if (!doap_document_parse_maintainer (self, reader))
             break;
         }
     }

@@ -44,7 +44,7 @@ enum {
 
 static GParamSpec *properties [LAST_PROP];
 
-static IdeDoap *
+static DoapDocument *
 ide_autotools_project_miner_find_doap (IdeAutotoolsProjectMiner *self,
                                        GCancellable             *cancellable,
                                        GFile                    *directory)
@@ -75,9 +75,9 @@ ide_autotools_project_miner_find_doap (IdeAutotoolsProjectMiner *self,
       if (name != NULL && g_str_has_suffix (name, ".doap"))
         {
           g_autoptr(GFile) doap_file = g_file_get_child (directory, name);
-          IdeDoap *doap = ide_doap_new ();
+          DoapDocument *doap = doap_document_new ();
 
-          if (!ide_doap_load_from_file (doap, doap_file, cancellable, NULL))
+          if (!doap_document_load_from_file (doap, doap_file, cancellable, NULL))
             {
               g_object_unref (doap);
               continue;
@@ -103,7 +103,7 @@ ide_autotools_project_miner_discovered (IdeAutotoolsProjectMiner *self,
   g_autoptr(GFileInfo) index_info = NULL;
   g_autoptr(IdeProjectInfo) project_info = NULL;
   g_autoptr(GDateTime) last_modified_at = NULL;
-  g_autoptr(IdeDoap) doap = NULL;
+  g_autoptr(DoapDocument) doap = NULL;
   const gchar *filename;
   const gchar *shortdesc = NULL;
   gchar **languages = NULL;
@@ -143,7 +143,7 @@ ide_autotools_project_miner_discovered (IdeAutotoolsProjectMiner *self,
 
   if (doap != NULL)
     {
-      const gchar *doap_name = ide_doap_get_name (doap);
+      const gchar *doap_name = doap_document_get_name (doap);
 
       if (!ide_str_empty0 (doap_name))
         {
@@ -151,8 +151,8 @@ ide_autotools_project_miner_discovered (IdeAutotoolsProjectMiner *self,
           name = g_strdup (doap_name);
         }
 
-      shortdesc = ide_doap_get_shortdesc (doap);
-      languages = ide_doap_get_languages (doap);
+      shortdesc = doap_document_get_shortdesc (doap);
+      languages = doap_document_get_languages (doap);
     }
 
   project_info = g_object_new (IDE_TYPE_PROJECT_INFO,

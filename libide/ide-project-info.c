@@ -39,19 +39,19 @@
 
 struct _IdeProjectInfo
 {
-  GObject     parent_instance;
+  GObject       parent_instance;
 
-  IdeDoap    *doap;
-  GDateTime  *last_modified_at;
-  GFile      *directory;
-  GFile      *file;
-  gchar      *name;
-  gchar      *description;
-  gchar     **languages;
+  DoapDocument *doap;
+  GDateTime    *last_modified_at;
+  GFile        *directory;
+  GFile        *file;
+  gchar        *name;
+  gchar        *description;
+  gchar       **languages;
 
-  gint        priority;
+  gint          priority;
 
-  guint       is_recent : 1;
+  guint         is_recent : 1;
 };
 
 G_DEFINE_TYPE (IdeProjectInfo, ide_project_info, G_TYPE_OBJECT)
@@ -78,7 +78,7 @@ static GParamSpec *properties [LAST_PROP];
  *
  * Returns: (nullable) (transfer none): An #IdeDoap or %NULL.
  */
-IdeDoap *
+DoapDocument *
 ide_project_info_get_doap (IdeProjectInfo *self)
 {
   g_return_val_if_fail (IDE_IS_PROJECT_INFO (self), NULL);
@@ -88,10 +88,10 @@ ide_project_info_get_doap (IdeProjectInfo *self)
 
 void
 ide_project_info_set_doap (IdeProjectInfo *self,
-                           IdeDoap        *doap)
+                           DoapDocument   *doap)
 {
   g_return_if_fail (IDE_IS_PROJECT_INFO (self));
-  g_return_if_fail (!doap || IDE_IS_DOAP (doap));
+  g_return_if_fail (!doap || DOAP_IS_DOCUMENT (doap));
 
   if (g_set_object (&self->doap, doap))
     g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_DOAP]);
@@ -443,7 +443,7 @@ ide_project_info_class_init (IdeProjectInfoClass *klass)
     g_param_spec_object ("doap",
                          "DOAP",
                          "A DOAP describing the project.",
-                         IDE_TYPE_DOAP,
+                         DOAP_TYPE_DOCUMENT,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_FILE] =

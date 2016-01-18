@@ -16,25 +16,25 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_DOAP_PERSON_H
-#define IDE_DOAP_PERSON_H
+#ifndef DOAP_PERSON_H
+#define DOAP_PERSON_H
 
 #include <glib-object.h>
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_DOAP_PERSON (ide_doap_person_get_type())
+#define DOAP_TYPE_PERSON (doap_person_get_type())
 
-G_DECLARE_FINAL_TYPE (IdeDoapPerson, ide_doap_person, IDE, DOAP_PERSON, GObject)
+G_DECLARE_FINAL_TYPE (DoapPerson, doap_person, DOAP, PERSON, GObject)
 
-IdeDoapPerson *ide_doap_person_new       (void);
-const gchar   *ide_doap_person_get_name  (IdeDoapPerson *self);
-void           ide_doap_person_set_name  (IdeDoapPerson *self,
-                                          const gchar   *name);
-const gchar   *ide_doap_person_get_email (IdeDoapPerson *self);
-void           ide_doap_person_set_email (IdeDoapPerson *self,
-                                          const gchar   *email);
+DoapPerson    *doap_person_new       (void);
+const gchar   *doap_person_get_name  (DoapPerson  *self);
+void           doap_person_set_name  (DoapPerson  *self,
+                                      const gchar *name);
+const gchar   *doap_person_get_email (DoapPerson  *self);
+void           doap_person_set_email (DoapPerson  *self,
+                                      const gchar *email);
 
 G_END_DECLS
 
-#endif /* IDE_DOAP_PERSON_H */
+#endif /* DOAP_PERSON_H */

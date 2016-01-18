@@ -1,4 +1,4 @@
-/* ide-doap-person.c
+/* doap-person.c
  *
  * Copyright (C) 2015 Christian Hergert <christian@hergert.me>
  *
@@ -18,9 +18,9 @@
 
 #include <glib/gi18n.h>
 
-#include "ide-doap-person.h"
+#include "doap-person.h"
 
-struct _IdeDoapPerson
+struct _DoapPerson
 {
   GObject parent_instance;
 
@@ -28,7 +28,7 @@ struct _IdeDoapPerson
   gchar *name;
 };
 
-G_DEFINE_TYPE (IdeDoapPerson, ide_doap_person, G_TYPE_OBJECT)
+G_DEFINE_TYPE (DoapPerson, doap_person, G_TYPE_OBJECT)
 
 enum {
   PROP_0,
@@ -39,25 +39,25 @@ enum {
 
 static GParamSpec *properties [LAST_PROP];
 
-IdeDoapPerson *
-ide_doap_person_new (void)
+DoapPerson *
+doap_person_new (void)
 {
-  return g_object_new (IDE_TYPE_DOAP_PERSON, NULL);
+  return g_object_new (DOAP_TYPE_PERSON, NULL);
 }
 
 const gchar *
-ide_doap_person_get_name (IdeDoapPerson *self)
+doap_person_get_name (DoapPerson *self)
 {
-  g_return_val_if_fail (IDE_IS_DOAP_PERSON (self), NULL);
+  g_return_val_if_fail (DOAP_IS_PERSON (self), NULL);
 
   return self->name;
 }
 
 void
-ide_doap_person_set_name (IdeDoapPerson *self,
-                          const gchar   *name)
+doap_person_set_name (DoapPerson  *self,
+                      const gchar *name)
 {
-  g_return_if_fail (IDE_IS_DOAP_PERSON (self));
+  g_return_if_fail (DOAP_IS_PERSON (self));
 
   if (g_strcmp0 (self->name, name) != 0)
     {
@@ -68,18 +68,18 @@ ide_doap_person_set_name (IdeDoapPerson *self,
 }
 
 const gchar *
-ide_doap_person_get_email (IdeDoapPerson *self)
+doap_person_get_email (DoapPerson *self)
 {
-  g_return_val_if_fail (IDE_IS_DOAP_PERSON (self), NULL);
+  g_return_val_if_fail (DOAP_IS_PERSON (self), NULL);
 
   return self->email;
 }
 
 void
-ide_doap_person_set_email (IdeDoapPerson *self,
-                           const gchar   *email)
+doap_person_set_email (DoapPerson  *self,
+                       const gchar *email)
 {
-  g_return_if_fail (IDE_IS_DOAP_PERSON (self));
+  g_return_if_fail (DOAP_IS_PERSON (self));
 
   if (g_strcmp0 (self->email, email) != 0)
     {
@@ -90,32 +90,32 @@ ide_doap_person_set_email (IdeDoapPerson *self,
 }
 
 static void
-ide_doap_person_finalize (GObject *object)
+doap_person_finalize (GObject *object)
 {
-  IdeDoapPerson *self = (IdeDoapPerson *)object;
+  DoapPerson *self = (DoapPerson *)object;
 
   g_clear_pointer (&self->email, g_free);
   g_clear_pointer (&self->name, g_free);
 
-  G_OBJECT_CLASS (ide_doap_person_parent_class)->finalize (object);
+  G_OBJECT_CLASS (doap_person_parent_class)->finalize (object);
 }
 
 static void
-ide_doap_person_get_property (GObject    *object,
-                              guint       prop_id,
-                              GValue     *value,
-                              GParamSpec *pspec)
+doap_person_get_property (GObject    *object,
+                          guint       prop_id,
+                          GValue     *value,
+                          GParamSpec *pspec)
 {
-  IdeDoapPerson *self = IDE_DOAP_PERSON (object);
+  DoapPerson *self = DOAP_PERSON (object);
 
   switch (prop_id)
     {
     case PROP_EMAIL:
-      g_value_set_string (value, ide_doap_person_get_email (self));
+      g_value_set_string (value, doap_person_get_email (self));
       break;
 
     case PROP_NAME:
-      g_value_set_string (value, ide_doap_person_get_name (self));
+      g_value_set_string (value, doap_person_get_name (self));
       break;
 
     default:
@@ -124,21 +124,21 @@ ide_doap_person_get_property (GObject    *object,
 }
 
 static void
-ide_doap_person_set_property (GObject      *object,
-                              guint         prop_id,
-                              const GValue *value,
-                              GParamSpec   *pspec)
+doap_person_set_property (GObject      *object,
+                          guint         prop_id,
+                          const GValue *value,
+                          GParamSpec   *pspec)
 {
-  IdeDoapPerson *self = IDE_DOAP_PERSON (object);
+  DoapPerson *self = DOAP_PERSON (object);
 
   switch (prop_id)
     {
     case PROP_EMAIL:
-      ide_doap_person_set_email (self, g_value_get_string (value));
+      doap_person_set_email (self, g_value_get_string (value));
       break;
 
     case PROP_NAME:
-      ide_doap_person_set_name (self, g_value_get_string (value));
+      doap_person_set_name (self, g_value_get_string (value));
       break;
 
     default:
@@ -147,13 +147,13 @@ ide_doap_person_set_property (GObject      *object,
 }
 
 static void
-ide_doap_person_class_init (IdeDoapPersonClass *klass)
+doap_person_class_init (DoapPersonClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  object_class->finalize = ide_doap_person_finalize;
-  object_class->get_property = ide_doap_person_get_property;
-  object_class->set_property = ide_doap_person_set_property;
+  object_class->finalize = doap_person_finalize;
+  object_class->get_property = doap_person_get_property;
+  object_class->set_property = doap_person_set_property;
 
   properties [PROP_EMAIL] =
     g_param_spec_string ("email",
@@ -173,6 +173,6 @@ ide_doap_person_class_init (IdeDoapPersonClass *klass)
 }
 
 static void
-ide_doap_person_init (IdeDoapPerson *self)
+doap_person_init (DoapPerson *self)
 {
 }
