@@ -155,7 +155,7 @@ refresh_tree (SymbolTree *self)
        * TODO: Get cross compile names for nodes so that we can
        *       recompute the open state.
        */
-      ide_tree_set_root (self->tree, ide_tree_node_new ());;
+      ide_tree_set_root (self->tree, ide_tree_node_new ());
 
       /*
        * Fetch the symbols via the transparent cache.
