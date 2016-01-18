@@ -52,7 +52,7 @@ static guint signals [LAST_SIGNAL];
 
 gboolean
 _ide_tree_builder_node_activated (IdeTreeBuilder *builder,
-                                 IdeTreeNode    *node)
+                                  IdeTreeNode    *node)
 {
   gboolean ret = FALSE;
 
@@ -66,8 +66,8 @@ _ide_tree_builder_node_activated (IdeTreeBuilder *builder,
 
 void
 _ide_tree_builder_node_popup (IdeTreeBuilder *builder,
-                             IdeTreeNode    *node,
-                             GMenu         *menu)
+                              IdeTreeNode    *node,
+                              GMenu          *menu)
 {
   g_return_if_fail (IDE_IS_TREE_BUILDER (builder));
   g_return_if_fail (IDE_IS_TREE_NODE (node));
@@ -78,7 +78,7 @@ _ide_tree_builder_node_popup (IdeTreeBuilder *builder,
 
 void
 _ide_tree_builder_node_selected (IdeTreeBuilder *builder,
-                                IdeTreeNode    *node)
+                                 IdeTreeNode    *node)
 {
 	g_return_if_fail (IDE_IS_TREE_BUILDER (builder));
 	g_return_if_fail (IDE_IS_TREE_NODE (node));
@@ -88,7 +88,7 @@ _ide_tree_builder_node_selected (IdeTreeBuilder *builder,
 
 void
 _ide_tree_builder_node_unselected (IdeTreeBuilder *builder,
-                                  IdeTreeNode    *node)
+                                   IdeTreeNode    *node)
 {
 	g_return_if_fail (IDE_IS_TREE_BUILDER (builder));
 	g_return_if_fail (IDE_IS_TREE_NODE (node));
@@ -98,7 +98,7 @@ _ide_tree_builder_node_unselected (IdeTreeBuilder *builder,
 
 void
 _ide_tree_builder_build_node (IdeTreeBuilder *builder,
-                             IdeTreeNode    *node)
+                              IdeTreeNode    *node)
 {
 	g_return_if_fail (IDE_IS_TREE_BUILDER (builder));
 	g_return_if_fail (IDE_IS_TREE_NODE (node));
@@ -108,7 +108,7 @@ _ide_tree_builder_build_node (IdeTreeBuilder *builder,
 
 void
 _ide_tree_builder_added (IdeTreeBuilder *builder,
-                        IdeTree        *tree)
+                         IdeTree        *tree)
 {
 	g_return_if_fail (IDE_IS_TREE_BUILDER (builder));
 	g_return_if_fail (IDE_IS_TREE (tree));
@@ -118,7 +118,7 @@ _ide_tree_builder_added (IdeTreeBuilder *builder,
 
 void
 _ide_tree_builder_removed (IdeTreeBuilder *builder,
-                          IdeTree        *tree)
+                           IdeTree        *tree)
 {
 	g_return_if_fail (IDE_IS_TREE_BUILDER (builder));
 	g_return_if_fail (IDE_IS_TREE (tree));
@@ -128,7 +128,7 @@ _ide_tree_builder_removed (IdeTreeBuilder *builder,
 
 void
 _ide_tree_builder_set_tree (IdeTreeBuilder *builder,
-                           IdeTree        *tree)
+                            IdeTree        *tree)
 {
 	IdeTreeBuilderPrivate *priv = ide_tree_builder_get_instance_private (builder);
 
@@ -189,9 +189,9 @@ ide_tree_builder_finalize (GObject *object)
 
 static void
 ide_tree_builder_get_property (GObject    *object,
-                              guint       prop_id,
-                              GValue     *value,
-                              GParamSpec *pspec)
+                               guint       prop_id,
+                               GValue     *value,
+                               GParamSpec *pspec)
 {
 	IdeTreeBuilder *builder = IDE_TREE_BUILDER (object);
   IdeTreeBuilderPrivate *priv = ide_tree_builder_get_instance_private (builder);

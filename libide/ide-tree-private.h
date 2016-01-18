@@ -54,6 +54,7 @@ void         _ide_tree_node_set_parent         (IdeTreeNode    *node,
 gboolean     _ide_tree_node_get_needs_build    (IdeTreeNode    *node);
 void         _ide_tree_node_set_needs_build    (IdeTreeNode    *node,
                                                 gboolean        needs_build);
+void         _ide_tree_node_add_dummy_child    (IdeTreeNode    *node);
 void         _ide_tree_node_remove_dummy_child (IdeTreeNode    *node);
 
 void         _ide_tree_builder_set_tree        (IdeTreeBuilder *builder,

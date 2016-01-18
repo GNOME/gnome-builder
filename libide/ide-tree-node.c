@@ -281,20 +281,28 @@ ide_tree_node_get_icon_name (IdeTreeNode *node)
 
 /**
  * ide_tree_node_set_icon_name:
- * @node: (in): A #IdeTreeNode.
- * @icon_name: (in): The icon name.
+ * @node: A #IdeTreeNode.
+ * @icon_name: (nullable): The icon name.
  *
  * Sets the icon name of the node. This is displayed in the pixbuf
  * cell of the IdeTree.
  */
 void
-ide_tree_node_set_icon_name (IdeTreeNode  *node,
-                            const gchar *icon_name)
+ide_tree_node_set_icon_name (IdeTreeNode *node,
+                             const gchar *icon_name)
 {
+  GQuark value = 0;
+
   g_return_if_fail (IDE_IS_TREE_NODE (node));
 
-  node->icon_name = g_quark_from_string (icon_name);
-  g_object_notify_by_pspec (G_OBJECT (node), properties [PROP_ICON_NAME]);
+  if (icon_name != NULL)
+    value = g_quark_from_string (icon_name);
+
+  if (value != node->icon_name)
+    {
+      node->icon_name = value;
+      g_object_notify_by_pspec (G_OBJECT (node), properties [PROP_ICON_NAME]);
+    }
 }
 
 /**
@@ -350,15 +358,15 @@ ide_tree_node_get_text (IdeTreeNode *node)
 
 /**
  * ide_tree_node_set_text:
- * @node: (in): A #IdeTreeNode.
- * @text: (in): The node text.
+ * @node: A #IdeTreeNode.
+ * @text: (nullable): The node text.
  *
  * Sets the text of the node. This is displayed in the text
  * cell of the IdeTree.
  */
 void
-ide_tree_node_set_text (IdeTreeNode  *node,
-                       const gchar *text)
+ide_tree_node_set_text (IdeTreeNode *node,
+                        const gchar *text)
 {
   g_return_if_fail (IDE_IS_TREE_NODE (node));
 
@@ -936,7 +944,7 @@ ide_tree_node_set_children_possible (IdeTreeNode *self,
     {
       self->children_possible = children_possible;
 
-      if (self->needs_build)
+      if (self->tree && self->needs_build)
         {
           if (self->children_possible)
             _ide_tree_node_add_dummy_child (self);

@@ -272,11 +272,14 @@ ide_tree_popup (IdeTree        *self,
   g_return_if_fail (IDE_IS_TREE (self));
   g_return_if_fail (IDE_IS_TREE_NODE (node));
 
-  for (gint i = 0; i < priv->builders->len; i++)
+  if (priv->context_menu != NULL)
     {
-      IdeTreeBuilder *builder = g_ptr_array_index (priv->builders, i);
+      for (gint i = 0; i < priv->builders->len; i++)
+        {
+          IdeTreeBuilder *builder = g_ptr_array_index (priv->builders, i);
 
-      _ide_tree_builder_node_popup (builder, node, G_MENU (priv->context_menu));
+          _ide_tree_builder_node_popup (builder, node, G_MENU (priv->context_menu));
+        }
     }
 
   if (priv->context_menu != NULL)
@@ -507,9 +510,9 @@ text_func (GtkCellLayout   *cell_layout,
 
 static void
 ide_tree_add (IdeTree     *self,
-             IdeTreeNode *node,
-             IdeTreeNode *child,
-             gboolean    prepend)
+              IdeTreeNode *node,
+              IdeTreeNode *child,
+              gboolean     prepend)
 {
   IdeTreePrivate *priv = ide_tree_get_instance_private (self);
   GtkTreePath *path;
@@ -539,6 +542,9 @@ ide_tree_add (IdeTree     *self,
                                      0, child,
                                      -1);
 
+  if (ide_tree_node_get_children_possible (child))
+    _ide_tree_node_add_dummy_child (child);
+
   if (node == priv->root)
     _ide_tree_build_node (self, child);
 
@@ -547,10 +553,10 @@ ide_tree_add (IdeTree     *self,
 
 void
 _ide_tree_insert_sorted (IdeTree                *self,
-                        IdeTreeNode            *node,
-                        IdeTreeNode            *child,
-                        IdeTreeNodeCompareFunc  compare_func,
-                        gpointer               user_data)
+                         IdeTreeNode            *node,
+                         IdeTreeNode            *child,
+                         IdeTreeNodeCompareFunc  compare_func,
+                         gpointer                user_data)
 {
   IdeTreePrivate *priv = ide_tree_get_instance_private (self);
   GtkTreeModel *model;
@@ -1230,14 +1236,14 @@ _ide_tree_get_path (IdeTree *self,
 
 /**
  * ide_tree_add_builder:
- * @self: (in): A #IdeTree.
- * @builder: (in) (transfer full): A #IdeTreeBuilder to add.
+ * @self: A #IdeTree.
+ * @builder: A #IdeTreeBuilder to add.
  *
  * Removes a builder from the tree.
  */
 void
 ide_tree_add_builder (IdeTree        *self,
-                     IdeTreeBuilder *builder)
+                      IdeTreeBuilder *builder)
 {
   GtkTreeIter iter;
   IdeTreePrivate *priv = ide_tree_get_instance_private (self);
@@ -1311,8 +1317,8 @@ ide_tree_get_root (IdeTree *self)
 
 /**
  * ide_tree_set_root:
- * @self: (in): A #IdeTree.
- * @node: (in): A #IdeTreeNode.
+ * @self: A #IdeTree.
+ * @node: A #IdeTreeNode.
  *
  * Sets the root node of the #IdeTree widget. This is used to build
  * the items within the treeview. The item itself will not be added
@@ -1320,7 +1326,7 @@ ide_tree_get_root (IdeTree *self)
  */
 void
 ide_tree_set_root (IdeTree     *self,
-                  IdeTreeNode *root)
+                   IdeTreeNode *root)
 {
   IdeTreePrivate *priv = ide_tree_get_instance_private (self);
 
@@ -1488,13 +1494,20 @@ _ide_tree_invalidate (IdeTree     *self,
 
   model = GTK_TREE_MODEL (priv->store);
   path = ide_tree_node_get_path (node);
-  gtk_tree_model_get_iter (model, &iter, path);
 
-  if (gtk_tree_model_iter_children (model, &child, &iter))
+  if (path != NULL)
     {
-      while (gtk_tree_store_remove (priv->store, &child))
+      gtk_tree_model_get_iter (model, &iter, path);
+
+      if (gtk_tree_model_iter_children (model, &child, &iter))
         {
+          while (gtk_tree_store_remove (priv->store, &child))
+            {
+              /* Do nothing */
+            }
         }
+
+      gtk_tree_path_free (path);
     }
 
   _ide_tree_node_set_needs_build (node, TRUE);
@@ -1503,8 +1516,6 @@ _ide_tree_invalidate (IdeTree     *self,
 
   if ((parent == NULL) || ide_tree_node_get_expanded (parent))
     _ide_tree_build_node (self, node);
-
-  gtk_tree_path_free (path);
 }
 
 /**
