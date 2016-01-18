@@ -14,7 +14,6 @@
 #include "ide-source-view.h"
 #include "ide-symbol.h"
 #include "ide-thread-pool.h"
-#include "doap-document.h"
 
 /*** END file-header ***/
 
