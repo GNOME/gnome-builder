@@ -7,6 +7,7 @@ SUBDIRS = \
 	rg \
 	search \
 	xml \
+	doap \
 	$(NULL)
 
 -include $(top_srcdir)/git.mk

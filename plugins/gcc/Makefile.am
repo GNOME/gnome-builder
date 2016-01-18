@@ -14,6 +14,7 @@ libgcc_plugin_la_SOURCES = \
 libgcc_plugin_la_CFLAGS = \
 	$(LIBIDE_CFLAGS) \
 	-I$(top_srcdir)/contrib/egg \
+	-I$(top_srcdir)/contrib/doap \
 	-I$(top_srcdir)/libide
 
 libgcc_plugin_la_LDFLAGS = \

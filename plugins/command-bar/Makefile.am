@@ -41,6 +41,7 @@ libcommand_bar_la_CFLAGS = \
 	-I$(top_srcdir)/contrib/egg \
 	-I$(top_srcdir)/contrib/gd \
 	-I$(top_srcdir)/contrib/nautilus \
+	-I$(top_srcdir)/contrib/doap \
 	$(LIBIDE_CFLAGS) \
 	$(DEBUG_CFLAGS) \
 	$(OPTIMIZE_CFLAGS) \

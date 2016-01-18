@@ -33,6 +33,7 @@ libterminal_la_CFLAGS = \
 	$(TERMINAL_CFLAGS) \
 	-I$(top_srcdir)/libide \
 	-I$(top_srcdir)/contrib/egg \
+	-I$(top_srcdir)/contrib/doap \
 	$(NULL)
 
 libterminal_la_LIBADD = \

@@ -424,6 +424,7 @@ AC_CONFIG_FILES([
 	contrib/rg/Makefile
 	contrib/search/Makefile
 	contrib/xml/Makefile
+	contrib/doap/Makefile
 
 	libide/ide-debug.h
 	libide/Makefile

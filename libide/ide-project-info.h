@@ -21,7 +21,7 @@
 
 #include <gio/gio.h>
 
-#include "doap/ide-doap.h"
+#include "ide-doap.h"
 
 G_BEGIN_DECLS
 

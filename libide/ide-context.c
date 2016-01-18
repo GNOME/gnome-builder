@@ -46,7 +46,7 @@
 #include "ide-vcs.h"
 #include "ide-recent-projects.h"
 
-#include "doap/ide-doap.h"
+#include "ide-doap.h"
 
 #define RESTORE_FILES_MAX_FILES 20
 

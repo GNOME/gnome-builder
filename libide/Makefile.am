@@ -14,10 +14,6 @@ libide_1_0_la_public_sources = \
 	directory/ide-directory-plugin.c \
 	directory/ide-directory-vcs.c \
 	directory/ide-directory-vcs.h \
-	doap/ide-doap-person.c \
-	doap/ide-doap-person.h \
-	doap/ide-doap.c \
-	doap/ide-doap.h \
 	editor/ide-editor-perspective.c \
 	editor/ide-editor-perspective.h \
 	editor/ide-editor-view-addin.c \
@@ -411,10 +407,9 @@ libide_1_0_la_includes = \
 	-I$(top_srcdir)/contrib/nautilus \
 	-I$(top_srcdir)/contrib/libeditorconfig \
 	-I$(top_srcdir)/contrib/search \
-	-I$(top_srcdir)/contrib/xml \
+	-I$(top_srcdir)/contrib/doap \
 	-I$(top_builddir)/data/icons/hicolor \
 	-I$(srcdir) \
-	-I$(srcdir)/doap \
 	-I$(srcdir)/editor \
 	-I$(srcdir)/editorconfig \
 	-I$(srcdir)/greeter \
@@ -465,7 +460,7 @@ libide_1_0_la_LIBADD = \
 	$(top_builddir)/contrib/libeditorconfig/libeditorconfig.la \
 	$(top_builddir)/contrib/nautilus/libnautilus.la \
 	$(top_builddir)/contrib/search/libsearch.la \
-	$(top_builddir)/contrib/xml/libxml.la \
+	$(top_builddir)/contrib/doap/libdoap.la \
 	$(NULL)
 
 libide_1_0_la_built_sources = \
@@ -489,7 +484,6 @@ endif
 glib_enum_h = ide-enums.h
 glib_enum_c = ide-enums.c
 glib_enum_headers =  \
-	doap/ide-doap.h \
 	ide-buffer.h \
 	ide-build-result.h \
 	ide-diagnostic.h \

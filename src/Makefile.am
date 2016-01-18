@@ -10,6 +10,7 @@ AM_CPPFLAGS = \
 	$(OPTIMIZE_CFLAGS) \
 	$(TERMINAL_CFLAGS) \
 	-I$(top_builddir)/data/icons/hicolor \
+	-I$(top_srcdir)/contrib/doap \
 	-I$(top_builddir)/libide \
 	-I$(top_srcdir)/libide \
 	$(NULL)

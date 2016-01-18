@@ -26,6 +26,7 @@ libsysmon_la_CFLAGS = \
 	-I$(top_srcdir)/libide \
 	-I$(top_srcdir)/contrib/egg \
 	-I$(top_srcdir)/contrib/rg \
+	-I$(top_srcdir)/contrib/doap \
 	$(NULL)
 
 libsysmon_la_LIBADD = \

@@ -17,6 +17,7 @@ libfile_search_la_CFLAGS = \
 	$(LIBIDE_CFLAGS) \
 	-I$(top_srcdir)/libide \
 	-I$(top_srcdir)/contrib/search \
+	-I$(top_srcdir)/contrib/doap \
 	$(NULL)
 
 libfile_search_la_LIBADD = \

@@ -25,6 +25,7 @@ libsymbol_tree_la_CFLAGS = \
 	$(OPTIMIZE_CFLAGS) \
 	-I$(top_srcdir)/libide \
 	-I$(top_srcdir)/contrib/egg \
+	-I$(top_srcdir)/contrib/doap \
 	$(NULL)
 
 libsymbol_tree_la_LDFLAGS = \

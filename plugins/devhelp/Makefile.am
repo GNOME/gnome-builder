@@ -33,6 +33,7 @@ libdevhelp_plugin_la_CFLAGS = \
 	$(LIBIDE_CFLAGS) \
 	$(DEVHELP_CFLAGS) \
 	$(OPTIMIZE_CFLAGS) \
+	-I$(top_srcdir)/contrib/doap \
 	-I$(top_srcdir)/libide \
 	$(NULL)
 
