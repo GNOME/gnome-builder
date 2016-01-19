@@ -385,7 +385,7 @@ ide_clang_service_get_translation_unit_worker (EggTaskCache  *cache,
 
   g_assert (IDE_IS_CLANG_SERVICE (self));
   g_assert (IDE_IS_CLANG_SERVICE (self));
-  g_assert (IDE_IS_FILE (key));
+  g_assert (IDE_IS_FILE ((IdeFile *)key));
   g_assert (IDE_IS_FILE (file));
   g_assert (G_IS_TASK (task));
 
