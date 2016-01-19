@@ -4172,6 +4172,8 @@ ide_source_view_draw_search_bubbles (IdeSourceView *self,
   GtkTextIter end;
   cairo_rectangle_int_t r;
   guint count;
+  gint buffer_x = 0;
+  gint buffer_y = 0;
   gint n;
   gint i;
 
@@ -4182,16 +4184,15 @@ ide_source_view_draw_search_bubbles (IdeSourceView *self,
   if (!priv->search_context || !gtk_source_search_context_get_highlight (priv->search_context))
     return;
 
-  gdk_cairo_get_clip_rectangle (cr, &area);
-  gtk_text_view_window_to_buffer_coords (text_view, GTK_TEXT_WINDOW_TEXT,
-                                         area.x, area.y, &area.x, &area.y);
-  gtk_text_view_get_iter_at_location (text_view, &begin, area.x, area.y);
-  gtk_text_view_get_iter_at_location (text_view, &end,
-                                      area.x + area.width,
-                                      area.y + area.height);
-
   if (!gdk_cairo_get_clip_rectangle (cr, &area))
-    g_assert_not_reached ();
+    gtk_widget_get_allocation (GTK_WIDGET (self), &area);
+
+  gtk_text_view_window_to_buffer_coords (text_view, GTK_TEXT_WINDOW_TEXT,
+                                         area.x, area.y, &buffer_x, &buffer_y);
+  gtk_text_view_get_iter_at_location (text_view, &begin, buffer_x, buffer_y);
+  gtk_text_view_get_iter_at_location (text_view, &end,
+                                      buffer_x + area.width,
+                                      buffer_y + area.height);
 
   clip_region = cairo_region_create_rectangle (&area);
   match_region = cairo_region_create ();
