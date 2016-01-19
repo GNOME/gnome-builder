@@ -133,7 +133,7 @@ _ide_tree_builder_set_tree (IdeTreeBuilder *builder,
 	IdeTreeBuilderPrivate *priv = ide_tree_builder_get_instance_private (builder);
 
 	g_return_if_fail (IDE_IS_TREE_BUILDER (builder));
-	g_return_if_fail (priv->tree == NULL);
+	g_return_if_fail (priv->tree == NULL || IDE_IS_TREE (priv->tree));
 	g_return_if_fail (IDE_IS_TREE (tree));
 
   if (priv->tree != tree)
