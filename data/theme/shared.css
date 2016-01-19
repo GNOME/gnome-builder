@@ -2,3 +2,18 @@
 filechooser actionbar button.combo {
   padding: 0;
 }
+
+/* styling for editor search */
+frame.gb-search-frame {
+  background-image: linear-gradient(shade(@theme_bg_color,1.05), @theme_bg_color);
+  padding: 6px;
+  border-style: solid;
+  border-color: @borders;
+  border-left-width: 1px;
+  border-right-width: 1px;
+  border-bottom-width: 1px;
+  border-bottom-left-radius: 5px;
+}
+frame.gb-search-frame border {
+  border: none;
+}
