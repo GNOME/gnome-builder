@@ -10,6 +10,7 @@ GITIGNOREFILES = \
 	missing \
 	py-compile \
 	test-driver \
+	ylwrap \
 	$(NULL)
 
 -include $(top_srcdir)/git.mk
