@@ -77,6 +77,9 @@
                     <property name="margin-end">3</property>
                     <property name="icon-name">pan-down-symbolic</property>
                     <property name="visible">true</property>
+                    <style>
+                      <class name="dim-label"/>
+                    </style>
                   </object>
                 </child>
                 <child>
