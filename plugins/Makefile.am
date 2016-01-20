@@ -19,6 +19,7 @@ SUBDIRS = \
 	library-template \
 	project-tree \
 	python-gi-imports-completion \
+	media-controls \
 	mingw \
 	python-pack \
 	support \

@@ -1,0 +1,8 @@
+[Plugin]
+Module=media-controls-plugin
+Name=Media Controls
+Description=Provides media control buttons
+Authors=Ben Iofel <iofelben@gmail.com>
+Copyright=Copyright © 2016 Ben Iofel
+Builtin=true
+Depends=editor
