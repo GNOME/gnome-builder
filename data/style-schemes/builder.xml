@@ -24,22 +24,22 @@
   <_description>The default color scheme for Builder</_description>
 
   <!-- Tango Palette -->
-  <color name="bg1" value="#f6f7f8"/>
-  <color name="bg2" value="#f0f1f2"/>
-  <color name="og1" value="#d75d1b"/>
-  <color name="gr1" value="#709831"/>
-  <color name="brown1" value="#a67f59"/>
-  <color name="blue1" value="#708090"/>
-  <color name="blue2" value="#0077aa"/>
-  <color name="purple1" value="#990055"/>
-  <color name="pink1" value="#dd4a68"/>
-  <color name="pink2" value="#EBCAD2"/>
-  <color name="green1" value="#669900"/>
-  <color name="text1" value="#4d4e53"/>
-  <color name="selection1" value="#b3d4fc"/>
-  <color name="line1" value="#a2a3a3"/>
-  <color name="white" value="#ffffff"/>
-  <color name="yellow1" value="#fff9e5"/>
+  <color name="bg1"                         value="#f6f7f8"/>
+  <color name="bg2"                         value="#f0f1f2"/>
+  <color name="og1"                         value="#d75d1b"/>
+  <color name="gr1"                         value="#709831"/>
+  <color name="brown1"                      value="#a67f59"/>
+  <color name="blue1"                       value="#708090"/>
+  <color name="blue2"                       value="#0077aa"/>
+  <color name="purple1"                     value="#990055"/>
+  <color name="pink1"                       value="#dd4a68"/>
+  <color name="pink2"                       value="#EBCAD2"/>
+  <color name="green1"                      value="#669900"/>
+  <color name="text1"                       value="#4d4e53"/>
+  <color name="selection1"                  value="#b3d4fc"/>
+  <color name="line1"                       value="#a2a3a3"/>
+  <color name="white"                       value="#ffffff"/>
+  <color name="yellow1"                     value="#fff9e5"/>
 
   <color name="butter1"                     value="#fce94f"/>
   <color name="butter2"                     value="#edd400"/>
