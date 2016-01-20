@@ -29,14 +29,18 @@ public class Ide.MediaControls : GLib.Object, Ide.WorkbenchAddin {
 
 			Mpris? mpris = null;
 			Bus.get_proxy.begin<Mpris> (BusType.SESSION,
-										"org.mpris.MediaPlayer2.spotify",
-										"/org/mpris/MediaPlayer2",
-										0, null,
-										(obj, res) => {
-				mpris = Bus.get_proxy.end (res);
-				back.clicked.connect (button => mpris.previous ());
-				play.clicked.connect (button => mpris.play_pause ());
-				forward.clicked.connect (button => mpris.next ());
+					"org.mpris.MediaPlayer2.spotify",
+					"/org/mpris/MediaPlayer2",
+					0, null,
+					(obj, res) => {
+				try {
+					mpris = Bus.get_proxy.end (res);
+					back.clicked.connect (button => mpris.previous ());
+					play.clicked.connect (button => mpris.play_pause ());
+					forward.clicked.connect (button => mpris.next ());
+				} catch (IOError e) {
+					warning (e.message);
+				}
 			});
 
 			box.add (back);
