@@ -19,6 +19,9 @@
   <chapter>
     <title>[Insert title here]</title>
         <xi:include href="xml/ide.xml"/>
+	<xi:include href="xml/ide-application.xml"/>
+	<xi:include href="xml/ide-application-addin.xml"/>
+	<xi:include href="xml/ide-application-tool.xml"/>
     <xi:include href="xml/ide-back-forward-item.xml"/>
     <xi:include href="xml/ide-back-forward-list.xml"/>
     <xi:include href="xml/ide-buffer.xml"/>
