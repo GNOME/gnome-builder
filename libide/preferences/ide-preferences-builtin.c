@@ -39,7 +39,8 @@ ide_preferences_builtin_register_plugins (IdePreferences *preferences)
   list = peas_engine_get_plugin_list (engine);
 
   ide_preferences_add_page (preferences, "plugins", _("Extensions"), 700);
-  ide_preferences_add_list_group (preferences, "plugins", "builtin", _("Bundled Extensions"), 0);
+  ide_preferences_add_list_group (preferences, "plugins", "installed", _("Installed Extensions"), 0);
+  ide_preferences_add_list_group (preferences, "plugins", "builtin", _("Bundled Extensions"), 100);
 
   for (; list; list = list->next, i++)
     {
@@ -47,6 +48,7 @@ ide_preferences_builtin_register_plugins (IdePreferences *preferences)
       PeasPluginInfo *plugin_info = list->data;
       const gchar *desc;
       const gchar *name;
+      const gchar *group;
 
       if (peas_plugin_info_is_hidden (plugin_info))
         continue;
@@ -57,7 +59,12 @@ ide_preferences_builtin_register_plugins (IdePreferences *preferences)
       path = g_strdup_printf ("/org/gnome/builder/plugins/%s/",
                               peas_plugin_info_get_module_name (plugin_info));
 
-      ide_preferences_add_switch (preferences, "plugins", "builtin", "org.gnome.builder.plugin", "enabled", path, NULL, name, desc, NULL, i);
+      if (peas_plugin_info_is_builtin (plugin_info))
+        group = "builtin";
+      else
+        group = "installed";
+
+      ide_preferences_add_switch (preferences, "plugins", group, "org.gnome.builder.plugin", "enabled", path, NULL, name, desc, NULL, i);
     }
 }
 
