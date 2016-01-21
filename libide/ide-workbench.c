@@ -299,6 +299,21 @@ ide_workbench_class_init (IdeWorkbenchClass *klass)
 
   widget_class->delete_event = ide_workbench_delete_event;
 
+  /**
+   * IdeWorkbench:context:
+   *
+   * The #IdeWorkbench:context property contains the #IdeContext for the loaded
+   * project. Loading a project consists of creating an #IdeContext, so there
+   * is a 1:1 mapping between "loaded project" and an #IdeContext.
+   *
+   * The #IdeContext contains many of the important components of a project.
+   * For example, it contains the #IdeVcs representing the active version
+   * control system and an #IdeBuildSystem representing the current build
+   * system.
+   *
+   * The creation of #IdeWorkbenchAddin addins are deferred until this property
+   * has been set.
+   */
   properties [PROP_CONTEXT] =
     g_param_spec_object ("context",
                          "Context",
@@ -306,6 +321,13 @@ ide_workbench_class_init (IdeWorkbenchClass *klass)
                          IDE_TYPE_CONTEXT,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
+  /**
+   * IdeWorkbench:visible-perspective:
+   *
+   * This property contains the #IdePerspective that is currently selected.
+   * Connect to the "notify::visible-perspective" signal to be notified when
+   * the perspective has been changed.
+   */
   properties [PROP_VISIBLE_PERSPECTIVE] =
     g_param_spec_object ("visible-perspective",
                          "visible-Perspective",
@@ -313,6 +335,12 @@ ide_workbench_class_init (IdeWorkbenchClass *klass)
                          IDE_TYPE_PERSPECTIVE,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
+  /**
+   * IdeWorkbench:visible-perspective-name:
+   *
+   * This property is just like #IdeWorkbench:visible-perspective except that
+   * it contains the name of the perspective as a string.
+   */
   properties [PROP_VISIBLE_PERSPECTIVE_NAME] =
     g_param_spec_string ("visible-perspective-name",
                          "visible-Perspective-name",

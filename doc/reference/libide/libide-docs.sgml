@@ -67,6 +67,7 @@
     <xi:include href="xml/ide-macros.xml"/>
     <xi:include href="xml/ide-object.xml"/>
     <xi:include href="xml/ide-pattern-spec.xml"/>
+    <xi:include href="xml/ide-perspective.xml"/>
     <xi:include href="xml/ide-process.xml"/>
     <xi:include href="xml/ide-progress.xml"/>
     <xi:include href="xml/ide-project.xml"/>
