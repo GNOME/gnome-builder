@@ -108,6 +108,8 @@
     <xi:include href="xml/ide-unsaved-files.xml"/>
     <xi:include href="xml/ide-vcs.xml"/>
     <xi:include href="xml/ide-vcs-uri.xml"/>
+    <xi:include href="xml/ide-workbench.xml"/>
+    <xi:include href="xml/ide-workbench-addin.xml"/>
 
   </chapter>
   <chapter id="object-tree">
