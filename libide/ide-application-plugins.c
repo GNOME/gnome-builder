@@ -61,6 +61,7 @@ ide_application_discover_plugins (IdeApplication *self)
 {
   PeasEngine *engine = peas_engine_get_default ();
   const GList *list;
+  gchar *path;
 
   g_return_if_fail (IDE_IS_APPLICATION (self));
 
@@ -80,8 +81,6 @@ ide_application_discover_plugins (IdeApplication *self)
 
           while ((name = g_dir_read_name (dir)))
             {
-              gchar *path;
-
               path = g_build_filename (BUILDDIR, "plugins", name, NULL);
               peas_engine_prepend_search_path (engine, path, path);
               g_free (path);
@@ -102,6 +101,10 @@ ide_application_discover_plugins (IdeApplication *self)
   peas_engine_prepend_search_path (engine,
                                    "resource:///org/gnome/builder/plugins",
                                    "resource:///org/gnome/builder/plugins");
+
+  path = g_build_filename (g_get_user_data_dir (), "gnome-builder", "plugins", NULL);
+  peas_engine_prepend_search_path (engine, path, path);
+  g_free (path);
 
   peas_engine_rescan_plugins (engine);
 
