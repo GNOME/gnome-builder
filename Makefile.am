@@ -74,6 +74,7 @@ run:
 	PEAS_DEBUG=1 \
 	GB_IN_TREE_PLUGINS=1 \
 	GB_IN_TREE_FONTS=1 \
+	GB_IN_TREE_STYLE_SCHEMES=1 \
 	GI_TYPELIB_PATH="libide:$(GI_TYPELIB_PATH)" \
 	GOBJECT_DEBUG=instance-count \
 	PATH=$(top_builddir)/src:${PATH} \
@@ -83,6 +84,7 @@ strace:
 	PEAS_DEBUG=1 \
 	GB_IN_TREE_PLUGINS=1 \
 	GB_IN_TREE_FONTS=1 \
+	GB_IN_TREE_STYLE_SCHEMES=1 \
 	GI_TYPELIB_PATH="libide:$(GI_TYPELIB_PATH)" \
 	GOBJECT_DEBUG=instance-count \
 	PATH=$(top_builddir)/src:${PATH} \
@@ -92,6 +94,7 @@ debug:
 	PEAS_DEBUG=1 \
 	GB_IN_TREE_PLUGINS=1 \
 	GB_IN_TREE_FONTS=1 \
+	GB_IN_TREE_STYLE_SCHEMES=1 \
 	GI_TYPELIB_PATH="libide:$(GI_TYPELIB_PATH)" \
 	G_DEBUG=fatal-criticals \
 	GOBJECT_DEBUG=instance-count \
@@ -102,6 +105,7 @@ valgrind:
 	PEAS_DEBUG=1 \
 	GB_IN_TREE_PLUGINS=1 \
 	GB_IN_TREE_FONTS=1 \
+	GB_IN_TREE_STYLE_SCHEMES=1 \
 	GI_TYPELIB_PATH="libide:$(GI_TYPELIB_PATH)" \
 	G_DEBUG=fatal-criticals \
 	G_SLICE=always-malloc \

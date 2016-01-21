@@ -142,6 +142,10 @@ ide_application_register_search_paths (IdeApplication *self)
 
   gtk_source_style_scheme_manager_append_search_path (gtk_source_style_scheme_manager_get_default (),
                                                       PACKAGE_DATADIR"/gtksourceview-3.0/styles/");
+
+  if (g_getenv ("GB_IN_TREE_STYLE_SCHEMES") != NULL)
+    gtk_source_style_scheme_manager_prepend_search_path (gtk_source_style_scheme_manager_get_default (),
+                                                         SRCDIR"/data/style-schemes");
 }
 
 static void
