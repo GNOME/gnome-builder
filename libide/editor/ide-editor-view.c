@@ -666,11 +666,14 @@ ide_editor_view_goto_line_changed (IdeEditorView    *self,
 }
 
 static void
-ide_editor_view__extension_added (PeasExtensionSet   *set,
-                                  PeasPluginInfo     *info,
-                                  IdeEditorViewAddin *addin,
-                                  IdeEditorView      *self)
+ide_editor_view__extension_added (PeasExtensionSet *set,
+                                  PeasPluginInfo   *info,
+                                  PeasExtension    *exten,
+                                  gpointer          user_data)
 {
+  IdeEditorView *self = user_data;
+  IdeEditorViewAddin *addin = (IdeEditorViewAddin *)exten;
+
   g_assert (PEAS_IS_EXTENSION_SET (set));
   g_assert (info != NULL);
   g_assert (IDE_IS_EDITOR_VIEW_ADDIN (addin));
@@ -695,11 +698,14 @@ ide_editor_view__extension_added (PeasExtensionSet   *set,
 }
 
 static void
-ide_editor_view__extension_removed (PeasExtensionSet  *set,
-                                   PeasPluginInfo    *info,
-                                   IdeEditorViewAddin *addin,
-                                   IdeEditorView      *self)
+ide_editor_view__extension_removed (PeasExtensionSet *set,
+                                    PeasPluginInfo   *info,
+                                    PeasExtension    *exten,
+                                    gpointer          user_data)
 {
+  IdeEditorViewAddin *addin = (IdeEditorViewAddin *)exten;
+  IdeEditorView *self = user_data;
+
   g_assert (PEAS_IS_EXTENSION_SET (set));
   g_assert (info != NULL);
   g_assert (IDE_IS_EDITOR_VIEW_ADDIN (addin));
@@ -710,7 +716,7 @@ ide_editor_view__extension_removed (PeasExtensionSet  *set,
 
 static void
 ide_editor_view_warning_button_clicked (IdeEditorView *self,
-                                       GtkButton    *button)
+                                        GtkButton     *button)
 {
   IdeEditorFrame *frame;
 
@@ -723,28 +729,64 @@ ide_editor_view_warning_button_clicked (IdeEditorView *self,
 }
 
 static void
-ide_editor_view_constructed (GObject *object)
+ide_editor_view_load_addins (IdeEditorView *self)
 {
-  IdeEditorView *self = (IdeEditorView *)object;
   PeasEngine *engine;
 
-  G_OBJECT_CLASS (ide_editor_view_parent_class)->constructed (object);
+  g_assert (IDE_IS_EDITOR_VIEW (self));
+  g_assert (self->extensions == NULL);
 
   engine = peas_engine_get_default ();
-  self->extensions = peas_extension_set_new (engine, IDE_TYPE_EDITOR_VIEW_ADDIN, NULL);
+
+  self->extensions = peas_extension_set_new (engine,
+                                             IDE_TYPE_EDITOR_VIEW_ADDIN,
+                                             NULL);
+
   g_signal_connect_object (self->extensions,
                            "extension-added",
                            G_CALLBACK (ide_editor_view__extension_added),
                            self,
-                           G_CONNECT_SWAPPED);
+                           0);
+
   g_signal_connect_object (self->extensions,
-                           "extension-added",
+                           "extension-removed",
                            G_CALLBACK (ide_editor_view__extension_removed),
                            self,
-                           G_CONNECT_SWAPPED);
-  peas_extension_set_foreach (self->extensions,
-                              (PeasExtensionSetForeachFunc)ide_editor_view__extension_added,
-                              self);
+                           0);
+
+  peas_extension_set_foreach (self->extensions, ide_editor_view__extension_added, self);
+}
+
+static void
+ide_editor_view_unload_addins (IdeEditorView *self)
+{
+  g_assert (IDE_IS_EDITOR_VIEW (self));
+  g_assert (!self->extensions || PEAS_IS_EXTENSION_SET (self->extensions));
+
+  g_clear_object (&self->extensions);
+}
+
+static void
+ide_editor_view_hierarchy_changed (GtkWidget *widget,
+                                   GtkWidget *previous_toplevel)
+{
+  IdeEditorView *self = (IdeEditorView *)widget;
+  GtkWidget *toplevel;
+
+  g_assert (IDE_IS_EDITOR_VIEW (self));
+
+  /*
+   * NOTE: If we ever support tearing out the editor, we should probably use
+   *       ide_widget_get_workbench() to discover a "synthetic" toplevel.
+   */
+
+  toplevel = gtk_widget_get_toplevel (widget);
+
+  if (IDE_IS_WORKBENCH (previous_toplevel) && self->extensions != NULL)
+    ide_editor_view_unload_addins (self);
+
+  if (IDE_IS_WORKBENCH (toplevel))
+    ide_editor_view_load_addins (self);
 }
 
 static const gchar *
@@ -764,6 +806,8 @@ static void
 ide_editor_view_destroy (GtkWidget *widget)
 {
   IdeEditorView *self = (IdeEditorView *)widget;
+
+  ide_editor_view_unload_addins (self);
 
   GTK_WIDGET_CLASS (ide_editor_view_parent_class)->destroy (widget);
 
@@ -828,7 +872,6 @@ ide_editor_view_class_init (IdeEditorViewClass *klass)
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   IdeLayoutViewClass *view_class = IDE_LAYOUT_VIEW_CLASS (klass);
 
-  object_class->constructed = ide_editor_view_constructed;
   object_class->finalize = ide_editor_view_finalize;
   object_class->get_property = ide_editor_view_get_property;
   object_class->set_property = ide_editor_view_set_property;
@@ -837,6 +880,7 @@ ide_editor_view_class_init (IdeEditorViewClass *klass)
   widget_class->grab_focus = ide_editor_view_grab_focus;
   widget_class->get_request_mode = ide_editor_view_get_request_mode;
   widget_class->get_preferred_height = ide_editor_view_get_preferred_height;
+  widget_class->hierarchy_changed = ide_editor_view_hierarchy_changed;
 
   view_class->create_split = ide_editor_view_create_split;
   view_class->get_special_title = ide_editor_view_get_special_title;
