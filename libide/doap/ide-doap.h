@@ -41,6 +41,10 @@ gboolean       ide_doap_load_from_file    (IdeDoap        *self,
                                            GFile          *file,
                                            GCancellable   *cancellable,
                                            GError        **error);
+gboolean       ide_doap_load_from_data    (IdeDoap        *self,
+                                           const gchar    *data,
+                                           gsize           length,
+                                           GError        **error);
 const gchar   *ide_doap_get_name          (IdeDoap        *self);
 const gchar   *ide_doap_get_shortdesc     (IdeDoap        *self);
 const gchar   *ide_doap_get_description   (IdeDoap        *self);

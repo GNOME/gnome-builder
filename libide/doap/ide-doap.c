@@ -521,23 +521,11 @@ ide_doap_parse_maintainer (IdeDoap   *self,
   return TRUE;
 }
 
-gboolean
-ide_doap_load_from_file (IdeDoap       *self,
-                         GFile         *file,
-                         GCancellable  *cancellable,
-                         GError       **error)
+static gboolean
+load_doap (IdeDoap       *self,
+           XmlReader     *reader,
+           GError       **error)
 {
-  g_autoptr(XmlReader) reader = NULL;
-
-  g_return_val_if_fail (IDE_IS_DOAP (self), FALSE);
-  g_return_val_if_fail (G_IS_FILE (file), FALSE);
-  g_return_val_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable), FALSE);
-
-  reader = xml_reader_new ();
-
-  if (!xml_reader_load_from_file (reader, file, cancellable, error))
-    return FALSE;
-
   if (!xml_reader_read_start_element (reader, "Project"))
     {
       g_set_error (error,
@@ -600,4 +588,43 @@ ide_doap_load_from_file (IdeDoap       *self,
   g_object_thaw_notify (G_OBJECT (self));
 
   return TRUE;
+}
+
+gboolean
+ide_doap_load_from_file (IdeDoap       *self,
+                         GFile         *file,
+                         GCancellable  *cancellable,
+                         GError       **error)
+{
+  g_autoptr(XmlReader) reader = NULL;
+
+  g_return_val_if_fail (IDE_IS_DOAP (self), FALSE);
+  g_return_val_if_fail (G_IS_FILE (file), FALSE);
+  g_return_val_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable), FALSE);
+
+  reader = xml_reader_new ();
+
+  if (!xml_reader_load_from_file (reader, file, cancellable, error))
+    return FALSE;
+
+  return load_doap (self, reader, error);
+}
+
+gboolean
+ide_doap_load_from_data (IdeDoap       *self,
+                         const gchar   *data,
+                         gsize          length,
+                         GError       **error)
+{
+  g_autoptr(XmlReader) reader = NULL;
+
+  g_return_val_if_fail (IDE_IS_DOAP (self), FALSE);
+  g_return_val_if_fail (data != NULL, FALSE);
+
+  reader = xml_reader_new ();
+
+  if (!xml_reader_load_from_data (reader, (const gchar *)data, length, NULL, NULL))
+    return FALSE;
+
+  return load_doap (self, reader, error);
 }
