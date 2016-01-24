@@ -1212,13 +1212,13 @@ ide_context_init_services (gpointer             source_object,
                            "extension-added",
                            G_CALLBACK (ide_context_service_added),
                            self,
-                           G_CONNECT_SWAPPED);
+                           0);
 
   g_signal_connect_object (self->services,
                            "extension-removed",
                            G_CALLBACK (ide_context_service_removed),
                            self,
-                           G_CONNECT_SWAPPED);
+                           0);
 
   peas_extension_set_foreach (self->services,
                               (PeasExtensionSetForeachFunc)ide_context_service_added,
