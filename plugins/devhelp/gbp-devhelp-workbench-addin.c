@@ -104,6 +104,7 @@ gbp_devhelp_workbench_addin_unload (IdeWorkbenchAddin *addin,
   GbpDevhelpWorkbenchAddin *self = (GbpDevhelpWorkbenchAddin *)addin;
   IdePerspective *perspective;
   GtkWidget *pane;
+  const gchar *empty_accels[1] = { NULL };
 
   g_assert (IDE_IS_WORKBENCH_ADDIN (self));
   g_assert (IDE_IS_WORKBENCH (workbench));
@@ -121,7 +122,7 @@ gbp_devhelp_workbench_addin_unload (IdeWorkbenchAddin *addin,
   g_action_map_remove_action (G_ACTION_MAP (workbench), "focus-devhelp-search");
 
   gtk_application_set_accels_for_action (GTK_APPLICATION (IDE_APPLICATION_DEFAULT),
-                                         "win.focus-devhelp-search", NULL);
+                                         "win.focus-devhelp-search", empty_accels);
 }
 
 static void

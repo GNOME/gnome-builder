@@ -48,10 +48,12 @@ static void
 gb_terminal_application_addin_unload (IdeApplicationAddin *addin,
                                       IdeApplication      *application)
 {
+  const gchar *empty_accels[1] = { NULL };
+
   g_assert (GB_IS_TERMINAL_APPLICATION_ADDIN (addin));
   g_assert (IDE_IS_APPLICATION (application));
 
-  gtk_application_set_accels_for_action (GTK_APPLICATION (application), "win.new-terminal", NULL);
+  gtk_application_set_accels_for_action (GTK_APPLICATION (application), "win.new-terminal", empty_accels);
 }
 
 static void
