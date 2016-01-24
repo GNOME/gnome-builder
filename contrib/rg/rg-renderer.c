@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <cairo/cairo.h>
+#include <cairo.h>
 
 #include "rg-renderer.h"
 
