@@ -99,7 +99,7 @@ connect_style_scheme (IdeLineChangeGutterRenderer *self)
     {
       GtkSourceStyle *style;
 
-      style = gtk_source_style_scheme_get_style (style_scheme, "diff:added-line");
+      style = gtk_source_style_scheme_get_style (style_scheme, "gutter:added-line");
 
       if (style)
         {
@@ -115,7 +115,7 @@ connect_style_scheme (IdeLineChangeGutterRenderer *self)
             self->rgba_added_set = gdk_rgba_parse (&self->rgba_added, foreground);
         }
 
-      style = gtk_source_style_scheme_get_style (style_scheme, "diff:changed-line");
+      style = gtk_source_style_scheme_get_style (style_scheme, "gutter:changed-line");
 
       if (style)
         {

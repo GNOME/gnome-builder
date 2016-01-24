@@ -133,10 +133,13 @@
 
   <style name="diff:added-line"             foreground="chameleon2"/>
   <style name="diff:removed-line"           foreground="plum1"/>
-  <style name="diff:changed-line"           foreground="butter3"/>
+  <style name="diff:changed-line"           foreground="blue1"/>
   <style name="diff:diff-file"              foreground="chameleon1" bold="true"/>
   <style name="diff:location"               foreground="chameleon1"/>
   <style name="diff:special-case"           foreground="white" bold="true"/>
+
+  <style name="gutter:added-line"           foreground="chameleon2"/>
+  <style name="gutter:changed-line"         foreground="butter3"/>
 
   <style name="js:object"                   foreground="chameleon3" bold="true"/>
   <style name="js:constructors"             foreground="pink1"/>
