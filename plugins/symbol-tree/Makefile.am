@@ -12,6 +12,8 @@ dist_plugin_DATA = symbol-tree.plugin
 libsymbol_tree_la_SOURCES = \
 	symbol-tree-builder.c \
 	symbol-tree-builder.h \
+	symbol-tree-panel.c \
+	symbol-tree-panel.h \
 	symbol-tree.c \
 	symbol-tree.h \
 	$(NULL)

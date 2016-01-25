@@ -1,6 +1,6 @@
-/* symbol-tree.h
+/* symbol-tree-panel.h
  *
- * Copyright (C) 2015 Christian Hergert <christian@hergert.me>
+ * Copyright (C) 2016 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,17 +16,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SYMBOL_TREE_H
-#define SYMBOL_TREE_H
+#ifndef SYMBOL_TREE_PANEL_H
+#define SYMBOL_TREE_PANEL_H
 
-#include <glib-object.h>
+#include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 
-#define SYMBOL_TYPE_TREE (symbol_tree_get_type())
+#define SYMBOL_TYPE_TREE_PANEL (symbol_tree_panel_get_type())
 
-G_DECLARE_FINAL_TYPE (SymbolTree, symbol_tree, SYMBOL, TREE, GObject)
+G_DECLARE_FINAL_TYPE (SymbolTreePanel, symbol_tree_panel, SYMBOL, TREE_PANEL, GtkBox)
+
+void symbol_tree_panel_reset (SymbolTreePanel *self);
 
 G_END_DECLS
 
-#endif /* SYMBOL_TREE_H */
+#endif /* SYMBOL_TREE_PANEL_H */

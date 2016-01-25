@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.16 -->
-  <template class="SymbolTree" parent="GtkBox">
+  <template class="SymbolTreePanel" parent="GtkBox">
     <property name="vexpand">true</property>
     <property name="visible">true</property>
     <property name="orientation">vertical</property>
