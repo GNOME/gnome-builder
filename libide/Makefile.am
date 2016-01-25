@@ -243,10 +243,6 @@ libide_1_0_la_public_sources = \
 
 libide_1_0_la_SOURCES = \
 	$(libide_1_0_la_public_sources) \
-	editorconfig/editorconfig-glib.c \
-	editorconfig/editorconfig-glib.h \
-	editorconfig/ide-editorconfig-file-settings.c \
-	editorconfig/ide-editorconfig-file-settings.h \
 	editor/ide-editor-frame-actions.c \
 	editor/ide-editor-frame-actions.h \
 	editor/ide-editor-frame.c \
@@ -410,14 +406,12 @@ libide_1_0_la_includes = \
 	-I$(top_srcdir)/contrib/egg \
 	-I$(top_srcdir)/contrib/gd \
 	-I$(top_srcdir)/contrib/nautilus \
-	-I$(top_srcdir)/contrib/libeditorconfig \
 	-I$(top_srcdir)/contrib/search \
 	-I$(top_srcdir)/contrib/xml \
 	-I$(top_builddir)/data/icons/hicolor \
 	-I$(srcdir) \
 	-I$(srcdir)/doap \
 	-I$(srcdir)/editor \
-	-I$(srcdir)/editorconfig \
 	-I$(srcdir)/greeter \
 	-I$(srcdir)/genesis \
 	-I$(srcdir)/gsettings \
@@ -463,7 +457,6 @@ libide_1_0_la_LIBADD = \
 	$(top_builddir)/data/icons/hicolor/libicons.la \
 	$(top_builddir)/contrib/egg/libegg-private.la \
 	$(top_builddir)/contrib/gd/libgd.la \
-	$(top_builddir)/contrib/libeditorconfig/libeditorconfig.la \
 	$(top_builddir)/contrib/nautilus/libnautilus.la \
 	$(top_builddir)/contrib/search/libsearch.la \
 	$(top_builddir)/contrib/xml/libxml.la \
@@ -473,6 +466,21 @@ libide_1_0_la_built_sources = \
 	resources/ide-resources.c \
 	resources/ide-resources.h \
 	$(NULL)
+
+
+if ENABLE_EDITORCONFIG
+libide_1_0_la_SOURCES += \
+	editorconfig/editorconfig-glib.c \
+	editorconfig/editorconfig-glib.h \
+	editorconfig/ide-editorconfig-file-settings.c \
+	editorconfig/ide-editorconfig-file-settings.h
+
+libide_1_0_la_includes += \
+	-I$(top_srcdir)/contrib/libeditorconfig \
+	-I$(srcdir)/editorconfig
+
+libide_1_0_la_LIBADD += $(top_builddir)/contrib/libeditorconfig/libeditorconfig.la
+endif
 
 
 if ENABLE_PYTHON_SCRIPTING

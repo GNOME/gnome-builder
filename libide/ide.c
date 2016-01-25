@@ -23,10 +23,13 @@
 #include "gconstructor.h"
 #include "ide.h"
 
-#include "ide-editorconfig-file-settings.h"
 #include "ide-file-settings.h"
 #include "ide-gsettings-file-settings.h"
 #include "ide-modelines-file-settings.h"
+
+#ifdef ENABLE_EDITORCONFIG
+# include "ide-editorconfig-file-settings.h"
+#endif
 
 #ifdef ENABLE_PYTHON_SCRIPTING
 # include "ide-pygobject-script.h"
@@ -73,10 +76,12 @@ ide_init_ctor (void)
                                   IDE_TYPE_MODELINES_FILE_SETTINGS,
                                   IDE_FILE_SETTINGS_EXTENSION_POINT".modelines",
                                   -100);
+#ifdef ENABLE_EDITORCONFIG
   g_io_extension_point_implement (IDE_FILE_SETTINGS_EXTENSION_POINT,
                                   IDE_TYPE_EDITORCONFIG_FILE_SETTINGS,
                                   IDE_FILE_SETTINGS_EXTENSION_POINT".editorconfig",
                                   -200);
+#endif
   g_io_extension_point_implement (IDE_FILE_SETTINGS_EXTENSION_POINT,
                                   IDE_TYPE_GSETTINGS_FILE_SETTINGS,
                                   IDE_FILE_SETTINGS_EXTENSION_POINT".gsettings",

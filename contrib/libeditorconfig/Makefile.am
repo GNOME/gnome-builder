@@ -1,3 +1,5 @@
+if ENABLE_EDITORCONFIG
+
 noinst_LTLIBRARIES = libeditorconfig.la
 
 libeditorconfig_la_SOURCES = \
@@ -33,5 +35,7 @@ libeditorconfig_la_CFLAGS = \
 	-Deditorconfig_VERSION_PATCH=0 \
 	-Deditorconfig_VERSION_SUFFIX=0 \
 	$(NULL)
+
+endif
 
 -include $(top_srcdir)/git.mk

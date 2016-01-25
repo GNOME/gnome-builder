@@ -80,7 +80,19 @@ APPSTREAM_XML
 dnl ***********************************************************************
 dnl Check for Required Headers
 dnl ***********************************************************************
-AC_CHECK_HEADER([pcre.h])
+AC_ARG_ENABLE([editorconfig],
+              AS_HELP_STRING([--enable-editorconfig],
+                             [Enable editorconfig file settings.]),
+              [enable_editorconfig=$enableval],
+              [enable_editorconfig=auto])
+AC_CHECK_HEADER([pcre.h],[have_pcre=yes],[have_pcre=no])
+AS_IF([test "$enable_editorconfig" = yes && test "$have_pcre" != "yes"],[
+       AC_MSG_ERROR([editorconfig requires pcre.h])
+])
+AS_IF([test "$enable_editorconfig" = "auto" && test "$have_pcre" = "yes"],[
+       enable_editorconfig=yes
+])
+AM_CONDITIONAL([ENABLE_EDITORCONFIG],[test "$enable_editorconfig" = "yes"])
 
 
 dnl ***********************************************************************
@@ -490,6 +502,7 @@ echo "  Command Bar .......................... : ${enable_command_bar_plugin}"
 echo "  Contribute ........................... : ${enable_contributing_plugin}"
 echo "  Ctags ................................ : ${enable_ctags_plugin}"
 echo "  Devhelp .............................. : ${enable_devhelp_plugin}"
+echo "  Editorconfig ......................... : ${enable_editorconfig}"
 echo "  Fpaste.org ........................... : ${enable_fpaste_plugin}"
 echo "  GCC .................................. : ${enable_gcc_plugin}"
 echo "  Git Version Control .................. : ${enable_git_plugin}"
