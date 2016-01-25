@@ -421,6 +421,7 @@ static const gchar *ide_application_credits_funders[] = {
   "Robert Carr",
   "Robert Taylor",
   "Roberto Clapis",
+  "Rocco Muscaritolo",
   "Rodolphe PP",
   "Rory MacQueen",
   "Rosanna Blandford",
