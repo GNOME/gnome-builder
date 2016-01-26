@@ -38,3 +38,7 @@ buildpanel list row image {
 buildlogpanel textview {
   padding: 3px;
 }
+
+buildpanel box.build-status {
+  background: shade(@theme_bg_color, 0.96);
+}
