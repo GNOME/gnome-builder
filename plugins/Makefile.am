@@ -5,6 +5,7 @@ SUBDIRS = \
 	command-bar \
 	contributing \
 	c-pack \
+	create-project \
 	ctags \
 	devhelp \
 	file-search \
@@ -15,6 +16,7 @@ SUBDIRS = \
 	html-completion \
 	html-preview \
 	jedi \
+	library-template \
 	project-tree \
 	python-gi-imports-completion \
 	mingw \

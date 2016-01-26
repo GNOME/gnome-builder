@@ -237,6 +237,12 @@ libide_1_0_la_public_sources = \
 	ide.h \
 	local/ide-local-device.c \
 	local/ide-local-device.h \
+	template/ide-project-template.c \
+	template/ide-project-template.h \
+	template/ide-template-base.c \
+	template/ide-template-base.h \
+	template/ide-template-provider.c \
+	template/ide-template-provider.h \
 	util/ide-file-manager.c \
 	util/ide-file-manager.h \
 	$(NULL)
@@ -407,6 +413,7 @@ libide_1_0_la_includes = \
 	-I$(top_srcdir)/contrib/gd \
 	-I$(top_srcdir)/contrib/nautilus \
 	-I$(top_srcdir)/contrib/search \
+	-I$(top_srcdir)/contrib/tmpl \
 	-I$(top_srcdir)/contrib/xml \
 	-I$(top_builddir)/data/icons/hicolor \
 	-I$(srcdir) \
@@ -459,6 +466,7 @@ libide_1_0_la_LIBADD = \
 	$(top_builddir)/contrib/gd/libgd.la \
 	$(top_builddir)/contrib/nautilus/libnautilus.la \
 	$(top_builddir)/contrib/search/libsearch.la \
+	$(top_builddir)/contrib/tmpl/libtemplate-glib-1.0.la \
 	$(top_builddir)/contrib/xml/libxml.la \
 	$(NULL)
 
@@ -536,11 +544,12 @@ introspection_sources = \
 	$(NULL)
 
 Ide-1.0.gir: libide-1.0.la
-Ide_1_0_gir_INCLUDES = Gio-2.0 GtkSource-3.0 Peas-1.0
+Ide_1_0_gir_INCLUDES = Gio-2.0 GtkSource-3.0 Peas-1.0 Template-1.0
 Ide_1_0_gir_CFLAGS = $(libide_1_0_la_CFLAGS)
 Ide_1_0_gir_LIBS = \
 	libide-1.0.la \
-	$(top_builddir)/contrib/egg/libegg-private.la
+	$(top_builddir)/contrib/egg/libegg-private.la \
+	$(top_builddir)/contrib/tmpl/libtemplate-glib-1.0.la
 Ide_1_0_gir_FILES = $(introspection_sources)
 Ide_1_0_gir_SCANNERFLAGS = \
 	--c-include="ide.h" \
@@ -564,8 +573,9 @@ if ENABLE_VAPIGEN
 libide-1.0.vapi: Ide-1.0.gir
 
 VAPIGEN_VAPIS = libide-1.0.vapi
+VAPIGEN_VAPIDIRS = $(top_builddir)/contrib/tmpl
 
-libide_1_0_vapi_DEPS = gio-2.0 gtk+-3.0 gtksourceview-3.0 libpeas-1.0
+libide_1_0_vapi_DEPS = gio-2.0 gtk+-3.0 gtksourceview-3.0 libpeas-1.0 template-glib-1.0
 libide_1_0_vapi_METADATADIRS = $(srcdir)
 libide_1_0_vapi_FILES = Ide-1.0.gir
 

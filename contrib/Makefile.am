@@ -6,6 +6,7 @@ SUBDIRS = \
 	nautilus \
 	rg \
 	search \
+	tmpl \
 	xml \
 	$(NULL)
 

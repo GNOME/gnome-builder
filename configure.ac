@@ -66,6 +66,8 @@ AM_PROG_CC_C_O
 AC_PROG_CXX
 AM_PROG_VALAC
 AC_PROG_INSTALL
+AM_PROG_LEX
+AC_PROG_YACC
 AC_PATH_PROG([GLIB_GENMARSHAL], [glib-genmarshal])
 AC_PATH_PROG([GLIB_MKENUMS], [glib-mkenums])
 AC_PATH_PROG([GLIB_COMPILE_RESOURCES], [glib-compile-resources])
@@ -168,6 +170,7 @@ m4_define([gtk_required_version], [3.19.7])
 m4_define([glib_required_version], [2.47.4])
 m4_define([gtksourceview_required_version], [3.19.4])
 m4_define([ggit_required_version], [0.23.7])
+m4_define([gobject_introspection_version], [1.47.1])
 m4_define([pygobject_required_version], [3.19.3])
 m4_define([libxml_required_version], [2.9.0])
 m4_define([pangoft2_required_version], [1.38.0])
@@ -196,6 +199,8 @@ PKG_CHECK_MODULES(PYGOBJECT,[pygobject-3.0 >= pygobject_required_version],
                             [have_pygobject=no])
 PKG_CHECK_MODULES(RG,       [gtk+-3.0 >= gtk_required_version])
 PKG_CHECK_MODULES(SEARCH,   [glib-2.0 >= glib_required_version])
+PKG_CHECK_MODULES(TMPL,     [gio-2.0 >= glib_required_version
+			     gobject-introspection-1.0 >= gobject_introspection_version])
 PKG_CHECK_MODULES(XML,      [gio-2.0 >= glib_required_version
                              libxml-2.0 >= libxml_required_version])
 
@@ -243,6 +248,7 @@ m4_include([plugins/c-pack/configure.ac])
 m4_include([plugins/clang/configure.ac])
 m4_include([plugins/command-bar/configure.ac])
 m4_include([plugins/contributing/configure.ac])
+m4_include([plugins/create-project/configure.ac])
 m4_include([plugins/ctags/configure.ac])
 m4_include([plugins/devhelp/configure.ac])
 m4_include([plugins/file-search/configure.ac])
@@ -253,6 +259,7 @@ m4_include([plugins/gnome-code-assistance/configure.ac])
 m4_include([plugins/html-completion/configure.ac])
 m4_include([plugins/html-preview/configure.ac])
 m4_include([plugins/jedi/configure.ac])
+m4_include([plugins/library-template/configure.ac])
 m4_include([plugins/mingw/configure.ac])
 m4_include([plugins/project-tree/configure.ac])
 m4_include([plugins/python-gi-imports-completion/configure.ac])
@@ -435,6 +442,8 @@ AC_CONFIG_FILES([
 	contrib/nautilus/Makefile
 	contrib/rg/Makefile
 	contrib/search/Makefile
+	contrib/tmpl/Makefile
+	contrib/tmpl/tmpl-debug.h
 	contrib/xml/Makefile
 
 	libide/ide-debug.h
@@ -450,6 +459,7 @@ AC_CONFIG_FILES([
 	data/icons/hicolor/Makefile
 	data/libide-1.0.pc
 	data/style-schemes/Makefile
+	data/template-glib-1.0.pc
 
 	doc/Makefile
 	doc/examples/Makefile
@@ -511,6 +521,7 @@ echo "  GNOME Code Assistance ................ : ${enable_gnome_code_assistance_
 echo "  HTML Autocompletion .................. : ${enable_html_completion_plugin}"
 echo "  HTML and Markdown Preview ............ : ${enable_html_preview_plugin}"
 echo "  MinGW ................................ : ${enable_mingw_plugin}"
+echo "  Project Creation ..................... : ${enable_create_project_plugin}"
 echo "  Project Tree ......................... : ${enable_project_tree_plugin}"
 echo "  Python GObject Introspection ......... : ${enable_python_gi_imports_completion_plugin}"
 echo "  Python Jedi Autocompletion ........... : ${enable_jedi_plugin}"
@@ -522,5 +533,9 @@ echo "  Todo ................................. : ${enable_todo_plugin}"
 echo "  Terminal ............................. : ${enable_terminal_plugin}"
 echo "  Vala Language Pack ................... : ${enable_vala_pack_plugin}"
 echo "  XML Language Pack .................... : ${enable_xml_pack_plugin}"
+echo ""
+echo " Templates"
+echo ""
+echo "  Library .............................. : ${enable_library_template_plugin}"
 echo ""
 

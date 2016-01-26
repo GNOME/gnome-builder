@@ -26,11 +26,13 @@ libvala_pack_plugin_la_VALAFLAGS = \
 	--target-glib=2.44 \
 	--thread \
 	--vapidir $(top_builddir)/libide \
+	--vapidir $(top_builddir)/contrib/tmpl \
 	--pkg gtksourceview-3.0 \
 	--pkg libide-1.0 \
 	--pkg libpeas-1.0 \
 	--pkg libvala-$(VALA_VERSION) \
 	--pkg posix \
+	--pkg template-glib-1.0 \
 	$(NULL)
 
 libvala_pack_plugin_la_CFLAGS = \
@@ -39,6 +41,7 @@ libvala_pack_plugin_la_CFLAGS = \
 	$(VALA_CFLAGS) \
 	-I$(top_srcdir)/libide \
 	-I$(top_srcdir)/contrib/egg \
+	-I$(top_srcdir)/contrib/tmpl \
 	$(NULL)
 
 libvala_pack_plugin_la_LDFLAGS = \

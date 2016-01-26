@@ -12,6 +12,12 @@ servicedir = $(datadir)/dbus-1/services
 service_in_files = org.gnome.Builder.service.in
 service_DATA = $(service_in_files:.service.in=.service)
 
+# pkg-config
+pkgconfigdir = $(libdir)/gnome-builder/pkgconfig
+pkgconfig_DATA = \
+	libide-1.0.pc \
+	template-glib-1.0.pc
+
 org.gnome.Builder.service: org.gnome.Builder.service.in
 	$(AM_V_GEN)	\
 		[ -d $(@D) ] || $(mkdir_p) $(@D) ; \

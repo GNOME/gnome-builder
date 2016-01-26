@@ -1,0 +1,203 @@
+AC_PREREQ([{{autoconf_required_version}}])
+
+dnl ***********************************************************************
+dnl Define Versioning Information
+dnl ***********************************************************************
+m4_define([major_version],[{{version_major}}])
+m4_define([minor_version],[{{version_minor}}])
+m4_define([micro_version],[{{version_micro}}])
+m4_define([version],[major_version.minor_version.micro_version])
+m4_define([interface_age],[0])
+m4_define([bugreport_url],[{{bugreport_url}}])
+m4_define([debug_default],[m4_if(m4_eval(minor_version % 2),[1],[yes],[minimum])])
+
+
+dnl ***********************************************************************
+dnl Initialize Autoconf
+dnl ***********************************************************************
+AC_INIT([{{name}}],[version],[bugreport_url])
+AC_CONFIG_HEADERS([config.h])
+AC_CONFIG_SRCDIR([configure.ac])
+AC_CONFIG_MACRO_DIR([build-aux])
+AC_CONFIG_AUX_DIR([build-aux])
+AC_SUBST(ACLOCAL_AMFLAGS, "-I build-aux")
+AC_CANONICAL_HOST
+
+
+dnl ***********************************************************************
+dnl Export version information
+dnl ***********************************************************************
+MAJOR_VERSION=major_version
+MINOR_VERSION=minor_version
+MICRO_VERSION=micro_version
+AC_SUBST(MAJOR_VERSION)
+AC_SUBST(MINOR_VERSION)
+AC_SUBST(MICRO_VERSION)
+
+
+dnl ***********************************************************************
+dnl Initialize Automake
+dnl ***********************************************************************
+AM_SILENT_RULES([yes])
+AM_INIT_AUTOMAKE([1.11 foreign subdir-objects tar-ustar no-dist-gzip dist-xz])
+AM_MAINTAINER_MODE([enable])
+
+
+dnl ***********************************************************************
+dnl Internationalization
+dnl ***********************************************************************
+IT_PROG_INTLTOOL([0.50.1])
+GETTEXT_PACKAGE=AC_PACKAGE_TARNAME
+AC_SUBST(GETTEXT_PACKAGE)
+AC_DEFINE_UNQUOTED([GETTEXT_PACKAGE], ["$GETTEXT_PACKAGE"], [GETTEXT package name])
+AM_GLIB_GNU_GETTEXT
+
+
+dnl ***********************************************************************
+dnl Check for Required Programs
+dnl ***********************************************************************
+AC_PROG_CC
+{{if enable_cplusplus}}
+AC_PROG_CXX
+{{end}}
+AC_PROG_INSTALL
+AC_PATH_PROG([GLIB_GENMARSHAL], [glib-genmarshal])
+AC_PATH_PROG([GLIB_MKENUMS], [glib-mkenums])
+AC_PATH_PROG([GLIB_COMPILE_RESOURCES], [glib-compile-resources])
+GLIB_GSETTINGS
+PKG_PROG_PKG_CONFIG([0.22])
+{{if enable_gobject_introspection}}
+GOBJECT_INTROSPECTION_CHECK([1.42.0])
+{{end}}
+{{if enable_vala}}
+AM_PROG_VALAC
+VAPIGEN_CHECK
+{{end}}
+{{if enable_appstream}}
+APPSTREAM_XML
+{{end}}
+
+
+{{if enable_c11}}
+dnl ***********************************************************************
+dnl Ensure C11 is Supported
+dnl ***********************************************************************
+AX_CHECK_COMPILE_FLAG([-std=gnu11],
+                      [CFLAGS="$CFLAGS -std=gnu11"],
+                      [AC_MSG_ERROR([C compiler cannot compile GNU C11 code])])
+
+
+{{end}}
+dnl ***********************************************************************
+dnl Setup Debug and Tracing Support
+dnl ***********************************************************************
+AC_ARG_ENABLE(debug,
+              AS_HELP_STRING([--enable-debug=@<:@no/minimum/yes@:>@],
+                             [turn on debugging @<:@default=debug_default@:>@]),
+              ,
+              enable_debug=debug_default)
+AS_CASE(["$enable_debug"],
+        [yes],[
+            DEBUG_CFLAGS="$DEBUG_CFLAGS -O0"
+            DEBUG_CFLAGS="$DEBUG_CFLAGS -g"
+        ],
+        [minimum],[
+            DEBUG_CFLAGS="$DEBUG_CFLAGS -DG_DISABLE_CAST_CHECKS"
+        ],
+        [no],[
+            DEBUG_CFLAGS="$DEBUG_CFLAGS -DG_DISABLE_ASSERT"
+            DEBUG_CFLAGS="$DEBUG_CFLAGS -DG_DISABLE_CHECKS"
+            DEBUG_CFLAGS="$DEBUG_CFLAGS -DG_DISABLE_CAST_CHECKS"
+        ],
+        [])
+AC_SUBST(DEBUG_CFLAGS)
+
+
+dnl ***********************************************************************
+dnl Check for Required Packages
+dnl ***********************************************************************
+m4_define([glib_required_version],[{{glib_required_version}}])
+
+PKG_CHECK_MODULES({{NAME}}, [
+	gobject-2.0 >= glib_required_version
+	gio-2.0 >= glib_required_version
+])
+
+
+dnl ***********************************************************************
+dnl Initialize Libtool
+dnl ***********************************************************************
+LT_PREREQ([2.2])
+LT_INIT
+
+
+{{if enable_compiler_flags}}
+dnl ***********************************************************************
+dnl Additional C Compiler Flags
+dnl ***********************************************************************
+AX_CHECK_COMPILE_FLAG([-Werror=unknown-warning-option], [
+	ax_compiler_flags_test="-Werror=unknown-warning-option"
+], [
+	ax_compiler_flags_test=""
+])
+AX_APPEND_COMPILE_FLAGS([ \
+	-Wall \
+	-Wcast-align \
+	-Wdeclaration-after-statement \
+	-Wempty-body \
+	-Werror=format-security \
+	-Werror=format=2 \
+	-Wextra \
+	-Wformat \
+	-Wformat-nonliteral \
+	-Wformat-security \
+	-Winit-self \
+	-Wmisleading-indentation \
+	-Wmissing-include-dirs \
+	-Wshift-negative-value \
+	-Wnested-externs \
+	-Wno-missing-field-initializers \
+	-Wno-sign-compare \
+	-Wno-strict-aliasing \
+	-Wno-uninitialized \
+	-Wno-unused-parameter \
+	-Wpointer-arith \
+	-Wredundant-decls \
+	-Wreturn-type \
+	-Wshadow \
+	-Wswitch-default \
+	-Wswitch-enum \
+	-Wundef \
+	-Wuninitialized \
+], [], [$ax_compiler_flags_test])
+AC_C_CONST
+
+
+{{end}}
+{{if enable_gtk_doc}}
+dnl ***********************************************************************
+dnl Support for gtk-doc Documentation Engine
+dnl ***********************************************************************
+GTK_DOC_CHECK([1.11],[--flavour no-tmpl])
+AM_CONDITIONAL(ENABLE_GTK_DOC, test "x$enable_gtk_doc" = "xyes")
+AC_ARG_ENABLE(doc-cross-references,
+              AS_HELP_STRING([--disable-doc-cross-references],
+                             [cross reference symbols from other libraries @<:@default=yes@:>@]),
+              enable_doc_cross_references=$enableval,
+              enable_doc_cross_references=yes)
+AM_CONDITIONAL(ENABLE_DOC_CROSS_REFERENCES, test x$enable_doc_cross_references != xno)
+
+
+{{end}}
+dnl ***********************************************************************
+dnl Process .in Files
+dnl ***********************************************************************
+AC_CONFIG_FILES([
+	Makefile
+])
+AC_OUTPUT
+
+
+echo ""
+echo " ${PACKAGE} - ${VERSION}"
+echo ""

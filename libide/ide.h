@@ -126,6 +126,8 @@ G_BEGIN_DECLS
 #include "doap/ide-doap.h"
 #include "local/ide-local-device.h"
 #include "search/ide-omni-search-row.h"
+#include "template/ide-project-template.h"
+#include "template/ide-template-provider.h"
 #include "util/ide-file-manager.h"
 #include "util/ide-gdk.h"
 #include "util/ide-gtk.h"
