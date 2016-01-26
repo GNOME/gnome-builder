@@ -68,12 +68,41 @@ GLIB_GSETTINGS
 {{if enable_gobject_introspection}}
 GOBJECT_INTROSPECTION_CHECK([1.42.0])
 {{end}}
+{{if enable_vala}}
+VAPIGEN_CHECK
+{{end}}
 
 
 dnl ***********************************************************************
 dnl Check for required packages
 dnl ***********************************************************************
 PKG_CHECK_MODULES({{NAME}}, [{{packages}}])
+
+
+dnl ***********************************************************************
+dnl Add extra debugging with --enable-debug
+dnl ***********************************************************************
+m4_define([debug_default],[m4_if(m4_eval(minor_version%2),[1],[yes],[minimum])])
+AC_ARG_ENABLE(debug,
+              AS_HELP_STRING([--enable-debug=@<:@no/minimum/yes@:>@],
+                             [turn on debugging @<:@default=debug_default@:>@]),
+              ,
+              enable_debug=debug_default)
+AS_CASE(["$enable_debug"],
+        [yes],[
+            CFLAGS="$CFLAGS -O0"
+            CFLAGS="$CFLAGS -g"
+        ],
+        [minimum],[
+            CFLAGS="$CFLAGS -DG_DISABLE_CAST_CHECKS"
+        ],
+        [no],[
+            CFLAGS="$CFLAGS -DG_DISABLE_ASSERT"
+            CFLAGS="$CFLAGS -DG_DISABLE_CHECKS"
+            CFLAGS="$CFLAGS -DG_DISABLE_CAST_CHECKS"
+        ],
+        [])
+AC_SUBST(CFLAGS)
 
 
 dnl ***********************************************************************

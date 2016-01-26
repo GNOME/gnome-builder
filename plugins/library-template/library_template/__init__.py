@@ -85,6 +85,7 @@ class LibraryProjectTemplate(Ide.TemplateBase, Ide.ProjectTemplate):
         scope.get('enable_i18n').assign_boolean(True)
         scope.get('enable_gtk_doc').assign_boolean(False)
         scope.get('enable_gobject_introspection').assign_boolean(True)
+        scope.get('enable_vala').assign_boolean(True)
         scope.get('license').assign_string('/* license */')
 
         expands = {
