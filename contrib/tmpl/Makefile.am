@@ -123,7 +123,11 @@ pkggir_DATA = $(INTROSPECTION_GIRS)
 pkgtypelibdir = $(libdir)/gnome-builder/girepository-1.0
 pkgtypelib_DATA = $(INTROSPECTION_GIRS:.gir=.typelib)
 
-CLEANFILES += $(gir_DATA) $(typelib_DATA)
+CLEANFILES += \
+	$(pkggir_DATA) \
+	$(pkgtypelib_DATA) \
+	tmpl-expr-scanner.c \
+	tmpl-expr-scanner.h
 endif
 
 if ENABLE_VAPIGEN
@@ -143,7 +147,9 @@ template-glib-1.0.deps: Makefile
 vapidir = $(datadir)/gnome-builder/vapi
 vapi_DATA = $(VAPIGEN_VAPIS) $(VAPIGEN_VAPIS:.vapi=.deps)
 
-EXTRA_DIST += template-glib-1.0.deps
+EXTRA_DIST += \
+	template-glib-1.0.deps \
+	Template-1.0.metadata
 
 DISTCLEANFILES += $(vapi_DATA)
 endif
