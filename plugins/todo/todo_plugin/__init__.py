@@ -72,7 +72,8 @@ class TodoWorkbenchAddin(GObject.Object, Ide.WorkbenchAddin):
         # Get the underline GFile
         file = buf.get_file().get_file()
 
-        # XXX: Clear existing items from this file
+        # Clear any existing items matching this file
+        self.panel.clear_file(file)
 
         # Mine the file for todo items
         self.mine(file)
@@ -202,6 +203,18 @@ class TodoPanel(Gtk.Bin):
     def add_item(self, item):
         iter = self.model.append()
         self.model.set_value(iter, 0, item)
+
+    def clear_file(self, file):
+        iter = self.model.get_iter_first()
+        while iter != None:
+            todo_item, = self.model.get(iter, 0)
+            if todo_item.props.file.equal(file):
+                # If remove() returns false, it was the last item in the store.
+                # Otherwise, iter was advanced for us.
+                if not self.model.remove(iter):
+                    break
+                continue
+            iter = self.model.iter_next(iter)
 
     def on_query_tooltip(self, treeview, x, y, keyboard, tooltip):
         x, y = treeview.convert_widget_to_bin_window_coords(x, y)
