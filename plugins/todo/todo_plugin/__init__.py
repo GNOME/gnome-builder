@@ -87,6 +87,9 @@ class TodoWorkbenchAddin(GObject.Object, Ide.WorkbenchAddin):
                 continue
             self.panel.add_item(item)
 
+    def should_skip(self, filename):
+        return filename.endswith('libtool.m4')
+
     def mine(self, file):
         """
         Mine a file or directory.
@@ -106,6 +109,7 @@ class TodoWorkbenchAddin(GObject.Object, Ide.WorkbenchAddin):
             stdout, _ = proc.communicate()
             lines = stdout.decode('utf-8').splitlines()
             stdout = None
+            skip = False
 
             items = []
             item = TodoItem()
@@ -116,15 +120,17 @@ class TodoWorkbenchAddin(GObject.Object, Ide.WorkbenchAddin):
                     continue
 
                 if line.startswith('--'):
-                    if item.props.file:
+                    if item.props.file and not skip:
                         items.append(item)
                     item = TodoItem()
+                    skip = False
                     continue
 
                 # If there is no file, then we haven't reached the x:x: line
                 regex = LINE1 if not item.props.file else LINE2
                 try:
                     (filename, line, message) = regex.match(line).groups()
+                    skip = self.should_skip(filename)
                 except Exception as ex:
                     continue
 
@@ -138,7 +144,7 @@ class TodoWorkbenchAddin(GObject.Object, Ide.WorkbenchAddin):
                 else:
                     item.props.message = message
 
-            if item.props.file:
+            if item.props.file and not skip:
                 items.append(item)
 
             GLib.timeout_add(0, lambda: self.post(items) and GLib.SOURCE_REMOVE)
