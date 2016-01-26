@@ -1,4 +1,52 @@
 ==============
+Version 3.19.4
+==============
+
+It's been far too long since our last release, and things are heating up
+for GNOME 3.20. Builder has underone a major overhaul since 3.18 and
+still has a few major pieces still to land this cycle.
+
+ • Perspectives have been implemented to allow for clearer groupings
+   of application features and plugins.
+ • Preferences has undergone substantial redesign. Preferences now
+   use a custom perspective rather than a dialog window.
+   - There is still an height-for-width bug to resolve in the layout
+     of preference items.
+ • A new "ide" command exposing various Builder features to command
+   line users.
+ • Global search has gotten some style cleanup.
+ • Builders custom CSS was rewritten for recent gtk+ changes.
+ • A build panel has been added.
+ • A Todo plugin was added to track todo items.
+ • Perspectives can handle URI opening, allowing for perspectives
+   such as a "glade perspective" to handle opening .ui files.
+ • Builder-1.0.gir was dropped, in favor of Ide-1.0.gir.
+ • Embedded plugins and dependency solving now works.
+ • Plugin APIs were simplified.
+ • Multi-process separation support using IdeWorker. Plugins can now
+   easily move work to a subprocess and communicate via D-Bus. Jedi
+   has been ported to multi-process mode for Python auto-completion.
+ • Lots of Vim-mode improvements.
+ • Vala plugin improvements.
+ • External plugins are now supported.
+ • Plugins can be loaded and unloaded.
+ • Loads of bug and build system fixes.
+ • Project greeter and project creation have been rewritten for
+   perspectives.
+ • Plugins now have automatic resources for menus.ui and css themes.
+ • Various keybinding improvements.
+ • Control+click works for navigating to type definitions.
+ • scrolloffset has much improved and gained support for negative
+   values, which works in the opposite direction (top down).
+ • Search movements have been simplified.
+
+And much, much more!
+
+Please help us shake out the bugs by running Builder and reporting
+bugs to bugzilla.gnome.org.
+
+
+==============
 Version 3.18.1
 ==============
 
