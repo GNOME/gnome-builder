@@ -75,22 +75,26 @@ class TodoWorkbenchAddin(GObject.Object, Ide.WorkbenchAddin):
         # Clear any existing items matching this file
         self.panel.clear_file(file)
 
-        # Mine the file for todo items
-        self.mine(file)
+        # Mine the file for todo items.
+        # We place just updated files at the top so they
+        # can be navigated to quickly.
+        self.mine(file, prepend=True)
 
-    def post(self, items):
+    def post(self, items, prepend=False):
         context = self.workbench.get_context()
         vcs = context.get_vcs()
 
         for item in items:
             if vcs.is_ignored(item.props.file):
                 continue
-            self.panel.add_item(item)
+            self.panel.add_item(item, prepend=prepend)
+
+        return GLib.SOURCE_REMOVE
 
     def should_skip(self, filename):
         return filename.endswith('libtool.m4')
 
-    def mine(self, file):
+    def mine(self, file, prepend=False):
         """
         Mine a file or directory.
 
@@ -147,7 +151,7 @@ class TodoWorkbenchAddin(GObject.Object, Ide.WorkbenchAddin):
             if item.props.file and not skip:
                 items.append(item)
 
-            GLib.timeout_add(0, lambda: self.post(items) and GLib.SOURCE_REMOVE)
+            GLib.timeout_add(0, lambda: self.post(items, prepend=prepend))
 
         threading.Thread(target=communicate, args=[p], name='todo-thread').start()
 
@@ -176,20 +180,20 @@ class TodoPanel(Gtk.Bin):
         scroller = Gtk.ScrolledWindow(visible=True)
         self.add(scroller)
 
-        treeview = Gtk.TreeView(visible=True, model=self.model, has_tooltip=True)
-        treeview.connect('query-tooltip', self.on_query_tooltip)
-        treeview.connect('row-activated', self.on_row_activated)
-        scroller.add(treeview)
+        self.treeview = Gtk.TreeView(visible=True, model=self.model, has_tooltip=True)
+        self.treeview.connect('query-tooltip', self.on_query_tooltip)
+        self.treeview.connect('row-activated', self.on_row_activated)
+        scroller.add(self.treeview)
 
         column1 = Gtk.TreeViewColumn(title="File")
-        treeview.append_column(column1)
+        self.treeview.append_column(column1)
 
         cell = Gtk.CellRendererText(xalign=0.0)
         column1.pack_start(cell, True)
         column1.set_cell_data_func(cell, self._file_data_func)
 
         column2 = Gtk.TreeViewColumn(title="Message")
-        treeview.append_column(column2)
+        self.treeview.append_column(column2)
 
         cell = Gtk.CellRendererText(xalign=0.0)
         column2.pack_start(cell, True)
@@ -206,9 +210,20 @@ class TodoPanel(Gtk.Bin):
         item, = model.get(iter, 0)
         cell.props.text = item.shortdesc
 
-    def add_item(self, item):
-        iter = self.model.append()
+    def add_item(self, item, prepend=False):
+        if prepend:
+            iter = self.model.prepend()
+        else:
+            iter = self.model.append()
+
         self.model.set_value(iter, 0, item)
+
+        # If we are prepending, select the first item
+        if prepend:
+            iter = self.model.get_iter_first()
+            self.treeview.get_selection().select_iter(iter)
+            path = self.model.get_path(iter)
+            self.treeview.scroll_to_cell(path, None, True, 0.0, 0.0)
 
     def clear_file(self, file):
         iter = self.model.get_iter_first()
