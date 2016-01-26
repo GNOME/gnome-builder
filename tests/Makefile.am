@@ -59,14 +59,13 @@ tests_ldflags = \
 misc_programs =
 
 TESTS_ENVIRONMENT= \
-	GI_TYPELIB_PATH="$(top_builddir)/libide:$(GI_TYPELIB_PATH)" \
-	GB_IN_TREE_PLUGINS=1                                        \
-	G_TEST_SRCDIR="$(abs_srcdir)" 		                    \
-	G_TEST_BUILDDIR="$(abs_builddir)" 	                    \
-	G_DEBUG=gc-friendly 			                    \
-	GSETTINGS_BACKEND=memory                                    \
-	GB_IN_TREE_PLUGINS=1                                        \
-	MALLOC_CHECK_=2 			                    \
+	GI_TYPELIB_PATH="$(top_builddir)/libide:$(top_builddir)/contrib/tmpl:$(GI_TYPELIB_PATH)" \
+	GB_IN_TREE_PLUGINS=1 \
+	G_TEST_SRCDIR="$(abs_srcdir)" \
+	G_TEST_BUILDDIR="$(abs_builddir)" \
+	G_DEBUG=gc-friendly \
+	GSETTINGS_BACKEND=memory \
+	MALLOC_CHECK_=2 \
 	MALLOC_PERTURB_=$$(($${RANDOM:-256} % 256))
 
 LOG_COMPILER = $(top_srcdir)/build/autotools/tap-test
