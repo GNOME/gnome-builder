@@ -67,6 +67,7 @@ ide_unsaved_file_persist (IdeUnsavedFile  *self,
                           GCancellable    *cancellable,
                           GError         **error)
 {
+  g_autoptr(GFile) file = NULL;
   gboolean ret;
 
   IDE_ENTRY;
@@ -76,14 +77,16 @@ ide_unsaved_file_persist (IdeUnsavedFile  *self,
 
   IDE_TRACE_MSG ("Saving draft to \"%s\"", self->temp_path);
 
-  /*
-   * TODO: Support cancellable.
-   */
-
-  ret = g_file_set_contents (self->temp_path,
-                             g_bytes_get_data (self->content, NULL),
-                             g_bytes_get_size (self->content),
-                             error);
+  file = g_file_new_for_path (self->temp_path);
+  ret = g_file_replace_contents (file,
+                                 g_bytes_get_data (self->content, NULL),
+                                 g_bytes_get_size (self->content),
+                                 NULL,
+                                 FALSE,
+                                 G_FILE_CREATE_REPLACE_DESTINATION,
+                                 NULL,
+                                 cancellable,
+                                 error);
 
   IDE_RETURN (ret);
 }
