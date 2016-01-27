@@ -1131,7 +1131,8 @@ builtin_hex (const GValue  *value,
 {
   if (G_VALUE_HOLDS_DOUBLE (value))
     {
-      gchar *str = g_strdup_printf ("0x%lx", (gint64)g_value_get_double (value));
+      gchar *str = g_strdup_printf ("0x%" G_GINT64_MODIFIER "x",
+                                    (gint64)g_value_get_double (value));
       g_value_init (return_value, G_TYPE_STRING);
       g_value_take_string (return_value, str);
       return TRUE;
