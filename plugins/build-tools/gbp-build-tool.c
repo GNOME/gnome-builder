@@ -27,6 +27,7 @@
 struct _GbpBuildTool
 {
   GObject parent_instance;
+  gint64  build_start;
 };
 
 static void application_tool_init (IdeApplicationToolInterface *iface);
@@ -58,19 +59,73 @@ gbp_build_tool_log (GbpBuildTool      *self,
 }
 
 static void
+print_build_info (IdeContext *context,
+                  IdeDevice  *device)
+{
+  IdeProject *project;
+  IdeBuildSystem *build_system;
+  IdeVcs *vcs;
+  const gchar *project_name;
+  const gchar *vcs_name;
+  const gchar *build_system_name;
+  const gchar *device_id;
+  const gchar *system_type;
+  g_autofree gchar *build_date = NULL;
+  GTimeVal tv;
+
+  project = ide_context_get_project (context);
+  project_name = ide_project_get_name (project);
+
+  vcs = ide_context_get_vcs (context);
+  vcs_name = g_type_name (G_TYPE_FROM_INSTANCE (vcs));
+
+  build_system = ide_context_get_build_system (context);
+  build_system_name = g_type_name (G_TYPE_FROM_INSTANCE (build_system));
+
+  device_id = ide_device_get_id (device);
+  system_type = ide_device_get_system_type (device);
+
+  g_get_current_time (&tv);
+  build_date = g_time_val_to_iso8601 (&tv);
+
+  g_printerr (_("========================\n"));
+  g_printerr (_("           Project Name: %s\n"), project_name);
+  g_printerr (_(" Version Control System: %s\n"), vcs_name);
+  g_printerr (_("           Build System: %s\n"), build_system_name);
+  g_printerr (_("    Build Date and Time: %s\n"), build_date);
+  g_printerr (_("    Building for Device: %s (%s)\n"), device_id, system_type);
+  g_printerr (_("========================\n"));
+}
+
+static void
 gbp_build_tool_build_cb (GObject      *object,
                          GAsyncResult *result,
                          gpointer      user_data)
 {
   g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeBuildResult) build_result = NULL;
+  GbpBuildTool *self;
   IdeBuilder *builder = (IdeBuilder *)object;
   GError *error = NULL;
+  guint64 completed_at;
+  guint64 total_usec;
 
   g_assert (G_IS_TASK (task));
   g_assert (IDE_IS_BUILDER (builder));
 
-  if (!ide_builder_build_finish (builder, result, &error))
+  self = g_task_get_source_object (task);
+  completed_at = g_get_monotonic_time ();
+  build_result = ide_builder_build_finish (builder, result, &error);
+
+  total_usec = completed_at - self->build_start;
+
+  if (build_result == NULL)
     {
+      g_printerr (_("===============\n"));
+      g_printerr (_(" Build Failure: %s\n"), error->message);
+      g_printerr (_(" Build ran for: %"G_GUINT64_FORMAT".%"G_GUINT64_FORMAT" seconds\n"),
+                  (total_usec / 1000000), ((total_usec % 1000000) / 1000));
+      g_printerr (_("===============\n"));
       g_task_return_error (task, error);
       return;
     }
@@ -81,7 +136,11 @@ gbp_build_tool_build_cb (GObject      *object,
    *       for this device, and then deploy.
    */
 
-  g_print (_("Success.\n"));
+  g_printerr (_("=================\n"));
+  g_printerr (_(" Build Successful\n"));
+  g_printerr (_("   Build ran for: %"G_GUINT64_FORMAT".%"G_GUINT64_FORMAT" seconds\n"),
+              (total_usec / 1000000), ((total_usec % 1000000) / 1000));
+  g_printerr (_("=================\n"));
 
   g_task_return_boolean (task, TRUE);
 }
@@ -98,12 +157,15 @@ gbp_build_tool_new_context_cb (GObject      *object,
   g_autoptr(IdeDevice) device = NULL;
   IdeDeviceManager *device_manager;
   IdeBuildSystem *build_system;
+  GbpBuildTool *self;
   IdeBuilderBuildFlags flags;
   GKeyFile *config;
   const gchar *device_id;
   GError *error = NULL;
 
   g_assert (G_IS_TASK (task));
+
+  self = g_task_get_source_object (task);
 
   context = ide_context_new_finish (result, &error);
 
@@ -131,6 +193,8 @@ gbp_build_tool_new_context_cb (GObject      *object,
       return;
     }
 
+  print_build_info (context, device);
+
   /* TODO: Support custom configs */
 
   build_system = ide_context_get_build_system (context);
@@ -141,6 +205,8 @@ gbp_build_tool_new_context_cb (GObject      *object,
       g_task_return_error (task, error);
       return;
     }
+
+  self->build_start = g_get_monotonic_time ();
 
   ide_builder_build_async (builder,
                            flags,
