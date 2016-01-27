@@ -92,7 +92,8 @@ class TodoWorkbenchAddin(GObject.Object, Ide.WorkbenchAddin):
         return GLib.SOURCE_REMOVE
 
     def should_skip(self, filename):
-        return filename.endswith('libtool.m4')
+        return (filename.endswith('libtool.m4') # Ignore libtool.m4
+             or filename.endswith(".po"))       # Ignore translations
 
     def mine(self, file, prepend=False):
         """
