@@ -103,3 +103,4 @@ contrib/tmpl/tmpl-template.c
 plugins/create-project/gbp-create-project-tool.c
 plugins/library-template/library_template/__init__.py
 plugins/symbol-tree/symbol-tree-panel.c
+plugins/git/ide-git-preferences-addin.c
