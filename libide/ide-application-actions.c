@@ -134,6 +134,32 @@ ide_application_actions_about (GSimpleAction *action,
 }
 
 static void
+ide_application_actions_help (GSimpleAction *action,
+                              GVariant      *param,
+                              gpointer       user_data)
+{
+  IdeApplication *self = user_data;
+  GtkWindow *focused_window= NULL;
+  GdkScreen *screen = NULL;
+  GError *err = NULL;
+
+  g_assert (IDE_IS_APPLICATION (self));
+
+  focused_window = gtk_application_get_active_window (GTK_APPLICATION (self));
+
+  screen = gtk_window_get_screen (focused_window);
+  gtk_show_uri (screen,
+                "help:gnome-builder",
+                gtk_get_current_event_time (),
+                &err);
+  if (err)
+    {
+      g_message ("Unable to open help: %s\n", err->message);
+      g_error_free (err);
+    }
+}
+
+static void
 ide_application_actions_open_project (GSimpleAction *action,
                                       GVariant      *variant,
                                       gpointer       user_data)
@@ -261,6 +287,7 @@ static const GActionEntry IdeApplicationActions[] = {
   { "preferences",  ide_application_actions_preferences },
   { "quit",         ide_application_actions_quit },
   { "shortcuts",    ide_application_actions_shortcuts },
+  { "help",         ide_application_actions_help },
 };
 
 void
