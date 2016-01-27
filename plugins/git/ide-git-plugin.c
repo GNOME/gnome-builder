@@ -20,6 +20,7 @@
 #include <ide.h>
 
 #include "ide-git-genesis-addin.h"
+#include "ide-git-preferences-addin.h"
 #include "ide-git-vcs.h"
 
 static gboolean
@@ -55,6 +56,9 @@ peas_register_types (PeasObjectModule *module)
       peas_object_module_register_extension_type (module,
                                                   IDE_TYPE_VCS,
                                                   IDE_TYPE_GIT_VCS);
+      peas_object_module_register_extension_type (module,
+                                                  IDE_TYPE_PREFERENCES_ADDIN,
+                                                  IDE_TYPE_GIT_PREFERENCES_ADDIN);
       peas_object_module_register_extension_type (module,
                                                   IDE_TYPE_GENESIS_ADDIN,
                                                   IDE_TYPE_GIT_GENESIS_ADDIN);

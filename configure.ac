@@ -169,7 +169,6 @@ dnl ***********************************************************************
 m4_define([gtk_required_version], [3.19.7])
 m4_define([glib_required_version], [2.47.4])
 m4_define([gtksourceview_required_version], [3.19.4])
-m4_define([ggit_required_version], [0.23.7])
 m4_define([gobject_introspection_version], [1.47.1])
 m4_define([pygobject_required_version], [3.19.3])
 m4_define([libxml_required_version], [2.9.0])
@@ -183,12 +182,10 @@ PKG_CHECK_MODULES(GD,       [gtk+-3.0 >= gtk_required_version])
 PKG_CHECK_MODULES(GEDIT,    [glib-2.0 >= glib_required_version
                              gtk+-3.0 >= gtk_required_version])
 PKG_CHECK_MODULES(ICONS,    [gio-2.0 >= glib_required_version])
-PKG_CHECK_MODULES(LIBGITG,  [libgit2-glib-1.0 >= ggit_required_version])
 PKG_CHECK_MODULES(LIBIDE,   [gio-2.0 >= glib_required_version
                              gio-unix-2.0 >= glib_required_version
                              gtk+-3.0 >= gtk_required_version
                              gtksourceview-3.0 >= gtksourceview_required_version
-                             libgit2-glib-1.0 >= ggit_required_version
                              libpeas-1.0 >= peas_required_version
                              libxml-2.0 >= libxml_required_version
                              pangoft2 >= pangoft2_required_version])
@@ -203,40 +200,6 @@ PKG_CHECK_MODULES(TMPL,     [gio-2.0 >= glib_required_version
 			     gobject-introspection-1.0 >= gobject_introspection_version])
 PKG_CHECK_MODULES(XML,      [gio-2.0 >= glib_required_version
                              libxml-2.0 >= libxml_required_version])
-
-
-dnl ***********************************************************************
-dnl Be extra careful about libgit2-glib requirements
-dnl ***********************************************************************
-# FIXME: Move git to a plugin. Requires abstraction in new-project-dialog.
-cflags_save="${CFLAGS}"
-libs_save="${LIBS}"
-CFLAGS="${CFLAGS} ${LIBGITG_CFLAGS}"
-LIBS="${LIBS} ${LIBGITG_LIBS}"
-# Thread-Safe
-AC_MSG_CHECKING([for thread-safe support in libgit2])
-AC_TRY_RUN([
-	#include <libgit2-glib/ggit.h>
-	int
-	main(int argc, const char *argv[])
-	{
-		ggit_init ();
-		return ((ggit_get_features() & GGIT_FEATURE_THREADS) != 0) ? 0 : 1;
-	}
-],[AC_MSG_RESULT([yes])],[AC_MSG_ERROR([no, please recompile a threadsafe version of libgit2 (-DTHREADSAFE:BOOL=ON)])])
-# SSH
-AC_MSG_CHECKING([for SSH support in libgit2])
-AC_TRY_RUN([
-	#include <libgit2-glib/ggit.h>
-	int
-	main(int argc, const char *argv[])
-	{
-		ggit_init ();
-		return ((ggit_get_features() & GGIT_FEATURE_SSH) != 0) ? 0 : 1;
-	}
-],[AC_MSG_RESULT([yes])],[AC_MSG_ERROR([no, please recompile a libgit2 with ssh support])])
-CFLAGS="${cflags_save}"
-LIBS="${libs_save}"
 
 
 dnl ***********************************************************************

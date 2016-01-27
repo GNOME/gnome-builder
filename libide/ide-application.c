@@ -25,7 +25,6 @@
 #include <glib/gi18n.h>
 #include <girepository.h>
 #include <gtksourceview/gtksource.h>
-#include <libgit2-glib/ggit.h>
 #include <locale.h>
 #include <stdlib.h>
 #ifdef __linux

@@ -17,6 +17,8 @@ libgit_plugin_la_SOURCES = \
 	ide-git-genesis-addin.c \
 	ide-git-genesis-addin.h \
 	ide-git-plugin.c \
+	ide-git-preferences-addin.c \
+	ide-git-preferences-addin.h \
 	ide-git-remote-callbacks.c \
 	ide-git-remote-callbacks.h \
 	ide-git-vcs.c \
@@ -29,6 +31,7 @@ nodist_libgit_plugin_la_SOURCES = \
 
 libgit_plugin_la_CFLAGS = \
 	$(LIBIDE_CFLAGS) \
+	$(GIT_CFLAGS) \
 	$(OPTIMIZE_CFLAGS) \
 	-I$(top_srcdir)/libide \
 	-I$(top_srcdir)/contrib/egg \
@@ -37,6 +40,7 @@ libgit_plugin_la_CFLAGS = \
 libgit_plugin_la_LIBADD = $(GIT_LIBS)
 
 libgit_plugin_la_LDFLAGS = \
+	$(GIT_LIBS) \
 	$(OPTIMIZE_LDFLAGS) \
 	-avoid-version \
 	-module \
