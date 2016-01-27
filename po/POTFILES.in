@@ -2,6 +2,9 @@ contrib/egg/egg-animation.c
 contrib/egg/egg-date-time.c
 contrib/egg/egg-search-bar.c
 contrib/search/trie.c
+contrib/tmpl/tmpl-parser.c
+contrib/tmpl/tmpl-template.c
+contrib/tmpl/tmpl-template-locator.c
 contrib/xml/xml-reader.c
 [type: gettext/glade]data/gtk/menus.ui
 data/style-schemes/builder-dark.xml
@@ -63,9 +66,10 @@ plugins/clang/ide-clang-symbol-node.c
 plugins/clang/ide-clang-translation-unit.c
 plugins/command-bar/gb-command-bar.c
 plugins/command-bar/gb-vim.c
-plugins/contributing/contributing_plugin/__init__.py
 plugins/contributing/contributing_plugin/helper.py
+plugins/contributing/contributing_plugin/__init__.py
 plugins/c-pack/ide-c-format-provider.c
+plugins/create-project/gbp-create-project-tool.c
 plugins/devhelp/gbp-devhelp-search-provider.c
 plugins/devhelp/gbp-devhelp-workbench-addin.c
 plugins/file-search/gb-file-search-provider.c
@@ -75,10 +79,12 @@ plugins/git/ide-git-buffer-change-monitor.c
 plugins/git/ide-git-clone-widget.c
 [type: gettext/glade]plugins/git/ide-git-clone-widget.ui
 plugins/git/ide-git-genesis-addin.c
+plugins/git/ide-git-preferences-addin.c
 plugins/gnome-code-assistance/ide-gca-diagnostic-provider.c
 plugins/gnome-code-assistance/ide-gca-service.c
 [type: gettext/glade]plugins/html-preview/html_preview_plugin/gtk/menus.ui
 plugins/jedi/jedi_plugin.py
+plugins/library-template/library_template/__init__.py
 plugins/mingw/ide-mingw-device-provider.c
 plugins/project-tree/gb-new-file-popover.c
 [type: gettext/glade]plugins/project-tree/gb-new-file-popover.ui
@@ -91,16 +97,9 @@ plugins/python-pack/ide-python-format-provider.c
 [type: gettext/glade]plugins/support/gtk/menus.ui
 plugins/support/ide-support-application-addin.c
 plugins/symbol-tree/symbol-tree.c
+plugins/symbol-tree/symbol-tree-panel.c
 plugins/sysmon/gb-sysmon-addin.c
 plugins/terminal/gb-terminal-view-actions.c
 plugins/terminal/gb-terminal-workbench-addin.c
 [type: gettext/glade]plugins/terminal/gtk/menus.ui
 plugins/todo/todo_plugin/__init__.py
-contrib/tmpl/tmpl-expr-parser.c
-contrib/tmpl/tmpl-parser.c
-contrib/tmpl/tmpl-template-locator.c
-contrib/tmpl/tmpl-template.c
-plugins/create-project/gbp-create-project-tool.c
-plugins/library-template/library_template/__init__.py
-plugins/symbol-tree/symbol-tree-panel.c
-plugins/git/ide-git-preferences-addin.c
