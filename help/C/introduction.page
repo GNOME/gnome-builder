@@ -1,0 +1,29 @@
+<page xmlns="http://projectmallard.org/1.0/"
+      xmlns:its="http://www.w3.org/2005/11/its"
+      type="topic"
+      id="introduction">
+
+  <info>
+    <link type="guide" xref="index"/>
+<!--
+    <link type="guide" xref="index#features"/>
+    <link type="seealso" xref="anotherpageid"/>
+-->
+    <revision pkgversion="3.9" date="2016-01-23" status="stub" />
+ 
+    <credit type="author">
+      <name>Alexandre Franke</name>
+      <email its:translate="no">afranke@gnome.org</email>
+      <years>2016</years>
+    </credit>
+ 
+    <include href="legal.xml" xmlns="http://www.w3.org/2001/XInclude"/>
+
+    <desc>Welcome to Builder</desc>
+  </info>
+
+  <title>Introduction</title>
+
+  <p>Builder is an Integrated Development Environment (IDE) for the GNOME desktop environment.</p>
+
+</page>

@@ -59,6 +59,12 @@ AM_GLIB_GNU_GETTEXT
 
 
 dnl ***********************************************************************
+dnl User documentation
+dnl ***********************************************************************
+YELP_HELP_INIT
+
+
+dnl ***********************************************************************
 dnl Check for Required Programs
 dnl ***********************************************************************
 AC_PROG_CC
@@ -430,6 +436,8 @@ AC_CONFIG_FILES([
 	doc/reference/Makefile
 	doc/reference/libide/Makefile
 	doc/reference/libide/version.xml
+
+	help/Makefile
 
 	po/Makefile.in
 
