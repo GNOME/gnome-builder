@@ -51,6 +51,24 @@ ide_application_can_load_plugin (IdeApplication *self,
 
   /*
    * TODO: Do ABI check on external data.
+   *
+   * Right now, we don't have any way to check that the plugin is implementing
+   * the same version of the API/ABI that the application exports. There are a
+   * couple ways we could go about doing this.
+   *
+   * One approach might be to generate UUIDs for each plugin structure,
+   * and update it every time the structure changes. However, plenty of changes
+   * can be safe for existing modules. So perhaps we need something that has
+   * a revision since last break. Then plugins would specify which version
+   * and revision of an interface they require.
+   *
+   * Imagine the scenario that FooIface added the method frobnicate(). Previous
+   * extensions for FooIface are perfectly happy to keep on working, but a new
+   * addin that requires FooIface may require frobnicate()'s existance. So while
+   * the ABI hasn't broken, some plugins will require a newer revision.
+   *
+   * This is not entirely different from libtool's interface age. Presumably,
+   * Gedit's IAge is similar here, but we would need it per-structure.
    */
 
   return TRUE;
