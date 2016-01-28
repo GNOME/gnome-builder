@@ -61,7 +61,7 @@ class LibraryProjectTemplate(Ide.TemplateBase, Ide.ProjectTemplate):
         return 'template-shared-library'
 
     def do_expand_async(self, params, cancellable, callback, data):
-        name = params['name'].get_string()
+        name = params['name'].get_string().lower()
         directory = Gio.File.new_for_path(name)
 
         scope = Template.Scope.new()
