@@ -74,7 +74,7 @@ gb_command_provider_get_active_view (GbCommandProvider *provider)
 
 static void
 gb_command_provider_set_active_view (GbCommandProvider *provider,
-                                    IdeLayoutView             *tab)
+                                     IdeLayoutView     *tab)
 {
   GbCommandProviderPrivate *priv = gb_command_provider_get_instance_private (provider);
 
@@ -102,7 +102,7 @@ gb_command_provider_set_active_view (GbCommandProvider *provider,
 static void
 on_workbench_set_focus (GbCommandProvider *provider,
                         GtkWidget         *widget,
-                        IdeWorkbench       *workbench)
+                        IdeWorkbench      *workbench)
 {
   g_return_if_fail (GB_IS_COMMAND_PROVIDER (provider));
   g_return_if_fail (IDE_IS_WORKBENCH (workbench));
@@ -121,7 +121,7 @@ on_workbench_set_focus (GbCommandProvider *provider,
 
 static void
 gb_command_provider_connect (GbCommandProvider *provider,
-                             IdeWorkbench       *workbench)
+                             IdeWorkbench      *workbench)
 {
   g_return_if_fail (GB_IS_COMMAND_PROVIDER (provider));
   g_return_if_fail (IDE_IS_WORKBENCH (workbench));
@@ -135,7 +135,7 @@ gb_command_provider_connect (GbCommandProvider *provider,
 
 static void
 gb_command_provider_disconnect (GbCommandProvider *provider,
-                                IdeWorkbench       *workbench)
+                                IdeWorkbench      *workbench)
 {
   g_return_if_fail (GB_IS_COMMAND_PROVIDER (provider));
   g_return_if_fail (IDE_IS_WORKBENCH (workbench));
@@ -157,7 +157,7 @@ gb_command_provider_get_workbench (GbCommandProvider *provider)
 
 static void
 gb_command_provider_set_workbench (GbCommandProvider *provider,
-                                   IdeWorkbench       *workbench)
+                                   IdeWorkbench      *workbench)
 {
   GbCommandProviderPrivate *priv = gb_command_provider_get_instance_private (provider);
 
@@ -253,7 +253,6 @@ gb_command_provider_complete (GbCommandProvider *provider,
 
   g_signal_emit (provider, signals [COMPLETE], 0, completions, initial_command_text);
 }
-
 
 static void
 gb_command_provider_get_property (GObject    *object,
