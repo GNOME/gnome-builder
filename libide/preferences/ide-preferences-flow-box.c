@@ -84,7 +84,7 @@ ide_preferences_flow_box_layout (IdePreferencesFlowBox *self,
 
       gtk_widget_get_preferred_height_for_width (child->widget, COLUMN_WIDTH, NULL, &child->req.height);
 
-      if (i == 0)
+      if (i != 0)
         total_height += ROW_SPACING;
       total_height += child->req.height;
     }
