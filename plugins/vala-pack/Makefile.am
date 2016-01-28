@@ -16,6 +16,7 @@ libvala_pack_plugin_la_SOURCES = \
 	ide-vala-indenter.vala \
 	ide-vala-index.vala \
 	ide-vala-locator.vala \
+	ide-vala-preferences-addin.vala \
 	ide-vala-source-file.vala \
 	ide-vala-symbol-resolver.vala \
 	ide-vala-symbol-tree.vala \
@@ -37,6 +38,7 @@ libvala_pack_plugin_la_VALAFLAGS = \
 
 libvala_pack_plugin_la_CFLAGS = \
 	-DG_LOG_DOMAIN=\"vala-pack-plugin\" \
+	-DGETTEXT_PACKAGE=\"gnome-builder\" \
 	$(LIBIDE_CFLAGS) \
 	$(VALA_CFLAGS) \
 	-I$(top_srcdir)/libide \
