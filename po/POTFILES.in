@@ -1,3 +1,5 @@
+# List of source files containing translatable strings.
+# Please keep this file sorted alphabetically.
 contrib/egg/egg-animation.c
 contrib/egg/egg-date-time.c
 contrib/egg/egg-search-bar.c

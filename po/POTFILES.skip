@@ -1,3 +1,5 @@
+# List of source files that should *not* be translated.
+# Please keep this file sorted alphabetically.
 plugins/vala-pack/ide-vala-preferences-addin.c
 tests/menus.ui
 tools/ide-build.c
