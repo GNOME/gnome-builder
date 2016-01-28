@@ -33,6 +33,7 @@ struct _IdeExtensionSetAdapter
   gchar      *key;
   gchar      *value;
   GHashTable *extensions;
+  GPtrArray  *settings;
 
   GType       interface_type;
 
@@ -58,6 +59,8 @@ enum {
 
 static GParamSpec *properties [LAST_PROP];
 static guint signals [LAST_SIGNAL];
+
+static void ide_extension_set_adapter_queue_reload (IdeExtensionSetAdapter *);
 
 static void
 add_extension (IdeExtensionSetAdapter *self,
@@ -90,12 +93,64 @@ remove_extension (IdeExtensionSetAdapter *self,
 }
 
 static void
+ide_extension_set_adapter_enabled_changed (IdeExtensionSetAdapter *self,
+                                           const gchar            *key,
+                                           GSettings              *settings)
+{
+  g_assert (IDE_IS_EXTENSION_SET_ADAPTER (self));
+  g_assert (key != NULL);
+  g_assert (G_IS_SETTINGS (settings));
+
+  ide_extension_set_adapter_queue_reload (self);
+}
+
+static void
+watch_extension (IdeExtensionSetAdapter *self,
+                 PeasPluginInfo         *plugin_info,
+                 GType                   interface_type)
+{
+  GSettings *settings;
+  gchar *path;
+
+  g_assert (IDE_IS_EXTENSION_SET_ADAPTER (self));
+  g_assert (plugin_info != NULL);
+  g_assert (G_TYPE_IS_INTERFACE (interface_type));
+
+  path = g_strdup_printf ("/org/gnome/builder/extension-types/%s/%s/",
+                          peas_plugin_info_get_module_name (plugin_info),
+                          g_type_name (interface_type));
+  settings = g_settings_new_with_path ("org.gnome.builder.extension-type", path);
+
+  g_ptr_array_add (self->settings, g_object_ref (settings));
+
+  g_signal_connect_object (settings,
+                           "changed::enabled",
+                           G_CALLBACK (ide_extension_set_adapter_enabled_changed),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  g_object_unref (settings);
+  g_free (path);
+}
+
+static void
 ide_extension_set_adapter_reload (IdeExtensionSetAdapter *self)
 {
   IdeContext *context;
   const GList *plugins;
 
   g_assert (IDE_IS_EXTENSION_SET_ADAPTER (self));
+
+  while (self->settings->len > 0)
+    {
+      GSettings *settings;
+
+      settings = g_ptr_array_index (self->settings, self->settings->len - 1);
+      g_signal_handlers_disconnect_by_func (settings,
+                                            ide_extension_set_adapter_enabled_changed,
+                                            self);
+      g_ptr_array_remove_index (self->settings, self->settings->len - 1);
+    }
 
   context = ide_object_get_context (IDE_OBJECT (self));
   plugins = peas_engine_get_plugin_list (self->engine);
@@ -104,6 +159,9 @@ ide_extension_set_adapter_reload (IdeExtensionSetAdapter *self)
     {
       PeasPluginInfo *plugin_info = plugins->data;
       gint priority;
+
+      if (peas_engine_provides_extension (self->engine, plugin_info, self->interface_type))
+        watch_extension (self, plugin_info, self->interface_type);
 
       if (ide_extension_util_can_use_plugin (self->engine,
                                              plugin_info,
@@ -192,10 +250,22 @@ ide_extension_set_adapter_finalize (GObject *object)
 {
   IdeExtensionSetAdapter *self = (IdeExtensionSetAdapter *)object;
 
+  while (self->settings->len > 0)
+    {
+      guint i = self->settings->len - 1;
+      GSettings *settings = g_ptr_array_index (self->settings, i);
+
+      g_signal_handlers_disconnect_by_func (settings,
+                                            ide_extension_set_adapter_enabled_changed,
+                                            self);
+      g_ptr_array_remove_index (self->settings, i);
+    }
+
   g_clear_object (&self->engine);
   g_clear_pointer (&self->key, g_free);
   g_clear_pointer (&self->value, g_free);
   g_clear_pointer (&self->extensions, g_hash_table_unref);
+  g_clear_pointer (&self->settings, g_ptr_array_unref);
 
   G_OBJECT_CLASS (ide_extension_set_adapter_parent_class)->finalize (object);
 }
@@ -327,6 +397,7 @@ ide_extension_set_adapter_class_init (IdeExtensionSetAdapterClass *klass)
 static void
 ide_extension_set_adapter_init (IdeExtensionSetAdapter *self)
 {
+  self->settings = g_ptr_array_new_with_free_func (g_object_unref);
   self->extensions = g_hash_table_new_full (NULL, NULL, NULL, g_object_unref);
 }
 
