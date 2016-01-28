@@ -23,6 +23,8 @@
 
 G_DEFINE_TYPE (IdePreferencesGroup, ide_preferences_group, GTK_TYPE_BIN)
 
+#define COLUMN_WIDTH 500
+
 enum {
   PROP_0,
   PROP_IS_LIST,
@@ -32,6 +34,14 @@ enum {
 };
 
 static GParamSpec *properties [LAST_PROP];
+
+gint
+ide_preferences_group_get_priority (IdePreferencesGroup *self)
+{
+  g_return_val_if_fail (IDE_IS_PREFERENCES_GROUP (self), 0);
+
+  return self->priority;
+}
 
 static void
 ide_preferences_group_widget_destroy (IdePreferencesGroup *self,
@@ -69,6 +79,33 @@ ide_preferences_group_get_title (IdePreferencesGroup *self)
   title = gtk_label_get_label (self->title);
 
   return (!title || !*title) ? NULL : title;
+}
+
+static void
+ide_preferences_group_get_preferred_width (GtkWidget *widget,
+                                           gint      *min_width,
+                                           gint      *nat_width)
+{
+  *min_width = *nat_width = COLUMN_WIDTH;
+}
+
+static void
+ide_preferences_group_get_preferred_height_for_width (GtkWidget *widget,
+                                                      gint       width,
+                                                      gint      *min_height,
+                                                      gint      *nat_height)
+{
+  g_assert (GTK_IS_WIDGET (widget));
+  g_assert (min_height != NULL);
+  g_assert (nat_height != NULL);
+
+  GTK_WIDGET_CLASS (ide_preferences_group_parent_class)->get_preferred_height_for_width (widget, width, min_height, nat_height);
+}
+
+static GtkSizeRequestMode
+ide_preferences_group_get_request_mode (GtkWidget *widget)
+{
+  return GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH;
 }
 
 static void
@@ -147,6 +184,10 @@ ide_preferences_group_class_init (IdePreferencesGroupClass *klass)
   object_class->finalize = ide_preferences_group_finalize;
   object_class->get_property = ide_preferences_group_get_property;
   object_class->set_property = ide_preferences_group_set_property;
+
+  widget_class->get_preferred_width = ide_preferences_group_get_preferred_width;
+  widget_class->get_preferred_height_for_width = ide_preferences_group_get_preferred_height_for_width;
+  widget_class->get_request_mode = ide_preferences_group_get_request_mode;
 
   properties [PROP_IS_LIST] =
     g_param_spec_boolean ("is-list",

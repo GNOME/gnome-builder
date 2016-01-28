@@ -27,9 +27,10 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdePreferencesGroup, ide_preferences_group, IDE, PREFERENCES_GROUP, GtkBin)
 
-void         ide_preferences_group_add       (IdePreferencesGroup *self,
-                                              GtkWidget           *widget);
-const gchar *ide_preferences_group_get_title (IdePreferencesGroup *self);
+void         ide_preferences_group_add          (IdePreferencesGroup *self,
+                                                 GtkWidget           *widget);
+const gchar *ide_preferences_group_get_title    (IdePreferencesGroup *self);
+gint         ide_preferences_group_get_priority (IdePreferencesGroup *self);
 
 G_END_DECLS
 

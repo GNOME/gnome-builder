@@ -1,6 +1,6 @@
 /* ide-preferences-flow-box.h
  *
- * Copyright (C) 2015 Christian Hergert <chergert@redhat.com>
+ * Copyright (C) 2016 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,7 +25,9 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_PREFERENCES_FLOW_BOX (ide_preferences_flow_box_get_type())
 
-G_DECLARE_FINAL_TYPE (IdePreferencesFlowBox, ide_preferences_flow_box, IDE, PREFERENCES_FLOW_BOX, GtkBox)
+G_DECLARE_FINAL_TYPE (IdePreferencesFlowBox, ide_preferences_flow_box, IDE, PREFERENCES_FLOW_BOX, GtkContainer)
+
+GtkWidget *ide_preferences_flow_box_new (void);
 
 G_END_DECLS
 

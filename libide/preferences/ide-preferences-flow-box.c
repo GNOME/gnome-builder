@@ -1,6 +1,6 @@
 /* ide-preferences-flow-box.c
  *
- * Copyright (C) 2015 Christian Hergert <chergert@redhat.com>
+ * Copyright (C) 2016 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,258 +18,142 @@
 
 #include "ide-preferences-flow-box.h"
 #include "ide-preferences-group.h"
-#include "ide-preferences-group-private.h"
 
-/**
- * SECTION:ide-preferences-flow-box
- *
- * This is a custom container similar to flow box, but not quiet. It is
- * meant to have multiple columns with preference items in it. We will
- * try to reflow the groups based on a couple hueristics to make things
- * more pleasant to look at.
- */
-
-#define BORDER_WIDTH   32
-#define COLUMN_WIDTH   500
-#define COLUMN_SPACING 32
-#define ROW_SPACING    24
+typedef struct
+{
+  GtkWidget      *widget;
+  GtkAllocation   alloc;
+  GtkRequisition  req;
+  gint            priority;
+} IdePreferencesFlowBoxChild;
 
 struct _IdePreferencesFlowBox
 {
-  GtkBox     parent_instance;
-
-  guint      needs_reflow : 1;
-  guint      max_columns : 3;
-
-  GPtrArray *columns;
-  GList     *groups;
+  GtkContainer  parent_instance;
+  GArray       *children;
 };
 
-G_DEFINE_TYPE (IdePreferencesFlowBox, ide_preferences_flow_box, GTK_TYPE_BOX)
+#define COLUMN_WIDTH   500
+#define COLUMN_SPACING 24
+#define ROW_SPACING    12
 
-static gint
-compare_group (gconstpointer a,
-               gconstpointer b)
-{
-  const IdePreferencesGroup *group_a = a;
-  const IdePreferencesGroup *group_b = b;
-
-  return group_a->priority - group_b->priority;
-}
-
-static gint
-find_next_column (IdePreferencesFlowBox *self,
-                  IdePreferencesGroup   *group,
-                  gint                   last_column)
-{
-  gint i;
-  struct {
-    gint column;
-    gint height;
-  } shortest = { -1, 0 };
-
-  g_assert (IDE_IS_PREFERENCES_FLOW_BOX (self));
-  g_assert (IDE_IS_PREFERENCES_GROUP (group));
-  g_assert (last_column >= -1);
-  g_assert (self->columns->len > 0);
-
-  if (ide_preferences_group_get_title (group) == NULL)
-    return last_column == -1 ? 0 : last_column;
-
-  for (i = 0; i < self->columns->len; i++)
-    {
-      GtkBox *column = g_ptr_array_index (self->columns, i);
-      gint height;
-
-      gtk_widget_get_preferred_height (GTK_WIDGET (column), NULL, &height);
-
-      if (shortest.column == -1 || height < shortest.height)
-        {
-          shortest.height = height;
-          shortest.column = i;
-        }
-    }
-
-  return shortest.column;
-}
+G_DEFINE_TYPE (IdePreferencesFlowBox, ide_preferences_flow_box, GTK_TYPE_CONTAINER)
 
 static void
-ide_preferences_flow_box_reflow (IdePreferencesFlowBox *self)
+ide_preferences_flow_box_layout (IdePreferencesFlowBox *self,
+                                 gint                   width,
+                                 gint                   height,
+                                 gint                  *tallest_column)
 {
-  GtkAllocation alloc;
-  const GList *iter;
-  gint n_columns;
-  gint width;
-  gint spacing;
+  gint real_tallest_column = 0;
+  gint total_height = 0;
+  gint n_columns = 0;
   gint border_width;
-  gint last_column = -1;
+  gint column;
+  guint i;
 
   g_assert (IDE_IS_PREFERENCES_FLOW_BOX (self));
-
-  self->needs_reflow = FALSE;
-
-  gtk_widget_get_allocation (GTK_WIDGET (self), &alloc);
+  g_assert (width > 0);
+  g_assert (tallest_column != NULL);
 
   /*
-   * Remove all groups from their containers, and add an extra reference
-   * until we have added the items back to a new box.
+   * We want to layout the children in a series of columns, but try to
+   * fill up each column before spilling into the next column.
+   *
+   * We can determine the number of columns we can support by the width
+   * of our allocation, and determine the max-height of each column
+   * by dividing the total height of all children by the number of
+   * columns. There is the chance that non-uniform sizing will mess up
+   * the height a bit here, but in practice it's mostly okay.
+   *
+   * The order of children is sorted by the priority, so that we know
+   * we can allocate them serially as we walk the array.
+   *
+   * We keep allocating children until we will go over the height of
+   * the column.
    */
-  for (iter = self->groups; iter; iter = iter->next)
-    {
-      GtkWidget *group = iter->data;
-      GtkWidget *parent = gtk_widget_get_parent (group);
 
-      g_object_ref (group);
-
-      if (parent != NULL)
-        gtk_container_remove (GTK_CONTAINER (parent), group);
-    }
-
-  /*
-   * Now remove the containers.
-   */
-  while (self->columns->len > 0)
-    {
-      GtkWidget *box = g_ptr_array_index (self->columns, self->columns->len - 1);
-
-      gtk_container_remove (GTK_CONTAINER (self), box);
-      g_ptr_array_remove_index (self->columns, self->columns->len - 1);
-    }
-
-  g_assert (self->columns->len == 0);
-
-  /*
-   * Determine the number of containers we need based on column width and
-   * allocation width, taking border_width and spacing into account.
-   */
-  n_columns = 1;
-  spacing = gtk_box_get_spacing (GTK_BOX (self));
   border_width = gtk_container_get_border_width (GTK_CONTAINER (self));
-  width = (border_width * 2) + COLUMN_WIDTH;
+  total_height = border_width * 2;
 
-  while (TRUE)
+  for (i = 0; i < self->children->len; i++)
     {
-      width += spacing;
-      width += COLUMN_WIDTH;
+      IdePreferencesFlowBoxChild *child;
 
-      if (width <= alloc.width)
+      child = &g_array_index (self->children, IdePreferencesFlowBoxChild, i);
+
+      gtk_widget_get_preferred_height_for_width (child->widget, COLUMN_WIDTH, NULL, &child->req.height);
+
+      if (i == 0)
+        total_height += ROW_SPACING;
+      total_height += child->req.height;
+    }
+
+  if (total_height <= height)
+    n_columns = 1;
+  else
+    n_columns = MAX (1, (width - (border_width * 2)) / (COLUMN_WIDTH + COLUMN_SPACING));
+
+  for (column = 0, i = 0; column < n_columns; column++)
+    {
+      GtkAllocation alloc;
+
+      alloc.x = border_width + (COLUMN_WIDTH * column) + (column * COLUMN_SPACING);
+      alloc.y = border_width;
+      alloc.width = COLUMN_WIDTH;
+      alloc.height = (height != 0) ? height : total_height / n_columns;
+
+      for (; i < self->children->len; i++)
         {
-          n_columns++;
-          continue;
+          IdePreferencesFlowBoxChild *child;
+
+          child = &g_array_index (self->children, IdePreferencesFlowBoxChild, i);
+
+          /*
+           * Ignore this child if it is not visible.
+           */
+          if (!gtk_widget_get_visible (child->widget) ||
+              !gtk_widget_get_child_visible (child->widget))
+            continue;
+
+          /*
+           * If the child requisition is taller than the space we have left in
+           * this column, we need to spill over to the next column.
+           */
+          if (child->req.height > alloc.height && column < (n_columns - 1))
+            break;
+
+          child->alloc.x = alloc.x;
+          child->alloc.y = alloc.y;
+          child->alloc.width = COLUMN_WIDTH;
+          child->alloc.height = child->req.height;
+
+#if 0
+          g_print ("Allocating child to: [%d] %d,%d %dx%d\n",
+                   column,
+                   child->alloc.x,
+                   child->alloc.y,
+                   child->alloc.width,
+                   child->alloc.height);
+#endif
+
+          alloc.y += child->req.height + ROW_SPACING;
+          alloc.height -= child->req.height + ROW_SPACING;
+
+          if (alloc.y > real_tallest_column)
+            real_tallest_column = alloc.y;
         }
-
-      break;
     }
 
-  /*
-   * Limit ourselves to our max columns.
-   */
-  n_columns = MIN (n_columns, self->max_columns);
+  real_tallest_column += border_width;
 
-  /*
-   * Add those columns, we'll add items to them after they are configured.
-   */
-  while (self->columns->len < n_columns)
-    {
-      GtkWidget *column;
-
-      column = g_object_new (GTK_TYPE_BOX,
-                             "hexpand", FALSE,
-                             "orientation", GTK_ORIENTATION_VERTICAL,
-                             "spacing", ROW_SPACING,
-                             "visible", TRUE,
-                             "width-request", COLUMN_WIDTH,
-                             NULL);
-      GTK_CONTAINER_CLASS (ide_preferences_flow_box_parent_class)->add (GTK_CONTAINER (self), column);
-      g_ptr_array_add (self->columns, column);
-    }
-
-  /*
-   * Now go through adding groups to columns based on the column with the
-   * shortest height. If the group does not have a title, it should be
-   * placed in the same column as the previous group.
-   */
-  for (iter = self->groups; iter; iter = iter->next)
-    {
-      IdePreferencesGroup *group = iter->data;
-      GtkBox *box;
-      gint column;
-
-      column = find_next_column (self, group, last_column);
-      g_assert (column >= 0);
-      g_assert (column < self->columns->len);
-
-      box = g_ptr_array_index (self->columns, column);
-      g_assert (GTK_IS_BOX (box));
-
-      gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (group));
-
-      last_column = column;
-    }
-
-  /*
-   * Now we can drop our extra reference to the groups.
-   */
-  g_list_foreach (self->groups, (GFunc)g_object_unref, NULL);
+  *tallest_column = real_tallest_column;
 }
 
-static void
-ide_preferences_flow_box_add_group (IdePreferencesFlowBox *self,
-                                    IdePreferencesGroup   *group)
+static GtkSizeRequestMode
+ide_preferences_flow_box_get_request_mode (GtkWidget *widget)
 {
-  g_assert (IDE_IS_PREFERENCES_FLOW_BOX (self));
-  g_assert (IDE_IS_PREFERENCES_GROUP (group));
-
-  self->groups = g_list_insert_sorted (self->groups, group, compare_group);
-  self->needs_reflow = TRUE;
-
-  gtk_widget_queue_allocate (GTK_WIDGET (self));
-}
-
-static void
-ide_preferences_flow_box_add (GtkContainer *container,
-                              GtkWidget    *child)
-{
-  IdePreferencesFlowBox *self = (IdePreferencesFlowBox *)container;
-
-  g_assert (IDE_IS_PREFERENCES_FLOW_BOX (self));
-  g_assert (IDE_IS_PREFERENCES_GROUP (child));
-
-  ide_preferences_flow_box_add_group (self, IDE_PREFERENCES_GROUP (child));
-}
-
-static void
-ide_preferences_flow_box_size_allocate (GtkWidget     *widget,
-                                        GtkAllocation *allocation)
-{
-  IdePreferencesFlowBox *self = (IdePreferencesFlowBox *)widget;
-  gint border_width;
-  gint min_width;
-  gint spacing;
-
-  g_assert (IDE_IS_PREFERENCES_FLOW_BOX (self));
-  g_assert (allocation != NULL);
-
-  border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
-  spacing = gtk_box_get_spacing (GTK_BOX (self));
-
-  min_width = (border_width * 2)
-            + (spacing * (self->columns->len - 1))
-            + (COLUMN_WIDTH * self->columns->len);
-
-  /*
-   * If we need to shrink our number of columns, or add another column,
-   * lets go through the reflow state.
-   */
-  if ((allocation->width < min_width) ||
-      ((allocation->width >= (min_width + spacing + COLUMN_WIDTH)) &&
-       (self->columns->len < self->max_columns)))
-    self->needs_reflow = TRUE;
-
-  GTK_WIDGET_CLASS (ide_preferences_flow_box_parent_class)->size_allocate (widget, allocation);
-
-  if (self->needs_reflow)
-    ide_preferences_flow_box_reflow (self);
+  return GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH;
 }
 
 static void
@@ -277,20 +161,147 @@ ide_preferences_flow_box_get_preferred_width (GtkWidget *widget,
                                               gint      *min_width,
                                               gint      *nat_width)
 {
+  IdePreferencesFlowBox *self = (IdePreferencesFlowBox *)widget;
   gint border_width;
 
-  g_assert (GTK_IS_WIDGET (widget));
+  g_assert (IDE_IS_PREFERENCES_FLOW_BOX (self));
   g_assert (min_width != NULL);
   g_assert (nat_width != NULL);
 
-  GTK_WIDGET_CLASS (ide_preferences_flow_box_parent_class)->get_preferred_width (widget, min_width, nat_width);
+  border_width = gtk_container_get_border_width (GTK_CONTAINER (self));
 
-  border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
+  *min_width = *nat_width = COLUMN_WIDTH + (border_width * 2);
+}
 
-  *min_width = (border_width * 2) + COLUMN_WIDTH;
+static void
+ide_preferences_flow_box_get_preferred_height_for_width (GtkWidget *widget,
+                                                         gint       width,
+                                                         gint      *min_height,
+                                                         gint      *nat_height)
+{
+  IdePreferencesFlowBox *self = (IdePreferencesFlowBox *)widget;
+  gint tallest_column = 0;
 
-  if (*nat_width < *min_width)
-    *nat_width = *min_width;
+  g_assert (IDE_IS_PREFERENCES_FLOW_BOX (self));
+  g_assert (min_height != NULL);
+  g_assert (nat_height != NULL);
+
+  ide_preferences_flow_box_layout (self, width, 0, &tallest_column);
+
+  *min_height = *nat_height = tallest_column;
+}
+
+static void
+ide_preferences_flow_box_size_allocate (GtkWidget     *widget,
+                                        GtkAllocation *allocation)
+{
+  IdePreferencesFlowBox *self = (IdePreferencesFlowBox *)widget;
+  gint tallest_column = 0;
+  guint i;
+
+  g_assert (IDE_IS_PREFERENCES_FLOW_BOX (self));
+  g_assert (allocation != NULL);
+
+  gtk_widget_set_allocation (widget, allocation);
+
+  ide_preferences_flow_box_layout (self, allocation->width, allocation->height, &tallest_column);
+
+  for (i = 0; i < self->children->len; i++)
+    {
+      IdePreferencesFlowBoxChild *child;
+
+      child = &g_array_index (self->children, IdePreferencesFlowBoxChild, i);
+      gtk_widget_size_allocate (child->widget, &child->alloc);
+    }
+}
+
+static gint
+ide_preferences_flow_box_child_compare (gconstpointer a,
+                                        gconstpointer b)
+{
+  const IdePreferencesFlowBoxChild *child_a = a;
+  const IdePreferencesFlowBoxChild *child_b = b;
+
+  return child_a->priority - child_b->priority;
+}
+
+static void
+ide_preferences_flow_box_add (GtkContainer *container,
+                              GtkWidget    *widget)
+{
+  IdePreferencesFlowBox *self = (IdePreferencesFlowBox *)container;
+  IdePreferencesFlowBoxChild child = { 0 };
+
+  g_assert (IDE_IS_PREFERENCES_FLOW_BOX (self));
+  g_assert (GTK_IS_WIDGET (widget));
+
+  if (!IDE_IS_PREFERENCES_GROUP (widget))
+    {
+      g_warning ("Attempt to add a widget of type \"%s\" to a IdePreferencesFlowBox.",
+                 G_OBJECT_TYPE_NAME (widget));
+      return;
+    }
+
+  child.widget = g_object_ref_sink (widget);
+  child.priority = ide_preferences_group_get_priority (IDE_PREFERENCES_GROUP (widget));
+
+  g_array_append_val (self->children, child);
+  g_array_sort (self->children, ide_preferences_flow_box_child_compare);
+
+  gtk_widget_set_parent (widget, GTK_WIDGET (self));
+  gtk_widget_queue_resize (GTK_WIDGET (self));
+}
+
+static void
+ide_preferences_flow_box_remove (GtkContainer *container,
+                                 GtkWidget    *widget)
+{
+  IdePreferencesFlowBox *self = (IdePreferencesFlowBox *)container;
+  guint i;
+
+  g_assert (GTK_IS_CONTAINER (container));
+  g_assert (GTK_IS_WIDGET (widget));
+
+  for (i = 0; i < self->children->len; i++)
+    {
+      IdePreferencesFlowBoxChild *child;
+
+      child = &g_array_index (self->children, IdePreferencesFlowBoxChild, i);
+
+      if (child->widget == widget)
+        {
+          gtk_widget_unparent (child->widget);
+          g_array_remove_index (self->children, i);
+          gtk_widget_queue_resize (GTK_WIDGET (self));
+          return;
+        }
+    }
+}
+
+static void
+ide_preferences_flow_box_forall (GtkContainer *container,
+                                 gboolean      include_internals,
+                                 GtkCallback   callback,
+                                 gpointer      user_data)
+{
+  IdePreferencesFlowBox *self = (IdePreferencesFlowBox *)container;
+  gint i;
+
+  g_assert (GTK_IS_CONTAINER (container));
+  g_assert (callback != NULL);
+
+  /*
+   * We walk backwards in the array to be safe against callback destorying
+   * the widget (and causing it to be removed).
+   */
+
+  for (i = self->children->len; i > 0; i--)
+    {
+      IdePreferencesFlowBoxChild *child;
+
+      child = &g_array_index (self->children, IdePreferencesFlowBoxChild, i - 1);
+      callback (child->widget, user_data);
+    }
 }
 
 static void
@@ -298,8 +309,7 @@ ide_preferences_flow_box_finalize (GObject *object)
 {
   IdePreferencesFlowBox *self = (IdePreferencesFlowBox *)object;
 
-  g_clear_pointer (&self->columns, g_ptr_array_unref);
-  g_clear_pointer (&self->groups, g_list_free);
+  g_clear_pointer (&self->children, g_array_unref);
 
   G_OBJECT_CLASS (ide_preferences_flow_box_parent_class)->finalize (object);
 }
@@ -313,21 +323,26 @@ ide_preferences_flow_box_class_init (IdePreferencesFlowBoxClass *klass)
 
   object_class->finalize = ide_preferences_flow_box_finalize;
 
-  widget_class->size_allocate = ide_preferences_flow_box_size_allocate;
+  widget_class->get_preferred_height_for_width = ide_preferences_flow_box_get_preferred_height_for_width;
   widget_class->get_preferred_width = ide_preferences_flow_box_get_preferred_width;
+  widget_class->get_request_mode = ide_preferences_flow_box_get_request_mode;
+  widget_class->size_allocate = ide_preferences_flow_box_size_allocate;
 
   container_class->add = ide_preferences_flow_box_add;
-
-  gtk_widget_class_set_css_name (widget_class, "preferencesflowbox");
+  container_class->forall = ide_preferences_flow_box_forall;
+  container_class->remove = ide_preferences_flow_box_remove;
 }
 
 static void
 ide_preferences_flow_box_init (IdePreferencesFlowBox *self)
 {
-  self->columns = g_ptr_array_new ();
-  self->max_columns = 2;
+  gtk_widget_set_has_window (GTK_WIDGET (self), FALSE);
 
-  gtk_widget_set_hexpand (GTK_WIDGET (self), TRUE);
-  gtk_container_set_border_width (GTK_CONTAINER (self), BORDER_WIDTH);
-  gtk_box_set_spacing (GTK_BOX (self), COLUMN_SPACING);
+  self->children = g_array_new (FALSE, TRUE, sizeof (IdePreferencesFlowBoxChild));
+}
+
+GtkWidget *
+ide_preferences_flow_box_new (void)
+{
+  return g_object_new (IDE_TYPE_PREFERENCES_FLOW_BOX, NULL);
 }
