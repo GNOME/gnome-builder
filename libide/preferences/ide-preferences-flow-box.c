@@ -97,13 +97,14 @@ ide_preferences_flow_box_layout (IdePreferencesFlowBox *self,
   for (column = 0, i = 0; column < n_columns; column++)
     {
       GtkAllocation alloc;
+      gint j = 0;
 
       alloc.x = border_width + (COLUMN_WIDTH * column) + (column * COLUMN_SPACING);
       alloc.y = border_width;
       alloc.width = COLUMN_WIDTH;
       alloc.height = (height != 0) ? height : total_height / n_columns;
 
-      for (; i < self->children->len; i++)
+      for (; i < self->children->len; i++, j++)
         {
           IdePreferencesFlowBoxChild *child;
 
@@ -120,7 +121,7 @@ ide_preferences_flow_box_layout (IdePreferencesFlowBox *self,
            * If the child requisition is taller than the space we have left in
            * this column, we need to spill over to the next column.
            */
-          if (child->req.height > alloc.height && column < (n_columns - 1))
+          if ((j != 0) && (child->req.height > alloc.height) && (column < (n_columns - 1)))
             break;
 
           child->alloc.x = alloc.x;
@@ -170,7 +171,8 @@ ide_preferences_flow_box_get_preferred_width (GtkWidget *widget,
 
   border_width = gtk_container_get_border_width (GTK_CONTAINER (self));
 
-  *min_width = *nat_width = COLUMN_WIDTH + (border_width * 2);
+  *nat_width = (COLUMN_WIDTH * 3) + (COLUMN_SPACING * 2) + (border_width * 2);
+  *min_width = COLUMN_WIDTH + (border_width * 2);
 }
 
 static void
