@@ -14,3 +14,5 @@ HELP_FILES = \
 
 # Translated languages, blank means no translation exists yet
 HELP_LINGUAS =
+
+-include $(top_srcdir)/git.mk
