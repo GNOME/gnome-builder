@@ -1,0 +1,83 @@
+# German translation for gnome-builder.
+# Copyright (C) 2016 gnome-builder's COPYRIGHT HOLDER
+# This file is distributed under the same license as the gnome-builder package.
+# Mario Blättermann <mario.blaettermann@gmail.com>, 2016.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: gnome-builder master\n"
+"POT-Creation-Date: 2016-01-29 16:53+0000\n"
+"PO-Revision-Date: 2016-01-29 19:42+0100\n"
+"Language-Team: German <gnome-de@gnome.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: de\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Last-Translator: Mario Blättermann <mario.blaettermann@gmail.com>\n"
+"X-Generator: Poedit 1.8.6\n"
+
+#. Put one translator per line, in the form NAME <EMAIL>, YEAR1, YEAR2
+msgctxt "_"
+msgid "translator-credits"
+msgstr "Mario Blättermann <mario.blaettermann@gmail.com>, 2016"
+
+#. (itstool) path: page/title
+#: C/index.page:12
+msgid "<_:media-1/> Builder"
+msgstr "<_:media-1/> Builder"
+
+#. (itstool) path: section/title
+#: C/index.page:18
+msgid "Features"
+msgstr "Funktionsmerkmale"
+
+#. (itstool) path: credit/name
+#: C/introduction.page:15
+msgid "Alexandre Franke"
+msgstr "Alexandre Franke"
+
+#. (itstool) path: credit/years
+#: C/introduction.page:17
+msgid "2016"
+msgstr "2016"
+
+#. (itstool) path: info/desc
+#: C/introduction.page:22
+msgid "Welcome to Builder"
+msgstr "Willkommen zu Builder"
+
+#. (itstool) path: page/title
+#: C/introduction.page:25
+msgid "Introduction"
+msgstr "Einführung"
+
+#. (itstool) path: page/p
+#: C/introduction.page:27
+msgid ""
+"Builder is an Integrated Development Environment (IDE) for the GNOME desktop "
+"environment."
+msgstr ""
+"Builder ist eine Integrierte Entwicklungsumgebung (IDE) für die GNOME-"
+"Arbeitsumgebung."
+
+#. (itstool) path: p/link
+#: C/legal.xml:5
+msgid "Creative Commons Attribution-ShareAlike 4.0 International"
+msgstr "Creative Commons Attribution-ShareAlike 4.0 International"
+
+#. (itstool) path: license/p
+#: C/legal.xml:4
+msgid "This work is licensed under a <_:link-1/> license."
+msgstr "Dieses Werk ist unter <_:link-1/> lizenziert."
+
+#. (itstool) path: license/p
+#: C/legal.xml:8
+msgid ""
+"As a special exception, the copyright holders give you permission to copy, "
+"modify, and distribute the example code contained in this documentation "
+"under the terms of your choosing, without restriction."
+msgstr ""
+"Als besondere Ausnahme gewähren die Inhaber des Urheberrechts die Erlaubnis, "
+"den Beispiel-Code in diesem Dokument zu kopieren, verändern und "
+"weiterzugeben, unter den Bedingungen Ihrer Wahl, ohne Einschränkungen."
