@@ -102,7 +102,7 @@ ide_preferences_flow_box_layout (IdePreferencesFlowBox *self,
       alloc.x = border_width + (COLUMN_WIDTH * column) + (column * COLUMN_SPACING);
       alloc.y = border_width;
       alloc.width = COLUMN_WIDTH;
-      alloc.height = (height != 0) ? height : total_height / n_columns;
+      alloc.height = (height != 0) ? (height - (border_width * 2)) : total_height / n_columns;
 
       for (; i < self->children->len; i++, j++)
         {
