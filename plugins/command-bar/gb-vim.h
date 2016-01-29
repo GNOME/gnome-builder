@@ -19,8 +19,6 @@
 #ifndef GB_VIM_H
 #define GB_VIM_H
 
-#include <gtksourceview/gtksource.h>
-
 G_BEGIN_DECLS
 
 #define GB_VIM_ERROR (gb_vim_error_quark())
@@ -34,13 +32,14 @@ typedef enum
   GB_VIM_ERROR_CANNOT_FIND_COLORSCHEME,
   GB_VIM_ERROR_UNKNOWN_OPTION,
   GB_VIM_ERROR_NOT_SOURCE_VIEW,
+  GB_VIM_ERROR_NO_VIEW
 } IdeVimError;
 
 GQuark     gb_vim_error_quark (void);
-gboolean   gb_vim_execute     (GtkSourceView  *source_view,
+gboolean   gb_vim_execute     (GtkWidget      *active_widget,
                                const gchar    *line,
                                GError        **error);
-gchar    **gb_vim_complete    (GtkSourceView  *source_view,
+gchar    **gb_vim_complete    (GtkWidget      *active_widget,
                                const gchar    *line);
 
 G_END_DECLS

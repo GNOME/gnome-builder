@@ -20,9 +20,13 @@
 
 #include <errno.h>
 #include <glib/gi18n.h>
+#include <gtksourceview/gtksource.h>
 #include <ide.h>
 
 #include "ide-gtk.h"
+#include "ide-editor-frame.h"
+#include "ide-editor-frame-private.h"
+#include "ide-editor-view-private.h"
 
 #include "gb-vim.h"
 
@@ -32,7 +36,7 @@ typedef gboolean (*GbVimSetFunc)     (GtkSourceView  *source_view,
                                       const gchar    *key,
                                       const gchar    *value,
                                       GError        **error);
-typedef gboolean (*GbVimCommandFunc) (GtkSourceView  *source_view,
+typedef gboolean (*GbVimCommandFunc) (GtkWidget      *active_widget,
                                       const gchar    *command,
                                       const gchar    *options,
                                       GError        **error);
@@ -299,18 +303,46 @@ lookup_set (const gchar *key)
 }
 
 static gboolean
-gb_vim_command_set (GtkSourceView  *source_view,
+gb_vim_set_source_view_error (GError **error)
+{
+  g_set_error (error,
+               GB_VIM_ERROR,
+               GB_VIM_ERROR_NOT_SOURCE_VIEW,
+               _("This command requires a GtkSourceView to be focused"));
+
+  return FALSE;
+}
+
+static gboolean
+gb_vim_set_no_view_error (GError **error)
+{
+  g_set_error (error,
+               GB_VIM_ERROR,
+               GB_VIM_ERROR_NO_VIEW,
+               _("This command requires a view to be focused"));
+
+  return FALSE;
+}
+
+static gboolean
+gb_vim_command_set (GtkWidget      *active_widget,
                     const gchar    *command,
                     const gchar    *options,
                     GError        **error)
 {
+  GtkSourceView *source_view;
   gboolean ret = FALSE;
   gchar **parts;
   gsize i;
 
-  g_assert (GTK_SOURCE_IS_VIEW (source_view));
+  g_assert (GTK_IS_WIDGET (active_widget));
   g_assert (command);
   g_assert (options);
+
+  if (IDE_IS_EDITOR_VIEW (active_widget))
+    source_view = GTK_SOURCE_VIEW (IDE_EDITOR_VIEW (active_widget)->frame1->source_view);
+  else
+    return gb_vim_set_source_view_error (error);
 
   parts = g_strsplit (options, " ", 0);
 
@@ -362,39 +394,46 @@ cleanup:
 }
 
 static gboolean
-gb_vim_command_colorscheme (GtkSourceView  *source_view,
+gb_vim_command_colorscheme (GtkWidget      *active_widget,
                             const gchar    *command,
                             const gchar    *options,
                             GError        **error)
 {
-  GtkSourceStyleSchemeManager *manager;
-  GtkSourceStyleScheme *style_scheme;
-  GtkTextBuffer *buffer;
-  g_autofree gchar *trimmed = NULL;
+  g_assert (GTK_IS_WIDGET (active_widget));
 
-  trimmed = g_strstrip (g_strdup (options));
-
-  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (source_view));
-  manager = gtk_source_style_scheme_manager_get_default ();
-  style_scheme = gtk_source_style_scheme_manager_get_scheme (manager, trimmed);
-
-  if (style_scheme == NULL)
+  if (IDE_IS_EDITOR_VIEW (active_widget))
     {
-      g_set_error (error,
-                   GB_VIM_ERROR,
-                   GB_VIM_ERROR_UNKNOWN_OPTION,
-                   _("Cannot find colorscheme '%s'"),
-                   options);
-      return FALSE;
+      GtkSourceStyleSchemeManager *manager;
+      GtkSourceStyleScheme *style_scheme;
+      GtkTextBuffer *buffer;
+      g_autofree gchar *trimmed = NULL;
+      GtkSourceView *source_view = GTK_SOURCE_VIEW (IDE_EDITOR_VIEW (active_widget)->frame1->source_view);
+
+      trimmed = g_strstrip (g_strdup (options));
+      buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (source_view));
+      manager = gtk_source_style_scheme_manager_get_default ();
+      style_scheme = gtk_source_style_scheme_manager_get_scheme (manager, trimmed);
+
+      if (style_scheme == NULL)
+        {
+          g_set_error (error,
+                       GB_VIM_ERROR,
+                       GB_VIM_ERROR_UNKNOWN_OPTION,
+                       _("Cannot find colorscheme '%s'"),
+                       options);
+          return FALSE;
+        }
+
+      g_object_set (buffer, "style-scheme", style_scheme, NULL);
+
+      return TRUE;
     }
-
-  g_object_set (buffer, "style-scheme", style_scheme, NULL);
-
-  return TRUE;
+  else
+    return gb_vim_set_source_view_error (error);
 }
 
 static gboolean
-gb_vim_command_edit (GtkSourceView  *source_view,
+gb_vim_command_edit (GtkWidget      *active_widget,
                      const gchar    *command,
                      const gchar    *options,
                      GError        **error)
@@ -405,13 +444,15 @@ gb_vim_command_edit (GtkSourceView  *source_view,
   GFile *workdir;
   GFile *file = NULL;
 
+  g_assert (GTK_IS_WIDGET (active_widget));
+
   if (ide_str_empty0 (options))
     {
-      ide_widget_action (GTK_WIDGET (source_view), "win", "open-with-dialog", NULL);
+      ide_widget_action (GTK_WIDGET (active_widget), "win", "open-with-dialog", NULL);
       return TRUE;
     }
 
-  if (!(workbench = ide_widget_get_workbench (GTK_WIDGET (source_view))) ||
+  if (!(workbench = ide_widget_get_workbench (active_widget)) ||
       !(context = ide_workbench_get_context (workbench)) ||
       !(vcs = ide_context_get_vcs (context)) ||
       !(workdir = ide_vcs_get_working_directory (vcs)))
@@ -436,232 +477,331 @@ gb_vim_command_edit (GtkSourceView  *source_view,
 }
 
 static gboolean
-gb_vim_command_tabe (GtkSourceView  *source_view,
+gb_vim_command_tabe (GtkWidget      *active_widget,
                      const gchar    *command,
                      const gchar    *options,
                      GError        **error)
 {
+  g_assert (GTK_IS_WIDGET (active_widget));
+
   if (!ide_str_empty0 (options))
-    return gb_vim_command_edit (source_view, command, options, error);
+    return gb_vim_command_edit (active_widget, command, options, error);
 
-  ide_widget_action (GTK_WIDGET (source_view), "perspective", "new-file", NULL);
+  ide_widget_action (GTK_WIDGET (active_widget), "perspective", "new-file", NULL);
 
   return TRUE;
 }
 
 static gboolean
-gb_vim_command_quit (GtkSourceView  *source_view,
+gb_vim_command_quit (GtkWidget      *active_widget,
                      const gchar    *command,
                      const gchar    *options,
                      GError        **error)
 {
-  ide_widget_action (GTK_WIDGET (source_view), "view", "save", NULL);
-  ide_widget_action (GTK_WIDGET (source_view), "view", "close", NULL);
+  g_assert (GTK_IS_WIDGET (active_widget));
+
+  if (IDE_IS_EDITOR_VIEW (active_widget))
+    {
+      GtkSourceView *source_view = GTK_SOURCE_VIEW (IDE_EDITOR_VIEW (active_widget)->frame1->source_view);
+
+      ide_widget_action (GTK_WIDGET (source_view), "view", "save", NULL);
+    }
+
+  ide_widget_action (GTK_WIDGET (active_widget), "view-stack", "close", NULL);
+
   return TRUE;
 }
 
 static gboolean
-gb_vim_command_split (GtkSourceView  *source_view,
+gb_vim_command_split (GtkWidget      *active_widget,
                       const gchar    *command,
                       const gchar    *options,
                       GError        **error)
 {
-  ide_widget_action (GTK_WIDGET (source_view), "view-stack", "split-down", NULL);
+  g_assert (GTK_IS_WIDGET (active_widget));
+
+  if (IDE_IS_LAYOUT_VIEW (active_widget))
+    ide_widget_action (GTK_WIDGET (active_widget), "view-stack", "split-down", NULL);
+  else
+    return gb_vim_set_no_view_error (error);
+
   return TRUE;
 }
 
 static gboolean
-gb_vim_command_vsplit (GtkSourceView  *source_view,
+gb_vim_command_vsplit (GtkWidget      *active_widget,
                        const gchar    *command,
                        const gchar    *options,
                        GError        **error)
 {
-  ide_widget_action (GTK_WIDGET (source_view), "view-stack", "split-left", NULL);
+  g_assert (GTK_IS_WIDGET (active_widget));
+
+  if (IDE_IS_LAYOUT_VIEW (active_widget))
+    ide_widget_action (GTK_WIDGET (active_widget), "view-stack", "split-left", NULL);
+  else
+    return gb_vim_set_no_view_error (error);
+
   return TRUE;
 }
 
 static gboolean
-gb_vim_command_write (GtkSourceView  *source_view,
+gb_vim_command_write (GtkWidget      *active_widget,
                       const gchar    *command,
                       const gchar    *options,
                       GError        **error)
 {
-  ide_widget_action (GTK_WIDGET (source_view), "view", "save", NULL);
-  return TRUE;
+  g_assert (GTK_IS_WIDGET (active_widget));
+
+  if (IDE_IS_EDITOR_VIEW (active_widget))
+    {
+      GtkSourceView  *source_view = GTK_SOURCE_VIEW (IDE_EDITOR_VIEW (active_widget)->frame1->source_view);
+
+      ide_widget_action (GTK_WIDGET (source_view), "view", "save", NULL);
+
+      return TRUE;
+    }
+  else
+    return gb_vim_set_source_view_error (error);
 }
 
 static gboolean
-gb_vim_command_wq (GtkSourceView  *source_view,
+gb_vim_command_wq (GtkWidget      *active_widget,
                    const gchar    *command,
                    const gchar    *options,
                    GError        **error)
 {
-  return (gb_vim_command_write (source_view, command, options, error) &&
-          gb_vim_command_quit (source_view, command, options, error));
+  g_assert (GTK_IS_WIDGET (active_widget));
+
+  if (IDE_IS_EDITOR_VIEW (active_widget))
+    return (gb_vim_command_write (active_widget, command, options, error) &&
+            gb_vim_command_quit (active_widget, command, options, error));
+  else
+    return gb_vim_set_source_view_error (error);
 }
 
 static gboolean
-gb_vim_command_nohl (GtkSourceView  *source_view,
+gb_vim_command_nohl (GtkWidget      *active_widget,
                      const gchar    *command,
                      const gchar    *options,
                      GError        **error)
 {
-  if (IDE_IS_SOURCE_VIEW (source_view))
+  g_assert (GTK_IS_WIDGET (active_widget));
+
+  if (IDE_IS_EDITOR_VIEW (active_widget))
     {
       GtkSourceSearchContext *context = NULL;
+      GtkSourceView *source_view = GTK_SOURCE_VIEW (IDE_EDITOR_VIEW (active_widget)->frame1->source_view);
 
       g_object_get (source_view, "search-context", &context, NULL);
       g_object_set (context, "highlight", FALSE, NULL);
       g_clear_object (&context);
-    }
 
-  return TRUE;
+      return TRUE;
+    }
+  else
+    return gb_vim_set_source_view_error (error);
 }
 
 static gboolean
-gb_vim_command_make (GtkSourceView  *source_view,
+gb_vim_command_make (GtkWidget      *active_widget,
                      const gchar    *command,
                      const gchar    *options,
                      GError        **error)
 {
-  ide_widget_action (GTK_WIDGET (source_view), "workbench", "build", NULL);
+  g_assert (GTK_IS_WIDGET (active_widget));
+
+  /* TODO: check for an open project */
+  ide_widget_action (GTK_WIDGET (active_widget), "workbench", "build", NULL);
+
   return TRUE;
 }
 
 static gboolean
-gb_vim_command_syntax (GtkSourceView  *source_view,
+gb_vim_command_syntax (GtkWidget      *active_widget,
                        const gchar    *command,
                        const gchar    *options,
                        GError        **error)
 {
-  if (g_str_equal (options, "enable") || g_str_equal (options, "on"))
-    g_object_set (source_view, "highlight-syntax", TRUE, NULL);
-  else if (g_str_equal (options, "off"))
-    g_object_set (source_view, "highlight-syntax", FALSE, NULL);
-  else
-    {
-      g_set_error (error,
-                   GB_VIM_ERROR,
-                   GB_VIM_ERROR_UNKNOWN_OPTION,
-                   _("Invalid :syntax subcommand: %s"),
-                   options);
-      return FALSE;
-    }
+  g_assert (GTK_IS_WIDGET (active_widget));
 
-  return TRUE;
+  if (IDE_IS_EDITOR_VIEW (active_widget))
+    {
+      GtkSourceView *source_view = GTK_SOURCE_VIEW (IDE_EDITOR_VIEW (active_widget)->frame1->source_view);
+
+      if (g_str_equal (options, "enable") || g_str_equal (options, "on"))
+        g_object_set (source_view, "highlight-syntax", TRUE, NULL);
+      else if (g_str_equal (options, "off"))
+        g_object_set (source_view, "highlight-syntax", FALSE, NULL);
+      else
+        {
+          g_set_error (error,
+                       GB_VIM_ERROR,
+                       GB_VIM_ERROR_UNKNOWN_OPTION,
+                       _("Invalid :syntax subcommand: %s"),
+                       options);
+          return FALSE;
+        }
+
+      return TRUE;
+    }
+  else
+    return gb_vim_set_source_view_error (error);
 }
 
 static gboolean
-gb_vim_command_sort (GtkSourceView  *source_view,
+gb_vim_command_sort (GtkWidget      *active_widget,
                      const gchar    *command,
                      const gchar    *options,
                      GError        **error)
 {
-  if (IDE_IS_SOURCE_VIEW (source_view))
+  g_assert (GTK_IS_WIDGET (active_widget));
+
+  if (IDE_IS_EDITOR_VIEW (active_widget))
     {
+      GtkSourceView *source_view = GTK_SOURCE_VIEW (IDE_EDITOR_VIEW (active_widget)->frame1->source_view);
+
       g_signal_emit_by_name (source_view, "sort", FALSE, FALSE);
       g_signal_emit_by_name (source_view, "clear-selection");
       g_signal_emit_by_name (source_view, "set-mode", NULL,
                              IDE_SOURCE_VIEW_MODE_TYPE_PERMANENT);
+
+      return TRUE;
     }
-
-  return TRUE;
+  else
+    return gb_vim_set_source_view_error (error);
 }
 
 static gboolean
-gb_vim_command_bnext (GtkSourceView  *source_view,
+gb_vim_command_bnext (GtkWidget      *active_widget,
                       const gchar    *command,
                       const gchar    *options,
                       GError        **error)
 {
-  ide_widget_action (GTK_WIDGET (source_view), "view-stack", "next-view", NULL);
+  g_assert (GTK_IS_WIDGET (active_widget));
+
+  // TODO: check for an open buffer ?
+  ide_widget_action (GTK_WIDGET (active_widget), "view-stack", "next-view", NULL);
+
   return TRUE;
 }
 
 static gboolean
-gb_vim_command_bprevious (GtkSourceView  *source_view,
+gb_vim_command_bprevious (GtkWidget      *active_widget,
                           const gchar    *command,
                           const gchar    *options,
                           GError        **error)
 {
-  ide_widget_action (GTK_WIDGET (source_view), "view-stack", "previous-view", NULL);
+  g_assert (GTK_IS_WIDGET (active_widget));
+
+  // TODO: check for an open buffer ?
+  ide_widget_action (GTK_WIDGET (active_widget), "view-stack", "previous-view", NULL);
+
   return TRUE;
 }
 
 static gboolean
-gb_vim_command_cnext (GtkSourceView  *source_view,
+gb_vim_command_cnext (GtkWidget      *active_widget,
                       const gchar    *command,
                       const gchar    *options,
                       GError        **error)
 {
-  if (IDE_IS_SOURCE_VIEW (source_view))
-    g_signal_emit_by_name (source_view, "move-error", GTK_DIR_DOWN);
-  return TRUE;
+  g_assert (GTK_IS_WIDGET (active_widget));
+
+  if (IDE_IS_EDITOR_VIEW (active_widget))
+    {
+      GtkSourceView  *source_view = GTK_SOURCE_VIEW (IDE_EDITOR_VIEW (active_widget)->frame1->source_view);
+
+      g_signal_emit_by_name (source_view, "move-error", GTK_DIR_DOWN);
+
+      return TRUE;
+    }
+  else
+    return gb_vim_set_source_view_error (error);
 }
 
 static gboolean
-gb_vim_command_cprevious (GtkSourceView  *source_view,
+gb_vim_command_cprevious (GtkWidget      *active_widget,
                           const gchar    *command,
                           const gchar    *options,
                           GError        **error)
 {
-  if (IDE_IS_SOURCE_VIEW (source_view))
-    g_signal_emit_by_name (source_view, "move-error", GTK_DIR_UP);
-  return TRUE;
+  g_assert (GTK_IS_WIDGET (active_widget));
+
+  if (IDE_IS_EDITOR_VIEW (active_widget))
+    {
+      GtkSourceView  *source_view = GTK_SOURCE_VIEW (IDE_EDITOR_VIEW (active_widget)->frame1->source_view);
+
+      g_signal_emit_by_name (source_view, "move-error", GTK_DIR_UP);
+
+      return TRUE;
+    }
+  else
+    return gb_vim_set_source_view_error (error);
 }
 
 static gboolean
-gb_vim_command_buffers (GtkSourceView  *source_view,
+gb_vim_command_buffers (GtkWidget      *active_widget,
                         const gchar    *command,
                         const gchar    *options,
                         GError        **error)
 {
-  ide_widget_action (GTK_WIDGET (source_view), "view-stack", "show-list", NULL);
+  g_assert (GTK_IS_WIDGET (active_widget));
+
+  ide_widget_action (GTK_WIDGET (active_widget), "view-stack", "show-list", NULL);
+
   return TRUE;
 }
 
 static gboolean
-gb_vim_jump_to_line (GtkSourceView  *source_view,
+gb_vim_jump_to_line (GtkWidget      *active_widget,
                      const gchar    *command,
                      const gchar    *options,
                      GError        **error)
 {
-  GtkTextBuffer *buffer;
-  gboolean extend_selection;
-  gint line;
+  g_assert (GTK_IS_WIDGET (active_widget));
 
-  if (!IDE_IS_SOURCE_VIEW (source_view))
-    return TRUE;
+  if (IDE_IS_EDITOR_VIEW (active_widget))
+    {
+      GtkTextBuffer *buffer;
+      gboolean extend_selection;
+      gint line;
+      GtkSourceView  *source_view = GTK_SOURCE_VIEW (IDE_EDITOR_VIEW (active_widget)->frame1->source_view);
 
-  if (!int32_parse (&line, options, 0, G_MAXINT32, "line number", error))
-    return FALSE;
+      if (!int32_parse (&line, options, 0, G_MAXINT32, "line number", error))
+        return FALSE;
 
-  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (source_view));
-  extend_selection = gtk_text_buffer_get_has_selection (buffer);
-  ide_source_view_set_count (IDE_SOURCE_VIEW (source_view), line);
+      buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (source_view));
+      extend_selection = gtk_text_buffer_get_has_selection (buffer);
+      ide_source_view_set_count (IDE_SOURCE_VIEW (source_view), line);
 
-  g_signal_emit_by_name (source_view,
-                         "movement",
-                         IDE_SOURCE_VIEW_MOVEMENT_NTH_LINE,
-                         extend_selection, TRUE, TRUE);
+      g_signal_emit_by_name (source_view,
+                             "movement",
+                             IDE_SOURCE_VIEW_MOVEMENT_NTH_LINE,
+                             extend_selection, TRUE, TRUE);
 
-  ide_source_view_set_count (IDE_SOURCE_VIEW (source_view), 0);
+      ide_source_view_set_count (IDE_SOURCE_VIEW (source_view), 0);
 
-  g_signal_emit_by_name (source_view, "save-insert-mark");
+      g_signal_emit_by_name (source_view, "save-insert-mark");
 
-  return TRUE;
+      return TRUE;
+    }
+  else
+    return gb_vim_set_source_view_error (error);
 }
 
 static gboolean
-gb_vim_command_help (GtkSourceView  *source_view,
+gb_vim_command_help (GtkWidget      *active_widget,
                      const gchar    *command,
                      const gchar    *options,
                      GError        **error)
 {
   GVariant *param;
 
+  g_assert (GTK_IS_WIDGET (active_widget));
+
   param = g_variant_new_string (options);
-  ide_widget_action (GTK_WIDGET (source_view), "workbench", "search-docs", param);
+  ide_widget_action (GTK_WIDGET (active_widget), "workbench", "search-docs", param);
+
   return TRUE;
 }
 
@@ -760,11 +900,12 @@ gb_vim_do_search_and_replace (GtkTextBuffer *buffer,
 }
 
 static gboolean
-gb_vim_command_search (GtkSourceView  *source_view,
+gb_vim_command_search (GtkWidget      *active_widget,
                        const gchar    *command,
                        const gchar    *options,
                        GError        **error)
 {
+  GtkSourceView  *source_view;
   GtkTextBuffer *buffer;
   const gchar *search_begin = NULL;
   const gchar *search_end = NULL;
@@ -774,7 +915,13 @@ gb_vim_command_search (GtkSourceView  *source_view,
   gchar *replace_text = NULL;
   gunichar separator;
 
+  g_assert (GTK_IS_WIDGET (active_widget));
   g_assert (g_str_has_prefix (command, "%s") || g_str_has_prefix (command, "s"));
+
+  if (IDE_IS_EDITOR_VIEW (active_widget))
+    source_view = GTK_SOURCE_VIEW (IDE_EDITOR_VIEW (active_widget)->frame1->source_view);
+  else
+    return gb_vim_set_source_view_error (error);
 
   if (*command == '%')
     command++;
@@ -937,11 +1084,10 @@ lookup_command (const gchar *name)
 }
 
 gboolean
-gb_vim_execute (GtkSourceView  *source_view,
+gb_vim_execute (GtkWidget      *active_widget,
                 const gchar    *line,
                 GError        **error)
 {
-  GtkTextBuffer *buffer;
   g_autofree gchar *name_slice = NULL;
   const GbVimCommand *command;
   const gchar *command_name = line;
@@ -949,19 +1095,8 @@ gb_vim_execute (GtkSourceView  *source_view,
   g_autofree gchar *all_options = NULL;
   gboolean result;
 
-  g_return_val_if_fail (GTK_SOURCE_IS_VIEW (source_view), FALSE);
+  g_return_val_if_fail (GTK_IS_WIDGET (active_widget), FALSE);
   g_return_val_if_fail (line, FALSE);
-
-  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (source_view));
-
-  if (!GTK_SOURCE_IS_BUFFER (buffer))
-    {
-      g_set_error (error,
-                   GB_VIM_ERROR,
-                   GB_VIM_ERROR_NOT_SOURCE_VIEW,
-                   _("vim mode requires GtkSourceView"));
-      return FALSE;
-    }
 
   for (options = line; *options; options = g_utf8_next_char (options))
     {
@@ -984,13 +1119,14 @@ gb_vim_execute (GtkSourceView  *source_view,
   if (command == NULL)
     {
       if (looks_like_search_and_replace (line))
-        return gb_vim_command_search (source_view, line, "", error);
+        return gb_vim_command_search (active_widget, line, "", error);
 
       g_set_error (error,
                    GB_VIM_ERROR,
                    GB_VIM_ERROR_NOT_FOUND,
-                   _("Not an editor command: %s"),
+                   _("Not a command: %s"),
                    command_name);
+
       return FALSE;
     }
 
@@ -999,7 +1135,7 @@ gb_vim_execute (GtkSourceView  *source_view,
   else
     all_options = g_strdup (options);
 
-  result = command->func (source_view, command_name, all_options, error);
+  result = command->func (active_widget, command_name, all_options, error);
   g_free (command->options_sup);
 
   return result;
@@ -1018,6 +1154,7 @@ joinv_and_add (gchar       **parts,
   for (i = 1; i < len; i++)
     g_string_append_printf (gstr, "%s%s", delim, parts [i]);
   g_string_append_printf (gstr, "%s%s", delim, str);
+
   return g_string_free (gstr, FALSE);
 }
 
@@ -1036,6 +1173,7 @@ gb_vim_complete_set (const gchar *line,
   if (len < 2)
     {
       g_strfreev (parts);
+
       return;
     }
 
@@ -1070,7 +1208,7 @@ gb_vim_complete_command (const gchar *line,
 }
 
 static void
-gb_vim_complete_edit_files (GtkSourceView *source_view,
+gb_vim_complete_edit_files (GtkWidget *active_widget,
                             const gchar   *command,
                             GPtrArray     *ar,
                             const gchar   *prefix)
@@ -1088,7 +1226,7 @@ gb_vim_complete_edit_files (GtkSourceView *source_view,
   g_assert (ar);
   g_assert (prefix);
 
-  if (!(workbench = ide_widget_get_workbench (GTK_WIDGET (source_view))) ||
+  if (!(workbench = ide_widget_get_workbench (GTK_WIDGET (active_widget))) ||
       !(context = ide_workbench_get_context (workbench)) ||
       !(vcs = ide_context_get_vcs (context)) ||
       !(workdir = ide_vcs_get_working_directory (vcs)))
@@ -1197,7 +1335,7 @@ gb_vim_complete_edit_files (GtkSourceView *source_view,
 }
 
 static void
-gb_vim_complete_edit (GtkSourceView *source_view,
+gb_vim_complete_edit (GtkWidget *active_widget,
                       const gchar   *line,
                       GPtrArray     *ar)
 {
@@ -1210,7 +1348,7 @@ gb_vim_complete_edit (GtkSourceView *source_view,
       return;
     }
 
-  gb_vim_complete_edit_files (source_view, parts [0], ar, parts [1]);
+  gb_vim_complete_edit_files (active_widget, parts [0], ar, parts [1]);
 
   g_strfreev (parts);
 }
@@ -1256,25 +1394,34 @@ gb_vim_complete_colorscheme (const gchar *line,
 }
 
 gchar **
-gb_vim_complete (GtkSourceView *source_view,
-                 const gchar   *line)
+gb_vim_complete (GtkWidget   *active_widget,
+                 const gchar *line)
 {
+  GtkSourceView  *source_view;
   GPtrArray *ar;
+
+  g_assert (GTK_IS_WIDGET (active_widget));
 
   ar = g_ptr_array_new ();
 
   if (line != NULL)
     {
-      if (g_str_has_prefix (line, "set "))
-        gb_vim_complete_set (line, ar);
-      else if (g_str_has_prefix (line, "e ") ||
-               g_str_has_prefix (line, "edit ") ||
-               g_str_has_prefix (line, "tabe "))
-        gb_vim_complete_edit (source_view, line, ar);
-      else if (g_str_has_prefix (line, "colorscheme "))
-        gb_vim_complete_colorscheme (line, ar);
+      if (IDE_IS_EDITOR_VIEW (active_widget))
+        {
+          source_view = GTK_SOURCE_VIEW (IDE_EDITOR_VIEW (active_widget)->frame1->source_view);
+
+          if (g_str_has_prefix (line, "set "))
+            gb_vim_complete_set (line, ar);
+          else if (g_str_has_prefix (line, "colorscheme "))
+            gb_vim_complete_colorscheme (line, ar);
+        }
+
+      if (g_str_has_prefix (line, "e ") ||
+          g_str_has_prefix (line, "edit ") ||
+          g_str_has_prefix (line, "tabe "))
+          gb_vim_complete_edit (active_widget, line, ar);
       else
-        gb_vim_complete_command (line, ar);
+          gb_vim_complete_command (line, ar);
     }
 
   g_ptr_array_add (ar, NULL);

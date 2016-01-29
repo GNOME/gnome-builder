@@ -28,7 +28,7 @@ struct _GbCommandVim
 {
   GbCommand      parent_instance;
 
-  IdeSourceView *source_view;
+  GtkWidget     *active_widget;
   gchar         *command_text;
 };
 
@@ -37,29 +37,29 @@ G_DEFINE_TYPE (GbCommandVim, gb_command_vim, GB_TYPE_COMMAND)
 enum {
   PROP_0,
   PROP_COMMAND_TEXT,
-  PROP_SOURCE_VIEW,
+  PROP_ACTIVE_WIDGET,
   LAST_PROP
 };
 
 static GParamSpec *properties [LAST_PROP];
 
-IdeSourceView *
-gb_command_vim_get_source_view (GbCommandVim *vim)
+GtkWidget *
+gb_command_vim_get_active_widget (GbCommandVim *vim)
 {
   g_return_val_if_fail (GB_IS_COMMAND_VIM (vim), NULL);
 
-  return vim->source_view;
+  return vim->active_widget;
 }
 
 static void
-gb_command_vim_set_source_view (GbCommandVim  *vim,
-                                IdeSourceView *source_view)
+gb_command_vim_set_active_widget (GbCommandVim *vim,
+                                  GtkWidget    *active_widget)
 {
   g_return_if_fail (GB_IS_COMMAND_VIM (vim));
-  g_return_if_fail (IDE_IS_SOURCE_VIEW (source_view));
+  g_return_if_fail (GTK_IS_WIDGET (active_widget));
 
-  if (ide_set_weak_pointer (&vim->source_view, source_view))
-    g_object_notify_by_pspec (G_OBJECT (vim), properties [PROP_SOURCE_VIEW]);
+  if (ide_set_weak_pointer (&vim->active_widget, active_widget))
+    g_object_notify_by_pspec (G_OBJECT (vim), properties [PROP_ACTIVE_WIDGET]);
 }
 
 const gchar *
@@ -92,14 +92,13 @@ gb_command_vim_execute (GbCommand *command)
 
   g_return_val_if_fail (GB_IS_COMMAND_VIM (self), NULL);
 
-  if (self->source_view)
+  if (self->active_widget)
     {
-      GtkSourceView *source_view = (GtkSourceView *)self->source_view;
       GError *error = NULL;
 
       IDE_TRACE_MSG ("Executing Vim command: %s", self->command_text);
 
-      if (!gb_vim_execute (source_view, self->command_text, &error))
+      if (!gb_vim_execute (self->active_widget, self->command_text, &error))
         {
           g_warning ("%s", error->message);
           g_clear_error (&error);
@@ -114,7 +113,7 @@ gb_command_vim_finalize (GObject *object)
 {
   GbCommandVim *self = GB_COMMAND_VIM (object);
 
-  ide_clear_weak_pointer (&self->source_view);
+  ide_clear_weak_pointer (&self->active_widget);
   g_clear_pointer (&self->command_text, g_free);
 
   G_OBJECT_CLASS (gb_command_vim_parent_class)->finalize (object);
@@ -134,8 +133,8 @@ gb_command_vim_get_property (GObject    *object,
       g_value_set_string (value, gb_command_vim_get_command_text (self));
       break;
 
-    case PROP_SOURCE_VIEW:
-      g_value_set_object (value, gb_command_vim_get_source_view (self));
+    case PROP_ACTIVE_WIDGET:
+      g_value_set_object (value, gb_command_vim_get_active_widget (self));
       break;
 
     default:
@@ -157,8 +156,8 @@ gb_command_vim_set_property (GObject      *object,
       gb_command_vim_set_command_text (self, g_value_get_string (value));
       break;
 
-    case PROP_SOURCE_VIEW:
-      gb_command_vim_set_source_view (self, g_value_get_object (value));
+    case PROP_ACTIVE_WIDGET:
+      gb_command_vim_set_active_widget (self, g_value_get_object (value));
       break;
 
     default:
@@ -185,11 +184,11 @@ gb_command_vim_class_init (GbCommandVimClass *klass)
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  properties [PROP_SOURCE_VIEW] =
-    g_param_spec_object ("source-view",
-                         "Source View",
-                         "The source view to modify.",
-                         IDE_TYPE_SOURCE_VIEW,
+  properties [PROP_ACTIVE_WIDGET] =
+    g_param_spec_object ("active-widget",
+                         "Active widget",
+                         "The active widget to act on.",
+                         GTK_TYPE_WIDGET,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, LAST_PROP, properties);

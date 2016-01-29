@@ -19,10 +19,6 @@
 #define G_LOG_DOMAIN "gb-vim-command-provider"
 
 #include <ide.h>
-
-#include "ide-editor-frame.h"
-#include "ide-editor-frame-private.h"
-#include "ide-editor-view-private.h"
 #include "ide-gtk.h"
 
 #include "gb-command-vim.h"
@@ -36,12 +32,11 @@ struct _GbCommandVimProvider
 
 G_DEFINE_TYPE (GbCommandVimProvider, gb_command_vim_provider, GB_TYPE_COMMAND_PROVIDER)
 
-GtkWidget *
-get_source_view (GbCommandProvider *provider)
+static GtkWidget *
+get_active_widget (GbCommandProvider *provider)
 {
   IdeWorkbench *workbench;
   IdeLayoutView *active_view;
-  IdeSourceView *source_view;
 
   g_assert (GB_IS_COMMAND_VIM_PROVIDER (provider));
 
@@ -50,33 +45,27 @@ get_source_view (GbCommandProvider *provider)
   if (!IDE_IS_WORKBENCH (workbench))
     return NULL;
 
-  /* Make sure we have an editor tab last focused */
   active_view = gb_command_provider_get_active_view (provider);
-  if (!IDE_IS_EDITOR_VIEW (active_view))
-    return NULL;
-
-  /* TODO: Perhaps get the last focused frame? */
-  source_view = IDE_EDITOR_VIEW (active_view)->frame1->source_view;
-  if (!IDE_IS_SOURCE_VIEW (source_view))
-    return NULL;
-
-  return GTK_WIDGET (source_view);
+  if (active_view != NULL)
+    return GTK_WIDGET (active_view);
+  else
+    return GTK_WIDGET (workbench);
 }
 
 static GbCommand *
 gb_command_vim_provider_lookup (GbCommandProvider *provider,
                                 const gchar       *command_text)
 {
-  GtkWidget *source_view;
+  GtkWidget *active_widget;
 
   g_return_val_if_fail (GB_IS_COMMAND_VIM_PROVIDER (provider), NULL);
   g_return_val_if_fail (command_text, NULL);
 
-  source_view = get_source_view (provider);
+  active_widget = get_active_widget (provider);
 
   return g_object_new (GB_TYPE_COMMAND_VIM,
                        "command-text", command_text,
-                       "source-view", source_view,
+                       "active-widget", active_widget,
                        NULL);
 }
 
@@ -85,7 +74,7 @@ gb_command_vim_provider_complete (GbCommandProvider *provider,
                                   GPtrArray         *completions,
                                   const gchar       *initial_command_text)
 {
-  GtkWidget *source_view;
+  GtkWidget *active_widget;
   gchar **results;
   gsize i;
 
@@ -93,9 +82,9 @@ gb_command_vim_provider_complete (GbCommandProvider *provider,
   g_return_if_fail (completions);
   g_return_if_fail (initial_command_text);
 
-  source_view = get_source_view (provider);
+  active_widget = get_active_widget (provider);
 
-  results = gb_vim_complete (GTK_SOURCE_VIEW (source_view), initial_command_text);
+  results = gb_vim_complete (active_widget, initial_command_text);
   for (i = 0; results [i]; i++)
     g_ptr_array_add (completions, results [i]);
   g_free (results);
