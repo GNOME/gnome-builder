@@ -27,12 +27,9 @@ AC_CANONICAL_HOST
 dnl ***********************************************************************
 dnl Make version information available to autoconf files
 dnl ***********************************************************************
-MAJOR_VERSION=major_version
-MINOR_VERSION=minor_version
-MICRO_VERSION=micro_version
-AC_SUBST([MAJOR_VERSION])
-AC_SUBST([MINOR_VERSION])
-AC_SUBST([MICRO_VERSION])
+AC_SUBST([MAJOR_VERSION],major_version)
+AC_SUBST([MINOR_VERSION],minor_version)
+AC_SUBST([MICRO_VERSION],micro_version)
 AC_SUBST([API_VERSION],api_version)
 
 
