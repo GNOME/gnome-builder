@@ -2,22 +2,6 @@ SUBDIRS = data po src
 
 EXTRA_DIST = AUTHORS
 
-{{if enable_i18n}}
-DISTCLEANFILES = \
-	intltool-extract \
-	intltool-merge \
-	intltool-update \
-	po/.intltool-merge-cache
-
-INTLTOOL_FILES = \
-	intltool-extract.in \
-	intltool-merge.in \
-	intltool-update.in \
-	$(NULL)
-
-EXTRA_DIST += $(INTLTOOL_FILES)
-{{end}}
-
 AUTHORS:
 	@if test -d "$(srcdir)/.git"; \
 	then \

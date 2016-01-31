@@ -87,6 +87,7 @@ class LibraryProjectTemplate(Ide.TemplateBase, Ide.ProjectTemplate):
         scope.get('enable_gobject_introspection').assign_boolean(True)
         scope.get('enable_vala').assign_boolean(True)
         scope.get('license').assign_string('/* license */')
+        scope.get('translation_copyright').assign_string('Translation copyright holder')
 
         expands = {
             'name': name,
@@ -122,6 +123,7 @@ class LibraryProjectTemplate(Ide.TemplateBase, Ide.ProjectTemplate):
 
             'shared-library/data/package.pc.in':             'data/%(name)s-1.0.pc.in',
             'shared-library/data/Makefile.am':               'data/Makefile.am',
+            'shared-library/po/Makevars':                    'po/Makevars',
             'shared-library/po/POTFILES.in':                 'po/POTFILES.in',
 
             'shared-library/src/Makefile.am':                'src/Makefile.am',

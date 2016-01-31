@@ -23,10 +23,6 @@ if [ "$#" = 0 -a "x$NOCONFIGURE" = "x" ]; then
 fi
 
 aclocal --install || exit 1
-{{if enable_i18n}}
-glib-gettextize --force --copy || exit 1
-intltoolize --force --copy --automake || exit 1
-{{end}}
 {{if enable_gtk_doc}}
 gtkdocize || exit 1
 {{end}}
