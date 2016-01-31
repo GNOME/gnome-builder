@@ -9,7 +9,7 @@ m4_define([minor_version],[{{minor_version}}])
 m4_define([micro_version],[{{micro_version}}])
 m4_define([package_version],[major_version.minor_version.micro_version])
 m4_define([bug_report_url],[https://bugzilla.gnome.org/enter_bug.cgi?product={{name}}])
-m4_define([interface_age],[0])
+m4_define([api_version],[0])
 
 
 dnl ***********************************************************************
@@ -17,7 +17,7 @@ dnl Initialize autoconf
 dnl ***********************************************************************
 AC_INIT([{{name}}],[package_version],[bug_report_url])
 AC_CONFIG_HEADERS([config.h])
-AC_CONFIG_SRCDIR([data/{{name}}-1.0.pc.in])
+AC_CONFIG_SRCDIR([data/{{name}}.pc.in])
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_AUX_DIR([build-aux])
 AC_SUBST([ACLOCAL_AMFLAGS], "-I m4")
@@ -33,6 +33,7 @@ MICRO_VERSION=micro_version
 AC_SUBST([MAJOR_VERSION])
 AC_SUBST([MINOR_VERSION])
 AC_SUBST([MICRO_VERSION])
+AC_SUBST([API_VERSION],api_version)
 
 
 dnl ***********************************************************************
@@ -124,12 +125,13 @@ AC_CONFIG_FILES([
 	src/{{prefix}}-version.h
 
 	data/Makefile
-	data/{{name}}-1.0.pc
+	data/{{name}}-$API_VERSION.pc:data/{{name}}.pc.in
 
 {{if enable_i18n}}
 	po/Makefile.in
 {{end}}
-])
+],[],
+[API_VERSION='$API_VERSION'])
 AC_OUTPUT
 
 
