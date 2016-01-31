@@ -85,6 +85,7 @@ dnl Add extra debugging with --enable-debug
 dnl ***********************************************************************
 AX_CHECK_ENABLE_DEBUG([no],[]
                       [G_DISABLE_ASSERT G_DISABLE_CHECKS G_DISABLE_CAST_CHECKS])
+AX_COMPILER_FLAGS
 
 
 dnl ***********************************************************************
