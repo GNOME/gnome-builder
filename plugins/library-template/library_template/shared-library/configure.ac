@@ -39,7 +39,7 @@ dnl ***********************************************************************
 dnl Initialize automake
 dnl ***********************************************************************
 AM_SILENT_RULES([yes])
-AM_INIT_AUTOMAKE([1.11 foreign subdir-objects tar-ustar no-dist-gzip dist-xz])
+AM_INIT_AUTOMAKE([1.11 foreign subdir-objects tar-ustar no-dist-gzip dist-xz -Wno-portability])
 AM_MAINTAINER_MODE([enable])
 
 
