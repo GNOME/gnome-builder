@@ -1,4 +1,10 @@
-SUBDIRS = data po src
+SUBDIRS = \
+	data \
+{{if enable_i18n}}
+	po \
+{{end}}
+	src \
+	$(NULL)
 
 EXTRA_DIST = AUTHORS
 
