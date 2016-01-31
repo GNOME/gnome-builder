@@ -9,7 +9,7 @@ SUBDIRS = \
 EXTRA_DIST = AUTHORS
 
 AUTHORS:
-	@if test -d "$(srcdir)/.git"; \
+	$(AM_V_GEN)if test -d "$(srcdir)/.git"; \
 	then \
 		echo Creating $@ && \
 		( cd "$(top_srcdir)" && \
