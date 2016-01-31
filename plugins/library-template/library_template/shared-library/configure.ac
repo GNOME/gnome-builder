@@ -20,7 +20,7 @@ AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_SRCDIR([data/{{name}}-1.0.pc.in])
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_AUX_DIR([build-aux])
-AC_SUBST(ACLOCAL_AMFLAGS, "-I m4")
+AC_SUBST([ACLOCAL_AMFLAGS], "-I m4")
 AC_CANONICAL_HOST
 
 
@@ -30,9 +30,9 @@ dnl ***********************************************************************
 MAJOR_VERSION=major_version
 MINOR_VERSION=minor_version
 MICRO_VERSION=micro_version
-AC_SUBST(MAJOR_VERSION)
-AC_SUBST(MINOR_VERSION)
-AC_SUBST(MICRO_VERSION)
+AC_SUBST([MAJOR_VERSION])
+AC_SUBST([MINOR_VERSION])
+AC_SUBST([MICRO_VERSION])
 
 
 dnl ***********************************************************************
@@ -48,7 +48,7 @@ dnl ***********************************************************************
 dnl Internationalization
 dnl ***********************************************************************
 GETTEXT_PACKAGE=AC_PACKAGE_TARNAME
-AC_SUBST(GETTEXT_PACKAGE)
+AC_SUBST([GETTEXT_PACKAGE])
 AC_DEFINE_UNQUOTED([GETTEXT_PACKAGE], ["$GETTEXT_PACKAGE"], [GETTEXT package name])
 
 AM_GNU_GETTEXT_VERSION([0.19.6])
@@ -84,9 +84,9 @@ dnl ***********************************************************************
 dnl Add extra debugging with --enable-debug
 dnl ***********************************************************************
 m4_define([debug_default],[m4_if(m4_eval(minor_version%2),[1],[yes],[minimum])])
-AC_ARG_ENABLE(debug,
-              AS_HELP_STRING([--enable-debug=@<:@no/minimum/yes@:>@],
-                             [turn on debugging @<:@default=debug_default@:>@]),
+AC_ARG_ENABLE([debug],
+              [AS_HELP_STRING([--enable-debug=@<:@no/minimum/yes@:>@],
+                              [turn on debugging @<:@default=debug_default@:>@])],
               ,
               enable_debug=debug_default)
 AS_CASE(["$enable_debug"],
@@ -103,7 +103,7 @@ AS_CASE(["$enable_debug"],
             CFLAGS="$CFLAGS -DG_DISABLE_CAST_CHECKS"
         ],
         [])
-AC_SUBST(CFLAGS)
+AC_SUBST([CFLAGS])
 
 
 dnl ***********************************************************************
