@@ -21,8 +21,6 @@ AUTHORS:
 		     echo Failed to generate $@ >&2 ); \
 	fi
 
-.PHONY: AUTHORS
-
 # Generate the ChangeLog.
 @GENERATE_CHANGELOG_RULES@
 dist-hook: dist-ChangeLog
