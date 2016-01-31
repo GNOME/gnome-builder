@@ -11,6 +11,7 @@ m4_define([package_version],[major_version.minor_version.micro_version])
 m4_define([bug_report_url],[https://bugzilla.gnome.org/enter_bug.cgi?product={{name}}])
 m4_define([api_version],[0])
 
+AX_IS_RELEASE([micro-version])
 
 dnl ***********************************************************************
 dnl Initialize autoconf
@@ -82,27 +83,8 @@ PKG_CHECK_MODULES({{NAME}}, [{{packages}}])
 dnl ***********************************************************************
 dnl Add extra debugging with --enable-debug
 dnl ***********************************************************************
-m4_define([debug_default],[m4_if(m4_eval(minor_version%2),[1],[yes],[minimum])])
-AC_ARG_ENABLE([debug],
-              [AS_HELP_STRING([--enable-debug=@<:@no/minimum/yes@:>@],
-                              [turn on debugging @<:@default=debug_default@:>@])],
-              ,
-              enable_debug=debug_default)
-AS_CASE(["$enable_debug"],
-        [yes],[
-            CFLAGS="$CFLAGS -O0"
-            CFLAGS="$CFLAGS -g"
-        ],
-        [minimum],[
-            CFLAGS="$CFLAGS -DG_DISABLE_CAST_CHECKS"
-        ],
-        [no],[
-            CFLAGS="$CFLAGS -DG_DISABLE_ASSERT"
-            CFLAGS="$CFLAGS -DG_DISABLE_CHECKS"
-            CFLAGS="$CFLAGS -DG_DISABLE_CAST_CHECKS"
-        ],
-        [])
-AC_SUBST([CFLAGS])
+AX_CHECK_ENABLE_DEBUG([no],[]
+                      [G_DISABLE_ASSERT G_DISABLE_CHECKS G_DISABLE_CAST_CHECKS])
 
 
 dnl ***********************************************************************
