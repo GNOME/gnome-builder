@@ -14,6 +14,8 @@
 # include "tmpl-expr.h"
 # include "tmpl-expr-private.h"
 # include "tmpl-expr-parser-private.h"
+
+#pragma GCC diagnostic ignored "-Wswitch-default"
 %}
 
 %union {

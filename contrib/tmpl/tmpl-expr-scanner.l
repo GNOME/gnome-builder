@@ -13,6 +13,9 @@
 # include "tmpl-expr-private.h"
 # include "tmpl-expr-parser-private.h"
 # include "tmpl-expr-parser.h"
+
+#pragma GCC diagnostic ignored "-Wswitch-default"
+#pragma GCC diagnostic ignored "-Wunused-function"
 %}
 
 %option extra-type="TmplExprParser *"
