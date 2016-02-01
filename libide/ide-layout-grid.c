@@ -20,6 +20,7 @@
 
 #include <glib/gi18n.h>
 
+#include "ide-gtk.h"
 #include "ide-layout-grid.h"
 #include "ide-layout-stack.h"
 #include "ide-layout-stack-private.h"
@@ -240,7 +241,7 @@ ide_layout_grid_focus_neighbor_action (GSimpleAction *action,
 
 static void
 ide_layout_grid_stack_empty (IdeLayoutGrid  *self,
-                          IdeLayoutStack *stack)
+                             IdeLayoutStack *stack)
 {
   GList *stacks;
 
@@ -252,7 +253,10 @@ ide_layout_grid_stack_empty (IdeLayoutGrid  *self,
   g_assert (stacks != NULL);
 
   if (g_list_length (stacks) == 1)
-    goto cleanup;
+    {
+      ide_widget_action (GTK_WIDGET (self), "perspective", "global-search", NULL);
+      goto cleanup;
+    }
 
   ide_layout_grid_focus_neighbor (self, GTK_DIR_LEFT, stack);
   ide_layout_grid_remove_stack (self, stack);

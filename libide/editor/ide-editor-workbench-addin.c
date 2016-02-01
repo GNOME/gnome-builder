@@ -21,11 +21,13 @@
 #include <gtksourceview/gtksource.h>
 #include <string.h>
 
+#include "ide-gtk.h"
 #include "ide-buffer.h"
 #include "ide-buffer-manager.h"
 #include "ide-context.h"
 #include "ide-editor-perspective.h"
 #include "ide-editor-workbench-addin.h"
+#include "ide-workbench-header-bar.h"
 
 struct _IdeEditorWorkbenchAddin
 {
@@ -55,6 +57,7 @@ ide_editor_workbench_addin_load (IdeWorkbenchAddin *addin,
                                  IdeWorkbench      *workbench)
 {
   IdeEditorWorkbenchAddin *self = (IdeEditorWorkbenchAddin *)addin;
+  IdeWorkbenchHeaderBar *titlebar;
 
   g_assert (IDE_IS_EDITOR_WORKBENCH_ADDIN (self));
   g_assert (IDE_IS_WORKBENCH (workbench));
@@ -65,6 +68,9 @@ ide_editor_workbench_addin_load (IdeWorkbenchAddin *addin,
                                     "visible", TRUE,
                                     NULL);
   ide_workbench_add_perspective (workbench, IDE_PERSPECTIVE (self->perspective));
+
+  titlebar = IDE_WORKBENCH_HEADER_BAR (ide_perspective_get_titlebar (IDE_PERSPECTIVE (self->perspective)));
+  ide_workbench_header_bar_focus_search (titlebar);
 }
 
 static void
