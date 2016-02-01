@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-01-27 15:26+0000\n"
-"PO-Revision-Date: 2016-01-27 19:54+0100\n"
+"POT-Creation-Date: 2016-02-01 16:55+0000\n"
+"PO-Revision-Date: 2016-02-01 20:04+0100\n"
 "Last-Translator: Mario Blättermann <mario.blaettermann@gmail.com>\n"
 "Language-Team: Deutsch <gnome-de@gnome.org>\n"
 "Language: de_DE\n"
@@ -117,163 +117,167 @@ msgid "Keyboard _Shortcuts"
 msgstr "Tasten_kombinationen"
 
 #: ../data/gtk/menus.ui.h:5
+msgid "_Help"
+msgstr "_Hilfe"
+
+#: ../data/gtk/menus.ui.h:6
 msgid "_About"
 msgstr "_Info"
 
-#: ../data/gtk/menus.ui.h:6
+#: ../data/gtk/menus.ui.h:7
 msgid "_Quit"
 msgstr "_Beenden"
 
-#: ../data/gtk/menus.ui.h:7 ../data/ui/ide-editor-view.ui.h:1
+#: ../data/gtk/menus.ui.h:8 ../data/ui/ide-editor-view.ui.h:1
 msgid "_Reload"
 msgstr "A_ktualisieren"
 
-#: ../data/gtk/menus.ui.h:8
+#: ../data/gtk/menus.ui.h:9
 msgid "_Print…"
 msgstr "_Drucken …"
 
-#: ../data/gtk/menus.ui.h:9
+#: ../data/gtk/menus.ui.h:10
 msgid "_Fullscreen"
 msgstr "_Vollbild"
 
-#: ../data/gtk/menus.ui.h:10
+#: ../data/gtk/menus.ui.h:11
 msgid "_New File"
 msgstr "_Neue Datei"
 
-#: ../data/gtk/menus.ui.h:11
+#: ../data/gtk/menus.ui.h:12
 msgid "_Open File"
 msgstr "Datei ö_ffnen"
 
-#: ../data/gtk/menus.ui.h:12
+#: ../data/gtk/menus.ui.h:13
 msgid "Save _All"
 msgstr "A_lle speichern"
 
-#: ../data/gtk/menus.ui.h:13
+#: ../data/gtk/menus.ui.h:14
 msgid "_Close All"
 msgstr "Alle sc_hließen"
 
-#: ../data/gtk/menus.ui.h:14
+#: ../data/gtk/menus.ui.h:15
 msgid "_Go to Definition"
 msgstr "Zur Definition _springen"
 
-#: ../data/gtk/menus.ui.h:15
+#: ../data/gtk/menus.ui.h:16
 msgid "_Undo"
 msgstr "_Rückgängig"
 
-#: ../data/gtk/menus.ui.h:16
+#: ../data/gtk/menus.ui.h:17
 msgid "_Redo"
 msgstr "_Wiederholen"
 
-#: ../data/gtk/menus.ui.h:17
+#: ../data/gtk/menus.ui.h:18
 msgid "C_ut"
 msgstr "_Ausschneiden"
 
-#: ../data/gtk/menus.ui.h:18
+#: ../data/gtk/menus.ui.h:19
 msgid "_Copy"
 msgstr "_Kopieren"
 
-#: ../data/gtk/menus.ui.h:19
+#: ../data/gtk/menus.ui.h:20
 msgid "_Paste"
 msgstr "_Einfügen"
 
-#: ../data/gtk/menus.ui.h:20
+#: ../data/gtk/menus.ui.h:21
 msgid "_Delete"
 msgstr "_Löschen"
 
-#: ../data/gtk/menus.ui.h:21
+#: ../data/gtk/menus.ui.h:22
 msgid "Selection"
 msgstr "Auswahl"
 
-#: ../data/gtk/menus.ui.h:22
+#: ../data/gtk/menus.ui.h:23
 msgid "Select _All"
 msgstr "_Alle auswählen"
 
-#: ../data/gtk/menus.ui.h:23
+#: ../data/gtk/menus.ui.h:24
 msgid "Select _None"
 msgstr "_Nichts auswählen"
 
-#: ../data/gtk/menus.ui.h:24
+#: ../data/gtk/menus.ui.h:25
 msgid "All _Upper Case"
 msgstr "Alles _groß schreiben"
 
-#: ../data/gtk/menus.ui.h:25
+#: ../data/gtk/menus.ui.h:26
 msgid "All _Lower Case"
 msgstr "Alles _klein schreiben"
 
-#: ../data/gtk/menus.ui.h:26
+#: ../data/gtk/menus.ui.h:27
 msgid "_Invert Case"
 msgstr "Groß-/Kleinschreibung _umkehren"
 
-#: ../data/gtk/menus.ui.h:27
+#: ../data/gtk/menus.ui.h:28
 #, fuzzy
 msgid "_Title Case"
 msgstr "Titel"
 
-#: ../data/gtk/menus.ui.h:28
+#: ../data/gtk/menus.ui.h:29
 msgid "Join Lines"
 msgstr "Zeilen zusammenfügen"
 
-#: ../data/gtk/menus.ui.h:29
+#: ../data/gtk/menus.ui.h:30
 msgid "Sort Lines"
 msgstr "Zeilen sortieren"
 
-#: ../data/gtk/menus.ui.h:30
+#: ../data/gtk/menus.ui.h:31
 msgid "Zoom"
 msgstr "Größe"
 
-#: ../data/gtk/menus.ui.h:31
+#: ../data/gtk/menus.ui.h:32
 msgid "Zoom _In"
 msgstr "Ver_größern"
 
-#: ../data/gtk/menus.ui.h:32
+#: ../data/gtk/menus.ui.h:33
 msgid "Zoom _Out"
 msgstr "Ver_kleinern"
 
-#: ../data/gtk/menus.ui.h:33
+#: ../data/gtk/menus.ui.h:34
 msgid "Reset"
 msgstr "Zurücksetzen"
 
-#: ../data/gtk/menus.ui.h:34
+#: ../data/gtk/menus.ui.h:35
 msgid "Split"
 msgstr "Teilen"
 
-#: ../data/gtk/menus.ui.h:35
+#: ../data/gtk/menus.ui.h:36
 msgid "Split Left"
 msgstr "Dokument links teilen"
 
-#: ../data/gtk/menus.ui.h:36
+#: ../data/gtk/menus.ui.h:37
 msgid "Split Right"
 msgstr "Dokument rechts teilen"
 
-#: ../data/gtk/menus.ui.h:37
+#: ../data/gtk/menus.ui.h:38
 msgid "Split Down"
 msgstr "Dokument unten Teilen"
 
-#: ../data/gtk/menus.ui.h:38
+#: ../data/gtk/menus.ui.h:39
 msgid "Move"
 msgstr "Verschieben"
 
-#: ../data/gtk/menus.ui.h:39
+#: ../data/gtk/menus.ui.h:40
 msgid "Move Left"
 msgstr "Nach links verschieben"
 
-#: ../data/gtk/menus.ui.h:40
+#: ../data/gtk/menus.ui.h:41
 msgid "Move Right"
 msgstr "Nach rechts verschieben"
 
-#: ../data/gtk/menus.ui.h:41
+#: ../data/gtk/menus.ui.h:42
 msgid "_Save"
 msgstr "_Speichern"
 
-#: ../data/gtk/menus.ui.h:42
+#: ../data/gtk/menus.ui.h:43
 msgid "_Save As"
 msgstr "Speichern _unter"
 
-#: ../data/gtk/menus.ui.h:43
+#: ../data/gtk/menus.ui.h:44
 msgid "_Print"
 msgstr "_Drucken"
 
-#: ../data/gtk/menus.ui.h:44
+#: ../data/gtk/menus.ui.h:45
 msgid "_Close"
 msgstr "_Schließen"
 
@@ -325,7 +329,7 @@ msgid "Smart Backspace"
 msgstr "Intelligente Löschtaste"
 
 #: ../data/ui/ide-editor-tweak-widget.ui.h:7
-#: ../libide/preferences/ide-preferences-builtin.c:231
+#: ../libide/preferences/ide-preferences-builtin.c:233
 msgid "Indentation"
 msgstr "Einrückung"
 
@@ -417,7 +421,7 @@ msgid "Editor Shortcuts"
 msgstr "Editor-Tastenkombinationen"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:2
-#: ../libide/preferences/ide-preferences-builtin.c:242
+#: ../libide/preferences/ide-preferences-builtin.c:244
 msgid "General"
 msgstr "Allgemein"
 
@@ -891,7 +895,7 @@ msgid "Chunk does not belong to snippet."
 msgstr "Stück gehört nicht zum Schnipsel."
 
 #: ../libide/ide-source-snippet-completion-provider.c:297
-#: ../libide/preferences/ide-preferences-builtin.c:171
+#: ../libide/preferences/ide-preferences-builtin.c:173
 msgid "Snippets"
 msgstr "Schnipsel"
 
@@ -1267,79 +1271,83 @@ msgstr ""
 msgid "Use Clang to suggest completions for C and C++ languages"
 msgstr "Clang für die Vervollständigung von C und C++ verwenden."
 
-#: ../libide/preferences/ide-preferences-builtin.c:174
+#: ../libide/preferences/ide-preferences-builtin.c:167
+msgid "Diagnostics"
+msgstr "Fehlerdiagnose"
+
+#: ../libide/preferences/ide-preferences-builtin.c:176
 msgid "Code snippets"
 msgstr "Code-Schnipsel"
 
-#: ../libide/preferences/ide-preferences-builtin.c:174
+#: ../libide/preferences/ide-preferences-builtin.c:176
 msgid "Use code fragments to increase typing efficiency"
 msgstr "Code-Fragmente zur Erhöhung der Eingabeeffizienz verwenden"
 
-#: ../libide/preferences/ide-preferences-builtin.c:188
+#: ../libide/preferences/ide-preferences-builtin.c:190
 msgid "Programming Languages"
 msgstr "Programmiersprachen"
 
-#: ../libide/preferences/ide-preferences-builtin.c:225
-msgid "Trim trialing whitespace"
+#: ../libide/preferences/ide-preferences-builtin.c:227
+msgid "Trim trailing whitespace"
 msgstr "Leerzeichen am Zeilenende entfernen"
 
-#: ../libide/preferences/ide-preferences-builtin.c:225
+#: ../libide/preferences/ide-preferences-builtin.c:227
 msgid "Upon saving, trailing whitespcae from modified lines will be trimmed."
 msgstr ""
 "Beim Speichern angehängte Leerzeichen von den geänderten Zeilen entfernen"
 
-#: ../libide/preferences/ide-preferences-builtin.c:227
+#: ../libide/preferences/ide-preferences-builtin.c:229
 msgid "Margins"
 msgstr "Ränder"
 
-#: ../libide/preferences/ide-preferences-builtin.c:228
+#: ../libide/preferences/ide-preferences-builtin.c:230
 msgid "Show right margin"
 msgstr "Rechten Rand anzeigen"
 
-#: ../libide/preferences/ide-preferences-builtin.c:229
+#: ../libide/preferences/ide-preferences-builtin.c:231
 msgid "Right margin position"
 msgstr "Position des rechten Randes"
 
-#: ../libide/preferences/ide-preferences-builtin.c:229
+#: ../libide/preferences/ide-preferences-builtin.c:231
 msgid "Position in spaces for the right margin"
 msgstr "Positionsangabe (Anzahl der Zeichen) für den rechten Rand"
 
-#: ../libide/preferences/ide-preferences-builtin.c:232
+#: ../libide/preferences/ide-preferences-builtin.c:234
 msgid "Tab width"
 msgstr "Tabulatorbreite"
 
-#: ../libide/preferences/ide-preferences-builtin.c:232
+#: ../libide/preferences/ide-preferences-builtin.c:234
 msgid "Width of a tab character in spaces"
 msgstr "Breite eines Tabulators (Anzahl der Zeichen)"
 
-#: ../libide/preferences/ide-preferences-builtin.c:233
+#: ../libide/preferences/ide-preferences-builtin.c:235
 msgid "Insert spaces instead of tabs"
 msgstr "Leerzeichen statt Tabulatoren einfügen"
 
-#: ../libide/preferences/ide-preferences-builtin.c:233
+#: ../libide/preferences/ide-preferences-builtin.c:235
 msgid "Prefer spaces over use of tabs"
 msgstr "Leerzeichen vor Tabulatoren bevorzugen"
 
-#: ../libide/preferences/ide-preferences-builtin.c:234
+#: ../libide/preferences/ide-preferences-builtin.c:236
 msgid "Automatically indent"
 msgstr "Automatische Einrückung"
 
-#: ../libide/preferences/ide-preferences-builtin.c:234
+#: ../libide/preferences/ide-preferences-builtin.c:236
 msgid "Indent source code as you type"
 msgstr "Quellcode bei der Eingabe automatisch einrücken"
 
-#: ../libide/preferences/ide-preferences-builtin.c:240
+#: ../libide/preferences/ide-preferences-builtin.c:242
 #: ../plugins/build-tools/gbp-build-workbench-addin.c:331
 #, fuzzy
 msgid "Build"
 msgstr "_Erstellen"
 
-#: ../libide/preferences/ide-preferences-builtin.c:243
+#: ../libide/preferences/ide-preferences-builtin.c:245
 #, fuzzy
 msgid "Build Workers"
 msgstr "Builder"
 
-#: ../libide/preferences/ide-preferences-builtin.c:243
+#: ../libide/preferences/ide-preferences-builtin.c:245
 msgid "Number of parallel build workers"
 msgstr ""
 
@@ -1670,55 +1678,60 @@ msgstr "Befehl nicht gefunden: %s"
 msgid "Use the entry below to execute a command"
 msgstr "Zum Ausführen eines Befehls den Eintrag unten verwenden"
 
-#: ../plugins/command-bar/gb-vim.c:82
+#: ../plugins/command-bar/gb-vim.c:86
 #, c-format
 msgid "Number required"
 msgstr "Zahl benötigt"
 
-#: ../plugins/command-bar/gb-vim.c:92
+#: ../plugins/command-bar/gb-vim.c:96
 #, c-format
 msgid "%s is invalid for %s"
 msgstr "%s ist für %s ungültig"
 
-#: ../plugins/command-bar/gb-vim.c:150
+#: ../plugins/command-bar/gb-vim.c:154
 #, c-format
 msgid "Cannot find language '%s'"
 msgstr "Sprache »%s« kann nicht gefunden werden"
 
-#: ../plugins/command-bar/gb-vim.c:347
+#: ../plugins/command-bar/gb-vim.c:311
+#, c-format
+msgid "This command requires a GtkSourceView to be focused"
+msgstr "Dieser Befehl benötigt ein fokussiertes GtkSourceView"
+
+#: ../plugins/command-bar/gb-vim.c:322
+#, c-format
+msgid "This command requires a view to be focused"
+msgstr "Dieser Befehl benötigt eine fokussierte Ansicht"
+
+#: ../plugins/command-bar/gb-vim.c:379
 #, c-format
 msgid "Unknown option: %s"
 msgstr "Unbekannte Option: %s"
 
-#: ../plugins/command-bar/gb-vim.c:386
+#: ../plugins/command-bar/gb-vim.c:422
 #, c-format
 msgid "Cannot find colorscheme '%s'"
 msgstr "Farbschema »%s« kann nicht gefunden werden"
 
-#: ../plugins/command-bar/gb-vim.c:422
+#: ../plugins/command-bar/gb-vim.c:463
 #, c-format
 msgid "Failed to locate working directory"
 msgstr "Arbeitsordner konnte nicht gefunden werden"
 
-#: ../plugins/command-bar/gb-vim.c:546
+#: ../plugins/command-bar/gb-vim.c:640
 #, c-format
 msgid "Invalid :syntax subcommand: %s"
 msgstr "Ungültiger Syntaxunterbefehl: %s"
 
-#: ../plugins/command-bar/gb-vim.c:875
+#: ../plugins/command-bar/gb-vim.c:1022
 #, c-format
 msgid "Invalid search and replace request"
 msgstr "Ungültige Suchen-und-Ersetzen-Anfrage"
 
-#: ../plugins/command-bar/gb-vim.c:962
+#: ../plugins/command-bar/gb-vim.c:1127
 #, c-format
-msgid "vim mode requires GtkSourceView"
-msgstr "Der Vim-Modus benötigt GtkSourceView"
-
-#: ../plugins/command-bar/gb-vim.c:992
-#, c-format
-msgid "Not an editor command: %s"
-msgstr "Kein Editor-Befehl: %s"
+msgid "Not a command: %s"
+msgstr "Kein Befehl: %s"
 
 #: ../plugins/contributing/contributing_plugin/helper.py:76
 #, python-format
@@ -1762,35 +1775,31 @@ msgid "Format Strings"
 msgstr "Formatstrings"
 
 #: ../plugins/create-project/gbp-create-project-tool.c:130
-#, fuzzy
-#| msgid "List available subcommands"
 msgid "List available templates"
-msgstr "Verfügbare Unterbefehle anzeigen"
+msgstr "Verfügbare Vorlagen anzeigen"
 
 #: ../plugins/create-project/gbp-create-project-tool.c:132
 msgid "Project template to generate"
-msgstr ""
+msgstr "Zu erzeugende Projektdatei"
 
 #: ../plugins/create-project/gbp-create-project-tool.c:138
 msgid "create-project [OPTION...] PROJECT_NAME"
-msgstr ""
+msgstr "create-project [OPTION …] PROJEKTNAME"
 
 #: ../plugins/create-project/gbp-create-project-tool.c:187
-#, fuzzy, c-format
-#| msgid "File name must not contain subdirectories."
+#, c-format
 msgid "Filename must be ascii and may not contain : or ="
-msgstr "Der Dateiname darf keine Unterordner enthalten."
+msgstr "Der Dateiname muss in ASCII sein und darf kein : oder = enthalten"
 
 #: ../plugins/create-project/gbp-create-project-tool.c:291
-#, fuzzy, c-format
-#| msgid "Missing project name"
+#, c-format
 msgid "Please specify a project name.\n"
-msgstr "Projektname fehlt"
+msgstr "Bitte geben Sie einen Projektnamen an.\n"
 
 #: ../plugins/create-project/gbp-create-project-tool.c:307
 #, c-format
 msgid "Please specify a project template with --template=\n"
-msgstr ""
+msgstr "Bitte geben Sie eine Projektvorlage mit --template= an\n"
 
 #: ../plugins/devhelp/gbp-devhelp-search-provider.c:128
 #: ../plugins/devhelp/gbp-devhelp-workbench-addin.c:90
@@ -1895,11 +1904,11 @@ msgstr "Jedi für die Vervollständigung von Python verwenden."
 
 #: ../plugins/library-template/library_template/__init__.py:52
 msgid "Shared Library"
-msgstr ""
+msgstr "Laufzeitbibliothek"
 
 #: ../plugins/library-template/library_template/__init__.py:55
 msgid "Create a new autotools project with a shared library"
-msgstr ""
+msgstr "Ein neues Autotools-Projekt mit einer Laufzeitbibliothek erstellen"
 
 #: ../plugins/mingw/ide-mingw-device-provider.c:95
 msgid "MinGW 64-bit"
@@ -2043,6 +2052,20 @@ msgstr "_Neues Terminal"
 #: ../plugins/todo/todo_plugin/__init__.py:60
 msgid "Todo"
 msgstr "Todo"
+
+#: ../plugins/vala-pack/ide-vala-preferences-addin.vala:33
+msgid "Vala"
+msgstr "Vala"
+
+#: ../plugins/vala-pack/ide-vala-preferences-addin.vala:34
+msgid "Show errors and warnings provided by Vala"
+msgstr "Von Vala erzeugte Fehler und Warnungen anzeigen"
+
+#: ../plugins/vala-pack/ide-vala-preferences-addin.vala:35
+#, fuzzy
+#| msgid "If the current line should be highlighted."
+msgid "vala diagnostics warnings errors"
+msgstr "Legt fest, ob die aktuelle Zeile hervorgehoben werden soll."
 
 #~ msgid "Success.\n"
 #~ msgstr "Erfolg.\n"
@@ -2562,16 +2585,6 @@ msgstr "Todo"
 #~| msgid "The file for the buffer."
 #~ msgid "The file represented by the buffer."
 #~ msgstr "Die Datei für den Puffer."
-
-#, fuzzy
-#~| msgid "Highlight Current Line"
-#~ msgid "Highlight Diagnostics"
-#~ msgstr "Aktuelle Zeile hervorheben"
-
-#, fuzzy
-#~| msgid "If the current line should be highlighted."
-#~ msgid "If diagnostic warnings and errors should be highlighted."
-#~ msgstr "Legt fest, ob die aktuelle Zeile hervorgehoben werden soll."
 
 #, fuzzy
 #~| msgid "If the document is read only."
@@ -3773,9 +3786,6 @@ msgstr "Todo"
 
 #~ msgid "The workbench the navigation list is for."
 #~ msgstr "Die Werkbank, für die die Navigationsliste angelegt wurde."
-
-#~ msgid "_Help"
-#~ msgstr "_Hilfe"
 
 #~ msgid ""
 #~ "Christian Hergert\n"
