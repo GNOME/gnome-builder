@@ -1397,7 +1397,6 @@ gchar **
 gb_vim_complete (GtkWidget   *active_widget,
                  const gchar *line)
 {
-  GtkSourceView  *source_view;
   GPtrArray *ar;
 
   g_assert (GTK_IS_WIDGET (active_widget));
@@ -1408,8 +1407,6 @@ gb_vim_complete (GtkWidget   *active_widget,
     {
       if (IDE_IS_EDITOR_VIEW (active_widget))
         {
-          source_view = GTK_SOURCE_VIEW (IDE_EDITOR_VIEW (active_widget)->frame1->source_view);
-
           if (g_str_has_prefix (line, "set "))
             gb_vim_complete_set (line, ar);
           else if (g_str_has_prefix (line, "colorscheme "))
