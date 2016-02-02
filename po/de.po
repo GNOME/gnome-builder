@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-02-01 16:55+0000\n"
-"PO-Revision-Date: 2016-02-01 20:04+0100\n"
+"POT-Creation-Date: 2016-02-02 16:58+0000\n"
+"PO-Revision-Date: 2016-02-02 19:46+0100\n"
 "Last-Translator: Mario Blättermann <mario.blaettermann@gmail.com>\n"
 "Language-Team: Deutsch <gnome-de@gnome.org>\n"
 "Language: de_DE\n"
@@ -417,220 +417,267 @@ msgid "_Select"
 msgstr "Au_swählen"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:1
+msgctxt "shortcut window"
 msgid "Editor Shortcuts"
 msgstr "Editor-Tastenkombinationen"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:2
-#: ../libide/preferences/ide-preferences-builtin.c:244
+msgctxt "shortcut window"
 msgid "General"
 msgstr "Allgemein"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:3
+msgctxt "shortcut window"
 msgid "Global Search"
 msgstr "Globale Suche"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:4
-#: ../libide/preferences/ide-preferences-perspective.c:796
+msgctxt "shortcut window"
 msgid "Preferences"
 msgstr "Einstellungen"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:5
+msgctxt "shortcut window"
 msgid "Command Bar"
 msgstr "Befehlsleiste"
 
-#. XXX: This belongs in terminal addin
 #: ../data/ui/ide-shortcuts-window.ui.h:6
-#: ../libide/preferences/ide-preferences-builtin.c:104
-#: ../plugins/terminal/gb-terminal-workbench-addin.c:99
+msgctxt "shortcut window"
 msgid "Terminal"
 msgstr "Terminal"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:7
+msgctxt "shortcut window"
 msgid "Keyboard Shortcuts"
 msgstr "Tastenkombinationen"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:8
+msgctxt "shortcut window"
 msgid "Panels"
 msgstr "Leisten"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:9
+msgctxt "shortcut window"
 msgid "Toggle left panel"
 msgstr "Linke Leiste anzeigen/verbergen"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:10
+msgctxt "shortcut window"
 msgid "Toggle right panel"
 msgstr "Rechte Leiste anzeigen/verbergen"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:11
+msgctxt "shortcut window"
 msgid "Toggle bottom panel"
 msgstr "Untere Leiste anzeigen/verbergen"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:12
+msgctxt "shortcut window"
 msgid "Touchpad gestures"
 msgstr "Tastfeldgesten"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:13
+msgctxt "shortcut window"
 msgid "Switch to the next document"
 msgstr "Zum nächsten Dokument wechseln"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:14
+msgctxt "shortcut window"
 msgid "Switch to the previous document"
 msgstr "Zum vorhergehenden Dokument wechseln"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:15
-#: ../plugins/project-tree/gb-project-tree-builder.c:77
+msgctxt "shortcut window"
 msgid "Files"
 msgstr "Dateien"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:16
+msgctxt "shortcut window"
 msgid "Create new document"
 msgstr "Neues Dokument anlegen"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:17
+msgctxt "shortcut window"
 msgid "Open a document"
 msgstr "Ein Dokument öffnen"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:18
+msgctxt "shortcut window"
 msgid "Save the document"
 msgstr "Das Dokument speichern"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:19
+msgctxt "shortcut window"
 msgid "Close the document"
 msgstr "Das Dokument schließen"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:20
+msgctxt "shortcut window"
 msgid "Find and replace"
-msgstr "Suchen und ersetzen"
+msgstr "Suchen und Ersetzen"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:21
+msgctxt "shortcut window"
 msgid "Find"
 msgstr "Suchen"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:22
+msgctxt "shortcut window"
 msgid "Find the next match"
 msgstr "Weitersuchen"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:23
+msgctxt "shortcut window"
 msgid "Find the previous match"
 msgstr "Rückwärts weitersuchen"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:24
+msgctxt "shortcut window"
 msgid "Clear highlight"
 msgstr "Hervorhebung löschen"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:25
+msgctxt "shortcut window"
 msgid "Copy and Paste"
 msgstr "Kopieren und Einfügen"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:26
+msgctxt "shortcut window"
 msgid "Copy selected text to clipboard"
 msgstr "Ausgewählten Text in die Zwischenablage kopieren"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:27
+msgctxt "shortcut window"
 msgid "Cut selected text to clipboard"
 msgstr "Ausgewählten Text in die Zwischenablage ausschneiden"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:28
+msgctxt "shortcut window"
 msgid "Paste text from clipboard"
-msgstr "Ausgewählten Text aus der Zwischenablage einfügen"
+msgstr "Text aus der Zwischenablage einfügen"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:29
+msgctxt "shortcut window"
 msgid "Undo and Redo"
-msgstr "Rückgängig und Wiederherstellen"
+msgstr "Rückgängig und Wiederholen"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:30
+msgctxt "shortcut window"
 msgid "Undo previous command"
 msgstr "Letzten Befehl rückgängig machen"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:31
+msgctxt "shortcut window"
 msgid "Redo previous command"
 msgstr "Letzten Befehl wiederholen"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:32
+msgctxt "shortcut window"
 msgid "Editing"
 msgstr "Bearbeiten"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:33
+msgctxt "shortcut window"
 msgid "Increment number at cursor"
 msgstr "Zahl unter dem Zeiger erhöhen"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:34
+msgctxt "shortcut window"
 msgid "Decrement number at cursor"
 msgstr "Zahl unter dem Zeiger verringern"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:35
+msgctxt "shortcut window"
 msgid "Join selected lines"
 msgstr "Ausgewählte Zeilen vereinen"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:36
+msgctxt "shortcut window"
 msgid "Show completion window"
-msgstr "Vervollständigungsfenster zeigen"
+msgstr "Vervollständigungsfenster anzeigen"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:37
+msgctxt "shortcut window"
 msgid "Toggle overwrite"
 msgstr "Überschreiben aktivieren"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:38
+msgctxt "shortcut window"
 msgid "Reindent line"
 msgstr "Zeile wieder einrücken"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:39
+msgctxt "shortcut window"
 msgid "Navigation"
 msgstr "Navigation"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:40
+msgctxt "shortcut window"
 msgid "Move to next error in file"
 msgstr "Zum nächsten Fehler in der Datei wechseln"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:41
+msgctxt "shortcut window"
 msgid "Move to previous error in file"
 msgstr "Zum vorherigen Fehler in der Datei wechseln"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:42
+msgctxt "shortcut window"
 msgid "Move to previous edit location"
 msgstr "Zur zuletzt bearbeiteten Stelle wechseln"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:43
+msgctxt "shortcut window"
 msgid "Move to next edit location"
 msgstr "Zur nächsten zu bearbeitenden Stelle wechseln"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:44
+msgctxt "shortcut window"
 msgid "Jump to definition of symbol"
 msgstr "Zur Definition des Symbols wechseln"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:45
+msgctxt "shortcut window"
 msgid "Move sectionport up within the file"
 msgstr "Ansichtsfeld innerhalb der Datei aufwärts schieben"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:46
+msgctxt "shortcut window"
 msgid "Move sectionport down within the file"
 msgstr "Ansichtsfeld innerhalb der Datei abwärts schieben"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:47
+msgctxt "shortcut window"
 msgid "Move sectionport to end of file"
 msgstr "Ansichtsfeld zum Ende der Datei schieben"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:48
+msgctxt "shortcut window"
 msgid "Move sectionport to beginning of file"
 msgstr "Ansichtsfeld zum Anfang der Datei schieben"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:49
+msgctxt "shortcut window"
 msgid "Move to matching bracket"
 msgstr "Zur übereinstimmenden Klammer wechseln"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:50
+msgctxt "shortcut window"
 msgid "Selections"
 msgstr "Auswahl"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:51
+msgctxt "shortcut window"
 msgid "Select all"
 msgstr "Alle auswählen"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:52
+msgctxt "shortcut window"
 msgid "Unselect all"
 msgstr "Alles abwählen"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:53
+msgctxt "shortcut window"
 msgid "Terminal Shortcuts"
 msgstr "Terminaltastenkombinationen"
 
@@ -1041,6 +1088,12 @@ msgstr "Schrift"
 msgid "editor font monospace"
 msgstr "Monospace-Schrift für Editor"
 
+#. XXX: This belongs in terminal addin
+#: ../libide/preferences/ide-preferences-builtin.c:104
+#: ../plugins/terminal/gb-terminal-workbench-addin.c:99
+msgid "Terminal"
+msgstr "Terminal"
+
 #: ../libide/preferences/ide-preferences-builtin.c:104
 msgid "terminal font monospace"
 msgstr "Monospace-Schrift für Terminal"
@@ -1342,6 +1395,10 @@ msgstr "Quellcode bei der Eingabe automatisch einrücken"
 msgid "Build"
 msgstr "_Erstellen"
 
+#: ../libide/preferences/ide-preferences-builtin.c:244
+msgid "General"
+msgstr "Allgemein"
+
 #: ../libide/preferences/ide-preferences-builtin.c:245
 #, fuzzy
 msgid "Build Workers"
@@ -1350,6 +1407,10 @@ msgstr "Builder"
 #: ../libide/preferences/ide-preferences-builtin.c:245
 msgid "Number of parallel build workers"
 msgstr ""
+
+#: ../libide/preferences/ide-preferences-perspective.c:796
+msgid "Preferences"
+msgstr "Einstellungen"
 
 #: ../libide/pygobject/ide-pygobject-script.c:135
 msgid "Attempt to load a PyGObject script with no filename."
@@ -1945,6 +2006,10 @@ msgstr "A_nlegen"
 #: ../plugins/project-tree/gb-project-tree-addin.c:77
 msgid "Project"
 msgstr "Projekt"
+
+#: ../plugins/project-tree/gb-project-tree-builder.c:77
+msgid "Files"
+msgstr "Dateien"
 
 #: ../plugins/project-tree/gb-rename-file-popover.c:79
 #, c-format
