@@ -189,7 +189,8 @@ save_file_cb (GObject      *object,
       g_clear_error (&error);
     }
 
-  ide_widget_hide_with_fade (GTK_WIDGET (self->progress_bar));
+  if (self->progress_bar)
+    ide_widget_hide_with_fade (GTK_WIDGET (self->progress_bar));
 }
 
 static void
