@@ -34,7 +34,7 @@ typedef struct
   gint    row_spacing;
 } EggColumnLayoutPrivate;
 
-#define COLUMN_WIDTH_DEFAEULT  500
+#define COLUMN_WIDTH_DEFAULT   500
 #define COLUMN_SPACING_DEFAULT 24
 #define ROW_SPACING_DEFAULT    12
 
@@ -602,7 +602,7 @@ egg_column_layout_init (EggColumnLayout *self)
 
   priv->children = g_array_new (FALSE, TRUE, sizeof (EggColumnLayoutChild));
 
-  priv->column_width = COLUMN_WIDTH_DEFAEULT;
+  priv->column_width = COLUMN_WIDTH_DEFAULT;
   priv->column_spacing = COLUMN_SPACING_DEFAULT;
   priv->row_spacing = ROW_SPACING_DEFAULT;
 }
