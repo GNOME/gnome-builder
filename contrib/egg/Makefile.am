@@ -15,6 +15,8 @@ libegg_private_la_SOURCES = \
 	egg-box.h \
 	egg-centering-bin.c \
 	egg-centering-bin.h \
+	egg-column-layout.c \
+	egg-column-layout.h \
 	egg-counter.c \
 	egg-counter.h \
 	egg-date-time.c \
