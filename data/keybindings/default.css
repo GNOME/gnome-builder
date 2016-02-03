@@ -58,6 +58,6 @@ IdeSourceViewMode.default {
   -gtk-key-bindings: default-ide-source-view;
 }
 
-GbProjectTree {
+projecttree {
   -gtk-key-bindings: builder-gb-project-tree;
 }

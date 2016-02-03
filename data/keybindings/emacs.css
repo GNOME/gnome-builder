@@ -199,7 +199,7 @@ GtkListBox {
   -gtk-key-bindings: builder-emacs-list-box;
 }
 
-GbProjectTree {
+projecttree {
   -gtk-key-bindings: builder-emacs-tree-view,
                     builder-gb-project-tree;
 }

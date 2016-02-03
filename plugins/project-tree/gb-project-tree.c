@@ -150,6 +150,7 @@ static void
 gb_project_tree_class_init (GbProjectTreeClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   object_class->finalize = gb_project_tree_finalize;
   object_class->get_property = gb_project_tree_get_property;
@@ -163,6 +164,8 @@ gb_project_tree_class_init (GbProjectTreeClass *klass)
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, LAST_PROP, properties);
+
+  gtk_widget_class_set_css_name (widget_class, "projecttree");
 }
 
 static void
