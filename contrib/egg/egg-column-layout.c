@@ -556,7 +556,7 @@ egg_column_layout_class_init (EggColumnLayoutClass *klass)
                       "The width of the columns",
                       0,
                       G_MAXINT,
-                      500,
+                      COLUMN_WIDTH_DEFAULT,
                       (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_ROW_SPACING] =
