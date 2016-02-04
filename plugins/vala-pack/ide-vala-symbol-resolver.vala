@@ -72,7 +72,7 @@ namespace Ide
 				if (binding != null && binding == Vala.MemberBinding.STATIC)
 					flags |= Ide.SymbolFlags.IS_STATIC;
 
-				if (symbol.deprecated)
+				if (symbol.version.deprecated)
 					flags |= Ide.SymbolFlags.IS_DEPRECATED;
 
 				var source_reference = symbol.source_reference;

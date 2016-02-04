@@ -70,7 +70,7 @@ dnl ***********************************************************************
 AC_PROG_CC
 AM_PROG_CC_C_O
 AC_PROG_CXX
-AM_PROG_VALAC
+AM_PROG_VALAC([0.30.0.55])
 AC_PROG_INSTALL
 AM_PROG_LEX
 AC_PROG_YACC
