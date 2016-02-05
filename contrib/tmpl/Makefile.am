@@ -27,7 +27,7 @@ pkginclude_HEADERS = \
 	$(NULL)
 
 libtemplate_glib_1_0_la_CFLAGS = $(TMPL_CFLAGS)
-libtemplate_glib_1_0_la_LIBADD = $(TMPL_LIBS)
+libtemplate_glib_1_0_la_LIBADD = $(TMPL_LIBS) $(LIBM)
 libtemplate_glib_1_0_la_SOURCES = \
 	$(pkginclude_HEADERS) \
 	tmpl-branch-node.c \
