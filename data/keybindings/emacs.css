@@ -162,11 +162,11 @@ entry {
   -gtk-key-bindings: builder-emacs-text-entry;
 }
 
-GtkTextView {
+textview {
   -gtk-key-bindings: builder-emacs-text-entry, builder-emacs-text-view;
 }
 
-GtkSourceView,
+.sourceview,
 idesourceviewmode.default
 {
   -IdeSourceViewMode-repeat-insert-with-count: true;
@@ -174,7 +174,7 @@ idesourceviewmode.default
   -gtk-key-bindings: builder-emacs-text-entry, builder-emacs-source-view, builder-emacs-text-view;
 }
 
-GtkSourceView,
+.sourceview,
 idesourceviewmode.default.has-indenter
 {
   -IdeSourceViewMode-repeat-insert-with-count: true;
@@ -191,11 +191,11 @@ idesourceviewmode.emacs-x {
   -gtk-key-bindings: builder-emacs-source-view-x;
 }
 
-GtkTreeView {
+treeview {
   -gtk-key-bindings: builder-emacs-tree-view;
 }
 
-GtkListBox {
+listbox {
   -gtk-key-bindings: builder-emacs-list-box;
 }
 
