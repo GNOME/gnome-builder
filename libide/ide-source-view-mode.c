@@ -239,11 +239,14 @@ static void
 ide_source_view_mode_class_init (IdeSourceViewModeClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   GtkBindingSet *binding_set, *parent_binding_set;
   GType type;
 
   object_class->finalize = ide_source_view_mode_finalize;
   object_class->get_property = ide_source_view_mode_get_property;
+
+  gtk_widget_class_set_css_name (widget_class, "idesourceviewmode");
 
   properties [PROP_NAME] =
     g_param_spec_string ("name",

@@ -167,7 +167,7 @@ GtkTextView {
 }
 
 GtkSourceView,
-IdeSourceViewMode.default
+idesourceviewmode.default
 {
   -IdeSourceViewMode-repeat-insert-with-count: true;
 
@@ -175,17 +175,17 @@ IdeSourceViewMode.default
 }
 
 GtkSourceView,
-IdeSourceViewMode.default.has-indenter
+idesourceviewmode.default.has-indenter
 {
   -IdeSourceViewMode-repeat-insert-with-count: true;
 
   -gtk-key-bindings: builder-emacs-text-entry,
-                    builder-emacs-source-view-has-indenter,
-                    builder-emacs-source-view,
-                    builder-emacs-text-view;
+                     builder-emacs-source-view-has-indenter,
+                     builder-emacs-source-view,
+                     builder-emacs-text-view;
 }
 
-IdeSourceViewMode.emacs-x {
+idesourceviewmode.emacs-x {
   -IdeSourceViewMode-display-name: "C-x";
 
   -gtk-key-bindings: builder-emacs-source-view-x;
@@ -201,5 +201,5 @@ GtkListBox {
 
 projecttree {
   -gtk-key-bindings: builder-emacs-tree-view,
-                    builder-gb-project-tree;
+                     builder-gb-project-tree;
 }

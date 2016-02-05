@@ -2342,58 +2342,58 @@ bind "KP_Multiply" { "save-insert-mark" ()
  *   }
  */
 
-IdeSourceViewMode.default,
-IdeSourceViewMode.vim-normal {
+idesourceviewmode.default,
+idesourceviewmode.vim-normal {
   -IdeSourceViewMode-suppress-unbound: true;
   -IdeSourceViewMode-block-cursor: true;
   -IdeSourceViewMode-keep-mark-on-char: true;
 
   -gtk-key-bindings: builder-vim-source-view,
-                    builder-vim-source-view-normal;
+                     builder-vim-source-view-normal;
 }
 
-IdeSourceViewMode.vim-normal-with-count {
+idesourceviewmode.vim-normal-with-count {
   -IdeSourceViewMode-suppress-unbound: true;
   -IdeSourceViewMode-block-cursor: true;
 
   -gtk-key-bindings: builder-vim-source-view,
-                    builder-vim-source-view-normal-with-count,
-                    builder-vim-source-view-normal;
+                     builder-vim-source-view-normal-with-count,
+                     builder-vim-source-view-normal;
 }
 
-IdeSourceViewMode.vim-normal-bracket {
+idesourceviewmode.vim-normal-bracket {
   -IdeSourceViewMode-suppress-unbound: true;
   -IdeSourceViewMode-block-cursor: true;
 
   -gtk-key-bindings: builder-vim-source-view,
-                    builder-vim-source-view-normal-bracket;
+                     builder-vim-source-view-normal-bracket;
 }
 
-IdeSourceViewMode.vim-normal-equal {
+idesourceviewmode.vim-normal-equal {
   -IdeSourceViewMode-suppress-unbound: true;
   -IdeSourceViewMode-block-cursor: true;
 
   -gtk-key-bindings: builder-vim-source-view,
-                    builder-vim-source-view-normal-equal;
+                     builder-vim-source-view-normal-equal;
 }
 
-IdeSourceViewMode.vim-normal-c {
+idesourceviewmode.vim-normal-c {
   -IdeSourceViewMode-suppress-unbound: true;
   -IdeSourceViewMode-block-cursor: true;
 
   -gtk-key-bindings: builder-vim-source-view,
-                    builder-vim-source-view-normal-c;
+                     builder-vim-source-view-normal-c;
 }
 
-IdeSourceViewMode.vim-normal-c-i {
+idesourceviewmode.vim-normal-c-i {
   -IdeSourceViewMode-suppress-unbound: true;
   -IdeSourceViewMode-block-cursor: true;
 
   -gtk-key-bindings: builder-vim-source-view,
-                    builder-vim-source-view-normal-c-i;
+                     builder-vim-source-view-normal-c-i;
 }
 
-IdeSourceViewMode.vim-normal-c-a {
+idesourceviewmode.vim-normal-c-a {
   -IdeSourceViewMode-suppress-unbound: true;
   -IdeSourceViewMode-block-cursor: true;
 
@@ -2401,32 +2401,32 @@ IdeSourceViewMode.vim-normal-c-a {
                      builder-vim-source-view-normal-c-a;
 }
 
-IdeSourceViewMode.vim-normal-d {
+idesourceviewmode.vim-normal-d {
   -IdeSourceViewMode-suppress-unbound: true;
   -IdeSourceViewMode-block-cursor: true;
   -IdeSourceViewMode-display-name: "Delete";
 
   -gtk-key-bindings: builder-vim-source-view,
-                    builder-vim-source-view-normal-d;
+                     builder-vim-source-view-normal-d;
 }
 
-IdeSourceViewMode.vim-normal-d-g {
+idesourceviewmode.vim-normal-d-g {
   -IdeSourceViewMode-suppress-unbound: true;
   -IdeSourceViewMode-block-cursor: true;
 
   -gtk-key-bindings: builder-vim-source-view,
-                    builder-vim-source-view-normal-d-g;
+                     builder-vim-source-view-normal-d-g;
 }
 
-IdeSourceViewMode.vim-normal-d-i {
+idesourceviewmode.vim-normal-d-i {
   -IdeSourceViewMode-suppress-unbound: true;
-  -IdeSourceViewMode-block-cursor: true;
+  -block-cursor: true;
 
   -gtk-key-bindings: builder-vim-source-view,
-                    builder-vim-source-view-normal-d-i;
+                     builder-vim-source-view-normal-d-i;
 }
 
-IdeSourceViewMode.vim-normal-d-a {
+idesourceviewmode.vim-normal-d-a {
   -IdeSourceViewMode-suppress-unbound: true;
   -IdeSourceViewMode-block-cursor: true;
 
@@ -2434,100 +2434,100 @@ IdeSourceViewMode.vim-normal-d-a {
                      builder-vim-source-view-normal-d-a;
 }
 
-IdeSourceViewMode.vim-normal-g {
+idesourceviewmode.vim-normal-g {
   -IdeSourceViewMode-suppress-unbound: true;
   -IdeSourceViewMode-block-cursor: true;
 
   -gtk-key-bindings: builder-vim-source-view,
-                    builder-vim-source-view-normal-g;
+                     builder-vim-source-view-normal-g;
 }
 
-IdeSourceViewMode.vim-normal-g-u {
+idesourceviewmode.vim-normal-g-u {
   -IdeSourceViewMode-suppress-unbound: true;
   -IdeSourceViewMode-block-cursor: true;
 
   -gtk-key-bindings: builder-vim-source-view,
-                    builder-vim-source-view-normal-g-u;
+                     builder-vim-source-view-normal-g-u;
 }
 
-IdeSourceViewMode.vim-normal-q {
+idesourceviewmode.vim-normal-q {
   -IdeSourceViewMode-suppress-unbound: true;
   -IdeSourceViewMode-block-cursor: true;
 
   -gtk-key-bindings: builder-vim-source-view,
-                    builder-vim-source-view-normal-q;
+                     builder-vim-source-view-normal-q;
 }
 
-IdeSourceViewMode.vim-normal-indent {
+idesourceviewmode.vim-normal-indent {
   -IdeSourceViewMode-suppress-unbound: true;
   -IdeSourceViewMode-block-cursor: true;
 
   -gtk-key-bindings: builder-vim-source-view,
-                    builder-vim-source-view-normal-indent;
+                     builder-vim-source-view-normal-indent;
 }
 
-IdeSourceViewMode.vim-normal-ctrl-w {
+idesourceviewmode.vim-normal-ctrl-w {
   -IdeSourceViewMode-suppress-unbound: true;
   -IdeSourceViewMode-block-cursor: true;
   -IdeSourceViewMode-display-name: "^w";
 
   -gtk-key-bindings: builder-vim-source-view,
-                    builder-vim-source-view-normal-ctrl-w;
+                     builder-vim-source-view-normal-ctrl-w;
 }
 
-IdeSourceViewMode.vim-normal-y {
+idesourceviewmode.vim-normal-y {
   -IdeSourceViewMode-suppress-unbound: true;
   -IdeSourceViewMode-block-cursor: true;
 
   -gtk-key-bindings: builder-vim-source-view,
-                    builder-vim-source-view-normal-y;
+                     builder-vim-source-view-normal-y;
 }
 
-IdeSourceViewMode.vim-normal-z {
+idesourceviewmode.vim-normal-z {
   -IdeSourceViewMode-suppress-unbound: true;
   -IdeSourceViewMode-block-cursor: true;
 
   -gtk-key-bindings: builder-vim-source-view,
-                    builder-vim-source-view-normal-z;
+                     builder-vim-source-view-normal-z;
 }
 
-IdeSourceViewMode.vim-normal-Z {
+idesourceviewmode.vim-normal-Z {
   -IdeSourceViewMode-suppress-unbound: true;
   -IdeSourceViewMode-block-cursor: true;
   -IdeSourceViewMode-display-name: "Z";
 
   -gtk-key-bindings: builder-vim-source-view,
-                    builder-vim-source-view-normal-Z;
+                     builder-vim-source-view-normal-Z;
 }
 
-IdeSourceViewMode.vim-insert {
+idesourceviewmode.vim-insert {
   -IdeSourceViewMode-suppress-unbound: false;
   -IdeSourceViewMode-block-cursor: false;
   -IdeSourceViewMode-display-name: "Insert";
 
   -gtk-key-bindings: builder-vim-source-view-insert,
-                    builder-vim-source-view;
+                     builder-vim-source-view;
 }
 
-IdeSourceViewMode.vim-replace {
+idesourceviewmode.vim-replace {
   -IdeSourceViewMode-suppress-unbound: false;
   -IdeSourceViewMode-block-cursor: false;
   -IdeSourceViewMode-display-name: "Replace";
 
   -gtk-key-bindings: builder-vim-source-view-insert,
-                    builder-vim-source-view;
+                     builder-vim-source-view;
 }
 
-IdeSourceViewMode.vim-visual {
+idesourceviewmode.vim-visual {
   -IdeSourceViewMode-suppress-unbound: true;
   -IdeSourceViewMode-block-cursor: true;
   -IdeSourceViewMode-display-name: "Visual";
 
   -gtk-key-bindings: builder-vim-source-view,
-                    builder-vim-source-view-visual;
+                     builder-vim-source-view-visual;
 }
 
-IdeSourceViewMode.vim-visual-i {
+idesourceviewmode.vim-visual-i {
   -IdeSourceViewMode-suppress-unbound: true;
   -IdeSourceViewMode-block-cursor: true;
   -IdeSourceViewMode-display-name: "Visual";
@@ -2536,7 +2536,7 @@ IdeSourceViewMode.vim-visual-i {
                      builder-vim-source-view-visual-i;
 }
 
-IdeSourceViewMode.vim-visual-a {
+idesourceviewmode.vim-visual-a {
   -IdeSourceViewMode-suppress-unbound: true;
   -IdeSourceViewMode-block-cursor: true;
   -IdeSourceViewMode-display-name: "Visual";
@@ -2545,74 +2545,74 @@ IdeSourceViewMode.vim-visual-a {
                      builder-vim-source-view-visual-a;
 }
 
-IdeSourceViewMode.vim-visual-with-count {
+idesourceviewmode.vim-visual-with-count {
   -IdeSourceViewMode-suppress-unbound: true;
   -IdeSourceViewMode-block-cursor: true;
   -IdeSourceViewMode-default-mode: "vim-visual";
   -IdeSourceViewMode-display-name: "Visual";
 
   -gtk-key-bindings: builder-vim-source-view,
-                    builder-vim-source-view-visual-with-count,
-                    builder-vim-source-view-visual;
+                     builder-vim-source-view-visual-with-count,
+                     builder-vim-source-view-visual;
 }
 
-IdeSourceViewMode.vim-visual-g {
+idesourceviewmode.vim-visual-g {
   -IdeSourceViewMode-suppress-unbound: true;
   -IdeSourceViewMode-block-cursor: true;
   -IdeSourceViewMode-display-name: "Visual";
 
   -gtk-key-bindings: builder-vim-source-view,
-                    builder-vim-source-view-visual-g;
+                     builder-vim-source-view-visual-g;
 }
 
-IdeSourceViewMode.vim-visual-z {
+idesourceviewmode.vim-visual-z {
   -IdeSourceViewMode-suppress-unbound: true;
   -IdeSourceViewMode-block-cursor: true;
   -IdeSourceViewMode-display-name: "Visual";
 
   -gtk-key-bindings: builder-vim-source-view,
-                    builder-vim-source-view-visual-z;
+                     builder-vim-source-view-visual-z;
 }
 
-IdeSourceViewMode.vim-visual-line {
+idesourceviewmode.vim-visual-line {
   -IdeSourceViewMode-suppress-unbound: true;
   -IdeSourceViewMode-block-cursor: true;
   -IdeSourceViewMode-display-name: "Visual Line";
 
   -gtk-key-bindings: builder-vim-source-view,
-                    builder-vim-source-view-visual-line;
+                     builder-vim-source-view-visual-line;
 }
 
-IdeSourceViewMode.vim-visual-line-with-count {
+idesourceviewmode.vim-visual-line-with-count {
   -IdeSourceViewMode-suppress-unbound: true;
   -IdeSourceViewMode-block-cursor: true;
   -IdeSourceViewMode-default-mode: "vim-visual-line";
   -IdeSourceViewMode-display-name: "Visual Line";
 
   -gtk-key-bindings: builder-vim-source-view,
-                    builder-vim-source-view-visual-line-with-count,
-                    builder-vim-source-view-visual-line;
+                     builder-vim-source-view-visual-line-with-count,
+                     builder-vim-source-view-visual-line;
 }
 
-IdeSourceViewMode.vim-visual-line-g {
+idesourceviewmode.vim-visual-line-g {
   -IdeSourceViewMode-suppress-unbound: true;
   -IdeSourceViewMode-block-cursor: true;
   -IdeSourceViewMode-display-name: "Visual Line";
 
   -gtk-key-bindings: builder-vim-source-view,
-                    builder-vim-source-view-visual-line-g;
+                     builder-vim-source-view-visual-line-g;
 }
 
-IdeSourceViewMode.vim-visual-line-z {
+idesourceviewmode.vim-visual-line-z {
   -IdeSourceViewMode-suppress-unbound: true;
   -IdeSourceViewMode-block-cursor: true;
   -IdeSourceViewMode-display-name: "Visual Line";
 
   -gtk-key-bindings: builder-vim-source-view,
-                    builder-vim-source-view-visual-line-z;
+                     builder-vim-source-view-visual-line-z;
 }
 
-IdeSourceViewMode.vim-visual-block {
+idesourceviewmode.vim-visual-block {
   -IdeSourceViewMode-suppress-unbound: true;
   -IdeSourceViewMode-block-cursor: true;
   -IdeSourceViewMode-display-name: "Visual Block";

@@ -54,7 +54,7 @@
   bind "<ctrl><alt>i" { "reindent" () };
 }
 
-IdeSourceViewMode.default {
+idesourceviewmode.default {
   -gtk-key-bindings: default-ide-source-view;
 }
 
