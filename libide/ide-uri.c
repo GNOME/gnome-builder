@@ -216,7 +216,7 @@ uri_decoder (const gchar       *part,
       if (flags & IDE_URI_PARSE_UTF8_ONLY)
         {
           g_set_error_literal (error, IDE_URI_ERROR, parse_error,
-                               _("Non-UTF8 characters in URI"));
+                               _("Non-UTF-8 characters in URI"));
           g_free (decoded);
           return FALSE;
         }

@@ -110,7 +110,7 @@ ide_preferences_builtin_register_keyboard (IdePreferences *preferences)
   ide_preferences_add_page (preferences, "keyboard", _("Keyboard"), 400);
 
   ide_preferences_add_list_group (preferences, "keyboard", "mode", _("Emulation"), 0);
-  ide_preferences_add_radio (preferences, "keyboard", "mode", "org.gnome.builder.editor", "keybindings", NULL, "\"default\"", _("Builder"), _("Default keybinding mode which mimics Gedit"), NULL, 0);
+  ide_preferences_add_radio (preferences, "keyboard", "mode", "org.gnome.builder.editor", "keybindings", NULL, "\"default\"", _("Builder"), _("Default keybinding mode which mimics gedit"), NULL, 0);
   ide_preferences_add_radio (preferences, "keyboard", "mode", "org.gnome.builder.editor", "keybindings", NULL, "\"emacs\"", _("Emacs"), _("Emulates the Emacs text editor"), NULL, 0);
   ide_preferences_add_radio (preferences, "keyboard", "mode", "org.gnome.builder.editor", "keybindings", NULL, "\"vim\"", _("Vim"), _("Emulates the Vim text editor"), NULL, 0);
 
@@ -224,7 +224,7 @@ ide_preferences_builtin_register_languages (IdePreferences *preferences)
   ide_preferences_add_page (preferences, "languages.id", NULL, 0);
 
   ide_preferences_add_list_group (preferences, "languages.id", "basic", NULL, 0);
-  ide_preferences_add_switch (preferences, "languages.id", "basic", "org.gnome.builder.editor.language", "trim-trailing-whitespace", "/org/gnome/builder/editor/language/{id}/", NULL, _("Trim trailing whitespace"), _("Upon saving, trailing whitespcae from modified lines will be trimmed."), NULL, 10);
+  ide_preferences_add_switch (preferences, "languages.id", "basic", "org.gnome.builder.editor.language", "trim-trailing-whitespace", "/org/gnome/builder/editor/language/{id}/", NULL, _("Trim trailing whitespace"), _("Upon saving, trailing whitespace from modified lines will be trimmed."), NULL, 10);
 
   ide_preferences_add_list_group (preferences, "languages.id", "margin", _("Margins"), 0);
   ide_preferences_add_radio (preferences, "languages.id", "margin", "org.gnome.builder.editor.language", "show-right-margin", "/org/gnome/builder/editor/language/{id}/", NULL, _("Show right margin"), NULL, NULL, 0);

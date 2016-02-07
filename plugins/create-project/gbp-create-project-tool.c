@@ -184,7 +184,7 @@ validate_name (GbpCreateProjectTool  *self,
           g_set_error (error,
                        G_IO_ERROR,
                        G_IO_ERROR_INVALID_DATA,
-                       _("Filename must be ascii and may not contain : or ="));
+                       _("Filename must be ASCII and may not contain : or ="));
           return FALSE;
         }
     }

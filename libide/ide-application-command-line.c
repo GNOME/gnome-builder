@@ -195,7 +195,7 @@ ide_application_local_command_line (GApplication   *application,
       G_OPTION_FLAG_NO_ARG | G_OPTION_FLAG_IN_MAIN,
       G_OPTION_ARG_CALLBACK,
       ide_application_increase_verbosity,
-      N_("Increase verbosity, may specify multiple times") },
+      N_("Increase verbosity, may be specified multiple times") },
 
     { NULL }
   };
@@ -343,7 +343,7 @@ ide_application_local_command_line (GApplication   *application,
 
       if (dbus_address== NULL)
         {
-          g_printerr ("%s\n", _("Please provide a dbus address"));
+          g_printerr ("%s\n", _("Please provide a D-Bus address"));
           *exit_status = EXIT_FAILURE;
           goto cleanup;
         }
