@@ -103,7 +103,7 @@ try:
         @property
         def py__call__(self):
             def actual(evaluator, params):
-                # Pasrse the docstring to find the return type:
+                # Parse the docstring to find the return type:
                 ret_type = ''
                 if '->' in self.obj.__doc__:
                     ret_type = self.obj.__doc__.split('->')[1].strip()
@@ -112,11 +112,11 @@ try:
                     ret_type = ret_type[len('iter:'):]  # we don't care if it's an iterator
 
                 if ret_type in __builtins__:
-                    # The function we're insepcting returns a builtin python type, that's easy
+                    # The function we're inspecting returns a builtin python type, that's easy
                     obj = _create_from_name(builtin, builtin, ret_type)
                     return evaluator.execute(obj, params)
                 else:
-                    # The function we're insepcting returns a GObject type
+                    # The function we're inspecting returns a GObject type
                     parent = self.parent.obj.__name__
                     if parent.startswith('gi.repository'):
                         parent = parent[len('gi.repository.'):]
@@ -541,7 +541,7 @@ class JediCompletionRequest:
             params = []
 
             # we have to use custom names here because .type and .params can't
-            # be overriden (they are properties)
+            # be overridden (they are properties)
             if type(info._definition) == PatchedJediCompiledObject and \
                type(info._definition.obj) == FunctionInfo:
                     info.real_type = 'function'
