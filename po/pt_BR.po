@@ -1,7 +1,7 @@
 # Brazilian Portuguese translation for gnome-builder.
 # Copyright (C) 2015 gnome-builder's COPYRIGHT HOLDER
 # This file is distributed under the same license as the gnome-builder package.
-# Rafael Fontenelle <rffontenelle@gmail.com>, 2015.
+# Rafael Fontenelle <rffontenelle@gmail.com>, 2016.
 # Gustavo Marques <gutodisse@gmail.com>, 2015.
 #
 msgid ""
@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-02-09 07:45-0200\n"
-"PO-Revision-Date: 2016-02-09 08:15-0200\n"
+"POT-Creation-Date: 2016-02-10 08:04+0000\n"
+"PO-Revision-Date: 2016-02-10 09:15-0200\n"
 "Last-Translator: Rafael Fontenelle <rffontenelle@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <gnome-pt_br-list@gnome.org>\n"
 "Language: pt_BR\n"
@@ -691,12 +691,12 @@ msgstr "Nenhum arquivo foi fornecido."
 msgid "Line %u, Column %u"
 msgstr "Linha %u, coluna %u"
 
-#: ../libide/editor/ide-editor-frame.c:242
+#: ../libide/editor/ide-editor-frame.c:244
 #, c-format
 msgid "%u of %u"
 msgstr "%u de %u"
 
-#: ../libide/editor/ide-editor-frame.c:641
+#: ../libide/editor/ide-editor-frame.c:643
 #: ../plugins/project-tree/gtk/menus.ui.h:1
 msgid "Re_veal in Project Tree"
 msgstr "Re_velar em árvore de projeto"
@@ -1225,11 +1225,11 @@ msgstr "Uma visão distanciada para melhorar a navegação no código fonte"
 
 #: ../libide/preferences/ide-preferences-builtin.c:142
 msgid "Automatically hide overview map"
-msgstr "Oculta automaticamente mapa de visão geral"
+msgstr "Ocultar automaticamente mapa de visão geral"
 
 #: ../libide/preferences/ide-preferences-builtin.c:142
 msgid "Automatically hide map when editor loses focus"
-msgstr "Ocultar automaticamente o mapa quando o editor perder o foco"
+msgstr "Oculta automaticamente o mapa quando o editor perder o foco"
 
 #: ../libide/preferences/ide-preferences-builtin.c:144
 msgid "Whitespace Characters"
@@ -1272,7 +1272,7 @@ msgid ""
 "Use code insight to highlight additional information discovered in source "
 "file"
 msgstr ""
-"Usar compreensão de código para realçar informação adicional descoberta no "
+"Usa compreensão de código para realçar informação adicional descoberta no "
 "arquivo fonte"
 
 #: ../libide/preferences/ide-preferences-builtin.c:162
