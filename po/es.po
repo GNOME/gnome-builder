@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-02-01 08:03+0000\n"
-"PO-Revision-Date: 2016-02-01 09:35+0100\n"
+"POT-Creation-Date: 2016-02-07 20:03+0000\n"
+"PO-Revision-Date: 2016-02-08 15:48+0100\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Español; Castellano <gnome-es-list@gnome.org>\n"
 "Language: \n"
@@ -77,7 +77,6 @@ msgstr "La orden %u no está soportada en Trie."
 
 #: ../contrib/tmpl/tmpl-parser.c:199
 #, c-format
-#| msgid "%s() may only be executed once"
 msgid "%s() may only be called once"
 msgstr "%s() sólo se debe ejecutar una vez"
 
@@ -93,7 +92,6 @@ msgstr "Debe analizar la plantilla antes de expandirla"
 
 #: ../contrib/tmpl/tmpl-template-locator.c:105
 #, c-format
-#| msgid "Failed to locate device \"%s\""
 msgid "Failed to locate template \"%s\""
 msgstr "Falló al buscar la plantilla «%s»"
 
@@ -419,220 +417,320 @@ msgid "_Select"
 msgstr "_Seleccionar"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:1
+#| msgid "Editor Shortcuts"
+msgctxt "shortcut window"
 msgid "Editor Shortcuts"
 msgstr "Editor de atajos"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:2
-#: ../libide/preferences/ide-preferences-builtin.c:244
+#| msgid "General"
+msgctxt "shortcut window"
 msgid "General"
 msgstr "General"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:3
+#| msgid "Global Search"
+msgctxt "shortcut window"
 msgid "Global Search"
 msgstr "Búsqueda global"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:4
-#: ../libide/preferences/ide-preferences-perspective.c:796
+#| msgid "Preferences"
+msgctxt "shortcut window"
 msgid "Preferences"
 msgstr "Preferencias"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:5
+#| msgid "Command Bar"
+msgctxt "shortcut window"
 msgid "Command Bar"
 msgstr "Barra de comandos"
 
-#. XXX: This belongs in terminal addin
 #: ../data/ui/ide-shortcuts-window.ui.h:6
-#: ../libide/preferences/ide-preferences-builtin.c:104
-#: ../plugins/terminal/gb-terminal-workbench-addin.c:99
+#| msgid "Terminal"
+msgctxt "shortcut window"
 msgid "Terminal"
 msgstr "Terminal"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:7
+#| msgid "Keyboard Shortcuts"
+msgctxt "shortcut window"
 msgid "Keyboard Shortcuts"
 msgstr "Atajos del teclado"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:8
+#| msgid "Panels"
+msgctxt "shortcut window"
 msgid "Panels"
 msgstr "Paneles"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:9
+#| msgid "Toggle left panel"
+msgctxt "shortcut window"
 msgid "Toggle left panel"
 msgstr "Conmutar panel izquierdo"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:10
+#| msgid "Toggle right panel"
+msgctxt "shortcut window"
 msgid "Toggle right panel"
 msgstr "Conmutar panel derecho"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:11
+#| msgid "Toggle bottom panel"
+msgctxt "shortcut window"
 msgid "Toggle bottom panel"
 msgstr "Conmutar panel inferior"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:12
+#| msgid "Touchpad gestures"
+msgctxt "shortcut window"
 msgid "Touchpad gestures"
 msgstr "Gestos del «touchpad»"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:13
+#| msgid "Switch to the next document"
+msgctxt "shortcut window"
 msgid "Switch to the next document"
 msgstr "cambiar al siguiente documento"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:14
+#| msgid "Switch to the previous document"
+msgctxt "shortcut window"
 msgid "Switch to the previous document"
 msgstr "Cambiar al documento anterior"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:15
-#: ../plugins/project-tree/gb-project-tree-builder.c:77
+#| msgid "Files"
+msgctxt "shortcut window"
 msgid "Files"
 msgstr "Archivos"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:16
+#| msgid "Create new document"
+msgctxt "shortcut window"
 msgid "Create new document"
 msgstr "Crear un nuevo documento"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:17
+#| msgid "Open a document"
+msgctxt "shortcut window"
 msgid "Open a document"
 msgstr "Abrir un documento"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:18
+#| msgid "Save the document"
+msgctxt "shortcut window"
 msgid "Save the document"
 msgstr "Guardar el documento"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:19
+#| msgid "Close the document"
+msgctxt "shortcut window"
 msgid "Close the document"
 msgstr "Cerrar el documento."
 
 #: ../data/ui/ide-shortcuts-window.ui.h:20
+#| msgid "Find and replace"
+msgctxt "shortcut window"
 msgid "Find and replace"
 msgstr "Buscar y reemplazar"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:21
+#| msgid "Find"
+msgctxt "shortcut window"
 msgid "Find"
 msgstr "Buscar"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:22
+#| msgid "Find the next match"
+msgctxt "shortcut window"
 msgid "Find the next match"
 msgstr "Buscar la siguiente coincidencia"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:23
+#| msgid "Find the previous match"
+msgctxt "shortcut window"
 msgid "Find the previous match"
 msgstr "Buscar la coincidencia anterior"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:24
+#| msgid "Clear highlight"
+msgctxt "shortcut window"
 msgid "Clear highlight"
 msgstr "Limpiar resaltado"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:25
+#| msgid "Copy and Paste"
+msgctxt "shortcut window"
 msgid "Copy and Paste"
 msgstr "Copiar y pegar"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:26
+#| msgid "Copy selected text to clipboard"
+msgctxt "shortcut window"
 msgid "Copy selected text to clipboard"
 msgstr "Copiar el texto seleccionado al portapapeles"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:27
+#| msgid "Cut selected text to clipboard"
+msgctxt "shortcut window"
 msgid "Cut selected text to clipboard"
 msgstr "Cortar el texto seleccionado al portapapeles"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:28
+#| msgid "Paste text from clipboard"
+msgctxt "shortcut window"
 msgid "Paste text from clipboard"
 msgstr "Pegar texto del portapapeles"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:29
+#| msgid "Undo and Redo"
+msgctxt "shortcut window"
 msgid "Undo and Redo"
 msgstr "Deshacer y rehacer"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:30
+#| msgid "Undo previous command"
+msgctxt "shortcut window"
 msgid "Undo previous command"
 msgstr "Deshacer el comando anterior"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:31
+#| msgid "Redo previous command"
+msgctxt "shortcut window"
 msgid "Redo previous command"
 msgstr "Rehacer el comando anterior"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:32
+#| msgid "Editing"
+msgctxt "shortcut window"
 msgid "Editing"
-msgstr "Editando"
+msgstr "Edición"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:33
+#| msgid "Increment number at cursor"
+msgctxt "shortcut window"
 msgid "Increment number at cursor"
 msgstr "Aumentar el número en el cursor"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:34
+#| msgid "Decrement number at cursor"
+msgctxt "shortcut window"
 msgid "Decrement number at cursor"
 msgstr "Disminuir el número en el cursor"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:35
+#| msgid "Join selected lines"
+msgctxt "shortcut window"
 msgid "Join selected lines"
 msgstr "Unir las líneas seleccionadas"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:36
+#| msgid "Show completion window"
+msgctxt "shortcut window"
 msgid "Show completion window"
 msgstr "Mostrar la ventana de completado"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:37
+#| msgid "Toggle overwrite"
+msgctxt "shortcut window"
 msgid "Toggle overwrite"
 msgstr "Conmutar sobrescritura"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:38
+#| msgid "Reindent line"
+msgctxt "shortcut window"
 msgid "Reindent line"
 msgstr "Volver a sangrar la línea"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:39
+#| msgid "Navigation"
+msgctxt "shortcut window"
 msgid "Navigation"
 msgstr "Navegación"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:40
+#| msgid "Move to next error in file"
+msgctxt "shortcut window"
 msgid "Move to next error in file"
 msgstr "Mover al siguiente error en el archivo"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:41
+#| msgid "Move to previous error in file"
+msgctxt "shortcut window"
 msgid "Move to previous error in file"
 msgstr "Mover al anterior error en el archivo"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:42
+#| msgid "Move to previous edit location"
+msgctxt "shortcut window"
 msgid "Move to previous edit location"
 msgstr "Mover a la ubicación de edición anterior"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:43
+#| msgid "Move to next edit location"
+msgctxt "shortcut window"
 msgid "Move to next edit location"
 msgstr "Mover a la siguiente ubicación de edición"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:44
+#| msgid "Jump to definition of symbol"
+msgctxt "shortcut window"
 msgid "Jump to definition of symbol"
 msgstr "Saltar a la definición del símbolo"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:45
+#| msgid "Move sectionport up within the file"
+msgctxt "shortcut window"
 msgid "Move sectionport up within the file"
 msgstr "Mover la sección hacia arriba en el archivo"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:46
+#| msgid "Move sectionport down within the file"
+msgctxt "shortcut window"
 msgid "Move sectionport down within the file"
 msgstr "Mover la sección hacia abajo en el archivo"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:47
+#| msgid "Move sectionport to end of file"
+msgctxt "shortcut window"
 msgid "Move sectionport to end of file"
 msgstr "Mover la sección al final del archivo"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:48
+#| msgid "Move sectionport to beginning of file"
+msgctxt "shortcut window"
 msgid "Move sectionport to beginning of file"
 msgstr "Mover la sección al principio del archivo"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:49
+#| msgid "Move to matching bracket"
+msgctxt "shortcut window"
 msgid "Move to matching bracket"
 msgstr "Mover al corchete coincidente"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:50
+#| msgid "Selections"
+msgctxt "shortcut window"
 msgid "Selections"
 msgstr "Selecciones"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:51
+#| msgid "Select all"
+msgctxt "shortcut window"
 msgid "Select all"
 msgstr "Seleccionar todo"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:52
+#| msgid "Unselect all"
+msgctxt "shortcut window"
 msgid "Unselect all"
 msgstr "Deseleccionar todo"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:53
+#| msgid "Terminal Shortcuts"
+msgctxt "shortcut window"
 msgid "Terminal Shortcuts"
 msgstr "Atajos de la terminal"
 
@@ -665,25 +763,25 @@ msgstr "_Mostrar en el árbol del proyectos"
 msgid "Editor"
 msgstr "Editor"
 
-#: ../libide/editor/ide-editor-view-actions.c:300
+#: ../libide/editor/ide-editor-view-actions.c:301
 msgid "Save Document"
 msgstr "Guardar documento"
 
-#: ../libide/editor/ide-editor-view-actions.c:306
-#: ../libide/editor/ide-editor-view-actions.c:437
+#: ../libide/editor/ide-editor-view-actions.c:307
+#: ../libide/editor/ide-editor-view-actions.c:438
 #: ../libide/ide-workbench-actions.c:67
 #: ../plugins/build-tools/gbp-build-panel.ui.h:13
 #: ../plugins/terminal/gb-terminal-view-actions.c:305
 msgid "Cancel"
 msgstr "Cancelar"
 
-#: ../libide/editor/ide-editor-view-actions.c:307
-#: ../libide/editor/ide-editor-view-actions.c:438
+#: ../libide/editor/ide-editor-view-actions.c:308
+#: ../libide/editor/ide-editor-view-actions.c:439
 #: ../plugins/terminal/gb-terminal-view-actions.c:306
 msgid "Save"
 msgstr "Guardar"
 
-#: ../libide/editor/ide-editor-view-actions.c:426
+#: ../libide/editor/ide-editor-view-actions.c:427
 msgid "Save Document As"
 msgstr "Guardar documento como"
 
@@ -761,7 +859,8 @@ msgid "Show the application's version"
 msgstr "Mostrar la versión de la aplicación"
 
 #: ../libide/ide-application-command-line.c:198
-msgid "Increase verbosity, may specify multiple times"
+#| msgid "Increase verbosity, may specify multiple times"
+msgid "Increase verbosity, may be specified multiple times"
 msgstr "Aumentar el nivel de detalle. Se puede especificar varias veces."
 
 #: ../libide/ide-application-command-line.c:228
@@ -785,7 +884,8 @@ msgid "Please provide a worker type"
 msgstr "Proporcione un tipo de trabajador"
 
 #: ../libide/ide-application-command-line.c:346
-msgid "Please provide a dbus address"
+#| msgid "Please provide a dbus address"
+msgid "Please provide a D-Bus address"
 msgstr "Proporcione una dirección de D-Bus"
 
 #: ../libide/ide-application-command-line.c:355
@@ -936,7 +1036,8 @@ msgid "Invalid %-encoding in URI"
 msgstr "Codificación %-e del URI no válida"
 
 #: ../libide/ide-uri.c:219
-msgid "Non-UTF8 characters in URI"
+#| msgid "Non-UTF8 characters in URI"
+msgid "Non-UTF-8 characters in URI"
 msgstr "Caracteres no UTF-8 en el URI"
 
 #: ../libide/ide-uri.c:366 ../libide/ide-uri.c:377
@@ -1043,6 +1144,12 @@ msgstr "Tipografía"
 msgid "editor font monospace"
 msgstr "tipografía monoespaciada del editor"
 
+#. XXX: This belongs in terminal addin
+#: ../libide/preferences/ide-preferences-builtin.c:104
+#: ../plugins/terminal/gb-terminal-workbench-addin.c:99
+msgid "Terminal"
+msgstr "Terminal"
+
 #: ../libide/preferences/ide-preferences-builtin.c:104
 msgid "terminal font monospace"
 msgstr "tipografía monoespaciada de la terminal"
@@ -1056,7 +1163,8 @@ msgid "Emulation"
 msgstr "Emulación"
 
 #: ../libide/preferences/ide-preferences-builtin.c:113
-msgid "Default keybinding mode which mimics Gedit"
+#| msgid "Default keybinding mode which mimics Gedit"
+msgid "Default keybinding mode which mimics gedit"
 msgstr "Modo de asociación de teclas predeterminado que imita a Gedit"
 
 #: ../libide/preferences/ide-preferences-builtin.c:114
@@ -1267,7 +1375,6 @@ msgid "Use Clang to suggest completions for C and C++ languages"
 msgstr "Usar Clang para sugerir completado en los lenguajes C y C++"
 
 #: ../libide/preferences/ide-preferences-builtin.c:167
-#| msgid "Highlight Diagnostics"
 msgid "Diagnostics"
 msgstr "Diagnósticos"
 
@@ -1284,13 +1391,17 @@ msgid "Programming Languages"
 msgstr "Lenguajes de programación"
 
 #: ../libide/preferences/ide-preferences-builtin.c:227
-msgid "Trim trialing whitespace"
-msgstr "Eliminar espacios en blanco"
+#| msgid "Trim trialing whitespace"
+msgid "Trim trailing whitespace"
+msgstr "Eliminar espacios en blanco al final"
 
 #: ../libide/preferences/ide-preferences-builtin.c:227
-msgid "Upon saving, trailing whitespcae from modified lines will be trimmed."
+#| msgid ""
+#| "Upon saving, trailing whitespcae from modified lines will be trimmed."
+msgid "Upon saving, trailing whitespace from modified lines will be trimmed."
 msgstr ""
-"Al guardar, se eliminarán los espacios en blanco de las líneas modificadas"
+"Al guardar, se eliminarán los espacios en blanco del final de las líneas "
+"modificadas."
 
 #: ../libide/preferences/ide-preferences-builtin.c:229
 msgid "Margins"
@@ -1337,6 +1448,10 @@ msgstr "Sangrar el código fuente a medida que escribe"
 msgid "Build"
 msgstr "Construir"
 
+#: ../libide/preferences/ide-preferences-builtin.c:244
+msgid "General"
+msgstr "General"
+
 #: ../libide/preferences/ide-preferences-builtin.c:245
 msgid "Build Workers"
 msgstr "Construir trabajadores"
@@ -1344,6 +1459,10 @@ msgstr "Construir trabajadores"
 #: ../libide/preferences/ide-preferences-builtin.c:245
 msgid "Number of parallel build workers"
 msgstr "Número de constructores en paralelo"
+
+#: ../libide/preferences/ide-preferences-perspective.c:796
+msgid "Preferences"
+msgstr "Preferencias"
 
 #: ../libide/pygobject/ide-pygobject-script.c:135
 msgid "Attempt to load a PyGObject script with no filename."
@@ -1601,7 +1720,8 @@ msgid "Clean the project"
 msgstr "Limpiar el proyecto"
 
 #: ../plugins/build-tools/gbp-build-tool.c:256
-msgid "The id of the device to build for"
+#| msgid "The id of the device to build for"
+msgid "The ID of the device to build for"
 msgstr "El ID del dispositivo para el que construir"
 
 #: ../plugins/build-tools/gbp-build-tool.c:257
@@ -1671,55 +1791,62 @@ msgstr "Comando no encontrado: %s"
 msgid "Use the entry below to execute a command"
 msgstr "Use la siguiente entrada para ejecutar un comando"
 
-#: ../plugins/command-bar/gb-vim.c:82
+#: ../plugins/command-bar/gb-vim.c:86
 #, c-format
 msgid "Number required"
 msgstr "Número requerido"
 
-#: ../plugins/command-bar/gb-vim.c:92
+#: ../plugins/command-bar/gb-vim.c:96
 #, c-format
 msgid "%s is invalid for %s"
 msgstr "%s no es válido para %s"
 
-#: ../plugins/command-bar/gb-vim.c:150
+#: ../plugins/command-bar/gb-vim.c:154
 #, c-format
 msgid "Cannot find language '%s'"
 msgstr "No se puede encontrar el idioma «%s»"
 
-#: ../plugins/command-bar/gb-vim.c:347
+#: ../plugins/command-bar/gb-vim.c:311
+#, c-format
+#| msgid "vim mode requires GtkSourceView"
+msgid "This command requires a GtkSourceView to be focused"
+msgstr "Este comando requiere que el GtkSourceView tenga el foco"
+
+#: ../plugins/command-bar/gb-vim.c:322
+#, c-format
+msgid "This command requires a view to be focused"
+msgstr "Este comando requiere que la vista tenga el foco"
+
+#: ../plugins/command-bar/gb-vim.c:379
 #, c-format
 msgid "Unknown option: %s"
 msgstr "Opción desconocida: %s"
 
-#: ../plugins/command-bar/gb-vim.c:386
+#: ../plugins/command-bar/gb-vim.c:422
 #, c-format
 msgid "Cannot find colorscheme '%s'"
 msgstr "No se puede encontrar el esquema de color «%s»"
 
-#: ../plugins/command-bar/gb-vim.c:422
+#: ../plugins/command-bar/gb-vim.c:463
 #, c-format
 msgid "Failed to locate working directory"
 msgstr "Falló al buscar la carpeta de trabajo"
 
-#: ../plugins/command-bar/gb-vim.c:546
+#: ../plugins/command-bar/gb-vim.c:640
 #, c-format
 msgid "Invalid :syntax subcommand: %s"
 msgstr "Subcomando :syntax no válido: %s"
 
-#: ../plugins/command-bar/gb-vim.c:875
+#: ../plugins/command-bar/gb-vim.c:1022
 #, c-format
 msgid "Invalid search and replace request"
 msgstr "Solicitud de buscar y reemplazar no válida"
 
-#: ../plugins/command-bar/gb-vim.c:962
+#: ../plugins/command-bar/gb-vim.c:1127
 #, c-format
-msgid "vim mode requires GtkSourceView"
-msgstr "el modo de vim necesita GtkSourceView"
-
-#: ../plugins/command-bar/gb-vim.c:992
-#, c-format
-msgid "Not an editor command: %s"
-msgstr "No es un comando del editor: %s"
+#| msgid "Not an editor command: %s"
+msgid "Not a command: %s"
+msgstr "No es un comando: %s"
 
 #: ../plugins/contributing/contributing_plugin/helper.py:76
 #, python-format
@@ -1778,7 +1905,6 @@ msgid "Format Strings"
 msgstr "Cadenas de formato"
 
 #: ../plugins/create-project/gbp-create-project-tool.c:130
-#| msgid "List available subcommands"
 msgid "List available templates"
 msgstr "Lista de plantillas disponibles"
 
@@ -1792,13 +1918,12 @@ msgstr "create-project [OPCIÓN...] NOMBRE_PROYECTO"
 
 #: ../plugins/create-project/gbp-create-project-tool.c:187
 #, c-format
-#| msgid "File name must not contain subdirectories."
-msgid "Filename must be ascii and may not contain : or ="
+#| msgid "Filename must be ascii and may not contain : or ="
+msgid "Filename must be ASCII and may not contain : or ="
 msgstr "El nombre del archivo debe ser ASCII y no debe contener : ni ="
 
 #: ../plugins/create-project/gbp-create-project-tool.c:291
 #, c-format
-#| msgid "Missing project name"
 msgid "Please specify a project name.\n"
 msgstr "Especifique un nombre de proyecto.\n"
 
@@ -1953,6 +2078,10 @@ msgstr "_Crear"
 msgid "Project"
 msgstr "Proyecto"
 
+#: ../plugins/project-tree/gb-project-tree-builder.c:77
+msgid "Files"
+msgstr "Archivos"
+
 #: ../plugins/project-tree/gb-rename-file-popover.c:79
 #, c-format
 msgid "Rename %s"
@@ -2069,7 +2198,6 @@ msgid "Show errors and warnings provided by Vala"
 msgstr "Mostrar errores y advertencias proporcionadas por Vala"
 
 #: ../plugins/vala-pack/ide-vala-preferences-addin.vala:35
-#| msgid "If diagnostic warnings and errors should be highlighted."
 msgid "vala diagnostics warnings errors"
 msgstr "diagnósticos de alertas y errores de Vala"
 
