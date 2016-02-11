@@ -8,26 +8,16 @@ contrib/tmpl/tmpl-parser.c
 contrib/tmpl/tmpl-template.c
 contrib/tmpl/tmpl-template-locator.c
 contrib/xml/xml-reader.c
-data/gsettings/org.gnome.builder.build.gschema.xml
-data/gsettings/org.gnome.builder.code-insight.gschema.xml.in
-data/gsettings/org.gnome.builder.editor.gschema.xml
-data/gsettings/org.gnome.builder.extension-type.gschema.xml
-data/gsettings/org.gnome.builder.gschema.xml
-data/gsettings/org.gnome.builder.plugin.gschema.xml
-data/gsettings/org.gnome.builder.project-tree.gschema.xml
-data/gsettings/org.gnome.builder.workbench.gschema.xml
-data/gtk/menus.ui
-data/org.gnome.Builder.appdata.xml
-data/org.gnome.Builder.desktop
+[type: gettext/glade]data/gtk/menus.ui
 data/style-schemes/builder-dark.xml
 data/style-schemes/builder.xml
-data/ui/ide-editor-frame.ui
-data/ui/ide-editor-tweak-widget.ui
-data/ui/ide-editor-view.ui
-data/ui/ide-genesis-perspective.ui
-data/ui/ide-greeter-perspective.ui
-data/ui/ide-preferences-font-button.ui
-data/ui/ide-shortcuts-window.ui
+[type: gettext/glade]data/ui/ide-editor-frame.ui
+[type: gettext/glade]data/ui/ide-editor-tweak-widget.ui
+[type: gettext/glade]data/ui/ide-editor-view.ui
+[type: gettext/glade]data/ui/ide-genesis-perspective.ui
+[type: gettext/glade]data/ui/ide-greeter-perspective.ui
+[type: gettext/glade]data/ui/ide-preferences-font-button.ui
+[type: gettext/glade]data/ui/ide-shortcuts-window.ui
 libide/directory/ide-directory-genesis-addin.c
 libide/editorconfig/ide-editorconfig-file-settings.c
 libide/editor/ide-editor-frame.c
@@ -70,7 +60,7 @@ plugins/autotools/ide-autotools-build-system.c
 plugins/autotools/ide-autotools-build-task.c
 plugins/autotools/ide-makecache.c
 plugins/build-tools/gbp-build-panel-row.c
-plugins/build-tools/gbp-build-panel.ui
+[type: gettext/glade]plugins/build-tools/gbp-build-panel.ui
 plugins/build-tools/gbp-build-tool.c
 plugins/build-tools/gbp-build-workbench-addin.c
 plugins/clang/ide-clang-service.c
@@ -85,34 +75,34 @@ plugins/create-project/gbp-create-project-tool.c
 plugins/devhelp/gbp-devhelp-search-provider.c
 plugins/devhelp/gbp-devhelp-workbench-addin.c
 plugins/file-search/gb-file-search-provider.c
-plugins/fpaste/fpaste_plugin/gtk/menus.ui
+[type: gettext/glade]plugins/fpaste/fpaste_plugin/gtk/menus.ui
 plugins/fpaste/fpaste_plugin/__init__.py
 plugins/git/ide-git-buffer-change-monitor.c
 plugins/git/ide-git-clone-widget.c
-plugins/git/ide-git-clone-widget.ui
+[type: gettext/glade]plugins/git/ide-git-clone-widget.ui
 plugins/git/ide-git-genesis-addin.c
 plugins/git/ide-git-preferences-addin.c
 plugins/gnome-code-assistance/ide-gca-diagnostic-provider.c
 plugins/gnome-code-assistance/ide-gca-service.c
-plugins/html-preview/html_preview_plugin/gtk/menus.ui
+[type: gettext/glade]plugins/html-preview/html_preview_plugin/gtk/menus.ui
 plugins/jedi/jedi_plugin.py
 plugins/library-template/library_template/__init__.py
 plugins/mingw/ide-mingw-device-provider.c
 plugins/project-tree/gb-new-file-popover.c
-plugins/project-tree/gb-new-file-popover.ui
+[type: gettext/glade]plugins/project-tree/gb-new-file-popover.ui
 plugins/project-tree/gb-project-tree-addin.c
 plugins/project-tree/gb-project-tree-builder.c
 plugins/project-tree/gb-rename-file-popover.c
-plugins/project-tree/gb-rename-file-popover.ui
-plugins/project-tree/gtk/menus.ui
+[type: gettext/glade]plugins/project-tree/gb-rename-file-popover.ui
+[type: gettext/glade]plugins/project-tree/gtk/menus.ui
 plugins/python-pack/ide-python-format-provider.c
-plugins/support/gtk/menus.ui
+[type: gettext/glade]plugins/support/gtk/menus.ui
 plugins/support/ide-support-application-addin.c
 plugins/symbol-tree/symbol-tree.c
 plugins/symbol-tree/symbol-tree-panel.c
 plugins/sysmon/gb-sysmon-addin.c
 plugins/terminal/gb-terminal-view-actions.c
 plugins/terminal/gb-terminal-workbench-addin.c
-plugins/terminal/gtk/menus.ui
+[type: gettext/glade]plugins/terminal/gtk/menus.ui
 plugins/todo/todo_plugin/__init__.py
 plugins/vala-pack/ide-vala-preferences-addin.vala
