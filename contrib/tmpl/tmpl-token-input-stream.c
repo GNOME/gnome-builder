@@ -21,6 +21,7 @@
 struct _TmplTokenInputStream
 {
   GDataInputStream parent_instance;
+  guint swallow_newline : 1;
 };
 
 G_DEFINE_TYPE (TmplTokenInputStream, tmpl_token_input_stream, G_TYPE_DATA_INPUT_STREAM)
@@ -212,6 +213,19 @@ tmpl_token_input_stream_read_token (TmplTokenInputStream  *self,
     return NULL;
 
   /*
+   * If we start with a newline, and need to swallow it (as can happen if the
+   * last tag was at the end of the line), skip past the newline.
+   */
+  if (self->swallow_newline && *text == '\n')
+    {
+      gchar *tmp = g_strdup (text + 1);
+      g_free (text);
+      text = tmp;
+    }
+
+  self->swallow_newline = FALSE;
+
+  /*
    * Handle successful read up to \ or {.
    */
   if (*text != '\0')
@@ -283,6 +297,8 @@ tmpl_token_input_stream_read_token (TmplTokenInputStream  *self,
    */
   if (!(text = tmpl_token_input_stream_read_tag (self, &len, cancellable, error)))
     return NULL;
+
+  self->swallow_newline = TRUE;
 
   return tmpl_token_new_generic (text);
 }
