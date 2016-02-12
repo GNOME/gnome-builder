@@ -51,8 +51,18 @@ typedef struct
 
 static void ide_perspective_iface_init (IdePerspectiveInterface *iface);
 
+static void ide_editor_perspective_add (GtkContainer *container, GtkWidget *widget);
+
 G_DEFINE_TYPE_EXTENDED (IdeEditorPerspective, ide_editor_perspective, IDE_TYPE_LAYOUT, 0,
                         G_IMPLEMENT_INTERFACE (IDE_TYPE_PERSPECTIVE, ide_perspective_iface_init))
+
+enum {
+  VIEW_ADDED,
+  VIEW_REMOVED,
+  LAST_SIGNAL
+};
+
+static guint signals [LAST_SIGNAL];
 
 static void
 ide_editor_perspective_restore_panel_state (IdeEditorPerspective *self)
@@ -166,7 +176,7 @@ ide_editor_perspective_load_buffer (IdeEditorPerspective *self,
 
   stack = ide_layout_grid_get_last_focus (self->grid);
 
-  gtk_container_add (GTK_CONTAINER (stack), GTK_WIDGET (view));
+  ide_editor_perspective_add (GTK_CONTAINER (self), GTK_WIDGET (view));
 
   workbench = ide_widget_get_workbench (GTK_WIDGET (stack));
   ide_workbench_focus (workbench, GTK_WIDGET (view));
@@ -270,6 +280,13 @@ ide_editor_perspective_finalize (GObject *object)
 }
 
 static void
+ide_editor_perspective_view_weak_cb (IdeEditorPerspective *self,
+                                     IdeLayoutView        *view)
+{
+  g_signal_emit (self, signals [VIEW_REMOVED], 0, view);
+}
+
+static void
 ide_editor_perspective_add (GtkContainer *container,
                             GtkWidget    *widget)
 {
@@ -284,6 +301,11 @@ ide_editor_perspective_add (GtkContainer *container,
 
       last_focus = ide_layout_grid_get_last_focus (self->grid);
       gtk_container_add (GTK_CONTAINER (last_focus), widget);
+      g_object_weak_ref (G_OBJECT (widget),
+                         (GWeakNotify)ide_editor_perspective_view_weak_cb,
+                         container);
+
+      g_signal_emit (self, signals [VIEW_ADDED], 0, widget);
       return;
     }
 
@@ -305,6 +327,26 @@ ide_editor_perspective_class_init (IdeEditorPerspectiveClass *klass)
   gtk_widget_class_bind_template_child (widget_class, IdeEditorPerspective, actions);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorPerspective, grid);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorPerspective, titlebar);
+
+  signals[VIEW_ADDED] =
+    g_signal_new ("view-added",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  0,
+                  NULL, NULL, NULL,
+                  G_TYPE_NONE,
+                  1,
+                  GTK_TYPE_WIDGET);
+
+  signals[VIEW_REMOVED] =
+    g_signal_new ("view-removed",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  0,
+                  NULL, NULL, NULL,
+                  G_TYPE_NONE,
+                  1,
+                  GTK_TYPE_WIDGET);
 }
 
 static void
