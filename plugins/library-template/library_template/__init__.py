@@ -121,7 +121,7 @@ class LibraryProjectTemplate(Ide.TemplateBase, Ide.ProjectTemplate):
             'shared-library/m4/vala.m4':                     'm4/vala.m4',
             'shared-library/m4/vapigen.m4':                  'm4/vapigen.m4',
 
-            'shared-library/data/package.pc.in':             'data/%(name)s-1.0.pc.in',
+            'shared-library/data/package.pc.in':             'data/%(name)s.pc.in',
             'shared-library/data/Makefile.am':               'data/Makefile.am',
             'shared-library/po/Makevars':                    'po/Makevars',
             'shared-library/po/POTFILES.in':                 'po/POTFILES.in',
