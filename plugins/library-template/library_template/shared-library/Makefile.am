@@ -1,8 +1,6 @@
 SUBDIRS = \
 	data \
-{{if enable_i18n}}
-	po \
-{{end}}
+	{{if enable_i18n}}po \{{end}}
 	src \
 	$(NULL)
 
