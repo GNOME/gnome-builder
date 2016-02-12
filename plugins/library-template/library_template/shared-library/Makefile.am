@@ -19,7 +19,7 @@ AUTHORS:
 		&& mv -f $@.tmp $@ \
 		|| ( rm -f $@.tmp ; \
 		     echo Failed to generate $@ >&2 ); \
-	fi
+	else touch $@; fi
 
 # Generate the ChangeLog.
 @GENERATE_CHANGELOG_RULES@
