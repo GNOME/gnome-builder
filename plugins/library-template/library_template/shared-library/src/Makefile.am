@@ -5,7 +5,7 @@ lib{{name_}}_@API_VERSION@_la_SOURCES = \
 	{{name}}.h \
 	$(NULL)
 
-lib{{name_}}_@API_VERSION@_la_CFLAGS =
+lib{{name_}}_@API_VERSION@_la_CFLAGS = \
 	$({{NAME}}_CFLAGS) \
 	$(WARN_CFLAGS) \
 	$(NULL)
