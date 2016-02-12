@@ -1,0 +1,9 @@
+[Plugin]
+Module=gettext-plugin
+Name=Gettext
+Description=Provides integration with Gettext
+Authors=Christian Hergert <christian@hergert.me>
+Copyright=Copyright © 2015 Christian Hergert
+Builtin=true
+X-Diagnostic-Provider-Languages=c,chdr,cpp,js,python,vala
+X-Diagnostic-Provider-Languages-Priority=100

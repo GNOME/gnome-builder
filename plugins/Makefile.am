@@ -11,6 +11,7 @@ SUBDIRS = \
 	file-search \
 	fpaste \
 	gcc \
+	gettext \
 	git \
 	gnome-code-assistance \
 	html-completion \
