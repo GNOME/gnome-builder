@@ -42,6 +42,12 @@ AM_INIT_AUTOMAKE([1.11 foreign subdir-objects tar-ustar no-dist-gzip dist-xz -Wn
 AM_MAINTAINER_MODE([enable])
 AX_GENERATE_CHANGELOG
 
+dnl ***********************************************************************
+dnl Add extra debugging with --enable-debug and --enable-compile-warnings
+dnl ***********************************************************************
+AX_CHECK_ENABLE_DEBUG([no],[]
+                      [G_DISABLE_ASSERT G_DISABLE_CHECKS G_DISABLE_CAST_CHECKS])
+AX_COMPILER_FLAGS
 
 {{if enable_i18n}}
 dnl ***********************************************************************
@@ -78,14 +84,6 @@ dnl ***********************************************************************
 dnl Check for required packages
 dnl ***********************************************************************
 PKG_CHECK_MODULES({{NAME}}, [{{packages}}])
-
-
-dnl ***********************************************************************
-dnl Add extra debugging with --enable-debug
-dnl ***********************************************************************
-AX_CHECK_ENABLE_DEBUG([no],[]
-                      [G_DISABLE_ASSERT G_DISABLE_CHECKS G_DISABLE_CAST_CHECKS])
-AX_COMPILER_FLAGS
 
 
 dnl ***********************************************************************
