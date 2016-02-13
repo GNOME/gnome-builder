@@ -674,4 +674,4 @@ class JediPreferences(GObject.Object, Ide.PreferencesAddin):
                 None, 30)
 
     def do_unload(self, prefs):
-        self.prefs.remove(self.completion_id)
+        prefs.remove_id(self.completion_id)
