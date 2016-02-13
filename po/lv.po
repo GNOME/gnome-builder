@@ -1,0 +1,2117 @@
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Rūdolfs Mazurs <rudolfs.mazurs@gmail.com>, 2016.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-bu"
+"ilder&keywords=I18N+L10N&component=general\n"
+"POT-Creation-Date: 2016-02-12 17:02+0000\n"
+"PO-Revision-Date: 2016-02-13 11:03+0200\n"
+"Last-Translator: Rūdolfs Mazurs <rudolfs.mazurs@gmail.com>\n"
+"Language-Team: Latvian <lata-l10n@googlegroups.com>\n"
+"Language: lv\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : "
+"2);\n"
+"X-Generator: Lokalize 2.0\n"
+
+#: ../contrib/egg/egg-animation.c:715
+#, c-format
+msgid "Cannot locate property %s in class %s"
+msgstr "Nevar atrast īpašību %s klasē %s"
+
+#: ../contrib/egg/egg-animation.c:1055 ../contrib/egg/egg-animation.c:1061
+#, c-format
+msgid "Failed to find property %s in %s"
+msgstr "Neizdevās atrast īpašību %s iekš %s"
+
+#: ../contrib/egg/egg-animation.c:1069
+#, c-format
+msgid "Failed to find property %s in %s or parent %s"
+msgstr "Neizdevās atrast īpašību %s iekš %s vai vecākā %s"
+
+#: ../contrib/egg/egg-animation.c:1079
+#, c-format
+msgid "Failed to retrieve va_list value: %s"
+msgstr "Neizdevās saņemt va_list vērtību: %s"
+
+#: ../contrib/egg/egg-date-time.c:55
+msgid "Just now"
+msgstr "Tikko"
+
+#: ../contrib/egg/egg-date-time.c:57
+msgid "An hour ago"
+msgstr "Pirms stundas"
+
+#: ../contrib/egg/egg-date-time.c:59
+msgid "Yesterday"
+msgstr "Vakar"
+
+#: ../contrib/egg/egg-date-time.c:65
+msgid "About a year ago"
+msgstr "Apmēram pirms gada"
+
+#: ../contrib/egg/egg-date-time.c:69
+#, c-format
+msgid "About %u year ago"
+msgid_plural "About %u years ago"
+msgstr[0] "Apmēram pirms %u gada"
+msgstr[1] "Apmēram pirms %u gadiem"
+msgstr[2] "Apmēram pirms %u gadiem"
+
+#: ../contrib/egg/egg-search-bar.c:378
+msgid "Search"
+msgstr "Meklēt"
+
+#: ../contrib/search/trie.c:790
+#, c-format
+msgid "Traversal order %u is not supported on Trie."
+msgstr "Apstaigāšanas secība %u nav atbalstīta uz Trie."
+
+#: ../contrib/tmpl/tmpl-parser.c:199
+#, c-format
+msgid "%s() may only be called once"
+msgstr "%s() var izsaukt tikai vienu reizi"
+
+#: ../contrib/tmpl/tmpl-parser.c:211
+#, c-format
+msgid "Parser does not contain an input stream"
+msgstr "Parsētājus nesatur ievades straumi"
+
+#: ../contrib/tmpl/tmpl-template.c:451
+#, c-format
+msgid "Must parse template before expanding"
+msgstr "Pirms izvēršanas jāparsē veidne"
+
+#: ../contrib/tmpl/tmpl-template-locator.c:105
+#, c-format
+msgid "Failed to locate template \"%s\""
+msgstr "Neizdevās atrast veidni “%s”"
+
+#: ../contrib/xml/xml-reader.c:327
+#, c-format
+msgid "Could not parse XML from stream"
+msgstr "Nevarēja parsēt XML no straumes"
+
+#: ../data/gtk/menus.ui.h:1
+msgid "_New Project"
+msgstr "Jau_ns projekts"
+
+#: ../data/gtk/menus.ui.h:2
+msgid "_Open Project"
+msgstr "_Atvērt projektu"
+
+#: ../data/gtk/menus.ui.h:3
+msgid "_Preferences"
+msgstr "_Iestatījumi"
+
+#: ../data/gtk/menus.ui.h:4
+msgid "Keyboard _Shortcuts"
+msgstr "Tastatūra_s īsinājumtaustiņi"
+
+#: ../data/gtk/menus.ui.h:5
+msgid "_Help"
+msgstr "_Palīdzība"
+
+#: ../data/gtk/menus.ui.h:6
+msgid "_About"
+msgstr "P_ar"
+
+#: ../data/gtk/menus.ui.h:7
+msgid "_Quit"
+msgstr "_Iziet"
+
+#: ../data/gtk/menus.ui.h:8 ../data/ui/ide-editor-view.ui.h:1
+msgid "_Reload"
+msgstr "Pā_rlādēt"
+
+#: ../data/gtk/menus.ui.h:9
+msgid "_Print…"
+msgstr "_Drukāt..."
+
+#: ../data/gtk/menus.ui.h:10
+msgid "_Fullscreen"
+msgstr "_Pilnekrāns"
+
+#: ../data/gtk/menus.ui.h:11
+msgid "_New File"
+msgstr "Jau_na datne"
+
+#: ../data/gtk/menus.ui.h:12
+msgid "_Open File"
+msgstr "_Atvērt datni"
+
+#: ../data/gtk/menus.ui.h:13
+msgid "Save _All"
+msgstr "S_aglabāt visu"
+
+#: ../data/gtk/menus.ui.h:14
+msgid "_Close All"
+msgstr "_Aizvērt visus"
+
+#: ../data/gtk/menus.ui.h:15
+msgid "_Go to Definition"
+msgstr "_Iet uz definīciju"
+
+#: ../data/gtk/menus.ui.h:16
+msgid "_Undo"
+msgstr "Atsa_ukt"
+
+#: ../data/gtk/menus.ui.h:17
+msgid "_Redo"
+msgstr "Ata_tsaukt"
+
+#: ../data/gtk/menus.ui.h:18
+msgid "C_ut"
+msgstr "I_zgriezt"
+
+#: ../data/gtk/menus.ui.h:19
+msgid "_Copy"
+msgstr "_Kopēt"
+
+#: ../data/gtk/menus.ui.h:20
+msgid "_Paste"
+msgstr "_Ielīmēt"
+
+#: ../data/gtk/menus.ui.h:21
+msgid "_Delete"
+msgstr "_Dzēst"
+
+#: ../data/gtk/menus.ui.h:22
+msgid "Selection"
+msgstr "Izvēle"
+
+#: ../data/gtk/menus.ui.h:23
+msgid "Select _All"
+msgstr "Izvēlēties _visu"
+
+#: ../data/gtk/menus.ui.h:24
+msgid "Select _None"
+msgstr "Iezīmēt _neko"
+
+#: ../data/gtk/menus.ui.h:25
+msgid "All _Upper Case"
+msgstr "Visi lielie b_urti"
+
+#: ../data/gtk/menus.ui.h:26
+msgid "All _Lower Case"
+msgstr "Visi _mazie burti"
+
+#: ../data/gtk/menus.ui.h:27
+msgid "_Invert Case"
+msgstr "Pārslēgt reģ_istru"
+
+#: ../data/gtk/menus.ui.h:28
+msgid "_Title Case"
+msgstr "Virsraks_ta reģistrs"
+
+#: ../data/gtk/menus.ui.h:29
+msgid "Join Lines"
+msgstr "Savienot rindas"
+
+#: ../data/gtk/menus.ui.h:30
+msgid "Sort Lines"
+msgstr "Kārtot rindas"
+
+#: ../data/gtk/menus.ui.h:31
+msgid "Zoom"
+msgstr "Mērogs"
+
+#: ../data/gtk/menus.ui.h:32
+msgid "Zoom _In"
+msgstr "Tuv_ināt"
+
+#: ../data/gtk/menus.ui.h:33
+msgid "Zoom _Out"
+msgstr "Tā_lināt"
+
+#: ../data/gtk/menus.ui.h:34
+msgid "Reset"
+msgstr "Atstatīt"
+
+#: ../data/gtk/menus.ui.h:35
+msgid "Split"
+msgstr "Sadalīt"
+
+#: ../data/gtk/menus.ui.h:36
+msgid "Split Left"
+msgstr "Sadalīt pa kreisi"
+
+#: ../data/gtk/menus.ui.h:37
+msgid "Split Right"
+msgstr "Sadalīt pa labi"
+
+#: ../data/gtk/menus.ui.h:38
+msgid "Split Down"
+msgstr "Sadalīt lejup"
+
+#: ../data/gtk/menus.ui.h:39
+msgid "Move"
+msgstr "Pārvietot"
+
+#: ../data/gtk/menus.ui.h:40
+msgid "Move Left"
+msgstr "Pārvietot pa kreisi"
+
+#: ../data/gtk/menus.ui.h:41
+msgid "Move Right"
+msgstr "Pārvietot pa labi"
+
+#: ../data/gtk/menus.ui.h:42
+msgid "_Save"
+msgstr "_Saglabāt"
+
+#: ../data/gtk/menus.ui.h:43
+msgid "_Save As"
+msgstr "_Saglabāt kā"
+
+#: ../data/gtk/menus.ui.h:44
+msgid "_Print"
+msgstr "_Drukāt"
+
+#: ../data/gtk/menus.ui.h:45
+msgid "_Close"
+msgstr "_Aizvērt"
+
+#: ../data/style-schemes/builder-dark.xml.h:1
+msgid "Builder Dark"
+msgstr "Būvētāja tumšais"
+
+#: ../data/style-schemes/builder-dark.xml.h:2
+msgid "Dark color scheme for Builder using the Tango color palette"
+msgstr "Tumša krāsu shēma būvētājam, izmantojot Tango krāsu paleti"
+
+#: ../data/style-schemes/builder.xml.h:1 ../libide/ide-application.c:404
+#: ../libide/preferences/ide-preferences-builtin.c:113
+msgid "Builder"
+msgstr "Būvētājs"
+
+#: ../data/style-schemes/builder.xml.h:2
+msgid "The default color scheme for Builder"
+msgstr "Noklusējuma krāsu salikums būvētāja lietotnei"
+
+#. OVR indicates we are in overwite mode
+#: ../data/ui/ide-editor-frame.ui.h:2
+msgid "OVR"
+msgstr "PĀR"
+
+#: ../data/ui/ide-editor-tweak-widget.ui.h:1
+msgid "Search highlight mode…"
+msgstr "Meklēšanas izcelšanas veids…"
+
+#: ../data/ui/ide-editor-tweak-widget.ui.h:2
+msgid "Display line numbers"
+msgstr "Rādīt rindu numurus"
+
+#: ../data/ui/ide-editor-tweak-widget.ui.h:3
+msgid "Display right margin"
+msgstr "Rādīt labo malu"
+
+#: ../data/ui/ide-editor-tweak-widget.ui.h:4
+msgid "Highlight current line"
+msgstr "Izcelt aktīvo rindu"
+
+#: ../data/ui/ide-editor-tweak-widget.ui.h:5
+msgid "Auto indent"
+msgstr "Automātiski veidot atkāpi"
+
+#: ../data/ui/ide-editor-tweak-widget.ui.h:6
+#: ../libide/preferences/ide-preferences-builtin.c:119
+msgid "Smart Backspace"
+msgstr "Gudrā atpakaļatkāpe "
+
+#: ../data/ui/ide-editor-tweak-widget.ui.h:7
+#: ../libide/preferences/ide-preferences-builtin.c:233
+msgid "Indentation"
+msgstr "Atkāpju veidošana"
+
+#: ../data/ui/ide-editor-tweak-widget.ui.h:8
+#: ../libide/preferences/ide-preferences-builtin.c:145
+msgid "Spaces"
+msgstr "Atstarpes"
+
+#: ../data/ui/ide-editor-tweak-widget.ui.h:9
+#: ../libide/preferences/ide-preferences-builtin.c:146
+msgid "Tabs"
+msgstr "Tabulācijas"
+
+#: ../data/ui/ide-editor-tweak-widget.ui.h:10
+msgid "2"
+msgstr "2"
+
+#: ../data/ui/ide-editor-tweak-widget.ui.h:11
+msgid "3"
+msgstr "3"
+
+#: ../data/ui/ide-editor-tweak-widget.ui.h:12
+msgid "4"
+msgstr "4"
+
+#: ../data/ui/ide-editor-tweak-widget.ui.h:13
+msgid "8"
+msgstr "8"
+
+#: ../data/ui/ide-editor-view.ui.h:2 ../data/ui/ide-greeter-perspective.ui.h:7
+msgid "_Cancel"
+msgstr "At_celt"
+
+#: ../data/ui/ide-editor-view.ui.h:3
+msgid ""
+"Builder has discovered that this file has been modified externally. Would "
+"you like to reload the file?"
+msgstr ""
+"Būvētājs ir atklājis, ka datne ir modificēta no ārpuses. Vai vēlaties "
+"pārlādēt datni?"
+
+#: ../data/ui/ide-editor-view.ui.h:4
+msgid "Go to Line"
+msgstr "Iet uz rindu"
+
+#: ../data/ui/ide-editor-view.ui.h:5
+msgid "Go"
+msgstr "Iet"
+
+#: ../data/ui/ide-genesis-perspective.ui.h:1
+msgid "New Project"
+msgstr "Jauns projekts"
+
+#: ../data/ui/ide-genesis-perspective.ui.h:2
+msgid "Co_ntinue"
+msgstr "_Turpināt"
+
+#: ../data/ui/ide-greeter-perspective.ui.h:1
+msgid "Recent Projects"
+msgstr "Nesenie projekti"
+
+#: ../data/ui/ide-greeter-perspective.ui.h:2
+msgid "Other Projects"
+msgstr "Citi projekti"
+
+#: ../data/ui/ide-greeter-perspective.ui.h:3
+msgid "_Remove"
+msgstr "_Izņemt"
+
+#: ../data/ui/ide-greeter-perspective.ui.h:4
+msgid "Select a Project"
+msgstr "Izvēlieties projektu"
+
+#: ../data/ui/ide-greeter-perspective.ui.h:5
+msgid "Click an item to select"
+msgstr "Spiediet uz vienuma, lai izvēlētos"
+
+#: ../data/ui/ide-greeter-perspective.ui.h:6
+#: ../plugins/project-tree/gtk/menus.ui.h:2
+msgid "_New"
+msgstr "Jau_ns"
+
+#: ../data/ui/ide-preferences-font-button.ui.h:1
+msgid "_Select"
+msgstr "Izvēlētie_s"
+
+#: ../data/ui/ide-shortcuts-window.ui.h:1
+msgctxt "shortcut window"
+msgid "Editor Shortcuts"
+msgstr "Redaktora saīsnes"
+
+#: ../data/ui/ide-shortcuts-window.ui.h:2
+msgctxt "shortcut window"
+msgid "General"
+msgstr "Vispārīgi"
+
+#: ../data/ui/ide-shortcuts-window.ui.h:3
+msgctxt "shortcut window"
+msgid "Global Search"
+msgstr "Globālā meklēšana"
+
+#: ../data/ui/ide-shortcuts-window.ui.h:4
+msgctxt "shortcut window"
+msgid "Preferences"
+msgstr "Iestatījumi"
+
+#: ../data/ui/ide-shortcuts-window.ui.h:5
+msgctxt "shortcut window"
+msgid "Command Bar"
+msgstr "Komandu josla"
+
+#: ../data/ui/ide-shortcuts-window.ui.h:6
+msgctxt "shortcut window"
+msgid "Terminal"
+msgstr "Terminālis"
+
+#: ../data/ui/ide-shortcuts-window.ui.h:7
+msgctxt "shortcut window"
+msgid "Keyboard Shortcuts"
+msgstr "Tastatūras saīsnes"
+
+#: ../data/ui/ide-shortcuts-window.ui.h:8
+msgctxt "shortcut window"
+msgid "Panels"
+msgstr "Rūtis"
+
+#: ../data/ui/ide-shortcuts-window.ui.h:9
+msgctxt "shortcut window"
+msgid "Toggle left panel"
+msgstr "Pārslēgt kreiso rūti"
+
+#: ../data/ui/ide-shortcuts-window.ui.h:10
+msgctxt "shortcut window"
+msgid "Toggle right panel"
+msgstr "Pārslēgt labo rūti"
+
+#: ../data/ui/ide-shortcuts-window.ui.h:11
+msgctxt "shortcut window"
+msgid "Toggle bottom panel"
+msgstr "Pārslēgt apakšējo rūti"
+
+#: ../data/ui/ide-shortcuts-window.ui.h:12
+msgctxt "shortcut window"
+msgid "Touchpad gestures"
+msgstr "Skārienpaliktņa žesti"
+
+#: ../data/ui/ide-shortcuts-window.ui.h:13
+msgctxt "shortcut window"
+msgid "Switch to the next document"
+msgstr "Pārslēgties uz nākošo dokumentu"
+
+#: ../data/ui/ide-shortcuts-window.ui.h:14
+msgctxt "shortcut window"
+msgid "Switch to the previous document"
+msgstr "Pārslēgties uz iepriekšējo dokumentu"
+
+#: ../data/ui/ide-shortcuts-window.ui.h:15
+msgctxt "shortcut window"
+msgid "Files"
+msgstr "Datnes"
+
+#: ../data/ui/ide-shortcuts-window.ui.h:16
+msgctxt "shortcut window"
+msgid "Create new document"
+msgstr "Izveidot jaunu dokumentu"
+
+#: ../data/ui/ide-shortcuts-window.ui.h:17
+msgctxt "shortcut window"
+msgid "Open a document"
+msgstr "Atvērt dokumentu"
+
+#: ../data/ui/ide-shortcuts-window.ui.h:18
+msgctxt "shortcut window"
+msgid "Save the document"
+msgstr "Saglabāt dokumentu"
+
+#: ../data/ui/ide-shortcuts-window.ui.h:19
+msgctxt "shortcut window"
+msgid "Close the document"
+msgstr "Aizvērt dokumentu"
+
+#: ../data/ui/ide-shortcuts-window.ui.h:20
+msgctxt "shortcut window"
+msgid "Find and replace"
+msgstr "Meklēt un aizstāt"
+
+#: ../data/ui/ide-shortcuts-window.ui.h:21
+msgctxt "shortcut window"
+msgid "Find"
+msgstr "Meklēt"
+
+#: ../data/ui/ide-shortcuts-window.ui.h:22
+msgctxt "shortcut window"
+msgid "Find the next match"
+msgstr "Meklēt nākamo atbilstību"
+
+#: ../data/ui/ide-shortcuts-window.ui.h:23
+msgctxt "shortcut window"
+msgid "Find the previous match"
+msgstr "Skatīt iepriekšējo atbilstību"
+
+#: ../data/ui/ide-shortcuts-window.ui.h:24
+msgctxt "shortcut window"
+msgid "Clear highlight"
+msgstr "Noņemt izcēlumu"
+
+#: ../data/ui/ide-shortcuts-window.ui.h:25
+msgctxt "shortcut window"
+msgid "Copy and Paste"
+msgstr "Kopēt un ielīmēt"
+
+#: ../data/ui/ide-shortcuts-window.ui.h:26
+msgctxt "shortcut window"
+msgid "Copy selected text to clipboard"
+msgstr "Kopēt izvēlēto starpliktuvē"
+
+#: ../data/ui/ide-shortcuts-window.ui.h:27
+msgctxt "shortcut window"
+msgid "Cut selected text to clipboard"
+msgstr "Izgriezt izvēlēto tekstu starpliktuvē"
+
+#: ../data/ui/ide-shortcuts-window.ui.h:28
+msgctxt "shortcut window"
+msgid "Paste text from clipboard"
+msgstr "Ielīmēt tekstu no starpliktuves"
+
+#: ../data/ui/ide-shortcuts-window.ui.h:29
+msgctxt "shortcut window"
+msgid "Undo and Redo"
+msgstr "Atsaukt un atcelt atsaukšanu"
+
+#: ../data/ui/ide-shortcuts-window.ui.h:30
+msgctxt "shortcut window"
+msgid "Undo previous command"
+msgstr "Atsaukt iepriekšējo komandu"
+
+#: ../data/ui/ide-shortcuts-window.ui.h:31
+msgctxt "shortcut window"
+msgid "Redo previous command"
+msgstr "Atcelt iepriekšējās komandas atsaukšanu"
+
+#: ../data/ui/ide-shortcuts-window.ui.h:32
+msgctxt "shortcut window"
+msgid "Editing"
+msgstr "Rediģēšana"
+
+#: ../data/ui/ide-shortcuts-window.ui.h:33
+msgctxt "shortcut window"
+msgid "Increment number at cursor"
+msgstr "Palielināt skaitli pie kursora"
+
+#: ../data/ui/ide-shortcuts-window.ui.h:34
+msgctxt "shortcut window"
+msgid "Decrement number at cursor"
+msgstr "Samazināt skaitli pie kursora"
+
+#: ../data/ui/ide-shortcuts-window.ui.h:35
+msgctxt "shortcut window"
+msgid "Join selected lines"
+msgstr "Savienot izvēlētās rindas"
+
+#: ../data/ui/ide-shortcuts-window.ui.h:36
+msgctxt "shortcut window"
+msgid "Show completion window"
+msgstr "Rādīt pabeigšanas logu"
+
+#: ../data/ui/ide-shortcuts-window.ui.h:37
+msgctxt "shortcut window"
+msgid "Toggle overwrite"
+msgstr "Pārslēgt “pārrakstīt”"
+
+#: ../data/ui/ide-shortcuts-window.ui.h:38
+msgctxt "shortcut window"
+msgid "Reindent line"
+msgstr "Atkal palielināt atkāpi"
+
+#: ../data/ui/ide-shortcuts-window.ui.h:39
+msgctxt "shortcut window"
+msgid "Navigation"
+msgstr "Navigācija"
+
+#: ../data/ui/ide-shortcuts-window.ui.h:40
+msgctxt "shortcut window"
+msgid "Move to next error in file"
+msgstr "Pāriet uz nākamo kļūdu datnē"
+
+#: ../data/ui/ide-shortcuts-window.ui.h:41
+msgctxt "shortcut window"
+msgid "Move to previous error in file"
+msgstr "Pāriet uz iepriekšējo kļūdu datnē"
+
+#: ../data/ui/ide-shortcuts-window.ui.h:42
+msgctxt "shortcut window"
+msgid "Move to previous edit location"
+msgstr "Pāriet uz iepriekšējo rediģēšanas vietu"
+
+#: ../data/ui/ide-shortcuts-window.ui.h:43
+msgctxt "shortcut window"
+msgid "Move to next edit location"
+msgstr "Pāriet uz nākamo rediģēšanas vietu"
+
+#: ../data/ui/ide-shortcuts-window.ui.h:44
+msgctxt "shortcut window"
+msgid "Jump to definition of symbol"
+msgstr "Lekt uz simbola definīciju"
+
+#: ../data/ui/ide-shortcuts-window.ui.h:45
+msgctxt "shortcut window"
+msgid "Move sectionport up within the file"
+msgstr "Pārvietot krustpunktu uz augšu datnes iekšienē"
+
+#: ../data/ui/ide-shortcuts-window.ui.h:46
+msgctxt "shortcut window"
+msgid "Move sectionport down within the file"
+msgstr "Pārvietot krustpunktu uz leju datnes iekšienē"
+
+#: ../data/ui/ide-shortcuts-window.ui.h:47
+msgctxt "shortcut window"
+msgid "Move sectionport to end of file"
+msgstr "Pārvietot krustpunktu uz datnes beigām"
+
+#: ../data/ui/ide-shortcuts-window.ui.h:48
+msgctxt "shortcut window"
+msgid "Move sectionport to beginning of file"
+msgstr "Pārvietot krustpunktu uz datnes sākumu"
+
+#: ../data/ui/ide-shortcuts-window.ui.h:49
+msgctxt "shortcut window"
+msgid "Move to matching bracket"
+msgstr "Iet uz saistīto iekavu"
+
+#: ../data/ui/ide-shortcuts-window.ui.h:50
+msgctxt "shortcut window"
+msgid "Selections"
+msgstr "Izvēles"
+
+#: ../data/ui/ide-shortcuts-window.ui.h:51
+msgctxt "shortcut window"
+msgid "Select all"
+msgstr "Izvēlēties visu"
+
+#: ../data/ui/ide-shortcuts-window.ui.h:52
+msgctxt "shortcut window"
+msgid "Unselect all"
+msgstr "Neizvēlēties neko"
+
+#: ../data/ui/ide-shortcuts-window.ui.h:53
+msgctxt "shortcut window"
+msgid "Terminal Shortcuts"
+msgstr "Termināļa saīsnes"
+
+#: ../libide/directory/ide-directory-genesis-addin.c:106
+msgid "From an existing project on this computer"
+msgstr "No esošā projekta uz šī datora"
+
+#: ../libide/editorconfig/ide-editorconfig-file-settings.c:153
+msgid "No file was provided."
+msgstr "Netika norādīta datne."
+
+#: ../libide/editor/ide-editor-frame.c:75
+#, c-format
+msgid "Line %u, Column %u"
+msgstr "Rinda %u, kolonna %u"
+
+#: ../libide/editor/ide-editor-frame.c:244
+#, c-format
+msgid "%u of %u"
+msgstr "%u no %u"
+
+#: ../libide/editor/ide-editor-frame.c:643
+#: ../plugins/project-tree/gtk/menus.ui.h:1
+msgid "Re_veal in Project Tree"
+msgstr "_Atklāt projekta koku"
+
+#: ../libide/editor/ide-editor-perspective.c:350
+#: ../libide/preferences/ide-preferences-builtin.c:102
+#: ../libide/preferences/ide-preferences-builtin.c:125
+msgid "Editor"
+msgstr "Redaktors"
+
+#: ../libide/editor/ide-editor-view-actions.c:301
+msgid "Save Document"
+msgstr "Saglabāt dokumentu"
+
+#: ../libide/editor/ide-editor-view-actions.c:307
+#: ../libide/editor/ide-editor-view-actions.c:438
+#: ../libide/ide-workbench-actions.c:67
+#: ../plugins/build-tools/gbp-build-panel.ui.h:13
+#: ../plugins/terminal/gb-terminal-view-actions.c:305
+msgid "Cancel"
+msgstr "Atcelt"
+
+#: ../libide/editor/ide-editor-view-actions.c:308
+#: ../libide/editor/ide-editor-view-actions.c:439
+#: ../plugins/terminal/gb-terminal-view-actions.c:306
+msgid "Save"
+msgstr "Saglabāt"
+
+#: ../libide/editor/ide-editor-view-actions.c:427
+msgid "Save Document As"
+msgstr "Saglabāt dokumentu kā"
+
+#: ../libide/editor/ide-editor-view.c:109
+msgid "Plain Text"
+msgstr "Vienkāršs teksts"
+
+#. translators: the user selected a number outside the value range for the document.
+#: ../libide/editor/ide-editor-view.c:660
+#, c-format
+msgid "Provide a number between 1 and %u"
+msgstr "Sniedziet skaitli starp 1 un %u"
+
+#: ../libide/genesis/ide-genesis-perspective.c:200
+#: ../libide/greeter/ide-greeter-perspective.c:429
+msgid "Failed to load the project"
+msgstr "Neizdevās augšupielādēt projektu"
+
+#: ../libide/gsettings/ide-language-defaults.c:177
+#, c-format
+msgid "%s contained invalid ASCII"
+msgstr "%s satur nederīgu ASCII"
+
+#: ../libide/gsettings/ide-language-defaults.c:192
+#, c-format
+msgid "Failed to parse integer from \"%s\""
+msgstr "Neizdevās parsēt veselo skaitli no “%s”"
+
+#: ../libide/gsettings/ide-language-defaults.c:270
+msgid "language defaults missing version in [global] group."
+msgstr "valodu noklusējumiem trūkst versija [globālajā] grupā."
+
+#: ../libide/gsettings/ide-language-defaults.c:362
+msgid "Failed to initialize defaults."
+msgstr "Neizdevās inicializēt noklusējumus."
+
+#: ../libide/ide-application-actions.c:114
+msgid "An IDE for GNOME"
+msgstr "IDE GNOME videi"
+
+#: ../libide/ide-application-actions.c:120
+msgid "GNOME Builder"
+msgstr "GNOME būvētājs"
+
+#: ../libide/ide-application-actions.c:122
+msgid "translator-credits"
+msgstr "Rūdolfs Mazurs <rudolfs.mazurs@gmail.com>"
+
+#: ../libide/ide-application-actions.c:125
+msgid "Learn more about GNOME Builder"
+msgstr "Uzziniet vairāk par GNOME būvētāju"
+
+#: ../libide/ide-application-actions.c:129
+msgid "Funded By"
+msgstr "Finansēja"
+
+#: ../libide/ide-application-command-line.c:102
+msgid "Commands:"
+msgstr "Komandas:"
+
+#: ../libide/ide-application-command-line.c:165
+msgid "List available subcommands"
+msgstr "Uzskaitīt pieejamās apakškomandas"
+
+#: ../libide/ide-application-command-line.c:172
+msgid "Run Builder in standalone mode"
+msgstr "Palaist būvētāju savrupā režīmā"
+
+#: ../libide/ide-application-command-line.c:179
+msgid "Show the application's version"
+msgstr "Rādīt lietotnes versiju"
+
+#: ../libide/ide-application-command-line.c:198
+msgid "Increase verbosity, may be specified multiple times"
+msgstr "Palielināt detalizētību, var norādīt vairākas reizes"
+
+#: ../libide/ide-application-command-line.c:228
+msgid "COMMAND"
+msgstr "KOMANDA"
+
+#: ../libide/ide-application-command-line.c:286
+msgid "No commands available"
+msgstr "Nav pieejamu komandu"
+
+#: ../libide/ide-application-command-line.c:315
+msgid "Please provide a command"
+msgstr "Lūdzu, norādiet komandu"
+
+#: ../libide/ide-application-command-line.c:325
+msgid "No such tool"
+msgstr "Nav tāda rīka"
+
+#: ../libide/ide-application-command-line.c:339
+msgid "Please provide a worker type"
+msgstr "Lūdzu, norādiet strādnieka tipu"
+
+#: ../libide/ide-application-command-line.c:346
+msgid "Please provide a D-Bus address"
+msgstr "Lūdzu, norādiet D-Bus adreses"
+
+#: ../libide/ide-application-command-line.c:355
+msgid "No such worker"
+msgstr "Nav tāda strādnieka"
+
+#: ../libide/ide-buffer.c:2204
+msgid "The current language lacks a symbol resolver."
+msgstr "Pašreizējai valodai trūkst simbolu atrisinātāju."
+
+#: ../libide/ide-buffer-manager.c:612
+msgid "File too large to be opened."
+msgstr "Datne ir pārāk liela, lai to atvērtu."
+
+#: ../libide/ide-buffer-manager.c:1456
+msgid "Words"
+msgstr "Vārdi"
+
+#: ../libide/ide-buffer-manager.c:1668
+#, c-format
+msgid "unsaved document %u"
+msgstr "nesaglabāts dokuments %u"
+
+#: ../libide/ide-buffer-manager.c:1702
+msgid "Failed to save buffer, ignoring reclamation."
+msgstr "Neizdevās saglabāt buferi, ignorē atgūšanu."
+
+#: ../libide/ide-builder.c:55
+#, c-format
+msgid "%s does not implement build_async()"
+msgstr "%s neimplementē build_async()"
+
+#: ../libide/ide-builder.c:61
+msgid "No implementation of build_async()"
+msgstr "Nav build_async() implementācijas"
+
+#: ../libide/ide-build-result.c:217
+msgid "Failed to open stderr stream."
+msgstr "Neizdevās atvērt stderr (standarta kļūdas) straumi."
+
+#: ../libide/ide-build-result.c:247
+msgid "Failed to open stdout stream."
+msgstr "Neizdevās atvērt stdout (standarta izvades) straumi."
+
+#: ../libide/ide-build-system.c:232
+#, c-format
+msgid "%s() is not supported on %s build system."
+msgstr "%s() nav atbalstīts uz %s būvēšanas sistēmas."
+
+#: ../libide/ide.c:62
+#, c-format
+msgid "You must call %s() before using libide."
+msgstr "Jums jāizsauc %s() pirms izmantot libide."
+
+#: ../libide/ide-context.c:1665
+msgid "An unload request is already pending"
+msgstr "Atielādēšanas pieprasījums jau ir gaida"
+
+#: ../libide/ide-context.c:1780
+msgid "Context has already been restored."
+msgstr "Konteksts jau ir atjaunots."
+
+#: ../libide/ide-device-manager.c:144
+#, c-format
+msgid "The device \"%s\" could not be found."
+msgstr "Nevarēja atrast ierīci “%s”."
+
+#: ../libide/ide-layout-view.c:146
+msgid "untitled document"
+msgstr "nenosaukts dokuments"
+
+#: ../libide/ide-object.c:288
+#, c-format
+msgid "No implementations of extension point \"%s\"."
+msgstr "Nav paplašinājuma punkta “%s” implementācijas."
+
+#: ../libide/ide-object.c:380
+msgid "Failed to locate build system plugin."
+msgstr "Neizdevās atrast būvēšanas sistēmas spraudni."
+
+#: ../libide/ide-object.c:467
+msgid "No such extension point."
+msgstr "Nav tāda paplašinājuma punkta."
+
+#: ../libide/ide-object.c:477
+msgid "No implementations of extension point."
+msgstr "Nav paplašinājuma punkta implementācijas."
+
+#: ../libide/ide-project.c:463
+msgid "Destination file must be within the project tree."
+msgstr "Mērķa datnei ir jābūt projekta kokā."
+
+#: ../libide/ide-project.c:593
+msgid "File must be within the project tree."
+msgstr "Datnei ir jābūt projekta kokā."
+
+#: ../libide/ide-recent-projects.c:382
+#, c-format
+msgid "%s() may only be executed once"
+msgstr "%s() var izpildīt tikai vienu reizi"
+
+#: ../libide/ide-script.c:205
+#, c-format
+msgid "%s has not implemented GAsyncInitable."
+msgstr "%s nav implementējis GAsyncInitable."
+
+#: ../libide/ide-source-snippet.c:370
+msgid "Chunk does not belong to snippet."
+msgstr "Gabaliņš nepieder pie fragmenta."
+
+#: ../libide/ide-source-snippet-completion-provider.c:297
+#: ../libide/preferences/ide-preferences-builtin.c:173
+msgid "Snippets"
+msgstr "Fragmenti"
+
+#: ../libide/ide-source-snippet-parser.c:496
+#, c-format
+msgid "Invalid snippet at line %d: %s"
+msgstr "Nederīgs fragments rindā %d: %s"
+
+#: ../libide/ide-source-snippets-manager.c:96
+#, c-format
+msgid "Failed to open directory: %s"
+msgstr "Neizdevās atvērt direktoriju: %s"
+
+#: ../libide/ide-source-snippets-manager.c:109
+#, c-format
+msgid "Failed to load file: %s: %s"
+msgstr "Nevar ielādēt datni: “%s” — %s"
+
+#: ../libide/ide-source-view.c:4965
+#, c-format
+msgid "Insert \"%s\""
+msgstr "Ievietot “%s”"
+
+#: ../libide/ide-source-view.c:4967
+#, c-format
+msgid "Replace \"%s\" with \"%s\""
+msgstr "Aizstāt “%s” ar “%s”"
+
+#: ../libide/ide-source-view.c:5081
+msgid "Apply Fix-It"
+msgstr "Pielietot Fix-It"
+
+#: ../libide/ide-uri.c:181
+#, no-c-format
+msgid "Invalid %-encoding in URI"
+msgstr "Nederīgs %-kodējums iekš URI"
+
+#: ../libide/ide-uri.c:219
+msgid "Non-UTF-8 characters in URI"
+msgstr "Ne-UTF-8 rakstzīmes iekš URI"
+
+#: ../libide/ide-uri.c:366 ../libide/ide-uri.c:377
+#, c-format
+msgid "Invalid IP literal '%s' in URI"
+msgstr "Nederīgs IP literālis “%s” iekš URI"
+
+#: ../libide/ide-uri.c:411
+#, c-format
+msgid "Invalid encoded IP literal '%s' in URI"
+msgstr "Nederīgs iekodētais IP literālis “%s” iekš URI"
+
+#: ../libide/ide-uri.c:420
+#, c-format
+msgid "Invalid non-ASCII hostname '%s' in URI"
+msgstr "Nederīgs ne-ASCII resursdators “%s” iekš URI"
+
+#: ../libide/ide-uri.c:435
+#, c-format
+msgid "Non-ASCII hostname '%s' forbidden in this URI"
+msgstr "Ne ASCII resursdators “%s” ir aizliegts šajā URI"
+
+#: ../libide/ide-uri.c:457
+#, c-format
+msgid "Could not parse port '%s' in URI"
+msgstr "Nevarēja parsēt “%s” iekš URI"
+
+#: ../libide/ide-uri.c:464
+#, c-format
+msgid "Port '%s' in URI is out of range"
+msgstr "URI ports “%s” ir ārpus apgabala"
+
+#: ../libide/ide-uri.c:590
+msgid "Base URI is not absolute"
+msgstr "Bāzes URI nav absolūts"
+
+#: ../libide/ide-uri.c:617
+msgid "URI is not absolute, and no base URI was provided"
+msgstr "URI nav absolūts un netika dots bāzes URI"
+
+#: ../libide/ide-uri.c:662
+#, c-format
+msgid "Could not parse '%s' as absolute URI"
+msgstr "Nevarēja parsēt “%s” kā absolūtu URI"
+
+#: ../libide/ide-uri.c:1190
+#, c-format
+msgid "URI '%s' has no host component"
+msgstr "URI “%s” nav resursdatora komponentes"
+
+#: ../libide/ide-workbench-actions.c:64
+msgid "Open File"
+msgstr "Atvērt datni"
+
+#: ../libide/ide-workbench-actions.c:68
+msgid "Open"
+msgstr "Atvērt"
+
+#: ../libide/preferences/ide-preferences-builtin.c:40
+msgid "Extensions"
+msgstr "Paplašinājumi"
+
+#: ../libide/preferences/ide-preferences-builtin.c:41
+msgid "Installed Extensions"
+msgstr "Instalētie paplašinājumi"
+
+#: ../libide/preferences/ide-preferences-builtin.c:42
+msgid "Bundled Extensions"
+msgstr "Komplektētie paplašinājumi"
+
+#: ../libide/preferences/ide-preferences-builtin.c:77
+msgid "Appearance"
+msgstr "Izskats"
+
+#: ../libide/preferences/ide-preferences-builtin.c:79
+msgid "Themes"
+msgstr "Motīvi"
+
+#: ../libide/preferences/ide-preferences-builtin.c:80
+msgid "Dark Theme"
+msgstr "Tumšais motīvs"
+
+#: ../libide/preferences/ide-preferences-builtin.c:80
+msgid "Whether Builder should use a dark theme"
+msgstr "Vai būvētājam vajadzētu izmantot tumšo motīvu"
+
+#: ../libide/preferences/ide-preferences-builtin.c:80
+msgid "dark theme"
+msgstr "tumšais motīvs"
+
+#: ../libide/preferences/ide-preferences-builtin.c:81
+msgid "Grid Pattern"
+msgstr "Režģa raksts"
+
+#: ../libide/preferences/ide-preferences-builtin.c:81
+msgid "Display a grid pattern underneath source code"
+msgstr "Rādīt režģa rakstu aiz pirmkoda"
+
+#: ../libide/preferences/ide-preferences-builtin.c:101
+msgid "Font"
+msgstr "Fonts"
+
+#: ../libide/preferences/ide-preferences-builtin.c:102
+msgid "editor font monospace"
+msgstr "redaktora fonts vienplatuma"
+
+#. XXX: This belongs in terminal addin
+#: ../libide/preferences/ide-preferences-builtin.c:104
+#: ../plugins/terminal/gb-terminal-workbench-addin.c:99
+msgid "Terminal"
+msgstr "Terminālis"
+
+#: ../libide/preferences/ide-preferences-builtin.c:104
+msgid "terminal font monospace"
+msgstr "termināļa fonts vienplatuma"
+
+#: ../libide/preferences/ide-preferences-builtin.c:110
+msgid "Keyboard"
+msgstr "Tastatūra"
+
+#: ../libide/preferences/ide-preferences-builtin.c:112
+msgid "Emulation"
+msgstr "Emulācija"
+
+#: ../libide/preferences/ide-preferences-builtin.c:113
+msgid "Default keybinding mode which mimics gedit"
+msgstr "Noklusējuma taustiņu sasaites režīms, kas imitē gedit"
+
+#: ../libide/preferences/ide-preferences-builtin.c:114
+msgid "Emacs"
+msgstr "Emacs"
+
+#: ../libide/preferences/ide-preferences-builtin.c:114
+msgid "Emulates the Emacs text editor"
+msgstr "Emulē Emacs teksta redaktoru"
+
+#: ../libide/preferences/ide-preferences-builtin.c:115
+msgid "Vim"
+msgstr "Vim"
+
+#: ../libide/preferences/ide-preferences-builtin.c:115
+msgid "Emulates the Vim text editor"
+msgstr "Emulē Vim teksta redaktoru"
+
+#: ../libide/preferences/ide-preferences-builtin.c:117
+msgid "Movement"
+msgstr "Kustība"
+
+#: ../libide/preferences/ide-preferences-builtin.c:118
+msgid "Smart Home and End"
+msgstr "Gudrais Home un End"
+
+#: ../libide/preferences/ide-preferences-builtin.c:118
+msgid "Home moves to first non-whitespace character"
+msgstr "Home taustiņš pāries uz pirmo neatstarpes rakstzīmi"
+
+#: ../libide/preferences/ide-preferences-builtin.c:119
+msgid ""
+"Backspace will remove extra space to keep you aligned with your indentation"
+msgstr ""
+"Atpakaļatkāpe noņems papildu atstarpi, lai paturētu līdzinājumu ar jūsu "
+"atkāpēm"
+
+#: ../libide/preferences/ide-preferences-builtin.c:127
+msgid "Cursor"
+msgstr "Kursors"
+
+#: ../libide/preferences/ide-preferences-builtin.c:128
+msgid "Restore cursor position"
+msgstr "Atjaunot kursora novietojumu"
+
+#: ../libide/preferences/ide-preferences-builtin.c:128
+msgid "Restore cursor position when a file is reopened"
+msgstr "Atjaunot kursora novietojumu kad datne tiek atkal atvērta"
+
+#: ../libide/preferences/ide-preferences-builtin.c:129
+msgid "Scroll Offset"
+msgstr "Ritināšanas nobīde"
+
+#: ../libide/preferences/ide-preferences-builtin.c:129
+msgid "Minimum number of lines to keep above and below the cursor"
+msgstr "Minimālais rindu skaits, ko paturēt virs un zem kursora"
+
+#: ../libide/preferences/ide-preferences-builtin.c:130
+msgid "Overscroll"
+msgstr "Pārritināšana"
+
+#: ../libide/preferences/ide-preferences-builtin.c:130
+msgid "Allow the editor to scroll past the end of the buffer"
+msgstr "Ļaut redaktoram ritināt pāri bufera beigām"
+
+#: ../libide/preferences/ide-preferences-builtin.c:132
+msgid "Line Information"
+msgstr "Informācija par rindām"
+
+#: ../libide/preferences/ide-preferences-builtin.c:133
+msgid "Line numbers"
+msgstr "Rindu numuri"
+
+#: ../libide/preferences/ide-preferences-builtin.c:133
+msgid "Show line number at beginning of each line"
+msgstr "Rādīt rindu numurus katras rindas sākumā"
+
+#: ../libide/preferences/ide-preferences-builtin.c:134
+msgid "Line changes"
+msgstr "Rindas izmaiņas"
+
+#: ../libide/preferences/ide-preferences-builtin.c:134
+msgid "Show if a line was added or modified next to line number"
+msgstr "Pie rindas numura rādīt, vai rinda tika pievienota vai modificēta "
+
+#: ../libide/preferences/ide-preferences-builtin.c:136
+msgid "Highlight"
+msgstr "Izcelt"
+
+#: ../libide/preferences/ide-preferences-builtin.c:137
+msgid "Current line"
+msgstr "Pašreizējo rindu"
+
+#: ../libide/preferences/ide-preferences-builtin.c:137
+msgid "Make current line stand out with highlights"
+msgstr "Likt aktuālajai rindai izcelties ar izgaismojumu"
+
+#: ../libide/preferences/ide-preferences-builtin.c:138
+msgid "Matching brackets"
+msgstr "Saistītās iekavas"
+
+#: ../libide/preferences/ide-preferences-builtin.c:138
+msgid "Highlight matching brackets based on cursor position"
+msgstr "Izcelt savstarpēji saistītās iekavas balstoties uz kursora novietojumu"
+
+#: ../libide/preferences/ide-preferences-builtin.c:140
+msgid "Code Overview"
+msgstr "Koda pārskats"
+
+#: ../libide/preferences/ide-preferences-builtin.c:141
+msgid "Show overview map"
+msgstr "Rādīt pārskata karti"
+
+#: ../libide/preferences/ide-preferences-builtin.c:141
+msgid "A zoomed out view to enhance navigating source code"
+msgstr "Tālināts skats, lai uzlabotu avigēšanupārlūkošanai"
+
+#: ../libide/preferences/ide-preferences-builtin.c:142
+msgid "Automatically hide overview map"
+msgstr "Automātiski slēpt pārskata karti"
+
+#: ../libide/preferences/ide-preferences-builtin.c:142
+msgid "Automatically hide map when editor loses focus"
+msgstr "Automātiski slēpt karti, kad redaktors zaudē fokusu"
+
+#: ../libide/preferences/ide-preferences-builtin.c:144
+msgid "Whitespace Characters"
+msgstr "Atstarpju rakstzīmes"
+
+#: ../libide/preferences/ide-preferences-builtin.c:147
+msgid "New line and carriage return"
+msgstr "Jauna rinda un kursora atgriešanās"
+
+#: ../libide/preferences/ide-preferences-builtin.c:148
+msgid "Non-breaking spaces"
+msgstr "Neatdalošās atstarpes"
+
+#: ../libide/preferences/ide-preferences-builtin.c:149
+msgid "Spaces inside of text"
+msgstr "Atstarpes teksta iekšpusē"
+
+#: ../libide/preferences/ide-preferences-builtin.c:150
+msgid "Trailing Only"
+msgstr "Tikai sekojošās"
+
+#: ../libide/preferences/ide-preferences-builtin.c:151
+msgid "Leading Only"
+msgstr "Tikai priekšējās"
+
+#: ../libide/preferences/ide-preferences-builtin.c:157
+msgid "Code Insight"
+msgstr "Koda ieskats"
+
+#: ../libide/preferences/ide-preferences-builtin.c:159
+msgid "Highlighting"
+msgstr "Izcelšana"
+
+#: ../libide/preferences/ide-preferences-builtin.c:160
+msgid "Semantic Highlighting"
+msgstr "Semantiskā izcelšana"
+
+#: ../libide/preferences/ide-preferences-builtin.c:160
+msgid ""
+"Use code insight to highlight additional information discovered in source "
+"file"
+msgstr ""
+"Izmantot koda ieskatu, lai izceltu papildu informāciju, kas ir atrasta "
+"pirmkoda datnē"
+
+#: ../libide/preferences/ide-preferences-builtin.c:162
+msgid "Completion"
+msgstr "Pabeigšana"
+
+#: ../libide/preferences/ide-preferences-builtin.c:163
+msgid "Suggest words found in open files"
+msgstr "Ieteikt vārdus, kas ir atrasti atvērtajās datnēs"
+
+#: ../libide/preferences/ide-preferences-builtin.c:163
+msgid ""
+"Suggests completions as you type based on words found in any open document"
+msgstr "Rakstot iesaka tekstu, kas ir atrodams kādā no atvērtajiem dokumentiem"
+
+#: ../libide/preferences/ide-preferences-builtin.c:164
+msgid "Suggest completions using Ctags"
+msgstr "Iesaka pabeigšanu, izmantojot Ctags"
+
+#: ../libide/preferences/ide-preferences-builtin.c:164
+msgid ""
+"Create and manages a Ctags database for completing class names, functions, "
+"and more"
+msgstr ""
+"Izveido un pārvalda Ctags datubāzi, lai pabeigtu klašu nosaukumus, funkcijas "
+"un vēl"
+
+#: ../libide/preferences/ide-preferences-builtin.c:165
+msgid "Suggest completions using Clang (Experimental)"
+msgstr "Iesaka pabeigšanu, izmantojot Ctags (eksperimentāls)"
+
+#: ../libide/preferences/ide-preferences-builtin.c:165
+msgid "Use Clang to suggest completions for C and C++ languages"
+msgstr "Izmanto Clang, lai ieteiktu pabeigšanu C un C++ valodām"
+
+#: ../libide/preferences/ide-preferences-builtin.c:167
+msgid "Diagnostics"
+msgstr "Diagnostika"
+
+#: ../libide/preferences/ide-preferences-builtin.c:176
+msgid "Code snippets"
+msgstr "Koda fragmenti"
+
+#: ../libide/preferences/ide-preferences-builtin.c:176
+msgid "Use code fragments to increase typing efficiency"
+msgstr "Izmantot koda fragmentus, lai palielinātu rakstīšanas efektivitāti"
+
+#: ../libide/preferences/ide-preferences-builtin.c:190
+msgid "Programming Languages"
+msgstr "Programmēšanas valodas"
+
+#: ../libide/preferences/ide-preferences-builtin.c:227
+msgid "Trim trailing whitespace"
+msgstr "Apgriezt sekojošās atstarpes"
+
+#: ../libide/preferences/ide-preferences-builtin.c:227
+msgid "Upon saving, trailing whitespace from modified lines will be trimmed."
+msgstr "Saglabājot, sekojošās atstarpes modificētajās rindās tiks izmestas."
+
+#: ../libide/preferences/ide-preferences-builtin.c:229
+msgid "Margins"
+msgstr "Apmales"
+
+#: ../libide/preferences/ide-preferences-builtin.c:230
+msgid "Show right margin"
+msgstr "Rādīt labo malu"
+
+#: ../libide/preferences/ide-preferences-builtin.c:231
+msgid "Right margin position"
+msgstr "Labās malas pozīcija"
+
+#: ../libide/preferences/ide-preferences-builtin.c:231
+msgid "Position in spaces for the right margin"
+msgstr "Novietojums, izteikts atstarpēs, labajai malai"
+
+#: ../libide/preferences/ide-preferences-builtin.c:234
+msgid "Tab width"
+msgstr "Tabulācijas platums"
+
+#: ../libide/preferences/ide-preferences-builtin.c:234
+msgid "Width of a tab character in spaces"
+msgstr "Tabulācijas rakstzīmes platums, izteikts atstarpēs"
+
+#: ../libide/preferences/ide-preferences-builtin.c:235
+msgid "Insert spaces instead of tabs"
+msgstr "Ievietot atstarpes tabulāciju vietā"
+
+#: ../libide/preferences/ide-preferences-builtin.c:235
+msgid "Prefer spaces over use of tabs"
+msgstr "Izmantot atstarpes, nevis tabulāciju"
+
+#: ../libide/preferences/ide-preferences-builtin.c:236
+msgid "Automatically indent"
+msgstr "Automātiski veidot atstarpes"
+
+#: ../libide/preferences/ide-preferences-builtin.c:236
+msgid "Indent source code as you type"
+msgstr "Pirmkodā veidot atkāpes rakstīšanas laikā"
+
+#: ../libide/preferences/ide-preferences-builtin.c:242
+#: ../plugins/build-tools/gbp-build-workbench-addin.c:331
+msgid "Build"
+msgstr "Būvēšana"
+
+#: ../libide/preferences/ide-preferences-builtin.c:244
+msgid "General"
+msgstr "Vispārīgi"
+
+#: ../libide/preferences/ide-preferences-builtin.c:245
+msgid "Build Workers"
+msgstr "Būvētāja strādnieki"
+
+#: ../libide/preferences/ide-preferences-builtin.c:245
+msgid "Number of parallel build workers"
+msgstr "Paralēlo būvētāju strādnieku skaits"
+
+#: ../libide/preferences/ide-preferences-perspective.c:796
+msgid "Preferences"
+msgstr "Iestatījumi"
+
+#: ../libide/pygobject/ide-pygobject-script.c:135
+msgid "Attempt to load a PyGObject script with no filename."
+msgstr "Mēģināt ielādēt PyGObject skriptu bez datnes nosaukuma."
+
+#: ../libide/pygobject/ide-pygobject-script.c:254
+msgid "The filename for the script was not provided."
+msgstr "Skripta datnes nosaukums nav dots."
+
+#: ../libide/pygobject/ide-pygobject-script.c:265
+msgid "The script must be on a local filesystem."
+msgstr "Skriptam ir jābūt uz lokālās datņu sistēmas."
+
+#: ../libide/pygobject/ide-pygobject-script.c:274
+#, c-format
+msgid "The script \"%s\" is not a PyGObject file."
+msgstr "Skripts “%s” nav PyGObject datne."
+
+#: ../libide/search/ide-omni-search-display.c:264
+msgid "Cannot add provider more than once."
+msgstr "Nevar pievienot pakalpojuma sniedzēju vairāk kā vienu reizi."
+
+#: ../libide/search/ide-omni-search-display.c:340
+msgid "The provider could not be found."
+msgstr "Nevarēja atrast pakalpojuma sniedzēju."
+
+#: ../libide/util/ide-file-manager.c:64
+msgid "File path is NULL"
+msgstr "Datnes ceļš ir NULL"
+
+#: ../libide/util/ide-file-manager.c:73 ../libide/util/ide-file-manager.c:84
+msgid "Error converting UTF-8 filename to wide char"
+msgstr "Kļūda, pārveidojot UTF-8 datnes nosaukumu uz paplašināto rakstzīmi"
+
+#: ../libide/util/ide-file-manager.c:92
+msgid "ILCreateFromPath() failed"
+msgstr "ILCreateFromPath() neizdevās"
+
+#: ../libide/util/ide-file-manager.c:129
+#, c-format
+msgid "Cannot convert '%s' into a valid NSURL."
+msgstr "Nevar pārveidot “%s” par derīgu NSURL."
+
+#: ../libide/util/ide-file-manager.c:157
+msgid "Connecting to org.freedesktop.FileManager1 failed: "
+msgstr "Neizdevās savienoties ar org.freedesktop.FileManager1"
+
+#: ../libide/util/ide-file-manager.c:181
+msgid "Calling ShowItems failed: "
+msgstr "Neizdevās izsaukt ShowItems:"
+
+#: ../plugins/autotools/ide-autotools-builder.c:130
+msgid "Cancelled"
+msgstr "Atcelts"
+
+#: ../plugins/autotools/ide-autotools-builder.c:132
+msgid "Failed"
+msgstr "Neizdevās"
+
+#: ../plugins/autotools/ide-autotools-builder.c:138
+msgid "Success"
+msgstr "Veiksmīgi"
+
+#: ../plugins/autotools/ide-autotools-builder.c:242
+#: ../plugins/autotools/ide-autotools-build-task.c:933
+msgid "Building…"
+msgstr "Būvē…"
+
+#: ../plugins/autotools/ide-autotools-build-system.c:182
+msgid "Failed to locate configure.ac"
+msgstr "Neizdevās atrast configure.ac"
+
+#: ../plugins/autotools/ide-autotools-build-task.c:270
+msgid "Directory must be on a locally mounted filesystem."
+msgstr "Direktorijai jābūt lokāli montētai datņu sistēmai."
+
+#: ../plugins/autotools/ide-autotools-build-task.c:649
+msgid "Cannot execute build task more than once."
+msgstr "Nevar izpildīt būvēšanas uzdevumu vairāk kā vienu reizi."
+
+#: ../plugins/autotools/ide-autotools-build-task.c:734
+msgid "Failed to create build directory."
+msgstr "Neizdevās izveidot būvēšanas direktoriju."
+
+#: ../plugins/autotools/ide-autotools-build-task.c:743
+#, c-format
+msgid "'%s' is not a directory."
+msgstr "“%s” nav direktorija."
+
+#: ../plugins/autotools/ide-autotools-build-task.c:782
+#, c-format
+msgid "autogen.sh is missing from project directory (%s)."
+msgstr "autogen.sh neatrodas projekta direktorijā (%s)."
+
+#: ../plugins/autotools/ide-autotools-build-task.c:792
+msgid "autogen.sh is not executable."
+msgstr "autogen.sh nav izpildāms."
+
+#: ../plugins/autotools/ide-autotools-build-task.c:796
+msgid "Autogening…"
+msgstr "Darbina autogen…"
+
+#: ../plugins/autotools/ide-autotools-build-task.c:825
+#, c-format
+msgid "autogen.sh failed to create configure (%s)"
+msgstr "autogen.sh neizdevās izveidot konfigurāciju (%s)"
+
+#: ../plugins/autotools/ide-autotools-build-task.c:860
+msgid "Configuring…"
+msgstr "Konfigurē…"
+
+#: ../plugins/autotools/ide-autotools-build-task.c:931
+msgid "Cleaning…"
+msgstr "Uzkopj…"
+
+#: ../plugins/autotools/ide-makecache.c:1006
+msgid "Invalid makefile provided, ignoring."
+msgstr "Sniegta nederīga būvēšanas datne, ignorē."
+
+#: ../plugins/build-tools/gbp-build-panel-row.c:68
+msgid "Unknown file"
+msgstr "Nezināma datne"
+
+#: ../plugins/build-tools/gbp-build-panel.ui.h:1
+msgid "Device:"
+msgstr "Ierīce:"
+
+#: ../plugins/build-tools/gbp-build-panel.ui.h:2
+msgid "Framework:"
+msgstr "Ietvars:"
+
+#: ../plugins/build-tools/gbp-build-panel.ui.h:3
+msgid "Packaging:"
+msgstr "Pakošana:"
+
+#: ../plugins/build-tools/gbp-build-panel.ui.h:4
+#: ../plugins/project-tree/gtk/menus.ui.h:12
+msgid "_Build"
+msgstr "_Būvēt"
+
+#: ../plugins/build-tools/gbp-build-panel.ui.h:5
+#: ../plugins/project-tree/gtk/menus.ui.h:13
+msgid "_Rebuild"
+msgstr "Pā_rbūvēt"
+
+#: ../plugins/build-tools/gbp-build-panel.ui.h:6
+msgid "_Clean"
+msgstr "_Attīrīt"
+
+#: ../plugins/build-tools/gbp-build-panel.ui.h:7
+msgid "framework"
+msgstr "ietvars"
+
+#: ../plugins/build-tools/gbp-build-panel.ui.h:8
+msgid "packaging"
+msgstr "pakošana"
+
+#: ../plugins/build-tools/gbp-build-panel.ui.h:9
+msgid "Status:"
+msgstr "Statuss:"
+
+#: ../plugins/build-tools/gbp-build-panel.ui.h:10
+msgid "Running Time:"
+msgstr "Darbības laiks:"
+
+#: ../plugins/build-tools/gbp-build-panel.ui.h:11
+msgid "Warnings:"
+msgstr "Brīdinājumi:"
+
+#: ../plugins/build-tools/gbp-build-panel.ui.h:12
+msgid "Errors:"
+msgstr "Kļūdas:"
+
+#: ../plugins/build-tools/gbp-build-panel.ui.h:14
+msgid "Deploy"
+msgstr "Instalēt"
+
+#: ../plugins/build-tools/gbp-build-panel.ui.h:15
+msgid "Export"
+msgstr "Eksportēt"
+
+#: ../plugins/build-tools/gbp-build-tool.c:91
+#: ../plugins/build-tools/gbp-build-tool.c:97
+#, c-format
+msgid "========================\n"
+msgstr "========================\n"
+
+#: ../plugins/build-tools/gbp-build-tool.c:92
+#, c-format
+msgid "           Project Name: %s\n"
+msgstr "           Projekta nosaukums: %s\n"
+
+#: ../plugins/build-tools/gbp-build-tool.c:93
+#, c-format
+msgid " Version Control System: %s\n"
+msgstr " Versijas vadības sistēma: %s\n"
+
+#: ../plugins/build-tools/gbp-build-tool.c:94
+#, c-format
+msgid "           Build System: %s\n"
+msgstr "           Būvēšanas sistēma: %s\n"
+
+#: ../plugins/build-tools/gbp-build-tool.c:95
+#, c-format
+msgid "    Build Date and Time: %s\n"
+msgstr "    Būvēšanas datums un laiks: %s\n"
+
+#: ../plugins/build-tools/gbp-build-tool.c:96
+#, c-format
+msgid "    Building for Device: %s (%s)\n"
+msgstr "    Būvē ierīcei: %s (%s)\n"
+
+#: ../plugins/build-tools/gbp-build-tool.c:124
+#: ../plugins/build-tools/gbp-build-tool.c:128
+#, c-format
+msgid "===============\n"
+msgstr "===============\n"
+
+#: ../plugins/build-tools/gbp-build-tool.c:125
+#, c-format
+msgid " Build Failure: %s\n"
+msgstr " Būvēšanas kļūme: %s\n"
+
+#: ../plugins/build-tools/gbp-build-tool.c:126
+msgid " Build ran for: %"
+msgstr " Būvēšana darbojās: %"
+
+#.
+#. * TODO: We should consider supporting packaging/xdg-app/deployment stuff
+#. *       here too. It would be nice if we could say, go build this project,
+#. *       for this device, and then deploy.
+#.
+#: ../plugins/build-tools/gbp-build-tool.c:139
+#: ../plugins/build-tools/gbp-build-tool.c:143
+#, c-format
+msgid "=================\n"
+msgstr "=================\n"
+
+#: ../plugins/build-tools/gbp-build-tool.c:140
+#, c-format
+msgid " Build Successful\n"
+msgstr " Būvēšana ir sekmīga\n"
+
+#: ../plugins/build-tools/gbp-build-tool.c:141
+msgid "   Build ran for: %"
+msgstr "   Būvēšana darbojās: %"
+
+#: ../plugins/build-tools/gbp-build-tool.c:191
+#, c-format
+msgid "Failed to locate device \"%s\""
+msgstr "Neizdevās atrast ierīci “%s”"
+
+#: ../plugins/build-tools/gbp-build-tool.c:254
+msgid "Clean the project"
+msgstr "Attīrīt projektu"
+
+#: ../plugins/build-tools/gbp-build-tool.c:256
+msgid "The ID of the device to build for"
+msgstr "ID ierīcei, kurai būvēt"
+
+#: ../plugins/build-tools/gbp-build-tool.c:257
+msgid "local"
+msgstr "lokāla"
+
+#: ../plugins/build-tools/gbp-build-tool.c:259
+msgid "Number of workers to use when building"
+msgstr "Darbinieku skaits, ko izmantoto būvējot"
+
+#: ../plugins/build-tools/gbp-build-tool.c:260
+msgid "N"
+msgstr "N"
+
+#: ../plugins/build-tools/gbp-build-tool.c:262
+msgid "Path to project file, defaults to current directory"
+msgstr "Ceļš uz projekta datni, noklusējuma ir pašreizējā direktorija"
+
+#: ../plugins/build-tools/gbp-build-tool.c:263
+msgid "PATH"
+msgstr "CEĻŠ"
+
+#: ../plugins/build-tools/gbp-build-workbench-addin.c:337
+msgid "Build Output"
+msgstr "Būvēšanas izvade"
+
+#: ../plugins/clang/ide-clang-service.c:269
+msgid "Unknown failure"
+msgstr "Nezināma kļūme"
+
+#: ../plugins/clang/ide-clang-service.c:273
+msgid "Clang crashed"
+msgstr "Clang avarēja"
+
+#: ../plugins/clang/ide-clang-service.c:277
+msgid "Invalid arguments"
+msgstr "Nederīgi parametri"
+
+#: ../plugins/clang/ide-clang-service.c:281
+msgid "AST read error"
+msgstr "AST lasīšanas kļūda"
+
+#: ../plugins/clang/ide-clang-service.c:293
+#, c-format
+msgid "Failed to create translation unit: %s"
+msgstr "Neizdevās izveidot tulkošanas vienumu — %s"
+
+#: ../plugins/clang/ide-clang-service.c:402
+msgid "File must be saved locally to parse."
+msgstr "Lai parsētu, datnei ir jābūt saglabātai lokāli."
+
+#: ../plugins/clang/ide-clang-symbol-node.c:149
+msgid "anonymous"
+msgstr "anonīms"
+
+#: ../plugins/clang/ide-clang-translation-unit.c:656
+msgid "clang_codeCompleteAt() only works on local files"
+msgstr "clang_codeCompleteAt() darbojas tikai ar lokālām datnēm"
+
+#: ../plugins/command-bar/gb-command-bar.c:299
+#, c-format
+msgid "Command not found: %s"
+msgstr "Komanda nav atrasta — %s"
+
+#: ../plugins/command-bar/gb-command-bar.c:603
+msgid "Use the entry below to execute a command"
+msgstr "Izmantot zemāk esošo ierakstu, lai izpildītu komandu"
+
+#: ../plugins/command-bar/gb-vim.c:86
+#, c-format
+msgid "Number required"
+msgstr "Nepieciešams numurs"
+
+#: ../plugins/command-bar/gb-vim.c:96
+#, c-format
+msgid "%s is invalid for %s"
+msgstr "%s nav derīgs priekš %s"
+
+#: ../plugins/command-bar/gb-vim.c:154
+#, c-format
+msgid "Cannot find language '%s'"
+msgstr "Nevar atrast valodu “%s”"
+
+#: ../plugins/command-bar/gb-vim.c:311
+#, c-format
+msgid "This command requires a GtkSourceView to be focused"
+msgstr "Šai komandai vajag, lai GtkSourceView būtu fokusēts"
+
+#: ../plugins/command-bar/gb-vim.c:322
+#, c-format
+msgid "This command requires a view to be focused"
+msgstr "Šai komandai vajag, lai skats būtu fokusēts"
+
+#: ../plugins/command-bar/gb-vim.c:379
+#, c-format
+msgid "Unknown option: %s"
+msgstr "Nezināma opcija: %s"
+
+#: ../plugins/command-bar/gb-vim.c:422
+#, c-format
+msgid "Cannot find colorscheme '%s'"
+msgstr "Nevar atrast krāsu saskaņu “%s”"
+
+#: ../plugins/command-bar/gb-vim.c:463
+#, c-format
+msgid "Failed to locate working directory"
+msgstr "Neizdevās atrast darba direktoriju"
+
+#: ../plugins/command-bar/gb-vim.c:640
+#, c-format
+msgid "Invalid :syntax subcommand: %s"
+msgstr "Nederīga :sintakses apakškomanda: %s"
+
+#: ../plugins/command-bar/gb-vim.c:1022
+#, c-format
+msgid "Invalid search and replace request"
+msgstr "Nederīgs meklēšanas un aizstāšanas pieprasījums"
+
+#: ../plugins/command-bar/gb-vim.c:1127
+#, c-format
+msgid "Not a command: %s"
+msgstr "Nav komanda: %s"
+
+#: ../plugins/contributing/contributing_plugin/helper.py:76
+#, python-format
+msgid ""
+"Usage:\n"
+"  %(prgname) %(command) OPTIONS\n"
+msgstr ""
+"Lietošana:\n"
+"  %(prgname) %(command) OPCIJAS\n"
+
+#: ../plugins/contributing/contributing_plugin/__init__.py:54
+msgid "Missing project name"
+msgstr "Trūkst projekta nosaukuma"
+
+#: ../plugins/contributing/contributing_plugin/__init__.py:68
+msgid ""
+"Usage:\n"
+"  ide contribute PROJECT_NAME\n"
+"\n"
+"  This command will bootstrap your system to begin contributing to the "
+"project\n"
+"  denoted by PROJECT_NAME. This includes fetching the sources, ensuring "
+"that\n"
+"  you have the required dependencies to build, and bootstraps the first "
+"build\n"
+"  of the project.\n"
+"\n"
+"Examples:\n"
+"  ide contribute gnome-builder\n"
+"  ide contribute gnome-maps\n"
+"\n"
+msgstr ""
+"Lietošana:\n"
+"  ide contribute PROJEKTA_NOSAUKUMS\n"
+"\n"
+"  Šī komanda sākumpalaidīs jūsu sistēmu, lai varētu dot ieguldījumu ar "
+"projektam\n"
+"  PROJEKTA_NOSAUKUMS. Tas iekļauj pirmkoda saņemšanu, būvēšanas atkarību\n"
+"  nodrošināšanu un sākumpalaiž pirmo projekta būvēšanu.\n"
+"\n"
+"Piemēri:\n"
+"  ide contribute gnome-builder\n"
+"  ide contribute gnome-maps\n"
+"\n"
+
+#: ../plugins/contributing/contributing_plugin/__init__.py:226
+msgid "Username"
+msgstr "Lietotājvārds"
+
+#: ../plugins/c-pack/ide-c-format-provider.c:281
+#: ../plugins/python-pack/ide-python-format-provider.c:238
+msgid "Format Strings"
+msgstr "Formatēt virknes"
+
+#: ../plugins/create-project/gbp-create-project-tool.c:130
+msgid "List available templates"
+msgstr "Pieejamo veidņu saraksts"
+
+#: ../plugins/create-project/gbp-create-project-tool.c:132
+msgid "Project template to generate"
+msgstr "Projekta veidne, ko ģenerēt"
+
+#: ../plugins/create-project/gbp-create-project-tool.c:138
+msgid "create-project [OPTION...] PROJECT_NAME"
+msgstr "create-project [OPCIJA...] PROJEKTA_NOSAUKUMS"
+
+#: ../plugins/create-project/gbp-create-project-tool.c:187
+#, c-format
+msgid "Filename must be ASCII and may not contain : or ="
+msgstr "Datnes nosaukumam ir jābūt ASCII un tas nesatur : vai ="
+
+#: ../plugins/create-project/gbp-create-project-tool.c:291
+#, c-format
+msgid "Please specify a project name.\n"
+msgstr "Lūdzu, norādiet projekta nosaukumu.\n"
+
+#: ../plugins/create-project/gbp-create-project-tool.c:307
+#, c-format
+msgid "Please specify a project template with --template=\n"
+msgstr "Lūdzu, norādiet projekta veidni ar --template=\n"
+
+#: ../plugins/devhelp/gbp-devhelp-search-provider.c:128
+#: ../plugins/devhelp/gbp-devhelp-workbench-addin.c:90
+msgid "Documentation"
+msgstr "Dokumentācija"
+
+#: ../plugins/file-search/gb-file-search-provider.c:44
+msgid "Switch To"
+msgstr "Pārslēgties uz"
+
+#: ../plugins/fpaste/fpaste_plugin/gtk/menus.ui.h:1
+msgid "Send to Fpaste.org"
+msgstr "Sūtīt uz Fpaste.org"
+
+#: ../plugins/fpaste/fpaste_plugin/__init__.py:104
+msgid "The following URL has been copied to the clipboard"
+msgstr " Sekojošais URL ir kopēts uz starpliktuvi"
+
+#: ../plugins/git/ide-git-buffer-change-monitor.c:167
+msgid "Cannot provide diff, no backing file provided."
+msgstr "Nevar parādīt starpību, nav dota aizmugures datne."
+
+#: ../plugins/git/ide-git-buffer-change-monitor.c:539
+#, c-format
+msgid "Repository does not have a working directory."
+msgstr "Krātuvei nav darba direktorijas."
+
+#: ../plugins/git/ide-git-buffer-change-monitor.c:550
+#, c-format
+msgid "File is not under control of git working directory."
+msgstr "Datne nav zem git darba direktorijas pārvaldības."
+
+#: ../plugins/git/ide-git-buffer-change-monitor.c:616
+#, c-format
+msgid "The requested file does not exist within the git index."
+msgstr "Pieprasītā datne neeksistē git indeksā."
+
+#: ../plugins/git/ide-git-clone-widget.c:131
+msgid "A valid Git URL is required"
+msgstr "Ir pieprasīts derīgs Git URL"
+
+#: ../plugins/git/ide-git-clone-widget.c:200
+msgid "Projects"
+msgstr "Projekti"
+
+#: ../plugins/git/ide-git-clone-widget.ui.h:1
+msgid "user@host:repository.git"
+msgstr "lietotājs@resursdators:repozitorijs.git"
+
+#: ../plugins/git/ide-git-clone-widget.ui.h:2
+msgid "Enter the URL of your project's source code repository"
+msgstr "Ievadiet sava projekta pirmkoda repozitorija URL"
+
+#: ../plugins/git/ide-git-clone-widget.ui.h:3
+msgid "Directory"
+msgstr "Direktorija"
+
+#: ../plugins/git/ide-git-clone-widget.ui.h:4
+msgid "Enter the name of the directory to create"
+msgstr "Ievadiet nosaukumu direktorijai, kuru izveidot"
+
+#: ../plugins/git/ide-git-clone-widget.ui.h:5
+msgid "Repository"
+msgstr "Repozitorijs"
+
+#: ../plugins/git/ide-git-clone-widget.ui.h:6
+msgid "Location"
+msgstr "Vieta"
+
+#: ../plugins/git/ide-git-genesis-addin.c:93
+msgid "From a existing project in a Git repository"
+msgstr "No esošā projekta Git repozitorijā"
+
+#: ../plugins/git/ide-git-preferences-addin.c:108
+msgid "Version Control"
+msgstr "Versiju vadība"
+
+#: ../plugins/git/ide-git-preferences-addin.c:145
+msgid "Attribution"
+msgstr "Attiecinājums"
+
+#: ../plugins/gnome-code-assistance/ide-gca-diagnostic-provider.c:336
+msgid "Code assistance requires a local file."
+msgstr "Kodēšanas palīdzībai vajag lokālu datni."
+
+#: ../plugins/gnome-code-assistance/ide-gca-service.c:168
+msgid "No language specified"
+msgstr "Nav norādīta valoda"
+
+#: ../plugins/html-preview/html_preview_plugin/gtk/menus.ui.h:1
+msgid "Preview as HTML"
+msgstr "Priekšskatīt kā HTML"
+
+#: ../plugins/jedi/jedi_plugin.py:672
+msgid "Suggest Python completions"
+msgstr "Ieteikt Python pabeigšanu"
+
+#: ../plugins/jedi/jedi_plugin.py:673
+msgid "Use Jedi to provide completions for the Python language"
+msgstr "Izmantot Jedi, lai nodrošinātu pabeigšanu Python valodai"
+
+#: ../plugins/library-template/library_template/__init__.py:52
+msgid "Shared Library"
+msgstr "Koplietota bibliotēka"
+
+#: ../plugins/library-template/library_template/__init__.py:55
+msgid "Create a new autotools project with a shared library"
+msgstr "Izveidot jaunu autotools projektu ar koplietotu bibliotēku"
+
+#: ../plugins/mingw/ide-mingw-device-provider.c:95
+msgid "MinGW 64-bit"
+msgstr "MinGW 64 bitu"
+
+#: ../plugins/mingw/ide-mingw-device-provider.c:107
+msgid "MinGW 32-bit"
+msgstr "MinGW 32 bitu"
+
+#: ../plugins/project-tree/gb-new-file-popover.c:123
+#: ../plugins/project-tree/gb-rename-file-popover.c:141
+msgid "A folder with that name already exists."
+msgstr "Tāda mape jau pastāv."
+
+#: ../plugins/project-tree/gb-new-file-popover.c:126
+#: ../plugins/project-tree/gb-rename-file-popover.c:144
+msgid "A file with that name already exists."
+msgstr "Tāda datne jau pastāv."
+
+#: ../plugins/project-tree/gb-new-file-popover.c:348
+#: ../plugins/project-tree/gb-new-file-popover.ui.h:1
+#: ../plugins/project-tree/gb-rename-file-popover.ui.h:1
+msgid "File Name"
+msgstr "Datnes nosaukums"
+
+#: ../plugins/project-tree/gb-new-file-popover.c:350
+msgid "Folder Name"
+msgstr "Mapes nosaukums"
+
+#: ../plugins/project-tree/gb-new-file-popover.ui.h:2
+msgid "_Create"
+msgstr "Izveido_t"
+
+#: ../plugins/project-tree/gb-project-tree-addin.c:77
+msgid "Project"
+msgstr "Projekts"
+
+#: ../plugins/project-tree/gb-project-tree-builder.c:77
+msgid "Files"
+msgstr "Datnes"
+
+#: ../plugins/project-tree/gb-rename-file-popover.c:79
+#, c-format
+msgid "Rename %s"
+msgstr "Pārdēvēt %s"
+
+#: ../plugins/project-tree/gb-rename-file-popover.c:172
+msgid "File name must not contain subdirectories."
+msgstr "Datnes nosaukums nevar saglabāt apakšdirektorijas."
+
+#: ../plugins/project-tree/gb-rename-file-popover.ui.h:2
+#: ../plugins/project-tree/gtk/menus.ui.h:10
+msgid "_Rename"
+msgstr "Pā_rdēvēt"
+
+#: ../plugins/project-tree/gtk/menus.ui.h:3
+msgid "_Empty File"
+msgstr "Tukša datn_e"
+
+#: ../plugins/project-tree/gtk/menus.ui.h:4
+msgid "_New Folder"
+msgstr "Jau_na mape"
+
+#: ../plugins/project-tree/gtk/menus.ui.h:5
+msgid "_Open"
+msgstr "_Atvērt"
+
+#: ../plugins/project-tree/gtk/menus.ui.h:6
+msgid "Open _With"
+msgstr "Atvērt _ar"
+
+#: ../plugins/project-tree/gtk/menus.ui.h:7
+msgid "Source Code Editor"
+msgstr "Pirmkoda redaktors"
+
+#: ../plugins/project-tree/gtk/menus.ui.h:8
+msgid "_Open Containing Folder"
+msgstr "Atvērt satur_ošo mapi"
+
+#: ../plugins/project-tree/gtk/menus.ui.h:9
+msgid "_Open in Terminal"
+msgstr "Atvērt t_erminālī"
+
+#: ../plugins/project-tree/gtk/menus.ui.h:11
+msgid "Mo_ve to Trash"
+msgstr "Iz_mest miskastē"
+
+#: ../plugins/project-tree/gtk/menus.ui.h:14
+msgid "Display Options"
+msgstr "Attēlošanas opcijas"
+
+#: ../plugins/project-tree/gtk/menus.ui.h:15
+msgid "Show Icons"
+msgstr "Rādīt ikonas"
+
+#: ../plugins/project-tree/gtk/menus.ui.h:16
+msgid "Show Ignored Files"
+msgstr "Rādīt ignorētās datnes"
+
+#: ../plugins/project-tree/gtk/menus.ui.h:17
+msgid "Sort Directories First"
+msgstr "Vispirms rādīt direktorijas"
+
+#: ../plugins/project-tree/gtk/menus.ui.h:18
+msgid "_Collapse All Nodes"
+msgstr "_Sakļaut visus mezglus"
+
+#: ../plugins/project-tree/gtk/menus.ui.h:19
+msgid "_Refresh"
+msgstr "_Atsvaidzināt"
+
+#: ../plugins/support/gtk/menus.ui.h:1
+msgid "Generate Support Log"
+msgstr "Ģenerēt atbalsta žurnālu"
+
+#: ../plugins/support/ide-support-application-addin.c:79
+#, c-format
+msgid ""
+"The support log file has been written to '%s'. Please provide this file as "
+"an attachment on your bug report or support request."
+msgstr ""
+"Atbalsta žurnāla datne tika ierakstīta “%s”. Lūdzu, dodiet šo datni kā "
+"pielikumu jūsu kļūdu ziņojumā vai atbalsta pieprasījumā."
+
+#: ../plugins/symbol-tree/symbol-tree.c:84
+msgid "Symbols"
+msgstr "Simboli"
+
+#: ../plugins/symbol-tree/symbol-tree-panel.c:239
+msgid "Current language does not support symbol resolvers"
+msgstr "Pašreizējā valoda nenodrošina simbolu atrisinātājus"
+
+#: ../plugins/sysmon/gb-sysmon-addin.c:63
+msgid "System Monitor"
+msgstr "Sistēmas pārraugs"
+
+#: ../plugins/terminal/gb-terminal-view-actions.c:297
+msgid "Save Terminal Content As"
+msgstr "Saglabāt termināļa saturu kā"
+
+#: ../plugins/terminal/gtk/menus.ui.h:1
+msgid "_New Terminal"
+msgstr "Jau_ns terminālis"
+
+#: ../plugins/todo/todo_plugin/__init__.py:60
+msgid "Todo"
+msgstr "Darāmie darbi"
+
+#: ../plugins/vala-pack/ide-vala-preferences-addin.vala:33
+msgid "Vala"
+msgstr "Vala"
+
+#: ../plugins/vala-pack/ide-vala-preferences-addin.vala:34
+msgid "Show errors and warnings provided by Vala"
+msgstr "Rādīt kļūdas un ziņojumus, ko sniedz Vala"
+
+#: ../plugins/vala-pack/ide-vala-preferences-addin.vala:35
+msgid "vala diagnostics warnings errors"
+msgstr "vala diagnostikas brīdinājumi, kļūdas"
+
+
