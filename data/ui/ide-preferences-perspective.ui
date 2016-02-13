@@ -55,6 +55,7 @@
     </child>
     <child type="title">
       <object class="GtkSearchEntry" id="search_entry">
+        <property name="tooltip-text" translatable="yes">Search through preferences</property>
         <property name="hexpand">true</property>
         <property name="margin-end">6</property>
         <property name="margin-start">6</property>

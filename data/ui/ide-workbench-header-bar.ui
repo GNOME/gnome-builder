@@ -5,6 +5,7 @@
     <property name="show-close-button">true</property>
     <child type="title">
       <object class="IdeOmniSearchEntry" id="search_entry">
+        <property name="tooltip-text" translatable="yes">Search for files. Shortcut: CTRL + .</property>
         <property name="hexpand">true</property>
         <property name="margin-end">6</property>
         <property name="margin-start">6</property>
@@ -13,6 +14,7 @@
     </child>
     <child>
       <object class="GtkMenuButton" id="menu_button">
+        <property name="tooltip-text" translatable="yes">Drops down a list of file operations</property>
         <property name="focus-on-click">false</property>
         <property name="visible">true</property>
         <style>
