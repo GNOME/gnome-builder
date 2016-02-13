@@ -738,6 +738,30 @@ ide_preferences_perspective_add_custom (IdePreferences *preferences,
   return widget_id;
 }
 
+static gboolean
+ide_preferences_perspective_remove_id (IdePreferences *preferences,
+                                       guint           widget_id)
+{
+  IdePreferencesPerspective *self = (IdePreferencesPerspective *)preferences;
+  GtkWidget *widget;
+
+  g_assert (IDE_IS_PREFERENCES_PERSPECTIVE (self));
+  g_assert (widget_id);
+
+  widget = g_hash_table_lookup (self->widgets, GINT_TO_POINTER (widget_id));
+  if (widget != NULL)
+    {
+      if (g_hash_table_remove (self->widgets, GINT_TO_POINTER (widget_id)))
+        {
+          gtk_widget_destroy (widget);
+          return TRUE;
+        }
+    }
+
+  g_warning ("No Preferences widget with number %i could be found and thus removed.", widget_id);
+  return FALSE;
+}
+
 static void
 ide_preferences_perspective_set_page (IdePreferences *preferences,
                                       const gchar    *page_name,
@@ -782,6 +806,7 @@ ide_preferences_iface_init (IdePreferencesInterface *iface)
   iface->add_spin_button = ide_preferences_perspective_add_spin_button;
   iface->add_custom = ide_preferences_perspective_add_custom;
   iface->set_page = ide_preferences_perspective_set_page;
+  iface->remove_id = ide_preferences_perspective_remove_id;
 }
 
 static gchar *

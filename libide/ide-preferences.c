@@ -180,6 +180,21 @@ ide_preferences_add_font_button (IdePreferences *self,
   return IDE_PREFERENCES_GET_IFACE (self)->add_font_button (self, page_name, group_name, schema_id, key, title, keywords, priority);
 }
 
+/**
+ * ide_preference_remove_id:
+ * @widget_id: An preferences widget id
+ *
+ */
+gboolean
+ide_preferences_remove_id (IdePreferences *self,
+                           guint           widget_id)
+{
+  g_return_val_if_fail (IDE_IS_PREFERENCES (self), FALSE);
+  g_return_val_if_fail (widget_id, FALSE);
+
+  return IDE_PREFERENCES_GET_IFACE (self)->remove_id (self, widget_id);
+}
+
 void
 ide_preferences_set_page (IdePreferences *self,
                           const gchar    *page_name,
