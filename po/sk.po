@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-02-07 08:02+0000\n"
-"PO-Revision-Date: 2016-02-07 13:48+0100\n"
+"POT-Creation-Date: 2016-02-13 08:03+0000\n"
+"PO-Revision-Date: 2016-02-13 14:47+0100\n"
 "Last-Translator: Dušan Kazik <prescott66@gmail.com>\n"
 "Language-Team: slovenčina <>\n"
 "Language: sk\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 1 : (n>=2 && n<=4) ? 2 : 0;\n"
-"X-Generator: Poedit 1.8.6\n"
+"X-Generator: Poedit 1.8.7\n"
 
 #: ../contrib/egg/egg-animation.c:715
 #, c-format
@@ -226,11 +226,11 @@ msgstr ""
 
 #: ../data/gtk/menus.ui.h:32
 msgid "Zoom _In"
-msgstr ""
+msgstr "Z_väčšiť"
 
 #: ../data/gtk/menus.ui.h:33
 msgid "Zoom _Out"
-msgstr ""
+msgstr "Zme_nšiť"
 
 #: ../data/gtk/menus.ui.h:34
 msgid "Reset"
@@ -693,17 +693,17 @@ msgstr "Nebol poskytnutý žiadny súbor."
 msgid "Line %u, Column %u"
 msgstr "Riadok %u, stĺpec %u"
 
-#: ../libide/editor/ide-editor-frame.c:242
+#: ../libide/editor/ide-editor-frame.c:244
 #, c-format
 msgid "%u of %u"
 msgstr "%u z %u"
 
-#: ../libide/editor/ide-editor-frame.c:641
+#: ../libide/editor/ide-editor-frame.c:643
 #: ../plugins/project-tree/gtk/menus.ui.h:1
 msgid "Re_veal in Project Tree"
 msgstr "Od_haliť v strome projektu"
 
-#: ../libide/editor/ide-editor-perspective.c:350
+#: ../libide/editor/ide-editor-perspective.c:392
 #: ../libide/preferences/ide-preferences-builtin.c:102
 #: ../libide/preferences/ide-preferences-builtin.c:125
 msgid "Editor"
@@ -805,7 +805,7 @@ msgstr "Zobrazí verziu aplikácie"
 
 #: ../libide/ide-application-command-line.c:198
 #, fuzzy
-msgid "Increase verbosity, may specify multiple times"
+msgid "Increase verbosity, may be specified multiple times"
 msgstr "Zvýši rozsah výpisov. Nárast môže byť až niekoľkonásobný"
 
 #: ../libide/ide-application-command-line.c:228
@@ -829,8 +829,10 @@ msgid "Please provide a worker type"
 msgstr ""
 
 #: ../libide/ide-application-command-line.c:346
-msgid "Please provide a dbus address"
-msgstr ""
+#, fuzzy
+#| msgid "Please provide a command"
+msgid "Please provide a D-Bus address"
+msgstr "Prosím, poskytnite príkaz"
 
 #: ../libide/ide-application-command-line.c:355
 msgid "No such worker"
@@ -980,7 +982,7 @@ msgid "Invalid %-encoding in URI"
 msgstr ""
 
 #: ../libide/ide-uri.c:219
-msgid "Non-UTF8 characters in URI"
+msgid "Non-UTF-8 characters in URI"
 msgstr ""
 
 #: ../libide/ide-uri.c:366 ../libide/ide-uri.c:377
@@ -1114,7 +1116,7 @@ msgid "Emulation"
 msgstr "Emulácia"
 
 #: ../libide/preferences/ide-preferences-builtin.c:113
-msgid "Default keybinding mode which mimics Gedit"
+msgid "Default keybinding mode which mimics gedit"
 msgstr ""
 
 #: ../libide/preferences/ide-preferences-builtin.c:114
@@ -1395,7 +1397,7 @@ msgid "Trim trailing whitespace"
 msgstr "Vymazať medzeru na konci riadka pri uložení dokumentu"
 
 #: ../libide/preferences/ide-preferences-builtin.c:227
-msgid "Upon saving, trailing whitespcae from modified lines will be trimmed."
+msgid "Upon saving, trailing whitespace from modified lines will be trimmed."
 msgstr ""
 
 #: ../libide/preferences/ide-preferences-builtin.c:229
@@ -1417,10 +1419,8 @@ msgid "Position in spaces for the right margin"
 msgstr ""
 
 #: ../libide/preferences/ide-preferences-builtin.c:234
-#, fuzzy
-#| msgid "_Tab width:"
 msgid "Tab width"
-msgstr "Šírka _tabulátora:"
+msgstr "Šírka tabulátora"
 
 #: ../libide/preferences/ide-preferences-builtin.c:234
 msgid "Width of a tab character in spaces"
@@ -1525,25 +1525,22 @@ msgid "Calling ShowItems failed: "
 msgstr "Volanie funkcie ShowItems zlyhalo: "
 
 #: ../plugins/autotools/ide-autotools-builder.c:130
-#, fuzzy
-#| msgid "Cancel"
 msgid "Cancelled"
-msgstr "Zrušiť"
+msgstr "Zrušené"
 
 #: ../plugins/autotools/ide-autotools-builder.c:132
 msgid "Failed"
-msgstr ""
+msgstr "Zlyhalo"
 
 #: ../plugins/autotools/ide-autotools-builder.c:138
 msgid "Success"
-msgstr ""
+msgstr "Úspech"
 
 #: ../plugins/autotools/ide-autotools-builder.c:242
 #: ../plugins/autotools/ide-autotools-build-task.c:933
-#, fuzzy
 #| msgid "Building"
 msgid "Building…"
-msgstr "Zostavovanie"
+msgstr "Zostavovanie…"
 
 #: ../plugins/autotools/ide-autotools-build-system.c:182
 msgid "Failed to locate configure.ac"
@@ -1577,7 +1574,7 @@ msgstr "Súbor autogen.sh nie je spustiteľný."
 
 #: ../plugins/autotools/ide-autotools-build-task.c:796
 msgid "Autogening…"
-msgstr ""
+msgstr "Automatické generovanie…"
 
 #: ../plugins/autotools/ide-autotools-build-task.c:825
 #, c-format
@@ -1585,30 +1582,25 @@ msgid "autogen.sh failed to create configure (%s)"
 msgstr "Súbor autogen.sh zlyhal pri tvorbe konfigurácie (%s)"
 
 #: ../plugins/autotools/ide-autotools-build-task.c:860
-#, fuzzy
 #| msgid "Config"
 msgid "Configuring…"
-msgstr "Konfigurácia"
+msgstr "Konfigurovanie…"
 
 #: ../plugins/autotools/ide-autotools-build-task.c:931
 msgid "Cleaning…"
-msgstr ""
+msgstr "Čistenie…"
 
 #: ../plugins/autotools/ide-makecache.c:1006
 msgid "Invalid makefile provided, ignoring."
 msgstr "Bol poskytnutý neplatný súbor makefile. Ignoruje sa."
 
 #: ../plugins/build-tools/gbp-build-panel-row.c:68
-#, fuzzy
-#| msgid "Unknown failure"
 msgid "Unknown file"
-msgstr "Neznáme zlyhanie"
+msgstr "Neznámy súbor"
 
 #: ../plugins/build-tools/gbp-build-panel.ui.h:1
-#, fuzzy
-#| msgid "Device"
 msgid "Device:"
-msgstr "Zariadenie"
+msgstr "Zariadenie:"
 
 #: ../plugins/build-tools/gbp-build-panel.ui.h:2
 msgid "Framework:"
@@ -1645,20 +1637,16 @@ msgid "Status:"
 msgstr "Stav:"
 
 #: ../plugins/build-tools/gbp-build-panel.ui.h:10
-#, fuzzy
-#| msgid "Is Running"
 msgid "Running Time:"
-msgstr "Je spustený"
+msgstr "Doba spustenia:"
 
 #: ../plugins/build-tools/gbp-build-panel.ui.h:11
 msgid "Warnings:"
 msgstr "Upozornenia:"
 
 #: ../plugins/build-tools/gbp-build-panel.ui.h:12
-#, fuzzy
-#| msgid "Is Error"
 msgid "Errors:"
-msgstr "Je chybou"
+msgstr "Chyby:"
 
 #: ../plugins/build-tools/gbp-build-panel.ui.h:14
 msgid "Deploy"
@@ -1735,10 +1723,9 @@ msgid "   Build ran for: %"
 msgstr "   Zostavenie trvalo: %"
 
 #: ../plugins/build-tools/gbp-build-tool.c:191
-#, fuzzy, c-format
-#| msgid "Failed to load file: %s: %s"
+#, c-format
 msgid "Failed to locate device \"%s\""
-msgstr "Zlyhalo načítanie súboru: %s: %s"
+msgstr "Zlyhalo lokalizovanie zariadenia „%s“"
 
 #: ../plugins/build-tools/gbp-build-tool.c:254
 #, fuzzy
@@ -1747,10 +1734,8 @@ msgid "Clean the project"
 msgstr "Vyčistí a znovu zostaví projekt."
 
 #: ../plugins/build-tools/gbp-build-tool.c:256
-#, fuzzy
-#| msgid "The device to build for."
-msgid "The id of the device to build for"
-msgstr "Zariadenie, pre ktoré sa má zostaviť."
+msgid "The ID of the device to build for"
+msgstr "ID zariadenia, pre ktoré sa má zostaviť"
 
 #: ../plugins/build-tools/gbp-build-tool.c:257
 msgid "local"
@@ -1885,10 +1870,8 @@ msgstr ""
 "  %(prgname) %(command) VOĽBY\n"
 
 #: ../plugins/contributing/contributing_plugin/__init__.py:54
-#, fuzzy
-#| msgid "The project name."
 msgid "Missing project name"
-msgstr "Názov Projektu."
+msgstr "Chýba názov projektu"
 
 #: ../plugins/contributing/contributing_plugin/__init__.py:68
 msgid ""
@@ -1910,10 +1893,8 @@ msgid ""
 msgstr ""
 
 #: ../plugins/contributing/contributing_plugin/__init__.py:226
-#, fuzzy
-#| msgid "_Rename"
 msgid "Username"
-msgstr "_Premenovať"
+msgstr "Používateľské meno"
 
 #: ../plugins/c-pack/ide-c-format-provider.c:281
 #: ../plugins/python-pack/ide-python-format-provider.c:238
@@ -1933,16 +1914,15 @@ msgid "create-project [OPTION...] PROJECT_NAME"
 msgstr "create-project [VOĽBA...] NÁZOV_PROJEKTU"
 
 #: ../plugins/create-project/gbp-create-project-tool.c:187
-#, fuzzy, c-format
-#| msgid "File name must not contain subdirectories."
-msgid "Filename must be ascii and may not contain : or ="
-msgstr "Názov súboru nesmie obsahovať podadresáre."
+#, c-format
+msgid "Filename must be ASCII and may not contain : or ="
+msgstr ""
+"Názov súboru musí byť v kódovaní ASCII a nemôže obsahovať znak : alebo ="
 
 #: ../plugins/create-project/gbp-create-project-tool.c:291
-#, fuzzy, c-format
-#| msgid "The project name."
+#, c-format
 msgid "Please specify a project name.\n"
-msgstr "Názov Projektu."
+msgstr "Prosím, zadajte názov projektu.\n"
 
 #: ../plugins/create-project/gbp-create-project-tool.c:307
 #, c-format
@@ -1990,10 +1970,8 @@ msgid "A valid Git URL is required"
 msgstr "Požaduje sa platná URL repozitára Git"
 
 #: ../plugins/git/ide-git-clone-widget.c:200
-#, fuzzy
-#| msgid "Project"
 msgid "Projects"
-msgstr "Projekt"
+msgstr "Projekty"
 
 #: ../plugins/git/ide-git-clone-widget.ui.h:1
 msgid "user@host:repository.git"
@@ -2072,16 +2050,12 @@ msgid "Create a new autotools project with a shared library"
 msgstr ""
 
 #: ../plugins/mingw/ide-mingw-device-provider.c:95
-#, fuzzy
-#| msgid "MinGW (64-bit)"
 msgid "MinGW 64-bit"
-msgstr "MinGW (64-bitový)"
+msgstr "MinGW 64-bitový"
 
 #: ../plugins/mingw/ide-mingw-device-provider.c:107
-#, fuzzy
-#| msgid "MinGW (32-bit)"
 msgid "MinGW 32-bit"
-msgstr "MinGW (32-bitový)"
+msgstr "MinGW 32-bitový"
 
 #: ../plugins/project-tree/gb-new-file-popover.c:123
 #: ../plugins/project-tree/gb-rename-file-popover.c:141
@@ -2199,10 +2173,8 @@ msgstr ""
 "súbor ako prílohu vo vašom hlásení o chybe alebo požiadavke o podporu."
 
 #: ../plugins/symbol-tree/symbol-tree.c:84
-#, fuzzy
-#| msgid "Search Symbols"
 msgid "Symbols"
-msgstr "Vyhľadajte symboly"
+msgstr "Symboly"
 
 #: ../plugins/symbol-tree/symbol-tree-panel.c:239
 msgid "Current language does not support symbol resolvers"
@@ -2217,10 +2189,8 @@ msgid "Save Terminal Content As"
 msgstr "Uloženie obsahu terminálu ako"
 
 #: ../plugins/terminal/gtk/menus.ui.h:1
-#, fuzzy
-#| msgid "Terminal"
 msgid "_New Terminal"
-msgstr "Terminál"
+msgstr "_Nový terminál"
 
 #: ../plugins/todo/todo_plugin/__init__.py:60
 msgid "Todo"
