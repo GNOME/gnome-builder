@@ -2624,7 +2624,7 @@ treeview {
   -gtk-key-bindings: builder-vim-tree-view;
 }
 
-projecttree {
+tree.project-tree {
   -gtk-key-bindings: builder-vim-tree-view,
                      builder-gb-project-tree-vim,
                      builder-gb-project-tree;
