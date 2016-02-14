@@ -38,6 +38,7 @@ nobase_resource_DATA = \
 	library_template/shared-library/autogen.sh \
 	library_template/shared-library/data/package.pc.in \
 	library_template/shared-library/data/Makefile.am \
+	library_template/shared-library/po/Makevars \
 	$(NULL)
 
 EXTRA_DIST = $(nobase_resource_DATA)
