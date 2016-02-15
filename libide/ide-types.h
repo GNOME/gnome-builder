@@ -41,6 +41,9 @@ typedef struct _IdeBuildResult                 IdeBuildResult;
 
 typedef struct _IdeBuildSystem                 IdeBuildSystem;
 
+typedef struct _IdeConfiguration               IdeConfiguration;
+typedef struct _IdeConfigurationManager        IdeConfigurationManager;
+
 typedef struct _IdeContext                     IdeContext;
 
 typedef struct _IdeDebugger                    IdeDebugger;
@@ -49,9 +52,7 @@ typedef struct _IdeDebuggerInterface           IdeDebuggerInterface;
 typedef struct _IdeDeployer                    IdeDeployer;
 
 typedef struct _IdeDevice                      IdeDevice;
-
 typedef struct _IdeDeviceManager               IdeDeviceManager;
-
 typedef struct _IdeDeviceProvider              IdeDeviceProvider;
 
 typedef struct _IdeDiagnostic                  IdeDiagnostic;
@@ -61,6 +62,9 @@ typedef struct _IdeDiagnostics                 IdeDiagnostics;
 typedef struct _IdeDiagnostician               IdeDiagnostician;
 
 typedef struct _IdeDiagnosticProvider          IdeDiagnosticProvider;
+
+typedef struct _IdeEnvironment                 IdeEnvironment;
+typedef struct _IdeEnvironmentVariable         IdeEnvironmentVariable;
 
 typedef struct _IdeExecuter                    IdeExecuter;
 typedef struct _IdeExecuterInterface           IdeExecuterInterface;

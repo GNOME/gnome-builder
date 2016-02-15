@@ -25,6 +25,8 @@ G_BEGIN_DECLS
 
 #define IDE_INSIDE
 
+#include "ide-types.h"
+
 #include "ide-application.h"
 #include "ide-application-addin.h"
 #include "ide-application-tool.h"
@@ -40,6 +42,8 @@ G_BEGIN_DECLS
 #include "ide-completion-item.h"
 #include "ide-completion-provider.h"
 #include "ide-completion-results.h"
+#include "ide-configuration.h"
+#include "ide-configuration-manager.h"
 #include "ide-context.h"
 #include "ide-debug.h"
 #include "ide-debugger.h"
@@ -52,6 +56,9 @@ G_BEGIN_DECLS
 #include "ide-diagnostician.h"
 #include "ide-diagnostic-provider.h"
 #include "ide-enums.h"
+#include "ide-environment.h"
+#include "ide-environment-editor.h"
+#include "ide-environment-variable.h"
 #include "ide-executable.h"
 #include "ide-executer.h"
 #include "ide-file.h"
@@ -80,6 +87,9 @@ G_BEGIN_DECLS
 #include "ide-project-item.h"
 #include "ide-recent-projects.h"
 #include "ide-refactory.h"
+#include "ide-runtime.h"
+#include "ide-runtime-manager.h"
+#include "ide-runtime-provider.h"
 #include "ide-script.h"
 #include "ide-script-manager.h"
 #include "ide-search-context.h"
@@ -97,6 +107,7 @@ G_BEGIN_DECLS
 #include "ide-source-snippets-manager.h"
 #include "ide-source-snippets.h"
 #include "ide-source-view.h"
+#include "ide-subprocess-launcher.h"
 #include "ide-symbol-resolver.h"
 #include "ide-symbol.h"
 #include "ide-target.h"
