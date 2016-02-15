@@ -36,12 +36,15 @@ libide/ide-builder.c
 libide/ide-build-result.c
 libide/ide-build-system.c
 libide/ide.c
+libide/ide-configuration-manager.c
 libide/ide-context.c
 libide/ide-device-manager.c
+libide/ide-environment-editor.c
 libide/ide-layout-view.c
 libide/ide-object.c
 libide/ide-project.c
 libide/ide-recent-projects.c
+libide/ide-runtime-manager.c
 libide/ide-script.c
 libide/ide-source-snippet.c
 libide/ide-source-snippet-completion-provider.c
@@ -59,6 +62,7 @@ plugins/autotools/ide-autotools-builder.c
 plugins/autotools/ide-autotools-build-system.c
 plugins/autotools/ide-autotools-build-task.c
 plugins/autotools/ide-makecache.c
+[type: gettext/glade]plugins/build-tools/gbp-build-configuration-view.ui
 plugins/build-tools/gbp-build-panel-row.c
 [type: gettext/glade]plugins/build-tools/gbp-build-panel.ui
 plugins/build-tools/gbp-build-tool.c
