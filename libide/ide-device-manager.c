@@ -128,6 +128,9 @@ ide_device_manager__provider_device_removed (IdeDeviceManager  *self,
   g_return_if_fail (IDE_IS_DEVICE (device));
   g_return_if_fail (IDE_IS_DEVICE_PROVIDER (provider));
 
+  if (self->devices == NULL)
+    return;
+
   for (i = 0; i < self->devices->len; i++)
     {
       IdeDevice *current = g_ptr_array_index (self->devices, i);
