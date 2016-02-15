@@ -83,6 +83,10 @@ libide_1_0_la_public_sources = \
 	ide-diagnostics.h \
 	ide-enums.c \
 	ide-enums.h \
+	ide-environment.c \
+	ide-environment.h \
+	ide-environment-variable.c \
+	ide-environment-variable.h \
 	ide-executable.c \
 	ide-executable.h \
 	ide-executer.c \
