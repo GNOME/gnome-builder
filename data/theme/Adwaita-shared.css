@@ -71,6 +71,9 @@ omnisearchdisplay omnisearchgroup omnisearchrow:selected {
  * preferences perspective, including groups, rows,
  * sidebar, etc.
  */
+workbench preferences stacksidebar list {
+  border-right: 1px solid alpha(@borders, 0.4);
+}
 workbench preferences preferencesgroup list row {
   padding: 10px;
   border-bottom: 1px solid alpha(@borders, 0.2);
