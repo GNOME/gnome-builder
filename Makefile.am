@@ -72,7 +72,7 @@ run:
 	GB_IN_TREE_PLUGINS=1 \
 	GB_IN_TREE_FONTS=1 \
 	GB_IN_TREE_STYLE_SCHEMES=1 \
-	GI_TYPELIB_PATH="libide:contrib/tmpl:$(GI_TYPELIB_PATH)" \
+	GI_TYPELIB_PATH="libide:contrib/egg:contrib/tmpl:$(GI_TYPELIB_PATH)" \
 	GOBJECT_DEBUG=instance-count \
 	PATH=$(top_builddir)/src:${PATH} \
 	$(LIBTOOL) --mode=execute gdb -ex run --args src/gnome-builder -vvvv -s
@@ -82,7 +82,7 @@ strace:
 	GB_IN_TREE_PLUGINS=1 \
 	GB_IN_TREE_FONTS=1 \
 	GB_IN_TREE_STYLE_SCHEMES=1 \
-	GI_TYPELIB_PATH="libide:contrib/tmpl:$(GI_TYPELIB_PATH)" \
+	GI_TYPELIB_PATH="libide:contrib/egg:contrib/tmpl:$(GI_TYPELIB_PATH)" \
 	GOBJECT_DEBUG=instance-count \
 	PATH=$(top_builddir)/src:${PATH} \
 	$(LIBTOOL) --mode=execute strace -T src/gnome-builder -vvvv -s
@@ -92,7 +92,7 @@ debug:
 	GB_IN_TREE_PLUGINS=1 \
 	GB_IN_TREE_FONTS=1 \
 	GB_IN_TREE_STYLE_SCHEMES=1 \
-	GI_TYPELIB_PATH="libide:contrib/tmpl:$(GI_TYPELIB_PATH)" \
+	GI_TYPELIB_PATH="libide:contrib/egg:contrib/tmpl:$(GI_TYPELIB_PATH)" \
 	G_DEBUG=fatal-criticals \
 	GOBJECT_DEBUG=instance-count \
 	PATH=$(top_builddir)/src:${PATH} \
@@ -103,7 +103,7 @@ valgrind:
 	GB_IN_TREE_PLUGINS=1 \
 	GB_IN_TREE_FONTS=1 \
 	GB_IN_TREE_STYLE_SCHEMES=1 \
-	GI_TYPELIB_PATH="libide:contrib/tmpl:$(GI_TYPELIB_PATH)" \
+	GI_TYPELIB_PATH="libide:contrib/egg:contrib/tmpl:$(GI_TYPELIB_PATH)" \
 	G_DEBUG=fatal-criticals \
 	G_SLICE=always-malloc \
 	PATH=$(top_builddir)/src:${PATH} \
