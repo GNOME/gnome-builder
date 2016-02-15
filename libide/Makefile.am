@@ -85,6 +85,10 @@ libide_1_0_la_public_sources = \
 	ide-enums.h \
 	ide-environment.c \
 	ide-environment.h \
+	ide-environment-editor.c \
+	ide-environment-editor.h \
+	ide-environment-editor-row.c \
+	ide-environment-editor-row.h \
 	ide-environment-variable.c \
 	ide-environment-variable.h \
 	ide-executable.c \
