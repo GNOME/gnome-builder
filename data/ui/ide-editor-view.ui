@@ -111,6 +111,7 @@
               <object class="GtkMenuButton" id="goto_line_button">
                 <property name="popover">goto_line_popover</property>
                 <property name="focus-on-click">false</property>
+                <property name="tooltip-text" translatable="yes">Go to line number</property>
                 <property name="visible">true</property>
                 <child>
                   <object class="GtkLabel" id="cursor_label">
@@ -131,6 +132,7 @@
               <object class="GtkMenuButton" id="tweak_button">
                 <property name="focus-on-click">false</property>
                 <property name="popover">tweak_popover</property>
+                <property name="tooltip-text" translatable="yes">Change editor settings and language</property>
                 <property name="visible">true</property>
               </object>
             </child>
