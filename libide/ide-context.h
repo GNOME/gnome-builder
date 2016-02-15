@@ -76,6 +76,9 @@ void                      ide_context_hold_for_object       (IdeContext         
 void                      ide_context_release               (IdeContext           *self);
 IdeConfigurationManager  *ide_context_get_configuration_manager (IdeContext           *self);
 IdeRuntimeManager        *ide_context_get_runtime_manager       (IdeContext           *self);
+void                      ide_context_warning                   (IdeContext           *self,
+                                                                 const gchar          *format,
+                                                                 ...) G_GNUC_PRINTF (2, 3);
 
 G_END_DECLS
 

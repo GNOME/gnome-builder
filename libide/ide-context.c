@@ -2082,3 +2082,21 @@ ide_context_get_configuration_manager (IdeContext *self)
   return self->configuration_manager;
 }
 
+void
+ide_context_warning (IdeContext  *self,
+                     const gchar *format,
+                     ...)
+{
+  va_list args;
+
+  g_return_if_fail (IDE_IS_CONTEXT (self));
+  g_return_if_fail (format != NULL);
+
+  va_start (args, format);
+  /*
+   * TODO: Track logging information so that we can display warnings
+   *       to the user in the workbench.
+   */
+  g_logv ("Ide", G_LOG_LEVEL_WARNING, format, args);
+  va_end (args);
+}
