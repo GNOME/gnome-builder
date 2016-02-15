@@ -16,6 +16,7 @@
               <object class="GtkButton" id="backward_button">
                 <property name="action-name">view-stack.go-backward</property>
                 <property name="focus-on-click">false</property>
+                <property name="tooltip-text" translatable="yes">Jump to previous location</property>
                 <property name="visible">true</property>
                 <child>
                   <object class="GtkImage">
@@ -29,6 +30,7 @@
               <object class="GtkButton" id="forward_button">
                 <property name="action-name">view-stack.go-forward</property>
                 <property name="focus-on-click">false</property>
+                <property name="tooltip-text" translatable="yes">Jump to next location</property>
                 <property name="visible">true</property>
                 <child>
                   <object class="GtkImage">
