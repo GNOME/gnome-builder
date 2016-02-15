@@ -22,6 +22,7 @@
 #include "egg-binding-group.h"
 #include "egg-signal-group.h"
 
+#include "gbp-build-configuration-row.h"
 #include "gbp-build-panel.h"
 #include "gbp-build-panel-row.h"
 
@@ -33,17 +34,14 @@ struct _GbpBuildPanel
   EggSignalGroup   *signals;
   EggBindingGroup  *bindings;
 
-  IdeDevice        *device;
-
+  GtkListBox       *configurations;
+  GtkLabel         *configuration_label;
+  GtkPopover       *configuration_popover;
   GtkListBox       *diagnostics;
+  GtkLabel         *errors_label;
+  GtkLabel         *running_time_label;
   GtkRevealer      *status_revealer;
   GtkLabel         *status_label;
-  GtkLabel         *running_time_label;
-  GtkMenuButton    *device_button;
-  GtkLabel         *device_label;
-  GtkListBox       *devices;
-  GtkPopover       *device_popover;
-  GtkLabel         *errors_label;
   GtkLabel         *warnings_label;
 
   guint             running_time_source;
@@ -56,79 +54,70 @@ G_DEFINE_TYPE (GbpBuildPanel, gbp_build_panel, GTK_TYPE_BIN)
 
 enum {
   PROP_0,
-  PROP_DEVICE,
-  PROP_DEVICE_MANAGER,
+  PROP_CONFIGURATION_MANAGER,
   PROP_RESULT,
   LAST_PROP
 };
 
 static GParamSpec *properties [LAST_PROP];
 
-static GtkWidget *
-create_device_row (gpointer item,
-                   gpointer user_data)
+static gboolean
+map_current_to_bool (GBinding     *binding,
+                     const GValue *from_value,
+                     GValue       *to_value,
+                     gpointer      user_data)
 {
-  GtkListBoxRow *row;
-  IdeDevice *device = item;
-  const gchar *type;
-  const gchar *name;
-  GtkLabel *label;
-  gchar *str;
+  IdeConfiguration *configuration = user_data;
+  IdeConfiguration *current;
 
-  g_assert (IDE_IS_DEVICE (device));
+  g_assert (IDE_IS_CONFIGURATION (configuration));
 
-  row = g_object_new (GTK_TYPE_LIST_BOX_ROW,
+  current = g_value_get_object (from_value);
+  g_value_set_boolean (to_value, (configuration == current));
+
+  return TRUE;
+}
+
+static GtkWidget *
+create_configuration_row (gpointer item,
+                          gpointer user_data)
+{
+  IdeConfiguration *configuration = item;
+  IdeConfigurationManager *manager = user_data;
+  GtkWidget *ret;
+
+  g_assert (IDE_IS_CONFIGURATION (configuration));
+  g_assert (IDE_IS_CONFIGURATION_MANAGER (manager));
+
+  ret = g_object_new (GBP_TYPE_BUILD_CONFIGURATION_ROW,
+                      "configuration", configuration,
                       "visible", TRUE,
                       NULL);
 
-  g_object_set_data_full (G_OBJECT (row),
-                          "IDE_DEVICE_ID",
-                          g_strdup (ide_device_get_id (device)),
-                          g_free);
+  g_object_bind_property_full (manager, "current", ret, "selected",
+                               G_BINDING_SYNC_CREATE,
+                               map_current_to_bool, NULL,
+                               g_object_ref (configuration), g_object_unref);
 
-  name = ide_device_get_display_name (device);
-  type = ide_device_get_system_type (device);
-  str = g_strdup_printf ("%s (%s)", name, type);
-
-  label = g_object_new (GTK_TYPE_LABEL,
-                        "label", str,
-                        "xalign", 0.0f,
-                        "visible", TRUE,
-                        NULL);
-  gtk_container_add (GTK_CONTAINER (row), GTK_WIDGET (label));
-
-  g_free (str);
-
-  return GTK_WIDGET (row);
+  return ret;
 }
 
 static void
-gbp_build_panel_set_device (GbpBuildPanel *self,
-                            IdeDevice     *device)
+gbp_build_panel_set_configuration_manager (GbpBuildPanel           *self,
+                                           IdeConfigurationManager *configuration_manager)
 {
-  g_return_if_fail (GBP_IS_BUILD_PANEL (self));
-  g_return_if_fail (!device || IDE_IS_DEVICE (device));
+  g_assert (GBP_IS_BUILD_PANEL (self));
+  g_assert (IDE_IS_CONFIGURATION_MANAGER (configuration_manager));
 
-  if (g_set_object (&self->device, device))
-    {
-      const gchar *name = NULL;
+  gtk_list_box_bind_model (self->configurations,
+                           G_LIST_MODEL (configuration_manager),
+                           create_configuration_row,
+                           g_object_ref (configuration_manager),
+                           g_object_unref);
 
-      if (device != NULL)
-        name = ide_device_get_display_name (device);
-      gtk_label_set_label (self->device_label, name);
-    }
-}
-
-static void
-gbp_build_panel_set_device_manager (GbpBuildPanel    *self,
-                                    IdeDeviceManager *device_manager)
-{
-  g_return_if_fail (GBP_IS_BUILD_PANEL (self));
-  g_return_if_fail (!device_manager || IDE_IS_DEVICE_MANAGER (device_manager));
-
-  gtk_list_box_bind_model (self->devices,
-                           G_LIST_MODEL (device_manager),
-                           create_device_row, NULL, NULL);
+  g_object_bind_property (configuration_manager, "current-display-name",
+                          self->configuration_label, "label",
+                          G_BINDING_SYNC_CREATE);
 }
 
 void
@@ -281,22 +270,26 @@ gbp_build_panel_notify_running (GbpBuildPanel  *self,
 }
 
 static void
-gbp_build_panel_device_activated (GbpBuildPanel *self,
-                                  GtkListBoxRow *row,
-                                  GtkListBox    *list_box)
+gbp_build_panel_configuration_activated (GbpBuildPanel *self,
+                                         GtkListBoxRow *row,
+                                         GtkListBox    *list_box)
 {
-  const gchar *id;
+  IdeConfigurationManager *manager;
+  IdeConfiguration *config;
+  IdeWorkbench *workbench;
+  IdeContext *context;
 
   g_assert (GBP_IS_BUILD_PANEL (self));
   g_assert (GTK_IS_LIST_BOX_ROW (row));
   g_assert (GTK_IS_LIST_BOX (list_box));
 
-  if ((id = g_object_get_data (G_OBJECT (row), "IDE_DEVICE_ID")))
-    ide_widget_action (GTK_WIDGET (self),
-                       "build-tools", "device",
-                       g_variant_new_string (id));
+  workbench = ide_widget_get_workbench (GTK_WIDGET (self));
+  context = ide_workbench_get_context (workbench);
+  manager = ide_context_get_configuration_manager (context);
+  config = gbp_build_configuration_row_get_configuration (GBP_BUILD_CONFIGURATION_ROW (row));
+  ide_configuration_manager_set_current (manager, config);
 
-  gtk_widget_hide (GTK_WIDGET (self->device_popover));
+  gtk_widget_hide (GTK_WIDGET (self->configuration_popover));
 }
 
 static void
@@ -339,7 +332,6 @@ gbp_build_panel_destroy (GtkWidget *widget)
 
   g_clear_object (&self->bindings);
   g_clear_object (&self->signals);
-  g_clear_object (&self->device);
 
   GTK_WIDGET_CLASS (gbp_build_panel_parent_class)->destroy (widget);
 }
@@ -354,10 +346,6 @@ gbp_build_panel_get_property (GObject    *object,
 
   switch (prop_id)
     {
-    case PROP_DEVICE:
-      g_value_set_object (value, self->device);
-      break;
-
     case PROP_RESULT:
       g_value_set_object (value, self->result);
       break;
@@ -377,12 +365,8 @@ gbp_build_panel_set_property (GObject      *object,
 
   switch (prop_id)
     {
-    case PROP_DEVICE:
-      gbp_build_panel_set_device (self, g_value_get_object (value));
-      break;
-
-    case PROP_DEVICE_MANAGER:
-      gbp_build_panel_set_device_manager (self, g_value_get_object (value));
+    case PROP_CONFIGURATION_MANAGER:
+      gbp_build_panel_set_configuration_manager (self, g_value_get_object (value));
       break;
 
     case PROP_RESULT:
@@ -405,18 +389,11 @@ gbp_build_panel_class_init (GbpBuildPanelClass *klass)
 
   widget_class->destroy = gbp_build_panel_destroy;
 
-  properties [PROP_DEVICE] =
-    g_param_spec_object ("device",
-                         "Device",
-                         "Device",
-                         IDE_TYPE_DEVICE,
-                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-
-  properties [PROP_DEVICE_MANAGER] =
-    g_param_spec_object ("device-manager",
-                         "Device Manager",
-                         "Device Manager",
-                         IDE_TYPE_DEVICE_MANAGER,
+  properties [PROP_CONFIGURATION_MANAGER] =
+    g_param_spec_object ("configuration-manager",
+                         "Configuration Manager",
+                         "Configuration Manager",
+                         IDE_TYPE_CONFIGURATION_MANAGER,
                          (G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_RESULT] =
@@ -430,10 +407,9 @@ gbp_build_panel_class_init (GbpBuildPanelClass *klass)
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/plugins/build-tools-plugin/gbp-build-panel.ui");
   gtk_widget_class_set_css_name (widget_class, "buildpanel");
-  gtk_widget_class_bind_template_child (widget_class, GbpBuildPanel, device_button);
-  gtk_widget_class_bind_template_child (widget_class, GbpBuildPanel, device_label);
-  gtk_widget_class_bind_template_child (widget_class, GbpBuildPanel, device_popover);
-  gtk_widget_class_bind_template_child (widget_class, GbpBuildPanel, devices);
+  gtk_widget_class_bind_template_child (widget_class, GbpBuildPanel, configurations);
+  gtk_widget_class_bind_template_child (widget_class, GbpBuildPanel, configuration_label);
+  gtk_widget_class_bind_template_child (widget_class, GbpBuildPanel, configuration_popover);
   gtk_widget_class_bind_template_child (widget_class, GbpBuildPanel, diagnostics);
   gtk_widget_class_bind_template_child (widget_class, GbpBuildPanel, errors_label);
   gtk_widget_class_bind_template_child (widget_class, GbpBuildPanel, running_time_label);
@@ -461,9 +437,9 @@ gbp_build_panel_init (GbpBuildPanel *self)
                                    self,
                                    G_CONNECT_SWAPPED);
 
-  g_signal_connect_object (self->devices,
+  g_signal_connect_object (self->configurations,
                            "row-activated",
-                           G_CALLBACK (gbp_build_panel_device_activated),
+                           G_CALLBACK (gbp_build_panel_configuration_activated),
                            self,
                            G_CONNECT_SWAPPED);
 
@@ -475,7 +451,6 @@ gbp_build_panel_init (GbpBuildPanel *self)
 
   self->bindings = egg_binding_group_new ();
 
-  egg_binding_group_bind (self->bindings, "mode",
-                          self->status_label, "label",
+  egg_binding_group_bind (self->bindings, "mode", self->status_label, "label",
                           G_BINDING_SYNC_CREATE);
 }

@@ -50,6 +50,22 @@ G_DEFINE_TYPE (GbpBuildLogPanel, gbp_build_log_panel, GTK_TYPE_BIN)
 static GParamSpec *properties [LAST_PROP];
 
 static void
+gbp_build_log_panel_reset_buffer (GbpBuildLogPanel *self)
+{
+  g_assert (GBP_IS_BUILD_LOG_PANEL (self));
+
+  g_clear_object (&self->buffer);
+
+  self->buffer = gtk_text_buffer_new (NULL);
+  self->stderr_tag = gtk_text_buffer_create_tag (self->buffer,
+                                                 "stderr-tag",
+                                                 "foreground", "#ff0000",
+                                                 "weight", PANGO_WEIGHT_BOLD,
+                                                 NULL);
+  gtk_text_view_set_buffer (self->text_view, self->buffer);
+}
+
+static void
 gbp_build_log_panel_log (GbpBuildLogPanel  *self,
                          IdeBuildResultLog  log,
                          const gchar       *message,
@@ -86,10 +102,11 @@ gbp_build_log_panel_set_result (GbpBuildLogPanel *self,
                                 IdeBuildResult   *result)
 {
   g_return_if_fail (GBP_IS_BUILD_LOG_PANEL (self));
+  g_return_if_fail (!result || IDE_IS_BUILD_RESULT (result));
 
   if (g_set_object (&self->result, result))
     {
-      gtk_text_buffer_set_text (self->buffer, "", 0);
+      gbp_build_log_panel_reset_buffer (self);
       egg_signal_group_set_target (self->signals, result);
     }
 }
@@ -131,6 +148,8 @@ static void
 gbp_build_log_panel_finalize (GObject *object)
 {
   GbpBuildLogPanel *self = (GbpBuildLogPanel *)object;
+
+  self->stderr_tag = NULL;
 
   g_clear_object (&self->result);
   g_clear_object (&self->signals);
@@ -191,7 +210,6 @@ gbp_build_log_panel_class_init (GbpBuildLogPanelClass *klass)
   gtk_widget_class_set_css_name (widget_class, "buildlogpanel");
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/plugins/build-tools-plugin/gbp-build-log-panel.ui");
   gtk_widget_class_bind_template_child (widget_class, GbpBuildLogPanel, text_view);
-  gtk_widget_class_bind_template_child (widget_class, GbpBuildLogPanel, buffer);
 
   properties [PROP_RESULT] =
     g_param_spec_object ("result",
@@ -209,12 +227,6 @@ gbp_build_log_panel_init (GbpBuildLogPanel *self)
   GtkStyleContext *context;
 
   gtk_widget_init_template (GTK_WIDGET (self));
-
-  self->stderr_tag = gtk_text_buffer_create_tag (self->buffer,
-                                                 "stderr-tag",
-                                                 "foreground", "#ff0000",
-                                                 "weight", PANGO_WEIGHT_BOLD,
-                                                 NULL);
 
   self->signals = egg_signal_group_new (IDE_TYPE_BUILD_RESULT);
 

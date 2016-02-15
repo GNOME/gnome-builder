@@ -30,6 +30,12 @@ struct _GbpBuildTool
   gint64  build_start;
 };
 
+static gint                  parallel = -1;
+static IdeBuilderBuildFlags  flags;
+static gchar                *configuration_id;
+static gchar                *device_id;
+static gchar                *runtime_id;
+
 static void application_tool_init (IdeApplicationToolInterface *iface);
 
 G_DEFINE_TYPE_EXTENDED (GbpBuildTool, gbp_build_tool, G_TYPE_OBJECT, 0,
@@ -60,15 +66,17 @@ gbp_build_tool_log (GbpBuildTool      *self,
 
 static void
 print_build_info (IdeContext *context,
-                  IdeDevice  *device)
+                  IdeConfiguration *configuration)
 {
   IdeProject *project;
   IdeBuildSystem *build_system;
+  IdeDevice *device;
   IdeVcs *vcs;
+  g_auto(GStrv) env = NULL;
+  const gchar *dev_id;
   const gchar *project_name;
   const gchar *vcs_name;
   const gchar *build_system_name;
-  const gchar *device_id;
   const gchar *system_type;
   g_autofree gchar *build_date = NULL;
   GTimeVal tv;
@@ -82,8 +90,11 @@ print_build_info (IdeContext *context,
   build_system = ide_context_get_build_system (context);
   build_system_name = g_type_name (G_TYPE_FROM_INSTANCE (build_system));
 
-  device_id = ide_device_get_id (device);
+  device = ide_configuration_get_device (configuration);
+  dev_id = ide_device_get_id (device);
   system_type = ide_device_get_system_type (device);
+
+  env = ide_configuration_get_environ (configuration);
 
   g_get_current_time (&tv);
   build_date = g_time_val_to_iso8601 (&tv);
@@ -93,7 +104,14 @@ print_build_info (IdeContext *context,
   g_printerr (_(" Version Control System: %s\n"), vcs_name);
   g_printerr (_("           Build System: %s\n"), build_system_name);
   g_printerr (_("    Build Date and Time: %s\n"), build_date);
-  g_printerr (_("    Building for Device: %s (%s)\n"), device_id, system_type);
+  g_printerr (_("    Building for Device: %s (%s)\n"), dev_id, system_type);
+
+  if (env && env [0])
+    {
+      g_autofree gchar *envstr = g_strjoinv (" ", env);
+      g_printerr (_("            Environment: %s\n"), envstr);
+    }
+
   g_printerr (_("========================\n"));
 }
 
@@ -155,12 +173,10 @@ gbp_build_tool_new_context_cb (GObject      *object,
   g_autoptr(IdeBuilder) builder = NULL;
   g_autoptr(IdeBuildResult) build_result = NULL;
   g_autoptr(IdeDevice) device = NULL;
-  IdeDeviceManager *device_manager;
+  g_autoptr(IdeConfiguration) configuration = NULL;
+  IdeConfigurationManager *configuration_manager;
   IdeBuildSystem *build_system;
   GbpBuildTool *self;
-  IdeBuilderBuildFlags flags;
-  GKeyFile *config;
-  const gchar *device_id;
   GError *error = NULL;
 
   g_assert (G_IS_TASK (task));
@@ -175,14 +191,20 @@ gbp_build_tool_new_context_cb (GObject      *object,
       return;
     }
 
-  config = g_object_get_data (G_OBJECT (task), "CONFIG");
-  flags = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (task), "FLAGS"));
+  configuration_manager = ide_context_get_configuration_manager (context);
 
-  device_id = g_object_get_data (G_OBJECT (task), "DEVICE_ID");
-  device_manager = ide_context_get_device_manager (context);
-  device = ide_device_manager_get_device (device_manager, device_id);
+  if (configuration_id != NULL)
+    configuration = ide_configuration_manager_get_configuration (configuration_manager, configuration_id);
+  else if (device_id && runtime_id)
+    configuration = ide_configuration_new (context, "command-line-build", device_id, runtime_id);
+  else if (device_id)
+    configuration = ide_configuration_new (context, "command-line-build", device_id, "host");
+  else if (runtime_id)
+    configuration = ide_configuration_new (context, "command-line-build", "local", runtime_id);
+  else
+    configuration = ide_configuration_manager_get_current (configuration_manager);
 
-  if (device == NULL)
+  if (!ide_configuration_get_device (configuration))
     {
       /* TODO: Wait for devices to settle. */
       g_task_return_new_error (task,
@@ -193,12 +215,27 @@ gbp_build_tool_new_context_cb (GObject      *object,
       return;
     }
 
-  print_build_info (context, device);
+  if (!ide_configuration_get_runtime (configuration))
+    {
+      g_task_return_new_error (task,
+                               G_IO_ERROR,
+                               G_IO_ERROR_NOT_FOUND,
+                               _("Failed to locate runtime \"%s\""),
+                               runtime_id);
+      return;
+    }
 
-  /* TODO: Support custom configs */
+  if (parallel > -1)
+    {
+      /* TODO: put this into IdeConfiguration:parallel: */
+      g_autofree gchar *str = g_strdup_printf ("%d", parallel);
+      ide_configuration_setenv (configuration, "PARALLEL", str);
+    }
+
+  print_build_info (context, configuration);
 
   build_system = ide_context_get_build_system (context);
-  builder = ide_build_system_get_builder (build_system, config, device, &error);
+  builder = ide_build_system_get_builder (build_system, configuration, &error);
 
   if (builder == NULL)
     {
@@ -240,14 +277,10 @@ gbp_build_tool_run_async (IdeApplicationTool  *tool,
   GbpBuildTool *self = (GbpBuildTool *)tool;
   g_autoptr(GTask) task = NULL;
   g_autofree gchar *project_path = NULL;
-  g_autofree gchar *device_id = NULL;
   g_autoptr(GFile) project_file = NULL;
   g_autoptr(GOptionContext) opt_context = NULL;
-  g_autoptr(GKeyFile) config = NULL;
   g_auto(GStrv) strv = NULL;
   gboolean clean = FALSE;
-  gint parallel = -1;
-  IdeBuilderBuildFlags flags = 0;
   GError *error = NULL;
   const GOptionEntry entries[] = {
     { "clean", 'c', 0, G_OPTION_ARG_NONE, &clean,
@@ -255,9 +288,15 @@ gbp_build_tool_run_async (IdeApplicationTool  *tool,
     { "device", 'd', 0, G_OPTION_ARG_STRING, &device_id,
       N_("The ID of the device to build for"),
       N_("local") },
+    { "runtime", 'r', 0, G_OPTION_ARG_STRING, &runtime_id,
+      N_("The runtime to use for building"),
+      N_("host") },
     { "parallel", 'j', 0, G_OPTION_ARG_INT, &parallel,
       N_("Number of workers to use when building"),
       N_("N") },
+    { "configuration", 't', 0, G_OPTION_ARG_STRING, &configuration_id,
+      N_("The configuration to use from .buildconfig"),
+      N_("CONFIG_ID") },
     { "project", 'p', 0, G_OPTION_ARG_FILENAME, &project_path,
       N_("Path to project file, defaults to current directory"),
       N_("PATH") },
@@ -288,17 +327,11 @@ gbp_build_tool_run_async (IdeApplicationTool  *tool,
   if (device_id == NULL)
     device_id = g_strdup ("local");
 
-  config = g_key_file_new ();
-
-  if (parallel >= -1)
-    g_key_file_set_integer (config, "parallel", "workers", parallel);
-
   if (clean)
-    flags |= IDE_BUILDER_BUILD_FLAGS_CLEAN;
-
-  g_object_set_data_full (G_OBJECT (task), "DEVICE_ID", g_strdup (device_id), g_free);
-  g_object_set_data_full (G_OBJECT (task), "CONFIG", g_key_file_ref (config), (GDestroyNotify)g_key_file_unref);
-  g_object_set_data (G_OBJECT (task), "FLAGS", GINT_TO_POINTER (flags));
+    {
+      flags |= IDE_BUILDER_BUILD_FLAGS_FORCE_CLEAN;
+      flags |= IDE_BUILDER_BUILD_FLAGS_NO_BUILD;
+    }
 
   ide_context_new_async (project_file,
                          cancellable,

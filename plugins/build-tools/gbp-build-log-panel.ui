@@ -7,13 +7,10 @@
           <object class="GtkTextView" id="text_view">
             <property name="cursor-visible">false</property>
             <property name="editable">false</property>
-            <property name="buffer">buffer</property>
             <property name="visible">true</property>
           </object>
         </child>
       </object>
     </child>
   </template>
-  <object class="GtkTextBuffer" id="buffer">
-  </object>
 </interface>

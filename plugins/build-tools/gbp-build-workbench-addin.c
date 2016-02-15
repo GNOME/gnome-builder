@@ -20,8 +20,9 @@
 
 #include "egg-binding-group.h"
 
-#include "gbp-build-panel.h"
 #include "gbp-build-log-panel.h"
+#include "gbp-build-panel.h"
+#include "gbp-build-perspective.h"
 #include "gbp-build-workbench-addin.h"
 
 struct _GbpBuildWorkbenchAddin
@@ -38,42 +39,20 @@ struct _GbpBuildWorkbenchAddin
   IdeBuildResult     *result;
   GSimpleActionGroup *actions;
   GCancellable       *cancellable;
-  IdeDevice          *device;
 };
 
 static void workbench_addin_iface_init (IdeWorkbenchAddinInterface *iface);
 
 G_DEFINE_TYPE_EXTENDED (GbpBuildWorkbenchAddin, gbp_build_workbench_addin, G_TYPE_OBJECT, 0,
-                        G_IMPLEMENT_INTERFACE (IDE_TYPE_WORKBENCH_ADDIN,
-                                               workbench_addin_iface_init))
+                        G_IMPLEMENT_INTERFACE (IDE_TYPE_WORKBENCH_ADDIN, workbench_addin_iface_init))
 
 enum {
   PROP_0,
-  PROP_DEVICE,
   PROP_RESULT,
   LAST_PROP
 };
 
 static GParamSpec *properties [LAST_PROP];
-
-static void
-gbp_build_workbench_addin_set_device (GbpBuildWorkbenchAddin *self,
-                                      IdeDevice              *device)
-{
-  g_assert (GBP_IS_BUILD_WORKBENCH_ADDIN (self));
-  g_assert (IDE_IS_DEVICE (device));
-
-  if (g_set_object (&self->device, device))
-    {
-      const gchar *id = ide_device_get_id (device);
-      GAction *action;
-
-      action = g_action_map_lookup_action (G_ACTION_MAP (self->actions), "device");
-      g_simple_action_set_state (G_SIMPLE_ACTION (action), g_variant_new_string (id));
-
-      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_DEVICE]);
-    }
-}
 
 static void
 gbp_build_workbench_addin_set_result (GbpBuildWorkbenchAddin *self,
@@ -148,6 +127,8 @@ gbp_build_workbench_addin_do_build (GbpBuildWorkbenchAddin *self,
 {
   g_autoptr(IdeBuilder) builder = NULL;
   g_autoptr(GError) error = NULL;
+  IdeConfigurationManager *config_manager;
+  IdeConfiguration *configuration;
   IdeBuildSystem *build_system;
   IdeWorkbench *workbench;
   IdeContext *context;
@@ -164,7 +145,10 @@ gbp_build_workbench_addin_do_build (GbpBuildWorkbenchAddin *self,
   workbench = ide_widget_get_workbench (GTK_WIDGET (self->panel));
   context = ide_workbench_get_context (workbench);
   build_system = ide_context_get_build_system (context);
-  builder = ide_build_system_get_builder (build_system, NULL, self->device, &error);
+  config_manager = ide_context_get_configuration_manager (context);
+  configuration = ide_configuration_manager_get_current (config_manager);
+
+  builder = ide_build_system_get_builder (build_system, configuration, &error);
 
   if (error != NULL)
     {
@@ -217,7 +201,7 @@ gbp_build_workbench_addin_rebuild (GSimpleAction *action,
   g_assert (G_IS_SIMPLE_ACTION (action));
   g_assert (GBP_IS_BUILD_WORKBENCH_ADDIN (self));
 
-  gbp_build_workbench_addin_do_build (self, IDE_BUILDER_BUILD_FLAGS_FORCE_REBUILD);
+  gbp_build_workbench_addin_do_build (self, IDE_BUILDER_BUILD_FLAGS_FORCE_CLEAN);
 }
 
 static void
@@ -230,7 +214,9 @@ gbp_build_workbench_addin_clean (GSimpleAction *action,
   g_assert (G_IS_SIMPLE_ACTION (action));
   g_assert (GBP_IS_BUILD_WORKBENCH_ADDIN (self));
 
-  gbp_build_workbench_addin_do_build (self, IDE_BUILDER_BUILD_FLAGS_CLEAN);
+  gbp_build_workbench_addin_do_build (self,
+                                      (IDE_BUILDER_BUILD_FLAGS_FORCE_CLEAN |
+                                       IDE_BUILDER_BUILD_FLAGS_NO_BUILD));
 }
 
 static void
@@ -246,68 +232,24 @@ gbp_build_workbench_addin_cancel (GSimpleAction *action,
     g_cancellable_cancel (self->cancellable);
 }
 
-static void
-gbp_build_workbench_addin_deploy (GSimpleAction *action,
-                                  GVariant      *param,
-                                  gpointer       user_data)
-{
-}
-
-static void
-gbp_build_workbench_addin_export (GSimpleAction *action,
-                                  GVariant      *param,
-                                  gpointer       user_data)
-{
-}
-
-static void
-gbp_build_workbench_addin_device (GSimpleAction *action,
-                                  GVariant      *param,
-                                  gpointer       user_data)
-{
-  GbpBuildWorkbenchAddin *self = user_data;
-  IdeDeviceManager *device_manager;
-  IdeContext *context;
-  IdeDevice *device;
-  const gchar *id;
-
-  g_assert (GBP_IS_BUILD_WORKBENCH_ADDIN (self));
-  g_assert (IDE_IS_WORKBENCH (self->workbench));
-
-  id = g_variant_get_string (param, NULL);
-  if (id == NULL)
-    id = "local";
-
-  context = ide_workbench_get_context (self->workbench);
-  device_manager = ide_context_get_device_manager (context);
-  device = ide_device_manager_get_device (device_manager, id);
-
-  if (device == NULL)
-    device = ide_device_manager_get_device (device_manager, "local");
-
-  gbp_build_workbench_addin_set_device (self, device);
-}
-
 static const GActionEntry actions[] = {
   { "build", gbp_build_workbench_addin_build },
   { "rebuild", gbp_build_workbench_addin_rebuild },
   { "clean", gbp_build_workbench_addin_clean },
   { "cancel-build", gbp_build_workbench_addin_cancel },
-  { "deploy", gbp_build_workbench_addin_deploy },
-  { "export", gbp_build_workbench_addin_export },
-  { "device", NULL, "s", "'local'", gbp_build_workbench_addin_device },
 };
 
 static void
 gbp_build_workbench_addin_load (IdeWorkbenchAddin *addin,
                                 IdeWorkbench      *workbench)
 {
+  IdeConfigurationManager *configuration_manager;
   GbpBuildWorkbenchAddin *self = (GbpBuildWorkbenchAddin *)addin;
+  IdeConfiguration *configuration;
   IdePerspective *editor;
-  GtkWidget *pane;
   IdeContext *context;
-  IdeDeviceManager *device_manager;
-  IdeDevice *device;
+  GtkWidget *build_perspective;
+  GtkWidget *pane;
 
   g_assert (IDE_IS_WORKBENCH_ADDIN (addin));
   g_assert (GBP_IS_BUILD_WORKBENCH_ADDIN (self));
@@ -316,33 +258,33 @@ gbp_build_workbench_addin_load (IdeWorkbenchAddin *addin,
   self->workbench = workbench;
 
   context = ide_workbench_get_context (workbench);
-  device_manager = ide_context_get_device_manager (context);
-  device = ide_device_manager_get_device (device_manager, "local");
+  configuration_manager = ide_context_get_configuration_manager (context);
+  configuration = ide_configuration_manager_get_current (configuration_manager);
 
   editor = ide_workbench_get_perspective_by_name (workbench, "editor");
   pane = ide_layout_get_right_pane (IDE_LAYOUT (editor));
   self->panel = g_object_new (GBP_TYPE_BUILD_PANEL,
-                              "device", device,
-                              "device-manager", device_manager,
+                              "configuration-manager", configuration_manager,
                               "visible", TRUE,
                               NULL);
-  ide_layout_pane_add_page (IDE_LAYOUT_PANE (pane),
-                            GTK_WIDGET (self->panel),
-                            _("Build"), NULL);
+  ide_layout_pane_add_page (IDE_LAYOUT_PANE (pane), GTK_WIDGET (self->panel), _("Build"), NULL);
 
   pane = ide_layout_get_bottom_pane (IDE_LAYOUT (editor));
   self->build_log_panel = g_object_new (GBP_TYPE_BUILD_LOG_PANEL, NULL);
-  ide_layout_pane_add_page (IDE_LAYOUT_PANE (pane),
-                            GTK_WIDGET (self->build_log_panel),
+  ide_layout_pane_add_page (IDE_LAYOUT_PANE (pane), GTK_WIDGET (self->build_log_panel),
                             _("Build Output"), NULL);
 
   gtk_widget_insert_action_group (GTK_WIDGET (workbench), "build-tools",
                                   G_ACTION_GROUP (self->actions));
 
   g_object_bind_property (self, "result", self->panel, "result", 0);
-  g_object_bind_property (self, "device", self->panel, "device", 0);
 
-  gbp_build_workbench_addin_set_device (self, device);
+  build_perspective = g_object_new (GBP_TYPE_BUILD_PERSPECTIVE,
+                                    "configuration-manager", configuration_manager,
+                                    "configuration", configuration,
+                                    "visible", TRUE,
+                                    NULL);
+  ide_workbench_add_perspective (workbench, IDE_PERSPECTIVE (build_perspective));
 }
 
 static void
@@ -379,31 +321,8 @@ gbp_build_workbench_addin_get_property (GObject    *object,
 
   switch (prop_id)
     {
-    case PROP_DEVICE:
-      g_value_set_object (value, self->device);
-      break;
-
     case PROP_RESULT:
       g_value_set_object (value, self->result);
-      break;
-
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
-    }
-}
-
-static void
-gbp_build_workbench_addin_set_property (GObject      *object,
-                                        guint         prop_id,
-                                        const GValue *value,
-                                        GParamSpec   *pspec)
-{
-  GbpBuildWorkbenchAddin *self = GBP_BUILD_WORKBENCH_ADDIN(object);
-
-  switch (prop_id)
-    {
-    case PROP_DEVICE:
-      gbp_build_workbench_addin_set_device (self, g_value_get_object (value));
       break;
 
     default:
@@ -416,7 +335,6 @@ gbp_build_workbench_addin_finalize (GObject *object)
 {
   GbpBuildWorkbenchAddin *self = (GbpBuildWorkbenchAddin *)object;
 
-  g_clear_object (&self->device);
   g_clear_object (&self->bindings);
   g_clear_object (&self->actions);
   g_clear_object (&self->result);
@@ -432,14 +350,6 @@ gbp_build_workbench_addin_class_init (GbpBuildWorkbenchAddinClass *klass)
 
   object_class->finalize = gbp_build_workbench_addin_finalize;
   object_class->get_property = gbp_build_workbench_addin_get_property;
-  object_class->set_property = gbp_build_workbench_addin_set_property;
-
-  properties [PROP_DEVICE] =
-    g_param_spec_object ("device",
-                         "Device",
-                         "The device the build is for",
-                         IDE_TYPE_DEVICE,
-                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_RESULT] =
     g_param_spec_object ("result",

@@ -5,150 +5,57 @@
         <property name="visible">true</property>
         <property name="orientation">vertical</property>
         <child>
-          <object class="GtkGrid">
-            <property name="border-width">12</property>
-            <property name="column-spacing">12</property>
-            <property name="column-homogeneous">true</property>
-            <property name="row-spacing">3</property>
+          <object class="GtkMenuButton" id="configuration_button">
+            <property name="margin">12</property>
+            <property name="popover">configuration_popover</property>
             <property name="visible">true</property>
+            <style>
+              <class name="flat"/>
+            </style>
             <child>
-              <object class="GtkLabel" id="label1">
-                <property name="label" translatable="yes">Device:</property>
-                <property name="xalign">1.0</property>
+              <object class="GtkLabel" id="configuration_label">
+                <property name="ellipsize">middle</property>
+                <property name="visible">true</property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox">
+            <property name="visible">true</property>
+            <property name="margin-end">12</property>
+            <property name="margin-start">12</property>
+            <property name="margin-bottom">12</property>
+            <property name="halign">end</property>
+            <property name="hexpand">true</property>
+            <property name="spacing">6</property>
+            <property name="homogeneous">true</property>
+            <child>
+              <object class="GtkButton">
+                <property name="action-name">build-tools.build</property>
+                <property name="label" translatable="yes">_Build</property>
+                <property name="use-underline">true</property>
                 <property name="visible">true</property>
                 <style>
-                  <class name="dim-label"/>
+                  <class name="suggested-action"/>
                 </style>
               </object>
-              <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">0</property>
-              </packing>
             </child>
             <child>
-              <object class="GtkLabel" id="label2">
-                <property name="label" translatable="yes">Framework:</property>
-                <property name="xalign">1.0</property>
-                <property name="visible">false</property>
-                <style>
-                  <class name="dim-label"/>
-                </style>
-              </object>
-              <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="label3">
-                <property name="label" translatable="yes">Packaging:</property>
-                <property name="xalign">1.0</property>
-                <property name="visible">false</property>
-                <style>
-                  <class name="dim-label"/>
-                </style>
-              </object>
-              <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">2</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkBox">
+              <object class="GtkButton">
+                <property name="action-name">build-tools.rebuild</property>
+                <property name="label" translatable="yes">_Rebuild</property>
+                <property name="use-underline">true</property>
                 <property name="visible">true</property>
-                <property name="margin-top">12</property>
-                <property name="halign">end</property>
-                <property name="hexpand">true</property>
-                <property name="spacing">6</property>
-                <property name="homogeneous">true</property>
-                <child>
-                  <object class="GtkButton">
-                    <property name="action-name">build-tools.build</property>
-                    <property name="label" translatable="yes">_Build</property>
-                    <property name="use-underline">true</property>
-                    <property name="visible">true</property>
-                    <style>
-                      <class name="suggested-action"/>
-                    </style>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkButton">
-                    <property name="action-name">build-tools.rebuild</property>
-                    <property name="label" translatable="yes">_Rebuild</property>
-                    <property name="use-underline">true</property>
-                    <property name="visible">true</property>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkButton">
-                    <property name="action-name">build-tools.clean</property>
-                    <property name="label" translatable="yes">_Clean</property>
-                    <property name="use-underline">true</property>
-                    <property name="visible">true</property>
-                  </object>
-                </child>
               </object>
-              <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">3</property>
-                <property name="width">2</property>
-              </packing>
             </child>
             <child>
-              <object class="GtkMenuButton" id="device_button">
-                <property name="focus-on-click">false</property>
-                <property name="popover">device_popover</property>
+              <object class="GtkButton">
+                <property name="action-name">build-tools.clean</property>
+                <property name="label" translatable="yes">_Clean</property>
+                <property name="use-underline">true</property>
                 <property name="visible">true</property>
-                <style>
-                  <class name="flat"/>
-                </style>
-                <child>
-                  <object class="GtkBox">
-                    <property name="spacing">6</property>
-                    <property name="visible">true</property>
-                    <child>
-                      <object class="GtkLabel" id="device_label">
-                        <property name="visible">true</property>
-                        <property name="hexpand">false</property>
-                        <property name="xalign">0.0</property>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkImage">
-                        <property name="icon-name">pan-down-symbolic</property>
-                        <property name="visible">true</property>
-                        <property name="hexpand">false</property>
-                        <property name="xalign">0.0</property>
-                      </object>
-                    </child>
-                  </object>
-                </child>
               </object>
-              <packing>
-                <property name="left-attach">1</property>
-                <property name="top-attach">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkMenuButton">
-                <property name="label" translatable="yes">framework</property>
-                <property name="visible">false</property>
-              </object>
-              <packing>
-                <property name="left-attach">1</property>
-                <property name="top-attach">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkMenuButton">
-                <property name="label" translatable="yes">packaging</property>
-                <property name="visible">false</property>
-              </object>
-              <packing>
-                <property name="left-attach">1</property>
-                <property name="top-attach">2</property>
-              </packing>
             </child>
           </object>
         </child>
@@ -349,6 +256,25 @@
         <property name="visible">true</property>
         <child>
           <object class="GtkListBox" id="devices">
+            <property name="selection-mode">none</property>
+            <property name="visible">true</property>
+            <style>
+              <class name="buildpanel"/>
+            </style>
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
+  <object class="GtkPopover" id="configuration_popover">
+    <child>
+      <object class="EggScrolledWindow">
+        <property name="min-content-width">250</property>
+        <property name="max-content-width">300</property>
+        <property name="max-content-height">300</property>
+        <property name="visible">true</property>
+        <child>
+          <object class="GtkListBox" id="configurations">
             <property name="selection-mode">none</property>
             <property name="visible">true</property>
             <style>

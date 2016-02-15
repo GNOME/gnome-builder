@@ -1,0 +1,33 @@
+<interface>
+  <template class="GbpBuildConfigurationRow" parent="GtkListBoxRow">
+    <child>
+      <object class="GtkBox">
+        <property name="orientation">horizontal</property>
+        <property name="visible">true</property>
+        <child>
+          <object class="GtkLabel" id="label">
+            <property name="valign">baseline</property>
+            <property name="visible">true</property>
+            <property name="xalign">0.0</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkImage" id="check_image">
+            <property name="icon-name">object-select-symbolic</property>
+            <property name="margin-end">6</property>
+            <property name="margin-start">6</property>
+            <property name="valign">baseline</property>
+            <property name="visible">true</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel" id="spacer">
+            <property name="hexpand">true</property>
+            <property name="valign">baseline</property>
+            <property name="visible">true</property>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

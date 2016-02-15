@@ -2,9 +2,14 @@
 <gresources>
   <gresource prefix="/org/gnome/builder/plugins/build-tools-plugin">
     <file>gtk/menus.ui</file>
-    <file>theme/shared.css</file>
+    <file>theme/Adwaita.css</file>
+    <file>theme/Adwaita-dark.css</file>
+    <file>theme/Adwaita-shared.css</file>
+    <file>gbp-build-configuration-row.ui</file>
+    <file>gbp-build-configuration-view.ui</file>
     <file>gbp-build-log-panel.ui</file>
-    <file>gbp-build-panel.ui</file>
     <file>gbp-build-panel-row.ui</file>
+    <file>gbp-build-panel.ui</file>
+    <file>gbp-build-perspective.ui</file>
   </gresource>
 </gresources>

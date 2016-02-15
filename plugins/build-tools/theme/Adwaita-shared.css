@@ -1,3 +1,4 @@
+/*
 buildpanel button.popup:active,
 buildpanel button.popup:checked,
 buildpanel button.popup {
@@ -8,6 +9,7 @@ buildpanel button.popup {
   margin: 0;
   padding: 0;
 }
+*/
 
 list.buildpanel row {
   padding: 10px;
@@ -31,9 +33,11 @@ buildpanel list row label.file {
   opacity: 0.5;
 }
 
+/*
 buildpanel list row image {
   opacity: 0.5;
 }
+*/
 
 buildlogpanel textview {
   padding: 3px;
@@ -41,4 +45,38 @@ buildlogpanel textview {
 
 buildpanel box.build-status {
   background: shade(@theme_bg_color, 0.96);
+}
+
+
+buildperspective list.sidebar row {
+  padding: 10px;
+  border-bottom: 1px solid alpha(@borders, 0.2);
+}
+buildperspective list.sidebar row:last-child {
+  border-bottom: none;
+}
+buildperspective list.sidebar {
+  background: @theme_base_color;
+  border-right: 1px solid alpha(@borders, 0.4);
+}
+
+
+configurationview list row {
+  padding: 10px;
+  border-bottom: 1px solid alpha(@borders, 0.4);
+}
+configurationview list row:last-child {
+  border-bottom: none;
+}
+configurationview list row entry {
+  background: transparent;
+  border: none;
+  padding: 0;
+  margin: 0;
+}
+
+
+/* hrmm, we can use this to get row separators */
+configurationview treeview {
+  border-bottom: 1px solid alpha(@borders, 0.4);
 }
