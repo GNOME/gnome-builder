@@ -30,52 +30,52 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeContext, ide_context, IDE, CONTEXT, GObject)
 
-IdeBackForwardList       *ide_context_get_back_forward_list (IdeContext           *self);
-GFile                    *ide_context_get_project_file      (IdeContext           *self);
-IdeBufferManager         *ide_context_get_buffer_manager    (IdeContext           *self);
-IdeBuildSystem           *ide_context_get_build_system      (IdeContext           *self);
-IdeDeviceManager         *ide_context_get_device_manager    (IdeContext           *self);
-IdeProject               *ide_context_get_project           (IdeContext           *self);
-GtkRecentManager         *ide_context_get_recent_manager    (IdeContext           *self);
-IdeScriptManager         *ide_context_get_script_manager    (IdeContext           *self);
-IdeSearchEngine          *ide_context_get_search_engine     (IdeContext           *self);
-IdeSettings              *ide_context_get_settings          (IdeContext           *self,
-                                                             const gchar          *schema_id,
-                                                             const gchar          *relative_path);
-IdeSourceSnippetsManager *ide_context_get_snippets_manager  (IdeContext           *self);
-IdeUnsavedFiles          *ide_context_get_unsaved_files     (IdeContext           *self);
-IdeVcs                   *ide_context_get_vcs               (IdeContext           *self);
-const gchar              *ide_context_get_root_build_dir    (IdeContext           *self);
-gpointer                  ide_context_get_service_typed     (IdeContext           *self,
-                                                             GType                 service_type);
-void                      ide_context_unload_async          (IdeContext           *self,
-                                                             GCancellable         *cancellable,
-                                                             GAsyncReadyCallback   callback,
-                                                             gpointer              user_data);
-gboolean                  ide_context_unload_finish         (IdeContext           *self,
-                                                             GAsyncResult         *result,
-                                                             GError              **error);
-void                      ide_context_new_async             (GFile                *project_file,
-                                                             GCancellable         *cancellable,
-                                                             GAsyncReadyCallback   callback,
-                                                             gpointer              user_data);
-IdeContext               *ide_context_new_finish            (GAsyncResult         *result,
-                                                             GError              **error);
-void                      ide_context_set_root_build_dir    (IdeContext           *self,
-                                                             const gchar          *root_build_dir);
-void                      ide_context_restore_async         (IdeContext           *self,
-                                                             GCancellable         *cancellable,
-                                                             GAsyncReadyCallback   callback,
-                                                             gpointer              user_data);
-gboolean                  ide_context_restore_finish        (IdeContext           *self,
-                                                             GAsyncResult         *result,
-                                                             GError              **error);
-void                      ide_context_hold                  (IdeContext           *self);
-void                      ide_context_hold_for_object       (IdeContext           *self,
-                                                             gpointer              instance);
-void                      ide_context_release               (IdeContext           *self);
+IdeBackForwardList       *ide_context_get_back_forward_list     (IdeContext           *self);
+GFile                    *ide_context_get_project_file          (IdeContext           *self);
+IdeBufferManager         *ide_context_get_buffer_manager        (IdeContext           *self);
+IdeBuildSystem           *ide_context_get_build_system          (IdeContext           *self);
 IdeConfigurationManager  *ide_context_get_configuration_manager (IdeContext           *self);
+IdeDeviceManager         *ide_context_get_device_manager        (IdeContext           *self);
+IdeProject               *ide_context_get_project               (IdeContext           *self);
+GtkRecentManager         *ide_context_get_recent_manager        (IdeContext           *self);
 IdeRuntimeManager        *ide_context_get_runtime_manager       (IdeContext           *self);
+IdeScriptManager         *ide_context_get_script_manager        (IdeContext           *self);
+IdeSearchEngine          *ide_context_get_search_engine         (IdeContext           *self);
+IdeSettings              *ide_context_get_settings              (IdeContext           *self,
+                                                                 const gchar          *schema_id,
+                                                                 const gchar          *relative_path);
+IdeSourceSnippetsManager *ide_context_get_snippets_manager      (IdeContext           *self);
+IdeUnsavedFiles          *ide_context_get_unsaved_files         (IdeContext           *self);
+IdeVcs                   *ide_context_get_vcs                   (IdeContext           *self);
+const gchar              *ide_context_get_root_build_dir        (IdeContext           *self);
+gpointer                  ide_context_get_service_typed         (IdeContext           *self,
+                                                                 GType                 service_type);
+void                      ide_context_unload_async              (IdeContext           *self,
+                                                                 GCancellable         *cancellable,
+                                                                 GAsyncReadyCallback   callback,
+                                                                 gpointer              user_data);
+gboolean                  ide_context_unload_finish             (IdeContext           *self,
+                                                                 GAsyncResult         *result,
+                                                                 GError              **error);
+void                      ide_context_new_async                 (GFile                *project_file,
+                                                                 GCancellable         *cancellable,
+                                                                 GAsyncReadyCallback   callback,
+                                                                 gpointer              user_data);
+IdeContext               *ide_context_new_finish                (GAsyncResult         *result,
+                                                                 GError              **error);
+void                      ide_context_set_root_build_dir        (IdeContext           *self,
+                                                                 const gchar          *root_build_dir);
+void                      ide_context_restore_async             (IdeContext           *self,
+                                                                 GCancellable         *cancellable,
+                                                                 GAsyncReadyCallback   callback,
+                                                                 gpointer              user_data);
+gboolean                  ide_context_restore_finish            (IdeContext           *self,
+                                                                 GAsyncResult         *result,
+                                                                 GError              **error);
+void                      ide_context_hold                      (IdeContext           *self);
+void                      ide_context_hold_for_object           (IdeContext           *self,
+                                                                 gpointer              instance);
+void                      ide_context_release                   (IdeContext           *self);
 void                      ide_context_warning                   (IdeContext           *self,
                                                                  const gchar          *format,
                                                                  ...) G_GNUC_PRINTF (2, 3);
