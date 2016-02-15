@@ -200,6 +200,8 @@ libide_1_0_la_public_sources = \
 	ide-source-view-mode.h \
 	ide-source-view.c \
 	ide-source-view.h \
+	ide-subprocess-launcher.c \
+	ide-subprocess-launcher.h \
 	ide-symbol-resolver.c \
 	ide-symbol-resolver.h \
 	ide-symbol.c \
