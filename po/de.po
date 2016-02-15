@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-02-02 16:58+0000\n"
-"PO-Revision-Date: 2016-02-02 19:46+0100\n"
+"POT-Creation-Date: 2016-02-15 14:53+0000\n"
+"PO-Revision-Date: 2016-02-15 20:05+0100\n"
 "Last-Translator: Mario Blättermann <mario.blaettermann@gmail.com>\n"
 "Language-Team: Deutsch <gnome-de@gnome.org>\n"
 "Language: de_DE\n"
@@ -695,41 +695,41 @@ msgstr "Es wurde keine Datei geliefert."
 msgid "Line %u, Column %u"
 msgstr "Zeile %u, Spalte %u"
 
-#: ../libide/editor/ide-editor-frame.c:242
+#: ../libide/editor/ide-editor-frame.c:244
 #, c-format
 msgid "%u of %u"
 msgstr "%u von %u"
 
-#: ../libide/editor/ide-editor-frame.c:641
+#: ../libide/editor/ide-editor-frame.c:643
 #: ../plugins/project-tree/gtk/menus.ui.h:1
 msgid "Re_veal in Project Tree"
 msgstr "Im Projektbaum an_zeigen"
 
-#: ../libide/editor/ide-editor-perspective.c:350
+#: ../libide/editor/ide-editor-perspective.c:392
 #: ../libide/preferences/ide-preferences-builtin.c:102
 #: ../libide/preferences/ide-preferences-builtin.c:125
 msgid "Editor"
 msgstr "Editor"
 
-#: ../libide/editor/ide-editor-view-actions.c:300
+#: ../libide/editor/ide-editor-view-actions.c:301
 msgid "Save Document"
 msgstr "Dokument speichern"
 
-#: ../libide/editor/ide-editor-view-actions.c:306
-#: ../libide/editor/ide-editor-view-actions.c:437
+#: ../libide/editor/ide-editor-view-actions.c:307
+#: ../libide/editor/ide-editor-view-actions.c:438
 #: ../libide/ide-workbench-actions.c:67
-#: ../plugins/build-tools/gbp-build-panel.ui.h:13
+#: ../plugins/build-tools/gbp-build-panel.ui.h:8
 #: ../plugins/terminal/gb-terminal-view-actions.c:305
 msgid "Cancel"
 msgstr "Abbrechen"
 
-#: ../libide/editor/ide-editor-view-actions.c:307
-#: ../libide/editor/ide-editor-view-actions.c:438
+#: ../libide/editor/ide-editor-view-actions.c:308
+#: ../libide/editor/ide-editor-view-actions.c:439
 #: ../plugins/terminal/gb-terminal-view-actions.c:306
 msgid "Save"
 msgstr "Speichern"
 
-#: ../libide/editor/ide-editor-view-actions.c:426
+#: ../libide/editor/ide-editor-view-actions.c:427
 msgid "Save Document As"
 msgstr "Dokument speichern unter"
 
@@ -806,7 +806,7 @@ msgid "Show the application's version"
 msgstr "Anwendungsversion anzeigen"
 
 #: ../libide/ide-application-command-line.c:198
-msgid "Increase verbosity, may specify multiple times"
+msgid "Increase verbosity, may be specified multiple times"
 msgstr "Ausführlichkeit erhöhen. Kann mehrmals angegeben werden."
 
 #: ../libide/ide-application-command-line.c:228
@@ -830,7 +830,7 @@ msgid "Please provide a worker type"
 msgstr ""
 
 #: ../libide/ide-application-command-line.c:346
-msgid "Please provide a dbus address"
+msgid "Please provide a D-Bus address"
 msgstr "Bitte geben Sie eine D-Bus-Adresse an"
 
 #: ../libide/ide-application-command-line.c:355
@@ -858,14 +858,10 @@ msgstr "Ungesichertes Dokument %u"
 msgid "Failed to save buffer, ignoring reclamation."
 msgstr "Konnte Puffer nicht speichern, ignoriere Beschwerde."
 
-#: ../libide/ide-builder.c:55
+#: ../libide/ide-builder.c:89
 #, c-format
-msgid "%s does not implement build_async()"
-msgstr "%s implementiert build_async() nicht"
-
-#: ../libide/ide-builder.c:61
-msgid "No implementation of build_async()"
-msgstr "Keine Implementation von build_async()"
+msgid "%s does not support building"
+msgstr "%s unterstützt keine Erstellung"
 
 #: ../libide/ide-build-result.c:217
 msgid "Failed to open stderr stream."
@@ -875,7 +871,7 @@ msgstr "Stderr-Stream konnte nicht geöffnet werden."
 msgid "Failed to open stdout stream."
 msgstr "Stdout-Stream konnte nicht geöffnet werden."
 
-#: ../libide/ide-build-system.c:232
+#: ../libide/ide-build-system.c:122
 #, c-format
 msgid "%s() is not supported on %s build system."
 msgstr "%s() wird vom Buildsystem %s nicht unterstützt."
@@ -885,18 +881,26 @@ msgstr "%s() wird vom Buildsystem %s nicht unterstützt."
 msgid "You must call %s() before using libide."
 msgstr "Sie müssen %s() aufrufen, bevor libide genutzt werden kann."
 
-#: ../libide/ide-context.c:1665
+#: ../libide/ide-configuration-manager.c:427
+msgid "Default Configuration"
+msgstr "Standardkonfiguration"
+
+#: ../libide/ide-context.c:1790
 msgid "An unload request is already pending"
 msgstr "Es steht bereits eine ungeladene Anfrage aus"
 
-#: ../libide/ide-context.c:1780
+#: ../libide/ide-context.c:1905
 msgid "Context has already been restored."
 msgstr "Der Kontext wurde bereits wiederhergestellt."
 
-#: ../libide/ide-device-manager.c:144
+#: ../libide/ide-device-manager.c:147
 #, c-format
 msgid "The device \"%s\" could not be found."
 msgstr "Das Gerät \"%s\" konnte nicht gefunden werden."
+
+#: ../libide/ide-environment-editor.c:65
+msgid "New variable…"
+msgstr "Neue Variable …"
 
 #: ../libide/ide-layout-view.c:146
 msgid "untitled document"
@@ -931,6 +935,10 @@ msgstr "Die Datei muss innerhalb des Projektbaums sein."
 #, c-format
 msgid "%s() may only be executed once"
 msgstr "%s() darf nur einmal aufgerufen werden."
+
+#: ../libide/ide-runtime-manager.c:100
+msgid "Host operating system"
+msgstr "Wirtsbetriebssystem"
 
 #: ../libide/ide-script.c:205
 #, c-format
@@ -981,7 +989,7 @@ msgid "Invalid %-encoding in URI"
 msgstr "Ungültige %-Kodierung in Adresse"
 
 #: ../libide/ide-uri.c:219
-msgid "Non-UTF8 characters in URI"
+msgid "Non-UTF-8 characters in URI"
 msgstr "Nicht-UTF8-Zeichen in Adresse"
 
 #: ../libide/ide-uri.c:366 ../libide/ide-uri.c:377
@@ -1107,7 +1115,7 @@ msgid "Emulation"
 msgstr "Emulation"
 
 #: ../libide/preferences/ide-preferences-builtin.c:113
-msgid "Default keybinding mode which mimics Gedit"
+msgid "Default keybinding mode which mimics gedit"
 msgstr "Voreingestellter Tastenkürzel-Modus, der Gedit nachahmt"
 
 #: ../libide/preferences/ide-preferences-builtin.c:114
@@ -1345,9 +1353,10 @@ msgid "Trim trailing whitespace"
 msgstr "Leerzeichen am Zeilenende entfernen"
 
 #: ../libide/preferences/ide-preferences-builtin.c:227
-msgid "Upon saving, trailing whitespcae from modified lines will be trimmed."
+msgid "Upon saving, trailing whitespace from modified lines will be trimmed."
 msgstr ""
-"Beim Speichern angehängte Leerzeichen von den geänderten Zeilen entfernen"
+"Beim Speichern werden angehängte Leerzeichen von den geänderten Zeilen "
+"entfernt."
 
 #: ../libide/preferences/ide-preferences-builtin.c:229
 msgid "Margins"
@@ -1390,12 +1399,12 @@ msgid "Indent source code as you type"
 msgstr "Quellcode bei der Eingabe automatisch einrücken"
 
 #: ../libide/preferences/ide-preferences-builtin.c:242
-#: ../plugins/build-tools/gbp-build-workbench-addin.c:331
-#, fuzzy
+#: ../plugins/build-tools/gbp-build-workbench-addin.c:270
 msgid "Build"
-msgstr "_Erstellen"
+msgstr "Erstellen"
 
 #: ../libide/preferences/ide-preferences-builtin.c:244
+#: ../plugins/build-tools/gbp-build-configuration-view.ui.h:1
 msgid "General"
 msgstr "Allgemein"
 
@@ -1408,7 +1417,7 @@ msgstr "Builder"
 msgid "Number of parallel build workers"
 msgstr ""
 
-#: ../libide/preferences/ide-preferences-perspective.c:796
+#: ../libide/preferences/ide-preferences-perspective.c:821
 msgid "Preferences"
 msgstr "Einstellungen"
 
@@ -1462,68 +1471,68 @@ msgstr "Verbindung zu org.freedesktop.FileManager1 fehlgeschlagen: "
 msgid "Calling ShowItems failed: "
 msgstr "Aufruf von ShowItems fehlgeschlagen: "
 
-#: ../plugins/autotools/ide-autotools-builder.c:130
+#: ../plugins/autotools/ide-autotools-builder.c:49
 msgid "Cancelled"
 msgstr "Abgebrochen"
 
-#: ../plugins/autotools/ide-autotools-builder.c:132
+#: ../plugins/autotools/ide-autotools-builder.c:51
 msgid "Failed"
 msgstr "Gescheitert"
 
-#: ../plugins/autotools/ide-autotools-builder.c:138
+#: ../plugins/autotools/ide-autotools-builder.c:57
 msgid "Success"
 msgstr "Erfolg"
 
-#: ../plugins/autotools/ide-autotools-builder.c:242
-#: ../plugins/autotools/ide-autotools-build-task.c:933
+#: ../plugins/autotools/ide-autotools-builder.c:161
+#: ../plugins/autotools/ide-autotools-build-task.c:857
 msgid "Building…"
 msgstr "Erstellung …"
 
-#: ../plugins/autotools/ide-autotools-build-system.c:182
+#: ../plugins/autotools/ide-autotools-build-system.c:183
 msgid "Failed to locate configure.ac"
 msgstr "configure.ac konnte nicht gefunden werden"
 
-#: ../plugins/autotools/ide-autotools-build-task.c:270
+#: ../plugins/autotools/ide-autotools-build-task.c:172
 msgid "Directory must be on a locally mounted filesystem."
 msgstr ""
 "Der Ordner muss sich auf einem lokal eingehängten Dateisystem befinden."
 
-#: ../plugins/autotools/ide-autotools-build-task.c:649
+#: ../plugins/autotools/ide-autotools-build-task.c:545
 msgid "Cannot execute build task more than once."
 msgstr "Der Erstellungstask kann nicht mehr als einmal ausgeführt werden."
 
-#: ../plugins/autotools/ide-autotools-build-task.c:734
+#: ../plugins/autotools/ide-autotools-build-task.c:627
 msgid "Failed to create build directory."
 msgstr "Erstellungsordner konnte nicht angelegt werden."
 
-#: ../plugins/autotools/ide-autotools-build-task.c:743
+#: ../plugins/autotools/ide-autotools-build-task.c:636
 #, c-format
 msgid "'%s' is not a directory."
 msgstr "»%s« ist kein Ordner."
 
-#: ../plugins/autotools/ide-autotools-build-task.c:782
+#: ../plugins/autotools/ide-autotools-build-task.c:675
 #, c-format
 msgid "autogen.sh is missing from project directory (%s)."
 msgstr "autogen.sh konnte nicht im Projektordner (%s) gefunden werden."
 
-#: ../plugins/autotools/ide-autotools-build-task.c:792
+#: ../plugins/autotools/ide-autotools-build-task.c:685
 msgid "autogen.sh is not executable."
 msgstr "autogen.sh ist nicht ausführbar."
 
-#: ../plugins/autotools/ide-autotools-build-task.c:796
-msgid "Autogening…"
+#: ../plugins/autotools/ide-autotools-build-task.c:689
+msgid "Running autogen…"
 msgstr "Autogen wird ausgeführt …"
 
-#: ../plugins/autotools/ide-autotools-build-task.c:825
+#: ../plugins/autotools/ide-autotools-build-task.c:723
 #, c-format
 msgid "autogen.sh failed to create configure (%s)"
 msgstr "autogen.sh konnte configure (%s) nicht erstellen"
 
-#: ../plugins/autotools/ide-autotools-build-task.c:860
-msgid "Configuring…"
+#: ../plugins/autotools/ide-autotools-build-task.c:758
+msgid "Running configure…"
 msgstr "Configure wird ausgeführt …"
 
-#: ../plugins/autotools/ide-autotools-build-task.c:931
+#: ../plugins/autotools/ide-autotools-build-task.c:855
 msgid "Cleaning…"
 msgstr "Wird aufgeräumt …"
 
@@ -1531,111 +1540,141 @@ msgstr "Wird aufgeräumt …"
 msgid "Invalid makefile provided, ignoring."
 msgstr "Ungültiges Makefile angegeben, wird ignoriert."
 
+#: ../plugins/build-tools/gbp-build-configuration-view.ui.h:2
+msgid "The name of the build configuration"
+msgstr "Der Name der Erstellungskonfiguration"
+
+#: ../plugins/build-tools/gbp-build-configuration-view.ui.h:3
+msgid "Name"
+msgstr "Name"
+
+#: ../plugins/build-tools/gbp-build-configuration-view.ui.h:4
+msgid "The prefix to use when installiing the project"
+msgstr "Das Präfix für die Installation des Projekts"
+
+#: ../plugins/build-tools/gbp-build-configuration-view.ui.h:5
+msgid "Installation Prefix"
+msgstr "Installationspräfix"
+
+#: ../plugins/build-tools/gbp-build-configuration-view.ui.h:6
+msgid "Options to use when bootstrapping the project"
+msgstr ""
+
+#: ../plugins/build-tools/gbp-build-configuration-view.ui.h:7
+msgid "Configure Options"
+msgstr "Configure-Optionen"
+
+#: ../plugins/build-tools/gbp-build-configuration-view.ui.h:8
+msgid "Duplicate Configuration"
+msgstr "Konfiguration duplizieren"
+
+#: ../plugins/build-tools/gbp-build-configuration-view.ui.h:9
+msgid "Delete Configuration"
+msgstr "Konfiguration löschen"
+
+#: ../plugins/build-tools/gbp-build-configuration-view.ui.h:10
+msgid "Device"
+msgstr "Gerät"
+
+#: ../plugins/build-tools/gbp-build-configuration-view.ui.h:11
+msgid "Runtime"
+msgstr ""
+
+#: ../plugins/build-tools/gbp-build-configuration-view.ui.h:12
+msgid "Environment"
+msgstr ""
+
 #: ../plugins/build-tools/gbp-build-panel-row.c:68
 msgid "Unknown file"
 msgstr "Unbekannte Datei"
 
 #: ../plugins/build-tools/gbp-build-panel.ui.h:1
-msgid "Device:"
-msgstr "Gerät:"
-
-#: ../plugins/build-tools/gbp-build-panel.ui.h:2
-msgid "Framework:"
-msgstr "Framework:"
-
-#: ../plugins/build-tools/gbp-build-panel.ui.h:3
-msgid "Packaging:"
-msgstr "Paketierung:"
-
-#: ../plugins/build-tools/gbp-build-panel.ui.h:4
 #: ../plugins/project-tree/gtk/menus.ui.h:12
 msgid "_Build"
 msgstr "_Erstellen"
 
-#: ../plugins/build-tools/gbp-build-panel.ui.h:5
+#: ../plugins/build-tools/gbp-build-panel.ui.h:2
 #: ../plugins/project-tree/gtk/menus.ui.h:13
 msgid "_Rebuild"
 msgstr "_Neu erstellen"
 
-#: ../plugins/build-tools/gbp-build-panel.ui.h:6
+#: ../plugins/build-tools/gbp-build-panel.ui.h:3
 msgid "_Clean"
 msgstr "_Aufräumen"
 
-#: ../plugins/build-tools/gbp-build-panel.ui.h:7
-msgid "framework"
-msgstr "Framework"
-
-#: ../plugins/build-tools/gbp-build-panel.ui.h:8
-msgid "packaging"
-msgstr "Paketierung"
-
-#: ../plugins/build-tools/gbp-build-panel.ui.h:9
+#: ../plugins/build-tools/gbp-build-panel.ui.h:4
 msgid "Status:"
 msgstr "Status:"
 
-#: ../plugins/build-tools/gbp-build-panel.ui.h:10
+#: ../plugins/build-tools/gbp-build-panel.ui.h:5
 msgid "Running Time:"
 msgstr "Laufende Zeit:"
 
-#: ../plugins/build-tools/gbp-build-panel.ui.h:11
+#: ../plugins/build-tools/gbp-build-panel.ui.h:6
 msgid "Warnings:"
 msgstr "Warnungen:"
 
-#: ../plugins/build-tools/gbp-build-panel.ui.h:12
+#: ../plugins/build-tools/gbp-build-panel.ui.h:7
 msgid "Errors:"
 msgstr "Fehler:"
 
-#: ../plugins/build-tools/gbp-build-panel.ui.h:14
+#: ../plugins/build-tools/gbp-build-panel.ui.h:9
 msgid "Deploy"
 msgstr ""
 
-#: ../plugins/build-tools/gbp-build-panel.ui.h:15
+#: ../plugins/build-tools/gbp-build-panel.ui.h:10
 msgid "Export"
 msgstr "Exportieren"
 
-#: ../plugins/build-tools/gbp-build-tool.c:91
-#: ../plugins/build-tools/gbp-build-tool.c:97
+#: ../plugins/build-tools/gbp-build-tool.c:102
+#: ../plugins/build-tools/gbp-build-tool.c:115
 #, c-format
 msgid "========================\n"
 msgstr "========================\n"
 
-#: ../plugins/build-tools/gbp-build-tool.c:92
+#: ../plugins/build-tools/gbp-build-tool.c:103
 #, c-format
 msgid "           Project Name: %s\n"
 msgstr "           Projektname: %s\n"
 
-#: ../plugins/build-tools/gbp-build-tool.c:93
+#: ../plugins/build-tools/gbp-build-tool.c:104
 #, c-format
 msgid " Version Control System: %s\n"
 msgstr " Versionskontrollsystem: %s\n"
 
-#: ../plugins/build-tools/gbp-build-tool.c:94
+#: ../plugins/build-tools/gbp-build-tool.c:105
 #, c-format
 msgid "           Build System: %s\n"
 msgstr "           Erstellsystem: %s\n"
 
-#: ../plugins/build-tools/gbp-build-tool.c:95
+#: ../plugins/build-tools/gbp-build-tool.c:106
 #, c-format
 msgid "    Build Date and Time: %s\n"
 msgstr "    Erstelldatum und -zeit: %s\n"
 
-#: ../plugins/build-tools/gbp-build-tool.c:96
+#: ../plugins/build-tools/gbp-build-tool.c:107
 #, c-format
 msgid "    Building for Device: %s (%s)\n"
 msgstr "    Erstellen für Gerät: %s (%s)\n"
 
-#: ../plugins/build-tools/gbp-build-tool.c:124
-#: ../plugins/build-tools/gbp-build-tool.c:128
+#: ../plugins/build-tools/gbp-build-tool.c:112
+#, fuzzy, c-format
+#| msgid "           Project Name: %s\n"
+msgid "            Environment: %s\n"
+msgstr "           Projektname: %s\n"
+
+#: ../plugins/build-tools/gbp-build-tool.c:142
+#: ../plugins/build-tools/gbp-build-tool.c:146
 #, c-format
 msgid "===============\n"
 msgstr "===============\n"
 
-#: ../plugins/build-tools/gbp-build-tool.c:125
+#: ../plugins/build-tools/gbp-build-tool.c:143
 #, c-format
 msgid " Build Failure: %s\n"
 msgstr " Erstellungsproblem: %s\n"
 
-#: ../plugins/build-tools/gbp-build-tool.c:126
+#: ../plugins/build-tools/gbp-build-tool.c:144
 msgid " Build ran for: %"
 msgstr " Erstellung lief seit: %"
 
@@ -1644,56 +1683,82 @@ msgstr " Erstellung lief seit: %"
 #. *       here too. It would be nice if we could say, go build this project,
 #. *       for this device, and then deploy.
 #.
-#: ../plugins/build-tools/gbp-build-tool.c:139
-#: ../plugins/build-tools/gbp-build-tool.c:143
+#: ../plugins/build-tools/gbp-build-tool.c:157
+#: ../plugins/build-tools/gbp-build-tool.c:161
 #, c-format
 msgid "=================\n"
 msgstr "=================\n"
 
-#: ../plugins/build-tools/gbp-build-tool.c:140
+#: ../plugins/build-tools/gbp-build-tool.c:158
 #, c-format
 msgid " Build Successful\n"
 msgstr " Erstellung erfolgreich\n"
 
-#: ../plugins/build-tools/gbp-build-tool.c:141
+#: ../plugins/build-tools/gbp-build-tool.c:159
 msgid "   Build ran for: %"
 msgstr "   Erstellung lief seit: %"
 
-#: ../plugins/build-tools/gbp-build-tool.c:191
+#: ../plugins/build-tools/gbp-build-tool.c:213
 #, c-format
 msgid "Failed to locate device \"%s\""
 msgstr "Gerät »%s« konnte nicht gefunden werden"
 
-#: ../plugins/build-tools/gbp-build-tool.c:254
+#: ../plugins/build-tools/gbp-build-tool.c:223
+#, fuzzy, c-format
+#| msgid "Failed to locate template \"%s\""
+msgid "Failed to locate runtime \"%s\""
+msgstr "Vorlage »%s« konnte nicht gefunden werden"
+
+#: ../plugins/build-tools/gbp-build-tool.c:287
 msgid "Clean the project"
 msgstr "Das Projekt leeren"
 
-#: ../plugins/build-tools/gbp-build-tool.c:256
+#: ../plugins/build-tools/gbp-build-tool.c:289
 #, fuzzy
-msgid "The id of the device to build for"
+msgid "The ID of the device to build for"
 msgstr "Die Quellansicht zur Bearbeitung."
 
-#: ../plugins/build-tools/gbp-build-tool.c:257
+#: ../plugins/build-tools/gbp-build-tool.c:290
 msgid "local"
 msgstr "lokal"
 
-#: ../plugins/build-tools/gbp-build-tool.c:259
+#: ../plugins/build-tools/gbp-build-tool.c:292
+#, fuzzy
+#| msgid "The repository to use for search data."
+msgid "The runtime to use for building"
+msgstr "Das Archiv für die Suchdaten."
+
+#: ../plugins/build-tools/gbp-build-tool.c:293
+msgid "host"
+msgstr ""
+
+#: ../plugins/build-tools/gbp-build-tool.c:295
 msgid "Number of workers to use when building"
 msgstr ""
 
-#: ../plugins/build-tools/gbp-build-tool.c:260
+#: ../plugins/build-tools/gbp-build-tool.c:296
 msgid "N"
 msgstr "N"
 
-#: ../plugins/build-tools/gbp-build-tool.c:262
+#: ../plugins/build-tools/gbp-build-tool.c:298
+#, fuzzy
+#| msgid "The navigation list for the workbench."
+msgid "The configuration to use from .buildconfig"
+msgstr "Die Navigationsliste für die Werkbank."
+
+#: ../plugins/build-tools/gbp-build-tool.c:299
+msgid "CONFIG_ID"
+msgstr ""
+
+#: ../plugins/build-tools/gbp-build-tool.c:301
 msgid "Path to project file, defaults to current directory"
 msgstr "Pfad zur Projektdatei, Vorgabe ist der aktuelle Ordner"
 
-#: ../plugins/build-tools/gbp-build-tool.c:263
+#: ../plugins/build-tools/gbp-build-tool.c:302
 msgid "PATH"
 msgstr "PFAD"
 
-#: ../plugins/build-tools/gbp-build-workbench-addin.c:337
+#: ../plugins/build-tools/gbp-build-workbench-addin.c:275
 msgid "Build Output"
 msgstr ""
 
@@ -1849,7 +1914,7 @@ msgstr "create-project [OPTION …] PROJEKTNAME"
 
 #: ../plugins/create-project/gbp-create-project-tool.c:187
 #, c-format
-msgid "Filename must be ascii and may not contain : or ="
+msgid "Filename must be ASCII and may not contain : or ="
 msgstr "Der Dateiname muss in ASCII sein und darf kein : oder = enthalten"
 
 #: ../plugins/create-project/gbp-create-project-tool.c:291
@@ -2132,6 +2197,27 @@ msgstr "Von Vala erzeugte Fehler und Warnungen anzeigen"
 msgid "vala diagnostics warnings errors"
 msgstr "Legt fest, ob die aktuelle Zeile hervorgehoben werden soll."
 
+#~ msgid "%s does not implement build_async()"
+#~ msgstr "%s implementiert build_async() nicht"
+
+#~ msgid "No implementation of build_async()"
+#~ msgstr "Keine Implementation von build_async()"
+
+#~ msgid "Autogening…"
+#~ msgstr "Autogen wird ausgeführt …"
+
+#~ msgid "Framework:"
+#~ msgstr "Framework:"
+
+#~ msgid "Packaging:"
+#~ msgstr "Paketierung:"
+
+#~ msgid "framework"
+#~ msgstr "Framework"
+
+#~ msgid "packaging"
+#~ msgstr "Paketierung"
+
 #~ msgid "Success.\n"
 #~ msgstr "Erfolg.\n"
 
@@ -2210,9 +2296,6 @@ msgstr "Legt fest, ob die aktuelle Zeile hervorgehoben werden soll."
 
 #~ msgid "From remote source code repository"
 #~ msgstr "Aus einem Quellcode-Archiv"
-
-#~ msgid "Name"
-#~ msgstr "Name"
 
 #~ msgid "GNOME Version"
 #~ msgstr "GNOME-Version"
@@ -2488,19 +2571,11 @@ msgstr "Legt fest, ob die aktuelle Zeile hervorgehoben werden soll."
 #~ msgid "Build Failure"
 #~ msgstr "Erstellungsproblem"
 
-#~ msgid "Project build system does not support building"
-#~ msgstr "Das Projekterstellungssystem unterstützt keine Erstellung"
-
 #~ msgid "Clang"
 #~ msgstr "Clang"
 
 #~ msgid "CTags"
 #~ msgstr "CTags"
-
-#, fuzzy
-#~| msgid "The name of the action to execute."
-#~ msgid "The name of the action"
-#~ msgstr "Der Name der auszuführenden Aktion."
 
 #~ msgid "State Machine"
 #~ msgstr "Zustandsautomat"
@@ -2582,11 +2657,6 @@ msgstr "Legt fest, ob die aktuelle Zeile hervorgehoben werden soll."
 #~| msgid "The name of the icon to use."
 #~ msgid "The name of the person."
 #~ msgstr "Name des zu Benutzenden Symbols."
-
-#, fuzzy
-#~| msgid "The repository to use for search data."
-#~ msgid "The repository to use for calculating diffs."
-#~ msgstr "Das Archiv für die Suchdaten."
 
 #~ msgid "Fraction"
 #~ msgstr "Bruchteil"
@@ -2800,11 +2870,6 @@ msgstr "Legt fest, ob die aktuelle Zeile hervorgehoben werden soll."
 
 #~ msgid "Path"
 #~ msgstr "Pfad"
-
-#, fuzzy
-#~| msgid "The offset within the line."
-#~ msgid "The path within the project."
-#~ msgstr "Der Abstand der Zeilen untereinander."
 
 #, fuzzy
 #~| msgid "The file that is being edited."
@@ -3157,11 +3222,6 @@ msgstr "Legt fest, ob die aktuelle Zeile hervorgehoben werden soll."
 
 #~ msgid "y"
 #~ msgstr "y"
-
-#, fuzzy
-#~| msgid "The navigation list for the workbench."
-#~ msgid "The configuration for the build."
-#~ msgstr "Die Navigationsliste für die Werkbank."
 
 #, fuzzy
 #~| msgid "The name of the icon to use."
