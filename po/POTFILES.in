@@ -12,12 +12,17 @@ contrib/xml/xml-reader.c
 data/style-schemes/builder-dark.xml
 data/style-schemes/builder.xml
 [type: gettext/glade]data/ui/ide-editor-frame.ui
+[type: gettext/glade]data/ui/ide-editor-perspective.ui
 [type: gettext/glade]data/ui/ide-editor-tweak-widget.ui
 [type: gettext/glade]data/ui/ide-editor-view.ui
 [type: gettext/glade]data/ui/ide-genesis-perspective.ui
 [type: gettext/glade]data/ui/ide-greeter-perspective.ui
+[type: gettext/glade]data/ui/ide-layout-tab-bar.ui
+[type: gettext/glade]data/ui/ide-layout-tab.ui
 [type: gettext/glade]data/ui/ide-preferences-font-button.ui
+[type: gettext/glade]data/ui/ide-preferences-perspective.ui
 [type: gettext/glade]data/ui/ide-shortcuts-window.ui
+[type: gettext/glade]data/ui/ide-workbench-header-bar.ui
 libide/directory/ide-directory-genesis-addin.c
 libide/editorconfig/ide-editorconfig-file-settings.c
 libide/editor/ide-editor-frame.c
