@@ -1,0 +1,36 @@
+# .buildconfig contains information required for Builder to
+# bootstrap the project using autotools.
+
+[debug]
+name=Builder (Debug)
+config-opts=--enable-tracing --enable-debug --enable-tests
+prefix=/app
+device=local
+runtime=xdg-app:org.gnome.Sdk/master/x86_64
+
+
+[debug.environment]
+
+
+[release]
+name=Builder (Release)
+config-opts=--enable-debug=minimum --enable-gtk-doc
+prefix=/app
+device=local
+runtime=xdg-app:org.gnome.Sdk/master/x86_64
+
+
+
+[release.environment]
+
+[host]
+name=Builder (Host)
+device=local
+runtime=host
+config-opts=--enable-tracing --enable-debug --enable-tests
+prefix=/opt/gnome
+
+
+default=true
+
+[host.environment]
