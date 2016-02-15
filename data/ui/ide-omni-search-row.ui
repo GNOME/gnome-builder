@@ -15,6 +15,7 @@
         </child>
         <child>
           <object class="GtkLabel" id="title">
+            <property name="ellipsize">middle</property>
             <property name="visible">true</property>
             <property name="xalign">0.0</property>
           </object>
