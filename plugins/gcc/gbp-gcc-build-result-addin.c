@@ -147,22 +147,26 @@ gbp_gcc_build_result_addin_log (GbpGccBuildResultAddin *self,
   g_assert (GBP_IS_GCC_BUILD_RESULT_ADDIN (self));
   g_assert (IDE_IS_BUILD_RESULT (result));
 
+#define ENTERING_DIRECTORY_BEGIN "Entering directory '"
+#define ENTERING_DIRECTORY_END   "'\n"
+
   /*
    * This expects LANG=C, which is defined in the autotools Builder.
    * Not the most ideal decoupling of logic, but we don't have a whole
    * lot to work with here.
    */
-  if ((enterdir = strstr (message, "Entering directory '")))
+  if (NULL != (enterdir = strstr (message, ENTERING_DIRECTORY_BEGIN)) &&
+      g_str_has_suffix (enterdir, ENTERING_DIRECTORY_END))
     {
-      gsize len;
+      gssize len;
 
-      enterdir += IDE_LITERAL_LENGTH ("Entering directory '");
-      len = strlen (enterdir);
+      enterdir += IDE_LITERAL_LENGTH (ENTERING_DIRECTORY_BEGIN);
+      len = strlen (enterdir) - IDE_LITERAL_LENGTH (ENTERING_DIRECTORY_END);
 
       if (len > 0)
         {
           g_free (self->current_dir);
-          self->current_dir = g_strndup (enterdir, len - 1);
+          self->current_dir = g_strndup (enterdir, len);
         }
     }
 
@@ -170,7 +174,7 @@ gbp_gcc_build_result_addin_log (GbpGccBuildResultAddin *self,
     {
       IdeDiagnostic *diagnostic;
 
-      if ((diagnostic = create_diagnostic (self, match_info)))
+      if (NULL != (diagnostic = create_diagnostic (self, match_info)))
         {
           ide_build_result_emit_diagnostic (result, diagnostic);
           ide_diagnostic_unref (diagnostic);
@@ -178,6 +182,9 @@ gbp_gcc_build_result_addin_log (GbpGccBuildResultAddin *self,
     }
 
   g_match_info_free (match_info);
+
+#undef ENTERING_DIRECTORY_BEGIN
+#undef ENTERING_DIRECTORY_END
 }
 
 static void
