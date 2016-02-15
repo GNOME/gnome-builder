@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
   <gresource prefix="/org/gnome/builder/icons">
+    <file>scalable/actions/builder-build-configure-symbolic.svg</file>
     <file>scalable/actions/builder-move-left-symbolic.svg</file>
     <file>scalable/actions/builder-move-right-symbolic.svg</file>
     <file>scalable/actions/builder-split-tab-left-symbolic.svg</file>
