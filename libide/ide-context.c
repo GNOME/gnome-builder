@@ -36,6 +36,7 @@
 #include "ide-project.h"
 #include "ide-project-item.h"
 #include "ide-project-files.h"
+#include "ide-runtime-manager.h"
 #include "ide-script-manager.h"
 #include "ide-search-engine.h"
 #include "ide-search-provider.h"
@@ -62,6 +63,7 @@ struct _IdeContext
   IdeDeviceManager         *device_manager;
   IdeDoap                  *doap;
   GtkRecentManager         *recent_manager;
+  IdeRuntimeManager        *runtime_manager;
   IdeScriptManager         *script_manager;
   IdeSearchEngine          *search_engine;
   IdeSourceSnippetsManager *snippets_manager;
@@ -98,6 +100,7 @@ enum {
   PROP_PROJECT_FILE,
   PROP_PROJECT,
   PROP_ROOT_BUILD_DIR,
+  PROP_RUNTIME_MANAGER,
   PROP_SCRIPT_MANAGER,
   PROP_SEARCH_ENGINE,
   PROP_SNIPPETS_MANAGER,
@@ -540,6 +543,7 @@ ide_context_finalize (GObject *object)
   g_clear_object (&self->project);
   g_clear_object (&self->project_file);
   g_clear_object (&self->recent_manager);
+  g_clear_object (&self->runtime_manager);
   g_clear_object (&self->unsaved_files);
   g_clear_object (&self->vcs);
 
@@ -592,6 +596,10 @@ ide_context_get_property (GObject    *object,
 
     case PROP_ROOT_BUILD_DIR:
       g_value_set_string (value, ide_context_get_root_build_dir (self));
+      break;
+
+    case PROP_RUNTIME_MANAGER:
+      g_value_set_object (value, ide_context_get_runtime_manager (self));
       break;
 
     case PROP_SCRIPT_MANAGER:
@@ -710,6 +718,13 @@ ide_context_class_init (IdeContextClass *klass)
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
+  properties [PROP_RUNTIME_MANAGER] =
+    g_param_spec_object ("runtime-manager",
+                         "Runtime Manager",
+                         "Runtime Manager",
+                         IDE_TYPE_RUNTIME_MANAGER,
+                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+
   properties [PROP_SCRIPT_MANAGER] =
     g_param_spec_object ("script-manager",
                          "Script Manager",
@@ -804,6 +819,10 @@ ide_context_init (IdeContext *self)
   self->project = g_object_new (IDE_TYPE_PROJECT,
                                 "context", self,
                                 NULL);
+
+  self->runtime_manager = g_object_new (IDE_TYPE_RUNTIME_MANAGER,
+                                        "context", self,
+                                        NULL);
 
   self->unsaved_files = g_object_new (IDE_TYPE_UNSAVED_FILES,
                                       "context", self,
@@ -1721,6 +1740,7 @@ ide_context_do_unload_locked (IdeContext *self)
   self->delayed_unload_task = NULL;
 
   g_clear_object (&self->device_manager);
+  g_clear_object (&self->runtime_manager);
 
   ide_async_helper_run (self,
                         g_task_get_cancellable (task),
@@ -2020,3 +2040,45 @@ ide_context_release (IdeContext *self)
 
   g_object_unref (self);
 }
+
+/**
+ * ide_context_get_runtime_manager:
+ * @self: An #IdeContext
+ *
+ * Gets the #IdeRuntimeManager for the LibIDE context.
+ *
+ * The runtime manager provies access to #IdeRuntime instances via the
+ * #GListModel interface. These can provide support for building projects
+ * in various runtimes such as xdg-app.
+ *
+ * Returns: (transfer none): An #IdeRuntimeManager.
+ */
+IdeRuntimeManager *
+ide_context_get_runtime_manager (IdeContext *self)
+{
+  g_return_val_if_fail (IDE_IS_CONTEXT (self), NULL);
+
+  return self->runtime_manager;
+}
+
+/**
+ * ide_context_get_configuration_manager:
+ * @self: An #IdeContext
+ *
+ * Gets the #IdeConfigurationManager for the context.
+ *
+ * The configuration manager is responsible for loading and saving
+ * configurations. Configurations consist of information about how to
+ * perform a particular build. Such information includes the target
+ * #IdeDevice, the #IdeRuntime to use, and various other build options.
+ *
+ * Returns: (transfer none): An #IdeConfigurationManager.
+ */
+IdeConfigurationManager *
+ide_context_get_configuration_manager (IdeContext *self)
+{
+  g_return_val_if_fail (IDE_IS_CONTEXT (self), NULL);
+
+  return self->configuration_manager;
+}
+

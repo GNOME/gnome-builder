@@ -98,6 +98,10 @@ typedef struct _IdeProjectFiles                IdeProjectFiles;
 typedef struct _IdeRefactory                   IdeRefactory;
 typedef struct _IdeRefactoryInterface          IdeRefactoryInterface;
 
+typedef struct _IdeRuntime                     IdeRuntime;
+typedef struct _IdeRuntimeManager              IdeRuntimeManager;
+typedef struct _IdeRuntimeProvider             IdeRuntimeProvider;
+
 typedef struct _IdeScript                      IdeScript;
 
 typedef struct _IdeScriptManager               IdeScriptManager;

@@ -59,6 +59,7 @@ IdeFixit           *_ide_fixit_new                          (IdeSourceRange     
                                                              const gchar           *replacement_text);
 void                _ide_project_set_name                   (IdeProject            *project,
                                                              const gchar           *name);
+void                _ide_runtime_manager_unload             (IdeRuntimeManager     *self);
 void                _ide_search_context_add_provider        (IdeSearchContext      *context,
                                                              IdeSearchProvider     *provider,
                                                              gsize                  max_results);
