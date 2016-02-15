@@ -20,6 +20,7 @@
 #define IDE_DEVICE_H
 
 #include "ide-object.h"
+#include "ide-types.h"
 
 G_BEGIN_DECLS
 
@@ -31,18 +32,20 @@ struct _IdeDeviceClass
 {
   IdeObjectClass parent;
 
-  GKeyFile    *(*get_config)      (IdeDevice *device);
-  const gchar *(*get_system_type) (IdeDevice *device);
+  const gchar *(*get_system_type)       (IdeDevice        *self);
+  void         (*prepare_configuration) (IdeDevice        *self,
+                                         IdeConfiguration *configuration);
 };
 
-GKeyFile    *ide_device_get_config       (IdeDevice   *device);
-const gchar *ide_device_get_display_name (IdeDevice   *device);
-void         ide_device_set_display_name (IdeDevice   *device,
-                                          const gchar *display_name);
-const gchar *ide_device_get_id           (IdeDevice   *device);
-void         ide_device_set_id           (IdeDevice   *device,
-                                          const gchar *id);
-const gchar *ide_device_get_system_type  (IdeDevice   *device);
+const gchar *ide_device_get_display_name      (IdeDevice   *self);
+void         ide_device_set_display_name      (IdeDevice   *self,
+                                               const gchar *display_name);
+const gchar *ide_device_get_id                (IdeDevice   *self);
+void         ide_device_set_id                (IdeDevice   *self,
+                                               const gchar *id);
+const gchar *ide_device_get_system_type       (IdeDevice        *self);
+void         ide_device_prepare_configuration (IdeDevice        *self,
+                                               IdeConfiguration *configuration);
 
 G_END_DECLS
 

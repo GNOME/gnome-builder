@@ -18,6 +18,7 @@
 
 #include <glib/gi18n.h>
 
+#include "ide-configuration.h"
 #include "ide-device.h"
 
 typedef struct
@@ -37,27 +38,6 @@ enum {
 };
 
 static GParamSpec *properties [LAST_PROP];
-
-/**
- * ide_device_get_config:
- * @device: A #IdeDevice.
- *
- * Retrieves any custom configuration that is required to build for the
- * device. Such values might include additional options to autoconf
- * or paths to cross-compilers.
- *
- * Returns: (transfer none) (nullable): A #GKeyFile or %NULL.
- */
-GKeyFile *
-ide_device_get_config (IdeDevice *device)
-{
-  g_return_val_if_fail (IDE_IS_DEVICE (device), NULL);
-
-  if (IDE_DEVICE_GET_CLASS (device)->get_config)
-    return IDE_DEVICE_GET_CLASS (device)->get_config (device);
-
-  return NULL;
-}
 
 /**
  * ide_device_get_display_name:
@@ -256,4 +236,15 @@ ide_device_class_init (IdeDeviceClass *klass)
 static void
 ide_device_init (IdeDevice *self)
 {
+}
+
+void
+ide_device_prepare_configuration (IdeDevice        *self,
+                                  IdeConfiguration *configuration)
+{
+  g_assert (IDE_IS_DEVICE (self));
+  g_assert (IDE_IS_CONFIGURATION (configuration));
+
+  if (IDE_DEVICE_GET_CLASS (self)->prepare_configuration)
+    IDE_DEVICE_GET_CLASS (self)->prepare_configuration (self, configuration);
 }
