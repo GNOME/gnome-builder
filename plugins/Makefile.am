@@ -27,6 +27,7 @@ SUBDIRS = \
 	terminal \
 	todo \
 	vala-pack \
+	xdg-app \
 	xml-pack \
 	$(NULL)
 

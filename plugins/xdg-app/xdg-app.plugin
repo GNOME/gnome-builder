@@ -1,0 +1,7 @@
+[Plugin]
+Module=xdg-app-plugin
+Name=Xdg-App
+Description=Provides support for building with Xdg-App
+Authors=Christian Hergert <christian@hergert.me>
+Copyright=Copyright © 2016 Christian Hergert
+Builtin=true

@@ -215,7 +215,6 @@ enable_python_scripting=no
 AS_IF([test "x$have_pygobject" = "xyes"],[
 	AM_PATH_PYTHON([3.2.3])
 	AC_PATH_TOOL(PYTHON3_CONFIG, "python3-config")
-
 	AS_IF([test -z "${PYTHON3_CONFIG}"],[
 		AC_MSG_RESULT([Failed to locate python3-config.])
 	],[
@@ -261,6 +260,7 @@ m4_include([plugins/sysmon/configure.ac])
 m4_include([plugins/todo/configure.ac])
 m4_include([plugins/terminal/configure.ac])
 m4_include([plugins/vala-pack/configure.ac])
+m4_include([plugins/xdg-app/configure.ac])
 m4_include([plugins/xml-pack/configure.ac])
 
 
@@ -504,6 +504,7 @@ echo "  Symbol Tree .......................... : ${enable_symbol_tree_plugin}"
 echo "  Todo ................................. : ${enable_todo_plugin}"
 echo "  Terminal ............................. : ${enable_terminal_plugin}"
 echo "  Vala Language Pack ................... : ${enable_vala_pack_plugin}"
+echo "  Xdg-App .............................. : ${enable_xdg_app_plugin}"
 echo "  XML Language Pack .................... : ${enable_xml_pack_plugin}"
 echo ""
 echo " Templates"
