@@ -23,8 +23,7 @@
 
 typedef struct
 {
-  GKeyFile *config;
-  gchar    *system_type;
+  gchar *system_type;
 } IdeLocalDevicePrivate;
 
 G_DEFINE_TYPE_WITH_PRIVATE (IdeLocalDevice, ide_local_device, IDE_TYPE_DEVICE)
@@ -71,25 +70,12 @@ ide_local_device_get_system_type (IdeDevice *device)
   return priv->system_type;
 }
 
-static GKeyFile *
-ide_local_device_get_config (IdeDevice *device)
-{
-  IdeLocalDevice *self = (IdeLocalDevice *)device;
-  IdeLocalDevicePrivate *priv = ide_local_device_get_instance_private (self);
-
-  g_return_val_if_fail (IDE_IS_LOCAL_DEVICE (device), NULL);
-  g_return_val_if_fail (IDE_IS_LOCAL_DEVICE (self), NULL);
-
-  return priv->config;
-}
-
 static void
 ide_local_device_finalize (GObject *object)
 {
   IdeLocalDevice *self = (IdeLocalDevice *)object;
   IdeLocalDevicePrivate *priv = ide_local_device_get_instance_private (self);
 
-  g_clear_pointer (&priv->config, g_key_file_unref);
   g_clear_pointer (&priv->system_type, g_free);
 
   G_OBJECT_CLASS (ide_local_device_parent_class)->finalize (object);
@@ -103,7 +89,6 @@ ide_local_device_class_init (IdeLocalDeviceClass *klass)
 
   object_class->finalize = ide_local_device_finalize;
 
-  device_class->get_config = ide_local_device_get_config;
   device_class->get_system_type = ide_local_device_get_system_type;
 }
 
@@ -113,9 +98,6 @@ ide_local_device_init (IdeLocalDevice *self)
   IdeLocalDevicePrivate *priv = ide_local_device_get_instance_private (self);
 
   priv->system_type = get_system_type ();
-  priv->config = g_key_file_new ();
-
-  g_key_file_set_string (priv->config, "autoconf", "--host", priv->system_type);
 
   ide_device_set_display_name (IDE_DEVICE (self), g_get_host_name ());
   ide_device_set_id (IDE_DEVICE (self), "local");
