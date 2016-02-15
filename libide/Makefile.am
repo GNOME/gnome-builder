@@ -413,6 +413,8 @@ libide_1_0_la_SOURCES = \
 	util/ide-list-inline.h \
 	util/ide-pango.c \
 	util/ide-pango.h \
+	util/ide-posix.c \
+	util/ide-posix.h \
 	util/ide-rgba.c \
 	util/ide-rgba.h \
 	util/ide-text-util.c \
@@ -559,6 +561,7 @@ INTROSPECTION_GIRS =
 INTROSPECTION_SCANNER_ARGS = --add-include-path=$(srcdir) --warn-all
 INTROSPECTION_COMPILER_ARGS = \
 	--includedir=$(srcdir) \
+	--includedir=$(top_builddir)/contrib/egg \
 	--includedir=$(top_builddir)/contrib/tmpl
 
 introspection_sources = \
@@ -574,6 +577,7 @@ Ide_1_0_gir_LIBS = \
 	$(top_builddir)/contrib/tmpl/libtemplate-glib-1.0.la
 Ide_1_0_gir_FILES = $(introspection_sources)
 Ide_1_0_gir_SCANNERFLAGS = \
+	--include-uninstalled=$(top_builddir)/contrib/egg/Egg-1.0.gir \
 	--include-uninstalled=$(top_builddir)/contrib/tmpl/Template-1.0.gir \
 	--c-include="ide.h" \
 	-n Ide \
@@ -597,11 +601,21 @@ libide-1.0.vapi: Ide-1.0.gir
 
 VAPIGEN_VAPIS = libide-1.0.vapi
 
-libide_1_0_vapi_DEPS = gio-2.0 gtk+-3.0 gtksourceview-3.0 libpeas-1.0 template-glib-1.0
+libide_1_0_vapi_DEPS = \
+	gio-2.0 \
+	gtk+-3.0 \
+	gtksourceview-3.0 \
+	libpeas-1.0 \
+	template-glib-1.0 \
+	egg-private
 libide_1_0_vapi_METADATADIRS = $(srcdir)
 libide_1_0_vapi_FILES = Ide-1.0.gir
-libide_1_0_vapi_VAPIDIRS = $(top_builddir)/contrib/tmpl
-libide_1_0_vapi_GIRDIRS = $(top_builddir)/contrib/tmpl
+libide_1_0_vapi_VAPIDIRS = \
+	$(top_builddir)/contrib/egg \
+	$(top_builddir)/contrib/tmpl
+libide_1_0_vapi_GIRDIRS = \
+	$(top_builddir)/contrib/egg \
+	$(top_builddir)/contrib/tmpl
 
 libide-1.0.deps: Makefile
 	$(AM_V_GEN) echo $(libide_1_0_vapi_DEPS) | tr ' ' '\n' > $@
