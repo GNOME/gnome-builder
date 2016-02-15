@@ -364,9 +364,12 @@ id_to_xgettext_language (const gchar *id)
   };
   gsize i;
 
-  for (i = 0; i < G_N_ELEMENTS (id_to_lang); i++)
-    if (strcmp (id, id_to_lang[i].id) == 0)
-      return id_to_lang[i].lang;
+  if (id != NULL)
+    {
+      for (i = 0; i < G_N_ELEMENTS (id_to_lang); i++)
+        if (strcmp (id, id_to_lang[i].id) == 0)
+          return id_to_lang[i].lang;
+    }
 
   return NULL;
 }
