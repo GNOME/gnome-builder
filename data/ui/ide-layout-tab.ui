@@ -120,6 +120,7 @@
             <property name="valign">center</property>
             <property name="margin-start">8</property>
             <property name="margin-end">11</property>
+	    <property name="tooltip-text" translatable="yes">Close the current document</property>
             <style>
               <class name="close"/>
             </style>
