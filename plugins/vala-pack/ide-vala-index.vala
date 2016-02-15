@@ -65,8 +65,8 @@ namespace Ide
 			this.code_context.compile_only = true;
 			this.code_context.use_header = false;
 			this.code_context.includedir = null;
-			this.code_context.basedir = Environment.get_current_dir ();
-			this.code_context.directory = Environment.get_current_dir ();
+			this.code_context.basedir = GLib.Environment.get_current_dir ();
+			this.code_context.directory = GLib.Environment.get_current_dir ();
 			this.code_context.debug = false;
 			this.code_context.thread = true;
 			this.code_context.mem_profiler = false;
