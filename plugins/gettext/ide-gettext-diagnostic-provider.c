@@ -39,11 +39,6 @@ struct _IdeGettextDiagnostics
   guint64 sequence;
 };
 
-struct _IdeGettextDiagnosticsClass
-{
-  GObjectClass parent_class;
-};
-
 G_DEFINE_TYPE (IdeGettextDiagnostics, ide_gettext_diagnostics, G_TYPE_OBJECT)
 
 enum {
@@ -53,7 +48,7 @@ enum {
   LAST_PROP
 };
 
-static GParamSpec *diagnostics_pspecs[LAST_PROP] = { 0 };
+static GParamSpec *properties [LAST_PROP];
 
 static void
 ide_gettext_diagnostics_set_property (GObject      *object,
@@ -93,21 +88,27 @@ static void
 ide_gettext_diagnostics_class_init (IdeGettextDiagnosticsClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  object_class->set_property = ide_gettext_diagnostics_set_property;
+
   object_class->finalize = ide_gettext_diagnostics_finalize;
+  object_class->set_property = ide_gettext_diagnostics_set_property;
 
-  diagnostics_pspecs[PROP_DIAGNOSTICS] =
-    g_param_spec_boxed ("diagnostics", NULL, NULL,
+  properties [PROP_DIAGNOSTICS] =
+    g_param_spec_boxed ("diagnostics",
+                        "Diagnostics",
+                        "Diagnostics",
                         IDE_TYPE_DIAGNOSTICS,
-                        G_PARAM_CONSTRUCT_ONLY | G_PARAM_WRITABLE);
-  diagnostics_pspecs[PROP_SEQUENCE] =
-    g_param_spec_uint64 ("sequence", NULL, NULL,
-                         0, G_MAXUINT64, 0,
-                         G_PARAM_CONSTRUCT_ONLY | G_PARAM_WRITABLE);
+                        (G_PARAM_CONSTRUCT_ONLY | G_PARAM_WRITABLE));
 
-  g_object_class_install_properties (object_class,
-                                     LAST_PROP,
-                                     diagnostics_pspecs);
+  properties [PROP_SEQUENCE] =
+    g_param_spec_uint64 ("sequence",
+                         "Sequence",
+                         "The document sequence number",
+                         0,
+                         G_MAXUINT64,
+                         0,
+                         (G_PARAM_CONSTRUCT_ONLY | G_PARAM_WRITABLE));
+
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 }
 
 static void
@@ -117,13 +118,8 @@ ide_gettext_diagnostics_init (IdeGettextDiagnostics *self)
 
 struct _IdeGettextDiagnosticProvider
 {
-  IdeObject parent_instance;
+  IdeObject     parent_instance;
   EggTaskCache *diagnostics_cache;
-};
-
-struct _IdeGettextDiagnosticProviderClass
-{
-  IdeObjectClass parent_class;
 };
 
 static void diagnostic_provider_iface_init (IdeDiagnosticProviderInterface *iface);
@@ -163,13 +159,12 @@ get_unsaved_file (IdeGettextDiagnosticProvider *self,
 
   context = ide_object_get_context (IDE_OBJECT (self));
   unsaved_files = ide_context_get_unsaved_files (context);
-
   array = ide_unsaved_files_to_array (unsaved_files);
+
   for (index = 0; index < array->len; index++)
     {
       IdeUnsavedFile *unsaved_file = g_ptr_array_index (array, index);
-      if (g_file_equal (ide_unsaved_file_get_file (unsaved_file),
-                        ide_file_get_file (file)))
+      if (g_file_equal (ide_unsaved_file_get_file (unsaved_file), ide_file_get_file (file)))
         return ide_unsaved_file_ref (unsaved_file);
     }
 
@@ -211,6 +206,7 @@ ide_gettext_diagnostic_provider_diagnose_async (IdeDiagnosticProvider *provider,
   task = g_task_new (self, cancellable, callback, user_data);
 
   unsaved_file = get_unsaved_file (self, file);
+
   if ((cached = egg_task_cache_peek (self->diagnostics_cache, file)) &&
       (cached->sequence >= ide_unsaved_file_get_sequence (unsaved_file)))
     {
@@ -237,8 +233,7 @@ ide_gettext_diagnostic_provider_diagnose_finish (IdeDiagnosticProvider  *provide
   g_return_val_if_fail (IDE_IS_GETTEXT_DIAGNOSTIC_PROVIDER (provider), NULL);
   g_return_val_if_fail (G_IS_TASK (task), NULL);
 
-  object = g_task_propagate_pointer (task, error);
-  if (!object)
+  if (NULL == (object = g_task_propagate_pointer (task, error)))
     return NULL;
 
   return ide_diagnostics_ref (object->diagnostics);
@@ -265,6 +260,7 @@ static void
 ide_gettext_diagnostic_provider_class_init (IdeGettextDiagnosticProviderClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
   object_class->finalize = ide_gettext_diagnostic_provider_finalize;
 }
 
@@ -298,17 +294,17 @@ subprocess_wait_cb (GObject      *source_object,
   g_clear_object (&stderr_input);
 
   input_prefix = g_strdup_printf ("%s:", ide_unsaved_file_get_temp_path (unit->unsaved_file));
+
   for (;;)
     {
       g_autofree gchar *line = NULL;
       gsize length;
 
-      error = NULL;
       line = g_data_input_stream_read_line (stderr_data_input,
                                             &length,
                                             g_task_get_cancellable (task),
                                             &error);
-      if (!line)
+      if (line == NULL)
         break;
 
       if (g_str_has_prefix (line, input_prefix))
