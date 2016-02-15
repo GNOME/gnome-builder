@@ -29,13 +29,6 @@ G_DECLARE_FINAL_TYPE (IdeAutotoolsBuilder, ide_autotools_builder, IDE, AUTOTOOLS
 
 GFile    *ide_autotools_builder_get_build_directory (IdeAutotoolsBuilder  *self);
 gboolean  ide_autotools_builder_get_needs_bootstrap (IdeAutotoolsBuilder  *self);
-void      ide_autotools_builder_bootstrap_async     (IdeAutotoolsBuilder  *self,
-                                                     GCancellable         *cancellable,
-                                                     GAsyncReadyCallback   callback,
-                                                     gpointer              user_data);
-gboolean  ide_autotools_builder_bootstrap_finish    (IdeAutotoolsBuilder   *self,
-                                                     GAsyncResult          *result,
-                                                     GError               **error);
 
 G_END_DECLS
 

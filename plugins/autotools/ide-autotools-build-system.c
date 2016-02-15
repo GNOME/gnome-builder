@@ -32,6 +32,8 @@
 #include "ide-autotools-build-system.h"
 #include "ide-autotools-builder.h"
 #include "ide-buffer-manager.h"
+#include "ide-configuration.h"
+#include "ide-configuration-manager.h"
 #include "ide-context.h"
 #include "ide-debug.h"
 #include "ide-device.h"
@@ -39,6 +41,8 @@
 #include "ide-file.h"
 #include "ide-internal.h"
 #include "ide-makecache.h"
+#include "ide-runtime.h"
+#include "ide-runtime-manager.h"
 #include "ide-tags-builder.h"
 
 #define MAKECACHE_KEY "makecache"
@@ -84,24 +88,21 @@ ide_autotools_build_system_get_tarball_name (IdeAutotoolsBuildSystem *self)
 }
 
 static IdeBuilder *
-ide_autotools_build_system_get_builder (IdeBuildSystem  *build_system,
-                                        GKeyFile        *config,
-                                        IdeDevice       *device,
-                                        GError         **error)
+ide_autotools_build_system_get_builder (IdeBuildSystem    *build_system,
+                                        IdeConfiguration  *configuration,
+                                        GError           **error)
 {
   IdeBuilder *ret;
   IdeContext *context;
 
-  g_return_val_if_fail (IDE_IS_AUTOTOOLS_BUILD_SYSTEM (build_system), NULL);
-  g_return_val_if_fail (config, NULL);
-  g_return_val_if_fail (IDE_IS_DEVICE (device), NULL);
+  g_assert (IDE_IS_AUTOTOOLS_BUILD_SYSTEM (build_system));
+  g_assert (IDE_IS_CONFIGURATION (configuration));
 
   context = ide_object_get_context (IDE_OBJECT (build_system));
 
   ret = g_object_new (IDE_TYPE_AUTOTOOLS_BUILDER,
                       "context", context,
-                      "config", config,
-                      "device", device,
+                      "configuration", configuration,
                       NULL);
 
   return ret;
@@ -213,43 +214,15 @@ ide_autotools_build_system_discover_file_finish (IdeAutotoolsBuildSystem  *syste
 }
 
 static void
-ide_autotools_build_system__bootstrap_cb (GObject      *object,
-                                          GAsyncResult *result,
-                                          gpointer      user_data)
-{
-  IdeAutotoolsBuilder *builder = (IdeAutotoolsBuilder *)object;
-  g_autoptr(GTask) task = user_data;
-  g_autoptr(GFile) build_directory = NULL;
-  g_autoptr(GFile) makefile = NULL;
-  GError *error = NULL;
-
-  g_assert (IDE_IS_AUTOTOOLS_BUILDER (builder));
-  g_assert (G_IS_TASK (task));
-
-  if (!ide_autotools_builder_bootstrap_finish (builder, result, &error))
-    {
-      g_task_return_error (task, error);
-      return;
-    }
-
-  build_directory = ide_autotools_builder_get_build_directory (builder);
-  makefile = g_file_get_child (build_directory, "Makefile");
-
-  g_task_return_pointer (task, g_object_ref (makefile), g_object_unref);
-}
-
-static void
 ide_autotools_build_system_get_local_makefile_async (IdeAutotoolsBuildSystem *self,
                                                      GCancellable            *cancellable,
                                                      GAsyncReadyCallback      callback,
                                                      gpointer                 user_data)
 {
   IdeContext *context;
-  IdeDeviceManager *device_manager;
-  IdeDevice *device;
+  g_autoptr(IdeConfiguration) configuration = NULL;
   g_autoptr(GTask) task = NULL;
   g_autoptr(IdeBuilder) builder = NULL;
-  g_autoptr(GKeyFile) config = NULL;
   g_autoptr(GFile) build_directory = NULL;
   g_autoptr(GFile) makefile = NULL;
   GError *error = NULL;
@@ -260,26 +233,14 @@ ide_autotools_build_system_get_local_makefile_async (IdeAutotoolsBuildSystem *se
   task = g_task_new (self, cancellable, callback, user_data);
 
   context = ide_object_get_context (IDE_OBJECT (self));
-  device_manager = ide_context_get_device_manager (context);
-  device = ide_device_manager_get_device (device_manager, "local");
-  config = g_key_file_new ();
-  builder = ide_autotools_build_system_get_builder (IDE_BUILD_SYSTEM (self), config, device, &error);
+
+  configuration = ide_configuration_new (context, "autotools-bootstrap", "local", "host");
+
+  builder = ide_autotools_build_system_get_builder (IDE_BUILD_SYSTEM (self), configuration, &error);
 
   if (builder == NULL)
     {
       g_task_return_error (task, error);
-      return;
-    }
-
-  /*
-   * If we haven't yet bootstrapped the project, let's go ahead and do that now.
-   */
-  if (ide_autotools_builder_get_needs_bootstrap (IDE_AUTOTOOLS_BUILDER (builder)))
-    {
-      ide_autotools_builder_bootstrap_async (IDE_AUTOTOOLS_BUILDER (builder),
-                                             cancellable,
-                                             ide_autotools_build_system__bootstrap_cb,
-                                             g_object_ref (task));
       return;
     }
 
@@ -862,17 +823,23 @@ simple_make_command_cb (GObject      *object,
 }
 
 static void
-simple_make_command (GFile       *directory,
-                     const gchar *target,
-                     GTask       *task)
+simple_make_command (GFile            *directory,
+                     const gchar      *target,
+                     GTask            *task,
+                     IdeConfiguration *configuration)
 {
-  g_autoptr(GSubprocessLauncher) launcher = NULL;
+  g_autoptr(IdeSubprocessLauncher) launcher = NULL;
   g_autoptr(GSubprocess) subprocess = NULL;
+  GCancellable *cancellable;
+  IdeRuntime *runtime;
   GError *error = NULL;
 
   g_assert (G_IS_FILE (directory));
   g_assert (target != NULL);
   g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_CONFIGURATION (configuration));
+
+  cancellable = g_task_get_cancellable (task);
 
   if (!g_file_is_native (directory))
     {
@@ -883,12 +850,29 @@ simple_make_command (GFile       *directory,
       return;
     }
 
-  launcher = g_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDERR_SILENCE |
-                                        G_SUBPROCESS_FLAGS_STDOUT_SILENCE);
-  g_subprocess_launcher_set_cwd (launcher, g_file_get_path (directory));
+  if (NULL == (runtime = ide_configuration_get_runtime (configuration)))
+    {
+      g_task_return_new_error (task,
+                               G_IO_ERROR,
+                               G_IO_ERROR_NOT_FOUND,
+                               "Failed to locate runtime");
+      return;
+    }
 
-  subprocess = g_subprocess_launcher_spawn (launcher, &error, GNU_MAKE_NAME, target, NULL);
-  if (subprocess == NULL)
+  if (NULL == (launcher = ide_runtime_create_launcher (runtime, &error)))
+    {
+      g_task_return_error (task, error);
+      return;
+    }
+
+  ide_subprocess_launcher_set_cwd (launcher, g_file_get_path (directory));
+
+  if (ide_runtime_contains_program_in_path (runtime, "gmake", cancellable))
+    ide_subprocess_launcher_push_argv (launcher, "gmake");
+  else
+    ide_subprocess_launcher_push_argv (launcher, "make");
+
+  if (NULL == (subprocess = ide_subprocess_launcher_spawn_sync (launcher, cancellable, &error)))
     {
       g_task_return_error (task, error);
       return;
@@ -901,28 +885,35 @@ simple_make_command (GFile       *directory,
 }
 
 static void
-ide_autotools_build_system_build_async (IdeTagsBuilder      *builder,
-                                        GFile               *file_or_directory,
-                                        gboolean             recursive,
-                                        GCancellable        *cancellable,
-                                        GAsyncReadyCallback  callback,
-                                        gpointer             user_data)
+ide_autotools_build_system_tags_build_async (IdeTagsBuilder      *builder,
+                                             GFile               *file_or_directory,
+                                             gboolean             recursive,
+                                             GCancellable        *cancellable,
+                                             GAsyncReadyCallback  callback,
+                                             gpointer             user_data)
 {
   IdeAutotoolsBuildSystem *self = (IdeAutotoolsBuildSystem *)builder;
+  IdeConfigurationManager *config_manager;
+  IdeConfiguration *configuration;
+  IdeContext *context;
   g_autoptr(GTask) task = NULL;
 
-  g_return_if_fail (IDE_IS_AUTOTOOLS_BUILD_SYSTEM (self));
-  g_return_if_fail (G_IS_FILE (file_or_directory));
-  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+  g_assert (IDE_IS_AUTOTOOLS_BUILD_SYSTEM (self));
+  g_assert (G_IS_FILE (file_or_directory));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  context = ide_object_get_context (IDE_OBJECT (self));
+  config_manager = ide_context_get_configuration_manager (context);
+  configuration = ide_configuration_manager_get_current (config_manager);
 
   task = g_task_new (self, cancellable, callback, user_data);
-  simple_make_command (file_or_directory, "ctags", task);
+  simple_make_command (file_or_directory, "ctags", task, configuration);
 }
 
 static gboolean
-ide_autotools_build_system_build_finish (IdeTagsBuilder  *builder,
-                                         GAsyncResult    *result,
-                                         GError         **error)
+ide_autotools_build_system_tags_build_finish (IdeTagsBuilder  *builder,
+                                              GAsyncResult    *result,
+                                              GError         **error)
 {
   IdeAutotoolsBuildSystem *self = (IdeAutotoolsBuildSystem *)builder;
   GTask *task = (GTask *)result;
@@ -936,6 +927,6 @@ ide_autotools_build_system_build_finish (IdeTagsBuilder  *builder,
 static void
 tags_builder_iface_init (IdeTagsBuilderInterface *iface)
 {
-  iface->build_async = ide_autotools_build_system_build_async;
-  iface->build_finish = ide_autotools_build_system_build_finish;
+  iface->build_async = ide_autotools_build_system_tags_build_async;
+  iface->build_finish = ide_autotools_build_system_tags_build_finish;
 }

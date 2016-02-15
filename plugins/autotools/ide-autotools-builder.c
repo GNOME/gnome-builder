@@ -17,98 +17,17 @@
  */
 
 #include <glib/gi18n.h>
+#include <ide.h>
 
 #include "ide-autotools-build-task.h"
 #include "ide-autotools-builder.h"
-#include "ide-build-result.h"
-#include "ide-context.h"
-#include "ide-device.h"
-#include "ide-project.h"
-#include "ide-vcs.h"
 
 struct _IdeAutotoolsBuilder
 {
-  IdeObject  parent_instance;
-
-  GKeyFile  *config;
-  IdeDevice *device;
+  IdeBuilder parent_instance;
 };
 
 G_DEFINE_TYPE (IdeAutotoolsBuilder, ide_autotools_builder, IDE_TYPE_BUILDER)
-
-enum {
-  PROP_0,
-  PROP_CONFIG,
-  PROP_DEVICE,
-  LAST_PROP
-};
-
-static GParamSpec *properties [LAST_PROP];
-
-static void
-ide_autotools_builder_merge_defaults (IdeAutotoolsBuilder *self,
-                                      GKeyFile            *key_file)
-{
-  g_return_if_fail (IDE_IS_AUTOTOOLS_BUILDER (self));
-  g_return_if_fail (key_file != NULL);
-
-  if (!g_key_file_has_key (key_file, "parallel", "workers", NULL))
-    {
-      g_autoptr(GSettings) settings = g_settings_new ("org.gnome.builder.build");
-
-      g_key_file_set_integer (key_file,
-                              "parallel", "workers",
-                              g_settings_get_int (settings, "parallel"));
-    }
-}
-
-GKeyFile *
-ide_autotools_builder_get_config (IdeAutotoolsBuilder *self)
-{
-  g_return_val_if_fail (IDE_IS_AUTOTOOLS_BUILDER (self), NULL);
-
-  return self->config;
-}
-
-static void
-ide_autotools_builder_set_config (IdeAutotoolsBuilder *self,
-                                  GKeyFile            *config)
-{
-  g_return_if_fail (IDE_IS_AUTOTOOLS_BUILDER (self));
-
-  if (self->config != config)
-    {
-      g_clear_pointer (&self->config, g_key_file_unref);
-
-      if (config != NULL)
-        {
-          self->config = g_key_file_ref (config);
-          ide_autotools_builder_merge_defaults (self, config);
-        }
-
-      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CONFIG]);
-    }
-}
-
-IdeDevice *
-ide_autotools_builder_get_device (IdeAutotoolsBuilder *self)
-{
-  g_return_val_if_fail (IDE_IS_AUTOTOOLS_BUILDER (self), NULL);
-
-  return self->device;
-}
-
-static void
-ide_autotools_builder_set_device (IdeAutotoolsBuilder *self,
-                                  IdeDevice           *device)
-{
-  g_return_if_fail (IDE_IS_AUTOTOOLS_BUILDER (self));
-  g_return_if_fail (!device || IDE_IS_DEVICE (device));
-
-  if (self->device != device)
-    if (g_set_object (&self->device, device))
-      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_DEVICE]);
-}
 
 static void
 ide_autotools_builder_build_cb (GObject      *object,
@@ -151,8 +70,10 @@ GFile *
 ide_autotools_builder_get_build_directory (IdeAutotoolsBuilder *self)
 {
   g_autofree gchar *path = NULL;
+  IdeConfiguration *configuration;
   IdeContext *context;
   IdeProject *project;
+  IdeDevice *device;
   const gchar *root_build_dir;
   const gchar *project_name;
   const gchar *device_id;
@@ -161,7 +82,11 @@ ide_autotools_builder_get_build_directory (IdeAutotoolsBuilder *self)
   g_return_val_if_fail (IDE_IS_AUTOTOOLS_BUILDER (self), NULL);
 
   context = ide_object_get_context (IDE_OBJECT (self));
-  device_id = ide_device_get_id (self->device);
+
+  configuration = ide_builder_get_configuration (IDE_BUILDER (self));
+
+  device = ide_configuration_get_device (configuration);
+  device_id = ide_device_get_id (device);
 
   /*
    * If this is the local device, we have a special workaround for building within the project
@@ -196,7 +121,7 @@ ide_autotools_builder_get_build_directory (IdeAutotoolsBuilder *self)
 
   project = ide_context_get_project (context);
   root_build_dir = ide_context_get_root_build_dir (context);
-  system_type = ide_device_get_system_type (self->device);
+  system_type = ide_device_get_system_type (device);
   project_name = ide_project_get_name (project);
   path = g_build_filename (root_build_dir, project_name, device_id, system_type, NULL);
 
@@ -215,29 +140,23 @@ ide_autotools_builder_build_async (IdeBuilder           *builder,
   g_autoptr(IdeAutotoolsBuildTask) build_result = NULL;
   g_autoptr(GTask) task = NULL;
   g_autoptr(GFile) directory = NULL;
+  IdeConfiguration *configuration;
   IdeContext *context;
-  IdeDevice *device;
 
   g_return_if_fail (IDE_IS_AUTOTOOLS_BUILDER (builder));
   g_return_if_fail (IDE_IS_AUTOTOOLS_BUILDER (self));
 
-  if (flags & IDE_BUILDER_BUILD_FLAGS_FORCE_REBUILD)
-    g_key_file_set_boolean (self->config, "autotools", "rebuild", TRUE);
-
-  /* TODO: This belongs as its own vfunc */
-  if (flags & IDE_BUILDER_BUILD_FLAGS_CLEAN)
-    g_key_file_set_boolean (self->config, "autotools", "clean-only", TRUE);
+  if (ide_autotools_builder_get_needs_bootstrap (self))
+    flags |= IDE_BUILDER_BUILD_FLAGS_FORCE_BOOTSTRAP;
 
   task = g_task_new (self, cancellable, callback, user_data);
 
   context = ide_object_get_context (IDE_OBJECT (builder));
-  device = ide_autotools_builder_get_device (self);
+  configuration = ide_builder_get_configuration (IDE_BUILDER (self));
   directory = ide_autotools_builder_get_build_directory (self);
-
   build_result = g_object_new (IDE_TYPE_AUTOTOOLS_BUILD_TASK,
                                "context", context,
-                               "config", self->config,
-                               "device", device,
+                               "configuration", configuration,
                                "directory", directory,
                                "mode", _("Building…"),
                                "running", TRUE,
@@ -247,6 +166,7 @@ ide_autotools_builder_build_async (IdeBuilder           *builder,
     *result = g_object_ref (build_result);
 
   ide_autotools_build_task_execute_async (build_result,
+                                          flags,
                                           cancellable,
                                           ide_autotools_builder_build_cb,
                                           g_object_ref (task));
@@ -266,94 +186,12 @@ ide_autotools_builder_build_finish (IdeBuilder    *builder,
 }
 
 static void
-ide_autotools_builder_finalize (GObject *object)
-{
-  IdeAutotoolsBuilder *self = (IdeAutotoolsBuilder *)object;
-
-  g_clear_pointer (&self->config, g_key_file_unref);
-  g_clear_object (&self->device);
-
-  G_OBJECT_CLASS (ide_autotools_builder_parent_class)->finalize (object);
-}
-
-static void
-ide_autotools_builder_get_property (GObject    *object,
-                                    guint       prop_id,
-                                    GValue     *value,
-                                    GParamSpec *pspec)
-{
-  IdeAutotoolsBuilder *self = IDE_AUTOTOOLS_BUILDER (object);
-
-  switch (prop_id)
-    {
-    case PROP_CONFIG:
-      g_value_set_boxed (value, ide_autotools_builder_get_config (self));
-      break;
-
-    case PROP_DEVICE:
-      g_value_set_object (value, ide_autotools_builder_get_device (self));
-      break;
-
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-    }
-}
-
-static void
-ide_autotools_builder_set_property (GObject      *object,
-                                    guint         prop_id,
-                                    const GValue *value,
-                                    GParamSpec   *pspec)
-{
-  IdeAutotoolsBuilder *self = IDE_AUTOTOOLS_BUILDER (object);
-
-  switch (prop_id)
-    {
-    case PROP_CONFIG:
-      ide_autotools_builder_set_config (self, g_value_get_boxed (value));
-      break;
-
-    case PROP_DEVICE:
-      ide_autotools_builder_set_device (self, g_value_get_object (value));
-      break;
-
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-    }
-}
-
-static void
 ide_autotools_builder_class_init (IdeAutotoolsBuilderClass *klass)
 {
-  GObjectClass *object_class = G_OBJECT_CLASS (klass);
   IdeBuilderClass *builder_class = IDE_BUILDER_CLASS (klass);
-
-  object_class->finalize = ide_autotools_builder_finalize;
-  object_class->get_property = ide_autotools_builder_get_property;
-  object_class->set_property = ide_autotools_builder_set_property;
 
   builder_class->build_async = ide_autotools_builder_build_async;
   builder_class->build_finish = ide_autotools_builder_build_finish;
-
-  properties [PROP_CONFIG] =
-    g_param_spec_boxed ("config",
-                        "Config",
-                        "The configuration for the build.",
-                        G_TYPE_KEY_FILE,
-                        (G_PARAM_READWRITE |
-                         G_PARAM_CONSTRUCT_ONLY |
-                         G_PARAM_STATIC_STRINGS));
-
-  properties [PROP_DEVICE] =
-    g_param_spec_object ("device",
-                         "Device",
-                         "The device to build for.",
-                         IDE_TYPE_DEVICE,
-                         (G_PARAM_READWRITE |
-                          G_PARAM_CONSTRUCT_ONLY |
-                          G_PARAM_STATIC_STRINGS));
-
-  g_object_class_install_properties (object_class, LAST_PROP, properties);
 }
 
 static void
@@ -366,6 +204,7 @@ ide_autotools_builder_get_needs_bootstrap (IdeAutotoolsBuilder *self)
 {
   g_autoptr(GFile) configure = NULL;
   GFile *working_directory = NULL;
+  IdeConfiguration *configuration;
   IdeContext *context;
   IdeVcs *vcs;
 
@@ -379,6 +218,10 @@ ide_autotools_builder_get_needs_bootstrap (IdeAutotoolsBuilder *self)
   if (!g_file_query_exists (configure, NULL))
     return TRUE;
 
+  configuration = ide_builder_get_configuration (IDE_BUILDER (self));
+  if (ide_configuration_get_dirty (configuration))
+    return TRUE;
+
   /*
    * TODO:
    *
@@ -388,34 +231,4 @@ ide_autotools_builder_get_needs_bootstrap (IdeAutotoolsBuilder *self)
    */
 
   return FALSE;
-}
-
-void
-ide_autotools_builder_bootstrap_async (IdeAutotoolsBuilder *self,
-                                       GCancellable        *cancellable,
-                                       GAsyncReadyCallback  callback,
-                                       gpointer             user_data)
-{
-  g_autoptr(GTask) task = NULL;
-
-  g_return_if_fail (IDE_IS_AUTOTOOLS_BUILDER (self));
-  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
-
-  task = g_task_new (self, cancellable, callback, user_data);
-
-  g_key_file_set_boolean (self->config, "autotools", "bootstrap", TRUE);
-
-  g_task_return_boolean (task, TRUE);
-}
-
-gboolean
-ide_autotools_builder_bootstrap_finish (IdeAutotoolsBuilder  *self,
-                                        GAsyncResult         *result,
-                                        GError              **error)
-{
-  GTask *task = (GTask *)result;
-
-  g_return_val_if_fail (IDE_IS_AUTOTOOLS_BUILDER (self), FALSE);
-
-  return g_task_propagate_boolean (task, error);
 }
