@@ -162,6 +162,12 @@ libide_1_0_la_public_sources = \
 	ide-project.h \
 	ide-recent-projects.c \
 	ide-recent-projects.h \
+	ide-runtime.c \
+	ide-runtime.h \
+	ide-runtime-manager.c \
+	ide-runtime-manager.h \
+	ide-runtime-provider.c \
+	ide-runtime-provider.h \
 	ide-refactory.c \
 	ide-refactory.h \
 	ide-script-manager.c \
