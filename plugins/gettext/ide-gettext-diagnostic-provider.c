@@ -84,7 +84,7 @@ ide_gettext_diagnostics_finalize (GObject *object)
 {
   IdeGettextDiagnostics *self = IDE_GETTEXT_DIAGNOSTICS (object);
 
-  ide_diagnostics_unref (self->diagnostics);
+  g_clear_pointer (&self->diagnostics, ide_diagnostics_unref);
 
   G_OBJECT_CLASS (ide_gettext_diagnostics_parent_class)->finalize (object);
 }
@@ -144,9 +144,12 @@ typedef struct
 static void
 translation_unit_free (TranslationUnit *unit)
 {
-  g_object_unref (unit->file);
-  ide_unsaved_file_unref (unit->unsaved_file);
-  g_free (unit);
+  if (unit != NULL)
+    {
+      g_clear_object (&unit->file);
+      g_clear_pointer (&unit->unsaved_file, ide_unsaved_file_unref);
+      g_slice_free (TranslationUnit, unit);
+    }
 }
 
 static IdeUnsavedFile *
@@ -253,7 +256,7 @@ ide_gettext_diagnostic_provider_finalize (GObject *object)
 {
   IdeGettextDiagnosticProvider *self = IDE_GETTEXT_DIAGNOSTIC_PROVIDER (object);
 
-  g_object_unref (self->diagnostics_cache);
+  g_clear_object (&self->diagnostics_cache);
 
   G_OBJECT_CLASS (ide_gettext_diagnostic_provider_parent_class)->finalize (object);
 }
@@ -273,7 +276,7 @@ subprocess_wait_cb (GObject      *source_object,
   GSubprocess *subprocess = G_SUBPROCESS (source_object);
   g_autoptr(GTask) task = user_data;
   TranslationUnit *unit = g_task_get_task_data (task);
-  GPtrArray *array;
+  GPtrArray *array = NULL;
   IdeGettextDiagnostics *diags;
   GInputStream *stderr_input;
   GDataInputStream *stderr_data_input;
@@ -292,12 +295,12 @@ subprocess_wait_cb (GObject      *source_object,
 
   stderr_input = g_subprocess_get_stderr_pipe (subprocess);
   stderr_data_input = g_data_input_stream_new (stderr_input);
-  g_object_unref (stderr_input);
+  g_clear_object (&stderr_input);
 
   input_prefix = g_strdup_printf ("%s:", ide_unsaved_file_get_temp_path (unit->unsaved_file));
   for (;;)
     {
-      g_autofree gchar *line;
+      g_autofree gchar *line = NULL;
       gsize length;
 
       error = NULL;
@@ -411,7 +414,7 @@ populate_cache (EggTaskCache  *cache,
       return;
     }
 
-  unit = g_new0 (TranslationUnit, 1);
+  unit = g_slice_new0 (TranslationUnit);
   unit->file = g_object_ref (file);
   unit->unsaved_file = ide_unsaved_file_ref (unsaved_file);
   g_task_set_task_data (task, unit, (GDestroyNotify) translation_unit_free);
