@@ -29,11 +29,11 @@ G_DECLARE_DERIVABLE_TYPE (IdeBuilder, ide_builder, IDE, BUILDER, IdeObject)
 
 typedef enum
 {
-  IDE_BUILDER_BUILD_FLAGS_NONE          = 0,
-  IDE_BUILDER_BUILD_FLAGS_FORCE_REBUILD = 1 << 0,
-
-  /* TODO: this belongs as a vfunc instead */
-  IDE_BUILDER_BUILD_FLAGS_CLEAN         = 1 << 1,
+  IDE_BUILDER_BUILD_FLAGS_NONE            = 0,
+  IDE_BUILDER_BUILD_FLAGS_FORCE_BOOTSTRAP = 1 << 0,
+  IDE_BUILDER_BUILD_FLAGS_FORCE_CLEAN     = 1 << 1,
+  IDE_BUILDER_BUILD_FLAGS_NO_BUILD        = 1 << 2,
+  IDE_BUILDER_BUILD_FLAGS_NO_CONFIGURE    = 1 << 3,
 } IdeBuilderBuildFlags;
 
 struct _IdeBuilderClass
@@ -51,15 +51,16 @@ struct _IdeBuilderClass
                                    GError              **error);
 };
 
-void            ide_builder_build_async  (IdeBuilder           *builder,
-                                          IdeBuilderBuildFlags  flags,
-                                          IdeBuildResult      **result,
-                                          GCancellable         *cancellable,
-                                          GAsyncReadyCallback   callback,
-                                          gpointer              user_data);
-IdeBuildResult *ide_builder_build_finish (IdeBuilder           *builder,
-                                          GAsyncResult         *result,
-                                          GError              **error);
+IdeConfiguration *ide_builder_get_configuration (IdeBuilder           *self);
+void              ide_builder_build_async       (IdeBuilder           *builder,
+                                                IdeBuilderBuildFlags   flags,
+                                                IdeBuildResult       **result,
+                                                GCancellable          *cancellable,
+                                                GAsyncReadyCallback    callback,
+                                                gpointer               user_data);
+IdeBuildResult   *ide_builder_build_finish     (IdeBuilder            *builder,
+                                                GAsyncResult          *result,
+                                                GError               **error);
 
 G_END_DECLS
 

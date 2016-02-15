@@ -19,10 +19,14 @@
 #include <glib/gi18n.h>
 
 #include "ide-build-system.h"
+#include "ide-configuration.h"
 #include "ide-context.h"
 #include "ide-device.h"
+#include "ide-device-manager.h"
 #include "ide-file.h"
 #include "ide-object.h"
+#include "ide-runtime.h"
+#include "ide-runtime-manager.h"
 
 typedef struct
 {
@@ -104,9 +108,28 @@ ide_build_system_get_build_flags_finish (IdeBuildSystem  *self,
   return g_new0 (gchar*, 1);
 }
 
+static IdeBuilder *
+ide_build_system_real_get_builder (IdeBuildSystem    *self,
+                                   IdeConfiguration  *configuration,
+                                   GError           **error)
+{
+  g_assert (IDE_IS_BUILD_SYSTEM (self));
+  g_assert (IDE_IS_CONFIGURATION (configuration));
+
+  g_set_error (error,
+               G_IO_ERROR,
+               G_IO_ERROR_NOT_SUPPORTED,
+               _("%s() is not supported on %s build system."),
+               G_STRFUNC, g_type_name (G_TYPE_FROM_INSTANCE (self)));
+
+  return NULL;
+}
+
 static void
 ide_build_system_default_init (IdeBuildSystemInterface *iface)
 {
+  iface->get_builder = ide_build_system_real_get_builder;
+
   properties [PROP_PROJECT_FILE] =
     g_param_spec_object ("project-file",
                          "Project File",
@@ -196,43 +219,23 @@ ide_build_system_new_finish (GAsyncResult  *result,
 /**
  * ide_build_system_get_builder:
  * @system: The #IdeBuildSystem to perform the build.
- * @config: (nullable): The configuration options for the build.
- * @device: The #IdeDevice the result should be able to run on.
+ * @configuration: An #IdeConfiguration.
  *
- * This function should return an #IdeBuilder that can be used to perform a
- * build of the project using the configuration specified. @device may be
- * a non-local device, for which cross-compilation may be necessary.
+ * This function returns an #IdeBuilder that can be used to perform a
+ * build of the project using the configuration specified.
+ *
+ * See ide_builder_build_async() for more information.
  *
  * Returns: (transfer full): An #IdeBuilder or %NULL and @error is set.
  */
 IdeBuilder *
-ide_build_system_get_builder (IdeBuildSystem  *system,
-                              GKeyFile        *config,
-                              IdeDevice       *device,
-                              GError         **error)
+ide_build_system_get_builder (IdeBuildSystem    *system,
+                              IdeConfiguration  *configuration,
+                              GError           **error)
 {
-  IdeBuildSystemInterface *iface;
-  IdeBuilder *ret = NULL;
-  g_autoptr(GKeyFile) local = NULL;
-
   g_return_val_if_fail (IDE_IS_BUILD_SYSTEM (system), NULL);
-  g_return_val_if_fail (IDE_IS_DEVICE (device), NULL);
+  g_return_val_if_fail (IDE_IS_CONFIGURATION (configuration), NULL);
 
-  if (config == NULL)
-    config = local = g_key_file_new ();
-
-  iface = IDE_BUILD_SYSTEM_GET_IFACE (system);
-
-  if (iface->get_builder)
-    ret = iface->get_builder (system, config, device, error);
-  else
-    g_set_error (error,
-                 G_IO_ERROR,
-                 G_IO_ERROR_NOT_SUPPORTED,
-                 _("%s() is not supported on %s build system."),
-                 G_STRFUNC,
-                 g_type_name (G_TYPE_FROM_INSTANCE (system)));
-
-  return ret;
+  return IDE_BUILD_SYSTEM_GET_IFACE (system)->get_builder (system, configuration, error);
 }
 

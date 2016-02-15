@@ -35,8 +35,7 @@ struct _IdeBuildSystemInterface
 
   gint        (*get_priority)           (IdeBuildSystem       *system);
   IdeBuilder *(*get_builder)            (IdeBuildSystem       *system,
-                                         GKeyFile             *config,
-                                         IdeDevice            *device,
+                                         IdeConfiguration     *configuration,
                                          GError              **error);
   void        (*get_build_flags_async)  (IdeBuildSystem       *self,
                                          IdeFile              *file,
@@ -65,8 +64,7 @@ void            ide_build_system_new_async              (IdeContext           *c
 IdeBuildSystem *ide_build_system_new_finish             (GAsyncResult         *result,
                                                          GError              **error);
 IdeBuilder     *ide_build_system_get_builder            (IdeBuildSystem       *system,
-                                                         GKeyFile             *config,
-                                                         IdeDevice            *device,
+                                                         IdeConfiguration     *configuration,
                                                          GError              **error);
 
 G_END_DECLS
