@@ -61,6 +61,10 @@ libide_1_0_la_public_sources = \
 	ide-completion-provider.h \
 	ide-completion-results.c \
 	ide-completion-results.h \
+	ide-configuration.c \
+	ide-configuration.h \
+	ide-configuration-manager.c \
+	ide-configuration-manager.h \
 	ide-context.c \
 	ide-context.h \
 	ide-debugger.c \

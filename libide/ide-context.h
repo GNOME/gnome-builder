@@ -74,6 +74,7 @@ void                      ide_context_hold                  (IdeContext         
 void                      ide_context_hold_for_object       (IdeContext           *self,
                                                              gpointer              instance);
 void                      ide_context_release               (IdeContext           *self);
+IdeConfigurationManager  *ide_context_get_configuration_manager (IdeContext           *self);
 
 G_END_DECLS
 
