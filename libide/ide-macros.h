@@ -20,6 +20,7 @@
 #define IDE_MACROS_H
 
 #include <glib-object.h>
+#include <string.h>
 
 G_BEGIN_DECLS
 
@@ -46,7 +47,8 @@ G_BEGIN_DECLS
     } \
   } G_STMT_END
 
-#define IDE_LITERAL_LENGTH(s) ((sizeof s)-1)
+/* strlen() generally gets hoisted out automatically */
+#define IDE_LITERAL_LENGTH(s) (strlen(s))
 
 static inline gboolean
 ide_str_empty0 (const gchar *str)
