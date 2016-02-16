@@ -172,7 +172,6 @@ gbp_build_tool_new_context_cb (GObject      *object,
   g_autoptr(IdeContext) context = NULL;
   g_autoptr(IdeBuilder) builder = NULL;
   g_autoptr(IdeBuildResult) build_result = NULL;
-  g_autoptr(IdeDevice) device = NULL;
   g_autoptr(IdeConfiguration) configuration = NULL;
   IdeConfigurationManager *configuration_manager;
   IdeBuildSystem *build_system;
