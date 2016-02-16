@@ -313,6 +313,21 @@ ide_editor_perspective_add (GtkContainer *container,
 }
 
 static void
+ide_editor_perspective_grid_empty (IdeEditorPerspective *self,
+                                   IdeLayoutGrid        *grid)
+{
+  GtkWidget *stack;
+
+  g_assert (IDE_IS_EDITOR_PERSPECTIVE (self));
+  g_assert (IDE_IS_LAYOUT_GRID (grid));
+
+  stack = gtk_widget_get_ancestor (GTK_WIDGET (grid), GTK_TYPE_STACK);
+
+  if (stack != NULL)
+    gtk_stack_set_visible_child_name (GTK_STACK (stack), "empty_state");
+}
+
+static void
 ide_editor_perspective_class_init (IdeEditorPerspectiveClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -373,6 +388,12 @@ ide_editor_perspective_init (IdeEditorPerspective *self)
                                    G_CONNECT_SWAPPED);
 
   gtk_widget_init_template (GTK_WIDGET (self));
+
+  g_signal_connect_object (self->grid,
+                           "empty",
+                           G_CALLBACK (ide_editor_perspective_grid_empty),
+                           self,
+                           G_CONNECT_SWAPPED);
 
   g_action_map_add_action_entries (G_ACTION_MAP (self->actions), entries,
                                    G_N_ELEMENTS (entries), self);

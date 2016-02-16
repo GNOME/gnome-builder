@@ -35,7 +35,14 @@ struct _IdeLayoutGrid
 
 G_DEFINE_TYPE (IdeLayoutGrid, ide_layout_grid, GTK_TYPE_BIN)
 
+enum {
+  EMPTY,
+  LAST_SIGNAL
+};
+
 static void ide_layout_grid_make_homogeneous (IdeLayoutGrid *self);
+
+static guint signals [LAST_SIGNAL];
 
 GtkWidget *
 ide_layout_grid_new (void)
@@ -255,6 +262,7 @@ ide_layout_grid_stack_empty (IdeLayoutGrid  *self,
   if (g_list_length (stacks) == 1)
     {
       ide_widget_action (GTK_WIDGET (self), "perspective", "global-search", NULL);
+      g_signal_emit (self, signals [EMPTY], 0);
       goto cleanup;
     }
 
@@ -817,6 +825,12 @@ ide_layout_grid_class_init (IdeLayoutGridClass *klass)
   widget_class->grab_focus = ide_layout_grid_grab_focus;
   widget_class->hierarchy_changed = ide_layout_grid_hierarchy_changed;
   widget_class->size_allocate = ide_layout_grid_size_allocate;
+
+  signals [EMPTY] =
+    g_signal_new ("empty",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  0, NULL, NULL, NULL, G_TYPE_NONE, 0);
 
   gtk_widget_class_set_css_name (widget_class, "layoutgrid");
 }
