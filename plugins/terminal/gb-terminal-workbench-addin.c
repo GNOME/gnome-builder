@@ -56,7 +56,7 @@ new_terminal_activate_cb (GSimpleAction            *action,
                        "visible", TRUE,
                        NULL);
   gtk_container_add (GTK_CONTAINER (perspective), GTK_WIDGET (view));
-  gtk_widget_grab_focus (GTK_WIDGET (view));
+  ide_workbench_focus (self->workbench, GTK_WIDGET (view));
 }
 
 static void
