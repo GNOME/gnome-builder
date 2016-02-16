@@ -71,6 +71,7 @@ enum {
 
 static GSubprocess *log_and_spawn     (IdeAutotoolsBuildTask  *self,
                                        IdeSubprocessLauncher  *launcher,
+                                       GCancellable           *cancellable,
                                        GError                **error,
                                        const gchar            *argv0,
                                        ...) G_GNUC_NULL_TERMINATED;
@@ -579,6 +580,7 @@ ide_autotools_build_task_execute_finish (IdeAutotoolsBuildTask  *self,
 static GSubprocess *
 log_and_spawn (IdeAutotoolsBuildTask  *self,
                IdeSubprocessLauncher  *launcher,
+               GCancellable           *cancellable,
                GError                **error,
                const gchar           *argv0,
                ...)
@@ -587,6 +589,10 @@ log_and_spawn (IdeAutotoolsBuildTask  *self,
   GString *log;
   gchar *item;
   va_list args;
+
+  g_assert (IDE_IS_AUTOTOOLS_BUILD_TASK (self));
+  g_assert (IDE_IS_SUBPROCESS_LAUNCHER (launcher));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   log = g_string_new (argv0);
   ide_subprocess_launcher_push_argv (launcher, argv0);
@@ -600,7 +606,7 @@ log_and_spawn (IdeAutotoolsBuildTask  *self,
   va_end (args);
 
   ide_build_result_log_stdout (IDE_BUILD_RESULT (self), "%s", log->str);
-  ret = ide_subprocess_launcher_spawn_sync (launcher, NULL, error);
+  ret = ide_subprocess_launcher_spawn_sync (launcher, cancellable, error);
   g_string_free (log, TRUE);
 
   return ret;
@@ -699,7 +705,7 @@ step_autogen (GTask                 *task,
   ide_subprocess_launcher_setenv (launcher, "NOCONFIGURE", "1", TRUE);
   apply_environment (self, launcher);
 
-  process = log_and_spawn (self, launcher, &error, autogen_sh_path, NULL);
+  process = log_and_spawn (self, launcher, cancellable, &error, autogen_sh_path, NULL);
 
   if (!process)
     {
@@ -856,7 +862,8 @@ step_make_all  (GTask                 *task,
       else
         ide_build_result_set_mode (IDE_BUILD_RESULT (self), _("Building…"));
 
-      process = log_and_spawn (self, launcher, &error, make, target, state->parallel, NULL);
+      process = log_and_spawn (self, launcher, cancellable, &error,
+                               make, target, state->parallel, NULL);
 
       if (!process)
         {
