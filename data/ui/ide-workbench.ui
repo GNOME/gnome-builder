@@ -40,12 +40,6 @@
                   </object>
                 </child>
                 <child>
-                  <object class="GtkSeparator">
-                    <property name="orientation">vertical</property>
-                    <property name="visible">true</property>
-                  </object>
-                </child>
-                <child>
                   <object class="GtkStack" id="perspectives_stack">
                     <property name="homogeneous">false</property>
                     <property name="transition-type">crossfade</property>

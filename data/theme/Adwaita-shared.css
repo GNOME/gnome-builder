@@ -93,6 +93,9 @@ workbench preferences preferencesgroup list entry {
  * The following tweaks the left-most sidebar containing
  * the list of perspectives.
  */
+perspectiveswitcher {
+  border-right: 1px solid alpha(@borders, 0.5);
+}
 perspectiveswitcher button {
   background: transparent;
   border-radius: 0;
