@@ -689,7 +689,6 @@ ide_configuration_manager_get_current (IdeConfigurationManager *self)
 
 static void
 ide_configuration_manager_changed (IdeConfigurationManager *self,
-                                   GParamSpec              *pspec,
                                    IdeConfiguration        *configuration)
 {
   g_assert (IDE_IS_CONFIGURATION_MANAGER (self));
