@@ -1,7 +1,6 @@
 SUBDIRS = \
 	egg \
 	gd \
-	gedit \
 	libeditorconfig \
 	nautilus \
 	rg \

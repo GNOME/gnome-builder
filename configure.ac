@@ -408,7 +408,6 @@ AC_CONFIG_FILES([
 	contrib/Makefile
 	contrib/egg/Makefile
 	contrib/gd/Makefile
-	contrib/gedit/Makefile
 	contrib/libeditorconfig/Makefile
 	contrib/nautilus/Makefile
 	contrib/rg/Makefile
