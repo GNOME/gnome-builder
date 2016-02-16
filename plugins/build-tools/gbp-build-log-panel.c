@@ -27,16 +27,17 @@
 
 struct _GbpBuildLogPanel
 {
-  GtkBin          parent_instance;
+  GtkBin             parent_instance;
 
-  IdeBuildResult *result;
-  EggSignalGroup *signals;
-  GtkCssProvider *css;
-  GSettings      *settings;
+  IdeBuildResult    *result;
+  EggSignalGroup    *signals;
+  GtkCssProvider    *css;
+  GSettings         *settings;
+  GtkTextBuffer     *buffer;
 
-  GtkTextBuffer  *buffer;
-  GtkTextView    *text_view;
-  GtkTextTag     *stderr_tag;
+  GtkScrolledWindow *scroller;
+  GtkTextView       *text_view;
+  GtkTextTag        *stderr_tag;
 };
 
 enum {
@@ -50,11 +51,16 @@ G_DEFINE_TYPE (GbpBuildLogPanel, gbp_build_log_panel, GTK_TYPE_BIN)
 static GParamSpec *properties [LAST_PROP];
 
 static void
-gbp_build_log_panel_reset_buffer (GbpBuildLogPanel *self)
+gbp_build_log_panel_reset_view (GbpBuildLogPanel *self)
 {
+  GtkStyleContext *context;
+
   g_assert (GBP_IS_BUILD_LOG_PANEL (self));
 
   g_clear_object (&self->buffer);
+
+  if (self->text_view != NULL)
+    gtk_widget_destroy (GTK_WIDGET (self->text_view));
 
   self->buffer = gtk_text_buffer_new (NULL);
   self->stderr_tag = gtk_text_buffer_create_tag (self->buffer,
@@ -62,7 +68,17 @@ gbp_build_log_panel_reset_buffer (GbpBuildLogPanel *self)
                                                  "foreground", "#ff0000",
                                                  "weight", PANGO_WEIGHT_BOLD,
                                                  NULL);
-  gtk_text_view_set_buffer (self->text_view, self->buffer);
+
+  self->text_view = g_object_new (GTK_TYPE_TEXT_VIEW,
+                                  "buffer", self->buffer,
+                                  "monospace", TRUE,
+                                  "visible", TRUE,
+                                  NULL);
+  context = gtk_widget_get_style_context (GTK_WIDGET (self->text_view));
+  gtk_style_context_add_provider (context,
+                                  GTK_STYLE_PROVIDER (self->css),
+                                  GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+  gtk_container_add (GTK_CONTAINER (self->scroller), GTK_WIDGET (self->text_view));
 }
 
 static void
@@ -71,6 +87,7 @@ gbp_build_log_panel_log (GbpBuildLogPanel  *self,
                          const gchar       *message,
                          IdeBuildResult    *result)
 {
+  GtkTextMark *insert;
   GtkTextIter iter;
 
   g_assert (GBP_IS_BUILD_LOG_PANEL (self));
@@ -94,7 +111,8 @@ gbp_build_log_panel_log (GbpBuildLogPanel  *self,
       gtk_text_buffer_apply_tag (self->buffer, self->stderr_tag, &begin, &iter);
     }
 
-  g_signal_emit_by_name (self->text_view, "move-cursor", GTK_MOVEMENT_BUFFER_ENDS, 1, FALSE);
+  insert = gtk_text_buffer_get_insert (self->buffer);
+  gtk_text_view_scroll_to_mark (self->text_view, insert, 0.0, TRUE, 0.0, 0.0);
 }
 
 void
@@ -106,7 +124,7 @@ gbp_build_log_panel_set_result (GbpBuildLogPanel *self,
 
   if (g_set_object (&self->result, result))
     {
-      gbp_build_log_panel_reset_buffer (self);
+      gbp_build_log_panel_reset_view (self);
       egg_signal_group_set_target (self->signals, result);
     }
 }
@@ -209,7 +227,7 @@ gbp_build_log_panel_class_init (GbpBuildLogPanelClass *klass)
 
   gtk_widget_class_set_css_name (widget_class, "buildlogpanel");
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/plugins/build-tools-plugin/gbp-build-log-panel.ui");
-  gtk_widget_class_bind_template_child (widget_class, GbpBuildLogPanel, text_view);
+  gtk_widget_class_bind_template_child (widget_class, GbpBuildLogPanel, scroller);
 
   properties [PROP_RESULT] =
     g_param_spec_object ("result",
@@ -224,9 +242,11 @@ gbp_build_log_panel_class_init (GbpBuildLogPanelClass *klass)
 static void
 gbp_build_log_panel_init (GbpBuildLogPanel *self)
 {
-  GtkStyleContext *context;
+  self->css = gtk_css_provider_new ();
 
   gtk_widget_init_template (GTK_WIDGET (self));
+
+  gbp_build_log_panel_reset_view (self);
 
   self->signals = egg_signal_group_new (IDE_TYPE_BUILD_RESULT);
 
@@ -235,12 +255,6 @@ gbp_build_log_panel_init (GbpBuildLogPanel *self)
                                    G_CALLBACK (gbp_build_log_panel_log),
                                    self,
                                    G_CONNECT_SWAPPED);
-
-  self->css = gtk_css_provider_new ();
-  context = gtk_widget_get_style_context (GTK_WIDGET (self->text_view));
-  gtk_style_context_add_provider (context,
-                                  GTK_STYLE_PROVIDER (self->css),
-                                  GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 
   self->settings = g_settings_new ("org.gnome.builder.terminal");
   g_signal_connect_object (self->settings,
