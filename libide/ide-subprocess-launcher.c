@@ -16,7 +16,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <signal.h>
+#include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 
 #include "ide-debug.h"
 #include "ide-environment.h"
@@ -45,6 +48,50 @@ enum {
 };
 
 static GParamSpec *properties [N_PROPS];
+
+static void
+child_setup_func (gpointer data)
+{
+#ifdef G_OS_UNIX
+  /*
+   * TODO: Check on FreeBSD to see if the process group id is the same as
+   *       the owning process. If not, our kill() signal might not work
+   *       as expected.
+   */
+  setsid ();
+#endif
+}
+
+static void
+ide_subprocess_launcher_kill_process_group (GCancellable *cancellable,
+                                            GSubprocess  *subprocess)
+{
+#ifdef G_OS_UNIX
+  const gchar *ident;
+  pid_t pid;
+
+  g_assert (G_IS_CANCELLABLE (cancellable));
+  g_assert (G_IS_SUBPROCESS (subprocess));
+
+  /*
+   * This will send SIGKILL to all processes in the process group that
+   * was created for our subprocess using setsid().
+   */
+
+  if (NULL != (ident = g_subprocess_get_identifier (subprocess)))
+    {
+      g_debug ("Killing process group %s due to cancellation", ident);
+      pid = atoi (ident);
+      kill (-pid, SIGKILL);
+    }
+
+  g_signal_handlers_disconnect_by_func (cancellable,
+                                        G_CALLBACK (ide_subprocess_launcher_kill_process_group),
+                                        subprocess);
+#else
+# error "Your platform is not yet supported"
+#endif
+}
 
 IdeSubprocessLauncher *
 ide_subprocess_launcher_new (GSubprocessFlags flags)
@@ -77,6 +124,7 @@ ide_subprocess_launcher_spawn_worker (GTask        *task,
 #endif
 
   launcher = g_subprocess_launcher_new (priv->flags);
+  g_subprocess_launcher_set_child_setup (launcher, child_setup_func, NULL, NULL);
   g_subprocess_launcher_set_cwd (launcher, priv->cwd);
   if (priv->environ->len > 1)
     g_subprocess_launcher_set_environ (launcher, (gchar **)priv->environ->pdata);
@@ -88,6 +136,16 @@ ide_subprocess_launcher_spawn_worker (GTask        *task,
     {
       g_task_return_error (task, error);
       return;
+    }
+
+  if (cancellable != NULL)
+    {
+      g_signal_connect_data (cancellable,
+                             "cancelled",
+                             G_CALLBACK (ide_subprocess_launcher_kill_process_group),
+                             g_object_ref (ret),
+                             (GClosureNotify)g_object_unref,
+                             0);
     }
 
   g_task_return_pointer (task, ret, g_object_unref);
