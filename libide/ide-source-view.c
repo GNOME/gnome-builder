@@ -4962,9 +4962,9 @@ ide_source_view_get_fixit_label (IdeSourceView *self,
   g_free (tmp);
 
   if (old_text [0] == '\0')
-    ret = g_strdup_printf (_("Insert \"%s\""), new_text);
+    ret = g_strdup_printf (_("Insert “%s”"), new_text);
   else
-    ret = g_strdup_printf (_("Replace \"%s\" with \"%s\""), old_text, new_text);
+    ret = g_strdup_printf (_("Replace “%s” with “%s”"), old_text, new_text);
 
 cleanup:
   g_free (old_text);
