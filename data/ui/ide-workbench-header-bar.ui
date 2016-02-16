@@ -5,7 +5,7 @@
     <property name="show-close-button">true</property>
     <child type="title">
       <object class="IdeOmniSearchEntry" id="search_entry">
-        <property name="tooltip-text" translatable="yes">Search for files. Shortcut: CTRL + .</property>
+        <property name="tooltip-text" translatable="yes">Search for files. Shortcut: Ctrl + .</property>
         <property name="hexpand">true</property>
         <property name="margin-end">6</property>
         <property name="margin-start">6</property>
