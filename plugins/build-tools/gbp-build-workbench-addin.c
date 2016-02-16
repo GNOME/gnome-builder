@@ -374,8 +374,6 @@ gbp_build_workbench_addin_init (GbpBuildWorkbenchAddin *self)
     { "running", "rebuild", G_BINDING_INVERT_BOOLEAN },
     { "running", "clean", G_BINDING_INVERT_BOOLEAN },
     { "running", "cancel-build", 0 },
-    { "running", "deploy", G_BINDING_INVERT_BOOLEAN },
-    { "running", "export", G_BINDING_INVERT_BOOLEAN },
     { NULL }
   };
 
