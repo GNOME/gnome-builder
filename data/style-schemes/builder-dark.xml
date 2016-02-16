@@ -59,14 +59,14 @@
   <color name="pink1"                       value="#dd4a68"/>
 
   <!-- Global Settings -->
-  <style name="text"                        foreground="aluminium3" background="aluminium6"/>
+  <style name="text"                        foreground="aluminium3" background="#292929"/>
   <style name="selection"                   foreground="aluminium1" background="aluminium4"/>
   <style name="cursor"                      foreground="aluminium2"/>
   <style name="current-line"                background="#rgba(85,87,83,.5)"/>
   <style name="current-line-number"         background="#rgba(85,87,83,.5)"/>
-  <style name="line-numbers"                foreground="aluminium4" background="aluminium6"/>
+  <style name="line-numbers"                foreground="aluminium4" background="#292929"/>
   <style name="draw-spaces"                 foreground="aluminium4"/>
-  <style name="background-pattern"          background="#32383a"/>
+  <style name="background-pattern"          background="#2f2f2f"/>
   <style name="map-overlay"                 background="#rgba(136,138,133,0.25)"/>
 
   <!-- Bracket Matching -->
