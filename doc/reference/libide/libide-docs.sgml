@@ -31,6 +31,8 @@
     <xi:include href="xml/ide-build-system.xml"/>
     <xi:include href="xml/ide-builder.xml"/>
     <xi:include href="xml/ide-completion-provider.xml"/>
+    <xi:include href="xml/ide-configuration.xml"/>
+    <xi:include href="xml/ide-configuration-manager.xml"/>
     <xi:include href="xml/ide-context.xml"/>
     <xi:include href="xml/ide-debug.xml"/>
     <xi:include href="xml/ide-debugger.xml"/>
@@ -46,6 +48,8 @@
     <xi:include href="xml/ide-doap.xml"/>
     <xi:include href="xml/ide-doap-person.xml"/>
     <xi:include href="xml/ide-enums.xml"/>
+    <xi:include href="xml/ide-environment.xml"/>
+    <xi:include href="xml/ide-environment-variable.xml"/>
     <xi:include href="xml/ide-executable.xml"/>
     <xi:include href="xml/ide-executer.xml"/>
     <xi:include href="xml/ide-extension-adapter.xml"/>
@@ -78,6 +82,7 @@
     <xi:include href="xml/ide-project-miner.xml"/>
     <xi:include href="xml/ide-recent-projects.xml"/>
     <xi:include href="xml/ide-refactory.xml"/>
+    <xi:include href="xml/ide-runtime.xml"/>
     <xi:include href="xml/ide-script.xml"/>
     <xi:include href="xml/ide-script-manager.xml"/>
     <xi:include href="xml/ide-search-context.xml"/>
