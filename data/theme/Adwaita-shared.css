@@ -73,6 +73,7 @@ omnisearchdisplay omnisearchgroup omnisearchrow:selected {
  */
 workbench preferences stacksidebar list {
   border-right: 1px solid alpha(@borders, 0.4);
+  background-color: @theme_base_color;
 }
 workbench preferences preferencesgroup list row {
   padding: 10px;
