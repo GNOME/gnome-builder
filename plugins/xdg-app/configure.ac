@@ -17,7 +17,7 @@ AS_IF([test "$enable_xdg_app_plugin" != no],[
 	       AC_MSG_ERROR([--enable-xdg-app-plugin requires xdg-app >= xdg_app_required_version])
 	])
 
-	enable_xdg_app_plugin=yes
+	enable_xdg_app_plugin=$have_xdg_app
 ])
 
 AM_CONDITIONAL(ENABLE_XDG_APP_PLUGIN, test x$enable_xdg_app_plugin = xyes)
