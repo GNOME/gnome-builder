@@ -43,7 +43,7 @@
                 </child>
                 <child>
                   <object class="GtkLabel">
-                    <property name="label" translatable="yes">Try opening a file using the search box at the top</property>
+                    <property name="label" translatable="yes">Try opening a file typing in the search box at the top</property>
                     <property name="wrap">true</property>
                     <property name="visible">true</property>
                     <style>
