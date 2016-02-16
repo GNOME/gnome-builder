@@ -186,6 +186,9 @@ directory_is_ignored (GFile *directory)
         return TRUE;
     }
 
+  if (!g_file_is_native (directory))
+    return TRUE;
+
   return FALSE;
 }
 
