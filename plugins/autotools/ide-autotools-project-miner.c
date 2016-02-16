@@ -33,6 +33,8 @@ struct _IdeAutotoolsProjectMiner
 
 static void project_miner_iface_init (IdeProjectMinerInterface *iface);
 
+static GPtrArray *ignored_directories;
+
 G_DEFINE_TYPE_EXTENDED (IdeAutotoolsProjectMiner, ide_autotools_project_miner, G_TYPE_OBJECT, 0,
                         G_IMPLEMENT_INTERFACE (IDE_TYPE_PROJECT_MINER, project_miner_iface_init))
 
@@ -171,6 +173,22 @@ ide_autotools_project_miner_discovered (IdeAutotoolsProjectMiner *self,
   IDE_EXIT;
 }
 
+static gboolean
+directory_is_ignored (GFile *directory)
+{
+  g_assert (G_IS_FILE (directory));
+
+  for (guint i = 0; i < ignored_directories->len; i++)
+    {
+      GFile *ignored_directory = g_ptr_array_index (ignored_directories, i);
+
+      if (g_file_equal (directory, ignored_directory))
+        return TRUE;
+    }
+
+  return FALSE;
+}
+
 static void
 ide_autotools_project_miner_mine_directory (IdeAutotoolsProjectMiner *self,
                                             GFile                    *directory,
@@ -186,6 +204,9 @@ ide_autotools_project_miner_mine_directory (IdeAutotoolsProjectMiner *self,
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   if (depth == MAX_MINE_DEPTH)
+    return;
+
+  if (directory_is_ignored (directory))
     return;
 
 #ifdef IDE_ENABLE_TRACE
@@ -382,6 +403,7 @@ static void
 ide_autotools_project_miner_class_init (IdeAutotoolsProjectMinerClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  g_autoptr(GFile) home = NULL;
 
   object_class->finalize = ide_autotools_project_miner_finalize;
   object_class->get_property = ide_autotools_project_miner_get_property;
@@ -395,6 +417,19 @@ ide_autotools_project_miner_class_init (IdeAutotoolsProjectMinerClass *klass)
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, LAST_PROP, properties);
+
+  ignored_directories = g_ptr_array_new ();
+  home = g_file_new_for_path (g_get_home_dir ());
+
+  for (guint i = 0; i < G_USER_N_DIRECTORIES; i++)
+    {
+      GFile *dir = g_file_new_for_path (g_get_user_special_dir (i));
+
+      if (g_file_equal (dir, home))
+        g_clear_object (&dir);
+      else
+        g_ptr_array_add (ignored_directories, dir);
+    }
 }
 
 static void
