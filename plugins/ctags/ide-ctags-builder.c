@@ -132,6 +132,7 @@ ide_ctags_builder_build_worker (GTask        *task,
   g_autoptr(GSubprocess) process = NULL;
   g_autoptr(GPtrArray) argv = NULL;
   g_autofree gchar *tags_file = NULL;
+  g_autofree gchar *tags_filename = NULL;
   g_autofree gchar *workpath = NULL;
   g_autofree gchar *options_path = NULL;
   g_autofree gchar *tagsdir = NULL;
@@ -153,10 +154,11 @@ ide_ctags_builder_build_worker (GTask        *task,
   project = ide_context_get_project (context);
   vcs = ide_context_get_vcs (context);
   workdir = g_object_ref (ide_vcs_get_working_directory (vcs));
+  tags_filename = g_strconcat (ide_project_get_id (project), ".tags", NULL);
   tags_file = g_build_filename (g_get_user_cache_dir (),
                                 ide_get_program_name (),
-                                ide_project_get_id (project),
                                 "tags",
+                                tags_filename,
                                 NULL);
   options_path = g_build_filename (g_get_user_config_dir (),
                                    ide_get_program_name (),

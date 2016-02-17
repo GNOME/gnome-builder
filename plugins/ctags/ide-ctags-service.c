@@ -320,6 +320,7 @@ ide_ctags_service_miner (GTask        *task,
                          GCancellable *cancellable)
 {
   g_autofree gchar *project_tags = NULL;
+  g_autofree gchar *filename = NULL;
   IdeCtagsService *self = source_object;
   IdeContext *context;
   IdeProject *project;
@@ -332,13 +333,14 @@ ide_ctags_service_miner (GTask        *task,
   context = ide_object_get_context (IDE_OBJECT (self));
   vcs = ide_context_get_vcs (context);
   project = ide_context_get_project (context);
+  filename = g_strconcat (ide_project_get_id (project), ".tags", NULL);
   project_tags = g_build_filename (g_get_user_cache_dir (),
                                    ide_get_program_name (),
-                                   ide_project_get_id (project),
                                    "tags",
+                                   filename,
                                    NULL);
 
-  /* mine ~/.cache/gnome-builder/<name>/tags */
+  /* mine ~/.cache/gnome-builder/tags/<name>.tags */
   file = g_file_new_for_path (project_tags);
   ide_ctags_service_load_tags (self, file);
   g_object_unref (file);
