@@ -22,6 +22,13 @@
 #include "ide-line-change-gutter-renderer.h"
 #include "ide-vcs.h"
 
+#define DELETE_WIDTH   5.0
+#define DELETE_HEIGHT 10.0
+
+#if 0
+# define ARROW_TOWARDS_GUTTER
+#endif
+
 struct _IdeLineChangeGutterRenderer
 {
   GtkSourceGutterRenderer parent_instance;
@@ -34,9 +41,13 @@ struct _IdeLineChangeGutterRenderer
 
   GdkRGBA                 rgba_added;
   GdkRGBA                 rgba_changed;
+  GdkRGBA                 rgba_removed;
+
+  guint                   show_line_deletions : 1;
 
   guint                   rgba_added_set : 1;
   guint                   rgba_changed_set : 1;
+  guint                   rgba_removed_set : 1;
 };
 
 
@@ -46,12 +57,22 @@ G_DEFINE_TYPE (IdeLineChangeGutterRenderer,
 
 static GdkRGBA rgbaAdded;
 static GdkRGBA rgbaChanged;
+static GdkRGBA rgbaRemoved;
+
+enum {
+  PROP_0,
+  PROP_SHOW_LINE_DELETIONS,
+  LAST_PROP
+};
+
+static GParamSpec *properties [LAST_PROP];
 
 static void
 disconnect_style_scheme (IdeLineChangeGutterRenderer *self)
 {
   self->rgba_added_set = 0;
   self->rgba_changed_set = 0;
+  self->rgba_removed_set = 0;
 }
 
 static void
@@ -130,6 +151,22 @@ connect_style_scheme (IdeLineChangeGutterRenderer *self)
           if (foreground_set)
             self->rgba_changed_set = gdk_rgba_parse (&self->rgba_changed, foreground);
         }
+
+      style = gtk_source_style_scheme_get_style (style_scheme, "gutter:removed-line");
+
+      if (style)
+        {
+          g_autofree gchar *foreground = NULL;
+          gboolean foreground_set = 0;
+
+          g_object_get (style,
+                        "foreground-set", &foreground_set,
+                        "foreground", &foreground,
+                        NULL);
+
+          if (foreground_set)
+            self->rgba_removed_set = gdk_rgba_parse (&self->rgba_removed, foreground);
+        }
     }
 }
 
@@ -207,6 +244,8 @@ ide_line_change_gutter_renderer_draw (GtkSourceGutterRenderer      *renderer,
   GtkTextBuffer *buffer;
   GdkRGBA *rgba = NULL;
   IdeBufferLineFlags flags;
+  IdeBufferLineFlags prev_flags = 0;
+  IdeBufferLineFlags next_flags;
   guint lineno;
 
   g_return_if_fail (IDE_IS_LINE_CHANGE_GUTTER_RENDERER (self));
@@ -216,8 +255,7 @@ ide_line_change_gutter_renderer_draw (GtkSourceGutterRenderer      *renderer,
   g_return_if_fail (begin);
   g_return_if_fail (end);
 
-  GTK_SOURCE_GUTTER_RENDERER_CLASS (ide_line_change_gutter_renderer_parent_class)->
-    draw (renderer, cr, bg_area, cell_area, begin, end, state);
+  GTK_SOURCE_GUTTER_RENDERER_CLASS (ide_line_change_gutter_renderer_parent_class)->draw (renderer, cr, bg_area, cell_area, begin, end, state);
 
   buffer = gtk_text_iter_get_buffer (begin);
 
@@ -225,7 +263,11 @@ ide_line_change_gutter_renderer_draw (GtkSourceGutterRenderer      *renderer,
     return;
 
   lineno = gtk_text_iter_get_line (begin);
+
   flags = ide_buffer_get_line_flags (IDE_BUFFER (buffer), lineno);
+  next_flags = ide_buffer_get_line_flags (IDE_BUFFER (buffer), lineno + 1);
+  if (lineno > 0)
+    prev_flags = ide_buffer_get_line_flags (IDE_BUFFER (buffer), lineno - 1);
 
   if ((flags & IDE_BUFFER_LINE_FLAGS_ADDED) != 0)
     rgba = self->rgba_added_set ? &self->rgba_added : &rgbaAdded;
@@ -239,6 +281,91 @@ ide_line_change_gutter_renderer_draw (GtkSourceGutterRenderer      *renderer,
       gdk_cairo_set_source_rgba (cr, rgba);
       cairo_fill (cr);
     }
+
+  if (!self->show_line_deletions)
+    return;
+
+  /*
+   * If the next line is a deletion, but we were not a deletion, then
+   * draw our half the deletion mark.
+   */
+  if (((next_flags & IDE_BUFFER_LINE_FLAGS_DELETED) != 0) &&
+      ((flags & IDE_BUFFER_LINE_FLAGS_DELETED) == 0))
+    {
+      rgba = self->rgba_removed_set ? &self->rgba_removed : &rgbaRemoved;
+      gdk_cairo_set_source_rgba (cr, rgba);
+
+#ifdef ARROW_TOWARDS_GUTTER
+      cairo_move_to (cr,
+                     cell_area->x + cell_area->width,
+                     cell_area->y + cell_area->height);
+      cairo_line_to (cr,
+                     cell_area->x + cell_area->width - DELETE_WIDTH,
+                     cell_area->y + cell_area->height);
+      cairo_line_to (cr,
+                     cell_area->x + cell_area->width,
+                     cell_area->y + cell_area->height - (DELETE_HEIGHT / 2));
+      cairo_line_to (cr,
+                     cell_area->x + cell_area->width,
+                     cell_area->y + cell_area->height);
+#else
+      cairo_move_to (cr,
+                     cell_area->x + cell_area->width,
+                     cell_area->y + cell_area->height);
+      cairo_line_to (cr,
+                     cell_area->x + cell_area->width - DELETE_WIDTH,
+                     cell_area->y + cell_area->height);
+      cairo_line_to (cr,
+                     cell_area->x + cell_area->width - DELETE_WIDTH,
+                     cell_area->y + cell_area->height - (DELETE_HEIGHT / 2));
+      cairo_line_to (cr,
+                     cell_area->x + cell_area->width,
+                     cell_area->y + cell_area->height);
+#endif
+
+      cairo_fill (cr);
+    }
+
+  /*
+   * If the previous line was not a deletion, and we have a deletion, then
+   * draw our half the deletion mark.
+   */
+  if (((prev_flags & IDE_BUFFER_LINE_FLAGS_DELETED) == 0) &&
+      ((flags & IDE_BUFFER_LINE_FLAGS_DELETED) != 0))
+    {
+      rgba = self->rgba_removed_set ? &self->rgba_removed : &rgbaRemoved;
+      gdk_cairo_set_source_rgba (cr, rgba);
+
+#ifdef ARROW_TOWARDS_GUTTER
+      cairo_move_to (cr,
+                     cell_area->x + cell_area->width,
+                     cell_area->y);
+      cairo_line_to (cr,
+                     cell_area->x + cell_area->width,
+                     cell_area->y + (DELETE_HEIGHT / 2));
+      cairo_line_to (cr,
+                     cell_area->x + cell_area->width - DELETE_WIDTH,
+                     cell_area->y);
+      cairo_line_to (cr,
+                     cell_area->x + cell_area->width,
+                     cell_area->y);
+#else
+      cairo_move_to (cr,
+                     cell_area->x + cell_area->width,
+                     cell_area->y);
+      cairo_line_to (cr,
+                     cell_area->x + cell_area->width - DELETE_WIDTH,
+                     cell_area->y);
+      cairo_line_to (cr,
+                     cell_area->x + cell_area->width - DELETE_WIDTH,
+                     cell_area->y + (DELETE_HEIGHT / 2));
+      cairo_line_to (cr,
+                     cell_area->x + cell_area->width,
+                     cell_area->y);
+#endif
+
+      cairo_fill (cr);
+    }
 }
 
 static void
@@ -250,17 +377,68 @@ ide_line_change_gutter_renderer_dispose (GObject *object)
 }
 
 static void
+ide_line_change_gutter_renderer_get_property (GObject    *object,
+                                              guint       prop_id,
+                                              GValue     *value,
+                                              GParamSpec *pspec)
+{
+  IdeLineChangeGutterRenderer *self = IDE_LINE_CHANGE_GUTTER_RENDERER(object);
+
+  switch (prop_id)
+    {
+    case PROP_SHOW_LINE_DELETIONS:
+      g_value_set_boolean (value, self->show_line_deletions);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
+    }
+}
+
+static void
+ide_line_change_gutter_renderer_set_property (GObject      *object,
+                                              guint         prop_id,
+                                              const GValue *value,
+                                              GParamSpec   *pspec)
+{
+  IdeLineChangeGutterRenderer *self = IDE_LINE_CHANGE_GUTTER_RENDERER(object);
+
+  switch (prop_id)
+    {
+    case PROP_SHOW_LINE_DELETIONS:
+      self->show_line_deletions = g_value_get_boolean (value);
+      gtk_source_gutter_renderer_queue_draw (GTK_SOURCE_GUTTER_RENDERER (self));
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
+    }
+}
+
+static void
 ide_line_change_gutter_renderer_class_init (IdeLineChangeGutterRendererClass *klass)
 {
   GtkSourceGutterRendererClass *renderer_class = GTK_SOURCE_GUTTER_RENDERER_CLASS (klass);
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   object_class->dispose = ide_line_change_gutter_renderer_dispose;
+  object_class->get_property = ide_line_change_gutter_renderer_get_property;
+  object_class->set_property = ide_line_change_gutter_renderer_set_property;
 
   renderer_class->draw = ide_line_change_gutter_renderer_draw;
 
+  properties [PROP_SHOW_LINE_DELETIONS] =
+    g_param_spec_boolean ("show-line-deletions",
+                          "Show Line Deletions",
+                          "If the deletion mark should be shown for deleted lines",
+                          FALSE,
+                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
+
   gdk_rgba_parse (&rgbaAdded, "#8ae234");
   gdk_rgba_parse (&rgbaChanged, "#fcaf3e");
+  gdk_rgba_parse (&rgbaRemoved, "#ff0000");
 }
 
 static void
