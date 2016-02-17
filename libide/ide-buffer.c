@@ -1484,6 +1484,9 @@ ide_buffer_get_line_flags (IdeBuffer *self,
           break;
 
         case IDE_BUFFER_LINE_CHANGE_DELETED:
+          flags |= IDE_BUFFER_LINE_FLAGS_DELETED;
+          break;
+
         case IDE_BUFFER_LINE_CHANGE_NONE:
         default:
           break;
