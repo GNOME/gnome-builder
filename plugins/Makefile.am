@@ -17,6 +17,7 @@ SUBDIRS = \
 	html-completion \
 	html-preview \
 	jedi \
+	jhbuild \
 	library-template \
 	project-tree \
 	python-gi-imports-completion \
