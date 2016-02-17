@@ -133,6 +133,7 @@
 
   <style name="gutter:added-line"           foreground="chameleon1"/>
   <style name="gutter:changed-line"         foreground="orange1"/>
+  <style name="gutter:removed-line"         foreground="scarletred1"/>
 
   <style name="python:builtin-object"       foreground="og1"/>
   <style name="python:keyword"              foreground="green1" bold="false"/>

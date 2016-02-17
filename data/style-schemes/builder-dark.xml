@@ -140,6 +140,7 @@
 
   <style name="gutter:added-line"           foreground="chameleon2"/>
   <style name="gutter:changed-line"         foreground="butter3"/>
+  <style name="gutter:removed-line"         foreground="scarletred3"/>
 
   <style name="js:object"                   foreground="chameleon3" bold="true"/>
   <style name="js:constructors"             foreground="pink1"/>
