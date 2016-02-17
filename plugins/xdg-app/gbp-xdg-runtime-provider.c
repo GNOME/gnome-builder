@@ -225,11 +225,25 @@ gbp_xdg_runtime_provider_unload (IdeRuntimeProvider *provider,
   g_assert (GBP_IS_XDG_RUNTIME_PROVIDER (self));
   g_assert (IDE_IS_RUNTIME_MANAGER (manager));
 
+  if (self->runtimes != NULL)
+    {
+      for (guint i= 0; i < self->runtimes->len; i++)
+        {
+          IdeRuntime *runtime = g_ptr_array_index (self->runtimes, i);
+
+          ide_runtime_manager_remove (manager, runtime);
+        }
+    }
+
+  g_clear_pointer (&self->runtimes, g_ptr_array_unref);
+
   if (self->cancellable != NULL)
     g_cancellable_cancel (self->cancellable);
+  g_clear_object (&self->cancellable);
+
+  g_clear_object (&self->installation);
 
   ide_clear_weak_pointer (&self->manager);
-  g_clear_object (&self->cancellable);
 }
 
 static void
