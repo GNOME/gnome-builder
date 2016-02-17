@@ -241,12 +241,14 @@ ide_line_change_gutter_renderer_draw (GtkSourceGutterRenderer      *renderer,
                                       GtkSourceGutterRendererState  state)
 {
   IdeLineChangeGutterRenderer *self = (IdeLineChangeGutterRenderer *)renderer;
+  GdkRectangle cell_area_copy;
   GtkTextBuffer *buffer;
   GdkRGBA *rgba = NULL;
   IdeBufferLineFlags flags;
   IdeBufferLineFlags prev_flags = 0;
   IdeBufferLineFlags next_flags;
   guint lineno;
+  gint xpad;
 
   g_return_if_fail (IDE_IS_LINE_CHANGE_GUTTER_RENDERER (self));
   g_return_if_fail (cr);
@@ -284,6 +286,14 @@ ide_line_change_gutter_renderer_draw (GtkSourceGutterRenderer      *renderer,
 
   if (!self->show_line_deletions)
     return;
+
+  /*
+   * If we have xpad, we want to draw over it. So we'll just mutate
+   * the cell_area here.
+   */
+  g_object_get (self, "xpad", &xpad, NULL);
+  cell_area_copy = *cell_area;
+  cell_area->x += xpad;
 
   /*
    * If the next line is a deletion, but we were not a deletion, then
@@ -366,6 +376,8 @@ ide_line_change_gutter_renderer_draw (GtkSourceGutterRenderer      *renderer,
 
       cairo_fill (cr);
     }
+
+  *cell_area = cell_area_copy;
 }
 
 static void
