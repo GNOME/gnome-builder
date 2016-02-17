@@ -12,6 +12,4 @@ dist_module_DATA = \
 
 endif
 
-GITIGNOREFILES = contributing_plugin/__pycache__
-
 -include $(top_srcdir)/git.mk

@@ -74,6 +74,7 @@ run:
 	GB_IN_TREE_STYLE_SCHEMES=1 \
 	GI_TYPELIB_PATH="libide:contrib/egg:contrib/tmpl:$(GI_TYPELIB_PATH)" \
 	GOBJECT_DEBUG=instance-count \
+	PYTHONDONTWRITEBYTECODE=yes \
 	PATH=$(top_builddir)/src:${PATH} \
 	$(LIBTOOL) --mode=execute gdb -ex run --args src/gnome-builder -vvvv -s
 
@@ -84,6 +85,7 @@ strace:
 	GB_IN_TREE_STYLE_SCHEMES=1 \
 	GI_TYPELIB_PATH="libide:contrib/egg:contrib/tmpl:$(GI_TYPELIB_PATH)" \
 	GOBJECT_DEBUG=instance-count \
+	PYTHONDONTWRITEBYTECODE=yes \
 	PATH=$(top_builddir)/src:${PATH} \
 	$(LIBTOOL) --mode=execute strace -T src/gnome-builder -vvvv -s
 
@@ -95,6 +97,7 @@ debug:
 	GI_TYPELIB_PATH="libide:contrib/egg:contrib/tmpl:$(GI_TYPELIB_PATH)" \
 	G_DEBUG=fatal-criticals \
 	GOBJECT_DEBUG=instance-count \
+	PYTHONDONTWRITEBYTECODE=yes \
 	PATH=$(top_builddir)/src:${PATH} \
 	$(LIBTOOL) --mode=execute gdb -ex run --args src/gnome-builder -vvvv -s
 
@@ -106,6 +109,7 @@ valgrind:
 	GI_TYPELIB_PATH="libide:contrib/egg:contrib/tmpl:$(GI_TYPELIB_PATH)" \
 	G_DEBUG=fatal-criticals \
 	G_SLICE=always-malloc \
+	PYTHONDONTWRITEBYTECODE=yes \
 	PATH=$(top_builddir)/src:${PATH} \
 	$(LIBTOOL) --mode=execute valgrind src/gnome-builder -vvvv -s
 

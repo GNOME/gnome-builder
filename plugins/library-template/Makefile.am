@@ -45,6 +45,4 @@ EXTRA_DIST = $(nobase_resource_DATA)
 
 endif
 
-GITIGNOREFILES = library_template/__pycache__
-
 -include $(top_srcdir)/git.mk

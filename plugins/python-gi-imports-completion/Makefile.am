@@ -7,8 +7,6 @@ dist_plugin_DATA = \
 	python-gi-imports-completion.plugin \
 	python_gi_imports_completion.py
 
-GITIGNOREFILES = __pycache__
-
 endif
 
 -include $(top_srcdir)/git.mk

@@ -13,7 +13,5 @@ dist_resourcegtk_DATA = fpaste_plugin/gtk/menus.ui
 
 endif
 
-GITIGNOREFILES = fpaste_plugin/__pycache__
-
 -include $(top_srcdir)/git.mk
 

@@ -10,6 +10,4 @@ dist_module_DATA = todo_plugin/__init__.py
 
 endif
 
-GITIGNOREFILES = todo_plugin/__pycache__
-
 -include $(top_srcdir)/git.mk

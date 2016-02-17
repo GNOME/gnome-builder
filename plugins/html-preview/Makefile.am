@@ -19,6 +19,4 @@ dist_resourcegtk_DATA = html_preview_plugin/gtk/menus.ui
 
 endif
 
-GITIGNOREFILES = html_preview_plugin/__pycache__
-
 -include $(top_srcdir)/git.mk
