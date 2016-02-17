@@ -219,6 +219,25 @@ ide_layout_destroy_handle_window (IdeLayout       *self,
 }
 
 static void
+ide_layout_child_get_preferred_size (IdeLayoutChild      *child,
+                                     const GtkAllocation *alloc)
+{
+  GtkRequisition min_req = { 0 };
+  GtkRequisition nat_req = { 0 };
+
+  g_assert (child != NULL);
+  g_assert (child->widget != NULL);
+  g_assert (alloc != NULL);
+
+  gtk_widget_get_preferred_size (child->widget, &min_req, &nat_req);
+
+  child->min_height = min_req.height;
+  child->nat_height = nat_req.height;
+  child->min_width = min_req.width;
+  child->nat_width = nat_req.width;
+}
+
+static void
 ide_layout_relayout (IdeLayout           *self,
                      const GtkAllocation *alloc)
 {
@@ -235,6 +254,11 @@ ide_layout_relayout (IdeLayout           *self,
   right = &priv->children [GTK_POS_RIGHT];
   content = &priv->children [GTK_POS_TOP];
   bottom = &priv->children [GTK_POS_BOTTOM];
+
+  ide_layout_child_get_preferred_size (left, alloc);
+  ide_layout_child_get_preferred_size (right, alloc);
+  ide_layout_child_get_preferred_size (content, alloc);
+  ide_layout_child_get_preferred_size (bottom, alloc);
 
   /*
    * Determine everything as if we are animating in/out or the child is visible.
