@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-02-07 17:00+0100\n"
-"PO-Revision-Date: 2016-02-07 17:01+0100\n"
+"POT-Creation-Date: 2016-02-17 23:04+0100\n"
+"PO-Revision-Date: 2016-02-17 23:05+0100\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <gnomepl@aviary.pl>\n"
 "Language: pl\n"
@@ -305,6 +305,26 @@ msgstr "Domyślny schemat kolorów programu Builder"
 msgid "OVR"
 msgstr "ZAS"
 
+#: ../data/ui/ide-editor-perspective.ui.h:1
+msgid "No open files"
+msgstr "Brak otwartych plików"
+
+#: ../data/ui/ide-editor-perspective.ui.h:2
+msgid "Try opening a file typing in the search box at the top"
+msgstr "Można otwierać pliki za pomocą pola wyszukiwania"
+
+#: ../data/ui/ide-editor-perspective.ui.h:3
+msgid "Enable / Disable left panel. Shortcut: F9"
+msgstr "Włącza/wyłącza lewy panel. Skrót: F9"
+
+#: ../data/ui/ide-editor-perspective.ui.h:4
+msgid "Enable / Disable bottom panel. Shortcut: Ctrl + F9"
+msgstr "Włącza/wyłącza dolny panel. Skrót: Ctrl+F9"
+
+#: ../data/ui/ide-editor-perspective.ui.h:5
+msgid "Enable / Disable right panel. Shortcut: Shift + F9"
+msgstr "Włącza/wyłącza prawy panel. Skrót: Shift+F9"
+
 #: ../data/ui/ide-editor-tweak-widget.ui.h:1
 msgid "Search highlight mode…"
 msgstr "Tryby wyróżniania…"
@@ -372,10 +392,18 @@ msgid ""
 msgstr "Wykryto zmianę pliku w innym programie. Wczytać go ponownie?"
 
 #: ../data/ui/ide-editor-view.ui.h:4
+msgid "Go to line number"
+msgstr "Przechodzi do numeru wiersza"
+
+#: ../data/ui/ide-editor-view.ui.h:5
+msgid "Change editor settings and language"
+msgstr "Zmienia ustawienia edytora i język"
+
+#: ../data/ui/ide-editor-view.ui.h:6
 msgid "Go to Line"
 msgstr "Przejście do wiersza"
 
-#: ../data/ui/ide-editor-view.ui.h:5
+#: ../data/ui/ide-editor-view.ui.h:7
 msgid "Go"
 msgstr "Przejdź"
 
@@ -412,9 +440,33 @@ msgstr "Kliknięcie elementu zaznacza go"
 msgid "_New"
 msgstr "_Nowy"
 
+#: ../data/ui/ide-layout-tab-bar.ui.h:1
+msgid "List open files"
+msgstr "Wyświetla listę otwartych plików"
+
+#: ../data/ui/ide-layout-tab-bar.ui.h:2
+msgid "Add a new empty file to your project"
+msgstr "Dodaje nowy pusty plik do projektu"
+
+#: ../data/ui/ide-layout-tab.ui.h:1
+msgid "Jump to previous location"
+msgstr "Przechodzi do poprzedniego położenia"
+
+#: ../data/ui/ide-layout-tab.ui.h:2
+msgid "Jump to next location"
+msgstr "Przechodzi do następnego położenia"
+
+#: ../data/ui/ide-layout-tab.ui.h:3
+msgid "Close the current document"
+msgstr "Zamyka bieżący dokument"
+
 #: ../data/ui/ide-preferences-font-button.ui.h:1
 msgid "_Select"
 msgstr "_Wybierz"
+
+#: ../data/ui/ide-preferences-perspective.ui.h:1
+msgid "Search through preferences"
+msgstr "Wyszukuje w preferencjach"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:1
 msgctxt "shortcut window"
@@ -681,6 +733,14 @@ msgctxt "shortcut window"
 msgid "Terminal Shortcuts"
 msgstr "Skróty terminala"
 
+#: ../data/ui/ide-workbench-header-bar.ui.h:1
+msgid "Search for files. Shortcut: Ctrl + ."
+msgstr "Wyszukuje pliki. Skrót: Ctrl+."
+
+#: ../data/ui/ide-workbench-header-bar.ui.h:2
+msgid "Drops down a list of file operations"
+msgstr "Wyświetla listę działań na plikach"
+
 #: ../libide/directory/ide-directory-genesis-addin.c:106
 msgid "From an existing project on this computer"
 msgstr "Z istniejącego projektu na tym komputerze"
@@ -694,17 +754,17 @@ msgstr "Nie podano żadnego pliku."
 msgid "Line %u, Column %u"
 msgstr "Wrsz %u, kol %u"
 
-#: ../libide/editor/ide-editor-frame.c:242
+#: ../libide/editor/ide-editor-frame.c:244
 #, c-format
 msgid "%u of %u"
 msgstr "%u z %u"
 
-#: ../libide/editor/ide-editor-frame.c:641
+#: ../libide/editor/ide-editor-frame.c:643
 #: ../plugins/project-tree/gtk/menus.ui.h:1
 msgid "Re_veal in Project Tree"
 msgstr "Odkry_wanie w drzewie projektu"
 
-#: ../libide/editor/ide-editor-perspective.c:350
+#: ../libide/editor/ide-editor-perspective.c:413
 #: ../libide/preferences/ide-preferences-builtin.c:102
 #: ../libide/preferences/ide-preferences-builtin.c:125
 msgid "Editor"
@@ -717,7 +777,7 @@ msgstr "Zapis dokumentu"
 #: ../libide/editor/ide-editor-view-actions.c:307
 #: ../libide/editor/ide-editor-view-actions.c:438
 #: ../libide/ide-workbench-actions.c:67
-#: ../plugins/build-tools/gbp-build-panel.ui.h:13
+#: ../plugins/build-tools/gbp-build-panel.ui.h:8
 #: ../plugins/terminal/gb-terminal-view-actions.c:305
 msgid "Cancel"
 msgstr "Anuluj"
@@ -835,7 +895,7 @@ msgstr "Proszę podać adres usługi D-Bus"
 msgid "No such worker"
 msgstr "Nie ma takiego wątku roboczego"
 
-#: ../libide/ide-buffer.c:2204
+#: ../libide/ide-buffer.c:2207
 msgid "The current language lacks a symbol resolver."
 msgstr "Obecny język nie posiada mechanizmu rozwiązywania symboli."
 
@@ -856,14 +916,10 @@ msgstr "niezapisywany dokument %u"
 msgid "Failed to save buffer, ignoring reclamation."
 msgstr "Zapisanie bufora się nie powiodło, ignorowanie nawrotu."
 
-#: ../libide/ide-builder.c:55
+#: ../libide/ide-builder.c:89
 #, c-format
-msgid "%s does not implement build_async()"
-msgstr "Funkcja build_async() nie jest zaimplementowana w %s"
-
-#: ../libide/ide-builder.c:61
-msgid "No implementation of build_async()"
-msgstr "Brak implementacji funkcji build_async()"
+msgid "%s does not support building"
+msgstr "%s nie obsługuje budowania"
 
 #: ../libide/ide-build-result.c:217
 msgid "Failed to open stderr stream."
@@ -873,7 +929,7 @@ msgstr "Otwarcie potoku standardowego wyjścia błędów się nie powiodło."
 msgid "Failed to open stdout stream."
 msgstr "Otwarcie potoku standardowego wyjścia się nie powiodło."
 
-#: ../libide/ide-build-system.c:232
+#: ../libide/ide-build-system.c:122
 #, c-format
 msgid "%s() is not supported on %s build system."
 msgstr "Funkcja %s() nie jest obsługiwana w systemie budowania %s."
@@ -883,18 +939,26 @@ msgstr "Funkcja %s() nie jest obsługiwana w systemie budowania %s."
 msgid "You must call %s() before using libide."
 msgstr "Należy wywołać funkcję %s() przed użyciem biblioteki libide."
 
-#: ../libide/ide-context.c:1665
+#: ../libide/ide-configuration-manager.c:427
+msgid "Default Configuration"
+msgstr "Domyślna konfiguracja"
+
+#: ../libide/ide-context.c:1790
 msgid "An unload request is already pending"
 msgstr "Żądanie usunięcia z pamięci jest już wykonywane"
 
-#: ../libide/ide-context.c:1780
+#: ../libide/ide-context.c:1905
 msgid "Context has already been restored."
 msgstr "Kontekst został już przywrócony."
 
-#: ../libide/ide-device-manager.c:144
+#: ../libide/ide-device-manager.c:147
 #, c-format
 msgid "The device \"%s\" could not be found."
 msgstr "Nie można odnaleźć urządzenia „%s”."
+
+#: ../libide/ide-environment-editor.c:65
+msgid "New variable…"
+msgstr "Nowa zmienna…"
 
 #: ../libide/ide-layout-view.c:146
 msgid "untitled document"
@@ -930,6 +994,10 @@ msgstr "Plik musi być w drzewie projektu."
 msgid "%s() may only be executed once"
 msgstr "%s() można wykonać tylko raz"
 
+#: ../libide/ide-runtime-manager.c:100
+msgid "Host operating system"
+msgstr "System operacyjny gospodarza"
+
 #: ../libide/ide-script.c:205
 #, c-format
 msgid "%s has not implemented GAsyncInitable."
@@ -959,17 +1027,17 @@ msgstr "Otwarcie katalogu się nie powiodło: %s"
 msgid "Failed to load file: %s: %s"
 msgstr "Wczytanie pliku się nie powiodło: %s: %s"
 
-#: ../libide/ide-source-view.c:4965
+#: ../libide/ide-source-view.c:4966
 #, c-format
-msgid "Insert \"%s\""
+msgid "Insert “%s”"
 msgstr "Wstaw „%s”"
 
-#: ../libide/ide-source-view.c:4967
+#: ../libide/ide-source-view.c:4968
 #, c-format
-msgid "Replace \"%s\" with \"%s\""
+msgid "Replace “%s” with “%s”"
 msgstr "Zmień „%s” na „%s”"
 
-#: ../libide/ide-source-view.c:5081
+#: ../libide/ide-source-view.c:5082
 msgid "Apply Fix-It"
 msgstr "Zastosuj „Fix-It”"
 
@@ -1375,11 +1443,12 @@ msgid "Indent source code as you type"
 msgstr "Tworzenie wcięć kodu źródłowego podczas pisania"
 
 #: ../libide/preferences/ide-preferences-builtin.c:242
-#: ../plugins/build-tools/gbp-build-workbench-addin.c:331
+#: ../plugins/build-tools/gbp-build-workbench-addin.c:270
 msgid "Build"
 msgstr "Budowanie"
 
 #: ../libide/preferences/ide-preferences-builtin.c:244
+#: ../plugins/build-tools/gbp-build-configuration-view.ui.h:1
 msgid "General"
 msgstr "Ogólne"
 
@@ -1391,7 +1460,7 @@ msgstr "Wątki robocze budowania"
 msgid "Number of parallel build workers"
 msgstr "Liczba równoległych wątków roboczych budowania"
 
-#: ../libide/preferences/ide-preferences-perspective.c:796
+#: ../libide/preferences/ide-preferences-perspective.c:821
 msgid "Preferences"
 msgstr "Preferencje"
 
@@ -1445,67 +1514,67 @@ msgstr "Połączenie z org.freedesktop.FileManager1 się nie powiodło: "
 msgid "Calling ShowItems failed: "
 msgstr "Wywołanie ShowItems się nie powiodło: "
 
-#: ../plugins/autotools/ide-autotools-builder.c:130
+#: ../plugins/autotools/ide-autotools-builder.c:49
 msgid "Cancelled"
 msgstr "Anulowano"
 
-#: ../plugins/autotools/ide-autotools-builder.c:132
+#: ../plugins/autotools/ide-autotools-builder.c:51
 msgid "Failed"
 msgstr "Niepowodzenie"
 
-#: ../plugins/autotools/ide-autotools-builder.c:138
+#: ../plugins/autotools/ide-autotools-builder.c:57
 msgid "Success"
 msgstr "Powodzenie"
 
-#: ../plugins/autotools/ide-autotools-builder.c:242
-#: ../plugins/autotools/ide-autotools-build-task.c:933
+#: ../plugins/autotools/ide-autotools-builder.c:161
+#: ../plugins/autotools/ide-autotools-build-task.c:863
 msgid "Building…"
 msgstr "Budowanie…"
 
-#: ../plugins/autotools/ide-autotools-build-system.c:182
+#: ../plugins/autotools/ide-autotools-build-system.c:183
 msgid "Failed to locate configure.ac"
 msgstr "Ustalenie położenia pliku configure.ac się nie powiodło"
 
-#: ../plugins/autotools/ide-autotools-build-task.c:270
+#: ../plugins/autotools/ide-autotools-build-task.c:173
 msgid "Directory must be on a locally mounted filesystem."
 msgstr "Katalog musi znajdować się na lokalnie zamontowanym systemie plików."
 
-#: ../plugins/autotools/ide-autotools-build-task.c:649
+#: ../plugins/autotools/ide-autotools-build-task.c:546
 msgid "Cannot execute build task more than once."
 msgstr "Nie można wykonać zadania budowania więcej niż raz."
 
-#: ../plugins/autotools/ide-autotools-build-task.c:734
+#: ../plugins/autotools/ide-autotools-build-task.c:633
 msgid "Failed to create build directory."
 msgstr "Utworzenie katalogu budowania się nie powiodło."
 
-#: ../plugins/autotools/ide-autotools-build-task.c:743
+#: ../plugins/autotools/ide-autotools-build-task.c:642
 #, c-format
 msgid "'%s' is not a directory."
 msgstr "„%s” nie jest katalogiem."
 
-#: ../plugins/autotools/ide-autotools-build-task.c:782
+#: ../plugins/autotools/ide-autotools-build-task.c:681
 #, c-format
 msgid "autogen.sh is missing from project directory (%s)."
 msgstr "Brak pliku autogen.sh w katalogu projektu (%s)."
 
-#: ../plugins/autotools/ide-autotools-build-task.c:792
+#: ../plugins/autotools/ide-autotools-build-task.c:691
 msgid "autogen.sh is not executable."
 msgstr "Plik autogen.sh nie jest wykonywalny."
 
-#: ../plugins/autotools/ide-autotools-build-task.c:796
-msgid "Autogening…"
-msgstr "Tworzenie automatyczne…"
+#: ../plugins/autotools/ide-autotools-build-task.c:695
+msgid "Running autogen…"
+msgstr "Wykonywanie polecenia autogen…"
 
-#: ../plugins/autotools/ide-autotools-build-task.c:825
+#: ../plugins/autotools/ide-autotools-build-task.c:729
 #, c-format
 msgid "autogen.sh failed to create configure (%s)"
 msgstr "Utworzenie pliku configure przez plik autogen.sh się nie powiodło (%s)"
 
-#: ../plugins/autotools/ide-autotools-build-task.c:860
-msgid "Configuring…"
-msgstr "Konfigurowanie…"
+#: ../plugins/autotools/ide-autotools-build-task.c:764
+msgid "Running configure…"
+msgstr "Wykonywanie polecenia configure…"
 
-#: ../plugins/autotools/ide-autotools-build-task.c:931
+#: ../plugins/autotools/ide-autotools-build-task.c:861
 msgid "Cleaning…"
 msgstr "Czyszczenie…"
 
@@ -1513,111 +1582,140 @@ msgstr "Czyszczenie…"
 msgid "Invalid makefile provided, ignoring."
 msgstr "Podano nieprawidłowy plik make, ignorowanie."
 
+#: ../plugins/build-tools/gbp-build-configuration-view.ui.h:2
+msgid "The name of the build configuration"
+msgstr "Nazwa konfiguracji budowania"
+
+#: ../plugins/build-tools/gbp-build-configuration-view.ui.h:3
+msgid "Name"
+msgstr "Nazwa"
+
+#: ../plugins/build-tools/gbp-build-configuration-view.ui.h:4
+msgid "The prefix to use when installing the project"
+msgstr "Przedrostek używany podczas instalowania projektu"
+
+#: ../plugins/build-tools/gbp-build-configuration-view.ui.h:5
+msgid "Installation Prefix"
+msgstr "Przedrostek instalacji"
+
+#: ../plugins/build-tools/gbp-build-configuration-view.ui.h:6
+msgid "Options to use when bootstrapping the project"
+msgstr "Opcje używane podczas zakładania projektu"
+
+#: ../plugins/build-tools/gbp-build-configuration-view.ui.h:7
+msgid "Configure Options"
+msgstr "Opcje polecenia configure"
+
+#: ../plugins/build-tools/gbp-build-configuration-view.ui.h:8
+msgid "Duplicate Configuration"
+msgstr "Duplikuj konfigurację"
+
+#: ../plugins/build-tools/gbp-build-configuration-view.ui.h:9
+msgid "Delete Configuration"
+msgstr "Usuń konfigurację"
+
+#: ../plugins/build-tools/gbp-build-configuration-view.ui.h:10
+msgid "Device"
+msgstr "Urządzenie"
+
+#: ../plugins/build-tools/gbp-build-configuration-view.ui.h:11
+msgid "Runtime"
+msgstr "Środowisko wykonawcze"
+
+#: ../plugins/build-tools/gbp-build-configuration-view.ui.h:12
+msgid "Environment"
+msgstr "Środowisko"
+
 #: ../plugins/build-tools/gbp-build-panel-row.c:68
 msgid "Unknown file"
 msgstr "Nieznany plik"
 
 #: ../plugins/build-tools/gbp-build-panel.ui.h:1
-msgid "Device:"
-msgstr "Urządzenie:"
-
-#: ../plugins/build-tools/gbp-build-panel.ui.h:2
-msgid "Framework:"
-msgstr "Struktura:"
-
-#: ../plugins/build-tools/gbp-build-panel.ui.h:3
-msgid "Packaging:"
-msgstr "Pakiet:"
-
-#: ../plugins/build-tools/gbp-build-panel.ui.h:4
 #: ../plugins/project-tree/gtk/menus.ui.h:12
 msgid "_Build"
 msgstr "Z_buduj"
 
-#: ../plugins/build-tools/gbp-build-panel.ui.h:5
+#: ../plugins/build-tools/gbp-build-panel.ui.h:2
 #: ../plugins/project-tree/gtk/menus.ui.h:13
 msgid "_Rebuild"
 msgstr "P_rzebuduj"
 
-#: ../plugins/build-tools/gbp-build-panel.ui.h:6
+#: ../plugins/build-tools/gbp-build-panel.ui.h:3
 msgid "_Clean"
 msgstr "Wy_czyść"
 
-#: ../plugins/build-tools/gbp-build-panel.ui.h:7
-msgid "framework"
-msgstr "struktura"
-
-#: ../plugins/build-tools/gbp-build-panel.ui.h:8
-msgid "packaging"
-msgstr "pakiet"
-
-#: ../plugins/build-tools/gbp-build-panel.ui.h:9
+#: ../plugins/build-tools/gbp-build-panel.ui.h:4
 msgid "Status:"
 msgstr "Stan:"
 
-#: ../plugins/build-tools/gbp-build-panel.ui.h:10
+#: ../plugins/build-tools/gbp-build-panel.ui.h:5
 msgid "Running Time:"
 msgstr "Czas trwania:"
 
-#: ../plugins/build-tools/gbp-build-panel.ui.h:11
+#: ../plugins/build-tools/gbp-build-panel.ui.h:6
 msgid "Warnings:"
 msgstr "Ostrzeżenia:"
 
-#: ../plugins/build-tools/gbp-build-panel.ui.h:12
+#: ../plugins/build-tools/gbp-build-panel.ui.h:7
 msgid "Errors:"
 msgstr "Błędy:"
 
-#: ../plugins/build-tools/gbp-build-panel.ui.h:14
+#: ../plugins/build-tools/gbp-build-panel.ui.h:9
 msgid "Deploy"
 msgstr "Wdroż"
 
-#: ../plugins/build-tools/gbp-build-panel.ui.h:15
+#: ../plugins/build-tools/gbp-build-panel.ui.h:10
 msgid "Export"
 msgstr "Wyeksportuj"
 
-#: ../plugins/build-tools/gbp-build-tool.c:91
-#: ../plugins/build-tools/gbp-build-tool.c:97
+#: ../plugins/build-tools/gbp-build-tool.c:102
+#: ../plugins/build-tools/gbp-build-tool.c:115
 #, c-format
 msgid "========================\n"
 msgstr "==========================\n"
 
-#: ../plugins/build-tools/gbp-build-tool.c:92
+#: ../plugins/build-tools/gbp-build-tool.c:103
 #, c-format
 msgid "           Project Name: %s\n"
 msgstr "           Nazwa projektu: %s\n"
 
-#: ../plugins/build-tools/gbp-build-tool.c:93
+#: ../plugins/build-tools/gbp-build-tool.c:104
 #, c-format
 msgid " Version Control System: %s\n"
 msgstr "   System kontroli wersji: %s\n"
 
-#: ../plugins/build-tools/gbp-build-tool.c:94
+#: ../plugins/build-tools/gbp-build-tool.c:105
 #, c-format
 msgid "           Build System: %s\n"
 msgstr "         System budowania: %s\n"
 
-#: ../plugins/build-tools/gbp-build-tool.c:95
+#: ../plugins/build-tools/gbp-build-tool.c:106
 #, c-format
 msgid "    Build Date and Time: %s\n"
 msgstr "   Data i czas zbudowania: %s\n"
 
-#: ../plugins/build-tools/gbp-build-tool.c:96
+#: ../plugins/build-tools/gbp-build-tool.c:107
 #, c-format
 msgid "    Building for Device: %s (%s)\n"
 msgstr " Budowanie dla urządzenia: %s (%s)\n"
 
-#: ../plugins/build-tools/gbp-build-tool.c:124
-#: ../plugins/build-tools/gbp-build-tool.c:128
+#: ../plugins/build-tools/gbp-build-tool.c:112
+#, c-format
+msgid "            Environment: %s\n"
+msgstr "               Środowisko: %s\n"
+
+#: ../plugins/build-tools/gbp-build-tool.c:142
+#: ../plugins/build-tools/gbp-build-tool.c:146
 #, c-format
 msgid "===============\n"
 msgstr "=========================\n"
 
-#: ../plugins/build-tools/gbp-build-tool.c:125
+#: ../plugins/build-tools/gbp-build-tool.c:143
 #, c-format
 msgid " Build Failure: %s\n"
 msgstr " Niepowodzenie budowania: %s\n"
 
-#: ../plugins/build-tools/gbp-build-tool.c:126
+#: ../plugins/build-tools/gbp-build-tool.c:144
 msgid " Build ran for: %"
 msgstr "        Budowanie trwało: %"
 
@@ -1626,55 +1724,76 @@ msgstr "        Budowanie trwało: %"
 #. *       here too. It would be nice if we could say, go build this project,
 #. *       for this device, and then deploy.
 #.
-#: ../plugins/build-tools/gbp-build-tool.c:139
-#: ../plugins/build-tools/gbp-build-tool.c:143
+#: ../plugins/build-tools/gbp-build-tool.c:157
+#: ../plugins/build-tools/gbp-build-tool.c:161
 #, c-format
 msgid "=================\n"
 msgstr "====================\n"
 
-#: ../plugins/build-tools/gbp-build-tool.c:140
+#: ../plugins/build-tools/gbp-build-tool.c:158
 #, c-format
 msgid " Build Successful\n"
 msgstr " Pomyślnie zbudowano\n"
 
-#: ../plugins/build-tools/gbp-build-tool.c:141
+#: ../plugins/build-tools/gbp-build-tool.c:159
 msgid "   Build ran for: %"
 msgstr "   Budowanie trwało: %"
 
-#: ../plugins/build-tools/gbp-build-tool.c:191
+#: ../plugins/build-tools/gbp-build-tool.c:212
 #, c-format
 msgid "Failed to locate device \"%s\""
 msgstr "Ustalenie położenia urządzenia „%s” się nie powiodło"
 
-#: ../plugins/build-tools/gbp-build-tool.c:254
+#: ../plugins/build-tools/gbp-build-tool.c:222
+#, c-format
+msgid "Failed to locate runtime \"%s\""
+msgstr "Ustalenie położenia środowiska wykonawczego „%s” się nie powiodło"
+
+#: ../plugins/build-tools/gbp-build-tool.c:286
 msgid "Clean the project"
 msgstr "Czyści projekt"
 
-#: ../plugins/build-tools/gbp-build-tool.c:256
+#: ../plugins/build-tools/gbp-build-tool.c:288
 msgid "The ID of the device to build for"
 msgstr "Identyfikator urządzenia, dla którego budować"
 
-#: ../plugins/build-tools/gbp-build-tool.c:257
+#: ../plugins/build-tools/gbp-build-tool.c:289
 msgid "local"
 msgstr "lokalne"
 
-#: ../plugins/build-tools/gbp-build-tool.c:259
+#: ../plugins/build-tools/gbp-build-tool.c:291
+msgid "The runtime to use for building"
+msgstr "Środowisko wykonawcze używane do budowania"
+
+#: ../plugins/build-tools/gbp-build-tool.c:292
+msgid "host"
+msgstr "gospodarz"
+
+#: ../plugins/build-tools/gbp-build-tool.c:294
 msgid "Number of workers to use when building"
 msgstr "Liczba wątków roboczych używanych do budowania"
 
-#: ../plugins/build-tools/gbp-build-tool.c:260
+#: ../plugins/build-tools/gbp-build-tool.c:295
 msgid "N"
 msgstr "N"
 
-#: ../plugins/build-tools/gbp-build-tool.c:262
+#: ../plugins/build-tools/gbp-build-tool.c:297
+msgid "The configuration to use from .buildconfig"
+msgstr "Konfiguracja używana z pliku .buildconfig"
+
+#: ../plugins/build-tools/gbp-build-tool.c:298
+msgid "CONFIG_ID"
+msgstr "IDENTYFIKATOR_KONFIGURACJI"
+
+#: ../plugins/build-tools/gbp-build-tool.c:300
 msgid "Path to project file, defaults to current directory"
 msgstr "Ścieżka do pliku projektu, domyślnie bieżący katalog"
 
-#: ../plugins/build-tools/gbp-build-tool.c:263
+#: ../plugins/build-tools/gbp-build-tool.c:301
 msgid "PATH"
 msgstr "ŚCIEŻKA"
 
-#: ../plugins/build-tools/gbp-build-workbench-addin.c:337
+#: ../plugins/build-tools/gbp-build-workbench-addin.c:275
 msgid "Build Output"
 msgstr "Wyjście budowania"
 
