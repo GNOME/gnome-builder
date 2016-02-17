@@ -4042,9 +4042,10 @@ ide_source_view_constructed (GObject *object)
   gutter = gtk_source_view_get_gutter (GTK_SOURCE_VIEW (self), GTK_TEXT_WINDOW_LEFT);
 
   priv->line_change_renderer = g_object_new (IDE_TYPE_LINE_CHANGE_GUTTER_RENDERER,
+                                             "show-line-deletions", TRUE,
                                              "size", 2,
                                              "visible", priv->show_line_changes,
-                                             "xpad", 1,
+                                             "xpad", 3,
                                              NULL);
   g_object_ref (priv->line_change_renderer);
   gtk_source_gutter_insert (gutter, priv->line_change_renderer, 0);
