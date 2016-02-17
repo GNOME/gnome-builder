@@ -22,8 +22,8 @@
 #include "ide-line-change-gutter-renderer.h"
 #include "ide-vcs.h"
 
-#define DELETE_WIDTH   5.0
-#define DELETE_HEIGHT 10.0
+#define DELETE_WIDTH  4.0
+#define DELETE_HEIGHT 7.0
 
 #if 0
 # define ARROW_TOWARDS_GUTTER
