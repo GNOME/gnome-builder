@@ -49,3 +49,7 @@ frame.gb-search-frame border {
     margin: 2px;
     padding: 2px;
 }
+
+.terminal {
+  background-color: @theme_base_color;
+}

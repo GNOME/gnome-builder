@@ -580,6 +580,7 @@ gb_terminal_view_init (GbTerminalView *self)
   g_settings_bind (settings, "font-name", self, "font-name", G_SETTINGS_BIND_GET);
 
   style_context = gtk_widget_get_style_context (GTK_WIDGET (self));
+  gtk_style_context_add_class (style_context, "terminal");
   g_signal_connect_object (style_context,
                            "changed",
                            G_CALLBACK (style_context_changed),
