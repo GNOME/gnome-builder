@@ -481,9 +481,11 @@ get_back_forward_list_file (IdeContext *self)
 
   project_name = ide_project_get_name (self->project);
   name = g_strdup_printf ("%s.back-forward-list", project_name);
-  path = g_build_filename (g_get_user_data_dir (),
+  name = g_strdelimit (name, " \t\n", '_');
+  path = g_build_filename (g_get_user_cache_dir (),
                            "gnome-builder",
-                           g_strdelimit (name, " \t\n", '_'),
+                           "history",
+                           name,
                            NULL);
   file = g_file_new_for_path (path);
 
