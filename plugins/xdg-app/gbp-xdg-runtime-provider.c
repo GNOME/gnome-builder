@@ -98,9 +98,11 @@ gbp_xdg_runtime_provider_load_worker (GTask        *task,
       g_autofree gchar *name = NULL;
       const gchar *arch;
       const gchar *branch;
-      g_autofree gchar *metadata = NULL;
+      g_autoptr(GBytes) metadata = NULL;
       g_autofree gchar *sdk = NULL;
       g_autoptr(GKeyFile) key_file = NULL;
+      const gchar *metadata_data;
+      gsize metadata_len;
 
       g_assert (XDG_APP_IS_INSTALLED_REF (ref));
 
@@ -128,9 +130,11 @@ gbp_xdg_runtime_provider_load_worker (GTask        *task,
           continue;
         }
 
+      metadata_data = g_bytes_get_data (metadata, &metadata_len);
+
       key_file = g_key_file_new ();
 
-      if (!g_key_file_load_from_data (key_file, metadata, -1, G_KEY_FILE_NONE, &error))
+      if (!g_key_file_load_from_data (key_file, metadata_data, metadata_len, G_KEY_FILE_NONE, &error))
         {
           /*
            * If this is not really a runtime, but something like a locale, then

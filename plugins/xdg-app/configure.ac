@@ -1,4 +1,4 @@
-m4_define([xdg_app_required_version], [0.4.8])
+m4_define([xdg_app_required_version], [0.4.11])
 
 # --enable-xdg-app-plugin=yes/no/auto
 AC_ARG_ENABLE([xdg-app-plugin],
