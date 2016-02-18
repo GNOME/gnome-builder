@@ -29,6 +29,7 @@
 #include "ide-ctags-builder.h"
 #include "ide-debug.h"
 #include "ide-global.h"
+#include "ide-macros.h"
 #include "ide-project.h"
 #include "ide-thread-pool.h"
 #include "ide-vcs.h"
@@ -271,12 +272,7 @@ ide_ctags_builder_finalize (GObject *object)
 {
   IdeCtagsBuilder *self = (IdeCtagsBuilder *)object;
 
-  if (self->build_timeout)
-    {
-      g_source_remove (self->build_timeout);
-      self->build_timeout = 0;
-    }
-
+  ide_clear_source (&self->build_timeout);
   g_clear_object (&self->settings);
 
   G_OBJECT_CLASS (ide_ctags_builder_parent_class)->finalize (object);
