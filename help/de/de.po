@@ -6,16 +6,16 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
-"POT-Creation-Date: 2016-01-29 16:53+0000\n"
-"PO-Revision-Date: 2016-01-29 19:42+0100\n"
+"POT-Creation-Date: 2016-02-18 08:02+0000\n"
+"PO-Revision-Date: 2016-02-18 11:10+0100\n"
+"Last-Translator: Mario Blättermann <mario.blaettermann@gmail.com>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
+"Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: de\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"Last-Translator: Mario Blättermann <mario.blaettermann@gmail.com>\n"
-"X-Generator: Poedit 1.8.6\n"
+"X-Generator: Poedit 1.8.7\n"
 
 #. Put one translator per line, in the form NAME <EMAIL>, YEAR1, YEAR2
 msgctxt "_"
@@ -38,28 +38,40 @@ msgid "Alexandre Franke"
 msgstr "Alexandre Franke"
 
 #. (itstool) path: credit/years
-#: C/introduction.page:17
+#: C/introduction.page:17 C/introduction.page:23
 msgid "2016"
 msgstr "2016"
 
+#. (itstool) path: credit/name
+#: C/introduction.page:21
+msgid "Christian Hergert"
+msgstr "Christian Hergert"
+
 #. (itstool) path: info/desc
-#: C/introduction.page:22
+#: C/introduction.page:28
 msgid "Welcome to Builder"
 msgstr "Willkommen zu Builder"
 
 #. (itstool) path: page/title
-#: C/introduction.page:25
+#: C/introduction.page:31
 msgid "Introduction"
 msgstr "Einführung"
 
 #. (itstool) path: page/p
-#: C/introduction.page:27
+#: C/introduction.page:33
 msgid ""
 "Builder is an Integrated Development Environment (IDE) for the GNOME desktop "
-"environment."
+"environment. While it is a relatively young application, it is quickly "
+"gaining features common to more mature IDEs. Thanks for trusting Builder "
+"with your project! We hope to make Builder the most delightful development "
+"tool for experienced and beginners alike."
 msgstr ""
-"Builder ist eine Integrierte Entwicklungsumgebung (IDE) für die GNOME-"
-"Arbeitsumgebung."
+"Builder ist eine integrierte Enwtwicklungsumgebung (IDE) für die GNOME-"
+"Arbeitsumgebung. Zwar ist es eine noch recht junge Anwendung, doch kommen "
+"ständig neue Funktionsmerkmale hinzu, die von ausgereifteren IDEs bekannt "
+"sind. Danke dass Sie Builder Ihr Projekt anvertrauen! Wir hoffen, Builder zu "
+"einem der angenehmsten Werkzeuge sowohl für Einsteiger wie auch für "
+"fortgeschrittene Entwickler zu machen."
 
 #. (itstool) path: p/link
 #: C/legal.xml:5
@@ -81,3 +93,10 @@ msgstr ""
 "Als besondere Ausnahme gewähren die Inhaber des Urheberrechts die Erlaubnis, "
 "den Beispiel-Code in diesem Dokument zu kopieren, verändern und "
 "weiterzugeben, unter den Bedingungen Ihrer Wahl, ohne Einschränkungen."
+
+#~ msgid ""
+#~ "Builder is an Integrated Development Environment (IDE) for the GNOME "
+#~ "desktop environment."
+#~ msgstr ""
+#~ "Builder ist eine Integrierte Entwicklungsumgebung (IDE) für die GNOME-"
+#~ "Arbeitsumgebung."
