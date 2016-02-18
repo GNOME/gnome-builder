@@ -630,7 +630,7 @@ ide_buffer_manager__load_file_query_info_cb (GObject      *object,
       _ide_buffer_set_mtime (state->buffer, &tv);
     }
 
-  g_signal_emit (self, signals [LOAD_BUFFER], 0, state->buffer);
+  g_signal_emit (self, signals [LOAD_BUFFER], 0, state->buffer, !state->is_new);
 
   gtk_source_file_loader_load_async (state->loader,
                                      G_PRIORITY_DEFAULT,
@@ -1379,9 +1379,13 @@ ide_buffer_manager_class_init (IdeBufferManagerClass *klass)
    * IdeBufferManager::load-buffer:
    * @self: An #IdeBufferManager.
    * @buffer: an #IdeBuffer.
+   * @reloading: if the buffer is being reloaded
    *
    * This signal is emitted when a request has been made to load a buffer from storage. You might
    * connect to this signal to be notified when loading of a buffer has begun.
+   *
+   * If @reloading is %TRUE, then the buffer is being force-reloaded due to changes
+   * from the host file-system.
    */
   signals [LOAD_BUFFER] = g_signal_new ("load-buffer",
                                          G_TYPE_FROM_CLASS (klass),
@@ -1389,8 +1393,9 @@ ide_buffer_manager_class_init (IdeBufferManagerClass *klass)
                                          0,
                                          NULL, NULL, NULL,
                                          G_TYPE_NONE,
-                                         1,
-                                         IDE_TYPE_BUFFER);
+                                         2,
+                                         IDE_TYPE_BUFFER,
+                                         G_TYPE_BOOLEAN);
 
   /**
    * IdeBufferManager::buffer-loaded:
@@ -1676,7 +1681,7 @@ ide_buffer_manager_create_temporary_buffer (IdeBufferManager *self)
                        NULL);
 
   g_signal_emit (self, signals [CREATE_BUFFER], 0, file, &buffer);
-  g_signal_emit (self, signals [LOAD_BUFFER], 0, buffer);
+  g_signal_emit (self, signals [LOAD_BUFFER], 0, buffer, FALSE);
   ide_buffer_manager_add_buffer (self, buffer);
   g_signal_emit (self, signals [BUFFER_LOADED], 0, buffer);
 

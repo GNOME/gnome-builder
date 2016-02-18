@@ -157,6 +157,7 @@ ide_editor_perspective_context_set (GtkWidget  *widget,
 static void
 ide_editor_perspective_load_buffer (IdeEditorPerspective *self,
                                     IdeBuffer            *buffer,
+                                    gboolean              reloading,
                                     IdeBufferManager     *buffer_manager)
 {
   IdeEditorView *view;
@@ -166,6 +167,13 @@ ide_editor_perspective_load_buffer (IdeEditorPerspective *self,
   g_assert (IDE_IS_EDITOR_PERSPECTIVE (self));
   g_assert (IDE_IS_BUFFER (buffer));
   g_assert (IDE_IS_BUFFER_MANAGER (buffer_manager));
+
+  /*
+   * We only want to create a new view when the buffer is originally
+   * created, not when it's reloaded.
+   */
+  if (reloading)
+    return;
 
   IDE_TRACE_MSG ("Loading %s", ide_buffer_get_title (buffer));
 
