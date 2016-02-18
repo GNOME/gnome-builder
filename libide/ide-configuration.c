@@ -717,6 +717,7 @@ ide_configuration_set_display_name (IdeConfiguration *self,
       g_free (self->display_name);
       self->display_name = g_strdup (display_name);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_DISPLAY_NAME]);
+      g_signal_emit (self, signals [CHANGED], 0);
     }
 }
 
