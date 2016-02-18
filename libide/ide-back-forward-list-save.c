@@ -27,7 +27,26 @@ typedef struct
 {
   GHashTable *counter;
   GString    *content;
+  GFile      *file;
 } IdeBackForwardListSave;
+
+static void
+ide_back_forward_list_save_free (gpointer data)
+{
+  IdeBackForwardListSave *state = data;
+
+  if (state != NULL)
+    {
+      g_clear_object (&state->file);
+
+      g_string_free (state->content, TRUE);
+      state->content = NULL;
+
+      g_clear_pointer (&state->counter, g_hash_table_unref);
+
+      g_slice_free (IdeBackForwardListSave, state);
+    }
+}
 
 static void
 ide_back_forward_list_save_collect (gpointer data,
@@ -68,21 +87,51 @@ ide_back_forward_list_save_collect (gpointer data,
 }
 
 static void
-ide_back_forward_list_save_cb (GObject      *object,
-                               GAsyncResult *result,
-                               gpointer      user_data)
+ide_back_forward_list_save_worker (GTask        *task,
+                                   gpointer      source_object,
+                                   gpointer      task_data,
+                                   GCancellable *cancellable)
 {
-  g_autoptr(GTask) task = user_data;
-  GFile *file = (GFile *)object;
+  IdeBackForwardListSave *state = task_data;
+  g_autoptr(GFile) parent = NULL;
   GError *error = NULL;
+  gboolean ret;
 
-  g_assert (G_IS_FILE (file));
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_BACK_FORWARD_LIST (source_object));
   g_assert (G_IS_TASK (task));
+  g_assert (state != NULL);
+  g_assert (G_IS_FILE (state->file));
+  g_assert (state->content != NULL);
 
-  if (!g_file_replace_contents_finish (file, result, NULL, &error))
+  parent = g_file_get_parent (state->file);
+
+  if (!g_file_query_exists (parent, cancellable))
+    {
+      if (!g_file_make_directory_with_parents (parent, cancellable, &error))
+        {
+          g_task_return_error (task, error);
+          IDE_EXIT;
+        }
+    }
+
+  ret = g_file_replace_contents (state->file,
+                                 state->content->str,
+                                 state->content->len,
+                                 NULL,
+                                 FALSE,
+                                 G_FILE_CREATE_NONE,
+                                 NULL,
+                                 cancellable,
+                                 &error);
+
+  if (ret == FALSE)
     g_task_return_error (task, error);
   else
     g_task_return_boolean (task, TRUE);
+
+  IDE_EXIT;
 }
 
 void
@@ -92,9 +141,12 @@ _ide_back_forward_list_save_async (IdeBackForwardList  *self,
                                    GAsyncReadyCallback  callback,
                                    gpointer             user_data)
 {
-  IdeBackForwardListSave state = { 0 };
+  IdeBackForwardListSave *state;
   g_autoptr(GTask) task = NULL;
-  GBytes *bytes;
+  g_autoptr(GFile) directory = NULL;
+  g_autoptr(GBytes) bytes = NULL;
+
+  IDE_ENTRY;
 
   g_return_if_fail (IDE_IS_BACK_FORWARD_LIST (self));
   g_return_if_fail (G_IS_FILE (file));
@@ -109,24 +161,21 @@ _ide_back_forward_list_save_async (IdeBackForwardList  *self,
   }
 #endif
 
+  state = g_slice_new0 (IdeBackForwardListSave);
+  state->content = g_string_new (NULL);
+  state->counter = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
+  state->file = g_object_ref (file);
+  _ide_back_forward_list_foreach (self, ide_back_forward_list_save_collect, state);
+
   task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_task_data (task, state, ide_back_forward_list_save_free);
 
-  state.content = g_string_new (NULL);
-  state.counter = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
+  if (state->content->len == 0)
+    g_task_return_boolean (task, TRUE);
+  else
+    g_task_run_in_thread (task, ide_back_forward_list_save_worker);
 
-  _ide_back_forward_list_foreach (self, ide_back_forward_list_save_collect, &state);
-  bytes = g_bytes_new_take (state.content->str, state.content->len);
-  g_string_free (state.content, FALSE);
-  g_hash_table_unref (state.counter);
-
-  g_file_replace_contents_bytes_async (file,
-                                       bytes,
-                                       NULL,
-                                       FALSE,
-                                       G_FILE_CREATE_NONE,
-                                       cancellable,
-                                       ide_back_forward_list_save_cb,
-                                       g_object_ref (task));
+  IDE_EXIT;
 }
 
 gboolean
@@ -134,8 +183,14 @@ _ide_back_forward_list_save_finish (IdeBackForwardList  *self,
                                     GAsyncResult        *result,
                                     GError             **error)
 {
+  gboolean ret;
+
+  IDE_ENTRY;
+
   g_return_val_if_fail (IDE_IS_BACK_FORWARD_LIST (self), FALSE);
   g_return_val_if_fail (G_IS_TASK (result), FALSE);
 
-  return g_task_propagate_boolean (G_TASK (result), error);
+  ret = g_task_propagate_boolean (G_TASK (result), error);
+
+  IDE_RETURN (ret);
 }
