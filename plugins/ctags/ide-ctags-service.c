@@ -444,9 +444,11 @@ restart_miner (gpointer data)
                                         build_system_tags_cb, g_object_ref (self));
           IDE_GOTO (finish);
         }
+      else
+        {
+          ide_ctags_builder_rebuild (self->builder);
+        }
     }
-
-  ide_ctags_builder_rebuild (self->builder);
 
 finish:
 
@@ -473,29 +475,22 @@ ide_ctags_service_buffer_saved (IdeCtagsService  *self,
 static void
 ide_ctags_service_context_loaded (IdeService *service)
 {
+  IdeBufferManager *buffer_manager;
   IdeCtagsService *self = (IdeCtagsService *)service;
   IdeContext *context;
-  IdeBuildSystem *build_system;
 
   IDE_ENTRY;
 
   g_assert (IDE_IS_CTAGS_SERVICE (self));
 
   context = ide_object_get_context (IDE_OBJECT (self));
-  build_system = ide_context_get_build_system (context);
+  buffer_manager = ide_context_get_buffer_manager (context);
 
-  if (IDE_IS_TAGS_BUILDER (build_system))
-    {
-      IdeBufferManager *buffer_manager;
-
-      buffer_manager = ide_context_get_buffer_manager (context);
-
-      g_signal_connect_object (buffer_manager,
-                               "buffer-saved",
-                               G_CALLBACK (ide_ctags_service_buffer_saved),
-                               self,
-                               G_CONNECT_SWAPPED);
-    }
+  g_signal_connect_object (buffer_manager,
+                           "buffer-saved",
+                           G_CALLBACK (ide_ctags_service_buffer_saved),
+                           self,
+                           G_CONNECT_SWAPPED);
 
   ide_ctags_service_mine (self);
 
