@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-02-15 14:53+0000\n"
-"PO-Revision-Date: 2016-02-15 20:05+0100\n"
+"POT-Creation-Date: 2016-02-18 08:02+0000\n"
+"PO-Revision-Date: 2016-02-18 09:33+0100\n"
 "Last-Translator: Mario Blättermann <mario.blaettermann@gmail.com>\n"
 "Language-Team: Deutsch <gnome-de@gnome.org>\n"
 "Language: de_DE\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.8.6\n"
+"X-Generator: Poedit 1.8.7\n"
 
 #: ../contrib/egg/egg-animation.c:715
 #, c-format
@@ -303,6 +303,28 @@ msgstr "Das Standardfarbschema für Builder"
 msgid "OVR"
 msgstr "OVR"
 
+#: ../data/ui/ide-editor-perspective.ui.h:1
+msgid "No open files"
+msgstr "Keine geöffneten Dateien"
+
+#: ../data/ui/ide-editor-perspective.ui.h:2
+msgid "Try opening a file typing in the search box at the top"
+msgstr ""
+"Versuchen Sie, eine Datei zu öffnen, indem Sie den Namen oben im Suchfeld "
+"eingeben"
+
+#: ../data/ui/ide-editor-perspective.ui.h:3
+msgid "Enable / Disable left panel. Shortcut: F9"
+msgstr "Linke Leiste aktivieren/deaktivieren, Kürzel: F9"
+
+#: ../data/ui/ide-editor-perspective.ui.h:4
+msgid "Enable / Disable bottom panel. Shortcut: Ctrl + F9"
+msgstr "Untere Leiste aktivieren/deaktivieren, Kürzel: Strg + F9"
+
+#: ../data/ui/ide-editor-perspective.ui.h:5
+msgid "Enable / Disable right panel. Shortcut: Shift + F9"
+msgstr "Rechte Leiste aktivieren/deaktivieren, Kürzel: Umschalttaste + F9"
+
 #: ../data/ui/ide-editor-tweak-widget.ui.h:1
 msgid "Search highlight mode…"
 msgstr "Hervorhebung der Suche …"
@@ -372,10 +394,18 @@ msgstr ""
 "Wollen Sie die Datei neu laden?"
 
 #: ../data/ui/ide-editor-view.ui.h:4
+msgid "Go to line number"
+msgstr "Gehe zu Zeilennummer"
+
+#: ../data/ui/ide-editor-view.ui.h:5
+msgid "Change editor settings and language"
+msgstr "Editoreinstellungen und Sprache ändern"
+
+#: ../data/ui/ide-editor-view.ui.h:6
 msgid "Go to Line"
 msgstr "Gehe zu Zeile"
 
-#: ../data/ui/ide-editor-view.ui.h:5
+#: ../data/ui/ide-editor-view.ui.h:7
 msgid "Go"
 msgstr "Navigieren"
 
@@ -412,9 +442,33 @@ msgstr "Klicken Sie auf ein Element, um es auszuwählen"
 msgid "_New"
 msgstr "_Neu"
 
+#: ../data/ui/ide-layout-tab-bar.ui.h:1
+msgid "List open files"
+msgstr "Liste der geöffneten Dateien anzeigen"
+
+#: ../data/ui/ide-layout-tab-bar.ui.h:2
+msgid "Add a new empty file to your project"
+msgstr "Neue leere Datei zu Ihrem Projekt hinzufügen"
+
+#: ../data/ui/ide-layout-tab.ui.h:1
+msgid "Jump to previous location"
+msgstr "Zur zuletzt bearbeiteten Stelle wechseln"
+
+#: ../data/ui/ide-layout-tab.ui.h:2
+msgid "Jump to next location"
+msgstr "Zur nächsten zu bearbeitenden Stelle wechseln"
+
+#: ../data/ui/ide-layout-tab.ui.h:3
+msgid "Close the current document"
+msgstr "Aktuelles Dokument schließen"
+
 #: ../data/ui/ide-preferences-font-button.ui.h:1
 msgid "_Select"
 msgstr "Au_swählen"
+
+#: ../data/ui/ide-preferences-perspective.ui.h:1
+msgid "Search through preferences"
+msgstr "Einstellungen durchsuchen"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:1
 msgctxt "shortcut window"
@@ -681,6 +735,14 @@ msgctxt "shortcut window"
 msgid "Terminal Shortcuts"
 msgstr "Terminaltastenkombinationen"
 
+#: ../data/ui/ide-workbench-header-bar.ui.h:1
+msgid "Search for files. Shortcut: Ctrl + ."
+msgstr "Nach Dateien suchen, Kürzel: Strg + ."
+
+#: ../data/ui/ide-workbench-header-bar.ui.h:2
+msgid "Drops down a list of file operations"
+msgstr "Liste der Dateioperationen ausklappen"
+
 #: ../libide/directory/ide-directory-genesis-addin.c:106
 msgid "From an existing project on this computer"
 msgstr "Aus existierendem Projekt auf diesem Rechner"
@@ -705,7 +767,7 @@ msgstr "%u von %u"
 msgid "Re_veal in Project Tree"
 msgstr "Im Projektbaum an_zeigen"
 
-#: ../libide/editor/ide-editor-perspective.c:392
+#: ../libide/editor/ide-editor-perspective.c:413
 #: ../libide/preferences/ide-preferences-builtin.c:102
 #: ../libide/preferences/ide-preferences-builtin.c:125
 msgid "Editor"
@@ -837,7 +899,7 @@ msgstr "Bitte geben Sie eine D-Bus-Adresse an"
 msgid "No such worker"
 msgstr ""
 
-#: ../libide/ide-buffer.c:2204
+#: ../libide/ide-buffer.c:2207
 msgid "The current language lacks a symbol resolver."
 msgstr "Die aktuelle Sprache benötigt einen Symbolauflöser."
 
@@ -969,17 +1031,17 @@ msgstr "Ordner konnte nicht geöffnet werden: %s"
 msgid "Failed to load file: %s: %s"
 msgstr "Datei konnte nicht geladen werden: %s: %s"
 
-#: ../libide/ide-source-view.c:4965
+#: ../libide/ide-source-view.c:4966
 #, c-format
-msgid "Insert \"%s\""
-msgstr "\"%s\" einfügen"
+msgid "Insert “%s”"
+msgstr "»%s« einfügen"
 
-#: ../libide/ide-source-view.c:4967
+#: ../libide/ide-source-view.c:4968
 #, c-format
-msgid "Replace \"%s\" with \"%s\""
-msgstr "\"%s\" durch \"%s\" ersetzen"
+msgid "Replace “%s” with “%s”"
+msgstr "»%s« durch »%s« ersetzen"
 
-#: ../libide/ide-source-view.c:5081
+#: ../libide/ide-source-view.c:5082
 msgid "Apply Fix-It"
 msgstr "Fix-It anwenden"
 
@@ -1484,7 +1546,7 @@ msgid "Success"
 msgstr "Erfolg"
 
 #: ../plugins/autotools/ide-autotools-builder.c:161
-#: ../plugins/autotools/ide-autotools-build-task.c:857
+#: ../plugins/autotools/ide-autotools-build-task.c:863
 msgid "Building…"
 msgstr "Erstellung …"
 
@@ -1492,47 +1554,47 @@ msgstr "Erstellung …"
 msgid "Failed to locate configure.ac"
 msgstr "configure.ac konnte nicht gefunden werden"
 
-#: ../plugins/autotools/ide-autotools-build-task.c:172
+#: ../plugins/autotools/ide-autotools-build-task.c:173
 msgid "Directory must be on a locally mounted filesystem."
 msgstr ""
 "Der Ordner muss sich auf einem lokal eingehängten Dateisystem befinden."
 
-#: ../plugins/autotools/ide-autotools-build-task.c:545
+#: ../plugins/autotools/ide-autotools-build-task.c:546
 msgid "Cannot execute build task more than once."
 msgstr "Der Erstellungstask kann nicht mehr als einmal ausgeführt werden."
 
-#: ../plugins/autotools/ide-autotools-build-task.c:627
+#: ../plugins/autotools/ide-autotools-build-task.c:633
 msgid "Failed to create build directory."
 msgstr "Erstellungsordner konnte nicht angelegt werden."
 
-#: ../plugins/autotools/ide-autotools-build-task.c:636
+#: ../plugins/autotools/ide-autotools-build-task.c:642
 #, c-format
 msgid "'%s' is not a directory."
 msgstr "»%s« ist kein Ordner."
 
-#: ../plugins/autotools/ide-autotools-build-task.c:675
+#: ../plugins/autotools/ide-autotools-build-task.c:681
 #, c-format
 msgid "autogen.sh is missing from project directory (%s)."
 msgstr "autogen.sh konnte nicht im Projektordner (%s) gefunden werden."
 
-#: ../plugins/autotools/ide-autotools-build-task.c:685
+#: ../plugins/autotools/ide-autotools-build-task.c:691
 msgid "autogen.sh is not executable."
 msgstr "autogen.sh ist nicht ausführbar."
 
-#: ../plugins/autotools/ide-autotools-build-task.c:689
+#: ../plugins/autotools/ide-autotools-build-task.c:695
 msgid "Running autogen…"
 msgstr "Autogen wird ausgeführt …"
 
-#: ../plugins/autotools/ide-autotools-build-task.c:723
+#: ../plugins/autotools/ide-autotools-build-task.c:729
 #, c-format
 msgid "autogen.sh failed to create configure (%s)"
 msgstr "autogen.sh konnte configure (%s) nicht erstellen"
 
-#: ../plugins/autotools/ide-autotools-build-task.c:758
+#: ../plugins/autotools/ide-autotools-build-task.c:764
 msgid "Running configure…"
 msgstr "Configure wird ausgeführt …"
 
-#: ../plugins/autotools/ide-autotools-build-task.c:855
+#: ../plugins/autotools/ide-autotools-build-task.c:861
 msgid "Cleaning…"
 msgstr "Wird aufgeräumt …"
 
@@ -1549,7 +1611,7 @@ msgid "Name"
 msgstr "Name"
 
 #: ../plugins/build-tools/gbp-build-configuration-view.ui.h:4
-msgid "The prefix to use when installiing the project"
+msgid "The prefix to use when installing the project"
 msgstr "Das Präfix für die Installation des Projekts"
 
 #: ../plugins/build-tools/gbp-build-configuration-view.ui.h:5
@@ -1658,10 +1720,10 @@ msgid "    Building for Device: %s (%s)\n"
 msgstr "    Erstellen für Gerät: %s (%s)\n"
 
 #: ../plugins/build-tools/gbp-build-tool.c:112
-#, fuzzy, c-format
+#, c-format
 #| msgid "           Project Name: %s\n"
 msgid "            Environment: %s\n"
-msgstr "           Projektname: %s\n"
+msgstr "            Umgebung: %s\n"
 
 #: ../plugins/build-tools/gbp-build-tool.c:142
 #: ../plugins/build-tools/gbp-build-tool.c:146
@@ -1698,63 +1760,61 @@ msgstr " Erstellung erfolgreich\n"
 msgid "   Build ran for: %"
 msgstr "   Erstellung lief seit: %"
 
-#: ../plugins/build-tools/gbp-build-tool.c:213
+#: ../plugins/build-tools/gbp-build-tool.c:212
 #, c-format
 msgid "Failed to locate device \"%s\""
 msgstr "Gerät »%s« konnte nicht gefunden werden"
 
-#: ../plugins/build-tools/gbp-build-tool.c:223
+#: ../plugins/build-tools/gbp-build-tool.c:222
 #, fuzzy, c-format
 #| msgid "Failed to locate template \"%s\""
 msgid "Failed to locate runtime \"%s\""
 msgstr "Vorlage »%s« konnte nicht gefunden werden"
 
-#: ../plugins/build-tools/gbp-build-tool.c:287
+#: ../plugins/build-tools/gbp-build-tool.c:286
 msgid "Clean the project"
 msgstr "Das Projekt leeren"
 
-#: ../plugins/build-tools/gbp-build-tool.c:289
+#: ../plugins/build-tools/gbp-build-tool.c:288
 #, fuzzy
 msgid "The ID of the device to build for"
 msgstr "Die Quellansicht zur Bearbeitung."
 
-#: ../plugins/build-tools/gbp-build-tool.c:290
+#: ../plugins/build-tools/gbp-build-tool.c:289
 msgid "local"
 msgstr "lokal"
 
-#: ../plugins/build-tools/gbp-build-tool.c:292
+#: ../plugins/build-tools/gbp-build-tool.c:291
 #, fuzzy
 #| msgid "The repository to use for search data."
 msgid "The runtime to use for building"
 msgstr "Das Archiv für die Suchdaten."
 
-#: ../plugins/build-tools/gbp-build-tool.c:293
+#: ../plugins/build-tools/gbp-build-tool.c:292
 msgid "host"
 msgstr ""
 
-#: ../plugins/build-tools/gbp-build-tool.c:295
+#: ../plugins/build-tools/gbp-build-tool.c:294
 msgid "Number of workers to use when building"
 msgstr ""
 
-#: ../plugins/build-tools/gbp-build-tool.c:296
+#: ../plugins/build-tools/gbp-build-tool.c:295
 msgid "N"
 msgstr "N"
 
-#: ../plugins/build-tools/gbp-build-tool.c:298
-#, fuzzy
-#| msgid "The navigation list for the workbench."
+#: ../plugins/build-tools/gbp-build-tool.c:297
 msgid "The configuration to use from .buildconfig"
-msgstr "Die Navigationsliste für die Werkbank."
+msgstr "Die zu verwendende Konfiguration aus .buildconfig"
 
-#: ../plugins/build-tools/gbp-build-tool.c:299
+#: ../plugins/build-tools/gbp-build-tool.c:298
 msgid "CONFIG_ID"
-msgstr ""
+msgstr "CONFIG_ID"
 
-#: ../plugins/build-tools/gbp-build-tool.c:301
+#: ../plugins/build-tools/gbp-build-tool.c:300
 msgid "Path to project file, defaults to current directory"
 msgstr "Pfad zur Projektdatei, Vorgabe ist der aktuelle Ordner"
 
-#: ../plugins/build-tools/gbp-build-tool.c:302
+#: ../plugins/build-tools/gbp-build-tool.c:301
 msgid "PATH"
 msgstr "PFAD"
 
@@ -2401,9 +2461,6 @@ msgstr "Legt fest, ob die aktuelle Zeile hervorgehoben werden soll."
 #~ msgid "Use dark colors for the application chrome."
 #~ msgstr "Dunkle Farben für Chrome verwenden."
 
-#~ msgid "Search Preferences…"
-#~ msgstr "Sucheinstellungen …"
-
 #~ msgid "Select Project"
 #~ msgstr "Wählen Sie ein Projekt"
 
@@ -2416,14 +2473,8 @@ msgstr "Legt fest, ob die aktuelle Zeile hervorgehoben werden soll."
 #~ msgid "Two finger swipe left"
 #~ msgstr "Mit zwei Fingern nach rechts streichen"
 
-#~ msgid "Show list of open files"
-#~ msgstr "Liste der geöffneten Dateien anzeigen"
-
 #~ msgid "Switch to source or header"
 #~ msgstr "Zwischen Quellcode und Header umschalten"
-
-#~ msgid "Go to line"
-#~ msgstr "Gehe zu Zeile"
 
 #~ msgid "Attempt to load a GJS script with no filename."
 #~ msgstr "Versuch ein GJS-Script ohne Dateiname zu laden."
