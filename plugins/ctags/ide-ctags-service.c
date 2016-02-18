@@ -419,6 +419,8 @@ restart_miner (gpointer data)
   IdeCtagsService *self = data;
   IdeContext *context;
 
+  IDE_ENTRY;
+
   g_assert (IDE_IS_CTAGS_SERVICE (self));
 
   self->build_tags_timeout = 0;
@@ -439,8 +441,8 @@ restart_miner (gpointer data)
           vcs = ide_context_get_vcs (context);
           workdir = ide_vcs_get_working_directory (vcs);
           ide_tags_builder_build_async (IDE_TAGS_BUILDER (build_system), workdir, TRUE, NULL,
-                                        build_system_tags_cb, g_object_ref (self));;
-          goto finish;
+                                        build_system_tags_cb, g_object_ref (self));
+          IDE_GOTO (finish);
         }
     }
 
@@ -448,7 +450,7 @@ restart_miner (gpointer data)
 
 finish:
 
-  return G_SOURCE_REMOVE;
+  IDE_RETURN (G_SOURCE_REMOVE);
 }
 
 static void
@@ -456,12 +458,16 @@ ide_ctags_service_buffer_saved (IdeCtagsService  *self,
                                 IdeBuffer        *buffer,
                                 IdeBufferManager *buffer_manager)
 {
+  IDE_ENTRY;
+
   g_assert (IDE_IS_CTAGS_SERVICE (self));
   g_assert (IDE_IS_BUFFER (buffer));
   g_assert (IDE_IS_BUFFER_MANAGER (buffer_manager));
 
   if (self->build_tags_timeout == 0)
     self->build_tags_timeout = g_timeout_add_seconds (5, restart_miner, self);
+
+  IDE_EXIT;
 }
 
 static void

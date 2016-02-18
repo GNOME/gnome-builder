@@ -142,6 +142,8 @@ ide_ctags_builder_build_worker (GTask        *task,
   GError *error = NULL;
   IdeVcs *vcs;
 
+  IDE_ENTRY;
+
   g_assert (G_IS_TASK (task));
   g_assert (IDE_IS_CTAGS_BUILDER (self));
   g_assert (task_data == NULL);
@@ -176,7 +178,7 @@ ide_ctags_builder_build_worker (GTask        *task,
                                G_IO_ERROR,
                                G_IO_ERROR_INVALID_FILENAME,
                                "ctags can only operate on local files.");
-      return;
+      IDE_EXIT;
     }
 
   /* create the directory if necessary */
@@ -226,7 +228,7 @@ ide_ctags_builder_build_worker (GTask        *task,
   if (process == NULL)
     {
       g_task_return_error (task, error);
-      return;
+      IDE_EXIT;
     }
 
   g_task_set_task_data (task, g_file_new_for_path (tags_file), g_object_unref);
@@ -235,6 +237,8 @@ ide_ctags_builder_build_worker (GTask        *task,
                            cancellable,
                            ide_ctags_builder_process_wait_cb,
                            g_object_ref (task));
+
+  IDE_EXIT;
 }
 
 void
