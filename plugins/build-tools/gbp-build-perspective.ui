@@ -4,6 +4,7 @@
   <template class="GbpBuildPerspective" parent="GtkBin">
     <child>
       <object class="GtkBox">
+        <property name="halign">start</property>
         <property name="orientation">horizontal</property>
         <property name="visible">true</property>
         <child>
