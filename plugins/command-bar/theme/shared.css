@@ -12,6 +12,8 @@ commandbar entry {
   color: #eeeeec;
   border: none;
   padding: 6px;
+  caret-color: #eeeeec;
+  box-shadow: none;
 }
 commandbar flowbox {
   background-color: @theme_bg_color;
