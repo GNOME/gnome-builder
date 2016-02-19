@@ -1267,6 +1267,36 @@ ide_context_init_services (gpointer             source_object,
   g_task_return_boolean (task, TRUE);
 }
 
+static gboolean
+directory_is_ignored (GFile *file)
+{
+  const gchar *home_dir = g_get_home_dir ();
+  const gchar *downloads_dir = g_get_user_special_dir (G_USER_DIRECTORY_DOWNLOAD);
+  g_autoptr(GFile) home_prefix = g_file_new_for_path (home_dir);
+  g_autoptr(GFile) downloads_prefix = g_file_new_for_path (downloads_dir);
+  g_autofree gchar *relative_path = g_file_get_relative_path (home_prefix, file);
+  GFileType type = g_file_query_file_type (file, G_FILE_QUERY_INFO_NOFOLLOW_SYMLINKS, NULL);
+
+  if (!g_file_has_prefix (file, home_prefix))
+    return TRUE;
+
+  if (g_file_equal (file, downloads_prefix) || g_file_has_prefix (file, downloads_prefix))
+    return TRUE;
+
+  if (g_str_has_prefix (relative_path, "."))
+    return TRUE;
+
+  if (type != G_FILE_TYPE_DIRECTORY)
+    {
+      g_autoptr(GFile) parent = g_file_get_parent (file);
+
+      if (g_file_equal (home_prefix, parent))
+        return TRUE;
+    }
+
+  return FALSE;
+}
+
 static void
 ide_context_init_add_recent (gpointer             source_object,
                              GCancellable        *cancellable,
@@ -1288,6 +1318,12 @@ ide_context_init_add_recent (gpointer             source_object,
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = g_task_new (self, cancellable, callback, user_data);
+
+  if (directory_is_ignored (self->project_file))
+    {
+      g_task_return_boolean (task, TRUE);
+      return;
+    }
 
   projects_file = g_bookmark_file_new ();
   g_bookmark_file_load_from_file (projects_file, self->recent_projects_path, &error);
