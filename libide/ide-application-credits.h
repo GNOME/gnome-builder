@@ -47,6 +47,7 @@ static const gchar *ide_application_credits_authors[] = {
   "burningTyger",
   "Carlos Garnacho",
   "Carlos Soriano",
+  "chandu",
   "Changwoo Ryu",
   "Chao-Hsiung Liao",
   "Cheng-Chia Tseng",
