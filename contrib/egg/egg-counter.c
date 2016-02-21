@@ -434,6 +434,14 @@ egg_counter_arena_unref (EggCounterArena *arena)
     _egg_counter_arena_destroy (arena);
 }
 
+/**
+ * egg_counter_arena_foreach:
+ * @arena: An #EggCounterArena
+ * @func: (scope call): A callback to execute
+ * @user_data: user data for @func
+ *
+ * Calls @func for every counter found in @area.
+ */
 void
 egg_counter_arena_foreach (EggCounterArena       *arena,
                            EggCounterForeachFunc  func,

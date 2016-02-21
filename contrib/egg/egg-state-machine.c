@@ -532,10 +532,7 @@ egg_state_machine_create_action (EggStateMachine *self,
   g_return_val_if_fail (EGG_IS_STATE_MACHINE (self), NULL);
   g_return_val_if_fail (name != NULL, NULL);
 
-  return g_object_new (EGG_TYPE_STATE_MACHINE_ACTION,
-                       "state-machine", self,
-                       "name", name,
-                       NULL);
+  return egg_state_machine_action_new (self, name);
 }
 
 void

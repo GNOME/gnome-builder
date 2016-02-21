@@ -658,6 +658,9 @@ egg_state_machine_buildable_custom_finished (GtkBuildable *buildable,
     }
 }
 
+/**
+ * egg_state_machine_buildable_iface_init: (skip)
+ */
 void
 egg_state_machine_buildable_iface_init (GtkBuildableIface *iface)
 {

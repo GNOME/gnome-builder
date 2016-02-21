@@ -80,6 +80,8 @@
  * Section 10 - Heaps and Priority Queues.
  */
 
+G_DEFINE_BOXED_TYPE (EggHeap, egg_heap, egg_heap_ref, egg_heap_unref)
+
 typedef struct _EggHeapReal EggHeapReal;
 
 struct _EggHeapReal
@@ -105,6 +107,18 @@ struct _EggHeapReal
       memcpy (heap_index (h, b), (h)->tmp, (h)->element_size);          \
  } G_STMT_END
 
+/**
+ * egg_heap_new:
+ * @element_size: the size of each element in the heap
+ * @compare_func: (scope async): a function to compare to elements
+ *
+ * Creates a new #EggHeap. A heap is a tree-like structure stored in
+ * an array that is not fully sorted, but head is guaranteed to be either
+ * the max, or min value based on @compare_func. This is also known as
+ * a priority queue.
+ *
+ * Returns: (transfer full): A newly allocated #EggHeap
+ */
 EggHeap *
 egg_heap_new (guint        element_size,
               GCompareFunc compare_func)
@@ -125,6 +139,14 @@ egg_heap_new (guint        element_size,
     return (EggHeap *)real;
 }
 
+/**
+ * egg_heap_ref:
+ * @heap: An #EggHeap
+ *
+ * Increments the reference count of @heap by one.
+ *
+ * Returns: (transfer full): @heap
+ */
 EggHeap *
 egg_heap_ref (EggHeap *heap)
 {
@@ -148,6 +170,13 @@ egg_heap_real_free (EggHeapReal *real)
   g_free (real);
 }
 
+/**
+ * egg_heap_unref:
+ * @heap: (transfer full): An #EggHeap
+ *
+ * Decrements the reference count of @heap by one, freeing the structure
+ * when the reference count reaches zero.
+ */
 void
 egg_heap_unref (EggHeap *heap)
 {

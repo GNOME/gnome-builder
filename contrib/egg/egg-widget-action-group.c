@@ -307,6 +307,15 @@ create_action (const GSignalQuery *query,
   return G_ACTION (action);
 }
 
+/**
+ * egg_widget_action_group_new:
+ * @widget: A #GtkWidget
+ *
+ * Creates a new #GActionGroup that can proxy signal actions
+ * to @widget.
+ *
+ * Returns: (transfer full): A newly allocated #GActionGroup.
+ */
 GActionGroup *
 egg_widget_action_group_new (GtkWidget *widget)
 {

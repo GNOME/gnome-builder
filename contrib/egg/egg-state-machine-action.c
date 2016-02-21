@@ -36,11 +36,11 @@ G_DEFINE_TYPE_WITH_CODE (EggStateMachineAction, egg_state_machine_action, G_TYPE
 
 enum {
   PROP_0,
-  PROP_NAME,
   PROP_STATE_MACHINE,
   LAST_PROP,
 
   PROP_ENABLED,
+  PROP_NAME,
   PROP_PARAMETER_TYPE,
   PROP_STATE,
   PROP_STATE_TYPE,
@@ -202,10 +202,6 @@ egg_state_machine_action_set_property (GObject      *object,
       egg_state_machine_action_set_state_machine (self, g_value_get_object (value));
       break;
 
-    case PROP_NAME:
-      self->name = g_value_dup_string (value);
-      break;
-
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -220,13 +216,6 @@ egg_state_machine_action_class_init (EggStateMachineActionClass *klass)
   object_class->get_property = egg_state_machine_action_get_property;
   object_class->set_property = egg_state_machine_action_set_property;
 
-  properties [PROP_NAME] =
-    g_param_spec_string ("name",
-                         "Name",
-                         "The name of the action",
-                         NULL,
-                         (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
-
   properties [PROP_STATE_MACHINE] =
     g_param_spec_object ("state-machine",
                          "State Machine",
@@ -236,6 +225,7 @@ egg_state_machine_action_class_init (EggStateMachineActionClass *klass)
 
   g_object_class_install_properties (object_class, LAST_PROP, properties);
 
+  g_object_class_override_property (object_class, PROP_NAME, "name");
   g_object_class_override_property (object_class, PROP_PARAMETER_TYPE, "parameter-type");
   g_object_class_override_property (object_class, PROP_ENABLED, "enabled");
   g_object_class_override_property (object_class, PROP_STATE_TYPE, "state-type");
@@ -256,4 +246,23 @@ action_iface_init (GActionInterface *iface)
   iface->get_state_type = egg_state_machine_action_get_state_type;
   iface->get_state = egg_state_machine_action_get_state;
   iface->activate = egg_state_machine_action_activate;
+}
+
+/**
+ * egg_state_machine_action_new:
+ *
+ * Returns: (transfer full): A newly allocated #EggStateMachineAction
+ */
+GAction *
+egg_state_machine_action_new (EggStateMachine *machine,
+                              const gchar     *name)
+{
+  EggStateMachineAction *self;
+
+  self = g_object_new (EGG_TYPE_STATE_MACHINE_ACTION,
+                       "state-machine", machine,
+                       NULL);
+  self->name = g_strdup (name);
+
+  return G_ACTION (self);
 }
