@@ -80,7 +80,7 @@ ide_log_level_str (GLogLevelFlags log_level)
     case G_LOG_LEVEL_MESSAGE:  return " MESSAGE";
     case G_LOG_LEVEL_INFO:     return "    INFO";
     case G_LOG_LEVEL_DEBUG:    return "   DEBUG";
-    case G_LOG_LEVEL_TRACE:    return "   TRACE";
+    case IDE_LOG_LEVEL_TRACE:  return "   TRACE";
 
     default:
       return " UNKNOWN";
@@ -98,7 +98,7 @@ ide_log_level_str_with_color (GLogLevelFlags log_level)
     case G_LOG_LEVEL_MESSAGE:  return " \033[1;32mMESSAGE\033[0m";
     case G_LOG_LEVEL_INFO:     return "    \033[1;32mINFO\033[0m";
     case G_LOG_LEVEL_DEBUG:    return "   \033[1;32mDEBUG\033[0m";
-    case G_LOG_LEVEL_TRACE:    return "   \033[1;36mTRACE\033[0m";
+    case IDE_LOG_LEVEL_TRACE:  return "   \033[1;36mTRACE\033[0m";
 
     default:
       return " UNKNOWN";
@@ -164,7 +164,7 @@ ide_log_handler (const gchar    *log_domain,
             return;
           break;
 
-        case G_LOG_LEVEL_TRACE:
+        case IDE_LOG_LEVEL_TRACE:
           if (log_verbosity < 4)
             return;
           break;
@@ -252,7 +252,7 @@ ide_log_shutdown (void)
  * Calling this once will cause G_LOG_LEVEL_MESSAGE to be displayed.
  * Calling this twice will cause G_LOG_LEVEL_INFO to be displayed.
  * Calling this thrice will cause G_LOG_LEVEL_DEBUG to be displayed.
- * Calling this four times will cause G_LOG_LEVEL_TRACE to be displayed.
+ * Calling this four times will cause IDE_LOG_LEVEL_TRACE to be displayed.
  *
  * Note that many DEBUG and TRACE level log messages are only compiled into
  * debug builds, and therefore will not be available in release builds.

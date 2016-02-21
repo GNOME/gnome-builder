@@ -490,6 +490,11 @@ ide_omni_search_display_disconnect_context (IdeOmniSearchDisplay *self,
     }
 }
 
+/**
+ * ide_omni_search_display_get_context:
+ *
+ * Returns: (transfer none): An IdeSearchContext.
+ */
 IdeSearchContext *
 ide_omni_search_display_get_context (IdeOmniSearchDisplay *self)
 {

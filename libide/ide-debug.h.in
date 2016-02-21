@@ -30,6 +30,9 @@ G_BEGIN_DECLS
 # undef IDE_ENABLE_TRACE
 #endif
 
+/**
+ * G_LOG_LEVEL_TRACE: (skip)
+ */
 #ifndef G_LOG_LEVEL_TRACE
 # define G_LOG_LEVEL_TRACE (1 << G_LOG_LEVEL_USER_SHIFT)
 #endif

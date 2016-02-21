@@ -64,6 +64,11 @@ ide_omni_search_row_connect (IdeOmniSearchRow *row,
   gtk_label_set_markup (row->title, title);
 }
 
+/**
+ * ide_omni_search_row_get_result:
+ *
+ * Returns: (transfer none): An #IdeSearchResult.
+ */
 IdeSearchResult *
 ide_omni_search_row_get_result (IdeOmniSearchRow *row)
 {

@@ -154,7 +154,6 @@ libide_1_0_la_public_headers = \
 	util/ide-cairo.h \
 	util/ide-dnd.h \
 	util/ide-file-manager.h \
-	util/ide-gdk.h \
 	util/ide-gtk.h \
 	util/ide-line-reader.h \
 	util/ide-list-inline.h \
@@ -288,10 +287,28 @@ libide_1_0_la_public_sources = \
 	ide-worker.c \
 	ide.c \
 	local/ide-local-device.c \
+	preferences/ide-preferences-entry.c \
+	preferences/ide-preferences-flow-box.c \
+	preferences/ide-preferences-font-button.c \
+	preferences/ide-preferences-group.c \
+	preferences/ide-preferences-page.c \
+	preferences/ide-preferences-spin-button.c \
+	preferences/ide-preferences-switch.c \
+	search/ide-omni-search-display.c \
+	search/ide-omni-search-entry.c \
+	search/ide-omni-search-group.c \
+	search/ide-omni-search-row.c \
 	template/ide-project-template.c \
 	template/ide-template-base.c \
 	template/ide-template-provider.c \
+	util/ide-cairo.c \
+	util/ide-dnd.c \
 	util/ide-file-manager.c \
+	util/ide-gtk.c \
+	util/ide-line-reader.c \
+	util/ide-pango.c \
+	util/ide-posix.c \
+	util/ide-rgba.c \
 	$(NULL)
 
 libide_1_0_la_SOURCES = \
@@ -393,35 +410,18 @@ libide_1_0_la_SOURCES = \
 	preferences/ide-preferences-builtin.h \
 	preferences/ide-preferences-bin.c \
 	preferences/ide-preferences-bin-private.h \
-	preferences/ide-preferences-entry.c \
-	preferences/ide-preferences-flow-box.c \
-	preferences/ide-preferences-font-button.c \
-	preferences/ide-preferences-group.c \
 	preferences/ide-preferences-group-private.h \
 	preferences/ide-preferences-language-row.c \
 	preferences/ide-preferences-language-row.h \
-	preferences/ide-preferences-page.c \
 	preferences/ide-preferences-page-private.h \
 	preferences/ide-preferences-perspective.c \
 	preferences/ide-preferences-perspective.h \
-	preferences/ide-preferences-spin-button.c \
-	preferences/ide-preferences-switch.c \
-	search/ide-omni-search-display.c \
-	search/ide-omni-search-entry.c \
-	search/ide-omni-search-group.c \
-	search/ide-omni-search-row.c \
 	theatrics/ide-box-theatric.c \
 	theatrics/ide-box-theatric.h \
-	util/ide-cairo.c \
-	util/ide-dnd.c \
 	util/ide-doc-seq.c \
 	util/ide-doc-seq.h \
 	util/ide-gdk.c \
-	util/ide-gtk.c \
-	util/ide-line-reader.c \
-	util/ide-pango.c \
-	util/ide-posix.c \
-	util/ide-rgba.c \
+	util/ide-gdk.h \
 	util/ide-text-util.c \
 	util/ide-text-util.h \
 	util/ide-window-settings.c \

@@ -140,7 +140,6 @@ G_BEGIN_DECLS
 #include "template/ide-project-template.h"
 #include "template/ide-template-provider.h"
 #include "util/ide-file-manager.h"
-#include "util/ide-gdk.h"
 #include "util/ide-gtk.h"
 #include "util/ide-line-reader.h"
 #include "util/ide-list-inline.h"

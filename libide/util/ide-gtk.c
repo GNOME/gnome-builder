@@ -150,6 +150,13 @@ ide_widget_hierarchy_changed (GtkWidget *widget,
     }
 }
 
+/**
+ * ide_widget_set_context_handler:
+ * @widget: (type Gtk.Widget): A #GtkWidget
+ * @handler: (scope async): A callback to handle the context
+ *
+ * Calls @handler when the #IdeContext has been set for @widget.
+ */
 void
 ide_widget_set_context_handler (gpointer                widget,
                                 IdeWidgetContextHandler handler)
@@ -245,6 +252,15 @@ ide_widget_show_with_fade (GtkWidget *widget)
     }
 }
 
+/**
+ * ide_widget_get_workbench:
+ *
+ * Gets the workbench @widget is associated with, if any.
+ *
+ * If no workbench is associated, NULL is returned.
+ *
+ * Returns: (transfer none) (nullable): An #IdeWorkbench
+ */
 IdeWorkbench *
 ide_widget_get_workbench (GtkWidget *widget)
 {

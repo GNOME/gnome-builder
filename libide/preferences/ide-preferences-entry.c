@@ -200,6 +200,11 @@ ide_preferences_entry_init (IdePreferencesEntry *self)
                            G_CONNECT_SWAPPED);
 }
 
+/**
+ * ide_preferences_entry_get_title_widget:
+ *
+ * Returns: (transfer none): A #GtkWidget
+ */
 GtkWidget *
 ide_preferences_entry_get_title_widget (IdePreferencesEntry *self)
 {

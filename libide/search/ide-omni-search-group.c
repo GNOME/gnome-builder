@@ -62,6 +62,11 @@ ide_omni_search_group_foreach_cb (GtkWidget *widget,
     *row = widget;
 }
 
+/**
+ * ide_omni_search_group_get_first:
+ *
+ * Returns: (transfer none) (nullable): An #IdeSearchResult or %NULL.
+ */
 IdeSearchResult *
 ide_omni_search_group_get_first (IdeOmniSearchGroup *self)
 {
@@ -80,6 +85,11 @@ ide_omni_search_group_get_first (IdeOmniSearchGroup *self)
   return ret;
 }
 
+/**
+ * ide_omni_search_group_get_provider:
+ *
+ * Returns: (transfer none): An #IdeSearchProvider
+ */
 IdeSearchProvider *
 ide_omni_search_group_get_provider (IdeOmniSearchGroup *self)
 {
