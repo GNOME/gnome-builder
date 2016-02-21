@@ -6,54 +6,59 @@ BUILT_SOURCES =
 pkglibdir = $(libdir)/gnome-builder
 pkglib_LTLIBRARIES = libegg-private.la
 
-libegg_private_la_SOURCES = \
-	egg-animation.c \
+headersdir = $(includedir)/gnome-builder-@VERSION@/egg
+headers_DATA = \
 	egg-animation.h \
-	egg-binding-group.c \
 	egg-binding-group.h \
-	egg-box.c \
 	egg-box.h \
-	egg-centering-bin.c \
 	egg-centering-bin.h \
-	egg-column-layout.c \
 	egg-column-layout.h \
-	egg-counter.c \
 	egg-counter.h \
-	egg-date-time.c \
 	egg-date-time.h \
-	egg-frame-source.c \
 	egg-frame-source.h \
-	egg-heap.c \
 	egg-heap.h \
-	egg-menu-manager.c \
 	egg-menu-manager.h \
-	egg-pill-box.c \
 	egg-pill-box.h \
 	egg-private.h \
-	egg-scrolled-window.c \
 	egg-scrolled-window.h \
-	egg-search-bar.c \
 	egg-search-bar.h \
-	egg-settings-flag-action.c \
 	egg-settings-flag-action.h \
-	egg-settings-sandwich.c \
 	egg-settings-sandwich.h \
-	egg-signal-group.c \
 	egg-signal-group.h \
-	egg-simple-popover.c \
 	egg-simple-popover.h \
-	egg-slider.c \
 	egg-slider.h \
-	egg-state-machine.c \
-	egg-state-machine.h \
-	egg-state-machine-action.c \
 	egg-state-machine-action.h \
-	egg-state-machine-buildable.c \
 	egg-state-machine-buildable.h \
-	egg-task-cache.c \
+	egg-state-machine.h \
 	egg-task-cache.h \
-	egg-widget-action-group.c \
 	egg-widget-action-group.h \
+	$(NULL)
+
+libegg_private_la_SOURCES = \
+	$(headers_DATA) \
+	egg-animation.c \
+	egg-binding-group.c \
+	egg-box.c \
+	egg-centering-bin.c \
+	egg-column-layout.c \
+	egg-counter.c \
+	egg-date-time.c \
+	egg-frame-source.c \
+	egg-heap.c \
+	egg-menu-manager.c \
+	egg-pill-box.c \
+	egg-scrolled-window.c \
+	egg-search-bar.c \
+	egg-settings-flag-action.c \
+	egg-settings-sandwich.c \
+	egg-signal-group.c \
+	egg-simple-popover.c \
+	egg-slider.c \
+	egg-state-machine-action.c \
+	egg-state-machine-buildable.c \
+	egg-state-machine.c \
+	egg-task-cache.c \
+	egg-widget-action-group.c \
 	$(NULL)
 
 nodist_libegg_private_la_SOURCES = \
@@ -84,30 +89,11 @@ INTROSPECTION_GIRS =
 INTROSPECTION_SCANNER_ARGS = --add-include-path=$(srcdir) --warn-all
 INTROSPECTION_COMPILER_ARGS = --includedir=$(srcdir)
 
-introspection_sources = \
-	egg-animation.c \
-	egg-animation.h \
-	egg-binding-group.c \
-	egg-binding-group.h \
-	egg-search-bar.c \
-	egg-search-bar.h \
-	egg-settings-flag-action.c \
-	egg-settings-flag-action.h \
-	egg-settings-sandwich.c \
-	egg-settings-sandwich.h \
-	egg-signal-group.c \
-	egg-signal-group.h \
-	egg-state-machine.c \
-	egg-state-machine.h \
-	egg-task-cache.c \
-	egg-task-cache.h \
-	$(NULL)
-
 Egg-1.0.gir: libegg-private.la
 Egg_1_0_gir_INCLUDES = Gio-2.0 Gdk-3.0 Gtk-3.0
 Egg_1_0_gir_CFLAGS = $(libegg_private_la_CFLAGS)
 Egg_1_0_gir_LIBS = libegg-private.la
-Egg_1_0_gir_FILES = $(introspection_sources)
+Egg_1_0_gir_FILES = $(libegg_private_la_SOURCES)
 Egg_1_0_gir_SCANNERFLAGS = \
 	--c-include="egg-private.h" \
 	-n Egg \

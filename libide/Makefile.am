@@ -6,268 +6,296 @@ EXTRA_DIST =
 pkglibdir = $(libdir)/gnome-builder
 pkglib_LTLIBRARIES = libide-1.0.la
 
-libide_1_0_la_public_sources = \
-	directory/ide-directory-build-system.c \
+headersdir = $(includedir)/gnome-builder-@VERSION@/libide
+nobase_headers_DATA = $(libide_1_0_la_public_headers)
+
+libide_1_0_la_public_headers = \
 	directory/ide-directory-build-system.h \
-	directory/ide-directory-genesis-addin.c \
 	directory/ide-directory-genesis-addin.h \
-	directory/ide-directory-plugin.c \
-	directory/ide-directory-vcs.c \
 	directory/ide-directory-vcs.h \
-	doap/ide-doap-person.c \
 	doap/ide-doap-person.h \
-	doap/ide-doap.c \
 	doap/ide-doap.h \
-	editor/ide-editor-perspective.c \
 	editor/ide-editor-perspective.h \
-	editor/ide-editor-view-addin.c \
 	editor/ide-editor-view-addin.h \
-	editor/ide-editor-view.c \
 	editor/ide-editor-view.h \
-	genesis/ide-genesis-perspective.c \
-	genesis/ide-genesis-perspective.h \
-	genesis/ide-genesis-addin.c \
 	genesis/ide-genesis-addin.h \
-	ide-application.c \
-	ide-application.h \
-	ide-application-addin.c \
+	genesis/ide-genesis-perspective.h \
 	ide-application-addin.h \
 	ide-application-credits.h \
-	ide-application-tool.c \
 	ide-application-tool.h \
-	ide-back-forward-item.c \
+	ide-application.h \
 	ide-back-forward-item.h \
-	ide-back-forward-list.c \
-	ide-back-forward-list-load.c \
-	ide-back-forward-list-save.c \
 	ide-back-forward-list.h \
-	ide-buffer-change-monitor.c \
 	ide-buffer-change-monitor.h \
-	ide-buffer-manager.c \
 	ide-buffer-manager.h \
-	ide-buffer.c \
 	ide-buffer.h \
-	ide-build-result.c \
-	ide-build-result.h \
-	ide-build-result-addin.c \
 	ide-build-result-addin.h \
-	ide-build-system.c \
+	ide-build-result.h \
 	ide-build-system.h \
-	ide-builder.c \
 	ide-builder.h \
-	ide-completion-item.c \
 	ide-completion-item.h \
-	ide-completion-provider.c \
 	ide-completion-provider.h \
-	ide-completion-results.c \
 	ide-completion-results.h \
-	ide-configuration.c \
-	ide-configuration.h \
-	ide-configuration-manager.c \
 	ide-configuration-manager.h \
-	ide-context.c \
+	ide-configuration.h \
 	ide-context.h \
-	ide-debugger.c \
+	ide-debug.h \
 	ide-debugger.h \
-	ide-deployer.c \
 	ide-deployer.h \
-	ide-device-manager.c \
 	ide-device-manager.h \
-	ide-device-provider.c \
 	ide-device-provider.h \
-	ide-device.c \
 	ide-device.h \
-	ide-diagnostic-provider.c \
 	ide-diagnostic-provider.h \
-	ide-diagnostic.c \
 	ide-diagnostic.h \
-	ide-diagnostician.c \
 	ide-diagnostician.h \
-	ide-diagnostics.c \
 	ide-diagnostics.h \
-	ide-enums.c \
 	ide-enums.h \
-	ide-environment.c \
-	ide-environment.h \
-	ide-environment-editor.c \
-	ide-environment-editor.h \
-	ide-environment-editor-row.c \
 	ide-environment-editor-row.h \
-	ide-environment-variable.c \
+	ide-environment-editor.h \
 	ide-environment-variable.h \
-	ide-executable.c \
+	ide-environment.h \
 	ide-executable.h \
-	ide-executer.c \
 	ide-executer.h \
-	ide-extension-adapter.c \
 	ide-extension-adapter.h \
-	ide-extension-set-adapter.c \
 	ide-extension-set-adapter.h \
-	ide-file-settings.c \
 	ide-file-settings.defs \
 	ide-file-settings.h \
-	ide-file.c \
 	ide-file.h \
-	ide-fixit.c \
 	ide-fixit.h \
 	ide-global.h \
-	ide-highlight-engine.c \
 	ide-highlight-engine.h \
-	ide-highlight-index.c \
 	ide-highlight-index.h \
-	ide-highlighter.c \
 	ide-highlighter.h \
 	ide-indent-style.h \
-	ide-indenter.c \
 	ide-indenter.h \
-	ide-layout.c \
-	ide-layout.h \
-	ide-layout-grid.c \
 	ide-layout-grid.h \
-	ide-layout-pane.c \
 	ide-layout-pane.h \
-	ide-layout-stack.c \
-	ide-layout-stack.h \
 	ide-layout-stack-split.h \
-	ide-layout-view.c \
+	ide-layout-stack.h \
 	ide-layout-view.h \
-	ide-log.c \
+	ide-layout.h \
 	ide-log.h \
 	ide-macros.h \
-	ide-object.c \
 	ide-object.h \
-	ide-pattern-spec.c \
 	ide-pattern-spec.h \
-	ide-perspective.c \
 	ide-perspective.h \
-	ide-preferences-addin.c \
 	ide-preferences-addin.h \
-	ide-preferences.c \
 	ide-preferences.h \
-	ide-process.c \
 	ide-process.h \
-	ide-progress.c \
 	ide-progress.h \
-	ide-project-file.c \
 	ide-project-file.h \
-	ide-project-files.c \
 	ide-project-files.h \
-	ide-project-info.c \
 	ide-project-info.h \
-	ide-project-item.c \
 	ide-project-item.h \
-	ide-project-miner.c \
 	ide-project-miner.h \
-	ide-project.c \
 	ide-project.h \
-	ide-recent-projects.c \
 	ide-recent-projects.h \
-	ide-runtime.c \
-	ide-runtime.h \
-	ide-runtime-manager.c \
-	ide-runtime-manager.h \
-	ide-runtime-provider.c \
-	ide-runtime-provider.h \
-	ide-refactory.c \
 	ide-refactory.h \
-	ide-script-manager.c \
+	ide-runtime-manager.h \
+	ide-runtime-provider.h \
+	ide-runtime.h \
 	ide-script-manager.h \
-	ide-script.c \
 	ide-script.h \
-	ide-search-context.c \
 	ide-search-context.h \
-	ide-search-engine.c \
 	ide-search-engine.h \
-	ide-search-provider.c \
 	ide-search-provider.h \
-	ide-search-result.c \
+	ide-search-reducer.h \
 	ide-search-result.h \
-	ide-service.c \
 	ide-service.h \
-	ide-settings.c \
 	ide-settings.h \
-	ide-source-location.c \
 	ide-source-location.h \
-	ide-source-map.c \
 	ide-source-map.h \
-	ide-source-range.c \
 	ide-source-range.h \
-	ide-source-snippet-chunk.c \
 	ide-source-snippet-chunk.h \
-	ide-source-snippet-context.c \
 	ide-source-snippet-context.h \
-	ide-source-snippet.c \
 	ide-source-snippet.h \
-	ide-source-snippets-manager.c \
 	ide-source-snippets-manager.h \
-	ide-source-snippets.c \
 	ide-source-snippets.h \
-	ide-source-view-mode.c \
 	ide-source-view-mode.h \
-	ide-source-view.c \
 	ide-source-view.h \
-	ide-subprocess-launcher.c \
 	ide-subprocess-launcher.h \
-	ide-symbol-resolver.c \
-	ide-symbol-resolver.h \
-	ide-symbol.c \
-	ide-symbol.h \
-	ide-symbol-node.c \
 	ide-symbol-node.h \
-	ide-symbol-tree.c \
+	ide-symbol-resolver.h \
 	ide-symbol-tree.h \
-	ide-tags-builder.c \
+	ide-symbol.h \
 	ide-tags-builder.h \
-	ide-target.c \
 	ide-target.h \
-	ide-test-case.c \
 	ide-test-case.h \
-	ide-test-suite.c \
 	ide-test-suite.h \
-	ide-thread-pool.c \
 	ide-thread-pool.h \
-	ide-tree-builder.c \
 	ide-tree-builder.h \
-	ide-tree-node.c \
 	ide-tree-node.h \
 	ide-tree-types.h \
-	ide-tree.c \
 	ide-tree.h \
 	ide-types.h \
-	ide-unsaved-file.c \
 	ide-unsaved-file.h \
-	ide-unsaved-files.c \
 	ide-unsaved-files.h \
-	ide-uri.c \
 	ide-uri.h \
-	ide-vcs-uri.c \
 	ide-vcs-uri.h \
-	ide-vcs.c \
 	ide-vcs.h \
-	ide-workbench.c \
-	ide-workbench.h \
-	ide-workbench-addin.c \
 	ide-workbench-addin.h \
-	ide-workbench-header-bar.c \
 	ide-workbench-header-bar.h \
-	ide-workbench-open.c \
-	ide-worker.c \
+	ide-workbench.h \
 	ide-worker.h \
-	ide.c \
 	ide.h \
-	local/ide-local-device.c \
 	local/ide-local-device.h \
-	template/ide-project-template.c \
+	preferences/ide-preferences-bin.h \
+	preferences/ide-preferences-entry.h \
+	preferences/ide-preferences-flow-box.h \
+	preferences/ide-preferences-font-button.h \
+	preferences/ide-preferences-group.h \
+	search/ide-omni-search-display.h \
+	search/ide-omni-search-entry.h \
+	search/ide-omni-search-group.h \
+	search/ide-omni-search-row.h \
 	template/ide-project-template.h \
-	template/ide-template-base.c \
 	template/ide-template-base.h \
-	template/ide-template-provider.c \
 	template/ide-template-provider.h \
-	util/ide-file-manager.c \
+	util/ide-cairo.h \
+	util/ide-dnd.h \
 	util/ide-file-manager.h \
+	util/ide-gdk.h \
+	util/ide-gtk.h \
+	util/ide-line-reader.h \
+	util/ide-list-inline.h \
+	util/ide-pango.h \
+	util/ide-posix.h \
+	util/ide-rgba.h \
+	$(NULL)
+
+libide_1_0_la_public_sources = \
+	directory/ide-directory-build-system.c \
+	directory/ide-directory-genesis-addin.c \
+	directory/ide-directory-plugin.c \
+	directory/ide-directory-vcs.c \
+	doap/ide-doap-person.c \
+	doap/ide-doap.c \
+	editor/ide-editor-perspective.c \
+	editor/ide-editor-view-addin.c \
+	editor/ide-editor-view.c \
+	genesis/ide-genesis-addin.c \
+	genesis/ide-genesis-perspective.c \
+	ide-application-addin.c \
+	ide-application-tool.c \
+	ide-application.c \
+	ide-back-forward-item.c \
+	ide-back-forward-list-load.c \
+	ide-back-forward-list-save.c \
+	ide-back-forward-list.c \
+	ide-buffer-change-monitor.c \
+	ide-buffer-manager.c \
+	ide-buffer.c \
+	ide-build-result-addin.c \
+	ide-build-result.c \
+	ide-build-system.c \
+	ide-builder.c \
+	ide-completion-item.c \
+	ide-completion-provider.c \
+	ide-completion-results.c \
+	ide-configuration-manager.c \
+	ide-configuration.c \
+	ide-context.c \
+	ide-debugger.c \
+	ide-deployer.c \
+	ide-device-manager.c \
+	ide-device-provider.c \
+	ide-device.c \
+	ide-diagnostic-provider.c \
+	ide-diagnostic.c \
+	ide-diagnostician.c \
+	ide-diagnostics.c \
+	ide-enums.c \
+	ide-environment-editor-row.c \
+	ide-environment-editor.c \
+	ide-environment-variable.c \
+	ide-environment.c \
+	ide-executable.c \
+	ide-executer.c \
+	ide-extension-adapter.c \
+	ide-extension-set-adapter.c \
+	ide-file-settings.c \
+	ide-file-settings.defs \
+	ide-file.c \
+	ide-fixit.c \
+	ide-highlight-engine.c \
+	ide-highlight-index.c \
+	ide-highlighter.c \
+	ide-indenter.c \
+	ide-layout-grid.c \
+	ide-layout-pane.c \
+	ide-layout-stack.c \
+	ide-layout-view.c \
+	ide-layout.c \
+	ide-log.c \
+	ide-object.c \
+	ide-pattern-spec.c \
+	ide-perspective.c \
+	ide-preferences-addin.c \
+	ide-preferences.c \
+	ide-process.c \
+	ide-progress.c \
+	ide-project-file.c \
+	ide-project-files.c \
+	ide-project-info.c \
+	ide-project-item.c \
+	ide-project-miner.c \
+	ide-project.c \
+	ide-recent-projects.c \
+	ide-refactory.c \
+	ide-runtime-manager.c \
+	ide-runtime-provider.c \
+	ide-runtime.c \
+	ide-script-manager.c \
+	ide-script.c \
+	ide-search-context.c \
+	ide-search-engine.c \
+	ide-search-provider.c \
+	ide-search-result.c \
+	ide-service.c \
+	ide-settings.c \
+	ide-source-location.c \
+	ide-source-map.c \
+	ide-source-range.c \
+	ide-source-snippet-chunk.c \
+	ide-source-snippet-context.c \
+	ide-source-snippet.c \
+	ide-source-snippets-manager.c \
+	ide-source-snippets.c \
+	ide-source-view-mode.c \
+	ide-source-view.c \
+	ide-subprocess-launcher.c \
+	ide-symbol-node.c \
+	ide-symbol-resolver.c \
+	ide-symbol-tree.c \
+	ide-symbol.c \
+	ide-tags-builder.c \
+	ide-target.c \
+	ide-test-case.c \
+	ide-test-suite.c \
+	ide-thread-pool.c \
+	ide-tree-builder.c \
+	ide-tree-node.c \
+	ide-tree.c \
+	ide-unsaved-file.c \
+	ide-unsaved-files.c \
+	ide-uri.c \
+	ide-vcs-uri.c \
+	ide-vcs.c \
+	ide-workbench-addin.c \
+	ide-workbench-header-bar.c \
+	ide-workbench-open.c \
+	ide-workbench.c \
+	ide-worker.c \
+	ide.c \
+	local/ide-local-device.c \
+	template/ide-project-template.c \
+	template/ide-template-base.c \
+	template/ide-template-provider.c \
+	util/ide-file-manager.c \
 	$(NULL)
 
 libide_1_0_la_SOURCES = \
+	$(libide_1_0_la_public_headers) \
 	$(libide_1_0_la_public_sources) \
 	editor/ide-editor-frame-actions.c \
 	editor/ide-editor-frame-actions.h \
@@ -310,7 +338,6 @@ libide_1_0_la_SOURCES = \
 	ide-battery-monitor.h \
 	ide-css-provider.c \
 	ide-css-provider.h \
-	ide-debug.h \
 	ide-extension-util.c \
 	ide-extension-util.h \
 	ide-internal.h \
@@ -332,7 +359,6 @@ libide_1_0_la_SOURCES = \
 	ide-ref-ptr.c \
 	ide-ref-ptr.h \
 	ide-search-reducer.c \
-	ide-search-reducer.h \
 	ide-shortcuts-window.c \
 	ide-shortcuts-window.h \
 	ide-source-iter.c \
@@ -366,57 +392,36 @@ libide_1_0_la_SOURCES = \
 	preferences/ide-preferences-builtin.c \
 	preferences/ide-preferences-builtin.h \
 	preferences/ide-preferences-bin.c \
-	preferences/ide-preferences-bin.h \
 	preferences/ide-preferences-bin-private.h \
 	preferences/ide-preferences-entry.c \
-	preferences/ide-preferences-entry.h \
 	preferences/ide-preferences-flow-box.c \
-	preferences/ide-preferences-flow-box.h \
 	preferences/ide-preferences-font-button.c \
-	preferences/ide-preferences-font-button.h \
 	preferences/ide-preferences-group.c \
-	preferences/ide-preferences-group.h \
 	preferences/ide-preferences-group-private.h \
 	preferences/ide-preferences-language-row.c \
 	preferences/ide-preferences-language-row.h \
 	preferences/ide-preferences-page.c \
-	preferences/ide-preferences-page.h \
 	preferences/ide-preferences-page-private.h \
 	preferences/ide-preferences-perspective.c \
 	preferences/ide-preferences-perspective.h \
 	preferences/ide-preferences-spin-button.c \
-	preferences/ide-preferences-spin-button.h \
 	preferences/ide-preferences-switch.c \
-	preferences/ide-preferences-switch.h \
 	search/ide-omni-search-display.c \
-	search/ide-omni-search-display.h \
 	search/ide-omni-search-entry.c \
-	search/ide-omni-search-entry.h \
 	search/ide-omni-search-group.c \
-	search/ide-omni-search-group.h \
 	search/ide-omni-search-row.c \
-	search/ide-omni-search-row.h \
 	theatrics/ide-box-theatric.c \
 	theatrics/ide-box-theatric.h \
 	util/ide-cairo.c \
-	util/ide-cairo.h \
 	util/ide-dnd.c \
-	util/ide-dnd.h \
 	util/ide-doc-seq.c \
 	util/ide-doc-seq.h \
 	util/ide-gdk.c \
-	util/ide-gdk.h \
 	util/ide-gtk.c \
-	util/ide-gtk.h \
 	util/ide-line-reader.c \
-	util/ide-line-reader.h \
-	util/ide-list-inline.h \
 	util/ide-pango.c \
-	util/ide-pango.h \
 	util/ide-posix.c \
-	util/ide-posix.h \
 	util/ide-rgba.c \
-	util/ide-rgba.h \
 	util/ide-text-util.c \
 	util/ide-text-util.h \
 	util/ide-window-settings.c \
@@ -566,6 +571,7 @@ INTROSPECTION_COMPILER_ARGS = \
 
 introspection_sources = \
 	$(libide_1_0_la_public_sources) \
+	$(libide_1_0_la_public_headers) \
 	$(NULL)
 
 Ide-1.0.gir: libide-1.0.la

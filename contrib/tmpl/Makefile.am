@@ -12,9 +12,10 @@ EXTRA_DIST = \
 	tmpl-expr-parser.c \
 	tmpl-expr-parser.h \
 	tmpl-expr-scanner.c \
-	tmpl-expr-scanner.h
+	tmpl-expr-scanner.h \
+	$(NULL)
 
-pkgincludedir = $(includedir)/template-glib-1.0
+pkgincludedir = $(includedir)/gnome-builder-@VERSION@/template-glib
 pkginclude_HEADERS = \
 	tmpl-error.h \
 	tmpl-expr-types.h \
