@@ -208,6 +208,7 @@
     </child>
     <child>
       <object class="GtkButton" id="new_button">
+        <property name="tooltip-text" translatable="yes">Create a new project</property>
         <property name="action-name">win.perspective</property>
         <property name="action-target">'genesis'</property>
         <property name="visible">true</property>
@@ -224,6 +225,7 @@
     </child>
     <child>
       <object class="GtkToggleButton" id="search_button">
+        <property name="tooltip-text" translatable="yes">Search for projects</property>
         <property name="visible">true</property>
         <style>
           <class name="image-button"/>
@@ -242,6 +244,7 @@
     </child>
     <child>
       <object class="GtkToggleButton" id="selection_button">
+        <property name="tooltip-text" translatable="yes">Select projects for removal</property>
         <property name="action-name">perspective.state</property>
         <property name="action-target">'selection'</property>
         <style>
@@ -261,6 +264,7 @@
     </child>
     <child>
       <object class="GtkButton" id="cancel_button">
+        <property name="tooltip-text" translatable="yes">Return to project selection</property>
         <property name="label" translatable="yes">_Cancel</property>
         <property name="use-underline">true</property>
         <property name="action-name">perspective.state</property>
