@@ -31,6 +31,7 @@ static const gchar *ide_application_credits_artists[] = {
 };
 
 static const gchar *ide_application_credits_authors[] = {
+  "Akshaya Kakkilaya",
   "Alex285",
   "Alexander Larsson",
   "Alexandre Franke",
@@ -52,6 +53,7 @@ static const gchar *ide_application_credits_authors[] = {
   "Christian Hergert",
   "Christian Kirbach",
   "Cosimo Cecchi",
+  "Daiki Ueno",
   "Damien Lespiau",
   "Daniel Korostil",
   "Daniel Mustieles",
@@ -88,6 +90,7 @@ static const gchar *ide_application_credits_authors[] = {
   "Mario Sanchez Prada",
   "Matej Urbančič",
   "Mathieu Bridon",
+  "Mathieu Duponchelle",
   "Matthias Clasen",
   "Megh Parikh",
   "Michael Catanzaro",
