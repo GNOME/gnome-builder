@@ -173,7 +173,10 @@ ide_editor_perspective_load_buffer (IdeEditorPerspective *self,
    * created, not when it's reloaded.
    */
   if (reloading)
-    return;
+    {
+      ide_buffer_manager_set_focus_buffer (buffer_manager, buffer);
+      return;
+    }
 
   IDE_TRACE_MSG ("Loading %s", ide_buffer_get_title (buffer));
 
