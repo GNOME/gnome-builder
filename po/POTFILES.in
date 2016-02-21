@@ -4,6 +4,7 @@ contrib/egg/egg-animation.c
 contrib/egg/egg-date-time.c
 contrib/egg/egg-search-bar.c
 contrib/search/trie.c
+contrib/tmpl/tmpl-expr-parser.c
 contrib/tmpl/tmpl-parser.c
 contrib/tmpl/tmpl-template.c
 contrib/tmpl/tmpl-template-locator.c
