@@ -240,7 +240,7 @@ ide_ctags_completion_provider_populate (GtkSourceCompletionProvider *provider,
           if (g_hash_table_contains (completions, entry->name))
             continue;
 
-          g_hash_table_add (completions, entry->name);
+          g_hash_table_add (completions, (gchar *)entry->name);
 
           if (!ide_ctags_is_allowed (entry, allowed))
             continue;
