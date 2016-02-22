@@ -7,6 +7,7 @@ plugin_LTLIBRARIES = libvala-pack-plugin.la
 dist_plugin_DATA = vala-pack.plugin
 
 libvala_pack_plugin_la_SOURCES = \
+	config.vapi \
 	ide-vala-service.vala \
 	ide-vala-completion.vala \
 	ide-vala-completion-item.vala \
@@ -38,6 +39,7 @@ libvala_pack_plugin_la_VALAFLAGS = \
 	$(NULL)
 
 libvala_pack_plugin_la_CFLAGS = \
+	-DPACKAGE_DATADIR=\""$(datadir)/gnome-builder"\" \
 	-DG_LOG_DOMAIN=\"vala-pack-plugin\" \
 	-DGETTEXT_PACKAGE=\"gnome-builder\" \
 	$(LIBIDE_CFLAGS) \

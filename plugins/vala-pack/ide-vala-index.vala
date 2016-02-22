@@ -87,6 +87,10 @@ namespace Ide
 				this.code_context.add_define ("GLIB_2_%d".printf (i));
 			}
 
+			this.code_context.vapi_directories = {
+				Path.build_filename (Config.PACKAGE_DATADIR, "vapi"),
+			};
+
 			this.code_context.add_external_package ("glib-2.0");
 			this.code_context.add_external_package ("gobject-2.0");
 
