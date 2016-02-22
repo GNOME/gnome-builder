@@ -40,9 +40,10 @@ AS_IF([test x$enable_vala_pack_plugin = xyes],[
 		LIBS="${libs_save}"
 	])
 	AC_MSG_RESULT([$have_vala_symbol_get_deprecated])
-
-	AM_CONDITIONAL(ENABLE_VALA_SYMBOL_GET_DEPRECATED, test x$have_vala_symbol_get_deprecated = xyes)
 ])
+
+# for if ENABLE_VALA_SYMBOL_GET_DEPRECATED in .vala files
+AM_CONDITIONAL(ENABLE_VALA_SYMBOL_GET_DEPRECATED, test x$have_vala_symbol_get_deprecated = xyes)
 
 # for if ENABLE_VALA_PACK_PLUGIN in Makefile.am
 AM_CONDITIONAL(ENABLE_VALA_PACK_PLUGIN, test x$enable_vala_pack_plugin = xyes)
