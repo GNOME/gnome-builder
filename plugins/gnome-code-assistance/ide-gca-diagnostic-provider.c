@@ -22,6 +22,7 @@
 #include <glib/gi18n.h>
 
 #include "ide-context.h"
+#include "ide-debug.h"
 #include "ide-diagnostics.h"
 #include "ide-file.h"
 #include "ide-gca-diagnostic-provider.h"
@@ -107,6 +108,8 @@ variant_to_diagnostics (DiagnoseState *state,
   gchar *d = NULL;
   guint a;
 
+  IDE_PROBE;
+
   g_assert (variant);
 
   ar = g_ptr_array_new ();
@@ -189,13 +192,16 @@ diagnostics_cb (GObject      *object,
   IdeDiagnostics *diagnostics;
   DiagnoseState *state;
 
+  IDE_ENTRY;
+
   g_assert (G_IS_TASK (task));
   g_assert (G_IS_ASYNC_RESULT (result));
 
   if (!gca_diagnostics_call_diagnostics_finish (proxy, &var, result, &error))
     {
+      IDE_TRACE_MSG ("%s", error->message);
       g_task_return_error (task, error);
-      return;
+      IDE_EXIT;
     }
 
   state = g_task_get_task_data (task);
@@ -205,6 +211,8 @@ diagnostics_cb (GObject      *object,
 
   g_task_return_pointer (task, diagnostics,
                          (GDestroyNotify)ide_diagnostics_unref);
+
+  IDE_EXIT;
 }
 
 static void
@@ -218,6 +226,8 @@ get_diag_proxy_cb (GObject      *object,
   GError *error = NULL;
   const gchar *path;
 
+  IDE_ENTRY;
+
   g_assert (G_IS_TASK (task));
   g_assert (G_IS_ASYNC_RESULT (result));
 
@@ -228,7 +238,7 @@ get_diag_proxy_cb (GObject      *object,
   if (!proxy)
     {
       g_task_return_error (task, error);
-      return;
+      IDE_EXIT;
     }
 
   path = g_dbus_proxy_get_object_path (G_DBUS_PROXY (proxy));
@@ -238,6 +248,8 @@ get_diag_proxy_cb (GObject      *object,
                                     g_task_get_cancellable (task),
                                     diagnostics_cb,
                                     g_object_ref (task));
+
+  IDE_EXIT;
 }
 
 static void
@@ -254,6 +266,8 @@ parse_cb (GObject      *object,
   GError *error = NULL;
   g_autofree gchar *document_path = NULL;
 
+  IDE_ENTRY;
+
   g_assert (GCA_IS_SERVICE (proxy));
   g_assert (G_IS_TASK (task));
 
@@ -264,8 +278,9 @@ parse_cb (GObject      *object,
 
   if (!ret)
     {
+      IDE_TRACE_MSG ("%s", error->message);
       g_task_return_error (task, error);
-      return;
+      IDE_EXIT;
     }
 
   doc_proxy = g_hash_table_lookup (self->document_cache, document_path);
@@ -286,13 +301,15 @@ parse_cb (GObject      *object,
                                  g_task_get_cancellable (task),
                                  get_diag_proxy_cb,
                                  g_object_ref (task));
-      return;
+      IDE_EXIT;
     }
 
   gca_diagnostics_call_diagnostics (doc_proxy,
                                     g_task_get_cancellable (task),
                                     diagnostics_cb,
                                     g_object_ref (task));
+
+  IDE_EXIT;
 }
 
 static void
@@ -311,6 +328,8 @@ get_proxy_cb (GObject      *object,
   GVariant *cursor = NULL;
   GVariant *options = NULL;
 
+  IDE_ENTRY;
+
   g_assert (G_IS_TASK (task));
   g_assert (IDE_IS_GCA_SERVICE (service));
 
@@ -322,7 +341,7 @@ get_proxy_cb (GObject      *object,
   if (!proxy)
     {
       g_task_return_error (task, error);
-      goto cleanup;
+      IDE_GOTO (cleanup);
     }
 
   gfile = ide_file_get_file (state->file);
@@ -334,7 +353,7 @@ get_proxy_cb (GObject      *object,
                                G_IO_ERROR,
                                G_IO_ERROR_NOT_SUPPORTED,
                                _("Code assistance requires a local file."));
-      goto cleanup;
+      IDE_GOTO (cleanup);
     }
 
   if (state->unsaved_file)
@@ -344,7 +363,7 @@ get_proxy_cb (GObject      *object,
                                      &error))
         {
           g_task_return_error (task, error);
-          goto cleanup;
+          IDE_GOTO (cleanup);
         }
 
       temp_path = ide_unsaved_file_get_temp_path (state->unsaved_file);
@@ -365,6 +384,8 @@ get_proxy_cb (GObject      *object,
 
 cleanup:
   g_clear_object (&proxy);
+
+  IDE_EXIT;
 }
 
 static void
@@ -384,6 +405,8 @@ ide_gca_diagnostic_provider_diagnose_async (IdeDiagnosticProvider *provider,
   const gchar *language_id;
   GFile *gfile;
 
+  IDE_ENTRY;
+
   g_return_if_fail (IDE_IS_GCA_DIAGNOSTIC_PROVIDER (self));
 
   task = g_task_new (self, cancellable, callback, user_data);
@@ -397,7 +420,7 @@ ide_gca_diagnostic_provider_diagnose_async (IdeDiagnosticProvider *provider,
                                G_IO_ERROR,
                                G_IO_ERROR_NOT_SUPPORTED,
                                "No language specified, code assistance not supported.");
-      return;
+      IDE_EXIT;
     }
 
   context = ide_object_get_context (IDE_OBJECT (provider));
@@ -415,6 +438,8 @@ ide_gca_diagnostic_provider_diagnose_async (IdeDiagnosticProvider *provider,
 
   ide_gca_service_get_proxy_async (service, language_id, cancellable,
                                    get_proxy_cb, g_object_ref (task));
+
+  IDE_EXIT;
 }
 
 static IdeDiagnostics *
@@ -423,11 +448,16 @@ ide_gca_diagnostic_provider_diagnose_finish (IdeDiagnosticProvider  *self,
                                              GError                **error)
 {
   GTask *task = (GTask *)result;
+  IdeDiagnostics *ret;
+
+  IDE_ENTRY;
 
   g_return_val_if_fail (IDE_IS_GCA_DIAGNOSTIC_PROVIDER (self), NULL);
   g_return_val_if_fail (G_IS_TASK (task), NULL);
 
-  return g_task_propagate_pointer (task, error);
+  ret = g_task_propagate_pointer (task, error);
+
+  IDE_RETURN (ret);
 }
 
 static void
