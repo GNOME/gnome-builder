@@ -8,7 +8,6 @@
         <property name="visible">true</property>
         <child>
           <object class="GtkCheckButton" id="checkbox">
-            <property name="tooltip-text" translatable="yes">Select to open project in Builder</property>
             <property name="margin-start">12</property>
             <property name="valign">center</property>
             <property name="vexpand">true</property>
