@@ -45,6 +45,17 @@ IDE_FILE_SETTINGS_PROPERTY (INSERT_TRAILING_NEWLINE, insert_trailing_newline,
                             priv->insert_trailing_newline = !!insert_trailing_newline;,
                             boolean)
 
+IDE_FILE_SETTINGS_PROPERTY (OVERWRITE_BRACES, overwrite_braces,
+                            gboolean, gboolean,
+                            "overwrite-braces",
+                            g_param_spec_boolean ("overwrite-braces",
+                                                  "Overwrite Braces",
+                                                  "Type over existing braces",
+                                                  FALSE,
+                                                  (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS)),
+                            priv->overwrite_braces = !!overwrite_braces;,
+                            boolean)
+
 IDE_FILE_SETTINGS_PROPERTY (NEWLINE_TYPE, newline_type,
                             GtkSourceNewlineType, GtkSourceNewlineType,
                             "newline-type",

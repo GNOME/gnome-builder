@@ -118,7 +118,7 @@
                         <property name="enable-word-completion">true</property>
                         <property name="highlight-current-line">true</property>
                         <property name="insert-matching-brace">true</property>
-                        <property name="overwrite-braces">true</property>
+                        <property name="overwrite-braces">false</property>
                         <property name="scroll-offset">0</property>
                         <property name="show-grid-lines">true</property>
                         <property name="show-line-changes">true</property>
