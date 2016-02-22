@@ -144,6 +144,9 @@ libide_1_0_la_public_headers = \
 	preferences/ide-preferences-flow-box.h \
 	preferences/ide-preferences-font-button.h \
 	preferences/ide-preferences-group.h \
+	preferences/ide-preferences-page.h \
+	preferences/ide-preferences-spin-button.h \
+	preferences/ide-preferences-switch.h \
 	search/ide-omni-search-display.h \
 	search/ide-omni-search-entry.h \
 	search/ide-omni-search-group.h \
