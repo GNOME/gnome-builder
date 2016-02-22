@@ -16,6 +16,8 @@ libclang_plugin_la_SOURCES = \
 	ide-clang-diagnostic-provider.h \
 	ide-clang-highlighter.c \
 	ide-clang-highlighter.h \
+	ide-clang-preferences-addin.c \
+	ide-clang-preferences-addin.h \
 	ide-clang-private.h \
 	ide-clang-service.c \
 	ide-clang-service.h \
