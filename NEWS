@@ -1,3 +1,61 @@
+===============
+Version 3.19.90
+===============
+
+GNOME 3.20 is heating up and so is Builder. We've landed a bunch more
+features for you since 3.19.4 and are ready for more general testing
+while we stablize for the upcoming 3.20 release.
+
+In this release, you'll find:
+
+ • A new diagnostic provider for common gettext errors (Daiki Ueno)
+ • Builder no longer bookmarks known temporary directories.
+   This should make things less annoying when opening a single
+   file with Builder. (Akshaya Kakkilaya)
+ • The framework for User Help has landed, and we need your help to
+   put together a good help story in Builder! (Alexandre Franke)
+ • Terminal styling for Dark Mode has been fixed (Carlos Soriano)
+ • Preferences layout was extracted into EggColumnLayout and fixed
+   various Height for Width issues.
+   See https://blogs.gnome.org/chergert/2016/02/05/eggcolumnlayout/
+ • Preferences for disabling various diagnostic engines was added.
+ • Improvements to our shared library template (Philip Withnall,
+   Igor Gnatenko)
+   See `ide create-project --help` for more information.
+ • A configuration manager has been added to allow building various
+   project configurations. A configruation editor allows you to
+   create new and tweak existing configurations.
+ • Support building projects inside xdg-app runtime, using
+   "xdg-app build"
+ • Support for building inside of a jhbuild runtime (Patrick Griffis)
+ • Various tooltips were added to the user interface (Piotr Drąg,
+   Adrian Zatreanu)
+ • The line change gutter got support for rendering deleted lines.
+ • Ctags got support for coalescing similar completion results. (chandu)
+ • Cursor location history and ctags were moved to .cache directories.
+   (Megh Parikh)
+ • Libide, Egg, and Template-GLib headers are now installed to
+   $(includedir)/gnome-builder-@VERSION@. This allows building C
+   and vala plugins out of tree.
+ • Support for enabling pylint via GNOME Code Assistance was added.
+ • You can search for projects in the greeter using the directory name.
+ • An empty state splash was added to the editor.
+ • Various workarounds for recent changes in Vala.
+ • Various fixes to the command bar availability (Sebastien Lafargue)
+ • Vim improvements (Sebastien Lafargue)
+ • Plugins can remove preferences when unloading (Sebastien Lafargue)
+ • Many improvements to translations (Alexandre Franke, Anders Jonsson,
+   Artur de Aquino Morais, Aurimas Černius, Balázs Meskó,
+   Baurzhan Muftakhidinov, Chao-Hsiung Liao, Daniel Mustieles,
+   Dušan Kazik, Fran Dieguez, Gábor Kelemen, Mario Blättermann,
+   Piotr Drąg, Rafael Fontenelle, Rūdolfs Mazurs)
+
+Happy Hacking!
+
+Please help us shake out the bugs by running Builder and reporting
+bugs to https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-builder
+
+
 ==============
 Version 3.19.4
 ==============
