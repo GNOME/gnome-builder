@@ -2,12 +2,13 @@
 # Please keep this file sorted alphabetically.
 contrib/tmpl/tmpl-expr-parser.c
 plugins/vala-pack/ide-vala-preferences-addin.c
+sub/plugins/vala-pack/ide-vala-preferences-addin.c
 tests/menus.ui
 tools/ide-build.c
 tools/ide-list-build-flags.c
 tools/ide-list-devices.c
 tools/ide-list-diagnostics.c
-tools/ide-list-files.c
 tools/ide-list-file-settings.c
+tools/ide-list-files.c
 tools/ide-mine-projects.c
 tools/ide-search.c

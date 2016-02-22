@@ -1,12 +1,30 @@
 if ENABLE_VALA_PACK_PLUGIN
 
+# NOTE:
+#
+# This does not use the normal _SOURCES support for Vala in automake.
+# This is because we need to ship files that are generated on the
+# build machine, based on the vala it has available. These can change
+# as has been seen in API breaks in libvala. Make sure you add any
+# new .vala file to _VALASOURCES and the corresponding C file to
+# _SOURCES.
+
 EXTRA_DIST = $(plugin_DATA)
 
 plugindir = $(libdir)/gnome-builder/plugins
 plugin_LTLIBRARIES = libvala-pack-plugin.la
 dist_plugin_DATA = vala-pack.plugin
 
-libvala_pack_plugin_la_SOURCES = \
+BUILT_SOURCES = libvala_pack_plugin_la.stamp
+
+libvala_pack_plugin_la.stamp: $(libvala_pack_plugin_la_VALASOURCES)
+	$(AM_V_GEN)$(VALAC) \
+		$(libvala_pack_plugin_la_VALAFLAGS) \
+		$(addprefix $(srcdir)/,$(libvala_pack_plugin_la_VALASOURCES)) \
+		--ccode \
+		&& touch $@
+
+libvala_pack_plugin_la_VALASOURCES = \
 	config.vapi \
 	ide-vala-service.vala \
 	ide-vala-completion.vala \
@@ -23,6 +41,27 @@ libvala_pack_plugin_la_SOURCES = \
 	ide-vala-symbol-tree.vala \
 	vala-pack-plugin.vala \
 	$(NULL)
+
+EXTRA_DIST += $(libvala_pack_plugin_la_VALASOURCES)
+
+nodist_libvala_pack_plugin_la_SOURCES = \
+	ide-vala-service.c \
+	ide-vala-completion.c \
+	ide-vala-completion-item.c \
+	ide-vala-completion-provider.c \
+	ide-vala-diagnostics.c \
+	ide-vala-diagnostic-provider.c \
+	ide-vala-indenter.c \
+	ide-vala-index.c \
+	ide-vala-locator.c \
+	ide-vala-preferences-addin.c \
+	ide-vala-source-file.c \
+	ide-vala-symbol-resolver.c \
+	ide-vala-symbol-tree.c \
+	vala-pack-plugin.c \
+	$(NULL)
+
+CLEANFILES = $(BUILT_SOURCES) $(nodist_libvala_pack_plugin_la_SOURCES)
 
 libvala_pack_plugin_la_VALAFLAGS = \
 	--target-glib=2.44 \
