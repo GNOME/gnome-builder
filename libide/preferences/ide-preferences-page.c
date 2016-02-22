@@ -147,6 +147,11 @@ ide_preferences_page_add_group (IdePreferencesPage  *self,
   gtk_container_add (GTK_CONTAINER (self->box), GTK_WIDGET (group));
 }
 
+/**
+ * ide_preferences_page_get_group:
+ *
+ * Returns: (transfer none) (nullable): An #IdePreferencesGroup or %NULL.
+ */
 IdePreferencesGroup *
 ide_preferences_page_get_group (IdePreferencesPage *self,
                                 const gchar        *name)
