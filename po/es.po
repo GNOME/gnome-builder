@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-02-17 11:39+0000\n"
-"PO-Revision-Date: 2016-02-18 15:04+0100\n"
+"POT-Creation-Date: 2016-02-22 08:03+0000\n"
+"PO-Revision-Date: 2016-02-22 18:26+0100\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Español; Castellano <gnome-es-list@gnome.org>\n"
 "Language: \n"
@@ -304,7 +304,6 @@ msgid "OVR"
 msgstr "OVR"
 
 #: ../data/ui/ide-editor-perspective.ui.h:1
-#| msgid "Show list of open files"
 msgid "No open files"
 msgstr "No hay archivos abiertos"
 
@@ -350,7 +349,7 @@ msgid "Smart Backspace"
 msgstr "Retroceso inteligente"
 
 #: ../data/ui/ide-editor-tweak-widget.ui.h:7
-#: ../libide/preferences/ide-preferences-builtin.c:233
+#: ../libide/preferences/ide-preferences-builtin.c:234
 msgid "Indentation"
 msgstr "Sangrado"
 
@@ -393,12 +392,10 @@ msgstr ""
 "¿Quiere recargarlo?"
 
 #: ../data/ui/ide-editor-view.ui.h:4
-#| msgid "Show line numbers"
 msgid "Go to line number"
 msgstr "Ir a la línea número"
 
 #: ../data/ui/ide-editor-view.ui.h:5
-#| msgid "Use Clang to suggest completions for C and C++ languages"
 msgid "Change editor settings and language"
 msgstr "Cambiar el idioma y las opciones del editor"
 
@@ -444,7 +441,6 @@ msgid "_New"
 msgstr "_Nuevo"
 
 #: ../data/ui/ide-layout-tab-bar.ui.h:1
-#| msgid "Show list of open files"
 msgid "List open files"
 msgstr "Listar los archivos abiertos"
 
@@ -453,20 +449,14 @@ msgid "Add a new empty file to your project"
 msgstr "Añadir un archivo nuevo vacío al proyecto"
 
 #: ../data/ui/ide-layout-tab.ui.h:1
-#| msgctxt "shortcut window"
-#| msgid "Move to previous edit location"
 msgid "Jump to previous location"
 msgstr "Mover a la ubicación anterior"
 
 #: ../data/ui/ide-layout-tab.ui.h:2
-#| msgctxt "shortcut window"
-#| msgid "Move to next edit location"
 msgid "Jump to next location"
 msgstr "Mover a la siguiente ubicación"
 
 #: ../data/ui/ide-layout-tab.ui.h:3
-#| msgctxt "shortcut window"
-#| msgid "Close the document"
 msgid "Close the current document"
 msgstr "Cerrar el documento actual"
 
@@ -475,7 +465,6 @@ msgid "_Select"
 msgstr "_Seleccionar"
 
 #: ../data/ui/ide-preferences-perspective.ui.h:1
-#| msgid "Search Preferences…"
 msgid "Search through preferences"
 msgstr "Buscar en las preferencias"
 
@@ -775,7 +764,7 @@ msgstr "%u de %u"
 msgid "Re_veal in Project Tree"
 msgstr "_Mostrar en el árbol del proyectos"
 
-#: ../libide/editor/ide-editor-perspective.c:413
+#: ../libide/editor/ide-editor-perspective.c:456
 #: ../libide/preferences/ide-preferences-builtin.c:102
 #: ../libide/preferences/ide-preferences-builtin.c:125
 msgid "Editor"
@@ -916,16 +905,16 @@ msgstr "Al idioma actual le falta un resolutor de símbolos."
 msgid "File too large to be opened."
 msgstr "El archivo es demasiado grande para poder abrirlo."
 
-#: ../libide/ide-buffer-manager.c:1456
+#: ../libide/ide-buffer-manager.c:1461
 msgid "Words"
 msgstr "Palabras"
 
-#: ../libide/ide-buffer-manager.c:1668
+#: ../libide/ide-buffer-manager.c:1673
 #, c-format
 msgid "unsaved document %u"
 msgstr "Documento %u sin guardar"
 
-#: ../libide/ide-buffer-manager.c:1702
+#: ../libide/ide-buffer-manager.c:1707
 msgid "Failed to save buffer, ignoring reclamation."
 msgstr "Falló al guardar el búfer, ignorando reclamación."
 
@@ -956,11 +945,11 @@ msgstr "Debe llamar a %s() antes de usar libide"
 msgid "Default Configuration"
 msgstr "Configuración predeterminada"
 
-#: ../libide/ide-context.c:1790
+#: ../libide/ide-context.c:1828
 msgid "An unload request is already pending"
 msgstr "Ya hay una solicitud de descarga pendiente"
 
-#: ../libide/ide-context.c:1905
+#: ../libide/ide-context.c:1943
 msgid "Context has already been restored."
 msgstr "Ya se ha restaurado el contexto."
 
@@ -1042,13 +1031,11 @@ msgstr "Falló al cargar el archivo: %s: %s"
 
 #: ../libide/ide-source-view.c:4966
 #, c-format
-#| msgid "Insert \"%s\""
 msgid "Insert “%s”"
 msgstr "Insertar «%s»"
 
 #: ../libide/ide-source-view.c:4968
 #, c-format
-#| msgid "Replace \"%s\" with \"%s\""
 msgid "Replace “%s” with “%s”"
 msgstr "Reemplazar «%s» con «%s»"
 
@@ -1424,61 +1411,70 @@ msgstr ""
 "Al guardar, se eliminarán los espacios en blanco del final de las líneas "
 "modificadas."
 
-#: ../libide/preferences/ide-preferences-builtin.c:229
+#: ../libide/preferences/ide-preferences-builtin.c:228
+msgid "Overwrite Braces"
+msgstr "Sobrescribir llaves"
+
+#: ../libide/preferences/ide-preferences-builtin.c:228
+#| msgid "Overwrite Braces"
+msgid "Overwrite closing braces"
+msgstr "Sobrescribir cierres de llaves"
+
+#: ../libide/preferences/ide-preferences-builtin.c:230
 msgid "Margins"
 msgstr "Márgenes"
 
-#: ../libide/preferences/ide-preferences-builtin.c:230
+#: ../libide/preferences/ide-preferences-builtin.c:231
 msgid "Show right margin"
 msgstr "Mostrar margen derecho"
 
-#: ../libide/preferences/ide-preferences-builtin.c:231
+#: ../libide/preferences/ide-preferences-builtin.c:232
 msgid "Right margin position"
 msgstr "Posición del margen derecho"
 
-#: ../libide/preferences/ide-preferences-builtin.c:231
+#: ../libide/preferences/ide-preferences-builtin.c:232
 msgid "Position in spaces for the right margin"
 msgstr "Posición en espacios para el margen derecho"
 
-#: ../libide/preferences/ide-preferences-builtin.c:234
+#: ../libide/preferences/ide-preferences-builtin.c:235
 msgid "Tab width"
 msgstr "Anchura del tabulador"
 
-#: ../libide/preferences/ide-preferences-builtin.c:234
+#: ../libide/preferences/ide-preferences-builtin.c:235
 msgid "Width of a tab character in spaces"
 msgstr "Anchura en espacios del tabulador"
 
-#: ../libide/preferences/ide-preferences-builtin.c:235
+#: ../libide/preferences/ide-preferences-builtin.c:236
 msgid "Insert spaces instead of tabs"
 msgstr "Insertar espacios en lugar de tabuladores"
 
-#: ../libide/preferences/ide-preferences-builtin.c:235
+#: ../libide/preferences/ide-preferences-builtin.c:236
 msgid "Prefer spaces over use of tabs"
 msgstr "Insertar espacios en lugar de tabuladores"
 
-#: ../libide/preferences/ide-preferences-builtin.c:236
+#: ../libide/preferences/ide-preferences-builtin.c:237
 msgid "Automatically indent"
 msgstr "Sangrar automáticamente"
 
-#: ../libide/preferences/ide-preferences-builtin.c:236
+#: ../libide/preferences/ide-preferences-builtin.c:237
 msgid "Indent source code as you type"
 msgstr "Sangrar el código fuente a medida que escribe"
 
-#: ../libide/preferences/ide-preferences-builtin.c:242
+#: ../libide/preferences/ide-preferences-builtin.c:243
 #: ../plugins/build-tools/gbp-build-workbench-addin.c:270
 msgid "Build"
 msgstr "Construir"
 
-#: ../libide/preferences/ide-preferences-builtin.c:244
+#: ../libide/preferences/ide-preferences-builtin.c:245
 #: ../plugins/build-tools/gbp-build-configuration-view.ui.h:1
 msgid "General"
 msgstr "General"
 
-#: ../libide/preferences/ide-preferences-builtin.c:245
+#: ../libide/preferences/ide-preferences-builtin.c:246
 msgid "Build Workers"
 msgstr "Construir trabajadores"
 
-#: ../libide/preferences/ide-preferences-builtin.c:245
+#: ../libide/preferences/ide-preferences-builtin.c:246
 msgid "Number of parallel build workers"
 msgstr "Número de constructores en paralelo"
 
@@ -1605,7 +1601,6 @@ msgid "Invalid makefile provided, ignoring."
 msgstr "Se ha proporcionado un Makefile no válido, ignorando."
 
 #: ../plugins/build-tools/gbp-build-configuration-view.ui.h:2
-#| msgid "The name of the action"
 msgid "The name of the build configuration"
 msgstr "El nombre de la configuración de construcción"
 
@@ -1614,8 +1609,8 @@ msgid "Name"
 msgstr "Nombre"
 
 #: ../plugins/build-tools/gbp-build-configuration-view.ui.h:4
-#| msgid "The path within the project."
-msgid "The prefix to use when installiing the project"
+#| msgid "The prefix to use when installiing the project"
+msgid "The prefix to use when installing the project"
 msgstr "El prefijo que usar al instalar el proyecto"
 
 #: ../plugins/build-tools/gbp-build-configuration-view.ui.h:5
@@ -1627,7 +1622,6 @@ msgid "Options to use when bootstrapping the project"
 msgstr "Opciones que usar al inicializar el proyecto"
 
 #: ../plugins/build-tools/gbp-build-configuration-view.ui.h:7
-#| msgid "Configuring…"
 msgid "Configure Options"
 msgstr "Configurar opciones"
 
@@ -1640,7 +1634,6 @@ msgid "Delete Configuration"
 msgstr "Eliminar configuración"
 
 #: ../plugins/build-tools/gbp-build-configuration-view.ui.h:10
-#| msgid "Device:"
 msgid "Device"
 msgstr "Dispositivo"
 
@@ -1856,6 +1849,21 @@ msgstr "anónimo"
 #: ../plugins/clang/ide-clang-translation-unit.c:656
 msgid "clang_codeCompleteAt() only works on local files"
 msgstr "clang_codeCompleteAt() solo funciona con archivos locales"
+
+#: ../plugins/clang/ide-clang-preferences-addin.c:62
+msgid "Clang"
+msgstr "Clang"
+
+#: ../plugins/clang/ide-clang-preferences-addin.c:63
+#| msgid "Show errors and warnings provided by Vala"
+msgid "Show errors and warnings provided by Clang"
+msgstr "Mostrar errores y advertencias proporcionadas por Clang"
+
+#. translators: keywords used when searching for preferences
+#: ../plugins/clang/ide-clang-preferences-addin.c:65
+#| msgid "vala diagnostics warnings errors"
+msgid "clang diagnostics warnings errors"
+msgstr "clang diagnósticos advertencias errors"
 
 #: ../plugins/command-bar/gb-command-bar.c:299
 #, c-format
@@ -2086,7 +2094,7 @@ msgstr "Control de versiones"
 msgid "Attribution"
 msgstr "Atribución"
 
-#: ../plugins/gnome-code-assistance/ide-gca-diagnostic-provider.c:336
+#: ../plugins/gnome-code-assistance/ide-gca-diagnostic-provider.c:375
 msgid "Code assistance requires a local file."
 msgstr "La asistencia de código requiere de un archivo local."
 
@@ -2272,6 +2280,19 @@ msgstr "Mostrar errores y advertencias proporcionadas por Vala"
 #: ../plugins/vala-pack/ide-vala-preferences-addin.vala:35
 msgid "vala diagnostics warnings errors"
 msgstr "diagnósticos de alertas y errores de Vala"
+
+#: ../plugins/gnome-code-assistance/ide-gca-preferences-addin.c:62
+msgid "Pylint"
+msgstr "Pylint"
+
+#: ../plugins/gnome-code-assistance/ide-gca-preferences-addin.c:63
+msgid "Enable the use of pylint, which may execute code in your project"
+msgstr "Activar el uso de pylint, que puede ejecutar código en su proyecto"
+
+#. translators: these are keywords used to search for preferences
+#: ../plugins/gnome-code-assistance/ide-gca-preferences-addin.c:65
+msgid "pylint python lint code execute execution"
+msgstr "pylint python lint código ejecutar ejecución"
 
 #~ msgid "%s does not implement build_async()"
 #~ msgstr "%s no implementa build_async()"
@@ -2670,9 +2691,6 @@ msgstr "diagnósticos de alertas y errores de Vala"
 
 #~ msgid "Build Failure"
 #~ msgstr "Fallo al construir"
-
-#~ msgid "Clang"
-#~ msgstr "Clang"
 
 #~ msgid "CTags"
 #~ msgstr "CTags"
@@ -3269,9 +3287,6 @@ msgstr "diagnósticos de alertas y errores de Vala"
 
 #~ msgid "The display name of the keybinding mode."
 #~ msgstr "El nombre que mostrar del modo de asociaciones de teclas."
-
-#~ msgid "Overwrite Braces"
-#~ msgstr "Sobrescribir llaves"
 
 #~ msgid "Overwrite a matching brace/bracket/quotation/parenthesis."
 #~ msgstr "Sobrescribir una llave/corchete/cita/paréntesis coincidente."
