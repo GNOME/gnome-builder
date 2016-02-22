@@ -79,6 +79,7 @@ ide_greeter_project_row_create_search_text (IdeGreeterProjectRow *self,
   const gchar *tmp;
   IdeDoap *doap;
   GString *str;
+  GFile *file;
 
   g_assert (IDE_IS_GREETER_PROJECT_ROW (self));
 
@@ -107,6 +108,27 @@ ide_greeter_project_row_create_search_text (IdeGreeterProjectRow *self,
       if ((tmp = ide_doap_get_description (doap)))
         {
           g_string_append (str, tmp);
+          g_string_append (str, " ");
+        }
+    }
+
+  file = ide_project_info_get_file (project_info);
+
+  if (file != NULL)
+    {
+      g_autoptr(GFile) parent = g_file_get_parent (file);
+      g_autofree gchar *dir = parent ? g_file_get_basename (parent) : NULL;
+      g_autofree gchar *base = g_file_get_basename (file);
+
+      if (dir != NULL)
+        {
+          g_string_append (str, dir);
+          g_string_append (str, " ");
+        }
+
+      if (base != NULL)
+        {
+          g_string_append (str, base);
           g_string_append (str, " ");
         }
     }
