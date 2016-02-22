@@ -55,6 +55,8 @@ G_DEFINE_TYPE_EXTENDED (IdeGcaDiagnosticProvider, ide_gca_diagnostic_provider, I
                         G_IMPLEMENT_INTERFACE (IDE_TYPE_DIAGNOSTIC_PROVIDER,
                                                diagnostic_provider_iface_init))
 
+static GSettings *gca_settings;
+
 static void
 diagnose_state_free (gpointer data)
 {
@@ -312,12 +314,31 @@ parse_cb (GObject      *object,
   IDE_EXIT;
 }
 
+static GVariant *
+get_parse_options (void)
+{
+  if (G_UNLIKELY (gca_settings == NULL))
+    gca_settings = g_settings_new ("org.gnome.builder.gnome-code-assistance");
+
+  if (g_settings_get_boolean (gca_settings, "enable-pylint"))
+    {
+      GVariantBuilder builder;
+
+      g_variant_builder_init (&builder, G_VARIANT_TYPE_ARRAY);
+      g_variant_builder_add (&builder, "{sv}", "pylint", g_variant_new_boolean (TRUE));
+      return g_variant_builder_end (&builder);
+    }
+
+  return g_variant_new ("a{sv}", 0);
+}
+
 static void
 get_proxy_cb (GObject      *object,
               GAsyncResult *result,
               gpointer      user_data)
 {
   g_autoptr(GTask) task = user_data;
+  g_autoptr(GVariant) options = NULL;
   IdeGcaService *service = (IdeGcaService *)object;
   DiagnoseState *state;
   GcaService *proxy;
@@ -326,7 +347,6 @@ get_proxy_cb (GObject      *object,
   GFile *gfile;
   g_autofree gchar *path = NULL;
   GVariant *cursor = NULL;
-  GVariant *options = NULL;
 
   IDE_ENTRY;
 
@@ -371,7 +391,7 @@ get_proxy_cb (GObject      *object,
 
   /* TODO: Plumb support for cursors down to this level? */
   cursor = g_variant_new ("(xx)", (gint64)0, (gint64)0);
-  options = g_variant_new ("a{sv}", 0);
+  options = g_variant_ref_sink (get_parse_options ());
 
   gca_service_call_parse (proxy,
                           path,
