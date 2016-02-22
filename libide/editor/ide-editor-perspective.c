@@ -228,6 +228,38 @@ ide_editor_perspective_locate_buffer (GtkWidget *view,
     }
 }
 
+void
+ide_editor_perspective_focus_buffer_in_current_stack (IdeEditorPerspective *self,
+                                                      IdeBuffer            *buffer)
+{
+  GtkWidget *focus_stack;
+
+  g_assert (IDE_IS_EDITOR_PERSPECTIVE (self));
+  g_assert (IDE_IS_BUFFER (buffer));
+
+  focus_stack = ide_layout_grid_get_last_focus (self->grid);
+  g_assert (!focus_stack || IDE_IS_LAYOUT_STACK (focus_stack));
+
+  if (focus_stack != NULL)
+    {
+      IdeBuffer *search_buffer = buffer;
+      GtkWidget *view;
+
+      ide_layout_stack_foreach_view (IDE_LAYOUT_STACK (focus_stack),
+                                     ide_editor_perspective_locate_buffer,
+                                     &search_buffer);
+
+      if (search_buffer != NULL)
+        {
+          view = g_object_new (IDE_TYPE_EDITOR_VIEW,
+                               "document", buffer,
+                               "visible", TRUE,
+                               NULL);
+          ide_editor_perspective_add (GTK_CONTAINER (self), view);
+        }
+    }
+}
+
 static void
 ide_editor_perspective_notify_focus_buffer (IdeEditorPerspective *self,
                                             GParamSpec           *pspec,

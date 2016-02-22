@@ -25,6 +25,7 @@
 #include "ide-buffer.h"
 #include "ide-buffer-manager.h"
 #include "ide-context.h"
+#include "ide-debug.h"
 #include "ide-editor-perspective.h"
 #include "ide-editor-workbench-addin.h"
 #include "ide-workbench-header-bar.h"
@@ -140,6 +141,7 @@ ide_editor_workbench_addin_open_cb (GObject      *object,
                                     gpointer      user_data)
 {
   IdeBufferManager *buffer_manager = (IdeBufferManager *)object;
+  IdeEditorWorkbenchAddin *self;
   g_autoptr(IdeBuffer) buffer = NULL;
   g_autoptr(GTask) task = user_data;
   GError *error = NULL;
@@ -149,10 +151,14 @@ ide_editor_workbench_addin_open_cb (GObject      *object,
   g_assert (IDE_IS_BUFFER_MANAGER (buffer_manager));
   g_assert (G_IS_TASK (task));
 
+  self = g_task_get_source_object (task);
+  g_assert (IDE_IS_EDITOR_WORKBENCH_ADDIN (self));
+
   buffer = ide_buffer_manager_load_file_finish (buffer_manager, result, &error);
 
   if (buffer == NULL)
     {
+      IDE_TRACE_MSG ("%s", error->message);
       g_task_return_error (task, error);
       return;
     }
@@ -174,6 +180,9 @@ ide_editor_workbench_addin_open_cb (GObject      *object,
           gtk_text_buffer_select_range (GTK_TEXT_BUFFER (buffer), &iter, &iter);
         }
     }
+
+  if (self->perspective != NULL)
+    ide_editor_perspective_focus_buffer_in_current_stack (self->perspective, buffer);
 
   g_task_return_boolean (task, TRUE);
 }

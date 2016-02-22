@@ -31,8 +31,10 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeEditorPerspective, ide_editor_perspective, IDE, EDITOR_PERSPECTIVE, IdeLayout)
 
-void ide_editor_perspective_focus_location (IdeEditorPerspective *self,
-                                            IdeSourceLocation    *location);
+void ide_editor_perspective_focus_location                (IdeEditorPerspective *self,
+                                                           IdeSourceLocation    *location);
+void ide_editor_perspective_focus_buffer_in_current_stack (IdeEditorPerspective *self,
+                                                           IdeBuffer            *buffer);
 
 G_END_DECLS
 
