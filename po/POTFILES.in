@@ -75,6 +75,7 @@ plugins/build-tools/gbp-build-workbench-addin.c
 plugins/clang/ide-clang-service.c
 plugins/clang/ide-clang-symbol-node.c
 plugins/clang/ide-clang-translation-unit.c
+plugins/clang/ide-clang-preferences-addin.c
 plugins/command-bar/gb-command-bar.c
 plugins/command-bar/gb-vim.c
 plugins/contributing/contributing_plugin/helper.py
