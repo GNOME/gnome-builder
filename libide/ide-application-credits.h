@@ -65,6 +65,7 @@ static const gchar *ide_application_credits_authors[] = {
   "Elad Alfassa",
   "Erick Pérez Castellanos",
   "Fabiano Fidêncio",
+  "Felix Schwarz",
   "Florian Bäuerle",
   "Florian Müllner",
   "Fran Dieguez",
