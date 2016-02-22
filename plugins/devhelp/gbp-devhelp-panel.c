@@ -86,6 +86,8 @@ gbp_devhelp_panel_link_selected (GbpDevhelpPanel *self,
   uri = dh_link_get_uri (link);
   gbp_devhelp_view_set_uri (view, uri);
   g_free (uri);
+
+  ide_workbench_focus (workbench, GTK_WIDGET (view));
 }
 
 void
