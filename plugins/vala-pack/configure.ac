@@ -24,6 +24,24 @@ AS_IF([test x$enable_vala_pack_plugin = xyes],[
 	AS_IF([test x$enable_vala != xyes || test x$have_libvala != xyes],[
 		AC_MSG_ERROR([Please install both the vala compiler and vapigen. vapigen may be part of your systems vala-tools package.])
 	])
+
+	AS_IF([test x$have_libvala = xyes],[
+		cflags_save="${CFLAGS}"
+		libs_save="${LIBS}"
+		CFLAGS="${CFLAGS} ${VALA_CFLAGS}"
+		LIBS="${LIBS} ${VALA_LIBS}"
+		AC_MSG_CHECKING([if vala uses old-style symbol deprecations])
+		AC_TRY_LINK([#include <vala.h>],[
+			vala_symbol_get_deprecated (NULL);
+		],
+		[have_vala_symbol_get_deprecated=yes],
+		[have_vala_symbol_get_deprecated=no])
+		CFLAGS="${cflags_save}"
+		LIBS="${libs_save}"
+	])
+	AC_MSG_RESULT([$have_vala_symbol_get_deprecated])
+
+	AM_CONDITIONAL(ENABLE_VALA_SYMBOL_GET_DEPRECATED, test x$have_vala_symbol_get_deprecated = xyes)
 ])
 
 # for if ENABLE_VALA_PACK_PLUGIN in Makefile.am
