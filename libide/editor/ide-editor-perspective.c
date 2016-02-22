@@ -229,9 +229,9 @@ ide_editor_perspective_locate_buffer (GtkWidget *view,
 }
 
 static void
-ide_editor_perspective_focus_buffer (IdeEditorPerspective *self,
-                                     GParamSpec           *pspec,
-                                     IdeBufferManager     *buffer_manager)
+ide_editor_perspective_notify_focus_buffer (IdeEditorPerspective *self,
+                                            GParamSpec           *pspec,
+                                            IdeBufferManager     *buffer_manager)
 {
   IdeBuffer *buffer;
 
@@ -394,7 +394,7 @@ ide_editor_perspective_init (IdeEditorPerspective *self)
 
   egg_signal_group_connect_object (self->buffer_manager_signals,
                                    "notify::focus-buffer",
-                                   G_CALLBACK (ide_editor_perspective_focus_buffer),
+                                   G_CALLBACK (ide_editor_perspective_notify_focus_buffer),
                                    self,
                                    G_CONNECT_SWAPPED);
 
