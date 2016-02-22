@@ -69,8 +69,6 @@ libvala_pack_plugin_la_LDFLAGS = \
 
 include $(top_srcdir)/plugins/Makefile.plugin
 
-GITIGNOREFILES = ide-vala.h
-
 endif
 
 -include $(top_srcdir)/git.mk
