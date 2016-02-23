@@ -137,6 +137,25 @@ ide_application_increase_verbosity (void)
   return TRUE;
 }
 
+static gboolean
+application_service_timeout_cb (gpointer data)
+{
+  g_autoptr(IdeApplication) self = data;
+
+  g_assert (IDE_IS_APPLICATION (self));
+
+  /*
+   * We have a reference and a hold on the #IdeApplication as we are waiting
+   * for operations to be received via DBus. If we got any requests, for
+   * something like Activate(), we'll already have another hold on the
+   * application for the window. Therefore, all we should need to do is drop
+   * the application hold we took before registering our timeout.
+   */
+  g_application_release (G_APPLICATION (self));
+
+  return G_SOURCE_REMOVE;
+}
+
 gboolean
 ide_application_local_command_line (GApplication   *application,
                                     gchar        ***arguments,
@@ -154,6 +173,7 @@ ide_application_local_command_line (GApplication   *application,
   gboolean standalone = FALSE;
   gboolean version = FALSE;
   gboolean list_commands = FALSE;
+  gboolean gapplication_service = FALSE;
 
   GOptionEntry entries[] = {
     /* keep list-commands as first entry */
@@ -196,6 +216,13 @@ ide_application_local_command_line (GApplication   *application,
       G_OPTION_ARG_CALLBACK,
       ide_application_increase_verbosity,
       N_("Increase verbosity, may be specified multiple times") },
+
+    { "gapplication-service",
+      0,
+      G_OPTION_FLAG_NONE,
+      G_OPTION_ARG_NONE,
+      &gapplication_service,
+      N_("Enter GApplication Service mode") },
 
     { NULL }
   };
@@ -270,6 +297,19 @@ ide_application_local_command_line (GApplication   *application,
                    "but g_test_init() has not been called.");
         }
     }
+  else if (gapplication_service)
+    {
+      GApplicationFlags flags;
+
+      flags = g_application_get_flags (application);
+      flags |= G_APPLICATION_IS_SERVICE;
+
+      g_application_set_flags (application, flags);
+    }
+
+  /* Only the primary instance can be a --gapplication-service */
+  if (self->mode != IDE_APPLICATION_MODE_PRIMARY)
+    gapplication_service = FALSE;
 
   if (!g_option_context_parse_strv (context, arguments, &error))
     {
@@ -295,7 +335,8 @@ ide_application_local_command_line (GApplication   *application,
       GApplicationFlags flags;
 
       flags = g_application_get_flags (application);
-      g_application_set_flags (application, flags | G_APPLICATION_NON_UNIQUE);
+      flags |= G_APPLICATION_NON_UNIQUE;
+      g_application_set_flags (application, flags);
     }
 
   if (version)
@@ -390,7 +431,15 @@ ide_application_local_command_line (GApplication   *application,
         g_application_open (G_APPLICATION (self), (GFile **)files->pdata, files->len, "");
     }
 
-  g_application_activate (application);
+  if (gapplication_service)
+    {
+      g_application_hold (G_APPLICATION (self));
+      g_timeout_add_seconds (10, application_service_timeout_cb, g_object_ref (self));
+    }
+  else
+    {
+      g_application_activate (application);
+    }
 
 cleanup:
   g_clear_pointer (&type, g_free);
