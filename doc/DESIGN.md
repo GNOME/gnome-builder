@@ -47,7 +47,7 @@ The build system should update the tree when it performs transforms on the
 underlying build system.  Such changes might include adding a file or target.
 
 We need a good way to listen for changes on the tree so that UI can update
-iteself.
+itself.
 
 ### IdeProjectItem
 
@@ -64,7 +64,7 @@ VCS layer).  Targets could be another (and loaded by the build system).
 `IdeLanguage` represents a programming language, such as C, C++, or Python.  It
 has some general utilities associated with it that can be used in IDEs.  One
 such example is commenting a block of text.  `IdeLanguage` can be used to
-retrieve an `IdeSymbolResolver`, `IdeRefactory`, and others.
+retrieve an `IdeSymbolResolver`, `IdeRefactory` and others.
 
 ### IdeFile
 
@@ -75,7 +75,7 @@ backend.
 
 ### IdeBuffer and IdeBufferIter
 
-`IdeBuffer` is an interface for passing around buffers that dont require
+`IdeBuffer` is an interface for passing around buffers that don't require
 copying all of the text out of GtkTextBuffer or GtkTextIter slices.  It also
 allows command handlers to work with a higher level structure than just a
 string buffer.
@@ -89,7 +89,7 @@ indentation should be when various trigger keys are pressed.
 ### IdeRefactory
 
 `IdeRefactory` represents a refactoring engine.  This can be retrieved for a
-given language, and the language can be retrieved from a given file.  The
+given language and the language can be retrieved from a given file.  The
 refactory can expose available commands that can be executed.  Such an example
 might be a "Extract Method" command.  Most of these will need to be programmed
 into the IDE in a non-generic way.
@@ -97,7 +97,7 @@ into the IDE in a non-generic way.
 ### IdeVcs
 
 An `IdeVcs` represents a version control system.  The version control system
-can perform basic operations like creating a branch, or snapshoting the
+can perform basic operations like creating a branch or snapshoting the
 repository.  You can also add and remove files from the VCS, which should be
 performed automatically when performing certain project transforms.
 
@@ -117,7 +117,7 @@ The `IdeSearchEngine` manages search within the IDE.  It can have various
 search providers that can resolve information.  Some search providers might
 even store mined search information on disk for fast future lookup.  Having the
 search engine live in LibIDE allows it fast access to project information,
-files, and refactory information like symbols.
+files and refactory information like symbols.
 
 ### IdeSearchProvider
 
@@ -133,7 +133,7 @@ route to the target information.
 ### IdeService
 
 `IdeService` is a base service that lives inside an `IdeContext`.
-These are used to implement singleton like features that arent quite singletons.
+These are used to implement singleton like features that aren't quite singletons.
 They are per-context singletons.
 
 This might be used by something such as a clang indexer to ensure only one
@@ -162,7 +162,7 @@ settings as needed in the context.  For example,
 ~/.config/gnome-builder/scripts/*.js might be loaded into the context using
 `IdeScript` to register custom commands.
 
-### IdeDevice, IdeDeviceProvider, and IdeDeviceManager
+### IdeDevice, IdeDeviceProvider and IdeDeviceManager
 
 `IdeDevice` represents a device that can run software.
 
@@ -312,8 +312,8 @@ a particular file. It might rely on both the `IdeBuildSystem` and the
 `IdeLanguage` of the file.
 
 Let's discuss the example of C. If the resolver for C can retrieve the CFLAGS
-for a file using the `IdeBuildSystem`, it need only query the `IdeClangService`
-to retrieve the list of symbols using the tranlsation unit used with the file.
+for a file using the `IdeBuildSystem`, it need to query the `IdeClangService`
+to retrieve the list of symbols using the translation unit used with the file.
 This means a concrete `IdeCSymbolResolver` concrete implementation.
 
 An implementation for python, such as `IdePythonSymbolResolver` may be able to
