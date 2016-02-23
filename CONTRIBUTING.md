@@ -4,14 +4,14 @@ We would love for you to contribute to GNOME Builder!
 
 GNOME Builder is a new IDE focusing on the GNOME desktop environment. It is
 primarily written in C, but allows for plugins in C, C++, Python or Vala.
-Additional compiled languages can also be supported, with some work.
+Additional compiled languages can also be supported with some work.
 
-Remeber that the GNOME community is largely made up of part-time contributors
+Remember that the GNOME community is largely made up of part-time contributors
 that do this for fun. Be respectful and assume the best of each other.
 
 ## Filing a bug
 
-Please file bugs for issues, enhancements, and features on
+Please file bugs for issues, enhancements and features on
 [our Bugzilla](https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-builder)
 bug tracker.
 
