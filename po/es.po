@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-02-22 08:03+0000\n"
-"PO-Revision-Date: 2016-02-22 18:26+0100\n"
+"POT-Creation-Date: 2016-02-23 07:58+0000\n"
+"PO-Revision-Date: 2016-02-23 12:07+0100\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Español; Castellano <gnome-es-list@gnome.org>\n"
 "Language: \n"
@@ -379,7 +379,8 @@ msgstr "4"
 msgid "8"
 msgstr "8"
 
-#: ../data/ui/ide-editor-view.ui.h:2 ../data/ui/ide-greeter-perspective.ui.h:7
+#: ../data/ui/ide-editor-view.ui.h:2
+#: ../data/ui/ide-greeter-perspective.ui.h:11
 msgid "_Cancel"
 msgstr "_Cancelar"
 
@@ -436,9 +437,30 @@ msgid "Click an item to select"
 msgstr "Pulse en un elemento para seleccionarlo"
 
 #: ../data/ui/ide-greeter-perspective.ui.h:6
+#| msgctxt "shortcut window"
+#| msgid "Create new document"
+msgid "Create a new project"
+msgstr "Crear un nuevo proyecto"
+
+#: ../data/ui/ide-greeter-perspective.ui.h:7
 #: ../plugins/project-tree/gtk/menus.ui.h:2
 msgid "_New"
 msgstr "_Nuevo"
+
+#: ../data/ui/ide-greeter-perspective.ui.h:8
+#| msgid "Search Shortcuts"
+msgid "Search for projects"
+msgstr "Buscar proyectos"
+
+#: ../data/ui/ide-greeter-perspective.ui.h:9
+#| msgid "Select Project File"
+msgid "Select projects for removal"
+msgstr "Seleccionar proyectos para eliminar"
+
+#: ../data/ui/ide-greeter-perspective.ui.h:10
+#| msgid "The project description."
+msgid "Return to project selection"
+msgstr "Volver a la selección de proyectos"
 
 #: ../data/ui/ide-layout-tab-bar.ui.h:1
 msgid "List open files"
@@ -1416,7 +1438,6 @@ msgid "Overwrite Braces"
 msgstr "Sobrescribir llaves"
 
 #: ../libide/preferences/ide-preferences-builtin.c:228
-#| msgid "Overwrite Braces"
 msgid "Overwrite closing braces"
 msgstr "Sobrescribir cierres de llaves"
 
@@ -1609,7 +1630,6 @@ msgid "Name"
 msgstr "Nombre"
 
 #: ../plugins/build-tools/gbp-build-configuration-view.ui.h:4
-#| msgid "The prefix to use when installiing the project"
 msgid "The prefix to use when installing the project"
 msgstr "El prefijo que usar al instalar el proyecto"
 
@@ -1855,13 +1875,11 @@ msgid "Clang"
 msgstr "Clang"
 
 #: ../plugins/clang/ide-clang-preferences-addin.c:63
-#| msgid "Show errors and warnings provided by Vala"
 msgid "Show errors and warnings provided by Clang"
 msgstr "Mostrar errores y advertencias proporcionadas por Clang"
 
 #. translators: keywords used when searching for preferences
 #: ../plugins/clang/ide-clang-preferences-addin.c:65
-#| msgid "vala diagnostics warnings errors"
 msgid "clang diagnostics warnings errors"
 msgstr "clang diagnósticos advertencias errors"
 
@@ -2581,9 +2599,6 @@ msgstr "pylint python lint código ejecutar ejecución"
 #~ msgid "The type of plugin worker process to run."
 #~ msgstr "El tipo de proceso trabajador del complemento que ejecutar."
 
-#~ msgid "Select Project File"
-#~ msgstr "Seleccionar archivo de proyecto"
-
 #~ msgid "Clone Repository"
 #~ msgstr "Clonar repositorio"
 
@@ -2676,9 +2691,6 @@ msgstr "pylint python lint código ejecutar ejecución"
 #~ msgid_plural "%s more"
 #~ msgstr[0] "%s más"
 #~ msgstr[1] "%s más"
-
-#~ msgid "Search Shortcuts"
-#~ msgstr "Atajos de la búsqueda"
 
 #~ msgid "Search Results"
 #~ msgstr "Resultados de búsqueda"
@@ -3083,9 +3095,6 @@ msgstr "pylint python lint código ejecutar ejecución"
 
 #~ msgid "The path for the file within the project tree."
 #~ msgstr "La ruta del archivo en el árbol del proyecto."
-
-#~ msgid "The project description."
-#~ msgstr "La descripción del proyecto"
 
 #~ msgid "The project directory."
 #~ msgstr "La carpeta del proyecto."
