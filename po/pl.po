@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-02-17 23:04+0100\n"
-"PO-Revision-Date: 2016-02-17 23:05+0100\n"
+"POT-Creation-Date: 2016-02-23 19:50+0100\n"
+"PO-Revision-Date: 2016-02-23 19:51+0100\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <gnomepl@aviary.pl>\n"
 "Language: pl\n"
@@ -351,7 +351,7 @@ msgid "Smart Backspace"
 msgstr "Inteligentny klawisz Backspace"
 
 #: ../data/ui/ide-editor-tweak-widget.ui.h:7
-#: ../libide/preferences/ide-preferences-builtin.c:233
+#: ../libide/preferences/ide-preferences-builtin.c:234
 msgid "Indentation"
 msgstr "Wcięcia"
 
@@ -381,7 +381,7 @@ msgstr "4"
 msgid "8"
 msgstr "8"
 
-#: ../data/ui/ide-editor-view.ui.h:2 ../data/ui/ide-greeter-perspective.ui.h:7
+#: ../data/ui/ide-editor-view.ui.h:2 ../data/ui/ide-greeter-perspective.ui.h:11
 msgid "_Cancel"
 msgstr "_Anuluj"
 
@@ -436,9 +436,25 @@ msgid "Click an item to select"
 msgstr "Kliknięcie elementu zaznacza go"
 
 #: ../data/ui/ide-greeter-perspective.ui.h:6
+msgid "Create a new project"
+msgstr "Tworzy nowy projekt"
+
+#: ../data/ui/ide-greeter-perspective.ui.h:7
 #: ../plugins/project-tree/gtk/menus.ui.h:2
 msgid "_New"
 msgstr "_Nowy"
+
+#: ../data/ui/ide-greeter-perspective.ui.h:8
+msgid "Search for projects"
+msgstr "Wyszukuje projekty"
+
+#: ../data/ui/ide-greeter-perspective.ui.h:9
+msgid "Select projects for removal"
+msgstr "Wybiera projekt do usunięcia"
+
+#: ../data/ui/ide-greeter-perspective.ui.h:10
+msgid "Return to project selection"
+msgstr "Wraca do wyboru projektów"
 
 #: ../data/ui/ide-layout-tab-bar.ui.h:1
 msgid "List open files"
@@ -764,7 +780,7 @@ msgstr "%u z %u"
 msgid "Re_veal in Project Tree"
 msgstr "Odkry_wanie w drzewie projektu"
 
-#: ../libide/editor/ide-editor-perspective.c:413
+#: ../libide/editor/ide-editor-perspective.c:456
 #: ../libide/preferences/ide-preferences-builtin.c:102
 #: ../libide/preferences/ide-preferences-builtin.c:125
 msgid "Editor"
@@ -903,16 +919,16 @@ msgstr "Obecny język nie posiada mechanizmu rozwiązywania symboli."
 msgid "File too large to be opened."
 msgstr "Plik jest za duży, aby go otworzyć."
 
-#: ../libide/ide-buffer-manager.c:1456
+#: ../libide/ide-buffer-manager.c:1461
 msgid "Words"
 msgstr "Wyrazy"
 
-#: ../libide/ide-buffer-manager.c:1668
+#: ../libide/ide-buffer-manager.c:1673
 #, c-format
 msgid "unsaved document %u"
 msgstr "niezapisywany dokument %u"
 
-#: ../libide/ide-buffer-manager.c:1702
+#: ../libide/ide-buffer-manager.c:1707
 msgid "Failed to save buffer, ignoring reclamation."
 msgstr "Zapisanie bufora się nie powiodło, ignorowanie nawrotu."
 
@@ -943,11 +959,11 @@ msgstr "Należy wywołać funkcję %s() przed użyciem biblioteki libide."
 msgid "Default Configuration"
 msgstr "Domyślna konfiguracja"
 
-#: ../libide/ide-context.c:1790
+#: ../libide/ide-context.c:1828
 msgid "An unload request is already pending"
 msgstr "Żądanie usunięcia z pamięci jest już wykonywane"
 
-#: ../libide/ide-context.c:1905
+#: ../libide/ide-context.c:1943
 msgid "Context has already been restored."
 msgstr "Kontekst został już przywrócony."
 
@@ -1402,61 +1418,69 @@ msgid "Upon saving, trailing whitespace from modified lines will be trimmed."
 msgstr ""
 "Usuwanie końcowych spacji z zmodyfikowanych wierszy podczas zapisywania."
 
-#: ../libide/preferences/ide-preferences-builtin.c:229
+#: ../libide/preferences/ide-preferences-builtin.c:228
+msgid "Overwrite Braces"
+msgstr "Zastępowanie nawiasów"
+
+#: ../libide/preferences/ide-preferences-builtin.c:228
+msgid "Overwrite closing braces"
+msgstr "Zastępowanie nawiasów zamykających"
+
+#: ../libide/preferences/ide-preferences-builtin.c:230
 msgid "Margins"
 msgstr "Marginesy"
 
-#: ../libide/preferences/ide-preferences-builtin.c:230
+#: ../libide/preferences/ide-preferences-builtin.c:231
 msgid "Show right margin"
 msgstr "Prawy margines"
 
-#: ../libide/preferences/ide-preferences-builtin.c:231
+#: ../libide/preferences/ide-preferences-builtin.c:232
 msgid "Right margin position"
 msgstr "Pozycja prawego marginesu"
 
-#: ../libide/preferences/ide-preferences-builtin.c:231
+#: ../libide/preferences/ide-preferences-builtin.c:232
 msgid "Position in spaces for the right margin"
 msgstr "Pozycja prawego marginesu w spacjach"
 
-#: ../libide/preferences/ide-preferences-builtin.c:234
+#: ../libide/preferences/ide-preferences-builtin.c:235
 msgid "Tab width"
 msgstr "Szerokość tabulacji"
 
-#: ../libide/preferences/ide-preferences-builtin.c:234
+#: ../libide/preferences/ide-preferences-builtin.c:235
 msgid "Width of a tab character in spaces"
 msgstr "Szerokość znaku tabulacji w spacjach"
 
-#: ../libide/preferences/ide-preferences-builtin.c:235
+#: ../libide/preferences/ide-preferences-builtin.c:236
 msgid "Insert spaces instead of tabs"
 msgstr "Spacje zamiast tabulacji"
 
-#: ../libide/preferences/ide-preferences-builtin.c:235
+#: ../libide/preferences/ide-preferences-builtin.c:236
 msgid "Prefer spaces over use of tabs"
 msgstr "Spacje zamiast tabulacji"
 
-#: ../libide/preferences/ide-preferences-builtin.c:236
+#: ../libide/preferences/ide-preferences-builtin.c:237
 msgid "Automatically indent"
 msgstr "Automatyczne wcięcia"
 
-#: ../libide/preferences/ide-preferences-builtin.c:236
+#: ../libide/preferences/ide-preferences-builtin.c:237
 msgid "Indent source code as you type"
 msgstr "Tworzenie wcięć kodu źródłowego podczas pisania"
 
-#: ../libide/preferences/ide-preferences-builtin.c:242
+#: ../libide/preferences/ide-preferences-builtin.c:243
 #: ../plugins/build-tools/gbp-build-workbench-addin.c:270
 msgid "Build"
 msgstr "Budowanie"
 
-#: ../libide/preferences/ide-preferences-builtin.c:244
+#: ../libide/preferences/ide-preferences-builtin.c:245
 #: ../plugins/build-tools/gbp-build-configuration-view.ui.h:1
 msgid "General"
 msgstr "Ogólne"
 
-#: ../libide/preferences/ide-preferences-builtin.c:245
+#: ../libide/preferences/ide-preferences-builtin.c:246
 msgid "Build Workers"
 msgstr "Wątki robocze budowania"
 
-#: ../libide/preferences/ide-preferences-builtin.c:245
+#: ../libide/preferences/ide-preferences-builtin.c:246
 msgid "Number of parallel build workers"
 msgstr "Liczba równoległych wątków roboczych budowania"
 
@@ -1830,6 +1854,19 @@ msgstr "anonimowy"
 msgid "clang_codeCompleteAt() only works on local files"
 msgstr "Funkcja clang_codeCompleteAt() działania tylko na lokalnych plikach"
 
+#: ../plugins/clang/ide-clang-preferences-addin.c:62
+msgid "Clang"
+msgstr "Clang"
+
+#: ../plugins/clang/ide-clang-preferences-addin.c:63
+msgid "Show errors and warnings provided by Clang"
+msgstr "Wyświetlanie błędów i ostrzeżeń kompilatora Clang"
+
+#. translators: keywords used when searching for preferences
+#: ../plugins/clang/ide-clang-preferences-addin.c:65
+msgid "clang diagnostics warnings errors"
+msgstr "clang diagnostyka ostrzeżenia błędy"
+
 #: ../plugins/command-bar/gb-command-bar.c:299
 #, c-format
 msgid "Command not found: %s"
@@ -2053,7 +2090,7 @@ msgstr "System kontroli wersji"
 msgid "Attribution"
 msgstr "Autorstwo"
 
-#: ../plugins/gnome-code-assistance/ide-gca-diagnostic-provider.c:336
+#: ../plugins/gnome-code-assistance/ide-gca-diagnostic-provider.c:375
 msgid "Code assistance requires a local file."
 msgstr "Asysta podczas pisania kodu wymaga lokalnego pliku."
 
@@ -2239,3 +2276,16 @@ msgstr "Wyświetlanie błędów i ostrzeżeń języka Vala"
 #: ../plugins/vala-pack/ide-vala-preferences-addin.vala:35
 msgid "vala diagnostics warnings errors"
 msgstr "vala diagnostyka ostrzeżenia błędy"
+
+#: ../plugins/gnome-code-assistance/ide-gca-preferences-addin.c:62
+msgid "Pylint"
+msgstr "pylint"
+
+#: ../plugins/gnome-code-assistance/ide-gca-preferences-addin.c:63
+msgid "Enable the use of pylint, which may execute code in your project"
+msgstr "Używa programu pylint, który może wykonywać kod w projekcie"
+
+#. translators: these are keywords used to search for preferences
+#: ../plugins/gnome-code-assistance/ide-gca-preferences-addin.c:65
+msgid "pylint python lint code execute execution"
+msgstr "pylint python lint kod wykonaj wykonywanie"
