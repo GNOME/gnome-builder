@@ -557,6 +557,10 @@ ide_subprocess_launcher_overlay_environment (IdeSubprocessLauncher *self,
     }
 }
 
+/**
+ * ide_subprocess_launcher_push_args:
+ * @args: (array zero-terminated=1) (element-type utf8): the arguments
+ */
 void
 ide_subprocess_launcher_push_args (IdeSubprocessLauncher *self,
                                    const gchar * const   *args)
