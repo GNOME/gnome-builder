@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-02-23 07:58+0000\n"
-"PO-Revision-Date: 2016-02-23 12:07+0100\n"
+"POT-Creation-Date: 2016-02-24 08:04+0000\n"
+"PO-Revision-Date: 2016-02-24 10:02+0100\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Español; Castellano <gnome-es-list@gnome.org>\n"
 "Language: \n"
@@ -437,8 +437,6 @@ msgid "Click an item to select"
 msgstr "Pulse en un elemento para seleccionarlo"
 
 #: ../data/ui/ide-greeter-perspective.ui.h:6
-#| msgctxt "shortcut window"
-#| msgid "Create new document"
 msgid "Create a new project"
 msgstr "Crear un nuevo proyecto"
 
@@ -448,17 +446,14 @@ msgid "_New"
 msgstr "_Nuevo"
 
 #: ../data/ui/ide-greeter-perspective.ui.h:8
-#| msgid "Search Shortcuts"
 msgid "Search for projects"
 msgstr "Buscar proyectos"
 
 #: ../data/ui/ide-greeter-perspective.ui.h:9
-#| msgid "Select Project File"
 msgid "Select projects for removal"
 msgstr "Seleccionar proyectos para eliminar"
 
 #: ../data/ui/ide-greeter-perspective.ui.h:10
-#| msgid "The project description."
 msgid "Return to project selection"
 msgstr "Volver a la selección de proyectos"
 
@@ -875,47 +870,51 @@ msgstr "Fundado por"
 msgid "Commands:"
 msgstr "Comandos:"
 
-#: ../libide/ide-application-command-line.c:165
+#: ../libide/ide-application-command-line.c:185
 msgid "List available subcommands"
 msgstr "Lista de subcomandos disponibles"
 
-#: ../libide/ide-application-command-line.c:172
+#: ../libide/ide-application-command-line.c:192
 msgid "Run Builder in standalone mode"
 msgstr "Ejecutar Builder en modo individual"
 
-#: ../libide/ide-application-command-line.c:179
+#: ../libide/ide-application-command-line.c:199
 msgid "Show the application's version"
 msgstr "Mostrar la versión de la aplicación"
 
-#: ../libide/ide-application-command-line.c:198
+#: ../libide/ide-application-command-line.c:218
 msgid "Increase verbosity, may be specified multiple times"
 msgstr "Aumentar el nivel de detalle. Se puede especificar varias veces."
 
-#: ../libide/ide-application-command-line.c:228
+#: ../libide/ide-application-command-line.c:225
+msgid "Enter GApplication Service mode"
+msgstr "Entrar en modo de servicio de GApplication"
+
+#: ../libide/ide-application-command-line.c:255
 msgid "COMMAND"
 msgstr "COMANDO"
 
-#: ../libide/ide-application-command-line.c:286
+#: ../libide/ide-application-command-line.c:326
 msgid "No commands available"
 msgstr "No hay comandos disponibles"
 
-#: ../libide/ide-application-command-line.c:315
+#: ../libide/ide-application-command-line.c:356
 msgid "Please provide a command"
 msgstr "Proporcione un comando"
 
-#: ../libide/ide-application-command-line.c:325
+#: ../libide/ide-application-command-line.c:366
 msgid "No such tool"
 msgstr "No existe la herramienta"
 
-#: ../libide/ide-application-command-line.c:339
+#: ../libide/ide-application-command-line.c:380
 msgid "Please provide a worker type"
 msgstr "Proporcione un tipo de trabajador"
 
-#: ../libide/ide-application-command-line.c:346
+#: ../libide/ide-application-command-line.c:387
 msgid "Please provide a D-Bus address"
 msgstr "Proporcione una dirección de D-Bus"
 
-#: ../libide/ide-application-command-line.c:355
+#: ../libide/ide-application-command-line.c:396
 msgid "No such worker"
 msgstr "No existe el trabajador"
 
