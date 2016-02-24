@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-02-22 20:32+0000\n"
-"PO-Revision-Date: 2016-02-23 00:31-0300\n"
+"POT-Creation-Date: 2016-02-23 21:35+0000\n"
+"PO-Revision-Date: 2016-02-23 20:51-0300\n"
 "Last-Translator: Artur de Aquino Morais <artur.morais93@outlook.com>\n"
 "Language-Team: Brazilian Portuguese <gnome-pt_br-list@gnome.org>\n"
 "Language: pt_BR\n"
@@ -866,49 +866,53 @@ msgstr "Fundado por"
 msgid "Commands:"
 msgstr "Comandos:"
 
-#: ../libide/ide-application-command-line.c:165
+#: ../libide/ide-application-command-line.c:185
 msgid "List available subcommands"
 msgstr "Lista de todos os subcomandos disponíveis"
 
-#: ../libide/ide-application-command-line.c:172
+#: ../libide/ide-application-command-line.c:192
 msgid "Run Builder in standalone mode"
 msgstr "Executa Builder em modo independente"
 
-#: ../libide/ide-application-command-line.c:179
+#: ../libide/ide-application-command-line.c:199
 msgid "Show the application's version"
 msgstr "Mostra a versão do aplicativo"
 
-#: ../libide/ide-application-command-line.c:198
+#: ../libide/ide-application-command-line.c:218
 msgid "Increase verbosity, may be specified multiple times"
 msgstr "Aumentar a verbosidade, pode ser especificado várias vezes"
 
-#: ../libide/ide-application-command-line.c:228
+#: ../libide/ide-application-command-line.c:225
+msgid "Enter GApplication Service mode"
+msgstr "Entrar no modo de serviço GApplication"
+
+#: ../libide/ide-application-command-line.c:255
 msgid "COMMAND"
 msgstr "COMANDO"
 
-#: ../libide/ide-application-command-line.c:286
+#: ../libide/ide-application-command-line.c:326
 msgid "No commands available"
 msgstr "Nenhum comando disponível"
 
-#: ../libide/ide-application-command-line.c:315
+#: ../libide/ide-application-command-line.c:356
 msgid "Please provide a command"
 msgstr "Por favor, forneça um comando"
 
-#: ../libide/ide-application-command-line.c:325
+#: ../libide/ide-application-command-line.c:366
 msgid "No such tool"
 msgstr "Ferramenta inexistente"
 
 # Não é trabalhador "pessoa". Adotei tradução semelhante à da Microsoft.
-#: ../libide/ide-application-command-line.c:339
+#: ../libide/ide-application-command-line.c:380
 msgid "Please provide a worker type"
 msgstr "Por favor, forneça um tipo de trabalho"
 
-#: ../libide/ide-application-command-line.c:346
+#: ../libide/ide-application-command-line.c:387
 msgid "Please provide a D-Bus address"
 msgstr "Por favor, forneça um endereço D-Bus"
 
 # Não é trabalhador "pessoa". Adotei tradução semelhante à da Microsoft.
-#: ../libide/ide-application-command-line.c:355
+#: ../libide/ide-application-command-line.c:396
 msgid "No such worker"
 msgstr "Trabalho inexistente"
 
