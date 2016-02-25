@@ -266,7 +266,7 @@ symbol_tree__search_entry_changed (SymbolTreePanel *self,
 {
   const gchar *text;
 
-  g_return_if_fail (SYMBOL_IS_TREE (self));
+  g_return_if_fail (SYMBOL_IS_TREE_PANEL (self));
   g_return_if_fail (GTK_IS_SEARCH_ENTRY (search_entry));
 
   text = gtk_entry_get_text (GTK_ENTRY (search_entry));
