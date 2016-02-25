@@ -720,6 +720,8 @@ ide_preferences_perspective_add_custom (IdePreferences *preferences,
       return 0;
     }
 
+  gtk_widget_set_visible (widget, TRUE);
+
   if (IDE_IS_PREFERENCES_BIN (widget))
     container = IDE_PREFERENCES_BIN (widget);
   else
