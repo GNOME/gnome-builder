@@ -18,6 +18,7 @@
 
 #include <libpeas/peas.h>
 #include <ide.h>
+#include "util/ide-gdk.h"
 #include <string.h>
 
 #include "ide-application-tests.h"
