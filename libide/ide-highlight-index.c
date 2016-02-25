@@ -19,14 +19,12 @@
 #define G_LOG_DOMAIN "ide-highlight-index"
 
 #include <string.h>
-#include <sys/types.h>
-#include <sys/user.h>
-#include <unistd.h>
 
 #include "egg-counter.h"
 
 #include "ide-debug.h"
 #include "ide-highlight-index.h"
+#include "ide-posix.h"
 
 G_DEFINE_BOXED_TYPE (IdeHighlightIndex, ide_highlight_index,
                      ide_highlight_index_ref, ide_highlight_index_unref)
@@ -52,7 +50,7 @@ ide_highlight_index_new (void)
 
   ret = g_new0 (IdeHighlightIndex, 1);
   ret->ref_count = 1;
-  ret->strings = g_string_chunk_new (sysconf (_SC_PAGE_SIZE));
+  ret->strings = g_string_chunk_new (ide_get_system_page_size ());
   ret->index = g_hash_table_new (g_str_hash, g_str_equal);
 
   EGG_COUNTER_INC (instances);

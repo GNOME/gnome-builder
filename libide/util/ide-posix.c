@@ -17,7 +17,10 @@
  */
 
 #include <string.h>
+#include <sys/types.h>
+#include <sys/user.h>
 #include <sys/utsname.h>
+#include <unistd.h>
 
 #include "ide-posix.h"
 
@@ -34,4 +37,10 @@ ide_get_system_arch (void)
   machine = strcmp (u.machine, "amd64") ? u.machine : "x86_64";
 
   return g_strdup (machine);
+}
+
+gsize
+ide_get_system_page_size (void)
+{
+  return sysconf (_SC_PAGE_SIZE);
 }

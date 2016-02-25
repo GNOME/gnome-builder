@@ -23,7 +23,8 @@
 
 G_BEGIN_DECLS
 
-gchar *ide_get_system_arch (void);
+gchar *ide_get_system_arch      (void);
+gsize  ide_get_system_page_size (void) G_GNUC_CONST;
 
 G_END_DECLS
 
