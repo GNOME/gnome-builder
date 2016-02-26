@@ -168,7 +168,7 @@ ide_clang_completion_provider_can_replay (IdeClangCompletionProvider *self,
   if (self->last_results == NULL)
     return FALSE;
 
-  if (line == NULL || self->last_line == NULL)
+  if (line == NULL || *line == '\0' || self->last_line == NULL)
     return FALSE;
 
   if (!g_str_has_prefix (line, self->last_line))
