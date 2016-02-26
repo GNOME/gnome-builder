@@ -206,6 +206,9 @@ ide_clang_completion_provider_save_results (IdeClangCompletionProvider *self,
   g_clear_pointer (&self->last_query, g_free);
   self->head = NULL;
 
+  if (query && !*query)
+    query = NULL;
+
   if (results != NULL)
     {
       self->last_line = g_strdup (line);
