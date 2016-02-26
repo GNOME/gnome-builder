@@ -176,11 +176,16 @@ ide_clang_completion_provider_can_replay (IdeClangCompletionProvider *self,
 
   suffix = line + strlen (self->last_line);
 
+  IDE_TRACE_MSG ("Checking \"%s\" for invalidating characters", suffix);
+
   for (; *suffix; suffix = g_utf8_next_char (suffix))
     {
       gunichar ch = g_utf8_get_char (suffix);
       if (!g_unichar_isalnum (ch) && (ch != '_'))
-        return FALSE;
+        {
+          IDE_TRACE_MSG ("contains invaliding characters");
+          return FALSE;
+        }
     }
 
   return TRUE;
@@ -277,6 +282,8 @@ ide_clang_completion_provider_refilter (IdeClangCompletionProvider *self,
   if (results->len == 0)
     return;
 
+  IDE_TRACE_MSG ("Filtering with query \"%s\"", query);
+
   /*
    * By traversing the linked list nodes instead of the array, we allow
    * ourselves to avoid rechecking items we already know filtered.
@@ -353,16 +360,22 @@ ide_clang_completion_provider_code_complete_cb (GObject      *object,
         {
           ide_clang_completion_provider_refilter (state->self, results, state->query);
           ide_clang_completion_provider_sort (state->self);
+          IDE_TRACE_MSG ("%d results returned from clang", results->len);
           gtk_source_completion_context_add_proposals (state->context,
                                                        GTK_SOURCE_COMPLETION_PROVIDER (state->self),
                                                        state->self->head, TRUE);
         }
       else
         {
+          IDE_TRACE_MSG ("No results returned from clang");
           gtk_source_completion_context_add_proposals (state->context,
                                                        GTK_SOURCE_COMPLETION_PROVIDER (state->self),
                                                        NULL, TRUE);
         }
+    }
+  else
+    {
+      IDE_TRACE_MSG ("Ignoring completions due to cancellation");
     }
 
   ide_clang_completion_state_free (state);
