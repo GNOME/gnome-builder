@@ -361,7 +361,8 @@ ide_clang_completion_provider_code_complete_cb (GObject      *object,
     {
       if (results->len > 0)
         {
-          ide_clang_completion_provider_refilter (state->self, results, state->query);
+          if (state->query && *state->query)
+            ide_clang_completion_provider_refilter (state->self, results, state->query);
           ide_clang_completion_provider_sort (state->self);
           IDE_TRACE_MSG ("%d results returned from clang", results->len);
           gtk_source_completion_context_add_proposals (state->context,
