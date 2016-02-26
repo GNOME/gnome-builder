@@ -446,6 +446,7 @@ ide_clang_completion_provider_populate (GtkSourceCompletionProvider *provider,
 {
   IdeClangCompletionProvider *self = (IdeClangCompletionProvider *)provider;
   IdeClangCompletionState *state;
+  GtkSourceCompletionActivation activation;
   g_autoptr(GtkSourceCompletion) completion = NULL;
   g_autofree gchar *line = NULL;
   g_autofree gchar *prefix = NULL;
@@ -460,6 +461,8 @@ ide_clang_completion_provider_populate (GtkSourceCompletionProvider *provider,
 
   g_return_if_fail (IDE_IS_CLANG_COMPLETION_PROVIDER (self));
   g_return_if_fail (GTK_SOURCE_IS_COMPLETION_CONTEXT (context));
+
+  activation = gtk_source_completion_context_get_activation (context);
 
   if (!gtk_source_completion_context_get_iter (context, &iter))
     IDE_GOTO (failure);
@@ -476,8 +479,11 @@ ide_clang_completion_provider_populate (GtkSourceCompletionProvider *provider,
   if (!gtk_text_iter_starts_line (&stop))
     gtk_text_iter_backward_char (&stop);
 
-  if (gtk_text_iter_get_char (&stop) == ';')
-    IDE_GOTO (failure);
+  if (activation == GTK_SOURCE_COMPLETION_ACTIVATION_INTERACTIVE)
+    {
+      if (gtk_text_iter_get_char (&stop) == ';')
+        IDE_GOTO (failure);
+    }
 
   /*
    * Walk backwards to locate the first character after a stop character.
@@ -505,8 +511,12 @@ ide_clang_completion_provider_populate (GtkSourceCompletionProvider *provider,
    * We might be able to reuse the results from our previous query if
    * the buffer is sufficiently similar. If so, possibly just rearrange
    * some things and redisplay those results.
+   *
+   * However, we always want to perform a new query if ctrl+space was
+   * pressed.
    */
-  if (ide_clang_completion_provider_can_replay (self, line))
+  if ((activation != GTK_SOURCE_COMPLETION_ACTIVATION_USER_REQUESTED) &&
+      ide_clang_completion_provider_can_replay (self, line))
     {
       IDE_PROBE;
 
