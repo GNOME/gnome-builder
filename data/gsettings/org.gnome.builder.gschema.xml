@@ -20,5 +20,10 @@
       <summary>Night Mode</summary>
       <description>Prefer dark application chrome.</description>
     </key>
+    <key name="enable-project-miners" type="b">
+      <default>true</default>
+      <summary>Mine projects</summary>
+      <description>Search directories for projects.</description>
+    </key>
   </schema>
 </schemalist>

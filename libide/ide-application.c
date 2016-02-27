@@ -537,8 +537,13 @@ ide_application_get_recent_projects (IdeApplication *self)
 
   if (self->recent_projects == NULL)
     {
+      g_autoptr(GSettings) settings = NULL;
+
       self->recent_projects = ide_recent_projects_new ();
-      ide_recent_projects_discover_async (self->recent_projects, NULL, NULL, NULL);
+      settings = g_settings_new ("org.gnome.builder");
+
+      if (g_settings_get_boolean (settings, "enable-project-miners"))
+        ide_recent_projects_discover_async (self->recent_projects, NULL, NULL, NULL);
     }
 
   return self->recent_projects;
