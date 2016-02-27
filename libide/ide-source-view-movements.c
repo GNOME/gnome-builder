@@ -491,9 +491,11 @@ ide_source_view_movements_last_line (Movement *mv)
     }
 }
 
-static void
+static gboolean
 ide_source_view_movements_next_line (Movement *mv)
 {
+  GtkTextIter prev_insert = mv->insert;
+  GtkTextIter prev_selection = mv->selection;
   GtkTextBuffer *buffer;
   gboolean has_selection;
   guint line;
@@ -533,7 +535,7 @@ ide_source_view_movements_next_line (Movement *mv)
 
       select_range (mv, &mv->insert, &mv->selection);
       ensure_anchor_selected (mv);
-      return;
+      return TRUE;
     }
 
   if (is_single_char_selection (&mv->insert, &mv->selection))
@@ -557,11 +559,16 @@ select_to_end:
   /* make sure selection/insert are up to date */
   if (!gtk_text_buffer_get_has_selection (buffer))
     mv->selection = mv->insert;
+
+  return (!gtk_text_iter_equal (&prev_selection, &mv->selection) ||
+          !gtk_text_iter_equal (&prev_insert, &mv->insert));
 }
 
-static void
+static gboolean
 ide_source_view_movements_previous_line (Movement *mv)
 {
+  GtkTextIter prev_insert = mv->insert;
+  GtkTextIter prev_selection = mv->selection;
   GtkTextBuffer *buffer;
   gboolean has_selection;
   guint line;
@@ -578,7 +585,7 @@ ide_source_view_movements_previous_line (Movement *mv)
     offset = *mv->target_offset;
 
   if (line == 0)
-    return;
+    return FALSE;
 
   /*
    * If we have a whole line selected (from say `V`), then we need to swap the cursor and
@@ -592,7 +599,7 @@ ide_source_view_movements_previous_line (Movement *mv)
       gtk_text_iter_set_line (&mv->insert, gtk_text_iter_get_line (&mv->insert) - 1);
       select_range (mv, &mv->insert, &mv->selection);
       ensure_anchor_selected (mv);
-      return;
+      return TRUE;
     }
 
   if (is_single_char_selection (&mv->insert, &mv->selection))
@@ -624,6 +631,9 @@ ide_source_view_movements_previous_line (Movement *mv)
   /* make sure selection/insert are up to date */
   if (!gtk_text_buffer_get_has_selection (buffer))
     mv->selection = mv->insert;
+
+  return (!gtk_text_iter_equal (&prev_selection, &mv->selection) ||
+          !gtk_text_iter_equal (&prev_insert, &mv->insert));
 }
 
 static void
@@ -1890,7 +1900,9 @@ _ide_source_view_apply_movement (IdeSourceView         *self,
   Movement mv = { 0 };
   GtkTextBuffer *buffer;
   GtkTextMark *insert;
+  GtkTextIter end_iter;
   gint min_count = 1;
+  gint end_line;
   gsize i;
 
   g_return_if_fail (IDE_IS_SOURCE_VIEW (self));
@@ -1923,6 +1935,9 @@ _ide_source_view_apply_movement (IdeSourceView         *self,
       else
         count = 0;
     }
+
+  gtk_text_buffer_get_end_iter (buffer, &end_iter);
+  end_line = gtk_text_iter_get_line (&end_iter);
 
   mv.self = self;
   mv.target_offset = target_offset;
@@ -2061,15 +2076,29 @@ _ide_source_view_apply_movement (IdeSourceView         *self,
     case IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_LINE:
       mv.ignore_target_offset = TRUE;
       mv.ignore_select = TRUE;
+      mv.count = MIN (mv.count, end_line);
+      /*
+       * It would be nice to do this as one large movement, but
+       * ide_source_view_movements_previous_line() needs to be
+       * split up into movements for different line-wise options.
+       */
       for (i = MAX (1, mv.count); i > 0; i--)
-        ide_source_view_movements_previous_line (&mv);
+        if (!ide_source_view_movements_previous_line (&mv))
+          break;
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_NEXT_LINE:
       mv.ignore_target_offset = TRUE;
       mv.ignore_select = TRUE;
+      mv.count = MIN (mv.count, end_line);
+      /*
+       * It would be nice to do this as one large movement, but
+       * ide_source_view_movements_next_line() needs to be
+       * split up into movements for different line-wise options.
+       */
       for (i = MAX (min_count, mv.count); i > 0; i--)
-        ide_source_view_movements_next_line (&mv);
+        if (!ide_source_view_movements_next_line (&mv))
+          break;
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_FIRST_LINE:
