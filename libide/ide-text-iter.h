@@ -51,10 +51,12 @@ gboolean _ide_text_iter_in_string                (GtkTextIter              *iter
                                                   GtkTextIter              *str_end,
                                                   gboolean                  include_str_bounds);
 gboolean _ide_text_iter_find_chars_backward      (GtkTextIter              *iter,
+                                                  GtkTextIter              *limit,
                                                   GtkTextIter              *end,
                                                   const gchar              *str,
                                                   gboolean                  only_at_start);
 gboolean _ide_text_iter_find_chars_forward       (GtkTextIter              *iter,
+                                                  GtkTextIter              *limit,
                                                   GtkTextIter              *end,
                                                   const gchar              *str,
                                                   gboolean                  only_at_start);

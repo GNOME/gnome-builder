@@ -270,6 +270,21 @@ on_cursor_moved (IdeBuffer         *buffer,
 }
 
 /**
+ * ide_editor_frame_get_source_view:
+ *
+ * Gets the #IdeEditorFrame:document property.
+ *
+ * Returns: (transfer none) (nullable): An #IdeSourceView or %NULL.
+ */
+IdeSourceView *
+ide_editor_frame_get_source_view (IdeEditorFrame *self)
+{
+  g_return_val_if_fail (IDE_IS_EDITOR_FRAME (self), NULL);
+
+  return self->source_view;
+}
+
+/**
  * ide_editor_frame_get_document:
  *
  * Gets the #IdeEditorFrame:document property.

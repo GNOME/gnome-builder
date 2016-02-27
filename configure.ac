@@ -237,6 +237,7 @@ m4_include([plugins/build-tools/configure.ac])
 m4_include([plugins/c-pack/configure.ac])
 m4_include([plugins/clang/configure.ac])
 m4_include([plugins/command-bar/configure.ac])
+m4_include([plugins/comment-code/configure.ac])
 m4_include([plugins/contributing/configure.ac])
 m4_include([plugins/create-project/configure.ac])
 m4_include([plugins/ctags/configure.ac])
@@ -482,6 +483,7 @@ echo "  Build Tools .......................... : ${enable_build_tools_plugin}"
 echo "  C Language Pack ...................... : ${enable_c_pack_plugin}"
 echo "  Clang ................................ : ${enable_clang_plugin}"
 echo "  Command Bar .......................... : ${enable_command_bar_plugin}"
+echo "  Comment Code.......................... : ${enable_comment_code_plugin}"
 echo "  Contribute ........................... : ${enable_contributing_plugin}"
 echo "  Ctags ................................ : ${enable_ctags_plugin}"
 echo "  Devhelp .............................. : ${enable_devhelp_plugin}"

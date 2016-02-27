@@ -22,6 +22,7 @@
 #include <gtk/gtk.h>
 
 #include "ide-buffer.h"
+#include "ide-source-view.h"
 
 G_BEGIN_DECLS
 
@@ -29,9 +30,10 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeEditorFrame, ide_editor_frame, IDE, EDITOR_FRAME, GtkBin)
 
-IdeBuffer *ide_editor_frame_get_document (IdeEditorFrame *self);
-void       ide_editor_frame_set_document (IdeEditorFrame *self,
-                                          IdeBuffer      *buffer);
+IdeBuffer       *ide_editor_frame_get_document      (IdeEditorFrame *self);
+void             ide_editor_frame_set_document      (IdeEditorFrame *self,
+                                                     IdeBuffer      *buffer);
+IdeSourceView   *ide_editor_frame_get_source_view   (IdeEditorFrame *self);
 
 G_END_DECLS
 

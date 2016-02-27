@@ -1241,7 +1241,7 @@ match_comments (GtkTextIter *insert,
 
   if (comment_start && !gtk_text_iter_is_end (&cursor))
     {
-      if (_ide_text_iter_find_chars_forward (&cursor, NULL, "*/", FALSE))
+      if (_ide_text_iter_find_chars_forward (&cursor, NULL, NULL, "*/", FALSE))
         {
           gtk_text_iter_forward_char (&cursor);
           *insert = cursor;
@@ -1251,7 +1251,7 @@ match_comments (GtkTextIter *insert,
     }
   else if (!comment_start && !gtk_text_iter_is_start (&cursor))
     {
-      if (_ide_text_iter_find_chars_backward (&cursor, NULL, "/*", FALSE))
+      if (_ide_text_iter_find_chars_backward (&cursor, NULL, NULL, "/*", FALSE))
         {
           *insert = cursor;
 
@@ -2417,11 +2417,11 @@ find_html_tag (GtkTextIter      *iter,
 
       return tag;
     }
-  else if (_ide_text_iter_find_chars_forward (&cursor, &end, "!--", TRUE))
+  else if (_ide_text_iter_find_chars_forward (&cursor, NULL, &end, "!--", TRUE))
     {
       tag->kind = HTML_TAG_KIND_COMMENT;
       cursor = end;
-      if (_ide_text_iter_find_chars_forward (&cursor, &end, "-->", FALSE))
+      if (_ide_text_iter_find_chars_forward (&cursor, NULL, &end, "-->", FALSE))
         {
           tag->end = end;
           if (direction == GTK_DIR_RIGHT)

@@ -1,6 +1,6 @@
-/* ide-editor-view.h
+/* gbp-comment-code-view-addin.h
  *
- * Copyright (C) 2015 Christian Hergert <christian@hergert.me>
+ * Copyright (C) 2016 sebastien lafargue <slafargue@gnome.org>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,22 +16,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_EDITOR_VIEW_H
-#define IDE_EDITOR_VIEW_H
-
-#include "ide-buffer.h"
-#include "ide-source-view.h"
-#include "ide-layout-view.h"
+#ifndef GBP_COMMENT_CODE_VIEW_ADDIN_H
+#define GBP_COMMENT_CODE_VIEW_ADDIN_H
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_EDITOR_VIEW (ide_editor_view_get_type())
+#define GBP_TYPE_COMMENT_CODE_VIEW_ADDIN (gbp_comment_code_view_addin_get_type())
 
-G_DECLARE_FINAL_TYPE (IdeEditorView, ide_editor_view, IDE, EDITOR_VIEW, IdeLayoutView)
-
-IdeBuffer      *ide_editor_view_get_document              (IdeEditorView *self);
-IdeSourceView  *ide_editor_view_get_active_source_view    (IdeEditorView *self);
+G_DECLARE_FINAL_TYPE (GbpCommentCodeViewAddin, gbp_comment_code_view_addin, GBP, COMMENT_CODE_VIEW_ADDIN, GObject)
 
 G_END_DECLS
 
-#endif /* IDE_EDITOR_VIEW_H */
+#endif /* GBP_COMMENT_CODE_VIEW_ADDIN_H */

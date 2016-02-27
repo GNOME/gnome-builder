@@ -1,6 +1,6 @@
-/* ide-editor-view.h
+/* gbp-comment-code-plugin.c
  *
- * Copyright (C) 2015 Christian Hergert <christian@hergert.me>
+ * Copyright (C) 2016 sebastien lafargue <slafargue@gnome.org>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,22 +16,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_EDITOR_VIEW_H
-#define IDE_EDITOR_VIEW_H
+#include <ide.h>
+#include <libpeas/peas.h>
 
-#include "ide-buffer.h"
-#include "ide-source-view.h"
-#include "ide-layout-view.h"
+#include "gbp-comment-code-view-addin.h"
 
-G_BEGIN_DECLS
-
-#define IDE_TYPE_EDITOR_VIEW (ide_editor_view_get_type())
-
-G_DECLARE_FINAL_TYPE (IdeEditorView, ide_editor_view, IDE, EDITOR_VIEW, IdeLayoutView)
-
-IdeBuffer      *ide_editor_view_get_document              (IdeEditorView *self);
-IdeSourceView  *ide_editor_view_get_active_source_view    (IdeEditorView *self);
-
-G_END_DECLS
-
-#endif /* IDE_EDITOR_VIEW_H */
+void
+peas_register_types (PeasObjectModule *module)
+{
+  peas_object_module_register_extension_type (module,
+                                              IDE_TYPE_EDITOR_VIEW_ADDIN,
+                                              GBP_TYPE_COMMENT_CODE_VIEW_ADDIN);
+}

@@ -5,6 +5,7 @@ SUBDIRS = \
 	command-bar \
 	contributing \
 	c-pack \
+	comment-code \
 	create-project \
 	ctags \
 	devhelp \

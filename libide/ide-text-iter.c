@@ -623,11 +623,12 @@ _ide_text_iter_in_string (GtkTextIter *iter,
 /**
  * _ide_text_iter_find_chars_backward:
  * @iter: A #GtkTextIter indicating the start position to check for.
- * end: (out): A #GtkTextIter returning the str end iter (if found).
+ * @limit: (nullable): A #GtkTextIter indicating the limit of the search.
+ * @end: (out) (nullable): A #GtkTextIter returning the str end iter (if found).
  * @str: A C type string.
  * @only_at_start: %TRUE if the searched @str string should be constrained to start @iter position.
  *
- * Search backward for a @str string, starting at @iter position.
+ * Search backward for a @str string, starting at @iter position till @limit if there's one.
  * In case of succes, @iter is updated to @str start position.
  *
  * Notice that for @str to be found, @iter need to be at least on the @str last char
@@ -636,12 +637,13 @@ _ide_text_iter_in_string (GtkTextIter *iter,
  */
 gboolean
 _ide_text_iter_find_chars_backward (GtkTextIter *iter,
+                                    GtkTextIter *limit,
                                     GtkTextIter *end,
                                     const gchar *str,
                                     gboolean     only_at_start)
 {
   const gchar *base_str;
-  const gchar *limit;
+  const gchar *str_limit;
   GtkTextIter base_cursor;
 
   g_return_val_if_fail (!ide_str_empty0 (str), FALSE);
@@ -649,7 +651,7 @@ _ide_text_iter_find_chars_backward (GtkTextIter *iter,
   if (!gtk_text_iter_backward_char (iter))
     return FALSE;
 
-  limit = str;
+  str_limit = str;
   base_str = str = str + strlen (str) - 1;
   base_cursor = *iter;
   do
@@ -665,7 +667,7 @@ _ide_text_iter_find_chars_backward (GtkTextIter *iter,
                 break;
             }
 
-          str = g_utf8_find_prev_char (limit, str);
+          str = g_utf8_find_prev_char (str_limit, str);
           if (str == NULL)
             {
               if (end)
@@ -692,28 +694,51 @@ _ide_text_iter_find_chars_backward (GtkTextIter *iter,
 /**
  * _ide_text_iter_find_chars_forward:
  * @iter: A #GtkTextIter indicating the start position to check for.
- * end: (out): A #GtkTextIter returning the str end iter (if found).
+ * @limit: (nullable): A #GtkTextIter indicating the limit of the search.
+ * @end: (out) (nullable): A #GtkTextIter returning the str end iter (if found).
  * @str: A C type string.
  * @only_at_start: %TRUE if the searched @str string should be constrained to start @iter position.
  *
- * Search forward for a @str string, starting at @iter position.
- * In case of succes, @iter is updated to @str start position.
+ * Search forward for a @str string, starting at @iter position till @limit if there's one.
+ * In case of succes, @iter is updated to the found @str start position,
+ * otherwise, its position is undefined.
  *
  * Returns: %TRUE if case of succes, %FALSE otherwise.
  */
 gboolean
 _ide_text_iter_find_chars_forward (GtkTextIter *iter,
+                                   GtkTextIter *limit,
                                    GtkTextIter *end,
                                    const gchar *str,
                                    gboolean     only_at_start)
 {
   const gchar *base_str;
-  const gchar *limit;
+  const gchar *str_limit;
   GtkTextIter base_cursor;
+  GtkTextIter real_limit;
+  gint str_char_len;
+  gint real_limit_offset;
 
   g_return_val_if_fail (!ide_str_empty0 (str), FALSE);
 
-  limit = str + strlen (str);
+  if (limit == NULL)
+    {
+      real_limit = *iter;
+      gtk_text_iter_forward_to_end (&real_limit);
+    }
+  else
+    real_limit = *limit;
+
+  str_char_len = g_utf8_strlen (str, -1);
+  real_limit_offset = gtk_text_iter_get_offset (&real_limit) - str_char_len;
+  if (real_limit_offset < 0)
+    return FALSE;
+
+  gtk_text_iter_set_offset (&real_limit, real_limit_offset);
+  if (gtk_text_iter_compare(iter, &real_limit) > 0)
+    return FALSE;
+
+  str_limit = str + strlen (str);
   base_str = str;
   base_cursor = *iter;
   do
@@ -729,7 +754,7 @@ _ide_text_iter_find_chars_forward (GtkTextIter *iter,
                 break;
             }
 
-          str = g_utf8_find_next_char (str, limit);
+          str = g_utf8_find_next_char (str, str_limit);
           if (str == NULL)
             {
               if (end)
@@ -744,11 +769,9 @@ _ide_text_iter_find_chars_forward (GtkTextIter *iter,
 
         } while ((gtk_text_iter_forward_char (iter)));
 
-      if (gtk_text_iter_is_end (iter))
-        return FALSE;
-      else
-        str = base_str;
-    } while (gtk_text_iter_forward_char (&base_cursor));
+    } while (gtk_text_iter_compare(&base_cursor, &real_limit) < 0 &&
+             (str = base_str) &&
+             gtk_text_iter_forward_char (&base_cursor));
 
   return FALSE;
 }

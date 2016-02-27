@@ -990,6 +990,23 @@ ide_editor_view_init (IdeEditorView *self)
 }
 
 /**
+ * ide_editor_view_get_active_source_view:
+ *
+ * Returns: (transfer none): An #IdeSourceView.
+ */
+IdeSourceView *
+ide_editor_view_get_active_source_view (IdeEditorView *self)
+{
+  IdeEditorFrame *frame;
+
+  g_return_val_if_fail (IDE_IS_EDITOR_VIEW (self), NULL);
+
+  frame = ide_editor_view_get_last_focused (self);
+
+  return ide_editor_frame_get_source_view (frame);
+}
+
+/**
  * ide_editor_view_get_document:
  *
  * Returns: (transfer none): An #IdeBuffer.

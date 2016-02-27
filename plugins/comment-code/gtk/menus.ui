@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<interface>
+  <menu id="ide-source-view-popup-menu">
+    <section id="ide-source-view-popup-menu-selection-section">
+      <submenu id="ide-source-view-popup-menu-selection-submenu">
+        <section id="ide-source-view-popup-menu-selection-comment-code-section">
+          <attribute name="after">ide-source-view-popup-menu-line-section</attribute>
+          <item>
+            <attribute name="label" translatable="yes">Comment code</attribute>
+            <attribute name="action">view.comment-code</attribute>
+            <attribute name="target" type="s">'0'</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="yes">Uncomment code</attribute>
+            <attribute name="action">view.comment-code</attribute>
+            <attribute name="target" type="s">'1'</attribute>
+          </item>
+        </section>
+      </submenu>
+    </section>
+  </menu>
+</interface>
