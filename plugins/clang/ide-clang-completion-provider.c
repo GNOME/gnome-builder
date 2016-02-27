@@ -51,6 +51,13 @@ struct _IdeClangCompletionProvider
    * text into the buffer.
    */
   IdeSourceView *view;
+  /*
+   * The saved offset used when generating results. This is our position
+   * where we moved past all the junk to a stop character (as required
+   * by clang).
+   */
+  guint stop_line;
+  guint stop_line_offset;
 };
 
 typedef struct
@@ -506,6 +513,9 @@ ide_clang_completion_provider_populate (GtkSourceCompletionProvider *provider,
       (gtk_text_iter_compare (&stop, &iter) < 0))
     gtk_text_iter_forward_char (&stop);
 
+  self->stop_line = gtk_text_iter_get_line (&stop);
+  self->stop_line_offset = gtk_text_iter_get_line_offset (&stop);
+
   prefix = g_strstrip (gtk_text_iter_get_slice (&stop, &iter));
 
   /*
@@ -578,43 +588,23 @@ get_start_iter (GtkSourceCompletionProvider *provider,
                 GtkSourceCompletionProposal *proposal,
                 GtkTextIter                 *iter)
 {
-  IdeClangCompletionItem *item = (IdeClangCompletionItem *)proposal;
-  const gchar *typed_text = ide_clang_completion_item_get_typed_text (item);
-  g_autofree gchar *text = g_strdup (typed_text);
-  gint len = g_utf8_strlen (typed_text ?: "", -1);
-  GtkTextIter begin;
-  GtkTextIter end;
-  guint offset;
 
-  end = begin = *location;
+  IdeClangCompletionProvider *self = (IdeClangCompletionProvider *)provider;
+  GtkTextBuffer *buffer = gtk_text_iter_get_buffer (location);
 
-  offset = gtk_text_iter_get_offset (&end);
+#if !GTK_CHECK_VERSION(3, 19, 0)
+# error "The following requires safety introduced in 3.19.x"
+#endif
 
-  if (offset >= len)
-    {
-      gchar *textptr = g_utf8_offset_to_pointer (text, len);
-      gchar *prevptr;
-      GtkTextIter match_start;
-      GtkTextIter match_end;
+  gtk_text_buffer_get_iter_at_line_offset (buffer,
+                                           iter,
+                                           self->stop_line,
+                                           self->stop_line_offset);
 
-      gtk_text_iter_set_offset (&begin, offset - len);
+  if (gtk_text_iter_get_line (iter) != gtk_text_iter_get_line (location))
+    return FALSE;
 
-      while (*text)
-        {
-          if (gtk_text_iter_forward_search (&begin, text, GTK_TEXT_SEARCH_TEXT_ONLY,
-                                            &match_start, &match_end, &end))
-            {
-              *iter = match_start;
-              return TRUE;
-            }
-
-          prevptr = textptr;
-          textptr = g_utf8_find_prev_char (text, textptr);
-          *prevptr = '\0';
-        }
-    }
-
-  return FALSE;
+  return TRUE;
 }
 
 static gboolean
@@ -646,7 +636,7 @@ ide_clang_completion_provider_activate_proposal (GtkSourceCompletionProvider *pr
   g_assert (IDE_IS_CLANG_COMPLETION_ITEM (item));
 
   if (!get_start_iter (provider, iter, proposal, &end))
-    return FALSE;
+    IDE_RETURN (FALSE);
 
   buffer = gtk_text_iter_get_buffer (iter);
   gtk_text_buffer_delete (buffer, iter, &end);
