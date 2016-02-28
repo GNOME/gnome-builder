@@ -10,16 +10,16 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-02-12 08:03+0000\n"
-"PO-Revision-Date: 2016-02-12 15:47+0100\n"
-"Last-Translator: Meskó Balázs <meskobalazs@gmail.com>\n"
+"POT-Creation-Date: 2016-02-27 08:01+0000\n"
+"PO-Revision-Date: 2016-02-28 16:05+0100\n"
+"Last-Translator: Gabor Kelemen <kelemeng at ubuntu dot com>\n"
 "Language-Team: Hungarian <openscope at googlegroups dot com>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.8.5\n"
+"X-Generator: Lokalize 1.5\n"
 
 #: ../contrib/egg/egg-animation.c:715
 #, c-format
@@ -300,6 +300,27 @@ msgstr "Az Építő alapértelmezett színsémája"
 msgid "OVR"
 msgstr "ÁTÍR"
 
+#: ../data/ui/ide-editor-perspective.ui.h:1
+#| msgid "Show list of open files"
+msgid "No open files"
+msgstr "Nincsenek nyitott fájlok"
+
+#: ../data/ui/ide-editor-perspective.ui.h:2
+msgid "Try opening a file typing in the search box at the top"
+msgstr "Próbáljon megnyitni egy fájlt a fenti keresőmezőbe gépeléssel"
+
+#: ../data/ui/ide-editor-perspective.ui.h:3
+msgid "Enable / Disable left panel. Shortcut: F9"
+msgstr "Bal panel be/kikapcsolása. Gyorsbillentyű: F9"
+
+#: ../data/ui/ide-editor-perspective.ui.h:4
+msgid "Enable / Disable bottom panel. Shortcut: Ctrl + F9"
+msgstr "Alsó panel be/kikapcsolása. Gyorsbillentyű: Ctrl + F9"
+
+#: ../data/ui/ide-editor-perspective.ui.h:5
+msgid "Enable / Disable right panel. Shortcut: Shift + F9"
+msgstr "Jobb panel be/kikapcsolása. Gyorsbillentyű: Shift + F9"
+
 #: ../data/ui/ide-editor-tweak-widget.ui.h:1
 msgid "Search highlight mode…"
 msgstr "Keresés kiemelési üzemmódja…"
@@ -326,7 +347,7 @@ msgid "Smart Backspace"
 msgstr "Okos visszatörlés"
 
 #: ../data/ui/ide-editor-tweak-widget.ui.h:7
-#: ../libide/preferences/ide-preferences-builtin.c:233
+#: ../libide/preferences/ide-preferences-builtin.c:234
 msgid "Indentation"
 msgstr "Behúzás"
 
@@ -356,7 +377,7 @@ msgstr "4"
 msgid "8"
 msgstr "8"
 
-#: ../data/ui/ide-editor-view.ui.h:2 ../data/ui/ide-greeter-perspective.ui.h:7
+#: ../data/ui/ide-editor-view.ui.h:2 ../data/ui/ide-greeter-perspective.ui.h:11
 msgid "_Cancel"
 msgstr "_Mégse"
 
@@ -369,10 +390,20 @@ msgstr ""
 "újratölteni a fájlt?"
 
 #: ../data/ui/ide-editor-view.ui.h:4
+#| msgid "Show line numbers"
+msgid "Go to line number"
+msgstr "Ugrás adott sorra"
+
+#: ../data/ui/ide-editor-view.ui.h:5
+#| msgid "Use Clang to suggest completions for C and C++ languages"
+msgid "Change editor settings and language"
+msgstr "Szerkesztőbeállítások és nyelv megváltoztatása"
+
+#: ../data/ui/ide-editor-view.ui.h:6
 msgid "Go to Line"
 msgstr "Ugrás sorra"
 
-#: ../data/ui/ide-editor-view.ui.h:5
+#: ../data/ui/ide-editor-view.ui.h:7
 msgid "Go"
 msgstr "Ugrás"
 
@@ -405,13 +436,66 @@ msgid "Click an item to select"
 msgstr "Kattintson a kiválasztandó elemre"
 
 #: ../data/ui/ide-greeter-perspective.ui.h:6
+#| msgctxt "shortcut window"
+#| msgid "Create new document"
+msgid "Create a new project"
+msgstr "Új projekt létrehozása"
+
+#: ../data/ui/ide-greeter-perspective.ui.h:7
 #: ../plugins/project-tree/gtk/menus.ui.h:2
 msgid "_New"
 msgstr "Ú_j"
 
+#: ../data/ui/ide-greeter-perspective.ui.h:8
+#| msgid "Search Shortcuts"
+msgid "Search for projects"
+msgstr "Projektek keresése"
+
+#: ../data/ui/ide-greeter-perspective.ui.h:9
+#| msgid "Select Project File"
+msgid "Select projects for removal"
+msgstr "Válassza ki az eltávolítandó projekteket"
+
+#: ../data/ui/ide-greeter-perspective.ui.h:10
+#| msgid "The project description."
+msgid "Return to project selection"
+msgstr "Vissza a projektválasztáshoz"
+
+#: ../data/ui/ide-layout-tab-bar.ui.h:1
+#| msgid "Show list of open files"
+msgid "List open files"
+msgstr "Nyitott fájlok felsorolása"
+
+#: ../data/ui/ide-layout-tab-bar.ui.h:2
+msgid "Add a new empty file to your project"
+msgstr "Új üres fájl hozzáadása a projekthez"
+
+#: ../data/ui/ide-layout-tab.ui.h:1
+#| msgctxt "shortcut window"
+#| msgid "Move to previous edit location"
+msgid "Jump to previous location"
+msgstr "Ugrás az előző helyre"
+
+#: ../data/ui/ide-layout-tab.ui.h:2
+#| msgctxt "shortcut window"
+#| msgid "Move to next edit location"
+msgid "Jump to next location"
+msgstr "Ugrás a következő helyre"
+
+#: ../data/ui/ide-layout-tab.ui.h:3
+#| msgctxt "shortcut window"
+#| msgid "Close the document"
+msgid "Close the current document"
+msgstr "Aktuális dokumentum bezárása"
+
 #: ../data/ui/ide-preferences-font-button.ui.h:1
 msgid "_Select"
 msgstr "_Kijelölés"
+
+#: ../data/ui/ide-preferences-perspective.ui.h:1
+#| msgid "Search Preferences…"
+msgid "Search through preferences"
+msgstr "Keresés a beállítások között"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:1
 msgctxt "shortcut window"
@@ -678,6 +762,14 @@ msgctxt "shortcut window"
 msgid "Terminal Shortcuts"
 msgstr "Terminál gyorsbillentyűi"
 
+#: ../data/ui/ide-workbench-header-bar.ui.h:1
+msgid "Search for files. Shortcut: Ctrl + ."
+msgstr "Fájlok keresése. Gyorsbillentyű: Ctrl + ."
+
+#: ../data/ui/ide-workbench-header-bar.ui.h:2
+msgid "Drops down a list of file operations"
+msgstr "Fájlműveletek listájának legördítése"
+
 #: ../libide/directory/ide-directory-genesis-addin.c:106
 msgid "From an existing project on this computer"
 msgstr "A számítógépen már létező projektből"
@@ -701,7 +793,7 @@ msgstr "%u / %u"
 msgid "Re_veal in Project Tree"
 msgstr "Meg_jelenítés a projektfában"
 
-#: ../libide/editor/ide-editor-perspective.c:350
+#: ../libide/editor/ide-editor-perspective.c:456
 #: ../libide/preferences/ide-preferences-builtin.c:102
 #: ../libide/preferences/ide-preferences-builtin.c:125
 msgid "Editor"
@@ -714,7 +806,7 @@ msgstr "Dokumentum mentése"
 #: ../libide/editor/ide-editor-view-actions.c:307
 #: ../libide/editor/ide-editor-view-actions.c:438
 #: ../libide/ide-workbench-actions.c:67
-#: ../plugins/build-tools/gbp-build-panel.ui.h:13
+#: ../plugins/build-tools/gbp-build-panel.ui.h:8
 #: ../plugins/terminal/gb-terminal-view-actions.c:305
 msgid "Cancel"
 msgstr "Mégse"
@@ -788,51 +880,55 @@ msgstr "Támogatta"
 msgid "Commands:"
 msgstr "Parancsok:"
 
-#: ../libide/ide-application-command-line.c:165
+#: ../libide/ide-application-command-line.c:185
 msgid "List available subcommands"
 msgstr "Elérhető alparancsok felsorolása"
 
-#: ../libide/ide-application-command-line.c:172
+#: ../libide/ide-application-command-line.c:192
 msgid "Run Builder in standalone mode"
 msgstr "Az Építő futtatása önálló módban"
 
-#: ../libide/ide-application-command-line.c:179
+#: ../libide/ide-application-command-line.c:199
 msgid "Show the application's version"
 msgstr "Az alkalmazás verziójának megjelenítése"
 
-#: ../libide/ide-application-command-line.c:198
+#: ../libide/ide-application-command-line.c:218
 msgid "Increase verbosity, may be specified multiple times"
 msgstr "Részletesség növelése, többször is megadható"
 
-#: ../libide/ide-application-command-line.c:228
+#: ../libide/ide-application-command-line.c:225
+msgid "Enter GApplication Service mode"
+msgstr "Belépés GApplication szolgáltatásmódba"
+
+#: ../libide/ide-application-command-line.c:255
 msgid "COMMAND"
 msgstr "PARANCS"
 
-#: ../libide/ide-application-command-line.c:286
+#: ../libide/ide-application-command-line.c:326
 msgid "No commands available"
 msgstr "Nincsenek elérhető parancsok"
 
-#: ../libide/ide-application-command-line.c:315
+#: ../libide/ide-application-command-line.c:356
 msgid "Please provide a command"
 msgstr "Adjon meg egy parancsot"
 
-#: ../libide/ide-application-command-line.c:325
+#: ../libide/ide-application-command-line.c:366
 msgid "No such tool"
 msgstr "Nincs ilyen eszköz"
 
-#: ../libide/ide-application-command-line.c:339
+#: ../libide/ide-application-command-line.c:380
 msgid "Please provide a worker type"
 msgstr "Adja meg az építő típusát"
 
-#: ../libide/ide-application-command-line.c:346
+#: ../libide/ide-application-command-line.c:387
 msgid "Please provide a D-Bus address"
 msgstr "Adja meg a D-Bus címet"
 
-#: ../libide/ide-application-command-line.c:355
+#: ../libide/ide-application-command-line.c:396
 msgid "No such worker"
 msgstr "Nincs ilyen építő"
 
-#: ../libide/ide-buffer.c:2204
+#: ../libide/ide-buffer.c:2207
 msgid "The current language lacks a symbol resolver."
 msgstr "Az aktuális nyelvhez nem tartozik szimbólumfeloldó"
 
@@ -840,27 +936,24 @@ msgstr "Az aktuális nyelvhez nem tartozik szimbólumfeloldó"
 msgid "File too large to be opened."
 msgstr "A fájl túl nagy a megnyitáshoz."
 
-#: ../libide/ide-buffer-manager.c:1456
+#: ../libide/ide-buffer-manager.c:1461
 msgid "Words"
 msgstr "Szavak"
 
-#: ../libide/ide-buffer-manager.c:1668
+#: ../libide/ide-buffer-manager.c:1673
 #, c-format
 msgid "unsaved document %u"
 msgstr "mentetlen dokumentum %u"
 
-#: ../libide/ide-buffer-manager.c:1702
+#: ../libide/ide-buffer-manager.c:1707
 msgid "Failed to save buffer, ignoring reclamation."
 msgstr "Nem sikerült a puffer mentése, a helyreállítás figyelmen kívül hagyva."
 
-#: ../libide/ide-builder.c:55
+#: ../libide/ide-builder.c:89
 #, c-format
-msgid "%s does not implement build_async()"
-msgstr "A(z) %s nem valósítja meg a build_async() függvényt"
-
-#: ../libide/ide-builder.c:61
-msgid "No implementation of build_async()"
-msgstr "A build_async() függvény nincs megvalósítva"
+#| msgid "Project build system does not support building"
+msgid "%s does not support building"
+msgstr "%s nem támogatja az összeállítást"
 
 #: ../libide/ide-build-result.c:217
 msgid "Failed to open stderr stream."
@@ -870,7 +963,7 @@ msgstr "Az stderr hibafolyam megnyitása meghiúsult."
 msgid "Failed to open stdout stream."
 msgstr "Az stdout adatfolyam megnyitása meghiúsult."
 
-#: ../libide/ide-build-system.c:232
+#: ../libide/ide-build-system.c:122
 #, c-format
 msgid "%s() is not supported on %s build system."
 msgstr "A(z) %s() nem támogatott a(z) %s összeállítási rendszeren."
@@ -880,18 +973,26 @@ msgstr "A(z) %s() nem támogatott a(z) %s összeállítási rendszeren."
 msgid "You must call %s() before using libide."
 msgstr "A libide használata előtt meg kell hívni a(z) %s() függvényt."
 
-#: ../libide/ide-context.c:1665
+#: ../libide/ide-configuration-manager.c:427
+msgid "Default Configuration"
+msgstr "Alapértelmezett beállítások"
+
+#: ../libide/ide-context.c:1828
 msgid "An unload request is already pending"
 msgstr "Egy lecsatolási kérés már várakozik"
 
-#: ../libide/ide-context.c:1780
+#: ../libide/ide-context.c:1943
 msgid "Context has already been restored."
 msgstr "A környezet már vissza lett állítva."
 
-#: ../libide/ide-device-manager.c:144
+#: ../libide/ide-device-manager.c:147
 #, c-format
 msgid "The device \"%s\" could not be found."
 msgstr "A(z) „%s” eszköz nem található."
+
+#: ../libide/ide-environment-editor.c:65
+msgid "New variable…"
+msgstr "Új változó…"
 
 #: ../libide/ide-layout-view.c:146
 msgid "untitled document"
@@ -927,6 +1028,10 @@ msgstr "A fájlnak a projektfán belül kell lennie."
 msgid "%s() may only be executed once"
 msgstr "A(z) %s() csak egyszer hajtható végre"
 
+#: ../libide/ide-runtime-manager.c:100
+msgid "Host operating system"
+msgstr "Gazda operációs rendszer"
+
 #: ../libide/ide-script.c:205
 #, c-format
 msgid "%s has not implemented GAsyncInitable."
@@ -956,17 +1061,19 @@ msgstr "A(z) „%s” könyvtár megnyitása meghiúsult"
 msgid "Failed to load file: %s: %s"
 msgstr "Nem sikerült a(z) „%s” fájlt megnyitni: %s"
 
-#: ../libide/ide-source-view.c:4965
+#: ../libide/ide-source-view.c:4966
 #, c-format
-msgid "Insert \"%s\""
-msgstr "A(z) „%s” beszúrása"
+#| msgid "Insert \"%s\""
+msgid "Insert “%s”"
+msgstr "„%s” beszúrása"
 
-#: ../libide/ide-source-view.c:4967
+#: ../libide/ide-source-view.c:4968
 #, c-format
-msgid "Replace \"%s\" with \"%s\""
+#| msgid "Replace \"%s\" with \"%s\""
+msgid "Replace “%s” with “%s”"
 msgstr "A(z) „%s” cseréje ezzel: „%s”"
 
-#: ../libide/ide-source-view.c:5081
+#: ../libide/ide-source-view.c:5082
 msgid "Apply Fix-It"
 msgstr "Javítás érvényesítése"
 
@@ -1330,64 +1437,74 @@ msgstr ""
 "Mentéskor a módosított sorokban a sorvégi helykitöltő karakterek levágásra "
 "kerülnek."
 
-#: ../libide/preferences/ide-preferences-builtin.c:229
+#: ../libide/preferences/ide-preferences-builtin.c:228
+msgid "Overwrite Braces"
+msgstr "Zárójelek felülírása"
+
+#: ../libide/preferences/ide-preferences-builtin.c:228
+#| msgid "Overwrite Braces"
+msgid "Overwrite closing braces"
+msgstr "Záró zárójelek felülírása"
+
+#: ../libide/preferences/ide-preferences-builtin.c:230
 msgid "Margins"
 msgstr "Margók"
 
-#: ../libide/preferences/ide-preferences-builtin.c:230
+#: ../libide/preferences/ide-preferences-builtin.c:231
 msgid "Show right margin"
 msgstr "Jobb margó megjelenítése"
 
-#: ../libide/preferences/ide-preferences-builtin.c:231
+#: ../libide/preferences/ide-preferences-builtin.c:232
 msgid "Right margin position"
 msgstr "Jobb margó pozíciója"
 
-#: ../libide/preferences/ide-preferences-builtin.c:231
+#: ../libide/preferences/ide-preferences-builtin.c:232
 msgid "Position in spaces for the right margin"
 msgstr "Jobb margó pozíciójának megadása szóközökkel számolva"
 
-#: ../libide/preferences/ide-preferences-builtin.c:234
+#: ../libide/preferences/ide-preferences-builtin.c:235
 msgid "Tab width"
 msgstr "Tabulátor szélessége"
 
-#: ../libide/preferences/ide-preferences-builtin.c:234
+#: ../libide/preferences/ide-preferences-builtin.c:235
 msgid "Width of a tab character in spaces"
 msgstr "A tabulátor karakter szélessége szóközökben"
 
-#: ../libide/preferences/ide-preferences-builtin.c:235
+#: ../libide/preferences/ide-preferences-builtin.c:236
 msgid "Insert spaces instead of tabs"
 msgstr "Szóközök beillesztése tabulátorok helyett"
 
-#: ../libide/preferences/ide-preferences-builtin.c:235
+#: ../libide/preferences/ide-preferences-builtin.c:236
 msgid "Prefer spaces over use of tabs"
 msgstr "Szóközök előnyben részesítése a tabulátorok helyett"
 
-#: ../libide/preferences/ide-preferences-builtin.c:236
+#: ../libide/preferences/ide-preferences-builtin.c:237
 msgid "Automatically indent"
 msgstr "Automatikus behúzás"
 
-#: ../libide/preferences/ide-preferences-builtin.c:236
+#: ../libide/preferences/ide-preferences-builtin.c:237
 msgid "Indent source code as you type"
 msgstr "A forráskód behúzása gépelés közben"
 
-#: ../libide/preferences/ide-preferences-builtin.c:242
-#: ../plugins/build-tools/gbp-build-workbench-addin.c:331
+#: ../libide/preferences/ide-preferences-builtin.c:243
+#: ../plugins/build-tools/gbp-build-workbench-addin.c:270
 msgid "Build"
 msgstr "Összeállítás"
 
-#: ../libide/preferences/ide-preferences-builtin.c:244
+#: ../libide/preferences/ide-preferences-builtin.c:245
+#: ../plugins/build-tools/gbp-build-configuration-view.ui.h:1
 msgid "General"
 msgstr "Általános"
 
-#: ../libide/preferences/ide-preferences-builtin.c:245
+#: ../libide/preferences/ide-preferences-builtin.c:246
 msgid "Build Workers"
 msgstr "Építők"
 
-#: ../libide/preferences/ide-preferences-builtin.c:245
+#: ../libide/preferences/ide-preferences-builtin.c:246
 msgid "Number of parallel build workers"
 msgstr "Párhuzamos építők száma"
 
-#: ../libide/preferences/ide-preferences-perspective.c:796
+#: ../libide/preferences/ide-preferences-perspective.c:823
 msgid "Preferences"
 msgstr "Beállítások"
 
@@ -1441,67 +1558,69 @@ msgstr "Kapcsolódás az org.freedesktop.FileManager1 címhez sikertelen:"
 msgid "Calling ShowItems failed: "
 msgstr "A ShowItems meghívása sikertelen:"
 
-#: ../plugins/autotools/ide-autotools-builder.c:130
+#: ../plugins/autotools/ide-autotools-builder.c:49
 msgid "Cancelled"
 msgstr "Megszakítva"
 
-#: ../plugins/autotools/ide-autotools-builder.c:132
+#: ../plugins/autotools/ide-autotools-builder.c:51
 msgid "Failed"
 msgstr "Sikertelen"
 
-#: ../plugins/autotools/ide-autotools-builder.c:138
+#: ../plugins/autotools/ide-autotools-builder.c:57
 msgid "Success"
 msgstr "Sikeres"
 
-#: ../plugins/autotools/ide-autotools-builder.c:242
-#: ../plugins/autotools/ide-autotools-build-task.c:933
+#: ../plugins/autotools/ide-autotools-builder.c:161
+#: ../plugins/autotools/ide-autotools-build-task.c:863
 msgid "Building…"
 msgstr "Összeállítás…"
 
-#: ../plugins/autotools/ide-autotools-build-system.c:182
+#: ../plugins/autotools/ide-autotools-build-system.c:183
 msgid "Failed to locate configure.ac"
 msgstr "Nem található a „configure.ac” fájl"
 
-#: ../plugins/autotools/ide-autotools-build-task.c:270
+#: ../plugins/autotools/ide-autotools-build-task.c:173
 msgid "Directory must be on a locally mounted filesystem."
 msgstr "A mappának csatolva kell lennie a helyi fájlrendszerre."
 
-#: ../plugins/autotools/ide-autotools-build-task.c:649
+#: ../plugins/autotools/ide-autotools-build-task.c:546
 msgid "Cannot execute build task more than once."
 msgstr "Az összeállítási feladat nem futtatható egynél többször."
 
-#: ../plugins/autotools/ide-autotools-build-task.c:734
+#: ../plugins/autotools/ide-autotools-build-task.c:633
 msgid "Failed to create build directory."
 msgstr "Az összeállítási könyvtár létrehozása meghiúsult."
 
-#: ../plugins/autotools/ide-autotools-build-task.c:743
+#: ../plugins/autotools/ide-autotools-build-task.c:642
 #, c-format
 msgid "'%s' is not a directory."
 msgstr "A(z) „%s” nem könyvtár."
 
-#: ../plugins/autotools/ide-autotools-build-task.c:782
+#: ../plugins/autotools/ide-autotools-build-task.c:681
 #, c-format
 msgid "autogen.sh is missing from project directory (%s)."
 msgstr "Az autogen.sh hiányzik a projektkönyvtárból (%s)."
 
-#: ../plugins/autotools/ide-autotools-build-task.c:792
+#: ../plugins/autotools/ide-autotools-build-task.c:691
 msgid "autogen.sh is not executable."
 msgstr "Az autogen.sh nem futtatható."
 
-#: ../plugins/autotools/ide-autotools-build-task.c:796
-msgid "Autogening…"
-msgstr "Automatikus generálás…"
+#: ../plugins/autotools/ide-autotools-build-task.c:695
+#| msgid "Require Autogen"
+msgid "Running autogen…"
+msgstr "Az Autogen futtatása…"
 
-#: ../plugins/autotools/ide-autotools-build-task.c:825
+#: ../plugins/autotools/ide-autotools-build-task.c:729
 #, c-format
 msgid "autogen.sh failed to create configure (%s)"
 msgstr "Az autogen.sh nem tudta létrehozni a configure-t (%s)"
 
-#: ../plugins/autotools/ide-autotools-build-task.c:860
-msgid "Configuring…"
-msgstr "Konfigurálás…"
+#: ../plugins/autotools/ide-autotools-build-task.c:764
+#| msgid "Require Configure"
+msgid "Running configure…"
+msgstr "A Configure futtatása…"
 
-#: ../plugins/autotools/ide-autotools-build-task.c:931
+#: ../plugins/autotools/ide-autotools-build-task.c:861
 msgid "Cleaning…"
 msgstr "Takarítás…"
 
@@ -1509,112 +1628,147 @@ msgstr "Takarítás…"
 msgid "Invalid makefile provided, ignoring."
 msgstr "A megadott makefile érvénytelen, figyelmen kívül hagyva."
 
+#: ../plugins/build-tools/gbp-build-configuration-view.ui.h:2
+#| msgid "The name of the action"
+msgid "The name of the build configuration"
+msgstr "Az összeállítási konfiguráció neve"
+
+#: ../plugins/build-tools/gbp-build-configuration-view.ui.h:3
+msgid "Name"
+msgstr "Név"
+
+#: ../plugins/build-tools/gbp-build-configuration-view.ui.h:4
+#| msgid "The path within the project."
+msgid "The prefix to use when installing the project"
+msgstr "A projekten telepítésekor használandó előtag"
+
+#: ../plugins/build-tools/gbp-build-configuration-view.ui.h:5
+msgid "Installation Prefix"
+msgstr "Telepítési előtag"
+
+#: ../plugins/build-tools/gbp-build-configuration-view.ui.h:6
+msgid "Options to use when bootstrapping the project"
+msgstr "A projekt előkészítéséhez használandó beállítások"
+
+#: ../plugins/build-tools/gbp-build-configuration-view.ui.h:7
+#| msgid "Configuring…"
+msgid "Configure Options"
+msgstr "Configure beállításai"
+
+#: ../plugins/build-tools/gbp-build-configuration-view.ui.h:8
+#| msgid "Require Configure"
+msgid "Duplicate Configuration"
+msgstr "Beállítások kettőzése"
+
+#: ../plugins/build-tools/gbp-build-configuration-view.ui.h:9
+msgid "Delete Configuration"
+msgstr "Beállítások törlése"
+
+#: ../plugins/build-tools/gbp-build-configuration-view.ui.h:10
+#| msgid "Device:"
+msgid "Device"
+msgstr "Eszköz"
+
+#: ../plugins/build-tools/gbp-build-configuration-view.ui.h:11
+msgid "Runtime"
+msgstr "Futtatókörnyezet"
+
+#: ../plugins/build-tools/gbp-build-configuration-view.ui.h:12
+msgid "Environment"
+msgstr "Környezet"
+
 #: ../plugins/build-tools/gbp-build-panel-row.c:68
 msgid "Unknown file"
 msgstr "Ismeretlen fájl"
 
 #: ../plugins/build-tools/gbp-build-panel.ui.h:1
-msgid "Device:"
-msgstr "Eszköz:"
-
-#: ../plugins/build-tools/gbp-build-panel.ui.h:2
-msgid "Framework:"
-msgstr "Keretrendszer:"
-
-#: ../plugins/build-tools/gbp-build-panel.ui.h:3
-msgid "Packaging:"
-msgstr "Csomagolás:"
-
-#: ../plugins/build-tools/gbp-build-panel.ui.h:4
 #: ../plugins/project-tree/gtk/menus.ui.h:12
 msgid "_Build"
 msgstr "Öss_zeállítás"
 
-#: ../plugins/build-tools/gbp-build-panel.ui.h:5
+#: ../plugins/build-tools/gbp-build-panel.ui.h:2
 #: ../plugins/project-tree/gtk/menus.ui.h:13
 msgid "_Rebuild"
 msgstr "Új_ra-összeállítás"
 
-#: ../plugins/build-tools/gbp-build-panel.ui.h:6
+#: ../plugins/build-tools/gbp-build-panel.ui.h:3
 msgid "_Clean"
 msgstr "_Tisztítás"
 
-#: ../plugins/build-tools/gbp-build-panel.ui.h:7
-msgid "framework"
-msgstr "keretrendszer"
-
-#: ../plugins/build-tools/gbp-build-panel.ui.h:8
-msgid "packaging"
-msgstr "csomagolás"
-
-#: ../plugins/build-tools/gbp-build-panel.ui.h:9
+#: ../plugins/build-tools/gbp-build-panel.ui.h:4
 msgid "Status:"
 msgstr "Állapot:"
 
-#: ../plugins/build-tools/gbp-build-panel.ui.h:10
+#: ../plugins/build-tools/gbp-build-panel.ui.h:5
 msgid "Running Time:"
 msgstr "Futásidő:"
 
-#: ../plugins/build-tools/gbp-build-panel.ui.h:11
+#: ../plugins/build-tools/gbp-build-panel.ui.h:6
 msgid "Warnings:"
 msgstr "Figyelmeztetések:"
 
-#: ../plugins/build-tools/gbp-build-panel.ui.h:12
+#: ../plugins/build-tools/gbp-build-panel.ui.h:7
 msgid "Errors:"
 msgstr "Hibák:"
 
-#: ../plugins/build-tools/gbp-build-panel.ui.h:14
+#: ../plugins/build-tools/gbp-build-panel.ui.h:9
 msgid "Deploy"
 msgstr "Telepítés"
 
-#: ../plugins/build-tools/gbp-build-panel.ui.h:15
+#: ../plugins/build-tools/gbp-build-panel.ui.h:10
 msgid "Export"
 msgstr "Exportálás"
 
-#: ../plugins/build-tools/gbp-build-tool.c:91
-#: ../plugins/build-tools/gbp-build-tool.c:97
+#: ../plugins/build-tools/gbp-build-tool.c:102
+#: ../plugins/build-tools/gbp-build-tool.c:115
 #, c-format
 msgid "========================\n"
 msgstr "==============================\n"
 
-#: ../plugins/build-tools/gbp-build-tool.c:92
+#: ../plugins/build-tools/gbp-build-tool.c:103
 #, c-format
 msgid "           Project Name: %s\n"
 msgstr "                   Projektnév: %s\n"
 
-#: ../plugins/build-tools/gbp-build-tool.c:93
+#: ../plugins/build-tools/gbp-build-tool.c:104
 #, c-format
 msgid " Version Control System: %s\n"
 msgstr "        Verziókezelő rendszer: %s\n"
 
-#: ../plugins/build-tools/gbp-build-tool.c:94
+#: ../plugins/build-tools/gbp-build-tool.c:105
 #, c-format
 msgid "           Build System: %s\n"
 msgstr "       Összeállítási rendszer: %s\n"
 
-#: ../plugins/build-tools/gbp-build-tool.c:95
+#: ../plugins/build-tools/gbp-build-tool.c:106
 #, c-format
 msgid "    Build Date and Time: %s\n"
 msgstr " Összeállítás dátuma és ideje: %s \n"
 
-#: ../plugins/build-tools/gbp-build-tool.c:96
+#: ../plugins/build-tools/gbp-build-tool.c:107
 #, c-format
 msgid "    Building for Device: %s (%s)\n"
 msgstr "    Összeállítás az eszközhöz: %s (%s)\n"
 
+#: ../plugins/build-tools/gbp-build-tool.c:112
+#, c-format
+#| msgid "           Project Name: %s\n"
+msgid "            Environment: %s\n"
+msgstr "                    Környezet: %s\n"
+
 # FIXME: itt miért van pont ennyi =?
-#: ../plugins/build-tools/gbp-build-tool.c:124
-#: ../plugins/build-tools/gbp-build-tool.c:128
+#: ../plugins/build-tools/gbp-build-tool.c:142
+#: ../plugins/build-tools/gbp-build-tool.c:146
 #, c-format
 msgid "===============\n"
 msgstr "=============================\n"
 
-#: ../plugins/build-tools/gbp-build-tool.c:125
+#: ../plugins/build-tools/gbp-build-tool.c:143
 #, c-format
 msgid " Build Failure: %s\n"
 msgstr "Sikertelen összeállítás: %s\n"
 
-#: ../plugins/build-tools/gbp-build-tool.c:126
+#: ../plugins/build-tools/gbp-build-tool.c:144
 msgid " Build ran for: %"
 msgstr "Az összeállítás futási ideje: %"
 
@@ -1624,55 +1778,79 @@ msgstr "Az összeállítás futási ideje: %"
 #. *       here too. It would be nice if we could say, go build this project,
 #. *       for this device, and then deploy.
 #.
-#: ../plugins/build-tools/gbp-build-tool.c:139
-#: ../plugins/build-tools/gbp-build-tool.c:143
+#: ../plugins/build-tools/gbp-build-tool.c:157
+#: ../plugins/build-tools/gbp-build-tool.c:161
 #, c-format
 msgid "=================\n"
 msgstr "=================================\n"
 
-#: ../plugins/build-tools/gbp-build-tool.c:140
+#: ../plugins/build-tools/gbp-build-tool.c:158
 #, c-format
 msgid " Build Successful\n"
 msgstr "Sikeres összeállítás\n"
 
-#: ../plugins/build-tools/gbp-build-tool.c:141
+#: ../plugins/build-tools/gbp-build-tool.c:159
 msgid "   Build ran for: %"
 msgstr "    Az összeállítás futási ideje: %"
 
-#: ../plugins/build-tools/gbp-build-tool.c:191
+#: ../plugins/build-tools/gbp-build-tool.c:212
 #, c-format
 msgid "Failed to locate device \"%s\""
 msgstr "A(z) „%s” eszköz nem található."
 
-#: ../plugins/build-tools/gbp-build-tool.c:254
+#: ../plugins/build-tools/gbp-build-tool.c:222
+#, c-format
+#| msgid "Failed to locate template \"%s\""
+msgid "Failed to locate runtime \"%s\""
+msgstr "A(z) „%s” futtatókörnyezet nem található"
+
+#: ../plugins/build-tools/gbp-build-tool.c:286
 msgid "Clean the project"
 msgstr "Projekt tisztítása"
 
-#: ../plugins/build-tools/gbp-build-tool.c:256
+#: ../plugins/build-tools/gbp-build-tool.c:288
 msgid "The ID of the device to build for"
 msgstr "Az eszköz azonosítója, amelyre az összeállítás készül"
 
-#: ../plugins/build-tools/gbp-build-tool.c:257
+#: ../plugins/build-tools/gbp-build-tool.c:289
 msgid "local"
 msgstr "helyi"
 
-#: ../plugins/build-tools/gbp-build-tool.c:259
+#: ../plugins/build-tools/gbp-build-tool.c:291
+#| msgid "The root directory to perform builds within."
+msgid "The runtime to use for building"
+msgstr "Az összeállításhoz használandó futtatókörnyezet"
+
+#: ../plugins/build-tools/gbp-build-tool.c:292
+msgid "host"
+msgstr "gép"
+
+#: ../plugins/build-tools/gbp-build-tool.c:294
 msgid "Number of workers to use when building"
 msgstr "Az összeállítás során használt építők száma"
 
-#: ../plugins/build-tools/gbp-build-tool.c:260
+#: ../plugins/build-tools/gbp-build-tool.c:295
 msgid "N"
 msgstr "N"
 
-#: ../plugins/build-tools/gbp-build-tool.c:262
+#: ../plugins/build-tools/gbp-build-tool.c:297
+#| msgid "The configuration for the build."
+msgid "The configuration to use from .buildconfig"
+msgstr "A .buildconfig-ból használandó beállítás"
+
+#: ../plugins/build-tools/gbp-build-tool.c:298
+msgid "CONFIG_ID"
+msgstr "KONFIG_AZ"
+
+#: ../plugins/build-tools/gbp-build-tool.c:300
 msgid "Path to project file, defaults to current directory"
 msgstr "Útvonal a projektfájlhoz, alapértelmezésben az aktuális könyvtár"
 
-#: ../plugins/build-tools/gbp-build-tool.c:263
+#: ../plugins/build-tools/gbp-build-tool.c:301
 msgid "PATH"
 msgstr "ÚTVONAL"
 
-#: ../plugins/build-tools/gbp-build-workbench-addin.c:337
+#: ../plugins/build-tools/gbp-build-workbench-addin.c:275
 msgid "Build Output"
 msgstr "Összeállítás kimenete"
 
@@ -1708,6 +1886,21 @@ msgstr "névtelen"
 #: ../plugins/clang/ide-clang-translation-unit.c:656
 msgid "clang_codeCompleteAt() only works on local files"
 msgstr "A clang_codeCompleteAt() csak helyi fájlokon működik"
+
+#: ../plugins/clang/ide-clang-preferences-addin.c:62
+msgid "Clang"
+msgstr "Clang"
+
+#: ../plugins/clang/ide-clang-preferences-addin.c:63
+#| msgid "Show errors and warnings provided by Vala"
+msgid "Show errors and warnings provided by Clang"
+msgstr "A Clang hibák és figyelmeztetések megjelenítése"
+
+#. translators: keywords used when searching for preferences
+#: ../plugins/clang/ide-clang-preferences-addin.c:65
+#| msgid "vala diagnostics warnings errors"
+msgid "clang diagnostics warnings errors"
+msgstr "clang diagnosztika figyelmeztetések hibák"
 
 #: ../plugins/command-bar/gb-command-bar.c:299
 #, c-format
@@ -1937,7 +2130,7 @@ msgstr "Verziókövetés"
 msgid "Attribution"
 msgstr "Megjelölés"
 
-#: ../plugins/gnome-code-assistance/ide-gca-diagnostic-provider.c:336
+#: ../plugins/gnome-code-assistance/ide-gca-diagnostic-provider.c:375
 msgid "Code assistance requires a local file."
 msgstr "A kódkiegészítéshez helyi fájl szükséges."
 
@@ -2124,6 +2317,41 @@ msgstr "A Vala hibák és figyelmeztetések megjelenítése"
 msgid "vala diagnostics warnings errors"
 msgstr "vala diagnosztika figyelmeztetések hibák"
 
+#: ../plugins/gnome-code-assistance/ide-gca-preferences-addin.c:62
+msgid "Pylint"
+msgstr "Pylint"
+
+#: ../plugins/gnome-code-assistance/ide-gca-preferences-addin.c:63
+msgid "Enable the use of pylint, which may execute code in your project"
+msgstr ""
+"A pylint használatának engedélyezése, ami kódot futtathat a projektjében"
+
+#. translators: these are keywords used to search for preferences
+#: ../plugins/gnome-code-assistance/ide-gca-preferences-addin.c:65
+msgid "pylint python lint code execute execution"
+msgstr "pylint python lint kód végrehajtás"
+
+#~ msgid "%s does not implement build_async()"
+#~ msgstr "A(z) %s nem valósítja meg a build_async() függvényt"
+
+#~ msgid "No implementation of build_async()"
+#~ msgstr "A build_async() függvény nincs megvalósítva"
+
+#~ msgid "Autogening…"
+#~ msgstr "Automatikus generálás…"
+
+#~ msgid "Framework:"
+#~ msgstr "Keretrendszer:"
+
+#~ msgid "Packaging:"
+#~ msgstr "Csomagolás:"
+
+#~ msgid "framework"
+#~ msgstr "keretrendszer"
+
+#~ msgid "packaging"
+#~ msgstr "csomagolás"
+
 #~ msgid "Success.\n"
 #~ msgstr "Sikeres.\n"
 
@@ -2149,9 +2377,6 @@ msgstr "vala diagnosztika figyelmeztetések hibák"
 
 #~ msgid "From remote source code repository"
 #~ msgstr "Távoli forráskód-tárolóból"
-
-#~ msgid "Name"
-#~ msgstr "Név"
 
 #~ msgid "GNOME Version"
 #~ msgstr "GNOME verzió"
@@ -2261,9 +2486,6 @@ msgstr "vala diagnosztika figyelmeztetések hibák"
 #~ msgid "Use dark colors for the application chrome."
 #~ msgstr "Sötét színeket használ az alkalmazás megjelenítéséhez."
 
-#~ msgid "Search Preferences…"
-#~ msgstr "Keresési beállítások…"
-
 #~ msgid "Select Project"
 #~ msgstr "Válasszon egy projektet"
 
@@ -2275,9 +2497,6 @@ msgstr "vala diagnosztika figyelmeztetések hibák"
 
 #~ msgid "Two finger swipe left"
 #~ msgstr "Két ujjas húzás balra"
-
-#~ msgid "Show list of open files"
-#~ msgstr "Nyitott fájlok listájának megjelenítése"
 
 #~ msgid "Switch to source or header"
 #~ msgstr "Váltás a forrás és a fejlécállomány között"
@@ -2332,9 +2551,6 @@ msgstr "vala diagnosztika figyelmeztetések hibák"
 
 #~ msgid "The type of plugin worker process to run."
 #~ msgstr "A futtatandó bővítmény háttérfolyamat típusa."
-
-#~ msgid "Select Project File"
-#~ msgstr "Válasszon egy projektfájlt"
 
 #~ msgid "Clone Repository"
 #~ msgstr "Tároló klónozása"
@@ -2430,9 +2646,6 @@ msgstr "vala diagnosztika figyelmeztetések hibák"
 #~ msgstr[0] "még %s"
 #~ msgstr[1] "még %s"
 
-#~ msgid "Search Shortcuts"
-#~ msgstr "Keresési gyorsbillentyűk"
-
 #~ msgid "Search Results"
 #~ msgstr "Találatok"
 
@@ -2444,9 +2657,6 @@ msgstr "vala diagnosztika figyelmeztetések hibák"
 
 #~ msgid "Build Failure"
 #~ msgstr "Sikertelen összeállítás"
-
-#~ msgid "Project build system does not support building"
-#~ msgstr "A projekt összeállító rendszere nem támogatja az összeállítást"
 
 #~ msgid "Timed out while waiting for devices to settle.\n"
 #~ msgstr "Időtúllépés az eszközre várakozás során.\n"
@@ -2499,9 +2709,6 @@ msgstr "vala diagnosztika figyelmeztetések hibák"
 #~ msgid "PROJECT_FILE [SEARCH TERMS...]"
 #~ msgstr "PROJEKTFÁJL [KERESÉSI KIFEJEZÉSEK…]"
 
-#~ msgid "Clang"
-#~ msgstr "Clang"
-
 #~ msgid "CTags"
 #~ msgstr "CTags"
 
@@ -2510,9 +2717,6 @@ msgstr "vala diagnosztika figyelmeztetések hibák"
 
 #~ msgid "%s (Preview)"
 #~ msgstr "%s (Előnézet)"
-
-#~ msgid "The name of the action"
-#~ msgstr "A művelet neve"
 
 #~ msgid "State Machine"
 #~ msgstr "Állapotgép"
@@ -2743,9 +2947,6 @@ msgstr "vala diagnosztika figyelmeztetések hibák"
 #~ msgid "Root Build Directory"
 #~ msgstr "Gyökér összeállítási könyvtár"
 
-#~ msgid "The root directory to perform builds within."
-#~ msgstr "A gyökérkönyvtár, ahol az összeállítást végezzük."
-
 #~ msgid "Script Manager"
 #~ msgstr "Parancsfájlkezelő"
 
@@ -2830,9 +3031,6 @@ msgstr "vala diagnosztika figyelmeztetések hibák"
 #~ msgid "Path"
 #~ msgstr "Útvonal"
 
-#~ msgid "The path within the project."
-#~ msgstr "A projekten belüli útvonal."
-
 #~ msgid "Temporary ID"
 #~ msgstr "Átmeneti ID"
 
@@ -2898,9 +3096,6 @@ msgstr "vala diagnosztika figyelmeztetések hibák"
 
 #~ msgid "The path for the file within the project tree."
 #~ msgstr "A fájl projekten belüli útvonala."
-
-#~ msgid "The project description."
-#~ msgstr "A projektleírás."
 
 #~ msgid "The project directory."
 #~ msgstr "A projektkönyvtár."
@@ -3101,9 +3296,6 @@ msgstr "vala diagnosztika figyelmeztetések hibák"
 #~ msgid "The display name of the keybinding mode."
 #~ msgstr "A billentyűkombináció mód megjelenítendő neve."
 
-#~ msgid "Overwrite Braces"
-#~ msgstr "Zárójelek felülírása"
-
 #~ msgid "Overwrite a matching brace/bracket/quotation/parenthesis."
 #~ msgstr "Felülírja a megfelelő idéző- és zárójelpárokat."
 
@@ -3202,9 +3394,6 @@ msgstr "vala diagnosztika figyelmeztetések hibák"
 #~ msgid "y"
 #~ msgstr "y"
 
-#~ msgid "The configuration for the build."
-#~ msgstr "Az összeállítás beállításai."
-
 #~ msgid "Tarball Name"
 #~ msgstr "Tarball neve"
 
@@ -3217,14 +3406,8 @@ msgstr "vala diagnosztika figyelmeztetések hibák"
 #~ msgid "The directory to perform the build within."
 #~ msgstr "A könyvtár, ahol az összeállítást végezzük."
 
-#~ msgid "Require Autogen"
-#~ msgstr "Az Autogen kötelező"
-
 #~ msgid "If autogen.sh should be forced to execute."
 #~ msgstr "Az autogen.sh kötelezően futtatandó-e."
-
-#~ msgid "Require Configure"
-#~ msgstr "A Configure kötelező"
 
 #~ msgid "If configure should be forced to execute."
 #~ msgstr "A configure kötelezően futtatandó-e."
@@ -3723,9 +3906,6 @@ msgstr "vala diagnosztika figyelmeztetések hibák"
 
 #~ msgid "If enabled, the editor will highlight matching brackets."
 #~ msgstr "Ha be van kapcsolva, akkor a szerkesztő kiemeli a zárójelpárokat."
-
-#~ msgid "Show line numbers"
-#~ msgstr "Sorok számának megjelenítése"
 
 #~ msgid "If enabled, the editor will show line numbers."
 #~ msgstr "Ha be van kapcsolva, akkor a szerkesztő megjeleníti a sorok számát."
