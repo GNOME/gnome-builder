@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-02-24 16:14+0100\n"
-"PO-Revision-Date: 2016-02-24 16:15+0100\n"
+"POT-Creation-Date: 2016-02-29 00:38+0100\n"
+"PO-Revision-Date: 2016-02-29 00:39+0100\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <gnomepl@aviary.pl>\n"
 "Language: pl\n"
@@ -310,7 +310,7 @@ msgid "No open files"
 msgstr "Brak otwartych plików"
 
 #: ../data/ui/ide-editor-perspective.ui.h:2
-msgid "Try opening a file typing in the search box at the top"
+msgid "Try opening a file by typing in the search box at the top"
 msgstr "Można otwierać pliki za pomocą pola wyszukiwania"
 
 #: ../data/ui/ide-editor-perspective.ui.h:3
@@ -775,7 +775,7 @@ msgstr "Wrsz %u, kol %u"
 msgid "%u of %u"
 msgstr "%u z %u"
 
-#: ../libide/editor/ide-editor-frame.c:643
+#: ../libide/editor/ide-editor-frame.c:658
 #: ../plugins/project-tree/gtk/menus.ui.h:1
 msgid "Re_veal in Project Tree"
 msgstr "Odkry_wanie w drzewie projektu"
@@ -1488,7 +1488,7 @@ msgstr "Wątki robocze budowania"
 msgid "Number of parallel build workers"
 msgstr "Liczba równoległych wątków roboczych budowania"
 
-#: ../libide/preferences/ide-preferences-perspective.c:821
+#: ../libide/preferences/ide-preferences-perspective.c:823
 msgid "Preferences"
 msgstr "Preferencje"
 
@@ -1825,6 +1825,19 @@ msgstr "ŚCIEŻKA"
 msgid "Build Output"
 msgstr "Wyjście budowania"
 
+#: ../plugins/clang/ide-clang-preferences-addin.c:62
+msgid "Clang"
+msgstr "Clang"
+
+#: ../plugins/clang/ide-clang-preferences-addin.c:63
+msgid "Show errors and warnings provided by Clang"
+msgstr "Wyświetlanie błędów i ostrzeżeń kompilatora Clang"
+
+#. translators: keywords used when searching for preferences
+#: ../plugins/clang/ide-clang-preferences-addin.c:65
+msgid "clang diagnostics warnings errors"
+msgstr "clang diagnostyka ostrzeżenia błędy"
+
 #: ../plugins/clang/ide-clang-service.c:269
 msgid "Unknown failure"
 msgstr "Nieznane niepowodzenie"
@@ -1857,19 +1870,6 @@ msgstr "anonimowy"
 #: ../plugins/clang/ide-clang-translation-unit.c:656
 msgid "clang_codeCompleteAt() only works on local files"
 msgstr "Funkcja clang_codeCompleteAt() działania tylko na lokalnych plikach"
-
-#: ../plugins/clang/ide-clang-preferences-addin.c:62
-msgid "Clang"
-msgstr "Clang"
-
-#: ../plugins/clang/ide-clang-preferences-addin.c:63
-msgid "Show errors and warnings provided by Clang"
-msgstr "Wyświetlanie błędów i ostrzeżeń kompilatora Clang"
-
-#. translators: keywords used when searching for preferences
-#: ../plugins/clang/ide-clang-preferences-addin.c:65
-msgid "clang diagnostics warnings errors"
-msgstr "clang diagnostyka ostrzeżenia błędy"
 
 #: ../plugins/command-bar/gb-command-bar.c:299
 #, c-format
@@ -1934,6 +1934,14 @@ msgstr "Nieprawidłowe żądanie wyszukania i zastąpienia"
 #, c-format
 msgid "Not a command: %s"
 msgstr "Nie jest poleceniem: %s"
+
+#: ../plugins/comment-code/gtk/menus.ui.h:1
+msgid "Comment code"
+msgstr "Dodaj komentarz"
+
+#: ../plugins/comment-code/gtk/menus.ui.h:2
+msgid "Uncomment code"
+msgstr "Usuń komentarz"
 
 #: ../plugins/contributing/contributing_plugin/helper.py:76
 #, python-format
@@ -2097,6 +2105,19 @@ msgstr "Autorstwo"
 #: ../plugins/gnome-code-assistance/ide-gca-diagnostic-provider.c:375
 msgid "Code assistance requires a local file."
 msgstr "Asysta podczas pisania kodu wymaga lokalnego pliku."
+
+#: ../plugins/gnome-code-assistance/ide-gca-preferences-addin.c:62
+msgid "Pylint"
+msgstr "pylint"
+
+#: ../plugins/gnome-code-assistance/ide-gca-preferences-addin.c:63
+msgid "Enable the use of pylint, which may execute code in your project"
+msgstr "Użycie programu pylint, który może wykonywać kod w projekcie"
+
+#. translators: these are keywords used to search for preferences
+#: ../plugins/gnome-code-assistance/ide-gca-preferences-addin.c:65
+msgid "pylint python lint code execute execution"
+msgstr "pylint python lint kod wykonaj wykonywanie"
 
 #: ../plugins/gnome-code-assistance/ide-gca-service.c:168
 msgid "No language specified"
@@ -2280,16 +2301,3 @@ msgstr "Wyświetlanie błędów i ostrzeżeń języka Vala"
 #: ../plugins/vala-pack/ide-vala-preferences-addin.vala:35
 msgid "vala diagnostics warnings errors"
 msgstr "vala diagnostyka ostrzeżenia błędy"
-
-#: ../plugins/gnome-code-assistance/ide-gca-preferences-addin.c:62
-msgid "Pylint"
-msgstr "pylint"
-
-#: ../plugins/gnome-code-assistance/ide-gca-preferences-addin.c:63
-msgid "Enable the use of pylint, which may execute code in your project"
-msgstr "Użycie programu pylint, który może wykonywać kod w projekcie"
-
-#. translators: these are keywords used to search for preferences
-#: ../plugins/gnome-code-assistance/ide-gca-preferences-addin.c:65
-msgid "pylint python lint code execute execution"
-msgstr "pylint python lint kod wykonaj wykonywanie"
