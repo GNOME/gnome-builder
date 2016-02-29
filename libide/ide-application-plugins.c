@@ -165,6 +165,18 @@ ide_application_plugins_enabled_changed (IdeApplication *self,
     peas_engine_unload_plugin (engine, plugin_info);
 }
 
+static GSettings *
+_ide_application_plugin_get_settings (const gchar *module_name)
+{
+  g_autofree gchar *path = NULL;
+  GSettings *settings;
+
+  path = g_strdup_printf ("/org/gnome/builder/plugins/%s/", module_name);
+  settings = g_settings_new_with_path ("org.gnome.builder.plugin", path);
+
+  return settings;
+}
+
 void
 ide_application_load_plugins (IdeApplication *self)
 {
@@ -180,12 +192,10 @@ ide_application_load_plugins (IdeApplication *self)
     {
       PeasPluginInfo *plugin_info = list->data;
       GSettings *settings;
-      g_autofree gchar *path = NULL;
       const gchar *module_name;
 
       module_name = peas_plugin_info_get_module_name (plugin_info);
-      path = g_strdup_printf ("/org/gnome/builder/plugins/%s/", module_name);
-      settings = g_settings_new_with_path ("org.gnome.builder.plugin", path);
+      settings = _ide_application_plugin_get_settings (module_name);
 
       g_object_set_data (G_OBJECT (settings), "PEAS_PLUGIN_INFO", plugin_info);
 
@@ -410,5 +420,16 @@ ide_application_init_plugin_menus (IdeApplication *self)
   list = peas_engine_get_plugin_list (engine);
 
   for (; list != NULL; list = list->next)
-    ide_application_load_plugin_menus (self, list->data, engine);
+    {
+      PeasPluginInfo *plugin_info = list->data;
+      const gchar *module_name;
+      GSettings *settings;
+
+      module_name = peas_plugin_info_get_module_name (plugin_info);
+      settings = _ide_application_plugin_get_settings (module_name);
+      if (!g_settings_get_boolean (settings, "enabled"))
+        continue;
+
+      ide_application_load_plugin_menus (self, list->data, engine);
+    }
 }
