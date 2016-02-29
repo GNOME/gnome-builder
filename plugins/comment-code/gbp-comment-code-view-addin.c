@@ -241,12 +241,15 @@ gbp_comment_code_view_addin_uncomment_line (GtkTextBuffer *buffer,
         tag_begin = tmp_iter;
 
       tmp_iter = tag_end;
-      gtk_text_iter_forward_char (&tmp_iter);
-      ch = gtk_text_iter_get_char (&tmp_iter);
-      if (ch == ' ' || ch == '\t')
+      if (!gtk_text_iter_ends_line (&tmp_iter))
         {
-          tag_end = tmp_iter;
-          gtk_text_iter_forward_char (&tag_end);
+          gtk_text_iter_forward_char (&tmp_iter);
+          ch = gtk_text_iter_get_char (&tmp_iter);
+          if (ch == ' ' || ch == '\t')
+            {
+              tag_end = tmp_iter;
+              gtk_text_iter_forward_char (&tag_end);
+            }
         }
 
       gtk_text_buffer_delete (buffer, &tag_begin, &tag_end);
