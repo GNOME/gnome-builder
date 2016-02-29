@@ -143,8 +143,6 @@ _ide_back_forward_list_save_async (IdeBackForwardList  *self,
 {
   IdeBackForwardListSave *state;
   g_autoptr(GTask) task = NULL;
-  g_autoptr(GFile) directory = NULL;
-  g_autoptr(GBytes) bytes = NULL;
 
   IDE_ENTRY;
 
