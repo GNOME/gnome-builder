@@ -30,7 +30,7 @@
 
 struct _IdeAutotoolsBuildTask
 {
-  IdeObject         parent_instance;
+  IdeBuildResult    parent;
   IdeConfiguration *configuration;
   GFile            *directory;
   GPtrArray        *extra_targets;
