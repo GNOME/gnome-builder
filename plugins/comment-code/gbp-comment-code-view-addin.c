@@ -320,6 +320,10 @@ gbp_comment_code_view_addin_comment_action (GSimpleAction *action,
   gtk_text_buffer_get_selection_bounds (buffer, &begin, &end);
   gtk_text_iter_order (&begin, &end);
 
+  if (!gtk_text_iter_equal (&begin, &end) &&
+      gtk_text_iter_starts_line (&end))
+    gtk_text_iter_backward_char (&end);
+
   start_line = gtk_text_iter_get_line (&begin);
   end_line = gtk_text_iter_get_line (&end);
 
