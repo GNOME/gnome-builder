@@ -47,13 +47,36 @@ gb_project_tree_addin_context_set (GtkWidget  *widget,
 }
 
 static void
+gb_project_tree_addin_grid_empty (GbProjectTreeAddin *self,
+                                  IdeLayoutGrid      *grid)
+{
+  GtkWidget *layout;
+  GtkWidget *pane;
+
+  g_assert (GB_IS_PROJECT_TREE_ADDIN (self));
+  g_assert (IDE_IS_LAYOUT_GRID (grid));
+
+  layout = gtk_widget_get_ancestor (GTK_WIDGET (grid), IDE_TYPE_LAYOUT);
+  g_assert (layout != NULL);
+
+  pane = ide_layout_get_left_pane (IDE_LAYOUT (layout));
+  g_assert (pane != NULL);
+
+  gtk_container_child_set (GTK_CONTAINER (layout), GTK_WIDGET (pane),
+                           "reveal", TRUE,
+                           NULL);
+}
+
+static void
 gb_project_tree_addin_load (IdeWorkbenchAddin *addin,
                             IdeWorkbench      *workbench)
 {
   GbProjectTreeAddin *self = (GbProjectTreeAddin *)addin;
   IdePerspective *editor;
   GtkWidget *pane;
+  GtkWidget *content;
   GtkWidget *scroller;
+  GtkWidget *grid;
 
   g_assert (IDE_IS_WORKBENCH_ADDIN (self));
   g_assert (IDE_IS_WORKBENCH (workbench));
@@ -63,6 +86,18 @@ gb_project_tree_addin_load (IdeWorkbenchAddin *addin,
 
   pane = ide_layout_get_left_pane (IDE_LAYOUT (editor));
   g_assert (pane != NULL);
+
+  content = ide_layout_get_content_pane (IDE_LAYOUT (editor));
+  g_assert (content != NULL);
+
+  grid = ide_widget_find_child_typed (content, IDE_TYPE_LAYOUT_GRID);
+  g_assert (grid != NULL);
+
+  g_signal_connect_object (grid,
+                           "empty",
+                           G_CALLBACK (gb_project_tree_addin_grid_empty),
+                           self,
+                           G_CONNECT_SWAPPED);
 
   scroller = g_object_new (GTK_TYPE_SCROLLED_WINDOW,
                            "visible", TRUE,
