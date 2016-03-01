@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
   <gresource prefix="/org/gnome/builder/plugins/create-project-plugin">
+    <file>gbp-create-project-widget.ui</file>
   </gresource>
 </gresources>
