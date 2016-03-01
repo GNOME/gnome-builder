@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-02-29 08:01+0000\n"
-"PO-Revision-Date: 2016-02-29 12:02-0300\n"
+"POT-Creation-Date: 2016-03-01 08:04+0000\n"
+"PO-Revision-Date: 2016-03-01 15:25-0300\n"
 "Last-Translator: Artur de Aquino Morais <artur.morais93@outlook.com>\n"
 "Language-Team: Brazilian Portuguese <gnome-pt_br-list@gnome.org>\n"
 "Language: pt_BR\n"
@@ -1010,7 +1010,7 @@ msgstr "Destinação de arquivo deve estar dentro da árvore do projeto."
 msgid "File must be within the project tree."
 msgstr "Arquivo deve estar dentro da árvore do projeto."
 
-#: ../libide/ide-recent-projects.c:382
+#: ../libide/ide-recent-projects.c:383
 #, c-format
 msgid "%s() may only be executed once"
 msgstr "%s() só pode ser executado uma vez"
@@ -1494,6 +1494,23 @@ msgstr "Trabalhos de compilação"
 msgid "Number of parallel build workers"
 msgstr "Número de trabalhos de compilação paralelos"
 
+#: ../libide/preferences/ide-preferences-builtin.c:252
+#: ../plugins/git/ide-git-clone-widget.c:200
+msgid "Projects"
+msgstr "Projetos"
+
+#: ../libide/preferences/ide-preferences-builtin.c:254
+msgid "Project Discovery"
+msgstr "Descoberta de projeto"
+
+#: ../libide/preferences/ide-preferences-builtin.c:255
+msgid "Discover projects on my computer"
+msgstr "Descobrir projetos no meu computador"
+
+#: ../libide/preferences/ide-preferences-builtin.c:255
+msgid "Scan your computer for existing projects"
+msgstr "Varrer seu computador por projetos existentes "
+
 #: ../libide/preferences/ide-preferences-perspective.c:823
 msgid "Preferences"
 msgstr "Preferências"
@@ -1561,7 +1578,7 @@ msgid "Success"
 msgstr "Sucesso"
 
 #: ../plugins/autotools/ide-autotools-builder.c:161
-#: ../plugins/autotools/ide-autotools-build-task.c:863
+#: ../plugins/autotools/ide-autotools-build-task.c:872
 msgid "Building…"
 msgstr "Compilando…"
 
@@ -1569,46 +1586,46 @@ msgstr "Compilando…"
 msgid "Failed to locate configure.ac"
 msgstr "Falha ao localizar o configure.ac"
 
-#: ../plugins/autotools/ide-autotools-build-task.c:173
+#: ../plugins/autotools/ide-autotools-build-task.c:174
 msgid "Directory must be on a locally mounted filesystem."
 msgstr "O diretório deve estar em um sistema de arquivos montado localmente."
 
-#: ../plugins/autotools/ide-autotools-build-task.c:546
+#: ../plugins/autotools/ide-autotools-build-task.c:548
 msgid "Cannot execute build task more than once."
 msgstr "Não foi possível executar a tarefa de compilação mais de uma vez."
 
-#: ../plugins/autotools/ide-autotools-build-task.c:633
+#: ../plugins/autotools/ide-autotools-build-task.c:642
 msgid "Failed to create build directory."
 msgstr "Falha ao criar o diretório de compilação."
 
-#: ../plugins/autotools/ide-autotools-build-task.c:642
+#: ../plugins/autotools/ide-autotools-build-task.c:651
 #, c-format
 msgid "'%s' is not a directory."
 msgstr "\"%s\" não é um diretório."
 
-#: ../plugins/autotools/ide-autotools-build-task.c:681
+#: ../plugins/autotools/ide-autotools-build-task.c:690
 #, c-format
 msgid "autogen.sh is missing from project directory (%s)."
 msgstr "autogen.sh está faltando no diretório de projeto (%s)."
 
-#: ../plugins/autotools/ide-autotools-build-task.c:691
+#: ../plugins/autotools/ide-autotools-build-task.c:700
 msgid "autogen.sh is not executable."
 msgstr "autogen.sh não é um executável."
 
-#: ../plugins/autotools/ide-autotools-build-task.c:695
+#: ../plugins/autotools/ide-autotools-build-task.c:704
 msgid "Running autogen…"
 msgstr "Executando autogen…"
 
-#: ../plugins/autotools/ide-autotools-build-task.c:729
+#: ../plugins/autotools/ide-autotools-build-task.c:738
 #, c-format
 msgid "autogen.sh failed to create configure (%s)"
 msgstr "autogen.sh falhou ao criar configuração (%s)"
 
-#: ../plugins/autotools/ide-autotools-build-task.c:764
+#: ../plugins/autotools/ide-autotools-build-task.c:773
 msgid "Running configure…"
 msgstr "Excecutando configure…"
 
-#: ../plugins/autotools/ide-autotools-build-task.c:861
+#: ../plugins/autotools/ide-autotools-build-task.c:870
 msgid "Cleaning…"
 msgstr "Limpando…"
 
@@ -2071,10 +2088,6 @@ msgstr "O arquivo requisitado não existe dentro do índice do git."
 #: ../plugins/git/ide-git-clone-widget.c:131
 msgid "A valid Git URL is required"
 msgstr "Uma URL Git válida é necessária"
-
-#: ../plugins/git/ide-git-clone-widget.c:200
-msgid "Projects"
-msgstr "Projetos"
 
 #: ../plugins/git/ide-git-clone-widget.ui.h:1
 msgid "user@host:repository.git"
