@@ -17,6 +17,7 @@ libmingw_plugin_la_SOURCES = \
 libmingw_plugin_la_CFLAGS = \
 	$(LIBIDE_CFLAGS) \
 	-I$(top_srcdir)/libide \
+	-I$(top_builddir)/libide \
 	$(NULL)
 
 libmingw_plugin_la_LDFLAGS = \

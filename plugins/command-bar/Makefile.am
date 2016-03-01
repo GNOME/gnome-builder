@@ -36,6 +36,7 @@ libcommand_bar_la_SOURCES = \
 
 libcommand_bar_la_CFLAGS = \
 	-I$(top_srcdir)/libide \
+	-I$(top_builddir)/libide \
 	-I$(top_srcdir)/libide/editor \
 	-I$(top_srcdir)/libide/util \
 	-I$(top_srcdir)/contrib/egg \

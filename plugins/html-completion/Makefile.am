@@ -16,6 +16,7 @@ libhtml_completion_plugin_la_CFLAGS = \
 	$(OPTIMIZE_CFLAGS) \
 	-I$(top_srcdir)/contrib/search \
 	-I$(top_srcdir)/libide \
+	-I$(top_builddir)/libide \
 	$(NULL)
 
 libhtml_completion_plugin_la_LDFLAGS = \

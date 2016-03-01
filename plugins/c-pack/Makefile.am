@@ -19,6 +19,7 @@ libc_pack_plugin_la_SOURCES = \
 libc_pack_plugin_la_CFLAGS = \
 	$(LIBIDE_CFLAGS) \
 	-I$(top_srcdir)/libide \
+	-I$(top_builddir)/libide \
 	$(NULL)
 
 libc_pack_plugin_la_LDFLAGS = \

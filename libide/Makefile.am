@@ -7,7 +7,9 @@ pkglibdir = $(libdir)/gnome-builder
 pkglib_LTLIBRARIES = libide-1.0.la
 
 headersdir = $(includedir)/gnome-builder-@VERSION@/libide
-nobase_headers_DATA = $(libide_1_0_la_public_headers)
+nobase_headers_DATA = \
+	$(libide_1_0_la_public_headers) \
+	$(builddir)/ide-enums.h
 
 libide_1_0_la_public_headers = \
 	directory/ide-directory-build-system.h \
@@ -49,7 +51,6 @@ libide_1_0_la_public_headers = \
 	ide-diagnostic.h \
 	ide-diagnostician.h \
 	ide-diagnostics.h \
-	ide-enums.h \
 	ide-environment-editor-row.h \
 	ide-environment-editor.h \
 	ide-environment-variable.h \
@@ -206,7 +207,6 @@ libide_1_0_la_public_sources = \
 	ide-diagnostic.c \
 	ide-diagnostician.c \
 	ide-diagnostics.c \
-	ide-enums.c \
 	ide-environment-editor-row.c \
 	ide-environment-editor.c \
 	ide-environment-variable.c \
@@ -445,6 +445,7 @@ libide_1_0_la_includes = \
 	-I$(top_srcdir)/contrib/search \
 	-I$(top_srcdir)/contrib/tmpl \
 	-I$(top_srcdir)/contrib/xml \
+	-I$(top_builddir)/contrib/tmpl \
 	-I$(top_builddir)/data/icons/hicolor \
 	-I$(srcdir) \
 	-I$(srcdir)/doap \
@@ -557,6 +558,8 @@ glib_resources_namespace = ide
 include $(top_srcdir)/build/autotools/Makefile.am.gresources
 
 nodist_libide_1_0_la_SOURCES = \
+	ide-enums.h \
+	ide-enums.c \
 	resources/ide-resources.c \
 	resources/ide-resources.h \
 	$(NULL)
@@ -575,6 +578,8 @@ INTROSPECTION_COMPILER_ARGS = \
 introspection_sources = \
 	$(libide_1_0_la_public_sources) \
 	$(libide_1_0_la_public_headers) \
+	ide-enums.h \
+	ide-enums.c \
 	$(NULL)
 
 Ide-1.0.gir: libide-1.0.la

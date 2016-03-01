@@ -34,6 +34,7 @@ libdevhelp_plugin_la_CFLAGS = \
 	$(DEVHELP_CFLAGS) \
 	$(OPTIMIZE_CFLAGS) \
 	-I$(top_srcdir)/libide \
+	-I$(top_builddir)/libide \
 	$(NULL)
 
 libdevhelp_plugin_la_LIBADD = $(DEVHELP_LIBS)

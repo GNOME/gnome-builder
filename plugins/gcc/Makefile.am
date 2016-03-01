@@ -14,7 +14,8 @@ libgcc_plugin_la_SOURCES = \
 libgcc_plugin_la_CFLAGS = \
 	$(LIBIDE_CFLAGS) \
 	-I$(top_srcdir)/contrib/egg \
-	-I$(top_srcdir)/libide
+	-I$(top_srcdir)/libide \
+	-I$(top_builddir)/libide
 
 libgcc_plugin_la_LDFLAGS = \
 	$(OPTIMIZE_LDFLAGS) \

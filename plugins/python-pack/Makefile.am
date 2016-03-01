@@ -17,6 +17,7 @@ libpython_pack_plugin_la_SOURCES = \
 libpython_pack_plugin_la_CFLAGS = \
 	$(LIBIDE_CFLAGS) \
 	-I$(top_srcdir)/libide \
+	-I$(top_builddir)/libide \
 	$(NULL)
 
 libpython_pack_plugin_la_LDFLAGS = \

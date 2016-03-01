@@ -34,6 +34,7 @@ libgit_plugin_la_CFLAGS = \
 	$(GIT_CFLAGS) \
 	$(OPTIMIZE_CFLAGS) \
 	-I$(top_srcdir)/libide \
+	-I$(top_builddir)/libide \
 	-I$(top_srcdir)/contrib/egg \
 	$(NULL)
 

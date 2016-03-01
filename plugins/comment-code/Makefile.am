@@ -23,6 +23,7 @@ libcomment_code_plugin_la_CFLAGS = \
 	$(LIBIDE_CFLAGS) \
 	$(OPTIMIZE_CFLAGS) \
 	-I$(top_srcdir)/libide \
+	-I$(top_builddir)/libide \
 	$(NULL)
 
 libcomment_code_plugin_la_LDFLAGS = \

@@ -36,8 +36,6 @@ libtemplate_glib_1_0_la_SOURCES = \
 	tmpl-condition-node.c \
 	tmpl-condition-node.h \
 	tmpl-debug.h \
-	tmpl-enums.c \
-	tmpl-enums.h \
 	tmpl-error.c \
 	tmpl-expr-eval.c \
 	tmpl-expr-node.c \
@@ -71,6 +69,11 @@ libtemplate_glib_1_0_la_SOURCES = \
 	tmpl-token.h \
 	tmpl-util-private.h \
 	tmpl-util.c \
+	$(NULL)
+
+nodist_libtemplate_glib_1_0_la_SOURCES = \
+	tmpl-enums.c \
+	tmpl-enums.h \
 	$(NULL)
 
 glib_enum_h = tmpl-enums.h

@@ -22,6 +22,7 @@ libxdg_app_plugin_la_CFLAGS = \
 	$(XDG_APP_CFLAGS) \
 	$(OPTIMIZE_CFLAGS) \
 	-I$(top_srcdir)/libide \
+	-I$(top_builddir)/libide \
 	$(NULL)
 
 libxdg_app_plugin_la_LIBADD = $(XDG_APP_LIBS)

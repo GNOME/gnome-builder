@@ -88,6 +88,7 @@ libvala_pack_plugin_la_CFLAGS = \
 	$(LIBIDE_CFLAGS) \
 	$(VALA_CFLAGS) \
 	-I$(top_srcdir)/libide \
+	-I$(top_builddir)/libide \
 	-I$(top_srcdir)/contrib/egg \
 	-I$(top_srcdir)/contrib/tmpl \
 	-Wno-deprecated-declarations \

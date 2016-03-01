@@ -23,6 +23,7 @@ libgnome_code_assistance_plugin_la_SOURCES = \
 libgnome_code_assistance_plugin_la_CFLAGS = \
 	$(LIBIDE_CFLAGS) \
 	-I$(top_srcdir)/libide \
+	-I$(top_builddir)/libide \
 	$(NULL)
 
 libgnome_code_assistance_plugin_la_LDFLAGS = \

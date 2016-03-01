@@ -24,6 +24,7 @@ libautotools_plugin_la_CFLAGS = \
 	$(LIBIDE_CFLAGS) \
 	-I$(top_srcdir)/contrib/egg \
 	-I$(top_srcdir)/libide \
+	-I$(top_builddir)/libide \
 	$(NULL)
 
 libautotools_plugin_la_LDFLAGS = \
