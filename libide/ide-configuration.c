@@ -42,6 +42,7 @@ struct _IdeConfiguration
   IdeEnvironment *environment;
 
   gint            parallelism;
+  guint           sequence;
 
   guint           dirty : 1;
   guint           debug : 1;
@@ -747,6 +748,7 @@ ide_configuration_set_dirty (IdeConfiguration *self,
    * Always emit the changed signal so that the configuration manager
    * can queue a writeback of the configuration.
    */
+  self->sequence++;
   g_signal_emit (self, signals [CHANGED], 0);
 }
 
@@ -822,4 +824,26 @@ ide_configuration_duplicate (IdeConfiguration *self)
   copy->environment = ide_environment_copy (self->environment);
 
   return copy;
+}
+
+/**
+ * ide_configuration_get_sequence:
+ * @self: An #IdeConfiguration
+ *
+ * This returns a sequence number for the configuration. This is useful
+ * for build systems that want to clear the "dirty" bit on the configuration
+ * so that they need not bootstrap a second time. This should be done by
+ * checking the sequence number before executing the bootstrap, and only
+ * cleared if the sequence number matches after performing the bootstrap.
+ * This indicates no changes have been made to the configuration in the
+ * mean time.
+ *
+ * Returns: A monotonic sequence number.
+ */
+guint
+ide_configuration_get_sequence (IdeConfiguration *self)
+{
+  g_return_val_if_fail (IDE_IS_CONFIGURATION (self), 0);
+
+  return self->sequence;
 }
