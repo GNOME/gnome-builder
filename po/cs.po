@@ -1,7 +1,6 @@
 # Czech translation for gnome-builder.
 # Copyright (C) 2015 gnome-builder's COPYRIGHT HOLDER
 # This file is distributed under the same license as the gnome-builder package.
-#
 # Marek Černocký <marek@manet.cz>, 2015, 2016.
 #
 msgid ""
@@ -9,8 +8,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-02-28 08:02+0000\n"
-"PO-Revision-Date: 2016-01-03 12:07+0100\n"
+"POT-Creation-Date: 2016-03-01 08:04+0000\n"
+"PO-Revision-Date: 2016-03-01 12:02+0100\n"
 "Last-Translator: Marek Černocký <marek@manet.cz>\n"
 "Language-Team: Czech <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
@@ -81,12 +80,12 @@ msgstr "%s() lze zrušit jen jednou"
 #: ../contrib/tmpl/tmpl-parser.c:211
 #, c-format
 msgid "Parser does not contain an input stream"
-msgstr ""
+msgstr "Analyzátor neobsahuje žádný vstupní tok dat"
 
 #: ../contrib/tmpl/tmpl-template.c:451
 #, c-format
 msgid "Must parse template before expanding"
-msgstr ""
+msgstr "Před rozbalením je šablonu zapotřebí zpracovat"
 
 #: ../contrib/tmpl/tmpl-template-locator.c:105
 #, c-format
@@ -116,7 +115,7 @@ msgstr "Kláve_sové zkratky"
 
 #: ../data/gtk/menus.ui.h:5
 msgid "_Help"
-msgstr ""
+msgstr "Nápo_věda"
 
 #: ../data/gtk/menus.ui.h:6
 msgid "_About"
@@ -220,7 +219,7 @@ msgstr "Seřadit řádky"
 
 #: ../data/gtk/menus.ui.h:31
 msgid "Zoom"
-msgstr ""
+msgstr "Přiblížení"
 
 #: ../data/gtk/menus.ui.h:32
 msgid "Zoom _In"
@@ -232,7 +231,7 @@ msgstr "_Oddálit"
 
 #: ../data/gtk/menus.ui.h:34
 msgid "Reset"
-msgstr ""
+msgstr "Základní"
 
 #: ../data/gtk/menus.ui.h:35
 msgid "Split"
@@ -305,20 +304,20 @@ msgid "No open files"
 msgstr "Nejsou otevřeny žádné soubory"
 
 #: ../data/ui/ide-editor-perspective.ui.h:2
-msgid "Try opening a file typing in the search box at the top"
-msgstr ""
+msgid "Try opening a file by typing in the search box at the top"
+msgstr "Zkuste otevřít soubor psaním do vyhledávacího pole nahoře"
 
 #: ../data/ui/ide-editor-perspective.ui.h:3
 msgid "Enable / Disable left panel. Shortcut: F9"
-msgstr ""
+msgstr "Zapnout/vypnout levý panel. Klávesová zkratka: F9"
 
 #: ../data/ui/ide-editor-perspective.ui.h:4
 msgid "Enable / Disable bottom panel. Shortcut: Ctrl + F9"
-msgstr ""
+msgstr "Zapnout/vypnout spodní panel. Klávesová zkratka: Ctrl + F9"
 
 #: ../data/ui/ide-editor-perspective.ui.h:5
 msgid "Enable / Disable right panel. Shortcut: Shift + F9"
-msgstr ""
+msgstr "Zapnout/vypnout pravý panel. Klávesová zkratka: Shift + F9"
 
 #: ../data/ui/ide-editor-tweak-widget.ui.h:1
 msgid "Search highlight mode…"
@@ -459,19 +458,15 @@ msgstr "Seznam otevřených souborů"
 
 #: ../data/ui/ide-layout-tab-bar.ui.h:2
 msgid "Add a new empty file to your project"
-msgstr ""
+msgstr "Přidat nový prázdný soubor do vašeho projektu"
 
 #: ../data/ui/ide-layout-tab.ui.h:1
-#, fuzzy
-#| msgid "Move to previous edit location"
 msgid "Jump to previous location"
-msgstr "Přesunout se na předchozí místo úprav"
+msgstr "Přejít na předchozí místo"
 
 #: ../data/ui/ide-layout-tab.ui.h:2
-#, fuzzy
-#| msgid "Move to next edit location"
 msgid "Jump to next location"
-msgstr "Přesunout se na následující místo úprav"
+msgstr "Přejít na následující místo"
 
 #: ../data/ui/ide-layout-tab.ui.h:3
 msgid "Close the current document"
@@ -483,7 +478,7 @@ msgstr "_Vybrat"
 
 #: ../data/ui/ide-preferences-perspective.ui.h:1
 msgid "Search through preferences"
-msgstr ""
+msgstr "Hledat v předvolbách"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:1
 msgctxt "shortcut window"
@@ -752,11 +747,11 @@ msgstr "Klávesové zkratky terminálu"
 
 #: ../data/ui/ide-workbench-header-bar.ui.h:1
 msgid "Search for files. Shortcut: Ctrl + ."
-msgstr ""
+msgstr "Hledat soubory. Klávesová zkratka: Ctrl + ."
 
 #: ../data/ui/ide-workbench-header-bar.ui.h:2
 msgid "Drops down a list of file operations"
-msgstr ""
+msgstr "Rozbalit seznam souborových operací"
 
 #: ../libide/directory/ide-directory-genesis-addin.c:106
 msgid "From an existing project on this computer"
@@ -776,7 +771,7 @@ msgstr "řádek %u, sloupec %u"
 msgid "%u of %u"
 msgstr "%u z %u"
 
-#: ../libide/editor/ide-editor-frame.c:643
+#: ../libide/editor/ide-editor-frame.c:658
 #: ../plugins/project-tree/gtk/menus.ui.h:1
 msgid "Re_veal in Project Tree"
 msgstr "Ukázat v projekto_vém stromu"
@@ -884,7 +879,7 @@ msgstr "Více podrobností, může být zadáno vícekrát."
 
 #: ../libide/ide-application-command-line.c:225
 msgid "Enter GApplication Service mode"
-msgstr ""
+msgstr "Vstoupit do režimu služba GApplication"
 
 #: ../libide/ide-application-command-line.c:255
 msgid "COMMAND"
@@ -1008,14 +1003,14 @@ msgstr "Cílový soubor musí být součástí projektového stromu."
 msgid "File must be within the project tree."
 msgstr "Soubor musí být součástí projektového stromu."
 
-#: ../libide/ide-recent-projects.c:382
+#: ../libide/ide-recent-projects.c:383
 #, c-format
 msgid "%s() may only be executed once"
 msgstr "%s() lze provést jen jednou"
 
 #: ../libide/ide-runtime-manager.c:100
 msgid "Host operating system"
-msgstr ""
+msgstr "Hostitelský operační systém"
 
 #: ../libide/ide-script.c:205
 #, c-format
@@ -1361,6 +1356,8 @@ msgid ""
 "Use code insight to highlight additional information discovered in source "
 "file"
 msgstr ""
+"Používat rozbor kódu ke zvýraznění doplňujících informací objevených v "
+"souboru se zdrojovým kódem"
 
 #: ../libide/preferences/ide-preferences-builtin.c:162
 msgid "Completion"
@@ -1399,7 +1396,7 @@ msgstr "Používat Clang pro návrhy dokončování v jazycích C a C++"
 
 #: ../libide/preferences/ide-preferences-builtin.c:167
 msgid "Diagnostics"
-msgstr ""
+msgstr "Diagnostika"
 
 #: ../libide/preferences/ide-preferences-builtin.c:176
 msgid "Code snippets"
@@ -1471,10 +1468,8 @@ msgstr "Odsazovat zdrojový kód podle toho, jak píšete"
 
 #: ../libide/preferences/ide-preferences-builtin.c:243
 #: ../plugins/build-tools/gbp-build-workbench-addin.c:270
-#, fuzzy
-#| msgid "_Build"
 msgid "Build"
-msgstr "_Sestavit"
+msgstr "Sestavení"
 
 #: ../libide/preferences/ide-preferences-builtin.c:245
 #: ../plugins/build-tools/gbp-build-configuration-view.ui.h:1
@@ -1482,14 +1477,29 @@ msgid "General"
 msgstr "Obecné"
 
 #: ../libide/preferences/ide-preferences-builtin.c:246
-#, fuzzy
-#| msgid "Builder"
 msgid "Build Workers"
-msgstr "Builder"
+msgstr "Sestavovací procesy"
 
 #: ../libide/preferences/ide-preferences-builtin.c:246
 msgid "Number of parallel build workers"
-msgstr ""
+msgstr "Počet souběžných sestavovacích procesů"
+
+#: ../libide/preferences/ide-preferences-builtin.c:252
+#: ../plugins/git/ide-git-clone-widget.c:200
+msgid "Projects"
+msgstr "Projekty"
+
+#: ../libide/preferences/ide-preferences-builtin.c:254
+msgid "Project Discovery"
+msgstr "Vyhledávání projektů"
+
+#: ../libide/preferences/ide-preferences-builtin.c:255
+msgid "Discover projects on my computer"
+msgstr "Vyhledávat projekty v mém počítači"
+
+#: ../libide/preferences/ide-preferences-builtin.c:255
+msgid "Scan your computer for existing projects"
+msgstr "Procházet můj počítač a hledat v něm stávající projekty"
 
 #: ../libide/preferences/ide-preferences-perspective.c:823
 msgid "Preferences"
@@ -1558,7 +1568,7 @@ msgid "Success"
 msgstr "Úspěšné"
 
 #: ../plugins/autotools/ide-autotools-builder.c:161
-#: ../plugins/autotools/ide-autotools-build-task.c:863
+#: ../plugins/autotools/ide-autotools-build-task.c:872
 msgid "Building…"
 msgstr "Sestavuje se…"
 
@@ -1566,46 +1576,46 @@ msgstr "Sestavuje se…"
 msgid "Failed to locate configure.ac"
 msgstr "Selhalo vyhledání souboru configure.ac"
 
-#: ../plugins/autotools/ide-autotools-build-task.c:173
+#: ../plugins/autotools/ide-autotools-build-task.c:174
 msgid "Directory must be on a locally mounted filesystem."
 msgstr "Složka musí být na místně připojeném souborovém systému."
 
-#: ../plugins/autotools/ide-autotools-build-task.c:546
+#: ../plugins/autotools/ide-autotools-build-task.c:548
 msgid "Cannot execute build task more than once."
 msgstr "Úlohu provádějící sestavení nelze spustic vícekrát než jednou."
 
-#: ../plugins/autotools/ide-autotools-build-task.c:633
+#: ../plugins/autotools/ide-autotools-build-task.c:642
 msgid "Failed to create build directory."
 msgstr "Selhalo vytvoření složky pro sestavení."
 
-#: ../plugins/autotools/ide-autotools-build-task.c:642
+#: ../plugins/autotools/ide-autotools-build-task.c:651
 #, c-format
 msgid "'%s' is not a directory."
 msgstr "„%s“ není složka."
 
-#: ../plugins/autotools/ide-autotools-build-task.c:681
+#: ../plugins/autotools/ide-autotools-build-task.c:690
 #, c-format
 msgid "autogen.sh is missing from project directory (%s)."
 msgstr "Ve složce projektu schází autogen.sh (%s)."
 
-#: ../plugins/autotools/ide-autotools-build-task.c:691
+#: ../plugins/autotools/ide-autotools-build-task.c:700
 msgid "autogen.sh is not executable."
 msgstr "Skript autogen.sh není spustitelný."
 
-#: ../plugins/autotools/ide-autotools-build-task.c:695
+#: ../plugins/autotools/ide-autotools-build-task.c:704
 msgid "Running autogen…"
-msgstr ""
+msgstr "Běží autogen…"
 
-#: ../plugins/autotools/ide-autotools-build-task.c:729
+#: ../plugins/autotools/ide-autotools-build-task.c:738
 #, c-format
 msgid "autogen.sh failed to create configure (%s)"
 msgstr "Skritp autogen.sh selhal při vytváření konfigurace (%s)"
 
-#: ../plugins/autotools/ide-autotools-build-task.c:764
+#: ../plugins/autotools/ide-autotools-build-task.c:773
 msgid "Running configure…"
 msgstr "Probíhá konfigurace…"
 
-#: ../plugins/autotools/ide-autotools-build-task.c:861
+#: ../plugins/autotools/ide-autotools-build-task.c:870
 msgid "Cleaning…"
 msgstr "Čistí se…"
 
@@ -1776,10 +1786,9 @@ msgid "Failed to locate device \"%s\""
 msgstr "Selhalo vyhledání zařízení „%s“"
 
 #: ../plugins/build-tools/gbp-build-tool.c:222
-#, fuzzy, c-format
-#| msgid "Failed to locate device \"%s\""
+#, c-format
 msgid "Failed to locate runtime \"%s\""
-msgstr "Selhalo vyhledání zařízení „%s“"
+msgstr "Selhalo vyhledání běhového prostředí „%s“"
 
 #: ../plugins/build-tools/gbp-build-tool.c:286
 msgid "Clean the project"
@@ -1794,10 +1803,8 @@ msgid "local"
 msgstr "místní"
 
 #: ../plugins/build-tools/gbp-build-tool.c:291
-#, fuzzy
-#| msgid "The target device we are building for."
 msgid "The runtime to use for building"
-msgstr "Cílové zařízení, pro které se sestavuje."
+msgstr "Běhové prostředí, které se má použít pro sestavení"
 
 #: ../plugins/build-tools/gbp-build-tool.c:292
 msgid "host"
@@ -1805,7 +1812,7 @@ msgstr "hostitel"
 
 #: ../plugins/build-tools/gbp-build-tool.c:294
 msgid "Number of workers to use when building"
-msgstr ""
+msgstr "Počet procesů použitých při sestavování"
 
 #: ../plugins/build-tools/gbp-build-tool.c:295
 msgid "N"
@@ -1830,6 +1837,19 @@ msgstr "CESTA"
 #: ../plugins/build-tools/gbp-build-workbench-addin.c:275
 msgid "Build Output"
 msgstr "Výpis ze sestavení"
+
+#: ../plugins/clang/ide-clang-preferences-addin.c:62
+msgid "Clang"
+msgstr "Clang"
+
+#: ../plugins/clang/ide-clang-preferences-addin.c:63
+msgid "Show errors and warnings provided by Clang"
+msgstr "Zobrazovat chyby a varování poskytnutá překladačem Clang"
+
+#. translators: keywords used when searching for preferences
+#: ../plugins/clang/ide-clang-preferences-addin.c:65
+msgid "clang diagnostics warnings errors"
+msgstr "clang diagnostika varování chyba chyby"
 
 #: ../plugins/clang/ide-clang-service.c:269
 msgid "Unknown failure"
@@ -1864,19 +1884,6 @@ msgstr "anonymní"
 msgid "clang_codeCompleteAt() only works on local files"
 msgstr "clang_codeCompleteAt() funguje jen na místních souborech"
 
-#: ../plugins/clang/ide-clang-preferences-addin.c:62
-msgid "Clang"
-msgstr ""
-
-#: ../plugins/clang/ide-clang-preferences-addin.c:63
-msgid "Show errors and warnings provided by Clang"
-msgstr ""
-
-#. translators: keywords used when searching for preferences
-#: ../plugins/clang/ide-clang-preferences-addin.c:65
-msgid "clang diagnostics warnings errors"
-msgstr ""
-
 #: ../plugins/command-bar/gb-command-bar.c:299
 #, c-format
 msgid "Command not found: %s"
@@ -1902,15 +1909,14 @@ msgid "Cannot find language '%s'"
 msgstr "Nelze najít jazyk „%s“"
 
 #: ../plugins/command-bar/gb-vim.c:311
-#, fuzzy, c-format
-#| msgid "vim mode requires GtkSourceView"
+#, c-format
 msgid "This command requires a GtkSourceView to be focused"
-msgstr "Režim vim vyžaduje GtkSourceView"
+msgstr "Tento příkaz vyžaduje, aby byl zaměřeno GtkSourceView"
 
 #: ../plugins/command-bar/gb-vim.c:322
 #, c-format
 msgid "This command requires a view to be focused"
-msgstr ""
+msgstr "Tento příkaz vyžaduje, aby bylo zaměřeno zobrazení"
 
 #: ../plugins/command-bar/gb-vim.c:379
 #, c-format
@@ -1942,6 +1948,14 @@ msgstr "Neplatný požadavek na hledání a nahrazování"
 msgid "Not a command: %s"
 msgstr "Nejedná se o příkaz: %s"
 
+#: ../plugins/comment-code/gtk/menus.ui.h:1
+msgid "Comment code"
+msgstr "Zakomentovat kód"
+
+#: ../plugins/comment-code/gtk/menus.ui.h:2
+msgid "Uncomment code"
+msgstr "Odkomentovat kód"
+
 #: ../plugins/contributing/contributing_plugin/helper.py:76
 #, python-format
 msgid ""
@@ -1956,7 +1970,6 @@ msgid "Missing project name"
 msgstr "Schází název projektu"
 
 #: ../plugins/contributing/contributing_plugin/__init__.py:68
-#, fuzzy
 msgid ""
 "Usage:\n"
 "  ide contribute PROJECT_NAME\n"
@@ -1977,13 +1990,13 @@ msgstr ""
 "Použití:\n"
 "  ide contribute NÁZEV_PROJEKTU\n"
 "\n"
-"  This command will bootstrap your system to begin contributing to the "
-"project\n"
-"  denoted by PROJECT_NAME. This includes fetching the sources, ensuring "
-"that\n"
-"  you have the required dependencies to build, and bootstraps the first "
-"build\n"
-"  of the project.\n"
+"  Tento příkaz připraví váš systém, aby v něm bylo možné pracovat s "
+"projektem\n"
+"  zadaným pomocí „NÁZEV_PROJEKTU“. Zahrnuje to stažení příslušných "
+"zdrojových\n"
+"  kódů, zajištění všech závislostí nutných pro sestavení a přípravu "
+"prvotního\n"
+"  sestavení projektu.\n"
 "\n"
 "Příklady:\n"
 "  ide contribute gnome-builder\n"
@@ -2005,7 +2018,7 @@ msgstr "Vypsat dostupné šablony"
 
 #: ../plugins/create-project/gbp-create-project-tool.c:132
 msgid "Project template to generate"
-msgstr ""
+msgstr "Šablona pro vygenerování projektu"
 
 #: ../plugins/create-project/gbp-create-project-tool.c:138
 msgid "create-project [OPTION...] PROJECT_NAME"
@@ -2014,7 +2027,8 @@ msgstr "create-project [VOLBA…] NÁZEV_PROJEKTU"
 #: ../plugins/create-project/gbp-create-project-tool.c:187
 #, c-format
 msgid "Filename must be ASCII and may not contain : or ="
-msgstr "Název souboru se musí skládat ze znaků ASCII a nesmí obsahovat : nebo ="
+msgstr ""
+"Název souboru se musí skládat ze znaků ASCII a nesmí obsahovat : nebo ="
 
 #: ../plugins/create-project/gbp-create-project-tool.c:291
 #, c-format
@@ -2066,10 +2080,6 @@ msgstr "Požadovaný soubor neexistuje v indexu git."
 msgid "A valid Git URL is required"
 msgstr "Je vyžadována platná adresa URL pro Git"
 
-#: ../plugins/git/ide-git-clone-widget.c:200
-msgid "Projects"
-msgstr "Projekty"
-
 #: ../plugins/git/ide-git-clone-widget.ui.h:1
 msgid "user@host:repository.git"
 msgstr "uzivatel@pocitac:repozitar.git"
@@ -2110,6 +2120,19 @@ msgstr "Autorství"
 msgid "Code assistance requires a local file."
 msgstr "Průvodce kódem vyžaduje místní soubor."
 
+#: ../plugins/gnome-code-assistance/ide-gca-preferences-addin.c:62
+msgid "Pylint"
+msgstr "Pylint"
+
+#: ../plugins/gnome-code-assistance/ide-gca-preferences-addin.c:63
+msgid "Enable the use of pylint, which may execute code in your project"
+msgstr "Povolit použití pylint, který může spouštět kód ve vašem projektu"
+
+#. translators: these are keywords used to search for preferences
+#: ../plugins/gnome-code-assistance/ide-gca-preferences-addin.c:65
+msgid "pylint python lint code execute execution"
+msgstr "pylint python lint programový kód spustit spuštění provést provádění"
+
 #: ../plugins/gnome-code-assistance/ide-gca-service.c:168
 msgid "No language specified"
 msgstr "Není určen žádný jazyk"
@@ -2128,11 +2151,11 @@ msgstr "Používat Jedi pro dokončování v jazyce Python."
 
 #: ../plugins/library-template/library_template/__init__.py:52
 msgid "Shared Library"
-msgstr ""
+msgstr "Sdílená knihovna"
 
 #: ../plugins/library-template/library_template/__init__.py:55
 msgid "Create a new autotools project with a shared library"
-msgstr ""
+msgstr "Vytvořit nový projekt se sdílenou knihovnou používající autotools"
 
 #: ../plugins/mingw/ide-mingw-device-provider.c:95
 msgid "MinGW 64-bit"
@@ -2166,7 +2189,7 @@ msgstr "Název složky"
 msgid "_Create"
 msgstr "V_ytvořit"
 
-#: ../plugins/project-tree/gb-project-tree-addin.c:77
+#: ../plugins/project-tree/gb-project-tree-addin.c:112
 msgid "Project"
 msgstr "Projekt"
 
@@ -2291,17 +2314,4 @@ msgstr "Zobrazovat chyby a varování poskytované pro jazyk Vala"
 
 #: ../plugins/vala-pack/ide-vala-preferences-addin.vala:35
 msgid "vala diagnostics warnings errors"
-msgstr ""
-
-#: ../plugins/gnome-code-assistance/ide-gca-preferences-addin.c:62
-msgid "Pylint"
-msgstr "Pylint"
-
-#: ../plugins/gnome-code-assistance/ide-gca-preferences-addin.c:63
-msgid "Enable the use of pylint, which may execute code in your project"
-msgstr ""
-
-#. translators: these are keywords used to search for preferences
-#: ../plugins/gnome-code-assistance/ide-gca-preferences-addin.c:65
-msgid "pylint python lint code execute execution"
-msgstr "pylint python lint programový kód spustit spuštění provést provádění"
+msgstr "vala diagnostika varování chyba chyby"
