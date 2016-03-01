@@ -37,6 +37,7 @@ gboolean           ide_recent_projects_get_busy         (IdeRecentProjects    *s
 void               ide_recent_projects_remove           (IdeRecentProjects    *self,
                                                          GList                *project_infos);
 void               ide_recent_projects_discover_async   (IdeRecentProjects    *self,
+                                                         gboolean              recent_only,
                                                          GCancellable         *cancellable,
                                                          GAsyncReadyCallback   callback,
                                                          gpointer              user_data);

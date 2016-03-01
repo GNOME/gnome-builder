@@ -362,6 +362,7 @@ ide_recent_projects_get_projects (IdeRecentProjects *self)
 
 void
 ide_recent_projects_discover_async (IdeRecentProjects   *self,
+                                    gboolean             recent_only,
                                     GCancellable        *cancellable,
                                     GAsyncReadyCallback  callback,
                                     gpointer             user_data)
@@ -387,6 +388,12 @@ ide_recent_projects_discover_async (IdeRecentProjects   *self,
   self->discovered = TRUE;
 
   ide_recent_projects_load_recent (self);
+
+  if (recent_only)
+    {
+      g_task_return_boolean (task, TRUE);
+      return;
+    }
 
   self->active = self->miners->len;
 
