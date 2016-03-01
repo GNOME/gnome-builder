@@ -48,6 +48,7 @@ typedef struct
   gchar      **configure_argv;
   gchar      **make_targets;
   IdeRuntime  *runtime;
+  guint        sequence;
   guint        require_autogen : 1;
   guint        require_configure : 1;
   guint        bootstrap_only : 1;
@@ -418,6 +419,7 @@ worker_state_new (IdeAutotoolsBuildTask *self,
     project_dir = g_object_ref (project_file);
 
   state = g_slice_new0 (WorkerState);
+  state->sequence = ide_configuration_get_sequence (self->configuration);
   state->require_autogen = self->require_autogen || !!(flags & IDE_BUILDER_BUILD_FLAGS_FORCE_BOOTSTRAP);
   state->require_configure = self->require_configure || (state->require_autogen && !(flags & IDE_BUILDER_BUILD_FLAGS_NO_CONFIGURE));
   state->directory_path = g_file_get_path (self->directory);
@@ -569,10 +571,17 @@ ide_autotools_build_task_execute_finish (IdeAutotoolsBuildTask  *self,
                                          GError                **error)
 {
   GTask *task = (GTask *)result;
+  WorkerState *state;
+  guint sequence;
 
   g_return_val_if_fail (IDE_IS_AUTOTOOLS_BUILD_TASK (self), FALSE);
-  g_return_val_if_fail (G_IS_TASK (result), FALSE);
   g_return_val_if_fail (G_IS_TASK (task), FALSE);
+
+  state = g_task_get_task_data (G_TASK (task));
+  sequence = ide_configuration_get_sequence (self->configuration);
+
+  if ((state != NULL) &&  (state->sequence == sequence))
+    ide_configuration_set_dirty (self->configuration, FALSE);
 
   return g_task_propagate_boolean (task, error);
 }
