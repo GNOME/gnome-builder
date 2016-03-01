@@ -1,6 +1,6 @@
-/* gbp-create-project-plugin.c
+/* gbp-create-project-genesis-addin.h
  *
- * Copyright (C) 2015 Christian Hergert <chergert@redhat.com>
+ * Copyright (C) 2016 Christian Hergert <christian@hergert.me>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,19 +16,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef GBP_CREATE_PROJECT_GENESIS_ADDIN_H
+#define GBP_CREATE_PROJECT_GENESIS_ADDIN_H
+
 #include <ide.h>
-#include <libpeas/peas.h>
 
-#include "gbp-create-project-genesis-addin.h"
-#include "gbp-create-project-tool.h"
+G_BEGIN_DECLS
 
-void
-peas_register_types (PeasObjectModule *module)
-{
-  peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_APPLICATION_TOOL,
-                                              GBP_TYPE_CREATE_PROJECT_TOOL);
-  peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_GENESIS_ADDIN,
-                                              GBP_TYPE_CREATE_PROJECT_GENESIS_ADDIN);
-}
+#define GBP_TYPE_CREATE_PROJECT_GENESIS_ADDIN (gbp_create_project_genesis_addin_get_type())
+
+G_DECLARE_FINAL_TYPE (GbpCreateProjectGenesisAddin, gbp_create_project_genesis_addin, GBP, CREATE_PROJECT_GENESIS_ADDIN, GObject)
+
+G_END_DECLS
+
+#endif /* GBP_CREATE_PROJECT_GENESIS_ADDIN_H */

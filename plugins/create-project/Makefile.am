@@ -10,9 +10,13 @@ plugin_LTLIBRARIES = libcreate-project-plugin.la
 dist_plugin_DATA = create-project.plugin
 
 libcreate_project_plugin_la_SOURCES = \
+	gbp-create-project-genesis-addin.c \
+	gbp-create-project-genesis-addin.h \
 	gbp-create-project-plugin.c \
 	gbp-create-project-tool.c \
 	gbp-create-project-tool.h \
+	gbp-create-project-widget.c \
+	gbp-create-project-widget.h \
 	$(NULL)
 
 nodist_libcreate_project_plugin_la_SOURCES = \
