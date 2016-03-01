@@ -166,13 +166,25 @@ ide_application_plugins_enabled_changed (IdeApplication *self,
 }
 
 static GSettings *
-_ide_application_plugin_get_settings (const gchar *module_name)
+_ide_application_plugin_get_settings (IdeApplication *self,
+                                      const gchar    *module_name)
 {
-  g_autofree gchar *path = NULL;
   GSettings *settings;
 
-  path = g_strdup_printf ("/org/gnome/builder/plugins/%s/", module_name);
-  settings = g_settings_new_with_path ("org.gnome.builder.plugin", path);
+  if (G_UNLIKELY(self->plugin_settings == NULL))
+    {
+      self->plugin_settings = g_hash_table_new_full (g_str_hash, g_str_equal,
+                                                     g_free, g_object_unref);
+    }
+
+  if (!(settings = g_hash_table_lookup (self->plugin_settings, module_name)))
+    {
+      g_autofree gchar *path = NULL;
+
+      path = g_strdup_printf ("/org/gnome/builder/plugins/%s/", module_name);
+      settings = g_settings_new_with_path ("org.gnome.builder.plugin", path);
+      g_hash_table_insert (self->plugin_settings, g_strdup (module_name), settings);
+    }
 
   return settings;
 }
@@ -195,7 +207,7 @@ ide_application_load_plugins (IdeApplication *self)
       const gchar *module_name;
 
       module_name = peas_plugin_info_get_module_name (plugin_info);
-      settings = _ide_application_plugin_get_settings (module_name);
+      settings = _ide_application_plugin_get_settings (self, module_name);
 
       g_object_set_data (G_OBJECT (settings), "PEAS_PLUGIN_INFO", plugin_info);
 
@@ -426,7 +438,7 @@ ide_application_init_plugin_menus (IdeApplication *self)
       GSettings *settings;
 
       module_name = peas_plugin_info_get_module_name (plugin_info);
-      settings = _ide_application_plugin_get_settings (module_name);
+      settings = _ide_application_plugin_get_settings (self, module_name);
       if (!g_settings_get_boolean (settings, "enabled"))
         continue;
 

@@ -61,6 +61,8 @@ struct _IdeApplication
   GHashTable          *plugin_css;
 
   GList               *test_funcs;
+
+  GHashTable          *plugin_settings;
 };
 
 void     ide_application_discover_plugins   (IdeApplication   *self) G_GNUC_INTERNAL;
