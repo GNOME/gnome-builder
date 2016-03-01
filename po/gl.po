@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-02-24 17:00+0100\n"
-"PO-Revision-Date: 2016-02-24 17:05+0200\n"
+"POT-Creation-Date: 2016-03-01 22:15+0100\n"
+"PO-Revision-Date: 2016-03-01 22:17+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: gnome-l10n-gl@gnome.org\n"
 "Language: gl\n"
@@ -303,7 +303,7 @@ msgid "No open files"
 msgstr "Non hai ficheiros abertos"
 
 #: ../data/ui/ide-editor-perspective.ui.h:2
-msgid "Try opening a file typing in the search box at the top"
+msgid "Try opening a file by typing in the search box at the top"
 msgstr ""
 "Tente abrindo un ficheiro escribindo na caixa de busca na parte superior"
 
@@ -771,7 +771,7 @@ msgstr "Liña %u, Columna %u"
 msgid "%u of %u"
 msgstr "%u de %u"
 
-#: ../libide/editor/ide-editor-frame.c:643
+#: ../libide/editor/ide-editor-frame.c:658
 #: ../plugins/project-tree/gtk/menus.ui.h:1
 msgid "Re_veal in Project Tree"
 msgstr "_Mostrar no árbore de proxectos"
@@ -1004,7 +1004,7 @@ msgstr "O ficheiro de destino debe estar na árbore do proxecto."
 msgid "File must be within the project tree."
 msgstr "O ficheiro debe estar dentro da árbore do proxecto."
 
-#: ../libide/ide-recent-projects.c:382
+#: ../libide/ide-recent-projects.c:383
 #, c-format
 msgid "%s() may only be executed once"
 msgstr "%s() só se debe executar unha vez"
@@ -1488,7 +1488,24 @@ msgstr "Traballadores de construción"
 msgid "Number of parallel build workers"
 msgstr "Número de traballadores de construción en paralelo"
 
-#: ../libide/preferences/ide-preferences-perspective.c:821
+#: ../libide/preferences/ide-preferences-builtin.c:252
+#: ../plugins/git/ide-git-clone-widget.c:200
+msgid "Projects"
+msgstr "Proxectos"
+
+#: ../libide/preferences/ide-preferences-builtin.c:254
+msgid "Project Discovery"
+msgstr "Descubrimento de proxectos"
+
+#: ../libide/preferences/ide-preferences-builtin.c:255
+msgid "Discover projects on my computer"
+msgstr "Descubrir proxectos no meu computador"
+
+#: ../libide/preferences/ide-preferences-builtin.c:255
+msgid "Scan your computer for existing projects"
+msgstr "Buscar no seu computador proxectos existentes"
+
+#: ../libide/preferences/ide-preferences-perspective.c:823
 msgid "Preferences"
 msgstr "Preferencias"
 
@@ -1556,7 +1573,7 @@ msgid "Success"
 msgstr "Éxito"
 
 #: ../plugins/autotools/ide-autotools-builder.c:161
-#: ../plugins/autotools/ide-autotools-build-task.c:863
+#: ../plugins/autotools/ide-autotools-build-task.c:872
 msgid "Building…"
 msgstr "Construíndo…"
 
@@ -1564,46 +1581,46 @@ msgstr "Construíndo…"
 msgid "Failed to locate configure.ac"
 msgstr "Produciuse un fallo ao buscar o configure.ac"
 
-#: ../plugins/autotools/ide-autotools-build-task.c:173
+#: ../plugins/autotools/ide-autotools-build-task.c:174
 msgid "Directory must be on a locally mounted filesystem."
 msgstr "O cartafol debe estar nun sistema de ficheiros montado localmente."
 
-#: ../plugins/autotools/ide-autotools-build-task.c:546
+#: ../plugins/autotools/ide-autotools-build-task.c:548
 msgid "Cannot execute build task more than once."
 msgstr "Non é posíbel execuar a tarefa de construción máis dunha vez."
 
-#: ../plugins/autotools/ide-autotools-build-task.c:633
+#: ../plugins/autotools/ide-autotools-build-task.c:642
 msgid "Failed to create build directory."
 msgstr "Produciuse un fallo ao crear o cartafol de construción."
 
-#: ../plugins/autotools/ide-autotools-build-task.c:642
+#: ../plugins/autotools/ide-autotools-build-task.c:651
 #, c-format
 msgid "'%s' is not a directory."
 msgstr "«%s» non é un cartafol."
 
-#: ../plugins/autotools/ide-autotools-build-task.c:681
+#: ../plugins/autotools/ide-autotools-build-task.c:690
 #, c-format
 msgid "autogen.sh is missing from project directory (%s)."
 msgstr "Falta autogen.sh do cartafol do proxecto (%s)."
 
-#: ../plugins/autotools/ide-autotools-build-task.c:691
+#: ../plugins/autotools/ide-autotools-build-task.c:700
 msgid "autogen.sh is not executable."
 msgstr "augogen.sh non é un executábel."
 
-#: ../plugins/autotools/ide-autotools-build-task.c:695
+#: ../plugins/autotools/ide-autotools-build-task.c:704
 msgid "Running autogen…"
 msgstr "Executando autogen…"
 
-#: ../plugins/autotools/ide-autotools-build-task.c:729
+#: ../plugins/autotools/ide-autotools-build-task.c:738
 #, c-format
 msgid "autogen.sh failed to create configure (%s)"
 msgstr "autogen.sh fallou ao crear o configure (%s)"
 
-#: ../plugins/autotools/ide-autotools-build-task.c:764
+#: ../plugins/autotools/ide-autotools-build-task.c:773
 msgid "Running configure…"
 msgstr "Executando configure…"
 
-#: ../plugins/autotools/ide-autotools-build-task.c:861
+#: ../plugins/autotools/ide-autotools-build-task.c:870
 msgid "Cleaning…"
 msgstr "Limpando…"
 
@@ -1826,6 +1843,19 @@ msgstr "RUTA"
 msgid "Build Output"
 msgstr "Saída da construción"
 
+#: ../plugins/clang/ide-clang-preferences-addin.c:62
+msgid "Clang"
+msgstr "Clang"
+
+#: ../plugins/clang/ide-clang-preferences-addin.c:63
+msgid "Show errors and warnings provided by Clang"
+msgstr "Mostrar erros e avisos fornecidos por Clang"
+
+#. translators: keywords used when searching for preferences
+#: ../plugins/clang/ide-clang-preferences-addin.c:65
+msgid "clang diagnostics warnings errors"
+msgstr "clang diagnóstico avisos erros"
+
 #: ../plugins/clang/ide-clang-service.c:269
 msgid "Unknown failure"
 msgstr "Característica descoñecida"
@@ -1858,19 +1888,6 @@ msgstr "anónimo"
 #: ../plugins/clang/ide-clang-translation-unit.c:656
 msgid "clang_codeCompleteAt() only works on local files"
 msgstr "clang_codeCompleteAt() só funciona en ficheiros locais"
-
-#: ../plugins/clang/ide-clang-preferences-addin.c:62
-msgid "Clang"
-msgstr "Clang"
-
-#: ../plugins/clang/ide-clang-preferences-addin.c:63
-msgid "Show errors and warnings provided by Clang"
-msgstr "Mostrar erros e avisos fornecidos por Clang"
-
-#. translators: keywords used when searching for preferences
-#: ../plugins/clang/ide-clang-preferences-addin.c:65
-msgid "clang diagnostics warnings errors"
-msgstr "clang diagnóstico avisos erros"
 
 #: ../plugins/command-bar/gb-command-bar.c:299
 #, c-format
@@ -1935,6 +1952,14 @@ msgstr "Solicitude de buscar e reemprazar non válida"
 #, c-format
 msgid "Not a command: %s"
 msgstr "Non é unha orde: %s"
+
+#: ../plugins/comment-code/gtk/menus.ui.h:1
+msgid "Comment code"
+msgstr "Comentar código"
+
+#: ../plugins/comment-code/gtk/menus.ui.h:2
+msgid "Uncomment code"
+msgstr "Descomentar código"
 
 #: ../plugins/contributing/contributing_plugin/helper.py:76
 #, python-format
@@ -2058,10 +2083,6 @@ msgstr "O ficheiro solicitado non existe dentro do índice de git."
 msgid "A valid Git URL is required"
 msgstr "Requírese unha URL de git válida"
 
-#: ../plugins/git/ide-git-clone-widget.c:200
-msgid "Projects"
-msgstr "Proxectos"
-
 #: ../plugins/git/ide-git-clone-widget.ui.h:1
 msgid "user@host:repository.git"
 msgstr "usuario@equipo:repositorio.git"
@@ -2101,6 +2122,19 @@ msgstr "Atribución"
 #: ../plugins/gnome-code-assistance/ide-gca-diagnostic-provider.c:375
 msgid "Code assistance requires a local file."
 msgstr "A asistencia de código require un ficheiro local."
+
+#: ../plugins/gnome-code-assistance/ide-gca-preferences-addin.c:62
+msgid "Pylint"
+msgstr "Pylint"
+
+#: ../plugins/gnome-code-assistance/ide-gca-preferences-addin.c:63
+msgid "Enable the use of pylint, which may execute code in your project"
+msgstr "Activar o uso de pylint, que pode executar código no seu proxecto"
+
+#. translators: these are keywords used to search for preferences
+#: ../plugins/gnome-code-assistance/ide-gca-preferences-addin.c:65
+msgid "pylint python lint code execute execution"
+msgstr "pylint python lint código executar execución"
 
 #: ../plugins/gnome-code-assistance/ide-gca-service.c:168
 msgid "No language specified"
@@ -2158,7 +2192,7 @@ msgstr "Nome do cartafol"
 msgid "_Create"
 msgstr "_Crear"
 
-#: ../plugins/project-tree/gb-project-tree-addin.c:77
+#: ../plugins/project-tree/gb-project-tree-addin.c:112
 msgid "Project"
 msgstr "Proxecto"
 
@@ -2284,19 +2318,6 @@ msgstr "Mostrar erros e avisos fornecidos por Vala"
 #: ../plugins/vala-pack/ide-vala-preferences-addin.vala:35
 msgid "vala diagnostics warnings errors"
 msgstr "avisos de erro de diagnóstico de vala"
-
-#: ../plugins/gnome-code-assistance/ide-gca-preferences-addin.c:62
-msgid "Pylint"
-msgstr "Pylint"
-
-#: ../plugins/gnome-code-assistance/ide-gca-preferences-addin.c:63
-msgid "Enable the use of pylint, which may execute code in your project"
-msgstr "Activar o uso de pylint, que pode executar código no seu proxecto"
-
-#. translators: these are keywords used to search for preferences
-#: ../plugins/gnome-code-assistance/ide-gca-preferences-addin.c:65
-msgid "pylint python lint code execute execution"
-msgstr "pylint python lint código executar execución"
 
 #~ msgid "_New Document"
 #~ msgstr "_Novo documento"
@@ -2837,9 +2858,6 @@ msgstr "pylint python lint código executar execución"
 
 #~ msgid "The currently focused buffer."
 #~ msgstr "O búfer que actualmente ten o foco."
-
-#~ msgid "Project File"
-#~ msgstr "Ficheiro de proxecto"
 
 #~ msgid "The project file."
 #~ msgstr "O ficheiro do proxecto."
