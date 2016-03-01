@@ -249,7 +249,7 @@ ide_preferences_builtin_register_build (IdePreferences *preferences)
 static void
 ide_preferences_builtin_register_projects (IdePreferences *preferences)
 {
-  ide_preferences_add_page (preferences, "projects", _("Projects"), 800);
+  ide_preferences_add_page (preferences, "projects", _("Projects"), 450);
 
   ide_preferences_add_list_group (preferences, "projects", "discovery", _("Project Discovery"), 0);
   ide_preferences_add_switch (preferences, "projects", "discovery", "org.gnome.builder", "enable-project-miners", NULL, NULL, _("Discover projects on my computer"), _("Scan your computer for existing projects"), NULL, 0);
