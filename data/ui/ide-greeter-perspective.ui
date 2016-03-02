@@ -27,7 +27,7 @@
             <child>
               <object class="EggEmptyState">
                 <property name="resource">/org/gnome/builder/icons/scalable/apps/builder-symbolic.svg</property>
-                <property name="subtitle" translatable="yes">Why not &lt;a href="action://app.new-project"&gt;create a new project&lt;/a&gt;?</property>
+                <property name="subtitle" translatable="yes" comments="the action:// link is used to jump to the new-project view">Why not &lt;a href="action://app.new-project"&gt;create a new project&lt;/a&gt;?</property>
                 <property name="title" translatable="yes">No projects found</property>
                 <property name="visible">true</property>
               </object>
