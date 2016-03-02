@@ -10,6 +10,8 @@ plugin_LTLIBRARIES = libterminal.la
 dist_plugin_DATA = terminal.plugin
 
 libterminal_la_SOURCES = \
+	gb-terminal.c \
+	gb-terminal.h \
 	gb-terminal-application-addin.c \
 	gb-terminal-application-addin.h \
 	gb-terminal-plugin.c \

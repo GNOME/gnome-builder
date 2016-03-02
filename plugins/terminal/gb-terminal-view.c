@@ -20,6 +20,7 @@
 #include <ide.h>
 #include <vte/vte.h>
 
+#include "gb-terminal.h"
 #include "gb-terminal-view.h"
 #include "gb-terminal-view-private.h"
 #include "gb-terminal-view-actions.h"
@@ -406,7 +407,7 @@ gb_terminal_set_split_view (IdeLayoutView   *view,
     {
       style_context = gtk_widget_get_style_context (GTK_WIDGET (view));
 
-      self->terminal_bottom = g_object_new (VTE_TYPE_TERMINAL,
+      self->terminal_bottom = g_object_new (GB_TYPE_TERMINAL,
                                             "audible-bell", FALSE,
                                             "scrollback-lines", G_MAXUINT,
                                             "expand", TRUE,
@@ -563,6 +564,8 @@ gb_terminal_view_class_init (GbTerminalViewClass *klass)
                          (G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, LAST_PROP, properties);
+
+  g_type_ensure (GB_TYPE_TERMINAL);
 }
 
 static void

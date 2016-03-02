@@ -4,16 +4,6 @@
   bind "F2" { "action" ("project-tree", "rename-file", "") };
 }
 
-@binding-set builder-vte-terminal
-{
-  bind "<ctrl><shift>c" { "copy-clipboard" () };
-  bind "<ctrl><shift>v" { "paste-clipboard" () };
-}
-
-vte-terminal {
-  -gtk-key-bindings: builder-vte-terminal;
-}
-
 @binding-set builder-command-bar-entry
 {
   bind "<ctrl>a" { "move-cursor" (paragraph-ends, -1, 0) };
