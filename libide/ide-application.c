@@ -333,6 +333,14 @@ ide_application_startup (GApplication *application)
       modeline_parser_init ();
     }
 
+  if (self->mode == IDE_APPLICATION_MODE_PRIMARY)
+    {
+      /*
+       * Start loading recent projects as early as we can.
+       */
+      (void)ide_application_get_recent_projects (self);
+    }
+
   _ide_battery_monitor_init ();
 
   G_APPLICATION_CLASS (ide_application_parent_class)->startup (application);
