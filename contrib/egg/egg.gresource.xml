@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
   <gresource prefix="/org/gnome/libegg-private">
+    <file>egg-empty-state.ui</file>
     <file>egg-pill-box.ui</file>
     <file>egg-simple-popover.ui</file>
   </gresource>
