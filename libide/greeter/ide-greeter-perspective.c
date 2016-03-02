@@ -43,6 +43,7 @@ struct _IdeGreeterPerspective
   IdePatternSpec       *pattern_spec;
   GActionMap           *actions;
 
+  GtkStack             *stack;
   GtkViewport          *viewport;
   GtkWidget            *titlebar;
   GtkBox               *my_projects_container;
@@ -305,6 +306,12 @@ recent_projects_items_changed (IdeGreeterPerspective *self,
   g_assert (IDE_IS_GREETER_PERSPECTIVE (self));
   g_assert (G_IS_LIST_MODEL (list_model));
   g_assert (IDE_IS_RECENT_PROJECTS (list_model));
+
+  if (g_list_model_get_n_items (list_model) > 0)
+    {
+      if (ide_str_equal0 ("empty-state", gtk_stack_get_visible_child_name (self->stack)))
+        gtk_stack_set_visible_child_name (self->stack, "projects");
+    }
 
   for (i = 0; i < added; i++)
     {
@@ -638,6 +645,7 @@ ide_greeter_perspective_class_init (IdeGreeterPerspectiveClass *klass)
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterPerspective, remove_button);
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterPerspective, search_entry);
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterPerspective, scrolled_window);
+  gtk_widget_class_bind_template_child (widget_class, IdeGreeterPerspective, stack);
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterPerspective, state_machine);
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterPerspective, viewport);
 }

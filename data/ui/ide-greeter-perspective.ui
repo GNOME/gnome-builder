@@ -25,6 +25,17 @@
             <property name="expand">true</property>
             <property name="visible">true</property>
             <child>
+              <object class="EggEmptyState">
+                <property name="resource">/org/gnome/builder/icons/scalable/apps/builder-symbolic.svg</property>
+                <property name="subtitle" translatable="yes">Why not &lt;a href="action://app.new-project"&gt;create a new project&lt;/a&gt;?</property>
+                <property name="title" translatable="yes">No projects found</property>
+                <property name="visible">true</property>
+              </object>
+              <packing>
+                <property name="name">empty-state</property>
+              </packing>
+            </child>
+            <child>
               <object class="GtkBox">
                 <property name="orientation">vertical</property>
                 <property name="visible">true</property>
