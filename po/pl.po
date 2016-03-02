@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-01 22:11+0100\n"
-"PO-Revision-Date: 2016-03-01 22:12+0100\n"
+"POT-Creation-Date: 2016-03-02 16:14+0100\n"
+"PO-Revision-Date: 2016-03-02 16:15+0100\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <gnomepl@aviary.pl>\n"
 "Language: pl\n"
@@ -291,7 +291,7 @@ msgid "Dark color scheme for Builder using the Tango color palette"
 msgstr ""
 "Ciemny schemat kolorów dla programu Builder, używający palety kolorów Tango"
 
-#: ../data/style-schemes/builder.xml.h:1 ../libide/ide-application.c:404
+#: ../data/style-schemes/builder.xml.h:1 ../libide/ide-application.c:413
 #: ../libide/preferences/ide-preferences-builtin.c:113
 msgid "Builder"
 msgstr "Builder"
@@ -381,7 +381,7 @@ msgstr "4"
 msgid "8"
 msgstr "8"
 
-#: ../data/ui/ide-editor-view.ui.h:2 ../data/ui/ide-greeter-perspective.ui.h:11
+#: ../data/ui/ide-editor-view.ui.h:2 ../data/ui/ide-greeter-perspective.ui.h:14
 msgid "_Cancel"
 msgstr "_Anuluj"
 
@@ -415,44 +415,53 @@ msgstr "Nowy projekt"
 msgid "Co_ntinue"
 msgstr "_Dalej"
 
-#: ../data/ui/ide-greeter-perspective.ui.h:1
+#. the action:// link is used to jump to the new-project view
+#: ../data/ui/ide-greeter-perspective.ui.h:2
+msgid "Why not <a href=\"action://app.new-project\">create a new project</a>?"
+msgstr "<a href=\"action://app.new-project\">Utworzyć nowy projekt?</a>"
+
+#: ../data/ui/ide-greeter-perspective.ui.h:3
+msgid "No projects found"
+msgstr "Brak projektów"
+
+#: ../data/ui/ide-greeter-perspective.ui.h:4
 msgid "Recent Projects"
 msgstr "Ostatnio używane projekty"
 
-#: ../data/ui/ide-greeter-perspective.ui.h:2
+#: ../data/ui/ide-greeter-perspective.ui.h:5
 msgid "Other Projects"
 msgstr "Inne projekty"
 
-#: ../data/ui/ide-greeter-perspective.ui.h:3
+#: ../data/ui/ide-greeter-perspective.ui.h:6
 msgid "_Remove"
 msgstr "_Usuń"
 
-#: ../data/ui/ide-greeter-perspective.ui.h:4
+#: ../data/ui/ide-greeter-perspective.ui.h:7
 msgid "Select a Project"
 msgstr "Wybór projektu"
 
-#: ../data/ui/ide-greeter-perspective.ui.h:5
+#: ../data/ui/ide-greeter-perspective.ui.h:8
 msgid "Click an item to select"
 msgstr "Kliknięcie elementu zaznacza go"
 
-#: ../data/ui/ide-greeter-perspective.ui.h:6
+#: ../data/ui/ide-greeter-perspective.ui.h:9
 msgid "Create a new project"
 msgstr "Tworzy nowy projekt"
 
-#: ../data/ui/ide-greeter-perspective.ui.h:7
+#: ../data/ui/ide-greeter-perspective.ui.h:10
 #: ../plugins/project-tree/gtk/menus.ui.h:2
 msgid "_New"
 msgstr "_Nowy"
 
-#: ../data/ui/ide-greeter-perspective.ui.h:8
+#: ../data/ui/ide-greeter-perspective.ui.h:11
 msgid "Search for projects"
 msgstr "Wyszukuje projekty"
 
-#: ../data/ui/ide-greeter-perspective.ui.h:9
+#: ../data/ui/ide-greeter-perspective.ui.h:12
 msgid "Select projects for removal"
 msgstr "Wybiera projekt do usunięcia"
 
-#: ../data/ui/ide-greeter-perspective.ui.h:10
+#: ../data/ui/ide-greeter-perspective.ui.h:13
 msgid "Return to project selection"
 msgstr "Wraca do wyboru projektów"
 
@@ -819,7 +828,7 @@ msgid "Provide a number between 1 and %u"
 msgstr "Należy podać numer między 1 a %u"
 
 #: ../libide/genesis/ide-genesis-perspective.c:200
-#: ../libide/greeter/ide-greeter-perspective.c:429
+#: ../libide/greeter/ide-greeter-perspective.c:436
 msgid "Failed to load the project"
 msgstr "Wczytanie projektu się nie powiodło"
 
