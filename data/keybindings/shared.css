@@ -10,7 +10,7 @@
   bind "<ctrl><shift>v" { "paste-clipboard" () };
 }
 
-VteTerminal {
+vte-terminal {
   -gtk-key-bindings: builder-vte-terminal;
 }
 
