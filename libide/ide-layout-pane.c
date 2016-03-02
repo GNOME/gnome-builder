@@ -23,6 +23,7 @@
 #include "ide-layout-pane.h"
 #include "ide-workbench.h"
 #include "ide-workbench-private.h"
+#include "ide-macros.h"
 
 struct _IdeLayoutPane
 {
@@ -34,6 +35,8 @@ struct _IdeLayoutPane
   GtkStack         *stack;
 
   EggSignalGroup   *toplevel_signals;
+
+  gulong 	    notify_stack_signal_handler;
 
   GdkRectangle      handle_pos;
 
@@ -159,6 +162,20 @@ ide_layout_pane_grab_focus (GtkWidget *widget)
 }
 
 static void
+on_stack_changed (GtkWidget *widget)
+{
+  GtkWidget *child;
+
+  g_assert (GTK_IS_WIDGET (widget));
+
+  child = gtk_stack_get_visible_child (GTK_STACK (widget));
+
+  if (child != NULL)
+    gtk_widget_grab_focus (child);
+}
+
+
+static void
 workbench_focus_changed (GtkWidget     *toplevel,
                          GtkWidget     *focus,
                          IdeLayoutPane *self)
@@ -212,6 +229,9 @@ static void
 ide_layout_pane_dispose (GObject *object)
 {
   IdeLayoutPane *self = (IdeLayoutPane *)object;
+
+  if (self->notify_stack_signal_handler > 0 && GTK_IS_STACK (self->stack))
+    ide_clear_signal_handler (self->stack, &self->notify_stack_signal_handler);
 
   g_clear_object (&self->toplevel_signals);
 
@@ -333,6 +353,12 @@ ide_layout_pane_init (IdeLayoutPane *self)
                                    G_CONNECT_AFTER);
 
   gtk_widget_init_template (GTK_WIDGET (self));
+
+  self->notify_stack_signal_handler = 0;
+  self->notify_stack_signal_handler = g_signal_connect (self->stack,
+						 	"notify::visible-child",
+							G_CALLBACK (on_stack_changed),
+							NULL);
 }
 
 GtkWidget *

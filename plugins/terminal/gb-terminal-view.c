@@ -590,4 +590,6 @@ gb_terminal_view_init (GbTerminalView *self)
                            self,
                            0);
   style_context_changed (style_context, self);
+
+  gtk_widget_set_can_focus (GTK_WIDGET (self->terminal_top), TRUE);
 }
