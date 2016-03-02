@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-02-24 08:04+0000\n"
-"PO-Revision-Date: 2016-02-24 10:02+0100\n"
+"POT-Creation-Date: 2016-02-29 08:01+0000\n"
+"PO-Revision-Date: 2016-02-29 15:59+0100\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Español; Castellano <gnome-es-list@gnome.org>\n"
 "Language: \n"
@@ -308,7 +308,8 @@ msgid "No open files"
 msgstr "No hay archivos abiertos"
 
 #: ../data/ui/ide-editor-perspective.ui.h:2
-msgid "Try opening a file typing in the search box at the top"
+#| msgid "Try opening a file typing in the search box at the top"
+msgid "Try opening a file by typing in the search box at the top"
 msgstr "Intente abrir el archivo escribiendo en la caja superior de búsqueda"
 
 #: ../data/ui/ide-editor-perspective.ui.h:3
@@ -776,7 +777,7 @@ msgstr "Línea %u, Columna %u"
 msgid "%u of %u"
 msgstr "%u de %u"
 
-#: ../libide/editor/ide-editor-frame.c:643
+#: ../libide/editor/ide-editor-frame.c:658
 #: ../plugins/project-tree/gtk/menus.ui.h:1
 msgid "Re_veal in Project Tree"
 msgstr "_Mostrar en el árbol del proyectos"
@@ -1498,7 +1499,7 @@ msgstr "Construir trabajadores"
 msgid "Number of parallel build workers"
 msgstr "Número de constructores en paralelo"
 
-#: ../libide/preferences/ide-preferences-perspective.c:821
+#: ../libide/preferences/ide-preferences-perspective.c:823
 msgid "Preferences"
 msgstr "Preferencias"
 
@@ -1835,6 +1836,19 @@ msgstr "RUTA"
 msgid "Build Output"
 msgstr "Salida de la construcción"
 
+#: ../plugins/clang/ide-clang-preferences-addin.c:62
+msgid "Clang"
+msgstr "Clang"
+
+#: ../plugins/clang/ide-clang-preferences-addin.c:63
+msgid "Show errors and warnings provided by Clang"
+msgstr "Mostrar errores y advertencias proporcionadas por Clang"
+
+#. translators: keywords used when searching for preferences
+#: ../plugins/clang/ide-clang-preferences-addin.c:65
+msgid "clang diagnostics warnings errors"
+msgstr "clang diagnósticos advertencias errors"
+
 #: ../plugins/clang/ide-clang-service.c:269
 msgid "Unknown failure"
 msgstr "Fallo desconocido"
@@ -1868,19 +1882,6 @@ msgstr "anónimo"
 #: ../plugins/clang/ide-clang-translation-unit.c:656
 msgid "clang_codeCompleteAt() only works on local files"
 msgstr "clang_codeCompleteAt() solo funciona con archivos locales"
-
-#: ../plugins/clang/ide-clang-preferences-addin.c:62
-msgid "Clang"
-msgstr "Clang"
-
-#: ../plugins/clang/ide-clang-preferences-addin.c:63
-msgid "Show errors and warnings provided by Clang"
-msgstr "Mostrar errores y advertencias proporcionadas por Clang"
-
-#. translators: keywords used when searching for preferences
-#: ../plugins/clang/ide-clang-preferences-addin.c:65
-msgid "clang diagnostics warnings errors"
-msgstr "clang diagnósticos advertencias errors"
 
 #: ../plugins/command-bar/gb-command-bar.c:299
 #, c-format
@@ -1945,6 +1946,14 @@ msgstr "Solicitud de buscar y reemplazar no válida"
 #, c-format
 msgid "Not a command: %s"
 msgstr "No es un comando: %s"
+
+#: ../plugins/comment-code/gtk/menus.ui.h:1
+msgid "Comment code"
+msgstr "Comentar código"
+
+#: ../plugins/comment-code/gtk/menus.ui.h:2
+msgid "Uncomment code"
+msgstr "Descomentar código"
 
 #: ../plugins/contributing/contributing_plugin/helper.py:76
 #, python-format
@@ -2115,6 +2124,19 @@ msgstr "Atribución"
 msgid "Code assistance requires a local file."
 msgstr "La asistencia de código requiere de un archivo local."
 
+#: ../plugins/gnome-code-assistance/ide-gca-preferences-addin.c:62
+msgid "Pylint"
+msgstr "Pylint"
+
+#: ../plugins/gnome-code-assistance/ide-gca-preferences-addin.c:63
+msgid "Enable the use of pylint, which may execute code in your project"
+msgstr "Activar el uso de pylint, que puede ejecutar código en su proyecto"
+
+#. translators: these are keywords used to search for preferences
+#: ../plugins/gnome-code-assistance/ide-gca-preferences-addin.c:65
+msgid "pylint python lint code execute execution"
+msgstr "pylint python lint código ejecutar ejecución"
+
 #: ../plugins/gnome-code-assistance/ide-gca-service.c:168
 msgid "No language specified"
 msgstr "No se ha especificado ningún lenguaje"
@@ -2171,7 +2193,7 @@ msgstr "Nombre de la carpeta"
 msgid "_Create"
 msgstr "_Crear"
 
-#: ../plugins/project-tree/gb-project-tree-addin.c:77
+#: ../plugins/project-tree/gb-project-tree-addin.c:112
 msgid "Project"
 msgstr "Proyecto"
 
@@ -2297,19 +2319,6 @@ msgstr "Mostrar errores y advertencias proporcionadas por Vala"
 #: ../plugins/vala-pack/ide-vala-preferences-addin.vala:35
 msgid "vala diagnostics warnings errors"
 msgstr "diagnósticos de alertas y errores de Vala"
-
-#: ../plugins/gnome-code-assistance/ide-gca-preferences-addin.c:62
-msgid "Pylint"
-msgstr "Pylint"
-
-#: ../plugins/gnome-code-assistance/ide-gca-preferences-addin.c:63
-msgid "Enable the use of pylint, which may execute code in your project"
-msgstr "Activar el uso de pylint, que puede ejecutar código en su proyecto"
-
-#. translators: these are keywords used to search for preferences
-#: ../plugins/gnome-code-assistance/ide-gca-preferences-addin.c:65
-msgid "pylint python lint code execute execution"
-msgstr "pylint python lint código ejecutar ejecución"
 
 #~ msgid "%s does not implement build_async()"
 #~ msgstr "%s no implementa build_async()"
