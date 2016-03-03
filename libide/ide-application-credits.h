@@ -59,6 +59,7 @@ static const gchar *ide_application_credits_authors[] = {
   "Daniel Korostil",
   "Daniel Mustieles",
   "David King",
+  "Debarshi Dutta",
   "Dimitris Zenios",
   "Dušan Kazik",
   "Ekaterina Gerasimova",
