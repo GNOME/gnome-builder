@@ -147,6 +147,7 @@ typedef struct
 
   GdkRGBA                      bubble_color1;
   GdkRGBA                      bubble_color2;
+  GdkRGBA                      snippet_area_background_rgba;
 
   guint                        font_scale;
 
@@ -978,13 +979,18 @@ ide_source_view__buffer_notify_style_scheme_cb (IdeSourceView *self,
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
   GtkSourceStyleScheme *scheme = NULL;
   GtkSourceStyle *style = NULL;
+  GtkSourceStyle *snippet_area_style = NULL;
+  g_autofree gchar *snippet_background = NULL;
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
   g_assert (IDE_IS_BUFFER (buffer));
 
   scheme = gtk_source_buffer_get_style_scheme (GTK_SOURCE_BUFFER (buffer));
   if (scheme)
-    style = gtk_source_style_scheme_get_style (scheme, "search-match");
+    {
+      style = gtk_source_style_scheme_get_style (scheme, "search-match");
+      snippet_area_style = gtk_source_style_scheme_get_style (scheme, "snippet::area");
+    }
 
   if (style)
     {
@@ -1000,6 +1006,17 @@ ide_source_view__buffer_notify_style_scheme_cb (IdeSourceView *self,
     {
       gdk_rgba_parse (&priv->bubble_color1, "#edd400");
       gdk_rgba_parse (&priv->bubble_color2, "#fce94f");
+    }
+
+  if (snippet_area_style)
+    g_object_get (snippet_area_style, "background", &snippet_background, NULL);
+
+  if (snippet_background)
+    gdk_rgba_parse (&priv->snippet_area_background_rgba, snippet_background);
+  else
+    {
+      gdk_rgba_parse (&priv->snippet_area_background_rgba, "#204a87");
+      priv->snippet_area_background_rgba.alpha = 0.1;
     }
 }
 
@@ -4176,7 +4193,6 @@ ide_source_view_draw_snippets_background (IdeSourceView *self,
                                           cairo_t       *cr)
 {
   static GdkRGBA rgba;
-  static gboolean did_rgba;
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
   IdeSourceSnippet *snippet;
   GtkTextView *text_view = GTK_TEXT_VIEW (self);
@@ -4188,13 +4204,7 @@ ide_source_view_draw_snippets_background (IdeSourceView *self,
   g_assert (IDE_IS_SOURCE_VIEW (self));
   g_assert (cr);
 
-  if (!did_rgba)
-    {
-      /* TODO: Get this from the style scheme? */
-      gdk_rgba_parse (&rgba, "#204a87");
-      rgba.alpha = 0.1;
-      did_rgba = TRUE;
-    }
+  rgba = priv->snippet_area_background_rgba;
 
   window = gtk_text_view_get_window (text_view, GTK_TEXT_WINDOW_TEXT);
   width = gdk_window_get_width (window);
