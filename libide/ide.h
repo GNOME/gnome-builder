@@ -106,6 +106,7 @@ G_BEGIN_DECLS
 #include "ide-source-snippet.h"
 #include "ide-source-snippets-manager.h"
 #include "ide-source-snippets.h"
+#include "ide-source-style-scheme.h"
 #include "ide-source-view.h"
 #include "ide-subprocess-launcher.h"
 #include "ide-symbol-resolver.h"

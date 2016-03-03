@@ -112,6 +112,7 @@ libide_1_0_la_public_headers = \
 	ide-source-snippet.h \
 	ide-source-snippets-manager.h \
 	ide-source-snippets.h \
+	ide-source-style-scheme.h \
 	ide-source-view-mode.h \
 	ide-source-view.h \
 	ide-subprocess-launcher.h \
@@ -263,6 +264,7 @@ libide_1_0_la_public_sources = \
 	ide-source-snippet.c \
 	ide-source-snippets-manager.c \
 	ide-source-snippets.c \
+	ide-source-style-scheme.c \
 	ide-source-view-mode.c \
 	ide-source-view.c \
 	ide-subprocess-launcher.c \
