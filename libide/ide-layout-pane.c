@@ -36,7 +36,7 @@ struct _IdeLayoutPane
 
   EggSignalGroup   *toplevel_signals;
 
-  gulong 	    notify_stack_signal_handler;
+  gulong            notify_stack_signal_handler;
 
   GdkRectangle      handle_pos;
 
@@ -356,9 +356,9 @@ ide_layout_pane_init (IdeLayoutPane *self)
 
   self->notify_stack_signal_handler = 0;
   self->notify_stack_signal_handler = g_signal_connect (self->stack,
-						 	"notify::visible-child",
-							G_CALLBACK (on_stack_changed),
-							NULL);
+                                                        "notify::visible-child",
+                                                        G_CALLBACK (on_stack_changed),
+                                                        NULL);
 }
 
 GtkWidget *
