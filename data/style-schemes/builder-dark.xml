@@ -69,6 +69,9 @@
   <style name="background-pattern"          background="#2e2e2e"/>
   <style name="map-overlay"                 background="#rgba(136,138,133,0.25)"/>
 
+  <!-- Snippets -->
+  <style name="snippet::tab-stop"           background="orange3" foreground="aluminium6"/>
+
   <!-- Bracket Matching -->
   <style name="bracket-match"               foreground="chocolate2" bold="true"/>
   <style name="bracket-mismatch"            foreground="aluminium1" background="scarletred2" bold="true"/>
