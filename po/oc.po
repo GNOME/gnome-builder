@@ -8,7 +8,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
 "POT-Creation-Date: 2016-02-29 08:01+0000\n"
-"PO-Revision-Date: 2016-03-02 21:53+0200\n"
+"PO-Revision-Date: 2016-03-03 20:51+0200\n"
 "Last-Translator: Cédric Valmary (totenoc.eu) <cvalmary@yahoo.fr>\n"
 "Language-Team: Tot En Òc\n"
 "Language: oc\n"
@@ -81,7 +81,7 @@ msgstr ""
 
 #: ../contrib/tmpl/tmpl-template-locator.c:105
 msgid "Failed to locate template \"%s\""
-msgstr "Impossible de trobar lo modèle « %s »"
+msgstr "Impossible de trobar lo modèl « %s »"
 
 #: ../contrib/xml/xml-reader.c:327
 msgid "Could not parse XML from stream"
@@ -2294,14 +2294,14 @@ msgid "vala diagnostics warnings errors"
 msgstr ""
 
 #~ msgid "Dark color scheme for Builder using the Tango color palette"
-#~ msgstr "Thème sombre per Builder qui utilizar la palette de colors Tango"
+#~ msgstr "Tèma sombre per Builder qui utilizar la palette de colors Tango"
 
 #, fuzzy
 #~| msgid "Project"
 #~ msgid "Project Discovery"
-#~ msgstr "Projet"
+#~ msgstr "Projècte"
 
 #, fuzzy
 #~| msgid "From an existing project on this computer"
 #~ msgid "Discover projects on my computer"
-#~ msgstr "Dempuèi un projet existant sus cet ordinateur"
+#~ msgstr "Dempuèi un projècte existant sus cet ordenador"
