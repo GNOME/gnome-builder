@@ -40,6 +40,7 @@
 #include "ide-source-iter.h"
 #include "ide-source-location.h"
 #include "ide-source-range.h"
+#include "ide-source-style-scheme.h"
 #include "ide-symbol.h"
 #include "ide-symbol-resolver.h"
 #include "ide-unsaved-files.h"
@@ -50,10 +51,11 @@
 #define RECLAIMATION_TIMEOUT_SECS              1
 #define MODIFICATION_TIMEOUT_SECS              1
 
-#define TAG_ERROR      "diagnostician::error"
-#define TAG_WARNING    "diagnostician::warning"
-#define TAG_DEPRECATED "diagnostician::deprecated"
-#define TAG_NOTE       "diagnostician::note"
+#define TAG_ERROR            "diagnostician::error"
+#define TAG_WARNING          "diagnostician::warning"
+#define TAG_DEPRECATED       "diagnostician::deprecated"
+#define TAG_NOTE             "diagnostician::note"
+#define TAG_SNIPPET_TAB_STOP "snippet::tab-stop"
 
 typedef struct
 {
@@ -918,6 +920,53 @@ ide_buffer_notify_language (IdeBuffer  *self,
 }
 
 static void
+ide_buffer_notify_style_scheme (IdeBuffer  *self,
+                                GParamSpec *pspec,
+                                gpointer    unused)
+{
+  GtkSourceStyleScheme *style_scheme;
+  GtkTextTagTable *table;
+
+  g_assert (IDE_IS_BUFFER (self));
+  g_assert (pspec != NULL);
+
+  style_scheme = gtk_source_buffer_get_style_scheme (GTK_SOURCE_BUFFER (self));
+  table = gtk_text_buffer_get_tag_table (GTK_TEXT_BUFFER (self));
+
+#define GET_TAG(name) (gtk_text_tag_table_lookup(table, name))
+
+  if (style_scheme != NULL)
+    {
+      ide_source_style_scheme_apply_style (style_scheme,
+                                           TAG_SNIPPET_TAB_STOP,
+                                           GET_TAG (TAG_SNIPPET_TAB_STOP));
+    }
+
+#undef GET_TAG
+}
+
+static void
+ide_buffer_on_tag_added (IdeBuffer       *self,
+                         GtkTextTag      *tag,
+                         GtkTextTagTable *table)
+{
+  GtkTextTag *chunk_tag;
+
+  g_assert (IDE_IS_BUFFER (self));
+  g_assert (GTK_IS_TEXT_TAG (tag));
+  g_assert (GTK_IS_TEXT_TAG_TABLE (table));
+
+  /*
+   * Adjust priority of our tab-stop tag.
+   */
+
+  chunk_tag = gtk_text_tag_table_lookup (table, "snippet::tab-stop");
+  if (chunk_tag != NULL)
+    gtk_text_tag_set_priority (chunk_tag,
+                               gtk_text_tag_table_get_size (table) - 1);
+}
+
+static void
 ide_buffer_constructed (GObject *object)
 {
   IdeBuffer *self = (IdeBuffer *)object;
@@ -960,6 +1009,14 @@ ide_buffer_constructed (GObject *object)
                               "underline", PANGO_UNDERLINE_ERROR,
                               "underline-rgba", &error_rgba,
                               NULL);
+  gtk_text_buffer_create_tag (GTK_TEXT_BUFFER (self), TAG_SNIPPET_TAB_STOP,
+                              NULL);
+
+  g_signal_connect_object (gtk_text_buffer_get_tag_table (GTK_TEXT_BUFFER (self)),
+                           "tag-added",
+                           G_CALLBACK (ide_buffer_on_tag_added),
+                           self,
+                           G_CONNECT_SWAPPED);
 
   priv->highlight_engine = ide_highlight_engine_new (self);
 
@@ -979,6 +1036,11 @@ ide_buffer_constructed (GObject *object)
                     NULL);
 
   g_object_notify (G_OBJECT (self), "language");
+
+  g_signal_connect (self,
+                    "notify::style-scheme",
+                    G_CALLBACK (ide_buffer_notify_style_scheme),
+                    NULL);
 }
 
 static void

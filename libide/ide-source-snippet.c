@@ -25,6 +25,8 @@
 #include "ide-source-snippet-chunk.h"
 #include "ide-source-snippet-context.h"
 
+#define TAG_SNIPPET_TAB_STOP "snippet::tab-stop"
+
 struct _IdeSourceSnippet
 {
   IdeObject                parent_instance;
@@ -484,16 +486,65 @@ ide_source_snippet_update_context (IdeSourceSnippet *self)
   ide_source_snippet_context_emit_changed (context);
 }
 
+static void
+ide_source_snippet_clear_tags (IdeSourceSnippet *self)
+{
+  g_assert (IDE_IS_SOURCE_SNIPPET (self));
+
+  if (self->mark_begin != NULL && self->mark_end != NULL)
+    {
+      GtkTextBuffer *buffer;
+      GtkTextIter begin;
+      GtkTextIter end;
+
+      buffer = gtk_text_mark_get_buffer (self->mark_begin);
+
+      gtk_text_buffer_get_iter_at_mark (buffer, &begin, self->mark_begin);
+      gtk_text_buffer_get_iter_at_mark (buffer, &end, self->mark_end);
+
+      gtk_text_buffer_remove_tag_by_name (buffer,
+                                          TAG_SNIPPET_TAB_STOP,
+                                          &begin, &end);
+    }
+}
+
+static void
+ide_source_snippet_update_tags (IdeSourceSnippet *self)
+{
+  GtkTextBuffer *buffer;
+  guint i;
+
+  g_assert (IDE_IS_SOURCE_SNIPPET (self));
+
+  ide_source_snippet_clear_tags (self);
+
+  buffer = gtk_text_mark_get_buffer (self->mark_begin);
+
+  for (i = 0; i < self->chunks->len; i++)
+    {
+      IdeSourceSnippetChunk *chunk = g_ptr_array_index (self->chunks, i);
+      gint tab_stop = ide_source_snippet_chunk_get_tab_stop (chunk);
+
+      if (tab_stop >= 0)
+        {
+          GtkTextIter begin;
+          GtkTextIter end;
+
+          ide_source_snippet_get_chunk_range (self, chunk, &begin, &end);
+          gtk_text_buffer_apply_tag_by_name (buffer,
+                                             TAG_SNIPPET_TAB_STOP,
+                                             &begin, &end);
+        }
+    }
+}
+
 gboolean
 ide_source_snippet_begin (IdeSourceSnippet *self,
                           GtkTextBuffer    *buffer,
                           GtkTextIter      *iter)
 {
   IdeSourceSnippetContext *context;
-  IdeSourceSnippetChunk *chunk;
-  const gchar *text;
   gboolean ret;
-  gint len;
   gint i;
 
   g_return_val_if_fail (IDE_IS_SOURCE_SNIPPET (self), FALSE);
@@ -520,9 +571,15 @@ ide_source_snippet_begin (IdeSourceSnippet *self,
 
   for (i = 0; i < self->chunks->len; i++)
     {
+      IdeSourceSnippetChunk *chunk;
+      const gchar *text;
+
       chunk = g_ptr_array_index (self->chunks, i);
+
       if ((text = ide_source_snippet_chunk_get_text (chunk)))
         {
+          gint len;
+
           len = g_utf8_strlen (text, -1);
           g_array_append_val (self->runs, len);
           gtk_text_buffer_insert (buffer, iter, text, -1);
@@ -538,6 +595,8 @@ ide_source_snippet_begin (IdeSourceSnippet *self,
 
   gtk_text_buffer_end_user_action (buffer);
 
+  ide_source_snippet_update_tags (self);
+
   ret = ide_source_snippet_move_next (self);
 
   return ret;
@@ -547,6 +606,11 @@ void
 ide_source_snippet_finish (IdeSourceSnippet *self)
 {
   g_return_if_fail (IDE_IS_SOURCE_SNIPPET (self));
+
+  ide_source_snippet_clear_tags (self);
+
+  g_clear_object (&self->mark_begin);
+  g_clear_object (&self->mark_end);
 }
 
 void
@@ -703,6 +767,8 @@ ide_source_snippet_after_insert_text (IdeSourceSnippet *self,
   gtk_text_buffer_get_iter_at_mark (buffer, iter, here);
   gtk_text_buffer_delete_mark (buffer, here);
 
+  ide_source_snippet_update_tags (self);
+
 #if 0
   ide_source_snippet_context_dump (self->snippet_context);
 #endif
@@ -793,6 +859,8 @@ ide_source_snippet_after_delete_range (IdeSourceSnippet *self,
   gtk_text_buffer_get_iter_at_mark (buffer, begin, here);
   gtk_text_buffer_get_iter_at_mark (buffer, end, here);
   gtk_text_buffer_delete_mark (buffer, here);
+
+  ide_source_snippet_update_tags (self);
 
 #if 0
   ide_source_snippet_context_dump (self->snippet_context);
