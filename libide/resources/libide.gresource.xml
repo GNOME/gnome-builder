@@ -21,6 +21,15 @@
     <file compressed="true" alias="Adwaita.css">../../data/theme/Adwaita.css</file>
     <file compressed="true" alias="Adwaita-dark.css">../../data/theme/Adwaita-dark.css</file>
     <file compressed="true" alias="Adwaita-shared.css">../../data/theme/Adwaita-shared.css</file>
+
+    <file compressed="true" alias="Arc.css">../../data/theme/Arc.css</file>
+    <file compressed="true" alias="Arc-Dark.css">../../data/theme/Arc-Dark.css</file>
+    <file compressed="true" alias="Arc-Darker.css">../../data/theme/Arc-Darker.css</file>
+    <file compressed="true" alias="Arc-dark.css">../../data/theme/Arc-Dark.css</file>
+    <file compressed="true" alias="Arc-Dark-dark.css">../../data/theme/Arc-Dark.css</file>
+    <file compressed="true" alias="Arc-Darker-dark.css">../../data/theme/Arc-Dark.css</file>
+    <file compressed="true" alias="Arc-shared.css">../../data/theme/Arc-shared.css</file>
+
     <file compressed="true" alias="shared.css">../../data/theme/shared.css</file>
   </gresource>
 

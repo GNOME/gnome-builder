@@ -1,0 +1,7 @@
+@import url("resource:///org/gnome/builder/theme/Arc-shared.css");
+
+/* Darker border */
+perspectiveswitcher {
+  border-top: 1px solid #2b2e39;
+  border-right: 1px solid #2b2e39;
+}
