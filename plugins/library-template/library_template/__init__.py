@@ -62,7 +62,13 @@ class LibraryProjectTemplate(Ide.TemplateBase, Ide.ProjectTemplate):
 
     def do_expand_async(self, params, cancellable, callback, data):
         name = params['name'].get_string().lower()
-        directory = Gio.File.new_for_path(name)
+
+        if 'path' in params:
+            dir_path = params['path'].get_string();
+        else:
+            dir_path = name
+
+        directory = Gio.File.new_for_path(dir_path)
 
         scope = Template.Scope.new()
 

@@ -2,9 +2,156 @@
 <interface>
   <template class="GbpCreateProjectWidget" parent="GtkBin">
     <child>
-      <object class="GtkBox">
-        <property name="orientation">vertical</property>
+      <object class="GtkScrolledWindow">
         <property name="visible">true</property>
+        <child>
+          <object class="GtkBox">
+            <property name="orientation">vertical</property>
+            <property name="expand">true</property>
+            <property name="border-width">32</property>
+            <property name="visible">true</property>
+            <child>
+              <object class="GtkBox">
+                <property name="orientation">horizontal</property>
+                <property name="expand">true</property>
+                <property name="valign">end</property>
+                <property name="spacing">12</property>
+                <property name="visible">true</property>
+                <child>
+                  <object class="GtkBox">
+                    <property name="orientation">vertical</property>
+                    <property name="expand">true</property>
+                    <property name="halign">end</property>
+                    <property name="spacing">12</property>
+                    <property name="visible">true</property>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="label" translatable="yes">Name</property>
+                        <property name="expand">true</property>
+                        <property name="halign">end</property>
+                        <property name="visible">true</property>
+                        <attributes>
+                          <attribute name="weight" value="bold"/>
+                        </attributes>
+                        <style>
+                          <class name="dim-label"/>
+                        </style>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="label" translatable="yes">Location</property>
+                        <property name="expand">true</property>
+                        <property name="halign">end</property>
+                        <property name="visible">true</property>
+                        <attributes>
+                          <attribute name="weight" value="bold"/>
+                        </attributes>
+                        <style>
+                          <class name="dim-label"/>
+                        </style>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="label" translatable="yes">Language</property>
+                        <property name="expand">true</property>
+                        <property name="halign">end</property>
+                        <property name="visible">true</property>
+                        <attributes>
+                          <attribute name="weight" value="bold"/>
+                        </attributes>
+                        <style>
+                          <class name="dim-label"/>
+                        </style>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child type="center">
+                  <object class="GtkBox">
+                    <property name="orientation">vertical</property>
+                    <property name="expand">false</property>
+                    <property name="spacing">12</property>
+                    <property name="visible">true</property>
+                    <child>
+                      <object class="GtkEntry" id="project_name_entry">
+                        <property name="width-chars">50</property>
+                        <property name="expand">true</property>
+                        <property name="visible">true</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkBox">
+                        <property name="expand">true</property>
+                        <property name="visible">true</property>
+                        <style>
+                          <class name="linked"/>
+                        </style>
+                        <child>
+                          <object class="GtkFileChooserButton" id="project_location_button">
+                            <property name="action">select-folder</property>
+                            <property name="local-only">true</property>
+                            <property name="expand">true</property>
+                            <property name="visible">true</property>
+                            <style>
+                              <class name="linked-on-right"/>
+                            </style>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkEntry" id="project_location_entry">
+                            <property name="expand">true</property>
+                            <property name="visible">true</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkComboBoxText" id="project_language_chooser">
+                        <property name="expand">true</property>
+                        <property name="visible">true</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkBox">
+                <property name="orientation">vertical</property>
+                <property name="expand">true</property>
+                <property name="valign">start</property>
+                <property name="spacing">12</property>
+                <property name="border-width">32</property>
+                <property name="visible">true</property>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="label" translatable="yes">Pattern</property>
+                    <property name="visible">true</property>
+                    <attributes>
+                      <attribute name="weight" value="bold"/>
+                    </attributes>
+                    <style>
+                      <class name="dim-label"/>
+                    </style>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkFlowBox" id="project_template_chooser">
+                    <property name="expand">true</property>
+                    <property name="halign">center</property>
+                    <property name="valign">start</property>
+                    <property name="visible">true</property>
+                    <style>
+                      <class name="dim-label"/>
+                    </style>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
       </object>
     </child>
   </template>

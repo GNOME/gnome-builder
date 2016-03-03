@@ -26,10 +26,7 @@ static void genesis_addin_iface_init (IdeGenesisAddinInterface *iface);
 struct _GbpCreateProjectGenesisAddin
 {
   GObject                 parent;
-
   GbpCreateProjectWidget *widget;
-
-  guint                   is_ready : 1;
 };
 
 G_DEFINE_TYPE_EXTENDED (GbpCreateProjectGenesisAddin,
@@ -68,7 +65,10 @@ gbp_create_project_genesis_addin_get_property (GObject    *object,
   switch (prop_id)
     {
     case PROP_IS_READY:
-      g_value_set_boolean (value, self->is_ready);
+      if (self->widget != NULL)
+        g_object_get_property (G_OBJECT (self->widget), "is-ready", value);
+      else
+        g_value_set_boolean (value, FALSE);
       break;
 
     default:
@@ -89,7 +89,7 @@ gbp_create_project_genesis_addin_class_init (GbpCreateProjectGenesisAddinClass *
                           "Is Ready",
                           "Is Ready",
                           FALSE,
-                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 }
@@ -97,6 +97,16 @@ gbp_create_project_genesis_addin_class_init (GbpCreateProjectGenesisAddinClass *
 static void
 gbp_create_project_genesis_addin_init (GbpCreateProjectGenesisAddin *self)
 {
+}
+
+static void
+widget_is_ready (GtkWidget                    *widget,
+                 GParamSpec                   *pspec,
+                 GbpCreateProjectGenesisAddin *self)
+{
+  g_assert (GBP_IS_CREATE_PROJECT_GENESIS_ADDIN (self));
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_IS_READY]);
 }
 
 static GtkWidget *
@@ -127,6 +137,10 @@ gbp_create_project_genesis_addin_get_widget (IdeGenesisAddin *addin)
        *       making the GbpCreateProjectGenesisAddin:is-ready property
        *       writable though.
        */
+      g_signal_connect (self->widget,
+                        "notify::is-ready",
+                        G_CALLBACK (widget_is_ready),
+                        self);
     }
 
   return GTK_WIDGET (self->widget);
@@ -142,6 +156,24 @@ static gchar *
 gbp_create_project_genesis_addin_get_title (IdeGenesisAddin *addin)
 {
   return g_strdup (_("From a project template"));
+}
+
+static void
+gbp_create_project_genesis_addin_run_cb (GObject      *object,
+                                         GAsyncResult *result,
+                                         gpointer      user_data)
+{
+  GbpCreateProjectWidget *widget = (GbpCreateProjectWidget *)object;
+  g_autoptr(GTask) task = user_data;
+  GError *error = NULL;
+
+  g_assert (G_IS_TASK (task));
+  g_assert (GBP_IS_CREATE_PROJECT_WIDGET (widget));
+
+  if (!gbp_create_project_widget_create_finish (widget, result, &error))
+    g_task_return_error (task, error);
+  else
+    g_task_return_boolean (task, TRUE);
 }
 
 static void
@@ -162,7 +194,10 @@ gbp_create_project_genesis_addin_run_async (IdeGenesisAddin     *addin,
    *       See gbp-create-project-tool.c for examples.
    */
 
-  g_task_return_boolean (task, TRUE);
+  gbp_create_project_widget_create_async (self->widget,
+                                          cancellable,
+                                          gbp_create_project_genesis_addin_run_cb,
+                                          g_object_ref (task));
 }
 
 static gboolean
@@ -170,8 +205,8 @@ gbp_create_project_genesis_addin_run_finish (IdeGenesisAddin  *addin,
                                              GAsyncResult     *result,
                                              GError          **error)
 {
-  g_assert (GBP_IS_CREATE_PROJECT_GENESIS_ADDIN (addin));
-  g_assert (G_IS_TASK (result));
+  g_return_val_if_fail (GBP_IS_CREATE_PROJECT_GENESIS_ADDIN (addin), FALSE);
+  g_return_val_if_fail (G_IS_TASK (result), FALSE);
 
   return g_task_propagate_boolean (G_TASK (result), error);
 }

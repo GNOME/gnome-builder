@@ -20,12 +20,21 @@
 #define GBP_CREATE_PROJECT_WIDGET_H
 
 #include <gtk/gtk.h>
+#include <ide.h>
 
 G_BEGIN_DECLS
 
 #define GBP_TYPE_CREATE_PROJECT_WIDGET (gbp_create_project_widget_get_type())
 
 G_DECLARE_FINAL_TYPE (GbpCreateProjectWidget, gbp_create_project_widget, GBP, CREATE_PROJECT_WIDGET, GtkBin)
+
+void gbp_create_project_widget_create_async (GbpCreateProjectWidget *self,
+                                             GCancellable           *cancellable,
+                                             GAsyncReadyCallback     callback,
+                                             gpointer                user_data);
+gboolean gbp_create_project_widget_create_finish (GbpCreateProjectWidget *self,
+                                                  GAsyncResult           *result,
+                                                  GError                **error);
 
 G_END_DECLS
 

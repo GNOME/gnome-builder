@@ -13,6 +13,8 @@ libcreate_project_plugin_la_SOURCES = \
 	gbp-create-project-genesis-addin.c \
 	gbp-create-project-genesis-addin.h \
 	gbp-create-project-plugin.c \
+	gbp-create-project-template-icon.c \
+	gbp-create-project-template-icon.h \
 	gbp-create-project-tool.c \
 	gbp-create-project-tool.h \
 	gbp-create-project-widget.c \

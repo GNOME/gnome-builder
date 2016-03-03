@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="GbpCreateProjectTemplateIcon" parent="GtkBin">
+    <child>
+      <object class="GtkBox">
+        <property name="orientation">vertical</property>
+        <property name="expand">true</property>
+        <property name="visible">true</property>
+        <child>
+          <object class="GtkImage" id="template_icon">
+            <property name="expand">true</property>
+            <property name="pixel-size">48</property>
+            <property name="visible">true</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel" id="template_name">
+            <property name="expand">true</property>
+            <property name="visible">true</property>
+            <attributes>
+              <attribute name="weight" value="bold"/>
+            </attributes>
+            <style>
+              <class name="dim-label"/>
+            </style>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

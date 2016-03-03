@@ -2,5 +2,6 @@
 <gresources>
   <gresource prefix="/org/gnome/builder/plugins/create-project-plugin">
     <file>gbp-create-project-widget.ui</file>
+    <file>gbp-create-project-template-icon.ui</file>
   </gresource>
 </gresources>
