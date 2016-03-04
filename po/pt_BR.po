@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-03-01 08:04+0000\n"
-"PO-Revision-Date: 2016-03-01 15:25-0300\n"
+"POT-Creation-Date: 2016-03-03 16:17+0000\n"
+"PO-Revision-Date: 2016-03-03 16:18-0300\n"
 "Last-Translator: Artur de Aquino Morais <artur.morais93@outlook.com>\n"
 "Language-Team: Brazilian Portuguese <gnome-pt_br-list@gnome.org>\n"
 "Language: pt_BR\n"
@@ -287,7 +287,7 @@ msgid "Dark color scheme for Builder using the Tango color palette"
 msgstr ""
 "Esquema de cores escuras para o Builder usando a paleta de cores do Tango"
 
-#: ../data/style-schemes/builder.xml.h:1 ../libide/ide-application.c:404
+#: ../data/style-schemes/builder.xml.h:1 ../libide/ide-application.c:413
 #: ../libide/preferences/ide-preferences-builtin.c:113
 msgid "Builder"
 msgstr "Builder"
@@ -377,8 +377,7 @@ msgstr "4"
 msgid "8"
 msgstr "8"
 
-#: ../data/ui/ide-editor-view.ui.h:2
-#: ../data/ui/ide-greeter-perspective.ui.h:11
+#: ../data/ui/ide-editor-view.ui.h:2 ../data/ui/ide-greeter-perspective.ui.h:14
 msgid "_Cancel"
 msgstr "_Cancelar"
 
@@ -414,44 +413,54 @@ msgstr "Novo projeto"
 msgid "Co_ntinue"
 msgstr "Co_ntinuar"
 
-#: ../data/ui/ide-greeter-perspective.ui.h:1
+#. the action:// link is used to jump to the new-project view
+#: ../data/ui/ide-greeter-perspective.ui.h:2
+msgid "Why not <a href=\"action://app.new-project\">create a new project</a>?"
+msgstr ""
+"Por que não <a href=\"action://app.new-project\">criar um novo projeto</a>?"
+
+#: ../data/ui/ide-greeter-perspective.ui.h:3
+msgid "No projects found"
+msgstr "Nenhum projeto encontrado"
+
+#: ../data/ui/ide-greeter-perspective.ui.h:4
 msgid "Recent Projects"
 msgstr "Projetos recentes"
 
-#: ../data/ui/ide-greeter-perspective.ui.h:2
+#: ../data/ui/ide-greeter-perspective.ui.h:5
 msgid "Other Projects"
 msgstr "Outros projetos"
 
-#: ../data/ui/ide-greeter-perspective.ui.h:3
+#: ../data/ui/ide-greeter-perspective.ui.h:6
 msgid "_Remove"
 msgstr "_Remover"
 
-#: ../data/ui/ide-greeter-perspective.ui.h:4
+#: ../data/ui/ide-greeter-perspective.ui.h:7
 msgid "Select a Project"
 msgstr "Selecionar um projeto"
 
-#: ../data/ui/ide-greeter-perspective.ui.h:5
+#: ../data/ui/ide-greeter-perspective.ui.h:8
 msgid "Click an item to select"
 msgstr "Clique em um item para selecionar"
 
-#: ../data/ui/ide-greeter-perspective.ui.h:6
+#: ../data/ui/ide-greeter-perspective.ui.h:9
 msgid "Create a new project"
 msgstr "Criar um novo projeto"
 
-#: ../data/ui/ide-greeter-perspective.ui.h:7
+#: ../data/ui/ide-greeter-perspective.ui.h:10
 #: ../plugins/project-tree/gtk/menus.ui.h:2
 msgid "_New"
 msgstr "_Novo"
 
-#: ../data/ui/ide-greeter-perspective.ui.h:8
+#: ../data/ui/ide-greeter-perspective.ui.h:11
 msgid "Search for projects"
 msgstr "Pesquisar por projetos"
 
-#: ../data/ui/ide-greeter-perspective.ui.h:9
+#: ../data/ui/ide-greeter-perspective.ui.h:12
 msgid "Select projects for removal"
 msgstr "Selecionar projetos para a remoção"
 
-#: ../data/ui/ide-greeter-perspective.ui.h:10
+#: ../data/ui/ide-greeter-perspective.ui.h:13
 msgid "Return to project selection"
 msgstr "Voltar para a seleção de projetos"
 
@@ -818,7 +827,7 @@ msgid "Provide a number between 1 and %u"
 msgstr "Forneça um número entre 1 e %u"
 
 #: ../libide/genesis/ide-genesis-perspective.c:200
-#: ../libide/greeter/ide-greeter-perspective.c:429
+#: ../libide/greeter/ide-greeter-perspective.c:436
 msgid "Failed to load the project"
 msgstr "Falha ao carregar o projeto"
 
@@ -916,7 +925,7 @@ msgstr "Por favor, forneça um endereço D-Bus"
 msgid "No such worker"
 msgstr "Trabalho inexistente"
 
-#: ../libide/ide-buffer.c:2207
+#: ../libide/ide-buffer.c:2269
 msgid "The current language lacks a symbol resolver."
 msgstr "O idioma atual carece de um resolvedor de símbolos."
 
@@ -1024,7 +1033,7 @@ msgstr "Sistema operacional do hospedeiro"
 msgid "%s has not implemented GAsyncInitable."
 msgstr "%s não possui implementação GAsyncInitable."
 
-#: ../libide/ide-source-snippet.c:370
+#: ../libide/ide-source-snippet.c:372
 msgid "Chunk does not belong to snippet."
 msgstr "O bloco não pertence a um trecho."
 
@@ -1048,17 +1057,17 @@ msgstr "Falha ao abrir o diretório: %s"
 msgid "Failed to load file: %s: %s"
 msgstr "Falha ao carregar arquivo: %s: %s"
 
-#: ../libide/ide-source-view.c:4966
+#: ../libide/ide-source-view.c:4841
 #, c-format
 msgid "Insert “%s”"
 msgstr "Insira \"%s\""
 
-#: ../libide/ide-source-view.c:4968
+#: ../libide/ide-source-view.c:4843
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "Substitua \"%s\" com \"%s\""
 
-#: ../libide/ide-source-view.c:5082
+#: ../libide/ide-source-view.c:4957
 msgid "Apply Fix-It"
 msgstr "Aplicar correção"
 
@@ -3223,9 +3232,6 @@ msgstr "vala diagnósticos avisos erros"
 #~ msgstr ""
 #~ "Copyright 2014 Christian Hergert, et al.\n"
 #~ "Licenciado sob a GNU GPL 3 ou posterior"
-
-#~ msgid "No documents were found"
-#~ msgstr "Nenhum documento foi encontrado"
 
 #~ msgid "Line 1, Column 1"
 #~ msgstr "Linha 1, Coluna 1"
