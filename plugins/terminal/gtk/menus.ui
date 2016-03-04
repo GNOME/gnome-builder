@@ -9,4 +9,32 @@
       </item>
     </section>
   </menu>
+  <menu id="gb-terminal-view-popup-menu">
+    <section id="gb-terminal-view-popup-menu-clipboard-section">
+      <item>
+        <attribute name="id">copy</attribute>
+        <attribute name="label" translatable="yes">_Copy</attribute>
+        <attribute name="action">terminal.copy-clipboard</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">_Paste</attribute>
+        <attribute name="action">terminal.paste-clipboard</attribute>
+      </item>
+    </section>
+    <section id="gb-terminal-view-popup-menu-selection-section">
+      <submenu id="gb-terminal-view-popup-menu-selection-submenu">
+        <attribute name="label" translatable="yes">Selection</attribute>
+        <item>
+          <attribute name="label" translatable="yes">Select _All</attribute>
+          <attribute name="action">terminal.select-all</attribute>
+          <attribute name="target" type="(b)">(true,)</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="yes">Select _None</attribute>
+          <attribute name="action">terminal.select-all</attribute>
+          <attribute name="target" type="(b)">(false,)</attribute>
+        </item>
+      </submenu>
+    </section>
+  </menu>
 </interface>
