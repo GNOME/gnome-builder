@@ -1,15 +1,15 @@
 # Kazakh translation for gnome-builder.
 # Copyright (C) 2015 gnome-builder's COPYRIGHT HOLDER
 # This file is distributed under the same license as the gnome-builder package.
-# Baurzhan Muftakhidinov <baurthefirst@gmail.com>, 2015.
+# Baurzhan Muftakhidinov <baurthefirst@gmail.com>, 2015-2016.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-02-07 16:02+0000\n"
-"PO-Revision-Date: 2016-02-09 15:48+0500\n"
+"POT-Creation-Date: 2016-03-03 22:17+0000\n"
+"PO-Revision-Date: 2016-03-04 09:32+0500\n"
 "Last-Translator: Baurzhan Muftakhidinov <baurthefirst@gmail.com>\n"
 "Language-Team: Kazakh <kk_KZ@googlegroups.com>\n"
 "Language: kk\n"
@@ -136,14 +136,12 @@ msgid "_Fullscreen"
 msgstr "Т_олық экранға"
 
 #: ../data/gtk/menus.ui.h:11
-#| msgid "_New Folder"
 msgid "_New File"
-msgstr ""
+msgstr "_Жаңа файл"
 
 #: ../data/gtk/menus.ui.h:12
-#| msgid "_Open"
 msgid "_Open File"
-msgstr ""
+msgstr "Файлды а_шу"
 
 #: ../data/gtk/menus.ui.h:13
 msgid "Save _All"
@@ -190,7 +188,6 @@ msgid "Select _All"
 msgstr "Барлығын _таңдау"
 
 #: ../data/gtk/menus.ui.h:24
-#| msgid "Select Project"
 msgid "Select _None"
 msgstr ""
 
@@ -204,7 +201,7 @@ msgstr ""
 
 #: ../data/gtk/menus.ui.h:27
 msgid "_Invert Case"
-msgstr ""
+msgstr "Регистрді т_ерістеу"
 
 #: ../data/gtk/menus.ui.h:28
 msgid "_Title Case"
@@ -212,11 +209,11 @@ msgstr ""
 
 #: ../data/gtk/menus.ui.h:29
 msgid "Join Lines"
-msgstr ""
+msgstr "Жолдарды біріктіру"
 
 #: ../data/gtk/menus.ui.h:30
 msgid "Sort Lines"
-msgstr ""
+msgstr "Жолдарды сұрыптау"
 
 #: ../data/gtk/menus.ui.h:31
 msgid "Zoom"
@@ -236,7 +233,7 @@ msgstr "Тастау"
 
 #: ../data/gtk/menus.ui.h:35
 msgid "Split"
-msgstr ""
+msgstr "Бөлу"
 
 #: ../data/gtk/menus.ui.h:36
 msgid "Split Left"
@@ -286,7 +283,7 @@ msgstr ""
 msgid "Dark color scheme for Builder using the Tango color palette"
 msgstr ""
 
-#: ../data/style-schemes/builder.xml.h:1 ../libide/ide-application.c:404
+#: ../data/style-schemes/builder.xml.h:1 ../libide/ide-application.c:413
 #: ../libide/preferences/ide-preferences-builtin.c:113
 msgid "Builder"
 msgstr ""
@@ -299,6 +296,26 @@ msgstr ""
 #: ../data/ui/ide-editor-frame.ui.h:2
 msgid "OVR"
 msgstr "ҮСТЖЗ"
+
+#: ../data/ui/ide-editor-perspective.ui.h:1
+msgid "No open files"
+msgstr "Ашық файлдар жоқ"
+
+#: ../data/ui/ide-editor-perspective.ui.h:2
+msgid "Try opening a file by typing in the search box at the top"
+msgstr ""
+
+#: ../data/ui/ide-editor-perspective.ui.h:3
+msgid "Enable / Disable left panel. Shortcut: F9"
+msgstr ""
+
+#: ../data/ui/ide-editor-perspective.ui.h:4
+msgid "Enable / Disable bottom panel. Shortcut: Ctrl + F9"
+msgstr ""
+
+#: ../data/ui/ide-editor-perspective.ui.h:5
+msgid "Enable / Disable right panel. Shortcut: Shift + F9"
+msgstr ""
 
 #: ../data/ui/ide-editor-tweak-widget.ui.h:1
 msgid "Search highlight mode…"
@@ -326,7 +343,7 @@ msgid "Smart Backspace"
 msgstr ""
 
 #: ../data/ui/ide-editor-tweak-widget.ui.h:7
-#: ../libide/preferences/ide-preferences-builtin.c:233
+#: ../libide/preferences/ide-preferences-builtin.c:234
 msgid "Indentation"
 msgstr "Шегіну"
 
@@ -356,7 +373,7 @@ msgstr "4"
 msgid "8"
 msgstr "8"
 
-#: ../data/ui/ide-editor-view.ui.h:2 ../data/ui/ide-greeter-perspective.ui.h:7
+#: ../data/ui/ide-editor-view.ui.h:2 ../data/ui/ide-greeter-perspective.ui.h:14
 msgid "_Cancel"
 msgstr "Ба_с тарту"
 
@@ -367,12 +384,20 @@ msgid ""
 msgstr ""
 
 #: ../data/ui/ide-editor-view.ui.h:4
+msgid "Go to line number"
+msgstr "Нөмірі берілген жолға өту"
+
+#: ../data/ui/ide-editor-view.ui.h:5
+msgid "Change editor settings and language"
+msgstr ""
+
+#: ../data/ui/ide-editor-view.ui.h:6
 msgid "Go to Line"
 msgstr "Жолға өту"
 
-#: ../data/ui/ide-editor-view.ui.h:5
+#: ../data/ui/ide-editor-view.ui.h:7
 msgid "Go"
-msgstr ""
+msgstr "Өту"
 
 #: ../data/ui/ide-genesis-perspective.ui.h:1
 msgid "New Project"
@@ -382,37 +407,85 @@ msgstr "Жаңа жоба"
 msgid "Co_ntinue"
 msgstr "Жалғ_астыру"
 
-#: ../data/ui/ide-greeter-perspective.ui.h:1
+#. the action:// link is used to jump to the new-project view
+#: ../data/ui/ide-greeter-perspective.ui.h:2
+msgid "Why not <a href=\"action://app.new-project\">create a new project</a>?"
+msgstr ""
+
+#: ../data/ui/ide-greeter-perspective.ui.h:3
+msgid "No projects found"
+msgstr "Жобалар табылмады"
+
+#: ../data/ui/ide-greeter-perspective.ui.h:4
 msgid "Recent Projects"
 msgstr "Жуырдағы жобалар"
 
-#: ../data/ui/ide-greeter-perspective.ui.h:2
+#: ../data/ui/ide-greeter-perspective.ui.h:5
 msgid "Other Projects"
 msgstr "Басқа жобалар"
 
-#: ../data/ui/ide-greeter-perspective.ui.h:3
+#: ../data/ui/ide-greeter-perspective.ui.h:6
 msgid "_Remove"
 msgstr "Ө_шіру"
 
-#: ../data/ui/ide-greeter-perspective.ui.h:4
+#: ../data/ui/ide-greeter-perspective.ui.h:7
 msgid "Select a Project"
 msgstr "Жобаны таңдау"
 
-#: ../data/ui/ide-greeter-perspective.ui.h:5
+#: ../data/ui/ide-greeter-perspective.ui.h:8
 msgid "Click an item to select"
 msgstr "Нәрсені таңдау үшін оның үстіне шертіңіз"
 
-#: ../data/ui/ide-greeter-perspective.ui.h:6
+#: ../data/ui/ide-greeter-perspective.ui.h:9
+msgid "Create a new project"
+msgstr "Жаңа жобаны жасау"
+
+#: ../data/ui/ide-greeter-perspective.ui.h:10
 #: ../plugins/project-tree/gtk/menus.ui.h:2
 msgid "_New"
 msgstr "Ж_аңа"
+
+#: ../data/ui/ide-greeter-perspective.ui.h:11
+msgid "Search for projects"
+msgstr "Жобаларды іздеу"
+
+#: ../data/ui/ide-greeter-perspective.ui.h:12
+msgid "Select projects for removal"
+msgstr "Өшіру үшін жобаны таңдау"
+
+#: ../data/ui/ide-greeter-perspective.ui.h:13
+msgid "Return to project selection"
+msgstr ""
+
+#: ../data/ui/ide-layout-tab-bar.ui.h:1
+msgid "List open files"
+msgstr ""
+
+#: ../data/ui/ide-layout-tab-bar.ui.h:2
+msgid "Add a new empty file to your project"
+msgstr ""
+
+#: ../data/ui/ide-layout-tab.ui.h:1
+msgid "Jump to previous location"
+msgstr "Алдыңғы орналасуға өту"
+
+#: ../data/ui/ide-layout-tab.ui.h:2
+msgid "Jump to next location"
+msgstr ""
+
+#: ../data/ui/ide-layout-tab.ui.h:3
+msgid "Close the current document"
+msgstr "Ағымдағы құжатты жабу"
 
 #: ../data/ui/ide-preferences-font-button.ui.h:1
 msgid "_Select"
 msgstr "Таң_дау"
 
+#: ../data/ui/ide-preferences-perspective.ui.h:1
+msgid "Search through preferences"
+msgstr ""
+
 #: ../data/ui/ide-shortcuts-window.ui.h:1
-#| msgid "Keyboard Shortcuts"
 msgctxt "shortcut window"
 msgid "Editor Shortcuts"
 msgstr "Түзеткіш жарлықтары"
@@ -423,7 +496,6 @@ msgid "General"
 msgstr "Жалпы"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:3
-#| msgid "Search"
 msgctxt "shortcut window"
 msgid "Global Search"
 msgstr "Глобалды іздеу"
@@ -494,19 +566,16 @@ msgid "Create new document"
 msgstr "Жаңа құжатты жасау"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:17
-#| msgid "Open a document"
 msgctxt "shortcut window"
 msgid "Open a document"
 msgstr "Құжатты ашу"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:18
-#| msgid "Save the document"
 msgctxt "shortcut window"
 msgid "Save the document"
 msgstr "Құжатты сақтау"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:19
-#| msgid "Close the document"
 msgctxt "shortcut window"
 msgid "Close the document"
 msgstr "Құжатты жабу"
@@ -657,7 +726,6 @@ msgid "Move sectionport to beginning of file"
 msgstr ""
 
 #: ../data/ui/ide-shortcuts-window.ui.h:49
-#| msgid "Highlight Matching Brackets"
 msgctxt "shortcut window"
 msgid "Move to matching bracket"
 msgstr ""
@@ -678,9 +746,16 @@ msgid "Unselect all"
 msgstr "Барлығынан таңдауды алып тастау"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:53
-#| msgid "Keyboard Shortcuts"
 msgctxt "shortcut window"
 msgid "Terminal Shortcuts"
+msgstr ""
+
+#: ../data/ui/ide-workbench-header-bar.ui.h:1
+msgid "Search for files. Shortcut: Ctrl + ."
+msgstr ""
+
+#: ../data/ui/ide-workbench-header-bar.ui.h:2
+msgid "Drops down a list of file operations"
 msgstr ""
 
 #: ../libide/directory/ide-directory-genesis-addin.c:106
@@ -696,17 +771,17 @@ msgstr "Файл ұсынылмады."
 msgid "Line %u, Column %u"
 msgstr "Жол %u, баған %u"
 
-#: ../libide/editor/ide-editor-frame.c:242
+#: ../libide/editor/ide-editor-frame.c:244
 #, c-format
 msgid "%u of %u"
 msgstr "%u, барлығы %u"
 
-#: ../libide/editor/ide-editor-frame.c:641
+#: ../libide/editor/ide-editor-frame.c:658
 #: ../plugins/project-tree/gtk/menus.ui.h:1
 msgid "Re_veal in Project Tree"
 msgstr ""
 
-#: ../libide/editor/ide-editor-perspective.c:350
+#: ../libide/editor/ide-editor-perspective.c:456
 #: ../libide/preferences/ide-preferences-builtin.c:102
 #: ../libide/preferences/ide-preferences-builtin.c:125
 msgid "Editor"
@@ -719,7 +794,7 @@ msgstr "Құжатты сақтау"
 #: ../libide/editor/ide-editor-view-actions.c:307
 #: ../libide/editor/ide-editor-view-actions.c:438
 #: ../libide/ide-workbench-actions.c:67
-#: ../plugins/build-tools/gbp-build-panel.ui.h:13
+#: ../plugins/build-tools/gbp-build-panel.ui.h:8
 #: ../plugins/terminal/gb-terminal-view-actions.c:305
 msgid "Cancel"
 msgstr "Бас тарту"
@@ -745,7 +820,7 @@ msgid "Provide a number between 1 and %u"
 msgstr ""
 
 #: ../libide/genesis/ide-genesis-perspective.c:200
-#: ../libide/greeter/ide-greeter-perspective.c:429
+#: ../libide/greeter/ide-greeter-perspective.c:436
 msgid "Failed to load the project"
 msgstr ""
 
@@ -777,7 +852,7 @@ msgstr ""
 
 #: ../libide/ide-application-actions.c:122
 msgid "translator-credits"
-msgstr "Baurzhan Muftakhidinov <baurthefirst@gmail.com> 2015"
+msgstr "Baurzhan Muftakhidinov <baurthefirst@gmail.com>"
 
 #: ../libide/ide-application-actions.c:125
 msgid "Learn more about GNOME Builder"
@@ -791,51 +866,55 @@ msgstr ""
 msgid "Commands:"
 msgstr "Командалар:"
 
-#: ../libide/ide-application-command-line.c:165
+#: ../libide/ide-application-command-line.c:185
 msgid "List available subcommands"
 msgstr ""
 
-#: ../libide/ide-application-command-line.c:172
+#: ../libide/ide-application-command-line.c:192
 msgid "Run Builder in standalone mode"
 msgstr ""
 
-#: ../libide/ide-application-command-line.c:179
+#: ../libide/ide-application-command-line.c:199
 msgid "Show the application's version"
 msgstr "Қолданба нұсқасын көрсету"
 
-#: ../libide/ide-application-command-line.c:198
+#: ../libide/ide-application-command-line.c:218
 msgid "Increase verbosity, may be specified multiple times"
 msgstr ""
 
-#: ../libide/ide-application-command-line.c:228
+#: ../libide/ide-application-command-line.c:225
+msgid "Enter GApplication Service mode"
+msgstr ""
+
+#: ../libide/ide-application-command-line.c:255
 msgid "COMMAND"
 msgstr "КОМАНДА"
 
-#: ../libide/ide-application-command-line.c:286
+#: ../libide/ide-application-command-line.c:326
 msgid "No commands available"
 msgstr ""
 
-#: ../libide/ide-application-command-line.c:315
+#: ../libide/ide-application-command-line.c:356
 msgid "Please provide a command"
 msgstr ""
 
-#: ../libide/ide-application-command-line.c:325
+#: ../libide/ide-application-command-line.c:366
 msgid "No such tool"
-msgstr ""
+msgstr "Ондай сайман жоқ"
 
-#: ../libide/ide-application-command-line.c:339
+#: ../libide/ide-application-command-line.c:380
 msgid "Please provide a worker type"
 msgstr ""
 
-#: ../libide/ide-application-command-line.c:346
+#: ../libide/ide-application-command-line.c:387
 msgid "Please provide a D-Bus address"
 msgstr ""
 
-#: ../libide/ide-application-command-line.c:355
+#: ../libide/ide-application-command-line.c:396
 msgid "No such worker"
 msgstr ""
 
-#: ../libide/ide-buffer.c:2204
+#: ../libide/ide-buffer.c:2269
 msgid "The current language lacks a symbol resolver."
 msgstr ""
 
@@ -843,26 +922,22 @@ msgstr ""
 msgid "File too large to be opened."
 msgstr ""
 
-#: ../libide/ide-buffer-manager.c:1456
+#: ../libide/ide-buffer-manager.c:1461
 msgid "Words"
 msgstr "Сөздер"
 
-#: ../libide/ide-buffer-manager.c:1668
+#: ../libide/ide-buffer-manager.c:1673
 #, c-format
 msgid "unsaved document %u"
 msgstr ""
 
-#: ../libide/ide-buffer-manager.c:1702
+#: ../libide/ide-buffer-manager.c:1707
 msgid "Failed to save buffer, ignoring reclamation."
 msgstr ""
 
-#: ../libide/ide-builder.c:55
+#: ../libide/ide-builder.c:89
 #, c-format
-msgid "%s does not implement build_async()"
-msgstr ""
-
-#: ../libide/ide-builder.c:61
-msgid "No implementation of build_async()"
+msgid "%s does not support building"
 msgstr ""
 
 #: ../libide/ide-build-result.c:217
@@ -873,7 +948,7 @@ msgstr ""
 msgid "Failed to open stdout stream."
 msgstr ""
 
-#: ../libide/ide-build-system.c:232
+#: ../libide/ide-build-system.c:122
 #, c-format
 msgid "%s() is not supported on %s build system."
 msgstr ""
@@ -883,23 +958,30 @@ msgstr ""
 msgid "You must call %s() before using libide."
 msgstr ""
 
-#: ../libide/ide-context.c:1665
+#: ../libide/ide-configuration-manager.c:427
+msgid "Default Configuration"
+msgstr ""
+
+#: ../libide/ide-context.c:1828
 msgid "An unload request is already pending"
 msgstr ""
 
-#: ../libide/ide-context.c:1780
+#: ../libide/ide-context.c:1943
 msgid "Context has already been restored."
 msgstr ""
 
-#: ../libide/ide-device-manager.c:144
+#: ../libide/ide-device-manager.c:147
 #, c-format
 msgid "The device \"%s\" could not be found."
 msgstr ""
 
-#: ../libide/ide-layout-view.c:146
-#| msgid "Save the document"
-msgid "untitled document"
+#: ../libide/ide-environment-editor.c:65
+msgid "New variable…"
 msgstr ""
+
+#: ../libide/ide-layout-view.c:146
+msgid "untitled document"
+msgstr "атаусыз құжат"
 
 #: ../libide/ide-object.c:288
 #, c-format
@@ -926,9 +1008,13 @@ msgstr ""
 msgid "File must be within the project tree."
 msgstr ""
 
-#: ../libide/ide-recent-projects.c:382
+#: ../libide/ide-recent-projects.c:383
 #, c-format
 msgid "%s() may only be executed once"
+msgstr ""
+
+#: ../libide/ide-runtime-manager.c:100
+msgid "Host operating system"
 msgstr ""
 
 #: ../libide/ide-script.c:205
@@ -936,7 +1022,7 @@ msgstr ""
 msgid "%s has not implemented GAsyncInitable."
 msgstr ""
 
-#: ../libide/ide-source-snippet.c:370
+#: ../libide/ide-source-snippet.c:372
 msgid "Chunk does not belong to snippet."
 msgstr ""
 
@@ -960,17 +1046,17 @@ msgstr ""
 msgid "Failed to load file: %s: %s"
 msgstr ""
 
-#: ../libide/ide-source-view.c:4965
+#: ../libide/ide-source-view.c:4841
 #, c-format
-msgid "Insert \"%s\""
+msgid "Insert “%s”"
 msgstr ""
 
-#: ../libide/ide-source-view.c:4967
+#: ../libide/ide-source-view.c:4843
 #, c-format
-msgid "Replace \"%s\" with \"%s\""
+msgid "Replace “%s” with “%s”"
 msgstr ""
 
-#: ../libide/ide-source-view.c:5081
+#: ../libide/ide-source-view.c:4957
 msgid "Apply Fix-It"
 msgstr ""
 
@@ -1060,7 +1146,6 @@ msgid "Themes"
 msgstr "Темалар"
 
 #: ../libide/preferences/ide-preferences-builtin.c:80
-#| msgid "Theme"
 msgid "Dark Theme"
 msgstr ""
 
@@ -1073,7 +1158,6 @@ msgid "dark theme"
 msgstr ""
 
 #: ../libide/preferences/ide-preferences-builtin.c:81
-#| msgid "Pattern"
 msgid "Grid Pattern"
 msgstr ""
 
@@ -1128,7 +1212,6 @@ msgid "Emulates the Vim text editor"
 msgstr ""
 
 #: ../libide/preferences/ide-preferences-builtin.c:117
-#| msgid "Move Left"
 msgid "Movement"
 msgstr ""
 
@@ -1178,7 +1261,6 @@ msgid "Line Information"
 msgstr "Жол ақпараты"
 
 #: ../libide/preferences/ide-preferences-builtin.c:133
-#| msgid "line numbers"
 msgid "Line numbers"
 msgstr "Жолдар нөмірлері"
 
@@ -1207,22 +1289,18 @@ msgid "Make current line stand out with highlights"
 msgstr ""
 
 #: ../libide/preferences/ide-preferences-builtin.c:138
-#| msgid "Highlight Matching Brackets"
 msgid "Matching brackets"
 msgstr ""
 
 #: ../libide/preferences/ide-preferences-builtin.c:138
-#| msgid "Highlight Matching Brackets"
 msgid "Highlight matching brackets based on cursor position"
 msgstr ""
 
 #: ../libide/preferences/ide-preferences-builtin.c:140
-#| msgid "Overview Map"
 msgid "Code Overview"
 msgstr ""
 
 #: ../libide/preferences/ide-preferences-builtin.c:141
-#| msgid "Overview Map"
 msgid "Show overview map"
 msgstr ""
 
@@ -1271,7 +1349,6 @@ msgid "Highlighting"
 msgstr "Түспен ерекшелеу"
 
 #: ../libide/preferences/ide-preferences-builtin.c:160
-#| msgid "Highlighting"
 msgid "Semantic Highlighting"
 msgstr ""
 
@@ -1282,7 +1359,6 @@ msgid ""
 msgstr ""
 
 #: ../libide/preferences/ide-preferences-builtin.c:162
-#| msgid "Auto Completion"
 msgid "Completion"
 msgstr ""
 
@@ -1318,7 +1394,6 @@ msgid "Diagnostics"
 msgstr ""
 
 #: ../libide/preferences/ide-preferences-builtin.c:176
-#| msgid "Snippets"
 msgid "Code snippets"
 msgstr ""
 
@@ -1338,69 +1413,90 @@ msgstr ""
 msgid "Upon saving, trailing whitespace from modified lines will be trimmed."
 msgstr ""
 
-#: ../libide/preferences/ide-preferences-builtin.c:229
+#: ../libide/preferences/ide-preferences-builtin.c:228
+msgid "Overwrite Braces"
+msgstr ""
+
+#: ../libide/preferences/ide-preferences-builtin.c:228
+msgid "Overwrite closing braces"
+msgstr ""
+
+#: ../libide/preferences/ide-preferences-builtin.c:230
 msgid "Margins"
 msgstr "Шет өрістері"
 
-#: ../libide/preferences/ide-preferences-builtin.c:230
-#| msgid "Display right margin"
+#: ../libide/preferences/ide-preferences-builtin.c:231
 msgid "Show right margin"
 msgstr ""
 
-#: ../libide/preferences/ide-preferences-builtin.c:231
+#: ../libide/preferences/ide-preferences-builtin.c:232
 msgid "Right margin position"
 msgstr ""
 
-#: ../libide/preferences/ide-preferences-builtin.c:231
+#: ../libide/preferences/ide-preferences-builtin.c:232
 msgid "Position in spaces for the right margin"
 msgstr ""
 
-#: ../libide/preferences/ide-preferences-builtin.c:234
-#| msgid "_Tab width:"
+#: ../libide/preferences/ide-preferences-builtin.c:235
 msgid "Tab width"
 msgstr "Табуляция ені"
 
-#: ../libide/preferences/ide-preferences-builtin.c:234
+#: ../libide/preferences/ide-preferences-builtin.c:235
 msgid "Width of a tab character in spaces"
 msgstr ""
 
-#: ../libide/preferences/ide-preferences-builtin.c:235
-#| msgid "Insert _spaces instead of tabs"
+#: ../libide/preferences/ide-preferences-builtin.c:236
 msgid "Insert spaces instead of tabs"
 msgstr ""
 
-#: ../libide/preferences/ide-preferences-builtin.c:235
-#| msgid "Insert _spaces instead of tabs"
+#: ../libide/preferences/ide-preferences-builtin.c:236
 msgid "Prefer spaces over use of tabs"
 msgstr ""
 
-#: ../libide/preferences/ide-preferences-builtin.c:236
-#| msgid "Auto indent"
+#: ../libide/preferences/ide-preferences-builtin.c:237
 msgid "Automatically indent"
 msgstr ""
 
-#: ../libide/preferences/ide-preferences-builtin.c:236
+#: ../libide/preferences/ide-preferences-builtin.c:237
 msgid "Indent source code as you type"
 msgstr ""
 
-#: ../libide/preferences/ide-preferences-builtin.c:242
-#: ../plugins/build-tools/gbp-build-workbench-addin.c:331
+#: ../libide/preferences/ide-preferences-builtin.c:243
+#: ../plugins/build-tools/gbp-build-workbench-addin.c:270
 msgid "Build"
 msgstr "Жинау"
 
-#: ../libide/preferences/ide-preferences-builtin.c:244
+#: ../libide/preferences/ide-preferences-builtin.c:245
+#: ../plugins/build-tools/gbp-build-configuration-view.ui.h:1
 msgid "General"
 msgstr "Жалпы"
 
-#: ../libide/preferences/ide-preferences-builtin.c:245
+#: ../libide/preferences/ide-preferences-builtin.c:246
 msgid "Build Workers"
 msgstr ""
 
-#: ../libide/preferences/ide-preferences-builtin.c:245
+#: ../libide/preferences/ide-preferences-builtin.c:246
 msgid "Number of parallel build workers"
 msgstr ""
 
-#: ../libide/preferences/ide-preferences-perspective.c:796
+#: ../libide/preferences/ide-preferences-builtin.c:252
+#: ../plugins/git/ide-git-clone-widget.c:200
+msgid "Projects"
+msgstr "Жобалар"
+
+#: ../libide/preferences/ide-preferences-builtin.c:254
+msgid "Project Discovery"
+msgstr "Жобаларды табу"
+
+#: ../libide/preferences/ide-preferences-builtin.c:255
+msgid "Discover projects on my computer"
+msgstr "Компьютерімдегі жобаларды табу"
+
+#: ../libide/preferences/ide-preferences-builtin.c:255
+msgid "Scan your computer for existing projects"
+msgstr ""
+
+#: ../libide/preferences/ide-preferences-perspective.c:823
 msgid "Preferences"
 msgstr "Баптаулар"
 
@@ -1454,179 +1550,208 @@ msgstr ""
 msgid "Calling ShowItems failed: "
 msgstr ""
 
-#: ../plugins/autotools/ide-autotools-builder.c:130
+#: ../plugins/autotools/ide-autotools-builder.c:49
 msgid "Cancelled"
 msgstr "Бас тартылған"
 
-#: ../plugins/autotools/ide-autotools-builder.c:132
+#: ../plugins/autotools/ide-autotools-builder.c:51
 msgid "Failed"
 msgstr "Сәтсіз"
 
-#: ../plugins/autotools/ide-autotools-builder.c:138
+#: ../plugins/autotools/ide-autotools-builder.c:57
 msgid "Success"
 msgstr "Сәтті"
 
-#: ../plugins/autotools/ide-autotools-builder.c:242
-#: ../plugins/autotools/ide-autotools-build-task.c:933
+#: ../plugins/autotools/ide-autotools-builder.c:161
+#: ../plugins/autotools/ide-autotools-build-task.c:872
 msgid "Building…"
-msgstr ""
+msgstr "Жинау…"
 
-#: ../plugins/autotools/ide-autotools-build-system.c:182
+#: ../plugins/autotools/ide-autotools-build-system.c:183
 msgid "Failed to locate configure.ac"
 msgstr ""
 
-#: ../plugins/autotools/ide-autotools-build-task.c:270
+#: ../plugins/autotools/ide-autotools-build-task.c:174
 msgid "Directory must be on a locally mounted filesystem."
 msgstr ""
 
-#: ../plugins/autotools/ide-autotools-build-task.c:649
+#: ../plugins/autotools/ide-autotools-build-task.c:548
 msgid "Cannot execute build task more than once."
 msgstr ""
 
-#: ../plugins/autotools/ide-autotools-build-task.c:734
+#: ../plugins/autotools/ide-autotools-build-task.c:642
 msgid "Failed to create build directory."
 msgstr ""
 
-#: ../plugins/autotools/ide-autotools-build-task.c:743
+#: ../plugins/autotools/ide-autotools-build-task.c:651
 #, c-format
 msgid "'%s' is not a directory."
 msgstr "'%s' бума емес."
 
-#: ../plugins/autotools/ide-autotools-build-task.c:782
+#: ../plugins/autotools/ide-autotools-build-task.c:690
 #, c-format
 msgid "autogen.sh is missing from project directory (%s)."
 msgstr ""
 
-#: ../plugins/autotools/ide-autotools-build-task.c:792
+#: ../plugins/autotools/ide-autotools-build-task.c:700
 msgid "autogen.sh is not executable."
 msgstr ""
 
-#: ../plugins/autotools/ide-autotools-build-task.c:796
-msgid "Autogening…"
+#: ../plugins/autotools/ide-autotools-build-task.c:704
+msgid "Running autogen…"
 msgstr ""
 
-#: ../plugins/autotools/ide-autotools-build-task.c:825
+#: ../plugins/autotools/ide-autotools-build-task.c:738
 #, c-format
 msgid "autogen.sh failed to create configure (%s)"
 msgstr ""
 
-#: ../plugins/autotools/ide-autotools-build-task.c:860
-msgid "Configuring…"
+#: ../plugins/autotools/ide-autotools-build-task.c:773
+msgid "Running configure…"
 msgstr ""
 
-#: ../plugins/autotools/ide-autotools-build-task.c:931
+#: ../plugins/autotools/ide-autotools-build-task.c:870
 msgid "Cleaning…"
-msgstr ""
+msgstr "Тазарту…"
 
 #: ../plugins/autotools/ide-makecache.c:1006
 msgid "Invalid makefile provided, ignoring."
 msgstr ""
 
+#: ../plugins/build-tools/gbp-build-configuration-view.ui.h:2
+msgid "The name of the build configuration"
+msgstr ""
+
+#: ../plugins/build-tools/gbp-build-configuration-view.ui.h:3
+msgid "Name"
+msgstr "Атауы"
+
+#: ../plugins/build-tools/gbp-build-configuration-view.ui.h:4
+msgid "The prefix to use when installing the project"
+msgstr ""
+
+#: ../plugins/build-tools/gbp-build-configuration-view.ui.h:5
+msgid "Installation Prefix"
+msgstr ""
+
+#: ../plugins/build-tools/gbp-build-configuration-view.ui.h:6
+msgid "Options to use when bootstrapping the project"
+msgstr ""
+
+#: ../plugins/build-tools/gbp-build-configuration-view.ui.h:7
+msgid "Configure Options"
+msgstr ""
+
+#: ../plugins/build-tools/gbp-build-configuration-view.ui.h:8
+msgid "Duplicate Configuration"
+msgstr ""
+
+#: ../plugins/build-tools/gbp-build-configuration-view.ui.h:9
+msgid "Delete Configuration"
+msgstr ""
+
+#: ../plugins/build-tools/gbp-build-configuration-view.ui.h:10
+msgid "Device"
+msgstr "Құрылғы"
+
+#: ../plugins/build-tools/gbp-build-configuration-view.ui.h:11
+msgid "Runtime"
+msgstr ""
+
+#: ../plugins/build-tools/gbp-build-configuration-view.ui.h:12
+msgid "Environment"
+msgstr "Қоршам"
+
 #: ../plugins/build-tools/gbp-build-panel-row.c:68
 msgid "Unknown file"
-msgstr ""
+msgstr "Белгісіз файл"
 
 #: ../plugins/build-tools/gbp-build-panel.ui.h:1
-msgid "Device:"
-msgstr "Құрылғы:"
-
-#: ../plugins/build-tools/gbp-build-panel.ui.h:2
-msgid "Framework:"
-msgstr ""
-
-#: ../plugins/build-tools/gbp-build-panel.ui.h:3
-msgid "Packaging:"
-msgstr ""
-
-#: ../plugins/build-tools/gbp-build-panel.ui.h:4
 #: ../plugins/project-tree/gtk/menus.ui.h:12
 msgid "_Build"
 msgstr "Құр_астыру"
 
-#: ../plugins/build-tools/gbp-build-panel.ui.h:5
+#: ../plugins/build-tools/gbp-build-panel.ui.h:2
 #: ../plugins/project-tree/gtk/menus.ui.h:13
 msgid "_Rebuild"
 msgstr "Қа_йта құрастыру"
 
-#: ../plugins/build-tools/gbp-build-panel.ui.h:6
+#: ../plugins/build-tools/gbp-build-panel.ui.h:3
 msgid "_Clean"
-msgstr ""
+msgstr "_Тазарту"
 
-#: ../plugins/build-tools/gbp-build-panel.ui.h:7
-msgid "framework"
-msgstr ""
-
-#: ../plugins/build-tools/gbp-build-panel.ui.h:8
-msgid "packaging"
-msgstr ""
-
-#: ../plugins/build-tools/gbp-build-panel.ui.h:9
+#: ../plugins/build-tools/gbp-build-panel.ui.h:4
 msgid "Status:"
 msgstr "Қалып-күйі:"
 
-#: ../plugins/build-tools/gbp-build-panel.ui.h:10
+#: ../plugins/build-tools/gbp-build-panel.ui.h:5
 msgid "Running Time:"
 msgstr ""
 
-#: ../plugins/build-tools/gbp-build-panel.ui.h:11
+#: ../plugins/build-tools/gbp-build-panel.ui.h:6
 msgid "Warnings:"
-msgstr ""
+msgstr "Ескертулер:"
 
-#: ../plugins/build-tools/gbp-build-panel.ui.h:12
+#: ../plugins/build-tools/gbp-build-panel.ui.h:7
 msgid "Errors:"
-msgstr ""
+msgstr "Қателер:"
 
-#: ../plugins/build-tools/gbp-build-panel.ui.h:14
+#: ../plugins/build-tools/gbp-build-panel.ui.h:9
 msgid "Deploy"
 msgstr ""
 
-#: ../plugins/build-tools/gbp-build-panel.ui.h:15
+#: ../plugins/build-tools/gbp-build-panel.ui.h:10
 msgid "Export"
 msgstr "Экспорт"
 
-#: ../plugins/build-tools/gbp-build-tool.c:91
-#: ../plugins/build-tools/gbp-build-tool.c:97
+#: ../plugins/build-tools/gbp-build-tool.c:102
+#: ../plugins/build-tools/gbp-build-tool.c:115
 #, c-format
 msgid "========================\n"
 msgstr "========================\n"
 
-#: ../plugins/build-tools/gbp-build-tool.c:92
+#: ../plugins/build-tools/gbp-build-tool.c:103
 #, c-format
 msgid "           Project Name: %s\n"
-msgstr ""
+msgstr "           Жоба аты: %s\n"
 
-#: ../plugins/build-tools/gbp-build-tool.c:93
+#: ../plugins/build-tools/gbp-build-tool.c:104
 #, c-format
 msgid " Version Control System: %s\n"
 msgstr ""
 
-#: ../plugins/build-tools/gbp-build-tool.c:94
+#: ../plugins/build-tools/gbp-build-tool.c:105
 #, c-format
 msgid "           Build System: %s\n"
 msgstr ""
 
-#: ../plugins/build-tools/gbp-build-tool.c:95
+#: ../plugins/build-tools/gbp-build-tool.c:106
 #, c-format
 msgid "    Build Date and Time: %s\n"
 msgstr ""
 
-#: ../plugins/build-tools/gbp-build-tool.c:96
+#: ../plugins/build-tools/gbp-build-tool.c:107
 #, c-format
 msgid "    Building for Device: %s (%s)\n"
 msgstr ""
 
-#: ../plugins/build-tools/gbp-build-tool.c:124
-#: ../plugins/build-tools/gbp-build-tool.c:128
+#: ../plugins/build-tools/gbp-build-tool.c:112
+#, c-format
+msgid "            Environment: %s\n"
+msgstr ""
+
+#: ../plugins/build-tools/gbp-build-tool.c:142
+#: ../plugins/build-tools/gbp-build-tool.c:146
 #, c-format
 msgid "===============\n"
 msgstr "===============\n"
 
-#: ../plugins/build-tools/gbp-build-tool.c:125
+#: ../plugins/build-tools/gbp-build-tool.c:143
 #, c-format
 msgid " Build Failure: %s\n"
 msgstr ""
 
-#: ../plugins/build-tools/gbp-build-tool.c:126
+#: ../plugins/build-tools/gbp-build-tool.c:144
 msgid " Build ran for: %"
 msgstr ""
 
@@ -1635,57 +1760,90 @@ msgstr ""
 #. *       here too. It would be nice if we could say, go build this project,
 #. *       for this device, and then deploy.
 #.
-#: ../plugins/build-tools/gbp-build-tool.c:139
-#: ../plugins/build-tools/gbp-build-tool.c:143
+#: ../plugins/build-tools/gbp-build-tool.c:157
+#: ../plugins/build-tools/gbp-build-tool.c:161
 #, c-format
 msgid "=================\n"
 msgstr "=================\n"
 
-#: ../plugins/build-tools/gbp-build-tool.c:140
+#: ../plugins/build-tools/gbp-build-tool.c:158
 #, c-format
 msgid " Build Successful\n"
 msgstr ""
 
-#: ../plugins/build-tools/gbp-build-tool.c:141
+#: ../plugins/build-tools/gbp-build-tool.c:159
 msgid "   Build ran for: %"
 msgstr ""
 
-#: ../plugins/build-tools/gbp-build-tool.c:191
+#: ../plugins/build-tools/gbp-build-tool.c:212
 #, c-format
 msgid "Failed to locate device \"%s\""
 msgstr ""
 
-#: ../plugins/build-tools/gbp-build-tool.c:254
-#| msgid "Other Projects"
+#: ../plugins/build-tools/gbp-build-tool.c:222
+#, c-format
+msgid "Failed to locate runtime \"%s\""
+msgstr ""
+
+#: ../plugins/build-tools/gbp-build-tool.c:286
 msgid "Clean the project"
 msgstr ""
 
-#: ../plugins/build-tools/gbp-build-tool.c:256
+#: ../plugins/build-tools/gbp-build-tool.c:288
 msgid "The ID of the device to build for"
 msgstr ""
 
-#: ../plugins/build-tools/gbp-build-tool.c:257
+#: ../plugins/build-tools/gbp-build-tool.c:289
 msgid "local"
 msgstr ""
 
-#: ../plugins/build-tools/gbp-build-tool.c:259
+#: ../plugins/build-tools/gbp-build-tool.c:291
+msgid "The runtime to use for building"
+msgstr ""
+
+#: ../plugins/build-tools/gbp-build-tool.c:292
+msgid "host"
+msgstr ""
+
+#: ../plugins/build-tools/gbp-build-tool.c:294
 msgid "Number of workers to use when building"
 msgstr ""
 
-#: ../plugins/build-tools/gbp-build-tool.c:260
+#: ../plugins/build-tools/gbp-build-tool.c:295
 msgid "N"
 msgstr ""
 
-#: ../plugins/build-tools/gbp-build-tool.c:262
+#: ../plugins/build-tools/gbp-build-tool.c:297
+msgid "The configuration to use from .buildconfig"
+msgstr ""
+
+#: ../plugins/build-tools/gbp-build-tool.c:298
+msgid "CONFIG_ID"
+msgstr ""
+
+#: ../plugins/build-tools/gbp-build-tool.c:300
 msgid "Path to project file, defaults to current directory"
 msgstr ""
 
-#: ../plugins/build-tools/gbp-build-tool.c:263
+#: ../plugins/build-tools/gbp-build-tool.c:301
 msgid "PATH"
 msgstr "ЖОЛ"
 
-#: ../plugins/build-tools/gbp-build-workbench-addin.c:337
+#: ../plugins/build-tools/gbp-build-workbench-addin.c:275
 msgid "Build Output"
+msgstr ""
+
+#: ../plugins/clang/ide-clang-preferences-addin.c:62
+msgid "Clang"
+msgstr "Clang"
+
+#: ../plugins/clang/ide-clang-preferences-addin.c:63
+msgid "Show errors and warnings provided by Clang"
+msgstr ""
+
+#. translators: keywords used when searching for preferences
+#: ../plugins/clang/ide-clang-preferences-addin.c:65
+msgid "clang diagnostics warnings errors"
 msgstr ""
 
 #: ../plugins/clang/ide-clang-service.c:269
@@ -1783,6 +1941,14 @@ msgstr ""
 #: ../plugins/command-bar/gb-vim.c:1127
 #, c-format
 msgid "Not a command: %s"
+msgstr "Команда емес: %s"
+
+#: ../plugins/comment-code/gtk/menus.ui.h:1
+msgid "Comment code"
+msgstr ""
+
+#: ../plugins/comment-code/gtk/menus.ui.h:2
+msgid "Uncomment code"
 msgstr ""
 
 #: ../plugins/contributing/contributing_plugin/helper.py:76
@@ -1791,10 +1957,12 @@ msgid ""
 "Usage:\n"
 "  %(prgname) %(command) OPTIONS\n"
 msgstr ""
+"Қолданылуы:\n"
+"  %(prgname) %(command) ОПЦИЯЛАР\n"
 
 #: ../plugins/contributing/contributing_plugin/__init__.py:54
 msgid "Missing project name"
-msgstr ""
+msgstr "Жоба атауы көрсетілмеген"
 
 #: ../plugins/contributing/contributing_plugin/__init__.py:68
 msgid ""
@@ -1891,11 +2059,6 @@ msgstr ""
 msgid "A valid Git URL is required"
 msgstr ""
 
-#: ../plugins/git/ide-git-clone-widget.c:200
-#| msgid "Project"
-msgid "Projects"
-msgstr "Жобалар"
-
 #: ../plugins/git/ide-git-clone-widget.ui.h:1
 msgid "user@host:repository.git"
 msgstr "user@host:repository.git"
@@ -1932,8 +2095,21 @@ msgstr "Нұсқаларды басқару"
 msgid "Attribution"
 msgstr ""
 
-#: ../plugins/gnome-code-assistance/ide-gca-diagnostic-provider.c:336
+#: ../plugins/gnome-code-assistance/ide-gca-diagnostic-provider.c:375
 msgid "Code assistance requires a local file."
+msgstr ""
+
+#: ../plugins/gnome-code-assistance/ide-gca-preferences-addin.c:62
+msgid "Pylint"
+msgstr "Pylint"
+
+#: ../plugins/gnome-code-assistance/ide-gca-preferences-addin.c:63
+msgid "Enable the use of pylint, which may execute code in your project"
+msgstr ""
+
+#. translators: these are keywords used to search for preferences
+#: ../plugins/gnome-code-assistance/ide-gca-preferences-addin.c:65
+msgid "pylint python lint code execute execution"
 msgstr ""
 
 #: ../plugins/gnome-code-assistance/ide-gca-service.c:168
@@ -1942,10 +2118,9 @@ msgstr ""
 
 #: ../plugins/html-preview/html_preview_plugin/gtk/menus.ui.h:1
 msgid "Preview as HTML"
-msgstr ""
+msgstr "HTML ретінде алдын-ала қарау"
 
 #: ../plugins/jedi/jedi_plugin.py:672
-#| msgid "Auto Completion"
 msgid "Suggest Python completions"
 msgstr ""
 
@@ -1993,7 +2168,7 @@ msgstr "Бума атауы"
 msgid "_Create"
 msgstr "Жа_сау"
 
-#: ../plugins/project-tree/gb-project-tree-addin.c:77
+#: ../plugins/project-tree/gb-project-tree-addin.c:112
 msgid "Project"
 msgstr "Жоба"
 
@@ -2104,7 +2279,7 @@ msgstr "Жаңа тер_минал"
 
 #: ../plugins/todo/todo_plugin/__init__.py:60
 msgid "Todo"
-msgstr ""
+msgstr "Todo"
 
 #: ../plugins/vala-pack/ide-vala-preferences-addin.vala:33
 msgid "Vala"
@@ -2126,9 +2301,6 @@ msgstr ""
 
 #~ msgid "_Enable automatic indentation"
 #~ msgstr "_Автошегінуді іске қосу"
-
-#~ msgid "Name"
-#~ msgstr "Атауы"
 
 #~ msgid "GNOME Version"
 #~ msgstr "GNOME нұсқасы"
@@ -2160,9 +2332,6 @@ msgstr ""
 #~ msgid "New"
 #~ msgstr "Жаңа"
 
-#~ msgid "Go to line"
-#~ msgstr "Жолға өту"
-
 #~ msgid "Device Manager"
 #~ msgstr "Құрылғылар басқарушысы"
 
@@ -2186,13 +2355,7 @@ msgstr ""
 #~ msgid "Open Document"
 #~ msgstr "Құжатты ашу"
 
-#~ msgid "- discover projects"
-#~ msgstr "- жобаларды щолу"
-
 #~| msgid "%s results\n"
 #~ msgid "%s result\n"
 #~ msgid_plural "%s results\n"
 #~ msgstr[0] "%s нәтиже\n"
-
-#~ msgid "Clang"
-#~ msgstr "Clang"
