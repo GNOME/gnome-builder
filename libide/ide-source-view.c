@@ -4425,12 +4425,13 @@ ide_source_view_real_draw_layer (GtkTextView      *text_view,
 
   GTK_TEXT_VIEW_CLASS (ide_source_view_parent_class)->draw_layer (text_view, layer, cr);
 
-  if (layer == GTK_TEXT_VIEW_LAYER_BELOW)
+  if (layer == GTK_TEXT_VIEW_LAYER_BELOW_TEXT)
     {
       if (priv->snippets->length)
         ide_source_view_draw_snippets_background (self, cr);
     }
-  else if (layer == GTK_TEXT_VIEW_LAYER_ABOVE)
+
+  if (layer == GTK_TEXT_VIEW_LAYER_ABOVE_TEXT)
     {
       if (priv->show_search_bubbles)
         {
