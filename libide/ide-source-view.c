@@ -4192,32 +4192,28 @@ static void
 ide_source_view_draw_snippets_background (IdeSourceView *self,
                                           cairo_t       *cr)
 {
-  static GdkRGBA rgba;
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
-  IdeSourceSnippet *snippet;
   GtkTextView *text_view = GTK_TEXT_VIEW (self);
   GdkWindow *window;
   gint len;
-  gint i;
   gint width;
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
   g_assert (cr);
 
-  rgba = priv->snippet_area_background_rgba;
-
   window = gtk_text_view_get_window (text_view, GTK_TEXT_WINDOW_TEXT);
   width = gdk_window_get_width (window);
 
-  gdk_cairo_set_source_rgba (cr, &rgba);
+  gdk_cairo_set_source_rgba (cr, &priv->snippet_area_background_rgba);
 
   len = priv->snippets->length;
 
   cairo_save (cr);
 
-  for (i = 0; i < len; i++)
+  for (guint i = 0; i < len; i++)
     {
-      snippet = g_queue_peek_nth (priv->snippets, i);
+      IdeSourceSnippet *snippet = g_queue_peek_nth (priv->snippets, i);
+
       ide_source_view_draw_snippet_background (self, cr, snippet, width - ((len - i) * 10));
     }
 
