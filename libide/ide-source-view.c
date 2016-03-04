@@ -4183,6 +4183,8 @@ ide_source_view_draw_snippet_background (IdeSourceView    *self,
 
   get_rect_for_iters (text_view, &begin, &end, &r, GTK_TEXT_WINDOW_TEXT);
 
+  gtk_text_view_window_to_buffer_coords (text_view, GTK_TEXT_WINDOW_TEXT, r.x, r.y, &r.x, &r.y);
+
   ide_cairo_rounded_rectangle (cr, &r, 5, 5);
 
   cairo_fill (cr);
