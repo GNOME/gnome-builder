@@ -1039,11 +1039,26 @@ ide_source_view__search_settings_notify_search_text (IdeSourceView           *se
 {
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
   const gchar *search_text;
+  gboolean case_sensitive = FALSE;
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
   g_assert (GTK_SOURCE_IS_SEARCH_SETTINGS (search_settings));
 
   search_text = gtk_source_search_settings_get_search_text (search_settings);
+
+  if (search_text != NULL)
+    {
+      for (const gchar *s = search_text; *s; s = g_utf8_next_char (s))
+        {
+          if (g_unichar_isupper (g_utf8_get_char (s)))
+            {
+              case_sensitive = TRUE;
+              break;
+            }
+        }
+    }
+
+  gtk_source_search_settings_set_case_sensitive (search_settings, case_sensitive);
 
   /*
    * If we have IdeSourceView:rubberband-search enabled, then we should try to
