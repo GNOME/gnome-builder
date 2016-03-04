@@ -71,6 +71,7 @@
 
   <!-- Snippets -->
   <style name="snippet::tab-stop"           background="orange3" foreground="aluminium6"/>
+  <style name="snippet::area"               background="#rgba(86,114,151,.5)"/>
 
   <!-- Bracket Matching -->
   <style name="bracket-match"               foreground="chocolate2" bold="true"/>
