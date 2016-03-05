@@ -2796,10 +2796,12 @@ static void
 ide_source_view_real_clear_search (IdeSourceView *self)
 {
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+  GtkSourceSearchSettings *search_settings;
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
 
-  gtk_source_search_context_set_highlight (priv->search_context, FALSE);
+  search_settings = gtk_source_search_context_get_settings (priv->search_context);
+  gtk_source_search_settings_set_search_text (search_settings, "");
 }
 
 static void
