@@ -466,7 +466,8 @@ egg_menu_manager_remove (EggMenuManager *self,
                                                i,
                                                EGG_MENU_ATTRIBUTE_MERGE_ID,
                                                "u", &item_merge_id))
-            g_menu_remove (menu, i);
+            if (item_merge_id == merge_id)
+              g_menu_remove (menu, i);
         }
     }
 }
