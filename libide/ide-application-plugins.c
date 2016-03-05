@@ -384,6 +384,9 @@ ide_application_unload_plugin_css (IdeApplication *self,
   g_assert (plugin_info != NULL);
   g_assert (PEAS_IS_ENGINE (engine));
 
+  if (self->plugin_css == NULL)
+    self->plugin_css = g_hash_table_new_full (NULL, NULL, NULL, g_object_unref);
+
   provider = g_hash_table_lookup (self->plugin_css, plugin_info);
 
   if (provider != NULL)
