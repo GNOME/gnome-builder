@@ -156,7 +156,7 @@ egg_widget_action_group_activate (GSimpleAction *action,
     }
 
   if (params)
-    g_print ("Activating %s with %s\n", query->signal_name, g_variant_print (params, TRUE));
+    g_debug ("Activating %s with %s\n", query->signal_name, g_variant_print (params, TRUE));
 
   if (params == NULL && query->n_params != 0)
     {
