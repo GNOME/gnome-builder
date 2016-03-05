@@ -227,9 +227,7 @@ ide_extension_adapter__engine_unload_plugin (IdeExtensionAdapter *self,
 
   if (self->extension != NULL)
     {
-      PeasExtensionBase *exten_base = PEAS_EXTENSION_BASE (self->extension);
-
-      if (plugin_info == peas_extension_base_get_plugin_info (exten_base))
+      if (plugin_info == self->plugin_info)
         {
           g_clear_object (&self->extension);
           ide_extension_adapter_queue_reload (self);
