@@ -354,7 +354,6 @@ ide_layout_pane_init (IdeLayoutPane *self)
 
   gtk_widget_init_template (GTK_WIDGET (self));
 
-  self->notify_stack_signal_handler = 0;
   self->notify_stack_signal_handler = g_signal_connect (self->stack,
                                                         "notify::visible-child",
                                                         G_CALLBACK (on_stack_changed),
