@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-02-29 08:01+0000\n"
-"PO-Revision-Date: 2016-02-29 15:59+0100\n"
+"POT-Creation-Date: 2016-03-03 07:59+0000\n"
+"PO-Revision-Date: 2016-03-03 09:50+0100\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Español; Castellano <gnome-es-list@gnome.org>\n"
 "Language: \n"
@@ -289,7 +289,7 @@ msgid "Dark color scheme for Builder using the Tango color palette"
 msgstr ""
 "Esquema de colores oscuros para Builder usando la paleta de colores Tango"
 
-#: ../data/style-schemes/builder.xml.h:1 ../libide/ide-application.c:404
+#: ../data/style-schemes/builder.xml.h:1 ../libide/ide-application.c:413
 #: ../libide/preferences/ide-preferences-builtin.c:113
 msgid "Builder"
 msgstr "Builder"
@@ -308,7 +308,6 @@ msgid "No open files"
 msgstr "No hay archivos abiertos"
 
 #: ../data/ui/ide-editor-perspective.ui.h:2
-#| msgid "Try opening a file typing in the search box at the top"
 msgid "Try opening a file by typing in the search box at the top"
 msgstr "Intente abrir el archivo escribiendo en la caja superior de búsqueda"
 
@@ -381,7 +380,7 @@ msgid "8"
 msgstr "8"
 
 #: ../data/ui/ide-editor-view.ui.h:2
-#: ../data/ui/ide-greeter-perspective.ui.h:11
+#: ../data/ui/ide-greeter-perspective.ui.h:14
 msgid "_Cancel"
 msgstr "_Cancelar"
 
@@ -417,44 +416,54 @@ msgstr "Nuevo proyecto"
 msgid "Co_ntinue"
 msgstr "Co_ntinuar"
 
-#: ../data/ui/ide-greeter-perspective.ui.h:1
+#. the action:// link is used to jump to the new-project view
+#: ../data/ui/ide-greeter-perspective.ui.h:2
+msgid "Why not <a href=\"action://app.new-project\">create a new project</a>?"
+msgstr ""
+"¿Por qué no <a href=\"action://app.new-project\">crea un proyecto nuevo</a>?"
+
+#: ../data/ui/ide-greeter-perspective.ui.h:3
+msgid "No projects found"
+msgstr "No se han encontrado proyectos"
+
+#: ../data/ui/ide-greeter-perspective.ui.h:4
 msgid "Recent Projects"
 msgstr "Proyectos recientes"
 
-#: ../data/ui/ide-greeter-perspective.ui.h:2
+#: ../data/ui/ide-greeter-perspective.ui.h:5
 msgid "Other Projects"
 msgstr "Otros proyectos"
 
-#: ../data/ui/ide-greeter-perspective.ui.h:3
+#: ../data/ui/ide-greeter-perspective.ui.h:6
 msgid "_Remove"
 msgstr "_Eliminar"
 
-#: ../data/ui/ide-greeter-perspective.ui.h:4
+#: ../data/ui/ide-greeter-perspective.ui.h:7
 msgid "Select a Project"
 msgstr "Seleccionar un proyecto"
 
-#: ../data/ui/ide-greeter-perspective.ui.h:5
+#: ../data/ui/ide-greeter-perspective.ui.h:8
 msgid "Click an item to select"
 msgstr "Pulse en un elemento para seleccionarlo"
 
-#: ../data/ui/ide-greeter-perspective.ui.h:6
+#: ../data/ui/ide-greeter-perspective.ui.h:9
 msgid "Create a new project"
 msgstr "Crear un nuevo proyecto"
 
-#: ../data/ui/ide-greeter-perspective.ui.h:7
+#: ../data/ui/ide-greeter-perspective.ui.h:10
 #: ../plugins/project-tree/gtk/menus.ui.h:2
 msgid "_New"
 msgstr "_Nuevo"
 
-#: ../data/ui/ide-greeter-perspective.ui.h:8
+#: ../data/ui/ide-greeter-perspective.ui.h:11
 msgid "Search for projects"
 msgstr "Buscar proyectos"
 
-#: ../data/ui/ide-greeter-perspective.ui.h:9
+#: ../data/ui/ide-greeter-perspective.ui.h:12
 msgid "Select projects for removal"
 msgstr "Seleccionar proyectos para eliminar"
 
-#: ../data/ui/ide-greeter-perspective.ui.h:10
+#: ../data/ui/ide-greeter-perspective.ui.h:13
 msgid "Return to project selection"
 msgstr "Volver a la selección de proyectos"
 
@@ -821,7 +830,7 @@ msgid "Provide a number between 1 and %u"
 msgstr "Indique un número entre 1 y %u"
 
 #: ../libide/genesis/ide-genesis-perspective.c:200
-#: ../libide/greeter/ide-greeter-perspective.c:429
+#: ../libide/greeter/ide-greeter-perspective.c:436
 msgid "Failed to load the project"
 msgstr "Falló al cargar el proyecto"
 
@@ -919,7 +928,7 @@ msgstr "Proporcione una dirección de D-Bus"
 msgid "No such worker"
 msgstr "No existe el trabajador"
 
-#: ../libide/ide-buffer.c:2207
+#: ../libide/ide-buffer.c:2269
 msgid "The current language lacks a symbol resolver."
 msgstr "Al idioma actual le falta un resolutor de símbolos."
 
@@ -1013,7 +1022,7 @@ msgstr "El archivo de destino debe estar en el árbol del proyecto."
 msgid "File must be within the project tree."
 msgstr "El archivo debe estar en el árbol del proyecto."
 
-#: ../libide/ide-recent-projects.c:382
+#: ../libide/ide-recent-projects.c:383
 #, c-format
 msgid "%s() may only be executed once"
 msgstr "%s() sólo se debe ejecutar una vez"
@@ -1027,7 +1036,7 @@ msgstr "Sistema operativo del equipo"
 msgid "%s has not implemented GAsyncInitable."
 msgstr "%s no tiene GAsyncInitable implementado"
 
-#: ../libide/ide-source-snippet.c:370
+#: ../libide/ide-source-snippet.c:372
 msgid "Chunk does not belong to snippet."
 msgstr "El trozo no pertenece al fragmento."
 
@@ -1051,17 +1060,17 @@ msgstr "Falló al abrir la carpeta: %s"
 msgid "Failed to load file: %s: %s"
 msgstr "Falló al cargar el archivo: %s: %s"
 
-#: ../libide/ide-source-view.c:4966
+#: ../libide/ide-source-view.c:4841
 #, c-format
 msgid "Insert “%s”"
 msgstr "Insertar «%s»"
 
-#: ../libide/ide-source-view.c:4968
+#: ../libide/ide-source-view.c:4843
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "Reemplazar «%s» con «%s»"
 
-#: ../libide/ide-source-view.c:5082
+#: ../libide/ide-source-view.c:4957
 msgid "Apply Fix-It"
 msgstr "Aplicar corrección"
 
@@ -1499,6 +1508,25 @@ msgstr "Construir trabajadores"
 msgid "Number of parallel build workers"
 msgstr "Número de constructores en paralelo"
 
+#: ../libide/preferences/ide-preferences-builtin.c:252
+#: ../plugins/git/ide-git-clone-widget.c:200
+msgid "Projects"
+msgstr "Proyectos"
+
+#: ../libide/preferences/ide-preferences-builtin.c:254
+#| msgid "Project File"
+msgid "Project Discovery"
+msgstr "Descubrimiento de proyectos"
+
+#: ../libide/preferences/ide-preferences-builtin.c:255
+#| msgid "From existing project on this computer"
+msgid "Discover projects on my computer"
+msgstr "Descubrir proyectos en mi equipo"
+
+#: ../libide/preferences/ide-preferences-builtin.c:255
+msgid "Scan your computer for existing projects"
+msgstr "Buscar proyectos existentes en su equipo"
+
 #: ../libide/preferences/ide-preferences-perspective.c:823
 msgid "Preferences"
 msgstr "Preferencias"
@@ -1566,7 +1594,7 @@ msgid "Success"
 msgstr "Correto"
 
 #: ../plugins/autotools/ide-autotools-builder.c:161
-#: ../plugins/autotools/ide-autotools-build-task.c:863
+#: ../plugins/autotools/ide-autotools-build-task.c:872
 msgid "Building…"
 msgstr "Construyendo…"
 
@@ -1574,46 +1602,46 @@ msgstr "Construyendo…"
 msgid "Failed to locate configure.ac"
 msgstr "Falló al buscar configure.ac"
 
-#: ../plugins/autotools/ide-autotools-build-task.c:173
+#: ../plugins/autotools/ide-autotools-build-task.c:174
 msgid "Directory must be on a locally mounted filesystem."
 msgstr "La carpeta debe estar en un sistema de archivos local."
 
-#: ../plugins/autotools/ide-autotools-build-task.c:546
+#: ../plugins/autotools/ide-autotools-build-task.c:548
 msgid "Cannot execute build task more than once."
 msgstr "No es posible ejecutar la tarea de construcción más de una vez."
 
-#: ../plugins/autotools/ide-autotools-build-task.c:633
+#: ../plugins/autotools/ide-autotools-build-task.c:642
 msgid "Failed to create build directory."
 msgstr "Falló al crear la carpeta de construcción."
 
-#: ../plugins/autotools/ide-autotools-build-task.c:642
+#: ../plugins/autotools/ide-autotools-build-task.c:651
 #, c-format
 msgid "'%s' is not a directory."
 msgstr "«%s» no es una carpeta."
 
-#: ../plugins/autotools/ide-autotools-build-task.c:681
+#: ../plugins/autotools/ide-autotools-build-task.c:690
 #, c-format
 msgid "autogen.sh is missing from project directory (%s)."
 msgstr "autogen.sh no se encuentra en la carpeta del proyecto (%s)."
 
-#: ../plugins/autotools/ide-autotools-build-task.c:691
+#: ../plugins/autotools/ide-autotools-build-task.c:700
 msgid "autogen.sh is not executable."
 msgstr "autogen.sh no es ejecutable."
 
-#: ../plugins/autotools/ide-autotools-build-task.c:695
+#: ../plugins/autotools/ide-autotools-build-task.c:704
 msgid "Running autogen…"
 msgstr "Ejecutando autogen…"
 
-#: ../plugins/autotools/ide-autotools-build-task.c:729
+#: ../plugins/autotools/ide-autotools-build-task.c:738
 #, c-format
 msgid "autogen.sh failed to create configure (%s)"
 msgstr "autogen.sh falló al crear configure (%s)"
 
-#: ../plugins/autotools/ide-autotools-build-task.c:764
+#: ../plugins/autotools/ide-autotools-build-task.c:773
 msgid "Running configure…"
 msgstr "Ejecutando configure…"
 
-#: ../plugins/autotools/ide-autotools-build-task.c:861
+#: ../plugins/autotools/ide-autotools-build-task.c:870
 msgid "Cleaning…"
 msgstr "Limpiando…"
 
@@ -2080,10 +2108,6 @@ msgstr "El archivo solicitado no existe dentro del índice de git."
 msgid "A valid Git URL is required"
 msgstr "Se necesita un URL de Git válido"
 
-#: ../plugins/git/ide-git-clone-widget.c:200
-msgid "Projects"
-msgstr "Proyectos"
-
 #: ../plugins/git/ide-git-clone-widget.ui.h:1
 msgid "user@host:repository.git"
 msgstr "usuario@equipo:repositorio.git"
@@ -2410,9 +2434,6 @@ msgstr "diagnósticos de alertas y errores de Vala"
 
 #~ msgid "_Continue"
 #~ msgstr "_Continuar"
-
-#~ msgid "From existing project on this computer"
-#~ msgstr "Desde un proyecto existente en este equipo"
 
 #~ msgid "From remote source code repository"
 #~ msgstr "Desde un repositorio de código fuente remoto"
@@ -2913,9 +2934,6 @@ msgstr "diagnósticos de alertas y errores de Vala"
 
 #~ msgid "The currently focused buffer."
 #~ msgstr "El búfer que actualmente tiene el foco."
-
-#~ msgid "Project File"
-#~ msgstr "Archivo de proyecto"
 
 #~ msgid "The project file."
 #~ msgstr "El archivo del proyecto."
