@@ -63,7 +63,7 @@ ide_pattern_spec_new (const gchar *needle)
   self->parts = g_strsplit (needle, " ", 0);
   self->case_sensitive = FALSE;
 
-  for (tmp = needle; tmp; tmp = g_utf8_next_char (tmp))
+  for (tmp = needle; *tmp; tmp = g_utf8_next_char (tmp))
     {
       if (g_unichar_isupper (g_utf8_get_char (tmp)))
         {
