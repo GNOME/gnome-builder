@@ -1132,8 +1132,14 @@ egg_object_animate (gpointer        object,
   va_list args;
 
   va_start (args, first_property);
-  animation = egg_object_animatev (object, mode, duration_msec, frame_clock, first_property, args);
+  animation = egg_object_animatev (object,
+                                   mode,
+                                   duration_msec,
+                                   frame_clock,
+                                   first_property,
+                                   args);
   va_end (args);
+
   return animation;
 }
 
@@ -1157,11 +1163,11 @@ egg_object_animate_full (gpointer        object,
 
   va_start (args, first_property);
   animation = egg_object_animatev (object,
-                                  mode,
-                                  duration_msec,
-                                  frame_clock,
-                                  first_property,
-                                  args);
+                                   mode,
+                                   duration_msec,
+                                   frame_clock,
+                                   first_property,
+                                   args);
   va_end (args);
 
   animation->notify = notify;
