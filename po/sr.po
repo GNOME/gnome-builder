@@ -2,6 +2,9 @@
 # Serbian translation for gnome-builder.
 # Copyright (C) 2015 gnome-builder's COPYRIGHT HOLDER
 # This file is distributed under the same license as the gnome-builder package.
+#
+# Translators: 
+# Мирослав Николић <miroslavnikolic@rocketmail.com>, 2015.
 # Марко М. Костић (Marko M. Kostić) <marko.m.kostic@gmail.com>, 2015.
 # Милош Поповић <gpopac@gmail.com>, 2015.
 #
@@ -10,8 +13,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-02-22 20:32+0000\n"
-"PO-Revision-Date: 2016-02-21 13:12+0100\n"
+"POT-Creation-Date: 2016-03-07 01:31+0000\n"
+"PO-Revision-Date: 2016-03-06 21:33+0100\n"
 "Last-Translator: Марко М. Костић <marko.m.kostic@gmail.com>\n"
 "Language-Team: српски <gnome-sr@googlegroups.org>\n"
 "Language: sr\n"
@@ -174,11 +177,11 @@ msgstr "_Понови"
 msgid "C_ut"
 msgstr "_Исеци"
 
-#: ../data/gtk/menus.ui.h:19
+#: ../data/gtk/menus.ui.h:19 ../plugins/terminal/gtk/menus.ui.h:2
 msgid "_Copy"
 msgstr "_Умножи"
 
-#: ../data/gtk/menus.ui.h:20
+#: ../data/gtk/menus.ui.h:20 ../plugins/terminal/gtk/menus.ui.h:3
 msgid "_Paste"
 msgstr "_Налепи"
 
@@ -186,15 +189,15 @@ msgstr "_Налепи"
 msgid "_Delete"
 msgstr "О_бриши"
 
-#: ../data/gtk/menus.ui.h:22
+#: ../data/gtk/menus.ui.h:22 ../plugins/terminal/gtk/menus.ui.h:4
 msgid "Selection"
 msgstr "Одабир"
 
-#: ../data/gtk/menus.ui.h:23
+#: ../data/gtk/menus.ui.h:23 ../plugins/terminal/gtk/menus.ui.h:5
 msgid "Select _All"
 msgstr "Изабери с_ве"
 
-#: ../data/gtk/menus.ui.h:24
+#: ../data/gtk/menus.ui.h:24 ../plugins/terminal/gtk/menus.ui.h:6
 msgid "Select _None"
 msgstr "И_збаци све из одабира"
 
@@ -290,7 +293,7 @@ msgstr "Тамна тема Градитеља"
 msgid "Dark color scheme for Builder using the Tango color palette"
 msgstr "Тамна шема боја за Градитеља која користи Танго палету боја"
 
-#: ../data/style-schemes/builder.xml.h:1 ../libide/ide-application.c:404
+#: ../data/style-schemes/builder.xml.h:1 ../libide/ide-application.c:413
 #: ../libide/preferences/ide-preferences-builtin.c:113
 msgid "Builder"
 msgstr "Градитељ"
@@ -309,8 +312,8 @@ msgid "No open files"
 msgstr "Нема отворених датотека"
 
 #: ../data/ui/ide-editor-perspective.ui.h:2
-msgid "Try opening a file typing in the search box at the top"
-msgstr "Пробајте да отворите датотеку куцајући у поље за претрагу, на врху"
+msgid "Try opening a file by typing in the search box at the top"
+msgstr "Пробајте да отворите датотеку куцајући у поље за претрагу на врху"
 
 #: ../data/ui/ide-editor-perspective.ui.h:3
 msgid "Enable / Disable left panel. Shortcut: F9"
@@ -380,7 +383,7 @@ msgstr "4"
 msgid "8"
 msgstr "8"
 
-#: ../data/ui/ide-editor-view.ui.h:2 ../data/ui/ide-greeter-perspective.ui.h:11
+#: ../data/ui/ide-editor-view.ui.h:2 ../data/ui/ide-greeter-perspective.ui.h:14
 msgid "_Cancel"
 msgstr "_Откажи"
 
@@ -416,55 +419,57 @@ msgstr "Нови пројекат"
 msgid "Co_ntinue"
 msgstr "_Настави"
 
-#: ../data/ui/ide-greeter-perspective.ui.h:1
+#. the action:// link is used to jump to the new-project view
+#: ../data/ui/ide-greeter-perspective.ui.h:2
+msgid "Why not <a href=\"action://app.new-project\">create a new project</a>?"
+msgstr ""
+"Зашто не бисте <a href=\"action://app.new-project\">направили нови пројекат</"
+"a>?"
+
+#: ../data/ui/ide-greeter-perspective.ui.h:3
+msgid "No projects found"
+msgstr "Ниједан пројекат није нађен"
+
+#: ../data/ui/ide-greeter-perspective.ui.h:4
 msgid "Recent Projects"
 msgstr "Скорашњи пројекти"
 
-#: ../data/ui/ide-greeter-perspective.ui.h:2
+#: ../data/ui/ide-greeter-perspective.ui.h:5
 msgid "Other Projects"
 msgstr "Други пројекти"
 
-#: ../data/ui/ide-greeter-perspective.ui.h:3
+#: ../data/ui/ide-greeter-perspective.ui.h:6
 msgid "_Remove"
 msgstr "_Уклони"
 
-#: ../data/ui/ide-greeter-perspective.ui.h:4
+#: ../data/ui/ide-greeter-perspective.ui.h:7
 msgid "Select a Project"
 msgstr "Изабери пројекат"
 
-#: ../data/ui/ide-greeter-perspective.ui.h:5
+#: ../data/ui/ide-greeter-perspective.ui.h:8
 msgid "Click an item to select"
 msgstr "Кликни на ставке испод за убацивање у избор"
 
-#: ../data/ui/ide-greeter-perspective.ui.h:6
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Create new document"
+#: ../data/ui/ide-greeter-perspective.ui.h:9
 msgid "Create a new project"
-msgstr "Направи нови документ"
+msgstr "Направи нови пројекат"
 
-#: ../data/ui/ide-greeter-perspective.ui.h:7
+#: ../data/ui/ide-greeter-perspective.ui.h:10
 #: ../plugins/project-tree/gtk/menus.ui.h:2
 msgid "_New"
 msgstr "_Ново"
 
-#: ../data/ui/ide-greeter-perspective.ui.h:8
-#, fuzzy
-#| msgid "Search Shortcuts"
+#: ../data/ui/ide-greeter-perspective.ui.h:11
 msgid "Search for projects"
-msgstr "Пречице претраге"
+msgstr "Тражи пројекте"
 
-#: ../data/ui/ide-greeter-perspective.ui.h:9
-#, fuzzy
-#| msgid "Select Project File"
+#: ../data/ui/ide-greeter-perspective.ui.h:12
 msgid "Select projects for removal"
-msgstr "Изабери пројектну датотеку"
+msgstr "Означи пројекте за уклањање"
 
-#: ../data/ui/ide-greeter-perspective.ui.h:10
-#, fuzzy
-#| msgid "The node selection."
+#: ../data/ui/ide-greeter-perspective.ui.h:13
 msgid "Return to project selection"
-msgstr "Избор чвора."
+msgstr "Повратак на избор пројекта"
 
 #: ../data/ui/ide-layout-tab-bar.ui.h:1
 msgid "List open files"
@@ -785,7 +790,7 @@ msgstr "%u. ред, %u. колона"
 msgid "%u of %u"
 msgstr "%u од %u"
 
-#: ../libide/editor/ide-editor-frame.c:643
+#: ../libide/editor/ide-editor-frame.c:658
 #: ../plugins/project-tree/gtk/menus.ui.h:1
 msgid "Re_veal in Project Tree"
 msgstr "Прикажи у стаблу пројекта"
@@ -829,7 +834,7 @@ msgid "Provide a number between 1 and %u"
 msgstr "Пружа број између 1 и %u"
 
 #: ../libide/genesis/ide-genesis-perspective.c:200
-#: ../libide/greeter/ide-greeter-perspective.c:429
+#: ../libide/greeter/ide-greeter-perspective.c:436
 msgid "Failed to load the project"
 msgstr "Нисам успео да учитам пројекат"
 
@@ -880,51 +885,55 @@ msgstr "Новчано помогли"
 msgid "Commands:"
 msgstr "Наредбе:"
 
-#: ../libide/ide-application-command-line.c:165
+#: ../libide/ide-application-command-line.c:185
 msgid "List available subcommands"
 msgstr "Списак доступних поднаредби"
 
-#: ../libide/ide-application-command-line.c:172
+#: ../libide/ide-application-command-line.c:192
 msgid "Run Builder in standalone mode"
 msgstr "Покрени Градитеља у самосталном режиму рада"
 
-#: ../libide/ide-application-command-line.c:179
+#: ../libide/ide-application-command-line.c:199
 msgid "Show the application's version"
 msgstr "Прикажи издање програма"
 
-#: ../libide/ide-application-command-line.c:198
+#: ../libide/ide-application-command-line.c:218
 msgid "Increase verbosity, may be specified multiple times"
 msgstr "Повећај причљивост, може се подесити више пута"
 
-#: ../libide/ide-application-command-line.c:228
+#: ../libide/ide-application-command-line.c:225
+msgid "Enter GApplication Service mode"
+msgstr "Уђи у GApplication сервисни режим"
+
+#: ../libide/ide-application-command-line.c:255
 msgid "COMMAND"
 msgstr "НАРЕДБА"
 
-#: ../libide/ide-application-command-line.c:286
+#: ../libide/ide-application-command-line.c:326
 msgid "No commands available"
 msgstr "Нема доступних наредби"
 
-#: ../libide/ide-application-command-line.c:315
+#: ../libide/ide-application-command-line.c:356
 msgid "Please provide a command"
 msgstr "Наведите наредбу"
 
-#: ../libide/ide-application-command-line.c:325
+#: ../libide/ide-application-command-line.c:366
 msgid "No such tool"
 msgstr "Нема такве алатке"
 
-#: ../libide/ide-application-command-line.c:339
+#: ../libide/ide-application-command-line.c:380
 msgid "Please provide a worker type"
 msgstr "Наведите врсту радника"
 
-#: ../libide/ide-application-command-line.c:346
+#: ../libide/ide-application-command-line.c:387
 msgid "Please provide a D-Bus address"
 msgstr "Наведите адресу д-магистрале"
 
-#: ../libide/ide-application-command-line.c:355
+#: ../libide/ide-application-command-line.c:396
 msgid "No such worker"
 msgstr "Нема таквог радника"
 
-#: ../libide/ide-buffer.c:2207
+#: ../libide/ide-buffer.c:2269
 msgid "The current language lacks a symbol resolver."
 msgstr "За тренутни језик не постоји разрешавач симбола."
 
@@ -1018,7 +1027,7 @@ msgstr "Одредишна датотека мора бити унутар ст�
 msgid "File must be within the project tree."
 msgstr "Датотека мора бити унутар стаба пројекта."
 
-#: ../libide/ide-recent-projects.c:382
+#: ../libide/ide-recent-projects.c:383
 #, c-format
 msgid "%s() may only be executed once"
 msgstr "%s() функција може бити извршена само једном"
@@ -1032,7 +1041,7 @@ msgstr "Оперативни систем домаћина"
 msgid "%s has not implemented GAsyncInitable."
 msgstr "%s функција нема спроведену GAsyncInitable могућност."
 
-#: ../libide/ide-source-snippet.c:370
+#: ../libide/ide-source-snippet.c:372
 msgid "Chunk does not belong to snippet."
 msgstr "Део не припада исечку."
 
@@ -1056,17 +1065,17 @@ msgstr "Не могу да отворим фасциклу: %s"
 msgid "Failed to load file: %s: %s"
 msgstr "Не могу да учитам датотеку: %s: %s"
 
-#: ../libide/ide-source-view.c:4966
+#: ../libide/ide-source-view.c:4867
 #, c-format
 msgid "Insert “%s”"
 msgstr "Убаци „%s“"
 
-#: ../libide/ide-source-view.c:4968
+#: ../libide/ide-source-view.c:4869
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "Замени „%s“ са „%s“"
 
-#: ../libide/ide-source-view.c:5082
+#: ../libide/ide-source-view.c:4983
 msgid "Apply Fix-It"
 msgstr "Примени исправку"
 
@@ -1442,10 +1451,8 @@ msgid "Overwrite Braces"
 msgstr "Преписује заграде"
 
 #: ../libide/preferences/ide-preferences-builtin.c:228
-#, fuzzy
-#| msgid "Overwrite Braces"
 msgid "Overwrite closing braces"
-msgstr "Преписује заграде"
+msgstr "Препиши затворене заграде"
 
 #: ../libide/preferences/ide-preferences-builtin.c:230
 msgid "Margins"
@@ -1505,7 +1512,24 @@ msgstr "Радници на градњи"
 msgid "Number of parallel build workers"
 msgstr "Број упоредних радника на градњи"
 
-#: ../libide/preferences/ide-preferences-perspective.c:821
+#: ../libide/preferences/ide-preferences-builtin.c:252
+#: ../plugins/git/ide-git-clone-widget.c:200
+msgid "Projects"
+msgstr "Пројекти"
+
+#: ../libide/preferences/ide-preferences-builtin.c:254
+msgid "Project Discovery"
+msgstr "Откривање пројеката"
+
+#: ../libide/preferences/ide-preferences-builtin.c:255
+msgid "Discover projects on my computer"
+msgstr "Откриј пројекте на мом рачунару"
+
+#: ../libide/preferences/ide-preferences-builtin.c:255
+msgid "Scan your computer for existing projects"
+msgstr "Потражи постојеће пројекте на рачунару"
+
+#: ../libide/preferences/ide-preferences-perspective.c:823
 msgid "Preferences"
 msgstr "Поставке"
 
@@ -1572,7 +1596,7 @@ msgid "Success"
 msgstr "Успех"
 
 #: ../plugins/autotools/ide-autotools-builder.c:161
-#: ../plugins/autotools/ide-autotools-build-task.c:863
+#: ../plugins/autotools/ide-autotools-build-task.c:872
 msgid "Building…"
 msgstr "Изграђујем..."
 
@@ -1580,46 +1604,46 @@ msgstr "Изграђујем..."
 msgid "Failed to locate configure.ac"
 msgstr "Не могу да нађем configure.ac датотеку"
 
-#: ../plugins/autotools/ide-autotools-build-task.c:173
+#: ../plugins/autotools/ide-autotools-build-task.c:174
 msgid "Directory must be on a locally mounted filesystem."
 msgstr "Фасцикла мора бити локално монтирани систем датотека."
 
-#: ../plugins/autotools/ide-autotools-build-task.c:546
+#: ../plugins/autotools/ide-autotools-build-task.c:548
 msgid "Cannot execute build task more than once."
 msgstr "Не могу да покренем више од једне изградње програма."
 
-#: ../plugins/autotools/ide-autotools-build-task.c:633
+#: ../plugins/autotools/ide-autotools-build-task.c:642
 msgid "Failed to create build directory."
 msgstr "Не могу да направим фасциклу за изградњу."
 
-#: ../plugins/autotools/ide-autotools-build-task.c:642
+#: ../plugins/autotools/ide-autotools-build-task.c:651
 #, c-format
 msgid "'%s' is not a directory."
 msgstr "\"%s\" није фасцикла."
 
-#: ../plugins/autotools/ide-autotools-build-task.c:681
+#: ../plugins/autotools/ide-autotools-build-task.c:690
 #, c-format
 msgid "autogen.sh is missing from project directory (%s)."
 msgstr "Унутар пројектне фасцикле (%s) недостаје autogen.sh датотека."
 
-#: ../plugins/autotools/ide-autotools-build-task.c:691
+#: ../plugins/autotools/ide-autotools-build-task.c:700
 msgid "autogen.sh is not executable."
 msgstr "Датотека autogen.sh није извршна."
 
-#: ../plugins/autotools/ide-autotools-build-task.c:695
+#: ../plugins/autotools/ide-autotools-build-task.c:704
 msgid "Running autogen…"
 msgstr "Извршавам аутоген…"
 
-#: ../plugins/autotools/ide-autotools-build-task.c:729
+#: ../plugins/autotools/ide-autotools-build-task.c:738
 #, c-format
 msgid "autogen.sh failed to create configure (%s)"
 msgstr "autogen.sh не може да направи configure (%s)"
 
-#: ../plugins/autotools/ide-autotools-build-task.c:764
+#: ../plugins/autotools/ide-autotools-build-task.c:773
 msgid "Running configure…"
 msgstr "Извршавам configure…"
 
-#: ../plugins/autotools/ide-autotools-build-task.c:861
+#: ../plugins/autotools/ide-autotools-build-task.c:870
 msgid "Cleaning…"
 msgstr "Чистим..."
 
@@ -1842,6 +1866,21 @@ msgstr "ПУТАЊА"
 msgid "Build Output"
 msgstr "Излаз поступка градње"
 
+#: ../plugins/clang/ide-clang-preferences-addin.c:62
+msgid "Clang"
+msgstr "Це-ланг"
+
+#: ../plugins/clang/ide-clang-preferences-addin.c:63
+msgid "Show errors and warnings provided by Clang"
+msgstr "Прикажи грешке и упозорења које пружа Це-ланг (енгл.: Clang)"
+
+#. translators: keywords used when searching for preferences
+#: ../plugins/clang/ide-clang-preferences-addin.c:65
+msgid "clang diagnostics warnings errors"
+msgstr ""
+"clang diagnostics warnings errors це-ланг дијагностика упозорења грешке ce-"
+"lang dijagnostika upozorenja greške greske"
+
 #: ../plugins/clang/ide-clang-service.c:269
 msgid "Unknown failure"
 msgstr "Непозната грешка"
@@ -1874,23 +1913,6 @@ msgstr "анонимно"
 #: ../plugins/clang/ide-clang-translation-unit.c:656
 msgid "clang_codeCompleteAt() only works on local files"
 msgstr "clang_codeCompleteAt() функција ради само на локалним датотекама"
-
-#: ../plugins/clang/ide-clang-preferences-addin.c:62
-msgid "Clang"
-msgstr "Це-ланг"
-
-#: ../plugins/clang/ide-clang-preferences-addin.c:63
-#, fuzzy
-#| msgid "Show errors and warnings provided by Vala"
-msgid "Show errors and warnings provided by Clang"
-msgstr "Прикажи грешке и упозорења које пружа Вала"
-
-#. translators: keywords used when searching for preferences
-#: ../plugins/clang/ide-clang-preferences-addin.c:65
-#, fuzzy
-#| msgid "vala diagnostics warnings errors"
-msgid "clang diagnostics warnings errors"
-msgstr "вала дијагностика упозорења грешке"
 
 #: ../plugins/command-bar/gb-command-bar.c:299
 #, c-format
@@ -1955,6 +1977,14 @@ msgstr "Неисправан „нађи и замени“ захтев"
 #, c-format
 msgid "Not a command: %s"
 msgstr "Није наредба: %s"
+
+#: ../plugins/comment-code/gtk/menus.ui.h:1
+msgid "Comment code"
+msgstr "Искоментариши код"
+
+#: ../plugins/comment-code/gtk/menus.ui.h:2
+msgid "Uncomment code"
+msgstr "Уклони коментар из кода"
 
 #: ../plugins/contributing/contributing_plugin/helper.py:76
 #, python-format
@@ -2080,10 +2110,6 @@ msgstr "Тражена датотека не постоји унутар сад�
 msgid "A valid Git URL is required"
 msgstr "Морате унети исправну УРЛ адресу гит ризнице"
 
-#: ../plugins/git/ide-git-clone-widget.c:200
-msgid "Projects"
-msgstr "Пројекти"
-
 #: ../plugins/git/ide-git-clone-widget.ui.h:1
 msgid "user@host:repository.git"
 msgstr "корисничко@адреса:ризница.гит"
@@ -2124,6 +2150,25 @@ msgstr "Власништво изворног кода"
 msgid "Code assistance requires a local file."
 msgstr "Кодна испомоћ тражи локалну датотеку."
 
+#: ../plugins/gnome-code-assistance/ide-gca-preferences-addin.c:62
+msgid "Pylint"
+msgstr "Пајлинт"
+
+#: ../plugins/gnome-code-assistance/ide-gca-preferences-addin.c:63
+msgid "Enable the use of pylint, which may execute code in your project"
+msgstr ""
+"Омогући коришћење пајлинта (енгл.: Pylint) који може извршити код у вашем "
+"пројекту"
+
+#. translators: these are keywords used to search for preferences
+#: ../plugins/gnome-code-assistance/ide-gca-preferences-addin.c:65
+msgid "pylint python lint code execute execution"
+msgstr ""
+"pylint python lint code execute execution пајлинт пајтон питон линт "
+"осенчавање означивање обележавање извршити извршавање pajlint pajton piton "
+"lint osencavanje osenčavanje označavanje oznacavanje obelezavanje "
+"obeležavanje"
+
 #: ../plugins/gnome-code-assistance/ide-gca-service.c:168
 msgid "No language specified"
 msgstr "Није постављен језик"
@@ -2134,7 +2179,7 @@ msgstr "Прикажи претпреглед као ХТМЛ"
 
 #: ../plugins/jedi/jedi_plugin.py:672
 msgid "Suggest Python completions"
-msgstr "Довршавање Пајтон кодаUse"
+msgstr "Довршавање Пајтон кода"
 
 #: ../plugins/jedi/jedi_plugin.py:673
 msgid "Use Jedi to provide completions for the Python language"
@@ -2181,7 +2226,7 @@ msgstr "Име фасцикле"
 msgid "_Create"
 msgstr "_Направи"
 
-#: ../plugins/project-tree/gb-project-tree-addin.c:77
+#: ../plugins/project-tree/gb-project-tree-addin.c:112
 msgid "Project"
 msgstr "Пројекат"
 
@@ -2307,19 +2352,6 @@ msgstr "Прикажи грешке и упозорења које пружа В
 #: ../plugins/vala-pack/ide-vala-preferences-addin.vala:35
 msgid "vala diagnostics warnings errors"
 msgstr "вала дијагностика упозорења грешке"
-
-#: ../plugins/gnome-code-assistance/ide-gca-preferences-addin.c:62
-msgid "Pylint"
-msgstr ""
-
-#: ../plugins/gnome-code-assistance/ide-gca-preferences-addin.c:63
-msgid "Enable the use of pylint, which may execute code in your project"
-msgstr ""
-
-#. translators: these are keywords used to search for preferences
-#: ../plugins/gnome-code-assistance/ide-gca-preferences-addin.c:65
-msgid "pylint python lint code execute execution"
-msgstr ""
 
 #~ msgid "%s does not implement build_async()"
 #~ msgstr "%s нема функцију build_async()"
@@ -2948,9 +2980,6 @@ msgstr ""
 #~ msgid "Style Scheme Name"
 #~ msgstr "Назив шеме стила"
 
-#~ msgid "Project File"
-#~ msgstr "Пројектна датотека"
-
 #~ msgid "The project file."
 #~ msgstr "Датотека која садржи податке о пројекту."
 
@@ -3491,9 +3520,6 @@ msgstr ""
 
 #~ msgid "Uri"
 #~ msgstr "УРИ"
-
-#~ msgid "Project Info"
-#~ msgstr "Подаци о пројекту"
 
 #~ msgid "The project info to render."
 #~ msgstr "Податке о пројекту које треба исцртати."
