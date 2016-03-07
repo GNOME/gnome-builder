@@ -229,7 +229,7 @@ egg_animation_load_begin_values (EggAnimation *animation)
 {
   GtkContainer *container;
   Tween *tween;
-  gint i;
+  guint i;
 
   g_return_if_fail (EGG_IS_ANIMATION (animation));
 
@@ -268,7 +268,7 @@ static void
 egg_animation_unload_begin_values (EggAnimation *animation)
 {
   Tween *tween;
-  gint i;
+  guint i;
 
   g_return_if_fail (EGG_IS_ANIMATION (animation));
 
@@ -457,7 +457,7 @@ egg_animation_tick (EggAnimation *animation,
   gdouble alpha;
   GValue value = { 0 };
   Tween *tween;
-  gint i;
+  guint i;
 
   g_return_val_if_fail (EGG_IS_ANIMATION (animation), FALSE);
 
@@ -759,7 +759,7 @@ egg_animation_finalize (GObject *object)
 {
   EggAnimation *self = EGG_ANIMATION (object);
   Tween *tween;
-  gint i;
+  guint i;
 
   for (i = 0; i < self->tweens->len; i++)
     {
