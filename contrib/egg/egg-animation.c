@@ -1002,7 +1002,7 @@ egg_animation_mode_get_type (void)
  * @object: A #GObject.
  * @mode: The animation mode.
  * @duration_msec: The duration in milliseconds.
- * @frame_rate: The target frame rate.
+ * @frame_clock: (nullable): The #GdkFrameClock to synchronize to.
  * @first_property: The first property to animate.
  * @args: A variadac list of arguments
  *
