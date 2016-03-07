@@ -474,6 +474,7 @@ static const gchar *ide_application_credits_funders[] = {
   "Thomas Maffia",
   "Thomas McDonald",
   "Tom Erik Gundersen",
+  "Tom Pollok",
   "Tomas Peterka",
   "Tommi Tauriainen",
   "Tomáš Krchňák",
