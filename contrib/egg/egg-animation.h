@@ -49,6 +49,13 @@ void          egg_animation_stop          (EggAnimation     *animation);
 void          egg_animation_add_property  (EggAnimation     *animation,
                                            GParamSpec       *pspec,
                                            const GValue     *value);
+
+EggAnimation *egg_object_animatev         (gpointer          object,
+                                           EggAnimationMode  mode,
+                                           guint             duration_msec,
+                                           GdkFrameClock    *frame_clock,
+                                           const gchar      *first_property,
+                                           va_list           args);
 EggAnimation* egg_object_animate          (gpointer          object,
                                            EggAnimationMode  mode,
                                            guint             duration_msec,
