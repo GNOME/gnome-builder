@@ -138,6 +138,15 @@ egg_animation_alpha_ease_out_cubic (gdouble offset)
   return p * p * p + 1.0;
 }
 
+static gdouble
+egg_animation_alpha_ease_in_out_cubic (gdouble offset)
+{
+  if (offset < .5)
+    return egg_animation_alpha_ease_in_cubic (offset * 2.0) / 2.0;
+  else
+    return .5 + egg_animation_alpha_ease_out_cubic ((offset - .5) * 2.0) / 2.0;
+}
+
 
 /**
  * egg_animation_alpha_linear:
@@ -918,6 +927,7 @@ egg_animation_class_init (EggAnimationClass *klass)
   SET_ALPHA (EASE_IN_OUT_QUAD, ease_in_out_quad);
   SET_ALPHA (EASE_IN_CUBIC, ease_in_cubic);
   SET_ALPHA (EASE_OUT_CUBIC, ease_out_cubic);
+  SET_ALPHA (EASE_IN_OUT_CUBIC, ease_in_out_cubic);
 
 #define SET_TWEEN(_T, _t) \
   G_STMT_START { \
@@ -965,12 +975,13 @@ egg_animation_mode_get_type (void)
 {
   static GType type_id = 0;
   static const GEnumValue values[] = {
-    { EGG_ANIMATION_LINEAR, "EGG_ANIMATION_LINEAR", "LINEAR" },
-    { EGG_ANIMATION_EASE_IN_QUAD, "EGG_ANIMATION_EASE_IN_QUAD", "EASE_IN_QUAD" },
-    { EGG_ANIMATION_EASE_IN_OUT_QUAD, "EGG_ANIMATION_EASE_IN_OUT_QUAD", "EASE_IN_OUT_QUAD" },
-    { EGG_ANIMATION_EASE_OUT_QUAD, "EGG_ANIMATION_EASE_OUT_QUAD", "EASE_OUT_QUAD" },
-    { EGG_ANIMATION_EASE_IN_CUBIC, "EGG_ANIMATION_EASE_IN_CUBIC", "EASE_IN_CUBIC" },
-    { EGG_ANIMATION_EASE_OUT_CUBIC, "EGG_ANIMATION_EASE_OUT_CUBIC", "EASE_OUT_CUBIC" },
+    { EGG_ANIMATION_LINEAR, "EGG_ANIMATION_LINEAR", "linear" },
+    { EGG_ANIMATION_EASE_IN_QUAD, "EGG_ANIMATION_EASE_IN_QUAD", "ease-in-quad" },
+    { EGG_ANIMATION_EASE_IN_OUT_QUAD, "EGG_ANIMATION_EASE_IN_OUT_QUAD", "ease-in-out-quad" },
+    { EGG_ANIMATION_EASE_OUT_QUAD, "EGG_ANIMATION_EASE_OUT_QUAD", "ease-out-quad" },
+    { EGG_ANIMATION_EASE_IN_CUBIC, "EGG_ANIMATION_EASE_IN_CUBIC", "ease-in-cubic" },
+    { EGG_ANIMATION_EASE_OUT_CUBIC, "EGG_ANIMATION_EASE_OUT_CUBIC", "ease-out-cubic" },
+    { EGG_ANIMATION_EASE_IN_OUT_CUBIC, "EGG_ANIMATION_EASE_IN_OUT_CUBIC", "ease-in-out-cubic" },
     { 0 }
   };
 
