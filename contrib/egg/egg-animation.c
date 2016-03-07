@@ -20,6 +20,7 @@
 #include <gobject/gvaluecollector.h>
 #include <gdk/gdk.h>
 #include <gtk/gtk.h>
+#include <stdlib.h>
 #include <string.h>
 
 #include "egg-animation.h"
@@ -102,6 +103,7 @@ static gboolean    debug;
 static GParamSpec *properties[LAST_PROP];
 static guint       signals[LAST_SIGNAL];
 static TweenFunc   tween_funcs[LAST_FUNDAMENTAL];
+static guint       slow_down_factor = 1;
 
 
 /*
@@ -804,7 +806,7 @@ egg_animation_set_property (GObject      *object,
   switch (prop_id)
     {
     case PROP_DURATION:
-      animation->duration_msec = g_value_get_uint (value);
+      animation->duration_msec = g_value_get_uint (value) * slow_down_factor;
       break;
 
     case PROP_FRAME_CLOCK:
@@ -837,8 +839,13 @@ static void
 egg_animation_class_init (EggAnimationClass *klass)
 {
   GObjectClass *object_class;
+  const gchar *slow_down_factor_env;
 
   debug = !!g_getenv ("EGG_ANIMATION_DEBUG");
+  slow_down_factor_env = g_getenv ("EGG_ANIMATION_SLOW_DOWN_FACTOR");
+
+  if (slow_down_factor_env)
+    slow_down_factor = MAX (1, atoi (slow_down_factor_env));
 
   object_class = G_OBJECT_CLASS (klass);
   object_class->dispose = egg_animation_dispose;
