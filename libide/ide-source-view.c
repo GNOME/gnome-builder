@@ -2625,7 +2625,7 @@ ide_source_view_real_motion_notify_event (GtkWidget      *widget,
 
   ret = klass->motion_notify_event (widget, event);
 
-  if (event->state != DEFINITION_HIGHLIGHT_MODIFIER)
+  if ((event->state & DEFINITION_HIGHLIGHT_MODIFIER) == 0)
     {
       if (priv->definition_src_location)
         ide_source_view_reset_definition_highlight (self);
