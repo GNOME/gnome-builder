@@ -2665,7 +2665,7 @@ ide_source_view_real_motion_notify_event (GtkWidget      *widget,
 
   ret = GTK_WIDGET_CLASS (ide_source_view_parent_class)->motion_notify_event (widget, event);
 
-  if ((event->state & DEFINITION_HIGHLIGHT_MODIFIER) == 0)
+  if ((event->state & ALL_ACCELS_MASK) != DEFINITION_HIGHLIGHT_MODIFIER)
     {
       if (priv->definition_src_location)
         ide_source_view_reset_definition_highlight (self);
