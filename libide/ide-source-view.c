@@ -154,9 +154,9 @@ typedef struct
   guint                        delay_size_allocate_chainup;
   GtkAllocation                delay_size_allocation;
 
-  GtkTextIter                  definition_highlight_start;
-  GtkTextIter                  definition_highlight_end;
   IdeSourceLocation           *definition_src_location;
+  GtkTextMark                 *definition_highlight_start_mark;
+  GtkTextMark                 *definition_highlight_end_mark;
 
   guint                        auto_indent : 1;
   guint                        completion_blocked : 1;
@@ -194,8 +194,8 @@ typedef struct
 typedef struct
 {
   IdeSourceView    *self;
-  GtkTextIter       word_start;
-  GtkTextIter       word_end;
+  GtkTextMark      *word_start_mark;
+  GtkTextMark      *word_end_mark;
 } DefinitionHighlightData;
 
 G_DEFINE_TYPE_WITH_PRIVATE (IdeSourceView, ide_source_view, GTK_SOURCE_TYPE_VIEW)
@@ -341,7 +341,28 @@ search_movement_unref (SearchMovement *movement)
     }
 }
 
+static void
+definition_highlight_data_free (DefinitionHighlightData *data)
+{
+  if (data != NULL)
+    {
+      GtkTextBuffer *buffer;
+
+      buffer = gtk_text_mark_get_buffer (data->word_start_mark);
+
+      gtk_text_buffer_delete_mark (buffer, data->word_start_mark);
+      gtk_text_buffer_delete_mark (buffer, data->word_end_mark);
+
+      g_clear_object (&data->self);
+      g_clear_object (&data->word_start_mark);
+      g_clear_object (&data->word_end_mark);
+
+      g_slice_free (DefinitionHighlightData, data);
+    }
+}
+
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (SearchMovement, search_movement_unref)
+G_DEFINE_AUTOPTR_CLEANUP_FUNC (DefinitionHighlightData, definition_highlight_data_free)
 
 static SearchMovement *
 search_movement_new (IdeSourceView *self,
@@ -1444,26 +1465,18 @@ ide_source_view_reset_definition_highlight (IdeSourceView *self)
 {
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
 
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+
   if (priv->definition_src_location)
-    {
-      ide_source_location_unref (priv->definition_src_location);
-      priv->definition_src_location = NULL;
-    }
+    g_clear_pointer (&priv->definition_src_location, ide_source_location_unref);
 
-  if (!gtk_text_iter_equal (&priv->definition_highlight_start,
-                            &priv->definition_highlight_end))
+  if (priv->buffer != NULL)
     {
-      gtk_text_buffer_remove_tag_by_name (GTK_TEXT_BUFFER (priv->buffer),
-                                          TAG_DEFINITION,
-                                          &priv->definition_highlight_start,
-                                          &priv->definition_highlight_end);
-    }
+      GtkTextIter begin;
+      GtkTextIter end;
 
-  if (priv->buffer)
-    {
-      gtk_text_buffer_get_end_iter (GTK_TEXT_BUFFER (priv->buffer),
-                                    &priv->definition_highlight_end);
-      priv->definition_highlight_start = priv->definition_highlight_end;
+      gtk_text_buffer_get_bounds (GTK_TEXT_BUFFER (priv->buffer), &begin, &end);
+      gtk_text_buffer_remove_tag_by_name (GTK_TEXT_BUFFER (priv->buffer), TAG_DEFINITION, &begin, &end);
     }
 
   ide_source_view_set_cursor_from_name (self, "text");
@@ -1556,6 +1569,12 @@ ide_source_view_bind_buffer (IdeSourceView  *self,
   priv->rubberband_insert_mark =
     gtk_text_buffer_create_mark (GTK_TEXT_BUFFER (buffer), NULL, &iter, TRUE);
 
+  /* Marks used for definition highlights */
+  priv->definition_highlight_start_mark =
+    gtk_text_buffer_create_mark (GTK_TEXT_BUFFER (buffer), NULL, &iter, TRUE);
+  priv->definition_highlight_end_mark =
+    gtk_text_buffer_create_mark (GTK_TEXT_BUFFER (buffer), NULL, &iter, TRUE);
+
   ide_source_view__buffer_notify_language_cb (self, NULL, buffer);
   ide_source_view__buffer_notify_file_cb (self, NULL, buffer);
   ide_source_view__buffer_notify_highlight_diagnostics_cb (self, NULL, buffer);
@@ -1611,6 +1630,9 @@ ide_source_view_unbind_buffer (IdeSourceView  *self,
   g_clear_object (&priv->search_context);
   g_clear_object (&priv->indenter_adapter);
   g_clear_object (&priv->completion_providers);
+
+  priv->definition_highlight_start_mark = NULL;
+  priv->definition_highlight_end_mark = NULL;
 
   ide_buffer_release (priv->buffer);
 }
@@ -2414,10 +2436,14 @@ ide_source_view_process_press_on_definition (IdeSourceView  *self,
                                              GdkEventButton *event)
 {
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
-  GtkTextView *text_view = (GtkTextView *) self;
+  GtkTextView *text_view = (GtkTextView *)self;
   GtkTextIter iter;
   GtkTextWindowType window_type;
-  gint buffer_x, buffer_y;
+  gint buffer_x;
+  gint buffer_y;
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+  g_assert (event != NULL);
 
   window_type = gtk_text_view_get_window_type (text_view, event->window);
   gtk_text_view_window_to_buffer_coords (text_view,
@@ -2431,23 +2457,26 @@ ide_source_view_process_press_on_definition (IdeSourceView  *self,
                                       buffer_x,
                                       buffer_y);
 
-  if (priv->definition_src_location)
+  if (priv->definition_src_location != NULL)
     {
-      if (gtk_text_iter_in_range (&iter,
-                                  &priv->definition_highlight_start,
-                                  &priv->definition_highlight_end))
+      GtkTextIter definition_highlight_start;
+      GtkTextIter definition_highlight_end;
+
+      gtk_text_buffer_get_iter_at_mark (GTK_TEXT_BUFFER (priv->buffer),
+                                        &definition_highlight_start,
+                                        priv->definition_highlight_start_mark);
+
+      gtk_text_buffer_get_iter_at_mark (GTK_TEXT_BUFFER (priv->buffer),
+                                        &definition_highlight_end,
+                                        priv->definition_highlight_end_mark);
+
+      if (gtk_text_iter_in_range (&iter, &definition_highlight_start, &definition_highlight_end))
         {
-          IdeSourceLocation *src_location = priv->definition_src_location;
-          ide_source_location_ref (src_location);
+          g_autoptr(IdeSourceLocation) src_location = NULL;
 
+          src_location = ide_source_location_ref (priv->definition_src_location);
           ide_source_view_reset_definition_highlight (self);
-
-          g_signal_emit (self,
-                         signals [FOCUS_LOCATION],
-                         0,
-                         src_location);
-
-          ide_source_location_unref (src_location);
+          g_signal_emit (self, signals [FOCUS_LOCATION], 0, src_location);
         }
 
       return TRUE;
@@ -2556,17 +2585,20 @@ ide_source_view_get_definition_on_mouse_over_cb (GObject      *object,
                                                  GAsyncResult *result,
                                                  gpointer      user_data)
 {
-  DefinitionHighlightData *data = (DefinitionHighlightData *) user_data;
-  IdeBuffer *buffer = (IdeBuffer *) object;
-  g_autoptr(IdeSourceView) self = data->self;
+  g_autoptr(DefinitionHighlightData) data = user_data;
+  IdeSourceViewPrivate *priv;
+  IdeBuffer *buffer = (IdeBuffer *)object;
   g_autoptr(IdeSymbol) symbol = NULL;
   g_autoptr(GError) error = NULL;
   IdeSourceLocation *srcloc;
 
   IDE_ENTRY;
 
+  g_assert (data != NULL);
   g_assert (IDE_IS_BUFFER (buffer));
-  g_assert (IDE_IS_SOURCE_VIEW (self));
+  g_assert (IDE_IS_SOURCE_VIEW (data->self));
+
+  priv = ide_source_view_get_instance_private (data->self);
 
   symbol = ide_buffer_get_symbol_at_location_finish (buffer, result, &error);
 
@@ -2580,32 +2612,35 @@ ide_source_view_get_definition_on_mouse_over_cb (GObject      *object,
 
   if (srcloc != NULL)
     {
-      IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+      GtkTextIter word_start;
+      GtkTextIter word_end;
 
       if (priv->definition_src_location &&
-          priv->definition_src_location != srcloc)
-        {
-          ide_source_location_unref (priv->definition_src_location);
-          priv->definition_src_location = NULL;
-        }
+          (priv->definition_src_location != srcloc))
+        g_clear_pointer (&priv->definition_src_location, ide_source_location_unref);
 
-      priv->definition_highlight_start = data->word_start;
-      priv->definition_highlight_end = data->word_end;
+      if (priv->definition_src_location == NULL)
+        priv->definition_src_location = ide_source_location_ref (srcloc);
 
-      priv->definition_src_location = srcloc;
-      ide_source_location_ref (priv->definition_src_location);
+      gtk_text_buffer_get_iter_at_mark (GTK_TEXT_BUFFER (buffer),
+                                        &word_start, data->word_start_mark);
+      gtk_text_buffer_get_iter_at_mark (GTK_TEXT_BUFFER (buffer),
+                                        &word_end, data->word_end_mark);
 
       gtk_text_buffer_apply_tag_by_name (GTK_TEXT_BUFFER (priv->buffer),
-                                         TAG_DEFINITION,
-                                         &priv->definition_highlight_start,
-                                         &priv->definition_highlight_end);
+                                         TAG_DEFINITION, &word_start, &word_end);
 
-      ide_source_view_set_cursor_from_name (self, "pointer");
+      gtk_text_buffer_move_mark (GTK_TEXT_BUFFER (priv->buffer),
+                                 priv->definition_highlight_start_mark,
+                                 &word_start);
+      gtk_text_buffer_move_mark (GTK_TEXT_BUFFER (priv->buffer),
+                                 priv->definition_highlight_end_mark,
+                                 &word_end);
+
+      ide_source_view_set_cursor_from_name (data->self, "pointer");
     }
   else
-    {
-      ide_source_view_reset_definition_highlight (self);
-    }
+    ide_source_view_reset_definition_highlight (data->self);
 
   IDE_EXIT;
 }
@@ -2657,17 +2692,30 @@ ide_source_view_real_motion_notify_event (GtkWidget      *widget,
 
   if (priv->definition_src_location)
     {
-      if (gtk_text_iter_equal (&priv->definition_highlight_start, &start_iter)
-          && gtk_text_iter_equal (&priv->definition_highlight_end, &end_iter))
+      GtkTextIter definition_highlight_start;
+      GtkTextIter definition_highlight_end;
+
+      gtk_text_buffer_get_iter_at_mark (GTK_TEXT_BUFFER (priv->buffer),
+                                        &definition_highlight_start,
+                                        priv->definition_highlight_start_mark);
+
+      gtk_text_buffer_get_iter_at_mark (GTK_TEXT_BUFFER (priv->buffer),
+                                        &definition_highlight_end,
+                                        priv->definition_highlight_end_mark);
+
+      if (gtk_text_iter_equal (&definition_highlight_start, &start_iter) &&
+          gtk_text_iter_equal (&definition_highlight_end, &end_iter))
         return ret;
 
       ide_source_view_reset_definition_highlight (self);
     }
 
-  data = g_slice_new (DefinitionHighlightData);
+  data = g_slice_new0 (DefinitionHighlightData);
   data->self = g_object_ref (self);
-  gtk_text_iter_assign (&data->word_start, &start_iter);
-  gtk_text_iter_assign (&data->word_end, &end_iter);
+  data->word_start_mark = gtk_text_buffer_create_mark (GTK_TEXT_BUFFER (priv->buffer),
+                                                       NULL, &start_iter, TRUE);
+  data->word_end_mark = gtk_text_buffer_create_mark (GTK_TEXT_BUFFER (priv->buffer),
+                                                     NULL, &end_iter, TRUE);
 
   ide_buffer_get_symbol_at_location_async (priv->buffer,
                                            &iter,
