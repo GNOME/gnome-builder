@@ -1502,10 +1502,6 @@ ide_source_view_bind_buffer (IdeSourceView  *self,
 
   priv->buffer = buffer;
 
-  gtk_text_buffer_create_tag (GTK_TEXT_BUFFER (priv->buffer), TAG_DEFINITION,
-                              "underline", PANGO_UNDERLINE_SINGLE,
-                              NULL);
-
   ide_source_view_reset_definition_highlight (self);
 
   ide_buffer_hold (buffer);

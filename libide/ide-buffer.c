@@ -56,6 +56,7 @@
 #define TAG_DEPRECATED       "diagnostician::deprecated"
 #define TAG_NOTE             "diagnostician::note"
 #define TAG_SNIPPET_TAB_STOP "snippet::tab-stop"
+#define TAG_DEFINITION       "action::hover-definition"
 
 typedef struct
 {
@@ -920,6 +921,24 @@ ide_buffer_notify_language (IdeBuffer  *self,
 }
 
 static void
+apply_style (GtkTextTag *tag,
+             const gchar *first_property,
+             ...)
+{
+  va_list args;
+
+  g_assert (!tag || GTK_IS_TEXT_TAG (tag));
+  g_assert (first_property != NULL);
+
+  if (tag == NULL)
+    return;
+
+  va_start (args, first_property);
+  g_object_set_valist (G_OBJECT (tag), first_property, args);
+  va_end (args);
+}
+
+static void
 ide_buffer_notify_style_scheme (IdeBuffer  *self,
                                 GParamSpec *pspec,
                                 gpointer    unused)
@@ -940,6 +959,13 @@ ide_buffer_notify_style_scheme (IdeBuffer  *self,
       ide_source_style_scheme_apply_style (style_scheme,
                                            TAG_SNIPPET_TAB_STOP,
                                            GET_TAG (TAG_SNIPPET_TAB_STOP));
+
+      if (!ide_source_style_scheme_apply_style (style_scheme,
+                                                TAG_DEFINITION,
+                                                GET_TAG (TAG_DEFINITION)))
+        apply_style (GET_TAG (TAG_DEFINITION),
+                     "underline", PANGO_UNDERLINE_SINGLE,
+                     NULL);
     }
 
 #undef GET_TAG
@@ -1010,6 +1036,9 @@ ide_buffer_constructed (GObject *object)
                               "underline-rgba", &error_rgba,
                               NULL);
   gtk_text_buffer_create_tag (GTK_TEXT_BUFFER (self), TAG_SNIPPET_TAB_STOP,
+                              NULL);
+  gtk_text_buffer_create_tag (GTK_TEXT_BUFFER (self), TAG_DEFINITION,
+                              "underline", PANGO_UNDERLINE_SINGLE,
                               NULL);
 
   g_signal_connect_object (gtk_text_buffer_get_tag_table (GTK_TEXT_BUFFER (self)),
