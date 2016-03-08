@@ -89,6 +89,8 @@
           <object class="GtkBox">
             <child>
               <object class="GtkButton" id="warning_button">
+                <property name="margin-start">6</property>
+                <property name="margin-end">6</property>
                 <property name="visible">false</property>
                 <child>
                   <object class="GtkImage">
