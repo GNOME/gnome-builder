@@ -23,9 +23,9 @@
 
 G_BEGIN_DECLS
 
-void ide_source_style_scheme_apply_style (GtkSourceStyleScheme *style_scheme,
-                                          const gchar          *style,
-                                          GtkTextTag           *tag);
+gboolean ide_source_style_scheme_apply_style (GtkSourceStyleScheme *style_scheme,
+                                              const gchar          *style,
+                                              GtkTextTag           *tag);
 
 G_END_DECLS
 

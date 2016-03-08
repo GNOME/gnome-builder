@@ -20,7 +20,7 @@
 
 #include "ide-source-style-scheme.h"
 
-void
+gboolean
 ide_source_style_scheme_apply_style (GtkSourceStyleScheme *style_scheme,
                                      const gchar          *style_name,
                                      GtkTextTag           *tag)
@@ -39,8 +39,8 @@ ide_source_style_scheme_apply_style (GtkSourceStyleScheme *style_scheme,
   gboolean italic = FALSE;
   gboolean italic_set = FALSE;
 
-  g_return_if_fail (GTK_SOURCE_IS_STYLE_SCHEME (style_scheme));
-  g_return_if_fail (style_name != NULL);
+  g_return_val_if_fail (GTK_SOURCE_IS_STYLE_SCHEME (style_scheme), FALSE);
+  g_return_val_if_fail (style_name != NULL, FALSE);
 
   g_object_set (tag,
                 "foreground-set", FALSE,
@@ -61,7 +61,7 @@ ide_source_style_scheme_apply_style (GtkSourceStyleScheme *style_scheme,
       style = gtk_source_style_scheme_get_style (style_scheme, defname);
 
       if (style == NULL)
-        return;
+        return FALSE;
     }
 
   g_object_get (style,
@@ -91,4 +91,6 @@ ide_source_style_scheme_apply_style (GtkSourceStyleScheme *style_scheme,
 
   if (underline_set && underline)
     g_object_set (tag, "underline", PANGO_UNDERLINE_SINGLE, NULL);
+
+  return TRUE;
 }
