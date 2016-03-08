@@ -2563,6 +2563,8 @@ ide_source_view_get_definition_on_mouse_over_cb (GObject      *object,
   g_autoptr(GError) error = NULL;
   IdeSourceLocation *srcloc;
 
+  IDE_ENTRY;
+
   g_assert (IDE_IS_BUFFER (buffer));
   g_assert (IDE_IS_SOURCE_VIEW (self));
 
@@ -2571,7 +2573,7 @@ ide_source_view_get_definition_on_mouse_over_cb (GObject      *object,
   if (symbol == NULL)
     {
       g_warning ("%s", error->message);
-      return;
+      IDE_EXIT;
     }
 
   srcloc = ide_symbol_get_definition_location (symbol);
@@ -2604,6 +2606,8 @@ ide_source_view_get_definition_on_mouse_over_cb (GObject      *object,
     {
       ide_source_view_reset_definition_highlight (self);
     }
+
+  IDE_EXIT;
 }
 
 static gboolean
