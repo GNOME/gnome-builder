@@ -2614,16 +2614,20 @@ static gboolean
 ide_source_view_real_motion_notify_event (GtkWidget      *widget,
                                           GdkEventMotion *event)
 {
-  IdeSourceView  *self = (IdeSourceView  *) widget;
+  IdeSourceView *self = (IdeSourceView *)widget;
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
-  GtkWidgetClass *klass = GTK_WIDGET_CLASS (ide_source_view_parent_class);
-  GtkTextIter iter, start_iter, end_iter;
-  gint buffer_x, buffer_y;
+  GtkTextIter iter;
+  GtkTextIter start_iter;
+  GtkTextIter end_iter;
+  gint buffer_x;
+  gint buffer_y;
   GtkTextWindowType window_type;
   DefinitionHighlightData *data;
   gboolean ret;
 
-  ret = klass->motion_notify_event (widget, event);
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+
+  ret = GTK_WIDGET_CLASS (ide_source_view_parent_class)->motion_notify_event (widget, event);
 
   if ((event->state & DEFINITION_HIGHLIGHT_MODIFIER) == 0)
     {
@@ -2633,8 +2637,7 @@ ide_source_view_real_motion_notify_event (GtkWidget      *widget,
       return ret;
     }
 
-  window_type = gtk_text_view_get_window_type (GTK_TEXT_VIEW (self),
-                                               event->window);
+  window_type = gtk_text_view_get_window_type (GTK_TEXT_VIEW (self), event->window);
   gtk_text_view_window_to_buffer_coords (GTK_TEXT_VIEW (self),
                                          window_type,
                                          event->x,
