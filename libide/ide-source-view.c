@@ -2604,7 +2604,8 @@ ide_source_view_get_definition_on_mouse_over_cb (GObject      *object,
 
   if (symbol == NULL)
     {
-      g_warning ("%s", error->message);
+      if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_NOT_SUPPORTED))
+        g_warning ("%s", error->message);
       IDE_EXIT;
     }
 
