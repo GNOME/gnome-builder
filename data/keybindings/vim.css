@@ -1376,6 +1376,16 @@
                     "selection-theatric" (expand)
                     "restore-insert-mark" ()
                     "clear-count" () };
+
+  bind "t" { "save-insert-mark" ()
+             "capture-modifier" ()
+             "save-search-char" ()
+             "movement" (next-match-modifier, 1, 1, 1)
+             "copy-clipboard" ()
+             "selection-theatric" (expand)
+             "clear-modifier" ()
+             "restore-insert-mark" ()
+             "clear-count" () };
 }
 
 @binding-set builder-vim-source-view-normal-g
