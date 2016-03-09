@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-03-01 08:04+0000\n"
-"PO-Revision-Date: 2016-03-01 12:02+0100\n"
+"POT-Creation-Date: 2016-03-09 08:02+0000\n"
+"PO-Revision-Date: 2016-03-09 12:07+0100\n"
 "Last-Translator: Marek Černocký <marek@manet.cz>\n"
 "Language-Team: Czech <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
@@ -19,22 +19,22 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 "X-Generator: Gtranslator 2.91.7\n"
 
-#: ../contrib/egg/egg-animation.c:715
+#: ../contrib/egg/egg-animation.c:726
 #, c-format
 msgid "Cannot locate property %s in class %s"
 msgstr "Nelze najít vlastnost %s ve třídě %s"
 
-#: ../contrib/egg/egg-animation.c:1055 ../contrib/egg/egg-animation.c:1061
+#: ../contrib/egg/egg-animation.c:1073 ../contrib/egg/egg-animation.c:1079
 #, c-format
 msgid "Failed to find property %s in %s"
 msgstr "Selhalo vyhledání vlastnosti %s v %s"
 
-#: ../contrib/egg/egg-animation.c:1069
+#: ../contrib/egg/egg-animation.c:1087
 #, c-format
 msgid "Failed to find property %s in %s or parent %s"
 msgstr "Selhalo vyhledání vlastnosti %s v %s nebo rodiči %s"
 
-#: ../contrib/egg/egg-animation.c:1079
+#: ../contrib/egg/egg-animation.c:1097
 #, c-format
 msgid "Failed to retrieve va_list value: %s"
 msgstr "Selhalo získání hodnoty va_list: %s"
@@ -169,11 +169,11 @@ msgstr "Z_novu"
 msgid "C_ut"
 msgstr "_Vyjmout"
 
-#: ../data/gtk/menus.ui.h:19
+#: ../data/gtk/menus.ui.h:19 ../plugins/terminal/gtk/menus.ui.h:2
 msgid "_Copy"
 msgstr "_Kopírovat"
 
-#: ../data/gtk/menus.ui.h:20
+#: ../data/gtk/menus.ui.h:20 ../plugins/terminal/gtk/menus.ui.h:3
 msgid "_Paste"
 msgstr "V_ložit"
 
@@ -181,15 +181,15 @@ msgstr "V_ložit"
 msgid "_Delete"
 msgstr "_Smazat"
 
-#: ../data/gtk/menus.ui.h:22
+#: ../data/gtk/menus.ui.h:22 ../plugins/terminal/gtk/menus.ui.h:4
 msgid "Selection"
 msgstr "Výběr"
 
-#: ../data/gtk/menus.ui.h:23
+#: ../data/gtk/menus.ui.h:23 ../plugins/terminal/gtk/menus.ui.h:5
 msgid "Select _All"
 msgstr "Vybrat vš_e"
 
-#: ../data/gtk/menus.ui.h:24
+#: ../data/gtk/menus.ui.h:24 ../plugins/terminal/gtk/menus.ui.h:6
 msgid "Select _None"
 msgstr "Z_rušit výběr"
 
@@ -285,7 +285,7 @@ msgstr "Tmavý Builder"
 msgid "Dark color scheme for Builder using the Tango color palette"
 msgstr "Tmavé barevné schéma pro Builder používající barevnou paletu Tango"
 
-#: ../data/style-schemes/builder.xml.h:1 ../libide/ide-application.c:404
+#: ../data/style-schemes/builder.xml.h:1 ../libide/ide-application.c:413
 #: ../libide/preferences/ide-preferences-builtin.c:113
 msgid "Builder"
 msgstr "Builder"
@@ -375,7 +375,8 @@ msgstr "4"
 msgid "8"
 msgstr "8"
 
-#: ../data/ui/ide-editor-view.ui.h:2 ../data/ui/ide-greeter-perspective.ui.h:11
+#: ../data/ui/ide-editor-view.ui.h:2
+#: ../data/ui/ide-greeter-perspective.ui.h:14
 msgid "_Cancel"
 msgstr "_Zrušit"
 
@@ -411,44 +412,53 @@ msgstr "Nový projekt"
 msgid "Co_ntinue"
 msgstr "_Pokračovat"
 
-#: ../data/ui/ide-greeter-perspective.ui.h:1
+#. the action:// link is used to jump to the new-project view
+#: ../data/ui/ide-greeter-perspective.ui.h:2
+msgid "Why not <a href=\"action://app.new-project\">create a new project</a>?"
+msgstr "A co <a href=\"action://app.new-project\">vytvořit nový projekt</a>?"
+
+#: ../data/ui/ide-greeter-perspective.ui.h:3
+msgid "No projects found"
+msgstr "Nebyl nalezen žádný projekt"
+
+#: ../data/ui/ide-greeter-perspective.ui.h:4
 msgid "Recent Projects"
 msgstr "Nedávné projekty"
 
-#: ../data/ui/ide-greeter-perspective.ui.h:2
+#: ../data/ui/ide-greeter-perspective.ui.h:5
 msgid "Other Projects"
 msgstr "Ostatní projekty"
 
-#: ../data/ui/ide-greeter-perspective.ui.h:3
+#: ../data/ui/ide-greeter-perspective.ui.h:6
 msgid "_Remove"
 msgstr "Odst_ranit"
 
-#: ../data/ui/ide-greeter-perspective.ui.h:4
+#: ../data/ui/ide-greeter-perspective.ui.h:7
 msgid "Select a Project"
 msgstr "Výběr projektu"
 
-#: ../data/ui/ide-greeter-perspective.ui.h:5
+#: ../data/ui/ide-greeter-perspective.ui.h:8
 msgid "Click an item to select"
 msgstr "Kliknutím vyberte položku"
 
-#: ../data/ui/ide-greeter-perspective.ui.h:6
+#: ../data/ui/ide-greeter-perspective.ui.h:9
 msgid "Create a new project"
 msgstr "Vytvořit nový projekt"
 
-#: ../data/ui/ide-greeter-perspective.ui.h:7
+#: ../data/ui/ide-greeter-perspective.ui.h:10
 #: ../plugins/project-tree/gtk/menus.ui.h:2
 msgid "_New"
 msgstr "_Nový"
 
-#: ../data/ui/ide-greeter-perspective.ui.h:8
+#: ../data/ui/ide-greeter-perspective.ui.h:11
 msgid "Search for projects"
 msgstr "Vyhledat projekty"
 
-#: ../data/ui/ide-greeter-perspective.ui.h:9
+#: ../data/ui/ide-greeter-perspective.ui.h:12
 msgid "Select projects for removal"
 msgstr "Výběr projektů k odstranění"
 
-#: ../data/ui/ide-greeter-perspective.ui.h:10
+#: ../data/ui/ide-greeter-perspective.ui.h:13
 msgid "Return to project selection"
 msgstr "Vrátit se do výběru projektu"
 
@@ -815,7 +825,7 @@ msgid "Provide a number between 1 and %u"
 msgstr "Zadejte číslo mezi 1 a %u"
 
 #: ../libide/genesis/ide-genesis-perspective.c:200
-#: ../libide/greeter/ide-greeter-perspective.c:429
+#: ../libide/greeter/ide-greeter-perspective.c:436
 msgid "Failed to load the project"
 msgstr "Selhalo načtení projektu"
 
@@ -899,7 +909,7 @@ msgstr "Takový nástroj neexistuje"
 
 #: ../libide/ide-application-command-line.c:380
 msgid "Please provide a worker type"
-msgstr ""
+msgstr "Zadejte prosím typ sestavovacího procesu"
 
 #: ../libide/ide-application-command-line.c:387
 msgid "Please provide a D-Bus address"
@@ -907,9 +917,9 @@ msgstr "Zadejte prosím adresu D-Bus"
 
 #: ../libide/ide-application-command-line.c:396
 msgid "No such worker"
-msgstr ""
+msgstr "Takový sestavovací proces neexistuje"
 
-#: ../libide/ide-buffer.c:2207
+#: ../libide/ide-buffer.c:2298
 msgid "The current language lacks a symbol resolver."
 msgstr "Pro aktuální programovací jazyk není k dispozici rozpoznávání symbolů."
 
@@ -1017,7 +1027,7 @@ msgstr "Hostitelský operační systém"
 msgid "%s has not implemented GAsyncInitable."
 msgstr "%s nemá implementováno GAsyncInitable."
 
-#: ../libide/ide-source-snippet.c:370
+#: ../libide/ide-source-snippet.c:372
 msgid "Chunk does not belong to snippet."
 msgstr "Blok nenáleží k úryvku."
 
@@ -1041,17 +1051,17 @@ msgstr "Selhalo otevření složky: %s"
 msgid "Failed to load file: %s: %s"
 msgstr "Selhalo načtení souboru: %s: %s"
 
-#: ../libide/ide-source-view.c:4966
+#: ../libide/ide-source-view.c:4919
 #, c-format
 msgid "Insert “%s”"
 msgstr "Vložit „%s“"
 
-#: ../libide/ide-source-view.c:4968
+#: ../libide/ide-source-view.c:4921
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "Nahradit „%s“ pomocí „%s“"
 
-#: ../libide/ide-source-view.c:5082
+#: ../libide/ide-source-view.c:5035
 msgid "Apply Fix-It"
 msgstr "Použít opravu"
 
@@ -1641,7 +1651,7 @@ msgstr "Prefix instalace"
 
 #: ../plugins/build-tools/gbp-build-configuration-view.ui.h:6
 msgid "Options to use when bootstrapping the project"
-msgstr ""
+msgstr "Volby, které se mají použít, když se projekt připravuje k práci"
 
 #: ../plugins/build-tools/gbp-build-configuration-view.ui.h:7
 msgid "Configure Options"
@@ -1661,11 +1671,11 @@ msgstr "Zařízení"
 
 #: ../plugins/build-tools/gbp-build-configuration-view.ui.h:11
 msgid "Runtime"
-msgstr ""
+msgstr "Běhové prostředí"
 
 #: ../plugins/build-tools/gbp-build-configuration-view.ui.h:12
 msgid "Environment"
-msgstr "Prostředí"
+msgstr "Proměnné prostředí"
 
 #: ../plugins/build-tools/gbp-build-panel-row.c:68
 msgid "Unknown file"
@@ -1703,7 +1713,7 @@ msgstr "Chyby:"
 
 #: ../plugins/build-tools/gbp-build-panel.ui.h:9
 msgid "Deploy"
-msgstr ""
+msgstr "Nasadit"
 
 #: ../plugins/build-tools/gbp-build-panel.ui.h:10
 msgid "Export"
@@ -1743,7 +1753,7 @@ msgstr " Sestaveno pro zařízení: %s (%s)\n"
 #: ../plugins/build-tools/gbp-build-tool.c:112
 #, c-format
 msgid "            Environment: %s\n"
-msgstr "              Prostředí: %s\n"
+msgstr "     Proměnné prostředí: %s\n"
 
 #: ../plugins/build-tools/gbp-build-tool.c:142
 #: ../plugins/build-tools/gbp-build-tool.c:146
@@ -2053,7 +2063,7 @@ msgstr "Přepnout na"
 msgid "Send to Fpaste.org"
 msgstr "Odeslat na Fpaste.org"
 
-#: ../plugins/fpaste/fpaste_plugin/__init__.py:104
+#: ../plugins/fpaste/fpaste_plugin/__init__.py:110
 msgid "The following URL has been copied to the clipboard"
 msgstr "Následující adresa URL byla zkopírována do schránky"
 
