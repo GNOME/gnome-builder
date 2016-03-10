@@ -27,6 +27,7 @@
 #include "ide-preferences.h"
 #include "ide-preferences-addin.h"
 #include "ide-preferences-builtin.h"
+#include "ide-preferences-file-chooser-button.h"
 #include "ide-preferences-font-button.h"
 #include "ide-preferences-group.h"
 #include "ide-preferences-page.h"
@@ -685,6 +686,69 @@ ide_preferences_perspective_add_font_button (IdePreferences *preferences,
 }
 
 static guint
+ide_preferences_perspective_add_file_chooser (IdePreferences      *preferences,
+                                              const gchar         *page_name,
+                                              const gchar         *group_name,
+                                              const gchar         *schema_id,
+                                              const gchar         *key,
+                                              const gchar         *path,
+                                              const gchar         *title,
+                                              const gchar         *subtitle,
+                                              GtkFileChooserAction action,
+                                              const gchar         *keywords,
+                                              gint                 priority)
+{
+  IdePreferencesPerspective *self = (IdePreferencesPerspective *)preferences;
+  IdePreferencesFileChooserButton *widget;
+  IdePreferencesGroup *group;
+  GtkWidget *page;
+  guint widget_id;
+
+  g_assert (IDE_IS_PREFERENCES_PERSPECTIVE (self));
+  g_assert (page_name != NULL);
+  g_assert (group_name != NULL);
+  g_assert (schema_id != NULL);
+  g_assert (key != NULL);
+  g_assert (title != NULL);
+
+  page = ide_preferences_perspective_get_page (self, page_name);
+
+  if (page == NULL)
+    {
+      g_warning ("No page named \"%s\" could be found.", page_name);
+      return 0;
+    }
+
+  group = ide_preferences_page_get_group (IDE_PREFERENCES_PAGE (page), group_name);
+
+  if (group == NULL)
+    {
+      g_warning ("No such preferences group \"%s\" in page \"%s\"",
+                 group_name, page_name);
+      return 0;
+    }
+
+  widget = g_object_new (IDE_TYPE_PREFERENCES_FILE_CHOOSER_BUTTON,
+                         "action", action,
+                         "key", key,
+                         "priority", priority,
+                         "schema-id", schema_id,
+                         "path", path,
+                         "subtitle", subtitle,
+                         "title", title,
+                         "keywords", keywords,
+                         "visible", TRUE,
+                         NULL);
+
+  ide_preferences_group_add (group, GTK_WIDGET (widget));
+
+  widget_id = ++self->last_widget_id;
+  g_hash_table_insert (self->widgets, GINT_TO_POINTER (widget_id), widget);
+
+  return widget_id;
+}
+
+static guint
 ide_preferences_perspective_add_custom (IdePreferences *preferences,
                                         const gchar    *page_name,
                                         const gchar    *group_name,
@@ -806,6 +870,7 @@ ide_preferences_iface_init (IdePreferencesInterface *iface)
   iface->add_font_button = ide_preferences_perspective_add_font_button;
   iface->add_switch = ide_preferences_perspective_add_switch;
   iface->add_spin_button = ide_preferences_perspective_add_spin_button;
+  iface->add_file_chooser = ide_preferences_perspective_add_file_chooser;
   iface->add_custom = ide_preferences_perspective_add_custom;
   iface->set_page = ide_preferences_perspective_set_page;
   iface->remove_id = ide_preferences_perspective_remove_id;

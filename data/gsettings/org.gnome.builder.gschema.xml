@@ -25,5 +25,10 @@
       <summary>Mine projects</summary>
       <description>Search directories for projects.</description>
     </key>
+    <key name="projects-directory" type="s">
+      <default>"Projects"</default>
+      <summary>Projects directory</summary>
+      <description>Directory for all builder projects</description>
+    </key>
   </schema>
 </schemalist>

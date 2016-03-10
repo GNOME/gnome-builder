@@ -180,6 +180,29 @@ ide_preferences_add_font_button (IdePreferences *self,
   return IDE_PREFERENCES_GET_IFACE (self)->add_font_button (self, page_name, group_name, schema_id, key, title, keywords, priority);
 }
 
+guint
+ide_preferences_add_file_chooser (IdePreferences      *self,
+                                  const gchar         *page_name,
+                                  const gchar         *group_name,
+                                  const gchar         *schema_id,
+                                  const gchar         *key,
+                                  const gchar         *path,
+                                  const gchar         *title,
+                                  const gchar         *subtitle,
+                                  GtkFileChooserAction action,
+                                  const gchar         *keywords,
+                                  gint                 priority)
+{
+  g_return_val_if_fail (IDE_IS_PREFERENCES (self), 0);
+  g_return_val_if_fail (page_name != NULL, 0);
+  g_return_val_if_fail (group_name != NULL, 0);
+  g_return_val_if_fail (schema_id != NULL, 0);
+  g_return_val_if_fail (key != NULL, 0);
+  g_return_val_if_fail (title != NULL, 0);
+
+  return IDE_PREFERENCES_GET_IFACE (self)->add_file_chooser (self, page_name, group_name, schema_id, key, path, title, subtitle, action, keywords, priority);
+}
+
 /**
  * ide_preference_remove_id:
  * @widget_id: An preferences widget id

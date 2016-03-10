@@ -65,6 +65,7 @@
     <file compressed="true" alias="ide-omni-search-group.ui">../../data/ui/ide-omni-search-group.ui</file>
     <file compressed="true" alias="ide-omni-search-row.ui">../../data/ui/ide-omni-search-row.ui</file>
     <file compressed="true" alias="ide-preferences-entry.ui">../../data/ui/ide-preferences-entry.ui</file>
+    <file compressed="true" alias="ide-preferences-file-chooser-button.ui">../../data/ui/ide-preferences-file-chooser-button.ui</file>
     <file compressed="true" alias="ide-preferences-font-button.ui">../../data/ui/ide-preferences-font-button.ui</file>
     <file compressed="true" alias="ide-preferences-group.ui">../../data/ui/ide-preferences-group.ui</file>
     <file compressed="true" alias="ide-preferences-language-row.ui">../../data/ui/ide-preferences-language-row.ui</file>

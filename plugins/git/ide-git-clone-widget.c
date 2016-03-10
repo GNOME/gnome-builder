@@ -22,6 +22,7 @@
 
 #include "egg-animation.h"
 
+#include "ide-macros.h"
 #include "ide-git-clone-widget.h"
 #include "ide-git-remote-callbacks.h"
 
@@ -193,14 +194,21 @@ ide_git_clone_widget_class_init (IdeGitCloneWidgetClass *klass)
 static void
 ide_git_clone_widget_init (IdeGitCloneWidget *self)
 {
-  gchar *projects_dir;
+  g_autoptr(GSettings) settings = NULL;
+  g_autofree gchar *path = NULL;
+  g_autofree gchar *projects_dir = NULL;
 
   gtk_widget_init_template (GTK_WIDGET (self));
 
-  projects_dir = g_build_filename (g_get_home_dir (), _("Projects"), NULL);
-  gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (self->clone_location_button),
+  settings = g_settings_new ("org.gnome.builder");
+  path = g_settings_get_string (settings, "projects-directory");
+
+  if (!ide_str_empty0 (path))
+    {
+      projects_dir = g_build_filename (g_get_home_dir (), path, NULL);
+      gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (self->clone_location_button),
                                        projects_dir);
-  g_free (projects_dir);
+    }
 
   g_signal_connect_object (self->clone_uri_entry,
                            "changed",
