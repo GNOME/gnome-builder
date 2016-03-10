@@ -253,12 +253,14 @@
 
   /* overwrite the current character with a modifier */
   bind "r" { "begin-macro" ()
+             "begin-user-action" ()
              "capture-modifier" ()
              "movement" (next-char, 1, 1, 1)
              "delete-selection" ()
              "insert-modifier" (1)
              "clear-modifier" ()
              "movement" (previous-char, 0, 1, 0)
+             "end-user-action" ()
              "end-macro" () };
 
   bind "Left"  { "movement" (previous-char, 0, 1, 1)
