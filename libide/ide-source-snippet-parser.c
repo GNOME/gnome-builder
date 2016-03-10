@@ -507,7 +507,7 @@ ide_source_snippet_parser_load_from_file (IdeSourceSnippetParser *parser,
                                           GError                **error)
 {
   GFileInputStream *file_stream;
-  GDataInputStream *data_stream;
+  g_autoptr(GDataInputStream) *data_stream;
   GError *local_error = NULL;
   gchar *line;
   gchar *basename = NULL;
@@ -532,7 +532,7 @@ ide_source_snippet_parser_load_from_file (IdeSourceSnippetParser *parser,
 
 again:
   line = g_data_input_stream_read_line_utf8 (data_stream, NULL, NULL, &local_error);
-  if (line && local_error)
+  if (!line && local_error)
     {
       g_propagate_error (error, local_error);
       return FALSE;
