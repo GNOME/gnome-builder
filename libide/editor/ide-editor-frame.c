@@ -513,20 +513,8 @@ ide_editor_frame__search_key_press_event (IdeEditorFrame *self,
 
     default:
       {
-        GtkSourceSearchSettings *search_settings;
-        GtkSourceSearchContext *search_context;
-
         if (!ide_source_view_get_rubberband_search (self->source_view))
           ide_source_view_set_rubberband_search (self->source_view, TRUE);
-
-        /*
-         * Other modes, such as Vim emulation, want word boundaries, but we do
-         * not when searching from this entry. Sort of hacky, but gets the job
-         * done to just change that setting here.
-         */
-        search_context = ide_source_view_get_search_context (self->source_view);
-        search_settings = gtk_source_search_context_get_settings (search_context);
-        gtk_source_search_settings_set_at_word_boundaries (search_settings, FALSE);
       }
       break;
     }
@@ -664,6 +652,85 @@ ide_editor_frame__source_view_populate_popup (IdeEditorFrame *self,
 }
 
 static void
+ide_editor_frame_add_search_actions (IdeEditorFrame *self,
+                                     GActionGroup   *group)
+{
+  GPropertyAction *prop_action;
+  GtkSourceSearchContext *search_context;
+  GtkSourceSearchSettings *search_settings;
+
+  g_assert (IDE_IS_EDITOR_FRAME (self));
+  g_assert (G_IS_ACTION_GROUP (group));
+
+  search_context = ide_source_view_get_search_context (self->source_view);
+  search_settings = gtk_source_search_context_get_settings (search_context);
+
+  prop_action = g_property_action_new ("change-case-sensitive", search_settings, "case-sensitive");
+  g_action_map_add_action (G_ACTION_MAP (group), G_ACTION (prop_action));
+  g_object_unref (prop_action);
+
+  prop_action = g_property_action_new ("change-word-boundaries", search_settings, "at-word-boundaries");
+  g_action_map_add_action (G_ACTION_MAP (group), G_ACTION (prop_action));
+  g_object_unref (prop_action);
+
+  prop_action = g_property_action_new ("change-regex-enabled", search_settings, "regex-enabled");
+  g_action_map_add_action (G_ACTION_MAP (group), G_ACTION (prop_action));
+  g_object_unref (prop_action);
+
+  prop_action = g_property_action_new ("change-wrap-around", search_settings, "wrap-around");
+  g_action_map_add_action (G_ACTION_MAP (group), G_ACTION (prop_action));
+  g_object_unref (prop_action);
+}
+
+static void
+ide_editor_frame__search_populate_popup (IdeEditorFrame *self,
+                                         GtkWidget      *popup,
+                                         GdTaggedEntry  *entry)
+{
+  g_assert (IDE_IS_EDITOR_FRAME (self));
+  g_assert (GTK_IS_WIDGET (popup));
+  g_assert (GD_IS_TAGGED_ENTRY (entry));
+
+  if (GTK_IS_MENU_SHELL (popup))
+    {
+      GMenu *menu;
+      GActionGroup *group;
+      GAction *action;
+      GtkEntryBuffer *buffer;
+      GtkClipboard *clipboard;
+      gboolean clipboard_contains_text;
+      gboolean entry_has_selection;
+
+      group = gtk_widget_get_action_group (GTK_WIDGET (entry), "search-entry");
+      ide_editor_frame_add_search_actions (self, group);
+
+      menu = ide_application_get_menu_by_id (IDE_APPLICATION_DEFAULT, "ide-editor-frame-search-menu");
+      gtk_menu_shell_bind_model (GTK_MENU_SHELL (popup), G_MENU_MODEL (menu), NULL, TRUE);
+
+      clipboard = gtk_widget_get_clipboard (GTK_WIDGET (entry), GDK_SELECTION_CLIPBOARD);
+      clipboard_contains_text = gtk_clipboard_wait_is_text_available (clipboard);
+
+      action = g_action_map_lookup_action (G_ACTION_MAP (group), "paste-clipboard");
+      g_simple_action_set_enabled (G_SIMPLE_ACTION (action), clipboard_contains_text);
+
+      entry_has_selection = gtk_editable_get_selection_bounds (GTK_EDITABLE (entry), NULL, NULL);
+
+      action = g_action_map_lookup_action (G_ACTION_MAP (group), "cut-clipboard");
+      g_simple_action_set_enabled (G_SIMPLE_ACTION (action), entry_has_selection);
+
+      action = g_action_map_lookup_action (G_ACTION_MAP (group), "copy-clipboard");
+      g_simple_action_set_enabled (G_SIMPLE_ACTION (action), entry_has_selection);
+
+      action = g_action_map_lookup_action (G_ACTION_MAP (group), "delete-selection");
+      g_simple_action_set_enabled (G_SIMPLE_ACTION (action), entry_has_selection);
+
+      action = g_action_map_lookup_action (G_ACTION_MAP (group), "select-all");
+      buffer = gtk_entry_get_buffer (GTK_ENTRY (self->search_entry));
+      g_simple_action_set_enabled (G_SIMPLE_ACTION (action), gtk_entry_buffer_get_length (buffer) > 0);
+    }
+}
+
+static void
 ide_editor_frame_constructed (GObject *object)
 {
   IdeEditorFrame *self = (IdeEditorFrame *)object;
@@ -697,6 +764,12 @@ ide_editor_frame_constructed (GObject *object)
   g_signal_connect_object (self->search_entry,
                            "key-press-event",
                            G_CALLBACK (ide_editor_frame__search_key_press_event),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  g_signal_connect_object (self->search_entry,
+                           "populate-popup",
+                           G_CALLBACK (ide_editor_frame__search_populate_popup),
                            self,
                            G_CONNECT_SWAPPED);
 }

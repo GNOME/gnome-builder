@@ -97,10 +97,78 @@ ide_editor_frame_actions_previous_search_result (GSimpleAction *action,
     (self->source_view, GTK_DIR_UP, FALSE, TRUE, TRUE, FALSE, FALSE);
 }
 
+static void
+ide_editor_frame_actions_cut_clipboard (GSimpleAction *action,
+                                        GVariant      *state,
+                                        gpointer       user_data)
+{
+  IdeEditorFrame *self = user_data;
+
+  g_assert (IDE_IS_EDITOR_FRAME (self));
+
+  gtk_editable_cut_clipboard (GTK_EDITABLE (self->search_entry));
+}
+
+static void
+ide_editor_frame_actions_copy_clipboard (GSimpleAction *action,
+                                         GVariant      *state,
+                                         gpointer       user_data)
+{
+  IdeEditorFrame *self = user_data;
+
+  g_assert (IDE_IS_EDITOR_FRAME (self));
+
+  gtk_editable_copy_clipboard (GTK_EDITABLE (self->search_entry));
+}
+
+static void
+ide_editor_frame_actions_paste_clipboard (GSimpleAction *action,
+                                          GVariant      *state,
+                                          gpointer       user_data)
+{
+  IdeEditorFrame *self = user_data;
+
+  g_assert (IDE_IS_EDITOR_FRAME (self));
+
+  gtk_editable_paste_clipboard (GTK_EDITABLE (self->search_entry));
+}
+
+static void
+ide_editor_frame_actions_delete_selection (GSimpleAction *action,
+                                           GVariant      *state,
+                                           gpointer       user_data)
+{
+  IdeEditorFrame *self = user_data;
+
+  g_assert (IDE_IS_EDITOR_FRAME (self));
+
+  gtk_editable_delete_selection (GTK_EDITABLE (self->search_entry));
+}
+
+static void
+ide_editor_frame_actions_select_all (GSimpleAction *action,
+                                     GVariant      *state,
+                                     gpointer       user_data)
+{
+  IdeEditorFrame *self = user_data;
+
+  g_assert (IDE_IS_EDITOR_FRAME (self));
+
+  gtk_editable_select_region (GTK_EDITABLE (self->search_entry), 0, -1);
+}
+
 static const GActionEntry IdeEditorFrameActions[] = {
   { "find", ide_editor_frame_actions_find, "i" },
   { "next-search-result", ide_editor_frame_actions_next_search_result },
   { "previous-search-result", ide_editor_frame_actions_previous_search_result },
+};
+
+static const GActionEntry IdeEditorFrameSearchActions[] = {
+  { "cut-clipboard", ide_editor_frame_actions_cut_clipboard, },
+  { "copy-clipboard", ide_editor_frame_actions_copy_clipboard, },
+  { "paste-clipboard", ide_editor_frame_actions_paste_clipboard, },
+  { "delete-selection", ide_editor_frame_actions_delete_selection, },
+  { "select-all", ide_editor_frame_actions_select_all },
 };
 
 void
@@ -114,4 +182,9 @@ ide_editor_frame_actions_init (IdeEditorFrame *self)
   g_action_map_add_action_entries (G_ACTION_MAP (group), IdeEditorFrameActions,
                                    G_N_ELEMENTS (IdeEditorFrameActions), self);
   gtk_widget_insert_action_group (GTK_WIDGET (self), "frame", G_ACTION_GROUP (group));
+
+  group = g_simple_action_group_new ();
+  g_action_map_add_action_entries (G_ACTION_MAP (group), IdeEditorFrameSearchActions,
+                                   G_N_ELEMENTS (IdeEditorFrameSearchActions), self);
+  gtk_widget_insert_action_group (GTK_WIDGET (self->search_entry), "search-entry", G_ACTION_GROUP (group));
 }
