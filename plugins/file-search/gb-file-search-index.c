@@ -339,3 +339,25 @@ gb_file_search_index_populate (GbFileSearchIndex *self,
         }
     }
 }
+
+gboolean
+gb_file_search_index_contains (GbFileSearchIndex *self,
+                               const gchar       *relative_path)
+{
+  g_return_val_if_fail (GB_IS_FILE_SEARCH_INDEX (self), FALSE);
+  g_return_val_if_fail (relative_path != NULL, FALSE);
+  g_return_val_if_fail (self->fuzzy != NULL, FALSE);
+
+  return fuzzy_contains (self->fuzzy, relative_path);
+}
+
+void
+gb_file_search_index_insert (GbFileSearchIndex *self,
+                             const gchar       *relative_path)
+{
+  g_return_if_fail (GB_IS_FILE_SEARCH_INDEX (self));
+  g_return_if_fail (relative_path != NULL);
+  g_return_if_fail (self->fuzzy != NULL);
+
+  fuzzy_insert (self->fuzzy, g_strdup (relative_path), NULL);
+}

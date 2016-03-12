@@ -65,12 +65,44 @@ gb_file_search_provider_populate (IdeSearchProvider *provider,
 }
 
 static void
+on_buffer_loaded (GbFileSearchProvider *self,
+                  IdeBuffer            *buffer,
+                  IdeBufferManager     *bufmgr)
+{
+  g_autofree gchar *relative_path = NULL;
+  IdeContext *context;
+  IdeVcs *vcs;
+  GFile *file;
+  GFile *workdir;
+
+  g_assert (GB_IS_FILE_SEARCH_PROVIDER (self));
+  g_assert (IDE_IS_BUFFER (buffer));
+  g_assert (IDE_IS_BUFFER_MANAGER (bufmgr));
+
+  if (self->index == NULL)
+    return;
+
+  file = ide_file_get_file (ide_buffer_get_file (buffer));
+  context = ide_buffer_get_context (buffer);
+  vcs = ide_context_get_vcs (context);
+  workdir = ide_vcs_get_working_directory (vcs);
+  relative_path = g_file_get_relative_path (workdir, file);
+
+  if ((relative_path != NULL) &&
+      !ide_vcs_is_ignored (vcs, file, NULL) &&
+      !gb_file_search_index_contains (self->index, relative_path))
+    gb_file_search_index_insert (self->index, relative_path);
+}
+
+static void
 gb_file_search_provider_build_cb (GObject      *object,
                                   GAsyncResult *result,
                                   gpointer      user_data)
 {
   GbFileSearchIndex *index = (GbFileSearchIndex *)object;
   g_autoptr(GbFileSearchProvider) self = user_data;
+  IdeContext *context;
+  IdeBufferManager *bufmgr;
   GError *error = NULL;
 
   g_assert (GB_IS_FILE_SEARCH_INDEX (index));
@@ -80,7 +112,17 @@ gb_file_search_provider_build_cb (GObject      *object,
     {
       g_warning ("%s", error->message);
       g_clear_error (&error);
+      return;
     }
+
+  context = ide_object_get_context (IDE_OBJECT (self));
+  bufmgr = ide_context_get_buffer_manager (context);
+
+  g_signal_connect_object (bufmgr,
+                           "buffer-loaded",
+                           G_CALLBACK (on_buffer_loaded),
+                           self,
+                           G_CONNECT_SWAPPED);
 }
 
 static GtkWidget *

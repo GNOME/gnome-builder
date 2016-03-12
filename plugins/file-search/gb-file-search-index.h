@@ -38,6 +38,10 @@ void     gb_file_search_index_build_async  (GbFileSearchIndex    *self,
 gboolean gb_file_search_index_build_finish (GbFileSearchIndex    *self,
                                             GAsyncResult         *result,
                                             GError              **error);
+gboolean gb_file_search_index_contains     (GbFileSearchIndex    *self,
+                                            const gchar          *relative_path);
+void     gb_file_search_index_insert       (GbFileSearchIndex    *self,
+                                            const gchar          *relative_path);
 
 G_END_DECLS
 
