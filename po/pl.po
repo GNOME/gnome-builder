@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-02 16:14+0100\n"
-"PO-Revision-Date: 2016-03-02 16:15+0100\n"
+"POT-Creation-Date: 2016-03-12 16:22+0100\n"
+"PO-Revision-Date: 2016-03-12 16:24+0100\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <gnomepl@aviary.pl>\n"
 "Language: pl\n"
@@ -23,23 +23,23 @@ msgstr ""
 "X-Poedit-Language: Polish\n"
 "X-Poedit-Country: Poland\n"
 
-#: ../contrib/egg/egg-animation.c:715
+#: ../contrib/egg/egg-animation.c:726
 #, c-format
 msgid "Cannot locate property %s in class %s"
 msgstr "Nie można ustalić położenia właściwości %s w klasie %s"
 
-#: ../contrib/egg/egg-animation.c:1055 ../contrib/egg/egg-animation.c:1061
+#: ../contrib/egg/egg-animation.c:1073 ../contrib/egg/egg-animation.c:1079
 #, c-format
 msgid "Failed to find property %s in %s"
 msgstr "Wyszukanie właściwości %s w %s się nie powiodło"
 
-#: ../contrib/egg/egg-animation.c:1069
+#: ../contrib/egg/egg-animation.c:1087
 #, c-format
 msgid "Failed to find property %s in %s or parent %s"
 msgstr ""
 "Wyszukanie właściwości %s w %s lub elemencie nadrzędnym %s się nie powiodło"
 
-#: ../contrib/egg/egg-animation.c:1079
+#: ../contrib/egg/egg-animation.c:1097
 #, c-format
 msgid "Failed to retrieve va_list value: %s"
 msgstr "Pobranie wartości „va_list” się nie powiodło: %s"
@@ -174,11 +174,11 @@ msgstr "P_onów"
 msgid "C_ut"
 msgstr "_Wytnij"
 
-#: ../data/gtk/menus.ui.h:19
+#: ../data/gtk/menus.ui.h:19 ../plugins/terminal/gtk/menus.ui.h:2
 msgid "_Copy"
 msgstr "S_kopiuj"
 
-#: ../data/gtk/menus.ui.h:20
+#: ../data/gtk/menus.ui.h:20 ../plugins/terminal/gtk/menus.ui.h:3
 msgid "_Paste"
 msgstr "Wk_lej"
 
@@ -186,15 +186,15 @@ msgstr "Wk_lej"
 msgid "_Delete"
 msgstr "_Usuń"
 
-#: ../data/gtk/menus.ui.h:22
+#: ../data/gtk/menus.ui.h:22 ../plugins/terminal/gtk/menus.ui.h:4
 msgid "Selection"
 msgstr "Zaznaczanie"
 
-#: ../data/gtk/menus.ui.h:23
+#: ../data/gtk/menus.ui.h:23 ../plugins/terminal/gtk/menus.ui.h:5
 msgid "Select _All"
 msgstr "Z_aznacz wszystko"
 
-#: ../data/gtk/menus.ui.h:24
+#: ../data/gtk/menus.ui.h:24 ../plugins/terminal/gtk/menus.ui.h:6
 msgid "Select _None"
 msgstr "O_dznacz wszystko"
 
@@ -239,46 +239,66 @@ msgid "Reset"
 msgstr "Przywróć"
 
 #: ../data/gtk/menus.ui.h:35
+msgid "_Match Case"
+msgstr "_Rozróżnianie małych i wielkich liter"
+
+#: ../data/gtk/menus.ui.h:36
+msgid "Match _Entire Word Only"
+msgstr "Tylko _całe wyrazy"
+
+#: ../data/gtk/menus.ui.h:37
+msgid "Match as _Regular Expression"
+msgstr "Wyrażenie reg_ularne"
+
+#: ../data/gtk/menus.ui.h:38
+msgid "_Wrap Around"
+msgstr "_Automatyczny powrót do początku"
+
+#: ../data/gtk/menus.ui.h:39
+msgid "Cu_t"
+msgstr "_Wytnij"
+
+#: ../data/gtk/menus.ui.h:40
 msgid "Split"
 msgstr "Podział"
 
-#: ../data/gtk/menus.ui.h:36
+#: ../data/gtk/menus.ui.h:41
 msgid "Split Left"
 msgstr "W lewo"
 
-#: ../data/gtk/menus.ui.h:37
+#: ../data/gtk/menus.ui.h:42
 msgid "Split Right"
 msgstr "W prawo"
 
-#: ../data/gtk/menus.ui.h:38
+#: ../data/gtk/menus.ui.h:43
 msgid "Split Down"
 msgstr "W dół"
 
-#: ../data/gtk/menus.ui.h:39
+#: ../data/gtk/menus.ui.h:44
 msgid "Move"
 msgstr "Przenoszenie"
 
-#: ../data/gtk/menus.ui.h:40
+#: ../data/gtk/menus.ui.h:45
 msgid "Move Left"
 msgstr "W lewo"
 
-#: ../data/gtk/menus.ui.h:41
+#: ../data/gtk/menus.ui.h:46
 msgid "Move Right"
 msgstr "W prawo"
 
-#: ../data/gtk/menus.ui.h:42
+#: ../data/gtk/menus.ui.h:47
 msgid "_Save"
 msgstr "_Zapisz"
 
-#: ../data/gtk/menus.ui.h:43
+#: ../data/gtk/menus.ui.h:48
 msgid "_Save As"
 msgstr "Z_apisz jako"
 
-#: ../data/gtk/menus.ui.h:44
+#: ../data/gtk/menus.ui.h:49
 msgid "_Print"
 msgstr "Wy_drukuj"
 
-#: ../data/gtk/menus.ui.h:45
+#: ../data/gtk/menus.ui.h:50
 msgid "_Close"
 msgstr "Za_mknij"
 
@@ -784,7 +804,7 @@ msgstr "Wrsz %u, kol %u"
 msgid "%u of %u"
 msgstr "%u z %u"
 
-#: ../libide/editor/ide-editor-frame.c:658
+#: ../libide/editor/ide-editor-frame.c:646
 #: ../plugins/project-tree/gtk/menus.ui.h:1
 msgid "Re_veal in Project Tree"
 msgstr "Odkry_wanie w drzewie projektu"
@@ -924,7 +944,7 @@ msgstr "Proszę podać adres usługi D-Bus"
 msgid "No such worker"
 msgstr "Nie ma takiego wątku roboczego"
 
-#: ../libide/ide-buffer.c:2207
+#: ../libide/ide-buffer.c:2298
 msgid "The current language lacks a symbol resolver."
 msgstr "Obecny język nie posiada mechanizmu rozwiązywania symboli."
 
@@ -1032,7 +1052,7 @@ msgstr "System operacyjny gospodarza"
 msgid "%s has not implemented GAsyncInitable."
 msgstr "GAsyncInitable nie jest zaimplementowane w %s."
 
-#: ../libide/ide-source-snippet.c:370
+#: ../libide/ide-source-snippet.c:372
 msgid "Chunk does not belong to snippet."
 msgstr "Fragment nie należy do wstawki."
 
@@ -1040,11 +1060,6 @@ msgstr "Fragment nie należy do wstawki."
 #: ../libide/preferences/ide-preferences-builtin.c:173
 msgid "Snippets"
 msgstr "Wstawki"
-
-#: ../libide/ide-source-snippet-parser.c:496
-#, c-format
-msgid "Invalid snippet at line %d: %s"
-msgstr "Nieprawidłowa wstawka w wierszu %d: %s"
 
 #: ../libide/ide-source-snippets-manager.c:96
 #, c-format
@@ -1056,17 +1071,17 @@ msgstr "Otwarcie katalogu się nie powiodło: %s"
 msgid "Failed to load file: %s: %s"
 msgstr "Wczytanie pliku się nie powiodło: %s: %s"
 
-#: ../libide/ide-source-view.c:4966
+#: ../libide/ide-source-view.c:4900
 #, c-format
 msgid "Insert “%s”"
 msgstr "Wstaw „%s”"
 
-#: ../libide/ide-source-view.c:4968
+#: ../libide/ide-source-view.c:4902
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "Zmień „%s” na „%s”"
 
-#: ../libide/ide-source-view.c:5082
+#: ../libide/ide-source-view.c:5016
 msgid "Apply Fix-It"
 msgstr "Zastosuj „Fix-It”"
 
@@ -1498,23 +1513,34 @@ msgid "Number of parallel build workers"
 msgstr "Liczba równoległych wątków roboczych budowania"
 
 #: ../libide/preferences/ide-preferences-builtin.c:252
-#: ../plugins/git/ide-git-clone-widget.c:200
 msgid "Projects"
 msgstr "Projekty"
 
 #: ../libide/preferences/ide-preferences-builtin.c:254
+msgid "Workspace"
+msgstr "Obszar roboczy"
+
+#: ../libide/preferences/ide-preferences-builtin.c:255
+msgid "Projects Directory"
+msgstr "Katalog projektów"
+
+#: ../libide/preferences/ide-preferences-builtin.c:255
+msgid "A place for all your projects"
+msgstr "Miejsce na wszystkie projekty"
+
+#: ../libide/preferences/ide-preferences-builtin.c:257
 msgid "Project Discovery"
 msgstr "Wykrywanie projektów"
 
-#: ../libide/preferences/ide-preferences-builtin.c:255
+#: ../libide/preferences/ide-preferences-builtin.c:258
 msgid "Discover projects on my computer"
 msgstr "Wykrywanie projektów na komputerze"
 
-#: ../libide/preferences/ide-preferences-builtin.c:255
+#: ../libide/preferences/ide-preferences-builtin.c:258
 msgid "Scan your computer for existing projects"
 msgstr "Wyszukiwanie istniejących projektów na komputerze"
 
-#: ../libide/preferences/ide-preferences-perspective.c:823
+#: ../libide/preferences/ide-preferences-perspective.c:888
 msgid "Preferences"
 msgstr "Preferencje"
 
@@ -2061,7 +2087,7 @@ msgstr "Przełącz na"
 msgid "Send to Fpaste.org"
 msgstr "Wyślij do serwisu Fpaste.org"
 
-#: ../plugins/fpaste/fpaste_plugin/__init__.py:104
+#: ../plugins/fpaste/fpaste_plugin/__init__.py:110
 msgid "The following URL has been copied to the clipboard"
 msgstr "Następujący adres URL został skopiowany do schowka"
 
@@ -2084,7 +2110,7 @@ msgstr "Plik nie jest pod kontrolą katalogu roboczego systemu git."
 msgid "The requested file does not exist within the git index."
 msgstr "Żądany plik nie istnieje w indeksie systemu git."
 
-#: ../plugins/git/ide-git-clone-widget.c:131
+#: ../plugins/git/ide-git-clone-widget.c:132
 msgid "A valid Git URL is required"
 msgstr "Wymagany jest prawidłowy adres URL systemu git"
 
