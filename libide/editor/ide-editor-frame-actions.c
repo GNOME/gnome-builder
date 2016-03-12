@@ -174,7 +174,7 @@ static const GActionEntry IdeEditorFrameSearchActions[] = {
 void
 ide_editor_frame_actions_init (IdeEditorFrame *self)
 {
-  g_autoptr(GSimpleActionGroup) group = NULL;
+  GSimpleActionGroup *group;
 
   g_assert (IDE_IS_EDITOR_FRAME (self));
 
@@ -182,9 +182,11 @@ ide_editor_frame_actions_init (IdeEditorFrame *self)
   g_action_map_add_action_entries (G_ACTION_MAP (group), IdeEditorFrameActions,
                                    G_N_ELEMENTS (IdeEditorFrameActions), self);
   gtk_widget_insert_action_group (GTK_WIDGET (self), "frame", G_ACTION_GROUP (group));
+  g_object_unref (group);
 
   group = g_simple_action_group_new ();
   g_action_map_add_action_entries (G_ACTION_MAP (group), IdeEditorFrameSearchActions,
                                    G_N_ELEMENTS (IdeEditorFrameSearchActions), self);
   gtk_widget_insert_action_group (GTK_WIDGET (self->search_entry), "search-entry", G_ACTION_GROUP (group));
+  g_object_unref (group);
 }
