@@ -3,38 +3,39 @@
 # Copyright (C) 2015 THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # Fran Dieguez <frandieguez@gnome.org>, 2015, 2016.
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-02 10:19+0100\n"
-"PO-Revision-Date: 2016-03-02 10:19+0200\n"
+"POT-Creation-Date: 2016-03-12 13:48+0100\n"
+"PO-Revision-Date: 2016-03-12 13:49+0100\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
-"Language-Team: gnome-l10n-gl@gnome.org\n"
+"Language-Team: Galician <gnome-l10n-gl@gnome.org>\n"
 "Language: gl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Virtaal 0.7.1\n"
+"X-Generator: Gtranslator 2.91.7\n"
 "X-Project-Style: gnome\n"
 
-#: ../contrib/egg/egg-animation.c:715
+#: ../contrib/egg/egg-animation.c:726
 #, c-format
 msgid "Cannot locate property %s in class %s"
 msgstr "Non foi posíbel atopar a propiedade %s na clase %s"
 
-#: ../contrib/egg/egg-animation.c:1055 ../contrib/egg/egg-animation.c:1061
+#: ../contrib/egg/egg-animation.c:1073 ../contrib/egg/egg-animation.c:1079
 #, c-format
 msgid "Failed to find property %s in %s"
 msgstr "Produciuse un fallo ao atopar a propiedade %s en %s"
 
-#: ../contrib/egg/egg-animation.c:1069
+#: ../contrib/egg/egg-animation.c:1087
 #, c-format
 msgid "Failed to find property %s in %s or parent %s"
 msgstr "Produciuse un fallo ao atopar a propiedade %s en %s ou no pai %s"
 
-#: ../contrib/egg/egg-animation.c:1079
+#: ../contrib/egg/egg-animation.c:1097
 #, c-format
 msgid "Failed to retrieve va_list value: %s"
 msgstr "Produciuse un fallo ao obter o valor de va_list: %s"
@@ -168,11 +169,11 @@ msgstr "_Refacer"
 msgid "C_ut"
 msgstr "Co_rtar"
 
-#: ../data/gtk/menus.ui.h:19
+#: ../data/gtk/menus.ui.h:19 ../plugins/terminal/gtk/menus.ui.h:2
 msgid "_Copy"
 msgstr "_Copiar"
 
-#: ../data/gtk/menus.ui.h:20
+#: ../data/gtk/menus.ui.h:20 ../plugins/terminal/gtk/menus.ui.h:3
 msgid "_Paste"
 msgstr "_Pegar"
 
@@ -180,15 +181,15 @@ msgstr "_Pegar"
 msgid "_Delete"
 msgstr "E_liminar"
 
-#: ../data/gtk/menus.ui.h:22
+#: ../data/gtk/menus.ui.h:22 ../plugins/terminal/gtk/menus.ui.h:4
 msgid "Selection"
 msgstr "Selección"
 
-#: ../data/gtk/menus.ui.h:23
+#: ../data/gtk/menus.ui.h:23 ../plugins/terminal/gtk/menus.ui.h:5
 msgid "Select _All"
 msgstr "Seleccionar _todo"
 
-#: ../data/gtk/menus.ui.h:24
+#: ../data/gtk/menus.ui.h:24 ../plugins/terminal/gtk/menus.ui.h:6
 msgid "Select _None"
 msgstr "_Deseleccionar todo"
 
@@ -233,46 +234,66 @@ msgid "Reset"
 msgstr "Restabelecer"
 
 #: ../data/gtk/menus.ui.h:35
+msgid "_Match Case"
+msgstr "Coincidir _capitalización"
+
+#: ../data/gtk/menus.ui.h:36
+msgid "Match _Entire Word Only"
+msgstr "Coincidir só coa _palabra completa"
+
+#: ../data/gtk/menus.ui.h:37
+msgid "Match as _Regular Expression"
+msgstr "Coincidir como unha expresión _regular"
+
+#: ../data/gtk/menus.ui.h:38
+msgid "_Wrap Around"
+msgstr "_Volver ao inicio"
+
+#: ../data/gtk/menus.ui.h:39
+msgid "Cu_t"
+msgstr "_Cortar"
+
+#: ../data/gtk/menus.ui.h:40
 msgid "Split"
 msgstr "Dividir"
 
-#: ../data/gtk/menus.ui.h:36
+#: ../data/gtk/menus.ui.h:41
 msgid "Split Left"
 msgstr "Dividir á esquerda"
 
-#: ../data/gtk/menus.ui.h:37
+#: ../data/gtk/menus.ui.h:42
 msgid "Split Right"
 msgstr "Dividir á dereita"
 
-#: ../data/gtk/menus.ui.h:38
+#: ../data/gtk/menus.ui.h:43
 msgid "Split Down"
 msgstr "Dividir abaixo"
 
-#: ../data/gtk/menus.ui.h:39
+#: ../data/gtk/menus.ui.h:44
 msgid "Move"
 msgstr "Mover"
 
-#: ../data/gtk/menus.ui.h:40
+#: ../data/gtk/menus.ui.h:45
 msgid "Move Left"
 msgstr "Mover á esquerda"
 
-#: ../data/gtk/menus.ui.h:41
+#: ../data/gtk/menus.ui.h:46
 msgid "Move Right"
 msgstr "Mover á dereita"
 
-#: ../data/gtk/menus.ui.h:42
+#: ../data/gtk/menus.ui.h:47
 msgid "_Save"
 msgstr "_Gardar"
 
-#: ../data/gtk/menus.ui.h:43
+#: ../data/gtk/menus.ui.h:48
 msgid "_Save As"
 msgstr "_Gardar como"
 
-#: ../data/gtk/menus.ui.h:44
+#: ../data/gtk/menus.ui.h:49
 msgid "_Print"
 msgstr "_Imprimir"
 
-#: ../data/gtk/menus.ui.h:45
+#: ../data/gtk/menus.ui.h:50
 msgid "_Close"
 msgstr "_Pechar"
 
@@ -781,7 +802,7 @@ msgstr "Liña %u, Columna %u"
 msgid "%u of %u"
 msgstr "%u de %u"
 
-#: ../libide/editor/ide-editor-frame.c:658
+#: ../libide/editor/ide-editor-frame.c:646
 #: ../plugins/project-tree/gtk/menus.ui.h:1
 msgid "Re_veal in Project Tree"
 msgstr "_Mostrar no árbore de proxectos"
@@ -920,7 +941,7 @@ msgstr "Forneza o enderezo de D-Bus"
 msgid "No such worker"
 msgstr "Non existe o traballador"
 
-#: ../libide/ide-buffer.c:2207
+#: ../libide/ide-buffer.c:2298
 msgid "The current language lacks a symbol resolver."
 msgstr "Ao linguaxe actual fáltalle un resolutor de símbolos."
 
@@ -1028,7 +1049,7 @@ msgstr "Sistema operativo do anfitrión"
 msgid "%s has not implemented GAsyncInitable."
 msgstr "%s non implementa GAsyncInitable."
 
-#: ../libide/ide-source-snippet.c:370
+#: ../libide/ide-source-snippet.c:372
 msgid "Chunk does not belong to snippet."
 msgstr "O anaco non pertence ao fragmento."
 
@@ -1036,11 +1057,6 @@ msgstr "O anaco non pertence ao fragmento."
 #: ../libide/preferences/ide-preferences-builtin.c:173
 msgid "Snippets"
 msgstr "Fragmentos"
-
-#: ../libide/ide-source-snippet-parser.c:496
-#, c-format
-msgid "Invalid snippet at line %d: %s"
-msgstr "Fragmento non válido na liña %d: %s"
 
 #: ../libide/ide-source-snippets-manager.c:96
 #, c-format
@@ -1052,17 +1068,17 @@ msgstr "Produciuse un fallo ao abrir o cartafol: %s"
 msgid "Failed to load file: %s: %s"
 msgstr "Produciuse un fallo ao cargar o ficheiro: %s: %s"
 
-#: ../libide/ide-source-view.c:4966
+#: ../libide/ide-source-view.c:4900
 #, c-format
 msgid "Insert “%s”"
 msgstr "Inserir «%s»"
 
-#: ../libide/ide-source-view.c:4968
+#: ../libide/ide-source-view.c:4902
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "Substituír «%s» con «%s»"
 
-#: ../libide/ide-source-view.c:5082
+#: ../libide/ide-source-view.c:5016
 msgid "Apply Fix-It"
 msgstr "Aplicar corrección"
 
@@ -1499,23 +1515,34 @@ msgid "Number of parallel build workers"
 msgstr "Número de traballadores de construción en paralelo"
 
 #: ../libide/preferences/ide-preferences-builtin.c:252
-#: ../plugins/git/ide-git-clone-widget.c:200
 msgid "Projects"
 msgstr "Proxectos"
 
 #: ../libide/preferences/ide-preferences-builtin.c:254
+msgid "Workspace"
+msgstr "Espazo de traballo"
+
+#: ../libide/preferences/ide-preferences-builtin.c:255
+msgid "Projects Directory"
+msgstr "Cartafol de proxectos"
+
+#: ../libide/preferences/ide-preferences-builtin.c:255
+msgid "A place for all your projects"
+msgstr "Un lugar para todos os seus proxectos"
+
+#: ../libide/preferences/ide-preferences-builtin.c:257
 msgid "Project Discovery"
 msgstr "Descubrimento de proxectos"
 
-#: ../libide/preferences/ide-preferences-builtin.c:255
+#: ../libide/preferences/ide-preferences-builtin.c:258
 msgid "Discover projects on my computer"
 msgstr "Descubrir proxectos no meu computador"
 
-#: ../libide/preferences/ide-preferences-builtin.c:255
+#: ../libide/preferences/ide-preferences-builtin.c:258
 msgid "Scan your computer for existing projects"
 msgstr "Buscar no seu computador proxectos existentes"
 
-#: ../libide/preferences/ide-preferences-perspective.c:823
+#: ../libide/preferences/ide-preferences-perspective.c:888
 msgid "Preferences"
 msgstr "Preferencias"
 
@@ -2065,7 +2092,7 @@ msgstr "Cambiar a"
 msgid "Send to Fpaste.org"
 msgstr "Enviar a Fpaste.org"
 
-#: ../plugins/fpaste/fpaste_plugin/__init__.py:104
+#: ../plugins/fpaste/fpaste_plugin/__init__.py:110
 msgid "The following URL has been copied to the clipboard"
 msgstr "Copiouse o seguinte URL foi copiado ao portapapeis"
 
@@ -2089,7 +2116,7 @@ msgstr "O ficheiro non está baixo o control do cartafol de traballo de git."
 msgid "The requested file does not exist within the git index."
 msgstr "O ficheiro solicitado non existe dentro do índice de git."
 
-#: ../plugins/git/ide-git-clone-widget.c:131
+#: ../plugins/git/ide-git-clone-widget.c:132
 msgid "A valid Git URL is required"
 msgstr "Requírese unha URL de git válida"
 
@@ -2328,6 +2355,9 @@ msgstr "Mostrar erros e avisos fornecidos por Vala"
 #: ../plugins/vala-pack/ide-vala-preferences-addin.vala:35
 msgid "vala diagnostics warnings errors"
 msgstr "avisos de erro de diagnóstico de vala"
+
+#~ msgid "Invalid snippet at line %d: %s"
+#~ msgstr "Fragmento non válido na liña %d: %s"
 
 #~ msgid "_New Document"
 #~ msgstr "_Novo documento"
