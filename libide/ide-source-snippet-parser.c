@@ -38,9 +38,18 @@ struct _IdeSourceSnippetParser
   gchar   *cur_desc;
   GString *cur_text;
   GString *snippet_text;
+
+  GFile   *current_file;
 };
 
 G_DEFINE_TYPE (IdeSourceSnippetParser, ide_source_snippet_parser, G_TYPE_OBJECT)
+
+enum {
+  PARSING_ERROR,
+  N_SIGNALS
+};
+
+static guint signals [N_SIGNALS];
 
 IdeSourceSnippetParser *
 ide_source_snippet_parser_new (void)
@@ -493,7 +502,8 @@ ide_source_snippet_parser_feed_line (IdeSourceSnippetParser *parser,
 
     /* Fall through */
     default:
-      g_warning (_("Invalid snippet at line %d: %s"), parser->lineno, line);
+      g_signal_emit (parser, signals [PARSING_ERROR], 0,
+                     parser->current_file, parser->lineno, line);
       break;
     }
 
@@ -530,11 +540,14 @@ ide_source_snippet_parser_load_from_file (IdeSourceSnippetParser *parser,
   data_stream = g_data_input_stream_new (G_INPUT_STREAM (file_stream));
   g_object_unref (file_stream);
 
+  g_set_object (&parser->current_file, file);
+
 again:
   line = g_data_input_stream_read_line_utf8 (data_stream, NULL, NULL, &local_error);
   if (!line && local_error)
     {
       g_propagate_error (error, local_error);
+      g_set_object (&parser->current_file, NULL);
       return FALSE;
     }
   else if (line)
@@ -546,6 +559,8 @@ again:
 
   ide_source_snippet_parser_finish (parser);
   g_free(basename);
+
+  g_set_object (&parser->current_file, NULL);
 
   return TRUE;
 }
@@ -600,6 +615,19 @@ ide_source_snippet_parser_class_init (IdeSourceSnippetParserClass *klass)
 
   object_class = G_OBJECT_CLASS (klass);
   object_class->finalize = ide_source_snippet_parser_finalize;
+
+  signals [PARSING_ERROR] =
+    g_signal_new ("parsing-error",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  0,
+                  NULL, NULL,
+                  NULL,
+                  G_TYPE_NONE,
+                  3,
+                  G_TYPE_FILE,
+                  G_TYPE_UINT,
+                  G_TYPE_STRING);
 }
 
 static void
