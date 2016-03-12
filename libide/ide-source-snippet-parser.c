@@ -40,6 +40,8 @@ struct _IdeSourceSnippetParser
   GString *snippet_text;
 
   GFile   *current_file;
+
+  guint    had_error : 1;
 };
 
 G_DEFINE_TYPE (IdeSourceSnippetParser, ide_source_snippet_parser, G_TYPE_OBJECT)
@@ -504,6 +506,7 @@ ide_source_snippet_parser_feed_line (IdeSourceSnippetParser *parser,
     default:
       g_signal_emit (parser, signals [PARSING_ERROR], 0,
                      parser->current_file, parser->lineno, line);
+      parser->had_error = TRUE;
       break;
     }
 
@@ -543,6 +546,17 @@ ide_source_snippet_parser_load_from_file (IdeSourceSnippetParser *parser,
   g_set_object (&parser->current_file, file);
 
 again:
+  if (parser->had_error)
+    {
+      /* TODO: Better error messages */
+      g_set_error (error,
+                   G_IO_ERROR,
+                   G_IO_ERROR_INVALID_DATA,
+                   "%s:%d: invalid snippet",
+                   basename, parser->lineno);
+      return FALSE;
+    }
+
   line = g_data_input_stream_read_line_utf8 (data_stream, NULL, NULL, &local_error);
   if (!line && local_error)
     {
