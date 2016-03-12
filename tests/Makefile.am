@@ -154,6 +154,12 @@ test_egg_slider_CFLAGS = $(egg_cflags)
 test_egg_slider_LDADD = $(egg_libs)
 
 
+misc_programs += test-snippet-parser
+test_snippet_parser_SOURCES = test-snippet-parser.c
+test_snippet_parser_CFLAGS = $(tests_cflags)
+test_snippet_parser_LDADD = $(tests_libs)
+
+
 #TESTS += test-ide-ctags
 #test_ide_ctags_SOURCES = test-ide-ctags.c
 #test_ide_ctags_CFLAGS = $(tests_cflags)
