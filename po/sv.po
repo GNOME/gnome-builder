@@ -1,40 +1,41 @@
 # Swedish translation for gnome-builder.
-# Copyright © 2015 gnome-builder's COPYRIGHT HOLDER
+# Copyright © 2015-2016 gnome-builder's COPYRIGHT HOLDER
 # This file is distributed under the same license as the gnome-builder package.
-# Anders Jonsson <anders.jonsson@norsjovallen.se>, 2015.
+# Anders Jonsson <anders.jonsson@norsjovallen.se>, 2015, 2016.
+# Sebastian Rasmussen <sebras@gmail.com>, 2016.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-01-27 15:26+0000\n"
-"PO-Revision-Date: 2015-10-15 22:25+0200\n"
-"Last-Translator: Anders Jonsson <anders.jonsson@norsjovallen.se>\n"
+"POT-Creation-Date: 2016-03-12 11:53+0000\n"
+"PO-Revision-Date: 2016-03-13 13:12+0100\n"
+"Last-Translator: Sebastian Rasmussen <sebras@gmail.com>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.8.5\n"
+"X-Generator: Poedit 1.8.7.1\n"
 
-#: ../contrib/egg/egg-animation.c:715
+#: ../contrib/egg/egg-animation.c:726
 #, c-format
 msgid "Cannot locate property %s in class %s"
 msgstr "Kan inte hitta egenskap %s i klassen %s"
 
-#: ../contrib/egg/egg-animation.c:1055 ../contrib/egg/egg-animation.c:1061
+#: ../contrib/egg/egg-animation.c:1073 ../contrib/egg/egg-animation.c:1079
 #, c-format
 msgid "Failed to find property %s in %s"
 msgstr "Misslyckades med att hitta egenskap %s i %s"
 
-#: ../contrib/egg/egg-animation.c:1069
+#: ../contrib/egg/egg-animation.c:1087
 #, c-format
 msgid "Failed to find property %s in %s or parent %s"
 msgstr "Misslyckades med att hitta egenskap %s i %s eller den överordnade %s"
 
-#: ../contrib/egg/egg-animation.c:1079
+#: ../contrib/egg/egg-animation.c:1097
 #, c-format
 msgid "Failed to retrieve va_list value: %s"
 msgstr "Misslyckades med att hämta va_list-värde: %s"
@@ -73,26 +74,24 @@ msgid "Traversal order %u is not supported on Trie."
 msgstr "Traverseringsordning %u stöds ej för trie."
 
 #: ../contrib/tmpl/tmpl-parser.c:199
-#, fuzzy, c-format
-#| msgid "%s() may only be executed once"
+#, c-format
 msgid "%s() may only be called once"
-msgstr "%s() kan bara köras en gång"
+msgstr "%s() kan bara anropas en gång"
 
 #: ../contrib/tmpl/tmpl-parser.c:211
 #, c-format
 msgid "Parser does not contain an input stream"
-msgstr ""
+msgstr "Tolk innehåller inte en inmatningsström"
 
 #: ../contrib/tmpl/tmpl-template.c:451
 #, c-format
 msgid "Must parse template before expanding"
-msgstr ""
+msgstr "Måste tolka mall innan expansion"
 
 #: ../contrib/tmpl/tmpl-template-locator.c:105
-#, fuzzy, c-format
-#| msgid "Failed to parse integer from \"%s\""
+#, c-format
 msgid "Failed to locate template \"%s\""
-msgstr "Misslyckades med att tolka heltal från ”%s”"
+msgstr "Misslyckades med hitta mall ”%s”"
 
 #: ../contrib/xml/xml-reader.c:327
 #, c-format
@@ -116,180 +115,186 @@ msgid "Keyboard _Shortcuts"
 msgstr "Tangentbord_sgenvägar"
 
 #: ../data/gtk/menus.ui.h:5
+msgid "_Help"
+msgstr "_Hjälp"
+
+#: ../data/gtk/menus.ui.h:6
 msgid "_About"
 msgstr "_Om"
 
-#: ../data/gtk/menus.ui.h:6
+#: ../data/gtk/menus.ui.h:7
 msgid "_Quit"
 msgstr "A_vsluta"
 
-#: ../data/gtk/menus.ui.h:7 ../data/ui/ide-editor-view.ui.h:1
+#: ../data/gtk/menus.ui.h:8 ../data/ui/ide-editor-view.ui.h:1
 msgid "_Reload"
 msgstr "_Läs om"
 
-#: ../data/gtk/menus.ui.h:8
+#: ../data/gtk/menus.ui.h:9
 msgid "_Print…"
 msgstr "S_kriv ut…"
 
-#: ../data/gtk/menus.ui.h:9
+#: ../data/gtk/menus.ui.h:10
 msgid "_Fullscreen"
 msgstr "_Helskärm"
 
-#: ../data/gtk/menus.ui.h:10
-#, fuzzy
-#| msgid "_New Folder"
-msgid "_New File"
-msgstr "_Ny mapp"
-
 #: ../data/gtk/menus.ui.h:11
-#, fuzzy
-#| msgid "_Open"
-msgid "_Open File"
-msgstr "Ö_ppna"
+msgid "_New File"
+msgstr "_Ny fil"
 
 #: ../data/gtk/menus.ui.h:12
+msgid "_Open File"
+msgstr "Ö_ppna fil"
+
+#: ../data/gtk/menus.ui.h:13
 msgid "Save _All"
 msgstr "Spara _alla"
 
-#: ../data/gtk/menus.ui.h:13
+#: ../data/gtk/menus.ui.h:14
 msgid "_Close All"
 msgstr "S_täng alla"
 
-#: ../data/gtk/menus.ui.h:14
-#, fuzzy
-#| msgid "Go to Definition"
-msgid "_Go to Definition"
-msgstr "Gå till definition"
-
 #: ../data/gtk/menus.ui.h:15
-msgid "_Undo"
-msgstr ""
+msgid "_Go to Definition"
+msgstr "_Gå till definition"
 
 #: ../data/gtk/menus.ui.h:16
-msgid "_Redo"
-msgstr ""
+msgid "_Undo"
+msgstr "_Ångra"
 
 #: ../data/gtk/menus.ui.h:17
-msgid "C_ut"
-msgstr ""
+msgid "_Redo"
+msgstr "_Gör om"
 
 #: ../data/gtk/menus.ui.h:18
+msgid "C_ut"
+msgstr "Klipp _ut"
+
+#: ../data/gtk/menus.ui.h:19 ../plugins/terminal/gtk/menus.ui.h:2
 msgid "_Copy"
-msgstr ""
+msgstr "K_opiera"
 
-#: ../data/gtk/menus.ui.h:19
+#: ../data/gtk/menus.ui.h:20 ../plugins/terminal/gtk/menus.ui.h:3
 msgid "_Paste"
-msgstr ""
-
-#: ../data/gtk/menus.ui.h:20
-#, fuzzy
-#| msgid "Delete"
-msgid "_Delete"
-msgstr "Ta bort"
+msgstr "_Klistra in"
 
 #: ../data/gtk/menus.ui.h:21
-#, fuzzy
-#| msgid "Selections"
+msgid "_Delete"
+msgstr "_Ta bort"
+
+#: ../data/gtk/menus.ui.h:22 ../plugins/terminal/gtk/menus.ui.h:4
 msgid "Selection"
-msgstr "Markeringar"
+msgstr "Markering"
 
-#: ../data/gtk/menus.ui.h:22
-#, fuzzy
-#| msgid "Select all"
+#: ../data/gtk/menus.ui.h:23 ../plugins/terminal/gtk/menus.ui.h:5
 msgid "Select _All"
-msgstr "Markera allt"
+msgstr "Markera _allt"
 
-#: ../data/gtk/menus.ui.h:23
-#, fuzzy
-#| msgid "Selections"
+#: ../data/gtk/menus.ui.h:24 ../plugins/terminal/gtk/menus.ui.h:6
 msgid "Select _None"
-msgstr "Markeringar"
-
-#: ../data/gtk/menus.ui.h:24
-msgid "All _Upper Case"
-msgstr ""
+msgstr "A_vmarkera allt"
 
 #: ../data/gtk/menus.ui.h:25
-msgid "All _Lower Case"
-msgstr ""
+msgid "All _Upper Case"
+msgstr "Alla _versaler"
 
 #: ../data/gtk/menus.ui.h:26
-#, fuzzy
-#| msgid "Insert \"%s\""
-msgid "_Invert Case"
-msgstr "Infoga ”%s”"
+msgid "All _Lower Case"
+msgstr "Alla _gemener"
 
 #: ../data/gtk/menus.ui.h:27
-msgid "_Title Case"
-msgstr ""
+msgid "_Invert Case"
+msgstr "_Invertera skiftläge"
 
 #: ../data/gtk/menus.ui.h:28
+msgid "_Title Case"
+msgstr "_Inledande versal"
+
+#: ../data/gtk/menus.ui.h:29
 msgid "Join Lines"
 msgstr "Slå samman rader"
 
-#: ../data/gtk/menus.ui.h:29
+#: ../data/gtk/menus.ui.h:30
 msgid "Sort Lines"
 msgstr "Sortera rader"
 
-#: ../data/gtk/menus.ui.h:30
-msgid "Zoom"
-msgstr ""
-
 #: ../data/gtk/menus.ui.h:31
-msgid "Zoom _In"
-msgstr ""
+msgid "Zoom"
+msgstr "Zooma"
 
 #: ../data/gtk/menus.ui.h:32
-msgid "Zoom _Out"
-msgstr ""
+msgid "Zoom _In"
+msgstr "Zooma _in"
 
 #: ../data/gtk/menus.ui.h:33
-msgid "Reset"
-msgstr ""
+msgid "Zoom _Out"
+msgstr "Zooma _ut"
 
 #: ../data/gtk/menus.ui.h:34
+msgid "Reset"
+msgstr "Återställ"
+
+#: ../data/gtk/menus.ui.h:35
+msgid "_Match Case"
+msgstr "_Matcha skiftläge"
+
+#: ../data/gtk/menus.ui.h:36
+msgid "Match _Entire Word Only"
+msgstr "Matcha _endast hela ord"
+
+#: ../data/gtk/menus.ui.h:37
+msgid "Match as _Regular Expression"
+msgstr "Matcha som _reguljärt uttryck"
+
+#: ../data/gtk/menus.ui.h:38
+msgid "_Wrap Around"
+msgstr "Börja _om från början"
+
+#: ../data/gtk/menus.ui.h:39
+msgid "Cu_t"
+msgstr "Klipp u_t"
+
+#: ../data/gtk/menus.ui.h:40
 msgid "Split"
 msgstr "Dela"
 
-#: ../data/gtk/menus.ui.h:35
+#: ../data/gtk/menus.ui.h:41
 msgid "Split Left"
 msgstr "Dela vänster"
 
-#: ../data/gtk/menus.ui.h:36
+#: ../data/gtk/menus.ui.h:42
 msgid "Split Right"
 msgstr "Dela höger"
 
-#: ../data/gtk/menus.ui.h:37
+#: ../data/gtk/menus.ui.h:43
 msgid "Split Down"
 msgstr "Dela nedåt"
 
-#: ../data/gtk/menus.ui.h:38
+#: ../data/gtk/menus.ui.h:44
 msgid "Move"
 msgstr "Flytta"
 
-#: ../data/gtk/menus.ui.h:39
+#: ../data/gtk/menus.ui.h:45
 msgid "Move Left"
 msgstr "Flytta vänster"
 
-#: ../data/gtk/menus.ui.h:40
+#: ../data/gtk/menus.ui.h:46
 msgid "Move Right"
 msgstr "Flytta höger"
 
-#: ../data/gtk/menus.ui.h:41
+#: ../data/gtk/menus.ui.h:47
 msgid "_Save"
 msgstr "_Spara"
 
-#: ../data/gtk/menus.ui.h:42
+#: ../data/gtk/menus.ui.h:48
 msgid "_Save As"
 msgstr "S_para som"
 
-#: ../data/gtk/menus.ui.h:43
-#, fuzzy
-#| msgid "Print"
+#: ../data/gtk/menus.ui.h:49
 msgid "_Print"
-msgstr "Skriv ut"
+msgstr "Skriv _ut"
 
-#: ../data/gtk/menus.ui.h:44
+#: ../data/gtk/menus.ui.h:50
 msgid "_Close"
 msgstr "S_täng"
 
@@ -301,7 +306,7 @@ msgstr "Mörk Builder"
 msgid "Dark color scheme for Builder using the Tango color palette"
 msgstr "Mörkt färgschema för Builder som använder Tango-färgpaletten"
 
-#: ../data/style-schemes/builder.xml.h:1 ../libide/ide-application.c:404
+#: ../data/style-schemes/builder.xml.h:1 ../libide/ide-application.c:413
 #: ../libide/preferences/ide-preferences-builtin.c:113
 msgid "Builder"
 msgstr "Builder"
@@ -315,6 +320,26 @@ msgstr "Standardfärgschemat för Builder"
 #: ../data/ui/ide-editor-frame.ui.h:2
 msgid "OVR"
 msgstr "ERS"
+
+#: ../data/ui/ide-editor-perspective.ui.h:1
+msgid "No open files"
+msgstr "Inga öppna filer"
+
+#: ../data/ui/ide-editor-perspective.ui.h:2
+msgid "Try opening a file by typing in the search box at the top"
+msgstr "Prova att öppna en fil genom att skriva i sökfältet längst upp"
+
+#: ../data/ui/ide-editor-perspective.ui.h:3
+msgid "Enable / Disable left panel. Shortcut: F9"
+msgstr "Aktivera/inaktivera vänsterpanel. Genväg: F9"
+
+#: ../data/ui/ide-editor-perspective.ui.h:4
+msgid "Enable / Disable bottom panel. Shortcut: Ctrl + F9"
+msgstr "Aktivera/inaktivera bottenpanel. Genväg: Ctrl + F9"
+
+#: ../data/ui/ide-editor-perspective.ui.h:5
+msgid "Enable / Disable right panel. Shortcut: Shift + F9"
+msgstr "Aktivera/inaktivera högerpanel. Genväg: Skift + F9"
 
 #: ../data/ui/ide-editor-tweak-widget.ui.h:1
 msgid "Search highlight mode…"
@@ -342,7 +367,7 @@ msgid "Smart Backspace"
 msgstr "Smart backsteg"
 
 #: ../data/ui/ide-editor-tweak-widget.ui.h:7
-#: ../libide/preferences/ide-preferences-builtin.c:231
+#: ../libide/preferences/ide-preferences-builtin.c:234
 msgid "Indentation"
 msgstr "Indentering"
 
@@ -372,7 +397,7 @@ msgstr "4"
 msgid "8"
 msgstr "8"
 
-#: ../data/ui/ide-editor-view.ui.h:2 ../data/ui/ide-greeter-perspective.ui.h:7
+#: ../data/ui/ide-editor-view.ui.h:2 ../data/ui/ide-greeter-perspective.ui.h:14
 msgid "_Cancel"
 msgstr "A_vbryt"
 
@@ -384,10 +409,18 @@ msgstr ""
 "Builder har upptäckt att denna fil ha ändrats externt. Vill du läsa om filen?"
 
 #: ../data/ui/ide-editor-view.ui.h:4
+msgid "Go to line number"
+msgstr "Gå till radnummer"
+
+#: ../data/ui/ide-editor-view.ui.h:5
+msgid "Change editor settings and language"
+msgstr "Ändra redigerarinställningar och språk"
+
+#: ../data/ui/ide-editor-view.ui.h:6
 msgid "Go to Line"
 msgstr "Gå till rad"
 
-#: ../data/ui/ide-editor-view.ui.h:5
+#: ../data/ui/ide-editor-view.ui.h:7
 msgid "Go"
 msgstr "Gå"
 
@@ -396,273 +429,364 @@ msgid "New Project"
 msgstr "Nytt projekt"
 
 #: ../data/ui/ide-genesis-perspective.ui.h:2
-#, fuzzy
-#| msgid "_Continue"
 msgid "Co_ntinue"
 msgstr "_Fortsätt"
 
-#: ../data/ui/ide-greeter-perspective.ui.h:1
+#. the action:// link is used to jump to the new-project view
+#: ../data/ui/ide-greeter-perspective.ui.h:2
+msgid "Why not <a href=\"action://app.new-project\">create a new project</a>?"
+msgstr ""
+"Varför inte <a href=\"action://app.new-project\">skapa ett nytt projekt</a>?"
+
+#: ../data/ui/ide-greeter-perspective.ui.h:3
+msgid "No projects found"
+msgstr "Inga projekt hittades"
+
+#: ../data/ui/ide-greeter-perspective.ui.h:4
 msgid "Recent Projects"
 msgstr "Tidigare projekt"
 
-#: ../data/ui/ide-greeter-perspective.ui.h:2
+#: ../data/ui/ide-greeter-perspective.ui.h:5
 msgid "Other Projects"
 msgstr "Andra projekt"
 
-#: ../data/ui/ide-greeter-perspective.ui.h:3
+#: ../data/ui/ide-greeter-perspective.ui.h:6
 msgid "_Remove"
 msgstr "_Ta bort"
 
-#: ../data/ui/ide-greeter-perspective.ui.h:4
+#: ../data/ui/ide-greeter-perspective.ui.h:7
 msgid "Select a Project"
 msgstr "Välj ett projekt"
 
-#: ../data/ui/ide-greeter-perspective.ui.h:5
+#: ../data/ui/ide-greeter-perspective.ui.h:8
 msgid "Click an item to select"
 msgstr "Klicka på ett objekt för att välja"
 
-#: ../data/ui/ide-greeter-perspective.ui.h:6
+#: ../data/ui/ide-greeter-perspective.ui.h:9
+msgid "Create a new project"
+msgstr "Skapa ett nytt projekt"
+
+#: ../data/ui/ide-greeter-perspective.ui.h:10
 #: ../plugins/project-tree/gtk/menus.ui.h:2
 msgid "_New"
 msgstr "_Ny"
 
+#: ../data/ui/ide-greeter-perspective.ui.h:11
+msgid "Search for projects"
+msgstr "Sök efter projekt"
+
+#: ../data/ui/ide-greeter-perspective.ui.h:12
+msgid "Select projects for removal"
+msgstr "Markera projekt för borttagning"
+
+#: ../data/ui/ide-greeter-perspective.ui.h:13
+msgid "Return to project selection"
+msgstr "Återgå till projektval"
+
+#: ../data/ui/ide-layout-tab-bar.ui.h:1
+msgid "List open files"
+msgstr "Lista öppna filer"
+
+#: ../data/ui/ide-layout-tab-bar.ui.h:2
+msgid "Add a new empty file to your project"
+msgstr "Lägg till en ny tom fil till ditt projekt"
+
+#: ../data/ui/ide-layout-tab.ui.h:1
+msgid "Jump to previous location"
+msgstr "Hoppa till föregående plats"
+
+#: ../data/ui/ide-layout-tab.ui.h:2
+msgid "Jump to next location"
+msgstr "Hoppa till nästa plats"
+
+#: ../data/ui/ide-layout-tab.ui.h:3
+msgid "Close the current document"
+msgstr "Stäng aktuellt dokument"
+
 #: ../data/ui/ide-preferences-font-button.ui.h:1
-#, fuzzy
-#| msgid "Selections"
 msgid "_Select"
-msgstr "Markeringar"
+msgstr "_Välj"
+
+#: ../data/ui/ide-preferences-perspective.ui.h:1
+msgid "Search through preferences"
+msgstr "Sök genom inställningar"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:1
+msgctxt "shortcut window"
 msgid "Editor Shortcuts"
 msgstr "Snabbtangenter för redigerare"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:2
-#: ../libide/preferences/ide-preferences-builtin.c:242
+msgctxt "shortcut window"
 msgid "General"
 msgstr "Allmänt"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:3
+msgctxt "shortcut window"
 msgid "Global Search"
 msgstr "Global sökning"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:4
-#: ../libide/preferences/ide-preferences-perspective.c:796
+msgctxt "shortcut window"
 msgid "Preferences"
 msgstr "Inställningar"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:5
+msgctxt "shortcut window"
 msgid "Command Bar"
 msgstr "Kommandorad"
 
-#. XXX: This belongs in terminal addin
 #: ../data/ui/ide-shortcuts-window.ui.h:6
-#: ../libide/preferences/ide-preferences-builtin.c:104
-#: ../plugins/terminal/gb-terminal-workbench-addin.c:99
+msgctxt "shortcut window"
 msgid "Terminal"
 msgstr "Terminal"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:7
+msgctxt "shortcut window"
 msgid "Keyboard Shortcuts"
 msgstr "Tangentbordsgenvägar"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:8
+msgctxt "shortcut window"
 msgid "Panels"
 msgstr "Paneler"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:9
+msgctxt "shortcut window"
 msgid "Toggle left panel"
 msgstr "Aktivera/inaktivera vänsterpanel"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:10
+msgctxt "shortcut window"
 msgid "Toggle right panel"
 msgstr "Aktivera/inaktivera högerpanel"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:11
+msgctxt "shortcut window"
 msgid "Toggle bottom panel"
 msgstr "Aktivera/inaktivera bottenpanel"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:12
+msgctxt "shortcut window"
 msgid "Touchpad gestures"
-msgstr "Styrplattegester"
+msgstr "Gester för styrplatta"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:13
+msgctxt "shortcut window"
 msgid "Switch to the next document"
 msgstr "Växla till nästa dokument"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:14
+msgctxt "shortcut window"
 msgid "Switch to the previous document"
 msgstr "Växla till föregående dokument"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:15
-#: ../plugins/project-tree/gb-project-tree-builder.c:77
+msgctxt "shortcut window"
 msgid "Files"
 msgstr "Filer"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:16
+msgctxt "shortcut window"
 msgid "Create new document"
 msgstr "Skapa nytt dokument"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:17
+msgctxt "shortcut window"
 msgid "Open a document"
 msgstr "Öppna ett dokument"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:18
+msgctxt "shortcut window"
 msgid "Save the document"
 msgstr "Spara dokumentet"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:19
+msgctxt "shortcut window"
 msgid "Close the document"
 msgstr "Stäng dokumentet"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:20
+msgctxt "shortcut window"
 msgid "Find and replace"
 msgstr "Sök och ersätt"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:21
+msgctxt "shortcut window"
 msgid "Find"
 msgstr "Sök"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:22
+msgctxt "shortcut window"
 msgid "Find the next match"
 msgstr "Sök nästa matchning"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:23
+msgctxt "shortcut window"
 msgid "Find the previous match"
 msgstr "Sök föregående matchning"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:24
+msgctxt "shortcut window"
 msgid "Clear highlight"
 msgstr "Rensa färgmarkering"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:25
+msgctxt "shortcut window"
 msgid "Copy and Paste"
 msgstr "Kopiera och klistra in"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:26
+msgctxt "shortcut window"
 msgid "Copy selected text to clipboard"
 msgstr "Kopiera markerad text till urklipp"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:27
+msgctxt "shortcut window"
 msgid "Cut selected text to clipboard"
 msgstr "Klipp ut markerad text till urklipp"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:28
+msgctxt "shortcut window"
 msgid "Paste text from clipboard"
 msgstr "Klistra in text från urklipp"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:29
+msgctxt "shortcut window"
 msgid "Undo and Redo"
 msgstr "Ångra och gör om"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:30
+msgctxt "shortcut window"
 msgid "Undo previous command"
 msgstr "Ångra föregående kommando"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:31
+msgctxt "shortcut window"
 msgid "Redo previous command"
 msgstr "Gör om föregående kommando"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:32
+msgctxt "shortcut window"
 msgid "Editing"
 msgstr "Redigering"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:33
+msgctxt "shortcut window"
 msgid "Increment number at cursor"
 msgstr "Öka nummer vid markör"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:34
+msgctxt "shortcut window"
 msgid "Decrement number at cursor"
 msgstr "Minska nummer vid markör"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:35
+msgctxt "shortcut window"
 msgid "Join selected lines"
 msgstr "Slå samman markerade rader"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:36
+msgctxt "shortcut window"
 msgid "Show completion window"
 msgstr "Visa kompletteringsfönster"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:37
+msgctxt "shortcut window"
 msgid "Toggle overwrite"
 msgstr "Aktivera/inaktivera överskrivning"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:38
+msgctxt "shortcut window"
 msgid "Reindent line"
 msgstr "Indentera om rad"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:39
+msgctxt "shortcut window"
 msgid "Navigation"
 msgstr "Navigering"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:40
+msgctxt "shortcut window"
 msgid "Move to next error in file"
 msgstr "Gå till nästa fel i fil"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:41
+msgctxt "shortcut window"
 msgid "Move to previous error in file"
 msgstr "Gå till föregående fel i fil"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:42
+msgctxt "shortcut window"
 msgid "Move to previous edit location"
 msgstr "Gå till föregående redigeringsplats"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:43
+msgctxt "shortcut window"
 msgid "Move to next edit location"
 msgstr "Gå till nästa redigeringsplats"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:44
+msgctxt "shortcut window"
 msgid "Jump to definition of symbol"
 msgstr "Hoppa till symboldefinition"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:45
-#, fuzzy
-#| msgid "Move viewport up within the file"
+msgctxt "shortcut window"
 msgid "Move sectionport up within the file"
-msgstr "Flytta visningsområde uppåt i filen"
+msgstr "Flytta avsnittsområde uppåt i filen"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:46
-#, fuzzy
-#| msgid "Move viewport down within the file"
+msgctxt "shortcut window"
 msgid "Move sectionport down within the file"
-msgstr "Flytta visningsområde nedåt i filen"
+msgstr "Flytta avsnittsområde nedåt i filen"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:47
-#, fuzzy
-#| msgid "Move viewport to end of file"
+msgctxt "shortcut window"
 msgid "Move sectionport to end of file"
-msgstr "Flytta visningsområde till slutet på filen"
+msgstr "Flytta avsnittsområde till slutet på filen"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:48
-#, fuzzy
-#| msgid "Move viewport to beginning of file"
+msgctxt "shortcut window"
 msgid "Move sectionport to beginning of file"
-msgstr "Flytta visningsområde till början på filen"
+msgstr "Flytta avsnittsområde till början på filen"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:49
+msgctxt "shortcut window"
 msgid "Move to matching bracket"
-msgstr "Gå till matchande klammer"
+msgstr "Gå till matchande parentes"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:50
+msgctxt "shortcut window"
 msgid "Selections"
 msgstr "Markeringar"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:51
+msgctxt "shortcut window"
 msgid "Select all"
 msgstr "Markera allt"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:52
+msgctxt "shortcut window"
 msgid "Unselect all"
 msgstr "Avmarkera allt"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:53
+msgctxt "shortcut window"
 msgid "Terminal Shortcuts"
 msgstr "Snabbtangenter för terminal"
 
+#: ../data/ui/ide-workbench-header-bar.ui.h:1
+msgid "Search for files. Shortcut: Ctrl + ."
+msgstr "Sök efter filer. Genväg: Ctrl + ."
+
+#: ../data/ui/ide-workbench-header-bar.ui.h:2
+msgid "Drops down a list of file operations"
+msgstr "Rullar ner en lista över filoperationer"
+
 #: ../libide/directory/ide-directory-genesis-addin.c:106
-#, fuzzy
-#| msgid "From existing project on this computer"
 msgid "From an existing project on this computer"
-msgstr "Från existerande projekt på den här datorn"
+msgstr "Från ett existerande projekt på den här datorn"
 
 #: ../libide/editorconfig/ide-editorconfig-file-settings.c:153
 msgid "No file was provided."
@@ -673,41 +797,41 @@ msgstr "Ingen fil tillhandahölls."
 msgid "Line %u, Column %u"
 msgstr "Rad %u, kolumn %u"
 
-#: ../libide/editor/ide-editor-frame.c:242
+#: ../libide/editor/ide-editor-frame.c:244
 #, c-format
 msgid "%u of %u"
 msgstr "%u av %u"
 
-#: ../libide/editor/ide-editor-frame.c:641
+#: ../libide/editor/ide-editor-frame.c:646
 #: ../plugins/project-tree/gtk/menus.ui.h:1
 msgid "Re_veal in Project Tree"
 msgstr "V_isa i projektträdet"
 
-#: ../libide/editor/ide-editor-perspective.c:350
+#: ../libide/editor/ide-editor-perspective.c:456
 #: ../libide/preferences/ide-preferences-builtin.c:102
 #: ../libide/preferences/ide-preferences-builtin.c:125
 msgid "Editor"
 msgstr "Redigerare"
 
-#: ../libide/editor/ide-editor-view-actions.c:300
+#: ../libide/editor/ide-editor-view-actions.c:301
 msgid "Save Document"
 msgstr "Spara dokument"
 
-#: ../libide/editor/ide-editor-view-actions.c:306
-#: ../libide/editor/ide-editor-view-actions.c:437
+#: ../libide/editor/ide-editor-view-actions.c:307
+#: ../libide/editor/ide-editor-view-actions.c:438
 #: ../libide/ide-workbench-actions.c:67
-#: ../plugins/build-tools/gbp-build-panel.ui.h:13
+#: ../plugins/build-tools/gbp-build-panel.ui.h:8
 #: ../plugins/terminal/gb-terminal-view-actions.c:305
 msgid "Cancel"
 msgstr "Avbryt"
 
-#: ../libide/editor/ide-editor-view-actions.c:307
-#: ../libide/editor/ide-editor-view-actions.c:438
+#: ../libide/editor/ide-editor-view-actions.c:308
+#: ../libide/editor/ide-editor-view-actions.c:439
 #: ../plugins/terminal/gb-terminal-view-actions.c:306
 msgid "Save"
 msgstr "Spara"
 
-#: ../libide/editor/ide-editor-view-actions.c:426
+#: ../libide/editor/ide-editor-view-actions.c:427
 msgid "Save Document As"
 msgstr "Spara dokument som"
 
@@ -722,11 +846,9 @@ msgid "Provide a number between 1 and %u"
 msgstr "Ange ett tal mellan 1 och %u"
 
 #: ../libide/genesis/ide-genesis-perspective.c:200
-#: ../libide/greeter/ide-greeter-perspective.c:429
-#, fuzzy
-#| msgid "Failed to locate configure.ac"
+#: ../libide/greeter/ide-greeter-perspective.c:436
 msgid "Failed to load the project"
-msgstr "Misslyckades med att hitta configure.ac"
+msgstr "Misslyckades med att läsa in projektet"
 
 #: ../libide/gsettings/ide-language-defaults.c:177
 #, c-format
@@ -758,6 +880,8 @@ msgstr "GNOME Builder"
 msgid "translator-credits"
 msgstr ""
 "Anders Jonsson <anders.jonsson@norsjovallen.se>\n"
+"Sebastian Rasmussen <sebras@gmail.com>\n"
+"\n"
 "Skicka synpunkter på översättningen till\n"
 "<tp-sv@listor.tp-sv.se>."
 
@@ -770,90 +894,82 @@ msgid "Funded By"
 msgstr "Finansierat av"
 
 #: ../libide/ide-application-command-line.c:102
-#, fuzzy
-#| msgid "Command Bar"
 msgid "Commands:"
-msgstr "Kommandorad"
+msgstr "Kommandon:"
 
-#: ../libide/ide-application-command-line.c:165
+#: ../libide/ide-application-command-line.c:185
 msgid "List available subcommands"
-msgstr ""
+msgstr "Lista tillgängliga underkommandon"
 
-#: ../libide/ide-application-command-line.c:172
+#: ../libide/ide-application-command-line.c:192
 msgid "Run Builder in standalone mode"
 msgstr "Kör Builder i fristående läge"
 
-#: ../libide/ide-application-command-line.c:179
+#: ../libide/ide-application-command-line.c:199
 msgid "Show the application's version"
 msgstr "Visa programmets version"
 
-#: ../libide/ide-application-command-line.c:198
-#, fuzzy
-#| msgid "Increase verbosity. May be specified multiple times."
-msgid "Increase verbosity, may specify multiple times"
-msgstr "Öka utförlighet. Kan anges flera gånger."
+#: ../libide/ide-application-command-line.c:218
+msgid "Increase verbosity, may be specified multiple times"
+msgstr "Öka utförlighet, kan anges flera gånger"
 
-#: ../libide/ide-application-command-line.c:228
+#: ../libide/ide-application-command-line.c:225
+msgid "Enter GApplication Service mode"
+msgstr "Ange ett serviceläge för GApplication"
+
+#: ../libide/ide-application-command-line.c:255
 msgid "COMMAND"
-msgstr ""
+msgstr "KOMMANDO"
 
-#: ../libide/ide-application-command-line.c:286
+#: ../libide/ide-application-command-line.c:326
 msgid "No commands available"
-msgstr ""
+msgstr "Inga kommandon tillgängliga"
 
-#: ../libide/ide-application-command-line.c:315
-#, fuzzy
-#| msgid "Redo previous command"
+#: ../libide/ide-application-command-line.c:356
 msgid "Please provide a command"
-msgstr "Gör om föregående kommando"
+msgstr "Ange ett kommando"
 
-#: ../libide/ide-application-command-line.c:325
-#, fuzzy
-#| msgid "No such extension point."
+#: ../libide/ide-application-command-line.c:366
 msgid "No such tool"
-msgstr "Ingen sådan tilläggspunkt."
+msgstr "Inget sådant verktyg finns"
 
-#: ../libide/ide-application-command-line.c:339
+#: ../libide/ide-application-command-line.c:380
 msgid "Please provide a worker type"
-msgstr ""
+msgstr "Ange en arbetartyp"
 
-#: ../libide/ide-application-command-line.c:346
-msgid "Please provide a dbus address"
-msgstr ""
+#: ../libide/ide-application-command-line.c:387
+msgid "Please provide a D-Bus address"
+msgstr "Ange D-Bus-adress"
 
-#: ../libide/ide-application-command-line.c:355
+#: ../libide/ide-application-command-line.c:396
 msgid "No such worker"
-msgstr ""
+msgstr "Ingen sådan arbetare finns"
 
-#: ../libide/ide-buffer.c:2204
+#: ../libide/ide-buffer.c:2298
 msgid "The current language lacks a symbol resolver."
 msgstr "Det aktuella språket saknar en symboluppslagare."
 
 #: ../libide/ide-buffer-manager.c:612
 msgid "File too large to be opened."
-msgstr "Fil för stor för att öppnas"
+msgstr "Fil för stor för att öppnas."
 
-#: ../libide/ide-buffer-manager.c:1456
+#: ../libide/ide-buffer-manager.c:1461
 msgid "Words"
 msgstr "Ord"
 
-#: ../libide/ide-buffer-manager.c:1668
+#: ../libide/ide-buffer-manager.c:1673
 #, c-format
 msgid "unsaved document %u"
 msgstr "osparat dokument %u"
 
-#: ../libide/ide-buffer-manager.c:1702
+#: ../libide/ide-buffer-manager.c:1707
 msgid "Failed to save buffer, ignoring reclamation."
 msgstr "Misslyckades med att spara buffert, ignorerar återkrävande."
 
-#: ../libide/ide-builder.c:55
+#: ../libide/ide-builder.c:89
 #, c-format
-msgid "%s does not implement build_async()"
-msgstr "%s implementerar inte build_async()"
-
-#: ../libide/ide-builder.c:61
-msgid "No implementation of build_async()"
-msgstr "Ingen implementation av build_async()"
+msgid "%s does not support building"
+msgstr "%s saknar stöd för byggande"
 
 #: ../libide/ide-build-result.c:217
 msgid "Failed to open stderr stream."
@@ -864,7 +980,7 @@ msgid "Failed to open stdout stream."
 msgstr "Misslyckades med att öppna stdout-strömmen."
 
 # osäker
-#: ../libide/ide-build-system.c:232
+#: ../libide/ide-build-system.c:122
 #, c-format
 msgid "%s() is not supported on %s build system."
 msgstr "%s() stöds inte i %s-byggsystem."
@@ -874,24 +990,30 @@ msgstr "%s() stöds inte i %s-byggsystem."
 msgid "You must call %s() before using libide."
 msgstr "Du måste anropa %s() innan libide används."
 
-#: ../libide/ide-context.c:1665
+#: ../libide/ide-configuration-manager.c:427
+msgid "Default Configuration"
+msgstr "Standardkonfiguration"
+
+#: ../libide/ide-context.c:1828
 msgid "An unload request is already pending"
 msgstr "En inaktiveringsbegäran väntar redan"
 
-#: ../libide/ide-context.c:1780
+#: ../libide/ide-context.c:1943
 msgid "Context has already been restored."
 msgstr "Kontext har redan återställts."
 
-#: ../libide/ide-device-manager.c:144
+#: ../libide/ide-device-manager.c:147
 #, c-format
 msgid "The device \"%s\" could not be found."
 msgstr "Enheten ”%s” kunde inte hittas."
 
+#: ../libide/ide-environment-editor.c:65
+msgid "New variable…"
+msgstr "Ny variabel…"
+
 #: ../libide/ide-layout-view.c:146
-#, fuzzy
-#| msgid "unsaved document %u"
 msgid "untitled document"
-msgstr "osparat dokument %u"
+msgstr "namnlöst dokument"
 
 #: ../libide/ide-object.c:288
 #, c-format
@@ -918,29 +1040,28 @@ msgstr "Målfil måste vara i projektträdet."
 msgid "File must be within the project tree."
 msgstr "Fil måste vara i projektträdet."
 
-#: ../libide/ide-recent-projects.c:382
+#: ../libide/ide-recent-projects.c:383
 #, c-format
 msgid "%s() may only be executed once"
 msgstr "%s() kan bara köras en gång"
+
+#: ../libide/ide-runtime-manager.c:100
+msgid "Host operating system"
+msgstr "Värdoperativsystem"
 
 #: ../libide/ide-script.c:205
 #, c-format
 msgid "%s has not implemented GAsyncInitable."
 msgstr "%s har inte implementerat GAsyncInitable."
 
-#: ../libide/ide-source-snippet.c:370
+#: ../libide/ide-source-snippet.c:372
 msgid "Chunk does not belong to snippet."
 msgstr "Stycke hör inte till textsnutt."
 
 #: ../libide/ide-source-snippet-completion-provider.c:297
-#: ../libide/preferences/ide-preferences-builtin.c:171
+#: ../libide/preferences/ide-preferences-builtin.c:173
 msgid "Snippets"
 msgstr "Textsnuttar"
-
-#: ../libide/ide-source-snippet-parser.c:496
-#, c-format
-msgid "Invalid snippet at line %d: %s"
-msgstr "Ogiltig textsnutt på rad %d: %s"
 
 #: ../libide/ide-source-snippets-manager.c:96
 #, c-format
@@ -952,85 +1073,81 @@ msgstr "Misslyckades med att öppna katalog: %s"
 msgid "Failed to load file: %s: %s"
 msgstr "Misslyckades med att läsa in fil: %s: %s"
 
-#: ../libide/ide-source-view.c:4965
+#: ../libide/ide-source-view.c:4900
 #, c-format
-msgid "Insert \"%s\""
+msgid "Insert “%s”"
 msgstr "Infoga ”%s”"
 
-#: ../libide/ide-source-view.c:4967
+#: ../libide/ide-source-view.c:4902
 #, c-format
-msgid "Replace \"%s\" with \"%s\""
+msgid "Replace “%s” with “%s”"
 msgstr "Ersätt ”%s” med ”%s”"
 
 # Fix-it: små automatiska fixar för problem
-#: ../libide/ide-source-view.c:5081
+#: ../libide/ide-source-view.c:5016
 msgid "Apply Fix-It"
 msgstr "Tillämpa Fixa-det"
 
 #: ../libide/ide-uri.c:181
 #, no-c-format
 msgid "Invalid %-encoding in URI"
-msgstr ""
+msgstr "Ogiltig %-kodning i URI"
 
 #: ../libide/ide-uri.c:219
-msgid "Non-UTF8 characters in URI"
-msgstr ""
+msgid "Non-UTF-8 characters in URI"
+msgstr "Tecken som inte är UTF-8 finns i URI"
 
 #: ../libide/ide-uri.c:366 ../libide/ide-uri.c:377
 #, c-format
 msgid "Invalid IP literal '%s' in URI"
-msgstr ""
+msgstr "Ogiltig IP-litteral ”%s” i URI"
 
 #: ../libide/ide-uri.c:411
 #, c-format
 msgid "Invalid encoded IP literal '%s' in URI"
-msgstr ""
+msgstr "Ogiltig kodad IP-litteral ”%s” i URI"
 
 #: ../libide/ide-uri.c:420
 #, c-format
 msgid "Invalid non-ASCII hostname '%s' in URI"
-msgstr ""
+msgstr "Ogiltigt icke-ASCII-värdnamn ”%s” i URI"
 
 #: ../libide/ide-uri.c:435
 #, c-format
 msgid "Non-ASCII hostname '%s' forbidden in this URI"
-msgstr ""
+msgstr "Icke-ASCII-värdnamn ”%s” är förbjudet i denna URI"
 
 #: ../libide/ide-uri.c:457
-#, fuzzy, c-format
-#| msgid "Could not parse XML from stream"
+#, c-format
 msgid "Could not parse port '%s' in URI"
-msgstr "Kunde inte tolka XML från ström"
+msgstr "Kunde inte tolka port ”%s” i URI"
 
 #: ../libide/ide-uri.c:464
 #, c-format
 msgid "Port '%s' in URI is out of range"
-msgstr ""
+msgstr "Port ”%s” i URI är utanför intervallet"
 
 #: ../libide/ide-uri.c:590
 msgid "Base URI is not absolute"
-msgstr ""
+msgstr "Bas-URI är inte absolut"
 
 #: ../libide/ide-uri.c:617
 msgid "URI is not absolute, and no base URI was provided"
-msgstr ""
+msgstr "URI är inte absolut, och ingen bas-URI angavs"
 
 #: ../libide/ide-uri.c:662
-#, fuzzy, c-format
-#| msgid "Could not parse XML from stream"
+#, c-format
 msgid "Could not parse '%s' as absolute URI"
-msgstr "Kunde inte tolka XML från ström"
+msgstr "Kunde inte tolka ”%s” som en absolut URI"
 
 #: ../libide/ide-uri.c:1190
 #, c-format
 msgid "URI '%s' has no host component"
-msgstr ""
+msgstr "URI ”%s” har ingen värdkomponent"
 
 #: ../libide/ide-workbench-actions.c:64
-#, fuzzy
-#| msgid "Open _With"
 msgid "Open File"
-msgstr "Öppna _med"
+msgstr "Öppna fil"
 
 #: ../libide/ide-workbench-actions.c:68
 msgid "Open"
@@ -1038,272 +1155,220 @@ msgstr "Öppna"
 
 #: ../libide/preferences/ide-preferences-builtin.c:40
 msgid "Extensions"
-msgstr ""
+msgstr "Tillägg"
 
 #: ../libide/preferences/ide-preferences-builtin.c:41
 msgid "Installed Extensions"
-msgstr ""
+msgstr "Installerade tillägg"
 
 #: ../libide/preferences/ide-preferences-builtin.c:42
 msgid "Bundled Extensions"
-msgstr ""
+msgstr "Medskickade tillägg"
 
 #: ../libide/preferences/ide-preferences-builtin.c:77
 msgid "Appearance"
-msgstr ""
+msgstr "Utseende"
 
 #: ../libide/preferences/ide-preferences-builtin.c:79
-#, fuzzy
-#| msgid "Theme"
 msgid "Themes"
-msgstr "Tema"
+msgstr "Teman"
 
 #: ../libide/preferences/ide-preferences-builtin.c:80
-#, fuzzy
-#| msgid "Theme"
 msgid "Dark Theme"
-msgstr "Tema"
+msgstr "Mörkt tema"
 
 #: ../libide/preferences/ide-preferences-builtin.c:80
 msgid "Whether Builder should use a dark theme"
-msgstr ""
+msgstr "Huruvida Builder ska använda ett mörkt tema"
 
 #: ../libide/preferences/ide-preferences-builtin.c:80
 msgid "dark theme"
-msgstr ""
+msgstr "mörkt tema"
 
 #: ../libide/preferences/ide-preferences-builtin.c:81
-#, fuzzy
-#| msgid "Display Grid Pattern"
 msgid "Grid Pattern"
-msgstr "Visa rutnätsmönster"
+msgstr "Rutnätsmönster"
 
 #: ../libide/preferences/ide-preferences-builtin.c:81
-#, fuzzy
-#| msgid "Display a grid pattern under the source code."
 msgid "Display a grid pattern underneath source code"
-msgstr "Visa ett rutnätsmönster under källkoden."
+msgstr "Visa ett rutnätsmönster under källkoden"
 
 #: ../libide/preferences/ide-preferences-builtin.c:101
 msgid "Font"
 msgstr "Typsnitt"
 
 #: ../libide/preferences/ide-preferences-builtin.c:102
-#, fuzzy
-#| msgid "font document editor monospace"
 msgid "editor font monospace"
-msgstr "typsnitt dokument redigerare monospace"
+msgstr "redigerartypsnitt med fast breddsteg"
+
+#. XXX: This belongs in terminal addin
+#: ../libide/preferences/ide-preferences-builtin.c:104
+#: ../plugins/terminal/gb-terminal-workbench-addin.c:99
+msgid "Terminal"
+msgstr "Terminal"
 
 #: ../libide/preferences/ide-preferences-builtin.c:104
 msgid "terminal font monospace"
-msgstr ""
+msgstr "terminaltypsnitt med fast breddsteg"
 
 #: ../libide/preferences/ide-preferences-builtin.c:110
 msgid "Keyboard"
 msgstr "Tangentbord"
 
 #: ../libide/preferences/ide-preferences-builtin.c:112
-#, fuzzy
-#| msgid "Vim Emulation"
 msgid "Emulation"
-msgstr "Vim-emulering"
+msgstr "Emulering"
 
 #: ../libide/preferences/ide-preferences-builtin.c:113
-msgid "Default keybinding mode which mimics Gedit"
-msgstr ""
+msgid "Default keybinding mode which mimics gedit"
+msgstr "Standardtangentbindningsläge som imiterar gedit"
 
 #: ../libide/preferences/ide-preferences-builtin.c:114
 msgid "Emacs"
-msgstr ""
+msgstr "Emacs"
 
 #: ../libide/preferences/ide-preferences-builtin.c:114
-#, fuzzy
-#| msgid "Emulates familiar keybindings from the Emacs text editor."
 msgid "Emulates the Emacs text editor"
-msgstr "Emulerar bekanta tangentbindningar från textredigeraren Emacs."
+msgstr "Emulerar textredigeraren Emacs"
 
 #: ../libide/preferences/ide-preferences-builtin.c:115
 msgid "Vim"
-msgstr ""
+msgstr "Vim"
 
 #: ../libide/preferences/ide-preferences-builtin.c:115
-#, fuzzy
-#| msgid "Emulates familiar keybindings from the Vim text editor."
 msgid "Emulates the Vim text editor"
-msgstr "Emulerar bekanta tangentbindningar från textredigeraren Vim."
+msgstr "Emulerar textredigeraren Vim"
 
 #: ../libide/preferences/ide-preferences-builtin.c:117
-#, fuzzy
-#| msgid "Move Left"
 msgid "Movement"
-msgstr "Flytta vänster"
+msgstr "Förflyttning"
 
 #: ../libide/preferences/ide-preferences-builtin.c:118
-#, fuzzy
-#| msgid "Smart Home End"
 msgid "Smart Home and End"
 msgstr "Smarta Home och End"
 
 #: ../libide/preferences/ide-preferences-builtin.c:118
-#, fuzzy
-#| msgid "Home moves to first non-space character."
 msgid "Home moves to first non-whitespace character"
-msgstr "Home flyttar till första tecken som inte är blanksteg."
+msgstr "Home flyttar till första tecken som inte är blanksteg"
 
 #: ../libide/preferences/ide-preferences-builtin.c:119
-#, fuzzy
-#| msgid ""
-#| "Backspace will remove extra spaces to keep you aligned with your "
-#| "indentation width."
 msgid ""
 "Backspace will remove extra space to keep you aligned with your indentation"
 msgstr ""
 "Backsteg kommer ta bort extra blanktecken för att hålla dig justerad med din "
-"indenteringsbredd."
+"indentering"
 
 #: ../libide/preferences/ide-preferences-builtin.c:127
 msgid "Cursor"
-msgstr ""
+msgstr "Markör"
 
 #: ../libide/preferences/ide-preferences-builtin.c:128
-#, fuzzy
-#| msgid "Restore Cursor Position"
 msgid "Restore cursor position"
 msgstr "Återställ markörposition"
 
 #: ../libide/preferences/ide-preferences-builtin.c:128
-#, fuzzy
-#| msgid ""
-#| "Restore the insertion cursor to the last position when reopening a file."
 msgid "Restore cursor position when a file is reopened"
-msgstr ""
-"Återställ inmatningsmarkören till den senaste positionen då en fil öppnas på "
-"nytt."
+msgstr "Återställ markörposition då en fil öppnas på nytt"
 
 #: ../libide/preferences/ide-preferences-builtin.c:129
 msgid "Scroll Offset"
 msgstr "Rullningsavstånd"
 
 #: ../libide/preferences/ide-preferences-builtin.c:129
-#, fuzzy
-#| msgid "Minimal number of lines to keep above and below the cursor."
 msgid "Minimum number of lines to keep above and below the cursor"
-msgstr "Minsta antal rader att behålla ovanför och under markören."
+msgstr "Minsta antal rader att behålla ovanför och under markören"
 
 #: ../libide/preferences/ide-preferences-builtin.c:130
 msgid "Overscroll"
-msgstr ""
+msgstr "Överrullning"
 
 #: ../libide/preferences/ide-preferences-builtin.c:130
 msgid "Allow the editor to scroll past the end of the buffer"
-msgstr ""
+msgstr "Låt textredigeraren rulla förbi slutet på bufferten"
 
 #: ../libide/preferences/ide-preferences-builtin.c:132
 msgid "Line Information"
-msgstr ""
+msgstr "Radinformation"
 
 #: ../libide/preferences/ide-preferences-builtin.c:133
-#, fuzzy
-#| msgid "line numbers"
 msgid "Line numbers"
-msgstr "radnummer"
+msgstr "Radnummer"
 
 #: ../libide/preferences/ide-preferences-builtin.c:133
-#, fuzzy
-#| msgid "Move viewport to beginning of file"
 msgid "Show line number at beginning of each line"
-msgstr "Flytta visningsområde till början på filen"
+msgstr "Visa radnumret vid varje rads början"
 
 #: ../libide/preferences/ide-preferences-builtin.c:134
 msgid "Line changes"
-msgstr ""
+msgstr "Radändringar"
 
 #: ../libide/preferences/ide-preferences-builtin.c:134
-#, fuzzy
-#| msgid ""
-#| "Display whether a line has been added or modified next to the line number."
 msgid "Show if a line was added or modified next to line number"
-msgstr "Visa huruvida en rad har lagts till eller ändrats intill radnumret."
+msgstr "Visa huruvida en rad har lagts till eller ändrats intill radnumret"
 
 #: ../libide/preferences/ide-preferences-builtin.c:136
-#, fuzzy
-#| msgid "Highlighting"
 msgid "Highlight"
 msgstr "Färgmarkering"
 
 #: ../libide/preferences/ide-preferences-builtin.c:137
-#, fuzzy
-#| msgid "Highlight current line"
 msgid "Current line"
-msgstr "Färgmarkera aktuell rad"
+msgstr "Aktuell rad"
 
 #: ../libide/preferences/ide-preferences-builtin.c:137
 msgid "Make current line stand out with highlights"
-msgstr ""
+msgstr "Få aktuell rad att sticka ut med färgmarkering"
 
 #: ../libide/preferences/ide-preferences-builtin.c:138
-#, fuzzy
-#| msgid "Move to matching bracket"
 msgid "Matching brackets"
-msgstr "Gå till matchande klammer"
+msgstr "Matchande parenteser"
 
 #: ../libide/preferences/ide-preferences-builtin.c:138
-#, fuzzy
-#| msgid "Highlight Matching Brackets"
 msgid "Highlight matching brackets based on cursor position"
-msgstr "Färgmarkera matchande klammer"
+msgstr "Färgmarkera matchande parenteser baserat på markörposition"
 
 #: ../libide/preferences/ide-preferences-builtin.c:140
-#, fuzzy
-#| msgid "Auto Hide Overview Map"
 msgid "Code Overview"
-msgstr "Dölj automatiskt översiktskarta"
+msgstr "Översiktskarta för kod"
 
 #: ../libide/preferences/ide-preferences-builtin.c:141
-#, fuzzy
-#| msgid "Overview Map"
 msgid "Show overview map"
-msgstr "Översiktskarta"
+msgstr "Visa översiktskarta"
 
 #: ../libide/preferences/ide-preferences-builtin.c:141
 msgid "A zoomed out view to enhance navigating source code"
-msgstr ""
+msgstr "En utzoomad vy för att förbättra källkodsnavigering"
 
 #: ../libide/preferences/ide-preferences-builtin.c:142
-#, fuzzy
-#| msgid "Auto Hide Overview Map"
 msgid "Automatically hide overview map"
 msgstr "Dölj automatiskt översiktskarta"
 
 #: ../libide/preferences/ide-preferences-builtin.c:142
 msgid "Automatically hide map when editor loses focus"
-msgstr ""
+msgstr "Dölj automatiskt karta när textredigeraren tappar fokus"
 
 #: ../libide/preferences/ide-preferences-builtin.c:144
 msgid "Whitespace Characters"
-msgstr ""
+msgstr "Blanktecken"
 
 #: ../libide/preferences/ide-preferences-builtin.c:147
 msgid "New line and carriage return"
-msgstr ""
+msgstr "Nyrad och vagnretur"
 
 #: ../libide/preferences/ide-preferences-builtin.c:148
-#, fuzzy
-#| msgid "Draw indicators for non-breaking spaces."
 msgid "Non-breaking spaces"
-msgstr "Rita indikatorer för icke-brytande blanksteg."
+msgstr "Icke-brytande blanksteg"
 
 #: ../libide/preferences/ide-preferences-builtin.c:149
 msgid "Spaces inside of text"
-msgstr ""
+msgstr "Mellanslag inuti text"
 
 #: ../libide/preferences/ide-preferences-builtin.c:150
 msgid "Trailing Only"
-msgstr ""
+msgstr "Endast eftersläpande"
 
 #: ../libide/preferences/ide-preferences-builtin.c:151
 msgid "Leading Only"
-msgstr ""
+msgstr "Endast inledande"
 
 #: ../libide/preferences/ide-preferences-builtin.c:157
 msgid "Code Insight"
@@ -1314,150 +1379,174 @@ msgid "Highlighting"
 msgstr "Färgmarkering"
 
 #: ../libide/preferences/ide-preferences-builtin.c:160
-#, fuzzy
-#| msgid "Semantic Language Highlighting"
 msgid "Semantic Highlighting"
-msgstr "Semantisk färgmarkering för språk"
+msgstr "Semantisk färgmarkering"
 
 #: ../libide/preferences/ide-preferences-builtin.c:160
 msgid ""
 "Use code insight to highlight additional information discovered in source "
 "file"
 msgstr ""
+"Använd kodinsikt för att färgmarkera ytterligare information som hittas i "
+"källkodsfilen"
 
 #: ../libide/preferences/ide-preferences-builtin.c:162
-#, fuzzy
-#| msgid "Auto Completion"
 msgid "Completion"
-msgstr "Automatisk komplettering"
+msgstr "Komplettering"
 
 #: ../libide/preferences/ide-preferences-builtin.c:163
-#, fuzzy
-#| msgid "Suggest completion of words found within all open documents."
 msgid "Suggest words found in open files"
-msgstr "Föreslå komplettering av ord som hittas i alla öppna dokument."
+msgstr "Föreslå ord som hittas i alla öppna filer"
 
 #: ../libide/preferences/ide-preferences-builtin.c:163
-#, fuzzy
-#| msgid "Suggest completion of words found within all open documents."
 msgid ""
 "Suggests completions as you type based on words found in any open document"
-msgstr "Föreslå komplettering av ord som hittas i alla öppna dokument."
+msgstr ""
+"Föreslå kompletteringar allt eftersom du skriver baserat på ord som hittas i "
+"alla öppna dokument"
 
 #: ../libide/preferences/ide-preferences-builtin.c:164
-#, fuzzy
-#| msgid "Suggest Completions using Ctags"
 msgid "Suggest completions using Ctags"
-msgstr "Föreslå kompletteringar med Ctags"
+msgstr "Föreslå kompletteringar från Ctags"
 
 #: ../libide/preferences/ide-preferences-builtin.c:164
 msgid ""
 "Create and manages a Ctags database for completing class names, functions, "
 "and more"
 msgstr ""
+"Skapa och hantera en Ctags-databas för komplettering av klassnamn, "
+"funktioner och annat"
 
 #: ../libide/preferences/ide-preferences-builtin.c:165
-#, fuzzy
-#| msgid "Suggest Completions using Clang (Experimental)"
 msgid "Suggest completions using Clang (Experimental)"
-msgstr "Föreslå kompletteringar med Clang (Experimentellt)"
+msgstr "Föreslå kompletteringar från Clang (Experimentellt)"
 
 #: ../libide/preferences/ide-preferences-builtin.c:165
-#, fuzzy
-#| msgid "Use Clang for completions in the C and C++ languages."
 msgid "Use Clang to suggest completions for C and C++ languages"
-msgstr "Använd Clang för kompletteringar i språken C och C++."
+msgstr "Använd Clang för att föreslå kompletteringar i språken C och C++"
 
-#: ../libide/preferences/ide-preferences-builtin.c:174
-#, fuzzy
-#| msgid "Snippets"
+#: ../libide/preferences/ide-preferences-builtin.c:167
+msgid "Diagnostics"
+msgstr "Diagnostik"
+
+#: ../libide/preferences/ide-preferences-builtin.c:176
 msgid "Code snippets"
-msgstr "Textsnuttar"
+msgstr "Kodsnuttar"
 
-#: ../libide/preferences/ide-preferences-builtin.c:174
+#: ../libide/preferences/ide-preferences-builtin.c:176
 msgid "Use code fragments to increase typing efficiency"
-msgstr ""
+msgstr "Använd kodfragment för att öka på skriveffektivitet"
 
-#: ../libide/preferences/ide-preferences-builtin.c:188
+#: ../libide/preferences/ide-preferences-builtin.c:190
 msgid "Programming Languages"
 msgstr "Programmeringsspråk"
 
-#: ../libide/preferences/ide-preferences-builtin.c:225
-#, fuzzy
-#| msgid "Trim trailing whitespace when saving document"
-msgid "Trim trialing whitespace"
-msgstr "Ta bort eftersläpande blanksteg då dokument sparas"
-
-#: ../libide/preferences/ide-preferences-builtin.c:225
-msgid "Upon saving, trailing whitespcae from modified lines will be trimmed."
-msgstr ""
+#: ../libide/preferences/ide-preferences-builtin.c:227
+msgid "Trim trailing whitespace"
+msgstr "Ta bort eftersläpande blanksteg"
 
 #: ../libide/preferences/ide-preferences-builtin.c:227
-msgid "Margins"
-msgstr ""
+msgid "Upon saving, trailing whitespace from modified lines will be trimmed."
+msgstr "Vid sparande kommer eftersläpande blanktecken att tas bort."
 
 #: ../libide/preferences/ide-preferences-builtin.c:228
-#, fuzzy
-#| msgid "Display right margin"
+msgid "Overwrite Braces"
+msgstr "Överskrivning av klammerparenteser"
+
+#: ../libide/preferences/ide-preferences-builtin.c:228
+msgid "Overwrite closing braces"
+msgstr "Överskrivning av avslutande klammerparenteser"
+
+#: ../libide/preferences/ide-preferences-builtin.c:230
+msgid "Margins"
+msgstr "Marginaler"
+
+#: ../libide/preferences/ide-preferences-builtin.c:231
 msgid "Show right margin"
 msgstr "Visa högermarginal"
 
-#: ../libide/preferences/ide-preferences-builtin.c:229
+#: ../libide/preferences/ide-preferences-builtin.c:232
 msgid "Right margin position"
-msgstr ""
+msgstr "Position för högermarginal"
 
-#: ../libide/preferences/ide-preferences-builtin.c:229
+#: ../libide/preferences/ide-preferences-builtin.c:232
 msgid "Position in spaces for the right margin"
-msgstr ""
+msgstr "Position i blanksteg för högermarginalen"
 
-#: ../libide/preferences/ide-preferences-builtin.c:232
-#, fuzzy
-#| msgid "_Tab width:"
+#: ../libide/preferences/ide-preferences-builtin.c:235
 msgid "Tab width"
-msgstr "_Tabbredd:"
+msgstr "Tabbredd"
 
-#: ../libide/preferences/ide-preferences-builtin.c:232
+#: ../libide/preferences/ide-preferences-builtin.c:235
 msgid "Width of a tab character in spaces"
-msgstr ""
+msgstr "Bredd för tabbtecken uttryckt i blanksteg"
 
-#: ../libide/preferences/ide-preferences-builtin.c:233
-#, fuzzy
-#| msgid "Insert _spaces instead of tabs"
+#: ../libide/preferences/ide-preferences-builtin.c:236
 msgid "Insert spaces instead of tabs"
-msgstr "Infoga _blanksteg istället för tabbar"
+msgstr "Infoga blanksteg istället för tabbar"
 
-#: ../libide/preferences/ide-preferences-builtin.c:233
-#, fuzzy
-#| msgid "Insert _spaces instead of tabs"
+#: ../libide/preferences/ide-preferences-builtin.c:236
 msgid "Prefer spaces over use of tabs"
-msgstr "Infoga _blanksteg istället för tabbar"
+msgstr "Föredra blanksteg istället för tabbar"
 
-#: ../libide/preferences/ide-preferences-builtin.c:234
-#, fuzzy
-#| msgid "Auto indent"
+#: ../libide/preferences/ide-preferences-builtin.c:237
 msgid "Automatically indent"
 msgstr "Automatisk indentering"
 
-#: ../libide/preferences/ide-preferences-builtin.c:234
+#: ../libide/preferences/ide-preferences-builtin.c:237
 msgid "Indent source code as you type"
-msgstr ""
+msgstr "Indentera källkod allt eftersom du skriver"
 
-#: ../libide/preferences/ide-preferences-builtin.c:240
-#: ../plugins/build-tools/gbp-build-workbench-addin.c:331
-#, fuzzy
-#| msgid "_Build"
+#: ../libide/preferences/ide-preferences-builtin.c:243
+#: ../plugins/build-tools/gbp-build-workbench-addin.c:270
 msgid "Build"
-msgstr "_Bygg"
+msgstr "Bygg"
 
-#: ../libide/preferences/ide-preferences-builtin.c:243
-#, fuzzy
-#| msgid "Builder"
+#: ../libide/preferences/ide-preferences-builtin.c:245
+#: ../plugins/build-tools/gbp-build-configuration-view.ui.h:1
+msgid "General"
+msgstr "Allmänt"
+
+#: ../libide/preferences/ide-preferences-builtin.c:246
 msgid "Build Workers"
-msgstr "Builder"
+msgstr "Byggarbetare"
 
-#: ../libide/preferences/ide-preferences-builtin.c:243
+#: ../libide/preferences/ide-preferences-builtin.c:246
 msgid "Number of parallel build workers"
-msgstr ""
+msgstr "Antal parallella byggarbetare"
+
+#: ../libide/preferences/ide-preferences-builtin.c:252
+msgid "Projects"
+msgstr "Projekt"
+
+#: ../libide/preferences/ide-preferences-builtin.c:254
+msgid "Workspace"
+msgstr "Arbetsyta"
+
+#: ../libide/preferences/ide-preferences-builtin.c:255
+msgid "Projects Directory"
+msgstr "Projektkatalog"
+
+#: ../libide/preferences/ide-preferences-builtin.c:255
+msgid "A place for all your projects"
+msgstr "En plats för alla dina projekt"
+
+# sebras: Den här översättningen är inte klockren, men jag kommer inte på något bättre i brådrasket.
+#: ../libide/preferences/ide-preferences-builtin.c:257
+msgid "Project Discovery"
+msgstr "Projektupptäckande"
+
+#: ../libide/preferences/ide-preferences-builtin.c:258
+msgid "Discover projects on my computer"
+msgstr "Upptäck projekt på min dator"
+
+#: ../libide/preferences/ide-preferences-builtin.c:258
+msgid "Scan your computer for existing projects"
+msgstr "Genomsök din dator efter existerande projekt"
+
+#: ../libide/preferences/ide-preferences-perspective.c:888
+msgid "Preferences"
+msgstr "Inställningar"
 
 #: ../libide/pygobject/ide-pygobject-script.c:135
 msgid "Attempt to load a PyGObject script with no filename."
@@ -1509,183 +1598,208 @@ msgstr "Anslutning till org.freedesktop.FileManager1 misslyckades: "
 msgid "Calling ShowItems failed: "
 msgstr "Anrop av ShowItems misslyckades: "
 
-#: ../plugins/autotools/ide-autotools-builder.c:130
-#, fuzzy
-#| msgid "Cancel"
+#: ../plugins/autotools/ide-autotools-builder.c:49
 msgid "Cancelled"
-msgstr "Avbryt"
+msgstr "Avbruten"
 
-#: ../plugins/autotools/ide-autotools-builder.c:132
+#: ../plugins/autotools/ide-autotools-builder.c:51
 msgid "Failed"
-msgstr ""
+msgstr "Misslyckades"
 
-#: ../plugins/autotools/ide-autotools-builder.c:138
+#: ../plugins/autotools/ide-autotools-builder.c:57
 msgid "Success"
-msgstr ""
+msgstr "Lyckades"
 
-#: ../plugins/autotools/ide-autotools-builder.c:242
-#: ../plugins/autotools/ide-autotools-build-task.c:933
+#: ../plugins/autotools/ide-autotools-builder.c:161
+#: ../plugins/autotools/ide-autotools-build-task.c:872
 msgid "Building…"
-msgstr ""
+msgstr "Bygger…"
 
-#: ../plugins/autotools/ide-autotools-build-system.c:182
+#: ../plugins/autotools/ide-autotools-build-system.c:183
 msgid "Failed to locate configure.ac"
 msgstr "Misslyckades med att hitta configure.ac"
 
-#: ../plugins/autotools/ide-autotools-build-task.c:270
+#: ../plugins/autotools/ide-autotools-build-task.c:174
 msgid "Directory must be on a locally mounted filesystem."
 msgstr "Katalog måste vara på ett lokalt monterat filsystem."
 
-#: ../plugins/autotools/ide-autotools-build-task.c:649
+#: ../plugins/autotools/ide-autotools-build-task.c:548
 msgid "Cannot execute build task more than once."
 msgstr "Kan inte köra bygguppgift mer än en gång."
 
-#: ../plugins/autotools/ide-autotools-build-task.c:734
+#: ../plugins/autotools/ide-autotools-build-task.c:642
 msgid "Failed to create build directory."
 msgstr "Misslyckades med att skapa byggkatalog."
 
-#: ../plugins/autotools/ide-autotools-build-task.c:743
+#: ../plugins/autotools/ide-autotools-build-task.c:651
 #, c-format
 msgid "'%s' is not a directory."
 msgstr "”%s” är inte en katalog."
 
-#: ../plugins/autotools/ide-autotools-build-task.c:782
+#: ../plugins/autotools/ide-autotools-build-task.c:690
 #, c-format
 msgid "autogen.sh is missing from project directory (%s)."
 msgstr "autogen.sh saknas i projektkatalog (%s)."
 
-#: ../plugins/autotools/ide-autotools-build-task.c:792
+#: ../plugins/autotools/ide-autotools-build-task.c:700
 msgid "autogen.sh is not executable."
 msgstr "autogen.sh är inte körbar."
 
-#: ../plugins/autotools/ide-autotools-build-task.c:796
-msgid "Autogening…"
-msgstr ""
+#: ../plugins/autotools/ide-autotools-build-task.c:704
+msgid "Running autogen…"
+msgstr "Kör autogen…"
 
-#: ../plugins/autotools/ide-autotools-build-task.c:825
+#: ../plugins/autotools/ide-autotools-build-task.c:738
 #, c-format
 msgid "autogen.sh failed to create configure (%s)"
 msgstr "autogen.sh misslyckades med att skapa configure (%s)"
 
-#: ../plugins/autotools/ide-autotools-build-task.c:860
-msgid "Configuring…"
-msgstr ""
+#: ../plugins/autotools/ide-autotools-build-task.c:773
+msgid "Running configure…"
+msgstr "Kör configure…"
 
-#: ../plugins/autotools/ide-autotools-build-task.c:931
+#: ../plugins/autotools/ide-autotools-build-task.c:870
 msgid "Cleaning…"
-msgstr ""
+msgstr "Rensar…"
 
 #: ../plugins/autotools/ide-makecache.c:1006
 msgid "Invalid makefile provided, ignoring."
 msgstr "Ogiltig make-fil tillhandahölls, ignorerar."
 
+#: ../plugins/build-tools/gbp-build-configuration-view.ui.h:2
+msgid "The name of the build configuration"
+msgstr "Namnet på byggkonfigurationen"
+
+#: ../plugins/build-tools/gbp-build-configuration-view.ui.h:3
+msgid "Name"
+msgstr "Namn"
+
+#: ../plugins/build-tools/gbp-build-configuration-view.ui.h:4
+msgid "The prefix to use when installing the project"
+msgstr "Prefixet som används när projektet installeras"
+
+#: ../plugins/build-tools/gbp-build-configuration-view.ui.h:5
+msgid "Installation Prefix"
+msgstr "Installeringsprefix"
+
+#: ../plugins/build-tools/gbp-build-configuration-view.ui.h:6
+msgid "Options to use when bootstrapping the project"
+msgstr "Alternativ som används när projektet startas upp"
+
+#: ../plugins/build-tools/gbp-build-configuration-view.ui.h:7
+msgid "Configure Options"
+msgstr "Alternativ för configure"
+
+#: ../plugins/build-tools/gbp-build-configuration-view.ui.h:8
+msgid "Duplicate Configuration"
+msgstr "Duplicera konfiguration"
+
+#: ../plugins/build-tools/gbp-build-configuration-view.ui.h:9
+msgid "Delete Configuration"
+msgstr "Ta bort konfiguration"
+
+#: ../plugins/build-tools/gbp-build-configuration-view.ui.h:10
+msgid "Device"
+msgstr "Enhet"
+
+#: ../plugins/build-tools/gbp-build-configuration-view.ui.h:11
+msgid "Runtime"
+msgstr "Exekveringsmiljö"
+
+#: ../plugins/build-tools/gbp-build-configuration-view.ui.h:12
+msgid "Environment"
+msgstr "Miljö"
+
 #: ../plugins/build-tools/gbp-build-panel-row.c:68
-#, fuzzy
-#| msgid "Unknown failure"
 msgid "Unknown file"
-msgstr "Okänt fel"
+msgstr "Okänd fil"
 
 #: ../plugins/build-tools/gbp-build-panel.ui.h:1
-msgid "Device:"
-msgstr ""
-
-#: ../plugins/build-tools/gbp-build-panel.ui.h:2
-msgid "Framework:"
-msgstr ""
-
-#: ../plugins/build-tools/gbp-build-panel.ui.h:3
-msgid "Packaging:"
-msgstr ""
-
-#: ../plugins/build-tools/gbp-build-panel.ui.h:4
 #: ../plugins/project-tree/gtk/menus.ui.h:12
 msgid "_Build"
 msgstr "_Bygg"
 
-#: ../plugins/build-tools/gbp-build-panel.ui.h:5
+#: ../plugins/build-tools/gbp-build-panel.ui.h:2
 #: ../plugins/project-tree/gtk/menus.ui.h:13
 msgid "_Rebuild"
 msgstr "Bygg _om"
 
-#: ../plugins/build-tools/gbp-build-panel.ui.h:6
+#: ../plugins/build-tools/gbp-build-panel.ui.h:3
 msgid "_Clean"
-msgstr ""
+msgstr "_Rensa"
+
+#: ../plugins/build-tools/gbp-build-panel.ui.h:4
+msgid "Status:"
+msgstr "Status:"
+
+#: ../plugins/build-tools/gbp-build-panel.ui.h:5
+msgid "Running Time:"
+msgstr "Körtid:"
+
+#: ../plugins/build-tools/gbp-build-panel.ui.h:6
+msgid "Warnings:"
+msgstr "Varningar:"
 
 #: ../plugins/build-tools/gbp-build-panel.ui.h:7
-msgid "framework"
-msgstr ""
-
-#: ../plugins/build-tools/gbp-build-panel.ui.h:8
-msgid "packaging"
-msgstr ""
+msgid "Errors:"
+msgstr "Fel:"
 
 #: ../plugins/build-tools/gbp-build-panel.ui.h:9
-msgid "Status:"
-msgstr ""
+msgid "Deploy"
+msgstr "Sätt i drift"
 
 #: ../plugins/build-tools/gbp-build-panel.ui.h:10
-msgid "Running Time:"
-msgstr ""
-
-#: ../plugins/build-tools/gbp-build-panel.ui.h:11
-msgid "Warnings:"
-msgstr ""
-
-#: ../plugins/build-tools/gbp-build-panel.ui.h:12
-msgid "Errors:"
-msgstr ""
-
-#: ../plugins/build-tools/gbp-build-panel.ui.h:14
-msgid "Deploy"
-msgstr ""
-
-#: ../plugins/build-tools/gbp-build-panel.ui.h:15
 msgid "Export"
-msgstr ""
+msgstr "Exportera"
 
-#: ../plugins/build-tools/gbp-build-tool.c:91
-#: ../plugins/build-tools/gbp-build-tool.c:97
+#: ../plugins/build-tools/gbp-build-tool.c:102
+#: ../plugins/build-tools/gbp-build-tool.c:115
 #, c-format
 msgid "========================\n"
 msgstr "========================\n"
 
-#: ../plugins/build-tools/gbp-build-tool.c:92
+#: ../plugins/build-tools/gbp-build-tool.c:103
 #, c-format
 msgid "           Project Name: %s\n"
 msgstr "              Projektnamn: %s\n"
 
-#: ../plugins/build-tools/gbp-build-tool.c:93
+#: ../plugins/build-tools/gbp-build-tool.c:104
 #, c-format
 msgid " Version Control System: %s\n"
 msgstr " Versionshanteringssystem: %s\n"
 
-#: ../plugins/build-tools/gbp-build-tool.c:94
+#: ../plugins/build-tools/gbp-build-tool.c:105
 #, c-format
 msgid "           Build System: %s\n"
 msgstr "               Byggsystem: %s\n"
 
-#: ../plugins/build-tools/gbp-build-tool.c:95
+#: ../plugins/build-tools/gbp-build-tool.c:106
 #, c-format
 msgid "    Build Date and Time: %s\n"
 msgstr "  Datum och tid för bygge: %s\n"
 
-#: ../plugins/build-tools/gbp-build-tool.c:96
+#: ../plugins/build-tools/gbp-build-tool.c:107
 #, c-format
 msgid "    Building for Device: %s (%s)\n"
 msgstr "         Bygger för enhet: %s (%s)\n"
 
-#: ../plugins/build-tools/gbp-build-tool.c:124
-#: ../plugins/build-tools/gbp-build-tool.c:128
+#: ../plugins/build-tools/gbp-build-tool.c:112
+#, c-format
+msgid "            Environment: %s\n"
+msgstr "              Miljö: %s\n"
+
+#: ../plugins/build-tools/gbp-build-tool.c:142
+#: ../plugins/build-tools/gbp-build-tool.c:146
 #, c-format
 msgid "===============\n"
 msgstr "===============\n"
 
-#: ../plugins/build-tools/gbp-build-tool.c:125
+#: ../plugins/build-tools/gbp-build-tool.c:143
 #, c-format
 msgid " Build Failure: %s\n"
 msgstr " Byggfel: %s\n"
 
-#: ../plugins/build-tools/gbp-build-tool.c:126
+#: ../plugins/build-tools/gbp-build-tool.c:144
 msgid " Build ran for: %"
 msgstr " Bygge kördes under: %"
 
@@ -1694,62 +1808,91 @@ msgstr " Bygge kördes under: %"
 #. *       here too. It would be nice if we could say, go build this project,
 #. *       for this device, and then deploy.
 #.
-#: ../plugins/build-tools/gbp-build-tool.c:139
-#: ../plugins/build-tools/gbp-build-tool.c:143
+#: ../plugins/build-tools/gbp-build-tool.c:157
+#: ../plugins/build-tools/gbp-build-tool.c:161
 #, c-format
 msgid "=================\n"
 msgstr "=================\n"
 
-#: ../plugins/build-tools/gbp-build-tool.c:140
+#: ../plugins/build-tools/gbp-build-tool.c:158
 #, c-format
 msgid " Build Successful\n"
 msgstr " Bygge lyckades\n"
 
-#: ../plugins/build-tools/gbp-build-tool.c:141
+#: ../plugins/build-tools/gbp-build-tool.c:159
 msgid "   Build ran for: %"
 msgstr "   Bygge kördes under: %"
 
-#: ../plugins/build-tools/gbp-build-tool.c:191
-#, fuzzy, c-format
-#| msgid "Failed to load file: %s: %s"
+#: ../plugins/build-tools/gbp-build-tool.c:212
+#, c-format
 msgid "Failed to locate device \"%s\""
-msgstr "Misslyckades med att läsa in fil: %s: %s"
+msgstr "Misslyckades med att hitta enhet ”%s”"
 
-#: ../plugins/build-tools/gbp-build-tool.c:254
-#, fuzzy
-#| msgid "Clean and rebuild the project."
+#: ../plugins/build-tools/gbp-build-tool.c:222
+#, c-format
+msgid "Failed to locate runtime \"%s\""
+msgstr "Misslyckades med att hitta exekveringsmiljö ”%s”"
+
+#: ../plugins/build-tools/gbp-build-tool.c:286
 msgid "Clean the project"
-msgstr "Städa upp och bygg om projektet."
+msgstr "Städa upp projektet"
 
-#: ../plugins/build-tools/gbp-build-tool.c:256
-#, fuzzy
-#| msgid "The target device we are building for."
-msgid "The id of the device to build for"
-msgstr "Målenheten som vi bygger för."
+#: ../plugins/build-tools/gbp-build-tool.c:288
+msgid "The ID of the device to build for"
+msgstr "ID:t för enheten som det byggs för"
 
-#: ../plugins/build-tools/gbp-build-tool.c:257
+#: ../plugins/build-tools/gbp-build-tool.c:289
 msgid "local"
-msgstr ""
+msgstr "lokal"
 
-#: ../plugins/build-tools/gbp-build-tool.c:259
+#: ../plugins/build-tools/gbp-build-tool.c:291
+msgid "The runtime to use for building"
+msgstr "Exekveringsmiljö att använda vid bygge"
+
+#: ../plugins/build-tools/gbp-build-tool.c:292
+msgid "host"
+msgstr "värd"
+
+#: ../plugins/build-tools/gbp-build-tool.c:294
 msgid "Number of workers to use when building"
-msgstr ""
+msgstr "Antal arbetare som används vid bygge"
 
-#: ../plugins/build-tools/gbp-build-tool.c:260
+#: ../plugins/build-tools/gbp-build-tool.c:295
 msgid "N"
 msgstr "N"
 
-#: ../plugins/build-tools/gbp-build-tool.c:262
+#: ../plugins/build-tools/gbp-build-tool.c:297
+msgid "The configuration to use from .buildconfig"
+msgstr "Konfigurationen som används från .buildconfig"
+
+#: ../plugins/build-tools/gbp-build-tool.c:298
+msgid "CONFIG_ID"
+msgstr "KONFIGURATIONS-ID"
+
+#: ../plugins/build-tools/gbp-build-tool.c:300
 msgid "Path to project file, defaults to current directory"
-msgstr ""
+msgstr "Sökväg till projektfilen, standardvärdet är aktuell katalog"
 
-#: ../plugins/build-tools/gbp-build-tool.c:263
+#: ../plugins/build-tools/gbp-build-tool.c:301
 msgid "PATH"
-msgstr ""
+msgstr "SÖKVÄG"
 
-#: ../plugins/build-tools/gbp-build-workbench-addin.c:337
+#: ../plugins/build-tools/gbp-build-workbench-addin.c:275
 msgid "Build Output"
-msgstr ""
+msgstr "Byggutmatning"
+
+#: ../plugins/clang/ide-clang-preferences-addin.c:62
+msgid "Clang"
+msgstr "Clang"
+
+#: ../plugins/clang/ide-clang-preferences-addin.c:63
+msgid "Show errors and warnings provided by Clang"
+msgstr "Visa fel och varningar som tillhandahålls av Clang"
+
+#. translators: keywords used when searching for preferences
+#: ../plugins/clang/ide-clang-preferences-addin.c:65
+msgid "clang diagnostics warnings errors"
+msgstr "clang diagnostik varningar fel"
 
 #: ../plugins/clang/ide-clang-service.c:269
 msgid "Unknown failure"
@@ -1793,55 +1936,68 @@ msgstr "Kommando kunde inte hittas: %s"
 msgid "Use the entry below to execute a command"
 msgstr "Använd raden nedan för att köra ett kommando"
 
-#: ../plugins/command-bar/gb-vim.c:82
+#: ../plugins/command-bar/gb-vim.c:86
 #, c-format
 msgid "Number required"
 msgstr "Nummer krävs"
 
-#: ../plugins/command-bar/gb-vim.c:92
+#: ../plugins/command-bar/gb-vim.c:96
 #, c-format
 msgid "%s is invalid for %s"
 msgstr "%s är ogiltig för %s"
 
-#: ../plugins/command-bar/gb-vim.c:150
+#: ../plugins/command-bar/gb-vim.c:154
 #, c-format
 msgid "Cannot find language '%s'"
 msgstr "Kan inte hitta språket ”%s”"
 
-#: ../plugins/command-bar/gb-vim.c:347
+#: ../plugins/command-bar/gb-vim.c:311
+#, c-format
+msgid "This command requires a GtkSourceView to be focused"
+msgstr "Detta kommando kräver att en GtkSourceView är i fokus"
+
+#: ../plugins/command-bar/gb-vim.c:322
+#, c-format
+msgid "This command requires a view to be focused"
+msgstr "Detta kommando kräver att en vy är i fokus"
+
+#: ../plugins/command-bar/gb-vim.c:379
 #, c-format
 msgid "Unknown option: %s"
 msgstr "Okänd flagga: %s"
 
-#: ../plugins/command-bar/gb-vim.c:386
+#: ../plugins/command-bar/gb-vim.c:422
 #, c-format
 msgid "Cannot find colorscheme '%s'"
 msgstr "Kan inte hitta färgschemat ”%s”"
 
-#: ../plugins/command-bar/gb-vim.c:422
+#: ../plugins/command-bar/gb-vim.c:463
 #, c-format
 msgid "Failed to locate working directory"
 msgstr "Misslyckades med att hitta arbetskatalog"
 
-#: ../plugins/command-bar/gb-vim.c:546
+#: ../plugins/command-bar/gb-vim.c:640
 #, c-format
 msgid "Invalid :syntax subcommand: %s"
 msgstr "Ogiltigt :syntax-underkommando: %s"
 
-#: ../plugins/command-bar/gb-vim.c:875
+#: ../plugins/command-bar/gb-vim.c:1022
 #, c-format
 msgid "Invalid search and replace request"
 msgstr "Ogiltig sök och ersätt-begäran"
 
-#: ../plugins/command-bar/gb-vim.c:962
+#: ../plugins/command-bar/gb-vim.c:1127
 #, c-format
-msgid "vim mode requires GtkSourceView"
-msgstr "vim-läge kräver GtkSourceView"
+msgid "Not a command: %s"
+msgstr "Inte ett kommando: %s"
 
-#: ../plugins/command-bar/gb-vim.c:992
-#, c-format
-msgid "Not an editor command: %s"
-msgstr "Inte ett redigerarkommando: %s"
+#: ../plugins/comment-code/gtk/menus.ui.h:1
+msgid "Comment code"
+msgstr "Kommentera kod"
+
+#: ../plugins/comment-code/gtk/menus.ui.h:2
+msgid "Uncomment code"
+msgstr "Avkommentera kod"
 
 #: ../plugins/contributing/contributing_plugin/helper.py:76
 #, python-format
@@ -1849,10 +2005,12 @@ msgid ""
 "Usage:\n"
 "  %(prgname) %(command) OPTIONS\n"
 msgstr ""
+"Användning:\n"
+"  %(prgname) %(command) FLAGGOR\n"
 
 #: ../plugins/contributing/contributing_plugin/__init__.py:54
 msgid "Missing project name"
-msgstr ""
+msgstr "Saknar projektnamn"
 
 #: ../plugins/contributing/contributing_plugin/__init__.py:68
 msgid ""
@@ -1872,12 +2030,24 @@ msgid ""
 "  ide contribute gnome-maps\n"
 "\n"
 msgstr ""
+"Användning:\n"
+"  ide contribute PROJEKTNAMN\n"
+"\n"
+"  Detta kommando kommer att starta ditt system så att det kan börja bidra "
+"till\n"
+"  projektet betecknat av PROJEKTNAMN. Detta inkluderar att hämta källkoden,\n"
+"  säkerställa att du har de beroenden som krävs för att bygga och startar "
+"det första\n"
+"  bygget av projektet.\n"
+"\n"
+"Exempel:\n"
+"  ide contribute gnome-builder\n"
+"  ide contribute gnome-maps\n"
+"\n"
 
 #: ../plugins/contributing/contributing_plugin/__init__.py:226
-#, fuzzy
-#| msgid "_Rename"
 msgid "Username"
-msgstr "_Byt namn"
+msgstr "Användarnamn"
 
 #: ../plugins/c-pack/ide-c-format-provider.c:281
 #: ../plugins/python-pack/ide-python-format-provider.c:238
@@ -1886,31 +2056,30 @@ msgstr "Formatsträngar"
 
 #: ../plugins/create-project/gbp-create-project-tool.c:130
 msgid "List available templates"
-msgstr ""
+msgstr "Lista tillgängliga mallar"
 
 #: ../plugins/create-project/gbp-create-project-tool.c:132
 msgid "Project template to generate"
-msgstr ""
+msgstr "Projektmall att generera"
 
 #: ../plugins/create-project/gbp-create-project-tool.c:138
 msgid "create-project [OPTION...] PROJECT_NAME"
-msgstr ""
+msgstr "create-projekt [FLAGGA…] PROJEKTNAMN"
 
 #: ../plugins/create-project/gbp-create-project-tool.c:187
-#, fuzzy, c-format
-#| msgid "File name must not contain subdirectories."
-msgid "Filename must be ascii and may not contain : or ="
-msgstr "Filnamn får inte innehålla underkataloger."
+#, c-format
+msgid "Filename must be ASCII and may not contain : or ="
+msgstr "Filnamnet måste uttryckas i ASCII och får inte innehålla : eller ="
 
 #: ../plugins/create-project/gbp-create-project-tool.c:291
 #, c-format
 msgid "Please specify a project name.\n"
-msgstr ""
+msgstr "Ange ett projektnamn.\n"
 
 #: ../plugins/create-project/gbp-create-project-tool.c:307
 #, c-format
 msgid "Please specify a project template with --template=\n"
-msgstr ""
+msgstr "Ange en projektmall med --template=\n"
 
 #: ../plugins/devhelp/gbp-devhelp-search-provider.c:128
 #: ../plugins/devhelp/gbp-devhelp-workbench-addin.c:90
@@ -1923,11 +2092,11 @@ msgstr "Växla till"
 
 #: ../plugins/fpaste/fpaste_plugin/gtk/menus.ui.h:1
 msgid "Send to Fpaste.org"
-msgstr ""
+msgstr "Skicka till Fpaste.org"
 
-#: ../plugins/fpaste/fpaste_plugin/__init__.py:104
+#: ../plugins/fpaste/fpaste_plugin/__init__.py:110
 msgid "The following URL has been copied to the clipboard"
-msgstr ""
+msgstr "Följande URL har kopierats till urklipp"
 
 # osäker
 #: ../plugins/git/ide-git-buffer-change-monitor.c:167
@@ -1949,25 +2118,17 @@ msgstr "Fil kontrolleras inte av git-arbetskatalog."
 msgid "The requested file does not exist within the git index."
 msgstr "Den begärda filen existerar inte i git-indexet."
 
-#: ../plugins/git/ide-git-clone-widget.c:131
+#: ../plugins/git/ide-git-clone-widget.c:132
 msgid "A valid Git URL is required"
 msgstr "En giltig Git-URL krävs"
-
-#: ../plugins/git/ide-git-clone-widget.c:200
-#, fuzzy
-#| msgid "Project"
-msgid "Projects"
-msgstr "Projekt"
 
 #: ../plugins/git/ide-git-clone-widget.ui.h:1
 msgid "user@host:repository.git"
 msgstr "användare@värd:arkiv.git"
 
 #: ../plugins/git/ide-git-clone-widget.ui.h:2
-#, fuzzy
-#| msgid "Enter the URL of your project's source code repository."
 msgid "Enter the URL of your project's source code repository"
-msgstr "Ange URL för ditt projekts källkodsarkiv."
+msgstr "Ange URL:en för ditt projekts källkodsarkiv"
 
 #: ../plugins/git/ide-git-clone-widget.ui.h:3
 msgid "Directory"
@@ -1975,7 +2136,7 @@ msgstr "Katalog"
 
 #: ../plugins/git/ide-git-clone-widget.ui.h:4
 msgid "Enter the name of the directory to create"
-msgstr ""
+msgstr "Ange namnet på katalogen som ska skapas"
 
 #: ../plugins/git/ide-git-clone-widget.ui.h:5
 msgid "Repository"
@@ -1986,24 +2147,33 @@ msgid "Location"
 msgstr "Plats"
 
 #: ../plugins/git/ide-git-genesis-addin.c:93
-#, fuzzy
-#| msgid "From existing project on this computer"
 msgid "From a existing project in a Git repository"
-msgstr "Från existerande projekt på den här datorn"
+msgstr "Från ett existerande projekt i ett Git-arkiv"
 
 #: ../plugins/git/ide-git-preferences-addin.c:108
 msgid "Version Control"
 msgstr "Versionshantering"
 
 #: ../plugins/git/ide-git-preferences-addin.c:145
-#, fuzzy
-#| msgid "Source Code Attribution"
 msgid "Attribution"
-msgstr "Erkännande för källkod"
+msgstr "Erkännande"
 
-#: ../plugins/gnome-code-assistance/ide-gca-diagnostic-provider.c:336
+#: ../plugins/gnome-code-assistance/ide-gca-diagnostic-provider.c:375
 msgid "Code assistance requires a local file."
 msgstr "Kodhjälp kräver en lokal fil."
+
+#: ../plugins/gnome-code-assistance/ide-gca-preferences-addin.c:62
+msgid "Pylint"
+msgstr "Pylint"
+
+#: ../plugins/gnome-code-assistance/ide-gca-preferences-addin.c:63
+msgid "Enable the use of pylint, which may execute code in your project"
+msgstr "Aktivera användningen av pylint vilket kan exekvera kod i ditt projekt"
+
+#. translators: these are keywords used to search for preferences
+#: ../plugins/gnome-code-assistance/ide-gca-preferences-addin.c:65
+msgid "pylint python lint code execute execution"
+msgstr "pylint python lint kod exekvera exekvering"
 
 #: ../plugins/gnome-code-assistance/ide-gca-service.c:168
 msgid "No language specified"
@@ -2014,36 +2184,28 @@ msgid "Preview as HTML"
 msgstr "Förhandsgranska som HTML"
 
 #: ../plugins/jedi/jedi_plugin.py:672
-#, fuzzy
-#| msgid "Suggest Word Completion"
 msgid "Suggest Python completions"
-msgstr "Föreslå ordkomplettering"
+msgstr "Föreslå Python-kompletteringar"
 
 #: ../plugins/jedi/jedi_plugin.py:673
-#, fuzzy
-#| msgid "Use Jedi for completions in the Python language."
 msgid "Use Jedi to provide completions for the Python language"
-msgstr "Använd Jedi för kompletteringar i språket Python."
+msgstr "Använd Jedi för att tillhandahålla kompletteringar i språket Python"
 
 #: ../plugins/library-template/library_template/__init__.py:52
 msgid "Shared Library"
-msgstr ""
+msgstr "Delat bibliotek"
 
 #: ../plugins/library-template/library_template/__init__.py:55
 msgid "Create a new autotools project with a shared library"
-msgstr ""
+msgstr "Skapa ett nytt autotools-projekt med ett delat bibliotek"
 
 #: ../plugins/mingw/ide-mingw-device-provider.c:95
-#, fuzzy
-#| msgid "MinGW (64-bit)"
 msgid "MinGW 64-bit"
-msgstr "MinGW (64-bit)"
+msgstr "MinGW 64-bit"
 
 #: ../plugins/mingw/ide-mingw-device-provider.c:107
-#, fuzzy
-#| msgid "MinGW (32-bit)"
 msgid "MinGW 32-bit"
-msgstr "MinGW (32-bit)"
+msgstr "MinGW 32-bit"
 
 #: ../plugins/project-tree/gb-new-file-popover.c:123
 #: ../plugins/project-tree/gb-rename-file-popover.c:141
@@ -2069,9 +2231,13 @@ msgstr "Mappnamn"
 msgid "_Create"
 msgstr "S_kapa"
 
-#: ../plugins/project-tree/gb-project-tree-addin.c:77
+#: ../plugins/project-tree/gb-project-tree-addin.c:112
 msgid "Project"
 msgstr "Projekt"
+
+#: ../plugins/project-tree/gb-project-tree-builder.c:77
+msgid "Files"
+msgstr "Filer"
 
 #: ../plugins/project-tree/gb-rename-file-popover.c:79
 #, c-format
@@ -2157,10 +2323,8 @@ msgstr ""
 "till din felrapport eller supportförfrågan."
 
 #: ../plugins/symbol-tree/symbol-tree.c:84
-#, fuzzy
-#| msgid "Search Symbols"
 msgid "Symbols"
-msgstr "Sök symboler"
+msgstr "Symboler"
 
 #: ../plugins/symbol-tree/symbol-tree-panel.c:239
 msgid "Current language does not support symbol resolvers"
@@ -2175,14 +2339,33 @@ msgid "Save Terminal Content As"
 msgstr "Spara terminalinnehåll som"
 
 #: ../plugins/terminal/gtk/menus.ui.h:1
-#, fuzzy
-#| msgid "Terminal"
 msgid "_New Terminal"
-msgstr "Terminal"
+msgstr "_Ny terminal"
 
 #: ../plugins/todo/todo_plugin/__init__.py:60
 msgid "Todo"
-msgstr ""
+msgstr "Att göra"
+
+#: ../plugins/vala-pack/ide-vala-preferences-addin.vala:33
+msgid "Vala"
+msgstr "Vala"
+
+#: ../plugins/vala-pack/ide-vala-preferences-addin.vala:34
+msgid "Show errors and warnings provided by Vala"
+msgstr "Visa fel och varningar som tillhandahålls av Vala"
+
+#: ../plugins/vala-pack/ide-vala-preferences-addin.vala:35
+msgid "vala diagnostics warnings errors"
+msgstr "vala diagnostik varningar fel"
+
+#~ msgid "Invalid snippet at line %d: %s"
+#~ msgstr "Ogiltig textsnutt på rad %d: %s"
+
+#~ msgid "%s does not implement build_async()"
+#~ msgstr "%s implementerar inte build_async()"
+
+#~ msgid "No implementation of build_async()"
+#~ msgstr "Ingen implementation av build_async()"
 
 #~ msgid "_New Document"
 #~ msgstr "_Nytt dokument"
@@ -2207,9 +2390,6 @@ msgstr ""
 
 #~ msgid "From remote source code repository"
 #~ msgstr "Från fjärrarkiv för källkod"
-
-#~ msgid "Name"
-#~ msgstr "Namn "
 
 #~ msgid "GNOME Version"
 #~ msgstr "GNOME-version"
@@ -2311,9 +2491,6 @@ msgstr ""
 #~ msgid "Use dark colors for the application chrome."
 #~ msgstr "Använd mörka färger för programfönstren."
 
-#~ msgid "Search Preferences…"
-#~ msgstr "Sök bland inställningar…"
-
 #~ msgid "Select Project"
 #~ msgstr "Välj projekt"
 
@@ -2326,15 +2503,9 @@ msgstr ""
 #~ msgid "Two finger swipe left"
 #~ msgstr "Tvåfingersvep åt vänster"
 
-#~ msgid "Show list of open files"
-#~ msgstr "Visa lista över öppna filer"
-
 # Växlar exempelvis mellan fil.c och fil.h om det är ett C-program.
 #~ msgid "Switch to source or header"
 #~ msgstr "Växla till källkod eller headerfil"
-
-#~ msgid "Go to line"
-#~ msgstr "Gå till rad"
 
 #~ msgid "Attempt to load a GJS script with no filename."
 #~ msgstr "Försök att läsa in ett GJS-skript utan något filnamn."
@@ -2361,17 +2532,11 @@ msgstr ""
 #~ msgid "Documentation (%s)"
 #~ msgstr "Dokumentation (%s)"
 
-#~ msgid "Device Manager"
-#~ msgstr "Enhetshanterare"
-
 #~ msgid "Symbol Tree"
 #~ msgstr "Symbolträd"
 
 #~ msgid "Terminal (%s)"
 #~ msgstr "Terminal (%s)"
-
-#~ msgid "Select Project File"
-#~ msgstr "Välj projektfil"
 
 #~ msgid "Clone Repository"
 #~ msgstr "Klona arkiv"
@@ -2467,9 +2632,6 @@ msgstr ""
 #~ msgstr[0] "%s till"
 #~ msgstr[1] "%s till"
 
-#~ msgid "Search Shortcuts"
-#~ msgstr "Sök snabbtangenter"
-
 #~ msgid "Search Results"
 #~ msgstr "Sökresultat"
 
@@ -2481,9 +2643,6 @@ msgstr ""
 
 #~ msgid "Build Failure"
 #~ msgstr "Byggfel"
-
-#~ msgid "Project build system does not support building"
-#~ msgstr "Projektets byggsystem stöder inte byggande"
 
 #~ msgid "Timed out while waiting for devices to settle.\n"
 #~ msgstr ""
@@ -2535,9 +2694,6 @@ msgstr ""
 
 #~ msgid "PROJECT_FILE [SEARCH TERMS...]"
 #~ msgstr "PROJEKTFIL [SÖKVILLKOR...]"
-
-#~ msgid "Clang"
-#~ msgstr "Clang"
 
 #~ msgid "CTags"
 #~ msgstr "CTags"
