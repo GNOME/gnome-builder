@@ -218,17 +218,11 @@ ide_clang_completion_item_create_snippet (IdeClangCompletionItem *self)
       enum CXCompletionChunkKind kind;
       IdeSourceSnippetChunk *chunk;
       const gchar *text;
-      g_autofree gchar *escaped = NULL;
       CXString cxstr;
 
       kind = clang_getCompletionChunkKind (result->CompletionString, i);
       cxstr = clang_getCompletionChunkText (result->CompletionString, i);
       text = clang_getCString (cxstr);
-
-      if (text)
-        escaped = g_markup_escape_text (text, -1);
-      else
-        escaped = g_strdup ("");
 
       switch (kind)
         {
