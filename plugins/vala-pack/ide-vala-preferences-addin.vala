@@ -32,6 +32,7 @@ namespace Ide {
 			                                              null,
 			                                              _("Vala"),
 			                                              _("Show errors and warnings provided by Vala"),
+			                                              /* translators: keywords used when searching for preferences */
 			                                              _("vala diagnostics warnings errors"),
 			                                              100);
 		}
