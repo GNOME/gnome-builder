@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-12 16:22+0100\n"
-"PO-Revision-Date: 2016-03-12 16:24+0100\n"
+"POT-Creation-Date: 2016-03-15 00:01+0100\n"
+"PO-Revision-Date: 2016-03-15 00:02+0100\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <gnomepl@aviary.pl>\n"
 "Language: pl\n"
@@ -1195,6 +1195,7 @@ msgid "Font"
 msgstr "Czcionka"
 
 #: ../libide/preferences/ide-preferences-builtin.c:102
+msgctxt "Keywords"
 msgid "editor font monospace"
 msgstr "edytor czcionka font stałej szerokości monospace"
 
@@ -1205,6 +1206,7 @@ msgid "Terminal"
 msgstr "Terminal"
 
 #: ../libide/preferences/ide-preferences-builtin.c:104
+msgctxt "Keywords"
 msgid "terminal font monospace"
 msgstr "terminal czcionka font stałej szerokości monospace"
 
@@ -2346,6 +2348,7 @@ msgstr "Vala"
 msgid "Show errors and warnings provided by Vala"
 msgstr "Wyświetlanie błędów i ostrzeżeń języka Vala"
 
-#: ../plugins/vala-pack/ide-vala-preferences-addin.vala:35
+#. translators: keywords used when searching for preferences
+#: ../plugins/vala-pack/ide-vala-preferences-addin.vala:36
 msgid "vala diagnostics warnings errors"
 msgstr "vala diagnostyka ostrzeżenia błędy"
