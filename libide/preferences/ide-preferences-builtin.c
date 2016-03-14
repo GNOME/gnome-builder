@@ -99,9 +99,9 @@ ide_preferences_builtin_register_appearance (IdePreferences *preferences)
     }
 
   ide_preferences_add_list_group (preferences, "appearance", "font", _("Font"), 200);
-  ide_preferences_add_font_button (preferences, "appearance", "font", "org.gnome.builder.editor", "font-name", _("Editor"), _("editor font monospace"), 0);
+  ide_preferences_add_font_button (preferences, "appearance", "font", "org.gnome.builder.editor", "font-name", _("Editor"), C_("Keywords", "editor font monospace"), 0);
   /* XXX: This belongs in terminal addin */
-  ide_preferences_add_font_button (preferences, "appearance", "font", "org.gnome.builder.terminal", "font-name", _("Terminal"), _("terminal font monospace"), 0);
+  ide_preferences_add_font_button (preferences, "appearance", "font", "org.gnome.builder.terminal", "font-name", _("Terminal"), C_("Keywords", "terminal font monospace"), 0);
 }
 
 static void
