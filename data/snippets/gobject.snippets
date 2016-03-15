@@ -247,7 +247,7 @@ snippet gobject_boxed_ref
 		return self;
 	}
 
-	$2 *
+	void
 	$3_unref ($2 *self)
 	{
 		g_return_if_fail (self);
@@ -277,7 +277,7 @@ snippet gobject_boxed_ref
 	$1     *$4_new   (void);
 	$1     *$4_copy  ($1 *self);
 	$1     *$4_ref   ($1 *self);
-	void${$1|space} *$4_unref ($1 *self);
+	void${$1|space}  $4_unref ($1 *self);
 	$0
 	G_DEFINE_AUTOPTR_CLEANUP_FUNC ($1, $4_unref)
 	$0
@@ -341,7 +341,7 @@ snippet gobject_boxed_copy
 
 	$1     *$4_new   (void);
 	$1     *$4_copy  ($1 *self);
-	void${$1|space} *$4_free  ($1 *self);
+	void${$1|space}  $4_free  ($1 *self);
 	$0
 	G_DEFINE_AUTOPTR_CLEANUP_FUNC ($1, $4_free)
 	$0
