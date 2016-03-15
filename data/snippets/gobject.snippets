@@ -196,6 +196,159 @@ snippet gobject_final
 
 	#endif /* ${$1|functify|upper}_H */
 
+snippet gobject_boxed_ref
+- scope c
+- desc Create Refed Boxed GObject
+	#include "${1:$filename|stripsuffix}.h"
+
+	G_DEFINE_BOXED_TYPE (${2:$1|camelize}, ${3:$1|functify}, $3_ref, $3_unref)
+
+	$2 *
+	$3_new (void)
+	{
+		$2 *self;
+
+		self = g_slice_new0 ($2);
+		self->ref_count = 1;
+
+		return self;
+	}
+
+	$2 *
+	$3_copy ($2 *self)
+	{
+		$2 *copy;
+
+		g_return_val_if_fail (self, NULL);
+		g_return_val_if_fail (self->ref_count, NULL);
+
+		copy = $3_new ();
+
+		return copy;
+	}
+
+	static void
+	$3_free ($2 *self)
+	{
+		g_assert (self);
+		g_assert_cmpint (self->ref_count, ==, 0);
+
+		g_slice_free ($2, self);
+	}
+
+	$2 *
+	$3_ref ($2 *self)
+	{
+		g_return_val_if_fail (self, NULL);
+		g_return_val_if_fail (self->ref_count, NULL);
+
+		g_atomic_int_inc (&self->ref_count);
+
+		return self;
+	}
+
+	$2 *
+	$3_unref ($2 *self)
+	{
+		g_return_if_fail (self);
+		g_return_if_fail (self->ref_count);
+
+		if (g_atomic_int_dec_and_test (&self->ref_count))
+			$3_free (self);
+	}
+- scope chdr
+- desc Create Refed Boxed GObject header
+	#ifndef ${$1|functify|upper}_H
+	#define ${$1|functify|upper}_H
+
+	#include ${3:<glib-object.h>}
+
+	G_BEGIN_DECLS
+
+	#define ${$1|functify|namespace|upper}_TYPE_${$1|class|functify|upper} (${4:$1|functify}_get_type())
+
+	typedef struct _$1 ${1:$filename|stripsuffix|camelize};
+
+	struct _$1
+	{
+		guint ref_count;
+	};
+
+	$1     *$4_new   (void);
+	$1     *$4_copy  ($1 *self);
+	$1     *$4_ref   ($1 *self);
+	void${$1|space} *$4_unref ($1 *self);
+	$0
+	G_DEFINE_AUTOPTR_CLEANUP_FUNC ($1, $4_unref)
+	$0
+	G_END_DECLS
+
+	#endif /* ${$1|functify|upper}_H */
+
+snippet gobject_boxed_copy
+- scope c
+- desc Create copy/free Boxed GObject
+	#include "${1:$filename|stripsuffix}.h"
+
+	G_DEFINE_BOXED_TYPE (${2:$1|camelize}, ${3:$1|functify}, $3_copy, $3_free)
+
+	$2 *
+	$3_new (void)
+	{
+		$2 *self;
+
+		self = g_slice_new0 ($2);
+
+		return self;
+	}
+
+	$2 *
+	$3_copy ($2 *self)
+	{
+		$2 *copy;
+
+		g_return_val_if_fail (self, NULL);
+
+		copy = $3_new ();
+
+		return copy;
+	}
+
+	void
+	$3_free ($2 *self)
+	{
+		g_return_if_fail (self);
+
+		g_slice_free ($2, self);
+	}
+- scope chdr
+- desc Create copy/free Boxed GObject header
+	#ifndef ${$1|functify|upper}_H
+	#define ${$1|functify|upper}_H
+
+	#include ${3:<glib-object.h>}
+
+	G_BEGIN_DECLS
+
+	#define ${$1|functify|namespace|upper}_TYPE_${$1|class|functify|upper} (${4:$1|functify}_get_type())
+
+	typedef struct _$1 ${1:$filename|stripsuffix|camelize};
+
+	struct _$1
+	{
+		$0;
+	};
+
+	$1     *$4_new   (void);
+	$1     *$4_copy  ($1 *self);
+	void${$1|space} *$4_free  ($1 *self);
+	$0
+	G_DEFINE_AUTOPTR_CLEANUP_FUNC ($1, $4_free)
+	$0
+	G_END_DECLS
+
+	#endif /* ${$1|functify|upper}_H */
+
 snippet gobj_guard
 - scope chdr
 	#ifndef ${1:$filename|stripsuffix|functify|upper}_H
