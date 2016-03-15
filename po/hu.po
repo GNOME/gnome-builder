@@ -1,42 +1,42 @@
 # Hungarian translation for gnome-builder.
-# Copyright (C) 2015. Free Software Foundation, Inc.
+# Copyright (C) 2015-2016 Free Software Foundation, Inc.
 # This file is distributed under the same license as the gnome-builder package.
 #
-# Balázs Meskó <meskobalazs at gmail dot com>, 2015.
-# Balázs Úr <urbalazs at gmail dot com>, 2015.
+# Balázs Meskó <meskobalazs at gmail dot com>, 2015, 2016.
+# Balázs Úr <urbalazs at gmail dot com>, 2015, 2016.
 # Gabor Kelemen <kelemeng at ubuntu dot com>, 2015, 2016.
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-03-03 07:59+0000\n"
-"PO-Revision-Date: 2016-03-03 11:02+0100\n"
-"Last-Translator: Meskó Balázs <meskobalazs@gmail.com>\n"
+"POT-Creation-Date: 2016-03-14 23:03+0000\n"
+"PO-Revision-Date: 2016-03-15 08:03+0100\n"
+"Last-Translator: Balázs Úr <urbalazs@gmail.com>\n"
 "Language-Team: Hungarian <openscope at googlegroups dot com>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.8.6\n"
+"X-Generator: Lokalize 1.2\n"
 
-#: ../contrib/egg/egg-animation.c:715
+#: ../contrib/egg/egg-animation.c:726
 #, c-format
 msgid "Cannot locate property %s in class %s"
 msgstr "A(z) %s tulajdonság nem található a(z) %s osztályban"
 
-#: ../contrib/egg/egg-animation.c:1055 ../contrib/egg/egg-animation.c:1061
+#: ../contrib/egg/egg-animation.c:1073 ../contrib/egg/egg-animation.c:1079
 #, c-format
 msgid "Failed to find property %s in %s"
 msgstr "Nem található a(z) %s tulajdonság itt: %s"
 
-#: ../contrib/egg/egg-animation.c:1069
+#: ../contrib/egg/egg-animation.c:1087
 #, c-format
 msgid "Failed to find property %s in %s or parent %s"
 msgstr "Nem található a(z) %s tulajdonság itt: %s, vagy a szülőben: %s"
 
-#: ../contrib/egg/egg-animation.c:1079
+#: ../contrib/egg/egg-animation.c:1097
 #, c-format
 msgid "Failed to retrieve va_list value: %s"
 msgstr "A va_list érték lekérése meghiúsult: %s"
@@ -170,11 +170,11 @@ msgstr "Új_ra"
 msgid "C_ut"
 msgstr "_Kivágás"
 
-#: ../data/gtk/menus.ui.h:19
+#: ../data/gtk/menus.ui.h:19 ../plugins/terminal/gtk/menus.ui.h:2
 msgid "_Copy"
 msgstr "_Másolás"
 
-#: ../data/gtk/menus.ui.h:20
+#: ../data/gtk/menus.ui.h:20 ../plugins/terminal/gtk/menus.ui.h:3
 msgid "_Paste"
 msgstr "_Beillesztés"
 
@@ -182,15 +182,15 @@ msgstr "_Beillesztés"
 msgid "_Delete"
 msgstr "_Törlés"
 
-#: ../data/gtk/menus.ui.h:22
+#: ../data/gtk/menus.ui.h:22 ../plugins/terminal/gtk/menus.ui.h:4
 msgid "Selection"
 msgstr "Kijelölés"
 
-#: ../data/gtk/menus.ui.h:23
+#: ../data/gtk/menus.ui.h:23 ../plugins/terminal/gtk/menus.ui.h:5
 msgid "Select _All"
 msgstr "Ö_sszes kijelölése"
 
-#: ../data/gtk/menus.ui.h:24
+#: ../data/gtk/menus.ui.h:24 ../plugins/terminal/gtk/menus.ui.h:6
 msgid "Select _None"
 msgstr "Kijelölés _megszüntetése"
 
@@ -235,46 +235,66 @@ msgid "Reset"
 msgstr "Visszaállítás"
 
 #: ../data/gtk/menus.ui.h:35
+msgid "_Match Case"
+msgstr "K_is- és nagybetűk megkülönböztetése"
+
+#: ../data/gtk/menus.ui.h:36
+msgid "Match _Entire Word Only"
+msgstr "Illesztés csak _teljes szóra"
+
+#: ../data/gtk/menus.ui.h:37
+msgid "Match as _Regular Expression"
+msgstr "Illesztés _reguláris kifejezésként"
+
+#: ../data/gtk/menus.ui.h:38
+msgid "_Wrap Around"
+msgstr "_Körkörös keresés"
+
+#: ../data/gtk/menus.ui.h:39
+msgid "Cu_t"
+msgstr "_Kivágás"
+
+#: ../data/gtk/menus.ui.h:40
 msgid "Split"
 msgstr "Szétvágás"
 
-#: ../data/gtk/menus.ui.h:36
+#: ../data/gtk/menus.ui.h:41
 msgid "Split Left"
 msgstr "Szétvágás balra"
 
-#: ../data/gtk/menus.ui.h:37
+#: ../data/gtk/menus.ui.h:42
 msgid "Split Right"
 msgstr "Szétvágás jobbra"
 
-#: ../data/gtk/menus.ui.h:38
+#: ../data/gtk/menus.ui.h:43
 msgid "Split Down"
 msgstr "Szétvágás lefelé"
 
-#: ../data/gtk/menus.ui.h:39
+#: ../data/gtk/menus.ui.h:44
 msgid "Move"
 msgstr "Mozgatás"
 
-#: ../data/gtk/menus.ui.h:40
+#: ../data/gtk/menus.ui.h:45
 msgid "Move Left"
 msgstr "Mozgatás balra"
 
-#: ../data/gtk/menus.ui.h:41
+#: ../data/gtk/menus.ui.h:46
 msgid "Move Right"
 msgstr "Mozgatás jobbra"
 
-#: ../data/gtk/menus.ui.h:42
+#: ../data/gtk/menus.ui.h:47
 msgid "_Save"
 msgstr "_Mentés"
 
-#: ../data/gtk/menus.ui.h:43
+#: ../data/gtk/menus.ui.h:48
 msgid "_Save As"
 msgstr "Me_ntés másként"
 
-#: ../data/gtk/menus.ui.h:44
+#: ../data/gtk/menus.ui.h:49
 msgid "_Print"
 msgstr "_Nyomtatás"
 
-#: ../data/gtk/menus.ui.h:45
+#: ../data/gtk/menus.ui.h:50
 msgid "_Close"
 msgstr "_Bezárás"
 
@@ -783,7 +803,7 @@ msgstr "%u. sor, %u. oszlop"
 msgid "%u of %u"
 msgstr "%u / %u"
 
-#: ../libide/editor/ide-editor-frame.c:658
+#: ../libide/editor/ide-editor-frame.c:646
 #: ../plugins/project-tree/gtk/menus.ui.h:1
 msgid "Re_veal in Project Tree"
 msgstr "Meg_jelenítés a projektfában"
@@ -923,7 +943,7 @@ msgstr "Adja meg a D-Bus címet"
 msgid "No such worker"
 msgstr "Nincs ilyen építő"
 
-#: ../libide/ide-buffer.c:2269
+#: ../libide/ide-buffer.c:2298
 msgid "The current language lacks a symbol resolver."
 msgstr "Az aktuális nyelvhez nem tartozik szimbólumfeloldó"
 
@@ -1040,11 +1060,6 @@ msgstr "A részlet nem tartozik a töredékhez."
 msgid "Snippets"
 msgstr "Töredékek"
 
-#: ../libide/ide-source-snippet-parser.c:496
-#, c-format
-msgid "Invalid snippet at line %d: %s"
-msgstr "Érvénytelen töredék a(z) %d. sorban: %s"
-
 #: ../libide/ide-source-snippets-manager.c:96
 #, c-format
 msgid "Failed to open directory: %s"
@@ -1055,17 +1070,17 @@ msgstr "A(z) „%s” könyvtár megnyitása meghiúsult"
 msgid "Failed to load file: %s: %s"
 msgstr "Nem sikerült a(z) „%s” fájlt megnyitni: %s"
 
-#: ../libide/ide-source-view.c:4841
+#: ../libide/ide-source-view.c:4900
 #, c-format
 msgid "Insert “%s”"
 msgstr "„%s” beszúrása"
 
-#: ../libide/ide-source-view.c:4843
+#: ../libide/ide-source-view.c:4902
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "A(z) „%s” cseréje ezzel: „%s”"
 
-#: ../libide/ide-source-view.c:4957
+#: ../libide/ide-source-view.c:5016
 msgid "Apply Fix-It"
 msgstr "Javítás érvényesítése"
 
@@ -1179,8 +1194,10 @@ msgid "Font"
 msgstr "Betűkészlet"
 
 #: ../libide/preferences/ide-preferences-builtin.c:102
+#| msgid "editor font monospace"
+msgctxt "Keywords"
 msgid "editor font monospace"
-msgstr "szerkesztő betűkészlete fix szélességű rögzített"
+msgstr "szerkesztő betűkészlete rögzített szélességű"
 
 #. XXX: This belongs in terminal addin
 #: ../libide/preferences/ide-preferences-builtin.c:104
@@ -1189,8 +1206,10 @@ msgid "Terminal"
 msgstr "Terminál"
 
 #: ../libide/preferences/ide-preferences-builtin.c:104
+#| msgid "terminal font monospace"
+msgctxt "Keywords"
 msgid "terminal font monospace"
-msgstr "terminál betűkészlete fix szélességű rögzített"
+msgstr "terminál betűkészlete rögzített szélességű"
 
 #: ../libide/preferences/ide-preferences-builtin.c:110
 msgid "Keyboard"
@@ -1496,23 +1515,34 @@ msgid "Number of parallel build workers"
 msgstr "Párhuzamos építők száma"
 
 #: ../libide/preferences/ide-preferences-builtin.c:252
-#: ../plugins/git/ide-git-clone-widget.c:200
 msgid "Projects"
 msgstr "Projektek"
 
 #: ../libide/preferences/ide-preferences-builtin.c:254
+msgid "Workspace"
+msgstr "Munkaterület"
+
+#: ../libide/preferences/ide-preferences-builtin.c:255
+msgid "Projects Directory"
+msgstr "Projektek mappa"
+
+#: ../libide/preferences/ide-preferences-builtin.c:255
+msgid "A place for all your projects"
+msgstr "Az összes projektjének helye"
+
+#: ../libide/preferences/ide-preferences-builtin.c:257
 msgid "Project Discovery"
 msgstr "Projektek feltérképezése"
 
-#: ../libide/preferences/ide-preferences-builtin.c:255
+#: ../libide/preferences/ide-preferences-builtin.c:258
 msgid "Discover projects on my computer"
 msgstr "A számítógépen lévő projektek feltérképezése"
 
-#: ../libide/preferences/ide-preferences-builtin.c:255
+#: ../libide/preferences/ide-preferences-builtin.c:258
 msgid "Scan your computer for existing projects"
 msgstr "Átvizsgálja a számítógépet meglévő projektek után"
 
-#: ../libide/preferences/ide-preferences-perspective.c:823
+#: ../libide/preferences/ide-preferences-perspective.c:888
 msgid "Preferences"
 msgstr "Beállítások"
 
@@ -2066,7 +2096,7 @@ msgstr "Átváltás"
 msgid "Send to Fpaste.org"
 msgstr "Küldés ide: Fpaste.org"
 
-#: ../plugins/fpaste/fpaste_plugin/__init__.py:104
+#: ../plugins/fpaste/fpaste_plugin/__init__.py:110
 msgid "The following URL has been copied to the clipboard"
 msgstr "A következő URL a vágólapra lett másolva"
 
@@ -2089,7 +2119,7 @@ msgstr "A fájl nincs a git munkakönyvtár kezelése alatt."
 msgid "The requested file does not exist within the git index."
 msgstr "A kért fájl nem létezik a git indexben."
 
-#: ../plugins/git/ide-git-clone-widget.c:131
+#: ../plugins/git/ide-git-clone-widget.c:132
 msgid "A valid Git URL is required"
 msgstr "Egy érvényes Git URL szükséges"
 
@@ -2326,9 +2356,13 @@ msgstr "Vala"
 msgid "Show errors and warnings provided by Vala"
 msgstr "A Vala hibák és figyelmeztetések megjelenítése"
 
-#: ../plugins/vala-pack/ide-vala-preferences-addin.vala:35
+#. translators: keywords used when searching for preferences
+#: ../plugins/vala-pack/ide-vala-preferences-addin.vala:36
 msgid "vala diagnostics warnings errors"
 msgstr "vala diagnosztika figyelmeztetések hibák"
+
+#~ msgid "Invalid snippet at line %d: %s"
+#~ msgstr "Érvénytelen töredék a(z) %d. sorban: %s"
 
 #~ msgid "%s does not implement build_async()"
 #~ msgstr "A(z) %s nem valósítja meg a build_async() függvényt"
@@ -3983,9 +4017,6 @@ msgstr "vala diagnosztika figyelmeztetések hibák"
 
 #~ msgid "Builder does not know how to load %s"
 #~ msgstr "A Builder nem tudja hogy töltse be a következőt: %s"
-
-#~ msgid "Active Workspace"
-#~ msgstr "Aktív munkaterület"
 
 #~ msgid "The command manager for the workbench."
 #~ msgstr "A munkaterülethez használt parancskezelő."
