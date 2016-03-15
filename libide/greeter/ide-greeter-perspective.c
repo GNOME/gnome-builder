@@ -450,8 +450,11 @@ ide_greeter_perspective__row_activated (IdeGreeterPerspective *self,
                                         GtkListBox            *list_box)
 {
   IdeProjectInfo *project_info;
-  IdeWorkbench *workbench;
+  IdeWorkbench *workbench = NULL;
   GFile *project_file;
+  GList *list;
+  GtkWindow *window;
+  IdeContext *context;
 
   g_assert (IDE_IS_GREETER_PERSPECTIVE (self));
   g_assert (IDE_IS_GREETER_PROJECT_ROW (row));
@@ -472,16 +475,35 @@ ide_greeter_perspective__row_activated (IdeGreeterPerspective *self,
   gtk_widget_set_sensitive (GTK_WIDGET (self), FALSE);
   gtk_widget_set_sensitive (GTK_WIDGET (self->titlebar), FALSE);
 
-  /*
-   * TODO: Check if the project is already open somewhere else.
-   */
-
   workbench = ide_widget_get_workbench (GTK_WIDGET (self));
-  ide_workbench_open_project_async (workbench,
-                                    project_file,
-                                    NULL,
-                                    ide_greeter_perspective_open_project_cb,
-                                    NULL);
+
+  list = gtk_application_get_windows (gtk_window_get_application (GTK_WINDOW (workbench)));
+
+  for (; list != NULL; list = list->next)
+    {
+      window = list->data;
+      context = ide_workbench_get_context (IDE_WORKBENCH (window));
+
+      if (context != NULL)
+        {
+          if (g_file_equal (ide_context_get_project_file (context), project_file))
+            {
+              gtk_window_present (window);
+              gtk_window_close (GTK_WINDOW (workbench));
+              workbench = NULL;
+              break;
+            }
+        }
+    }
+
+  if(workbench != NULL)
+    {
+      ide_workbench_open_project_async (workbench,
+                                        project_file,
+                                        NULL,
+                                        ide_greeter_perspective_open_project_cb,
+                                        NULL);
+    }
 
   ide_project_info_set_is_recent (project_info, TRUE);
 }
