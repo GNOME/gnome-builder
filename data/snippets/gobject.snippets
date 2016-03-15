@@ -99,6 +99,103 @@ snippet gobject
 	G_END_DECLS
 
 	#endif /* ${$1|functify|upper}_H */
+
+snippet gobject_final
+- scope c
+- desc Create final GObject
+	#include "${1:$filename|stripsuffix}.h"
+	
+	struct _${2:$1|camelize}
+	{
+		${4:GObject} parent_instance;
+	};
+
+	G_DEFINE_TYPE ($2, ${3:$1|functify}, ${$4|namespace|functify|upper}_TYPE_${$4|class|functify|upper})
+
+	enum {
+		PROP_0,
+		N_PROPS
+	};
+
+	static GParamSpec *properties [N_PROPS];
+
+	$2 *
+	$3_new (void)
+	{
+		return g_object_new (${$1|namespace|functify|upper}_TYPE_${$1|class|functify|upper}, NULL);
+	}
+
+	static void
+	$3_finalize (GObject *object)
+	{
+		$2 *self = ($2 *)object;
+
+		G_OBJECT_CLASS ($3_parent_class)->finalize (object);
+	}
+
+	static void
+	$3_get_property (GObject    *object,
+	${$3|space}               guint       prop_id,
+	${$3|space}               GValue     *value,
+	${$3|space}               GParamSpec *pspec)
+	{
+		$2 *self = ${$3|upper} (object);
+
+		switch (prop_id)
+		  {
+		  default:
+		    G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+		  }
+	}
+
+	static void
+	$3_set_property (GObject      *object,
+	${$3|space}               guint         prop_id,
+	${$3|space}               const GValue *value,
+	${$3|space}               GParamSpec   *pspec)
+	{
+		$2 *self = ${$3|upper} (object);
+
+		switch (prop_id)
+		  {
+		  default:
+		    G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+		  }
+	}
+
+	static void
+	$3_class_init ($2Class *klass)
+	{
+		GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+		object_class->finalize = $3_finalize;
+		object_class->get_property = $3_get_property;
+		object_class->set_property = $3_set_property;
+	}
+
+	static void
+	$3_init ($2 *self)
+	{
+	}
+- scope chdr
+- desc Create final GObject header
+	#ifndef ${$1|functify|upper}_H
+	#define ${$1|functify|upper}_H
+
+	#include ${3:<glib-object.h>}
+
+	G_BEGIN_DECLS
+
+	#define ${$1|functify|namespace|upper}_TYPE_${$1|class|functify|upper} (${$1|functify}_get_type())
+
+	G_DECLARE_FINAL_TYPE (${1:$filename|stripsuffix|camelize}, ${$1|functify}, ${$1|functify|namespace|upper}, ${$1|class|functify|upper}, ${2:GObject})
+
+	$1 *${$1|functify}_new (void);
+	$0
+	G_END_DECLS
+
+	#endif /* ${$1|functify|upper}_H */
+
 snippet gobj_guard
 - scope chdr
 	#ifndef ${1:$filename|stripsuffix|functify|upper}_H
