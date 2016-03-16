@@ -1,15 +1,15 @@
 # Korean translation for gnome-builder.
 # This file is distributed under the same license as the gnome-builder package.
 #
-# Changwoo Ryu <cwryu@debian.org>, 2015.
+# Changwoo Ryu <cwryu@debian.org>, 2015-2016.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2015-09-21 12:09+0000\n"
-"PO-Revision-Date: 2015-09-29 18:14+0900\n"
+"POT-Creation-Date: 2016-03-16 10:59+0000\n"
+"PO-Revision-Date: 2016-03-16 21:11+0900\n"
 "Last-Translator: Changwoo Ryu <cwryu@debian.org>\n"
 "Language-Team: GNOME Korea <gnome-kr@googlegroups.com>\n"
 "Language: ko\n"
@@ -18,27 +18,49 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: ../contrib/egg/egg-animation.c:723
+#: ../contrib/egg/egg-animation.c:726
 #, c-format
 msgid "Cannot locate property %s in class %s"
 msgstr "%2$s 클래스의 %1$s 속성을 찾을 수 없습니다"
 
-#: ../contrib/egg/egg-animation.c:1067 ../contrib/egg/egg-animation.c:1073
+#: ../contrib/egg/egg-animation.c:1073 ../contrib/egg/egg-animation.c:1079
 #, c-format
 msgid "Failed to find property %s in %s"
 msgstr "%2$s에서 %1$s 속성을 찾는데 실패했습니다"
 
-#: ../contrib/egg/egg-animation.c:1081
+#: ../contrib/egg/egg-animation.c:1087
 #, c-format
 msgid "Failed to find property %s in %s or parent %s"
 msgstr "%2$s 또는 상위 %3$s에서 %1$s 속성을 찾는데 실패했습니다"
 
-#: ../contrib/egg/egg-animation.c:1091
+#: ../contrib/egg/egg-animation.c:1097
 #, c-format
 msgid "Failed to retrieve va_list value: %s"
 msgstr "va_list 값을 가져오는데 실패했습니다: %s"
 
-#: ../contrib/egg/egg-search-bar.c:371
+#: ../contrib/egg/egg-date-time.c:55
+msgid "Just now"
+msgstr "바로 지금"
+
+#: ../contrib/egg/egg-date-time.c:57
+msgid "An hour ago"
+msgstr "1시간 전"
+
+#: ../contrib/egg/egg-date-time.c:59
+msgid "Yesterday"
+msgstr "어제"
+
+#: ../contrib/egg/egg-date-time.c:65
+msgid "About a year ago"
+msgstr "1년 전"
+
+#: ../contrib/egg/egg-date-time.c:69
+#, c-format
+msgid "About %u year ago"
+msgid_plural "About %u years ago"
+msgstr[0] "약 %u년 전"
+
+#: ../contrib/egg/egg-search-bar.c:378
 msgid "Search"
 msgstr "검색"
 
@@ -48,6 +70,26 @@ msgstr "검색"
 #, c-format
 msgid "Traversal order %u is not supported on Trie."
 msgstr "순회 순서 %u번은 트라이에서 지원하지 않습니다."
+
+#: ../contrib/tmpl/tmpl-parser.c:199
+#, c-format
+msgid "%s() may only be called once"
+msgstr "%s() 기능은 한 번만 호출할 수 있습니다"
+
+#: ../contrib/tmpl/tmpl-parser.c:211
+#, c-format
+msgid "Parser does not contain an input stream"
+msgstr "파서에 입력 스트림이 들어 있지 않습니다"
+
+#: ../contrib/tmpl/tmpl-template.c:451
+#, c-format
+msgid "Must parse template before expanding"
+msgstr "확장하기 전에 서식을 파싱해야 합니다"
+
+#: ../contrib/tmpl/tmpl-template-locator.c:105
+#, c-format
+msgid "Failed to locate template \"%s\""
+msgstr "\"%s\" 서식을 찾는데 실패했습니다"
 
 #: ../contrib/xml/xml-reader.c:327
 #, c-format
@@ -67,12 +109,12 @@ msgid "_Preferences"
 msgstr "기본 설정(_P)"
 
 #: ../data/gtk/menus.ui.h:4
-msgid "Generate Support Log"
-msgstr "지원용 기록 만들기"
-
-#: ../data/gtk/menus.ui.h:5
 msgid "Keyboard _Shortcuts"
 msgstr "키보드 단축키(_S)"
+
+#: ../data/gtk/menus.ui.h:5
+msgid "_Help"
+msgstr "도움말(_H)"
 
 #: ../data/gtk/menus.ui.h:6
 msgid "_About"
@@ -82,7 +124,7 @@ msgstr "정보(_A)"
 msgid "_Quit"
 msgstr "끝내기(_Q)"
 
-#: ../data/gtk/menus.ui.h:8 ../data/ui/gb-editor-view.ui.h:1
+#: ../data/gtk/menus.ui.h:8 ../data/ui/ide-editor-view.ui.h:1
 msgid "_Reload"
 msgstr "다시 읽기(_R)"
 
@@ -95,12 +137,12 @@ msgid "_Fullscreen"
 msgstr "전체 화면(_F)"
 
 #: ../data/gtk/menus.ui.h:11
-msgid "_New Document"
-msgstr "새 문서(_N)"
+msgid "_New File"
+msgstr "새 파일(_N)"
 
 #: ../data/gtk/menus.ui.h:12
-msgid "_Open"
-msgstr "열기(_O)"
+msgid "_Open File"
+msgstr "파일 열기(_O)"
 
 #: ../data/gtk/menus.ui.h:13
 msgid "Save _All"
@@ -111,72 +153,149 @@ msgid "_Close All"
 msgstr "모두 닫기(_C)"
 
 #: ../data/gtk/menus.ui.h:15
-msgid "Display Options"
-msgstr "표시 옵션"
+msgid "_Go to Definition"
+msgstr "정의로 이동(_G)"
 
 #: ../data/gtk/menus.ui.h:16
-msgid "Show Icons"
-msgstr "아이콘 표시"
+msgid "_Undo"
+msgstr "실행 취소(_U)"
 
 #: ../data/gtk/menus.ui.h:17
-msgid "Show Ignored Files"
-msgstr "무시한 파일 표시"
+msgid "_Redo"
+msgstr "다시 실행(_R)"
 
 #: ../data/gtk/menus.ui.h:18
-msgid "Sort Directories First"
-msgstr "디렉터리 앞에 정렬"
+msgid "C_ut"
+msgstr "잘라내기(_U)"
 
-#: ../data/gtk/menus.ui.h:19
-msgid "_Collapse All Nodes"
-msgstr "모든 노드 접기(_C)"
+#: ../data/gtk/menus.ui.h:19 ../plugins/terminal/gtk/menus.ui.h:2
+msgid "_Copy"
+msgstr "복사(_C)"
 
-#: ../data/gtk/menus.ui.h:20
-msgid "_Refresh"
-msgstr "새로 고침(_R)"
+#: ../data/gtk/menus.ui.h:20 ../plugins/terminal/gtk/menus.ui.h:3
+msgid "_Paste"
+msgstr "붙여넣기(_P)"
 
-#: ../data/gtk/menus.ui.h:21 ../data/ui/gb-greeter-window.ui.h:3
-msgid "_New"
-msgstr "새로 만들기(_N)"
+#: ../data/gtk/menus.ui.h:21
+msgid "_Delete"
+msgstr "삭제(_D)"
 
-#: ../data/gtk/menus.ui.h:22
-msgid "_Empty File"
-msgstr "빈 파일(_E)"
+#: ../data/gtk/menus.ui.h:22 ../plugins/terminal/gtk/menus.ui.h:4
+msgid "Selection"
+msgstr "선택"
 
-#: ../data/gtk/menus.ui.h:23
-msgid "_New Folder"
-msgstr "새 폴더(_N)"
+#: ../data/gtk/menus.ui.h:23 ../plugins/terminal/gtk/menus.ui.h:5
+msgid "Select _All"
+msgstr "모두 선택(_A)"
 
-#: ../data/gtk/menus.ui.h:24
-msgid "Open _With"
-msgstr "다른 프로그램으로 열기(_W)"
+#: ../data/gtk/menus.ui.h:24 ../plugins/terminal/gtk/menus.ui.h:6
+msgid "Select _None"
+msgstr "모두 선택 해제(_N)"
 
 #: ../data/gtk/menus.ui.h:25
-msgid "Source Code Editor"
-msgstr "소스 코드 편집기"
+msgid "All _Upper Case"
+msgstr "모두 대문자(_U)"
 
 #: ../data/gtk/menus.ui.h:26
-msgid "_Open Containing Folder"
-msgstr "들어 있는 폴더 열기(_O)"
+msgid "All _Lower Case"
+msgstr "모두 소문자(_L)"
 
 #: ../data/gtk/menus.ui.h:27
-msgid "_Open in Terminal"
-msgstr "터미널에서 열기(_O)"
+msgid "_Invert Case"
+msgstr "대소문자 뒤바꾸기(_I)"
 
-#: ../data/gtk/menus.ui.h:28 ../data/ui/gb-rename-file-popover.ui.h:2
-msgid "_Rename"
-msgstr "이름 바꾸기(_R)"
+# 주의: 단어 첫글자만 대문자로 만드는 것을 말함
+#: ../data/gtk/menus.ui.h:28
+msgid "_Title Case"
+msgstr "제목 대소문자(_T)"
 
 #: ../data/gtk/menus.ui.h:29
-msgid "Mo_ve to Trash"
-msgstr "휴지통으로 옮기기(_V)"
+msgid "Join Lines"
+msgstr "줄 합치기"
 
 #: ../data/gtk/menus.ui.h:30
-msgid "_Build"
-msgstr "빌드(_B)"
+msgid "Sort Lines"
+msgstr "줄 정렬"
 
 #: ../data/gtk/menus.ui.h:31
-msgid "_Rebuild"
-msgstr "다시 빌드(_R)"
+msgid "Zoom"
+msgstr "확대/축소"
+
+#: ../data/gtk/menus.ui.h:32
+msgid "Zoom _In"
+msgstr "확대(_I)"
+
+#: ../data/gtk/menus.ui.h:33
+msgid "Zoom _Out"
+msgstr "축소(_O)"
+
+#: ../data/gtk/menus.ui.h:34
+msgid "Reset"
+msgstr "초기화"
+
+#: ../data/gtk/menus.ui.h:35
+msgid "_Match Case"
+msgstr "대소문자 구별(_M)"
+
+#: ../data/gtk/menus.ui.h:36
+msgid "Match _Entire Word Only"
+msgstr "전체 단어와 일치(_E)"
+
+#: ../data/gtk/menus.ui.h:37
+msgid "Match as _Regular Expression"
+msgstr "정규식으로 일치(_R)"
+
+#: ../data/gtk/menus.ui.h:38
+msgid "_Wrap Around"
+msgstr "끝까지 가면 처음부터(_W)"
+
+#: ../data/gtk/menus.ui.h:39
+msgid "Cu_t"
+msgstr "잘라내기(_T)"
+
+#: ../data/gtk/menus.ui.h:40
+msgid "Split"
+msgstr "쪼개기"
+
+#: ../data/gtk/menus.ui.h:41
+msgid "Split Left"
+msgstr "왼쪽 쪼개기"
+
+#: ../data/gtk/menus.ui.h:42
+msgid "Split Right"
+msgstr "오른쪽 쪼개기"
+
+#: ../data/gtk/menus.ui.h:43
+msgid "Split Down"
+msgstr "아래 쪼개기"
+
+#: ../data/gtk/menus.ui.h:44
+msgid "Move"
+msgstr "이동"
+
+#: ../data/gtk/menus.ui.h:45
+msgid "Move Left"
+msgstr "왼쪽 이동"
+
+#: ../data/gtk/menus.ui.h:46
+msgid "Move Right"
+msgstr "오른쪽 이동"
+
+#: ../data/gtk/menus.ui.h:47
+msgid "_Save"
+msgstr "저장(_S)"
+
+#: ../data/gtk/menus.ui.h:48
+msgid "_Save As"
+msgstr "다른 이름으로 저장(_S)"
+
+#: ../data/gtk/menus.ui.h:49
+msgid "_Print"
+msgstr "인쇄(_P)"
+
+#: ../data/gtk/menus.ui.h:50
+msgid "_Close"
+msgstr "닫기(_C)"
 
 #: ../data/style-schemes/builder-dark.xml.h:1
 msgid "Builder Dark"
@@ -186,10 +305,8 @@ msgstr "빌더 다크 테마"
 msgid "Dark color scheme for Builder using the Tango color palette"
 msgstr "빌더 어두운 색 테마, 탱고 색 팔레트 사용"
 
-#: ../data/style-schemes/builder.xml.h:1
-#: ../data/ui/gb-preferences-page-keybindings.ui.h:3
-#: ../data/ui/gb-workbench.ui.h:1 ../src/main.c:49
-#: ../src/workbench/gb-workbench.c:153
+#: ../data/style-schemes/builder.xml.h:1 ../libide/ide-application.c:413
+#: ../libide/preferences/ide-preferences-builtin.c:113
 msgid "Builder"
 msgstr "빌더"
 
@@ -199,784 +316,539 @@ msgstr "빌더의 기본 색 구성"
 
 # overwrite 알림 표시
 #. OVR indicates we are in overwite mode
-#: ../data/ui/gb-editor-frame.ui.h:2
+#: ../data/ui/ide-editor-frame.ui.h:2
 msgid "OVR"
 msgstr "덮기"
 
-#: ../data/ui/gb-editor-settings-widget.ui.h:1
-msgid "Display right _margin at column:"
-msgstr "다음 열에 오른쪽 여백 표시(_M):"
+#: ../data/ui/ide-editor-perspective.ui.h:1
+msgid "No open files"
+msgstr "열린 파일 없음"
 
-#: ../data/ui/gb-editor-settings-widget.ui.h:2
-msgid "Trim trailing whitespace when saving document"
-msgstr "문서 저장할 때 뒤의 공백 제거"
+#: ../data/ui/ide-editor-perspective.ui.h:2
+msgid "Try opening a file by typing in the search box at the top"
+msgstr "위의 검색 창에서 입력하면 파일을 엽니다"
 
-#: ../data/ui/gb-editor-settings-widget.ui.h:3
-msgid "Insert matching brace, bracket, quotation, and parenthesis."
-msgstr "일치하는 괄호, 중괄호, 각괄호, 따옴표를 입력합니다."
+#: ../data/ui/ide-editor-perspective.ui.h:3
+msgid "Enable / Disable left panel. Shortcut: F9"
+msgstr "왼쪽 패널을 사용하거나 감춥니다. 단축키: F9"
 
-#: ../data/ui/gb-editor-settings-widget.ui.h:4
-msgid "Overwrite closing brace, bracket, quotation, and parenthesis."
-msgstr "닫는 괄호, 중괄호, 각괄호, 따옴표를 덮어씁니다."
+#: ../data/ui/ide-editor-perspective.ui.h:4
+msgid "Enable / Disable bottom panel. Shortcut: Ctrl + F9"
+msgstr "아래 패널을 사용하거나 감춥니다. 단축키: F9"
 
-#: ../data/ui/gb-editor-settings-widget.ui.h:5
-#: ../data/ui/gb-editor-tweak-widget.ui.h:7
-msgid "Indentation"
-msgstr "들여쓰기"
+#: ../data/ui/ide-editor-perspective.ui.h:5
+msgid "Enable / Disable right panel. Shortcut: Shift + F9"
+msgstr "오른쪽 패널을 사용하거나 감춥니다. 단축키: F9"
 
-#: ../data/ui/gb-editor-settings-widget.ui.h:6
-msgid "_Tab width:"
-msgstr "탭 너비(_T):"
-
-#: ../data/ui/gb-editor-settings-widget.ui.h:7
-msgid "Insert _spaces instead of tabs"
-msgstr "탭 대신 공백 입력(_S)"
-
-#: ../data/ui/gb-editor-settings-widget.ui.h:8
-msgid "_Enable automatic indentation"
-msgstr "자동 들여쓰기 사용(_E)"
-
-#: ../data/ui/gb-editor-settings-widget.ui.h:9
-msgid "Snippets (read-only)"
-msgstr "스니핏(읽기 전용)"
-
-#: ../data/ui/gb-editor-tweak-widget.ui.h:1
+#: ../data/ui/ide-editor-tweak-widget.ui.h:1
 msgid "Search highlight mode…"
 msgstr "검색 강조 모드…"
 
-#: ../data/ui/gb-editor-tweak-widget.ui.h:2
+#: ../data/ui/ide-editor-tweak-widget.ui.h:2
 msgid "Display line numbers"
 msgstr "줄 번호 표시"
 
-#: ../data/ui/gb-editor-tweak-widget.ui.h:3
+#: ../data/ui/ide-editor-tweak-widget.ui.h:3
 msgid "Display right margin"
 msgstr "오른쪽 여백 표시"
 
-#: ../data/ui/gb-editor-tweak-widget.ui.h:4
+#: ../data/ui/ide-editor-tweak-widget.ui.h:4
 msgid "Highlight current line"
 msgstr "현재 줄 강조"
 
-#: ../data/ui/gb-editor-tweak-widget.ui.h:5
+#: ../data/ui/ide-editor-tweak-widget.ui.h:5
 msgid "Auto indent"
 msgstr "자동 들여쓰기"
 
-#: ../data/ui/gb-editor-tweak-widget.ui.h:6
-#: ../data/ui/gb-preferences-page-keybindings.ui.h:12
+#: ../data/ui/ide-editor-tweak-widget.ui.h:6
+#: ../libide/preferences/ide-preferences-builtin.c:119
 msgid "Smart Backspace"
 msgstr "똑똑한 백스페이스"
 
-#: ../data/ui/gb-editor-tweak-widget.ui.h:8
+#: ../data/ui/ide-editor-tweak-widget.ui.h:7
+#: ../libide/preferences/ide-preferences-builtin.c:234
+msgid "Indentation"
+msgstr "들여쓰기"
+
+#: ../data/ui/ide-editor-tweak-widget.ui.h:8
+#: ../libide/preferences/ide-preferences-builtin.c:145
 msgid "Spaces"
 msgstr "공백"
 
-#: ../data/ui/gb-editor-tweak-widget.ui.h:9
+#: ../data/ui/ide-editor-tweak-widget.ui.h:9
+#: ../libide/preferences/ide-preferences-builtin.c:146
 msgid "Tabs"
 msgstr "탭"
 
-#: ../data/ui/gb-editor-tweak-widget.ui.h:10
+#: ../data/ui/ide-editor-tweak-widget.ui.h:10
 msgid "2"
 msgstr "2"
 
-#: ../data/ui/gb-editor-tweak-widget.ui.h:11
+#: ../data/ui/ide-editor-tweak-widget.ui.h:11
 msgid "3"
 msgstr "3"
 
-#: ../data/ui/gb-editor-tweak-widget.ui.h:12
+#: ../data/ui/ide-editor-tweak-widget.ui.h:12
 msgid "4"
 msgstr "4"
 
-#: ../data/ui/gb-editor-tweak-widget.ui.h:13
+#: ../data/ui/ide-editor-tweak-widget.ui.h:13
 msgid "8"
 msgstr "8"
 
-#: ../data/ui/gb-editor-view.ui.h:2 ../data/ui/gb-greeter-window.ui.h:4
-#: ../data/ui/gb-new-project-dialog.ui.h:2 ../data/ui/gb-projects-dialog.ui.h:3
+#: ../data/ui/ide-editor-view.ui.h:2 ../data/ui/ide-greeter-perspective.ui.h:14
 msgid "_Cancel"
 msgstr "취소(_C)"
 
-#: ../data/ui/gb-editor-view.ui.h:3
+#: ../data/ui/ide-editor-view.ui.h:3
 msgid ""
 "Builder has discovered that this file has been modified externally. Would "
 "you like to reload the file?"
 msgstr "이 파일은 외부에서 수정되었습니다. 파일을 다시 읽어들이시겠습니까?"
 
-#: ../data/ui/gb-editor-view.ui.h:4
+#: ../data/ui/ide-editor-view.ui.h:4
+msgid "Go to line number"
+msgstr "줄 번호로 이동"
+
+#: ../data/ui/ide-editor-view.ui.h:5
+msgid "Change editor settings and language"
+msgstr "편집기 설정 및 언어 바꾸기"
+
+#: ../data/ui/ide-editor-view.ui.h:6
 msgid "Go to Line"
 msgstr "줄로 이동"
 
-#: ../data/ui/gb-editor-view.ui.h:5
+#: ../data/ui/ide-editor-view.ui.h:7
 msgid "Go"
 msgstr "이동"
 
-#: ../data/ui/gb-greeter-window.ui.h:1
-msgid "Select a Project"
-msgstr "프로젝트 선택"
-
-#: ../data/ui/gb-greeter-window.ui.h:2
-msgid "Click an item to select"
-msgstr "선택할 항목을 누르십시오"
-
-#: ../data/ui/gb-greeter-window.ui.h:5
-msgid "Recent Projects"
-msgstr "최근 프로젝트"
-
-#: ../data/ui/gb-greeter-window.ui.h:6
-msgid "Other Projects"
-msgstr "다른 프로젝트"
-
-#: ../data/ui/gb-greeter-window.ui.h:7
-msgid "_Remove"
-msgstr "제거(_R)"
-
-#: ../data/ui/gb-new-file-popover.ui.h:1
-#: ../data/ui/gb-rename-file-popover.ui.h:1
-#: ../src/project-tree/gb-new-file-popover.c:349
-msgid "File Name"
-msgstr "파일 이름"
-
-#: ../data/ui/gb-new-file-popover.ui.h:2
-msgid "_Create"
-msgstr "만들기(_C)"
-
-#: ../data/ui/gb-new-project-dialog.ui.h:1
-#: ../src/dialogs/gb-new-project-dialog.c:354
+#: ../data/ui/ide-genesis-perspective.ui.h:1
 msgid "New Project"
 msgstr "새 프로젝트"
 
-#: ../data/ui/gb-new-project-dialog.ui.h:3
-msgid "_Continue"
-msgstr "계속(_C)"
-
-#: ../data/ui/gb-new-project-dialog.ui.h:4
-msgid "From existing project on this computer"
-msgstr "이 컴퓨터의 기존 프로젝트에서"
-
-#: ../data/ui/gb-new-project-dialog.ui.h:5
-msgid "From remote source code repository"
-msgstr "원격 소스 코드 저장소에서"
-
-#: ../data/ui/gb-new-project-dialog.ui.h:6
-#: ../data/ui/gb-preferences-page-git.ui.h:3
-msgid "Name"
-msgstr "이름"
-
-#: ../data/ui/gb-new-project-dialog.ui.h:7
-msgid "Location"
-msgstr "위치"
-
-#: ../data/ui/gb-new-project-dialog.ui.h:8
-msgid "GNOME Version"
-msgstr "그놈 버전"
-
-#: ../data/ui/gb-new-project-dialog.ui.h:9
-msgid "Language"
-msgstr "언어"
-
-#: ../data/ui/gb-new-project-dialog.ui.h:10
-msgid "Pattern"
-msgstr "패턴"
-
-#: ../data/ui/gb-new-project-dialog.ui.h:11
-msgid "Git"
-msgstr "Git"
-
-#: ../data/ui/gb-new-project-dialog.ui.h:12
-msgid "user@host:repository.git"
-msgstr "user@host:repository.git"
-
-#: ../data/ui/gb-new-project-dialog.ui.h:13
-msgid "Enter the URL of your project's source code repository."
-msgstr "프로젝트의 소스 코드 저장소 URL을 입력하십시오."
-
-#: ../data/ui/gb-new-project-dialog.ui.h:14
-msgid "Directory"
-msgstr "디렉터리"
-
-#: ../data/ui/gb-new-project-dialog.ui.h:15
-msgid "Repository"
-msgstr "저장소"
-
-#: ../data/ui/gb-preferences-page-editor.ui.h:1
-#: ../data/ui/gb-preferences-window.ui.h:3
-msgid "Editor"
-msgstr "편집기"
-
-#: ../data/ui/gb-preferences-page-editor.ui.h:2
-msgid "Font"
-msgstr "글꼴"
-
-#: ../data/ui/gb-preferences-page-editor.ui.h:3
-msgid "Highlighting"
-msgstr "강조"
-
-#: ../data/ui/gb-preferences-page-editor.ui.h:4
-msgid "Display Document Changes"
-msgstr "문서 바뀜 표시"
-
-#: ../data/ui/gb-preferences-page-editor.ui.h:5
-msgid ""
-"Display whether a line has been added or modified next to the line number."
-msgstr "줄을 추가했거나 줄 번호 뒤의 텍스트를 수정했는지 여부를 표시합니다."
-
-#: ../data/ui/gb-preferences-page-editor.ui.h:6
-msgid "Display Line Numbers"
-msgstr "줄 번호 표시"
-
-#: ../data/ui/gb-preferences-page-editor.ui.h:7
-msgid "Display the line numbers next to each line of the document."
-msgstr "문서의 각 줄 옆에 줄 번호를 표시합니다."
-
-#: ../data/ui/gb-preferences-page-editor.ui.h:8
-msgid "Highlight Current Line"
-msgstr "현재 줄 강조"
-
-#: ../data/ui/gb-preferences-page-editor.ui.h:9
-msgid "Highlight the line containing the cursor."
-msgstr "커서가 있는 줄을 강조합니다."
-
-#: ../data/ui/gb-preferences-page-editor.ui.h:10
-msgid "Highlight Matching Brackets"
-msgstr "대응되는 괄호 강조"
-
-#: ../data/ui/gb-preferences-page-editor.ui.h:11
-msgid "Whether or not matching brackets should be highlighted."
-msgstr "대응되는 괄호를 강조할지 여부."
-
-#: ../data/ui/gb-preferences-page-editor.ui.h:12
-msgid "Overview Map"
-msgstr "개요 보기"
-
-#: ../data/ui/gb-preferences-page-editor.ui.h:13
-msgid "Display Overview Map"
-msgstr "개요 보기 표시"
-
-#: ../data/ui/gb-preferences-page-editor.ui.h:14
-msgid "Display an overview map next to the source code editor."
-msgstr "소스 코드 편집기 옆에 개요를 표시합니다."
-
-#: ../data/ui/gb-preferences-page-editor.ui.h:15
-msgid "Auto Hide Overview Map"
-msgstr "개요 보기 자동 숨김"
-
-#: ../data/ui/gb-preferences-page-editor.ui.h:16
-msgid "Automatically hide the overview map during periods of inactivity."
-msgstr "활동이 없으면 자동으로 개요를 감춥니다."
-
-#: ../data/ui/gb-preferences-page-editor.ui.h:17
-msgid "Cursor Placement"
-msgstr "커서 위치"
-
-#: ../data/ui/gb-preferences-page-editor.ui.h:18
-msgid "Restore Cursor Position"
-msgstr "커서 위치 복구"
-
-#: ../data/ui/gb-preferences-page-editor.ui.h:19
-msgid ""
-"Restore the insertion cursor to the last position when reopening a file."
-msgstr "파일을 다시 열 때 이전 위치로 입력 커서를 옮깁니다."
-
-#: ../data/ui/gb-preferences-page-editor.ui.h:20
-msgid "Scroll Offset"
-msgstr "스크롤 오프셋"
-
-#: ../data/ui/gb-preferences-page-editor.ui.h:21
-msgid "Minimal number of lines to keep above and below the cursor."
-msgstr "커서 위와 아래에 유지할 최소 줄 수."
-
-#: ../data/ui/gb-preferences-page-git.ui.h:1
-#: ../data/ui/gb-preferences-window.ui.h:8
-msgid "Version Control"
-msgstr "버전 컨트롤"
-
-#: ../data/ui/gb-preferences-page-git.ui.h:2
-msgid "Source Code Attribution"
-msgstr "소스 코드 출처"
-
-#: ../data/ui/gb-preferences-page-git.ui.h:4
-msgid "Email"
-msgstr "전자메일"
-
-#: ../data/ui/gb-preferences-page-insight.ui.h:1
-#: ../data/ui/gb-preferences-window.ui.h:5
-msgid "Code Insight"
-msgstr "코드 분석"
-
-#: ../data/ui/gb-preferences-page-insight.ui.h:2
-msgid "Semantic Language Highlighting"
-msgstr "의미적 언어 강조"
-
-#: ../data/ui/gb-preferences-page-insight.ui.h:3
-msgid ""
-"Highlight additional syntax based upon information found in the document."
-msgstr "문서에 들어 있는 정보를 기반으로 문법을 추가로 더 강조합니다."
-
-#: ../data/ui/gb-preferences-page-insight.ui.h:4
-msgid "Auto Completion"
-msgstr "자동 완성"
-
-#: ../data/ui/gb-preferences-page-insight.ui.h:5
-msgid "Suggest Snippet Completion"
-msgstr "스니핏 자동 완성 제안"
-
-#: ../data/ui/gb-preferences-page-insight.ui.h:6
-msgid "Allow snippets to be inserted into the document."
-msgstr "문서에 스니핏을 입력합니다."
-
-#: ../data/ui/gb-preferences-page-insight.ui.h:7
-msgid "Suggest Word Completion"
-msgstr "단어 자동 완성 제안"
-
-#: ../data/ui/gb-preferences-page-insight.ui.h:8
-msgid "Suggest completion of words found within all open documents."
-msgstr "열린 문서에 있는 단어를 기준으로 자동 완성을 합니다."
-
-#: ../data/ui/gb-preferences-page-insight.ui.h:9
-msgid "Suggest Completions using Ctags"
-msgstr "CTags 사용 자동 완성 제안"
-
-#: ../data/ui/gb-preferences-page-insight.ui.h:10
-msgid "Use Ctags for completions in supported languages."
-msgstr "지원하는 언어에서 Ctags를 사용해 자동 완성을 합니다."
-
-#: ../data/ui/gb-preferences-page-insight.ui.h:11
-msgid "Suggest Completions using Clang (Experimental)"
-msgstr "Clang 사용 자동 완성 제안(실험적)"
-
-#: ../data/ui/gb-preferences-page-insight.ui.h:12
-msgid "Use Clang for completions in the C and C++ languages."
-msgstr "C 및 C++ 언어에서 Clang을 사용해 자동 완성을 합니다."
-
-#: ../data/ui/gb-preferences-page-insight.ui.h:13
-msgid "Suggest Completions using Jedi"
-msgstr "Jedi 사용 자동 완성 제안"
-
-#: ../data/ui/gb-preferences-page-insight.ui.h:14
-msgid "Use Jedi for completions in the Python language."
-msgstr "파이썬 언어에서 Jedi를 사용해 자동 완성을 합니다."
-
-#: ../data/ui/gb-preferences-page-keybindings.ui.h:1
-#: ../data/ui/gb-preferences-window.ui.h:6
-msgid "Keyboard"
-msgstr "키보드"
-
-#: ../data/ui/gb-preferences-page-keybindings.ui.h:2
-msgid "Key Binding Emulation"
-msgstr "키 바인딩 에뮬레이션"
-
-#: ../data/ui/gb-preferences-page-keybindings.ui.h:4
-msgid "The default keybindings for Builder."
-msgstr "빌더의 기본 키 바인딩."
-
-#: ../data/ui/gb-preferences-page-keybindings.ui.h:5
-msgid "Emacs Emulation"
-msgstr "이맥스 흉내내기"
-
-#: ../data/ui/gb-preferences-page-keybindings.ui.h:6
-msgid "Emulates familiar keybindings from the Emacs text editor."
-msgstr "익숙한 이맥스 텍스트 편집기 키 바인딩을 에뮬레이션합니다."
-
-#: ../data/ui/gb-preferences-page-keybindings.ui.h:7
-msgid "Vim Emulation"
-msgstr "빔 흉내내기"
-
-#: ../data/ui/gb-preferences-page-keybindings.ui.h:8
-msgid "Emulates familiar keybindings from the Vim text editor."
-msgstr "익숙한 빔 텍스트 편집기 키 바인딩을 에뮬레이션합니다."
-
-#: ../data/ui/gb-preferences-page-keybindings.ui.h:9
-msgid "Keyboard Movement"
-msgstr "키보드 움직임"
-
-#: ../data/ui/gb-preferences-page-keybindings.ui.h:10
-msgid "Smart Home End"
-msgstr "똑똑한 Home End"
-
-#: ../data/ui/gb-preferences-page-keybindings.ui.h:11
-msgid "Home moves to first non-space character."
-msgstr "Home을 누르면 처음 공백이 아닌 문자 위치로 이동합니다."
-
-#: ../data/ui/gb-preferences-page-keybindings.ui.h:13
-msgid ""
-"Backspace will remove extra spaces to keep you aligned with your indentation "
-"width."
-msgstr "백스페이스를 누르면 들여쓰기 폭에 맞춰 공백을 지워 열을 맞춥니다."
-
-#: ../data/ui/gb-preferences-page-language.ui.h:1
-#: ../data/ui/gb-preferences-window.ui.h:4
-msgid "Programming Languages"
-msgstr "프로그래밍 언어"
-
-#: ../data/ui/gb-preferences-page-plugins.ui.h:1
-#: ../data/ui/gb-preferences-window.ui.h:9
-msgid "Plugins"
-msgstr "플러그인"
-
-#: ../data/ui/gb-preferences-page-theme.ui.h:1
-#: ../data/ui/gb-preferences-window.ui.h:7
-msgid "Theme"
-msgstr "테마"
-
-#: ../data/ui/gb-preferences-page-theme.ui.h:2
-msgid "Night Mode"
-msgstr "심야 모드"
-
-#: ../data/ui/gb-preferences-page-theme.ui.h:3
-msgid "Use dark colors for the application chrome."
-msgstr "프로그램 장식에 어두운 색을 사용합니다."
-
-#: ../data/ui/gb-preferences-page-theme.ui.h:4
-msgid "Display Grid Pattern"
-msgstr "격자 패턴 표시"
-
-#: ../data/ui/gb-preferences-page-theme.ui.h:5
-msgid "Display a grid pattern under the source code."
-msgstr "소스 코드에 격자 패턴을 표시합니다."
-
-#: ../data/ui/gb-preferences-window.ui.h:1
-#: ../data/ui/gb-shortcuts-window.ui.h:4
-msgid "Preferences"
-msgstr "기본 설정"
-
-#: ../data/ui/gb-preferences-window.ui.h:2
-msgid "Search Preferences…"
-msgstr "검색 기본 설정…"
-
-#: ../data/ui/gb-projects-dialog.ui.h:1 ../src/dialogs/gb-projects-dialog.c:255
-msgid "Select Project"
+#: ../data/ui/ide-genesis-perspective.ui.h:2
+msgid "Co_ntinue"
+msgstr "계속(_N)"
+
+#. the action:// link is used to jump to the new-project view
+#: ../data/ui/ide-greeter-perspective.ui.h:2
+msgid "Why not <a href=\"action://app.new-project\">create a new project</a>?"
+msgstr ""
+"<a href=\"action://app.new-project\">새 프로젝트를 만들어</a> 보는 건 어떻습"
+"니까?"
+
+#: ../data/ui/ide-greeter-perspective.ui.h:3
+msgid "No projects found"
+msgstr "프로젝트가 없습니다"
+
+#: ../data/ui/ide-greeter-perspective.ui.h:4
+msgid "Recent Projects"
+msgstr "최근 프로젝트"
+
+#: ../data/ui/ide-greeter-perspective.ui.h:5
+msgid "Other Projects"
+msgstr "다른 프로젝트"
+
+#: ../data/ui/ide-greeter-perspective.ui.h:6
+msgid "_Remove"
+msgstr "제거(_R)"
+
+#: ../data/ui/ide-greeter-perspective.ui.h:7
+msgid "Select a Project"
 msgstr "프로젝트 선택"
 
-#: ../data/ui/gb-projects-dialog.ui.h:2
-msgid "New"
-msgstr "새로 만들기"
+#: ../data/ui/ide-greeter-perspective.ui.h:8
+msgid "Click an item to select"
+msgstr "선택할 항목을 누르십시오"
 
-#: ../data/ui/gb-projects-dialog.ui.h:4
-msgid "Delete"
-msgstr "삭제"
+#: ../data/ui/ide-greeter-perspective.ui.h:9
+msgid "Create a new project"
+msgstr "새 프로젝트 만들기"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:1
+#: ../data/ui/ide-greeter-perspective.ui.h:10
+#: ../plugins/project-tree/gtk/menus.ui.h:2
+msgid "_New"
+msgstr "새로 만들기(_N)"
+
+#: ../data/ui/ide-greeter-perspective.ui.h:11
+msgid "Search for projects"
+msgstr "프로젝트 검색"
+
+#: ../data/ui/ide-greeter-perspective.ui.h:12
+msgid "Select projects for removal"
+msgstr "제거할 프로젝트 선택"
+
+#: ../data/ui/ide-greeter-perspective.ui.h:13
+msgid "Return to project selection"
+msgstr "프로젝트 선택으로 돌아가기"
+
+#: ../data/ui/ide-layout-tab-bar.ui.h:1
+msgid "List open files"
+msgstr "연 파일 목록 보기"
+
+#: ../data/ui/ide-layout-tab-bar.ui.h:2
+msgid "Add a new empty file to your project"
+msgstr "프로젝트에 새 빈 파일 추가"
+
+#: ../data/ui/ide-layout-tab.ui.h:1
+msgid "Jump to previous location"
+msgstr "이전 위치로 이동"
+
+#: ../data/ui/ide-layout-tab.ui.h:2
+msgid "Jump to next location"
+msgstr "다음 위치로 이동"
+
+# 툴팁
+#: ../data/ui/ide-layout-tab.ui.h:3
+msgid "Close the current document"
+msgstr "현재 문서를 닫습니다"
+
+#: ../data/ui/ide-preferences-font-button.ui.h:1
+msgid "_Select"
+msgstr "선택(_S)"
+
+#: ../data/ui/ide-preferences-perspective.ui.h:1
+msgid "Search through preferences"
+msgstr "기본 설정에서 검색"
+
+#: ../data/ui/ide-shortcuts-window.ui.h:1
+msgctxt "shortcut window"
 msgid "Editor Shortcuts"
 msgstr "편집기 단축키"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:2
+#: ../data/ui/ide-shortcuts-window.ui.h:2
+msgctxt "shortcut window"
 msgid "General"
 msgstr "일반"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:3
+#: ../data/ui/ide-shortcuts-window.ui.h:3
+msgctxt "shortcut window"
 msgid "Global Search"
 msgstr "전체 검색"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:5
+#: ../data/ui/ide-shortcuts-window.ui.h:4
+msgctxt "shortcut window"
+msgid "Preferences"
+msgstr "기본 설정"
+
+#: ../data/ui/ide-shortcuts-window.ui.h:5
+msgctxt "shortcut window"
 msgid "Command Bar"
 msgstr "명령어 모음"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:6
-#: ../plugins/terminal/gb-terminal-document.c:87
-#: ../plugins/terminal/gb-terminal-workbench-addin.c:101
+#: ../data/ui/ide-shortcuts-window.ui.h:6
+msgctxt "shortcut window"
 msgid "Terminal"
 msgstr "터미널"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:7
+#: ../data/ui/ide-shortcuts-window.ui.h:7
+msgctxt "shortcut window"
 msgid "Keyboard Shortcuts"
 msgstr "키보드 단축키"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:8
+#: ../data/ui/ide-shortcuts-window.ui.h:8
+msgctxt "shortcut window"
 msgid "Panels"
 msgstr "패널"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:9
+#: ../data/ui/ide-shortcuts-window.ui.h:9
+msgctxt "shortcut window"
 msgid "Toggle left panel"
 msgstr "왼쪽 패널 토글"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:10
+#: ../data/ui/ide-shortcuts-window.ui.h:10
+msgctxt "shortcut window"
 msgid "Toggle right panel"
 msgstr "오른쪽 패널 토글"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:11
+#: ../data/ui/ide-shortcuts-window.ui.h:11
+msgctxt "shortcut window"
 msgid "Toggle bottom panel"
 msgstr "아래 패널 토글"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:12
+#: ../data/ui/ide-shortcuts-window.ui.h:12
+msgctxt "shortcut window"
 msgid "Touchpad gestures"
 msgstr "터치패드 제스쳐"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:13
+#: ../data/ui/ide-shortcuts-window.ui.h:13
+msgctxt "shortcut window"
 msgid "Switch to the next document"
 msgstr "다음 문서로 전환"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:14
-msgid "Two finger swipe right"
-msgstr "두손가락 오른쪽 스와이프"
-
-#: ../data/ui/gb-shortcuts-window.ui.h:15
+#: ../data/ui/ide-shortcuts-window.ui.h:14
+msgctxt "shortcut window"
 msgid "Switch to the previous document"
 msgstr "이전 문서로 전환"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:16
-msgid "Two finger swipe left"
-msgstr "두손가락 왼쪽 스와이프"
-
-#: ../data/ui/gb-shortcuts-window.ui.h:17
-#: ../src/project-tree/gb-project-tree-builder.c:79
+#: ../data/ui/ide-shortcuts-window.ui.h:15
+msgctxt "shortcut window"
 msgid "Files"
 msgstr "파일"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:18
+#: ../data/ui/ide-shortcuts-window.ui.h:16
+msgctxt "shortcut window"
 msgid "Create new document"
 msgstr "새 문서 만들기"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:19
+#: ../data/ui/ide-shortcuts-window.ui.h:17
+msgctxt "shortcut window"
 msgid "Open a document"
 msgstr "문서 열기"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:20
+#: ../data/ui/ide-shortcuts-window.ui.h:18
+msgctxt "shortcut window"
 msgid "Save the document"
 msgstr "문서 저장"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:21
+#: ../data/ui/ide-shortcuts-window.ui.h:19
+msgctxt "shortcut window"
 msgid "Close the document"
 msgstr "문서 닫기"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:22
-msgid "Show list of open files"
-msgstr "열린 파일의 목록 표시"
-
-#: ../data/ui/gb-shortcuts-window.ui.h:23
-msgid "Switch to source or header"
-msgstr "소스 또는 헤더로 전환"
-
-#: ../data/ui/gb-shortcuts-window.ui.h:24
+#: ../data/ui/ide-shortcuts-window.ui.h:20
+msgctxt "shortcut window"
 msgid "Find and replace"
 msgstr "찾기 및 바꾸기"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:25
+#: ../data/ui/ide-shortcuts-window.ui.h:21
+msgctxt "shortcut window"
 msgid "Find"
 msgstr "찾기"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:26
+#: ../data/ui/ide-shortcuts-window.ui.h:22
+msgctxt "shortcut window"
 msgid "Find the next match"
 msgstr "다음 일치하는 항목 찾기"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:27
+#: ../data/ui/ide-shortcuts-window.ui.h:23
+msgctxt "shortcut window"
 msgid "Find the previous match"
 msgstr "이전 일치하는 항목 찾기"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:28
+#: ../data/ui/ide-shortcuts-window.ui.h:24
+msgctxt "shortcut window"
 msgid "Clear highlight"
 msgstr "강조 지우기"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:29
-msgid "Go to line"
-msgstr "줄로 이동"
-
-#: ../data/ui/gb-shortcuts-window.ui.h:30
+#: ../data/ui/ide-shortcuts-window.ui.h:25
+msgctxt "shortcut window"
 msgid "Copy and Paste"
 msgstr "복사 및 붙여넣기"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:31
+#: ../data/ui/ide-shortcuts-window.ui.h:26
+msgctxt "shortcut window"
 msgid "Copy selected text to clipboard"
 msgstr "선택한 텍스트 클립보드에 복사"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:32
+#: ../data/ui/ide-shortcuts-window.ui.h:27
+msgctxt "shortcut window"
 msgid "Cut selected text to clipboard"
 msgstr "선택한 텍스트 클립보드로 자르기"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:33
+#: ../data/ui/ide-shortcuts-window.ui.h:28
+msgctxt "shortcut window"
 msgid "Paste text from clipboard"
 msgstr "클립보드에서 텍스트 붙여넣기"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:34
+#: ../data/ui/ide-shortcuts-window.ui.h:29
+msgctxt "shortcut window"
 msgid "Undo and Redo"
 msgstr "실행 취소 및 다시 실행"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:35
+#: ../data/ui/ide-shortcuts-window.ui.h:30
+msgctxt "shortcut window"
 msgid "Undo previous command"
 msgstr "이전 명령 실행 취소"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:36
+#: ../data/ui/ide-shortcuts-window.ui.h:31
+msgctxt "shortcut window"
 msgid "Redo previous command"
 msgstr "이전 명령 다시 실행"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:37
+#: ../data/ui/ide-shortcuts-window.ui.h:32
+msgctxt "shortcut window"
 msgid "Editing"
 msgstr "편집"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:38
+#: ../data/ui/ide-shortcuts-window.ui.h:33
+msgctxt "shortcut window"
 msgid "Increment number at cursor"
 msgstr "커서 위치의 수 증가"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:39
+#: ../data/ui/ide-shortcuts-window.ui.h:34
+msgctxt "shortcut window"
 msgid "Decrement number at cursor"
 msgstr "커서 위치의 수 감소"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:40
+#: ../data/ui/ide-shortcuts-window.ui.h:35
+msgctxt "shortcut window"
 msgid "Join selected lines"
 msgstr "선택한 줄 합치기"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:41
+#: ../data/ui/ide-shortcuts-window.ui.h:36
+msgctxt "shortcut window"
 msgid "Show completion window"
 msgstr "완성 창 표시"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:42
+#: ../data/ui/ide-shortcuts-window.ui.h:37
+msgctxt "shortcut window"
 msgid "Toggle overwrite"
 msgstr "덮어쓰기 토글"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:43
+#: ../data/ui/ide-shortcuts-window.ui.h:38
+msgctxt "shortcut window"
+msgid "Reindent line"
+msgstr "줄 다시 들여쓰기"
+
+#: ../data/ui/ide-shortcuts-window.ui.h:39
+msgctxt "shortcut window"
 msgid "Navigation"
 msgstr "이동"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:44
+#: ../data/ui/ide-shortcuts-window.ui.h:40
+msgctxt "shortcut window"
 msgid "Move to next error in file"
 msgstr "파일의 다음 오류로 이동"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:45
+#: ../data/ui/ide-shortcuts-window.ui.h:41
+msgctxt "shortcut window"
 msgid "Move to previous error in file"
 msgstr "파일의 이전 오류로 이동"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:46
+#: ../data/ui/ide-shortcuts-window.ui.h:42
+msgctxt "shortcut window"
 msgid "Move to previous edit location"
 msgstr "이전 편집 위치로 이동"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:47
+#: ../data/ui/ide-shortcuts-window.ui.h:43
+msgctxt "shortcut window"
 msgid "Move to next edit location"
 msgstr "다음 편집 위치로 이동"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:48
+#: ../data/ui/ide-shortcuts-window.ui.h:44
+msgctxt "shortcut window"
 msgid "Jump to definition of symbol"
 msgstr "심볼의 정의로 이동"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:49
-msgid "Move viewport up within the file"
+#: ../data/ui/ide-shortcuts-window.ui.h:45
+msgctxt "shortcut window"
+msgid "Move sectionport up within the file"
 msgstr "파일에서 보기 영역을 위로 이동"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:50
-msgid "Move viewport down within the file"
+#: ../data/ui/ide-shortcuts-window.ui.h:46
+msgctxt "shortcut window"
+msgid "Move sectionport down within the file"
 msgstr "파일에서 보기 영역을 아래로 이동"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:51
-msgid "Move viewport to end of file"
+#: ../data/ui/ide-shortcuts-window.ui.h:47
+msgctxt "shortcut window"
+msgid "Move sectionport to end of file"
 msgstr "파일에서 보기 영역을 파일 끝으로 이동"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:52
-msgid "Move viewport to beginning of file"
+#: ../data/ui/ide-shortcuts-window.ui.h:48
+msgctxt "shortcut window"
+msgid "Move sectionport to beginning of file"
 msgstr "파일에서 보기 영역을 파일 처음으로 이동"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:53
+#: ../data/ui/ide-shortcuts-window.ui.h:49
+msgctxt "shortcut window"
 msgid "Move to matching bracket"
 msgstr "일치하는 각괄호 위치로 이동"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:54
+#: ../data/ui/ide-shortcuts-window.ui.h:50
+msgctxt "shortcut window"
 msgid "Selections"
 msgstr "선택"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:55
+#: ../data/ui/ide-shortcuts-window.ui.h:51
+msgctxt "shortcut window"
 msgid "Select all"
 msgstr "모두 선택"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:56
+#: ../data/ui/ide-shortcuts-window.ui.h:52
+msgctxt "shortcut window"
 msgid "Unselect all"
 msgstr "모두 선택 해제"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:57
+#: ../data/ui/ide-shortcuts-window.ui.h:53
+msgctxt "shortcut window"
 msgid "Terminal Shortcuts"
 msgstr "터미널 단축키"
 
-#: ../data/ui/gb-view.ui.h:1
-msgid "Split"
-msgstr "쪼개기"
+#: ../data/ui/ide-workbench-header-bar.ui.h:1
+msgid "Search for files. Shortcut: Ctrl + ."
+msgstr "파일 검색. 단축키: Ctrl + ."
 
-#: ../data/ui/gb-view.ui.h:2
-msgid "Split Left"
-msgstr "왼쪽 쪼개기"
+#: ../data/ui/ide-workbench-header-bar.ui.h:2
+msgid "Drops down a list of file operations"
+msgstr "파일 동작의 목록을 펼쳐 봅니다"
 
-#: ../data/ui/gb-view.ui.h:3
-msgid "Split Right"
-msgstr "오른쪽 쪼개기"
-
-#: ../data/ui/gb-view.ui.h:4
-msgid "Split Down"
-msgstr "아래 쪼개기"
-
-#: ../data/ui/gb-view.ui.h:5
-msgid "Move"
-msgstr "이동"
-
-#: ../data/ui/gb-view.ui.h:6
-msgid "Move Left"
-msgstr "왼쪽 이동"
-
-#: ../data/ui/gb-view.ui.h:7
-msgid "Move Right"
-msgstr "오른쪽 이동"
-
-#: ../data/ui/gb-view.ui.h:8
-msgid "_Save"
-msgstr "저장(_S)"
-
-#: ../data/ui/gb-view.ui.h:9
-msgid "_Save As"
-msgstr "다른 이름으로 저장(_S)"
-
-#: ../data/ui/gb-view.ui.h:10
-msgid "Print"
-msgstr "인쇄"
-
-#: ../data/ui/gb-view.ui.h:11
-msgid "_Close"
-msgstr "닫기(_C)"
-
-#: ../data/ui/gb-workbench.ui.h:2
-msgid "Project"
-msgstr "프로젝트"
+#: ../libide/directory/ide-directory-genesis-addin.c:106
+msgid "From an existing project on this computer"
+msgstr "이 컴퓨터의 기존 프로젝트에서"
 
 #: ../libide/editorconfig/ide-editorconfig-file-settings.c:153
 msgid "No file was provided."
 msgstr "파일을 입력하지 않았습니다."
 
-#: ../libide/git/ide-git-buffer-change-monitor.c:167
-msgid "Cannot provide diff, no backing file provided."
-msgstr "차이점을 표시할 수 없습니다. 보관 파일이 없습니다."
-
-#: ../libide/git/ide-git-buffer-change-monitor.c:537
+#: ../libide/editor/ide-editor-frame.c:75
 #, c-format
-msgid "Repository does not have a working directory."
-msgstr "저장소에 작업 디렉터리가 없습니다."
+msgid "Line %u, Column %u"
+msgstr "줄 %u, 행 %u"
 
-#: ../libide/git/ide-git-buffer-change-monitor.c:548
+#: ../libide/editor/ide-editor-frame.c:244
 #, c-format
-msgid "File is not under control of git working directory."
-msgstr "파일이 git 작업 디렉터리에서 주관하지 않습니다."
+msgid "%u of %u"
+msgstr "%u, 전체 %u"
 
-#: ../libide/git/ide-git-buffer-change-monitor.c:614
+#: ../libide/editor/ide-editor-frame.c:646
+#: ../plugins/project-tree/gtk/menus.ui.h:1
+msgid "Re_veal in Project Tree"
+msgstr "프로젝트 트리에서 드러내기(_V)"
+
+#: ../libide/editor/ide-editor-perspective.c:456
+#: ../libide/preferences/ide-preferences-builtin.c:102
+#: ../libide/preferences/ide-preferences-builtin.c:125
+msgid "Editor"
+msgstr "편집기"
+
+#: ../libide/editor/ide-editor-view-actions.c:301
+msgid "Save Document"
+msgstr "문서 저장"
+
+#: ../libide/editor/ide-editor-view-actions.c:307
+#: ../libide/editor/ide-editor-view-actions.c:438
+#: ../libide/ide-workbench-actions.c:67
+#: ../plugins/build-tools/gbp-build-panel.ui.h:8
+#: ../plugins/terminal/gb-terminal-view-actions.c:305
+msgid "Cancel"
+msgstr "취소"
+
+#: ../libide/editor/ide-editor-view-actions.c:308
+#: ../libide/editor/ide-editor-view-actions.c:439
+#: ../plugins/terminal/gb-terminal-view-actions.c:306
+msgid "Save"
+msgstr "저장"
+
+#: ../libide/editor/ide-editor-view-actions.c:427
+msgid "Save Document As"
+msgstr "다른 이름으로 문서 저장"
+
+#: ../libide/editor/ide-editor-view.c:109
+msgid "Plain Text"
+msgstr "일반 텍스트"
+
+#. translators: the user selected a number outside the value range for the document.
+#: ../libide/editor/ide-editor-view.c:660
 #, c-format
-msgid "The requested file does not exist within the git index."
-msgstr "요청한 파일이 git 인덱스에 없습니다."
+msgid "Provide a number between 1 and %u"
+msgstr "1과 %u 사이의 수를 써야 합니다"
 
-#: ../libide/gjs/ide-gjs-script.cpp:76
-msgid "Attempt to load a GJS script with no filename."
-msgstr "파일 이름이 없는 GJS 스크립트 읽어들이기를 시도합니다."
-
-#: ../libide/gjs/ide-gjs-script.cpp:103
-msgid "Failed to create JavaScript context."
-msgstr "자바스크립트 컨텍스트를 만들기 실패했습니다."
-
-#: ../libide/gjs/ide-gjs-script.cpp:128
-msgid "Failed to set IdeContext in JavaScript runtime."
-msgstr "자바스크립트 런타임에서 IdeContext 설정에 실패했습니다."
-
-#: ../libide/gjs/ide-gjs-script.cpp:202
-#: ../libide/pygobject/ide-pygobject-script.c:254
-msgid "The filename for the script was not provided."
-msgstr "스크립트 파일 이름을 입력하지 않았습니다."
-
-#: ../libide/gjs/ide-gjs-script.cpp:213
-#: ../libide/pygobject/ide-pygobject-script.c:265
-msgid "The script must be on a local filesystem."
-msgstr "스크립트가 로컬 파일 시스템에 있어야 합니다."
-
-#: ../libide/gjs/ide-gjs-script.cpp:222
-#, c-format
-msgid "The script \"%s\" is not a JavaScript file."
-msgstr "\"%s\" 스크립트가 자바스크립트 파일이 아닙니다."
+#: ../libide/genesis/ide-genesis-perspective.c:200
+#: ../libide/greeter/ide-greeter-perspective.c:436
+msgid "Failed to load the project"
+msgstr "프로젝트를 읽어들이는데 실패했습니다"
 
 #: ../libide/gsettings/ide-language-defaults.c:177
 #, c-format
@@ -996,93 +868,161 @@ msgstr "언어 기본값의 [global] 그룹에 버전이 없습니다."
 msgid "Failed to initialize defaults."
 msgstr "기본값 초기화에 실패했습니다."
 
-#: ../libide/ide-back-forward-list.c:722
-msgid "File contained invalid UTF-8"
-msgstr "%s 안에 잘못된 UTF-8 문자가 들어 있습니다"
+#: ../libide/ide-application-actions.c:114
+msgid "An IDE for GNOME"
+msgstr "그놈 통합 개발 환경"
 
-#: ../libide/ide-buffer.c:1991
+#: ../libide/ide-application-actions.c:120
+msgid "GNOME Builder"
+msgstr "그놈 빌더"
+
+#: ../libide/ide-application-actions.c:122
+msgid "translator-credits"
+msgstr "류창우 <cwryu@debian.org>"
+
+#: ../libide/ide-application-actions.c:125
+msgid "Learn more about GNOME Builder"
+msgstr "그놈 빌더 자세히 알아보기"
+
+#: ../libide/ide-application-actions.c:129
+msgid "Funded By"
+msgstr "펀딩"
+
+#: ../libide/ide-application-command-line.c:102
+msgid "Commands:"
+msgstr "명령어:"
+
+#: ../libide/ide-application-command-line.c:185
+msgid "List available subcommands"
+msgstr "사용 가능한 하위 명령 목록 보기"
+
+#: ../libide/ide-application-command-line.c:192
+msgid "Run Builder in standalone mode"
+msgstr "단독 모드에서 빌더 실행"
+
+#: ../libide/ide-application-command-line.c:199
+msgid "Show the application's version"
+msgstr "프로그램 버전 표시"
+
+#: ../libide/ide-application-command-line.c:218
+msgid "Increase verbosity, may be specified multiple times"
+msgstr "더 자세히 표시합니다. 여러 번 쓸 수 있습니다"
+
+#: ../libide/ide-application-command-line.c:225
+msgid "Enter GApplication Service mode"
+msgstr "GApplication 서비스 모드 들어가기"
+
+#: ../libide/ide-application-command-line.c:255
+msgid "COMMAND"
+msgstr "<명령>"
+
+#: ../libide/ide-application-command-line.c:326
+msgid "No commands available"
+msgstr "사용 가능한 명령어가 없습니다"
+
+#: ../libide/ide-application-command-line.c:356
+msgid "Please provide a command"
+msgstr "명령어를 지정하십시오"
+
+#: ../libide/ide-application-command-line.c:366
+msgid "No such tool"
+msgstr "그런 도구가 없습니다"
+
+#: ../libide/ide-application-command-line.c:380
+msgid "Please provide a worker type"
+msgstr "워커 종류를 지정하십시오"
+
+#: ../libide/ide-application-command-line.c:387
+msgid "Please provide a D-Bus address"
+msgstr "D-버스 주소를 지정하십시오"
+
+#: ../libide/ide-application-command-line.c:396
+msgid "No such worker"
+msgstr "그런 워커가 없습니다"
+
+#: ../libide/ide-buffer.c:2298
 msgid "The current language lacks a symbol resolver."
 msgstr "현재 언어에 심볼 알아내기가 없습니다."
 
-#: ../libide/ide-buffer-manager.c:604
+#: ../libide/ide-buffer-manager.c:612
 msgid "File too large to be opened."
 msgstr "파일이 너무 커서 열 수 없습니다."
 
-#: ../libide/ide-buffer-manager.c:1425
+#: ../libide/ide-buffer-manager.c:1461
 msgid "Words"
 msgstr "단어"
 
-#: ../libide/ide-buffer-manager.c:1636
+#: ../libide/ide-buffer-manager.c:1673
 #, c-format
 msgid "unsaved document %u"
 msgstr "저장하지 않은 문서 %u"
 
-#: ../libide/ide-buffer-manager.c:1670
+#: ../libide/ide-buffer-manager.c:1707
 msgid "Failed to save buffer, ignoring reclamation."
 msgstr "버퍼 저장에 실패했습니다. 교정 기능을 무시합니다."
 
-#: ../libide/ide-builder.c:50
+#: ../libide/ide-builder.c:89
 #, c-format
-msgid "%s does not implement build_async()"
-msgstr "%s에서 build_async()를 구현하지 않았습니다"
+msgid "%s does not support building"
+msgstr "%s에서 빌드를 지원하지 않습니다"
 
-#: ../libide/ide-builder.c:56
-msgid "No implementation of build_async()"
-msgstr "build_async()를 구현하지 않았습니다"
-
-#: ../libide/ide-build-result.c:156
+#: ../libide/ide-build-result.c:217
 msgid "Failed to open stderr stream."
 msgstr "표준 오류 스트림을 여는데 실패했습니다."
 
-#: ../libide/ide-build-result.c:186
+#: ../libide/ide-build-result.c:247
 msgid "Failed to open stdout stream."
 msgstr "표준 출력 스트림을 여는데 실패했습니다."
 
-#: ../libide/ide-build-system.c:229
+#: ../libide/ide-build-system.c:122
 #, c-format
 msgid "%s() is not supported on %s build system."
 msgstr "%2$s 빌드 시스템에서 %1$s() 기능은 지원하지 않습니다."
 
-#: ../libide/ide.c:71
+#: ../libide/ide.c:62
 #, c-format
 msgid "You must call %s() before using libide."
 msgstr "libide를 사용하기 전에 %s() 기능을 호출해야 합니다."
 
-#: ../libide/ide.c:136
-msgid "Builder requires libgit2-glib with threading support."
-msgstr "버퍼에 스레드 표시 기능을 사용하려면 libgit2-glib이 필요합니다."
+#: ../libide/ide-configuration-manager.c:427
+msgid "Default Configuration"
+msgstr "기본값 설정"
 
-#: ../libide/ide.c:142
-msgid "Builder requires libgit2-glib with SSH support."
-msgstr "버퍼에 SSH 기능을 사용하려면 libgit2-glib이 필요합니다."
-
-#: ../libide/ide-context.c:1666
+#: ../libide/ide-context.c:1828
 msgid "An unload request is already pending"
 msgstr "해제 요청이 이미 지연 중입니다."
 
-#: ../libide/ide-context.c:1781
+#: ../libide/ide-context.c:1943
 msgid "Context has already been restored."
 msgstr "컨텍스트를 이미 복구했습니다."
 
-#: ../libide/ide-device-manager.c:144
+#: ../libide/ide-device-manager.c:147
 #, c-format
 msgid "The device \"%s\" could not be found."
 msgstr "\"%s\" 장치가 없습니다."
 
-#: ../libide/ide-object.c:285
+#: ../libide/ide-environment-editor.c:65
+msgid "New variable…"
+msgstr "새 변수…"
+
+#: ../libide/ide-layout-view.c:146
+msgid "untitled document"
+msgstr "이름 없는 문서"
+
+#: ../libide/ide-object.c:288
 #, c-format
 msgid "No implementations of extension point \"%s\"."
 msgstr "\"%s\" 확장 포인트 구현이 없습니다."
 
-#: ../libide/ide-object.c:377
+#: ../libide/ide-object.c:380
 msgid "Failed to locate build system plugin."
 msgstr "빌드 시스템 플러그인을 찾는데 실패했습니다."
 
-#: ../libide/ide-object.c:464
+#: ../libide/ide-object.c:467
 msgid "No such extension point."
 msgstr "그런 확장 포인트가 없습니다."
 
-#: ../libide/ide-object.c:474
+#: ../libide/ide-object.c:477
 msgid "No implementations of extension point."
 msgstr "확장 포인트 구현이 없습니다."
 
@@ -1094,28 +1034,28 @@ msgstr "대상 파일이 프로젝트 트리 안에 들어있어야 합니다."
 msgid "File must be within the project tree."
 msgstr "파일이 프로젝트 트리 안에 들어있어야 합니다."
 
-#: ../libide/ide-recent-projects.c:377
+#: ../libide/ide-recent-projects.c:383
 #, c-format
 msgid "%s() may only be executed once"
 msgstr "%s() 기능은 한 번만 실행할 수 있습니다"
+
+#: ../libide/ide-runtime-manager.c:100
+msgid "Host operating system"
+msgstr "호스트 운영 체제"
 
 #: ../libide/ide-script.c:205
 #, c-format
 msgid "%s has not implemented GAsyncInitable."
 msgstr "%s에서 GAsyncInitable를 구현하지 않았습니다."
 
-#: ../libide/ide-source-snippet.c:370
+#: ../libide/ide-source-snippet.c:372
 msgid "Chunk does not belong to snippet."
 msgstr "청크가 스니핏에 속해 있지 않습니다."
 
-#: ../libide/ide-source-snippet-completion-provider.c:288
+#: ../libide/ide-source-snippet-completion-provider.c:297
+#: ../libide/preferences/ide-preferences-builtin.c:173
 msgid "Snippets"
 msgstr "스니핏"
-
-#: ../libide/ide-source-snippet-parser.c:495
-#, c-format
-msgid "Invalid snippet at line %d: %s"
-msgstr "%d번 줄에 스니핏이 올바르지 않습니다: %s"
 
 #: ../libide/ide-source-snippets-manager.c:96
 #, c-format
@@ -1127,106 +1067,845 @@ msgstr "디렉터리를 여는데 실패했습니다: %s"
 msgid "Failed to load file: %s: %s"
 msgstr "파일을 읽어들이는데 실패했습니다: %s: %s"
 
-#: ../libide/ide-source-view.c:4563
+#: ../libide/ide-source-view.c:4900
 #, c-format
-msgid "Insert \"%s\""
-msgstr "\"%s\" 입력"
+msgid "Insert “%s”"
+msgstr "“%s“ 입력"
 
-#: ../libide/ide-source-view.c:4565
+#: ../libide/ide-source-view.c:4902
 #, c-format
-msgid "Replace \"%s\" with \"%s\""
-msgstr "\"%s\"을(를) \"%s\"(으)로 바꾸기"
+msgid "Replace “%s” with “%s”"
+msgstr "“%s“을(를) “%s“(으)로 바꾸기"
 
-#: ../libide/ide-source-view.c:4683
+#: ../libide/ide-source-view.c:5016
 msgid "Apply Fix-It"
 msgstr "바로잡기 적용"
 
-#: ../libide/ide-source-view.c:4726
-msgid "Join Lines"
-msgstr "줄 합치기"
+#: ../libide/ide-uri.c:181
+#, no-c-format
+msgid "Invalid %-encoding in URI"
+msgstr "URI에 잘못된 %s 인코딩"
 
-#: ../libide/ide-source-view.c:4737
-msgid "Sort Lines"
-msgstr "줄 정렬"
+#: ../libide/ide-uri.c:219
+msgid "Non-UTF-8 characters in URI"
+msgstr "URI에 UTF-8이 아닌 문자"
 
-#: ../libide/ide-source-view.c:4756
-msgid "Go to Definition"
-msgstr "정의로 이동"
+#: ../libide/ide-uri.c:366 ../libide/ide-uri.c:377
+#, c-format
+msgid "Invalid IP literal '%s' in URI"
+msgstr "URI에 잘못된 IP 문자열 '%s'"
+
+#: ../libide/ide-uri.c:411
+#, c-format
+msgid "Invalid encoded IP literal '%s' in URI"
+msgstr "URI에 잘못 인코딩된 IP 문자열 '%s'"
+
+#: ../libide/ide-uri.c:420
+#, c-format
+msgid "Invalid non-ASCII hostname '%s' in URI"
+msgstr "URI에 ASCII가 아닌 호스트 이름 '%s'"
+
+#: ../libide/ide-uri.c:435
+#, c-format
+msgid "Non-ASCII hostname '%s' forbidden in this URI"
+msgstr "이 URI에서 ASCII가 아닌 '%s' 호스트 이름은 금지됩니다"
+
+#: ../libide/ide-uri.c:457
+#, c-format
+msgid "Could not parse port '%s' in URI"
+msgstr "URI에서 포트 번호 '%s'을(를) 파싱할 수 없습니다"
+
+#: ../libide/ide-uri.c:464
+#, c-format
+msgid "Port '%s' in URI is out of range"
+msgstr "URI에서 포트 번호 '%s'이(가) 범위에서 벗어났습니다"
+
+#: ../libide/ide-uri.c:590
+msgid "Base URI is not absolute"
+msgstr "베이스 URI가 절대 경로가 아닙니다"
+
+#: ../libide/ide-uri.c:617
+msgid "URI is not absolute, and no base URI was provided"
+msgstr "URI가 절대 경로가 아니고, 베이스 URI를 지정하지 않았습니다"
+
+#: ../libide/ide-uri.c:662
+#, c-format
+msgid "Could not parse '%s' as absolute URI"
+msgstr "'%s'을(를) 절대 경로 URI로 파싱할 수 없습니다"
+
+#: ../libide/ide-uri.c:1190
+#, c-format
+msgid "URI '%s' has no host component"
+msgstr "'%s' URI에 호스트 부분이 없습니다"
+
+#: ../libide/ide-workbench-actions.c:64
+msgid "Open File"
+msgstr "파일 열기"
+
+#: ../libide/ide-workbench-actions.c:68
+msgid "Open"
+msgstr "열기"
+
+#: ../libide/preferences/ide-preferences-builtin.c:40
+msgid "Extensions"
+msgstr "확장 기능"
+
+#: ../libide/preferences/ide-preferences-builtin.c:41
+msgid "Installed Extensions"
+msgstr "설치한 확장 기능"
+
+#: ../libide/preferences/ide-preferences-builtin.c:42
+msgid "Bundled Extensions"
+msgstr "포함된 확장 기능"
+
+#: ../libide/preferences/ide-preferences-builtin.c:77
+msgid "Appearance"
+msgstr "모양"
+
+#: ../libide/preferences/ide-preferences-builtin.c:79
+msgid "Themes"
+msgstr "테마"
+
+#: ../libide/preferences/ide-preferences-builtin.c:80
+msgid "Dark Theme"
+msgstr "어두운 테마"
+
+#: ../libide/preferences/ide-preferences-builtin.c:80
+msgid "Whether Builder should use a dark theme"
+msgstr "빌더에서 어두운 테마를 사용할지 여부"
+
+#: ../libide/preferences/ide-preferences-builtin.c:80
+msgid "dark theme"
+msgstr "어두운 테마"
+
+#: ../libide/preferences/ide-preferences-builtin.c:81
+msgid "Grid Pattern"
+msgstr "격자 패턴"
+
+#: ../libide/preferences/ide-preferences-builtin.c:81
+msgid "Display a grid pattern underneath source code"
+msgstr "소스 코드에 격자 패턴을 표시합니다"
+
+#: ../libide/preferences/ide-preferences-builtin.c:101
+msgid "Font"
+msgstr "글꼴"
+
+#: ../libide/preferences/ide-preferences-builtin.c:102
+msgctxt "Keywords"
+msgid "editor font monospace"
+msgstr "편집기 글꼴 고정폭"
+
+#. XXX: This belongs in terminal addin
+#: ../libide/preferences/ide-preferences-builtin.c:104
+#: ../plugins/terminal/gb-terminal-workbench-addin.c:99
+msgid "Terminal"
+msgstr "터미널"
+
+#: ../libide/preferences/ide-preferences-builtin.c:104
+msgctxt "Keywords"
+msgid "terminal font monospace"
+msgstr "터미널 글꼴 고정폭"
+
+#: ../libide/preferences/ide-preferences-builtin.c:110
+msgid "Keyboard"
+msgstr "키보드"
+
+#: ../libide/preferences/ide-preferences-builtin.c:112
+msgid "Emulation"
+msgstr "흉내내기"
+
+#: ../libide/preferences/ide-preferences-builtin.c:113
+msgid "Default keybinding mode which mimics gedit"
+msgstr "지에디트를 흉내내는 기본 키바인딩 모드"
+
+#: ../libide/preferences/ide-preferences-builtin.c:114
+msgid "Emacs"
+msgstr "이맥스"
+
+#: ../libide/preferences/ide-preferences-builtin.c:114
+msgid "Emulates the Emacs text editor"
+msgstr "이맥스 텍스트 편집기를 에뮬레이션합니다"
+
+#: ../libide/preferences/ide-preferences-builtin.c:115
+msgid "Vim"
+msgstr "빔"
+
+#: ../libide/preferences/ide-preferences-builtin.c:115
+msgid "Emulates the Vim text editor"
+msgstr "빔 텍스트 편집기를 에뮬레이션합니다"
+
+#: ../libide/preferences/ide-preferences-builtin.c:117
+msgid "Movement"
+msgstr "이동"
+
+#: ../libide/preferences/ide-preferences-builtin.c:118
+msgid "Smart Home and End"
+msgstr "똑똑한 Home 및 End"
+
+#: ../libide/preferences/ide-preferences-builtin.c:118
+msgid "Home moves to first non-whitespace character"
+msgstr "Home을 누르면 처음 공백이 아닌 문자 위치로 이동합니다"
+
+#: ../libide/preferences/ide-preferences-builtin.c:119
+msgid ""
+"Backspace will remove extra space to keep you aligned with your indentation"
+msgstr "백스페이스를 누르면 들여쓰기에 맞춰 공백을 지워 열을 맞춥니다"
+
+#: ../libide/preferences/ide-preferences-builtin.c:127
+msgid "Cursor"
+msgstr "커서"
+
+#: ../libide/preferences/ide-preferences-builtin.c:128
+msgid "Restore cursor position"
+msgstr "커서 위치 복구"
+
+#: ../libide/preferences/ide-preferences-builtin.c:128
+msgid "Restore cursor position when a file is reopened"
+msgstr "파일을 다시 열 때 커서 위치를 복구합니다"
+
+#: ../libide/preferences/ide-preferences-builtin.c:129
+msgid "Scroll Offset"
+msgstr "스크롤 오프셋"
+
+#: ../libide/preferences/ide-preferences-builtin.c:129
+msgid "Minimum number of lines to keep above and below the cursor"
+msgstr "커서 위와 아래에 유지할 최소 줄 수"
+
+#: ../libide/preferences/ide-preferences-builtin.c:130
+msgid "Overscroll"
+msgstr "오버스크롤"
+
+#: ../libide/preferences/ide-preferences-builtin.c:130
+msgid "Allow the editor to scroll past the end of the buffer"
+msgstr "에디터에서 버퍼의 끝을 지나서 스크롤할 수 있게 허용합니다"
+
+#: ../libide/preferences/ide-preferences-builtin.c:132
+msgid "Line Information"
+msgstr "줄 정보"
+
+# 키워드 번역
+#: ../libide/preferences/ide-preferences-builtin.c:133
+msgid "Line numbers"
+msgstr "줄 번호"
+
+#: ../libide/preferences/ide-preferences-builtin.c:133
+msgid "Show line number at beginning of each line"
+msgstr "줄마다 앞에 줄 번호 표시"
+
+#: ../libide/preferences/ide-preferences-builtin.c:134
+msgid "Line changes"
+msgstr "줄 바뀜"
+
+#: ../libide/preferences/ide-preferences-builtin.c:134
+msgid "Show if a line was added or modified next to line number"
+msgstr "그 줄이 추가되었거나 수정되었는지 여부를 줄 번호 뒤에 표시합니다"
+
+#: ../libide/preferences/ide-preferences-builtin.c:136
+msgid "Highlight"
+msgstr "강조"
+
+#: ../libide/preferences/ide-preferences-builtin.c:137
+msgid "Current line"
+msgstr "현재 줄"
+
+#: ../libide/preferences/ide-preferences-builtin.c:137
+msgid "Make current line stand out with highlights"
+msgstr "현재 줄을 강조해서 표시합니다"
+
+#: ../libide/preferences/ide-preferences-builtin.c:138
+msgid "Matching brackets"
+msgstr "대응되는 각괄호"
+
+#: ../libide/preferences/ide-preferences-builtin.c:138
+msgid "Highlight matching brackets based on cursor position"
+msgstr "커서 위치에 대해 대응되는 각괄호 강조"
+
+#: ../libide/preferences/ide-preferences-builtin.c:140
+msgid "Code Overview"
+msgstr "코드 개요"
+
+#: ../libide/preferences/ide-preferences-builtin.c:141
+msgid "Show overview map"
+msgstr "개요 표시"
+
+#: ../libide/preferences/ide-preferences-builtin.c:141
+msgid "A zoomed out view to enhance navigating source code"
+msgstr "소스 코드 보기에 편리하도록 축소한 개요 표시"
+
+#: ../libide/preferences/ide-preferences-builtin.c:142
+msgid "Automatically hide overview map"
+msgstr "개요 보기 자동 숨김"
+
+#: ../libide/preferences/ide-preferences-builtin.c:142
+msgid "Automatically hide map when editor loses focus"
+msgstr "편집기가 포커스를 잃으면 자동으로 개요 보기를 숨깁니다"
+
+#: ../libide/preferences/ide-preferences-builtin.c:144
+msgid "Whitespace Characters"
+msgstr "공백 문자"
+
+#: ../libide/preferences/ide-preferences-builtin.c:147
+msgid "New line and carriage return"
+msgstr "줄바꿈 및 캐리지 리턴 문자"
+
+#: ../libide/preferences/ide-preferences-builtin.c:148
+msgid "Non-breaking spaces"
+msgstr "분리할 수 없는 공백"
+
+#: ../libide/preferences/ide-preferences-builtin.c:149
+msgid "Spaces inside of text"
+msgstr "텍스트 안의 공백"
+
+#: ../libide/preferences/ide-preferences-builtin.c:150
+msgid "Trailing Only"
+msgstr "뒤에만"
+
+#: ../libide/preferences/ide-preferences-builtin.c:151
+msgid "Leading Only"
+msgstr "앞에만"
+
+#: ../libide/preferences/ide-preferences-builtin.c:157
+msgid "Code Insight"
+msgstr "코드 분석"
+
+#: ../libide/preferences/ide-preferences-builtin.c:159
+msgid "Highlighting"
+msgstr "강조"
+
+#: ../libide/preferences/ide-preferences-builtin.c:160
+msgid "Semantic Highlighting"
+msgstr "의미적 강조"
+
+#: ../libide/preferences/ide-preferences-builtin.c:160
+msgid ""
+"Use code insight to highlight additional information discovered in source "
+"file"
+msgstr "코드 이해에 따라 소스 파일에서 발견된 추가 정보를 강조합니다"
+
+#: ../libide/preferences/ide-preferences-builtin.c:162
+msgid "Completion"
+msgstr "자동 완성"
+
+#: ../libide/preferences/ide-preferences-builtin.c:163
+msgid "Suggest words found in open files"
+msgstr "열린 파일에 있는 단어를 제안"
+
+#: ../libide/preferences/ide-preferences-builtin.c:163
+msgid ""
+"Suggests completions as you type based on words found in any open document"
+msgstr "열린 문서에 있는 단어를 기준으로 타이핑할 때 자동 완성을 제안합니다."
+
+#: ../libide/preferences/ide-preferences-builtin.c:164
+msgid "Suggest completions using Ctags"
+msgstr "ctags 사용 자동 완성 제안"
+
+#: ../libide/preferences/ide-preferences-builtin.c:164
+msgid ""
+"Create and manages a Ctags database for completing class names, functions, "
+"and more"
+msgstr ""
+"클래스 이름, 함수 등을 자동 완성할 때 사용할 ctags 데이터베이스를 만들고 관리"
+"합니다"
+
+#: ../libide/preferences/ide-preferences-builtin.c:165
+msgid "Suggest completions using Clang (Experimental)"
+msgstr "Clang 사용 자동 완성 제안 (실험적)"
+
+#: ../libide/preferences/ide-preferences-builtin.c:165
+msgid "Use Clang to suggest completions for C and C++ languages"
+msgstr "C 및 C++ 언어에서 Clang을 사용해 자동 완성을 합니다"
+
+#: ../libide/preferences/ide-preferences-builtin.c:167
+msgid "Diagnostics"
+msgstr "진단"
+
+#: ../libide/preferences/ide-preferences-builtin.c:176
+msgid "Code snippets"
+msgstr "코드 스니핏"
+
+#: ../libide/preferences/ide-preferences-builtin.c:176
+msgid "Use code fragments to increase typing efficiency"
+msgstr "타이핑 효율을 높이는데 코드 조각을 활용합니다"
+
+#: ../libide/preferences/ide-preferences-builtin.c:190
+msgid "Programming Languages"
+msgstr "프로그래밍 언어"
+
+#: ../libide/preferences/ide-preferences-builtin.c:227
+msgid "Trim trailing whitespace"
+msgstr "뒤의 공백 제거"
+
+#: ../libide/preferences/ide-preferences-builtin.c:227
+msgid "Upon saving, trailing whitespace from modified lines will be trimmed."
+msgstr "저장할 때, 수정한 줄의 끝 공백 문자를 제거합니다."
+
+#: ../libide/preferences/ide-preferences-builtin.c:228
+msgid "Overwrite Braces"
+msgstr "중괄호 덮어쓰기"
+
+#: ../libide/preferences/ide-preferences-builtin.c:228
+msgid "Overwrite closing braces"
+msgstr "닫는 중괄호를 덮어씁니다"
+
+#: ../libide/preferences/ide-preferences-builtin.c:230
+msgid "Margins"
+msgstr "여백"
+
+#: ../libide/preferences/ide-preferences-builtin.c:231
+msgid "Show right margin"
+msgstr "오른쪽 여백 표시"
+
+#: ../libide/preferences/ide-preferences-builtin.c:232
+msgid "Right margin position"
+msgstr "오른쪽 여백 위치"
+
+#: ../libide/preferences/ide-preferences-builtin.c:232
+msgid "Position in spaces for the right margin"
+msgstr "오른쪽 여백의 위치, 공백 문자 수 단위"
+
+#: ../libide/preferences/ide-preferences-builtin.c:235
+msgid "Tab width"
+msgstr "탭 너비"
+
+#: ../libide/preferences/ide-preferences-builtin.c:235
+msgid "Width of a tab character in spaces"
+msgstr "탭 문자의 너비, 공백 문자 수 단위"
+
+#: ../libide/preferences/ide-preferences-builtin.c:236
+msgid "Insert spaces instead of tabs"
+msgstr "탭 대신 공백 입력"
+
+#: ../libide/preferences/ide-preferences-builtin.c:236
+msgid "Prefer spaces over use of tabs"
+msgstr "탭 대신 공백 사용"
+
+#: ../libide/preferences/ide-preferences-builtin.c:237
+msgid "Automatically indent"
+msgstr "자동 들여쓰기"
+
+#: ../libide/preferences/ide-preferences-builtin.c:237
+msgid "Indent source code as you type"
+msgstr "소스 코드 입력할 때 들여 쓰기"
+
+#: ../libide/preferences/ide-preferences-builtin.c:243
+#: ../plugins/build-tools/gbp-build-workbench-addin.c:270
+msgid "Build"
+msgstr "빌드"
+
+#: ../libide/preferences/ide-preferences-builtin.c:245
+#: ../plugins/build-tools/gbp-build-configuration-view.ui.h:1
+msgid "General"
+msgstr "일반"
+
+#: ../libide/preferences/ide-preferences-builtin.c:246
+msgid "Build Workers"
+msgstr "빌드 작업"
+
+#: ../libide/preferences/ide-preferences-builtin.c:246
+msgid "Number of parallel build workers"
+msgstr "병렬로 실행할 빌드 작업 개수"
+
+#: ../libide/preferences/ide-preferences-builtin.c:252
+msgid "Projects"
+msgstr "프로젝트"
+
+#: ../libide/preferences/ide-preferences-builtin.c:254
+msgid "Workspace"
+msgstr "작업 공간"
+
+#: ../libide/preferences/ide-preferences-builtin.c:255
+msgid "Projects Directory"
+msgstr "프로젝트 디렉터리"
+
+#: ../libide/preferences/ide-preferences-builtin.c:255
+msgid "A place for all your projects"
+msgstr "모든 프로젝트가 들어가는 위치"
+
+#: ../libide/preferences/ide-preferences-builtin.c:257
+msgid "Project Discovery"
+msgstr "프로젝트 찾기"
+
+#: ../libide/preferences/ide-preferences-builtin.c:258
+msgid "Discover projects on my computer"
+msgstr "이 컴퓨터의 프로젝트 찾기"
+
+#: ../libide/preferences/ide-preferences-builtin.c:258
+msgid "Scan your computer for existing projects"
+msgstr "이 컴퓨터에서 기존 프로젝트를 검사합니다"
+
+#: ../libide/preferences/ide-preferences-perspective.c:888
+msgid "Preferences"
+msgstr "기본 설정"
 
 #: ../libide/pygobject/ide-pygobject-script.c:135
 msgid "Attempt to load a PyGObject script with no filename."
 msgstr "파일 이름이 없는 PyGObject 스크립트를 읽어들이도록 시도했습니다."
+
+#: ../libide/pygobject/ide-pygobject-script.c:254
+msgid "The filename for the script was not provided."
+msgstr "스크립트 파일 이름을 입력하지 않았습니다."
+
+#: ../libide/pygobject/ide-pygobject-script.c:265
+msgid "The script must be on a local filesystem."
+msgstr "스크립트가 로컬 파일 시스템에 있어야 합니다."
 
 #: ../libide/pygobject/ide-pygobject-script.c:274
 #, c-format
 msgid "The script \"%s\" is not a PyGObject file."
 msgstr "\"%s\" 스크립트는 PyGObject 파일이 아닙니다."
 
-#: ../plugins/autotools/ide-autotools-build-system.c:175
+#: ../libide/search/ide-omni-search-display.c:264
+msgid "Cannot add provider more than once."
+msgstr "프로바이더를 여러번 추가할 수 없습니다."
+
+#: ../libide/search/ide-omni-search-display.c:340
+msgid "The provider could not be found."
+msgstr "프로바이더를 찾을 수 없습니다."
+
+#: ../libide/util/ide-file-manager.c:64
+msgid "File path is NULL"
+msgstr "파일 경로가 NULL입니다"
+
+#: ../libide/util/ide-file-manager.c:73 ../libide/util/ide-file-manager.c:84
+msgid "Error converting UTF-8 filename to wide char"
+msgstr "UTF-8 파일 이름을 와이드 문자로 변환하는데 오류"
+
+#: ../libide/util/ide-file-manager.c:92
+msgid "ILCreateFromPath() failed"
+msgstr "ILCreateFromPath() 실패"
+
+#: ../libide/util/ide-file-manager.c:129
+#, c-format
+msgid "Cannot convert '%s' into a valid NSURL."
+msgstr "'%s'을(를) 올바른 NSURL로 변환할 수 없습니다."
+
+#: ../libide/util/ide-file-manager.c:157
+msgid "Connecting to org.freedesktop.FileManager1 failed: "
+msgstr "org.freedesktop.FileManager1에 연결하는데 실패: "
+
+#: ../libide/util/ide-file-manager.c:181
+msgid "Calling ShowItems failed: "
+msgstr "ShowItems 호출 실패: "
+
+#: ../plugins/autotools/ide-autotools-builder.c:49
+msgid "Cancelled"
+msgstr "취소함"
+
+#: ../plugins/autotools/ide-autotools-builder.c:51
+msgid "Failed"
+msgstr "실패함"
+
+#: ../plugins/autotools/ide-autotools-builder.c:57
+msgid "Success"
+msgstr "성공"
+
+#: ../plugins/autotools/ide-autotools-builder.c:161
+#: ../plugins/autotools/ide-autotools-build-task.c:872
+msgid "Building…"
+msgstr "빌드 중…"
+
+#: ../plugins/autotools/ide-autotools-build-system.c:183
 msgid "Failed to locate configure.ac"
 msgstr "configure.ac 파일을 찾는데 실패했습니다"
 
-#: ../plugins/autotools/ide-autotools-build-task.c:270
+#: ../plugins/autotools/ide-autotools-build-task.c:174
 msgid "Directory must be on a locally mounted filesystem."
 msgstr "디렉터리는 로컬에 마운트한 파일 시스템 위에 있어야 합니다."
 
-#: ../plugins/autotools/ide-autotools-build-task.c:641
+#: ../plugins/autotools/ide-autotools-build-task.c:548
 msgid "Cannot execute build task more than once."
 msgstr "빌드 작업을 여러번 실행할 수 없습니다."
 
-#: ../plugins/autotools/ide-autotools-build-task.c:726
+#: ../plugins/autotools/ide-autotools-build-task.c:642
 msgid "Failed to create build directory."
 msgstr "빌드 디렉터리 만드는데 실패했습니다."
 
-#: ../plugins/autotools/ide-autotools-build-task.c:735
+#: ../plugins/autotools/ide-autotools-build-task.c:651
 #, c-format
 msgid "'%s' is not a directory."
 msgstr "'%s'은(는) 디렉터리가 아닙니다."
 
-#: ../plugins/autotools/ide-autotools-build-task.c:774
+#: ../plugins/autotools/ide-autotools-build-task.c:690
 #, c-format
 msgid "autogen.sh is missing from project directory (%s)."
 msgstr "프로젝트 디렉터리에(%s) autogen.sh 파일이 없습니다."
 
-#: ../plugins/autotools/ide-autotools-build-task.c:784
+#: ../plugins/autotools/ide-autotools-build-task.c:700
 msgid "autogen.sh is not executable."
 msgstr "autogen.sh 파일이 실행 가능 파일이 아닙니다."
 
-#: ../plugins/autotools/ide-autotools-build-task.c:814
+#: ../plugins/autotools/ide-autotools-build-task.c:704
+msgid "Running autogen…"
+msgstr "autogen 실행 중…"
+
+#: ../plugins/autotools/ide-autotools-build-task.c:738
 #, c-format
 msgid "autogen.sh failed to create configure (%s)"
 msgstr "autogen.sh에서 configure 파일을 만드는데 실패했습니다(%s)"
 
-#: ../plugins/autotools/ide-makecache.c:999
+#: ../plugins/autotools/ide-autotools-build-task.c:773
+msgid "Running configure…"
+msgstr "configure 실행 중…"
+
+#: ../plugins/autotools/ide-autotools-build-task.c:870
+msgid "Cleaning…"
+msgstr "빌드 결과 지우는 중…"
+
+#: ../plugins/autotools/ide-makecache.c:1006
 msgid "Invalid makefile provided, ignoring."
 msgstr "올바르지 않은 메이크파일입니다. 무시합니다."
 
-#: ../plugins/clang/ide-clang-completion-provider.c:200
+#: ../plugins/build-tools/gbp-build-configuration-view.ui.h:2
+msgid "The name of the build configuration"
+msgstr "빌드 설정의 이름"
+
+#: ../plugins/build-tools/gbp-build-configuration-view.ui.h:3
+msgid "Name"
+msgstr "이름"
+
+#: ../plugins/build-tools/gbp-build-configuration-view.ui.h:4
+msgid "The prefix to use when installing the project"
+msgstr "프로젝트를 설치할 때 사용할 최상위 경로 (prefix)"
+
+#: ../plugins/build-tools/gbp-build-configuration-view.ui.h:5
+msgid "Installation Prefix"
+msgstr "설치 최상위 경로"
+
+#: ../plugins/build-tools/gbp-build-configuration-view.ui.h:6
+msgid "Options to use when bootstrapping the project"
+msgstr "프로젝트를 처음 만들 때 사용할 옵션"
+
+#: ../plugins/build-tools/gbp-build-configuration-view.ui.h:7
+msgid "Configure Options"
+msgstr "설정 옵션"
+
+#: ../plugins/build-tools/gbp-build-configuration-view.ui.h:8
+msgid "Duplicate Configuration"
+msgstr "설정 복제"
+
+#: ../plugins/build-tools/gbp-build-configuration-view.ui.h:9
+msgid "Delete Configuration"
+msgstr "설정 삭제"
+
+#: ../plugins/build-tools/gbp-build-configuration-view.ui.h:10
+msgid "Device"
+msgstr "장치"
+
+#: ../plugins/build-tools/gbp-build-configuration-view.ui.h:11
+msgid "Runtime"
+msgstr "런타임"
+
+#: ../plugins/build-tools/gbp-build-configuration-view.ui.h:12
+msgid "Environment"
+msgstr "환경"
+
+#: ../plugins/build-tools/gbp-build-panel-row.c:68
+msgid "Unknown file"
+msgstr "알 수 없는 파일"
+
+#: ../plugins/build-tools/gbp-build-panel.ui.h:1
+#: ../plugins/project-tree/gtk/menus.ui.h:12
+msgid "_Build"
+msgstr "빌드(_B)"
+
+#: ../plugins/build-tools/gbp-build-panel.ui.h:2
+#: ../plugins/project-tree/gtk/menus.ui.h:13
+msgid "_Rebuild"
+msgstr "다시 빌드(_R)"
+
+# 주의: 일반적인 clean과 구분하기 위해 빌드 결과임을 명시한다
+#: ../plugins/build-tools/gbp-build-panel.ui.h:3
+msgid "_Clean"
+msgstr "빌드 결과 지우기(_C)"
+
+#: ../plugins/build-tools/gbp-build-panel.ui.h:4
+msgid "Status:"
+msgstr "상태:"
+
+#: ../plugins/build-tools/gbp-build-panel.ui.h:5
+msgid "Running Time:"
+msgstr "실행 시간:"
+
+#: ../plugins/build-tools/gbp-build-panel.ui.h:6
+msgid "Warnings:"
+msgstr "경고:"
+
+#: ../plugins/build-tools/gbp-build-panel.ui.h:7
+msgid "Errors:"
+msgstr "오류:"
+
+#: ../plugins/build-tools/gbp-build-panel.ui.h:9
+msgid "Deploy"
+msgstr "배치"
+
+#: ../plugins/build-tools/gbp-build-panel.ui.h:10
+msgid "Export"
+msgstr "내보내기"
+
+#: ../plugins/build-tools/gbp-build-tool.c:102
+#: ../plugins/build-tools/gbp-build-tool.c:115
+#, c-format
+msgid "========================\n"
+msgstr "========================\n"
+
+#: ../plugins/build-tools/gbp-build-tool.c:103
+#, c-format
+msgid "           Project Name: %s\n"
+msgstr "          프로젝트 이름: %s\n"
+
+#: ../plugins/build-tools/gbp-build-tool.c:104
+#, c-format
+msgid " Version Control System: %s\n"
+msgstr "     버전 컨트롤 시스템: %s\n"
+
+#: ../plugins/build-tools/gbp-build-tool.c:105
+#, c-format
+msgid "           Build System: %s\n"
+msgstr "            빌드 시스템: %s\n"
+
+#: ../plugins/build-tools/gbp-build-tool.c:106
+#, c-format
+msgid "    Build Date and Time: %s\n"
+msgstr "      빌드 날짜 및 시각: %s\n"
+
+#: ../plugins/build-tools/gbp-build-tool.c:107
+#, c-format
+msgid "    Building for Device: %s (%s)\n"
+msgstr "         빌드 목표 장치: %s (%s)\n"
+
+#: ../plugins/build-tools/gbp-build-tool.c:112
+#, c-format
+msgid "            Environment: %s\n"
+msgstr "                   환경: %s\n"
+
+#: ../plugins/build-tools/gbp-build-tool.c:142
+#: ../plugins/build-tools/gbp-build-tool.c:146
+#, c-format
+msgid "===============\n"
+msgstr "===============\n"
+
+#: ../plugins/build-tools/gbp-build-tool.c:143
+#, c-format
+msgid " Build Failure: %s\n"
+msgstr " 빌드 실패: %s\n"
+
+#: ../plugins/build-tools/gbp-build-tool.c:144
+msgid " Build ran for: %"
+msgstr " 빌드 실행 목표: %"
+
+#.
+#. * TODO: We should consider supporting packaging/xdg-app/deployment stuff
+#. *       here too. It would be nice if we could say, go build this project,
+#. *       for this device, and then deploy.
+#.
+#: ../plugins/build-tools/gbp-build-tool.c:157
+#: ../plugins/build-tools/gbp-build-tool.c:161
+#, c-format
+msgid "=================\n"
+msgstr "=================\n"
+
+#: ../plugins/build-tools/gbp-build-tool.c:158
+#, c-format
+msgid " Build Successful\n"
+msgstr " 빌드 성공\n"
+
+#: ../plugins/build-tools/gbp-build-tool.c:159
+msgid "   Build ran for: %"
+msgstr "   빌드 실행 목표: %"
+
+#: ../plugins/build-tools/gbp-build-tool.c:212
+#, c-format
+msgid "Failed to locate device \"%s\""
+msgstr "\"%s\" 장치를 찾는데 실패했습니다"
+
+#: ../plugins/build-tools/gbp-build-tool.c:222
+#, c-format
+msgid "Failed to locate runtime \"%s\""
+msgstr "\"%s\" 런타임을 찾는데 실패했습니다"
+
+#: ../plugins/build-tools/gbp-build-tool.c:286
+msgid "Clean the project"
+msgstr "프로젝트 빌드 결과 지우기"
+
+#: ../plugins/build-tools/gbp-build-tool.c:288
+msgid "The ID of the device to build for"
+msgstr "빌드하려는 대상 장치의 ID"
+
+#: ../plugins/build-tools/gbp-build-tool.c:289
+msgid "local"
+msgstr "로컬"
+
+#: ../plugins/build-tools/gbp-build-tool.c:291
+msgid "The runtime to use for building"
+msgstr "빌드하는 대상으로 사용할 런타임"
+
+#: ../plugins/build-tools/gbp-build-tool.c:292
+msgid "host"
+msgstr "호스트"
+
+#: ../plugins/build-tools/gbp-build-tool.c:294
+msgid "Number of workers to use when building"
+msgstr "빌드할 때 사용할 워커 수"
+
+#: ../plugins/build-tools/gbp-build-tool.c:295
+msgid "N"
+msgstr "<개수>"
+
+#: ../plugins/build-tools/gbp-build-tool.c:297
+msgid "The configuration to use from .buildconfig"
+msgstr ".buildconfig 파일에서 온 설정"
+
+#: ../plugins/build-tools/gbp-build-tool.c:298
+msgid "CONFIG_ID"
+msgstr "<설정ID>"
+
+#: ../plugins/build-tools/gbp-build-tool.c:300
+msgid "Path to project file, defaults to current directory"
+msgstr "프로젝트 파일의 경로, 기본값은 현재 디렉터리"
+
+#: ../plugins/build-tools/gbp-build-tool.c:301
+msgid "PATH"
+msgstr "<경로>"
+
+#: ../plugins/build-tools/gbp-build-workbench-addin.c:275
+msgid "Build Output"
+msgstr "빌드 출력"
+
+#: ../plugins/clang/ide-clang-preferences-addin.c:62
 msgid "Clang"
 msgstr "Clang"
 
-#: ../plugins/clang/ide-clang-service.c:266
+#: ../plugins/clang/ide-clang-preferences-addin.c:63
+msgid "Show errors and warnings provided by Clang"
+msgstr "Clang의 오류와 경고 표시"
+
+#. translators: keywords used when searching for preferences
+#: ../plugins/clang/ide-clang-preferences-addin.c:65
+msgid "clang diagnostics warnings errors"
+msgstr "clang diagnostics warnings errors 진단 경고 오류"
+
+#: ../plugins/clang/ide-clang-service.c:269
 msgid "Unknown failure"
 msgstr "알 수 없는 실패"
 
-#: ../plugins/clang/ide-clang-service.c:270
+#: ../plugins/clang/ide-clang-service.c:273
 msgid "Clang crashed"
 msgstr "Clang 이상 종료"
 
-#: ../plugins/clang/ide-clang-service.c:274
+#: ../plugins/clang/ide-clang-service.c:277
 msgid "Invalid arguments"
 msgstr "인자가 올바르지 않습니다"
 
-#: ../plugins/clang/ide-clang-service.c:278
+#: ../plugins/clang/ide-clang-service.c:281
 msgid "AST read error"
 msgstr "AST 읽기 오류"
 
-#: ../plugins/clang/ide-clang-service.c:290
+#: ../plugins/clang/ide-clang-service.c:293
 #, c-format
 msgid "Failed to create translation unit: %s"
 msgstr "변환 단위를 만드는데 실패했습니다: %s"
 
-#: ../plugins/clang/ide-clang-service.c:399
+#: ../plugins/clang/ide-clang-service.c:402
 msgid "File must be saved locally to parse."
 msgstr "파일을 파싱하려면 로컬에 저장해야 합니다."
 
@@ -1234,153 +1913,394 @@ msgstr "파일을 파싱하려면 로컬에 저장해야 합니다."
 msgid "anonymous"
 msgstr "익명"
 
-#: ../plugins/clang/ide-clang-translation-unit.c:654
+#: ../plugins/clang/ide-clang-translation-unit.c:656
 msgid "clang_codeCompleteAt() only works on local files"
 msgstr "clang_codeCompleteAt() 기능은 로컬 파일에서만 동작합니다."
 
-#: ../plugins/command-bar/gb-command-bar.c:290
+#: ../plugins/command-bar/gb-command-bar.c:299
 #, c-format
 msgid "Command not found: %s"
 msgstr "명령어가 없습니다: %s"
 
-#: ../plugins/command-bar/gb-command-bar.c:594
+#: ../plugins/command-bar/gb-command-bar.c:603
 msgid "Use the entry below to execute a command"
 msgstr "명령을 실행하려면 아래 항목을 사용하십시오"
 
-#: ../plugins/command-bar/gb-vim.c:83
+#: ../plugins/command-bar/gb-vim.c:86
 #, c-format
 msgid "Number required"
 msgstr "숫자가 필요합니다"
 
 # <값> <파라미터이름>
-#: ../plugins/command-bar/gb-vim.c:93
+#: ../plugins/command-bar/gb-vim.c:96
 #, c-format
 msgid "%s is invalid for %s"
 msgstr "%s은(는) %s에 올바른 값이 아닙니다"
 
-#: ../plugins/command-bar/gb-vim.c:151
+#: ../plugins/command-bar/gb-vim.c:154
 #, c-format
 msgid "Cannot find language '%s'"
 msgstr "'%s' 언어를 찾을 수 없습니다"
 
-#: ../plugins/command-bar/gb-vim.c:348
+#: ../plugins/command-bar/gb-vim.c:311
+#, c-format
+msgid "This command requires a GtkSourceView to be focused"
+msgstr "이 명령어는 포커스가 있는 GtkSourceView가 필요합니다"
+
+#: ../plugins/command-bar/gb-vim.c:322
+#, c-format
+msgid "This command requires a view to be focused"
+msgstr "이 명령은 포커스가 있는 뷰가 필요합니다"
+
+#: ../plugins/command-bar/gb-vim.c:379
 #, c-format
 msgid "Unknown option: %s"
 msgstr "알 수 없는 옵션: %s"
 
-#: ../plugins/command-bar/gb-vim.c:387
+#: ../plugins/command-bar/gb-vim.c:422
 #, c-format
 msgid "Cannot find colorscheme '%s'"
 msgstr "'%s' 색 구성을 찾을 수 없습니다"
 
-#: ../plugins/command-bar/gb-vim.c:423
+#: ../plugins/command-bar/gb-vim.c:463
 #, c-format
 msgid "Failed to locate working directory"
 msgstr "작업 디렉터리 찾는데 실패했습니다"
 
-#: ../plugins/command-bar/gb-vim.c:547
+#: ../plugins/command-bar/gb-vim.c:640
 #, c-format
 msgid "Invalid :syntax subcommand: %s"
 msgstr ":syntax 하위 명령이 올바르지 않습니다: %s"
 
-#: ../plugins/command-bar/gb-vim.c:874
+#: ../plugins/command-bar/gb-vim.c:1022
 #, c-format
 msgid "Invalid search and replace request"
 msgstr "검색 및 바꾸기 요청이 올바르지 않습니다"
 
-#: ../plugins/command-bar/gb-vim.c:960
+#: ../plugins/command-bar/gb-vim.c:1127
 #, c-format
-msgid "vim mode requires GtkSourceView"
-msgstr "빔 모드에는 GtkSourceView가 필요합니다"
+msgid "Not a command: %s"
+msgstr "명령어가 아닙니다: %s"
 
-#: ../plugins/command-bar/gb-vim.c:990
-#, c-format
-msgid "Not an editor command: %s"
-msgstr "편집기 명령이 아닙니다: %s"
+#: ../plugins/comment-code/gtk/menus.ui.h:1
+msgid "Comment code"
+msgstr "주석으로 넣기"
+
+#: ../plugins/comment-code/gtk/menus.ui.h:2
+msgid "Uncomment code"
+msgstr "주석에서 빼기"
+
+#: ../plugins/contributing/contributing_plugin/helper.py:76
+#, python-format
+msgid ""
+"Usage:\n"
+"  %(prgname) %(command) OPTIONS\n"
+msgstr ""
+"사용법:\n"
+"  %(prgname) %(command) 옵션\n"
+
+#: ../plugins/contributing/contributing_plugin/__init__.py:54
+msgid "Missing project name"
+msgstr "프로젝트 이름이 없습니다"
+
+#: ../plugins/contributing/contributing_plugin/__init__.py:68
+msgid ""
+"Usage:\n"
+"  ide contribute PROJECT_NAME\n"
+"\n"
+"  This command will bootstrap your system to begin contributing to the "
+"project\n"
+"  denoted by PROJECT_NAME. This includes fetching the sources, ensuring "
+"that\n"
+"  you have the required dependencies to build, and bootstraps the first "
+"build\n"
+"  of the project.\n"
+"\n"
+"Examples:\n"
+"  ide contribute gnome-builder\n"
+"  ide contribute gnome-maps\n"
+"\n"
+msgstr ""
+"사용법:\n"
+"  ide contribute <프로젝트_이름>\n"
+"\n"
+"  이 명령을 실행하면 <프로젝트_이름>으로 지정하는 프로젝트에 기여를\n"
+"  시작합니다. 소스 코드를 가져오고, 빌드에 필요한 의존성이 갖춰져 있는지\n"
+"  확인하고, 프로젝트를 처음 빌드합니다.\n"
+"\n"
+"예제:\n"
+"  ide contribute gnome-builder\n"
+"  ide contribute gnome-maps\n"
+"\n"
+
+#: ../plugins/contributing/contributing_plugin/__init__.py:226
+msgid "Username"
+msgstr "사용자 이름"
 
 #: ../plugins/c-pack/ide-c-format-provider.c:281
 #: ../plugins/python-pack/ide-python-format-provider.c:238
 msgid "Format Strings"
 msgstr "포맷 문자열"
 
-#: ../plugins/ctags/ide-ctags-completion-provider.c:179
-msgid "CTags"
-msgstr "CTags"
+#: ../plugins/create-project/gbp-create-project-tool.c:130
+msgid "List available templates"
+msgstr "사용 가능한 서식 목록 출력"
 
-#: ../plugins/devhelp/gb-devhelp-document.c:71
+#: ../plugins/create-project/gbp-create-project-tool.c:132
+msgid "Project template to generate"
+msgstr "생성할 프로젝트 서식"
+
+#: ../plugins/create-project/gbp-create-project-tool.c:138
+msgid "create-project [OPTION...] PROJECT_NAME"
+msgstr "create-project [옵션...] <프로젝트_이름>"
+
+#: ../plugins/create-project/gbp-create-project-tool.c:187
 #, c-format
-msgid "Documentation (%s)"
-msgstr "문서(%s)"
+msgid "Filename must be ASCII and may not contain : or ="
+msgstr "파일 이름이 ASCII 문자여야 하고 : 또는 = 문자가 들어 있으면 안됩니다"
 
-#: ../plugins/devhelp/gb-devhelp-document.c:148
-#: ../plugins/devhelp/gb-devhelp-panel.c:144
-#: ../plugins/devhelp/gb-devhelp-search-provider.c:134
+#: ../plugins/create-project/gbp-create-project-tool.c:291
+#, c-format
+msgid "Please specify a project name.\n"
+msgstr "프로젝트 이름을 지정하십시오.\n"
+
+#: ../plugins/create-project/gbp-create-project-tool.c:307
+#, c-format
+msgid "Please specify a project template with --template=\n"
+msgstr "--template= 옵션으로 프로젝트 서식을 지정하십시오\n"
+
+#: ../plugins/devhelp/gbp-devhelp-search-provider.c:128
+#: ../plugins/devhelp/gbp-devhelp-workbench-addin.c:90
 msgid "Documentation"
 msgstr "문서"
 
-#: ../plugins/device-manager/gb-device-manager-panel.c:75
-msgid "Device Manager"
-msgstr "장치 관리"
-
-#: ../plugins/file-search/gb-file-search-provider.c:45
+#: ../plugins/file-search/gb-file-search-provider.c:44
 msgid "Switch To"
 msgstr "전환"
 
-#: ../plugins/gnome-code-assistance/ide-gca-diagnostic-provider.c:336
+#: ../plugins/fpaste/fpaste_plugin/gtk/menus.ui.h:1
+msgid "Send to Fpaste.org"
+msgstr "fpaste.org로 보내기"
+
+#: ../plugins/fpaste/fpaste_plugin/__init__.py:110
+msgid "The following URL has been copied to the clipboard"
+msgstr "다음 URL을 클립보드에 복사했습니다"
+
+#: ../plugins/git/ide-git-buffer-change-monitor.c:167
+msgid "Cannot provide diff, no backing file provided."
+msgstr "차이점을 표시할 수 없습니다. 보관 파일이 없습니다."
+
+#: ../plugins/git/ide-git-buffer-change-monitor.c:539
+#, c-format
+msgid "Repository does not have a working directory."
+msgstr "저장소에 작업 디렉터리가 없습니다."
+
+#: ../plugins/git/ide-git-buffer-change-monitor.c:550
+#, c-format
+msgid "File is not under control of git working directory."
+msgstr "파일이 git 작업 디렉터리에서 주관하지 않습니다."
+
+#: ../plugins/git/ide-git-buffer-change-monitor.c:616
+#, c-format
+msgid "The requested file does not exist within the git index."
+msgstr "요청한 파일이 git 인덱스에 없습니다."
+
+#: ../plugins/git/ide-git-clone-widget.c:132
+msgid "A valid Git URL is required"
+msgstr "올바른 Git URL이 필요합니다"
+
+#: ../plugins/git/ide-git-clone-widget.ui.h:1
+msgid "user@host:repository.git"
+msgstr "user@host:repository.git"
+
+#: ../plugins/git/ide-git-clone-widget.ui.h:2
+msgid "Enter the URL of your project's source code repository"
+msgstr "프로젝트의 소스 코드 저장소 URL을 입력하십시오"
+
+#: ../plugins/git/ide-git-clone-widget.ui.h:3
+msgid "Directory"
+msgstr "디렉터리"
+
+#: ../plugins/git/ide-git-clone-widget.ui.h:4
+msgid "Enter the name of the directory to create"
+msgstr "새로 만들 디렉터리 이름을 입력하십시오"
+
+#: ../plugins/git/ide-git-clone-widget.ui.h:5
+msgid "Repository"
+msgstr "저장소"
+
+#: ../plugins/git/ide-git-clone-widget.ui.h:6
+msgid "Location"
+msgstr "위치"
+
+#: ../plugins/git/ide-git-genesis-addin.c:93
+msgid "From a existing project in a Git repository"
+msgstr "깃 저장소의 기존 프로젝트에서"
+
+#: ../plugins/git/ide-git-preferences-addin.c:108
+msgid "Version Control"
+msgstr "버전 컨트롤"
+
+#: ../plugins/git/ide-git-preferences-addin.c:145
+msgid "Attribution"
+msgstr "출처"
+
+#: ../plugins/gnome-code-assistance/ide-gca-diagnostic-provider.c:375
 msgid "Code assistance requires a local file."
 msgstr "코드 도우미는 로컬 파일이 필요합니다."
+
+#: ../plugins/gnome-code-assistance/ide-gca-preferences-addin.c:62
+msgid "Pylint"
+msgstr "Pylint"
+
+#: ../plugins/gnome-code-assistance/ide-gca-preferences-addin.c:63
+msgid "Enable the use of pylint, which may execute code in your project"
+msgstr "pylint를 사용합니다. 프로젝트 안에서 코드를 실행합니다"
+
+#. translators: these are keywords used to search for preferences
+#: ../plugins/gnome-code-assistance/ide-gca-preferences-addin.c:65
+msgid "pylint python lint code execute execution"
+msgstr "pylint python lint code execute execution 파이썬 코드 실행"
 
 #: ../plugins/gnome-code-assistance/ide-gca-service.c:168
 msgid "No language specified"
 msgstr "언어를 지정하지 않았습니다"
 
-#: ../plugins/html-preview/html_preview_plugin/__init__.py:88
+#: ../plugins/html-preview/html_preview_plugin/gtk/menus.ui.h:1
 msgid "Preview as HTML"
 msgstr "HTML로 미리보기"
 
+#: ../plugins/jedi/jedi_plugin.py:672
+msgid "Suggest Python completions"
+msgstr "파이썬 자동 완성 제안"
+
+#: ../plugins/jedi/jedi_plugin.py:673
+msgid "Use Jedi to provide completions for the Python language"
+msgstr "파이썬 언어에서 Jedi를 사용해 자동 완성을 합니다"
+
+#: ../plugins/library-template/library_template/__init__.py:52
+msgid "Shared Library"
+msgstr "공유 라이브러리"
+
+#: ../plugins/library-template/library_template/__init__.py:55
+msgid "Create a new autotools project with a shared library"
+msgstr "공유 라이브러리가 있는 새 autotools 프로젝트를 만듭니다"
+
 #: ../plugins/mingw/ide-mingw-device-provider.c:95
-msgid "MinGW (64-bit)"
-msgstr "MinGW(64비트)"
+msgid "MinGW 64-bit"
+msgstr "MinGW 64비트"
 
 #: ../plugins/mingw/ide-mingw-device-provider.c:107
-msgid "MinGW (32-bit)"
-msgstr "MinGW(32비트)"
+msgid "MinGW 32-bit"
+msgstr "MinGW 32비트"
 
-#: ../plugins/symbol-tree/symbol-tree.c:187
-msgid "Current language does not support symbol resolvers"
-msgstr "현재 언어는 심볼 찾기를 지원하지 않습니다"
+#: ../plugins/project-tree/gb-new-file-popover.c:123
+#: ../plugins/project-tree/gb-rename-file-popover.c:141
+msgid "A folder with that name already exists."
+msgstr "같은 이름의 폴더가 이미 있습니다."
 
-#: ../plugins/symbol-tree/symbol-tree.c:211
-msgid "Symbol Tree"
-msgstr "심볼 트리"
+#: ../plugins/project-tree/gb-new-file-popover.c:126
+#: ../plugins/project-tree/gb-rename-file-popover.c:144
+msgid "A file with that name already exists."
+msgstr "같은 이름의 파일이 이미 있습니다."
 
-#: ../plugins/sysmon/gb-sysmon-addin.c:64
-msgid "System Monitor"
-msgstr "시스템 보기"
+#: ../plugins/project-tree/gb-new-file-popover.c:348
+#: ../plugins/project-tree/gb-new-file-popover.ui.h:1
+#: ../plugins/project-tree/gb-rename-file-popover.ui.h:1
+msgid "File Name"
+msgstr "파일 이름"
 
-#: ../plugins/terminal/gb-terminal-document.c:64
+#: ../plugins/project-tree/gb-new-file-popover.c:350
+msgid "Folder Name"
+msgstr "폴더 이름"
+
+#: ../plugins/project-tree/gb-new-file-popover.ui.h:2
+msgid "_Create"
+msgstr "만들기(_C)"
+
+#: ../plugins/project-tree/gb-project-tree-addin.c:112
+msgid "Project"
+msgstr "프로젝트"
+
+#: ../plugins/project-tree/gb-project-tree-builder.c:77
+msgid "Files"
+msgstr "파일"
+
+#: ../plugins/project-tree/gb-rename-file-popover.c:79
 #, c-format
-msgid "Terminal (%s)"
-msgstr "터미널(%s)"
+msgid "Rename %s"
+msgstr "%s 이름 바꾸기"
 
-#: ../plugins/terminal/gb-terminal-view-actions.c:300
-msgid "Save Terminal Content As"
-msgstr "다른 이름으로 터미널 내용 저장"
+#: ../plugins/project-tree/gb-rename-file-popover.c:172
+msgid "File name must not contain subdirectories."
+msgstr "파일 이름에 하위 디렉터리가 들어 있으면 안 됩니다."
 
-#: ../plugins/terminal/gb-terminal-view-actions.c:308
-#: ../src/editor/gb-editor-view-actions.c:310
-#: ../src/editor/gb-editor-view-actions.c:441
-#: ../src/workbench/gb-workbench-actions.c:169
-msgid "Cancel"
-msgstr "취소"
+#: ../plugins/project-tree/gb-rename-file-popover.ui.h:2
+#: ../plugins/project-tree/gtk/menus.ui.h:10
+msgid "_Rename"
+msgstr "이름 바꾸기(_R)"
 
-#: ../plugins/terminal/gb-terminal-view-actions.c:309
-#: ../src/editor/gb-editor-view-actions.c:311
-#: ../src/editor/gb-editor-view-actions.c:442
-msgid "Save"
-msgstr "저장"
+#: ../plugins/project-tree/gtk/menus.ui.h:3
+msgid "_Empty File"
+msgstr "빈 파일(_E)"
 
-#: ../src/app/gb-application-actions.c:91
+#: ../plugins/project-tree/gtk/menus.ui.h:4
+msgid "_New Folder"
+msgstr "새 폴더(_N)"
+
+#: ../plugins/project-tree/gtk/menus.ui.h:5
+msgid "_Open"
+msgstr "열기(_O)"
+
+#: ../plugins/project-tree/gtk/menus.ui.h:6
+msgid "Open _With"
+msgstr "다른 프로그램으로 열기(_W)"
+
+#: ../plugins/project-tree/gtk/menus.ui.h:7
+msgid "Source Code Editor"
+msgstr "소스 코드 편집기"
+
+#: ../plugins/project-tree/gtk/menus.ui.h:8
+msgid "_Open Containing Folder"
+msgstr "들어 있는 폴더 열기(_O)"
+
+#: ../plugins/project-tree/gtk/menus.ui.h:9
+msgid "_Open in Terminal"
+msgstr "터미널에서 열기(_O)"
+
+#: ../plugins/project-tree/gtk/menus.ui.h:11
+msgid "Mo_ve to Trash"
+msgstr "휴지통으로 옮기기(_V)"
+
+#: ../plugins/project-tree/gtk/menus.ui.h:14
+msgid "Display Options"
+msgstr "표시 옵션"
+
+#: ../plugins/project-tree/gtk/menus.ui.h:15
+msgid "Show Icons"
+msgstr "아이콘 표시"
+
+#: ../plugins/project-tree/gtk/menus.ui.h:16
+msgid "Show Ignored Files"
+msgstr "무시한 파일 표시"
+
+#: ../plugins/project-tree/gtk/menus.ui.h:17
+msgid "Sort Directories First"
+msgstr "디렉터리 앞에 정렬"
+
+#: ../plugins/project-tree/gtk/menus.ui.h:18
+msgid "_Collapse All Nodes"
+msgstr "모든 노드 접기(_C)"
+
+#: ../plugins/project-tree/gtk/menus.ui.h:19
+msgid "_Refresh"
+msgstr "새로 고침(_R)"
+
+#: ../plugins/support/gtk/menus.ui.h:1
+msgid "Generate Support Log"
+msgstr "지원용 기록 만들기"
+
+#: ../plugins/support/ide-support-application-addin.c:79
 #, c-format
 msgid ""
 "The support log file has been written to '%s'. Please provide this file as "
@@ -1389,500 +2309,40 @@ msgstr ""
 "지원용 기록 파일을 '%s' 파일에 기록했습니다. 버그 보고나 지원 요청을 보낼 때 "
 "이 파일을 첨부해 주십시오."
 
-#: ../src/app/gb-application-actions.c:157
-msgid "An IDE for GNOME"
-msgstr "그놈 통합 개발 환경"
+#: ../plugins/symbol-tree/symbol-tree.c:84
+msgid "Symbols"
+msgstr "심볼"
 
-#: ../src/app/gb-application-actions.c:162
-msgid "GNOME Builder"
-msgstr "그놈 빌더"
+#: ../plugins/symbol-tree/symbol-tree-panel.c:239
+msgid "Current language does not support symbol resolvers"
+msgstr "현재 언어는 심볼 찾기를 지원하지 않습니다"
 
-#: ../src/app/gb-application-actions.c:164
-msgid "translator-credits"
-msgstr "류창우 <cwryu@debian.org>"
+#: ../plugins/sysmon/gb-sysmon-addin.c:63
+msgid "System Monitor"
+msgstr "시스템 보기"
 
-#: ../src/app/gb-application-actions.c:167
-msgid "Learn more about GNOME Builder"
-msgstr "그놈 빌더 자세히 알아보기"
+#: ../plugins/terminal/gb-terminal-view-actions.c:297
+msgid "Save Terminal Content As"
+msgstr "다른 이름으로 터미널 내용 저장"
 
-#: ../src/app/gb-application-actions.c:170
-msgid "Funded By"
-msgstr "펀딩"
+#: ../plugins/terminal/gtk/menus.ui.h:1
+msgid "_New Terminal"
+msgstr "새 터미널(_N)"
 
-#: ../src/app/gb-application.c:642
-msgid "Run Builder in standalone mode"
-msgstr "단독 모드에서 빌더 실행"
+#: ../plugins/todo/todo_plugin/__init__.py:60
+msgid "Todo"
+msgstr "할 일"
 
-#: ../src/app/gb-application.c:648
-msgid "Show the application's version"
-msgstr "프로그램 버전 표시"
+#: ../plugins/vala-pack/ide-vala-preferences-addin.vala:33
+msgid "Vala"
+msgstr "Vala"
 
-#: ../src/app/gb-application.c:654
-msgid "Increase verbosity. May be specified multiple times."
-msgstr "더 자세히 표시합니다. 여러 번 쓸 수 있습니다."
-
-#: ../src/dialogs/gb-new-project-dialog.c:347
-msgid "Select Project File"
-msgstr "프로젝트 파일 선택"
-
-#: ../src/dialogs/gb-new-project-dialog.c:374
-msgid "Clone Repository"
-msgstr "저장소 클론"
-
-#: ../src/dialogs/gb-new-project-dialog.c:394
-msgid "Autotools Project (configure.ac)"
-msgstr "Autotools 프로젝트(configure.ac)"
-
-#: ../src/dialogs/gb-new-project-dialog.c:400
-msgid "Any Directory"
-msgstr "모든 디렉터리"
-
-#: ../src/dialogs/gb-new-project-dialog.c:527
-msgid "A valid Git URL is required"
-msgstr "올바른 Git URL이 필요합니다"
-
-#: ../src/dialogs/gb-new-project-dialog.c:666
-msgid "Directory|Projects"
-msgstr "디렉터리|프로젝트"
-
-#: ../src/dialogs/gb-projects-dialog.c:244
-msgid "(Click on items to select them)"
-msgstr "(항목을 눌러 선택하십시오)"
-
-#: ../src/editor/gb-editor-frame.c:76
-#, c-format
-msgid "Line %u, Column %u"
-msgstr "줄 %u, 행 %u"
-
-#: ../src/editor/gb-editor-frame.c:244
-#, c-format
-msgid "%u of %u"
-msgstr "%u, 전체 %u"
-
-#: ../src/editor/gb-editor-frame.c:664
-msgid "Re_veal in Project Tree"
-msgstr "프로젝트 트리에서 드러내기(_V)"
-
-#: ../src/editor/gb-editor-settings-widget.c:189
-#, c-format
-msgid "%s (read-only)"
-msgstr "%s(읽기 전용)"
-
-#: ../src/editor/gb-editor-view-actions.c:304
-msgid "Save Document"
-msgstr "문서 저장"
-
-#: ../src/editor/gb-editor-view-actions.c:430
-msgid "Save Document As"
-msgstr "다른 이름으로 문서 저장"
-
-#: ../src/editor/gb-editor-view.c:119
-msgid "Plain Text"
-msgstr "일반 텍스트"
-
-#. translators: the user selected a number outside the value range for the document.
-#: ../src/editor/gb-editor-view.c:624
-#, c-format
-msgid "Provide a number between 1 and %u"
-msgstr "1과 %u 사이의 수를 써야 합니다"
+#: ../plugins/vala-pack/ide-vala-preferences-addin.vala:34
+msgid "Show errors and warnings provided by Vala"
+msgstr "Vala에서 나오는 오류와 경고를 표시합니다"
 
 # 키워드 번역
-#. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-editor.c:95
-msgid "restore insert cursor mark"
-msgstr "restore insert cursor mark 입력 커서 표시 복구"
-
-# 키워드 번역
-#. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-editor.c:100
-msgid "diff renderer gutter changes git vcs"
-msgstr "diff renderer gutter changes git vcs 차이점 렌더러 차이점 버전 컨트롤"
-
-# 키워드 번역
-#. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-editor.c:105
-msgid "line numbers"
-msgstr "line numbers 줄 행 번호 줄번호 행번호"
-
-# 키워드 번역
-#. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-editor.c:110
-msgid "line lines highlight current"
-msgstr "line lines highlight current 줄 행 강조 현재"
-
-# 키워드 번역
-#. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-editor.c:115
-msgid "bracket brackets highlight matching"
-msgstr "bracket brackets highlight matching 괄호 각괄호 일치 강조"
-
-# 키워드 번역
-#. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-editor.c:120
-msgid "lines margin scrolloff scroll off"
-msgstr "lines margin scrolloff scroll off 줄 여백 스크롤"
-
-# 키워드 번역
-#. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-editor.c:126
-msgid "font document editor monospace"
-msgstr "font document editor monospace 글꼴 문서 편집기 고정폭"
-
-# 키워드 번역
-#. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-editor.c:131
-msgid "minimap mini map overview over view"
-msgstr "minimap mini map overview over view 미니맵 개요 요약 보기"
-
-# 키워드 번역
-#. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-git.c:169
-msgid "git author name surname attribution source code"
-msgstr ""
-"git author name surname attribution source code 개발자 저자 이름 출처 소스 코"
-"드"
-
-# 키워드 번역
-#. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-git.c:175
-msgid "git author email mail address attribute source code"
-msgstr ""
-"git author email mail address attribute source code 개발자 저자 메일 전자메"
-"일 이메일 출처 소스 코드"
-
-# 키워드 번역
-#. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-insight.c:61
-msgid "word words auto completion suggest found document"
-msgstr ""
-"word words auto completion suggest found document 단어 자동 완성 자동완성 제"
-"안 문서"
-
-# 키워드 번역
-#. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-insight.c:66
-msgid "experimental clang autocompletion auto complete"
-msgstr ""
-"experimental clang autocompletion auto complete 실험적 자동 완성 자동완성"
-
-# 키워드 번역
-#. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-insight.c:71
-msgid "exuberant ctags tags autocompletion auto complete"
-msgstr ""
-"exuberant ctags tags autocompletion auto complete 태그 자동 완성 자동완성"
-
-# 키워드 번역
-#. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-insight.c:76
-msgid "jedi python autocompletion auto complete"
-msgstr "jedi python autocompletion auto complete 파이썬 자동 완성 자동완성"
-
-# 키워드 번역
-#. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-insight.c:81
-msgid "snippets autocompletion auto complete"
-msgstr "snippets autocompletion auto complete 스니핏 자동 완성 자동완성"
-
-# 키워드 번역
-#. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-insight.c:86
-msgid "semantic highlighting color goto declaration definition"
-msgstr ""
-"semantic highlighting color goto declaration definition 의미적 강조 색 이동 "
-"선언 정의"
-
-# 키워드 번역
-#. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-keybindings.c:64
-msgid "default builder keybindings"
-msgstr "default builder keybindings 기본 빌더 키바인딩"
-
-# 키워드 번역
-#. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-keybindings.c:69
-msgid "emacs keybindings modal"
-msgstr "emacs keybindings modal 이맥스 키바인딩 모달"
-
-# 키워드 번역
-#. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-keybindings.c:74
-msgid "vim keybindings modal"
-msgstr "emacs keybindings modal 빔 키바인딩 모달"
-
-# 키워드 번역
-#. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-keybindings.c:80
-msgid "smart home end"
-msgstr "smart home end 똑똑한"
-
-# 키워드 번역
-#. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-keybindings.c:85
-msgid "smart back backspace indent align"
-msgstr "smart back backspace indent align 똑똑한 백스페이스 들여쓰기 맞추기"
-
-# 키워드 번역
-#. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-theme.c:114
-msgid "show grid lines"
-msgstr "show grid lines 격자 표시"
-
-# 키워드 번역
-#. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-theme.c:119
-msgid "source style scheme source tango solarized builder syntax"
-msgstr ""
-"source style scheme source tango solarized builder syntax 소스 양식 구성 소"
-"스 탱고 빌더 문법 신택스"
-
-#: ../src/project-tree/gb-new-file-popover.c:124
-#: ../src/project-tree/gb-rename-file-popover.c:142
-msgid "A folder with that name already exists."
-msgstr "같은 이름의 폴더가 이미 있습니다."
-
-#: ../src/project-tree/gb-new-file-popover.c:127
-#: ../src/project-tree/gb-rename-file-popover.c:145
-msgid "A file with that name already exists."
-msgstr "같은 이름의 파일이 이미 있습니다."
-
-#: ../src/project-tree/gb-new-file-popover.c:351
-msgid "Folder Name"
-msgstr "폴더 이름"
-
-#: ../src/project-tree/gb-rename-file-popover.c:80
-#, c-format
-msgid "Rename %s"
-msgstr "%s 이름 바꾸기"
-
-#: ../src/project-tree/gb-rename-file-popover.c:173
-msgid "File name must not contain subdirectories."
-msgstr "파일 이름에 하위 디렉터리가 들어 있으면 안 됩니다."
-
-#: ../src/search/gb-search-display.c:234
-msgid "Cannot add provider more than once."
-msgstr "프로바이더를 여러번 추가할 수 없습니다."
-
-#: ../src/search/gb-search-display.c:316
-msgid "The provider could not be found."
-msgstr "프로바이더를 찾을 수 없습니다."
-
-#: ../src/search/gb-search-display-group.c:182
-#, c-format
-msgid "%s more"
-msgstr "%s 초과"
-
-#: ../src/shortcuts/gb-shortcuts-dialog.c:937
-msgid "Search Shortcuts"
-msgstr "검색 단축키"
-
-#: ../src/shortcuts/gb-shortcuts-dialog.c:964
-msgid "Search Results"
-msgstr "검색 결과"
-
-#: ../src/util/gb-file-manager.c:64
-msgid "File path is NULL"
-msgstr "파일 경로가 NULL입니다"
-
-#: ../src/util/gb-file-manager.c:73 ../src/util/gb-file-manager.c:84
-msgid "Error converting UTF-8 filename to wide char"
-msgstr "UTF-8 파일 이름을 와이드 문자로 변환하는데 오류"
-
-#: ../src/util/gb-file-manager.c:92
-msgid "ILCreateFromPath() failed"
-msgstr "ILCreateFromPath() 실패"
-
-#: ../src/util/gb-file-manager.c:129
-#, c-format
-msgid "Cannot convert '%s' into a valid NSURL."
-msgstr "'%s'을(를) 올바른 NSURL로 변환할 수 없습니다."
-
-#: ../src/util/gb-file-manager.c:157
-msgid "Connecting to org.freedesktop.FileManager1 failed: "
-msgstr "org.freedesktop.FileManager1에 연결하는데 실패: "
-
-#: ../src/util/gb-file-manager.c:181
-msgid "Calling ShowItems failed: "
-msgstr "ShowItems 호출 실패: "
-
-#: ../src/util/gb-glib.c:55
-msgid "Just now"
-msgstr "바로 지금"
-
-#: ../src/util/gb-glib.c:57
-msgid "An hour ago"
-msgstr "1시간 전"
-
-#: ../src/util/gb-glib.c:59
-msgid "Yesterday"
-msgstr "어제"
-
-#: ../src/util/gb-glib.c:65
-msgid "About a year ago"
-msgstr "1년 전"
-
-#: ../src/util/gb-glib.c:69
-#, c-format
-msgid "About %u years ago"
-msgstr "약 %u년 전"
-
-#: ../src/workbench/gb-workbench-actions.c:162
-msgid "Open Document"
-msgstr "문서 열기"
-
-#: ../src/workbench/gb-workbench-actions.c:170
-msgid "Open"
-msgstr "열기"
-
-#: ../src/workbench/gb-workbench.c:151
-#, c-format
-msgid "%s - Builder"
-msgstr "%s - 빌더"
-
-#: ../src/workbench/gb-workbench.c:919
-msgid "Build Failure"
-msgstr "빌드 실패"
-
-#: ../src/workbench/gb-workbench.c:966
-msgid "Project build system does not support building"
-msgstr "프로젝트 빌드 시스템이 빌드를 지원하지 않습니다"
-
-#: ../tools/ide-build.c:81 ../tools/ide-build.c:85
-#, c-format
-msgid "===============\n"
-msgstr "===============\n"
-
-#: ../tools/ide-build.c:82
-#, c-format
-msgid " Build Failure: %s\n"
-msgstr " 빌드 실패: %s\n"
-
-#: ../tools/ide-build.c:83
-msgid " Build ran for: %"
-msgstr " 빌드 실행 목표: %"
-
-#: ../tools/ide-build.c:90 ../tools/ide-build.c:94
-#, c-format
-msgid "=================\n"
-msgstr "=================\n"
-
-#: ../tools/ide-build.c:91
-#, c-format
-msgid " Build Successful\n"
-msgstr " 빌드 성공\n"
-
-#: ../tools/ide-build.c:92
-msgid "   Build ran for: %"
-msgstr "   빌드 실행 목표: %"
-
-#: ../tools/ide-build.c:200 ../tools/ide-build.c:206
-#, c-format
-msgid "========================\n"
-msgstr "========================\n"
-
-#: ../tools/ide-build.c:201
-#, c-format
-msgid "           Project Name: %s\n"
-msgstr "          프로젝트 이름: %s\n"
-
-#: ../tools/ide-build.c:202
-#, c-format
-msgid " Version Control System: %s\n"
-msgstr "     버전 컨트롤 시스템: %s\n"
-
-#: ../tools/ide-build.c:203
-#, c-format
-msgid "           Build System: %s\n"
-msgstr "            빌드 시스템: %s\n"
-
-#: ../tools/ide-build.c:204
-#, c-format
-msgid "    Build Date and Time: %s\n"
-msgstr "      빌드 날짜 및 시각: %s\n"
-
-#: ../tools/ide-build.c:205
-#, c-format
-msgid "    Building for Device: %s (%s)\n"
-msgstr "         빌드 목표 장치: %s (%s)\n"
-
-#: ../tools/ide-build.c:288
-#, c-format
-msgid "Timed out while waiting for devices to settle.\n"
-msgstr "장치가 안정될 때까지 기다리는 중 제한 시간이 초과했습니다.\n"
-
-#: ../tools/ide-build.c:346
-#, c-format
-msgid "Waiting up to 60 seconds for devices to settle. Ctrl+C to exit.\n"
-msgstr ""
-"장치가 안정될 때까지 60초를 기다립니다. 끝내려면 Ctrl+C를 누르십시오.\n"
-
-#: ../tools/ide-build.c:355
-msgid "The target device we are building for."
-msgstr "빌드하려는 목표 장치."
-
-#: ../tools/ide-build.c:356
-msgid "DEVICE_ID"
-msgstr "<장치ID>"
-
-#: ../tools/ide-build.c:359
-msgid "Clean and rebuild the project."
-msgstr "프로젝트를 지우고 다시 빌드합니다."
-
-#: ../tools/ide-build.c:361
-msgid "Increase parallelism in the build."
-msgstr "병렬 빌드 개수를 늘립니다."
-
-#: ../tools/ide-build.c:362
-msgid "N"
-msgstr "<개수>"
-
-#: ../tools/ide-build.c:373
-msgid "- Build the project."
-msgstr "- 프로젝트를 빌드합니다."
-
-#: ../tools/ide-list-build-flags.c:115
-msgid "- Get build flags for a project file"
-msgstr "- 프로젝트 파일의 빌드 플래그를 가져옵니다"
-
-#: ../tools/ide-list-devices.c:109
-msgid "- List devices found on the system."
-msgstr "- 시스템에 있는 장치 목록을 표시합니다."
-
-#: ../tools/ide-list-diagnostics.c:187
-#, c-format
-msgid "Failed to diagnose: %s\n"
-msgstr "진단에 실패했습니다: %s\n"
-
-#: ../tools/ide-list-diagnostics.c:250
-#, c-format
-msgid "No such file in project: %s\n"
-msgstr "프로젝트에 그런 파일이 없습니다: %s\n"
-
-#: ../tools/ide-list-diagnostics.c:284
-msgid "- List diagnostics for a file."
-msgstr "- 파일의 진단 목록을 표시합니다."
-
-#: ../tools/ide-list-files.c:127 ../tools/ide-list-file-settings.c:207
-msgid "- List files found in project."
-msgstr "- 프로젝트에 들어 있는 파일 목록을 표시합니다."
-
-#: ../tools/ide-list-file-settings.c:182
-#, c-format
-msgid "No files provided to load settings for.\n"
-msgstr "읽어들인 설정을 적용할 파일이 없습니다.\n"
-
-#: ../tools/ide-mine-projects.c:87
-msgid "- discover projects"
-msgstr "- 프로젝트를 발견합니다"
-
-#: ../tools/ide-search.c:68
-#, c-format
-msgid "%s results\n"
-msgstr "%s 결과\n"
-
-#: ../tools/ide-search.c:120
-msgid "PROJECT_FILE [SEARCH TERMS...]"
-msgstr "<프로젝트_파일> [검색어...]"
-
-#~ msgid "Search Symbols"
-#~ msgstr "심볼 검색"
+#. translators: keywords used when searching for preferences
+#: ../plugins/vala-pack/ide-vala-preferences-addin.vala:36
+msgid "vala diagnostics warnings errors"
+msgstr "vala diagnostics warnings errors 진단 경고 오류"
