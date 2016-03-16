@@ -56,8 +56,8 @@ ide_editor_view_get_last_focused (IdeEditorView *self)
 }
 
 static void
-ide_editor_view_navigate_to (IdeLayoutView            *view,
-                            IdeSourceLocation *location)
+ide_editor_view_navigate_to (IdeLayoutView     *view,
+                             IdeSourceLocation *location)
 {
   IdeEditorView *self = (IdeEditorView *)view;
   IdeEditorFrame *frame;
@@ -122,9 +122,9 @@ ide_editor_view_get_modified (IdeLayoutView *view)
 }
 
 static void
-ide_editor_view__buffer_modified_changed (IdeEditorView  *self,
-                                         GParamSpec    *pspec,
-                                         GtkTextBuffer *buffer)
+ide_editor_view__buffer_modified_changed (IdeEditorView *self,
+                                          GParamSpec    *pspec,
+                                          GtkTextBuffer *buffer)
 {
   g_assert (IDE_IS_EDITOR_VIEW (self));
 
@@ -168,8 +168,8 @@ no_really_scroll_to_the_top (gpointer data)
 
 static void
 ide_editor_view__buffer_changed_on_volume (IdeEditorView *self,
-                                          GParamSpec   *pspec,
-                                          IdeBuffer    *buffer)
+                                           GParamSpec    *pspec,
+                                           IdeBuffer     *buffer)
 {
   g_assert (IDE_IS_EDITOR_VIEW (self));
   g_assert (IDE_IS_BUFFER (buffer));
@@ -208,8 +208,8 @@ ide_editor_view_get_special_title (IdeLayoutView *view)
 
 static void
 ide_editor_view__buffer_notify_title (IdeEditorView *self,
-                                     GParamSpec   *pspec,
-                                     IdeBuffer    *buffer)
+                                      GParamSpec    *pspec,
+                                      IdeBuffer     *buffer)
 {
   const gchar *title;
   gchar **parts;
@@ -263,9 +263,9 @@ notify_language_foreach (PeasExtensionSet *set,
 }
 
 static void
-ide_editor_view__buffer_notify_language (IdeEditorView     *self,
-                                        GParamSpec       *pspec,
-                                        IdeBuffer *document)
+ide_editor_view__buffer_notify_language (IdeEditorView *self,
+                                         GParamSpec    *pspec,
+                                         IdeBuffer     *document)
 {
   g_assert (IDE_IS_EDITOR_VIEW (self));
   g_assert (IDE_IS_BUFFER (document));
@@ -285,9 +285,9 @@ ide_editor_view__buffer_notify_language (IdeEditorView     *self,
 }
 
 static void
-ide_editor_view__buffer_cursor_moved (IdeEditorView      *self,
-                                     const GtkTextIter *iter,
-                                     GtkTextBuffer     *buffer)
+ide_editor_view__buffer_cursor_moved (IdeEditorView     *self,
+                                      const GtkTextIter *iter,
+                                      GtkTextBuffer     *buffer)
 {
   GtkTextIter bounds;
   GtkTextMark *mark;
@@ -444,9 +444,9 @@ ide_editor_view_request_documentation (IdeEditorView *self,
 
 static void
 ide_editor_view__focused_frame_weak_notify (gpointer  data,
-                                           GObject  *object)
+                                            GObject  *object)
 {
-  IdeEditorView  *self = data;
+  IdeEditorView *self = data;
 
   g_assert (IDE_IS_EDITOR_VIEW (self));
 
@@ -455,14 +455,14 @@ ide_editor_view__focused_frame_weak_notify (gpointer  data,
 
 static gboolean
 ide_editor_view__focus_in_event (IdeEditorView  *self,
-                                GdkEvent      *event,
-                                IdeSourceView *source_view)
+                                 GdkEvent       *event,
+                                 IdeSourceView  *source_view)
 {
   g_assert (IDE_IS_EDITOR_VIEW (self));
   g_assert (IDE_IS_SOURCE_VIEW (source_view));
 
   if (self->last_focused_frame && self->last_focused_frame->source_view == source_view)
-      return FALSE;
+    return FALSE;
 
   if (self->frame2 && self->frame2->source_view == source_view)
     {
@@ -479,8 +479,8 @@ ide_editor_view__focus_in_event (IdeEditorView  *self,
 }
 
 static void
-ide_editor_view_set_split_view (IdeLayoutView   *view,
-                               gboolean  split_view)
+ide_editor_view_set_split_view (IdeLayoutView *view,
+                                gboolean       split_view)
 {
   IdeEditorView *self = (IdeEditorView *)view;
 
@@ -528,8 +528,8 @@ ide_editor_view_set_split_view (IdeLayoutView   *view,
 }
 
 static void
-ide_editor_view_set_back_forward_list (IdeLayoutView             *view,
-                                      IdeBackForwardList *back_forward_list)
+ide_editor_view_set_back_forward_list (IdeLayoutView      *view,
+                                       IdeBackForwardList *back_forward_list)
 {
   IdeEditorView *self = (IdeEditorView *)view;
 
@@ -543,7 +543,7 @@ ide_editor_view_set_back_forward_list (IdeLayoutView             *view,
 
 static void
 ide_editor_view_hide_reload_bar (IdeEditorView *self,
-                                GtkWidget    *button)
+                                 GtkWidget     *button)
 {
   g_assert (IDE_IS_EDITOR_VIEW (self));
 
@@ -558,8 +558,8 @@ ide_editor_view_get_request_mode (GtkWidget *widget)
 
 static void
 ide_editor_view_get_preferred_height (GtkWidget *widget,
-                                     gint      *min_height,
-                                     gint      *nat_height)
+                                      gint      *min_height,
+                                      gint      *nat_height)
 {
   /*
    * FIXME: Workaround GtkStack changes.
@@ -829,9 +829,9 @@ ide_editor_view_finalize (GObject *object)
 
 static void
 ide_editor_view_get_property (GObject    *object,
-                             guint       prop_id,
-                             GValue     *value,
-                             GParamSpec *pspec)
+                              guint       prop_id,
+                              GValue     *value,
+                              GParamSpec *pspec)
 {
   IdeEditorView *self = IDE_EDITOR_VIEW (object);
 
@@ -848,9 +848,9 @@ ide_editor_view_get_property (GObject    *object,
 
 static void
 ide_editor_view_set_property (GObject      *object,
-                             guint         prop_id,
-                             const GValue *value,
-                             GParamSpec   *pspec)
+                              guint         prop_id,
+                              const GValue *value,
+                              GParamSpec   *pspec)
 {
   IdeEditorView *self = IDE_EDITOR_VIEW (object);
 
