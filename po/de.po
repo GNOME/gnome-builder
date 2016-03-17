@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-02-18 08:02+0000\n"
-"PO-Revision-Date: 2016-02-18 09:33+0100\n"
+"POT-Creation-Date: 2016-03-12 11:53+0000\n"
+"PO-Revision-Date: 2016-03-12 21:55+0100\n"
 "Last-Translator: Mario Blättermann <mario.blaettermann@gmail.com>\n"
 "Language-Team: Deutsch <gnome-de@gnome.org>\n"
 "Language: de_DE\n"
@@ -21,24 +21,24 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.8.7\n"
+"X-Generator: Poedit 1.8.7.1\n"
 
-#: ../contrib/egg/egg-animation.c:715
+#: ../contrib/egg/egg-animation.c:726
 #, c-format
 msgid "Cannot locate property %s in class %s"
 msgstr "Eigenschaft %s konnte nicht in Klasse %s gefunden werden"
 
-#: ../contrib/egg/egg-animation.c:1055 ../contrib/egg/egg-animation.c:1061
+#: ../contrib/egg/egg-animation.c:1073 ../contrib/egg/egg-animation.c:1079
 #, c-format
 msgid "Failed to find property %s in %s"
 msgstr "Eigenschaft %s konnte nicht in %s gefunden werden"
 
-#: ../contrib/egg/egg-animation.c:1069
+#: ../contrib/egg/egg-animation.c:1087
 #, c-format
 msgid "Failed to find property %s in %s or parent %s"
 msgstr "Eigenschaft %s konnte nicht in %s oder Elter %s gefunden werden"
 
-#: ../contrib/egg/egg-animation.c:1079
+#: ../contrib/egg/egg-animation.c:1097
 #, c-format
 msgid "Failed to retrieve va_list value: %s"
 msgstr "va_list-Wert konnte nicht geladen werden: %s"
@@ -172,11 +172,11 @@ msgstr "_Wiederholen"
 msgid "C_ut"
 msgstr "_Ausschneiden"
 
-#: ../data/gtk/menus.ui.h:19
+#: ../data/gtk/menus.ui.h:19 ../plugins/terminal/gtk/menus.ui.h:2
 msgid "_Copy"
 msgstr "_Kopieren"
 
-#: ../data/gtk/menus.ui.h:20
+#: ../data/gtk/menus.ui.h:20 ../plugins/terminal/gtk/menus.ui.h:3
 msgid "_Paste"
 msgstr "_Einfügen"
 
@@ -184,15 +184,15 @@ msgstr "_Einfügen"
 msgid "_Delete"
 msgstr "_Löschen"
 
-#: ../data/gtk/menus.ui.h:22
+#: ../data/gtk/menus.ui.h:22 ../plugins/terminal/gtk/menus.ui.h:4
 msgid "Selection"
 msgstr "Auswahl"
 
-#: ../data/gtk/menus.ui.h:23
+#: ../data/gtk/menus.ui.h:23 ../plugins/terminal/gtk/menus.ui.h:5
 msgid "Select _All"
 msgstr "_Alle auswählen"
 
-#: ../data/gtk/menus.ui.h:24
+#: ../data/gtk/menus.ui.h:24 ../plugins/terminal/gtk/menus.ui.h:6
 msgid "Select _None"
 msgstr "_Nichts auswählen"
 
@@ -238,46 +238,67 @@ msgid "Reset"
 msgstr "Zurücksetzen"
 
 #: ../data/gtk/menus.ui.h:35
+msgid "_Match Case"
+msgstr "_Groß-/Kleinschreibung beachten"
+
+#: ../data/gtk/menus.ui.h:36
+msgid "Match _Entire Word Only"
+msgstr "Nur ganz_e Wörter"
+
+#: ../data/gtk/menus.ui.h:37
+msgid "Match as _Regular Expression"
+msgstr "Als _regulären Ausdruck auswerten"
+
+# Zugegeben, nicht optimal. Soweit ich das beurteilen kann, handelt es sich um die Funktion, dass die Suche nach dem Erreichen des Dateiendes (oder des Anfangs bei Rückwärtssuche) zum Anfang (bzw. Ende) zurückspringt und neu beginnt. Genauso habe ich es kürzlich im Texteditor Nano übersetzt.
+#: ../data/gtk/menus.ui.h:38
+msgid "_Wrap Around"
+msgstr "Suche _umbrechen"
+
+#: ../data/gtk/menus.ui.h:39
+msgid "Cu_t"
+msgstr "_Ausschneiden"
+
+#: ../data/gtk/menus.ui.h:40
 msgid "Split"
 msgstr "Teilen"
 
-#: ../data/gtk/menus.ui.h:36
+#: ../data/gtk/menus.ui.h:41
 msgid "Split Left"
 msgstr "Dokument links teilen"
 
-#: ../data/gtk/menus.ui.h:37
+#: ../data/gtk/menus.ui.h:42
 msgid "Split Right"
 msgstr "Dokument rechts teilen"
 
-#: ../data/gtk/menus.ui.h:38
+#: ../data/gtk/menus.ui.h:43
 msgid "Split Down"
 msgstr "Dokument unten Teilen"
 
-#: ../data/gtk/menus.ui.h:39
+#: ../data/gtk/menus.ui.h:44
 msgid "Move"
 msgstr "Verschieben"
 
-#: ../data/gtk/menus.ui.h:40
+#: ../data/gtk/menus.ui.h:45
 msgid "Move Left"
 msgstr "Nach links verschieben"
 
-#: ../data/gtk/menus.ui.h:41
+#: ../data/gtk/menus.ui.h:46
 msgid "Move Right"
 msgstr "Nach rechts verschieben"
 
-#: ../data/gtk/menus.ui.h:42
+#: ../data/gtk/menus.ui.h:47
 msgid "_Save"
 msgstr "_Speichern"
 
-#: ../data/gtk/menus.ui.h:43
+#: ../data/gtk/menus.ui.h:48
 msgid "_Save As"
 msgstr "Speichern _unter"
 
-#: ../data/gtk/menus.ui.h:44
+#: ../data/gtk/menus.ui.h:49
 msgid "_Print"
 msgstr "_Drucken"
 
-#: ../data/gtk/menus.ui.h:45
+#: ../data/gtk/menus.ui.h:50
 msgid "_Close"
 msgstr "_Schließen"
 
@@ -289,7 +310,7 @@ msgstr "Builder dunkel"
 msgid "Dark color scheme for Builder using the Tango color palette"
 msgstr "Dunkles Farbschema für Builder unter Benutzung der Tango-Farbpalette"
 
-#: ../data/style-schemes/builder.xml.h:1 ../libide/ide-application.c:404
+#: ../data/style-schemes/builder.xml.h:1 ../libide/ide-application.c:413
 #: ../libide/preferences/ide-preferences-builtin.c:113
 msgid "Builder"
 msgstr "Builder"
@@ -308,7 +329,7 @@ msgid "No open files"
 msgstr "Keine geöffneten Dateien"
 
 #: ../data/ui/ide-editor-perspective.ui.h:2
-msgid "Try opening a file typing in the search box at the top"
+msgid "Try opening a file by typing in the search box at the top"
 msgstr ""
 "Versuchen Sie, eine Datei zu öffnen, indem Sie den Namen oben im Suchfeld "
 "eingeben"
@@ -351,7 +372,7 @@ msgid "Smart Backspace"
 msgstr "Intelligente Löschtaste"
 
 #: ../data/ui/ide-editor-tweak-widget.ui.h:7
-#: ../libide/preferences/ide-preferences-builtin.c:233
+#: ../libide/preferences/ide-preferences-builtin.c:234
 msgid "Indentation"
 msgstr "Einrückung"
 
@@ -381,7 +402,7 @@ msgstr "4"
 msgid "8"
 msgstr "8"
 
-#: ../data/ui/ide-editor-view.ui.h:2 ../data/ui/ide-greeter-perspective.ui.h:7
+#: ../data/ui/ide-editor-view.ui.h:2 ../data/ui/ide-greeter-perspective.ui.h:14
 msgid "_Cancel"
 msgstr "_Abbrechen"
 
@@ -417,30 +438,57 @@ msgstr "Neues Projekt"
 msgid "Co_ntinue"
 msgstr "_Fortsetzen"
 
-#: ../data/ui/ide-greeter-perspective.ui.h:1
+#. the action:// link is used to jump to the new-project view
+#: ../data/ui/ide-greeter-perspective.ui.h:2
+msgid "Why not <a href=\"action://app.new-project\">create a new project</a>?"
+msgstr ""
+"Wie wäre es damit, <a href=\"action://app.new-project\">ein neues Projekt "
+"anzulegen</a>?"
+
+#: ../data/ui/ide-greeter-perspective.ui.h:3
+msgid "No projects found"
+msgstr "Keine Projekte gefunden"
+
+#: ../data/ui/ide-greeter-perspective.ui.h:4
 msgid "Recent Projects"
 msgstr "Zuletzt geöffnete Projekte"
 
-#: ../data/ui/ide-greeter-perspective.ui.h:2
+#: ../data/ui/ide-greeter-perspective.ui.h:5
 msgid "Other Projects"
 msgstr "Andere Projekte"
 
-#: ../data/ui/ide-greeter-perspective.ui.h:3
+#: ../data/ui/ide-greeter-perspective.ui.h:6
 msgid "_Remove"
 msgstr "_Entfernen"
 
-#: ../data/ui/ide-greeter-perspective.ui.h:4
+#: ../data/ui/ide-greeter-perspective.ui.h:7
 msgid "Select a Project"
 msgstr "Wählen Sie ein Projekt"
 
-#: ../data/ui/ide-greeter-perspective.ui.h:5
+#: ../data/ui/ide-greeter-perspective.ui.h:8
 msgid "Click an item to select"
 msgstr "Klicken Sie auf ein Element, um es auszuwählen"
 
-#: ../data/ui/ide-greeter-perspective.ui.h:6
+#: ../data/ui/ide-greeter-perspective.ui.h:9
+msgid "Create a new project"
+msgstr "Neues Projekt anlegen"
+
+#: ../data/ui/ide-greeter-perspective.ui.h:10
 #: ../plugins/project-tree/gtk/menus.ui.h:2
 msgid "_New"
 msgstr "_Neu"
+
+#: ../data/ui/ide-greeter-perspective.ui.h:11
+msgid "Search for projects"
+msgstr "Nach Projekten suchen"
+
+#: ../data/ui/ide-greeter-perspective.ui.h:12
+msgid "Select projects for removal"
+msgstr "Projekte zum Entfernen auswählen"
+
+#: ../data/ui/ide-greeter-perspective.ui.h:13
+msgid "Return to project selection"
+msgstr "Zurück zur Projektauswahl"
 
 #: ../data/ui/ide-layout-tab-bar.ui.h:1
 msgid "List open files"
@@ -762,12 +810,12 @@ msgstr "Zeile %u, Spalte %u"
 msgid "%u of %u"
 msgstr "%u von %u"
 
-#: ../libide/editor/ide-editor-frame.c:643
+#: ../libide/editor/ide-editor-frame.c:646
 #: ../plugins/project-tree/gtk/menus.ui.h:1
 msgid "Re_veal in Project Tree"
 msgstr "Im Projektbaum an_zeigen"
 
-#: ../libide/editor/ide-editor-perspective.c:413
+#: ../libide/editor/ide-editor-perspective.c:456
 #: ../libide/preferences/ide-preferences-builtin.c:102
 #: ../libide/preferences/ide-preferences-builtin.c:125
 msgid "Editor"
@@ -806,7 +854,7 @@ msgid "Provide a number between 1 and %u"
 msgstr "Geben Sie eine Zahl zwischen 1 und %u an"
 
 #: ../libide/genesis/ide-genesis-perspective.c:200
-#: ../libide/greeter/ide-greeter-perspective.c:429
+#: ../libide/greeter/ide-greeter-perspective.c:436
 msgid "Failed to load the project"
 msgstr "Projekt konnte nicht geladen werden"
 
@@ -855,51 +903,55 @@ msgstr "Gefördert von"
 msgid "Commands:"
 msgstr "Befehle:"
 
-#: ../libide/ide-application-command-line.c:165
+#: ../libide/ide-application-command-line.c:185
 msgid "List available subcommands"
 msgstr "Verfügbare Unterbefehle anzeigen"
 
-#: ../libide/ide-application-command-line.c:172
+#: ../libide/ide-application-command-line.c:192
 msgid "Run Builder in standalone mode"
 msgstr "Builder im Standalone-Modus ausführen"
 
-#: ../libide/ide-application-command-line.c:179
+#: ../libide/ide-application-command-line.c:199
 msgid "Show the application's version"
 msgstr "Anwendungsversion anzeigen"
 
-#: ../libide/ide-application-command-line.c:198
+#: ../libide/ide-application-command-line.c:218
 msgid "Increase verbosity, may be specified multiple times"
 msgstr "Ausführlichkeit erhöhen. Kann mehrmals angegeben werden."
 
-#: ../libide/ide-application-command-line.c:228
+#: ../libide/ide-application-command-line.c:225
+msgid "Enter GApplication Service mode"
+msgstr "In GApplication-Servicemodus wechseln"
+
+#: ../libide/ide-application-command-line.c:255
 msgid "COMMAND"
 msgstr "BEFEHL"
 
-#: ../libide/ide-application-command-line.c:286
+#: ../libide/ide-application-command-line.c:326
 msgid "No commands available"
 msgstr "Keine Befehle verfügbar"
 
-#: ../libide/ide-application-command-line.c:315
+#: ../libide/ide-application-command-line.c:356
 msgid "Please provide a command"
 msgstr "Bitte geben Sie einen Befehl an"
 
-#: ../libide/ide-application-command-line.c:325
+#: ../libide/ide-application-command-line.c:366
 msgid "No such tool"
 msgstr "Kein solches Werkzeug"
 
-#: ../libide/ide-application-command-line.c:339
+#: ../libide/ide-application-command-line.c:380
 msgid "Please provide a worker type"
-msgstr ""
+msgstr "Bitte geben Sie einen Worker-Typ an"
 
-#: ../libide/ide-application-command-line.c:346
+#: ../libide/ide-application-command-line.c:387
 msgid "Please provide a D-Bus address"
 msgstr "Bitte geben Sie eine D-Bus-Adresse an"
 
-#: ../libide/ide-application-command-line.c:355
+#: ../libide/ide-application-command-line.c:396
 msgid "No such worker"
-msgstr ""
+msgstr "Kein solcher Worker"
 
-#: ../libide/ide-buffer.c:2207
+#: ../libide/ide-buffer.c:2298
 msgid "The current language lacks a symbol resolver."
 msgstr "Die aktuelle Sprache benötigt einen Symbolauflöser."
 
@@ -907,16 +959,16 @@ msgstr "Die aktuelle Sprache benötigt einen Symbolauflöser."
 msgid "File too large to be opened."
 msgstr "Datei ist zu groß zum Öffnen."
 
-#: ../libide/ide-buffer-manager.c:1456
+#: ../libide/ide-buffer-manager.c:1461
 msgid "Words"
 msgstr "Wörter"
 
-#: ../libide/ide-buffer-manager.c:1668
+#: ../libide/ide-buffer-manager.c:1673
 #, c-format
 msgid "unsaved document %u"
 msgstr "Ungesichertes Dokument %u"
 
-#: ../libide/ide-buffer-manager.c:1702
+#: ../libide/ide-buffer-manager.c:1707
 msgid "Failed to save buffer, ignoring reclamation."
 msgstr "Konnte Puffer nicht speichern, ignoriere Beschwerde."
 
@@ -947,11 +999,11 @@ msgstr "Sie müssen %s() aufrufen, bevor libide genutzt werden kann."
 msgid "Default Configuration"
 msgstr "Standardkonfiguration"
 
-#: ../libide/ide-context.c:1790
+#: ../libide/ide-context.c:1828
 msgid "An unload request is already pending"
 msgstr "Es steht bereits eine ungeladene Anfrage aus"
 
-#: ../libide/ide-context.c:1905
+#: ../libide/ide-context.c:1943
 msgid "Context has already been restored."
 msgstr "Der Kontext wurde bereits wiederhergestellt."
 
@@ -993,7 +1045,7 @@ msgstr "Die Zieldatei muss innerhalb des Projektbaums sein."
 msgid "File must be within the project tree."
 msgstr "Die Datei muss innerhalb des Projektbaums sein."
 
-#: ../libide/ide-recent-projects.c:382
+#: ../libide/ide-recent-projects.c:383
 #, c-format
 msgid "%s() may only be executed once"
 msgstr "%s() darf nur einmal aufgerufen werden."
@@ -1007,7 +1059,7 @@ msgstr "Wirtsbetriebssystem"
 msgid "%s has not implemented GAsyncInitable."
 msgstr "%s implementiert GAsyncInitable nicht."
 
-#: ../libide/ide-source-snippet.c:370
+#: ../libide/ide-source-snippet.c:372
 msgid "Chunk does not belong to snippet."
 msgstr "Stück gehört nicht zum Schnipsel."
 
@@ -1015,11 +1067,6 @@ msgstr "Stück gehört nicht zum Schnipsel."
 #: ../libide/preferences/ide-preferences-builtin.c:173
 msgid "Snippets"
 msgstr "Schnipsel"
-
-#: ../libide/ide-source-snippet-parser.c:496
-#, c-format
-msgid "Invalid snippet at line %d: %s"
-msgstr "Fehlerhafter Schnipsel in Zeile %d: %s"
 
 #: ../libide/ide-source-snippets-manager.c:96
 #, c-format
@@ -1031,17 +1078,17 @@ msgstr "Ordner konnte nicht geöffnet werden: %s"
 msgid "Failed to load file: %s: %s"
 msgstr "Datei konnte nicht geladen werden: %s: %s"
 
-#: ../libide/ide-source-view.c:4966
+#: ../libide/ide-source-view.c:4900
 #, c-format
 msgid "Insert “%s”"
 msgstr "»%s« einfügen"
 
-#: ../libide/ide-source-view.c:4968
+#: ../libide/ide-source-view.c:4902
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "»%s« durch »%s« ersetzen"
 
-#: ../libide/ide-source-view.c:5082
+#: ../libide/ide-source-view.c:5016
 msgid "Apply Fix-It"
 msgstr "Fix-It anwenden"
 
@@ -1420,66 +1467,101 @@ msgstr ""
 "Beim Speichern werden angehängte Leerzeichen von den geänderten Zeilen "
 "entfernt."
 
-#: ../libide/preferences/ide-preferences-builtin.c:229
+#: ../libide/preferences/ide-preferences-builtin.c:228
+msgid "Overwrite Braces"
+msgstr "Klammern überschreiben"
+
+#: ../libide/preferences/ide-preferences-builtin.c:228
+msgid "Overwrite closing braces"
+msgstr "Schließende Klammern überschreiben"
+
+#: ../libide/preferences/ide-preferences-builtin.c:230
 msgid "Margins"
 msgstr "Ränder"
 
-#: ../libide/preferences/ide-preferences-builtin.c:230
+#: ../libide/preferences/ide-preferences-builtin.c:231
 msgid "Show right margin"
 msgstr "Rechten Rand anzeigen"
 
-#: ../libide/preferences/ide-preferences-builtin.c:231
+#: ../libide/preferences/ide-preferences-builtin.c:232
 msgid "Right margin position"
 msgstr "Position des rechten Randes"
 
-#: ../libide/preferences/ide-preferences-builtin.c:231
+#: ../libide/preferences/ide-preferences-builtin.c:232
 msgid "Position in spaces for the right margin"
 msgstr "Positionsangabe (Anzahl der Zeichen) für den rechten Rand"
 
-#: ../libide/preferences/ide-preferences-builtin.c:234
+#: ../libide/preferences/ide-preferences-builtin.c:235
 msgid "Tab width"
 msgstr "Tabulatorbreite"
 
-#: ../libide/preferences/ide-preferences-builtin.c:234
+#: ../libide/preferences/ide-preferences-builtin.c:235
 msgid "Width of a tab character in spaces"
 msgstr "Breite eines Tabulators (Anzahl der Zeichen)"
 
-#: ../libide/preferences/ide-preferences-builtin.c:235
+#: ../libide/preferences/ide-preferences-builtin.c:236
 msgid "Insert spaces instead of tabs"
 msgstr "Leerzeichen statt Tabulatoren einfügen"
 
-#: ../libide/preferences/ide-preferences-builtin.c:235
+#: ../libide/preferences/ide-preferences-builtin.c:236
 msgid "Prefer spaces over use of tabs"
 msgstr "Leerzeichen vor Tabulatoren bevorzugen"
 
-#: ../libide/preferences/ide-preferences-builtin.c:236
+#: ../libide/preferences/ide-preferences-builtin.c:237
 msgid "Automatically indent"
 msgstr "Automatische Einrückung"
 
-#: ../libide/preferences/ide-preferences-builtin.c:236
+#: ../libide/preferences/ide-preferences-builtin.c:237
 msgid "Indent source code as you type"
 msgstr "Quellcode bei der Eingabe automatisch einrücken"
 
-#: ../libide/preferences/ide-preferences-builtin.c:242
+#: ../libide/preferences/ide-preferences-builtin.c:243
 #: ../plugins/build-tools/gbp-build-workbench-addin.c:270
 msgid "Build"
 msgstr "Erstellen"
 
-#: ../libide/preferences/ide-preferences-builtin.c:244
+#: ../libide/preferences/ide-preferences-builtin.c:245
 #: ../plugins/build-tools/gbp-build-configuration-view.ui.h:1
 msgid "General"
 msgstr "Allgemein"
 
-#: ../libide/preferences/ide-preferences-builtin.c:245
-#, fuzzy
+#: ../libide/preferences/ide-preferences-builtin.c:246
 msgid "Build Workers"
-msgstr "Builder"
+msgstr "Erstellungs-Worker"
 
-#: ../libide/preferences/ide-preferences-builtin.c:245
+#: ../libide/preferences/ide-preferences-builtin.c:246
 msgid "Number of parallel build workers"
-msgstr ""
+msgstr "Anzahl der parallel laufenden Erstellungs-Worker"
 
-#: ../libide/preferences/ide-preferences-perspective.c:821
+#: ../libide/preferences/ide-preferences-builtin.c:252
+msgid "Projects"
+msgstr "Projekte"
+
+#: ../libide/preferences/ide-preferences-builtin.c:254
+msgid "Workspace"
+msgstr "Arbeitsfläche"
+
+#: ../libide/preferences/ide-preferences-builtin.c:255
+msgid "Projects Directory"
+msgstr "Projektordner"
+
+#: ../libide/preferences/ide-preferences-builtin.c:255
+msgid "A place for all your projects"
+msgstr "Ein Platz für alle Ihre Projekte"
+
+#: ../libide/preferences/ide-preferences-builtin.c:257
+msgid "Project Discovery"
+msgstr "Projektsuche"
+
+#: ../libide/preferences/ide-preferences-builtin.c:258
+msgid "Discover projects on my computer"
+msgstr "Projekte auf diesem Rechner finden"
+
+#: ../libide/preferences/ide-preferences-builtin.c:258
+msgid "Scan your computer for existing projects"
+msgstr "Durchsuchen Sie Ihren Rechner nach vorhandenen Projekten"
+
+#: ../libide/preferences/ide-preferences-perspective.c:888
 msgid "Preferences"
 msgstr "Einstellungen"
 
@@ -1546,7 +1628,7 @@ msgid "Success"
 msgstr "Erfolg"
 
 #: ../plugins/autotools/ide-autotools-builder.c:161
-#: ../plugins/autotools/ide-autotools-build-task.c:863
+#: ../plugins/autotools/ide-autotools-build-task.c:872
 msgid "Building…"
 msgstr "Erstellung …"
 
@@ -1554,47 +1636,47 @@ msgstr "Erstellung …"
 msgid "Failed to locate configure.ac"
 msgstr "configure.ac konnte nicht gefunden werden"
 
-#: ../plugins/autotools/ide-autotools-build-task.c:173
+#: ../plugins/autotools/ide-autotools-build-task.c:174
 msgid "Directory must be on a locally mounted filesystem."
 msgstr ""
 "Der Ordner muss sich auf einem lokal eingehängten Dateisystem befinden."
 
-#: ../plugins/autotools/ide-autotools-build-task.c:546
+#: ../plugins/autotools/ide-autotools-build-task.c:548
 msgid "Cannot execute build task more than once."
 msgstr "Der Erstellungstask kann nicht mehr als einmal ausgeführt werden."
 
-#: ../plugins/autotools/ide-autotools-build-task.c:633
+#: ../plugins/autotools/ide-autotools-build-task.c:642
 msgid "Failed to create build directory."
 msgstr "Erstellungsordner konnte nicht angelegt werden."
 
-#: ../plugins/autotools/ide-autotools-build-task.c:642
+#: ../plugins/autotools/ide-autotools-build-task.c:651
 #, c-format
 msgid "'%s' is not a directory."
 msgstr "»%s« ist kein Ordner."
 
-#: ../plugins/autotools/ide-autotools-build-task.c:681
+#: ../plugins/autotools/ide-autotools-build-task.c:690
 #, c-format
 msgid "autogen.sh is missing from project directory (%s)."
 msgstr "autogen.sh konnte nicht im Projektordner (%s) gefunden werden."
 
-#: ../plugins/autotools/ide-autotools-build-task.c:691
+#: ../plugins/autotools/ide-autotools-build-task.c:700
 msgid "autogen.sh is not executable."
 msgstr "autogen.sh ist nicht ausführbar."
 
-#: ../plugins/autotools/ide-autotools-build-task.c:695
+#: ../plugins/autotools/ide-autotools-build-task.c:704
 msgid "Running autogen…"
 msgstr "Autogen wird ausgeführt …"
 
-#: ../plugins/autotools/ide-autotools-build-task.c:729
+#: ../plugins/autotools/ide-autotools-build-task.c:738
 #, c-format
 msgid "autogen.sh failed to create configure (%s)"
 msgstr "autogen.sh konnte configure (%s) nicht erstellen"
 
-#: ../plugins/autotools/ide-autotools-build-task.c:764
+#: ../plugins/autotools/ide-autotools-build-task.c:773
 msgid "Running configure…"
 msgstr "Configure wird ausgeführt …"
 
-#: ../plugins/autotools/ide-autotools-build-task.c:861
+#: ../plugins/autotools/ide-autotools-build-task.c:870
 msgid "Cleaning…"
 msgstr "Wird aufgeräumt …"
 
@@ -1721,7 +1803,6 @@ msgstr "    Erstellen für Gerät: %s (%s)\n"
 
 #: ../plugins/build-tools/gbp-build-tool.c:112
 #, c-format
-#| msgid "           Project Name: %s\n"
 msgid "            Environment: %s\n"
 msgstr "            Umgebung: %s\n"
 
@@ -1776,9 +1857,8 @@ msgid "Clean the project"
 msgstr "Das Projekt leeren"
 
 #: ../plugins/build-tools/gbp-build-tool.c:288
-#, fuzzy
 msgid "The ID of the device to build for"
-msgstr "Die Quellansicht zur Bearbeitung."
+msgstr "Die Kennung des Gerätes, für das erstellt werden soll"
 
 #: ../plugins/build-tools/gbp-build-tool.c:289
 msgid "local"
@@ -1792,11 +1872,11 @@ msgstr "Das Archiv für die Suchdaten."
 
 #: ../plugins/build-tools/gbp-build-tool.c:292
 msgid "host"
-msgstr ""
+msgstr "Rechner"
 
 #: ../plugins/build-tools/gbp-build-tool.c:294
 msgid "Number of workers to use when building"
-msgstr ""
+msgstr "Anzahl der für die Erstellung zu verwendenden Worker"
 
 #: ../plugins/build-tools/gbp-build-tool.c:295
 msgid "N"
@@ -1820,7 +1900,20 @@ msgstr "PFAD"
 
 #: ../plugins/build-tools/gbp-build-workbench-addin.c:275
 msgid "Build Output"
-msgstr ""
+msgstr "Erstellungs-Ausgabe"
+
+#: ../plugins/clang/ide-clang-preferences-addin.c:62
+msgid "Clang"
+msgstr "Clang"
+
+#: ../plugins/clang/ide-clang-preferences-addin.c:63
+msgid "Show errors and warnings provided by Clang"
+msgstr "Von Clang erzeugte Fehler und Warnungen anzeigen"
+
+#. translators: keywords used when searching for preferences
+#: ../plugins/clang/ide-clang-preferences-addin.c:65
+msgid "clang diagnostics warnings errors"
+msgstr "Clang Fehlerdiagnose Warnungen Fehler"
 
 #: ../plugins/clang/ide-clang-service.c:269
 msgid "Unknown failure"
@@ -1919,6 +2012,15 @@ msgstr "Ungültige Suchen-und-Ersetzen-Anfrage"
 msgid "Not a command: %s"
 msgstr "Kein Befehl: %s"
 
+#: ../plugins/comment-code/gtk/menus.ui.h:1
+msgid "Comment code"
+msgstr "Code kommentieren"
+
+# Ich nehme mal an, dass es um das Auskommentieren mittels # geht.
+#: ../plugins/comment-code/gtk/menus.ui.h:2
+msgid "Uncomment code"
+msgstr "Kommentierung zurücknehmen"
+
 #: ../plugins/contributing/contributing_plugin/helper.py:76
 #, python-format
 msgid ""
@@ -1950,6 +2052,21 @@ msgid ""
 "  ide contribute gnome-maps\n"
 "\n"
 msgstr ""
+"Aufruf:\n"
+"  ide contribute PROJEKTNAME\n"
+"\n"
+"  Dieser Befehl richtet Ihr System so ein, dass Sie sich an dem Projekt "
+"beteiligen\n"
+"  können, das als PROJEKTNAME benannt ist. Dies beinhaltet das Holen der "
+"Quellen,\n"
+"  Überprüfung, dass die nötigen Abhängigkeiten vorhanden sind, sowie die "
+"erste\n"
+"  Erstellung des Projekts.\n"
+"\n"
+"Beispiele:\n"
+"  ide contribute gnome-builder\n"
+"  ide contribute gnome-maps\n"
+"\n"
 
 #: ../plugins/contributing/contributing_plugin/__init__.py:226
 msgid "Username"
@@ -2000,7 +2117,7 @@ msgstr "Wechseln zu"
 msgid "Send to Fpaste.org"
 msgstr "An Fpaste.org senden"
 
-#: ../plugins/fpaste/fpaste_plugin/__init__.py:104
+#: ../plugins/fpaste/fpaste_plugin/__init__.py:110
 msgid "The following URL has been copied to the clipboard"
 msgstr "Die folgende Adresse wurde in die Zwischenablage kopiert"
 
@@ -2024,13 +2141,9 @@ msgstr "Die Datei ist nicht unter der Kontrolle des git-Arbeitsordners"
 msgid "The requested file does not exist within the git index."
 msgstr "Die angeforderte Datei existiert nicht im git-Index."
 
-#: ../plugins/git/ide-git-clone-widget.c:131
+#: ../plugins/git/ide-git-clone-widget.c:132
 msgid "A valid Git URL is required"
 msgstr "Eine gültige git-Adresse wird benötigt"
-
-#: ../plugins/git/ide-git-clone-widget.c:200
-msgid "Projects"
-msgstr "Projekte"
 
 #: ../plugins/git/ide-git-clone-widget.ui.h:1
 msgid "user@host:repository.git"
@@ -2068,9 +2181,24 @@ msgstr "Versionskontrolle"
 msgid "Attribution"
 msgstr "Quellcodezuordnung"
 
-#: ../plugins/gnome-code-assistance/ide-gca-diagnostic-provider.c:336
+#: ../plugins/gnome-code-assistance/ide-gca-diagnostic-provider.c:375
 msgid "Code assistance requires a local file."
 msgstr "Der Codeassistent benötigt eine lokale Datei."
+
+#: ../plugins/gnome-code-assistance/ide-gca-preferences-addin.c:62
+msgid "Pylint"
+msgstr "Pylint"
+
+#: ../plugins/gnome-code-assistance/ide-gca-preferences-addin.c:63
+msgid "Enable the use of pylint, which may execute code in your project"
+msgstr ""
+"Nutzung von Pylint aktivieren, womit Code in Ihrem Projekt ausgeführt werden "
+"kann"
+
+#. translators: these are keywords used to search for preferences
+#: ../plugins/gnome-code-assistance/ide-gca-preferences-addin.c:65
+msgid "pylint python lint code execute execution"
+msgstr "pylint python lint code ausführen Ausführung"
 
 #: ../plugins/gnome-code-assistance/ide-gca-service.c:168
 msgid "No language specified"
@@ -2128,7 +2256,7 @@ msgstr "Ordnername"
 msgid "_Create"
 msgstr "A_nlegen"
 
-#: ../plugins/project-tree/gb-project-tree-addin.c:77
+#: ../plugins/project-tree/gb-project-tree-addin.c:112
 msgid "Project"
 msgstr "Projekt"
 
@@ -2252,10 +2380,11 @@ msgid "Show errors and warnings provided by Vala"
 msgstr "Von Vala erzeugte Fehler und Warnungen anzeigen"
 
 #: ../plugins/vala-pack/ide-vala-preferences-addin.vala:35
-#, fuzzy
-#| msgid "If the current line should be highlighted."
 msgid "vala diagnostics warnings errors"
-msgstr "Legt fest, ob die aktuelle Zeile hervorgehoben werden soll."
+msgstr "Vala Fehlerdiagnose Warnungen Fehler"
+
+#~ msgid "Invalid snippet at line %d: %s"
+#~ msgstr "Fehlerhafter Schnipsel in Zeile %d: %s"
 
 #~ msgid "%s does not implement build_async()"
 #~ msgstr "%s implementiert build_async() nicht"
@@ -2509,9 +2638,6 @@ msgstr "Legt fest, ob die aktuelle Zeile hervorgehoben werden soll."
 #~ msgid "Terminal (%s)"
 #~ msgstr "Terminal (%s)"
 
-#~ msgid "Select Project File"
-#~ msgstr "Wählen Sie eine Projektdatei"
-
 #~ msgid "Clone Repository"
 #~ msgstr "Archiv klonen"
 
@@ -2607,9 +2733,6 @@ msgstr "Legt fest, ob die aktuelle Zeile hervorgehoben werden soll."
 #~ msgstr[0] "%s weitere"
 #~ msgstr[1] "%s weitere"
 
-#~ msgid "Search Shortcuts"
-#~ msgstr "Tastenkombinationen suchen"
-
 #~ msgid "Search Results"
 #~ msgstr "Suchergebnisse"
 
@@ -2621,9 +2744,6 @@ msgstr "Legt fest, ob die aktuelle Zeile hervorgehoben werden soll."
 
 #~ msgid "Build Failure"
 #~ msgstr "Erstellungsproblem"
-
-#~ msgid "Clang"
-#~ msgstr "Clang"
 
 #~ msgid "CTags"
 #~ msgstr "CTags"
@@ -2806,9 +2926,6 @@ msgstr "Legt fest, ob die aktuelle Zeile hervorgehoben werden soll."
 #~ msgid "The currently focused buffer."
 #~ msgstr "Die Datei für den Puffer."
 
-#~ msgid "Project File"
-#~ msgstr "Projektdatei"
-
 #~ msgid "The project file."
 #~ msgstr "Die Projektdatei."
 
@@ -2977,11 +3094,6 @@ msgstr "Legt fest, ob die aktuelle Zeile hervorgehoben werden soll."
 #~| msgid "The active view within the stack."
 #~ msgid "The path for the file within the project tree."
 #~ msgstr "Die aktive Ansicht innerhalb des Stapels."
-
-#, fuzzy
-#~| msgid "The node selection."
-#~ msgid "The project description."
-#~ msgstr "Die Knotenauswahl."
 
 #, fuzzy
 #~| msgid "The parent node."
@@ -3174,9 +3286,6 @@ msgstr "Legt fest, ob die aktuelle Zeile hervorgehoben werden soll."
 #~| msgid "The name of the icon to use."
 #~ msgid "The display name of the keybinding mode."
 #~ msgstr "Name des zu Benutzenden Symbols."
-
-#~ msgid "Overwrite Braces"
-#~ msgstr "Klammern überschreiben"
 
 #, fuzzy
 #~| msgid "Overwrite closing brace, bracket, quotation, and parenthesis."
@@ -3954,9 +4063,6 @@ msgstr "Legt fest, ob die aktuelle Zeile hervorgehoben werden soll."
 #~ msgid "Show spinner"
 #~ msgstr "Kreisel zeigen"
 
-#~ msgid "Workspace"
-#~ msgstr "Arbeitsfläche"
-
 #~ msgid "The workspace to ensure is focused."
 #~ msgstr "Die Arbeitsfläche, die im Vordergrund gehalten wird."
 
@@ -4084,9 +4190,6 @@ msgstr "Legt fest, ob die aktuelle Zeile hervorgehoben werden soll."
 #~ msgstr ""
 #~ "Copyright 2014 Christian Hergert, et al.\n"
 #~ "Lizensiert unter der GNU GPL 3 oder neuer"
-
-#~ msgid "No document were found"
-#~ msgstr "Es wurden keine Dokumente gefunden"
 
 #~ msgid "Line 1, Column 1"
 #~ msgstr "Zeile 1, Spalte 1"
