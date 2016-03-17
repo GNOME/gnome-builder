@@ -13,6 +13,6 @@ HELP_FILES = \
 	legal.xml
 
 # Translated languages, blank means no translation exists yet
-HELP_LINGUAS = cs de es
+HELP_LINGUAS = cs de el es
 
 -include $(top_srcdir)/git.mk
