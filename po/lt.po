@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-03-13 08:03+0000\n"
-"PO-Revision-Date: 2016-03-13 21:29+0200\n"
+"POT-Creation-Date: 2016-03-16 22:36+0000\n"
+"PO-Revision-Date: 2016-03-16 15:38+0200\n"
 "Last-Translator: Aurimas Černius <aurisc4@gmail.com>\n"
 "Language-Team: Lietuvių <gnome-lt@lists.akl.lt>\n"
 "Language: lt\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && (n"
 "%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Gtranslator 2.91.7\n"
+"X-Generator: Poedit 1.8.7\n"
 
 #: ../contrib/egg/egg-animation.c:726
 #, c-format
@@ -235,7 +235,6 @@ msgid "Reset"
 msgstr "Atstatyti"
 
 #: ../data/gtk/menus.ui.h:35
-#| msgid "_Title Case"
 msgid "_Match Case"
 msgstr "_Skirti raidžių registrą"
 
@@ -1194,6 +1193,7 @@ msgid "Font"
 msgstr "Šriftas"
 
 #: ../libide/preferences/ide-preferences-builtin.c:102
+msgctxt "Keywords"
 msgid "editor font monospace"
 msgstr "redaktorius šriftas lygiaplotis"
 
@@ -1204,6 +1204,7 @@ msgid "Terminal"
 msgstr "Terminalas"
 
 #: ../libide/preferences/ide-preferences-builtin.c:104
+msgctxt "Keywords"
 msgid "terminal font monospace"
 msgstr "terminalas šriftas lygiaplotis"
 
@@ -1518,12 +1519,10 @@ msgid "Workspace"
 msgstr "Darbo sritis"
 
 #: ../libide/preferences/ide-preferences-builtin.c:255
-#| msgid "Project Discovery"
 msgid "Projects Directory"
 msgstr "Projektų katalogas"
 
 #: ../libide/preferences/ide-preferences-builtin.c:255
-#| msgid "Search for projects"
 msgid "A place for all your projects"
 msgstr "Vieta visiems jūsų projektams"
 
@@ -1910,7 +1909,7 @@ msgstr "AST skaitymo klaida"
 msgid "Failed to create translation unit: %s"
 msgstr "Nepavyko sukurti transliavimo vieneto: %s"
 
-#: ../plugins/clang/ide-clang-service.c:402
+#: ../plugins/clang/ide-clang-service.c:401
 msgid "File must be saved locally to parse."
 msgstr "Failas turi būti įrašytas vietoje skaitymui."
 
@@ -2349,7 +2348,8 @@ msgstr "Vala"
 msgid "Show errors and warnings provided by Vala"
 msgstr "Rodyti Vala pateiktas klaidas"
 
-#: ../plugins/vala-pack/ide-vala-preferences-addin.vala:35
+#. translators: keywords used when searching for preferences
+#: ../plugins/vala-pack/ide-vala-preferences-addin.vala:36
 msgid "vala diagnostics warnings errors"
 msgstr "vala diagnostika įspėjimai klaidos"
 
