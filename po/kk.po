@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-03-03 22:17+0000\n"
-"PO-Revision-Date: 2016-03-04 09:32+0500\n"
+"POT-Creation-Date: 2016-03-16 20:06+0000\n"
+"PO-Revision-Date: 2016-03-17 08:37+0500\n"
 "Last-Translator: Baurzhan Muftakhidinov <baurthefirst@gmail.com>\n"
 "Language-Team: Kazakh <kk_KZ@googlegroups.com>\n"
 "Language: kk\n"
@@ -19,22 +19,22 @@ msgstr ""
 "X-Generator: Poedit 1.8.6\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: ../contrib/egg/egg-animation.c:715
+#: ../contrib/egg/egg-animation.c:726
 #, c-format
 msgid "Cannot locate property %s in class %s"
 msgstr ""
 
-#: ../contrib/egg/egg-animation.c:1055 ../contrib/egg/egg-animation.c:1061
+#: ../contrib/egg/egg-animation.c:1073 ../contrib/egg/egg-animation.c:1079
 #, c-format
 msgid "Failed to find property %s in %s"
 msgstr ""
 
-#: ../contrib/egg/egg-animation.c:1069
+#: ../contrib/egg/egg-animation.c:1087
 #, c-format
 msgid "Failed to find property %s in %s or parent %s"
 msgstr ""
 
-#: ../contrib/egg/egg-animation.c:1079
+#: ../contrib/egg/egg-animation.c:1097
 #, c-format
 msgid "Failed to retrieve va_list value: %s"
 msgstr ""
@@ -167,11 +167,11 @@ msgstr "Қай_талау"
 msgid "C_ut"
 msgstr "Қ_иып алу"
 
-#: ../data/gtk/menus.ui.h:19
+#: ../data/gtk/menus.ui.h:19 ../plugins/terminal/gtk/menus.ui.h:2
 msgid "_Copy"
 msgstr "_Көшіріп алу"
 
-#: ../data/gtk/menus.ui.h:20
+#: ../data/gtk/menus.ui.h:20 ../plugins/terminal/gtk/menus.ui.h:3
 msgid "_Paste"
 msgstr "Кірі_стіру"
 
@@ -179,15 +179,15 @@ msgstr "Кірі_стіру"
 msgid "_Delete"
 msgstr "Ө_шіру"
 
-#: ../data/gtk/menus.ui.h:22
+#: ../data/gtk/menus.ui.h:22 ../plugins/terminal/gtk/menus.ui.h:4
 msgid "Selection"
 msgstr "Таңдалған"
 
-#: ../data/gtk/menus.ui.h:23
+#: ../data/gtk/menus.ui.h:23 ../plugins/terminal/gtk/menus.ui.h:5
 msgid "Select _All"
 msgstr "Барлығын _таңдау"
 
-#: ../data/gtk/menus.ui.h:24
+#: ../data/gtk/menus.ui.h:24 ../plugins/terminal/gtk/menus.ui.h:6
 msgid "Select _None"
 msgstr ""
 
@@ -232,46 +232,66 @@ msgid "Reset"
 msgstr "Тастау"
 
 #: ../data/gtk/menus.ui.h:35
-msgid "Split"
-msgstr "Бөлу"
+msgid "_Match Case"
+msgstr "_Регистрді ескеру"
 
 #: ../data/gtk/menus.ui.h:36
-msgid "Split Left"
+msgid "Match _Entire Word Only"
 msgstr ""
 
 #: ../data/gtk/menus.ui.h:37
-msgid "Split Right"
+msgid "Match as _Regular Expression"
 msgstr ""
 
 #: ../data/gtk/menus.ui.h:38
-msgid "Split Down"
+msgid "_Wrap Around"
 msgstr ""
 
 #: ../data/gtk/menus.ui.h:39
+msgid "Cu_t"
+msgstr ""
+
+#: ../data/gtk/menus.ui.h:40
+msgid "Split"
+msgstr "Бөлу"
+
+#: ../data/gtk/menus.ui.h:41
+msgid "Split Left"
+msgstr ""
+
+#: ../data/gtk/menus.ui.h:42
+msgid "Split Right"
+msgstr ""
+
+#: ../data/gtk/menus.ui.h:43
+msgid "Split Down"
+msgstr ""
+
+#: ../data/gtk/menus.ui.h:44
 msgid "Move"
 msgstr "Жылжыту"
 
-#: ../data/gtk/menus.ui.h:40
+#: ../data/gtk/menus.ui.h:45
 msgid "Move Left"
 msgstr "Солға жылжыту"
 
-#: ../data/gtk/menus.ui.h:41
+#: ../data/gtk/menus.ui.h:46
 msgid "Move Right"
 msgstr "Оңға жылжыту"
 
-#: ../data/gtk/menus.ui.h:42
+#: ../data/gtk/menus.ui.h:47
 msgid "_Save"
 msgstr "_Сақтау"
 
-#: ../data/gtk/menus.ui.h:43
+#: ../data/gtk/menus.ui.h:48
 msgid "_Save As"
 msgstr "Қала_йша сақтау"
 
-#: ../data/gtk/menus.ui.h:44
+#: ../data/gtk/menus.ui.h:49
 msgid "_Print"
 msgstr "Бас_паға шығару"
 
-#: ../data/gtk/menus.ui.h:45
+#: ../data/gtk/menus.ui.h:50
 msgid "_Close"
 msgstr "_Жабу"
 
@@ -776,7 +796,7 @@ msgstr "Жол %u, баған %u"
 msgid "%u of %u"
 msgstr "%u, барлығы %u"
 
-#: ../libide/editor/ide-editor-frame.c:658
+#: ../libide/editor/ide-editor-frame.c:646
 #: ../plugins/project-tree/gtk/menus.ui.h:1
 msgid "Re_veal in Project Tree"
 msgstr ""
@@ -914,7 +934,7 @@ msgstr ""
 msgid "No such worker"
 msgstr ""
 
-#: ../libide/ide-buffer.c:2269
+#: ../libide/ide-buffer.c:2298
 msgid "The current language lacks a symbol resolver."
 msgstr ""
 
@@ -1031,11 +1051,6 @@ msgstr ""
 msgid "Snippets"
 msgstr "Снипеттер"
 
-#: ../libide/ide-source-snippet-parser.c:496
-#, c-format
-msgid "Invalid snippet at line %d: %s"
-msgstr ""
-
 #: ../libide/ide-source-snippets-manager.c:96
 #, c-format
 msgid "Failed to open directory: %s"
@@ -1046,17 +1061,17 @@ msgstr ""
 msgid "Failed to load file: %s: %s"
 msgstr ""
 
-#: ../libide/ide-source-view.c:4841
+#: ../libide/ide-source-view.c:4900
 #, c-format
 msgid "Insert “%s”"
 msgstr ""
 
-#: ../libide/ide-source-view.c:4843
+#: ../libide/ide-source-view.c:4902
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr ""
 
-#: ../libide/ide-source-view.c:4957
+#: ../libide/ide-source-view.c:5016
 msgid "Apply Fix-It"
 msgstr ""
 
@@ -1170,6 +1185,7 @@ msgid "Font"
 msgstr "Қаріп"
 
 #: ../libide/preferences/ide-preferences-builtin.c:102
+msgctxt "Keywords"
 msgid "editor font monospace"
 msgstr ""
 
@@ -1180,6 +1196,7 @@ msgid "Terminal"
 msgstr "Терминал"
 
 #: ../libide/preferences/ide-preferences-builtin.c:104
+msgctxt "Keywords"
 msgid "terminal font monospace"
 msgstr ""
 
@@ -1480,23 +1497,34 @@ msgid "Number of parallel build workers"
 msgstr ""
 
 #: ../libide/preferences/ide-preferences-builtin.c:252
-#: ../plugins/git/ide-git-clone-widget.c:200
 msgid "Projects"
 msgstr "Жобалар"
 
 #: ../libide/preferences/ide-preferences-builtin.c:254
+msgid "Workspace"
+msgstr ""
+
+#: ../libide/preferences/ide-preferences-builtin.c:255
+msgid "Projects Directory"
+msgstr "Жобалар бумасы"
+
+#: ../libide/preferences/ide-preferences-builtin.c:255
+msgid "A place for all your projects"
+msgstr "Жобаларыңыз үшін орын"
+
+#: ../libide/preferences/ide-preferences-builtin.c:257
 msgid "Project Discovery"
 msgstr "Жобаларды табу"
 
-#: ../libide/preferences/ide-preferences-builtin.c:255
+#: ../libide/preferences/ide-preferences-builtin.c:258
 msgid "Discover projects on my computer"
 msgstr "Компьютерімдегі жобаларды табу"
 
-#: ../libide/preferences/ide-preferences-builtin.c:255
+#: ../libide/preferences/ide-preferences-builtin.c:258
 msgid "Scan your computer for existing projects"
 msgstr ""
 
-#: ../libide/preferences/ide-preferences-perspective.c:823
+#: ../libide/preferences/ide-preferences-perspective.c:888
 msgid "Preferences"
 msgstr "Баптаулар"
 
@@ -2032,7 +2060,7 @@ msgstr ""
 msgid "Send to Fpaste.org"
 msgstr ""
 
-#: ../plugins/fpaste/fpaste_plugin/__init__.py:104
+#: ../plugins/fpaste/fpaste_plugin/__init__.py:110
 msgid "The following URL has been copied to the clipboard"
 msgstr ""
 
@@ -2055,7 +2083,7 @@ msgstr ""
 msgid "The requested file does not exist within the git index."
 msgstr ""
 
-#: ../plugins/git/ide-git-clone-widget.c:131
+#: ../plugins/git/ide-git-clone-widget.c:132
 msgid "A valid Git URL is required"
 msgstr ""
 
@@ -2289,7 +2317,8 @@ msgstr "Vala"
 msgid "Show errors and warnings provided by Vala"
 msgstr ""
 
-#: ../plugins/vala-pack/ide-vala-preferences-addin.vala:35
+#. translators: keywords used when searching for preferences
+#: ../plugins/vala-pack/ide-vala-preferences-addin.vala:36
 msgid "vala diagnostics warnings errors"
 msgstr ""
 
