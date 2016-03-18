@@ -293,17 +293,12 @@ AX_APPEND_COMPILE_FLAGS([ \
 	-Wall \
 	-Wcast-align \
 	-Wdeclaration-after-statement \
-	-Wempty-body \
 	-Werror=format-security \
 	-Werror=format=2 \
 	-Wextra \
-	-Wformat \
 	-Wformat-nonliteral \
 	-Wformat-security \
-	-Winit-self \
-	-Wmisleading-indentation \
 	-Wmissing-include-dirs \
-	-Wshift-negative-value \
 	-Wnested-externs \
 	-Wno-missing-field-initializers \
 	-Wno-sign-compare \
@@ -312,12 +307,10 @@ AX_APPEND_COMPILE_FLAGS([ \
 	-Wno-unused-parameter \
 	-Wpointer-arith \
 	-Wredundant-decls \
-	-Wreturn-type \
 	-Wshadow \
 	-Wswitch-default \
 	-Wswitch-enum \
 	-Wundef \
-	-Wuninitialized \
 ], [], [$ax_compiler_flags_test])
 AC_C_CONST
 
