@@ -1,8 +1,10 @@
+root = true
+
 [*]
 charset = utf-8
 
 [*.c]
 indent_style = space
 tab_width = 4
-indent_width = 2
+indent_size = 2
 
