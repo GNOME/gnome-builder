@@ -173,11 +173,10 @@ ide_editor_workbench_addin_open_cb (GObject      *object,
 
       if (sscanf (fragment, "L%u_%u", &line, &column) >= 1)
         {
-          GtkTextIter iter;
+          g_autoptr(IdeSourceLocation) location = NULL;
 
-          /* Reminder this is only safe on 3.20 */
-          gtk_text_buffer_get_iter_at_line_offset (GTK_TEXT_BUFFER (buffer), &iter, line, column);
-          gtk_text_buffer_select_range (GTK_TEXT_BUFFER (buffer), &iter, &iter);
+          location = ide_source_location_new (ide_buffer_get_file (buffer), line, column, 0);
+          ide_editor_perspective_focus_location (self->perspective, location);
         }
     }
 
