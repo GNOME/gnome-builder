@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-15 00:01+0100\n"
-"PO-Revision-Date: 2016-03-15 00:02+0100\n"
+"POT-Creation-Date: 2016-03-18 15:30+0100\n"
+"PO-Revision-Date: 2016-03-18 15:32+0100\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <gnomepl@aviary.pl>\n"
 "Language: pl\n"
@@ -1913,7 +1913,7 @@ msgstr "Błąd odczytu AST"
 msgid "Failed to create translation unit: %s"
 msgstr "Utworzenie jednostki tłumaczenia się nie powiodło: %s"
 
-#: ../plugins/clang/ide-clang-service.c:402
+#: ../plugins/clang/ide-clang-service.c:401
 msgid "File must be saved locally to parse."
 msgstr "Plik do przetworzenia musi być zapisany lokalnie."
 
@@ -2141,7 +2141,7 @@ msgid "Location"
 msgstr "Położenie"
 
 #: ../plugins/git/ide-git-genesis-addin.c:93
-msgid "From a existing project in a Git repository"
+msgid "From an existing project in a Git repository"
 msgstr "Z istniejącego projektu w repozytorium systemu git"
 
 #: ../plugins/git/ide-git-preferences-addin.c:108
