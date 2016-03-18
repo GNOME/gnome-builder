@@ -17,8 +17,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-16 19:33+0100\n"
-"PO-Revision-Date: 2016-03-16 19:31+0200\n"
+"POT-Creation-Date: 2016-03-18 11:25+0100\n"
+"PO-Revision-Date: 2016-03-17 20:12+0200\n"
 "Last-Translator: Kris Thomsen <lakristho@gmail.com>\n"
 "Language-Team: Danish <dansk@dansk-gruppen.dk>\n"
 "Language: da\n"
@@ -241,25 +241,24 @@ msgid "Reset"
 msgstr "Nulstil"
 
 #: ../data/gtk/menus.ui.h:35
-#, fuzzy
 msgid "_Match Case"
-msgstr "_Stort begyndelsesbogstav"
+msgstr "_Match på store/små bogstaver"
 
 #: ../data/gtk/menus.ui.h:36
 msgid "Match _Entire Word Only"
-msgstr ""
+msgstr "Match kun _hele ord"
 
 #: ../data/gtk/menus.ui.h:37
 msgid "Match as _Regular Expression"
-msgstr ""
+msgstr "Match som _regulært udtryk"
 
 #: ../data/gtk/menus.ui.h:38
 msgid "_Wrap Around"
-msgstr ""
+msgstr "_Begynd forfra ved slut"
 
 #: ../data/gtk/menus.ui.h:39
 msgid "Cu_t"
-msgstr ""
+msgstr "_Klip"
 
 #: ../data/gtk/menus.ui.h:40
 msgid "Split"
@@ -333,7 +332,6 @@ msgid "No open files"
 msgstr "Ingen åbne filer"
 
 #: ../data/ui/ide-editor-perspective.ui.h:2
-#, fuzzy
 msgid "Try opening a file by typing in the search box at the top"
 msgstr "Prøv at åbne en fil ved at skrive i søgeboksen i toppen"
 
@@ -446,11 +444,11 @@ msgstr "Fo_rtsæt"
 #: ../data/ui/ide-greeter-perspective.ui.h:2
 msgid "Why not <a href=\"action://app.new-project\">create a new project</a>?"
 msgstr ""
+"Hvorfor ikke <a href=\"action://app.new-project\">oprette et nyt projekt</a>?"
 
 #: ../data/ui/ide-greeter-perspective.ui.h:3
-#, fuzzy
 msgid "No projects found"
-msgstr "Ingen dokumenter fundet"
+msgstr "Ingen projekter fundet"
 
 #: ../data/ui/ide-greeter-perspective.ui.h:4
 msgid "Recent Projects"
@@ -925,7 +923,7 @@ msgstr "Udskriv flere detaljer. Kan angives flere gange"
 
 #: ../libide/ide-application-command-line.c:225
 msgid "Enter GApplication Service mode"
-msgstr ""
+msgstr "Aktivér GApplication-tjenestetilstand"
 
 #: ../libide/ide-application-command-line.c:255
 msgid "COMMAND"
@@ -1207,7 +1205,6 @@ msgid "Font"
 msgstr "Skrifttype"
 
 #: ../libide/preferences/ide-preferences-builtin.c:102
-#, fuzzy
 msgctxt "Keywords"
 msgid "editor font monospace"
 msgstr "redigering skrifttype fastbredde"
@@ -1219,7 +1216,6 @@ msgid "Terminal"
 msgstr "Terminal"
 
 #: ../libide/preferences/ide-preferences-builtin.c:104
-#, fuzzy
 msgctxt "Keywords"
 msgid "terminal font monospace"
 msgstr "terminal skrifttype fastbredde"
@@ -1538,28 +1534,24 @@ msgid "Workspace"
 msgstr "Arbejdsområde"
 
 #: ../libide/preferences/ide-preferences-builtin.c:255
-#, fuzzy
 msgid "Projects Directory"
-msgstr "Mappe"
+msgstr "Projektmappe"
 
 #: ../libide/preferences/ide-preferences-builtin.c:255
-#, fuzzy
 msgid "A place for all your projects"
-msgstr "Søg efter projekter"
+msgstr "Et sted til alle dine projekter"
 
 #: ../libide/preferences/ide-preferences-builtin.c:257
-#, fuzzy
 msgid "Project Discovery"
-msgstr "Projekter"
+msgstr "Find projekter"
 
 #: ../libide/preferences/ide-preferences-builtin.c:258
-#, fuzzy
 msgid "Discover projects on my computer"
-msgstr "Fra eksisterende projekt på denne computer"
+msgstr "Find projekter på din computer"
 
 #: ../libide/preferences/ide-preferences-builtin.c:258
 msgid "Scan your computer for existing projects"
-msgstr ""
+msgstr "Skan din computer for eksisterende projekter"
 
 #: ../libide/preferences/ide-preferences-perspective.c:888
 msgid "Preferences"
@@ -1934,7 +1926,7 @@ msgstr "AST-læsefejl"
 msgid "Failed to create translation unit: %s"
 msgstr "Kunne ikke oprette oversættelsesenhed: %s"
 
-#: ../plugins/clang/ide-clang-service.c:402
+#: ../plugins/clang/ide-clang-service.c:401
 msgid "File must be saved locally to parse."
 msgstr "Filen skal gemmes lokalt for at kunne fortolkes."
 
@@ -2012,11 +2004,11 @@ msgstr "Ikke en kommando: %s"
 
 #: ../plugins/comment-code/gtk/menus.ui.h:1
 msgid "Comment code"
-msgstr ""
+msgstr "Udkommentér kode"
 
 #: ../plugins/comment-code/gtk/menus.ui.h:2
 msgid "Uncomment code"
-msgstr ""
+msgstr "Afkommentér kode"
 
 #: ../plugins/contributing/contributing_plugin/helper.py:76
 #, python-format
