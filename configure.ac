@@ -392,6 +392,44 @@ AC_MSG_RESULT([$enable_profiling])
 
 
 dnl ***********************************************************************
+dnl Setup common cflags and ldflags for plugins
+dnl ***********************************************************************
+PLUGIN_CFLAGS="$PLUGIN_CFLAGS -I\$(top_builddir)/contrib/egg"
+PLUGIN_CFLAGS="$PLUGIN_CFLAGS -I\$(top_builddir)/libide"
+PLUGIN_CFLAGS="$PLUGIN_CFLAGS -I\$(top_srcdir)/contrib/egg"
+PLUGIN_CFLAGS="$PLUGIN_CFLAGS -I\$(top_srcdir)/contrib/gd"
+PLUGIN_CFLAGS="$PLUGIN_CFLAGS -I\$(top_srcdir)/contrib/nautilus"
+PLUGIN_CFLAGS="$PLUGIN_CFLAGS -I\$(top_srcdir)/contrib/rg"
+PLUGIN_CFLAGS="$PLUGIN_CFLAGS -I\$(top_srcdir)/contrib/search"
+PLUGIN_CFLAGS="$PLUGIN_CFLAGS -I\$(top_srcdir)/contrib/xml"
+PLUGIN_CFLAGS="$PLUGIN_CFLAGS -I\$(top_srcdir)/libide"
+PLUGIN_CFLAGS="$PLUGIN_CFLAGS -I\$(top_srcdir)/libide/editor"
+PLUGIN_CFLAGS="$PLUGIN_CFLAGS -I\$(top_srcdir)/libide/genesis"
+PLUGIN_CFLAGS="$PLUGIN_CFLAGS -I\$(top_srcdir)/libide/greeter"
+PLUGIN_CFLAGS="$PLUGIN_CFLAGS -I\$(top_srcdir)/libide/preferences"
+PLUGIN_CFLAGS="$PLUGIN_CFLAGS -I\$(top_srcdir)/libide/util"
+PLUGIN_CFLAGS="$PLUGIN_CFLAGS $LIBIDE_CFLAGS"
+PLUGIN_CFLAGS="$PLUGIN_CFLAGS $DEBUG_CFLAGS"
+PLUGIN_CFLAGS="$PLUGIN_CFLAGS $OPTIMIZE_LDFLAGS"
+AC_SUBST(PLUGIN_CFLAGS)
+
+PLUGIN_LDFLAGS="$PLUGIN_LDFLAGS $OPTIMIZE_LDFLAGS"
+PLUGIN_LDFLAGS="$PLUGIN_LDFLAGS -avoid-version"
+PLUGIN_LDFLAGS="$PLUGIN_LDFLAGS -export-regex peas_register_types"
+PLUGIN_LDFLAGS="$PLUGIN_LDFLAGS -module"
+AC_SUBST(PLUGIN_LDFLAGS)
+
+PLUGIN_VALAFLAGS="$PLUGIN_VALAFLAGS --target-glib=2.44"
+PLUGIN_VALAFLAGS="$PLUGIN_VALAFLAGS --thread"
+PLUGIN_VALAFLAGS="$PLUGIN_VALAFLAGS --vapidir \$(top_builddir)/libide"
+PLUGIN_VALAFLAGS="$PLUGIN_VALAFLAGS --vapidir \$(top_builddir)/contrib/egg"
+PLUGIN_VALAFLAGS="$PLUGIN_VALAFLAGS --vapidir \$(top_builddir)/contrib/tmpl"
+PLUGIN_VALAFLAGS="$PLUGIN_VALAFLAGS --pkg libide-1.0"
+PLUGIN_VALAFLAGS="$PLUGIN_VALAFLAGS --pkg libpeas-1.0"
+AC_SUBST(PLUGIN_VALAFLAGS)
+
+
+dnl ***********************************************************************
 dnl Process .in Files
 dnl ***********************************************************************
 AC_CONFIG_FILES([

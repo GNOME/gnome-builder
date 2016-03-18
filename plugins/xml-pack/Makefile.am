@@ -16,19 +16,8 @@ libxml_pack_plugin_la_SOURCES = \
 	xml-pack-plugin.c \
 	$(NULL)
 
-libxml_pack_plugin_la_CFLAGS = \
-	$(LIBIDE_CFLAGS) \
-	-I$(top_srcdir)/libide \
-	-I$(top_builddir)/libide \
-	-I$(top_srcdir)/contrib/egg \
-	-I$(top_srcdir)/contrib/xml \
-	$(NULL)
-
-libxml_pack_plugin_la_LDFLAGS = \
-	$(OPTIMIZE_LDFLAGS) \
-	-avoid-version \
-	-module \
-	$(NULL)
+libxml_pack_plugin_la_CFLAGS = $(PLUGIN_CFLAGS)
+libxml_pack_plugin_la_LDFLAGS = $(PLUGIN_LDFLAGS)
 
 include $(top_srcdir)/plugins/Makefile.plugin
 

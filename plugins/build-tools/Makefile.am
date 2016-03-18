@@ -33,20 +33,8 @@ nodist_libbuild_tools_plugin_la_SOURCES = \
 	gbp-build-resources.c \
 	gbp-build-resources.h
 
-libbuild_tools_plugin_la_CFLAGS = \
-	$(LIBIDE_CFLAGS) \
-	$(OPTIMIZE_CFLAGS) \
-	-I$(top_srcdir)/libide \
-	-I$(top_builddir)/libide \
-	-I$(top_srcdir)/contrib/egg \
-	$(NULL)
-
-libbuild_tools_plugin_la_LDFLAGS = \
-	$(OPTIMIZE_LDFLAGS) \
-	-avoid-version \
-	-module \
-	-export-regex peas_register_types \
-	$(NULL)
+libbuild_tools_plugin_la_CFLAGS = $(PLUGIN_CFLAGS)
+libbuild_tools_plugin_la_LDFLAGS = $(PLUGIN_LDFLAGS)
 
 glib_resources_c = gbp-build-resources.c
 glib_resources_h = gbp-build-resources.h

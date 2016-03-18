@@ -34,24 +34,8 @@ libcommand_bar_la_SOURCES = \
 	gb-vim.h \
 	$(NULL)
 
-libcommand_bar_la_CFLAGS = \
-	-I$(top_srcdir)/libide \
-	-I$(top_builddir)/libide \
-	-I$(top_srcdir)/libide/editor \
-	-I$(top_srcdir)/libide/util \
-	-I$(top_srcdir)/contrib/egg \
-	-I$(top_srcdir)/contrib/gd \
-	-I$(top_srcdir)/contrib/nautilus \
-	$(LIBIDE_CFLAGS) \
-	$(DEBUG_CFLAGS) \
-	$(OPTIMIZE_CFLAGS) \
-	$(NULL)
-
-libcommand_bar_la_LDFLAGS = \
-	$(OPTIMIZE_LDFLAGS) \
-	-avoid-version \
-	-module \
-	$(NULL)
+libcommand_bar_la_CFLAGS = $(PLUGIN_CFLAGS)
+libcommand_bar_la_LDFLAGS = $(PLUGIN_LDFLAGS)
 
 glib_resources_c = gb-command-bar-resources.c
 glib_resources_h = gb-command-bar-resources.h

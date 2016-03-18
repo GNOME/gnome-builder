@@ -20,17 +20,8 @@ libgnome_code_assistance_plugin_la_SOURCES = \
 	ide-gca-service.h \
 	$(NULL)
 
-libgnome_code_assistance_plugin_la_CFLAGS = \
-	$(LIBIDE_CFLAGS) \
-	-I$(top_srcdir)/libide \
-	-I$(top_builddir)/libide \
-	$(NULL)
-
-libgnome_code_assistance_plugin_la_LDFLAGS = \
-	$(OPTIMIZE_LDFLAGS) \
-	-avoid-version \
-	-module \
-	$(NULL)
+libgnome_code_assistance_plugin_la_CFLAGS = $(PLUGIN_CFLAGS)
+libgnome_code_assistance_plugin_la_LDFLAGS = $(PLUGIN_LDFLAGS)
 
 gsettings_SCHEMAS = org.gnome.builder.gnome-code-assistance.gschema.xml
 

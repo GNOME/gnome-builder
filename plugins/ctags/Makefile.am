@@ -25,18 +25,8 @@ libctags_plugin_la_SOURCES = \
 	ctags-plugin.c \
 	$(NULL)
 
-libctags_plugin_la_CFLAGS = \
-	$(LIBIDE_CFLAGS) \
-	-I$(top_srcdir)/contrib/egg \
-	-I$(top_srcdir)/libide \
-	-I$(top_builddir)/libide \
-	-I$(top_srcdir)/libide/util \
-	$(NULL)
-
-libctags_plugin_la_LDFLAGS = \
-	-avoid-version \
-	-module \
-	$(NULL)
+libctags_plugin_la_CFLAGS = $(PLUGIN_CFLAGS)
+libctags_plugin_la_LDFLAGS = $(PLUGIN_LDFLAGS)
 
 include $(top_srcdir)/plugins/Makefile.plugin
 

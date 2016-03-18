@@ -14,17 +14,8 @@ libpython_pack_plugin_la_SOURCES = \
 	python-pack-plugin.c \
 	$(NULL)
 
-libpython_pack_plugin_la_CFLAGS = \
-	$(LIBIDE_CFLAGS) \
-	-I$(top_srcdir)/libide \
-	-I$(top_builddir)/libide \
-	$(NULL)
-
-libpython_pack_plugin_la_LDFLAGS = \
-	$(OPTIMIZE_LDFLAGS) \
-	-avoid-version \
-	-module \
-	$(NULL)
+libpython_pack_plugin_la_CFLAGS = $(PLUGIN_CFLAGS)
+libpython_pack_plugin_la_LDFLAGS = $(PLUGIN_LDFLAGS)
 
 include $(top_srcdir)/plugins/Makefile.plugin
 

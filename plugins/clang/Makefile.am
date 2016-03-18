@@ -32,24 +32,9 @@ libclang_plugin_la_SOURCES = \
 	clang-plugin.c \
 	$(NULL)
 
-libclang_plugin_la_CFLAGS = \
-	$(LIBIDE_CFLAGS) \
-	$(CLANG_CFLAGS) \
-	-I$(top_srcdir)/libide \
-	-I$(top_builddir)/libide \
-	-I$(top_srcdir)/contrib/egg \
-	$(NULL)
-
-libclang_plugin_la_LIBADD = \
-	-lclang \
-	$(NULL)
-
-libclang_plugin_la_LDFLAGS = \
-	$(CLANG_LDFLAGS) \
-	$(OPTIMIZE_LDFLAGS) \
-	-avoid-version \
-	-module \
-	$(NULL)
+libclang_plugin_la_CFLAGS = $(PLUGIN_CFLAGS) $(CLANG_CFLAGS)
+libclang_plugin_la_LIBADD = -lclang
+libclang_plugin_la_LDFLAGS = $(PLUGIN_LDFLAGS) $(CLANG_LDFLAGS)
 
 include $(top_srcdir)/plugins/Makefile.plugin
 

@@ -29,24 +29,9 @@ nodist_libgit_plugin_la_SOURCES = \
 	ide-git-resources.c \
 	ide-git-resources.h
 
-libgit_plugin_la_CFLAGS = \
-	$(LIBIDE_CFLAGS) \
-	$(GIT_CFLAGS) \
-	$(OPTIMIZE_CFLAGS) \
-	-I$(top_srcdir)/libide \
-	-I$(top_builddir)/libide \
-	-I$(top_srcdir)/contrib/egg \
-	$(NULL)
-
+libgit_plugin_la_CFLAGS = $(PLUGIN_CFLAGS) $(GIT_CFLAGS)
 libgit_plugin_la_LIBADD = $(GIT_LIBS)
-
-libgit_plugin_la_LDFLAGS = \
-	$(GIT_LIBS) \
-	$(OPTIMIZE_LDFLAGS) \
-	-avoid-version \
-	-module \
-	-export-regex peas_register_types \
-	$(NULL)
+libgit_plugin_la_LDFLAGS = $(PLUGIN_LDFLAGS)
 
 glib_resources_c = ide-git-resources.c
 glib_resources_h = ide-git-resources.h

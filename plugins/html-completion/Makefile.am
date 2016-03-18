@@ -11,19 +11,8 @@ libhtml_completion_plugin_la_SOURCES = \
 	ide-html-completion-provider.h \
 	$(NULL)
 
-libhtml_completion_plugin_la_CFLAGS = \
-	$(LIBIDE_CFLAGS) \
-	$(OPTIMIZE_CFLAGS) \
-	-I$(top_srcdir)/contrib/search \
-	-I$(top_srcdir)/libide \
-	-I$(top_builddir)/libide \
-	$(NULL)
-
-libhtml_completion_plugin_la_LDFLAGS = \
-	$(OPTIMIZE_LDFLAGS) \
-	-avoid-version \
-	-module \
-	$(NULL)
+libhtml_completion_plugin_la_CFLAGS = $(PLUGIN_CFLAGS)
+libhtml_completion_plugin_la_LDFLAGS = $(PLUGIN_LDFLAGS)
 
 include $(top_srcdir)/plugins/Makefile.plugin
 

@@ -19,20 +19,8 @@ nodist_libcreate_project_plugin_la_SOURCES = \
 	gbp-create-project-resources.c \
 	gbp-create-project-resources.h
 
-libcreate_project_plugin_la_CFLAGS = \
-	$(LIBIDE_CFLAGS) \
-	$(OPTIMIZE_CFLAGS) \
-	-I$(top_srcdir)/libide \
-	-I$(top_builddir)/libide \
-	-I$(top_srcdir)/contrib/egg \
-	$(NULL)
-
-libcreate_project_plugin_la_LDFLAGS = \
-	$(OPTIMIZE_LDFLAGS) \
-	-avoid-version \
-	-module \
-	-export-regex peas_register_types \
-	$(NULL)
+libcreate_project_plugin_la_CFLAGS = $(PLUGIN_CFLAGS)
+libcreate_project_plugin_la_LDFLAGS = $(PLUGIN_LDFLAGS)
 
 glib_resources_c = gbp-create-project-resources.c
 glib_resources_h = gbp-create-project-resources.h

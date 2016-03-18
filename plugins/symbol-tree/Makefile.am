@@ -22,19 +22,8 @@ nodist_libsymbol_tree_la_SOURCES = \
 	symbol-tree-resources.c \
 	symbol-tree-resources.h
 
-libsymbol_tree_la_CFLAGS = \
-	$(LIBIDE_CFLAGS) \
-	$(OPTIMIZE_CFLAGS) \
-	-I$(top_srcdir)/libide \
-	-I$(top_builddir)/libide \
-	-I$(top_srcdir)/contrib/egg \
-	$(NULL)
-
-libsymbol_tree_la_LDFLAGS = \
-	$(OPTIMIZE_LDFLAGS) \
-	-avoid-version \
-	-module \
-	$(NULL)
+libsymbol_tree_la_CFLAGS = $(PLUGIN_CFLAGS)
+libsymbol_tree_la_LDFLAGS = $(PLUGIN_LDFLAGS)
 
 glib_resources_c = symbol-tree-resources.c
 glib_resources_h = symbol-tree-resources.h

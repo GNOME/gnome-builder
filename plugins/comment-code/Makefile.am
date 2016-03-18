@@ -19,19 +19,8 @@ nodist_libcomment_code_plugin_la_SOURCES = \
 	gbp-comment-code-resources.c \
 	gbp-comment-code-resources.h
 
-libcomment_code_plugin_la_CFLAGS = \
-	$(LIBIDE_CFLAGS) \
-	$(OPTIMIZE_CFLAGS) \
-	-I$(top_srcdir)/libide \
-	-I$(top_builddir)/libide \
-	$(NULL)
-
-libcomment_code_plugin_la_LDFLAGS = \
-	$(OPTIMIZE_LDFLAGS) \
-	-avoid-version \
-	-module \
-	-export-regex peas_register_types \
-	$(NULL)
+libcomment_code_plugin_la_CFLAGS = $(PLUGIN_CFLAGS)
+libcomment_code_plugin_la_LDFLAGS = $(PLUGIN_LDFLAGS)
 
 glib_resources_c = gbp-comment-code-resources.c
 glib_resources_h = gbp-comment-code-resources.h

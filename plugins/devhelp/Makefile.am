@@ -29,22 +29,9 @@ nodist_libdevhelp_plugin_la_SOURCES = \
 	gbp-devhelp-resources.c \
 	gbp-devhelp-resources.h
 
-libdevhelp_plugin_la_CFLAGS = \
-	$(LIBIDE_CFLAGS) \
-	$(DEVHELP_CFLAGS) \
-	$(OPTIMIZE_CFLAGS) \
-	-I$(top_srcdir)/libide \
-	-I$(top_builddir)/libide \
-	$(NULL)
-
+libdevhelp_plugin_la_CFLAGS = $(PLUGIN_CFLAGS) $(DEVHELP_CFLAGS)
 libdevhelp_plugin_la_LIBADD = $(DEVHELP_LIBS)
-
-libdevhelp_plugin_la_LDFLAGS = \
-	$(OPTIMIZE_LDFLAGS) \
-	-avoid-version \
-	-module \
-	-export-regex peas_register_types \
-	$(NULL)
+libdevhelp_plugin_la_LDFLAGS = $(PLUGIN_LDFLAGS)
 
 glib_resources_c = gbp-devhelp-resources.c
 glib_resources_h = gbp-devhelp-resources.h

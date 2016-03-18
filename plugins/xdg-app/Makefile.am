@@ -17,22 +17,9 @@ libxdg_app_plugin_la_SOURCES = \
 	gbp-xdg-plugin.c \
 	$(NULL)
 
-libxdg_app_plugin_la_CFLAGS = \
-	$(LIBIDE_CFLAGS) \
-	$(XDG_APP_CFLAGS) \
-	$(OPTIMIZE_CFLAGS) \
-	-I$(top_srcdir)/libide \
-	-I$(top_builddir)/libide \
-	$(NULL)
-
+libxdg_app_plugin_la_CFLAGS = $(PLUGIN_CFLAGS) $(XDG_APP_CFLAGS)
 libxdg_app_plugin_la_LIBADD = $(XDG_APP_LIBS)
-
-libxdg_app_plugin_la_LDFLAGS = \
-	$(OPTIMIZE_LDFLAGS) \
-	-avoid-version \
-	-module \
-	-export-regex peas_register_types \
-	$(NULL)
+libxdg_app_plugin_la_LDFLAGS = $(PLUGIN_LDFLAGS)
 
 include $(top_srcdir)/plugins/Makefile.plugin
 

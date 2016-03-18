@@ -20,17 +20,8 @@ libautotools_plugin_la_SOURCES = \
 	ide-makecache-target.h \
 	$(NULL)
 
-libautotools_plugin_la_CFLAGS = \
-	$(LIBIDE_CFLAGS) \
-	-I$(top_srcdir)/contrib/egg \
-	-I$(top_srcdir)/libide \
-	-I$(top_builddir)/libide \
-	$(NULL)
-
-libautotools_plugin_la_LDFLAGS = \
-	-avoid-version \
-	-module \
-	$(NULL)
+libautotools_plugin_la_CFLAGS = $(PLUGIN_CFLAGS)
+libautotools_plugin_la_LDFLAGS = $(PLUGIN_LDFLAGS)
 
 include $(top_srcdir)/plugins/Makefile.plugin
 

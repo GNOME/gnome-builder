@@ -21,22 +21,9 @@ nodist_libsysmon_la_SOURCES = \
 	gb-sysmon-resources.h \
 	$(NULL)
 
-libsysmon_la_CFLAGS = \
-	$(LIBIDE_CFLAGS) \
-	-I$(top_srcdir)/libide \
-	-I$(top_builddir)/libide \
-	-I$(top_srcdir)/contrib/egg \
-	-I$(top_srcdir)/contrib/rg \
-	$(NULL)
-
-libsysmon_la_LIBADD = \
-	$(top_builddir)/contrib/rg/librg.la \
-	$(NULL)
-
-libsysmon_la_LDFLAGS = \
-	-avoid-version \
-	-module \
-	$(NULL)
+libsysmon_la_CFLAGS = $(PLUGIN_CFLAGS)
+libsysmon_la_LIBADD = $(top_builddir)/contrib/rg/librg.la
+libsysmon_la_LDFLAGS = $(PLUGIN_LDFLAGS)
 
 glib_resources_c = gb-sysmon-resources.c
 glib_resources_h = gb-sysmon-resources.h

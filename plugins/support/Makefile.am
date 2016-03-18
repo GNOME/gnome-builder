@@ -21,20 +21,8 @@ nodist_libsupport_plugin_la_SOURCES = \
 	ide-support-resources.c \
 	ide-support-resources.h
 
-libsupport_plugin_la_CFLAGS = \
-	$(LIBIDE_CFLAGS) \
-	$(OPTIMIZE_CFLAGS) \
-	-I$(top_srcdir)/libide \
-	-I$(top_builddir)/libide \
-	-I$(top_srcdir)/contrib/egg \
-	$(NULL)
-
-libsupport_plugin_la_LDFLAGS = \
-	$(OPTIMIZE_LDFLAGS) \
-	-avoid-version \
-	-module \
-	-export-regex peas_register_types \
-	$(NULL)
+libsupport_plugin_la_CFLAGS = $(PLUGIN_CFLAGS)
+libsupport_plugin_la_LDFLAGS = $(PLUGIN_LDFLAGS)
 
 glib_resources_c = ide-support-resources.c
 glib_resources_h = ide-support-resources.h

@@ -30,22 +30,9 @@ nodist_libterminal_la_SOURCES = \
 	gb-terminal-resources.h \
 	$(NULL)
 
-libterminal_la_CFLAGS = \
-	$(LIBIDE_CFLAGS) \
-	$(TERMINAL_CFLAGS) \
-	-I$(top_srcdir)/libide \
-	-I$(top_builddir)/libide \
-	-I$(top_srcdir)/contrib/egg \
-	$(NULL)
-
-libterminal_la_LIBADD = \
-	$(TERMINAL_LIBS) \
-	$(NULL)
-
-libterminal_la_LDFLAGS = \
-	-avoid-version \
-	-module \
-	$(NULL)
+libterminal_la_CFLAGS = $(PLUGIN_CFLAGS) $(TERMINAL_CFLAGS)
+libterminal_la_LIBADD = $(TERMINAL_LIBS)
+libterminal_la_LDFLAGS = $(PLUGIN_CFLAGS)
 
 glib_resources_c = gb-terminal-resources.c
 glib_resources_h = gb-terminal-resources.h

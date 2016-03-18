@@ -16,17 +16,8 @@ libc_pack_plugin_la_SOURCES = \
 	ide-c-format-provider.h \
 	$(NULL)
 
-libc_pack_plugin_la_CFLAGS = \
-	$(LIBIDE_CFLAGS) \
-	-I$(top_srcdir)/libide \
-	-I$(top_builddir)/libide \
-	$(NULL)
-
-libc_pack_plugin_la_LDFLAGS = \
-	$(OPTIMIZE_LDFLAGS) \
-	-avoid-version \
-	-module \
-	$(NULL)
+libc_pack_plugin_la_CFLAGS = $(PLUGIN_CFLAGS)
+libc_pack_plugin_la_LDFLAGS = $(PLUGIN_LDFLAGS)
 
 include $(top_srcdir)/plugins/Makefile.plugin
 

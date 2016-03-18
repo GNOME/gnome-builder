@@ -64,14 +64,8 @@ nodist_libvala_pack_plugin_la_SOURCES = \
 CLEANFILES = $(BUILT_SOURCES) $(nodist_libvala_pack_plugin_la_SOURCES)
 
 libvala_pack_plugin_la_VALAFLAGS = \
-	--target-glib=2.44 \
-	--thread \
-	--vapidir $(top_builddir)/libide \
-	--vapidir $(top_builddir)/contrib/egg \
-	--vapidir $(top_builddir)/contrib/tmpl \
+	$(PLUGIN_VALAFLAGS) \
 	--pkg gtksourceview-3.0 \
-	--pkg libide-1.0 \
-	--pkg libpeas-1.0 \
 	--pkg libvala-$(VALA_VERSION) \
 	--pkg posix \
 	--pkg template-glib-1.0 \
@@ -85,12 +79,8 @@ libvala_pack_plugin_la_CFLAGS = \
 	-DPACKAGE_DATADIR=\""$(datadir)/gnome-builder"\" \
 	-DG_LOG_DOMAIN=\"vala-pack-plugin\" \
 	-DGETTEXT_PACKAGE=\"gnome-builder\" \
-	$(LIBIDE_CFLAGS) \
+	$(PLUGIN_CFLAGS) \
 	$(VALA_CFLAGS) \
-	-I$(top_srcdir)/libide \
-	-I$(top_builddir)/libide \
-	-I$(top_srcdir)/contrib/egg \
-	-I$(top_srcdir)/contrib/tmpl \
 	-Wno-deprecated-declarations \
 	-Wno-discarded-qualifiers \
 	-Wno-implicit-function-declaration \
@@ -100,12 +90,8 @@ libvala_pack_plugin_la_CFLAGS = \
 	-Wno-unused-function \
 	$(NULL)
 
-libvala_pack_plugin_la_LDFLAGS = \
-	$(OPTIMIZE_LDFLAGS) \
-	$(VALA_LIBS) \
-	-avoid-version \
-	-module \
-	$(NULL)
+libvala_pack_plugin_la_LIBADD = $(VALA_LIBS)
+libvala_pack_plugin_la_LDFLAGS = $(PLUGIN_LDFLAGS)
 
 include $(top_srcdir)/plugins/Makefile.plugin
 

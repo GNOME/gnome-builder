@@ -34,28 +34,15 @@ nodist_libproject_tree_plugin_la_SOURCES = \
 	gb-project-tree-resources.c \
 	gb-project-tree-resources.h
 
-libproject_tree_plugin_la_CFLAGS = \
-	$(LIBIDE_CFLAGS) \
-	$(OPTIMIZE_CFLAGS) \
-	$(DEBUG_CFLAGS) \
-	-I$(top_srcdir)/libide \
-	-I$(top_builddir)/libide \
-	$(NULL)
-
-libproject_tree_plugin_la_LIBADD =
-
+libproject_tree_plugin_la_CFLAGS = $(PLUGIN_CFLAGS)
+libproject_tree_plugin_la_LDFLAGS = $(PLUGIN_LDFLAGS)
 if ENABLE_TERMINAL_PLUGIN
-libproject_tree_plugin_la_LIBADD += $(TERMINAL_LIBS)
+libproject_tree_plugin_la_LIBADD = $(TERMINAL_LIBS)
 libproject_tree_plugin_la_CFLAGS += \
 	$(TERMINAL_CFLAGS) \
 	-DHAVE_VTE
 endif
 
-libproject_tree_plugin_la_LDFLAGS = \
-	$(OPTIMIZE_LDFLAGS) \
-	-avoid-version \
-	-module \
-	$(NULL)
 
 glib_resources_c = gb-project-tree-resources.c
 glib_resources_h = gb-project-tree-resources.h

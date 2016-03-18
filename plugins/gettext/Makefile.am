@@ -12,23 +12,8 @@ libgettext_plugin_la_SOURCES = \
 	gettext-plugin.c \
 	$(NULL)
 
-libgettext_plugin_la_CFLAGS = \
-	$(LIBIDE_CFLAGS) \
-	$(GETTEXT_CFLAGS) \
-	-I$(top_srcdir)/libide \
-	-I$(top_builddir)/libide \
-	-I$(top_srcdir)/contrib/egg \
-	$(NULL)
-
-libgettext_plugin_la_LIBADD = \
-	$(NULL)
-
-libgettext_plugin_la_LDFLAGS = \
-	$(GETTEXT_LDFLAGS) \
-	$(OPTIMIZE_LDFLAGS) \
-	-avoid-version \
-	-module \
-	$(NULL)
+libgettext_plugin_la_CFLAGS = $(PLUGIN_CFLAGS) $(GETTEXT_CFLAGS)
+libgettext_plugin_la_LDFLAGS = $(PLUGIN_LDFLAGS)
 
 include $(top_srcdir)/plugins/Makefile.plugin
 

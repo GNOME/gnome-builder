@@ -11,17 +11,8 @@ libgcc_plugin_la_SOURCES = \
 	gbp-gcc-build-result-addin.h \
 	gbp-gcc-plugin.c
 
-libgcc_plugin_la_CFLAGS = \
-	$(LIBIDE_CFLAGS) \
-	-I$(top_srcdir)/contrib/egg \
-	-I$(top_srcdir)/libide \
-	-I$(top_builddir)/libide
-
-libgcc_plugin_la_LDFLAGS = \
-	$(OPTIMIZE_LDFLAGS) \
-	-avoid-version \
-	-export-regex peas_register_types \
-	-module
+libgcc_plugin_la_CFLAGS = $(PLUGIN_CFLAGS)
+libgcc_plugin_la_LDFLAGS = $(PLUGIN_LDFLAGS)
 
 include $(top_srcdir)/plugins/Makefile.plugin
 

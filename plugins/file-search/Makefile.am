@@ -13,21 +13,9 @@ libfile_search_la_SOURCES = \
 	gb-file-search-index.h \
 	$(NULL)
 
-libfile_search_la_CFLAGS = \
-	$(LIBIDE_CFLAGS) \
-	-I$(top_srcdir)/libide \
-	-I$(top_builddir)/libide \
-	-I$(top_srcdir)/contrib/search \
-	$(NULL)
-
-libfile_search_la_LIBADD = \
-	$(top_builddir)/contrib/search/libsearch.la \
-	$(NULL)
-
-libfile_search_la_LDFLAGS = \
-	-module \
-	-avoid-version \
-	$(NULL)
+libfile_search_la_CFLAGS = $(PLUGIN_CFLAGS)
+libfile_search_la_LIBADD = $(top_builddir)/contrib/search/libsearch.la
+libfile_search_la_LDFLAGS = $(PLUGIN_LDFLAGS)
 
 -include $(top_srcdir)/git.mk
 
