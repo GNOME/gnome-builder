@@ -9,9 +9,9 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-03-12 11:53+0000\n"
-"PO-Revision-Date: 2016-03-13 13:12+0100\n"
-"Last-Translator: Sebastian Rasmussen <sebras@gmail.com>\n"
+"POT-Creation-Date: 2016-03-18 13:56+0000\n"
+"PO-Revision-Date: 2016-03-18 22:36+0100\n"
+"Last-Translator: Anders Jonsson <anders.jonsson@norsjovallen.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
@@ -1198,8 +1198,9 @@ msgid "Font"
 msgstr "Typsnitt"
 
 #: ../libide/preferences/ide-preferences-builtin.c:102
+msgctxt "Keywords"
 msgid "editor font monospace"
-msgstr "redigerartypsnitt med fast breddsteg"
+msgstr "redigerare typsnitt fast breddsteg monospace"
 
 #. XXX: This belongs in terminal addin
 #: ../libide/preferences/ide-preferences-builtin.c:104
@@ -1208,8 +1209,9 @@ msgid "Terminal"
 msgstr "Terminal"
 
 #: ../libide/preferences/ide-preferences-builtin.c:104
+msgctxt "Keywords"
 msgid "terminal font monospace"
-msgstr "terminaltypsnitt med fast breddsteg"
+msgstr "terminal typsnitt fast breddsteg monospace"
 
 #: ../libide/preferences/ide-preferences-builtin.c:110
 msgid "Keyboard"
@@ -1915,7 +1917,7 @@ msgstr "AST-läsfel"
 msgid "Failed to create translation unit: %s"
 msgstr "Misslyckades med att skapa översättningsenhet: %s"
 
-#: ../plugins/clang/ide-clang-service.c:402
+#: ../plugins/clang/ide-clang-service.c:401
 msgid "File must be saved locally to parse."
 msgstr "Fil måste vara lokalt sparad för att tolkas."
 
@@ -2147,8 +2149,8 @@ msgid "Location"
 msgstr "Plats"
 
 #: ../plugins/git/ide-git-genesis-addin.c:93
-msgid "From a existing project in a Git repository"
-msgstr "Från ett existerande projekt i ett Git-arkiv"
+msgid "From an existing project in a Git repository"
+msgstr "Från ett befintligt projekt i ett Git-arkiv"
 
 #: ../plugins/git/ide-git-preferences-addin.c:108
 msgid "Version Control"
@@ -2354,7 +2356,8 @@ msgstr "Vala"
 msgid "Show errors and warnings provided by Vala"
 msgstr "Visa fel och varningar som tillhandahålls av Vala"
 
-#: ../plugins/vala-pack/ide-vala-preferences-addin.vala:35
+#. translators: keywords used when searching for preferences
+#: ../plugins/vala-pack/ide-vala-preferences-addin.vala:36
 msgid "vala diagnostics warnings errors"
 msgstr "vala diagnostik varningar fel"
 
