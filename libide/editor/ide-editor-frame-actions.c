@@ -28,8 +28,6 @@ ide_editor_frame_actions_find (GSimpleAction *action,
 {
   IdeEditorFrame *self = user_data;
   GtkTextBuffer *buffer;
-  GtkTextIter start_sel;
-  GtkTextIter end_sel;
   GtkDirectionType search_direction;
 
   g_assert (IDE_IS_EDITOR_FRAME (self));
@@ -48,15 +46,25 @@ ide_editor_frame_actions_find (GSimpleAction *action,
 
   if (gtk_text_buffer_get_has_selection (buffer))
     {
+      GtkTextIter start_sel;
+      GtkTextIter end_sel;
+      g_autofree gchar *selected_text = NULL;
+      g_autofree gchar *escaped_selected_text = NULL;
+      GtkSourceSearchContext *search_context;
+      GtkSourceSearchSettings *search_settings;
+
       gtk_text_buffer_get_selection_bounds (buffer, &start_sel, &end_sel);
+      selected_text = gtk_text_buffer_get_text (buffer, &start_sel, &end_sel, FALSE);
 
-      if (gtk_text_iter_get_line (&start_sel) == gtk_text_iter_get_line (&end_sel))
-        {
-          g_autofree gchar *selected_text;
+      search_context = ide_source_view_get_search_context (self->source_view);
+      search_settings = gtk_source_search_context_get_settings (search_context);
 
-          selected_text = gtk_text_buffer_get_text (buffer, &start_sel, &end_sel, FALSE);
-          gtk_entry_set_text (GTK_ENTRY (self->search_entry), selected_text);
-        }
+      if (gtk_source_search_settings_get_regex_enabled (search_settings))
+        escaped_selected_text = g_regex_escape_string (selected_text, -1);
+      else
+        escaped_selected_text = gtk_source_utils_escape_search_text (selected_text);
+
+      gtk_entry_set_text (GTK_ENTRY (self->search_entry), escaped_selected_text);
     }
   else if (self->previous_search_string != NULL)
     {

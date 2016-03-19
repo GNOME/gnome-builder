@@ -309,13 +309,39 @@ search_text_transform_to (GBinding     *binding,
                           GValue       *to_value,
                           gpointer      user_data)
 {
+  IdeEditorFrame *self = user_data;
+
+  g_assert (IDE_IS_EDITOR_FRAME (self));
   g_assert (from_value != NULL);
   g_assert (to_value != NULL);
 
   if (g_value_get_string (from_value) == NULL)
-    g_value_set_string (to_value, "");
+    {
+      g_value_set_string (to_value, "");
+    }
   else
-    g_value_copy (from_value, to_value);
+    {
+      const gchar *entry_text = g_value_get_string (from_value);
+      GtkSourceSearchContext *search_context;
+      GtkSourceSearchSettings *search_settings;
+
+      search_context = ide_source_view_get_search_context (self->source_view);
+      search_settings = gtk_source_search_context_get_settings (search_context);
+
+      if (gtk_source_search_settings_get_regex_enabled (search_settings))
+        {
+          g_value_set_string (to_value, entry_text);
+        }
+      else
+        {
+          gchar *unescaped_entry_text;
+
+          unescaped_entry_text = gtk_source_utils_unescape_search_text (entry_text);
+          g_value_set_string (to_value, unescaped_entry_text);
+
+          g_free (unescaped_entry_text);
+        }
+    }
 
   return TRUE;
 }
@@ -374,7 +400,7 @@ ide_editor_frame_set_document (IdeEditorFrame *self,
   g_object_bind_property_full (self->search_entry, "text", search_settings, "search-text",
                                (G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL),
                                search_text_transform_to, search_text_transform_from,
-                               NULL, NULL);
+                               self, NULL);
   g_signal_connect_object (search_context,
                            "notify::occurrences-count",
                            G_CALLBACK (ide_editor_frame_on_search_occurrences_notify),

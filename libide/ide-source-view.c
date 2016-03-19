@@ -4394,10 +4394,11 @@ add_match (GtkTextView       *text_view,
     }
 
   /*
-   * TODO: Complex matches.
+   * TODO: Add support for multi-line matches. When @begin and @end are not
+   *       on the same line, we need to add the match region to @region so
+   *       ide_source_view_draw_search_bubbles() can draw search bubbles
+   *       around it.
    */
-
-  g_warning ("Need to support complex matches (multi-line)");
 }
 
 static guint
