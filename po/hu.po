@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-03-14 23:03+0000\n"
-"PO-Revision-Date: 2016-03-15 08:03+0100\n"
+"POT-Creation-Date: 2016-03-18 20:04+0000\n"
+"PO-Revision-Date: 2016-03-19 04:21+0100\n"
 "Last-Translator: Balázs Úr <urbalazs@gmail.com>\n"
 "Language-Team: Hungarian <openscope at googlegroups dot com>\n"
 "Language: hu\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 1.2\n"
+"X-Generator: Poedit 1.8.6\n"
 
 #: ../contrib/egg/egg-animation.c:726
 #, c-format
@@ -1194,7 +1194,6 @@ msgid "Font"
 msgstr "Betűkészlet"
 
 #: ../libide/preferences/ide-preferences-builtin.c:102
-#| msgid "editor font monospace"
 msgctxt "Keywords"
 msgid "editor font monospace"
 msgstr "szerkesztő betűkészlete rögzített szélességű"
@@ -1206,7 +1205,6 @@ msgid "Terminal"
 msgstr "Terminál"
 
 #: ../libide/preferences/ide-preferences-builtin.c:104
-#| msgid "terminal font monospace"
 msgctxt "Keywords"
 msgid "terminal font monospace"
 msgstr "terminál betűkészlete rögzített szélességű"
@@ -1915,7 +1913,7 @@ msgstr "AST olvasási hiba"
 msgid "Failed to create translation unit: %s"
 msgstr "Nem sikerült létrehozni a(z) „%s” fordítási egységet"
 
-#: ../plugins/clang/ide-clang-service.c:402
+#: ../plugins/clang/ide-clang-service.c:401
 msgid "File must be saved locally to parse."
 msgstr "A fájlnak helyben mentettnek kell lennie a feldolgozáshoz."
 
@@ -2148,7 +2146,7 @@ msgid "Location"
 msgstr "Hely"
 
 #: ../plugins/git/ide-git-genesis-addin.c:93
-msgid "From a existing project in a Git repository"
+msgid "From an existing project in a Git repository"
 msgstr "Egy Git tárolóban már létező projektből"
 
 #: ../plugins/git/ide-git-preferences-addin.c:108
