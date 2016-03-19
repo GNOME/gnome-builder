@@ -3440,11 +3440,11 @@ ide_source_view__search_forward_cb (GObject      *object,
    */
   if (mv->count > 0)
     {
-      gtk_source_search_context_backward_async (search_context,
-                                                &end,
-                                                NULL,
-                                                ide_source_view__search_forward_cb,
-                                                search_movement_ref (mv));
+      gtk_source_search_context_forward_async (search_context,
+                                               &end,
+                                               NULL,
+                                               ide_source_view__search_forward_cb,
+                                               search_movement_ref (mv));
       return;
     }
 
@@ -3614,7 +3614,6 @@ ide_source_view_real_move_search (IdeSourceView    *self,
 
   if (is_forward)
     {
-      gtk_text_iter_forward_char (&end);
       gtk_source_search_context_forward_async (priv->search_context,
                                                &end,
                                                NULL,
@@ -3623,7 +3622,6 @@ ide_source_view_real_move_search (IdeSourceView    *self,
     }
   else
     {
-      gtk_text_iter_backward_char (&begin);
       gtk_source_search_context_backward_async (priv->search_context,
                                                 &begin,
                                                 NULL,

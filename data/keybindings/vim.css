@@ -327,7 +327,8 @@
   bind "semicolon" { "movement" (next-match-search-char, 0, 0, 1)
                      "clear-count" () };
 
-  bind "n" { "move-search" (tab-forward, 0, 0, 1, 1, 0) };
+  bind "n" { "movement" (next-char, 0, 1, 0)
+             "move-search" (tab-forward, 0, 0, 1, 1, 0) };
   bind "<shift>n" { "move-search" (tab-backward, 0, 0, 0, 1, 0) };
 
   bind "numbersign" { "movement" (previous-word-end, 0, 1, 1)
@@ -1893,7 +1894,8 @@
   bind "b" { "movement" (previous-word-start, 1, 1, 1) };
   bind "<shift>b" { "movement" (previous-full-word-start, 1, 1, 1) };
 
-  bind "n" { "move-search" (tab-forward, 1, 0, 1, 1, 0) };
+  bind "n" { "movement" (next-char, 1, 1, 0)
+             "move-search" (tab-forward, 1, 0, 1, 1, 0) };
   bind "<shift>n" { "move-search" (tab-backward, 1, 0, 0, 1, 0) };
 
   bind "numbersign" { "save-insert-mark" ()
