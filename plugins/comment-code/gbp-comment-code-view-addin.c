@@ -32,10 +32,10 @@ struct _GbpCommentCodeViewAddin
   IdeEditorView *editor_view;
 };
 
-static void iface_init (IdeEditorViewAddinInterface *iface);
+static void editor_view_addin_iface_init (IdeEditorViewAddinInterface *iface);
 
 G_DEFINE_TYPE_EXTENDED (GbpCommentCodeViewAddin, gbp_comment_code_view_addin, G_TYPE_OBJECT, 0,
-                        G_IMPLEMENT_INTERFACE (IDE_TYPE_EDITOR_VIEW_ADDIN, iface_init))
+                        G_IMPLEMENT_INTERFACE (IDE_TYPE_EDITOR_VIEW_ADDIN, editor_view_addin_iface_init))
 
 /* If there's only empty lines, G_MAXINT is returned */
 static gint
@@ -415,7 +415,7 @@ gbp_comment_code_view_addin_init (GbpCommentCodeViewAddin *self)
 }
 
 static void
-iface_init (IdeEditorViewAddinInterface *iface)
+editor_view_addin_iface_init (IdeEditorViewAddinInterface *iface)
 {
   iface->load = gbp_comment_code_view_addin_load;
   iface->unload = gbp_comment_code_view_addin_unload;
