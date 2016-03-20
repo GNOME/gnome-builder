@@ -2,8 +2,6 @@
 # Serbian translation for gnome-builder.
 # Copyright (C) 2015 gnome-builder's COPYRIGHT HOLDER
 # This file is distributed under the same license as the gnome-builder package.
-#
-# Translators: 
 # Мирослав Николић <miroslavnikolic@rocketmail.com>, 2015.
 # Марко М. Костић (Marko M. Kostić) <marko.m.kostic@gmail.com>, 2015.
 # Милош Поповић <gpopac@gmail.com>, 2015.
@@ -13,8 +11,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-03-07 01:31+0000\n"
-"PO-Revision-Date: 2016-03-06 21:33+0100\n"
+"POT-Creation-Date: 2016-03-18 13:56+0000\n"
+"PO-Revision-Date: 2016-03-19 15:22+0100\n"
 "Last-Translator: Марко М. Костић <marko.m.kostic@gmail.com>\n"
 "Language-Team: српски <gnome-sr@googlegroups.org>\n"
 "Language: sr\n"
@@ -23,25 +21,25 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=n==1? 3 : n%10==1 && n%100!=11 ? 0 : n"
 "%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Poedit 1.8.6\n"
+"X-Generator: Poedit 1.8.7.1\n"
 "X-Project-Style: gnome\n"
 
-#: ../contrib/egg/egg-animation.c:715
+#: ../contrib/egg/egg-animation.c:726
 #, c-format
 msgid "Cannot locate property %s in class %s"
 msgstr "Не могу да нађем својство „%s“ у класи „%s“"
 
-#: ../contrib/egg/egg-animation.c:1055 ../contrib/egg/egg-animation.c:1061
+#: ../contrib/egg/egg-animation.c:1073 ../contrib/egg/egg-animation.c:1079
 #, c-format
 msgid "Failed to find property %s in %s"
 msgstr "Нисам успео да нађем својство „%s“ у „%s“"
 
-#: ../contrib/egg/egg-animation.c:1069
+#: ../contrib/egg/egg-animation.c:1087
 #, c-format
 msgid "Failed to find property %s in %s or parent %s"
 msgstr "Нисам успео да нађем својство „%s“ у „%s“ или у надређеном „%s“"
 
-#: ../contrib/egg/egg-animation.c:1079
+#: ../contrib/egg/egg-animation.c:1097
 #, c-format
 msgid "Failed to retrieve va_list value: %s"
 msgstr "Не могу да добијем списак дељења са сервера: %s"
@@ -242,46 +240,66 @@ msgid "Reset"
 msgstr "Поврати"
 
 #: ../data/gtk/menus.ui.h:35
+msgid "_Match Case"
+msgstr "Упореди _величину слова"
+
+#: ../data/gtk/menus.ui.h:36
+msgid "Match _Entire Word Only"
+msgstr "Поклопи само ц_елу реч"
+
+#: ../data/gtk/menus.ui.h:37
+msgid "Match as _Regular Expression"
+msgstr "Поклопи као _регуларни израз"
+
+#: ../data/gtk/menus.ui.h:38
+msgid "_Wrap Around"
+msgstr "Преламај _около"
+
+#: ../data/gtk/menus.ui.h:39
+msgid "Cu_t"
+msgstr "_Исеци"
+
+#: ../data/gtk/menus.ui.h:40
 msgid "Split"
 msgstr "Подели"
 
-#: ../data/gtk/menus.ui.h:36
+#: ../data/gtk/menus.ui.h:41
 msgid "Split Left"
 msgstr "Подели документ лево"
 
-#: ../data/gtk/menus.ui.h:37
+#: ../data/gtk/menus.ui.h:42
 msgid "Split Right"
 msgstr "Подели документ десно"
 
-#: ../data/gtk/menus.ui.h:38
+#: ../data/gtk/menus.ui.h:43
 msgid "Split Down"
 msgstr "Подели на доле"
 
-#: ../data/gtk/menus.ui.h:39
+#: ../data/gtk/menus.ui.h:44
 msgid "Move"
 msgstr "Помери"
 
-#: ../data/gtk/menus.ui.h:40
+#: ../data/gtk/menus.ui.h:45
 msgid "Move Left"
 msgstr "Помери документ улево"
 
-#: ../data/gtk/menus.ui.h:41
+#: ../data/gtk/menus.ui.h:46
 msgid "Move Right"
 msgstr "Помери документ удесно"
 
-#: ../data/gtk/menus.ui.h:42
+#: ../data/gtk/menus.ui.h:47
 msgid "_Save"
 msgstr "_Сачувај"
 
-#: ../data/gtk/menus.ui.h:43
+#: ../data/gtk/menus.ui.h:48
 msgid "_Save As"
 msgstr "_Сачувај као"
 
-#: ../data/gtk/menus.ui.h:44
+#: ../data/gtk/menus.ui.h:49
 msgid "_Print"
 msgstr "_Штампај"
 
-#: ../data/gtk/menus.ui.h:45
+#: ../data/gtk/menus.ui.h:50
 msgid "_Close"
 msgstr "_Затвори"
 
@@ -790,7 +808,7 @@ msgstr "%u. ред, %u. колона"
 msgid "%u of %u"
 msgstr "%u од %u"
 
-#: ../libide/editor/ide-editor-frame.c:658
+#: ../libide/editor/ide-editor-frame.c:646
 #: ../plugins/project-tree/gtk/menus.ui.h:1
 msgid "Re_veal in Project Tree"
 msgstr "Прикажи у стаблу пројекта"
@@ -933,7 +951,7 @@ msgstr "Наведите адресу д-магистрале"
 msgid "No such worker"
 msgstr "Нема таквог радника"
 
-#: ../libide/ide-buffer.c:2269
+#: ../libide/ide-buffer.c:2298
 msgid "The current language lacks a symbol resolver."
 msgstr "За тренутни језик не постоји разрешавач симбола."
 
@@ -1050,32 +1068,27 @@ msgstr "Део не припада исечку."
 msgid "Snippets"
 msgstr "Исечци"
 
-#: ../libide/ide-source-snippet-parser.c:496
-#, c-format
-msgid "Invalid snippet at line %d: %s"
-msgstr "Неисправан исечак у %d. реду: %s"
-
 #: ../libide/ide-source-snippets-manager.c:96
 #, c-format
 msgid "Failed to open directory: %s"
-msgstr "Не могу да отворим фасциклу: %s"
+msgstr "Не могу да отворим директоријум: %s"
 
 #: ../libide/ide-source-snippets-manager.c:109
 #, c-format
 msgid "Failed to load file: %s: %s"
 msgstr "Не могу да учитам датотеку: %s: %s"
 
-#: ../libide/ide-source-view.c:4867
+#: ../libide/ide-source-view.c:4900
 #, c-format
 msgid "Insert “%s”"
 msgstr "Убаци „%s“"
 
-#: ../libide/ide-source-view.c:4869
+#: ../libide/ide-source-view.c:4902
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "Замени „%s“ са „%s“"
 
-#: ../libide/ide-source-view.c:4983
+#: ../libide/ide-source-view.c:5016
 msgid "Apply Fix-It"
 msgstr "Примени исправку"
 
@@ -1189,10 +1202,11 @@ msgid "Font"
 msgstr "Фонт"
 
 #: ../libide/preferences/ide-preferences-builtin.c:102
+msgctxt "Keywords"
 msgid "editor font monospace"
 msgstr ""
-"font document editor monospace uređivač dokument utvrđene širine monospejs "
-"уређивач документ утврђене ширине моноспејс фонт сликослов slikoslov"
+"font editor monospace uređivač utvrđene širine monospejs уређивач утврђене "
+"ширине моноспејс фонт сликослов slikoslov"
 
 #. XXX: This belongs in terminal addin
 #: ../libide/preferences/ide-preferences-builtin.c:104
@@ -1201,8 +1215,11 @@ msgid "Terminal"
 msgstr "Терминал"
 
 #: ../libide/preferences/ide-preferences-builtin.c:104
+msgctxt "Keywords"
 msgid "terminal font monospace"
-msgstr "фонт утврђене ширине за терминал"
+msgstr ""
+"terminal font monospace slikoslov utvrđene širine monospejs терминал фонт "
+"утврђене ширине моноспејс сликослов"
 
 #: ../libide/preferences/ide-preferences-builtin.c:110
 msgid "Keyboard"
@@ -1513,23 +1530,34 @@ msgid "Number of parallel build workers"
 msgstr "Број упоредних радника на градњи"
 
 #: ../libide/preferences/ide-preferences-builtin.c:252
-#: ../plugins/git/ide-git-clone-widget.c:200
 msgid "Projects"
 msgstr "Пројекти"
 
 #: ../libide/preferences/ide-preferences-builtin.c:254
+msgid "Workspace"
+msgstr "Радни простор"
+
+#: ../libide/preferences/ide-preferences-builtin.c:255
+msgid "Projects Directory"
+msgstr "Директоријум са пројектима"
+
+#: ../libide/preferences/ide-preferences-builtin.c:255
+msgid "A place for all your projects"
+msgstr "Место за све ваше пројекте"
+
+#: ../libide/preferences/ide-preferences-builtin.c:257
 msgid "Project Discovery"
 msgstr "Откривање пројеката"
 
-#: ../libide/preferences/ide-preferences-builtin.c:255
+#: ../libide/preferences/ide-preferences-builtin.c:258
 msgid "Discover projects on my computer"
 msgstr "Откриј пројекте на мом рачунару"
 
-#: ../libide/preferences/ide-preferences-builtin.c:255
+#: ../libide/preferences/ide-preferences-builtin.c:258
 msgid "Scan your computer for existing projects"
 msgstr "Потражи постојеће пројекте на рачунару"
 
-#: ../libide/preferences/ide-preferences-perspective.c:823
+#: ../libide/preferences/ide-preferences-perspective.c:888
 msgid "Preferences"
 msgstr "Поставке"
 
@@ -1606,7 +1634,7 @@ msgstr "Не могу да нађем configure.ac датотеку"
 
 #: ../plugins/autotools/ide-autotools-build-task.c:174
 msgid "Directory must be on a locally mounted filesystem."
-msgstr "Фасцикла мора бити локално монтирани систем датотека."
+msgstr "Директоријум мора бити локално прикачени систем датотека."
 
 #: ../plugins/autotools/ide-autotools-build-task.c:548
 msgid "Cannot execute build task more than once."
@@ -1614,17 +1642,17 @@ msgstr "Не могу да покренем више од једне изгра�
 
 #: ../plugins/autotools/ide-autotools-build-task.c:642
 msgid "Failed to create build directory."
-msgstr "Не могу да направим фасциклу за изградњу."
+msgstr "Не могу да направим директоријум за изградњу."
 
 #: ../plugins/autotools/ide-autotools-build-task.c:651
 #, c-format
 msgid "'%s' is not a directory."
-msgstr "\"%s\" није фасцикла."
+msgstr "\"%s\" није директоријум."
 
 #: ../plugins/autotools/ide-autotools-build-task.c:690
 #, c-format
 msgid "autogen.sh is missing from project directory (%s)."
-msgstr "Унутар пројектне фасцикле (%s) недостаје autogen.sh датотека."
+msgstr "Унутар пројектног директоријума (%s) недостаје autogen.sh датотека."
 
 #: ../plugins/autotools/ide-autotools-build-task.c:700
 msgid "autogen.sh is not executable."
@@ -1902,7 +1930,7 @@ msgstr "AST грешка приликом читања"
 msgid "Failed to create translation unit: %s"
 msgstr "Не могу да направим преводилачку јединицу: %s"
 
-#: ../plugins/clang/ide-clang-service.c:402
+#: ../plugins/clang/ide-clang-service.c:401
 msgid "File must be saved locally to parse."
 msgstr "Датотека мора бити сачувана локално да бих је обрадио."
 
@@ -1961,7 +1989,7 @@ msgstr "Не могу наћи шему боја '%s'"
 #: ../plugins/command-bar/gb-vim.c:463
 #, c-format
 msgid "Failed to locate working directory"
-msgstr "Не могу да нађем радну фасциклу"
+msgstr "Не могу да нађем радни директоријум"
 
 #: ../plugins/command-bar/gb-vim.c:640
 #, c-format
@@ -2083,7 +2111,7 @@ msgstr "Пребаци на"
 msgid "Send to Fpaste.org"
 msgstr "Пошаљи на Fpaste.org"
 
-#: ../plugins/fpaste/fpaste_plugin/__init__.py:104
+#: ../plugins/fpaste/fpaste_plugin/__init__.py:110
 msgid "The following URL has been copied to the clipboard"
 msgstr "Следећи УРЛ је умножен у вашу оставу"
 
@@ -2106,7 +2134,7 @@ msgstr "Датотека се не налази под управништвом 
 msgid "The requested file does not exist within the git index."
 msgstr "Тражена датотека не постоји унутар садржаја гита."
 
-#: ../plugins/git/ide-git-clone-widget.c:131
+#: ../plugins/git/ide-git-clone-widget.c:132
 msgid "A valid Git URL is required"
 msgstr "Морате унети исправну УРЛ адресу гит ризнице"
 
@@ -2124,7 +2152,7 @@ msgstr "Директоријум"
 
 #: ../plugins/git/ide-git-clone-widget.ui.h:4
 msgid "Enter the name of the directory to create"
-msgstr "Унесите назив фасцикле коју треба направити"
+msgstr "Унесите назив директоријума који треба направити"
 
 #: ../plugins/git/ide-git-clone-widget.ui.h:5
 msgid "Repository"
@@ -2135,7 +2163,7 @@ msgid "Location"
 msgstr "Место"
 
 #: ../plugins/git/ide-git-genesis-addin.c:93
-msgid "From a existing project in a Git repository"
+msgid "From an existing project in a Git repository"
 msgstr "Из постојећег пројекта у гит ризници"
 
 #: ../plugins/git/ide-git-preferences-addin.c:108
@@ -2205,7 +2233,7 @@ msgstr "MinGW (32-битни)"
 #: ../plugins/project-tree/gb-new-file-popover.c:123
 #: ../plugins/project-tree/gb-rename-file-popover.c:141
 msgid "A folder with that name already exists."
-msgstr "Директоријум са тим именом већ постоји."
+msgstr "Фасцикла са тим именом већ постоји."
 
 #: ../plugins/project-tree/gb-new-file-popover.c:126
 #: ../plugins/project-tree/gb-rename-file-popover.c:144
@@ -2349,9 +2377,13 @@ msgstr "Вала"
 msgid "Show errors and warnings provided by Vala"
 msgstr "Прикажи грешке и упозорења које пружа Вала"
 
-#: ../plugins/vala-pack/ide-vala-preferences-addin.vala:35
+#. translators: keywords used when searching for preferences
+#: ../plugins/vala-pack/ide-vala-preferences-addin.vala:36
 msgid "vala diagnostics warnings errors"
 msgstr "вала дијагностика упозорења грешке"
+
+#~ msgid "Invalid snippet at line %d: %s"
+#~ msgstr "Неисправан исечак у %d. реду: %s"
 
 #~ msgid "%s does not implement build_async()"
 #~ msgstr "%s нема функцију build_async()"
@@ -3993,9 +4025,6 @@ msgstr "вала дијагностика упозорења грешке"
 
 #~ msgid "The label for the navigation item."
 #~ msgstr "Натпис за ставку навигације."
-
-#~ msgid "Workspace"
-#~ msgstr "Радни простор"
 
 #~ msgid "The workspace to ensure is focused."
 #~ msgstr "Радни простор који је у првом плану."
