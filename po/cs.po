@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-03-14 22:12+0000\n"
-"PO-Revision-Date: 2016-03-15 08:06+0100\n"
+"POT-Creation-Date: 2016-03-20 08:07+0000\n"
+"PO-Revision-Date: 2016-03-20 14:13+0100\n"
 "Last-Translator: Marek Černocký <marek@manet.cz>\n"
 "Language-Team: Czech <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
@@ -1909,7 +1909,7 @@ msgstr "Chyba čtení AST"
 msgid "Failed to create translation unit: %s"
 msgstr "Selhalo vytvoření překladové jednotky: %s"
 
-#: ../plugins/clang/ide-clang-service.c:402
+#: ../plugins/clang/ide-clang-service.c:401
 msgid "File must be saved locally to parse."
 msgstr "Soubor musí být uložen místně, aby jej bylo možné zpracovat."
 
@@ -2142,7 +2142,7 @@ msgid "Location"
 msgstr "Umístění"
 
 #: ../plugins/git/ide-git-genesis-addin.c:93
-msgid "From a existing project in a Git repository"
+msgid "From an existing project in a Git repository"
 msgstr "Ze stávajícího projektu v repozitáři Git"
 
 #: ../plugins/git/ide-git-preferences-addin.c:108
@@ -2349,6 +2349,7 @@ msgstr "Vala"
 msgid "Show errors and warnings provided by Vala"
 msgstr "Zobrazovat chyby a varování poskytované pro jazyk Vala"
 
-#: ../plugins/vala-pack/ide-vala-preferences-addin.vala:35
+#. translators: keywords used when searching for preferences
+#: ../plugins/vala-pack/ide-vala-preferences-addin.vala:36
 msgid "vala diagnostics warnings errors"
 msgstr "vala diagnostika varování chyba chyby"
