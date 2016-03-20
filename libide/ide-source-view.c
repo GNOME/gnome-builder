@@ -3546,10 +3546,10 @@ ide_source_view_real_move_search (IdeSourceView    *self,
   GtkTextView *text_view = (GtkTextView *)self;
   g_autoptr(SearchMovement) mv = NULL;
   GtkTextBuffer *buffer;
+  GtkTextMark *insert_mark;
+  GtkTextIter insert_iter;
   GtkSourceSearchSettings *settings;
   const gchar *search_text;
-  GtkTextIter begin;
-  GtkTextIter end;
   gboolean is_forward;
 
   g_return_if_fail (GTK_IS_TEXT_VIEW (text_view));
@@ -3602,10 +3602,8 @@ ide_source_view_real_move_search (IdeSourceView    *self,
     }
 
   buffer = gtk_text_view_get_buffer (text_view);
-  gtk_text_buffer_get_selection_bounds (buffer, &begin, &end);
-
-  if (!extend_selection)
-    gtk_text_iter_order (&begin, &end);
+  insert_mark = gtk_text_buffer_get_insert (buffer);
+  gtk_text_buffer_get_iter_at_mark (buffer, &insert_iter, insert_mark);
 
   is_forward = (dir == GTK_DIR_DOWN) || (dir == GTK_DIR_RIGHT);
 
@@ -3614,8 +3612,9 @@ ide_source_view_real_move_search (IdeSourceView    *self,
 
   if (is_forward)
     {
+      gtk_text_iter_forward_char (&insert_iter);
       gtk_source_search_context_forward_async (priv->search_context,
-                                               &end,
+                                               &insert_iter,
                                                NULL,
                                                ide_source_view__search_forward_cb,
                                                search_movement_ref (mv));
@@ -3623,7 +3622,7 @@ ide_source_view_real_move_search (IdeSourceView    *self,
   else
     {
       gtk_source_search_context_backward_async (priv->search_context,
-                                                &begin,
+                                                &insert_iter,
                                                 NULL,
                                                 ide_source_view__search_backward_cb,
                                                 search_movement_ref (mv));
