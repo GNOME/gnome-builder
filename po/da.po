@@ -17,8 +17,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-18 11:25+0100\n"
-"PO-Revision-Date: 2016-03-17 20:12+0200\n"
+"POT-Creation-Date: 2016-03-20 23:40+0100\n"
+"PO-Revision-Date: 2016-03-20 03:33+0100\n"
 "Last-Translator: Kris Thomsen <lakristho@gmail.com>\n"
 "Language-Team: Danish <dansk@dansk-gruppen.dk>\n"
 "Language: da\n"
@@ -1081,17 +1081,17 @@ msgstr "Kunne ikke åbne mappe: %s"
 msgid "Failed to load file: %s: %s"
 msgstr "Kunne ikke indlæse fil: %s: %s"
 
-#: ../libide/ide-source-view.c:4900
+#: ../libide/ide-source-view.c:4897
 #, c-format
 msgid "Insert “%s”"
 msgstr "Indsæt “%s”"
 
-#: ../libide/ide-source-view.c:4902
+#: ../libide/ide-source-view.c:4899
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "Erstat “%s” med “%s”"
 
-#: ../libide/ide-source-view.c:5016
+#: ../libide/ide-source-view.c:5013
 msgid "Apply Fix-It"
 msgstr "Anvend Fix-It"
 
@@ -2156,7 +2156,7 @@ msgid "Location"
 msgstr "Sted"
 
 #: ../plugins/git/ide-git-genesis-addin.c:93
-msgid "From a existing project in a Git repository"
+msgid "From an existing project in a Git repository"
 msgstr "Fra et eksisterende projekt i et Git-arkiv"
 
 #: ../plugins/git/ide-git-preferences-addin.c:108
@@ -2579,7 +2579,7 @@ msgstr "vala diagnostik advarsler fejl"
 #~ msgstr "git forfatter navn efternavn kilde kode"
 
 #~ msgid "git author email mail address attribute source code"
-#~ msgstr "git forfatter e-post post adresse attribut kilde kode"
+#~ msgstr "git forfatter e-mail post adresse attribut kilde kode"
 
 #~ msgid "word words auto completion suggest found document"
 #~ msgstr "ord auto fuldførelse foreslå fandt dokument"
@@ -3369,7 +3369,7 @@ msgstr "vala diagnostik advarsler fejl"
 #~ msgstr "Forfatternavn"
 
 #~ msgid "Author Email"
-#~ msgstr "Forfatter-e-post"
+#~ msgstr "Forfatter-e-mail"
 
 #~ msgid "<b>VIM Modal Editing</b>"
 #~ msgstr "<b>VIM modalredigering</b>"
