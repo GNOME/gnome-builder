@@ -52,7 +52,7 @@ ide_editor_frame_actions_find (GSimpleAction *action,
 
       if (gtk_text_iter_get_line (&start_sel) == gtk_text_iter_get_line (&end_sel))
         {
-          const gchar *selected_text;
+          g_autofree gchar *selected_text;
 
           selected_text = gtk_text_buffer_get_text (buffer, &start_sel, &end_sel, FALSE);
           gtk_entry_set_text (GTK_ENTRY (self->search_entry), selected_text);
