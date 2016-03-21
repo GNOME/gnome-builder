@@ -69,6 +69,8 @@
 #include "ide-text-util.h"
 #include "ide-workbench-private.h"
 
+#define INCLUDE_STATEMENTS "^#include[\\s]+[\\\"\\<][^\\s\\\"\\\'\\<\\>[:cntrl:]]+[\\\"\\>]"
+
 #define DEFAULT_FONT_DESC "Monospace 11"
 #define ANIMATION_X_GROW 50
 #define ANIMATION_Y_GROW 30
@@ -178,6 +180,8 @@ typedef struct
   guint                        snippet_completion : 1;
   guint                        waiting_for_capture : 1;
   gint                         overscroll_num_lines;
+
+  GRegex                       *include_regex;
 } IdeSourceViewPrivate;
 
 typedef struct
@@ -2530,9 +2534,8 @@ ide_source_get_word_from_iter (const GtkTextIter *iter,
   /* Just using forward/backward to word start/end is not enough
    * because _ break words when using those functions while they
    * are commonly used in the same word in code */
-
-  gtk_text_iter_assign (word_start, iter);
-  gtk_text_iter_assign (word_end, iter);
+  *word_start = *iter;
+  *word_end = *iter;
 
   do
     {
@@ -2558,7 +2561,7 @@ ide_source_get_word_from_iter (const GtkTextIter *iter,
         }
     }
 
-  return !gtk_text_iter_equal (word_start, word_end);
+  return (!gtk_text_iter_equal (word_start, word_end));
 }
 
 static void
@@ -2572,6 +2575,7 @@ ide_source_view_get_definition_on_mouse_over_cb (GObject      *object,
   g_autoptr(IdeSymbol) symbol = NULL;
   g_autoptr(GError) error = NULL;
   IdeSourceLocation *srcloc;
+  IdeSymbolKind kind;
 
   IDE_ENTRY;
 
@@ -2589,6 +2593,8 @@ ide_source_view_get_definition_on_mouse_over_cb (GObject      *object,
         g_warning ("%s", error->message);
       IDE_EXIT;
     }
+
+  kind = ide_symbol_get_kind (symbol);
 
   srcloc = ide_symbol_get_definition_location (symbol);
 
@@ -2608,6 +2614,39 @@ ide_source_view_get_definition_on_mouse_over_cb (GObject      *object,
                                         &word_start, data->word_start_mark);
       gtk_text_buffer_get_iter_at_mark (GTK_TEXT_BUFFER (buffer),
                                         &word_end, data->word_end_mark);
+
+      if (kind == IDE_SYMBOL_HEADER)
+        {
+          GtkTextIter line_start = word_start;
+          GtkTextIter line_end = word_end;
+          gint line_number;
+          g_autofree gchar* line_text = NULL;
+          g_autoptr (GMatchInfo) matchInfo = NULL;
+
+          line_number = gtk_text_iter_get_line(&word_start);
+
+          gtk_text_iter_set_line_offset (&line_start, 0);
+          gtk_text_iter_forward_to_line_end (&line_end);
+
+          line_text = gtk_text_iter_get_visible_text (&line_start,&line_end);
+
+          g_regex_match (priv->include_regex, line_text, 0, &matchInfo);
+
+          if (g_match_info_matches (matchInfo))
+            {
+              gint start_pos;
+              gint end_pos;
+              g_match_info_fetch_pos (matchInfo,
+                                      0,
+                                      &start_pos,
+                                      &end_pos);
+              word_start = line_start;
+              word_end   = line_start;
+
+              gtk_text_iter_set_line_index (&word_start, start_pos);
+              gtk_text_iter_set_line_index (&word_end, end_pos);
+            }
+        }
 
       gtk_text_buffer_apply_tag_by_name (GTK_TEXT_BUFFER (priv->buffer),
                                          TAG_DEFINITION, &word_start, &word_end);
@@ -5361,6 +5400,8 @@ ide_source_view_finalize (GObject *object)
   IdeSourceView *self = (IdeSourceView *)object;
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
 
+  g_regex_unref (priv->include_regex);
+
   g_clear_object (&priv->completion_providers_signals);
   g_clear_pointer (&priv->display_name, g_free);
   g_clear_pointer (&priv->font_desc, pango_font_description_free);
@@ -6425,6 +6466,11 @@ ide_source_view_init (IdeSourceView *self)
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
   GtkSourceCompletion *completion;
   GtkTargetList *target_list;
+
+  priv->include_regex = g_regex_new (INCLUDE_STATEMENTS,
+                                     G_REGEX_OPTIMIZE,
+                                     0,
+                                     NULL);
 
   EGG_COUNTER_INC (instances);
 

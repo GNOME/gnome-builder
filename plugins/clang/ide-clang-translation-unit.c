@@ -872,6 +872,10 @@ get_symbol_kind (CXCursor        cursor,
       kind = IDE_SYMBOL_FIELD;
       break;
 
+    case CXCursor_InclusionDirective:
+      kind = IDE_SYMBOL_HEADER;
+      break;
+
     default:
       break;
     }
@@ -948,6 +952,27 @@ ide_clang_translation_unit_lookup_symbol (IdeClangTranslationUnit  *self,
     }
 
   symkind = get_symbol_kind (cursor, &symflags);
+
+  if (symkind == IDE_SYMBOL_HEADER)
+    {
+      CXFile included_file;
+      CXString included_file_name;
+
+      included_file = clang_getIncludedFile (cursor);
+      included_file_name = clang_getFileName (included_file);
+
+      gfile = g_file_new_for_path (clang_getCString (included_file_name));
+      file = g_object_new (IDE_TYPE_FILE,
+                           "context",
+                           context,
+                           "file",
+                           gfile,
+                           "path",
+                           clang_getCString (included_file_name),
+                           NULL);
+
+      definition = ide_source_location_new (file, 0, 0, 0);
+    }
 
   cxstr = clang_getCursorDisplayName (cursor);
   ret = ide_symbol_new (clang_getCString (cxstr), symkind, symflags,
