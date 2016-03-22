@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-03-15 08:05+0000\n"
-"PO-Revision-Date: 2016-03-15 15:02+0100\n"
+"POT-Creation-Date: 2016-03-22 08:16+0000\n"
+"PO-Revision-Date: 2016-03-22 12:26+0100\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Español; Castellano <gnome-es-list@gnome.org>\n"
 "Language: \n"
@@ -1075,17 +1075,17 @@ msgstr "Falló al abrir la carpeta: %s"
 msgid "Failed to load file: %s: %s"
 msgstr "Falló al cargar el archivo: %s: %s"
 
-#: ../libide/ide-source-view.c:4900
+#: ../libide/ide-source-view.c:4897
 #, c-format
 msgid "Insert “%s”"
 msgstr "Insertar «%s»"
 
-#: ../libide/ide-source-view.c:4902
+#: ../libide/ide-source-view.c:4899
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "Reemplazar «%s» con «%s»"
 
-#: ../libide/ide-source-view.c:5016
+#: ../libide/ide-source-view.c:5013
 msgid "Apply Fix-It"
 msgstr "Aplicar corrección"
 
@@ -1199,7 +1199,6 @@ msgid "Font"
 msgstr "Tipografía"
 
 #: ../libide/preferences/ide-preferences-builtin.c:102
-#| msgid "editor font monospace"
 msgctxt "Keywords"
 msgid "editor font monospace"
 msgstr "tipografía monoespaciada del editor"
@@ -1211,7 +1210,6 @@ msgid "Terminal"
 msgstr "Terminal"
 
 #: ../libide/preferences/ide-preferences-builtin.c:104
-#| msgid "terminal font monospace"
 msgctxt "Keywords"
 msgid "terminal font monospace"
 msgstr "tipografía monoespaciada de la terminal"
@@ -1926,7 +1924,7 @@ msgstr "Error de lectura AST"
 msgid "Failed to create translation unit: %s"
 msgstr "Falló al crear la unidad de traducción: %s"
 
-#: ../plugins/clang/ide-clang-service.c:402
+#: ../plugins/clang/ide-clang-service.c:401
 msgid "File must be saved locally to parse."
 msgstr ""
 "El archivo debe estar guardado localmente para analizarlo gramaticalmente."
@@ -2161,7 +2159,8 @@ msgid "Location"
 msgstr "Ubicación"
 
 #: ../plugins/git/ide-git-genesis-addin.c:93
-msgid "From a existing project in a Git repository"
+#| msgid "From a existing project in a Git repository"
+msgid "From an existing project in a Git repository"
 msgstr "Desde un proyecto existente en un repositorio Git"
 
 #: ../plugins/git/ide-git-preferences-addin.c:108
