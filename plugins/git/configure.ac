@@ -1,4 +1,4 @@
-m4_define([ggit_required_version], [0.23.7])
+m4_define([ggit_required_version], [0.24.0])
 
 # --enable-git-plugin=yes/no/auto
 AC_ARG_ENABLE([git-plugin],
