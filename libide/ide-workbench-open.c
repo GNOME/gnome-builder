@@ -447,7 +447,6 @@ ide_workbench_open_project_cb (GObject      *object,
     }
 
   ide_workbench_set_context (workbench, context);
-  ide_workbench_set_visible_perspective_name (workbench, "editor");
 
   g_task_return_boolean (task, TRUE);
 }

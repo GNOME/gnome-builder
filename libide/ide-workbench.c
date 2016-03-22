@@ -34,6 +34,8 @@
 #include "ide-workbench-header-bar.h"
 #include "ide-workbench-private.h"
 
+#define STABLIZE_DELAY_MSEC 50
+
 G_DEFINE_TYPE (IdeWorkbench, ide_workbench, GTK_TYPE_APPLICATION_WINDOW)
 
 enum {
@@ -530,6 +532,18 @@ restore_in_timeout (gpointer data)
   return G_SOURCE_REMOVE;
 }
 
+static gboolean
+stablize_cb (gpointer data)
+{
+  g_autoptr(IdeWorkbench) self = data;
+
+  g_assert (IDE_IS_WORKBENCH (self));
+
+  ide_workbench_set_visible_perspective_name (self, "editor");
+
+  return G_SOURCE_REMOVE;
+}
+
 void
 ide_workbench_set_context (IdeWorkbench *self,
                            IdeContext   *context)
@@ -558,9 +572,12 @@ ide_workbench_set_context (IdeWorkbench *self,
 
   peas_extension_set_foreach (self->addins, ide_workbench_addin_added, self);
 
-  ide_workbench_set_visible_perspective_name (self, "editor");
-
-  gtk_stack_set_visible_child_name (self->top_stack, "perspectives");
+  /*
+   * Creating all the addins above is a bit intenstive, so give ourselves
+   * just a bit of time to stablize allocations and sizing before
+   * transitioning to the editor.
+   */
+  g_timeout_add (STABLIZE_DELAY_MSEC, stablize_cb, g_object_ref (self));
 
   /*
    * When restoring, previous buffers may get loaded. This causes new
@@ -569,7 +586,7 @@ ide_workbench_set_context (IdeWorkbench *self,
    * we will delay until the transition has completed.
    */
   duration = gtk_stack_get_transition_duration (self->top_stack);
-  g_timeout_add (duration, restore_in_timeout, g_object_ref (context));
+  g_timeout_add (STABLIZE_DELAY_MSEC + duration, restore_in_timeout, g_object_ref (context));
 }
 
 void
@@ -697,14 +714,20 @@ ide_workbench_set_visible_perspective (IdeWorkbench   *self,
   stack = GTK_STACK (gtk_widget_get_ancestor (GTK_WIDGET (perspective), GTK_TYPE_STACK));
 
   id = ide_perspective_get_id (perspective);
-  gtk_stack_set_visible_child_name (stack, id);
-  gtk_stack_set_visible_child_name (self->titlebar_stack, id);
+
+  if (!ide_str_equal0 (gtk_stack_get_visible_child_name (stack), id))
+    {
+      gtk_stack_set_visible_child_name (stack, id);
+      gtk_stack_set_visible_child_name (self->titlebar_stack, id);
+    }
+
   g_free (id);
 
   actions = ide_perspective_get_actions (perspective);
   gtk_widget_insert_action_group (GTK_WIDGET (self), "perspective", actions);
 
-  if (stack == self->perspectives_stack)
+  if ((stack == self->perspectives_stack) &&
+      !ide_str_equal0 (gtk_stack_get_visible_child_name (self->top_stack), "perspectives"))
     gtk_stack_set_visible_child_name (self->top_stack, "perspectives");
 }
 
