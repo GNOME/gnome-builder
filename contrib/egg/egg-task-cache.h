@@ -35,7 +35,7 @@ G_DECLARE_FINAL_TYPE (EggTaskCache, egg_task_cache, EGG, TASK_CACHE, GObject)
  * @user_data: user_data registered at initialization.
  *
  * #EggTaskCacheCallback is the prototype for a function to be executed to
- * populate a an item in the cache.
+ * populate an item in the cache.
  *
  * This function will be executed when a fault (cache miss) occurs from
  * a caller requesting an item from the cache.
