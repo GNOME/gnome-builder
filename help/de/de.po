@@ -6,8 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
-"POT-Creation-Date: 2016-02-18 08:02+0000\n"
-"PO-Revision-Date: 2016-02-18 11:10+0100\n"
+"POT-Creation-Date: 2016-03-22 08:16+0000\n"
+"PO-Revision-Date: 2016-03-22 10:21+0100\n"
 "Last-Translator: Mario Blättermann <mario.blaettermann@gmail.com>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "Language: de\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.8.7\n"
+"X-Generator: Poedit 1.8.7.1\n"
 
 #. Put one translator per line, in the form NAME <EMAIL>, YEAR1, YEAR2
 msgctxt "_"
@@ -29,8 +29,8 @@ msgstr "<_:media-1/> Builder"
 
 #. (itstool) path: section/title
 #: C/index.page:18
-msgid "Features"
-msgstr "Funktionsmerkmale"
+msgid "Projects and files"
+msgstr "Projekte und Dateien"
 
 #. (itstool) path: credit/name
 #: C/introduction.page:15
@@ -49,8 +49,8 @@ msgstr "Christian Hergert"
 
 #. (itstool) path: info/desc
 #: C/introduction.page:28
-msgid "Welcome to Builder"
-msgstr "Willkommen zu Builder"
+msgid "Welcome to <app>Builder</app>"
+msgstr "Willkommen zu <app>Builder</app>"
 
 #. (itstool) path: page/title
 #: C/introduction.page:31
@@ -59,19 +59,8 @@ msgstr "Einführung"
 
 #. (itstool) path: page/p
 #: C/introduction.page:33
-msgid ""
-"Builder is an Integrated Development Environment (IDE) for the GNOME desktop "
-"environment. While it is a relatively young application, it is quickly "
-"gaining features common to more mature IDEs. Thanks for trusting Builder "
-"with your project! We hope to make Builder the most delightful development "
-"tool for experienced and beginners alike."
-msgstr ""
-"Builder ist eine integrierte Enwtwicklungsumgebung (IDE) für die GNOME-"
-"Arbeitsumgebung. Zwar ist es eine noch recht junge Anwendung, doch kommen "
-"ständig neue Funktionsmerkmale hinzu, die von ausgereifteren IDEs bekannt "
-"sind. Danke dass Sie Builder Ihr Projekt anvertrauen! Wir hoffen, Builder zu "
-"einem der angenehmsten Werkzeuge sowohl für Einsteiger wie auch für "
-"fortgeschrittene Entwickler zu machen."
+msgid "<app>Builder</app> is an Integrated Development Environment (IDE) for the GNOME desktop environment. While it is a relatively young application, it is quickly gaining features common to more mature IDEs. Thanks for trusting <app>Builder</app> with your project! We hope to make <app>Builder</app> the most delightful development tool for experienced and beginners alike."
+msgstr "<app>Builder</app> ist eine integrierte Enwtwicklungsumgebung (IDE) für die GNOME-Arbeitsumgebung. Zwar ist es eine noch recht junge Anwendung, doch kommen ständig neue Funktionsmerkmale hinzu, die von ausgereifteren IDEs bekannt sind. Danke dass Sie <app>Builder</app> Ihr Projekt anvertrauen! Wir hoffen, <app>Builder</app> zu einem der angenehmsten Werkzeuge sowohl für Einsteiger wie auch für fortgeschrittene Entwickler zu machen."
 
 #. (itstool) path: p/link
 #: C/legal.xml:5
@@ -85,14 +74,11 @@ msgstr "Dieses Werk ist unter <_:link-1/> lizenziert."
 
 #. (itstool) path: license/p
 #: C/legal.xml:8
-msgid ""
-"As a special exception, the copyright holders give you permission to copy, "
-"modify, and distribute the example code contained in this documentation "
-"under the terms of your choosing, without restriction."
-msgstr ""
-"Als besondere Ausnahme gewähren die Inhaber des Urheberrechts die Erlaubnis, "
-"den Beispiel-Code in diesem Dokument zu kopieren, verändern und "
-"weiterzugeben, unter den Bedingungen Ihrer Wahl, ohne Einschränkungen."
+msgid "As a special exception, the copyright holders give you permission to copy, modify, and distribute the example code contained in this documentation under the terms of your choosing, without restriction."
+msgstr "Als besondere Ausnahme gewähren die Inhaber des Urheberrechts die Erlaubnis, den Beispiel-Code in diesem Dokument zu kopieren, verändern und weiterzugeben, unter den Bedingungen Ihrer Wahl, ohne Einschränkungen."
+
+#~ msgid "Features"
+#~ msgstr "Funktionsmerkmale"
 
 #~ msgid ""
 #~ "Builder is an Integrated Development Environment (IDE) for the GNOME "
