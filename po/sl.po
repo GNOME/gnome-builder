@@ -10,7 +10,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
 "POT-Creation-Date: 2016-03-05 21:44+0100\n"
-"PO-Revision-Date: 2016-03-08 21:45+0100\n"
+"PO-Revision-Date: 2016-03-22 21:35+0100\n"
 "Last-Translator: Matej Urbančič <mateju@svn.gnome.org>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
@@ -74,9 +74,8 @@ msgid "Generate Support Log"
 msgstr "Prijava"
 
 #: ../data/gtk/menus.ui.h:5
-#, fuzzy
 msgid "Keyboard _Shortcuts"
-msgstr "_Tipkovne bližnjice ..."
+msgstr "_Tipkovne bližnjice"
 
 #: ../data/gtk/menus.ui.h:6
 msgid "_About"
@@ -99,7 +98,6 @@ msgid "_Fullscreen"
 msgstr "_Celozaslonski način"
 
 #: ../data/gtk/menus.ui.h:11
-#, fuzzy
 msgid "_New Document"
 msgstr "Nov _dokument"
 
@@ -116,24 +114,20 @@ msgid "_Close All"
 msgstr "_Zapri vse"
 
 #: ../data/gtk/menus.ui.h:15
-#, fuzzy
 msgid "Display Options"
 msgstr "Možnosti prikaza"
 
 #: ../data/gtk/menus.ui.h:16
-#, fuzzy
 msgid "Show Icons"
 msgstr "Pokaži ikone"
 
 #: ../data/gtk/menus.ui.h:17
-#, fuzzy
 msgid "Show Ignored Files"
-msgstr "Prezrte datoteke"
+msgstr "Pokaže prezrte datoteke"
 
 #: ../data/gtk/menus.ui.h:18
-#, fuzzy
 msgid "Sort Directories First"
-msgstr "Mape:\n"
+msgstr "Najprej razvrsti mape"
 
 #: ../data/gtk/menus.ui.h:19
 msgid "_Collapse All Nodes"
@@ -160,12 +154,10 @@ msgid "Open _With"
 msgstr "Odpri _z"
 
 #: ../data/gtk/menus.ui.h:25
-#, fuzzy
 msgid "Source Code Editor"
-msgstr "Izvorna koda"
+msgstr "Urejevalnik izvorne kode"
 
 #: ../data/gtk/menus.ui.h:26
-#, fuzzy
 msgid "_Open Containing Folder"
 msgstr "_Odpri vsebujočo mapo"
 
@@ -213,12 +205,10 @@ msgstr "Datoteke barvnih shem"
 
 #. OVR indicates we are in overwite mode
 #: ../data/ui/gb-editor-frame.ui.h:2
-#, fuzzy
 msgid "OVR"
 msgstr "PREP"
 
 #: ../data/ui/gb-editor-settings-widget.ui.h:1
-#, fuzzy
 msgid "Display right _margin at column:"
 msgstr "Prikaži desni _rob na stolpcu:"
 
@@ -236,22 +226,18 @@ msgstr ""
 
 #: ../data/ui/gb-editor-settings-widget.ui.h:5
 #: ../data/ui/gb-editor-tweak-widget.ui.h:7
-#, fuzzy
 msgid "Indentation"
 msgstr "Zamikanje"
 
 #: ../data/ui/gb-editor-settings-widget.ui.h:6
-#, fuzzy
 msgid "_Tab width:"
 msgstr "Širina _tabulatorja:"
 
 #: ../data/ui/gb-editor-settings-widget.ui.h:7
-#, fuzzy
 msgid "Insert _spaces instead of tabs"
 msgstr "Vstavi _presledke namesto tabulatorjev"
 
 #: ../data/ui/gb-editor-settings-widget.ui.h:8
-#, fuzzy
 msgid "_Enable automatic indentation"
 msgstr "Vključi s_amodejno zamikanje"
 
@@ -261,12 +247,10 @@ msgid "Snippets (read-only)"
 msgstr "le za branje"
 
 #: ../data/ui/gb-editor-tweak-widget.ui.h:1
-#, fuzzy
 msgid "Search highlight mode…"
-msgstr "Način iskanja s poudarjanjem"
+msgstr "Način iskanja s poudarjanjem ..."
 
 #: ../data/ui/gb-editor-tweak-widget.ui.h:2
-#, fuzzy
 msgid "Display line numbers"
 msgstr "Prikaži številke vrstic"
 
@@ -284,14 +268,12 @@ msgstr "Samodejno zamikanje"
 
 #: ../data/ui/gb-editor-tweak-widget.ui.h:6
 #: ../data/ui/gb-preferences-page-keybindings.ui.h:12
-#, fuzzy
 msgid "Smart Backspace"
-msgstr "vračalka"
+msgstr "Pametna vračalka"
 
 #: ../data/ui/gb-editor-tweak-widget.ui.h:8
-#, fuzzy
 msgid "Spaces"
-msgstr "Velikost zamikanja oklepajev v presledkih:"
+msgstr "Presledki"
 
 #: ../data/ui/gb-editor-tweak-widget.ui.h:9
 msgid "Tabs"
@@ -334,14 +316,12 @@ msgid "Go"
 msgstr "Pojdi"
 
 #: ../data/ui/gb-greeter-window.ui.h:1
-#, fuzzy
 msgid "Select a Project"
-msgstr "Izberite hrbtišče projekta za odpiranje."
+msgstr "Izberite projekt"
 
 #: ../data/ui/gb-greeter-window.ui.h:2
-#, fuzzy
 msgid "Click an item to select"
-msgstr "Kliknite za izbor naprave ..."
+msgstr "Kliknite za izbor predmeta"
 
 #: ../data/ui/gb-greeter-window.ui.h:5
 msgid "Recent Projects"
@@ -394,11 +374,8 @@ msgid "Location"
 msgstr "Mesto"
 
 #: ../data/ui/gb-new-project-dialog.ui.h:8
-#, fuzzy
 msgid "GNOME Version"
-msgstr ""
-"Z vejico ločen seznam različic lupine gnome, s katerimi je vstavek "
-"programsko združljiv."
+msgstr "Različica GNOME"
 
 #: ../data/ui/gb-new-project-dialog.ui.h:9
 msgid "Language"
@@ -414,7 +391,7 @@ msgstr "Git"
 
 #: ../data/ui/gb-new-project-dialog.ui.h:12
 msgid "user@host:repository.git"
-msgstr ""
+msgstr "uporabnik@gostitelj:skladišče.git"
 
 #: ../data/ui/gb-new-project-dialog.ui.h:13
 msgid "Enter the URL of your project's source code repository."
@@ -438,14 +415,12 @@ msgid "Font"
 msgstr "Pisava"
 
 #: ../data/ui/gb-preferences-page-editor.ui.h:3
-#, fuzzy
 msgid "Highlighting"
 msgstr "Poudarjanje"
 
 #: ../data/ui/gb-preferences-page-editor.ui.h:4
-#, fuzzy
 msgid "Display Document Changes"
-msgstr "Spremembe dokumenta “%s” bodo trajno izgubljene."
+msgstr "Pokaži spremembe dokumenta"
 
 #: ../data/ui/gb-preferences-page-editor.ui.h:5
 msgid ""
@@ -453,7 +428,6 @@ msgid ""
 msgstr ""
 
 #: ../data/ui/gb-preferences-page-editor.ui.h:6
-#, fuzzy
 msgid "Display Line Numbers"
 msgstr "Pokaži številke vrstic"
 
@@ -462,32 +436,26 @@ msgid "Display the line numbers next to each line of the document."
 msgstr ""
 
 #: ../data/ui/gb-preferences-page-editor.ui.h:8
-#, fuzzy
 msgid "Highlight Current Line"
-msgstr "Poudari _trenutno vrstico"
+msgstr "Poudari trenutno vrstico"
 
 #: ../data/ui/gb-preferences-page-editor.ui.h:9
-#, fuzzy
 msgid "Highlight the line containing the cursor."
-msgstr "Poudari _trenutno vrstico"
+msgstr "Poudari vrstico s kazalko"
 
 #: ../data/ui/gb-preferences-page-editor.ui.h:10
-#, fuzzy
 msgid "Highlight Matching Brackets"
 msgstr "Poudari ujemajoče oklepaje"
 
 #: ../data/ui/gb-preferences-page-editor.ui.h:11
-#, fuzzy
 msgid "Whether or not matching brackets should be highlighted."
-msgstr "Ali naj gedit poudari ujemajoče oklepaje."
+msgstr "Ali naj bodo poudarjeni ujemajoči oklepaji."
 
 #: ../data/ui/gb-preferences-page-editor.ui.h:12
-#, fuzzy
 msgid "Overview Map"
-msgstr "Pokaži predogledni zemljevid"
+msgstr "Predogledni zemljevid"
 
 #: ../data/ui/gb-preferences-page-editor.ui.h:13
-#, fuzzy
 msgid "Display Overview Map"
 msgstr "Pokaži predogledni zemljevid"
 
@@ -496,23 +464,20 @@ msgid "Display an overview map next to the source code editor."
 msgstr ""
 
 #: ../data/ui/gb-preferences-page-editor.ui.h:15
-#, fuzzy
 msgid "Auto Hide Overview Map"
-msgstr "Pokaži predogledni _zemljevid"
+msgstr "Samodejno skrij predogledni zemljevid"
 
 #: ../data/ui/gb-preferences-page-editor.ui.h:16
 msgid "Automatically hide the overview map during periods of inactivity."
 msgstr ""
 
 #: ../data/ui/gb-preferences-page-editor.ui.h:17
-#, fuzzy
 msgid "Cursor Placement"
-msgstr "Postavitev okna:"
+msgstr "Postavitev kazalke"
 
 #: ../data/ui/gb-preferences-page-editor.ui.h:18
-#, fuzzy
 msgid "Restore Cursor Position"
-msgstr "Povrni prejšnji položaj kazalke"
+msgstr "Povrni položaj kazalke"
 
 #: ../data/ui/gb-preferences-page-editor.ui.h:19
 msgid ""
@@ -520,7 +485,6 @@ msgid ""
 msgstr ""
 
 #: ../data/ui/gb-preferences-page-editor.ui.h:20
-#, fuzzy
 msgid "Scroll Offset"
 msgstr "Drsni odmik"
 
@@ -529,9 +493,8 @@ msgid "Minimal number of lines to keep above and below the cursor."
 msgstr ""
 
 #: ../data/ui/gb-preferences-page-editor.ui.h:22
-#, fuzzy
 msgid "Draw Spaces"
-msgstr "ris"
+msgstr "Izriši presledke"
 
 #: ../data/ui/gb-preferences-page-editor.ui.h:23
 msgid "Draw a circle over space characters."
@@ -559,9 +522,8 @@ msgstr ""
 
 #: ../data/ui/gb-preferences-page-git.ui.h:1
 #: ../data/ui/gb-preferences-window.ui.h:8
-#, fuzzy
 msgid "Version Control"
-msgstr "preskoči posodobitev nadzora različic"
+msgstr "Nadzor različic"
 
 #: ../data/ui/gb-preferences-page-git.ui.h:2
 #, fuzzy
@@ -589,23 +551,20 @@ msgid ""
 msgstr ""
 
 #: ../data/ui/gb-preferences-page-insight.ui.h:4
-#, fuzzy
 msgid "Auto Completion"
 msgstr "Samodejno dopolnjevanje"
 
 #: ../data/ui/gb-preferences-page-insight.ui.h:5
-#, fuzzy
 msgid "Suggest Snippet Completion"
-msgstr "Dodaj izrezek z uporabo samodejnega dopolnjevanja"
+msgstr "Predlagaj dopolnjevanje z izrezki"
 
 #: ../data/ui/gb-preferences-page-insight.ui.h:6
 msgid "Allow snippets to be inserted into the document."
 msgstr ""
 
 #: ../data/ui/gb-preferences-page-insight.ui.h:7
-#, fuzzy
 msgid "Suggest Word Completion"
-msgstr "Dopolnjevanje besed"
+msgstr "Predlagaj dopolnjevanje besed"
 
 #: ../data/ui/gb-preferences-page-insight.ui.h:8
 msgid "Suggest completion of words found within all open documents."
@@ -637,7 +596,6 @@ msgstr ""
 
 #: ../data/ui/gb-preferences-page-keybindings.ui.h:1
 #: ../data/ui/gb-preferences-window.ui.h:6
-#, fuzzy
 msgid "Keyboard"
 msgstr "Tipkovnica"
 
@@ -689,9 +647,8 @@ msgstr ""
 
 #: ../data/ui/gb-preferences-page-language.ui.h:1
 #: ../data/ui/gb-preferences-window.ui.h:4
-#, fuzzy
 msgid "Programming Languages"
-msgstr "V katerem programskem jeziku najraje programirate?"
+msgstr "Programski jeziki"
 
 #: ../data/ui/gb-preferences-page-plugins.ui.h:1
 #: ../data/ui/gb-preferences-window.ui.h:9
@@ -726,15 +683,13 @@ msgid "Preferences"
 msgstr "Možnosti"
 
 #: ../data/ui/gb-preferences-window.ui.h:2
-#, fuzzy
 msgid "Search Preferences…"
-msgstr "Možnosti namiznega iskanja"
+msgstr "Možnosti iskanja ..."
 
 #: ../data/ui/gb-projects-dialog.ui.h:1
 #: ../src/dialogs/gb-projects-dialog.c:255
-#, fuzzy
 msgid "Select Project"
-msgstr "Izberite hrbtišče projekta za odpiranje."
+msgstr "Izberite projekt"
 
 #: ../data/ui/gb-projects-dialog.ui.h:2
 msgid "New"
@@ -753,14 +708,12 @@ msgid "General"
 msgstr "Splošno"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:3
-#, fuzzy
 msgid "Global Search"
-msgstr "_Pokaži v splošnih rezultatih iskanja"
+msgstr "Splošno iskanje"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:5
-#, fuzzy
 msgid "Command Bar"
-msgstr "samostojen ukaz"
+msgstr "Ukazna vrstica"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:6
 #: ../plugins/terminal/gb-terminal-document.c:87
@@ -769,9 +722,8 @@ msgid "Terminal"
 msgstr "Terminal"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:7
-#, fuzzy
 msgid "Keyboard Shortcuts"
-msgstr "_Tipkovne bližnjice ..."
+msgstr "Tipkovne bližnjice"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:8
 #, fuzzy
@@ -779,44 +731,36 @@ msgid "Panels"
 msgstr "Vodo&ravna postavitev oken"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:9
-#, fuzzy
 msgid "Toggle left panel"
-msgstr "Datotečni pogled v levem oknu"
+msgstr "Preklopi levi pladenj"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:10
-#, fuzzy
 msgid "Toggle right panel"
-msgstr "Datotečni pogled v desnem oknu"
+msgstr "Preklopi desni pladenj"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:11
-#, fuzzy
 msgid "Toggle bottom panel"
-msgstr "_Spodnji pladenj"
+msgstr "Preklopi spodnji pladenj"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:12
-#, fuzzy
 msgid "Touchpad gestures"
-msgstr "Poteze"
+msgstr "Poteze na sledilni ploščici"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:13
-#, fuzzy
 msgid "Switch to the next document"
 msgstr "Preklopi na naslednji dokument"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:14
-#, fuzzy
 msgid "Two finger swipe right"
-msgstr "(ali pa povlecite prst)"
+msgstr "Dvoprstni poteg v desno"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:15
-#, fuzzy
 msgid "Switch to the previous document"
-msgstr "Preklopi na prejšnji dokument"
+msgstr "Preklopi na predhodni dokument"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:16
-#, fuzzy
 msgid "Two finger swipe left"
-msgstr "(ali pa povlecite prst)"
+msgstr "Dvoprstni poteg v levo"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:17
 #: ../src/project-tree/gb-project-tree-builder.c:79
@@ -824,12 +768,10 @@ msgid "Files"
 msgstr "Datoteke"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:18
-#, fuzzy
 msgid "Create new document"
 msgstr "Ustvari nov dokument"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:19
-#, fuzzy
 msgid "Open a document"
 msgstr "Odpri dokument"
 
@@ -842,9 +784,8 @@ msgid "Close the document"
 msgstr "Zapri dokument"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:22
-#, fuzzy
 msgid "Show list of open files"
-msgstr "Odpri _datoteke"
+msgstr "Pokaži seznam odprtih datotek"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:23
 #, fuzzy
@@ -860,36 +801,30 @@ msgid "Find"
 msgstr "Najdi"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:26
-#, fuzzy
 msgid "Find the next match"
-msgstr "_Najdi predmete, ki se ujemajo z:"
+msgstr "Najdi naslednji predmet"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:27
-#, fuzzy
 msgid "Find the previous match"
-msgstr "Najdi predhodne"
+msgstr "Najdi predhodni predmet"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:28
-#, fuzzy
 msgid "Clear highlight"
-msgstr "_Počisti poudarjanje"
+msgstr "Počisti poudarjanje"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:29
-#, fuzzy
 msgid "Go to line"
-msgstr "_Pojdi v vrstico ..."
+msgstr "Pojdi v vrstico"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:30
 msgid "Copy and Paste"
 msgstr "Kopiraj in prilepi"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:31
-#, fuzzy
 msgid "Copy selected text to clipboard"
 msgstr "Kopiraj izbrano besedilo na odložišče"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:32
-#, fuzzy
 msgid "Cut selected text to clipboard"
 msgstr "Izreži izbrano besedilo v odložišče"
 
@@ -924,9 +859,8 @@ msgid "Decrement number at cursor"
 msgstr "Kazalka"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:40
-#, fuzzy
 msgid "Join selected lines"
-msgstr "Črte"
+msgstr "Združi izbrane vrstice"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:41
 #, fuzzy
@@ -1131,27 +1065,25 @@ msgid "Failed to initialize defaults."
 msgstr "Začenjanje upravljalnika podatkov je spodletelo"
 
 #: ../libide/ide-back-forward-list.c:722
-#, fuzzy
 msgid "File contained invalid UTF-8"
-msgstr "neveljaven zapis UTF-8!"
+msgstr "V datoteki je neveljaven zapis UTF-8!"
 
 #: ../libide/ide-buffer.c:2071
 msgid "The current language lacks a symbol resolver."
 msgstr ""
 
 #: ../libide/ide-buffer-manager.c:604
-#, fuzzy
 msgid "File too large to be opened."
-msgstr "Datoteka \"%s\" je prevelika."
+msgstr "Datoteka je prevelika in je ni mogoče odpreti."
 
 #: ../libide/ide-buffer-manager.c:1425
 msgid "Words"
 msgstr "Besede"
 
 #: ../libide/ide-buffer-manager.c:1636
-#, fuzzy, c-format
+#, c-format
 msgid "unsaved document %u"
-msgstr "dokument %d"
+msgstr "neshranjen dokument %u"
 
 #: ../libide/ide-buffer-manager.c:1670
 msgid "Failed to save buffer, ignoring reclamation."
@@ -1205,9 +1137,9 @@ msgid "Context has already been restored."
 msgstr "Dokument je že poslan."
 
 #: ../libide/ide-device-manager.c:144
-#, fuzzy, c-format
+#, c-format
 msgid "The device \"%s\" could not be found."
-msgstr "Čelne naprave \"%s\" ni mogoče odpreti."
+msgstr "Naprave \"%s\" ni mogoče najti."
 
 #: ../libide/ide-object.c:288
 #, fuzzy, c-format
@@ -1294,9 +1226,8 @@ msgid "Sort Lines"
 msgstr "Razvrsti vrstice"
 
 #: ../libide/ide-source-view.c:4927
-#, fuzzy
 msgid "Go to Definition"
-msgstr "Skoči na določilo simbola"
+msgstr "Skoči na določilo"
 
 #: ../libide/pygobject/ide-pygobject-script.c:135
 msgid "Attempt to load a PyGObject script with no filename."
@@ -1787,10 +1718,10 @@ msgstr "Ponudnika ni mogoče najti."
 #, c-format
 msgid "%s more"
 msgid_plural "%s more"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "%s in več"
+msgstr[1] "%s in več"
+msgstr[2] "%s in več"
+msgstr[3] "%s in več"
 
 #: ../src/shortcuts/gb-shortcuts-dialog.c:937
 msgid "Search Shortcuts"
@@ -1801,9 +1732,8 @@ msgid "Search Results"
 msgstr "Zadetki iskanja"
 
 #: ../src/util/gb-file-manager.c:64
-#, fuzzy
 msgid "File path is NULL"
-msgstr "DATOTEKA [POT]"
+msgstr "Pot datoteke je PRAZNA VREDNOST"
 
 #: ../src/util/gb-file-manager.c:73 ../src/util/gb-file-manager.c:84
 msgid "Error converting UTF-8 filename to wide char"
