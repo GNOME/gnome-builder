@@ -6,16 +6,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-17 01:40+0200\n"
-"PO-Revision-Date: 2016-03-17 01:40+0300\n"
+"POT-Creation-Date: 2016-03-22 23:20+0200\n"
+"PO-Revision-Date: 2016-03-22 23:20+0300\n"
 "Last-Translator: Daniel Korostil <ted.korostiled@gmail.com>\n"
 "Language-Team: linux.org.ua\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: Virtaal 0.7.1\n"
 "X-Project-Style: gnome\n"
 
@@ -1065,17 +1065,17 @@ msgstr "Не вдалося відкрити каталог: %s"
 msgid "Failed to load file: %s: %s"
 msgstr "Не вдалося завантажити файл: %s: %s"
 
-#: ../libide/ide-source-view.c:4900
+#: ../libide/ide-source-view.c:4897
 #, c-format
 msgid "Insert “%s”"
 msgstr "Вставити «%s»"
 
-#: ../libide/ide-source-view.c:4902
+#: ../libide/ide-source-view.c:4899
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "Замінити «%s» на «%s»"
 
-#: ../libide/ide-source-view.c:5016
+#: ../libide/ide-source-view.c:5013
 msgid "Apply Fix-It"
 msgstr "Застосувати латку"
 
@@ -2135,7 +2135,7 @@ msgid "Location"
 msgstr "Місце"
 
 #: ../plugins/git/ide-git-genesis-addin.c:93
-msgid "From a existing project in a Git repository"
+msgid "From an existing project in a Git repository"
 msgstr "З наявного проекту в сховищі Git"
 
 #: ../plugins/git/ide-git-preferences-addin.c:108
