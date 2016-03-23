@@ -1,0 +1,2377 @@
+# Dutch translation for gnome-builder.
+# Copyright (C) 2015 gnome-builder's COPYRIGHT HOLDER
+# This file is distributed under the same license as the gnome-builder package.
+# Justin van Steijn <justin50@live.nl>, 2015, 2016.
+# Reinout van Schouwen <reinouts@gnome.org>, 2016
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: gnome-builder master\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-03-23 22:45+0100\n"
+"PO-Revision-Date: 2016-03-23 23:02+0100\n"
+"Last-Translator: Reinout van Schouwen <reinouts@gnome.org>\n"
+"Language-Team: Dutch <gnome-nl-list@gnome.org>\n"
+"Language: nl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.6.10\n"
+
+#: ../contrib/egg/egg-animation.c:726 ../contrib/pnl/pnl-animation.c:701
+#, c-format
+msgid "Cannot locate property %s in class %s"
+msgstr "Eigenschap %s kan niet gevonden worden in klasse %s "
+
+#: ../contrib/egg/egg-animation.c:1073 ../contrib/egg/egg-animation.c:1079
+#: ../contrib/pnl/pnl-animation.c:1053 ../contrib/pnl/pnl-animation.c:1059
+#, c-format
+msgid "Failed to find property %s in %s"
+msgstr "Eigenschap %s kan niet in %s gevonden worden"
+
+#: ../contrib/egg/egg-animation.c:1087 ../contrib/pnl/pnl-animation.c:1067
+#, c-format
+msgid "Failed to find property %s in %s or parent %s"
+msgstr "Eigenschap %s kan niet in %s of ouder %s gevonden worden"
+
+#: ../contrib/egg/egg-animation.c:1097 ../contrib/pnl/pnl-animation.c:1077
+#, c-format
+msgid "Failed to retrieve va_list value: %s"
+msgstr "va_list-waarde kon niet geladen worden: %s"
+
+#: ../contrib/egg/egg-date-time.c:55
+msgid "Just now"
+msgstr "Net"
+
+#: ../contrib/egg/egg-date-time.c:57
+msgid "An hour ago"
+msgstr "Een uur geleden"
+
+#: ../contrib/egg/egg-date-time.c:59
+msgid "Yesterday"
+msgstr "Gisteren"
+
+#: ../contrib/egg/egg-date-time.c:65
+msgid "About a year ago"
+msgstr "Ongeveer een jaar geleden"
+
+#: ../contrib/egg/egg-date-time.c:69
+#, c-format
+msgid "About %u year ago"
+msgid_plural "About %u years ago"
+msgstr[0] "Ongeveer %u jaar geleden"
+msgstr[1] "Ongeveer %u jaar geleden"
+
+#: ../contrib/egg/egg-search-bar.c:378
+msgid "Search"
+msgstr "Zoeken"
+
+#: ../contrib/search/trie.c:790
+#, c-format
+msgid "Traversal order %u is not supported on Trie."
+msgstr "Traversal-volgorde %u wordt op Trie niet ondersteund."
+
+#: ../contrib/tmpl/tmpl-parser.c:199
+#, c-format
+msgid "%s() may only be called once"
+msgstr "%s() kan maar één keer aangeroepen worden"
+
+#: ../contrib/tmpl/tmpl-parser.c:211
+#, c-format
+msgid "Parser does not contain an input stream"
+msgstr "Parser bevat geen invoerstroom"
+
+#: ../contrib/tmpl/tmpl-template.c:451
+#, c-format
+msgid "Must parse template before expanding"
+msgstr "Moet sjabloon parsen voor uitbreiding"
+
+#: ../contrib/tmpl/tmpl-template-locator.c:105
+#, c-format
+msgid "Failed to locate template \"%s\""
+msgstr "Sjabloonlocatie kon niet bepaald worden: \"%s\""
+
+#: ../contrib/xml/xml-reader.c:327
+#, c-format
+msgid "Could not parse XML from stream"
+msgstr "Kon XML vanuit stroom niet parsen"
+
+#: ../data/gtk/menus.ui.h:1
+msgid "_New Project"
+msgstr "_Nieuw project"
+
+#: ../data/gtk/menus.ui.h:2
+msgid "_Open Project"
+msgstr "_Open project"
+
+#: ../data/gtk/menus.ui.h:3
+msgid "_Preferences"
+msgstr "_Voorkeuren"
+
+#: ../data/gtk/menus.ui.h:4
+msgid "Keyboard _Shortcuts"
+msgstr "Toetsenbord_sneltoetsen"
+
+#: ../data/gtk/menus.ui.h:5
+msgid "_Help"
+msgstr "_Hulp"
+
+#: ../data/gtk/menus.ui.h:6
+msgid "_About"
+msgstr "_Over"
+
+#: ../data/gtk/menus.ui.h:7
+msgid "_Quit"
+msgstr "_Afsluiten"
+
+#: ../data/gtk/menus.ui.h:8 ../data/ui/ide-editor-view.ui.h:1
+msgid "_Reload"
+msgstr "_Herladen"
+
+#: ../data/gtk/menus.ui.h:9
+msgid "_Print…"
+msgstr "_Afdrukken…"
+
+#: ../data/gtk/menus.ui.h:10
+msgid "_Fullscreen"
+msgstr "_Volledig scherm"
+
+#: ../data/gtk/menus.ui.h:11
+msgid "_New File"
+msgstr "_Nieuw bestand"
+
+#: ../data/gtk/menus.ui.h:12
+msgid "_Open File"
+msgstr "_Bestand openen"
+
+#: ../data/gtk/menus.ui.h:13
+msgid "Save _All"
+msgstr "_Alles opslaan"
+
+#: ../data/gtk/menus.ui.h:14
+msgid "_Close All"
+msgstr "Alles _sluiten"
+
+#: ../data/gtk/menus.ui.h:15
+msgid "_Go to Definition"
+msgstr "Naar definitie _gaan"
+
+#: ../data/gtk/menus.ui.h:16
+msgid "_Undo"
+msgstr "_Ongedaan maken"
+
+#: ../data/gtk/menus.ui.h:17
+msgid "_Redo"
+msgstr "_Herhalen"
+
+#: ../data/gtk/menus.ui.h:18
+msgid "C_ut"
+msgstr "_Knippen"
+
+#: ../data/gtk/menus.ui.h:19 ../plugins/terminal/gtk/menus.ui.h:2
+msgid "_Copy"
+msgstr "K_opiëren"
+
+#: ../data/gtk/menus.ui.h:20 ../plugins/terminal/gtk/menus.ui.h:3
+msgid "_Paste"
+msgstr "_Plakken"
+
+#: ../data/gtk/menus.ui.h:21
+msgid "_Delete"
+msgstr "_Verwijderen"
+
+#: ../data/gtk/menus.ui.h:22 ../plugins/terminal/gtk/menus.ui.h:4
+msgid "Selection"
+msgstr "Selectie"
+
+#: ../data/gtk/menus.ui.h:23 ../plugins/terminal/gtk/menus.ui.h:5
+msgid "Select _All"
+msgstr "_Alles selecteren"
+
+#: ../data/gtk/menus.ui.h:24 ../plugins/terminal/gtk/menus.ui.h:6
+msgid "Select _None"
+msgstr "_Niets selecteren"
+
+#: ../data/gtk/menus.ui.h:25
+msgid "All _Upper Case"
+msgstr "Alles naar _hoofdletters"
+
+#: ../data/gtk/menus.ui.h:26
+msgid "All _Lower Case"
+msgstr "Alles naar _kleine letters"
+
+#: ../data/gtk/menus.ui.h:27
+msgid "_Invert Case"
+msgstr "_Hoofdlettergebruik omkeren"
+
+#: ../data/gtk/menus.ui.h:28
+msgid "_Title Case"
+msgstr "_Titel-hoofdlettergebruik"
+
+#: ../data/gtk/menus.ui.h:29
+msgid "Join Lines"
+msgstr "Regels samenvoegen"
+
+#: ../data/gtk/menus.ui.h:30
+msgid "Sort Lines"
+msgstr "Regels sorteren"
+
+#: ../data/gtk/menus.ui.h:31
+msgid "Zoom"
+msgstr "Zoomen"
+
+#: ../data/gtk/menus.ui.h:32
+msgid "Zoom _In"
+msgstr "_Inzoomen"
+
+#: ../data/gtk/menus.ui.h:33
+msgid "Zoom _Out"
+msgstr "_Uitzoomen"
+
+#: ../data/gtk/menus.ui.h:34
+msgid "Reset"
+msgstr "Beginwaarden"
+
+#: ../data/gtk/menus.ui.h:35
+#, fuzzy
+msgid "_Match Case"
+msgstr "_Titel-hoofdlettergebruik"
+
+#: ../data/gtk/menus.ui.h:36
+msgid "Match _Entire Word Only"
+msgstr ""
+
+#: ../data/gtk/menus.ui.h:37
+msgid "Match as _Regular Expression"
+msgstr ""
+
+#: ../data/gtk/menus.ui.h:38
+msgid "_Wrap Around"
+msgstr ""
+
+#: ../data/gtk/menus.ui.h:39
+msgid "Cu_t"
+msgstr ""
+
+#: ../data/gtk/menus.ui.h:40
+msgid "Split"
+msgstr "Opdelen"
+
+#: ../data/gtk/menus.ui.h:41
+msgid "Split Left"
+msgstr "Links opdelen"
+
+#: ../data/gtk/menus.ui.h:42
+msgid "Split Right"
+msgstr "Rechts opdelen"
+
+#: ../data/gtk/menus.ui.h:43
+msgid "Split Down"
+msgstr "Beneden opdelen"
+
+#: ../data/gtk/menus.ui.h:44
+msgid "Move"
+msgstr "Verplaatsen"
+
+#: ../data/gtk/menus.ui.h:45
+msgid "Move Left"
+msgstr "Naar _links verplaatsen"
+
+#: ../data/gtk/menus.ui.h:46
+msgid "Move Right"
+msgstr "Naar _rechts verplaatsen"
+
+#: ../data/gtk/menus.ui.h:47
+msgid "_Save"
+msgstr "_Opslaan"
+
+#: ../data/gtk/menus.ui.h:48
+msgid "_Save As"
+msgstr "Opslaan _als"
+
+#: ../data/gtk/menus.ui.h:49
+msgid "_Print"
+msgstr "_Afdrukken"
+
+#: ../data/gtk/menus.ui.h:50
+msgid "_Close"
+msgstr "Sl_uiten"
+
+#: ../data/style-schemes/builder-dark.xml.h:1
+msgid "Builder Dark"
+msgstr "Builder donker"
+
+#: ../data/style-schemes/builder-dark.xml.h:2
+msgid "Dark color scheme for Builder using the Tango color palette"
+msgstr ""
+"Donker kleurenschema voor Builder gebruikmakend van het Tango-kleurenpalet"
+
+#: ../data/style-schemes/builder.xml.h:1 ../libide/ide-application.c:413
+#: ../libide/preferences/ide-preferences-builtin.c:113
+msgid "Builder"
+msgstr "Builder"
+
+#: ../data/style-schemes/builder.xml.h:2
+msgid "The default color scheme for Builder"
+msgstr "Het standaard kleurenschema voor Builder"
+
+# In gedit ook zo vertaald
+#. OVR indicates we are in overwite mode
+#: ../data/ui/ide-editor-frame.ui.h:2
+msgid "OVR"
+msgstr "OVR"
+
+#: ../data/ui/ide-editor-perspective.ui.h:1
+msgid "No open files"
+msgstr "Geen geopende bestanden"
+
+#: ../data/ui/ide-editor-perspective.ui.h:2
+msgid "Try opening a file by typing in the search box at the top"
+msgstr ""
+"Probeer een bestand te openen door in de zoekbalk aan de bovenkant te typen"
+
+#: ../data/ui/ide-editor-perspective.ui.h:3
+msgid "Enable / Disable left panel. Shortcut: F9"
+msgstr "Linkerpaneel in/uitschakelen. Sneltoets: F9"
+
+#: ../data/ui/ide-editor-perspective.ui.h:4
+msgid "Enable / Disable bottom panel. Shortcut: Ctrl + F9"
+msgstr "Paneel beneden in/uitschakelen. Sneltoets: Ctrl + F9"
+
+#: ../data/ui/ide-editor-perspective.ui.h:5
+msgid "Enable / Disable right panel. Shortcut: Shift + F9"
+msgstr "Rechterpaneel in/uitschakelen. Sneltoets: Shift + F9"
+
+#: ../data/ui/ide-editor-tweak-widget.ui.h:1
+msgid "Search highlight mode…"
+msgstr "Markeermodus zoeken…"
+
+#: ../data/ui/ide-editor-tweak-widget.ui.h:2
+msgid "Display line numbers"
+msgstr "Regelnummers weergeven"
+
+#: ../data/ui/ide-editor-tweak-widget.ui.h:3
+msgid "Display right margin"
+msgstr "Rechtermarge weergeven"
+
+#: ../data/ui/ide-editor-tweak-widget.ui.h:4
+msgid "Highlight current line"
+msgstr "Huidige regel markeren"
+
+#: ../data/ui/ide-editor-tweak-widget.ui.h:5
+msgid "Auto indent"
+msgstr "Automatische inspringing"
+
+#: ../data/ui/ide-editor-tweak-widget.ui.h:6
+#: ../libide/preferences/ide-preferences-builtin.c:119
+msgid "Smart Backspace"
+msgstr "Slimme backspace"
+
+#: ../data/ui/ide-editor-tweak-widget.ui.h:7
+#: ../libide/preferences/ide-preferences-builtin.c:234
+msgid "Indentation"
+msgstr "Inspringing"
+
+#: ../data/ui/ide-editor-tweak-widget.ui.h:8
+#: ../libide/preferences/ide-preferences-builtin.c:145
+msgid "Spaces"
+msgstr "Spaties"
+
+#: ../data/ui/ide-editor-tweak-widget.ui.h:9
+#: ../libide/preferences/ide-preferences-builtin.c:146
+msgid "Tabs"
+msgstr "Tabs"
+
+#: ../data/ui/ide-editor-tweak-widget.ui.h:10
+msgid "2"
+msgstr "2"
+
+#: ../data/ui/ide-editor-tweak-widget.ui.h:11
+msgid "3"
+msgstr "3"
+
+#: ../data/ui/ide-editor-tweak-widget.ui.h:12
+msgid "4"
+msgstr "4"
+
+#: ../data/ui/ide-editor-tweak-widget.ui.h:13
+msgid "8"
+msgstr "8"
+
+#: ../data/ui/ide-editor-view.ui.h:2
+#: ../data/ui/ide-greeter-perspective.ui.h:14
+msgid "_Cancel"
+msgstr "_Annuleren"
+
+#: ../data/ui/ide-editor-view.ui.h:3
+msgid ""
+"Builder has discovered that this file has been modified externally. Would "
+"you like to reload the file?"
+msgstr ""
+"Builder heeft opgemerkt dat dit bestand extern is gewijzigd. Wilt u het "
+"bestand herladen?"
+
+#: ../data/ui/ide-editor-view.ui.h:4
+msgid "Go to line number"
+msgstr "Ga naar regelnummer"
+
+#: ../data/ui/ide-editor-view.ui.h:5
+msgid "Change editor settings and language"
+msgstr "Editor-instellingen en -taal wijzigen"
+
+#: ../data/ui/ide-editor-view.ui.h:6
+msgid "Go to Line"
+msgstr "Ga naar regel"
+
+#: ../data/ui/ide-editor-view.ui.h:7
+msgid "Go"
+msgstr "Gaan"
+
+#: ../data/ui/ide-genesis-perspective.ui.h:1
+msgid "New Project"
+msgstr "Nieuw project"
+
+#: ../data/ui/ide-genesis-perspective.ui.h:2
+msgid "Co_ntinue"
+msgstr "_Doorgaan"
+
+#. the action:// link is used to jump to the new-project view
+#: ../data/ui/ide-greeter-perspective.ui.h:2
+msgid "Why not <a href=\"action://app.new-project\">create a new project</a>?"
+msgstr ""
+
+#: ../data/ui/ide-greeter-perspective.ui.h:3
+msgid "No projects found"
+msgstr ""
+
+#: ../data/ui/ide-greeter-perspective.ui.h:4
+msgid "Recent Projects"
+msgstr "Recente projecten"
+
+#: ../data/ui/ide-greeter-perspective.ui.h:5
+msgid "Other Projects"
+msgstr "Andere projecten"
+
+#: ../data/ui/ide-greeter-perspective.ui.h:6
+msgid "_Remove"
+msgstr "_Verwijderen"
+
+#: ../data/ui/ide-greeter-perspective.ui.h:7
+msgid "Select a Project"
+msgstr "Een project selecteren"
+
+#: ../data/ui/ide-greeter-perspective.ui.h:8
+msgid "Click an item to select"
+msgstr "Een item klikken om te selecteren"
+
+#: ../data/ui/ide-greeter-perspective.ui.h:9
+msgid "Create a new project"
+msgstr "Nieuw project aanmaken"
+
+#: ../data/ui/ide-greeter-perspective.ui.h:10
+#: ../plugins/project-tree/gtk/menus.ui.h:2
+msgid "_New"
+msgstr "_Nieuw"
+
+#: ../data/ui/ide-greeter-perspective.ui.h:11
+msgid "Search for projects"
+msgstr "Zoeken naar projecten"
+
+#: ../data/ui/ide-greeter-perspective.ui.h:12
+msgid "Select projects for removal"
+msgstr "Projecten selecteren om te verwijderen"
+
+#: ../data/ui/ide-greeter-perspective.ui.h:13
+msgid "Return to project selection"
+msgstr "Teruggaan naar selectie van projecten"
+
+#: ../data/ui/ide-layout-tab-bar.ui.h:1
+msgid "List open files"
+msgstr "Geopende bestanden tonen"
+
+#: ../data/ui/ide-layout-tab-bar.ui.h:2
+msgid "Add a new empty file to your project"
+msgstr "Een nieuw leeg bestand aan uw project toevoegen"
+
+#: ../data/ui/ide-layout-tab.ui.h:1
+msgid "Jump to previous location"
+msgstr "Naar vorige locatie springen"
+
+#: ../data/ui/ide-layout-tab.ui.h:2
+msgid "Jump to next location"
+msgstr "Naar volgende locatie springen"
+
+#: ../data/ui/ide-layout-tab.ui.h:3
+msgid "Close the current document"
+msgstr "Huidige document sluiten"
+
+#: ../data/ui/ide-preferences-font-button.ui.h:1
+msgid "_Select"
+msgstr "_Selecteren"
+
+#: ../data/ui/ide-preferences-perspective.ui.h:1
+msgid "Search through preferences"
+msgstr "Door voorkeuren zoeken"
+
+#: ../data/ui/ide-shortcuts-window.ui.h:1
+msgctxt "shortcut window"
+msgid "Editor Shortcuts"
+msgstr "Bewerker-snelkoppelingen"
+
+#: ../data/ui/ide-shortcuts-window.ui.h:2
+msgctxt "shortcut window"
+msgid "General"
+msgstr "Algemeen"
+
+#: ../data/ui/ide-shortcuts-window.ui.h:3
+msgctxt "shortcut window"
+msgid "Global Search"
+msgstr "Overal zoeken"
+
+#: ../data/ui/ide-shortcuts-window.ui.h:4
+msgctxt "shortcut window"
+msgid "Preferences"
+msgstr "Voorkeuren"
+
+#: ../data/ui/ide-shortcuts-window.ui.h:5
+msgctxt "shortcut window"
+msgid "Command Bar"
+msgstr "Opdracht-balk"
+
+#: ../data/ui/ide-shortcuts-window.ui.h:6
+msgctxt "shortcut window"
+msgid "Terminal"
+msgstr "Terminal"
+
+#: ../data/ui/ide-shortcuts-window.ui.h:7
+msgctxt "shortcut window"
+msgid "Keyboard Shortcuts"
+msgstr "Toetsenbordsnelkoppelingen"
+
+#: ../data/ui/ide-shortcuts-window.ui.h:8
+msgctxt "shortcut window"
+msgid "Panels"
+msgstr "Panelen"
+
+#: ../data/ui/ide-shortcuts-window.ui.h:9
+msgctxt "shortcut window"
+msgid "Toggle left panel"
+msgstr "Linkerpaneel omschakelen"
+
+#: ../data/ui/ide-shortcuts-window.ui.h:10
+msgctxt "shortcut window"
+msgid "Toggle right panel"
+msgstr "Rechterpaneel omschakelen"
+
+#: ../data/ui/ide-shortcuts-window.ui.h:11
+msgctxt "shortcut window"
+msgid "Toggle bottom panel"
+msgstr "Onderpaneel omschakelen"
+
+#: ../data/ui/ide-shortcuts-window.ui.h:12
+msgctxt "shortcut window"
+msgid "Touchpad gestures"
+msgstr "Touchpad-gebaren"
+
+#: ../data/ui/ide-shortcuts-window.ui.h:13
+msgctxt "shortcut window"
+msgid "Switch to the next document"
+msgstr "Naar het volgende document wisselen"
+
+#: ../data/ui/ide-shortcuts-window.ui.h:14
+msgctxt "shortcut window"
+msgid "Switch to the previous document"
+msgstr "Naar het vorige document wisselen"
+
+#: ../data/ui/ide-shortcuts-window.ui.h:15
+msgctxt "shortcut window"
+msgid "Files"
+msgstr "Bestanden"
+
+#: ../data/ui/ide-shortcuts-window.ui.h:16
+msgctxt "shortcut window"
+msgid "Create new document"
+msgstr "Nieuw document aanmaken"
+
+#: ../data/ui/ide-shortcuts-window.ui.h:17
+msgctxt "shortcut window"
+msgid "Open a document"
+msgstr "Een document openen"
+
+#: ../data/ui/ide-shortcuts-window.ui.h:18
+msgctxt "shortcut window"
+msgid "Save the document"
+msgstr "Document opslaan"
+
+#: ../data/ui/ide-shortcuts-window.ui.h:19
+msgctxt "shortcut window"
+msgid "Close the document"
+msgstr "Document sluiten"
+
+#: ../data/ui/ide-shortcuts-window.ui.h:20
+msgctxt "shortcut window"
+msgid "Find and replace"
+msgstr "Zoeken en vervangen"
+
+#: ../data/ui/ide-shortcuts-window.ui.h:21
+msgctxt "shortcut window"
+msgid "Find"
+msgstr "Zoeken"
+
+#: ../data/ui/ide-shortcuts-window.ui.h:22
+msgctxt "shortcut window"
+msgid "Find the next match"
+msgstr "De volgende overeenkomst tonen"
+
+#: ../data/ui/ide-shortcuts-window.ui.h:23
+msgctxt "shortcut window"
+msgid "Find the previous match"
+msgstr "De vorige overeenkomst tonen"
+
+#: ../data/ui/ide-shortcuts-window.ui.h:24
+msgctxt "shortcut window"
+msgid "Clear highlight"
+msgstr "Markering wissen"
+
+#: ../data/ui/ide-shortcuts-window.ui.h:25
+msgctxt "shortcut window"
+msgid "Copy and Paste"
+msgstr "Kopiëren en plakken"
+
+#: ../data/ui/ide-shortcuts-window.ui.h:26
+msgctxt "shortcut window"
+msgid "Copy selected text to clipboard"
+msgstr "Geselecteerde tekst naar klembord kopiëren"
+
+#: ../data/ui/ide-shortcuts-window.ui.h:27
+msgctxt "shortcut window"
+msgid "Cut selected text to clipboard"
+msgstr "Geselecteerde tekst naar klembord knippen"
+
+#: ../data/ui/ide-shortcuts-window.ui.h:28
+msgctxt "shortcut window"
+msgid "Paste text from clipboard"
+msgstr "Tekst van klembord plakken"
+
+#: ../data/ui/ide-shortcuts-window.ui.h:29
+msgctxt "shortcut window"
+msgid "Undo and Redo"
+msgstr "Ongedaan maken en herhalen"
+
+#: ../data/ui/ide-shortcuts-window.ui.h:30
+msgctxt "shortcut window"
+msgid "Undo previous command"
+msgstr "Vorige opdracht ongedaan maken"
+
+#: ../data/ui/ide-shortcuts-window.ui.h:31
+msgctxt "shortcut window"
+msgid "Redo previous command"
+msgstr "Vorige opdracht herhalen"
+
+#: ../data/ui/ide-shortcuts-window.ui.h:32
+msgctxt "shortcut window"
+msgid "Editing"
+msgstr "Bewerken"
+
+#: ../data/ui/ide-shortcuts-window.ui.h:33
+msgctxt "shortcut window"
+msgid "Increment number at cursor"
+msgstr "Nummer bij muisaanwijzer verhogen"
+
+#: ../data/ui/ide-shortcuts-window.ui.h:34
+msgctxt "shortcut window"
+msgid "Decrement number at cursor"
+msgstr "Nummer bij muisaanwijzer verlagen"
+
+#: ../data/ui/ide-shortcuts-window.ui.h:35
+msgctxt "shortcut window"
+msgid "Join selected lines"
+msgstr "Geselecteerde regels samenvoegen"
+
+#: ../data/ui/ide-shortcuts-window.ui.h:36
+msgctxt "shortcut window"
+msgid "Show completion window"
+msgstr "Voltooiingsvenster weergeven"
+
+#: ../data/ui/ide-shortcuts-window.ui.h:37
+msgctxt "shortcut window"
+msgid "Toggle overwrite"
+msgstr "Tussen invoegen en overschrijven wisselen"
+
+#: ../data/ui/ide-shortcuts-window.ui.h:38
+msgctxt "shortcut window"
+msgid "Reindent line"
+msgstr "Regel opnieuw inspringen"
+
+#: ../data/ui/ide-shortcuts-window.ui.h:39
+msgctxt "shortcut window"
+msgid "Navigation"
+msgstr "Navigatie"
+
+#: ../data/ui/ide-shortcuts-window.ui.h:40
+msgctxt "shortcut window"
+msgid "Move to next error in file"
+msgstr "Naar volgende fout in bestand gaan"
+
+#: ../data/ui/ide-shortcuts-window.ui.h:41
+msgctxt "shortcut window"
+msgid "Move to previous error in file"
+msgstr "Naar vorige fout in bestand gaan"
+
+#: ../data/ui/ide-shortcuts-window.ui.h:42
+msgctxt "shortcut window"
+msgid "Move to previous edit location"
+msgstr "Naar vorige bewerkingslocatie gaan"
+
+#: ../data/ui/ide-shortcuts-window.ui.h:43
+msgctxt "shortcut window"
+msgid "Move to next edit location"
+msgstr "Naar volgende bewerkingslocatie gaan"
+
+#: ../data/ui/ide-shortcuts-window.ui.h:44
+msgctxt "shortcut window"
+msgid "Jump to definition of symbol"
+msgstr "Naar symbooldefinitie springen"
+
+#: ../data/ui/ide-shortcuts-window.ui.h:45
+msgctxt "shortcut window"
+msgid "Move sectionport up within the file"
+msgstr "Weergave binnen het bestand omhoog schuiven"
+
+#: ../data/ui/ide-shortcuts-window.ui.h:46
+msgctxt "shortcut window"
+msgid "Move sectionport down within the file"
+msgstr "Weergave binnen het bestand omlaag schuiven"
+
+#: ../data/ui/ide-shortcuts-window.ui.h:47
+msgctxt "shortcut window"
+msgid "Move sectionport to end of file"
+msgstr "Weergave naar eind van bestand schuiven"
+
+#: ../data/ui/ide-shortcuts-window.ui.h:48
+msgctxt "shortcut window"
+msgid "Move sectionport to beginning of file"
+msgstr "Weergave naar begin van bestand schuiven"
+
+#: ../data/ui/ide-shortcuts-window.ui.h:49
+msgctxt "shortcut window"
+msgid "Move to matching bracket"
+msgstr "Naar bijbehorend haakje gaan"
+
+#: ../data/ui/ide-shortcuts-window.ui.h:50
+msgctxt "shortcut window"
+msgid "Selections"
+msgstr "Selecties"
+
+#: ../data/ui/ide-shortcuts-window.ui.h:51
+msgctxt "shortcut window"
+msgid "Select all"
+msgstr "Alles selecteren"
+
+#: ../data/ui/ide-shortcuts-window.ui.h:52
+msgctxt "shortcut window"
+msgid "Unselect all"
+msgstr "Niets selecteren"
+
+#: ../data/ui/ide-shortcuts-window.ui.h:53
+msgctxt "shortcut window"
+msgid "Terminal Shortcuts"
+msgstr "Terminal-snelkoppelingen"
+
+#: ../data/ui/ide-workbench-header-bar.ui.h:1
+msgid "Search for files. Shortcut: Ctrl + ."
+msgstr "Bestanden zoeken. Sneltoets: Ctrl + ."
+
+#: ../data/ui/ide-workbench-header-bar.ui.h:2
+msgid "Drops down a list of file operations"
+msgstr "Geeft een lijst met bestandsbewerkingen"
+
+#: ../libide/directory/ide-directory-genesis-addin.c:106
+msgid "From an existing project on this computer"
+msgstr "Vanuit bestaand project op deze computer"
+
+#: ../libide/editorconfig/ide-editorconfig-file-settings.c:153
+msgid "No file was provided."
+msgstr "Er werd geen bestand aangeboden."
+
+#: ../libide/editor/ide-editor-frame.c:75
+#, c-format
+msgid "Line %u, Column %u"
+msgstr "Regel %u, kolom %u"
+
+#: ../libide/editor/ide-editor-frame.c:244
+#, c-format
+msgid "%u of %u"
+msgstr "%u van %u"
+
+#: ../libide/editor/ide-editor-frame.c:646
+#: ../plugins/project-tree/gtk/menus.ui.h:1
+msgid "Re_veal in Project Tree"
+msgstr "In projectboom _tonen"
+
+#: ../libide/editor/ide-editor-perspective.c:444
+#: ../libide/preferences/ide-preferences-builtin.c:102
+#: ../libide/preferences/ide-preferences-builtin.c:125
+msgid "Editor"
+msgstr "Editor"
+
+#: ../libide/editor/ide-editor-view-actions.c:301
+msgid "Save Document"
+msgstr "Document opslaan"
+
+#: ../libide/editor/ide-editor-view-actions.c:307
+#: ../libide/editor/ide-editor-view-actions.c:438
+#: ../libide/ide-workbench-actions.c:67
+#: ../plugins/build-tools/gbp-build-panel.ui.h:8
+#: ../plugins/terminal/gb-terminal-view-actions.c:305
+msgid "Cancel"
+msgstr "Annuleren"
+
+#: ../libide/editor/ide-editor-view-actions.c:308
+#: ../libide/editor/ide-editor-view-actions.c:439
+#: ../plugins/terminal/gb-terminal-view-actions.c:306
+msgid "Save"
+msgstr "Opslaan"
+
+#: ../libide/editor/ide-editor-view-actions.c:427
+msgid "Save Document As"
+msgstr "Document opslaan als"
+
+#: ../libide/editor/ide-editor-view.c:109
+msgid "Plain Text"
+msgstr "Platte tekst"
+
+#. translators: the user selected a number outside the value range for the document.
+#: ../libide/editor/ide-editor-view.c:660
+#, c-format
+msgid "Provide a number between 1 and %u"
+msgstr "Geef een nummer tussen 1 en %u"
+
+#: ../libide/genesis/ide-genesis-perspective.c:200
+#: ../libide/greeter/ide-greeter-perspective.c:436
+msgid "Failed to load the project"
+msgstr "Laden van project mislukt"
+
+#: ../libide/gsettings/ide-language-defaults.c:177
+#, c-format
+msgid "%s contained invalid ASCII"
+msgstr "%s bevat ongeldig ASCII"
+
+#: ../libide/gsettings/ide-language-defaults.c:192
+#, c-format
+msgid "Failed to parse integer from \"%s\""
+msgstr "Kan integer van ‘%s’ niet ontleden"
+
+#: ../libide/gsettings/ide-language-defaults.c:270
+msgid "language defaults missing version in [global] group."
+msgstr "Standaardwaarden voor taal ontbreken in [global] groep."
+
+#: ../libide/gsettings/ide-language-defaults.c:362
+msgid "Failed to initialize defaults."
+msgstr "Standaardwaarden initialiseren mislukt."
+
+#: ../libide/ide-application-actions.c:114
+msgid "An IDE for GNOME"
+msgstr "Een geïntegreerde ontwikkelingsomgeving voor Gnome"
+
+#: ../libide/ide-application-actions.c:120
+msgid "GNOME Builder"
+msgstr "Gnome Builder"
+
+#: ../libide/ide-application-actions.c:122
+msgid "translator-credits"
+msgstr ""
+"Gnome-NL\n"
+"\n"
+"Justin van Steijn"
+
+#: ../libide/ide-application-actions.c:125
+msgid "Learn more about GNOME Builder"
+msgstr "Kom meer te weten over Gnome Builder"
+
+#: ../libide/ide-application-actions.c:129
+msgid "Funded By"
+msgstr "Gesponsord door"
+
+#: ../libide/ide-application-command-line.c:102
+msgid "Commands:"
+msgstr "Opdrachten:"
+
+#: ../libide/ide-application-command-line.c:185
+msgid "List available subcommands"
+msgstr "Beschikbare subopdrachten weergeven"
+
+#: ../libide/ide-application-command-line.c:192
+msgid "Run Builder in standalone mode"
+msgstr "Builder in standalone-modus uitvoeren"
+
+#: ../libide/ide-application-command-line.c:199
+msgid "Show the application's version"
+msgstr "De toepassingsversie tonen"
+
+#: ../libide/ide-application-command-line.c:218
+msgid "Increase verbosity, may be specified multiple times"
+msgstr "Hoeveelheid details verhogen, kan meerdere keren gespecificeerd worden"
+
+#: ../libide/ide-application-command-line.c:225
+msgid "Enter GApplication Service mode"
+msgstr "GApplication Service-modus binnengaan"
+
+#: ../libide/ide-application-command-line.c:255
+msgid "COMMAND"
+msgstr "OPDRACHT"
+
+#: ../libide/ide-application-command-line.c:326
+msgid "No commands available"
+msgstr "Geen opdrachten beschikbaar"
+
+#: ../libide/ide-application-command-line.c:356
+msgid "Please provide a command"
+msgstr "Voer alstublieft een opdracht in"
+
+#: ../libide/ide-application-command-line.c:366
+msgid "No such tool"
+msgstr "Geen dergelijk hulpmiddel"
+
+#: ../libide/ide-application-command-line.c:380
+msgid "Please provide a worker type"
+msgstr "Voer alstublieft een worker-type in"
+
+#: ../libide/ide-application-command-line.c:387
+msgid "Please provide a D-Bus address"
+msgstr "Voer alstublieft een D-Bus-adres in"
+
+#: ../libide/ide-application-command-line.c:396
+msgid "No such worker"
+msgstr "Geen dergelijke worker"
+
+#: ../libide/ide-buffer.c:2298
+msgid "The current language lacks a symbol resolver."
+msgstr "Huidige taal ondersteunt geen symbool-oplossers"
+
+#: ../libide/ide-buffer-manager.c:612
+msgid "File too large to be opened."
+msgstr "Bestand te groot om te openen."
+
+#: ../libide/ide-buffer-manager.c:1461
+msgid "Words"
+msgstr "Woorden"
+
+#: ../libide/ide-buffer-manager.c:1673
+#, c-format
+msgid "unsaved document %u"
+msgstr "niet-opgeslagen document %u"
+
+#: ../libide/ide-buffer-manager.c:1707
+msgid "Failed to save buffer, ignoring reclamation."
+msgstr "Kon buffer niet opslaan, negeert bezwaren."
+
+#: ../libide/ide-builder.c:89
+#, c-format
+msgid "%s does not support building"
+msgstr "%s ondersteunt bouwen niet"
+
+#: ../libide/ide-build-result.c:217
+msgid "Failed to open stderr stream."
+msgstr "Stderr-stream kon niet geopend worden."
+
+#: ../libide/ide-build-result.c:247
+msgid "Failed to open stdout stream."
+msgstr "Stdout-stream kon niet geopend worden."
+
+#: ../libide/ide-build-system.c:122
+#, c-format
+msgid "%s() is not supported on %s build system."
+msgstr "%s() wordt door compilatiesysteem %s niet ondersteund."
+
+#: ../libide/ide.c:62
+#, c-format
+msgid "You must call %s() before using libide."
+msgstr "U moet %s() aanroepen voor het gebruik van libide."
+
+#: ../libide/ide-configuration-manager.c:427
+msgid "Default Configuration"
+msgstr "Standaardconfiguratie"
+
+#: ../libide/ide-context.c:1828
+msgid "An unload request is already pending"
+msgstr "Er staat al een ontlaad-verzoek uit."
+
+#: ../libide/ide-context.c:1943
+msgid "Context has already been restored."
+msgstr "Context is al hersteld."
+
+#: ../libide/ide-device-manager.c:147
+#, c-format
+msgid "The device \"%s\" could not be found."
+msgstr "Het apparaat ‘%s’ kon niet worden gevonden."
+
+#: ../libide/ide-environment-editor.c:65
+msgid "New variable…"
+msgstr "Nieuwe variabele…"
+
+#: ../libide/ide-layout-view.c:146
+msgid "untitled document"
+msgstr "naamloos document"
+
+#: ../libide/ide-object.c:288
+#, c-format
+msgid "No implementations of extension point \"%s\"."
+msgstr "Geen implementaties van uitbreidingspunt ‘%s’."
+
+#: ../libide/ide-object.c:380
+msgid "Failed to locate build system plugin."
+msgstr "Kon de buildsystem-uitbreiding niet laden."
+
+#: ../libide/ide-object.c:467
+msgid "No such extension point."
+msgstr "Geen dergelijk uitbreidingspunt."
+
+#: ../libide/ide-object.c:477
+msgid "No implementations of extension point."
+msgstr "Geen implementaties van uitbreidingspunt."
+
+#: ../libide/ide-project.c:463
+msgid "Destination file must be within the project tree."
+msgstr "Bestemmingsbestand moet binnen de projectboom zijn."
+
+#: ../libide/ide-project.c:593
+msgid "File must be within the project tree."
+msgstr "Bestand moet binnen de projectboom zijn."
+
+#: ../libide/ide-recent-projects.c:383
+#, c-format
+msgid "%s() may only be executed once"
+msgstr "%s() kan maar één keer uitgevoerd worden"
+
+#: ../libide/ide-runtime-manager.c:100
+msgid "Host operating system"
+msgstr "Host-besturingssysteem"
+
+#: ../libide/ide-script.c:205
+#, c-format
+msgid "%s has not implemented GAsyncInitable."
+msgstr "%s heeft GAsyncInitable niet geïmplementeerd."
+
+#: ../libide/ide-source-snippet.c:372
+msgid "Chunk does not belong to snippet."
+msgstr "Stuk behoort niet bij knipsel."
+
+#: ../libide/ide-source-snippet-completion-provider.c:297
+#: ../libide/preferences/ide-preferences-builtin.c:173
+msgid "Snippets"
+msgstr "Knipsels"
+
+#: ../libide/ide-source-snippets-manager.c:96
+#, c-format
+msgid "Failed to open directory: %s"
+msgstr "Kon map niet openen: %s"
+
+#: ../libide/ide-source-snippets-manager.c:109
+#, c-format
+msgid "Failed to load file: %s: %s"
+msgstr "Kon bestand niet laden: %s: %s"
+
+#: ../libide/ide-source-view.c:4897
+#, c-format
+msgid "Insert “%s”"
+msgstr "‘%s’ invoegen"
+
+#: ../libide/ide-source-view.c:4899
+#, c-format
+msgid "Replace “%s” with “%s”"
+msgstr "‘%s’ door ‘%s’ vervangen"
+
+#: ../libide/ide-source-view.c:5013
+msgid "Apply Fix-It"
+msgstr "Fix-It toepassen"
+
+#: ../libide/ide-uri.c:181
+#, no-c-format
+msgid "Invalid %-encoding in URI"
+msgstr "Ongeldige %-encoding in URI"
+
+#: ../libide/ide-uri.c:219
+msgid "Non-UTF-8 characters in URI"
+msgstr "Niet-UTF8-tekens in URI"
+
+#: ../libide/ide-uri.c:366 ../libide/ide-uri.c:377
+#, c-format
+msgid "Invalid IP literal '%s' in URI"
+msgstr "Ongeldige IP-tekens ‘%s’ in URI"
+
+#: ../libide/ide-uri.c:411
+#, c-format
+msgid "Invalid encoded IP literal '%s' in URI"
+msgstr "Ongeldige gecodeerde IP-tekens ‘%s’ in URI"
+
+#: ../libide/ide-uri.c:420
+#, c-format
+msgid "Invalid non-ASCII hostname '%s' in URI"
+msgstr "Ongeldige niet-ASCII hostnaam ‘%s’ in URI"
+
+#: ../libide/ide-uri.c:435
+#, c-format
+msgid "Non-ASCII hostname '%s' forbidden in this URI"
+msgstr "De niet-ASCII hostnaam ‘%s’ is verboden in deze URI"
+
+#: ../libide/ide-uri.c:457
+#, c-format
+msgid "Could not parse port '%s' in URI"
+msgstr "Kon poort ‘%s’ in URI niet parsen"
+
+#: ../libide/ide-uri.c:464
+#, c-format
+msgid "Port '%s' in URI is out of range"
+msgstr "Poort ‘%s’ in URI is buiten bereik"
+
+#: ../libide/ide-uri.c:590
+msgid "Base URI is not absolute"
+msgstr "Basis-URI is niet absoluut"
+
+#: ../libide/ide-uri.c:617
+msgid "URI is not absolute, and no base URI was provided"
+msgstr "URI is niet absoluut, en er is geen basis-URI ingevoerd"
+
+#: ../libide/ide-uri.c:662
+#, c-format
+msgid "Could not parse '%s' as absolute URI"
+msgstr "Kon ‘%s’ niet parsen als absolute URI"
+
+#: ../libide/ide-uri.c:1190
+#, c-format
+msgid "URI '%s' has no host component"
+msgstr "URI ‘%s’ heeft geen host-component"
+
+#: ../libide/ide-workbench-actions.c:64
+msgid "Open File"
+msgstr "Bestand openen"
+
+#: ../libide/ide-workbench-actions.c:68
+msgid "Open"
+msgstr "Openen"
+
+#: ../libide/preferences/ide-preferences-builtin.c:40
+msgid "Extensions"
+msgstr "Uitbreidingen"
+
+#: ../libide/preferences/ide-preferences-builtin.c:41
+msgid "Installed Extensions"
+msgstr "Geïnstalleerde uitbreidingen"
+
+#: ../libide/preferences/ide-preferences-builtin.c:42
+msgid "Bundled Extensions"
+msgstr "Meegeleverde uitbreidingen"
+
+#: ../libide/preferences/ide-preferences-builtin.c:77
+msgid "Appearance"
+msgstr "Uiterlijk"
+
+#: ../libide/preferences/ide-preferences-builtin.c:79
+msgid "Themes"
+msgstr "Thema's"
+
+#: ../libide/preferences/ide-preferences-builtin.c:80
+msgid "Dark Theme"
+msgstr "Donker thema"
+
+#: ../libide/preferences/ide-preferences-builtin.c:80
+msgid "Whether Builder should use a dark theme"
+msgstr "Of Builder een donker thema moet gebruiken"
+
+#: ../libide/preferences/ide-preferences-builtin.c:80
+msgid "dark theme"
+msgstr "donker thema"
+
+#: ../libide/preferences/ide-preferences-builtin.c:81
+msgid "Grid Pattern"
+msgstr "Rasterpatroon"
+
+#: ../libide/preferences/ide-preferences-builtin.c:81
+msgid "Display a grid pattern underneath source code"
+msgstr "Een tegelpatroon onder de broncode weergeven"
+
+#: ../libide/preferences/ide-preferences-builtin.c:101
+msgid "Font"
+msgstr "Lettertype"
+
+#: ../libide/preferences/ide-preferences-builtin.c:102
+msgctxt "Keywords"
+msgid "editor font monospace"
+msgstr "editor font lettertype monospace"
+
+#. XXX: This belongs in terminal addin
+#: ../libide/preferences/ide-preferences-builtin.c:104
+#: ../plugins/terminal/gb-terminal-workbench-addin.c:90
+msgid "Terminal"
+msgstr "Terminal"
+
+#: ../libide/preferences/ide-preferences-builtin.c:104
+msgctxt "Keywords"
+msgid "terminal font monospace"
+msgstr "terminal font lettertype monospace"
+
+#: ../libide/preferences/ide-preferences-builtin.c:110
+msgid "Keyboard"
+msgstr "Toetsenbord"
+
+#: ../libide/preferences/ide-preferences-builtin.c:112
+msgid "Emulation"
+msgstr "Emulatie"
+
+#: ../libide/preferences/ide-preferences-builtin.c:113
+msgid "Default keybinding mode which mimics gedit"
+msgstr "Standaard sneltoets-modus die gedit nabootst"
+
+#: ../libide/preferences/ide-preferences-builtin.c:114
+msgid "Emacs"
+msgstr "Emacs"
+
+#: ../libide/preferences/ide-preferences-builtin.c:114
+msgid "Emulates the Emacs text editor"
+msgstr "Emuleert de Emacs-tekstverwerker"
+
+#: ../libide/preferences/ide-preferences-builtin.c:115
+msgid "Vim"
+msgstr "Vim"
+
+#: ../libide/preferences/ide-preferences-builtin.c:115
+msgid "Emulates the Vim text editor"
+msgstr "Emuleert de Vim-tekstverwerker"
+
+#: ../libide/preferences/ide-preferences-builtin.c:117
+msgid "Movement"
+msgstr "Verplaatsing"
+
+#: ../libide/preferences/ide-preferences-builtin.c:118
+msgid "Smart Home and End"
+msgstr "Slimme Home/End-toetsen"
+
+#: ../libide/preferences/ide-preferences-builtin.c:118
+msgid "Home moves to first non-whitespace character"
+msgstr "Home beweegt naar het eerste teken, dat geen spatie is"
+
+#: ../libide/preferences/ide-preferences-builtin.c:119
+msgid ""
+"Backspace will remove extra space to keep you aligned with your indentation"
+msgstr ""
+"Backspace verwijdert extra witruimte om uitgelijnd te blijven met de "
+"inspringing"
+
+#: ../libide/preferences/ide-preferences-builtin.c:127
+msgid "Cursor"
+msgstr "Cursor"
+
+#: ../libide/preferences/ide-preferences-builtin.c:128
+msgid "Restore cursor position"
+msgstr "Cursorlocatie herstellen"
+
+#: ../libide/preferences/ide-preferences-builtin.c:128
+msgid "Restore cursor position when a file is reopened"
+msgstr "Cursorlocatie herstellen als een bestand heropend wordt"
+
+#: ../libide/preferences/ide-preferences-builtin.c:129
+msgid "Scroll Offset"
+msgstr "Scrollafstand"
+
+#: ../libide/preferences/ide-preferences-builtin.c:129
+msgid "Minimum number of lines to keep above and below the cursor"
+msgstr "Minimale hoeveelheid regels om boven en onder de cursor te houden"
+
+#: ../libide/preferences/ide-preferences-builtin.c:130
+msgid "Overscroll"
+msgstr "Overscrollen"
+
+#: ../libide/preferences/ide-preferences-builtin.c:130
+msgid "Allow the editor to scroll past the end of the buffer"
+msgstr "De bewerker toestaan om voorbij het einde van de buffer te scrollen"
+
+#: ../libide/preferences/ide-preferences-builtin.c:132
+msgid "Line Information"
+msgstr "Regelinformatie"
+
+#: ../libide/preferences/ide-preferences-builtin.c:133
+msgid "Line numbers"
+msgstr "Regelnummers"
+
+#: ../libide/preferences/ide-preferences-builtin.c:133
+msgid "Show line number at beginning of each line"
+msgstr "Regelnummer aan het begin van elke regel tonen"
+
+#: ../libide/preferences/ide-preferences-builtin.c:134
+msgid "Line changes"
+msgstr "Regelwijzigingen"
+
+#: ../libide/preferences/ide-preferences-builtin.c:134
+msgid "Show if a line was added or modified next to line number"
+msgstr ""
+"Naast het regelnummer weergeven of een regel is toegevoegd of gewijzigd"
+
+#: ../libide/preferences/ide-preferences-builtin.c:136
+msgid "Highlight"
+msgstr "Markeren"
+
+#: ../libide/preferences/ide-preferences-builtin.c:137
+msgid "Current line"
+msgstr "Huidige regel"
+
+#: ../libide/preferences/ide-preferences-builtin.c:137
+msgid "Make current line stand out with highlights"
+msgstr "Huidige regel uitlichten met markeringen"
+
+#: ../libide/preferences/ide-preferences-builtin.c:138
+msgid "Matching brackets"
+msgstr "Gepaarde haakjes"
+
+#: ../libide/preferences/ide-preferences-builtin.c:138
+msgid "Highlight matching brackets based on cursor position"
+msgstr "Gepaarde haakjes markeren gebaseerd op cursorlocatie"
+
+#: ../libide/preferences/ide-preferences-builtin.c:140
+msgid "Code Overview"
+msgstr "Code-overzicht"
+
+#: ../libide/preferences/ide-preferences-builtin.c:141
+msgid "Show overview map"
+msgstr "Overzichtsweergave weergeven"
+
+#: ../libide/preferences/ide-preferences-builtin.c:141
+msgid "A zoomed out view to enhance navigating source code"
+msgstr "Een helikopterweergave om het bladeren door broncode te verbeteren"
+
+#: ../libide/preferences/ide-preferences-builtin.c:142
+msgid "Automatically hide overview map"
+msgstr "Overzichtsweergave automatisch verbergen"
+
+#: ../libide/preferences/ide-preferences-builtin.c:142
+msgid "Automatically hide map when editor loses focus"
+msgstr "Weergave automatisch verbergen als de bewerker focus verliest"
+
+#: ../libide/preferences/ide-preferences-builtin.c:144
+msgid "Whitespace Characters"
+msgstr "Spatie-tekens"
+
+#: ../libide/preferences/ide-preferences-builtin.c:147
+msgid "New line and carriage return"
+msgstr "Nieuwe regel en enter"
+
+#: ../libide/preferences/ide-preferences-builtin.c:148
+msgid "Non-breaking spaces"
+msgstr "Harde spaties"
+
+#: ../libide/preferences/ide-preferences-builtin.c:149
+msgid "Spaces inside of text"
+msgstr "Spaties binnen de tekst"
+
+#: ../libide/preferences/ide-preferences-builtin.c:150
+msgid "Trailing Only"
+msgstr "Alleen trailing"
+
+#: ../libide/preferences/ide-preferences-builtin.c:151
+msgid "Leading Only"
+msgstr "Alleen leidend"
+
+#: ../libide/preferences/ide-preferences-builtin.c:157
+msgid "Code Insight"
+msgstr "Code-inzicht"
+
+#: ../libide/preferences/ide-preferences-builtin.c:159
+msgid "Highlighting"
+msgstr "Markering"
+
+#: ../libide/preferences/ide-preferences-builtin.c:160
+msgid "Semantic Highlighting"
+msgstr "Semantisch markeren"
+
+#: ../libide/preferences/ide-preferences-builtin.c:160
+msgid ""
+"Use code insight to highlight additional information discovered in source "
+"file"
+msgstr ""
+"Code-inzicht gebruiken om aanvullende informatie te markeren die is ontdekt "
+"in bronbestand"
+
+#: ../libide/preferences/ide-preferences-builtin.c:162
+msgid "Completion"
+msgstr "Aanvulling"
+
+#: ../libide/preferences/ide-preferences-builtin.c:163
+msgid "Suggest words found in open files"
+msgstr "Woorden suggereren uit geopende bestanden"
+
+#: ../libide/preferences/ide-preferences-builtin.c:163
+msgid ""
+"Suggests completions as you type based on words found in any open document"
+msgstr ""
+"Aanvullingen suggereren terwijl u typt, gebaseerd op gevonden woorden in "
+"alle geopende documenten"
+
+#: ../libide/preferences/ide-preferences-builtin.c:164
+msgid "Suggest completions using Ctags"
+msgstr "Aanvullingen suggereren gebruikmakend van Ctags"
+
+#: ../libide/preferences/ide-preferences-builtin.c:164
+msgid ""
+"Create and manages a Ctags database for completing class names, functions, "
+"and more"
+msgstr ""
+"Creëert en beheert een Ctags-database om klassenamen, functies en meer aan "
+"te vullen"
+
+#: ../libide/preferences/ide-preferences-builtin.c:165
+msgid "Suggest completions using Clang (Experimental)"
+msgstr "Aanvullingen suggereren gebruikmakend van Ctags (experimenteel)"
+
+#: ../libide/preferences/ide-preferences-builtin.c:165
+msgid "Use Clang to suggest completions for C and C++ languages"
+msgstr "Clang gebruiken om aanvullingen te suggereren voor de talen C en C++"
+
+#: ../libide/preferences/ide-preferences-builtin.c:167
+msgid "Diagnostics"
+msgstr "Bevindingen"
+
+#: ../libide/preferences/ide-preferences-builtin.c:176
+msgid "Code snippets"
+msgstr "Codeknipsels"
+
+#: ../libide/preferences/ide-preferences-builtin.c:176
+msgid "Use code fragments to increase typing efficiency"
+msgstr "Codefragmenten gebruiken om type-efficiëntie te verhogen"
+
+#: ../libide/preferences/ide-preferences-builtin.c:190
+msgid "Programming Languages"
+msgstr "Programmeertalen"
+
+#: ../libide/preferences/ide-preferences-builtin.c:227
+msgid "Trim trailing whitespace"
+msgstr "Trialing spatie trimmen"
+
+#: ../libide/preferences/ide-preferences-builtin.c:227
+msgid "Upon saving, trailing whitespace from modified lines will be trimmed."
+msgstr ""
+"Trialing spaties van gewijzigde regels zullen bij het opslaan worden getrimd."
+
+#: ../libide/preferences/ide-preferences-builtin.c:228
+msgid "Overwrite Braces"
+msgstr "Braces overschrijven"
+
+#: ../libide/preferences/ide-preferences-builtin.c:228
+msgid "Overwrite closing braces"
+msgstr "Sluit-braces overschrijven"
+
+#: ../libide/preferences/ide-preferences-builtin.c:230
+msgid "Margins"
+msgstr "Marges"
+
+#: ../libide/preferences/ide-preferences-builtin.c:231
+msgid "Show right margin"
+msgstr "Rechtermarge weergeven"
+
+#: ../libide/preferences/ide-preferences-builtin.c:232
+msgid "Right margin position"
+msgstr "Positie van rechtermarge"
+
+#: ../libide/preferences/ide-preferences-builtin.c:232
+msgid "Position in spaces for the right margin"
+msgstr "Positie van rechtermarge in spaties"
+
+#: ../libide/preferences/ide-preferences-builtin.c:235
+msgid "Tab width"
+msgstr "Tab-breedte"
+
+#: ../libide/preferences/ide-preferences-builtin.c:235
+msgid "Width of a tab character in spaces"
+msgstr "Breedte van een Tab-teken in spaties"
+
+#: ../libide/preferences/ide-preferences-builtin.c:236
+msgid "Insert spaces instead of tabs"
+msgstr "Spaties in plaats van Tabs invoegen"
+
+#: ../libide/preferences/ide-preferences-builtin.c:236
+msgid "Prefer spaces over use of tabs"
+msgstr "Spaties boven het gebruik van Tabs verkiezen"
+
+#: ../libide/preferences/ide-preferences-builtin.c:237
+msgid "Automatically indent"
+msgstr "Automatisch inspringen"
+
+#: ../libide/preferences/ide-preferences-builtin.c:237
+msgid "Indent source code as you type"
+msgstr "Broncode inspringen terwijl u typt"
+
+#: ../libide/preferences/ide-preferences-builtin.c:243
+#: ../plugins/build-tools/gbp-build-panel.c:426
+msgid "Build"
+msgstr "Compileren"
+
+#: ../libide/preferences/ide-preferences-builtin.c:245
+#: ../plugins/build-tools/gbp-build-configuration-view.ui.h:1
+msgid "General"
+msgstr "Algemeen"
+
+#: ../libide/preferences/ide-preferences-builtin.c:246
+msgid "Build Workers"
+msgstr "Build-werkers"
+
+#: ../libide/preferences/ide-preferences-builtin.c:246
+msgid "Number of parallel build workers"
+msgstr "Hoeveelheid parallelle build-werkers"
+
+#: ../libide/preferences/ide-preferences-builtin.c:252
+msgid "Projects"
+msgstr "Projecten"
+
+#: ../libide/preferences/ide-preferences-builtin.c:254
+msgid "Workspace"
+msgstr ""
+
+#: ../libide/preferences/ide-preferences-builtin.c:255
+msgid "Projects Directory"
+msgstr "Projectenmap"
+
+#: ../libide/preferences/ide-preferences-builtin.c:255
+msgid "A place for all your projects"
+msgstr "Een locatie voor al uw projecten"
+
+#: ../libide/preferences/ide-preferences-builtin.c:257
+msgid "Project Discovery"
+msgstr "Projecten ontdekken"
+
+#: ../libide/preferences/ide-preferences-builtin.c:258
+msgid "Discover projects on my computer"
+msgstr "Projecten op deze computer ontdekken"
+
+#: ../libide/preferences/ide-preferences-builtin.c:258
+msgid "Scan your computer for existing projects"
+msgstr "Uw computer afzoeken naar bestaande projecten"
+
+#: ../libide/preferences/ide-preferences-perspective.c:888
+msgid "Preferences"
+msgstr "Voorkeuren"
+
+#: ../libide/pygobject/ide-pygobject-script.c:135
+msgid "Attempt to load a PyGObject script with no filename."
+msgstr "Een PyGObject-script proberen te laden zonder bestandsnaam."
+
+#: ../libide/pygobject/ide-pygobject-script.c:254
+msgid "The filename for the script was not provided."
+msgstr "De bestandsnaam voor het script was niet geleverd."
+
+#: ../libide/pygobject/ide-pygobject-script.c:265
+msgid "The script must be on a local filesystem."
+msgstr "Het script moet op een lokaal bestandssysteem zijn."
+
+#: ../libide/pygobject/ide-pygobject-script.c:274
+#, c-format
+msgid "The script \"%s\" is not a PyGObject file."
+msgstr "Het script ‘%s’ is geen PyGObject-bestand."
+
+#: ../libide/search/ide-omni-search-display.c:264
+msgid "Cannot add provider more than once."
+msgstr "Kan de provider niet meer dan één keer toevoegen."
+
+#: ../libide/search/ide-omni-search-display.c:340
+msgid "The provider could not be found."
+msgstr "De provider kon niet worden gevonden."
+
+#: ../libide/util/ide-file-manager.c:64
+msgid "File path is NULL"
+msgstr "Bestandspad is NULL"
+
+#: ../libide/util/ide-file-manager.c:73 ../libide/util/ide-file-manager.c:84
+msgid "Error converting UTF-8 filename to wide char"
+msgstr "Fout bij het omzetten van UTF-8-bestandsnaam naar breed karakter"
+
+#: ../libide/util/ide-file-manager.c:92
+msgid "ILCreateFromPath() failed"
+msgstr "ILCreateFromPath() mislukt"
+
+#: ../libide/util/ide-file-manager.c:129
+#, c-format
+msgid "Cannot convert '%s' into a valid NSURL."
+msgstr "‘%s’ kan niet in een geldige NSURL omgezet worden."
+
+#: ../libide/util/ide-file-manager.c:157
+msgid "Connecting to org.freedesktop.FileManager1 failed: "
+msgstr "Verbinding met org.freedesktop.FileManager1 mislukt:"
+
+#: ../libide/util/ide-file-manager.c:181
+msgid "Calling ShowItems failed: "
+msgstr "Aanroepen van ShowItems mislukt:"
+
+#: ../plugins/autotools/ide-autotools-builder.c:49
+msgid "Cancelled"
+msgstr "Geannuleerd"
+
+#: ../plugins/autotools/ide-autotools-builder.c:51
+msgid "Failed"
+msgstr "Mislukt"
+
+#: ../plugins/autotools/ide-autotools-builder.c:57
+msgid "Success"
+msgstr "Succes"
+
+#: ../plugins/autotools/ide-autotools-builder.c:161
+#: ../plugins/autotools/ide-autotools-build-task.c:872
+msgid "Building…"
+msgstr "Compileren…"
+
+#: ../plugins/autotools/ide-autotools-build-system.c:183
+msgid "Failed to locate configure.ac"
+msgstr "configure.ac kon niet gevonden worden"
+
+#: ../plugins/autotools/ide-autotools-build-task.c:174
+msgid "Directory must be on a locally mounted filesystem."
+msgstr "Map moet zich op een lokaal gekoppeld bestandssysteem bevinden."
+
+#: ../plugins/autotools/ide-autotools-build-task.c:548
+msgid "Cannot execute build task more than once."
+msgstr "De compilatietaak kan niet meer dan één keer uitgevoerd worden."
+
+#: ../plugins/autotools/ide-autotools-build-task.c:642
+msgid "Failed to create build directory."
+msgstr "Aanmaken van compilatiemap is mislukt."
+
+#: ../plugins/autotools/ide-autotools-build-task.c:651
+#, c-format
+msgid "'%s' is not a directory."
+msgstr "‘%s’ is geen map."
+
+#: ../plugins/autotools/ide-autotools-build-task.c:690
+#, c-format
+msgid "autogen.sh is missing from project directory (%s)."
+msgstr "autogen.sh ontbreekt in de projectmap (%s)."
+
+#: ../plugins/autotools/ide-autotools-build-task.c:700
+msgid "autogen.sh is not executable."
+msgstr "autogen.sh is niet uitvoerbaar."
+
+#: ../plugins/autotools/ide-autotools-build-task.c:704
+msgid "Running autogen…"
+msgstr "Autogen uitvoeren…"
+
+#: ../plugins/autotools/ide-autotools-build-task.c:738
+#, c-format
+msgid "autogen.sh failed to create configure (%s)"
+msgstr "autogen.sh kon configuratie (%s) niet aanmaken"
+
+#: ../plugins/autotools/ide-autotools-build-task.c:773
+msgid "Running configure…"
+msgstr "Configure uitvoeren…"
+
+#: ../plugins/autotools/ide-autotools-build-task.c:870
+msgid "Cleaning…"
+msgstr "Opschonen…"
+
+#: ../plugins/autotools/ide-makecache.c:1006
+msgid "Invalid makefile provided, ignoring."
+msgstr "Ongeldige makefile ingevoerd, wordt genegeerd."
+
+#: ../plugins/build-tools/gbp-build-configuration-view.ui.h:2
+msgid "The name of the build configuration"
+msgstr "De naam van de compilatie-configuratie"
+
+#: ../plugins/build-tools/gbp-build-configuration-view.ui.h:3
+msgid "Name"
+msgstr "Naam"
+
+#: ../plugins/build-tools/gbp-build-configuration-view.ui.h:4
+msgid "The prefix to use when installing the project"
+msgstr "Het voorvoegsel om te gebruiken bij het installeren van het project"
+
+#: ../plugins/build-tools/gbp-build-configuration-view.ui.h:5
+msgid "Installation Prefix"
+msgstr "Installatie-voorvoegsel"
+
+#: ../plugins/build-tools/gbp-build-configuration-view.ui.h:6
+msgid "Options to use when bootstrapping the project"
+msgstr "Opties om te gebruiken tijdens het opstarten van het project"
+
+#: ../plugins/build-tools/gbp-build-configuration-view.ui.h:7
+msgid "Configure Options"
+msgstr "Configure-opties"
+
+#: ../plugins/build-tools/gbp-build-configuration-view.ui.h:8
+msgid "Duplicate Configuration"
+msgstr "Configuratie dupliceren"
+
+#: ../plugins/build-tools/gbp-build-configuration-view.ui.h:9
+msgid "Delete Configuration"
+msgstr "Configuratie verwijderen"
+
+#: ../plugins/build-tools/gbp-build-configuration-view.ui.h:10
+msgid "Device"
+msgstr "Apparaat"
+
+#: ../plugins/build-tools/gbp-build-configuration-view.ui.h:11
+msgid "Runtime"
+msgstr "Runtime"
+
+#: ../plugins/build-tools/gbp-build-configuration-view.ui.h:12
+msgid "Environment"
+msgstr "Omgeving"
+
+#: ../plugins/build-tools/gbp-build-log-panel.c:249
+msgid "Build Output"
+msgstr "Bouw-uitvoer"
+
+#: ../plugins/build-tools/gbp-build-panel.c:150
+#, c-format
+msgid "%d warning"
+msgid_plural "%d warnings"
+msgstr[0] "%d waarschuwing"
+msgstr[1] "%d waarschuwingen"
+
+#: ../plugins/build-tools/gbp-build-panel.c:157
+#, c-format
+msgid "%d error"
+msgid_plural "%d errors"
+msgstr[0] "%d fout"
+msgstr[1] "%d fouten"
+
+#: ../plugins/build-tools/gbp-build-panel-row.c:68
+msgid "Unknown file"
+msgstr "Onbekend bestand"
+
+#: ../plugins/build-tools/gbp-build-panel.ui.h:1
+#: ../plugins/project-tree/gtk/menus.ui.h:12
+msgid "_Build"
+msgstr "_Bouwen"
+
+#: ../plugins/build-tools/gbp-build-panel.ui.h:2
+#: ../plugins/project-tree/gtk/menus.ui.h:13
+msgid "_Rebuild"
+msgstr "_Herbouwen"
+
+#: ../plugins/build-tools/gbp-build-panel.ui.h:3
+msgid "_Clean"
+msgstr "_Opschonen"
+
+#: ../plugins/build-tools/gbp-build-panel.ui.h:4
+msgid "Status:"
+msgstr "Status:"
+
+#: ../plugins/build-tools/gbp-build-panel.ui.h:5
+msgid "Running Time:"
+msgstr "Doorlooptijd:"
+
+#: ../plugins/build-tools/gbp-build-panel.ui.h:6
+msgid "Warnings:"
+msgstr "Waarschuwingen:"
+
+#: ../plugins/build-tools/gbp-build-panel.ui.h:7
+msgid "Errors:"
+msgstr "Fouten:"
+
+#: ../plugins/build-tools/gbp-build-panel.ui.h:9
+msgid "Deploy"
+msgstr "Implementeren"
+
+#: ../plugins/build-tools/gbp-build-panel.ui.h:10
+msgid "Export"
+msgstr "Exporteren"
+
+#: ../plugins/build-tools/gbp-build-tool.c:102
+#: ../plugins/build-tools/gbp-build-tool.c:115
+#, c-format
+msgid "========================\n"
+msgstr "========================\n"
+
+#: ../plugins/build-tools/gbp-build-tool.c:103
+#, c-format
+msgid "           Project Name: %s\n"
+msgstr "           Projectnaam: %s\n"
+
+#: ../plugins/build-tools/gbp-build-tool.c:104
+#, c-format
+msgid " Version Control System: %s\n"
+msgstr "Versiecontrolesysteem: %s\n"
+
+#: ../plugins/build-tools/gbp-build-tool.c:105
+#, c-format
+msgid "           Build System: %s\n"
+msgstr "           Compilatiesysteem: %s\n"
+
+#: ../plugins/build-tools/gbp-build-tool.c:106
+#, c-format
+msgid "    Build Date and Time: %s\n"
+msgstr "    Compilatiedatum en -tijd: %s\n"
+
+#: ../plugins/build-tools/gbp-build-tool.c:107
+#, c-format
+msgid "    Building for Device: %s (%s)\n"
+msgstr "    Compileren voor apparaat: %s (%s)\n"
+
+#: ../plugins/build-tools/gbp-build-tool.c:112
+#, c-format
+msgid "            Environment: %s\n"
+msgstr "           Omgeving: %s\n"
+
+#: ../plugins/build-tools/gbp-build-tool.c:142
+#: ../plugins/build-tools/gbp-build-tool.c:146
+#, c-format
+msgid "===============\n"
+msgstr "===============\n"
+
+#: ../plugins/build-tools/gbp-build-tool.c:143
+#, c-format
+msgid " Build Failure: %s\n"
+msgstr "Bouwfout: %s\n"
+
+#: ../plugins/build-tools/gbp-build-tool.c:144
+msgid " Build ran for: %"
+msgstr "Bouwpoging loopt sinds: %"
+
+#.
+#. * TODO: We should consider supporting packaging/xdg-app/deployment stuff
+#. *       here too. It would be nice if we could say, go build this project,
+#. *       for this device, and then deploy.
+#.
+#: ../plugins/build-tools/gbp-build-tool.c:157
+#: ../plugins/build-tools/gbp-build-tool.c:161
+#, c-format
+msgid "=================\n"
+msgstr "=================\n"
+
+#: ../plugins/build-tools/gbp-build-tool.c:158
+#, c-format
+msgid " Build Successful\n"
+msgstr "Bouwen geslaagd\n"
+
+#: ../plugins/build-tools/gbp-build-tool.c:159
+msgid "   Build ran for: %"
+msgstr "   Bouwpoging heeft geduurd: %"
+
+#: ../plugins/build-tools/gbp-build-tool.c:212
+#, c-format
+msgid "Failed to locate device \"%s\""
+msgstr "Locatie van apparaat kon niet bepaald worden: \"%s\""
+
+#: ../plugins/build-tools/gbp-build-tool.c:222
+#, c-format
+msgid "Failed to locate runtime \"%s\""
+msgstr "Runtime kon niet gevonden worden: \"%s\""
+
+#: ../plugins/build-tools/gbp-build-tool.c:286
+msgid "Clean the project"
+msgstr "Het project opschonen"
+
+#: ../plugins/build-tools/gbp-build-tool.c:288
+msgid "The ID of the device to build for"
+msgstr "Het ID van het apparaat waarvoor we aan het compileren zijn"
+
+#: ../plugins/build-tools/gbp-build-tool.c:289
+msgid "local"
+msgstr "lokaal"
+
+#: ../plugins/build-tools/gbp-build-tool.c:291
+msgid "The runtime to use for building"
+msgstr "De runtime om te gebruiken voor compilatie"
+
+#: ../plugins/build-tools/gbp-build-tool.c:292
+msgid "host"
+msgstr "host"
+
+#: ../plugins/build-tools/gbp-build-tool.c:294
+msgid "Number of workers to use when building"
+msgstr "Hoeveelheid werkers om te gebruiken bij het compileren"
+
+#: ../plugins/build-tools/gbp-build-tool.c:295
+msgid "N"
+msgstr "N"
+
+#: ../plugins/build-tools/gbp-build-tool.c:297
+msgid "The configuration to use from .buildconfig"
+msgstr "De configuratie te gebruiken van .buildconfig"
+
+#: ../plugins/build-tools/gbp-build-tool.c:298
+msgid "CONFIG_ID"
+msgstr "CONFIG_ID"
+
+#: ../plugins/build-tools/gbp-build-tool.c:300
+msgid "Path to project file, defaults to current directory"
+msgstr "Pad naar projectbestand, staat standaard op huidige map ingesteld"
+
+#: ../plugins/build-tools/gbp-build-tool.c:301
+msgid "PATH"
+msgstr "PAD"
+
+#: ../plugins/clang/ide-clang-preferences-addin.c:62
+msgid "Clang"
+msgstr "Clang"
+
+#: ../plugins/clang/ide-clang-preferences-addin.c:63
+msgid "Show errors and warnings provided by Clang"
+msgstr "Fouten en waarschuwingen weergeven geleverd door Clang"
+
+#. translators: keywords used when searching for preferences
+#: ../plugins/clang/ide-clang-preferences-addin.c:65
+msgid "clang diagnostics warnings errors"
+msgstr "clang diagnostics warnings errors bevindingen waarschuwingen fouten"
+
+#: ../plugins/clang/ide-clang-service.c:269
+msgid "Unknown failure"
+msgstr "Onbekende fout"
+
+#: ../plugins/clang/ide-clang-service.c:273
+msgid "Clang crashed"
+msgstr "Clang gecrasht"
+
+#: ../plugins/clang/ide-clang-service.c:277
+msgid "Invalid arguments"
+msgstr "Ongeldige parameters"
+
+#: ../plugins/clang/ide-clang-service.c:281
+msgid "AST read error"
+msgstr "AST-leesfout"
+
+#: ../plugins/clang/ide-clang-service.c:293
+#, c-format
+msgid "Failed to create translation unit: %s"
+msgstr "De overzettingsunit kon niet aangemaakt worden: %s"
+
+#: ../plugins/clang/ide-clang-service.c:401
+msgid "File must be saved locally to parse."
+msgstr "Bestand moet lokaal zijn opgeslagen om te parsen."
+
+#: ../plugins/clang/ide-clang-symbol-node.c:149
+msgid "anonymous"
+msgstr "anoniem"
+
+#: ../plugins/clang/ide-clang-translation-unit.c:656
+msgid "clang_codeCompleteAt() only works on local files"
+msgstr "clang_codeCompleteAt() werkt alleen op lokale bestanden"
+
+#: ../plugins/command-bar/gb-command-bar.c:299
+#, c-format
+msgid "Command not found: %s"
+msgstr "Opdracht niet gevonden: %s"
+
+#: ../plugins/command-bar/gb-command-bar.c:603
+msgid "Use the entry below to execute a command"
+msgstr "De ingang hieronder gebruiken om een opdracht uit te voeren"
+
+#: ../plugins/command-bar/gb-vim.c:86
+#, c-format
+msgid "Number required"
+msgstr "Nummer benodigd"
+
+#: ../plugins/command-bar/gb-vim.c:96
+#, c-format
+msgid "%s is invalid for %s"
+msgstr "%s is ongeldig voor %s"
+
+#: ../plugins/command-bar/gb-vim.c:154
+#, c-format
+msgid "Cannot find language '%s'"
+msgstr "Kan taal ‘%s’ niet vinden"
+
+#: ../plugins/command-bar/gb-vim.c:311
+#, c-format
+msgid "This command requires a GtkSourceView to be focused"
+msgstr "Deze opdracht heeft een GtkSourceView nodig om gefocust te zijn"
+
+#: ../plugins/command-bar/gb-vim.c:322
+#, c-format
+msgid "This command requires a view to be focused"
+msgstr "Deze opdracht heeft een weergave nodig om gefocust te zijn"
+
+#: ../plugins/command-bar/gb-vim.c:379
+#, c-format
+msgid "Unknown option: %s"
+msgstr "Onbekende optie: %s"
+
+#: ../plugins/command-bar/gb-vim.c:422
+#, c-format
+msgid "Cannot find colorscheme '%s'"
+msgstr "Kan kleurenschema ‘%s’ niet vinden"
+
+#: ../plugins/command-bar/gb-vim.c:463
+#, c-format
+msgid "Failed to locate working directory"
+msgstr "Werkmap kon niet gevonden worden"
+
+#: ../plugins/command-bar/gb-vim.c:640
+#, c-format
+msgid "Invalid :syntax subcommand: %s"
+msgstr "Ongeldige syntax-subopdracht: %s"
+
+#: ../plugins/command-bar/gb-vim.c:1022
+#, c-format
+msgid "Invalid search and replace request"
+msgstr "Ongeldige zoeken-en-vervangen-aanvraag"
+
+#: ../plugins/command-bar/gb-vim.c:1127
+#, c-format
+msgid "Not a command: %s"
+msgstr "Geen opdracht: %s"
+
+#: ../plugins/comment-code/gtk/menus.ui.h:1
+msgid "Comment code"
+msgstr "Commentaar maken"
+
+#: ../plugins/comment-code/gtk/menus.ui.h:2
+msgid "Uncomment code"
+msgstr "Uit commentaar halen"
+
+#: ../plugins/contributing/contributing_plugin/helper.py:76
+#, python-format
+msgid ""
+"Usage:\n"
+"  %(prgname) %(command) OPTIONS\n"
+msgstr ""
+"Gebruik:\n"
+"  %(prgname) %(command) OPTIES\n"
+
+#: ../plugins/contributing/contributing_plugin/__init__.py:54
+msgid "Missing project name"
+msgstr "Ontbrekende projectnaam"
+
+#: ../plugins/contributing/contributing_plugin/__init__.py:68
+msgid ""
+"Usage:\n"
+"  ide contribute PROJECT_NAME\n"
+"\n"
+"  This command will bootstrap your system to begin contributing to the "
+"project\n"
+"  denoted by PROJECT_NAME. This includes fetching the sources, ensuring "
+"that\n"
+"  you have the required dependencies to build, and bootstraps the first "
+"build\n"
+"  of the project.\n"
+"\n"
+"Examples:\n"
+"  ide contribute gnome-builder\n"
+"  ide contribute gnome-maps\n"
+"\n"
+msgstr ""
+"Gebruik:\n"
+"  ide contribute PROJECT_NAAM\n"
+"\n"
+"  Deze opdracht zal uw systeem opstarten om te beginnen bij te dragen aan\n"
+"  het project genaamd PROJECT_NAAM. Deze opdracht haalt ook de bronnen\n"
+"  op, om er zeker van te zijn dat u de benodigde afhankelijkheden heeft om\n"
+"  te compileren, en start de eerste build van het project op.\n"
+"\n"
+"Voorbeelden:\n"
+"  ide contribute gnome-builder\n"
+"  ide contribute gnome-maps\n"
+"\n"
+
+#: ../plugins/contributing/contributing_plugin/__init__.py:226
+msgid "Username"
+msgstr "Gebruikersnaam"
+
+#: ../plugins/c-pack/ide-c-format-provider.c:281
+#: ../plugins/python-pack/ide-python-format-provider.c:238
+msgid "Format Strings"
+msgstr "Strings opmaken"
+
+#: ../plugins/create-project/gbp-create-project-tool.c:130
+msgid "List available templates"
+msgstr "Beschikbare sjablonen weergeven"
+
+#: ../plugins/create-project/gbp-create-project-tool.c:132
+msgid "Project template to generate"
+msgstr "Projectsjabloon te genereren"
+
+#: ../plugins/create-project/gbp-create-project-tool.c:138
+msgid "create-project [OPTION...] PROJECT_NAME"
+msgstr "maak-project [OPTIE...] PROJECT_NAAM"
+
+#: ../plugins/create-project/gbp-create-project-tool.c:187
+#, c-format
+msgid "Filename must be ASCII and may not contain : or ="
+msgstr "Bestandsnaam moet ASCII zijn en mag geen : of = bevatten"
+
+#: ../plugins/create-project/gbp-create-project-tool.c:291
+#, c-format
+msgid "Please specify a project name.\n"
+msgstr "Geef alstublieft een projectnaam op.\n"
+
+#: ../plugins/create-project/gbp-create-project-tool.c:307
+#, c-format
+msgid "Please specify a project template with --template=\n"
+msgstr "Geef alstublieft een projectsjabloon op met --template=\n"
+
+#: ../plugins/devhelp/gbp-devhelp-panel.c:187
+#: ../plugins/devhelp/gbp-devhelp-search-provider.c:128
+msgid "Documentation"
+msgstr "Documentatie"
+
+#: ../plugins/file-search/gb-file-search-provider.c:44
+msgid "Switch To"
+msgstr "Wisselen naar"
+
+#: ../plugins/fpaste/fpaste_plugin/gtk/menus.ui.h:1
+msgid "Send to Fpaste.org"
+msgstr "Versturen naar Fpaste.org"
+
+#: ../plugins/fpaste/fpaste_plugin/__init__.py:110
+msgid "The following URL has been copied to the clipboard"
+msgstr "De volgende URL is naar het klembord gekopieerd"
+
+#: ../plugins/git/ide-git-buffer-change-monitor.c:167
+msgid "Cannot provide diff, no backing file provided."
+msgstr "Kan geen vergelijking leveren, geen back-up-bestand geleverd."
+
+#: ../plugins/git/ide-git-buffer-change-monitor.c:539
+#, c-format
+msgid "Repository does not have a working directory."
+msgstr "Pakketbron heeft geen werkmap."
+
+#: ../plugins/git/ide-git-buffer-change-monitor.c:550
+#, c-format
+msgid "File is not under control of git working directory."
+msgstr "Bestand is niet onder de bevoegdheid van de git-werkmap."
+
+#: ../plugins/git/ide-git-buffer-change-monitor.c:616
+#, c-format
+msgid "The requested file does not exist within the git index."
+msgstr "Het aangevraagde bestand bestaat niet binnen de git-index."
+
+#: ../plugins/git/ide-git-clone-widget.c:132
+msgid "A valid Git URL is required"
+msgstr "Een geldige Git-URL is benodigd"
+
+#: ../plugins/git/ide-git-clone-widget.ui.h:1
+msgid "user@host:repository.git"
+msgstr "user@host:repository.git"
+
+#: ../plugins/git/ide-git-clone-widget.ui.h:2
+msgid "Enter the URL of your project's source code repository"
+msgstr "Voer de URL in van de broncode-pakketbron van uw project"
+
+#: ../plugins/git/ide-git-clone-widget.ui.h:3
+msgid "Directory"
+msgstr "Map"
+
+#: ../plugins/git/ide-git-clone-widget.ui.h:4
+msgid "Enter the name of the directory to create"
+msgstr "Voer de naam in voor de te maken map"
+
+#: ../plugins/git/ide-git-clone-widget.ui.h:5
+msgid "Repository"
+msgstr "Pakketbron"
+
+#: ../plugins/git/ide-git-clone-widget.ui.h:6
+msgid "Location"
+msgstr "Locatie"
+
+#: ../plugins/git/ide-git-genesis-addin.c:93
+msgid "From an existing project in a Git repository"
+msgstr "Vanuit een bestaand project in een Git-repository"
+
+#: ../plugins/git/ide-git-preferences-addin.c:108
+msgid "Version Control"
+msgstr "Versiecontrole"
+
+#: ../plugins/git/ide-git-preferences-addin.c:145
+msgid "Attribution"
+msgstr "Toewijzing"
+
+#: ../plugins/gnome-code-assistance/ide-gca-diagnostic-provider.c:375
+msgid "Code assistance requires a local file."
+msgstr "Codeassistentie heeft een lokaal bestand nodig."
+
+#: ../plugins/gnome-code-assistance/ide-gca-preferences-addin.c:62
+msgid "Pylint"
+msgstr "Pylint"
+
+#: ../plugins/gnome-code-assistance/ide-gca-preferences-addin.c:63
+msgid "Enable the use of pylint, which may execute code in your project"
+msgstr ""
+"Het gebruik van pylint inschakelen, dat code in uw project kan uitvoeren"
+
+#. translators: these are keywords used to search for preferences
+#: ../plugins/gnome-code-assistance/ide-gca-preferences-addin.c:65
+msgid "pylint python lint code execute execution"
+msgstr "pylint python lint code execute execution uitvoeren"
+
+#: ../plugins/gnome-code-assistance/ide-gca-service.c:168
+msgid "No language specified"
+msgstr "Geen taal opgegeven"
+
+#: ../plugins/html-preview/html_preview_plugin/gtk/menus.ui.h:1
+msgid "Preview as HTML"
+msgstr "Voorbeeldweergave als HTML"
+
+#: ../plugins/jedi/jedi_plugin.py:672
+msgid "Suggest Python completions"
+msgstr "Python-aanvullingen suggereren"
+
+#: ../plugins/jedi/jedi_plugin.py:673
+msgid "Use Jedi to provide completions for the Python language"
+msgstr "Jedi gebruiken om aanvullingen voor de Python-taal te leveren"
+
+#: ../plugins/library-template/library_template/__init__.py:52
+msgid "Shared Library"
+msgstr "Gedeelde bibliotheek"
+
+#: ../plugins/library-template/library_template/__init__.py:55
+msgid "Create a new autotools project with a shared library"
+msgstr "Een nieuw autotools-project aanmaken met een gedeelde bibliotheek"
+
+#: ../plugins/mingw/ide-mingw-device-provider.c:95
+msgid "MinGW 64-bit"
+msgstr "MinGW 64-bit"
+
+#: ../plugins/mingw/ide-mingw-device-provider.c:107
+msgid "MinGW 32-bit"
+msgstr "MinGW 32-bit"
+
+#: ../plugins/project-tree/gb-new-file-popover.c:123
+#: ../plugins/project-tree/gb-rename-file-popover.c:141
+msgid "A folder with that name already exists."
+msgstr "Er bestaat al een map met die naam."
+
+#: ../plugins/project-tree/gb-new-file-popover.c:126
+#: ../plugins/project-tree/gb-rename-file-popover.c:144
+msgid "A file with that name already exists."
+msgstr "Er bestaat al een bestand met die naam."
+
+#: ../plugins/project-tree/gb-new-file-popover.c:348
+#: ../plugins/project-tree/gb-new-file-popover.ui.h:1
+#: ../plugins/project-tree/gb-rename-file-popover.ui.h:1
+msgid "File Name"
+msgstr "Bestandsnaam"
+
+#: ../plugins/project-tree/gb-new-file-popover.c:350
+msgid "Folder Name"
+msgstr "Mapnaam"
+
+#: ../plugins/project-tree/gb-new-file-popover.ui.h:2
+msgid "_Create"
+msgstr "Aan_maken"
+
+#: ../plugins/project-tree/gb-project-tree-addin.c:113
+msgid "Project"
+msgstr "Project"
+
+#: ../plugins/project-tree/gb-project-tree-builder.c:77
+msgid "Files"
+msgstr "Bestanden"
+
+#: ../plugins/project-tree/gb-rename-file-popover.c:79
+#, c-format
+msgid "Rename %s"
+msgstr "%s hernoemen"
+
+#: ../plugins/project-tree/gb-rename-file-popover.c:172
+msgid "File name must not contain subdirectories."
+msgstr "Bestandsnaam mag geen submappen bevatten."
+
+#: ../plugins/project-tree/gb-rename-file-popover.ui.h:2
+#: ../plugins/project-tree/gtk/menus.ui.h:10
+msgid "_Rename"
+msgstr "He_rnoemen"
+
+#: ../plugins/project-tree/gtk/menus.ui.h:3
+msgid "_Empty File"
+msgstr "_Leeg bestand"
+
+#: ../plugins/project-tree/gtk/menus.ui.h:4
+msgid "_New Folder"
+msgstr "_Nieuwe map"
+
+#: ../plugins/project-tree/gtk/menus.ui.h:5
+msgid "_Open"
+msgstr "_Openen"
+
+#: ../plugins/project-tree/gtk/menus.ui.h:6
+msgid "Open _With"
+msgstr "Openen _met"
+
+#: ../plugins/project-tree/gtk/menus.ui.h:7
+msgid "Source Code Editor"
+msgstr "Broncode-editor"
+
+#: ../plugins/project-tree/gtk/menus.ui.h:8
+msgid "_Open Containing Folder"
+msgstr "Bijbehorende map _openen"
+
+#: ../plugins/project-tree/gtk/menus.ui.h:9
+msgid "_Open in Terminal"
+msgstr "_Openen in terminalvenster"
+
+#: ../plugins/project-tree/gtk/menus.ui.h:11
+msgid "Mo_ve to Trash"
+msgstr "Naar prullenbak _verplaatsen"
+
+#: ../plugins/project-tree/gtk/menus.ui.h:14
+msgid "Display Options"
+msgstr "Weergaveopties"
+
+#: ../plugins/project-tree/gtk/menus.ui.h:15
+msgid "Show Icons"
+msgstr "Pictogrammen tonen"
+
+#: ../plugins/project-tree/gtk/menus.ui.h:16
+msgid "Show Ignored Files"
+msgstr "Genegeerde bestanden tonen"
+
+#: ../plugins/project-tree/gtk/menus.ui.h:17
+msgid "Sort Directories First"
+msgstr "Mappen eerst sorteren"
+
+#: ../plugins/project-tree/gtk/menus.ui.h:18
+msgid "_Collapse All Nodes"
+msgstr "Alle nodes _inklappen"
+
+#: ../plugins/project-tree/gtk/menus.ui.h:19
+msgid "_Refresh"
+msgstr "_Herladen"
+
+#: ../plugins/support/gtk/menus.ui.h:1
+msgid "Generate Support Log"
+msgstr "Ondersteuningslogboek genereren"
+
+#: ../plugins/support/ide-support-application-addin.c:79
+#, c-format
+msgid ""
+"The support log file has been written to '%s'. Please provide this file as "
+"an attachment on your bug report or support request."
+msgstr ""
+"Het ondersteuningslogboekbestand is weggeschreven naar ‘%s’. Lever dit "
+"bestand als bijlage bij uw foutenrapport of ondersteuningsaanvraag."
+
+#: ../plugins/symbol-tree/symbol-tree-panel.c:239
+msgid "Current language does not support symbol resolvers"
+msgstr "Huidige taal ondersteunt geen symbool-oplossers"
+
+#: ../plugins/symbol-tree/symbol-tree-panel.c:335
+msgid "Symbols"
+msgstr "Symbolen"
+
+#: ../plugins/sysmon/gb-sysmon-panel.ui.h:1
+msgid "System Monitor"
+msgstr "Systeemmonitor"
+
+#: ../plugins/terminal/gb-terminal-view-actions.c:297
+msgid "Save Terminal Content As"
+msgstr "Terminalinhoud opslaan als"
+
+#: ../plugins/terminal/gtk/menus.ui.h:1
+msgid "_New Terminal"
+msgstr "_Nieuwe terminal"
+
+#: ../plugins/todo/todo_plugin/__init__.py:179
+msgid "Todo"
+msgstr "Taken"
+
+#: ../plugins/vala-pack/ide-vala-preferences-addin.vala:33
+msgid "Vala"
+msgstr "Vala"
+
+#: ../plugins/vala-pack/ide-vala-preferences-addin.vala:34
+msgid "Show errors and warnings provided by Vala"
+msgstr "Fouten en waarschuwingen weergeven geleverd door Vala"
+
+#. translators: keywords used when searching for preferences
+#: ../plugins/vala-pack/ide-vala-preferences-addin.vala:36
+msgid "vala diagnostics warnings errors"
+msgstr "vala bevindingen waarschuwingen fouten"
+
+#~ msgid "Invalid snippet at line %d: %s"
+#~ msgstr "Ongeldig knipsel op regel %d: %s"
