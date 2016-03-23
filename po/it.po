@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-03-18 13:56+0000\n"
-"PO-Revision-Date: 2016-03-21 21:43+0100\n"
+"POT-Creation-Date: 2016-03-23 02:32+0000\n"
+"PO-Revision-Date: 2016-03-23 08:33+0100\n"
 "Last-Translator: Milo Casagrande <milo@milo.name>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
@@ -19,22 +19,23 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 1.8.7\n"
 
-#: ../contrib/egg/egg-animation.c:726
+#: ../contrib/egg/egg-animation.c:726 ../contrib/pnl/pnl-animation.c:701
 #, c-format
 msgid "Cannot locate property %s in class %s"
 msgstr "Impossibile trovare la proprietà %s nella classe %s"
 
 #: ../contrib/egg/egg-animation.c:1073 ../contrib/egg/egg-animation.c:1079
+#: ../contrib/pnl/pnl-animation.c:1053 ../contrib/pnl/pnl-animation.c:1059
 #, c-format
 msgid "Failed to find property %s in %s"
 msgstr "Ricerca della proprietà %s in %s non riuscita"
 
-#: ../contrib/egg/egg-animation.c:1087
+#: ../contrib/egg/egg-animation.c:1087 ../contrib/pnl/pnl-animation.c:1067
 #, c-format
 msgid "Failed to find property %s in %s or parent %s"
 msgstr "Ricerca della proprietà %s in %s o nel genitore %s non riuscita"
 
-#: ../contrib/egg/egg-animation.c:1097
+#: ../contrib/egg/egg-animation.c:1097 ../contrib/pnl/pnl-animation.c:1077
 #, c-format
 msgid "Failed to retrieve va_list value: %s"
 msgstr "Recupero del valore va_list non riuscito: %s"
@@ -802,7 +803,7 @@ msgstr "%u di %u"
 msgid "Re_veal in Project Tree"
 msgstr "_Mostra nell'albero del progetto"
 
-#: ../libide/editor/ide-editor-perspective.c:456
+#: ../libide/editor/ide-editor-perspective.c:444
 #: ../libide/preferences/ide-preferences-builtin.c:102
 #: ../libide/preferences/ide-preferences-builtin.c:125
 msgid "Editor"
@@ -1066,17 +1067,17 @@ msgstr "Apertura della directory non riuscita: %s"
 msgid "Failed to load file: %s: %s"
 msgstr "Caricamento del file non riuscito: %s: %s"
 
-#: ../libide/ide-source-view.c:4900
+#: ../libide/ide-source-view.c:4897
 #, c-format
 msgid "Insert “%s”"
 msgstr "Inserisci «%s»"
 
-#: ../libide/ide-source-view.c:4902
+#: ../libide/ide-source-view.c:4899
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "Sostituisci «%s» con «%s»"
 
-#: ../libide/ide-source-view.c:5016
+#: ../libide/ide-source-view.c:5013
 msgid "Apply Fix-It"
 msgstr "Applica Fix-It"
 
@@ -1196,7 +1197,7 @@ msgstr "editor carattere spaziatura fissa monospace font"
 
 #. XXX: This belongs in terminal addin
 #: ../libide/preferences/ide-preferences-builtin.c:104
-#: ../plugins/terminal/gb-terminal-workbench-addin.c:99
+#: ../plugins/terminal/gb-terminal-workbench-addin.c:90
 msgid "Terminal"
 msgstr "Terminale"
 
@@ -1500,7 +1501,7 @@ msgid "Indent source code as you type"
 msgstr "Indenta il codice sorgente mentre si scrive"
 
 #: ../libide/preferences/ide-preferences-builtin.c:243
-#: ../plugins/build-tools/gbp-build-workbench-addin.c:270
+#: ../plugins/build-tools/gbp-build-panel.c:426
 msgid "Build"
 msgstr "Compila"
 
@@ -1878,10 +1879,6 @@ msgstr "Percorso al file progetto, predefinito alla directory attuale"
 msgid "PATH"
 msgstr "PERCORSO"
 
-#: ../plugins/build-tools/gbp-build-workbench-addin.c:275
-msgid "Build Output"
-msgstr "Output compilazione"
-
 #: ../plugins/clang/ide-clang-preferences-addin.c:62
 msgid "Clang"
 msgstr "Clang"
@@ -2084,7 +2081,7 @@ msgid "Please specify a project template with --template=\n"
 msgstr "Specificare un modello di progetto con --template=\n"
 
 #: ../plugins/devhelp/gbp-devhelp-search-provider.c:128
-#: ../plugins/devhelp/gbp-devhelp-workbench-addin.c:90
+#: ../plugins/devhelp/gbp-devhelp-panel.c:187
 msgid "Documentation"
 msgstr "Documentazione"
 
@@ -2202,12 +2199,10 @@ msgid "Create a new autotools project with a shared library"
 msgstr "Crea un nuovo progetto autotools con una libreria condivisa"
 
 #: ../plugins/mingw/ide-mingw-device-provider.c:95
-#| msgid "MinGW (64-bit)"
 msgid "MinGW 64-bit"
 msgstr "MinGW 64-bit"
 
 #: ../plugins/mingw/ide-mingw-device-provider.c:107
-#| msgid "MinGW (32-bit)"
 msgid "MinGW 32-bit"
 msgstr "MinGW 32-bit"
 
@@ -2235,7 +2230,7 @@ msgstr "Nome cartella"
 msgid "_Create"
 msgstr "_Crea"
 
-#: ../plugins/project-tree/gb-project-tree-addin.c:112
+#: ../plugins/project-tree/gb-project-tree-addin.c:113
 msgid "Project"
 msgstr "Progetto"
 
@@ -2326,17 +2321,13 @@ msgstr ""
 "Il file di registro di supporto è stato scritto su «%s». Fornire questo file "
 "come allegato alla segnalazione bug o alla richiesta di supporto."
 
-#: ../plugins/symbol-tree/symbol-tree.c:84
-msgid "Symbols"
-msgstr "Simboli"
-
 #: ../plugins/symbol-tree/symbol-tree-panel.c:239
 msgid "Current language does not support symbol resolvers"
 msgstr "Il linguaggio attuale non supporta i risolutori di simboli"
 
-#: ../plugins/sysmon/gb-sysmon-addin.c:63
-msgid "System Monitor"
-msgstr "Monitor di sistema"
+#: ../plugins/symbol-tree/symbol-tree-panel.c:335
+msgid "Symbols"
+msgstr "Simboli"
 
 #: ../plugins/terminal/gb-terminal-view-actions.c:297
 msgid "Save Terminal Content As"
@@ -2346,7 +2337,7 @@ msgstr "Salva contenuto terminale come"
 msgid "_New Terminal"
 msgstr "Nuova _terminale"
 
-#: ../plugins/todo/todo_plugin/__init__.py:60
+#: ../plugins/todo/todo_plugin/__init__.py:179
 msgid "Todo"
 msgstr "Todo"
 
@@ -2362,3 +2353,24 @@ msgstr "Mostra errori e avvisi forniti da Vala"
 #: ../plugins/vala-pack/ide-vala-preferences-addin.vala:36
 msgid "vala diagnostics warnings errors"
 msgstr "vala diagnostica avvisi errori warnings errors"
+
+#: ../plugins/build-tools/gbp-build-log-panel.c:249
+msgid "Build Output"
+msgstr "Output compilazione"
+
+#: ../plugins/build-tools/gbp-build-panel.c:150
+#, c-format
+msgid "%d warning"
+msgid_plural "%d warnings"
+msgstr[0] "%d avviso"
+msgstr[1] "%d avvisi"
+
+#: ../plugins/build-tools/gbp-build-panel.c:157
+#, c-format
+msgid "%d error"
+msgid_plural "%d errors"
+msgstr[0] "%d errore"
+msgstr[1] "%d errori"
+
+#~ msgid "System Monitor"
+#~ msgstr "Monitor di sistema"
