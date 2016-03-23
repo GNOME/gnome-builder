@@ -87,6 +87,7 @@ static const gchar *ide_application_credits_authors[] = {
   "Jordi Mas",
   "Kalev Lember",
   "Kjartan Maraas",
+  "Kris Thomsen",
   "Kristjan SCHMIDT",
   "Lars Uebernickel",
   "Lionel Landwerlin",
