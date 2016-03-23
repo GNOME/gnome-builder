@@ -3,6 +3,7 @@
 contrib/egg/egg-animation.c
 contrib/egg/egg-date-time.c
 contrib/egg/egg-search-bar.c
+contrib/pnl/pnl-animation.c
 contrib/search/trie.c
 contrib/tmpl/tmpl-parser.c
 contrib/tmpl/tmpl-template.c
@@ -68,6 +69,8 @@ plugins/autotools/ide-autotools-build-system.c
 plugins/autotools/ide-autotools-build-task.c
 plugins/autotools/ide-makecache.c
 [type: gettext/glade]plugins/build-tools/gbp-build-configuration-view.ui
+plugins/build-tools/gbp-build-log-panel.c
+plugins/build-tools/gbp-build-panel.c
 plugins/build-tools/gbp-build-panel-row.c
 [type: gettext/glade]plugins/build-tools/gbp-build-panel.ui
 plugins/build-tools/gbp-build-tool.c
@@ -83,6 +86,7 @@ plugins/contributing/contributing_plugin/helper.py
 plugins/contributing/contributing_plugin/__init__.py
 plugins/c-pack/ide-c-format-provider.c
 plugins/create-project/gbp-create-project-tool.c
+plugins/devhelp/gbp-devhelp-panel.c
 plugins/devhelp/gbp-devhelp-search-provider.c
 plugins/devhelp/gbp-devhelp-workbench-addin.c
 plugins/file-search/gb-file-search-provider.c
@@ -114,13 +118,9 @@ plugins/support/ide-support-application-addin.c
 plugins/symbol-tree/symbol-tree.c
 plugins/symbol-tree/symbol-tree-panel.c
 plugins/sysmon/gb-sysmon-addin.c
+[type: gettext/glade]plugins/sysmon/gb-sysmon-panel.ui
 plugins/terminal/gb-terminal-view-actions.c
 plugins/terminal/gb-terminal-workbench-addin.c
 [type: gettext/glade]plugins/terminal/gtk/menus.ui
 plugins/todo/todo_plugin/__init__.py
 plugins/vala-pack/ide-vala-preferences-addin.vala
-contrib/pnl/pnl-animation.c
-plugins/build-tools/gbp-build-log-panel.c
-plugins/build-tools/gbp-build-panel.c
-plugins/devhelp/gbp-devhelp-panel.c
-plugins/sysmon/gb-sysmon-panel.ui
