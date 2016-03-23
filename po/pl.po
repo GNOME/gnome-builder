@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-18 15:30+0100\n"
-"PO-Revision-Date: 2016-03-18 15:32+0100\n"
+"POT-Creation-Date: 2016-03-23 13:07+0100\n"
+"PO-Revision-Date: 2016-03-23 13:08+0100\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <gnomepl@aviary.pl>\n"
 "Language: pl\n"
@@ -23,23 +23,24 @@ msgstr ""
 "X-Poedit-Language: Polish\n"
 "X-Poedit-Country: Poland\n"
 
-#: ../contrib/egg/egg-animation.c:726
+#: ../contrib/egg/egg-animation.c:726 ../contrib/pnl/pnl-animation.c:701
 #, c-format
 msgid "Cannot locate property %s in class %s"
 msgstr "Nie można ustalić położenia właściwości %s w klasie %s"
 
 #: ../contrib/egg/egg-animation.c:1073 ../contrib/egg/egg-animation.c:1079
+#: ../contrib/pnl/pnl-animation.c:1053 ../contrib/pnl/pnl-animation.c:1059
 #, c-format
 msgid "Failed to find property %s in %s"
 msgstr "Wyszukanie właściwości %s w %s się nie powiodło"
 
-#: ../contrib/egg/egg-animation.c:1087
+#: ../contrib/egg/egg-animation.c:1087 ../contrib/pnl/pnl-animation.c:1067
 #, c-format
 msgid "Failed to find property %s in %s or parent %s"
 msgstr ""
 "Wyszukanie właściwości %s w %s lub elemencie nadrzędnym %s się nie powiodło"
 
-#: ../contrib/egg/egg-animation.c:1097
+#: ../contrib/egg/egg-animation.c:1097 ../contrib/pnl/pnl-animation.c:1077
 #, c-format
 msgid "Failed to retrieve va_list value: %s"
 msgstr "Pobranie wartości „va_list” się nie powiodło: %s"
@@ -809,7 +810,7 @@ msgstr "%u z %u"
 msgid "Re_veal in Project Tree"
 msgstr "Odkry_wanie w drzewie projektu"
 
-#: ../libide/editor/ide-editor-perspective.c:456
+#: ../libide/editor/ide-editor-perspective.c:444
 #: ../libide/preferences/ide-preferences-builtin.c:102
 #: ../libide/preferences/ide-preferences-builtin.c:125
 msgid "Editor"
@@ -1071,17 +1072,17 @@ msgstr "Otwarcie katalogu się nie powiodło: %s"
 msgid "Failed to load file: %s: %s"
 msgstr "Wczytanie pliku się nie powiodło: %s: %s"
 
-#: ../libide/ide-source-view.c:4900
+#: ../libide/ide-source-view.c:4897
 #, c-format
 msgid "Insert “%s”"
 msgstr "Wstaw „%s”"
 
-#: ../libide/ide-source-view.c:4902
+#: ../libide/ide-source-view.c:4899
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "Zmień „%s” na „%s”"
 
-#: ../libide/ide-source-view.c:5016
+#: ../libide/ide-source-view.c:5013
 msgid "Apply Fix-It"
 msgstr "Zastosuj „Fix-It”"
 
@@ -1201,7 +1202,7 @@ msgstr "edytor czcionka font stałej szerokości monospace"
 
 #. XXX: This belongs in terminal addin
 #: ../libide/preferences/ide-preferences-builtin.c:104
-#: ../plugins/terminal/gb-terminal-workbench-addin.c:99
+#: ../plugins/terminal/gb-terminal-workbench-addin.c:90
 msgid "Terminal"
 msgstr "Terminal"
 
@@ -1497,7 +1498,7 @@ msgid "Indent source code as you type"
 msgstr "Tworzenie wcięć kodu źródłowego podczas pisania"
 
 #: ../libide/preferences/ide-preferences-builtin.c:243
-#: ../plugins/build-tools/gbp-build-workbench-addin.c:270
+#: ../plugins/build-tools/gbp-build-panel.c:426
 msgid "Build"
 msgstr "Budowanie"
 
@@ -1708,6 +1709,26 @@ msgstr "Środowisko wykonawcze"
 msgid "Environment"
 msgstr "Środowisko"
 
+#: ../plugins/build-tools/gbp-build-log-panel.c:249
+msgid "Build Output"
+msgstr "Wyjście budowania"
+
+#: ../plugins/build-tools/gbp-build-panel.c:150
+#, c-format
+msgid "%d warning"
+msgid_plural "%d warnings"
+msgstr[0] "%d ostrzeżenie"
+msgstr[1] "%d ostrzeżenia"
+msgstr[2] "%d ostrzeżeń"
+
+#: ../plugins/build-tools/gbp-build-panel.c:157
+#, c-format
+msgid "%d error"
+msgid_plural "%d errors"
+msgstr[0] "%d błąd"
+msgstr[1] "%d błędy"
+msgstr[2] "%d błędów"
+
 #: ../plugins/build-tools/gbp-build-panel-row.c:68
 msgid "Unknown file"
 msgstr "Nieznany plik"
@@ -1874,10 +1895,6 @@ msgstr "Ścieżka do pliku projektu, domyślnie bieżący katalog"
 #: ../plugins/build-tools/gbp-build-tool.c:301
 msgid "PATH"
 msgstr "ŚCIEŻKA"
-
-#: ../plugins/build-tools/gbp-build-workbench-addin.c:275
-msgid "Build Output"
-msgstr "Wyjście budowania"
 
 #: ../plugins/clang/ide-clang-preferences-addin.c:62
 msgid "Clang"
@@ -2076,8 +2093,8 @@ msgstr "Proszę podać nazwę projektu.\n"
 msgid "Please specify a project template with --template=\n"
 msgstr "Proszę podać szablon projektu za pomocą parametru „--template=”\n"
 
+#: ../plugins/devhelp/gbp-devhelp-panel.c:187
 #: ../plugins/devhelp/gbp-devhelp-search-provider.c:128
-#: ../plugins/devhelp/gbp-devhelp-workbench-addin.c:90
 msgid "Documentation"
 msgstr "Dokumentacja"
 
@@ -2225,7 +2242,7 @@ msgstr "Nazwa katalogu"
 msgid "_Create"
 msgstr "_Utwórz"
 
-#: ../plugins/project-tree/gb-project-tree-addin.c:112
+#: ../plugins/project-tree/gb-project-tree-addin.c:113
 msgid "Project"
 msgstr "Projekt"
 
@@ -2316,15 +2333,15 @@ msgstr ""
 "Plik dziennika wsparcia został zapisany do „%s”. Proszę dostarczyć ten plik "
 "jako załącznik w zgłoszeniu błędu lub prośbie o wsparcie."
 
-#: ../plugins/symbol-tree/symbol-tree.c:84
-msgid "Symbols"
-msgstr "Symbole"
-
 #: ../plugins/symbol-tree/symbol-tree-panel.c:239
 msgid "Current language does not support symbol resolvers"
 msgstr "Obecny język nie obsługuje mechanizmów rozwiązywania symboli"
 
-#: ../plugins/sysmon/gb-sysmon-addin.c:63
+#: ../plugins/symbol-tree/symbol-tree-panel.c:335
+msgid "Symbols"
+msgstr "Symbole"
+
+#: ../plugins/sysmon/gb-sysmon-panel.ui.h:1
 msgid "System Monitor"
 msgstr "Monitor systemu"
 
@@ -2336,7 +2353,7 @@ msgstr "Zapis zawartości terminala jako"
 msgid "_New Terminal"
 msgstr "_Nowy terminal"
 
-#: ../plugins/todo/todo_plugin/__init__.py:60
+#: ../plugins/todo/todo_plugin/__init__.py:179
 msgid "Todo"
 msgstr "Zadania"
 
