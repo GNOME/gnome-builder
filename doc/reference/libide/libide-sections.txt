@@ -976,10 +976,6 @@ ide_language_defaults_init_finish
 IDE_TYPE_LAYOUT
 IdeLayoutClass
 ide_layout_new
-ide_layout_get_left_pane
-ide_layout_get_right_pane
-ide_layout_get_bottom_pane
-ide_layout_get_content_pane
 ide_layout_get_active_view
 IdeLayout
 </SECTION>

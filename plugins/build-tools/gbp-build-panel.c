@@ -28,7 +28,7 @@
 
 struct _GbpBuildPanel
 {
-  GtkBin            parent_instance;
+  PnlDockWidget     parent_instance;
 
   IdeBuildResult   *result;
   EggSignalGroup   *signals;
@@ -50,7 +50,7 @@ struct _GbpBuildPanel
   guint             warning_count;
 };
 
-G_DEFINE_TYPE (GbpBuildPanel, gbp_build_panel, GTK_TYPE_BIN)
+G_DEFINE_TYPE (GbpBuildPanel, gbp_build_panel, PNL_TYPE_DOCK_WIDGET)
 
 enum {
   PROP_0,
@@ -422,6 +422,8 @@ static void
 gbp_build_panel_init (GbpBuildPanel *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
+
+  g_object_set (self, "title", _("Build"), NULL);
 
   self->signals = egg_signal_group_new (IDE_TYPE_BUILD_RESULT);
 

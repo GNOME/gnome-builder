@@ -174,7 +174,7 @@ gbp_devhelp_search_provider_activate (IdeSearchProvider *provider,
   editor = ide_workbench_get_perspective_by_name (IDE_WORKBENCH (toplevel), "editor");
   g_assert (editor != NULL);
 
-  pane = ide_layout_get_right_pane (IDE_LAYOUT (editor));
+  pane = pnl_dock_bin_get_right_edge (PNL_DOCK_BIN (editor));
   g_assert (pane != NULL);
 
   panel = ide_widget_find_child_typed (pane, GBP_TYPE_DEVHELP_PANEL);

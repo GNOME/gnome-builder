@@ -262,17 +262,16 @@ gbp_build_workbench_addin_load (IdeWorkbenchAddin *addin,
   configuration = ide_configuration_manager_get_current (configuration_manager);
 
   editor = ide_workbench_get_perspective_by_name (workbench, "editor");
-  pane = ide_layout_get_right_pane (IDE_LAYOUT (editor));
+  pane = pnl_dock_bin_get_right_edge (PNL_DOCK_BIN (editor));
   self->panel = g_object_new (GBP_TYPE_BUILD_PANEL,
                               "configuration-manager", configuration_manager,
                               "visible", TRUE,
                               NULL);
-  ide_layout_pane_add_page (IDE_LAYOUT_PANE (pane), GTK_WIDGET (self->panel), _("Build"), NULL);
+  gtk_container_add (GTK_CONTAINER (pane), GTK_WIDGET (self->panel));
 
-  pane = ide_layout_get_bottom_pane (IDE_LAYOUT (editor));
+  pane = pnl_dock_bin_get_bottom_edge (PNL_DOCK_BIN (editor));
   self->build_log_panel = g_object_new (GBP_TYPE_BUILD_LOG_PANEL, NULL);
-  ide_layout_pane_add_page (IDE_LAYOUT_PANE (pane), GTK_WIDGET (self->build_log_panel),
-                            _("Build Output"), NULL);
+  gtk_container_add (GTK_CONTAINER (pane), GTK_WIDGET (self->build_log_panel));
 
   gtk_widget_insert_action_group (GTK_WIDGET (workbench), "build-tools",
                                   G_ACTION_GROUP (self->actions));
@@ -292,8 +291,6 @@ gbp_build_workbench_addin_unload (IdeWorkbenchAddin *addin,
                                   IdeWorkbench      *workbench)
 {
   GbpBuildWorkbenchAddin *self = (GbpBuildWorkbenchAddin *)addin;
-  IdePerspective *editor;
-  GtkWidget *pane;
 
   g_assert (IDE_IS_WORKBENCH_ADDIN (addin));
   g_assert (GBP_IS_BUILD_WORKBENCH_ADDIN (self));
@@ -306,9 +303,8 @@ gbp_build_workbench_addin_unload (IdeWorkbenchAddin *addin,
 
   gtk_widget_insert_action_group (GTK_WIDGET (workbench), "build-tools", NULL);
 
-  editor = ide_workbench_get_perspective_by_name (workbench, "editor");
-  pane = ide_layout_get_right_pane (IDE_LAYOUT (editor));
-  ide_layout_pane_remove_page (IDE_LAYOUT_PANE (pane), GTK_WIDGET (self->panel));
+  gtk_widget_destroy (GTK_WIDGET (self->panel));
+  self->panel = NULL;
 }
 
 static void

@@ -27,7 +27,7 @@
 
 struct _GbpBuildLogPanel
 {
-  GtkBin             parent_instance;
+  PnlDockWidget      parent_instance;
 
   IdeBuildResult    *result;
   EggSignalGroup    *signals;
@@ -46,7 +46,7 @@ enum {
   LAST_PROP
 };
 
-G_DEFINE_TYPE (GbpBuildLogPanel, gbp_build_log_panel, GTK_TYPE_BIN)
+G_DEFINE_TYPE (GbpBuildLogPanel, gbp_build_log_panel, PNL_TYPE_DOCK_WIDGET)
 
 static GParamSpec *properties [LAST_PROP];
 
@@ -245,6 +245,8 @@ gbp_build_log_panel_init (GbpBuildLogPanel *self)
   self->css = gtk_css_provider_new ();
 
   gtk_widget_init_template (GTK_WIDGET (self));
+
+  g_object_set (self, "title", _("Build Output"), NULL);
 
   gbp_build_log_panel_reset_view (self);
 

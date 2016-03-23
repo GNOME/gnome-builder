@@ -2,69 +2,61 @@
 <interface>
   <!-- interface-requires gtk+ 3.18 -->
   <template class="IdeEditorPerspective" parent="IdeLayout">
-    <child internal-child="content_pane">
-      <object class="IdeLayoutPane">
-        <child internal-child="header">
+    <child type="center">
+      <object class="GtkStack" id="content_stack">
+        <property name="visible">true</property>
+        <child>
           <object class="GtkBox">
-            <property name="visible">false</property>
+            <property name="halign">center</property>
+            <property name="valign">center</property>
+            <property name="orientation">vertical</property>
+            <property name="spacing">12</property>
+            <property name="visible">true</property>
+            <child>
+              <object class="GtkImage">
+                <property name="icon-name">text-editor-symbolic</property>
+                <property name="pixel-size">128</property>
+                <property name="visible">true</property>
+                <style>
+                  <class name="dim-label"/>
+                </style>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="label" translatable="yes">No open files</property>
+                <property name="visible">true</property>
+                <style>
+                  <class name="dim-label"/>
+                </style>
+                <attributes>
+                  <attribute name="scale" value="2.0"/>
+                  <attribute name="weight" value="bold"/>
+                </attributes>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="label" translatable="yes">Try opening a file by typing in the search box at the top</property>
+                <property name="wrap">true</property>
+                <property name="visible">true</property>
+                <style>
+                  <class name="dim-label"/>
+                </style>
+              </object>
+            </child>
           </object>
+          <packing>
+            <property name="name">empty_state</property>
+          </packing>
         </child>
-        <child internal-child="stack">
-          <object class="GtkStack" id="content_stack">
-            <child>
-              <object class="GtkBox">
-                <property name="halign">center</property>
-                <property name="valign">center</property>
-                <property name="orientation">vertical</property>
-                <property name="spacing">12</property>
-                <property name="visible">true</property>
-                <child>
-                  <object class="GtkImage">
-                    <property name="icon-name">text-editor-symbolic</property>
-                    <property name="pixel-size">128</property>
-                    <property name="visible">true</property>
-                    <style>
-                      <class name="dim-label"/>
-                    </style>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkLabel">
-                    <property name="label" translatable="yes">No open files</property>
-                    <property name="visible">true</property>
-                    <style>
-                      <class name="dim-label"/>
-                    </style>
-                    <attributes>
-                      <attribute name="scale" value="2.0"/>
-                      <attribute name="weight" value="bold"/>
-                    </attributes>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkLabel">
-                    <property name="label" translatable="yes">Try opening a file by typing in the search box at the top</property>
-                    <property name="wrap">true</property>
-                    <property name="visible">true</property>
-                    <style>
-                      <class name="dim-label"/>
-                    </style>
-                  </object>
-                </child>
-              </object>
-              <packing>
-                <property name="name">empty_state</property>
-              </packing>
-            </child>
-            <child>
-              <object class="IdeLayoutGrid" id="grid">
-                <property name="visible">true</property>
-              </object>
-              <packing>
-                <property name="name">grid</property>
-              </packing>
-            </child>
+        <child>
+          <object class="IdeLayoutGrid" id="grid">
+            <property name="visible">true</property>
           </object>
+          <packing>
+            <property name="name">grid</property>
+          </packing>
         </child>
       </object>
     </child>
@@ -80,7 +72,7 @@
         </style>
         <child>
           <object class="GtkToggleButton">
-            <property name="action-name">panels.left</property>
+            <property name="action-name">dockbin.left-visible</property>
             <property name="tooltip-text" translatable="yes">Enable / Disable left panel. Shortcut: F9</property>
             <property name="focus-on-click">false</property>
             <property name="visible">true</property>
@@ -97,7 +89,7 @@
         </child>
         <child>
           <object class="GtkToggleButton">
-            <property name="action-name">panels.bottom</property>
+            <property name="action-name">dockbin.bottom-visible</property>
             <property name="tooltip-text" translatable="yes">Enable / Disable bottom panel. Shortcut: Ctrl + F9</property>
             <property name="focus-on-click">false</property>
             <property name="visible">true</property>
@@ -114,7 +106,7 @@
         </child>
         <child>
           <object class="GtkToggleButton">
-            <property name="action-name">panels.right</property>
+            <property name="action-name">dockbin.right-visible</property>
             <property name="tooltip-text" translatable="yes">Enable / Disable right panel. Shortcut: Shift + F9</property>
             <property name="focus-on-click">false</property>
             <property name="visible">true</property>

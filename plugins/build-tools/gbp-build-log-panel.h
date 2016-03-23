@@ -26,7 +26,7 @@ G_BEGIN_DECLS
 
 #define GBP_TYPE_BUILD_LOG_PANEL (gbp_build_log_panel_get_type())
 
-G_DECLARE_FINAL_TYPE (GbpBuildLogPanel, gbp_build_log_panel, GBP, BUILD_LOG_PANEL, GtkBin)
+G_DECLARE_FINAL_TYPE (GbpBuildLogPanel, gbp_build_log_panel, GBP, BUILD_LOG_PANEL, PnlDockWidget)
 
 void gbp_build_log_panel_set_result (GbpBuildLogPanel *self,
                                      IdeBuildResult   *result);

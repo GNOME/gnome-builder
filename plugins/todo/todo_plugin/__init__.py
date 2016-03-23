@@ -27,6 +27,7 @@ from gi.repository import Gio
 from gi.repository import GLib
 from gi.repository import GObject
 from gi.repository import Gtk
+from gi.repository import Pnl
 
 from gettext import gettext as _
 import re
@@ -56,8 +57,8 @@ class TodoWorkbenchAddin(GObject.Object, Ide.WorkbenchAddin):
         # Create our panel to display results
         self.panel = TodoPanel(workdir, visible=True)
         editor = workbench.get_perspective_by_name('editor')
-        pane = editor.get_bottom_pane()
-        pane.add_page(self.panel, _("Todo"), None)
+        pane = editor.get_bottom_edge()
+        pane.add(self.panel)
 
         # Mine the directory in a background thread
         self.mine(workdir)
@@ -171,9 +172,12 @@ class TodoItem(GObject.Object):
             return msg[:msg.index('\n')].strip()
         return msg.strip()
 
-class TodoPanel(Gtk.Bin):
+class TodoPanel(Pnl.DockWidget):
     def __init__(self, basedir, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
+        self.props.title = _("Todo")
+        self.props.expand = True
 
         self.basedir = basedir
         self.model = Gtk.ListStore(TodoItem)

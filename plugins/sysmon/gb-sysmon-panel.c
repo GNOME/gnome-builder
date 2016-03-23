@@ -16,18 +16,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <glib/gi18n.h>
 #include <realtime-graphs.h>
 
 #include "gb-sysmon-panel.h"
 
 struct _GbSysmonPanel
 {
-  GtkBox      parent_instance;
-  RgCpuGraph *cpu_graph;
+  PnlDockWidget  parent_instance;
+  RgCpuGraph    *cpu_graph;
 };
 
-G_DEFINE_TYPE (GbSysmonPanel, gb_sysmon_panel, GTK_TYPE_BOX)
+G_DEFINE_TYPE (GbSysmonPanel, gb_sysmon_panel, PNL_TYPE_DOCK_WIDGET)
 
 static void
 gb_sysmon_panel_finalize (GObject *object)

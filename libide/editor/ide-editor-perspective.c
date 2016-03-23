@@ -76,29 +76,23 @@ ide_editor_perspective_restore_panel_state (IdeEditorPerspective *self)
 
   settings = g_settings_new ("org.gnome.builder.workbench");
 
-  pane = ide_layout_get_left_pane (IDE_LAYOUT (self));
+  pane = pnl_dock_bin_get_left_edge (PNL_DOCK_BIN (self));
   reveal = g_settings_get_boolean (settings, "left-visible");
   position = g_settings_get_int (settings, "left-position");
-  gtk_container_child_set (GTK_CONTAINER (self), pane,
-                           "position", position,
-                           "reveal", reveal,
-                           NULL);
+  pnl_dock_revealer_set_reveal_child (PNL_DOCK_REVEALER (pane), reveal);
+  pnl_dock_revealer_set_position (PNL_DOCK_REVEALER (pane), position);
 
-  pane = ide_layout_get_right_pane (IDE_LAYOUT (self));
+  pane = pnl_dock_bin_get_right_edge (PNL_DOCK_BIN (self));
   reveal = g_settings_get_boolean (settings, "right-visible");
   position = g_settings_get_int (settings, "right-position");
-  gtk_container_child_set (GTK_CONTAINER (self), pane,
-                           "position", position,
-                           "reveal", reveal,
-                           NULL);
+  pnl_dock_revealer_set_reveal_child (PNL_DOCK_REVEALER (pane), reveal);
+  pnl_dock_revealer_set_position (PNL_DOCK_REVEALER (pane), position);
 
-  pane = ide_layout_get_bottom_pane (IDE_LAYOUT (self));
+  pane = pnl_dock_bin_get_bottom_edge (PNL_DOCK_BIN (self));
   reveal = g_settings_get_boolean (settings, "bottom-visible");
   position = g_settings_get_int (settings, "bottom-position");
-  gtk_container_child_set (GTK_CONTAINER (self), pane,
-                           "position", position,
-                           "reveal", reveal,
-                           NULL);
+  pnl_dock_revealer_set_reveal_child (PNL_DOCK_REVEALER (pane), reveal);
+  pnl_dock_revealer_set_position (PNL_DOCK_REVEALER (pane), position);
 }
 
 static void
@@ -113,27 +107,21 @@ ide_editor_perspective_save_panel_state (IdeEditorPerspective *self)
 
   settings = g_settings_new ("org.gnome.builder.workbench");
 
-  pane = ide_layout_get_left_pane (IDE_LAYOUT (self));
-  gtk_container_child_get (GTK_CONTAINER (IDE_LAYOUT (self)), pane,
-                           "reveal", &reveal,
-                           "position", &position,
-                           NULL);
+  pane = pnl_dock_bin_get_left_edge (PNL_DOCK_BIN (self));
+  position = pnl_dock_revealer_get_position (PNL_DOCK_REVEALER (pane));
+  reveal = pnl_dock_revealer_get_reveal_child (PNL_DOCK_REVEALER (pane));
   g_settings_set_boolean (settings, "left-visible", reveal);
   g_settings_set_int (settings, "left-position", position);
 
-  pane = ide_layout_get_right_pane (IDE_LAYOUT (self));
-  gtk_container_child_get (GTK_CONTAINER (IDE_LAYOUT (self)), pane,
-                           "reveal", &reveal,
-                           "position", &position,
-                           NULL);
+  pane = pnl_dock_bin_get_right_edge (PNL_DOCK_BIN (self));
+  position = pnl_dock_revealer_get_position (PNL_DOCK_REVEALER (pane));
+  reveal = pnl_dock_revealer_get_reveal_child (PNL_DOCK_REVEALER (pane));
   g_settings_set_boolean (settings, "right-visible", reveal);
   g_settings_set_int (settings, "right-position", position);
 
-  pane = ide_layout_get_bottom_pane (IDE_LAYOUT (self));
-  gtk_container_child_get (GTK_CONTAINER (IDE_LAYOUT (self)), pane,
-                           "reveal", &reveal,
-                           "position", &position,
-                           NULL);
+  pane = pnl_dock_bin_get_bottom_edge (PNL_DOCK_BIN (self));
+  position = pnl_dock_revealer_get_position (PNL_DOCK_REVEALER (pane));
+  reveal = pnl_dock_revealer_get_reveal_child (PNL_DOCK_REVEALER (pane));
   g_settings_set_boolean (settings, "bottom-visible", reveal);
   g_settings_set_int (settings, "bottom-position", position);
 }
@@ -441,8 +429,8 @@ ide_editor_perspective_init (IdeEditorPerspective *self)
   g_action_map_add_action_entries (G_ACTION_MAP (self->actions), entries,
                                    G_N_ELEMENTS (entries), self);
 
-  actions = gtk_widget_get_action_group (GTK_WIDGET (self), "panels");
-  gtk_widget_insert_action_group (GTK_WIDGET (self->titlebar), "panels", actions);
+  actions = gtk_widget_get_action_group (GTK_WIDGET (self), "dockbin");
+  gtk_widget_insert_action_group (GTK_WIDGET (self->titlebar), "dockbin", actions);
 
   ide_editor_perspective_restore_panel_state (self);
 

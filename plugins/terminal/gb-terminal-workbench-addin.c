@@ -27,7 +27,9 @@ struct _GbTerminalWorkbenchAddin
   GObject         parent_instance;
 
   IdeWorkbench   *workbench;
+
   GbTerminalView *panel_terminal;
+  GtkWidget      *panel_dock_widget;
 };
 
 static void workbench_addin_iface_init (IdeWorkbenchAddinInterface *iface);
@@ -83,21 +85,28 @@ gb_terminal_workbench_addin_load (IdeWorkbenchAddin *addin,
 
   if (self->panel_terminal == NULL)
     {
+      self->panel_dock_widget = g_object_new (PNL_TYPE_DOCK_WIDGET,
+                                              "expand", TRUE,
+                                              "title", _("Terminal"),
+                                              "visible", TRUE,
+                                              NULL);
       self->panel_terminal = g_object_new (GB_TYPE_TERMINAL_VIEW,
                                            "visible", TRUE,
                                            NULL);
+      gtk_container_add (GTK_CONTAINER (self->panel_dock_widget),
+                         GTK_WIDGET (self->panel_terminal));
+
       g_object_add_weak_pointer (G_OBJECT (self->panel_terminal),
                                  (gpointer *)&self->panel_terminal);
+      g_object_add_weak_pointer (G_OBJECT (self->panel_dock_widget),
+                                 (gpointer *)&self->panel_dock_widget);
     }
 
   perspective = ide_workbench_get_perspective_by_name (workbench, "editor");
   g_assert (IDE_IS_LAYOUT (perspective));
 
-  bottom_pane = ide_layout_get_bottom_pane (IDE_LAYOUT (perspective));
-  ide_layout_pane_add_page (IDE_LAYOUT_PANE (bottom_pane),
-                            GTK_WIDGET (self->panel_terminal),
-                            _("Terminal"),
-                            "utilities-terminal-symbolic");
+  bottom_pane = pnl_dock_bin_get_bottom_edge (PNL_DOCK_BIN (perspective));
+  gtk_container_add (GTK_CONTAINER (bottom_pane), GTK_WIDGET (self->panel_dock_widget));
 }
 
 static void
@@ -110,12 +119,10 @@ gb_terminal_workbench_addin_unload (IdeWorkbenchAddin *addin,
 
   g_action_map_remove_action (G_ACTION_MAP (self->workbench), "new-terminal");
 
-  if (self->panel_terminal != NULL)
+  if (self->panel_dock_widget != NULL)
     {
-      GtkWidget *parent;
-
-      parent = gtk_widget_get_parent (GTK_WIDGET (self->panel_terminal));
-      gtk_container_remove (GTK_CONTAINER (parent), GTK_WIDGET (self->panel_terminal));
+      gtk_widget_destroy (self->panel_dock_widget);
+      self->panel_dock_widget = NULL;
     }
 }
 

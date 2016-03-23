@@ -1,0 +1,50 @@
+dockbin {
+  border: 1px solid alpha(@borders, 0.75);
+  -PnlDockBin-handle-size: 1;
+}
+
+dockpaned {
+  border: 1px solid @borders;
+}
+
+tabstrip {
+  padding: 0 6px 0 6px;
+}
+
+tab {
+  background-image: none;
+  background-color: transparent;
+  border-color: transparent;
+  border-style: solid;
+  color: @theme_fg_color;
+  min-height: 39px;
+  outline-offset: -6px;
+  transition-duration: 200ms;
+  transition-timing-function: ease;
+}
+
+tab label {
+  font-size: 0.7em;
+}
+
+tab > * {
+  padding: 0 6px 0 6px;
+}
+
+dockoverlayedge {
+  background-color: @theme_bg_color;
+}
+
+dockoverlayedge tabstrip {
+  padding: 0;
+  border: none;
+}
+
+dockoverlayedge.left-edge tab:checked {
+  border-right-color: @theme_selected_bg_color;
+  border-bottom-color: transparent;
+}
+dockoverlayedge.right-edge tab:checked {
+  border-left-color: @theme_selected_bg_color;
+  border-bottom-color: transparent;
+}

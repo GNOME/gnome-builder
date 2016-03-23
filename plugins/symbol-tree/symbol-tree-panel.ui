@@ -1,25 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.16 -->
-  <template class="SymbolTreePanel" parent="GtkBox">
+  <template class="SymbolTreePanel" parent="PnlDockWidget">
     <property name="vexpand">true</property>
     <property name="visible">true</property>
-    <property name="orientation">vertical</property>
     <child>
-      <object class="GtkSearchEntry" id="search_entry">
+      <object class="GtkBox">
         <property name="visible">true</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkScrolledWindow">
-        <property name="expand">true</property>
-        <property name="visible">true</property>
+        <property name="orientation">vertical</property>
         <child>
-          <object class="IdeTree" id="tree">
-            <property name="activate-on-single-click">true</property>
-            <property name="headers-visible">false</property>
-            <property name="show-icons">true</property>
+          <object class="GtkSearchEntry" id="search_entry">
             <property name="visible">true</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkScrolledWindow">
+            <property name="expand">true</property>
+            <property name="visible">true</property>
+            <child>
+              <object class="IdeTree" id="tree">
+                <property name="activate-on-single-click">true</property>
+                <property name="headers-visible">false</property>
+                <property name="show-icons">true</property>
+                <property name="visible">true</property>
+              </object>
+            </child>
           </object>
         </child>
       </object>

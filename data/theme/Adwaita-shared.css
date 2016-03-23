@@ -1,4 +1,5 @@
 @import url("resource:///org/gnome/builder/theme/shared.css");
+@import url("resource:///org/gnome/builder/theme/Adwaita-panels.css");
 
 
 /*
@@ -109,22 +110,7 @@ layouttab > box > button:last-child:backdrop image {
 }
 
 
-/*
- * The following tweaks the layout panel headers
- */
-layoutpane {
-  -IdeLayoutPane-handle-size: 1;
-  -gtk-icon-source: none;
+layout {
+  border: 1px solid alpha(@borders, 0.75);
+  -PnlDockBin-handle-size: 1;
 }
-layoutpane stackswitcher button {
-  min-width: 0;
-  border: none;
-  background: transparent;
-  box-shadow: none;
-  padding: 0 3px 0 3px;
-  border-radius: 0;
-}
-layoutpane .pane-separator {
-  background-color: @borders;
-}
-

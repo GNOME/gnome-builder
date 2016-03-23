@@ -26,7 +26,7 @@ G_BEGIN_DECLS
 
 #define GBP_TYPE_BUILD_PANEL (gbp_build_panel_get_type())
 
-G_DECLARE_FINAL_TYPE (GbpBuildPanel, gbp_build_panel, GBP, BUILD_PANEL, GtkBin)
+G_DECLARE_FINAL_TYPE (GbpBuildPanel, gbp_build_panel, GBP, BUILD_PANEL, PnlDockWidget)
 
 void gbp_build_panel_set_result (GbpBuildPanel  *self,
                                  IdeBuildResult *result);

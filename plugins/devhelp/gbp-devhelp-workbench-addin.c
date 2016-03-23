@@ -79,15 +79,15 @@ gbp_devhelp_workbench_addin_load (IdeWorkbenchAddin *addin,
   perspective = ide_workbench_get_perspective_by_name (workbench, "editor");
   g_assert (IDE_IS_LAYOUT (perspective));
 
-  pane = ide_layout_get_right_pane (IDE_LAYOUT (perspective));
+  pane = pnl_dock_bin_get_right_edge (PNL_DOCK_BIN (perspective));
   g_assert (IDE_IS_LAYOUT_PANE (pane));
 
   self->panel = g_object_new (GBP_TYPE_DEVHELP_PANEL,
                               "book-manager", self->books,
+                              "expand", TRUE,
                               "visible", TRUE,
                               NULL);
-  ide_layout_pane_add_page (IDE_LAYOUT_PANE (pane), GTK_WIDGET (self->panel),
-                            _("Documentation"), "devhelp-symbolic");
+  gtk_container_add (GTK_CONTAINER (pane), GTK_WIDGET (self->panel));
 
   action = g_simple_action_new ("focus-devhelp-search", NULL);
   g_signal_connect_object (action, "activate", G_CALLBACK (focus_devhelp_search), self, 0);
@@ -114,10 +114,11 @@ gbp_devhelp_workbench_addin_unload (IdeWorkbenchAddin *addin,
   perspective = ide_workbench_get_perspective_by_name (workbench, "editor");
   g_assert (IDE_IS_LAYOUT (perspective));
 
-  pane = ide_layout_get_right_pane (IDE_LAYOUT (perspective));
+  pane = pnl_dock_bin_get_right_edge (PNL_DOCK_BIN (perspective));
   g_assert (IDE_IS_LAYOUT_PANE (pane));
 
-  ide_layout_pane_remove_page (IDE_LAYOUT_PANE (pane), GTK_WIDGET (self->panel));
+  gtk_widget_destroy (GTK_WIDGET (self->panel));
+  self->panel = NULL;
 
   g_action_map_remove_action (G_ACTION_MAP (workbench), "focus-devhelp-search");
 

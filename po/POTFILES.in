@@ -119,3 +119,8 @@ plugins/terminal/gb-terminal-workbench-addin.c
 [type: gettext/glade]plugins/terminal/gtk/menus.ui
 plugins/todo/todo_plugin/__init__.py
 plugins/vala-pack/ide-vala-preferences-addin.vala
+contrib/pnl/pnl-animation.c
+plugins/build-tools/gbp-build-log-panel.c
+plugins/build-tools/gbp-build-panel.c
+plugins/devhelp/gbp-devhelp-panel.c
+plugins/sysmon/gb-sysmon-panel.ui

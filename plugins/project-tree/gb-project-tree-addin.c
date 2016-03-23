@@ -27,8 +27,10 @@ static void workbench_addin_iface_init (IdeWorkbenchAddinInterface *iface);
 
 struct _GbProjectTreeAddin
 {
-  GObject  jparent_instance;
-  IdeTree *tree;
+  GObject    parent_instance;
+
+  IdeTree   *tree;
+  GtkWidget *panel;
 };
 
 G_DEFINE_TYPE_EXTENDED (GbProjectTreeAddin, gb_project_tree_addin, G_TYPE_OBJECT, 0,
@@ -59,12 +61,10 @@ gb_project_tree_addin_grid_empty (GbProjectTreeAddin *self,
   layout = gtk_widget_get_ancestor (GTK_WIDGET (grid), IDE_TYPE_LAYOUT);
   g_assert (layout != NULL);
 
-  pane = ide_layout_get_left_pane (IDE_LAYOUT (layout));
+  pane = pnl_dock_bin_get_left_edge (PNL_DOCK_BIN (layout));
   g_assert (pane != NULL);
 
-  gtk_container_child_set (GTK_CONTAINER (layout), GTK_WIDGET (pane),
-                           "reveal", TRUE,
-                           NULL);
+  pnl_dock_revealer_set_reveal_child (PNL_DOCK_REVEALER (pane), TRUE);
 }
 
 static void
@@ -84,10 +84,10 @@ gb_project_tree_addin_load (IdeWorkbenchAddin *addin,
   editor = ide_workbench_get_perspective_by_name (workbench, "editor");
   g_assert (editor != NULL);
 
-  pane = ide_layout_get_left_pane (IDE_LAYOUT (editor));
+  pane = pnl_dock_bin_get_left_edge (PNL_DOCK_BIN (editor));
   g_assert (pane != NULL);
 
-  content = ide_layout_get_content_pane (IDE_LAYOUT (editor));
+  content = pnl_dock_bin_get_center_widget (PNL_DOCK_BIN (editor));
   g_assert (content != NULL);
 
   grid = ide_widget_find_child_typed (content, IDE_TYPE_LAYOUT_GRID);
@@ -108,8 +108,13 @@ gb_project_tree_addin_load (IdeWorkbenchAddin *addin,
                              NULL);
   gtk_container_add (GTK_CONTAINER (scroller), GTK_WIDGET (self->tree));
 
-  ide_layout_pane_add_page (IDE_LAYOUT_PANE (pane), scroller,
-                            _("Project"), "folder-symbolic");
+  self->panel = g_object_new (PNL_TYPE_DOCK_WIDGET,
+                              "expand", TRUE,
+                              "title", _("Project"),
+                              "visible", TRUE,
+                              NULL);
+  gtk_container_add (GTK_CONTAINER (self->panel), GTK_WIDGET (scroller));
+  gtk_container_add (GTK_CONTAINER (pane), GTK_WIDGET (self->panel));
 
   ide_widget_set_context_handler (self->tree, gb_project_tree_addin_context_set);
 
@@ -121,20 +126,12 @@ gb_project_tree_addin_unload (IdeWorkbenchAddin *addin,
                               IdeWorkbench      *workbench)
 {
   GbProjectTreeAddin *self = (GbProjectTreeAddin *)addin;
-  IdePerspective *editor;
-  GtkWidget *pane;
 
   g_assert (IDE_IS_WORKBENCH_ADDIN (self));
   g_assert (IDE_IS_WORKBENCH (workbench));
 
-  editor = ide_workbench_get_perspective_by_name (workbench, "editor");
-  g_assert (editor != NULL);
-
-  pane = ide_layout_get_left_pane (IDE_LAYOUT (editor));
-  g_assert (pane != NULL);
-
-  ide_layout_pane_remove_page (IDE_LAYOUT_PANE (pane),
-                               gtk_widget_get_parent (GTK_WIDGET (self->tree)));
+  gtk_widget_destroy (self->panel);
+  self->panel = NULL;
 }
 
 static void

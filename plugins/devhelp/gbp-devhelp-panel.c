@@ -17,6 +17,7 @@
  */
 
 #include <devhelp/devhelp.h>
+#include <glib/gi18n.h>
 #include <ide.h>
 
 #include "gbp-devhelp-panel.h"
@@ -24,13 +25,13 @@
 
 struct _GbpDevhelpPanel
 {
-  GtkBin         parent_instance;
+  PnlDockWidget  parent_instance;
 
   DhBookManager *books;
   DhSidebar     *sidebar;
 };
 
-G_DEFINE_TYPE (GbpDevhelpPanel, gbp_devhelp_panel, GTK_TYPE_BIN)
+G_DEFINE_TYPE (GbpDevhelpPanel, gbp_devhelp_panel, PNL_TYPE_DOCK_WIDGET)
 
 enum {
   PROP_0,
@@ -183,18 +184,14 @@ gbp_devhelp_panel_class_init (GbpDevhelpPanelClass *klass)
 static void
 gbp_devhelp_panel_init (GbpDevhelpPanel *self)
 {
+  g_object_set (self, "title", _("Documentation"), NULL);
 }
 
 void
 gbp_devhelp_panel_focus_search (GbpDevhelpPanel *self,
                                 const gchar     *keyword)
 {
-  IdeWorkbench *workbench;
-
   g_return_if_fail (GBP_IS_DEVHELP_PANEL (self));
-
-  workbench = ide_widget_get_workbench (GTK_WIDGET (self));
-  ide_workbench_focus (workbench, GTK_WIDGET (self->sidebar));
 
   dh_sidebar_set_search_focus (self->sidebar);
 

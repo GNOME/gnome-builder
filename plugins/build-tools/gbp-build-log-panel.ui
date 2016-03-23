@@ -1,5 +1,5 @@
 <interface>
-  <template class="GbpBuildLogPanel" parent="GtkBin">
+  <template class="GbpBuildLogPanel" parent="PnlDockWidget">
     <child>
       <object class="GtkScrolledWindow" id="scroller">
         <property name="visible">true</property>

@@ -34,7 +34,7 @@
 
 struct _SymbolTreePanel
 {
-  GtkBox parent_instance;
+  PnlDockWidget   parent_instance;
 
   GCancellable   *cancellable;
   EggTaskCache   *symbols_cache;
@@ -47,7 +47,7 @@ struct _SymbolTreePanel
   guint           refresh_tree_timeout;
 };
 
-G_DEFINE_TYPE (SymbolTreePanel, symbol_tree_panel, GTK_TYPE_BOX)
+G_DEFINE_TYPE (SymbolTreePanel, symbol_tree_panel, PNL_TYPE_DOCK_WIDGET)
 
 static void refresh_tree (SymbolTreePanel *self);
 
@@ -331,7 +331,8 @@ symbol_tree_panel_init (SymbolTreePanel *self)
                                             NULL);
 
   gtk_widget_init_template (GTK_WIDGET (self));
-  gtk_widget_show (GTK_WIDGET (self));
+
+  g_object_set (self, "title", _("Symbols"), NULL);
 
   root = ide_tree_node_new ();
   ide_tree_set_root (self->tree, root);

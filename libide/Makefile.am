@@ -446,9 +446,11 @@ libide_1_0_la_includes = \
 	-I$(top_srcdir)/contrib/egg \
 	-I$(top_srcdir)/contrib/gd \
 	-I$(top_srcdir)/contrib/nautilus \
+	-I$(top_srcdir)/contrib/pnl \
 	-I$(top_srcdir)/contrib/search \
 	-I$(top_srcdir)/contrib/tmpl \
 	-I$(top_srcdir)/contrib/xml \
+	-I$(top_builddir)/contrib/pnl \
 	-I$(top_builddir)/contrib/tmpl \
 	-I$(top_builddir)/data/icons/hicolor \
 	-I$(srcdir) \
@@ -500,6 +502,7 @@ libide_1_0_la_LIBADD = \
 	$(top_builddir)/contrib/egg/libegg-private.la \
 	$(top_builddir)/contrib/gd/libgd.la \
 	$(top_builddir)/contrib/nautilus/libnautilus.la \
+	$(top_builddir)/contrib/pnl/libpanel-gtk.la \
 	$(top_builddir)/contrib/search/libsearch.la \
 	$(top_builddir)/contrib/tmpl/libtemplate-glib-1.0.la \
 	$(top_builddir)/contrib/xml/libxml.la \
@@ -577,6 +580,7 @@ INTROSPECTION_SCANNER_ARGS = --add-include-path=$(srcdir) --warn-all
 INTROSPECTION_COMPILER_ARGS = \
 	--includedir=$(srcdir) \
 	--includedir=$(top_builddir)/contrib/egg \
+	--includedir=$(top_builddir)/contrib/pnl \
 	--includedir=$(top_builddir)/contrib/tmpl
 
 introspection_sources = \
@@ -596,6 +600,7 @@ Ide_1_0_gir_LIBS = \
 Ide_1_0_gir_FILES = $(introspection_sources)
 Ide_1_0_gir_SCANNERFLAGS = \
 	--include-uninstalled=$(top_builddir)/contrib/egg/Egg-1.0.gir \
+	--include-uninstalled=$(top_builddir)/contrib/pnl/Pnl-1.0.gir \
 	--include-uninstalled=$(top_builddir)/contrib/tmpl/Template-1.0.gir \
 	--c-include="ide.h" \
 	-n Ide \
@@ -624,15 +629,18 @@ libide_1_0_vapi_DEPS = \
 	gtk+-3.0 \
 	gtksourceview-3.0 \
 	libpeas-1.0 \
+	panel-gtk \
 	template-glib-1.0 \
 	egg-private
 libide_1_0_vapi_METADATADIRS = $(srcdir)
 libide_1_0_vapi_FILES = Ide-1.0.gir
 libide_1_0_vapi_VAPIDIRS = \
 	$(top_builddir)/contrib/egg \
+	$(top_builddir)/contrib/pnl \
 	$(top_builddir)/contrib/tmpl
 libide_1_0_vapi_GIRDIRS = \
 	$(top_builddir)/contrib/egg \
+	$(top_builddir)/contrib/pnl \
 	$(top_builddir)/contrib/tmpl
 
 libide-1.0.deps: Makefile

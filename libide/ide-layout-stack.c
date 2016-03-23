@@ -442,6 +442,7 @@ static void
 ide_layout_stack_init (IdeLayoutStack *self)
 {
   GtkStyleContext *context;
+  GList *focus_chain = NULL;
 
   gtk_widget_init_template (GTK_WIDGET (self));
 
@@ -463,6 +464,11 @@ ide_layout_stack_init (IdeLayoutStack *self)
                            G_CONNECT_SWAPPED);
 
   ide_widget_set_context_handler (self, ide_layout_stack_context_handler);
+
+  focus_chain = g_list_prepend (focus_chain, self->tab_bar);
+  focus_chain = g_list_prepend (focus_chain, self->stack);
+  gtk_container_set_focus_chain (GTK_CONTAINER (self), focus_chain);
+  g_list_free (focus_chain);
 }
 
 GtkWidget *

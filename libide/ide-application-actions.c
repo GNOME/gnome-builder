@@ -309,9 +309,9 @@ ide_application_actions_init (IdeApplication *self)
   /*
    * FIXME: Once we get a new shortcuts engine, port these to that.
    */
-  gtk_application_set_accels_for_action (GTK_APPLICATION (self), "panels.left", left);
-  gtk_application_set_accels_for_action (GTK_APPLICATION (self), "panels.right", right);
-  gtk_application_set_accels_for_action (GTK_APPLICATION (self), "panels.bottom", bottom);
+  gtk_application_set_accels_for_action (GTK_APPLICATION (self), "dockbin.left-visible", left);
+  gtk_application_set_accels_for_action (GTK_APPLICATION (self), "dockbin.right-visible", right);
+  gtk_application_set_accels_for_action (GTK_APPLICATION (self), "dockbin.bottom-visible", bottom);
   gtk_application_set_accels_for_action (GTK_APPLICATION (self), "app.preferences", preferences);
   gtk_application_set_accels_for_action (GTK_APPLICATION (self), "perspective.global-search", global_search);
   gtk_application_set_accels_for_action (GTK_APPLICATION (self), "perspective.new-file", new_file);

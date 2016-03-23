@@ -19,13 +19,13 @@
 #ifndef GB_SYSMON_PANEL_H
 #define GB_SYSMON_PANEL_H
 
-#include <gtk/gtk.h>
+#include <ide.h>
 
 G_BEGIN_DECLS
 
 #define GB_TYPE_SYSMON_PANEL (gb_sysmon_panel_get_type())
 
-G_DECLARE_FINAL_TYPE (GbSysmonPanel, gb_sysmon_panel, GB, SYSMON_PANEL, GtkBox)
+G_DECLARE_FINAL_TYPE (GbSysmonPanel, gb_sysmon_panel, GB, SYSMON_PANEL, PnlDockWidget)
 
 G_END_DECLS
 

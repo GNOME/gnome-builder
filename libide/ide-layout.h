@@ -19,27 +19,20 @@
 #ifndef IDE_LAYOUT_H
 #define IDE_LAYOUT_H
 
-#include <gtk/gtk.h>
-
-#include "ide-layout-pane.h"
+#include <pnl.h>
 
 G_BEGIN_DECLS
 
 #define IDE_TYPE_LAYOUT (ide_layout_get_type())
 
-G_DECLARE_DERIVABLE_TYPE (IdeLayout, ide_layout, IDE, LAYOUT, GtkOverlay)
+G_DECLARE_DERIVABLE_TYPE (IdeLayout, ide_layout, IDE, LAYOUT, PnlDockBin)
 
 struct _IdeLayoutClass
 {
-  GtkOverlayClass parent_instance;
+  PnlDockBinClass parent_class;
 };
 
-GtkWidget *ide_layout_new              (void);
-GtkWidget *ide_layout_get_left_pane    (IdeLayout *self);
-GtkWidget *ide_layout_get_right_pane   (IdeLayout *self);
-GtkWidget *ide_layout_get_bottom_pane  (IdeLayout *self);
-GtkWidget *ide_layout_get_content_pane (IdeLayout *self);
-GtkWidget *ide_layout_get_active_view  (IdeLayout *self);
+GtkWidget *ide_layout_get_active_view (IdeLayout *self);
 
 G_END_DECLS
 

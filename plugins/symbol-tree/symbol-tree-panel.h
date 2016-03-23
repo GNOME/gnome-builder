@@ -19,13 +19,13 @@
 #ifndef SYMBOL_TREE_PANEL_H
 #define SYMBOL_TREE_PANEL_H
 
-#include <gtk/gtk.h>
+#include <ide.h>
 
 G_BEGIN_DECLS
 
 #define SYMBOL_TYPE_TREE_PANEL (symbol_tree_panel_get_type())
 
-G_DECLARE_FINAL_TYPE (SymbolTreePanel, symbol_tree_panel, SYMBOL, TREE_PANEL, GtkBox)
+G_DECLARE_FINAL_TYPE (SymbolTreePanel, symbol_tree_panel, SYMBOL, TREE_PANEL, PnlDockWidget)
 
 void symbol_tree_panel_reset (SymbolTreePanel *self);
 

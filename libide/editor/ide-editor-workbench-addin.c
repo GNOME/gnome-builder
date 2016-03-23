@@ -33,6 +33,7 @@
 struct _IdeEditorWorkbenchAddin
 {
   GObject               parent_instance;
+  PnlDockManager       *manager;
   IdeEditorPerspective *perspective;
   IdeWorkbench         *workbench;
 };
@@ -65,7 +66,10 @@ ide_editor_workbench_addin_load (IdeWorkbenchAddin *addin,
 
   self->workbench = workbench;
 
+  self->manager = pnl_dock_manager_new ();
+
   self->perspective = g_object_new (IDE_TYPE_EDITOR_PERSPECTIVE,
+                                    "manager", self->manager,
                                     "visible", TRUE,
                                     NULL);
   ide_workbench_add_perspective (workbench, IDE_PERSPECTIVE (self->perspective));
@@ -90,6 +94,8 @@ ide_editor_workbench_addin_unload (IdeWorkbenchAddin *addin,
   self->workbench = NULL;
 
   ide_workbench_remove_perspective (workbench, perspective);
+
+  g_clear_object (&self->manager);
 }
 
 static gboolean

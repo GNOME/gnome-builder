@@ -1,32 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.16 -->
-  <template class="IdeLayoutPane" parent="GtkBin">
+  <template class="IdeLayoutPane" parent="PnlDockBinEdge">
     <child>
-      <object class="GtkBox" id="box">
-        <property name="orientation">vertical</property>
+      <object class="PnlDockStack" id="dock_stack">
+        <property name="expand">true</property>
         <property name="visible">true</property>
-        <child>
-          <object class="GtkBox" id="header">
-            <property name="visible">true</property>
-            <property name="vexpand">false</property>
-            <child type="center">
-              <object class="GtkStackSwitcher" id="stack_switcher">
-                <property name="stack">stack</property>
-                <property name="visible">true</property>
-              </object>
-            </child>
-          </object>
-        </child>
-        <child>
-          <object class="GtkStack" id="stack">
-            <property name="transition-duration">150</property>
-            <property name="transition-type">crossfade</property>
-            <property name="expand">true</property>
-            <property name="homogeneous">false</property>
-            <property name="visible">true</property>
-          </object>
-        </child>
       </object>
     </child>
   </template>

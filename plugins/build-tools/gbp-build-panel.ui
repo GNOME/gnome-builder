@@ -1,5 +1,5 @@
 <interface>
-  <template class="GbpBuildPanel" parent="GtkBin">
+  <template class="GbpBuildPanel" parent="PnlDockWidget">
     <child>
       <object class="GtkBox" id="toplevel">
         <property name="visible">true</property>

@@ -74,15 +74,13 @@ symbol_tree_load (IdeWorkbenchAddin *addin,
                            self,
                            G_CONNECT_SWAPPED);
 
-  right_pane = ide_layout_get_right_pane (IDE_LAYOUT (perspective));
+  right_pane = pnl_dock_bin_get_right_edge (PNL_DOCK_BIN (perspective));
   g_assert (right_pane != NULL);
 
-  self->panel = g_object_new (SYMBOL_TYPE_TREE_PANEL, NULL);
-
-  ide_layout_pane_add_page (IDE_LAYOUT_PANE (right_pane),
-                            GTK_WIDGET (self->panel),
-                            _("Symbols"),
-                            "lang-function-symbolic");
+  self->panel = g_object_new (SYMBOL_TYPE_TREE_PANEL,
+                              "visible", TRUE,
+                              NULL);
+  gtk_container_add (GTK_CONTAINER (right_pane), GTK_WIDGET (self->panel));
 
   gtk_container_child_set (GTK_CONTAINER (gtk_widget_get_parent (GTK_WIDGET (self->panel))),
                            GTK_WIDGET (self->panel),
@@ -106,10 +104,11 @@ symbol_tree_unload (IdeWorkbenchAddin *addin,
   perspective = ide_workbench_get_perspective_by_name (workbench, "editor");
   g_assert (IDE_IS_LAYOUT (perspective));
 
-  pane = ide_layout_get_right_pane (IDE_LAYOUT (perspective));
+  pane = pnl_dock_bin_get_right_edge (PNL_DOCK_BIN (perspective));
   g_assert (IDE_IS_LAYOUT_PANE (pane));
 
-  ide_layout_pane_remove_page (IDE_LAYOUT_PANE (pane), GTK_WIDGET (self->panel));
+  gtk_widget_destroy (GTK_WIDGET (self->panel));
+  self->panel = NULL;
 }
 
 

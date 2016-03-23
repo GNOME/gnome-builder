@@ -20,6 +20,7 @@
   <gresource prefix="/org/gnome/builder/theme">
     <file compressed="true" alias="Adwaita.css">../../data/theme/Adwaita.css</file>
     <file compressed="true" alias="Adwaita-dark.css">../../data/theme/Adwaita-dark.css</file>
+    <file compressed="true" alias="Adwaita-panels.css">../../data/theme/Adwaita-panels.css</file>
     <file compressed="true" alias="Adwaita-shared.css">../../data/theme/Adwaita-shared.css</file>
 
     <file compressed="true" alias="Arc.css">../../data/theme/Arc.css</file>
@@ -57,7 +58,6 @@
     <file compressed="true" alias="ide-genesis-perspective.ui">../../data/ui/ide-genesis-perspective.ui</file>
     <file compressed="true" alias="ide-greeter-perspective.ui">../../data/ui/ide-greeter-perspective.ui</file>
     <file compressed="true" alias="ide-greeter-project-row.ui">../../data/ui/ide-greeter-project-row.ui</file>
-    <file compressed="true" alias="ide-layout.ui">../../data/ui/ide-layout.ui</file>
     <file compressed="true" alias="ide-layout-tab.ui">../../data/ui/ide-layout-tab.ui</file>
     <file compressed="true" alias="ide-layout-tab-bar.ui">../../data/ui/ide-layout-tab-bar.ui</file>
     <file compressed="true" alias="ide-layout-pane.ui">../../data/ui/ide-layout-pane.ui</file>

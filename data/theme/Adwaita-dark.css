@@ -51,14 +51,14 @@ layouttab:backdrop {
 }
 
 
-layoutpane > box.vertical:first-child > box.horizontal {
+tabstrip {
   background-color: #303535;
   box-shadow: 0 4px 3px -5px #2c3030 inset,
               0 -1px 0 #1c1f1f inset;
 }
-layoutpane:backdrop > box.vertical:first-child > box.horizontal {
+tabstrip:backdrop {
   box-shadow: 0 -1px 0 #2c3030 inset;
 }
-layoutpane stackswitcher button:checked {
+tabstrip tab:checked {
   box-shadow: 0 -2px 0 #215d9c inset;
 }

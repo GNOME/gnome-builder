@@ -53,23 +53,29 @@ gb_sysmon_addin_load (IdeWorkbenchAddin *addin,
   g_assert (editor != NULL);
   g_assert (IDE_IS_LAYOUT (editor));
 
-  pane = ide_layout_get_bottom_pane (IDE_LAYOUT (editor));
+  pane = pnl_dock_bin_get_bottom_edge (PNL_DOCK_BIN (editor));
   panel = g_object_new (GB_TYPE_SYSMON_PANEL,
+                        "expand", TRUE,
                         "visible", TRUE,
                         NULL);
   ide_set_weak_pointer (&self->panel, panel);
-  ide_layout_pane_add_page (IDE_LAYOUT_PANE (pane),
-                            GTK_WIDGET (panel),
-                            _("System Monitor"),
-                            "utilities-system-monitor-symbolic");
+  gtk_container_add (GTK_CONTAINER (pane), GTK_WIDGET (panel));
 }
 
 static void
 gb_sysmon_addin_unload (IdeWorkbenchAddin *addin,
                         IdeWorkbench      *workbench)
 {
+  GbSysmonAddin *self = (GbSysmonAddin *)addin;
+
   g_assert (GB_IS_SYSMON_ADDIN (addin));
   g_assert (IDE_IS_WORKBENCH (workbench));
+
+  if (self->panel != NULL)
+    {
+      gtk_widget_destroy (self->panel);
+      ide_clear_weak_pointer (&self->panel);
+    }
 }
 
 static void
