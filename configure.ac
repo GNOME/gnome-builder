@@ -197,6 +197,7 @@ PKG_CHECK_MODULES(LIBIDE,   [gio-2.0 >= glib_required_version
                              pangoft2 >= pangoft2_required_version])
 PKG_CHECK_MODULES(NAUTILUS, [glib-2.0 >= glib_required_version
                              gtk+-3.0 >= gtk_required_version])
+PKG_CHECK_MODULES(PANEL_GTK,[gtk+-3.0 >= gtk_required_version])
 PKG_CHECK_MODULES(PYGOBJECT,[pygobject-3.0 >= pygobject_required_version],
                             [have_pygobject=yes],
                             [have_pygobject=no])
@@ -395,10 +396,12 @@ dnl ***********************************************************************
 dnl Setup common cflags and ldflags for plugins
 dnl ***********************************************************************
 PLUGIN_CFLAGS="$PLUGIN_CFLAGS -I\$(top_builddir)/contrib/egg"
+PLUGIN_CFLAGS="$PLUGIN_CFLAGS -I\$(top_builddir)/contrib/pnl"
 PLUGIN_CFLAGS="$PLUGIN_CFLAGS -I\$(top_builddir)/libide"
 PLUGIN_CFLAGS="$PLUGIN_CFLAGS -I\$(top_srcdir)/contrib/egg"
 PLUGIN_CFLAGS="$PLUGIN_CFLAGS -I\$(top_srcdir)/contrib/gd"
 PLUGIN_CFLAGS="$PLUGIN_CFLAGS -I\$(top_srcdir)/contrib/nautilus"
+PLUGIN_CFLAGS="$PLUGIN_CFLAGS -I\$(top_srcdir)/contrib/pnl"
 PLUGIN_CFLAGS="$PLUGIN_CFLAGS -I\$(top_srcdir)/contrib/rg"
 PLUGIN_CFLAGS="$PLUGIN_CFLAGS -I\$(top_srcdir)/contrib/search"
 PLUGIN_CFLAGS="$PLUGIN_CFLAGS -I\$(top_srcdir)/contrib/xml"
@@ -423,6 +426,7 @@ PLUGIN_VALAFLAGS="$PLUGIN_VALAFLAGS --target-glib=2.44"
 PLUGIN_VALAFLAGS="$PLUGIN_VALAFLAGS --thread"
 PLUGIN_VALAFLAGS="$PLUGIN_VALAFLAGS --vapidir \$(top_builddir)/libide"
 PLUGIN_VALAFLAGS="$PLUGIN_VALAFLAGS --vapidir \$(top_builddir)/contrib/egg"
+PLUGIN_VALAFLAGS="$PLUGIN_VALAFLAGS --vapidir \$(top_builddir)/contrib/pnl"
 PLUGIN_VALAFLAGS="$PLUGIN_VALAFLAGS --vapidir \$(top_builddir)/contrib/tmpl"
 PLUGIN_VALAFLAGS="$PLUGIN_VALAFLAGS --pkg libide-1.0"
 PLUGIN_VALAFLAGS="$PLUGIN_VALAFLAGS --pkg libpeas-1.0"
@@ -443,6 +447,8 @@ AC_CONFIG_FILES([
 	contrib/gd/Makefile
 	contrib/libeditorconfig/Makefile
 	contrib/nautilus/Makefile
+	contrib/pnl/Makefile
+	contrib/pnl/pnl-version.h
 	contrib/rg/Makefile
 	contrib/search/Makefile
 	contrib/tmpl/Makefile

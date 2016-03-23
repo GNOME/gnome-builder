@@ -12,11 +12,14 @@ AM_CPPFLAGS = \
 	-I$(top_builddir)/data/icons/hicolor \
 	-I$(top_builddir)/libide \
 	-I$(top_srcdir)/libide \
+	-I$(top_srcdir)/contrib/pnl \
+	-I$(top_builddir)/contrib/pnl \
 	$(NULL)
 
 gnome_builder_libs = \
 	$(LIBIDE_LIBS) \
 	$(top_builddir)/contrib/egg/libegg-private.la \
+	$(top_builddir)/contrib/pnl/libpanel-gtk.la \
 	$(top_builddir)/data/icons/hicolor/libicons.la \
 	$(top_builddir)/libide/libide-1.0.la \
 	$(NULL)

@@ -67,12 +67,14 @@ dist-hook:
 
 .PHONY: AUTHORS
 
+RUNTIME_TYPELIB_PATH = libide:contrib/egg:contrib/pnl:contrib/tmpl:$(GI_TYPELIB_PATH)
+
 run:
 	PEAS_DEBUG=1 \
 	GB_IN_TREE_PLUGINS=1 \
 	GB_IN_TREE_FONTS=1 \
 	GB_IN_TREE_STYLE_SCHEMES=1 \
-	GI_TYPELIB_PATH="libide:contrib/egg:contrib/tmpl:$(GI_TYPELIB_PATH)" \
+	GI_TYPELIB_PATH="$(RUNTIME_TYPELIB_PATH)" \
 	GOBJECT_DEBUG=instance-count \
 	PYTHONDONTWRITEBYTECODE=yes \
 	PATH=$(top_builddir)/src:${PATH} \
@@ -83,7 +85,7 @@ strace:
 	GB_IN_TREE_PLUGINS=1 \
 	GB_IN_TREE_FONTS=1 \
 	GB_IN_TREE_STYLE_SCHEMES=1 \
-	GI_TYPELIB_PATH="libide:contrib/egg:contrib/tmpl:$(GI_TYPELIB_PATH)" \
+	GI_TYPELIB_PATH="$(RUNTIME_TYPELIB_PATH)" \
 	GOBJECT_DEBUG=instance-count \
 	PYTHONDONTWRITEBYTECODE=yes \
 	PATH=$(top_builddir)/src:${PATH} \
@@ -94,7 +96,7 @@ debug:
 	GB_IN_TREE_PLUGINS=1 \
 	GB_IN_TREE_FONTS=1 \
 	GB_IN_TREE_STYLE_SCHEMES=1 \
-	GI_TYPELIB_PATH="libide:contrib/egg:contrib/tmpl:$(GI_TYPELIB_PATH)" \
+	GI_TYPELIB_PATH="$(RUNTIME_TYPELIB_PATH)" \
 	G_DEBUG=fatal-criticals \
 	GOBJECT_DEBUG=instance-count \
 	PYTHONDONTWRITEBYTECODE=yes \
@@ -106,7 +108,7 @@ valgrind:
 	GB_IN_TREE_PLUGINS=1 \
 	GB_IN_TREE_FONTS=1 \
 	GB_IN_TREE_STYLE_SCHEMES=1 \
-	GI_TYPELIB_PATH="libide:contrib/egg:contrib/tmpl:$(GI_TYPELIB_PATH)" \
+	GI_TYPELIB_PATH="$(RUNTIME_TYPELIB_PATH)" \
 	G_DEBUG=fatal-criticals \
 	G_SLICE=always-malloc \
 	PYTHONDONTWRITEBYTECODE=yes \

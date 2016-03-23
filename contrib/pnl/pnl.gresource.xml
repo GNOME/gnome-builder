@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<gresources>
+  <gresource prefix="/org/gnome/panel-gtk/icons/16x16/actions/">
+    <file compressed="true" alias="panel-bottom-pane-symbolic.svg">resources/panel-bottom-pane-symbolic.svg</file>
+    <file compressed="true" alias="panel-left-pane-symbolic.svg">resources/panel-left-pane-symbolic.svg</file>
+    <file compressed="true" alias="panel-right-pane-symbolic.svg">resources/panel-right-pane-symbolic.svg</file>
+  </gresource>
+</gresources>

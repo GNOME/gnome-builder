@@ -3,6 +3,7 @@ SUBDIRS = \
 	gd \
 	libeditorconfig \
 	nautilus \
+	pnl \
 	rg \
 	search \
 	tmpl \

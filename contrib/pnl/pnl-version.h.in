@@ -1,0 +1,97 @@
+/* pnl-version.h
+ *
+ * Copyright (C) 2016 Christian Hergert <chergert@redhat.com>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+#ifndef PNL_VERSION_H
+#define PNL_VERSION_H
+
+#if !defined(PNL_INSIDE) && !defined(PNL_COMPILATION)
+# error "Only <pnl.h> can be included directly."
+#endif
+
+/**
+ * SECTION:pnl-version
+ * @short_description: pnl version checking
+ *
+ * pnl provides macros to check the version of the library
+ * at compile-time
+ */
+
+/**
+ * PNL_MAJOR_VERSION:
+ *
+ * pnl major version component (e.g. 1 if %PNL_VERSION is 1.2.3)
+ */
+#define PNL_MAJOR_VERSION (@MAJOR_VERSION@)
+
+/**
+ * PNL_MINOR_VERSION:
+ *
+ * pnl minor version component (e.g. 2 if %PNL_VERSION is 1.2.3)
+ */
+#define PNL_MINOR_VERSION (@MINOR_VERSION@)
+
+/**
+ * PNL_MICRO_VERSION:
+ *
+ * pnl micro version component (e.g. 3 if %PNL_VERSION is 1.2.3)
+ */
+#define PNL_MICRO_VERSION (@MICRO_VERSION@)
+
+/**
+ * PNL_VERSION
+ *
+ * pnl version.
+ */
+#define PNL_VERSION (@VERSION@)
+
+/**
+ * PNL_VERSION_S:
+ *
+ * pnl version, encoded as a string, useful for printing and
+ * concatenation.
+ */
+#define PNL_VERSION_S "@VERSION@"
+
+#define PNL_ENCODE_VERSION(major,minor,micro) \
+        ((major) << 24 | (minor) << 16 | (micro) << 8)
+
+/**
+ * PNL_VERSION_HEX:
+ *
+ * pnl version, encoded as an hexadecimal number, useful for
+ * integer comparisons.
+ */
+#define PNL_VERSION_HEX \
+        (PNL_ENCODE_VERSION (PNL_MAJOR_VERSION, PNL_MINOR_VERSION, PNL_MICRO_VERSION))
+
+/**
+ * PNL_CHECK_VERSION:
+ * @major: required major version
+ * @minor: required minor version
+ * @micro: required micro version
+ *
+ * Compile-time version checking. Evaluates to %TRUE if the version
+ * of pnl is greater than the required one.
+ */
+#define PNL_CHECK_VERSION(major,minor,micro)   \
+        (PNL_MAJOR_VERSION > (major) || \
+         (PNL_MAJOR_VERSION == (major) && PNL_MINOR_VERSION > (minor)) || \
+         (PNL_MAJOR_VERSION == (major) && PNL_MINOR_VERSION == (minor) && \
+          PNL_MICRO_VERSION >= (micro)))
+
+#endif /* PNL_VERSION_H */
