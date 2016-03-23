@@ -1,3 +1,58 @@
+==============
+Version 3.20.0
+==============
+
+GNOME 3.20 has finally arrived, and Builder is here to help you
+write great software!
+
+A lot of stability improvements have landed since 3.19.90, as well
+as merging the beginning of our new panel engine. While Builder
+shouldn't look any different with the panel improvements, it lays
+the groundwork for us to provide a more powerful panel engine
+going forward, including all the features you would expect.
+
+Since our last release, you'll find:
+
+ • More stylability controls using GtkSourceView style schemes.
+ • The ability to toggle case-sensitivity with search context
+   menus.
+ • VIM movement improvements.
+ • The ability to disable project miners at startup.
+ • Improvements to the clang completion engine.
+ • Show empty state screen when last document is closed.
+ • Show project tree when last document is closed.
+ • Various build system improvements.
+ • Improvements to Control+Click on symbols in the editor.
+ • Snippet parser improvements.
+ • Filtering improvements in symbol tree.
+ • Various bugs squashed in menu management.
+ • A new comment code plugin.
+
+Thanks to all our contributors since 3.18.1!
+
+Akshaya Kakkilaya, Alex285, Alexandre Franke, Anders Jonsson, Anwar
+Sadath, Artur de Aquino Morais, Ask Hjorth Larsen, Aurimas Černius,
+Balázs Meskó, Balázs Úr, Baurzhan Muftakhidinov, Ben Iofel, Boris
+Egorov, CHHAVI GARG, Carl Simonson, Carlos Soriano, Changwoo Ryu,
+Chao-Hsiung Liao, Christian Hergert, Christian Kirbach, Cédric Valmary,
+Daiki Ueno, Damien Lespiau, Daniel Korostil, Daniel Mustieles, David
+King, Debarshi, Dušan Kazik, Elad Alfassa, Enrico Nicoletto, Erick Perez
+Castellanos, Fangwen Yu, Felix Schwarz, Fran Dieguez, Garrett Regier,
+Gustavo Marques, Gábor Kelemen, Ignacio Casal Quinteiro, Ignazio
+Sgalmuzzo, Igor Gnatenko, Joaquim Rocha, Kris Thomsen, Kristjan SCHMIDT,
+Kyrylo Polezhaiev, Lionel Landwerlin, Marek Černocký, Marinus Schraal,
+Mario Blättermann, Mario Sanchez Prada, Matej Urbančič, Mathieu
+Duponchelle, Matthias Clasen, Megh Parikh, Michael Catanzaro, Milo
+Casagrande, Patrick Griffis, Pedro Albuquerque, Philip Withnall, Piotr
+Drąg, Rafael Fontenelle, Ray Strode, Richard Hughes, Rūdolfs Mazurs,
+Sebastian Rasmussen, Sebastien Lafargue, Thibault Saunier, Timm Bäder,
+Ting-Wei Lan, Tom Tryfonidis, Varun Joshi, Wolfgang Stöggl, Yannick
+Inizan, adrian.zatreanu, chandu, heroin, Γιάννης Κουτσούκος, Марко
+Костић, Милош Поповић 
+
+Happy Hacking!
+
+
 ===============
 Version 3.19.90
 ===============
