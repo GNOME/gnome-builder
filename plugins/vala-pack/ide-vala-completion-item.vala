@@ -82,13 +82,17 @@ namespace Ide
 			return result;
 		}
 
+		private string esc_angle_brackets (string in) {
+		    return in.replace ("<", "&lt;").replace (">", "&gt;");
+		}
+
 		public void build_label ()
 		{
 			GLib.StringBuilder str = new GLib.StringBuilder ();
 
 			if (this.symbol is Vala.Method) {
 				var method = symbol as Vala.Method;
-				str.append (method.return_type.to_qualified_string (symbol.owner));
+				str.append (esc_angle_brackets (method.return_type.to_qualified_string (symbol.owner)));
 				str.append_printf (" %s", method.name);
 				var type_params = method.get_type_parameters ();
 				if (type_params.size > 0) {
@@ -113,7 +117,7 @@ namespace Ide
 					else if (param.direction == ParameterDirection.REF)
 						str.append ("ref ");
 
-					str.append_printf ("%s, ", param.variable_type.to_qualified_string (method.owner));
+					str.append_printf ("%s, ", esc_angle_brackets (param.variable_type.to_qualified_string (method.owner)));
 				}
 				if (parameters.size > 0) {
 					str.truncate (str.len - 2);
