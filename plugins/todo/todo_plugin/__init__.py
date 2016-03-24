@@ -45,10 +45,7 @@ class TodoWorkbenchAddin(GObject.Object, Ide.WorkbenchAddin):
     def do_load(self, workbench):
         self.workbench = workbench
 
-        # Watch the buffer manager for file changes (to update)
         context = workbench.get_context()
-        bufmgr = context.get_buffer_manager()
-        bufmgr.connect('buffer-saved', self.on_buffer_saved)
 
         # Get the working directory of the project
         vcs = context.get_vcs()
@@ -59,6 +56,10 @@ class TodoWorkbenchAddin(GObject.Object, Ide.WorkbenchAddin):
         editor = workbench.get_perspective_by_name('editor')
         pane = editor.get_bottom_edge()
         pane.add(self.panel)
+
+        # Watch the buffer manager for file changes (to update)
+        bufmgr = context.get_buffer_manager()
+        bufmgr.connect('buffer-saved', self.on_buffer_saved)
 
         # Mine the directory in a background thread
         self.mine(workdir)
