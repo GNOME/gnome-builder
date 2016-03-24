@@ -48,14 +48,17 @@ namespace Ide
 
 		public override void depr (Vala.SourceReference? source_reference, string message) {
 			add (source_reference, message, Ide.DiagnosticSeverity.DEPRECATED);
+			++warnings;
 		}
 
 		public override void warn (Vala.SourceReference? source_reference, string message) {
 			add (source_reference, message, Ide.DiagnosticSeverity.WARNING);
+			++warnings;
 		}
 
 		public override void err (Vala.SourceReference? source_reference, string message) {
 			add (source_reference, message, Ide.DiagnosticSeverity.ERROR);
+			++errors;
 		}
 	}
 }
