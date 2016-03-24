@@ -255,11 +255,9 @@ namespace Ide
 
 			foreach (var source_file in this.code_context.get_source_files ()) {
 				if (source_file.get_nodes ().size == 0) {
+					this.parser.visit_source_file (source_file);
 					if (source_file is Ide.ValaSourceFile) {
-						this.parser.visit_source_file (source_file);
 						(source_file as Ide.ValaSourceFile).dirty = false;
-					} else {
-						this.parser.visit_source_file (source_file);
 					}
 				}
 			}
