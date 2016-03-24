@@ -161,8 +161,12 @@ namespace Ide
 							this.add_file (file);
 
 						this.apply_unsaved_files (unsaved_files_copy);
+						this.report.clear ();
 						this.reparse ();
-						this.code_context.check ();
+						if (this.report.get_errors () == 0 &&
+						        (cancellable == null || !cancellable.is_cancelled ())) {
+						    this.code_context.check ();
+						}
 
 						GLib.Idle.add(this.parse_file.callback);
 
@@ -194,8 +198,12 @@ namespace Ide
 					Vala.CodeContext.push (this.code_context);
 
 					this.apply_unsaved_files (unsaved_files_copy);
+					this.report.clear ();
 					this.reparse ();
-					this.code_context.check ();
+					if (this.report.get_errors () == 0 &&
+					        (cancellable == null || !cancellable.is_cancelled ())) {
+					    this.code_context.check ();
+					}
 
 					if (this.source_files.contains (file)) {
 						var source_file = this.source_files [file];
