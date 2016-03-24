@@ -245,7 +245,7 @@ populate_cache_cb (EggTaskCache  *cache,
 static gboolean
 filter_symbols_cb (IdeTree     *tree,
                    IdeTreeNode *node,
-                   gpointer    user_data)
+                   gpointer     user_data)
 {
   IdePatternSpec *spec = user_data;
   const gchar *text;
@@ -281,9 +281,9 @@ symbol_tree__search_entry_changed (SymbolTreePanel *self,
 
       spec = ide_pattern_spec_new (text);
       ide_tree_set_filter (self->tree,
-                          filter_symbols_cb,
-                          spec,
-                          (GDestroyNotify)ide_pattern_spec_unref);
+                           filter_symbols_cb,
+                           spec,
+                           (GDestroyNotify)ide_pattern_spec_unref);
       gtk_tree_view_expand_all (GTK_TREE_VIEW (self->tree));
     }
 }
