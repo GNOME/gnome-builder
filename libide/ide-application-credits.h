@@ -176,6 +176,7 @@ static const gchar *ide_application_credits_funders[] = {
   "Brijesh Kartha",
   "Bruce Cowan",
   "Bruce M Franklin",
+  "Bruno Windels",
   "Búza Géza",
   "Canek Pelaez Valdes",
   "Carlos Soriano Sanchez",
