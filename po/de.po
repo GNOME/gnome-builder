@@ -4,7 +4,7 @@
 # Florian Bäuerle <florian.bae@gmail.com>, 2015.
 # Christian Kirbach <christian.kirbach@gmail.com>, 2015, 2016.
 # Bernd Homuth <dev@hmt.im>, 2015.
-# Wolfgang Stöggl <c72578@yahoo.de>, 2015.
+# Wolfgang Stöggl <c72578@yahoo.de>, 2015-2016.
 # Mario Blättermann <mario.blaettermann@gmail.com>, 2016
 #
 msgid ""
@@ -12,33 +12,34 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-03-12 11:53+0000\n"
-"PO-Revision-Date: 2016-03-12 21:55+0100\n"
-"Last-Translator: Mario Blättermann <mario.blaettermann@gmail.com>\n"
+"POT-Creation-Date: 2016-03-25 08:18+0000\n"
+"PO-Revision-Date: 2016-03-25 17:32+0100\n"
+"Last-Translator: Wolfgang Stoeggl <c72578@yahoo.de>\n"
 "Language-Team: Deutsch <gnome-de@gnome.org>\n"
 "Language: de_DE\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.8.7.1\n"
+"X-Generator: Poedit 1.8.7\n"
 
-#: ../contrib/egg/egg-animation.c:726
+#: ../contrib/egg/egg-animation.c:726 ../contrib/pnl/pnl-animation.c:701
 #, c-format
 msgid "Cannot locate property %s in class %s"
 msgstr "Eigenschaft %s konnte nicht in Klasse %s gefunden werden"
 
 #: ../contrib/egg/egg-animation.c:1073 ../contrib/egg/egg-animation.c:1079
+#: ../contrib/pnl/pnl-animation.c:1053 ../contrib/pnl/pnl-animation.c:1059
 #, c-format
 msgid "Failed to find property %s in %s"
 msgstr "Eigenschaft %s konnte nicht in %s gefunden werden"
 
-#: ../contrib/egg/egg-animation.c:1087
+#: ../contrib/egg/egg-animation.c:1087 ../contrib/pnl/pnl-animation.c:1067
 #, c-format
 msgid "Failed to find property %s in %s or parent %s"
 msgstr "Eigenschaft %s konnte nicht in %s oder Elter %s gefunden werden"
 
-#: ../contrib/egg/egg-animation.c:1097
+#: ../contrib/egg/egg-animation.c:1097 ../contrib/pnl/pnl-animation.c:1077
 #, c-format
 msgid "Failed to retrieve va_list value: %s"
 msgstr "va_list-Wert konnte nicht geladen werden: %s"
@@ -209,9 +210,8 @@ msgid "_Invert Case"
 msgstr "Groß-/Kleinschreibung _umkehren"
 
 #: ../data/gtk/menus.ui.h:28
-#, fuzzy
 msgid "_Title Case"
-msgstr "Titel"
+msgstr "Überschrif_t-Großschreibung"
 
 #: ../data/gtk/menus.ui.h:29
 msgid "Join Lines"
@@ -815,7 +815,7 @@ msgstr "%u von %u"
 msgid "Re_veal in Project Tree"
 msgstr "Im Projektbaum an_zeigen"
 
-#: ../libide/editor/ide-editor-perspective.c:456
+#: ../libide/editor/ide-editor-perspective.c:444
 #: ../libide/preferences/ide-preferences-builtin.c:102
 #: ../libide/preferences/ide-preferences-builtin.c:125
 msgid "Editor"
@@ -1078,17 +1078,17 @@ msgstr "Ordner konnte nicht geöffnet werden: %s"
 msgid "Failed to load file: %s: %s"
 msgstr "Datei konnte nicht geladen werden: %s: %s"
 
-#: ../libide/ide-source-view.c:4900
+#: ../libide/ide-source-view.c:4897
 #, c-format
 msgid "Insert “%s”"
 msgstr "»%s« einfügen"
 
-#: ../libide/ide-source-view.c:4902
+#: ../libide/ide-source-view.c:4899
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "»%s« durch »%s« ersetzen"
 
-#: ../libide/ide-source-view.c:5016
+#: ../libide/ide-source-view.c:5013
 msgid "Apply Fix-It"
 msgstr "Fix-It anwenden"
 
@@ -1104,12 +1104,12 @@ msgstr "Nicht-UTF8-Zeichen in Adresse"
 #: ../libide/ide-uri.c:366 ../libide/ide-uri.c:377
 #, c-format
 msgid "Invalid IP literal '%s' in URI"
-msgstr ""
+msgstr "Ungültiges IP-Symbol »%s« in Adresse"
 
 #: ../libide/ide-uri.c:411
 #, c-format
 msgid "Invalid encoded IP literal '%s' in URI"
-msgstr ""
+msgstr "Ungültig kodiertes IP-Symbol »%s« in Adresse"
 
 #: ../libide/ide-uri.c:420
 #, c-format
@@ -1202,16 +1202,18 @@ msgid "Font"
 msgstr "Schrift"
 
 #: ../libide/preferences/ide-preferences-builtin.c:102
+msgctxt "Keywords"
 msgid "editor font monospace"
 msgstr "Monospace-Schrift für Editor"
 
 #. XXX: This belongs in terminal addin
 #: ../libide/preferences/ide-preferences-builtin.c:104
-#: ../plugins/terminal/gb-terminal-workbench-addin.c:99
+#: ../plugins/terminal/gb-terminal-workbench-addin.c:90
 msgid "Terminal"
 msgstr "Terminal"
 
 #: ../libide/preferences/ide-preferences-builtin.c:104
+msgctxt "Keywords"
 msgid "terminal font monospace"
 msgstr "Monospace-Schrift für Terminal"
 
@@ -1516,7 +1518,7 @@ msgid "Indent source code as you type"
 msgstr "Quellcode bei der Eingabe automatisch einrücken"
 
 #: ../libide/preferences/ide-preferences-builtin.c:243
-#: ../plugins/build-tools/gbp-build-workbench-addin.c:270
+#: ../plugins/build-tools/gbp-build-panel.c:426
 msgid "Build"
 msgstr "Erstellen"
 
@@ -1702,7 +1704,7 @@ msgstr "Installationspräfix"
 
 #: ../plugins/build-tools/gbp-build-configuration-view.ui.h:6
 msgid "Options to use when bootstrapping the project"
-msgstr ""
+msgstr "Optionen für das »Bootstrapping« des Projektes"
 
 #: ../plugins/build-tools/gbp-build-configuration-view.ui.h:7
 msgid "Configure Options"
@@ -1722,11 +1724,29 @@ msgstr "Gerät"
 
 #: ../plugins/build-tools/gbp-build-configuration-view.ui.h:11
 msgid "Runtime"
-msgstr ""
+msgstr "Laufzeit"
 
 #: ../plugins/build-tools/gbp-build-configuration-view.ui.h:12
 msgid "Environment"
-msgstr ""
+msgstr "Umgebung"
+
+#: ../plugins/build-tools/gbp-build-log-panel.c:249
+msgid "Build Output"
+msgstr "Erstellungs-Ausgabe"
+
+#: ../plugins/build-tools/gbp-build-panel.c:150
+#, c-format
+msgid "%d warning"
+msgid_plural "%d warnings"
+msgstr[0] "%d Warnung"
+msgstr[1] "%d Warnungen"
+
+#: ../plugins/build-tools/gbp-build-panel.c:157
+#, c-format
+msgid "%d error"
+msgid_plural "%d errors"
+msgstr[0] "%d Fehler"
+msgstr[1] "%d Fehler"
 
 #: ../plugins/build-tools/gbp-build-panel-row.c:68
 msgid "Unknown file"
@@ -1764,7 +1784,7 @@ msgstr "Fehler:"
 
 #: ../plugins/build-tools/gbp-build-panel.ui.h:9
 msgid "Deploy"
-msgstr ""
+msgstr "Bereitstellen"
 
 #: ../plugins/build-tools/gbp-build-panel.ui.h:10
 msgid "Export"
@@ -1847,10 +1867,9 @@ msgid "Failed to locate device \"%s\""
 msgstr "Gerät »%s« konnte nicht gefunden werden"
 
 #: ../plugins/build-tools/gbp-build-tool.c:222
-#, fuzzy, c-format
-#| msgid "Failed to locate template \"%s\""
+#, c-format
 msgid "Failed to locate runtime \"%s\""
-msgstr "Vorlage »%s« konnte nicht gefunden werden"
+msgstr "Laufzeit »%s« konnte nicht gefunden werden"
 
 #: ../plugins/build-tools/gbp-build-tool.c:286
 msgid "Clean the project"
@@ -1865,10 +1884,8 @@ msgid "local"
 msgstr "lokal"
 
 #: ../plugins/build-tools/gbp-build-tool.c:291
-#, fuzzy
-#| msgid "The repository to use for search data."
 msgid "The runtime to use for building"
-msgstr "Das Archiv für die Suchdaten."
+msgstr "Die zu verwendende Laufzeit für das Erstellen"
 
 #: ../plugins/build-tools/gbp-build-tool.c:292
 msgid "host"
@@ -1897,10 +1914,6 @@ msgstr "Pfad zur Projektdatei, Vorgabe ist der aktuelle Ordner"
 #: ../plugins/build-tools/gbp-build-tool.c:301
 msgid "PATH"
 msgstr "PFAD"
-
-#: ../plugins/build-tools/gbp-build-workbench-addin.c:275
-msgid "Build Output"
-msgstr "Erstellungs-Ausgabe"
 
 #: ../plugins/clang/ide-clang-preferences-addin.c:62
 msgid "Clang"
@@ -1936,7 +1949,7 @@ msgstr "AST-Lesefehler"
 msgid "Failed to create translation unit: %s"
 msgstr "Die Übersetzungseinheit konnte nicht geladen werden: %s"
 
-#: ../plugins/clang/ide-clang-service.c:402
+#: ../plugins/clang/ide-clang-service.c:401
 msgid "File must be saved locally to parse."
 msgstr "Die Datei muss zum Einlesen lokal gespeichert sein."
 
@@ -2104,8 +2117,8 @@ msgstr "Bitte geben Sie einen Projektnamen an.\n"
 msgid "Please specify a project template with --template=\n"
 msgstr "Bitte geben Sie eine Projektvorlage mit --template= an\n"
 
+#: ../plugins/devhelp/gbp-devhelp-panel.c:187
 #: ../plugins/devhelp/gbp-devhelp-search-provider.c:128
-#: ../plugins/devhelp/gbp-devhelp-workbench-addin.c:90
 msgid "Documentation"
 msgstr "Handbuch"
 
@@ -2170,7 +2183,7 @@ msgid "Location"
 msgstr "Ort"
 
 #: ../plugins/git/ide-git-genesis-addin.c:93
-msgid "From a existing project in a Git repository"
+msgid "From an existing project in a Git repository"
 msgstr "Aus existierendem Projekt in einem Git-Softwarebestand"
 
 #: ../plugins/git/ide-git-preferences-addin.c:108
@@ -2256,7 +2269,7 @@ msgstr "Ordnername"
 msgid "_Create"
 msgstr "A_nlegen"
 
-#: ../plugins/project-tree/gb-project-tree-addin.c:112
+#: ../plugins/project-tree/gb-project-tree-addin.c:113
 msgid "Project"
 msgstr "Projekt"
 
@@ -2347,15 +2360,15 @@ msgstr ""
 "Die Protokolldatei für Supportanfragen wurde abgelegt unter »%s«. Bitte "
 "fügen Sie diese Datei allen Supportanfragen oder Fehleranzeigen bei."
 
-#: ../plugins/symbol-tree/symbol-tree.c:84
-msgid "Symbols"
-msgstr "Symbole"
-
 #: ../plugins/symbol-tree/symbol-tree-panel.c:239
 msgid "Current language does not support symbol resolvers"
 msgstr "Die aktuelle Sprache unterstützt keine Symbolauflösung"
 
-#: ../plugins/sysmon/gb-sysmon-addin.c:63
+#: ../plugins/symbol-tree/symbol-tree-panel.c:335
+msgid "Symbols"
+msgstr "Symbole"
+
+#: ../plugins/sysmon/gb-sysmon-panel.ui.h:1
 msgid "System Monitor"
 msgstr "Änderungsüberwachung"
 
@@ -2367,7 +2380,7 @@ msgstr "Terminalinhalt speichern unter"
 msgid "_New Terminal"
 msgstr "_Neues Terminal"
 
-#: ../plugins/todo/todo_plugin/__init__.py:60
+#: ../plugins/todo/todo_plugin/__init__.py:180
 msgid "Todo"
 msgstr "Todo"
 
@@ -2379,7 +2392,8 @@ msgstr "Vala"
 msgid "Show errors and warnings provided by Vala"
 msgstr "Von Vala erzeugte Fehler und Warnungen anzeigen"
 
-#: ../plugins/vala-pack/ide-vala-preferences-addin.vala:35
+#. translators: keywords used when searching for preferences
+#: ../plugins/vala-pack/ide-vala-preferences-addin.vala:36
 msgid "vala diagnostics warnings errors"
 msgstr "Vala Fehlerdiagnose Warnungen Fehler"
 
