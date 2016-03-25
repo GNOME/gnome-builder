@@ -181,7 +181,7 @@ typedef struct
   guint                        waiting_for_capture : 1;
   gint                         overscroll_num_lines;
 
-  GRegex                       *include_regex;
+  GRegex                      *include_regex;
 } IdeSourceViewPrivate;
 
 typedef struct
@@ -2597,7 +2597,6 @@ ide_source_view_get_definition_on_mouse_over_cb (GObject      *object,
   kind = ide_symbol_get_kind (symbol);
 
   srcloc = ide_symbol_get_definition_location (symbol);
-
   if (srcloc != NULL)
     {
       GtkTextIter word_start;
@@ -2619,11 +2618,8 @@ ide_source_view_get_definition_on_mouse_over_cb (GObject      *object,
         {
           GtkTextIter line_start = word_start;
           GtkTextIter line_end = word_end;
-          gint line_number;
-          g_autofree gchar* line_text = NULL;
+          g_autofree gchar *line_text = NULL;
           g_autoptr (GMatchInfo) matchInfo = NULL;
-
-          line_number = gtk_text_iter_get_line(&word_start);
 
           gtk_text_iter_set_line_offset (&line_start, 0);
           gtk_text_iter_forward_to_line_end (&line_end);
@@ -2674,11 +2670,14 @@ ide_source_view_real_motion_notify_event (GtkWidget      *widget,
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
   GtkTextIter iter;
   GtkTextIter start_iter;
+  GtkTextIter line_start_iter;
   GtkTextIter end_iter;
+  gunichar ch;
   gint buffer_x;
   gint buffer_y;
   GtkTextWindowType window_type;
   DefinitionHighlightData *data;
+  gboolean word_found = FALSE;
   gboolean ret;
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
@@ -2705,11 +2704,38 @@ ide_source_view_real_motion_notify_event (GtkWidget      *widget,
                                       buffer_x,
                                       buffer_y);
 
-  if (!ide_source_get_word_from_iter (&iter, &start_iter, &end_iter))
+  /* Workaround about a Clang bug where <> includes are not correctly reported */
+  line_start_iter = iter;
+  gtk_text_iter_set_line_offset (&line_start_iter, 0);
+
+  if (gtk_text_iter_ends_line (&line_start_iter))
+    goto cleanup;
+
+  while ((ch = gtk_text_iter_get_char (&line_start_iter)) &&
+         g_unichar_isspace (ch) &&
+         gtk_text_iter_forward_char (&line_start_iter))
+    ;
+
+  if (ch == '#')
     {
-      ide_source_view_reset_definition_highlight (self);
-      return ret;
+      g_autofree gchar *str = NULL;
+      GtkTextIter sharp_iter = line_start_iter;
+      GtkTextIter line_end_iter = iter;
+
+      gtk_text_iter_forward_char (&line_start_iter);
+      gtk_text_iter_forward_to_line_end (&line_end_iter);
+      str = gtk_text_buffer_get_text (GTK_TEXT_BUFFER (priv->buffer), &line_start_iter, &line_end_iter, FALSE);
+      g_strchug (str);
+      if (g_str_has_prefix (str, "include"))
+        {
+          iter = start_iter = sharp_iter;
+          end_iter = line_end_iter;
+          word_found = TRUE;
+        }
     }
+
+  if (!word_found && !ide_source_get_word_from_iter (&iter, &start_iter, &end_iter))
+    goto cleanup;
 
   if (priv->definition_src_location)
     {
@@ -2744,6 +2770,10 @@ ide_source_view_real_motion_notify_event (GtkWidget      *widget,
                                            ide_source_view_get_definition_on_mouse_over_cb,
                                            data);
 
+  return ret;
+
+cleanup:
+  ide_source_view_reset_definition_highlight (self);
   return ret;
 }
 
@@ -5400,13 +5430,12 @@ ide_source_view_finalize (GObject *object)
   IdeSourceView *self = (IdeSourceView *)object;
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
 
-  g_regex_unref (priv->include_regex);
-
   g_clear_object (&priv->completion_providers_signals);
   g_clear_pointer (&priv->display_name, g_free);
   g_clear_pointer (&priv->font_desc, pango_font_description_free);
   g_clear_pointer (&priv->selections, g_queue_free);
   g_clear_pointer (&priv->snippets, g_queue_free);
+  g_clear_pointer (&priv->include_regex, g_regex_unref);
 
   EGG_COUNTER_DEC (instances);
 
