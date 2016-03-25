@@ -28,22 +28,22 @@
 
 typedef struct
 {
-  GPtrArray         *builders;
+  GPtrArray          *builders;
   IdeTreeNode        *root;
   IdeTreeNode        *selection;
-  GtkTreeViewColumn *column;
-  GtkCellRenderer   *cell_pixbuf;
-  GtkCellRenderer   *cell_text;
-  GtkTreeStore      *store;
-  GMenuModel        *context_menu;
-  GdkRGBA            dim_foreground;
-  guint              show_icons : 1;
+  GtkTreeViewColumn  *column;
+  GtkCellRenderer    *cell_pixbuf;
+  GtkCellRenderer    *cell_text;
+  GtkTreeStore       *store;
+  GMenuModel         *context_menu;
+  GdkRGBA             dim_foreground;
+  guint               show_icons : 1;
 } IdeTreePrivate;
 
 typedef struct
 {
-  gpointer    key;
-  GEqualFunc  equal_func;
+  gpointer     key;
+  GEqualFunc   equal_func;
   IdeTreeNode *result;
 } NodeLookup;
 
@@ -51,8 +51,8 @@ typedef struct
 {
   IdeTree           *self;
   IdeTreeFilterFunc  filter_func;
-  gpointer          filter_data;
-  GDestroyNotify    filter_data_destroy;
+  gpointer           filter_data;
+  GDestroyNotify     filter_data_destroy;
 } FilterFunc;
 
 static void ide_tree_buildable_init (GtkBuildableIface *iface);
@@ -110,7 +110,7 @@ ide_tree_set_context_menu (IdeTree    *self,
 
 void
 _ide_tree_build_node (IdeTree     *self,
-                     IdeTreeNode *node)
+                      IdeTreeNode *node)
 {
   IdeTreePrivate *priv = ide_tree_get_instance_private (self);
   gsize i;
@@ -147,7 +147,7 @@ ide_tree_unselect (IdeTree *self)
 
 static void
 ide_tree_select (IdeTree     *self,
-                IdeTreeNode *node)
+                 IdeTreeNode *node)
 {
   IdeTreePrivate *priv = ide_tree_get_instance_private (self);
   GtkTreeSelection *selection;
@@ -204,10 +204,10 @@ ide_tree_get_row_height (IdeTree *self)
 
 static void
 ide_tree_menu_position_func (GtkMenu  *menu,
-                            gint     *x,
-                            gint     *y,
-                            gboolean *push_in,
-                            gpointer  user_data)
+                             gint     *x,
+                             gint     *y,
+                             gboolean *push_in,
+                             gpointer  user_data)
 {
   GdkPoint *loc = user_data;
   GtkRequisition req;
@@ -343,7 +343,7 @@ ide_tree_popup_menu (GtkWidget *widget)
 }
 
 static void
-ide_tree_selection_changed (IdeTree           *self,
+ide_tree_selection_changed (IdeTree         *self,
                            GtkTreeSelection *selection)
 {
   IdeTreePrivate *priv = ide_tree_get_instance_private (self);
@@ -379,6 +379,7 @@ ide_tree_selection_changed (IdeTree           *self,
               builder = g_ptr_array_index (priv->builders, i);
               _ide_tree_builder_node_selected (builder, node);
             }
+
           g_object_unref (node);
         }
     }
@@ -390,9 +391,9 @@ ide_tree_selection_changed (IdeTree           *self,
 
 static gboolean
 ide_tree_add_builder_foreach_cb (GtkTreeModel *model,
-                                GtkTreePath  *path,
-                                GtkTreeIter  *iter,
-                                gpointer      user_data)
+                                 GtkTreePath  *path,
+                                 GtkTreeIter  *iter,
+                                 gpointer      user_data)
 {
   IdeTreeBuilder *builder = user_data;
   IdeTreeNode *node = NULL;
@@ -412,10 +413,10 @@ ide_tree_add_builder_foreach_cb (GtkTreeModel *model,
 }
 
 static gboolean
-ide_tree_foreach (IdeTree                  *self,
-                 GtkTreeIter             *iter,
-                 GtkTreeModelForeachFunc  func,
-                 gpointer                 user_data)
+ide_tree_foreach (IdeTree                 *self,
+                  GtkTreeIter             *iter,
+                  GtkTreeModelForeachFunc  func,
+                  gpointer                 user_data)
 {
   IdeTreePrivate *priv = ide_tree_get_instance_private (self);
   GtkTreeModel *model;
@@ -610,8 +611,8 @@ inserted:
 
 static void
 ide_tree_row_activated (GtkTreeView       *tree_view,
-                       GtkTreePath       *path,
-                       GtkTreeViewColumn *column)
+                        GtkTreePath       *path,
+                        GtkTreeViewColumn *column)
 {
   IdeTree *self = (IdeTree *)tree_view;
   IdeTreePrivate *priv = ide_tree_get_instance_private (self);
@@ -650,8 +651,8 @@ ide_tree_row_activated (GtkTreeView       *tree_view,
 
 static void
 ide_tree_row_expanded (GtkTreeView *tree_view,
-                      GtkTreeIter *iter,
-                      GtkTreePath *path)
+                       GtkTreeIter *iter,
+                       GtkTreePath *path)
 {
   IdeTree *self = (IdeTree *)tree_view;
   GtkTreeModel *model;
@@ -679,10 +680,9 @@ ide_tree_row_expanded (GtkTreeView *tree_view,
   g_clear_object (&node);
 }
 
-
 static gboolean
 ide_tree_button_press_event (GtkWidget      *widget,
-                            GdkEventButton *button)
+                             GdkEventButton *button)
 {
   IdeTree *self = (IdeTree *)widget;
   IdeTreePrivate *priv = ide_tree_get_instance_private (self);
@@ -719,8 +719,8 @@ ide_tree_button_press_event (GtkWidget      *widget,
           gtk_tree_model_get (GTK_TREE_MODEL (priv->store), &iter, 0, &node, -1);
           ide_tree_select (self, node);
           ide_tree_popup (self, node, button,
-                         alloc.x + alloc.width,
-                         button->y - cell_y);
+                          alloc.x + alloc.width,
+                          button->y - cell_y);
           g_object_unref (node);
           gtk_tree_path_free (tree_path);
         }
@@ -733,9 +733,9 @@ ide_tree_button_press_event (GtkWidget      *widget,
 
 static gboolean
 ide_tree_find_item_foreach_cb (GtkTreeModel *model,
-                              GtkTreePath  *path,
-                              GtkTreeIter  *iter,
-                              gpointer      user_data)
+                               GtkTreePath  *path,
+                               GtkTreeIter  *iter,
+                               gpointer      user_data)
 {
   IdeTreeNode *node = NULL;
   NodeLookup *lookup = user_data;
@@ -767,10 +767,10 @@ ide_tree_find_item_foreach_cb (GtkTreeModel *model,
 }
 
 static void
-ide_tree_real_action (IdeTree      *self,
-                     const gchar *prefix,
-                     const gchar *action_name,
-                     const gchar *param)
+ide_tree_real_action (IdeTree     *self,
+                      const gchar *prefix,
+                      const gchar *action_name,
+                      const gchar *param)
 {
   GVariant *variant = NULL;
 
@@ -796,10 +796,10 @@ ide_tree_real_action (IdeTree      *self,
 
 static gboolean
 ide_tree_default_search_equal_func (GtkTreeModel *model,
-                                   gint          column,
-                                   const gchar  *key,
-                                   GtkTreeIter  *iter,
-                                   gpointer      user_data)
+                                    gint          column,
+                                    const gchar  *key,
+                                    GtkTreeIter  *iter,
+                                    gpointer      user_data)
 {
   IdeTreeNode *node = NULL;
   gboolean ret = TRUE;
@@ -825,9 +825,9 @@ ide_tree_default_search_equal_func (GtkTreeModel *model,
 
 static void
 ide_tree_add_child (GtkBuildable *buildable,
-                   GtkBuilder   *builder,
-                   GObject      *child,
-                   const gchar  *type)
+                    GtkBuilder   *builder,
+                    GObject      *child,
+                    const gchar  *type)
 {
   IdeTree *self = (IdeTree *)buildable;
 
@@ -886,9 +886,9 @@ ide_tree_finalize (GObject *object)
 
 static void
 ide_tree_get_property (GObject    *object,
-                      guint       prop_id,
-                      GValue     *value,
-                      GParamSpec *pspec)
+                       guint       prop_id,
+                       GValue     *value,
+                       GParamSpec *pspec)
 {
   IdeTree *self = IDE_TREE (object);
   IdeTreePrivate *priv = ide_tree_get_instance_private (self);
@@ -918,9 +918,9 @@ ide_tree_get_property (GObject    *object,
 
 static void
 ide_tree_set_property (GObject      *object,
-                      guint         prop_id,
-                      const GValue *value,
-                      GParamSpec   *pspec)
+                       guint         prop_id,
+                       const GValue *value,
+                       GParamSpec   *pspec)
 {
   IdeTree *self = IDE_TREE (object);
 
@@ -1082,7 +1082,7 @@ ide_tree_init (IdeTree *self)
 
 void
 ide_tree_expand_to_node (IdeTree     *self,
-                        IdeTreeNode *node)
+                         IdeTreeNode *node)
 {
   g_assert (IDE_IS_TREE (self));
   g_assert (IDE_IS_TREE_NODE (node));
@@ -1110,7 +1110,7 @@ ide_tree_get_show_icons (IdeTree *self)
 
 void
 ide_tree_set_show_icons (IdeTree   *self,
-                        gboolean  show_icons)
+                         gboolean   show_icons)
 {
   IdeTreePrivate *priv = ide_tree_get_instance_private (self);
 
@@ -1172,7 +1172,7 @@ ide_tree_get_selected (IdeTree *self)
 
 void
 ide_tree_scroll_to_node (IdeTree     *self,
-                        IdeTreeNode *node)
+                         IdeTreeNode *node)
 {
   GtkTreePath *path;
 
@@ -1186,7 +1186,7 @@ ide_tree_scroll_to_node (IdeTree     *self,
 
 GtkTreePath *
 _ide_tree_get_path (IdeTree *self,
-                   GList  *list)
+                    GList   *list)
 {
   IdeTreePrivate *priv = ide_tree_get_instance_private (self);
   GtkTreeModel *model;
@@ -1239,7 +1239,7 @@ _ide_tree_get_path (IdeTree *self,
  * @self: A #IdeTree.
  * @builder: A #IdeTreeBuilder to add.
  *
- * Removes a builder from the tree.
+ * Add a builder to the tree.
  */
 void
 ide_tree_add_builder (IdeTree        *self,
@@ -1273,7 +1273,7 @@ ide_tree_add_builder (IdeTree        *self,
  */
 void
 ide_tree_remove_builder (IdeTree        *self,
-                        IdeTreeBuilder *builder)
+                         IdeTreeBuilder *builder)
 {
   IdeTreePrivate *priv = ide_tree_get_instance_private (self);
   gsize i;
@@ -1404,8 +1404,8 @@ ide_tree_rebuild (IdeTree *self)
  */
 IdeTreeNode *
 ide_tree_find_custom (IdeTree     *self,
-                     GEqualFunc  equal_func,
-                     gpointer    key)
+                      GEqualFunc   equal_func,
+                      gpointer     key)
 {
   IdeTreePrivate *priv = ide_tree_get_instance_private (self);
   NodeLookup lookup;
@@ -1435,7 +1435,7 @@ ide_tree_find_custom (IdeTree     *self,
  */
 IdeTreeNode *
 ide_tree_find_item (IdeTree  *self,
-                   GObject *item)
+                    GObject  *item)
 {
   IdeTreePrivate *priv = ide_tree_get_instance_private (self);
   NodeLookup lookup;
@@ -1456,8 +1456,8 @@ ide_tree_find_item (IdeTree  *self,
 
 void
 _ide_tree_append (IdeTree     *self,
-                 IdeTreeNode *node,
-                 IdeTreeNode *child)
+                  IdeTreeNode *node,
+                  IdeTreeNode *child)
 {
   g_return_if_fail (IDE_IS_TREE (self));
   g_return_if_fail (IDE_IS_TREE_NODE (node));
@@ -1468,8 +1468,8 @@ _ide_tree_append (IdeTree     *self,
 
 void
 _ide_tree_prepend (IdeTree     *self,
-                  IdeTreeNode *node,
-                  IdeTreeNode *child)
+                   IdeTreeNode *node,
+                   IdeTreeNode *child)
 {
   g_return_if_fail (IDE_IS_TREE (self));
   g_return_if_fail (IDE_IS_TREE_NODE (node));
@@ -1480,7 +1480,7 @@ _ide_tree_prepend (IdeTree     *self,
 
 void
 _ide_tree_invalidate (IdeTree     *self,
-                     IdeTreeNode *node)
+                      IdeTreeNode *node)
 {
   IdeTreePrivate *priv = ide_tree_get_instance_private (self);
   GtkTreeModel *model;
@@ -1532,9 +1532,9 @@ _ide_tree_invalidate (IdeTree     *self,
  */
 IdeTreeNode *
 ide_tree_find_child_node (IdeTree         *self,
-                         IdeTreeNode     *node,
-                         IdeTreeFindFunc  find_func,
-                         gpointer        user_data)
+                          IdeTreeNode     *node,
+                          IdeTreeFindFunc  find_func,
+                          gpointer         user_data)
 {
   IdeTreePrivate *priv = ide_tree_get_instance_private (self);
   GtkTreeModel *model;
@@ -1604,7 +1604,7 @@ failure:
 
 void
 _ide_tree_remove (IdeTree     *self,
-                 IdeTreeNode *node)
+                  IdeTreeNode *node)
 {
   IdeTreePrivate *priv = ide_tree_get_instance_private (self);
   GtkTreePath *path;
@@ -1623,8 +1623,8 @@ _ide_tree_remove (IdeTree     *self,
 
 gboolean
 _ide_tree_get_iter (IdeTree      *self,
-                   IdeTreeNode  *node,
-                   GtkTreeIter *iter)
+                    IdeTreeNode  *node,
+                    GtkTreeIter  *iter)
 {
   IdeTreePrivate *priv = ide_tree_get_instance_private (self);
   GtkTreePath *path;
@@ -1656,8 +1656,8 @@ filter_func_free (gpointer user_data)
 
 static gboolean
 ide_tree_model_filter_recursive (GtkTreeModel *model,
-                                GtkTreeIter  *parent,
-                                FilterFunc   *filter)
+                                 GtkTreeIter  *parent,
+                                 FilterFunc   *filter)
 {
   GtkTreeIter child;
 
@@ -1686,8 +1686,8 @@ ide_tree_model_filter_recursive (GtkTreeModel *model,
 
 static gboolean
 ide_tree_model_filter_visible_func (GtkTreeModel *model,
-                                   GtkTreeIter  *iter,
-                                   gpointer      data)
+                                    GtkTreeIter  *iter,
+                                    gpointer      data)
 {
   IdeTreeNode *node = NULL;
   FilterFunc *filter = data;
@@ -1744,9 +1744,9 @@ ide_tree_model_filter_visible_func (GtkTreeModel *model,
  */
 void
 ide_tree_set_filter (IdeTree           *self,
-                    IdeTreeFilterFunc  filter_func,
-                    gpointer          filter_data,
-                    GDestroyNotify    filter_data_destroy)
+                     IdeTreeFilterFunc  filter_func,
+                     gpointer           filter_data,
+                     GDestroyNotify     filter_data_destroy)
 {
   IdeTreePrivate *priv = ide_tree_get_instance_private (self);
 
