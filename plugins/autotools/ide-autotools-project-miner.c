@@ -426,7 +426,14 @@ ide_autotools_project_miner_class_init (IdeAutotoolsProjectMinerClass *klass)
 
   for (guint i = 0; i < G_USER_N_DIRECTORIES; i++)
     {
-      GFile *dir = g_file_new_for_path (g_get_user_special_dir (i));
+      const gchar *path;
+      GFile *dir;
+
+      path = g_get_user_special_dir (i);
+      if (!path)
+        continue;
+
+      dir = g_file_new_for_path (path);
 
       if (g_file_equal (dir, home))
         g_clear_object (&dir);
