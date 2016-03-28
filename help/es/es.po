@@ -6,8 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
-"POT-Creation-Date: 2016-02-29 08:01+0000\n"
-"PO-Revision-Date: 2016-02-29 16:13+0100\n"
+"POT-Creation-Date: 2016-03-27 19:16+0000\n"
+"PO-Revision-Date: 2016-03-28 09:28+0200\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Español; Castellano <gnome-es-list@gnome.org>\n"
 "Language: es\n"
@@ -29,8 +29,8 @@ msgstr "<_:media-1/> Builder"
 
 #. (itstool) path: section/title
 #: C/index.page:18
-msgid "Features"
-msgstr "Características"
+msgid "Projects and files"
+msgstr "Proyectos y archivos"
 
 #. (itstool) path: credit/name
 #: C/introduction.page:15
@@ -49,8 +49,9 @@ msgstr "Christian Hergert"
 
 #. (itstool) path: info/desc
 #: C/introduction.page:28
-msgid "Welcome to Builder"
-msgstr "Bienvenido a Builder"
+#| msgid "Welcome to Builder"
+msgid "Welcome to <app>Builder</app>"
+msgstr "Bienvenido a <app>Builder</app>"
 
 #. (itstool) path: page/title
 #: C/introduction.page:31
@@ -59,18 +60,25 @@ msgstr "Introducción"
 
 #. (itstool) path: page/p
 #: C/introduction.page:33
+#| msgid ""
+#| "Builder is an Integrated Development Environment (IDE) for the GNOME "
+#| "desktop environment. While it is a relatively young application, it is "
+#| "quickly gaining features common to more mature IDEs. Thanks for trusting "
+#| "Builder with your project! We hope to make Builder the most delightful "
+#| "development tool for experienced and beginners alike."
 msgid ""
-"Builder is an Integrated Development Environment (IDE) for the GNOME desktop "
-"environment. While it is a relatively young application, it is quickly "
-"gaining features common to more mature IDEs. Thanks for trusting Builder "
-"with your project! We hope to make Builder the most delightful development "
-"tool for experienced and beginners alike."
+"<app>Builder</app> is an Integrated Development Environment (IDE) for the "
+"GNOME desktop environment. While it is a relatively young application, it is "
+"quickly gaining features common to more mature IDEs. Thanks for trusting "
+"<app>Builder</app> with your project! We hope to make <app>Builder</app> the "
+"most delightful development tool for experienced and beginners alike."
 msgstr ""
-"Builder es un entorno integrado de desarrollo (EID) para el escritorio "
-"GNOME. Aunque es una aplicación relativamente joven, está recibiendo "
-"características rápidamente de otros EID más maduros. Gracias por confiar su "
-"proyecto a Builder. Esperamos hacer de Builder una herramienta de desarrollo "
-"adecuada para programadores tanto noveles como experimentados."
+"<app>Builder</app> es un entorno integrado de desarrollo (EID) para el "
+"escritorio GNOME. Aunque es una aplicación relativamente joven, está "
+"recibiendo características rápidamente de otros EID más maduros. Gracias por "
+"confiar su proyecto a <app>Builder</app>. Esperamos hacer de <app>Builder</"
+"app> una herramienta de desarrollo adecuada para programadores tanto noveles "
+"como experimentados."
 
 #. (itstool) path: p/link
 #: C/legal.xml:5
@@ -92,6 +100,9 @@ msgstr ""
 "Como excepción especial, los poseedores de los derechos de autor le dan "
 "permiso para copiar, modificar y distribuir el código de ejemplo contenido "
 "en este documento bajo los términos que usted elija, sin restricción."
+
+#~ msgid "Features"
+#~ msgstr "Características"
 
 #~ msgid ""
 #~ "Builder is an Integrated Development Environment (IDE) for the GNOME "
