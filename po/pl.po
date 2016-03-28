@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-23 13:07+0100\n"
-"PO-Revision-Date: 2016-03-23 13:08+0100\n"
+"POT-Creation-Date: 2016-03-28 19:59+0200\n"
+"PO-Revision-Date: 2016-03-28 20:00+0200\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <gnomepl@aviary.pl>\n"
 "Language: pl\n"
@@ -1072,17 +1072,17 @@ msgstr "Otwarcie katalogu się nie powiodło: %s"
 msgid "Failed to load file: %s: %s"
 msgstr "Wczytanie pliku się nie powiodło: %s: %s"
 
-#: ../libide/ide-source-view.c:4897
+#: ../libide/ide-source-view.c:4966
 #, c-format
 msgid "Insert “%s”"
 msgstr "Wstaw „%s”"
 
-#: ../libide/ide-source-view.c:4899
+#: ../libide/ide-source-view.c:4968
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "Zmień „%s” na „%s”"
 
-#: ../libide/ide-source-view.c:5013
+#: ../libide/ide-source-view.c:5082
 msgid "Apply Fix-It"
 msgstr "Zastosuj „Fix-It”"
 
@@ -2353,9 +2353,9 @@ msgstr "Zapis zawartości terminala jako"
 msgid "_New Terminal"
 msgstr "_Nowy terminal"
 
-#: ../plugins/todo/todo_plugin/__init__.py:179
+#: ../plugins/todo/todo_plugin/__init__.py:180
 msgid "Todo"
-msgstr "Zadania"
+msgstr "TODO"
 
 #: ../plugins/vala-pack/ide-vala-preferences-addin.vala:33
 msgid "Vala"
