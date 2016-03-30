@@ -215,6 +215,7 @@ static const gchar *ide_application_credits_funders[] = {
   "Demetris Lambrou",
   "Dennis Schulmeister",
   "Denver Gingerich",
+  "Derek 呆",
   "Dolgoff ",
   "Eduardo Silva",
   "Eitan Isaacson",
