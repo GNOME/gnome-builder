@@ -163,6 +163,7 @@ ide_application_local_command_line (GApplication   *application,
 {
   IdeApplication *self = (IdeApplication *)application;
   g_autofree gchar *path_copy = NULL;
+  g_autofree gchar *filename = NULL;
   GOptionContext *context = NULL;
   GOptionGroup *group;
   const gchar *shortdesc = NULL;
@@ -223,6 +224,14 @@ ide_application_local_command_line (GApplication   *application,
       G_OPTION_ARG_NONE,
       &gapplication_service,
       N_("Enter GApplication Service mode") },
+
+    { "project",
+      'p',
+      G_OPTION_FLAG_IN_MAIN,
+      G_OPTION_ARG_FILENAME,
+      &filename,
+      N_("Opens the project specified by PATH"),
+      N_("PATH") },
 
     { NULL }
   };
@@ -435,11 +444,18 @@ ide_application_local_command_line (GApplication   *application,
     {
       g_application_hold (G_APPLICATION (self));
       g_timeout_add_seconds (10, application_service_timeout_cb, g_object_ref (self));
+      goto cleanup;
     }
-  else
+
+  if (filename != NULL)
     {
-      g_application_activate (application);
+      GVariant *file;
+      file = g_variant_new ("s", filename);
+      g_action_group_activate_action ((GActionGroup *) application, "load-project", file);
+      goto cleanup;
     }
+
+  g_application_activate (application);
 
 cleanup:
   g_clear_pointer (&type, g_free);

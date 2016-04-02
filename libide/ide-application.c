@@ -645,3 +645,50 @@ ide_application_get_menu_by_id (IdeApplication *self,
 
   return NULL;
 }
+
+gboolean
+ide_application_open_project (IdeApplication *self,
+                              GFile          *file)
+{
+  g_return_val_if_fail (IDE_IS_APPLICATION (self), FALSE);
+  g_return_val_if_fail (G_IS_FILE (file), FALSE);
+  
+  if (!g_file_query_exists (file, NULL))
+    return FALSE;
+
+  GList *list;
+  IdeContext *context;
+  GtkWindow *window;
+  GFile *projectfile;
+  IdeWorkbench *workbench = NULL;
+ 
+  list = gtk_application_get_windows (GTK_APPLICATION (self));
+
+  for (; list != NULL; list = list->next)
+    {
+      window = list->data;
+      context = ide_workbench_get_context (IDE_WORKBENCH (window));
+
+      if (context != NULL)
+        {
+          projectfile = g_file_get_parent (ide_context_get_project_file (context));
+          if (g_file_equal (file, projectfile))
+            workbench =  IDE_WORKBENCH (window);
+        }
+    }
+
+  if (workbench == NULL)
+    {
+      workbench = g_object_new (IDE_TYPE_WORKBENCH, 
+                                "application", self,
+                                NULL);
+      ide_workbench_open_project_async (workbench, file, NULL, NULL, NULL);
+    }
+
+  gtk_window_present (GTK_WINDOW (workbench));
+  
+  if (ide_workbench_get_context(workbench) != NULL)
+    return TRUE;
+  else
+    return FALSE;
+}

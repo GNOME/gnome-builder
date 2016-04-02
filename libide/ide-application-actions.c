@@ -278,12 +278,33 @@ ide_application_actions_dayhack (GSimpleAction *action,
   g_settings_set_string (settings, "style-scheme-name", "builder");
 }
 
+static void
+ide_application_actions_load_project (GSimpleAction *action,
+                                      GVariant      *args,
+                                      gpointer       user_data)
+{
+  IdeApplication *self = user_data;
+  g_autofree gchar *filename = NULL;
+  g_autoptr(GFile) file = NULL;
+
+  g_assert (IDE_IS_APPLICATION (self));
+
+  g_variant_get (args, "s", &filename);
+  file = g_file_new_for_path (filename);
+
+  if (!ide_application_open_project (self, file))
+    {
+      g_message ("unable to open project specified by path - %s", filename);
+    }
+}
+
 static const GActionEntry IdeApplicationActions[] = {
   { "about",        ide_application_actions_about },
   { "dayhack",      ide_application_actions_dayhack },
   { "nighthack",    ide_application_actions_nighthack },
   { "open-project", ide_application_actions_open_project },
   { "new-project",  ide_application_actions_new_project },
+  { "load-project", ide_application_actions_load_project, "s"},
   { "preferences",  ide_application_actions_preferences },
   { "quit",         ide_application_actions_quit },
   { "shortcuts",    ide_application_actions_shortcuts },

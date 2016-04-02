@@ -54,6 +54,8 @@ GDBusProxy         *ide_application_get_worker_finish    (IdeApplication       *
                                                           GError              **error);
 GMenu              *ide_application_get_menu_by_id       (IdeApplication       *self,
                                                           const gchar          *id);
+gboolean            ide_application_open_project         (IdeApplication       *self,
+                                                          GFile                *file);
 
 G_END_DECLS
 
