@@ -231,6 +231,12 @@ AS_IF([test "x$have_pygobject" = "xyes"],[
 
 
 dnl ***********************************************************************
+dnl Check for libidemm
+dnl ***********************************************************************
+m4_include([libidemm/configure.ac])
+
+
+dnl ***********************************************************************
 dnl Check for supported plugins
 dnl ***********************************************************************
 m4_include([plugins/autotools/configure.ac])
@@ -508,6 +514,10 @@ echo "  Enable Profiling (-pg)................ : ${enable_profiling}"
 echo "  Build Test Suite ..................... : ${enable_tests}"
 echo "  Build API reference .................. : ${enable_gtk_doc}"
 echo "  Use cross-referencing in API docs .... : ${enable_doc_cross_references}"
+echo ""
+echo " Optional libraries"
+echo ""
+echo "  libidemm.............................. : ${enable_libidemm}"
 echo ""
 echo " Scripting"
 echo ""
