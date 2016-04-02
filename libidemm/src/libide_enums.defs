@@ -1,0 +1,535 @@
+;; From ide-application.h
+
+;; Original typedef:
+;; typedef enum
+;; {
+;;   IDE_APPLICATION_MODE_PRIMARY,
+;;   IDE_APPLICATION_MODE_WORKER,
+;;   IDE_APPLICATION_MODE_TOOL,
+;;   IDE_APPLICATION_MODE_TESTS,
+;; } IdeApplicationMode;
+
+(define-enum-extended ApplicationMode
+  (in-module "Ide")
+  (c-name "IdeApplicationMode")
+  (values
+    '("primary" "IDE_APPLICATION_MODE_PRIMARY" "0")
+    '("worker" "IDE_APPLICATION_MODE_WORKER" "1")
+    '("tool" "IDE_APPLICATION_MODE_TOOL" "2")
+    '("tests" "IDE_APPLICATION_MODE_TESTS" "3")
+  )
+)
+
+;; From ide-buffer-change-monitor.h
+
+;; Original typedef:
+;; typedef enum
+;; {
+;;   IDE_BUFFER_LINE_CHANGE_NONE    = 0,
+;;   IDE_BUFFER_LINE_CHANGE_ADDED   = 1,
+;;   IDE_BUFFER_LINE_CHANGE_CHANGED = 2,
+;;   IDE_BUFFER_LINE_CHANGE_DELETED = 3,
+;; } IdeBufferLineChange;
+
+(define-enum-extended BufferLineChange
+  (in-module "Ide")
+  (c-name "IdeBufferLineChange")
+  (values
+    '("none" "IDE_BUFFER_LINE_CHANGE_NONE" "0")
+    '("added" "IDE_BUFFER_LINE_CHANGE_ADDED" "1")
+    '("changed" "IDE_BUFFER_LINE_CHANGE_CHANGED" "2")
+    '("deleted" "IDE_BUFFER_LINE_CHANGE_DELETED" "3")
+  )
+)
+
+;; From ide-buffer.h
+
+;; Original typedef:
+;; typedef enum
+;; {
+;;   IDE_BUFFER_LINE_FLAGS_NONE     = 0,
+;;   IDE_BUFFER_LINE_FLAGS_ADDED    = 1 << 0,
+;;   IDE_BUFFER_LINE_FLAGS_CHANGED  = 1 << 1,
+;;   IDE_BUFFER_LINE_FLAGS_DELETED  = 1 << 2,
+;;   IDE_BUFFER_LINE_FLAGS_ERROR    = 1 << 3,
+;;   IDE_BUFFER_LINE_FLAGS_WARNING  = 1 << 4,
+;;   IDE_BUFFER_LINE_FLAGS_NOTE     = 1 << 5,
+;; } IdeBufferLineFlags;
+
+(define-flags-extended BufferLineFlags
+  (in-module "Ide")
+  (c-name "IdeBufferLineFlags")
+  (values
+    '("none" "IDE_BUFFER_LINE_FLAGS_NONE" "0x0")
+    '("added" "IDE_BUFFER_LINE_FLAGS_ADDED" "1 << 0")
+    '("changed" "IDE_BUFFER_LINE_FLAGS_CHANGED" "1 << 1")
+    '("deleted" "IDE_BUFFER_LINE_FLAGS_DELETED" "1 << 2")
+    '("error" "IDE_BUFFER_LINE_FLAGS_ERROR" "1 << 3")
+    '("warning" "IDE_BUFFER_LINE_FLAGS_WARNING" "1 << 4")
+    '("note" "IDE_BUFFER_LINE_FLAGS_NOTE" "1 << 5")
+  )
+)
+
+;; From ide-builder.h
+
+;; Original typedef:
+;; typedef enum
+;; {
+;;   IDE_BUILDER_BUILD_FLAGS_NONE            = 0,
+;;   IDE_BUILDER_BUILD_FLAGS_FORCE_BOOTSTRAP = 1 << 0,
+;;   IDE_BUILDER_BUILD_FLAGS_FORCE_CLEAN     = 1 << 1,
+;;   IDE_BUILDER_BUILD_FLAGS_NO_BUILD        = 1 << 2,
+;;   IDE_BUILDER_BUILD_FLAGS_NO_CONFIGURE    = 1 << 3,
+;; } IdeBuilderBuildFlags;
+
+(define-flags-extended BuilderBuildFlags
+  (in-module "Ide")
+  (c-name "IdeBuilderBuildFlags")
+  (values
+    '("none" "IDE_BUILDER_BUILD_FLAGS_NONE" "0x0")
+    '("force-bootstrap" "IDE_BUILDER_BUILD_FLAGS_FORCE_BOOTSTRAP" "1 << 0")
+    '("force-clean" "IDE_BUILDER_BUILD_FLAGS_FORCE_CLEAN" "1 << 1")
+    '("no-build" "IDE_BUILDER_BUILD_FLAGS_NO_BUILD" "1 << 2")
+    '("no-configure" "IDE_BUILDER_BUILD_FLAGS_NO_CONFIGURE" "1 << 3")
+  )
+)
+
+;; From ide-build-result.h
+
+;; Original typedef:
+;; typedef enum
+;; {
+;;   IDE_BUILD_RESULT_LOG_STDOUT,
+;;   IDE_BUILD_RESULT_LOG_STDERR,
+;; } IdeBuildResultLog;
+
+(define-enum-extended BuildResultLog
+  (in-module "Ide")
+  (c-name "IdeBuildResultLog")
+  (values
+    '("stdout" "IDE_BUILD_RESULT_LOG_STDOUT" "0")
+    '("stderr" "IDE_BUILD_RESULT_LOG_STDERR" "1")
+  )
+)
+
+;; From ide-diagnostic.h
+
+;; Original typedef:
+;; typedef enum
+;; {
+;;   IDE_DIAGNOSTIC_IGNORED    = 0,
+;;   IDE_DIAGNOSTIC_NOTE       = 1,
+;;   IDE_DIAGNOSTIC_DEPRECATED = 2,
+;;   IDE_DIAGNOSTIC_WARNING    = 3,
+;;   IDE_DIAGNOSTIC_ERROR      = 4,
+;;   IDE_DIAGNOSTIC_FATAL      = 5,
+;; } IdeDiagnosticSeverity;
+
+(define-enum-extended DiagnosticSeverity
+  (in-module "Ide")
+  (c-name "IdeDiagnosticSeverity")
+  (values
+    '("ignored" "IDE_DIAGNOSTIC_IGNORED" "0")
+    '("note" "IDE_DIAGNOSTIC_NOTE" "1")
+    '("deprecated" "IDE_DIAGNOSTIC_DEPRECATED" "2")
+    '("warning" "IDE_DIAGNOSTIC_WARNING" "3")
+    '("error" "IDE_DIAGNOSTIC_ERROR" "4")
+    '("fatal" "IDE_DIAGNOSTIC_FATAL" "5")
+  )
+)
+
+;; From ide-highlighter.h
+
+;; Original typedef:
+;; typedef enum
+;; {
+;;   IDE_HIGHLIGHT_STOP,
+;;   IDE_HIGHLIGHT_CONTINUE,
+;; } IdeHighlightResult;
+
+(define-enum-extended HighlightResult
+  (in-module "Ide")
+  (c-name "IdeHighlightResult")
+  (values
+    '("stop" "IDE_HIGHLIGHT_STOP" "0")
+    '("continue" "IDE_HIGHLIGHT_CONTINUE" "1")
+  )
+)
+
+;; From ide-indent-style.h
+
+;; Original typedef:
+;; typedef enum
+;; {
+;;   IDE_INDENT_STYLE_SPACES = 1,
+;;   IDE_INDENT_STYLE_TABS   = 2,
+;; } IdeIndentStyle;
+
+(define-enum-extended IndentStyle
+  (in-module "Ide")
+  (c-name "IdeIndentStyle")
+  (values
+    '("spaces" "IDE_INDENT_STYLE_SPACES" "1")
+    '("tabs" "IDE_INDENT_STYLE_TABS" "2")
+  )
+)
+
+;; From ide-layout-stack-split.h
+
+;; Original typedef:
+;; typedef enum
+;; {
+;;   IDE_LAYOUT_GRID_SPLIT_LEFT = 1,
+;;   IDE_LAYOUT_GRID_SPLIT_RIGHT = 2,
+;;   IDE_LAYOUT_GRID_SPLIT_MOVE_LEFT = 3,
+;;   IDE_LAYOUT_GRID_SPLIT_MOVE_RIGHT = 4,
+;; } IdeLayoutGridSplit;
+
+(define-enum-extended LayoutGridSplit
+  (in-module "Ide")
+  (c-name "IdeLayoutGridSplit")
+  (values
+    '("left" "IDE_LAYOUT_GRID_SPLIT_LEFT" "1")
+    '("right" "IDE_LAYOUT_GRID_SPLIT_RIGHT" "2")
+    '("move-left" "IDE_LAYOUT_GRID_SPLIT_MOVE_LEFT" "3")
+    '("move-right" "IDE_LAYOUT_GRID_SPLIT_MOVE_RIGHT" "4")
+  )
+)
+
+;; From ide-source-view.h
+
+;; Original typedef:
+;; typedef enum
+;; {
+;;   IDE_SOURCE_VIEW_MODE_TYPE_TRANSIENT,
+;;   IDE_SOURCE_VIEW_MODE_TYPE_PERMANENT,
+;;   IDE_SOURCE_VIEW_MODE_TYPE_MODAL
+;; } IdeSourceViewModeType;
+
+(define-enum-extended SourceViewModeType
+  (in-module "Ide")
+  (c-name "IdeSourceViewModeType")
+  (values
+    '("transient" "IDE_SOURCE_VIEW_MODE_TYPE_TRANSIENT" "0")
+    '("permanent" "IDE_SOURCE_VIEW_MODE_TYPE_PERMANENT" "1")
+    '("modal" "IDE_SOURCE_VIEW_MODE_TYPE_MODAL" "2")
+  )
+)
+
+;; Original typedef:
+;; typedef enum
+;; {
+;;   IDE_SOURCE_VIEW_THEATRIC_EXPAND,
+;;   IDE_SOURCE_VIEW_THEATRIC_SHRINK,
+;; } IdeSourceViewTheatric;
+
+(define-enum-extended SourceViewTheatric
+  (in-module "Ide")
+  (c-name "IdeSourceViewTheatric")
+  (values
+    '("expand" "IDE_SOURCE_VIEW_THEATRIC_EXPAND" "0")
+    '("shrink" "IDE_SOURCE_VIEW_THEATRIC_SHRINK" "1")
+  )
+)
+
+;; Original typedef:
+;; typedef enum
+;; {
+;;   IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_OFFSET,
+;;   IDE_SOURCE_VIEW_MOVEMENT_NEXT_OFFSET,
+;; 
+;;   IDE_SOURCE_VIEW_MOVEMENT_NTH_CHAR,
+;;   IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_CHAR,
+;;   IDE_SOURCE_VIEW_MOVEMENT_NEXT_CHAR,
+;;   IDE_SOURCE_VIEW_MOVEMENT_FIRST_CHAR,
+;;   IDE_SOURCE_VIEW_MOVEMENT_FIRST_NONSPACE_CHAR,
+;;   IDE_SOURCE_VIEW_MOVEMENT_MIDDLE_CHAR,
+;;   IDE_SOURCE_VIEW_MOVEMENT_LAST_CHAR,
+;; 
+;;   IDE_SOURCE_VIEW_MOVEMENT_NEXT_WORD_START,
+;;   IDE_SOURCE_VIEW_MOVEMENT_NEXT_FULL_WORD_START,
+;;   IDE_SOURCE_VIEW_MOVEMENT_NEXT_SUB_WORD_START,
+;;   IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_SUB_WORD_START,
+;;   IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_WORD_START,
+;;   IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_FULL_WORD_START,
+;; 
+;;   IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_WORD_END,
+;;   IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_FULL_WORD_END,
+;;   IDE_SOURCE_VIEW_MOVEMENT_NEXT_WORD_END,
+;;   IDE_SOURCE_VIEW_MOVEMENT_NEXT_FULL_WORD_END,
+;; 
+;;   IDE_SOURCE_VIEW_MOVEMENT_SENTENCE_START,
+;;   IDE_SOURCE_VIEW_MOVEMENT_SENTENCE_END,
+;; 
+;;   IDE_SOURCE_VIEW_MOVEMENT_PARAGRAPH_START,
+;;   IDE_SOURCE_VIEW_MOVEMENT_PARAGRAPH_END,
+;; 
+;;   IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_LINE,
+;;   IDE_SOURCE_VIEW_MOVEMENT_NEXT_LINE,
+;; 
+;;   IDE_SOURCE_VIEW_MOVEMENT_FIRST_LINE,
+;;   IDE_SOURCE_VIEW_MOVEMENT_NTH_LINE,
+;;   IDE_SOURCE_VIEW_MOVEMENT_LAST_LINE,
+;;   IDE_SOURCE_VIEW_MOVEMENT_LINE_PERCENTAGE,
+;; 
+;;   IDE_SOURCE_VIEW_MOVEMENT_LINE_CHARS,
+;;   IDE_SOURCE_VIEW_MOVEMENT_LINE_END,
+;; 
+;;   IDE_SOURCE_VIEW_MOVEMENT_HALF_PAGE_UP,
+;;   IDE_SOURCE_VIEW_MOVEMENT_HALF_PAGE_DOWN,
+;;   IDE_SOURCE_VIEW_MOVEMENT_HALF_PAGE_LEFT,
+;;   IDE_SOURCE_VIEW_MOVEMENT_HALF_PAGE_RIGHT,
+;; 
+;;   IDE_SOURCE_VIEW_MOVEMENT_PAGE_UP,
+;;   IDE_SOURCE_VIEW_MOVEMENT_PAGE_DOWN,
+;; 
+;;   IDE_SOURCE_VIEW_MOVEMENT_SCREEN_UP,
+;;   IDE_SOURCE_VIEW_MOVEMENT_SCREEN_DOWN,
+;;   IDE_SOURCE_VIEW_MOVEMENT_SCREEN_LEFT,
+;;   IDE_SOURCE_VIEW_MOVEMENT_SCREEN_RIGHT,
+;;   IDE_SOURCE_VIEW_MOVEMENT_SCREEN_TOP,
+;;   IDE_SOURCE_VIEW_MOVEMENT_SCREEN_MIDDLE,
+;;   IDE_SOURCE_VIEW_MOVEMENT_SCREEN_BOTTOM,
+;; 
+;;   IDE_SOURCE_VIEW_MOVEMENT_MATCH_SPECIAL,
+;; 
+;;   IDE_SOURCE_VIEW_MOVEMENT_SCROLL_SCREEN_TOP,
+;;   IDE_SOURCE_VIEW_MOVEMENT_SCROLL_SCREEN_CENTER,
+;;   IDE_SOURCE_VIEW_MOVEMENT_SCROLL_SCREEN_BOTTOM,
+;;   IDE_SOURCE_VIEW_MOVEMENT_SCROLL_SCREEN_LEFT,
+;;   IDE_SOURCE_VIEW_MOVEMENT_SCROLL_SCREEN_RIGHT,
+;; 
+;;   IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_UNMATCHED_BRACE,
+;;   IDE_SOURCE_VIEW_MOVEMENT_NEXT_UNMATCHED_BRACE,
+;; 
+;;   IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_UNMATCHED_PAREN,
+;;   IDE_SOURCE_VIEW_MOVEMENT_NEXT_UNMATCHED_PAREN,
+;; 
+;;   IDE_SOURCE_VIEW_MOVEMENT_NEXT_MATCH_MODIFIER,
+;;   IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_MATCH_MODIFIER,
+;; 
+;;   IDE_SOURCE_VIEW_MOVEMENT_NEXT_MATCH_SEARCH_CHAR,
+;;   IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_MATCH_SEARCH_CHAR,
+;; } IdeSourceViewMovement;
+
+(define-enum-extended SourceViewMovement
+  (in-module "Ide")
+  (c-name "IdeSourceViewMovement")
+  (values
+    '("previous-offset" "IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_OFFSET" "0")
+    '("next-offset" "IDE_SOURCE_VIEW_MOVEMENT_NEXT_OFFSET" "1")
+    '("nth-char" "IDE_SOURCE_VIEW_MOVEMENT_NTH_CHAR" "2")
+    '("previous-char" "IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_CHAR" "3")
+    '("next-char" "IDE_SOURCE_VIEW_MOVEMENT_NEXT_CHAR" "4")
+    '("first-char" "IDE_SOURCE_VIEW_MOVEMENT_FIRST_CHAR" "5")
+    '("first-nonspace-char" "IDE_SOURCE_VIEW_MOVEMENT_FIRST_NONSPACE_CHAR" "6")
+    '("middle-char" "IDE_SOURCE_VIEW_MOVEMENT_MIDDLE_CHAR" "7")
+    '("last-char" "IDE_SOURCE_VIEW_MOVEMENT_LAST_CHAR" "8")
+    '("next-word-start" "IDE_SOURCE_VIEW_MOVEMENT_NEXT_WORD_START" "9")
+    '("next-full-word-start" "IDE_SOURCE_VIEW_MOVEMENT_NEXT_FULL_WORD_START" "10")
+    '("next-sub-word-start" "IDE_SOURCE_VIEW_MOVEMENT_NEXT_SUB_WORD_START" "11")
+    '("previous-sub-word-start" "IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_SUB_WORD_START" "12")
+    '("previous-word-start" "IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_WORD_START" "13")
+    '("previous-full-word-start" "IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_FULL_WORD_START" "14")
+    '("previous-word-end" "IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_WORD_END" "15")
+    '("previous-full-word-end" "IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_FULL_WORD_END" "16")
+    '("next-word-end" "IDE_SOURCE_VIEW_MOVEMENT_NEXT_WORD_END" "17")
+    '("next-full-word-end" "IDE_SOURCE_VIEW_MOVEMENT_NEXT_FULL_WORD_END" "18")
+    '("sentence-start" "IDE_SOURCE_VIEW_MOVEMENT_SENTENCE_START" "19")
+    '("sentence-end" "IDE_SOURCE_VIEW_MOVEMENT_SENTENCE_END" "20")
+    '("paragraph-start" "IDE_SOURCE_VIEW_MOVEMENT_PARAGRAPH_START" "21")
+    '("paragraph-end" "IDE_SOURCE_VIEW_MOVEMENT_PARAGRAPH_END" "22")
+    '("previous-line" "IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_LINE" "23")
+    '("next-line" "IDE_SOURCE_VIEW_MOVEMENT_NEXT_LINE" "24")
+    '("first-line" "IDE_SOURCE_VIEW_MOVEMENT_FIRST_LINE" "25")
+    '("nth-line" "IDE_SOURCE_VIEW_MOVEMENT_NTH_LINE" "26")
+    '("last-line" "IDE_SOURCE_VIEW_MOVEMENT_LAST_LINE" "27")
+    '("line-percentage" "IDE_SOURCE_VIEW_MOVEMENT_LINE_PERCENTAGE" "28")
+    '("line-chars" "IDE_SOURCE_VIEW_MOVEMENT_LINE_CHARS" "29")
+    '("line-end" "IDE_SOURCE_VIEW_MOVEMENT_LINE_END" "30")
+    '("half-page-up" "IDE_SOURCE_VIEW_MOVEMENT_HALF_PAGE_UP" "31")
+    '("half-page-down" "IDE_SOURCE_VIEW_MOVEMENT_HALF_PAGE_DOWN" "32")
+    '("half-page-left" "IDE_SOURCE_VIEW_MOVEMENT_HALF_PAGE_LEFT" "33")
+    '("half-page-right" "IDE_SOURCE_VIEW_MOVEMENT_HALF_PAGE_RIGHT" "34")
+    '("page-up" "IDE_SOURCE_VIEW_MOVEMENT_PAGE_UP" "35")
+    '("page-down" "IDE_SOURCE_VIEW_MOVEMENT_PAGE_DOWN" "36")
+    '("screen-up" "IDE_SOURCE_VIEW_MOVEMENT_SCREEN_UP" "37")
+    '("screen-down" "IDE_SOURCE_VIEW_MOVEMENT_SCREEN_DOWN" "38")
+    '("screen-left" "IDE_SOURCE_VIEW_MOVEMENT_SCREEN_LEFT" "39")
+    '("screen-right" "IDE_SOURCE_VIEW_MOVEMENT_SCREEN_RIGHT" "40")
+    '("screen-top" "IDE_SOURCE_VIEW_MOVEMENT_SCREEN_TOP" "41")
+    '("screen-middle" "IDE_SOURCE_VIEW_MOVEMENT_SCREEN_MIDDLE" "42")
+    '("screen-bottom" "IDE_SOURCE_VIEW_MOVEMENT_SCREEN_BOTTOM" "43")
+    '("match-special" "IDE_SOURCE_VIEW_MOVEMENT_MATCH_SPECIAL" "44")
+    '("scroll-screen-top" "IDE_SOURCE_VIEW_MOVEMENT_SCROLL_SCREEN_TOP" "45")
+    '("scroll-screen-center" "IDE_SOURCE_VIEW_MOVEMENT_SCROLL_SCREEN_CENTER" "46")
+    '("scroll-screen-bottom" "IDE_SOURCE_VIEW_MOVEMENT_SCROLL_SCREEN_BOTTOM" "47")
+    '("scroll-screen-left" "IDE_SOURCE_VIEW_MOVEMENT_SCROLL_SCREEN_LEFT" "48")
+    '("scroll-screen-right" "IDE_SOURCE_VIEW_MOVEMENT_SCROLL_SCREEN_RIGHT" "49")
+    '("previous-unmatched-brace" "IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_UNMATCHED_BRACE" "50")
+    '("next-unmatched-brace" "IDE_SOURCE_VIEW_MOVEMENT_NEXT_UNMATCHED_BRACE" "51")
+    '("previous-unmatched-paren" "IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_UNMATCHED_PAREN" "52")
+    '("next-unmatched-paren" "IDE_SOURCE_VIEW_MOVEMENT_NEXT_UNMATCHED_PAREN" "53")
+    '("next-match-modifier" "IDE_SOURCE_VIEW_MOVEMENT_NEXT_MATCH_MODIFIER" "54")
+    '("previous-match-modifier" "IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_MATCH_MODIFIER" "55")
+    '("next-match-search-char" "IDE_SOURCE_VIEW_MOVEMENT_NEXT_MATCH_SEARCH_CHAR" "56")
+    '("previous-match-search-char" "IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_MATCH_SEARCH_CHAR" "57")
+  )
+)
+
+;; From ide-symbol.h
+
+;; Original typedef:
+;; typedef enum
+;; {
+;;   IDE_SYMBOL_NONE,
+;;   IDE_SYMBOL_SCALAR,
+;;   IDE_SYMBOL_CLASS,
+;;   IDE_SYMBOL_FUNCTION,
+;;   IDE_SYMBOL_METHOD,
+;;   IDE_SYMBOL_STRUCT,
+;;   IDE_SYMBOL_UNION,
+;;   IDE_SYMBOL_FIELD,
+;;   IDE_SYMBOL_ENUM,
+;;   IDE_SYMBOL_ENUM_VALUE,
+;;   IDE_SYMBOL_VARIABLE,
+;;   IDE_SYMBOL_HEADER,
+;; } IdeSymbolKind;
+
+(define-enum-extended SymbolKind
+  (in-module "Ide")
+  (c-name "IdeSymbolKind")
+  (values
+    '("none" "IDE_SYMBOL_NONE" "0")
+    '("scalar" "IDE_SYMBOL_SCALAR" "1")
+    '("class" "IDE_SYMBOL_CLASS" "2")
+    '("function" "IDE_SYMBOL_FUNCTION" "3")
+    '("method" "IDE_SYMBOL_METHOD" "4")
+    '("struct" "IDE_SYMBOL_STRUCT" "5")
+    '("union" "IDE_SYMBOL_UNION" "6")
+    '("field" "IDE_SYMBOL_FIELD" "7")
+    '("enum" "IDE_SYMBOL_ENUM" "8")
+    '("enum-value" "IDE_SYMBOL_ENUM_VALUE" "9")
+    '("variable" "IDE_SYMBOL_VARIABLE" "10")
+    '("header" "IDE_SYMBOL_HEADER" "11")
+  )
+)
+
+;; Original typedef:
+;; typedef enum
+;; {
+;;   IDE_SYMBOL_FLAGS_NONE          = 0,
+;;   IDE_SYMBOL_FLAGS_IS_STATIC     = 1 << 0,
+;;   IDE_SYMBOL_FLAGS_IS_MEMBER     = 1 << 1,
+;;   IDE_SYMBOL_FLAGS_IS_DEPRECATED = 1 << 2,
+;; } IdeSymbolFlags;
+
+(define-flags-extended SymbolFlags
+  (in-module "Ide")
+  (c-name "IdeSymbolFlags")
+  (values
+    '("none" "IDE_SYMBOL_FLAGS_NONE" "0x0")
+    '("is-static" "IDE_SYMBOL_FLAGS_IS_STATIC" "1 << 0")
+    '("is-member" "IDE_SYMBOL_FLAGS_IS_MEMBER" "1 << 1")
+    '("is-deprecated" "IDE_SYMBOL_FLAGS_IS_DEPRECATED" "1 << 2")
+  )
+)
+
+;; From ide-thread-pool.h
+
+;; Original typedef:
+;; typedef enum
+;; {
+;;   IDE_THREAD_POOL_COMPILER,
+;;   IDE_THREAD_POOL_INDEXER,
+;;   IDE_THREAD_POOL_LAST
+;; } IdeThreadPoolKind;
+
+(define-enum-extended ThreadPoolKind
+  (in-module "Ide")
+  (c-name "IdeThreadPoolKind")
+  (values
+    '("compiler" "IDE_THREAD_POOL_COMPILER" "0")
+    '("indexer" "IDE_THREAD_POOL_INDEXER" "1")
+    '("last" "IDE_THREAD_POOL_LAST" "2")
+  )
+)
+
+;; From ide-uri.h
+
+;; Original typedef:
+;; typedef enum
+;; {
+;;   IDE_URI_PARSE_STRICT      = 1 << 0,
+;;   IDE_URI_PARSE_HTML5       = 1 << 1,
+;;   IDE_URI_PARSE_NO_IRI      = 1 << 2,
+;;   IDE_URI_PARSE_PASSWORD    = 1 << 3,
+;;   IDE_URI_PARSE_AUTH_PARAMS = 1 << 4,
+;;   IDE_URI_PARSE_NON_DNS     = 1 << 5,
+;;   IDE_URI_PARSE_DECODED     = 1 << 6,
+;;   IDE_URI_PARSE_UTF8_ONLY   = 1 << 7
+;; } IdeUriParseFlags;
+
+(define-flags-extended UriParseFlags
+  (in-module "Ide")
+  (c-name "IdeUriParseFlags")
+  (values
+    '("strict" "IDE_URI_PARSE_STRICT" "1 << 0")
+    '("html5" "IDE_URI_PARSE_HTML5" "1 << 1")
+    '("no-iri" "IDE_URI_PARSE_NO_IRI" "1 << 2")
+    '("password" "IDE_URI_PARSE_PASSWORD" "1 << 3")
+    '("auth-params" "IDE_URI_PARSE_AUTH_PARAMS" "1 << 4")
+    '("non-dns" "IDE_URI_PARSE_NON_DNS" "1 << 5")
+    '("decoded" "IDE_URI_PARSE_DECODED" "1 << 6")
+    '("utf8-only" "IDE_URI_PARSE_UTF8_ONLY" "1 << 7")
+  )
+)
+
+;; Original typedef:
+;; typedef enum
+;; {
+;;   IDE_URI_HIDE_AUTH_PARAMS = 1 << 0,
+;;   IDE_URI_HIDE_FRAGMENT    = 1 << 1,
+;; } IdeUriToStringFlags;
+
+(define-flags-extended UriToStringFlags
+  (in-module "Ide")
+  (c-name "IdeUriToStringFlags")
+  (values
+    '("auth-params" "IDE_URI_HIDE_AUTH_PARAMS" "1 << 0")
+    '("fragment" "IDE_URI_HIDE_FRAGMENT" "1 << 1")
+  )
+)
+
+;; Original typedef:
+;; typedef enum
+;; {
+;;   IDE_URI_ERROR_MISC,
+;;   IDE_URI_ERROR_BAD_SCHEME,
+;;   IDE_URI_ERROR_BAD_USER,
+;;   IDE_URI_ERROR_BAD_PASSWORD,
+;;   IDE_URI_ERROR_BAD_AUTH_PARAMS,
+;;   IDE_URI_ERROR_BAD_HOST,
+;;   IDE_URI_ERROR_BAD_PORT,
+;;   IDE_URI_ERROR_BAD_PATH,
+;;   IDE_URI_ERROR_BAD_QUERY,
+;;   IDE_URI_ERROR_BAD_FRAGMENT
+;; } IdeUriError;
+
+(define-enum-extended UriError
+  (in-module "Ide")
+  (c-name "IdeUriError")
+  (values
+    '("misc" "IDE_URI_ERROR_MISC" "0")
+    '("bad-scheme" "IDE_URI_ERROR_BAD_SCHEME" "1")
+    '("bad-user" "IDE_URI_ERROR_BAD_USER" "2")
+    '("bad-password" "IDE_URI_ERROR_BAD_PASSWORD" "3")
+    '("bad-auth-params" "IDE_URI_ERROR_BAD_AUTH_PARAMS" "4")
+    '("bad-host" "IDE_URI_ERROR_BAD_HOST" "5")
+    '("bad-port" "IDE_URI_ERROR_BAD_PORT" "6")
+    '("bad-path" "IDE_URI_ERROR_BAD_PATH" "7")
+    '("bad-query" "IDE_URI_ERROR_BAD_QUERY" "8")
+    '("bad-fragment" "IDE_URI_ERROR_BAD_FRAGMENT" "9")
+  )
+)
+

@@ -1,0 +1,7000 @@
+<root>
+<signal name="IdeBuffer::cursor-moved">
+<description>
+This signal is emitted when the insertion location has moved. You might
+want to attach to this signal to update the location of the insert mark in
+the display.
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> An #IdeBuffer.
+</parameter_description>
+</parameter>
+<parameter name="location">
+<parameter_description> A #GtkTextIter.
+</parameter_description>
+</parameter>
+</parameters>
+<return></return>
+</signal>
+
+<signal name="IdeBuffer::line-flags-changed">
+<description>
+This signal is emitted when the calculated line flags have changed. This occurs when
+diagnostics and line changes have been recalculated.
+
+</description>
+<parameters>
+</parameters>
+<return></return>
+</signal>
+
+<signal name="IdeBuffer::loaded">
+<description>
+This signal is emitted when the buffer manager has completed loading the file.
+
+</description>
+<parameters>
+</parameters>
+<return></return>
+</signal>
+
+<signal name="IdeBuffer::saved">
+<description>
+This signal is emitted when the buffer manager has completed saving the file.
+
+</description>
+<parameters>
+</parameters>
+<return></return>
+</signal>
+
+<signal name="IdeBufferManager::buffer-focus-enter">
+<description>
+This signal is emitted when a view for @buffer has received focus. You might connect to this
+signal when you want to perform an operation while a buffer is in focus.
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> An #IdeBufferManager.
+</parameter_description>
+</parameter>
+<parameter name="buffer">
+<parameter_description> an #IdeBuffer.
+</parameter_description>
+</parameter>
+</parameters>
+<return></return>
+</signal>
+
+<signal name="IdeBufferManager::buffer-focus-leave">
+<description>
+This signal is emitted when the focus has left the view containing @buffer. You might connect
+to this signal to stop any work you were performing while the buffer was focused.
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> An #IdeBufferManager.
+</parameter_description>
+</parameter>
+<parameter name="buffer">
+<parameter_description> an #IdeBuffer.
+</parameter_description>
+</parameter>
+</parameters>
+<return></return>
+</signal>
+
+<signal name="IdeBufferManager::buffer-loaded">
+<description>
+This signal is emitted when a buffer has been successfully loaded. You might connect to this
+signal to be notified when a buffer has completed loading.
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> An #IdeBufferManager.
+</parameter_description>
+</parameter>
+<parameter name="buffer">
+<parameter_description> an #IdeBuffer.
+</parameter_description>
+</parameter>
+</parameters>
+<return></return>
+</signal>
+
+<signal name="IdeBufferManager::buffer-saved">
+<description>
+This signal is emitted when a buffer has finished saving to storage. You might connect to
+this signal if you want to know when the modifications have successfully been written to
+storage.
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> An #IdeBufferManager.
+</parameter_description>
+</parameter>
+<parameter name="buffer">
+<parameter_description> an #IdeBuffer.
+</parameter_description>
+</parameter>
+</parameters>
+<return></return>
+</signal>
+
+<signal name="IdeBufferManager::create-buffer">
+<description>
+This signal is emitted when there is a request to create a new buffer
+object. This allows subclasses of #IdeBuffer to be instantiated by the
+buffer manager.
+
+The first handler of this signal is responsible for returning an
+#IdeBuffer or %NULL, for which one will be created.
+
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> An #IdeBufferManager
+</parameter_description>
+</parameter>
+<parameter name="file">
+<parameter_description> An #IdeFile
+</parameter_description>
+</parameter>
+</parameters>
+<return> An #IdeBuffer or %NULL.
+</return>
+</signal>
+
+<signal name="IdeBufferManager::load-buffer">
+<description>
+This signal is emitted when a request has been made to load a buffer from storage. You might
+connect to this signal to be notified when loading of a buffer has begun.
+
+If @reloading is %TRUE, then the buffer is being force-reloaded due to changes
+from the host file-system.
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> An #IdeBufferManager.
+</parameter_description>
+</parameter>
+<parameter name="buffer">
+<parameter_description> an #IdeBuffer.
+</parameter_description>
+</parameter>
+<parameter name="reloading">
+<parameter_description> if the buffer is being reloaded
+</parameter_description>
+</parameter>
+</parameters>
+<return></return>
+</signal>
+
+<signal name="IdeBufferManager::save-buffer">
+<description>
+This signal is emitted when a request has been made to save a buffer. Connect to this signal
+if you'd like to perform mutation of the buffer before it is persisted to storage.
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> An #IdeBufferManager.
+</parameter_description>
+</parameter>
+<parameter name="buffer">
+<parameter_description> an #IdeBuffer.
+</parameter_description>
+</parameter>
+</parameters>
+<return></return>
+</signal>
+
+<signal name="IdeCompletionItem::match">
+<description>
+This virtual function checks to see if a particular query matches
+the #IdeCompletionItem in question. You can use helper functions
+defined in this module for simple requests like case-insensitive
+fuzzy matching.
+
+The default implementation of this virtual function performs a
+strstr() to match @query exactly in the items label.
+
+
+</description>
+<parameters>
+</parameters>
+<return> %TRUE if the item matches.
+</return>
+</signal>
+
+<signal name="IdeCompletionResults::compare">
+<description>
+Compares two completion items as they should be displayed.
+See ide_completion_results_invalidate_sort() to invalide the
+current sort settings.
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> An #IdeCompletionResults
+</parameter_description>
+</parameter>
+<parameter name="left">
+<parameter_description> An #IdeCompletionItem on the left hand side.
+</parameter_description>
+</parameter>
+<parameter name="right">
+<parameter_description> An #IdeCompletionItem on the right hand side.
+</parameter_description>
+</parameter>
+</parameters>
+<return></return>
+</signal>
+
+<signal name="IdeContext::loaded">
+<description>
+This signal is emitted when loading of the context has completed.
+Plugins and services might want to get notified of this to perform
+work that requires subsystems that may not be loaded during context
+startup.
+
+</description>
+<parameters>
+</parameters>
+<return></return>
+</signal>
+
+<signal name="IdeHighlighter::update">
+<description>
+#IdeHighlighter should call callback() with the range and style-name of
+the style to apply. Callback will ensure that the style exists and style
+it appropriately based on the style scheme.
+
+If @callback returns %IDE_HIGHLIGHT_STOP, the caller has run out of its
+time slice and should yield back to the highlight engine.
+
+@location should be set to the position that the highlighter got to
+before yielding back to the engine.
+
+</description>
+<parameters>
+</parameters>
+<return></return>
+</signal>
+
+<signal name="IdeLayoutStack::split">
+<description>
+Requests a split to be performed on the view.
+
+This should only be used by #IdeLayoutGrid.
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> A #IdeLayoutStack.
+</parameter_description>
+</parameter>
+<parameter name="view">
+<parameter_description> The #IdeLayoutView to split.
+</parameter_description>
+</parameter>
+<parameter name="split_type">
+<parameter_description> A #IdeLayoutGridSplit.
+</parameter_description>
+</parameter>
+</parameters>
+<return></return>
+</signal>
+
+<signal name="IdeProjectMiner::discovered">
+<description>
+This signal is emitted when a new project has been discovered by the miner.
+The signal will always be emitted from the primary thread (Gtk+) as long as
+ide_project_miner_emit_discovered() was used to emit the signal.
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> An #IdeProjectMiner
+</parameter_description>
+</parameter>
+<parameter name="project_info">
+<parameter_description> An #IdeProjectInfo
+</parameter_description>
+</parameter>
+</parameters>
+<return></return>
+</signal>
+
+<signal name="IdeSourceView::begin-macro">
+<description>
+This signal will begin recording input to the #IdeSourceView. This includes the current
+#IdeSourceViewMode, #IdeSourceView:count and #IdeSourceView:modifier which will be used
+to replay the sequence starting from the correct state.
+
+Pair this with an emission of #IdeSourceView::end-macro to complete the sequence.
+
+</description>
+<parameters>
+</parameters>
+<return></return>
+</signal>
+
+<signal name="IdeSourceView::capture-modifier">
+<description>
+This signal will block the main loop in a similar fashion to how
+gtk_dialog_run() performs until a key-press has occurred that can be
+captured for use in movements.
+
+Pressing Escape or unfocusing the widget will break from this loop.
+
+Use of this signal is not recommended except in very specific cases.
+
+</description>
+<parameters>
+</parameters>
+<return></return>
+</signal>
+
+<signal name="IdeSourceView::end-macro">
+<description>
+You should call #IdeSourceView::begin-macro before emitting this signal.
+
+Complete a macro recording sequence. This may be called more times than is necessary,
+since #IdeSourceView will only keep the most recent macro recording. This can be
+helpful when implementing recording sequences such as in Vim.
+
+</description>
+<parameters>
+</parameters>
+<return></return>
+</signal>
+
+<signal name="IdeSourceView::insert-modifier">
+<description>
+Inserts the current modifier character at the insert mark in the buffer.
+If @use_count is %TRUE, then the character will be inserted
+#IdeSourceView:count times.
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> An #IdeSourceView
+</parameter_description>
+</parameter>
+<parameter name="use_count">
+<parameter_description> If the count property should be used to repeat.
+</parameter_description>
+</parameter>
+</parameters>
+<return></return>
+</signal>
+
+<signal name="IdeSourceView::move-error">
+<description>
+Moves to the next search result either forwards or backwards.
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> An #IdeSourceView.
+</parameter_description>
+</parameter>
+<parameter name="dir">
+<parameter_description> The direction to move.
+</parameter_description>
+</parameter>
+</parameters>
+<return></return>
+</signal>
+
+<signal name="IdeSourceView::pop-selection">
+<description>
+Reselects a previousl selected range of text that was saved using
+IdeSourceView::push-selection.
+
+</description>
+<parameters>
+</parameters>
+<return></return>
+</signal>
+
+<signal name="IdeSourceView::pop-snippet">
+<description>
+Pops the current snippet from the sourceview if there is one.
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> An #IdeSourceView
+</parameter_description>
+</parameter>
+<parameter name="snippet">
+<parameter_description> An #IdeSourceSnippet.
+</parameter_description>
+</parameter>
+</parameters>
+<return></return>
+</signal>
+
+<signal name="IdeSourceView::push-selection">
+<description>
+Saves the current selection away to be restored by a call to
+IdeSourceView::pop-selection. You must pop the selection to keep
+the selection stack in consistent order.
+
+</description>
+<parameters>
+</parameters>
+<return></return>
+</signal>
+
+<signal name="IdeSourceView::push-snippet">
+<description>
+Pushes @snippet onto the snippet stack at either @iter or the insertion
+mark if @iter is not provided.
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> An #IdeSourceView
+</parameter_description>
+</parameter>
+<parameter name="snippet">
+<parameter_description> An #IdeSourceSnippet.
+</parameter_description>
+</parameter>
+<parameter name="iter">
+<parameter_description> The location for the snippet, or %NULL.
+</parameter_description>
+</parameter>
+</parameters>
+<return></return>
+</signal>
+
+<signal name="IdeSourceView::sort">
+<description>
+This signal is meant to be activated from keybindings to sort the currently selected lines.
+The lines are sorted using qsort() and either strcmp() or strcasecmp().
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> an #IdeSourceView.
+</parameter_description>
+</parameter>
+<parameter name="ignore_case">
+<parameter_description> If character case should be ignored.
+</parameter_description>
+</parameter>
+<parameter name="reverse">
+<parameter_description> If the lines should be sorted in reverse order
+</parameter_description>
+</parameter>
+</parameters>
+<return></return>
+</signal>
+
+<enum name="IdeSourceViewModeType">
+<description>
+The type of keyboard mode.
+
+</description>
+<parameters>
+<parameter name="IDE_SOURCE_VIEW_MODE_TRANSIENT">
+<parameter_description> Transient
+</parameter_description>
+</parameter>
+<parameter name="IDE_SOURCE_VIEW_MODE_PERMANENT">
+<parameter_description> Permanent
+</parameter_description>
+</parameter>
+<parameter name="IDE_SOURCE_VIEW_MODE_MODAL">
+<parameter_description> Modal
+</parameter_description>
+</parameter>
+</parameters>
+</enum>
+
+<enum name="IdeSourceViewMovement">
+<description>
+The type of movement.
+
+Some of these movements may be modified by using the modify-repeat action.
+First adjust the repeat and then perform the &quot;movement&quot; action.
+
+</description>
+<parameters>
+<parameter name="IDE_SOURCE_VIEW_MOVEMENT_NEXT_OFFSET">
+<parameter_description> move to next character in the file.
+This includes line breaks.
+</parameter_description>
+</parameter>
+<parameter name="IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_OFFSET">
+<parameter_description> move to previous character in the file.
+This includes line breaks.
+</parameter_description>
+</parameter>
+<parameter name="IDE_SOURCE_VIEW_MOVEMENT_NTH_CHAR">
+<parameter_description> move to nth character in line. Use a repeat to
+specify the target character within the line.
+</parameter_description>
+</parameter>
+<parameter name="IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_CHAR">
+<parameter_description> move to previous character in line.
+</parameter_description>
+</parameter>
+<parameter name="IDE_SOURCE_VIEW_MOVEMENT_NEXT_CHAR">
+<parameter_description> move to next character in line.
+</parameter_description>
+</parameter>
+<parameter name="IDE_SOURCE_VIEW_MOVEMENT_FIRST_CHAR">
+<parameter_description> move to line offset of zero.
+</parameter_description>
+</parameter>
+<parameter name="IDE_SOURCE_VIEW_MOVEMENT_FIRST_NONSPACE_CHAR">
+<parameter_description> move to first non-whitespace character in line.
+</parameter_description>
+</parameter>
+<parameter name="IDE_SOURCE_VIEW_MOVEMENT_MIDDLE_CHAR">
+<parameter_description> move to the middle character in the line.
+</parameter_description>
+</parameter>
+<parameter name="IDE_SOURCE_VIEW_MOVEMENT_LAST_CHAR">
+<parameter_description> move to the last character in the line. this can be
+inclusve or exclusive. inclusive is equivalent to %IDE_SOURCE_VIEW_MOVEMENT_LINE_END.
+</parameter_description>
+</parameter>
+<parameter name="IDE_SOURCE_VIEW_MOVEMENT_NEXT_SUB_WORD_START">
+<parameter_description> move to the next sub-word start, similar
+to the default in GtkTextView. This includes the underline character as a word break,
+as is common in Emacs.
+</parameter_description>
+</parameter>
+<parameter name="IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_SUB_WORD_START">
+<parameter_description> move to the previous sub-wird start,
+similar to the default in GtkTextView. This includes the underline character as a
+word break, as is common in Emacs.
+</parameter_description>
+</parameter>
+<parameter name="IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_WORD_START">
+<parameter_description> move to beginning of previous word.
+</parameter_description>
+</parameter>
+<parameter name="IDE_SOURCE_VIEW_MOVEMENT_NEXT_WORD_START">
+<parameter_description> move to beginning of next word.
+</parameter_description>
+</parameter>
+<parameter name="IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_WORD_END">
+<parameter_description> move to end of previous word.
+</parameter_description>
+</parameter>
+<parameter name="IDE_SOURCE_VIEW_MOVEMENT_NEXT_WORD_END">
+<parameter_description> move to end of next word.
+</parameter_description>
+</parameter>
+<parameter name="IDE_SOURCE_VIEW_MOVEMENT_SENTENCE_START">
+<parameter_description> move to beginning of sentance.
+</parameter_description>
+</parameter>
+<parameter name="IDE_SOURCE_VIEW_MOVEMENT_SENTENCE_END">
+<parameter_description> move to end of sentance.
+</parameter_description>
+</parameter>
+<parameter name="IDE_SOURCE_VIEW_MOVEMENT_PARAGRAPH_START">
+<parameter_description> move to start of paragraph.
+</parameter_description>
+</parameter>
+<parameter name="IDE_SOURCE_VIEW_MOVEMENT_PARAGRAPH_END">
+<parameter_description> move to end of paragraph.
+</parameter_description>
+</parameter>
+<parameter name="IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_LINE">
+<parameter_description> move to previous line, keeping line offset if possible.
+</parameter_description>
+</parameter>
+<parameter name="IDE_SOURCE_VIEW_MOVEMENT_NEXT_LINE">
+<parameter_description> move to next line, keeping line offset if possible.
+</parameter_description>
+</parameter>
+<parameter name="IDE_SOURCE_VIEW_MOVEMENT_FIRST_LINE">
+<parameter_description> move to first line in file, line offset of zero.
+</parameter_description>
+</parameter>
+<parameter name="IDE_SOURCE_VIEW_MOVEMENT_NTH_LINE">
+<parameter_description> move to nth line, line offset of zero. use repeat to
+select the given line number.
+</parameter_description>
+</parameter>
+<parameter name="IDE_SOURCE_VIEW_MOVEMENT_LAST_LINE">
+<parameter_description> move to last line in file, with line offset of zero.
+</parameter_description>
+</parameter>
+<parameter name="IDE_SOURCE_VIEW_MOVEMENT_LINE_PERCENTAGE">
+<parameter_description> move to line based on percentage. Use repeat to
+specify the percentage, 0 to 100.
+</parameter_description>
+</parameter>
+<parameter name="IDE_SOURCE_VIEW_MOVEMENT_LINE_CHARS">
+<parameter_description> special selection to select all line characters up to the
+cursor position. special care will be taken if the line is blank to select only the blank
+space if any. otherwise, the line break will be selected.
+</parameter_description>
+</parameter>
+<parameter name="IDE_SOURCE_VIEW_MOVEMENT_LINE_END">
+<parameter_description> This will move you to the location of the newline at the
+end of the current line. It does not support exclusive will not select the newline, while
+inclusive will select the newline.
+</parameter_description>
+</parameter>
+<parameter name="IDE_SOURCE_VIEW_MOVEMENT_HALF_PAGE_UP">
+<parameter_description> move half a page up.
+</parameter_description>
+</parameter>
+<parameter name="IDE_SOURCE_VIEW_MOVEMENT_HALF_PAGE_DOWN">
+<parameter_description> move half a page down.
+</parameter_description>
+</parameter>
+<parameter name="IDE_SOURCE_VIEW_MOVEMENT_HALF_PAGE_LEFT">
+<parameter_description> move half a page left.
+</parameter_description>
+</parameter>
+<parameter name="IDE_SOURCE_VIEW_MOVEMENT_HALF_PAGE_RIGHT">
+<parameter_description> move half a page right.
+</parameter_description>
+</parameter>
+<parameter name="IDE_SOURCE_VIEW_MOVEMENT_PAGE_UP">
+<parameter_description> move a full page up.
+</parameter_description>
+</parameter>
+<parameter name="IDE_SOURCE_VIEW_MOVEMENT_PAGE_DOWN">
+<parameter_description> move a full page down.
+</parameter_description>
+</parameter>
+<parameter name="IDE_SOURCE_VIEW_MOVEMENT_SCREEN_UP">
+<parameter_description> move to viewport up by visible line, adjusting cursor
+to stay on screen if necessary.
+</parameter_description>
+</parameter>
+<parameter name="IDE_SOURCE_VIEW_MOVEMENT_SCREEN_DOWN">
+<parameter_description> move to viewport down by visible line, adjusting cursor
+to stay on screen if necessary.
+</parameter_description>
+</parameter>
+<parameter name="IDE_SOURCE_VIEW_MOVEMENT_SCREEN_LEFT">
+<parameter_description> move to viewport left by visible char, adjusting cursor
+to stay on screen if necessary.
+</parameter_description>
+</parameter>
+<parameter name="IDE_SOURCE_VIEW_MOVEMENT_SCREEN_RIGHT">
+<parameter_description> move to viewport right by visible char, adjusting cursor
+to stay on screen if necessary.
+</parameter_description>
+</parameter>
+<parameter name="IDE_SOURCE_VIEW_MOVEMENT_SCREEN_TOP">
+<parameter_description> move to the top of the screen.
+</parameter_description>
+</parameter>
+<parameter name="IDE_SOURCE_VIEW_MOVEMENT_SCREEN_MIDDLE">
+<parameter_description> move to the middle of the screen.
+</parameter_description>
+</parameter>
+<parameter name="IDE_SOURCE_VIEW_MOVEMENT_SCREEN_BOTTOM">
+<parameter_description> move to the bottom of the screen.
+</parameter_description>
+</parameter>
+<parameter name="IDE_SOURCE_VIEW_MOVEMENT_MATCH_SPECIAL">
+<parameter_description> move to match of brace, bracket, comment.
+</parameter_description>
+</parameter>
+<parameter name="IDE_SOURCE_VIEW_MOVEMENT_SCROLL_SCREEN_TOP">
+<parameter_description> scroll until insert cursor or [count]th line is at screen top.
+</parameter_description>
+</parameter>
+<parameter name="IDE_SOURCE_VIEW_MOVEMENT_SCROLL_SCREEN_CENTER">
+<parameter_description> scroll until insert cursor or [count]th line is at screen center.
+</parameter_description>
+</parameter>
+<parameter name="IDE_SOURCE_VIEW_MOVEMENT_SCROLL_SCREEN_BOTTOM">
+<parameter_description> scroll until insert cursor or [count]th line is at screen bottom.
+</parameter_description>
+</parameter>
+<parameter name="IDE_SOURCE_VIEW_MOVEMENT_SCROLL_SCREEN_LEFT">
+<parameter_description> scroll until insert cursor or [count]th char is at screen left.
+</parameter_description>
+</parameter>
+<parameter name="IDE_SOURCE_VIEW_MOVEMENT_SCROLL_SCREEN_RIGHT">
+<parameter_description> scroll until insert cursor or [count]th char is at screen right.
+</parameter_description>
+</parameter>
+<parameter name="IDE_SOURCE_VIEW_MOVEMENT_NEXT_MATCH_SEARCH_CHAR">
+<parameter_description> move to the next matching char according to f and t in vim.
+</parameter_description>
+</parameter>
+<parameter name="IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_MATCH_SEARCH_CHAR">
+<parameter_description> move to the previous matching char according to F and T in vim.
+</parameter_description>
+</parameter>
+</parameters>
+</enum>
+
+<enum name="IdeSourceViewTheatric">
+<description>
+The style of theatric.
+
+</description>
+<parameters>
+<parameter name="IDE_SOURCE_VIEW_THEATRIC_EXPAND">
+<parameter_description> expand from selection location.
+</parameter_description>
+</parameter>
+<parameter name="IDE_SOURCE_VIEW_THEATRIC_SHRINK">
+<parameter_description> shrink from selection location.
+</parameter_description>
+</parameter>
+</parameters>
+</enum>
+
+<enum name="IdeUriError">
+<description>
+Error codes returned by #IdeUri methods.
+
+</description>
+<parameters>
+<parameter name="IDE_URI_ERROR_PARSE">
+<parameter_description> URI could not be parsed
+</parameter_description>
+</parameter>
+</parameters>
+</enum>
+
+<enum name="IdeUriParseFlags">
+<description>
+Flags that control how a URI string is parsed (or re-parsed).
+
+</description>
+<parameters>
+<parameter name="IDE_URI_PARSE_STRICT">
+<parameter_description> Parse the URI strictly according to the RFC
+3986 grammar.
+</parameter_description>
+</parameter>
+<parameter name="IDE_URI_PARSE_HTML5">
+<parameter_description> Parse the URI according to the HTML5 web
+address parsing rules.
+</parameter_description>
+</parameter>
+<parameter name="IDE_URI_PARSE_NO_IRI">
+<parameter_description> Disallow Internationalized URIs; return an
+error if the URI contains non-ASCII characters
+</parameter_description>
+</parameter>
+<parameter name="IDE_URI_PARSE_PASSWORD">
+<parameter_description> Split the userinfo into user and password,
+separated by ':'.
+</parameter_description>
+</parameter>
+<parameter name="IDE_URI_PARSE_AUTH_PARAMS">
+<parameter_description> Split the userinfo into user/password and
+parameters, separated by ';'.
+</parameter_description>
+</parameter>
+<parameter name="IDE_URI_PARSE_NON_DNS">
+<parameter_description> Do not parse the host as a DNS host/IP address.
+(Eg, for smb URIs with NetBIOS hostnames).
+</parameter_description>
+</parameter>
+<parameter name="IDE_URI_PARSE_DECODED">
+<parameter_description> Decode even reserved %&lt;!-- --&gt;encoded
+characters in the URI (unless this would result in non-UTF8
+strings). Using this flag means that you cannot reliably
+convert the parsed URI back to string form with
+ide_uri_to_string().
+</parameter_description>
+</parameter>
+<parameter name="IDE_URI_PARSE_UTF8_ONLY">
+<parameter_description> Return an error if non-UTF8 characters are
+encountered in the URI.
+</parameter_description>
+</parameter>
+</parameters>
+</enum>
+
+<signal name="IdeWorkbench::set-perspective">
+<description>
+This signal is meant for keybindings to change the current perspective.
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> An #IdeWorkbench
+</parameter_description>
+</parameter>
+<parameter name="name">
+<parameter_description> the name of the perspective
+</parameter_description>
+</parameter>
+</parameters>
+<return></return>
+</signal>
+
+<function name="ide_application_addin_load">
+<description>
+This interface method is called when the application is started or
+the plugin has just been activated.
+
+Use this to setup code in your plugin that needs to be loaded once
+per application process.
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> An #IdeApplicationAddin.
+</parameter_description>
+</parameter>
+<parameter name="application">
+<parameter_description> An #IdeApplication.
+</parameter_description>
+</parameter>
+</parameters>
+<return></return>
+</function>
+
+<function name="ide_application_addin_unload">
+<description>
+This inteface method is called when the application is shutting down
+or the plugin has been unloaded.
+
+Use this function to cleanup after anything setup in ide_application_addin_load().
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> An #IdeApplicationAddin.
+</parameter_description>
+</parameter>
+<parameter name="application">
+<parameter_description> An #IdeApplication.
+</parameter_description>
+</parameter>
+</parameters>
+<return></return>
+</function>
+
+<function name="ide_application_get_menu_by_id">
+<description>
+Similar to gtk_application_get_menu_by_id() but takes into account merging
+the menus provided by, and extended by, plugins.
+
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> An #IdeApplication.
+</parameter_description>
+</parameter>
+<parameter name="id">
+<parameter_description> The id of the menu to lookup.
+</parameter_description>
+</parameter>
+</parameters>
+<return> A #GMenu.
+</return>
+</function>
+
+<function name="ide_application_get_recent_projects">
+<description>
+This method will retreive an #IdeRecentProjects for the application that
+represents recent and discover projects on the system. The first time
+the #IdeRecentProjects is loaded, discovery of projects will occur. There
+is no need to call ide_recent_projects_discover_async().
+
+If you would like to display a spinner while discovery is in process, simply
+connect to the #IdeRecentProjects:busy: property notification.
+
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> An #IdeApplication.
+</parameter_description>
+</parameter>
+</parameters>
+<return> An #IdeRecentProjects.
+</return>
+</function>
+
+<function name="ide_application_get_started_at">
+<description>
+Gets the startup time of the application.
+
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> A #IdeApplication.
+</parameter_description>
+</parameter>
+</parameters>
+<return> A #GDateTime.
+</return>
+</function>
+
+<function name="ide_application_get_worker_async">
+<description>
+Asynchronously requests a #GDBusProxy to a service provided in a worker
+process. The worker should be an #IdeWorker implemented by the plugin named
+@plugin_name. The #IdeWorker is responsible for created both the service
+registered on the bus and the proxy to it.
+
+The #IdeApplication is responsible for spawning a subprocess for the worker.
+
+@callback should call ide_application_get_worker_finish() with the result
+provided to retrieve the result.
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> A #IdeApplication
+</parameter_description>
+</parameter>
+<parameter name="plugin_name">
+<parameter_description> The name of the plugin.
+</parameter_description>
+</parameter>
+<parameter name="cancellable">
+<parameter_description> A #GCancellable or %NULL.
+</parameter_description>
+</parameter>
+<parameter name="callback">
+<parameter_description> A #GAsyncReadyCallback or %NULL.
+</parameter_description>
+</parameter>
+<parameter name="user_data">
+<parameter_description> user data for @callback.
+</parameter_description>
+</parameter>
+</parameters>
+<return></return>
+</function>
+
+<function name="ide_application_get_worker_finish">
+<description>
+Completes an asynchronous request to get a proxy to a worker process.
+
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> A #IdeApplication.
+</parameter_description>
+</parameter>
+<parameter name="result">
+<parameter_description> A #GAsyncResult
+</parameter_description>
+</parameter>
+<parameter name="error">
+<parameter_description> a location for a #GError, or %NULL.
+</parameter_description>
+</parameter>
+</parameters>
+<return> A #GDBusProxy or %NULL.
+</return>
+</function>
+
+<function name="ide_application_tool_run_async">
+<description>
+Asynchronously runs an application tool. This is typically done on the
+command line using the `ide` command.
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> An #IdeApplicationTool
+</parameter_description>
+</parameter>
+<parameter name="arguments">
+<parameter_description> argv for the command
+</parameter_description>
+</parameter>
+<parameter name="cancellable">
+<parameter_description> A #GCancellable or %NULL
+</parameter_description>
+</parameter>
+<parameter name="callback">
+<parameter_description> A callback to execute upon completion
+</parameter_description>
+</parameter>
+<parameter name="user_data">
+<parameter_description> User data for @callback
+</parameter_description>
+</parameter>
+</parameters>
+<return></return>
+</function>
+
+<function name="ide_back_forward_list_branch">
+<description>
+Branches @self into a newly created #IdeBackForwardList.
+
+This can be used independently and then merged back into a global
+#IdeBackForwardList. This can be useful in situations where you have
+multiple sets of editors.
+
+
+</description>
+<parameters>
+</parameters>
+<return> An #IdeBackForwardList
+</return>
+</function>
+
+<function name="ide_back_forward_list_get_current_item">
+<description>
+Retrieves the current #IdeBackForwardItem or %NULL if no items have been
+added to the #IdeBackForwardList.
+
+
+</description>
+<parameters>
+</parameters>
+<return> An #IdeBackForwardItem or %NULL.
+</return>
+</function>
+
+<function name="ide_buffer_check_for_volume_change">
+<description>
+Update the #IdeBuffer:read-only property and the corresponding
+modification time (mtime).
+
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> A #IdeBuffer.
+</parameter_description>
+</parameter>
+</parameters>
+<return></return>
+</function>
+
+<function name="ide_buffer_get_busy">
+<description>
+Gets the #IdeBuffer:busy property.
+Return whether the buffer is performing background work or not.
+
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> A #IdeBuffer.
+</parameter_description>
+</parameter>
+</parameters>
+<return> %TRUE if the #IdeBuffer is performing background work. Otherwise %FALSE.
+</return>
+</function>
+
+<function name="ide_buffer_get_changed_on_volume">
+<description>
+Gets if the file backing the buffer has changed on the underlying storage.
+
+Use ide_buffer_manager_load_file_async() to reload the buffer.
+
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> A #IdeBuffer.
+</parameter_description>
+</parameter>
+</parameters>
+<return> %TRUE if the file has changed.
+</return>
+</function>
+
+<function name="ide_buffer_get_content">
+<description>
+Gets the contents of the buffer as GBytes.
+
+By using this function to get the bytes, you allow #IdeBuffer to avoid calculating the buffer
+text unnecessarily, potentially saving on allocations.
+
+Additionally, this allows the buffer to update the state in #IdeUnsavedFiles if the content
+is out of sync.
+
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> A #IdeBuffer.
+</parameter_description>
+</parameter>
+</parameters>
+<return> A #GBytes containing the buffer content.
+</return>
+</function>
+
+<function name="ide_buffer_get_context">
+<description>
+Gets the #IdeBuffer:context property. This is the #IdeContext that owns the buffer.
+
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> A #IdeBuffer.
+</parameter_description>
+</parameter>
+</parameters>
+<return> An #IdeContext.
+</return>
+</function>
+
+<function name="ide_buffer_get_diagnostic_at_iter">
+<description>
+Gets the first diagnostic that overlaps the position
+
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> A #IdeBuffer.
+</parameter_description>
+</parameter>
+<parameter name="iter">
+<parameter_description> a #GtkTextIter.
+</parameter_description>
+</parameter>
+</parameters>
+<return> An #IdeDiagnostic or %NULL.
+</return>
+</function>
+
+<function name="ide_buffer_get_file">
+<description>
+Gets the underlying file behind the buffer.
+
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> A #IdeBuffer.
+</parameter_description>
+</parameter>
+</parameters>
+<return> An #IdeFile.
+</return>
+</function>
+
+<function name="ide_buffer_get_has_diagnostics">
+<description>
+Gets the #IdeBuffer:has-diagnostics property.
+Return whether the buffer contains diagnostic messages or not.
+
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> A #IdeBuffer.
+</parameter_description>
+</parameter>
+</parameters>
+<return> %TRUE if the #IdeBuffer has diagnostics messages. Otherwise %FALSE.
+</return>
+</function>
+
+<function name="ide_buffer_get_highlight_diagnostics">
+<description>
+Gets the #IdeBuffer:highlight-diagnostics property.
+Return whether the diagnostic warnings and errors should be highlighted.
+
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> A #IdeBuffer.
+</parameter_description>
+</parameter>
+</parameters>
+<return> %TRUE if diagnostics are highlighted. Otherwise %FALSE.
+</return>
+</function>
+
+<function name="ide_buffer_get_iter_at_source_location">
+<description>
+Fill @iter with the position designated by @location.
+
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> A #IdeBuffer.
+</parameter_description>
+</parameter>
+<parameter name="iter">
+<parameter_description> a #GtkTextIter.
+</parameter_description>
+</parameter>
+<parameter name="location">
+<parameter_description> a #IdeSourceLocation.
+</parameter_description>
+</parameter>
+</parameters>
+<return></return>
+</function>
+
+<function name="ide_buffer_get_line_flags">
+<description>
+Return the flags set for the #IdeBuffer @line number.
+(diagnostics and errors messages, line changed or added, notes)
+
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> A #IdeBuffer.
+</parameter_description>
+</parameter>
+<parameter name="line">
+<parameter_description> a buffer line number.
+</parameter_description>
+</parameter>
+</parameters>
+<return> An #IdeBufferLineFlags struct.
+</return>
+</function>
+
+<function name="ide_buffer_get_read_only">
+<description>
+Gets the #IdeBuffer:read-only property. This property indicate if the underlying file is read only or not.
+
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> A #IdeBuffer.
+</parameter_description>
+</parameter>
+</parameters>
+<return> %TRUE if the #IdeBuffer is read only. Otherwise %FALSE.
+</return>
+</function>
+
+<function name="ide_buffer_get_selection_bounds">
+<description>
+This function acts like gtk_text_buffer_get_selection_bounds() except that it always
+places the location of the insert mark at @insert and the location of the selection
+mark at @selection.
+
+Calling gtk_text_iter_order() with the results of this function would be equivalent
+to calling gtk_text_buffer_get_selection_bounds().
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> A #IdeBuffer.
+</parameter_description>
+</parameter>
+<parameter name="insert">
+<parameter_description> A #GtkTextIter to get the insert position.
+</parameter_description>
+</parameter>
+<parameter name="selection">
+<parameter_description> A #GtkTextIter to get the selection position.
+</parameter_description>
+</parameter>
+</parameters>
+<return></return>
+</function>
+
+<function name="ide_buffer_get_style_scheme_name">
+<description>
+Gets the #IdeBuffer:style-scheme-name property.
+This property contains the current style scheme used by the buffer.
+
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> A #IdeBuffer.
+</parameter_description>
+</parameter>
+</parameters>
+<return> A string containing the name of the currently used style scheme.
+</return>
+</function>
+
+<function name="ide_buffer_get_symbol_at_location_async">
+<description>
+Asynchronously get a possible symbol at @location.
+
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> A #IdeBuffer.
+</parameter_description>
+</parameter>
+<parameter name="location">
+<parameter_description> a #GtkTextIter indicating a position to search for a symbol.
+</parameter_description>
+</parameter>
+<parameter name="cancellable">
+<parameter_description> A #GCancellable.
+</parameter_description>
+</parameter>
+<parameter name="callback">
+<parameter_description> A #GAsyncReadyCallback.
+</parameter_description>
+</parameter>
+<parameter name="user_data">
+<parameter_description> A #gpointer to hold user data.
+</parameter_description>
+</parameter>
+</parameters>
+<return></return>
+</function>
+
+<function name="ide_buffer_get_symbol_at_location_finish">
+<description>
+Completes an asynchronous request to locate a symbol at a location.
+
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> A #IdeBuffer.
+</parameter_description>
+</parameter>
+<parameter name="result">
+<parameter_description> A #GAsyncResult.
+</parameter_description>
+</parameter>
+<parameter name="error">
+<parameter_description> A #GError.
+</parameter_description>
+</parameter>
+</parameters>
+<return> An #IdeSymbol or %NULL.
+</return>
+</function>
+
+<function name="ide_buffer_get_symbol_resolver">
+<description>
+Gets the symbol resolver for the buffer based on the current language.
+
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> A #IdeBuffer.
+</parameter_description>
+</parameter>
+</parameters>
+<return> An #IdeSymbolResolver or %NULL.
+</return>
+</function>
+
+<function name="ide_buffer_get_symbols_finish">
+<description>
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> A #IdeBuffer.
+</parameter_description>
+</parameter>
+</parameters>
+<return> A #GPtrArray if successful;
+otherwise %NULL.
+</return>
+</function>
+
+<function name="ide_buffer_get_title">
+<description>
+Gets the #IdeBuffer:title property. This property contains a title for the buffer suitable
+for display.
+
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> A #IdeBuffer.
+</parameter_description>
+</parameter>
+</parameters>
+<return> A string containing the buffer title.
+</return>
+</function>
+
+<function name="ide_buffer_get_word_at_iter">
+<description>
+Gets the word found under the position denoted by @iter.
+
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> A #IdeBuffer.
+</parameter_description>
+</parameter>
+<parameter name="iter">
+<parameter_description> A #GtkTextIter.
+</parameter_description>
+</parameter>
+</parameters>
+<return> A newly allocated string.
+</return>
+</function>
+
+<function name="ide_buffer_manager_create_temporary_buffer">
+<description>
+Creates a new #IdeBuffer that does not yet have a backing file attached to it. Interfaces
+should perform a save-as operation to save the file to a real file.
+
+ide_file_get_file() will return %NULL to denote this type of buffer.
+
+
+</description>
+<parameters>
+</parameters>
+<return> A newly created #IdeBuffer
+</return>
+</function>
+
+<function name="ide_buffer_manager_find_buffer">
+<description>
+Gets the buffer for a given file. If it has not yet been loaded, %NULL is
+returned.
+
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> An #IdeBufferManager.
+</parameter_description>
+</parameter>
+<parameter name="file">
+<parameter_description> A #GFile.
+</parameter_description>
+</parameter>
+</parameters>
+<return> An #IdeBuffer or %NULL.
+</return>
+</function>
+
+<function name="ide_buffer_manager_get_auto_save">
+<description>
+Gets the #IdeBufferManager:auto-save property.
+
+If auto-save is enabled, then buffers managed by @self will be automatically
+persisted #IdeBufferManager:auto-save-timeout seconds after their last
+change.
+
+
+</description>
+<parameters>
+</parameters>
+<return> %TRUE if auto save is enabled. otherwise %FALSE.
+</return>
+</function>
+
+<function name="ide_buffer_manager_get_auto_save_timeout">
+<description>
+Gets the value of the #IdeBufferManager:auto-save-timeout property.
+
+
+</description>
+<parameters>
+</parameters>
+<return> The timeout in seconds if enabled, otherwise 0.
+</return>
+</function>
+
+<function name="ide_buffer_manager_get_buffers">
+<description>
+Returns a newly allocated #GPtrArray of all the buffers managed by the #IdeBufferManager
+instance.
+
+Buffers are generally not added to the buffer list until they have been loaded.
+
+
+</description>
+<parameters>
+</parameters>
+<return> A #GPtrArray of buffers.
+</return>
+</function>
+
+<function name="ide_buffer_manager_get_focus_buffer">
+<description>
+Gets the #IdeBufferManager:focus-buffer property. This the buffer behind
+the current selected view.
+
+
+</description>
+<parameters>
+</parameters>
+<return> An #IdeBuffer or %NULL.
+</return>
+</function>
+
+<function name="ide_buffer_manager_get_max_file_size">
+<description>
+Gets the #IdeBufferManager:max-file-size property. This contains the maximum file size in bytes
+that a file may be to be loaded by the #IdeBufferManager.
+
+If zero, no size limits will be enforced.
+
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> An #IdeBufferManager.
+</parameter_description>
+</parameter>
+</parameters>
+<return> A #gsize in bytes or zero.
+</return>
+</function>
+
+<function name="ide_buffer_manager_get_word_completion">
+<description>
+Gets the #GtkSourceCompletionWords completion provider that will complete
+words using the loaded documents.
+
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> A #IdeBufferManager.
+</parameter_description>
+</parameter>
+</parameters>
+<return> A #GtkSourceCompletionWords
+</return>
+</function>
+
+<function name="ide_buffer_manager_has_file">
+<description>
+Checks to see if the buffer manager has the file loaded.
+
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> An #IdeBufferManager.
+</parameter_description>
+</parameter>
+<parameter name="file">
+<parameter_description> An #IdeFile.
+</parameter_description>
+</parameter>
+</parameters>
+<return> %TRUE if @file is loaded.
+</return>
+</function>
+
+<function name="ide_buffer_manager_load_file_async">
+<description>
+Asynchronously requests that the file represented by @file is loaded. If the file is already
+loaded, the previously loaded version of the file will be returned, asynchronously.
+
+Before loading the file, #IdeBufferManager will check the file size to help protect itself
+from the user accidentally loading very large files. You can change the maximum size of file
+that will be loaded with the #IdeBufferManager:max-file-size property.
+
+See ide_buffer_manager_load_file_finish() for how to complete this asynchronous request.
+
+</description>
+<parameters>
+<parameter name="progress">
+<parameter_description> A location for an #IdeProgress or %NULL.
+</parameter_description>
+</parameter>
+</parameters>
+<return></return>
+</function>
+
+<function name="ide_buffer_manager_load_file_finish">
+<description>
+Completes an asynchronous request to load a file via ide_buffer_manager_load_file_async().
+If the buffer was already loaded, this function will return a reference to the previous buffer
+with it's reference count incremented by one.
+
+
+</description>
+<parameters>
+</parameters>
+<return> An #IdeBuffer if successf; otherwise %NULL and @error is set.
+</return>
+</function>
+
+<function name="ide_buffer_manager_save_file_async">
+<description>
+This function asynchronously requests that a buffer be saved to the storage represented by
+@file. @buffer should be a previously loaded buffer owned by @self, such as one loaded with
+ide_buffer_manager_load_file_async().
+
+Call ide_buffer_manager_save_file_finish() to complete this asynchronous request.
+
+</description>
+<parameters>
+</parameters>
+<return></return>
+</function>
+
+<function name="ide_buffer_manager_save_file_finish">
+<description>
+This function completes an asynchronous request to save a buffer to storage using
+ide_buffer_manager_save_file_async(). Upon failure, %FALSE is returned and @error is set.
+
+
+</description>
+<parameters>
+</parameters>
+<return> %TRUE if successful %FALSE upon failure and @error is set.
+</return>
+</function>
+
+<function name="ide_buffer_manager_set_auto_save">
+<description>
+Sets the #IdeBufferManager:auto-save property. If this is %TRUE, then a
+buffer will automatically be saved after #IdeBufferManager:auto-save-timeout
+seconds have elapsed since the buffers last modification.
+
+</description>
+<parameters>
+<parameter name="auto_save">
+<parameter_description> %TRUE if auto-save should be enabled.
+</parameter_description>
+</parameter>
+</parameters>
+<return></return>
+</function>
+
+<function name="ide_buffer_manager_set_auto_save_timeout">
+<description>
+Sets the #IdeBufferManager:auto-save-timeout property.
+
+You can set this property to 0 to use the default timeout.
+
+This is the number of seconds to wait after a buffer has been changed before
+automatically saving the buffer.
+
+</description>
+<parameters>
+<parameter name="auto_save_timeout">
+<parameter_description> The auto save timeout in seconds.
+</parameter_description>
+</parameter>
+</parameters>
+<return></return>
+</function>
+
+<function name="ide_buffer_manager_set_max_file_size">
+<description>
+Sets the maximum file size in bytes, that will be loaded by the #IdeBufferManager.
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> An #IdeBufferManager.
+</parameter_description>
+</parameter>
+<parameter name="max_file_size">
+<parameter_description> The maximum file size in bytes, or zero for no limit.
+</parameter_description>
+</parameter>
+</parameters>
+<return></return>
+</function>
+
+<function name="ide_buffer_rehighlight">
+<description>
+Force the #IdeBuffer to rebuild the highlight.
+
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> A #IdeBuffer.
+</parameter_description>
+</parameter>
+</parameters>
+<return></return>
+</function>
+
+<function name="ide_buffer_set_file">
+<description>
+Sets the underlying file to use when saving and loading @self to and from storage.
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> A #IdeBuffer.
+</parameter_description>
+</parameter>
+<parameter name="file">
+<parameter_description> An #IdeFile.
+</parameter_description>
+</parameter>
+</parameters>
+<return></return>
+</function>
+
+<function name="ide_buffer_set_highlight_diagnostics">
+<description>
+Sets the #IdeBuffer:highlight-diagnostics property.
+Sets whether the diagnostic warnings and errors should be highlighted.
+
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> A #IdeBuffer.
+</parameter_description>
+</parameter>
+<parameter name="highlight_diagnostics">
+<parameter_description> Whether to highlight the diagnostics or not.
+</parameter_description>
+</parameter>
+</parameters>
+<return></return>
+</function>
+
+<function name="ide_buffer_set_style_scheme_name">
+<description>
+Sets the #IdeBuffer:style-scheme-name property.
+Sets the style scheme to be used by this buffer.
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> A #IdeBuffer.
+</parameter_description>
+</parameter>
+<parameter name="style_scheme_name">
+<parameter_description> A string containing the name of the style scheme to use.
+</parameter_description>
+</parameter>
+</parameters>
+<return></return>
+</function>
+
+<function name="ide_buffer_trim_trailing_whitespace">
+<description>
+Trim trailing whitespaces from the buffer.
+
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> A #IdeBuffer.
+</parameter_description>
+</parameter>
+</parameters>
+<return></return>
+</function>
+
+<function name="ide_build_result_get_stderr_stream">
+<description>
+Fetches a merged stdedrr stream for all child processes of this build result.
+
+
+</description>
+<parameters>
+</parameters>
+<return> A #GInputStream.
+</return>
+</function>
+
+<function name="ide_build_result_get_stdout_stream">
+<description>
+Fetches a merged stdout stream for all child processes of this build result.
+
+
+</description>
+<parameters>
+</parameters>
+<return> A #GInputStream or %NULL.
+</return>
+</function>
+
+<function name="ide_build_system_get_build_flags_async">
+<description>
+Asynchronously requests the build flags for a file. For autotools and C based projects, this
+would be similar to the $CFLAGS variable and is suitable for generating warnings and errors
+with clang.
+
+</description>
+<parameters>
+</parameters>
+<return></return>
+</function>
+
+<function name="ide_build_system_get_build_flags_finish">
+<description>
+Completes an asynchronous request to get the build flags for a file.
+
+
+</description>
+<parameters>
+</parameters>
+<return> An array of strings
+containing the build flags, or %NULL upon failure and @error is set.
+</return>
+</function>
+
+<function name="ide_build_system_get_builder">
+<description>
+This function returns an #IdeBuilder that can be used to perform a
+build of the project using the configuration specified.
+
+See ide_builder_build_async() for more information.
+
+
+</description>
+<parameters>
+<parameter name="system">
+<parameter_description> The #IdeBuildSystem to perform the build.
+</parameter_description>
+</parameter>
+<parameter name="configuration">
+<parameter_description> An #IdeConfiguration.
+</parameter_description>
+</parameter>
+</parameters>
+<return> An #IdeBuilder or %NULL and @error is set.
+</return>
+</function>
+
+<function name="ide_build_system_new_async">
+<description>
+Asynchronously creates a new #IdeBuildSystem instance using the registered
+#GIOExtensionPoint system. Each extension point will be tried asynchronously
+by priority until one has been found that supports @project_file.
+
+If no build system could be found, then ide_build_system_new_finish() will
+return %NULL.
+
+</description>
+<parameters>
+<parameter name="context">
+<parameter_description> #IdeBuildSystem
+</parameter_description>
+</parameter>
+<parameter name="project_file">
+<parameter_description> A #GFile containing the directory or project file.
+</parameter_description>
+</parameter>
+<parameter name="cancellable">
+<parameter_description> A #GCancellable
+</parameter_description>
+</parameter>
+<parameter name="callback">
+<parameter_description> A callback to execute upon completion
+</parameter_description>
+</parameter>
+<parameter name="user_data">
+<parameter_description> User data for @callback.
+</parameter_description>
+</parameter>
+</parameters>
+<return></return>
+</function>
+
+<function name="ide_build_system_new_finish">
+<description>
+Complete an asynchronous call to ide_build_system_new_async().
+
+
+</description>
+<parameters>
+</parameters>
+<return> An #IdeBuildSystem if successful; otherwise
+%NULL and @error is set.
+</return>
+</function>
+
+<function name="ide_builder_build_async">
+<description>
+
+</description>
+<parameters>
+<parameter name="result">
+<parameter_description> A location for an #IdeBuildResult.
+</parameter_description>
+</parameter>
+</parameters>
+<return></return>
+</function>
+
+<function name="ide_builder_build_finish">
+<description>
+Completes an asynchronous request to build the project.
+
+
+</description>
+<parameters>
+</parameters>
+<return> An #IdeBuildResult or %NULL upon failure.
+</return>
+</function>
+
+<function name="ide_builder_get_configuration">
+<description>
+Gets the configuration to use for the builder.
+
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> An #IdeBuilder.
+</parameter_description>
+</parameter>
+</parameters>
+<return> An #IdeConfiguration.
+</return>
+</function>
+
+<function name="ide_completion_item_fuzzy_match">
+<description>
+This helper function can do a fuzzy match for you giving a haystack and
+casefolded needle. Casefold your needle using g_utf8_casefold() before
+running the query against a batch of #IdeCompletionItem for the best performance.
+
+score will be set with the score of the match upon success. Otherwise,
+it will be set to zero.
+
+
+</description>
+<parameters>
+<parameter name="haystack">
+<parameter_description> the string to be searched.
+</parameter_description>
+</parameter>
+<parameter name="casefold_needle">
+<parameter_description> A g_utf8_casefold() version of the needle.
+</parameter_description>
+</parameter>
+<parameter name="priority">
+<parameter_description> An optional location for the score of the match
+</parameter_description>
+</parameter>
+</parameters>
+<return> %TRUE if @haystack matched @casefold_needle, otherwise %FALSE.
+</return>
+</function>
+
+<function name="ide_completion_results_take_proposal">
+<description>
+
+</description>
+<parameters>
+<parameter name="proposal">
+<parameter_description> The completion item
+</parameter_description>
+</parameter>
+</parameters>
+<return></return>
+</function>
+
+<function name="ide_configuration_duplicate">
+<description>
+Copies the configuration into a new configuration.
+
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> An #IdeConfiguration
+</parameter_description>
+</parameter>
+</parameters>
+<return> An #IdeConfiguration.
+</return>
+</function>
+
+<function name="ide_configuration_get_device">
+<description>
+Gets the device for the configuration.
+
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> An #IdeConfiguration
+</parameter_description>
+</parameter>
+</parameters>
+<return> An #IdeDevice.
+</return>
+</function>
+
+<function name="ide_configuration_get_environ">
+<description>
+Gets the environment to use when spawning processes.
+
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> An #IdeConfiguration
+</parameter_description>
+</parameter>
+</parameters>
+<return> An array of key=value environment variables.
+</return>
+</function>
+
+<function name="ide_configuration_get_environment">
+<description>
+
+</description>
+<parameters>
+</parameters>
+<return> An #IdeEnvironment.
+</return>
+</function>
+
+<function name="ide_configuration_get_runtime">
+<description>
+Gets the runtime for the configuration.
+
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> An #IdeConfiguration
+</parameter_description>
+</parameter>
+</parameters>
+<return> An #IdeRuntime
+</return>
+</function>
+
+<function name="ide_configuration_get_sequence">
+<description>
+This returns a sequence number for the configuration. This is useful
+for build systems that want to clear the &quot;dirty&quot; bit on the configuration
+so that they need not bootstrap a second time. This should be done by
+checking the sequence number before executing the bootstrap, and only
+cleared if the sequence number matches after performing the bootstrap.
+This indicates no changes have been made to the configuration in the
+mean time.
+
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> An #IdeConfiguration
+</parameter_description>
+</parameter>
+</parameters>
+<return> A monotonic sequence number.
+</return>
+</function>
+
+<function name="ide_configuration_manager_get_configuration">
+<description>
+Gets the #IdeConfiguration by id. See ide_configuration_get_id().
+
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> An #IdeConfigurationManager
+</parameter_description>
+</parameter>
+<parameter name="id">
+<parameter_description> The string identifier of the configuration
+</parameter_description>
+</parameter>
+</parameters>
+<return> An #IdeConfiguration or %NULL if
+the configuration could not be found.
+</return>
+</function>
+
+<function name="ide_configuration_manager_get_current">
+<description>
+Gets the current configuration to use for building.
+
+Many systems allow you to pass a configuration in instead of relying on the
+default configuration. This sets the default configuration that various
+background items might use, such as tags builders which need to discover
+settings.
+
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> An #IdeConfigurationManager
+</parameter_description>
+</parameter>
+</parameters>
+<return> An #IdeConfiguration
+</return>
+</function>
+
+<function name="ide_context_get_back_forward_list">
+<description>
+Retrieves the global back forward list for the #IdeContext.
+
+Consumers of this should branch the #IdeBackForwardList and merge them
+when there document stack is closed.
+
+See ide_back_forward_list_branch() and ide_back_forward_list_merge() for
+more information.
+
+
+</description>
+<parameters>
+</parameters>
+<return> An #IdeBackForwardList.
+</return>
+</function>
+
+<function name="ide_context_get_buffer_manager">
+<description>
+Gets the #IdeContext:buffer-manager property. The buffer manager is responsible for loading
+and saving buffers (files) within the #IdeContext. It provides a convenient place for scripts
+to hook into the load and save process.
+
+
+</description>
+<parameters>
+</parameters>
+<return> An #IdeBufferManager.
+</return>
+</function>
+
+<function name="ide_context_get_build_system">
+<description>
+Fetches the &quot;build-system&quot; property of @context.
+
+
+</description>
+<parameters>
+</parameters>
+<return> An #IdeBuildSystem.
+</return>
+</function>
+
+<function name="ide_context_get_configuration_manager">
+<description>
+Gets the #IdeConfigurationManager for the context.
+
+The configuration manager is responsible for loading and saving
+configurations. Configurations consist of information about how to
+perform a particular build. Such information includes the target
+#IdeDevice, the #IdeRuntime to use, and various other build options.
+
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> An #IdeContext
+</parameter_description>
+</parameter>
+</parameters>
+<return> An #IdeConfigurationManager.
+</return>
+</function>
+
+<function name="ide_context_get_device_manager">
+<description>
+Retrieves the &quot;device-manager&quot; property. The device manager is responsible
+for connecting and disconnecting to physical or virtual devices within
+LibIDE.
+
+
+</description>
+<parameters>
+</parameters>
+<return> An #IdeDeviceManager.
+</return>
+</function>
+
+<function name="ide_context_get_project">
+<description>
+Retrieves the #IdeProject for the context.
+
+
+</description>
+<parameters>
+</parameters>
+<return> An #IdeContext.
+</return>
+</function>
+
+<function name="ide_context_get_project_file">
+<description>
+Retrieves a #GFile containing the project file that was used to load
+the context.
+
+
+</description>
+<parameters>
+</parameters>
+<return> A #GFile.
+</return>
+</function>
+
+<function name="ide_context_get_recent_manager">
+<description>
+Gets the IdeContext:recent-manager property. The recent manager is a GtkRecentManager instance
+that should be used for the workbench.
+
+
+</description>
+<parameters>
+</parameters>
+<return> A #GtkRecentManager.
+</return>
+</function>
+
+<function name="ide_context_get_root_build_dir">
+<description>
+Retrieves the &quot;root-build-dir&quot; for the context. This is the root directory
+that will contain builds made for various devices.
+
+
+</description>
+<parameters>
+</parameters>
+<return> A string containing the &quot;root-build-dir&quot; property.
+</return>
+</function>
+
+<function name="ide_context_get_runtime_manager">
+<description>
+Gets the #IdeRuntimeManager for the LibIDE context.
+
+The runtime manager provies access to #IdeRuntime instances via the
+#GListModel interface. These can provide support for building projects
+in various runtimes such as xdg-app.
+
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> An #IdeContext
+</parameter_description>
+</parameter>
+</parameters>
+<return> An #IdeRuntimeManager.
+</return>
+</function>
+
+<function name="ide_context_get_script_manager">
+<description>
+Retrieves the script manager for the context.
+
+
+</description>
+<parameters>
+</parameters>
+<return> An #IdeScriptManager.
+</return>
+</function>
+
+<function name="ide_context_get_search_engine">
+<description>
+Retrieves the search engine for the context.
+
+
+</description>
+<parameters>
+</parameters>
+<return> An #IdeSearchEngine.
+</return>
+</function>
+
+<function name="ide_context_get_service_typed">
+<description>
+Retrieves a service matching @service_type. If no match was found, a type
+implementing the requested service type will be returned. If no matching
+service type could be found, then an instance of the service will be
+created, started, and returned.
+
+
+</description>
+<parameters>
+<parameter name="service_type">
+<parameter_description> A #GType of the service desired.
+</parameter_description>
+</parameter>
+</parameters>
+<return> An #IdeService or %NULL.
+</return>
+</function>
+
+<function name="ide_context_get_settings">
+<description>
+Gets an #IdeSettings representing the given #GSettingsSchema.
+
+relative_path will be used to apply multiple layers of settings. Project settings will be
+applied to first, followed by global settings.
+
+
+</description>
+<parameters>
+</parameters>
+<return> An #IdeSettings.
+</return>
+</function>
+
+<function name="ide_context_get_snippets_manager">
+<description>
+Gets the #IdeContext:snippets-manager property.
+
+
+</description>
+<parameters>
+</parameters>
+<return> An #IdeSourceSnippetsManager.
+</return>
+</function>
+
+<function name="ide_context_get_unsaved_files">
+<description>
+Returns the unsaved files for the #IdeContext. These are the contents of
+open buffers in the IDE.
+
+
+</description>
+<parameters>
+</parameters>
+<return> An #IdeUnsavedFiles.
+</return>
+</function>
+
+<function name="ide_context_get_vcs">
+<description>
+Retrieves the #IdeVcs used to load the project. If no version control system
+could be found, this will return an #IdeDirectoryVcs.
+
+
+</description>
+<parameters>
+</parameters>
+<return> An #IdeVcs.
+</return>
+</function>
+
+<function name="ide_context_hold">
+<description>
+Puts a hold on the #IdeContext, preventing the context from being unloaded
+until a call to ide_context_release().
+
+If ide_context_unload_async() is called while a hold is in progress, the
+unload will be delayed until ide_context_release() has been called the
+same number of times as ide_context_hold().
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> the #IdeContext
+</parameter_description>
+</parameter>
+</parameters>
+<return></return>
+</function>
+
+<function name="ide_context_hold_for_object">
+<description>
+Adds a hold on @self for the lifetime of @instance.
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> An #IdeContext
+</parameter_description>
+</parameter>
+<parameter name="instance">
+<parameter_description> A #GObject instance
+</parameter_description>
+</parameter>
+</parameters>
+<return></return>
+</function>
+
+<function name="ide_context_new_finish">
+<description>
+
+</description>
+<parameters>
+</parameters>
+<return> An #IdeContext or %NULL upon failure and
+@error is set.
+</return>
+</function>
+
+<function name="ide_context_release">
+<description>
+Releases a hold on the context previously created with ide_context_hold().
+
+If a pending unload of the context has been requested, it will be dispatched
+once the hold count reaches zero.
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> the #IdeContext
+</parameter_description>
+</parameter>
+</parameters>
+<return></return>
+</function>
+
+<function name="ide_context_set_root_build_dir">
+<description>
+Sets the &quot;root-build-dir&quot; property. This is the root directory that will
+be used when building projects for projects that support building out of
+tree.
+
+</description>
+<parameters>
+<parameter name="root_build_dir">
+<parameter_description> the path to the root build directory.
+</parameter_description>
+</parameter>
+</parameters>
+<return></return>
+</function>
+
+<function name="ide_context_unload_async">
+<description>
+This function attempts to unload various components in the #IdeContext. This
+should be called before you dispose the context. Unsaved buffers will be
+persisted to the drafts directory.  More operations may be added in the
+future.
+
+If there is a hold on the #IdeContext, created by ide_context_hold(), then
+the unload request will be delayed until the appropriate number of calls to
+ide_context_release() have been called.
+
+</description>
+<parameters>
+</parameters>
+<return></return>
+</function>
+
+<function name="ide_device_get_display_name">
+<description>
+This function returns the name of the device. If no name has been set, then
+%NULL is returned.
+
+In some cases, this value wont be available until additional information
+has been probed from the device.
+
+
+</description>
+<parameters>
+</parameters>
+<return> A string containing the display name for the device.
+</return>
+</function>
+
+<function name="ide_device_get_id">
+<description>
+Retrieves the &quot;id&quot; property of the #IdeDevice. This is generally not a
+user friendly name as it is often a guid.
+
+
+</description>
+<parameters>
+</parameters>
+<return> A unique identifier for the device.
+</return>
+</function>
+
+<function name="ide_device_get_system_type">
+<description>
+This is the description of the system we are building for. Commonly, this
+is referred to as a &quot;system_type&quot;. A combination of the machine architecture
+such as x86_64, the operating system, and the libc.
+
+&quot;x86_64-linux-gnu&quot; might be one such system.
+
+
+</description>
+<parameters>
+</parameters>
+<return> A string containing the system type.
+</return>
+</function>
+
+<function name="ide_device_manager_get_device">
+<description>
+Fetches the first device that matches the device identifier @device_id.
+
+
+</description>
+<parameters>
+<parameter name="device_id">
+<parameter_description> The device identifier string.
+</parameter_description>
+</parameter>
+</parameters>
+<return> An #IdeDevice or %NULL.
+</return>
+</function>
+
+<function name="ide_device_manager_get_devices">
+<description>
+Retrieves all of the devices that are registered with the #IdeDeviceManager.
+
+
+</description>
+<parameters>
+</parameters>
+<return> An array of devices
+registered with the #IdeManager.
+</return>
+</function>
+
+<function name="ide_device_provider_get_devices">
+<description>
+Retrieves a list of devices currently managed by @provider.
+
+
+</description>
+<parameters>
+</parameters>
+<return> A #GPtrArray of
+#IdeDevice instances.
+</return>
+</function>
+
+<function name="ide_diagnostic_add_range">
+<description>
+Adds the range to the diagnostic. This allows diagnostic tools to highlight
+the errored text appropriately.
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> An #IdeDiagnostic.
+</parameter_description>
+</parameter>
+<parameter name="range">
+<parameter_description> An #IdeSourceRange.
+</parameter_description>
+</parameter>
+</parameters>
+<return></return>
+</function>
+
+<function name="ide_diagnostic_get_fixit">
+<description>
+Gets the fixit denoted by @index. This value should be less than the value
+returned from ide_diagnostic_get_num_fixits().
+
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> A #IdeDiagnostic.
+</parameter_description>
+</parameter>
+<parameter name="index">
+<parameter_description> The index of the fixit.
+</parameter_description>
+</parameter>
+</parameters>
+<return> An #IdeFixit.
+</return>
+</function>
+
+<function name="ide_diagnostic_get_location">
+<description>
+Gets the location of a diagnostic.
+
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> An #IdeDiagnostic.
+</parameter_description>
+</parameter>
+</parameters>
+<return> Gets the location of a diagnostic.
+</return>
+</function>
+
+<function name="ide_diagnostic_get_range">
+<description>
+Retrieves the range found at @index. It is a programming error to call this
+function with a value greater or equal to ide_diagnostic_get_num_ranges().
+
+
+</description>
+<parameters>
+</parameters>
+<return> An #IdeSourceRange
+</return>
+</function>
+
+<function name="ide_diagnostic_get_text_for_display">
+<description>
+This creates a new string that is formatted using the diagnostics line number, column, severity,
+and message text in the format &quot;line:column: severity: message&quot;.
+
+This can be convenient when wanting to quickly display a diagnostic such as in a tooltip.
+
+
+</description>
+<parameters>
+</parameters>
+<return> A string containing the text formatted for display.
+</return>
+</function>
+
+<function name="ide_diagnostic_new">
+<description>
+Creates a new diagnostic.
+
+If you want to set a range for the diagnostic, see
+ide_diagnostic_add_range() or ide_diagnostic_take_range().
+
+
+</description>
+<parameters>
+<parameter name="severity">
+<parameter_description> the severity of the diagnostic
+</parameter_description>
+</parameter>
+<parameter name="text">
+<parameter_description> the diagnostic message text
+</parameter_description>
+</parameter>
+<parameter name="location">
+<parameter_description> the location of the diagnostic
+</parameter_description>
+</parameter>
+</parameters>
+<return> An #IdeDiagnostic.
+</return>
+</function>
+
+<function name="ide_diagnostic_provider_diagnose_finish">
+<description>
+Completes an asynchronous call to ide_diagnostic_provider_diagnose_async().
+
+
+</description>
+<parameters>
+</parameters>
+<return> #IdeDiagnostics or %NULL and @error is set.
+</return>
+</function>
+
+<function name="ide_diagnostic_take_fixit">
+<description>
+Adds the suggested fixit to the diagnostic while transfering ownership
+of @fixit to @self.
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> A #IdeDiagnostic.
+</parameter_description>
+</parameter>
+<parameter name="fixit">
+<parameter_description> An #IdeFixit.
+</parameter_description>
+</parameter>
+</parameters>
+<return></return>
+</function>
+
+<function name="ide_diagnostic_take_range">
+<description>
+Steals the ownership of @range and adds to the diagnostic.
+
+This saves multiple atomic references of @range which could be expensive
+if you are doing lots of diagnostics.
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> A #IdeDiagnostic.
+</parameter_description>
+</parameter>
+<parameter name="range">
+<parameter_description> An #IdeSourceRange.
+</parameter_description>
+</parameter>
+</parameters>
+<return></return>
+</function>
+
+<function name="ide_diagnostician_get_language">
+<description>
+Gets the #IdeDiagnostician:language property.
+
+
+</description>
+<parameters>
+</parameters>
+<return> A #GtkSourceLanguage.
+</return>
+</function>
+
+<function name="ide_diagnostics_get_size">
+<description>
+Retrieves the number of diagnostics that can be accessed via
+ide_diagnostics_index().
+
+
+</description>
+<parameters>
+</parameters>
+<return> The number of diagnostics in @self.
+</return>
+</function>
+
+<function name="ide_diagnostics_index">
+<description>
+Retrieves the diagnostic at @index.
+
+
+</description>
+<parameters>
+</parameters>
+<return> An #IdeDiagnostic.
+</return>
+</function>
+
+<function name="ide_diagnostics_merge">
+<description>
+Copies the contents of @other into @self.
+
+This is performed by taking a reference to the immutable #IdeDiagnostic
+instances.
+
+</description>
+<parameters>
+</parameters>
+<return></return>
+</function>
+
+<function name="ide_diagnostics_new">
+<description>
+Creates a new #IdeDiagnostics container structure for @ar.
+Ownership of @ar is transfered to the resulting structure.
+
+
+</description>
+<parameters>
+<parameter name="ar">
+<parameter_description> an array of #IdeDiagnostic.
+</parameter_description>
+</parameter>
+</parameters>
+<return> A newly allocated #IdeDiagnostics.
+</return>
+</function>
+
+<function name="ide_dnd_get_uri_list">
+<description>
+Create a list of valid uri's from a uri-list drop.
+
+
+</description>
+<parameters>
+<parameter name="selection_data">
+<parameter_description> the #GtkSelectionData from drag_data_received
+</parameter_description>
+</parameter>
+</parameters>
+<return> a string array which will hold the uris or
+%NULL if there were no valid uris. g_strfreev should be used when
+the string array is no longer used
+</return>
+</function>
+
+<function name="ide_doap_get_languages">
+<description>
+
+</description>
+<parameters>
+</parameters>
+<return> A #GStrv.
+</return>
+</function>
+
+<function name="ide_doap_get_maintainers">
+<description>
+
+</description>
+<parameters>
+</parameters>
+<return> A #GList of #IdeDoapPerson.
+</return>
+</function>
+
+<function name="ide_editor_frame_get_document">
+<description>
+Gets the #IdeEditorFrame:document property.
+
+
+</description>
+<parameters>
+</parameters>
+<return> An #IdeBuffer or %NULL.
+</return>
+</function>
+
+<function name="ide_editor_frame_get_source_view">
+<description>
+Gets the #IdeEditorFrame:document property.
+
+
+</description>
+<parameters>
+</parameters>
+<return> An #IdeSourceView or %NULL.
+</return>
+</function>
+
+<function name="ide_editor_view_get_active_source_view">
+<description>
+
+</description>
+<parameters>
+</parameters>
+<return> An #IdeSourceView.
+</return>
+</function>
+
+<function name="ide_editor_view_get_document">
+<description>
+
+</description>
+<parameters>
+</parameters>
+<return> An #IdeBuffer.
+</return>
+</function>
+
+<function name="ide_environment_copy">
+<description>
+Copies the contents of #IdeEnvironment into a newly allocated #IdeEnvironment.
+
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> An #IdeEnvironment
+</parameter_description>
+</parameter>
+</parameters>
+<return> An #IdeEnvironment.
+</return>
+</function>
+
+<function name="ide_environment_editor_get_environment">
+<description>
+
+</description>
+<parameters>
+</parameters>
+<return> An #IdeEnvironment or %NULL.
+</return>
+</function>
+
+<function name="ide_environment_editor_row_get_variable">
+<description>
+
+</description>
+<parameters>
+</parameters>
+<return> An #IdeEnvironmentVariable.
+</return>
+</function>
+
+<function name="ide_environment_get_environ">
+<description>
+Gets the environment as a set of key=value pairs, suitable for use
+in various GLib process functions.
+
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> An #IdeEnvironment
+</parameter_description>
+</parameter>
+</parameters>
+<return> A newly allocated string array.
+</return>
+</function>
+
+<function name="ide_extension_adapter_get_engine">
+<description>
+Gets the #IdeExtensionAdapter:engine property.
+
+
+</description>
+<parameters>
+</parameters>
+<return> A #PeasEngine.
+</return>
+</function>
+
+<function name="ide_extension_adapter_get_extension">
+<description>
+Gets the extension object managed by the adapter.
+
+
+</description>
+<parameters>
+</parameters>
+<return> A #GObject or %NULL.
+</return>
+</function>
+
+<function name="ide_extension_adapter_new">
+<description>
+Creates a new #IdeExtensionAdapter.
+
+The #IdeExtensionAdapter object can be used to wrap an extension that might need to change
+at runtime based on various changing parameters. For example, it can watch the loading and
+unloading of plugins and reload the #IdeExtensionAdapter:extension property.
+
+Additionally, it can match a specific plugin based on the @value provided.
+
+This uses #IdeExtensionPoint to create the extension implementation, which means that
+extension points that are disabled (such as from the plugins GSettings) will be ignored.
+As such, if one plugin that is higher priority than another, but is disabled, will be
+ignored and the secondary plugin will be used.
+
+
+</description>
+<parameters>
+<parameter name="context">
+<parameter_description> An #IdeContext.
+</parameter_description>
+</parameter>
+<parameter name="engine">
+<parameter_description> A #PeasEngine or %NULL.
+</parameter_description>
+</parameter>
+<parameter name="interface_type">
+<parameter_description> The #GType of the interface to be implemented.
+</parameter_description>
+</parameter>
+<parameter name="key">
+<parameter_description> The key for matching extensions from plugin info external data.
+</parameter_description>
+</parameter>
+<parameter name="value">
+<parameter_description> The value to use when matching keys.
+</parameter_description>
+</parameter>
+</parameters>
+<return> A newly created #IdeExtensionAdapter.
+</return>
+</function>
+
+<function name="ide_extension_set_adapter_foreach">
+<description>
+Calls @foreach_func for every extension loaded by the extension set.
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> A #IdeExtensionSetAdapter
+</parameter_description>
+</parameter>
+<parameter name="foreach_func">
+<parameter_description> A callback
+</parameter_description>
+</parameter>
+<parameter name="user_data">
+<parameter_description> user data for @foreach_func
+</parameter_description>
+</parameter>
+</parameters>
+<return></return>
+</function>
+
+<function name="ide_extension_set_adapter_get_engine">
+<description>
+Gets the #IdeExtensionSetAdapter:engine property.
+
+
+</description>
+<parameters>
+</parameters>
+<return> A #PeasEngine.
+</return>
+</function>
+
+<function name="ide_file_find_other_finish">
+<description>
+Completes an asynchronous call to ide_file_find_other_async(). This function
+will try to find a matching file for languages where this exists. Such cases
+include C and C++ where a .c or .cpp file may have a .h or .hh header. Additional
+suffixes are implemented including (.c, .cc, .cpp, .cxx, .h, .hh, .hpp, and .hxx).
+
+
+</description>
+<parameters>
+</parameters>
+<return> An #IdeFIle or %NULL.
+</return>
+</function>
+
+<function name="ide_file_get_file">
+<description>
+Retrieves the underlying #GFile represented by @self.
+
+
+</description>
+<parameters>
+</parameters>
+<return> A #GFile.
+</return>
+</function>
+
+<function name="ide_file_get_language">
+<description>
+Retrieves the #GtkSourceLanguage that was discovered for the file.
+
+
+</description>
+<parameters>
+</parameters>
+<return> A #GtkSourceLanguage or %NULL.
+</return>
+</function>
+
+<function name="ide_file_get_temporary_id">
+<description>
+Gets the #IdeFile:temporary-id property for the file.
+
+Temporary files have unique identifiers associated with them so that we can
+display names such as &quot;unsaved file 1&quot; and know that it will not collide with
+another temporary file.
+
+Files that are not temporary, will return zero.
+
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> A #IdeFile.
+</parameter_description>
+</parameter>
+</parameters>
+<return> A positive integer greater than zero if the file is a temporary file.
+</return>
+</function>
+
+<function name="ide_file_load_settings_finish">
+<description>
+
+</description>
+<parameters>
+</parameters>
+<return> An #IdeFileSettings or %NULL upon failure and
+@error is set.
+</return>
+</function>
+
+<function name="ide_file_new">
+<description>
+Creates a new file.
+
+
+</description>
+<parameters>
+<parameter name="context">
+<parameter_description> An #IdeContext or %NULL.
+</parameter_description>
+</parameter>
+<parameter name="file">
+<parameter_description> a #GFile.
+</parameter_description>
+</parameter>
+</parameters>
+<return> An #IdeFile.
+</return>
+</function>
+
+<function name="ide_file_settings_get_file">
+<description>
+Retrieves the underlying file that @self refers to.
+
+This may be used by #IdeFileSettings implementations to discover additional
+information about the settings. For example, a modeline parser might load
+some portion of the file looking for modelines. An editorconfig
+implementation might look for &quot;.editorconfig&quot; files.
+
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> An #IdeFileSettings.
+</parameter_description>
+</parameter>
+</parameters>
+<return> An #IdeFile.
+</return>
+</function>
+
+<function name="ide_file_settings_get_settled">
+<description>
+Gets the #IdeFileSettings:settled property.
+
+This property is %TRUE when all of the children file settings have completed loading.
+
+Some file setting implementations require that various I/O be performed on disk in
+the background. This property will change to %TRUE when all of the settings have
+been loaded.
+
+Normally, this is not a problem, since the editor will respond to changes and update them
+accordingly. However, if you are writing a tool that prints the file settings
+(such as ide-list-file-settings), you probably want to wait until the values have
+settled.
+
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> An #IdeFileSettings.
+</parameter_description>
+</parameter>
+</parameters>
+<return> %TRUE if all the settings have loaded.
+</return>
+</function>
+
+<function name="ide_fixit_get_range">
+<description>
+Gets the range for the replacement text. The range is non inclusive of the
+end location. [a,b)
+
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> A #IdeFixit.
+</parameter_description>
+</parameter>
+</parameters>
+<return> An #IdeSourceRange.
+</return>
+</function>
+
+<function name="ide_fixit_get_text">
+<description>
+Gets the text to replace the source range with.
+
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> A #IdeFixit.
+</parameter_description>
+</parameter>
+</parameters>
+<return> A string with the replacement text.
+</return>
+</function>
+
+<function name="ide_genesis_addin_get_widget">
+<description>
+
+</description>
+<parameters>
+</parameters>
+<return> A #GtkWidget.
+</return>
+</function>
+
+<function name="ide_highlight_engine_get_buffer">
+<description>
+Gets the IdeHighlightEngine:buffer property.
+
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> A #IdeHighlightEngine.
+</parameter_description>
+</parameter>
+</parameters>
+<return> An #IdeBuffer.
+</return>
+</function>
+
+<function name="ide_highlight_engine_get_highlighter">
+<description>
+Gets the IdeHighlightEngine:highlighter property.
+
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> A #IdeHighlightEngine.
+</parameter_description>
+</parameter>
+</parameters>
+<return> An #IdeHighlighter.
+</return>
+</function>
+
+<function name="ide_highlight_engine_get_style">
+<description>
+A #GtkTextTag for @style_name.
+
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> the #IdeHighlightEngine
+</parameter_description>
+</parameter>
+<parameter name="style_name">
+<parameter_description> the name of the style to retrieve
+</parameter_description>
+</parameter>
+</parameters>
+<return> A #GtkTextTag.
+</return>
+</function>
+
+<function name="ide_highlight_engine_invalidate">
+<description>
+This function will extend the invalidated range of the buffer to include
+the range of @begin to @end.
+
+The highlighter will be queued to interactively update the invalidated
+region.
+
+Updating the invalidated region of the buffer may take some time, as it is
+important that the highlighter does not block for more than 1-2 milliseconds
+to avoid dropping frames.
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> An #IdeHighlightEngine.
+</parameter_description>
+</parameter>
+<parameter name="begin">
+<parameter_description> the beginning of the range to invalidate
+</parameter_description>
+</parameter>
+<parameter name="end">
+<parameter_description> the end of the range to invalidate
+</parameter_description>
+</parameter>
+</parameters>
+<return></return>
+</function>
+
+<function name="ide_highlight_index_lookup">
+<description>
+Gets the pointer tag that was registered for @word, or %NULL.  This can be
+any arbitrary value. Some highlight engines might use it to point at
+internal structures or strings they know about to optimize later work.
+
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> An #IdeHighlightIndex.
+</parameter_description>
+</parameter>
+</parameters>
+<return> Highlighter specific tag.
+</return>
+</function>
+
+<function name="ide_highlighter_update">
+<description>
+Incrementally processes more of the buffer for highlighting.  If @callback
+returns %IDE_HIGHLIGHT_STOP, then this vfunc should stop processing and
+return, having set @location to the current position of processing.
+
+If processing the entire range was successful, then @location should be set
+to @range_end.
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> A #IdeHighlighter.
+</parameter_description>
+</parameter>
+<parameter name="callback">
+<parameter_description> A callback to apply a given style.
+</parameter_description>
+</parameter>
+<parameter name="range_begin">
+<parameter_description> The beginning of the range to update.
+</parameter_description>
+</parameter>
+<parameter name="range_end">
+<parameter_description> The end of the range to update.
+</parameter_description>
+</parameter>
+<parameter name="location">
+<parameter_description> How far the highlighter got in the update.
+</parameter_description>
+</parameter>
+</parameters>
+<return></return>
+</function>
+
+<function name="ide_indenter_format">
+<description>
+This function performs an indentation for the key press activated by @event.
+The implementation is free to move the @begin and @end iters to swallow
+adjacent content. The result, a string, is the contents that will replace
+the content inbetween @begin and @end.
+
+@cursor_offset may be set to jump the cursor starting from @end. Negative
+values are allowed.
+
+
+</description>
+<parameters>
+<parameter name="text_view">
+<parameter_description> A #GtkTextView
+</parameter_description>
+</parameter>
+<parameter name="begin">
+<parameter_description> A #GtkTextIter for the beginning region of text to replace.
+</parameter_description>
+</parameter>
+<parameter name="end">
+<parameter_description> A #GtkTextIter for the end region of text to replace.
+</parameter_description>
+</parameter>
+<parameter name="cursor_offset">
+<parameter_description> The offset in characters from @end to place the
+cursor. Negative values are okay.
+</parameter_description>
+</parameter>
+<parameter name="event">
+<parameter_description> The #GdkEventKey that triggered the event.
+</parameter_description>
+</parameter>
+</parameters>
+<return> A string containing the replacement text, or %NULL.
+</return>
+</function>
+
+<function name="ide_indenter_is_trigger">
+<description>
+Determines if @event should trigger an indentation request. If %TRUE is
+returned then ide_indenter_format() will be called.
+
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> an #IdeIndenter
+</parameter_description>
+</parameter>
+<parameter name="event">
+<parameter_description> a #GdkEventKey
+</parameter_description>
+</parameter>
+</parameters>
+<return> %TRUE if @event should trigger an indentation request.
+</return>
+</function>
+
+<function name="ide_layout_get_active_view">
+<description>
+
+</description>
+<parameters>
+</parameters>
+<return> An #IdeLayoutView or %NULL.
+</return>
+</function>
+
+<function name="ide_layout_grid_add_stack_after">
+<description>
+
+</description>
+<parameters>
+</parameters>
+<return> The new view stack.
+</return>
+</function>
+
+<function name="ide_layout_grid_add_stack_before">
+<description>
+
+</description>
+<parameters>
+</parameters>
+<return> The new view stack.
+</return>
+</function>
+
+<function name="ide_layout_grid_foreach_view">
+<description>
+Calls @callback for every view found in the #IdeLayoutGrid.
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> A #IdeLayoutGrid.
+</parameter_description>
+</parameter>
+<parameter name="callback">
+<parameter_description> A #GtkCallback
+</parameter_description>
+</parameter>
+<parameter name="user_data">
+<parameter_description> user data for @callback.
+</parameter_description>
+</parameter>
+</parameters>
+<return></return>
+</function>
+
+<function name="ide_layout_grid_get_last_focus">
+<description>
+Gets the last focused #IdeLayoutStack.
+
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> A #IdeLayoutGrid.
+</parameter_description>
+</parameter>
+</parameters>
+<return> A #IdeLayoutStack or %NULL.
+</return>
+</function>
+
+<function name="ide_layout_grid_get_stack_after">
+<description>
+
+</description>
+<parameters>
+</parameters>
+<return> The view stack.
+</return>
+</function>
+
+<function name="ide_layout_grid_get_stack_before">
+<description>
+
+</description>
+<parameters>
+</parameters>
+<return> The view stack.
+</return>
+</function>
+
+<function name="ide_layout_grid_get_stacks">
+<description>
+Fetches all of the stacks in the grid. The resulting #GList should be
+freed with g_list_free().
+
+
+</description>
+<parameters>
+</parameters>
+<return> A #GList.
+</return>
+</function>
+
+<function name="ide_layout_stack_foreach_view">
+<description>
+
+</description>
+<parameters>
+<parameter name="callback">
+<parameter_description> A callback to invoke for each view.
+</parameter_description>
+</parameter>
+</parameters>
+<return></return>
+</function>
+
+<function name="ide_layout_stack_get_active_view">
+<description>
+
+</description>
+<parameters>
+</parameters>
+<return> A #GtkWidget or %NULL.
+</return>
+</function>
+
+<function name="ide_layout_view_create_split">
+<description>
+Creates a new view similar to @self that can be displayed in a split.
+If the view does not support splits, %NULL will be returned.
+
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> A #IdeLayoutView.
+</parameter_description>
+</parameter>
+</parameters>
+<return> A #IdeLayoutView.
+</return>
+</function>
+
+<function name="ide_layout_view_get_can_preview">
+<description>
+Checks if @self can create a preview view (such as html, markdown, etc).
+
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> A #IdeLayoutView.
+</parameter_description>
+</parameter>
+</parameters>
+<return> %TRUE if @self can create a preview view.
+</return>
+</function>
+
+<function name="ide_layout_view_get_can_split">
+<description>
+Checks if @self can create a split view. If so, %TRUE is returned. Otherwise, %FALSE.
+
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> A #IdeLayoutView.
+</parameter_description>
+</parameter>
+</parameters>
+<return> %TRUE if @self can create a split.
+</return>
+</function>
+
+<function name="ide_layout_view_get_controls">
+<description>
+Gets the controls for the view.
+
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> A #IdeLayoutView.
+</parameter_description>
+</parameter>
+</parameters>
+<return> A #GtkWidget.
+</return>
+</function>
+
+<function name="ide_layout_view_set_split_view">
+<description>
+Set a split view using GtkPaned style split with %GTK_ORIENTATION_VERTICAL.
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> A #IdeLayoutView.
+</parameter_description>
+</parameter>
+<parameter name="split_view">
+<parameter_description> if the split should be enabled.
+</parameter_description>
+</parameter>
+</parameters>
+<return></return>
+</function>
+
+<function name="ide_line_reader_next">
+<description>
+Moves forward to the beginning of the next line in the buffer. No changes to the buffer
+are made, and the result is a pointer within the string passed as @contents in
+ide_line_reader_init(). Since the line most likely will not be terminated with a NULL byte,
+you must provide @length to determine the length of the line.
+
+
+</description>
+<parameters>
+<parameter name="reader">
+<parameter_description> the #IdeLineReader
+</parameter_description>
+</parameter>
+<parameter name="length">
+<parameter_description> a location for the length of the line in bytes.
+</parameter_description>
+</parameter>
+</parameters>
+<return> The beginning of the line within the buffer.
+</return>
+</function>
+
+<function name="ide_log_get_thread">
+<description>
+Retrieves task id for the current thread. This is only supported on Linux.
+On other platforms, the current current thread pointer is retrieved.
+
+
+</description>
+<parameters>
+</parameters>
+<return> The task id.
+</return>
+</function>
+
+<function name="ide_log_handler">
+<description>
+Default log handler that will dispatch log messages to configured logging
+destinations.
+
+Side effects: None.
+
+</description>
+<parameters>
+<parameter name="log_domain">
+<parameter_description> A string containing the log section.
+</parameter_description>
+</parameter>
+<parameter name="log_level">
+<parameter_description> A #GLogLevelFlags.
+</parameter_description>
+</parameter>
+<parameter name="message">
+<parameter_description> The string message.
+</parameter_description>
+</parameter>
+<parameter name="user_data">
+<parameter_description> User data supplied to g_log_set_default_handler().
+</parameter_description>
+</parameter>
+</parameters>
+<return></return>
+</function>
+
+<function name="ide_log_increase_verbosity">
+<description>
+Increases the amount of logging that will occur. By default, only
+warning and above will be displayed.
+
+Calling this once will cause G_LOG_LEVEL_MESSAGE to be displayed.
+Calling this twice will cause G_LOG_LEVEL_INFO to be displayed.
+Calling this thrice will cause G_LOG_LEVEL_DEBUG to be displayed.
+Calling this four times will cause IDE_LOG_LEVEL_TRACE to be displayed.
+
+Note that many DEBUG and TRACE level log messages are only compiled into
+debug builds, and therefore will not be available in release builds.
+
+This method is meant to be called for every -v provided on the command
+line.
+
+Calling this method more than four times is acceptable.
+
+</description>
+<parameters>
+</parameters>
+<return></return>
+</function>
+
+<function name="ide_log_init">
+<description>
+Initializes the logging subsystem.
+
+</description>
+<parameters>
+<parameter name="stdout_">
+<parameter_description> Indicates logging should be written to stdout.
+</parameter_description>
+</parameter>
+<parameter name="filename">
+<parameter_description> An optional file in which to store logs.
+</parameter_description>
+</parameter>
+</parameters>
+<return></return>
+</function>
+
+<function name="ide_log_level_str">
+<description>
+Retrieves the log level as a string.
+
+
+</description>
+<parameters>
+<parameter name="log_level">
+<parameter_description> A #GLogLevelFlags.
+</parameter_description>
+</parameter>
+</parameters>
+<return> A string which shouldn't be modified or freed.
+Side effects: None.
+</return>
+</function>
+
+<function name="ide_log_shutdown">
+<description>
+Cleans up after the logging subsystem.
+
+</description>
+<parameters>
+</parameters>
+<return></return>
+</function>
+
+<function name="ide_log_write_to_channel">
+<description>
+Writes @message to @channel and flushes the channel.
+
+</description>
+<parameters>
+<parameter name="channel">
+<parameter_description> A #GIOChannel.
+</parameter_description>
+</parameter>
+<parameter name="message">
+<parameter_description> A string log message.
+</parameter_description>
+</parameter>
+</parameters>
+<return></return>
+</function>
+
+<function name="ide_object_get_context">
+<description>
+Fetches the #IdeObject:context property.
+
+
+</description>
+<parameters>
+</parameters>
+<return> An #IdeContext.
+</return>
+</function>
+
+<function name="ide_object_hold">
+<description>
+This function will acquire a reference to the IdeContext that the object
+is a part of. This is useful if you are going to be doing a long running
+task (such as something in a thread) and want to ensure the context cannot
+be unloaded during your operation.
+
+You should call ide_object_release() an equivalent number of times to
+ensure the context may be freed afterwards.
+
+You should check the return value of this function to ensure that the
+context is not already in shutdown.
+
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> the #IdeObject
+</parameter_description>
+</parameter>
+</parameters>
+<return> %TRUE if a hold was successfully created.
+</return>
+</function>
+
+<function name="ide_object_new_for_extension_async">
+<description>
+
+</description>
+<parameters>
+<parameter name="sort_priority_func">
+<parameter_description> A #GCompareDataFunc or %NULL.
+</parameter_description>
+</parameter>
+</parameters>
+<return></return>
+</function>
+
+<function name="ide_object_release">
+<description>
+Releases a successful hold on the context previously created with ide_object_hold().
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> the #IdeObject.
+</parameter_description>
+</parameter>
+</parameters>
+<return></return>
+</function>
+
+<function name="ide_omni_search_display_get_context">
+<description>
+
+</description>
+<parameters>
+</parameters>
+<return> An IdeSearchContext.
+</return>
+</function>
+
+<function name="ide_omni_search_entry_get_search_engine">
+<description>
+Gets the search engine to use with the current workbench.
+
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> An #IdeOmniSearchEntry.
+</parameter_description>
+</parameter>
+</parameters>
+<return> An #IdeSearchEngine.
+</return>
+</function>
+
+<function name="ide_omni_search_group_get_first">
+<description>
+
+</description>
+<parameters>
+</parameters>
+<return> An #IdeSearchResult or %NULL.
+</return>
+</function>
+
+<function name="ide_omni_search_group_get_provider">
+<description>
+
+</description>
+<parameters>
+</parameters>
+<return> An #IdeSearchProvider
+</return>
+</function>
+
+<function name="ide_omni_search_row_get_result">
+<description>
+
+</description>
+<parameters>
+</parameters>
+<return> An #IdeSearchResult.
+</return>
+</function>
+
+<function name="ide_perspective_agree_to_shutdown">
+<description>
+This interface method is called when the workbench would like to shutdown.
+If the perspective needs to focus and ask the user a question, this is the place
+to do so. You may run a #GtkDialog using gtk_dialog_run() or simply focus your
+perspective and return %FALSE.
+
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> An #IdePerspective.
+</parameter_description>
+</parameter>
+</parameters>
+<return> %TRUE to allow the workbench to continue shutting down.
+</return>
+</function>
+
+<function name="ide_perspective_get_actions">
+<description>
+This interface method should retrieve a #GActionGroup associated with the
+perspective, if necessary. The #GActionGroup will automatically be
+registered with the &quot;perspective&quot; action prefix while the perspective is
+active. A perspective is &quot;active&quot; when it is currently displayed in the
+workbench.
+
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> An #IdePerspective.
+</parameter_description>
+</parameter>
+</parameters>
+<return> A #GActionGroup or %NULL.
+</return>
+</function>
+
+<function name="ide_perspective_get_icon_name">
+<description>
+This interface methods retrieves the icon name to use when displaying the
+perspective selection sidebar.
+
+If you implement an &quot;icon-name&quot; property, the icon may change at runtime.
+
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> An #IdePerspective.
+</parameter_description>
+</parameter>
+</parameters>
+<return> A newly allcoated string that contains the icon-name
+to use for the perspective.
+</return>
+</function>
+
+<function name="ide_perspective_get_id">
+<description>
+This interface method is used to identify the perspective. It should be a short
+internal name, such as &quot;editor&quot; which should not be translated. Internally, the
+default implementation of this method will return the name of the instances #GType.
+
+This value should be unique per workspace.
+
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> An #IdePerspective
+</parameter_description>
+</parameter>
+</parameters>
+<return> A string identifier for the perspective.
+</return>
+</function>
+
+<function name="ide_perspective_get_needs_attention">
+<description>
+This interface method returns %TRUE if the interface needs attention.
+
+One such use of this would be to indicate that contents within a perspective have
+changed since the user last focused the perspective. This should also be implemented
+with a boolean property named &quot;needs-attention&quot;. If you call g_object_notify() (or one
+of its variants), the notifcation visual will be rendered with your icon.
+
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> An #IdePerspective.
+</parameter_description>
+</parameter>
+</parameters>
+<return> %TRUE if the perspective needs attention.
+</return>
+</function>
+
+<function name="ide_perspective_get_title">
+<description>
+This interface method gets the title of the perspective. This is used for tooltips
+in the perspective selector and potentially other UI components.
+
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> An #IdePerspective
+</parameter_description>
+</parameter>
+</parameters>
+<return> A string which will not be modified or freed.
+</return>
+</function>
+
+<function name="ide_perspective_get_titlebar">
+<description>
+This interface method should return a #GtkWidget suitable for being embedded as the
+titlebar for the application. If you return %NULL from this method, a suitable titlebar
+will be created for you.
+
+You may use #IdeHeaderBar for a base implementation to save you the trouble of
+creating a titlebar similar to other perspectives in Builder.
+
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> An #IdePerspective.
+</parameter_description>
+</parameter>
+</parameters>
+<return> A #GtkWidget or %NULL.
+</return>
+</function>
+
+<function name="ide_perspective_is_early">
+<description>
+If %TRUE, the perspective can be used before loading a project.
+
+</description>
+<parameters>
+</parameters>
+<return></return>
+</function>
+
+<function name="ide_perspective_set_fullscreen">
+<description>
+This interface method is used to notify the perspective that it is going into
+fullscreen mode. The #IdeWorkbench will notify the perspective before it is displayed.
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> An #IdePerspective.
+</parameter_description>
+</parameter>
+<parameter name="fullscreen">
+<parameter_description> If fullscreen mode should be activated.
+</parameter_description>
+</parameter>
+</parameters>
+<return></return>
+</function>
+
+<function name="ide_perspective_views_foreach">
+<description>
+This interface method is used to iterate all #IdeLayoutView's that are descendents of @self.
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> An #IdePerspective.
+</parameter_description>
+</parameter>
+<parameter name="callback">
+<parameter_description> A #GtkCallback.
+</parameter_description>
+</parameter>
+<parameter name="user_data">
+<parameter_description> user data for @callback.
+</parameter_description>
+</parameter>
+</parameters>
+<return></return>
+</function>
+
+<function name="ide_preference_remove_id">
+<description>
+
+</description>
+<parameters>
+<parameter name="widget_id">
+<parameter_description> An preferences widget id
+</parameter_description>
+</parameter>
+</parameters>
+<return></return>
+</function>
+
+<function name="ide_preferences_add_switch">
+<description>
+
+</description>
+<parameters>
+<parameter name="path">
+<parameter_description> An optional path
+</parameter_description>
+</parameter>
+<parameter name="variant_string">
+<parameter_description> An optional gvariant string
+</parameter_description>
+</parameter>
+<parameter name="title">
+<parameter_description> An optional title
+</parameter_description>
+</parameter>
+<parameter name="subtitle">
+<parameter_description> An optional subtitle
+</parameter_description>
+</parameter>
+<parameter name="keywords">
+<parameter_description> Optional keywords for search
+</parameter_description>
+</parameter>
+</parameters>
+<return></return>
+</function>
+
+<function name="ide_preferences_addin_load">
+<description>
+This interface method is called when a preferences addin is initialized. It could be
+initialized from multiple preferences implementations, so consumers should use the
+#IdePreferences interface to add their preferences controls to the container.
+
+Such implementations might include a preferences dialog window, or a preferences
+widget which could be rendered as a perspective.
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> An #IdePreferencesAddin.
+</parameter_description>
+</parameter>
+<parameter name="preferences">
+<parameter_description> The preferences container implementation.
+</parameter_description>
+</parameter>
+</parameters>
+<return></return>
+</function>
+
+<function name="ide_preferences_addin_unload">
+<description>
+This interface method is called when the preferences addin should remove all controls
+added to @preferences. This could happen during desctruction of @preferences, or when
+the plugin is unloaded.
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> An #IdePreferencesAddin.
+</parameter_description>
+</parameter>
+<parameter name="preferences">
+<parameter_description> The preferences container implementation.
+</parameter_description>
+</parameter>
+</parameters>
+<return></return>
+</function>
+
+<function name="ide_preferences_entry_get_title_widget">
+<description>
+
+</description>
+<parameters>
+</parameters>
+<return> A #GtkWidget
+</return>
+</function>
+
+<function name="ide_preferences_page_get_group">
+<description>
+
+</description>
+<parameters>
+</parameters>
+<return> An #IdePreferencesGroup or %NULL.
+</return>
+</function>
+
+<function name="ide_progress_file_progress_callback">
+<description>
+This function is a #GFileProgressCallback helper that will update the
+#IdeProgress:fraction property. @user_data must be an #IdeProgress.
+
+Remember to make sure to unref the #IdeProgress instance with
+g_object_unref() during the #GDestroyNotify.
+
+</description>
+<parameters>
+</parameters>
+<return></return>
+</function>
+
+<function name="ide_project_file_get_file">
+<description>
+Retrieves the underlying #GFile represented by @file.
+
+
+</description>
+<parameters>
+</parameters>
+<return> Retrieves the #GFile represented by @file.
+</return>
+</function>
+
+<function name="ide_project_file_get_file_info">
+<description>
+Retrieves a #GFileInfo containing the basic information about @file. This
+includes the name, display name, and file type.
+
+
+</description>
+<parameters>
+</parameters>
+<return> A #GFileInfo
+</return>
+</function>
+
+<function name="ide_project_files_find_file">
+<description>
+Tries to locate an #IdeProjectFile matching the given file.
+If @file is the working directory, @self is returned.
+
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> A #IdeProjectFiles.
+</parameter_description>
+</parameter>
+<parameter name="file">
+<parameter_description> A #GFile.
+</parameter_description>
+</parameter>
+</parameters>
+<return> An #IdeProjectItem or %NULL.
+</return>
+</function>
+
+<function name="ide_project_files_get_file_for_path">
+<description>
+Retrieves an #IdeFile for the path. If no such path exists within the
+project, %NULL is returned.
+
+
+</description>
+<parameters>
+</parameters>
+<return> An #IdeFile or %NULL.
+</return>
+</function>
+
+<function name="ide_project_get_file_for_path">
+<description>
+Retrieves an #IdeFile for the path specified. #IdeFile provides access to
+language specific features via ide_file_get_language().
+
+You must hold the reader lock while calling this function. See
+ide_project_reader_lock() and ide_project_reader_unlock() for more
+information.
+
+
+</description>
+<parameters>
+<parameter name="path">
+<parameter_description> A relative path from the project root.
+</parameter_description>
+</parameter>
+</parameters>
+<return> An #IdeFile or %NULL if no matching
+file could be found.
+</return>
+</function>
+
+<function name="ide_project_get_files">
+<description>
+Gets the #IdeProjectFiles instance within the project tree.
+If it has not yet been loaded, %NULL is returned.
+
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> A #IdeProject.
+</parameter_description>
+</parameter>
+</parameters>
+<return> An #IdeProjectFiles or %NULL.
+</return>
+</function>
+
+<function name="ide_project_get_project_file">
+<description>
+Gets a new #IdeFile representing @gfile.
+
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> A #IdeProject.
+</parameter_description>
+</parameter>
+<parameter name="gfile">
+<parameter_description> A #GFile.
+</parameter_description>
+</parameter>
+</parameters>
+<return> An #IdeFile.
+</return>
+</function>
+
+<function name="ide_project_get_root">
+<description>
+Retrieves the root item of the project tree.
+
+You must be holding the reader lock while calling and using the result of
+this function. Other thread may be accessing or modifying the tree without
+your knowledge. See ide_project_reader_lock() and ide_project_reader_unlock()
+for more information.
+
+If you need to modify the tree, you must hold a writer lock that has been
+acquired with ide_project_writer_lock() and released with
+ide_project_writer_unlock() when you are no longer modifiying the tree.
+
+
+</description>
+<parameters>
+</parameters>
+<return> An #IdeProjectItem.
+</return>
+</function>
+
+<function name="ide_project_info_get_directory">
+<description>
+Gets the #IdeProjectInfo:directory property.
+This is the directory containing the project (if known).
+
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> A #IdeProjectInfo.
+</parameter_description>
+</parameter>
+</parameters>
+<return> A #GFile.
+</return>
+</function>
+
+<function name="ide_project_info_get_doap">
+<description>
+
+</description>
+<parameters>
+</parameters>
+<return> An #IdeDoap or %NULL.
+</return>
+</function>
+
+<function name="ide_project_info_get_file">
+<description>
+Gets the #IdeProjectInfo:file property.
+This is the project file (such as configure.ac) of the project.
+
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> A #IdeProjectInfo.
+</parameter_description>
+</parameter>
+</parameters>
+<return> A #GFile.
+</return>
+</function>
+
+<function name="ide_project_info_get_languages">
+<description>
+
+</description>
+<parameters>
+</parameters>
+<return> An array of language names.
+</return>
+</function>
+
+<function name="ide_project_info_get_last_modified_at">
+<description>
+
+</description>
+<parameters>
+</parameters>
+<return> A #GDateTime or %NULL.
+</return>
+</function>
+
+<function name="ide_project_item_get_children">
+<description>
+A scalable list containing the children of the item.
+
+
+</description>
+<parameters>
+</parameters>
+<return> A #GSequence.
+</return>
+</function>
+
+<function name="ide_project_item_get_parent">
+<description>
+Retrieves the parent #IdeProjectItem of @item, or %NULL if @item is the root
+of the project tree.
+
+
+</description>
+<parameters>
+</parameters>
+<return> An #IdeProjectItem or %NULL if the item
+is the root of the tree.
+</return>
+</function>
+
+<function name="ide_project_template_expand_async">
+<description>
+Asynchronously requests expansion of the template.
+
+This may involve creating files and directories on disk as well as
+expanding files based on the contents of @params.
+
+It is expected that this method is only called once on an #IdeProjectTemplate.
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> an #IdeProjectTemplate
+</parameter_description>
+</parameter>
+<parameter name="params">
+<parameter_description> A hashtable of template parameters.
+</parameter_description>
+</parameter>
+<parameter name="cancellable">
+<parameter_description> A #GCancellable or %NULL.
+</parameter_description>
+</parameter>
+<parameter name="callback">
+<parameter_description> the callback for the asynchronous operation.
+</parameter_description>
+</parameter>
+<parameter name="user_data">
+<parameter_description> user data for @callback.
+</parameter_description>
+</parameter>
+</parameters>
+<return></return>
+</function>
+
+<function name="ide_project_template_get_languages">
+<description>
+Gets the list of languages that this template can support when generating
+the project.
+
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> an #IdeProjectTemplate
+</parameter_description>
+</parameter>
+</parameters>
+<return> A newly allocated, NULL terminated list of
+supported languages.
+</return>
+</function>
+
+<function name="ide_project_template_get_widget">
+<description>
+Get's the configuration widget for the template if there is one.
+
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> An #IdeProjectTemplate
+</parameter_description>
+</parameter>
+</parameters>
+<return> A #GtkWidget.
+</return>
+</function>
+
+<function name="ide_recent_projects_get_projects">
+<description>
+Gets a #GPtrArray containing the #IdeProjectInfo that have been discovered.
+
+
+</description>
+<parameters>
+</parameters>
+<return> A #GPtrArray of #IdeProjectInfo.
+</return>
+</function>
+
+<function name="ide_recent_projects_remove">
+<description>
+Removes the provided projects from the recent projects file.
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> An #IdeRecentProjects
+</parameter_description>
+</parameter>
+<parameter name="project_infos">
+<parameter_description> A #GList of #IdeProjectInfo.
+</parameter_description>
+</parameter>
+</parameters>
+<return></return>
+</function>
+
+<function name="ide_runtime_create_launcher">
+<description>
+Creates a launcher for the runtime.
+
+This can be used to execute a command within a runtime.
+If you are doing a build, you probably want to ensure you call
+ide_runtime_prebuild_async() before using the launcher.
+
+It is important that this function can be run from a thread without
+side effects.
+
+
+</description>
+<parameters>
+</parameters>
+<return> An #IdeSubprocessLauncher or %NULL upon failure.
+</return>
+</function>
+
+<function name="ide_runtime_manager_get_runtime">
+<description>
+Gets the runtime by it's internal identifier.
+
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> An #IdeRuntimeManager
+</parameter_description>
+</parameter>
+<parameter name="id">
+<parameter_description> the identifier of the runtime
+</parameter_description>
+</parameter>
+</parameters>
+<return> An #IdeRuntime.
+</return>
+</function>
+
+<function name="ide_script_get_file">
+<description>
+Returns a #GFile pointing to the location of the script on disk.
+
+
+</description>
+<parameters>
+</parameters>
+<return> A #GFile
+</return>
+</function>
+
+<function name="ide_search_context_get_providers">
+<description>
+Retrieve the list of providers for the search context.
+
+
+</description>
+<parameters>
+</parameters>
+<return> A #GList of
+#IdeSearchProvider.
+</return>
+</function>
+
+<function name="ide_search_engine_search">
+<description>
+Begins a query against the requested search providers.
+
+If @providers is %NULL, all registered providers will be used.
+
+
+</description>
+<parameters>
+<parameter name="search_terms">
+<parameter_description> The search terms.
+</parameter_description>
+</parameter>
+</parameters>
+<return> An #IdeSearchContext or %NULL if no
+providers could be loaded.
+</return>
+</function>
+
+<function name="ide_search_provider_create_row">
+<description>
+Create a row to display the search result.
+
+
+</description>
+<parameters>
+<parameter name="provider">
+<parameter_description> A #IdeSearchProvider.
+</parameter_description>
+</parameter>
+<parameter name="result">
+<parameter_description> A #IdeSearchResult.
+</parameter_description>
+</parameter>
+</parameters>
+<return> A #GtkWidget.
+</return>
+</function>
+
+<function name="ide_search_result_get_provider">
+<description>
+Gets the provider that created the search result.
+
+
+</description>
+<parameters>
+<parameter name="result">
+<parameter_description> A #IdeSearchResult.
+</parameter_description>
+</parameter>
+</parameters>
+<return> An #IdeSearchProvider.
+</return>
+</function>
+
+<function name="ide_settings_bind_with_mapping">
+<description>
+Like ide_settings_bind() but allows transforming to and from settings storage using
+@get_mapping and @set_mapping transformation functions.
+
+Call ide_settings_unbind() to unbind the mapping.
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> An #IdeSettings
+</parameter_description>
+</parameter>
+<parameter name="key">
+<parameter_description> The settings key
+</parameter_description>
+</parameter>
+<parameter name="object">
+<parameter_description> the object to bind to
+</parameter_description>
+</parameter>
+<parameter name="property">
+<parameter_description> the property of @object to bind to
+</parameter_description>
+</parameter>
+<parameter name="flags">
+<parameter_description> flags for the binding
+</parameter_description>
+</parameter>
+<parameter name="get_mapping">
+<parameter_description> variant to value mapping
+</parameter_description>
+</parameter>
+<parameter name="set_mapping">
+<parameter_description> value to variant mapping
+</parameter_description>
+</parameter>
+<parameter name="user_data">
+<parameter_description> user data for @get_mapping and @set_mapping
+</parameter_description>
+</parameter>
+<parameter name="destroy">
+<parameter_description> destroy function to cleanup @user_data.
+</parameter_description>
+</parameter>
+</parameters>
+<return></return>
+</function>
+
+<function name="ide_source_location_get_file">
+<description>
+The file represented by this source location.
+
+
+</description>
+<parameters>
+</parameters>
+<return> An #IdeFile.
+</return>
+</function>
+
+<function name="ide_source_location_get_line">
+<description>
+Retrieves the target line number starting from 0.
+
+
+</description>
+<parameters>
+</parameters>
+<return> A #guint containing the target line.
+</return>
+</function>
+
+<function name="ide_source_location_get_line_offset">
+<description>
+Retrieves the character offset within the line.
+
+
+</description>
+<parameters>
+</parameters>
+<return> A #guint containing the offset within the line.
+</return>
+</function>
+
+<function name="ide_source_location_get_offset">
+<description>
+Retrieves the character offset within the file.
+
+
+</description>
+<parameters>
+</parameters>
+<return> A #guint containing the character offset within the file.
+</return>
+</function>
+
+<function name="ide_source_location_get_uri">
+<description>
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> A #IdeSourceLocation.
+</parameter_description>
+</parameter>
+</parameters>
+<return> A newly allocated #IdeUri.
+</return>
+</function>
+
+<function name="ide_source_location_new">
+<description>
+Creates a new #IdeSourceLocation, using the file, line, column, and character
+offset provided.
+
+
+</description>
+<parameters>
+<parameter name="file">
+<parameter_description> an #IdeFile
+</parameter_description>
+</parameter>
+<parameter name="line">
+<parameter_description> the line number starting from zero
+</parameter_description>
+</parameter>
+<parameter name="line_offset">
+<parameter_description> the character offset within the line
+</parameter_description>
+</parameter>
+<parameter name="offset">
+<parameter_description> the character offset in the file
+</parameter_description>
+</parameter>
+</parameters>
+<return> A newly allocated #IdeSourceLocation.
+</return>
+</function>
+
+<function name="ide_source_location_ref">
+<description>
+Increments the reference count of @self by one.
+
+
+</description>
+<parameters>
+</parameters>
+<return> self
+</return>
+</function>
+
+<function name="ide_source_location_unref">
+<description>
+Decrements the reference count of @self by one. If the reference count
+reaches zero, then the structure is freed.
+
+</description>
+<parameters>
+</parameters>
+<return></return>
+</function>
+
+<function name="ide_source_range_get_begin">
+<description>
+Gets the beginning of the source range.
+
+
+</description>
+<parameters>
+</parameters>
+<return> An #IdeSourceLocation.
+</return>
+</function>
+
+<function name="ide_source_range_get_end">
+<description>
+Gets the end of the source range.
+
+
+</description>
+<parameters>
+</parameters>
+<return> An #IdeSourceLocation.
+</return>
+</function>
+
+<function name="ide_source_range_ref">
+<description>
+Increments the reference count of @self by one. When you are done with
+@self, release it by calling ide_source_range_unref().
+
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> An #IdeSourceRange
+</parameter_description>
+</parameter>
+</parameters>
+<return> @self
+</return>
+</function>
+
+<function name="ide_source_range_unref">
+<description>
+Decrements the reference count of @self by one.
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> An #IdeSourceRange
+</parameter_description>
+</parameter>
+</parameters>
+<return></return>
+</function>
+
+<function name="ide_source_snippet_chunk_copy">
+<description>
+Copies the source snippet.
+
+
+</description>
+<parameters>
+</parameters>
+<return> An #IdeSourceSnippetChunk.
+</return>
+</function>
+
+<function name="ide_source_snippet_chunk_get_context">
+<description>
+Gets the context for the snippet insertion.
+
+
+</description>
+<parameters>
+</parameters>
+<return> An #IdeSourceSnippetContext.
+</return>
+</function>
+
+<function name="ide_source_snippet_copy">
+<description>
+
+</description>
+<parameters>
+</parameters>
+<return> An #IdeSourceSnippet.
+</return>
+</function>
+
+<function name="ide_source_snippet_get_context">
+<description>
+
+</description>
+<parameters>
+</parameters>
+<return>
+</return>
+</function>
+
+<function name="ide_source_snippet_get_mark_begin">
+<description>
+
+</description>
+<parameters>
+</parameters>
+<return>
+</return>
+</function>
+
+<function name="ide_source_snippet_get_mark_end">
+<description>
+
+</description>
+<parameters>
+</parameters>
+<return>
+</return>
+</function>
+
+<function name="ide_source_snippet_get_nth_chunk">
+<description>
+
+</description>
+<parameters>
+</parameters>
+<return>
+</return>
+</function>
+
+<function name="ide_source_snippets_foreach">
+<description>
+
+</description>
+<parameters>
+<parameter name="foreach_func">
+<parameter_description> A callback to execute for each snippet.
+</parameter_description>
+</parameter>
+</parameters>
+<return></return>
+</function>
+
+<function name="ide_source_snippets_manager_get_for_language">
+<description>
+Gets the snippets for a given source language.
+
+
+</description>
+<parameters>
+</parameters>
+<return> An #IdeSourceSnippets or %NULL.
+</return>
+</function>
+
+<function name="ide_source_snippets_manager_get_for_language_id">
+<description>
+Gets the snippets for a given source language.
+
+
+</description>
+<parameters>
+</parameters>
+<return> An #IdeSourceSnippets or %NULL.
+</return>
+</function>
+
+<function name="ide_source_view_get_back_forward_list">
+<description>
+Gets the #IdeSourceView:back-forward-list property. This is the list that is used to manage
+navigation history between multiple #IdeSourceView.
+
+
+</description>
+<parameters>
+</parameters>
+<return> An #IdeBackForwardList or %NULL.
+</return>
+</function>
+
+<function name="ide_source_view_get_current_snippet">
+<description>
+Gets the current snippet if there is one, otherwise %NULL.
+
+
+</description>
+<parameters>
+</parameters>
+<return> An #IdeSourceSnippet or %NULL.
+</return>
+</function>
+
+<function name="ide_source_view_get_file_settings">
+<description>
+Gets the #IdeSourceView:file-settings property. This contains various
+settings for how the file should be rendered in the view, and preferences
+such as spaces vs tabs.
+
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> A #IdeSourceView.
+</parameter_description>
+</parameter>
+</parameters>
+<return> An #IdeFileSettings or %NULL.
+</return>
+</function>
+
+<function name="ide_source_view_get_scroll_offset">
+<description>
+Gets the #IdeSourceView:scroll-offset property. This property contains the number of lines
+that should be kept above or below the line containing the insertion cursor relative to the
+top and bottom of the visible text window.
+
+</description>
+<parameters>
+</parameters>
+<return></return>
+</function>
+
+<function name="ide_source_view_get_search_context">
+<description>
+Returns the #GtkSourceSearchContext for the source view if there is one.
+
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> An #IdeSourceView.
+</parameter_description>
+</parameter>
+</parameters>
+<return> A #GtkSourceSearchContext or %NULL.
+</return>
+</function>
+
+<function name="ide_source_view_get_search_direction">
+<description>
+Gets the current search direction.
+
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> An #IdeSourceView.
+</parameter_description>
+</parameter>
+</parameters>
+<return> A #GtkDirectionType
+</return>
+</function>
+
+<function name="ide_source_view_get_show_search_bubbles">
+<description>
+Gets the #IdeSourceView:show-search-bubbles property.
+
+If this is set to %TRUE, a bubble will be drawn around search results to
+make them stand out.
+
+The default is %FALSE.
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> An #IdeSourceView.
+</parameter_description>
+</parameter>
+</parameters>
+<return></return>
+</function>
+
+<function name="ide_source_view_get_show_search_shadow">
+<description>
+Gets the #IdeSourceView:show-search-shadow property.
+
+If this property is %TRUE, then when searching, a shadow will be drawn over
+the portion of the visible region that does not contain a match. This can
+be used to help bring focus to the matches.
+
+The default is %FALSE.
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> An #IdeSourceView.
+</parameter_description>
+</parameter>
+</parameters>
+<return></return>
+</function>
+
+<function name="ide_source_view_get_snippet_completion">
+<description>
+Gets the #IdeSourceView:snippet-completion property.
+
+If enabled, snippet expansion can be performed via the auto completion drop down.
+
+</description>
+<parameters>
+</parameters>
+<return></return>
+</function>
+
+<function name="ide_source_view_get_visible_rect">
+<description>
+Gets the visible region in buffer coordinates that is the visible area of the buffer. This
+is similar to gtk_text_view_get_visible_area() except that it takes into account the
+#IdeSourceView:scroll-offset property to ensure there is space above and below the
+visible_rect.
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> An #IdeSourceView.
+</parameter_description>
+</parameter>
+<parameter name="visible_rect">
+<parameter_description> A #GdkRectangle.
+</parameter_description>
+</parameter>
+</parameters>
+<return></return>
+</function>
+
+<function name="ide_source_view_push_snippet">
+<description>
+Pushes a new snippet onto the source view.
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> An #IdeSourceView
+</parameter_description>
+</parameter>
+<parameter name="snippet">
+<parameter_description> An #IdeSourceSnippet.
+</parameter_description>
+</parameter>
+<parameter name="location">
+<parameter_description> A location for the snippet or %NULL.
+</parameter_description>
+</parameter>
+</parameters>
+<return></return>
+</function>
+
+<function name="ide_source_view_set_scroll_offset">
+<description>
+Sets the #IdeSourceView:scroll-offset property. See ide_source_view_get_scroll_offset() for
+more information. Set to 0 to unset this property.
+
+</description>
+<parameters>
+</parameters>
+<return></return>
+</function>
+
+<function name="ide_source_view_set_search_direction">
+<description>
+Sets the search direction.
+
+This can be used to invert the normal search direction so that a forward
+movement is towards the beginning of the document.
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> An #IdeSourceView.
+</parameter_description>
+</parameter>
+<parameter name="direction">
+<parameter_description> the direction
+</parameter_description>
+</parameter>
+</parameters>
+<return></return>
+</function>
+
+<function name="ide_source_view_set_snippet_completion">
+<description>
+Sets the #IdeSourceView:snippet-completion property. By setting this property to %TRUE,
+snippets will be loaded for the currently activated source code language. See #IdeSourceSnippet
+for more information on what can be provided via a snippet.
+
+See also: ide_source_view_get_snippet_completion()
+
+</description>
+<parameters>
+</parameters>
+<return></return>
+</function>
+
+<function name="ide_subprocess_launcher_push_args">
+<description>
+
+</description>
+<parameters>
+<parameter name="args">
+<parameter_description> the arguments
+</parameter_description>
+</parameter>
+</parameters>
+<return></return>
+</function>
+
+<function name="ide_subprocess_launcher_spawn_finish">
+<description>
+Complete a request to asynchronously spawn a process.
+
+
+</description>
+<parameters>
+</parameters>
+<return> A #GSubprocess or %NULL upon error.
+</return>
+</function>
+
+<function name="ide_subprocess_launcher_spawn_sync">
+<description>
+Synchronously spawn a process using the internal state.
+
+
+</description>
+<parameters>
+</parameters>
+<return> A #GSubprocess or %NULL upon error.
+</return>
+</function>
+
+<function name="ide_symbol_get_canonical_location">
+<description>
+Gets the location of the symbols &quot;implementation&quot;. In C/C++ languages, you can have multiple
+declarations by only a single implementation.
+
+
+</description>
+<parameters>
+</parameters>
+<return> An #IdeSourceLocation or %NULL.
+</return>
+</function>
+
+<function name="ide_symbol_get_declaration_location">
+<description>
+The location of a symbol equates to the declaration of the symbol. In C and C++, this would
+mean the header location (or forward declaration in a C file before the implementation).
+
+If the symbol provider did not register this information, %NULL will be returned.
+
+
+</description>
+<parameters>
+</parameters>
+<return> An #IdeSourceLocation or %NULL.
+</return>
+</function>
+
+<function name="ide_symbol_get_definition_location">
+<description>
+Like ide_symbol_get_declaration_location() but gets the first declaration (only one can be
+the definition).
+
+
+</description>
+<parameters>
+</parameters>
+<return> An #IdeSourceLocation or %NULL.
+</return>
+</function>
+
+<function name="ide_symbol_new">
+<description>
+
+</description>
+<parameters>
+<parameter name="name">
+<parameter_description> the symbol name
+</parameter_description>
+</parameter>
+<parameter name="kind">
+<parameter_description> the symbol kind
+</parameter_description>
+</parameter>
+<parameter name="flags">
+<parameter_description> the symbol flags
+</parameter_description>
+</parameter>
+<parameter name="declaration_location">
+<parameter_description> the declaration location
+</parameter_description>
+</parameter>
+<parameter name="definition_location">
+<parameter_description> the definition location
+</parameter_description>
+</parameter>
+<parameter name="canonical_location">
+<parameter_description> the canonical location
+</parameter_description>
+</parameter>
+</parameters>
+<return> a new #IdeSymbol.
+</return>
+</function>
+
+<function name="ide_symbol_node_get_location">
+<description>
+Gets the location for the symbol node.
+
+
+</description>
+<parameters>
+</parameters>
+<return> An #IdeSourceLocation or %NULL.
+</return>
+</function>
+
+<function name="ide_symbol_resolver_get_symbol_tree_async">
+<description>
+Asynchronously fetch an up to date symbol tree for @file.
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> An #IdeSymbolResolver
+</parameter_description>
+</parameter>
+<parameter name="file">
+<parameter_description> A #GFile
+</parameter_description>
+</parameter>
+<parameter name="cancellable">
+<parameter_description> a #GCancellable or %NULL.
+</parameter_description>
+</parameter>
+<parameter name="callback">
+<parameter_description> a callback to execute upon completion
+</parameter_description>
+</parameter>
+<parameter name="user_data">
+<parameter_description> user data for @callback
+</parameter_description>
+</parameter>
+</parameters>
+<return></return>
+</function>
+
+<function name="ide_symbol_resolver_get_symbol_tree_finish">
+<description>
+Completes an asynchronous request to get the symbol tree for the requested file.
+
+
+</description>
+<parameters>
+</parameters>
+<return> An #IdeSymbolTree; otherwise %NULL and @error is set.
+</return>
+</function>
+
+<function name="ide_symbol_resolver_lookup_symbol_async">
+<description>
+Asynchronously requests that @self determine the symbol existing at the source location
+denoted by @self. @callback should call ide_symbol_resolver_lookup_symbol_finish() to
+retrieve the result.
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> An #IdeSymbolResolver.
+</parameter_description>
+</parameter>
+<parameter name="location">
+<parameter_description> An #IdeSourceLocation.
+</parameter_description>
+</parameter>
+<parameter name="cancellable">
+<parameter_description> A #GCancellable or %NULL.
+</parameter_description>
+</parameter>
+<parameter name="callback">
+<parameter_description> A callback to execute upon completion.
+</parameter_description>
+</parameter>
+<parameter name="user_data">
+<parameter_description> user data for @callback.
+</parameter_description>
+</parameter>
+</parameters>
+<return></return>
+</function>
+
+<function name="ide_symbol_resolver_lookup_symbol_finish">
+<description>
+Completes an asynchronous call to lookup a symbol using
+ide_symbol_resolver_lookup_symbol_async().
+
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> An #IdeSymbolResolver.
+</parameter_description>
+</parameter>
+<parameter name="result">
+<parameter_description> A #GAsyncResult provided to the callback.
+</parameter_description>
+</parameter>
+<parameter name="error">
+<parameter_description> A location for an @error or %NULL.
+</parameter_description>
+</parameter>
+</parameters>
+<return> An #IdeSymbol if successful; otherwise %NULL.
+</return>
+</function>
+
+<function name="ide_symbol_tree_get_n_children">
+<description>
+Get the number of children of @node. If @node is NULL, the root node
+is assumed.
+
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> An @IdeSymbolTree
+</parameter_description>
+</parameter>
+<parameter name="node">
+<parameter_description> An #IdeSymbolNode or %NULL.
+</parameter_description>
+</parameter>
+</parameters>
+<return> An unsigned integer containing the number of children.
+</return>
+</function>
+
+<function name="ide_symbol_tree_get_nth_child">
+<description>
+Gets the @nth child node of @node.
+
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> An #IdeSymbolTree.
+</parameter_description>
+</parameter>
+<parameter name="node">
+<parameter_description> an #IdeSymboNode
+</parameter_description>
+</parameter>
+<parameter name="nth">
+<parameter_description> the nth child to retrieve.
+</parameter_description>
+</parameter>
+</parameters>
+<return> A #IdeSymbolNode or %NULL.
+</return>
+</function>
+
+<function name="ide_template_base_get_locator">
+<description>
+Fetches the #TmplTemplateLocator used for resolving templates.
+
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> An #IdeTemplateBase
+</parameter_description>
+</parameter>
+</parameters>
+<return> A #TmplTemplateLocator or %NULL.
+</return>
+</function>
+
+<function name="ide_template_provider_get_project_templates">
+<description>
+Gets a list of templates for this provider.
+
+Plugins should implement this interface to feed #IdeProjectTemplate's into
+the project creation workflow.
+
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> An #IdeTemplateProvider
+</parameter_description>
+</parameter>
+</parameters>
+<return> A #GList of
+#IdeProjectTemplate instances.
+</return>
+</function>
+
+<function name="ide_text_iter_in_string">
+<description>
+Check if @iter position in the buffer is part of @str.
+
+
+</description>
+<parameters>
+<parameter name="iter">
+<parameter_description> A #GtkTextIter indicating the position to check for.
+</parameter_description>
+</parameter>
+<parameter name="str">
+<parameter_description> A C type string.
+</parameter_description>
+</parameter>
+<parameter name="str_start">
+<parameter_description> A #GtkTextIter returning the str start iter (if found).
+</parameter_description>
+</parameter>
+<parameter name="str_end">
+<parameter_description> A #GtkTextIter returning the str end iter (if found).
+</parameter_description>
+</parameter>
+<parameter name="include_str_bounds">
+<parameter_description> %TRUE if we take into account the str limits as possible @iter positions.
+</parameter_description>
+</parameter>
+</parameters>
+<return> %TRUE if case of succes, %FALSE otherwise.
+</return>
+</function>
+
+<function name="ide_thread_pool_push">
+<description>
+Runs the callback on the thread pool thread.
+
+</description>
+<parameters>
+<parameter name="kind">
+<parameter_description> the threadpool kind to use.
+</parameter_description>
+</parameter>
+<parameter name="func">
+<parameter_description> A function to call in the worker thread.
+</parameter_description>
+</parameter>
+<parameter name="func_data">
+<parameter_description> user data for @func.
+</parameter_description>
+</parameter>
+</parameters>
+<return></return>
+</function>
+
+<function name="ide_thread_pool_push_task">
+<description>
+This pushes a task to be executed on a worker thread based on the task kind as denoted by
+@kind. Some tasks will be placed on special work queues or throttled based on proirity.
+
+</description>
+<parameters>
+<parameter name="kind">
+<parameter_description> The task kind.
+</parameter_description>
+</parameter>
+<parameter name="task">
+<parameter_description> A #GTask to execute.
+</parameter_description>
+</parameter>
+<parameter name="func">
+<parameter_description> The thread worker to execute for @task.
+</parameter_description>
+</parameter>
+</parameters>
+<return></return>
+</function>
+
+<function name="ide_tree_add_builder">
+<description>
+Add a builder to the tree.
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> A #IdeTree.
+</parameter_description>
+</parameter>
+<parameter name="builder">
+<parameter_description> A #IdeTreeBuilder to add.
+</parameter_description>
+</parameter>
+</parameters>
+<return></return>
+</function>
+
+<function name="ide_tree_builder_get_tree">
+<description>
+Gets the tree that owns the builder.
+
+
+</description>
+<parameters>
+<parameter name="builder">
+<parameter_description> A #IdeTreeBuilder.
+</parameter_description>
+</parameter>
+</parameters>
+<return> A #IdeTree or %NULL.
+</return>
+</function>
+
+<function name="ide_tree_find_child_node">
+<description>
+Searches through the direct children of @node for a matching child.
+@find_func should return %TRUE if the child matches, otherwise %FALSE.
+
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> A #IdeTree
+</parameter_description>
+</parameter>
+<parameter name="node">
+<parameter_description> A #IdeTreeNode
+</parameter_description>
+</parameter>
+<parameter name="find_func">
+<parameter_description> A callback to locate the child
+</parameter_description>
+</parameter>
+<parameter name="user_data">
+<parameter_description> user data for @find_func
+</parameter_description>
+</parameter>
+</parameters>
+<return> A #IdeTreeNode or %NULL.
+</return>
+</function>
+
+<function name="ide_tree_find_custom">
+<description>
+Walks the entire tree looking for the first item that matches given
+@equal_func and @key.
+
+The first parameter to @equal_func will always be @key.
+The second parameter will be the nodes #IdeTreeNode:item property.
+
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> A #IdeTree
+</parameter_description>
+</parameter>
+<parameter name="equal_func">
+<parameter_description> A #GEqualFunc
+</parameter_description>
+</parameter>
+<parameter name="key">
+<parameter_description> the key for @equal_func
+</parameter_description>
+</parameter>
+</parameters>
+<return> A #IdeTreeNode or %NULL.
+</return>
+</function>
+
+<function name="ide_tree_find_item">
+<description>
+Finds a #IdeTreeNode with an item property matching @item.
+
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> A #IdeTree.
+</parameter_description>
+</parameter>
+<parameter name="item">
+<parameter_description> A #GObject or %NULL.
+</parameter_description>
+</parameter>
+</parameters>
+<return> A #IdeTreeNode or %NULL.
+</return>
+</function>
+
+<function name="ide_tree_get_context_menu">
+<description>
+
+</description>
+<parameters>
+</parameters>
+<return> A #GMenuModel or %NULL.
+</return>
+</function>
+
+<function name="ide_tree_get_root">
+<description>
+Retrieves the root node of the tree. The root node is not a visible node
+in the self, but a placeholder for all other builders to build upon.
+
+
+</description>
+<parameters>
+</parameters>
+<return> A #IdeTreeNode or %NULL.
+</return>
+</function>
+
+<function name="ide_tree_get_selected">
+<description>
+Gets the currently selected node in the tree.
+
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> A #IdeTree.
+</parameter_description>
+</parameter>
+</parameters>
+<return> A #IdeTreeNode.
+</return>
+</function>
+
+<function name="ide_tree_node_append">
+<description>
+Appends @child to the list of children owned by @node.
+
+</description>
+<parameters>
+<parameter name="node">
+<parameter_description> A #IdeTreeNode.
+</parameter_description>
+</parameter>
+<parameter name="child">
+<parameter_description> A #IdeTreeNode.
+</parameter_description>
+</parameter>
+</parameters>
+<return></return>
+</function>
+
+<function name="ide_tree_node_get_icon_name">
+<description>
+Fetches the icon-name of the icon to display, or NULL for no icon.
+
+</description>
+<parameters>
+</parameters>
+<return></return>
+</function>
+
+<function name="ide_tree_node_get_item">
+<description>
+Gets a #GObject for the node, if one was set.
+
+
+</description>
+<parameters>
+<parameter name="node">
+<parameter_description> A #IdeTreeNode.
+</parameter_description>
+</parameter>
+</parameters>
+<return> A #GObject or %NULL.
+</return>
+</function>
+
+<function name="ide_tree_node_get_parent">
+<description>
+Retrieves the parent #IdeTreeNode for @node.
+
+
+</description>
+<parameters>
+<parameter name="node">
+<parameter_description> A #IdeTreeNode.
+</parameter_description>
+</parameter>
+</parameters>
+<return> A #IdeTreeNode.
+</return>
+</function>
+
+<function name="ide_tree_node_get_path">
+<description>
+Gets a #GtkTreePath for @node.
+
+
+</description>
+<parameters>
+<parameter name="node">
+<parameter_description> A #IdeTreeNode.
+</parameter_description>
+</parameter>
+</parameters>
+<return> A #GtkTreePath if successful; otherwise %NULL.
+</return>
+</function>
+
+<function name="ide_tree_node_get_tree">
+<description>
+Fetches the #IdeTree instance that owns the node.
+
+
+</description>
+<parameters>
+<parameter name="node">
+<parameter_description> A #IdeTreeNode.
+</parameter_description>
+</parameter>
+</parameters>
+<return> A #IdeTree.
+</return>
+</function>
+
+<function name="ide_tree_node_insert_sorted">
+<description>
+Inserts a @child as a child of @node, sorting it among the other children.
+
+</description>
+<parameters>
+<parameter name="node">
+<parameter_description> A #IdeTreeNode.
+</parameter_description>
+</parameter>
+<parameter name="child">
+<parameter_description> A #IdeTreeNode.
+</parameter_description>
+</parameter>
+<parameter name="compare_func">
+<parameter_description> A compare func to compare nodes.
+</parameter_description>
+</parameter>
+<parameter name="user_data">
+<parameter_description> user data for @compare_func.
+</parameter_description>
+</parameter>
+</parameters>
+<return></return>
+</function>
+
+<function name="ide_tree_node_new">
+<description>
+Creates a new #IdeTreeNode instance. This is handy for situations where you
+do not want to subclass #IdeTreeNode.
+
+
+</description>
+<parameters>
+</parameters>
+<return> A #IdeTreeNode
+</return>
+</function>
+
+<function name="ide_tree_node_prepend">
+<description>
+Prepends @child to the list of children owned by @node.
+
+</description>
+<parameters>
+<parameter name="node">
+<parameter_description> A #IdeTreeNode.
+</parameter_description>
+</parameter>
+<parameter name="child">
+<parameter_description> A #IdeTreeNode.
+</parameter_description>
+</parameter>
+</parameters>
+<return></return>
+</function>
+
+<function name="ide_tree_node_remove">
+<description>
+Removes @child from the list of children owned by @node.
+
+</description>
+<parameters>
+<parameter name="node">
+<parameter_description> A #IdeTreeNode.
+</parameter_description>
+</parameter>
+<parameter name="child">
+<parameter_description> A #IdeTreeNode.
+</parameter_description>
+</parameter>
+</parameters>
+<return></return>
+</function>
+
+<function name="ide_tree_node_set_children_possible">
+<description>
+If the node has not yet been built, setting this to %TRUE will add a
+dummy child node. This dummy node will be removed when when the node
+is built by the registered #IdeTreeBuilder instances.
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> A #IdeTreeNode.
+</parameter_description>
+</parameter>
+<parameter name="children_possible">
+<parameter_description> If the node has children.
+</parameter_description>
+</parameter>
+</parameters>
+<return></return>
+</function>
+
+<function name="ide_tree_node_set_icon_name">
+<description>
+Sets the icon name of the node. This is displayed in the pixbuf
+cell of the IdeTree.
+
+</description>
+<parameters>
+<parameter name="node">
+<parameter_description> A #IdeTreeNode.
+</parameter_description>
+</parameter>
+<parameter name="icon_name">
+<parameter_description> The icon name.
+</parameter_description>
+</parameter>
+</parameters>
+<return></return>
+</function>
+
+<function name="ide_tree_node_set_item">
+<description>
+An optional object to associate with the node. This is handy to save needing
+to subclass the #IdeTreeNode class.
+
+</description>
+<parameters>
+<parameter name="node">
+<parameter_description> A #IdeTreeNode.
+</parameter_description>
+</parameter>
+<parameter name="item">
+<parameter_description> A #GObject.
+</parameter_description>
+</parameter>
+</parameters>
+<return></return>
+</function>
+
+<function name="ide_tree_node_set_text">
+<description>
+Sets the text of the node. This is displayed in the text
+cell of the IdeTree.
+
+</description>
+<parameters>
+<parameter name="node">
+<parameter_description> A #IdeTreeNode.
+</parameter_description>
+</parameter>
+<parameter name="text">
+<parameter_description> The node text.
+</parameter_description>
+</parameter>
+</parameters>
+<return></return>
+</function>
+
+<function name="ide_tree_node_set_tree">
+<description>
+Internal method to set the nodes tree.
+
+</description>
+<parameters>
+<parameter name="node">
+<parameter_description> A #IdeTreeNode.
+</parameter_description>
+</parameter>
+<parameter name="tree">
+<parameter_description> A #IdeTree.
+</parameter_description>
+</parameter>
+</parameters>
+<return></return>
+</function>
+
+<function name="ide_tree_remove_builder">
+<description>
+Removes a builder from the tree.
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> A #IdeTree.
+</parameter_description>
+</parameter>
+<parameter name="builder">
+<parameter_description> A #IdeTreeBuilder to remove.
+</parameter_description>
+</parameter>
+</parameters>
+<return></return>
+</function>
+
+<function name="ide_tree_set_filter">
+<description>
+Sets the filter function to be used to determine visability of a tree node.
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> A #IdeTree
+</parameter_description>
+</parameter>
+<parameter name="filter_func">
+<parameter_description> A callback to determien visibility.
+</parameter_description>
+</parameter>
+<parameter name="filter_data">
+<parameter_description> User data for @filter_func.
+</parameter_description>
+</parameter>
+<parameter name="filter_data_destroy">
+<parameter_description> Destroy notify for @filter_data.
+</parameter_description>
+</parameter>
+</parameters>
+<return></return>
+</function>
+
+<function name="ide_tree_set_root">
+<description>
+Sets the root node of the #IdeTree widget. This is used to build
+the items within the treeview. The item itself will not be added
+to the self, but the direct children will be.
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> A #IdeTree.
+</parameter_description>
+</parameter>
+<parameter name="node">
+<parameter_description> A #IdeTreeNode.
+</parameter_description>
+</parameter>
+</parameters>
+<return></return>
+</function>
+
+<function name="ide_unsaved_file_get_content">
+<description>
+Gets the contents of the unsaved file.
+
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> A #IdeUnsavedFile.
+</parameter_description>
+</parameter>
+</parameters>
+<return> A #GBytes containing the unsaved file content.
+</return>
+</function>
+
+<function name="ide_unsaved_file_get_file">
+<description>
+Retrieves the underlying file represented by @self.
+
+
+</description>
+<parameters>
+</parameters>
+<return> A #GFile.
+</return>
+</function>
+
+<function name="ide_unsaved_files_get_unsaved_file">
+<description>
+Retrieves the unsaved file content for a particular file. If no unsaved
+file content is registered, %NULL is returned.
+
+
+</description>
+<parameters>
+</parameters>
+<return> An #IdeUnsavedFile or %NULL.
+</return>
+</function>
+
+<function name="ide_unsaved_files_to_array">
+<description>
+This retrieves all of the unsaved file buffers known to the context.
+These are handy if you need to pass modified state to parsers such as
+clang.
+
+Call g_ptr_array_unref() on the resulting #GPtrArray when no longer in use.
+
+If you would like to hold onto an unsaved file instance, call
+ide_unsaved_file_ref() to increment it's reference count.
+
+
+</description>
+<parameters>
+</parameters>
+<return> A #GPtrArray
+containing #IdeUnsavedFile elements.
+</return>
+</function>
+
+<function name="ide_uri_copy">
+<description>
+Copies @uri
+
+
+</description>
+<parameters>
+<parameter name="uri">
+<parameter_description> a #IdeUri
+</parameter_description>
+</parameter>
+</parameters>
+<return> a copy of @uri
+</return>
+</function>
+
+<function name="ide_uri_get_auth_params">
+<description>
+Gets @uri's authentication parameters. Depending on the URI scheme,
+ide_uri_parse_params() may be useful for further parsing this
+information.
+
+
+</description>
+<parameters>
+<parameter name="uri">
+<parameter_description> a #IdeUri
+</parameter_description>
+</parameter>
+</parameters>
+<return> @uri's authentication parameters.
+</return>
+</function>
+
+<function name="ide_uri_get_fragment">
+<description>
+Gets @uri's fragment, which may contain %&lt;!-- --&gt;-encoding,
+depending on the flags with which @uri was parsed.
+
+
+</description>
+<parameters>
+<parameter name="uri">
+<parameter_description> a #IdeUri
+</parameter_description>
+</parameter>
+</parameters>
+<return> @uri's fragment.
+</return>
+</function>
+
+<function name="ide_uri_get_host">
+<description>
+Gets @uri's host. If @uri contained an IPv6 address literal, this
+value will not include the brackets that are required by the URI
+syntax.
+
+
+</description>
+<parameters>
+<parameter name="uri">
+<parameter_description> a #IdeUri
+</parameter_description>
+</parameter>
+</parameters>
+<return> @uri's host.
+</return>
+</function>
+
+<function name="ide_uri_get_password">
+<description>
+Gets @uri's password. If @uri was not parsed with
+%IDE_URI_PARSE_PASSWORD, this will always be %NULL.
+
+
+</description>
+<parameters>
+<parameter name="uri">
+<parameter_description> a #IdeUri
+</parameter_description>
+</parameter>
+</parameters>
+<return> @uri's password.
+</return>
+</function>
+
+<function name="ide_uri_get_path">
+<description>
+Gets @uri's path, which may contain %&lt;!-- --&gt;-encoding, depending
+on the flags with which @uri was parsed.
+
+
+</description>
+<parameters>
+<parameter name="uri">
+<parameter_description> a #IdeUri
+</parameter_description>
+</parameter>
+</parameters>
+<return> @uri's path.
+</return>
+</function>
+
+<function name="ide_uri_get_port">
+<description>
+Gets @uri's port.
+
+
+</description>
+<parameters>
+<parameter name="uri">
+<parameter_description> a #IdeUri
+</parameter_description>
+</parameter>
+</parameters>
+<return> @uri's port, or %0 if it was unset
+</return>
+</function>
+
+<function name="ide_uri_get_query">
+<description>
+Gets @uri's query, which may contain %&lt;!-- --&gt;-encoding, depending
+on the flags with which @uri was parsed.
+
+For queries consisting of a series of &quot;name=value&quot; parameters,
+ide_uri_parse_params() may be useful.
+
+
+</description>
+<parameters>
+<parameter name="uri">
+<parameter_description> a #IdeUri
+</parameter_description>
+</parameter>
+</parameters>
+<return> @uri's query.
+</return>
+</function>
+
+<function name="ide_uri_get_scheme">
+<description>
+Gets @uri's scheme.
+
+
+</description>
+<parameters>
+<parameter name="uri">
+<parameter_description> a #IdeUri
+</parameter_description>
+</parameter>
+</parameters>
+<return> @uri's scheme.
+</return>
+</function>
+
+<function name="ide_uri_get_user">
+<description>
+Gets @uri's user. If @uri was parsed with %IDE_URI_PARSE_PASSWORD or
+%IDE_URI_PARSE_AUTH_PARAMS, this is the string that appears before the
+password and parameters in the userinfo. If not, then the entire
+userinfo is considered the user.
+
+
+</description>
+<parameters>
+<parameter name="uri">
+<parameter_description> a #IdeUri
+</parameter_description>
+</parameter>
+</parameters>
+<return> @uri's user.
+</return>
+</function>
+
+<function name="ide_uri_new">
+<description>
+Parses @uri_string according to @flags. If the result is not a
+valid absolute URI, it will be discarded, and an error returned.
+
+
+</description>
+<parameters>
+<parameter name="uri_string">
+<parameter_description> a string representing an absolute URI
+</parameter_description>
+</parameter>
+<parameter name="flags">
+<parameter_description> flags describing how to parse @uri_string
+</parameter_description>
+</parameter>
+<parameter name="error">
+<parameter_description> #GError for error reporting, or %NULL to ignore.
+</parameter_description>
+</parameter>
+</parameters>
+<return> a new #IdeUri.
+</return>
+</function>
+
+<function name="ide_uri_new_from_file">
+<description>
+Creates a new #IdeUri from the uri provided by @file.
+
+
+</description>
+<parameters>
+<parameter name="file">
+<parameter_description> A #GFile.
+</parameter_description>
+</parameter>
+</parameters>
+<return> A newly allcoated #IdeUri.
+</return>
+</function>
+
+<function name="ide_uri_new_relative">
+<description>
+Parses @uri_string according to @flags and, if it is a relative
+URI, merges it with @base_uri. If the result is not a valid
+absolute URI, it will be discarded, and an error returned.
+
+
+</description>
+<parameters>
+<parameter name="base_uri">
+<parameter_description> a base URI
+</parameter_description>
+</parameter>
+<parameter name="uri_string">
+<parameter_description> a string representing a relative or absolute URI
+</parameter_description>
+</parameter>
+<parameter name="flags">
+<parameter_description> flags describing how to parse @uri_string
+</parameter_description>
+</parameter>
+<parameter name="error">
+<parameter_description> #GError for error reporting, or %NULL to ignore.
+</parameter_description>
+</parameter>
+</parameters>
+<return> a new #IdeUri.
+</return>
+</function>
+
+<function name="ide_uri_parse_host">
+<description>
+Utility function for parsing &quot;network&quot; URIs. This extracts just the
+scheme, host, and port from @uri_string. All three out parameters
+are mandatory.
+
+
+</description>
+<parameters>
+<parameter name="uri_string">
+<parameter_description> a string containing a network URI
+</parameter_description>
+</parameter>
+<parameter name="flags">
+<parameter_description> flags for parsing @uri_string
+</parameter_description>
+</parameter>
+<parameter name="scheme">
+<parameter_description> on return, will contain @uri_string's URI scheme
+</parameter_description>
+</parameter>
+<parameter name="host">
+<parameter_description> on return, will contain @uri_string's decoded hostname
+</parameter_description>
+</parameter>
+<parameter name="port">
+<parameter_description> on return, will contain @uri_string's port, or %0
+</parameter_description>
+</parameter>
+<parameter name="error">
+<parameter_description> #GError for error reporting, or %NULL to ignore.
+</parameter_description>
+</parameter>
+</parameters>
+<return> %TRUE on success, %FALSE on failure.
+</return>
+</function>
+
+<function name="ide_uri_parse_params">
+<description>
+Many URI schemes include one or more attribute/value pairs
+as part of the URI value. This method can be used to parse them
+into a hash table.
+
+The @params string is assumed to still be %&lt;!-- --&gt;-encoded, but
+the returned values will be fully decoded. (Thus it is possible
+that the returned values may contain '=' or @separator, if the
+value was encoded in the input.) Invalid %&lt;!-- --&gt;-encoding is
+treated as with the non-%IDE_URI_PARSE_STRICT rules for ide_uri_new().
+(However, if @params is the path or query string from a #IdeUri that
+was parsed with %IDE_URI_PARSE_STRICT, then you already know that it
+does not contain any invalid encoding.)
+
+
+</description>
+<parameters>
+<parameter name="params">
+<parameter_description> a string containing &quot;attribute=value&quot; parameters
+</parameter_description>
+</parameter>
+<parameter name="length">
+<parameter_description> the length of @params, or -1 if it is NUL-terminated
+</parameter_description>
+</parameter>
+<parameter name="separator">
+<parameter_description> the separator character between parameters.
+(usually ';', but sometimes '&amp;')
+</parameter_description>
+</parameter>
+<parameter name="case_insensitive">
+<parameter_description> whether to match parameter names case-insensitively
+</parameter_description>
+</parameter>
+</parameters>
+<return> a hash table
+of attribute/value pairs. Both names and values will be fully-decoded. If
+@params cannot be parsed (eg, it contains two @separator characters in a
+row), then %NULL is returned.
+</return>
+</function>
+
+<function name="ide_uri_ref">
+<description>
+Increments the reference count of @uri by one.
+
+
+</description>
+<parameters>
+<parameter name="uri">
+<parameter_description> An #IdeUri
+</parameter_description>
+</parameter>
+</parameters>
+<return> uri
+</return>
+</function>
+
+<function name="ide_uri_set_auth_params">
+<description>
+Sets @uri's authentication parameters to @auth_params.
+
+</description>
+<parameters>
+<parameter name="uri">
+<parameter_description> a #IdeUri
+</parameter_description>
+</parameter>
+<parameter name="auth_params">
+<parameter_description> the authentication parameters, or %NULL
+</parameter_description>
+</parameter>
+</parameters>
+<return></return>
+</function>
+
+<function name="ide_uri_set_fragment">
+<description>
+Sets @uri's fragment to @fragment, which is assumed to have been
+%&lt;!-- --&gt;-encoded by the caller. See ide_uri_set_path() for more
+details.
+
+</description>
+<parameters>
+<parameter name="uri">
+<parameter_description> a #IdeUri
+</parameter_description>
+</parameter>
+<parameter name="fragment">
+<parameter_description> the (%&lt;!-- --&gt;-encoded) fragment
+</parameter_description>
+</parameter>
+</parameters>
+<return></return>
+</function>
+
+<function name="ide_uri_set_host">
+<description>
+Sets @uri's host to @host.
+
+If @host is an IPv6 IP address, it should not include the brackets
+required by the URI syntax; they will be added automatically when
+converting @uri to a string.
+
+</description>
+<parameters>
+<parameter name="uri">
+<parameter_description> a #IdeUri
+</parameter_description>
+</parameter>
+<parameter name="host">
+<parameter_description> the hostname or IP address, or %NULL
+</parameter_description>
+</parameter>
+</parameters>
+<return></return>
+</function>
+
+<function name="ide_uri_set_password">
+<description>
+Sets @uri's password to @password.
+
+</description>
+<parameters>
+<parameter name="uri">
+<parameter_description> a #IdeUri
+</parameter_description>
+</parameter>
+<parameter name="password">
+<parameter_description> the password, or %NULL
+</parameter_description>
+</parameter>
+</parameters>
+<return></return>
+</function>
+
+<function name="ide_uri_set_path">
+<description>
+Sets @uri's path to @path, which is assumed to have been
+appropriately %&lt;!-- --&gt;-encoded. In particular, this means that if
+you want to include a literal percent sign the path, you must write
+it as &quot;%&lt;!-- --&gt;25&quot;. That being said, if @path contains an
+unencoded '?' or '#' character, it will get encoded, since
+otherwise converting @uri to a string and then back to a #IdeUri
+again would give a different result.
+
+</description>
+<parameters>
+<parameter name="uri">
+<parameter_description> a #IdeUri
+</parameter_description>
+</parameter>
+<parameter name="path">
+<parameter_description> the (%&lt;!-- --&gt;-encoded) path
+</parameter_description>
+</parameter>
+</parameters>
+<return></return>
+</function>
+
+<function name="ide_uri_set_port">
+<description>
+Sets @uri's port to @port. If @port is 0, it will not be output
+when calling ide_uri_to_string().
+
+</description>
+<parameters>
+<parameter name="uri">
+<parameter_description> a #IdeUri
+</parameter_description>
+</parameter>
+<parameter name="port">
+<parameter_description> the port, or %0
+</parameter_description>
+</parameter>
+</parameters>
+<return></return>
+</function>
+
+<function name="ide_uri_set_query">
+<description>
+Sets @uri's query to @query, which is assumed to have been
+%&lt;!-- --&gt;-encoded by the caller. See ide_uri_set_path() for more
+details.
+
+</description>
+<parameters>
+<parameter name="uri">
+<parameter_description> a #IdeUri
+</parameter_description>
+</parameter>
+<parameter name="query">
+<parameter_description> the (%&lt;!-- --&gt;-encoded) query
+</parameter_description>
+</parameter>
+</parameters>
+<return></return>
+</function>
+
+<function name="ide_uri_set_scheme">
+<description>
+Sets @uri's scheme to @scheme.
+
+</description>
+<parameters>
+<parameter name="uri">
+<parameter_description> a #IdeUri
+</parameter_description>
+</parameter>
+<parameter name="scheme">
+<parameter_description> the URI scheme
+</parameter_description>
+</parameter>
+</parameters>
+<return></return>
+</function>
+
+<function name="ide_uri_set_user">
+<description>
+Sets @uri's user to @user. See ide_uri_get_user() for a description
+of how this interacts with various parsing flags.
+
+</description>
+<parameters>
+<parameter name="uri">
+<parameter_description> a #IdeUri
+</parameter_description>
+</parameter>
+<parameter name="user">
+<parameter_description> the username, or %NULL
+</parameter_description>
+</parameter>
+</parameters>
+<return></return>
+</function>
+
+<function name="ide_uri_split">
+<description>
+Parses @uri_string more-or-less according to the generic grammar of
+RFC 3986 (&quot;more&quot; if @strict is %TRUE, &quot;less&quot; if %FALSE), and
+outputs the pieces into the provided variables. This is a low-level
+method that does not do any pre- or post-processing of @uri_string,
+and is &quot;garbage in, garbage out&quot;; it just splits @uri_string into
+pieces at the appropriate punctuation characters (consuming
+delimiters as appropriate), and returns the pieces. Components that
+are not present in @uri_string will be set to %NULL (but note that
+the path is always present, though it may be an empty string).
+
+</description>
+<parameters>
+<parameter name="uri_string">
+<parameter_description> a string containing a relative or absolute URI
+</parameter_description>
+</parameter>
+<parameter name="strict">
+<parameter_description> whether to parse @uri_string strictly
+</parameter_description>
+</parameter>
+<parameter name="scheme">
+<parameter_description> on return, contains the scheme, or %NULL
+</parameter_description>
+</parameter>
+<parameter name="userinfo">
+<parameter_description> on return, contains the userinfo, or %NULL
+</parameter_description>
+</parameter>
+<parameter name="host">
+<parameter_description> on return, contains the host, or %NULL
+</parameter_description>
+</parameter>
+<parameter name="port">
+<parameter_description> on return, contains the port, or %NULL
+</parameter_description>
+</parameter>
+<parameter name="path">
+<parameter_description> on return, contains the path, or %NULL
+</parameter_description>
+</parameter>
+<parameter name="query">
+<parameter_description> on return, contains the query, or %NULL
+</parameter_description>
+</parameter>
+<parameter name="fragment">
+<parameter_description> on return, contains the fragment, or %NULL
+</parameter_description>
+</parameter>
+</parameters>
+<return></return>
+</function>
+
+<function name="ide_uri_to_file">
+<description>
+Creates a #GFile that represents the resource @uri.
+
+
+</description>
+<parameters>
+<parameter name="uri">
+<parameter_description> An #IdeUri
+</parameter_description>
+</parameter>
+</parameters>
+<return> A #GFile or %NULL upon failure.
+</return>
+</function>
+
+<function name="ide_uri_to_string">
+<description>
+Returns a string representing @uri.
+
+
+</description>
+<parameters>
+<parameter name="uri">
+<parameter_description> a #IdeUri
+</parameter_description>
+</parameter>
+<parameter name="flags">
+<parameter_description> flags describing how to convert @uri
+</parameter_description>
+</parameter>
+</parameters>
+<return> a string representing @uri, which the caller must free.
+</return>
+</function>
+
+<function name="ide_uri_unref">
+<description>
+Decrements the reference count of @uri by 1. If the reference count
+reaches zero, the structure will be freed.
+
+</description>
+<parameters>
+<parameter name="uri">
+<parameter_description> a #IdeUri
+</parameter_description>
+</parameter>
+</parameters>
+<return></return>
+</function>
+
+<function name="ide_vcs_get_buffer_change_monitor">
+<description>
+Gets an #IdeBufferChangeMonitor for the buffer provided. If the #IdeVcs implementation does not
+support change monitoring, or cannot for the current file, then %NULL is returned.
+
+
+</description>
+<parameters>
+</parameters>
+<return> An #IdeBufferChangeMonitor or %NULL.
+</return>
+</function>
+
+<function name="ide_vcs_get_working_directory">
+<description>
+Retrieves the working directory for the context. This is the root of where
+the project files exist.
+
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> An #IdeVcs.
+</parameter_description>
+</parameter>
+</parameters>
+<return> A #GFile.
+</return>
+</function>
+
+<function name="ide_vcs_new_finish">
+<description>
+Completes a call to ide_vcs_new_async().
+
+
+</description>
+<parameters>
+</parameters>
+<return> An #IdeVcs.
+</return>
+</function>
+
+<function name="ide_widget_get_workbench">
+<description>
+Gets the workbench @widget is associated with, if any.
+
+If no workbench is associated, NULL is returned.
+
+
+</description>
+<parameters>
+</parameters>
+<return> An #IdeWorkbench
+</return>
+</function>
+
+<function name="ide_widget_set_context_handler">
+<description>
+Calls @handler when the #IdeContext has been set for @widget.
+
+</description>
+<parameters>
+<parameter name="widget">
+<parameter_description> A #GtkWidget
+</parameter_description>
+</parameter>
+<parameter name="handler">
+<parameter_description> A callback to handle the context
+</parameter_description>
+</parameter>
+</parameters>
+<return></return>
+</function>
+
+<function name="ide_workbench_addin_can_open">
+<description>
+This interface method indicates if the workbench addin can load the content
+found at @uri. If so, @priority should be set to an integer priority
+indicating how important it is for this addin to load @uri.
+
+The lowest integer value wins. However, a load fails, the next addin which
+returned %TRUE from this method will be consulted.
+
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> An #IdeWorkbenchAddin.
+</parameter_description>
+</parameter>
+<parameter name="uri">
+<parameter_description> An #IdeUri.
+</parameter_description>
+</parameter>
+<parameter name="content_type">
+<parameter_description> A content-type or %NULL.
+</parameter_description>
+</parameter>
+<parameter name="priority">
+<parameter_description> the priority at which this loader should be used.
+</parameter_description>
+</parameter>
+</parameters>
+<return> %TRUE if @self and open @uri.
+</return>
+</function>
+
+<function name="ide_workbench_addin_get_id">
+<description>
+Gets the identifier for this workbench addin. By default this is the
+name of the classes GType (such as &quot;MyObject&quot;).
+
+This can be used as the hint to various open operations in IdeWorkbench
+to prefer a given loader.
+
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> An #IdeWorkbenchAddin.
+</parameter_description>
+</parameter>
+</parameters>
+<return> a newly allocated string.
+</return>
+</function>
+
+<function name="ide_workbench_addin_load">
+<description>
+This interface method is called to load @self. Addin implementations should add any
+required UI or actions to @workbench here. You should remove anything you've added
+in ide_workbench_addin_unload(), as that will be called when your plugin is deactivated
+or the workbench is in the destruction process.
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> An #IdeWorkbenchAddin
+</parameter_description>
+</parameter>
+<parameter name="workbench">
+<parameter_description> An #IdeWorkbench
+</parameter_description>
+</parameter>
+</parameters>
+<return></return>
+</function>
+
+<function name="ide_workbench_addin_unload">
+<description>
+This interface method should cleanup after anything added to @workbench in
+ide_workbench_addin_load().
+
+This might be called when a plugin is deactivated, or the workbench is in the
+destruction process.
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> An #IdeWorkbenchAddin
+</parameter_description>
+</parameter>
+<parameter name="workbench">
+<parameter_description> An #IdeWorkbench
+</parameter_description>
+</parameter>
+</parameters>
+<return></return>
+</function>
+
+<function name="ide_workbench_get_context">
+<description>
+Gets the context associated with the workbench, or %NULL.
+
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> An #IdeWorkbench.
+</parameter_description>
+</parameter>
+</parameters>
+<return> An #IdeContext or %NULL.
+</return>
+</function>
+
+<function name="ide_workbench_get_perspective_by_name">
+<description>
+Gets the perspective by it's registered name as defined in
+ide_perspective_get_id().
+
+
+</description>
+<parameters>
+</parameters>
+<return> An #IdePerspective or %NULL.
+</return>
+</function>
+
+<function name="ide_workbench_get_visible_perspective">
+<description>
+Gets the current perspective.
+
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> An #IdeWorkbench.
+</parameter_description>
+</parameter>
+</parameters>
+<return> An #IdePerspective.
+</return>
+</function>
+
+<function name="ide_workbench_views_foreach">
+<description>
+Executes @callback for every #IdeLayoutView across all perspectives.
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> An #IdeWorkbench.
+</parameter_description>
+</parameter>
+<parameter name="callback">
+<parameter_description> The callback to execute
+</parameter_description>
+</parameter>
+<parameter name="user_data">
+<parameter_description> user data for @callback.
+</parameter_description>
+</parameter>
+</parameters>
+<return></return>
+</function>
+
+<function name="ide_worker_create_proxy">
+<description>
+Creates a new proxy to be connected to the subprocess peer on the other
+end of @connection.
+
+
+</description>
+<parameters>
+<parameter name="self">
+<parameter_description> An #IdeWorker.
+</parameter_description>
+</parameter>
+<parameter name="connection">
+<parameter_description> A #GDBusConnection connected to the worker process.
+</parameter_description>
+</parameter>
+<parameter name="error">
+<parameter_description> a location for a #GError, or %NULL.
+</parameter_description>
+</parameter>
+</parameters>
+<return> A #GDBusProxy or %NULL.
+</return>
+</function>
+
+</root>

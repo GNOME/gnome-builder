@@ -1,0 +1,7562 @@
+;; -*- scheme -*-
+; object definitions ...
+(define-object CompletionItem
+  (in-module "Ide")
+  (parent "GObject")
+  (c-name "IdeCompletionItem")
+  (gtype-id "IDE_TYPE_COMPLETION_ITEM")
+)
+
+;; Enumerations and flags ...
+
+(define-enum ApplicationMode
+  (in-module "Ide")
+  (c-name "IdeApplicationMode")
+  (gtype-id "IDE_TYPE_APPLICATION_MODE")
+  (values
+    '("primary" "IDE_APPLICATION_MODE_PRIMARY")
+    '("worker" "IDE_APPLICATION_MODE_WORKER")
+    '("tool" "IDE_APPLICATION_MODE_TOOL")
+    '("tests" "IDE_APPLICATION_MODE_TESTS")
+  )
+)
+
+(define-enum BufferLineChange
+  (in-module "Ide")
+  (c-name "IdeBufferLineChange")
+  (gtype-id "IDE_TYPE_BUFFER_LINE_CHANGE")
+  (values
+    '("none" "IDE_BUFFER_LINE_CHANGE_NONE")
+    '("added" "IDE_BUFFER_LINE_CHANGE_ADDED")
+    '("changed" "IDE_BUFFER_LINE_CHANGE_CHANGED")
+    '("deleted" "IDE_BUFFER_LINE_CHANGE_DELETED")
+  )
+)
+
+(define-flags BufferLineFlags
+  (in-module "Ide")
+  (c-name "IdeBufferLineFlags")
+  (gtype-id "IDE_TYPE_BUFFER_LINE_FLAGS")
+  (values
+    '("none" "IDE_BUFFER_LINE_FLAGS_NONE")
+    '("added" "IDE_BUFFER_LINE_FLAGS_ADDED")
+    '("changed" "IDE_BUFFER_LINE_FLAGS_CHANGED")
+    '("deleted" "IDE_BUFFER_LINE_FLAGS_DELETED")
+    '("error" "IDE_BUFFER_LINE_FLAGS_ERROR")
+    '("warning" "IDE_BUFFER_LINE_FLAGS_WARNING")
+    '("note" "IDE_BUFFER_LINE_FLAGS_NOTE")
+  )
+)
+
+(define-flags BuilderBuildFlags
+  (in-module "Ide")
+  (c-name "IdeBuilderBuildFlags")
+  (gtype-id "IDE_TYPE_BUILDER_BUILD_FLAGS")
+  (values
+    '("none" "IDE_BUILDER_BUILD_FLAGS_NONE")
+    '("force-bootstrap" "IDE_BUILDER_BUILD_FLAGS_FORCE_BOOTSTRAP")
+    '("force-clean" "IDE_BUILDER_BUILD_FLAGS_FORCE_CLEAN")
+    '("no-build" "IDE_BUILDER_BUILD_FLAGS_NO_BUILD")
+    '("no-configure" "IDE_BUILDER_BUILD_FLAGS_NO_CONFIGURE")
+  )
+)
+
+(define-enum BuildResultLog
+  (in-module "Ide")
+  (c-name "IdeBuildResultLog")
+  (gtype-id "IDE_TYPE_BUILD_RESULT_LOG")
+  (values
+    '("stdout" "IDE_BUILD_RESULT_LOG_STDOUT")
+    '("stderr" "IDE_BUILD_RESULT_LOG_STDERR")
+  )
+)
+
+(define-enum DiagnosticSeverity
+  (in-module "Ide")
+  (c-name "IdeDiagnosticSeverity")
+  (gtype-id "IDE_TYPE_DIAGNOSTIC_SEVERITY")
+  (values
+    '("ignored" "IDE_DIAGNOSTIC_IGNORED")
+    '("note" "IDE_DIAGNOSTIC_NOTE")
+    '("deprecated" "IDE_DIAGNOSTIC_DEPRECATED")
+    '("warning" "IDE_DIAGNOSTIC_WARNING")
+    '("error" "IDE_DIAGNOSTIC_ERROR")
+    '("fatal" "IDE_DIAGNOSTIC_FATAL")
+  )
+)
+
+(define-enum HighlightResult
+  (in-module "Ide")
+  (c-name "IdeHighlightResult")
+  (gtype-id "IDE_TYPE_HIGHLIGHT_RESULT")
+  (values
+    '("stop" "IDE_HIGHLIGHT_STOP")
+    '("continue" "IDE_HIGHLIGHT_CONTINUE")
+  )
+)
+
+(define-enum IndentStyle
+  (in-module "Ide")
+  (c-name "IdeIndentStyle")
+  (gtype-id "IDE_TYPE_INDENT_STYLE")
+  (values
+    '("spaces" "IDE_INDENT_STYLE_SPACES")
+    '("tabs" "IDE_INDENT_STYLE_TABS")
+  )
+)
+
+(define-enum LayoutGridSplit
+  (in-module "Ide")
+  (c-name "IdeLayoutGridSplit")
+  (gtype-id "IDE_TYPE_LAYOUT_GRID_SPLIT")
+  (values
+    '("left" "IDE_LAYOUT_GRID_SPLIT_LEFT")
+    '("right" "IDE_LAYOUT_GRID_SPLIT_RIGHT")
+    '("move-left" "IDE_LAYOUT_GRID_SPLIT_MOVE_LEFT")
+    '("move-right" "IDE_LAYOUT_GRID_SPLIT_MOVE_RIGHT")
+  )
+)
+
+(define-enum SourceViewModeType
+  (in-module "Ide")
+  (c-name "IdeSourceViewModeType")
+  (gtype-id "IDE_TYPE_SOURCE_VIEW_MODE_TYPE")
+  (values
+    '("transient" "IDE_SOURCE_VIEW_MODE_TYPE_TRANSIENT")
+    '("permanent" "IDE_SOURCE_VIEW_MODE_TYPE_PERMANENT")
+    '("modal" "IDE_SOURCE_VIEW_MODE_TYPE_MODAL")
+  )
+)
+
+(define-enum SourceViewTheatric
+  (in-module "Ide")
+  (c-name "IdeSourceViewTheatric")
+  (gtype-id "IDE_TYPE_SOURCE_VIEW_THEATRIC")
+  (values
+    '("expand" "IDE_SOURCE_VIEW_THEATRIC_EXPAND")
+    '("shrink" "IDE_SOURCE_VIEW_THEATRIC_SHRINK")
+  )
+)
+
+(define-enum SourceViewMovement
+  (in-module "Ide")
+  (c-name "IdeSourceViewMovement")
+  (gtype-id "IDE_TYPE_SOURCE_VIEW_MOVEMENT")
+  (values
+    '("previous-offset" "IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_OFFSET")
+    '("next-offset" "IDE_SOURCE_VIEW_MOVEMENT_NEXT_OFFSET")
+    '("nth-char" "IDE_SOURCE_VIEW_MOVEMENT_NTH_CHAR")
+    '("previous-char" "IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_CHAR")
+    '("next-char" "IDE_SOURCE_VIEW_MOVEMENT_NEXT_CHAR")
+    '("first-char" "IDE_SOURCE_VIEW_MOVEMENT_FIRST_CHAR")
+    '("first-nonspace-char" "IDE_SOURCE_VIEW_MOVEMENT_FIRST_NONSPACE_CHAR")
+    '("middle-char" "IDE_SOURCE_VIEW_MOVEMENT_MIDDLE_CHAR")
+    '("last-char" "IDE_SOURCE_VIEW_MOVEMENT_LAST_CHAR")
+    '("next-word-start" "IDE_SOURCE_VIEW_MOVEMENT_NEXT_WORD_START")
+    '("next-full-word-start" "IDE_SOURCE_VIEW_MOVEMENT_NEXT_FULL_WORD_START")
+    '("next-sub-word-start" "IDE_SOURCE_VIEW_MOVEMENT_NEXT_SUB_WORD_START")
+    '("previous-sub-word-start" "IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_SUB_WORD_START")
+    '("previous-word-start" "IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_WORD_START")
+    '("previous-full-word-start" "IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_FULL_WORD_START")
+    '("previous-word-end" "IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_WORD_END")
+    '("previous-full-word-end" "IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_FULL_WORD_END")
+    '("next-word-end" "IDE_SOURCE_VIEW_MOVEMENT_NEXT_WORD_END")
+    '("next-full-word-end" "IDE_SOURCE_VIEW_MOVEMENT_NEXT_FULL_WORD_END")
+    '("sentence-start" "IDE_SOURCE_VIEW_MOVEMENT_SENTENCE_START")
+    '("sentence-end" "IDE_SOURCE_VIEW_MOVEMENT_SENTENCE_END")
+    '("paragraph-start" "IDE_SOURCE_VIEW_MOVEMENT_PARAGRAPH_START")
+    '("paragraph-end" "IDE_SOURCE_VIEW_MOVEMENT_PARAGRAPH_END")
+    '("previous-line" "IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_LINE")
+    '("next-line" "IDE_SOURCE_VIEW_MOVEMENT_NEXT_LINE")
+    '("first-line" "IDE_SOURCE_VIEW_MOVEMENT_FIRST_LINE")
+    '("nth-line" "IDE_SOURCE_VIEW_MOVEMENT_NTH_LINE")
+    '("last-line" "IDE_SOURCE_VIEW_MOVEMENT_LAST_LINE")
+    '("line-percentage" "IDE_SOURCE_VIEW_MOVEMENT_LINE_PERCENTAGE")
+    '("line-chars" "IDE_SOURCE_VIEW_MOVEMENT_LINE_CHARS")
+    '("line-end" "IDE_SOURCE_VIEW_MOVEMENT_LINE_END")
+    '("half-page-up" "IDE_SOURCE_VIEW_MOVEMENT_HALF_PAGE_UP")
+    '("half-page-down" "IDE_SOURCE_VIEW_MOVEMENT_HALF_PAGE_DOWN")
+    '("half-page-left" "IDE_SOURCE_VIEW_MOVEMENT_HALF_PAGE_LEFT")
+    '("half-page-right" "IDE_SOURCE_VIEW_MOVEMENT_HALF_PAGE_RIGHT")
+    '("page-up" "IDE_SOURCE_VIEW_MOVEMENT_PAGE_UP")
+    '("page-down" "IDE_SOURCE_VIEW_MOVEMENT_PAGE_DOWN")
+    '("screen-up" "IDE_SOURCE_VIEW_MOVEMENT_SCREEN_UP")
+    '("screen-down" "IDE_SOURCE_VIEW_MOVEMENT_SCREEN_DOWN")
+    '("screen-left" "IDE_SOURCE_VIEW_MOVEMENT_SCREEN_LEFT")
+    '("screen-right" "IDE_SOURCE_VIEW_MOVEMENT_SCREEN_RIGHT")
+    '("screen-top" "IDE_SOURCE_VIEW_MOVEMENT_SCREEN_TOP")
+    '("screen-middle" "IDE_SOURCE_VIEW_MOVEMENT_SCREEN_MIDDLE")
+    '("screen-bottom" "IDE_SOURCE_VIEW_MOVEMENT_SCREEN_BOTTOM")
+    '("match-special" "IDE_SOURCE_VIEW_MOVEMENT_MATCH_SPECIAL")
+    '("scroll-screen-top" "IDE_SOURCE_VIEW_MOVEMENT_SCROLL_SCREEN_TOP")
+    '("scroll-screen-center" "IDE_SOURCE_VIEW_MOVEMENT_SCROLL_SCREEN_CENTER")
+    '("scroll-screen-bottom" "IDE_SOURCE_VIEW_MOVEMENT_SCROLL_SCREEN_BOTTOM")
+    '("scroll-screen-left" "IDE_SOURCE_VIEW_MOVEMENT_SCROLL_SCREEN_LEFT")
+    '("scroll-screen-right" "IDE_SOURCE_VIEW_MOVEMENT_SCROLL_SCREEN_RIGHT")
+    '("previous-unmatched-brace" "IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_UNMATCHED_BRACE")
+    '("next-unmatched-brace" "IDE_SOURCE_VIEW_MOVEMENT_NEXT_UNMATCHED_BRACE")
+    '("previous-unmatched-paren" "IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_UNMATCHED_PAREN")
+    '("next-unmatched-paren" "IDE_SOURCE_VIEW_MOVEMENT_NEXT_UNMATCHED_PAREN")
+    '("next-match-modifier" "IDE_SOURCE_VIEW_MOVEMENT_NEXT_MATCH_MODIFIER")
+    '("previous-match-modifier" "IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_MATCH_MODIFIER")
+    '("next-match-search-char" "IDE_SOURCE_VIEW_MOVEMENT_NEXT_MATCH_SEARCH_CHAR")
+    '("previous-match-search-char" "IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_MATCH_SEARCH_CHAR")
+  )
+)
+
+(define-enum SymbolKind
+  (in-module "Ide")
+  (c-name "IdeSymbolKind")
+  (gtype-id "IDE_TYPE_SYMBOL_KIND")
+  (values
+    '("none" "IDE_SYMBOL_NONE")
+    '("scalar" "IDE_SYMBOL_SCALAR")
+    '("class" "IDE_SYMBOL_CLASS")
+    '("function" "IDE_SYMBOL_FUNCTION")
+    '("method" "IDE_SYMBOL_METHOD")
+    '("struct" "IDE_SYMBOL_STRUCT")
+    '("union" "IDE_SYMBOL_UNION")
+    '("field" "IDE_SYMBOL_FIELD")
+    '("enum" "IDE_SYMBOL_ENUM")
+    '("enum-value" "IDE_SYMBOL_ENUM_VALUE")
+    '("variable" "IDE_SYMBOL_VARIABLE")
+    '("header" "IDE_SYMBOL_HEADER")
+  )
+)
+
+(define-flags SymbolFlags
+  (in-module "Ide")
+  (c-name "IdeSymbolFlags")
+  (gtype-id "IDE_TYPE_SYMBOL_FLAGS")
+  (values
+    '("none" "IDE_SYMBOL_FLAGS_NONE")
+    '("is-static" "IDE_SYMBOL_FLAGS_IS_STATIC")
+    '("is-member" "IDE_SYMBOL_FLAGS_IS_MEMBER")
+    '("is-deprecated" "IDE_SYMBOL_FLAGS_IS_DEPRECATED")
+  )
+)
+
+(define-enum ThreadPoolKind
+  (in-module "Ide")
+  (c-name "IdeThreadPoolKind")
+  (gtype-id "IDE_TYPE_THREAD_POOL_KIND")
+  (values
+    '("compiler" "IDE_THREAD_POOL_COMPILER")
+    '("indexer" "IDE_THREAD_POOL_INDEXER")
+    '("last" "IDE_THREAD_POOL_LAST")
+  )
+)
+
+(define-flags UriParseFlags
+  (in-module "Ide")
+  (c-name "IdeUriParseFlags")
+  (gtype-id "IDE_TYPE_URI_PARSE_FLAGS")
+  (values
+    '("strict" "IDE_URI_PARSE_STRICT")
+    '("html5" "IDE_URI_PARSE_HTML5")
+    '("no-iri" "IDE_URI_PARSE_NO_IRI")
+    '("password" "IDE_URI_PARSE_PASSWORD")
+    '("auth-params" "IDE_URI_PARSE_AUTH_PARAMS")
+    '("non-dns" "IDE_URI_PARSE_NON_DNS")
+    '("decoded" "IDE_URI_PARSE_DECODED")
+    '("utf8-only" "IDE_URI_PARSE_UTF8_ONLY")
+  )
+)
+
+(define-flags UriToStringFlags
+  (in-module "Ide")
+  (c-name "IdeUriToStringFlags")
+  (gtype-id "IDE_TYPE_URI_TO_STRING_FLAGS")
+  (values
+    '("auth-params" "IDE_URI_HIDE_AUTH_PARAMS")
+    '("fragment" "IDE_URI_HIDE_FRAGMENT")
+  )
+)
+
+(define-enum UriError
+  (in-module "Ide")
+  (c-name "IdeUriError")
+  (gtype-id "IDE_TYPE_URI_ERROR")
+  (values
+    '("misc" "IDE_URI_ERROR_MISC")
+    '("bad-scheme" "IDE_URI_ERROR_BAD_SCHEME")
+    '("bad-user" "IDE_URI_ERROR_BAD_USER")
+    '("bad-password" "IDE_URI_ERROR_BAD_PASSWORD")
+    '("bad-auth-params" "IDE_URI_ERROR_BAD_AUTH_PARAMS")
+    '("bad-host" "IDE_URI_ERROR_BAD_HOST")
+    '("bad-port" "IDE_URI_ERROR_BAD_PORT")
+    '("bad-path" "IDE_URI_ERROR_BAD_PATH")
+    '("bad-query" "IDE_URI_ERROR_BAD_QUERY")
+    '("bad-fragment" "IDE_URI_ERROR_BAD_FRAGMENT")
+  )
+)
+
+
+;; From gconstructor.h
+
+
+
+;; From ide-application-actions.h
+
+(define-method actions_init
+  (of-object "IdeApplication")
+  (c-name "ide_application_actions_init")
+  (return-type "none")
+)
+
+
+
+;; From ide-application-addin.h
+
+(define-method load
+  (of-object "IdeApplicationAddin")
+  (c-name "ide_application_addin_load")
+  (return-type "none")
+  (parameters
+    '("IdeApplication*" "application")
+  )
+)
+
+(define-method unload
+  (of-object "IdeApplicationAddin")
+  (c-name "ide_application_addin_unload")
+  (return-type "none")
+  (parameters
+    '("IdeApplication*" "application")
+  )
+)
+
+
+
+;; From ide-application-credits.h
+
+
+
+;; From ide-application.h
+
+(define-function ide_application_new
+  (c-name "ide_application_new")
+  (is-constructor-of "IdeApplication")
+  (return-type "IdeApplication*")
+)
+
+(define-method get_started_at
+  (of-object "IdeApplication")
+  (c-name "ide_application_get_started_at")
+  (return-type "GDateTime*")
+)
+
+(define-method get_recent_projects
+  (of-object "IdeApplication")
+  (c-name "ide_application_get_recent_projects")
+  (return-type "IdeRecentProjects*")
+)
+
+(define-method show_projects_window
+  (of-object "IdeApplication")
+  (c-name "ide_application_show_projects_window")
+  (return-type "none")
+)
+
+(define-method get_keybindings_mode
+  (of-object "IdeApplication")
+  (c-name "ide_application_get_keybindings_mode")
+  (return-type "const-gchar*")
+)
+
+(define-method get_worker_async
+  (of-object "IdeApplication")
+  (c-name "ide_application_get_worker_async")
+  (return-type "none")
+  (parameters
+    '("const-gchar*" "plugin_name")
+    '("GCancellable*" "cancellable")
+    '("GAsyncReadyCallback" "callback")
+    '("gpointer" "user_data")
+  )
+)
+
+(define-method get_worker_finish
+  (of-object "IdeApplication")
+  (c-name "ide_application_get_worker_finish")
+  (return-type "GDBusProxy*")
+  (parameters
+    '("GAsyncResult*" "result")
+    '("GError**" "error")
+  )
+)
+
+(define-method get_menu_by_id
+  (of-object "IdeApplication")
+  (c-name "ide_application_get_menu_by_id")
+  (return-type "GMenu*")
+  (parameters
+    '("const-gchar*" "id")
+  )
+)
+
+
+
+;; From ide-application-private.h
+
+(define-method discover_plugins
+  (of-object "IdeApplication")
+  (c-name "ide_application_discover_plugins")
+  (return-type "none")
+)
+
+(define-method load_plugins
+  (of-object "IdeApplication")
+  (c-name "ide_application_load_plugins")
+  (return-type "none")
+)
+
+(define-method load_addins
+  (of-object "IdeApplication")
+  (c-name "ide_application_load_addins")
+  (return-type "none")
+)
+
+(define-method init_plugin_menus
+  (of-object "IdeApplication")
+  (c-name "ide_application_init_plugin_menus")
+  (return-type "none")
+)
+
+(define-function ide_application_local_command_line
+  (c-name "ide_application_local_command_line")
+  (return-type "gboolean")
+  (parameters
+    '("GApplication*" "application")
+    '("gchar***" "arguments")
+    '("gint*" "exit_status")
+  )
+)
+
+(define-method run_tests
+  (of-object "IdeApplication")
+  (c-name "ide_application_run_tests")
+  (return-type "none")
+)
+
+
+
+;; From ide-application-tests.h
+
+(define-method add_test
+  (of-object "IdeApplication")
+  (c-name "ide_application_add_test")
+  (return-type "none")
+  (parameters
+    '("const-gchar*" "test_name")
+    '("IdeApplicationTest" "test_func")
+    '("IdeApplicationTestCompletion" "test_completion")
+  )
+)
+
+
+
+;; From ide-application-tool.h
+
+(define-method run_async
+  (of-object "IdeApplicationTool")
+  (c-name "ide_application_tool_run_async")
+  (return-type "none")
+  (parameters
+    '("const-gchar*-const*" "arguments")
+    '("GCancellable*" "cancellable")
+    '("GAsyncReadyCallback" "callback")
+    '("gpointer" "user_data")
+  )
+)
+
+(define-method run_finish
+  (of-object "IdeApplicationTool")
+  (c-name "ide_application_tool_run_finish")
+  (return-type "gint")
+  (parameters
+    '("GAsyncResult*" "result")
+    '("GError**" "error")
+  )
+)
+
+
+
+;; From ide-async-helper.h
+
+(define-function ide_async_helper_run
+  (c-name "ide_async_helper_run")
+  (return-type "none")
+  (parameters
+    '("gpointer" "source_object")
+    '("GCancellable*" "cancellable")
+    '("GAsyncReadyCallback" "callback")
+    '("gpointer" "user_data")
+    '("IdeAsyncStep" "step1")
+  )
+  (varargs #t)
+)
+
+
+
+;; From ide-back-forward-item.h
+
+(define-method get_uri
+  (of-object "IdeBackForwardItem")
+  (c-name "ide_back_forward_item_get_uri")
+  (return-type "IdeUri*")
+)
+
+(define-method chain
+  (of-object "IdeBackForwardItem")
+  (c-name "ide_back_forward_item_chain")
+  (return-type "gboolean")
+  (parameters
+    '("IdeBackForwardItem*" "other")
+  )
+)
+
+
+
+;; From ide-back-forward-list.h
+
+(define-method go_forward
+  (of-object "IdeBackForwardList")
+  (c-name "ide_back_forward_list_go_forward")
+  (return-type "none")
+)
+
+(define-method get_can_go_backward
+  (of-object "IdeBackForwardList")
+  (c-name "ide_back_forward_list_get_can_go_backward")
+  (return-type "gboolean")
+)
+
+(define-method get_can_go_forward
+  (of-object "IdeBackForwardList")
+  (c-name "ide_back_forward_list_get_can_go_forward")
+  (return-type "gboolean")
+)
+
+(define-method get_current_item
+  (of-object "IdeBackForwardList")
+  (c-name "ide_back_forward_list_get_current_item")
+  (return-type "IdeBackForwardItem*")
+)
+
+(define-method push
+  (of-object "IdeBackForwardList")
+  (c-name "ide_back_forward_list_push")
+  (return-type "none")
+  (parameters
+    '("IdeBackForwardItem*" "item")
+  )
+)
+
+(define-method branch
+  (of-object "IdeBackForwardList")
+  (c-name "ide_back_forward_list_branch")
+  (return-type "IdeBackForwardList*")
+)
+
+(define-method merge
+  (of-object "IdeBackForwardList")
+  (c-name "ide_back_forward_list_merge")
+  (return-type "none")
+  (parameters
+    '("IdeBackForwardList*" "branch")
+  )
+)
+
+
+
+;; From ide-back-forward-list-private.h
+
+
+
+;; From ide-battery-monitor.h
+
+(define-function ide_battery_monitor_get_energy_percentage
+  (c-name "ide_battery_monitor_get_energy_percentage")
+  (return-type "gdouble")
+)
+
+(define-function ide_battery_monitor_get_on_battery
+  (c-name "ide_battery_monitor_get_on_battery")
+  (return-type "gboolean")
+)
+
+(define-function ide_battery_monitor_get_should_conserve
+  (c-name "ide_battery_monitor_get_should_conserve")
+  (return-type "gboolean")
+)
+
+
+
+;; From ide-buffer-change-monitor.h
+
+(define-method get_change
+  (of-object "IdeBufferChangeMonitor")
+  (c-name "ide_buffer_change_monitor_get_change")
+  (return-type "IdeBufferLineChange")
+  (parameters
+    '("const-GtkTextIter*" "iter")
+  )
+)
+
+(define-method emit_changed
+  (of-object "IdeBufferChangeMonitor")
+  (c-name "ide_buffer_change_monitor_emit_changed")
+  (return-type "none")
+)
+
+
+
+;; From ide-buffer.h
+
+(define-method get_busy
+  (of-object "IdeBuffer")
+  (c-name "ide_buffer_get_busy")
+  (return-type "gboolean")
+)
+
+(define-method get_changed_on_volume
+  (of-object "IdeBuffer")
+  (c-name "ide_buffer_get_changed_on_volume")
+  (return-type "gboolean")
+)
+
+(define-method get_change_count
+  (of-object "IdeBuffer")
+  (c-name "ide_buffer_get_change_count")
+  (return-type "gsize")
+)
+
+(define-method get_content
+  (of-object "IdeBuffer")
+  (c-name "ide_buffer_get_content")
+  (return-type "GBytes*")
+)
+
+(define-method get_context
+  (of-object "IdeBuffer")
+  (c-name "ide_buffer_get_context")
+  (return-type "IdeContext*")
+)
+
+(define-method get_diagnostic_at_iter
+  (of-object "IdeBuffer")
+  (c-name "ide_buffer_get_diagnostic_at_iter")
+  (return-type "IdeDiagnostic*")
+  (parameters
+    '("const-GtkTextIter*" "iter")
+  )
+)
+
+(define-method get_file
+  (of-object "IdeBuffer")
+  (c-name "ide_buffer_get_file")
+  (return-type "IdeFile*")
+)
+
+(define-method get_line_flags
+  (of-object "IdeBuffer")
+  (c-name "ide_buffer_get_line_flags")
+  (return-type "IdeBufferLineFlags")
+  (parameters
+    '("guint" "line")
+  )
+)
+
+(define-method get_read_only
+  (of-object "IdeBuffer")
+  (c-name "ide_buffer_get_read_only")
+  (return-type "gboolean")
+)
+
+(define-method get_highlight_diagnostics
+  (of-object "IdeBuffer")
+  (c-name "ide_buffer_get_highlight_diagnostics")
+  (return-type "gboolean")
+)
+
+(define-method get_style_scheme_name
+  (of-object "IdeBuffer")
+  (c-name "ide_buffer_get_style_scheme_name")
+  (return-type "const-gchar*")
+)
+
+(define-method get_title
+  (of-object "IdeBuffer")
+  (c-name "ide_buffer_get_title")
+  (return-type "const-gchar*")
+)
+
+(define-method set_file
+  (of-object "IdeBuffer")
+  (c-name "ide_buffer_set_file")
+  (return-type "none")
+  (parameters
+    '("IdeFile*" "file")
+  )
+)
+
+(define-method set_highlight_diagnostics
+  (of-object "IdeBuffer")
+  (c-name "ide_buffer_set_highlight_diagnostics")
+  (return-type "none")
+  (parameters
+    '("gboolean" "highlight_diagnostics")
+  )
+)
+
+(define-method set_style_scheme_name
+  (of-object "IdeBuffer")
+  (c-name "ide_buffer_set_style_scheme_name")
+  (return-type "none")
+  (parameters
+    '("const-gchar*" "style_scheme_name")
+  )
+)
+
+(define-method trim_trailing_whitespace
+  (of-object "IdeBuffer")
+  (c-name "ide_buffer_trim_trailing_whitespace")
+  (return-type "none")
+)
+
+(define-method check_for_volume_change
+  (of-object "IdeBuffer")
+  (c-name "ide_buffer_check_for_volume_change")
+  (return-type "none")
+)
+
+(define-method get_iter_at_source_location
+  (of-object "IdeBuffer")
+  (c-name "ide_buffer_get_iter_at_source_location")
+  (return-type "none")
+  (parameters
+    '("GtkTextIter*" "iter")
+    '("IdeSourceLocation*" "location")
+  )
+)
+
+(define-method rehighlight
+  (of-object "IdeBuffer")
+  (c-name "ide_buffer_rehighlight")
+  (return-type "none")
+)
+
+(define-method get_selection_bounds
+  (of-object "IdeBuffer")
+  (c-name "ide_buffer_get_selection_bounds")
+  (return-type "none")
+  (parameters
+    '("GtkTextIter*" "insert")
+    '("GtkTextIter*" "selection")
+  )
+)
+
+(define-method get_symbol_resolver
+  (of-object "IdeBuffer")
+  (c-name "ide_buffer_get_symbol_resolver")
+  (return-type "IdeSymbolResolver*")
+)
+
+(define-method get_symbol_at_location_async
+  (of-object "IdeBuffer")
+  (c-name "ide_buffer_get_symbol_at_location_async")
+  (return-type "none")
+  (parameters
+    '("const-GtkTextIter*" "location")
+    '("GCancellable*" "cancellable")
+    '("GAsyncReadyCallback" "callback")
+    '("gpointer" "user_data")
+  )
+)
+
+(define-method get_symbol_at_location_finish
+  (of-object "IdeBuffer")
+  (c-name "ide_buffer_get_symbol_at_location_finish")
+  (return-type "IdeSymbol*")
+  (parameters
+    '("GAsyncResult*" "result")
+    '("GError**" "error")
+  )
+)
+
+(define-method hold
+  (of-object "IdeBuffer")
+  (c-name "ide_buffer_hold")
+  (return-type "none")
+)
+
+(define-method release
+  (of-object "IdeBuffer")
+  (c-name "ide_buffer_release")
+  (return-type "none")
+)
+
+(define-method get_word_at_iter
+  (of-object "IdeBuffer")
+  (c-name "ide_buffer_get_word_at_iter")
+  (return-type "gchar*")
+  (parameters
+    '("const-GtkTextIter*" "iter")
+  )
+)
+
+(define-method sync_to_unsaved_files
+  (of-object "IdeBuffer")
+  (c-name "ide_buffer_sync_to_unsaved_files")
+  (return-type "none")
+)
+
+
+
+;; From ide-buffer-manager.h
+
+(define-method load_file_async
+  (of-object "IdeBufferManager")
+  (c-name "ide_buffer_manager_load_file_async")
+  (return-type "none")
+  (parameters
+    '("IdeFile*" "file")
+    '("gboolean" "force_reload")
+    '("IdeProgress**" "progress")
+    '("GCancellable*" "cancellable")
+    '("GAsyncReadyCallback" "callback")
+    '("gpointer" "user_data")
+  )
+)
+
+(define-method load_file_finish
+  (of-object "IdeBufferManager")
+  (c-name "ide_buffer_manager_load_file_finish")
+  (return-type "IdeBuffer*")
+  (parameters
+    '("GAsyncResult*" "result")
+    '("GError**" "error")
+  )
+)
+
+(define-method save_file_async
+  (of-object "IdeBufferManager")
+  (c-name "ide_buffer_manager_save_file_async")
+  (return-type "none")
+  (parameters
+    '("IdeBuffer*" "buffer")
+    '("IdeFile*" "file")
+    '("IdeProgress**" "progress")
+    '("GCancellable*" "cancellable")
+    '("GAsyncReadyCallback" "callback")
+    '("gpointer" "user_data")
+  )
+)
+
+(define-method save_file_finish
+  (of-object "IdeBufferManager")
+  (c-name "ide_buffer_manager_save_file_finish")
+  (return-type "gboolean")
+  (parameters
+    '("GAsyncResult*" "result")
+    '("GError**" "error")
+  )
+)
+
+(define-method save_all_async
+  (of-object "IdeBufferManager")
+  (c-name "ide_buffer_manager_save_all_async")
+  (return-type "none")
+  (parameters
+    '("GCancellable*" "cancellable")
+    '("GAsyncReadyCallback" "callback")
+    '("gpointer" "user_data")
+  )
+)
+
+(define-method save_all_finish
+  (of-object "IdeBufferManager")
+  (c-name "ide_buffer_manager_save_all_finish")
+  (return-type "gboolean")
+  (parameters
+    '("GAsyncResult*" "result")
+    '("GError**" "error")
+  )
+)
+
+(define-method get_focus_buffer
+  (of-object "IdeBufferManager")
+  (c-name "ide_buffer_manager_get_focus_buffer")
+  (return-type "IdeBuffer*")
+)
+
+(define-method set_focus_buffer
+  (of-object "IdeBufferManager")
+  (c-name "ide_buffer_manager_set_focus_buffer")
+  (return-type "none")
+  (parameters
+    '("IdeBuffer*" "buffer")
+  )
+)
+
+(define-method get_buffers
+  (of-object "IdeBufferManager")
+  (c-name "ide_buffer_manager_get_buffers")
+  (return-type "GPtrArray*")
+)
+
+(define-method get_word_completion
+  (of-object "IdeBufferManager")
+  (c-name "ide_buffer_manager_get_word_completion")
+  (return-type "GtkSourceCompletionWords*")
+)
+
+(define-method get_n_buffers
+  (of-object "IdeBufferManager")
+  (c-name "ide_buffer_manager_get_n_buffers")
+  (return-type "guint")
+)
+
+(define-method has_file
+  (of-object "IdeBufferManager")
+  (c-name "ide_buffer_manager_has_file")
+  (return-type "gboolean")
+  (parameters
+    '("GFile*" "file")
+  )
+)
+
+(define-method find_buffer
+  (of-object "IdeBufferManager")
+  (c-name "ide_buffer_manager_find_buffer")
+  (return-type "IdeBuffer*")
+  (parameters
+    '("GFile*" "file")
+  )
+)
+
+(define-method get_max_file_size
+  (of-object "IdeBufferManager")
+  (c-name "ide_buffer_manager_get_max_file_size")
+  (return-type "gsize")
+)
+
+(define-method set_max_file_size
+  (of-object "IdeBufferManager")
+  (c-name "ide_buffer_manager_set_max_file_size")
+  (return-type "none")
+  (parameters
+    '("gsize" "max_file_size")
+  )
+)
+
+
+
+;; From ide-builder.h
+
+(define-method get_configuration
+  (of-object "IdeBuilder")
+  (c-name "ide_builder_get_configuration")
+  (return-type "IdeConfiguration*")
+)
+
+(define-method build_async
+  (of-object "IdeBuilder")
+  (c-name "ide_builder_build_async")
+  (return-type "none")
+  (parameters
+    '("IdeBuilderBuildFlags" "flags")
+    '("IdeBuildResult**" "result")
+    '("GCancellable*" "cancellable")
+    '("GAsyncReadyCallback" "callback")
+    '("gpointer" "user_data")
+  )
+)
+
+(define-method build_finish
+  (of-object "IdeBuilder")
+  (c-name "ide_builder_build_finish")
+  (return-type "IdeBuildResult*")
+  (parameters
+    '("GAsyncResult*" "result")
+    '("GError**" "error")
+  )
+)
+
+
+
+;; From ide-build-result-addin.h
+
+(define-method load
+  (of-object "IdeBuildResultAddin")
+  (c-name "ide_build_result_addin_load")
+  (return-type "none")
+  (parameters
+    '("IdeBuildResult*" "result")
+  )
+)
+
+(define-method unload
+  (of-object "IdeBuildResultAddin")
+  (c-name "ide_build_result_addin_unload")
+  (return-type "none")
+  (parameters
+    '("IdeBuildResult*" "result")
+  )
+)
+
+
+
+;; From ide-build-result.h
+
+(define-method get_stdout_stream
+  (of-object "IdeBuildResult")
+  (c-name "ide_build_result_get_stdout_stream")
+  (return-type "GInputStream*")
+)
+
+(define-method get_stderr_stream
+  (of-object "IdeBuildResult")
+  (c-name "ide_build_result_get_stderr_stream")
+  (return-type "GInputStream*")
+)
+
+(define-method log_subprocess
+  (of-object "IdeBuildResult")
+  (c-name "ide_build_result_log_subprocess")
+  (return-type "none")
+  (parameters
+    '("GSubprocess*" "subprocess")
+  )
+)
+
+(define-method get_running_time
+  (of-object "IdeBuildResult")
+  (c-name "ide_build_result_get_running_time")
+  (return-type "GTimeSpan")
+)
+
+(define-method get_running
+  (of-object "IdeBuildResult")
+  (c-name "ide_build_result_get_running")
+  (return-type "gboolean")
+)
+
+(define-method set_running
+  (of-object "IdeBuildResult")
+  (c-name "ide_build_result_set_running")
+  (return-type "none")
+  (parameters
+    '("gboolean" "running")
+  )
+)
+
+(define-method emit_diagnostic
+  (of-object "IdeBuildResult")
+  (c-name "ide_build_result_emit_diagnostic")
+  (return-type "none")
+  (parameters
+    '("IdeDiagnostic*" "diagnostic")
+  )
+)
+
+(define-method get_mode
+  (of-object "IdeBuildResult")
+  (c-name "ide_build_result_get_mode")
+  (return-type "gchar*")
+)
+
+(define-method set_mode
+  (of-object "IdeBuildResult")
+  (c-name "ide_build_result_set_mode")
+  (return-type "none")
+  (parameters
+    '("const-gchar*" "mode")
+  )
+)
+
+(define-method log_stdout
+  (of-object "IdeBuildResult")
+  (c-name "ide_build_result_log_stdout")
+  (return-type "none")
+  (parameters
+    '("const-gchar*" "format")
+  )
+  (varargs #t)
+)
+
+(define-method log_stderr
+  (of-object "IdeBuildResult")
+  (c-name "ide_build_result_log_stderr")
+  (return-type "none")
+  (parameters
+    '("const-gchar*" "format")
+  )
+  (varargs #t)
+)
+
+
+
+;; From ide-build-system.h
+
+(define-method get_priority
+  (of-object "IdeBuildSystem")
+  (c-name "ide_build_system_get_priority")
+  (return-type "gint")
+)
+
+(define-method get_build_flags_async
+  (of-object "IdeBuildSystem")
+  (c-name "ide_build_system_get_build_flags_async")
+  (return-type "none")
+  (parameters
+    '("IdeFile*" "file")
+    '("GCancellable*" "cancellable")
+    '("GAsyncReadyCallback" "callback")
+    '("gpointer" "user_data")
+  )
+)
+
+(define-method get_build_flags_finish
+  (of-object "IdeBuildSystem")
+  (c-name "ide_build_system_get_build_flags_finish")
+  (return-type "gchar**")
+  (parameters
+    '("GAsyncResult*" "result")
+    '("GError**" "error")
+  )
+)
+
+(define-function ide_build_system_new_async
+  (c-name "ide_build_system_new_async")
+  (return-type "none")
+  (parameters
+    '("IdeContext*" "context")
+    '("GFile*" "project_file")
+    '("GCancellable*" "cancellable")
+    '("GAsyncReadyCallback" "callback")
+    '("gpointer" "user_data")
+  )
+)
+
+(define-function ide_build_system_new_finish
+  (c-name "ide_build_system_new_finish")
+  (return-type "IdeBuildSystem*")
+  (parameters
+    '("GAsyncResult*" "result")
+    '("GError**" "error")
+  )
+)
+
+(define-method get_builder
+  (of-object "IdeBuildSystem")
+  (c-name "ide_build_system_get_builder")
+  (return-type "IdeBuilder*")
+  (parameters
+    '("IdeConfiguration*" "configuration")
+    '("GError**" "error")
+  )
+)
+
+
+
+;; From ide-completion-item.h
+
+(define-function ide_completion_item_new
+  (c-name "ide_completion_item_new")
+  (is-constructor-of "IdeCompletionItem")
+  (return-type "IdeCompletionItem*")
+)
+
+(define-method match
+  (of-object "IdeCompletionItem")
+  (c-name "ide_completion_item_match")
+  (return-type "gboolean")
+  (parameters
+    '("const-gchar*" "query")
+    '("const-gchar*" "casefold")
+  )
+)
+
+(define-method set_priority
+  (of-object "IdeCompletionItem")
+  (c-name "ide_completion_item_set_priority")
+  (return-type "none")
+  (parameters
+    '("guint" "priority")
+  )
+)
+
+(define-function ide_completion_item_fuzzy_match
+  (c-name "ide_completion_item_fuzzy_match")
+  (return-type "gboolean")
+  (parameters
+    '("const-gchar*" "haystack")
+    '("const-gchar*" "casefold_needle")
+    '("guint*" "priority")
+  )
+)
+
+(define-function ide_completion_item_fuzzy_highlight
+  (c-name "ide_completion_item_fuzzy_highlight")
+  (return-type "gchar*")
+  (parameters
+    '("const-gchar*" "haystack")
+    '("const-gchar*" "casefold_query")
+  )
+)
+
+
+
+;; From ide-completion-provider.h
+
+(define-function ide_completion_provider_get_type
+  (c-name "ide_completion_provider_get_type")
+  (return-type "GType")
+)
+
+(define-function ide_completion_provider_context_in_comment
+  (c-name "ide_completion_provider_context_in_comment")
+  (return-type "gboolean")
+  (parameters
+    '("GtkSourceCompletionContext*" "context")
+  )
+)
+
+(define-function ide_completion_provider_context_in_comment_or_string
+  (c-name "ide_completion_provider_context_in_comment_or_string")
+  (return-type "gboolean")
+  (parameters
+    '("GtkSourceCompletionContext*" "context")
+  )
+)
+
+(define-function ide_completion_provider_context_current_word
+  (c-name "ide_completion_provider_context_current_word")
+  (return-type "gchar*")
+  (parameters
+    '("GtkSourceCompletionContext*" "context")
+  )
+)
+
+
+
+;; From ide-completion-results.h
+
+(define-function ide_completion_results_new
+  (c-name "ide_completion_results_new")
+  (is-constructor-of "IdeCompletionResults")
+  (return-type "IdeCompletionResults*")
+  (parameters
+    '("const-gchar*" "query")
+  )
+)
+
+(define-method get_query
+  (of-object "IdeCompletionResults")
+  (c-name "ide_completion_results_get_query")
+  (return-type "const-gchar*")
+)
+
+(define-method invalidate_sort
+  (of-object "IdeCompletionResults")
+  (c-name "ide_completion_results_invalidate_sort")
+  (return-type "none")
+)
+
+(define-method take_proposal
+  (of-object "IdeCompletionResults")
+  (c-name "ide_completion_results_take_proposal")
+  (return-type "none")
+  (parameters
+    '("IdeCompletionItem*" "proposal")
+  )
+)
+
+(define-method present
+  (of-object "IdeCompletionResults")
+  (c-name "ide_completion_results_present")
+  (return-type "none")
+  (parameters
+    '("GtkSourceCompletionProvider*" "provider")
+    '("GtkSourceCompletionContext*" "context")
+  )
+)
+
+(define-method replay
+  (of-object "IdeCompletionResults")
+  (c-name "ide_completion_results_replay")
+  (return-type "gboolean")
+  (parameters
+    '("const-gchar*" "query")
+  )
+)
+
+
+
+;; From ide-configuration.h
+
+(define-method get_id
+  (of-object "IdeConfiguration")
+  (c-name "ide_configuration_get_id")
+  (return-type "const-gchar*")
+)
+
+(define-method get_runtime_id
+  (of-object "IdeConfiguration")
+  (c-name "ide_configuration_get_runtime_id")
+  (return-type "const-gchar*")
+)
+
+(define-method set_runtime_id
+  (of-object "IdeConfiguration")
+  (c-name "ide_configuration_set_runtime_id")
+  (return-type "none")
+  (parameters
+    '("const-gchar*" "runtime_id")
+  )
+)
+
+(define-method get_device_id
+  (of-object "IdeConfiguration")
+  (c-name "ide_configuration_get_device_id")
+  (return-type "const-gchar*")
+)
+
+(define-method set_device_id
+  (of-object "IdeConfiguration")
+  (c-name "ide_configuration_set_device_id")
+  (return-type "none")
+  (parameters
+    '("const-gchar*" "device_id")
+  )
+)
+
+(define-method get_device
+  (of-object "IdeConfiguration")
+  (c-name "ide_configuration_get_device")
+  (return-type "IdeDevice*")
+)
+
+(define-method set_device
+  (of-object "IdeConfiguration")
+  (c-name "ide_configuration_set_device")
+  (return-type "none")
+  (parameters
+    '("IdeDevice*" "device")
+  )
+)
+
+(define-method get_dirty
+  (of-object "IdeConfiguration")
+  (c-name "ide_configuration_get_dirty")
+  (return-type "gboolean")
+)
+
+(define-method set_dirty
+  (of-object "IdeConfiguration")
+  (c-name "ide_configuration_set_dirty")
+  (return-type "none")
+  (parameters
+    '("gboolean" "dirty")
+  )
+)
+
+(define-method get_display_name
+  (of-object "IdeConfiguration")
+  (c-name "ide_configuration_get_display_name")
+  (return-type "const-gchar*")
+)
+
+(define-method set_display_name
+  (of-object "IdeConfiguration")
+  (c-name "ide_configuration_set_display_name")
+  (return-type "none")
+  (parameters
+    '("const-gchar*" "display_name")
+  )
+)
+
+(define-method get_runtime
+  (of-object "IdeConfiguration")
+  (c-name "ide_configuration_get_runtime")
+  (return-type "IdeRuntime*")
+)
+
+(define-method set_runtime
+  (of-object "IdeConfiguration")
+  (c-name "ide_configuration_set_runtime")
+  (return-type "none")
+  (parameters
+    '("IdeRuntime*" "runtime")
+  )
+)
+
+(define-method get_environ
+  (of-object "IdeConfiguration")
+  (c-name "ide_configuration_get_environ")
+  (return-type "gchar**")
+)
+
+(define-method getenv
+  (of-object "IdeConfiguration")
+  (c-name "ide_configuration_getenv")
+  (return-type "const-gchar*")
+  (parameters
+    '("const-gchar*" "key")
+  )
+)
+
+(define-method setenv
+  (of-object "IdeConfiguration")
+  (c-name "ide_configuration_setenv")
+  (return-type "none")
+  (parameters
+    '("const-gchar*" "key")
+    '("const-gchar*" "value")
+  )
+)
+
+(define-method get_debug
+  (of-object "IdeConfiguration")
+  (c-name "ide_configuration_get_debug")
+  (return-type "gboolean")
+)
+
+(define-method set_debug
+  (of-object "IdeConfiguration")
+  (c-name "ide_configuration_set_debug")
+  (return-type "none")
+  (parameters
+    '("gboolean" "debug")
+  )
+)
+
+(define-method get_prefix
+  (of-object "IdeConfiguration")
+  (c-name "ide_configuration_get_prefix")
+  (return-type "const-gchar*")
+)
+
+(define-method set_prefix
+  (of-object "IdeConfiguration")
+  (c-name "ide_configuration_set_prefix")
+  (return-type "none")
+  (parameters
+    '("const-gchar*" "prefix")
+  )
+)
+
+(define-method get_config_opts
+  (of-object "IdeConfiguration")
+  (c-name "ide_configuration_get_config_opts")
+  (return-type "const-gchar*")
+)
+
+(define-method set_config_opts
+  (of-object "IdeConfiguration")
+  (c-name "ide_configuration_set_config_opts")
+  (return-type "none")
+  (parameters
+    '("const-gchar*" "config_opts")
+  )
+)
+
+(define-method get_parallelism
+  (of-object "IdeConfiguration")
+  (c-name "ide_configuration_get_parallelism")
+  (return-type "gint")
+)
+
+(define-method set_parallelism
+  (of-object "IdeConfiguration")
+  (c-name "ide_configuration_set_parallelism")
+  (return-type "none")
+  (parameters
+    '("gint" "parallelism")
+  )
+)
+
+(define-method get_environment
+  (of-object "IdeConfiguration")
+  (c-name "ide_configuration_get_environment")
+  (return-type "IdeEnvironment*")
+)
+
+(define-method duplicate
+  (of-object "IdeConfiguration")
+  (c-name "ide_configuration_duplicate")
+  (return-type "IdeConfiguration*")
+)
+
+(define-method get_sequence
+  (of-object "IdeConfiguration")
+  (c-name "ide_configuration_get_sequence")
+  (return-type "guint")
+)
+
+
+
+;; From ide-configuration-manager.h
+
+(define-method set_current
+  (of-object "IdeConfigurationManager")
+  (c-name "ide_configuration_manager_set_current")
+  (return-type "none")
+  (parameters
+    '("IdeConfiguration*" "configuration")
+  )
+)
+
+(define-method get_configuration
+  (of-object "IdeConfigurationManager")
+  (c-name "ide_configuration_manager_get_configuration")
+  (return-type "IdeConfiguration*")
+  (parameters
+    '("const-gchar*" "id")
+  )
+)
+
+(define-method add
+  (of-object "IdeConfigurationManager")
+  (c-name "ide_configuration_manager_add")
+  (return-type "none")
+  (parameters
+    '("IdeConfiguration*" "configuration")
+  )
+)
+
+(define-method remove
+  (of-object "IdeConfigurationManager")
+  (c-name "ide_configuration_manager_remove")
+  (return-type "none")
+  (parameters
+    '("IdeConfiguration*" "configuration")
+  )
+)
+
+(define-method save_async
+  (of-object "IdeConfigurationManager")
+  (c-name "ide_configuration_manager_save_async")
+  (return-type "none")
+  (parameters
+    '("GCancellable*" "cancellable")
+    '("GAsyncReadyCallback" "callback")
+    '("gpointer" "user_data")
+  )
+)
+
+(define-method save_finish
+  (of-object "IdeConfigurationManager")
+  (c-name "ide_configuration_manager_save_finish")
+  (return-type "gboolean")
+  (parameters
+    '("GAsyncResult*" "result")
+    '("GError**" "error")
+  )
+)
+
+
+
+;; From ide-context.h
+
+(define-method get_project_file
+  (of-object "IdeContext")
+  (c-name "ide_context_get_project_file")
+  (return-type "GFile*")
+)
+
+(define-method get_buffer_manager
+  (of-object "IdeContext")
+  (c-name "ide_context_get_buffer_manager")
+  (return-type "IdeBufferManager*")
+)
+
+(define-method get_build_system
+  (of-object "IdeContext")
+  (c-name "ide_context_get_build_system")
+  (return-type "IdeBuildSystem*")
+)
+
+(define-method get_configuration_manager
+  (of-object "IdeContext")
+  (c-name "ide_context_get_configuration_manager")
+  (return-type "IdeConfigurationManager*")
+)
+
+(define-method get_device_manager
+  (of-object "IdeContext")
+  (c-name "ide_context_get_device_manager")
+  (return-type "IdeDeviceManager*")
+)
+
+(define-method get_project
+  (of-object "IdeContext")
+  (c-name "ide_context_get_project")
+  (return-type "IdeProject*")
+)
+
+(define-method get_recent_manager
+  (of-object "IdeContext")
+  (c-name "ide_context_get_recent_manager")
+  (return-type "GtkRecentManager*")
+)
+
+(define-method get_runtime_manager
+  (of-object "IdeContext")
+  (c-name "ide_context_get_runtime_manager")
+  (return-type "IdeRuntimeManager*")
+)
+
+(define-method get_script_manager
+  (of-object "IdeContext")
+  (c-name "ide_context_get_script_manager")
+  (return-type "IdeScriptManager*")
+)
+
+(define-method get_search_engine
+  (of-object "IdeContext")
+  (c-name "ide_context_get_search_engine")
+  (return-type "IdeSearchEngine*")
+)
+
+(define-method get_settings
+  (of-object "IdeContext")
+  (c-name "ide_context_get_settings")
+  (return-type "IdeSettings*")
+  (parameters
+    '("const-gchar*" "schema_id")
+    '("const-gchar*" "relative_path")
+  )
+)
+
+(define-method get_snippets_manager
+  (of-object "IdeContext")
+  (c-name "ide_context_get_snippets_manager")
+  (return-type "IdeSourceSnippetsManager*")
+)
+
+(define-method get_unsaved_files
+  (of-object "IdeContext")
+  (c-name "ide_context_get_unsaved_files")
+  (return-type "IdeUnsavedFiles*")
+)
+
+(define-method get_vcs
+  (of-object "IdeContext")
+  (c-name "ide_context_get_vcs")
+  (return-type "IdeVcs*")
+)
+
+(define-method get_root_build_dir
+  (of-object "IdeContext")
+  (c-name "ide_context_get_root_build_dir")
+  (return-type "const-gchar*")
+)
+
+(define-method get_service_typed
+  (of-object "IdeContext")
+  (c-name "ide_context_get_service_typed")
+  (return-type "gpointer")
+  (parameters
+    '("GType" "service_type")
+  )
+)
+
+(define-method unload_async
+  (of-object "IdeContext")
+  (c-name "ide_context_unload_async")
+  (return-type "none")
+  (parameters
+    '("GCancellable*" "cancellable")
+    '("GAsyncReadyCallback" "callback")
+    '("gpointer" "user_data")
+  )
+)
+
+(define-method unload_finish
+  (of-object "IdeContext")
+  (c-name "ide_context_unload_finish")
+  (return-type "gboolean")
+  (parameters
+    '("GAsyncResult*" "result")
+    '("GError**" "error")
+  )
+)
+
+(define-function ide_context_new_async
+  (c-name "ide_context_new_async")
+  (return-type "none")
+  (parameters
+    '("GFile*" "project_file")
+    '("GCancellable*" "cancellable")
+    '("GAsyncReadyCallback" "callback")
+    '("gpointer" "user_data")
+  )
+)
+
+(define-function ide_context_new_finish
+  (c-name "ide_context_new_finish")
+  (return-type "IdeContext*")
+  (parameters
+    '("GAsyncResult*" "result")
+    '("GError**" "error")
+  )
+)
+
+(define-method set_root_build_dir
+  (of-object "IdeContext")
+  (c-name "ide_context_set_root_build_dir")
+  (return-type "none")
+  (parameters
+    '("const-gchar*" "root_build_dir")
+  )
+)
+
+(define-method restore_async
+  (of-object "IdeContext")
+  (c-name "ide_context_restore_async")
+  (return-type "none")
+  (parameters
+    '("GCancellable*" "cancellable")
+    '("GAsyncReadyCallback" "callback")
+    '("gpointer" "user_data")
+  )
+)
+
+(define-method restore_finish
+  (of-object "IdeContext")
+  (c-name "ide_context_restore_finish")
+  (return-type "gboolean")
+  (parameters
+    '("GAsyncResult*" "result")
+    '("GError**" "error")
+  )
+)
+
+(define-method hold
+  (of-object "IdeContext")
+  (c-name "ide_context_hold")
+  (return-type "none")
+)
+
+(define-method hold_for_object
+  (of-object "IdeContext")
+  (c-name "ide_context_hold_for_object")
+  (return-type "none")
+  (parameters
+    '("gpointer" "instance")
+  )
+)
+
+(define-method release
+  (of-object "IdeContext")
+  (c-name "ide_context_release")
+  (return-type "none")
+)
+
+(define-method warning
+  (of-object "IdeContext")
+  (c-name "ide_context_warning")
+  (return-type "none")
+  (parameters
+    '("const-gchar*" "format")
+  )
+  (varargs #t)
+)
+
+
+
+;; From ide-css-provider.h
+
+
+
+;; From ide-debugger.h
+
+(define-function ide_debugger_get_type
+  (c-name "ide_debugger_get_type")
+  (return-type "GType")
+)
+
+
+
+;; From ide-debug.h
+
+
+
+;; From ide-deployer.h
+
+
+
+;; From ide-device.h
+
+(define-method get_display_name
+  (of-object "IdeDevice")
+  (c-name "ide_device_get_display_name")
+  (return-type "const-gchar*")
+)
+
+(define-method set_display_name
+  (of-object "IdeDevice")
+  (c-name "ide_device_set_display_name")
+  (return-type "none")
+  (parameters
+    '("const-gchar*" "display_name")
+  )
+)
+
+(define-method get_id
+  (of-object "IdeDevice")
+  (c-name "ide_device_get_id")
+  (return-type "const-gchar*")
+)
+
+(define-method set_id
+  (of-object "IdeDevice")
+  (c-name "ide_device_set_id")
+  (return-type "none")
+  (parameters
+    '("const-gchar*" "id")
+  )
+)
+
+(define-method get_system_type
+  (of-object "IdeDevice")
+  (c-name "ide_device_get_system_type")
+  (return-type "const-gchar*")
+)
+
+(define-method prepare_configuration
+  (of-object "IdeDevice")
+  (c-name "ide_device_prepare_configuration")
+  (return-type "none")
+  (parameters
+    '("IdeConfiguration*" "configuration")
+  )
+)
+
+
+
+;; From ide-device-manager.h
+
+(define-method get_devices
+  (of-object "IdeDeviceManager")
+  (c-name "ide_device_manager_get_devices")
+  (return-type "GPtrArray*")
+)
+
+(define-method get_settled
+  (of-object "IdeDeviceManager")
+  (c-name "ide_device_manager_get_settled")
+  (return-type "gboolean")
+)
+
+(define-method remove_provider
+  (of-object "IdeDeviceManager")
+  (c-name "ide_device_manager_remove_provider")
+  (return-type "none")
+  (parameters
+    '("IdeDeviceProvider*" "provider")
+  )
+)
+
+(define-method get_device
+  (of-object "IdeDeviceManager")
+  (c-name "ide_device_manager_get_device")
+  (return-type "IdeDevice*")
+  (parameters
+    '("const-gchar*" "device_id")
+  )
+)
+
+
+
+;; From ide-device-provider.h
+
+(define-method emit_device_added
+  (of-object "IdeDeviceProvider")
+  (c-name "ide_device_provider_emit_device_added")
+  (return-type "none")
+  (parameters
+    '("IdeDevice*" "device")
+  )
+)
+
+(define-method emit_device_removed
+  (of-object "IdeDeviceProvider")
+  (c-name "ide_device_provider_emit_device_removed")
+  (return-type "none")
+  (parameters
+    '("IdeDevice*" "device")
+  )
+)
+
+(define-method get_devices
+  (of-object "IdeDeviceProvider")
+  (c-name "ide_device_provider_get_devices")
+  (return-type "GPtrArray*")
+)
+
+(define-method get_settled
+  (of-object "IdeDeviceProvider")
+  (c-name "ide_device_provider_get_settled")
+  (return-type "gboolean")
+)
+
+
+
+;; From ide-diagnostic.h
+
+(define-method get_location
+  (of-object "IdeDiagnostic")
+  (c-name "ide_diagnostic_get_location")
+  (return-type "IdeSourceLocation*")
+)
+
+(define-method get_num_fixits
+  (of-object "IdeDiagnostic")
+  (c-name "ide_diagnostic_get_num_fixits")
+  (return-type "guint")
+)
+
+(define-method get_fixit
+  (of-object "IdeDiagnostic")
+  (c-name "ide_diagnostic_get_fixit")
+  (return-type "IdeFixit*")
+  (parameters
+    '("guint" "index")
+  )
+)
+
+(define-method get_num_ranges
+  (of-object "IdeDiagnostic")
+  (c-name "ide_diagnostic_get_num_ranges")
+  (return-type "guint")
+)
+
+(define-method get_range
+  (of-object "IdeDiagnostic")
+  (c-name "ide_diagnostic_get_range")
+  (return-type "IdeSourceRange*")
+  (parameters
+    '("guint" "index")
+  )
+)
+
+(define-method get_severity
+  (of-object "IdeDiagnostic")
+  (c-name "ide_diagnostic_get_severity")
+  (return-type "IdeDiagnosticSeverity")
+)
+
+(define-method get_text
+  (of-object "IdeDiagnostic")
+  (c-name "ide_diagnostic_get_text")
+  (return-type "const-gchar*")
+)
+
+(define-method get_text_for_display
+  (of-object "IdeDiagnostic")
+  (c-name "ide_diagnostic_get_text_for_display")
+  (return-type "gchar*")
+)
+
+(define-function ide_diagnostic_get_type
+  (c-name "ide_diagnostic_get_type")
+  (return-type "GType")
+)
+
+(define-method ref
+  (of-object "IdeDiagnostic")
+  (c-name "ide_diagnostic_ref")
+  (return-type "IdeDiagnostic*")
+)
+
+(define-method unref
+  (of-object "IdeDiagnostic")
+  (c-name "ide_diagnostic_unref")
+  (return-type "none")
+)
+
+(define-function ide_diagnostic_new
+  (c-name "ide_diagnostic_new")
+  (is-constructor-of "IdeDiagnostic")
+  (return-type "IdeDiagnostic*")
+  (parameters
+    '("IdeDiagnosticSeverity" "severity")
+    '("const-gchar*" "text")
+    '("IdeSourceLocation*" "location")
+  )
+)
+
+(define-method add_range
+  (of-object "IdeDiagnostic")
+  (c-name "ide_diagnostic_add_range")
+  (return-type "none")
+  (parameters
+    '("IdeSourceRange*" "range")
+  )
+)
+
+(define-method take_fixit
+  (of-object "IdeDiagnostic")
+  (c-name "ide_diagnostic_take_fixit")
+  (return-type "none")
+  (parameters
+    '("IdeFixit*" "fixit")
+  )
+)
+
+(define-method take_range
+  (of-object "IdeDiagnostic")
+  (c-name "ide_diagnostic_take_range")
+  (return-type "none")
+  (parameters
+    '("IdeSourceRange*" "range")
+  )
+)
+
+(define-method to_string
+  (of-object "IdeDiagnosticSeverity")
+  (c-name "ide_diagnostic_severity_to_string")
+  (return-type "const-gchar*")
+)
+
+
+
+;; From ide-diagnostician.h
+
+(define-method set_language
+  (of-object "IdeDiagnostician")
+  (c-name "ide_diagnostician_set_language")
+  (return-type "none")
+  (parameters
+    '("GtkSourceLanguage*" "language")
+  )
+)
+
+(define-method diagnose_async
+  (of-object "IdeDiagnostician")
+  (c-name "ide_diagnostician_diagnose_async")
+  (return-type "none")
+  (parameters
+    '("IdeFile*" "file")
+    '("GCancellable*" "cancellable")
+    '("GAsyncReadyCallback" "callback")
+    '("gpointer" "user_data")
+  )
+)
+
+(define-method diagnose_finish
+  (of-object "IdeDiagnostician")
+  (c-name "ide_diagnostician_diagnose_finish")
+  (return-type "IdeDiagnostics*")
+  (parameters
+    '("GAsyncResult*" "result")
+    '("GError**" "error")
+  )
+)
+
+
+
+;; From ide-diagnostic-provider.h
+
+(define-method diagnose_async
+  (of-object "IdeDiagnosticProvider")
+  (c-name "ide_diagnostic_provider_diagnose_async")
+  (return-type "none")
+  (parameters
+    '("IdeFile*" "file")
+    '("GCancellable*" "cancellable")
+    '("GAsyncReadyCallback" "callback")
+    '("gpointer" "user_data")
+  )
+)
+
+(define-method diagnose_finish
+  (of-object "IdeDiagnosticProvider")
+  (c-name "ide_diagnostic_provider_diagnose_finish")
+  (return-type "IdeDiagnostics*")
+  (parameters
+    '("GAsyncResult*" "result")
+    '("GError**" "error")
+  )
+)
+
+
+
+;; From ide-diagnostics.h
+
+(define-function ide_diagnostics_get_type
+  (c-name "ide_diagnostics_get_type")
+  (return-type "GType")
+)
+
+(define-method ref
+  (of-object "IdeDiagnostics")
+  (c-name "ide_diagnostics_ref")
+  (return-type "IdeDiagnostics*")
+)
+
+(define-method unref
+  (of-object "IdeDiagnostics")
+  (c-name "ide_diagnostics_unref")
+  (return-type "none")
+)
+
+(define-method get_size
+  (of-object "IdeDiagnostics")
+  (c-name "ide_diagnostics_get_size")
+  (return-type "gsize")
+)
+
+(define-method index
+  (of-object "IdeDiagnostics")
+  (c-name "ide_diagnostics_index")
+  (return-type "IdeDiagnostic*")
+  (parameters
+    '("gsize" "index")
+  )
+)
+
+(define-method merge
+  (of-object "IdeDiagnostics")
+  (c-name "ide_diagnostics_merge")
+  (return-type "none")
+  (parameters
+    '("IdeDiagnostics*" "other")
+  )
+)
+
+(define-function ide_diagnostics_new
+  (c-name "ide_diagnostics_new")
+  (is-constructor-of "IdeDiagnostics")
+  (return-type "IdeDiagnostics*")
+  (parameters
+    '("GPtrArray*" "ar")
+  )
+)
+
+
+
+;; From ide-enums.h
+
+(define-function ide_doap_error_get_type
+  (c-name "ide_doap_error_get_type")
+  (return-type "GType")
+)
+
+(define-function ide_buffer_line_flags_get_type
+  (c-name "ide_buffer_line_flags_get_type")
+  (return-type "GType")
+)
+
+(define-function ide_build_result_log_get_type
+  (c-name "ide_build_result_log_get_type")
+  (return-type "GType")
+)
+
+(define-function ide_diagnostic_severity_get_type
+  (c-name "ide_diagnostic_severity_get_type")
+  (return-type "GType")
+)
+
+(define-function ide_highlight_result_get_type
+  (c-name "ide_highlight_result_get_type")
+  (return-type "GType")
+)
+
+(define-function ide_indent_style_get_type
+  (c-name "ide_indent_style_get_type")
+  (return-type "GType")
+)
+
+(define-function ide_layout_grid_split_get_type
+  (c-name "ide_layout_grid_split_get_type")
+  (return-type "GType")
+)
+
+(define-function ide_source_view_mode_type_get_type
+  (c-name "ide_source_view_mode_type_get_type")
+  (return-type "GType")
+)
+
+(define-function ide_source_view_theatric_get_type
+  (c-name "ide_source_view_theatric_get_type")
+  (return-type "GType")
+)
+
+(define-function ide_source_view_movement_get_type
+  (c-name "ide_source_view_movement_get_type")
+  (return-type "GType")
+)
+
+(define-function ide_symbol_kind_get_type
+  (c-name "ide_symbol_kind_get_type")
+  (return-type "GType")
+)
+
+(define-function ide_symbol_flags_get_type
+  (c-name "ide_symbol_flags_get_type")
+  (return-type "GType")
+)
+
+(define-function ide_thread_pool_kind_get_type
+  (c-name "ide_thread_pool_kind_get_type")
+  (return-type "GType")
+)
+
+
+
+;; From ide-environment-editor.h
+
+(define-method get_environment
+  (of-object "IdeEnvironmentEditor")
+  (c-name "ide_environment_editor_get_environment")
+  (return-type "IdeEnvironment*")
+)
+
+(define-method set_environment
+  (of-object "IdeEnvironmentEditor")
+  (c-name "ide_environment_editor_set_environment")
+  (return-type "none")
+  (parameters
+    '("IdeEnvironment*" "environment")
+  )
+)
+
+
+
+;; From ide-environment-editor-row.h
+
+(define-method set_variable
+  (of-object "IdeEnvironmentEditorRow")
+  (c-name "ide_environment_editor_row_set_variable")
+  (return-type "none")
+  (parameters
+    '("IdeEnvironmentVariable*" "variable")
+  )
+)
+
+(define-method start_editing
+  (of-object "IdeEnvironmentEditorRow")
+  (c-name "ide_environment_editor_row_start_editing")
+  (return-type "none")
+)
+
+
+
+;; From ide-environment.h
+
+(define-method setenv
+  (of-object "IdeEnvironment")
+  (c-name "ide_environment_setenv")
+  (return-type "none")
+  (parameters
+    '("const-gchar*" "key")
+    '("const-gchar*" "value")
+  )
+)
+
+(define-method getenv
+  (of-object "IdeEnvironment")
+  (c-name "ide_environment_getenv")
+  (return-type "const-gchar*")
+  (parameters
+    '("const-gchar*" "key")
+  )
+)
+
+(define-method get_environ
+  (of-object "IdeEnvironment")
+  (c-name "ide_environment_get_environ")
+  (return-type "gchar**")
+)
+
+(define-method append
+  (of-object "IdeEnvironment")
+  (c-name "ide_environment_append")
+  (return-type "none")
+  (parameters
+    '("IdeEnvironmentVariable*" "variable")
+  )
+)
+
+(define-method remove
+  (of-object "IdeEnvironment")
+  (c-name "ide_environment_remove")
+  (return-type "none")
+  (parameters
+    '("IdeEnvironmentVariable*" "variable")
+  )
+)
+
+(define-method copy
+  (of-object "IdeEnvironment")
+  (c-name "ide_environment_copy")
+  (return-type "IdeEnvironment*")
+)
+
+
+
+;; From ide-environment-variable.h
+
+(define-method get_key
+  (of-object "IdeEnvironmentVariable")
+  (c-name "ide_environment_variable_get_key")
+  (return-type "const-gchar*")
+)
+
+(define-method set_key
+  (of-object "IdeEnvironmentVariable")
+  (c-name "ide_environment_variable_set_key")
+  (return-type "none")
+  (parameters
+    '("const-gchar*" "key")
+  )
+)
+
+(define-method get_value
+  (of-object "IdeEnvironmentVariable")
+  (c-name "ide_environment_variable_get_value")
+  (return-type "const-gchar*")
+)
+
+(define-method set_value
+  (of-object "IdeEnvironmentVariable")
+  (c-name "ide_environment_variable_set_value")
+  (return-type "none")
+  (parameters
+    '("const-gchar*" "value")
+  )
+)
+
+
+
+;; From ide-executable.h
+
+(define-function ide_executable_get_type
+  (c-name "ide_executable_get_type")
+  (return-type "GType")
+)
+
+
+
+;; From ide-executer.h
+
+(define-function ide_executer_get_type
+  (c-name "ide_executer_get_type")
+  (return-type "GType")
+)
+
+
+
+;; From ide-extension-adapter.h
+
+(define-method get_engine
+  (of-object "IdeExtensionAdapter")
+  (c-name "ide_extension_adapter_get_engine")
+  (return-type "PeasEngine*")
+)
+
+(define-method get_extension
+  (of-object "IdeExtensionAdapter")
+  (c-name "ide_extension_adapter_get_extension")
+  (return-type "gpointer")
+)
+
+(define-method get_interface_type
+  (of-object "IdeExtensionAdapter")
+  (c-name "ide_extension_adapter_get_interface_type")
+  (return-type "GType")
+)
+
+(define-method get_key
+  (of-object "IdeExtensionAdapter")
+  (c-name "ide_extension_adapter_get_key")
+  (return-type "const-gchar*")
+)
+
+(define-method set_key
+  (of-object "IdeExtensionAdapter")
+  (c-name "ide_extension_adapter_set_key")
+  (return-type "none")
+  (parameters
+    '("const-gchar*" "key")
+  )
+)
+
+(define-method get_value
+  (of-object "IdeExtensionAdapter")
+  (c-name "ide_extension_adapter_get_value")
+  (return-type "const-gchar*")
+)
+
+(define-method set_value
+  (of-object "IdeExtensionAdapter")
+  (c-name "ide_extension_adapter_set_value")
+  (return-type "none")
+  (parameters
+    '("const-gchar*" "value")
+  )
+)
+
+
+
+;; From ide-extension-set-adapter.h
+
+(define-method get_engine
+  (of-object "IdeExtensionSetAdapter")
+  (c-name "ide_extension_set_adapter_get_engine")
+  (return-type "PeasEngine*")
+)
+
+(define-method get_interface_type
+  (of-object "IdeExtensionSetAdapter")
+  (c-name "ide_extension_set_adapter_get_interface_type")
+  (return-type "GType")
+)
+
+(define-method get_key
+  (of-object "IdeExtensionSetAdapter")
+  (c-name "ide_extension_set_adapter_get_key")
+  (return-type "const-gchar*")
+)
+
+(define-method set_key
+  (of-object "IdeExtensionSetAdapter")
+  (c-name "ide_extension_set_adapter_set_key")
+  (return-type "none")
+  (parameters
+    '("const-gchar*" "key")
+  )
+)
+
+(define-method get_value
+  (of-object "IdeExtensionSetAdapter")
+  (c-name "ide_extension_set_adapter_get_value")
+  (return-type "const-gchar*")
+)
+
+(define-method set_value
+  (of-object "IdeExtensionSetAdapter")
+  (c-name "ide_extension_set_adapter_set_value")
+  (return-type "none")
+  (parameters
+    '("const-gchar*" "value")
+  )
+)
+
+(define-method get_n_extensions
+  (of-object "IdeExtensionSetAdapter")
+  (c-name "ide_extension_set_adapter_get_n_extensions")
+  (return-type "guint")
+)
+
+(define-method foreach
+  (of-object "IdeExtensionSetAdapter")
+  (c-name "ide_extension_set_adapter_foreach")
+  (return-type "none")
+  (parameters
+    '("IdeExtensionSetAdapterForeachFunc" "foreach_func")
+    '("gpointer" "user_data")
+  )
+)
+
+
+
+;; From ide-extension-util.h
+
+(define-function ide_extension_util_can_use_plugin
+  (c-name "ide_extension_util_can_use_plugin")
+  (return-type "gboolean")
+  (parameters
+    '("PeasEngine*" "engine")
+    '("PeasPluginInfo*" "plugin_info")
+    '("GType" "interface_type")
+    '("const-gchar*" "key")
+    '("const-gchar*" "value")
+    '("gint*" "priority")
+  )
+)
+
+
+
+;; From ide-file.h
+
+(define-function ide_file_new_for_path
+  (c-name "ide_file_new_for_path")
+  (return-type "IdeFile*")
+  (parameters
+    '("IdeContext*" "context")
+    '("const-gchar*" "path")
+  )
+)
+
+(define-method get_is_temporary
+  (of-object "IdeFile")
+  (c-name "ide_file_get_is_temporary")
+  (return-type "gboolean")
+)
+
+(define-method get_temporary_id
+  (of-object "IdeFile")
+  (c-name "ide_file_get_temporary_id")
+  (return-type "guint")
+)
+
+(define-method get_language
+  (of-object "IdeFile")
+  (c-name "ide_file_get_language")
+  (return-type "GtkSourceLanguage*")
+)
+
+(define-method get_file
+  (of-object "IdeFile")
+  (c-name "ide_file_get_file")
+  (return-type "GFile*")
+)
+
+(define-method hash
+  (of-object "IdeFile")
+  (c-name "ide_file_hash")
+  (return-type "guint")
+)
+
+(define-method equal
+  (of-object "IdeFile")
+  (c-name "ide_file_equal")
+  (return-type "gboolean")
+  (parameters
+    '("IdeFile*" "other")
+  )
+)
+
+(define-method get_path
+  (of-object "IdeFile")
+  (c-name "ide_file_get_path")
+  (return-type "const-gchar*")
+)
+
+(define-method load_settings_async
+  (of-object "IdeFile")
+  (c-name "ide_file_load_settings_async")
+  (return-type "none")
+  (parameters
+    '("GCancellable*" "cancellable")
+    '("GAsyncReadyCallback" "callback")
+    '("gpointer" "user_data")
+  )
+)
+
+(define-method load_settings_finish
+  (of-object "IdeFile")
+  (c-name "ide_file_load_settings_finish")
+  (return-type "IdeFileSettings*")
+  (parameters
+    '("GAsyncResult*" "result")
+    '("GError**" "error")
+  )
+)
+
+(define-method find_other_async
+  (of-object "IdeFile")
+  (c-name "ide_file_find_other_async")
+  (return-type "none")
+  (parameters
+    '("GCancellable*" "cancellable")
+    '("GAsyncReadyCallback" "callback")
+    '("gpointer" "user_data")
+  )
+)
+
+(define-method find_other_finish
+  (of-object "IdeFile")
+  (c-name "ide_file_find_other_finish")
+  (return-type "IdeFile*")
+  (parameters
+    '("GAsyncResult*" "result")
+    '("GError**" "error")
+  )
+)
+
+
+
+;; From ide-file-settings.h
+
+(define-method settings_new
+  (of-object "IdeFile")
+  (c-name "ide_file_settings_new")
+  (return-type "IdeFileSettings*")
+)
+
+(define-method get_file
+  (of-object "IdeFileSettings")
+  (c-name "ide_file_settings_get_file")
+  (return-type "IdeFile*")
+)
+
+(define-method get_settled
+  (of-object "IdeFileSettings")
+  (c-name "ide_file_settings_get_settled")
+  (return-type "gboolean")
+)
+
+
+
+;; From ide-fixit.h
+
+(define-function ide_fixit_get_type
+  (c-name "ide_fixit_get_type")
+  (return-type "GType")
+)
+
+(define-method ref
+  (of-object "IdeFixit")
+  (c-name "ide_fixit_ref")
+  (return-type "IdeFixit*")
+)
+
+(define-method unref
+  (of-object "IdeFixit")
+  (c-name "ide_fixit_unref")
+  (return-type "none")
+)
+
+(define-method apply
+  (of-object "IdeFixit")
+  (c-name "ide_fixit_apply")
+  (return-type "none")
+)
+
+(define-method get_text
+  (of-object "IdeFixit")
+  (c-name "ide_fixit_get_text")
+  (return-type "const-gchar*")
+)
+
+(define-method get_range
+  (of-object "IdeFixit")
+  (c-name "ide_fixit_get_range")
+  (return-type "IdeSourceRange*")
+)
+
+
+
+;; From ide-global.h
+
+(define-function ide_get_program_name
+  (c-name "ide_get_program_name")
+  (return-type "const-gchar*")
+)
+
+(define-function ide_set_program_name
+  (c-name "ide_set_program_name")
+  (return-type "none")
+  (parameters
+    '("const-gchar*" "program_name")
+  )
+)
+
+
+
+;; From ide.h
+
+
+
+;; From ide-highlight-engine.h
+
+(define-method get_buffer
+  (of-object "IdeHighlightEngine")
+  (c-name "ide_highlight_engine_get_buffer")
+  (return-type "IdeBuffer*")
+)
+
+(define-method get_highlighter
+  (of-object "IdeHighlightEngine")
+  (c-name "ide_highlight_engine_get_highlighter")
+  (return-type "IdeHighlighter*")
+)
+
+(define-method rebuild
+  (of-object "IdeHighlightEngine")
+  (c-name "ide_highlight_engine_rebuild")
+  (return-type "none")
+)
+
+(define-method invalidate
+  (of-object "IdeHighlightEngine")
+  (c-name "ide_highlight_engine_invalidate")
+  (return-type "none")
+  (parameters
+    '("const-GtkTextIter*" "begin")
+    '("const-GtkTextIter*" "end")
+  )
+)
+
+(define-method get_style
+  (of-object "IdeHighlightEngine")
+  (c-name "ide_highlight_engine_get_style")
+  (return-type "GtkTextTag*")
+  (parameters
+    '("const-gchar*" "style_name")
+  )
+)
+
+
+
+;; From ide-highlighter.h
+
+(define-method update
+  (of-object "IdeHighlighter")
+  (c-name "ide_highlighter_update")
+  (return-type "none")
+  (parameters
+    '("IdeHighlightCallback" "callback")
+    '("const-GtkTextIter*" "range_begin")
+    '("const-GtkTextIter*" "range_end")
+    '("GtkTextIter*" "location")
+  )
+)
+
+
+
+;; From ide-highlight-index.h
+
+(define-function ide_highlight_index_get_type
+  (c-name "ide_highlight_index_get_type")
+  (return-type "GType")
+)
+
+(define-function ide_highlight_index_new
+  (c-name "ide_highlight_index_new")
+  (is-constructor-of "IdeHighlightIndex")
+  (return-type "IdeHighlightIndex*")
+)
+
+(define-method ref
+  (of-object "IdeHighlightIndex")
+  (c-name "ide_highlight_index_ref")
+  (return-type "IdeHighlightIndex*")
+)
+
+(define-method unref
+  (of-object "IdeHighlightIndex")
+  (c-name "ide_highlight_index_unref")
+  (return-type "none")
+)
+
+(define-method insert
+  (of-object "IdeHighlightIndex")
+  (c-name "ide_highlight_index_insert")
+  (return-type "none")
+  (parameters
+    '("const-gchar*" "word")
+    '("gpointer" "tag")
+  )
+)
+
+(define-method lookup
+  (of-object "IdeHighlightIndex")
+  (c-name "ide_highlight_index_lookup")
+  (return-type "gpointer")
+  (parameters
+    '("const-gchar*" "word")
+  )
+)
+
+(define-method dump
+  (of-object "IdeHighlightIndex")
+  (c-name "ide_highlight_index_dump")
+  (return-type "none")
+)
+
+
+
+;; From ide-indenter.h
+
+(define-method is_trigger
+  (of-object "IdeIndenter")
+  (c-name "ide_indenter_is_trigger")
+  (return-type "gboolean")
+  (parameters
+    '("GdkEventKey*" "event")
+  )
+)
+
+(define-method format
+  (of-object "IdeIndenter")
+  (c-name "ide_indenter_format")
+  (return-type "gchar*")
+  (parameters
+    '("GtkTextView*" "text_view")
+    '("GtkTextIter*" "begin")
+    '("GtkTextIter*" "end")
+    '("gint*" "cursor_offset")
+    '("GdkEventKey*" "event")
+  )
+)
+
+
+
+;; From ide-indent-style.h
+
+
+
+;; From ide-internal.h
+
+
+
+;; From ide-keybindings.h
+
+(define-method get_application
+  (of-object "IdeKeybindings")
+  (c-name "ide_keybindings_get_application")
+  (return-type "GtkApplication*")
+)
+
+(define-method get_mode
+  (of-object "IdeKeybindings")
+  (c-name "ide_keybindings_get_mode")
+  (return-type "const-gchar*")
+)
+
+(define-method set_mode
+  (of-object "IdeKeybindings")
+  (c-name "ide_keybindings_set_mode")
+  (return-type "none")
+  (parameters
+    '("const-gchar*" "name")
+  )
+)
+
+
+
+;; From ide-layout-grid.h
+
+(define-method add_stack_after
+  (of-object "IdeLayoutGrid")
+  (c-name "ide_layout_grid_add_stack_after")
+  (return-type "GtkWidget*")
+  (parameters
+    '("IdeLayoutStack*" "stack")
+  )
+)
+
+(define-method add_stack_before
+  (of-object "IdeLayoutGrid")
+  (c-name "ide_layout_grid_add_stack_before")
+  (return-type "GtkWidget*")
+  (parameters
+    '("IdeLayoutStack*" "stack")
+  )
+)
+
+(define-method get_stack_after
+  (of-object "IdeLayoutGrid")
+  (c-name "ide_layout_grid_get_stack_after")
+  (return-type "GtkWidget*")
+  (parameters
+    '("IdeLayoutStack*" "stack")
+  )
+)
+
+(define-method get_stack_before
+  (of-object "IdeLayoutGrid")
+  (c-name "ide_layout_grid_get_stack_before")
+  (return-type "GtkWidget*")
+  (parameters
+    '("IdeLayoutStack*" "stack")
+  )
+)
+
+(define-method get_stacks
+  (of-object "IdeLayoutGrid")
+  (c-name "ide_layout_grid_get_stacks")
+  (return-type "GList*")
+)
+
+(define-method get_last_focus
+  (of-object "IdeLayoutGrid")
+  (c-name "ide_layout_grid_get_last_focus")
+  (return-type "GtkWidget*")
+)
+
+(define-method foreach_view
+  (of-object "IdeLayoutGrid")
+  (c-name "ide_layout_grid_foreach_view")
+  (return-type "none")
+  (parameters
+    '("GtkCallback" "callback")
+    '("gpointer" "user_data")
+  )
+)
+
+
+
+;; From ide-layout.h
+
+(define-method get_active_view
+  (of-object "IdeLayout")
+  (c-name "ide_layout_get_active_view")
+  (return-type "GtkWidget*")
+)
+
+
+
+;; From ide-layout-pane.h
+
+
+
+;; From ide-layout-stack-actions.h
+
+
+
+;; From ide-layout-stack.h
+
+(define-method remove
+  (of-object "IdeLayoutStack")
+  (c-name "ide_layout_stack_remove")
+  (return-type "none")
+  (parameters
+    '("GtkWidget*" "view")
+  )
+)
+
+(define-method get_active_view
+  (of-object "IdeLayoutStack")
+  (c-name "ide_layout_stack_get_active_view")
+  (return-type "GtkWidget*")
+)
+
+(define-method set_active_view
+  (of-object "IdeLayoutStack")
+  (c-name "ide_layout_stack_set_active_view")
+  (return-type "none")
+  (parameters
+    '("GtkWidget*" "active_view")
+  )
+)
+
+(define-method foreach_view
+  (of-object "IdeLayoutStack")
+  (c-name "ide_layout_stack_foreach_view")
+  (return-type "none")
+  (parameters
+    '("GtkCallback" "callback")
+    '("gpointer" "user_data")
+  )
+)
+
+
+
+;; From ide-layout-stack-private.h
+
+(define-function ide_layout_stack_add
+  (c-name "ide_layout_stack_add")
+  (return-type "none")
+  (parameters
+    '("GtkContainer*" "container")
+    '("GtkWidget*" "child")
+  )
+)
+
+
+
+;; From ide-layout-stack-split.h
+
+
+
+;; From ide-layout-tab-bar.h
+
+(define-method show_list
+  (of-object "IdeLayoutTabBar")
+  (c-name "ide_layout_tab_bar_show_list")
+  (return-type "none")
+)
+
+
+
+;; From ide-layout-tab.h
+
+
+
+;; From ide-layout-view.h
+
+(define-method create_split
+  (of-object "IdeLayoutView")
+  (c-name "ide_layout_view_create_split")
+  (return-type "IdeLayoutView*")
+)
+
+(define-method get_can_preview
+  (of-object "IdeLayoutView")
+  (c-name "ide_layout_view_get_can_preview")
+  (return-type "gboolean")
+)
+
+(define-method get_can_split
+  (of-object "IdeLayoutView")
+  (c-name "ide_layout_view_get_can_split")
+  (return-type "gboolean")
+)
+
+(define-method get_title
+  (of-object "IdeLayoutView")
+  (c-name "ide_layout_view_get_title")
+  (return-type "const-gchar*")
+)
+
+(define-method get_special_title
+  (of-object "IdeLayoutView")
+  (c-name "ide_layout_view_get_special_title")
+  (return-type "const-gchar*")
+)
+
+(define-method get_controls
+  (of-object "IdeLayoutView")
+  (c-name "ide_layout_view_get_controls")
+  (return-type "GtkWidget*")
+)
+
+(define-method get_modified
+  (of-object "IdeLayoutView")
+  (c-name "ide_layout_view_get_modified")
+  (return-type "gboolean")
+)
+
+(define-method set_split_view
+  (of-object "IdeLayoutView")
+  (c-name "ide_layout_view_set_split_view")
+  (return-type "none")
+  (parameters
+    '("gboolean" "split_view")
+  )
+)
+
+(define-method set_back_forward_list
+  (of-object "IdeLayoutView")
+  (c-name "ide_layout_view_set_back_forward_list")
+  (return-type "none")
+  (parameters
+    '("IdeBackForwardList*" "back_forward_list")
+  )
+)
+
+(define-method navigate_to
+  (of-object "IdeLayoutView")
+  (c-name "ide_layout_view_navigate_to")
+  (return-type "none")
+  (parameters
+    '("IdeSourceLocation*" "location")
+  )
+)
+
+
+
+;; From ide-line-change-gutter-renderer.h
+
+
+
+;; From ide-line-diagnostics-gutter-renderer.h
+
+
+
+;; From ide-log.h
+
+(define-function ide_log_init
+  (c-name "ide_log_init")
+  (return-type "none")
+  (parameters
+    '("gboolean" "stdout_")
+    '("const-gchar*" "filename")
+  )
+)
+
+(define-function ide_log_increase_verbosity
+  (c-name "ide_log_increase_verbosity")
+  (return-type "none")
+)
+
+(define-function ide_log_get_verbosity
+  (c-name "ide_log_get_verbosity")
+  (return-type "gint")
+)
+
+(define-function ide_log_set_verbosity
+  (c-name "ide_log_set_verbosity")
+  (return-type "none")
+  (parameters
+    '("gint" "level")
+  )
+)
+
+(define-function ide_log_shutdown
+  (c-name "ide_log_shutdown")
+  (return-type "none")
+)
+
+
+
+;; From ide-macros.h
+
+(define-function ide_str_empty0
+  (c-name "ide_str_empty0")
+  (return-type "gboolean")
+  (parameters
+    '("const-gchar*" "str")
+  )
+)
+
+(define-function ide_str_equal0
+  (c-name "ide_str_equal0")
+  (return-type "gboolean")
+  (parameters
+    '("gconstpointer" "a")
+    '("gconstpointer" "b")
+  )
+)
+
+
+
+;; From ide-object.h
+
+(define-method get_context
+  (of-object "IdeObject")
+  (c-name "ide_object_get_context")
+  (return-type "IdeContext*")
+)
+
+(define-method set_context
+  (of-object "IdeObject")
+  (c-name "ide_object_set_context")
+  (return-type "none")
+  (parameters
+    '("IdeContext*" "context")
+  )
+)
+
+(define-function ide_object_new_for_extension_async
+  (c-name "ide_object_new_for_extension_async")
+  (return-type "none")
+  (parameters
+    '("GType" "interface_gtype")
+    '("GCompareDataFunc" "sort_priority_func")
+    '("gpointer" "sort_proirity_data")
+    '("int" "io_priority")
+    '("GCancellable*" "cancellable")
+    '("GAsyncReadyCallback" "callback")
+    '("gpointer" "user_data")
+    '("const-gchar*" "first_property")
+  )
+  (varargs #t)
+)
+
+(define-function ide_object_new_async
+  (c-name "ide_object_new_async")
+  (return-type "none")
+  (parameters
+    '("const-gchar*" "extension_point")
+    '("int" "io_priority")
+    '("GCancellable*" "cancellable")
+    '("GAsyncReadyCallback" "callback")
+    '("gpointer" "user_data")
+    '("const-gchar*" "first_property")
+  )
+  (varargs #t)
+)
+
+(define-function ide_object_new_finish
+  (c-name "ide_object_new_finish")
+  (return-type "IdeObject*")
+  (parameters
+    '("GAsyncResult*" "result")
+    '("GError**" "error")
+  )
+)
+
+(define-method hold
+  (of-object "IdeObject")
+  (c-name "ide_object_hold")
+  (return-type "gboolean")
+)
+
+(define-method release
+  (of-object "IdeObject")
+  (c-name "ide_object_release")
+  (return-type "none")
+)
+
+(define-function ide_object_notify_in_main
+  (c-name "ide_object_notify_in_main")
+  (return-type "none")
+  (parameters
+    '("gpointer" "instance")
+    '("GParamSpec*" "pspec")
+  )
+)
+
+
+
+;; From ide-pattern-spec.h
+
+(define-function ide_pattern_spec_get_type
+  (c-name "ide_pattern_spec_get_type")
+  (return-type "GType")
+)
+
+(define-function ide_pattern_spec_new
+  (c-name "ide_pattern_spec_new")
+  (is-constructor-of "IdePatternSpec")
+  (return-type "IdePatternSpec*")
+  (parameters
+    '("const-gchar*" "keywords")
+  )
+)
+
+(define-method ref
+  (of-object "IdePatternSpec")
+  (c-name "ide_pattern_spec_ref")
+  (return-type "IdePatternSpec*")
+)
+
+(define-method unref
+  (of-object "IdePatternSpec")
+  (c-name "ide_pattern_spec_unref")
+  (return-type "none")
+)
+
+(define-method match
+  (of-object "IdePatternSpec")
+  (c-name "ide_pattern_spec_match")
+  (return-type "gboolean")
+  (parameters
+    '("const-gchar*" "haystack")
+  )
+)
+
+(define-method get_text
+  (of-object "IdePatternSpec")
+  (c-name "ide_pattern_spec_get_text")
+  (return-type "const-gchar*")
+)
+
+
+
+;; From ide-perspective.h
+
+(define-method agree_to_shutdown
+  (of-object "IdePerspective")
+  (c-name "ide_perspective_agree_to_shutdown")
+  (return-type "gboolean")
+)
+
+(define-method get_actions
+  (of-object "IdePerspective")
+  (c-name "ide_perspective_get_actions")
+  (return-type "GActionGroup*")
+)
+
+(define-method get_icon_name
+  (of-object "IdePerspective")
+  (c-name "ide_perspective_get_icon_name")
+  (return-type "gchar*")
+)
+
+(define-method get_id
+  (of-object "IdePerspective")
+  (c-name "ide_perspective_get_id")
+  (return-type "gchar*")
+)
+
+(define-method get_needs_attention
+  (of-object "IdePerspective")
+  (c-name "ide_perspective_get_needs_attention")
+  (return-type "gboolean")
+)
+
+(define-method get_priority
+  (of-object "IdePerspective")
+  (c-name "ide_perspective_get_priority")
+  (return-type "gint")
+)
+
+(define-method get_title
+  (of-object "IdePerspective")
+  (c-name "ide_perspective_get_title")
+  (return-type "gchar*")
+)
+
+(define-method get_titlebar
+  (of-object "IdePerspective")
+  (c-name "ide_perspective_get_titlebar")
+  (return-type "GtkWidget*")
+)
+
+(define-method is_early
+  (of-object "IdePerspective")
+  (c-name "ide_perspective_is_early")
+  (return-type "gboolean")
+)
+
+(define-method set_fullscreen
+  (of-object "IdePerspective")
+  (c-name "ide_perspective_set_fullscreen")
+  (return-type "none")
+  (parameters
+    '("gboolean" "fullscreen")
+  )
+)
+
+(define-method views_foreach
+  (of-object "IdePerspective")
+  (c-name "ide_perspective_views_foreach")
+  (return-type "none")
+  (parameters
+    '("GtkCallback" "callback")
+    '("gpointer" "user_data")
+  )
+)
+
+
+
+;; From ide-perspective-switcher.h
+
+
+
+;; From ide-preferences-addin.h
+
+(define-method load
+  (of-object "IdePreferencesAddin")
+  (c-name "ide_preferences_addin_load")
+  (return-type "none")
+  (parameters
+    '("IdePreferences*" "preferences")
+  )
+)
+
+(define-method unload
+  (of-object "IdePreferencesAddin")
+  (c-name "ide_preferences_addin_unload")
+  (return-type "none")
+  (parameters
+    '("IdePreferences*" "preferences")
+  )
+)
+
+
+
+;; From ide-preferences.h
+
+(define-method add_page
+  (of-object "IdePreferences")
+  (c-name "ide_preferences_add_page")
+  (return-type "none")
+  (parameters
+    '("const-gchar*" "page_name")
+    '("const-gchar*" "title")
+    '("gint" "priority")
+  )
+)
+
+(define-method add_group
+  (of-object "IdePreferences")
+  (c-name "ide_preferences_add_group")
+  (return-type "none")
+  (parameters
+    '("const-gchar*" "page_name")
+    '("const-gchar*" "group_name")
+    '("const-gchar*" "title")
+    '("gint" "priority")
+  )
+)
+
+(define-method add_list_group
+  (of-object "IdePreferences")
+  (c-name "ide_preferences_add_list_group")
+  (return-type "none")
+  (parameters
+    '("const-gchar*" "page_name")
+    '("const-gchar*" "group_name")
+    '("const-gchar*" "title")
+    '("gint" "priority")
+  )
+)
+
+(define-method add_radio
+  (of-object "IdePreferences")
+  (c-name "ide_preferences_add_radio")
+  (return-type "guint")
+  (parameters
+    '("const-gchar*" "page_name")
+    '("const-gchar*" "group_name")
+    '("const-gchar*" "schema_id")
+    '("const-gchar*" "key")
+    '("const-gchar*" "path")
+    '("const-gchar*" "variant_string")
+    '("const-gchar*" "title")
+    '("const-gchar*" "subtitle")
+    '("const-gchar*" "keywords")
+    '("gint" "priority")
+  )
+)
+
+(define-method add_switch
+  (of-object "IdePreferences")
+  (c-name "ide_preferences_add_switch")
+  (return-type "guint")
+  (parameters
+    '("const-gchar*" "page_name")
+    '("const-gchar*" "group_name")
+    '("const-gchar*" "schema_id")
+    '("const-gchar*" "key")
+    '("const-gchar*" "path")
+    '("const-gchar*" "variant_string")
+    '("const-gchar*" "title")
+    '("const-gchar*" "subtitle")
+    '("const-gchar*" "keywords")
+    '("gint" "priority")
+  )
+)
+
+(define-method add_spin_button
+  (of-object "IdePreferences")
+  (c-name "ide_preferences_add_spin_button")
+  (return-type "guint")
+  (parameters
+    '("const-gchar*" "page_name")
+    '("const-gchar*" "group_name")
+    '("const-gchar*" "schema_id")
+    '("const-gchar*" "key")
+    '("const-gchar*" "path")
+    '("const-gchar*" "title")
+    '("const-gchar*" "subtitle")
+    '("const-gchar*" "keywords")
+    '("gint" "priority")
+  )
+)
+
+(define-method add_custom
+  (of-object "IdePreferences")
+  (c-name "ide_preferences_add_custom")
+  (return-type "guint")
+  (parameters
+    '("const-gchar*" "page_name")
+    '("const-gchar*" "group_name")
+    '("GtkWidget*" "widget")
+    '("const-gchar*" "keywords")
+    '("gint" "priority")
+  )
+)
+
+(define-method add_font_button
+  (of-object "IdePreferences")
+  (c-name "ide_preferences_add_font_button")
+  (return-type "guint")
+  (parameters
+    '("const-gchar*" "page_name")
+    '("const-gchar*" "group_name")
+    '("const-gchar*" "schema_id")
+    '("const-gchar*" "key")
+    '("const-gchar*" "title")
+    '("const-gchar*" "keywords")
+    '("gint" "priority")
+  )
+)
+
+(define-method add_file_chooser
+  (of-object "IdePreferences")
+  (c-name "ide_preferences_add_file_chooser")
+  (return-type "guint")
+  (parameters
+    '("const-gchar*" "page_name")
+    '("const-gchar*" "group_name")
+    '("const-gchar*" "schema_id")
+    '("const-gchar*" "key")
+    '("const-gchar*" "path")
+    '("const-gchar*" "title")
+    '("const-gchar*" "subtitle")
+    '("GtkFileChooserAction" "action")
+    '("const-gchar*" "keywords")
+    '("gint" "priority")
+  )
+)
+
+(define-method remove_id
+  (of-object "IdePreferences")
+  (c-name "ide_preferences_remove_id")
+  (return-type "gboolean")
+  (parameters
+    '("guint" "widget_id")
+  )
+)
+
+(define-method set_page
+  (of-object "IdePreferences")
+  (c-name "ide_preferences_set_page")
+  (return-type "none")
+  (parameters
+    '("const-gchar*" "page_name")
+    '("GHashTable*" "map")
+  )
+)
+
+
+
+;; From ide-process.h
+
+(define-function ide_process_get_type
+  (c-name "ide_process_get_type")
+  (return-type "GType")
+)
+
+
+
+;; From ide-progress.h
+
+(define-method get_fraction
+  (of-object "IdeProgress")
+  (c-name "ide_progress_get_fraction")
+  (return-type "gdouble")
+)
+
+(define-method get_message
+  (of-object "IdeProgress")
+  (c-name "ide_progress_get_message")
+  (return-type "const-gchar*")
+)
+
+(define-method set_fraction
+  (of-object "IdeProgress")
+  (c-name "ide_progress_set_fraction")
+  (return-type "none")
+  (parameters
+    '("gdouble" "fraction")
+  )
+)
+
+(define-method set_message
+  (of-object "IdeProgress")
+  (c-name "ide_progress_set_message")
+  (return-type "none")
+  (parameters
+    '("const-gchar*" "message")
+  )
+)
+
+(define-function ide_progress_file_progress_callback
+  (c-name "ide_progress_file_progress_callback")
+  (return-type "none")
+  (parameters
+    '("goffset" "current_num_bytes")
+    '("goffset" "total_num_bytes")
+    '("gpointer" "user_data")
+  )
+)
+
+
+
+;; From ide-project-file.h
+
+(define-method get_file
+  (of-object "IdeProjectFile")
+  (c-name "ide_project_file_get_file")
+  (return-type "GFile*")
+)
+
+(define-method get_file_info
+  (of-object "IdeProjectFile")
+  (c-name "ide_project_file_get_file_info")
+  (return-type "GFileInfo*")
+)
+
+(define-method get_name
+  (of-object "IdeProjectFile")
+  (c-name "ide_project_file_get_name")
+  (return-type "const-gchar*")
+)
+
+(define-method get_path
+  (of-object "IdeProjectFile")
+  (c-name "ide_project_file_get_path")
+  (return-type "const-gchar*")
+)
+
+(define-method get_is_directory
+  (of-object "IdeProjectFile")
+  (c-name "ide_project_file_get_is_directory")
+  (return-type "gboolean")
+)
+
+
+
+;; From ide-project-files.h
+
+(define-method get_file_for_path
+  (of-object "IdeProjectFiles")
+  (c-name "ide_project_files_get_file_for_path")
+  (return-type "IdeFile*")
+  (parameters
+    '("const-gchar*" "path")
+  )
+)
+
+(define-method add_file
+  (of-object "IdeProjectFiles")
+  (c-name "ide_project_files_add_file")
+  (return-type "none")
+  (parameters
+    '("IdeProjectFile*" "file")
+  )
+)
+
+(define-method find_file
+  (of-object "IdeProjectFiles")
+  (c-name "ide_project_files_find_file")
+  (return-type "IdeProjectItem*")
+  (parameters
+    '("GFile*" "file")
+  )
+)
+
+
+
+;; From ide-project.h
+
+(define-method get_name
+  (of-object "IdeProject")
+  (c-name "ide_project_get_name")
+  (return-type "const-gchar*")
+)
+
+(define-method get_id
+  (of-object "IdeProject")
+  (c-name "ide_project_get_id")
+  (return-type "const-gchar*")
+)
+
+(define-method get_file_for_path
+  (of-object "IdeProject")
+  (c-name "ide_project_get_file_for_path")
+  (return-type "IdeFile*")
+  (parameters
+    '("const-gchar*" "path")
+  )
+)
+
+(define-method get_project_file
+  (of-object "IdeProject")
+  (c-name "ide_project_get_project_file")
+  (return-type "IdeFile*")
+  (parameters
+    '("GFile*" "gfile")
+  )
+)
+
+(define-method reader_lock
+  (of-object "IdeProject")
+  (c-name "ide_project_reader_lock")
+  (return-type "none")
+)
+
+(define-method reader_unlock
+  (of-object "IdeProject")
+  (c-name "ide_project_reader_unlock")
+  (return-type "none")
+)
+
+(define-method writer_lock
+  (of-object "IdeProject")
+  (c-name "ide_project_writer_lock")
+  (return-type "none")
+)
+
+(define-method writer_unlock
+  (of-object "IdeProject")
+  (c-name "ide_project_writer_unlock")
+  (return-type "none")
+)
+
+(define-method add_file
+  (of-object "IdeProject")
+  (c-name "ide_project_add_file")
+  (return-type "none")
+  (parameters
+    '("IdeProjectFile*" "file")
+  )
+)
+
+(define-method get_files
+  (of-object "IdeProject")
+  (c-name "ide_project_get_files")
+  (return-type "IdeProjectFiles*")
+)
+
+(define-method rename_file_async
+  (of-object "IdeProject")
+  (c-name "ide_project_rename_file_async")
+  (return-type "none")
+  (parameters
+    '("GFile*" "orig_file")
+    '("GFile*" "new_file")
+    '("GCancellable*" "cancellable")
+    '("GAsyncReadyCallback" "callback")
+    '("gpointer" "user_data")
+  )
+)
+
+(define-method rename_file_finish
+  (of-object "IdeProject")
+  (c-name "ide_project_rename_file_finish")
+  (return-type "gboolean")
+  (parameters
+    '("GAsyncResult*" "result")
+    '("GError**" "error")
+  )
+)
+
+(define-method trash_file_async
+  (of-object "IdeProject")
+  (c-name "ide_project_trash_file_async")
+  (return-type "none")
+  (parameters
+    '("GFile*" "file")
+    '("GCancellable*" "cancellable")
+    '("GAsyncReadyCallback" "callback")
+    '("gpointer" "user_data")
+  )
+)
+
+(define-method trash_file_finish
+  (of-object "IdeProject")
+  (c-name "ide_project_trash_file_finish")
+  (return-type "gboolean")
+  (parameters
+    '("GAsyncResult*" "result")
+    '("GError**" "error")
+  )
+)
+
+
+
+;; From ide-project-info.h
+
+(define-method get_file
+  (of-object "IdeProjectInfo")
+  (c-name "ide_project_info_get_file")
+  (return-type "GFile*")
+)
+
+(define-method get_doap
+  (of-object "IdeProjectInfo")
+  (c-name "ide_project_info_get_doap")
+  (return-type "IdeDoap*")
+)
+
+(define-method get_description
+  (of-object "IdeProjectInfo")
+  (c-name "ide_project_info_get_description")
+  (return-type "const-gchar*")
+)
+
+(define-method get_directory
+  (of-object "IdeProjectInfo")
+  (c-name "ide_project_info_get_directory")
+  (return-type "GFile*")
+)
+
+(define-method get_is_recent
+  (of-object "IdeProjectInfo")
+  (c-name "ide_project_info_get_is_recent")
+  (return-type "gboolean")
+)
+
+(define-method get_priority
+  (of-object "IdeProjectInfo")
+  (c-name "ide_project_info_get_priority")
+  (return-type "gint")
+)
+
+(define-method get_last_modified_at
+  (of-object "IdeProjectInfo")
+  (c-name "ide_project_info_get_last_modified_at")
+  (return-type "GDateTime*")
+)
+
+(define-method get_languages
+  (of-object "IdeProjectInfo")
+  (c-name "ide_project_info_get_languages")
+  (return-type "const-gchar*-const*")
+)
+
+(define-method get_name
+  (of-object "IdeProjectInfo")
+  (c-name "ide_project_info_get_name")
+  (return-type "const-gchar*")
+)
+
+(define-method set_file
+  (of-object "IdeProjectInfo")
+  (c-name "ide_project_info_set_file")
+  (return-type "none")
+  (parameters
+    '("GFile*" "file")
+  )
+)
+
+(define-method set_description
+  (of-object "IdeProjectInfo")
+  (c-name "ide_project_info_set_description")
+  (return-type "none")
+  (parameters
+    '("const-gchar*" "description")
+  )
+)
+
+(define-method set_directory
+  (of-object "IdeProjectInfo")
+  (c-name "ide_project_info_set_directory")
+  (return-type "none")
+  (parameters
+    '("GFile*" "directory")
+  )
+)
+
+(define-method set_is_recent
+  (of-object "IdeProjectInfo")
+  (c-name "ide_project_info_set_is_recent")
+  (return-type "none")
+  (parameters
+    '("gboolean" "is_recent")
+  )
+)
+
+(define-method set_languages
+  (of-object "IdeProjectInfo")
+  (c-name "ide_project_info_set_languages")
+  (return-type "none")
+  (parameters
+    '("gchar**" "languages")
+  )
+)
+
+(define-method set_name
+  (of-object "IdeProjectInfo")
+  (c-name "ide_project_info_set_name")
+  (return-type "none")
+  (parameters
+    '("const-gchar*" "name")
+  )
+)
+
+(define-method set_priority
+  (of-object "IdeProjectInfo")
+  (c-name "ide_project_info_set_priority")
+  (return-type "none")
+  (parameters
+    '("gint" "priority")
+  )
+)
+
+
+
+;; From ide-project-item.h
+
+(define-method get_parent
+  (of-object "IdeProjectItem")
+  (c-name "ide_project_item_get_parent")
+  (return-type "IdeProjectItem*")
+)
+
+(define-method append
+  (of-object "IdeProjectItem")
+  (c-name "ide_project_item_append")
+  (return-type "none")
+  (parameters
+    '("IdeProjectItem*" "child")
+  )
+)
+
+(define-method remove
+  (of-object "IdeProjectItem")
+  (c-name "ide_project_item_remove")
+  (return-type "none")
+  (parameters
+    '("IdeProjectItem*" "child")
+  )
+)
+
+(define-method get_children
+  (of-object "IdeProjectItem")
+  (c-name "ide_project_item_get_children")
+  (return-type "GSequence*")
+)
+
+
+
+;; From ide-project-miner.h
+
+(define-method emit_discovered
+  (of-object "IdeProjectMiner")
+  (c-name "ide_project_miner_emit_discovered")
+  (return-type "none")
+  (parameters
+    '("IdeProjectInfo*" "project_info")
+  )
+)
+
+(define-method mine_async
+  (of-object "IdeProjectMiner")
+  (c-name "ide_project_miner_mine_async")
+  (return-type "none")
+  (parameters
+    '("GCancellable*" "cancellable")
+    '("GAsyncReadyCallback" "callback")
+    '("gpointer" "user_data")
+  )
+)
+
+(define-method mine_finish
+  (of-object "IdeProjectMiner")
+  (c-name "ide_project_miner_mine_finish")
+  (return-type "gboolean")
+  (parameters
+    '("GAsyncResult*" "result")
+    '("GError**" "error")
+  )
+)
+
+
+
+;; From ide-recent-projects.h
+
+(define-method get_projects
+  (of-object "IdeRecentProjects")
+  (c-name "ide_recent_projects_get_projects")
+  (return-type "GPtrArray*")
+)
+
+(define-method get_busy
+  (of-object "IdeRecentProjects")
+  (c-name "ide_recent_projects_get_busy")
+  (return-type "gboolean")
+)
+
+(define-method remove
+  (of-object "IdeRecentProjects")
+  (c-name "ide_recent_projects_remove")
+  (return-type "none")
+  (parameters
+    '("GList*" "project_infos")
+  )
+)
+
+(define-method discover_async
+  (of-object "IdeRecentProjects")
+  (c-name "ide_recent_projects_discover_async")
+  (return-type "none")
+  (parameters
+    '("gboolean" "recent_only")
+    '("GCancellable*" "cancellable")
+    '("GAsyncReadyCallback" "callback")
+    '("gpointer" "user_data")
+  )
+)
+
+(define-method discover_finish
+  (of-object "IdeRecentProjects")
+  (c-name "ide_recent_projects_discover_finish")
+  (return-type "gboolean")
+  (parameters
+    '("GAsyncResult*" "result")
+    '("GError**" "error")
+  )
+)
+
+
+
+;; From ide-refactory.h
+
+
+
+;; From ide-ref-ptr.h
+
+(define-function ide_ref_ptr_get_type
+  (c-name "ide_ref_ptr_get_type")
+  (return-type "GType")
+)
+
+(define-function ide_ref_ptr_new
+  (c-name "ide_ref_ptr_new")
+  (is-constructor-of "IdeRefPtr")
+  (return-type "IdeRefPtr*")
+  (parameters
+    '("gpointer" "data")
+    '("GDestroyNotify" "free_func")
+  )
+)
+
+(define-method ref
+  (of-object "IdeRefPtr")
+  (c-name "ide_ref_ptr_ref")
+  (return-type "IdeRefPtr*")
+)
+
+(define-method unref
+  (of-object "IdeRefPtr")
+  (c-name "ide_ref_ptr_unref")
+  (return-type "none")
+)
+
+(define-method get
+  (of-object "IdeRefPtr")
+  (c-name "ide_ref_ptr_get")
+  (return-type "gpointer")
+)
+
+
+
+;; From ide-runtime.h
+
+(define-method prebuild_async
+  (of-object "IdeRuntime")
+  (c-name "ide_runtime_prebuild_async")
+  (return-type "none")
+  (parameters
+    '("GCancellable*" "cancellable")
+    '("GAsyncReadyCallback" "callback")
+    '("gpointer" "user_data")
+  )
+)
+
+(define-method prebuild_finish
+  (of-object "IdeRuntime")
+  (c-name "ide_runtime_prebuild_finish")
+  (return-type "gboolean")
+  (parameters
+    '("GAsyncResult*" "result")
+    '("GError**" "error")
+  )
+)
+
+(define-method postbuild_async
+  (of-object "IdeRuntime")
+  (c-name "ide_runtime_postbuild_async")
+  (return-type "none")
+  (parameters
+    '("GCancellable*" "cancellable")
+    '("GAsyncReadyCallback" "callback")
+    '("gpointer" "user_data")
+  )
+)
+
+(define-method postbuild_finish
+  (of-object "IdeRuntime")
+  (c-name "ide_runtime_postbuild_finish")
+  (return-type "gboolean")
+  (parameters
+    '("GAsyncResult*" "result")
+    '("GError**" "error")
+  )
+)
+
+(define-method contains_program_in_path
+  (of-object "IdeRuntime")
+  (c-name "ide_runtime_contains_program_in_path")
+  (return-type "gboolean")
+  (parameters
+    '("const-gchar*" "program")
+    '("GCancellable*" "cancellable")
+  )
+)
+
+(define-method create_launcher
+  (of-object "IdeRuntime")
+  (c-name "ide_runtime_create_launcher")
+  (return-type "IdeSubprocessLauncher*")
+  (parameters
+    '("GError**" "error")
+  )
+)
+
+(define-method prepare_configuration
+  (of-object "IdeRuntime")
+  (c-name "ide_runtime_prepare_configuration")
+  (return-type "none")
+  (parameters
+    '("IdeConfiguration*" "configuration")
+  )
+)
+
+(define-function ide_runtime_new
+  (c-name "ide_runtime_new")
+  (is-constructor-of "IdeRuntime")
+  (return-type "IdeRuntime*")
+  (parameters
+    '("IdeContext*" "context")
+    '("const-gchar*" "id")
+    '("const-gchar*" "title")
+  )
+)
+
+(define-method get_id
+  (of-object "IdeRuntime")
+  (c-name "ide_runtime_get_id")
+  (return-type "const-gchar*")
+)
+
+(define-method set_id
+  (of-object "IdeRuntime")
+  (c-name "ide_runtime_set_id")
+  (return-type "none")
+  (parameters
+    '("const-gchar*" "id")
+  )
+)
+
+(define-method get_display_name
+  (of-object "IdeRuntime")
+  (c-name "ide_runtime_get_display_name")
+  (return-type "const-gchar*")
+)
+
+(define-method set_display_name
+  (of-object "IdeRuntime")
+  (c-name "ide_runtime_set_display_name")
+  (return-type "none")
+  (parameters
+    '("const-gchar*" "display_name")
+  )
+)
+
+
+
+;; From ide-runtime-manager.h
+
+(define-method add
+  (of-object "IdeRuntimeManager")
+  (c-name "ide_runtime_manager_add")
+  (return-type "none")
+  (parameters
+    '("IdeRuntime*" "runtime")
+  )
+)
+
+(define-method remove
+  (of-object "IdeRuntimeManager")
+  (c-name "ide_runtime_manager_remove")
+  (return-type "none")
+  (parameters
+    '("IdeRuntime*" "runtime")
+  )
+)
+
+
+
+;; From ide-runtime-provider.h
+
+(define-method load
+  (of-object "IdeRuntimeProvider")
+  (c-name "ide_runtime_provider_load")
+  (return-type "none")
+  (parameters
+    '("IdeRuntimeManager*" "manager")
+  )
+)
+
+(define-method unload
+  (of-object "IdeRuntimeProvider")
+  (c-name "ide_runtime_provider_unload")
+  (return-type "none")
+  (parameters
+    '("IdeRuntimeManager*" "manager")
+  )
+)
+
+
+
+;; From ide-script.h
+
+(define-method load
+  (of-object "IdeScript")
+  (c-name "ide_script_load")
+  (return-type "none")
+)
+
+(define-method unload
+  (of-object "IdeScript")
+  (c-name "ide_script_unload")
+  (return-type "none")
+)
+
+(define-method get_file
+  (of-object "IdeScript")
+  (c-name "ide_script_get_file")
+  (return-type "GFile*")
+)
+
+
+
+;; From ide-script-manager.h
+
+(define-method load_async
+  (of-object "IdeScriptManager")
+  (c-name "ide_script_manager_load_async")
+  (return-type "none")
+  (parameters
+    '("GCancellable*" "cancellable")
+    '("GAsyncReadyCallback" "callback")
+    '("gpointer" "user_data")
+  )
+)
+
+(define-method load_finish
+  (of-object "IdeScriptManager")
+  (c-name "ide_script_manager_load_finish")
+  (return-type "gboolean")
+  (parameters
+    '("GAsyncResult*" "result")
+    '("GError**" "error")
+  )
+)
+
+
+
+;; From ide-search-context.h
+
+(define-method provider_completed
+  (of-object "IdeSearchContext")
+  (c-name "ide_search_context_provider_completed")
+  (return-type "none")
+  (parameters
+    '("IdeSearchProvider*" "provider")
+  )
+)
+
+(define-method add_result
+  (of-object "IdeSearchContext")
+  (c-name "ide_search_context_add_result")
+  (return-type "none")
+  (parameters
+    '("IdeSearchProvider*" "provider")
+    '("IdeSearchResult*" "result")
+  )
+)
+
+(define-method remove_result
+  (of-object "IdeSearchContext")
+  (c-name "ide_search_context_remove_result")
+  (return-type "none")
+  (parameters
+    '("IdeSearchProvider*" "provider")
+    '("IdeSearchResult*" "result")
+  )
+)
+
+(define-method cancel
+  (of-object "IdeSearchContext")
+  (c-name "ide_search_context_cancel")
+  (return-type "none")
+)
+
+(define-method execute
+  (of-object "IdeSearchContext")
+  (c-name "ide_search_context_execute")
+  (return-type "none")
+  (parameters
+    '("const-gchar*" "search_terms")
+    '("gsize" "max_results")
+  )
+)
+
+(define-method set_provider_count
+  (of-object "IdeSearchContext")
+  (c-name "ide_search_context_set_provider_count")
+  (return-type "none")
+  (parameters
+    '("IdeSearchProvider*" "provider")
+    '("guint64" "count")
+  )
+)
+
+(define-method get_max_results
+  (of-object "IdeSearchContext")
+  (c-name "ide_search_context_get_max_results")
+  (return-type "gsize")
+)
+
+
+
+;; From ide-search-engine.h
+
+
+
+;; From ide-search-provider.h
+
+(define-method get_prefix
+  (of-object "IdeSearchProvider")
+  (c-name "ide_search_provider_get_prefix")
+  (return-type "gunichar")
+)
+
+(define-method get_priority
+  (of-object "IdeSearchProvider")
+  (c-name "ide_search_provider_get_priority")
+  (return-type "gint")
+)
+
+(define-method get_verb
+  (of-object "IdeSearchProvider")
+  (c-name "ide_search_provider_get_verb")
+  (return-type "const-gchar*")
+)
+
+(define-method populate
+  (of-object "IdeSearchProvider")
+  (c-name "ide_search_provider_populate")
+  (return-type "none")
+  (parameters
+    '("IdeSearchContext*" "context")
+    '("const-gchar*" "search_terms")
+    '("gsize" "max_results")
+    '("GCancellable*" "cancellable")
+  )
+)
+
+(define-method create_row
+  (of-object "IdeSearchProvider")
+  (c-name "ide_search_provider_create_row")
+  (return-type "GtkWidget*")
+  (parameters
+    '("IdeSearchResult*" "result")
+  )
+)
+
+(define-method activate
+  (of-object "IdeSearchProvider")
+  (c-name "ide_search_provider_activate")
+  (return-type "none")
+  (parameters
+    '("GtkWidget*" "row")
+    '("IdeSearchResult*" "result")
+  )
+)
+
+
+
+;; From ide-search-reducer.h
+
+(define-method init
+  (of-object "IdeSearchReducer")
+  (c-name "ide_search_reducer_init")
+  (return-type "none")
+  (parameters
+    '("IdeSearchContext*" "context")
+    '("IdeSearchProvider*" "provider")
+    '("gsize" "max_results")
+  )
+)
+
+(define-method accepts
+  (of-object "IdeSearchReducer")
+  (c-name "ide_search_reducer_accepts")
+  (return-type "gboolean")
+  (parameters
+    '("gfloat" "score")
+  )
+)
+
+(define-method push
+  (of-object "IdeSearchReducer")
+  (c-name "ide_search_reducer_push")
+  (return-type "none")
+  (parameters
+    '("IdeSearchResult*" "result")
+  )
+)
+
+(define-method destroy
+  (of-object "IdeSearchReducer")
+  (c-name "ide_search_reducer_destroy")
+  (return-type "none")
+)
+
+
+
+;; From ide-search-result.h
+
+(define-function ide_search_result_new
+  (c-name "ide_search_result_new")
+  (is-constructor-of "IdeSearchResult")
+  (return-type "IdeSearchResult*")
+  (parameters
+    '("IdeSearchProvider*" "provider")
+    '("const-gchar*" "title")
+    '("const-gchar*" "subtitle")
+    '("gfloat" "score")
+  )
+)
+
+(define-method get_provider
+  (of-object "IdeSearchResult")
+  (c-name "ide_search_result_get_provider")
+  (return-type "IdeSearchProvider*")
+)
+
+(define-method get_score
+  (of-object "IdeSearchResult")
+  (c-name "ide_search_result_get_score")
+  (return-type "gfloat")
+)
+
+(define-method get_title
+  (of-object "IdeSearchResult")
+  (c-name "ide_search_result_get_title")
+  (return-type "const-gchar*")
+)
+
+(define-method get_subtitle
+  (of-object "IdeSearchResult")
+  (c-name "ide_search_result_get_subtitle")
+  (return-type "const-gchar*")
+)
+
+(define-method compare
+  (of-object "IdeSearchResult")
+  (c-name "ide_search_result_compare")
+  (return-type "gint")
+  (parameters
+    '("const-IdeSearchResult*" "b")
+  )
+)
+
+(define-method activate
+  (of-object "IdeSearchResult")
+  (c-name "ide_search_result_activate")
+  (return-type "none")
+)
+
+
+
+;; From ide-service.h
+
+(define-method get_name
+  (of-object "IdeService")
+  (c-name "ide_service_get_name")
+  (return-type "const-gchar*")
+)
+
+(define-method start
+  (of-object "IdeService")
+  (c-name "ide_service_start")
+  (return-type "none")
+)
+
+(define-method stop
+  (of-object "IdeService")
+  (c-name "ide_service_stop")
+  (return-type "none")
+)
+
+
+
+;; From ide-settings.h
+
+(define-method get_schema_id
+  (of-object "IdeSettings")
+  (c-name "ide_settings_get_schema_id")
+  (return-type "const-gchar*")
+)
+
+(define-method get_ignore_project_settings
+  (of-object "IdeSettings")
+  (c-name "ide_settings_get_ignore_project_settings")
+  (return-type "gboolean")
+)
+
+(define-method get_default_value
+  (of-object "IdeSettings")
+  (c-name "ide_settings_get_default_value")
+  (return-type "GVariant*")
+  (parameters
+    '("const-gchar*" "key")
+  )
+)
+
+(define-method get_user_value
+  (of-object "IdeSettings")
+  (c-name "ide_settings_get_user_value")
+  (return-type "GVariant*")
+  (parameters
+    '("const-gchar*" "key")
+  )
+)
+
+(define-method get_value
+  (of-object "IdeSettings")
+  (c-name "ide_settings_get_value")
+  (return-type "GVariant*")
+  (parameters
+    '("const-gchar*" "key")
+  )
+)
+
+(define-method set_value
+  (of-object "IdeSettings")
+  (c-name "ide_settings_set_value")
+  (return-type "none")
+  (parameters
+    '("const-gchar*" "key")
+    '("GVariant*" "value")
+  )
+)
+
+(define-method get_boolean
+  (of-object "IdeSettings")
+  (c-name "ide_settings_get_boolean")
+  (return-type "gboolean")
+  (parameters
+    '("const-gchar*" "key")
+  )
+)
+
+(define-method get_double
+  (of-object "IdeSettings")
+  (c-name "ide_settings_get_double")
+  (return-type "gdouble")
+  (parameters
+    '("const-gchar*" "key")
+  )
+)
+
+(define-method get_int
+  (of-object "IdeSettings")
+  (c-name "ide_settings_get_int")
+  (return-type "gint")
+  (parameters
+    '("const-gchar*" "key")
+  )
+)
+
+(define-method get_string
+  (of-object "IdeSettings")
+  (c-name "ide_settings_get_string")
+  (return-type "gchar*")
+  (parameters
+    '("const-gchar*" "key")
+  )
+)
+
+(define-method get_uint
+  (of-object "IdeSettings")
+  (c-name "ide_settings_get_uint")
+  (return-type "guint")
+  (parameters
+    '("const-gchar*" "key")
+  )
+)
+
+(define-method set_boolean
+  (of-object "IdeSettings")
+  (c-name "ide_settings_set_boolean")
+  (return-type "none")
+  (parameters
+    '("const-gchar*" "key")
+    '("gboolean" "val")
+  )
+)
+
+(define-method set_double
+  (of-object "IdeSettings")
+  (c-name "ide_settings_set_double")
+  (return-type "none")
+  (parameters
+    '("const-gchar*" "key")
+    '("gdouble" "val")
+  )
+)
+
+(define-method set_int
+  (of-object "IdeSettings")
+  (c-name "ide_settings_set_int")
+  (return-type "none")
+  (parameters
+    '("const-gchar*" "key")
+    '("gint" "val")
+  )
+)
+
+(define-method set_string
+  (of-object "IdeSettings")
+  (c-name "ide_settings_set_string")
+  (return-type "none")
+  (parameters
+    '("const-gchar*" "key")
+    '("const-gchar*" "val")
+  )
+)
+
+(define-method set_uint
+  (of-object "IdeSettings")
+  (c-name "ide_settings_set_uint")
+  (return-type "none")
+  (parameters
+    '("const-gchar*" "key")
+    '("guint" "val")
+  )
+)
+
+(define-method bind
+  (of-object "IdeSettings")
+  (c-name "ide_settings_bind")
+  (return-type "none")
+  (parameters
+    '("const-gchar*" "key")
+    '("gpointer" "object")
+    '("const-gchar*" "property")
+    '("GSettingsBindFlags" "flags")
+  )
+)
+
+(define-method bind_with_mapping
+  (of-object "IdeSettings")
+  (c-name "ide_settings_bind_with_mapping")
+  (return-type "none")
+  (parameters
+    '("const-gchar*" "key")
+    '("gpointer" "object")
+    '("const-gchar*" "property")
+    '("GSettingsBindFlags" "flags")
+    '("GSettingsBindGetMapping" "get_mapping")
+    '("GSettingsBindSetMapping" "set_mapping")
+    '("gpointer" "user_data")
+    '("GDestroyNotify" "destroy")
+  )
+)
+
+(define-method unbind
+  (of-object "IdeSettings")
+  (c-name "ide_settings_unbind")
+  (return-type "none")
+  (parameters
+    '("const-gchar*" "property")
+  )
+)
+
+
+
+;; From ide-shortcuts-window.h
+
+
+
+;; From ide-source-iter.h
+
+
+
+;; From ide-source-location.h
+
+(define-function ide_source_location_get_type
+  (c-name "ide_source_location_get_type")
+  (return-type "GType")
+)
+
+(define-method ref
+  (of-object "IdeSourceLocation")
+  (c-name "ide_source_location_ref")
+  (return-type "IdeSourceLocation*")
+)
+
+(define-method unref
+  (of-object "IdeSourceLocation")
+  (c-name "ide_source_location_unref")
+  (return-type "none")
+)
+
+(define-function ide_source_location_new
+  (c-name "ide_source_location_new")
+  (is-constructor-of "IdeSourceLocation")
+  (return-type "IdeSourceLocation*")
+  (parameters
+    '("IdeFile*" "file")
+    '("guint" "line")
+    '("guint" "line_offset")
+    '("guint" "offset")
+  )
+)
+
+(define-method get_line
+  (of-object "IdeSourceLocation")
+  (c-name "ide_source_location_get_line")
+  (return-type "guint")
+)
+
+(define-method get_line_offset
+  (of-object "IdeSourceLocation")
+  (c-name "ide_source_location_get_line_offset")
+  (return-type "guint")
+)
+
+(define-method get_offset
+  (of-object "IdeSourceLocation")
+  (c-name "ide_source_location_get_offset")
+  (return-type "guint")
+)
+
+(define-method get_file
+  (of-object "IdeSourceLocation")
+  (c-name "ide_source_location_get_file")
+  (return-type "IdeFile*")
+)
+
+(define-method get_uri
+  (of-object "IdeSourceLocation")
+  (c-name "ide_source_location_get_uri")
+  (return-type "IdeUri*")
+)
+
+
+
+;; From ide-source-map.h
+
+
+
+;; From ide-source-range.h
+
+(define-function ide_source_range_get_type
+  (c-name "ide_source_range_get_type")
+  (return-type "GType")
+)
+
+(define-method ref
+  (of-object "IdeSourceRange")
+  (c-name "ide_source_range_ref")
+  (return-type "IdeSourceRange*")
+)
+
+(define-method unref
+  (of-object "IdeSourceRange")
+  (c-name "ide_source_range_unref")
+  (return-type "none")
+)
+
+(define-method get_begin
+  (of-object "IdeSourceRange")
+  (c-name "ide_source_range_get_begin")
+  (return-type "IdeSourceLocation*")
+)
+
+(define-method get_end
+  (of-object "IdeSourceRange")
+  (c-name "ide_source_range_get_end")
+  (return-type "IdeSourceLocation*")
+)
+
+(define-function ide_source_range_new
+  (c-name "ide_source_range_new")
+  (is-constructor-of "IdeSourceRange")
+  (return-type "IdeSourceRange*")
+  (parameters
+    '("IdeSourceLocation*" "begin")
+    '("IdeSourceLocation*" "end")
+  )
+)
+
+
+
+;; From ide-source-snippet-chunk.h
+
+(define-method copy
+  (of-object "IdeSourceSnippetChunk")
+  (c-name "ide_source_snippet_chunk_copy")
+  (return-type "IdeSourceSnippetChunk*")
+)
+
+(define-method get_context
+  (of-object "IdeSourceSnippetChunk")
+  (c-name "ide_source_snippet_chunk_get_context")
+  (return-type "IdeSourceSnippetContext*")
+)
+
+(define-method set_context
+  (of-object "IdeSourceSnippetChunk")
+  (c-name "ide_source_snippet_chunk_set_context")
+  (return-type "none")
+  (parameters
+    '("IdeSourceSnippetContext*" "context")
+  )
+)
+
+(define-method get_spec
+  (of-object "IdeSourceSnippetChunk")
+  (c-name "ide_source_snippet_chunk_get_spec")
+  (return-type "const-gchar*")
+)
+
+(define-method set_spec
+  (of-object "IdeSourceSnippetChunk")
+  (c-name "ide_source_snippet_chunk_set_spec")
+  (return-type "none")
+  (parameters
+    '("const-gchar*" "spec")
+  )
+)
+
+(define-method get_tab_stop
+  (of-object "IdeSourceSnippetChunk")
+  (c-name "ide_source_snippet_chunk_get_tab_stop")
+  (return-type "gint")
+)
+
+(define-method set_tab_stop
+  (of-object "IdeSourceSnippetChunk")
+  (c-name "ide_source_snippet_chunk_set_tab_stop")
+  (return-type "none")
+  (parameters
+    '("gint" "tab_stop")
+  )
+)
+
+(define-method get_text
+  (of-object "IdeSourceSnippetChunk")
+  (c-name "ide_source_snippet_chunk_get_text")
+  (return-type "const-gchar*")
+)
+
+(define-method set_text
+  (of-object "IdeSourceSnippetChunk")
+  (c-name "ide_source_snippet_chunk_set_text")
+  (return-type "none")
+  (parameters
+    '("const-gchar*" "text")
+  )
+)
+
+(define-method get_text_set
+  (of-object "IdeSourceSnippetChunk")
+  (c-name "ide_source_snippet_chunk_get_text_set")
+  (return-type "gboolean")
+)
+
+(define-method set_text_set
+  (of-object "IdeSourceSnippetChunk")
+  (c-name "ide_source_snippet_chunk_set_text_set")
+  (return-type "none")
+  (parameters
+    '("gboolean" "text_set")
+  )
+)
+
+
+
+;; From ide-source-snippet-completion-item.h
+
+(define-method get_snippet
+  (of-object "IdeSourceSnippetCompletionItem")
+  (c-name "ide_source_snippet_completion_item_get_snippet")
+  (return-type "IdeSourceSnippet*")
+)
+
+(define-method set_snippet
+  (of-object "IdeSourceSnippetCompletionItem")
+  (c-name "ide_source_snippet_completion_item_set_snippet")
+  (return-type "none")
+  (parameters
+    '("IdeSourceSnippet*" "snippet")
+  )
+)
+
+
+
+;; From ide-source-snippet-completion-provider.h
+
+
+
+;; From ide-source-snippet-context.h
+
+(define-method emit_changed
+  (of-object "IdeSourceSnippetContext")
+  (c-name "ide_source_snippet_context_emit_changed")
+  (return-type "none")
+)
+
+(define-method clear_variables
+  (of-object "IdeSourceSnippetContext")
+  (c-name "ide_source_snippet_context_clear_variables")
+  (return-type "none")
+)
+
+(define-method add_variable
+  (of-object "IdeSourceSnippetContext")
+  (c-name "ide_source_snippet_context_add_variable")
+  (return-type "none")
+  (parameters
+    '("const-gchar*" "key")
+    '("const-gchar*" "value")
+  )
+)
+
+(define-method get_variable
+  (of-object "IdeSourceSnippetContext")
+  (c-name "ide_source_snippet_context_get_variable")
+  (return-type "const-gchar*")
+  (parameters
+    '("const-gchar*" "key")
+  )
+)
+
+(define-method expand
+  (of-object "IdeSourceSnippetContext")
+  (c-name "ide_source_snippet_context_expand")
+  (return-type "gchar*")
+  (parameters
+    '("const-gchar*" "input")
+  )
+)
+
+(define-method set_tab_width
+  (of-object "IdeSourceSnippetContext")
+  (c-name "ide_source_snippet_context_set_tab_width")
+  (return-type "none")
+  (parameters
+    '("gint" "tab_size")
+  )
+)
+
+(define-method set_use_spaces
+  (of-object "IdeSourceSnippetContext")
+  (c-name "ide_source_snippet_context_set_use_spaces")
+  (return-type "none")
+  (parameters
+    '("gboolean" "use_spaces")
+  )
+)
+
+(define-method set_line_prefix
+  (of-object "IdeSourceSnippetContext")
+  (c-name "ide_source_snippet_context_set_line_prefix")
+  (return-type "none")
+  (parameters
+    '("const-gchar*" "line_prefix")
+  )
+)
+
+(define-method dump
+  (of-object "IdeSourceSnippetContext")
+  (c-name "ide_source_snippet_context_dump")
+  (return-type "none")
+)
+
+
+
+;; From ide-source-snippet.h
+
+(define-method copy
+  (of-object "IdeSourceSnippet")
+  (c-name "ide_source_snippet_copy")
+  (return-type "IdeSourceSnippet*")
+)
+
+(define-method get_trigger
+  (of-object "IdeSourceSnippet")
+  (c-name "ide_source_snippet_get_trigger")
+  (return-type "const-gchar*")
+)
+
+(define-method set_trigger
+  (of-object "IdeSourceSnippet")
+  (c-name "ide_source_snippet_set_trigger")
+  (return-type "none")
+  (parameters
+    '("const-gchar*" "trigger")
+  )
+)
+
+(define-method get_language
+  (of-object "IdeSourceSnippet")
+  (c-name "ide_source_snippet_get_language")
+  (return-type "const-gchar*")
+)
+
+(define-method set_language
+  (of-object "IdeSourceSnippet")
+  (c-name "ide_source_snippet_set_language")
+  (return-type "none")
+  (parameters
+    '("const-gchar*" "language")
+  )
+)
+
+(define-method get_description
+  (of-object "IdeSourceSnippet")
+  (c-name "ide_source_snippet_get_description")
+  (return-type "const-gchar*")
+)
+
+(define-method set_description
+  (of-object "IdeSourceSnippet")
+  (c-name "ide_source_snippet_set_description")
+  (return-type "none")
+  (parameters
+    '("const-gchar*" "description")
+  )
+)
+
+(define-method add_chunk
+  (of-object "IdeSourceSnippet")
+  (c-name "ide_source_snippet_add_chunk")
+  (return-type "none")
+  (parameters
+    '("IdeSourceSnippetChunk*" "chunk")
+  )
+)
+
+(define-method get_n_chunks
+  (of-object "IdeSourceSnippet")
+  (c-name "ide_source_snippet_get_n_chunks")
+  (return-type "guint")
+)
+
+(define-method get_tab_stop
+  (of-object "IdeSourceSnippet")
+  (c-name "ide_source_snippet_get_tab_stop")
+  (return-type "gint")
+)
+
+(define-method get_nth_chunk
+  (of-object "IdeSourceSnippet")
+  (c-name "ide_source_snippet_get_nth_chunk")
+  (return-type "IdeSourceSnippetChunk*")
+  (parameters
+    '("guint" "n")
+  )
+)
+
+(define-method get_chunk_range
+  (of-object "IdeSourceSnippet")
+  (c-name "ide_source_snippet_get_chunk_range")
+  (return-type "none")
+  (parameters
+    '("IdeSourceSnippetChunk*" "chunk")
+    '("GtkTextIter*" "begin")
+    '("GtkTextIter*" "end")
+  )
+)
+
+(define-method get_mark_begin
+  (of-object "IdeSourceSnippet")
+  (c-name "ide_source_snippet_get_mark_begin")
+  (return-type "GtkTextMark*")
+)
+
+(define-method get_mark_end
+  (of-object "IdeSourceSnippet")
+  (c-name "ide_source_snippet_get_mark_end")
+  (return-type "GtkTextMark*")
+)
+
+(define-method get_context
+  (of-object "IdeSourceSnippet")
+  (c-name "ide_source_snippet_get_context")
+  (return-type "IdeSourceSnippetContext*")
+)
+
+(define-method get_snippet_text
+  (of-object "IdeSourceSnippet")
+  (c-name "ide_source_snippet_get_snippet_text")
+  (return-type "const-gchar*")
+)
+
+(define-method set_snippet_text
+  (of-object "IdeSourceSnippet")
+  (c-name "ide_source_snippet_set_snippet_text")
+  (return-type "none")
+  (parameters
+    '("const-gchar*" "snippet_text")
+  )
+)
+
+
+
+;; From ide-source-snippet-parser.h
+
+(define-method load_from_file
+  (of-object "IdeSourceSnippetParser")
+  (c-name "ide_source_snippet_parser_load_from_file")
+  (return-type "gboolean")
+  (parameters
+    '("GFile*" "file")
+    '("GError**" "error")
+  )
+)
+
+(define-method get_snippets
+  (of-object "IdeSourceSnippetParser")
+  (c-name "ide_source_snippet_parser_get_snippets")
+  (return-type "GList*")
+)
+
+
+
+;; From ide-source-snippet-private.h
+
+(define-method begin
+  (of-object "IdeSourceSnippet")
+  (c-name "ide_source_snippet_begin")
+  (return-type "gboolean")
+  (parameters
+    '("GtkTextBuffer*" "buffer")
+    '("GtkTextIter*" "iter")
+  )
+)
+
+(define-method pause
+  (of-object "IdeSourceSnippet")
+  (c-name "ide_source_snippet_pause")
+  (return-type "none")
+)
+
+(define-method unpause
+  (of-object "IdeSourceSnippet")
+  (c-name "ide_source_snippet_unpause")
+  (return-type "none")
+)
+
+(define-method finish
+  (of-object "IdeSourceSnippet")
+  (c-name "ide_source_snippet_finish")
+  (return-type "none")
+)
+
+(define-method move_next
+  (of-object "IdeSourceSnippet")
+  (c-name "ide_source_snippet_move_next")
+  (return-type "gboolean")
+)
+
+(define-method move_previous
+  (of-object "IdeSourceSnippet")
+  (c-name "ide_source_snippet_move_previous")
+  (return-type "gboolean")
+)
+
+(define-method before_insert_text
+  (of-object "IdeSourceSnippet")
+  (c-name "ide_source_snippet_before_insert_text")
+  (return-type "none")
+  (parameters
+    '("GtkTextBuffer*" "buffer")
+    '("GtkTextIter*" "iter")
+    '("gchar*" "text")
+    '("gint" "len")
+  )
+)
+
+(define-method after_insert_text
+  (of-object "IdeSourceSnippet")
+  (c-name "ide_source_snippet_after_insert_text")
+  (return-type "none")
+  (parameters
+    '("GtkTextBuffer*" "buffer")
+    '("GtkTextIter*" "iter")
+    '("gchar*" "text")
+    '("gint" "len")
+  )
+)
+
+(define-method before_delete_range
+  (of-object "IdeSourceSnippet")
+  (c-name "ide_source_snippet_before_delete_range")
+  (return-type "none")
+  (parameters
+    '("GtkTextBuffer*" "buffer")
+    '("GtkTextIter*" "begin")
+    '("GtkTextIter*" "end")
+  )
+)
+
+(define-method after_delete_range
+  (of-object "IdeSourceSnippet")
+  (c-name "ide_source_snippet_after_delete_range")
+  (return-type "none")
+  (parameters
+    '("GtkTextBuffer*" "buffer")
+    '("GtkTextIter*" "begin")
+    '("GtkTextIter*" "end")
+  )
+)
+
+(define-method insert_set
+  (of-object "IdeSourceSnippet")
+  (c-name "ide_source_snippet_insert_set")
+  (return-type "gboolean")
+  (parameters
+    '("GtkTextMark*" "mark")
+  )
+)
+
+
+
+;; From ide-source-snippets.h
+
+(define-method clear
+  (of-object "IdeSourceSnippets")
+  (c-name "ide_source_snippets_clear")
+  (return-type "none")
+)
+
+(define-method merge
+  (of-object "IdeSourceSnippets")
+  (c-name "ide_source_snippets_merge")
+  (return-type "none")
+  (parameters
+    '("IdeSourceSnippets*" "other")
+  )
+)
+
+(define-method count
+  (of-object "IdeSourceSnippets")
+  (c-name "ide_source_snippets_count")
+  (return-type "guint")
+)
+
+(define-function ide_source_snippets_new
+  (c-name "ide_source_snippets_new")
+  (is-constructor-of "IdeSourceSnippets")
+  (return-type "IdeSourceSnippets*")
+)
+
+(define-method foreach
+  (of-object "IdeSourceSnippets")
+  (c-name "ide_source_snippets_foreach")
+  (return-type "none")
+  (parameters
+    '("const-gchar*" "prefix")
+    '("GFunc" "foreach_func")
+    '("gpointer" "user_data")
+  )
+)
+
+
+
+;; From ide-source-snippets-manager.h
+
+(define-method load_finish
+  (of-object "IdeSourceSnippetsManager")
+  (c-name "ide_source_snippets_manager_load_finish")
+  (return-type "gboolean")
+  (parameters
+    '("GAsyncResult*" "result")
+    '("GError**" "error")
+  )
+)
+
+(define-method get_for_language
+  (of-object "IdeSourceSnippetsManager")
+  (c-name "ide_source_snippets_manager_get_for_language")
+  (return-type "IdeSourceSnippets*")
+  (parameters
+    '("GtkSourceLanguage*" "language")
+  )
+)
+
+(define-method get_for_language_id
+  (of-object "IdeSourceSnippetsManager")
+  (c-name "ide_source_snippets_manager_get_for_language_id")
+  (return-type "IdeSourceSnippets*")
+  (parameters
+    '("const-gchar*" "language_id")
+  )
+)
+
+
+
+;; From ide-source-style-scheme.h
+
+(define-function ide_source_style_scheme_apply_style
+  (c-name "ide_source_style_scheme_apply_style")
+  (return-type "gboolean")
+  (parameters
+    '("GtkSourceStyleScheme*" "style_scheme")
+    '("const-gchar*" "style")
+    '("GtkTextTag*" "tag")
+  )
+)
+
+
+
+;; From ide-source-view-capture.h
+
+(define-method get_view
+  (of-object "IdeSourceViewCapture")
+  (c-name "ide_source_view_capture_get_view")
+  (return-type "IdeSourceView*")
+)
+
+(define-method replay
+  (of-object "IdeSourceViewCapture")
+  (c-name "ide_source_view_capture_replay")
+  (return-type "none")
+)
+
+(define-method record_event
+  (of-object "IdeSourceViewCapture")
+  (c-name "ide_source_view_capture_record_event")
+  (return-type "none")
+  (parameters
+    '("const-GdkEvent*" "event")
+    '("guint" "count")
+    '("gunichar" "modifier")
+  )
+)
+
+(define-method record_modifier
+  (of-object "IdeSourceViewCapture")
+  (c-name "ide_source_view_capture_record_modifier")
+  (return-type "none")
+  (parameters
+    '("gunichar" "modifier")
+  )
+)
+
+
+
+;; From ide-source-view.h
+
+(define-method clear_snippets
+  (of-object "IdeSourceView")
+  (c-name "ide_source_view_clear_snippets")
+  (return-type "none")
+)
+
+(define-method get_current_snippet
+  (of-object "IdeSourceView")
+  (c-name "ide_source_view_get_current_snippet")
+  (return-type "IdeSourceSnippet*")
+)
+
+(define-method get_back_forward_list
+  (of-object "IdeSourceView")
+  (c-name "ide_source_view_get_back_forward_list")
+  (return-type "IdeBackForwardList*")
+)
+
+(define-method get_visual_position
+  (of-object "IdeSourceView")
+  (c-name "ide_source_view_get_visual_position")
+  (return-type "none")
+  (parameters
+    '("guint*" "line")
+    '("guint*" "line_offset")
+  )
+)
+
+(define-method get_count
+  (of-object "IdeSourceView")
+  (c-name "ide_source_view_get_count")
+  (return-type "gint")
+)
+
+(define-method get_enable_word_completion
+  (of-object "IdeSourceView")
+  (c-name "ide_source_view_get_enable_word_completion")
+  (return-type "gboolean")
+)
+
+(define-method get_file_settings
+  (of-object "IdeSourceView")
+  (c-name "ide_source_view_get_file_settings")
+  (return-type "IdeFileSettings*")
+)
+
+(define-method get_font_desc
+  (of-object "IdeSourceView")
+  (c-name "ide_source_view_get_font_desc")
+  (return-type "const-PangoFontDescription*")
+)
+
+(define-method get_highlight_current_line
+  (of-object "IdeSourceView")
+  (c-name "ide_source_view_get_highlight_current_line")
+  (return-type "gboolean")
+)
+
+(define-method get_insert_matching_brace
+  (of-object "IdeSourceView")
+  (c-name "ide_source_view_get_insert_matching_brace")
+  (return-type "gboolean")
+)
+
+(define-method get_mode_display_name
+  (of-object "IdeSourceView")
+  (c-name "ide_source_view_get_mode_display_name")
+  (return-type "const-gchar*")
+)
+
+(define-method get_mode_name
+  (of-object "IdeSourceView")
+  (c-name "ide_source_view_get_mode_name")
+  (return-type "const-gchar*")
+)
+
+(define-method get_overwrite_braces
+  (of-object "IdeSourceView")
+  (c-name "ide_source_view_get_overwrite_braces")
+  (return-type "gboolean")
+)
+
+(define-method get_overwrite
+  (of-object "IdeSourceView")
+  (c-name "ide_source_view_get_overwrite")
+  (return-type "gboolean")
+)
+
+(define-method get_rubberband_search
+  (of-object "IdeSourceView")
+  (c-name "ide_source_view_get_rubberband_search")
+  (return-type "gboolean")
+)
+
+(define-method get_scroll_offset
+  (of-object "IdeSourceView")
+  (c-name "ide_source_view_get_scroll_offset")
+  (return-type "guint")
+)
+
+(define-method get_search_context
+  (of-object "IdeSourceView")
+  (c-name "ide_source_view_get_search_context")
+  (return-type "GtkSourceSearchContext*")
+)
+
+(define-method get_search_direction
+  (of-object "IdeSourceView")
+  (c-name "ide_source_view_get_search_direction")
+  (return-type "GtkDirectionType")
+)
+
+(define-method get_show_grid_lines
+  (of-object "IdeSourceView")
+  (c-name "ide_source_view_get_show_grid_lines")
+  (return-type "gboolean")
+)
+
+(define-method get_show_line_changes
+  (of-object "IdeSourceView")
+  (c-name "ide_source_view_get_show_line_changes")
+  (return-type "gboolean")
+)
+
+(define-method get_show_line_diagnostics
+  (of-object "IdeSourceView")
+  (c-name "ide_source_view_get_show_line_diagnostics")
+  (return-type "gboolean")
+)
+
+(define-method get_show_search_bubbles
+  (of-object "IdeSourceView")
+  (c-name "ide_source_view_get_show_search_bubbles")
+  (return-type "gboolean")
+)
+
+(define-method get_show_search_shadow
+  (of-object "IdeSourceView")
+  (c-name "ide_source_view_get_show_search_shadow")
+  (return-type "gboolean")
+)
+
+(define-method get_snippet_completion
+  (of-object "IdeSourceView")
+  (c-name "ide_source_view_get_snippet_completion")
+  (return-type "gboolean")
+)
+
+(define-method get_visible_rect
+  (of-object "IdeSourceView")
+  (c-name "ide_source_view_get_visible_rect")
+  (return-type "none")
+  (parameters
+    '("GdkRectangle*" "visible_rect")
+  )
+)
+
+(define-method jump
+  (of-object "IdeSourceView")
+  (c-name "ide_source_view_jump")
+  (return-type "none")
+  (parameters
+    '("const-GtkTextIter*" "location")
+  )
+)
+
+(define-method pop_snippet
+  (of-object "IdeSourceView")
+  (c-name "ide_source_view_pop_snippet")
+  (return-type "none")
+)
+
+(define-method push_snippet
+  (of-object "IdeSourceView")
+  (c-name "ide_source_view_push_snippet")
+  (return-type "none")
+  (parameters
+    '("IdeSourceSnippet*" "snippet")
+    '("const-GtkTextIter*" "location")
+  )
+)
+
+(define-method rollback_search
+  (of-object "IdeSourceView")
+  (c-name "ide_source_view_rollback_search")
+  (return-type "none")
+)
+
+(define-method set_count
+  (of-object "IdeSourceView")
+  (c-name "ide_source_view_set_count")
+  (return-type "none")
+  (parameters
+    '("gint" "count")
+  )
+)
+
+(define-method set_enable_word_completion
+  (of-object "IdeSourceView")
+  (c-name "ide_source_view_set_enable_word_completion")
+  (return-type "none")
+  (parameters
+    '("gboolean" "enable_word_copletion")
+  )
+)
+
+(define-method set_font_desc
+  (of-object "IdeSourceView")
+  (c-name "ide_source_view_set_font_desc")
+  (return-type "none")
+  (parameters
+    '("const-PangoFontDescription*" "font_desc")
+  )
+)
+
+(define-method set_font_name
+  (of-object "IdeSourceView")
+  (c-name "ide_source_view_set_font_name")
+  (return-type "none")
+  (parameters
+    '("const-gchar*" "font_name")
+  )
+)
+
+(define-method set_highlight_current_line
+  (of-object "IdeSourceView")
+  (c-name "ide_source_view_set_highlight_current_line")
+  (return-type "none")
+  (parameters
+    '("gboolean" "highlight_current_line")
+  )
+)
+
+(define-method set_insert_matching_brace
+  (of-object "IdeSourceView")
+  (c-name "ide_source_view_set_insert_matching_brace")
+  (return-type "none")
+  (parameters
+    '("gboolean" "insert_matching_brace")
+  )
+)
+
+(define-method set_overwrite_braces
+  (of-object "IdeSourceView")
+  (c-name "ide_source_view_set_overwrite_braces")
+  (return-type "none")
+  (parameters
+    '("gboolean" "overwrite_braces")
+  )
+)
+
+(define-method set_rubberband_search
+  (of-object "IdeSourceView")
+  (c-name "ide_source_view_set_rubberband_search")
+  (return-type "none")
+  (parameters
+    '("gboolean" "rubberband_search")
+  )
+)
+
+(define-method set_scroll_offset
+  (of-object "IdeSourceView")
+  (c-name "ide_source_view_set_scroll_offset")
+  (return-type "none")
+  (parameters
+    '("guint" "scroll_offset")
+  )
+)
+
+(define-method set_search_direction
+  (of-object "IdeSourceView")
+  (c-name "ide_source_view_set_search_direction")
+  (return-type "none")
+  (parameters
+    '("GtkDirectionType" "direction")
+  )
+)
+
+(define-method set_show_grid_lines
+  (of-object "IdeSourceView")
+  (c-name "ide_source_view_set_show_grid_lines")
+  (return-type "none")
+  (parameters
+    '("gboolean" "show_grid_lines")
+  )
+)
+
+(define-method set_show_line_changes
+  (of-object "IdeSourceView")
+  (c-name "ide_source_view_set_show_line_changes")
+  (return-type "none")
+  (parameters
+    '("gboolean" "show_line_changes")
+  )
+)
+
+(define-method set_show_line_diagnostics
+  (of-object "IdeSourceView")
+  (c-name "ide_source_view_set_show_line_diagnostics")
+  (return-type "none")
+  (parameters
+    '("gboolean" "show_line_changes")
+  )
+)
+
+(define-method set_show_search_bubbles
+  (of-object "IdeSourceView")
+  (c-name "ide_source_view_set_show_search_bubbles")
+  (return-type "none")
+  (parameters
+    '("gboolean" "show_search_bubbles")
+  )
+)
+
+(define-method set_show_search_shadow
+  (of-object "IdeSourceView")
+  (c-name "ide_source_view_set_show_search_shadow")
+  (return-type "none")
+  (parameters
+    '("gboolean" "show_search_bubbles")
+  )
+)
+
+(define-method set_snippet_completion
+  (of-object "IdeSourceView")
+  (c-name "ide_source_view_set_snippet_completion")
+  (return-type "none")
+  (parameters
+    '("gboolean" "snippet_completion")
+  )
+)
+
+(define-method set_back_forward_list
+  (of-object "IdeSourceView")
+  (c-name "ide_source_view_set_back_forward_list")
+  (return-type "none")
+  (parameters
+    '("IdeBackForwardList*" "back_forward_list")
+  )
+)
+
+(define-method move_mark_onscreen
+  (of-object "IdeSourceView")
+  (c-name "ide_source_view_move_mark_onscreen")
+  (return-type "gboolean")
+  (parameters
+    '("GtkTextMark*" "mark")
+  )
+)
+
+(define-method place_cursor_onscreen
+  (of-object "IdeSourceView")
+  (c-name "ide_source_view_place_cursor_onscreen")
+  (return-type "gboolean")
+)
+
+(define-method clear_search
+  (of-object "IdeSourceView")
+  (c-name "ide_source_view_clear_search")
+  (return-type "none")
+)
+
+(define-method scroll_mark_onscreen
+  (of-object "IdeSourceView")
+  (c-name "ide_source_view_scroll_mark_onscreen")
+  (return-type "none")
+  (parameters
+    '("GtkTextMark*" "mark")
+    '("gboolean" "use_align")
+    '("gdouble" "alignx")
+    '("gdouble" "aligny")
+  )
+)
+
+(define-method scroll_to_mark
+  (of-object "IdeSourceView")
+  (c-name "ide_source_view_scroll_to_mark")
+  (return-type "none")
+  (parameters
+    '("GtkTextMark*" "mark")
+    '("gdouble" "within_margin")
+    '("gboolean" "use_align")
+    '("gdouble" "xalign")
+    '("gdouble" "yalign")
+    '("gboolean" "animate_scroll")
+  )
+)
+
+(define-method scroll_to_iter
+  (of-object "IdeSourceView")
+  (c-name "ide_source_view_scroll_to_iter")
+  (return-type "none")
+  (parameters
+    '("const-GtkTextIter*" "iter")
+    '("gdouble" "within_margin")
+    '("gboolean" "use_align")
+    '("gdouble" "xalign")
+    '("gdouble" "yalign")
+    '("gboolean" "animate_scroll")
+  )
+)
+
+
+
+;; From ide-source-view-mode.h
+
+(define-method get_block_cursor
+  (of-object "IdeSourceViewMode")
+  (c-name "ide_source_view_mode_get_block_cursor")
+  (return-type "gboolean")
+)
+
+(define-method get_suppress_unbound
+  (of-object "IdeSourceViewMode")
+  (c-name "ide_source_view_mode_get_suppress_unbound")
+  (return-type "gboolean")
+)
+
+(define-method get_name
+  (of-object "IdeSourceViewMode")
+  (c-name "ide_source_view_mode_get_name")
+  (return-type "const-gchar*")
+)
+
+(define-method get_default_mode
+  (of-object "IdeSourceViewMode")
+  (c-name "ide_source_view_mode_get_default_mode")
+  (return-type "const-gchar*")
+)
+
+(define-method get_display_name
+  (of-object "IdeSourceViewMode")
+  (c-name "ide_source_view_mode_get_display_name")
+  (return-type "const-gchar*")
+)
+
+(define-method get_keep_mark_on_char
+  (of-object "IdeSourceViewMode")
+  (c-name "ide_source_view_mode_get_keep_mark_on_char")
+  (return-type "gboolean")
+)
+
+(define-method get_mode_type
+  (of-object "IdeSourceViewMode")
+  (c-name "ide_source_view_mode_get_mode_type")
+  (return-type "IdeSourceViewModeType")
+)
+
+(define-method set_has_indenter
+  (of-object "IdeSourceViewMode")
+  (c-name "ide_source_view_mode_set_has_indenter")
+  (return-type "none")
+  (parameters
+    '("gboolean" "has_indenter")
+  )
+)
+
+
+
+;; From ide-source-view-movements.h
+
+
+
+;; From ide-subprocess-launcher.h
+
+(define-function ide_subprocess_launcher_new
+  (c-name "ide_subprocess_launcher_new")
+  (is-constructor-of "IdeSubprocessLauncher")
+  (return-type "IdeSubprocessLauncher*")
+  (parameters
+    '("GSubprocessFlags" "flags")
+  )
+)
+
+(define-method get_cwd
+  (of-object "IdeSubprocessLauncher")
+  (c-name "ide_subprocess_launcher_get_cwd")
+  (return-type "const-gchar*")
+)
+
+(define-method set_cwd
+  (of-object "IdeSubprocessLauncher")
+  (c-name "ide_subprocess_launcher_set_cwd")
+  (return-type "none")
+  (parameters
+    '("const-gchar*" "cwd")
+  )
+)
+
+(define-method get_flags
+  (of-object "IdeSubprocessLauncher")
+  (c-name "ide_subprocess_launcher_get_flags")
+  (return-type "GSubprocessFlags")
+)
+
+(define-method set_flags
+  (of-object "IdeSubprocessLauncher")
+  (c-name "ide_subprocess_launcher_set_flags")
+  (return-type "none")
+  (parameters
+    '("GSubprocessFlags" "flags")
+  )
+)
+
+(define-method get_environ
+  (of-object "IdeSubprocessLauncher")
+  (c-name "ide_subprocess_launcher_get_environ")
+  (return-type "const-gchar*-const*")
+)
+
+(define-method set_environ
+  (of-object "IdeSubprocessLauncher")
+  (c-name "ide_subprocess_launcher_set_environ")
+  (return-type "none")
+  (parameters
+    '("const-gchar*-const*" "environ_")
+  )
+)
+
+(define-method setenv
+  (of-object "IdeSubprocessLauncher")
+  (c-name "ide_subprocess_launcher_setenv")
+  (return-type "none")
+  (parameters
+    '("const-gchar*" "key")
+    '("const-gchar*" "value")
+    '("gboolean" "replace")
+  )
+)
+
+(define-method overlay_environment
+  (of-object "IdeSubprocessLauncher")
+  (c-name "ide_subprocess_launcher_overlay_environment")
+  (return-type "none")
+  (parameters
+    '("IdeEnvironment*" "environment")
+  )
+)
+
+(define-method push_args
+  (of-object "IdeSubprocessLauncher")
+  (c-name "ide_subprocess_launcher_push_args")
+  (return-type "none")
+  (parameters
+    '("const-gchar*-const*" "args")
+  )
+)
+
+(define-method push_argv
+  (of-object "IdeSubprocessLauncher")
+  (c-name "ide_subprocess_launcher_push_argv")
+  (return-type "none")
+  (parameters
+    '("const-gchar*" "argv")
+  )
+)
+
+(define-method spawn_sync
+  (of-object "IdeSubprocessLauncher")
+  (c-name "ide_subprocess_launcher_spawn_sync")
+  (return-type "GSubprocess*")
+  (parameters
+    '("GCancellable*" "cancellable")
+    '("GError**" "error")
+  )
+)
+
+(define-method spawn_async
+  (of-object "IdeSubprocessLauncher")
+  (c-name "ide_subprocess_launcher_spawn_async")
+  (return-type "none")
+  (parameters
+    '("GCancellable*" "cancellable")
+    '("GAsyncReadyCallback" "callback")
+    '("gpointer" "user_data")
+  )
+)
+
+(define-method spawn_finish
+  (of-object "IdeSubprocessLauncher")
+  (c-name "ide_subprocess_launcher_spawn_finish")
+  (return-type "GSubprocess*")
+  (parameters
+    '("GAsyncResult*" "result")
+    '("GError**" "error")
+  )
+)
+
+
+
+;; From ide-symbol.h
+
+(define-function ide_symbol_get_type
+  (c-name "ide_symbol_get_type")
+  (return-type "GType")
+)
+
+(define-method ref
+  (of-object "IdeSymbol")
+  (c-name "ide_symbol_ref")
+  (return-type "IdeSymbol*")
+)
+
+(define-method unref
+  (of-object "IdeSymbol")
+  (c-name "ide_symbol_unref")
+  (return-type "none")
+)
+
+(define-method get_kind
+  (of-object "IdeSymbol")
+  (c-name "ide_symbol_get_kind")
+  (return-type "IdeSymbolKind")
+)
+
+(define-method get_flags
+  (of-object "IdeSymbol")
+  (c-name "ide_symbol_get_flags")
+  (return-type "IdeSymbolFlags")
+)
+
+(define-method get_name
+  (of-object "IdeSymbol")
+  (c-name "ide_symbol_get_name")
+  (return-type "const-gchar*")
+)
+
+(define-method get_canonical_location
+  (of-object "IdeSymbol")
+  (c-name "ide_symbol_get_canonical_location")
+  (return-type "IdeSourceLocation*")
+)
+
+(define-method get_declaration_location
+  (of-object "IdeSymbol")
+  (c-name "ide_symbol_get_declaration_location")
+  (return-type "IdeSourceLocation*")
+)
+
+(define-method get_definition_location
+  (of-object "IdeSymbol")
+  (c-name "ide_symbol_get_definition_location")
+  (return-type "IdeSourceLocation*")
+)
+
+(define-function ide_symbol_new
+  (c-name "ide_symbol_new")
+  (is-constructor-of "IdeSymbol")
+  (return-type "IdeSymbol*")
+  (parameters
+    '("const-gchar*" "name")
+    '("IdeSymbolKind" "kind")
+    '("IdeSymbolFlags" "flags")
+    '("IdeSourceLocation*" "declaration_location")
+    '("IdeSourceLocation*" "definition_location")
+    '("IdeSourceLocation*" "canonical_location")
+  )
+)
+
+
+
+;; From ide-symbol-node.h
+
+(define-method get_kind
+  (of-object "IdeSymbolNode")
+  (c-name "ide_symbol_node_get_kind")
+  (return-type "IdeSymbolKind")
+)
+
+(define-method get_flags
+  (of-object "IdeSymbolNode")
+  (c-name "ide_symbol_node_get_flags")
+  (return-type "IdeSymbolFlags")
+)
+
+(define-method get_name
+  (of-object "IdeSymbolNode")
+  (c-name "ide_symbol_node_get_name")
+  (return-type "const-gchar*")
+)
+
+(define-method get_location
+  (of-object "IdeSymbolNode")
+  (c-name "ide_symbol_node_get_location")
+  (return-type "IdeSourceLocation*")
+)
+
+
+
+;; From ide-symbol-resolver.h
+
+(define-method lookup_symbol_async
+  (of-object "IdeSymbolResolver")
+  (c-name "ide_symbol_resolver_lookup_symbol_async")
+  (return-type "none")
+  (parameters
+    '("IdeSourceLocation*" "location")
+    '("GCancellable*" "cancellable")
+    '("GAsyncReadyCallback" "callback")
+    '("gpointer" "user_data")
+  )
+)
+
+(define-method lookup_symbol_finish
+  (of-object "IdeSymbolResolver")
+  (c-name "ide_symbol_resolver_lookup_symbol_finish")
+  (return-type "IdeSymbol*")
+  (parameters
+    '("GAsyncResult*" "result")
+    '("GError**" "error")
+  )
+)
+
+(define-method get_symbol_tree_async
+  (of-object "IdeSymbolResolver")
+  (c-name "ide_symbol_resolver_get_symbol_tree_async")
+  (return-type "none")
+  (parameters
+    '("GFile*" "file")
+    '("GCancellable*" "cancellable")
+    '("GAsyncReadyCallback" "callback")
+    '("gpointer" "user_data")
+  )
+)
+
+(define-method get_symbol_tree_finish
+  (of-object "IdeSymbolResolver")
+  (c-name "ide_symbol_resolver_get_symbol_tree_finish")
+  (return-type "IdeSymbolTree*")
+  (parameters
+    '("GAsyncResult*" "result")
+    '("GError**" "error")
+  )
+)
+
+
+
+;; From ide-symbol-tree.h
+
+(define-method get_n_children
+  (of-object "IdeSymbolTree")
+  (c-name "ide_symbol_tree_get_n_children")
+  (return-type "guint")
+  (parameters
+    '("IdeSymbolNode*" "node")
+  )
+)
+
+(define-method get_nth_child
+  (of-object "IdeSymbolTree")
+  (c-name "ide_symbol_tree_get_nth_child")
+  (return-type "IdeSymbolNode*")
+  (parameters
+    '("IdeSymbolNode*" "node")
+    '("guint" "nth")
+  )
+)
+
+
+
+;; From ide-tags-builder.h
+
+(define-method build_async
+  (of-object "IdeTagsBuilder")
+  (c-name "ide_tags_builder_build_async")
+  (return-type "none")
+  (parameters
+    '("GFile*" "directory_or_file")
+    '("gboolean" "recursive")
+    '("GCancellable*" "cancellable")
+    '("GAsyncReadyCallback" "callback")
+    '("gpointer" "user_data")
+  )
+)
+
+(define-method build_finish
+  (of-object "IdeTagsBuilder")
+  (c-name "ide_tags_builder_build_finish")
+  (return-type "gboolean")
+  (parameters
+    '("GAsyncResult*" "result")
+    '("GError**" "error")
+  )
+)
+
+
+
+;; From ide-target.h
+
+(define-function ide_target_get_type
+  (c-name "ide_target_get_type")
+  (return-type "GType")
+)
+
+
+
+;; From ide-test-case.h
+
+(define-function ide_test_case_get_type
+  (c-name "ide_test_case_get_type")
+  (return-type "GType")
+)
+
+
+
+;; From ide-test-suite.h
+
+(define-function ide_test_suite_get_type
+  (c-name "ide_test_suite_get_type")
+  (return-type "GType")
+)
+
+
+
+;; From ide-text-iter.h
+
+
+
+;; From ide-theme-manager.h
+
+
+
+;; From ide-thread-pool.h
+
+(define-function ide_thread_pool_push
+  (c-name "ide_thread_pool_push")
+  (return-type "none")
+  (parameters
+    '("IdeThreadPoolKind" "kind")
+    '("IdeThreadFunc" "func")
+    '("gpointer" "func_data")
+  )
+)
+
+(define-function ide_thread_pool_push_task
+  (c-name "ide_thread_pool_push_task")
+  (return-type "none")
+  (parameters
+    '("IdeThreadPoolKind" "kind")
+    '("GTask*" "task")
+    '("GTaskThreadFunc" "func")
+  )
+)
+
+
+
+;; From ide-tree-builder.h
+
+(define-method get_tree
+  (of-object "IdeTreeBuilder")
+  (c-name "ide_tree_builder_get_tree")
+  (return-type "IdeTree*")
+)
+
+
+
+;; From ide-tree.h
+
+(define-method add_builder
+  (of-object "IdeTree")
+  (c-name "ide_tree_add_builder")
+  (return-type "none")
+  (parameters
+    '("IdeTreeBuilder*" "builder")
+  )
+)
+
+(define-method remove_builder
+  (of-object "IdeTree")
+  (c-name "ide_tree_remove_builder")
+  (return-type "none")
+  (parameters
+    '("IdeTreeBuilder*" "builder")
+  )
+)
+
+(define-method find_item
+  (of-object "IdeTree")
+  (c-name "ide_tree_find_item")
+  (return-type "IdeTreeNode*")
+  (parameters
+    '("GObject*" "item")
+  )
+)
+
+(define-method find_custom
+  (of-object "IdeTree")
+  (c-name "ide_tree_find_custom")
+  (return-type "IdeTreeNode*")
+  (parameters
+    '("GEqualFunc" "equal_func")
+    '("gpointer" "key")
+  )
+)
+
+(define-method get_selected
+  (of-object "IdeTree")
+  (c-name "ide_tree_get_selected")
+  (return-type "IdeTreeNode*")
+)
+
+(define-method rebuild
+  (of-object "IdeTree")
+  (c-name "ide_tree_rebuild")
+  (return-type "none")
+)
+
+(define-method set_root
+  (of-object "IdeTree")
+  (c-name "ide_tree_set_root")
+  (return-type "none")
+  (parameters
+    '("IdeTreeNode*" "node")
+  )
+)
+
+(define-method get_root
+  (of-object "IdeTree")
+  (c-name "ide_tree_get_root")
+  (return-type "IdeTreeNode*")
+)
+
+(define-method set_show_icons
+  (of-object "IdeTree")
+  (c-name "ide_tree_set_show_icons")
+  (return-type "none")
+  (parameters
+    '("gboolean" "show_icons")
+  )
+)
+
+(define-method get_show_icons
+  (of-object "IdeTree")
+  (c-name "ide_tree_get_show_icons")
+  (return-type "gboolean")
+)
+
+(define-method scroll_to_node
+  (of-object "IdeTree")
+  (c-name "ide_tree_scroll_to_node")
+  (return-type "none")
+  (parameters
+    '("IdeTreeNode*" "node")
+  )
+)
+
+(define-method expand_to_node
+  (of-object "IdeTree")
+  (c-name "ide_tree_expand_to_node")
+  (return-type "none")
+  (parameters
+    '("IdeTreeNode*" "node")
+  )
+)
+
+(define-method find_child_node
+  (of-object "IdeTree")
+  (c-name "ide_tree_find_child_node")
+  (return-type "IdeTreeNode*")
+  (parameters
+    '("IdeTreeNode*" "node")
+    '("IdeTreeFindFunc" "find_func")
+    '("gpointer" "user_data")
+  )
+)
+
+(define-method set_filter
+  (of-object "IdeTree")
+  (c-name "ide_tree_set_filter")
+  (return-type "none")
+  (parameters
+    '("IdeTreeFilterFunc" "filter_func")
+    '("gpointer" "filter_data")
+    '("GDestroyNotify" "filter_data_destroy")
+  )
+)
+
+(define-method get_context_menu
+  (of-object "IdeTree")
+  (c-name "ide_tree_get_context_menu")
+  (return-type "GMenuModel*")
+)
+
+(define-method set_context_menu
+  (of-object "IdeTree")
+  (c-name "ide_tree_set_context_menu")
+  (return-type "none")
+  (parameters
+    '("GMenuModel*" "context_menu")
+  )
+)
+
+
+
+;; From ide-tree-node.h
+
+(define-function ide_tree_node_new
+  (c-name "ide_tree_node_new")
+  (is-constructor-of "IdeTreeNode")
+  (return-type "IdeTreeNode*")
+)
+
+(define-method append
+  (of-object "IdeTreeNode")
+  (c-name "ide_tree_node_append")
+  (return-type "none")
+  (parameters
+    '("IdeTreeNode*" "child")
+  )
+)
+
+(define-method insert_sorted
+  (of-object "IdeTreeNode")
+  (c-name "ide_tree_node_insert_sorted")
+  (return-type "none")
+  (parameters
+    '("IdeTreeNode*" "child")
+    '("IdeTreeNodeCompareFunc" "compare_func")
+    '("gpointer" "user_data")
+  )
+)
+
+(define-method get_icon_name
+  (of-object "IdeTreeNode")
+  (c-name "ide_tree_node_get_icon_name")
+  (return-type "const-gchar*")
+)
+
+(define-method get_item
+  (of-object "IdeTreeNode")
+  (c-name "ide_tree_node_get_item")
+  (return-type "GObject*")
+)
+
+(define-method get_parent
+  (of-object "IdeTreeNode")
+  (c-name "ide_tree_node_get_parent")
+  (return-type "IdeTreeNode*")
+)
+
+(define-method get_path
+  (of-object "IdeTreeNode")
+  (c-name "ide_tree_node_get_path")
+  (return-type "GtkTreePath*")
+)
+
+(define-method get_iter
+  (of-object "IdeTreeNode")
+  (c-name "ide_tree_node_get_iter")
+  (return-type "gboolean")
+  (parameters
+    '("GtkTreeIter*" "iter")
+  )
+)
+
+(define-method prepend
+  (of-object "IdeTreeNode")
+  (c-name "ide_tree_node_prepend")
+  (return-type "none")
+  (parameters
+    '("IdeTreeNode*" "child")
+  )
+)
+
+(define-method remove
+  (of-object "IdeTreeNode")
+  (c-name "ide_tree_node_remove")
+  (return-type "none")
+  (parameters
+    '("IdeTreeNode*" "child")
+  )
+)
+
+(define-method set_icon_name
+  (of-object "IdeTreeNode")
+  (c-name "ide_tree_node_set_icon_name")
+  (return-type "none")
+  (parameters
+    '("const-gchar*" "icon_name")
+  )
+)
+
+(define-method set_item
+  (of-object "IdeTreeNode")
+  (c-name "ide_tree_node_set_item")
+  (return-type "none")
+  (parameters
+    '("GObject*" "item")
+  )
+)
+
+(define-method expand
+  (of-object "IdeTreeNode")
+  (c-name "ide_tree_node_expand")
+  (return-type "gboolean")
+  (parameters
+    '("gboolean" "expand_ancestors")
+  )
+)
+
+(define-method collapse
+  (of-object "IdeTreeNode")
+  (c-name "ide_tree_node_collapse")
+  (return-type "none")
+)
+
+(define-method select
+  (of-object "IdeTreeNode")
+  (c-name "ide_tree_node_select")
+  (return-type "none")
+)
+
+(define-method get_area
+  (of-object "IdeTreeNode")
+  (c-name "ide_tree_node_get_area")
+  (return-type "none")
+  (parameters
+    '("GdkRectangle*" "area")
+  )
+)
+
+(define-method invalidate
+  (of-object "IdeTreeNode")
+  (c-name "ide_tree_node_invalidate")
+  (return-type "none")
+)
+
+(define-method get_expanded
+  (of-object "IdeTreeNode")
+  (c-name "ide_tree_node_get_expanded")
+  (return-type "gboolean")
+)
+
+(define-method show_popover
+  (of-object "IdeTreeNode")
+  (c-name "ide_tree_node_show_popover")
+  (return-type "none")
+  (parameters
+    '("GtkPopover*" "popover")
+  )
+)
+
+(define-method get_text
+  (of-object "IdeTreeNode")
+  (c-name "ide_tree_node_get_text")
+  (return-type "const-gchar*")
+)
+
+(define-method set_text
+  (of-object "IdeTreeNode")
+  (c-name "ide_tree_node_set_text")
+  (return-type "none")
+  (parameters
+    '("const-gchar*" "text")
+  )
+)
+
+(define-method get_tree
+  (of-object "IdeTreeNode")
+  (c-name "ide_tree_node_get_tree")
+  (return-type "IdeTree*")
+)
+
+(define-method get_children_possible
+  (of-object "IdeTreeNode")
+  (c-name "ide_tree_node_get_children_possible")
+  (return-type "gboolean")
+)
+
+(define-method set_children_possible
+  (of-object "IdeTreeNode")
+  (c-name "ide_tree_node_set_children_possible")
+  (return-type "none")
+  (parameters
+    '("gboolean" "children_possible")
+  )
+)
+
+(define-method get_use_markup
+  (of-object "IdeTreeNode")
+  (c-name "ide_tree_node_get_use_markup")
+  (return-type "gboolean")
+)
+
+(define-method set_use_markup
+  (of-object "IdeTreeNode")
+  (c-name "ide_tree_node_set_use_markup")
+  (return-type "none")
+  (parameters
+    '("gboolean" "use_markup")
+  )
+)
+
+(define-method get_use_dim_label
+  (of-object "IdeTreeNode")
+  (c-name "ide_tree_node_get_use_dim_label")
+  (return-type "gboolean")
+)
+
+(define-method set_use_dim_label
+  (of-object "IdeTreeNode")
+  (c-name "ide_tree_node_set_use_dim_label")
+  (return-type "none")
+  (parameters
+    '("gboolean" "use_dim_label")
+  )
+)
+
+
+
+;; From ide-tree-private.h
+
+
+
+;; From ide-tree-types.h
+
+
+
+;; From ide-types.h
+
+
+
+;; From ide-unsaved-file.h
+
+(define-function ide_unsaved_file_get_type
+  (c-name "ide_unsaved_file_get_type")
+  (return-type "GType")
+)
+
+(define-method ref
+  (of-object "IdeUnsavedFile")
+  (c-name "ide_unsaved_file_ref")
+  (return-type "IdeUnsavedFile*")
+)
+
+(define-method unref
+  (of-object "IdeUnsavedFile")
+  (c-name "ide_unsaved_file_unref")
+  (return-type "none")
+)
+
+(define-method get_content
+  (of-object "IdeUnsavedFile")
+  (c-name "ide_unsaved_file_get_content")
+  (return-type "GBytes*")
+)
+
+(define-method get_file
+  (of-object "IdeUnsavedFile")
+  (c-name "ide_unsaved_file_get_file")
+  (return-type "GFile*")
+)
+
+(define-method get_sequence
+  (of-object "IdeUnsavedFile")
+  (c-name "ide_unsaved_file_get_sequence")
+  (return-type "gint64")
+)
+
+(define-method get_temp_path
+  (of-object "IdeUnsavedFile")
+  (c-name "ide_unsaved_file_get_temp_path")
+  (return-type "const-gchar*")
+)
+
+(define-method persist
+  (of-object "IdeUnsavedFile")
+  (c-name "ide_unsaved_file_persist")
+  (return-type "gboolean")
+  (parameters
+    '("GCancellable*" "cancellable")
+    '("GError**" "error")
+  )
+)
+
+
+
+;; From ide-unsaved-files.h
+
+(define-method update
+  (of-object "IdeUnsavedFiles")
+  (c-name "ide_unsaved_files_update")
+  (return-type "none")
+  (parameters
+    '("GFile*" "file")
+    '("GBytes*" "content")
+  )
+)
+
+(define-method remove
+  (of-object "IdeUnsavedFiles")
+  (c-name "ide_unsaved_files_remove")
+  (return-type "none")
+  (parameters
+    '("GFile*" "file")
+  )
+)
+
+(define-method save_async
+  (of-object "IdeUnsavedFiles")
+  (c-name "ide_unsaved_files_save_async")
+  (return-type "none")
+  (parameters
+    '("GCancellable*" "cancellable")
+    '("GAsyncReadyCallback" "callback")
+    '("gpointer" "user_data")
+  )
+)
+
+(define-method save_finish
+  (of-object "IdeUnsavedFiles")
+  (c-name "ide_unsaved_files_save_finish")
+  (return-type "gboolean")
+  (parameters
+    '("GAsyncResult*" "result")
+    '("GError**" "error")
+  )
+)
+
+(define-method restore_async
+  (of-object "IdeUnsavedFiles")
+  (c-name "ide_unsaved_files_restore_async")
+  (return-type "none")
+  (parameters
+    '("GCancellable*" "cancellable")
+    '("GAsyncReadyCallback" "callback")
+    '("gpointer" "user_data")
+  )
+)
+
+(define-method restore_finish
+  (of-object "IdeUnsavedFiles")
+  (c-name "ide_unsaved_files_restore_finish")
+  (return-type "gboolean")
+  (parameters
+    '("GAsyncResult*" "result")
+    '("GError**" "error")
+  )
+)
+
+(define-method to_array
+  (of-object "IdeUnsavedFiles")
+  (c-name "ide_unsaved_files_to_array")
+  (return-type "GPtrArray*")
+)
+
+(define-method get_sequence
+  (of-object "IdeUnsavedFiles")
+  (c-name "ide_unsaved_files_get_sequence")
+  (return-type "gint64")
+)
+
+(define-method get_unsaved_file
+  (of-object "IdeUnsavedFiles")
+  (c-name "ide_unsaved_files_get_unsaved_file")
+  (return-type "IdeUnsavedFile*")
+  (parameters
+    '("GFile*" "file")
+  )
+)
+
+(define-method clear
+  (of-object "IdeUnsavedFiles")
+  (c-name "ide_unsaved_files_clear")
+  (return-type "none")
+)
+
+(define-method contains
+  (of-object "IdeUnsavedFiles")
+  (c-name "ide_unsaved_files_contains")
+  (return-type "gboolean")
+  (parameters
+    '("GFile*" "file")
+  )
+)
+
+
+
+;; From ide-uri.h
+
+(define-function ide_uri_new
+  (c-name "ide_uri_new")
+  (is-constructor-of "IdeUri")
+  (return-type "IdeUri*")
+  (parameters
+    '("const-gchar*" "uri_string")
+    '("IdeUriParseFlags" "flags")
+    '("GError**" "error")
+  )
+)
+
+(define-method new_relative
+  (of-object "IdeUri")
+  (c-name "ide_uri_new_relative")
+  (return-type "IdeUri*")
+  (parameters
+    '("const-gchar*" "uri_string")
+    '("IdeUriParseFlags" "flags")
+    '("GError**" "error")
+  )
+)
+
+(define-function ide_uri_new_from_file
+  (c-name "ide_uri_new_from_file")
+  (return-type "IdeUri*")
+  (parameters
+    '("GFile*" "file")
+  )
+)
+
+(define-function ide_uri_get_type
+  (c-name "ide_uri_get_type")
+  (return-type "GType")
+)
+
+(define-method to_string
+  (of-object "IdeUri")
+  (c-name "ide_uri_to_string")
+  (return-type "char*")
+  (parameters
+    '("IdeUriToStringFlags" "flags")
+  )
+)
+
+(define-method copy
+  (of-object "IdeUri")
+  (c-name "ide_uri_copy")
+  (return-type "IdeUri*")
+)
+
+(define-method ref
+  (of-object "IdeUri")
+  (c-name "ide_uri_ref")
+  (return-type "IdeUri*")
+)
+
+(define-method unref
+  (of-object "IdeUri")
+  (c-name "ide_uri_unref")
+  (return-type "none")
+)
+
+(define-method get_scheme
+  (of-object "IdeUri")
+  (c-name "ide_uri_get_scheme")
+  (return-type "const-gchar*")
+)
+
+(define-method set_scheme
+  (of-object "IdeUri")
+  (c-name "ide_uri_set_scheme")
+  (return-type "none")
+  (parameters
+    '("const-gchar*" "scheme")
+  )
+)
+
+(define-method get_user
+  (of-object "IdeUri")
+  (c-name "ide_uri_get_user")
+  (return-type "const-gchar*")
+)
+
+(define-method set_user
+  (of-object "IdeUri")
+  (c-name "ide_uri_set_user")
+  (return-type "none")
+  (parameters
+    '("const-gchar*" "user")
+  )
+)
+
+(define-method get_password
+  (of-object "IdeUri")
+  (c-name "ide_uri_get_password")
+  (return-type "const-gchar*")
+)
+
+(define-method set_password
+  (of-object "IdeUri")
+  (c-name "ide_uri_set_password")
+  (return-type "none")
+  (parameters
+    '("const-gchar*" "password")
+  )
+)
+
+(define-method get_auth_params
+  (of-object "IdeUri")
+  (c-name "ide_uri_get_auth_params")
+  (return-type "const-gchar*")
+)
+
+(define-method set_auth_params
+  (of-object "IdeUri")
+  (c-name "ide_uri_set_auth_params")
+  (return-type "none")
+  (parameters
+    '("const-gchar*" "auth_params")
+  )
+)
+
+(define-method get_host
+  (of-object "IdeUri")
+  (c-name "ide_uri_get_host")
+  (return-type "const-gchar*")
+)
+
+(define-method set_host
+  (of-object "IdeUri")
+  (c-name "ide_uri_set_host")
+  (return-type "none")
+  (parameters
+    '("const-gchar*" "host")
+  )
+)
+
+(define-method get_port
+  (of-object "IdeUri")
+  (c-name "ide_uri_get_port")
+  (return-type "gushort")
+)
+
+(define-method set_port
+  (of-object "IdeUri")
+  (c-name "ide_uri_set_port")
+  (return-type "none")
+  (parameters
+    '("gushort" "port")
+  )
+)
+
+(define-method get_path
+  (of-object "IdeUri")
+  (c-name "ide_uri_get_path")
+  (return-type "const-gchar*")
+)
+
+(define-method set_path
+  (of-object "IdeUri")
+  (c-name "ide_uri_set_path")
+  (return-type "none")
+  (parameters
+    '("const-gchar*" "path")
+  )
+)
+
+(define-method get_query
+  (of-object "IdeUri")
+  (c-name "ide_uri_get_query")
+  (return-type "const-gchar*")
+)
+
+(define-method set_query
+  (of-object "IdeUri")
+  (c-name "ide_uri_set_query")
+  (return-type "none")
+  (parameters
+    '("const-gchar*" "query")
+  )
+)
+
+(define-method get_fragment
+  (of-object "IdeUri")
+  (c-name "ide_uri_get_fragment")
+  (return-type "const-gchar*")
+)
+
+(define-method set_fragment
+  (of-object "IdeUri")
+  (c-name "ide_uri_set_fragment")
+  (return-type "none")
+  (parameters
+    '("const-gchar*" "fragment")
+  )
+)
+
+(define-function ide_uri_split
+  (c-name "ide_uri_split")
+  (return-type "none")
+  (parameters
+    '("const-gchar*" "uri_string")
+    '("gboolean" "strict")
+    '("gchar**" "scheme")
+    '("gchar**" "userinfo")
+    '("gchar**" "host")
+    '("gchar**" "port")
+    '("gchar**" "path")
+    '("gchar**" "query")
+    '("gchar**" "fragment")
+  )
+)
+
+(define-function ide_uri_parse_params
+  (c-name "ide_uri_parse_params")
+  (return-type "GHashTable*")
+  (parameters
+    '("const-gchar*" "params")
+    '("gssize" "length")
+    '("gchar" "separator")
+    '("gboolean" "case_insensitive")
+  )
+)
+
+(define-function ide_uri_parse_host
+  (c-name "ide_uri_parse_host")
+  (return-type "gboolean")
+  (parameters
+    '("const-gchar*" "uri_string")
+    '("IdeUriParseFlags" "flags")
+    '("gchar**" "scheme")
+    '("gchar**" "host")
+    '("gushort*" "port")
+    '("GError**" "error")
+  )
+)
+
+(define-function ide_uri_build
+  (c-name "ide_uri_build")
+  (return-type "gchar*")
+  (parameters
+    '("const-gchar*" "scheme")
+    '("const-gchar*" "userinfo")
+    '("const-gchar*" "host")
+    '("const-gchar*" "port")
+    '("const-gchar*" "path")
+    '("const-gchar*" "query")
+    '("const-gchar*" "fragment")
+  )
+)
+
+(define-method is_file
+  (of-object "IdeUri")
+  (c-name "ide_uri_is_file")
+  (return-type "gboolean")
+  (parameters
+    '("GFile*" "file")
+  )
+)
+
+(define-method to_file
+  (of-object "IdeUri")
+  (c-name "ide_uri_to_file")
+  (return-type "GFile*")
+)
+
+(define-function ide_uri_error_quark
+  (c-name "ide_uri_error_quark")
+  (return-type "GQuark")
+)
+
+
+
+;; From ide-vcs.h
+
+(define-method get_buffer_change_monitor
+  (of-object "IdeVcs")
+  (c-name "ide_vcs_get_buffer_change_monitor")
+  (return-type "IdeBufferChangeMonitor*")
+  (parameters
+    '("IdeBuffer*" "buffer")
+  )
+)
+
+(define-method get_working_directory
+  (of-object "IdeVcs")
+  (c-name "ide_vcs_get_working_directory")
+  (return-type "GFile*")
+)
+
+(define-function ide_vcs_new_async
+  (c-name "ide_vcs_new_async")
+  (return-type "none")
+  (parameters
+    '("IdeContext*" "context")
+    '("int" "io_priority")
+    '("GCancellable*" "cancellable")
+    '("GAsyncReadyCallback" "callback")
+    '("gpointer" "user_data")
+  )
+)
+
+(define-function ide_vcs_new_finish
+  (c-name "ide_vcs_new_finish")
+  (return-type "IdeVcs*")
+  (parameters
+    '("GAsyncResult*" "result")
+    '("GError**" "error")
+  )
+)
+
+(define-method is_ignored
+  (of-object "IdeVcs")
+  (c-name "ide_vcs_is_ignored")
+  (return-type "gboolean")
+  (parameters
+    '("GFile*" "file")
+    '("GError**" "error")
+  )
+)
+
+(define-method get_priority
+  (of-object "IdeVcs")
+  (c-name "ide_vcs_get_priority")
+  (return-type "gint")
+)
+
+
+
+;; From ide-vcs-uri.h
+
+(define-function ide_vcs_uri_get_type
+  (c-name "ide_vcs_uri_get_type")
+  (return-type "GType")
+)
+
+(define-function ide_vcs_uri_new
+  (c-name "ide_vcs_uri_new")
+  (is-constructor-of "IdeVcsUri")
+  (return-type "IdeVcsUri*")
+  (parameters
+    '("const-gchar*" "uri")
+  )
+)
+
+(define-method ref
+  (of-object "IdeVcsUri")
+  (c-name "ide_vcs_uri_ref")
+  (return-type "IdeVcsUri*")
+)
+
+(define-method unref
+  (of-object "IdeVcsUri")
+  (c-name "ide_vcs_uri_unref")
+  (return-type "none")
+)
+
+(define-method get_scheme
+  (of-object "IdeVcsUri")
+  (c-name "ide_vcs_uri_get_scheme")
+  (return-type "const-gchar*")
+)
+
+(define-method get_user
+  (of-object "IdeVcsUri")
+  (c-name "ide_vcs_uri_get_user")
+  (return-type "const-gchar*")
+)
+
+(define-method get_host
+  (of-object "IdeVcsUri")
+  (c-name "ide_vcs_uri_get_host")
+  (return-type "const-gchar*")
+)
+
+(define-method get_port
+  (of-object "IdeVcsUri")
+  (c-name "ide_vcs_uri_get_port")
+  (return-type "guint")
+)
+
+(define-method get_path
+  (of-object "IdeVcsUri")
+  (c-name "ide_vcs_uri_get_path")
+  (return-type "const-gchar*")
+)
+
+(define-method set_scheme
+  (of-object "IdeVcsUri")
+  (c-name "ide_vcs_uri_set_scheme")
+  (return-type "none")
+  (parameters
+    '("const-gchar*" "scheme")
+  )
+)
+
+(define-method set_user
+  (of-object "IdeVcsUri")
+  (c-name "ide_vcs_uri_set_user")
+  (return-type "none")
+  (parameters
+    '("const-gchar*" "user")
+  )
+)
+
+(define-method set_host
+  (of-object "IdeVcsUri")
+  (c-name "ide_vcs_uri_set_host")
+  (return-type "none")
+  (parameters
+    '("const-gchar*" "host")
+  )
+)
+
+(define-method set_port
+  (of-object "IdeVcsUri")
+  (c-name "ide_vcs_uri_set_port")
+  (return-type "none")
+  (parameters
+    '("guint" "port")
+  )
+)
+
+(define-method set_path
+  (of-object "IdeVcsUri")
+  (c-name "ide_vcs_uri_set_path")
+  (return-type "none")
+  (parameters
+    '("const-gchar*" "path")
+  )
+)
+
+(define-method to_string
+  (of-object "IdeVcsUri")
+  (c-name "ide_vcs_uri_to_string")
+  (return-type "gchar*")
+)
+
+(define-function ide_vcs_uri_is_valid
+  (c-name "ide_vcs_uri_is_valid")
+  (return-type "gboolean")
+  (parameters
+    '("const-gchar*" "uri_string")
+  )
+)
+
+
+
+;; From ide-workbench-addin.h
+
+(define-method get_id
+  (of-object "IdeWorkbenchAddin")
+  (c-name "ide_workbench_addin_get_id")
+  (return-type "gchar*")
+)
+
+(define-method load
+  (of-object "IdeWorkbenchAddin")
+  (c-name "ide_workbench_addin_load")
+  (return-type "none")
+  (parameters
+    '("IdeWorkbench*" "workbench")
+  )
+)
+
+(define-method unload
+  (of-object "IdeWorkbenchAddin")
+  (c-name "ide_workbench_addin_unload")
+  (return-type "none")
+  (parameters
+    '("IdeWorkbench*" "workbench")
+  )
+)
+
+(define-method can_open
+  (of-object "IdeWorkbenchAddin")
+  (c-name "ide_workbench_addin_can_open")
+  (return-type "gboolean")
+  (parameters
+    '("IdeUri*" "uri")
+    '("const-gchar*" "content_type")
+    '("gint*" "priority")
+  )
+)
+
+(define-method open_async
+  (of-object "IdeWorkbenchAddin")
+  (c-name "ide_workbench_addin_open_async")
+  (return-type "none")
+  (parameters
+    '("IdeUri*" "uri")
+    '("const-gchar*" "content_type")
+    '("GCancellable*" "cancellable")
+    '("GAsyncReadyCallback" "callback")
+    '("gpointer" "user_data")
+  )
+)
+
+(define-method open_finish
+  (of-object "IdeWorkbenchAddin")
+  (c-name "ide_workbench_addin_open_finish")
+  (return-type "gboolean")
+  (parameters
+    '("GAsyncResult*" "result")
+    '("GError**" "error")
+  )
+)
+
+
+
+;; From ide-workbench.h
+
+(define-method open_project_finish
+  (of-object "IdeWorkbench")
+  (c-name "ide_workbench_open_project_finish")
+  (return-type "gboolean")
+  (parameters
+    '("GAsyncResult*" "result")
+    '("GError**" "error")
+  )
+)
+
+(define-method open_uri_async
+  (of-object "IdeWorkbench")
+  (c-name "ide_workbench_open_uri_async")
+  (return-type "none")
+  (parameters
+    '("IdeUri*" "uri")
+    '("const-gchar*" "hint")
+    '("GCancellable*" "cancellable")
+    '("GAsyncReadyCallback" "callback")
+    '("gpointer" "user_data")
+  )
+)
+
+(define-method open_uri_finish
+  (of-object "IdeWorkbench")
+  (c-name "ide_workbench_open_uri_finish")
+  (return-type "gboolean")
+  (parameters
+    '("GAsyncResult*" "result")
+    '("GError**" "error")
+  )
+)
+
+(define-method open_files_async
+  (of-object "IdeWorkbench")
+  (c-name "ide_workbench_open_files_async")
+  (return-type "none")
+  (parameters
+    '("GFile**" "files")
+    '("guint" "n_files")
+    '("const-gchar*" "hint")
+    '("GCancellable*" "cancellable")
+    '("GAsyncReadyCallback" "callback")
+    '("gpointer" "user_data")
+  )
+)
+
+(define-method open_files_finish
+  (of-object "IdeWorkbench")
+  (c-name "ide_workbench_open_files_finish")
+  (return-type "gboolean")
+  (parameters
+    '("GAsyncResult*" "result")
+    '("GError**" "error")
+  )
+)
+
+(define-method save_all_async
+  (of-object "IdeWorkbench")
+  (c-name "ide_workbench_save_all_async")
+  (return-type "none")
+  (parameters
+    '("GCancellable*" "cancellable")
+    '("GAsyncReadyCallback" "callback")
+    '("gpointer" "user_data")
+  )
+)
+
+(define-method save_all_finish
+  (of-object "IdeWorkbench")
+  (c-name "ide_workbench_save_all_finish")
+  (return-type "gboolean")
+  (parameters
+    '("GAsyncResult*" "result")
+    '("GError**" "error")
+  )
+)
+
+(define-method focus
+  (of-object "IdeWorkbench")
+  (c-name "ide_workbench_focus")
+  (return-type "none")
+  (parameters
+    '("GtkWidget*" "widget")
+  )
+)
+
+(define-method close
+  (of-object "IdeWorkbench")
+  (c-name "ide_workbench_close")
+  (return-type "none")
+)
+
+(define-method get_context
+  (of-object "IdeWorkbench")
+  (c-name "ide_workbench_get_context")
+  (return-type "IdeContext*")
+)
+
+(define-method add_perspective
+  (of-object "IdeWorkbench")
+  (c-name "ide_workbench_add_perspective")
+  (return-type "none")
+  (parameters
+    '("IdePerspective*" "perspective")
+  )
+)
+
+(define-method remove_perspective
+  (of-object "IdeWorkbench")
+  (c-name "ide_workbench_remove_perspective")
+  (return-type "none")
+  (parameters
+    '("IdePerspective*" "perspective")
+  )
+)
+
+(define-method get_perspective_by_name
+  (of-object "IdeWorkbench")
+  (c-name "ide_workbench_get_perspective_by_name")
+  (return-type "IdePerspective*")
+  (parameters
+    '("const-gchar*" "name")
+  )
+)
+
+(define-method get_visible_perspective
+  (of-object "IdeWorkbench")
+  (c-name "ide_workbench_get_visible_perspective")
+  (return-type "IdePerspective*")
+)
+
+(define-method set_visible_perspective
+  (of-object "IdeWorkbench")
+  (c-name "ide_workbench_set_visible_perspective")
+  (return-type "none")
+  (parameters
+    '("IdePerspective*" "perspective")
+  )
+)
+
+(define-method get_visible_perspective_name
+  (of-object "IdeWorkbench")
+  (c-name "ide_workbench_get_visible_perspective_name")
+  (return-type "const-gchar*")
+)
+
+(define-method set_visible_perspective_name
+  (of-object "IdeWorkbench")
+  (c-name "ide_workbench_set_visible_perspective_name")
+  (return-type "none")
+  (parameters
+    '("const-gchar*" "name")
+  )
+)
+
+(define-method get_fullscreen
+  (of-object "IdeWorkbench")
+  (c-name "ide_workbench_get_fullscreen")
+  (return-type "gboolean")
+)
+
+(define-method set_fullscreen
+  (of-object "IdeWorkbench")
+  (c-name "ide_workbench_set_fullscreen")
+  (return-type "none")
+  (parameters
+    '("gboolean" "fullscreen")
+  )
+)
+
+(define-method views_foreach
+  (of-object "IdeWorkbench")
+  (c-name "ide_workbench_views_foreach")
+  (return-type "none")
+  (parameters
+    '("GtkCallback" "callback")
+    '("gpointer" "user_data")
+  )
+)
+
+
+
+;; From ide-workbench-header-bar.h
+
+(define-function ide_workbench_header_bar_new
+  (c-name "ide_workbench_header_bar_new")
+  (is-constructor-of "IdeWorkbenchHeaderBar")
+  (return-type "GtkWidget*")
+)
+
+(define-method focus_search
+  (of-object "IdeWorkbenchHeaderBar")
+  (c-name "ide_workbench_header_bar_focus_search")
+  (return-type "none")
+)
+
+
+
+;; From ide-workbench-private.h
+
+(define-method set_context
+  (of-object "IdeWorkbench")
+  (c-name "ide_workbench_set_context")
+  (return-type "none")
+  (parameters
+    '("IdeContext*" "context")
+  )
+)
+
+(define-method actions_init
+  (of-object "IdeWorkbench")
+  (c-name "ide_workbench_actions_init")
+  (return-type "none")
+)
+
+(define-method set_selection_owner
+  (of-object "IdeWorkbench")
+  (c-name "ide_workbench_set_selection_owner")
+  (return-type "none")
+  (parameters
+    '("GObject*" "object")
+  )
+)
+
+(define-method get_selection_owner
+  (of-object "IdeWorkbench")
+  (c-name "ide_workbench_get_selection_owner")
+  (return-type "GObject*")
+)
+
+
+
+;; From ide-worker.h
+
+(define-method create_proxy
+  (of-object "IdeWorker")
+  (c-name "ide_worker_create_proxy")
+  (return-type "GDBusProxy*")
+  (parameters
+    '("GDBusConnection*" "connection")
+    '("GError**" "error")
+  )
+)
+
+(define-method register_service
+  (of-object "IdeWorker")
+  (c-name "ide_worker_register_service")
+  (return-type "none")
+  (parameters
+    '("GDBusConnection*" "connection")
+  )
+)
+
+
+
+;; From ide-worker-manager.h
+
+(define-method get_worker_async
+  (of-object "IdeWorkerManager")
+  (c-name "ide_worker_manager_get_worker_async")
+  (return-type "none")
+  (parameters
+    '("const-gchar*" "plugin_name")
+    '("GCancellable*" "cancellable")
+    '("GAsyncReadyCallback" "callback")
+    '("gpointer" "user_data")
+  )
+)
+
+(define-method get_worker_finish
+  (of-object "IdeWorkerManager")
+  (c-name "ide_worker_manager_get_worker_finish")
+  (return-type "GDBusProxy*")
+  (parameters
+    '("GAsyncResult*" "result")
+    '("GError**" "error")
+  )
+)
+
+
+
+;; From ide-worker-process.h
+
+(define-method run
+  (of-object "IdeWorkerProcess")
+  (c-name "ide_worker_process_run")
+  (return-type "none")
+)
+
+(define-method quit
+  (of-object "IdeWorkerProcess")
+  (c-name "ide_worker_process_quit")
+  (return-type "none")
+)
+
+(define-method create_proxy
+  (of-object "IdeWorkerProcess")
+  (c-name "ide_worker_process_create_proxy")
+  (return-type "gpointer")
+  (parameters
+    '("GError**" "error")
+  )
+)
+
+(define-method matches_credentials
+  (of-object "IdeWorkerProcess")
+  (c-name "ide_worker_process_matches_credentials")
+  (return-type "gboolean")
+  (parameters
+    '("GCredentials*" "credentials")
+  )
+)
+
+(define-method set_connection
+  (of-object "IdeWorkerProcess")
+  (c-name "ide_worker_process_set_connection")
+  (return-type "none")
+  (parameters
+    '("GDBusConnection*" "connection")
+  )
+)
+
+(define-method get_proxy_async
+  (of-object "IdeWorkerProcess")
+  (c-name "ide_worker_process_get_proxy_async")
+  (return-type "none")
+  (parameters
+    '("GCancellable*" "cancellable")
+    '("GAsyncReadyCallback" "callback")
+    '("gpointer" "user_data")
+  )
+)
+
+(define-method get_proxy_finish
+  (of-object "IdeWorkerProcess")
+  (c-name "ide_worker_process_get_proxy_finish")
+  (return-type "GDBusProxy*")
+  (parameters
+    '("GAsyncResult*" "result")
+    '("GError**" "error")
+  )
+)
+
+
