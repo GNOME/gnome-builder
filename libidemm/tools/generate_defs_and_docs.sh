@@ -10,9 +10,22 @@ if [ -z "$JHBUILD_SOURCES" ]; then
   exit 1;
 fi
 
-OUT_DIR="$(dirname "$0")/../../src"
+ROOT_DIR="$(dirname "$0")/.."
+OUT_DIR="$ROOT_DIR/src"
+
 
 PARAMS="-s $JHBUILD_SOURCES/gnome-builder/libide/"
-
 DOCEXTRACT_TO_XML_PY="$JHBUILD_SOURCES/glibmm/tools/defs_gen/docextract_to_xml.py"
 $DOCEXTRACT_TO_XML_PY --no-since $PARAMS > "$OUT_DIR/libide_docs.xml"
+
+
+GEN_DIR="$ROOT_DIR/tools/extra_defs_gen"
+"$GEN_DIR"/generate_defs_libide > "$OUT_DIR"/libide_signals.defs
+
+
+ENUM_PL="$JHBUILD_SOURCES/glibmm/tools/enum.pl"
+$ENUM_PL "$JHBUILD_SOURCES"/gnome-builder/libide/*.h > "$OUT_DIR/libide_enums.defs"
+
+
+H2DEF_PY="$JHBUILD_SOURCES/glibmm/tools/defs_gen/h2def.py"
+$H2DEF_PY "$JHBUILD_SOURCES/gnome-builder"/libide/*.h > "$OUT_DIR/libide_methods.defs"
