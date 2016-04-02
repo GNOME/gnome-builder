@@ -1,8 +1,13 @@
+libidemmconfig.h
+stamp-h2
+
 /Makefile
 /Makefile.in
 /libidemm/Makefile
 /libidemm/Makefile.in
 /src/Makefile
 /src/Makefile.in
+/tools/extra_defs_gen/.dirstamp
+/tools/extra_defs_gen/generate_defs_libide
 /tools/Makefile
 /tools/Makefile.in
