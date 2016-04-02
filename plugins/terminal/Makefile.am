@@ -32,7 +32,7 @@ nodist_libterminal_la_SOURCES = \
 
 libterminal_la_CFLAGS = $(PLUGIN_CFLAGS) $(TERMINAL_CFLAGS)
 libterminal_la_LIBADD = $(TERMINAL_LIBS)
-libterminal_la_LDFLAGS = $(PLUGIN_CFLAGS)
+libterminal_la_LDFLAGS = $(PLUGIN_LDFLAGS)
 
 glib_resources_c = gb-terminal-resources.c
 glib_resources_h = gb-terminal-resources.h
