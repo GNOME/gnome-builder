@@ -21,6 +21,8 @@ AS_IF([test x$enable_libidemm != xno],[
 
 AM_CONDITIONAL(ENABLE_LIBIDEMM, test x$enable_libidemm = xyes)
 
+AC_CONFIG_HEADERS([libidemm/libidemmconfig.h])
+
 AC_CONFIG_FILES([libidemm/Makefile])
 AC_CONFIG_FILES([libidemm/libidemm/Makefile])
 AC_CONFIG_FILES([libidemm/src/Makefile])

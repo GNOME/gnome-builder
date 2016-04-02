@@ -14,7 +14,6 @@
 ## along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 srcmm_subdirs = libidemm
-pkgconfig_files = $(LIBIDEMM_MODULE_NAME).pc
 libidemm_include_HEADERS = libidemm.h
 
 if MAINTAINER_MODE
@@ -34,9 +33,7 @@ SUBDIRS = tools $(src_subdirs) $(srcmm_subdirs) # $(doc_subdirs)
 
 libidemm_includedir = $(includedir)/$(LIBIDEMM_MODULE_NAME)
 libidemm_libincludedir = $(libdir)/$(LIBIDEMM_MODULE_NAME)/include
-nodist_libidemm_libinclude_HEADERS = libide/libidemmconfig.h
+nodist_libidemm_libinclude_HEADERS = libidemmconfig.h
 
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = $(pkgconfig_files)
-
-dist_noinst_SCRIPTS = autogen.sh

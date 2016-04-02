@@ -1,4 +1,4 @@
-SUBDIRS = . build contrib data libide src plugins tools po tests doc help
+SUBDIRS = . build contrib data libide src plugins tools po tests doc help libidemm
 
 INTLTOOL_FILES = \
 	intltool-extract.in \
