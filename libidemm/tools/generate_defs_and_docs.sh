@@ -13,6 +13,7 @@ fi
 ROOT_DIR="$(dirname "$0")/.."
 OUT_DIR="$ROOT_DIR/src"
 
+shopt -s extglob # Enable extended pattern matching
 
 PARAMS="-s $JHBUILD_SOURCES/gnome-builder/libide/"
 DOCEXTRACT_TO_XML_PY="$JHBUILD_SOURCES/glibmm/tools/defs_gen/docextract_to_xml.py"
@@ -24,8 +25,8 @@ GEN_DIR="$ROOT_DIR/tools/extra_defs_gen"
 
 
 ENUM_PL="$JHBUILD_SOURCES/glibmm/tools/enum.pl"
-$ENUM_PL "$JHBUILD_SOURCES"/gnome-builder/libide/*.h > "$OUT_DIR/libide_enums.defs"
+$ENUM_PL "$JHBUILD_SOURCES"/gnome-builder/libide/!(*private).h > "$OUT_DIR/libide_enums.defs"
 
 
 H2DEF_PY="$JHBUILD_SOURCES/glibmm/tools/defs_gen/h2def.py"
-$H2DEF_PY "$JHBUILD_SOURCES/gnome-builder"/libide/*.h > "$OUT_DIR/libide_methods.defs"
+$H2DEF_PY "$JHBUILD_SOURCES/gnome-builder"/libide/!(*private).h > "$OUT_DIR/libide_methods.defs"
