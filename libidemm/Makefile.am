@@ -14,7 +14,7 @@
 ## along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 srcmm_subdirs = libidemm
-libidemm_include_HEADERS = libidemm.h
+libidemm_include_HEADERS = idemm.h
 
 if MAINTAINER_MODE
 src_subdirs = src
@@ -33,7 +33,7 @@ SUBDIRS = tools $(src_subdirs) $(srcmm_subdirs) # $(doc_subdirs)
 
 libidemm_includedir = $(includedir)/$(LIBIDEMM_MODULE_NAME)
 libidemm_libincludedir = $(libdir)/$(LIBIDEMM_MODULE_NAME)/include
-nodist_libidemm_libinclude_HEADERS = libidemmconfig.h
+nodist_libidemm_libinclude_HEADERS = idemmconfig.h
 
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = $(pkgconfig_files)

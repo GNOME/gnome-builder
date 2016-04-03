@@ -1,0 +1,49 @@
+#include "application.h"
+
+namespace {
+
+static void
+SignalProxy_async_callback(GObject*, GAsyncResult* res, gpointer data)
+{
+  auto the_slot = static_cast<Gio::SlotAsyncReady*>(data);
+
+  try
+  {
+    auto result = Glib::wrap(res, true /* take copy */);
+    (*the_slot)(result);
+  }
+  catch(...)
+  {
+    Glib::exception_handlers_invoke();
+  }
+
+  delete the_slot;
+}
+
+}
+
+namespace Ide {
+
+Application::Application()
+:
+  _CONSTRUCT("application-id", "org.gnome.Builder", "flags", G_APPLICATION_HANDLES_OPEN)
+{}
+
+
+void Application::get_worker_async(const Glib::ustring& plugin_name, const Gio::SlotAsyncReady& slot, const Glib::RefPtr<Gio::Cancellable>& cancellable)
+{
+  // slot_copy will be deleted in the callback.
+  auto slot_copy = new Gio::SlotAsyncReady(slot);
+
+  ide_application_get_worker_async(gobj(), plugin_name.c_str(), Glib::unwrap(cancellable), &SignalProxy_async_callback, slot_copy);
+}
+
+void Application::get_worker_async(const Glib::ustring& plugin_name, const Gio::SlotAsyncReady& slot)
+{
+  // slot_copy will be deleted in the callback.
+  auto slot_copy = new Gio::SlotAsyncReady(slot);
+
+  ide_application_get_worker_async(gobj(), plugin_name.c_str(), nullptr, &SignalProxy_async_callback, slot_copy);
+}
+
+}

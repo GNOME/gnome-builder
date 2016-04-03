@@ -1,5 +1,5 @@
 dnl Enums
-#_CONV_ENUM(Gst,AssocFlags)
+_CONV_ENUM(Ide,ApplicationMode)
 
 dnl Glibmm Enums
 #_CONV_GLIB_ENUM(ThreadPriority)
