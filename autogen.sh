@@ -18,6 +18,9 @@ aclocal --install -I build/autotools || exit 1
 glib-gettextize --force --copy || exit 1
 intltoolize --force --copy --automake || exit 1
 gtkdocize || exit 1
+
+mm-common-prepare --copy --force $srcdir/libidemm
+
 autoreconf --force --install -Wno-portability || exit 1
 
 if [ "$NOCONFIGURE" = "" ]; then
