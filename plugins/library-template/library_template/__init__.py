@@ -55,7 +55,7 @@ class LibraryProjectTemplate(Ide.TemplateBase, Ide.ProjectTemplate):
         return _("Create a new autotools project with a shared library")
 
     def do_get_languages(self):
-        return ['C', 'Python']
+        return ['C']
 
     def do_get_icon_name(self):
         return 'template-shared-library'
