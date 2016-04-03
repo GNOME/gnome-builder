@@ -149,7 +149,7 @@ gbp_create_project_genesis_addin_get_widget (IdeGenesisAddin *addin)
 static gchar *
 gbp_create_project_genesis_addin_get_icon_name (IdeGenesisAddin *addin)
 {
-  return g_strdup ("gtk-missing");
+  return g_strdup ("folder-templates-symbolic");
 }
 
 static gchar *
