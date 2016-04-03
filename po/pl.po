@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-28 19:59+0200\n"
-"PO-Revision-Date: 2016-03-28 20:00+0200\n"
+"POT-Creation-Date: 2016-04-03 22:28+0200\n"
+"PO-Revision-Date: 2016-04-03 22:29+0200\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <gnomepl@aviary.pl>\n"
 "Language: pl\n"
@@ -805,7 +805,7 @@ msgstr "Wrsz %u, kol %u"
 msgid "%u of %u"
 msgstr "%u z %u"
 
-#: ../libide/editor/ide-editor-frame.c:646
+#: ../libide/editor/ide-editor-frame.c:672
 #: ../plugins/project-tree/gtk/menus.ui.h:1
 msgid "Re_veal in Project Tree"
 msgstr "Odkry_wanie w drzewie projektu"
@@ -897,51 +897,60 @@ msgstr "Wsparte finansowo przez"
 msgid "Commands:"
 msgstr "Polecenia:"
 
-#: ../libide/ide-application-command-line.c:185
+#: ../libide/ide-application-command-line.c:186
 msgid "List available subcommands"
 msgstr "Wyświetla listę dostępnych podpoleceń"
 
-#: ../libide/ide-application-command-line.c:192
+#: ../libide/ide-application-command-line.c:193
 msgid "Run Builder in standalone mode"
 msgstr "Uruchamia program Builder w trybie samodzielnym"
 
-#: ../libide/ide-application-command-line.c:199
+#: ../libide/ide-application-command-line.c:200
 msgid "Show the application's version"
 msgstr "Wyświetla wersję programu"
 
-#: ../libide/ide-application-command-line.c:218
+#: ../libide/ide-application-command-line.c:219
 msgid "Increase verbosity, may be specified multiple times"
 msgstr "Zwiększa ilość informacji, można podawać wielokrotnie"
 
-#: ../libide/ide-application-command-line.c:225
+#: ../libide/ide-application-command-line.c:226
 msgid "Enter GApplication Service mode"
 msgstr "Przechodzi do trybu usługi GApplication"
 
-#: ../libide/ide-application-command-line.c:255
+#: ../libide/ide-application-command-line.c:233
+msgid "Opens the project specified by PATH"
+msgstr "Otwiera projekt podany w ŚCIEŻCE"
+
+#: ../libide/ide-application-command-line.c:234
+#: ../plugins/build-tools/gbp-build-tool.c:301
+msgid "PATH"
+msgstr "ŚCIEŻKA"
+
+#: ../libide/ide-application-command-line.c:264
 msgid "COMMAND"
 msgstr "POLECENIE"
 
-#: ../libide/ide-application-command-line.c:326
+#: ../libide/ide-application-command-line.c:335
 msgid "No commands available"
 msgstr "Brak dostępnych poleceń"
 
-#: ../libide/ide-application-command-line.c:356
+#: ../libide/ide-application-command-line.c:365
 msgid "Please provide a command"
 msgstr "Proszę podać polecenie"
 
-#: ../libide/ide-application-command-line.c:366
+#: ../libide/ide-application-command-line.c:375
 msgid "No such tool"
 msgstr "Nie ma takiego narzędzia"
 
-#: ../libide/ide-application-command-line.c:380
+#: ../libide/ide-application-command-line.c:389
 msgid "Please provide a worker type"
 msgstr "Proszę podać typ wątku roboczego"
 
-#: ../libide/ide-application-command-line.c:387
+#: ../libide/ide-application-command-line.c:396
 msgid "Please provide a D-Bus address"
 msgstr "Proszę podać adres usługi D-Bus"
 
-#: ../libide/ide-application-command-line.c:396
+#: ../libide/ide-application-command-line.c:405
 msgid "No such worker"
 msgstr "Nie ma takiego wątku roboczego"
 
@@ -1072,17 +1081,17 @@ msgstr "Otwarcie katalogu się nie powiodło: %s"
 msgid "Failed to load file: %s: %s"
 msgstr "Wczytanie pliku się nie powiodło: %s: %s"
 
-#: ../libide/ide-source-view.c:4966
+#: ../libide/ide-source-view.c:4967
 #, c-format
 msgid "Insert “%s”"
 msgstr "Wstaw „%s”"
 
-#: ../libide/ide-source-view.c:4968
+#: ../libide/ide-source-view.c:4969
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "Zmień „%s” na „%s”"
 
-#: ../libide/ide-source-view.c:5082
+#: ../libide/ide-source-view.c:5083
 msgid "Apply Fix-It"
 msgstr "Zastosuj „Fix-It”"
 
@@ -1670,6 +1679,7 @@ msgid "The name of the build configuration"
 msgstr "Nazwa konfiguracji budowania"
 
 #: ../plugins/build-tools/gbp-build-configuration-view.ui.h:3
+#: ../plugins/create-project/gbp-create-project-widget.ui.h:1
 msgid "Name"
 msgstr "Nazwa"
 
@@ -1892,10 +1902,6 @@ msgstr "IDENTYFIKATOR_KONFIGURACJI"
 msgid "Path to project file, defaults to current directory"
 msgstr "Ścieżka do pliku projektu, domyślnie bieżący katalog"
 
-#: ../plugins/build-tools/gbp-build-tool.c:301
-msgid "PATH"
-msgstr "ŚCIEŻKA"
-
 #: ../plugins/clang/ide-clang-preferences-addin.c:62
 msgid "Clang"
 msgstr "Clang"
@@ -2066,6 +2072,10 @@ msgstr "Nazwa użytkownika"
 msgid "Format Strings"
 msgstr "Ciągi formatu"
 
+#: ../plugins/create-project/gbp-create-project-genesis-addin.c:158
+msgid "From a project template"
+msgstr "Z szablonu projektu"
+
 #: ../plugins/create-project/gbp-create-project-tool.c:130
 msgid "List available templates"
 msgstr "Wyświetla listę dostępnych szablonów"
@@ -2092,6 +2102,19 @@ msgstr "Proszę podać nazwę projektu.\n"
 #, c-format
 msgid "Please specify a project template with --template=\n"
 msgstr "Proszę podać szablon projektu za pomocą parametru „--template=”\n"
+
+#: ../plugins/create-project/gbp-create-project-widget.ui.h:2
+#: ../plugins/git/ide-git-clone-widget.ui.h:6
+msgid "Location"
+msgstr "Położenie"
+
+#: ../plugins/create-project/gbp-create-project-widget.ui.h:3
+msgid "Language"
+msgstr "Język"
+
+#: ../plugins/create-project/gbp-create-project-widget.ui.h:4
+msgid "Pattern"
+msgstr "Wzór"
 
 #: ../plugins/devhelp/gbp-devhelp-panel.c:187
 #: ../plugins/devhelp/gbp-devhelp-search-provider.c:128
@@ -2152,10 +2175,6 @@ msgstr "Nazwa katalogu do utworzenia"
 #: ../plugins/git/ide-git-clone-widget.ui.h:5
 msgid "Repository"
 msgstr "Repozytorium"
-
-#: ../plugins/git/ide-git-clone-widget.ui.h:6
-msgid "Location"
-msgstr "Położenie"
 
 #: ../plugins/git/ide-git-genesis-addin.c:93
 msgid "From an existing project in a Git repository"
