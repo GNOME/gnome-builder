@@ -1,13 +1,51 @@
-libidemmconfig.h
+*~
+
+*.lo
+*.o
+.deps
+.dirstamp
+.libs
+
 stamp-h2
 
+.stamps
+
+# /
 /Makefile
 /Makefile.in
-/libidemm/Makefile
-/libidemm/Makefile.in
+/idemmconfig.h
+/compile-binding.am
+/dist-changelog.am
+/doc-reference.am
+/generate-binding.am
+
+# /src
 /src/Makefile
 /src/Makefile.in
+
+# /tools
 /tools/extra_defs_gen/.dirstamp
 /tools/extra_defs_gen/generate_defs_libide
 /tools/Makefile
 /tools/Makefile.in
+
+# /libidemm
+/libidemm/libidemm-1.0.la
+/libidemm/Makefile
+/libidemm/Makefile.in
+/libidemm/private/
+/libidemm/application.cc
+/libidemm/application.h
+/libidemm/wrap_init.cc
+
+# docs/
+/docs/doc-install.pl
+/docs/doc-postprocess.pl
+/docs/doxygen.css
+/docs/doxygen-extra.css
+/docs/tagfile-to-devhelp2.xsl
+/docs/reference/Doxyfile
+/docs/reference/doxygen.log
+/docs/reference/gstreamermm-1.0.devhelp2
+/docs/reference/gstreamermm-1.0.tag
+/docs/reference/html/

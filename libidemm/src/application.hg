@@ -1,0 +1,42 @@
+#include <gtkmm/application.h>
+#include <giomm/asyncresult.h>
+#include <giomm/cancellable.h>
+#include <giomm/dbusproxy.h>
+
+#include <ide.h>
+
+_DEFS(libidemm, libide)
+_PINCLUDE(gtkmm/private/application_p.h)
+
+namespace Ide {
+
+_WRAP_ENUM(ApplicationMode, IdeApplicationMode, NO_GTYPE)
+
+class Application : public Gtk::Application
+{
+protected:
+  _CLASS_GOBJECT(Application, IdeApplication, IDE_APPLICATION, Gtk::Application, GtkApplication)
+  _STRUCT_NOT_HIDDEN
+
+  Application();
+
+public:
+  _IGNORE(ide_application_new)
+  _WRAP_CREATE()
+  _WRAP_METHOD(Ide::ApplicationMode get_mode() const, ide_application_get_mode)
+  _WRAP_METHOD(Glib::DateTime get_started_at() const, ide_application_get_started_at)
+  _WRAP_METHOD(void show_projects_window(), ide_application_show_projects_window)
+  _WRAP_METHOD(Glib::ustring get_keybindings_mode() const, ide_application_get_keybindings_mode)
+  _WRAP_METHOD(Glib::RefPtr<Gio::Menu> get_menu_by_id(const Glib::ustring& id), ide_application_get_menu_by_id)
+
+// TODO: remove the conversion when bug #764547 is fixed
+#m4 _CONVERSION(`GDBusProxy*',`Glib::RefPtr<Gio::DBus::Proxy>',`Glib::wrap($3)')
+_WRAP_METHOD(Glib::RefPtr<Gio::DBus::Proxy> get_worker_finish(const Glib::RefPtr<Gio::AsyncResult>& result), ide_application_get_worker_finish, errthrow)
+
+  void get_worker_async(const Glib::ustring& plugin_name, const Gio::SlotAsyncReady& slot, const Glib::RefPtr<Gio::Cancellable>& cancellable);
+  void get_worker_async(const Glib::ustring& plugin_name, const Gio::SlotAsyncReady& slot);
+  _IGNORE(ide_application_get_worker_async)
+
+};
+
+}

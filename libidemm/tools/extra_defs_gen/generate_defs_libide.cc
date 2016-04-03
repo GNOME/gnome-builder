@@ -28,6 +28,7 @@ bool libide_type_is_a_pointer(GType gtype)
 int main (int argc, char *argv[])
 {
 
-  //  std::cout << get_defs(GTYPE, libide_type_is_a_pointer);
+  std::cout << get_defs(IDE_TYPE_APPLICATION, libide_type_is_a_pointer);
+  
   return 0;
 }
