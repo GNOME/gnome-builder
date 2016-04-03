@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <template class="GbpCreateProjectTemplateIcon" parent="GtkBin">
+    <property name="border-width">12</property>
     <child>
       <object class="GtkBox">
         <property name="orientation">vertical</property>
@@ -17,12 +18,6 @@
           <object class="GtkLabel" id="template_name">
             <property name="expand">true</property>
             <property name="visible">true</property>
-            <attributes>
-              <attribute name="weight" value="bold"/>
-            </attributes>
-            <style>
-              <class name="dim-label"/>
-            </style>
           </object>
         </child>
       </object>
