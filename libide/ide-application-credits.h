@@ -263,6 +263,7 @@ static const gchar *ide_application_credits_funders[] = {
   "Guilherme Rodrigues",
   "Guillaume Beaudin",
   "Guillaume Hain",
+  "Guillaume Pasquet",
   "Guillaume Quintard",
   "Gustavo Arejano",
   "Gustavo N Silva",
