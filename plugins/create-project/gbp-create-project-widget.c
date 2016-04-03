@@ -443,7 +443,7 @@ gbp_create_project_widget_create_async (GbpCreateProjectWidget *self,
                                   (GDestroyNotify)g_variant_unref);
 
   text = gtk_entry_get_text (self->project_name_entry);
-  name = g_strdup (text);
+  name = g_strstrip (g_strdup (text));
   g_hash_table_insert (params,
                        g_strdup ("name"),
                        g_variant_ref_sink (g_variant_new_string (g_strdelimit (name, " ", '-'))));
