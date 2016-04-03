@@ -334,6 +334,12 @@
 
 ;; From ide-application.h
 
+(define-method get_mode
+  (of-object "IdeApplication")
+  (c-name "ide_application_get_mode")
+  (return-type "IdeApplicationMode")
+)
+
 (define-function ide_application_new
   (c-name "ide_application_new")
   (is-constructor-of "IdeApplication")
@@ -393,50 +399,6 @@
   (parameters
     '("const-gchar*" "id")
   )
-)
-
-
-
-;; From ide-application-private.h
-
-(define-method discover_plugins
-  (of-object "IdeApplication")
-  (c-name "ide_application_discover_plugins")
-  (return-type "none")
-)
-
-(define-method load_plugins
-  (of-object "IdeApplication")
-  (c-name "ide_application_load_plugins")
-  (return-type "none")
-)
-
-(define-method load_addins
-  (of-object "IdeApplication")
-  (c-name "ide_application_load_addins")
-  (return-type "none")
-)
-
-(define-method init_plugin_menus
-  (of-object "IdeApplication")
-  (c-name "ide_application_init_plugin_menus")
-  (return-type "none")
-)
-
-(define-function ide_application_local_command_line
-  (c-name "ide_application_local_command_line")
-  (return-type "gboolean")
-  (parameters
-    '("GApplication*" "application")
-    '("gchar***" "arguments")
-    '("gint*" "exit_status")
-  )
-)
-
-(define-method run_tests
-  (of-object "IdeApplication")
-  (c-name "ide_application_run_tests")
-  (return-type "none")
 )
 
 
@@ -501,6 +463,16 @@
 
 ;; From ide-back-forward-item.h
 
+(define-function ide_back_forward_item_new
+  (c-name "ide_back_forward_item_new")
+  (is-constructor-of "IdeBackForwardItem")
+  (return-type "IdeBackForwardItem*")
+  (parameters
+    '("IdeContext*" "context")
+    '("IdeUri*" "uri")
+  )
+)
+
 (define-method get_uri
   (of-object "IdeBackForwardItem")
   (c-name "ide_back_forward_item_get_uri")
@@ -519,6 +491,12 @@
 
 
 ;; From ide-back-forward-list.h
+
+(define-method go_backward
+  (of-object "IdeBackForwardList")
+  (c-name "ide_back_forward_list_go_backward")
+  (return-type "none")
+)
 
 (define-method go_forward
   (of-object "IdeBackForwardList")
@@ -567,10 +545,6 @@
     '("IdeBackForwardList*" "branch")
   )
 )
-
-
-
-;; From ide-back-forward-list-private.h
 
 
 
@@ -815,6 +789,12 @@
 
 
 ;; From ide-buffer-manager.h
+
+(define-method create_temporary_buffer
+  (of-object "IdeBufferManager")
+  (c-name "ide_buffer_manager_create_temporary_buffer")
+  (return-type "IdeBuffer*")
+)
 
 (define-method load_file_async
   (of-object "IdeBufferManager")
@@ -1297,6 +1277,18 @@
 
 ;; From ide-configuration.h
 
+(define-function ide_configuration_new
+  (c-name "ide_configuration_new")
+  (is-constructor-of "IdeConfiguration")
+  (return-type "IdeConfiguration*")
+  (parameters
+    '("IdeContext*" "context")
+    '("const-gchar*" "id")
+    '("const-gchar*" "device_id")
+    '("const-gchar*" "runtime_id")
+  )
+)
+
 (define-method get_id
   (of-object "IdeConfiguration")
   (c-name "ide_configuration_get_id")
@@ -1500,6 +1492,12 @@
 
 ;; From ide-configuration-manager.h
 
+(define-method get_current
+  (of-object "IdeConfigurationManager")
+  (c-name "ide_configuration_manager_get_current")
+  (return-type "IdeConfiguration*")
+)
+
 (define-method set_current
   (of-object "IdeConfigurationManager")
   (c-name "ide_configuration_manager_set_current")
@@ -1560,6 +1558,12 @@
 
 
 ;; From ide-context.h
+
+(define-method get_back_forward_list
+  (of-object "IdeContext")
+  (c-name "ide_context_get_back_forward_list")
+  (return-type "IdeBackForwardList*")
+)
 
 (define-method get_project_file
   (of-object "IdeContext")
@@ -1770,6 +1774,15 @@
 
 ;; From ide-css-provider.h
 
+(define-function ide_css_provider_new
+  (c-name "ide_css_provider_new")
+  (is-constructor-of "IdeCssProvider")
+  (return-type "GtkCssProvider*")
+  (parameters
+    '("const-gchar*" "base_path")
+  )
+)
+
 
 
 ;; From ide-debugger.h
@@ -1839,6 +1852,15 @@
 
 
 ;; From ide-device-manager.h
+
+(define-method add_provider
+  (of-object "IdeDeviceManager")
+  (c-name "ide_device_manager_add_provider")
+  (return-type "none")
+  (parameters
+    '("IdeDeviceProvider*" "provider")
+  )
+)
 
 (define-method get_devices
   (of-object "IdeDeviceManager")
@@ -2027,6 +2049,12 @@
 
 ;; From ide-diagnostician.h
 
+(define-method get_language
+  (of-object "IdeDiagnostician")
+  (c-name "ide_diagnostician_get_language")
+  (return-type "GtkSourceLanguage*")
+)
+
 (define-method set_language
   (of-object "IdeDiagnostician")
   (c-name "ide_diagnostician_set_language")
@@ -2211,6 +2239,12 @@
 
 ;; From ide-environment-editor.h
 
+(define-function ide_environment_editor_new
+  (c-name "ide_environment_editor_new")
+  (is-constructor-of "IdeEnvironmentEditor")
+  (return-type "GtkWidget*")
+)
+
 (define-method get_environment
   (of-object "IdeEnvironmentEditor")
   (c-name "ide_environment_editor_get_environment")
@@ -2230,6 +2264,12 @@
 
 ;; From ide-environment-editor-row.h
 
+(define-method get_variable
+  (of-object "IdeEnvironmentEditorRow")
+  (c-name "ide_environment_editor_row_get_variable")
+  (return-type "IdeEnvironmentVariable*")
+)
+
 (define-method set_variable
   (of-object "IdeEnvironmentEditorRow")
   (c-name "ide_environment_editor_row_set_variable")
@@ -2248,6 +2288,12 @@
 
 
 ;; From ide-environment.h
+
+(define-function ide_environment_new
+  (c-name "ide_environment_new")
+  (is-constructor-of "IdeEnvironment")
+  (return-type "IdeEnvironment*")
+)
 
 (define-method setenv
   (of-object "IdeEnvironment")
@@ -2302,6 +2348,16 @@
 
 ;; From ide-environment-variable.h
 
+(define-function ide_environment_variable_new
+  (c-name "ide_environment_variable_new")
+  (is-constructor-of "IdeEnvironmentVariable")
+  (return-type "IdeEnvironmentVariable*")
+  (parameters
+    '("const-gchar*" "key")
+    '("const-gchar*" "value")
+  )
+)
+
 (define-method get_key
   (of-object "IdeEnvironmentVariable")
   (c-name "ide_environment_variable_get_key")
@@ -2354,6 +2410,19 @@
 
 ;; From ide-extension-adapter.h
 
+(define-function ide_extension_adapter_new
+  (c-name "ide_extension_adapter_new")
+  (is-constructor-of "IdeExtensionAdapter")
+  (return-type "IdeExtensionAdapter*")
+  (parameters
+    '("IdeContext*" "context")
+    '("PeasEngine*" "engine")
+    '("GType" "interface_type")
+    '("const-gchar*" "key")
+    '("const-gchar*" "value")
+  )
+)
+
 (define-method get_engine
   (of-object "IdeExtensionAdapter")
   (c-name "ide_extension_adapter_get_engine")
@@ -2405,6 +2474,19 @@
 
 
 ;; From ide-extension-set-adapter.h
+
+(define-function ide_extension_set_adapter_new
+  (c-name "ide_extension_set_adapter_new")
+  (is-constructor-of "IdeExtensionSetAdapter")
+  (return-type "IdeExtensionSetAdapter*")
+  (parameters
+    '("IdeContext*" "context")
+    '("PeasEngine*" "engine")
+    '("GType" "interface_type")
+    '("const-gchar*" "key")
+    '("const-gchar*" "value")
+  )
+)
 
 (define-method get_engine
   (of-object "IdeExtensionSetAdapter")
@@ -2484,6 +2566,16 @@
 
 
 ;; From ide-file.h
+
+(define-function ide_file_new
+  (c-name "ide_file_new")
+  (is-constructor-of "IdeFile")
+  (return-type "IdeFile*")
+  (parameters
+    '("IdeContext*" "context")
+    '("GFile*" "file")
+  )
+)
 
 (define-function ide_file_new_for_path
   (c-name "ide_file_new_for_path")
@@ -2667,6 +2759,15 @@
 
 ;; From ide-highlight-engine.h
 
+(define-function ide_highlight_engine_new
+  (c-name "ide_highlight_engine_new")
+  (is-constructor-of "IdeHighlightEngine")
+  (return-type "IdeHighlightEngine*")
+  (parameters
+    '("IdeBuffer*" "buffer")
+  )
+)
+
 (define-method get_buffer
   (of-object "IdeHighlightEngine")
   (c-name "ide_highlight_engine_get_buffer")
@@ -2810,6 +2911,16 @@
 
 ;; From ide-keybindings.h
 
+(define-function ide_keybindings_new
+  (c-name "ide_keybindings_new")
+  (is-constructor-of "IdeKeybindings")
+  (return-type "IdeKeybindings*")
+  (parameters
+    '("GtkApplication*" "application")
+    '("const-gchar*" "mode")
+  )
+)
+
 (define-method get_application
   (of-object "IdeKeybindings")
   (c-name "ide_keybindings_get_application")
@@ -2834,6 +2945,12 @@
 
 
 ;; From ide-layout-grid.h
+
+(define-function ide_layout_grid_new
+  (c-name "ide_layout_grid_new")
+  (is-constructor-of "IdeLayoutGrid")
+  (return-type "GtkWidget*")
+)
 
 (define-method add_stack_after
   (of-object "IdeLayoutGrid")
@@ -2915,6 +3032,12 @@
 
 ;; From ide-layout-stack.h
 
+(define-function ide_layout_stack_new
+  (c-name "ide_layout_stack_new")
+  (is-constructor-of "IdeLayoutStack")
+  (return-type "GtkWidget*")
+)
+
 (define-method remove
   (of-object "IdeLayoutStack")
   (c-name "ide_layout_stack_remove")
@@ -2951,24 +3074,20 @@
 
 
 
-;; From ide-layout-stack-private.h
-
-(define-function ide_layout_stack_add
-  (c-name "ide_layout_stack_add")
-  (return-type "none")
-  (parameters
-    '("GtkContainer*" "container")
-    '("GtkWidget*" "child")
-  )
-)
-
-
-
 ;; From ide-layout-stack-split.h
 
 
 
 ;; From ide-layout-tab-bar.h
+
+(define-method set_view
+  (of-object "IdeLayoutTabBar")
+  (c-name "ide_layout_tab_bar_set_view")
+  (return-type "none")
+  (parameters
+    '("GtkWidget*" "view")
+  )
+)
 
 (define-method show_list
   (of-object "IdeLayoutTabBar")
@@ -2979,6 +3098,15 @@
 
 
 ;; From ide-layout-tab.h
+
+(define-method set_view
+  (of-object "IdeLayoutTab")
+  (c-name "ide_layout_tab_set_view")
+  (return-type "none")
+  (parameters
+    '("GtkWidget*" "view")
+  )
+)
 
 
 
@@ -3515,6 +3643,12 @@
 
 ;; From ide-progress.h
 
+(define-function ide_progress_new
+  (c-name "ide_progress_new")
+  (is-constructor-of "IdeProgress")
+  (return-type "IdeProgress*")
+)
+
 (define-method get_fraction
   (of-object "IdeProgress")
   (c-name "ide_progress_get_fraction")
@@ -3623,6 +3757,12 @@
 
 
 ;; From ide-project.h
+
+(define-method get_root
+  (of-object "IdeProject")
+  (c-name "ide_project_get_root")
+  (return-type "IdeProjectItem*")
+)
 
 (define-method get_name
   (of-object "IdeProject")
@@ -3741,6 +3881,15 @@
 
 
 ;; From ide-project-info.h
+
+(define-method compare
+  (of-object "IdeProjectInfo")
+  (c-name "ide_project_info_compare")
+  (return-type "gint")
+  (parameters
+    '("IdeProjectInfo*" "info2")
+  )
+)
 
 (define-method get_file
   (of-object "IdeProjectInfo")
@@ -3930,6 +4079,12 @@
 
 
 ;; From ide-recent-projects.h
+
+(define-function ide_recent_projects_new
+  (c-name "ide_recent_projects_new")
+  (is-constructor-of "IdeRecentProjects")
+  (return-type "IdeRecentProjects*")
+)
 
 (define-method get_projects
   (of-object "IdeRecentProjects")
@@ -4134,6 +4289,15 @@
 
 ;; From ide-runtime-manager.h
 
+(define-method get_runtime
+  (of-object "IdeRuntimeManager")
+  (c-name "ide_runtime_manager_get_runtime")
+  (return-type "IdeRuntime*")
+  (parameters
+    '("const-gchar*" "id")
+  )
+)
+
 (define-method add
   (of-object "IdeRuntimeManager")
   (c-name "ide_runtime_manager_add")
@@ -4200,6 +4364,12 @@
 
 ;; From ide-script-manager.h
 
+(define-method get_scripts_directory
+  (of-object "IdeScriptManager")
+  (c-name "ide_script_manager_get_scripts_directory")
+  (return-type "const-gchar*")
+)
+
 (define-method load_async
   (of-object "IdeScriptManager")
   (c-name "ide_script_manager_load_async")
@@ -4224,6 +4394,12 @@
 
 
 ;; From ide-search-context.h
+
+(define-method get_providers
+  (of-object "IdeSearchContext")
+  (c-name "ide_search_context_get_providers")
+  (return-type "const-GList*")
+)
 
 (define-method provider_completed
   (of-object "IdeSearchContext")
@@ -4289,6 +4465,15 @@
 
 
 ;; From ide-search-engine.h
+
+(define-method search
+  (of-object "IdeSearchEngine")
+  (c-name "ide_search_engine_search")
+  (return-type "IdeSearchContext*")
+  (parameters
+    '("const-gchar*" "search_terms")
+  )
+)
 
 
 
@@ -4462,6 +4647,12 @@
 
 
 ;; From ide-settings.h
+
+(define-method get_relative_path
+  (of-object "IdeSettings")
+  (c-name "ide_settings_get_relative_path")
+  (return-type "const-gchar*")
+)
 
 (define-method get_schema_id
   (of-object "IdeSettings")
@@ -4951,6 +5142,16 @@
 
 ;; From ide-source-snippet.h
 
+(define-function ide_source_snippet_new
+  (c-name "ide_source_snippet_new")
+  (is-constructor-of "IdeSourceSnippet")
+  (return-type "IdeSourceSnippet*")
+  (parameters
+    '("const-gchar*" "trigger")
+    '("const-gchar*" "language")
+  )
+)
+
 (define-method copy
   (of-object "IdeSourceSnippet")
   (c-name "ide_source_snippet_copy")
@@ -5098,106 +5299,16 @@
 
 
 
-;; From ide-source-snippet-private.h
-
-(define-method begin
-  (of-object "IdeSourceSnippet")
-  (c-name "ide_source_snippet_begin")
-  (return-type "gboolean")
-  (parameters
-    '("GtkTextBuffer*" "buffer")
-    '("GtkTextIter*" "iter")
-  )
-)
-
-(define-method pause
-  (of-object "IdeSourceSnippet")
-  (c-name "ide_source_snippet_pause")
-  (return-type "none")
-)
-
-(define-method unpause
-  (of-object "IdeSourceSnippet")
-  (c-name "ide_source_snippet_unpause")
-  (return-type "none")
-)
-
-(define-method finish
-  (of-object "IdeSourceSnippet")
-  (c-name "ide_source_snippet_finish")
-  (return-type "none")
-)
-
-(define-method move_next
-  (of-object "IdeSourceSnippet")
-  (c-name "ide_source_snippet_move_next")
-  (return-type "gboolean")
-)
-
-(define-method move_previous
-  (of-object "IdeSourceSnippet")
-  (c-name "ide_source_snippet_move_previous")
-  (return-type "gboolean")
-)
-
-(define-method before_insert_text
-  (of-object "IdeSourceSnippet")
-  (c-name "ide_source_snippet_before_insert_text")
-  (return-type "none")
-  (parameters
-    '("GtkTextBuffer*" "buffer")
-    '("GtkTextIter*" "iter")
-    '("gchar*" "text")
-    '("gint" "len")
-  )
-)
-
-(define-method after_insert_text
-  (of-object "IdeSourceSnippet")
-  (c-name "ide_source_snippet_after_insert_text")
-  (return-type "none")
-  (parameters
-    '("GtkTextBuffer*" "buffer")
-    '("GtkTextIter*" "iter")
-    '("gchar*" "text")
-    '("gint" "len")
-  )
-)
-
-(define-method before_delete_range
-  (of-object "IdeSourceSnippet")
-  (c-name "ide_source_snippet_before_delete_range")
-  (return-type "none")
-  (parameters
-    '("GtkTextBuffer*" "buffer")
-    '("GtkTextIter*" "begin")
-    '("GtkTextIter*" "end")
-  )
-)
-
-(define-method after_delete_range
-  (of-object "IdeSourceSnippet")
-  (c-name "ide_source_snippet_after_delete_range")
-  (return-type "none")
-  (parameters
-    '("GtkTextBuffer*" "buffer")
-    '("GtkTextIter*" "begin")
-    '("GtkTextIter*" "end")
-  )
-)
-
-(define-method insert_set
-  (of-object "IdeSourceSnippet")
-  (c-name "ide_source_snippet_insert_set")
-  (return-type "gboolean")
-  (parameters
-    '("GtkTextMark*" "mark")
-  )
-)
-
-
-
 ;; From ide-source-snippets.h
+
+(define-method add
+  (of-object "IdeSourceSnippets")
+  (c-name "ide_source_snippets_add")
+  (return-type "none")
+  (parameters
+    '("IdeSourceSnippet*" "snippet")
+  )
+)
 
 (define-method clear
   (of-object "IdeSourceSnippets")
@@ -5240,6 +5351,17 @@
 
 
 ;; From ide-source-snippets-manager.h
+
+(define-method load_async
+  (of-object "IdeSourceSnippetsManager")
+  (c-name "ide_source_snippets_manager_load_async")
+  (return-type "none")
+  (parameters
+    '("GCancellable*" "cancellable")
+    '("GAsyncReadyCallback" "callback")
+    '("gpointer" "user_data")
+  )
+)
 
 (define-method load_finish
   (of-object "IdeSourceSnippetsManager")
@@ -6143,6 +6265,12 @@
 
 ;; From ide-theme-manager.h
 
+(define-function ide_theme_manager_new
+  (c-name "ide_theme_manager_new")
+  (is-constructor-of "IdeThemeManager")
+  (return-type "IdeThemeManager*")
+)
+
 
 
 ;; From ide-thread-pool.h
@@ -6530,10 +6658,6 @@
     '("gboolean" "use_dim_label")
   )
 )
-
-
-
-;; From ide-tree-private.h
 
 
 
@@ -7215,6 +7339,18 @@
 
 ;; From ide-workbench.h
 
+(define-method open_project_async
+  (of-object "IdeWorkbench")
+  (c-name "ide_workbench_open_project_async")
+  (return-type "none")
+  (parameters
+    '("GFile*" "file_or_directory")
+    '("GCancellable*" "cancellable")
+    '("GAsyncReadyCallback" "callback")
+    '("gpointer" "user_data")
+  )
+)
+
 (define-method open_project_finish
   (of-object "IdeWorkbench")
   (c-name "ide_workbench_open_project_finish")
@@ -7414,40 +7550,6 @@
 
 
 
-;; From ide-workbench-private.h
-
-(define-method set_context
-  (of-object "IdeWorkbench")
-  (c-name "ide_workbench_set_context")
-  (return-type "none")
-  (parameters
-    '("IdeContext*" "context")
-  )
-)
-
-(define-method actions_init
-  (of-object "IdeWorkbench")
-  (c-name "ide_workbench_actions_init")
-  (return-type "none")
-)
-
-(define-method set_selection_owner
-  (of-object "IdeWorkbench")
-  (c-name "ide_workbench_set_selection_owner")
-  (return-type "none")
-  (parameters
-    '("GObject*" "object")
-  )
-)
-
-(define-method get_selection_owner
-  (of-object "IdeWorkbench")
-  (c-name "ide_workbench_get_selection_owner")
-  (return-type "GObject*")
-)
-
-
-
 ;; From ide-worker.h
 
 (define-method create_proxy
@@ -7472,6 +7574,12 @@
 
 
 ;; From ide-worker-manager.h
+
+(define-function ide_worker_manager_new
+  (c-name "ide_worker_manager_new")
+  (is-constructor-of "IdeWorkerManager")
+  (return-type "IdeWorkerManager*")
+)
 
 (define-method get_worker_async
   (of-object "IdeWorkerManager")
@@ -7498,6 +7606,17 @@
 
 
 ;; From ide-worker-process.h
+
+(define-function ide_worker_process_new
+  (c-name "ide_worker_process_new")
+  (is-constructor-of "IdeWorkerProcess")
+  (return-type "IdeWorkerProcess*")
+  (parameters
+    '("const-gchar*" "argv0")
+    '("const-gchar*" "type")
+    '("const-gchar*" "dbus_address")
+  )
+)
 
 (define-method run
   (of-object "IdeWorkerProcess")
