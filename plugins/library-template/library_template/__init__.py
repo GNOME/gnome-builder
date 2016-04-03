@@ -58,7 +58,7 @@ class LibraryProjectTemplate(Ide.TemplateBase, Ide.ProjectTemplate):
         return ['C']
 
     def do_get_icon_name(self):
-        return 'template-shared-library'
+        return 'application-x-executable-symbolic'
 
     def do_expand_async(self, params, cancellable, callback, data):
         name = params['name'].get_string().lower()
