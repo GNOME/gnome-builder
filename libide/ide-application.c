@@ -652,7 +652,7 @@ ide_application_open_project (IdeApplication *self,
 {
   g_return_val_if_fail (IDE_IS_APPLICATION (self), FALSE);
   g_return_val_if_fail (G_IS_FILE (file), FALSE);
-  
+
   if (!g_file_query_exists (file, NULL))
     return FALSE;
 
@@ -661,7 +661,7 @@ ide_application_open_project (IdeApplication *self,
   GtkWindow *window;
   GFile *projectfile;
   IdeWorkbench *workbench = NULL;
- 
+
   list = gtk_application_get_windows (GTK_APPLICATION (self));
 
   for (; list != NULL; list = list->next)
@@ -679,14 +679,14 @@ ide_application_open_project (IdeApplication *self,
 
   if (workbench == NULL)
     {
-      workbench = g_object_new (IDE_TYPE_WORKBENCH, 
+      workbench = g_object_new (IDE_TYPE_WORKBENCH,
                                 "application", self,
                                 NULL);
       ide_workbench_open_project_async (workbench, file, NULL, NULL, NULL);
     }
 
   gtk_window_present (GTK_WINDOW (workbench));
-  
+
   if (ide_workbench_get_context(workbench) != NULL)
     return TRUE;
   else
