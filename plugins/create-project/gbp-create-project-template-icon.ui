@@ -10,7 +10,7 @@
         <child>
           <object class="GtkImage" id="template_icon">
             <property name="expand">true</property>
-            <property name="pixel-size">48</property>
+            <property name="pixel-size">64</property>
             <property name="visible">true</property>
           </object>
         </child>
