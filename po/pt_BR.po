@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-04-03 07:18+0000\n"
-"PO-Revision-Date: 2016-04-03 04:58-0200\n"
+"POT-Creation-Date: 2016-04-03 20:27+0000\n"
+"PO-Revision-Date: 2016-04-04 01:49-0200\n"
 "Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
 "Language-Team: Brazilian Portuguese <gnome-pt_br-list@gnome.org>\n"
 "Language: pt_BR\n"
@@ -1686,6 +1686,7 @@ msgid "The name of the build configuration"
 msgstr "O nome da configuração de compilação"
 
 #: ../plugins/build-tools/gbp-build-configuration-view.ui.h:3
+#: ../plugins/create-project/gbp-create-project-widget.ui.h:1
 msgid "Name"
 msgstr "Nome"
 
@@ -2080,6 +2081,11 @@ msgstr "Nome de usuário"
 msgid "Format Strings"
 msgstr "Strings de formato"
 
+#: ../plugins/create-project/gbp-create-project-genesis-addin.c:158
+#| msgid "From an existing project on this computer"
+msgid "From a project template"
+msgstr "De um modelo de projeto"
+
 #: ../plugins/create-project/gbp-create-project-tool.c:130
 msgid "List available templates"
 msgstr "Lista os modelos disponíveis"
@@ -2106,6 +2112,19 @@ msgstr "Por favor, especifique um nome de projeto.\n"
 #, c-format
 msgid "Please specify a project template with --template=\n"
 msgstr "Por favor, especifique um modelo de projeto com --template=\n"
+
+#: ../plugins/create-project/gbp-create-project-widget.ui.h:2
+#: ../plugins/git/ide-git-clone-widget.ui.h:6
+msgid "Location"
+msgstr "Localização"
+
+#: ../plugins/create-project/gbp-create-project-widget.ui.h:3
+msgid "Language"
+msgstr "Idioma"
+
+#: ../plugins/create-project/gbp-create-project-widget.ui.h:4
+msgid "Pattern"
+msgstr "Padrão"
 
 #: ../plugins/devhelp/gbp-devhelp-panel.c:187
 #: ../plugins/devhelp/gbp-devhelp-search-provider.c:128
@@ -2166,10 +2185,6 @@ msgstr "Digite o nome do diretório para criar"
 #: ../plugins/git/ide-git-clone-widget.ui.h:5
 msgid "Repository"
 msgstr "Repositório"
-
-#: ../plugins/git/ide-git-clone-widget.ui.h:6
-msgid "Location"
-msgstr "Localização"
 
 #: ../plugins/git/ide-git-genesis-addin.c:93
 msgid "From an existing project in a Git repository"
@@ -2490,12 +2505,6 @@ msgstr "vala diagnósticos avisos erros"
 
 #~ msgid "GNOME Version"
 #~ msgstr "Versão do GNOME"
-
-#~ msgid "Language"
-#~ msgstr "Idioma"
-
-#~ msgid "Pattern"
-#~ msgstr "Padrão"
 
 #~ msgid "Git"
 #~ msgstr "Git"
