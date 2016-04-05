@@ -1,0 +1,7 @@
+files_built_cc = $(idemm_files_hg:.hg=.cc) wrap_init.cc
+files_built_h  = $(idemm_files_hg:.hg=.h)
+files_built_ph = $(patsubst %.hg,private/%_p.h,$(idemm_files_hg))
+files_extra_cc =
+files_extra_h  = \
+	wrap_init.h
+files_extra_ph =

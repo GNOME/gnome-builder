@@ -5,7 +5,7 @@
 
 #include <ide.h>
 
-_DEFS(libidemm, libide)
+_DEFS(idemm, libide)
 _PINCLUDE(gtkmm/private/application_p.h)
 
 namespace Ide {

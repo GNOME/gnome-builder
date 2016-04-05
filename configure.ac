@@ -231,7 +231,7 @@ AS_IF([test "x$have_pygobject" = "xyes"],[
 
 
 dnl ***********************************************************************
-dnl Check for libidemm
+dnl Check for idemm
 dnl ***********************************************************************
 m4_include([libidemm/configure.ac])
 
@@ -517,7 +517,7 @@ echo "  Use cross-referencing in API docs .... : ${enable_doc_cross_references}"
 echo ""
 echo " Optional libraries"
 echo ""
-echo "  libidemm.............................. : ${enable_libidemm}"
+echo "  idemm................................. : ${enable_idemm}"
 echo ""
 echo " Scripting"
 echo ""

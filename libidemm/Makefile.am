@@ -13,8 +13,8 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-srcmm_subdirs = libidemm
-libidemm_include_HEADERS = idemm.h
+srcmm_subdirs = idemm
+idemm_include_HEADERS = idemm.h
 
 if MAINTAINER_MODE
 src_subdirs = src
@@ -31,9 +31,9 @@ endif
 
 SUBDIRS = tools $(src_subdirs) $(srcmm_subdirs) # $(doc_subdirs)
 
-libidemm_includedir = $(includedir)/$(LIBIDEMM_MODULE_NAME)
-libidemm_libincludedir = $(libdir)/$(LIBIDEMM_MODULE_NAME)/include
-nodist_libidemm_libinclude_HEADERS = idemmconfig.h
+idemm_includedir = $(includedir)/$(IDEMM_MODULE_NAME)
+idemm_libincludedir = $(libdir)/$(IDEMM_MODULE_NAME)/include
+nodist_idemm_libinclude_HEADERS = idemmconfig.h
 
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = $(pkgconfig_files)
