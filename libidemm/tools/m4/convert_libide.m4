@@ -35,3 +35,6 @@ _CONVERSION(`gchararray',`const Glib::ustring&',__GCHARP_TO_USTRING)
 _CONVERSION(`const gchar*',`const Glib::ustring&',__GCHARP_TO_USTRING)
 _CONVERSION(`Glib::ustring&',`const guchar*', ($2)($3.c_str()))
 _CONVERSION(`const Glib::ustring&',`gchararray', $3.c_str())
+
+dnl Ide::RecentProjects
+_CONVERSION(`IdeRecentProjects*',`Glib::RefPtr<Ide::RecentProjects>',`Glib::wrap($3)')

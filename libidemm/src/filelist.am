@@ -8,6 +8,7 @@ idemm_files_defs =		\
 	libide_docs.xml
 
 idemm_files_hg =		\
-	application.hg
+	application.hg		\
+	recentprojects.hg
 
 idemm_files_ccg = $(idemm_files_hg:.hg=.ccg)
