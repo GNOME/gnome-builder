@@ -9,9 +9,9 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-03-23 08:16+0000\n"
-"PO-Revision-Date: 2016-03-23 10:14+0100\n"
-"Last-Translator: Anders Jonsson <anders.jonsson@norsjovallen.se>\n"
+"POT-Creation-Date: 2016-04-05 07:17+0000\n"
+"PO-Revision-Date: 2016-04-05 10:05+0200\n"
+"Last-Translator: Sebastian Rasmussen <sebras@gmail.com>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
@@ -803,7 +803,7 @@ msgstr "Rad %u, kolumn %u"
 msgid "%u of %u"
 msgstr "%u av %u"
 
-#: ../libide/editor/ide-editor-frame.c:646
+#: ../libide/editor/ide-editor-frame.c:672
 #: ../plugins/project-tree/gtk/menus.ui.h:1
 msgid "Re_veal in Project Tree"
 msgstr "V_isa i projektträdet"
@@ -898,51 +898,60 @@ msgstr "Finansierat av"
 msgid "Commands:"
 msgstr "Kommandon:"
 
-#: ../libide/ide-application-command-line.c:185
+#: ../libide/ide-application-command-line.c:186
 msgid "List available subcommands"
 msgstr "Lista tillgängliga underkommandon"
 
-#: ../libide/ide-application-command-line.c:192
+#: ../libide/ide-application-command-line.c:193
 msgid "Run Builder in standalone mode"
 msgstr "Kör Builder i fristående läge"
 
-#: ../libide/ide-application-command-line.c:199
+#: ../libide/ide-application-command-line.c:200
 msgid "Show the application's version"
 msgstr "Visa programmets version"
 
-#: ../libide/ide-application-command-line.c:218
+#: ../libide/ide-application-command-line.c:219
 msgid "Increase verbosity, may be specified multiple times"
 msgstr "Öka utförlighet, kan anges flera gånger"
 
-#: ../libide/ide-application-command-line.c:225
+#: ../libide/ide-application-command-line.c:226
 msgid "Enter GApplication Service mode"
 msgstr "Ange ett serviceläge för GApplication"
 
-#: ../libide/ide-application-command-line.c:255
+#: ../libide/ide-application-command-line.c:233
+msgid "Opens the project specified by PATH"
+msgstr "Öppnar projektet angivet av SÖKVÄG"
+
+#: ../libide/ide-application-command-line.c:234
+#: ../plugins/build-tools/gbp-build-tool.c:301
+msgid "PATH"
+msgstr "SÖKVÄG"
+
+#: ../libide/ide-application-command-line.c:264
 msgid "COMMAND"
 msgstr "KOMMANDO"
 
-#: ../libide/ide-application-command-line.c:326
+#: ../libide/ide-application-command-line.c:335
 msgid "No commands available"
 msgstr "Inga kommandon tillgängliga"
 
-#: ../libide/ide-application-command-line.c:356
+#: ../libide/ide-application-command-line.c:365
 msgid "Please provide a command"
 msgstr "Ange ett kommando"
 
-#: ../libide/ide-application-command-line.c:366
+#: ../libide/ide-application-command-line.c:375
 msgid "No such tool"
 msgstr "Inget sådant verktyg finns"
 
-#: ../libide/ide-application-command-line.c:380
+#: ../libide/ide-application-command-line.c:389
 msgid "Please provide a worker type"
 msgstr "Ange en arbetartyp"
 
-#: ../libide/ide-application-command-line.c:387
+#: ../libide/ide-application-command-line.c:396
 msgid "Please provide a D-Bus address"
 msgstr "Ange D-Bus-adress"
 
-#: ../libide/ide-application-command-line.c:396
+#: ../libide/ide-application-command-line.c:405
 msgid "No such worker"
 msgstr "Ingen sådan arbetare finns"
 
@@ -1074,18 +1083,18 @@ msgstr "Misslyckades med att öppna katalog: %s"
 msgid "Failed to load file: %s: %s"
 msgstr "Misslyckades med att läsa in fil: %s: %s"
 
-#: ../libide/ide-source-view.c:4897
+#: ../libide/ide-source-view.c:4967
 #, c-format
 msgid "Insert “%s”"
 msgstr "Infoga ”%s”"
 
-#: ../libide/ide-source-view.c:4899
+#: ../libide/ide-source-view.c:4969
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "Ersätt ”%s” med ”%s”"
 
 # Fix-it: små automatiska fixar för problem
-#: ../libide/ide-source-view.c:5013
+#: ../libide/ide-source-view.c:5083
 msgid "Apply Fix-It"
 msgstr "Tillämpa Fixa-det"
 
@@ -1674,6 +1683,7 @@ msgid "The name of the build configuration"
 msgstr "Namnet på byggkonfigurationen"
 
 #: ../plugins/build-tools/gbp-build-configuration-view.ui.h:3
+#: ../plugins/create-project/gbp-create-project-widget.ui.h:1
 msgid "Name"
 msgstr "Namn"
 
@@ -1712,6 +1722,24 @@ msgstr "Exekveringsmiljö"
 #: ../plugins/build-tools/gbp-build-configuration-view.ui.h:12
 msgid "Environment"
 msgstr "Miljö"
+
+#: ../plugins/build-tools/gbp-build-log-panel.c:249
+msgid "Build Output"
+msgstr "Byggutmatning"
+
+#: ../plugins/build-tools/gbp-build-panel.c:150
+#, c-format
+msgid "%d warning"
+msgid_plural "%d warnings"
+msgstr[0] "%d varning"
+msgstr[1] "%d varningar"
+
+#: ../plugins/build-tools/gbp-build-panel.c:157
+#, c-format
+msgid "%d error"
+msgid_plural "%d errors"
+msgstr[0] "%d fel"
+msgstr[1] "%d fel"
 
 #: ../plugins/build-tools/gbp-build-panel-row.c:68
 msgid "Unknown file"
@@ -1875,10 +1903,6 @@ msgstr "KONFIGURATIONS-ID"
 #: ../plugins/build-tools/gbp-build-tool.c:300
 msgid "Path to project file, defaults to current directory"
 msgstr "Sökväg till projektfilen, standardvärdet är aktuell katalog"
-
-#: ../plugins/build-tools/gbp-build-tool.c:301
-msgid "PATH"
-msgstr "SÖKVÄG"
 
 #: ../plugins/clang/ide-clang-preferences-addin.c:62
 msgid "Clang"
@@ -2053,6 +2077,10 @@ msgstr "Användarnamn"
 msgid "Format Strings"
 msgstr "Formatsträngar"
 
+#: ../plugins/create-project/gbp-create-project-genesis-addin.c:158
+msgid "From a project template"
+msgstr "Från en projektmall"
+
 #: ../plugins/create-project/gbp-create-project-tool.c:130
 msgid "List available templates"
 msgstr "Lista tillgängliga mallar"
@@ -2080,8 +2108,21 @@ msgstr "Ange ett projektnamn.\n"
 msgid "Please specify a project template with --template=\n"
 msgstr "Ange en projektmall med --template=\n"
 
-#: ../plugins/devhelp/gbp-devhelp-search-provider.c:128
+#: ../plugins/create-project/gbp-create-project-widget.ui.h:2
+#: ../plugins/git/ide-git-clone-widget.ui.h:6
+msgid "Location"
+msgstr "Plats"
+
+#: ../plugins/create-project/gbp-create-project-widget.ui.h:3
+msgid "Language"
+msgstr "Språk"
+
+#: ../plugins/create-project/gbp-create-project-widget.ui.h:4
+msgid "Pattern"
+msgstr "Mönster"
+
 #: ../plugins/devhelp/gbp-devhelp-panel.c:187
+#: ../plugins/devhelp/gbp-devhelp-search-provider.c:128
 msgid "Documentation"
 msgstr "Dokumentation"
 
@@ -2140,10 +2181,6 @@ msgstr "Ange namnet på katalogen som ska skapas"
 #: ../plugins/git/ide-git-clone-widget.ui.h:5
 msgid "Repository"
 msgstr "Arkiv"
-
-#: ../plugins/git/ide-git-clone-widget.ui.h:6
-msgid "Location"
-msgstr "Plats"
 
 #: ../plugins/git/ide-git-genesis-addin.c:93
 msgid "From an existing project in a Git repository"
@@ -2329,6 +2366,10 @@ msgstr "Aktuellt språk stöder inte symboluppslagare"
 msgid "Symbols"
 msgstr "Symboler"
 
+#: ../plugins/sysmon/gb-sysmon-panel.ui.h:1
+msgid "System Monitor"
+msgstr "Systemövervakare"
+
 #: ../plugins/terminal/gb-terminal-view-actions.c:297
 msgid "Save Terminal Content As"
 msgstr "Spara terminalinnehåll som"
@@ -2337,7 +2378,7 @@ msgstr "Spara terminalinnehåll som"
 msgid "_New Terminal"
 msgstr "_Ny terminal"
 
-#: ../plugins/todo/todo_plugin/__init__.py:179
+#: ../plugins/todo/todo_plugin/__init__.py:180
 msgid "Todo"
 msgstr "Att göra"
 
@@ -2353,27 +2394,6 @@ msgstr "Visa fel och varningar som tillhandahålls av Vala"
 #: ../plugins/vala-pack/ide-vala-preferences-addin.vala:36
 msgid "vala diagnostics warnings errors"
 msgstr "vala diagnostik varningar fel"
-
-#: ../plugins/build-tools/gbp-build-log-panel.c:249
-msgid "Build Output"
-msgstr "Byggutmatning"
-
-#: ../plugins/build-tools/gbp-build-panel.c:150
-#, c-format
-msgid "%d warning"
-msgid_plural "%d warnings"
-msgstr[0] "%d varning"
-msgstr[1] "%d varningar"
-
-#: ../plugins/build-tools/gbp-build-panel.c:157
-#, c-format
-msgid "%d error"
-msgid_plural "%d errors"
-msgstr[0] "%d fel"
-msgstr[1] "%d fel"
-
-#~ msgid "System Monitor"
-#~ msgstr "Systemövervakare"
 
 #~ msgid "Invalid snippet at line %d: %s"
 #~ msgstr "Ogiltig textsnutt på rad %d: %s"
@@ -2410,12 +2430,6 @@ msgstr[1] "%d fel"
 
 #~ msgid "GNOME Version"
 #~ msgstr "GNOME-version"
-
-#~ msgid "Language"
-#~ msgstr "Språk"
-
-#~ msgid "Pattern"
-#~ msgstr "Mönster"
 
 #~ msgid "Git"
 #~ msgstr "Git"
