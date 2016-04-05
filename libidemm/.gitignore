@@ -29,14 +29,14 @@ stamp-h2
 /tools/Makefile
 /tools/Makefile.in
 
-# /libidemm
-/libidemm/libidemm-1.0.la
-/libidemm/Makefile
-/libidemm/Makefile.in
-/libidemm/private/
-/libidemm/application.cc
-/libidemm/application.h
-/libidemm/wrap_init.cc
+# /idemm
+/idemm/libidemm-1.0.la
+/idemm/Makefile
+/idemm/Makefile.in
+/idemm/private/
+/idemm/application.cc
+/idemm/application.h
+/idemm/wrap_init.cc
 
 # docs/
 /docs/doc-install.pl
