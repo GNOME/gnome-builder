@@ -291,6 +291,7 @@ m4_include([plugins/gcc/configure.ac])
 m4_include([plugins/gettext/configure.ac])
 m4_include([plugins/git/configure.ac])
 m4_include([plugins/gnome-code-assistance/configure.ac])
+m4_include([plugins/hello-cpp/configure.ac])
 m4_include([plugins/html-completion/configure.ac])
 m4_include([plugins/html-preview/configure.ac])
 m4_include([plugins/jedi/configure.ac])
@@ -590,6 +591,7 @@ echo "  Global File Search ................... : ${enable_file_search_plugin}"
 echo "  GNOME Code Assistance ................ : ${enable_gnome_code_assistance_plugin}"
 echo "  HTML Autocompletion .................. : ${enable_html_completion_plugin}"
 echo "  HTML and Markdown Preview ............ : ${enable_html_preview_plugin}"
+echo "  Example C++.............. ............ : ${enable_hello_cpp_plugin}"
 echo "  JHBuild .............................. : ${enable_jhbuild_plugin}"
 echo "  MinGW ................................ : ${enable_mingw_plugin}"
 echo "  Project Creation ..................... : ${enable_create_project_plugin}"
