@@ -1,7 +1,4 @@
-#ifndef _IDEMM_WRAP_INIT_H
-#define _IDEMM_WRAP_INIT_H
-
-/* wrap_init.h
+/* applicationaddin.ccg
  *
  * Copyright (C) 2016 Marcin Kolny <marcin.kolny@gmail.com>
  *
@@ -18,12 +15,3 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-namespace Ide
-{
-
-void wrap_init();
-
-} // namespace Ide
-
-#endif /* _IDEMM_WRAP_INIT_H */

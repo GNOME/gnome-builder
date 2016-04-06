@@ -36,6 +36,8 @@ stamp-h2
 /idemm/private/
 /idemm/application.cc
 /idemm/application.h
+/idemm/applicationaddin.cc
+/idemm/applicationaddin.h
 /idemm/recentprojects.cc
 /idemm/recentprojects.h
 /idemm/wrap_init.cc

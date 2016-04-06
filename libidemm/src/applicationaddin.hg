@@ -1,0 +1,42 @@
+/* applicationaddin.hg
+ *
+ * Copyright (C) 2016 Marcin Kolny <marcin.kolny@gmail.com>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+#include <idemm/application.h>
+
+#include <glibmm/interface.h>
+
+#include <ide.h>
+
+_DEFS(idemm, libide)
+_PINCLUDE(glibmm/private/interface_p.h)
+
+namespace Ide {
+
+class ApplicationAddin : public Glib::Interface
+{
+  _CLASS_INTERFACE(ApplicationAddin, IdeApplicationAddin, IDE_APPLICATION_ADDIN, IdeApplicationAddinInterface)
+
+public:
+  _WRAP_METHOD(void load(const Glib::RefPtr<Ide::Application>& application), ide_application_addin_load)
+  _WRAP_METHOD(void unload(const Glib::RefPtr<Ide::Application>& application), ide_application_addin_load)
+
+  _WRAP_VFUNC(void load(const Glib::RefPtr<Ide::Application>& application), "load")
+  _WRAP_VFUNC(void unload(const Glib::RefPtr<Ide::Application>& application), "unload")
+};
+
+}

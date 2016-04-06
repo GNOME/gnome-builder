@@ -5,10 +5,12 @@ idemm_files_defs =		\
 	libide_enums.defs	\
 	libide_methods.defs	\
 	libide_signals.defs	\
+	libide_vfuncs.defs	\
 	libide_docs.xml
 
 idemm_files_hg =		\
 	application.hg		\
+	applicationaddin.hg	\
 	recentprojects.hg
 
 idemm_files_ccg = $(idemm_files_hg:.hg=.ccg)
