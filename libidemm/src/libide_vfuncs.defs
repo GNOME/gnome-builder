@@ -1,0 +1,21 @@
+;; -*- scheme -*-
+; virtual function definitions
+; define-vfunc is g*mm-specific
+; These are hand-written.
+
+; IdeApplicationAddin
+(define-vfunc load
+  (of-object "IdeApplicationAddin")
+  (return-type "void")
+  (parameters
+   '("IdeApplication*" "application")
+  )
+)
+
+(define-vfunc unload
+  (of-object "IdeApplicationAddin")
+  (return-type "void")
+  (parameters
+   '("IdeApplication*" "application")
+  )
+)

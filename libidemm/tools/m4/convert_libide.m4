@@ -38,3 +38,8 @@ _CONVERSION(`const Glib::ustring&',`gchararray', $3.c_str())
 
 dnl Ide::RecentProjects
 _CONVERSION(`IdeRecentProjects*',`Glib::RefPtr<Ide::RecentProjects>',`Glib::wrap($3)')
+
+dnl Ide::Application
+_CONVERSION(`const Glib::RefPtr<Ide::Application>&',`IdeApplication*',__CONVERT_REFPTR_TO_P)
+_CONVERSION(`IdeApplication*',`const Glib::RefPtr<Ide::Application>&',Glib::wrap($3))
+
