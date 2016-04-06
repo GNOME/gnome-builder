@@ -1,0 +1,7 @@
+[Plugin]
+Module=hello-cpp-plugin
+Name=Example C++ plugin
+Description=Plugin measures time you spent in the Builder application. Plugin can be used as a template for another C++ plugins.
+Authors=Marcin Kolny <marcin.kolny@gmail.com>
+Copyright=Copyright © 2016 Marcin Kolny
+Builtin=true
