@@ -5,6 +5,6 @@
 #include <idemm/applicationaddin.h>
 #include <idemm/recentprojects.h>
 #include <idemm/registermmtype.h>
-#include <libidemm/wrap_init.h>
+#include <idemm/wrap_init.h>
 
 #endif

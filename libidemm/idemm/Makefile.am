@@ -11,5 +11,10 @@ AM_CPPFLAGS = $(local_cppflags) $(IDEMM_CFLAGS) $(libide_cflags)
 AM_CXXFLAGS = $(IDEMM_WXXFLAGS)
 
 libidemm_1_0_la_SOURCES = $(binding_sources)
-libidemm_1_0_la_LDFLAGS = -no-undefined -version-info $(IDEMM_SO_VERSION)
+libidemm_1_0_la_LDFLAGS =
+	$(OPTIMIZE_LDFLAGS) \
+	-avoid-version \
+	-no-undefined \
+	$(NULL)
+
 libidemm_1_0_la_LIBADD  = $(IDEMM_LIBS)
