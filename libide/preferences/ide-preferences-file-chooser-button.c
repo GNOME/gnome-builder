@@ -45,19 +45,14 @@ enum {
 static GParamSpec *properties [LAST_PROP];
 
 static void
-ide_preferences_file_chooser_button_save_folder (IdePreferencesFileChooserButton *self,
-                                                 GtkFileChooserButton            *widget)
+ide_preferences_file_chooser_button_save_file (IdePreferencesFileChooserButton *self,
+                                               GtkFileChooserButton            *widget)
 {
-  g_autoptr(GFile) home = NULL;
-  g_autoptr(GFile) folder = NULL;
   g_autofree gchar *path = NULL;
 
   g_assert (IDE_IS_PREFERENCES_FILE_CHOOSER_BUTTON (self));
-  g_assert (GTK_IS_FILE_CHOOSER_BUTTON (widget));
 
-  home = g_file_new_for_path (g_get_home_dir ());
-  folder = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (widget));
-  path = g_file_get_relative_path (home, folder);
+  path = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (self->widget));
 
   g_settings_set_string (self->settings, self->key, path);
 
@@ -68,7 +63,7 @@ ide_preferences_file_chooser_button_connect (IdePreferencesBin *bin,
                                              GSettings         *settings)
 {
   IdePreferencesFileChooserButton *self = (IdePreferencesFileChooserButton *)bin;
-  g_autofree gchar *folder = NULL;
+  g_autofree gchar *file = NULL;
   g_autofree gchar *path = NULL;
 
   g_assert (IDE_IS_PREFERENCES_FILE_CHOOSER_BUTTON (self));
@@ -76,17 +71,21 @@ ide_preferences_file_chooser_button_connect (IdePreferencesBin *bin,
 
   self->settings = g_object_ref (settings);
 
-  folder = g_settings_get_string (settings, self->key);
+  file = g_settings_get_string (settings, self->key);
 
-  if (!ide_str_empty0 (folder))
+  if (!ide_str_empty0 (file))
     {
-      path = g_build_filename (g_get_home_dir (), folder, NULL);
-      gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (self->widget), path);
+      if (!g_path_is_absolute (file))
+        path = g_build_filename (g_get_home_dir (), file, NULL);
+      else
+        path = g_steal_pointer (&file);
+
+      gtk_file_chooser_set_filename (GTK_FILE_CHOOSER (self->widget), path);
     }
 
   g_signal_connect_object (self->widget,
                            "file-set",
-                           G_CALLBACK (ide_preferences_file_chooser_button_save_folder),
+                           G_CALLBACK (ide_preferences_file_chooser_button_save_file),
                            self,
                            G_CONNECT_SWAPPED);
 }

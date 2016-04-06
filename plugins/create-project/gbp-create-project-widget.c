@@ -340,7 +340,11 @@ gbp_create_project_widget_init (GbpCreateProjectWidget *self)
 
   if (!ide_str_empty0 (path))
     {
-      projects_dir = g_build_filename (g_get_home_dir (), path, NULL);
+      if (!g_path_is_absolute (path))
+        projects_dir = g_build_filename (g_get_home_dir (), path, NULL);
+      else
+        projects_dir = g_steal_pointer (&path);
+
       gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (self->project_location_button),
                                            projects_dir);
     }
