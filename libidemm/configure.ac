@@ -1,4 +1,3 @@
-m4_define([glibmm_required_version], [2.47.3])
 m4_define([gtkmm_required_version], [3.19.12])
 
 AC_SUBST([IDEMM_SO_VERSION], [0:0:0])
@@ -13,8 +12,7 @@ MM_ARG_ENABLE_DOCUMENTATION
 MM_PKG_CONFIG_SUBST([GMMPROC_DIR], [--variable=gmmprocdir glibmm-2.4])
 MM_PKG_CONFIG_SUBST([GMMPROC_EXTRA_M4_DIR], [--variable=gmmprocm4dir cairomm-1.0 pangomm-1.4 atkmm-1.6 gtkmm-3.0])
 
-PKG_CHECK_MODULES(IDEMM,    [glibmm-2.4 >= glibmm_required_version
-                             gtkmm-3.0 >= gtkmm_required_version])
+PKG_CHECK_MODULES(IDEMM,    [gtkmm-3.0 >= gtkmm_required_version])
 
 
 AC_ARG_ENABLE([idemm],

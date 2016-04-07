@@ -1,3 +1,5 @@
+if ENABLE_IDEMM
+
 AUTOMAKE_OPTIONS = subdir-objects
 
 include $(srcdir)/m4/filelist.am
@@ -9,3 +11,5 @@ extra_defs_gen_generate_defs_libide_LDADD = \
 	$(IDEMM_LIBS) -lglibmm_generate_extra_defs-2.4 -L../../libide -lide-1.0
 
 AM_CPPFLAGS = -I$(top_builddir) $(LIBIDE_CFLAGS) $(IDEMM_CFLAGS) -I../../libide -I../../contrib/pnl
+
+endif

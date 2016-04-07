@@ -13,6 +13,8 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+if ENABLE_IDEMM
+
 srcmm_subdirs = idemm
 idemm_include_HEADERS = idemm.h
 
@@ -37,3 +39,5 @@ nodist_idemm_libinclude_HEADERS = idemmconfig.h
 
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = $(pkgconfig_files)
+
+endif
