@@ -25,6 +25,10 @@ GITIGNOREFILES = \
 	ltversion.m4 \
 	lt~obsolete.m4 \
 	nls.m4 \
+	mm-common.m4 \
+	mm-doc.m4 \
+	mm-module.m4 \
+	mm-pkg.m4 \
 	$(NULL)
 
 -include $(top_srcdir)/git.mk

@@ -19,7 +19,9 @@ glib-gettextize --force --copy || exit 1
 intltoolize --force --copy --automake || exit 1
 gtkdocize || exit 1
 
-mm-common-prepare --copy --force $srcdir/libidemm
+if command -v mm-common-prepare 2>/dev/null; then
+    mm-common-prepare --copy --force $srcdir/libidemm
+fi
 
 autoreconf --force --install -Wno-portability || exit 1
 
