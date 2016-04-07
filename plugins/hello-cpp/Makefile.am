@@ -13,8 +13,8 @@ libhello_cpp_plugin_la_SOURCES = \
 	registermmtype.h \
 	$(NULL)
 
-libhello_cpp_plugin_la_CPPFLAGS = $(GTKMM_CFLAGS) $(PLUGIN_CFLAGS) -I$(top_srcdir)/libidemm
-libhello_cpp_plugin_la_LDFLAGS = $(GTKMM_LIBS) $(PLUGIN_LDFLAGS) -L$(top_srcdir)/libidemm/idemm/.libs -lidemm-1.0
+libhello_cpp_plugin_la_CPPFLAGS = $(IDEMM_CFLAGS) $(PLUGIN_CFLAGS) -I$(top_srcdir)/libidemm
+libhello_cpp_plugin_la_LDFLAGS = $(IDEMM_LIBS) $(PLUGIN_LDFLAGS) -L$(top_srcdir)/libidemm/idemm/.libs -lidemm-1.0
 
 include $(top_srcdir)/plugins/Makefile.plugin
 

@@ -1,3 +1,5 @@
+if ENABLE_IDEMM
+
 lib_LTLIBRARIES = libidemm-1.0.la
 include $(srcdir)/../src/filelist.am
 include $(srcdir)/filelist.am
@@ -18,3 +20,5 @@ libidemm_1_0_la_LDFLAGS =
 	$(NULL)
 
 libidemm_1_0_la_LIBADD  = $(IDEMM_LIBS)
+
+endif
