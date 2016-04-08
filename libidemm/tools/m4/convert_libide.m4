@@ -41,5 +41,5 @@ _CONVERSION(`IdeRecentProjects*',`Glib::RefPtr<Ide::RecentProjects>',`Glib::wrap
 
 dnl Ide::Application
 _CONVERSION(`const Glib::RefPtr<Ide::Application>&',`IdeApplication*',__CONVERT_REFPTR_TO_P)
-_CONVERSION(`IdeApplication*',`const Glib::RefPtr<Ide::Application>&',Glib::wrap($3))
+_CONVERSION(`IdeApplication*',`const Glib::RefPtr<Ide::Application>&',Glib::wrap($3, true))
 
