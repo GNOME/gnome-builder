@@ -30,7 +30,8 @@ class HelloCppApplicationAddin : public Glib::Object, public Ide::ApplicationAdd
 {
 private:
   std::chrono::time_point<std::chrono::steady_clock> start;
-
+  sigc::connection con;
+  
 public:
   typedef GObject BaseObjectType;
   typedef Glib::Object_Class CppClassType;

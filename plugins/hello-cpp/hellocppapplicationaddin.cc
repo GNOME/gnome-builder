@@ -42,7 +42,7 @@ HelloCppApplicationAddin::HelloCppApplicationAddin(GObject *gobj)
 {
   using namespace std::chrono;
 
-  application->signal_shutdown().connect([this] {
+  con = application->signal_shutdown().connect([this] {
       auto stop = steady_clock::now();
       auto elapsed_seconds = duration_cast<seconds>(stop - start).count();
       char message [100];
@@ -55,7 +55,8 @@ HelloCppApplicationAddin::HelloCppApplicationAddin(GObject *gobj)
 
   void HelloCppApplicationAddin::unload_vfunc(const Glib::RefPtr<Ide::Application>& application)
 {
-  std::cout << "Unloading application" << std::endl;
+  std::cout << "Unloading example C++ addin" << std::endl;
+  con.disconnect();
 }
 
 }
