@@ -12,6 +12,7 @@ idemm_files_hg =		\
 	application.hg		\
 	applicationaddin.hg	\
 	backforwardlist.hg	\
+	context.hg		\
 	object.hg		\
 	recentprojects.hg
 

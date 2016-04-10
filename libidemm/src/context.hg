@@ -1,0 +1,58 @@
+/* context.hg
+ *
+ * Copyright (C) 2016 Marcin Kolny <marcin.kolny@gmail.com>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+#include <idemm/backforwardlist.h>
+#include <glibmm/object.h>
+#include <giomm/file.h>
+#include <gtkmm/recentmanager.h>
+
+#include <ide.h>
+
+_DEFS(idemm, libide)
+_PINCLUDE(glibmm/private/object_p.h)
+
+namespace Ide {
+
+class Context : public Glib::Object
+{
+protected:
+  _CLASS_GOBJECT(Context, IdeContext, IDE_CONTEXT, Glib::Object, GObject)
+  _STRUCT_NOT_HIDDEN
+
+public:
+  _WRAP_METHOD(Glib::RefPtr<Ide::BackForwardList> get_back_forward_list() const, ide_context_get_back_forward_list, refreturn)
+  _WRAP_METHOD(Glib::RefPtr<Gio::File> get_project_file() const, ide_context_get_project_file, refreturn)
+
+#m4 _CONVERSION(`GtkRecentManager*',`Glib::RefPtr<Gtk::RecentManager>',`Glib::wrap($3)')
+  _WRAP_METHOD(Glib::RefPtr<Gtk::RecentManager> get_recent_manager() const, ide_context_get_recent_manager, refreturn)
+
+  _WRAP_METHOD(Glib::ustring get_root_build_dir() const, ide_context_get_root_build_dir)
+  _WRAP_METHOD(void set_root_build_dir(const Glib::ustring& root_build_dir), ide_context_set_root_build_dir)
+  _WRAP_METHOD(void hold(), ide_context_hold)
+
+#m4 _CONVERSION(`const Glib::RefPtr<Glib::Object>&',`gpointer',`Glib::unwrap($3)')
+  _WRAP_METHOD(void hold_for_object(const Glib::RefPtr<Glib::Object>& instance), ide_context_hold_for_object)
+  _WRAP_METHOD(void release(), ide_context_release);
+
+  _WRAP_SIGNAL(void loaded(), "loaded", no_default_handler)
+
+  _WRAP_PROPERTY("back_forward_list", Glib::RefPtr<Ide::BackForwardList>)
+  _WRAP_PROPERTY("project_file", Glib::RefPtr<Gio::File>)
+};
+
+}

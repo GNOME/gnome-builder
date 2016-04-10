@@ -1,4 +1,4 @@
-/* generate_defs_libide.cc
+/* context.ccg
  *
  * Copyright (C) 2016 Marcin Kolny <marcin.kolny@gmail.com>
  *
@@ -15,23 +15,3 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-#include <glibmm_generate_extra_defs/generate_extra_defs.h>
-
-#include <ide.h>
-
-bool libide_type_is_a_pointer(GType gtype)
-{
-  return (gtype_is_a_pointer(gtype));
-}
-
-int main (int argc, char *argv[])
-{
-
-  std::cout << get_defs(IDE_TYPE_APPLICATION, libide_type_is_a_pointer)
-	    << get_defs(IDE_TYPE_OBJECT, libide_type_is_a_pointer)
-    	    << get_defs(IDE_TYPE_BACK_FORWARD_LIST, libide_type_is_a_pointer)
-	    << get_defs(IDE_TYPE_CONTEXT, libide_type_is_a_pointer);
-  
-  return 0;
-}
