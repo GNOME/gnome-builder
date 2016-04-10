@@ -54,3 +54,137 @@
   (writable #f)
   (construct-only #f)
 )
+
+;; From IdeContext
+
+(define-signal loaded
+  (of-object "IdeContext")
+  (return-type "void")
+  (when "last")
+)
+
+(define-property back-forward-list
+  (of-object "IdeContext")
+  (prop-type "GParamObject")
+  (docs "Back/forward navigation history for the context.")
+  (readable #t)
+  (writable #f)
+  (construct-only #f)
+)
+
+(define-property buffer-manager
+  (of-object "IdeContext")
+  (prop-type "GParamObject")
+  (docs "The buffer manager for the context.")
+  (readable #t)
+  (writable #f)
+  (construct-only #f)
+)
+
+(define-property build-system
+  (of-object "IdeContext")
+  (prop-type "GParamObject")
+  (docs "The build system used by the context.")
+  (readable #t)
+  (writable #f)
+  (construct-only #f)
+)
+
+(define-property configuration-manager
+  (of-object "IdeContext")
+  (prop-type "GParamObject")
+  (docs "The configuration manager for the context")
+  (readable #t)
+  (writable #f)
+  (construct-only #f)
+)
+
+(define-property device-manager
+  (of-object "IdeContext")
+  (prop-type "GParamObject")
+  (docs "The device manager for the context.")
+  (readable #t)
+  (writable #f)
+  (construct-only #f)
+)
+
+(define-property project-file
+  (of-object "IdeContext")
+  (prop-type "GParamObject")
+  (docs "The project file for the context.")
+  (readable #t)
+  (writable #t)
+  (construct-only #t)
+)
+
+(define-property project
+  (of-object "IdeContext")
+  (prop-type "GParamObject")
+  (docs "The project for the context.")
+  (readable #t)
+  (writable #f)
+  (construct-only #f)
+)
+
+(define-property root-build-dir
+  (of-object "IdeContext")
+  (prop-type "GParamString")
+  (docs "The root directory to perform builds within.")
+  (readable #t)
+  (writable #t)
+  (construct-only #f)
+)
+
+(define-property runtime-manager
+  (of-object "IdeContext")
+  (prop-type "GParamObject")
+  (docs "Runtime Manager")
+  (readable #t)
+  (writable #f)
+  (construct-only #f)
+)
+
+(define-property script-manager
+  (of-object "IdeContext")
+  (prop-type "GParamObject")
+  (docs "The script manager for the context.")
+  (readable #t)
+  (writable #f)
+  (construct-only #f)
+)
+
+(define-property search-engine
+  (of-object "IdeContext")
+  (prop-type "GParamObject")
+  (docs "The search engine for the context.")
+  (readable #t)
+  (writable #f)
+  (construct-only #f)
+)
+
+(define-property snippets-manager
+  (of-object "IdeContext")
+  (prop-type "GParamObject")
+  (docs "The snippets manager for the context.")
+  (readable #t)
+  (writable #t)
+  (construct-only #f)
+)
+
+(define-property vcs
+  (of-object "IdeContext")
+  (prop-type "GParamObject")
+  (docs "The VCS for the context.")
+  (readable #t)
+  (writable #f)
+  (construct-only #f)
+)
+
+(define-property unsaved-files
+  (of-object "IdeContext")
+  (prop-type "GParamObject")
+  (docs "The unsaved files in the context.")
+  (readable #t)
+  (writable #f)
+  (construct-only #f)
+)
