@@ -1,0 +1,18 @@
+;; From IdeApplication
+
+;; From IdeObject
+
+(define-signal destroy
+  (of-object "IdeObject")
+  (return-type "void")
+  (when "last")
+)
+
+(define-property context
+  (of-object "IdeObject")
+  (prop-type "GParamObject")
+  (docs "The context that owns the object.")
+  (readable #t)
+  (writable #t)
+  (construct-only #t)
+)

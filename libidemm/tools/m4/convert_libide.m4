@@ -43,3 +43,5 @@ dnl Ide::Application
 _CONVERSION(`const Glib::RefPtr<Ide::Application>&',`IdeApplication*',__CONVERT_REFPTR_TO_P)
 _CONVERSION(`IdeApplication*',`const Glib::RefPtr<Ide::Application>&',Glib::wrap($3, true))
 
+dnl Ide::Object
+_CONVERSION(`IdeObject*',`Glib::RefPtr<Ide::Object>',Glib::wrap($3, true))
