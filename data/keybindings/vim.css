@@ -334,6 +334,7 @@
                       "movement" (next-word-start, 0, 1, 0)
                       "movement" (next-word-end, 1, 0, 1)
                       "set-search-text" ("", 1)
+                      "movement" (previous-char, 0, 1, 0)
                       "move-search" (up, 0, 0, 0, 1, 1) };
 
   bind "asterisk" { "movement" (previous-word-end, 0, 1, 1)
