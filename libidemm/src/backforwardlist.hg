@@ -1,0 +1,47 @@
+/* backforwardlist.hg
+ *
+ * Copyright (C) 2016 Marcin Kolny <marcin.kolny@gmail.com>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+#include <idemm/object.h>
+
+#include <ide.h>
+
+_DEFS(idemm, libide)
+_PINCLUDE(idemm/private/object_p.h)
+
+namespace Ide {
+
+class BackForwardList : public Ide::Object
+{
+protected:
+  _CLASS_GOBJECT(BackForwardList, IdeBackForwardList, IDE_BACK_FORWARD_LIST, Ide::Object, IdeObject)
+  _STRUCT_NOT_HIDDEN
+
+public:
+  _WRAP_METHOD(void go_backward(), ide_back_forward_list_go_backward)
+  _WRAP_METHOD(void go_forward(), ide_back_forward_list_go_forward)
+  _WRAP_METHOD(void get_can_go_backward() const, ide_back_forward_list_get_can_go_backward)
+  _WRAP_METHOD(void get_can_go_forward() const, ide_back_forward_list_get_can_go_forward)
+  _WRAP_METHOD(Glib::RefPtr<Ide::BackForwardList> branch(), ide_back_forward_list_branch)
+  _WRAP_METHOD(void merge(const Glib::RefPtr<Ide::BackForwardList>& branch), ide_back_forward_list_merge)
+
+  _WRAP_PROPERTY("can_go_backward", bool)
+  _WRAP_PROPERTY("can_go_forward", bool)
+  _WRAP_PROPERTY("current_item", Glib::RefPtr<Ide::Object>)
+};
+
+}

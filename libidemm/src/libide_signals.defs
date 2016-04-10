@@ -16,3 +16,41 @@
   (writable #t)
   (construct-only #t)
 )
+
+;; From IdeBackForwardList
+
+(define-signal navigate-to
+  (of-object "IdeBackForwardList")
+  (return-type "void")
+  (when "last")
+  (parameters
+    '("IdeBackForwardItem*" "p0")
+  )
+)
+
+(define-property can-go-backward
+  (of-object "IdeBackForwardList")
+  (prop-type "GParamBoolean")
+  (docs "If there are more backward navigation items.")
+  (readable #t)
+  (writable #f)
+  (construct-only #f)
+)
+
+(define-property can-go-forward
+  (of-object "IdeBackForwardList")
+  (prop-type "GParamBoolean")
+  (docs "If there are more forward navigation items.")
+  (readable #t)
+  (writable #f)
+  (construct-only #f)
+)
+
+(define-property current-item
+  (of-object "IdeBackForwardList")
+  (prop-type "GParamObject")
+  (docs "The current navigation item.")
+  (readable #t)
+  (writable #f)
+  (construct-only #f)
+)
