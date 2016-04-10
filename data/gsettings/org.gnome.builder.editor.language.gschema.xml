@@ -14,7 +14,7 @@
       <default>false</default>
     </key>
     <key name="overwrite-braces" type="b">
-      <default>false</default>
+      <default>true</default>
     </key>
     <key name="show-right-margin" type="b">
       <default>true</default>
