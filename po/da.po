@@ -17,8 +17,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-20 23:40+0100\n"
-"PO-Revision-Date: 2016-03-20 03:33+0100\n"
+"POT-Creation-Date: 2016-04-10 23:05+0200\n"
+"PO-Revision-Date: 2016-04-10 21:49+0200\n"
 "Last-Translator: Kris Thomsen <lakristho@gmail.com>\n"
 "Language-Team: Danish <dansk@dansk-gruppen.dk>\n"
 "Language: da\n"
@@ -27,22 +27,23 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: ../contrib/egg/egg-animation.c:726
+#: ../contrib/egg/egg-animation.c:726 ../contrib/pnl/pnl-animation.c:701
 #, c-format
 msgid "Cannot locate property %s in class %s"
 msgstr "Kan ikke finde egenskaben %s i klassen %s"
 
 #: ../contrib/egg/egg-animation.c:1073 ../contrib/egg/egg-animation.c:1079
+#: ../contrib/pnl/pnl-animation.c:1053 ../contrib/pnl/pnl-animation.c:1059
 #, c-format
 msgid "Failed to find property %s in %s"
 msgstr "Kunne ikke finde egenskaben %s i %s"
 
-#: ../contrib/egg/egg-animation.c:1087
+#: ../contrib/egg/egg-animation.c:1087 ../contrib/pnl/pnl-animation.c:1067
 #, c-format
 msgid "Failed to find property %s in %s or parent %s"
 msgstr "Kunne ikke finde egenskaben %s i %s eller ophavselementet %s"
 
-#: ../contrib/egg/egg-animation.c:1097
+#: ../contrib/egg/egg-animation.c:1097 ../contrib/pnl/pnl-animation.c:1077
 #, c-format
 msgid "Failed to retrieve va_list value: %s"
 msgstr "Kunne ikke hente va_list-værdi: %s"
@@ -810,12 +811,12 @@ msgstr "Linje %u, kolonne %u"
 msgid "%u of %u"
 msgstr "%u af %u"
 
-#: ../libide/editor/ide-editor-frame.c:646
+#: ../libide/editor/ide-editor-frame.c:672
 #: ../plugins/project-tree/gtk/menus.ui.h:1
 msgid "Re_veal in Project Tree"
 msgstr "_Synliggør i projekttræ"
 
-#: ../libide/editor/ide-editor-perspective.c:456
+#: ../libide/editor/ide-editor-perspective.c:444
 #: ../libide/preferences/ide-preferences-builtin.c:102
 #: ../libide/preferences/ide-preferences-builtin.c:125
 msgid "Editor"
@@ -905,51 +906,60 @@ msgstr "Finansieret af"
 msgid "Commands:"
 msgstr "Kommandoer:"
 
-#: ../libide/ide-application-command-line.c:185
+#: ../libide/ide-application-command-line.c:186
 msgid "List available subcommands"
 msgstr "Vis tilgængelige underkommandoer"
 
-#: ../libide/ide-application-command-line.c:192
+#: ../libide/ide-application-command-line.c:193
 msgid "Run Builder in standalone mode"
 msgstr "Kør Builder i selvstændig tilstand"
 
-#: ../libide/ide-application-command-line.c:199
+#: ../libide/ide-application-command-line.c:200
 msgid "Show the application's version"
 msgstr "Vis programversion"
 
-#: ../libide/ide-application-command-line.c:218
+#: ../libide/ide-application-command-line.c:219
 msgid "Increase verbosity, may be specified multiple times"
 msgstr "Udskriv flere detaljer. Kan angives flere gange"
 
-#: ../libide/ide-application-command-line.c:225
+#: ../libide/ide-application-command-line.c:226
 msgid "Enter GApplication Service mode"
 msgstr "Aktivér GApplication-tjenestetilstand"
 
-#: ../libide/ide-application-command-line.c:255
+#: ../libide/ide-application-command-line.c:233
+msgid "Opens the project specified by PATH"
+msgstr "Åbner projektet angivet ved STI"
+
+#: ../libide/ide-application-command-line.c:234
+#: ../plugins/build-tools/gbp-build-tool.c:301
+msgid "PATH"
+msgstr "STI"
+
+#: ../libide/ide-application-command-line.c:264
 msgid "COMMAND"
 msgstr "KOMMANDO"
 
-#: ../libide/ide-application-command-line.c:326
+#: ../libide/ide-application-command-line.c:335
 msgid "No commands available"
 msgstr "Ingen kommandoer tilgængelige"
 
-#: ../libide/ide-application-command-line.c:356
+#: ../libide/ide-application-command-line.c:365
 msgid "Please provide a command"
 msgstr "Angiv venligst en kommando"
 
-#: ../libide/ide-application-command-line.c:366
+#: ../libide/ide-application-command-line.c:375
 msgid "No such tool"
 msgstr "Intet sådant værktøj"
 
-#: ../libide/ide-application-command-line.c:380
+#: ../libide/ide-application-command-line.c:389
 msgid "Please provide a worker type"
 msgstr "Angiv venligst en arbejdertype"
 
-#: ../libide/ide-application-command-line.c:387
+#: ../libide/ide-application-command-line.c:396
 msgid "Please provide a D-Bus address"
 msgstr "Angiv venligst en D-Bus-adresse"
 
-#: ../libide/ide-application-command-line.c:396
+#: ../libide/ide-application-command-line.c:405
 msgid "No such worker"
 msgstr "Ingen sådan arbejder"
 
@@ -1081,17 +1091,17 @@ msgstr "Kunne ikke åbne mappe: %s"
 msgid "Failed to load file: %s: %s"
 msgstr "Kunne ikke indlæse fil: %s: %s"
 
-#: ../libide/ide-source-view.c:4897
+#: ../libide/ide-source-view.c:4967
 #, c-format
 msgid "Insert “%s”"
 msgstr "Indsæt “%s”"
 
-#: ../libide/ide-source-view.c:4899
+#: ../libide/ide-source-view.c:4969
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "Erstat “%s” med “%s”"
 
-#: ../libide/ide-source-view.c:5013
+#: ../libide/ide-source-view.c:5083
 msgid "Apply Fix-It"
 msgstr "Anvend Fix-It"
 
@@ -1211,7 +1221,7 @@ msgstr "redigering skrifttype fastbredde"
 
 #. XXX: This belongs in terminal addin
 #: ../libide/preferences/ide-preferences-builtin.c:104
-#: ../plugins/terminal/gb-terminal-workbench-addin.c:99
+#: ../plugins/terminal/gb-terminal-workbench-addin.c:90
 msgid "Terminal"
 msgstr "Terminal"
 
@@ -1508,7 +1518,7 @@ msgid "Indent source code as you type"
 msgstr "Indryk kildekode mens du skriver"
 
 #: ../libide/preferences/ide-preferences-builtin.c:243
-#: ../plugins/build-tools/gbp-build-workbench-addin.c:270
+#: ../plugins/build-tools/gbp-build-panel.c:426
 msgid "Build"
 msgstr "Kompilér"
 
@@ -1680,6 +1690,7 @@ msgid "The name of the build configuration"
 msgstr "Navnet på kompileringskonfigurationen"
 
 #: ../plugins/build-tools/gbp-build-configuration-view.ui.h:3
+#: ../plugins/create-project/gbp-create-project-widget.ui.h:1
 msgid "Name"
 msgstr "Navn"
 
@@ -1718,6 +1729,24 @@ msgstr "Runtime"
 #: ../plugins/build-tools/gbp-build-configuration-view.ui.h:12
 msgid "Environment"
 msgstr "Miljø"
+
+#: ../plugins/build-tools/gbp-build-log-panel.c:249
+msgid "Build Output"
+msgstr "Kompileringsoutput"
+
+#: ../plugins/build-tools/gbp-build-panel.c:150
+#, c-format
+msgid "%d warning"
+msgid_plural "%d warnings"
+msgstr[0] "%d advarsel"
+msgstr[1] "%d advarsler"
+
+#: ../plugins/build-tools/gbp-build-panel.c:157
+#, c-format
+msgid "%d error"
+msgid_plural "%d errors"
+msgstr[0] "%d fejl"
+msgstr[1] "%d fejl"
 
 #: ../plugins/build-tools/gbp-build-panel-row.c:68
 msgid "Unknown file"
@@ -1883,14 +1912,6 @@ msgstr "CONFIG_ID"
 #: ../plugins/build-tools/gbp-build-tool.c:300
 msgid "Path to project file, defaults to current directory"
 msgstr "Sti til projektfil; som udgangspunkt nuværende arbejdsmappe"
-
-#: ../plugins/build-tools/gbp-build-tool.c:301
-msgid "PATH"
-msgstr "STI"
-
-#: ../plugins/build-tools/gbp-build-workbench-addin.c:275
-msgid "Build Output"
-msgstr "Kompileringsoutput"
 
 #: ../plugins/clang/ide-clang-preferences-addin.c:62
 msgid "Clang"
@@ -2064,6 +2085,10 @@ msgstr "Brugernavn"
 msgid "Format Strings"
 msgstr "Formatstrenge"
 
+#: ../plugins/create-project/gbp-create-project-genesis-addin.c:158
+msgid "From a project template"
+msgstr "Fra en projektskabelon"
+
 #: ../plugins/create-project/gbp-create-project-tool.c:130
 msgid "List available templates"
 msgstr "Vis tilgængelige skabeloner"
@@ -2091,8 +2116,21 @@ msgstr "Angiv venligst et projektnavn.\n"
 msgid "Please specify a project template with --template=\n"
 msgstr "Angiv venligst en projekt-skabelon med --template=\n"
 
+#: ../plugins/create-project/gbp-create-project-widget.ui.h:2
+#: ../plugins/git/ide-git-clone-widget.ui.h:6
+msgid "Location"
+msgstr "Sted"
+
+#: ../plugins/create-project/gbp-create-project-widget.ui.h:3
+msgid "Language"
+msgstr "Sprog"
+
+#: ../plugins/create-project/gbp-create-project-widget.ui.h:4
+msgid "Pattern"
+msgstr "Mønster"
+
+#: ../plugins/devhelp/gbp-devhelp-panel.c:187
 #: ../plugins/devhelp/gbp-devhelp-search-provider.c:128
-#: ../plugins/devhelp/gbp-devhelp-workbench-addin.c:90
 msgid "Documentation"
 msgstr "Dokumentation"
 
@@ -2150,10 +2188,6 @@ msgstr "Indtast navnet på mappen, som skal oprettes"
 #: ../plugins/git/ide-git-clone-widget.ui.h:5
 msgid "Repository"
 msgstr "Arkiv"
-
-#: ../plugins/git/ide-git-clone-widget.ui.h:6
-msgid "Location"
-msgstr "Sted"
 
 #: ../plugins/git/ide-git-genesis-addin.c:93
 msgid "From an existing project in a Git repository"
@@ -2240,7 +2274,7 @@ msgstr "Mappenavn"
 msgid "_Create"
 msgstr "_Opret"
 
-#: ../plugins/project-tree/gb-project-tree-addin.c:112
+#: ../plugins/project-tree/gb-project-tree-addin.c:113
 msgid "Project"
 msgstr "Projekt"
 
@@ -2331,15 +2365,15 @@ msgstr ""
 "Supportlog-filen er blevet skrevet til '%s'. Vedhæft venlist denne fil til "
 "din fejlrapport eller support-forespørgsel."
 
-#: ../plugins/symbol-tree/symbol-tree.c:84
-msgid "Symbols"
-msgstr "Symboler"
-
 #: ../plugins/symbol-tree/symbol-tree-panel.c:239
 msgid "Current language does not support symbol resolvers"
 msgstr "Nuværende sprog understøtter ikke symbolgenkendere"
 
-#: ../plugins/sysmon/gb-sysmon-addin.c:63
+#: ../plugins/symbol-tree/symbol-tree-panel.c:335
+msgid "Symbols"
+msgstr "Symboler"
+
+#: ../plugins/sysmon/gb-sysmon-panel.ui.h:1
 msgid "System Monitor"
 msgstr "Systemovervågning"
 
@@ -2351,7 +2385,7 @@ msgstr "Gem indhold af terminal som"
 msgid "_New Terminal"
 msgstr "_Ny terminal"
 
-#: ../plugins/todo/todo_plugin/__init__.py:60
+#: ../plugins/todo/todo_plugin/__init__.py:180
 msgid "Todo"
 msgstr "Todo"
 
@@ -2401,12 +2435,6 @@ msgstr "vala diagnostik advarsler fejl"
 
 #~ msgid "GNOME Version"
 #~ msgstr "GNOME-version"
-
-#~ msgid "Language"
-#~ msgstr "Sprog"
-
-#~ msgid "Pattern"
-#~ msgstr "Mønster"
 
 #~ msgid "Git"
 #~ msgstr "Git"
