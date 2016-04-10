@@ -34,10 +34,13 @@ stamp-h2
 /idemm/Makefile
 /idemm/Makefile.in
 /idemm/private/
+
 /idemm/application.cc
 /idemm/application.h
 /idemm/applicationaddin.cc
 /idemm/applicationaddin.h
+/idemm/backforwardlist.cc
+/idemm/backforwardlist.h
 /idemm/object.cc
 /idemm/object.h
 /idemm/recentprojects.cc

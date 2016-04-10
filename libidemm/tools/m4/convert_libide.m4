@@ -45,3 +45,7 @@ _CONVERSION(`IdeApplication*',`const Glib::RefPtr<Ide::Application>&',Glib::wrap
 
 dnl Ide::Object
 _CONVERSION(`IdeObject*',`Glib::RefPtr<Ide::Object>',Glib::wrap($3, true))
+
+dnl Ide::BackForwardList
+_CONVERSION(`IdeBackForwardList*',`Glib::RefPtr<Ide::BackForwardList>',Glib::wrap($3))
+_CONVERSION(`const Glib::RefPtr<Ide::BackForwardList>&',`IdeBackForwardList*',__CONVERT_REFPTR_TO_P)
