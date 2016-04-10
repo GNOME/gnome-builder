@@ -11,6 +11,7 @@ idemm_files_defs =		\
 idemm_files_hg =		\
 	application.hg		\
 	applicationaddin.hg	\
+	object.hg		\
 	recentprojects.hg
 
 idemm_files_ccg = $(idemm_files_hg:.hg=.ccg)

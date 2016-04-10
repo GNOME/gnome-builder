@@ -1,4 +1,4 @@
-/* generate_defs_libide.cc
+/* object.hg
  *
  * Copyright (C) 2016 Marcin Kolny <marcin.kolny@gmail.com>
  *
@@ -16,20 +16,29 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <glibmm_generate_extra_defs/generate_extra_defs.h>
+#include <glibmm/object.h>
+#include <giomm/asyncresult.h>
 
 #include <ide.h>
 
-bool libide_type_is_a_pointer(GType gtype)
-{
-  return (gtype_is_a_pointer(gtype));
-}
+_DEFS(idemm, libide)
+_PINCLUDE(glibmm/private/object_p.h)
 
-int main (int argc, char *argv[])
-{
+namespace Ide {
 
-  std::cout << get_defs(IDE_TYPE_APPLICATION, libide_type_is_a_pointer)
-	    << get_defs(IDE_TYPE_OBJECT, libide_type_is_a_pointer);
-  
-  return 0;
+class Object : public Glib::Object
+{
+protected:
+  _CLASS_GOBJECT(Object, IdeObject, IDE_OBJECT, Glib::Object, GObject)
+
+public:
+  static Glib::RefPtr<Ide::Object> create_finish(const Glib::RefPtr<Gio::AsyncResult>& result);
+
+  _WRAP_METHOD(bool hold(), ide_object_hold)
+  _WRAP_METHOD(void release(), ide_object_release)
+  _WRAP_METHOD(void notify_in_main(GParamSpec *pspec), ide_object_notify_in_main)
+
+  _WRAP_SIGNAL(void destroy(), "destroy")
+};
+
 }

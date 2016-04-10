@@ -1,4 +1,4 @@
-/* generate_defs_libide.cc
+/* object.ccg
  *
  * Copyright (C) 2016 Marcin Kolny <marcin.kolny@gmail.com>
  *
@@ -16,20 +16,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <glibmm_generate_extra_defs/generate_extra_defs.h>
+namespace Ide {
 
-#include <ide.h>
-
-bool libide_type_is_a_pointer(GType gtype)
+Glib::RefPtr<Ide::Object> Object::create_finish(const Glib::RefPtr<Gio::AsyncResult>& result)
 {
-  return (gtype_is_a_pointer(gtype));
+  GError* gerror = nullptr;
+  Glib::RefPtr<Ide::Object> retvalue = Glib::wrap(ide_object_new_finish(Glib::unwrap(result), &(gerror)), true);
+  if(gerror)
+    ::Glib::Error::throw_exception(gerror);
+  return retvalue;
 }
 
-int main (int argc, char *argv[])
-{
-
-  std::cout << get_defs(IDE_TYPE_APPLICATION, libide_type_is_a_pointer)
-	    << get_defs(IDE_TYPE_OBJECT, libide_type_is_a_pointer);
-  
-  return 0;
 }
