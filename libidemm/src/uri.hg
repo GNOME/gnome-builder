@@ -1,0 +1,76 @@
+/* uri.hg
+ *
+ * Copyright (C) 2016 Marcin Kolny <marcin.kolny@gmail.com>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+#include <giomm/file.h>
+
+#include <ide.h>
+
+_DEFS(idemm, libide)
+
+namespace Ide {
+
+_WRAP_ENUM(UriParseFlags, IdeUriParseFlags, NO_GTYPE)
+_WRAP_ENUM(UriToStringFlags, IdeUriToStringFlags, NO_GTYPE)
+
+class Uri
+{
+  // TODO: IdeUri defines ide_uri_ref as a copy method. why?
+  _CLASS_BOXEDTYPE(Uri, IdeUri, NONE, ide_uri_copy, ide_uri_unref)
+
+public:
+  Uri(const Glib::ustring& uri_string, Ide::UriParseFlags flags);
+  Uri(const Uri& base_uri, const Glib::ustring& uri_string, Ide::UriParseFlags flags);
+  Uri(const Glib::RefPtr<Gio::File>& file);
+
+  _IGNORE(ide_uri_unref, ide_uri_new_relative, ide_uri_ref, ide_uri_copy)
+
+  // todo operator string?
+  _WRAP_METHOD(Glib::ustring to_string(Ide::UriToStringFlags flags) const, ide_uri_to_string)
+  
+  _WRAP_METHOD(Glib::ustring get_scheme() const, ide_uri_get_scheme)
+  _WRAP_METHOD(void set_scheme(const Glib::ustring& scheme), ide_uri_set_scheme)
+  
+  _WRAP_METHOD(Glib::ustring get_user() const, ide_uri_get_user)
+  _WRAP_METHOD(void set_user(const Glib::ustring& user), ide_uri_set_user)
+  
+  _WRAP_METHOD(Glib::ustring get_password() const, ide_uri_get_password)
+  _WRAP_METHOD(void set_password(const Glib::ustring& password), ide_uri_set_password)
+  
+  _WRAP_METHOD(Glib::ustring get_auth_params() const, ide_uri_get_auth_params)
+  _WRAP_METHOD(void set_auth_params(const Glib::ustring& auth_params), ide_uri_set_auth_params)
+  
+  _WRAP_METHOD(Glib::ustring get_host() const, ide_uri_get_host)
+  _WRAP_METHOD(void set_host(const Glib::ustring& host), ide_uri_set_host)
+  
+  _WRAP_METHOD(gushort get_port() const, ide_uri_get_port)
+  _WRAP_METHOD(void set_port(gushort port), ide_uri_set_port)
+  
+  _WRAP_METHOD(Glib::ustring get_path() const, ide_uri_get_path)
+  _WRAP_METHOD(void set_path(const Glib::ustring& path), ide_uri_set_path)
+  
+  _WRAP_METHOD(Glib::ustring get_query() const, ide_uri_get_query)
+  _WRAP_METHOD(void set_query(const Glib::ustring& query), ide_uri_set_query)
+  
+  _WRAP_METHOD(Glib::ustring get_fragment() const, ide_uri_get_fragment)
+  _WRAP_METHOD(void set_fragment(const Glib::ustring& fragment), ide_uri_set_fragment)
+  
+  _WRAP_METHOD(bool is_file(const Glib::RefPtr<Gio::File>& file) const, ide_uri_is_file)
+  _WRAP_METHOD(Glib::RefPtr<Gio::File> to_file() const, ide_uri_to_file)
+};
+
+}
