@@ -1,0 +1,44 @@
+/* uri.hg
+ *
+ * Copyright (C) 2016 Marcin Kolny <marcin.kolny@gmail.com>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+namespace Ide {
+
+Uri::Uri(const Glib::ustring& uri_string, Ide::UriParseFlags flags)
+{
+  GError* gerror = nullptr;
+  gobject_ = ide_uri_new(uri_string.c_str(), static_cast<IdeUriParseFlags>(flags), &gerror);
+
+  if(gerror)
+    ::Glib::Error::throw_exception(gerror);
+}
+
+Uri::Uri(const Uri& base_uri, const Glib::ustring& uri_string, Ide::UriParseFlags flags)
+{
+  GError* gerror = nullptr;
+  gobject_ = ide_uri_new_relative(const_cast<IdeUri*>(base_uri.gobj()), uri_string.c_str(), static_cast<IdeUriParseFlags>(flags), &gerror);
+
+  if(gerror)
+    ::Glib::Error::throw_exception(gerror);
+}
+
+Uri::Uri(const Glib::RefPtr<Gio::File>& file)
+{
+  gobject_ = ide_uri_new_from_file(file->gobj());
+}
+
+}

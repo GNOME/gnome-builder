@@ -47,6 +47,8 @@ stamp-h2
 /idemm/object.h
 /idemm/recentprojects.cc
 /idemm/recentprojects.h
+/idemm/uri.cc
+/idemm/uri.h
 /idemm/wrap_init.cc
 
 # docs/

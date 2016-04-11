@@ -14,6 +14,7 @@ idemm_files_hg =		\
 	backforwardlist.hg	\
 	context.hg		\
 	object.hg		\
-	recentprojects.hg
+	recentprojects.hg	\
+	uri.hg
 
 idemm_files_ccg = $(idemm_files_hg:.hg=.ccg)

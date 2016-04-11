@@ -1,5 +1,7 @@
 dnl Enums
 _CONV_ENUM(Ide,ApplicationMode)
+_CONV_ENUM(Ide,UriParseFlags)
+_CONV_ENUM(Ide,UriToStringFlags)
 
 dnl Glibmm Enums
 #_CONV_GLIB_ENUM(ThreadPriority)
