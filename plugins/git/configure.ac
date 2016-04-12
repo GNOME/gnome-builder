@@ -13,7 +13,7 @@ AS_IF([test "$enable_git_plugin" != no],[
 	                  [have_git=yes],
 	                  [have_git=no])
 
-	AS_IF([test "$enable_git_plugin" = "yes" && "$have_git" = "no"],[
+	AS_IF([test "$enable_git_plugin" = "yes" && test "$have_git" = "no"],[
 	       AC_MSG_ERROR([--enable-git-plugin requires libgit2-glib-1.0 >= ggit_required_version])
 	])
 
