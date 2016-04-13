@@ -179,7 +179,7 @@ m4_define([gobject_introspection_version], [1.47.92])
 m4_define([pygobject_required_version], [3.19.3])
 m4_define([libxml_required_version], [2.9.0])
 m4_define([pangoft2_required_version], [1.38.0])
-m4_define([peas_required_version], [1.17.0])
+m4_define([peas_required_version], [1.18.0])
 
 PKG_CHECK_MODULES(EGG,      [glib-2.0 >= glib_required_version
                              gmodule-2.0 >= glib_required_version
