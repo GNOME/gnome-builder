@@ -426,18 +426,18 @@ ide_autotools_project_miner_class_init (IdeAutotoolsProjectMinerClass *klass)
 
   for (guint i = 0; i < G_USER_N_DIRECTORIES; i++)
     {
+      g_autoptr(GFile) dir = NULL;
       const gchar *path;
-      GFile *dir;
 
       path = g_get_user_special_dir (i);
-      if (!path)
+      if (path == NULL)
         continue;
 
       dir = g_file_new_for_path (path);
+      if (dir == NULL)
+        continue;
 
-      if (g_file_equal (dir, home))
-        g_clear_object (&dir);
-      else
+      if (!g_file_equal (dir, home))
         g_ptr_array_add (ignored_directories, dir);
     }
 }
