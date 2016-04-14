@@ -177,6 +177,7 @@ static gboolean
 directory_is_ignored (GFile *directory)
 {
   g_assert (G_IS_FILE (directory));
+  g_assert (ignored_directories != NULL);
 
   for (guint i = 0; i < ignored_directories->len; i++)
     {
@@ -438,7 +439,7 @@ ide_autotools_project_miner_class_init (IdeAutotoolsProjectMinerClass *klass)
         continue;
 
       if (!g_file_equal (dir, home))
-        g_ptr_array_add (ignored_directories, dir);
+        g_ptr_array_add (ignored_directories, g_steal_pointer (&dir));
     }
 }
 
