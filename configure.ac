@@ -180,6 +180,7 @@ m4_define([pygobject_required_version], [3.19.3])
 m4_define([libxml_required_version], [2.9.0])
 m4_define([pangoft2_required_version], [1.38.0])
 m4_define([peas_required_version], [1.18.0])
+m4_define([webkit_required_version], [2.12.0])
 
 PKG_CHECK_MODULES(EGG,      [glib-2.0 >= glib_required_version
                              gmodule-2.0 >= glib_required_version
@@ -194,7 +195,8 @@ PKG_CHECK_MODULES(LIBIDE,   [gio-2.0 >= glib_required_version
                              gtksourceview-3.0 >= gtksourceview_required_version
                              libpeas-1.0 >= peas_required_version
                              libxml-2.0 >= libxml_required_version
-                             pangoft2 >= pangoft2_required_version])
+                             pangoft2 >= pangoft2_required_version
+                             webkit2gtk-4.0 >= webkit_required_version])
 PKG_CHECK_MODULES(NAUTILUS, [glib-2.0 >= glib_required_version
                              gtk+-3.0 >= gtk_required_version])
 PKG_CHECK_MODULES(PANEL_GTK,[gtk+-3.0 >= gtk_required_version])
