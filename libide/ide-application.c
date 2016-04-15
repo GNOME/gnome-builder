@@ -650,17 +650,17 @@ gboolean
 ide_application_open_project (IdeApplication *self,
                               GFile          *file)
 {
-  g_return_val_if_fail (IDE_IS_APPLICATION (self), FALSE);
-  g_return_val_if_fail (G_IS_FILE (file), FALSE);
-
-  if (!g_file_query_exists (file, NULL))
-    return FALSE;
-
   GList *list;
   IdeContext *context;
   GtkWindow *window;
   GFile *projectfile;
   IdeWorkbench *workbench = NULL;
+
+  g_return_val_if_fail (IDE_IS_APPLICATION (self), FALSE);
+  g_return_val_if_fail (G_IS_FILE (file), FALSE);
+
+  if (!g_file_query_exists (file, NULL))
+    return FALSE;
 
   list = gtk_application_get_windows (GTK_APPLICATION (self));
 
