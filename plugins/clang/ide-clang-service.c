@@ -104,6 +104,8 @@ ide_clang_service_build_index_visitor (CXCursor     cursor,
     {
     case CXCursor_TypedefDecl:
     case CXCursor_TypeAliasDecl:
+    case CXCursor_StructDecl:
+    case CXCursor_ClassDecl:
       style_name = IDE_CLANG_HIGHLIGHTER_TYPE;
       break;
 
