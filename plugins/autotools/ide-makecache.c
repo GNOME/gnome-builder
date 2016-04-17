@@ -38,8 +38,9 @@
 #include "ide-makecache.h"
 #include "ide-makecache-target.h"
 
-#define FAKE_CC  "__LIBIDE_FAKE_CC__"
-#define FAKE_CXX "__LIBIDE_FAKE_CXX__"
+#define FAKE_CC    "__LIBIDE_FAKE_CC__"
+#define FAKE_CXX   "__LIBIDE_FAKE_CXX__"
+#define FAKE_VALAC "__LIBIDE_FAKE_VALAC__"
 
 struct _IdeMakecache
 {
@@ -812,6 +813,95 @@ ide_makecache_parse_c_cxx (IdeMakecache *self,
   g_ptr_array_add (ret, NULL);
 }
 
+static gchar *
+build_path (const gchar *relpath,
+            const gchar *subdir,
+            const gchar *path)
+{
+  g_assert (relpath);
+  g_assert (subdir);
+  g_assert (path);
+
+  if (g_path_is_absolute (path))
+    return g_strdup (path);
+
+  return g_build_filename (subdir, path, NULL);
+}
+
+static void
+ide_makecache_parse_valac (IdeMakecache *self,
+                           const gchar  *line,
+                           const gchar  *relpath,
+                           const gchar  *subdir,
+                           GPtrArray    *ret)
+{
+  g_auto(GStrv) argv = NULL;
+  gint argc = 0;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAKECACHE (self));
+  g_assert (line != NULL);
+  g_assert (relpath != NULL);
+  g_assert (subdir != NULL);
+  g_assert (ret != NULL);
+
+  if (g_shell_parse_argv (line, &argc, &argv, NULL))
+    {
+      gint i;
+
+      for (i = 0; i < argc; i++)
+        {
+          gchar *arg = argv[i];
+          gchar *next_arg = i < (argc - 1) ? argv[i + 1] : NULL;
+
+          if (g_str_has_prefix (arg, "--pkg=") ||
+              g_str_has_prefix (arg, "--target-glib="))
+            {
+              g_ptr_array_add (ret, g_strdup (arg));
+            }
+          else if (g_str_has_prefix (arg, "--vapidir=") ||
+                   g_str_has_prefix (arg, "--girdir=") ||
+                   g_str_has_prefix (arg, "--metadatadir="))
+            {
+              gchar *tmp = strchr (arg, '=');
+
+              *tmp = '\0';
+              next_arg = ++tmp;
+
+              g_ptr_array_add (ret, g_strdup (arg));
+              g_ptr_array_add (ret, build_path (relpath, subdir, next_arg));
+            }
+          else if (next_arg &&
+                   (g_str_has_prefix (arg, "--pkg") ||
+                    g_str_has_prefix (arg, "--target-glib")))
+            {
+              g_ptr_array_add (ret, g_strdup (arg));
+              g_ptr_array_add (ret, g_strdup (next_arg));
+              i++;
+            }
+          else if (g_str_has_prefix (arg, "--vapidir") ||
+                   g_str_has_prefix (arg, "--girdir") ||
+                   g_str_has_prefix (arg, "--metadatadir"))
+            {
+              g_ptr_array_add (ret, g_strdup (arg));
+              g_ptr_array_add (ret, build_path (relpath, subdir, next_arg));
+              i++;
+            }
+          else if (g_str_has_prefix (arg, "--thread"))
+            {
+              g_ptr_array_add (ret, g_strdup (arg));
+            }
+          else if (strstr (arg, ".vapi") != NULL)
+            {
+              g_ptr_array_add (ret, g_strdup (arg));
+            }
+        }
+    }
+
+  IDE_EXIT;
+}
+
 static gchar **
 ide_makecache_parse_line (IdeMakecache *self,
                           const gchar  *line,
@@ -844,6 +934,14 @@ ide_makecache_parse_line (IdeMakecache *self,
       gchar **strv;
 
       ide_makecache_parse_c_cxx (self, pos + strlen(FAKE_CC), relpath, subdir, ret);
+      strv = (gchar **)g_ptr_array_free (ret, FALSE);
+      IDE_RETURN (strv);
+    }
+  else if ((pos = strstr (line, FAKE_VALAC)))
+    {
+      gchar **strv;
+
+      ide_makecache_parse_valac (self, pos + strlen(FAKE_VALAC), relpath, subdir, ret);
       strv = (gchar **)g_ptr_array_free (ret, FALSE);
       IDE_RETURN (strv);
     }
@@ -888,6 +986,7 @@ ide_makecache_get_file_flags_worker (GTask        *task,
       GError *error = NULL;
       gchar **lines;
       gchar **ret = NULL;
+      gchar *tmp;
 
       if (g_cancellable_is_cancelled (cancellable))
         break;
@@ -920,6 +1019,7 @@ ide_makecache_get_file_flags_worker (GTask        *task,
       g_ptr_array_add (argv, "V=1");
       g_ptr_array_add (argv, "CC="FAKE_CC);
       g_ptr_array_add (argv, "CXX="FAKE_CXX);
+      g_ptr_array_add (argv, "VALAC="FAKE_VALAC);
       g_ptr_array_add (argv, NULL);
 
 #ifdef IDE_ENABLE_TRACE
@@ -948,6 +1048,16 @@ ide_makecache_get_file_flags_worker (GTask        *task,
         {
           g_task_return_error (task, error);
           IDE_EXIT;
+        }
+
+      /*
+       * Replace escaped newlines with " " to simplify command parsing
+       */
+      tmp = stdoutstr;
+      while (NULL != (tmp = strstr (tmp, "\\\n")))
+        {
+          tmp[0] = ' ';
+          tmp[1] = ' ';
         }
 
       lines = g_strsplit (stdoutstr, "\n", 0);
@@ -1011,13 +1121,40 @@ ide_makecache_set_makefile (IdeMakecache *self,
   g_set_object (&self->parent, parent);
 }
 
+static gchar *
+replace_suffix (const gchar *str,
+                const gchar *replace)
+{
+  const gchar *suffix;
+  GString *gs;
+
+  g_assert (str != NULL);
+  g_assert (replace != NULL);
+
+  /*
+   * In the common case, we could do this without GString.
+   * But probably not worth the effort.
+   */
+
+  if (NULL == (suffix = strrchr (str, '.')))
+    return g_strdup (str);
+
+  gs = g_string_new (NULL);
+  g_string_append_len (gs, str, suffix - str);
+  g_string_append_printf (gs, ".%s", replace);
+
+  return g_string_free (gs, FALSE);
+}
+
 static void
 ide_makecache_get_file_targets_worker (GTask        *task,
                                        gpointer      source_object,
                                        gpointer      task_data,
                                        GCancellable *cancellable)
 {
+  g_autofree gchar *translated = NULL;
   FileTargetsLookup *lookup = task_data;
+  const gchar *path;
   GPtrArray *ret;
 
   IDE_ENTRY;
@@ -1028,9 +1165,38 @@ ide_makecache_get_file_targets_worker (GTask        *task,
   g_assert (lookup->mapped != NULL);
   g_assert (lookup->path != NULL);
 
+  path = lookup->path;
+
+  /* Translate suffix to something we can find in a target */
+  if (g_str_has_suffix (path, ".vala"))
+    path = translated = replace_suffix (path, "c");
+
   /* we use an empty GPtrArray to get negative cache hits. a bit heavy handed? sure. */
-  if (!(ret = ide_makecache_get_file_targets_searched (lookup->mapped, lookup->path)))
+  if (!(ret = ide_makecache_get_file_targets_searched (lookup->mapped, path)))
     ret = g_ptr_array_new ();
+
+  /* If we had a vala file, we might need to translate the target */
+  if (translated != NULL)
+    {
+      guint i;
+
+      for (i = 0; i < ret->len; i++)
+        {
+          IdeMakecacheTarget *target = g_ptr_array_index (ret, i);
+          const gchar *name = ide_makecache_target_get_target (target);
+          const gchar *endptr;
+
+          if (NULL != (endptr = strchr (name, '-')))
+            {
+              GString *str = g_string_new (NULL);
+
+              g_string_append_len (str, name, endptr - name);
+              g_string_append (str, ".stamp");
+              ide_makecache_target_set_target (target, str->str);
+              g_string_free (str, TRUE);
+            }
+        }
+    }
 
   g_task_return_pointer (task, ret, (GDestroyNotify)g_ptr_array_unref);
 
