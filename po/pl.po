@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-04-03 22:28+0200\n"
-"PO-Revision-Date: 2016-04-03 22:29+0200\n"
+"POT-Creation-Date: 2016-04-17 15:22+0200\n"
+"PO-Revision-Date: 2016-04-17 15:23+0200\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <gnomepl@aviary.pl>\n"
 "Language: pl\n"
@@ -313,6 +313,7 @@ msgstr ""
 "Ciemny schemat kolorów dla programu Builder, używający palety kolorów Tango"
 
 #: ../data/style-schemes/builder.xml.h:1 ../libide/ide-application.c:413
+#: ../libide/ide-workbench.c:560
 #: ../libide/preferences/ide-preferences-builtin.c:113
 msgid "Builder"
 msgstr "Builder"
@@ -1160,6 +1161,11 @@ msgstr "Otwarcie pliku"
 msgid "Open"
 msgstr "Otwórz"
 
+#: ../libide/ide-workbench.c:558
+#, c-format
+msgid "%s - Builder"
+msgstr "%s — Builder"
+
 #: ../libide/preferences/ide-preferences-builtin.c:40
 msgid "Extensions"
 msgstr "Rozszerzenia"
@@ -1915,28 +1921,28 @@ msgstr "Wyświetlanie błędów i ostrzeżeń kompilatora Clang"
 msgid "clang diagnostics warnings errors"
 msgstr "clang diagnostyka ostrzeżenia błędy"
 
-#: ../plugins/clang/ide-clang-service.c:269
+#: ../plugins/clang/ide-clang-service.c:271
 msgid "Unknown failure"
 msgstr "Nieznane niepowodzenie"
 
-#: ../plugins/clang/ide-clang-service.c:273
+#: ../plugins/clang/ide-clang-service.c:275
 msgid "Clang crashed"
 msgstr "Awaria kompilatora Clang"
 
-#: ../plugins/clang/ide-clang-service.c:277
+#: ../plugins/clang/ide-clang-service.c:279
 msgid "Invalid arguments"
 msgstr "Nieprawidłowe parametry"
 
-#: ../plugins/clang/ide-clang-service.c:281
+#: ../plugins/clang/ide-clang-service.c:283
 msgid "AST read error"
 msgstr "Błąd odczytu AST"
 
-#: ../plugins/clang/ide-clang-service.c:293
+#: ../plugins/clang/ide-clang-service.c:295
 #, c-format
 msgid "Failed to create translation unit: %s"
 msgstr "Utworzenie jednostki tłumaczenia się nie powiodło: %s"
 
-#: ../plugins/clang/ide-clang-service.c:401
+#: ../plugins/clang/ide-clang-service.c:403
 msgid "File must be saved locally to parse."
 msgstr "Plik do przetworzenia musi być zapisany lokalnie."
 
