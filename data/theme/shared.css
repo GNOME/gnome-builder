@@ -199,3 +199,8 @@ perspectiveswitcher button {
   padding: 6px;
 }
 
+
+/* Workaround Adwaita adding borders we don't want */
+textview border.left {
+  background: none;
+}
