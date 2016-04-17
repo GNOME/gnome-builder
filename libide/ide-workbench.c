@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-workbench"
 
+#include <glib/gi18n.h>
+
 #include "ide-debug.h"
 #include "ide-genesis-perspective.h"
 #include "ide-greeter-perspective.h"
@@ -544,10 +546,27 @@ stablize_cb (gpointer data)
   return G_SOURCE_REMOVE;
 }
 
+static gboolean
+transform_title (GBinding     *binding,
+                 const GValue *from_value,
+                 GValue       *to_value,
+                 gpointer      user_data)
+{
+  const gchar *name = g_value_get_string (from_value);
+
+  if (name != NULL)
+    g_value_take_string (to_value, g_strdup_printf (_("%s - Builder"), name));
+  else
+    g_value_set_static_string (to_value, _("Builder"));
+
+  return TRUE;
+}
+
 void
 ide_workbench_set_context (IdeWorkbench *self,
                            IdeContext   *context)
 {
+  IdeProject *project;
   guint duration;
 
   g_return_if_fail (IDE_IS_WORKBENCH (self));
@@ -555,6 +574,12 @@ ide_workbench_set_context (IdeWorkbench *self,
   g_return_if_fail (self->context == NULL);
 
   g_set_object (&self->context, context);
+
+  project = ide_context_get_project (context);
+  g_object_bind_property_full (project, "name",
+                               self, "title",
+                               G_BINDING_SYNC_CREATE,
+                               transform_title, NULL, NULL, NULL);
 
   self->addins = peas_extension_set_new (peas_engine_get_default (),
                                          IDE_TYPE_WORKBENCH_ADDIN,
