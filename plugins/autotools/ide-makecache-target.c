@@ -98,6 +98,16 @@ ide_makecache_target_get_target (IdeMakecacheTarget *self)
   return self->target;
 }
 
+void
+ide_makecache_target_set_target (IdeMakecacheTarget *self,
+                                 const gchar        *target)
+{
+  g_assert (self);
+
+  g_free (self->target);
+  self->target = g_strdup (target);
+}
+
 guint
 ide_makecache_target_hash (gconstpointer data)
 {

@@ -34,6 +34,8 @@ IdeMakecacheTarget *ide_makecache_target_ref        (IdeMakecacheTarget *self);
 void                ide_makecache_target_unref      (IdeMakecacheTarget *self);
 const gchar        *ide_makecache_target_get_target (IdeMakecacheTarget *self);
 const gchar        *ide_makecache_target_get_subdir (IdeMakecacheTarget *self);
+void                ide_makecache_target_set_target (IdeMakecacheTarget *self,
+                                                     const gchar        *target);
 guint               ide_makecache_target_hash       (gconstpointer       data);
 gboolean            ide_makecache_target_equal      (gconstpointer       data1,
                                                      gconstpointer       data2);
