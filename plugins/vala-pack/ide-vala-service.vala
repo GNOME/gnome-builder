@@ -81,7 +81,7 @@ namespace Ide
 					load_directory (child, cancellable, files);
 				}
 			} catch (GLib.Error err) {
-				warning ("%s".printf (err.message));
+				warning ("%s", err.message);
 			}
 		}
 	}
