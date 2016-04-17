@@ -99,14 +99,6 @@ namespace Ide
 			this.code_context.add_external_package ("glib-2.0");
 			this.code_context.add_external_package ("gobject-2.0");
 
-			/* TODO: find packages from build system */
-			this.code_context.add_external_package ("gio-2.0");
-			this.code_context.add_external_package ("gtk+-3.0");
-			this.code_context.add_external_package ("gtksourceview-3.0");
-			this.code_context.add_external_package ("libide-1.0");
-			this.code_context.add_external_package ("libpeas-1.0");
-			this.code_context.add_external_package ("libvala-0.32");
-
 			this.report = new Ide.ValaDiagnostics ();
 			this.code_context.report = this.report;
 
@@ -120,6 +112,9 @@ namespace Ide
 
 		void add_file (GLib.File file)
 		{
+			if (this.source_files.contains (file))
+				return;
+
 			var path = file.get_path ();
 			if (path == null)
 				return;
@@ -146,6 +141,76 @@ namespace Ide
 			yield;
 		}
 
+		void load_build_flags (string[] flags)
+		{
+			var len = GLib.strv_length (flags);
+
+			lock (this.code_context) {
+				for (var i = 0; i < len; i++) {
+					string next_param = null;
+					string param = flags[i];
+
+					if (param.contains ("=")) {
+						var offset = param.index_of("=") + 1;
+						next_param = param.offset(offset);
+					} else if (i + 1 < len) {
+						next_param = flags[i + 1];
+					}
+
+					if (next_param != null) {
+						if (param.has_prefix("--pkg")) {
+							this.code_context.add_external_package(next_param);
+						} else if (param.has_prefix("--vapidir")) {
+							var dirs = this.code_context.vapi_directories;
+							dirs += next_param;
+							this.code_context.vapi_directories = dirs;
+						} else if (param.has_prefix("--vapi")) {
+							this.code_context.add_external_package(next_param);
+						} else if (param.has_prefix("--girdir")) {
+							var dirs = this.code_context.gir_directories;
+							dirs += next_param;
+							this.code_context.gir_directories = dirs;
+						} else if (param.has_prefix("--metadatadir")) {
+							var dirs = this.code_context.metadata_directories;
+							dirs += next_param;
+							this.code_context.metadata_directories = dirs;
+						} else if (param.has_prefix("--target-glib")) {
+							/* TODO: Parse glib version ~= 2.44 */
+						}
+
+						continue;
+					}
+					else if (param.has_suffix (".vapi")) {
+						if (!GLib.Path.is_absolute (param)) {
+							var vcs = this.context.get_vcs ();
+							var workdir = vcs.get_working_directory ();
+							var child = workdir.get_child(param);
+							this.add_file (child);
+						} else {
+							this.add_file (GLib.File.new_for_path (param));
+						}
+					}
+					else if (param == "--thread") {
+						this.code_context.thread = true;
+					}
+				}
+			}
+		}
+
+		async void update_build_flags (GLib.File file,
+		                               GLib.Cancellable? cancellable)
+		{
+			var ifile = new Ide.File (this.context, file);
+			var build_system = this.context.get_build_system ();
+
+			try {
+				var flags = yield build_system.get_build_flags_async (ifile, cancellable);
+				load_build_flags (flags);
+			} catch (GLib.Error err) {
+				warning ("%s", err.message);
+			}
+		}
+
 		public async bool parse_file (GLib.File file,
 		                              Ide.UnsavedFiles? unsaved_files,
 		                              GLib.Cancellable? cancellable)
@@ -156,6 +221,8 @@ namespace Ide
 			if (unsaved_files != null) {
 				unsaved_files_copy = unsaved_files.to_array ();
 			}
+
+			yield this.update_build_flags (file, cancellable);
 
 			Ide.ThreadPool.push (Ide.ThreadPoolKind.COMPILER, () => {
 				if ((cancellable == null) || !cancellable.is_cancelled ()) {
