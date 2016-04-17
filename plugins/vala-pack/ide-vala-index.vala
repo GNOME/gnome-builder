@@ -33,15 +33,20 @@ namespace Ide
 {
 	public class ValaIndex: GLib.Object
 	{
+		Ide.Context context;
 		Vala.CodeContext code_context;
 		Vala.Parser parser;
 		HashMap<GLib.File,Ide.ValaSourceFile> source_files;
 		Ide.ValaDiagnostics report;
 
-		public ValaIndex ()
+		public ValaIndex (Ide.Context context)
 		{
+			var vcs = context.get_vcs();
+			var workdir = vcs.get_working_directory();
+
 			this.source_files = new HashMap<GLib.File,Ide.ValaSourceFile> (GLib.File.hash, (GLib.EqualFunc)GLib.File.equal);
 
+			this.context = context;
 			this.code_context = new Vala.CodeContext ();
 
 			Vala.CodeContext.push (this.code_context);
@@ -65,7 +70,7 @@ namespace Ide
 			this.code_context.compile_only = true;
 			this.code_context.use_header = false;
 			this.code_context.includedir = null;
-			this.code_context.basedir = GLib.Environment.get_current_dir ();
+			this.code_context.basedir = workdir.get_path ();
 			this.code_context.directory = GLib.Environment.get_current_dir ();
 			this.code_context.debug = false;
 			this.code_context.thread = true;

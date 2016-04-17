@@ -27,7 +27,6 @@ namespace Ide
 		Ide.ValaIndex _index;
 
 		construct {
-			this._index = new Ide.ValaIndex ();
 		}
 
 		public ValaIndex index {
@@ -39,6 +38,8 @@ namespace Ide
 		}
 
 		public void start () {
+			this._index = new Ide.ValaIndex (this.get_context ());
+
 			Ide.ThreadPool.push (Ide.ThreadPoolKind.INDEXER, () => {
 				Ide.Vcs vcs = this.get_context ().get_vcs ();
 				var files = new ArrayList<GLib.File> ();
