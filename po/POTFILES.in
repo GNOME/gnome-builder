@@ -59,6 +59,7 @@ libide/ide-source-snippets-manager.c
 libide/ide-source-view.c
 libide/ide-uri.c
 libide/ide-workbench-actions.c
+libide/ide-workbench.c
 libide/preferences/ide-preferences-builtin.c
 libide/preferences/ide-preferences-perspective.c
 libide/pygobject/ide-pygobject-script.c
