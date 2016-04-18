@@ -225,6 +225,8 @@ ide_workbench_constructed (GObject *object)
 
   G_OBJECT_CLASS (ide_workbench_parent_class)->constructed (object);
 
+  gtk_application_window_set_show_menubar (GTK_APPLICATION_WINDOW (self), FALSE);
+
   ide_workbench_actions_init (self);
 }
 
