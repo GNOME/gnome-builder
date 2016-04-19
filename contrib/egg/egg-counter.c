@@ -580,11 +580,13 @@ _egg_counter_getcpu_vdso_helper (void)
 }
 #endif
 
+#ifndef HAVE_SCHED_GETCPU
 static guint
 _egg_counter_getcpu_fallback (void)
 {
   return 0;
 }
+#endif
 
 #ifdef EGG_HAVE_RDTSCP
 static guint
@@ -614,9 +616,9 @@ _egg_counter_init_getcpu (void)
 
 #ifdef HAVE_SCHED_GETCPU
   _egg_counter_getcpu_helper = (guint (*) (void))sched_getcpu;
-#endif
-
+#else
   _egg_counter_getcpu_helper = _egg_counter_getcpu_fallback;
+#endif
 }
 
 guint
