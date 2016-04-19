@@ -580,8 +580,8 @@ ide_uri_new_relative (IdeUri            *base_uri,
                       IdeUriParseFlags   flags,
                       GError           **error)
 {
+  g_autofree gchar *cleaned_uri_string = NULL;
   IdeUri *raw = NULL, *uri = NULL;
-  gchar *cleaned_uri_string = NULL;
   gchar *raw_port = NULL;
 
   if (base_uri && !base_uri->scheme)
@@ -606,8 +606,6 @@ ide_uri_new_relative (IdeUri            *base_uri,
   ide_uri_split (uri_string, (flags & IDE_URI_PARSE_STRICT) != 0,
                &raw->scheme, &raw->user, &raw->host, &raw_port,
                &raw->path, &raw->query, &raw->fragment);
-  if (cleaned_uri_string)
-    g_free (cleaned_uri_string);
 
   if (raw->scheme)
     uri->scheme = g_ascii_strdown (raw->scheme, -1);
