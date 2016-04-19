@@ -138,7 +138,7 @@ ide_preferences_bin_get_settings (IdePreferencesBin *self)
         return NULL;
 
       hash_key = g_strdup_printf ("%s|%s",
-                                  resolved_schema_id ?: "",
+                                  resolved_schema_id,
                                   resolved_path ?: "");
 
       if (!g_hash_table_contains (settings_cache, hash_key))
