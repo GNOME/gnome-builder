@@ -2170,8 +2170,10 @@ ide_source_view_do_mode (IdeSourceView *self,
         ret = TRUE;
     }
 
-  if (!priv->mode)
+  if (priv->mode == NULL)
     ide_source_view_real_set_mode (self, suggested_default, IDE_SOURCE_VIEW_MODE_TYPE_PERMANENT);
+
+  g_assert (priv->mode != NULL);
 
   if (ide_source_view_mode_get_mode_type (priv->mode) == IDE_SOURCE_VIEW_MODE_TYPE_PERMANENT)
     g_string_erase (priv->command_str, 0, -1);
