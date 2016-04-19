@@ -1184,14 +1184,25 @@ ide_makecache_get_file_targets_worker (GTask        *task,
         {
           IdeMakecacheTarget *target = g_ptr_array_index (ret, i);
           const gchar *name = ide_makecache_target_get_target (target);
+          const gchar *slash = strrchr (name, G_DIR_SEPARATOR);
           const gchar *endptr;
+
+          /* We might be using non-recursive automake, which means that the
+           * source is maybe in a subdirectory, but the target is in the
+           * current subdir (so no directory prefix).
+           */
+          if (slash != NULL)
+            name = slash + 1;
 
           if (NULL != (endptr = strchr (name, '-')))
             {
               GString *str = g_string_new (NULL);
 
               g_string_append_len (str, name, endptr - name);
-              g_string_append (str, ".stamp");
+              if (g_str_has_prefix (name, "lib"))
+                g_string_append (str, ".stamp");
+              else
+                g_string_append (str, "_vala.stamp");
               ide_makecache_target_set_target (target, str->str);
               g_string_free (str, TRUE);
             }
