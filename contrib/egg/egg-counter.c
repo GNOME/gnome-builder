@@ -555,8 +555,7 @@ _egg_counter_find_getcpu_in_vdso (void)
         {
           void *sym = NULL;
 
-          g_module_symbol (lib, sym_names [j], &sym);
-          if (!sym)
+          if (!g_module_symbol (lib, sym_names [j], &sym) || (sym == NULL))
             continue;
 
           return sym;
