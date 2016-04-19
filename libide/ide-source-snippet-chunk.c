@@ -125,9 +125,9 @@ ide_source_snippet_chunk_set_context (IdeSourceSnippetChunk   *chunk,
 
       g_clear_object (&chunk->context);
 
-      if (context)
+      if (context != NULL)
         {
-          chunk->context = context ? g_object_ref (context) : NULL;
+          chunk->context = g_object_ref (context);
           chunk->context_changed_handler =
             g_signal_connect_object (chunk->context,
                                      "changed",
