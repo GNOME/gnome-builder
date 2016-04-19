@@ -39,6 +39,7 @@
 
 G_DEFINE_BOXED_TYPE (EggCounterArena, egg_counter_arena, egg_counter_arena_ref, egg_counter_arena_unref)
 
+#define MAX_COUNTERS       2000
 #define NAME_FORMAT        "/EggCounters-%u"
 #define MAGIC              0x71167125
 #define COUNTER_MAX_SHM    (1024 * 1024 * 4)
@@ -298,6 +299,9 @@ _egg_counter_arena_init_remote (EggCounterArena *arena,
     goto failure;
 
   n_counters = header.n_counters;
+
+  if (n_counters > MAX_COUNTERS)
+    goto failure;
 
   if (header.size <
       CELLS_PER_HEADER + (((n_counters / COUNTERS_PER_GROUP) + 1) * CELLS_PER_GROUP(header.ncpu)))
