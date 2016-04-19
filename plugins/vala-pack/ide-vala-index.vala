@@ -141,11 +141,60 @@ namespace Ide
 			yield;
 		}
 
+		/* Caller is expected to hold code_context lock */
+		void add_vapidir_locked (string vapidir)
+		{
+			var dirs = this.code_context.vapi_directories;
+
+			foreach (var dir in dirs) {
+				if (dir == vapidir) {
+					return;
+				}
+			}
+
+			dirs += vapidir;
+			this.code_context.vapi_directories = dirs;
+		}
+
+		/* Caller is expected to hold code_context lock */
+		void add_girdir_locked (string girdir)
+		{
+			var dirs = this.code_context.gir_directories;
+
+			foreach (var dir in dirs) {
+				if (dir == girdir) {
+					return;
+				}
+			}
+
+			dirs += girdir;
+			this.code_context.gir_directories = dirs;
+		}
+
+		/* Caller is expected to hold code_context lock */
+		void add_metadatadir_locked (string metadata_dir)
+		{
+			var dirs = this.code_context.metadata_directories;
+
+			foreach (var dir in dirs) {
+				if (dir == metadata_dir) {
+					return;
+				}
+			}
+
+			dirs += metadata_dir;
+			this.code_context.metadata_directories = dirs;
+		}
+
 		void load_build_flags (string[] flags)
 		{
 			var len = GLib.strv_length (flags);
 
 			lock (this.code_context) {
+				Vala.CodeContext.push (this.code_context);
+
+				var packages = new ArrayList<string> ();
+
 				for (var i = 0; i < len; i++) {
 					string next_param = null;
 					string param = flags[i];
@@ -159,22 +208,16 @@ namespace Ide
 
 					if (next_param != null) {
 						if (param.has_prefix("--pkg")) {
-							this.code_context.add_external_package(next_param);
-						} else if (param.has_prefix("--vapidir")) {
-							var dirs = this.code_context.vapi_directories;
-							dirs += next_param;
-							this.code_context.vapi_directories = dirs;
-						} else if (param.has_prefix("--vapi")) {
-							this.code_context.add_external_package(next_param);
-						} else if (param.has_prefix("--girdir")) {
-							var dirs = this.code_context.gir_directories;
-							dirs += next_param;
-							this.code_context.gir_directories = dirs;
-						} else if (param.has_prefix("--metadatadir")) {
-							var dirs = this.code_context.metadata_directories;
-							dirs += next_param;
-							this.code_context.metadata_directories = dirs;
-						} else if (param.has_prefix("--target-glib")) {
+							packages.add (next_param);
+						} else if (param.has_prefix ("--vapidir")) {
+							this.add_vapidir_locked (next_param);
+						} else if (param.has_prefix ("--vapi")) {
+							packages.add (next_param);
+						} else if (param.has_prefix ("--girdir")) {
+							this.add_girdir_locked (next_param);
+						} else if (param.has_prefix ("--metadatadir")) {
+							this.add_metadatadir_locked (next_param);
+						} else if (param.has_prefix ("--target-glib")) {
 							/* TODO: Parse glib version ~= 2.44 */
 						}
 
@@ -184,7 +227,7 @@ namespace Ide
 						if (!GLib.Path.is_absolute (param)) {
 							var vcs = this.context.get_vcs ();
 							var workdir = vcs.get_working_directory ();
-							var child = workdir.get_child(param);
+							var child = workdir.get_child (param);
 							this.add_file (child);
 						} else {
 							this.add_file (GLib.File.new_for_path (param));
@@ -194,6 +237,13 @@ namespace Ide
 						this.code_context.thread = true;
 					}
 				}
+
+				/* Now add external packages after vapidir/girdir have been added */
+				foreach (var package in packages) {
+					this.code_context.add_external_package (package);
+				}
+
+				Vala.CodeContext.pop ();
 			}
 		}
 
