@@ -430,10 +430,10 @@ parse_host (const gchar       *raw_host,
 
   if (flags & IDE_URI_PARSE_NO_IRI)
     {
-      g_free (decoded);
       g_set_error (error, IDE_URI_ERROR, IDE_URI_ERROR_BAD_HOST,
                    _("Non-ASCII hostname '%s' forbidden in this URI"),
                    decoded);
+      g_free (decoded);
       return FALSE;
     }
 
