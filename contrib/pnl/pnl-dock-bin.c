@@ -749,6 +749,7 @@ pnl_dock_bin_child_size_allocate (PnlDockBin      *self,
         case PNL_DOCK_BIN_CHILD_LEFT:
           handle_alloc.x += handle_alloc.width - HANDLE_WIDTH;
           handle_alloc.width = HANDLE_WIDTH;
+          break;
 
         case PNL_DOCK_BIN_CHILD_RIGHT:
           handle_alloc.width = HANDLE_WIDTH;
