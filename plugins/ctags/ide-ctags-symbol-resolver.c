@@ -207,7 +207,6 @@ regex_worker (GTask        *task,
 {
   IdeCtagsSymbolResolver *self = source_object;
   LookupSymbol *lookup = task_data;
-  g_autoptr(GMappedFile) mapped = NULL;
   g_autoptr(GRegex) regex = NULL;
   g_autofree gchar *pattern = NULL;
   GMatchInfo *match_info = NULL;
@@ -228,8 +227,8 @@ regex_worker (GTask        *task,
           return;
         }
 
-      data = g_mapped_file_get_contents (mapped);
-      length = g_mapped_file_get_length (mapped);
+      data = g_mapped_file_get_contents (lookup->mapped);
+      length = g_mapped_file_get_length (lookup->mapped);
     }
   else
     {
