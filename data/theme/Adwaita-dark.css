@@ -51,14 +51,14 @@ layouttab:backdrop {
 }
 
 
-tabstrip {
+docktabstrip {
   background-color: #303535;
   box-shadow: 0 4px 3px -5px #2c3030 inset,
               0 -1px 0 #1c1f1f inset;
 }
-tabstrip:backdrop {
+docktabstrip:backdrop {
   box-shadow: 0 -1px 0 #2c3030 inset;
 }
-tabstrip tab:checked {
+docktabstrip docktab:checked {
   box-shadow: 0 -2px 0 #215d9c inset;
 }

@@ -154,7 +154,7 @@ pnl_tab_class_init (PnlTabClass *klass)
 
   widget_class->destroy = pnl_tab_destroy;
 
-  gtk_widget_class_set_css_name (widget_class, "tab");
+  gtk_widget_class_set_css_name (widget_class, "docktab");
 
   properties [PROP_EDGE] =
     g_param_spec_enum ("edge",
