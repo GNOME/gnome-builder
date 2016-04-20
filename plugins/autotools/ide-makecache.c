@@ -838,8 +838,6 @@ ide_makecache_parse_valac (IdeMakecache *self,
   g_auto(GStrv) argv = NULL;
   gint argc = 0;
 
-  IDE_ENTRY;
-
   g_assert (IDE_IS_MAKECACHE (self));
   g_assert (line != NULL);
   g_assert (relpath != NULL);
@@ -899,7 +897,7 @@ ide_makecache_parse_valac (IdeMakecache *self,
         }
     }
 
-  IDE_EXIT;
+  g_ptr_array_add (ret, NULL);
 }
 
 static gchar **
@@ -908,7 +906,7 @@ ide_makecache_parse_line (IdeMakecache *self,
                           const gchar  *relpath,
                           const gchar  *subdir)
 {
-  GPtrArray *ret = NULL;
+  GPtrArray *ret;
   const gchar *pos;
 
   IDE_ENTRY;
