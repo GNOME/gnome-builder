@@ -162,12 +162,14 @@ ide_makecache_discover_llvm_flags_worker (GTask        *task,
 
   if (!subprocess)
     {
+      g_assert (error != NULL);
       g_task_return_error (task, error);
       IDE_EXIT;
     }
 
   if (!g_subprocess_communicate_utf8 (subprocess, NULL, cancellable, &stdoutstr, NULL, &error))
     {
+      g_assert (error != NULL);
       g_task_return_error (task, error);
       IDE_EXIT;
     }
@@ -579,6 +581,7 @@ ide_makecache_new_worker (GTask        *task,
 
   if (fd == -1)
     {
+      g_assert (error != NULL);
       g_task_return_error (task, error);
       IDE_EXIT;
     }
@@ -612,6 +615,7 @@ ide_makecache_new_worker (GTask        *task,
 
   if (!subprocess)
     {
+      g_assert (error != NULL);
       g_task_return_error (task, error);
       close (fd);
       IDE_EXIT;
@@ -622,6 +626,7 @@ ide_makecache_new_worker (GTask        *task,
    */
   if (!g_subprocess_wait (subprocess, cancellable, &error))
     {
+      g_assert (error != NULL);
       g_task_return_error (task, error);
       close (fd);
       IDE_EXIT;
@@ -653,6 +658,7 @@ ide_makecache_new_worker (GTask        *task,
 
   if (!mapped)
     {
+      g_assert (error != NULL);
       g_task_return_error (task, error);
       close (fd);
       IDE_EXIT;
@@ -669,6 +675,7 @@ ide_makecache_new_worker (GTask        *task,
    */
   if (!ide_makecache_validate_mapped_file (mapped, &error))
     {
+      g_assert (error != NULL);
       g_task_return_error (task, error);
       IDE_EXIT;
     }
@@ -1038,12 +1045,14 @@ ide_makecache_get_file_flags_worker (GTask        *task,
 
       if (!subprocess)
         {
+          g_assert (error != NULL);
           g_task_return_error (task, error);
           IDE_EXIT;
         }
 
       if (!g_subprocess_communicate_utf8 (subprocess, NULL, cancellable, &stdoutstr, NULL, &error))
         {
+          g_assert (error != NULL);
           g_task_return_error (task, error);
           IDE_EXIT;
         }
@@ -1267,6 +1276,7 @@ ide_makecache_get_file_flags__get_targets_cb (GObject      *object,
 
   if (!(targets = ide_makecache_get_file_targets_finish (self, result, &error)))
     {
+      g_assert (error != NULL);
       g_task_return_error (task, error);
       IDE_EXIT;
     }
@@ -1552,7 +1562,10 @@ ide_makecache_get_file_targets__task_cache_get_cb (GObject      *object,
   GPtrArray *ret;
 
   if (!(ret = egg_task_cache_get_finish (cache, result, &error)))
-    g_task_return_error (task, error);
+    {
+      g_assert (error != NULL);
+      g_task_return_error (task, error);
+    }
   else
     g_task_return_pointer (task, ret, (GDestroyNotify)g_ptr_array_unref);
 }
@@ -1620,7 +1633,10 @@ ide_makecache_get_file_flags__task_cache_get_cb (GObject      *object,
   gchar **ret;
 
   if (!(ret = egg_task_cache_get_finish (cache, result, &error)))
-    g_task_return_error (task, error);
+    {
+      g_assert (error != NULL);
+      g_task_return_error (task, error);
+    }
   else
     g_task_return_pointer (task, ret, (GDestroyNotify)g_strfreev);
 }
