@@ -112,6 +112,8 @@ namespace Ide
 
 		void add_file (GLib.File file)
 		{
+			var type = Vala.SourceFileType.SOURCE;
+
 			if (this.source_files.contains (file))
 				return;
 
@@ -119,7 +121,10 @@ namespace Ide
 			if (path == null)
 				return;
 
-			var source_file = new Ide.ValaSourceFile (this.code_context, Vala.SourceFileType.SOURCE, path, null, false);
+			if (path.has_suffix ("vapi"))
+				type = Vala.SourceFileType.PACKAGE;
+
+			var source_file = new Ide.ValaSourceFile (this.code_context, type, path, null, false);
 			this.code_context.add_source_file (source_file);
 
 			this.source_files [file] = source_file;
