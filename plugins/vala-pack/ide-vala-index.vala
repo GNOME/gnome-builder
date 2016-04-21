@@ -282,6 +282,10 @@ namespace Ide
 						if (!this.source_files.contains (file))
 							this.add_file (file);
 
+						/* Ensure vala has loaded the contents */
+						var source_file = this.source_files[file];
+						source_file.get_mapped_contents ();
+
 						this.apply_unsaved_files (unsaved_files_copy);
 						this.report.clear ();
 						this.reparse ();
