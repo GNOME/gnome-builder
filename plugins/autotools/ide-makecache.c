@@ -1160,6 +1160,7 @@ ide_makecache_get_file_targets_worker (GTask        *task,
                                        GCancellable *cancellable)
 {
   g_autofree gchar *translated = NULL;
+  g_autofree gchar *base = NULL;
   FileTargetsLookup *lookup = task_data;
   const gchar *path;
   GPtrArray *ret;
@@ -1177,6 +1178,8 @@ ide_makecache_get_file_targets_worker (GTask        *task,
   /* Translate suffix to something we can find in a target */
   if (g_str_has_suffix (path, ".vala"))
     path = translated = replace_suffix (path, "c");
+
+  base = g_path_get_basename (path);
 
   /* we use an empty GPtrArray to get negative cache hits. a bit heavy handed? sure. */
   if (!(ret = ide_makecache_get_file_targets_searched (lookup->mapped, path)))
@@ -1201,6 +1204,21 @@ ide_makecache_get_file_targets_worker (GTask        *task,
           if (slash != NULL)
             name = slash + 1;
 
+          /*
+           * It we got a target that looks like "foo.lo" and the filename was
+           * "foo.vala", then they probably aren't using vala automake
+           * integration but we can likely still extract flags.
+           */
+          if ((NULL != (endptr = strrchr (name, '.'))) &&
+              (strcmp (endptr, ".lo") == 0) &&
+              (strncmp (name, base, endptr - name) == 0))
+            continue;
+
+          /*
+           * Follow the automake vala renaming rules the best I can decipher.
+           * Which seems to be that libraries get libfoo_la.stamp (ignoring
+           * the filename portion) but programs get program_foo.stamp.
+           */
           if (NULL != (endptr = strchr (name, '-')))
             {
               GString *str = g_string_new (NULL);
