@@ -32,6 +32,7 @@ struct _GbpCreateProjectTool
   gboolean   list_templates;
   gchar    **args;
   gchar     *template;
+  gchar     *language;
   GList     *project_templates;
 };
 
@@ -80,6 +81,7 @@ gbp_create_project_tool_finalize (GObject *object)
   g_list_foreach (self->project_templates, (GFunc)g_object_unref, NULL);
   g_clear_pointer (&self->project_templates, g_list_free);
   g_clear_pointer (&self->args, g_strfreev);
+  g_clear_pointer (&self->language, g_free);
   g_clear_pointer (&self->template, g_free);
 
   G_OBJECT_CLASS (gbp_create_project_tool_parent_class)->finalize (object);
@@ -130,6 +132,8 @@ gbp_create_project_tool_parse (GbpCreateProjectTool  *self,
       N_("List available templates") },
     { "template", 't', 0, G_OPTION_ARG_STRING, &self->template,
       N_("Project template to generate") },
+    { "language", 'g', 0, G_OPTION_ARG_STRING, &self->language,
+      N_("The target language (if supported)") },
     { NULL }
   };
 
@@ -325,6 +329,11 @@ gbp_create_project_tool_run_async (IdeApplicationTool  *tool,
   g_hash_table_insert (params,
                        g_strdup ("name"),
                        g_variant_ref_sink (g_variant_new_string (name)));
+
+  if (self->language != NULL)
+    g_hash_table_insert (params,
+                         g_strdup ("language"),
+                         g_variant_ref_sink (g_variant_new_string (self->language)));
 
   ide_project_template_expand_async (template,
                                      params,
