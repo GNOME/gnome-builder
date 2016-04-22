@@ -76,6 +76,9 @@ GLIB_GSETTINGS
 GOBJECT_INTROSPECTION_CHECK([1.42.0])
 {{end}}
 {{if enable_vala}}
+AM_PROG_VALAC([0.32])
+{{end}}
+{{if enable_vapi}}
 VAPIGEN_CHECK
 {{end}}
 
@@ -100,7 +103,9 @@ AC_CONFIG_FILES([
 	Makefile
 
 	src/Makefile
+{{if language == "c"}}
 	src/{{prefix}}-version.h
+{{end}}
 
 	data/Makefile
 	data/{{name}}-$API_VERSION.pc:data/{{name}}.pc.in

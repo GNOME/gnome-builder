@@ -1,5 +1,6 @@
 SUBDIRS = \
 	autotools \
+	autotools-templates \
 	build-tools \
 	clang \
 	command-bar \
@@ -19,7 +20,6 @@ SUBDIRS = \
 	html-preview \
 	jedi \
 	jhbuild \
-	library-template \
 	project-tree \
 	python-gi-imports-completion \
 	mingw \

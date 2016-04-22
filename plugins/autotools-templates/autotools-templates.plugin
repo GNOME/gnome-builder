@@ -1,6 +1,6 @@
 [Plugin]
-Name=Library Templates
-Description=Provides templates for creating libraries
+Name=Autotools Templates
+Description=Provides templates for creating autotools projects
 Authors=Christian Hergert <christian@hergert.me>
 Copyright=Copyright © 2016 Christian Hergert
 
@@ -8,4 +8,4 @@ Builtin=true
 Hidden=true
 
 Loader=python3
-Module=library_template
+Module=autotools_templates

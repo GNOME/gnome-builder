@@ -236,6 +236,7 @@ dnl ***********************************************************************
 dnl Check for supported plugins
 dnl ***********************************************************************
 m4_include([plugins/autotools/configure.ac])
+m4_include([plugins/autotools-templates/configure.ac])
 m4_include([plugins/build-tools/configure.ac])
 m4_include([plugins/c-pack/configure.ac])
 m4_include([plugins/clang/configure.ac])
@@ -255,7 +256,6 @@ m4_include([plugins/html-completion/configure.ac])
 m4_include([plugins/html-preview/configure.ac])
 m4_include([plugins/jedi/configure.ac])
 m4_include([plugins/jhbuild/configure.ac])
-m4_include([plugins/library-template/configure.ac])
 m4_include([plugins/mingw/configure.ac])
 m4_include([plugins/project-tree/configure.ac])
 m4_include([plugins/python-gi-imports-completion/configure.ac])
@@ -553,6 +553,6 @@ echo "  XML Language Pack .................... : ${enable_xml_pack_plugin}"
 echo ""
 echo " Templates"
 echo ""
-echo "  Library .............................. : ${enable_library_template_plugin}"
+echo "  Autotools ............................ : ${enable_autotools_templates}"
 echo ""
 
