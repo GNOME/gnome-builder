@@ -16,7 +16,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <alloca.h>
 #include <string.h>
 
 #include "egg-simple-label.h"
@@ -81,7 +80,7 @@ egg_simple_label_calculate_size (EggSimpleLabel *self)
 
   if (self->width_chars >= 0)
     {
-      gchar *str = alloca (self->width_chars);
+      gchar str[self->width_chars];
       memset (str, '9', self->width_chars);
       pango_layout_set_text (layout, str, self->width_chars);
     }
