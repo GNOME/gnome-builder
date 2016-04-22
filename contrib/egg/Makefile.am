@@ -26,6 +26,7 @@ headers_DATA = \
 	egg-settings-flag-action.h \
 	egg-settings-sandwich.h \
 	egg-signal-group.h \
+	egg-simple-label.h \
 	egg-simple-popover.h \
 	egg-slider.h \
 	egg-state-machine-action.h \
@@ -54,6 +55,7 @@ libegg_private_la_SOURCES = \
 	egg-settings-flag-action.c \
 	egg-settings-sandwich.c \
 	egg-signal-group.c \
+	egg-simple-label.c \
 	egg-simple-popover.c \
 	egg-slider.c \
 	egg-state-machine-action.c \
