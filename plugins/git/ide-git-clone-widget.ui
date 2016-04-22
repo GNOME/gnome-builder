@@ -60,6 +60,7 @@
                         <property name="visible">true</property>
                         <style>
                           <class name="linked"/>
+                          <class name="linked-on-right"/>
                         </style>
                         <child>
                           <object class="GtkFileChooserButton" id="clone_location_button">
@@ -69,9 +70,6 @@
                             <property name="spacing">6</property>
                             <property name="valign">baseline</property>
                             <property name="visible">true</property>
-                            <style>
-                              <class name="linked-on-right"/>
-                            </style>
                           </object>
                         </child>
                         <child>
