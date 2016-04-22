@@ -44,6 +44,11 @@ void          ide_widget_show_with_fade      (GtkWidget               *widget);
 IdeWorkbench *ide_widget_get_workbench       (GtkWidget               *widget);
 gpointer      ide_widget_find_child_typed    (GtkWidget               *widget,
                                               GType                    type);
+void          ide_gtk_text_buffer_remove_tag (GtkTextBuffer           *buffer,
+                                              GtkTextTag              *tag,
+                                              const GtkTextIter       *start,
+                                              const GtkTextIter       *end,
+                                              gboolean                 minimal_damage);
 
 G_END_DECLS
 

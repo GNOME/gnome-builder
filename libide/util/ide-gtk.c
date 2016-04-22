@@ -324,3 +324,56 @@ ide_widget_find_child_typed (GtkWidget *widget,
 
   return state.ret;
 }
+
+/**
+ * ide_gtk_text_buffer_remove_tag:
+ *
+ * Like gtk_text_buffer_remove_tag() but allows specifying that the tags
+ * should be removed one at a time to avoid over-damaging the views
+ * displaying @buffer.
+ */
+void
+ide_gtk_text_buffer_remove_tag (GtkTextBuffer     *buffer,
+                                GtkTextTag        *tag,
+                                const GtkTextIter *start,
+                                const GtkTextIter *end,
+                                gboolean           minimal_damage)
+{
+	GtkTextIter tag_begin;
+	GtkTextIter tag_end;
+
+  g_return_if_fail (GTK_IS_TEXT_BUFFER (buffer));
+  g_return_if_fail (GTK_IS_TEXT_TAG (tag));
+  g_return_if_fail (start != NULL);
+  g_return_if_fail (end != NULL);
+
+  if (!minimal_damage)
+    {
+      gtk_text_buffer_remove_tag (buffer, tag, start, end);
+      return;
+    }
+
+  tag_begin = *start;
+
+  if (!gtk_text_iter_starts_tag (&tag_begin, tag))
+    {
+      if (!gtk_text_iter_forward_to_tag_toggle (&tag_begin, tag))
+        return;
+    }
+
+  tag_end = tag_begin;
+
+  while (gtk_text_iter_compare (&tag_begin, end) < 0)
+    {
+      if (!gtk_text_iter_forward_to_tag_toggle (&tag_end, tag))
+        return;
+
+      gtk_text_iter_forward_char (&tag_end);
+      gtk_text_buffer_remove_tag (buffer, tag, &tag_begin, &tag_end);
+
+      tag_begin = tag_end;
+
+      if (!gtk_text_iter_forward_to_tag_toggle (&tag_begin, tag))
+        return;
+    }
+}
