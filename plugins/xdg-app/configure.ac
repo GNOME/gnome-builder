@@ -20,5 +20,5 @@ AS_IF([test "$enable_xdg_app_plugin" != no],[
 	enable_xdg_app_plugin=$have_xdg_app
 ])
 
-AM_CONDITIONAL(ENABLE_XDG_APP_PLUGIN, test x$enable_xdg_app_plugin = xyes)
+AM_CONDITIONAL(ENABLE_XDG_APP_PLUGIN, [test "x$enable_xdg_app_plugin" = "xyes"])
 AC_CONFIG_FILES([plugins/xdg-app/Makefile])
