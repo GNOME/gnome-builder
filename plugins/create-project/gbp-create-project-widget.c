@@ -17,6 +17,7 @@
  */
 
 #include <libpeas/peas.h>
+#include <stdlib.h>
 
 #include "ide-macros.h"
 #include "gbp-create-project-template-icon.h"
@@ -47,23 +48,34 @@ static void
 gbp_create_project_widget_add_languages (GbpCreateProjectWidget *self,
                                          GList                  *project_templates)
 {
+  g_autoptr(GHashTable) languages = NULL;
   const GList *iter;
+  const gchar **keys;
+  guint len;
+  guint i;
 
   g_assert (GBP_IS_CREATE_PROJECT_WIDGET (self));
+
+  languages = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
 
   for (iter = project_templates; iter != NULL; iter = iter->next)
     {
       IdeProjectTemplate *template = iter->data;
       g_auto(GStrv) template_languages = NULL;
-      gint i;
 
       g_assert (IDE_IS_PROJECT_TEMPLATE (template));
 
       template_languages = ide_project_template_get_languages (template);
 
       for (i = 0; template_languages [i]; i++)
-        gtk_combo_box_text_append (self->project_language_chooser, NULL, template_languages [i]);
+        g_hash_table_add (languages, g_strdup (template_languages [i]));
     }
+
+  keys = (const gchar **)g_hash_table_get_keys_as_array (languages, &len);
+  qsort (keys, len, sizeof (gchar *), (GCompareFunc)g_utf8_collate);
+  for (i = 0; keys [i]; i++)
+    gtk_combo_box_text_append (self->project_language_chooser, NULL, keys [i]);
+  g_free (keys);
 }
 
 static gboolean
@@ -239,6 +251,8 @@ gbp_create_project_widget_constructed (GObject *object)
   g_clear_object (&extensions);
 
   G_OBJECT_CLASS (gbp_create_project_widget_parent_class)->constructed (object);
+
+  gtk_combo_box_set_active (GTK_COMBO_BOX (self->project_language_chooser), 0);
 }
 
 static void
