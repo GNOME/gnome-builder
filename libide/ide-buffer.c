@@ -34,6 +34,7 @@
 #include "ide-extension-adapter.h"
 #include "ide-file.h"
 #include "ide-file-settings.h"
+#include "ide-gtk.h"
 #include "ide-highlighter.h"
 #include "ide-highlight-engine.h"
 #include "ide-internal.h"
@@ -260,6 +261,8 @@ ide_buffer_clear_diagnostics (IdeBuffer *self)
 {
   IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
   GtkTextBuffer *buffer = (GtkTextBuffer *)self;
+  GtkTextTagTable *table;
+  GtkTextTag *tag;
   GtkTextIter begin;
   GtkTextIter end;
 
@@ -270,10 +273,19 @@ ide_buffer_clear_diagnostics (IdeBuffer *self)
 
   gtk_text_buffer_get_bounds (buffer, &begin, &end);
 
-  gtk_text_buffer_remove_tag_by_name (buffer, TAG_NOTE, &begin, &end);
-  gtk_text_buffer_remove_tag_by_name (buffer, TAG_WARNING, &begin, &end);
-  gtk_text_buffer_remove_tag_by_name (buffer, TAG_DEPRECATED, &begin, &end);
-  gtk_text_buffer_remove_tag_by_name (buffer, TAG_ERROR, &begin, &end);
+  table = gtk_text_buffer_get_tag_table (buffer);
+
+  if (NULL != (tag = gtk_text_tag_table_lookup (table, TAG_NOTE)))
+    ide_gtk_text_buffer_remove_tag (buffer, tag, &begin, &end, TRUE);
+
+  if (NULL != (tag = gtk_text_tag_table_lookup (table, TAG_WARNING)))
+    ide_gtk_text_buffer_remove_tag (buffer, tag, &begin, &end, TRUE);
+
+  if (NULL != (tag = gtk_text_tag_table_lookup (table, TAG_DEPRECATED)))
+    ide_gtk_text_buffer_remove_tag (buffer, tag, &begin, &end, TRUE);
+
+  if (NULL != (tag = gtk_text_tag_table_lookup (table, TAG_ERROR)))
+    ide_gtk_text_buffer_remove_tag (buffer, tag, &begin, &end, TRUE);
 }
 
 static void
