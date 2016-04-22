@@ -453,12 +453,12 @@ gbp_create_project_widget_create_async (GbpCreateProjectWidget *self,
                        g_variant_ref_sink (g_variant_new_string (g_strdelimit (name, " ", '-'))));
 
   child_name = gtk_entry_get_text (self->project_location_entry);
-  location = gtk_file_chooser_get_current_folder (GTK_FILE_CHOOSER (self->project_location_button));
+  location = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (self->project_location_button));
 
   if (!ide_str_empty0 (child_name))
     path = g_build_filename (location, child_name, NULL);
   else
-    path = g_strdup (location);
+    path = g_steal_pointer (&location);
 
   g_hash_table_insert (params,
                        g_strdup ("path"),
