@@ -361,19 +361,46 @@ ide_gtk_text_buffer_remove_tag (GtkTextBuffer     *buffer,
         return;
     }
 
-  tag_end = tag_begin;
-
-  while (gtk_text_iter_compare (&tag_begin, end) < 0)
+  while (gtk_text_iter_starts_tag (&tag_begin, tag) &&
+         gtk_text_iter_compare (&tag_begin, end) < 0)
     {
-      if (!gtk_text_iter_forward_to_tag_toggle (&tag_end, tag))
-        return;
+      gint count = 1;
 
-      gtk_text_iter_forward_char (&tag_end);
-      gtk_text_buffer_remove_tag (buffer, tag, &tag_begin, &tag_end);
+      tag_end = tag_begin;
+
+      /*
+       * We might have found the start of another tag embedded
+       * inside this tag. So keep scanning forward until we have
+       * reached the right number of end tags.
+       */
+
+      while (gtk_text_iter_forward_to_tag_toggle (&tag_end, tag))
+        {
+          if (gtk_text_iter_starts_tag (&tag_end, tag))
+            count++;
+          else if (gtk_text_iter_ends_tag (&tag_end, tag))
+            count--;
+
+          if (count == 0)
+            break;
+        }
+
+      if (gtk_text_iter_ends_tag (&tag_end, tag))
+        gtk_text_buffer_remove_tag (buffer, tag, &tag_begin, &tag_end);
 
       tag_begin = tag_end;
 
-      if (!gtk_text_iter_forward_to_tag_toggle (&tag_begin, tag))
-        return;
+      /*
+       * Move to the next start tag. It's possible to have an overlapped
+       * end tag, which would be non-ideal, but possible.
+       */
+      if (!gtk_text_iter_starts_tag (&tag_begin, tag))
+        {
+          while (gtk_text_iter_forward_to_tag_toggle (&tag_begin, tag))
+            {
+              if (gtk_text_iter_starts_tag (&tag_begin, tag))
+                break;
+            }
+        }
     }
 }
