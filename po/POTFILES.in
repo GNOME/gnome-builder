@@ -69,6 +69,7 @@ plugins/autotools/ide-autotools-builder.c
 plugins/autotools/ide-autotools-build-system.c
 plugins/autotools/ide-autotools-build-task.c
 plugins/autotools/ide-makecache.c
+plugins/autotools-templates/autotools_templates/__init__.py
 [type: gettext/glade]plugins/build-tools/gbp-build-configuration-view.ui
 plugins/build-tools/gbp-build-log-panel.c
 plugins/build-tools/gbp-build-panel.c
@@ -106,7 +107,6 @@ plugins/gnome-code-assistance/ide-gca-preferences-addin.c
 plugins/gnome-code-assistance/ide-gca-service.c
 [type: gettext/glade]plugins/html-preview/html_preview_plugin/gtk/menus.ui
 plugins/jedi/jedi_plugin.py
-plugins/library-template/library_template/__init__.py
 plugins/mingw/ide-mingw-device-provider.c
 plugins/project-tree/gb-new-file-popover.c
 [type: gettext/glade]plugins/project-tree/gb-new-file-popover.ui
