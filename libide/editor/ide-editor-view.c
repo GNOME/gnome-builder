@@ -291,7 +291,7 @@ ide_editor_view__buffer_cursor_moved (IdeEditorView     *self,
 {
   GtkTextIter bounds;
   GtkTextMark *mark;
-  gchar *str;
+  gchar str[32];
   guint line;
   gint column;
   gint column2;
@@ -305,24 +305,30 @@ ide_editor_view__buffer_cursor_moved (IdeEditorView     *self,
   mark = gtk_text_buffer_get_selection_bound (buffer);
   gtk_text_buffer_get_iter_at_mark (buffer, &bounds, mark);
 
+  g_snprintf (str, sizeof str, "%d", line + 1);
+  egg_simple_label_set_label (self->line_label, str);
+
+  g_snprintf (str, sizeof str, "%d", column + 1);
+  egg_simple_label_set_label (self->column_label, str);
+
   if (!gtk_widget_has_focus (GTK_WIDGET (self->frame1->source_view)) ||
       gtk_text_iter_equal (&bounds, iter) ||
       (gtk_text_iter_get_line (iter) != gtk_text_iter_get_line (&bounds)))
     {
-      str = g_strdup_printf ("%d:%d", line + 1, column + 1);
-      gtk_label_set_text (self->cursor_label, str);
-      g_free (str);
+      gtk_widget_set_visible (GTK_WIDGET (self->range_label), FALSE);
       return;
     }
 
   /* We have a selection that is on the same line.
    * Lets give some detail as to how long the selection is.
    */
-  column2 = gtk_source_view_get_visual_column (GTK_SOURCE_VIEW (self->frame1->source_view),
-                                               &bounds);
-  str = g_strdup_printf ("%d:%d (%d)", line + 1, column + 1, ABS (column2 - column));
-  gtk_label_set_text (self->cursor_label, str);
-  g_free (str);
+  column2 = gtk_source_view_get_visual_column (
+      GTK_SOURCE_VIEW (self->frame1->source_view),
+      &bounds);
+
+  g_snprintf (str, sizeof str, "%d", ABS (column2 - column));
+  gtk_label_set_label (self->range_label, str);
+  gtk_widget_set_visible (GTK_WIDGET (self->range_label), TRUE);
 }
 
 static void
@@ -910,16 +916,18 @@ ide_editor_view_class_init (IdeEditorViewClass *klass)
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/ui/ide-editor-view.ui");
 
-  gtk_widget_class_bind_template_child (widget_class, IdeEditorView, cursor_label);
+  gtk_widget_class_bind_template_child (widget_class, IdeEditorView, column_label);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorView, frame1);
+  gtk_widget_class_bind_template_child (widget_class, IdeEditorView, goto_line_button);
+  gtk_widget_class_bind_template_child (widget_class, IdeEditorView, goto_line_popover);
+  gtk_widget_class_bind_template_child (widget_class, IdeEditorView, line_label);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorView, modified_cancel_button);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorView, modified_revealer);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorView, paned);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorView, progress_bar);
+  gtk_widget_class_bind_template_child (widget_class, IdeEditorView, range_label);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorView, tweak_button);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorView, tweak_widget);
-  gtk_widget_class_bind_template_child (widget_class, IdeEditorView, goto_line_button);
-  gtk_widget_class_bind_template_child (widget_class, IdeEditorView, goto_line_popover);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorView, warning_button);
 
   g_type_ensure (IDE_TYPE_EDITOR_FRAME);

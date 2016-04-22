@@ -22,6 +22,7 @@
 #include <libpeas/peas.h>
 #include <gtk/gtk.h>
 
+#include "egg-simple-label.h"
 #include "egg-simple-popover.h"
 
 #include "ide-buffer.h"
@@ -40,7 +41,9 @@ struct _IdeEditorView
   GSettings            *settings;
   gchar                *title;
 
-  GtkLabel             *cursor_label;
+  EggSimpleLabel       *line_label;
+  EggSimpleLabel       *column_label;
+  GtkLabel             *range_label;
   IdeEditorFrame       *frame1;
   IdeEditorFrame       *frame2;
   IdeEditorFrame       *last_focused_frame;
