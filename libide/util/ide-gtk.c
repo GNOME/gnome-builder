@@ -339,8 +339,8 @@ ide_gtk_text_buffer_remove_tag (GtkTextBuffer     *buffer,
                                 const GtkTextIter *end,
                                 gboolean           minimal_damage)
 {
-	GtkTextIter tag_begin;
-	GtkTextIter tag_end;
+  GtkTextIter tag_begin;
+  GtkTextIter tag_end;
 
   g_return_if_fail (GTK_IS_TEXT_BUFFER (buffer));
   g_return_if_fail (GTK_IS_TEXT_TAG (tag));
