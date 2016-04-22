@@ -39,12 +39,14 @@ gi.require_version('Gtk', '3.0')
 gi.require_version('GtkSource', '3.0')
 gi.require_version('Ide', '1.0')
 
+from collections import OrderedDict
 from gettext import gettext as _
 
 from gi.importer import DynamicImporter
 from gi.module import IntrospectionModule
 from gi.module import FunctionInfo
 
+from gi.repository import GIRepository
 from gi.repository import Gio
 from gi.repository import GLib
 from gi.repository import GObject
@@ -173,6 +175,58 @@ except ImportError:
     print("jedi not found, python auto-completion not possible.")
     HAS_JEDI = False
 
+GIR_PATH_LIST = []
+
+def init_gir_path_list():
+    global GIR_PATH_LIST
+    paths = OrderedDict()
+
+    # Use GI_TYPELIB_PATH and the search path used by gobject-introspection
+    # to guess the correct path of gir files. It is likely that gir files and
+    # typelib files are installed in the same prefix.
+    search_path = GIRepository.Repository.get_default().get_search_path()
+    if 'GI_TYPELIB_PATH' in os.environ:
+        search_path = os.environ['GI_TYPELIB_PATH'].split(':') + search_path
+
+    for typelib_path in search_path:
+        # Check whether the path is end with lib*/girepository-1.0. If
+        # not, it is likely to be a custom path used for testing that
+        # we should not use.
+        typelib_path = os.path.normpath(typelib_path)
+        typelib_basename = os.path.basename(typelib_path)
+        if typelib_basename != 'girepository-1.0':
+            continue
+
+        path_has_lib = False
+        gir_path, gir_basename = typelib_path, typelib_basename
+        while gir_basename != '':
+            gir_path = os.path.normpath(os.path.join(gir_path, os.path.pardir))
+            gir_basename = os.path.basename(gir_path)
+            if gir_basename.startswith('lib'):
+                path_has_lib = True
+                break
+
+        if not path_has_lib:
+            continue
+        # Replace lib component with share.
+        gir_path = os.path.normpath(os.path.join(gir_path, os.path.pardir,
+            'share', os.path.relpath(typelib_path, gir_path)))
+        # Replace girepository-1.0 component with gir-1.0.
+        gir_path = os.path.normpath(os.path.join(gir_path, os.path.pardir,
+            'gir-1.0'))
+        paths[gir_path] = None
+
+    # It is also possible for XDG_DATA_DIRS to contain a list of prefixes.
+    if 'XDG_DATA_DIRS' in os.environ:
+        for xdg_data_path in os.environ['XDG_DATA_DIRS'].split(':'):
+            gir_path = os.path.normpath(os.path.join(
+                xdg_data_path, 'gir-1.0'))
+            paths[gir_path] = None
+
+    # Ignore non-existent directories to prevent exceptions.
+    GIR_PATH_LIST = list(filter(os.path.isdir, paths.keys()))
+
+init_gir_path_list()
 
 class DocumentationDB(object):
     def __init__(self):
@@ -215,45 +269,49 @@ class DocumentationDB(object):
         "Build the documentation DB and ensure it's up to date"
         if not HAS_LXML:
             return  # Can't process the gir files without lxml
-        gir_path = '/usr/share/gir-1.0'
         ns = {'core': 'http://www.gtk.org/introspection/core/1.0',
               'c': 'http://www.gtk.org/introspection/c/1.0'}
         self.open()
         cursor = self.cursor
+        processed_gir_files = {}
 
         # I would use scandir for better performance, but it requires newer Python
-        for gir_file in os.listdir(gir_path):
-            filename = os.path.join(gir_path, gir_file)
-            mtime = os.stat(filename).st_mtime
-            cursor.execute('SELECT * from girfiles WHERE file=?', (filename,))
-            result = cursor.fetchone()
-            if result is None:
-                cursor.execute('INSERT INTO girfiles VALUES (?, ?)', (filename, mtime))
-            else:
-                if result[1] >= mtime:
+        for gir_path in GIR_PATH_LIST:
+            for gir_file in os.listdir(gir_path):
+                if gir_file in processed_gir_files:
                     continue
+                processed_gir_files[gir_file] = None
+                filename = os.path.join(gir_path, gir_file)
+                mtime = os.stat(filename).st_mtime
+                cursor.execute('SELECT * from girfiles WHERE file=?', (filename,))
+                result = cursor.fetchone()
+                if result is None:
+                    cursor.execute('INSERT INTO girfiles VALUES (?, ?)', (filename, mtime))
                 else:
-                    # updated
-                    cursor.execute('DELETE FROM doc WHERE gir_file=?', (filename,))
-                    cursor.execute('UPDATE girfiles SET last_modified=? WHERE file=?', (mtime, filename))
-            parser = lxml.etree.XMLParser(recover=True)
-            tree = lxml.etree.parse(filename, parser=parser)
-            namespace = tree.find('core:namespace', namespaces=ns)
-            library_version = namespace.attrib['version']
-            for node in namespace.findall('core:class', namespaces=ns):
-                doc = node.find('core:doc', namespaces=ns)
-                if doc is not None:
-                    symbol = node.attrib['{http://www.gtk.org/introspection/glib/1.0}type-name']
-                    cursor.execute("INSERT INTO doc VALUES (?, ?, ?, ?)",
-                                   (symbol, library_version, doc.text, filename))
-            for method in namespace.findall('core:method', namespaces=ns) + \
-                          namespace.findall('core:constructor', namespaces=ns) + \
-                          namespace.findall('core:function', namespaces=ns):
-                doc = method.find('core:doc', namespaces=ns)
-                if doc is not None:
-                    symbol = method.attrib['{http://www.gtk.org/introspection/c/1.0}identifier']
-                    cursor.execute("INSERT INTO doc VALUES (?, ?, ?, ?)",
-                                   (symbol, library_version, doc.text, filename))
+                    if result[1] >= mtime:
+                        continue
+                    else:
+                        # updated
+                        cursor.execute('DELETE FROM doc WHERE gir_file=?', (filename,))
+                        cursor.execute('UPDATE girfiles SET last_modified=? WHERE file=?', (mtime, filename))
+                parser = lxml.etree.XMLParser(recover=True)
+                tree = lxml.etree.parse(filename, parser=parser)
+                namespace = tree.find('core:namespace', namespaces=ns)
+                library_version = namespace.attrib['version']
+                for node in namespace.findall('core:class', namespaces=ns):
+                    doc = node.find('core:doc', namespaces=ns)
+                    if doc is not None:
+                        symbol = node.attrib['{http://www.gtk.org/introspection/glib/1.0}type-name']
+                        cursor.execute("INSERT INTO doc VALUES (?, ?, ?, ?)",
+                                       (symbol, library_version, doc.text, filename))
+                for method in namespace.findall('core:method', namespaces=ns) + \
+                              namespace.findall('core:constructor', namespaces=ns) + \
+                              namespace.findall('core:function', namespaces=ns):
+                    doc = method.find('core:doc', namespaces=ns)
+                    if doc is not None:
+                        symbol = method.attrib['{http://www.gtk.org/introspection/c/1.0}identifier']
+                        cursor.execute("INSERT INTO doc VALUES (?, ?, ?, ?)",
+                                       (symbol, library_version, doc.text, filename))
         self.db.commit()
         if close_when_done:
             self.close()
