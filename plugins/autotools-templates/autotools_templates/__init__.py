@@ -42,7 +42,7 @@ def get_module_data_path(name):
 
 class LibraryTemplateProvider(GObject.Object, Ide.TemplateProvider):
     def do_get_project_templates(self):
-        return [LibraryProjectTemplate()]
+        return [LibraryProjectTemplate(), EmptyProjectTemplate()]
 
 class AutotoolsTemplate(Ide.TemplateBase, Ide.ProjectTemplate):
     def __init__(self, id, name, icon_name, description, languages):
@@ -207,4 +207,14 @@ class LibraryProjectTemplate(AutotoolsTemplate):
             files['resources/src/Makefile.shared-library-vala'] = 'src/Makefile.am'
             files['resources/src/package.vala'] = 'src/%(prefix)s.vala'
 
+
+class EmptyProjectTemplate(AutotoolsTemplate):
+    def __init__(self):
+        super().__init__(
+            'empty',
+            _("Empty Project"),
+            'application-x-executable-symbolic',
+            _("Create a new empty autotools project"),
+            ['C', 'Vala']
+         )
 
