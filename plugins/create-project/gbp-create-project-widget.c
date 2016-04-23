@@ -44,6 +44,16 @@ static GParamSpec *properties [N_PROPS];
 
 G_DEFINE_TYPE (GbpCreateProjectWidget, gbp_create_project_widget, GTK_TYPE_BIN)
 
+static int
+sort_by_name (gconstpointer a,
+              gconstpointer b)
+{
+  const gchar * const *astr = a;
+  const gchar * const *bstr = b;
+
+  return g_utf8_collate (*astr, *bstr);
+}
+
 static void
 gbp_create_project_widget_add_languages (GbpCreateProjectWidget *self,
                                          GList                  *project_templates)
@@ -72,7 +82,7 @@ gbp_create_project_widget_add_languages (GbpCreateProjectWidget *self,
     }
 
   keys = (const gchar **)g_hash_table_get_keys_as_array (languages, &len);
-  qsort (keys, len, sizeof (gchar *), (GCompareFunc)g_utf8_collate);
+  qsort (keys, len, sizeof (gchar *), sort_by_name);
   for (i = 0; keys [i]; i++)
     gtk_combo_box_text_append (self->project_language_chooser, NULL, keys [i]);
   g_free (keys);
