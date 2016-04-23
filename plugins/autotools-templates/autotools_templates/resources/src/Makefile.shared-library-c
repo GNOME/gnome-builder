@@ -5,10 +5,17 @@ lib{{name_}}_@API_VERSION@_la_SOURCES = \
 	{{name}}.h \
 	$(NULL)
 
+{{if enable_cplusplus}}
+lib{{name_}}_@API_VERSION@_la_CXXFLAGS = \
+	$({{NAME}}_CFLAGS) \
+	$(WARN_CFLAGS) \
+	$(NULL)
+{{else}}
 lib{{name_}}_@API_VERSION@_la_CFLAGS = \
 	$({{NAME}}_CFLAGS) \
 	$(WARN_CFLAGS) \
 	$(NULL)
+{{end}}
 
 lib{{name_}}_@API_VERSION@_la_LIBADD = \
 	$({{NAME}}_LIBS) \

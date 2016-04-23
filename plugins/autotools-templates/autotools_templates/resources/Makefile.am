@@ -3,7 +3,9 @@ SUBDIRS = \
 {{if enable_i18n}}
 	po \
 {{end}}
+{{if template != "empty"}}
 	src \
+{{end}}
 	$(NULL)
 
 EXTRA_DIST = AUTHORS

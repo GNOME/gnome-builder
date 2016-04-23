@@ -82,13 +82,15 @@ class AutotoolsTemplate(Ide.TemplateBase, Ide.ProjectTemplate):
         if 'language' in params:
             self.language = params['language'].get_string().lower()
 
-        if self.language not in ('c', 'vala'):
+        if self.language not in ('c', 'c++', 'vala'):
             task.return_error(GLib.Error("Language %s not supported" % self.language))
             return
 
         directory = Gio.File.new_for_path(dir_path)
 
         scope = Template.Scope.new()
+
+        scope.get('template').assign_string(self.id)
 
         prefix = name if not name.endswith('-glib') else name[:-5]
         PREFIX = prefix.upper().replace('-','_')
@@ -107,6 +109,8 @@ class AutotoolsTemplate(Ide.TemplateBase, Ide.ProjectTemplate):
         scope.get('major_version').assign_string('0')
         scope.get('minor_version').assign_string('1')
         scope.get('micro_version').assign_string('0')
+        scope.get('enable_c').assign_boolean(True)
+        scope.get('enable_cplusplus').assign_boolean(self.language == 'c++')
         scope.get('enable_i18n').assign_boolean(True)
         scope.get('enable_gtk_doc').assign_boolean(False)
         scope.get('enable_gobject_introspection').assign_boolean(True)
@@ -139,6 +143,7 @@ class AutotoolsTemplate(Ide.TemplateBase, Ide.ProjectTemplate):
             'resources/m4/ax_check_compile_flag.m4':    'm4/ax_check_compile_flag.m4',
             'resources/m4/ax_check_link_flag.m4':       'm4/ax_check_link_flag.m4',
             'resources/m4/ax_compiler_vendor.m4':       'm4/ax_compiler_vendor.m4',
+            'resources/m4/ax_compiler_flags_cxxflags.m4':'m4/ax_compiler_flags_cxxflags.m4',
             'resources/m4/ax_cxx_compile_stdcxx_11.m4': 'm4/ax_cxx_compile_stdcxx_11.m4',
             'resources/m4/ax_require_defined.m4':       'm4/ax_require_defined.m4',
             'resources/m4/glib-gettext.m4':             'm4/glib-gettext.m4',
@@ -150,7 +155,6 @@ class AutotoolsTemplate(Ide.TemplateBase, Ide.ProjectTemplate):
             'resources/m4/vala.m4':                     'm4/vala.m4',
             'resources/m4/vapigen.m4':                  'm4/vapigen.m4',
 
-            'resources/data/package.pc.in':             'data/%(name)s.pc.in',
             'resources/data/Makefile.am':               'data/Makefile.am',
             'resources/po/Makevars':                    'po/Makevars',
             'resources/po/POTFILES.in':                 'po/POTFILES.in',
@@ -176,7 +180,7 @@ class AutotoolsTemplate(Ide.TemplateBase, Ide.ProjectTemplate):
             task.return_boolean(True)
         except Exception as exc:
             print(exc)
-            task.return_error(GLib.Error(exc))
+            task.return_error(GLib.Error(repr(exc)))
 
     def prepare_scope(self, scope):
         pass
@@ -194,16 +198,18 @@ class LibraryProjectTemplate(AutotoolsTemplate):
             _("Shared Library"),
             'application-x-executable-symbolic',
             _("Create a new autotools project with a shared library"),
-            ['C', 'Vala']
+            ['C', 'C++', 'Vala']
          )
 
     def prepare_files(self, files):
-        if self.language == 'c':
+        files['resources/data/package.pc.in'] = 'data/%(name)s.pc.in'
+
+        if self.language in ('c', 'c++'):
             files['resources/src/Makefile.shared-library-c'] = 'src/Makefile.am'
             files['resources/src/package.h'] = 'src/%(name)s.h'
             files['resources/src/package-version.h.in'] = 'src/%(prefix)s-version.h.in'
 
-        if self.language == 'vala':
+        elif self.language == 'vala':
             files['resources/src/Makefile.shared-library-vala'] = 'src/Makefile.am'
             files['resources/src/package.vala'] = 'src/%(prefix)s.vala'
 
@@ -215,6 +221,6 @@ class EmptyProjectTemplate(AutotoolsTemplate):
             _("Empty Project"),
             'application-x-executable-symbolic',
             _("Create a new empty autotools project"),
-            ['C', 'Vala']
+            ['C', 'C++', 'Vala']
          )
 

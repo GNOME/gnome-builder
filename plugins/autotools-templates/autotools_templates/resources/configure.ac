@@ -18,7 +18,11 @@ dnl Initialize autoconf
 dnl ***********************************************************************
 AC_INIT([{{name}}],[package_version],[bug_report_url])
 AC_CONFIG_HEADERS([config.h])
+{{if template != "empty"}}
 AC_CONFIG_SRCDIR([data/{{name}}.pc.in])
+{{else}}
+AC_CONFIG_SRCDIR([NEWS])
+{{end}}
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_AUX_DIR([build-aux])
 AC_SUBST([ACLOCAL_AMFLAGS], "-I m4")
@@ -42,12 +46,13 @@ AM_INIT_AUTOMAKE([1.11 foreign subdir-objects tar-ustar no-dist-gzip dist-xz -Wn
 AM_MAINTAINER_MODE([enable])
 AX_GENERATE_CHANGELOG
 
+
 dnl ***********************************************************************
 dnl Add extra debugging with --enable-debug and --enable-compile-warnings
 dnl ***********************************************************************
 AX_CHECK_ENABLE_DEBUG([no],[]
                       [G_DISABLE_ASSERT G_DISABLE_CHECKS G_DISABLE_CAST_CHECKS])
-AX_COMPILER_FLAGS
+
 
 {{if enable_i18n}}
 dnl ***********************************************************************
@@ -59,13 +64,16 @@ AC_DEFINE_UNQUOTED([GETTEXT_PACKAGE], ["$GETTEXT_PACKAGE"], [GETTEXT package nam
 
 AM_GNU_GETTEXT_VERSION([0.19.6])
 AM_GNU_GETTEXT([external])
+
+
 {{end}}
-
-
 dnl ***********************************************************************
 dnl Check for required programs
 dnl ***********************************************************************
 AC_PROG_CC
+{{if enable_cplusplus}}
+AC_PROG_CXX
+{{end}}
 AC_PROG_INSTALL
 AC_PATH_PROG([GLIB_GENMARSHAL],[glib-genmarshal])
 AC_PATH_PROG([GLIB_MKENUMS],[glib-mkenums])
@@ -83,6 +91,27 @@ VAPIGEN_CHECK
 {{end}}
 
 
+AX_COMPILER_FLAGS
+
+
+{{if enable_c}}
+dnl ***********************************************************************
+dnl Ensure C11 is Supported
+dnl ***********************************************************************
+AX_CHECK_COMPILE_FLAG([-std=gnu11],
+                      [CFLAGS="$CFLAGS -std=gnu11"],
+                      [AC_MSG_ERROR([C compiler cannot compile GNU C11 code])])
+
+
+{{end}}
+{{if enable_cplusplus}}
+dnl ***********************************************************************
+dnl Ensure C++11 is Supported
+dnl ***********************************************************************
+AX_CXX_COMPILE_STDCXX_11([noext], [mandatory])
+
+
+{{end}}
 dnl ***********************************************************************
 dnl Check for required packages
 dnl ***********************************************************************
@@ -102,13 +131,19 @@ dnl ***********************************************************************
 AC_CONFIG_FILES([
 	Makefile
 
+{{if template != "empty"}}
 	src/Makefile
-{{if language == "c"}}
+{{end}}
+{{if template == "shared-library"}}
+{{if language != "vala"}}
 	src/{{prefix}}-version.h
+{{end}}
 {{end}}
 
 	data/Makefile
+{{if template == "shared-library"}}
 	data/{{name}}-$API_VERSION.pc:data/{{name}}.pc.in
+{{end}}
 
 {{if enable_i18n}}
 	po/Makefile.in
