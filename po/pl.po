@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-04-17 15:22+0200\n"
-"PO-Revision-Date: 2016-04-17 15:23+0200\n"
+"POT-Creation-Date: 2016-04-23 14:07+0200\n"
+"PO-Revision-Date: 2016-04-23 14:08+0200\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <gnomepl@aviary.pl>\n"
 "Language: pl\n"
@@ -313,7 +313,7 @@ msgstr ""
 "Ciemny schemat kolorów dla programu Builder, używający palety kolorów Tango"
 
 #: ../data/style-schemes/builder.xml.h:1 ../libide/ide-application.c:413
-#: ../libide/ide-workbench.c:560
+#: ../libide/ide-workbench.c:562
 #: ../libide/preferences/ide-preferences-builtin.c:113
 msgid "Builder"
 msgstr "Builder"
@@ -844,7 +844,7 @@ msgid "Plain Text"
 msgstr "Zwykły tekst"
 
 #. translators: the user selected a number outside the value range for the document.
-#: ../libide/editor/ide-editor-view.c:660
+#: ../libide/editor/ide-editor-view.c:666
 #, c-format
 msgid "Provide a number between 1 and %u"
 msgstr "Należy podać numer między 1 a %u"
@@ -955,7 +955,7 @@ msgstr "Proszę podać adres usługi D-Bus"
 msgid "No such worker"
 msgstr "Nie ma takiego wątku roboczego"
 
-#: ../libide/ide-buffer.c:2298
+#: ../libide/ide-buffer.c:2310
 msgid "The current language lacks a symbol resolver."
 msgstr "Obecny język nie posiada mechanizmu rozwiązywania symboli."
 
@@ -1082,17 +1082,17 @@ msgstr "Otwarcie katalogu się nie powiodło: %s"
 msgid "Failed to load file: %s: %s"
 msgstr "Wczytanie pliku się nie powiodło: %s: %s"
 
-#: ../libide/ide-source-view.c:4967
+#: ../libide/ide-source-view.c:4969
 #, c-format
 msgid "Insert “%s”"
 msgstr "Wstaw „%s”"
 
-#: ../libide/ide-source-view.c:4969
+#: ../libide/ide-source-view.c:4971
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "Zmień „%s” na „%s”"
 
-#: ../libide/ide-source-view.c:5083
+#: ../libide/ide-source-view.c:5085
 msgid "Apply Fix-It"
 msgstr "Zastosuj „Fix-It”"
 
@@ -1120,7 +1120,7 @@ msgstr "Nieprawidłowo zakodowany literał IP „%s” w adresie URI"
 msgid "Invalid non-ASCII hostname '%s' in URI"
 msgstr "Nieprawidłowy adres komputera niebędący ASCII „%s” w adresie URI"
 
-#: ../libide/ide-uri.c:435
+#: ../libide/ide-uri.c:434
 #, c-format
 msgid "Non-ASCII hostname '%s' forbidden in this URI"
 msgstr "Adres komputera niebędący ASCII „%s” jest zabroniony w tym adresie URI"
@@ -1139,16 +1139,16 @@ msgstr "Port „%s” w adresie URI jest poza zakresem"
 msgid "Base URI is not absolute"
 msgstr "Podstawowy adres URI nie jest bezwzględny"
 
-#: ../libide/ide-uri.c:617
+#: ../libide/ide-uri.c:615
 msgid "URI is not absolute, and no base URI was provided"
 msgstr "Adres URI nie jest bezwzględny, i nie podano podstawowego adresu URI"
 
-#: ../libide/ide-uri.c:662
+#: ../libide/ide-uri.c:660
 #, c-format
 msgid "Could not parse '%s' as absolute URI"
 msgstr "Nie można przetworzyć „%s” jako bezwzględnego adresu URI"
 
-#: ../libide/ide-uri.c:1190
+#: ../libide/ide-uri.c:1188
 #, c-format
 msgid "URI '%s' has no host component"
 msgstr "Adres URI „%s” nie posiada części komputera"
@@ -1161,7 +1161,7 @@ msgstr "Otwarcie pliku"
 msgid "Open"
 msgstr "Otwórz"
 
-#: ../libide/ide-workbench.c:558
+#: ../libide/ide-workbench.c:560
 #, c-format
 msgid "%s - Builder"
 msgstr "%s — Builder"
@@ -1676,9 +1676,25 @@ msgstr "Wykonywanie polecenia configure…"
 msgid "Cleaning…"
 msgstr "Czyszczenie…"
 
-#: ../plugins/autotools/ide-makecache.c:1006
+#: ../plugins/autotools/ide-makecache.c:1123
 msgid "Invalid makefile provided, ignoring."
 msgstr "Podano nieprawidłowy plik make, ignorowanie."
+
+#: ../plugins/autotools-templates/autotools_templates/__init__.py:198
+msgid "Shared Library"
+msgstr "Biblioteka współdzielona"
+
+#: ../plugins/autotools-templates/autotools_templates/__init__.py:200
+msgid "Create a new autotools project with a shared library"
+msgstr "Utworzenie nowego projektu Autotools ze współdzieloną biblioteką"
+
+#: ../plugins/autotools-templates/autotools_templates/__init__.py:221
+msgid "Empty Project"
+msgstr "Pusty projekt"
+
+#: ../plugins/autotools-templates/autotools_templates/__init__.py:223
+msgid "Create a new empty autotools project"
+msgstr "Utworzenie nowego pustego projektu Autotools"
 
 #: ../plugins/build-tools/gbp-build-configuration-view.ui.h:2
 msgid "The name of the build configuration"
@@ -2082,29 +2098,33 @@ msgstr "Ciągi formatu"
 msgid "From a project template"
 msgstr "Z szablonu projektu"
 
-#: ../plugins/create-project/gbp-create-project-tool.c:130
+#: ../plugins/create-project/gbp-create-project-tool.c:132
 msgid "List available templates"
 msgstr "Wyświetla listę dostępnych szablonów"
 
-#: ../plugins/create-project/gbp-create-project-tool.c:132
+#: ../plugins/create-project/gbp-create-project-tool.c:134
 msgid "Project template to generate"
 msgstr "Szablon projektu do utworzenia"
 
-#: ../plugins/create-project/gbp-create-project-tool.c:138
+#: ../plugins/create-project/gbp-create-project-tool.c:136
+msgid "The target language (if supported)"
+msgstr "Język docelowy (jeśli jest obsługiwany)"
+
+#: ../plugins/create-project/gbp-create-project-tool.c:142
 msgid "create-project [OPTION...] PROJECT_NAME"
 msgstr "create-project [OPCJA…] NAZWA_PROJEKTU"
 
-#: ../plugins/create-project/gbp-create-project-tool.c:187
+#: ../plugins/create-project/gbp-create-project-tool.c:191
 #, c-format
 msgid "Filename must be ASCII and may not contain : or ="
 msgstr "Nazwa pliku musi być ASCII i nie może zawierać znaków „:” i „=”"
 
-#: ../plugins/create-project/gbp-create-project-tool.c:291
+#: ../plugins/create-project/gbp-create-project-tool.c:295
 #, c-format
 msgid "Please specify a project name.\n"
 msgstr "Proszę podać nazwę projektu.\n"
 
-#: ../plugins/create-project/gbp-create-project-tool.c:307
+#: ../plugins/create-project/gbp-create-project-tool.c:311
 #, c-format
 msgid "Please specify a project template with --template=\n"
 msgstr "Proszę podać szablon projektu za pomocą parametru „--template=”\n"
@@ -2226,14 +2246,6 @@ msgstr "Sugerowanie uzupełnień języka Python"
 #: ../plugins/jedi/jedi_plugin.py:673
 msgid "Use Jedi to provide completions for the Python language"
 msgstr "Użycie biblioteki Jedi do uzupełniania w języku Python"
-
-#: ../plugins/library-template/library_template/__init__.py:52
-msgid "Shared Library"
-msgstr "Biblioteka współdzielona"
-
-#: ../plugins/library-template/library_template/__init__.py:55
-msgid "Create a new autotools project with a shared library"
-msgstr "Utworzenie nowego projektu Autotools ze współdzieloną biblioteką"
 
 #: ../plugins/mingw/ide-mingw-device-provider.c:95
 msgid "MinGW 64-bit"
