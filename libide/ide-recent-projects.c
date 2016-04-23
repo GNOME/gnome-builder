@@ -480,11 +480,23 @@ ide_recent_projects_remove (IdeRecentProjects *self,
 
       if (!g_bookmark_file_remove_item (projects_file, file_uri, &error))
         {
-          g_warning ("Failed to remove recent project: %s", error->message);
-          g_clear_error (&error);
-          continue;
-        }
+          g_autofree gchar *with_slash = g_strdup_printf ("%s/", file_uri);
 
+          /* Sometimes we don't get a match because the directory is missing a
+           * trailing slash. Annoying, I know. See the following for the
+           * upstream bug filed in GLib.
+           *
+           * https://bugzilla.gnome.org/show_bug.cgi?id=765449
+           */
+          if (!g_bookmark_file_remove_item (projects_file, with_slash, NULL))
+            {
+              g_warning ("Failed to remove recent project: %s", error->message);
+              g_clear_error (&error);
+              continue;
+            }
+
+          g_clear_error (&error);
+        }
 
       g_sequence_remove (iter);
     }
