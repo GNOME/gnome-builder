@@ -196,7 +196,7 @@ class LibraryProjectTemplate(AutotoolsTemplate):
         super().__init__(
             'shared-library',
             _("Shared Library"),
-            'application-x-executable-symbolic',
+            'pattern-library',
             _("Create a new autotools project with a shared library"),
             ['C', 'C++', 'Vala']
          )
@@ -219,7 +219,8 @@ class EmptyProjectTemplate(AutotoolsTemplate):
         super().__init__(
             'empty',
             _("Empty Project"),
-            'application-x-executable-symbolic',
+            # it would be nice to have a different icon here.
+            'pattern-library',
             _("Create a new empty autotools project"),
             ['C', 'C++', 'Vala']
          )
