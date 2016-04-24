@@ -762,10 +762,10 @@ gb_vim_jump_to_line (GtkWidget      *active_widget,
 
   if (IDE_IS_EDITOR_VIEW (active_widget))
     {
+      GtkSourceView  *source_view = GTK_SOURCE_VIEW (IDE_EDITOR_VIEW (active_widget)->frame1->source_view);
       GtkTextBuffer *buffer;
       gboolean extend_selection;
       gint line;
-      GtkSourceView  *source_view = GTK_SOURCE_VIEW (IDE_EDITOR_VIEW (active_widget)->frame1->source_view);
 
       if (!int32_parse (&line, options, 0, G_MAXINT32, "line number", error))
         return FALSE;
@@ -774,10 +774,28 @@ gb_vim_jump_to_line (GtkWidget      *active_widget,
       extend_selection = gtk_text_buffer_get_has_selection (buffer);
       ide_source_view_set_count (IDE_SOURCE_VIEW (source_view), line);
 
-      g_signal_emit_by_name (source_view,
-                             "movement",
-                             IDE_SOURCE_VIEW_MOVEMENT_NTH_LINE,
-                             extend_selection, TRUE, TRUE);
+      if (line == 0)
+        {
+          GtkTextIter iter;
+
+          /*
+           * Zero is not a valid line number, and IdeSourceView treats
+           * that as a move to the end of the buffer. Instead, we want
+           * line 1 to be like vi/vim.
+           */
+          gtk_text_buffer_get_start_iter (buffer, &iter);
+          gtk_text_buffer_select_range (buffer, &iter, &iter);
+          gtk_text_view_scroll_to_mark (GTK_TEXT_VIEW (source_view),
+                                        gtk_text_buffer_get_insert (buffer),
+                                        0.0, FALSE, 0.0, 0.0);
+        }
+      else
+        {
+          g_signal_emit_by_name (source_view,
+                                 "movement",
+                                 IDE_SOURCE_VIEW_MOVEMENT_NTH_LINE,
+                                 extend_selection, TRUE, TRUE);
+        }
 
       ide_source_view_set_count (IDE_SOURCE_VIEW (source_view), 0);
 
