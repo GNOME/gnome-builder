@@ -28,6 +28,13 @@
 
     <file compressed="true">scalable/apps/builder-symbolic.svg</file>
 
+    <!-- Gtk only seems to be able to find these in actions/ -->
+    <file compressed="true" alias="scalable/actions/pattern-browse.svg">98x98/patterns/pattern-browse.svg</file>
+    <file compressed="true" alias="scalable/actions/pattern-cli.svg">98x98/patterns/pattern-cli.svg</file>
+    <file compressed="true" alias="scalable/actions/pattern-grid.svg">98x98/patterns/pattern-grid.svg</file>
+    <file compressed="true" alias="scalable/actions/pattern-legacy.svg">98x98/patterns/pattern-legacy.svg</file>
+    <file compressed="true" alias="scalable/actions/pattern-library.svg">98x98/patterns/pattern-library.svg</file>
+
     <file>256x256/actions/builder-vcs-git.png</file>
     <file>48x48/actions/builder-vcs-git.png</file>
     <file>32x32/actions/builder-vcs-git.png</file>
