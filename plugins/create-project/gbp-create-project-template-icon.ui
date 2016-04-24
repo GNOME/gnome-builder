@@ -6,11 +6,12 @@
       <object class="GtkBox">
         <property name="orientation">vertical</property>
         <property name="expand">true</property>
+        <property name="spacing">6</property>
         <property name="visible">true</property>
         <child>
           <object class="GtkImage" id="template_icon">
             <property name="expand">true</property>
-            <property name="pixel-size">64</property>
+            <property name="pixel-size">98</property>
             <property name="visible">true</property>
           </object>
         </child>
