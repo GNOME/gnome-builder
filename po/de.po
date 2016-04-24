@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-04-05 07:17+0000\n"
-"PO-Revision-Date: 2016-04-05 15:03+0200\n"
+"POT-Creation-Date: 2016-04-23 19:18+0000\n"
+"PO-Revision-Date: 2016-04-24 08:16+0200\n"
 "Last-Translator: Wolfgang Stoeggl <c72578@yahoo.de>\n"
 "Language-Team: Deutsch <gnome-de@gnome.org>\n"
 "Language: de_DE\n"
@@ -311,6 +311,7 @@ msgid "Dark color scheme for Builder using the Tango color palette"
 msgstr "Dunkles Farbschema für Builder unter Benutzung der Tango-Farbpalette"
 
 #: ../data/style-schemes/builder.xml.h:1 ../libide/ide-application.c:413
+#: ../libide/ide-workbench.c:562
 #: ../libide/preferences/ide-preferences-builtin.c:113
 msgid "Builder"
 msgstr "Builder"
@@ -848,7 +849,7 @@ msgid "Plain Text"
 msgstr "Reiner Text"
 
 #. translators: the user selected a number outside the value range for the document.
-#: ../libide/editor/ide-editor-view.c:660
+#: ../libide/editor/ide-editor-view.c:666
 #, c-format
 msgid "Provide a number between 1 and %u"
 msgstr "Geben Sie eine Zahl zwischen 1 und %u an"
@@ -960,7 +961,7 @@ msgstr "Bitte geben Sie eine D-Bus-Adresse an"
 msgid "No such worker"
 msgstr "Kein solcher Worker"
 
-#: ../libide/ide-buffer.c:2298
+#: ../libide/ide-buffer.c:2310
 msgid "The current language lacks a symbol resolver."
 msgstr "Die aktuelle Sprache benötigt einen Symbolauflöser."
 
@@ -1087,17 +1088,17 @@ msgstr "Ordner konnte nicht geöffnet werden: %s"
 msgid "Failed to load file: %s: %s"
 msgstr "Datei konnte nicht geladen werden: %s: %s"
 
-#: ../libide/ide-source-view.c:4967
+#: ../libide/ide-source-view.c:4969
 #, c-format
 msgid "Insert “%s”"
 msgstr "»%s« einfügen"
 
-#: ../libide/ide-source-view.c:4969
+#: ../libide/ide-source-view.c:4971
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "»%s« durch »%s« ersetzen"
 
-#: ../libide/ide-source-view.c:5083
+#: ../libide/ide-source-view.c:5085
 msgid "Apply Fix-It"
 msgstr "Fix-It anwenden"
 
@@ -1125,7 +1126,7 @@ msgstr "Ungültig kodiertes IP-Symbol »%s« in Adresse"
 msgid "Invalid non-ASCII hostname '%s' in URI"
 msgstr "Ungültiger Nicht-ASCII-Rechnername »%s« in Adresse"
 
-#: ../libide/ide-uri.c:435
+#: ../libide/ide-uri.c:434
 #, c-format
 msgid "Non-ASCII hostname '%s' forbidden in this URI"
 msgstr "Nicht-ASCII-Rechnername »%s« ist in dieser Adresse"
@@ -1144,16 +1145,16 @@ msgstr "Port »%s« ist außerhalb des Bereichs"
 msgid "Base URI is not absolute"
 msgstr "Basisadresse ist nicht absolut"
 
-#: ../libide/ide-uri.c:617
+#: ../libide/ide-uri.c:615
 msgid "URI is not absolute, and no base URI was provided"
 msgstr "Adresse ist nicht absolut oder es wurde keine Basisadresse angegeben"
 
-#: ../libide/ide-uri.c:662
+#: ../libide/ide-uri.c:660
 #, c-format
 msgid "Could not parse '%s' as absolute URI"
 msgstr "»%s« konnte nicht als absolute Adresse ausgewertet werden"
 
-#: ../libide/ide-uri.c:1190
+#: ../libide/ide-uri.c:1188
 #, c-format
 msgid "URI '%s' has no host component"
 msgstr "Adresse »%s« hat keine Rechner-Komponente"
@@ -1165,6 +1166,11 @@ msgstr "Datei öffnen"
 #: ../libide/ide-workbench-actions.c:68
 msgid "Open"
 msgstr "Öffnen"
+
+#: ../libide/ide-workbench.c:560
+#, c-format
+msgid "%s - Builder"
+msgstr "%s - Builder"
 
 #: ../libide/preferences/ide-preferences-builtin.c:40
 msgid "Extensions"
@@ -1691,9 +1697,25 @@ msgstr "Configure wird ausgeführt …"
 msgid "Cleaning…"
 msgstr "Wird aufgeräumt …"
 
-#: ../plugins/autotools/ide-makecache.c:1006
+#: ../plugins/autotools/ide-makecache.c:1123
 msgid "Invalid makefile provided, ignoring."
 msgstr "Ungültiges Makefile angegeben, wird ignoriert."
+
+#: ../plugins/autotools-templates/autotools_templates/__init__.py:198
+msgid "Shared Library"
+msgstr "Laufzeitbibliothek"
+
+#: ../plugins/autotools-templates/autotools_templates/__init__.py:200
+msgid "Create a new autotools project with a shared library"
+msgstr "Ein neues Autotools-Projekt mit einer Laufzeitbibliothek erstellen"
+
+#: ../plugins/autotools-templates/autotools_templates/__init__.py:221
+msgid "Empty Project"
+msgstr "Leeres Projekt"
+
+#: ../plugins/autotools-templates/autotools_templates/__init__.py:223
+msgid "Create a new empty autotools project"
+msgstr "Ein neues, leeres Autotools-Projekt anlegen"
 
 #: ../plugins/build-tools/gbp-build-configuration-view.ui.h:2
 msgid "The name of the build configuration"
@@ -1934,28 +1956,28 @@ msgstr "Von Clang erzeugte Fehler und Warnungen anzeigen"
 msgid "clang diagnostics warnings errors"
 msgstr "Clang Fehlerdiagnose Warnungen Fehler"
 
-#: ../plugins/clang/ide-clang-service.c:269
+#: ../plugins/clang/ide-clang-service.c:271
 msgid "Unknown failure"
 msgstr "Unbekannter Fehler"
 
-#: ../plugins/clang/ide-clang-service.c:273
+#: ../plugins/clang/ide-clang-service.c:275
 msgid "Clang crashed"
 msgstr "Clang ist abgestürzt"
 
-#: ../plugins/clang/ide-clang-service.c:277
+#: ../plugins/clang/ide-clang-service.c:279
 msgid "Invalid arguments"
 msgstr "Ungültige Argumente"
 
-#: ../plugins/clang/ide-clang-service.c:281
+#: ../plugins/clang/ide-clang-service.c:283
 msgid "AST read error"
 msgstr "AST-Lesefehler"
 
-#: ../plugins/clang/ide-clang-service.c:293
+#: ../plugins/clang/ide-clang-service.c:295
 #, c-format
 msgid "Failed to create translation unit: %s"
 msgstr "Die Übersetzungseinheit konnte nicht geladen werden: %s"
 
-#: ../plugins/clang/ide-clang-service.c:401
+#: ../plugins/clang/ide-clang-service.c:403
 msgid "File must be saved locally to parse."
 msgstr "Die Datei muss zum Einlesen lokal gespeichert sein."
 
@@ -2100,29 +2122,33 @@ msgstr "Formatstrings"
 msgid "From a project template"
 msgstr "Aus einer Projektvorlage"
 
-#: ../plugins/create-project/gbp-create-project-tool.c:130
+#: ../plugins/create-project/gbp-create-project-tool.c:132
 msgid "List available templates"
 msgstr "Verfügbare Vorlagen anzeigen"
 
-#: ../plugins/create-project/gbp-create-project-tool.c:132
+#: ../plugins/create-project/gbp-create-project-tool.c:134
 msgid "Project template to generate"
 msgstr "Zu erzeugende Projektdatei"
 
-#: ../plugins/create-project/gbp-create-project-tool.c:138
+#: ../plugins/create-project/gbp-create-project-tool.c:136
+msgid "The target language (if supported)"
+msgstr "Die Zielsprache (falls unterstützt)"
+
+#: ../plugins/create-project/gbp-create-project-tool.c:142
 msgid "create-project [OPTION...] PROJECT_NAME"
 msgstr "create-project [OPTION …] PROJEKTNAME"
 
-#: ../plugins/create-project/gbp-create-project-tool.c:187
+#: ../plugins/create-project/gbp-create-project-tool.c:191
 #, c-format
 msgid "Filename must be ASCII and may not contain : or ="
 msgstr "Der Dateiname muss in ASCII sein und darf kein : oder = enthalten"
 
-#: ../plugins/create-project/gbp-create-project-tool.c:291
+#: ../plugins/create-project/gbp-create-project-tool.c:295
 #, c-format
 msgid "Please specify a project name.\n"
 msgstr "Bitte geben Sie einen Projektnamen an.\n"
 
-#: ../plugins/create-project/gbp-create-project-tool.c:307
+#: ../plugins/create-project/gbp-create-project-tool.c:311
 #, c-format
 msgid "Please specify a project template with --template=\n"
 msgstr "Bitte geben Sie eine Projektvorlage mit --template= an\n"
@@ -2247,14 +2273,6 @@ msgstr "Python-Vervollständigungen vorschlagen"
 #: ../plugins/jedi/jedi_plugin.py:673
 msgid "Use Jedi to provide completions for the Python language"
 msgstr "Jedi für die Vervollständigung von Python verwenden."
-
-#: ../plugins/library-template/library_template/__init__.py:52
-msgid "Shared Library"
-msgstr "Laufzeitbibliothek"
-
-#: ../plugins/library-template/library_template/__init__.py:55
-msgid "Create a new autotools project with a shared library"
-msgstr "Ein neues Autotools-Projekt mit einer Laufzeitbibliothek erstellen"
 
 #: ../plugins/mingw/ide-mingw-device-provider.c:95
 msgid "MinGW 64-bit"
@@ -2766,9 +2784,6 @@ msgstr "Vala Fehlerdiagnose Warnungen Fehler"
 #~ msgid "Open Document"
 #~ msgstr "Dokument öffnen"
 
-#~ msgid "%s - Builder"
-#~ msgstr "%s - Builder"
-
 #~ msgid "Build Failure"
 #~ msgstr "Erstellungsproblem"
 
@@ -3220,9 +3235,6 @@ msgstr "Vala Fehlerdiagnose Warnungen Fehler"
 
 #~ msgid "The trigger for the snippet."
 #~ msgstr "Der Auslöser für den Schnipsel."
-
-#~ msgid "The language for the snippet."
-#~ msgstr "Die Sprache für den Schnipsel."
 
 #~ msgid "The description for the snippet."
 #~ msgstr "Die Beschreibung für den Schnipsel."
