@@ -10,7 +10,6 @@ libhello_cpp_plugin_la_SOURCES = \
 	hellocppapplicationaddin.cc \
 	hellocppapplicationaddin.h \
 	hellocppplugin.cc \
-	registermmtype.h \
 	$(NULL)
 
 libhello_cpp_plugin_la_CPPFLAGS = $(IDEMM_CFLAGS) $(PLUGIN_CFLAGS) -I$(top_srcdir)/libidemm
