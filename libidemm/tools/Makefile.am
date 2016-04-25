@@ -2,6 +2,8 @@ if ENABLE_IDEMM
 
 include $(srcdir)/m4/filelist.am
 
+dist_noinst_DATA = $(addprefix m4/,$(files_codegen_m4))
+
 noinst_PROGRAMS = extra_defs_gen/generate_defs_libide
 
 extra_defs_gen_generate_defs_libide_SOURCES = extra_defs_gen/generate_defs_libide.cc

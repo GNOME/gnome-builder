@@ -25,6 +25,7 @@ DISTCHECK_CONFIGURE_FLAGS = \
 	--disable-gtk-doc \
 	--disable-tracing \
 	--enable-appstream-util \
+	--disable-maintainer-mode \
 	$(NULL)
 
 GITIGNOREFILES = \

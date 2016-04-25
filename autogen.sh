@@ -21,6 +21,9 @@ gtkdocize || exit 1
 
 if command -v mm-common-prepare 2>/dev/null; then
     mm-common-prepare --copy --force $srcdir/libidemm
+else
+    touch $srcdir/libidemm/generate-binding.am
+    touch $srcdir/libidemm/compile-binding.am
 fi
 
 autoreconf --force --install -Wno-portability || exit 1
