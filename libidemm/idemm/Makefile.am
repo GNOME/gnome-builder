@@ -1,8 +1,11 @@
 if ENABLE_IDEMM
 
 lib_LTLIBRARIES = libidemm-1.0.la
+
 include $(srcdir)/../src/filelist.am
+
 include $(srcdir)/filelist.am
+
 include $(top_srcdir)/libidemm/compile-binding.am
 
 local_cppflags = $(binding_includes) $(binding_cppflags) -DLIBIDEMM_BUILD=1
@@ -22,3 +25,5 @@ libidemm_1_0_la_LDFLAGS =
 libidemm_1_0_la_LIBADD  = $(IDEMM_LIBS)
 
 endif
+
+-include $(top_srcdir)/git.mk

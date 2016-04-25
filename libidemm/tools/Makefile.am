@@ -1,7 +1,5 @@
 if ENABLE_IDEMM
 
-AUTOMAKE_OPTIONS = subdir-objects
-
 include $(srcdir)/m4/filelist.am
 
 noinst_PROGRAMS = extra_defs_gen/generate_defs_libide

@@ -1,5 +1,7 @@
 SUBDIRS = . build contrib data libide libidemm src plugins tools po tests doc help
 
+ACLOCAL_AMFLAGS = -I build/autotools
+
 INTLTOOL_FILES = \
 	intltool-extract.in \
 	intltool-merge.in \
