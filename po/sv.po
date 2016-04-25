@@ -9,9 +9,9 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-04-05 07:17+0000\n"
-"PO-Revision-Date: 2016-04-05 10:05+0200\n"
-"Last-Translator: Sebastian Rasmussen <sebras@gmail.com>\n"
+"POT-Creation-Date: 2016-04-22 19:27+0000\n"
+"PO-Revision-Date: 2016-04-22 21:37+0200\n"
+"Last-Translator: Anders Jonsson <anders.jonsson@norsjovallen.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
@@ -308,6 +308,7 @@ msgid "Dark color scheme for Builder using the Tango color palette"
 msgstr "Mörkt färgschema för Builder som använder Tango-färgpaletten"
 
 #: ../data/style-schemes/builder.xml.h:1 ../libide/ide-application.c:413
+#: ../libide/ide-workbench.c:562
 #: ../libide/preferences/ide-preferences-builtin.c:113
 msgid "Builder"
 msgstr "Builder"
@@ -841,7 +842,7 @@ msgid "Plain Text"
 msgstr "Vanlig text"
 
 #. translators: the user selected a number outside the value range for the document.
-#: ../libide/editor/ide-editor-view.c:660
+#: ../libide/editor/ide-editor-view.c:666
 #, c-format
 msgid "Provide a number between 1 and %u"
 msgstr "Ange ett tal mellan 1 och %u"
@@ -955,7 +956,7 @@ msgstr "Ange D-Bus-adress"
 msgid "No such worker"
 msgstr "Ingen sådan arbetare finns"
 
-#: ../libide/ide-buffer.c:2298
+#: ../libide/ide-buffer.c:2310
 msgid "The current language lacks a symbol resolver."
 msgstr "Det aktuella språket saknar en symboluppslagare."
 
@@ -1083,18 +1084,18 @@ msgstr "Misslyckades med att öppna katalog: %s"
 msgid "Failed to load file: %s: %s"
 msgstr "Misslyckades med att läsa in fil: %s: %s"
 
-#: ../libide/ide-source-view.c:4967
+#: ../libide/ide-source-view.c:4969
 #, c-format
 msgid "Insert “%s”"
 msgstr "Infoga ”%s”"
 
-#: ../libide/ide-source-view.c:4969
+#: ../libide/ide-source-view.c:4971
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "Ersätt ”%s” med ”%s”"
 
 # Fix-it: små automatiska fixar för problem
-#: ../libide/ide-source-view.c:5083
+#: ../libide/ide-source-view.c:5085
 msgid "Apply Fix-It"
 msgstr "Tillämpa Fixa-det"
 
@@ -1122,7 +1123,7 @@ msgstr "Ogiltig kodad IP-litteral ”%s” i URI"
 msgid "Invalid non-ASCII hostname '%s' in URI"
 msgstr "Ogiltigt icke-ASCII-värdnamn ”%s” i URI"
 
-#: ../libide/ide-uri.c:435
+#: ../libide/ide-uri.c:434
 #, c-format
 msgid "Non-ASCII hostname '%s' forbidden in this URI"
 msgstr "Icke-ASCII-värdnamn ”%s” är förbjudet i denna URI"
@@ -1141,16 +1142,16 @@ msgstr "Port ”%s” i URI är utanför intervallet"
 msgid "Base URI is not absolute"
 msgstr "Bas-URI är inte absolut"
 
-#: ../libide/ide-uri.c:617
+#: ../libide/ide-uri.c:615
 msgid "URI is not absolute, and no base URI was provided"
 msgstr "URI är inte absolut, och ingen bas-URI angavs"
 
-#: ../libide/ide-uri.c:662
+#: ../libide/ide-uri.c:660
 #, c-format
 msgid "Could not parse '%s' as absolute URI"
 msgstr "Kunde inte tolka ”%s” som en absolut URI"
 
-#: ../libide/ide-uri.c:1190
+#: ../libide/ide-uri.c:1188
 #, c-format
 msgid "URI '%s' has no host component"
 msgstr "URI ”%s” har ingen värdkomponent"
@@ -1162,6 +1163,11 @@ msgstr "Öppna fil"
 #: ../libide/ide-workbench-actions.c:68
 msgid "Open"
 msgstr "Öppna"
+
+#: ../libide/ide-workbench.c:560
+#, c-format
+msgid "%s - Builder"
+msgstr "%s - Builder"
 
 #: ../libide/preferences/ide-preferences-builtin.c:40
 msgid "Extensions"
@@ -1674,9 +1680,25 @@ msgstr "Kör configure…"
 msgid "Cleaning…"
 msgstr "Rensar…"
 
-#: ../plugins/autotools/ide-makecache.c:1006
+#: ../plugins/autotools/ide-makecache.c:1123
 msgid "Invalid makefile provided, ignoring."
 msgstr "Ogiltig make-fil tillhandahölls, ignorerar."
+
+#: ../plugins/autotools-templates/autotools_templates/__init__.py:194
+msgid "Shared Library"
+msgstr "Delat bibliotek"
+
+#: ../plugins/autotools-templates/autotools_templates/__init__.py:196
+msgid "Create a new autotools project with a shared library"
+msgstr "Skapa ett nytt autotools-projekt med ett delat bibliotek"
+
+#: ../plugins/autotools-templates/autotools_templates/__init__.py:215
+msgid "Empty Project"
+msgstr "Tomt projekt"
+
+#: ../plugins/autotools-templates/autotools_templates/__init__.py:217
+msgid "Create a new empty autotools project"
+msgstr "Skapa ett nytt tomt autotools-projekt"
 
 #: ../plugins/build-tools/gbp-build-configuration-view.ui.h:2
 msgid "The name of the build configuration"
@@ -1917,28 +1939,28 @@ msgstr "Visa fel och varningar som tillhandahålls av Clang"
 msgid "clang diagnostics warnings errors"
 msgstr "clang diagnostik varningar fel"
 
-#: ../plugins/clang/ide-clang-service.c:269
+#: ../plugins/clang/ide-clang-service.c:271
 msgid "Unknown failure"
 msgstr "Okänt fel"
 
-#: ../plugins/clang/ide-clang-service.c:273
+#: ../plugins/clang/ide-clang-service.c:275
 msgid "Clang crashed"
 msgstr "Clang kraschade"
 
-#: ../plugins/clang/ide-clang-service.c:277
+#: ../plugins/clang/ide-clang-service.c:279
 msgid "Invalid arguments"
 msgstr "Ogiltiga argument"
 
-#: ../plugins/clang/ide-clang-service.c:281
+#: ../plugins/clang/ide-clang-service.c:283
 msgid "AST read error"
 msgstr "AST-läsfel"
 
-#: ../plugins/clang/ide-clang-service.c:293
+#: ../plugins/clang/ide-clang-service.c:295
 #, c-format
 msgid "Failed to create translation unit: %s"
 msgstr "Misslyckades med att skapa översättningsenhet: %s"
 
-#: ../plugins/clang/ide-clang-service.c:401
+#: ../plugins/clang/ide-clang-service.c:403
 msgid "File must be saved locally to parse."
 msgstr "Fil måste vara lokalt sparad för att tolkas."
 
@@ -2081,29 +2103,33 @@ msgstr "Formatsträngar"
 msgid "From a project template"
 msgstr "Från en projektmall"
 
-#: ../plugins/create-project/gbp-create-project-tool.c:130
+#: ../plugins/create-project/gbp-create-project-tool.c:132
 msgid "List available templates"
 msgstr "Lista tillgängliga mallar"
 
-#: ../plugins/create-project/gbp-create-project-tool.c:132
+#: ../plugins/create-project/gbp-create-project-tool.c:134
 msgid "Project template to generate"
 msgstr "Projektmall att generera"
 
-#: ../plugins/create-project/gbp-create-project-tool.c:138
+#: ../plugins/create-project/gbp-create-project-tool.c:136
+msgid "The target language (if supported)"
+msgstr "Målspråket (om stöd finns)"
+
+#: ../plugins/create-project/gbp-create-project-tool.c:142
 msgid "create-project [OPTION...] PROJECT_NAME"
 msgstr "create-projekt [FLAGGA…] PROJEKTNAMN"
 
-#: ../plugins/create-project/gbp-create-project-tool.c:187
+#: ../plugins/create-project/gbp-create-project-tool.c:191
 #, c-format
 msgid "Filename must be ASCII and may not contain : or ="
 msgstr "Filnamnet måste uttryckas i ASCII och får inte innehålla : eller ="
 
-#: ../plugins/create-project/gbp-create-project-tool.c:291
+#: ../plugins/create-project/gbp-create-project-tool.c:295
 #, c-format
 msgid "Please specify a project name.\n"
 msgstr "Ange ett projektnamn.\n"
 
-#: ../plugins/create-project/gbp-create-project-tool.c:307
+#: ../plugins/create-project/gbp-create-project-tool.c:311
 #, c-format
 msgid "Please specify a project template with --template=\n"
 msgstr "Ange en projektmall med --template=\n"
@@ -2226,14 +2252,6 @@ msgstr "Föreslå Python-kompletteringar"
 #: ../plugins/jedi/jedi_plugin.py:673
 msgid "Use Jedi to provide completions for the Python language"
 msgstr "Använd Jedi för att tillhandahålla kompletteringar i språket Python"
-
-#: ../plugins/library-template/library_template/__init__.py:52
-msgid "Shared Library"
-msgstr "Delat bibliotek"
-
-#: ../plugins/library-template/library_template/__init__.py:55
-msgid "Create a new autotools project with a shared library"
-msgstr "Skapa ett nytt autotools-projekt med ett delat bibliotek"
 
 #: ../plugins/mingw/ide-mingw-device-provider.c:95
 msgid "MinGW 64-bit"
@@ -2668,9 +2686,6 @@ msgstr "vala diagnostik varningar fel"
 
 #~ msgid "Open Document"
 #~ msgstr "Öppna dokument"
-
-#~ msgid "%s - Builder"
-#~ msgstr "%s - Builder"
 
 #~ msgid "Build Failure"
 #~ msgstr "Byggfel"
