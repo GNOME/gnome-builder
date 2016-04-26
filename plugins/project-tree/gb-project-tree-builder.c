@@ -49,6 +49,7 @@ build_context (GbProjectTreeBuilder *self,
   g_autofree gchar *name = NULL;
   IdeTreeNode *child;
   IdeContext *context;
+  IdeProject *project;
   IdeVcs *vcs;
   GFile *workdir;
 
@@ -58,6 +59,7 @@ build_context (GbProjectTreeBuilder *self,
   context = IDE_CONTEXT (ide_tree_node_get_item (node));
   vcs = ide_context_get_vcs (context);
   workdir = ide_vcs_get_working_directory (vcs);
+  project = ide_context_get_project (context);
 
   file_info = g_file_info_new ();
 
@@ -74,9 +76,9 @@ build_context (GbProjectTreeBuilder *self,
 
   child = g_object_new (IDE_TYPE_TREE_NODE,
                         "item", item,
-                        "text", _("Files"),
                         "icon-name", "folder-symbolic",
                         NULL);
+  g_object_bind_property (project, "name", child, "text", G_BINDING_SYNC_CREATE);
   ide_tree_node_append (node, child);
 }
 
