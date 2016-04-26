@@ -124,6 +124,29 @@ on_file_renamed (GbFileSearchProvider *self,
 }
 
 static void
+on_file_trashed (GbFileSearchProvider *self,
+                 GFile                *file,
+                 IdeProject           *project)
+{
+  g_autofree gchar *path = NULL;
+  IdeContext *context;
+  IdeVcs *vcs;
+  GFile *workdir;
+
+  g_assert (GB_IS_FILE_SEARCH_PROVIDER (self));
+  g_assert (G_IS_FILE (file));
+  g_assert (IDE_IS_PROJECT (project));
+  g_assert (GB_IS_FILE_SEARCH_INDEX (self->index));
+
+  context = ide_object_get_context (IDE_OBJECT (project));
+  vcs = ide_context_get_vcs (context);
+  workdir = ide_vcs_get_working_directory (vcs);
+
+  if (NULL != (path = g_file_get_relative_path (workdir, file)))
+    gb_file_search_index_remove (self->index, path);
+}
+
+static void
 gb_file_search_provider_build_cb (GObject      *object,
                                   GAsyncResult *result,
                                   gpointer      user_data)
@@ -159,6 +182,12 @@ gb_file_search_provider_build_cb (GObject      *object,
   g_signal_connect_object (project,
                            "file-renamed",
                            G_CALLBACK (on_file_renamed),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  g_signal_connect_object (project,
+                           "file-trashed",
+                           G_CALLBACK (on_file_trashed),
                            self,
                            G_CONNECT_SWAPPED);
 }
