@@ -9,6 +9,7 @@ contrib/tmpl/tmpl-parser.c
 contrib/tmpl/tmpl-template.c
 contrib/tmpl/tmpl-template-locator.c
 contrib/xml/xml-reader.c
+data/org.gnome.Builder.appdata.xml.in
 [type: gettext/glade]data/gtk/menus.ui
 data/style-schemes/builder-dark.xml
 data/style-schemes/builder.xml
