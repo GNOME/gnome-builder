@@ -1,6 +1,6 @@
 [Desktop Entry]
-Name=Builder
-Comment=Build software for GNOME
+_Name=Builder
+_Comment=Build software for GNOME
 Exec=gnome-builder %U
 Icon=builder
 DBusActivatable=true
@@ -8,5 +8,5 @@ StartupNotify=true
 Terminal=false
 Type=Application
 Categories=GNOME;GTK;Development;
-Keywords=Build;Develop;
+_Keywords=Build;Develop;
 MimeType=text/x-c;text/x-csrc;text/x-changelog;text/x-chdr;text/x-c++hdr;text/x-python;application/x-python;application/javascript;application/x-javascript;text/x-javascript;text/javascript;text/x-js;text/x-shellscript;application/x-shellscript;text/x-sh;text/x-vala;text/x-makefile;text/x-c++;text/x-cpp;text/x-c++src;text/css;application/x-gnome-app-info;application/x-desktop;text/x-go;text/html;text/x-markdown;application/json;application/x-m4;application/xml;text/xml;application/x-yaml;text/x-sql;application/x-ruby;text/x-ruby;text/x-pkg-config;text/x-lua;text/x-php;application/x-php;text/x-php-source;application/x-php-source;text/x-perl;application/x-perl;

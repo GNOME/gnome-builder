@@ -5,7 +5,10 @@ appdata_DATA = org.gnome.Builder.appdata.xml
 
 # Desktop launcher and description file.
 desktopdir = $(datadir)/applications
+desktop_in_in_files = org.gnome.Builder.desktop.in.in
+desktop_in_files = org.gnome.Builder.desktop.inn
 desktop_DATA = org.gnome.Builder.desktop
+@INTLTOOL_DESKTOP_RULE@
 
 # D-Bus service file.
 servicedir = $(datadir)/dbus-1/services
@@ -25,10 +28,26 @@ org.gnome.Builder.service: org.gnome.Builder.service.in
 
 EXTRA_DIST = \
 	$(appdata_DATA) \
-	$(desktop_DATA) \
+	$(desktop_in_in_files) \
 	$(service_in_files) \
 	$(NULL)
 
-CLEANFILES = $(service_DATA)
+CLEANFILES = \
+	$(service_DATA) \
+	$(desktop_DATA) \
+	$(NULL)
+
+DISTCLEANFILES = \
+	$(desktop_DATA) \
+	$(NULL)
+
+desktop-file-validate: $(desktop_DATA)
+	for f in $^; do \
+		$(DESKTOP_FILE_VALIDATE) $$f; \
+	done
+
+check-local: desktop-file-validate
+
+.PHONY: desktop-file-validate
 
 -include $(top_srcdir)/git.mk

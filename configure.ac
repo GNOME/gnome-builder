@@ -51,6 +51,7 @@ AM_MAINTAINER_MODE([enable])
 dnl ***********************************************************************
 dnl Internationalization
 dnl ***********************************************************************
+AX_REQUIRE_DEFINED([IT_PROG_INTLTOOL])
 IT_PROG_INTLTOOL([0.50.1])
 GETTEXT_PACKAGE=AC_PACKAGE_TARNAME
 AC_SUBST(GETTEXT_PACKAGE)
@@ -83,6 +84,12 @@ GOBJECT_INTROSPECTION_CHECK([1.42.0])
 VAPIGEN_CHECK
 GLIB_GSETTINGS
 APPSTREAM_XML
+
+AC_ARG_VAR([DESKTOP_FILE_VALIDATE], [the desktop-file-validate program])
+AC_PATH_PROG([DESKTOP_FILE_VALIDATE], [desktop-file-validate], [])
+if test -z "$DESKTOP_FILE_VALIDATE"; then
+	AC_MSG_ERROR([desktop-file-validate not found])
+fi
 
 
 dnl ***********************************************************************
@@ -471,6 +478,7 @@ AC_CONFIG_FILES([
 	data/libide-1.0.pc
 	data/style-schemes/Makefile
 	data/template-glib-1.0.pc
+	data/org.gnome.Builder.desktop.in
 
 	doc/Makefile
 	doc/examples/Makefile
