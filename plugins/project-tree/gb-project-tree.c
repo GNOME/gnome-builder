@@ -58,6 +58,21 @@ gb_project_tree_get_context (GbProjectTree *self)
   return NULL;
 }
 
+static void
+gb_project_tree_project_file_renamed (GbProjectTree *self,
+                                      GFile         *src_file,
+                                      GFile         *dst_file,
+                                      IdeProject    *project)
+{
+  g_assert (GB_IS_PROJECT_TREE (self));
+  g_assert (G_IS_FILE (src_file));
+  g_assert (G_IS_FILE (dst_file));
+  g_assert (IDE_IS_PROJECT (project));
+
+  ide_tree_rebuild (IDE_TREE (self));
+  gb_project_tree_reveal (self, dst_file);
+}
+
 void
 gb_project_tree_set_context (GbProjectTree *self,
                              IdeContext    *context)
@@ -65,9 +80,18 @@ gb_project_tree_set_context (GbProjectTree *self,
   GtkTreeModel *model;
   GtkTreeIter iter;
   IdeTreeNode *root;
+  IdeProject *project;
 
   g_return_if_fail (GB_IS_PROJECT_TREE (self));
   g_return_if_fail (!context || IDE_IS_CONTEXT (context));
+
+  project = ide_context_get_project (context);
+
+  g_signal_connect_object (project,
+                           "file-renamed",
+                           G_CALLBACK (gb_project_tree_project_file_renamed),
+                           self,
+                           G_CONNECT_SWAPPED);
 
   model = gtk_tree_view_get_model (GTK_TREE_VIEW (self));
 

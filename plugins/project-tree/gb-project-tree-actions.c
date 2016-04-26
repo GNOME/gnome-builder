@@ -559,24 +559,6 @@ gb_project_tree_actions_new_file (GSimpleAction *action,
   gb_project_tree_actions_new (self, G_FILE_TYPE_REGULAR);
 }
 
-static gboolean
-find_child_node (IdeTree     *tree,
-                 IdeTreeNode *parent,
-                 IdeTreeNode *child,
-                 gpointer    user_data)
-{
-  GObject *item = ide_tree_node_get_item (child);
-  GFile *target = user_data;
-  GFile *child_file;
-
-  if (GB_IS_PROJECT_FILE (item) &&
-      (child_file = gb_project_file_get_file (GB_PROJECT_FILE (item))) &&
-      g_file_equal (child_file, target))
-    return TRUE;
-
-  return FALSE;
-}
-
 static void
 gb_project_tree_actions__project_rename_file_cb (GObject      *object,
                                                  GAsyncResult *result,
@@ -585,10 +567,6 @@ gb_project_tree_actions__project_rename_file_cb (GObject      *object,
   IdeProject *project = (IdeProject *)object;
   g_autoptr(GbRenameFilePopover) popover = user_data;
   g_autoptr(GError) error = NULL;
-  IdeTreeNode *node;
-  IdeTreeNode *parent;
-  GFile *file;
-  IdeTree *tree;
 
   g_assert (IDE_IS_PROJECT (project));
   g_assert (GB_IS_RENAME_FILE_POPOVER (popover));
@@ -600,29 +578,6 @@ gb_project_tree_actions__project_rename_file_cb (GObject      *object,
       return;
     }
 
-  file = g_object_get_data (G_OBJECT (popover), "G_FILE");
-  tree = IDE_TREE (gtk_popover_get_relative_to (GTK_POPOVER (popover)));
-
-  g_assert (G_IS_FILE (file));
-  g_assert (IDE_IS_TREE (tree));
-
-  node = ide_tree_get_selected (tree);
-  if (node == NULL)
-    goto cleanup;
-
-  parent = ide_tree_node_get_parent (node);
-
-  ide_tree_node_invalidate (parent);
-  ide_tree_node_expand (parent, FALSE);
-
-  node = ide_tree_find_child_node (tree, parent, find_child_node, file);
-
-  if (node != NULL)
-    ide_tree_node_select (node);
-  else
-    ide_tree_node_select (parent);
-
-cleanup:
   gtk_widget_hide (GTK_WIDGET (popover));
   gtk_widget_destroy (GTK_WIDGET (popover));
 }
@@ -646,7 +601,7 @@ gb_project_tree_actions__rename_file_cb (GbProjectTree       *self,
   context = ide_workbench_get_context (workbench);
   project = ide_context_get_project (context);
 
-  /* todo: set busy spinner in popover */
+  /* TODO: set busy spinner in popover */
 
   g_object_set_data_full (G_OBJECT (popover),
                           "G_FILE",
