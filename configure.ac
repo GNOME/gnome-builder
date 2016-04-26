@@ -18,7 +18,10 @@ m4_define([builder_debug_default],
 dnl ***********************************************************************
 dnl Initialize Autoconf
 dnl ***********************************************************************
-AC_INIT([gnome-builder],[builder_version],[builder_bugreport_url])
+AC_INIT([gnome-builder],
+        [builder_version],
+        [builder_bugreport_url],
+        [https://wiki.gnome.org/Apps/Builder])
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_SRCDIR([src/main.c])
 AC_CONFIG_MACRO_DIR([build/autotools])
