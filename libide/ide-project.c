@@ -54,6 +54,7 @@ enum {
 
 enum {
   FILE_RENAMED,
+  FILE_TRASHED,
   LAST_SIGNAL
 };
 
@@ -425,6 +426,13 @@ ide_project_class_init (IdeProjectClass *klass)
                   G_SIGNAL_RUN_LAST,
                   0, NULL, NULL, NULL,
                   G_TYPE_NONE, 2, G_TYPE_FILE, G_TYPE_FILE);
+
+  signals [FILE_TRASHED] =
+    g_signal_new ("file-trashed",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  0, NULL, NULL, NULL,
+                  G_TYPE_NONE, 1, G_TYPE_FILE);
 }
 
 static void
@@ -586,8 +594,9 @@ ide_project_trash_file__file_trash_cb (GObject      *object,
                                        GAsyncResult *result,
                                        gpointer      user_data)
 {
-  GFile *file = (GFile *)object;
   g_autoptr(GTask) task = user_data;
+  GFile *file = (GFile *)object;
+  IdeProject *self;
   GError *error = NULL;
 
   g_assert (G_IS_FILE (file));
@@ -597,6 +606,12 @@ ide_project_trash_file__file_trash_cb (GObject      *object,
     g_task_return_error (task, error);
   else
     g_task_return_boolean (task, TRUE);
+
+  self = g_task_get_source_object (task);
+
+  g_assert (IDE_IS_PROJECT (self));
+
+  g_signal_emit (self, signals [FILE_TRASHED], 0, file);
 }
 
 static gboolean
