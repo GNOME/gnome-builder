@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-04-23 14:07+0200\n"
-"PO-Revision-Date: 2016-04-23 14:08+0200\n"
+"POT-Creation-Date: 2016-04-26 12:22+0200\n"
+"PO-Revision-Date: 2016-04-26 12:23+0200\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <gnomepl@aviary.pl>\n"
 "Language: pl\n"
@@ -102,6 +102,79 @@ msgstr "Ustalenie położenia szablonu „%s” się nie powiodło"
 #, c-format
 msgid "Could not parse XML from stream"
 msgstr "Nie można przetworzyć kodu XML z potoku"
+
+#: ../data/org.gnome.Builder.appdata.xml.in.h:1
+#: ../data/org.gnome.Builder.desktop.in.in.h:1
+#: ../data/style-schemes/builder.xml.h:1 ../libide/ide-application.c:413
+#: ../libide/ide-workbench.c:562
+#: ../libide/preferences/ide-preferences-builtin.c:113
+msgid "Builder"
+msgstr "Builder"
+
+#: ../data/org.gnome.Builder.appdata.xml.in.h:2
+#: ../libide/ide-application-actions.c:114
+msgid "An IDE for GNOME"
+msgstr "Zintegrowane środowisko programistyczne dla GNOME"
+
+#: ../data/org.gnome.Builder.appdata.xml.in.h:3
+msgid ""
+"Builder is an actively developed Integrated Development Environment for "
+"GNOME. It combines integrated support for essential GNOME technologies such "
+"as GTK+, GLib, and GNOME APIs with features that any developer will "
+"appreciate, like syntax highlighting and snippets."
+msgstr ""
+"Builder to aktywnie rozwijane zintegrowane środowisko programistyczne dla "
+"projektu GNOME. Łączy ono zintegrowaną obsługę najważniejszych technologii "
+"GNOME, takich jak GTK+, GLib i API platformy GNOME z funkcjami, które doceni "
+"każdy programista, takimi jak wyróżnianie elementów składni i wstawki."
+
+#: ../data/org.gnome.Builder.appdata.xml.in.h:4
+msgid "Features:"
+msgstr "Funkcje:"
+
+#: ../data/org.gnome.Builder.appdata.xml.in.h:5
+msgid "Integration with Autotools"
+msgstr "Integracja z Autotools"
+
+#: ../data/org.gnome.Builder.appdata.xml.in.h:6
+msgid "Clang based auto-completion, semantic highlighting, and diagnostics"
+msgstr ""
+"Automatyczne uzupełnianie, semantyczne wyróżnianie elementów składni i "
+"diagnostyka oparte na kompilatorze Clang"
+
+#: ../data/org.gnome.Builder.appdata.xml.in.h:7
+msgid "Auto indentation"
+msgstr "Automatyczne wcięcia"
+
+#: ../data/org.gnome.Builder.appdata.xml.in.h:8
+msgid "Side-by-side code editors"
+msgstr "Dwa edytory kodu obok siebie"
+
+#: ../data/org.gnome.Builder.appdata.xml.in.h:9
+msgid "Syntax highlighting"
+msgstr "Wyróżnianie elementów składni"
+
+#: ../data/org.gnome.Builder.appdata.xml.in.h:10
+msgid "HTML/Markdown live preview"
+msgstr "Podgląd HTML/Markdown na żywo"
+
+#: ../data/org.gnome.Builder.appdata.xml.in.h:11
+msgid "Optional Vim-style editing"
+msgstr "Opcjonalna edycja w stylu programu Vim"
+
+#: ../data/org.gnome.Builder.appdata.xml.in.h:12
+msgid "Integration with Git"
+msgstr "Integracja z systemem git"
+
+#: ../data/org.gnome.Builder.desktop.in.in.h:2
+msgid "Build software for GNOME"
+msgstr "Budowanie oprogramowania dla środowiska GNOME"
+
+#: ../data/org.gnome.Builder.desktop.in.in.h:3
+msgid "Build;Develop;"
+msgstr ""
+"Budowanie;Buduj;Zbuduj;Programowanie;Programuj;Zaprogramuj;Zintegrowane;"
+"środowisko;programistyczne;IDE;"
 
 #: ../data/gtk/menus.ui.h:1
 msgid "_New Project"
@@ -311,12 +384,6 @@ msgstr "Ciemny motyw programu Builder"
 msgid "Dark color scheme for Builder using the Tango color palette"
 msgstr ""
 "Ciemny schemat kolorów dla programu Builder, używający palety kolorów Tango"
-
-#: ../data/style-schemes/builder.xml.h:1 ../libide/ide-application.c:413
-#: ../libide/ide-workbench.c:562
-#: ../libide/preferences/ide-preferences-builtin.c:113
-msgid "Builder"
-msgstr "Builder"
 
 #: ../data/style-schemes/builder.xml.h:2
 msgid "The default color scheme for Builder"
@@ -872,10 +939,6 @@ msgstr "brak wersji domyślnych wartości języka w grupie [global]."
 msgid "Failed to initialize defaults."
 msgstr "Zainicjowanie wartości domyślnych się nie powiodło."
 
-#: ../libide/ide-application-actions.c:114
-msgid "An IDE for GNOME"
-msgstr "Zintegrowane środowisko programistyczne dla GNOME"
-
 #: ../libide/ide-application-actions.c:120
 msgid "GNOME Builder"
 msgstr "GNOME Builder"
@@ -955,7 +1018,7 @@ msgstr "Proszę podać adres usługi D-Bus"
 msgid "No such worker"
 msgstr "Nie ma takiego wątku roboczego"
 
-#: ../libide/ide-buffer.c:2310
+#: ../libide/ide-buffer.c:2331
 msgid "The current language lacks a symbol resolver."
 msgstr "Obecny język nie posiada mechanizmu rozwiązywania symboli."
 
@@ -1041,11 +1104,11 @@ msgstr "Nie ma takiego punktu rozszerzenia."
 msgid "No implementations of extension point."
 msgstr "Brak implementacji punktu rozszerzenia."
 
-#: ../libide/ide-project.c:463
+#: ../libide/ide-project.c:524
 msgid "Destination file must be within the project tree."
 msgstr "Plik docelowy musi być w drzewie projektu."
 
-#: ../libide/ide-project.c:593
+#: ../libide/ide-project.c:659
 msgid "File must be within the project tree."
 msgstr "Plik musi być w drzewie projektu."
 
@@ -1692,7 +1755,7 @@ msgstr "Utworzenie nowego projektu Autotools ze współdzieloną biblioteką"
 msgid "Empty Project"
 msgstr "Pusty projekt"
 
-#: ../plugins/autotools-templates/autotools_templates/__init__.py:223
+#: ../plugins/autotools-templates/autotools_templates/__init__.py:224
 msgid "Create a new empty autotools project"
 msgstr "Utworzenie nowego pustego projektu Autotools"
 
@@ -2024,12 +2087,12 @@ msgstr "Ustalenie położenia katalogu roboczego się nie powiodło"
 msgid "Invalid :syntax subcommand: %s"
 msgstr "Nieprawidłowe podpolecenie „:syntax”: %s"
 
-#: ../plugins/command-bar/gb-vim.c:1022
+#: ../plugins/command-bar/gb-vim.c:1040
 #, c-format
 msgid "Invalid search and replace request"
 msgstr "Nieprawidłowe żądanie wyszukania i zastąpienia"
 
-#: ../plugins/command-bar/gb-vim.c:1127
+#: ../plugins/command-bar/gb-vim.c:1145
 #, c-format
 msgid "Not a command: %s"
 msgstr "Nie jest poleceniem: %s"
@@ -2239,11 +2302,11 @@ msgstr "Nie podano żadnego języka"
 msgid "Preview as HTML"
 msgstr "Podgląd jako HTML"
 
-#: ../plugins/jedi/jedi_plugin.py:672
+#: ../plugins/jedi/jedi_plugin.py:730
 msgid "Suggest Python completions"
 msgstr "Sugerowanie uzupełnień języka Python"
 
-#: ../plugins/jedi/jedi_plugin.py:673
+#: ../plugins/jedi/jedi_plugin.py:731
 msgid "Use Jedi to provide completions for the Python language"
 msgstr "Użycie biblioteki Jedi do uzupełniania w języku Python"
 
@@ -2291,10 +2354,6 @@ msgstr "Pliki"
 #, c-format
 msgid "Rename %s"
 msgstr "Zmień nazwę %s"
-
-#: ../plugins/project-tree/gb-rename-file-popover.c:172
-msgid "File name must not contain subdirectories."
-msgstr "Nazwa pliku nie może zawierać podkatalogów."
 
 #: ../plugins/project-tree/gb-rename-file-popover.ui.h:2
 #: ../plugins/project-tree/gtk/menus.ui.h:10
