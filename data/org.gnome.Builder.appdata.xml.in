@@ -11,7 +11,7 @@
     <_p>
       Builder is an actively developed Integrated Development Environment for
       GNOME. It combines integrated support for essential GNOME technologies
-      such as Gtk, Glib, and GNOME APIs with features that any developer will
+      such as GTK+, GLib, and GNOME APIs with features that any developer will
       appreciate, like syntax highlighting and snippets.
     </_p>
     <_p>Features:</_p>
