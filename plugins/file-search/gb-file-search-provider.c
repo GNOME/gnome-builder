@@ -95,6 +95,35 @@ on_buffer_loaded (GbFileSearchProvider *self,
 }
 
 static void
+on_file_renamed (GbFileSearchProvider *self,
+                 GFile                *src_file,
+                 GFile                *dst_file,
+                 IdeProject           *project)
+{
+  g_autofree gchar *old_path = NULL;
+  g_autofree gchar *new_path = NULL;
+  IdeContext *context;
+  IdeVcs *vcs;
+  GFile *workdir;
+
+  g_assert (GB_IS_FILE_SEARCH_PROVIDER (self));
+  g_assert (G_IS_FILE (src_file));
+  g_assert (G_IS_FILE (dst_file));
+  g_assert (IDE_IS_PROJECT (project));
+  g_assert (GB_IS_FILE_SEARCH_INDEX (self->index));
+
+  context = ide_object_get_context (IDE_OBJECT (project));
+  vcs = ide_context_get_vcs (context);
+  workdir = ide_vcs_get_working_directory (vcs);
+
+  if (NULL != (old_path = g_file_get_relative_path (workdir, src_file)))
+    gb_file_search_index_remove (self->index, old_path);
+
+  if (NULL != (new_path = g_file_get_relative_path (workdir, dst_file)))
+    gb_file_search_index_insert (self->index, new_path);
+}
+
+static void
 gb_file_search_provider_build_cb (GObject      *object,
                                   GAsyncResult *result,
                                   gpointer      user_data)
@@ -103,6 +132,7 @@ gb_file_search_provider_build_cb (GObject      *object,
   g_autoptr(GbFileSearchProvider) self = user_data;
   IdeContext *context;
   IdeBufferManager *bufmgr;
+  IdeProject *project;
   GError *error = NULL;
 
   g_assert (GB_IS_FILE_SEARCH_INDEX (index));
@@ -121,6 +151,14 @@ gb_file_search_provider_build_cb (GObject      *object,
   g_signal_connect_object (bufmgr,
                            "buffer-loaded",
                            G_CALLBACK (on_buffer_loaded),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  project = ide_context_get_project (context);
+
+  g_signal_connect_object (project,
+                           "file-renamed",
+                           G_CALLBACK (on_file_renamed),
                            self,
                            G_CONNECT_SWAPPED);
 }
