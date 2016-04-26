@@ -28,7 +28,6 @@ struct _GbFileSearchIndex
   IdeObject     parent_instance;
 
   GFile        *root_directory;
-  GFileMonitor *file_monitor;
   Fuzzy        *fuzzy;
 };
 
@@ -63,7 +62,6 @@ gb_file_search_index_finalize (GObject *object)
   GbFileSearchIndex *self = (GbFileSearchIndex *)object;
 
   g_clear_object (&self->root_directory);
-  g_clear_object (&self->file_monitor);
   g_clear_pointer (&self->fuzzy, fuzzy_unref);
 
   G_OBJECT_CLASS (gb_file_search_index_parent_class)->finalize (object);
