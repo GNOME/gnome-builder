@@ -19,6 +19,7 @@
 #define G_LOG_DOMAIN "project-tree"
 
 #include <glib/gi18n.h>
+#include <ide.h>
 
 #include "gb-project-file.h"
 #include "gb-project-tree.h"
@@ -64,6 +65,8 @@ gb_project_tree_project_file_renamed (GbProjectTree *self,
                                       GFile         *dst_file,
                                       IdeProject    *project)
 {
+  IDE_ENTRY;
+
   g_assert (GB_IS_PROJECT_TREE (self));
   g_assert (G_IS_FILE (src_file));
   g_assert (G_IS_FILE (dst_file));
@@ -71,6 +74,57 @@ gb_project_tree_project_file_renamed (GbProjectTree *self,
 
   ide_tree_rebuild (IDE_TREE (self));
   gb_project_tree_reveal (self, dst_file);
+
+  IDE_EXIT;
+}
+
+static gboolean
+compare_to_file (gconstpointer a,
+                 gconstpointer b)
+{
+  GFile *file = (GFile *)a;
+  GObject *item = (GObject *)b;
+
+  /*
+   * Our key (the GFile) is always @a.
+   * The potential match (maybe a GbProjectFile) is @b.
+   * @b may also be NULL.
+   */
+
+  g_assert (G_IS_FILE (file));
+  g_assert (!item || G_IS_OBJECT (item));
+
+  if (GB_IS_PROJECT_FILE (item))
+    return g_file_equal (file, gb_project_file_get_file (GB_PROJECT_FILE (item)));
+
+  return FALSE;
+}
+
+static void
+gb_project_tree_project_file_trashed (GbProjectTree *self,
+                                      GFile         *file,
+                                      IdeProject    *project)
+{
+  IdeTreeNode *node;
+
+  IDE_ENTRY;
+
+  g_assert (GB_IS_PROJECT_TREE (self));
+  g_assert (G_IS_FILE (file));
+  g_assert (IDE_IS_PROJECT (project));
+
+  node = ide_tree_find_custom (IDE_TREE (self), compare_to_file, file);
+
+  if (node != NULL)
+    {
+      IdeTreeNode *parent = ide_tree_node_get_parent (node);
+
+      ide_tree_node_invalidate (parent);
+      ide_tree_node_expand (parent, TRUE);
+      ide_tree_node_select (parent);
+    }
+
+  IDE_EXIT;
 }
 
 void
@@ -90,6 +144,12 @@ gb_project_tree_set_context (GbProjectTree *self,
   g_signal_connect_object (project,
                            "file-renamed",
                            G_CALLBACK (gb_project_tree_project_file_renamed),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  g_signal_connect_object (project,
+                           "file-trashed",
+                           G_CALLBACK (gb_project_tree_project_file_trashed),
                            self,
                            G_CONNECT_SWAPPED);
 

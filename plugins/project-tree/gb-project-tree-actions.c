@@ -658,23 +658,15 @@ gb_project_tree_actions__trash_file_cb (GObject      *object,
   IdeProject *project = (IdeProject *)object;
   g_autoptr(IdeTreeNode) node = user_data;
   g_autoptr(GError) error = NULL;
-  IdeTreeNode *parent;
 
   g_assert (IDE_IS_PROJECT (project));
   g_assert (IDE_IS_TREE_NODE (node));
 
   if (!ide_project_trash_file_finish (project, result, &error))
     {
-      /* todo: warning dialog */
+      /* TODO: warning dialog */
       g_warning ("%s", error->message);
       return;
-    }
-
-  if ((parent = ide_tree_node_get_parent (node)))
-    {
-      ide_tree_node_invalidate (parent);
-      ide_tree_node_expand (parent, FALSE);
-      ide_tree_node_select (parent);
     }
 }
 
