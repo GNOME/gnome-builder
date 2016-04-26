@@ -4,26 +4,26 @@
   <id>org.gnome.Builder.desktop</id>
   <metadata_license>CC0</metadata_license>
   <project_license>GPL-3.0+ and GPL-2.0+ and LGPL-3.0+ and LGPL-2.0+ and MIT</project_license>
-  <name>Builder</name>
-  <summary>An IDE for GNOME</summary>
+  <_name>Builder</name>
+  <_summary>An IDE for GNOME</summary>
 
   <description>
-    <p>
+    <_p>
       Builder is an actively developed Integrated Development Environment for
       GNOME. It combines integrated support for essential GNOME technologies
       such as Gtk, Glib, and GNOME APIs with features that any developer will
       appreciate, like syntax highlighting and snippets.
-    </p>
-    <p>Features:</p>
+    </_p>
+    <_p>Features:</_p>
     <ul>
-      <li>Integration with Autotools</li>
-      <li>Clang based auto-completion, semantic highlighting, and diagnostics</li>
-      <li>Auto indentation</li>
-      <li>Side-by-side code editors</li>
-      <li>Syntax highlighting</li>
-      <li>HTML/Markdown live preview</li>
-      <li>Optional Vim-style editing</li>
-      <li>Integration with Git</li>
+      <_li>Integration with Autotools</_li>
+      <_li>Clang based auto-completion, semantic highlighting, and diagnostics</_li>
+      <_li>Auto indentation</_li>
+      <_li>Side-by-side code editors</_li>
+      <_li>Syntax highlighting</_li>
+      <_li>HTML/Markdown live preview</_li>
+      <_li>Optional Vim-style editing</_li>
+      <_li>Integration with Git</_li>
     </ul>
   </description>
 

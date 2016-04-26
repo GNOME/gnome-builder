@@ -1,7 +1,10 @@
 SUBDIRS = gsettings icons style-schemes fonts .
 
-appdatadir = $(datadir)/appdata
-appdata_DATA = org.gnome.Builder.appdata.xml
+@APPSTREAM_XML_RULES@
+@INTLTOOL_XML_RULE@
+
+appstream_in_files = org.gnome.Builder.appdata.xml.in
+appstream_XML = $(appstream_in_files:.xml.in=.xml)
 
 # Desktop launcher and description file.
 desktopdir = $(datadir)/applications
@@ -27,14 +30,15 @@ org.gnome.Builder.service: org.gnome.Builder.service.in
 		sed -e "s|\@bindir\@|$(bindir)|" $< > $@.tmp && mv $@.tmp $@
 
 EXTRA_DIST = \
-	$(appdata_DATA) \
+	$(appstream_in_files) \
 	$(desktop_in_in_files) \
 	$(service_in_files) \
 	$(NULL)
 
 CLEANFILES = \
-	$(service_DATA) \
+	$(appstream_XML) \
 	$(desktop_DATA) \
+	$(service_DATA) \
 	$(NULL)
 
 DISTCLEANFILES = \
