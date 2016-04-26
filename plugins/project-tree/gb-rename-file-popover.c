@@ -166,13 +166,6 @@ gb_rename_file_popover__entry_changed (GbRenameFilePopover *self,
   if (ide_str_empty0 (text))
     return;
 
-  if (strchr (text, G_DIR_SEPARATOR) != NULL)
-    {
-      gtk_label_set_label (self->message,
-                           _("File name must not contain subdirectories."));
-      return;
-    }
-
   if (self->cancellable)
     {
       g_cancellable_cancel (self->cancellable);
