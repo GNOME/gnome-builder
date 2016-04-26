@@ -42,6 +42,8 @@ gboolean gb_file_search_index_contains     (GbFileSearchIndex    *self,
                                             const gchar          *relative_path);
 void     gb_file_search_index_insert       (GbFileSearchIndex    *self,
                                             const gchar          *relative_path);
+void     gb_file_search_index_remove       (GbFileSearchIndex    *self,
+                                            const gchar          *relative_path);
 
 G_END_DECLS
 

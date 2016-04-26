@@ -359,3 +359,14 @@ gb_file_search_index_insert (GbFileSearchIndex *self,
 
   fuzzy_insert (self->fuzzy, g_strdup (relative_path), NULL);
 }
+
+void
+gb_file_search_index_remove (GbFileSearchIndex *self,
+                             const gchar       *relative_path)
+{
+  g_return_if_fail (GB_IS_FILE_SEARCH_INDEX (self));
+  g_return_if_fail (relative_path != NULL);
+  g_return_if_fail (self->fuzzy != NULL);
+
+  fuzzy_remove (self->fuzzy, relative_path);
+}
