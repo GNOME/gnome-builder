@@ -200,6 +200,7 @@ egg_simple_label_get_property (GObject    *object,
 
     case PROP_WIDTH_CHARS:
       g_value_set_int (value, self->width_chars);
+      break;
 
     case PROP_XALIGN:
       g_value_set_float (value, self->xalign);
