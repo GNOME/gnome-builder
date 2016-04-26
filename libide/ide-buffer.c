@@ -142,13 +142,34 @@ gboolean
 ide_buffer_get_has_diagnostics (IdeBuffer *self)
 {
   IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
+  guint size;
+  guint i;
 
   g_return_val_if_fail (IDE_IS_BUFFER (self), FALSE);
 
   if (priv->diagnostics == NULL)
     return FALSE;
 
-  return (ide_diagnostics_get_size (priv->diagnostics) > 0);
+  /*
+   * The diagnostics set might include warnings for files other than
+   * our own. So we need to verify they are for this file. As long as
+   * this is usually just used via bindings, its not expensive enough
+   * to matter much.
+   */
+
+  size = ide_diagnostics_get_size (priv->diagnostics);
+
+  for (i = 0; i < size; i++)
+    {
+      IdeDiagnostic *diag = ide_diagnostics_index (priv->diagnostics, i);
+      IdeSourceLocation *loc = ide_diagnostic_get_location (diag);
+      IdeFile *file = ide_source_location_get_file (loc);
+
+      if (priv->file && file && ide_file_equal (priv->file, file))
+        return TRUE;
+    }
+
+  return FALSE;
 }
 
 /**
