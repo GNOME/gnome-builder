@@ -52,7 +52,13 @@ enum {
   LAST_PROP
 };
 
+enum {
+  FILE_RENAMED,
+  LAST_SIGNAL
+};
+
 static GParamSpec *properties [LAST_PROP];
+static guint signals [LAST_SIGNAL];
 
 void
 ide_project_reader_lock (IdeProject *self)
@@ -412,6 +418,13 @@ ide_project_class_init (IdeProjectClass *klass)
                           G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, LAST_PROP, properties);
+
+  signals [FILE_RENAMED] =
+    g_signal_new ("file-renamed",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  0, NULL, NULL, NULL,
+                  G_TYPE_NONE, 2, G_TYPE_FILE, G_TYPE_FILE);
 }
 
 static void
@@ -421,16 +434,56 @@ ide_project_init (IdeProject *self)
 }
 
 static void
+rename_file_free (gpointer data)
+{
+  RenameFile *op = data;
+
+  if (op != NULL)
+    {
+      g_object_unref (op->new_file);
+      g_object_unref (op->orig_file);
+      g_slice_free (RenameFile, op);
+    }
+}
+
+static gboolean
+emit_file_renamed (gpointer data)
+{
+  g_autoptr(GTask) task = data;
+  IdeProject *project;
+  RenameFile *rf;
+
+  g_assert (G_IS_TASK (task));
+
+  project = g_task_get_source_object (task);
+  rf = g_task_get_task_data (task);
+
+  g_assert (IDE_IS_PROJECT (project));
+  g_assert (rf != NULL);
+  g_assert (G_IS_FILE (rf->orig_file));
+  g_assert (G_IS_FILE (rf->new_file));
+
+  g_signal_emit (project,
+                 signals [FILE_RENAMED],
+                 0,
+                 rf->orig_file,
+                 rf->new_file);
+
+  return G_SOURCE_REMOVE;
+}
+
+static void
 ide_project_rename_file_worker (GTask        *task,
                                 gpointer      source_object,
                                 gpointer      task_data,
                                 GCancellable *cancellable)
 {
   IdeProject *self = source_object;
+  g_autofree gchar *path = NULL;
+  g_autoptr(GFile) parent = NULL;
   IdeContext *context;
   IdeVcs *vcs;
   RenameFile *op = task_data;
-  g_autofree gchar *path = NULL;
   GError *error = NULL;
   GFile *workdir;
 
@@ -464,6 +517,15 @@ ide_project_rename_file_worker (GTask        *task,
       return;
     }
 
+  parent = g_file_get_parent (op->new_file);
+
+  if (!g_file_query_exists (parent, cancellable) &&
+      !g_file_make_directory_with_parents (parent, cancellable, &error))
+    {
+      g_task_return_error (task, error);
+      return;
+    }
+
   if (!g_file_move (op->orig_file,
                     op->new_file,
                     G_FILE_COPY_NONE,
@@ -476,20 +538,9 @@ ide_project_rename_file_worker (GTask        *task,
       return;
     }
 
+  g_timeout_add (0, emit_file_renamed, g_object_ref (task));
+
   g_task_return_boolean (task, TRUE);
-}
-
-static void
-rename_file_free (gpointer data)
-{
-  RenameFile *op = data;
-
-  if (op != NULL)
-    {
-      g_object_unref (op->new_file);
-      g_object_unref (op->orig_file);
-      g_slice_free (RenameFile, op);
-    }
 }
 
 void
