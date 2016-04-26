@@ -1,0 +1,9 @@
+<schemalist>
+  <schema id="org.gnome.builder.extension-type" gettext-domain="gnome-builder">
+    <key name="enabled" type="b">
+      <default>true</default>
+      <summary>Enabled</summary>
+      <description>If the type within the extension is enabled.</description>
+    </key>
+  </schema>
+</schemalist>

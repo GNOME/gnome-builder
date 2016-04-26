@@ -1,0 +1,94 @@
+<schemalist>
+
+  <flags id="org.gnome.builder.editor.DrawSpaces">
+    <value nick="space" value="1"/>
+    <value nick="tab" value="2"/>
+    <value nick="newline" value="4"/>
+    <value nick="nbsp" value="8"/>
+    <value nick="leading" value="16"/>
+    <value nick="text" value="32"/>
+    <value nick="trailing" value="64"/>
+  </flags>
+
+  <schema id="org.gnome.builder.editor" path="/org/gnome/builder/editor/" gettext-domain="gnome-builder">
+    <key name="keybindings" type="s">
+      <choices>
+        <choice value="default"/>
+        <choice value="emacs"/>
+        <choice value="vim"/>
+      </choices>
+      <default>'default'</default>
+    </key>
+    <key name="restore-insert-mark" type="b">
+      <default>true</default>
+      <summary>Restore last position</summary>
+      <description>Jump to the last position when reopening a file</description>
+    </key>
+    <key name="show-line-changes" type="b">
+      <default>true</default>
+      <summary>Show modified lines</summary>
+      <description>If enabled, the editor will show line additions and changes next to the source code.</description>
+    </key>
+    <key name="highlight-current-line" type="b">
+      <default>false</default>
+      <summary>Highlight current line</summary>
+      <description>If enabled, the editor will highlight the line containing the cursor.</description>
+    </key>
+    <key name="highlight-matching-brackets" type="b">
+      <default>false</default>
+      <summary>Highlight matching brackets</summary>
+      <description>If enabled, the editor will highlight matching brackets.</description>
+    </key>
+    <key name="show-line-numbers" type="b">
+      <default>true</default>
+      <summary>Show line numbers</summary>
+      <description>If enabled, the editor will show line numbers.</description>
+    </key>
+    <key name="smart-backspace" type="b">
+      <default>true</default>
+      <summary>Smart Backspace</summary>
+      <description>Backspace will remove additional spaces to keep you aligned to the indentation size.</description>
+    </key>
+    <key name="smart-home-end" type="b">
+      <default>true</default>
+      <summary>Smart Home and End</summary>
+      <description>Whether or not Home moves to first non-space character.</description>
+    </key>
+    <key name="show-grid-lines" type="b">
+      <default>true</default>
+      <summary>Show grid lines</summary>
+      <description>If enabled, the editor will show grid lines in the document.</description>
+    </key>
+    <key name="font-name" type="s">
+      <default>"Monospace 11"</default>
+    </key>
+    <key name="style-scheme-name" type="s">
+      <default>"builder"</default>
+    </key>
+    <key name="scroll-offset" type="i">
+      <range min="0" max="999"/>
+      <default>0</default>
+    </key>
+    <key name="show-map" type="b">
+      <default>false</default>
+      <summary>Show overview map</summary>
+      <description>If enabled, Builder will display an overview map of the source file next to the editor.</description>
+    </key>
+    <key name="auto-hide-map" type="b">
+      <default>false</default>
+      <summary>Automatically Hide Overview Map</summary>
+      <description>If enabled, Builder will automatically hide the overview map when mouse focus leaves the editor, or a timeout occurs.</description>
+    </key>
+    <key name="draw-spaces" flags="org.gnome.builder.editor.DrawSpaces">
+      <default>[]</default>
+      <summary>Draw Spaces</summary>
+      <description>The various types of space to draw in the editor.</description>
+    </key>
+    <key name="overscroll" type="i">
+      <default>10</default>
+      <range min="-999" max="999"/>
+      <summary>Overscroll</summary>
+      <description>The number of lines to scroll beyond the end of the buffer.</description>
+    </key>
+  </schema>
+</schemalist>

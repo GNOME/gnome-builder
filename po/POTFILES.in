@@ -11,6 +11,16 @@ contrib/tmpl/tmpl-template-locator.c
 contrib/xml/xml-reader.c
 data/org.gnome.Builder.appdata.xml.in
 data/org.gnome.Builder.desktop.in.in
+[type: gettext/gsettings]data/gsettings/org.gnome.builder.build.gschema.xml.in
+[type: gettext/gsettings]data/gsettings/org.gnome.builder.code-insight.gschema.xml.in
+[type: gettext/gsettings]data/gsettings/org.gnome.builder.editor.gschema.xml.in
+[type: gettext/gsettings]data/gsettings/org.gnome.builder.editor.language.gschema.xml.in
+[type: gettext/gsettings]data/gsettings/org.gnome.builder.extension-type.gschema.xml.in
+[type: gettext/gsettings]data/gsettings/org.gnome.builder.gschema.xml.in
+[type: gettext/gsettings]data/gsettings/org.gnome.builder.plugin.gschema.xml.in
+[type: gettext/gsettings]data/gsettings/org.gnome.builder.project-tree.gschema.xml.in
+[type: gettext/gsettings]data/gsettings/org.gnome.builder.terminal.gschema.xml.in
+[type: gettext/gsettings]data/gsettings/org.gnome.builder.workbench.gschema.xml.in
 [type: gettext/glade]data/gtk/menus.ui
 data/style-schemes/builder-dark.xml
 data/style-schemes/builder.xml

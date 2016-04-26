@@ -21,6 +21,7 @@ dnl ***********************************************************************
 AC_INIT([gnome-builder],
         [builder_version],
         [builder_bugreport_url],
+        [gnome-builder],
         [https://wiki.gnome.org/Apps/Builder])
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_SRCDIR([src/main.c])
@@ -57,8 +58,8 @@ dnl ***********************************************************************
 AX_REQUIRE_DEFINED([IT_PROG_INTLTOOL])
 IT_PROG_INTLTOOL([0.50.1])
 GETTEXT_PACKAGE=AC_PACKAGE_TARNAME
-AC_SUBST(GETTEXT_PACKAGE)
 AC_DEFINE_UNQUOTED([GETTEXT_PACKAGE], ["$GETTEXT_PACKAGE"], [GETTEXT package name])
+AC_SUBST(GETTEXT_PACKAGE)
 AM_GLIB_GNU_GETTEXT
 
 
@@ -474,7 +475,6 @@ AC_CONFIG_FILES([
 
 	data/Makefile
 	data/fonts/Makefile
-	data/gsettings/org.gnome.builder.code-insight.gschema.xml
 	data/gsettings/Makefile
 	data/icons/Makefile
 	data/icons/hicolor/Makefile
@@ -482,6 +482,17 @@ AC_CONFIG_FILES([
 	data/style-schemes/Makefile
 	data/template-glib-1.0.pc
 	data/org.gnome.Builder.desktop.in
+
+	data/gsettings/org.gnome.builder.build.gschema.xml
+	data/gsettings/org.gnome.builder.code-insight.gschema.xml
+	data/gsettings/org.gnome.builder.editor.gschema.xml
+	data/gsettings/org.gnome.builder.editor.language.gschema.xml
+	data/gsettings/org.gnome.builder.extension-type.gschema.xml
+	data/gsettings/org.gnome.builder.gschema.xml
+	data/gsettings/org.gnome.builder.plugin.gschema.xml
+	data/gsettings/org.gnome.builder.project-tree.gschema.xml
+	data/gsettings/org.gnome.builder.terminal.gschema.xml
+	data/gsettings/org.gnome.builder.workbench.gschema.xml
 
 	doc/Makefile
 	doc/examples/Makefile

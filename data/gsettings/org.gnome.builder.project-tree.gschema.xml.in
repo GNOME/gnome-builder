@@ -1,0 +1,19 @@
+<schemalist>
+  <schema id="org.gnome.builder.project-tree" path="/org/gnome/builder/project-tree/" gettext-domain="gnome-builder">
+    <key name="show" type="b">
+      <default>true</default>
+      <summary>Show Project Sidebar</summary>
+      <description>If enabled, the sidebar will be visible in the editor workspace.</description>
+    </key>
+    <key name="show-icons" type="b">
+      <default>true</default>
+      <summary>Show Icons</summary>
+      <description>If enabled, the project tree will display icons next to each item.</description>
+    </key>
+    <key name="show-ignored-files" type="b">
+      <default>false</default>
+      <summary>Show Ignored Files</summary>
+      <description>If enabled, the project tree will display files that are ignored by the VCS.</description>
+    </key>
+  </schema>
+</schemalist>
