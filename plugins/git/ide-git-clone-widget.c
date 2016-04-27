@@ -374,6 +374,10 @@ ide_git_clone_widget_clone_async (IdeGitCloneWidget   *self,
 
   gtk_spinner_start (self->clone_spinner);
 
+  gtk_widget_set_sensitive (GTK_WIDGET (self->clone_location_button), FALSE);
+  gtk_widget_set_sensitive (GTK_WIDGET (self->clone_location_entry), FALSE);
+  gtk_widget_set_sensitive (GTK_WIDGET (self->clone_uri_entry), FALSE);
+
   task = g_task_new (self, cancellable, callback, user_data);
   g_task_set_task_data (task, req, clone_request_free);
   g_task_run_in_thread (task, ide_git_clone_widget_worker);
@@ -388,6 +392,10 @@ ide_git_clone_widget_clone_finish (IdeGitCloneWidget  *self,
   g_return_val_if_fail (G_IS_TASK (result), FALSE);
 
   gtk_spinner_stop (self->clone_spinner);
+
+  gtk_widget_set_sensitive (GTK_WIDGET (self->clone_location_button), TRUE);
+  gtk_widget_set_sensitive (GTK_WIDGET (self->clone_location_entry), TRUE);
+  gtk_widget_set_sensitive (GTK_WIDGET (self->clone_uri_entry), TRUE);
 
   return g_task_propagate_boolean (G_TASK (result), error);
 }
