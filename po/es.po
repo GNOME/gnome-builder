@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-04-07 07:22+0000\n"
-"PO-Revision-Date: 2016-04-07 12:49+0200\n"
+"POT-Creation-Date: 2016-04-26 05:27+0000\n"
+"PO-Revision-Date: 2016-04-26 10:05+0200\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Español; Castellano <gnome-es-list@gnome.org>\n"
 "Language: \n"
@@ -311,6 +311,7 @@ msgstr ""
 "Esquema de colores oscuros para Builder usando la paleta de colores Tango"
 
 #: ../data/style-schemes/builder.xml.h:1 ../libide/ide-application.c:413
+#: ../libide/ide-workbench.c:562
 #: ../libide/preferences/ide-preferences-builtin.c:113
 msgid "Builder"
 msgstr "Builder"
@@ -845,7 +846,7 @@ msgid "Plain Text"
 msgstr "Texto plano"
 
 #. translators: the user selected a number outside the value range for the document.
-#: ../libide/editor/ide-editor-view.c:660
+#: ../libide/editor/ide-editor-view.c:666
 #, c-format
 msgid "Provide a number between 1 and %u"
 msgstr "Indique un número entre 1 y %u"
@@ -958,7 +959,7 @@ msgstr "Proporcione una dirección de D-Bus"
 msgid "No such worker"
 msgstr "No existe el trabajador"
 
-#: ../libide/ide-buffer.c:2298
+#: ../libide/ide-buffer.c:2310
 msgid "The current language lacks a symbol resolver."
 msgstr "Al idioma actual le falta un resolutor de símbolos."
 
@@ -1044,11 +1045,11 @@ msgstr "No existe el punto de extensión."
 msgid "No implementations of extension point."
 msgstr "No hay implementaciones para el punto de extensión."
 
-#: ../libide/ide-project.c:463
+#: ../libide/ide-project.c:524
 msgid "Destination file must be within the project tree."
 msgstr "El archivo de destino debe estar en el árbol del proyecto."
 
-#: ../libide/ide-project.c:593
+#: ../libide/ide-project.c:659
 msgid "File must be within the project tree."
 msgstr "El archivo debe estar en el árbol del proyecto."
 
@@ -1085,17 +1086,17 @@ msgstr "Falló al abrir la carpeta: %s"
 msgid "Failed to load file: %s: %s"
 msgstr "Falló al cargar el archivo: %s: %s"
 
-#: ../libide/ide-source-view.c:4967
+#: ../libide/ide-source-view.c:4969
 #, c-format
 msgid "Insert “%s”"
 msgstr "Insertar «%s»"
 
-#: ../libide/ide-source-view.c:4969
+#: ../libide/ide-source-view.c:4971
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "Reemplazar «%s» con «%s»"
 
-#: ../libide/ide-source-view.c:5083
+#: ../libide/ide-source-view.c:5085
 msgid "Apply Fix-It"
 msgstr "Aplicar corrección"
 
@@ -1123,7 +1124,7 @@ msgstr "IP literal codificada «%s» en URI no válida"
 msgid "Invalid non-ASCII hostname '%s' in URI"
 msgstr "Nombre de equipo no ASCII «%s» en URI no válido"
 
-#: ../libide/ide-uri.c:435
+#: ../libide/ide-uri.c:434
 #, c-format
 msgid "Non-ASCII hostname '%s' forbidden in this URI"
 msgstr "Nombre de equipo no ASCII «%s» prohibido en este URI"
@@ -1142,16 +1143,16 @@ msgstr "El puerto «%s» en el URI está fuera de rango"
 msgid "Base URI is not absolute"
 msgstr "El URI base no es absoluto"
 
-#: ../libide/ide-uri.c:617
+#: ../libide/ide-uri.c:615
 msgid "URI is not absolute, and no base URI was provided"
 msgstr "El URI no es absoluto y no se ha proporcionado un URI base"
 
-#: ../libide/ide-uri.c:662
+#: ../libide/ide-uri.c:660
 #, c-format
 msgid "Could not parse '%s' as absolute URI"
 msgstr "No se pudo analizar «%s» como URI absoluto"
 
-#: ../libide/ide-uri.c:1190
+#: ../libide/ide-uri.c:1188
 #, c-format
 msgid "URI '%s' has no host component"
 msgstr "El URI «%s» no tiene componente de equipo"
@@ -1163,6 +1164,11 @@ msgstr "Abrir archivo"
 #: ../libide/ide-workbench-actions.c:68
 msgid "Open"
 msgstr "Abrir"
+
+#: ../libide/ide-workbench.c:560
+#, c-format
+msgid "%s - Builder"
+msgstr "%s - Constructor"
 
 #: ../libide/preferences/ide-preferences-builtin.c:40
 msgid "Extensions"
@@ -1681,9 +1687,27 @@ msgstr "Ejecutando configure…"
 msgid "Cleaning…"
 msgstr "Limpiando…"
 
-#: ../plugins/autotools/ide-makecache.c:1006
+#: ../plugins/autotools/ide-makecache.c:1123
 msgid "Invalid makefile provided, ignoring."
 msgstr "Se ha proporcionado un Makefile no válido, ignorando."
+
+#: ../plugins/autotools-templates/autotools_templates/__init__.py:198
+msgid "Shared Library"
+msgstr "Biblioteca compartida"
+
+#: ../plugins/autotools-templates/autotools_templates/__init__.py:200
+msgid "Create a new autotools project with a shared library"
+msgstr "Crear un proyecto de autotools nuevo con una biblioteca compartida"
+
+#: ../plugins/autotools-templates/autotools_templates/__init__.py:221
+#| msgid "Project"
+msgid "Empty Project"
+msgstr "Proyecto vacío"
+
+#: ../plugins/autotools-templates/autotools_templates/__init__.py:224
+#| msgid "Create a new project"
+msgid "Create a new empty autotools project"
+msgstr "Crear un nuevo proyecto de autotools vacío"
 
 #: ../plugins/build-tools/gbp-build-configuration-view.ui.h:2
 msgid "The name of the build configuration"
@@ -1924,28 +1948,28 @@ msgstr "Mostrar errores y advertencias proporcionadas por Clang"
 msgid "clang diagnostics warnings errors"
 msgstr "clang diagnósticos advertencias errors"
 
-#: ../plugins/clang/ide-clang-service.c:269
+#: ../plugins/clang/ide-clang-service.c:271
 msgid "Unknown failure"
 msgstr "Fallo desconocido"
 
-#: ../plugins/clang/ide-clang-service.c:273
+#: ../plugins/clang/ide-clang-service.c:275
 msgid "Clang crashed"
 msgstr "Clang ha fallado"
 
-#: ../plugins/clang/ide-clang-service.c:277
+#: ../plugins/clang/ide-clang-service.c:279
 msgid "Invalid arguments"
 msgstr "Argumentos no válidos"
 
-#: ../plugins/clang/ide-clang-service.c:281
+#: ../plugins/clang/ide-clang-service.c:283
 msgid "AST read error"
 msgstr "Error de lectura AST"
 
-#: ../plugins/clang/ide-clang-service.c:293
+#: ../plugins/clang/ide-clang-service.c:295
 #, c-format
 msgid "Failed to create translation unit: %s"
 msgstr "Falló al crear la unidad de traducción: %s"
 
-#: ../plugins/clang/ide-clang-service.c:401
+#: ../plugins/clang/ide-clang-service.c:403
 msgid "File must be saved locally to parse."
 msgstr ""
 "El archivo debe estar guardado localmente para analizarlo gramaticalmente."
@@ -2012,12 +2036,12 @@ msgstr "Falló al buscar la carpeta de trabajo"
 msgid "Invalid :syntax subcommand: %s"
 msgstr "Subcomando :syntax no válido: %s"
 
-#: ../plugins/command-bar/gb-vim.c:1022
+#: ../plugins/command-bar/gb-vim.c:1040
 #, c-format
 msgid "Invalid search and replace request"
 msgstr "Solicitud de buscar y reemplazar no válida"
 
-#: ../plugins/command-bar/gb-vim.c:1127
+#: ../plugins/command-bar/gb-vim.c:1145
 #, c-format
 msgid "Not a command: %s"
 msgstr "No es un comando: %s"
@@ -2087,33 +2111,37 @@ msgid "Format Strings"
 msgstr "Cadenas de formato"
 
 #: ../plugins/create-project/gbp-create-project-genesis-addin.c:158
-#| msgid "From an existing project on this computer"
 msgid "From a project template"
 msgstr "Desde una plantilla de proyecto"
 
-#: ../plugins/create-project/gbp-create-project-tool.c:130
+#: ../plugins/create-project/gbp-create-project-tool.c:132
 msgid "List available templates"
 msgstr "Lista de plantillas disponibles"
 
-#: ../plugins/create-project/gbp-create-project-tool.c:132
+#: ../plugins/create-project/gbp-create-project-tool.c:134
 msgid "Project template to generate"
 msgstr "Plantilla de proyecto que generar"
 
-#: ../plugins/create-project/gbp-create-project-tool.c:138
+#: ../plugins/create-project/gbp-create-project-tool.c:136
+#| msgid "The language for the snippet."
+msgid "The target language (if supported)"
+msgstr "El lenguaje objetivo (si está soportado)"
+
+#: ../plugins/create-project/gbp-create-project-tool.c:142
 msgid "create-project [OPTION...] PROJECT_NAME"
 msgstr "create-project [OPCIÓN...] NOMBRE_PROYECTO"
 
-#: ../plugins/create-project/gbp-create-project-tool.c:187
+#: ../plugins/create-project/gbp-create-project-tool.c:191
 #, c-format
 msgid "Filename must be ASCII and may not contain : or ="
 msgstr "El nombre del archivo debe ser ASCII y no debe contener : ni ="
 
-#: ../plugins/create-project/gbp-create-project-tool.c:291
+#: ../plugins/create-project/gbp-create-project-tool.c:295
 #, c-format
 msgid "Please specify a project name.\n"
 msgstr "Especifique un nombre de proyecto.\n"
 
-#: ../plugins/create-project/gbp-create-project-tool.c:307
+#: ../plugins/create-project/gbp-create-project-tool.c:311
 #, c-format
 msgid "Please specify a project template with --template=\n"
 msgstr "Especifique una plantilla para el proyecto con --template=\n"
@@ -2238,14 +2266,6 @@ msgstr "Sugerir completado en Python"
 msgid "Use Jedi to provide completions for the Python language"
 msgstr "Usar Jedi para completado en el lenguaje Python"
 
-#: ../plugins/library-template/library_template/__init__.py:52
-msgid "Shared Library"
-msgstr "Biblioteca compartida"
-
-#: ../plugins/library-template/library_template/__init__.py:55
-msgid "Create a new autotools project with a shared library"
-msgstr "Crear un proyecto de autotools nuevo con una biblioteca compartida"
-
 #: ../plugins/mingw/ide-mingw-device-provider.c:95
 msgid "MinGW 64-bit"
 msgstr "MinGW 64-bit"
@@ -2290,10 +2310,6 @@ msgstr "Archivos"
 #, c-format
 msgid "Rename %s"
 msgstr "Renombrar %s"
-
-#: ../plugins/project-tree/gb-rename-file-popover.c:172
-msgid "File name must not contain subdirectories."
-msgstr "El nombre del archivo no debe contener subcarpetas."
 
 #: ../plugins/project-tree/gb-rename-file-popover.ui.h:2
 #: ../plugins/project-tree/gtk/menus.ui.h:10
@@ -2405,6 +2421,9 @@ msgstr "Mostrar errores y advertencias proporcionadas por Vala"
 #: ../plugins/vala-pack/ide-vala-preferences-addin.vala:36
 msgid "vala diagnostics warnings errors"
 msgstr "diagnósticos de alertas y errores de Vala"
+
+#~ msgid "File name must not contain subdirectories."
+#~ msgstr "El nombre del archivo no debe contener subcarpetas."
 
 #~ msgid "Invalid snippet at line %d: %s"
 #~ msgstr "Fragmento no válido en la línea %d: %s"
@@ -2785,9 +2804,6 @@ msgstr "diagnósticos de alertas y errores de Vala"
 
 #~ msgid "Open Document"
 #~ msgstr "Abrir documento"
-
-#~ msgid "%s - Builder"
-#~ msgstr "%s - Constructor"
 
 #~ msgid "Build Failure"
 #~ msgstr "Fallo al construir"
@@ -3273,9 +3289,6 @@ msgstr "diagnósticos de alertas y errores de Vala"
 
 #~ msgid "The trigger for the snippet."
 #~ msgstr "El disparador para el fragmento."
-
-#~ msgid "The language for the snippet."
-#~ msgstr "El lenguage para del fragmento."
 
 #~ msgid "The description for the snippet."
 #~ msgstr "La descripción para el fragmento."
