@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-04-27 16:19+0200\n"
-"PO-Revision-Date: 2016-04-27 16:20+0200\n"
+"POT-Creation-Date: 2016-04-27 23:40+0200\n"
+"PO-Revision-Date: 2016-04-27 23:41+0200\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <gnomepl@aviary.pl>\n"
 "Language: pl\n"
@@ -497,8 +497,8 @@ msgid "Bottom Panel Position"
 msgstr "Położenie dolnego panelu"
 
 #: ../data/gsettings/org.gnome.builder.workbench.gschema.xml.in.h:12
-msgid "The width in pixel units of the bottom panel."
-msgstr "Szerokość dolnego panelu w pikselach."
+msgid "The height in pixel units of the bottom panel."
+msgstr "Wysokość dolnego panelu w pikselach."
 
 #: ../data/gtk/menus.ui.h:1
 msgid "_New Project"
