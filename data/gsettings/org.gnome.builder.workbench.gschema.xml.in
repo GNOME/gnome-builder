@@ -33,7 +33,7 @@
       <range min="1" max="1000"/>
       <default>200</default>
       <summary>Bottom Panel Position</summary>
-      <description>The width in pixel units of the bottom panel.</description>
+      <description>The height in pixel units of the bottom panel.</description>
     </key>
   </schema>
 </schemalist>
