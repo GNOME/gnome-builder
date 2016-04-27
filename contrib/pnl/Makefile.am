@@ -71,7 +71,7 @@ libpanel_gtk_la_LIBADD = \
 	$(NULL)
 
 libpanel_gtk_la_LDFLAGS = \
-	--no-undefined \
+	-no-undefined \
 	$(NULL)
 
 
