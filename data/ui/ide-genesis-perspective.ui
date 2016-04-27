@@ -3,26 +3,59 @@
   <!-- interface-requires gtk+ 3.18 -->
   <template class="IdeGenesisPerspective" parent="GtkBin">
     <child>
-      <object class="GtkStack" id="stack">
-        <property name="transition-duration">250</property>
-        <property name="transition-type">crossfade</property>
-        <property name="expand">true</property>
+      <object class="GtkBox">
+        <property name="orientation">vertical</property>
         <property name="visible">true</property>
         <child>
-          <object class="EggBox" id="main_page">
-            <property name="halign">center</property>
-            <property name="width-request">550</property>
-            <property name="max-width-request">550</property>
-            <property name="valign">center</property>
+          <object class="GtkRevealer" id="info_bar_revealer">
+            <property name="reveal-child">false</property>
+            <property name="transition-type">slide-down</property>
             <property name="visible">true</property>
             <child>
-              <object class="GtkFrame">
+              <object class="GtkInfoBar" id="info_bar">
+                <property name="message-type">error</property>
+                <property name="show-close-button">true</property>
+                <property name="visible">true</property>
+                <child internal-child="content_area">
+                  <object class="GtkBox">
+                    <child>
+                      <object class="GtkLabel" id="info_bar_label">
+                        <property name="hexpand">true</property>
+                        <property name="label">Failure</property>
+                        <property name="visible">true</property>
+                        <property name="wrap">true</property>
+                        <property name="xalign">0</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkStack" id="stack">
+            <property name="transition-duration">250</property>
+            <property name="transition-type">crossfade</property>
+            <property name="expand">true</property>
+            <property name="visible">true</property>
+            <child>
+              <object class="EggBox" id="main_page">
+                <property name="halign">center</property>
+                <property name="width-request">550</property>
+                <property name="max-width-request">550</property>
+                <property name="valign">center</property>
                 <property name="visible">true</property>
                 <child>
-                  <object class="GtkListBox" id="list_box">
-                    <property name="hexpand">true</property>
-                    <property name="selection-mode">none</property>
+                  <object class="GtkFrame">
                     <property name="visible">true</property>
+                    <child>
+                      <object class="GtkListBox" id="list_box">
+                        <property name="hexpand">true</property>
+                        <property name="selection-mode">none</property>
+                        <property name="visible">true</property>
+                      </object>
+                    </child>
                   </object>
                 </child>
               </object>

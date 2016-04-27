@@ -35,6 +35,9 @@ struct _IdeGenesisPerspective
   IdeGenesisAddin  *current_addin;
 
   GtkHeaderBar     *header_bar;
+  GtkInfoBar       *info_bar;
+  GtkLabel         *info_bar_label;
+  GtkRevealer      *info_bar_revealer;
   GtkListBox       *list_box;
   GtkWidget        *main_page;
   GtkStack         *stack;
@@ -191,23 +194,8 @@ ide_genesis_perspective_run_cb (GObject      *object,
 
   if (!ide_genesis_addin_run_finish (addin, result, &error))
     {
-      GtkWidget *dialog;
-
-      dialog = gtk_message_dialog_new (NULL,
-                                       GTK_DIALOG_USE_HEADER_BAR,
-                                       GTK_MESSAGE_ERROR,
-                                       GTK_BUTTONS_CLOSE,
-                                       _("Failed to load the project"));
-      g_object_set (dialog,
-                    "secondary-text", error->message,
-                    NULL);
-
-      gtk_dialog_run (GTK_DIALOG (dialog));
-      gtk_widget_destroy (dialog);
-
-      /*
-       * TODO: Destroy workbench.
-       */
+      gtk_label_set_label (self->info_bar_label, error->message);
+      gtk_revealer_set_reveal_child (self->info_bar_revealer, TRUE);
     }
 }
 
@@ -223,6 +211,17 @@ ide_genesis_perspective_continue_clicked (IdeGenesisPerspective *self,
                                NULL,
                                ide_genesis_perspective_run_cb,
                                g_object_ref (self));
+}
+
+static void
+ide_genesis_perspective_info_bar_response (IdeGenesisPerspective *self,
+                                           int                    response_id,
+                                           GtkInfoBar            *info_bar)
+{
+  g_assert (IDE_IS_GENESIS_PERSPECTIVE (self));
+  g_assert (GTK_IS_INFO_BAR (info_bar));
+
+  gtk_revealer_set_reveal_child (self->info_bar_revealer, FALSE);
 }
 
 static void
@@ -281,6 +280,9 @@ ide_genesis_perspective_class_init (IdeGenesisPerspectiveClass *klass)
   gtk_widget_class_bind_template_child (widget_class, IdeGenesisPerspective, cancel_button);
   gtk_widget_class_bind_template_child (widget_class, IdeGenesisPerspective, continue_button);
   gtk_widget_class_bind_template_child (widget_class, IdeGenesisPerspective, header_bar);
+  gtk_widget_class_bind_template_child (widget_class, IdeGenesisPerspective, info_bar);
+  gtk_widget_class_bind_template_child (widget_class, IdeGenesisPerspective, info_bar_label);
+  gtk_widget_class_bind_template_child (widget_class, IdeGenesisPerspective, info_bar_revealer);
   gtk_widget_class_bind_template_child (widget_class, IdeGenesisPerspective, list_box);
   gtk_widget_class_bind_template_child (widget_class, IdeGenesisPerspective, main_page);
   gtk_widget_class_bind_template_child (widget_class, IdeGenesisPerspective, stack);
@@ -294,6 +296,12 @@ ide_genesis_perspective_init (IdeGenesisPerspective *self)
   g_signal_connect_object (self->list_box,
                            "row-activated",
                            G_CALLBACK (ide_genesis_perspective_row_activated),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  g_signal_connect_object (self->info_bar,
+                           "response",
+                           G_CALLBACK (ide_genesis_perspective_info_bar_response),
                            self,
                            G_CONNECT_SWAPPED);
 }
