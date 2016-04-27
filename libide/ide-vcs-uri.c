@@ -165,6 +165,12 @@ ide_vcs_uri_parse (IdeVcsUri   *self,
       host = g_match_info_fetch (match_info, 2);
       path = g_match_info_fetch (match_info, 3);
 
+      if (path && path[0] != '~' && path[0] != '/')
+        {
+          g_autofree gchar *tmp = path;
+          path = g_strdup_printf ("~/%s", tmp);
+        }
+
       ide_vcs_uri_set_user (self, user);
       ide_vcs_uri_set_host (self, host);
       ide_vcs_uri_set_path (self, path);
