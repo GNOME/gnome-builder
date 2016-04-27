@@ -44,9 +44,9 @@ struct _IdeGitCloneWidget
 
 typedef struct
 {
-  gchar *uri;
-  GFile *location;
-  GFile *project_file;
+  IdeVcsUri *uri;
+  GFile     *location;
+  GFile     *project_file;
 } CloneRequest;
 
 enum {
@@ -64,7 +64,7 @@ clone_request_free (gpointer data)
 
   if (req != NULL)
     {
-      g_clear_pointer (&req->uri, g_free);
+      g_clear_pointer (&req->uri, ide_vcs_uri_unref);
       g_clear_object (&req->location);
       g_clear_object (&req->project_file);
       g_slice_free (CloneRequest, req);
@@ -72,8 +72,8 @@ clone_request_free (gpointer data)
 }
 
 static CloneRequest *
-clone_request_new (const gchar *uri,
-                   GFile       *location)
+clone_request_new (IdeVcsUri *uri,
+                   GFile     *location)
 {
   CloneRequest *req;
 
@@ -81,7 +81,7 @@ clone_request_new (const gchar *uri,
   g_assert (location);
 
   req = g_slice_new0 (CloneRequest);
-  req->uri = g_strdup (uri);
+  req->uri = ide_vcs_uri_ref (uri);
   req->location = g_object_ref (location);
   req->project_file = NULL;
 
@@ -296,6 +296,7 @@ ide_git_clone_widget_worker (GTask        *task,
                              gpointer      task_data,
                              GCancellable *cancellable)
 {
+  g_autofree gchar *uristr = NULL;
   IdeGitCloneWidget *self = source_object;
   GgitRepository *repository;
   CloneRequest *req = task_data;
@@ -323,7 +324,9 @@ ide_git_clone_widget_worker (GTask        *task,
   ggit_clone_options_set_fetch_options (clone_options, fetch_options);
   g_clear_pointer (&fetch_options, ggit_fetch_options_free);
 
-  repository = ggit_repository_clone (req->uri, req->location, clone_options, &error);
+  uristr = ide_vcs_uri_to_string (req->uri);
+
+  repository = ggit_repository_clone (uristr, req->location, clone_options, &error);
 
   g_clear_object (&callbacks);
   g_clear_object (&clone_options);
@@ -349,18 +352,32 @@ ide_git_clone_widget_clone_async (IdeGitCloneWidget   *self,
   g_autoptr(GTask) task = NULL;
   g_autoptr(GFile) location = NULL;
   g_autoptr(GFile) child = NULL;
+  g_autoptr(IdeVcsUri) uri = NULL;
   CloneRequest *req;
-  const gchar *uri;
+  const gchar *uristr;
   const gchar *child_name;
 
   g_return_if_fail (IDE_IS_GIT_CLONE_WIDGET (self));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
+  task = g_task_new (self, cancellable, callback, user_data);
+
   gtk_label_set_label (self->clone_error_label, NULL);
 
-  uri = gtk_entry_get_text (self->clone_uri_entry);
+  uristr = gtk_entry_get_text (self->clone_uri_entry);
   child_name = gtk_entry_get_text (self->clone_location_entry);
   location = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (self->clone_location_button));
+
+  uri = ide_vcs_uri_new (uristr);
+
+  if (uri == NULL)
+    {
+      g_task_return_new_error (task,
+                               G_IO_ERROR,
+                               G_IO_ERROR_INVAL,
+                               _("A valid Git URL is required"));
+      return;
+    }
 
   if (child_name != NULL)
     {
@@ -378,7 +395,6 @@ ide_git_clone_widget_clone_async (IdeGitCloneWidget   *self,
   gtk_widget_set_sensitive (GTK_WIDGET (self->clone_location_entry), FALSE);
   gtk_widget_set_sensitive (GTK_WIDGET (self->clone_uri_entry), FALSE);
 
-  task = g_task_new (self, cancellable, callback, user_data);
   g_task_set_task_data (task, req, clone_request_free);
   g_task_run_in_thread (task, ide_git_clone_widget_worker);
 }
