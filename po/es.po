@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-04-26 05:27+0000\n"
-"PO-Revision-Date: 2016-04-26 10:05+0200\n"
+"POT-Creation-Date: 2016-04-27 07:45+0000\n"
+"PO-Revision-Date: 2016-04-27 11:26+0200\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Español; Castellano <gnome-es-list@gnome.org>\n"
 "Language: \n"
@@ -100,6 +100,447 @@ msgstr "Falló al buscar la plantilla «%s»"
 #, c-format
 msgid "Could not parse XML from stream"
 msgstr "No se pudo analizar el XML del flujo"
+
+#: ../data/org.gnome.Builder.appdata.xml.in.h:1
+#: ../data/org.gnome.Builder.desktop.in.in.h:1
+#: ../data/style-schemes/builder.xml.h:1 ../libide/ide-application.c:413
+#: ../libide/ide-workbench.c:562
+#: ../libide/preferences/ide-preferences-builtin.c:113
+msgid "Builder"
+msgstr "Builder"
+
+#: ../data/org.gnome.Builder.appdata.xml.in.h:2
+#: ../libide/ide-application-actions.c:114
+msgid "An IDE for GNOME"
+msgstr "Un EID para GNOME"
+
+#: ../data/org.gnome.Builder.appdata.xml.in.h:3
+msgid ""
+"Builder is an actively developed Integrated Development Environment for "
+"GNOME. It combines integrated support for essential GNOME technologies such "
+"as GTK+, GLib, and GNOME APIs with features that any developer will "
+"appreciate, like syntax highlighting and snippets."
+msgstr ""
+
+#: ../data/org.gnome.Builder.appdata.xml.in.h:4
+msgid "Features:"
+msgstr "Características:"
+
+#: ../data/org.gnome.Builder.appdata.xml.in.h:5
+msgid "Integration with Autotools"
+msgstr "Integración con Autotools"
+
+#: ../data/org.gnome.Builder.appdata.xml.in.h:6
+msgid "Clang based auto-completion, semantic highlighting, and diagnostics"
+msgstr ""
+
+#: ../data/org.gnome.Builder.appdata.xml.in.h:7
+#| msgid "Auto indent"
+msgid "Auto indentation"
+msgstr "Sangrado automático"
+
+#: ../data/org.gnome.Builder.appdata.xml.in.h:8
+msgid "Side-by-side code editors"
+msgstr ""
+
+#: ../data/org.gnome.Builder.appdata.xml.in.h:9
+#| msgid "Semantic Highlighting"
+msgid "Syntax highlighting"
+msgstr "Resaltado de sintaxis"
+
+#: ../data/org.gnome.Builder.appdata.xml.in.h:10
+msgid "HTML/Markdown live preview"
+msgstr ""
+
+#: ../data/org.gnome.Builder.appdata.xml.in.h:11
+msgid "Optional Vim-style editing"
+msgstr ""
+
+#: ../data/org.gnome.Builder.appdata.xml.in.h:12
+msgid "Integration with Git"
+msgstr "Integración con Git"
+
+#: ../data/org.gnome.Builder.desktop.in.in.h:2
+msgid "Build software for GNOME"
+msgstr "Construir software para GNOME"
+
+#: ../data/org.gnome.Builder.desktop.in.in.h:3
+msgid "Build;Develop;"
+msgstr "Construir;Desarrollar;"
+
+#: ../data/gsettings/org.gnome.builder.build.gschema.xml.in.h:1
+#| msgid "Build Project"
+msgid "Build Parallelism"
+msgstr "Construir paralelismo"
+
+#: ../data/gsettings/org.gnome.builder.build.gschema.xml.in.h:2
+msgid ""
+"Number of workers to use when performing builds. -1 for sensible default. 0 "
+"for number of CPU."
+msgstr ""
+"Número de trabajadores que usar al construir. -1 para entrada sensible. 0 "
+"para número de CPU."
+
+#: ../data/gsettings/org.gnome.builder.code-insight.gschema.xml.in.h:1
+msgid "Suggest Snippet Completion"
+msgstr "Sugerir completado de fragmentos"
+
+#: ../data/gsettings/org.gnome.builder.code-insight.gschema.xml.in.h:2
+msgid "Allow snippets to be inserted into the document."
+msgstr "Permitir insertar fragmentos en el documento."
+
+#: ../data/gsettings/org.gnome.builder.code-insight.gschema.xml.in.h:3
+msgid "Clang based autocompletion (Experimental)"
+msgstr "Autocompletado basado en Clang (experimental)"
+
+#: ../data/gsettings/org.gnome.builder.code-insight.gschema.xml.in.h:4
+msgid "Use Clang for autocompletion in the C and C++ languages."
+msgstr "Usar Clang para el autocompletado en los lenguajes C y C++."
+
+#: ../data/gsettings/org.gnome.builder.code-insight.gschema.xml.in.h:5
+msgid "Ctags based autocompletion"
+msgstr "Autocompletado basado en Ctags"
+
+#: ../data/gsettings/org.gnome.builder.code-insight.gschema.xml.in.h:6
+msgid "Use Ctags for autocompletion."
+msgstr "Usar Ctags para el autocompletado."
+
+#: ../data/gsettings/org.gnome.builder.code-insight.gschema.xml.in.h:7
+msgid "Enable auto-completion of words in document"
+msgstr "Activar autocompletado de palabras en el documento"
+
+#: ../data/gsettings/org.gnome.builder.code-insight.gschema.xml.in.h:8
+msgid ""
+"If enabled, words within the current document will be available for auto-"
+"completion."
+msgstr ""
+"Si se activa, las palabras dentro del documento actual estarán disponibles "
+"para el autocompletado."
+
+#: ../data/gsettings/org.gnome.builder.code-insight.gschema.xml.in.h:9
+msgid "Enable semantic highlighting"
+msgstr "Activar el resaltado semántico"
+
+#: ../data/gsettings/org.gnome.builder.code-insight.gschema.xml.in.h:10
+msgid ""
+"If enabled, additional highlighting will be provided in supported languages "
+"based on information extracted from the source code."
+msgstr ""
+"Si se activa, se proporcionará resaltado adicional basado en información "
+"extraída del código fuente en los lenguajes soportados."
+
+#: ../data/gsettings/org.gnome.builder.code-insight.gschema.xml.in.h:11
+msgid "Path to ctags executable"
+msgstr "Ruta al ejecutable ctags"
+
+#: ../data/gsettings/org.gnome.builder.code-insight.gschema.xml.in.h:12
+msgid "The path to the ctags executable on the system."
+msgstr "La ruta hacia el ejecutable ctags en el sistema."
+
+#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:1
+#| msgid "Restore cursor position"
+msgid "Restore last position"
+msgstr "Restaurar la última posición"
+
+#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:2
+msgid "Jump to the last position when reopening a file"
+msgstr "Saltar a la última posición al reabrir un archivo"
+
+#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:3
+msgid "Show modified lines"
+msgstr "Mostrar las líneas modificadas"
+
+#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:4
+msgid ""
+"If enabled, the editor will show line additions and changes next to the "
+"source code."
+msgstr ""
+"Si se activa, el editor mostrará las adiciones y cambios en las líneas junto "
+"al código fuente."
+
+#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:5
+#: ../data/ui/ide-editor-tweak-widget.ui.h:4
+msgid "Highlight current line"
+msgstr "Resaltar la línea actual"
+
+#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:6
+msgid "If enabled, the editor will highlight the line containing the cursor."
+msgstr "Si se activa, el editor resaltará la línea que contiene el cursor."
+
+#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:7
+#| msgid "Matching brackets"
+msgid "Highlight matching brackets"
+msgstr "Resaltar corchetes coincidente"
+
+#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:8
+msgid "If enabled, the editor will highlight matching brackets."
+msgstr "Si se activa, el editor resaltará las parejas de corchetes."
+
+#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:9
+#| msgid "Go to line number"
+msgid "Show line numbers"
+msgstr "Mostrar números de línea"
+
+#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:10
+msgid "If enabled, the editor will show line numbers."
+msgstr "Si se activa, el editor mostrará los números de línea."
+
+#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:11
+#: ../data/ui/ide-editor-tweak-widget.ui.h:6
+#: ../libide/preferences/ide-preferences-builtin.c:119
+msgid "Smart Backspace"
+msgstr "Retroceso inteligente"
+
+#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:12
+msgid ""
+"Backspace will remove additional spaces to keep you aligned to the "
+"indentation size."
+msgstr ""
+"Retroceso eliminará espacios adicionales para mantenerle alineado con el "
+"tamaño de la sangría."
+
+#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:13
+#: ../libide/preferences/ide-preferences-builtin.c:118
+msgid "Smart Home and End"
+msgstr "Inicio y Fin inteligentes"
+
+#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:14
+msgid "Whether or not Home moves to first non-space character."
+msgstr ""
+"Si la tecla Inicio mueve o no el cursor al primer carácter que no sea un "
+"espacio en blanco."
+
+#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:15
+#| msgid "show grid lines"
+msgid "Show grid lines"
+msgstr "Mostrar las líneas de la rejilla"
+
+#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:16
+msgid "If enabled, the editor will show grid lines in the document."
+msgstr "Si se activa, el editor mostrará líneas de cuadrícula en el documento."
+
+#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:17
+#: ../libide/preferences/ide-preferences-builtin.c:141
+msgid "Show overview map"
+msgstr "Mostrar la vista general del mapa"
+
+#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:18
+msgid ""
+"If enabled, Builder will display an overview map of the source file next to "
+"the editor."
+msgstr ""
+"Se se activa, Builder mostrará una vista general del mapa del archivo fuente "
+"junto al editor."
+
+#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:19
+#, fuzzy
+#| msgid "Automatically hide overview map"
+msgid "Automatically Hide Overview Map"
+msgstr "Ocultar automáticamente la vista general del mapa"
+
+#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:20
+msgid ""
+"If enabled, Builder will automatically hide the overview map when mouse "
+"focus leaves the editor, or a timeout occurs."
+msgstr ""
+"Si se activa, Builder ocultará automáticamente la vista general del mapa "
+"cuando el foco del ratón se retire del editor o pase un intervalo de tiempo."
+
+#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:21
+msgid "Draw Spaces"
+msgstr "Dibujar espacios"
+
+#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:22
+msgid "The various types of space to draw in the editor."
+msgstr "Los diferentes tipos de espacios que dibujar en el editor."
+
+#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:23
+#: ../libide/preferences/ide-preferences-builtin.c:130
+msgid "Overscroll"
+msgstr "Sobredesplazamiento"
+
+#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:24
+#| msgid "Allow the editor to scroll past the end of the buffer"
+msgid "The number of lines to scroll beyond the end of the buffer."
+msgstr "El número de líneas que desplazarse más allá del final del búfer."
+
+#: ../data/gsettings/org.gnome.builder.extension-type.gschema.xml.in.h:1
+#: ../data/gsettings/org.gnome.builder.plugin.gschema.xml.in.h:1
+#, fuzzy
+#| msgid "Table"
+msgid "Enabled"
+msgstr "Tabla"
+
+#: ../data/gsettings/org.gnome.builder.extension-type.gschema.xml.in.h:2
+#, fuzzy
+#| msgid "The GType of the extension interface."
+msgid "If the type within the extension is enabled."
+msgstr "El GType de la interfaz de la extensión."
+
+#: ../data/gsettings/org.gnome.builder.gschema.xml.in.h:1
+msgid "Window size"
+msgstr "Tamaño de la ventana"
+
+#: ../data/gsettings/org.gnome.builder.gschema.xml.in.h:2
+msgid "Window size (width and height)."
+msgstr "Tamaño de la ventana (anchura y altura)."
+
+#: ../data/gsettings/org.gnome.builder.gschema.xml.in.h:3
+#| msgid "Right margin position"
+msgid "Window position"
+msgstr "Posición de la ventana"
+
+#: ../data/gsettings/org.gnome.builder.gschema.xml.in.h:4
+msgid "Window position (x and y)."
+msgstr "Posición de la ventana (x e y)."
+
+#: ../data/gsettings/org.gnome.builder.gschema.xml.in.h:5
+msgid "Window maximized"
+msgstr "Ventana maximizada"
+
+#: ../data/gsettings/org.gnome.builder.gschema.xml.in.h:6
+msgid "Window maximized state"
+msgstr "Estado maximizado de la ventana"
+
+#: ../data/gsettings/org.gnome.builder.gschema.xml.in.h:7
+msgid "Night Mode"
+msgstr "Modo nocturno"
+
+#: ../data/gsettings/org.gnome.builder.gschema.xml.in.h:8
+#, fuzzy
+#| msgid "Use dark colors for the application chrome."
+msgid "Prefer dark application chrome."
+msgstr "Usar colores oscuros para el cromado de la aplicación."
+
+#: ../data/gsettings/org.gnome.builder.gschema.xml.in.h:9
+#, fuzzy
+#| msgid "- discover projects"
+msgid "Mine projects"
+msgstr "- descubrir proyectos"
+
+#: ../data/gsettings/org.gnome.builder.gschema.xml.in.h:10
+#, fuzzy
+#| msgid "Search for projects"
+msgid "Search directories for projects."
+msgstr "Buscar proyectos"
+
+#: ../data/gsettings/org.gnome.builder.gschema.xml.in.h:11
+#| msgid "Projects Directory"
+msgid "Projects directory"
+msgstr "Carpeta de proyectos"
+
+#: ../data/gsettings/org.gnome.builder.gschema.xml.in.h:12
+#, fuzzy
+#| msgid "A place for all your projects"
+msgid "Directory for all builder projects"
+msgstr "Un lugar para todos sus proyectos"
+
+#: ../data/gsettings/org.gnome.builder.plugin.gschema.xml.in.h:2
+#| msgid "If the pane should be revealed."
+msgid "If the plugin should be enabled"
+msgstr "Si se debe activar el complemento"
+
+#: ../data/gsettings/org.gnome.builder.project-tree.gschema.xml.in.h:1
+msgid "Show Project Sidebar"
+msgstr "Mostrar la barra lateral del proyecto"
+
+#: ../data/gsettings/org.gnome.builder.project-tree.gschema.xml.in.h:2
+msgid "If enabled, the sidebar will be visible in the editor workspace."
+msgstr ""
+"Si se activa, la barra lateral será visible en el espacio de trabajo del "
+"editor."
+
+#: ../data/gsettings/org.gnome.builder.project-tree.gschema.xml.in.h:3
+#: ../plugins/project-tree/gtk/menus.ui.h:15
+msgid "Show Icons"
+msgstr "Mostrar iconos"
+
+#: ../data/gsettings/org.gnome.builder.project-tree.gschema.xml.in.h:4
+#, fuzzy
+#| msgid "If enabled, the sidebar will display icons next to each item."
+msgid "If enabled, the project tree will display icons next to each item."
+msgstr "Si se activa, la barra lateral mostrará iconos junto a cada elemento."
+
+#: ../data/gsettings/org.gnome.builder.project-tree.gschema.xml.in.h:5
+#: ../plugins/project-tree/gtk/menus.ui.h:16
+msgid "Show Ignored Files"
+msgstr "Mostrar archivos ignorados"
+
+#: ../data/gsettings/org.gnome.builder.project-tree.gschema.xml.in.h:6
+#, fuzzy
+#| msgid "If enabled, the sidebar will display icons next to each item."
+msgid ""
+"If enabled, the project tree will display files that are ignored by the VCS."
+msgstr "Si se activa, la barra lateral mostrará iconos junto a cada elemento."
+
+#: ../data/gsettings/org.gnome.builder.workbench.gschema.xml.in.h:1
+#| msgid "Left Pane"
+msgid "Show Left Panel"
+msgstr "Mostrar el panel izquierdo"
+
+#: ../data/gsettings/org.gnome.builder.workbench.gschema.xml.in.h:2
+#, fuzzy
+#| msgid "If enabled, the sidebar will be visible in the editor workspace."
+msgid "If enabled, the left panel will be displayed."
+msgstr ""
+"Si se activa, la barra lateral será visible en el espacio de trabajo del "
+"editor."
+
+#: ../data/gsettings/org.gnome.builder.workbench.gschema.xml.in.h:3
+#| msgid "Left Pane"
+msgid "Left Panel Position"
+msgstr "Posición del panel izquierdo"
+
+#: ../data/gsettings/org.gnome.builder.workbench.gschema.xml.in.h:4
+#| msgid "The width in pixels of the project tree."
+msgid "The width in pixel units of the left panel."
+msgstr "La anchura en píxeles del panel izquierdo."
+
+#: ../data/gsettings/org.gnome.builder.workbench.gschema.xml.in.h:5
+#| msgid "Right Pane"
+msgid "Show Right Panel"
+msgstr "Mostrar el panel derecho"
+
+#: ../data/gsettings/org.gnome.builder.workbench.gschema.xml.in.h:6
+#, fuzzy
+#| msgid "If enabled, the sidebar will be visible in the editor workspace."
+msgid "If enabled, the right panel will be displayed."
+msgstr ""
+"Si se activa, la barra lateral será visible en el espacio de trabajo del "
+"editor."
+
+#: ../data/gsettings/org.gnome.builder.workbench.gschema.xml.in.h:7
+#| msgid "Right margin position"
+msgid "Right Panel Position"
+msgstr "Posición del panel derecho"
+
+#: ../data/gsettings/org.gnome.builder.workbench.gschema.xml.in.h:8
+#| msgid "The width in pixels of the project tree."
+msgid "The width in pixel units of the right panel."
+msgstr "La anchura en píxeles del panel derecho."
+
+#: ../data/gsettings/org.gnome.builder.workbench.gschema.xml.in.h:9
+#| msgid "Bottom Pane"
+msgid "Show Bottom Panel"
+msgstr "Mostrar panel inferior"
+
+#: ../data/gsettings/org.gnome.builder.workbench.gschema.xml.in.h:10
+#, fuzzy
+#| msgid "If enabled, the sidebar will be visible in the editor workspace."
+msgid "If enabled, the bottom panel will be displayed."
+msgstr ""
+"Si se activa, la barra lateral será visible en el espacio de trabajo del "
+"editor."
+
+#: ../data/gsettings/org.gnome.builder.workbench.gschema.xml.in.h:11
+#| msgid "Bottom Pane"
+msgid "Bottom Panel Position"
+msgstr "Posición del panel inferior"
+
+#: ../data/gsettings/org.gnome.builder.workbench.gschema.xml.in.h:12
+#| msgid "The width in pixels of the project tree."
+msgid "The width in pixel units of the bottom panel."
+msgstr "La anchura en píxeles del panel inferior."
 
 #: ../data/gtk/menus.ui.h:1
 msgid "_New Project"
@@ -310,12 +751,6 @@ msgid "Dark color scheme for Builder using the Tango color palette"
 msgstr ""
 "Esquema de colores oscuros para Builder usando la paleta de colores Tango"
 
-#: ../data/style-schemes/builder.xml.h:1 ../libide/ide-application.c:413
-#: ../libide/ide-workbench.c:562
-#: ../libide/preferences/ide-preferences-builtin.c:113
-msgid "Builder"
-msgstr "Builder"
-
 #: ../data/style-schemes/builder.xml.h:2
 msgid "The default color scheme for Builder"
 msgstr "El esquema de colores predeterminado para Builder"
@@ -357,18 +792,9 @@ msgstr "Mostrar números de línea"
 msgid "Display right margin"
 msgstr "Mostrar margen derecho"
 
-#: ../data/ui/ide-editor-tweak-widget.ui.h:4
-msgid "Highlight current line"
-msgstr "Resaltar la línea actual"
-
 #: ../data/ui/ide-editor-tweak-widget.ui.h:5
 msgid "Auto indent"
 msgstr "Sangrado automático"
-
-#: ../data/ui/ide-editor-tweak-widget.ui.h:6
-#: ../libide/preferences/ide-preferences-builtin.c:119
-msgid "Smart Backspace"
-msgstr "Retroceso inteligente"
 
 #: ../data/ui/ide-editor-tweak-widget.ui.h:7
 #: ../libide/preferences/ide-preferences-builtin.c:234
@@ -876,10 +1302,6 @@ msgstr ""
 msgid "Failed to initialize defaults."
 msgstr "Falló al inicializar los parámetros predeterminados."
 
-#: ../libide/ide-application-actions.c:114
-msgid "An IDE for GNOME"
-msgstr "Un EID para GNOME"
-
 #: ../libide/ide-application-actions.c:120
 msgid "GNOME Builder"
 msgstr "GNOME Builder"
@@ -959,7 +1381,7 @@ msgstr "Proporcione una dirección de D-Bus"
 msgid "No such worker"
 msgstr "No existe el trabajador"
 
-#: ../libide/ide-buffer.c:2310
+#: ../libide/ide-buffer.c:2331
 msgid "The current language lacks a symbol resolver."
 msgstr "Al idioma actual le falta un resolutor de símbolos."
 
@@ -1263,10 +1685,6 @@ msgid "Movement"
 msgstr "Movimiento"
 
 #: ../libide/preferences/ide-preferences-builtin.c:118
-msgid "Smart Home and End"
-msgstr "Inicio y Fin inteligentes"
-
-#: ../libide/preferences/ide-preferences-builtin.c:118
 msgid "Home moves to first non-whitespace character"
 msgstr ""
 "La tecla Inicio mueve el cursor hacia el primer carácter que no sea un "
@@ -1298,10 +1716,6 @@ msgstr "Desplazamiento"
 #: ../libide/preferences/ide-preferences-builtin.c:129
 msgid "Minimum number of lines to keep above and below the cursor"
 msgstr "Número mínimo de líneas que mantener por encima y debajo del cursor"
-
-#: ../libide/preferences/ide-preferences-builtin.c:130
-msgid "Overscroll"
-msgstr "Sobredesplazamiento"
 
 #: ../libide/preferences/ide-preferences-builtin.c:130
 msgid "Allow the editor to scroll past the end of the buffer"
@@ -1353,10 +1767,6 @@ msgstr ""
 #: ../libide/preferences/ide-preferences-builtin.c:140
 msgid "Code Overview"
 msgstr "Vista general del código"
-
-#: ../libide/preferences/ide-preferences-builtin.c:141
-msgid "Show overview map"
-msgstr "Mostrar la vista general del mapa"
 
 #: ../libide/preferences/ide-preferences-builtin.c:141
 msgid "A zoomed out view to enhance navigating source code"
@@ -1700,12 +2110,10 @@ msgid "Create a new autotools project with a shared library"
 msgstr "Crear un proyecto de autotools nuevo con una biblioteca compartida"
 
 #: ../plugins/autotools-templates/autotools_templates/__init__.py:221
-#| msgid "Project"
 msgid "Empty Project"
 msgstr "Proyecto vacío"
 
 #: ../plugins/autotools-templates/autotools_templates/__init__.py:224
-#| msgid "Create a new project"
 msgid "Create a new empty autotools project"
 msgstr "Crear un nuevo proyecto de autotools vacío"
 
@@ -2123,7 +2531,6 @@ msgid "Project template to generate"
 msgstr "Plantilla de proyecto que generar"
 
 #: ../plugins/create-project/gbp-create-project-tool.c:136
-#| msgid "The language for the snippet."
 msgid "The target language (if supported)"
 msgstr "El lenguaje objetivo (si está soportado)"
 
@@ -2258,11 +2665,11 @@ msgstr "No se ha especificado ningún lenguaje"
 msgid "Preview as HTML"
 msgstr "Vista previa como HTML"
 
-#: ../plugins/jedi/jedi_plugin.py:672
+#: ../plugins/jedi/jedi_plugin.py:730
 msgid "Suggest Python completions"
 msgstr "Sugerir completado en Python"
 
-#: ../plugins/jedi/jedi_plugin.py:673
+#: ../plugins/jedi/jedi_plugin.py:731
 msgid "Use Jedi to provide completions for the Python language"
 msgstr "Usar Jedi para completado en el lenguaje Python"
 
@@ -2301,10 +2708,6 @@ msgstr "_Crear"
 #: ../plugins/project-tree/gb-project-tree-addin.c:113
 msgid "Project"
 msgstr "Proyecto"
-
-#: ../plugins/project-tree/gb-project-tree-builder.c:77
-msgid "Files"
-msgstr "Archivos"
 
 #: ../plugins/project-tree/gb-rename-file-popover.c:79
 #, c-format
@@ -2351,14 +2754,6 @@ msgstr "Mo_ver a la papelera"
 #: ../plugins/project-tree/gtk/menus.ui.h:14
 msgid "Display Options"
 msgstr "Opciones de visualización"
-
-#: ../plugins/project-tree/gtk/menus.ui.h:15
-msgid "Show Icons"
-msgstr "Mostrar iconos"
-
-#: ../plugins/project-tree/gtk/menus.ui.h:16
-msgid "Show Ignored Files"
-msgstr "Mostrar archivos ignorados"
 
 #: ../plugins/project-tree/gtk/menus.ui.h:17
 msgid "Sort Directories First"
@@ -2421,6 +2816,9 @@ msgstr "Mostrar errores y advertencias proporcionadas por Vala"
 #: ../plugins/vala-pack/ide-vala-preferences-addin.vala:36
 msgid "vala diagnostics warnings errors"
 msgstr "diagnósticos de alertas y errores de Vala"
+
+#~ msgid "Files"
+#~ msgstr "Archivos"
 
 #~ msgid "File name must not contain subdirectories."
 #~ msgstr "El nombre del archivo no debe contener subcarpetas."
@@ -2498,9 +2896,6 @@ msgstr "diagnósticos de alertas y errores de Vala"
 #~ msgid "No files provided to load settings for.\n"
 #~ msgstr ""
 #~ "No se han proporcionado archivos para los que cargar una configuración.\n"
-
-#~ msgid "- discover projects"
-#~ msgstr "- descubrir proyectos"
 
 #~ msgid "%s result\n"
 #~ msgid_plural "%s results\n"
@@ -2594,9 +2989,6 @@ msgstr "diagnósticos de alertas y errores de Vala"
 #~ msgid "Cursor Placement"
 #~ msgstr "Ubicación del cursor"
 
-#~ msgid "Draw Spaces"
-#~ msgstr "Dibujar espacios"
-
 #~ msgid "Draw an arrow over tab characters"
 #~ msgstr "Dibujar una flecha sobre los tabuladores"
 
@@ -2617,12 +3009,6 @@ msgstr "diagnósticos de alertas y errores de Vala"
 #~ msgstr ""
 #~ "Resaltar sintaxis adicional basada en información encontrada en el "
 #~ "documento."
-
-#~ msgid "Suggest Snippet Completion"
-#~ msgstr "Sugerir completado de fragmentos"
-
-#~ msgid "Allow snippets to be inserted into the document."
-#~ msgstr "Permitir insertar fragmentos en el documento."
 
 #~ msgid "Use Ctags for completions in supported languages."
 #~ msgstr "Usar Ctags para completado en los lenguajes soportados."
@@ -2647,12 +3033,6 @@ msgstr "diagnósticos de alertas y errores de Vala"
 
 #~ msgid "Plugins"
 #~ msgstr "Complementos"
-
-#~ msgid "Night Mode"
-#~ msgstr "Modo nocturno"
-
-#~ msgid "Use dark colors for the application chrome."
-#~ msgstr "Usar colores oscuros para el cromado de la aplicación."
 
 #~ msgid "Two finger swipe right"
 #~ msgstr "Deslizar a la derecha con dos dedos"
@@ -2788,9 +3168,6 @@ msgstr "diagnósticos de alertas y errores de Vala"
 #~ msgid "smart back backspace indent align"
 #~ msgstr "inteligente atrás retroceso sangrado alineación"
 
-#~ msgid "show grid lines"
-#~ msgstr "mostrar las líneas de la rejilla"
-
 #~ msgid "source style scheme source tango solarized builder syntax"
 #~ msgstr "fuente estilo tango iluminado constructor sintaxis"
 
@@ -2855,9 +3232,6 @@ msgstr "diagnósticos de alertas y errores de Vala"
 
 #~ msgid "Max Samples"
 #~ msgstr "Máximo de muestras"
-
-#~ msgid "Table"
-#~ msgstr "Tabla"
 
 #~ msgid "The data table for the graph."
 #~ msgstr "La tabla de datos para el gráfico."
@@ -3096,9 +3470,6 @@ msgstr "diagnósticos de alertas y errores de Vala"
 
 #~ msgid "Interface Type"
 #~ msgstr "Tipo de interfaz"
-
-#~ msgid "The GType of the extension interface."
-#~ msgstr "El GType de la interfaz de la extensión."
 
 #~ msgid "Key"
 #~ msgstr "Clave"
@@ -3832,17 +4203,8 @@ msgstr "diagnósticos de alertas y errores de Vala"
 #~ msgid "Which slider child is visible."
 #~ msgstr "Qué deslizador hijo es visible."
 
-#~ msgid "Left Pane"
-#~ msgstr "Panel izquierdo"
-
 #~ msgid "The left workspace pane."
 #~ msgstr "El panel del área de trabajo izquierda."
-
-#~ msgid "Right Pane"
-#~ msgstr "Panel derecho"
-
-#~ msgid "Bottom Pane"
-#~ msgstr "Panel inferior"
 
 #~ msgid "Content Pane"
 #~ msgstr "Panel de contenido"
@@ -3855,9 +4217,6 @@ msgstr "diagnósticos de alertas y errores de Vala"
 
 #~ msgid "Reveal"
 #~ msgstr "Mostrar"
-
-#~ msgid "If the pane should be revealed."
-#~ msgstr "Si se debe mostrar el panel."
 
 #~ msgid "The position of the pane."
 #~ msgstr "La posición del panel."
@@ -3892,124 +4251,11 @@ msgstr "diagnósticos de alertas y errores de Vala"
 #~ msgid "Display Side _Panel"
 #~ msgstr "Mostrar el _panel lateral"
 
-#~ msgid "Build Project"
-#~ msgstr "Construir proyecto"
-
 #~ msgid "Rebuild Project"
 #~ msgstr "Reconstruir proyecto"
 
-#~ msgid "Clang based autocompletion (Experimental)"
-#~ msgstr "Autocompletado basado en Clang (experimental)"
-
-#~ msgid "Use Clang for autocompletion in the C and C++ languages."
-#~ msgstr "Usar Clang para el autocompletado en los lenguajes C y C++."
-
-#~ msgid "Ctags based autocompletion"
-#~ msgstr "Autocompletado basado en Ctags"
-
-#~ msgid "Use Ctags for autocompletion."
-#~ msgstr "Usar Ctags para el autocompletado."
-
-#~ msgid "Enable auto-completion of words in document"
-#~ msgstr "Activar autocompletado de palabras en el documento"
-
-#~ msgid ""
-#~ "If enabled, words within the current document will be available for auto-"
-#~ "completion."
-#~ msgstr ""
-#~ "Si se activa, las palabras dentro del documento actual estarán "
-#~ "disponibles para el autocompletado."
-
-#~ msgid "Enable semantic highlighting"
-#~ msgstr "Activar el resaltado semántico"
-
-#~ msgid ""
-#~ "If enabled, additional highlighting will be provided in supported "
-#~ "languages based on information extracted from the source code."
-#~ msgstr ""
-#~ "Si se activa, se proporcionará resaltado adicional basado en información "
-#~ "extraída del código fuente en los lenguajes soportados."
-
-#~ msgid "Path to ctags executable"
-#~ msgstr "Ruta al ejecutable ctags"
-
-#~ msgid "The path to the ctags executable on the system."
-#~ msgstr "La ruta hacia el ejecutable ctags en el sistema."
-
-#~ msgid "Jump to the last position when reopening a file"
-#~ msgstr "Saltar a la última posición al reabrir un archivo"
-
-#~ msgid "Show modified lines"
-#~ msgstr "Mostrar las líneas modificadas"
-
-#~ msgid ""
-#~ "If enabled, the editor will show line additions and changes next to the "
-#~ "source code."
-#~ msgstr ""
-#~ "Si se activa, el editor mostrará las adiciones y cambios en las líneas "
-#~ "junto al código fuente."
-
-#~ msgid ""
-#~ "If enabled, the editor will highlight the line containing the cursor."
-#~ msgstr "Si se activa, el editor resaltará la línea que contiene el cursor."
-
-#~ msgid "If enabled, the editor will highlight matching brackets."
-#~ msgstr "Si se activa, el editor resaltará las parejas de corchetes."
-
-#~ msgid "If enabled, the editor will show line numbers."
-#~ msgstr "Si se activa, el editor mostrará los números de línea."
-
-#~ msgid ""
-#~ "Backspace will remove additional spaces to keep you aligned to the "
-#~ "indentation size."
-#~ msgstr ""
-#~ "Retroceso eliminará espacios adicionales para mantenerle alineado con el "
-#~ "tamaño de la sangría."
-
-#~ msgid "Whether or not Home moves to first non-space character."
-#~ msgstr ""
-#~ "Si la tecla Inicio mueve o no el cursor al primer carácter que no sea un "
-#~ "espacio en blanco."
-
-#~ msgid "If enabled, the editor will show grid lines in the document."
-#~ msgstr ""
-#~ "Si se activa, el editor mostrará líneas de cuadrícula en el documento."
-
-#~ msgid ""
-#~ "If enabled, Builder will display an overview map of the source file next "
-#~ "to the editor."
-#~ msgstr ""
-#~ "Se se activa, Builder mostrará una vista general del mapa del archivo "
-#~ "fuente junto al editor."
-
-#~ msgid ""
-#~ "If enabled, Builder will automatically hide the overview map when mouse "
-#~ "focus leaves the editor, or a timeout occurs."
-#~ msgstr ""
-#~ "Si se activa, Builder ocultará automáticamente la vista general del mapa "
-#~ "cuando el foco del ratón se retire del editor o pase un intervalo de "
-#~ "tiempo."
-
-#~ msgid "The various types of space to draw in the editor."
-#~ msgstr "Los diferentes tipos de espacios que dibujar en el editor."
-
-#~ msgid "Show Project Sidebar"
-#~ msgstr "Mostrar la barra lateral del proyecto"
-
-#~ msgid "If enabled, the sidebar will be visible in the editor workspace."
-#~ msgstr ""
-#~ "Si se activa, la barra lateral será visible en el espacio de trabajo del "
-#~ "editor."
-
-#~ msgid "If enabled, the sidebar will display icons next to each item."
-#~ msgstr ""
-#~ "Si se activa, la barra lateral mostrará iconos junto a cada elemento."
-
 #~ msgid "Project Tree Width"
 #~ msgstr "Anchura del árbol del proyecto."
-
-#~ msgid "The width in pixels of the project tree."
-#~ msgstr "La anchura, en píxeles, del árbol del proyecto."
 
 #~ msgid "Location must be set to .git directory."
 #~ msgstr "La ubicación debe estar establecida a la carpeta .git"
