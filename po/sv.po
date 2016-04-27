@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-04-22 19:27+0000\n"
-"PO-Revision-Date: 2016-04-22 21:37+0200\n"
+"POT-Creation-Date: 2016-04-27 21:16+0000\n"
+"PO-Revision-Date: 2016-04-27 23:18+0200\n"
 "Last-Translator: Anders Jonsson <anders.jonsson@norsjovallen.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "Language: sv\n"
@@ -98,6 +98,404 @@ msgstr "Misslyckades med hitta mall ”%s”"
 #, c-format
 msgid "Could not parse XML from stream"
 msgstr "Kunde inte tolka XML från ström"
+
+#: ../data/org.gnome.Builder.appdata.xml.in.h:1
+#: ../data/org.gnome.Builder.desktop.in.in.h:1
+#: ../data/style-schemes/builder.xml.h:1 ../libide/ide-application.c:413
+#: ../libide/ide-workbench.c:562
+#: ../libide/preferences/ide-preferences-builtin.c:113
+msgid "Builder"
+msgstr "Builder"
+
+#: ../data/org.gnome.Builder.appdata.xml.in.h:2
+#: ../libide/ide-application-actions.c:114
+msgid "An IDE for GNOME"
+msgstr "En utvecklingsmiljö för GNOME"
+
+#: ../data/org.gnome.Builder.appdata.xml.in.h:3
+msgid ""
+"Builder is an actively developed Integrated Development Environment for "
+"GNOME. It combines integrated support for essential GNOME technologies such "
+"as GTK+, GLib, and GNOME APIs with features that any developer will "
+"appreciate, like syntax highlighting and snippets."
+msgstr ""
+"Builder är en aktivt utvecklad integrerad utvecklingsmiljö (Integrated "
+"Development Environment, IDE) för GNOME. Den kombinerar integrerat stöd för "
+"nödvändiga GNOME-teknologier som GTK+, GLib och GNOME-API:n med funktioner "
+"som alla utvecklare kommer uppskatta, som syntaxmarkering och kodsnuttar."
+
+#: ../data/org.gnome.Builder.appdata.xml.in.h:4
+msgid "Features:"
+msgstr "Funktioner:"
+
+#: ../data/org.gnome.Builder.appdata.xml.in.h:5
+msgid "Integration with Autotools"
+msgstr "Integration med Autotools"
+
+#: ../data/org.gnome.Builder.appdata.xml.in.h:6
+msgid "Clang based auto-completion, semantic highlighting, and diagnostics"
+msgstr ""
+"Clang-baserad automatisk komplettering, semantisk färgmarkering och "
+"diagnostik"
+
+#: ../data/org.gnome.Builder.appdata.xml.in.h:7
+msgid "Auto indentation"
+msgstr "Automatisk indentering"
+
+#: ../data/org.gnome.Builder.appdata.xml.in.h:8
+msgid "Side-by-side code editors"
+msgstr "Flera kodredigerare bredvid varandra"
+
+#: ../data/org.gnome.Builder.appdata.xml.in.h:9
+msgid "Syntax highlighting"
+msgstr "Syntaxmarkering"
+
+#: ../data/org.gnome.Builder.appdata.xml.in.h:10
+msgid "HTML/Markdown live preview"
+msgstr "Direkt förhandsgranskning av HTML/Markdown"
+
+#: ../data/org.gnome.Builder.appdata.xml.in.h:11
+msgid "Optional Vim-style editing"
+msgstr "Möjlighet att redigera i Vim-stil"
+
+#: ../data/org.gnome.Builder.appdata.xml.in.h:12
+msgid "Integration with Git"
+msgstr "Integration med Git"
+
+#: ../data/org.gnome.Builder.desktop.in.in.h:2
+msgid "Build software for GNOME"
+msgstr "Byggprogramvara för GNOME"
+
+#: ../data/org.gnome.Builder.desktop.in.in.h:3
+msgid "Build;Develop;"
+msgstr "Bygg;Utveckla;"
+
+#: ../data/gsettings/org.gnome.builder.build.gschema.xml.in.h:1
+msgid "Build Parallelism"
+msgstr "Byggparallellisering"
+
+#: ../data/gsettings/org.gnome.builder.build.gschema.xml.in.h:2
+msgid ""
+"Number of workers to use when performing builds. -1 for sensible default. 0 "
+"for number of CPU."
+msgstr ""
+"Antal arbetare att använda vid byggen. -1 för ett rimligt standardvärde. 0 "
+"för antal processorer."
+
+#: ../data/gsettings/org.gnome.builder.code-insight.gschema.xml.in.h:1
+msgid "Suggest Snippet Completion"
+msgstr "Föreslå textsnuttskomplettering"
+
+#: ../data/gsettings/org.gnome.builder.code-insight.gschema.xml.in.h:2
+msgid "Allow snippets to be inserted into the document."
+msgstr "Tillåt att textsnuttar infogas i dokumentet."
+
+#: ../data/gsettings/org.gnome.builder.code-insight.gschema.xml.in.h:3
+msgid "Clang based autocompletion (Experimental)"
+msgstr "Clang-baserad automatisk komplettering (Experimentell)"
+
+#: ../data/gsettings/org.gnome.builder.code-insight.gschema.xml.in.h:4
+msgid "Use Clang for autocompletion in the C and C++ languages."
+msgstr "Använd Clang för automatisk komplettering i språken C och C++."
+
+#: ../data/gsettings/org.gnome.builder.code-insight.gschema.xml.in.h:5
+msgid "Ctags based autocompletion"
+msgstr "Ctags-baserad automatisk komplettering"
+
+#: ../data/gsettings/org.gnome.builder.code-insight.gschema.xml.in.h:6
+msgid "Use Ctags for autocompletion."
+msgstr "Använd Ctags för automatisk komplettering."
+
+#: ../data/gsettings/org.gnome.builder.code-insight.gschema.xml.in.h:7
+msgid "Enable auto-completion of words in document"
+msgstr "Aktivera automatisk komplettering av ord i dokument"
+
+#: ../data/gsettings/org.gnome.builder.code-insight.gschema.xml.in.h:8
+msgid ""
+"If enabled, words within the current document will be available for auto-"
+"completion."
+msgstr ""
+"Om aktiverad kommer ord i det aktuella dokumentet vara tillgängliga för "
+"automatisk komplettering."
+
+#: ../data/gsettings/org.gnome.builder.code-insight.gschema.xml.in.h:9
+msgid "Enable semantic highlighting"
+msgstr "Aktivera semantisk färgmarkering"
+
+#: ../data/gsettings/org.gnome.builder.code-insight.gschema.xml.in.h:10
+msgid ""
+"If enabled, additional highlighting will be provided in supported languages "
+"based on information extracted from the source code."
+msgstr ""
+"Om aktiverad kommer ytterligare färgmarkering att tillhandahållas i språk "
+"som stöds baserat på information som extraherats från källkoden."
+
+#: ../data/gsettings/org.gnome.builder.code-insight.gschema.xml.in.h:11
+msgid "Path to ctags executable"
+msgstr "Sökväg till körbar ctags-fil"
+
+#: ../data/gsettings/org.gnome.builder.code-insight.gschema.xml.in.h:12
+msgid "The path to the ctags executable on the system."
+msgstr "Sökvägen till systemets körbara ctags-fil"
+
+#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:1
+msgid "Restore last position"
+msgstr "Återställ sista position"
+
+#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:2
+msgid "Jump to the last position when reopening a file"
+msgstr "Hoppa till den senaste positionen då en fil öppnas på nytt"
+
+#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:3
+msgid "Show modified lines"
+msgstr "Visa ändrade rader"
+
+#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:4
+msgid ""
+"If enabled, the editor will show line additions and changes next to the "
+"source code."
+msgstr ""
+"Om aktiverad kommer redigeraren att visa radtillägg och ändringar intill "
+"källkoden."
+
+#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:5
+#: ../data/ui/ide-editor-tweak-widget.ui.h:4
+msgid "Highlight current line"
+msgstr "Färgmarkera aktuell rad"
+
+#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:6
+msgid "If enabled, the editor will highlight the line containing the cursor."
+msgstr ""
+"Om aktiverad kommer redigeraren att färgmarkera raden som innehåller "
+"markören."
+
+#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:7
+msgid "Highlight matching brackets"
+msgstr "Färgmarkera matchande parenteser"
+
+#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:8
+msgid "If enabled, the editor will highlight matching brackets."
+msgstr "Om aktiverad kommer redigeraren att färgmarkera matchande parenteser."
+
+#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:9
+msgid "Show line numbers"
+msgstr "Visa radnummer"
+
+#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:10
+msgid "If enabled, the editor will show line numbers."
+msgstr "Om aktiverad kommer redigeraren att visa radnummer."
+
+#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:11
+#: ../data/ui/ide-editor-tweak-widget.ui.h:6
+#: ../libide/preferences/ide-preferences-builtin.c:119
+msgid "Smart Backspace"
+msgstr "Smart backsteg"
+
+#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:12
+msgid ""
+"Backspace will remove additional spaces to keep you aligned to the "
+"indentation size."
+msgstr ""
+"Backsteg kommer ta bort extra blanktecken för att hålla dig justerad med "
+"indenteringsstorleken."
+
+#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:13
+#: ../libide/preferences/ide-preferences-builtin.c:118
+msgid "Smart Home and End"
+msgstr "Smarta Home och End"
+
+#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:14
+msgid "Whether or not Home moves to first non-space character."
+msgstr "Huruvida Home flyttar till första tecken som inte är blanksteg."
+
+#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:15
+msgid "Show grid lines"
+msgstr "Visa rutnät"
+
+#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:16
+msgid "If enabled, the editor will show grid lines in the document."
+msgstr "Om aktiverad kommer redigeraren visa rutnät i dokumentet."
+
+#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:17
+#: ../libide/preferences/ide-preferences-builtin.c:141
+msgid "Show overview map"
+msgstr "Visa översiktskarta"
+
+#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:18
+msgid ""
+"If enabled, Builder will display an overview map of the source file next to "
+"the editor."
+msgstr ""
+"Om aktiverad kommer Builder att visa en översiktskarta över källfilen intill "
+"redigeraren."
+
+#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:19
+msgid "Automatically Hide Overview Map"
+msgstr "Dölj automatiskt översiktskarta"
+
+#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:20
+msgid ""
+"If enabled, Builder will automatically hide the overview map when mouse "
+"focus leaves the editor, or a timeout occurs."
+msgstr ""
+"Om aktiverad kommer Builder automatiskt att dölja översiktskartan då "
+"musfokus lämnar redigeraren, eller en tidsgräns uppnås."
+
+#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:21
+msgid "Draw Spaces"
+msgstr "Rita ut blanktecken"
+
+#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:22
+msgid "The various types of space to draw in the editor."
+msgstr "De olika typerna av blanktecken att rita ut i redigeraren."
+
+#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:23
+#: ../libide/preferences/ide-preferences-builtin.c:130
+msgid "Overscroll"
+msgstr "Överrullning"
+
+#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:24
+msgid "The number of lines to scroll beyond the end of the buffer."
+msgstr "Antal rader att rulla bortom slutet på bufferten."
+
+#: ../data/gsettings/org.gnome.builder.extension-type.gschema.xml.in.h:1
+#: ../data/gsettings/org.gnome.builder.plugin.gschema.xml.in.h:1
+msgid "Enabled"
+msgstr "Aktiverad"
+
+#: ../data/gsettings/org.gnome.builder.extension-type.gschema.xml.in.h:2
+msgid "If the type within the extension is enabled."
+msgstr "Om typen i tillägget är aktiverad."
+
+#: ../data/gsettings/org.gnome.builder.gschema.xml.in.h:1
+msgid "Window size"
+msgstr "Fönsterstorlek"
+
+#: ../data/gsettings/org.gnome.builder.gschema.xml.in.h:2
+msgid "Window size (width and height)."
+msgstr "Fönsterstorlek (bredd och höjd)."
+
+#: ../data/gsettings/org.gnome.builder.gschema.xml.in.h:3
+msgid "Window position"
+msgstr "Fönsterposition"
+
+#: ../data/gsettings/org.gnome.builder.gschema.xml.in.h:4
+msgid "Window position (x and y)."
+msgstr "Fönsterposition (x och y)."
+
+#: ../data/gsettings/org.gnome.builder.gschema.xml.in.h:5
+msgid "Window maximized"
+msgstr "Fönster maximerat"
+
+#: ../data/gsettings/org.gnome.builder.gschema.xml.in.h:6
+msgid "Window maximized state"
+msgstr "Maximerat tillstånd för fönster"
+
+#: ../data/gsettings/org.gnome.builder.gschema.xml.in.h:7
+msgid "Night Mode"
+msgstr "Nattläge"
+
+#: ../data/gsettings/org.gnome.builder.gschema.xml.in.h:8
+msgid "Prefer dark application chrome."
+msgstr "Föredra mörka färger för programfönster"
+
+#: ../data/gsettings/org.gnome.builder.gschema.xml.in.h:9
+msgid "Mine projects"
+msgstr "Samla in projekt"
+
+#: ../data/gsettings/org.gnome.builder.gschema.xml.in.h:10
+msgid "Search directories for projects."
+msgstr "Sök kataloger efter projekt."
+
+#: ../data/gsettings/org.gnome.builder.gschema.xml.in.h:11
+msgid "Projects directory"
+msgstr "Projektkatalog"
+
+#: ../data/gsettings/org.gnome.builder.gschema.xml.in.h:12
+msgid "Directory for all builder projects"
+msgstr "Katalog för alla builder-projekt"
+
+#: ../data/gsettings/org.gnome.builder.plugin.gschema.xml.in.h:2
+msgid "If the plugin should be enabled"
+msgstr "Om insticksmodulen ska vara aktiverad"
+
+#: ../data/gsettings/org.gnome.builder.project-tree.gschema.xml.in.h:1
+msgid "Show Project Sidebar"
+msgstr "Visa sidopanel för projekt"
+
+#: ../data/gsettings/org.gnome.builder.project-tree.gschema.xml.in.h:2
+msgid "If enabled, the sidebar will be visible in the editor workspace."
+msgstr ""
+"Om aktiverad kommer sidopanelen att vara synlig i redigerarens arbetsyta."
+
+#: ../data/gsettings/org.gnome.builder.project-tree.gschema.xml.in.h:3
+#: ../plugins/project-tree/gtk/menus.ui.h:15
+msgid "Show Icons"
+msgstr "Visa ikoner"
+
+#: ../data/gsettings/org.gnome.builder.project-tree.gschema.xml.in.h:4
+msgid "If enabled, the project tree will display icons next to each item."
+msgstr "Om aktiverad kommer projektträdet att visa ikoner intill varje objekt."
+
+#: ../data/gsettings/org.gnome.builder.project-tree.gschema.xml.in.h:5
+#: ../plugins/project-tree/gtk/menus.ui.h:16
+msgid "Show Ignored Files"
+msgstr "Visa ignorerade filer"
+
+#: ../data/gsettings/org.gnome.builder.project-tree.gschema.xml.in.h:6
+msgid ""
+"If enabled, the project tree will display files that are ignored by the VCS."
+msgstr ""
+"Om aktiverad kommer projektträdet att visa filer som ignoreras av "
+"versionshanteringssystemet."
+
+#: ../data/gsettings/org.gnome.builder.workbench.gschema.xml.in.h:1
+msgid "Show Left Panel"
+msgstr "Visa vänsterpanel"
+
+#: ../data/gsettings/org.gnome.builder.workbench.gschema.xml.in.h:2
+msgid "If enabled, the left panel will be displayed."
+msgstr "Om aktiverad kommer vänsterpanelen att visas."
+
+#: ../data/gsettings/org.gnome.builder.workbench.gschema.xml.in.h:3
+msgid "Left Panel Position"
+msgstr "Position för vänsterpanel"
+
+#: ../data/gsettings/org.gnome.builder.workbench.gschema.xml.in.h:4
+msgid "The width in pixel units of the left panel."
+msgstr "Bredden i bildpunkter för vänsterpanelen."
+
+#: ../data/gsettings/org.gnome.builder.workbench.gschema.xml.in.h:5
+msgid "Show Right Panel"
+msgstr "Visa högerpanel"
+
+#: ../data/gsettings/org.gnome.builder.workbench.gschema.xml.in.h:6
+msgid "If enabled, the right panel will be displayed."
+msgstr "Om aktiverad kommer högerpanelen att visas."
+
+#: ../data/gsettings/org.gnome.builder.workbench.gschema.xml.in.h:7
+msgid "Right Panel Position"
+msgstr "Position för högerpanel"
+
+#: ../data/gsettings/org.gnome.builder.workbench.gschema.xml.in.h:8
+msgid "The width in pixel units of the right panel."
+msgstr "Bredden i bildpunkter för högerpanelen."
+
+#: ../data/gsettings/org.gnome.builder.workbench.gschema.xml.in.h:9
+msgid "Show Bottom Panel"
+msgstr "Visa bottenpanel"
+
+#: ../data/gsettings/org.gnome.builder.workbench.gschema.xml.in.h:10
+msgid "If enabled, the bottom panel will be displayed."
+msgstr "Om aktiverad kommer bottenpanelen att visas."
+
+#: ../data/gsettings/org.gnome.builder.workbench.gschema.xml.in.h:11
+msgid "Bottom Panel Position"
+msgstr "Position för bottenpanel"
+
+#: ../data/gsettings/org.gnome.builder.workbench.gschema.xml.in.h:12
+msgid "The height in pixel units of the bottom panel."
+msgstr "Höjden i bildpunkter för bottenpanelen."
 
 #: ../data/gtk/menus.ui.h:1
 msgid "_New Project"
@@ -307,12 +705,6 @@ msgstr "Mörk Builder"
 msgid "Dark color scheme for Builder using the Tango color palette"
 msgstr "Mörkt färgschema för Builder som använder Tango-färgpaletten"
 
-#: ../data/style-schemes/builder.xml.h:1 ../libide/ide-application.c:413
-#: ../libide/ide-workbench.c:562
-#: ../libide/preferences/ide-preferences-builtin.c:113
-msgid "Builder"
-msgstr "Builder"
-
 #: ../data/style-schemes/builder.xml.h:2
 msgid "The default color scheme for Builder"
 msgstr "Standardfärgschemat för Builder"
@@ -355,18 +747,9 @@ msgstr "Visa radnummer"
 msgid "Display right margin"
 msgstr "Visa högermarginal"
 
-#: ../data/ui/ide-editor-tweak-widget.ui.h:4
-msgid "Highlight current line"
-msgstr "Färgmarkera aktuell rad"
-
 #: ../data/ui/ide-editor-tweak-widget.ui.h:5
 msgid "Auto indent"
 msgstr "Automatisk indentering"
-
-#: ../data/ui/ide-editor-tweak-widget.ui.h:6
-#: ../libide/preferences/ide-preferences-builtin.c:119
-msgid "Smart Backspace"
-msgstr "Smart backsteg"
 
 #: ../data/ui/ide-editor-tweak-widget.ui.h:7
 #: ../libide/preferences/ide-preferences-builtin.c:234
@@ -870,10 +1253,6 @@ msgstr "standardvärden för språk saknar version i gruppen [global]."
 msgid "Failed to initialize defaults."
 msgstr "Misslyckades med att initiera standardvärden."
 
-#: ../libide/ide-application-actions.c:114
-msgid "An IDE for GNOME"
-msgstr "En utvecklingsmiljö för GNOME"
-
 #: ../libide/ide-application-actions.c:120
 msgid "GNOME Builder"
 msgstr "GNOME Builder"
@@ -956,7 +1335,7 @@ msgstr "Ange D-Bus-adress"
 msgid "No such worker"
 msgstr "Ingen sådan arbetare finns"
 
-#: ../libide/ide-buffer.c:2310
+#: ../libide/ide-buffer.c:2331
 msgid "The current language lacks a symbol resolver."
 msgstr "Det aktuella språket saknar en symboluppslagare."
 
@@ -1043,11 +1422,11 @@ msgstr "Ingen sådan tilläggspunkt."
 msgid "No implementations of extension point."
 msgstr "Inga implementationer av tilläggspunkt."
 
-#: ../libide/ide-project.c:463
+#: ../libide/ide-project.c:524
 msgid "Destination file must be within the project tree."
 msgstr "Målfil måste vara i projektträdet."
 
-#: ../libide/ide-project.c:593
+#: ../libide/ide-project.c:659
 msgid "File must be within the project tree."
 msgstr "Fil måste vara i projektträdet."
 
@@ -1262,10 +1641,6 @@ msgid "Movement"
 msgstr "Förflyttning"
 
 #: ../libide/preferences/ide-preferences-builtin.c:118
-msgid "Smart Home and End"
-msgstr "Smarta Home och End"
-
-#: ../libide/preferences/ide-preferences-builtin.c:118
 msgid "Home moves to first non-whitespace character"
 msgstr "Home flyttar till första tecken som inte är blanksteg"
 
@@ -1295,10 +1670,6 @@ msgstr "Rullningsavstånd"
 #: ../libide/preferences/ide-preferences-builtin.c:129
 msgid "Minimum number of lines to keep above and below the cursor"
 msgstr "Minsta antal rader att behålla ovanför och under markören"
-
-#: ../libide/preferences/ide-preferences-builtin.c:130
-msgid "Overscroll"
-msgstr "Överrullning"
 
 #: ../libide/preferences/ide-preferences-builtin.c:130
 msgid "Allow the editor to scroll past the end of the buffer"
@@ -1347,10 +1718,6 @@ msgstr "Färgmarkera matchande parenteser baserat på markörposition"
 #: ../libide/preferences/ide-preferences-builtin.c:140
 msgid "Code Overview"
 msgstr "Översiktskarta för kod"
-
-#: ../libide/preferences/ide-preferences-builtin.c:141
-msgid "Show overview map"
-msgstr "Visa översiktskarta"
 
 #: ../libide/preferences/ide-preferences-builtin.c:141
 msgid "A zoomed out view to enhance navigating source code"
@@ -1684,19 +2051,19 @@ msgstr "Rensar…"
 msgid "Invalid makefile provided, ignoring."
 msgstr "Ogiltig make-fil tillhandahölls, ignorerar."
 
-#: ../plugins/autotools-templates/autotools_templates/__init__.py:194
+#: ../plugins/autotools-templates/autotools_templates/__init__.py:198
 msgid "Shared Library"
 msgstr "Delat bibliotek"
 
-#: ../plugins/autotools-templates/autotools_templates/__init__.py:196
+#: ../plugins/autotools-templates/autotools_templates/__init__.py:200
 msgid "Create a new autotools project with a shared library"
 msgstr "Skapa ett nytt autotools-projekt med ett delat bibliotek"
 
-#: ../plugins/autotools-templates/autotools_templates/__init__.py:215
+#: ../plugins/autotools-templates/autotools_templates/__init__.py:221
 msgid "Empty Project"
 msgstr "Tomt projekt"
 
-#: ../plugins/autotools-templates/autotools_templates/__init__.py:217
+#: ../plugins/autotools-templates/autotools_templates/__init__.py:224
 msgid "Create a new empty autotools project"
 msgstr "Skapa ett nytt tomt autotools-projekt"
 
@@ -2026,12 +2393,12 @@ msgstr "Misslyckades med att hitta arbetskatalog"
 msgid "Invalid :syntax subcommand: %s"
 msgstr "Ogiltigt :syntax-underkommando: %s"
 
-#: ../plugins/command-bar/gb-vim.c:1022
+#: ../plugins/command-bar/gb-vim.c:1040
 #, c-format
 msgid "Invalid search and replace request"
 msgstr "Ogiltig sök och ersätt-begäran"
 
-#: ../plugins/command-bar/gb-vim.c:1127
+#: ../plugins/command-bar/gb-vim.c:1145
 #, c-format
 msgid "Not a command: %s"
 msgstr "Inte ett kommando: %s"
@@ -2245,11 +2612,11 @@ msgstr "Inget språk angivet"
 msgid "Preview as HTML"
 msgstr "Förhandsgranska som HTML"
 
-#: ../plugins/jedi/jedi_plugin.py:672
+#: ../plugins/jedi/jedi_plugin.py:730
 msgid "Suggest Python completions"
 msgstr "Föreslå Python-kompletteringar"
 
-#: ../plugins/jedi/jedi_plugin.py:673
+#: ../plugins/jedi/jedi_plugin.py:731
 msgid "Use Jedi to provide completions for the Python language"
 msgstr "Använd Jedi för att tillhandahålla kompletteringar i språket Python"
 
@@ -2289,18 +2656,10 @@ msgstr "S_kapa"
 msgid "Project"
 msgstr "Projekt"
 
-#: ../plugins/project-tree/gb-project-tree-builder.c:77
-msgid "Files"
-msgstr "Filer"
-
 #: ../plugins/project-tree/gb-rename-file-popover.c:79
 #, c-format
 msgid "Rename %s"
 msgstr "Byt namn på ”%s”"
-
-#: ../plugins/project-tree/gb-rename-file-popover.c:172
-msgid "File name must not contain subdirectories."
-msgstr "Filnamn får inte innehålla underkataloger."
 
 #: ../plugins/project-tree/gb-rename-file-popover.ui.h:2
 #: ../plugins/project-tree/gtk/menus.ui.h:10
@@ -2342,14 +2701,6 @@ msgstr "Fly_tta till papperskorgen"
 #: ../plugins/project-tree/gtk/menus.ui.h:14
 msgid "Display Options"
 msgstr "Visningsalternativ"
-
-#: ../plugins/project-tree/gtk/menus.ui.h:15
-msgid "Show Icons"
-msgstr "Visa ikoner"
-
-#: ../plugins/project-tree/gtk/menus.ui.h:16
-msgid "Show Ignored Files"
-msgstr "Visa ignorerade filer"
 
 #: ../plugins/project-tree/gtk/menus.ui.h:17
 msgid "Sort Directories First"
@@ -2413,6 +2764,12 @@ msgstr "Visa fel och varningar som tillhandahålls av Vala"
 msgid "vala diagnostics warnings errors"
 msgstr "vala diagnostik varningar fel"
 
+#~ msgid "Files"
+#~ msgstr "Filer"
+
+#~ msgid "File name must not contain subdirectories."
+#~ msgstr "Filnamn får inte innehålla underkataloger."
+
 #~ msgid "Invalid snippet at line %d: %s"
 #~ msgstr "Ogiltig textsnutt på rad %d: %s"
 
@@ -2464,26 +2821,17 @@ msgstr "vala diagnostik varningar fel"
 #~ msgid "Highlight Current Line"
 #~ msgstr "Färgmarkera aktuell rad"
 
-#~ msgid "Highlight the line containing the cursor."
-#~ msgstr "Färgmarkera raden som innehåller markören."
-
 #~ msgid "Whether or not matching brackets should be highlighted."
 #~ msgstr "Huruvida matchande klammer ska färgmarkeras eller inte."
 
 #~ msgid "Display Overview Map"
 #~ msgstr "Visa översiktskarta"
 
-#~ msgid "Display an overview map next to the source code editor."
-#~ msgstr "Visa en översiktskarta bredvid källkodsredigeraren"
-
 #~ msgid "Automatically hide the overview map during periods of inactivity."
 #~ msgstr "Dölj automatiskt översiktskartan under inaktivitet."
 
 #~ msgid "Cursor Placement"
 #~ msgstr "Markörplacering"
-
-#~ msgid "Draw Spaces"
-#~ msgstr "Rita ut blanksteg"
 
 #~ msgid "Draw a circle over space characters."
 #~ msgstr "Rita en cirkel över blanksteg."
@@ -2507,15 +2855,6 @@ msgstr "vala diagnostik varningar fel"
 #~ "Highlight additional syntax based upon information found in the document."
 #~ msgstr "Färgmarkera ytterligare syntax baserat på information i dokumentet."
 
-#~ msgid "Suggest Snippet Completion"
-#~ msgstr "Föreslå textsnuttskomplettering"
-
-#~ msgid "Allow snippets to be inserted into the document."
-#~ msgstr "Tillåt att textsnuttar infogas i dokumentet."
-
-#~ msgid "Use Ctags for completions in supported languages."
-#~ msgstr "Använd Ctags för kompletteringar i språk som stöds."
-
 #~ msgid "Suggest Completions using Jedi"
 #~ msgstr "Föreslå kompletteringar med Jedi"
 
@@ -2533,12 +2872,6 @@ msgstr "vala diagnostik varningar fel"
 
 #~ msgid "Plugins"
 #~ msgstr "Insticksmoduler"
-
-#~ msgid "Night Mode"
-#~ msgstr "Nattläge"
-
-#~ msgid "Use dark colors for the application chrome."
-#~ msgstr "Använd mörka färger för programfönstren."
 
 #~ msgid "Select Project"
 #~ msgstr "Välj projekt"
@@ -2637,9 +2970,6 @@ msgstr "vala diagnostik varningar fel"
 #~ msgid "git author email mail address attribute source code"
 #~ msgstr "git författare e-post e-postadress attribut källkod"
 
-#~ msgid "word words auto completion suggest found document"
-#~ msgstr "ord automatisk komplettering föreslå hittad dokument"
-
 #~ msgid "experimental clang autocompletion auto complete"
 #~ msgstr "experimentell clang automatisk komplettering autokomplettering"
 
@@ -2669,9 +2999,6 @@ msgstr "vala diagnostik varningar fel"
 
 #~ msgid "smart back backspace indent align"
 #~ msgstr "smart backsteg indentering justering"
-
-#~ msgid "show grid lines"
-#~ msgstr "visa rutnät"
 
 #~ msgid "source style scheme source tango solarized builder syntax"
 #~ msgstr "källkodsstil schema källkod tango solarized builder syntax"
@@ -2728,9 +3055,6 @@ msgstr "vala diagnostik varningar fel"
 
 #~ msgid "No files provided to load settings for.\n"
 #~ msgstr "Inga filer tillhandahållna att läsa in inställningar för.\n"
-
-#~ msgid "- discover projects"
-#~ msgstr "- upptäck projekt"
 
 # %s är en siffra
 #~ msgid "%s result\n"
