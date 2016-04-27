@@ -124,6 +124,24 @@
                     </child>
                   </object>
                 </child>
+                <child>
+                  <object class="GtkBox">
+                    <property name="halign">start</property>
+                    <property name="hexpand">true</property>
+                    <property name="valign">start</property>
+                    <property name="vexpand">true</property>
+                    <property name="visible">true</property>
+                    <child>
+                      <object class="GtkSpinner" id="clone_spinner">
+                        <property name="active">false</property>
+                        <property name="visible">true</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="pack-type">end</property>
+                  </packing>
+                </child>
               </object>
             </child>
             <child>
@@ -160,6 +178,7 @@
     <widgets>
       <widget name="clone_location_label"/>
       <widget name="clone_location_button"/>
+      <widget name="clone_spinner"/>
       <widget name="clone_uri_label"/>
       <widget name="clone_uri_entry"/>
     </widgets>

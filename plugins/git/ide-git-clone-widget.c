@@ -37,6 +37,7 @@ struct _IdeGitCloneWidget
   GtkEntry             *clone_uri_entry;
   GtkLabel             *clone_error_label;
   GtkProgressBar       *clone_progress;
+  GtkSpinner           *clone_spinner;
 
   guint                 is_ready : 1;
 };
@@ -188,6 +189,7 @@ ide_git_clone_widget_class_init (IdeGitCloneWidgetClass *klass)
   gtk_widget_class_bind_template_child (widget_class, IdeGitCloneWidget, clone_location_button);
   gtk_widget_class_bind_template_child (widget_class, IdeGitCloneWidget, clone_location_entry);
   gtk_widget_class_bind_template_child (widget_class, IdeGitCloneWidget, clone_progress);
+  gtk_widget_class_bind_template_child (widget_class, IdeGitCloneWidget, clone_spinner);
   gtk_widget_class_bind_template_child (widget_class, IdeGitCloneWidget, clone_uri_entry);
 }
 
@@ -370,6 +372,8 @@ ide_git_clone_widget_clone_async (IdeGitCloneWidget   *self,
       req = clone_request_new (uri, location);
     }
 
+  gtk_spinner_start (self->clone_spinner);
+
   task = g_task_new (self, cancellable, callback, user_data);
   g_task_set_task_data (task, req, clone_request_free);
   g_task_run_in_thread (task, ide_git_clone_widget_worker);
@@ -382,6 +386,8 @@ ide_git_clone_widget_clone_finish (IdeGitCloneWidget  *self,
 {
   g_return_val_if_fail (IDE_IS_GIT_CLONE_WIDGET (self), FALSE);
   g_return_val_if_fail (G_IS_TASK (result), FALSE);
+
+  gtk_spinner_stop (self->clone_spinner);
 
   return g_task_propagate_boolean (G_TASK (result), error);
 }
