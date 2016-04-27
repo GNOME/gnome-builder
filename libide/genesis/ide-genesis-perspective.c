@@ -194,9 +194,13 @@ ide_genesis_perspective_run_cb (GObject      *object,
 
   if (!ide_genesis_addin_run_finish (addin, result, &error))
     {
+      g_strstrip (error->message);
       gtk_label_set_label (self->info_bar_label, error->message);
       gtk_revealer_set_reveal_child (self->info_bar_revealer, TRUE);
     }
+
+  /* Update continue button sensitivity */
+  g_object_notify (G_OBJECT (addin), "is-ready");
 }
 
 static void
@@ -206,6 +210,8 @@ ide_genesis_perspective_continue_clicked (IdeGenesisPerspective *self,
   g_assert (IDE_IS_GENESIS_PERSPECTIVE (self));
   g_assert (GTK_IS_BUTTON (button));
   g_assert (self->current_addin != NULL);
+
+  gtk_widget_set_sensitive (GTK_WIDGET (self->continue_button), FALSE);
 
   ide_genesis_addin_run_async (self->current_addin,
                                NULL,
