@@ -12,3 +12,4 @@ tools/ide-list-file-settings.c
 tools/ide-list-files.c
 tools/ide-mine-projects.c
 tools/ide-search.c
+data/org.gnome.Builder.desktop.in
