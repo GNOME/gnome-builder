@@ -10,16 +10,16 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-04-25 07:21+0000\n"
-"PO-Revision-Date: 2016-04-25 10:39+0200\n"
-"Last-Translator: Meskó Balázs <meskobalazs@gmail.com>\n"
+"POT-Creation-Date: 2016-04-28 08:48+0000\n"
+"PO-Revision-Date: 2016-04-28 22:31+0200\n"
+"Last-Translator: Gabor Kelemen <kelemeng at ubuntu dot com>\n"
 "Language-Team: Hungarian <openscope at googlegroups dot com>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.8.7\n"
+"X-Generator: Lokalize 1.5\n"
 
 #: ../contrib/egg/egg-animation.c:726 ../contrib/pnl/pnl-animation.c:701
 #, c-format
@@ -98,6 +98,433 @@ msgstr "A(z) „%s” sablon nem található."
 #, c-format
 msgid "Could not parse XML from stream"
 msgstr "Nem sikerült az XML feldolgozása a folyamból"
+
+#: ../data/org.gnome.Builder.appdata.xml.in.h:1
+#: ../data/org.gnome.Builder.desktop.in.in.h:1
+#: ../data/style-schemes/builder.xml.h:1 ../libide/ide-application.c:413
+#: ../libide/ide-workbench.c:562
+#: ../libide/preferences/ide-preferences-builtin.c:113
+msgid "Builder"
+msgstr "Építő"
+
+#: ../data/org.gnome.Builder.appdata.xml.in.h:2
+#: ../libide/ide-application-actions.c:114
+msgid "An IDE for GNOME"
+msgstr "Integrált fejlesztői környezet a GNOME-hoz"
+
+#: ../data/org.gnome.Builder.appdata.xml.in.h:3
+msgid ""
+"Builder is an actively developed Integrated Development Environment for "
+"GNOME. It combines integrated support for essential GNOME technologies such "
+"as GTK+, GLib, and GNOME APIs with features that any developer will "
+"appreciate, like syntax highlighting and snippets."
+msgstr ""
+"Az Építő egy folyamatosan fejlesztett integrált fejlesztői környezet a GNOME-"
+"hoz. Egyesíti az alapvető GNOME technológiák – mint a GTK+, GLib és a GNOME "
+"API-k – integrált támogatását, olyan funkciókkal, melyeket minden fejlesztő "
+"értékel, mint a szintaxiskiemelés és a töredékek kezelése."
+
+#: ../data/org.gnome.Builder.appdata.xml.in.h:4
+msgid ""
+"You can rely on predictable releases of Builder with each new release of "
+"GNOME every six months."
+msgstr ""
+"Támaszkodhat az Építő kiszámíthatóan, a GNOME minden új kiadásával hat "
+"havonta megjelenő kiadásaira."
+
+#: ../data/org.gnome.Builder.appdata.xml.in.h:5
+msgid "Features:"
+msgstr "Funkciók:"
+
+#: ../data/org.gnome.Builder.appdata.xml.in.h:6
+#| msgid "The semantic highlighter for the language."
+msgid "Built in syntax highlighting for many languages"
+msgstr "Beépített szemantikus kiemelés számos nyelvhez."
+
+#: ../data/org.gnome.Builder.appdata.xml.in.h:7
+msgid "Side-by-side code editors"
+msgstr "Egymás melletti kódszerkesztők"
+
+#: ../data/org.gnome.Builder.appdata.xml.in.h:8
+msgid "Integration with Git"
+msgstr "Git integráció"
+
+#: ../data/org.gnome.Builder.appdata.xml.in.h:9
+msgid "Integration with Autotools"
+msgstr "Autotools integráció"
+
+#: ../data/org.gnome.Builder.appdata.xml.in.h:10
+msgid "Clang based auto-completion, semantic highlighting, and diagnostics"
+msgstr ""
+"Clang-alapú automatikus kiegészítés, szemantikus kiemelés, és diagnosztika"
+
+#: ../data/org.gnome.Builder.appdata.xml.in.h:11
+#| msgid "Clang based auto-completion, semantic highlighting, and diagnostics"
+msgid "Python based auto-completion, semantic highlighting, and diagnostics"
+msgstr ""
+"Python-alapú automatikus kiegészítés, szemantikus kiemelés, és diagnosztika"
+
+#: ../data/org.gnome.Builder.appdata.xml.in.h:12
+#| msgid "Clang based auto-completion, semantic highlighting, and diagnostics"
+msgid "Vala based auto-completion and diagnostics"
+msgstr ""
+"Vala-alapú automatikus kiegészítés, szemantikus kiemelés, és diagnosztika"
+
+#: ../data/org.gnome.Builder.appdata.xml.in.h:13
+msgid "Auto indentation support for C, Python, Vala, and XML"
+msgstr "Automatikus behúzás támogatása C, Python, Vala és XML nyelvekhez"
+
+#: ../data/org.gnome.Builder.appdata.xml.in.h:14
+msgid "HTML/Markdown live preview"
+msgstr "HTML/Markdown élő előnézet"
+
+#: ../data/org.gnome.Builder.appdata.xml.in.h:15
+msgid "Optional Vim-style editing"
+msgstr "Válaszható Vim-stílusú szerkesztés"
+
+#: ../data/org.gnome.Builder.appdata.xml.in.h:16
+msgid "Preview support for building with Xdg-App runtimes"
+msgstr "XDG-App futtatókörnyezetekkel építés kezdeti támogatása"
+
+#: ../data/org.gnome.Builder.desktop.in.in.h:2
+msgid "Build software for GNOME"
+msgstr "Szoftverek építése a GNOME-hoz"
+
+#: ../data/org.gnome.Builder.desktop.in.in.h:3
+msgid "Build;Develop;"
+msgstr "Építés;Összeállítás;Fejlesztés;"
+
+#: ../data/gsettings/org.gnome.builder.build.gschema.xml.in.h:1
+msgid "Build Parallelism"
+msgstr "Párhuzamos összeállítás"
+
+#: ../data/gsettings/org.gnome.builder.build.gschema.xml.in.h:2
+msgid ""
+"Number of workers to use when performing builds. -1 for sensible default. 0 "
+"for number of CPU."
+msgstr ""
+"Dolgozók száma az összeállítások elvégzésekor. -1 az értelmes "
+"alapbeállításokhoz, 0 a CPU-k számához."
+
+#: ../data/gsettings/org.gnome.builder.code-insight.gschema.xml.in.h:1
+msgid "Suggest Snippet Completion"
+msgstr "Töredékkiegészítés javaslata"
+
+#: ../data/gsettings/org.gnome.builder.code-insight.gschema.xml.in.h:2
+msgid "Allow snippets to be inserted into the document."
+msgstr "Lehetővé teszi töredékek beszúrását a dokumentumba."
+
+#: ../data/gsettings/org.gnome.builder.code-insight.gschema.xml.in.h:3
+msgid "Clang based autocompletion (Experimental)"
+msgstr "Clang-alapú kódkiegészítés (kísérleti)"
+
+#: ../data/gsettings/org.gnome.builder.code-insight.gschema.xml.in.h:4
+msgid "Use Clang for autocompletion in the C and C++ languages."
+msgstr "Használja kódkiegészítésre a Clang-et C és C++ nyelvek esetén."
+
+#: ../data/gsettings/org.gnome.builder.code-insight.gschema.xml.in.h:5
+msgid "Ctags based autocompletion"
+msgstr "Ctags-alapú kódkiegészítés"
+
+#: ../data/gsettings/org.gnome.builder.code-insight.gschema.xml.in.h:6
+msgid "Use Ctags for autocompletion."
+msgstr "Használja a Ctags-ot kódkiegészítésre."
+
+#: ../data/gsettings/org.gnome.builder.code-insight.gschema.xml.in.h:7
+msgid "Enable auto-completion of words in document"
+msgstr "A szavak automatikus kiegészítésének bekapcsolása a dokumentumban"
+
+#: ../data/gsettings/org.gnome.builder.code-insight.gschema.xml.in.h:8
+msgid ""
+"If enabled, words within the current document will be available for auto-"
+"completion."
+msgstr ""
+"Ha be van kapcsolva, akkor a jelenlegi dokumentum szavai elérhetőek lesznek "
+"a szókiegészítés számára."
+
+#: ../data/gsettings/org.gnome.builder.code-insight.gschema.xml.in.h:9
+msgid "Enable semantic highlighting"
+msgstr "Szemantikus kiemelés bekapcsolása"
+
+#: ../data/gsettings/org.gnome.builder.code-insight.gschema.xml.in.h:10
+msgid ""
+"If enabled, additional highlighting will be provided in supported languages "
+"based on information extracted from the source code."
+msgstr ""
+"Ha be van kapcsolva, akkor a forráskódból kinyert információt további "
+"kiemelés céljából használja fel a támogatott nyelvekben."
+
+#: ../data/gsettings/org.gnome.builder.code-insight.gschema.xml.in.h:11
+msgid "Path to ctags executable"
+msgstr "Útvonal a ctags binárisához"
+
+#: ../data/gsettings/org.gnome.builder.code-insight.gschema.xml.in.h:12
+msgid "The path to the ctags executable on the system."
+msgstr "A rendszer útvonala a ctags bináris állományához."
+
+#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:1
+msgid "Restore last position"
+msgstr "Legutóbbi pozíció visszaállítása"
+
+#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:2
+msgid "Jump to the last position when reopening a file"
+msgstr "A legutóbbi pozícióra ugrás a fájl újranyitása során"
+
+#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:3
+msgid "Show modified lines"
+msgstr "A változott sorok mutatása"
+
+#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:4
+msgid ""
+"If enabled, the editor will show line additions and changes next to the "
+"source code."
+msgstr ""
+"Ha be van kapcsolva, akkor a szerkesztő jelzi a hozzáadott és a változtatott "
+"sorokat a forráskód mellett."
+
+#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:5
+#: ../data/ui/ide-editor-tweak-widget.ui.h:4
+msgid "Highlight current line"
+msgstr "Jelenlegi sor kiemelése"
+
+#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:6
+msgid "If enabled, the editor will highlight the line containing the cursor."
+msgstr ""
+"Ha be van kapcsolva, akkor a szerkesztő kiemeli a sort, ahol a kurzor "
+"található."
+
+#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:7
+msgid "Highlight matching brackets"
+msgstr "Zárójelpárok kiemelése"
+
+#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:8
+msgid "If enabled, the editor will highlight matching brackets."
+msgstr "Ha be van kapcsolva, akkor a szerkesztő kiemeli a zárójelpárokat."
+
+#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:9
+msgid "Show line numbers"
+msgstr "Sorok számának megjelenítése"
+
+#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:10
+msgid "If enabled, the editor will show line numbers."
+msgstr "Ha be van kapcsolva, akkor a szerkesztő megjeleníti a sorok számát."
+
+#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:11
+#: ../data/ui/ide-editor-tweak-widget.ui.h:6
+#: ../libide/preferences/ide-preferences-builtin.c:119
+msgid "Smart Backspace"
+msgstr "Okos visszatörlés"
+
+#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:12
+msgid ""
+"Backspace will remove additional spaces to keep you aligned to the "
+"indentation size."
+msgstr ""
+"A Visszatörlés kitörli a felesleges szóközöket a behúzásnak megfelelően."
+
+#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:13
+#: ../libide/preferences/ide-preferences-builtin.c:118
+msgid "Smart Home and End"
+msgstr "Okos Home és End"
+
+#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:14
+msgid "Whether or not Home moves to first non-space character."
+msgstr "A Home billentyű az első nem szóköz karakterre ugrik-e vagy sem."
+
+#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:15
+msgid "Show grid lines"
+msgstr "Rácsvonalak megjelenítése"
+
+#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:16
+msgid "If enabled, the editor will show grid lines in the document."
+msgstr ""
+"Ha be van kapcsolva, akkor a forráskód mögött rácsvonalakat rajzol a "
+"szerkesztő."
+
+#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:17
+#: ../libide/preferences/ide-preferences-builtin.c:141
+msgid "Show overview map"
+msgstr "Áttekintő térkép megjelenítése"
+
+#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:18
+msgid ""
+"If enabled, Builder will display an overview map of the source file next to "
+"the editor."
+msgstr ""
+"Ha be van kapcsolva, akkor a Builder megjeleníti az áttekintő térképet a "
+"forráskód mellett."
+
+#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:19
+msgid "Automatically Hide Overview Map"
+msgstr "Áttekintő térkép automatikus elrejtése"
+
+#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:20
+msgid ""
+"If enabled, Builder will automatically hide the overview map when mouse "
+"focus leaves the editor, or a timeout occurs."
+msgstr ""
+"Ha be van kapcsolva, akkor a Builder bizonyos inaktivitás után, vagy ha  az "
+"egér elhagyja a szerkesztőt, automatikusan elrejti az áttekintő térképet."
+
+#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:21
+msgid "Draw Spaces"
+msgstr "Szóközök kirajzolása"
+
+#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:22
+msgid "The various types of space to draw in the editor."
+msgstr "A különböző szóközök kirajzolása a szerkesztőben."
+
+#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:23
+#: ../libide/preferences/ide-preferences-builtin.c:130
+msgid "Overscroll"
+msgstr "Túlgörgetés"
+
+#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:24
+msgid "The number of lines to scroll beyond the end of the buffer."
+msgstr "A túlgörgetés sorainak száma a puffer végén."
+
+#: ../data/gsettings/org.gnome.builder.extension-type.gschema.xml.in.h:1
+#: ../data/gsettings/org.gnome.builder.plugin.gschema.xml.in.h:1
+msgid "Enabled"
+msgstr "Engedélyezve"
+
+#: ../data/gsettings/org.gnome.builder.extension-type.gschema.xml.in.h:2
+msgid "If the type within the extension is enabled."
+msgstr "A kiegészítőn belüli típus engedélyezett-e."
+
+#: ../data/gsettings/org.gnome.builder.gschema.xml.in.h:1
+msgid "Window size"
+msgstr "Ablakméret"
+
+#: ../data/gsettings/org.gnome.builder.gschema.xml.in.h:2
+msgid "Window size (width and height)."
+msgstr "Ablakméret (szélesség és magasság)."
+
+#: ../data/gsettings/org.gnome.builder.gschema.xml.in.h:3
+msgid "Window position"
+msgstr "Ablakpozíció"
+
+#: ../data/gsettings/org.gnome.builder.gschema.xml.in.h:4
+msgid "Window position (x and y)."
+msgstr "Ablakpozíció (x és y)."
+
+#: ../data/gsettings/org.gnome.builder.gschema.xml.in.h:5
+msgid "Window maximized"
+msgstr "Teljes méretű ablak"
+
+#: ../data/gsettings/org.gnome.builder.gschema.xml.in.h:6
+msgid "Window maximized state"
+msgstr "Az ablak teljes méretű-e"
+
+#: ../data/gsettings/org.gnome.builder.gschema.xml.in.h:7
+msgid "Night Mode"
+msgstr "Éjszakai mód"
+
+#: ../data/gsettings/org.gnome.builder.gschema.xml.in.h:8
+msgid "Prefer dark application chrome."
+msgstr "Sötét alkalmazásszín előnyben részesítése."
+
+#: ../data/gsettings/org.gnome.builder.gschema.xml.in.h:9
+msgid "Mine projects"
+msgstr "Projektek bányászata"
+
+#: ../data/gsettings/org.gnome.builder.gschema.xml.in.h:10
+msgid "Search directories for projects."
+msgstr "Mappák átvizsgálása projektek után."
+
+#: ../data/gsettings/org.gnome.builder.gschema.xml.in.h:11
+msgid "Projects directory"
+msgstr "Projektek mappa"
+
+#: ../data/gsettings/org.gnome.builder.gschema.xml.in.h:12
+msgid "Directory for all builder projects"
+msgstr "Az összes projekt helye"
+
+#: ../data/gsettings/org.gnome.builder.plugin.gschema.xml.in.h:2
+msgid "If the plugin should be enabled"
+msgstr "A bővítmény engedélyezett-e"
+
+#: ../data/gsettings/org.gnome.builder.project-tree.gschema.xml.in.h:1
+msgid "Show Project Sidebar"
+msgstr "Mutassa a projekt oldalsávját"
+
+#: ../data/gsettings/org.gnome.builder.project-tree.gschema.xml.in.h:2
+msgid "If enabled, the sidebar will be visible in the editor workspace."
+msgstr ""
+"Ha be van kapcsolva, akkor az oldalsáv látható lesz a szerkesztő "
+"munkaterületen."
+
+#: ../data/gsettings/org.gnome.builder.project-tree.gschema.xml.in.h:3
+#: ../plugins/project-tree/gtk/menus.ui.h:15
+msgid "Show Icons"
+msgstr "Ikonok megjelenítése"
+
+#: ../data/gsettings/org.gnome.builder.project-tree.gschema.xml.in.h:4
+msgid "If enabled, the project tree will display icons next to each item."
+msgstr ""
+"Ha be van kapcsolva, akkor a projektfa minden elem mellett megjeleníti az "
+"ikonját."
+
+#: ../data/gsettings/org.gnome.builder.project-tree.gschema.xml.in.h:5
+#: ../plugins/project-tree/gtk/menus.ui.h:16
+msgid "Show Ignored Files"
+msgstr "Figyelmen kívül hagyott fájlok megjelenítése"
+
+#: ../data/gsettings/org.gnome.builder.project-tree.gschema.xml.in.h:6
+msgid ""
+"If enabled, the project tree will display files that are ignored by the VCS."
+msgstr ""
+"Ha be van kapcsolva, akkor a projektfa megjeleníti a VCS által figyelmen "
+"kívül hagyott fájlokat."
+
+#: ../data/gsettings/org.gnome.builder.workbench.gschema.xml.in.h:1
+msgid "Show Left Panel"
+msgstr "Bal panel megjelenítése"
+
+#: ../data/gsettings/org.gnome.builder.workbench.gschema.xml.in.h:2
+msgid "If enabled, the left panel will be displayed."
+msgstr "Ha be van kapcsolva, akkor a bal panel megjelenik."
+
+#: ../data/gsettings/org.gnome.builder.workbench.gschema.xml.in.h:3
+msgid "Left Panel Position"
+msgstr "Bal panel pozíció"
+
+#: ../data/gsettings/org.gnome.builder.workbench.gschema.xml.in.h:4
+msgid "The width in pixel units of the left panel."
+msgstr "A bal panel szélessége képpontokban megadva."
+
+#: ../data/gsettings/org.gnome.builder.workbench.gschema.xml.in.h:5
+msgid "Show Right Panel"
+msgstr "Jobb panel"
+
+#: ../data/gsettings/org.gnome.builder.workbench.gschema.xml.in.h:6
+msgid "If enabled, the right panel will be displayed."
+msgstr "Ha be van kapcsolva, akkor a jobb panel megjelenik."
+
+#: ../data/gsettings/org.gnome.builder.workbench.gschema.xml.in.h:7
+msgid "Right Panel Position"
+msgstr "Jobb panel pozíció"
+
+#: ../data/gsettings/org.gnome.builder.workbench.gschema.xml.in.h:8
+msgid "The width in pixel units of the right panel."
+msgstr "A jobb panel szélessége képpontokban megadva."
+
+#: ../data/gsettings/org.gnome.builder.workbench.gschema.xml.in.h:9
+msgid "Show Bottom Panel"
+msgstr "Alsó panel"
+
+#: ../data/gsettings/org.gnome.builder.workbench.gschema.xml.in.h:10
+msgid "If enabled, the bottom panel will be displayed."
+msgstr "Ha be van kapcsolva, akkor az alsó panel megjelenik."
+
+#: ../data/gsettings/org.gnome.builder.workbench.gschema.xml.in.h:11
+msgid "Bottom Panel Position"
+msgstr "Alsó panel pozíció"
+
+#: ../data/gsettings/org.gnome.builder.workbench.gschema.xml.in.h:12
+#| msgid "The width in pixel units of the bottom panel."
+msgid "The height in pixel units of the bottom panel."
+msgstr "Az alsó panel magassága képpontokban megadva."
 
 #: ../data/gtk/menus.ui.h:1
 msgid "_New Project"
@@ -307,12 +734,6 @@ msgstr "Építő sötét"
 msgid "Dark color scheme for Builder using the Tango color palette"
 msgstr "Sötét színséma az Építőhöz, a Tangó színpaletta használatával"
 
-#: ../data/style-schemes/builder.xml.h:1 ../libide/ide-application.c:413
-#: ../libide/ide-workbench.c:562
-#: ../libide/preferences/ide-preferences-builtin.c:113
-msgid "Builder"
-msgstr "Építő"
-
 #: ../data/style-schemes/builder.xml.h:2
 msgid "The default color scheme for Builder"
 msgstr "Az Építő alapértelmezett színsémája"
@@ -354,18 +775,9 @@ msgstr "Sorok számának megjelenítése"
 msgid "Display right margin"
 msgstr "Jobb margó megjelenítése"
 
-#: ../data/ui/ide-editor-tweak-widget.ui.h:4
-msgid "Highlight current line"
-msgstr "Jelenlegi sor kiemelése"
-
 #: ../data/ui/ide-editor-tweak-widget.ui.h:5
 msgid "Auto indent"
 msgstr "Automatikus behúzás"
-
-#: ../data/ui/ide-editor-tweak-widget.ui.h:6
-#: ../libide/preferences/ide-preferences-builtin.c:119
-msgid "Smart Backspace"
-msgstr "Okos visszatörlés"
 
 #: ../data/ui/ide-editor-tweak-widget.ui.h:7
 #: ../libide/preferences/ide-preferences-builtin.c:234
@@ -848,7 +1260,6 @@ msgstr "Egyszerű szöveg"
 msgid "Provide a number between 1 and %u"
 msgstr "Adjon meg egy számot 1 és %u között"
 
-#: ../libide/genesis/ide-genesis-perspective.c:200
 #: ../libide/greeter/ide-greeter-perspective.c:436
 msgid "Failed to load the project"
 msgstr "A projekt nem tölthető be"
@@ -870,10 +1281,6 @@ msgstr "a nyelvi alapbeállítások verziója hiányzik a [global] csoportból."
 #: ../libide/gsettings/ide-language-defaults.c:362
 msgid "Failed to initialize defaults."
 msgstr "Az alapbeállítások előkészítése meghiúsult."
-
-#: ../libide/ide-application-actions.c:114
-msgid "An IDE for GNOME"
-msgstr "Integrált fejlesztői környezet a GNOME-hoz"
 
 #: ../libide/ide-application-actions.c:120
 msgid "GNOME Builder"
@@ -954,7 +1361,7 @@ msgstr "Adja meg a D-Bus címet"
 msgid "No such worker"
 msgstr "Nincs ilyen építő"
 
-#: ../libide/ide-buffer.c:2310
+#: ../libide/ide-buffer.c:2344
 msgid "The current language lacks a symbol resolver."
 msgstr "Az aktuális nyelvhez nem tartozik szimbólumfeloldó"
 
@@ -1040,11 +1447,11 @@ msgstr "Nincs ilyen kiegészítési pont."
 msgid "No implementations of extension point."
 msgstr "A kiegészítési pont nincs megvalósítva."
 
-#: ../libide/ide-project.c:463
+#: ../libide/ide-project.c:524
 msgid "Destination file must be within the project tree."
 msgstr "A célfájlnak a projektfán belül kell lennie."
 
-#: ../libide/ide-project.c:593
+#: ../libide/ide-project.c:659
 msgid "File must be within the project tree."
 msgstr "A fájlnak a projektfán belül kell lennie."
 
@@ -1258,10 +1665,6 @@ msgid "Movement"
 msgstr "Mozgás"
 
 #: ../libide/preferences/ide-preferences-builtin.c:118
-msgid "Smart Home and End"
-msgstr "Okos Home és End"
-
-#: ../libide/preferences/ide-preferences-builtin.c:118
 msgid "Home moves to first non-whitespace character"
 msgstr "A Home az első nem üres karakterhez ugrik"
 
@@ -1289,10 +1692,6 @@ msgstr "Görgetési eltolás"
 #: ../libide/preferences/ide-preferences-builtin.c:129
 msgid "Minimum number of lines to keep above and below the cursor"
 msgstr "A kurzor fölötti és alatti sorok legkisebb száma"
-
-#: ../libide/preferences/ide-preferences-builtin.c:130
-msgid "Overscroll"
-msgstr "Túlgörgetés"
 
 #: ../libide/preferences/ide-preferences-builtin.c:130
 msgid "Allow the editor to scroll past the end of the buffer"
@@ -1341,10 +1740,6 @@ msgstr "Zárójelpárok kiemelése a kurzorpozíció alapján"
 #: ../libide/preferences/ide-preferences-builtin.c:140
 msgid "Code Overview"
 msgstr "Kód áttekintése"
-
-#: ../libide/preferences/ide-preferences-builtin.c:141
-msgid "Show overview map"
-msgstr "Áttekintő térkép megjelenítése"
 
 #: ../libide/preferences/ide-preferences-builtin.c:141
 msgid "A zoomed out view to enhance navigating source code"
@@ -2181,7 +2576,8 @@ msgstr "A fájl nincs a git munkakönyvtár kezelése alatt."
 msgid "The requested file does not exist within the git index."
 msgstr "A kért fájl nem létezik a git indexben."
 
-#: ../plugins/git/ide-git-clone-widget.c:132
+#: ../plugins/git/ide-git-clone-widget.c:133
+#: ../plugins/git/ide-git-clone-widget.c:378
 msgid "A valid Git URL is required"
 msgstr "Egy érvényes Git URL szükséges"
 
@@ -2217,6 +2613,13 @@ msgstr "Verziókövetés"
 msgid "Attribution"
 msgstr "Megjelölés"
 
+#: ../plugins/git/ide-git-remote-callbacks.c:176
+#, c-format
+msgid ""
+"Builder failed to provide appropriate credentials when cloning repository."
+msgstr ""
+"Az Építő nem adott meg megfelelő hitelesítési adatokat a tároló klónozásakor."
+
 #: ../plugins/gnome-code-assistance/ide-gca-diagnostic-provider.c:375
 msgid "Code assistance requires a local file."
 msgstr "A kódkiegészítéshez helyi fájl szükséges."
@@ -2243,11 +2646,11 @@ msgstr "Nincs nyelv megadva"
 msgid "Preview as HTML"
 msgstr "Előnézet HTML-ként"
 
-#: ../plugins/jedi/jedi_plugin.py:672
+#: ../plugins/jedi/jedi_plugin.py:731
 msgid "Suggest Python completions"
 msgstr "Python kiegészítési javaslatok"
 
-#: ../plugins/jedi/jedi_plugin.py:673
+#: ../plugins/jedi/jedi_plugin.py:732
 msgid "Use Jedi to provide completions for the Python language"
 msgstr "Használja a Jedit kiegészítésre a Python nyelv esetén."
 
@@ -2287,18 +2690,10 @@ msgstr "_Létrehozás"
 msgid "Project"
 msgstr "Projekt"
 
-#: ../plugins/project-tree/gb-project-tree-builder.c:77
-msgid "Files"
-msgstr "Fájlok"
-
 #: ../plugins/project-tree/gb-rename-file-popover.c:79
 #, c-format
 msgid "Rename %s"
 msgstr "A(z) „%s” átnevezése"
-
-#: ../plugins/project-tree/gb-rename-file-popover.c:172
-msgid "File name must not contain subdirectories."
-msgstr "A fájlnév nem tartalmazhat alkönyvtárakat."
 
 #: ../plugins/project-tree/gb-rename-file-popover.ui.h:2
 #: ../plugins/project-tree/gtk/menus.ui.h:10
@@ -2340,14 +2735,6 @@ msgstr "Át_helyezés a Kukába"
 #: ../plugins/project-tree/gtk/menus.ui.h:14
 msgid "Display Options"
 msgstr "Megjelenítési beállítások"
-
-#: ../plugins/project-tree/gtk/menus.ui.h:15
-msgid "Show Icons"
-msgstr "Ikonok megjelenítése"
-
-#: ../plugins/project-tree/gtk/menus.ui.h:16
-msgid "Show Ignored Files"
-msgstr "Figyelmen kívül hagyott fájlok megjelenítése"
 
 #: ../plugins/project-tree/gtk/menus.ui.h:17
 msgid "Sort Directories First"
@@ -2410,6 +2797,18 @@ msgstr "A Vala hibák és figyelmeztetések megjelenítése"
 #: ../plugins/vala-pack/ide-vala-preferences-addin.vala:36
 msgid "vala diagnostics warnings errors"
 msgstr "vala diagnosztika figyelmeztetések hibák"
+
+#~ msgid "Auto indentation"
+#~ msgstr "Automatikus behúzás"
+
+#~ msgid "Syntax highlighting"
+#~ msgstr "Szintaxiskiemelés"
+
+#~ msgid "Files"
+#~ msgstr "Fájlok"
+
+#~ msgid "File name must not contain subdirectories."
+#~ msgstr "A fájlnév nem tartalmazhat alkönyvtárakat."
 
 #~ msgid "Invalid snippet at line %d: %s"
 #~ msgstr "Érvénytelen töredék a(z) %d. sorban: %s"
@@ -2500,9 +2899,6 @@ msgstr "vala diagnosztika figyelmeztetések hibák"
 #~ msgid "Cursor Placement"
 #~ msgstr "Kurzorelhelyezés"
 
-#~ msgid "Draw Spaces"
-#~ msgstr "Szóközök kirajzolása"
-
 #~| msgid "Draw an arrow over tab characters."
 #~ msgid "Draw an arrow over tab characters"
 #~ msgstr "Nyíl rajzolása a tabulátorok helyére"
@@ -2527,12 +2923,6 @@ msgstr "vala diagnosztika figyelmeztetések hibák"
 #~ msgstr ""
 #~ "További szintaxiskiemelés a dokumentumban található információk alapján."
 
-#~ msgid "Suggest Snippet Completion"
-#~ msgstr "Töredékkiegészítés javaslata"
-
-#~ msgid "Allow snippets to be inserted into the document."
-#~ msgstr "Lehetővé teszi töredékek beszúrását a dokumentumba."
-
 #~ msgid "Use Ctags for completions in supported languages."
 #~ msgstr "Használja szókiegészítésre a Ctags-et a támogatott nyelvek esetén."
 
@@ -2556,12 +2946,6 @@ msgstr "vala diagnosztika figyelmeztetések hibák"
 
 #~ msgid "Plugins"
 #~ msgstr "Bővítmények"
-
-#~ msgid "Night Mode"
-#~ msgstr "Éjszakai mód"
-
-#~ msgid "Use dark colors for the application chrome."
-#~ msgstr "Sötét színeket használ az alkalmazás megjelenítéséhez."
 
 #~ msgid "Select Project"
 #~ msgstr "Válasszon egy projektet"
@@ -2711,9 +3095,6 @@ msgstr "vala diagnosztika figyelmeztetések hibák"
 #~ msgid "smart back backspace indent align"
 #~ msgstr "okos vissza visszatörlés backspace behúzás igazítás"
 
-#~ msgid "show grid lines"
-#~ msgstr "rácsvonalak rács vonalak megjelenítés"
-
 #~ msgid "source style scheme source tango solarized builder syntax"
 #~ msgstr ""
 #~ "forrás stílus séma forráskód tango solarized építő szintaxis szintaktika"
@@ -2772,9 +3153,6 @@ msgstr "vala diagnosztika figyelmeztetések hibák"
 #~ msgstr ""
 #~ "Nincsenek fájlok megadva, amelyekhez be kellene tölteni a beállításokat.\n"
 
-#~ msgid "- discover projects"
-#~ msgstr "– Projektek feltérképezése"
-
 #~ msgid "%s result\n"
 #~ msgid_plural "%s results\n"
 #~ msgstr[0] "%s találat\n"
@@ -2830,9 +3208,6 @@ msgstr "vala diagnosztika figyelmeztetések hibák"
 
 #~ msgid "Max Samples"
 #~ msgstr "Legtöbb minta"
-
-#~ msgid "Table"
-#~ msgstr "Táblázat"
 
 #~ msgid "The data table for the graph."
 #~ msgstr "A grafikonhoz tartozó adattáblázat."
@@ -3071,9 +3446,6 @@ msgstr "vala diagnosztika figyelmeztetések hibák"
 
 #~ msgid "Interface Type"
 #~ msgstr "Interfész típus"
-
-#~ msgid "The GType of the extension interface."
-#~ msgstr "A kiegészítő interfész GType típusa."
 
 #~ msgid "Key"
 #~ msgstr "Kulcs"
@@ -3800,17 +4172,8 @@ msgstr "vala diagnosztika figyelmeztetések hibák"
 #~ msgid "Which slider child is visible."
 #~ msgstr "Melyik csúszka gyermek látható."
 
-#~ msgid "Left Pane"
-#~ msgstr "Bal ablaktábla"
-
 #~ msgid "The left workspace pane."
 #~ msgstr "A bal munkaterület ablaktábla."
-
-#~ msgid "Right Pane"
-#~ msgstr "Jobb ablaktábla"
-
-#~ msgid "Bottom Pane"
-#~ msgstr "Alsó ablaktábla"
 
 #~ msgid "Content Pane"
 #~ msgstr "Tartalom ablaktábla"
@@ -3823,9 +4186,6 @@ msgstr "vala diagnosztika figyelmeztetések hibák"
 
 #~ msgid "Reveal"
 #~ msgstr "Megjelenítés"
-
-#~ msgid "If the pane should be revealed."
-#~ msgstr "Az ablaktábla megjelenjen-e."
 
 #~ msgid "The position of the pane."
 #~ msgstr "Az ablaktábla pozíciója."
@@ -3867,9 +4227,6 @@ msgstr "vala diagnosztika figyelmeztetések hibák"
 #~ msgid "The diagnostician for the language."
 #~ msgstr "A nyelvhez tartozó elemző."
 
-#~ msgid "The semantic highlighter for the language."
-#~ msgstr "A nyelvhez tartozó szemantikus kiemelő."
-
 #~ msgid "The language identifier such as \"c\"."
 #~ msgstr "A nyelv azonosítója, mint például a \"c\"."
 
@@ -3909,125 +4266,11 @@ msgstr "vala diagnosztika figyelmeztetések hibák"
 #~ msgid "Display Side _Panel"
 #~ msgstr "_Oldalpanel megjelenítése"
 
-#~ msgid "Build Project"
-#~ msgstr "Projekt összeállítása"
-
 #~ msgid "Rebuild Project"
 #~ msgstr "Projekt újraösszeállítása"
 
-#~ msgid "Clang based autocompletion (Experimental)"
-#~ msgstr "Clang-alapú kódkiegészítés (kísérleti)"
-
-#~ msgid "Use Clang for autocompletion in the C and C++ languages."
-#~ msgstr "Használja kódkiegészítésre a Clang-et C és C++ nyelvek esetén."
-
-#~ msgid "Ctags based autocompletion"
-#~ msgstr "Ctags-alapú kódkiegészítés"
-
-#~ msgid "Use Ctags for autocompletion."
-#~ msgstr "Használja a Ctags-ot kódkiegészítésre."
-
-#~ msgid "Enable auto-completion of words in document"
-#~ msgstr "A szavak automaikus kiegészítésének bekapcsolása a dokumentumban"
-
-#~ msgid ""
-#~ "If enabled, words within the current document will be available for auto-"
-#~ "completion."
-#~ msgstr ""
-#~ "Ha be van kapcsolva, akkor a jelenlegi dokumentum szavai elérhetőek "
-#~ "lesznek a szókiegészítés számára."
-
-#~ msgid "Enable semantic highlighting"
-#~ msgstr "Szemantikus kiemelés bekapcsolása"
-
-#~ msgid ""
-#~ "If enabled, additional highlighting will be provided in supported "
-#~ "languages based on information extracted from the source code."
-#~ msgstr ""
-#~ "Ha be van kapcsolva, akkor a forráskódból kinyert információt további "
-#~ "kiemelés céljából használja fel a támogatott nyelvekben."
-
-#~ msgid "Path to ctags executable"
-#~ msgstr "Útvonal a ctags binárisához"
-
-#~ msgid "The path to the ctags executable on the system."
-#~ msgstr "A rendszer útvonala a ctags bináris állományához."
-
-#~ msgid "Jump to the last position when reopening a file"
-#~ msgstr "A legutóbbi pozícióra ugrás a fájl újranyitása során"
-
-#~ msgid "Show modified lines"
-#~ msgstr "A változott sorok mutatása"
-
-#~ msgid ""
-#~ "If enabled, the editor will show line additions and changes next to the "
-#~ "source code."
-#~ msgstr ""
-#~ "Ha be van kapcsolva, akkor a szerkesztő jelzi a hozzáadott és a "
-#~ "változtatott sorokat a forráskód mellett."
-
-#~ msgid ""
-#~ "If enabled, the editor will highlight the line containing the cursor."
-#~ msgstr ""
-#~ "Ha be van kapcsolva, akkor a szerkesztő kiemeli a sort, ahol a kurzor "
-#~ "található."
-
-#~ msgid "If enabled, the editor will highlight matching brackets."
-#~ msgstr "Ha be van kapcsolva, akkor a szerkesztő kiemeli a zárójelpárokat."
-
-#~ msgid "If enabled, the editor will show line numbers."
-#~ msgstr "Ha be van kapcsolva, akkor a szerkesztő megjeleníti a sorok számát."
-
-#~ msgid ""
-#~ "Backspace will remove additional spaces to keep you aligned to the "
-#~ "indentation size."
-#~ msgstr ""
-#~ "A Visszatörlés kitörli a felesleges szóközöket a behúzásnak megfelelően."
-
-#~ msgid "Whether or not Home moves to first non-space character."
-#~ msgstr "A Home billentyű az első nem szóköz karakterre ugrik-e vagy sem."
-
-#~ msgid "If enabled, the editor will show grid lines in the document."
-#~ msgstr ""
-#~ "Ha be van kapcsolva, akkor a forráskód mögött rácsvonalakat rajzol a "
-#~ "szerkesztő."
-
-#~ msgid ""
-#~ "If enabled, Builder will display an overview map of the source file next "
-#~ "to the editor."
-#~ msgstr ""
-#~ "Ha be van kapcsolva, akkor a Builder megjeleníti az áttekintő térképet a "
-#~ "forráskód mellett."
-
-#~ msgid ""
-#~ "If enabled, Builder will automatically hide the overview map when mouse "
-#~ "focus leaves the editor, or a timeout occurs."
-#~ msgstr ""
-#~ "Ha be van kapcsolva, akkor a Builder bizonyos inaktivitás után, vagy ha  "
-#~ "az egér elhagyja a szerkesztőt, automatikusan elrejti az áttekintő "
-#~ "térképet."
-
-#~ msgid "The various types of space to draw in the editor."
-#~ msgstr "A különböző szóközök kirajzolása a szerkesztőben."
-
-#~ msgid "Show Project Sidebar"
-#~ msgstr "Mutassa a projekt oldalsávját"
-
-#~ msgid "If enabled, the sidebar will be visible in the editor workspace."
-#~ msgstr ""
-#~ "Ha be van kapcsolva, akkor az oldalsáv látható lesz a szerkesztő "
-#~ "munkaterületen."
-
-#~ msgid "If enabled, the sidebar will display icons next to each item."
-#~ msgstr ""
-#~ "Ha be van kapcsolva, akkor az oldalsávon minden elem mellett megjeleníti "
-#~ "az ikonját."
-
 #~ msgid "Project Tree Width"
 #~ msgstr "Projektfa szélessége"
-
-#~ msgid "The width in pixels of the project tree."
-#~ msgstr "A projektfa szélessége pixelekben megadva."
 
 #~ msgid "Location must be set to .git directory."
 #~ msgstr "A .git könyvtár útvonalát be kell állítani."
