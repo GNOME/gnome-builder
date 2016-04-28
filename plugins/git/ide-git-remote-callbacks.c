@@ -33,6 +33,7 @@ struct _IdeGitRemoteCallbacks
   EggAnimation        *animation;
   IdeProgress         *progress;
   gdouble              fraction;
+  GgitCredtype         tried;
 };
 
 G_DEFINE_TYPE (IdeGitRemoteCallbacks, ide_git_remote_callbacks, GGIT_TYPE_REMOTE_CALLBACKS)
@@ -138,14 +139,17 @@ ide_git_remote_callbacks_real_credentials (GgitRemoteCallbacks  *callbacks,
                                            GgitCredtype          allowed_types,
                                            GError              **error)
 {
+  IdeGitRemoteCallbacks *self = (IdeGitRemoteCallbacks *)callbacks;
   GgitCred *ret = NULL;
 
   IDE_ENTRY;
 
-  g_assert (IDE_IS_GIT_REMOTE_CALLBACKS (callbacks));
+  g_assert (IDE_IS_GIT_REMOTE_CALLBACKS (self));
   g_assert (url != NULL);
 
   IDE_TRACE_MSG ("username=%s url=%s", username_from_url ?: "", url);
+
+  allowed_types &= ~self->tried;
 
   if ((allowed_types & GGIT_CREDTYPE_SSH_KEY) != 0)
     {
@@ -153,6 +157,7 @@ ide_git_remote_callbacks_real_credentials (GgitRemoteCallbacks  *callbacks,
 
       cred = ggit_cred_ssh_key_from_agent_new (username_from_url, error);
       ret = GGIT_CRED (cred);
+      self->tried |= GGIT_CREDTYPE_SSH_KEY;
     }
 
   if ((allowed_types & GGIT_CREDTYPE_SSH_INTERACTIVE) != 0)
@@ -161,6 +166,7 @@ ide_git_remote_callbacks_real_credentials (GgitRemoteCallbacks  *callbacks,
 
       cred = ggit_cred_ssh_interactive_new (username_from_url, error);
       ret = GGIT_CRED (cred);
+      self->tried |= GGIT_CREDTYPE_SSH_INTERACTIVE;
     }
 
   IDE_RETURN (ret);
