@@ -1,4 +1,15 @@
 ==============
+Version 3.21.1
+==============
+
+This is our starting point for the 3.22 cycle.
+
+This release is mostly the same as 3.20.2 except that it has an updated color
+palette for the Adwaita theme in GTK+ 3.21.1.
+
+Cheers!
+
+==============
 Version 3.20.2
 ==============
 
