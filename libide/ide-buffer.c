@@ -163,7 +163,12 @@ ide_buffer_get_has_diagnostics (IdeBuffer *self)
     {
       IdeDiagnostic *diag = ide_diagnostics_index (priv->diagnostics, i);
       IdeSourceLocation *loc = ide_diagnostic_get_location (diag);
-      IdeFile *file = ide_source_location_get_file (loc);
+      IdeFile *file;
+
+      if (loc == NULL)
+        continue;
+
+      file = ide_source_location_get_file (loc);
 
       if (priv->file && file && ide_file_equal (priv->file, file))
         return TRUE;
