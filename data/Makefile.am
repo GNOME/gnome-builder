@@ -9,7 +9,7 @@ appstream_XML = $(appstream_in_files:.xml.in=.xml)
 # Desktop launcher and description file.
 desktopdir = $(datadir)/applications
 desktop_in_in_files = org.gnome.Builder.desktop.in.in
-desktop_in_files = org.gnome.Builder.desktop.inn
+desktop_in_files = org.gnome.Builder.desktop.in
 desktop_DATA = org.gnome.Builder.desktop
 @INTLTOOL_DESKTOP_RULE@
 
