@@ -179,7 +179,7 @@ ide_pango_font_description_to_css (const PangoFontDescription *font_desc)
       gint font_size;
 
       font_size = pango_font_description_get_size (font_desc) / PANGO_SCALE;
-      ADD_KEYVAL_PRINTF ("font-size", "%dpx", font_size);
+      ADD_KEYVAL_PRINTF ("font-size", "%dpt", font_size);
     }
 
   return g_string_free (str, FALSE);
