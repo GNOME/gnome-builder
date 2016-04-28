@@ -36,6 +36,7 @@ struct _GbpGccBuildResultAddin
 
   EggSignalGroup *signals;
   gchar          *current_dir;
+  gchar          *top_dir;
 };
 
 static void build_result_addin_iface_init (IdeBuildResultAddinInterface *iface);
@@ -119,11 +120,36 @@ create_diagnostic (GbpGccBuildResultAddin *self,
 
   context = ide_object_get_context (IDE_OBJECT (self));
 
-  if (self->current_dir)
+  if (!g_path_is_absolute (filename) && self->current_dir != NULL)
     {
+      const gchar *basedir = self->current_dir;
       gchar *path;
 
-      path = g_build_filename (self->current_dir, filename, NULL);
+      if (g_str_has_prefix (basedir, self->top_dir))
+        {
+          basedir += strlen (self->top_dir);
+          if (*basedir == '/')
+            basedir++;
+        }
+
+      path = g_build_filename (basedir, filename, NULL);
+      g_free (filename);
+      filename = path;
+    }
+
+  if (!g_path_is_absolute (filename))
+    {
+      g_autoptr(GFile) child = NULL;
+      IdeVcs *vcs;
+      GFile *workdir;
+      gchar *path;
+
+      vcs = ide_context_get_vcs (context);
+      workdir = ide_vcs_get_working_directory (vcs);
+
+      child = g_file_get_child (workdir, filename);
+      path = g_file_get_path (child);
+
       g_free (filename);
       filename = path;
     }
@@ -167,6 +193,8 @@ gbp_gcc_build_result_addin_log (GbpGccBuildResultAddin *self,
         {
           g_free (self->current_dir);
           self->current_dir = g_strndup (enterdir, len);
+          if (self->top_dir == NULL)
+            self->top_dir = g_strndup (enterdir, len);
         }
     }
 
@@ -222,6 +250,8 @@ gbp_gcc_build_result_addin_unload (IdeBuildResultAddin *addin,
   GbpGccBuildResultAddin *self = (GbpGccBuildResultAddin *)addin;
 
   egg_signal_group_set_target (self->signals, NULL);
+  g_clear_pointer (&self->current_dir, g_free);
+  g_clear_pointer (&self->top_dir, g_free);
 }
 
 static void
