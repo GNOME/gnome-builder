@@ -21,6 +21,7 @@
             as part of that transition, otherwise it looks clunky.
           -->
           <object class="GtkStack" id="top_stack">
+            <property name="homogeneous">false</property>
             <property name="transition-duration">333</property>
             <property name="transition-type">crossfade</property>
             <property name="vexpand">true</property>
