@@ -10,7 +10,7 @@ appstream_XML = $(appstream_in_files:.xml.in=.xml)
 desktopdir = $(datadir)/applications
 desktop_in_in_files = org.gnome.Builder.desktop.in.in
 desktop_in_files = org.gnome.Builder.desktop.in
-desktop_DATA = org.gnome.Builder.desktop
+desktop_DATA = $(desktop_in_files:.desktop.in=.desktop)
 @INTLTOOL_DESKTOP_RULE@
 
 # D-Bus service file.
@@ -38,11 +38,12 @@ EXTRA_DIST = \
 CLEANFILES = \
 	$(appstream_XML) \
 	$(desktop_DATA) \
+	$(desktop_in_files) \
 	$(service_DATA) \
 	$(NULL)
 
 DISTCLEANFILES = \
-	$(desktop_DATA) \
+	$(desktop_in_files) \
 	$(NULL)
 
 desktop-file-validate: $(desktop_DATA)
