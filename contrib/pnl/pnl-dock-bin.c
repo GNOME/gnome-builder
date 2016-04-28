@@ -626,7 +626,9 @@ pnl_dock_bin_child_size_allocate (PnlDockBin      *self,
                         "handle-size", &handle_size,
                         NULL);
 
-  if (child->widget != NULL && gtk_widget_get_visible (child->widget))
+  if (child->widget != NULL &&
+      gtk_widget_get_visible (child->widget) &&
+      gtk_widget_get_child_visible (child->widget))
     {
       GtkAllocation child_alloc = { 0 };
       GtkAllocation handle_alloc = { 0 };
