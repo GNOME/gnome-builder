@@ -122,6 +122,12 @@ test_ide_vcs_uri_CFLAGS = $(tests_cflags)
 test_ide_vcs_uri_LDADD = $(tests_libs)
 
 
+TESTS += test-ide-uri
+test_ide_uri_SOURCES = test-ide-uri.c
+test_ide_uri_CFLAGS = $(tests_cflags)
+test_ide_uri_LDADD = $(tests_libs)
+
+
 #TESTS += test-c-parse-helper
 #test_c_parse_helper_SOURCES = test-c-parse-helper.c
 #test_c_parse_helper_CFLAGS = \
