@@ -84,6 +84,7 @@ static const gchar *ide_application_credits_authors[] = {
   "Jasper St. Pierre",
   "Joaquim Rocha",
   "Jonathon Jongsma",
+  "Jürg Billeter",
   "Jordi Mas",
   "Kalev Lember",
   "Kjartan Maraas",
