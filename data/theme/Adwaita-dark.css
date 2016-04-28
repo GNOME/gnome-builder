@@ -12,7 +12,7 @@ eggsearchbar:backdrop box.search-bar {
 
 
 perspectiveswitcher {
-  background-color: #303535;
+  background-color: #272c2e;
 }
 perspectiveswitcher button {
   color: #696c6b;
@@ -32,7 +32,7 @@ pillbox {
 
 
 layouttabbar {
-  background-color: #303535;
+  background-color: #272c2e;
   box-shadow: 0 4px 3px -5px #2c3030 inset,
               0 -1px 0 #1c1f1f inset;
 }
@@ -52,7 +52,7 @@ layouttab:backdrop {
 
 
 docktabstrip {
-  background-color: #303535;
+  background-color: #272c2e;
   box-shadow: 0 4px 3px -5px #2c3030 inset,
               0 -1px 0 #1c1f1f inset;
 }
