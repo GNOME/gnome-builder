@@ -13,7 +13,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
 "POT-Creation-Date: 2016-04-27 07:45+0000\n"
-"PO-Revision-Date: 2016-04-27 11:26+0200\n"
+"PO-Revision-Date: 2016-04-28 09:21+0200\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Español; Castellano <gnome-es-list@gnome.org>\n"
 "Language: \n"
@@ -121,6 +121,11 @@ msgid ""
 "as GTK+, GLib, and GNOME APIs with features that any developer will "
 "appreciate, like syntax highlighting and snippets."
 msgstr ""
+"Builder es un entorno de desarrollo integrado para GNOME gestionado "
+"activamente. Combina soporte integrado para las tecnologías esenciales de "
+"GNOME, tales como GTK+, GLib y las API de GNOME con características que "
+"cualquier desarrollador apreciará, como el resaltado de sintaxis y los "
+"fragmentos."
 
 #: ../data/org.gnome.Builder.appdata.xml.in.h:4
 msgid "Features:"
@@ -133,6 +138,7 @@ msgstr "Integración con Autotools"
 #: ../data/org.gnome.Builder.appdata.xml.in.h:6
 msgid "Clang based auto-completion, semantic highlighting, and diagnostics"
 msgstr ""
+"Completado automático basado en Clang, resaltado semántico y diagnósticos"
 
 #: ../data/org.gnome.Builder.appdata.xml.in.h:7
 #| msgid "Auto indent"
@@ -141,7 +147,7 @@ msgstr "Sangrado automático"
 
 #: ../data/org.gnome.Builder.appdata.xml.in.h:8
 msgid "Side-by-side code editors"
-msgstr ""
+msgstr "Editores de código de lado a lado"
 
 #: ../data/org.gnome.Builder.appdata.xml.in.h:9
 #| msgid "Semantic Highlighting"
@@ -150,11 +156,11 @@ msgstr "Resaltado de sintaxis"
 
 #: ../data/org.gnome.Builder.appdata.xml.in.h:10
 msgid "HTML/Markdown live preview"
-msgstr ""
+msgstr "Vista previa en directo del marcado/HTML"
 
 #: ../data/org.gnome.Builder.appdata.xml.in.h:11
 msgid "Optional Vim-style editing"
-msgstr ""
+msgstr "Edición estilo Vim opcional"
 
 #: ../data/org.gnome.Builder.appdata.xml.in.h:12
 msgid "Integration with Git"
@@ -333,7 +339,6 @@ msgstr ""
 "junto al editor."
 
 #: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:19
-#, fuzzy
 #| msgid "Automatically hide overview map"
 msgid "Automatically Hide Overview Map"
 msgstr "Ocultar automáticamente la vista general del mapa"
@@ -366,16 +371,14 @@ msgstr "El número de líneas que desplazarse más allá del final del búfer."
 
 #: ../data/gsettings/org.gnome.builder.extension-type.gschema.xml.in.h:1
 #: ../data/gsettings/org.gnome.builder.plugin.gschema.xml.in.h:1
-#, fuzzy
 #| msgid "Table"
 msgid "Enabled"
-msgstr "Tabla"
+msgstr "Activado"
 
 #: ../data/gsettings/org.gnome.builder.extension-type.gschema.xml.in.h:2
-#, fuzzy
 #| msgid "The GType of the extension interface."
 msgid "If the type within the extension is enabled."
-msgstr "El GType de la interfaz de la extensión."
+msgstr "Si el tipo con la extensión está activado."
 
 #: ../data/gsettings/org.gnome.builder.gschema.xml.in.h:1
 msgid "Window size"
@@ -407,22 +410,19 @@ msgid "Night Mode"
 msgstr "Modo nocturno"
 
 #: ../data/gsettings/org.gnome.builder.gschema.xml.in.h:8
-#, fuzzy
 #| msgid "Use dark colors for the application chrome."
 msgid "Prefer dark application chrome."
-msgstr "Usar colores oscuros para el cromado de la aplicación."
+msgstr "Preferir colores oscuros para el cromado de la aplicación."
 
 #: ../data/gsettings/org.gnome.builder.gschema.xml.in.h:9
-#, fuzzy
 #| msgid "- discover projects"
 msgid "Mine projects"
-msgstr "- descubrir proyectos"
+msgstr "Proyectos de minería"
 
 #: ../data/gsettings/org.gnome.builder.gschema.xml.in.h:10
-#, fuzzy
 #| msgid "Search for projects"
 msgid "Search directories for projects."
-msgstr "Buscar proyectos"
+msgstr "Buscar carpetas para proyectos."
 
 #: ../data/gsettings/org.gnome.builder.gschema.xml.in.h:11
 #| msgid "Projects Directory"
@@ -430,10 +430,9 @@ msgid "Projects directory"
 msgstr "Carpeta de proyectos"
 
 #: ../data/gsettings/org.gnome.builder.gschema.xml.in.h:12
-#, fuzzy
 #| msgid "A place for all your projects"
 msgid "Directory for all builder projects"
-msgstr "Un lugar para todos sus proyectos"
+msgstr "Carpeta para todos los proyectos de construcción"
 
 #: ../data/gsettings/org.gnome.builder.plugin.gschema.xml.in.h:2
 #| msgid "If the pane should be revealed."
@@ -456,10 +455,10 @@ msgid "Show Icons"
 msgstr "Mostrar iconos"
 
 #: ../data/gsettings/org.gnome.builder.project-tree.gschema.xml.in.h:4
-#, fuzzy
 #| msgid "If enabled, the sidebar will display icons next to each item."
 msgid "If enabled, the project tree will display icons next to each item."
-msgstr "Si se activa, la barra lateral mostrará iconos junto a cada elemento."
+msgstr ""
+"Si se activa, el árbol de proyectos mostrará iconos junto a cada elemento."
 
 #: ../data/gsettings/org.gnome.builder.project-tree.gschema.xml.in.h:5
 #: ../plugins/project-tree/gtk/menus.ui.h:16
@@ -467,11 +466,11 @@ msgid "Show Ignored Files"
 msgstr "Mostrar archivos ignorados"
 
 #: ../data/gsettings/org.gnome.builder.project-tree.gschema.xml.in.h:6
-#, fuzzy
 #| msgid "If enabled, the sidebar will display icons next to each item."
 msgid ""
 "If enabled, the project tree will display files that are ignored by the VCS."
-msgstr "Si se activa, la barra lateral mostrará iconos junto a cada elemento."
+msgstr ""
+"Si se activa, el árbol de proyectos mostrará archivos ignorados por el VCS."
 
 #: ../data/gsettings/org.gnome.builder.workbench.gschema.xml.in.h:1
 #| msgid "Left Pane"
@@ -479,12 +478,9 @@ msgid "Show Left Panel"
 msgstr "Mostrar el panel izquierdo"
 
 #: ../data/gsettings/org.gnome.builder.workbench.gschema.xml.in.h:2
-#, fuzzy
 #| msgid "If enabled, the sidebar will be visible in the editor workspace."
 msgid "If enabled, the left panel will be displayed."
-msgstr ""
-"Si se activa, la barra lateral será visible en el espacio de trabajo del "
-"editor."
+msgstr "Si se activa, se mostrará el panel izquierdo."
 
 #: ../data/gsettings/org.gnome.builder.workbench.gschema.xml.in.h:3
 #| msgid "Left Pane"
@@ -502,12 +498,9 @@ msgid "Show Right Panel"
 msgstr "Mostrar el panel derecho"
 
 #: ../data/gsettings/org.gnome.builder.workbench.gschema.xml.in.h:6
-#, fuzzy
 #| msgid "If enabled, the sidebar will be visible in the editor workspace."
 msgid "If enabled, the right panel will be displayed."
-msgstr ""
-"Si se activa, la barra lateral será visible en el espacio de trabajo del "
-"editor."
+msgstr "Si se activa, se mostrará el panel derecho."
 
 #: ../data/gsettings/org.gnome.builder.workbench.gschema.xml.in.h:7
 #| msgid "Right margin position"
@@ -525,7 +518,6 @@ msgid "Show Bottom Panel"
 msgstr "Mostrar panel inferior"
 
 #: ../data/gsettings/org.gnome.builder.workbench.gschema.xml.in.h:10
-#, fuzzy
 #| msgid "If enabled, the sidebar will be visible in the editor workspace."
 msgid "If enabled, the bottom panel will be displayed."
 msgstr ""
