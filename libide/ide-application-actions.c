@@ -58,7 +58,7 @@ ide_application_actions_preferences (GSimpleAction *action,
 
       name = ide_workbench_get_visible_perspective_name (IDE_WORKBENCH (window));
 
-      if (!ide_str_equal0 (name, "greeter"))
+      if (!ide_str_equal0 (name, "greeter") && !ide_str_equal0 (name, "genesis"))
         {
           ide_workbench_set_visible_perspective_name (IDE_WORKBENCH (window), "preferences");
           IDE_EXIT;
