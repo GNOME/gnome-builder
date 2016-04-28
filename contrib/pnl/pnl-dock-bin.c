@@ -190,44 +190,6 @@ pnl_dock_bin_get_child (PnlDockBin *self,
   return NULL;
 }
 
-#if 0
-static PnlDockBinChild *
-pnl_dock_bin_get_child_at_coordinates (PnlDockBin *self,
-                                       gint        x,
-                                       gint        y)
-{
-  PnlDockBinPrivate *priv = pnl_dock_bin_get_instance_private (self);
-  GtkAllocation our_alloc;
-  guint i;
-
-  g_assert (PNL_IS_DOCK_BIN (self));
-
-  gtk_widget_get_allocation (GTK_WIDGET (self), &our_alloc);
-
-  for (i = 0; i < G_N_ELEMENTS (priv->children); i++)
-    {
-      PnlDockBinChild *child = &priv->children [i];
-      GtkAllocation alloc;
-
-      if (child->widget == NULL)
-        continue;
-
-      gtk_widget_get_allocation (child->widget, &alloc);
-
-      alloc.x -= our_alloc.x;
-      alloc.y -= our_alloc.y;
-
-      if (x >= alloc.x &&
-          x <= alloc.x + alloc.width &&
-          y >= alloc.y &&
-          y <= alloc.y + alloc.height)
-        return child;
-    }
-
-  return NULL;
-}
-#endif
-
 static PnlDockBinChild *
 pnl_dock_bin_get_child_typed (PnlDockBin          *self,
                               PnlDockBinChildType  type)
