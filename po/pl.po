@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-04-27 23:40+0200\n"
-"PO-Revision-Date: 2016-04-27 23:41+0200\n"
+"POT-Creation-Date: 2016-04-28 14:58+0200\n"
+"PO-Revision-Date: 2016-04-28 14:59+0200\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <gnomepl@aviary.pl>\n"
 "Language: pl\n"
@@ -129,42 +129,64 @@ msgstr ""
 "każdy programista, takimi jak wyróżnianie elementów składni i wstawki."
 
 #: ../data/org.gnome.Builder.appdata.xml.in.h:4
+msgid ""
+"You can rely on predictable releases of Builder with each new release of "
+"GNOME every six months."
+msgstr ""
+"Builder jest wydawany co sześć miesięcy, razem z nowym wydaniem środowiska "
+"GNOME."
+
+#: ../data/org.gnome.Builder.appdata.xml.in.h:5
 msgid "Features:"
 msgstr "Funkcje:"
 
-#: ../data/org.gnome.Builder.appdata.xml.in.h:5
+#: ../data/org.gnome.Builder.appdata.xml.in.h:6
+msgid "Built in syntax highlighting for many languages"
+msgstr "Wbudowane wyróżnianie elementów składni w wielu językach"
+
+#: ../data/org.gnome.Builder.appdata.xml.in.h:7
+msgid "Side-by-side code editors"
+msgstr "Dwa edytory kodu obok siebie"
+
+#: ../data/org.gnome.Builder.appdata.xml.in.h:8
+msgid "Integration with Git"
+msgstr "Integracja z systemem git"
+
+#: ../data/org.gnome.Builder.appdata.xml.in.h:9
 msgid "Integration with Autotools"
 msgstr "Integracja z Autotools"
 
-#: ../data/org.gnome.Builder.appdata.xml.in.h:6
+#: ../data/org.gnome.Builder.appdata.xml.in.h:10
 msgid "Clang based auto-completion, semantic highlighting, and diagnostics"
 msgstr ""
 "Automatyczne uzupełnianie, semantyczne wyróżnianie elementów składni i "
 "diagnostyka oparte na kompilatorze Clang"
 
-#: ../data/org.gnome.Builder.appdata.xml.in.h:7
-msgid "Auto indentation"
-msgstr "Automatyczne wcięcia"
+#: ../data/org.gnome.Builder.appdata.xml.in.h:11
+msgid "Python based auto-completion, semantic highlighting, and diagnostics"
+msgstr ""
+"Automatyczne uzupełnianie, semantyczne wyróżnianie elementów składni i "
+"diagnostyka oparte na języku Python"
 
-#: ../data/org.gnome.Builder.appdata.xml.in.h:8
-msgid "Side-by-side code editors"
-msgstr "Dwa edytory kodu obok siebie"
+#: ../data/org.gnome.Builder.appdata.xml.in.h:12
+msgid "Vala based auto-completion and diagnostics"
+msgstr "Automatyczne uzupełnianie i diagnostyka oparte na języku Vala"
 
-#: ../data/org.gnome.Builder.appdata.xml.in.h:9
-msgid "Syntax highlighting"
-msgstr "Wyróżnianie elementów składni"
+#: ../data/org.gnome.Builder.appdata.xml.in.h:13
+msgid "Auto indentation support for C, Python, Vala, and XML"
+msgstr "Automatyczne wcięcia w językach C, Python, Vala i XML"
 
-#: ../data/org.gnome.Builder.appdata.xml.in.h:10
+#: ../data/org.gnome.Builder.appdata.xml.in.h:14
 msgid "HTML/Markdown live preview"
 msgstr "Podgląd HTML/Markdown na żywo"
 
-#: ../data/org.gnome.Builder.appdata.xml.in.h:11
+#: ../data/org.gnome.Builder.appdata.xml.in.h:15
 msgid "Optional Vim-style editing"
 msgstr "Opcjonalna edycja w stylu programu Vim"
 
-#: ../data/org.gnome.Builder.appdata.xml.in.h:12
-msgid "Integration with Git"
-msgstr "Integracja z systemem git"
+#: ../data/org.gnome.Builder.appdata.xml.in.h:16
+msgid "Preview support for building with Xdg-App runtimes"
+msgstr "Testowa obsługa budowania za pomocą środowisk wykonawczych xdg-app"
 
 #: ../data/org.gnome.Builder.desktop.in.in.h:2
 msgid "Build software for GNOME"
@@ -1231,7 +1253,6 @@ msgstr "Zwykły tekst"
 msgid "Provide a number between 1 and %u"
 msgstr "Należy podać numer między 1 a %u"
 
-#: ../libide/genesis/ide-genesis-perspective.c:200
 #: ../libide/greeter/ide-greeter-perspective.c:436
 msgid "Failed to load the project"
 msgstr "Wczytanie projektu się nie powiodło"
@@ -1333,7 +1354,7 @@ msgstr "Proszę podać adres usługi D-Bus"
 msgid "No such worker"
 msgstr "Nie ma takiego wątku roboczego"
 
-#: ../libide/ide-buffer.c:2331
+#: ../libide/ide-buffer.c:2344
 msgid "The current language lacks a symbol resolver."
 msgstr "Obecny język nie posiada mechanizmu rozwiązywania symboli."
 
@@ -2544,7 +2565,8 @@ msgstr "Plik nie jest pod kontrolą katalogu roboczego systemu git."
 msgid "The requested file does not exist within the git index."
 msgstr "Żądany plik nie istnieje w indeksie systemu git."
 
-#: ../plugins/git/ide-git-clone-widget.c:132
+#: ../plugins/git/ide-git-clone-widget.c:133
+#: ../plugins/git/ide-git-clone-widget.c:378
 msgid "A valid Git URL is required"
 msgstr "Wymagany jest prawidłowy adres URL systemu git"
 
@@ -2580,6 +2602,14 @@ msgstr "System kontroli wersji"
 msgid "Attribution"
 msgstr "Autorstwo"
 
+#: ../plugins/git/ide-git-remote-callbacks.c:176
+#, c-format
+msgid ""
+"Builder failed to provide appropriate credentials when cloning repository."
+msgstr ""
+"Dostarczenie odpowiednich danych uwierzytelniających podczas klonowania "
+"repozytorium się nie powiodło."
+
 #: ../plugins/gnome-code-assistance/ide-gca-diagnostic-provider.c:375
 msgid "Code assistance requires a local file."
 msgstr "Asysta podczas pisania kodu wymaga lokalnego pliku."
@@ -2605,11 +2635,11 @@ msgstr "Nie podano żadnego języka"
 msgid "Preview as HTML"
 msgstr "Podgląd jako HTML"
 
-#: ../plugins/jedi/jedi_plugin.py:730
+#: ../plugins/jedi/jedi_plugin.py:731
 msgid "Suggest Python completions"
 msgstr "Sugerowanie uzupełnień języka Python"
 
-#: ../plugins/jedi/jedi_plugin.py:731
+#: ../plugins/jedi/jedi_plugin.py:732
 msgid "Use Jedi to provide completions for the Python language"
 msgstr "Użycie biblioteki Jedi do uzupełniania w języku Python"
 
