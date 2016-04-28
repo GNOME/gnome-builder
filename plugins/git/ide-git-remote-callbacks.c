@@ -169,6 +169,12 @@ ide_git_remote_callbacks_real_credentials (GgitRemoteCallbacks  *callbacks,
       self->tried |= GGIT_CREDTYPE_SSH_INTERACTIVE;
     }
 
+  if (ret == NULL)
+    g_set_error (error,
+                 G_IO_ERROR,
+                 G_IO_ERROR_NOT_SUPPORTED,
+                 _("Builder failed to provide appropriate credentials when cloning repository."));
+
   IDE_RETURN (ret);
 }
 
