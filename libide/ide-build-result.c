@@ -354,6 +354,10 @@ ide_build_result_addin_added (PeasExtensionSet    *set,
   g_assert (IDE_IS_BUILD_RESULT_ADDIN (addin));
   g_assert (IDE_IS_BUILD_RESULT (self));
 
+  if (IDE_IS_OBJECT (addin))
+    ide_object_set_context (IDE_OBJECT (addin),
+                            ide_object_get_context (IDE_OBJECT (self)));
+
   ide_build_result_addin_load (addin, self);
 }
 
