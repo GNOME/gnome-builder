@@ -1,4 +1,55 @@
 ==============
+Version 3.20.2
+==============
+
+We've packed a bunch of bug fixes into a new release for you.
+
+We strongly suggest that distributions upgrade to 3.20.2 if
+they have already shipped 3.20.0 as it fixes numerous issues.
+
+ • You can now select templates when creating a project, including
+   C, C++, and Vala languages.
+ • The Vala plugin now extracts --pkg command line arguments from
+   autotools projects.
+ • Various bug fixes to preferences and gsettings.
+ • Much more of builder is translatable now.
+ • Build for FreeBSD and OpenBSD.
+ • Fixes to vim movements.
+ • Many performance improvements to the editor.
+ • Support for LLVM 3.8.
+ • Fixes for ctrl+click on included headers to jump to header.
+ • Fix for infinite loop in worker thread when cloning from
+   unauthorized git repositories.
+ • Builder removes unnecessary widgets after starting up, lowering
+   the runtime overhead of the workbench.
+ • You can move rename files outside their current directory.
+ • Fixes for shorthand git URLs such as user@host:path.
+ • The global file search now handles renames and deletes of
+   project files.
+ • The project window now includes the title of the project
+   to help when multiple projects are open in GNOME Shell's
+   overview.
+ • Some projects that could not be removed from the greeter
+   can now be removed.
+
+We also request that packages ensure that they ensure that the Builder
+package depends on automake, autoconf, and libtool. These will always
+be available when building, but are also required at runtime for
+autotools support.
+
+Thanks to all our translators and contributors in this release!
+
+Akshaya Kakkilaya, Alexandre Franke, Anders Jonsson, Andreas Henriksson,
+Antoine Jacoutot, Ask Hjorth Larsen, Aurimas Černius, Balázs Meskó,
+Balázs Úr, Ben Iofel, Christian Hergert, Daniel Mustieles, Debarshi,
+Enrico Nicoletto, Fangwen Yu, Fran Dieguez, Gabor Kelemen, Jakub
+Steiner, Jürg Billeter, Marek Černocký, Milo Casagrande, Piotr Drąg,
+Rafael Fontenelle, Reinout van Schouwen, Rūdolfs Mazurs, Sebastian
+Rasmussen, Sebastien Lafargue, Ting-Wei Lan, Tom Tryfonidis, Wolfgang
+Stöggl, chandu, Марко М. Костић
+
+
+==============
 Version 3.20.0
 ==============
 
