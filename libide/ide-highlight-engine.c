@@ -595,7 +595,7 @@ ide_highlight_engine__notify_style_scheme_cb (IdeHighlightEngine *self,
     sync_tag_style (style_scheme, iter->data);
 }
 
-static void
+void
 ide_highlight_engine_clear (IdeHighlightEngine *self)
 {
   GtkTextIter begin;

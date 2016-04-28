@@ -33,6 +33,7 @@ IdeHighlightEngine *ide_highlight_engine_new             (IdeBuffer          *bu
 IdeBuffer          *ide_highlight_engine_get_buffer      (IdeHighlightEngine *self);
 IdeHighlighter     *ide_highlight_engine_get_highlighter (IdeHighlightEngine *self);
 void                ide_highlight_engine_rebuild         (IdeHighlightEngine *self);
+void                ide_highlight_engine_clear           (IdeHighlightEngine *self);
 void                ide_highlight_engine_invalidate      (IdeHighlightEngine *self,
                                                           const GtkTextIter  *begin,
                                                           const GtkTextIter  *end);

@@ -2260,8 +2260,16 @@ ide_buffer_rehighlight (IdeBuffer *self)
 
   g_return_if_fail (IDE_IS_BUFFER (self));
 
-  if (priv->highlight_engine != NULL)
-    ide_highlight_engine_rebuild (priv->highlight_engine);
+  if (gtk_source_buffer_get_highlight_syntax (GTK_SOURCE_BUFFER (self)))
+    {
+      if (priv->highlight_engine != NULL)
+        {
+          ide_highlight_engine_rebuild (priv->highlight_engine);
+          IDE_EXIT;
+        }
+    }
+
+  ide_highlight_engine_clear (priv->highlight_engine);
 
   IDE_EXIT;
 }
