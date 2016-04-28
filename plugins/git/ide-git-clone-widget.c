@@ -108,8 +108,8 @@ ide_git_clone_widget_uri_changed (IdeGitCloneWidget *self,
       gchar *name = NULL;
 
       g_object_set (self->clone_uri_entry,
+                    "secondary-icon-tooltip-text", "",
                     "secondary-icon-name", NULL,
-                    "secondary-icon-tooltip-text", NULL,
                     NULL);
 
       path = ide_vcs_uri_get_path (uri);
