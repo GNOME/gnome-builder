@@ -1216,18 +1216,17 @@ ide_makecache_get_file_targets_worker (GTask        *task,
 
           /*
            * Follow the automake vala renaming rules the best I can decipher.
-           * Which seems to be that libraries get libfoo_la.stamp (ignoring
-           * the filename portion) but programs get program_foo.stamp.
+           * I mostly see _vala.stamp, but I have seen others. However, we
+           * need to ship this product and our templates are generating
+           * _vala.stamp with libraries, so at least make that work out of
+           * the box.
            */
           if (NULL != (endptr = strchr (name, '-')))
             {
               GString *str = g_string_new (NULL);
 
               g_string_append_len (str, name, endptr - name);
-              if (g_str_has_prefix (name, "lib"))
-                g_string_append (str, ".stamp");
-              else
-                g_string_append (str, "_vala.stamp");
+              g_string_append (str, "_vala.stamp");
               ide_makecache_target_set_target (target, str->str);
               g_string_free (str, TRUE);
             }
