@@ -1378,8 +1378,6 @@ pnl_dock_bin_draw (GtkWidget *widget,
 
   style_context = gtk_widget_get_style_context (widget);
 
-  gtk_style_context_add_class (style_context, GTK_STYLE_CLASS_PANE_SEPARATOR);
-
   for (i = 0; i < PNL_DOCK_BIN_CHILD_CENTER; i++)
     {
       PnlDockBinChild *child = &priv->children [i];
@@ -1434,8 +1432,6 @@ pnl_dock_bin_draw (GtkWidget *widget,
           gtk_render_handle (style_context, cr, handle.x, handle.y, handle.width, handle.height);
         }
     }
-
-  gtk_style_context_remove_class (style_context, GTK_STYLE_CLASS_PANE_SEPARATOR);
 
   return ret;
 }
