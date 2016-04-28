@@ -727,6 +727,23 @@ ide_workbench_get_visible_perspective (IdeWorkbench *self)
   return IDE_PERSPECTIVE (gtk_stack_get_visible_child (self->perspectives_stack));
 }
 
+static gboolean
+remove_early_perspectives (gpointer data)
+{
+  g_autoptr(IdeWorkbench) self = data;
+  GtkWidget *widget;
+
+  g_assert (IDE_IS_WORKBENCH (self));
+
+  widget = gtk_stack_get_child_by_name (self->top_stack, "greeter");
+  gtk_widget_destroy (widget);
+
+  widget = gtk_stack_get_child_by_name (self->top_stack, "genesis");
+  gtk_widget_destroy (widget);
+
+  return G_SOURCE_REMOVE;
+}
+
 void
 ide_workbench_set_visible_perspective (IdeWorkbench   *self,
                                        IdePerspective *perspective)
@@ -755,7 +772,12 @@ ide_workbench_set_visible_perspective (IdeWorkbench   *self,
 
   if ((stack == self->perspectives_stack) &&
       !ide_str_equal0 (gtk_stack_get_visible_child_name (self->top_stack), "perspectives"))
-    gtk_stack_set_visible_child_name (self->top_stack, "perspectives");
+    {
+      gtk_stack_set_visible_child_name (self->top_stack, "perspectives");
+      g_timeout_add (1000 + gtk_stack_get_transition_duration (self->top_stack),
+                     remove_early_perspectives,
+                     g_object_ref (self));
+    }
 }
 
 const gchar *
