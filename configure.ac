@@ -183,11 +183,11 @@ AC_SUBST(BUGREPORT_URL)
 dnl ***********************************************************************
 dnl Check for Required Packages
 dnl ***********************************************************************
-m4_define([gtk_required_version], [3.20.0])
-m4_define([glib_required_version], [2.47.92])
-m4_define([gtksourceview_required_version], [3.20.0])
-m4_define([gobject_introspection_version], [1.47.92])
-m4_define([pygobject_required_version], [3.19.3])
+m4_define([gtk_required_version], [3.21.1])
+m4_define([glib_required_version], [2.49.0])
+m4_define([gtksourceview_required_version], [3.21.1])
+m4_define([gobject_introspection_version], [1.48.0])
+m4_define([pygobject_required_version], [3.21.0])
 m4_define([libxml_required_version], [2.9.0])
 m4_define([pangoft2_required_version], [1.38.0])
 m4_define([peas_required_version], [1.18.0])
