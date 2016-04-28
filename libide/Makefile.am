@@ -508,6 +508,13 @@ libide_1_0_la_LIBADD = \
 	$(top_builddir)/contrib/xml/libxml.la \
 	$(NULL)
 
+if ENABLE_WEBKIT
+libide_1_0_la_SOURCES += webkit/ide-webkit.c
+libide_1_0_la_CFLAGS += $(WEBKIT_CFLAGS)
+libide_1_0_la_LIBADD += $(WEBKIT_LIBS)
+endif
+
+
 libide_1_0_la_built_sources = \
 	resources/ide-resources.c \
 	resources/ide-resources.h \

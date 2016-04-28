@@ -85,4 +85,8 @@
   <gresource prefix="/org/gnome/builder/plugins/directory">
     <file alias="directory.plugin">../directory/directory.plugin</file>
   </gresource>
+
+  <gresource prefix="/org/gnome/builder/plugins/webkit">
+    <file alias="webkit.plugin">../webkit/webkit.plugin</file>
+  </gresource>
 </gresources>

@@ -1,0 +1,9 @@
+[Plugin]
+Module=webkit
+Name=WebKit
+Description=Support for WebKit
+Authors=Christian Hergert <christian@hergert.me>
+Copyright=Copyright © 2016 Christian Hergert
+Builtin=true
+Hidden=true
+Embedded=ide_webkit_register_types
