@@ -68,6 +68,8 @@ ide_workbench_actions_open_with_dialog (GSimpleAction *action,
                                         _("Open"), GTK_RESPONSE_OK,
                                         NULL);
 
+  gtk_file_chooser_set_local_only (GTK_FILE_CHOOSER (dialog), FALSE);
+
   button = gtk_dialog_get_widget_for_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
   gtk_style_context_add_class (gtk_widget_get_style_context (button),
                                GTK_STYLE_CLASS_SUGGESTED_ACTION);
