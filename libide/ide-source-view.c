@@ -4191,6 +4191,7 @@ ide_source_view_constructed (GObject *object)
   priv->line_diagnostics_renderer = g_object_new (IDE_TYPE_LINE_DIAGNOSTICS_GUTTER_RENDERER,
                                                   "size", 16,
                                                   "visible", visible,
+                                                  "xpad", 2,
                                                   NULL);
   g_object_ref (priv->line_diagnostics_renderer);
   gtk_source_gutter_insert (gutter, priv->line_diagnostics_renderer, -100);
