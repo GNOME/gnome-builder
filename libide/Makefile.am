@@ -532,6 +532,7 @@ libide_1_0_la_includes += \
 	-I$(top_srcdir)/contrib/libeditorconfig \
 	-I$(srcdir)/editorconfig
 
+libide_1_0_la_CFLAGS += -DENABLE_EDITORCONFIG
 libide_1_0_la_LIBADD += $(top_builddir)/contrib/libeditorconfig/libeditorconfig.la
 endif
 
