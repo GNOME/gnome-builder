@@ -54,6 +54,8 @@ G_DEFINE_TYPE (IdeApplication, ide_application, GTK_TYPE_APPLICATION)
 static void
 ide_application_make_skeleton_dirs (IdeApplication *self)
 {
+  g_autoptr(GSettings) settings = NULL;
+  g_autofree gchar *projects_dir = NULL;
   gchar *path;
 
   IDE_ENTRY;
@@ -71,6 +73,19 @@ ide_application_make_skeleton_dirs (IdeApplication *self)
   path = g_build_filename (g_get_user_config_dir (), "gnome-builder", "snippets", NULL);
   g_mkdir_with_parents (path, 0750);
   g_free (path);
+
+  settings = g_settings_new ("org.gnome.builder");
+  projects_dir = g_settings_get_string (settings, "projects-directory");
+
+  if (!g_path_is_absolute (projects_dir))
+    {
+      g_autofree gchar *tmp = projects_dir;
+
+      projects_dir = g_build_path (g_get_home_dir (), tmp, NULL);
+    }
+
+  if (!g_file_test (projects_dir, G_FILE_TEST_IS_DIR))
+    g_mkdir_with_parents (projects_dir, 0750);
 
   IDE_EXIT;
 }
