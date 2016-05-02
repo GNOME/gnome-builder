@@ -330,16 +330,16 @@
   bind "n" { "move-search" (tab-forward, 0, 0, 1, 1, 0) };
   bind "<shift>n" { "move-search" (tab-backward, 0, 0, 0, 1, 0) };
 
-  bind "numbersign" { "movement" (previous-word-end, 0, 1, 1)
-                      "movement" (next-word-start, 0, 1, 0)
-                      "movement" (next-word-end, 1, 0, 1)
+  bind "numbersign" { "movement" (next-word-end, 0, 1, 0)
+                      "movement" (previous-word-start, 0, 1, 0)
+                      "movement" (next-word-end, 1, 0, 0)
                       "set-search-text" ("", 1)
                       "movement" (previous-char, 0, 1, 0)
                       "move-search" (up, 0, 0, 0, 1, 1) };
 
-  bind "asterisk" { "movement" (previous-word-end, 0, 1, 1)
-                    "movement" (next-word-start, 0, 1, 0)
-                    "movement" (next-word-end, 1, 0, 1)
+  bind "asterisk" { "movement" (next-word-end, 0, 1, 0)
+                    "movement" (previous-word-start, 0, 1, 0)
+                    "movement" (next-word-end, 1, 0, 0)
                     "set-search-text" ("", 1)
                     "move-search" (down, 0, 0, 1, 1, 1) };
 

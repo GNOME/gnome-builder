@@ -3663,6 +3663,9 @@ ide_source_view_real_move_search (IdeSourceView    *self,
   gtk_source_search_context_set_highlight (priv->search_context, TRUE);
 
   settings = gtk_source_search_context_get_settings (priv->search_context);
+
+  gtk_source_search_settings_set_at_word_boundaries (settings, word_boundaries);
+
   search_text = gtk_source_search_settings_get_search_text (settings);
 
   if (search_text == NULL || search_text[0] == '\0')
