@@ -872,6 +872,8 @@ simple_make_command (GFile            *directory,
   else
     ide_subprocess_launcher_push_argv (launcher, "make");
 
+  ide_subprocess_launcher_push_argv (launcher, target);
+
   if (NULL == (subprocess = ide_subprocess_launcher_spawn_sync (launcher, cancellable, &error)))
     {
       g_task_return_error (task, error);
