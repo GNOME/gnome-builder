@@ -294,6 +294,7 @@ ide_tree_popup (IdeTree        *self,
       gdk_window_get_root_coords (gtk_widget_get_window (GTK_WIDGET (self)),
                                   target_x, target_y, &loc.x, &loc.y);
       loc.x -= 12;
+      loc.y -= 3;
     }
 
   gtk_container_foreach (GTK_CONTAINER (menu_widget),
