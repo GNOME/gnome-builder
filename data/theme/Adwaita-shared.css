@@ -114,3 +114,10 @@ layout {
   border: 1px solid alpha(@borders, 0.75);
   -PnlDockBin-handle-size: 1;
 }
+
+
+entry.error {
+  background-color: #cc0000;
+  color: white;
+  text-shadow: none;
+}

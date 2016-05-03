@@ -62,3 +62,8 @@ docktabstrip:backdrop {
 docktabstrip docktab:checked {
   box-shadow: 0 -2px 0 #215d9c inset;
 }
+
+
+entry.error {
+  border-color: #330000;
+}
