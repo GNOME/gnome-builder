@@ -64,6 +64,6 @@ docktabstrip docktab:checked {
 }
 
 
-entry.error {
+entry.search-missing {
   border-color: #330000;
 }

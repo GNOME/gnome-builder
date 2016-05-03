@@ -236,10 +236,13 @@ ide_editor_frame_update_search_position_label (IdeEditorFrame *self)
   context = gtk_widget_get_style_context (GTK_WIDGET (self->search_entry));
   search_text = gtk_entry_get_text (GTK_ENTRY (self->search_entry));
 
+  /* We use our own error class because we don't want to colide with styling
+   * from GTK+ themes.
+   */
   if ((count == 0) && !ide_str_empty0 (search_text))
-    gtk_style_context_add_class (context, GTK_STYLE_CLASS_ERROR);
+    gtk_style_context_add_class (context, "search-missing");
   else
-    gtk_style_context_remove_class (context, GTK_STYLE_CLASS_ERROR);
+    gtk_style_context_remove_class (context, "search-missing");
 
   text = g_strdup_printf (_("%u of %u"), pos, count);
   ide_editor_frame_set_position_label (self, text);

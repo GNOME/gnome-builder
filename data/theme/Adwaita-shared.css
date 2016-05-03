@@ -116,12 +116,12 @@ layout {
 }
 
 
-entry.error {
+entry.search-missing {
   background-color: #cc0000;
   color: white;
   text-shadow: none;
 }
 
-entry.error > image {
+entry.search-missing > image {
   color: white;
 }
