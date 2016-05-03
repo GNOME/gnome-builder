@@ -121,3 +121,7 @@ entry.error {
   color: white;
   text-shadow: none;
 }
+
+entry.error > image {
+  color: white;
+}
