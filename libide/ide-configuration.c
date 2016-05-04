@@ -416,6 +416,7 @@ ide_configuration_init (IdeConfiguration *self)
   self->runtime_id = g_strdup ("host");
   self->debug = TRUE;
   self->environment = ide_environment_new ();
+  self->parallelism = -1;
 
   g_signal_connect_object (self->environment,
                            "items-changed",
