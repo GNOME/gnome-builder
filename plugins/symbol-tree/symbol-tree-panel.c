@@ -121,13 +121,11 @@ refresh_tree (SymbolTreePanel *self)
   IdeBuffer *document = NULL;
   gsize change_count = 0;
 
-  IDE_ENTRY;
-
   g_assert (SYMBOL_IS_TREE_PANEL (self));
 
   workbench = IDE_WORKBENCH (gtk_widget_get_ancestor (GTK_WIDGET (self), IDE_TYPE_WORKBENCH));
   if (workbench == NULL)
-    IDE_EXIT;
+    return;
 
   perspective = ide_workbench_get_perspective_by_name (workbench, "editor");
   g_assert (perspective != NULL);
@@ -142,6 +140,8 @@ refresh_tree (SymbolTreePanel *self)
 
   if ((document != self->last_document) || (self->last_change_count < change_count))
     {
+      IDE_PROBE;
+
       ide_clear_source (&self->refresh_tree_timeout);
 
       self->last_document = document;
@@ -176,8 +176,6 @@ refresh_tree (SymbolTreePanel *self)
                                     g_object_ref (self));
         }
     }
-
-  IDE_EXIT;
 }
 
 static void
