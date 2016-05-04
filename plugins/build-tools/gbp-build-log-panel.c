@@ -71,6 +71,7 @@ gbp_build_log_panel_reset_view (GbpBuildLogPanel *self)
 
   self->text_view = g_object_new (GTK_TYPE_TEXT_VIEW,
                                   "buffer", self->buffer,
+                                  "editable", FALSE,
                                   "monospace", TRUE,
                                   "visible", TRUE,
                                   NULL);
