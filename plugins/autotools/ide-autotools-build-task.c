@@ -430,7 +430,7 @@ worker_state_new (IdeAutotoolsBuildTask *self,
   state->system_type = g_strdup (ide_device_get_system_type (device));
   state->runtime = g_object_ref (runtime);
 
-  val32 = atoi (ide_configuration_getenv (self->configuration, "PARALLEL") ?: "-1");
+  val32 = ide_configuration_get_parallelism (self->configuration);
 
   if (val32 == -1)
     state->parallel = g_strdup_printf ("-j%u", g_get_num_processors () + 1);
