@@ -3611,7 +3611,7 @@ ide_source_view_real_move_search (IdeSourceView    *self,
                                   gboolean          select_match,
                                   gboolean          exclusive,
                                   gboolean          apply_count,
-                                  gboolean          word_boundaries)
+                                  gint              word_boundaries)
 {
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
   GtkTextView *text_view = (GtkTextView *)self;
@@ -3664,7 +3664,14 @@ ide_source_view_real_move_search (IdeSourceView    *self,
 
   settings = gtk_source_search_context_get_settings (priv->search_context);
 
-  gtk_source_search_settings_set_at_word_boundaries (settings, word_boundaries);
+  /*
+   * A word_boundaries value other than 0 or 1 means that we don't modify
+   * the word_boundaries search setting.
+   */
+  if (word_boundaries == 0)
+    gtk_source_search_settings_set_at_word_boundaries (settings, FALSE);
+  else if (word_boundaries == 1)
+    gtk_source_search_settings_set_at_word_boundaries (settings, TRUE);
 
   search_text = gtk_source_search_settings_get_search_text (settings);
 
@@ -6228,7 +6235,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   G_TYPE_BOOLEAN,
                   G_TYPE_BOOLEAN,
                   G_TYPE_BOOLEAN,
-                  G_TYPE_BOOLEAN);
+                  G_TYPE_INT);
 
   signals [PASTE_CLIPBOARD_EXTENDED] =
     g_signal_new ("paste-clipboard-extended",

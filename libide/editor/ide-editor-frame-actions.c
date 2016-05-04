@@ -87,7 +87,7 @@ ide_editor_frame_actions_next_search_result (GSimpleAction *action,
   ide_source_view_set_rubberband_search (self->source_view, FALSE);
 
   IDE_SOURCE_VIEW_GET_CLASS (self->source_view)->move_search
-    (self->source_view, GTK_DIR_DOWN, FALSE, TRUE, TRUE, FALSE, FALSE);
+    (self->source_view, GTK_DIR_DOWN, FALSE, TRUE, TRUE, FALSE, -1);
 }
 
 static void
@@ -102,7 +102,7 @@ ide_editor_frame_actions_previous_search_result (GSimpleAction *action,
   ide_source_view_set_rubberband_search (self->source_view, FALSE);
 
   IDE_SOURCE_VIEW_GET_CLASS (self->source_view)->move_search
-    (self->source_view, GTK_DIR_UP, FALSE, TRUE, TRUE, FALSE, FALSE);
+    (self->source_view, GTK_DIR_UP, FALSE, TRUE, TRUE, FALSE, -1);
 }
 
 static void

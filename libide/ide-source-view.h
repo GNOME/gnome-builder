@@ -254,7 +254,7 @@ struct _IdeSourceViewClass
                                        gboolean                 select_match,
                                        gboolean                 exclusive,
                                        gboolean                 apply_count,
-                                       gboolean                 at_word_boundaries);
+                                       gint                     at_word_boundaries);
   void (*paste_clipboard_extended)    (IdeSourceView           *self,
                                        gboolean                 smart_lines,
                                        gboolean                 after_cursor,
