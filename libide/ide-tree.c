@@ -317,9 +317,17 @@ ide_tree_popup (IdeTree        *self,
       gtk_menu_attach_to_widget (GTK_MENU (menu_widget),
                                  GTK_WIDGET (self),
                                  NULL);
+      g_signal_connect_after (menu_widget,
+                              "selection-done",
+                              G_CALLBACK (gtk_widget_destroy),
+                              NULL);
       gtk_menu_popup (GTK_MENU (menu_widget), NULL, NULL,
                       ide_tree_menu_position_func, &loc,
                       button, event_time);
+    }
+  else
+    {
+      gtk_widget_destroy (menu_widget);
     }
 
   IDE_EXIT;
