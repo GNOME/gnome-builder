@@ -28,6 +28,9 @@
 
 #include "ide-autotools-build-task.h"
 
+#define FLAG_SET(_f,_n) (((_f) & (_n)) != 0)
+#define FLAG_UNSET(_f,_n) (((_f) & (_n)) == 0)
+
 struct _IdeAutotoolsBuildTask
 {
   IdeBuildResult    parent;
@@ -420,8 +423,8 @@ worker_state_new (IdeAutotoolsBuildTask *self,
 
   state = g_slice_new0 (WorkerState);
   state->sequence = ide_configuration_get_sequence (self->configuration);
-  state->require_autogen = self->require_autogen || !!(flags & IDE_BUILDER_BUILD_FLAGS_FORCE_BOOTSTRAP);
-  state->require_configure = self->require_configure || (state->require_autogen && !(flags & IDE_BUILDER_BUILD_FLAGS_NO_CONFIGURE));
+  state->require_autogen = self->require_autogen || FLAG_SET (flags, IDE_BUILDER_BUILD_FLAGS_FORCE_BOOTSTRAP);
+  state->require_configure = self->require_configure || (state->require_autogen && FLAG_UNSET (flags, IDE_BUILDER_BUILD_FLAGS_NO_CONFIGURE));
   state->directory_path = g_file_get_path (self->directory);
   state->project_path = g_file_get_path (project_dir);
   state->system_type = g_strdup (ide_device_get_system_type (device));
@@ -438,21 +441,24 @@ worker_state_new (IdeAutotoolsBuildTask *self,
 
   make_targets = g_ptr_array_new ();
 
-  if (0 != (flags & IDE_BUILDER_BUILD_FLAGS_FORCE_CLEAN))
+  if (FLAG_SET (flags, IDE_BUILDER_BUILD_FLAGS_FORCE_CLEAN))
     {
-      state->require_autogen = TRUE;
-      state->require_configure = TRUE;
+      if (FLAG_UNSET (flags, IDE_BUILDER_BUILD_FLAGS_NO_BUILD))
+        {
+          state->require_autogen = TRUE;
+          state->require_configure = TRUE;
+        }
       g_ptr_array_add (make_targets, g_strdup ("clean"));
     }
 
-  if (0 == (flags & IDE_BUILDER_BUILD_FLAGS_NO_BUILD))
+  if (FLAG_UNSET (flags, IDE_BUILDER_BUILD_FLAGS_NO_BUILD))
     g_ptr_array_add (make_targets, g_strdup ("all"));
 
   g_ptr_array_add (make_targets, NULL);
 
   state->make_targets = (gchar **)g_ptr_array_free (make_targets, FALSE);
 
-  if (0 != (flags & IDE_BUILDER_BUILD_FLAGS_NO_CONFIGURE))
+  if (FLAG_SET (flags, IDE_BUILDER_BUILD_FLAGS_NO_CONFIGURE))
     {
       state->require_autogen = TRUE;
       state->require_configure = TRUE;
