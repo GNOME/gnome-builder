@@ -16,6 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define G_LOG_DOMAIN "gbp-devhelp-panel"
+
 #include <devhelp/devhelp.h>
 #include <glib/gi18n.h>
 #include <ide.h>
@@ -64,6 +66,8 @@ gbp_devhelp_panel_link_selected (GbpDevhelpPanel *self,
   IdeWorkbench *workbench;
   gchar *uri;
 
+  IDE_ENTRY;
+
   g_assert (GBP_IS_DEVHELP_PANEL (self));
   g_assert (link != NULL);
   g_assert (DH_IS_SIDEBAR (sidebar));
@@ -85,10 +89,13 @@ gbp_devhelp_panel_link_selected (GbpDevhelpPanel *self,
     }
 
   uri = dh_link_get_uri (link);
+  IDE_TRACE_MSG ("User selected %s", uri);
   gbp_devhelp_view_set_uri (view, uri);
   g_free (uri);
 
   ide_workbench_focus (workbench, GTK_WIDGET (view));
+
+  IDE_EXIT;
 }
 
 void
