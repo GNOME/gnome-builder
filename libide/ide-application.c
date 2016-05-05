@@ -152,14 +152,22 @@ ide_application_register_menus (IdeApplication *self)
 static void
 ide_application_register_search_paths (IdeApplication *self)
 {
+  GtkSourceStyleSchemeManager *manager;
+  g_autofree gchar *gedit_path = NULL;
+
   g_assert (IDE_IS_APPLICATION (self));
 
-  gtk_source_style_scheme_manager_append_search_path (gtk_source_style_scheme_manager_get_default (),
+  manager = gtk_source_style_scheme_manager_get_default ();
+
+  gtk_source_style_scheme_manager_append_search_path (manager,
                                                       PACKAGE_DATADIR"/gtksourceview-3.0/styles/");
 
+  /* We can use styles from gedit too */
+  gedit_path = g_build_filename (g_get_user_data_dir (), "gedit", "styles", NULL);
+  gtk_source_style_scheme_manager_append_search_path (manager, gedit_path);
+
   if (g_getenv ("GB_IN_TREE_STYLE_SCHEMES") != NULL)
-    gtk_source_style_scheme_manager_prepend_search_path (gtk_source_style_scheme_manager_get_default (),
-                                                         SRCDIR"/data/style-schemes");
+    gtk_source_style_scheme_manager_prepend_search_path (manager, SRCDIR"/data/style-schemes");
 }
 
 static void
