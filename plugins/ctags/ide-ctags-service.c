@@ -285,6 +285,7 @@ ide_ctags_service_mine_directory (IdeCtagsService *self,
     return;
 
   enumerator = g_file_enumerate_children (directory,
+                                          G_FILE_ATTRIBUTE_STANDARD_IS_SYMLINK","
                                           G_FILE_ATTRIBUTE_STANDARD_NAME","
                                           G_FILE_ATTRIBUTE_STANDARD_TYPE,
                                           G_FILE_QUERY_INFO_NONE,
@@ -297,11 +298,15 @@ ide_ctags_service_mine_directory (IdeCtagsService *self,
   while ((infoptr = g_file_enumerator_next_file (enumerator, cancellable, NULL)))
     {
       g_autoptr(GFileInfo) file_info = infoptr;
-      const gchar *name = g_file_info_get_name (file_info);
       GFileType type = g_file_info_get_file_type (file_info);
+
+      if (g_file_info_get_is_symlink (file_info))
+        continue;
 
       if (type == G_FILE_TYPE_DIRECTORY)
         {
+          const gchar *name = g_file_info_get_name (file_info);
+
           child = g_file_get_child (directory, name);
           ide_ctags_service_mine_directory (self, child, recurse, cancellable);
           g_clear_object (&child);
