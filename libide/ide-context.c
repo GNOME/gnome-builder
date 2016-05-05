@@ -1283,7 +1283,16 @@ directory_is_ignored (GFile *file)
   if (g_file_equal (file, downloads_prefix) || g_file_has_prefix (file, downloads_prefix))
     return TRUE;
 
-  if (g_str_has_prefix (relative_path, "."))
+  /* realtive_path should be valid here because we are within the home_prefix. */
+  g_assert (relative_path != NULL);
+
+  /*
+   * Ignore dot directories, except .local.
+   * We've had too many bug reports with people creating things
+   * like gnome-shell extensions in their .local directory.
+   */
+  if (*relative_path == '.' &&
+      !g_str_has_prefix (relative_path, ".local"G_DIR_SEPARATOR_S))
     return TRUE;
 
   if (type != G_FILE_TYPE_DIRECTORY)
