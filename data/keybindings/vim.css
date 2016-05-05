@@ -1879,6 +1879,9 @@
   bind "space" { "movement" (next-offset, 1, 1, 1)
                  "clear-count" () };
 
+  bind "equal" { "reindent" ()
+                 "set-mode" ("vim-normal", permanent) };
+
   /* TODO: we really want to rollback the macro here */
   bind "y" { "copy-clipboard" ()
              "selection-theatric" (expand)
@@ -2210,6 +2213,9 @@ bind "KP_Multiply" { "save-insert-mark" ()
 
   bind "Up" { "movement" (previous-line, 1, 0, 1) };
   bind "Down" { "movement" (next-line, 1, 0, 1) };
+
+  bind "equal" { "reindent" ()
+                 "set-mode" ("vim-normal", permanent) };
 
   bind "z" { "set-mode" ("vim-visual-line-z", transient) };
 
