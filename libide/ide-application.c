@@ -81,7 +81,7 @@ ide_application_make_skeleton_dirs (IdeApplication *self)
     {
       g_autofree gchar *tmp = projects_dir;
 
-      projects_dir = g_build_path (g_get_home_dir (), tmp, NULL);
+      projects_dir = g_build_filename (g_get_home_dir (), tmp, NULL);
     }
 
   if (!g_file_test (projects_dir, G_FILE_TEST_IS_DIR))
