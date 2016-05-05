@@ -16,6 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define G_LOG_DOMAIN "ide-back-forward-list"
+
 #include "ide-back-forward-item.h"
 #include "ide-back-forward-list.h"
 #include "ide-back-forward-list-private.h"
