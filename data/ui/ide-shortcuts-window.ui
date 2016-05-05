@@ -316,28 +316,28 @@
               <object class="GtkShortcutsShortcut">
                 <property name="visible">1</property>
                 <property name="accelerator">&lt;alt&gt;&lt;shift&gt;Up</property>
-                <property name="title" translatable="yes" context="shortcut window">Move sectionport up within the file</property>
+                <property name="title" translatable="yes" context="shortcut window">Move viewport up within the file</property>
               </object>
             </child>
             <child>
               <object class="GtkShortcutsShortcut">
                 <property name="visible">1</property>
                 <property name="accelerator">&lt;alt&gt;&lt;shift&gt;Down</property>
-                <property name="title" translatable="yes" context="shortcut window">Move sectionport down within the file</property>
+                <property name="title" translatable="yes" context="shortcut window">Move viewport down within the file</property>
               </object>
             </child>
             <child>
               <object class="GtkShortcutsShortcut">
                 <property name="visible">1</property>
                 <property name="accelerator">&lt;alt&gt;&lt;shift&gt;End</property>
-                <property name="title" translatable="yes" context="shortcut window">Move sectionport to end of file</property>
+                <property name="title" translatable="yes" context="shortcut window">Move viewport to end of file</property>
               </object>
             </child>
             <child>
               <object class="GtkShortcutsShortcut">
                 <property name="visible">1</property>
                 <property name="accelerator">&lt;alt&gt;&lt;shift&gt;Home</property>
-                <property name="title" translatable="yes" context="shortcut window">Move sectionport to beginning of file</property>
+                <property name="title" translatable="yes" context="shortcut window">Move viewport to beginning of file</property>
               </object>
             </child>
             <child>
