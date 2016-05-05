@@ -228,3 +228,17 @@ ide_preferences_set_page (IdePreferences *self,
 
   IDE_PREFERENCES_GET_IFACE (self)->set_page (self, page_name, map);
 }
+
+/**
+ * ide_preferences_get_widget:
+ *
+ * Returns: (transfer none) (nullable): A #GtkWidget or %NULL.
+ */
+GtkWidget *
+ide_preferences_get_widget (IdePreferences *self,
+                            guint           widget_id)
+{
+  g_return_val_if_fail (IDE_IS_PREFERENCES (self), NULL);
+
+  IDE_PREFERENCES_GET_IFACE (self)->get_widget (self, widget_id);
+}

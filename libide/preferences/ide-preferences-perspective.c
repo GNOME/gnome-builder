@@ -860,6 +860,17 @@ ide_preferences_perspective_set_page (IdePreferences *preferences,
   gtk_widget_set_visible (GTK_WIDGET (self->back_button), FALSE);
 }
 
+static GtkWidget *
+ide_preferences_perspective_get_widget (IdePreferences *preferences,
+                                        guint           widget_id)
+{
+  IdePreferencesPerspective *self = (IdePreferencesPerspective *)preferences;
+
+  g_assert (IDE_IS_PREFERENCES_PERSPECTIVE (self));
+
+  return g_hash_table_lookup (self->widgets, GINT_TO_POINTER (widget_id));
+}
+
 static void
 ide_preferences_iface_init (IdePreferencesInterface *iface)
 {
@@ -874,6 +885,7 @@ ide_preferences_iface_init (IdePreferencesInterface *iface)
   iface->add_custom = ide_preferences_perspective_add_custom;
   iface->set_page = ide_preferences_perspective_set_page;
   iface->remove_id = ide_preferences_perspective_remove_id;
+  iface->get_widget = ide_preferences_perspective_get_widget;
 }
 
 static gchar *

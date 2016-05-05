@@ -108,6 +108,9 @@ struct _IdePreferencesInterface
 
   gboolean (*remove_id)        (IdePreferences *self,
                                 guint           widget_id);
+
+  GtkWidget *(*get_widget)     (IdePreferences *self,
+                                guint           widget_id);
 };
 
 void     ide_preferences_add_page         (IdePreferences *self,
@@ -186,6 +189,8 @@ gboolean ide_preferences_remove_id        (IdePreferences *self,
 void     ide_preferences_set_page         (IdePreferences *self,
                                            const gchar    *page_name,
                                            GHashTable     *map);
+GtkWidget *ide_preferences_get_widget     (IdePreferences *self,
+                                           guint           widget_id);
 
 
 G_END_DECLS
