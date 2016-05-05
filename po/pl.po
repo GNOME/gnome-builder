@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-05-05 12:53+0200\n"
-"PO-Revision-Date: 2016-05-05 12:54+0200\n"
+"POT-Creation-Date: 2016-05-05 13:34+0200\n"
+"PO-Revision-Date: 2016-05-05 13:35+0200\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <gnomepl@aviary.pl>\n"
 "Language: pl\n"
@@ -1150,23 +1150,23 @@ msgstr "Przejście do definicji symbolu"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:45
 msgctxt "shortcut window"
-msgid "Move sectionport up within the file"
-msgstr "Przeniesienie portu sekcji do góry w pliku"
+msgid "Move viewport up within the file"
+msgstr "Przeniesienie portu widoku do góry w pliku"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:46
 msgctxt "shortcut window"
-msgid "Move sectionport down within the file"
-msgstr "Przeniesienie portu sekcji w dół w pliku"
+msgid "Move viewport down within the file"
+msgstr "Przeniesienie portu widoku w dół w pliku"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:47
 msgctxt "shortcut window"
-msgid "Move sectionport to end of file"
-msgstr "Przeniesienie portu sekcji na koniec pliku"
+msgid "Move viewport to end of file"
+msgstr "Przeniesienie portu widoku na koniec pliku"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:48
 msgctxt "shortcut window"
-msgid "Move sectionport to beginning of file"
-msgstr "Przeniesienie portu sekcji na początek pliku"
+msgid "Move viewport to beginning of file"
+msgstr "Przeniesienie portu widoku na początek pliku"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:49
 msgctxt "shortcut window"
