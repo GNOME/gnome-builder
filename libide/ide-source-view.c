@@ -2760,11 +2760,15 @@ ide_source_view_real_motion_notify_event (GtkWidget      *widget,
     }
 
   data = g_slice_new0 (DefinitionHighlightData);
-  data->self = g_object_ref (self);
+  data->self = self;
   data->word_start_mark = gtk_text_buffer_create_mark (GTK_TEXT_BUFFER (priv->buffer),
                                                        NULL, &start_iter, TRUE);
   data->word_end_mark = gtk_text_buffer_create_mark (GTK_TEXT_BUFFER (priv->buffer),
                                                      NULL, &end_iter, TRUE);
+
+  g_object_ref (data->self);
+  g_object_ref (data->word_start_mark);
+  g_object_ref (data->word_end_mark);
 
   ide_buffer_get_symbol_at_location_async (priv->buffer,
                                            &iter,
