@@ -120,7 +120,7 @@ register_git (IdePreferences *preferences)
 
   author_text = read_config_string (config, "user.name", NULL);
   author = g_object_new (IDE_TYPE_PREFERENCES_ENTRY,
-                         "text", author_text,
+                         "text", author_text ?: "",
                          "title", "Author",
                          "visible", TRUE,
                          NULL);
@@ -132,7 +132,7 @@ register_git (IdePreferences *preferences)
 
   email_text = read_config_string (config, "user.email", NULL);
   email = g_object_new (IDE_TYPE_PREFERENCES_ENTRY,
-                         "text", email_text,
+                         "text", email_text ?: "",
                         "title", "Email",
                         "visible", TRUE,
                         NULL);
