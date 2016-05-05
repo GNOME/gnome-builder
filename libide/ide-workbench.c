@@ -568,12 +568,15 @@ void
 ide_workbench_set_context (IdeWorkbench *self,
                            IdeContext   *context)
 {
+  g_autoptr(GSettings) settings = NULL;
   IdeProject *project;
   guint duration;
 
   g_return_if_fail (IDE_IS_WORKBENCH (self));
   g_return_if_fail (IDE_IS_CONTEXT (context));
   g_return_if_fail (self->context == NULL);
+
+  settings = g_settings_new ("org.gnome.builder");
 
   g_set_object (&self->context, context);
 
@@ -612,8 +615,11 @@ ide_workbench_set_context (IdeWorkbench *self,
    * the stack transition results in non-smooth transitions. So instead,
    * we will delay until the transition has completed.
    */
-  duration = gtk_stack_get_transition_duration (self->top_stack);
-  g_timeout_add (STABLIZE_DELAY_MSEC + duration, restore_in_timeout, g_object_ref (context));
+  if (g_settings_get_boolean (settings, "restore-previous-files"))
+    {
+      duration = gtk_stack_get_transition_duration (self->top_stack);
+      g_timeout_add (STABLIZE_DELAY_MSEC + duration, restore_in_timeout, g_object_ref (context));
+    }
 }
 
 void
