@@ -24,6 +24,7 @@
 #include "ide-preferences-builtin.h"
 #include "ide-preferences-entry.h"
 #include "ide-preferences-language-row.h"
+#include "ide-preferences-spin-button.h"
 
 static void
 ide_preferences_builtin_register_plugins (IdePreferences *preferences)
@@ -237,13 +238,61 @@ ide_preferences_builtin_register_languages (IdePreferences *preferences)
   ide_preferences_add_radio (preferences, "languages.id", "indentation", "org.gnome.builder.editor.language", "auto-indent", "/org/gnome/builder/editor/language/{id}/", NULL, _("Automatically indent"), _("Indent source code as you type"), NULL, 30);
 }
 
+static gboolean
+workers_output (GtkSpinButton *button)
+{
+  GtkAdjustment *adj = gtk_spin_button_get_adjustment (button);
+
+  if (gtk_adjustment_get_value (adj) == -1)
+    {
+      gtk_entry_set_text (GTK_ENTRY (button), _("Default"));
+      return TRUE;
+    }
+  else if (gtk_adjustment_get_value (adj) == 0)
+    {
+      gtk_entry_set_text (GTK_ENTRY (button), _("Number of CPU"));
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+static gint
+workers_input (GtkSpinButton *button,
+               gdouble       *new_value)
+{
+  const gchar *text = gtk_entry_get_text (GTK_ENTRY (button));
+
+  if (g_strcmp0 (text, _("Default")) == 0)
+    {
+      *new_value = -1;
+      return TRUE;
+    }
+  else if (g_strcmp0 (text, _("Number of CPU")) == 0)
+    {
+      *new_value = 0;
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
 static void
 ide_preferences_builtin_register_build (IdePreferences *preferences)
 {
+  GtkWidget *widget, *bin;
+  guint id;
+
   ide_preferences_add_page (preferences, "build", _("Build"), 500);
 
   ide_preferences_add_list_group (preferences, "build", "basic", _("General"), 0);
-  ide_preferences_add_spin_button (preferences, "build", "basic", "org.gnome.builder.build", "parallel", "/org/gnome/builder/build/", _("Build Workers"), _("Number of parallel build workers"), NULL, 0);
+  id = ide_preferences_add_spin_button (preferences, "build", "basic", "org.gnome.builder.build", "parallel", "/org/gnome/builder/build/", _("Build Workers"), _("Number of parallel build workers"), NULL, 0);
+
+  bin = ide_preferences_get_widget (preferences, id);
+  widget = ide_preferences_spin_button_get_spin_button (IDE_PREFERENCES_SPIN_BUTTON (bin));
+  gtk_entry_set_width_chars (GTK_ENTRY (widget), 20);
+  g_signal_connect (widget, "input", G_CALLBACK (workers_input), NULL);
+  g_signal_connect (widget, "output", G_CALLBACK (workers_output), NULL);
 }
 
 static void
