@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-04-28 14:58+0200\n"
-"PO-Revision-Date: 2016-04-28 14:59+0200\n"
+"POT-Creation-Date: 2016-05-05 12:53+0200\n"
+"PO-Revision-Date: 2016-05-05 12:54+0200\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <gnomepl@aviary.pl>\n"
 "Language: pl\n"
@@ -105,7 +105,7 @@ msgstr "Nie można przetworzyć kodu XML z potoku"
 
 #: ../data/org.gnome.Builder.appdata.xml.in.h:1
 #: ../data/org.gnome.Builder.desktop.in.in.h:1
-#: ../data/style-schemes/builder.xml.h:1 ../libide/ide-application.c:413
+#: ../data/style-schemes/builder.xml.h:1 ../libide/ide-application.c:428
 #: ../libide/ide-workbench.c:562
 #: ../libide/preferences/ide-preferences-builtin.c:113
 msgid "Builder"
@@ -434,12 +434,21 @@ msgid "Search directories for projects."
 msgstr "Wyszukiwanie projektów w katalogach."
 
 #: ../data/gsettings/org.gnome.builder.gschema.xml.in.h:11
+#: ../libide/preferences/ide-preferences-builtin.c:255
 msgid "Projects directory"
 msgstr "Katalog projektów"
 
 #: ../data/gsettings/org.gnome.builder.gschema.xml.in.h:12
 msgid "Directory for all builder projects"
 msgstr "Katalog na wszystkie projekty programu Builder"
+
+#: ../data/gsettings/org.gnome.builder.gschema.xml.in.h:13
+msgid "Restore Previous Files"
+msgstr "Przywracanie poprzednich plików"
+
+#: ../data/gsettings/org.gnome.builder.gschema.xml.in.h:14
+msgid "Restore previously opened files when loading a project."
+msgstr "Przywracanie poprzednio otwartych plików podczas wczytywania projektu."
 
 #: ../data/gsettings/org.gnome.builder.plugin.gschema.xml.in.h:2
 msgid "If the plugin should be enabled"
@@ -1205,12 +1214,12 @@ msgstr "Nie podano żadnego pliku."
 msgid "Line %u, Column %u"
 msgstr "Wrsz %u, kol %u"
 
-#: ../libide/editor/ide-editor-frame.c:244
+#: ../libide/editor/ide-editor-frame.c:247
 #, c-format
 msgid "%u of %u"
 msgstr "%u z %u"
 
-#: ../libide/editor/ide-editor-frame.c:672
+#: ../libide/editor/ide-editor-frame.c:675
 #: ../plugins/project-tree/gtk/menus.ui.h:1
 msgid "Re_veal in Project Tree"
 msgstr "Odkry_wanie w drzewie projektu"
@@ -1402,11 +1411,11 @@ msgstr "Należy wywołać funkcję %s() przed użyciem biblioteki libide."
 msgid "Default Configuration"
 msgstr "Domyślna konfiguracja"
 
-#: ../libide/ide-context.c:1828
+#: ../libide/ide-context.c:1837
 msgid "An unload request is already pending"
 msgstr "Żądanie usunięcia z pamięci jest już wykonywane"
 
-#: ../libide/ide-context.c:1943
+#: ../libide/ide-context.c:1952
 msgid "Context has already been restored."
 msgstr "Kontekst został już przywrócony."
 
@@ -1481,17 +1490,17 @@ msgstr "Otwarcie katalogu się nie powiodło: %s"
 msgid "Failed to load file: %s: %s"
 msgstr "Wczytanie pliku się nie powiodło: %s: %s"
 
-#: ../libide/ide-source-view.c:4969
+#: ../libide/ide-source-view.c:4984
 #, c-format
 msgid "Insert “%s”"
 msgstr "Wstaw „%s”"
 
-#: ../libide/ide-source-view.c:4971
+#: ../libide/ide-source-view.c:4986
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "Zmień „%s” na „%s”"
 
-#: ../libide/ide-source-view.c:5085
+#: ../libide/ide-source-view.c:5100
 msgid "Apply Fix-It"
 msgstr "Zastosuj „Fix-It”"
 
@@ -1547,7 +1556,7 @@ msgstr "Adres URI nie jest bezwzględny, i nie podano podstawowego adresu URI"
 msgid "Could not parse '%s' as absolute URI"
 msgstr "Nie można przetworzyć „%s” jako bezwzględnego adresu URI"
 
-#: ../libide/ide-uri.c:1188
+#: ../libide/ide-uri.c:1203
 #, c-format
 msgid "URI '%s' has no host component"
 msgstr "Adres URI „%s” nie posiada części komputera"
@@ -1926,22 +1935,26 @@ msgid "Workspace"
 msgstr "Obszar roboczy"
 
 #: ../libide/preferences/ide-preferences-builtin.c:255
-msgid "Projects Directory"
-msgstr "Katalog projektów"
-
-#: ../libide/preferences/ide-preferences-builtin.c:255
 msgid "A place for all your projects"
 msgstr "Miejsce na wszystkie projekty"
 
-#: ../libide/preferences/ide-preferences-builtin.c:257
+#: ../libide/preferences/ide-preferences-builtin.c:256
+msgid "Restore previously opened files"
+msgstr "Przywracanie poprzednio otwartych plików"
+
+#: ../libide/preferences/ide-preferences-builtin.c:256
+msgid "Open previously opened files when loading a project"
+msgstr "Otwieranie poprzednio otwartych plików podczas wczytywania projektu"
+
+#: ../libide/preferences/ide-preferences-builtin.c:258
 msgid "Project Discovery"
 msgstr "Wykrywanie projektów"
 
-#: ../libide/preferences/ide-preferences-builtin.c:258
+#: ../libide/preferences/ide-preferences-builtin.c:259
 msgid "Discover projects on my computer"
 msgstr "Wykrywanie projektów na komputerze"
 
-#: ../libide/preferences/ide-preferences-builtin.c:258
+#: ../libide/preferences/ide-preferences-builtin.c:259
 msgid "Scan your computer for existing projects"
 msgstr "Wyszukiwanie istniejących projektów na komputerze"
 
@@ -2012,7 +2025,7 @@ msgid "Success"
 msgstr "Powodzenie"
 
 #: ../plugins/autotools/ide-autotools-builder.c:161
-#: ../plugins/autotools/ide-autotools-build-task.c:872
+#: ../plugins/autotools/ide-autotools-build-task.c:878
 msgid "Building…"
 msgstr "Budowanie…"
 
@@ -2020,46 +2033,46 @@ msgstr "Budowanie…"
 msgid "Failed to locate configure.ac"
 msgstr "Ustalenie położenia pliku configure.ac się nie powiodło"
 
-#: ../plugins/autotools/ide-autotools-build-task.c:174
+#: ../plugins/autotools/ide-autotools-build-task.c:177
 msgid "Directory must be on a locally mounted filesystem."
 msgstr "Katalog musi znajdować się na lokalnie zamontowanym systemie plików."
 
-#: ../plugins/autotools/ide-autotools-build-task.c:548
+#: ../plugins/autotools/ide-autotools-build-task.c:554
 msgid "Cannot execute build task more than once."
 msgstr "Nie można wykonać zadania budowania więcej niż raz."
 
-#: ../plugins/autotools/ide-autotools-build-task.c:642
+#: ../plugins/autotools/ide-autotools-build-task.c:648
 msgid "Failed to create build directory."
 msgstr "Utworzenie katalogu budowania się nie powiodło."
 
-#: ../plugins/autotools/ide-autotools-build-task.c:651
+#: ../plugins/autotools/ide-autotools-build-task.c:657
 #, c-format
 msgid "'%s' is not a directory."
 msgstr "„%s” nie jest katalogiem."
 
-#: ../plugins/autotools/ide-autotools-build-task.c:690
+#: ../plugins/autotools/ide-autotools-build-task.c:696
 #, c-format
 msgid "autogen.sh is missing from project directory (%s)."
 msgstr "Brak pliku autogen.sh w katalogu projektu (%s)."
 
-#: ../plugins/autotools/ide-autotools-build-task.c:700
+#: ../plugins/autotools/ide-autotools-build-task.c:706
 msgid "autogen.sh is not executable."
 msgstr "Plik autogen.sh nie jest wykonywalny."
 
-#: ../plugins/autotools/ide-autotools-build-task.c:704
+#: ../plugins/autotools/ide-autotools-build-task.c:710
 msgid "Running autogen…"
 msgstr "Wykonywanie polecenia autogen…"
 
-#: ../plugins/autotools/ide-autotools-build-task.c:738
+#: ../plugins/autotools/ide-autotools-build-task.c:744
 #, c-format
 msgid "autogen.sh failed to create configure (%s)"
 msgstr "Utworzenie pliku configure przez plik autogen.sh się nie powiodło (%s)"
 
-#: ../plugins/autotools/ide-autotools-build-task.c:773
+#: ../plugins/autotools/ide-autotools-build-task.c:779
 msgid "Running configure…"
 msgstr "Wykonywanie polecenia configure…"
 
-#: ../plugins/autotools/ide-autotools-build-task.c:870
+#: ../plugins/autotools/ide-autotools-build-task.c:876
 msgid "Cleaning…"
 msgstr "Czyszczenie…"
 
@@ -2128,7 +2141,7 @@ msgstr "Środowisko wykonawcze"
 msgid "Environment"
 msgstr "Środowisko"
 
-#: ../plugins/build-tools/gbp-build-log-panel.c:249
+#: ../plugins/build-tools/gbp-build-log-panel.c:250
 msgid "Build Output"
 msgstr "Wyjście budowania"
 
