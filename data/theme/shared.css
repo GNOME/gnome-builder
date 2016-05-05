@@ -132,9 +132,6 @@ greeter list row:last-child {
 greeter frame border {
   border-color: alpha(@borders, 0.6);
 }
-greeter actionbar {
-  border-top: 1px solid @borders;
-}
 
 /*
  * Global search results styling
