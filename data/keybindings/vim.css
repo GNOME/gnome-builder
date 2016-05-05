@@ -203,8 +203,8 @@
   bind "o" { "begin-macro" ()
              "set-mode" ("vim-insert", permanent)
              "movement" (line-end, 0, 1, 0)
-	     "insert-at-cursor" ("\n")
-	     "reindent" () };
+             "insert-at-cursor" ("\n")
+             "reindent" () };
 
   /* insert line before current */
   bind "<shift>o" { "begin-macro" ()
