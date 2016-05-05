@@ -240,5 +240,5 @@ ide_preferences_get_widget (IdePreferences *self,
 {
   g_return_val_if_fail (IDE_IS_PREFERENCES (self), NULL);
 
-  IDE_PREFERENCES_GET_IFACE (self)->get_widget (self, widget_id);
+  return IDE_PREFERENCES_GET_IFACE (self)->get_widget (self, widget_id);
 }
