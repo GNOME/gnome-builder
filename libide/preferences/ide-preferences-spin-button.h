@@ -29,6 +29,8 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdePreferencesSpinButton, ide_preferences_spin_button, IDE, PREFERENCES_SPIN_BUTTON, IdePreferencesBin)
 
+GtkWidget *ide_preferences_spin_button_get_spin_button (IdePreferencesSpinButton *self);
+
 G_END_DECLS
 
 #endif /* IDE_PREFERENCES_SPIN_BUTTON_H */
