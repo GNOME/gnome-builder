@@ -402,3 +402,16 @@ ide_preferences_spin_button_init (IdePreferencesSpinButton *self)
                            self,
                            G_CONNECT_SWAPPED);
 }
+
+/**
+ * ide_preferences_spin_button_get_spin_button:
+ *
+ * Returns: (transfer none): The actual spin button widget.
+ */
+GtkWidget *
+ide_preferences_spin_button_get_spin_button (IdePreferencesSpinButton *self)
+{
+  g_return_val_if_fail (IDE_IS_PREFERENCES_SPIN_BUTTON (self), NULL);
+
+  return GTK_WIDGET (self->spin_button);
+}
