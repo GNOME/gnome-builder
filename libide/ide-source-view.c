@@ -4086,57 +4086,98 @@ ide_source_view_real_reindent (IdeSourceView *self)
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
   GtkTextBuffer *buffer;
   IdeIndenter *indenter;
-  GtkTextMark *mark;
   GtkTextIter begin;
   GtkTextIter end;
-  GdkEventKey *event;
   GdkWindow *window;
-  gint cursor_offset = 0;
-  gchar *ret;
+  GtkTextIter iter;
+  guint i;
+  guint first_line;
+  g_autoptr(GPtrArray) lines = NULL;
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
 
   if (priv->buffer == NULL)
     return;
 
-  indenter = ide_source_view_get_indenter (self);
-  if (indenter == NULL)
+  if (NULL == (indenter = ide_source_view_get_indenter (self)))
     return;
 
   buffer = GTK_TEXT_BUFFER (priv->buffer);
+  window = gtk_text_view_get_window (GTK_TEXT_VIEW (self), GTK_TEXT_WINDOW_TEXT);
 
   gtk_text_buffer_get_selection_bounds (buffer, &begin, &end);
-  if (gtk_text_iter_get_line (&begin) != gtk_text_iter_get_line (&end))
-    return;
+  gtk_text_iter_order (&begin, &end);
 
-  mark = gtk_text_buffer_get_insert (buffer);
-  gtk_text_buffer_get_iter_at_mark (buffer, &begin, mark);
   gtk_text_iter_set_line_offset (&begin, 0);
+  first_line = gtk_text_iter_get_line (&begin);
 
-  end = begin;
-  while (!gtk_text_iter_ends_line (&end) &&
-         g_unichar_isspace (gtk_text_iter_get_char (&end)))
-    gtk_text_iter_forward_char (&end);
+  /* if the end position is at index 0 of the next line (common with
+   * line mode in vim), then move it back to the end of the previous
+   * line, since we don't really care about that next line.
+   */
+  if (gtk_text_iter_starts_line (&end) &&
+      gtk_text_iter_get_line (&begin) != gtk_text_iter_get_line (&end))
+    gtk_text_iter_backward_char (&end);
+
+  if (!gtk_text_iter_ends_line (&end))
+    gtk_text_iter_forward_to_line_end (&end);
+
+  lines = g_ptr_array_new_with_free_func (g_free);
+
+  for (iter = begin;
+       gtk_text_iter_compare (&iter, &end) < 0;
+       gtk_text_iter_forward_line (&iter))
+    {
+      GtkTextIter line_end = iter;
+      gchar *line;
+
+      if (!gtk_text_iter_ends_line (&line_end))
+        gtk_text_iter_forward_to_line_end (&line_end);
+
+      line = gtk_text_iter_get_slice (&iter, &line_end);
+      g_ptr_array_add (lines, g_strstrip (line));
+    }
 
   gtk_text_buffer_begin_user_action (buffer);
 
-  if (gtk_text_iter_equal (&begin, &end))
-    gtk_text_buffer_delete (buffer, &begin, &end);
+  gtk_text_buffer_delete (buffer, &begin, &end);
 
-  window = gtk_text_view_get_window (GTK_TEXT_VIEW (self), GTK_TEXT_WINDOW_TEXT);
-  event = ide_gdk_synthesize_event_key (window, '\n');
-  ret = ide_indenter_format (indenter, GTK_TEXT_VIEW (self), &begin, &end, &cursor_offset, event);
-
-  if (ret != NULL)
+  for (i = 0; i < lines->len; i++)
     {
-      gtk_text_buffer_delete (buffer, &begin, &end);
-      gtk_text_buffer_insert (buffer, &begin, ret, -1);
-      g_free (ret);
+      g_autofree gchar *indent = NULL;
+      const gchar *line;
+      GdkEventKey *event;
+      gint cursor_offset;
+
+      line = g_ptr_array_index (lines, i);
+      event = ide_gdk_synthesize_event_key (window, '\n');
+      indent = ide_indenter_format (indenter, GTK_TEXT_VIEW (self), &begin, &end, &cursor_offset, event);
+      gdk_event_free ((GdkEvent *)event);
+
+      if (indent != NULL)
+        {
+          if (!gtk_text_iter_equal (&begin, &end))
+            gtk_text_buffer_delete (buffer, &begin, &end);
+
+          gtk_text_buffer_insert (buffer, &begin, indent, -1);
+          gtk_text_buffer_insert (buffer, &begin, line, -1);
+
+          if (i != lines->len - 1)
+            gtk_text_buffer_insert (buffer, &begin, "\n", -1);
+        }
+
+      end = begin;
     }
 
   gtk_text_buffer_end_user_action (buffer);
 
-  gdk_event_free ((GdkEvent *)event);
+  /* Advance to first non-whitespace */
+  gtk_text_iter_set_line (&begin, first_line);
+  while (!gtk_text_iter_ends_line (&begin) &&
+         g_unichar_isspace (gtk_text_iter_get_char (&begin)))
+    gtk_text_iter_forward_char (&begin);
+
+  gtk_text_buffer_select_range (buffer, &begin, &begin);
 }
 
 static void
