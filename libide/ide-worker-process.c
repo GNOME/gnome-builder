@@ -87,7 +87,7 @@ ide_worker_process_wait_check_cb (GObject      *object,
 {
   GSubprocess *subprocess = (GSubprocess *)object;
   g_autoptr(IdeWorkerProcess) self = user_data;
-  GError *error = NULL;
+  g_autoptr(GError) error = NULL;
 
   IDE_ENTRY;
 
@@ -96,7 +96,10 @@ ide_worker_process_wait_check_cb (GObject      *object,
   g_assert (G_IS_ASYNC_RESULT (result));
 
   if (!g_subprocess_wait_check_finish (subprocess, result, &error))
-    g_critical ("%s", error->message);
+    {
+      if (!self->quit)
+        g_warning ("%s", error->message);
+    }
 
   g_clear_object (&self->subprocess);
 
@@ -190,13 +193,9 @@ ide_worker_process_quit (IdeWorkerProcess *self)
 
   if (self->subprocess != NULL)
     {
-      if (!g_subprocess_get_if_exited (self->subprocess))
-        {
-          g_autoptr(GSubprocess) subprocess = self->subprocess;
+      g_autoptr(GSubprocess) subprocess = g_steal_pointer (&self->subprocess);
 
-          self->subprocess = NULL;
-          g_subprocess_force_exit (subprocess);
-        }
+      g_subprocess_force_exit (subprocess);
     }
 }
 

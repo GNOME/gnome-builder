@@ -28,6 +28,7 @@ G_BEGIN_DECLS
 G_DECLARE_FINAL_TYPE (IdeWorkerManager, ide_worker_manager, IDE, WORKER_MANAGER, GObject)
 
 IdeWorkerManager *ide_worker_manager_new               (void);
+void              ide_worker_manager_shutdown          (IdeWorkerManager     *self);
 void              ide_worker_manager_get_worker_async  (IdeWorkerManager     *self,
                                                         const gchar          *plugin_name,
                                                         GCancellable         *cancellable,

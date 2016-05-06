@@ -155,6 +155,9 @@ ide_worker_manager_finalize (GObject *object)
 {
   IdeWorkerManager *self = (IdeWorkerManager *)object;
 
+  if (self->dbus_server != NULL)
+    g_dbus_server_stop (self->dbus_server);
+
   g_clear_pointer (&self->plugin_name_to_worker, g_hash_table_unref);
   g_clear_object (&self->dbus_server);
 
@@ -192,6 +195,9 @@ ide_worker_manager_get_worker_process (IdeWorkerManager *self,
 
   g_assert (IDE_IS_WORKER_MANAGER (self));
   g_assert (plugin_name != NULL);
+
+  if (!self->plugin_name_to_worker || !self->dbus_server)
+    return NULL;
 
   worker_process = g_hash_table_lookup (self->plugin_name_to_worker, plugin_name);
 
@@ -275,4 +281,16 @@ IdeWorkerManager *
 ide_worker_manager_new (void)
 {
   return g_object_new (IDE_TYPE_WORKER_MANAGER, NULL);
+}
+
+void
+ide_worker_manager_shutdown (IdeWorkerManager *self)
+{
+  g_return_if_fail (IDE_IS_WORKER_MANAGER (self));
+
+  if (self->dbus_server != NULL)
+    g_dbus_server_stop (self->dbus_server);
+
+  g_clear_pointer (&self->plugin_name_to_worker, g_hash_table_unref);
+  g_clear_object (&self->dbus_server);
 }

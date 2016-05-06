@@ -385,6 +385,18 @@ ide_application_open (GApplication  *application,
 }
 
 static void
+ide_application_shutdown (GApplication *application)
+{
+  IdeApplication *self = (IdeApplication *)application;
+
+  if (self->worker_manager != NULL)
+    ide_worker_manager_shutdown (self->worker_manager);
+
+  if (G_APPLICATION_CLASS (ide_application_parent_class)->shutdown)
+    G_APPLICATION_CLASS (ide_application_parent_class)->shutdown (application);
+}
+
+static void
 ide_application_finalize (GObject *object)
 {
   IdeApplication *self = (IdeApplication *)object;
@@ -417,6 +429,7 @@ ide_application_class_init (IdeApplicationClass *klass)
   g_app_class->local_command_line = ide_application_local_command_line;
   g_app_class->open = ide_application_open;
   g_app_class->startup = ide_application_startup;
+  g_app_class->shutdown = ide_application_shutdown;
 }
 
 static void
