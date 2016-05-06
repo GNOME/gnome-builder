@@ -68,6 +68,7 @@ libvala_pack_plugin_la_VALAFLAGS = \
 	--pkg gtksourceview-3.0 \
 	--pkg libvala-$(VALA_VERSION) \
 	--pkg posix \
+	--pkg gio-2.0 \
 	--pkg template-glib-1.0 \
 	$(NULL)
 

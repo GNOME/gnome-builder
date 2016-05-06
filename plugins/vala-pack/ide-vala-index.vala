@@ -33,6 +33,8 @@ namespace Ide
 {
 	public class ValaIndex: GLib.Object
 	{
+		static const int VALA_VERSION = 32;
+
 		Ide.Context context;
 		Vala.CodeContext code_context;
 		Vala.Parser parser;
@@ -84,7 +86,7 @@ namespace Ide
 
 			this.code_context.run_output = false;
 
-			for (var i = 2; i <= 32; i += 2) {
+			for (var i = 2; i <= VALA_VERSION; i += 2) {
 				this.code_context.add_define ("VALA_0_%d".printf (i));
 			}
 
@@ -92,9 +94,19 @@ namespace Ide
 				this.code_context.add_define ("GLIB_2_%d".printf (i));
 			}
 
-			this.code_context.vapi_directories = {
-				Path.build_filename (Config.PACKAGE_DATADIR, "vapi"),
-			};
+			this.code_context.vapi_directories = {};
+
+			/* $prefix/share/vala-0.32/vapi */
+			string versioned_vapidir = get_versioned_vapidir ();
+			if (versioned_vapidir != null) {
+				this.add_vapidir_locked (versioned_vapidir);
+			}
+
+			/* $prefix/share/vala/vapi */
+			string unversioned_vapidir = get_unversioned_vapidir ();
+			if (unversioned_vapidir != null) {
+				this.add_vapidir_locked (unversioned_vapidir);
+			}
 
 			this.code_context.add_external_package ("glib-2.0");
 			this.code_context.add_external_package ("gobject-2.0");
@@ -157,6 +169,7 @@ namespace Ide
 				}
 			}
 
+			debug ("Adding vapidir %s", vapidir);
 			dirs += vapidir;
 			this.code_context.vapi_directories = dirs;
 		}
@@ -497,6 +510,37 @@ namespace Ide
 			yield;
 
 			return ret;
+		}
+
+		string? get_versioned_vapidir ()
+		{
+			try {
+				var pkgname = "libvala-0.%d".printf (VALA_VERSION);
+				string outstr = null;
+				var subprocess = new GLib.Subprocess (GLib.SubprocessFlags.STDOUT_PIPE,
+					                                  "pkg-config",
+					                                  "--variable=vapidir",
+					                                  pkgname,
+					                                  null);
+				subprocess.communicate_utf8 (null, null, out outstr, null);
+				outstr = outstr.strip();
+				return outstr;
+			} catch (GLib.Error er) {
+				warning ("%s", er.message);
+				return null;
+			}
+		}
+
+		string? get_unversioned_vapidir ()
+		{
+			string versioned_vapidir = get_versioned_vapidir ();
+
+			if (versioned_vapidir != null) {
+				return GLib.Path.build_filename (versioned_vapidir,
+				                                 "..", "..", "vala", "vapi", null);
+			}
+
+			return null;
 		}
 	}
 }
