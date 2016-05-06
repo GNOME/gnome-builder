@@ -292,7 +292,7 @@ ide_configuration_manager_save_async (IdeConfigurationManager *self,
 
 #define PERSIST_STRING_KEY(key, getter) \
       g_key_file_set_string (self->key_file, group, key, \
-                             ide_configuration_##getter (configuration))
+                             ide_configuration_##getter (configuration) ?: "")
       PERSIST_STRING_KEY ("name", get_display_name);
       PERSIST_STRING_KEY ("device", get_device_id);
       PERSIST_STRING_KEY ("runtime", get_runtime_id);
