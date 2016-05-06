@@ -156,6 +156,8 @@ class AutotoolsTemplate(Ide.TemplateBase, Ide.ProjectTemplate):
             'resources/m4/vapigen.m4':                  'm4/vapigen.m4',
 
             'resources/data/Makefile.am':               'data/Makefile.am',
+
+            'resources/po/LINGUAS':                     'po/LINGUAS',
             'resources/po/Makevars':                    'po/Makevars',
             'resources/po/POTFILES.in':                 'po/POTFILES.in',
         }
