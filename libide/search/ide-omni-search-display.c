@@ -20,6 +20,7 @@
 
 #include <glib/gi18n.h>
 
+#include "ide-macros.h"
 #include "ide-omni-search-group.h"
 #include "ide-omni-search-display.h"
 
@@ -29,6 +30,10 @@ struct _IdeOmniSearchDisplay
 
   IdeSearchContext    *context;
   GPtrArray           *providers;
+
+  gulong               result_added_handler;
+  gulong               result_removed_handler;
+  gulong               count_set_handler;
 
   guint                do_autoselect : 1;
 };
@@ -452,21 +457,26 @@ ide_omni_search_display_connect_context (IdeOmniSearchDisplay *self,
   for (iter = providers; iter; iter = iter->next)
     ide_omni_search_display_add_provider (self, iter->data);
 
-  g_signal_connect_object (context,
-                           "result-added",
-                           G_CALLBACK (ide_omni_search_display_result_added),
-                           self,
-                           G_CONNECT_SWAPPED);
-  g_signal_connect_object (context,
-                           "result-removed",
-                           G_CALLBACK (ide_omni_search_display_result_removed),
-                           self,
-                           G_CONNECT_SWAPPED);
-  g_signal_connect_object (context,
-                           "count-set",
-                           G_CALLBACK (ide_omni_search_display_count_set),
-                           self,
-                           G_CONNECT_SWAPPED);
+  self->result_added_handler =
+    g_signal_connect_object (context,
+                             "result-added",
+                             G_CALLBACK (ide_omni_search_display_result_added),
+                             self,
+                             G_CONNECT_SWAPPED);
+
+  self->result_removed_handler =
+    g_signal_connect_object (context,
+                             "result-removed",
+                             G_CALLBACK (ide_omni_search_display_result_removed),
+                             self,
+                             G_CONNECT_SWAPPED);
+
+  self->count_set_handler =
+    g_signal_connect_object (context,
+                             "count-set",
+                             G_CALLBACK (ide_omni_search_display_count_set),
+                             self,
+                             G_CONNECT_SWAPPED);
 }
 
 static void
@@ -476,9 +486,9 @@ ide_omni_search_display_disconnect_context (IdeOmniSearchDisplay *self,
   g_return_if_fail (IDE_IS_OMNI_SEARCH_DISPLAY (self));
   g_return_if_fail (IDE_IS_SEARCH_CONTEXT (context));
 
-  g_signal_handlers_disconnect_by_func (context,
-                                        G_CALLBACK (ide_omni_search_display_result_added),
-                                        self);
+  ide_clear_signal_handler (context, &self->result_added_handler);
+  ide_clear_signal_handler (context, &self->result_removed_handler);
+  ide_clear_signal_handler (context, &self->count_set_handler);
 
   while (self->providers->len)
     {
@@ -555,8 +565,13 @@ ide_omni_search_display_dispose (GObject *object)
 {
   IdeOmniSearchDisplay *self = (IdeOmniSearchDisplay *)object;
 
+  if (self->context != NULL)
+    {
+      ide_omni_search_display_disconnect_context (self, self->context);
+      g_clear_object (&self->context);
+    }
+
   g_clear_pointer (&self->providers, g_ptr_array_unref);
-  g_clear_object (&self->context);
 
   G_OBJECT_CLASS (ide_omni_search_display_parent_class)->dispose (object);
 }
