@@ -66,9 +66,20 @@ ide_editor_frame_actions_find (GSimpleAction *action,
 
       gtk_entry_set_text (GTK_ENTRY (self->search_entry), escaped_selected_text);
     }
-  else if (self->previous_search_string != NULL)
+  else
     {
-      gtk_entry_set_text (GTK_ENTRY (self->search_entry), self->previous_search_string);
+      GtkSourceSearchContext *search_context;
+      GtkSourceSearchSettings *search_settings;
+      const gchar *search_text;
+
+      search_context = ide_source_view_get_search_context (self->source_view);
+      search_settings = gtk_source_search_context_get_settings (search_context);
+      search_text = gtk_source_search_settings_get_search_text (search_settings);
+
+      if ((search_text != NULL) && (search_text [0] != '\0'))
+        gtk_entry_set_text (GTK_ENTRY (self->search_entry), search_text);
+      else if (self->previous_search_string != NULL)
+        gtk_entry_set_text (GTK_ENTRY (self->search_entry), self->previous_search_string);
     }
 
   gtk_revealer_set_reveal_child (self->search_revealer, TRUE);
