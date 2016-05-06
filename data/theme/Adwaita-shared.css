@@ -125,3 +125,8 @@ entry.search-missing {
 entry.search-missing > image {
   color: white;
 }
+
+
+/* tweak icons for treeviews */
+treeview.image { color: alpha(currentColor, 0.8); }
+treeview.image:selected { color: alpha(@theme_selected_fg_color, 0.9); }
