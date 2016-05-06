@@ -1,4 +1,49 @@
 ==============
+Version 3.20.4
+==============
+
+Builder 3.20.4 is here with another round of bug fixes and performance
+improvements and additional translations.
+
+ • Support for opening remote files has been re-introduced.
+ • Support for $CFLAGS, $CXXFLAGS, and $VALAFLAGS for projects
+   without autotools support.
+ • Automake VALAFLAGS extraction improvements.
+ • Fixes for an editorconfig build-system issue that caused .editorconfig
+   settings to be ignored.
+ • When generating ctags via automake, no longer perform a full build.
+ • Various CSS style tweaks.
+ • Fix a leak of GtkMenu instances via the project tree.
+ • Autotools no longer performs an autogen when cleaning the project.
+ • Build output was eroneously editable.
+ • Fix an unref of a non-owned object during symbol lookup.
+ • Allow disabling restoration of previous files as startup.
+ • Allow projects to exist in ~/.local, for those working on shell
+   extensions.
+ • Ensure the projects directory is available at startup.
+ • Ignore symlinks when mining ctags directories.
+ • Show better default values for number of build workers.
+ • Load gtksourceview style schemes from gedit directory.
+ • Support for reindent when multiple lines are selected.
+ • Vala integration will now load versioned and unversioned
+   vapi directories.
+ • Fix a hard to trigger infinite loop at shutdown due to GDBusServer
+   spinning trying to accept sockets.
+ • Various search improvements. (Fangwen Yu)
+
+Updated translations for:
+
+ • Swedish (Anders Jonsson)
+ • Brazilian Portuguese (Enrico Nicoletto)
+ • Portuguese (Tiago Santos)
+ • Hungarian (Gábor Kelemen)
+ • Polish (Piotr Drąg)
+ • Serbian (Марко Костић)
+
+Happy Hacking!
+
+
+==============
 Version 3.20.2
 ==============
 
