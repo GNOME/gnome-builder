@@ -35,6 +35,7 @@ nobase_resource_DATA = \
 	autotools_templates/resources/m4/pkg.m4 \
 	autotools_templates/resources/m4/vala.m4 \
 	autotools_templates/resources/m4/vapigen.m4 \
+	autotools_templates/resources/po/LINGUAS \
 	autotools_templates/resources/po/Makevars \
 	autotools_templates/resources/po/POTFILES.in \
 	autotools_templates/resources/src/Makefile.shared-library-c \
