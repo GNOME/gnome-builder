@@ -528,6 +528,10 @@ ide_editor_frame__search_key_press_event (IdeEditorFrame *self,
 
     case GDK_KEY_KP_Enter:
     case GDK_KEY_Return:
+      /* stash the search string for later */
+      g_free (self->previous_search_string);
+      g_object_get (self->search_entry, "text", &self->previous_search_string, NULL);
+
       ide_widget_action (GTK_WIDGET (self), "frame", "next-search-result", NULL);
       gtk_widget_grab_focus (GTK_WIDGET (self->source_view));
       return GDK_EVENT_STOP;
