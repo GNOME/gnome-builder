@@ -859,6 +859,46 @@ ide_source_view_movements_move_page (Movement *mv)
       mv->ignore_scroll_to_insert = TRUE;
       break;
 
+    case IDE_SOURCE_VIEW_MOVEMENT_PAGE_UP_LINES:
+      gtk_text_buffer_get_iter_at_line (buffer, &mv->insert, MAX (0, line_top - scrolloff));
+      if (!gtk_text_iter_ends_line (&mv->insert))
+        {
+          if (gtk_text_iter_compare (&mv->insert, &mv->selection) < 0)
+            gtk_text_iter_forward_line (&mv->insert);
+          else
+            gtk_text_iter_set_line_offset (&mv->insert, 0);
+        }
+      ide_source_view_movements_select_range (mv);
+
+      mark = _ide_source_view_get_scroll_mark (mv->self);
+      gtk_text_buffer_get_iter_at_line (buffer, &scroll_iter, line_top);
+      gtk_text_buffer_move_mark (buffer, mark, &scroll_iter);
+      gtk_text_view_scroll_to_mark (text_view, mark, 0.0, TRUE, 1.0, 1.0);
+
+      mv->ignore_select = TRUE;
+      mv->ignore_scroll_to_insert = TRUE;
+      break;
+
+    case IDE_SOURCE_VIEW_MOVEMENT_PAGE_DOWN_LINES:
+      gtk_text_buffer_get_iter_at_line (buffer, &mv->insert, line_bottom + scrolloff);
+      if (!gtk_text_iter_ends_line (&mv->insert))
+        {
+          if (gtk_text_iter_compare (&mv->insert, &mv->selection) < 0)
+            gtk_text_iter_set_line_offset (&mv->insert, 0);
+          else
+            gtk_text_iter_forward_line (&mv->insert);
+        }
+      ide_source_view_movements_select_range (mv);
+
+      mark = _ide_source_view_get_scroll_mark (mv->self);
+      gtk_text_buffer_get_iter_at_line (buffer, &scroll_iter, line_bottom);
+      gtk_text_buffer_move_mark (buffer, mark, &scroll_iter);
+      gtk_text_view_scroll_to_mark (text_view, mark, 0.0, TRUE, 1.0, 0.0);
+
+      mv->ignore_select = TRUE;
+      mv->ignore_scroll_to_insert = TRUE;
+      break;
+
     case IDE_SOURCE_VIEW_MOVEMENT_PAGE_DOWN:
       gtk_text_buffer_get_iter_at_line (buffer, &mv->insert, line_bottom + scrolloff);
       text_iter_forward_to_nonspace_captive (&mv->insert);
@@ -2134,7 +2174,9 @@ _ide_source_view_apply_movement (IdeSourceView         *self,
     case IDE_SOURCE_VIEW_MOVEMENT_HALF_PAGE_LEFT:
     case IDE_SOURCE_VIEW_MOVEMENT_HALF_PAGE_RIGHT:
     case IDE_SOURCE_VIEW_MOVEMENT_PAGE_UP:
+    case IDE_SOURCE_VIEW_MOVEMENT_PAGE_UP_LINES:
     case IDE_SOURCE_VIEW_MOVEMENT_PAGE_DOWN:
+    case IDE_SOURCE_VIEW_MOVEMENT_PAGE_DOWN_LINES:
       for (i = MAX (1, mv.count); i > 0; i--)
         ide_source_view_movements_move_page (&mv);
       break;
