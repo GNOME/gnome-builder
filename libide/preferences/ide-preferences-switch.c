@@ -207,6 +207,9 @@ ide_preferences_switch_toggle (IdePreferencesSwitch *self,
     gtk_switch_set_state (self->widget, state);
 
   self->updating = FALSE;
+
+  /* For good measure, so that we cleanup in the boolean deselection case */
+  ide_preferences_switch_changed (self, self->key, self->settings);
 }
 
 static gboolean
