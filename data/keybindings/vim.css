@@ -2318,13 +2318,13 @@ bind "KP_Multiply" { "save-insert-mark" ()
   bind "<ctrl>y" { "movement" (screen-down, 1, 0, 1) };
 
   /* page movements */
-  bind "<ctrl>b" { "movement" (page-up, 1, 0, 1)
+  bind "<ctrl>b" { "movement" (page-up-lines, 1, 0, 1)
                    "clear-count" () };
-  bind "Page_Up" { "movement" (page-up, 1, 0, 1)
+  bind "Page_Up" { "movement" (page-up-lines, 1, 0, 1)
                    "clear-count" () };
-  bind "<ctrl>f" { "movement" (page-down, 1, 0, 1)
+  bind "<ctrl>f" { "movement" (page-down-lines, 1, 0, 1)
                    "clear-count" () };
-  bind "Page_Down" { "movement" (page-down, 1, 0, 1)
+  bind "Page_Down" { "movement" (page-down-lines, 1, 0, 1)
                      "clear-count" () };
   bind "<ctrl>u" { "movement" (half-page-up, 1, 0, 1)
                    "clear-count" () };

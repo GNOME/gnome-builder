@@ -106,7 +106,9 @@ typedef enum
  * @IDE_SOURCE_VIEW_MOVEMENT_HALF_PAGE_LEFT: move half a page left.
  * @IDE_SOURCE_VIEW_MOVEMENT_HALF_PAGE_RIGHT: move half a page right.
  * @IDE_SOURCE_VIEW_MOVEMENT_PAGE_UP: move a full page up.
+ * @IDE_SOURCE_VIEW_MOVEMENT_PAGE_UP_LINES: move a full page up, but extend to whole line.
  * @IDE_SOURCE_VIEW_MOVEMENT_PAGE_DOWN: move a full page down.
+ * @IDE_SOURCE_VIEW_MOVEMENT_PAGE_DOWN_LINES: move a full page down, but extend to whole line.
  * @IDE_SOURCE_VIEW_MOVEMENT_SCREEN_UP: move to viewport up by visible line, adjusting cursor
  *   to stay on screen if necessary.
  * @IDE_SOURCE_VIEW_MOVEMENT_SCREEN_DOWN: move to viewport down by visible line, adjusting cursor
@@ -180,7 +182,9 @@ typedef enum
   IDE_SOURCE_VIEW_MOVEMENT_HALF_PAGE_RIGHT,
 
   IDE_SOURCE_VIEW_MOVEMENT_PAGE_UP,
+  IDE_SOURCE_VIEW_MOVEMENT_PAGE_UP_LINES,
   IDE_SOURCE_VIEW_MOVEMENT_PAGE_DOWN,
+  IDE_SOURCE_VIEW_MOVEMENT_PAGE_DOWN_LINES,
 
   IDE_SOURCE_VIEW_MOVEMENT_SCREEN_UP,
   IDE_SOURCE_VIEW_MOVEMENT_SCREEN_DOWN,
