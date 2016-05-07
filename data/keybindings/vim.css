@@ -1925,7 +1925,9 @@ bind "KP_Multiply" { "save-insert-mark" ()
                      "move-search" (down, 1, 0, 1, 1, 1) };
 
   bind "<ctrl>b" { "movement" (page-up, 1, 0, 1) };
+  bind "Page_Up" { "movement" (page-up, 1, 0, 1) };
   bind "<ctrl>f" { "movement" (page-down, 1, 0, 1) };
+  bind "Page_Down" { "movement" (page-down, 1, 0, 1) };
   bind "<ctrl>u" { "movement" (half-page-up, 1, 0, 1) };
   bind "<ctrl>d" { "movement" (half-page-down, 1, 0, 1) };
 
@@ -1940,8 +1942,10 @@ bind "KP_Multiply" { "save-insert-mark" ()
 
   bind "0" { "movement" (first-char, 1, 1, 0) };
   bind "KP_0" { "movement" (first-char, 1, 1, 0) };
+  bind "Home" { "movement" (first-char, 1, 1, 0) };
   bind "asciicircum" { "movement" (first-nonspace-char, 1, 0, 0) };
-  bind "dollar" { "movement" (last-char, 1, 1, 0) };
+  bind "dollar" { "movement" (last-char, 1, 0, 0) };
+  bind "End" { "movement" (last-char, 1, 0, 0) };
   bind "bar" { "movement" (nth-char, 1, 1, 1) };
 
   bind "<shift>h" { "movement" (screen-top, 1, 0, 0) };
@@ -2316,8 +2320,12 @@ bind "KP_Multiply" { "save-insert-mark" ()
   /* page movements */
   bind "<ctrl>b" { "movement" (page-up, 1, 0, 1)
                    "clear-count" () };
+  bind "Page_Up" { "movement" (page-up, 1, 0, 1)
+                   "clear-count" () };
   bind "<ctrl>f" { "movement" (page-down, 1, 0, 1)
                    "clear-count" () };
+  bind "Page_Down" { "movement" (page-down, 1, 0, 1)
+                     "clear-count" () };
   bind "<ctrl>u" { "movement" (half-page-up, 1, 0, 1)
                    "clear-count" () };
   bind "<ctrl>d" { "movement" (half-page-down, 1, 0, 1)
