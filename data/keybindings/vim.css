@@ -2075,31 +2075,31 @@ bind "KP_Multiply" { "save-insert-mark" ()
                     "set-mode" ("vim-visual", permanent) };
 
   /* vi< and vi> */
-    bind "less" { "begin-macro" ()
-                  "select-inner" ("<", ">", 1, 0)
-                  "set-mode" ("vim-visual", permanent) };
+  bind "less" { "begin-macro" ()
+                "select-inner" ("<", ">", 1, 0)
+                "set-mode" ("vim-visual", permanent) };
 
-    bind "greater" { "begin-macro" ()
-                     "select-inner" ("<", ">", 1, 0)
-                     "set-mode" ("vim-visual", permanent) };
+  bind "greater" { "begin-macro" ()
+                   "select-inner" ("<", ">", 1, 0)
+                   "set-mode" ("vim-visual", permanent) };
 
   /* vi" vi' vi` */
-    bind "quotedbl" { "begin-macro" ()
-                      "select-inner" ("\"", "\"", 1, 1)
-                      "set-mode" ("vim-visual", permanent) };
+  bind "quotedbl" { "begin-macro" ()
+                    "select-inner" ("\"", "\"", 1, 1)
+                    "set-mode" ("vim-visual", permanent) };
 
-    bind "apostrophe" { "begin-macro" ()
+  bind "apostrophe" { "begin-macro" ()
                         "select-inner" ("'", "'", 1, 1)
                         "set-mode" ("vim-visual", permanent) };
 
-    bind "grave" { "begin-macro" ()
-                   "select-inner" ("`", "`", 1, 1)
-                   "set-mode" ("vim-visual", permanent) };
+  bind "grave" { "begin-macro" ()
+                 "select-inner" ("`", "`", 1, 1)
+                 "set-mode" ("vim-visual", permanent) };
 
    /* vit */
-    bind "t" { "begin-macro" ()
-               "select-tag" (1)
-               "set-mode" ("vim-visual", permanent) };
+  bind "t" { "begin-macro" ()
+              "select-tag" (1)
+              "set-mode" ("vim-visual", permanent) };
 }
 
 @binding-set builder-vim-source-view-visual-a
