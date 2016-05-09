@@ -30,7 +30,6 @@
 typedef struct
 {
   GSubprocessFlags  flags;
-  guint             freeze_check : 1;
 
   GPtrArray        *argv;
   gchar            *cwd;
@@ -162,8 +161,6 @@ ide_subprocess_launcher_real_spawn_sync (IdeSubprocessLauncher  *self,
   g_assert (IDE_IS_SUBPROCESS_LAUNCHER (self));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  priv->freeze_check = TRUE;
-
   task = g_task_new (self, cancellable, NULL, NULL);
   g_task_run_in_thread_sync (task, ide_subprocess_launcher_spawn_worker);
 
@@ -181,8 +178,6 @@ ide_subprocess_launcher_real_spawn_async (IdeSubprocessLauncher *self,
 
   g_assert (IDE_IS_SUBPROCESS_LAUNCHER (self));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
-
-  priv->freeze_check = TRUE;
 
   task = g_task_new (self, cancellable, callback, user_data);
   g_task_run_in_thread (task, ide_subprocess_launcher_spawn_worker);
@@ -326,12 +321,6 @@ ide_subprocess_launcher_set_flags (IdeSubprocessLauncher *self,
 
   g_return_if_fail (IDE_IS_SUBPROCESS_LAUNCHER (self));
 
-  if (priv->freeze_check)
-    {
-      g_warning ("process launcher is already frozen");
-      return;
-    }
-
   if (flags != priv->flags)
     {
       priv->flags = flags;
@@ -368,12 +357,6 @@ ide_subprocess_launcher_set_environ (IdeSubprocessLauncher *self,
 
   g_return_if_fail (IDE_IS_SUBPROCESS_LAUNCHER (self));
 
-  if (priv->freeze_check)
-    {
-      g_warning ("process launcher is already frozen");
-      return;
-    }
-
   g_ptr_array_remove_range (priv->environ, 0, priv->environ->len);
 
   if (environ_ != NULL)
@@ -397,12 +380,6 @@ ide_subprocess_launcher_setenv (IdeSubprocessLauncher *self,
 
   g_return_if_fail (IDE_IS_SUBPROCESS_LAUNCHER (self));
   g_return_if_fail (key != NULL);
-
-  if (priv->freeze_check)
-    {
-      g_warning ("process launcher is already frozen");
-      return;
-    }
 
   if (value == NULL)
     value = "";
@@ -442,12 +419,6 @@ ide_subprocess_launcher_push_argv (IdeSubprocessLauncher *self,
 
   g_return_if_fail (IDE_IS_SUBPROCESS_LAUNCHER (self));
   g_return_if_fail (argv != NULL);
-
-  if (priv->freeze_check)
-    {
-      g_warning ("process launcher is already frozen");
-      return;
-    }
 
   g_ptr_array_index (priv->argv, priv->argv->len - 1) = g_strdup (argv);
   g_ptr_array_add (priv->argv, NULL);
