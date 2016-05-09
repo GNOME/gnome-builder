@@ -65,8 +65,9 @@ void                   ide_subprocess_launcher_push_args           (IdeSubproces
                                                                     const gchar * const   *args);
 void                   ide_subprocess_launcher_push_argv           (IdeSubprocessLauncher *self,
                                                                     const gchar           *argv);
-GSubprocess           *ide_subprocess_launcher_spawn_sync          (IdeSubprocessLauncher  *self,
-                                                                    GCancellable           *cancellable,
+gchar                 *ide_subprocess_launcher_pop_argv            (IdeSubprocessLauncher *self) G_GNUC_WARN_UNUSED_RESULT;
+GSubprocess           *ide_subprocess_launcher_spawn_sync          (IdeSubprocessLauncher *self,
+                                                                    GCancellable          *cancellable,
                                                                     GError                **error);
 void                   ide_subprocess_launcher_spawn_async         (IdeSubprocessLauncher *self,
                                                                     GCancellable          *cancellable,
