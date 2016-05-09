@@ -627,6 +627,7 @@ log_and_spawn (IdeAutotoolsBuildTask  *self,
   GString *log;
   gchar *item;
   va_list args;
+  gint popcnt = 0;
 
   g_assert (IDE_IS_AUTOTOOLS_BUILD_TASK (self));
   g_assert (IDE_IS_SUBPROCESS_LAUNCHER (launcher));
@@ -640,6 +641,7 @@ log_and_spawn (IdeAutotoolsBuildTask  *self,
     {
       ide_subprocess_launcher_push_argv (launcher, item);
       g_string_append_printf (log, " '%s'", item);
+      popcnt++;
     }
   va_end (args);
 
@@ -649,6 +651,13 @@ log_and_spawn (IdeAutotoolsBuildTask  *self,
   g_timeout_add (0, log_in_main, pair);
 
   ret = ide_subprocess_launcher_spawn_sync (launcher, cancellable, error);
+
+  /* pop make args */
+  for (; popcnt; popcnt--)
+    g_free (ide_subprocess_launcher_pop_argv (launcher));
+
+  /* pop "make" */
+  g_free (ide_subprocess_launcher_pop_argv (launcher));
 
   return ret;
 }
