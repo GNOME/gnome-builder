@@ -2596,6 +2596,10 @@ ide_source_view_get_definition_on_mouse_over_cb (GObject      *object,
       IDE_EXIT;
     }
 
+  /* Short circuit if the async operation completed after we closed */
+  if (priv->buffer == NULL)
+    IDE_EXIT;
+
   kind = ide_symbol_get_kind (symbol);
 
   srcloc = ide_symbol_get_definition_location (symbol);
