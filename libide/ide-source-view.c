@@ -4130,19 +4130,22 @@ ide_source_view_real_reindent (IdeSourceView *self)
 
   lines = g_ptr_array_new_with_free_func (g_free);
 
-  for (iter = begin;
-       gtk_text_iter_compare (&iter, &end) < 0;
-       gtk_text_iter_forward_line (&iter))
-    {
-      GtkTextIter line_end = iter;
-      gchar *line;
+  if (gtk_text_iter_compare (&begin, &end) == 0)
+    g_ptr_array_add (lines, g_strdup (""));
+  else
+    for (iter = begin;
+         gtk_text_iter_compare (&iter, &end) < 0;
+         gtk_text_iter_forward_line (&iter))
+      {
+        GtkTextIter line_end = iter;
+        gchar *line;
 
-      if (!gtk_text_iter_ends_line (&line_end))
-        gtk_text_iter_forward_to_line_end (&line_end);
+        if (!gtk_text_iter_ends_line (&line_end))
+          gtk_text_iter_forward_to_line_end (&line_end);
 
-      line = gtk_text_iter_get_slice (&iter, &line_end);
-      g_ptr_array_add (lines, g_strstrip (line));
-    }
+        line = gtk_text_iter_get_slice (&iter, &line_end);
+        g_ptr_array_add (lines, g_strstrip (line));
+      }
 
   gtk_text_buffer_begin_user_action (buffer);
 
