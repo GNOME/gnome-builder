@@ -80,7 +80,8 @@ get_cached_symbol_tree_cb (GObject      *object,
 
   if (!(symbol_tree = egg_task_cache_get_finish (cache, result, &error)))
     {
-      if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_NOT_SUPPORTED))
+      if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_NOT_SUPPORTED) &&
+          !g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
         g_warning ("%s", error->message);
       return;
     }
