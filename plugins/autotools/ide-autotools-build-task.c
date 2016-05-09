@@ -594,6 +594,23 @@ ide_autotools_build_task_execute_finish (IdeAutotoolsBuildTask  *self,
   return g_task_propagate_boolean (task, error);
 }
 
+static gboolean
+log_in_main (gpointer data)
+{
+  struct {
+    IdeBuildResult *result;
+    gchar *message;
+  } *pair = data;
+
+  ide_build_result_log_stdout (pair->result, "%s", pair->message);
+
+  g_free (pair->message);
+  g_object_unref (pair->result);
+  g_slice_free1 (sizeof *pair, pair);
+
+  return G_SOURCE_REMOVE;
+}
+
 static GSubprocess *
 log_and_spawn (IdeAutotoolsBuildTask  *self,
                IdeSubprocessLauncher  *launcher,
@@ -603,6 +620,10 @@ log_and_spawn (IdeAutotoolsBuildTask  *self,
                ...)
 {
   GSubprocess *ret;
+  struct {
+    IdeBuildResult *result;
+    gchar *message;
+  } *pair;
   GString *log;
   gchar *item;
   va_list args;
@@ -622,9 +643,12 @@ log_and_spawn (IdeAutotoolsBuildTask  *self,
     }
   va_end (args);
 
-  ide_build_result_log_stdout (IDE_BUILD_RESULT (self), "%s", log->str);
+  pair = g_slice_alloc (sizeof *pair);
+  pair->result = g_object_ref (self);
+  pair->message = g_string_free (log, FALSE);
+  g_timeout_add (0, log_in_main, pair);
+
   ret = ide_subprocess_launcher_spawn_sync (launcher, cancellable, error);
-  g_string_free (log, TRUE);
 
   return ret;
 }
