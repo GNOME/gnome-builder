@@ -957,21 +957,27 @@ ide_clang_translation_unit_lookup_symbol (IdeClangTranslationUnit  *self,
     {
       CXFile included_file;
       CXString included_file_name;
+      const gchar *path;
 
       included_file = clang_getIncludedFile (cursor);
       included_file_name = clang_getFileName (included_file);
+      path = clang_getCString (included_file_name);
 
-      gfile = g_file_new_for_path (clang_getCString (included_file_name));
-      file = g_object_new (IDE_TYPE_FILE,
-                           "context",
-                           context,
-                           "file",
-                           gfile,
-                           "path",
-                           clang_getCString (included_file_name),
-                           NULL);
+      if (path != NULL)
+        {
+          gfile = g_file_new_for_path (path);
+          file = g_object_new (IDE_TYPE_FILE,
+                               "context", context,
+                               "file", gfile,
+                               "path", path,
+                               NULL);
 
-      definition = ide_source_location_new (file, 0, 0, 0);
+          g_clear_pointer (&definition, ide_symbol_unref);
+          definition = ide_source_location_new (file, 0, 0, 0);
+
+          g_clear_object (&file);
+          g_clear_object (&gfile);
+        }
     }
 
   cxstr = clang_getCursorDisplayName (cursor);
