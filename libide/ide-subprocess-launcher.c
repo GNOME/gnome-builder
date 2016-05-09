@@ -571,3 +571,21 @@ ide_subprocess_launcher_push_args (IdeSubprocessLauncher *self,
   for (guint i = 0; args [i] != NULL; i++)
     ide_subprocess_launcher_push_argv (self, args [i]);
 }
+
+gchar *
+ide_subprocess_launcher_pop_argv (IdeSubprocessLauncher *self)
+{
+  IdeSubprocessLauncherPrivate *priv = ide_subprocess_launcher_get_instance_private (self);
+  gchar *ret = NULL;
+
+  g_return_val_if_fail (IDE_IS_SUBPROCESS_LAUNCHER (self), NULL);
+
+  if (priv->argv->len > 0)
+    {
+      ret = g_ptr_array_index (priv->argv, priv->argv->len - 1);
+      g_ptr_array_index (priv->argv, priv->argv->len - 1) = NULL;
+      g_ptr_array_set_size (priv->argv, priv->argv->len - 1);
+    }
+
+  return ret;
+}
