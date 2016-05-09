@@ -367,7 +367,9 @@ gen_configure_argv (IdeAutotoolsBuildTask *self,
   system_type = ide_device_get_system_type (device);
   g_ptr_array_add (ar, g_strdup_printf ("--host=%s", system_type));
 
-  if (NULL != (opts = ide_configuration_get_config_opts (self->configuration)))
+  opts = ide_configuration_get_config_opts (self->configuration);
+
+  if (!ide_str_empty0 (opts))
     {
       GError *error = NULL;
       gint argc;
