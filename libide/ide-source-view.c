@@ -1560,6 +1560,9 @@ ide_source_view_bind_buffer (IdeSourceView  *self,
   priv->definition_highlight_end_mark =
     gtk_text_buffer_create_mark (GTK_TEXT_BUFFER (buffer), NULL, &iter, TRUE);
 
+  g_object_ref (priv->definition_highlight_start_mark);
+  g_object_ref (priv->definition_highlight_end_mark);
+
   ide_source_view__buffer_notify_language_cb (self, NULL, buffer);
   ide_source_view__buffer_notify_file_cb (self, NULL, buffer);
   ide_source_view__buffer_notify_highlight_diagnostics_cb (self, NULL, buffer);
@@ -1615,9 +1618,8 @@ ide_source_view_unbind_buffer (IdeSourceView  *self,
   g_clear_object (&priv->search_context);
   g_clear_object (&priv->indenter_adapter);
   g_clear_object (&priv->completion_providers);
-
-  priv->definition_highlight_start_mark = NULL;
-  priv->definition_highlight_end_mark = NULL;
+  g_clear_object (&priv->definition_highlight_start_mark);
+  g_clear_object (&priv->definition_highlight_end_mark);
 
   ide_buffer_release (priv->buffer);
 }
