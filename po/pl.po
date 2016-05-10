@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-05-10 12:04+0200\n"
-"PO-Revision-Date: 2016-05-10 12:05+0200\n"
+"POT-Creation-Date: 2016-05-10 19:24+0200\n"
+"PO-Revision-Date: 2016-05-10 19:25+0200\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <gnomepl@aviary.pl>\n"
 "Language: pl\n"
@@ -1224,7 +1224,7 @@ msgstr "%u z %u"
 msgid "Re_veal in Project Tree"
 msgstr "Odkry_wanie w drzewie projektu"
 
-#: ../libide/editor/ide-editor-perspective.c:444
+#: ../libide/editor/ide-editor-perspective.c:447
 #: ../libide/preferences/ide-preferences-builtin.c:105
 #: ../libide/preferences/ide-preferences-builtin.c:134
 msgid "Editor"
@@ -1389,11 +1389,11 @@ msgstr "Zapisanie bufora się nie powiodło, ignorowanie nawrotu."
 msgid "%s does not support building"
 msgstr "%s nie obsługuje budowania"
 
-#: ../libide/ide-build-result.c:217
+#: ../libide/ide-build-result.c:242
 msgid "Failed to open stderr stream."
 msgstr "Otwarcie potoku standardowego wyjścia błędów się nie powiodło."
 
-#: ../libide/ide-build-result.c:247
+#: ../libide/ide-build-result.c:272
 msgid "Failed to open stdout stream."
 msgstr "Otwarcie potoku standardowego wyjścia się nie powiodło."
 
@@ -2508,36 +2508,52 @@ msgstr "Ciągi formatu"
 msgid "From a project template"
 msgstr "Z szablonu projektu"
 
-#: ../plugins/create-project/gbp-create-project-tool.c:132
+#: ../plugins/create-project/gbp-create-project-tool.c:136
 msgid "List available templates"
 msgstr "Wyświetla listę dostępnych szablonów"
 
-#: ../plugins/create-project/gbp-create-project-tool.c:134
+#: ../plugins/create-project/gbp-create-project-tool.c:138
 msgid "Project template to generate"
 msgstr "Szablon projektu do utworzenia"
 
-#: ../plugins/create-project/gbp-create-project-tool.c:136
+#: ../plugins/create-project/gbp-create-project-tool.c:140
 msgid "The target language (if supported)"
 msgstr "Język docelowy (jeśli jest obsługiwany)"
 
 #: ../plugins/create-project/gbp-create-project-tool.c:142
+msgid "The version control to use or \"none\" to disable"
+msgstr "Używany system kontroli wersji lub „none”, aby wyłączyć"
+
+#: ../plugins/create-project/gbp-create-project-tool.c:143
+msgid "git"
+msgstr "git"
+
+#: ../plugins/create-project/gbp-create-project-tool.c:149
 msgid "create-project [OPTION...] PROJECT_NAME"
 msgstr "create-project [OPCJA…] NAZWA_PROJEKTU"
 
-#: ../plugins/create-project/gbp-create-project-tool.c:191
+#: ../plugins/create-project/gbp-create-project-tool.c:198
 #, c-format
 msgid "Filename must be ASCII and may not contain : or ="
 msgstr "Nazwa pliku musi być ASCII i nie może zawierać znaków „:” i „=”"
 
-#: ../plugins/create-project/gbp-create-project-tool.c:295
+#: ../plugins/create-project/gbp-create-project-tool.c:372
 #, c-format
 msgid "Please specify a project name.\n"
 msgstr "Proszę podać nazwę projektu.\n"
 
-#: ../plugins/create-project/gbp-create-project-tool.c:311
+#: ../plugins/create-project/gbp-create-project-tool.c:388
 #, c-format
 msgid "Please specify a project template with --template=\n"
 msgstr "Proszę podać szablon projektu za pomocą parametru „--template=”\n"
+
+#: ../plugins/create-project/gbp-create-project-widget.c:290
+msgid "Without version control"
+msgstr "Bez systemu kontroli wersji"
+
+#: ../plugins/create-project/gbp-create-project-widget.c:530
+msgid "A failure occurred while initializing version control"
+msgstr "Wystąpiło niepowodzenie podczas inicjowania systemu kontroli wersji"
 
 #: ../plugins/create-project/gbp-create-project-widget.ui.h:2
 #: ../plugins/git/ide-git-clone-widget.ui.h:6
@@ -2549,6 +2565,10 @@ msgid "Language"
 msgstr "Język"
 
 #: ../plugins/create-project/gbp-create-project-widget.ui.h:4
+msgid "Versioning"
+msgstr "Kontrola wersji"
+
+#: ../plugins/create-project/gbp-create-project-widget.ui.h:5
 msgid "Pattern"
 msgstr "Wzór"
 
