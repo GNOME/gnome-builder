@@ -73,12 +73,14 @@ ide_preferences_builtin_register_appearance (IdePreferences *preferences)
 {
   GtkSourceStyleSchemeManager *manager;
   const gchar * const *scheme_ids;
+  GtkWidget *bin;
   gint i;
+  gint dark_mode;
 
   ide_preferences_add_page (preferences, "appearance", _("Appearance"), 0);
 
   ide_preferences_add_list_group (preferences, "appearance", "basic", _("Themes"), 0);
-  ide_preferences_add_switch (preferences, "appearance", "basic", "org.gnome.builder", "night-mode", NULL, NULL, _("Dark Theme"), _("Whether Builder should use a dark theme"), _("dark theme"), 0);
+  dark_mode = ide_preferences_add_switch (preferences, "appearance", "basic", "org.gnome.builder", "night-mode", NULL, NULL, _("Dark Theme"), _("Whether Builder should use a dark theme"), _("dark theme"), 0);
   ide_preferences_add_switch (preferences, "appearance", "basic", "org.gnome.builder.editor", "show-grid-lines", NULL, NULL, _("Grid Pattern"), _("Display a grid pattern underneath source code"), NULL, 0);
 
   ide_preferences_add_list_group (preferences, "appearance", "schemes", NULL, 100);
@@ -103,6 +105,12 @@ ide_preferences_builtin_register_appearance (IdePreferences *preferences)
   ide_preferences_add_font_button (preferences, "appearance", "font", "org.gnome.builder.editor", "font-name", _("Editor"), C_("Keywords", "editor font monospace"), 0);
   /* XXX: This belongs in terminal addin */
   ide_preferences_add_font_button (preferences, "appearance", "font", "org.gnome.builder.terminal", "font-name", _("Terminal"), C_("Keywords", "terminal font monospace"), 0);
+
+  if (g_getenv ("GTK_THEME") != NULL)
+    {
+      bin = ide_preferences_get_widget (preferences, dark_mode);
+      gtk_widget_set_sensitive (bin, FALSE);
+    }
 }
 
 static void
