@@ -101,6 +101,7 @@ plugins/contributing/contributing_plugin/__init__.py
 plugins/c-pack/ide-c-format-provider.c
 plugins/create-project/gbp-create-project-genesis-addin.c
 plugins/create-project/gbp-create-project-tool.c
+plugins/create-project/gbp-create-project-widget.c
 [type: gettext/glade]plugins/create-project/gbp-create-project-widget.ui
 plugins/devhelp/gbp-devhelp-panel.c
 plugins/devhelp/gbp-devhelp-search-provider.c
