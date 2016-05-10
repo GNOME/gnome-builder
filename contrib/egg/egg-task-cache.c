@@ -434,6 +434,7 @@ egg_task_cache_get_async (EggTaskCache        *self,
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_return_on_cancel (task, FALSE);
 
   /*
    * If we have the answer, return it now.
