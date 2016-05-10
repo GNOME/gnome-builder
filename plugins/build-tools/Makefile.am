@@ -33,7 +33,10 @@ nodist_libbuild_tools_plugin_la_SOURCES = \
 	gbp-build-resources.c \
 	gbp-build-resources.h
 
-libbuild_tools_plugin_la_CFLAGS = $(PLUGIN_CFLAGS)
+libbuild_tools_plugin_la_CFLAGS = \
+	$(PLUGIN_CFLAGS) \
+	-DG_LOG_DOMAIN="\"build-tools\""
+
 libbuild_tools_plugin_la_LDFLAGS = $(PLUGIN_LDFLAGS)
 
 glib_resources_c = gbp-build-resources.c
