@@ -83,7 +83,7 @@ gbp_build_workbench_addin_build_cb (GObject      *object,
 
   build_result = ide_builder_build_finish (builder, result, &error);
 
-  if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+  if (error != NULL && !g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
     g_message ("%s", error->message);
 }
 
