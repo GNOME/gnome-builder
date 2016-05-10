@@ -31,6 +31,9 @@ struct _GbTerminalView
   VteTerminal         *terminal_top;
   VteTerminal         *terminal_bottom;
 
+  GtkScrollbar        *top_scrollbar;
+  GtkScrollbar        *bottom_scrollbar;
+
   GFile               *save_as_file_top;
   GFile               *save_as_file_bottom;
 

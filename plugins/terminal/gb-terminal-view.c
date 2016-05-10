@@ -413,7 +413,10 @@ gb_terminal_set_split_view (IdeLayoutView   *view,
                                             "expand", TRUE,
                                             "visible", TRUE,
                                             NULL);
-      gtk_container_add (GTK_CONTAINER (self->bottom_container), GTK_WIDGET (self->terminal_bottom));
+      gtk_container_add_with_properties (GTK_CONTAINER (self->bottom_container),
+                                         GTK_WIDGET (self->terminal_bottom),
+                                         "position", 0,
+                                         NULL);
       gtk_widget_show (self->bottom_container);
 
       gb_terminal_view_connect_terminal (self, self->terminal_bottom);
@@ -459,8 +462,16 @@ static void
 gb_terminal_view_connect_terminal (GbTerminalView *self,
                                    VteTerminal    *terminal)
 {
+  GtkAdjustment *vadj;
   GQuark quark;
   guint signal_id;
+
+  vadj = gtk_scrollable_get_vadjustment (GTK_SCROLLABLE (terminal));
+
+  if (terminal == self->terminal_top)
+    gtk_range_set_adjustment (GTK_RANGE (self->top_scrollbar), vadj);
+  else
+    gtk_range_set_adjustment (GTK_RANGE (self->bottom_scrollbar), vadj);
 
   g_signal_connect_object (terminal,
                            "size-allocate",
@@ -553,6 +564,8 @@ gb_terminal_view_class_init (GbTerminalViewClass *klass)
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/plugins/terminal/gb-terminal-view.ui");
   gtk_widget_class_bind_template_child (widget_class, GbTerminalView, terminal_top);
   gtk_widget_class_bind_template_child (widget_class, GbTerminalView, bottom_container);
+  gtk_widget_class_bind_template_child (widget_class, GbTerminalView, top_scrollbar);
+  gtk_widget_class_bind_template_child (widget_class, GbTerminalView, bottom_scrollbar);
 
   g_type_ensure (VTE_TYPE_TERMINAL);
 
