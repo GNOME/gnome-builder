@@ -567,18 +567,21 @@ parse_kate_modeline (gchar           *s,
  * Line numbers are counted starting at one.
  */
 static void
-parse_modeline (gchar           *s,
+parse_modeline (gchar           *line,
 		gint             line_number,
 		gint             line_count,
 		ModelineOptions *options)
 {
-	gchar prev;
+	gchar *s = line;
 
 	/* look for the beginning of a modeline */
-	for (prev = ' '; (s != NULL) && (*s != '\0'); prev = *(s++))
+	while (s != NULL && *s != '\0')
 	{
-		if (!g_ascii_isspace (prev))
-			continue;
+		if (s > line && !g_ascii_isspace (*(s - 1)))
+                {
+                        s++;
+        		continue;
+                }
 
 		if ((line_number <= 3 || line_number > line_count - 3) &&
 		    (strncmp (s, "ex:", 3) == 0 ||
@@ -603,6 +606,10 @@ parse_modeline (gchar           *s,
 
 			s = parse_kate_modeline (s + 5, options);
 		}
+		else
+                {
+                        s++;
+                }
 	}
 }
 
