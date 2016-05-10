@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <glib/gi18n.h>
 #include <libpeas/peas.h>
 #include <stdlib.h>
 
@@ -32,6 +33,7 @@ struct _GbpCreateProjectWidget
   GtkFileChooserButton *project_location_button;
   GtkComboBoxText      *project_language_chooser;
   GtkFlowBox           *project_template_chooser;
+  GtkComboBoxText      *versioning_chooser;
 };
 
 enum {
@@ -231,16 +233,40 @@ template_providers_foreach_cb (PeasExtensionSet *set,
                                gpointer          user_data)
 {
   GbpCreateProjectWidget *self = user_data;
-  IdeTemplateProvider *provider = IDE_TEMPLATE_PROVIDER (exten);
-  GList *templates = ide_template_provider_get_project_templates (provider);
+  IdeTemplateProvider *provider = (IdeTemplateProvider *)exten;
+  GList *templates;
 
+  g_assert (PEAS_IS_EXTENSION_SET (set));
   g_assert (GBP_IS_CREATE_PROJECT_WIDGET (self));
+  g_assert (IDE_IS_TEMPLATE_PROVIDER (provider));
+
+  templates = ide_template_provider_get_project_templates (provider);
 
   gbp_create_project_widget_add_template_buttons (self, templates);
   gbp_create_project_widget_add_languages (self, templates);
 
-  g_list_foreach (templates, (GFunc)g_object_unref, NULL);
-  g_list_free (templates);
+  g_list_free_full (templates, g_object_unref);
+}
+
+static void
+vcs_initializers_foreach_cb (PeasExtensionSet *set,
+                             PeasPluginInfo   *plugin_info,
+                             PeasExtension    *exten,
+                             gpointer          user_data)
+{
+  GbpCreateProjectWidget *self = user_data;
+  IdeVcsInitializer *initializer = (IdeVcsInitializer *)exten;
+  g_autofree gchar *title = NULL;
+  g_autofree gchar *id = NULL;
+
+  g_assert (PEAS_IS_EXTENSION_SET (set));
+  g_assert (GBP_IS_CREATE_PROJECT_WIDGET (self));
+  g_assert (IDE_IS_VCS_INITIALIZER (initializer));
+
+  title = ide_vcs_initializer_get_title (initializer);
+  id = g_strdup (peas_plugin_info_get_module_name (plugin_info));
+
+  gtk_combo_box_text_append (self->versioning_chooser, id, title);
 }
 
 static void
@@ -251,18 +277,22 @@ gbp_create_project_widget_constructed (GObject *object)
   PeasExtensionSet *extensions;
 
   engine = peas_engine_get_default ();
-  extensions = peas_extension_set_new (engine,
-                                       IDE_TYPE_TEMPLATE_PROVIDER,
-                                       NULL);
-  peas_extension_set_foreach (extensions,
-                              template_providers_foreach_cb,
-                              self);
 
+  /* Load templates */
+  extensions = peas_extension_set_new (engine, IDE_TYPE_TEMPLATE_PROVIDER, NULL);
+  peas_extension_set_foreach (extensions, template_providers_foreach_cb, self);
   g_clear_object (&extensions);
+
+  /* Load version control backends */
+  extensions = peas_extension_set_new (engine, IDE_TYPE_VCS_INITIALIZER, NULL);
+  peas_extension_set_foreach (extensions, vcs_initializers_foreach_cb, self);
+  g_clear_object (&extensions);
+  gtk_combo_box_text_append (self->versioning_chooser, NULL, _("Without version control"));
 
   G_OBJECT_CLASS (gbp_create_project_widget_parent_class)->constructed (object);
 
   gtk_combo_box_set_active (GTK_COMBO_BOX (self->project_language_chooser), 0);
+  gtk_combo_box_set_active (GTK_COMBO_BOX (self->versioning_chooser), 0);
 }
 
 static void
@@ -348,6 +378,7 @@ gbp_create_project_widget_class_init (GbpCreateProjectWidgetClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GbpCreateProjectWidget, project_location_entry);
   gtk_widget_class_bind_template_child (widget_class, GbpCreateProjectWidget, project_language_chooser);
   gtk_widget_class_bind_template_child (widget_class, GbpCreateProjectWidget, project_template_chooser);
+  gtk_widget_class_bind_template_child (widget_class, GbpCreateProjectWidget, versioning_chooser);
 }
 
 static void
@@ -399,40 +430,104 @@ gbp_create_project_widget_init (GbpCreateProjectWidget *self)
 }
 
 static void
+init_vcs_cb (GObject      *object,
+             GAsyncResult *result,
+             gpointer      user_data)
+{
+  g_autoptr(GTask) task = user_data;
+  IdeVcsInitializer *vcs = (IdeVcsInitializer *)object;
+  GbpCreateProjectWidget *self;
+  IdeWorkbench *workbench;
+  GFile *project_file;
+  GError *error = NULL;
+
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (G_IS_TASK (task));
+
+  if (!ide_vcs_initializer_initialize_finish (vcs, result, &error))
+    {
+      g_task_return_error (task, error);
+      return;
+    }
+
+  self = g_task_get_source_object (task);
+  g_assert (GBP_IS_CREATE_PROJECT_WIDGET (self));
+
+  project_file = g_task_get_task_data (task);
+  g_assert (G_IS_FILE (project_file));
+
+  workbench = ide_widget_get_workbench (GTK_WIDGET (self));
+  ide_workbench_open_project_async (workbench, project_file, NULL, NULL, NULL);
+
+  g_task_return_boolean (task, TRUE);
+}
+
+static void
 extract_cb (GObject      *object,
             GAsyncResult *result,
             gpointer      user_data)
 {
-  GbpCreateProjectWidget *self;
-  IdeWorkbench *workbench;
   IdeProjectTemplate *template = (IdeProjectTemplate *)object;
   g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeVcsInitializer) vcs = NULL;
+  GbpCreateProjectWidget *self;
+  IdeWorkbench *workbench;
+  PeasEngine *engine;
+  PeasPluginInfo *plugin_info;
+  GFile *project_file;
   GError *error = NULL;
-  const gchar *path;
-  g_autoptr(GFile) project_file = NULL;
+  const gchar *vcs_id;
 
   g_assert (IDE_IS_PROJECT_TEMPLATE (template));
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (G_IS_TASK (task));
 
-
   if (!ide_project_template_expand_finish (template, result, &error))
     {
-      g_object_unref (template);
       g_task_return_error (task, error);
       return;
     }
-  else
+
+  self = g_task_get_source_object (task);
+  g_assert (GBP_IS_CREATE_PROJECT_WIDGET (self));
+
+  project_file = g_task_get_task_data (task);
+  g_assert (G_IS_FILE (project_file));
+
+  vcs_id = gtk_combo_box_get_active_id (GTK_COMBO_BOX (self->versioning_chooser));
+
+  if (vcs_id == NULL)
     {
-      self = g_task_get_source_object (task);
-      path = g_task_get_task_data (task);
-      project_file = g_file_new_for_path (path);
       workbench = ide_widget_get_workbench (GTK_WIDGET (self));
       ide_workbench_open_project_async (workbench, project_file, NULL, NULL, NULL);
+      g_task_return_boolean (task, TRUE);
+      return;
     }
 
-  g_object_unref (template);
-  g_task_return_boolean (task, TRUE);
+  engine = peas_engine_get_default ();
+  plugin_info = peas_engine_get_plugin_info (engine, vcs_id);
+  if (plugin_info == NULL)
+    goto failure;
+
+  vcs = (IdeVcsInitializer *)peas_engine_create_extension (engine, plugin_info,
+                                                           IDE_TYPE_VCS_INITIALIZER,
+                                                           NULL);
+  if (vcs == NULL)
+    goto failure;
+
+  ide_vcs_initializer_initialize_async (vcs,
+                                        project_file,
+                                        g_task_get_cancellable (task),
+                                        init_vcs_cb,
+                                        g_object_ref (task));
+
+  return;
+
+failure:
+  g_task_return_new_error (task,
+                           G_IO_ERROR,
+                           G_IO_ERROR_FAILED,
+                           _("A failure occurred while initializing version control"));
 }
 
 void
@@ -494,13 +589,14 @@ gbp_create_project_widget_create_async (GbpCreateProjectWidget *self,
                        g_variant_ref_sink (g_variant_new_string (language)));
 
   task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_task_data (task, g_strdup (path), g_free);
+  g_task_set_task_data (task, g_file_new_for_path (path), g_object_unref);
 
-  ide_project_template_expand_async (g_object_ref (template),
+  ide_project_template_expand_async (template,
                                      params,
                                      NULL,
                                      extract_cb,
                                      g_object_ref (task));
+
   g_object_unref (template);
 }
 
