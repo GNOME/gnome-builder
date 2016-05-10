@@ -201,3 +201,7 @@ perspectiveswitcher button {
 textview border.left {
   background: none;
 }
+
+treeview.dim-label {
+  color: alpha(currentColor, 0.5);
+}
