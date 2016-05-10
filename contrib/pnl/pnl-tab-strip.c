@@ -301,6 +301,22 @@ pnl_tab_strip_stack_notify_visible_child (PnlTabStrip *self,
 }
 
 static void
+pnl_tab_strip_tab_clicked (PnlTabStrip *self,
+                           PnlTab      *tab)
+{
+  GtkWidget *widget;
+
+  g_assert (PNL_IS_TAB_STRIP (self));
+  g_assert (PNL_IS_TAB (tab));
+
+  if (NULL != (widget = pnl_tab_get_widget (tab)))
+    {
+      if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (tab)))
+        gtk_widget_grab_focus (widget);
+    }
+}
+
+static void
 pnl_tab_strip_stack_add (PnlTabStrip *self,
                          GtkWidget   *widget,
                          GtkStack    *stack)
@@ -328,6 +344,12 @@ pnl_tab_strip_stack_add (PnlTabStrip *self,
                       NULL);
 
   g_object_set_data (G_OBJECT (widget), "PNL_TAB", tab);
+
+  g_signal_connect_object (tab,
+                           "clicked",
+                           G_CALLBACK (pnl_tab_strip_tab_clicked),
+                           self,
+                           G_CONNECT_SWAPPED | G_CONNECT_AFTER);
 
   g_signal_connect_object (widget,
                            "child-notify::position",
