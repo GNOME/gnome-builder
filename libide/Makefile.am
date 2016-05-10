@@ -134,6 +134,7 @@ libide_1_0_la_public_headers = \
 	ide-unsaved-files.h \
 	ide-uri.h \
 	ide-vcs-uri.h \
+	ide-vcs-initializer.h \
 	ide-vcs.h \
 	ide-workbench-addin.h \
 	ide-workbench-header-bar.h \
@@ -284,6 +285,7 @@ libide_1_0_la_public_sources = \
 	ide-unsaved-file.c \
 	ide-unsaved-files.c \
 	ide-uri.c \
+	ide-vcs-initializer.c \
 	ide-vcs-uri.c \
 	ide-vcs.c \
 	ide-workbench-addin.c \
