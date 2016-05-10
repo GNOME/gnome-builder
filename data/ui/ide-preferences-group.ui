@@ -33,9 +33,16 @@
             <child>
               <object class="GtkFrame" id="list_box_frame">
                 <child>
-                  <object class="GtkListBox" id="list_box">
-                    <property name="selection-mode">none</property>
+                  <object class="EggScrolledWindow">
                     <property name="visible">true</property>
+                    <property name="shadow-type">none</property>
+                    <property name="max-content-height">500</property>
+                    <child>
+                      <object class="GtkListBox" id="list_box">
+                        <property name="selection-mode">none</property>
+                        <property name="visible">true</property>
+                      </object>
+                    </child>
                   </object>
                 </child>
               </object>
