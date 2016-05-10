@@ -984,7 +984,7 @@ ide_editor_frame_init (IdeEditorFrame *self)
   g_settings_bind_with_mapping (settings, "smart-home-end", self->source_view, "smart-home-end", G_SETTINGS_BIND_GET, get_smart_home_end, NULL, NULL, NULL);
   g_settings_bind (settings, "show-map", self, "show-map", G_SETTINGS_BIND_GET);
   g_settings_bind (settings, "auto-hide-map", self, "auto-hide-map", G_SETTINGS_BIND_GET);
-  g_signal_connect (settings, "changed::keybindings", G_CALLBACK (keybindings_changed), self);
+  g_signal_connect_object (settings, "changed::keybindings", G_CALLBACK (keybindings_changed), self, 0);
 
   insight_settings = g_settings_new ("org.gnome.builder.code-insight");
   g_settings_bind (insight_settings, "word-completion", self->source_view, "enable-word-completion", G_SETTINGS_BIND_GET);
