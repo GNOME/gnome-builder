@@ -27,6 +27,10 @@
 #include "ide-file.h"
 #include "ide-source-location.h"
 
+#define POINTER_MARK(p)   GSIZE_TO_POINTER(GPOINTER_TO_SIZE(p)|1)
+#define POINTER_UNMARK(p) GSIZE_TO_POINTER(GPOINTER_TO_SIZE(p)&~(gsize)1)
+#define POINTER_MARKED(p) (GPOINTER_TO_SIZE(p)&1)
+
 typedef struct
 {
   GMutex            mutex;
@@ -38,6 +42,9 @@ typedef struct
   GOutputStream    *stderr_writer;
 
   PeasExtensionSet *addins;
+
+  GSource          *log_source;
+  GAsyncQueue      *log_queue;
 
   GTimer           *timer;
   gchar            *mode;
@@ -100,52 +107,62 @@ _ide_build_result_open_log (IdeBuildResult  *self,
   return FALSE;
 }
 
-static void
+void
 _ide_build_result_log (IdeBuildResult    *self,
-                       IdeBuildResultLog  log,
+                       GSource           *source,
+                       GAsyncQueue       *queue,
                        GOutputStream     *stream,
-                       const gchar       *message)
+                       IdeBuildResultLog  log,
+                       const gchar       *format,
+                       va_list            args)
 {
-  g_autofree gchar *buffer = NULL;
+  IdeBuildResultPrivate *priv = ide_build_result_get_instance_private (self);
+  g_autofree gchar *freeme = NULL;
+  gchar data[256];
+  gchar *message = data;
+  va_list copy;
+  gint len;
 
+  g_assert (source != NULL);
+  g_assert (queue != NULL);
   g_assert (G_IS_OUTPUT_STREAM (stream));
   g_assert (message != NULL);
 
-  /*
-   * TODO: Is there a better way we can do this to just add a newline
-   *       at the end of stuff? Previously, I had a bunch of log stuff here
-   *       like date/time, but I didn't think it was necessary in the long
-   *       run. Would be nice to remove the printf as well. We need to do the
-   *       write as a single item in case we have multiple threads appending.
-   *
-   *       We could probably replace the \0 with \n and pass string lengths
-   *       around, but it would be nice for the callers to have a valid
-   *       copy of the string.
-   *
-   *       However, even worse, is that the signal emit may result in a
-   *       string copy anyway. We could get around this by using an
-   *       intermediate structure such as "IdeBuildResultEvent" or
-   *       similar.
-   */
+  G_VA_COPY (copy, args);
+  len = g_vsnprintf (data, sizeof data, format, copy);
+  va_end (copy);
 
-  buffer = g_strdup_printf ("%s\n", message);
-  g_output_stream_write_all (stream, buffer, strlen (buffer), NULL, NULL, NULL);
+  if (len >= sizeof data - 1)
+    {
+      freeme = g_malloc (len + 2);
+      g_vsnprintf (freeme, len + 2, format, args);
+      message = freeme;
+    }
 
-  /*
-   * XXX:
-   *
-   * This is rather non-ideal today. Signal emission requires a global lock
-   * to access the signal information. However, we'll be in the Gtk main loop
-   * at this point, and signals generally aren't used in other threads. So
-   * the lock should most likely be non-contended. Still feels a bit heavy
-   * though since @message will get strdup()'d in most cases.
-   *
-   * I'm also non-plus'd at our use of read_line_async() to get the next line.
-   * It results in re-entering the main loop for ever log message in the build
-   * result. We already have IdeLineReader, which could help us lower the cost
-   * while doing larger buffered reads.
-   */
-  g_signal_emit (self, signals [LOG], 0, log, buffer);
+  message [len++] = '\n';
+  message [len] = '\0';
+
+  g_output_stream_write_all (stream, message, len, NULL, NULL, NULL);
+
+  if G_UNLIKELY (g_source_get_context (source) != g_main_context_get_thread_default ())
+    {
+      gchar *copied;
+
+      if G_UNLIKELY (freeme != NULL)
+        copied = g_steal_pointer (&freeme);
+      else
+        copied = g_strdup (message);
+
+      if G_UNLIKELY (log == IDE_BUILD_RESULT_LOG_STDERR)
+        copied = POINTER_MARK (copied);
+
+      g_async_queue_push (priv->log_queue, copied);
+      g_source_set_ready_time (source, 0);
+    }
+  else
+    {
+      g_signal_emit (self, signals [LOG], 0, log, message);
+    }
 }
 
 void
@@ -154,19 +171,23 @@ ide_build_result_log_stdout (IdeBuildResult *self,
                              ...)
 {
   IdeBuildResultPrivate *priv = ide_build_result_get_instance_private (self);
-  g_autofree gchar *msg = NULL;
+  G_GNUC_UNUSED GInputStream *stream;
   va_list args;
 
   /* lazy create stream if necessary */
-  (void)ide_build_result_get_stdout_stream (self);
+  stream = ide_build_result_get_stdout_stream (self);
 
   if (priv->stdout_writer)
     {
       va_start (args, format);
-      msg = g_strdup_vprintf (format, args);
+      _ide_build_result_log (self,
+                             priv->log_source,
+                             priv->log_queue,
+                             priv->stdout_writer,
+                             IDE_BUILD_RESULT_LOG_STDOUT,
+                             format,
+                             args);
       va_end (args);
-
-      _ide_build_result_log (self, IDE_BUILD_RESULT_LOG_STDOUT, priv->stdout_writer, msg);
     }
 }
 
@@ -176,19 +197,23 @@ ide_build_result_log_stderr (IdeBuildResult *self,
                              ...)
 {
   IdeBuildResultPrivate *priv = ide_build_result_get_instance_private (self);
-  g_autofree gchar *msg = NULL;
+  G_GNUC_UNUSED GInputStream *stream;
   va_list args;
 
   /* lazy create stream if necessary */
-  (void)ide_build_result_get_stderr_stream (self);
+  stream = ide_build_result_get_stderr_stream (self);
 
   if (priv->stderr_writer)
     {
       va_start (args, format);
-      msg = g_strdup_vprintf (format, args);
+      _ide_build_result_log (self,
+                             priv->log_source,
+                             priv->log_queue,
+                             priv->stderr_writer,
+                             IDE_BUILD_RESULT_LOG_STDERR,
+                             format,
+                             args);
       va_end (args);
-
-      _ide_build_result_log (self, IDE_BUILD_RESULT_LOG_STDERR, priv->stderr_writer, msg);
     }
 }
 
@@ -271,7 +296,11 @@ ide_build_result_tail_cb (GObject      *object,
 
   if (line)
     {
-      _ide_build_result_log (tail->self, tail->log, tail->writer, line);
+      if (tail->log == IDE_BUILD_RESULT_LOG_STDOUT)
+        ide_build_result_log_stdout (tail->self, "%s", line);
+      else
+        ide_build_result_log_stderr (tail->self, "%s", line);
+
       g_data_input_stream_read_line_async (reader,
                                            G_PRIORITY_DEFAULT,
                                            NULL,
@@ -375,6 +404,42 @@ ide_build_result_addin_removed (PeasExtensionSet    *set,
   ide_build_result_addin_unload (addin, self);
 }
 
+static gboolean
+emit_log_from_main (gpointer user_data)
+{
+  IdeBuildResult *self = user_data;
+  IdeBuildResultPrivate *priv = ide_build_result_get_instance_private (self);
+  g_autoptr(GPtrArray) ar = g_ptr_array_new ();
+  gpointer item;
+  guint i;
+
+  g_assert (IDE_IS_BUILD_RESULT (self));
+
+  g_async_queue_lock (priv->log_queue);
+  while (NULL != (item = g_async_queue_try_pop_unlocked (priv->log_queue)))
+    g_ptr_array_add (ar, item);
+  g_source_set_ready_time (priv->log_source, -1);
+  g_async_queue_unlock (priv->log_queue);
+
+  for (i = 0; i < ar->len; i++)
+    {
+      IdeBuildResultLog log = IDE_BUILD_RESULT_LOG_STDOUT;
+      gchar *message;
+
+      item = g_ptr_array_index (ar, i);
+      message = POINTER_UNMARK (item);
+
+      if (POINTER_MARKED (item))
+        log = IDE_BUILD_RESULT_LOG_STDERR;
+
+      g_signal_emit (self, signals[LOG], 0, log, message);
+
+      g_free (message);
+    }
+
+  return G_SOURCE_CONTINUE;
+}
+
 static void
 ide_build_result_constructed (GObject *object)
 {
@@ -418,6 +483,8 @@ ide_build_result_finalize (GObject *object)
 
   g_clear_pointer (&priv->mode, g_free);
   g_clear_pointer (&priv->timer, g_timer_destroy);
+
+  g_clear_pointer (&priv->log_source, g_source_destroy);
 
   g_mutex_clear (&priv->mutex);
 
@@ -521,6 +588,14 @@ ide_build_result_init (IdeBuildResult *self)
   g_mutex_init (&priv->mutex);
 
   priv->timer = g_timer_new ();
+
+  priv->log_queue = g_async_queue_new ();
+
+  priv->log_source = g_timeout_source_new (G_MAXINT);
+  g_source_set_ready_time (priv->log_source, -1);
+  g_source_set_name (priv->log_source, "[ide] build_logs");
+  g_source_set_callback (priv->log_source, emit_log_from_main, self, NULL);
+  g_source_attach (priv->log_source, g_main_context_default ());
 }
 
 GTimeSpan
