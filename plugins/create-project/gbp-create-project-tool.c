@@ -33,6 +33,8 @@ struct _GbpCreateProjectTool
   gchar    **args;
   gchar     *template;
   gchar     *language;
+  gchar     *name;
+  gchar     *vcs;
   GList     *project_templates;
 };
 
@@ -83,6 +85,8 @@ gbp_create_project_tool_finalize (GObject *object)
   g_clear_pointer (&self->args, g_strfreev);
   g_clear_pointer (&self->language, g_free);
   g_clear_pointer (&self->template, g_free);
+  g_clear_pointer (&self->name, g_free);
+  g_clear_pointer (&self->vcs, g_free);
 
   G_OBJECT_CLASS (gbp_create_project_tool_parent_class)->finalize (object);
 }
@@ -134,6 +138,9 @@ gbp_create_project_tool_parse (GbpCreateProjectTool  *self,
       N_("Project template to generate") },
     { "language", 'g', 0, G_OPTION_ARG_STRING, &self->language,
       N_("The target language (if supported)") },
+    { "vcs", 'v', 0, G_OPTION_ARG_STRING, &self->vcs,
+      N_("The version control to use or \"none\" to disable"),
+      N_("git") },
     { NULL }
   };
 
@@ -196,6 +203,57 @@ validate_name (GbpCreateProjectTool  *self,
   return TRUE;
 }
 
+static IdeVcsInitializer *
+find_vcs (GbpCreateProjectTool *self)
+{
+  PeasPluginInfo *plugin_info;
+  PeasEngine *engine;
+  const gchar *name;
+
+  g_assert (GBP_IS_CREATE_PROJECT_TOOL (self));
+
+  name = self->vcs ?: "git";
+  engine = peas_engine_get_default ();
+
+  plugin_info = peas_engine_get_plugin_info (engine, name);
+
+  /* allow use of "git" instead of "git-plugin" */
+  if (plugin_info == NULL)
+    {
+      g_autofree gchar *fullname = g_strdup_printf ("%s-plugin", name);
+
+      plugin_info = peas_engine_get_plugin_info (engine, fullname);
+      if (plugin_info == NULL)
+        return NULL;
+    }
+
+
+  return (IdeVcsInitializer *)peas_engine_create_extension (peas_engine_get_default (),
+                                                            plugin_info,
+                                                            IDE_TYPE_VCS_INITIALIZER,
+                                                            NULL);
+
+}
+
+static void
+vcs_init_cb (GObject      *object,
+             GAsyncResult *result,
+             gpointer      user_data)
+{
+  IdeVcsInitializer *vcs = (IdeVcsInitializer *)object;
+  g_autoptr(GTask) task = user_data;
+  GError *error = NULL;
+
+  g_assert (IDE_IS_VCS_INITIALIZER (vcs));
+  g_assert (G_IS_TASK (task));
+  g_assert (G_IS_ASYNC_RESULT (result));
+
+  if (!ide_vcs_initializer_initialize_finish (vcs, result, &error))
+    g_task_return_error (task, error);
+  else
+    g_task_return_int (task, 0);
+}
+
 static void
 extract_cb (GObject      *object,
             GAsyncResult *result,
@@ -203,15 +261,34 @@ extract_cb (GObject      *object,
 {
   IdeProjectTemplate *template = (IdeProjectTemplate *)object;
   g_autoptr(GTask) task = user_data;
+  GbpCreateProjectTool *self;
+  g_autoptr(IdeVcsInitializer) vcs = NULL;
   GError *error = NULL;
 
   g_assert (IDE_IS_PROJECT_TEMPLATE (template));
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (G_IS_TASK (task));
 
+  self = g_task_get_source_object (task);
+  g_assert (GBP_IS_CREATE_PROJECT_TOOL (self));
+
   if (!ide_project_template_expand_finish (template, result, &error))
     {
       g_task_return_error (task, error);
+      return;
+    }
+
+  vcs = find_vcs (self);
+
+  if (vcs != NULL)
+    {
+      g_autoptr(GFile) project_dir = g_file_new_for_commandline_arg (self->name);
+
+      ide_vcs_initializer_initialize_async (vcs,
+                                            project_dir,
+                                            g_task_get_cancellable (task),
+                                            vcs_init_cb,
+                                            g_object_ref (task));
       return;
     }
 
@@ -329,6 +406,8 @@ gbp_create_project_tool_run_async (IdeApplicationTool  *tool,
   g_hash_table_insert (params,
                        g_strdup ("name"),
                        g_variant_ref_sink (g_variant_new_string (name)));
+
+  self->name = g_strdup (name);
 
   if (self->language != NULL)
     g_hash_table_insert (params,
