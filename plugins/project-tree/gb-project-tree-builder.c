@@ -123,6 +123,7 @@ build_file (GbProjectTreeBuilder *self,
   IdeVcs *vcs;
   GFile *file;
   IdeTree *tree;
+  gint count = 0;
   gboolean show_ignored_files;
 
   g_return_if_fail (GB_IS_PROJECT_TREE_BUILDER (self));
@@ -189,6 +190,24 @@ build_file (GbProjectTreeBuilder *self,
 
       if (g_file_info_get_file_type (item_file_info) == G_FILE_TYPE_DIRECTORY)
         ide_tree_node_set_children_possible (child, TRUE);
+
+      count++;
+    }
+
+  /*
+   * If we didn't add any children to this node, insert an empty node to
+   * notify the user that nothing was found.
+   */
+  if (count == 0)
+    {
+      IdeTreeNode *child;
+
+      child = g_object_new (IDE_TYPE_TREE_NODE,
+                            "icon-name", NULL,
+                            "text", _("Empty"),
+                            "use-dim-label", TRUE,
+                            NULL);
+      ide_tree_node_append (node, child);
     }
 }
 
