@@ -482,6 +482,28 @@ gb_project_tree_actions_new (GbProjectTree *self,
   g_assert ((file_type == G_FILE_TYPE_DIRECTORY) ||
             (file_type == G_FILE_TYPE_REGULAR));
 
+  /*
+   * If the selected item is NULL, but the parent is a GbProjectFile, then
+   * this was the "empty file" in a directory. We want to instead jump to
+   * the parent.
+   */
+  if (NULL != (selected = ide_tree_get_selected (IDE_TREE (self))))
+    {
+      if (NULL == ide_tree_node_get_item (selected))
+        {
+          IdeTreeNode *parent;
+
+          if (NULL != (parent = ide_tree_node_get_parent (selected)))
+            {
+              if (NULL != (item = ide_tree_node_get_item (parent)))
+                {
+                  if (GB_IS_PROJECT_FILE (item))
+                    ide_tree_node_select (parent);
+                }
+            }
+        }
+    }
+
 again:
   if (!(selected = ide_tree_get_selected (IDE_TREE (self))) ||
       !(item = ide_tree_node_get_item (selected)) ||
@@ -836,7 +858,9 @@ gb_project_tree_actions_update (GbProjectTree *self)
 {
   GActionGroup *group;
   IdeTreeNode *selection;
+  IdeTreeNode *parent;
   GObject *item = NULL;
+  GObject *parent_item = NULL;
 
   IDE_ENTRY;
 
@@ -847,13 +871,19 @@ gb_project_tree_actions_update (GbProjectTree *self)
 
   selection = ide_tree_get_selected (IDE_TREE (self));
   if (selection != NULL)
-    item = ide_tree_node_get_item (selection);
+    {
+      item = ide_tree_node_get_item (selection);
+
+      parent = ide_tree_node_get_parent (selection);
+      if (parent != NULL)
+        parent_item = ide_tree_node_get_item (parent);
+    }
 
   action_set (group, "new-file",
-              "enabled", GB_IS_PROJECT_FILE (item),
+              "enabled", GB_IS_PROJECT_FILE (item) || GB_IS_PROJECT_FILE (parent_item),
               NULL);
   action_set (group, "new-directory",
-              "enabled", GB_IS_PROJECT_FILE (item),
+              "enabled", GB_IS_PROJECT_FILE (item) || GB_IS_PROJECT_FILE (parent_item),
               NULL);
   action_set (group, "open",
               "enabled", (GB_IS_PROJECT_FILE (item) && !project_file_is_directory (item)),
