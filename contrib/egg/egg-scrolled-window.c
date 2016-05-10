@@ -154,6 +154,45 @@ egg_scrolled_window_get_preferred_height (GtkWidget *widget,
 }
 
 static void
+egg_scrolled_window_get_preferred_height_for_width (GtkWidget *widget,
+                                                    gint       width,
+                                                    gint      *minimum_height,
+                                                    gint      *natural_height)
+{
+  EggScrolledWindow *self = (EggScrolledWindow *)widget;
+  EggScrolledWindowPrivate *priv = egg_scrolled_window_get_instance_private (self);
+
+  g_return_if_fail (EGG_IS_SCROLLED_WINDOW (self));
+
+  GTK_WIDGET_CLASS (egg_scrolled_window_parent_class)->get_preferred_height_for_width (widget, width, minimum_height, natural_height);
+
+  if (natural_height)
+    {
+      if (priv->max_content_height > -1)
+        {
+          GtkWidget *child;
+          GtkStyleContext *style;
+          GtkBorder border;
+          gint child_min_height;
+          gint child_nat_height;
+          gint additional;
+
+          if (!(child = gtk_bin_get_child (GTK_BIN (widget))))
+            return;
+
+          style = gtk_widget_get_style_context (widget);
+          gtk_style_context_get_border (style, gtk_style_context_get_state (style), &border);
+          additional = border.top + border.bottom;
+
+          gtk_widget_get_preferred_height_for_width (child, width, &child_min_height, &child_nat_height);
+
+          if ((child_nat_height > *natural_height) && (priv->max_content_height > *natural_height))
+            *natural_height = MIN (priv->max_content_height, child_nat_height) + additional;
+        }
+    }
+}
+
+static void
 egg_scrolled_window_get_preferred_width (GtkWidget *widget,
                                          gint      *minimum_width,
                                          gint      *natural_width)
@@ -248,6 +287,7 @@ egg_scrolled_window_class_init (EggScrolledWindowClass *klass)
 
   widget_class->get_preferred_width = egg_scrolled_window_get_preferred_width;
   widget_class->get_preferred_height = egg_scrolled_window_get_preferred_height;
+  widget_class->get_preferred_height_for_width = egg_scrolled_window_get_preferred_height_for_width;
 
   properties [PROP_MAX_CONTENT_HEIGHT] =
     g_param_spec_int ("max-content-height",
