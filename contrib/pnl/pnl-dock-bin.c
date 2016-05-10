@@ -711,12 +711,28 @@ pnl_dock_bin_child_size_allocate (PnlDockBin      *self,
       switch (child->type)
         {
         case PNL_DOCK_BIN_CHILD_LEFT:
-          handle_alloc.x += handle_alloc.width - HANDLE_WIDTH;
-          handle_alloc.width = HANDLE_WIDTH;
+          /*
+           * When left-to-right, we often have a scrollbar to deal
+           * with right here. So fudge the allocation position a bit
+           * to the right so that the scrollbar can still be easily
+           * hovered.
+           */
+          if (gtk_widget_get_direction (child->widget) == GTK_TEXT_DIR_LTR)
+            {
+              handle_alloc.x += handle_alloc.width - (HANDLE_WIDTH / 2);
+              handle_alloc.width = HANDLE_WIDTH;
+            }
+          else
+            {
+              handle_alloc.x += handle_alloc.width - HANDLE_WIDTH;
+              handle_alloc.width = HANDLE_WIDTH;
+            }
           break;
 
         case PNL_DOCK_BIN_CHILD_RIGHT:
           handle_alloc.width = HANDLE_WIDTH;
+          if (gtk_widget_get_direction (child->widget) == GTK_TEXT_DIR_RTL)
+            handle_alloc.x -= (HANDLE_WIDTH / 2);
           break;
 
         case PNL_DOCK_BIN_CHILD_BOTTOM:
