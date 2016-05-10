@@ -23,6 +23,8 @@ libgit_plugin_la_SOURCES = \
 	ide-git-remote-callbacks.h \
 	ide-git-vcs.c \
 	ide-git-vcs.h \
+	ide-git-vcs-initializer.c \
+	ide-git-vcs-initializer.h \
 	$(NULL)
 
 nodist_libgit_plugin_la_SOURCES = \
