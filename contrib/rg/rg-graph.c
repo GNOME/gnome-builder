@@ -29,7 +29,7 @@ typedef struct
   GPtrArray       *renderers;
   cairo_surface_t *surface;
   guint            tick_handler;
-  gint             x_offset;
+  gdouble          x_offset;
   guint            surface_dirty : 1;
 } RgGraphPrivate;
 
@@ -117,7 +117,7 @@ rg_graph_tick_cb (GtkWidget     *widget,
   gint64 frame_time;
   gint64 end_time;
   gint64 timespan;
-  gint x_offset;
+  gdouble x_offset;
 
   g_assert (RG_IS_GRAPH (self));
 
@@ -133,7 +133,7 @@ rg_graph_tick_cb (GtkWidget     *widget,
   frame_time = gdk_frame_clock_get_frame_time (frame_clock);
   end_time = rg_table_get_end_time (priv->table);
 
-  x_offset = -((frame_time - end_time) / (gdouble)timespan * alloc.width);
+  x_offset = -((frame_time - end_time) / (gdouble)timespan);
 
   if (x_offset != priv->x_offset)
     {
@@ -215,8 +215,6 @@ rg_graph_ensure_surface (RgGraph *self)
         }
 
       cairo_destroy (cr);
-
-      priv->x_offset = 0;
     }
 
   if (priv->tick_handler == 0)
@@ -249,7 +247,7 @@ rg_graph_draw (GtkWidget *widget,
   gtk_style_context_restore (style_context);
 
   cairo_save (cr);
-  cairo_set_source_surface (cr, priv->surface, priv->x_offset, 0);
+  cairo_set_source_surface (cr, priv->surface, priv->x_offset * alloc.width, 0);
   cairo_rectangle (cr, 0, 0, alloc.width, alloc.height);
   cairo_fill (cr);
   cairo_restore (cr);
@@ -280,8 +278,12 @@ static void
 rg_graph__table_changed (RgGraph *self,
                          RgTable *table)
 {
+  RgGraphPrivate *priv = rg_graph_get_instance_private (self);
+
   g_assert (RG_IS_GRAPH (self));
   g_assert (RG_IS_TABLE (table));
+
+  priv->x_offset = 0;
 
   rg_graph_clear_surface (self);
 }
