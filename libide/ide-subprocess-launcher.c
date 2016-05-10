@@ -155,7 +155,6 @@ ide_subprocess_launcher_real_spawn_sync (IdeSubprocessLauncher  *self,
                                          GCancellable           *cancellable,
                                          GError                **error)
 {
-  IdeSubprocessLauncherPrivate *priv = ide_subprocess_launcher_get_instance_private (self);
   g_autoptr(GTask) task = NULL;
 
   g_assert (IDE_IS_SUBPROCESS_LAUNCHER (self));
@@ -173,7 +172,6 @@ ide_subprocess_launcher_real_spawn_async (IdeSubprocessLauncher *self,
                                           GAsyncReadyCallback    callback,
                                           gpointer               user_data)
 {
-  IdeSubprocessLauncherPrivate *priv = ide_subprocess_launcher_get_instance_private (self);
   g_autoptr(GTask) task = NULL;
 
   g_assert (IDE_IS_SUBPROCESS_LAUNCHER (self));
