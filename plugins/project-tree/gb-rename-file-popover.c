@@ -72,16 +72,14 @@ gb_rename_file_popover_set_file (GbRenameFilePopover *self,
     {
       if (file != NULL)
         {
-          gchar *name;
-          gchar *label;
+          g_autofree gchar *name = NULL;
+          g_autofree gchar *label = NULL;
 
           name = g_file_get_basename (file);
           label = g_strdup_printf (_("Rename %s"), name);
 
           gtk_label_set_label (self->label, label);
-
-          g_free (name);
-          g_free (label);
+          gtk_entry_set_text (self->entry, name);
         }
 
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_FILE]);
@@ -195,6 +193,23 @@ gb_rename_file_popover__entry_activate (GbRenameFilePopover *self,
 
   if (gtk_widget_get_sensitive (GTK_WIDGET (self->button)))
     gtk_widget_activate (GTK_WIDGET (self->button));
+}
+
+static void
+gb_rename_file_popover__entry_focus_in_event (GbRenameFilePopover *self,
+                                              GdkEvent            *event,
+                                              GtkEntry            *entry)
+{
+  const gchar *name;
+  const gchar *tmp;
+
+  g_assert (GB_IS_RENAME_FILE_POPOVER (self));
+  g_assert (GTK_IS_ENTRY (entry));
+
+  name = gtk_entry_get_text (entry);
+
+  if (NULL != (tmp = strrchr (name, '.')))
+    gtk_editable_select_region (GTK_EDITABLE (entry), 0, tmp - name);
 }
 
 static void
@@ -352,4 +367,10 @@ gb_rename_file_popover_init (GbRenameFilePopover *self)
                            G_CALLBACK (gb_rename_file_popover__button_clicked),
                            self,
                            G_CONNECT_SWAPPED);
+
+  g_signal_connect_object (self->entry,
+                           "focus-in-event",
+                           G_CALLBACK (gb_rename_file_popover__entry_focus_in_event),
+                           self,
+                           G_CONNECT_SWAPPED | G_CONNECT_AFTER);
 }
