@@ -22,6 +22,7 @@
 #include "ide-git-genesis-addin.h"
 #include "ide-git-preferences-addin.h"
 #include "ide-git-vcs.h"
+#include "ide-git-vcs-initializer.h"
 
 static gboolean
 register_ggit (void)
@@ -56,6 +57,9 @@ peas_register_types (PeasObjectModule *module)
       peas_object_module_register_extension_type (module,
                                                   IDE_TYPE_VCS,
                                                   IDE_TYPE_GIT_VCS);
+      peas_object_module_register_extension_type (module,
+                                                  IDE_TYPE_VCS_INITIALIZER,
+                                                  IDE_TYPE_GIT_VCS_INITIALIZER);
       peas_object_module_register_extension_type (module,
                                                   IDE_TYPE_PREFERENCES_ADDIN,
                                                   IDE_TYPE_GIT_PREFERENCES_ADDIN);
