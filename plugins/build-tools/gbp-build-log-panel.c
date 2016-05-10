@@ -70,9 +70,13 @@ gbp_build_log_panel_reset_view (GbpBuildLogPanel *self)
                                                  NULL);
 
   self->text_view = g_object_new (GTK_TYPE_TEXT_VIEW,
+                                  "bottom-margin", 3,
                                   "buffer", self->buffer,
                                   "editable", FALSE,
+                                  "left-margin", 3,
                                   "monospace", TRUE,
+                                  "right-margin", 3,
+                                  "top-margin", 3,
                                   "visible", TRUE,
                                   NULL);
   context = gtk_widget_get_style_context (GTK_WIDGET (self->text_view));
