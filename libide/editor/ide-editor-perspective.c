@@ -49,9 +49,12 @@ typedef struct
   IdeSourceLocation    *location;
 } FocusLocation;
 
-static void ide_perspective_iface_init (IdePerspectiveInterface *iface);
-
-static void ide_editor_perspective_add (GtkContainer *container, GtkWidget *widget);
+static void ide_perspective_iface_init                 (IdePerspectiveInterface *iface);
+static void ide_editor_perspective_add                 (GtkContainer            *container,
+                                                        GtkWidget               *widget);
+static void ide_editor_perspective_focus_location_full (IdeEditorPerspective    *self,
+                                                        IdeSourceLocation       *location,
+                                                        gboolean                 open_if_not_found);
 
 G_DEFINE_TYPE_EXTENDED (IdeEditorPerspective, ide_editor_perspective, IDE_TYPE_LAYOUT, 0,
                         G_IMPLEMENT_INTERFACE (IDE_TYPE_PERSPECTIVE, ide_perspective_iface_init))
@@ -557,7 +560,7 @@ ide_editor_perspective_focus_location_cb (GObject      *object,
     }
 
   /* try again now that we have loaded */
-  ide_editor_perspective_focus_location (state->self, state->location);
+  ide_editor_perspective_focus_location_full (state->self, state->location, FALSE);
 
 cleanup:
   g_object_unref (state->self);
@@ -565,9 +568,10 @@ cleanup:
   g_slice_free (FocusLocation, state);
 }
 
-void
-ide_editor_perspective_focus_location (IdeEditorPerspective *self,
-                                       IdeSourceLocation    *location)
+static void
+ide_editor_perspective_focus_location_full (IdeEditorPerspective *self,
+                                            IdeSourceLocation    *location,
+                                            gboolean              open_if_not_found)
 {
   struct {
     IdeFile *file;
@@ -584,6 +588,9 @@ ide_editor_perspective_focus_location (IdeEditorPerspective *self,
   ide_perspective_views_foreach (IDE_PERSPECTIVE (self),
                                  ide_editor_perspective_find_source_location,
                                  &lookup);
+
+  if (!open_if_not_found && lookup.view == NULL)
+    return;
 
   if (lookup.view == NULL)
     {
@@ -614,4 +621,11 @@ ide_editor_perspective_focus_location (IdeEditorPerspective *self,
   ide_layout_stack_set_active_view (IDE_LAYOUT_STACK (stack), GTK_WIDGET (lookup.view));
   ide_layout_view_navigate_to (IDE_LAYOUT_VIEW (lookup.view), location);
   gtk_widget_grab_focus (GTK_WIDGET (lookup.view));
+}
+
+void
+ide_editor_perspective_focus_location (IdeEditorPerspective *self,
+                                       IdeSourceLocation    *location)
+{
+  ide_editor_perspective_focus_location_full (self, location, TRUE);
 }
