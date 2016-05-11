@@ -21,6 +21,8 @@
 #include <glib/gi18n.h>
 #include <gtksourceview/gtksource.h>
 
+#include "egg-counter.h"
+
 #include "ide-enums.h"
 #include "ide-file.h"
 #include "ide-file-settings.h"
@@ -35,6 +37,8 @@
  *
  * We do that over and over again until we have all the aspects of the object defined.
  */
+
+EGG_DEFINE_COUNTER (instances, "IdeFileSettings", "Instances", "Number of IdeFileSettings instances.")
 
 typedef struct
 {
@@ -204,6 +208,8 @@ ide_file_settings_finalize (GObject *object)
   ide_clear_weak_pointer (&priv->file);
 
   G_OBJECT_CLASS (ide_file_settings_parent_class)->finalize (object);
+
+  EGG_COUNTER_DEC (instances);
 }
 
 static void
@@ -321,6 +327,8 @@ static void
 ide_file_settings_init (IdeFileSettings *self)
 {
   IdeFileSettingsPrivate *priv = ide_file_settings_get_instance_private (self);
+
+  EGG_COUNTER_INC (instances);
 
   priv->indent_style = IDE_INDENT_STYLE_SPACES;
   priv->indent_width = -1;
