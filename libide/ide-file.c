@@ -240,8 +240,9 @@ ide_file_set_path (IdeFile     *self,
 static void
 ide_file__file_settings_settled_cb (IdeFileSettings *file_settings,
                                     GParamSpec      *pspec,
-                                    GTask           *task)
+                                    gpointer         user_data)
 {
+  g_autoptr(GTask) task = user_data;
   IdeFile *self;
 
   IDE_ENTRY;
@@ -251,20 +252,11 @@ ide_file__file_settings_settled_cb (IdeFileSettings *file_settings,
   self = g_task_get_source_object (task);
   g_assert (IDE_IS_FILE (self));
 
-  if (ide_file_settings_get_settled (file_settings))
-    {
-      g_signal_handlers_disconnect_by_func (file_settings,
-                                            G_CALLBACK (ide_file__file_settings_settled_cb),
-                                            task);
-
-      if (self->file_settings == NULL)
-        self->file_settings = g_object_ref (file_settings);
-
-      g_task_return_pointer (task, g_object_ref (file_settings), g_object_unref);
-      g_object_unref (task);
-
-      IDE_EXIT;
-    }
+  g_signal_handlers_disconnect_by_func (file_settings,
+                                        G_CALLBACK (ide_file__file_settings_settled_cb),
+                                        task);
+  g_set_object (&self->file_settings, file_settings);
+  g_task_return_pointer (task, g_object_ref (file_settings), g_object_unref);
 
   IDE_EXIT;
 }
