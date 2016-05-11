@@ -1545,7 +1545,7 @@ ide_buffer_set_file (IdeBuffer *self,
                                     g_object_ref (self));
       ide_buffer_reload_change_monitor (self);
       /*
-       * FIXME: More hack for 3.16.3. This all needs refactorying.
+       * FIXME: More hack for 3.16.3. This all needs refactoring.
        *        In particular, IdeFile should probably subclass GtkSourceFile.
        */
       if (file != NULL)
