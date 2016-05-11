@@ -86,10 +86,13 @@ diagnose_cb (GObject      *object,
   g_autoptr(GError) error = NULL;
   DiagnoseState *state;
 
-  g_return_if_fail (IDE_IS_DIAGNOSTIC_PROVIDER (provider));
-  g_return_if_fail (G_IS_TASK (task));
+  g_assert (IDE_IS_DIAGNOSTIC_PROVIDER (provider));
+  g_assert (G_IS_TASK (task));
 
   state = g_task_get_task_data (task);
+
+  g_assert (state != NULL);
+  g_assert (state->task == task);
 
   state->active--;
 
@@ -102,9 +105,9 @@ diagnose_cb (GObject      *object,
   ide_diagnostics_unref (ret);
 
 maybe_complete:
-  if (state->total == 1 && error)
+  if (state->total == 1 && error != NULL)
     g_task_return_error (task, g_error_copy (error));
-  else if (!state->active)
+  else if (state->active == 0)
     g_task_return_pointer (task,
                            ide_diagnostics_ref (state->diagnostics),
                            (GDestroyNotify)ide_diagnostics_unref);
@@ -179,11 +182,9 @@ ide_diagnostician_diagnose_finish (IdeDiagnostician  *self,
                                    GAsyncResult      *result,
                                    GError           **error)
 {
-  GTask *task = (GTask *)result;
-
   g_return_val_if_fail (G_IS_TASK (result), NULL);
 
-  return g_task_propagate_pointer (task, error);
+  return g_task_propagate_pointer (G_TASK (result), error);
 }
 
 static void
