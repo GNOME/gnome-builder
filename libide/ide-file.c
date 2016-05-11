@@ -252,10 +252,13 @@ ide_file__file_settings_settled_cb (IdeFileSettings *file_settings,
       g_signal_handlers_disconnect_by_func (file_settings,
                                             G_CALLBACK (ide_file__file_settings_settled_cb),
                                             task);
+
       if (self->file_settings == NULL)
         self->file_settings = g_object_ref (file_settings);
-      g_task_return_pointer (task, file_settings, g_object_unref);
+
+      g_task_return_pointer (task, g_object_ref (file_settings), g_object_unref);
       g_object_unref (task);
+
       IDE_EXIT;
     }
 
@@ -269,7 +272,7 @@ ide_file_load_settings_async (IdeFile              *self,
                               gpointer              user_data)
 {
   g_autoptr(GTask) task = NULL;
-  IdeFileSettings *file_settings;
+  g_autoptr(IdeFileSettings) file_settings = NULL;
 
   IDE_ENTRY;
 
@@ -293,8 +296,8 @@ ide_file_load_settings_async (IdeFile              *self,
    */
   if (ide_file_settings_get_settled (file_settings))
     {
-      self->file_settings = file_settings;
-      g_task_return_pointer (task, g_object_ref (file_settings), g_object_unref);
+      self->file_settings = g_steal_pointer (&file_settings);
+      g_task_return_pointer (task, g_object_ref (self->file_settings), g_object_unref);
       IDE_EXIT;
     }
 
@@ -307,6 +310,7 @@ ide_file_load_settings_async (IdeFile              *self,
                     "notify::settled",
                     G_CALLBACK (ide_file__file_settings_settled_cb),
                     g_object_ref (task));
+  g_task_set_task_data (task, g_steal_pointer (&file_settings), g_object_unref);
 
   IDE_EXIT;
 }
