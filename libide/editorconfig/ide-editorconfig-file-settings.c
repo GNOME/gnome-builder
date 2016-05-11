@@ -16,10 +16,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define G_LOG_DOMAIN "editorconfig"
+
 #include <editorconfig-glib.h>
 #include <glib/gi18n.h>
 
 #include "ide-editorconfig-file-settings.h"
+#include "ide-debug.h"
 #include "ide-file.h"
 
 struct _IdeEditorconfigFileSettings
@@ -136,6 +139,8 @@ ide_editorconfig_file_settings_init_async (GAsyncInitable      *initable,
   IdeFile *file;
   GFile *gfile = NULL;
 
+  IDE_ENTRY;
+
   g_return_if_fail (IDE_IS_EDITORCONFIG_FILE_SETTINGS (self));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
@@ -151,11 +156,13 @@ ide_editorconfig_file_settings_init_async (GAsyncInitable      *initable,
                                G_IO_ERROR,
                                G_IO_ERROR_NOT_FOUND,
                                _("No file was provided."));
-      return;
+      IDE_EXIT;
     }
 
   g_task_set_task_data (task, g_object_ref (gfile), g_object_unref);
   g_task_run_in_thread (task, ide_editorconfig_file_settings_init_worker);
+
+  IDE_EXIT;
 }
 
 static gboolean
@@ -163,11 +170,15 @@ ide_editorconfig_file_settings_init_finish (GAsyncInitable  *initable,
                                             GAsyncResult    *result,
                                             GError         **error)
 {
-  GTask *task = (GTask *)result;
+  gboolean ret;
 
-  g_return_val_if_fail (G_IS_TASK (task), FALSE);
+  IDE_ENTRY;
 
-  return g_task_propagate_boolean (task, error);
+  g_return_val_if_fail (G_IS_TASK (result), FALSE);
+
+  ret = g_task_propagate_boolean (G_TASK (result), error);
+
+  IDE_RETURN (ret);
 }
 
 static void
