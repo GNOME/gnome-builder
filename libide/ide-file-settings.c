@@ -381,16 +381,13 @@ ide_file_settings__init_cb (GObject      *object,
   g_autoptr(IdeFileSettings) self = user_data;
   IdeFileSettingsPrivate *priv = ide_file_settings_get_instance_private (self);
   GAsyncInitable *initable = (GAsyncInitable *)object;
-  GError *error = NULL;
+  g_autoptr(GError) error = NULL;
 
   g_assert (IDE_IS_FILE_SETTINGS (self));
   g_assert (G_IS_ASYNC_INITABLE (initable));
 
   if (!g_async_initable_init_finish (initable, result, &error))
-    {
-      g_warning ("%s", error->message);
-      g_clear_error (&error);
-    }
+    g_warning ("%s", error->message);
 
   if (--priv->unsettled_count == 0)
     g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SETTLED]);
