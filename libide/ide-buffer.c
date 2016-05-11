@@ -2395,12 +2395,10 @@ ide_buffer_get_symbol_at_location_finish (IdeBuffer     *self,
                                           GAsyncResult  *result,
                                           GError       **error)
 {
-  GTask *task = (GTask *)result;
-
   g_return_val_if_fail (IDE_IS_BUFFER (self), NULL);
-  g_return_val_if_fail (G_IS_TASK (task), NULL);
+  g_return_val_if_fail (G_IS_TASK (result), NULL);
 
-  return g_task_propagate_pointer (task, error);
+  return g_task_propagate_pointer (G_TASK (result), error);
 }
 
 /**
@@ -2415,12 +2413,10 @@ ide_buffer_get_symbols_finish (IdeBuffer     *self,
                                GAsyncResult  *result,
                                GError       **error)
 {
-  GTask *task = (GTask *)result;
-
   g_return_val_if_fail (IDE_IS_BUFFER (self), NULL);
-  g_return_val_if_fail (G_IS_TASK (task), NULL);
+  g_return_val_if_fail (G_IS_TASK (result), NULL);
 
-  return g_task_propagate_pointer (task, error);
+  return g_task_propagate_pointer (G_TASK (result), error);
 }
 
 static gboolean

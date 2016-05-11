@@ -811,15 +811,14 @@ ide_buffer_manager_load_file_finish (IdeBufferManager  *self,
                                      GAsyncResult      *result,
                                      GError           **error)
 {
-  GTask *task = (GTask *)result;
   IdeBuffer *ret;
 
   IDE_ENTRY;
 
   g_return_val_if_fail (IDE_IS_BUFFER_MANAGER (self), NULL);
-  g_return_val_if_fail (G_IS_TASK (task), NULL);
+  g_return_val_if_fail (G_IS_TASK (result), NULL);
 
-  ret = g_task_propagate_pointer (task, error);
+  ret = g_task_propagate_pointer (G_TASK (result), error);
 
   IDE_RETURN (ret);
 }
@@ -1091,12 +1090,10 @@ ide_buffer_manager_save_file_finish (IdeBufferManager  *self,
                                      GAsyncResult      *result,
                                      GError           **error)
 {
-  GTask *task = (GTask *)result;
-
   g_return_val_if_fail (IDE_IS_BUFFER_MANAGER (self), FALSE);
-  g_return_val_if_fail (G_IS_TASK (task), FALSE);
+  g_return_val_if_fail (G_IS_TASK (result), FALSE);
 
-  return g_task_propagate_boolean (task, error);
+  return g_task_propagate_boolean (G_TASK (result), error);
 }
 
 static void
@@ -1819,9 +1816,8 @@ ide_buffer_manager_save_all_finish (IdeBufferManager  *self,
                                     GAsyncResult      *result,
                                     GError           **error)
 {
-  GTask *task = (GTask *)result;
-
   g_return_val_if_fail (IDE_IS_BUFFER_MANAGER (self), FALSE);
+  g_return_val_if_fail (G_IS_TASK (result), FALSE);
 
-  return g_task_propagate_boolean (task, error);
+  return g_task_propagate_boolean (G_TASK (result), error);
 }
