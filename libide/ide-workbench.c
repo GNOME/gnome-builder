@@ -407,13 +407,6 @@ ide_workbench_init (IdeWorkbench *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
 
-  /*
-   * dialogs often track the parent modal state, and we generally
-   * want the dialogs to be modal. so we set this here, even though
-   * it really doesn't make a difference for our operation.
-   */
-  gtk_window_set_modal (GTK_WINDOW (self), TRUE);
-
   ide_workbench_add_perspective (self,
                                  g_object_new (IDE_TYPE_GREETER_PERSPECTIVE,
                                                "visible", TRUE,
