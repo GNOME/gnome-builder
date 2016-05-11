@@ -808,6 +808,26 @@ ide_editor_frame_constructed (GObject *object)
 }
 
 static void
+ide_editor_frame_destroy (GtkWidget *widget)
+{
+  IdeEditorFrame *self = (IdeEditorFrame *)widget;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_EDITOR_FRAME (self));
+
+  if (self->source_view)
+    {
+      gtk_widget_destroy (GTK_WIDGET (self->source_view));
+      self->source_view = NULL;
+    }
+
+  GTK_WIDGET_CLASS (ide_editor_frame_parent_class)->destroy (widget);
+
+  IDE_EXIT;
+}
+
+static void
 ide_editor_frame_dispose (GObject *object)
 {
   IdeEditorFrame *self = (IdeEditorFrame *)object;
@@ -904,6 +924,7 @@ ide_editor_frame_class_init (IdeEditorFrameClass *klass)
   object_class->get_property = ide_editor_frame_get_property;
   object_class->set_property = ide_editor_frame_set_property;
 
+  widget_class->destroy = ide_editor_frame_destroy;
   widget_class->grab_focus = ide_editor_frame_grab_focus;
 
   properties [PROP_AUTO_HIDE_MAP] =

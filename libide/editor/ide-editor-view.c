@@ -813,11 +813,32 @@ ide_editor_view_destroy (GtkWidget *widget)
 {
   IdeEditorView *self = (IdeEditorView *)widget;
 
+  IDE_ENTRY;
+
   ide_editor_view_unload_addins (self);
+
+  /*
+   * We want to make extra sure these widgets get destroyed, so manually
+   * destroy them here before doing any other work.
+   */
+
+  if (self->frame1)
+    {
+      gtk_widget_destroy (GTK_WIDGET (self->frame1));
+      self->frame1 = NULL;
+    }
+
+  if (self->frame2)
+    {
+      gtk_widget_destroy (GTK_WIDGET (self->frame2));
+      self->frame2 = NULL;
+    }
+
+  g_clear_object (&self->document);
 
   GTK_WIDGET_CLASS (ide_editor_view_parent_class)->destroy (widget);
 
-  g_clear_object (&self->document);
+  IDE_EXIT;
 }
 
 static void

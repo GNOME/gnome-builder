@@ -2468,13 +2468,15 @@ ide_buffer_release (IdeBuffer *self)
 {
   IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
 
+  IDE_ENTRY;
+
   g_return_if_fail (IDE_IS_BUFFER (self));
   g_return_if_fail (priv->hold_count >= 0);
 
   priv->hold_count--;
 
   if (priv->context == NULL)
-    return;
+    IDE_EXIT;
 
   /*
    * If our hold count has reached zero, then queue the buffer for
@@ -2490,6 +2492,8 @@ ide_buffer_release (IdeBuffer *self)
                                                          ide_buffer_reclaim_timeout,
                                                          self);
     }
+
+  IDE_EXIT;
 }
 
 /**
