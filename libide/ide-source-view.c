@@ -98,7 +98,6 @@ typedef struct
   IdeBackForwardList          *back_forward_list;
   IdeBuffer                   *buffer;
   GtkCssProvider              *css_provider;
-  IdeFileSettings             *file_settings;
   PangoFontDescription        *font_desc;
   IdeExtensionAdapter         *indenter_adapter;
   GtkSourceGutterRenderer     *line_change_renderer;
@@ -836,30 +835,6 @@ ide_source_view_update_auto_indent_override (IdeSourceView *self)
 }
 
 static void
-ide_source_view_connect_settings (IdeSourceView   *self,
-                                  IdeFileSettings *file_settings)
-{
-  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
-
-  g_assert (IDE_IS_SOURCE_VIEW (self));
-  g_assert (IDE_IS_FILE_SETTINGS (file_settings));
-
-  egg_binding_group_set_source (priv->file_setting_bindings, file_settings);
-}
-
-static void
-ide_source_view_disconnect_settings (IdeSourceView   *self,
-                                     IdeFileSettings *file_settings)
-{
-  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
-
-  g_assert (IDE_IS_SOURCE_VIEW (self));
-  g_assert (IDE_IS_FILE_SETTINGS (file_settings));
-
-  egg_binding_group_set_source (priv->file_setting_bindings, NULL);
-}
-
-static void
 ide_source_view_set_file_settings (IdeSourceView   *self,
                                    IdeFileSettings *file_settings)
 {
@@ -868,20 +843,9 @@ ide_source_view_set_file_settings (IdeSourceView   *self,
   g_assert (IDE_IS_SOURCE_VIEW (self));
   g_assert (IDE_IS_FILE_SETTINGS (file_settings));
 
-  if (file_settings != priv->file_settings)
+  if (file_settings != ide_source_view_get_file_settings (self))
     {
-      if (priv->file_settings)
-        {
-          ide_source_view_disconnect_settings (self, priv->file_settings);
-          g_clear_object (&priv->file_settings);
-        }
-
-      if (file_settings)
-        {
-          priv->file_settings = g_object_ref (file_settings);
-          ide_source_view_connect_settings (self, file_settings);
-        }
-
+      egg_binding_group_set_source (priv->file_setting_bindings, file_settings);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_FILE_SETTINGS]);
     }
 }
@@ -7804,7 +7768,7 @@ ide_source_view_get_file_settings (IdeSourceView *self)
 
   g_return_val_if_fail (IDE_IS_SOURCE_VIEW (self), NULL);
 
-  return priv->file_settings;
+  return (IdeFileSettings *)egg_binding_group_get_source (priv->file_setting_bindings);
 }
 
 gboolean
