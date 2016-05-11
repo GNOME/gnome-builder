@@ -136,8 +136,6 @@ typedef struct
   gunichar                     inner_left;
   gunichar                     inner_right;
 
-  guint                        delayed_scroll_replay;
-
   guint                        scroll_offset;
   gint                         cached_char_height;
   gint                         cached_char_width;
@@ -5236,21 +5234,6 @@ ide_source_view_set_indent_style (IdeSourceView  *self,
 }
 
 static gboolean
-ide_source_view_replay_scroll (gpointer data)
-{
-  IdeSourceView *self = data;
-  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
-
-  g_assert (IDE_IS_SOURCE_VIEW (self));
-
-  priv->delayed_scroll_replay = 0;
-
-  ide_source_view_scroll_mark_onscreen (self, priv->scroll_mark, TRUE, 0.5, 0.5);
-
-  return G_SOURCE_REMOVE;
-}
-
-static gboolean
 ide_source_view_do_size_allocate_hack_cb (gpointer data)
 {
   IdeSourceView *self = data;
@@ -5336,20 +5319,6 @@ ide_source_view_size_allocate (GtkWidget     *widget,
     GTK_WIDGET_CLASS (ide_source_view_parent_class)->size_allocate (GTK_WIDGET (self), allocation);
 
   ide_source_view_set_overscroll_num_lines (self, priv->overscroll_num_lines);
-
-  /*
-   * If we were in a scroll, and we got a size-allocate, we might need to adjust how far we
-   * are scrolling. This could happen while the view is calculating text layout sizes and
-   * has not yet reached our target location.
-   */
-  if (priv->scrolling_to_scroll_mark)
-    {
-      if (priv->delayed_scroll_replay != 0)
-        g_source_remove (priv->delayed_scroll_replay);
-      priv->delayed_scroll_replay = g_timeout_add (SCROLL_REPLAY_DELAY,
-                                                   ide_source_view_replay_scroll,
-                                                   self);
-    }
 }
 
 static gboolean
@@ -5464,12 +5433,6 @@ ide_source_view_dispose (GObject *object)
     }
 
   ide_source_view_clear_snippets (self);
-
-  if (priv->delayed_scroll_replay)
-    {
-      g_source_remove (priv->delayed_scroll_replay);
-      priv->delayed_scroll_replay = 0;
-    }
 
   if (priv->delay_size_allocate_chainup)
     {
