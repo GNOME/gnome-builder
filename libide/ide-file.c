@@ -21,6 +21,8 @@
 #include <glib/gi18n.h>
 #include <gtksourceview/gtksource.h>
 
+#include "egg-counter.h"
+
 #include "ide-context.h"
 #include "ide-debug.h"
 #include "ide-file.h"
@@ -49,6 +51,8 @@ enum {
   PROP_TEMPORARY_ID,
   LAST_PROP
 };
+
+EGG_DEFINE_COUNTER (instances, "IdeFile", "Instances", "Number of IdeFile instances.")
 
 G_DEFINE_TYPE (IdeFile, ide_file, IDE_TYPE_OBJECT)
 
@@ -394,6 +398,8 @@ ide_file_finalize (GObject *object)
 
   G_OBJECT_CLASS (ide_file_parent_class)->finalize (object);
 
+  EGG_COUNTER_DEC (instances);
+
   IDE_EXIT;
 }
 
@@ -513,6 +519,7 @@ ide_file_class_init (IdeFileClass *klass)
 static void
 ide_file_init (IdeFile *file)
 {
+  EGG_COUNTER_INC (instances);
 }
 
 static gboolean
