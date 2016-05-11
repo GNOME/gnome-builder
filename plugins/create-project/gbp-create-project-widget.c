@@ -35,6 +35,8 @@ struct _GbpCreateProjectWidget
   GtkFlowBox           *project_template_chooser;
   GtkFileChooserDialog *select_folder_dialog;
   GtkComboBoxText      *versioning_chooser;
+
+  guint                 auto_update : 1;
 };
 
 enum {
@@ -106,6 +108,20 @@ validate_name (const gchar *name)
 }
 
 static void
+gbp_create_project_widget_location_changed (GbpCreateProjectWidget *self,
+                                            GtkEntry               *entry)
+{
+  g_assert (GBP_IS_CREATE_PROJECT_WIDGET (self));
+  g_assert (GTK_IS_ENTRY (entry));
+
+  self->auto_update = FALSE;
+
+  g_signal_handlers_disconnect_by_func (self->project_location_entry,
+                                        gbp_create_project_widget_location_changed,
+                                        self);
+}
+
+static void
 gbp_create_project_widget_name_changed (GbpCreateProjectWidget *self,
                                         GtkEntry               *entry)
 {
@@ -125,7 +141,7 @@ gbp_create_project_widget_name_changed (GbpCreateProjectWidget *self,
                     "secondary-icon-name", "dialog-warning-symbolic",
                     NULL);
 
-      gtk_entry_set_text (self->project_location_entry, "");
+      project_dir = g_strdup ("");
     }
   else
     {
@@ -134,7 +150,19 @@ gbp_create_project_widget_name_changed (GbpCreateProjectWidget *self,
                     NULL);
 
       project_dir = g_ascii_strdown (g_strdelimit (project_name, " ", '-'), -1);
+    }
+
+  if (self->auto_update)
+    {
+      g_signal_handlers_block_by_func (self->project_location_entry,
+                                       gbp_create_project_widget_location_changed,
+                                       self);
+
       gtk_entry_set_text (self->project_location_entry, project_dir);
+
+      g_signal_handlers_unblock_by_func (self->project_location_entry,
+                                         gbp_create_project_widget_location_changed,
+                                         self);
     }
 
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_IS_READY]);
@@ -294,6 +322,8 @@ gbp_create_project_widget_constructed (GObject *object)
 
   gtk_combo_box_set_active (GTK_COMBO_BOX (self->project_language_chooser), 0);
   gtk_combo_box_set_active (GTK_COMBO_BOX (self->versioning_chooser), 0);
+
+  self->auto_update = TRUE;
 }
 
 static void
@@ -427,6 +457,11 @@ gbp_create_project_widget_init (GbpCreateProjectWidget *self)
                            self,
                            G_CONNECT_SWAPPED);
 
+  g_signal_connect_object (self->project_location_entry,
+                           "changed",
+                           G_CALLBACK (gbp_create_project_widget_location_changed),
+                           self,
+                           G_CONNECT_SWAPPED);
 
   g_signal_connect_object (self->project_language_chooser,
                            "changed",
