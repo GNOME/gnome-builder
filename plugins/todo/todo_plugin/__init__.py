@@ -87,7 +87,8 @@ class TodoWorkbenchAddin(GObject.Object, Ide.WorkbenchAddin):
         vcs = context.get_vcs()
 
         for item in items:
-            if vcs.is_ignored(item.props.file):
+            file = item.props.file
+            if vcs.is_ignored(file) or file.get_basename().endswith('.m4'):
                 continue
             self.panel.add_item(item, prepend=prepend)
 
