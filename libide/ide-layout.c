@@ -112,7 +112,14 @@ ide_layout_hierarchy_changed (GtkWidget *widget,
     {
       g_signal_handler_disconnect (old_toplevel, priv->focus_handler);
       priv->focus_handler = 0;
-      ide_clear_weak_pointer (&priv->active_view);
+
+      if (priv->active_view)
+        {
+          g_object_weak_unref (G_OBJECT (priv->active_view),
+                               (GWeakNotify)ide_layout_active_view_weak_cb,
+                               self);
+          priv->active_view = NULL;
+        }
     }
 
   toplevel = gtk_widget_get_toplevel (widget);
