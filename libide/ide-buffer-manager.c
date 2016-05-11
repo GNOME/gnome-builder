@@ -522,7 +522,7 @@ ide_buffer_manager_load_file__load_cb (GObject      *object,
           guint line = 0;
           guint line_offset = 0;
 
-          if (1 == sscanf (fragment, "L%u_%u", &line, &line_offset))
+          if (sscanf (fragment, "L%u_%u", &line, &line_offset) >= 1)
             {
               IDE_TRACE_MSG ("Restoring insert mark to %u:%u", line, line_offset);
               gtk_text_buffer_get_iter_at_line_offset (GTK_TEXT_BUFFER (state->buffer), &iter,
