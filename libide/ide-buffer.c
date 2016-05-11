@@ -558,6 +558,31 @@ ide_buffer__diagnostician_diagnose_cb (GObject      *object,
 }
 
 static gboolean
+ide_buffer_is_system_file (IdeBuffer *self,
+                           IdeFile   *file)
+{
+  IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
+  GFile *gfile;
+
+  g_assert (IDE_IS_BUFFER (self));
+  g_assert (IDE_IS_FILE (file));
+
+  if (NULL != (gfile = ide_file_get_file (file)))
+    {
+      IdeVcs *vcs;
+      GFile *workdir;
+
+      vcs = ide_context_get_vcs (priv->context);
+      workdir = ide_vcs_get_working_directory (vcs);
+
+      if (gfile != NULL && !g_file_has_prefix (gfile, workdir))
+        return TRUE;
+    }
+
+  return FALSE;
+}
+
+static gboolean
 ide_buffer__diagnose_timeout_cb (gpointer user_data)
 {
   IdeBuffer *self = user_data;
@@ -567,7 +592,7 @@ ide_buffer__diagnose_timeout_cb (gpointer user_data)
 
   priv->diagnose_timeout = 0;
 
-  if (priv->file != NULL)
+  if (priv->file != NULL && !ide_buffer_is_system_file (self, priv->file))
     {
       priv->diagnostics_dirty = FALSE;
       priv->in_diagnose = TRUE;
