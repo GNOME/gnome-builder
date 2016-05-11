@@ -131,9 +131,7 @@ dnl ***********************************************************************
 AC_CONFIG_FILES([
 	Makefile
 
-{{if template != "empty"}}
 	src/Makefile
-{{end}}
 {{if template == "shared-library"}}
 {{if language != "vala"}}
 	src/{{prefix}}-version.h
@@ -151,7 +149,6 @@ AC_CONFIG_FILES([
 ],[],
 [API_VERSION='$API_VERSION'])
 AC_OUTPUT
-
 
 echo ""
 echo " ${PACKAGE} - ${VERSION}"
