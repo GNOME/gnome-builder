@@ -1308,7 +1308,10 @@ pnl_dock_bin_grab_focus (GtkWidget *widget)
     {
       child = &priv->children [i];
 
-      if (child->widget != NULL)
+      if (PNL_IS_DOCK_REVEALER (child->widget) &&
+          gtk_widget_get_visible (child->widget) &&
+          gtk_widget_get_child_visible (child->widget) &&
+          pnl_dock_revealer_get_reveal_child (PNL_DOCK_REVEALER (child->widget)))
         {
           if (gtk_widget_child_focus (child->widget, GTK_DIR_TAB_FORWARD))
             return;
