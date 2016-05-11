@@ -21,8 +21,10 @@
 
 typedef struct
 {
-  GPtrArray *docks;
+  GPtrArray            *docks;
   PnlDockTransientGrab *grab;
+  GHashTable           *queued_focus_by_toplevel;
+  guint                 queued_handler;
 } PnlDockManagerPrivate;
 
 G_DEFINE_TYPE_WITH_PRIVATE (PnlDockManager, pnl_dock_manager, G_TYPE_OBJECT)
@@ -36,27 +38,17 @@ enum {
 static guint signals [N_SIGNALS];
 
 static void
-pnl_dock_manager_set_focus (PnlDockManager *self,
-                            GtkWidget      *focus,
-                            GtkWidget      *toplevel)
+pnl_dock_manager_do_set_focus (PnlDockManager *self,
+                               GtkWidget      *focus,
+                               GtkWidget      *toplevel)
 {
   PnlDockManagerPrivate *priv = pnl_dock_manager_get_instance_private (self);
   PnlDockTransientGrab *grab = NULL;
   GtkWidget *parent;
 
   g_assert (PNL_IS_DOCK_MANAGER (self));
-  g_assert (GTK_IS_WINDOW (toplevel));
-
-  /*
-   * Don't do anything if we get a NULL focus. Instead, wait for the focus
-   * to be updated with a widget.
-   */
-  if (focus == NULL)
-    return;
-
-#if 0
-  g_print ("Attempting to set focus on %s\n", G_OBJECT_TYPE_NAME (focus));
-#endif
+  g_assert (GTK_IS_WIDGET (focus));
+  g_assert (GTK_IS_WIDGET (toplevel));
 
   if (priv->grab != NULL)
     {
@@ -104,6 +96,62 @@ pnl_dock_manager_set_focus (PnlDockManager *self,
       priv->grab = grab;
       pnl_dock_transient_grab_acquire (priv->grab);
     }
+}
+
+static gboolean
+do_delayed_focus_update (gpointer user_data)
+{
+  PnlDockManager *self = user_data;
+  PnlDockManagerPrivate *priv = pnl_dock_manager_get_instance_private (self);
+  g_autoptr(GHashTable) hashtable = NULL;
+  GHashTableIter iter;
+  GtkWidget *toplevel;
+  GtkWidget *focus;
+
+  g_assert (PNL_IS_DOCK_MANAGER (self));
+
+  priv->queued_handler = 0;
+
+  hashtable = g_steal_pointer (&priv->queued_focus_by_toplevel);
+  g_hash_table_iter_init (&iter, hashtable);
+  while (g_hash_table_iter_next (&iter, (gpointer *)&toplevel, (gpointer *)&focus))
+    pnl_dock_manager_do_set_focus (self, focus, toplevel);
+
+  return G_SOURCE_REMOVE;
+}
+
+static void
+pnl_dock_manager_set_focus (PnlDockManager *self,
+                            GtkWidget      *focus,
+                            GtkWidget      *toplevel)
+{
+  PnlDockManagerPrivate *priv = pnl_dock_manager_get_instance_private (self);
+
+  g_assert (PNL_IS_DOCK_MANAGER (self));
+  g_assert (GTK_IS_WINDOW (toplevel));
+
+  if (priv->queued_focus_by_toplevel == NULL)
+    priv->queued_focus_by_toplevel = g_hash_table_new (NULL, NULL);
+
+  /*
+   * Don't do anything if we get a NULL focus. Instead, wait for the focus
+   * to be updated with a widget.
+   */
+  if (focus == NULL)
+    {
+      g_hash_table_remove (priv->queued_focus_by_toplevel, toplevel);
+      return;
+    }
+
+  /*
+   * If focus is changing, we want to delay this until the end of the main
+   * loop cycle so that we don't do too much work when rapidly adding widgets
+   * to the hierarchy, as they may implicitly grab focus.
+   */
+  g_hash_table_insert (priv->queued_focus_by_toplevel, toplevel, focus);
+  if (priv->queued_handler != 0)
+    g_source_remove (priv->queued_handler);
+  priv->queued_handler = g_timeout_add (0, do_delayed_focus_update, self);
 }
 
 static void
@@ -203,6 +251,14 @@ pnl_dock_manager_finalize (GObject *object)
   PnlDockManager *self = (PnlDockManager *)object;
   PnlDockManagerPrivate *priv = pnl_dock_manager_get_instance_private (self);
 
+  g_clear_pointer (&priv->queued_focus_by_toplevel, g_hash_table_unref);
+
+  if (priv->queued_handler)
+    {
+      g_source_remove (priv->queued_handler);
+      priv->queued_handler = 0;
+    }
+
   while (priv->docks->len > 0)
     {
       PnlDock *dock = g_ptr_array_index (priv->docks, priv->docks->len - 1);
@@ -217,39 +273,11 @@ pnl_dock_manager_finalize (GObject *object)
 }
 
 static void
-pnl_dock_manager_get_property (GObject    *object,
-                               guint       prop_id,
-                               GValue     *value,
-                               GParamSpec *pspec)
-{
-  switch (prop_id)
-    {
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-    }
-}
-
-static void
-pnl_dock_manager_set_property (GObject      *object,
-                               guint         prop_id,
-                               const GValue *value,
-                               GParamSpec   *pspec)
-{
-  switch (prop_id)
-    {
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-    }
-}
-
-static void
 pnl_dock_manager_class_init (PnlDockManagerClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   object_class->finalize = pnl_dock_manager_finalize;
-  object_class->get_property = pnl_dock_manager_get_property;
-  object_class->set_property = pnl_dock_manager_set_property;
 
   klass->register_dock = pnl_dock_manager_real_register_dock;
   klass->unregister_dock = pnl_dock_manager_real_unregister_dock;
