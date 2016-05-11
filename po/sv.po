@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-05-10 11:07+0000\n"
-"PO-Revision-Date: 2016-05-10 13:17+0200\n"
+"POT-Creation-Date: 2016-05-11 14:56+0000\n"
+"PO-Revision-Date: 2016-05-11 18:58+0200\n"
 "Last-Translator: Anders Jonsson <anders.jonsson@norsjovallen.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "Language: sv\n"
@@ -1223,7 +1223,7 @@ msgstr "%u av %u"
 msgid "Re_veal in Project Tree"
 msgstr "V_isa i projektträdet"
 
-#: ../libide/editor/ide-editor-perspective.c:444
+#: ../libide/editor/ide-editor-perspective.c:447
 #: ../libide/preferences/ide-preferences-builtin.c:105
 #: ../libide/preferences/ide-preferences-builtin.c:134
 msgid "Editor"
@@ -1237,6 +1237,7 @@ msgstr "Spara dokument"
 #: ../libide/editor/ide-editor-view-actions.c:438
 #: ../libide/ide-workbench-actions.c:67
 #: ../plugins/build-tools/gbp-build-panel.ui.h:8
+#: ../plugins/create-project/gbp-create-project-widget.c:451
 #: ../plugins/terminal/gb-terminal-view-actions.c:305
 msgid "Cancel"
 msgstr "Avbryt"
@@ -1365,7 +1366,7 @@ msgstr "Ange D-Bus-adress"
 msgid "No such worker"
 msgstr "Ingen sådan arbetare finns"
 
-#: ../libide/ide-buffer.c:2344
+#: ../libide/ide-buffer.c:2366
 msgid "The current language lacks a symbol resolver."
 msgstr "Det aktuella språket saknar en symboluppslagare."
 
@@ -1391,11 +1392,11 @@ msgstr "Misslyckades med att spara buffert, ignorerar återkrävande."
 msgid "%s does not support building"
 msgstr "%s saknar stöd för byggande"
 
-#: ../libide/ide-build-result.c:217
+#: ../libide/ide-build-result.c:242
 msgid "Failed to open stderr stream."
 msgstr "Misslyckades med att öppna stderr-strömmen."
 
-#: ../libide/ide-build-result.c:247
+#: ../libide/ide-build-result.c:272
 msgid "Failed to open stdout stream."
 msgstr "Misslyckades med att öppna stdout-strömmen."
 
@@ -1493,18 +1494,18 @@ msgstr "Misslyckades med att öppna katalog: %s"
 msgid "Failed to load file: %s: %s"
 msgstr "Misslyckades med att läsa in fil: %s: %s"
 
-#: ../libide/ide-source-view.c:5034
+#: ../libide/ide-source-view.c:5043
 #, c-format
 msgid "Insert “%s”"
 msgstr "Infoga ”%s”"
 
-#: ../libide/ide-source-view.c:5036
+#: ../libide/ide-source-view.c:5045
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "Ersätt ”%s” med ”%s”"
 
 # Fix-it: små automatiska fixar för problem
-#: ../libide/ide-source-view.c:5150
+#: ../libide/ide-source-view.c:5159
 msgid "Apply Fix-It"
 msgstr "Tillämpa Fixa-det"
 
@@ -2091,7 +2092,7 @@ msgstr "Kör configure…"
 msgid "Cleaning…"
 msgstr "Rensar…"
 
-#: ../plugins/autotools/ide-makecache.c:1123
+#: ../plugins/autotools/ide-makecache.c:1124
 msgid "Invalid makefile provided, ignoring."
 msgstr "Ogiltig make-fil tillhandahölls, ignorerar."
 
@@ -2514,36 +2515,58 @@ msgstr "Formatsträngar"
 msgid "From a project template"
 msgstr "Från en projektmall"
 
-#: ../plugins/create-project/gbp-create-project-tool.c:132
+#: ../plugins/create-project/gbp-create-project-tool.c:136
 msgid "List available templates"
 msgstr "Lista tillgängliga mallar"
 
-#: ../plugins/create-project/gbp-create-project-tool.c:134
+#: ../plugins/create-project/gbp-create-project-tool.c:138
 msgid "Project template to generate"
 msgstr "Projektmall att generera"
 
-#: ../plugins/create-project/gbp-create-project-tool.c:136
+#: ../plugins/create-project/gbp-create-project-tool.c:140
 msgid "The target language (if supported)"
 msgstr "Målspråket (om stöd finns)"
 
 #: ../plugins/create-project/gbp-create-project-tool.c:142
+msgid "The version control to use or \"none\" to disable"
+msgstr ""
+"Vilket versionshanteringssystem som ska användas eller ”none” för att "
+"inaktivera"
+
+#: ../plugins/create-project/gbp-create-project-tool.c:143
+msgid "git"
+msgstr "git"
+
+#: ../plugins/create-project/gbp-create-project-tool.c:149
 msgid "create-project [OPTION...] PROJECT_NAME"
 msgstr "create-projekt [FLAGGA…] PROJEKTNAMN"
 
-#: ../plugins/create-project/gbp-create-project-tool.c:191
+#: ../plugins/create-project/gbp-create-project-tool.c:198
 #, c-format
 msgid "Filename must be ASCII and may not contain : or ="
 msgstr "Filnamnet måste uttryckas i ASCII och får inte innehålla : eller ="
 
-#: ../plugins/create-project/gbp-create-project-tool.c:295
+#: ../plugins/create-project/gbp-create-project-tool.c:372
 #, c-format
 msgid "Please specify a project name.\n"
 msgstr "Ange ett projektnamn.\n"
 
-#: ../plugins/create-project/gbp-create-project-tool.c:311
+#: ../plugins/create-project/gbp-create-project-tool.c:388
 #, c-format
 msgid "Please specify a project template with --template=\n"
 msgstr "Ange en projektmall med --template=\n"
+
+#: ../plugins/create-project/gbp-create-project-widget.c:291
+msgid "Without version control"
+msgstr "Utan versionshantering"
+
+#: ../plugins/create-project/gbp-create-project-widget.c:450
+msgid "Select"
+msgstr "Välj"
+
+#: ../plugins/create-project/gbp-create-project-widget.c:554
+msgid "A failure occurred while initializing version control"
+msgstr "Ett fel uppstod under initiering av versionshantering"
 
 #: ../plugins/create-project/gbp-create-project-widget.ui.h:2
 #: ../plugins/git/ide-git-clone-widget.ui.h:6
@@ -2555,6 +2578,10 @@ msgid "Language"
 msgstr "Språk"
 
 #: ../plugins/create-project/gbp-create-project-widget.ui.h:4
+msgid "Versioning"
+msgstr "Versionering"
+
+#: ../plugins/create-project/gbp-create-project-widget.ui.h:5
 msgid "Pattern"
 msgstr "Mönster"
 
@@ -2804,7 +2831,7 @@ msgstr "Spara terminalinnehåll som"
 msgid "_New Terminal"
 msgstr "_Ny terminal"
 
-#: ../plugins/todo/todo_plugin/__init__.py:180
+#: ../plugins/todo/todo_plugin/__init__.py:181
 msgid "Todo"
 msgstr "Att göra"
 
@@ -2871,9 +2898,6 @@ msgstr "vala diagnostik varningar fel"
 
 #~ msgid "GNOME Version"
 #~ msgstr "GNOME-version"
-
-#~ msgid "Git"
-#~ msgstr "Git"
 
 #~ msgid "Display Document Changes"
 #~ msgstr "Visa ändringar i dokument"
