@@ -227,3 +227,6 @@ class EmptyProjectTemplate(AutotoolsTemplate):
             ['C', 'C++', 'Vala']
          )
 
+    def prepare_files(self, files):
+        files['resources/src/Makefile.empty'] = 'src/Makefile.am'
+
