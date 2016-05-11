@@ -443,13 +443,10 @@ ide_file_settings_new (IdeFile *file)
 
       if (G_IS_INITABLE (child))
         {
-          GError *error = NULL;
+          g_autoptr(GError) error = NULL;
 
           if (!g_initable_init (G_INITABLE (child), NULL, &error))
-            {
-              g_warning ("%s", error->message);
-              g_clear_error (&error);
-            }
+            g_warning ("%s", error->message);
         }
       else if (G_IS_ASYNC_INITABLE (child))
         {
