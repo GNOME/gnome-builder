@@ -161,11 +161,8 @@ ide_file_settings_set_file (IdeFileSettings *self,
   g_return_if_fail (IDE_IS_FILE_SETTINGS (self));
   g_return_if_fail (IDE_IS_FILE (file));
 
-  if (priv->file != file)
-    {
-      if (ide_set_weak_pointer (&priv->file, file))
-        g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_FILE]);
-    }
+  if (ide_set_weak_pointer (&priv->file, file))
+    g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_FILE]);
 }
 
 /**
@@ -352,7 +349,7 @@ ide_file_settings_child_notify (IdeFileSettings *self,
     g_object_notify_by_pspec (G_OBJECT (self), pspec);
 }
 
-void
+static void
 _ide_file_settings_append (IdeFileSettings *self,
                            IdeFileSettings *child)
 {

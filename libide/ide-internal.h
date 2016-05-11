@@ -53,8 +53,6 @@ const gchar        *_ide_file_get_content_type              (IdeFile            
 GtkSourceFile      *_ide_file_set_content_type              (IdeFile               *self,
                                                              const gchar           *content_type);
 GtkSourceFile      *_ide_file_get_source_file               (IdeFile               *self);
-void                _ide_file_settings_add_child            (IdeFileSettings       *self,
-                                                             IdeFileSettings       *child);
 IdeFixit           *_ide_fixit_new                          (IdeSourceRange        *source_range,
                                                              const gchar           *replacement_text);
 void                _ide_project_set_name                   (IdeProject            *project,
