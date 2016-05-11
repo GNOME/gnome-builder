@@ -303,7 +303,7 @@ ide_file_settings_class_init (IdeFileSettingsClass *klass)
                           "Settled",
                           "If the file settings implementations have settled.",
                           FALSE,
-                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+                          (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
 #define IDE_FILE_SETTINGS_PROPERTY(NAME, name, _1, _2, _pname, pspec, _4, _5) \
   properties [PROP_##NAME] = pspec;
