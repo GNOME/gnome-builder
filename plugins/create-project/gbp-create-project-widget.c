@@ -33,6 +33,7 @@ struct _GbpCreateProjectWidget
   GtkFileChooserButton *project_location_button;
   GtkComboBoxText      *project_language_chooser;
   GtkFlowBox           *project_template_chooser;
+  GtkFileChooserDialog *select_folder_dialog;
   GtkComboBoxText      *versioning_chooser;
 };
 
@@ -333,6 +334,16 @@ gbp_create_project_widget_is_ready (GbpCreateProjectWidget *self)
 }
 
 static void
+make_dialog_modal (GbpCreateProjectWidget *self,
+                   GtkFileChooserDialog   *dialog)
+{
+  g_assert (GBP_IS_CREATE_PROJECT_WIDGET (self));
+  g_assert (GTK_IS_FILE_CHOOSER_DIALOG (dialog));
+
+  gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
+}
+
+static void
 gbp_create_project_widget_get_property (GObject    *object,
                                         guint       prop_id,
                                         GValue     *value,
@@ -378,6 +389,7 @@ gbp_create_project_widget_class_init (GbpCreateProjectWidgetClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GbpCreateProjectWidget, project_location_entry);
   gtk_widget_class_bind_template_child (widget_class, GbpCreateProjectWidget, project_language_chooser);
   gtk_widget_class_bind_template_child (widget_class, GbpCreateProjectWidget, project_template_chooser);
+  gtk_widget_class_bind_template_child (widget_class, GbpCreateProjectWidget, select_folder_dialog);
   gtk_widget_class_bind_template_child (widget_class, GbpCreateProjectWidget, versioning_chooser);
 }
 
@@ -427,6 +439,18 @@ gbp_create_project_widget_init (GbpCreateProjectWidget *self)
                            G_CALLBACK (gbp_create_project_widget_template_selected),
                            self,
                            G_CONNECT_SWAPPED);
+
+  g_signal_connect_object (self->select_folder_dialog,
+                           "show",
+                           G_CALLBACK (make_dialog_modal),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  gtk_dialog_add_buttons (GTK_DIALOG (self->select_folder_dialog),
+                          _("Select"), GTK_RESPONSE_OK,
+                          _("Cancel"), GTK_RESPONSE_CANCEL,
+                          NULL);
+  gtk_dialog_set_default_response (GTK_DIALOG (self->select_folder_dialog), GTK_RESPONSE_OK);
 }
 
 static void

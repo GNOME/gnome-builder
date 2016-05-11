@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
+  <object class="GtkFileChooserDialog" id="select_folder_dialog">
+    <property name="action">select-folder</property>
+    <property name="local-only">true</property>
+  </object>
   <template class="GbpCreateProjectWidget" parent="GtkBin">
     <child>
       <object class="GtkScrolledWindow">
@@ -106,6 +110,7 @@
                         <child>
                           <object class="GtkFileChooserButton" id="project_location_button">
                             <property name="action">select-folder</property>
+                            <property name="dialog">select_folder_dialog</property>
                             <property name="local-only">true</property>
                             <property name="expand">true</property>
                             <property name="visible">true</property>
