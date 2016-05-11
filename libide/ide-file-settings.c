@@ -458,8 +458,7 @@ ide_file_settings_new (IdeFile *file)
       _ide_file_settings_append (ret, child);
     }
 
-  if (--priv->unsettled_count == 0)
-    g_object_notify_by_pspec (G_OBJECT (ret), properties [PROP_SETTLED]);
+  priv->unsettled_count--;
 
   return ret;
 }
