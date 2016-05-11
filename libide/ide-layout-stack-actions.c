@@ -26,26 +26,32 @@
 #include "ide-layout-stack-private.h"
 #include "ide-layout-view.h"
 
-static void
-ide_layout_stack_actions_close_cb (GObject      *object,
-                                   GAsyncResult *result,
-                                   gpointer      user_data)
+static gboolean
+ide_layout_stack_actions_close_cb (gpointer data)
 {
-  IdeLayoutStack *self = (IdeLayoutStack *)object;
-  g_autoptr(IdeLayout) view = user_data;
+  struct {
+    IdeLayoutStack *self;
+    GtkWidget *active_view;
+  } *pair = data;
 
-  g_assert (IDE_IS_LAYOUT_STACK (self));
-  g_assert (IDE_IS_LAYOUT_VIEW (view));
+  g_assert (pair != NULL);
+  g_assert (IDE_IS_LAYOUT_STACK (pair->self));
+  g_assert (IDE_IS_LAYOUT_VIEW (pair->active_view));
 
-  ide_layout_stack_remove (self, GTK_WIDGET (view));
+  ide_layout_stack_remove (pair->self, GTK_WIDGET (pair->active_view));
 
   /*
    * Force the view to destroy. This helps situation where plugins are holding
    * onto a reference that can't easily be broken automatically.
    */
-  gtk_widget_destroy (GTK_WIDGET (view));
-}
+  gtk_widget_destroy (GTK_WIDGET (pair->active_view));
 
+  g_object_unref (pair->self);
+  g_object_unref (pair->active_view);
+  g_slice_free1 (sizeof *pair, pair);
+
+  return G_SOURCE_REMOVE;
+}
 
 static void
 ide_layout_stack_actions_close (GSimpleAction *action,
@@ -55,6 +61,10 @@ ide_layout_stack_actions_close (GSimpleAction *action,
   g_autoptr(GTask) task = NULL;
   IdeLayoutStack *self = user_data;
   GtkWidget *active_view;
+  struct {
+    IdeLayoutStack *self;
+    GtkWidget *active_view;
+  } *pair;
 
   g_assert (IDE_IS_LAYOUT_STACK (self));
 
@@ -62,13 +72,14 @@ ide_layout_stack_actions_close (GSimpleAction *action,
   if (active_view == NULL || !IDE_IS_LAYOUT_VIEW (active_view))
     return;
 
-
   /*
    * Queue until we are out of this potential signalaction. (Which mucks things
    * up since it expects the be able to continue working with the widget).
    */
-  task = g_task_new (self, NULL, ide_layout_stack_actions_close_cb, g_object_ref (active_view));
-  g_task_return_boolean (task, TRUE);
+  pair = g_slice_alloc (sizeof *pair);
+  pair->self = g_object_ref (self);
+  pair->active_view = g_object_ref (active_view);
+  g_timeout_add (0, ide_layout_stack_actions_close_cb, pair);
 }
 
 static void

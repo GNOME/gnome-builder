@@ -1597,11 +1597,13 @@ ide_source_view_unbind_buffer (IdeSourceView  *self,
 {
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
 
+  IDE_ENTRY;
+
   g_assert (IDE_IS_SOURCE_VIEW (self));
   g_assert (EGG_IS_SIGNAL_GROUP (group));
 
   if (priv->buffer == NULL)
-    return;
+    IDE_EXIT;
 
   priv->scroll_mark = NULL;
 
@@ -1627,6 +1629,8 @@ ide_source_view_unbind_buffer (IdeSourceView  *self,
   g_clear_object (&priv->definition_highlight_end_mark);
 
   ide_buffer_release (priv->buffer);
+
+  IDE_EXIT;
 }
 
 static gunichar
