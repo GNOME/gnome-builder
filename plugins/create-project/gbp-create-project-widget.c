@@ -538,8 +538,8 @@ gbp_create_project_widget_create_async (GbpCreateProjectWidget *self,
 {
   g_autoptr(GTask) task = NULL;
   g_autoptr(GHashTable) params = NULL;
-  IdeProjectTemplate *template;
-  g_autofree gchar *name;
+  g_autoptr(IdeProjectTemplate) template = NULL;
+  g_autofree gchar *name = NULL;
   g_autofree gchar *location = NULL;
   g_autofree gchar *path = NULL;
   g_autofree gchar *language = NULL;
@@ -547,7 +547,7 @@ gbp_create_project_widget_create_async (GbpCreateProjectWidget *self,
   GbpCreateProjectTemplateIcon *template_icon;
   const gchar *text;
   const gchar *child_name;
-  GList *selected_box_child = NULL;
+  GList *selected_box_child;
 
   g_return_if_fail (GBP_CREATE_PROJECT_WIDGET (self));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
@@ -596,8 +596,6 @@ gbp_create_project_widget_create_async (GbpCreateProjectWidget *self,
                                      NULL,
                                      extract_cb,
                                      g_object_ref (task));
-
-  g_object_unref (template);
 }
 
 gboolean
