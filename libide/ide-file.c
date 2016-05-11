@@ -324,14 +324,13 @@ ide_file_load_settings_finish (IdeFile              *self,
                                GAsyncResult         *result,
                                GError              **error)
 {
-  GTask *task = (GTask *)result;
   IdeFileSettings *ret;
 
   IDE_ENTRY;
 
-  g_return_val_if_fail (G_IS_TASK (task), NULL);
+  g_return_val_if_fail (G_IS_TASK (result), NULL);
 
-  ret = g_task_propagate_pointer (task, error);
+  ret = g_task_propagate_pointer (G_TASK (result), error);
 
   IDE_RETURN (ret);
 }
@@ -641,12 +640,10 @@ ide_file_find_other_finish (IdeFile       *self,
                             GAsyncResult  *result,
                             GError       **error)
 {
-  GTask *task = (GTask *)result;
-
   g_return_val_if_fail (IDE_IS_FILE (self), NULL);
-  g_return_val_if_fail (G_IS_TASK (task), NULL);
+  g_return_val_if_fail (G_IS_TASK (result), NULL);
 
-  return g_task_propagate_pointer (task, error);
+  return g_task_propagate_pointer (G_TASK (result), error);
 }
 
 /**
