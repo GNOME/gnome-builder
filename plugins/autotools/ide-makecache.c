@@ -1050,7 +1050,8 @@ ide_makecache_get_file_flags_worker (GTask        *task,
           IDE_EXIT;
         }
 
-      if (!g_subprocess_communicate_utf8 (subprocess, NULL, cancellable, &stdoutstr, NULL, &error))
+      /* Don't let ourselves be cancelled from this operation */
+      if (!g_subprocess_communicate_utf8 (subprocess, NULL, NULL, &stdoutstr, NULL, &error))
         {
           g_assert (error != NULL);
           g_task_return_error (task, error);
