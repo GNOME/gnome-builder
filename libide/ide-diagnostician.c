@@ -109,7 +109,7 @@ maybe_complete:
     g_task_return_error (task, g_error_copy (error));
   else if (state->active == 0)
     g_task_return_pointer (task,
-                           ide_diagnostics_ref (state->diagnostics),
+                           g_steal_pointer (&state->diagnostics),
                            (GDestroyNotify)ide_diagnostics_unref);
 }
 
