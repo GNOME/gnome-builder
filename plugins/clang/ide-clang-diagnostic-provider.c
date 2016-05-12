@@ -54,7 +54,7 @@ get_translation_unit_cb (GObject      *object,
   IdeClangService *service = (IdeClangService *)object;
   g_autoptr(IdeClangTranslationUnit) tu = NULL;
   g_autoptr(GTask) task = user_data;
-  IdeDiagnostics *diagnostics;
+  g_autoptr(IdeDiagnostics) diagnostics = NULL;
   IdeFile *target;
   GFile *gfile;
   GError *error = NULL;
@@ -76,7 +76,7 @@ get_translation_unit_cb (GObject      *object,
   diagnostics = ide_clang_translation_unit_get_diagnostics_for_file (tu, gfile);
 
   g_task_return_pointer (task,
-                         ide_diagnostics_ref (diagnostics),
+                         g_steal_pointer (&diagnostics),
                          (GDestroyNotify)ide_diagnostics_unref);
 }
 
