@@ -26,8 +26,8 @@
 struct _IdeCssProvider
 {
   GtkCssProvider  parent_instance;
-  GtkSettings    *settings;
   gchar          *base_path;
+  guint           queued_update;
 };
 
 G_DEFINE_TYPE (IdeCssProvider, ide_css_provider, GTK_TYPE_CSS_PROVIDER)
@@ -53,12 +53,12 @@ ide_css_provider_update (IdeCssProvider *self)
 {
   g_autofree gchar *theme_name = NULL;
   g_autofree gchar *resource_path = NULL;
+  GtkSettings *settings = gtk_settings_get_default ();
   gboolean prefer_dark_theme = FALSE;
   gsize len = 0;
   guint32 flags = 0;
 
   g_assert (IDE_IS_CSS_PROVIDER (self));
-  g_assert (GTK_IS_SETTINGS (self->settings));
 
   if ((theme_name = g_strdup(g_getenv ("GTK_THEME"))))
     {
@@ -75,7 +75,7 @@ ide_css_provider_update (IdeCssProvider *self)
     }
   else
     {
-      g_object_get (self->settings,
+      g_object_get (settings,
                     "gtk-theme-name", &theme_name,
                     "gtk-application-prefer-dark-theme", &prefer_dark_theme,
                     NULL);
@@ -100,6 +100,28 @@ ide_css_provider_update (IdeCssProvider *self)
   gtk_css_provider_load_from_resource (GTK_CSS_PROVIDER (self), resource_path);
 }
 
+static gboolean
+ide_css_provider_do_update (gpointer user_data)
+{
+  IdeCssProvider *self = user_data;
+
+  g_assert (IDE_IS_CSS_PROVIDER (self));
+
+  self->queued_update = 0;
+  ide_css_provider_update (self);
+
+  return G_SOURCE_REMOVE;
+}
+
+static void
+ide_css_provider_queue_update (IdeCssProvider *self)
+{
+  g_assert (IDE_IS_CSS_PROVIDER (self));
+
+  if (self->queued_update == 0)
+    self->queued_update = g_timeout_add (0, ide_css_provider_do_update, self);
+}
+
 static void
 ide_css_provider__settings_notify_gtk_theme_name (IdeCssProvider *self,
                                                  GParamSpec    *pspec,
@@ -107,7 +129,7 @@ ide_css_provider__settings_notify_gtk_theme_name (IdeCssProvider *self,
 {
   g_assert (IDE_IS_CSS_PROVIDER (self));
 
-  ide_css_provider_update (self);
+  ide_css_provider_queue_update (self);
 }
 
 static void
@@ -117,7 +139,7 @@ ide_css_provider__settings_notify_gtk_application_prefer_dark_theme (IdeCssProvi
 {
   g_assert (IDE_IS_CSS_PROVIDER (self));
 
-  ide_css_provider_update (self);
+  ide_css_provider_queue_update (self);
 }
 
 static void
@@ -151,18 +173,19 @@ static void
 ide_css_provider_constructed (GObject *object)
 {
   IdeCssProvider *self = (IdeCssProvider *)object;
+  GtkSettings *settings;
 
   G_OBJECT_CLASS (ide_css_provider_parent_class)->constructed (object);
 
-  self->settings = g_object_ref (gtk_settings_get_default ());
+  settings = gtk_settings_get_default ();
 
-  g_signal_connect_object (self->settings,
+  g_signal_connect_object (settings,
                            "notify::gtk-theme-name",
                            G_CALLBACK (ide_css_provider__settings_notify_gtk_theme_name),
                            self,
                            G_CONNECT_SWAPPED);
 
-  g_signal_connect_object (self->settings,
+  g_signal_connect_object (settings,
                            "notify::gtk-application-prefer-dark-theme",
                            G_CALLBACK (ide_css_provider__settings_notify_gtk_application_prefer_dark_theme),
                            self,
@@ -176,7 +199,6 @@ ide_css_provider_finalize (GObject *object)
 {
   IdeCssProvider *self = (IdeCssProvider *)object;
 
-  g_clear_object (&self->settings);
   g_clear_pointer (&self->base_path, g_free);
 
   G_OBJECT_CLASS (ide_css_provider_parent_class)->finalize (object);
