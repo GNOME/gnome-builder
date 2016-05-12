@@ -513,7 +513,7 @@ ide_application_get_worker_async (IdeApplication      *self,
                                   GAsyncReadyCallback  callback,
                                   gpointer             user_data)
 {
-  GTask *task = NULL;
+  g_autoptr(GTask) task = NULL;
 
   g_return_if_fail (IDE_IS_APPLICATION (self));
   g_return_if_fail (plugin_name != NULL);
