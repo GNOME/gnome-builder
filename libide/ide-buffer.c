@@ -486,13 +486,15 @@ ide_buffer_set_diagnostics (IdeBuffer      *self,
 
   if (diagnostics != priv->diagnostics)
     {
-      g_clear_pointer (&priv->diagnostics, ide_diagnostics_unref);
-      priv->diagnostics = diagnostics ? ide_diagnostics_ref (diagnostics) : NULL;
-
       ide_buffer_clear_diagnostics (self);
 
-      if (diagnostics)
-        ide_buffer_update_diagnostics (self, diagnostics);
+      g_clear_pointer (&priv->diagnostics, ide_diagnostics_unref);
+
+      if (diagnostics != NULL)
+        {
+          priv->diagnostics = ide_diagnostics_ref (diagnostics);
+          ide_buffer_update_diagnostics (self, diagnostics);
+        }
 
       g_signal_emit (self, signals [LINE_FLAGS_CHANGED], 0);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_HAS_DIAGNOSTICS]);
