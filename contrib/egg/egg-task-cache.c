@@ -639,6 +639,8 @@ egg_task_cache_dispose (GObject *object)
       count = g_hash_table_size (self->cache);
       g_clear_pointer (&self->cache, g_hash_table_unref);
 
+      g_debug ("Evected cache of %"G_GINT64_FORMAT" items", count);
+
       EGG_COUNTER_SUB (cached, count);
     }
 
