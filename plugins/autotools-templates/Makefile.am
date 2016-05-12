@@ -38,6 +38,7 @@ nobase_resource_DATA = \
 	autotools_templates/resources/po/LINGUAS \
 	autotools_templates/resources/po/Makevars \
 	autotools_templates/resources/po/POTFILES.in \
+	autotools_templates/resources/src/Makefile.empty \
 	autotools_templates/resources/src/Makefile.shared-library-c \
 	autotools_templates/resources/src/Makefile.shared-library-vala \
 	autotools_templates/resources/src/package-version.h.in \
