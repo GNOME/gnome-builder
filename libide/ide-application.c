@@ -531,7 +531,7 @@ ide_application_get_worker_async (IdeApplication      *self,
                                        plugin_name,
                                        cancellable,
                                        ide_application_get_worker_cb,
-                                       task);
+                                       g_object_ref (task));
 }
 
 /**
