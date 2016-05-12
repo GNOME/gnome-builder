@@ -271,6 +271,7 @@ subprocess_wait_cb (GObject      *source_object,
 {
   GSubprocess *subprocess = G_SUBPROCESS (source_object);
   g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeDiagnostics) local_diags = NULL;
   TranslationUnit *unit = g_task_get_task_data (task);
   GPtrArray *array = NULL;
   IdeGettextDiagnostics *diags;
@@ -330,8 +331,9 @@ subprocess_wait_cb (GObject      *source_object,
     }
 
  out:
+  local_diags = ide_diagnostics_new (array);
   diags = g_object_new (IDE_TYPE_GETTEXT_DIAGNOSTICS,
-                        "diagnostics", ide_diagnostics_new (array),
+                        "diagnostics", local_diags,
                         "sequence", ide_unsaved_file_get_sequence (unit->unsaved_file),
                         NULL);
   g_task_return_pointer (task, diags, g_object_unref);
