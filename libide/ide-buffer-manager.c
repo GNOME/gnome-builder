@@ -404,6 +404,15 @@ ide_buffer_manager_remove_buffer (IdeBufferManager *self,
                                         G_CALLBACK (ide_buffer_manager_buffer_changed),
                                         self);
 
+  /* Try hard to ensure the buffer releases any objects held.
+   * That way, if for some reason the buffer does get leaked
+   * (which we see sometimes with GSV and have yet to track down),
+   * we at least drop all the related IDE objects.
+   *
+   * https://bugzilla.gnome.org/show_bug.cgi?id=766322
+   */
+  g_object_run_dispose (G_OBJECT (buffer));
+
   g_object_unref (buffer);
 
   EGG_COUNTER_DEC (registered);
