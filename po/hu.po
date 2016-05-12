@@ -10,10 +10,10 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-04-28 08:48+0000\n"
-"PO-Revision-Date: 2016-04-28 22:31+0200\n"
-"Last-Translator: Gabor Kelemen <kelemeng at ubuntu dot com>\n"
-"Language-Team: Hungarian <openscope at googlegroups dot com>\n"
+"POT-Creation-Date: 2016-05-11 09:17+0000\n"
+"PO-Revision-Date: 2016-05-12 11:41+0200\n"
+"Last-Translator: Gabor Kelemen <kelemeng at gnome dot hu>\n"
+"Language-Team: Hungarian <openscope at gmail dot com>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -101,9 +101,9 @@ msgstr "Nem sikerült az XML feldolgozása a folyamból"
 
 #: ../data/org.gnome.Builder.appdata.xml.in.h:1
 #: ../data/org.gnome.Builder.desktop.in.in.h:1
-#: ../data/style-schemes/builder.xml.h:1 ../libide/ide-application.c:413
+#: ../data/style-schemes/builder.xml.h:1 ../libide/ide-application.c:449
 #: ../libide/ide-workbench.c:562
-#: ../libide/preferences/ide-preferences-builtin.c:113
+#: ../libide/preferences/ide-preferences-builtin.c:122
 msgid "Builder"
 msgstr "Építő"
 
@@ -137,7 +137,6 @@ msgid "Features:"
 msgstr "Funkciók:"
 
 #: ../data/org.gnome.Builder.appdata.xml.in.h:6
-#| msgid "The semantic highlighter for the language."
 msgid "Built in syntax highlighting for many languages"
 msgstr "Beépített szemantikus kiemelés számos nyelvhez."
 
@@ -159,13 +158,11 @@ msgstr ""
 "Clang-alapú automatikus kiegészítés, szemantikus kiemelés, és diagnosztika"
 
 #: ../data/org.gnome.Builder.appdata.xml.in.h:11
-#| msgid "Clang based auto-completion, semantic highlighting, and diagnostics"
 msgid "Python based auto-completion, semantic highlighting, and diagnostics"
 msgstr ""
 "Python-alapú automatikus kiegészítés, szemantikus kiemelés, és diagnosztika"
 
 #: ../data/org.gnome.Builder.appdata.xml.in.h:12
-#| msgid "Clang based auto-completion, semantic highlighting, and diagnostics"
 msgid "Vala based auto-completion and diagnostics"
 msgstr ""
 "Vala-alapú automatikus kiegészítés, szemantikus kiemelés, és diagnosztika"
@@ -311,7 +308,7 @@ msgstr "Ha be van kapcsolva, akkor a szerkesztő megjeleníti a sorok számát."
 
 #: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:11
 #: ../data/ui/ide-editor-tweak-widget.ui.h:6
-#: ../libide/preferences/ide-preferences-builtin.c:119
+#: ../libide/preferences/ide-preferences-builtin.c:128
 msgid "Smart Backspace"
 msgstr "Okos visszatörlés"
 
@@ -323,7 +320,7 @@ msgstr ""
 "A Visszatörlés kitörli a felesleges szóközöket a behúzásnak megfelelően."
 
 #: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:13
-#: ../libide/preferences/ide-preferences-builtin.c:118
+#: ../libide/preferences/ide-preferences-builtin.c:127
 msgid "Smart Home and End"
 msgstr "Okos Home és End"
 
@@ -342,7 +339,7 @@ msgstr ""
 "szerkesztő."
 
 #: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:17
-#: ../libide/preferences/ide-preferences-builtin.c:141
+#: ../libide/preferences/ide-preferences-builtin.c:150
 msgid "Show overview map"
 msgstr "Áttekintő térkép megjelenítése"
 
@@ -375,7 +372,7 @@ msgid "The various types of space to draw in the editor."
 msgstr "A különböző szóközök kirajzolása a szerkesztőben."
 
 #: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:23
-#: ../libide/preferences/ide-preferences-builtin.c:130
+#: ../libide/preferences/ide-preferences-builtin.c:139
 msgid "Overscroll"
 msgstr "Túlgörgetés"
 
@@ -433,12 +430,21 @@ msgid "Search directories for projects."
 msgstr "Mappák átvizsgálása projektek után."
 
 #: ../data/gsettings/org.gnome.builder.gschema.xml.in.h:11
+#: ../libide/preferences/ide-preferences-builtin.c:312
 msgid "Projects directory"
 msgstr "Projektek mappa"
 
 #: ../data/gsettings/org.gnome.builder.gschema.xml.in.h:12
 msgid "Directory for all builder projects"
 msgstr "Az összes projekt helye"
+
+#: ../data/gsettings/org.gnome.builder.gschema.xml.in.h:13
+msgid "Restore Previous Files"
+msgstr "Előző fájlok visszaállítása"
+
+#: ../data/gsettings/org.gnome.builder.gschema.xml.in.h:14
+msgid "Restore previously opened files when loading a project."
+msgstr "Korábban megnyitott fájlok visszaállítása projekt betöltésekor."
 
 #: ../data/gsettings/org.gnome.builder.plugin.gschema.xml.in.h:2
 msgid "If the plugin should be enabled"
@@ -522,7 +528,6 @@ msgid "Bottom Panel Position"
 msgstr "Alsó panel pozíció"
 
 #: ../data/gsettings/org.gnome.builder.workbench.gschema.xml.in.h:12
-#| msgid "The width in pixel units of the bottom panel."
 msgid "The height in pixel units of the bottom panel."
 msgstr "Az alsó panel magassága képpontokban megadva."
 
@@ -780,17 +785,17 @@ msgid "Auto indent"
 msgstr "Automatikus behúzás"
 
 #: ../data/ui/ide-editor-tweak-widget.ui.h:7
-#: ../libide/preferences/ide-preferences-builtin.c:234
+#: ../libide/preferences/ide-preferences-builtin.c:243
 msgid "Indentation"
 msgstr "Behúzás"
 
 #: ../data/ui/ide-editor-tweak-widget.ui.h:8
-#: ../libide/preferences/ide-preferences-builtin.c:145
+#: ../libide/preferences/ide-preferences-builtin.c:154
 msgid "Spaces"
 msgstr "Szóközök"
 
 #: ../data/ui/ide-editor-tweak-widget.ui.h:9
-#: ../libide/preferences/ide-preferences-builtin.c:146
+#: ../libide/preferences/ide-preferences-builtin.c:155
 msgid "Tabs"
 msgstr "Tabulátorok"
 
@@ -1147,23 +1152,31 @@ msgid "Jump to definition of symbol"
 msgstr "Ugrás szimbólumdefinícióra"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:45
+#| msgctxt "shortcut window"
+#| msgid "Move sectionport up within the file"
 msgctxt "shortcut window"
-msgid "Move sectionport up within the file"
+msgid "Move viewport up within the file"
 msgstr "Nézőpont mozgatása felfelé a fájlban"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:46
+#| msgctxt "shortcut window"
+#| msgid "Move sectionport down within the file"
 msgctxt "shortcut window"
-msgid "Move sectionport down within the file"
+msgid "Move viewport down within the file"
 msgstr "Nézőpont mozgatása lefelé a fájlban"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:47
+#| msgctxt "shortcut window"
+#| msgid "Move sectionport to end of file"
 msgctxt "shortcut window"
-msgid "Move sectionport to end of file"
+msgid "Move viewport to end of file"
 msgstr "Nézőpont mozgatása a fájl végére"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:48
+#| msgctxt "shortcut window"
+#| msgid "Move sectionport to beginning of file"
 msgctxt "shortcut window"
-msgid "Move sectionport to beginning of file"
+msgid "Move viewport to beginning of file"
 msgstr "Nézőpont mozgatása a fájl elejére"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:49
@@ -1212,19 +1225,19 @@ msgstr "Nincs fájl megadva."
 msgid "Line %u, Column %u"
 msgstr "%u. sor, %u. oszlop"
 
-#: ../libide/editor/ide-editor-frame.c:244
+#: ../libide/editor/ide-editor-frame.c:247
 #, c-format
 msgid "%u of %u"
 msgstr "%u / %u"
 
-#: ../libide/editor/ide-editor-frame.c:672
+#: ../libide/editor/ide-editor-frame.c:679
 #: ../plugins/project-tree/gtk/menus.ui.h:1
 msgid "Re_veal in Project Tree"
 msgstr "Meg_jelenítés a projektfában"
 
-#: ../libide/editor/ide-editor-perspective.c:444
-#: ../libide/preferences/ide-preferences-builtin.c:102
-#: ../libide/preferences/ide-preferences-builtin.c:125
+#: ../libide/editor/ide-editor-perspective.c:447
+#: ../libide/preferences/ide-preferences-builtin.c:105
+#: ../libide/preferences/ide-preferences-builtin.c:134
 msgid "Editor"
 msgstr "Szerkesztő"
 
@@ -1236,6 +1249,7 @@ msgstr "Dokumentum mentése"
 #: ../libide/editor/ide-editor-view-actions.c:438
 #: ../libide/ide-workbench-actions.c:67
 #: ../plugins/build-tools/gbp-build-panel.ui.h:8
+#: ../plugins/create-project/gbp-create-project-widget.c:451
 #: ../plugins/terminal/gb-terminal-view-actions.c:305
 msgid "Cancel"
 msgstr "Mégse"
@@ -1361,7 +1375,7 @@ msgstr "Adja meg a D-Bus címet"
 msgid "No such worker"
 msgstr "Nincs ilyen építő"
 
-#: ../libide/ide-buffer.c:2344
+#: ../libide/ide-buffer.c:2341
 msgid "The current language lacks a symbol resolver."
 msgstr "Az aktuális nyelvhez nem tartozik szimbólumfeloldó"
 
@@ -1387,11 +1401,11 @@ msgstr "Nem sikerült a puffer mentése, a helyreállítás figyelmen kívül ha
 msgid "%s does not support building"
 msgstr "%s nem támogatja az összeállítást"
 
-#: ../libide/ide-build-result.c:217
+#: ../libide/ide-build-result.c:242
 msgid "Failed to open stderr stream."
 msgstr "Az stderr hibafolyam megnyitása meghiúsult."
 
-#: ../libide/ide-build-result.c:247
+#: ../libide/ide-build-result.c:272
 msgid "Failed to open stdout stream."
 msgstr "Az stdout adatfolyam megnyitása meghiúsult."
 
@@ -1409,11 +1423,11 @@ msgstr "A libide használata előtt meg kell hívni a(z) %s() függvényt."
 msgid "Default Configuration"
 msgstr "Alapértelmezett beállítások"
 
-#: ../libide/ide-context.c:1828
+#: ../libide/ide-context.c:1837
 msgid "An unload request is already pending"
 msgstr "Egy lecsatolási kérés már várakozik"
 
-#: ../libide/ide-context.c:1943
+#: ../libide/ide-context.c:1952
 msgid "Context has already been restored."
 msgstr "A környezet már vissza lett állítva."
 
@@ -1474,7 +1488,7 @@ msgid "Chunk does not belong to snippet."
 msgstr "A részlet nem tartozik a töredékhez."
 
 #: ../libide/ide-source-snippet-completion-provider.c:297
-#: ../libide/preferences/ide-preferences-builtin.c:173
+#: ../libide/preferences/ide-preferences-builtin.c:182
 msgid "Snippets"
 msgstr "Töredékek"
 
@@ -1488,17 +1502,17 @@ msgstr "A(z) „%s” könyvtár megnyitása meghiúsult"
 msgid "Failed to load file: %s: %s"
 msgstr "Nem sikerült a(z) „%s” fájlt megnyitni: %s"
 
-#: ../libide/ide-source-view.c:4969
+#: ../libide/ide-source-view.c:5034
 #, c-format
 msgid "Insert “%s”"
 msgstr "„%s” beszúrása"
 
-#: ../libide/ide-source-view.c:4971
+#: ../libide/ide-source-view.c:5036
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "A(z) „%s” cseréje ezzel: „%s”"
 
-#: ../libide/ide-source-view.c:5085
+#: ../libide/ide-source-view.c:5150
 msgid "Apply Fix-It"
 msgstr "Javítás érvényesítése"
 
@@ -1554,7 +1568,7 @@ msgstr "Az URI nem abszolút, és nem lett bázis URI megadva"
 msgid "Could not parse '%s' as absolute URI"
 msgstr "A(z) „%s” nem dolgozható fel abszolút URI-ként"
 
-#: ../libide/ide-uri.c:1188
+#: ../libide/ide-uri.c:1203
 #, c-format
 msgid "URI '%s' has no host component"
 msgstr "A(z) „%s” URI-nak nincs gépnév része"
@@ -1572,224 +1586,224 @@ msgstr "Megnyitás"
 msgid "%s - Builder"
 msgstr "%s – Építő"
 
-#: ../libide/preferences/ide-preferences-builtin.c:40
+#: ../libide/preferences/ide-preferences-builtin.c:41
 msgid "Extensions"
 msgstr "Kiterjesztések"
 
-#: ../libide/preferences/ide-preferences-builtin.c:41
+#: ../libide/preferences/ide-preferences-builtin.c:42
 msgid "Installed Extensions"
 msgstr "Telepített kiterjesztések"
 
-#: ../libide/preferences/ide-preferences-builtin.c:42
+#: ../libide/preferences/ide-preferences-builtin.c:43
 msgid "Bundled Extensions"
 msgstr "Csomagolt kiterjesztések"
 
-#: ../libide/preferences/ide-preferences-builtin.c:77
+#: ../libide/preferences/ide-preferences-builtin.c:80
 msgid "Appearance"
 msgstr "Megjelenés"
 
-#: ../libide/preferences/ide-preferences-builtin.c:79
+#: ../libide/preferences/ide-preferences-builtin.c:82
 msgid "Themes"
 msgstr "Témák"
 
-#: ../libide/preferences/ide-preferences-builtin.c:80
+#: ../libide/preferences/ide-preferences-builtin.c:83
 msgid "Dark Theme"
 msgstr "Sötét téma"
 
-#: ../libide/preferences/ide-preferences-builtin.c:80
+#: ../libide/preferences/ide-preferences-builtin.c:83
 msgid "Whether Builder should use a dark theme"
 msgstr "Az Építő a sötét témát használja-e"
 
-#: ../libide/preferences/ide-preferences-builtin.c:80
+#: ../libide/preferences/ide-preferences-builtin.c:83
 msgid "dark theme"
 msgstr "sötét téma"
 
-#: ../libide/preferences/ide-preferences-builtin.c:81
+#: ../libide/preferences/ide-preferences-builtin.c:84
 msgid "Grid Pattern"
 msgstr "Rácsminta"
 
-#: ../libide/preferences/ide-preferences-builtin.c:81
+#: ../libide/preferences/ide-preferences-builtin.c:84
 msgid "Display a grid pattern underneath source code"
 msgstr "Rácsmintát jelenít meg a forráskód alatt."
 
-#: ../libide/preferences/ide-preferences-builtin.c:101
+#: ../libide/preferences/ide-preferences-builtin.c:104
 msgid "Font"
 msgstr "Betűkészlet"
 
-#: ../libide/preferences/ide-preferences-builtin.c:102
+#: ../libide/preferences/ide-preferences-builtin.c:105
 msgctxt "Keywords"
 msgid "editor font monospace"
 msgstr "szerkesztő betűkészlete rögzített szélességű"
 
 #. XXX: This belongs in terminal addin
-#: ../libide/preferences/ide-preferences-builtin.c:104
+#: ../libide/preferences/ide-preferences-builtin.c:107
 #: ../plugins/terminal/gb-terminal-workbench-addin.c:90
 msgid "Terminal"
 msgstr "Terminál"
 
-#: ../libide/preferences/ide-preferences-builtin.c:104
+#: ../libide/preferences/ide-preferences-builtin.c:107
 msgctxt "Keywords"
 msgid "terminal font monospace"
 msgstr "terminál betűkészlete rögzített szélességű"
 
-#: ../libide/preferences/ide-preferences-builtin.c:110
+#: ../libide/preferences/ide-preferences-builtin.c:119
 msgid "Keyboard"
 msgstr "Billentyűzet"
 
-#: ../libide/preferences/ide-preferences-builtin.c:112
+#: ../libide/preferences/ide-preferences-builtin.c:121
 msgid "Emulation"
 msgstr "Utánzás"
 
-#: ../libide/preferences/ide-preferences-builtin.c:113
+#: ../libide/preferences/ide-preferences-builtin.c:122
 msgid "Default keybinding mode which mimics gedit"
 msgstr "Az alapértelmezett gyorsbillentyűk a geditet utánozzák"
 
-#: ../libide/preferences/ide-preferences-builtin.c:114
+#: ../libide/preferences/ide-preferences-builtin.c:123
 msgid "Emacs"
 msgstr "Emacs"
 
-#: ../libide/preferences/ide-preferences-builtin.c:114
+#: ../libide/preferences/ide-preferences-builtin.c:123
 msgid "Emulates the Emacs text editor"
 msgstr "Az Emacs szövegszerkesztőt utánozza"
 
-#: ../libide/preferences/ide-preferences-builtin.c:115
+#: ../libide/preferences/ide-preferences-builtin.c:124
 msgid "Vim"
 msgstr "Vim"
 
-#: ../libide/preferences/ide-preferences-builtin.c:115
+#: ../libide/preferences/ide-preferences-builtin.c:124
 msgid "Emulates the Vim text editor"
 msgstr "A Vim szövegszerkesztőt utánozza."
 
-#: ../libide/preferences/ide-preferences-builtin.c:117
+#: ../libide/preferences/ide-preferences-builtin.c:126
 msgid "Movement"
 msgstr "Mozgás"
 
-#: ../libide/preferences/ide-preferences-builtin.c:118
+#: ../libide/preferences/ide-preferences-builtin.c:127
 msgid "Home moves to first non-whitespace character"
 msgstr "A Home az első nem üres karakterhez ugrik"
 
-#: ../libide/preferences/ide-preferences-builtin.c:119
+#: ../libide/preferences/ide-preferences-builtin.c:128
 msgid ""
 "Backspace will remove extra space to keep you aligned with your indentation"
 msgstr "A Backspace kitörli a felesleges szóközöket a behúzáshoz igazodva."
 
-#: ../libide/preferences/ide-preferences-builtin.c:127
+#: ../libide/preferences/ide-preferences-builtin.c:136
 msgid "Cursor"
 msgstr "Kurzor"
 
-#: ../libide/preferences/ide-preferences-builtin.c:128
+#: ../libide/preferences/ide-preferences-builtin.c:137
 msgid "Restore cursor position"
 msgstr "A kurzor pozíciójának visszaállítása"
 
-#: ../libide/preferences/ide-preferences-builtin.c:128
+#: ../libide/preferences/ide-preferences-builtin.c:137
 msgid "Restore cursor position when a file is reopened"
 msgstr "A kurzorpozíció visszaállítása a fájl újranyitásakor"
 
-#: ../libide/preferences/ide-preferences-builtin.c:129
+#: ../libide/preferences/ide-preferences-builtin.c:138
 msgid "Scroll Offset"
 msgstr "Görgetési eltolás"
 
-#: ../libide/preferences/ide-preferences-builtin.c:129
+#: ../libide/preferences/ide-preferences-builtin.c:138
 msgid "Minimum number of lines to keep above and below the cursor"
 msgstr "A kurzor fölötti és alatti sorok legkisebb száma"
 
-#: ../libide/preferences/ide-preferences-builtin.c:130
+#: ../libide/preferences/ide-preferences-builtin.c:139
 msgid "Allow the editor to scroll past the end of the buffer"
 msgstr "A szerkesztő puffer végi túlgörgetésének engedélyezése"
 
-#: ../libide/preferences/ide-preferences-builtin.c:132
+#: ../libide/preferences/ide-preferences-builtin.c:141
 msgid "Line Information"
 msgstr "Sorinformációk"
 
-#: ../libide/preferences/ide-preferences-builtin.c:133
+#: ../libide/preferences/ide-preferences-builtin.c:142
 msgid "Line numbers"
 msgstr "Sorszámok"
 
-#: ../libide/preferences/ide-preferences-builtin.c:133
+#: ../libide/preferences/ide-preferences-builtin.c:142
 msgid "Show line number at beginning of each line"
 msgstr "Sorok számának megjelenítése minden sor elején"
 
-#: ../libide/preferences/ide-preferences-builtin.c:134
+#: ../libide/preferences/ide-preferences-builtin.c:143
 msgid "Line changes"
 msgstr "Sorok változásai"
 
-#: ../libide/preferences/ide-preferences-builtin.c:134
+#: ../libide/preferences/ide-preferences-builtin.c:143
 msgid "Show if a line was added or modified next to line number"
 msgstr "Jelezze-e az új és megváltozott sorokat a sor száma mellett"
 
-#: ../libide/preferences/ide-preferences-builtin.c:136
+#: ../libide/preferences/ide-preferences-builtin.c:145
 msgid "Highlight"
 msgstr "Kiemelés"
 
-#: ../libide/preferences/ide-preferences-builtin.c:137
+#: ../libide/preferences/ide-preferences-builtin.c:146
 msgid "Current line"
 msgstr "Jelenlegi sor"
 
-#: ../libide/preferences/ide-preferences-builtin.c:137
+#: ../libide/preferences/ide-preferences-builtin.c:146
 msgid "Make current line stand out with highlights"
 msgstr "Aktuális sor kiemelése"
 
-#: ../libide/preferences/ide-preferences-builtin.c:138
+#: ../libide/preferences/ide-preferences-builtin.c:147
 msgid "Matching brackets"
 msgstr "Zárójelpárok"
 
-#: ../libide/preferences/ide-preferences-builtin.c:138
+#: ../libide/preferences/ide-preferences-builtin.c:147
 msgid "Highlight matching brackets based on cursor position"
 msgstr "Zárójelpárok kiemelése a kurzorpozíció alapján"
 
-#: ../libide/preferences/ide-preferences-builtin.c:140
+#: ../libide/preferences/ide-preferences-builtin.c:149
 msgid "Code Overview"
 msgstr "Kód áttekintése"
 
-#: ../libide/preferences/ide-preferences-builtin.c:141
+#: ../libide/preferences/ide-preferences-builtin.c:150
 msgid "A zoomed out view to enhance navigating source code"
 msgstr "Egy kicsinyített nézet a forráskódban navigálás javítására"
 
-#: ../libide/preferences/ide-preferences-builtin.c:142
+#: ../libide/preferences/ide-preferences-builtin.c:151
 msgid "Automatically hide overview map"
 msgstr "Áttekintő térkép automatikus elrejtése"
 
-#: ../libide/preferences/ide-preferences-builtin.c:142
+#: ../libide/preferences/ide-preferences-builtin.c:151
 msgid "Automatically hide map when editor loses focus"
 msgstr "A térkép automatikus elrejtése, ha a szerkesztő elveszti a fókuszt"
 
-#: ../libide/preferences/ide-preferences-builtin.c:144
+#: ../libide/preferences/ide-preferences-builtin.c:153
 msgid "Whitespace Characters"
 msgstr "Üres karakterek"
 
-#: ../libide/preferences/ide-preferences-builtin.c:147
+#: ../libide/preferences/ide-preferences-builtin.c:156
 msgid "New line and carriage return"
 msgstr "Soremelés és kocsivissza"
 
-#: ../libide/preferences/ide-preferences-builtin.c:148
+#: ../libide/preferences/ide-preferences-builtin.c:157
 msgid "Non-breaking spaces"
 msgstr "Nem-törő szóközök"
 
-#: ../libide/preferences/ide-preferences-builtin.c:149
+#: ../libide/preferences/ide-preferences-builtin.c:158
 msgid "Spaces inside of text"
 msgstr "Szóközök szövegen belül"
 
-#: ../libide/preferences/ide-preferences-builtin.c:150
+#: ../libide/preferences/ide-preferences-builtin.c:159
 msgid "Trailing Only"
 msgstr "Csak sorvégi"
 
-#: ../libide/preferences/ide-preferences-builtin.c:151
+#: ../libide/preferences/ide-preferences-builtin.c:160
 msgid "Leading Only"
 msgstr "Csak soreleji"
 
-#: ../libide/preferences/ide-preferences-builtin.c:157
+#: ../libide/preferences/ide-preferences-builtin.c:166
 msgid "Code Insight"
 msgstr "Kódelemzés"
 
-#: ../libide/preferences/ide-preferences-builtin.c:159
+#: ../libide/preferences/ide-preferences-builtin.c:168
 msgid "Highlighting"
 msgstr "Kiemelés"
 
-#: ../libide/preferences/ide-preferences-builtin.c:160
+#: ../libide/preferences/ide-preferences-builtin.c:169
 msgid "Semantic Highlighting"
 msgstr "Szemantikus kiemelés"
 
-#: ../libide/preferences/ide-preferences-builtin.c:160
+#: ../libide/preferences/ide-preferences-builtin.c:169
 msgid ""
 "Use code insight to highlight additional information discovered in source "
 "file"
@@ -1797,25 +1811,25 @@ msgstr ""
 "Kódelemzés használata a forrásfájlban felfedezett további információk "
 "kiemeléséhez"
 
-#: ../libide/preferences/ide-preferences-builtin.c:162
+#: ../libide/preferences/ide-preferences-builtin.c:171
 msgid "Completion"
 msgstr "Kiegészítés"
 
-#: ../libide/preferences/ide-preferences-builtin.c:163
+#: ../libide/preferences/ide-preferences-builtin.c:172
 msgid "Suggest words found in open files"
 msgstr "Szókiegészítési javaslatok a megnyitott dokumentumokban"
 
-#: ../libide/preferences/ide-preferences-builtin.c:163
+#: ../libide/preferences/ide-preferences-builtin.c:172
 msgid ""
 "Suggests completions as you type based on words found in any open document"
 msgstr ""
 "Szókiegészítési javaslatok miközben szavakat ír be bármelyik dokumentumban"
 
-#: ../libide/preferences/ide-preferences-builtin.c:164
+#: ../libide/preferences/ide-preferences-builtin.c:173
 msgid "Suggest completions using Ctags"
 msgstr "Kiegészítési javaslatok Ctags alapján"
 
-#: ../libide/preferences/ide-preferences-builtin.c:164
+#: ../libide/preferences/ide-preferences-builtin.c:173
 msgid ""
 "Create and manages a Ctags database for completing class names, functions, "
 "and more"
@@ -1823,135 +1837,152 @@ msgstr ""
 "Létrehoz és kezel egy Ctags adatbázist osztálynevek, függvények stb. "
 "kiegészítésére."
 
-#: ../libide/preferences/ide-preferences-builtin.c:165
+#: ../libide/preferences/ide-preferences-builtin.c:174
 msgid "Suggest completions using Clang (Experimental)"
 msgstr "Kiegészítési javaslatok Clang alapján (kísérleti)"
 
-#: ../libide/preferences/ide-preferences-builtin.c:165
+#: ../libide/preferences/ide-preferences-builtin.c:174
 msgid "Use Clang to suggest completions for C and C++ languages"
 msgstr "Használja a Clanget kiegészítésre C és C++ nyelvek esetén."
 
-#: ../libide/preferences/ide-preferences-builtin.c:167
+#: ../libide/preferences/ide-preferences-builtin.c:176
 msgid "Diagnostics"
 msgstr "Diagnosztika"
 
-#: ../libide/preferences/ide-preferences-builtin.c:176
+#: ../libide/preferences/ide-preferences-builtin.c:185
 msgid "Code snippets"
 msgstr "Kódtöredékek"
 
-#: ../libide/preferences/ide-preferences-builtin.c:176
+#: ../libide/preferences/ide-preferences-builtin.c:185
 msgid "Use code fragments to increase typing efficiency"
 msgstr "Kódtöredékek használata a gépelés hatékonyságának növelése érdekében"
 
-#: ../libide/preferences/ide-preferences-builtin.c:190
+#: ../libide/preferences/ide-preferences-builtin.c:199
 msgid "Programming Languages"
 msgstr "Programozási nyelvek"
 
-#: ../libide/preferences/ide-preferences-builtin.c:227
+#: ../libide/preferences/ide-preferences-builtin.c:236
 msgid "Trim trailing whitespace"
 msgstr "Sorvégi üres karakterek levágása"
 
-#: ../libide/preferences/ide-preferences-builtin.c:227
+#: ../libide/preferences/ide-preferences-builtin.c:236
 msgid "Upon saving, trailing whitespace from modified lines will be trimmed."
 msgstr ""
 "Mentéskor a módosított sorokban a sorvégi helykitöltő karakterek levágásra "
 "kerülnek."
 
-#: ../libide/preferences/ide-preferences-builtin.c:228
+#: ../libide/preferences/ide-preferences-builtin.c:237
 msgid "Overwrite Braces"
 msgstr "Zárójelek felülírása"
 
-#: ../libide/preferences/ide-preferences-builtin.c:228
+#: ../libide/preferences/ide-preferences-builtin.c:237
 msgid "Overwrite closing braces"
 msgstr "Záró zárójelek felülírása"
 
-#: ../libide/preferences/ide-preferences-builtin.c:230
+#: ../libide/preferences/ide-preferences-builtin.c:239
 msgid "Margins"
 msgstr "Margók"
 
-#: ../libide/preferences/ide-preferences-builtin.c:231
+#: ../libide/preferences/ide-preferences-builtin.c:240
 msgid "Show right margin"
 msgstr "Jobb margó megjelenítése"
 
-#: ../libide/preferences/ide-preferences-builtin.c:232
+#: ../libide/preferences/ide-preferences-builtin.c:241
 msgid "Right margin position"
 msgstr "Jobb margó pozíciója"
 
-#: ../libide/preferences/ide-preferences-builtin.c:232
+#: ../libide/preferences/ide-preferences-builtin.c:241
 msgid "Position in spaces for the right margin"
 msgstr "Jobb margó pozíciójának megadása szóközökkel számolva"
 
-#: ../libide/preferences/ide-preferences-builtin.c:235
+#: ../libide/preferences/ide-preferences-builtin.c:244
 msgid "Tab width"
 msgstr "Tabulátor szélessége"
 
-#: ../libide/preferences/ide-preferences-builtin.c:235
+#: ../libide/preferences/ide-preferences-builtin.c:244
 msgid "Width of a tab character in spaces"
 msgstr "A tabulátor karakter szélessége szóközökben"
 
-#: ../libide/preferences/ide-preferences-builtin.c:236
+#: ../libide/preferences/ide-preferences-builtin.c:245
 msgid "Insert spaces instead of tabs"
 msgstr "Szóközök beillesztése tabulátorok helyett"
 
-#: ../libide/preferences/ide-preferences-builtin.c:236
+#: ../libide/preferences/ide-preferences-builtin.c:245
 msgid "Prefer spaces over use of tabs"
 msgstr "Szóközök előnyben részesítése a tabulátorok helyett"
 
-#: ../libide/preferences/ide-preferences-builtin.c:237
+#: ../libide/preferences/ide-preferences-builtin.c:246
 msgid "Automatically indent"
 msgstr "Automatikus behúzás"
 
-#: ../libide/preferences/ide-preferences-builtin.c:237
+#: ../libide/preferences/ide-preferences-builtin.c:246
 msgid "Indent source code as you type"
 msgstr "A forráskód behúzása gépelés közben"
 
-#: ../libide/preferences/ide-preferences-builtin.c:243
+#: ../libide/preferences/ide-preferences-builtin.c:256
+#: ../libide/preferences/ide-preferences-builtin.c:274
+msgid "Default"
+msgstr "Alapértelmezett"
+
+#: ../libide/preferences/ide-preferences-builtin.c:261
+#: ../libide/preferences/ide-preferences-builtin.c:279
+msgid "Number of CPU"
+msgstr "CPU-k száma"
+
+#: ../libide/preferences/ide-preferences-builtin.c:294
 #: ../plugins/build-tools/gbp-build-panel.c:426
 msgid "Build"
 msgstr "Összeállítás"
 
-#: ../libide/preferences/ide-preferences-builtin.c:245
+#: ../libide/preferences/ide-preferences-builtin.c:296
 #: ../plugins/build-tools/gbp-build-configuration-view.ui.h:1
 msgid "General"
 msgstr "Általános"
 
-#: ../libide/preferences/ide-preferences-builtin.c:246
+#: ../libide/preferences/ide-preferences-builtin.c:297
 msgid "Build Workers"
 msgstr "Építők"
 
-#: ../libide/preferences/ide-preferences-builtin.c:246
+#: ../libide/preferences/ide-preferences-builtin.c:297
 msgid "Number of parallel build workers"
 msgstr "Párhuzamos építők száma"
 
-#: ../libide/preferences/ide-preferences-builtin.c:252
+#: ../libide/preferences/ide-preferences-builtin.c:309
 msgid "Projects"
 msgstr "Projektek"
 
-#: ../libide/preferences/ide-preferences-builtin.c:254
+#: ../libide/preferences/ide-preferences-builtin.c:311
 msgid "Workspace"
 msgstr "Munkaterület"
 
-#: ../libide/preferences/ide-preferences-builtin.c:255
-msgid "Projects Directory"
-msgstr "Projektek mappa"
-
-#: ../libide/preferences/ide-preferences-builtin.c:255
+#: ../libide/preferences/ide-preferences-builtin.c:312
 msgid "A place for all your projects"
 msgstr "Az összes projektjének helye"
 
-#: ../libide/preferences/ide-preferences-builtin.c:257
+#: ../libide/preferences/ide-preferences-builtin.c:313
+#| msgctxt "shortcut window"
+#| msgid "Move to previous error in file"
+msgid "Restore previously opened files"
+msgstr "Korábban megnyitott fájlok visszaállítása"
+
+#: ../libide/preferences/ide-preferences-builtin.c:313
+#| msgid "The prefix to use when installing the project"
+msgid "Open previously opened files when loading a project"
+msgstr "Korábban megnyitott fájlok megnyitása projekt betöltésekor"
+
+#: ../libide/preferences/ide-preferences-builtin.c:315
 msgid "Project Discovery"
 msgstr "Projektek feltérképezése"
 
-#: ../libide/preferences/ide-preferences-builtin.c:258
+#: ../libide/preferences/ide-preferences-builtin.c:316
 msgid "Discover projects on my computer"
 msgstr "A számítógépen lévő projektek feltérképezése"
 
-#: ../libide/preferences/ide-preferences-builtin.c:258
+#: ../libide/preferences/ide-preferences-builtin.c:316
 msgid "Scan your computer for existing projects"
 msgstr "Átvizsgálja a számítógépet meglévő projektek után"
 
-#: ../libide/preferences/ide-preferences-perspective.c:888
+#: ../libide/preferences/ide-preferences-perspective.c:900
 msgid "Preferences"
 msgstr "Beállítások"
 
@@ -1972,11 +2003,11 @@ msgstr "A parancsfájlnak helyi fájlrendszeren kell lennie."
 msgid "The script \"%s\" is not a PyGObject file."
 msgstr "A(z) „%s” nem egy PyGObject parancsfájl."
 
-#: ../libide/search/ide-omni-search-display.c:264
+#: ../libide/search/ide-omni-search-display.c:269
 msgid "Cannot add provider more than once."
 msgstr "A szolgáltató nem adható hozzá egynél többször."
 
-#: ../libide/search/ide-omni-search-display.c:340
+#: ../libide/search/ide-omni-search-display.c:345
 msgid "The provider could not be found."
 msgstr "A szolgáltató nem található."
 
@@ -2018,7 +2049,7 @@ msgid "Success"
 msgstr "Sikeres"
 
 #: ../plugins/autotools/ide-autotools-builder.c:161
-#: ../plugins/autotools/ide-autotools-build-task.c:872
+#: ../plugins/autotools/ide-autotools-build-task.c:913
 msgid "Building…"
 msgstr "Összeállítás…"
 
@@ -2026,46 +2057,46 @@ msgstr "Összeállítás…"
 msgid "Failed to locate configure.ac"
 msgstr "Nem található a „configure.ac” fájl"
 
-#: ../plugins/autotools/ide-autotools-build-task.c:174
+#: ../plugins/autotools/ide-autotools-build-task.c:177
 msgid "Directory must be on a locally mounted filesystem."
 msgstr "A mappának csatolva kell lennie a helyi fájlrendszerre."
 
-#: ../plugins/autotools/ide-autotools-build-task.c:548
+#: ../plugins/autotools/ide-autotools-build-task.c:556
 msgid "Cannot execute build task more than once."
 msgstr "Az összeállítási feladat nem futtatható egynél többször."
 
-#: ../plugins/autotools/ide-autotools-build-task.c:642
+#: ../plugins/autotools/ide-autotools-build-task.c:683
 msgid "Failed to create build directory."
 msgstr "Az összeállítási könyvtár létrehozása meghiúsult."
 
-#: ../plugins/autotools/ide-autotools-build-task.c:651
+#: ../plugins/autotools/ide-autotools-build-task.c:692
 #, c-format
 msgid "'%s' is not a directory."
 msgstr "A(z) „%s” nem könyvtár."
 
-#: ../plugins/autotools/ide-autotools-build-task.c:690
+#: ../plugins/autotools/ide-autotools-build-task.c:731
 #, c-format
 msgid "autogen.sh is missing from project directory (%s)."
 msgstr "Az autogen.sh hiányzik a projektkönyvtárból (%s)."
 
-#: ../plugins/autotools/ide-autotools-build-task.c:700
+#: ../plugins/autotools/ide-autotools-build-task.c:741
 msgid "autogen.sh is not executable."
 msgstr "Az autogen.sh nem futtatható."
 
-#: ../plugins/autotools/ide-autotools-build-task.c:704
+#: ../plugins/autotools/ide-autotools-build-task.c:745
 msgid "Running autogen…"
 msgstr "Az Autogen futtatása…"
 
-#: ../plugins/autotools/ide-autotools-build-task.c:738
+#: ../plugins/autotools/ide-autotools-build-task.c:779
 #, c-format
 msgid "autogen.sh failed to create configure (%s)"
 msgstr "Az autogen.sh nem tudta létrehozni a configure-t (%s)"
 
-#: ../plugins/autotools/ide-autotools-build-task.c:773
+#: ../plugins/autotools/ide-autotools-build-task.c:814
 msgid "Running configure…"
 msgstr "A Configure futtatása…"
 
-#: ../plugins/autotools/ide-autotools-build-task.c:870
+#: ../plugins/autotools/ide-autotools-build-task.c:911
 msgid "Cleaning…"
 msgstr "Takarítás…"
 
@@ -2073,19 +2104,19 @@ msgstr "Takarítás…"
 msgid "Invalid makefile provided, ignoring."
 msgstr "A megadott makefile érvénytelen, figyelmen kívül hagyva."
 
-#: ../plugins/autotools-templates/autotools_templates/__init__.py:198
+#: ../plugins/autotools-templates/autotools_templates/__init__.py:200
 msgid "Shared Library"
 msgstr "Megosztott könyvtár"
 
-#: ../plugins/autotools-templates/autotools_templates/__init__.py:200
+#: ../plugins/autotools-templates/autotools_templates/__init__.py:202
 msgid "Create a new autotools project with a shared library"
 msgstr "Új autotools projekt létrehozása egy megosztott könyvtárral"
 
-#: ../plugins/autotools-templates/autotools_templates/__init__.py:221
+#: ../plugins/autotools-templates/autotools_templates/__init__.py:223
 msgid "Empty Project"
 msgstr "Üres projekt"
 
-#: ../plugins/autotools-templates/autotools_templates/__init__.py:224
+#: ../plugins/autotools-templates/autotools_templates/__init__.py:226
 msgid "Create a new empty autotools project"
 msgstr "Új üres autotools projekt létrehozása"
 
@@ -2134,7 +2165,7 @@ msgstr "Futtatókörnyezet"
 msgid "Environment"
 msgstr "Környezet"
 
-#: ../plugins/build-tools/gbp-build-log-panel.c:249
+#: ../plugins/build-tools/gbp-build-log-panel.c:254
 msgid "Build Output"
 msgstr "Összeállítás kimenete"
 
@@ -2494,38 +2525,61 @@ msgstr "Formátum karakterláncok"
 msgid "From a project template"
 msgstr "Egy projektsablonból"
 
-#: ../plugins/create-project/gbp-create-project-tool.c:132
+#: ../plugins/create-project/gbp-create-project-tool.c:136
 msgid "List available templates"
 msgstr "Elérhető sablonok felsorolása"
 
-#: ../plugins/create-project/gbp-create-project-tool.c:134
+#: ../plugins/create-project/gbp-create-project-tool.c:138
 msgid "Project template to generate"
 msgstr "Készítendő projektsablon"
 
-#: ../plugins/create-project/gbp-create-project-tool.c:136
+#: ../plugins/create-project/gbp-create-project-tool.c:140
 msgid "The target language (if supported)"
 msgstr "A célnyelv (ha támogatott)"
 
 #: ../plugins/create-project/gbp-create-project-tool.c:142
+msgid "The version control to use or \"none\" to disable"
+msgstr "A használandó verziókövetés, vagy „nincs” a letiltáshoz"
+
+#: ../plugins/create-project/gbp-create-project-tool.c:143
+#| msgid "Git"
+msgid "git"
+msgstr "git"
+
+#: ../plugins/create-project/gbp-create-project-tool.c:149
 msgid "create-project [OPTION...] PROJECT_NAME"
 msgstr "create-project [BEÁLLÍTÁS...] PROJEKTNÉV"
 
-#: ../plugins/create-project/gbp-create-project-tool.c:191
+#: ../plugins/create-project/gbp-create-project-tool.c:198
 #, c-format
 msgid "Filename must be ASCII and may not contain : or ="
 msgstr ""
 "A fájlnévnek ASCII kódolásúnak kell lennie, és nem tartalmazhat : vagy = "
 "karaktert."
 
-#: ../plugins/create-project/gbp-create-project-tool.c:295
+#: ../plugins/create-project/gbp-create-project-tool.c:372
 #, c-format
 msgid "Please specify a project name.\n"
 msgstr "Adjon meg egy projektnevet.\n"
 
-#: ../plugins/create-project/gbp-create-project-tool.c:311
+#: ../plugins/create-project/gbp-create-project-tool.c:388
 #, c-format
 msgid "Please specify a project template with --template=\n"
 msgstr "Adjon meg egy projektsablont a --template= kapcsolóval\n"
+
+#: ../plugins/create-project/gbp-create-project-widget.c:291
+#| msgid "Version Control"
+msgid "Without version control"
+msgstr "Verziókövetés nélkül"
+
+#: ../plugins/create-project/gbp-create-project-widget.c:450
+#| msgid "_Select"
+msgid "Select"
+msgstr "Kiválasztás"
+
+#: ../plugins/create-project/gbp-create-project-widget.c:554
+msgid "A failure occurred while initializing version control"
+msgstr "Hiba történt a verziókövetés előkészítésekor"
 
 #: ../plugins/create-project/gbp-create-project-widget.ui.h:2
 #: ../plugins/git/ide-git-clone-widget.ui.h:6
@@ -2537,6 +2591,11 @@ msgid "Language"
 msgstr "Nyelv"
 
 #: ../plugins/create-project/gbp-create-project-widget.ui.h:4
+#| msgid "Version Control"
+msgid "Versioning"
+msgstr "Verziókövetés"
+
+#: ../plugins/create-project/gbp-create-project-widget.ui.h:5
 msgid "Pattern"
 msgstr "Minta"
 
@@ -2663,12 +2722,12 @@ msgid "MinGW 32-bit"
 msgstr "MinGW 32 bit"
 
 #: ../plugins/project-tree/gb-new-file-popover.c:123
-#: ../plugins/project-tree/gb-rename-file-popover.c:141
+#: ../plugins/project-tree/gb-rename-file-popover.c:139
 msgid "A folder with that name already exists."
 msgstr "Már létezik ilyen nevű mappa."
 
 #: ../plugins/project-tree/gb-new-file-popover.c:126
-#: ../plugins/project-tree/gb-rename-file-popover.c:144
+#: ../plugins/project-tree/gb-rename-file-popover.c:142
 msgid "A file with that name already exists."
 msgstr "Már létezik ilyen nevű fájl."
 
@@ -2689,6 +2748,11 @@ msgstr "_Létrehozás"
 #: ../plugins/project-tree/gb-project-tree-addin.c:113
 msgid "Project"
 msgstr "Projekt"
+
+#: ../plugins/project-tree/gb-project-tree-builder.c:207
+#| msgid "_Empty File"
+msgid "Empty"
+msgstr "Üres"
 
 #: ../plugins/project-tree/gb-rename-file-popover.c:79
 #, c-format
@@ -2761,11 +2825,11 @@ msgstr ""
 "A támogatási naplófájl kiírásra került ide: „%s”. Kérjük csatolja ezt a "
 "fájlt a hibabejelentéséhez vagy támogatási kéréséhez."
 
-#: ../plugins/symbol-tree/symbol-tree-panel.c:239
+#: ../plugins/symbol-tree/symbol-tree-panel.c:240
 msgid "Current language does not support symbol resolvers"
 msgstr "Az aktuális nyelv nem támogatja a szimbólumfeloldókat"
 
-#: ../plugins/symbol-tree/symbol-tree-panel.c:335
+#: ../plugins/symbol-tree/symbol-tree-panel.c:336
 msgid "Symbols"
 msgstr "Szimbólumok"
 
@@ -2797,6 +2861,9 @@ msgstr "A Vala hibák és figyelmeztetések megjelenítése"
 #: ../plugins/vala-pack/ide-vala-preferences-addin.vala:36
 msgid "vala diagnostics warnings errors"
 msgstr "vala diagnosztika figyelmeztetések hibák"
+
+#~ msgid "Projects Directory"
+#~ msgstr "Projektek mappa"
 
 #~ msgid "Auto indentation"
 #~ msgstr "Automatikus behúzás"
@@ -2862,9 +2929,6 @@ msgstr "vala diagnosztika figyelmeztetések hibák"
 
 #~ msgid "GNOME Version"
 #~ msgstr "GNOME verzió"
-
-#~ msgid "Git"
-#~ msgstr "Git"
 
 #~ msgid "Display Document Changes"
 #~ msgstr "Dokumentumváltozások megjelenítése"
