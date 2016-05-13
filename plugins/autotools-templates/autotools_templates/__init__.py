@@ -74,7 +74,7 @@ class AutotoolsTemplate(Ide.TemplateBase, Ide.ProjectTemplate):
         name = params['name'].get_string().lower()
 
         if 'path' in params:
-            dir_path = params['path'].get_string();
+            dir_path = params['path'].get_string()
         else:
             dir_path = name
 
@@ -116,7 +116,6 @@ class AutotoolsTemplate(Ide.TemplateBase, Ide.ProjectTemplate):
         scope.get('enable_gobject_introspection').assign_boolean(True)
         scope.get('enable_vapi').assign_boolean(True)
         scope.get('enable_vala').assign_boolean(self.language == 'vala')
-        scope.get('license').assign_string('/* license */')
         scope.get('translation_copyright').assign_string('Translation copyright holder')
         scope.get('language').assign_string(self.language)
 
@@ -161,6 +160,17 @@ class AutotoolsTemplate(Ide.TemplateBase, Ide.ProjectTemplate):
             'resources/po/Makevars':                    'po/Makevars',
             'resources/po/POTFILES.in':                 'po/POTFILES.in',
         }
+
+        if 'license_full' in params:
+            license_full_path = params['license_full'].get_string()
+            files[license_full_path] = 'COPYING'
+
+            license_short_path = params['license_short'].get_string()
+            license_header = Gio.resources_lookup_data(license_short_path[11:], 0).get_data().decode()
+            scope.get('license').assign_string(license_header)
+        else:
+            scope.get('license').assign_string('/*license*/')
+
         self.prepare_files(files)
 
         modes = { 'resources/autogen.sh': 0o750 }
@@ -169,7 +179,7 @@ class AutotoolsTemplate(Ide.TemplateBase, Ide.ProjectTemplate):
         for src,dst in files.items():
             destination = directory.get_child(dst % expands)
             if src.startswith("resource://"):
-                self.add_resource(src, destination, scope, modes.get(src, 0))
+                self.add_resource(src[11:], destination, scope, modes.get(src, 0))
             else:
                 path = get_module_data_path(src)
                 self.add_path(path, destination, scope, modes.get(src, 0))

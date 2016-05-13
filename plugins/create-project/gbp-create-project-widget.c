@@ -35,6 +35,7 @@ struct _GbpCreateProjectWidget
   GtkFlowBox           *project_template_chooser;
   GtkFileChooserDialog *select_folder_dialog;
   GtkComboBoxText      *versioning_chooser;
+  GtkComboBoxText      *license_chooser;
 
   guint                 auto_update : 1;
 };
@@ -322,6 +323,7 @@ gbp_create_project_widget_constructed (GObject *object)
 
   gtk_combo_box_set_active (GTK_COMBO_BOX (self->project_language_chooser), 0);
   gtk_combo_box_set_active (GTK_COMBO_BOX (self->versioning_chooser), 0);
+  gtk_combo_box_set_active (GTK_COMBO_BOX (self->license_chooser), 0);
 
   self->auto_update = TRUE;
 }
@@ -421,6 +423,7 @@ gbp_create_project_widget_class_init (GbpCreateProjectWidgetClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GbpCreateProjectWidget, project_template_chooser);
   gtk_widget_class_bind_template_child (widget_class, GbpCreateProjectWidget, select_folder_dialog);
   gtk_widget_class_bind_template_child (widget_class, GbpCreateProjectWidget, versioning_chooser);
+  gtk_widget_class_bind_template_child (widget_class, GbpCreateProjectWidget, license_chooser);
 }
 
 static void
@@ -606,6 +609,7 @@ gbp_create_project_widget_create_async (GbpCreateProjectWidget *self,
   GbpCreateProjectTemplateIcon *template_icon;
   const gchar *text;
   const gchar *child_name;
+  const gchar *license_id;
   GList *selected_box_child;
 
   g_return_if_fail (GBP_CREATE_PROJECT_WIDGET (self));
@@ -646,6 +650,25 @@ gbp_create_project_widget_create_async (GbpCreateProjectWidget *self,
   g_hash_table_insert (params,
                        g_strdup ("language"),
                        g_variant_ref_sink (g_variant_new_string (language)));
+
+  license_id = gtk_combo_box_get_active_id (GTK_COMBO_BOX (self->license_chooser));
+
+  if (!g_str_equal (license_id, "none"))
+    {
+      g_autofree gchar *license_full_path = NULL;
+      g_autofree gchar *license_short_path = NULL;
+
+      license_full_path = g_strjoin (NULL, "resource://", "/org/gnome/builder/plugins/create-project-plugin/license/full/", license_id, NULL);
+      license_short_path = g_strjoin (NULL, "resource://", "/org/gnome/builder/plugins/create-project-plugin/license/short/", license_id, NULL);
+
+      g_hash_table_insert (params,
+                           g_strdup ("license_full"),
+                           g_variant_ref_sink (g_variant_new_string (license_full_path)));
+
+      g_hash_table_insert (params,
+                           g_strdup ("license_short"),
+                           g_variant_ref_sink (g_variant_new_string (license_short_path)));
+    }
 
   task = g_task_new (self, cancellable, callback, user_data);
   g_task_set_task_data (task, g_file_new_for_path (path), g_object_unref);

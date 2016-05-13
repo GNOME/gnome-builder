@@ -4,4 +4,22 @@
     <file>gbp-create-project-widget.ui</file>
     <file>gbp-create-project-template-icon.ui</file>
   </gresource>
+
+  <gresource prefix="/org/gnome/builder/plugins/create-project-plugin/license/full">
+    <file compressed="true" alias="agpl_3">resources/agpl_3_full</file>
+    <file compressed="true" alias="gpl_2">resources/gpl_2_full</file>
+    <file compressed="true" alias="gpl_3">resources/gpl_3_full</file>
+    <file compressed="true" alias="lgpl_2_1">resources/lgpl_2_1_full</file>
+    <file compressed="true" alias="lgpl_3">resources/lgpl_3_full</file>
+    <file compressed="true" alias="mit_x11">resources/mit_x11_full</file>
+  </gresource>
+
+  <gresource prefix="/org/gnome/builder/plugins/create-project-plugin/license/short">
+    <file compressed="true" alias="agpl_3">resources/agpl_3_short</file>
+    <file compressed="true" alias="gpl_2">resources/gpl_2_short</file>
+    <file compressed="true" alias="gpl_3">resources/gpl_3_short</file>
+    <file compressed="true" alias="lgpl_2_1">resources/lgpl_2_1_short</file>
+    <file compressed="true" alias="lgpl_3">resources/lgpl_3_short</file>
+    <file compressed="true" alias="mit_x11">resources/mit_x11_short</file>
+  </gresource>
 </gresources>

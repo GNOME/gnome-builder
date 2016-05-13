@@ -84,6 +84,20 @@
                         </style>
                       </object>
                     </child>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="label" translatable="yes">License</property>
+                        <property name="expand">true</property>
+                        <property name="halign">end</property>
+                        <property name="visible">true</property>
+                        <attributes>
+                          <attribute name="weight" value="bold"/>
+                        </attributes>
+                        <style>
+                          <class name="dim-label"/>
+                        </style>
+                      </object>
+                    </child>
                   </object>
                 </child>
                 <child type="center">
@@ -134,6 +148,21 @@
                       <object class="GtkComboBoxText" id="versioning_chooser">
                         <property name="expand">true</property>
                         <property name="visible">true</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkComboBoxText" id="license_chooser">
+                        <property name="expand">true</property>
+                        <property name="visible">true</property>
+                        <items>
+                          <item id="none" translatable="yes">None</item>
+                          <item id="agpl_3" translatable="yes">AGPL 3</item>
+                          <item id="gpl_2" translatable="yes">GPL 2</item>
+                          <item id="gpl_3" translatable="yes">GPL 3</item>
+                          <item id="lgpl_2_1" translatable="yes">LGPL 2.1</item>
+                          <item id="lgpl_3" translatable="yes">LGPL 3</item>
+                          <item id="mit_x11" translatable="yes">MIT/X11</item>
+                        </items>
                       </object>
                     </child>
                   </object>
