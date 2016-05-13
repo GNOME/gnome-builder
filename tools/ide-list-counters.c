@@ -19,6 +19,7 @@
 #include "egg-counter.h"
 
 #include <errno.h>
+#include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -74,6 +75,9 @@ main (gint   argc,
       fprintf (stderr, "usage: %s <pid>\n", argv [0]);
       return EXIT_FAILURE;
     }
+
+  if (g_str_has_prefix (argv [1], "/dev/shm/EggCounters-"))
+    argv [1] += strlen ("/dev/shm/EggCounters-");
 
   if (!int_parse_with_range (&pid, 1, G_MAXUSHORT, argv [1]))
     {
