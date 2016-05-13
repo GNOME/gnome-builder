@@ -178,14 +178,18 @@ get_diagnostics_cb (GObject      *source_object,
 {
   EggTaskCache *cache = EGG_TASK_CACHE (source_object);
   g_autoptr(GTask) task = user_data;
-  IdeGettextDiagnostics *diags;
+  g_autoptr(IdeGettextDiagnostics) diags = NULL;
   GError *error = NULL;
 
+  g_assert (EGG_IS_TASK_CACHE (cache));
+  g_assert (G_IS_TASK (task));
+
   diags = egg_task_cache_get_finish (cache, res, &error);
-  if (!diags)
+
+  if (diags == NULL)
     g_task_return_error (task, error);
   else
-    g_task_return_pointer (task, diags, g_object_unref);
+    g_task_return_pointer (task, g_steal_pointer (&diags), g_object_unref);
 }
 
 static void
