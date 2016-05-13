@@ -157,8 +157,9 @@ ide_recent_projects_get_bookmarks (IdeRecentProjects  *self,
 static void
 ide_recent_projects_load_recent (IdeRecentProjects *self)
 {
-  g_autoptr(GBookmarkFile) projects_file;
+  g_autoptr(GBookmarkFile) projects_file = NULL;
   g_autoptr(GError) error = NULL;
+  gboolean needs_sync = FALSE;
   gchar **uris;
   gssize z;
 
@@ -200,11 +201,19 @@ ide_recent_projects_load_recent (IdeRecentProjects *self)
       continue;
 
     is_project:
+      project_file = g_file_new_for_uri (uri);
+
+      if (g_file_is_native (project_file) && !g_file_query_exists (project_file, NULL))
+        {
+          g_bookmark_file_remove_item (projects_file, uri, NULL);
+          needs_sync = TRUE;
+          continue;
+        }
+
       name = g_bookmark_file_get_title (projects_file, uri, NULL);
       description = g_bookmark_file_get_description (projects_file, uri, NULL);
       modified = g_bookmark_file_get_modified  (projects_file, uri, NULL);
       last_modified_at = g_date_time_new_from_unix_local (modified);
-      project_file = g_file_new_for_uri (uri);
       directory = g_file_get_parent (project_file);
 
       languages = g_ptr_array_new ();
@@ -229,7 +238,11 @@ ide_recent_projects_load_recent (IdeRecentProjects *self)
 
       g_hash_table_insert (self->recent_uris, g_strdup (uri), NULL);
     }
+
   g_strfreev (uris);
+
+  if (needs_sync)
+    g_bookmark_file_to_file (projects_file, self->file_uri, NULL);
 }
 
 static GType
