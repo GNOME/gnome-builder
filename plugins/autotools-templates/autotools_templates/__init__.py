@@ -167,9 +167,12 @@ class AutotoolsTemplate(Ide.TemplateBase, Ide.ProjectTemplate):
         self.prepare_file_modes(modes)
 
         for src,dst in files.items():
-            path = get_module_data_path(src)
             destination = directory.get_child(dst % expands)
-            self.add_path(path, destination, scope, modes.get(src, 0))
+            if src.startswith("resource://"):
+                self.add_resource(src, destination, scope, modes.get(src, 0))
+            else:
+                path = get_module_data_path(src)
+                self.add_path(path, destination, scope, modes.get(src, 0))
 
         self.expand_all_async(cancellable, self.expand_all_cb, task)
 
