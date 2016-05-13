@@ -443,4 +443,6 @@ ide_gettext_diagnostic_provider_init (IdeGettextDiagnosticProvider *self)
                                                 populate_cache,
                                                 self,
                                                 NULL);
+
+  egg_task_cache_set_name (self->diagnostics_cache, "gettext diagnostic cache");
 }

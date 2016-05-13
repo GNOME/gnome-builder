@@ -567,6 +567,8 @@ ide_clang_service_start (IdeService *service)
                                           g_object_ref (self),
                                           g_object_unref);
 
+  egg_task_cache_set_name (self->units_cache, "clang translation-unit cache");
+
   self->index = clang_createIndex (0, 0);
   clang_CXIndex_setGlobalOptions (self->index,
                                   CXGlobalOpt_ThreadBackgroundPriorityForAll);

@@ -1470,6 +1470,8 @@ ide_makecache_init (IdeMakecache *self)
                                                  self,
                                                  NULL);
 
+  egg_task_cache_set_name (self->file_targets_cache, "makecache: file-targets-cache");
+
   self->file_flags_cache = egg_task_cache_new ((GHashFunc)g_file_hash,
                                                (GEqualFunc)g_file_equal,
                                                g_object_ref,
@@ -1480,6 +1482,8 @@ ide_makecache_init (IdeMakecache *self)
                                                ide_makecache_get_file_flags_dispatch,
                                                self,
                                                NULL);
+
+  egg_task_cache_set_name (self->file_flags_cache, "makecache: file-flags-cache");
 }
 
 GFile *

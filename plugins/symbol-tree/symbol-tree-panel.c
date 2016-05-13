@@ -329,6 +329,8 @@ symbol_tree_panel_init (SymbolTreePanel *self)
                                             self,
                                             NULL);
 
+  egg_task_cache_set_name (self->symbols_cache, "symbol-tree symbol cache");
+
   gtk_widget_init_template (GTK_WIDGET (self));
 
   g_object_set (self, "title", _("Symbols"), NULL);

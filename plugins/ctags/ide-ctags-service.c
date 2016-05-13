@@ -591,6 +591,8 @@ ide_ctags_service_init (IdeCtagsService *self)
                                       ide_ctags_service_build_index_cb,
                                       self,
                                       NULL);
+
+  egg_task_cache_set_name (self->indexes, "ctags index cache");
 }
 
 void

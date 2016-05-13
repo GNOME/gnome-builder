@@ -678,6 +678,8 @@ ide_autotools_build_system_init (IdeAutotoolsBuildSystem *self)
                                          populate_cache_cb,
                                          self,
                                          NULL);
+
+  egg_task_cache_set_name (self->task_cache, "makecache");
 }
 
 static void

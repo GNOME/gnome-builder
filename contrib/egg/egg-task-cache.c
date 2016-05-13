@@ -57,6 +57,8 @@ struct _EggTaskCache
   GHashTable           *in_flight;
   GHashTable           *queued;
 
+  gchar                *name;
+
   EggHeap              *evict_heap;
   GSource              *evict_source;
   guint                 evict_source_id;
@@ -639,7 +641,8 @@ egg_task_cache_dispose (GObject *object)
       count = g_hash_table_size (self->cache);
       g_clear_pointer (&self->cache, g_hash_table_unref);
 
-      g_debug ("Evected cache of %"G_GINT64_FORMAT" items", count);
+      g_debug ("Evicted cache of %"G_GINT64_FORMAT" items from %s",
+               count, self->name ?: "unnamed cache");
 
       EGG_COUNTER_SUB (cached, count);
     }
@@ -676,6 +679,10 @@ egg_task_cache_dispose (GObject *object)
 static void
 egg_task_cache_finalize (GObject *object)
 {
+  EggTaskCache *self = (EggTaskCache *)object;
+
+  g_clear_pointer (&self->name, g_free);
+
   G_OBJECT_CLASS (egg_task_cache_parent_class)->finalize (object);
 
   EGG_COUNTER_DEC (instances);
@@ -894,4 +901,22 @@ egg_task_cache_get_values (EggTaskCache *self)
     }
 
   return ar;
+}
+
+void
+egg_task_cache_set_name (EggTaskCache *self,
+                         const gchar  *name)
+{
+  g_return_if_fail (EGG_IS_TASK_CACHE (self));
+
+  g_free (self->name);
+  self->name = g_strdup (name);
+
+  if (name && self->evict_source)
+    {
+      g_autofree gchar *full_name = NULL;
+
+      full_name = g_strdup_printf ("[egg_task_cache] %s", name);
+      g_source_set_name (self->evict_source, full_name);
+    }
 }
