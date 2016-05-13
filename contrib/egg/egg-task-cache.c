@@ -249,6 +249,8 @@ egg_task_cache_evict_full (EggTaskCache  *self,
 
       EGG_COUNTER_DEC (cached);
 
+      g_debug ("Evicted 1 item from %s", self->name ?: "unnamed cache");
+
       if (self->evict_source != NULL)
         evict_source_rearm (self->evict_source);
 
