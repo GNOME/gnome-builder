@@ -411,6 +411,7 @@ ide_buffer_manager_remove_buffer (IdeBufferManager *self,
    *
    * https://bugzilla.gnome.org/show_bug.cgi?id=766322
    */
+  g_signal_emit_by_name (buffer, "destroy");
   g_object_run_dispose (G_OBJECT (buffer));
 
   g_object_unref (buffer);

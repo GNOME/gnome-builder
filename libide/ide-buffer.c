@@ -118,6 +118,7 @@ enum {
 
 enum {
   CURSOR_MOVED,
+  DESTROY,
   LINE_FLAGS_CHANGED,
   LOADED,
   SAVED,
@@ -1432,6 +1433,18 @@ ide_buffer_class_init (IdeBufferClass *klass)
                   NULL, NULL, NULL,
                   G_TYPE_NONE,
                   0);
+
+  /**
+   * IdeBuffer::destroy:
+   *
+   * This signal is emitted when the buffer should be destroyed, as the
+   * #IdeBufferManager has reclaimed the buffer.
+   */
+  signals [DESTROY] =
+    g_signal_new ("destroy",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  0, NULL, NULL, NULL, G_TYPE_NONE, 0);
 
   /**
    * IdeBuffer::saved:
