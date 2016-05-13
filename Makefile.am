@@ -92,6 +92,7 @@ strace:
 	$(LIBTOOL) --mode=execute strace -T src/gnome-builder -vvvv -s
 
 debug:
+	G_SLICE=always-malloc \
 	PEAS_DEBUG=1 \
 	GB_IN_TREE_PLUGINS=1 \
 	GB_IN_TREE_FONTS=1 \
