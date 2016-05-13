@@ -323,7 +323,7 @@ gbp_create_project_widget_constructed (GObject *object)
 
   gtk_combo_box_set_active (GTK_COMBO_BOX (self->project_language_chooser), 0);
   gtk_combo_box_set_active (GTK_COMBO_BOX (self->versioning_chooser), 0);
-  gtk_combo_box_set_active (GTK_COMBO_BOX (self->license_chooser), 0);
+  gtk_combo_box_set_active_id (GTK_COMBO_BOX (self->license_chooser), "gpl_3");
 
   self->auto_update = TRUE;
 }
