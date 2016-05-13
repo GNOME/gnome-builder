@@ -146,7 +146,7 @@
               <object class="GtkShortcutsShortcut">
                 <property name="visible">1</property>
                 <property name="accelerator">&lt;ctrl&gt;k</property>
-                <property name="title" translatable="yes" context="shortcut window">Show list of open files</property>
+                <property name="title" translatable="yes" context="shortcut window">Show list of open documents</property>
               </object>
             </child>
           </object>
