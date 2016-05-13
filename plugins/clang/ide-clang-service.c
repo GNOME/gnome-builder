@@ -454,7 +454,7 @@ ide_clang_service_get_translation_unit_cb (GObject      *object,
   if (!(ret = egg_task_cache_get_finish (cache, result, &error)))
     g_task_return_error (task, error);
   else
-    g_task_return_pointer (task, g_object_ref (ret), g_object_unref);
+    g_task_return_pointer (task, g_steal_pointer (&ret), g_object_unref);
 }
 
 /**
