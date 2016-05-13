@@ -405,7 +405,10 @@ ide_clang_service_get_translation_unit_worker (EggTaskCache  *cache,
     }
 
   request = g_slice_new0 (ParseRequest);
-  request->file = g_object_ref (file);
+  /* Use a copy of the file so that our cache key does not
+   * include any file settings held by the IdeFile instance.
+   */
+  request->file = ide_file_new (context, gfile);
   request->index = self->index;
   request->source_filename = g_strdup (path);
   request->command_line_args = NULL;
@@ -433,7 +436,7 @@ ide_clang_service_get_translation_unit_worker (EggTaskCache  *cache,
    */
   IDE_TRACE_MSG ("Requesting build of translation unit");
   ide_build_system_get_build_flags_async (build_system,
-                                          file,
+                                          request->file,
                                           g_task_get_cancellable (task),
                                           ide_clang_service__get_build_flags_cb,
                                           g_object_ref (real_task));
