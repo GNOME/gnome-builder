@@ -40,6 +40,7 @@ struct _SymbolTreePanel
   EggTaskCache   *symbols_cache;
   IdeTree        *tree;
   GtkSearchEntry *search_entry;
+  GHashTable     *destroy_connected;
 
   IdeBuffer      *last_document;
   gsize           last_change_count;
@@ -114,6 +115,21 @@ get_cached_symbol_tree_cb (GObject      *object,
 }
 
 static void
+symbol_tree_panel_buffer_destroy (SymbolTreePanel *self,
+                                  IdeBuffer       *buffer)
+{
+  g_assert (SYMBOL_IS_TREE_PANEL (self));
+  g_assert (IDE_IS_BUFFER (buffer));
+
+  g_hash_table_remove (self->destroy_connected, buffer);
+  g_signal_handlers_disconnect_by_func (buffer,
+                                        G_CALLBACK (symbol_tree_panel_buffer_destroy),
+                                        self);
+
+  egg_task_cache_evict (self->symbols_cache, buffer);
+}
+
+static void
 refresh_tree (SymbolTreePanel *self)
 {
   GtkWidget *active_view;
@@ -168,6 +184,17 @@ refresh_tree (SymbolTreePanel *self)
             }
 
           self->cancellable = g_cancellable_new ();
+
+          if (!g_hash_table_contains (self->destroy_connected, document))
+            {
+              /* connect to destroy exactly once */
+              g_hash_table_add (self->destroy_connected, document);
+              g_signal_connect_object (document,
+                                       "destroy",
+                                       G_CALLBACK (symbol_tree_panel_buffer_destroy),
+                                       self,
+                                       G_CONNECT_SWAPPED);
+            }
 
           egg_task_cache_get_async (self->symbols_cache,
                                     document,
@@ -319,6 +346,8 @@ symbol_tree_panel_init (SymbolTreePanel *self)
 {
   IdeTreeNode *root;
   IdeTreeBuilder *builder;
+
+  self->destroy_connected = g_hash_table_new (NULL, NULL);
 
   self->symbols_cache = egg_task_cache_new (g_direct_hash,
                                             g_direct_equal,
