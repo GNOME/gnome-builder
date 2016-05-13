@@ -181,8 +181,10 @@ class AutotoolsTemplate(Ide.TemplateBase, Ide.ProjectTemplate):
             self.expand_all_finish(result)
             task.return_boolean(True)
         except Exception as exc:
-            print(exc)
-            task.return_error(GLib.Error(repr(exc)))
+            if isinstance(exc, GLib.Error):
+                task.return_error(exc)
+            else:
+                task.return_error(GLib.Error(repr(exc)))
 
     def prepare_scope(self, scope):
         pass
