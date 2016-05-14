@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-05-14 15:55+0300\n"
-"PO-Revision-Date: 2016-05-14 15:57+0300\n"
+"POT-Creation-Date: 2016-05-14 22:40+0300\n"
+"PO-Revision-Date: 2016-05-14 22:41+0300\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <gnomepl@aviary.pl>\n"
 "Language: pl\n"
@@ -2582,24 +2582,24 @@ msgid "No license"
 msgstr "Brak licencji"
 
 #: ../plugins/create-project/gbp-create-project-widget.ui.h:7
-msgid "AGPL 3"
-msgstr "AGPL 3"
+msgid "AGPL version 3 or later"
+msgstr "AGPL wersja 3 lub późniejsza"
 
 #: ../plugins/create-project/gbp-create-project-widget.ui.h:8
-msgid "GPL 2"
-msgstr "GPL 2"
+msgid "GPL version 3 or later"
+msgstr "GPL wersja 3 lub późniejsza"
 
 #: ../plugins/create-project/gbp-create-project-widget.ui.h:9
-msgid "GPL 3"
-msgstr "GPL 3"
+msgid "GPL version 2 or later"
+msgstr "GPL wersja 2 lub późniejsza"
 
 #: ../plugins/create-project/gbp-create-project-widget.ui.h:10
-msgid "LGPL 2.1"
-msgstr "LGPL 2.1"
+msgid "LGPL version 3 or later"
+msgstr "LGPL wersja 3 lub późniejsza"
 
 #: ../plugins/create-project/gbp-create-project-widget.ui.h:11
-msgid "LGPL 3"
-msgstr "LGPL 3"
+msgid "LGPL version 2.1 or later"
+msgstr "LGPL wersja 2.1 lub późniejsza"
 
 #: ../plugins/create-project/gbp-create-project-widget.ui.h:12
 msgid "MIT/X11"
