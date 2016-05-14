@@ -625,7 +625,9 @@ ide_template_base_add_resource (IdeTemplateBase *self,
 {
   IdeTemplateBasePrivate *priv = ide_template_base_get_instance_private (self);
   FileExpansion expansion = { 0 };
+  TmplSymbol *symbol;
   g_autofree gchar *uri = NULL;
+  g_autofree gchar *filename = NULL;
 
   g_return_if_fail (IDE_IS_TEMPLATE_BASE (self));
   g_return_if_fail (resource_path != NULL);
@@ -647,6 +649,10 @@ ide_template_base_add_resource (IdeTemplateBase *self,
   expansion.destination = g_object_ref (destination);
   expansion.result = NULL;
   expansion.mode = mode;
+
+  symbol = tmpl_scope_get (expansion.scope, "filename");
+  filename = g_file_get_basename (destination);
+  tmpl_symbol_assign_string (symbol, filename);
 
   g_array_append_val (priv->files, expansion);
 }
