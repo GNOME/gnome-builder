@@ -150,11 +150,11 @@
                         <property name="visible">true</property>
                         <items>
                           <item id="none" translatable="yes">No license</item>
-                          <item id="agpl_3" translatable="yes">AGPL 3</item>
-                          <item id="gpl_2" translatable="yes">GPL 2</item>
-                          <item id="gpl_3" translatable="yes">GPL 3</item>
-                          <item id="lgpl_2_1" translatable="yes">LGPL 2.1</item>
-                          <item id="lgpl_3" translatable="yes">LGPL 3</item>
+                          <item id="agpl_3" translatable="yes">AGPL version 3 or later</item>
+                          <item id="gpl_2" translatable="yes">GPL version 2 or later</item>
+                          <item id="gpl_3" translatable="yes">GPL version 3 or later</item>
+                          <item id="lgpl_2_1" translatable="yes">LGPL version 2.1 or later</item>
+                          <item id="lgpl_3" translatable="yes">LGPL version 3 or later</item>
                           <item id="mit_x11" translatable="yes">MIT/X11</item>
                         </items>
                       </object>
