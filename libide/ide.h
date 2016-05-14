@@ -67,6 +67,7 @@ G_BEGIN_DECLS
 #include "ide-highlight-engine.h"
 #include "ide-highlighter.h"
 #include "ide-indenter.h"
+#include "ide-language.h"
 #include "ide-layout-grid.h"
 #include "ide-layout-pane.h"
 #include "ide-layout-stack.h"
