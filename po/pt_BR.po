@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-05-14 16:08+0000\n"
-"PO-Revision-Date: 2016-05-14 20:12-0300\n"
+"POT-Creation-Date: 2016-05-14 23:14+0000\n"
+"PO-Revision-Date: 2016-05-14 20:16-0300\n"
 "Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
 "Language-Team: Brazilian Portuguese <gnome-pt_br-list@gnome.org>\n"
 "Language: pt_BR\n"
@@ -1036,170 +1036,175 @@ msgstr "Fechar o documento"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:20
 msgctxt "shortcut window"
+msgid "Show list of open documents"
+msgstr "Mostrar lista de documentos abertos"
+
+#: ../data/ui/ide-shortcuts-window.ui.h:21
+msgctxt "shortcut window"
 msgid "Find and replace"
 msgstr "Localizar e substituir"
 
-#: ../data/ui/ide-shortcuts-window.ui.h:21
+#: ../data/ui/ide-shortcuts-window.ui.h:22
 msgctxt "shortcut window"
 msgid "Find"
 msgstr "Localizar"
 
-#: ../data/ui/ide-shortcuts-window.ui.h:22
+#: ../data/ui/ide-shortcuts-window.ui.h:23
 msgctxt "shortcut window"
 msgid "Find the next match"
 msgstr "Localizar a próxima ocorrência"
 
-#: ../data/ui/ide-shortcuts-window.ui.h:23
+#: ../data/ui/ide-shortcuts-window.ui.h:24
 msgctxt "shortcut window"
 msgid "Find the previous match"
 msgstr "Localizar a ocorrência anterior"
 
-#: ../data/ui/ide-shortcuts-window.ui.h:24
+#: ../data/ui/ide-shortcuts-window.ui.h:25
 msgctxt "shortcut window"
 msgid "Clear highlight"
 msgstr "Limpar realce"
 
-#: ../data/ui/ide-shortcuts-window.ui.h:25
+#: ../data/ui/ide-shortcuts-window.ui.h:26
 msgctxt "shortcut window"
 msgid "Copy and Paste"
 msgstr "Copiar e colar"
 
-#: ../data/ui/ide-shortcuts-window.ui.h:26
+#: ../data/ui/ide-shortcuts-window.ui.h:27
 msgctxt "shortcut window"
 msgid "Copy selected text to clipboard"
 msgstr "Copiar o texto selecionado para a área de transferência"
 
-#: ../data/ui/ide-shortcuts-window.ui.h:27
+#: ../data/ui/ide-shortcuts-window.ui.h:28
 msgctxt "shortcut window"
 msgid "Cut selected text to clipboard"
 msgstr "Colar o texto selecionado para a área de transferência"
 
-#: ../data/ui/ide-shortcuts-window.ui.h:28
+#: ../data/ui/ide-shortcuts-window.ui.h:29
 msgctxt "shortcut window"
 msgid "Paste text from clipboard"
 msgstr "Colar o texto da área de transferência"
 
-#: ../data/ui/ide-shortcuts-window.ui.h:29
+#: ../data/ui/ide-shortcuts-window.ui.h:30
 msgctxt "shortcut window"
 msgid "Undo and Redo"
 msgstr "Desfazer e refazer"
 
-#: ../data/ui/ide-shortcuts-window.ui.h:30
+#: ../data/ui/ide-shortcuts-window.ui.h:31
 msgctxt "shortcut window"
 msgid "Undo previous command"
 msgstr "Desfazer o comando anterior"
 
-#: ../data/ui/ide-shortcuts-window.ui.h:31
+#: ../data/ui/ide-shortcuts-window.ui.h:32
 msgctxt "shortcut window"
 msgid "Redo previous command"
 msgstr "Refazer o comando anterior"
 
-#: ../data/ui/ide-shortcuts-window.ui.h:32
+#: ../data/ui/ide-shortcuts-window.ui.h:33
 msgctxt "shortcut window"
 msgid "Editing"
 msgstr "Edição"
 
-#: ../data/ui/ide-shortcuts-window.ui.h:33
+#: ../data/ui/ide-shortcuts-window.ui.h:34
 msgctxt "shortcut window"
 msgid "Increment number at cursor"
 msgstr "Incrementar o número no cursor"
 
-#: ../data/ui/ide-shortcuts-window.ui.h:34
+#: ../data/ui/ide-shortcuts-window.ui.h:35
 msgctxt "shortcut window"
 msgid "Decrement number at cursor"
 msgstr "Decrementar o número no cursor"
 
-#: ../data/ui/ide-shortcuts-window.ui.h:35
+#: ../data/ui/ide-shortcuts-window.ui.h:36
 msgctxt "shortcut window"
 msgid "Join selected lines"
 msgstr "Juntar as linhas selecionadas"
 
-#: ../data/ui/ide-shortcuts-window.ui.h:36
+#: ../data/ui/ide-shortcuts-window.ui.h:37
 msgctxt "shortcut window"
 msgid "Show completion window"
 msgstr "Mostrar janela de preenchimento"
 
-#: ../data/ui/ide-shortcuts-window.ui.h:37
+#: ../data/ui/ide-shortcuts-window.ui.h:38
 msgctxt "shortcut window"
 msgid "Toggle overwrite"
 msgstr "Ativar sobrescrever"
 
-#: ../data/ui/ide-shortcuts-window.ui.h:38
+#: ../data/ui/ide-shortcuts-window.ui.h:39
 msgctxt "shortcut window"
 msgid "Reindent line"
 msgstr "Aplicar recuo na linha"
 
-#: ../data/ui/ide-shortcuts-window.ui.h:39
+#: ../data/ui/ide-shortcuts-window.ui.h:40
 msgctxt "shortcut window"
 msgid "Navigation"
 msgstr "Navegação"
 
-#: ../data/ui/ide-shortcuts-window.ui.h:40
+#: ../data/ui/ide-shortcuts-window.ui.h:41
 msgctxt "shortcut window"
 msgid "Move to next error in file"
 msgstr "Mover para o próximo erro no arquivo"
 
-#: ../data/ui/ide-shortcuts-window.ui.h:41
+#: ../data/ui/ide-shortcuts-window.ui.h:42
 msgctxt "shortcut window"
 msgid "Move to previous error in file"
 msgstr "Mover para o erro anterior no arquivo"
 
-#: ../data/ui/ide-shortcuts-window.ui.h:42
+#: ../data/ui/ide-shortcuts-window.ui.h:43
 msgctxt "shortcut window"
 msgid "Move to previous edit location"
 msgstr "Mover para o local de edição anterior"
 
-#: ../data/ui/ide-shortcuts-window.ui.h:43
+#: ../data/ui/ide-shortcuts-window.ui.h:44
 msgctxt "shortcut window"
 msgid "Move to next edit location"
 msgstr "Mover para o próximo local de edição"
 
-#: ../data/ui/ide-shortcuts-window.ui.h:44
+#: ../data/ui/ide-shortcuts-window.ui.h:45
 msgctxt "shortcut window"
 msgid "Jump to definition of symbol"
 msgstr "Pular para a definição do símbolo"
 
-#: ../data/ui/ide-shortcuts-window.ui.h:45
+#: ../data/ui/ide-shortcuts-window.ui.h:46
 msgctxt "shortcut window"
 msgid "Move viewport up within the file"
 msgstr "Mover viewport acima no arquivo"
 
-#: ../data/ui/ide-shortcuts-window.ui.h:46
+#: ../data/ui/ide-shortcuts-window.ui.h:47
 msgctxt "shortcut window"
 msgid "Move viewport down within the file"
 msgstr "Mover viewport abaixo no arquivo"
 
-#: ../data/ui/ide-shortcuts-window.ui.h:47
+#: ../data/ui/ide-shortcuts-window.ui.h:48
 msgctxt "shortcut window"
 msgid "Move viewport to end of file"
 msgstr "Mover viewport para o fim do arquivo"
 
-#: ../data/ui/ide-shortcuts-window.ui.h:48
+#: ../data/ui/ide-shortcuts-window.ui.h:49
 msgctxt "shortcut window"
 msgid "Move viewport to beginning of file"
 msgstr "Mover viewport para o começo do arquivo"
 
-#: ../data/ui/ide-shortcuts-window.ui.h:49
+#: ../data/ui/ide-shortcuts-window.ui.h:50
 msgctxt "shortcut window"
 msgid "Move to matching bracket"
 msgstr "Mover para colchete correspondente"
 
-#: ../data/ui/ide-shortcuts-window.ui.h:50
+#: ../data/ui/ide-shortcuts-window.ui.h:51
 msgctxt "shortcut window"
 msgid "Selections"
 msgstr "Seleções"
 
-#: ../data/ui/ide-shortcuts-window.ui.h:51
+#: ../data/ui/ide-shortcuts-window.ui.h:52
 msgctxt "shortcut window"
 msgid "Select all"
 msgstr "Selecionar tudo"
 
-#: ../data/ui/ide-shortcuts-window.ui.h:52
+#: ../data/ui/ide-shortcuts-window.ui.h:53
 msgctxt "shortcut window"
 msgid "Unselect all"
 msgstr "Desmarcar tudo"
 
-#: ../data/ui/ide-shortcuts-window.ui.h:53
+#: ../data/ui/ide-shortcuts-window.ui.h:54
 msgctxt "shortcut window"
 msgid "Terminal Shortcuts"
 msgstr "Atalhos do Terminal"
@@ -1216,21 +1221,21 @@ msgstr "Mostra em um menu suspenso uma lista de operações de arquivos"
 msgid "From an existing project on this computer"
 msgstr "De um projeto existente neste computador"
 
-#: ../libide/editorconfig/ide-editorconfig-file-settings.c:153
+#: ../libide/editorconfig/ide-editorconfig-file-settings.c:158
 msgid "No file was provided."
 msgstr "Nenhum arquivo foi fornecido."
 
-#: ../libide/editor/ide-editor-frame.c:75
+#: ../libide/editor/ide-editor-frame.c:77
 #, c-format
 msgid "Line %u, Column %u"
 msgstr "Linha %u, coluna %u"
 
-#: ../libide/editor/ide-editor-frame.c:247
+#: ../libide/editor/ide-editor-frame.c:249
 #, c-format
 msgid "%u of %u"
 msgstr "%u de %u"
 
-#: ../libide/editor/ide-editor-frame.c:679
+#: ../libide/editor/ide-editor-frame.c:681
 #: ../plugins/project-tree/gtk/menus.ui.h:1
 msgid "Re_veal in Project Tree"
 msgstr "Re_velar em árvore de projeto"
@@ -2189,7 +2194,7 @@ msgid_plural "%d errors"
 msgstr[0] "%d erro"
 msgstr[1] "%d erros"
 
-#: ../plugins/build-tools/gbp-build-panel-row.c:68
+#: ../plugins/build-tools/gbp-build-panel-row.c:66
 msgid "Unknown file"
 msgstr "Arquivo desconhecido"
 
@@ -2630,7 +2635,7 @@ msgstr "MIT/X11"
 msgid "Pattern"
 msgstr "Padrão"
 
-#: ../plugins/devhelp/gbp-devhelp-panel.c:187
+#: ../plugins/devhelp/gbp-devhelp-panel.c:194
 #: ../plugins/devhelp/gbp-devhelp-search-provider.c:128
 msgid "Documentation"
 msgstr "Documentação"
@@ -2856,7 +2861,7 @@ msgstr ""
 "O arquivo de log de suporte foi escrito em \"%s\". Por favor, forneça esse "
 "arquivo como um anexo em seu relatório de erro ou requisição de suporte."
 
-#: ../plugins/symbol-tree/symbol-tree-panel.c:267
+#: ../plugins/symbol-tree/symbol-tree-panel.c:265
 msgid "Current language does not support symbol resolvers"
 msgstr "A linguagem atual não possui suporte a resolvedores de símbolos"
 
