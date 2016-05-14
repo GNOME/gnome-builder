@@ -628,6 +628,8 @@ ide_template_base_add_resource (IdeTemplateBase *self,
   TmplSymbol *symbol;
   g_autofree gchar *uri = NULL;
   g_autofree gchar *filename = NULL;
+  g_autofree gchar *year = NULL;
+  g_autoptr(GDateTime) now = NULL;
 
   g_return_if_fail (IDE_IS_TEMPLATE_BASE (self));
   g_return_if_fail (resource_path != NULL);
@@ -653,6 +655,14 @@ ide_template_base_add_resource (IdeTemplateBase *self,
   symbol = tmpl_scope_get (expansion.scope, "filename");
   filename = g_file_get_basename (destination);
   tmpl_symbol_assign_string (symbol, filename);
+
+  symbol = tmpl_scope_get (expansion.scope, "author");
+  tmpl_symbol_assign_string (symbol, g_get_real_name ());
+
+  now = g_date_time_new_now_local ();
+  year = g_date_time_format (now, "%Y");
+  symbol = tmpl_scope_get (expansion.scope, "year");
+  tmpl_symbol_assign_string (symbol, year);
 
   g_array_append_val (priv->files, expansion);
 }
