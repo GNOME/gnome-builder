@@ -27,17 +27,26 @@
 
 G_BEGIN_DECLS
 
+typedef gboolean (*TmplScopeResolver) (TmplScope    *scope,
+                                       const gchar  *name,
+                                       TmplSymbol  **symbol,
+                                       gpointer      user_data);
+
 TmplScope  *tmpl_scope_new             (void);
-TmplScope  *tmpl_scope_new_with_parent (TmplScope   *parent);
-TmplScope  *tmpl_scope_ref             (TmplScope   *self);
-void        tmpl_scope_unref           (TmplScope   *self);
-TmplSymbol *tmpl_scope_peek            (TmplScope   *self,
-                                        const gchar *name);
-TmplSymbol *tmpl_scope_get             (TmplScope   *self,
-                                        const gchar *name);
-void        tmpl_scope_set             (TmplScope   *self,
-                                        const gchar *name,
-                                        TmplSymbol  *symbol);
+TmplScope  *tmpl_scope_new_with_parent (TmplScope         *parent);
+TmplScope  *tmpl_scope_ref             (TmplScope         *self);
+void        tmpl_scope_unref           (TmplScope         *self);
+TmplSymbol *tmpl_scope_peek            (TmplScope         *self,
+                                        const gchar       *name);
+TmplSymbol *tmpl_scope_get             (TmplScope         *self,
+                                        const gchar       *name);
+void        tmpl_scope_set             (TmplScope         *self,
+                                        const gchar       *name,
+                                        TmplSymbol        *symbol);
+void        tmpl_scope_set_resolver    (TmplScope         *self,
+                                        TmplScopeResolver  resolver,
+                                        gpointer           user_data,
+                                        GDestroyNotify     destroy);
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (TmplScope, tmpl_scope_unref)
 

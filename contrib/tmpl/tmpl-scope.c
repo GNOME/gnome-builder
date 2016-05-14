@@ -21,9 +21,12 @@
 
 struct _TmplScope
 {
-  volatile gint  ref_count;
-  TmplScope     *parent;
-  GHashTable    *symbols;
+  volatile gint      ref_count;
+  TmplScope         *parent;
+  GHashTable        *symbols;
+  TmplScopeResolver  resolver;
+  gpointer           resolver_data;
+  GDestroyNotify     resolver_destroy;
 };
 
 G_DEFINE_BOXED_TYPE (TmplScope, tmpl_scope, tmpl_scope_ref, tmpl_scope_unref)
@@ -47,6 +50,10 @@ tmpl_scope_unref (TmplScope *self)
 
   if (g_atomic_int_dec_and_test (&self->ref_count))
     {
+      if (self->resolver_destroy)
+        g_clear_pointer (&self->resolver_data, self->resolver_destroy);
+      self->resolver = NULL;
+      self->resolver_destroy = NULL;
       g_clear_pointer (&self->symbols, g_hash_table_unref);
       g_clear_pointer (&self->parent, tmpl_scope_unref);
       g_slice_free (TmplScope, self);
@@ -99,6 +106,7 @@ tmpl_scope_get_full (TmplScope   *self,
                      gboolean     create)
 {
   TmplSymbol *symbol = NULL;
+  TmplScope *parent;
 
   g_return_val_if_fail (self != NULL, NULL);
 
@@ -110,17 +118,22 @@ tmpl_scope_get_full (TmplScope   *self,
     }
 
   /* Try to locate the symbol in a parent scope */
-  if (symbol == NULL)
+  for (parent = self->parent; parent != NULL; parent = parent->parent)
     {
-      TmplScope *parent;
-
-      for (parent = self->parent; parent != NULL; parent = parent->parent)
+      if (parent->symbols != NULL)
         {
-          if (parent->symbols != NULL)
-            {
-              if ((symbol = g_hash_table_lookup (parent->symbols, name)))
-                return symbol;
-            }
+          if ((symbol = g_hash_table_lookup (parent->symbols, name)))
+            return symbol;
+        }
+    }
+
+  /* Call our resolver helper to locate the symbol */
+  for (parent = self; parent != NULL; parent = parent->parent)
+    {
+      if (parent->resolver)
+        {
+          if (parent->resolver (parent, name, &symbol, parent->resolver_data) && symbol)
+            goto save_symbol;
         }
     }
 
@@ -128,13 +141,18 @@ tmpl_scope_get_full (TmplScope   *self,
     {
       /* Define the symbol in this scope */
       symbol = tmpl_symbol_new ();
-      if (self->symbols == NULL)
-        self->symbols = g_hash_table_new_full (g_str_hash,
-                                               g_str_equal,
-                                               g_free,
-                                               (GDestroyNotify)tmpl_symbol_unref);
-      g_hash_table_insert (self->symbols, g_strdup (name), symbol);
+      goto save_symbol;
     }
+
+  return symbol;
+
+save_symbol:
+  if (self->symbols == NULL)
+    self->symbols = g_hash_table_new_full (g_str_hash,
+                                           g_str_equal,
+                                           g_free,
+                                           (GDestroyNotify)tmpl_symbol_unref);
+  g_hash_table_insert (self->symbols, g_strdup (name), symbol);
 
   return symbol;
 }
@@ -165,4 +183,29 @@ tmpl_scope_peek (TmplScope   *self,
                  const gchar *name)
 {
   return tmpl_scope_get_full (self, name, FALSE);
+}
+
+void
+tmpl_scope_set_resolver (TmplScope         *self,
+                         TmplScopeResolver  resolver,
+                         gpointer           user_data,
+                         GDestroyNotify     destroy)
+{
+  g_return_if_fail (self != NULL);
+
+  if (resolver != self->resolver ||
+      user_data != self->resolver_data ||
+      destroy != self->resolver_destroy)
+    {
+      if (self->resolver && self->resolver_destroy && self->resolver_data)
+        {
+          g_clear_pointer (&self->resolver_data, self->resolver_destroy);
+          self->resolver_destroy = NULL;
+          self->resolver = NULL;
+        }
+
+      self->resolver = resolver;
+      self->resolver_data = user_data;
+      self->resolver_destroy = destroy;
+    }
 }
