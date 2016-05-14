@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-05-11 16:54+0200\n"
-"PO-Revision-Date: 2016-05-11 16:55+0200\n"
+"POT-Creation-Date: 2016-05-14 15:55+0300\n"
+"PO-Revision-Date: 2016-05-14 15:57+0300\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <gnomepl@aviary.pl>\n"
 "Language: pl\n"
@@ -1238,7 +1238,7 @@ msgstr "Zapis dokumentu"
 #: ../libide/editor/ide-editor-view-actions.c:438
 #: ../libide/ide-workbench-actions.c:67
 #: ../plugins/build-tools/gbp-build-panel.ui.h:8
-#: ../plugins/create-project/gbp-create-project-widget.c:451
+#: ../plugins/create-project/gbp-create-project-widget.c:489
 #: ../plugins/terminal/gb-terminal-view-actions.c:305
 msgid "Cancel"
 msgstr "Anuluj"
@@ -1364,24 +1364,24 @@ msgstr "Proszę podać adres usługi D-Bus"
 msgid "No such worker"
 msgstr "Nie ma takiego wątku roboczego"
 
-#: ../libide/ide-buffer.c:2366
+#: ../libide/ide-buffer.c:2381
 msgid "The current language lacks a symbol resolver."
 msgstr "Obecny język nie posiada mechanizmu rozwiązywania symboli."
 
-#: ../libide/ide-buffer-manager.c:612
+#: ../libide/ide-buffer-manager.c:622
 msgid "File too large to be opened."
 msgstr "Plik jest za duży, aby go otworzyć."
 
-#: ../libide/ide-buffer-manager.c:1461
+#: ../libide/ide-buffer-manager.c:1468
 msgid "Words"
 msgstr "Wyrazy"
 
-#: ../libide/ide-buffer-manager.c:1673
+#: ../libide/ide-buffer-manager.c:1680
 #, c-format
 msgid "unsaved document %u"
 msgstr "niezapisywany dokument %u"
 
-#: ../libide/ide-buffer-manager.c:1707
+#: ../libide/ide-buffer-manager.c:1714
 msgid "Failed to save buffer, ignoring reclamation."
 msgstr "Zapisanie bufora się nie powiodło, ignorowanie nawrotu."
 
@@ -1458,7 +1458,7 @@ msgstr "Plik docelowy musi być w drzewie projektu."
 msgid "File must be within the project tree."
 msgstr "Plik musi być w drzewie projektu."
 
-#: ../libide/ide-recent-projects.c:383
+#: ../libide/ide-recent-projects.c:396
 #, c-format
 msgid "%s() may only be executed once"
 msgstr "%s() można wykonać tylko raz"
@@ -1491,17 +1491,17 @@ msgstr "Otwarcie katalogu się nie powiodło: %s"
 msgid "Failed to load file: %s: %s"
 msgstr "Wczytanie pliku się nie powiodło: %s: %s"
 
-#: ../libide/ide-source-view.c:5043
+#: ../libide/ide-source-view.c:5007
 #, c-format
 msgid "Insert “%s”"
 msgstr "Wstaw „%s”"
 
-#: ../libide/ide-source-view.c:5045
+#: ../libide/ide-source-view.c:5009
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "Zmień „%s” na „%s”"
 
-#: ../libide/ide-source-view.c:5159
+#: ../libide/ide-source-view.c:5123
 msgid "Apply Fix-It"
 msgstr "Zastosuj „Fix-It”"
 
@@ -2091,19 +2091,19 @@ msgstr "Czyszczenie…"
 msgid "Invalid makefile provided, ignoring."
 msgstr "Podano nieprawidłowy plik make, ignorowanie."
 
-#: ../plugins/autotools-templates/autotools_templates/__init__.py:200
+#: ../plugins/autotools-templates/autotools_templates/__init__.py:241
 msgid "Shared Library"
 msgstr "Biblioteka współdzielona"
 
-#: ../plugins/autotools-templates/autotools_templates/__init__.py:202
+#: ../plugins/autotools-templates/autotools_templates/__init__.py:243
 msgid "Create a new autotools project with a shared library"
 msgstr "Utworzenie nowego projektu Autotools ze współdzieloną biblioteką"
 
-#: ../plugins/autotools-templates/autotools_templates/__init__.py:223
+#: ../plugins/autotools-templates/autotools_templates/__init__.py:264
 msgid "Empty Project"
 msgstr "Pusty projekt"
 
-#: ../plugins/autotools-templates/autotools_templates/__init__.py:226
+#: ../plugins/autotools-templates/autotools_templates/__init__.py:267
 msgid "Create a new empty autotools project"
 msgstr "Utworzenie nowego pustego projektu Autotools"
 
@@ -2548,15 +2548,15 @@ msgstr "Proszę podać nazwę projektu.\n"
 msgid "Please specify a project template with --template=\n"
 msgstr "Proszę podać szablon projektu za pomocą parametru „--template=”\n"
 
-#: ../plugins/create-project/gbp-create-project-widget.c:291
+#: ../plugins/create-project/gbp-create-project-widget.c:320
 msgid "Without version control"
 msgstr "Bez systemu kontroli wersji"
 
-#: ../plugins/create-project/gbp-create-project-widget.c:450
+#: ../plugins/create-project/gbp-create-project-widget.c:488
 msgid "Select"
 msgstr "Wybierz"
 
-#: ../plugins/create-project/gbp-create-project-widget.c:554
+#: ../plugins/create-project/gbp-create-project-widget.c:592
 msgid "A failure occurred while initializing version control"
 msgstr "Wystąpiło niepowodzenie podczas inicjowania systemu kontroli wersji"
 
@@ -2570,10 +2570,42 @@ msgid "Language"
 msgstr "Język"
 
 #: ../plugins/create-project/gbp-create-project-widget.ui.h:4
+msgid "License"
+msgstr "Licencja"
+
+#: ../plugins/create-project/gbp-create-project-widget.ui.h:5
 msgid "Versioning"
 msgstr "Kontrola wersji"
 
-#: ../plugins/create-project/gbp-create-project-widget.ui.h:5
+#: ../plugins/create-project/gbp-create-project-widget.ui.h:6
+msgid "No license"
+msgstr "Brak licencji"
+
+#: ../plugins/create-project/gbp-create-project-widget.ui.h:7
+msgid "AGPL 3"
+msgstr "AGPL 3"
+
+#: ../plugins/create-project/gbp-create-project-widget.ui.h:8
+msgid "GPL 2"
+msgstr "GPL 2"
+
+#: ../plugins/create-project/gbp-create-project-widget.ui.h:9
+msgid "GPL 3"
+msgstr "GPL 3"
+
+#: ../plugins/create-project/gbp-create-project-widget.ui.h:10
+msgid "LGPL 2.1"
+msgstr "LGPL 2.1"
+
+#: ../plugins/create-project/gbp-create-project-widget.ui.h:11
+msgid "LGPL 3"
+msgstr "LGPL 3"
+
+#: ../plugins/create-project/gbp-create-project-widget.ui.h:12
+msgid "MIT/X11"
+msgstr "MIT/X11"
+
+#: ../plugins/create-project/gbp-create-project-widget.ui.h:13
 msgid "Pattern"
 msgstr "Wzór"
 
@@ -2802,11 +2834,11 @@ msgstr ""
 "Plik dziennika wsparcia został zapisany do „%s”. Proszę dostarczyć ten plik "
 "jako załącznik w zgłoszeniu błędu lub prośbie o wsparcie."
 
-#: ../plugins/symbol-tree/symbol-tree-panel.c:240
+#: ../plugins/symbol-tree/symbol-tree-panel.c:267
 msgid "Current language does not support symbol resolvers"
 msgstr "Obecny język nie obsługuje mechanizmów rozwiązywania symboli"
 
-#: ../plugins/symbol-tree/symbol-tree-panel.c:336
+#: ../plugins/symbol-tree/symbol-tree-panel.c:365
 msgid "Symbols"
 msgstr "Symbole"
 
