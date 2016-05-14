@@ -69,6 +69,7 @@ libide_1_0_la_public_headers = \
 	ide-highlighter.h \
 	ide-indent-style.h \
 	ide-indenter.h \
+	ide-language.h \
 	ide-layout-grid.h \
 	ide-layout-pane.h \
 	ide-layout-stack-split.h \
@@ -226,6 +227,7 @@ libide_1_0_la_public_sources = \
 	ide-highlight-index.c \
 	ide-highlighter.c \
 	ide-indenter.c \
+	ide-language.c \
 	ide-layout-grid.c \
 	ide-layout-pane.c \
 	ide-layout-stack.c \
