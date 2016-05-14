@@ -30,7 +30,7 @@ typedef struct
   TmplTemplateLocator *locator;
   GArray              *files;
 
-  guint   has_expanded : 1;
+  guint                has_expanded : 1;
 } IdeTemplateBasePrivate;
 
 typedef struct
@@ -154,7 +154,7 @@ ide_template_base_set_locator (IdeTemplateBase     *self,
   if (priv->has_expanded)
     {
       g_warning ("Cannot change template locator after "
-                 "ide_template_base_expand_async() has been called.");
+                 "ide_template_base_expand_all_async() has been called.");
       return;
     }
 
@@ -247,7 +247,7 @@ ide_template_base_class_init (IdeTemplateBaseClass *klass)
                          "Locator",
                          "Locator",
                          TMPL_TYPE_TEMPLATE_LOCATOR,
-                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+                         (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, LAST_PROP, properties);
 }
@@ -574,7 +574,7 @@ ide_template_base_expand_all_async (IdeTemplateBase     *self,
   g_task_set_task_data (task, task_data, g_free);
 
   /*
-   * You can only call ide_template_base_expand_async() once, since we maintain
+   * You can only call ide_template_base_expand_all_async() once, since we maintain
    * a bunch of state inline.
    */
   if (priv->has_expanded)
@@ -616,6 +616,37 @@ ide_template_base_expand_all_finish (IdeTemplateBase  *self,
   return g_task_propagate_boolean (G_TASK (result), error);
 }
 
+static TmplScope *
+create_scope (IdeTemplateBase *self,
+              TmplScope       *parent,
+              GFile           *destination)
+{
+  TmplScope *scope;
+  TmplSymbol *symbol;
+  g_autofree gchar *filename = NULL;
+  g_autofree gchar *year = NULL;
+  g_autoptr(GDateTime) now = NULL;
+
+  g_assert (IDE_IS_TEMPLATE_BASE (self));
+  g_assert (G_IS_FILE (destination));
+
+  scope = tmpl_scope_new_with_parent (parent);
+
+  symbol = tmpl_scope_get (scope, "filename");
+  filename = g_file_get_basename (destination);
+  tmpl_symbol_assign_string (symbol, filename);
+
+  symbol = tmpl_scope_get (scope, "author");
+  tmpl_symbol_assign_string (symbol, g_get_real_name ());
+
+  now = g_date_time_new_now_local ();
+  year = g_date_time_format (now, "%Y");
+  symbol = tmpl_scope_get (scope, "year");
+  tmpl_symbol_assign_string (symbol, year);
+
+  return scope;
+}
+
 void
 ide_template_base_add_resource (IdeTemplateBase *self,
                                 const gchar     *resource_path,
@@ -625,11 +656,7 @@ ide_template_base_add_resource (IdeTemplateBase *self,
 {
   IdeTemplateBasePrivate *priv = ide_template_base_get_instance_private (self);
   FileExpansion expansion = { 0 };
-  TmplSymbol *symbol;
   g_autofree gchar *uri = NULL;
-  g_autofree gchar *filename = NULL;
-  g_autofree gchar *year = NULL;
-  g_autoptr(GDateTime) now = NULL;
 
   g_return_if_fail (IDE_IS_TEMPLATE_BASE (self));
   g_return_if_fail (resource_path != NULL);
@@ -637,7 +664,7 @@ ide_template_base_add_resource (IdeTemplateBase *self,
 
   if (priv->has_expanded)
     {
-      g_warning ("%s() called after ide_template_base_expand_async(). "
+      g_warning ("%s() called after ide_template_base_expand_all_async(). "
                  "Ignoring request to add resource.",
                  G_STRFUNC);
       return;
@@ -647,22 +674,10 @@ ide_template_base_add_resource (IdeTemplateBase *self,
 
   expansion.file = g_file_new_for_uri (uri);
   expansion.stream = NULL;
-  expansion.scope = scope ? tmpl_scope_ref (scope) : tmpl_scope_new ();
+  expansion.scope = create_scope (self, scope, destination);
   expansion.destination = g_object_ref (destination);
   expansion.result = NULL;
   expansion.mode = mode;
-
-  symbol = tmpl_scope_get (expansion.scope, "filename");
-  filename = g_file_get_basename (destination);
-  tmpl_symbol_assign_string (symbol, filename);
-
-  symbol = tmpl_scope_get (expansion.scope, "author");
-  tmpl_symbol_assign_string (symbol, g_get_real_name ());
-
-  now = g_date_time_new_now_local ();
-  year = g_date_time_format (now, "%Y");
-  symbol = tmpl_scope_get (expansion.scope, "year");
-  tmpl_symbol_assign_string (symbol, year);
 
   g_array_append_val (priv->files, expansion);
 }
@@ -683,7 +698,7 @@ ide_template_base_add_path (IdeTemplateBase *self,
 
   if (priv->has_expanded)
     {
-      g_warning ("%s() called after ide_template_base_expand_async(). "
+      g_warning ("%s() called after ide_template_base_expand_all_async(). "
                  "Ignoring request to add resource.",
                  G_STRFUNC);
       return;
@@ -691,7 +706,7 @@ ide_template_base_add_path (IdeTemplateBase *self,
 
   expansion.file = g_file_new_for_path (path);
   expansion.stream = NULL;
-  expansion.scope = scope ? tmpl_scope_ref (scope) : tmpl_scope_new ();
+  expansion.scope = create_scope (self, scope, destination);
   expansion.destination = g_object_ref (destination);
   expansion.result = NULL;
   expansion.mode = mode;
