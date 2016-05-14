@@ -31,6 +31,7 @@ from gi.repository import Ide
 from gi.repository import Gio
 from gi.repository import GLib
 from gi.repository import GObject
+from gi.repository import GtkSource
 from gi.repository import Peas
 from gi.repository import Template
 
@@ -44,6 +45,28 @@ class LibraryTemplateProvider(GObject.Object, Ide.TemplateProvider):
     def do_get_project_templates(self):
         return [LibraryProjectTemplate(), EmptyProjectTemplate()]
 
+class AutotoolsTemplateLocator(Template.TemplateLocator):
+    license = None
+
+    def empty(self):
+        return Gio.MemoryInputStream()
+
+    def do_locate(self, path):
+        if path.startswith('license.'):
+            filename = GLib.basename(path)
+            manager = GtkSource.LanguageManager.get_default()
+            language = manager.guess_language(filename, None)
+
+            if self.license == None or language == None:
+                return self.empty()
+
+            header = Ide.language_format_header(language, self.license)
+            gbytes = GLib.Bytes(header.encode())
+
+            return Gio.MemoryInputStream.new_from_bytes(gbytes)
+
+        return super().do_locate(self, path)
+
 class AutotoolsTemplate(Ide.TemplateBase, Ide.ProjectTemplate):
     def __init__(self, id, name, icon_name, description, languages):
         super().__init__()
@@ -52,6 +75,9 @@ class AutotoolsTemplate(Ide.TemplateBase, Ide.ProjectTemplate):
         self.icon_name = icon_name
         self.description = description
         self.languages = languages
+        self.locator = AutotoolsTemplateLocator()
+
+        self.props.locator = self.locator
 
     def do_get_id(self):
         return self.id
@@ -83,7 +109,8 @@ class AutotoolsTemplate(Ide.TemplateBase, Ide.ProjectTemplate):
             self.language = params['language'].get_string().lower()
 
         if self.language not in ('c', 'c++', 'vala'):
-            task.return_error(GLib.Error("Language %s not supported" % self.language))
+            task.return_error(GLib.Error("Language %s not supported" %
+                                         self.language))
             return
 
         directory = Gio.File.new_for_path(dir_path)
@@ -165,11 +192,10 @@ class AutotoolsTemplate(Ide.TemplateBase, Ide.ProjectTemplate):
             license_full_path = params['license_full'].get_string()
             files[license_full_path] = 'COPYING'
 
+        if 'license_short' in params:
             license_short_path = params['license_short'].get_string()
-            license_header = Gio.resources_lookup_data(license_short_path[11:], 0).get_data().decode()
-            scope.get('license').assign_string(license_header)
-        else:
-            scope.get('license').assign_string('/*license*/')
+            license_base = Gio.resources_lookup_data(license_short_path[11:], 0).get_data().decode()
+            self.locator.license = license_base
 
         self.prepare_files(files)
 
