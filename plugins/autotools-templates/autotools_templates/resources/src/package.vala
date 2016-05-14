@@ -1,4 +1,4 @@
-/* license */
+{{include "license.vala"}}
 
 using GLib;
 

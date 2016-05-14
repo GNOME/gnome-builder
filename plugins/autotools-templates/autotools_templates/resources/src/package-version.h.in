@@ -1,4 +1,4 @@
-{{license}}
+{{include "license.h"}}
 
 #ifndef {{NAME}}_VERSION_H
 #define {{NAME}}_VERSION_H
