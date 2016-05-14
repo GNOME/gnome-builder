@@ -21,7 +21,8 @@
 struct _TmplTokenInputStream
 {
   GDataInputStream parent_instance;
-  guint swallow_newline : 1;
+  guint            swallow_newline : 1;
+  guint            last_was_text_with_newline : 1;
 };
 
 G_DEFINE_TYPE (TmplTokenInputStream, tmpl_token_input_stream, G_TYPE_DATA_INPUT_STREAM)
@@ -34,6 +35,7 @@ tmpl_token_input_stream_class_init (TmplTokenInputStreamClass *klass)
 static void
 tmpl_token_input_stream_init (TmplTokenInputStream *self)
 {
+  self->last_was_text_with_newline = TRUE;
 }
 
 static gboolean
@@ -229,7 +231,11 @@ tmpl_token_input_stream_read_token (TmplTokenInputStream  *self,
    * Handle successful read up to \ or {.
    */
   if (*text != '\0')
-    return tmpl_token_new_text (text);
+    {
+      self->last_was_text_with_newline = g_str_has_suffix (text, "\n");
+
+      return tmpl_token_new_text (text);
+    }
 
   g_free (text);
 
@@ -250,6 +256,8 @@ tmpl_token_input_stream_read_token (TmplTokenInputStream  *self,
   if (ch == '\\')
     {
       gchar str[8] = { 0 };
+
+      self->last_was_text_with_newline = FALSE;
 
       /*
        * Get the next char after \.
@@ -278,7 +286,10 @@ tmpl_token_input_stream_read_token (TmplTokenInputStream  *self,
    * return a token for the final {.
    */
   if (!tmpl_token_input_stream_read_unichar (self, &ch, cancellable, error))
-    return tmpl_token_new_unichar ('{');
+    {
+      self->last_was_text_with_newline = FALSE;
+      return tmpl_token_new_unichar ('{');
+    }
 
   /*
    * If this is not a {{, then just return a string for the pair.
@@ -289,6 +300,8 @@ tmpl_token_input_stream_read_token (TmplTokenInputStream  *self,
 
       g_unichar_to_utf8 (ch, str);
 
+      self->last_was_text_with_newline = FALSE;
+
       return tmpl_token_new_text (g_strdup_printf ("{%s", str));
     }
 
@@ -298,7 +311,8 @@ tmpl_token_input_stream_read_token (TmplTokenInputStream  *self,
   if (!(text = tmpl_token_input_stream_read_tag (self, &len, cancellable, error)))
     return NULL;
 
-  self->swallow_newline = TRUE;
+  self->swallow_newline = self->last_was_text_with_newline;
+  self->last_was_text_with_newline = FALSE;
 
   return tmpl_token_new_generic (text);
 }
