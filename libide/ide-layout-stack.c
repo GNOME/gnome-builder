@@ -86,6 +86,8 @@ ide_layout_stack_remove (IdeLayoutStack *self,
   g_return_if_fail (IDE_IS_LAYOUT_STACK (self));
   g_return_if_fail (IDE_IS_LAYOUT_VIEW (view));
 
+  g_object_ref (view);
+
   focus_after_close = g_list_nth_data (self->focus_history, 1);
   if (focus_after_close != NULL)
     g_object_ref (focus_after_close);
@@ -108,6 +110,8 @@ ide_layout_stack_remove (IdeLayoutStack *self,
 
       g_signal_emit (self, signals [EMPTY], 0);
     }
+
+  g_object_unref (view);
 }
 
 static void
