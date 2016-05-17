@@ -33,11 +33,11 @@ endif
 
 SUBDIRS = tools $(src_subdirs) $(srcmm_subdirs) # $(doc_subdirs)
 
-idemm_includedir = $(includedir)/$(IDEMM_MODULE_NAME)
-idemm_libincludedir = $(libdir)/$(IDEMM_MODULE_NAME)/include
+idemm_includedir = $(includedir)/gnome-builder-@VERSION@/$(IDEMM_MODULE_NAME)
+idemm_libincludedir = $(pkglibdir)/$(IDEMM_MODULE_NAME)/include
 nodist_idemm_libinclude_HEADERS = idemmconfig.h
 
-pkgconfigdir = $(libdir)/pkgconfig
+pkgconfigdir = $(pkglibdir)/pkgconfig
 pkgconfig_DATA = $(pkgconfig_files)
 
 endif
