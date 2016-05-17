@@ -1,6 +1,5 @@
 if ENABLE_IDEMM
 
-pkglibdir = $(libdir)/gnome-builder
 pkglib_LTLIBRARIES = libidemm-1.0.la
 
 include $(srcdir)/../src/filelist.am
