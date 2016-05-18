@@ -280,7 +280,19 @@ egg_empty_state_set_icon_name (EggEmptyState *self,
 
   if (g_strcmp0 (icon_name, egg_empty_state_get_icon_name (self)) != 0)
     {
-      g_object_set (priv->image, "icon-name", icon_name, NULL);
+      GtkStyleContext *context;
+
+      g_object_set (priv->image,
+                    "icon-name", icon_name,
+                    NULL);
+
+      context = gtk_widget_get_style_context (GTK_WIDGET (priv->image));
+
+      if (icon_name != NULL && g_str_has_suffix (icon_name, "-symbolic"))
+        gtk_style_context_add_class (context, "dim-label");
+      else
+        gtk_style_context_remove_class (context, "dim-label");
+
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ICON_NAME]);
     }
 }
