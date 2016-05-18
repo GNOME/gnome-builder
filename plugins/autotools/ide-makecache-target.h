@@ -40,6 +40,8 @@ guint               ide_makecache_target_hash       (gconstpointer       data);
 gboolean            ide_makecache_target_equal      (gconstpointer       data1,
                                                      gconstpointer       data2);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC (IdeMakecacheTarget, ide_makecache_target_unref)
+
 G_END_DECLS
 
 #endif /* IDE_MAKECACHE_TARGET_H */

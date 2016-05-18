@@ -324,14 +324,14 @@ ide_makecache_get_file_targets_searched (GMappedFile *mapped,
 
               if (is_target_interesting (targetstr))
                 {
-                  IdeMakecacheTarget *target;
+                  g_autoptr(IdeMakecacheTarget) target = NULL;
 
                   target = ide_makecache_target_new (subdir, targetstr);
 
                   if (!g_hash_table_contains (found, target))
                     {
                       g_hash_table_insert (found, target, NULL);
-                      g_ptr_array_add (targets, target);
+                      g_ptr_array_add (targets, g_steal_pointer (&target));
                     }
                 }
 
