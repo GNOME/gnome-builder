@@ -172,6 +172,7 @@ static const gchar *ide_application_credits_funders[] = {
   "Benjamin Grimm-Lebsanft",
   "Bernd Homuth",
   "Bill Roth",
+  "Bill Thornton",
   "Brad Taylor",
   "Brendan Long",
   "Brijesh Kartha",
