@@ -753,7 +753,7 @@ ide_makecache_parse_c_cxx (IdeMakecache *self,
                            GPtrArray    *ret)
 {
   gint argc = 0;
-  gchar **argv = NULL;
+  g_auto(GStrv) argv = NULL;
   gboolean in_expand = FALSE;
   GError *error = NULL;
   gsize i;
