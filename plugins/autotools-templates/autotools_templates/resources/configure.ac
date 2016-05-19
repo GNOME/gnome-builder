@@ -9,7 +9,7 @@ m4_define([minor_version],[{{minor_version}}])
 m4_define([micro_version],[{{micro_version}}])
 m4_define([package_version],[major_version.minor_version.micro_version])
 m4_define([bug_report_url],[https://bugzilla.gnome.org/enter_bug.cgi?product={{name}}])
-m4_define([api_version],[0])
+m4_define([api_version],[major_version])
 
 AX_IS_RELEASE([micro-version])
 
