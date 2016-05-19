@@ -134,9 +134,9 @@ throw_type_mismatch (GError       **error,
 
 static gboolean
 tmpl_expr_simple_eval (TmplExprSimple  *node,
-                      TmplScope       *scope,
-                      GValue         *return_value,
-                      GError        **error)
+                       TmplScope       *scope,
+                       GValue          *return_value,
+                       GError         **error)
 {
   GValue left = G_VALUE_INIT;
   GValue right = G_VALUE_INIT;
@@ -166,6 +166,55 @@ tmpl_expr_simple_eval (TmplExprSimple  *node,
     }
 
 cleanup:
+  TMPL_CLEAR_VALUE (&left);
+  TMPL_CLEAR_VALUE (&right);
+
+  return ret;
+}
+
+static gboolean
+tmpl_expr_simple_eval_logical (TmplExprSimple  *node,
+                               TmplScope       *scope,
+                               GValue          *return_value,
+                               GError         **error)
+{
+  GValue left = G_VALUE_INIT;
+  GValue right = G_VALUE_INIT;
+  gboolean ret = FALSE;
+
+  g_assert (node != NULL);
+  g_assert (scope != NULL);
+  g_assert (return_value != NULL);
+
+  g_value_init (return_value, G_TYPE_BOOLEAN);
+
+  if (tmpl_expr_eval_internal (node->left, scope, &left, error) &&
+      ((node->right == NULL) ||
+       tmpl_expr_eval_internal (node->right, scope, &right, error)))
+    {
+      switch ((int)node->type)
+        {
+        case TMPL_EXPR_AND:
+          g_value_set_boolean (return_value,
+                               (tmpl_value_as_boolean (&left) && tmpl_value_as_boolean (&right)));
+          ret = TRUE;
+          break;
+
+        case TMPL_EXPR_OR:
+          g_value_set_boolean (return_value,
+                               (tmpl_value_as_boolean (&left) || tmpl_value_as_boolean (&right)));
+          ret = TRUE;
+          break;
+
+        default:
+          g_set_error (error,
+                       TMPL_ERROR,
+                       TMPL_ERROR_RUNTIME_ERROR,
+                       "Unknown logical operator type: %d", node->type);
+          break;
+        }
+    }
+
   TMPL_CLEAR_VALUE (&left);
   TMPL_CLEAR_VALUE (&right);
 
@@ -818,6 +867,10 @@ tmpl_expr_eval_internal (TmplExpr   *node,
     case TMPL_EXPR_GTE:
     case TMPL_EXPR_LTE:
       return tmpl_expr_simple_eval ((TmplExprSimple *)node, scope, return_value, error);
+
+    case TMPL_EXPR_AND:
+    case TMPL_EXPR_OR:
+      return tmpl_expr_simple_eval_logical ((TmplExprSimple *)node, scope, return_value, error);
 
     case TMPL_EXPR_NUMBER:
       g_value_init (return_value, G_TYPE_DOUBLE);
