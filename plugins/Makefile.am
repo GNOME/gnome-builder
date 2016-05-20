@@ -11,6 +11,7 @@ SUBDIRS = \
 	ctags \
 	devhelp \
 	file-search \
+	flatpak \
 	fpaste \
 	gcc \
 	gettext \
@@ -31,7 +32,6 @@ SUBDIRS = \
 	terminal \
 	todo \
 	vala-pack \
-	xdg-app \
 	xml-pack \
 	$(NULL)
 

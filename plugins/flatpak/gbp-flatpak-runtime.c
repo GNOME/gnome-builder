@@ -1,4 +1,4 @@
-/* gb-xdg-runtime.c
+/* gb-flatpak-runtime.c
  *
  * Copyright (C) 2016 Christian Hergert <chergert@redhat.com>
  *
@@ -16,9 +16,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "gbp-xdg-runtime.h"
+#include "gbp-flatpak-runtime.h"
 
-struct _GbpXdgRuntime
+struct _GbpFlatpakRuntime
 {
   IdeRuntime parent_instance;
 
@@ -27,7 +27,7 @@ struct _GbpXdgRuntime
   gchar *branch;
 };
 
-G_DEFINE_TYPE (GbpXdgRuntime, gbp_xdg_runtime, IDE_TYPE_RUNTIME)
+G_DEFINE_TYPE (GbpFlatpakRuntime, gbp_flatpak_runtime, IDE_TYPE_RUNTIME)
 
 enum {
   PROP_0,
@@ -40,12 +40,12 @@ enum {
 static GParamSpec *properties [LAST_PROP];
 
 static gchar *
-get_build_directory (GbpXdgRuntime *self)
+get_build_directory (GbpFlatpakRuntime *self)
 {
   IdeContext *context;
   IdeProject *project;
 
-  g_assert (GBP_IS_XDG_RUNTIME (self));
+  g_assert (GBP_IS_FLATPAK_RUNTIME (self));
 
   context = ide_object_get_context (IDE_OBJECT (self));
   project = ide_context_get_project (context);
@@ -54,13 +54,13 @@ get_build_directory (GbpXdgRuntime *self)
                            "gnome-builder",
                            "builds",
                            ide_project_get_name (project),
-                           "xdg-app",
+                           "flatpak-app",
                            ide_runtime_get_id (IDE_RUNTIME (self)),
                            NULL);
 }
 
 static gboolean
-gbp_xdg_runtime_contains_program_in_path (IdeRuntime   *runtime,
+gbp_flatpak_runtime_contains_program_in_path (IdeRuntime   *runtime,
                                           const gchar  *program,
                                           GCancellable *cancellable)
 {
@@ -82,12 +82,12 @@ gbp_xdg_runtime_contains_program_in_path (IdeRuntime   *runtime,
 }
 
 static void
-gbp_xdg_runtime_prebuild_worker (GTask        *task,
+gbp_flatpak_runtime_prebuild_worker (GTask        *task,
                                  gpointer      source_object,
                                  gpointer      task_data,
                                  GCancellable *cancellable)
 {
-  GbpXdgRuntime *self = source_object;
+  GbpFlatpakRuntime *self = source_object;
   g_autofree gchar *build_path = NULL;
   g_autoptr(GFile) build_dir = NULL;
   g_autoptr(GSubprocessLauncher) launcher = NULL;
@@ -96,7 +96,7 @@ gbp_xdg_runtime_prebuild_worker (GTask        *task,
   GError *error = NULL;
 
   g_assert (G_IS_TASK (task));
-  g_assert (GBP_IS_XDG_RUNTIME (self));
+  g_assert (GBP_IS_FLATPAK_RUNTIME (self));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   build_path = get_build_directory (self);
@@ -121,14 +121,14 @@ gbp_xdg_runtime_prebuild_worker (GTask        *task,
 
   launcher = g_subprocess_launcher_new (G_SUBPROCESS_FLAGS_NONE);
   subprocess = g_subprocess_launcher_spawn (launcher, &error,
-                                            "xdg-app",
+                                            "flatpak-app",
                                             "build-init",
                                             build_path,
                                             /* XXX: Fake name, probably okay, but
                                              * can be proper once we get IdeConfiguration
                                              * in place.
                                              */
-                                            "org.gnome.Builder.XdgApp.Build",
+                                            "org.gnome.Builder.FlatpakApp.Build",
                                             self->sdk,
                                             self->platform,
                                             self->branch,
@@ -138,50 +138,50 @@ gbp_xdg_runtime_prebuild_worker (GTask        *task,
 }
 
 static void
-gbp_xdg_runtime_prebuild_async (IdeRuntime          *runtime,
+gbp_flatpak_runtime_prebuild_async (IdeRuntime          *runtime,
                                 GCancellable        *cancellable,
                                 GAsyncReadyCallback  callback,
                                 gpointer             user_data)
 {
-  GbpXdgRuntime *self = (GbpXdgRuntime *)runtime;
+  GbpFlatpakRuntime *self = (GbpFlatpakRuntime *)runtime;
   g_autoptr(GTask) task = NULL;
 
-  g_assert (GBP_IS_XDG_RUNTIME (self));
+  g_assert (GBP_IS_FLATPAK_RUNTIME (self));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = g_task_new (self, cancellable, callback, user_data);
-  g_task_run_in_thread (task, gbp_xdg_runtime_prebuild_worker);
+  g_task_run_in_thread (task, gbp_flatpak_runtime_prebuild_worker);
 }
 
 static gboolean
-gbp_xdg_runtime_prebuild_finish (IdeRuntime    *runtime,
+gbp_flatpak_runtime_prebuild_finish (IdeRuntime    *runtime,
                                  GAsyncResult  *result,
                                  GError       **error)
 {
-  GbpXdgRuntime *self = (GbpXdgRuntime *)runtime;
+  GbpFlatpakRuntime *self = (GbpFlatpakRuntime *)runtime;
 
-  g_assert (GBP_IS_XDG_RUNTIME (self));
+  g_assert (GBP_IS_FLATPAK_RUNTIME (self));
   g_assert (G_IS_TASK (result));
 
   return g_task_propagate_boolean (G_TASK (result), error);
 }
 
 static IdeSubprocessLauncher *
-gbp_xdg_runtime_create_launcher (IdeRuntime  *runtime,
+gbp_flatpak_runtime_create_launcher (IdeRuntime  *runtime,
                                  GError     **error)
 {
   IdeSubprocessLauncher *ret;
-  GbpXdgRuntime *self = (GbpXdgRuntime *)runtime;
+  GbpFlatpakRuntime *self = (GbpFlatpakRuntime *)runtime;
 
-  g_return_val_if_fail (GBP_IS_XDG_RUNTIME (self), NULL);
+  g_return_val_if_fail (GBP_IS_FLATPAK_RUNTIME (self), NULL);
 
-  ret = IDE_RUNTIME_CLASS (gbp_xdg_runtime_parent_class)->create_launcher (runtime, error);
+  ret = IDE_RUNTIME_CLASS (gbp_flatpak_runtime_parent_class)->create_launcher (runtime, error);
 
   if (ret != NULL)
     {
       g_autofree gchar *build_path = get_build_directory (self);
 
-      ide_subprocess_launcher_push_argv (ret, "xdg-app");
+      ide_subprocess_launcher_push_argv (ret, "flatpak-app");
       ide_subprocess_launcher_push_argv (ret, "build");
       ide_subprocess_launcher_push_argv (ret, build_path);
     }
@@ -190,7 +190,7 @@ gbp_xdg_runtime_create_launcher (IdeRuntime  *runtime,
 }
 
 static void
-gbp_xdg_runtime_prepare_configuration (IdeRuntime       *runtime,
+gbp_flatpak_runtime_prepare_configuration (IdeRuntime       *runtime,
                                        IdeConfiguration *configuration)
 {
   g_assert (IDE_IS_RUNTIME (runtime));
@@ -200,12 +200,12 @@ gbp_xdg_runtime_prepare_configuration (IdeRuntime       *runtime,
 }
 
 static void
-gbp_xdg_runtime_get_property (GObject    *object,
+gbp_flatpak_runtime_get_property (GObject    *object,
                               guint       prop_id,
                               GValue     *value,
                               GParamSpec *pspec)
 {
-  GbpXdgRuntime *self = GBP_XDG_RUNTIME(object);
+  GbpFlatpakRuntime *self = GBP_FLATPAK_RUNTIME(object);
 
   switch (prop_id)
     {
@@ -227,12 +227,12 @@ gbp_xdg_runtime_get_property (GObject    *object,
 }
 
 static void
-gbp_xdg_runtime_set_property (GObject      *object,
+gbp_flatpak_runtime_set_property (GObject      *object,
                               guint         prop_id,
                               const GValue *value,
                               GParamSpec   *pspec)
 {
-  GbpXdgRuntime *self = GBP_XDG_RUNTIME(object);
+  GbpFlatpakRuntime *self = GBP_FLATPAK_RUNTIME(object);
 
   switch (prop_id)
     {
@@ -254,32 +254,32 @@ gbp_xdg_runtime_set_property (GObject      *object,
 }
 
 static void
-gbp_xdg_runtime_finalize (GObject *object)
+gbp_flatpak_runtime_finalize (GObject *object)
 {
-  GbpXdgRuntime *self = (GbpXdgRuntime *)object;
+  GbpFlatpakRuntime *self = (GbpFlatpakRuntime *)object;
 
   g_clear_pointer (&self->sdk, g_free);
   g_clear_pointer (&self->platform, g_free);
   g_clear_pointer (&self->branch, g_free);
 
-  G_OBJECT_CLASS (gbp_xdg_runtime_parent_class)->finalize (object);
+  G_OBJECT_CLASS (gbp_flatpak_runtime_parent_class)->finalize (object);
 }
 
 static void
-gbp_xdg_runtime_class_init (GbpXdgRuntimeClass *klass)
+gbp_flatpak_runtime_class_init (GbpFlatpakRuntimeClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   IdeRuntimeClass *runtime_class = IDE_RUNTIME_CLASS (klass);
 
-  object_class->finalize = gbp_xdg_runtime_finalize;
-  object_class->get_property = gbp_xdg_runtime_get_property;
-  object_class->set_property = gbp_xdg_runtime_set_property;
+  object_class->finalize = gbp_flatpak_runtime_finalize;
+  object_class->get_property = gbp_flatpak_runtime_get_property;
+  object_class->set_property = gbp_flatpak_runtime_set_property;
 
-  runtime_class->prebuild_async = gbp_xdg_runtime_prebuild_async;
-  runtime_class->prebuild_finish = gbp_xdg_runtime_prebuild_finish;
-  runtime_class->create_launcher = gbp_xdg_runtime_create_launcher;
-  runtime_class->contains_program_in_path = gbp_xdg_runtime_contains_program_in_path;
-  runtime_class->prepare_configuration = gbp_xdg_runtime_prepare_configuration;
+  runtime_class->prebuild_async = gbp_flatpak_runtime_prebuild_async;
+  runtime_class->prebuild_finish = gbp_flatpak_runtime_prebuild_finish;
+  runtime_class->create_launcher = gbp_flatpak_runtime_create_launcher;
+  runtime_class->contains_program_in_path = gbp_flatpak_runtime_contains_program_in_path;
+  runtime_class->prepare_configuration = gbp_flatpak_runtime_prepare_configuration;
 
   properties [PROP_BRANCH] =
     g_param_spec_string ("branch",
@@ -312,6 +312,6 @@ gbp_xdg_runtime_class_init (GbpXdgRuntimeClass *klass)
 }
 
 static void
-gbp_xdg_runtime_init (GbpXdgRuntime *self)
+gbp_flatpak_runtime_init (GbpFlatpakRuntime *self)
 {
 }

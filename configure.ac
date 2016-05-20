@@ -286,6 +286,7 @@ m4_include([plugins/create-project/configure.ac])
 m4_include([plugins/ctags/configure.ac])
 m4_include([plugins/devhelp/configure.ac])
 m4_include([plugins/file-search/configure.ac])
+m4_include([plugins/flatpak/configure.ac])
 m4_include([plugins/fpaste/configure.ac])
 m4_include([plugins/gcc/configure.ac])
 m4_include([plugins/gettext/configure.ac])
@@ -306,7 +307,6 @@ m4_include([plugins/sysmon/configure.ac])
 m4_include([plugins/todo/configure.ac])
 m4_include([plugins/terminal/configure.ac])
 m4_include([plugins/vala-pack/configure.ac])
-m4_include([plugins/xdg-app/configure.ac])
 m4_include([plugins/xml-pack/configure.ac])
 
 
@@ -604,7 +604,7 @@ echo "  Symbol Tree .......................... : ${enable_symbol_tree_plugin}"
 echo "  Todo ................................. : ${enable_todo_plugin}"
 echo "  Terminal ............................. : ${enable_terminal_plugin}"
 echo "  Vala Language Pack ................... : ${enable_vala_pack_plugin}"
-echo "  Xdg-App .............................. : ${enable_xdg_app_plugin}"
+echo "  Flatpak .............................. : ${enable_flatpak_plugin}"
 echo "  XML Language Pack .................... : ${enable_xml_pack_plugin}"
 echo ""
 echo " Example Plugins"

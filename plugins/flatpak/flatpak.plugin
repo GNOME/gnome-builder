@@ -1,7 +1,7 @@
 [Plugin]
-Module=xdg-app-plugin
-Name=Xdg-App
-Description=Provides support for building with Xdg-App
+Module=flatpak-plugin
+Name=Flatpak
+Description=Provides support for building with Flatpak
 Authors=Christian Hergert <christian@hergert.me>
 Copyright=Copyright © 2016 Christian Hergert
 Builtin=true
