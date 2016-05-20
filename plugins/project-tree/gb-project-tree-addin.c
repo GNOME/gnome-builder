@@ -97,6 +97,7 @@ gb_project_tree_addin_load (IdeWorkbenchAddin *addin,
                              "headers-visible", FALSE,
                              "visible", TRUE,
                              NULL);
+  g_object_add_weak_pointer (G_OBJECT (self->tree), (gpointer *)&self->tree);
   gtk_container_add (GTK_CONTAINER (scroller), GTK_WIDGET (self->tree));
 
   self->panel = g_object_new (PNL_TYPE_DOCK_WIDGET,
@@ -120,6 +121,15 @@ gb_project_tree_addin_unload (IdeWorkbenchAddin *addin,
 
   g_assert (IDE_IS_WORKBENCH_ADDIN (self));
   g_assert (IDE_IS_WORKBENCH (workbench));
+
+  if (self->tree != NULL)
+    {
+      g_signal_handlers_disconnect_by_func (self->tree,
+                                            G_CALLBACK (gb_project_tree_addin_grid_empty),
+                                            self);
+      g_object_remove_weak_pointer (G_OBJECT (self->tree), (gpointer *)&self->tree);
+      self->tree = NULL;
+    }
 
   gtk_widget_destroy (self->panel);
   self->panel = NULL;
