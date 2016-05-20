@@ -52,19 +52,10 @@ static void
 gb_project_tree_addin_grid_empty (GbProjectTreeAddin *self,
                                   IdeLayoutGrid      *grid)
 {
-  GtkWidget *layout;
-  GtkWidget *pane;
-
   g_assert (GB_IS_PROJECT_TREE_ADDIN (self));
   g_assert (IDE_IS_LAYOUT_GRID (grid));
 
-  layout = gtk_widget_get_ancestor (GTK_WIDGET (grid), IDE_TYPE_LAYOUT);
-  g_assert (layout != NULL);
-
-  pane = pnl_dock_bin_get_left_edge (PNL_DOCK_BIN (layout));
-  g_assert (pane != NULL);
-
-  pnl_dock_revealer_set_reveal_child (PNL_DOCK_REVEALER (pane), TRUE);
+  gtk_widget_grab_focus (GTK_WIDGET (self->tree));
 }
 
 static void
