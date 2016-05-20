@@ -1,4 +1,4 @@
-/* gbp-xdg-runtime-provider.c
+/* gbp-flatpak-runtime-provider.c
  *
  * Copyright (C) 2016 Christian Hergert <chergert@redhat.com>
  *
@@ -17,25 +17,25 @@
  */
 
 #include <string.h>
-#include <xdg-app.h>
+#include <flatpak.h>
 
 #include "util/ide-posix.h"
 
-#include "gbp-xdg-runtime.h"
-#include "gbp-xdg-runtime-provider.h"
+#include "gbp-flatpak-runtime.h"
+#include "gbp-flatpak-runtime-provider.h"
 
-struct _GbpXdgRuntimeProvider
+struct _GbpFlatpakRuntimeProvider
 {
   GObject             parent_instance;
   IdeRuntimeManager  *manager;
-  XdgAppInstallation *installation;
+  FlatpakInstallation *installation;
   GCancellable       *cancellable;
   GPtrArray          *runtimes;
 };
 
 static void runtime_provider_iface_init (IdeRuntimeProviderInterface *);
 
-G_DEFINE_TYPE_EXTENDED (GbpXdgRuntimeProvider, gbp_xdg_runtime_provider, G_TYPE_OBJECT, 0,
+G_DEFINE_TYPE_EXTENDED (GbpFlatpakRuntimeProvider, gbp_flatpak_runtime_provider, G_TYPE_OBJECT, 0,
                         G_IMPLEMENT_INTERFACE (IDE_TYPE_RUNTIME_PROVIDER,
                                                runtime_provider_iface_init))
 
@@ -49,12 +49,12 @@ sanitize_name (gchar *name)
 }
 
 static void
-gbp_xdg_runtime_provider_load_worker (GTask        *task,
-                                      gpointer      source_object,
-                                      gpointer      task_data,
-                                      GCancellable *cancellable)
+gbp_flatpak_runtime_provider_load_worker (GTask        *task,
+                                          gpointer      source_object,
+                                          gpointer      task_data,
+                                          GCancellable *cancellable)
 {
-  GbpXdgRuntimeProvider *self = source_object;
+  GbpFlatpakRuntimeProvider *self = source_object;
   g_autofree gchar *host_type = NULL;
   IdeContext *context;
   GPtrArray *ret;
@@ -63,13 +63,13 @@ gbp_xdg_runtime_provider_load_worker (GTask        *task,
   guint i;
 
   g_assert (G_IS_TASK (task));
-  g_assert (GBP_IS_XDG_RUNTIME_PROVIDER (self));
+  g_assert (GBP_IS_FLATPAK_RUNTIME_PROVIDER (self));
   g_assert (IDE_IS_RUNTIME_MANAGER (self->manager));
 
   context = ide_object_get_context (IDE_OBJECT (self->manager));
   host_type = ide_get_system_arch ();
 
-  self->installation = xdg_app_installation_new_user (cancellable, &error);
+  self->installation = flatpak_installation_new_user (cancellable, &error);
 
   if (self->installation == NULL)
     {
@@ -77,8 +77,8 @@ gbp_xdg_runtime_provider_load_worker (GTask        *task,
       return;
     }
 
-  ar = xdg_app_installation_list_installed_refs_by_kind (self->installation,
-                                                         XDG_APP_REF_KIND_RUNTIME,
+  ar = flatpak_installation_list_installed_refs_by_kind (self->installation,
+                                                         FLATPAK_REF_KIND_RUNTIME,
                                                          cancellable,
                                                          &error);
 
@@ -92,7 +92,7 @@ gbp_xdg_runtime_provider_load_worker (GTask        *task,
 
   for (i = 0; i < ar->len; i++)
     {
-      XdgAppInstalledRef *ref = g_ptr_array_index (ar, i);
+      FlatpakInstalledRef *ref = g_ptr_array_index (ar, i);
       g_autofree gchar *str = NULL;
       g_autofree gchar *id = NULL;
       g_autofree gchar *name = NULL;
@@ -104,23 +104,23 @@ gbp_xdg_runtime_provider_load_worker (GTask        *task,
       const gchar *metadata_data;
       gsize metadata_len;
 
-      g_assert (XDG_APP_IS_INSTALLED_REF (ref));
+      g_assert (FLATPAK_IS_INSTALLED_REF (ref));
 
-      name = g_strdup (xdg_app_ref_get_name (XDG_APP_REF (ref)));
+      name = g_strdup (flatpak_ref_get_name (FLATPAK_REF (ref)));
 
       sanitize_name (name);
 
-      arch = xdg_app_ref_get_arch (XDG_APP_REF (ref));
-      branch = xdg_app_ref_get_branch (XDG_APP_REF (ref));
+      arch = flatpak_ref_get_arch (FLATPAK_REF (ref));
+      branch = flatpak_ref_get_branch (FLATPAK_REF (ref));
 
-      id = g_strdup_printf ("xdg-app:%s/%s/%s", name, branch, arch);
+      id = g_strdup_printf ("flatpak-app:%s/%s/%s", name, branch, arch);
 
       if (g_strcmp0 (host_type, arch) == 0)
         str = g_strdup_printf ("%s <b>%s</b>", name, branch);
       else
         str = g_strdup_printf ("%s <b>%s</b> <sup>%s</sup>", name, branch, arch);
 
-      metadata = xdg_app_installed_ref_load_metadata (XDG_APP_INSTALLED_REF (ref),
+      metadata = flatpak_installed_ref_load_metadata (FLATPAK_INSTALLED_REF (ref),
                                                       cancellable, &error);
 
       if (metadata == NULL)
@@ -157,7 +157,7 @@ gbp_xdg_runtime_provider_load_worker (GTask        *task,
       sanitize_name (sdk);
 
       g_ptr_array_add (ret,
-                       g_object_new (GBP_TYPE_XDG_RUNTIME,
+                       g_object_new (GBP_TYPE_FLATPAK_RUNTIME,
                                      "branch", branch,
                                      "sdk", sdk,
                                      "platform", name,
@@ -173,16 +173,16 @@ gbp_xdg_runtime_provider_load_worker (GTask        *task,
 }
 
 static void
-gbp_xdg_runtime_provider_load_cb (GObject      *object,
+gbp_flatpak_runtime_provider_load_cb (GObject      *object,
                                   GAsyncResult *result,
                                   gpointer      user_data)
 {
-  GbpXdgRuntimeProvider *self = (GbpXdgRuntimeProvider *)object;
+  GbpFlatpakRuntimeProvider *self = (GbpFlatpakRuntimeProvider *)object;
   GPtrArray *ret;
   GError *error = NULL;
   guint i;
 
-  g_assert (GBP_IS_XDG_RUNTIME_PROVIDER (self));
+  g_assert (GBP_IS_FLATPAK_RUNTIME_PROVIDER (self));
   g_assert (G_IS_TASK (result));
 
   if (!(ret = g_task_propagate_pointer (G_TASK (result), &error)))
@@ -203,30 +203,30 @@ gbp_xdg_runtime_provider_load_cb (GObject      *object,
 }
 
 static void
-gbp_xdg_runtime_provider_load (IdeRuntimeProvider *provider,
+gbp_flatpak_runtime_provider_load (IdeRuntimeProvider *provider,
                                IdeRuntimeManager  *manager)
 {
-  GbpXdgRuntimeProvider *self = (GbpXdgRuntimeProvider *)provider;
+  GbpFlatpakRuntimeProvider *self = (GbpFlatpakRuntimeProvider *)provider;
   g_autoptr(GTask) task = NULL;
 
-  g_assert (GBP_IS_XDG_RUNTIME_PROVIDER (self));
+  g_assert (GBP_IS_FLATPAK_RUNTIME_PROVIDER (self));
   g_assert (IDE_IS_RUNTIME_MANAGER (manager));
 
   ide_set_weak_pointer (&self->manager, manager);
 
   self->cancellable = g_cancellable_new ();
 
-  task = g_task_new (self, self->cancellable, gbp_xdg_runtime_provider_load_cb, NULL);
-  g_task_run_in_thread (task, gbp_xdg_runtime_provider_load_worker);
+  task = g_task_new (self, self->cancellable, gbp_flatpak_runtime_provider_load_cb, NULL);
+  g_task_run_in_thread (task, gbp_flatpak_runtime_provider_load_worker);
 }
 
 static void
-gbp_xdg_runtime_provider_unload (IdeRuntimeProvider *provider,
+gbp_flatpak_runtime_provider_unload (IdeRuntimeProvider *provider,
                                  IdeRuntimeManager  *manager)
 {
-  GbpXdgRuntimeProvider *self = (GbpXdgRuntimeProvider *)provider;
+  GbpFlatpakRuntimeProvider *self = (GbpFlatpakRuntimeProvider *)provider;
 
-  g_assert (GBP_IS_XDG_RUNTIME_PROVIDER (self));
+  g_assert (GBP_IS_FLATPAK_RUNTIME_PROVIDER (self));
   g_assert (IDE_IS_RUNTIME_MANAGER (manager));
 
   if (self->runtimes != NULL)
@@ -251,18 +251,18 @@ gbp_xdg_runtime_provider_unload (IdeRuntimeProvider *provider,
 }
 
 static void
-gbp_xdg_runtime_provider_class_init (GbpXdgRuntimeProviderClass *klass)
+gbp_flatpak_runtime_provider_class_init (GbpFlatpakRuntimeProviderClass *klass)
 {
 }
 
 static void
-gbp_xdg_runtime_provider_init (GbpXdgRuntimeProvider *self)
+gbp_flatpak_runtime_provider_init (GbpFlatpakRuntimeProvider *self)
 {
 }
 
 static void
 runtime_provider_iface_init (IdeRuntimeProviderInterface *iface)
 {
-  iface->load = gbp_xdg_runtime_provider_load;
-  iface->unload = gbp_xdg_runtime_provider_unload;
+  iface->load = gbp_flatpak_runtime_provider_load;
+  iface->unload = gbp_flatpak_runtime_provider_unload;
 }

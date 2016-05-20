@@ -1,4 +1,4 @@
-/* gbp-xdg-runtime.h
+/* gbp-flatpak-runtime.h
  *
  * Copyright (C) 2016 Christian Hergert <chergert@redhat.com>
  *
@@ -16,17 +16,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GBP_XDG_RUNTIME_H
-#define GBP_XDG_RUNTIME_H
+#ifndef GBP_FLATPAK_RUNTIME_H
+#define GBP_FLATPAK_RUNTIME_H
 
 #include <ide.h>
 
 G_BEGIN_DECLS
 
-#define GBP_TYPE_XDG_RUNTIME (gbp_xdg_runtime_get_type())
+#define GBP_TYPE_FLATPAK_RUNTIME (gbp_flatpak_runtime_get_type())
 
-G_DECLARE_FINAL_TYPE (GbpXdgRuntime, gbp_xdg_runtime, GBP, XDG_RUNTIME, IdeRuntime)
+G_DECLARE_FINAL_TYPE (GbpFlatpakRuntime, gbp_flatpak_runtime, GBP, FLATPAK_RUNTIME, IdeRuntime)
 
 G_END_DECLS
 
-#endif /* GBP_XDG_RUNTIME_H */
+#endif /* GBP_FLATPAK_RUNTIME_H */

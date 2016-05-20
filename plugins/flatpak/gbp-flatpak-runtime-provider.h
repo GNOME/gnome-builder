@@ -1,4 +1,4 @@
-/* gbp-xdg-plugin.c
+/* gbp-flatpak-runtime-provider.h
  *
  * Copyright (C) 2016 Christian Hergert <chergert@redhat.com>
  *
@@ -16,15 +16,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <libpeas/peas.h>
+#ifndef GBP_FLATPAK_RUNTIME_PROVIDER_H
+#define GBP_FLATPAK_RUNTIME_PROVIDER_H
+
 #include <ide.h>
 
-#include "gbp-xdg-runtime-provider.h"
+G_BEGIN_DECLS
 
-void
-peas_register_types (PeasObjectModule *module)
-{
-  peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_RUNTIME_PROVIDER,
-                                              GBP_TYPE_XDG_RUNTIME_PROVIDER);
-}
+#define GBP_TYPE_FLATPAK_RUNTIME_PROVIDER (gbp_flatpak_runtime_provider_get_type())
+
+G_DECLARE_FINAL_TYPE (GbpFlatpakRuntimeProvider, gbp_flatpak_runtime_provider, GBP, FLATPAK_RUNTIME_PROVIDER, GObject)
+
+G_END_DECLS
+
+#endif /* GBP_FLATPAK_RUNTIME_PROVIDER_H */
