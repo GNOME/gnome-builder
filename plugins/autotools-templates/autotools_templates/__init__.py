@@ -95,6 +95,8 @@ class AutotoolsTemplate(Ide.TemplateBase, Ide.ProjectTemplate):
         return self.languages
 
     def do_expand_async(self, params, cancellable, callback, data):
+        self.reset()
+
         task = Gio.Task.new(self, cancellable, callback)
 
         name = params['name'].get_string().lower()

@@ -713,3 +713,16 @@ ide_template_base_add_path (IdeTemplateBase *self,
 
   g_array_append_val (priv->files, expansion);
 }
+
+void
+ide_template_base_reset (IdeTemplateBase *self)
+{
+  IdeTemplateBasePrivate *priv = ide_template_base_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_TEMPLATE_BASE (self));
+
+  g_clear_pointer (&priv->files, g_array_unref);
+  priv->files = g_array_new (FALSE, TRUE, sizeof (FileExpansion));
+
+  priv->has_expanded = FALSE;
+}
