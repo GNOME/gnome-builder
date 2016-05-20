@@ -52,6 +52,7 @@ void                 ide_template_base_expand_all_async  (IdeTemplateBase       
 gboolean             ide_template_base_expand_all_finish (IdeTemplateBase       *self,
                                                           GAsyncResult          *result,
                                                           GError               **error);
+void                 ide_template_base_reset             (IdeTemplateBase       *self);
 
 G_END_DECLS
 
