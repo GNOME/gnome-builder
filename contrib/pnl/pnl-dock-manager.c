@@ -63,9 +63,8 @@ pnl_dock_manager_do_set_focus (PnlDockManager *self,
   /*
    * If their is a PnlDockItem in the hierarchy, create a new transient grab.
    */
-  for (parent = focus;
-       parent != NULL;
-       parent = gtk_widget_get_parent (parent))
+  parent = focus;
+  while (GTK_IS_WIDGET (parent))
     {
       if (PNL_IS_DOCK_ITEM (parent))
         {
@@ -73,6 +72,11 @@ pnl_dock_manager_do_set_focus (PnlDockManager *self,
             grab = pnl_dock_transient_grab_new ();
           pnl_dock_transient_grab_add_item (grab, PNL_DOCK_ITEM (parent));
         }
+
+      if (GTK_IS_POPOVER (parent))
+        parent = gtk_popover_get_relative_to (GTK_POPOVER (parent));
+      else
+        parent = gtk_widget_get_parent (parent);
     }
 
   /*
