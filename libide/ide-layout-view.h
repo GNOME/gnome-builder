@@ -46,8 +46,12 @@ struct _IdeLayoutViewClass
                                            IdeBackForwardList        *back_forward_list);
   void           (*navigate_to)           (IdeLayoutView             *self,
                                            IdeSourceLocation         *location);
+  gboolean       (*agree_to_close)        (IdeLayoutView             *self);
+
+  gpointer padding[8];
 };
 
+gboolean       ide_layout_view_agree_to_close        (IdeLayoutView             *self);
 IdeLayoutView *ide_layout_view_create_split          (IdeLayoutView             *self);
 gboolean       ide_layout_view_get_can_preview       (IdeLayoutView             *self);
 gboolean       ide_layout_view_get_can_split         (IdeLayoutView             *self);
