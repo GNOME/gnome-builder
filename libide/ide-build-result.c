@@ -107,7 +107,7 @@ _ide_build_result_open_log (IdeBuildResult  *self,
   return FALSE;
 }
 
-void
+G_GNUC_PRINTF (6, 0) static void
 _ide_build_result_log (IdeBuildResult    *self,
                        GSource           *source,
                        GAsyncQueue       *queue,
