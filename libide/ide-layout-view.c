@@ -343,3 +343,14 @@ ide_layout_view_get_special_title (IdeLayoutView *self)
 
   return ret;
 }
+
+gboolean
+ide_layout_view_agree_to_close (IdeLayoutView *self)
+{
+  g_return_val_if_fail (IDE_IS_LAYOUT_VIEW (self), FALSE);
+
+  if (IDE_LAYOUT_VIEW_GET_CLASS (self)->agree_to_close)
+    return IDE_LAYOUT_VIEW_GET_CLASS (self)->agree_to_close (self);
+
+  return TRUE;
+}

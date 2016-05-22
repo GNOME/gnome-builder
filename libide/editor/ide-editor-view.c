@@ -841,6 +841,23 @@ ide_editor_view_destroy (GtkWidget *widget)
   IDE_EXIT;
 }
 
+static gboolean
+ide_editor_view_agree_to_close (IdeLayoutView *view)
+{
+  IdeEditorView *self = (IdeEditorView *)view;
+
+  g_assert (IDE_IS_EDITOR_VIEW (self));
+
+  /* We autosave documents, so we don't really need to ask the user
+   * to close the document. But we do need to release our plugins
+   * immediately before we start closing. Otherwise we rely on widget
+   * destruction which is a rather nasty way to cleanup.
+   */
+  ide_editor_view_unload_addins (self);
+
+  return TRUE;
+}
+
 static void
 ide_editor_view_finalize (GObject *object)
 {
@@ -916,6 +933,7 @@ ide_editor_view_class_init (IdeEditorViewClass *klass)
   view_class->set_back_forward_list = ide_editor_view_set_back_forward_list;
   view_class->navigate_to = ide_editor_view_navigate_to;
   view_class->get_title = ide_editor_view_get_title;
+  view_class->agree_to_close = ide_editor_view_agree_to_close;
 
   properties [PROP_DOCUMENT] =
     g_param_spec_object ("document",

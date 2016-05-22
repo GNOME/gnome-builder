@@ -81,14 +81,21 @@ void
 ide_layout_stack_remove (IdeLayoutStack *self,
                          GtkWidget      *view)
 {
-  GtkWidget *focus_after_close = NULL;
+  g_autoptr(GtkWidget) focus_after_close = NULL;
 
   g_return_if_fail (IDE_IS_LAYOUT_STACK (self));
   g_return_if_fail (IDE_IS_LAYOUT_VIEW (view));
 
   g_object_ref (view);
 
-  focus_after_close = g_list_nth_data (self->focus_history, 1);
+  if (!ide_layout_view_agree_to_close (IDE_LAYOUT_VIEW (view)))
+    return;
+
+  if (self->focus_history->data != view)
+    focus_after_close = self->focus_history->data;
+  else
+    focus_after_close = g_list_nth_data (self->focus_history, 1);
+
   if (focus_after_close != NULL)
     g_object_ref (focus_after_close);
 
@@ -99,9 +106,8 @@ ide_layout_stack_remove (IdeLayoutStack *self,
     {
       gtk_stack_set_visible_child (self->stack, focus_after_close);
       gtk_widget_grab_focus (GTK_WIDGET (focus_after_close));
-      g_clear_object (&focus_after_close);
     }
-  else
+  else if (!gtk_widget_in_destruction (GTK_WIDGET (self)))
     {
       GtkStyleContext *context;
 
