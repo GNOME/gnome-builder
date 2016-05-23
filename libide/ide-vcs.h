@@ -40,6 +40,7 @@ struct _IdeVcsInterface
                                                         GFile      *file,
                                                         GError    **error);
   gint                    (*get_priority)              (IdeVcs     *self);
+  void                    (*changed)                   (IdeVcs     *self);
 };
 
 IdeBufferChangeMonitor *ide_vcs_get_buffer_change_monitor (IdeVcs               *self,
@@ -56,6 +57,7 @@ gboolean                ide_vcs_is_ignored                (IdeVcs               
                                                            GFile                *file,
                                                            GError              **error);
 gint                    ide_vcs_get_priority              (IdeVcs               *self);
+void                    ide_vcs_emit_changed              (IdeVcs               *self);
 
 G_END_DECLS
 

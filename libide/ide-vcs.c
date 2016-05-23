@@ -23,6 +23,13 @@
 
 G_DEFINE_INTERFACE (IdeVcs, ide_vcs, IDE_TYPE_OBJECT)
 
+enum {
+  CHANGED,
+  N_SIGNALS
+};
+
+static guint signals [N_SIGNALS];
+
 static void
 ide_vcs_default_init (IdeVcsInterface *iface)
 {
@@ -32,6 +39,20 @@ ide_vcs_default_init (IdeVcsInterface *iface)
                                                             "Context",
                                                             IDE_TYPE_CONTEXT,
                                                             (G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS)));
+
+  /**
+   * IdeVcs::changed:
+   *
+   * The "changed" signal should be emitted when the VCS has detected a change
+   * to the underlying VCS storage. This can be used by consumers to reload
+   * their respective data structures.
+   */
+  signals [CHANGED] =
+    g_signal_new ("changed",
+                  G_TYPE_FROM_INTERFACE (iface),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (IdeVcsInterface, changed),
+                  NULL, NULL, NULL, G_TYPE_NONE, 0);
 }
 
 gboolean
@@ -152,4 +173,12 @@ ide_vcs_new_finish (GAsyncResult  *result,
   ret = ide_object_new_finish (result, error);
 
   return IDE_VCS (ret);
+}
+
+void
+ide_vcs_emit_changed (IdeVcs *self)
+{
+  g_return_if_fail (IDE_IS_VCS (self));
+
+  g_signal_emit (self, signals [CHANGED], 0);
 }
