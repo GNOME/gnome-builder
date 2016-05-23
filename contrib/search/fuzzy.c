@@ -460,13 +460,20 @@ fuzzy_match (Fuzzy       *fuzzy,
     }
   else
     {
+      guint last_id = G_MAXUINT;
+
       for (i = 0; i < root->len; i++)
         {
           item = &g_array_index (root, FuzzyItem, i);
-          match.key = fuzzy_get_string (fuzzy, item->id);
-          match.value = g_ptr_array_index (fuzzy->id_to_value, item->id);
-          match.score = 0;
-          g_array_append_val (matches, match);
+          match.id = GPOINTER_TO_INT (item->id);
+          if (match.id != last_id)
+            {
+              match.key = fuzzy_get_string (fuzzy, item->id);
+              match.value = g_ptr_array_index (fuzzy->id_to_value, item->id);
+              match.score = 0;
+              g_array_append_val (matches, match);
+              last_id = match.id;
+            }
         }
 
       goto cleanup;
