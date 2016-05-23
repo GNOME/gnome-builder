@@ -18,6 +18,7 @@
     <file compressed="true">scalable/actions/lang-function-symbolic.svg</file>
     <file compressed="true">scalable/actions/lang-include-symbolic.svg</file>
     <file compressed="true">scalable/actions/lang-method-symbolic.svg</file>
+    <file compressed="true">scalable/actions/lang-namespace-symbolic.svg</file>
     <file compressed="true">scalable/actions/lang-struct-symbolic.svg</file>
     <file compressed="true">scalable/actions/lang-typedef-symbolic.svg</file>
     <file compressed="true">scalable/actions/lang-union-symbolic.svg</file>
