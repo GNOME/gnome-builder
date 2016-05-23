@@ -29,6 +29,7 @@ gi.require_version('GIRepository', '2.0')
 gi.require_version('Ide', '1.0')
 
 from gi.repository import GIRepository
+from gi.repository import Gio
 from gi.repository import GLib
 from gi.repository import GObject
 from gi.repository import Gtk
@@ -37,6 +38,8 @@ from gi.repository import Ide
 
 # 2 minutes
 CACHE_EXPIRE_USEC = 2 * 60 * 1000 * 1000
+
+_NamespaceIcon = Gio.ThemedIcon.new('lang-namespace-symbolic')
 
 class CompletionProvider(Ide.Object,
                          GtkSource.CompletionProvider,
@@ -136,8 +139,8 @@ class CompletionProposal(GObject.Object, GtkSource.CompletionProposal):
     def do_get_text(self):
         return self.complete
 
-    def do_get_icon_name(self):
-        return 'lang-include-symbolic'
+    def do_get_gicon(self):
+        return _NamespaceIcon
 
     def do_hash(self):
         return hash(self.completion)
