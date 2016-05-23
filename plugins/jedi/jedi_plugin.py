@@ -83,8 +83,8 @@ _ICONS = {
     _TYPE_CLASS: 'lang-class-symbolic',
     _TYPE_INSTANCE: 'lang-variable-symbolic',
     _TYPE_PARAM: 'lang-variable-symbolic',
-    _TYPE_IMPORT: 'lang-include-symbolic',
-    _TYPE_MODULE: 'lang-include-symbolic',
+    _TYPE_IMPORT: 'lang-namespace-symbolic',
+    _TYPE_MODULE: 'lang-namespace-symbolic',
 }
 
 try:
