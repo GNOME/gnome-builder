@@ -127,6 +127,31 @@ gb_project_tree_project_file_trashed (GbProjectTree *self,
   IDE_EXIT;
 }
 
+static void
+gb_project_tree_vcs_changed (GbProjectTree *self,
+                             IdeVcs        *vcs)
+{
+  g_autoptr(GFile) file = NULL;
+  IdeTreeNode *node;
+  GObject *item;
+
+  g_assert (GB_IS_PROJECT_TREE (self));
+  g_assert (IDE_IS_VCS (vcs));
+
+  if (NULL != (node = ide_tree_get_selected (IDE_TREE (self))) &&
+      NULL != (item = ide_tree_node_get_item (node)) &&
+      GB_IS_PROJECT_FILE (item))
+    {
+      if (NULL != (file = gb_project_file_get_file (GB_PROJECT_FILE (item))))
+        g_object_ref (file);
+    }
+
+
+  ide_tree_rebuild (IDE_TREE (self));
+
+  gb_project_tree_reveal (self, file);
+}
+
 void
 gb_project_tree_set_context (GbProjectTree *self,
                              IdeContext    *context)
@@ -135,9 +160,18 @@ gb_project_tree_set_context (GbProjectTree *self,
   GtkTreeIter iter;
   IdeTreeNode *root;
   IdeProject *project;
+  IdeVcs *vcs;
 
   g_return_if_fail (GB_IS_PROJECT_TREE (self));
-  g_return_if_fail (!context || IDE_IS_CONTEXT (context));
+  g_return_if_fail (IDE_IS_CONTEXT (context));
+
+  vcs = ide_context_get_vcs (context);
+
+  g_signal_connect_object (vcs,
+                           "changed",
+                           G_CALLBACK (gb_project_tree_vcs_changed),
+                           self,
+                           G_CONNECT_SWAPPED);
 
   project = ide_context_get_project (context);
 
