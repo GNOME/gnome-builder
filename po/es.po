@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-05-11 19:25+0000\n"
-"PO-Revision-Date: 2016-05-12 09:30+0200\n"
+"POT-Creation-Date: 2016-05-23 16:36+0000\n"
+"PO-Revision-Date: 2016-05-24 10:30+0200\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Español; Castellano <gnome-es-list@gnome.org>\n"
 "Language: \n"
@@ -1029,179 +1029,178 @@ msgid "Close the document"
 msgstr "Cerrar el documento."
 
 #: ../data/ui/ide-shortcuts-window.ui.h:20
+#| msgctxt "shortcut window"
+#| msgid "Switch to the next document"
+msgctxt "shortcut window"
+msgid "Show list of open documents"
+msgstr "Mostrar la lista de documentos abiertos"
+
+#: ../data/ui/ide-shortcuts-window.ui.h:21
 msgctxt "shortcut window"
 msgid "Find and replace"
 msgstr "Buscar y reemplazar"
 
-#: ../data/ui/ide-shortcuts-window.ui.h:21
+#: ../data/ui/ide-shortcuts-window.ui.h:22
 msgctxt "shortcut window"
 msgid "Find"
 msgstr "Buscar"
 
-#: ../data/ui/ide-shortcuts-window.ui.h:22
+#: ../data/ui/ide-shortcuts-window.ui.h:23
 msgctxt "shortcut window"
 msgid "Find the next match"
 msgstr "Buscar la siguiente coincidencia"
 
-#: ../data/ui/ide-shortcuts-window.ui.h:23
+#: ../data/ui/ide-shortcuts-window.ui.h:24
 msgctxt "shortcut window"
 msgid "Find the previous match"
 msgstr "Buscar la coincidencia anterior"
 
-#: ../data/ui/ide-shortcuts-window.ui.h:24
+#: ../data/ui/ide-shortcuts-window.ui.h:25
 msgctxt "shortcut window"
 msgid "Clear highlight"
 msgstr "Limpiar resaltado"
 
-#: ../data/ui/ide-shortcuts-window.ui.h:25
+#: ../data/ui/ide-shortcuts-window.ui.h:26
 msgctxt "shortcut window"
 msgid "Copy and Paste"
 msgstr "Copiar y pegar"
 
-#: ../data/ui/ide-shortcuts-window.ui.h:26
+#: ../data/ui/ide-shortcuts-window.ui.h:27
 msgctxt "shortcut window"
 msgid "Copy selected text to clipboard"
 msgstr "Copiar el texto seleccionado al portapapeles"
 
-#: ../data/ui/ide-shortcuts-window.ui.h:27
+#: ../data/ui/ide-shortcuts-window.ui.h:28
 msgctxt "shortcut window"
 msgid "Cut selected text to clipboard"
 msgstr "Cortar el texto seleccionado al portapapeles"
 
-#: ../data/ui/ide-shortcuts-window.ui.h:28
+#: ../data/ui/ide-shortcuts-window.ui.h:29
 msgctxt "shortcut window"
 msgid "Paste text from clipboard"
 msgstr "Pegar texto del portapapeles"
 
-#: ../data/ui/ide-shortcuts-window.ui.h:29
+#: ../data/ui/ide-shortcuts-window.ui.h:30
 msgctxt "shortcut window"
 msgid "Undo and Redo"
 msgstr "Deshacer y rehacer"
 
-#: ../data/ui/ide-shortcuts-window.ui.h:30
+#: ../data/ui/ide-shortcuts-window.ui.h:31
 msgctxt "shortcut window"
 msgid "Undo previous command"
 msgstr "Deshacer el comando anterior"
 
-#: ../data/ui/ide-shortcuts-window.ui.h:31
+#: ../data/ui/ide-shortcuts-window.ui.h:32
 msgctxt "shortcut window"
 msgid "Redo previous command"
 msgstr "Rehacer el comando anterior"
 
-#: ../data/ui/ide-shortcuts-window.ui.h:32
+#: ../data/ui/ide-shortcuts-window.ui.h:33
 msgctxt "shortcut window"
 msgid "Editing"
 msgstr "Edición"
 
-#: ../data/ui/ide-shortcuts-window.ui.h:33
+#: ../data/ui/ide-shortcuts-window.ui.h:34
 msgctxt "shortcut window"
 msgid "Increment number at cursor"
 msgstr "Aumentar el número en el cursor"
 
-#: ../data/ui/ide-shortcuts-window.ui.h:34
+#: ../data/ui/ide-shortcuts-window.ui.h:35
 msgctxt "shortcut window"
 msgid "Decrement number at cursor"
 msgstr "Disminuir el número en el cursor"
 
-#: ../data/ui/ide-shortcuts-window.ui.h:35
+#: ../data/ui/ide-shortcuts-window.ui.h:36
 msgctxt "shortcut window"
 msgid "Join selected lines"
 msgstr "Unir las líneas seleccionadas"
 
-#: ../data/ui/ide-shortcuts-window.ui.h:36
+#: ../data/ui/ide-shortcuts-window.ui.h:37
 msgctxt "shortcut window"
 msgid "Show completion window"
 msgstr "Mostrar la ventana de completado"
 
-#: ../data/ui/ide-shortcuts-window.ui.h:37
+#: ../data/ui/ide-shortcuts-window.ui.h:38
 msgctxt "shortcut window"
 msgid "Toggle overwrite"
 msgstr "Conmutar sobrescritura"
 
-#: ../data/ui/ide-shortcuts-window.ui.h:38
+#: ../data/ui/ide-shortcuts-window.ui.h:39
 msgctxt "shortcut window"
 msgid "Reindent line"
 msgstr "Volver a sangrar la línea"
 
-#: ../data/ui/ide-shortcuts-window.ui.h:39
+#: ../data/ui/ide-shortcuts-window.ui.h:40
 msgctxt "shortcut window"
 msgid "Navigation"
 msgstr "Navegación"
 
-#: ../data/ui/ide-shortcuts-window.ui.h:40
+#: ../data/ui/ide-shortcuts-window.ui.h:41
 msgctxt "shortcut window"
 msgid "Move to next error in file"
 msgstr "Mover al siguiente error en el archivo"
 
-#: ../data/ui/ide-shortcuts-window.ui.h:41
+#: ../data/ui/ide-shortcuts-window.ui.h:42
 msgctxt "shortcut window"
 msgid "Move to previous error in file"
 msgstr "Mover al anterior error en el archivo"
 
-#: ../data/ui/ide-shortcuts-window.ui.h:42
+#: ../data/ui/ide-shortcuts-window.ui.h:43
 msgctxt "shortcut window"
 msgid "Move to previous edit location"
 msgstr "Mover a la ubicación de edición anterior"
 
-#: ../data/ui/ide-shortcuts-window.ui.h:43
+#: ../data/ui/ide-shortcuts-window.ui.h:44
 msgctxt "shortcut window"
 msgid "Move to next edit location"
 msgstr "Mover a la siguiente ubicación de edición"
 
-#: ../data/ui/ide-shortcuts-window.ui.h:44
+#: ../data/ui/ide-shortcuts-window.ui.h:45
 msgctxt "shortcut window"
 msgid "Jump to definition of symbol"
 msgstr "Saltar a la definición del símbolo"
 
-#: ../data/ui/ide-shortcuts-window.ui.h:45
-#| msgctxt "shortcut window"
-#| msgid "Move sectionport up within the file"
+#: ../data/ui/ide-shortcuts-window.ui.h:46
 msgctxt "shortcut window"
 msgid "Move viewport up within the file"
 msgstr "Mover la sección hacia arriba en el archivo"
 
-#: ../data/ui/ide-shortcuts-window.ui.h:46
-#| msgctxt "shortcut window"
-#| msgid "Move sectionport down within the file"
+#: ../data/ui/ide-shortcuts-window.ui.h:47
 msgctxt "shortcut window"
 msgid "Move viewport down within the file"
 msgstr "Mover la sección hacia abajo en el archivo"
 
-#: ../data/ui/ide-shortcuts-window.ui.h:47
-#| msgctxt "shortcut window"
-#| msgid "Move sectionport to end of file"
+#: ../data/ui/ide-shortcuts-window.ui.h:48
 msgctxt "shortcut window"
 msgid "Move viewport to end of file"
 msgstr "Mover la sección al final del archivo"
 
-#: ../data/ui/ide-shortcuts-window.ui.h:48
-#| msgctxt "shortcut window"
-#| msgid "Move sectionport to beginning of file"
+#: ../data/ui/ide-shortcuts-window.ui.h:49
 msgctxt "shortcut window"
 msgid "Move viewport to beginning of file"
 msgstr "Mover la sección al principio del archivo"
 
-#: ../data/ui/ide-shortcuts-window.ui.h:49
+#: ../data/ui/ide-shortcuts-window.ui.h:50
 msgctxt "shortcut window"
 msgid "Move to matching bracket"
 msgstr "Mover al corchete coincidente"
 
-#: ../data/ui/ide-shortcuts-window.ui.h:50
+#: ../data/ui/ide-shortcuts-window.ui.h:51
 msgctxt "shortcut window"
 msgid "Selections"
 msgstr "Selecciones"
 
-#: ../data/ui/ide-shortcuts-window.ui.h:51
+#: ../data/ui/ide-shortcuts-window.ui.h:52
 msgctxt "shortcut window"
 msgid "Select all"
 msgstr "Seleccionar todo"
 
-#: ../data/ui/ide-shortcuts-window.ui.h:52
+#: ../data/ui/ide-shortcuts-window.ui.h:53
 msgctxt "shortcut window"
 msgid "Unselect all"
 msgstr "Deseleccionar todo"
 
-#: ../data/ui/ide-shortcuts-window.ui.h:53
+#: ../data/ui/ide-shortcuts-window.ui.h:54
 msgctxt "shortcut window"
 msgid "Terminal Shortcuts"
 msgstr "Atajos de la terminal"
@@ -1222,17 +1221,17 @@ msgstr "Desde un proyecto existente en este equipo"
 msgid "No file was provided."
 msgstr "No se ha proporcionado ningún archivo."
 
-#: ../libide/editor/ide-editor-frame.c:75
+#: ../libide/editor/ide-editor-frame.c:77
 #, c-format
 msgid "Line %u, Column %u"
 msgstr "Línea %u, Columna %u"
 
-#: ../libide/editor/ide-editor-frame.c:247
+#: ../libide/editor/ide-editor-frame.c:249
 #, c-format
 msgid "%u of %u"
 msgstr "%u de %u"
 
-#: ../libide/editor/ide-editor-frame.c:679
+#: ../libide/editor/ide-editor-frame.c:681
 #: ../plugins/project-tree/gtk/menus.ui.h:1
 msgid "Re_veal in Project Tree"
 msgstr "_Mostrar en el árbol del proyectos"
@@ -1251,7 +1250,7 @@ msgstr "Guardar documento"
 #: ../libide/editor/ide-editor-view-actions.c:438
 #: ../libide/ide-workbench-actions.c:67
 #: ../plugins/build-tools/gbp-build-panel.ui.h:8
-#: ../plugins/create-project/gbp-create-project-widget.c:486
+#: ../plugins/create-project/gbp-create-project-widget.c:489
 #: ../plugins/terminal/gb-terminal-view-actions.c:305
 msgid "Cancel"
 msgstr "Cancelar"
@@ -1379,24 +1378,24 @@ msgstr "Proporcione una dirección de D-Bus"
 msgid "No such worker"
 msgstr "No existe el trabajador"
 
-#: ../libide/ide-buffer.c:2366
+#: ../libide/ide-buffer.c:2381
 msgid "The current language lacks a symbol resolver."
 msgstr "Al idioma actual le falta un resolutor de símbolos."
 
-#: ../libide/ide-buffer-manager.c:612
+#: ../libide/ide-buffer-manager.c:622
 msgid "File too large to be opened."
 msgstr "El archivo es demasiado grande para poder abrirlo."
 
-#: ../libide/ide-buffer-manager.c:1458
+#: ../libide/ide-buffer-manager.c:1468
 msgid "Words"
 msgstr "Palabras"
 
-#: ../libide/ide-buffer-manager.c:1670
+#: ../libide/ide-buffer-manager.c:1680
 #, c-format
 msgid "unsaved document %u"
 msgstr "Documento %u sin guardar"
 
-#: ../libide/ide-buffer-manager.c:1704
+#: ../libide/ide-buffer-manager.c:1714
 msgid "Failed to save buffer, ignoring reclamation."
 msgstr "Falló al guardar el búfer, ignorando reclamación."
 
@@ -1473,7 +1472,7 @@ msgstr "El archivo de destino debe estar en el árbol del proyecto."
 msgid "File must be within the project tree."
 msgstr "El archivo debe estar en el árbol del proyecto."
 
-#: ../libide/ide-recent-projects.c:383
+#: ../libide/ide-recent-projects.c:396
 #, c-format
 msgid "%s() may only be executed once"
 msgstr "%s() sólo se debe ejecutar una vez"
@@ -1972,13 +1971,10 @@ msgid "A place for all your projects"
 msgstr "Un lugar para todos sus proyectos"
 
 #: ../libide/preferences/ide-preferences-builtin.c:313
-#| msgctxt "shortcut window"
-#| msgid "Move to previous error in file"
 msgid "Restore previously opened files"
 msgstr "Restaurar archivos abiertos anteriormente"
 
 #: ../libide/preferences/ide-preferences-builtin.c:313
-#| msgid "The prefix to use when installing the project"
 msgid "Open previously opened files when loading a project"
 msgstr "Abrir archivos abiertos anteriormente al cargar un proyecto"
 
@@ -2116,19 +2112,19 @@ msgstr "Limpiando…"
 msgid "Invalid makefile provided, ignoring."
 msgstr "Se ha proporcionado un Makefile no válido, ignorando."
 
-#: ../plugins/autotools-templates/autotools_templates/__init__.py:200
+#: ../plugins/autotools-templates/autotools_templates/__init__.py:243
 msgid "Shared Library"
 msgstr "Biblioteca compartida"
 
-#: ../plugins/autotools-templates/autotools_templates/__init__.py:202
+#: ../plugins/autotools-templates/autotools_templates/__init__.py:245
 msgid "Create a new autotools project with a shared library"
 msgstr "Crear un proyecto de autotools nuevo con una biblioteca compartida"
 
-#: ../plugins/autotools-templates/autotools_templates/__init__.py:223
+#: ../plugins/autotools-templates/autotools_templates/__init__.py:266
 msgid "Empty Project"
 msgstr "Proyecto vacío"
 
-#: ../plugins/autotools-templates/autotools_templates/__init__.py:226
+#: ../plugins/autotools-templates/autotools_templates/__init__.py:269
 msgid "Create a new empty autotools project"
 msgstr "Crear un nuevo proyecto de autotools vacío"
 
@@ -2554,7 +2550,6 @@ msgid "The version control to use or \"none\" to disable"
 msgstr "El control de versiones que usar o «ninguno» para desactivarlo"
 
 #: ../plugins/create-project/gbp-create-project-tool.c:143
-#| msgid "Git"
 msgid "git"
 msgstr "git"
 
@@ -2577,17 +2572,15 @@ msgstr "Especifique un nombre de proyecto.\n"
 msgid "Please specify a project template with --template=\n"
 msgstr "Especifique una plantilla para el proyecto con --template=\n"
 
-#: ../plugins/create-project/gbp-create-project-widget.c:319
-#| msgid "Version Control"
+#: ../plugins/create-project/gbp-create-project-widget.c:320
 msgid "Without version control"
 msgstr "Sin control de versiones"
 
-#: ../plugins/create-project/gbp-create-project-widget.c:485
-#| msgid "_Select"
+#: ../plugins/create-project/gbp-create-project-widget.c:488
 msgid "Select"
 msgstr "Seleccionar"
 
-#: ../plugins/create-project/gbp-create-project-widget.c:589
+#: ../plugins/create-project/gbp-create-project-widget.c:592
 msgid "A failure occurred while initializing version control"
 msgstr "Ocurrió un error al inicializar el control de versiones"
 
@@ -2601,11 +2594,43 @@ msgid "Language"
 msgstr "Idioma"
 
 #: ../plugins/create-project/gbp-create-project-widget.ui.h:4
-#| msgid "Version Control"
+msgid "License"
+msgstr "Licencia"
+
+#: ../plugins/create-project/gbp-create-project-widget.ui.h:5
 msgid "Versioning"
 msgstr "Versionado"
 
-#: ../plugins/create-project/gbp-create-project-widget.ui.h:5
+#: ../plugins/create-project/gbp-create-project-widget.ui.h:6
+#| msgid "Go to line"
+msgid "No license"
+msgstr "Sin licencia"
+
+#: ../plugins/create-project/gbp-create-project-widget.ui.h:7
+msgid "AGPL version 3 or later"
+msgstr "AGPL versión 3 o superior"
+
+#: ../plugins/create-project/gbp-create-project-widget.ui.h:8
+msgid "GPL version 3 or later"
+msgstr "GPL versión 3 o superior"
+
+#: ../plugins/create-project/gbp-create-project-widget.ui.h:9
+msgid "GPL version 2 or later"
+msgstr "GPL versión 2 o superior"
+
+#: ../plugins/create-project/gbp-create-project-widget.ui.h:10
+msgid "LGPL version 3 or later"
+msgstr "LGPL versión 3 o superior"
+
+#: ../plugins/create-project/gbp-create-project-widget.ui.h:11
+msgid "LGPL version 2.1 or later"
+msgstr "LGPL versión 2.1 o superior"
+
+#: ../plugins/create-project/gbp-create-project-widget.ui.h:12
+msgid "MIT/X11"
+msgstr "MIT/X11"
+
+#: ../plugins/create-project/gbp-create-project-widget.ui.h:13
 msgid "Pattern"
 msgstr "Patrón"
 
@@ -2757,12 +2782,11 @@ msgstr "Nombre de la carpeta"
 msgid "_Create"
 msgstr "_Crear"
 
-#: ../plugins/project-tree/gb-project-tree-addin.c:113
+#: ../plugins/project-tree/gb-project-tree-addin.c:105
 msgid "Project"
 msgstr "Proyecto"
 
 #: ../plugins/project-tree/gb-project-tree-builder.c:207
-#| msgid "_Empty File"
 msgid "Empty"
 msgstr "Vacío"
 
@@ -2837,11 +2861,11 @@ msgstr ""
 "El archivo de registro de soporte se ha escrito en «%s». Proporcione este "
 "archivo como adjunto en su informe de error o en la solicitud de soporte."
 
-#: ../plugins/symbol-tree/symbol-tree-panel.c:238
+#: ../plugins/symbol-tree/symbol-tree-panel.c:265
 msgid "Current language does not support symbol resolvers"
 msgstr "El idioma actual no soporta resolutores de símbolos"
 
-#: ../plugins/symbol-tree/symbol-tree-panel.c:334
+#: ../plugins/symbol-tree/symbol-tree-panel.c:365
 msgid "Symbols"
 msgstr "Símbolos"
 
@@ -2873,6 +2897,11 @@ msgstr "Mostrar errores y advertencias proporcionadas por Vala"
 #: ../plugins/vala-pack/ide-vala-preferences-addin.vala:36
 msgid "vala diagnostics warnings errors"
 msgstr "diagnósticos de alertas y errores de Vala"
+
+#: ../plugins/hello-cpp/hellocppapplicationaddin.cc:48
+#, c-format
+msgid "Wow! You've spent with Builder %d seconds!"
+msgstr "Ha invertido %d segundos en Builder."
 
 #~ msgid "Projects Directory"
 #~ msgstr "Carpeta de proyectos"
@@ -3107,9 +3136,6 @@ msgstr "diagnósticos de alertas y errores de Vala"
 
 #~ msgid "Switch to source or header"
 #~ msgstr "Cambiar a fuente o cabecera"
-
-#~ msgid "Go to line"
-#~ msgstr "Ir a la línea"
 
 #~ msgid "Attempt to load a GJS script with no filename."
 #~ msgstr "Intentado cargar un script GJS sin nombre de archivo."
