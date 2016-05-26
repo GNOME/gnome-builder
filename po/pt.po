@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-05-26 10:30+0000\n"
-"PO-Revision-Date: 2016-05-26 14:42+0100\n"
+"POT-Creation-Date: 2016-05-26 14:52+0000\n"
+"PO-Revision-Date: 2016-05-26 16:19+0100\n"
 "Last-Translator: Tiago Santos <tiagofsantos81@sapo.pt>\n"
 "Language-Team: Português <happyguy_pt@hotmail.com>\n"
 "Language: pt\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.8.7.1\n"
+"X-Generator: Poedit 1.5.4\n"
 
 #: ../contrib/egg/egg-animation.c:726 ../contrib/pnl/pnl-animation.c:701
 #, c-format
@@ -119,10 +119,10 @@ msgid ""
 "as GTK+, GLib, and GNOME APIs with features that any developer will "
 "appreciate, like syntax highlighting and snippets."
 msgstr ""
-"Construtor é um Ambiente de Desenvolvimento Integrado (IDE) em desenvolvimento"
-"ativo. Combina suporte integrado para tecnologias GNOME essenciais "
-"tal como o GTK+, GLib, e as GNOME APIs com características que qualquer "
-"programador irá apreciar, como snippets e realce de sintaxe."
+"Construtor é um Ambiente de Desenvolvimento Integrado (IDE) em "
+"desenvolvimentoativo. Combina suporte integrado para tecnologias GNOME "
+"essenciais tal como o GTK+, GLib, e as GNOME APIs com características que "
+"qualquer programador irá apreciar, como snippets e realce de sintaxe."
 
 #: ../data/org.gnome.Builder.appdata.xml.in.h:4
 msgid ""
@@ -154,11 +154,13 @@ msgstr "Integração com Autotools"
 
 #: ../data/org.gnome.Builder.appdata.xml.in.h:10
 msgid "Clang based auto-completion, semantic highlighting, and diagnostics"
-msgstr "Conclusão automática baseada em Clang, realce semântico, e diagnósticos"
+msgstr ""
+"Conclusão automática baseada em Clang, realce semântico, e diagnósticos"
 
 #: ../data/org.gnome.Builder.appdata.xml.in.h:11
 msgid "Python based auto-completion, semantic highlighting, and diagnostics"
-msgstr "Conclusão automática baseada em Python, realce semântico, e diagnósticos"
+msgstr ""
+"Conclusão automática baseada em Python, realce semântico, e diagnósticos"
 
 #: ../data/org.gnome.Builder.appdata.xml.in.h:12
 msgid "Vala based auto-completion and diagnostics"
@@ -806,7 +808,8 @@ msgstr "4"
 msgid "8"
 msgstr "8"
 
-#: ../data/ui/ide-editor-view.ui.h:2 ../data/ui/ide-greeter-perspective.ui.h:14
+#: ../data/ui/ide-editor-view.ui.h:2
+#: ../data/ui/ide-greeter-perspective.ui.h:14
 msgid "_Cancel"
 msgstr "_Cancelar"
 
@@ -845,7 +848,8 @@ msgstr "Co_ntinuar"
 #. the action:// link is used to jump to the new-project view
 #: ../data/ui/ide-greeter-perspective.ui.h:2
 msgid "Why not <a href=\"action://app.new-project\">create a new project</a>?"
-msgstr "Porque não <a href=\"action://app.new-project\">create a new project</a>?"
+msgstr ""
+"Porque não <a href=\"action://app.new-project\">create a new project</a>?"
 
 #: ../data/ui/ide-greeter-perspective.ui.h:3
 msgid "No projects found"
@@ -1756,10 +1760,9 @@ msgid "Whitespace Characters"
 msgstr "Desenhar um círculo sobre caracteres de espaço"
 
 #: ../libide/preferences/ide-preferences-builtin.c:156
-#, fuzzy
 #| msgid "carriage return"
 msgid "New line and carriage return"
-msgstr "Nova linha e carriage return"
+msgstr "Nova linha e Carriage Return"
 
 #: ../libide/preferences/ide-preferences-builtin.c:157
 msgid "Non-breaking spaces"
@@ -1794,8 +1797,8 @@ msgid ""
 "Use code insight to highlight additional information discovered in source "
 "file"
 msgstr ""
-"Usar o interpretação do código para realçar informação adicional descoberta no "
-"ficheiro de código"
+"Usar o interpretação do código para realçar informação adicional descoberta "
+"no ficheiro de código"
 
 #: ../libide/preferences/ide-preferences-builtin.c:171
 msgid "Completion"
@@ -2482,7 +2485,8 @@ msgstr ""
 "\n"
 "  Este comando irá inicializar o seu sistema para começar a contribuir para "
 "o projeto\n"
-"  denotado por NOME_DO_PROJETO. Este inclui buscar as fontes, permitindo que\n"
+"  denotado por NOME_DO_PROJETO. Este inclui buscar as fontes, permitindo "
+"que\n"
 "  tenha as dependências requeridas para construir, e inicializa a primeira "
 "construção\n"
 "  do projeto.\n"
@@ -2865,37 +2869,3 @@ msgstr "Mostrar erros e alertas fornecidos por Vala"
 #: ../plugins/vala-pack/ide-vala-preferences-addin.vala:36
 msgid "vala diagnostics warnings errors"
 msgstr "vala diagnósticos alertas erros"
-
-#~| msgid "Directory"
-#~ msgid "Projects Directory"
-#~ msgstr "Diretório de projetos"
-
-#~ msgid "_Continue"
-#~ msgstr "_Continuar"
-
-#~ msgid "From remote source code repository"
-#~ msgstr "De repositório de código fonte remoto"
-
-#~ msgid "GNOME Version"
-#~ msgstr "Versão GNOME"
-
-#~ msgid "Enter the URL of your project's source code repository."
-#~ msgstr "Insira o URL do repositório de código fonte do seu projeto."
-
-#~ msgid "New"
-#~ msgstr "Novo"
-
-#~ msgid "Delete"
-#~ msgstr "Eliminar"
-
-#~ msgid "Builder requires libgit2-glib with threading support."
-#~ msgstr "O Construtor requer o libgit2-glib com suporte a linhas."
-
-#~ msgid "Builder requires libgit2-glib with SSH support."
-#~ msgstr "O Construtor requer libgit2-glib com suporte SSH."
-
-#~ msgid "No implementation of build_async()"
-#~ msgstr "Sem implementação de build_async()"
-
-#~ msgid "Invalid snippet at line %d: %s"
-#~ msgstr "Snippet inválido na linha %d: %s"
