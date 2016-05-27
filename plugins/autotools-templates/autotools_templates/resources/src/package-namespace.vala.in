@@ -1,0 +1,4 @@
+{{include "license.vala"}}
+
+[CCode (gir_namespace = "{{Prefix}}", gir_version = "@API_VERSION@", cheader_filename = "{{prefix}}/{{prefix}}.h")]
+namespace {{Prefix}} {}

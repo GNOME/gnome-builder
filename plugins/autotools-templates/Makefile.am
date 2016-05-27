@@ -44,6 +44,8 @@ nobase_resource_DATA = \
 	autotools_templates/resources/src/package-version.h.in \
 	autotools_templates/resources/src/package.h \
 	autotools_templates/resources/src/package.vala \
+	autotools_templates/resources/src/package.deps.in \
+	autotools_templates/resources/src/package-namespace.vala.in \
 	$(NULL)
 
 EXTRA_DIST = $(nobase_resource_DATA)

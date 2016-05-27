@@ -18,9 +18,30 @@ lib{{name_}}_@API_VERSION@_la_LDFLAGS = \
 	$(NULL)
 
 lib{{name_}}_@API_VERSION@_la_VALAFLAGS = \
+	--vapidir=$(VAPIDIR) \
 	--thread \
 	--target-glib=2.44 \
 	--pkg glib-2.0 \
+	-H {{prefix}}.h \
+	--library {{prefix}}-@API_VERSION@ \
+	$(NULL)
+
+{{prefix}}.h : lib{{name_}}-@API_VERSION@.la
+header_DATA={{prefix}}.h
+headerdir=$(includedir)/{{prefix}}-@API_VERSION@/{{prefix}}
+
+{{prefix}}-@API_VERSION@.vapi : lib{{name_}}-@API_VERSION@.la
+
+{{prefix}}-@API_VERSION@.deps:
+	cp {{prefix}}.deps {{prefix}}-@API_VERSION@.deps
+
+vapi_DATA={{prefix}}-@API_VERSION@.vapi {{prefix}}-@API_VERSION@.deps
+vapidir=$(VAPIDIR)
+
+CLEANFILES=\
+	{{prefix}}-@API_VERSION@.vapi \
+	{{prefix}}-@API_VERSION@.deps \
+	{{prefix}}.h \
 	$(NULL)
 
 -include $(top_srcdir)/git.mk

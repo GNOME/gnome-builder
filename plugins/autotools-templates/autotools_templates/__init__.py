@@ -248,7 +248,6 @@ class LibraryProjectTemplate(AutotoolsTemplate):
 
     def prepare_files(self, files):
         files['resources/data/package.pc.in'] = 'data/%(name)s.pc.in'
-
         if self.language in ('c', 'c++'):
             files['resources/src/Makefile.shared-library-c'] = 'src/Makefile.am'
             files['resources/src/package.h'] = 'src/%(name)s.h'
@@ -257,6 +256,8 @@ class LibraryProjectTemplate(AutotoolsTemplate):
         elif self.language == 'vala':
             files['resources/src/Makefile.shared-library-vala'] = 'src/Makefile.am'
             files['resources/src/package.vala'] = 'src/%(prefix)s.vala'
+            files['resources/src/package.deps.in'] = 'src/%(prefix)s.deps.in'
+            files['resources/src/package-namespace.vala.in'] = 'src/%(prefix)s-namespace.vala.in'
 
 
 class EmptyProjectTemplate(AutotoolsTemplate):

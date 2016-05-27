@@ -136,8 +136,11 @@ AC_CONFIG_FILES([
 {{if language != "vala"}}
 	src/{{prefix}}-version.h
 {{end}}
+{{if language == "vala"}}
+	src/{{name}}-namespace.vala
+	src/{{name}}-$API_VERSION.deps:src/{{name}}.deps.in
 {{end}}
-
+{{end}}
 	data/Makefile
 {{if template == "shared-library"}}
 	data/{{name}}-$API_VERSION.pc:data/{{name}}.pc.in

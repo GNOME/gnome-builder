@@ -71,7 +71,7 @@ tmpl_branch_node_accept (TmplNode      *node,
           g_set_error (error,
                        TMPL_ERROR,
                        TMPL_ERROR_SYNTAX_ERROR,
-                       "Unexpected end-of-file reached");
+                       "Template: Syntax error: Unexpected end-of-file reached");
           TMPL_RETURN (FALSE);
 
         case TMPL_TOKEN_END:
@@ -120,7 +120,7 @@ tmpl_branch_node_accept (TmplNode      *node,
           g_set_error (error,
                        TMPL_ERROR,
                        TMPL_ERROR_SYNTAX_ERROR,
-                       "Invalid token, expected else if, else, or end.");
+                       "Template: Syntax error: Invalid token, expected else if, else, or end.");
           TMPL_RETURN (FALSE);
         }
     }

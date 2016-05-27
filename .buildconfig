@@ -28,7 +28,7 @@ name=Builder (Host)
 device=local
 runtime=host
 config-opts=--enable-tracing --enable-debug --enable-tests
-prefix=/opt/gnome
+prefix=/home/despinosa/.cache/gnome-builder/install/Builder/host
 
 
 default=true
