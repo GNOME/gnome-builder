@@ -134,6 +134,7 @@ libide_1_0_la_public_headers = \
 	ide-unsaved-file.h \
 	ide-unsaved-files.h \
 	ide-uri.h \
+	ide-vcs-config.h \
 	ide-vcs-uri.h \
 	ide-vcs-initializer.h \
 	ide-vcs.h \
@@ -287,6 +288,7 @@ libide_1_0_la_public_sources = \
 	ide-unsaved-file.c \
 	ide-unsaved-files.c \
 	ide-uri.c \
+	ide-vcs-config.c \
 	ide-vcs-initializer.c \
 	ide-vcs-uri.c \
 	ide-vcs.c \

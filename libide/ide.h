@@ -125,6 +125,7 @@ G_BEGIN_DECLS
 #include "ide-unsaved-files.h"
 #include "ide-uri.h"
 #include "ide-vcs.h"
+#include "ide-vcs-config.h"
 #include "ide-vcs-initializer.h"
 #include "ide-vcs-uri.h"
 #include "ide-workbench.h"
