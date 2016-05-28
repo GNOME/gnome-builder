@@ -115,6 +115,8 @@ class AutotoolsTemplate(Ide.TemplateBase, Ide.ProjectTemplate):
                                          self.language))
             return
 
+        author_name = params['author'].get_string()
+
         directory = Gio.File.new_for_path(dir_path)
 
         scope = Template.Scope.new()
@@ -147,6 +149,8 @@ class AutotoolsTemplate(Ide.TemplateBase, Ide.ProjectTemplate):
         scope.get('enable_vala').assign_boolean(self.language == 'vala')
         scope.get('translation_copyright').assign_string('Translation copyright holder')
         scope.get('language').assign_string(self.language)
+
+        scope.get('author').assign_string(author_name)
 
         self.prepare_scope(scope)
 

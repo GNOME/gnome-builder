@@ -636,9 +636,6 @@ create_scope (IdeTemplateBase *self,
   filename = g_file_get_basename (destination);
   tmpl_symbol_assign_string (symbol, filename);
 
-  symbol = tmpl_scope_get (scope, "author");
-  tmpl_symbol_assign_string (symbol, g_get_real_name ());
-
   now = g_date_time_new_now_local ();
   year = g_date_time_format (now, "%Y");
   symbol = tmpl_scope_get (scope, "year");

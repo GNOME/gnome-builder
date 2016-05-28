@@ -601,15 +601,21 @@ gbp_create_project_widget_create_async (GbpCreateProjectWidget *self,
   g_autoptr(GTask) task = NULL;
   g_autoptr(GHashTable) params = NULL;
   g_autoptr(IdeProjectTemplate) template = NULL;
+  g_autoptr(IdeVcsConfig) vcs_conf = NULL;
+  GValue str = G_VALUE_INIT;
   g_autofree gchar *name = NULL;
   g_autofree gchar *location = NULL;
   g_autofree gchar *path = NULL;
   g_autofree gchar *language = NULL;
   GtkFlowBoxChild *template_container;
   GbpCreateProjectTemplateIcon *template_icon;
+  PeasEngine *engine;
+  PeasPluginInfo *plugin_info;
   const gchar *text;
   const gchar *child_name;
   const gchar *license_id;
+  const gchar *vcs_id;
+  const gchar *author_name;
   GList *selected_box_child;
 
   g_return_if_fail (GBP_CREATE_PROJECT_WIDGET (self));
@@ -669,6 +675,38 @@ gbp_create_project_widget_create_async (GbpCreateProjectWidget *self,
                            g_strdup ("license_short"),
                            g_variant_ref_sink (g_variant_new_string (license_short_path)));
     }
+
+  vcs_id = gtk_combo_box_get_active_id (GTK_COMBO_BOX (self->versioning_chooser));
+
+  if (vcs_id != NULL)
+    {
+      engine = peas_engine_get_default ();
+      plugin_info = peas_engine_get_plugin_info (engine, vcs_id);
+
+      if (plugin_info != NULL)
+        {
+          vcs_conf = (IdeVcsConfig *)peas_engine_create_extension (engine, plugin_info,
+                                                                   IDE_TYPE_VCS_CONFIG,
+                                                                   NULL);
+
+          if (vcs_conf != NULL)
+            {
+              g_value_init (&str, G_TYPE_STRING);
+              ide_vcs_config_get_config (vcs_conf, IDE_VCS_CONFIG_FULL_NAME, &str);
+            }
+        }
+    }
+
+  if (G_VALUE_HOLDS_STRING (&str) && !ide_str_empty0 (g_value_get_string (&str)))
+    author_name = g_value_get_string (&str);
+  else
+    author_name = g_get_real_name ();
+
+  g_hash_table_insert (params,
+                       g_strdup ("author"),
+                       g_variant_ref_sink (g_variant_new_string (author_name)));
+
+  g_value_unset (&str);
 
   task = g_task_new (self, cancellable, callback, user_data);
   g_task_set_task_data (task, g_file_new_for_path (path), g_object_unref);
