@@ -115,7 +115,10 @@ class AutotoolsTemplate(Ide.TemplateBase, Ide.ProjectTemplate):
                                          self.language))
             return
 
-        author_name = params['author'].get_string()
+        if 'author' in params:
+            author_name = params['author'].get_string()
+        else:
+            author_name = GLib.get_real_name()
 
         directory = Gio.File.new_for_path(dir_path)
 
