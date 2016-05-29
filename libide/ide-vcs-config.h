@@ -27,13 +27,11 @@ G_BEGIN_DECLS
 
 G_DECLARE_INTERFACE (IdeVcsConfig, ide_vcs_config, IDE, VCS_CONFIG, GObject)
 
-typedef enum _IdeVcsConfigType IdeVcsConfigType;
-
-enum _IdeVcsConfigType
+typedef enum
 {
   IDE_VCS_CONFIG_FULL_NAME,
-  IDE_VCS_CONFIG_EMAIL
-};
+  IDE_VCS_CONFIG_EMAIL,
+} IdeVcsConfigType;
 
 struct _IdeVcsConfigInterface
 {
