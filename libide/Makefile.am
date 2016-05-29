@@ -568,6 +568,7 @@ glib_enum_headers =  \
 	ide-source-view.h \
 	ide-symbol.h \
 	ide-thread-pool.h \
+	ide-vcs-config.h \
 	$(NULL)
 include $(top_srcdir)/build/autotools/Makefile.am.enums
 
