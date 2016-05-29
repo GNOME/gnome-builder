@@ -76,8 +76,8 @@ ide_git_vcs_config_get_config (IdeVcsConfig    *self,
                                IdeVcsConfigType type,
                                GValue          *value)
 {
+  g_autoptr(GgitConfig) config = NULL;
   GgitConfig *orig_config;
-  GgitConfig *config;
 
   g_return_if_fail (IDE_IS_GIT_VCS_CONFIG (self));
 
@@ -96,9 +96,10 @@ ide_git_vcs_config_get_config (IdeVcsConfig    *self,
     case IDE_VCS_CONFIG_EMAIL:
       ide_git_vcs_config_get_string (config, "user.email", value, NULL);
       break;
-    }
 
-  g_object_unref (config);
+    default:
+      break;
+    }
 }
 
 static void
@@ -120,6 +121,9 @@ ide_git_vcs_config_set_config (IdeVcsConfig    *self,
 
     case IDE_VCS_CONFIG_EMAIL:
       ide_git_vcs_config_set_string (config, "user.email", value, NULL);
+      break;
+
+    default:
       break;
     }
 }
