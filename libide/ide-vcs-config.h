@@ -23,7 +23,7 @@
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_VCS_CONFIG (ide_vcs_config_get_type ())
+#define IDE_TYPE_VCS_CONFIG (ide_vcs_config_get_type())
 
 G_DECLARE_INTERFACE (IdeVcsConfig, ide_vcs_config, IDE, VCS_CONFIG, GObject)
 
@@ -47,12 +47,12 @@ struct _IdeVcsConfigInterface
                       const GValue    *value);
 };
 
-void ide_vcs_config_get_config (IdeVcsConfig    *self,
-                                IdeVcsConfigType type,
-                                GValue          *value);
-void ide_vcs_config_set_config (IdeVcsConfig    *self,
-                                IdeVcsConfigType type,
-                                const GValue    *value);
+void ide_vcs_config_get_config (IdeVcsConfig     *self,
+                                IdeVcsConfigType  type,
+                                GValue           *value);
+void ide_vcs_config_set_config (IdeVcsConfig     *self,
+                                IdeVcsConfigType  type,
+                                const GValue     *value);
 
 G_END_DECLS
 
