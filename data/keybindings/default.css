@@ -23,6 +23,7 @@
   bind "<ctrl>l" { "change-case" (lower) };
   bind "<ctrl>i" { "action" ("view", "goto-line", "") };
   bind "<ctrl>asciitilde" { "change-case" (toggle) };
+  bind "<ctrl><alt>d" { "duplicate-entire-line" ()};
 
   bind "<ctrl>minus" { "decrease-font-size" () };
   bind "<ctrl>plus" { "increase-font-size" () };

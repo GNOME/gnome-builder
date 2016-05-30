@@ -247,6 +247,7 @@ enum {
   CLEAR_SEARCH,
   CLEAR_SELECTION,
   CLEAR_SNIPPETS,
+  DUPLICATE_ENTIRE_LINE,
   CYCLE_COMPLETION,
   DECREASE_FONT_SIZE,
   DELETE_SELECTION,
@@ -3059,6 +3060,51 @@ ide_source_view_real_insert_modifier (IdeSourceView *self,
   gtk_text_buffer_begin_user_action (buffer);
   for (i = 0; i < count; i++)
     gtk_text_buffer_insert_at_cursor (buffer, str, len);
+  gtk_text_buffer_end_user_action (buffer);
+}
+
+static void
+ide_source_view_real_duplicate_entire_line (IdeSourceView *self)
+{
+  GtkTextView *text_view = (GtkTextView *)self;
+  GtkTextIter begin, end;
+  gboolean selected;
+  g_autofree gchar *text = NULL;
+  g_autofree gchar *duplicate_line = NULL;
+  GtkTextMark *cursor;
+  GtkTextBuffer *buffer;
+
+  g_assert (GTK_IS_TEXT_VIEW (text_view));
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+
+  buffer = gtk_text_view_get_buffer (text_view);
+  cursor = gtk_text_buffer_get_insert (buffer);
+
+  gtk_text_buffer_begin_user_action (buffer);
+
+  selected = gtk_text_buffer_get_selection_bounds (buffer, &begin, &end);
+
+  if (selected)
+    {
+      duplicate_line = gtk_text_iter_get_text (&begin, &end);
+      gtk_text_buffer_insert (buffer, &begin, duplicate_line, -1);
+    }
+  else
+    {
+      gtk_text_buffer_get_iter_at_mark (buffer, &begin, cursor);
+      end = begin;
+
+      gtk_text_iter_set_line_offset (&begin, 0);
+      gtk_text_iter_forward_to_line_end (&end);
+
+      if (gtk_text_iter_get_line (&begin) == gtk_text_iter_get_line (&end))
+        {
+          text = gtk_text_iter_get_text (&begin, &end);
+          duplicate_line = g_strconcat (text, "\n", NULL);
+          gtk_text_buffer_insert (buffer, &begin, duplicate_line, -1);
+        }
+    }
+
   gtk_text_buffer_end_user_action (buffer);
 }
 
@@ -6375,6 +6421,15 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   NULL, NULL, NULL,
                   G_TYPE_NONE,
                   0);
+
+  signals [DUPLICATE_ENTIRE_LINE] =
+    g_signal_new_class_handler ("duplicate-entire-line",
+                                G_TYPE_FROM_CLASS (klass),
+                                G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                                G_CALLBACK (ide_source_view_real_duplicate_entire_line),
+                                NULL, NULL, NULL,
+                                G_TYPE_NONE,
+                                0);
 
   signals [REINDENT] =
     g_signal_new_class_handler ("reindent",

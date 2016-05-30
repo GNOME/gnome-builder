@@ -210,6 +210,13 @@
                 <property name="title" translatable="yes" context="shortcut window">Paste text from clipboard</property>
               </object>
             </child>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="visible">1</property>
+                <property name="accelerator">&lt;ctrl&gt;&lt;alt&gt;d</property>
+                <property name="title" translatable="yes" context="shortcut window">Duplicate current line or selection</property>
+              </object>
+            </child>
           </object>
         </child>
         <child>
