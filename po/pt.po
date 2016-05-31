@@ -188,7 +188,7 @@ msgstr "Crie software para GNOME"
 
 #: ../data/org.gnome.Builder.desktop.in.in.h:3
 msgid "Build;Develop;"
-msgstr "Construir;Desenvolver;Programar"
+msgstr "Construir;Desenvolver;Programar;"
 
 #: ../data/gsettings/org.gnome.builder.build.gschema.xml.in.h:1
 msgid "Build Parallelism"
