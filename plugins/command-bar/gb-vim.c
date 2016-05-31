@@ -1054,6 +1054,7 @@ static const GbVimCommand vim_commands[] = {
   { "ls",          gb_vim_command_buffers, NULL },
   { "make",        gb_vim_command_make, NULL },
   { "nohl",        gb_vim_command_nohl, NULL },
+  { "open",        gb_vim_command_edit, NULL },
   { "quit",        gb_vim_command_quit, NULL },
   { "set",         gb_vim_command_set, NULL },
   { "sort",        gb_vim_command_sort, NULL },
