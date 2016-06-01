@@ -77,6 +77,7 @@ libvala_pack_plugin_la_VALAFLAGS += -D ENABLE_VALA_SYMBOL_GET_DEPRECATED
 endif
 
 libvala_pack_plugin_la_CFLAGS = \
+	-DVALA_VERSION=\""$(VALA_VERSION)"\" \
 	-DPACKAGE_DATADIR=\""$(datadir)/gnome-builder"\" \
 	-DG_LOG_DOMAIN=\"vala-pack-plugin\" \
 	-DGETTEXT_PACKAGE=\"gnome-builder\" \

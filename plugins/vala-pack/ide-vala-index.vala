@@ -33,8 +33,6 @@ namespace Ide
 {
 	public class ValaIndex: GLib.Object
 	{
-		static const int VALA_VERSION = 32;
-
 		Ide.Context context;
 		Vala.CodeContext code_context;
 		Vala.Parser parser;
@@ -86,7 +84,13 @@ namespace Ide
 
 			this.code_context.run_output = false;
 
-			for (var i = 2; i <= VALA_VERSION; i += 2) {
+			int minor = 34;
+			var tokens = Config.VALA_VERSION.split(".", 2);
+			if (tokens[1] != null) {
+				minor = int.parse(tokens[1]);
+			}
+
+			for (var i = 2; i <= minor; i += 2) {
 				this.code_context.add_define ("VALA_0_%d".printf (i));
 			}
 
@@ -515,7 +519,7 @@ namespace Ide
 		string? get_versioned_vapidir ()
 		{
 			try {
-				var pkgname = "libvala-0.%d".printf (VALA_VERSION);
+				var pkgname = "libvala-%s".printf (Config.VALA_VERSION);
 				string outstr = null;
 				var subprocess = new GLib.Subprocess (GLib.SubprocessFlags.STDOUT_PIPE,
 					                                  "pkg-config",
