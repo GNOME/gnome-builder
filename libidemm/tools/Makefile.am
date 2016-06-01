@@ -20,6 +20,7 @@ AM_CPPFLAGS = \
 	$(IDEMM_CFLAGS) \
 	-I$(top_srcdir)/libide \
 	-I$(top_builddir)/libide \
-	-I$(top_srcdir)/contrib/pnl
+	-I$(top_srcdir)/contrib/pnl \
+	-I$(top_builddir)/contrib/pnl
 
 endif

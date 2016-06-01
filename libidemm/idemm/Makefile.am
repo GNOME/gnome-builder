@@ -14,6 +14,7 @@ libide_cflags = \
 	$(LIBIDE_CFLAGS) \
 	-I$(top_srcdir)/libide \
 	-I$(top_srcdir)/contrib/pnl \
+	-I$(top_builddir)/contrib/pnl \
 	-I$(top_builddir)/libide
 
 AM_CPPFLAGS = $(local_cppflags) $(IDEMM_CFLAGS) $(libide_cflags)
