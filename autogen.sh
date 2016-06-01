@@ -10,6 +10,9 @@ test -z "$srcdir" && srcdir=.
     exit 1
 }
 
+olddir=`pwd`
+
+cd $srcdir
 
 touch ChangeLog
 touch INSTALL
@@ -27,6 +30,8 @@ else
 fi
 
 autoreconf --force --install -Wno-portability || exit 1
+
+cd $olddir
 
 if [ "$NOCONFIGURE" = "" ]; then
         $srcdir/configure "$@" || exit 1
