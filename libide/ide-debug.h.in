@@ -39,7 +39,7 @@ G_BEGIN_DECLS
 
 #ifdef IDE_ENABLE_TRACE
 # define IDE_TRACE_MSG(fmt, ...)                                         \
-   g_log(G_LOG_DOMAIN, IDE_LOG_LEVEL_TRACE, "  MSG: %s():%d: "fmt,       \
+   g_log(G_LOG_DOMAIN, IDE_LOG_LEVEL_TRACE, "  MSG: %s():%d: " fmt,       \
          G_STRFUNC, __LINE__, ##__VA_ARGS__)
 # define IDE_PROBE                                                       \
    g_log(G_LOG_DOMAIN, IDE_LOG_LEVEL_TRACE, "PROBE: %s():%d",            \
