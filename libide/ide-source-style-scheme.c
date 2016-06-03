@@ -25,17 +25,20 @@ ide_source_style_scheme_apply_style (GtkSourceStyleScheme *style_scheme,
                                      const gchar          *style_name,
                                      GtkTextTag           *tag)
 {
+  g_autofree gchar *tag_name = NULL;
   g_autofree gchar *foreground = NULL;
   g_autofree gchar *background = NULL;
-  g_autofree gchar *tag_name = NULL;
+  g_autofree gchar *underline_color = NULL;
+  GdkRGBA underline_rgba;
   GtkSourceStyle *style;
   const gchar *colon;
+  PangoUnderline pango_underline;
   gboolean foreground_set = FALSE;
   gboolean background_set = FALSE;
   gboolean bold = FALSE;
   gboolean bold_set = FALSE;
-  gboolean underline = FALSE;
   gboolean underline_set = FALSE;
+  gboolean underline_color_set = FALSE;
   gboolean italic = FALSE;
   gboolean italic_set = FALSE;
 
@@ -47,6 +50,7 @@ ide_source_style_scheme_apply_style (GtkSourceStyleScheme *style_scheme,
                 "background-set", FALSE,
                 "weight-set", FALSE,
                 "underline-set", FALSE,
+                "underline-rgba-set", FALSE,
                 "style-set", FALSE,
                 NULL);
 
@@ -71,8 +75,10 @@ ide_source_style_scheme_apply_style (GtkSourceStyleScheme *style_scheme,
                 "foreground-set", &foreground_set,
                 "bold", &bold,
                 "bold-set", &bold_set,
-                "underline", &underline,
+                "pango-underline", &pango_underline,
                 "underline-set", &underline_set,
+                "underline-color", &underline_color,
+                "underline-color-set", &underline_color_set,
                 "italic", &italic,
                 "italic-set", &italic_set,
                 NULL);
@@ -89,8 +95,15 @@ ide_source_style_scheme_apply_style (GtkSourceStyleScheme *style_scheme,
   if (italic_set && italic)
     g_object_set (tag, "style", PANGO_STYLE_ITALIC, NULL);
 
-  if (underline_set && underline)
-    g_object_set (tag, "underline", PANGO_UNDERLINE_SINGLE, NULL);
+  if (underline_set)
+    g_object_set (tag, "underline", pango_underline, NULL);
 
+  if (underline_color_set && underline_color != NULL)
+    {
+      gdk_rgba_parse (&underline_rgba, underline_color);
+      g_object_set (tag,
+                    "underline-rgba", &underline_rgba,
+                    NULL);
+    }
   return TRUE;
 }

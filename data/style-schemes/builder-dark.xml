@@ -57,6 +57,7 @@
   <color name="aluminium6"                  value="#2e3436"/>
   <color name="white"                       value="#ffffff"/>
   <color name="pink1"                       value="#dd4a68"/>
+  <color name="red1"                        value="#ff0000"/>
 
   <!-- Global Settings -->
   <style name="text"                        foreground="aluminium3" background="#232729"/>
@@ -68,6 +69,12 @@
   <style name="draw-spaces"                 foreground="aluminium4"/>
   <style name="background-pattern"          background="#rgba(46,46,46,0.8)"/>
   <style name="map-overlay"                 background="#rgba(136,138,133,0.25)"/>
+
+  <!-- Diagnostics Underlining -->
+  <style name="diagnostician::deprecated"   underline="error" underline-color="aluminium3"/>
+  <style name="diagnostician::error"        underline="error" underline-color="red1"/>
+  <style name="diagnostician::note"         underline="error" underline-color="skyblue1"/>
+  <style name="diagnostician::warning"      underline="error" underline-color="orange1"/>
 
   <!-- Snippets -->
   <style name="snippet::tab-stop"           background="orange3" foreground="aluminium6"/>

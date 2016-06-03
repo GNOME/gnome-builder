@@ -40,6 +40,7 @@
   <color name="line1"                       value="#a2a3a3"/>
   <color name="white"                       value="#ffffff"/>
   <color name="yellow1"                     value="#fff9e5"/>
+  <color name="red1"                        value="#ff0000"/>
 
   <color name="butter1"                     value="#fce94f"/>
   <color name="butter2"                     value="#edd400"/>
@@ -79,6 +80,12 @@
   <style name="draw-spaces"                 foreground="aluminium3"/>
   <style name="line-numbers"                foreground="line1" background="bg1"/>
   <style name="background-pattern"          background="#rgba(.125,.125,.125,.025)"/>
+
+  <!-- Diagnostics Underlining -->
+  <style name="diagnostician::deprecated"   underline="error" underline-color="aluminium3"/>
+  <style name="diagnostician::error"        underline="error" underline-color="red1"/>
+  <style name="diagnostician::note"         underline="error" underline-color="blue1"/>
+  <style name="diagnostician::warning"      underline="error" underline-color="orange1"/>
 
   <!-- Snippets -->
   <style name="snippet::tab-stop"           background="#fcaf3e" foreground="text1"/>

@@ -59,6 +59,11 @@
 #define TAG_SNIPPET_TAB_STOP "snippet::tab-stop"
 #define TAG_DEFINITION       "action::hover-definition"
 
+#define DEPRECATED_COLOR "#babdb6"
+#define ERROR_COLOR      "#ff0000"
+#define NOTE_COLOR       "#708090"
+#define WARNING_COLOR    "#fcaf3e"
+
 typedef struct
 {
   IdeContext             *context;
@@ -1011,6 +1016,10 @@ ide_buffer_notify_style_scheme (IdeBuffer  *self,
 {
   GtkSourceStyleScheme *style_scheme;
   GtkTextTagTable *table;
+  GdkRGBA deprecated_rgba;
+  GdkRGBA error_rgba;
+  GdkRGBA note_rgba;
+  GdkRGBA warning_rgba;
 
   g_assert (IDE_IS_BUFFER (self));
   g_assert (pspec != NULL);
@@ -1022,6 +1031,46 @@ ide_buffer_notify_style_scheme (IdeBuffer  *self,
 
   if (style_scheme != NULL)
     {
+      /*
+       * These are used as a fall-back if our style scheme isn't installed.
+       */
+      gdk_rgba_parse (&deprecated_rgba, DEPRECATED_COLOR);
+      gdk_rgba_parse (&error_rgba, ERROR_COLOR);
+      gdk_rgba_parse (&note_rgba, NOTE_COLOR);
+      gdk_rgba_parse (&warning_rgba, WARNING_COLOR);
+
+      if (!ide_source_style_scheme_apply_style (style_scheme,
+                                                TAG_DEPRECATED,
+                                                GET_TAG (TAG_DEPRECATED)))
+        apply_style (GET_TAG (TAG_DEPRECATED),
+                     "underline", PANGO_UNDERLINE_ERROR,
+                     "underline-rgba", &deprecated_rgba,
+                     NULL);
+
+      if (!ide_source_style_scheme_apply_style (style_scheme,
+                                                TAG_ERROR,
+                                                GET_TAG (TAG_ERROR)))
+        apply_style (GET_TAG (TAG_ERROR),
+                     "underline", PANGO_UNDERLINE_ERROR,
+                     "underline-rgba", &error_rgba,
+                     NULL);
+
+      if (!ide_source_style_scheme_apply_style (style_scheme,
+                                                TAG_NOTE,
+                                                GET_TAG (TAG_NOTE)))
+        apply_style (GET_TAG (TAG_NOTE),
+                     "underline", PANGO_UNDERLINE_ERROR,
+                     "underline-rgba", &note_rgba,
+                     NULL);
+
+      if (!ide_source_style_scheme_apply_style (style_scheme,
+                                                TAG_WARNING,
+                                                GET_TAG (TAG_WARNING)))
+        apply_style (GET_TAG (TAG_WARNING),
+                     "underline", PANGO_UNDERLINE_ERROR,
+                     "underline-rgba", &warning_rgba,
+                     NULL);
+
       ide_source_style_scheme_apply_style (style_scheme,
                                            TAG_SNIPPET_TAB_STOP,
                                            GET_TAG (TAG_SNIPPET_TAB_STOP));
@@ -1063,6 +1112,12 @@ ide_buffer_constructed (GObject *object)
 {
   IdeBuffer *self = (IdeBuffer *)object;
   IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
+  GtkTextTagTable *tag_table;
+  GtkSourceStyleScheme *style_scheme;
+  g_autoptr(GtkTextTag) deprecated_tag = NULL;
+  g_autoptr(GtkTextTag) error_tag = NULL;
+  g_autoptr(GtkTextTag) note_tag = NULL;
+  g_autoptr(GtkTextTag) warning_tag = NULL;
   GdkRGBA deprecated_rgba;
   GdkRGBA error_rgba;
   GdkRGBA note_rgba;
@@ -1070,14 +1125,16 @@ ide_buffer_constructed (GObject *object)
 
   G_OBJECT_CLASS (ide_buffer_parent_class)->constructed (object);
 
+  tag_table = gtk_text_buffer_get_tag_table (GTK_TEXT_BUFFER (self));
+  style_scheme = gtk_source_buffer_get_style_scheme (GTK_SOURCE_BUFFER (self));
+
   /*
-   * TODO: Once we bump to GtkSourceView 3.17, these should be extracted
-   *       from the style scheme (or use the style scheme directly).
+   * These are used as a fall-back if our style scheme isn't installed.
    */
-  gdk_rgba_parse (&deprecated_rgba, "#babdb6");
-  gdk_rgba_parse (&error_rgba, "#ff0000");
-  gdk_rgba_parse (&note_rgba, "#708090");
-  gdk_rgba_parse (&warning_rgba, "#fcaf3e");
+  gdk_rgba_parse (&deprecated_rgba, DEPRECATED_COLOR);
+  gdk_rgba_parse (&error_rgba, ERROR_COLOR);
+  gdk_rgba_parse (&note_rgba, NOTE_COLOR);
+  gdk_rgba_parse (&warning_rgba, WARNING_COLOR);
 
   /*
    * NOTE:
@@ -1085,22 +1142,41 @@ ide_buffer_constructed (GObject *object)
    * The tag table assigns priority upon insert. Each successive insert
    * is higher priority than the last.
    */
-  gtk_text_buffer_create_tag (GTK_TEXT_BUFFER (self), TAG_NOTE,
-                              "underline", PANGO_UNDERLINE_ERROR,
-                              "underline-rgba", &note_rgba,
-                              NULL);
-  gtk_text_buffer_create_tag (GTK_TEXT_BUFFER (self), TAG_DEPRECATED,
-                              "underline", PANGO_UNDERLINE_ERROR,
-                              "underline-rgba", &deprecated_rgba,
-                              NULL);
-  gtk_text_buffer_create_tag (GTK_TEXT_BUFFER (self), TAG_WARNING,
-                              "underline", PANGO_UNDERLINE_ERROR,
-                              "underline-rgba", &warning_rgba,
-                              NULL);
-  gtk_text_buffer_create_tag (GTK_TEXT_BUFFER (self), TAG_ERROR,
-                              "underline", PANGO_UNDERLINE_ERROR,
-                              "underline-rgba", &error_rgba,
-                              NULL);
+
+  deprecated_tag = gtk_text_tag_new (TAG_DEPRECATED);
+  error_tag = gtk_text_tag_new (TAG_ERROR);
+  note_tag = gtk_text_tag_new (TAG_NOTE);
+  warning_tag = gtk_text_tag_new (TAG_WARNING);
+
+  if (!ide_source_style_scheme_apply_style (style_scheme, TAG_DEPRECATED, deprecated_tag))
+      apply_style (deprecated_tag,
+                   "underline", PANGO_UNDERLINE_ERROR,
+                   "underline-rgba", &deprecated_rgba,
+                   NULL);
+
+  if (!ide_source_style_scheme_apply_style (style_scheme, TAG_ERROR, error_tag))
+      apply_style (error_tag,
+                   "underline", PANGO_UNDERLINE_ERROR,
+                   "underline-rgba", &error_rgba,
+                   NULL);
+
+  if (!ide_source_style_scheme_apply_style (style_scheme, TAG_NOTE, note_tag))
+      apply_style (note_tag,
+                   "underline", PANGO_UNDERLINE_ERROR,
+                   "underline-rgba", &note_rgba,
+                   NULL);
+
+  if (!ide_source_style_scheme_apply_style (style_scheme, TAG_NOTE, warning_tag))
+      apply_style (warning_tag,
+                   "underline", PANGO_UNDERLINE_ERROR,
+                   "underline-rgba", &warning_rgba,
+                   NULL);
+
+  gtk_text_tag_table_add (tag_table, deprecated_tag);
+  gtk_text_tag_table_add (tag_table, error_tag);
+  gtk_text_tag_table_add (tag_table, note_tag);
+  gtk_text_tag_table_add (tag_table, warning_tag);
+
   gtk_text_buffer_create_tag (GTK_TEXT_BUFFER (self), TAG_SNIPPET_TAB_STOP,
                               NULL);
   gtk_text_buffer_create_tag (GTK_TEXT_BUFFER (self), TAG_DEFINITION,
