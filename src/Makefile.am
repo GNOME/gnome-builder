@@ -1,7 +1,11 @@
 bin_PROGRAMS = \
 	gnome-builder \
 	gnome-builder-cli \
+	$(NULL)
+
+libexec_PROGRAMS = \
 	gnome-builder-worker \
+	$(NULL)
 
 AM_CPPFLAGS = \
 	-DPACKAGE_LOCALE_DIR=\""${datadir}/locale"\" \

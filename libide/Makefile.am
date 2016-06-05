@@ -446,6 +446,7 @@ libide_1_0_la_includes = \
 	-DPACKAGE_DATADIR="\"${datadir}\"" \
 	-DPACKAGE_LOCALE_DIR=\""${datadir}/locale"\" \
 	-DPACKAGE_LIBDIR=\""${libdir}"\" \
+	-DPACKAGE_LIBEXECDIR=\""${libexecdir}"\" \
 	-DBUILDDIR=\""${abs_top_builddir}"\" \
 	-DSRCDIR=\""${abs_top_srcdir}"\" \
 	-I$(top_builddir)/libide \

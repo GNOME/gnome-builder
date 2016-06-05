@@ -204,12 +204,20 @@ ide_worker_manager_get_worker_process (IdeWorkerManager *self,
   if (worker_process == NULL)
     {
       g_autofree gchar *address = NULL;
+      const gchar *path = PACKAGE_LIBEXECDIR G_DIR_SEPARATOR_S "gnome-builder-worker";
 
       address = g_strdup_printf ("%s,guid=%s",
                                  g_dbus_server_get_client_address (self->dbus_server),
                                  g_dbus_server_get_guid (self->dbus_server));
 
-      worker_process = ide_worker_process_new ("gnome-builder-worker", plugin_name, address);
+      /*
+       * If we are running out of tree, rely on PATH to access
+       * gnome-builder-worker from the build directory.
+       */
+      if (g_getenv ("GB_IN_TREE_PLUGINS") != NULL)
+        path = "gnome-builder-worker";
+
+      worker_process = ide_worker_process_new (path, plugin_name, address);
       g_hash_table_insert (self->plugin_name_to_worker, g_strdup (plugin_name), worker_process);
       ide_worker_process_run (worker_process);
     }
