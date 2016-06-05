@@ -257,7 +257,7 @@ ide_application_local_command_line (GApplication   *application,
   if (prgname && g_str_has_prefix (prgname, "lt-"))
     prgname += strlen ("lt-");
 
-  if (g_str_equal (prgname, "ide"))
+  if (g_str_equal (prgname, "gnome-builder-cli"))
     {
       g_assert_cmpstr (entries [0].long_name, ==, "list-commands");
       entries [0].flags = 0;
@@ -277,10 +277,10 @@ ide_application_local_command_line (GApplication   *application,
   ide_application_discover_plugins (self);
 
   /*
-   * If we are the "ide" program, then we want to setup ourselves for
+   * If we are the "cli" program, then we want to setup ourselves for
    * verb style commands and add a commands group for help.
    */
-  if (g_str_equal (prgname, "ide"))
+  if (g_str_equal (prgname, "gnome-builder-cli"))
     {
       gchar *command_help;
 
