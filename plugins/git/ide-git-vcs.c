@@ -27,6 +27,7 @@
 #include "ide-debug.h"
 #include "ide-git-buffer-change-monitor.h"
 #include "ide-git-vcs.h"
+#include "ide-git-vcs-config.h"
 #include "ide-project.h"
 #include "ide-project-file.h"
 #include "ide-project-files.h"
@@ -101,6 +102,14 @@ ide_git_vcs_get_working_directory (IdeVcs *vcs)
   g_return_val_if_fail (IDE_IS_GIT_VCS (self), NULL);
 
   return self->working_directory;
+}
+
+static IdeVcsConfig *
+ide_git_vcs_get_config (IdeVcs *vcs)
+{
+  g_return_val_if_fail (IDE_IS_GIT_VCS (vcs), NULL);
+
+  return (IdeVcsConfig *)ide_git_vcs_config_new ();
 }
 
 static IdeBufferChangeMonitor *
@@ -371,6 +380,7 @@ ide_git_vcs_init_iface (IdeVcsInterface *iface)
   iface->get_working_directory = ide_git_vcs_get_working_directory;
   iface->get_buffer_change_monitor = ide_git_vcs_get_buffer_change_monitor;
   iface->is_ignored = ide_git_vcs_is_ignored;
+  iface->get_config = ide_git_vcs_get_config;
 }
 
 static void

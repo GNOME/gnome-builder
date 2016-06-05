@@ -27,6 +27,8 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeGitVcsConfig, ide_git_vcs_config, IDE, GIT_VCS_CONFIG, GObject)
 
+IdeGitVcsConfig *ide_git_vcs_config_new (void);
+
 G_END_DECLS
 
 #endif /* IDE_GIT_VCS_CONFIG_H */

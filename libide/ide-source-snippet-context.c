@@ -103,6 +103,17 @@ ide_source_snippet_context_add_variable (IdeSourceSnippetContext *context,
   g_hash_table_replace (context->variables, g_strdup (key), g_strdup (value));
 }
 
+void
+ide_source_snippet_context_add_shared_variable (IdeSourceSnippetContext *context,
+                                                const gchar             *key,
+                                                const gchar             *value)
+{
+  g_return_if_fail (IDE_IS_SOURCE_SNIPPET_CONTEXT (context));
+  g_return_if_fail (key);
+
+  g_hash_table_replace (context->shared, g_strdup (key), g_strdup (value));
+}
+
 const gchar *
 ide_source_snippet_context_get_variable (IdeSourceSnippetContext *context,
                                         const gchar            *key)
@@ -601,32 +612,6 @@ ide_source_snippet_context_emit_changed (IdeSourceSnippetContext *context)
   g_signal_emit (context, signals[CHANGED], 0);
 }
 
-static gchar *
-run_command (const gchar *command)
-{
-  GError *error = NULL;
-  gchar *output = NULL;
-  gchar **argv = NULL;
-  gint argc = 0;
-
-  if (!g_shell_parse_argv (command, &argc, &argv, NULL))
-    return NULL;
-
-  /*
-   * TODO: Run in project directory.
-   */
-
-  if (!g_spawn_sync (NULL, argv, NULL, G_SPAWN_SEARCH_PATH, NULL, NULL, &output, NULL, NULL, &error))
-    {
-      g_printerr ("%s\n", error->message);
-      g_error_free (error);
-    }
-
-  g_strfreev (argv);
-
-  return g_strstrip (output);
-}
-
 static void
 ide_source_snippet_context_finalize (GObject *object)
 {
@@ -702,9 +687,7 @@ ide_source_snippet_context_init (IdeSourceSnippetContext *context)
   g_free (str);
   g_date_time_unref (dt);
 
-  str = run_command ("git config user.email");
-  ADD_VARIABLE ("email", str);
-  g_free (str);
+  ADD_VARIABLE ("email", "unknown@domain.org");
 
 #undef ADD_VARIABLE
 }

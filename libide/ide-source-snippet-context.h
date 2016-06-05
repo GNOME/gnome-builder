@@ -28,23 +28,26 @@ G_BEGIN_DECLS
 G_DECLARE_FINAL_TYPE (IdeSourceSnippetContext, ide_source_snippet_context,
                       IDE, SOURCE_SNIPPET_CONTEXT, GObject)
 
-IdeSourceSnippetContext *ide_source_snippet_context_new             (void);
-void                     ide_source_snippet_context_emit_changed    (IdeSourceSnippetContext *context);
-void                     ide_source_snippet_context_clear_variables (IdeSourceSnippetContext *context);
-void                     ide_source_snippet_context_add_variable    (IdeSourceSnippetContext *context,
-                                                                     const gchar             *key,
-                                                                     const gchar             *value);
-const gchar             *ide_source_snippet_context_get_variable    (IdeSourceSnippetContext *context,
-                                                                     const gchar             *key);
-gchar                   *ide_source_snippet_context_expand          (IdeSourceSnippetContext *context,
-                                                                     const gchar             *input);
-void                     ide_source_snippet_context_set_tab_width   (IdeSourceSnippetContext *context,
-                                                                     gint                     tab_size);
-void                     ide_source_snippet_context_set_use_spaces  (IdeSourceSnippetContext *context,
-                                                                     gboolean                 use_spaces);
-void                     ide_source_snippet_context_set_line_prefix (IdeSourceSnippetContext *context,
-                                                                     const gchar             *line_prefix);
-void                     ide_source_snippet_context_dump            (IdeSourceSnippetContext *context);
+IdeSourceSnippetContext *ide_source_snippet_context_new                 (void);
+void                     ide_source_snippet_context_emit_changed        (IdeSourceSnippetContext *context);
+void                     ide_source_snippet_context_clear_variables     (IdeSourceSnippetContext *context);
+void                     ide_source_snippet_context_add_variable        (IdeSourceSnippetContext *context,
+                                                                         const gchar             *key,
+                                                                         const gchar             *value);
+void                     ide_source_snippet_context_add_shared_variable (IdeSourceSnippetContext *context,
+                                                                         const gchar             *key,
+                                                                         const gchar             *value);
+const gchar             *ide_source_snippet_context_get_variable        (IdeSourceSnippetContext *context,
+                                                                         const gchar             *key);
+gchar                   *ide_source_snippet_context_expand              (IdeSourceSnippetContext *context,
+                                                                         const gchar             *input);
+void                     ide_source_snippet_context_set_tab_width       (IdeSourceSnippetContext *context,
+                                                                         gint                     tab_size);
+void                     ide_source_snippet_context_set_use_spaces      (IdeSourceSnippetContext *context,
+                                                                         gboolean                 use_spaces);
+void                     ide_source_snippet_context_set_line_prefix     (IdeSourceSnippetContext *context,
+                                                                         const gchar             *line_prefix);
+void                     ide_source_snippet_context_dump                (IdeSourceSnippetContext *context);
 
 G_END_DECLS
 

@@ -67,6 +67,7 @@
 #include "ide-source-view-movements.h"
 #include "ide-symbol.h"
 #include "ide-text-util.h"
+#include "ide-vcs.h"
 #include "ide-workbench-private.h"
 
 #define INCLUDE_STATEMENTS "^#include[\\s]+[\\\"\\<][^\\s\\\"\\\'\\<\\>[:cntrl:]]+[\\\"\\>]"
@@ -4006,6 +4007,7 @@ ide_source_view_real_push_snippet (IdeSourceView           *self,
                                    const GtkTextIter       *location)
 {
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+  IdeContext *ide_context;
   IdeSourceSnippetContext *context;
   IdeFile *file;
   GFile *gfile;
@@ -4016,14 +4018,49 @@ ide_source_view_real_push_snippet (IdeSourceView           *self,
 
   context = ide_source_snippet_get_context (snippet);
 
-  if ((priv->buffer != NULL) &&
-      (file = ide_buffer_get_file (priv->buffer)) &&
-      (gfile = ide_file_get_file (file)))
+  if (priv->buffer != NULL)
     {
-      g_autofree gchar *name = NULL;
+      if ((file = ide_buffer_get_file (priv->buffer)) &&
+          (gfile = ide_file_get_file (file)))
+        {
+          g_autofree gchar *name = NULL;
 
-      name = g_file_get_basename (gfile);
-      ide_source_snippet_context_add_variable (context, "filename", name);
+          name = g_file_get_basename (gfile);
+          ide_source_snippet_context_add_variable (context, "filename", name);
+        }
+
+      if ((ide_context = ide_buffer_get_context (priv->buffer)))
+        {
+          IdeVcs *vcs;
+          IdeVcsConfig *vcs_config;
+
+          vcs = ide_context_get_vcs (ide_context);
+          if ((vcs_config = ide_vcs_get_config (vcs)))
+            {
+              GValue value = G_VALUE_INIT;
+
+              g_value_init (&value, G_TYPE_STRING);
+
+              ide_vcs_config_get_config (vcs_config, IDE_VCS_CONFIG_FULL_NAME, &value);
+
+              if (!ide_str_empty0 (g_value_get_string (&value)))
+                {
+                  ide_source_snippet_context_add_shared_variable (context, "author", g_value_get_string (&value));
+                  ide_source_snippet_context_add_shared_variable (context, "fullname", g_value_get_string (&value));
+                  ide_source_snippet_context_add_shared_variable (context, "username", g_value_get_string (&value));
+                }
+
+              g_value_reset (&value);
+
+              ide_vcs_config_get_config (vcs_config, IDE_VCS_CONFIG_EMAIL, &value);
+
+              if (!ide_str_empty0 (g_value_get_string (&value)))
+                ide_source_snippet_context_add_shared_variable (context, "email", g_value_get_string (&value));
+
+              g_value_unset (&value);
+              g_object_unref (vcs_config);
+            }
+        }
     }
 }
 

@@ -182,3 +182,26 @@ ide_vcs_emit_changed (IdeVcs *self)
 
   g_signal_emit (self, signals [CHANGED], 0);
 }
+
+/**
+ * ide_vcs_get_config:
+ *
+ * Retrieves an #IdeVcsConfig for the #IdeVcs provided. If the #IdeVcs implementation does not
+ * support access to configuration, then %NULL is returned.
+ *
+ * Returns: (transfer full) (nullable): An #IdeVcsConfig or %NULL.
+ */
+IdeVcsConfig *
+ide_vcs_get_config (IdeVcs *self)
+{
+  IdeVcsConfig *ret = NULL;
+
+  g_return_val_if_fail (IDE_IS_VCS (self), NULL);
+
+  if (IDE_VCS_GET_IFACE (self)->get_config)
+    ret = IDE_VCS_GET_IFACE (self)->get_config (self);
+
+  g_return_val_if_fail (!ret || IDE_IS_VCS_CONFIG (ret), NULL);
+
+  return  ret;
+}
