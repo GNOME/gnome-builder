@@ -20,6 +20,7 @@
 #include <gtksourceview/gtksource.h>
 #include <libpeas/peas.h>
 
+#include "ide-application-private.h"
 #include "ide-macros.h"
 #include "ide-preferences-builtin.h"
 #include "ide-preferences-entry.h"
@@ -106,7 +107,7 @@ ide_preferences_builtin_register_appearance (IdePreferences *preferences)
   /* XXX: This belongs in terminal addin */
   ide_preferences_add_font_button (preferences, "appearance", "font", "org.gnome.builder.terminal", "font-name", _("Terminal"), C_("Keywords", "terminal font monospace"), 0);
 
-  if (g_getenv ("GTK_THEME") != NULL)
+  if (ide_application_get_disable_theme_tracking (IDE_APPLICATION_DEFAULT))
     {
       bin = ide_preferences_get_widget (preferences, dark_mode);
       gtk_widget_set_sensitive (bin, FALSE);

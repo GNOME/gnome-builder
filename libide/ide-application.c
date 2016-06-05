@@ -96,6 +96,7 @@ ide_application_register_theme_overrides (IdeApplication *self)
   g_autoptr(GSettings) settings = NULL;
   GtkSettings *gtk_settings;
   GdkScreen *screen;
+  gboolean wants_dark_theme = FALSE;
 
   IDE_ENTRY;
 
@@ -106,9 +107,24 @@ ide_application_register_theme_overrides (IdeApplication *self)
   screen = gdk_screen_get_default ();
   gtk_settings = gtk_settings_get_for_screen (screen);
   settings = g_settings_new ("org.gnome.builder");
-  g_settings_bind (settings, "night-mode",
-                   gtk_settings, "gtk-application-prefer-dark-theme",
-                   G_SETTINGS_BIND_DEFAULT);
+
+  /*
+   * Some users override the "default to dark theme" in gnome-tweak-tool,
+   * which means if they haven't selected the dark theme, we will
+   * inadvertantly set the application to light-mode. If we detect this,
+   * we will avoid tracking the dark status.
+   */
+  g_object_get (gtk_settings,
+                "gtk-application-prefer-dark-theme", &wants_dark_theme,
+                NULL);
+
+  if (wants_dark_theme || g_getenv ("GTK_THEME") != NULL)
+    self->disable_theme_tracking = TRUE;
+
+  if (!self->disable_theme_tracking)
+    g_settings_bind (settings, "night-mode",
+                     gtk_settings, "gtk-application-prefer-dark-theme",
+                     G_SETTINGS_BIND_DEFAULT);
 
   IDE_EXIT;
 }
@@ -727,4 +743,12 @@ ide_application_open_project (IdeApplication *self,
     return TRUE;
   else
     return FALSE;
+}
+
+gboolean
+ide_application_get_disable_theme_tracking (IdeApplication *self)
+{
+  g_return_val_if_fail (IDE_IS_APPLICATION (self), FALSE);
+
+  return self->disable_theme_tracking;
 }
