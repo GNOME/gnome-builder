@@ -1,7 +1,7 @@
 bin_PROGRAMS = \
 	gnome-builder \
+	gnome-builder-cli \
 	gnome-builder-worker \
-	ide
 
 AM_CPPFLAGS = \
 	-DPACKAGE_LOCALE_DIR=\""${datadir}/locale"\" \
@@ -32,7 +32,7 @@ gnome_builder_LDADD = $(gnome_builder_libs)
 gnome_builder_worker_SOURCES = main.c
 gnome_builder_worker_LDADD = $(gnome_builder_libs)
 
-ide_SOURCES = main.c
-ide_LDADD = $(gnome_builder_libs)
+gnome_builder_cli_SOURCES = main.c
+gnome_builder_cli_LDADD = $(gnome_builder_libs)
 
 -include $(top_srcdir)/git.mk
