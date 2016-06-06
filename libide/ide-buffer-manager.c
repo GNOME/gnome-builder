@@ -221,7 +221,7 @@ ide_buffer_manager_get_auto_save (IdeBufferManager *self)
  *
  * Sets the #IdeBufferManager:auto-save property. If this is %TRUE, then a
  * buffer will automatically be saved after #IdeBufferManager:auto-save-timeout
- * seconds have elapsed since the buffers last modification.
+ * seconds have elapsed since the buffer's last modification.
  */
 void
 ide_buffer_manager_set_auto_save (IdeBufferManager *self,
@@ -257,7 +257,7 @@ ide_buffer_manager_set_auto_save (IdeBufferManager *self,
 /**
  * ide_buffer_manager_get_focus_buffer:
  *
- * Gets the #IdeBufferManager:focus-buffer property. This the buffer behind
+ * Gets the #IdeBufferManager:focus-buffer property. This is the buffer behind
  * the current selected view.
  *
  * Returns: (transfer none): An #IdeBuffer or %NULL.
@@ -770,7 +770,7 @@ ide_buffer_manager_load_file_async (IdeBufferManager     *self,
     {
       /*
        * Allow application to specify the buffer instance which may be a
-       * decendent of IdeBuffer.
+       * descendant of IdeBuffer.
        */
       g_signal_emit (self, signals [CREATE_BUFFER], 0, file, &state->buffer);
 
@@ -812,9 +812,9 @@ ide_buffer_manager_load_file_async (IdeBufferManager     *self,
  *
  * Completes an asynchronous request to load a file via ide_buffer_manager_load_file_async().
  * If the buffer was already loaded, this function will return a reference to the previous buffer
- * with it's reference count incremented by one.
+ * with its reference count incremented by one.
  *
- * Returns: (transfer full): An #IdeBuffer if successf; otherwise %NULL and @error is set.
+ * Returns: (transfer full): An #IdeBuffer if successful; otherwise %NULL and @error is set.
  */
 IdeBuffer *
 ide_buffer_manager_load_file_finish (IdeBufferManager  *self,
@@ -896,12 +896,12 @@ ide_buffer_manager_save_file__save_cb (GObject      *object,
       return;
     }
 
-  /* Make the buffer as not modified if we saved it to the backing file */
+  /* Mark the buffer as not modified if we saved it to the backing file */
   file = ide_buffer_get_file (state->buffer);
   if (ide_file_equal (file, state->file))
     gtk_text_buffer_set_modified (GTK_TEXT_BUFFER (state->buffer), FALSE);
 
-  /* remove the unsaved files state */
+  /* Remove the unsaved files state */
   context = ide_object_get_context (IDE_OBJECT (self));
   unsaved_files = ide_context_get_unsaved_files (context);
   gfile = ide_file_get_file (state->file);
@@ -971,7 +971,7 @@ ide_buffer_manager_save_file__load_settings_cb (GObject      *object,
    */
   gtk_source_file_saver_set_flags (saver, GTK_SOURCE_FILE_SAVER_FLAGS_IGNORE_MODIFICATION_TIME);
 
-  /* set file encoding and newline style defaults */
+  /* Set file encoding and newline style defaults */
   newline_type = ide_file_settings_get_newline_type (file_settings);
   encoding = gtk_source_encoding_get_utf8 ();
 
