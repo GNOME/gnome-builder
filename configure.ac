@@ -235,7 +235,7 @@ AS_IF([test "$enable_webkit" != no],[
 	                  [have_webkit=yes],
 	                  [have_webkit=no])
 
-	AS_IF([test "$enable_webkit" = "yes" && "$have_webkit" = "no"],[
+	AS_IF([test "$enable_webkit" = "yes" && test "$have_webkit" = "no"],[
 	       AC_MSG_ERROR([--enable-webkit requires webkit2gtk-4.0 >= webkit_required_version])
 	])
 
