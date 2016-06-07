@@ -1427,6 +1427,8 @@ gb_vim_complete (GtkWidget   *active_widget,
 
       if (g_str_has_prefix (line, "e ") ||
           g_str_has_prefix (line, "edit ") ||
+          g_str_has_prefix (line, "o ") ||
+          g_str_has_prefix (line, "open ") ||
           g_str_has_prefix (line, "tabe "))
           gb_vim_complete_edit (active_widget, line, ar);
       else
