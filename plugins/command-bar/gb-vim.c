@@ -1292,18 +1292,8 @@ gb_vim_complete_edit_files (GtkWidget *active_widget,
   if (parent != NULL)
     {
       g_autoptr(GFileEnumerator) fe = NULL;
-      g_autofree gchar *relpath = NULL;
       GFileInfo *descendent;
       const gchar *slash;
-
-      relpath = g_file_get_relative_path (workdir, parent);
-
-      if (relpath && g_str_has_prefix (relpath, "./"))
-        {
-          gchar *tmp = relpath;
-          relpath = g_strdup (relpath + 2);
-          g_free (tmp);
-        }
 
 #ifdef IDE_ENABLE_TRACE
       {
@@ -1326,23 +1316,26 @@ gb_vim_complete_edit_files (GtkWidget *active_widget,
       while ((descendent = g_file_enumerator_next_file (fe, NULL, NULL)))
         {
           const gchar *name;
-
           name = g_file_info_get_display_name (descendent);
 
           IDE_TRACE_MSG ("name=%s prefix=%s", name, prefix);
 
           if (name && g_str_has_prefix (name, prefix))
             {
-              gchar *path;
+              gchar *completed_command;
+              const gchar *descendent_name;
+              g_autofree gchar *full_path = NULL;
+              g_autofree gchar *parent_path = NULL;
 
-              if (relpath)
-                path = g_strdup_printf ("%s %s/%s", command, relpath, name);
-              else
-                path = g_strdup_printf ("%s %s", command, name);
+              parent_path = g_file_get_path (parent);
+              descendent_name = g_file_info_get_name (descendent);
+              full_path = g_build_filename (parent_path, descendent_name, NULL);
 
-              IDE_TRACE_MSG ("edit completion: %s", path);
+              completed_command = g_strdup_printf ("%s %s", command, full_path);
 
-              g_ptr_array_add (ar, path);
+              IDE_TRACE_MSG ("edit completion: %s", completed_command);
+
+              g_ptr_array_add (ar, completed_command);
             }
           g_object_unref (descendent);
         }
