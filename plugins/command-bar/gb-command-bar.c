@@ -436,6 +436,12 @@ gb_command_bar_complete (GbCommandBar *self)
               GtkWidget *label;
               char *s;
 
+              if (!g_str_has_prefix (completions[i], current_prefix))
+                {
+                  g_warning ("Provided completion does not contain '%s' as a prefix", current_prefix);
+                  continue;
+                }
+
               label = gtk_label_new ("");
               s = g_strdup_printf ("<b>%s</b>%s", current_prefix, completions[i] + strlen (current_prefix));
               gtk_label_set_markup (GTK_LABEL (label), s);
