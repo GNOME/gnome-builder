@@ -389,7 +389,7 @@ gb_terminal_view_set_font_name (GbTerminalView *self,
 
 static void
 gb_terminal_set_split_view (IdeLayoutView   *view,
-                            gboolean  split_view)
+                            gboolean         split_view)
 {
   GbTerminalView *self = (GbTerminalView *)view;
   GtkStyleContext *style_context;

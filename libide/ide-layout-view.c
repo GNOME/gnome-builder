@@ -110,7 +110,7 @@ ide_layout_view_create_split (IdeLayoutView *self)
  */
 void
 ide_layout_view_set_split_view (IdeLayoutView   *self,
-                        gboolean  split_view)
+                                gboolean         split_view)
 {
   g_return_if_fail (IDE_IS_LAYOUT_VIEW (self));
 
