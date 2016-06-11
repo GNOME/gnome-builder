@@ -72,7 +72,8 @@ gbp_devhelp_view_notify_title (GbpDevhelpView *self,
 }
 
 static IdeLayoutView *
-gbp_devhelp_view_create_split (IdeLayoutView *view)
+gbp_devhelp_view_create_split (IdeLayoutView *view,
+                               GFile         *file)
 {
   GbpDevhelpView *self = (GbpDevhelpView *)view;
   GbpDevhelpView *other;

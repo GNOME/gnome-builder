@@ -403,15 +403,35 @@ ide_editor_view_set_document (IdeEditorView *self,
 }
 
 static IdeLayoutView *
-ide_editor_view_create_split (IdeLayoutView *view)
+ide_editor_view_create_split (IdeLayoutView *view,
+                              GFile         *file)
 {
   IdeEditorView *self = (IdeEditorView *)view;
   IdeLayoutView *ret;
+  IdeBuffer *buffer;
+  IdeContext *context;
+  IdeBufferManager *buf_mgr;
 
   g_assert (IDE_IS_EDITOR_VIEW (self));
 
+  if (file == NULL)
+    {
+      buffer = self->document;
+    }
+  else
+    {
+      context = ide_buffer_get_context (self->document);
+      buf_mgr = ide_context_get_buffer_manager (context);
+      buffer = ide_buffer_manager_find_buffer (buf_mgr, file);
+      if (buffer == NULL)
+        {
+          g_warning ("Failed to find buffer for file '%s'", g_file_get_path (file));
+          buffer = self->document;
+        }
+    }
+
   ret = g_object_new (IDE_TYPE_EDITOR_VIEW,
-                      "document", self->document,
+                      "document", buffer,
                       "visible", TRUE,
                       NULL);
 

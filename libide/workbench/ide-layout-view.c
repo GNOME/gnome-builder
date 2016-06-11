@@ -86,19 +86,22 @@ ide_layout_view_get_can_split (IdeLayoutView *self)
 /**
  * ide_layout_view_create_split:
  * @self: A #IdeLayoutView.
+ * @file: A #GFile already loaded by the #IdeBufferManager, or %NULL to use the
+ * existing buffer.
  *
- * Creates a new view similar to @self that can be displayed in a split.
- * If the view does not support splits, %NULL will be returned.
+ * Creates a new view that can be displayed in a split, potentially with a different
+ * buffer. If the view does not support splits, %NULL will be returned.
  *
  * Returns: (transfer full): A #IdeLayoutView.
  */
 IdeLayoutView *
-ide_layout_view_create_split (IdeLayoutView *self)
+ide_layout_view_create_split (IdeLayoutView *self,
+                              GFile         *file)
 {
   g_return_val_if_fail (IDE_IS_LAYOUT_VIEW (self), NULL);
 
   if (IDE_LAYOUT_VIEW_GET_CLASS (self)->create_split)
-    return IDE_LAYOUT_VIEW_GET_CLASS (self)->create_split (self);
+    return IDE_LAYOUT_VIEW_GET_CLASS (self)->create_split (self, file);
 
   return NULL;
 }

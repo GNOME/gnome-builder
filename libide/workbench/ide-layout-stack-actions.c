@@ -97,7 +97,7 @@ ide_layout_stack_actions_move_left (GSimpleAction *action,
   if (active_view == NULL || !IDE_IS_LAYOUT_VIEW (active_view))
     return;
 
-  g_signal_emit_by_name (self, "split", active_view, IDE_LAYOUT_GRID_SPLIT_MOVE_LEFT);
+  g_signal_emit_by_name (self, "split", active_view, IDE_LAYOUT_GRID_SPLIT_MOVE_LEFT, NULL);
 }
 
 static void
@@ -114,7 +114,7 @@ ide_layout_stack_actions_move_right (GSimpleAction *action,
   if (active_view == NULL || !IDE_IS_LAYOUT_VIEW (active_view))
     return;
 
-  g_signal_emit_by_name (self, "split", active_view, IDE_LAYOUT_GRID_SPLIT_MOVE_RIGHT);
+  g_signal_emit_by_name (self, "split", active_view, IDE_LAYOUT_GRID_SPLIT_MOVE_RIGHT, NULL);
 }
 
 static void
@@ -159,6 +159,8 @@ ide_layout_stack_actions_split_left (GSimpleAction *action,
 {
   IdeLayoutStack *self = user_data;
   GtkWidget *active_view;
+  const gchar *file_path;
+  g_autoptr(GFile) file = NULL;
 
   g_assert (IDE_IS_LAYOUT_STACK (self));
 
@@ -166,7 +168,13 @@ ide_layout_stack_actions_split_left (GSimpleAction *action,
   if (active_view == NULL || !IDE_IS_LAYOUT_VIEW (active_view))
     return;
 
-  g_signal_emit_by_name (self, "split", active_view, IDE_LAYOUT_GRID_SPLIT_LEFT);
+  file_path = g_variant_get_string (param, NULL);
+  if (ide_str_empty0 (file_path))
+    file = NULL;
+  else
+    file = g_file_new_for_path (file_path);
+
+  g_signal_emit_by_name (self, "split", active_view, IDE_LAYOUT_GRID_SPLIT_LEFT, file);
 }
 
 static void
@@ -183,7 +191,7 @@ ide_layout_stack_actions_split_right (GSimpleAction *action,
   if (active_view == NULL || !IDE_IS_LAYOUT_VIEW (active_view))
     return;
 
-  g_signal_emit_by_name (self, "split", active_view, IDE_LAYOUT_GRID_SPLIT_RIGHT);
+  g_signal_emit_by_name (self, "split", active_view, IDE_LAYOUT_GRID_SPLIT_RIGHT, NULL);
 }
 
 static void
@@ -298,7 +306,7 @@ static const GActionEntry gbViewStackActions[] = {
   { "previous-view", ide_layout_stack_actions_previous_view },
   { "show-list", ide_layout_stack_actions_show_list },
   { "split-down", NULL, NULL, "false", ide_layout_stack_actions_split_down },
-  { "split-left", ide_layout_stack_actions_split_left },
+  { "split-left", ide_layout_stack_actions_split_left, "s", NULL, NULL },
   { "split-right", ide_layout_stack_actions_split_right },
 };
 

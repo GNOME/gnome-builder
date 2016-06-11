@@ -352,7 +352,8 @@ style_context_changed (GtkStyleContext *style_context,
 }
 
 static IdeLayoutView *
-gb_terminal_create_split (IdeLayoutView *view)
+gb_terminal_create_split (IdeLayoutView *view,
+                          GFile         *file)
 {
   IdeLayoutView *new_view;
 

@@ -430,6 +430,8 @@ ide_layout_stack_class_init (IdeLayoutStackClass *klass)
    * @self: A #IdeLayoutStack.
    * @view: The #IdeLayoutView to split.
    * @split_type: (type gint): A #IdeLayoutGridSplit.
+   * @file: A #GFile to be opened in the split, or %NULL to use the existing file. If given,
+   * the @file should have already been loaded by the buffer manager.
    *
    * Requests a split to be performed on the view.
    *
@@ -441,9 +443,10 @@ ide_layout_stack_class_init (IdeLayoutStackClass *klass)
                                    0,
                                    NULL, NULL, NULL,
                                    G_TYPE_NONE,
-                                   2,
+                                   3,
                                    IDE_TYPE_LAYOUT_VIEW,
-                                   IDE_TYPE_LAYOUT_GRID_SPLIT);
+                                   IDE_TYPE_LAYOUT_GRID_SPLIT,
+                                   G_TYPE_FILE);
 
   gtk_widget_class_set_css_name (widget_class, "layoutstack");
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/ui/ide-layout-stack.ui");

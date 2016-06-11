@@ -277,6 +277,7 @@ static void
 ide_layout_grid_stack_split (IdeLayoutGrid      *self,
                              IdeLayoutView      *view,
                              IdeLayoutGridSplit  split,
+                             GFile              *file,
                              IdeLayoutStack     *stack)
 {
   GtkWidget *target_stack = NULL;
@@ -289,7 +290,7 @@ ide_layout_grid_stack_split (IdeLayoutGrid      *self,
   switch (split)
     {
     case IDE_LAYOUT_GRID_SPLIT_LEFT:
-      target_view = ide_layout_view_create_split (view);
+      target_view = ide_layout_view_create_split (view, file);
       if (target_view == NULL)
         return;
 
@@ -316,7 +317,7 @@ ide_layout_grid_stack_split (IdeLayoutGrid      *self,
       break;
 
     case IDE_LAYOUT_GRID_SPLIT_RIGHT:
-      target_view = ide_layout_view_create_split (view);
+      target_view = ide_layout_view_create_split (view, file);
       if (target_view == NULL)
         return;
 

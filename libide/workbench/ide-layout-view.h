@@ -39,7 +39,8 @@ struct _IdeLayoutViewClass
   gboolean       (*get_modified)          (IdeLayoutView             *self);
   const gchar   *(*get_title)             (IdeLayoutView             *self);
   const gchar   *(*get_special_title)     (IdeLayoutView             *self);
-  IdeLayoutView *(*create_split)          (IdeLayoutView             *self);
+  IdeLayoutView *(*create_split)          (IdeLayoutView             *self,
+                                           GFile                     *file);
   void           (*set_split_view)        (IdeLayoutView             *self,
                                            gboolean                   split_view);
   void           (*set_back_forward_list) (IdeLayoutView             *self,
@@ -52,7 +53,8 @@ struct _IdeLayoutViewClass
 };
 
 gboolean       ide_layout_view_agree_to_close        (IdeLayoutView             *self);
-IdeLayoutView *ide_layout_view_create_split          (IdeLayoutView             *self);
+IdeLayoutView *ide_layout_view_create_split          (IdeLayoutView             *self,
+                                                      GFile                     *file);
 gboolean       ide_layout_view_get_can_preview       (IdeLayoutView             *self);
 gboolean       ide_layout_view_get_can_split         (IdeLayoutView             *self);
 const gchar   *ide_layout_view_get_title             (IdeLayoutView             *self);
