@@ -49,6 +49,7 @@
 #include "util/ide-async-helper.h"
 #include "util/ide-settings.h"
 #include "vcs/ide-vcs.h"
+#include "workbench/ide-workbench.h"
 
 #define RESTORE_FILES_MAX_FILES 20
 
@@ -1898,6 +1899,7 @@ restore_in_idle (gpointer user_data)
   IdeContext *self;
   GPtrArray *ar;
   GFile *file;
+  IdeWorkbenchOpenFlags flags;
 
   g_assert (G_IS_TASK (task));
 
@@ -1919,9 +1921,12 @@ restore_in_idle (gpointer user_data)
   ifile = ide_project_get_project_file (self->project, file);
   g_ptr_array_remove_index (ar, ar->len - 1);
 
+  flags = WORKBENCH_OPEN_FLAGS_NONE;
+
   ide_buffer_manager_load_file_async (self->buffer_manager,
                                       ifile,
                                       FALSE,
+                                      flags,
                                       NULL,
                                       g_task_get_cancellable (task),
                                       ide_context_restore__load_file_cb,

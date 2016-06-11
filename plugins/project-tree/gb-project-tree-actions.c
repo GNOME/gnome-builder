@@ -132,6 +132,7 @@ gb_project_tree_actions_open (GSimpleAction *action,
     {
       GFileInfo *file_info;
       GFile *file;
+      IdeWorkbenchOpenFlags flags;
 
       file_info = gb_project_file_get_file_info (GB_PROJECT_FILE (item));
       if (!file_info)
@@ -144,7 +145,9 @@ gb_project_tree_actions_open (GSimpleAction *action,
       if (!file)
         return;
 
-      ide_workbench_open_files_async (workbench, &file, 1, NULL, NULL, NULL, NULL);
+      flags = WORKBENCH_OPEN_FLAGS_NONE;
+
+      ide_workbench_open_files_async (workbench, &file, 1, NULL, flags, NULL, NULL, NULL);
     }
 }
 
@@ -197,6 +200,7 @@ gb_project_tree_actions_open_with_editor (GSimpleAction *action,
   GFile *file;
   IdeTreeNode *selected;
   GObject *item;
+  IdeWorkbenchOpenFlags flags;
 
   g_assert (GB_IS_PROJECT_TREE (self));
 
@@ -209,7 +213,9 @@ gb_project_tree_actions_open_with_editor (GSimpleAction *action,
       !(workbench = ide_widget_get_workbench (GTK_WIDGET (self))))
     return;
 
-  ide_workbench_open_files_async (workbench, &file, 1, "editor", NULL, NULL, NULL);
+  flags = WORKBENCH_OPEN_FLAGS_NONE;
+
+  ide_workbench_open_files_async (workbench, &file, 1, "editor", flags, NULL, NULL, NULL);
 }
 
 static void
@@ -380,6 +386,7 @@ gb_project_tree_actions__create_cb (GObject      *object,
   g_autoptr(GError) error = NULL;
   GbProjectTree *self;
   IdeWorkbench *workbench;
+  IdeWorkbenchOpenFlags flags;
 
   g_assert (G_IS_FILE (file));
   g_assert (IDE_IS_TREE_NODE (node));
@@ -398,7 +405,9 @@ gb_project_tree_actions__create_cb (GObject      *object,
   if (workbench == NULL)
     return;
 
-  ide_workbench_open_files_async (workbench, &file, 1, NULL, NULL, NULL, NULL);
+  flags = WORKBENCH_OPEN_FLAGS_NONE;
+
+  ide_workbench_open_files_async (workbench, &file, 1, NULL, flags, NULL, NULL, NULL);
 
   ide_tree_node_invalidate (node);
   ide_tree_node_expand (node, FALSE);

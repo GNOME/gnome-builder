@@ -28,6 +28,12 @@
 
 G_BEGIN_DECLS
 
+typedef enum
+{
+  WORKBENCH_OPEN_FLAGS_NONE = 0,
+  WORKBENCH_OPEN_FLAGS_BG = 1
+} IdeWorkbenchOpenFlags;
+
 #define IDE_TYPE_WORKBENCH (ide_workbench_get_type())
 
 G_DECLARE_FINAL_TYPE (IdeWorkbench, ide_workbench, IDE, WORKBENCH, GtkApplicationWindow)
@@ -43,6 +49,7 @@ gboolean        ide_workbench_open_project_finish          (IdeWorkbench        
 void            ide_workbench_open_uri_async               (IdeWorkbench         *self,
                                                             IdeUri               *uri,
                                                             const gchar          *hint,
+                                                            IdeWorkbenchOpenFlags flags,
                                                             GCancellable         *cancellable,
                                                             GAsyncReadyCallback   callback,
                                                             gpointer              user_data);
@@ -53,6 +60,7 @@ void            ide_workbench_open_files_async             (IdeWorkbench        
                                                             GFile               **files,
                                                             guint                 n_files,
                                                             const gchar          *hint,
+                                                            IdeWorkbenchOpenFlags flags,
                                                             GCancellable         *cancellable,
                                                             GAsyncReadyCallback   callback,
                                                             gpointer              user_data);

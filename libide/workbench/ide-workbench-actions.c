@@ -86,11 +86,13 @@ ide_workbench_actions_open_with_dialog (GSimpleAction *action,
   if (ret == GTK_RESPONSE_OK)
     {
       g_autoptr(GFile) file = NULL;
+      IdeWorkbenchOpenFlags flags;
 
       IDE_PROBE;
 
       file = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (dialog));
-      ide_workbench_open_files_async (self, &file, 1, NULL, NULL,
+      flags = WORKBENCH_OPEN_FLAGS_NONE;
+      ide_workbench_open_files_async (self, &file, 1, NULL, flags, NULL,
                                       ide_workbench_actions_open_with_dialog_cb,
                                       NULL);
     }

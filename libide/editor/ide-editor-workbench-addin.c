@@ -29,6 +29,7 @@
 #include "editor/ide-editor-perspective.h"
 #include "editor/ide-editor-workbench-addin.h"
 #include "util/ide-gtk.h"
+#include "workbench/ide-workbench.h"
 #include "workbench/ide-workbench-header-bar.h"
 
 struct _IdeEditorWorkbenchAddin
@@ -39,11 +40,24 @@ struct _IdeEditorWorkbenchAddin
   IdeWorkbench         *workbench;
 };
 
+typedef struct
+{
+  IdeWorkbenchOpenFlags flags;
+  IdeUri               *uri;
+} OpenFileTaskData;
+
 static void ide_workbench_addin_iface_init (IdeWorkbenchAddinInterface *iface);
 
 G_DEFINE_TYPE_EXTENDED (IdeEditorWorkbenchAddin, ide_editor_workbench_addin, G_TYPE_OBJECT, 0,
                         G_IMPLEMENT_INTERFACE (IDE_TYPE_WORKBENCH_ADDIN,
                                                ide_workbench_addin_iface_init))
+
+static void
+open_file_task_data_free (OpenFileTaskData *open_file_task_data)
+{
+  ide_uri_unref (open_file_task_data->uri);
+  g_slice_free (OpenFileTaskData, open_file_task_data);
+}
 
 static void
 ide_editor_workbench_addin_class_init (IdeEditorWorkbenchAddinClass *klass)
@@ -153,6 +167,7 @@ ide_editor_workbench_addin_open_cb (GObject      *object,
   g_autoptr(GTask) task = user_data;
   GError *error = NULL;
   const gchar *fragment;
+  OpenFileTaskData *open_file_task_data;
   IdeUri *uri;
 
   g_assert (IDE_IS_BUFFER_MANAGER (buffer_manager));
@@ -160,6 +175,8 @@ ide_editor_workbench_addin_open_cb (GObject      *object,
 
   self = g_task_get_source_object (task);
   g_assert (IDE_IS_EDITOR_WORKBENCH_ADDIN (self));
+
+  open_file_task_data = g_task_get_task_data (task);
 
   buffer = ide_buffer_manager_load_file_finish (buffer_manager, result, &error);
 
@@ -170,7 +187,7 @@ ide_editor_workbench_addin_open_cb (GObject      *object,
       return;
     }
 
-  uri = g_task_get_task_data (task);
+  uri = open_file_task_data->uri;
   fragment = ide_uri_get_fragment (uri);
 
   if (fragment != NULL)
@@ -187,23 +204,25 @@ ide_editor_workbench_addin_open_cb (GObject      *object,
         }
     }
 
-  if (self->perspective != NULL)
+  if (self->perspective != NULL && !(open_file_task_data->flags & WORKBENCH_OPEN_FLAGS_BG))
     ide_editor_perspective_focus_buffer_in_current_stack (self->perspective, buffer);
 
   g_task_return_boolean (task, TRUE);
 }
 
 static void
-ide_editor_workbench_addin_open_async (IdeWorkbenchAddin   *addin,
-                                       IdeUri              *uri,
-                                       const gchar         *content_type,
-                                       GCancellable        *cancellable,
-                                       GAsyncReadyCallback  callback,
-                                       gpointer             user_data)
+ide_editor_workbench_addin_open_async (IdeWorkbenchAddin    *addin,
+                                       IdeUri               *uri,
+                                       const gchar          *content_type,
+                                       IdeWorkbenchOpenFlags flags,
+                                       GCancellable         *cancellable,
+                                       GAsyncReadyCallback   callback,
+                                       gpointer              user_data)
 {
   IdeEditorWorkbenchAddin *self = (IdeEditorWorkbenchAddin *)addin;
   IdeBufferManager *buffer_manager;
   IdeContext *context;
+  OpenFileTaskData *open_file_task_data;
   g_autoptr(GTask) task = NULL;
   g_autoptr(IdeFile) ifile = NULL;
   g_autoptr(GFile) gfile = NULL;
@@ -214,7 +233,10 @@ ide_editor_workbench_addin_open_async (IdeWorkbenchAddin   *addin,
   g_assert (IDE_IS_WORKBENCH (self->workbench));
 
   task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_task_data (task, ide_uri_ref (uri), (GDestroyNotify)ide_uri_unref);
+  open_file_task_data = g_slice_new (OpenFileTaskData);
+  open_file_task_data->flags = flags;
+  open_file_task_data->uri = ide_uri_ref(uri);
+  g_task_set_task_data (task, open_file_task_data, (GDestroyNotify)open_file_task_data_free);
 
   context = ide_workbench_get_context (self->workbench);
   buffer_manager = ide_context_get_buffer_manager (context);
@@ -243,6 +265,7 @@ ide_editor_workbench_addin_open_async (IdeWorkbenchAddin   *addin,
   ide_buffer_manager_load_file_async (buffer_manager,
                                       ifile,
                                       FALSE,
+                                      flags,
                                       NULL,
                                       cancellable,
                                       ide_editor_workbench_addin_open_cb,

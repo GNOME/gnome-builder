@@ -34,13 +34,14 @@ typedef struct
 
 typedef struct
 {
-  IdeWorkbench *self;
-  GTask        *task;
-  IdeUri       *uri;
-  GArray       *loaders;
-  gchar        *content_type;
-  gchar        *hint;
-  guint         did_collect : 1;
+  IdeWorkbench         *self;
+  GTask                *task;
+  IdeUri               *uri;
+  GArray               *loaders;
+  gchar                *content_type;
+  IdeWorkbenchOpenFlags flags;
+  gchar                *hint;
+  guint                 did_collect : 1;
 } IdeWorkbenchOpenUriState;
 
 typedef struct
@@ -195,6 +196,7 @@ ide_workbench_open_uri_try_next (IdeWorkbenchOpenUriState *open_uri_state)
   ide_workbench_addin_open_async (loader->addin,
                                   open_uri_state->uri,
                                   open_uri_state->content_type,
+                                  open_uri_state->flags,
                                   g_task_get_cancellable (open_uri_state->task),
                                   ide_workbench_open_uri_cb,
                                   open_uri_state);
@@ -270,12 +272,13 @@ ide_workbench_open_discover_content_type (IdeWorkbenchOpenUriState *open_uri_sta
 }
 
 void
-ide_workbench_open_uri_async (IdeWorkbench        *self,
-                              IdeUri              *uri,
-                              const gchar         *hint,
-                              GCancellable        *cancellable,
-                              GAsyncReadyCallback  callback,
-                              gpointer             user_data)
+ide_workbench_open_uri_async (IdeWorkbench         *self,
+                              IdeUri               *uri,
+                              const gchar          *hint,
+                              IdeWorkbenchOpenFlags flags,
+                              GCancellable         *cancellable,
+                              GAsyncReadyCallback   callback,
+                              gpointer              user_data)
 {
   IdeWorkbenchOpenUriState *open_uri_state;
 
@@ -290,6 +293,7 @@ ide_workbench_open_uri_async (IdeWorkbench        *self,
   open_uri_state->loaders = g_array_new (FALSE, FALSE, sizeof (IdeWorkbenchLoader));
   open_uri_state->task = g_task_new (self, cancellable, callback, user_data);
   open_uri_state->hint = g_strdup (hint);
+  open_uri_state->flags = flags;
 
   g_array_set_clear_func (open_uri_state->loaders,
                           ide_workbench_loader_destroy);
@@ -352,11 +356,27 @@ ide_workbench_open_files_cb (GObject      *object,
     }
 }
 
+/**
+ * ide_workbench_open_files_async:
+ * @self: An #IdeWorkbench.
+ * @files: An array of #GFile objects to be opened.
+ * @n_files: The number of files given.
+ * @hint: The id of an #IdeWorkbenchAddin that should be preferred as a loader.
+ * @flags: A #IdeWorkbenchOpenFlags (if WORKBENCH_OPEN_FLAGS_BG is set, the buffer is loaded
+ * but not made visible in the UI).
+ * @cancellable: A #GCancellable.
+ * @callback: A #GASyncReadyCallback.
+ * @user_data: A #gpointer to hold user data.
+ *
+ * Starts the process of loading the buffers for the given @files, possibly
+ * creating an #IdeEditorView for each depending on @flags.
+ */
 void
 ide_workbench_open_files_async (IdeWorkbench         *self,
                                 GFile               **files,
                                 guint                 n_files,
                                 const gchar          *hint,
+                                IdeWorkbenchOpenFlags flags,
                                 GCancellable         *cancellable,
                                 GAsyncReadyCallback   callback,
                                 gpointer              user_data)
@@ -395,6 +415,7 @@ ide_workbench_open_files_async (IdeWorkbench         *self,
       ide_workbench_open_uri_async (self,
                                     uri,
                                     hint,
+                                    flags,
                                     cancellable,
                                     ide_workbench_open_files_cb,
                                     open_files_state);

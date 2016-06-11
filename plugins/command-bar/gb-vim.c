@@ -441,6 +441,7 @@ gb_vim_command_edit (GtkWidget      *active_widget,
   IdeVcs *vcs;
   GFile *workdir;
   GFile *file = NULL;
+  IdeWorkbenchOpenFlags flags;
 
   g_assert (GTK_IS_WIDGET (active_widget));
 
@@ -467,7 +468,8 @@ gb_vim_command_edit (GtkWidget      *active_widget,
   else
     file = g_file_get_child (workdir, options);
 
-  ide_workbench_open_files_async (workbench, &file, 1, "editor", NULL, NULL, NULL);
+  flags = WORKBENCH_OPEN_FLAGS_NONE;
+  ide_workbench_open_files_async (workbench, &file, 1, "editor", flags, NULL, NULL, NULL);
 
   g_clear_object (&file);
 

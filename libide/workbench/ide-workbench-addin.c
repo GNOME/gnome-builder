@@ -137,12 +137,13 @@ ide_workbench_addin_can_open (IdeWorkbenchAddin *self,
 }
 
 void
-ide_workbench_addin_open_async (IdeWorkbenchAddin   *self,
-                                IdeUri              *uri,
-                                const gchar         *content_type,
-                                GCancellable        *cancellable,
-                                GAsyncReadyCallback  callback,
-                                gpointer             user_data)
+ide_workbench_addin_open_async (IdeWorkbenchAddin    *self,
+                                IdeUri               *uri,
+                                const gchar          *content_type,
+                                IdeWorkbenchOpenFlags flags,
+                                GCancellable         *cancellable,
+                                GAsyncReadyCallback   callback,
+                                gpointer              user_data)
 {
   g_return_if_fail (IDE_IS_WORKBENCH_ADDIN (self));
   g_return_if_fail (uri != NULL);
@@ -152,7 +153,7 @@ ide_workbench_addin_open_async (IdeWorkbenchAddin   *self,
       (IDE_WORKBENCH_ADDIN_GET_IFACE (self)->open_finish == NULL))
     g_return_if_reached ();
 
-  IDE_WORKBENCH_ADDIN_GET_IFACE (self)->open_async (self, uri, content_type, cancellable, callback, user_data);
+  IDE_WORKBENCH_ADDIN_GET_IFACE (self)->open_async (self, uri, content_type, flags, cancellable, callback, user_data);
 }
 
 gboolean

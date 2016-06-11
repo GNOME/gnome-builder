@@ -301,6 +301,7 @@ gbp_build_panel_diagnostic_activated (GbpBuildPanel *self,
   IdeDiagnostic *diagnostic;
   IdeSourceLocation *loc;
   IdeWorkbench *workbench;
+  IdeWorkbenchOpenFlags flags;
 
   g_assert (GBP_IS_BUILD_PANEL (self));
   g_assert (GTK_IS_LIST_BOX_ROW (row));
@@ -319,7 +320,8 @@ gbp_build_panel_diagnostic_activated (GbpBuildPanel *self,
     return;
 
   workbench = ide_widget_get_workbench (GTK_WIDGET (self));
-  ide_workbench_open_uri_async (workbench, uri, "editor", NULL, NULL, NULL);
+  flags = WORKBENCH_OPEN_FLAGS_NONE;
+  ide_workbench_open_uri_async (workbench, uri, "editor", flags, NULL, NULL, NULL);
 }
 
 static void

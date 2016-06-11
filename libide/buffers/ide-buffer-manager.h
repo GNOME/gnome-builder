@@ -23,6 +23,7 @@
 #include <gtksourceview/completion-providers/words/gtksourcecompletionwords.h>
 
 #include "ide-object.h"
+#include "ide-workbench.h"
 
 #include "files/ide-file.h"
 
@@ -37,6 +38,7 @@ IdeBuffer                *ide_buffer_manager_create_temporary_buffer
 void                      ide_buffer_manager_load_file_async     (IdeBufferManager     *self,
                                                                   IdeFile              *file,
                                                                   gboolean              force_reload,
+                                                                  IdeWorkbenchOpenFlags flags,
                                                                   IdeProgress         **progress,
                                                                   GCancellable         *cancellable,
                                                                   GAsyncReadyCallback   callback,

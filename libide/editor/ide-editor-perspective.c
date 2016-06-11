@@ -30,6 +30,7 @@
 #include "editor/ide-editor-view.h"
 #include "util/ide-gtk.h"
 #include "workbench/ide-layout-grid.h"
+#include "workbench/ide-workbench.h"
 #include "workbench/ide-workbench-header-bar.h"
 
 struct _IdeEditorPerspective
@@ -148,7 +149,7 @@ ide_editor_perspective_context_set (GtkWidget  *widget,
 static void
 ide_editor_perspective_load_buffer (IdeEditorPerspective *self,
                                     IdeBuffer            *buffer,
-                                    gboolean              reloading,
+                                    gboolean              create_new_view,
                                     IdeBufferManager     *buffer_manager)
 {
   IdeEditorView *view;
@@ -163,7 +164,7 @@ ide_editor_perspective_load_buffer (IdeEditorPerspective *self,
    * We only want to create a new view when the buffer is originally
    * created, not when it's reloaded.
    */
-  if (reloading)
+  if (!create_new_view)
     {
       ide_buffer_manager_set_focus_buffer (buffer_manager, buffer);
       return;
@@ -598,6 +599,7 @@ ide_editor_perspective_focus_location_full (IdeEditorPerspective *self,
       IdeBufferManager *bufmgr;
       IdeWorkbench *workbench;
       IdeContext *context;
+      IdeWorkbenchOpenFlags flags;
 
       workbench = ide_widget_get_workbench (GTK_WIDGET (self));
       context = ide_workbench_get_context (workbench);
@@ -607,9 +609,12 @@ ide_editor_perspective_focus_location_full (IdeEditorPerspective *self,
       state->self = g_object_ref (self);
       state->location = ide_source_location_ref (location);
 
+      flags = WORKBENCH_OPEN_FLAGS_NONE;
+
       ide_buffer_manager_load_file_async (bufmgr,
                                           lookup.file,
                                           FALSE,
+                                          flags,
                                           NULL,
                                           NULL,
                                           ide_editor_perspective_focus_location_cb,

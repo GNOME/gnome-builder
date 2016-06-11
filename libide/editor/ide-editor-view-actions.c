@@ -34,6 +34,7 @@
 #include "util/ide-gtk.h"
 #include "util/ide-progress.h"
 #include "vcs/ide-vcs.h"
+#include "workbench/ide-workbench.h"
 
 static void
 ide_editor_view_actions_source_view_notify (IdeSourceView *source_view,
@@ -517,10 +518,12 @@ find_other_file_cb (GObject      *object,
     {
       IdeWorkbench *workbench;
       GFile *gfile;
+      IdeWorkbenchOpenFlags flags;
 
       gfile = ide_file_get_file (ret);
       workbench = ide_widget_get_workbench (GTK_WIDGET (self));
-      ide_workbench_open_files_async (workbench, &gfile, 1, "editor", NULL, NULL, NULL);
+      flags = WORKBENCH_OPEN_FLAGS_NONE;
+      ide_workbench_open_files_async (workbench, &gfile, 1, "editor", flags, NULL, NULL, NULL);
     }
 }
 
@@ -581,6 +584,7 @@ ide_editor_view_actions_reload_buffer (GSimpleAction *action,
   IdeBufferManager *buffer_manager;
   IdeFile *file;
   g_autoptr(IdeProgress) progress = NULL;
+  IdeWorkbenchOpenFlags flags;
 
   g_assert (IDE_IS_EDITOR_VIEW (self));
 
@@ -592,9 +596,12 @@ ide_editor_view_actions_reload_buffer (GSimpleAction *action,
   gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR (self->progress_bar), 0.0);
   gtk_widget_show (GTK_WIDGET (self->progress_bar));
 
+  flags = WORKBENCH_OPEN_FLAGS_NONE;
+
   ide_buffer_manager_load_file_async (buffer_manager,
                                       file,
                                       TRUE,
+                                      flags,
                                       &progress,
                                       NULL,
                                       ide_editor_view_actions_reload_buffer_cb,
