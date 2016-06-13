@@ -299,16 +299,25 @@ static gboolean
 ide_buffer_manager_auto_save_cb (gpointer data)
 {
   AutoSave *state = data;
-  IdeFile *file;
 
   g_assert (state);
   g_assert (IDE_IS_BUFFER_MANAGER (state->self));
   g_assert (IDE_IS_BUFFER (state->buffer));
   g_assert (state->source_id > 0);
 
-  file = ide_buffer_get_file (state->buffer);
-  if (file)
-    ide_buffer_manager_save_file_async (state->self, state->buffer, file, NULL, NULL, NULL, NULL);
+  if (!ide_buffer_get_changed_on_volume (state->buffer))
+    {
+      IdeFile *file = ide_buffer_get_file (state->buffer);
+
+      if (file != NULL)
+        ide_buffer_manager_save_file_async (state->self,
+                                            state->buffer,
+                                            file,
+                                            NULL,
+                                            NULL,
+                                            NULL,
+                                            NULL);
+    }
 
   unregister_auto_save (state->self, state->buffer);
 
@@ -1039,13 +1048,13 @@ ide_buffer_manager_save_file__load_settings_cb (GObject      *object,
  * Call ide_buffer_manager_save_file_finish() to complete this asynchronous request.
  */
 void
-ide_buffer_manager_save_file_async  (IdeBufferManager     *self,
-                                     IdeBuffer            *buffer,
-                                     IdeFile              *file,
-                                     IdeProgress         **progress,
-                                     GCancellable         *cancellable,
-                                     GAsyncReadyCallback   callback,
-                                     gpointer              user_data)
+ide_buffer_manager_save_file_async (IdeBufferManager     *self,
+                                    IdeBuffer            *buffer,
+                                    IdeFile              *file,
+                                    IdeProgress         **progress,
+                                    GCancellable         *cancellable,
+                                    GAsyncReadyCallback   callback,
+                                    gpointer              user_data)
 {
   g_autoptr(GTask) task = NULL;
   IdeContext *context;
@@ -1730,7 +1739,8 @@ _ide_buffer_manager_reclaim (IdeBufferManager *self,
   g_assert (IDE_IS_BUFFER_MANAGER (self));
   g_assert (IDE_IS_BUFFER (buffer));
 
-  if (gtk_text_buffer_get_modified (GTK_TEXT_BUFFER (buffer)))
+  if (gtk_text_buffer_get_modified (GTK_TEXT_BUFFER (buffer)) &&
+      !ide_buffer_get_changed_on_volume (buffer))
     {
       IdeFile *file;
 
