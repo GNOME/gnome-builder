@@ -15,14 +15,7 @@
 
 if ENABLE_IDEMM
 
-srcmm_subdirs = idemm
 idemm_include_HEADERS = idemm.h
-
-if MAINTAINER_MODE
-src_subdirs = src
-else
-src_subdirs =
-endif
 
 # TODO 
 # if ENABLE_DOCUMENTATION
@@ -31,7 +24,7 @@ endif
 # doc_subdirs =
 # endif
 
-SUBDIRS = tools $(src_subdirs) $(srcmm_subdirs) # $(doc_subdirs)
+SUBDIRS = tools src idemm # $(doc_subdirs)
 
 idemm_includedir = $(includedir)/gnome-builder-@VERSION@/$(IDEMM_MODULE_NAME)
 idemm_libincludedir = $(pkglibdir)/$(IDEMM_MODULE_NAME)/include
@@ -41,3 +34,15 @@ pkgconfigdir = $(pkglibdir)/pkgconfig
 pkgconfig_DATA = $(pkgconfig_files)
 
 endif
+
+GITIGNOREFILES = \
+	compile-binding.am \
+	dist-changelog.am \
+	doc-reference.am \
+	generate-binding.am \
+	idemmconfig.h \
+	stamp-h2 \
+	$(NULL)
+
+
+-include $(top_srcdir)/git.mk

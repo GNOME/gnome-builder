@@ -1,3 +1,4 @@
+if MAINTAINER_MODE
 if ENABLE_IDEMM
 
 binding_name    = idemm
@@ -14,3 +15,6 @@ files_hg   = $(idemm_files_hg)
 include $(top_srcdir)/libidemm/generate-binding.am
 
 endif
+endif
+
+-include $(top_srcdir)/git.mk

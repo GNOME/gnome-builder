@@ -24,3 +24,5 @@ AM_CPPFLAGS = \
 	-I$(top_builddir)/contrib/pnl
 
 endif
+
+-include $(top_srcdir)/git.mk
