@@ -363,9 +363,10 @@ ide_omni_search_entry_init (IdeOmniSearchEntry *self)
                 NULL);
 
   self->popover = g_object_new (GTK_TYPE_POPOVER,
-                                "width-request", 500,
-                                "relative-to", self,
+                                "modal", FALSE,
                                 "position", GTK_POS_BOTTOM,
+                                "relative-to", self,
+                                "width-request", 500,
                                 NULL);
 
   g_signal_connect_object (self->popover,

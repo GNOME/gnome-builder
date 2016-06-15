@@ -250,7 +250,7 @@
   </template>
   <object class="GtkPopover" id="device_popover">
     <child>
-      <object class="EggScrolledWindow">
+      <object class="GtkScrolledWindow">
         <property name="min-content-width">100</property>
         <property name="max-content-width">300</property>
         <property name="max-content-height">300</property>
@@ -269,7 +269,7 @@
   </object>
   <object class="GtkPopover" id="configuration_popover">
     <child>
-      <object class="EggScrolledWindow">
+      <object class="GtkScrolledWindow">
         <property name="min-content-width">250</property>
         <property name="max-content-width">300</property>
         <property name="max-content-height">300</property>

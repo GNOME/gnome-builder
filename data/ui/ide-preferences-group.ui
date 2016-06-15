@@ -33,7 +33,7 @@
             <child>
               <object class="GtkFrame" id="list_box_frame">
                 <child>
-                  <object class="EggScrolledWindow">
+                  <object class="GtkScrolledWindow">
                     <property name="visible">true</property>
                     <property name="shadow-type">none</property>
                     <property name="max-content-height">500</property>
