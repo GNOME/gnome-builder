@@ -456,7 +456,7 @@ ide_editor_perspective_get_titlebar (IdePerspective *perspective)
 static gchar *
 ide_editor_perspective_get_icon_name (IdePerspective *perspective)
 {
-  return g_strdup ("text-editor-symbolic");
+  return g_strdup ("builder-editor-symbolic");
 }
 
 static gchar *
