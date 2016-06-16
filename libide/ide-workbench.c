@@ -750,6 +750,23 @@ remove_early_perspectives (gpointer data)
   return G_SOURCE_REMOVE;
 }
 
+static void
+ide_workbench_notify_perspective_set (PeasExtensionSet *set,
+                                      PeasPluginInfo   *plugin_info,
+                                      PeasExtension    *exten,
+                                      gpointer          user_data)
+{
+  IdeWorkbenchAddin *addin = (IdeWorkbenchAddin *)exten;
+  IdeWorkbench *self = user_data;
+
+  g_assert (IDE_IS_WORKBENCH (self));
+  g_assert (PEAS_IS_EXTENSION_SET (set));
+  g_assert (plugin_info != NULL);
+  g_assert (IDE_IS_WORKBENCH_ADDIN (addin));
+
+  ide_workbench_addin_perspective_set (addin, self->perspective);
+}
+
 void
 ide_workbench_set_visible_perspective (IdeWorkbench   *self,
                                        IdePerspective *perspective)
@@ -784,6 +801,11 @@ ide_workbench_set_visible_perspective (IdeWorkbench   *self,
                      remove_early_perspectives,
                      g_object_ref (self));
     }
+
+  if (self->addins != NULL)
+    peas_extension_set_foreach (self->addins,
+                                ide_workbench_notify_perspective_set,
+                                self);
 }
 
 const gchar *

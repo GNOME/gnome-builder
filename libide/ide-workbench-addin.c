@@ -22,6 +22,12 @@
 
 G_DEFINE_INTERFACE (IdeWorkbenchAddin, ide_workbench_addin, G_TYPE_OBJECT)
 
+static void
+ide_workbench_addin_real_perspective_set (IdeWorkbenchAddin *self,
+                                          IdePerspective    *perspective)
+{
+}
+
 static gchar *
 ide_workbench_addin_real_get_id (IdeWorkbenchAddin *self)
 {
@@ -57,6 +63,7 @@ ide_workbench_addin_default_init (IdeWorkbenchAddinInterface *iface)
   iface->get_id = ide_workbench_addin_real_get_id;
   iface->load = ide_workbench_addin_real_load;
   iface->unload = ide_workbench_addin_real_unload;
+  iface->perspective_set = ide_workbench_addin_real_perspective_set;
 }
 
 /**
@@ -187,4 +194,24 @@ ide_workbench_addin_get_id (IdeWorkbenchAddin *self)
   g_return_val_if_fail (IDE_IS_WORKBENCH_ADDIN (self), NULL);
 
   return IDE_WORKBENCH_ADDIN_GET_IFACE (self)->get_id (self);
+}
+
+/**
+ * ide_workbench_addin_perspective_set:
+ * @self: an #IdeWorkbenchAddin
+ * @perspective: An #IdePerspective
+ *
+ * This function is called when the workbench changes the perspective.
+ *
+ * Addins that wish to add buttons to the header bar may want to show or
+ * hide the widgets in this vfunc.
+ */
+void
+ide_workbench_addin_perspective_set (IdeWorkbenchAddin *self,
+                                     IdePerspective    *perspective)
+{
+  g_return_if_fail (IDE_IS_WORKBENCH_ADDIN (self));
+  g_return_if_fail (IDE_IS_PERSPECTIVE (perspective));
+
+  IDE_WORKBENCH_ADDIN_GET_IFACE (self)->perspective_set (self, perspective);
 }
