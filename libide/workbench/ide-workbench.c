@@ -803,7 +803,7 @@ ide_workbench_set_visible_perspective (IdeWorkbench   *self,
                      g_object_ref (self));
     }
 
-  if (self->addins != NULL)
+  if (self->addins != NULL && self->perspective != NULL)
     peas_extension_set_foreach (self->addins,
                                 ide_workbench_notify_perspective_set,
                                 self);
