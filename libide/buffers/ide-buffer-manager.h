@@ -23,9 +23,9 @@
 #include <gtksourceview/completion-providers/words/gtksourcecompletionwords.h>
 
 #include "ide-object.h"
-#include "ide-workbench.h"
 
 #include "files/ide-file.h"
+#include "workbench/ide-workbench.h"
 
 G_BEGIN_DECLS
 
