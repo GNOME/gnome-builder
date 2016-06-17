@@ -16,13 +16,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define G_LOG_DOMAIN "ide-directory-plugin"
+
 #include <libpeas/peas.h>
 
-#include "ide-build-system.h"
-#include "ide-directory-build-system.h"
-#include "ide-directory-genesis-addin.h"
-#include "ide-directory-vcs.h"
-#include "ide-genesis-addin.h"
+#include "buildsystem/ide-build-system.h"
+#include "directory/ide-directory-build-system.h"
+#include "directory/ide-directory-genesis-addin.h"
+#include "directory/ide-directory-vcs.h"
+#include "genesis/ide-genesis-addin.h"
 
 void
 ide_directory_register_types (PeasObjectModule *module)

@@ -16,16 +16,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define G_LOG_DOMAIN "ide-preferences-builtin"
+
 #include <glib/gi18n.h>
 #include <gtksourceview/gtksource.h>
 #include <libpeas/peas.h>
 
-#include "ide-application-private.h"
 #include "ide-macros.h"
-#include "ide-preferences-builtin.h"
-#include "ide-preferences-entry.h"
-#include "ide-preferences-language-row.h"
-#include "ide-preferences-spin-button.h"
+
+#include "application/ide-application-private.h"
+#include "preferences/ide-preferences-builtin.h"
+#include "preferences/ide-preferences-entry.h"
+#include "preferences/ide-preferences-language-row.h"
+#include "preferences/ide-preferences-spin-button.h"
 
 static void
 ide_preferences_builtin_register_plugins (IdePreferences *preferences)

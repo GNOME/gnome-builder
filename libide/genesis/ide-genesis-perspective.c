@@ -16,14 +16,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define G_LOG_DOMAIN "ide-genesis-perspective"
+
 #include <glib/gi18n.h>
 #include <libpeas/peas.h>
 
-#include "ide-genesis-addin.h"
-#include "ide-genesis-perspective.h"
-#include "ide-gtk.h"
 #include "ide-macros.h"
-#include "ide-workbench.h"
+
+#include "genesis/ide-genesis-addin.h"
+#include "genesis/ide-genesis-perspective.h"
+#include "util/ide-gtk.h"
+#include "workbench/ide-workbench.h"
 
 struct _IdeGenesisPerspective
 {

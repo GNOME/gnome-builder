@@ -19,8 +19,7 @@
 #ifndef IDE_MINGW_DEVICE_PROVIDER_H
 #define IDE_MINGW_DEVICE_PROVIDER_H
 
-#include "ide-device-provider.h"
-#include "ide-object.h"
+#include <ide.h>
 
 G_BEGIN_DECLS
 

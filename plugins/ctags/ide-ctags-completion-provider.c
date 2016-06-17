@@ -19,19 +19,12 @@
 #define G_LOG_DOMAIN "ide-ctags-completion-provider"
 
 #include <glib/gi18n.h>
-#include <ide.h>
 
-#include "ide-completion-provider.h"
-#include "ide-completion-item.h"
-#include "ide-completion-results.h"
-#include "ide-context.h"
 #include "ide-ctags-completion-item.h"
 #include "ide-ctags-completion-provider.h"
 #include "ide-ctags-completion-provider-private.h"
 #include "ide-ctags-service.h"
 #include "ide-ctags-util.h"
-#include "ide-debug.h"
-#include "ide-macros.h"
 
 static void provider_iface_init (GtkSourceCompletionProviderIface *iface);
 

@@ -20,13 +20,8 @@
 
 #include <glib/gi18n.h>
 
-#include "ide-context.h"
 #include "ide-ctags-highlighter.h"
 #include "ide-ctags-service.h"
-#include "ide-debug.h"
-#include "ide-file.h"
-#include "ide-highlight-engine.h"
-#include "ide-macros.h"
 
 struct _IdeCtagsHighlighter
 {

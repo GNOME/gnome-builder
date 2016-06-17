@@ -19,7 +19,7 @@
 #ifndef IDE_EDITOR_WORKBENCH_ADDIN_H
 #define IDE_EDITOR_WORKBENCH_ADDIN_H
 
-#include "ide-workbench-addin.h"
+#include "workbench/ide-workbench-addin.h"
 
 G_BEGIN_DECLS
 

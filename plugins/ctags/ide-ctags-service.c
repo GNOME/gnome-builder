@@ -18,23 +18,15 @@
 
 #define G_LOG_DOMAIN "ide-ctags-service"
 
+#include <egg-task-cache.h>
 #include <glib/gi18n.h>
 #include <gtksourceview/gtksource.h>
 
-#include "egg-task-cache.h"
-
-#include "ide-buffer-manager.h"
-#include "ide-context.h"
 #include "ide-ctags-builder.h"
 #include "ide-ctags-completion-provider.h"
 #include "ide-ctags-highlighter.h"
 #include "ide-ctags-index.h"
 #include "ide-ctags-service.h"
-#include "ide-debug.h"
-#include "ide-global.h"
-#include "ide-project.h"
-#include "ide-tags-builder.h"
-#include "ide-vcs.h"
 
 struct _IdeCtagsService
 {

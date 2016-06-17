@@ -18,10 +18,9 @@
 
 #define G_LOG_DOMAIN "clang-completion-provider"
 
+#include <ide.h>
 #include <string.h>
 
-#include "ide-buffer.h"
-#include "ide-completion-provider.h"
 #include "ide-clang-completion-item.h"
 #include "ide-clang-completion-item-private.h"
 #include "ide-clang-completion-provider.h"

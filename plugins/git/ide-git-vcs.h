@@ -20,8 +20,7 @@
 #define IDE_GIT_VCS_H
 
 #include <libgit2-glib/ggit.h>
-
-#include "ide-vcs.h"
+#include <ide.h>
 
 G_BEGIN_DECLS
 

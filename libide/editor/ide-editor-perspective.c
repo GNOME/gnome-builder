@@ -18,19 +18,19 @@
 
 #define G_LOG_DOMAIN "ide-editor-perspective"
 
+#include <egg-signal-group.h>
 #include <glib/gi18n.h>
 
-#include "egg-signal-group.h"
-
-#include "ide-buffer.h"
-#include "ide-buffer-manager.h"
 #include "ide-context.h"
 #include "ide-debug.h"
-#include "ide-editor-perspective.h"
-#include "ide-editor-view.h"
-#include "ide-gtk.h"
-#include "ide-layout-grid.h"
-#include "ide-workbench-header-bar.h"
+
+#include "buffers/ide-buffer-manager.h"
+#include "buffers/ide-buffer.h"
+#include "editor/ide-editor-perspective.h"
+#include "editor/ide-editor-view.h"
+#include "util/ide-gtk.h"
+#include "workbench/ide-layout-grid.h"
+#include "workbench/ide-workbench-header-bar.h"
 
 struct _IdeEditorPerspective
 {

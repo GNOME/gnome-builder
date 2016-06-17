@@ -20,7 +20,6 @@
 #define IDE_EDITOR_TWEAK_WIDGET_H
 
 #include <gtk/gtk.h>
-#include <ide.h>
 
 G_BEGIN_DECLS
 

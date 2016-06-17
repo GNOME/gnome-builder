@@ -18,13 +18,8 @@
 
 #define G_LOG_DOMAIN "clang-symbol-resolver"
 
-#include "ide-context.h"
 #include "ide-clang-service.h"
 #include "ide-clang-symbol-resolver.h"
-#include "ide-debug.h"
-#include "ide-file.h"
-#include "ide-source-location.h"
-#include "ide-symbol.h"
 
 struct _IdeClangSymbolResolver
 {

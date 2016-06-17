@@ -16,20 +16,21 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_PRIVATE_H
-#define IDE_PRIVATE_H
+#ifndef IDE_INTERNAL_H
+#define IDE_INTERNAL_H
 
 #include <gtksourceview/gtksource.h>
 
-#include "ide-back-forward-item.h"
-#include "ide-back-forward-list.h"
-#include "ide-diagnostic.h"
 #include "ide-types.h"
-#include "ide-settings.h"
-#include "ide-source-view.h"
-#include "ide-source-view-mode.h"
-#include "ide-symbol.h"
-#include "ide-highlight-engine.h"
+
+#include "diagnostics/ide-diagnostic.h"
+#include "highlighting/ide-highlight-engine.h"
+#include "history/ide-back-forward-item.h"
+#include "history/ide-back-forward-list.h"
+#include "sourceview/ide-source-view-mode.h"
+#include "sourceview/ide-source-view.h"
+#include "symbols/ide-symbol.h"
+#include "util/ide-settings.h"
 
 G_BEGIN_DECLS
 
@@ -88,4 +89,4 @@ const gchar        *_ide_source_view_get_mode_name          (IdeSourceView      
 
 G_END_DECLS
 
-#endif /* IDE_PRIVATE_H */
+#endif /* IDE_INTERNAL_H */

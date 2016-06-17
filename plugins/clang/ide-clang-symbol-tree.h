@@ -20,8 +20,7 @@
 #define IDE_CLANG_SYMBOL_TREE_H
 
 #include <gio/gio.h>
-
-#include "ide-symbol-tree.h"
+#include <ide.h>
 
 G_BEGIN_DECLS
 

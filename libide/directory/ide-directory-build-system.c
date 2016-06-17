@@ -16,15 +16,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define G_LOG_DOMAIN "directory-build-system"
+
 #include <glib/gi18n.h>
 
-#include "ide-configuration.h"
-#include "ide-configuration-manager.h"
 #include "ide-context.h"
-#include "ide-directory-build-system.h"
-#include "ide-project.h"
-#include "ide-project-file.h"
-#include "ide-project-item.h"
+
+#include "buildsystem/ide-configuration-manager.h"
+#include "buildsystem/ide-configuration.h"
+#include "directory/ide-directory-build-system.h"
+#include "projects/ide-project-file.h"
+#include "projects/ide-project-item.h"
+#include "projects/ide-project.h"
 
 struct _IdeDirectoryBuildSystem
 {

@@ -20,9 +20,11 @@
 
 #include <glib/gi18n.h>
 
+#include "ide-debug.h"
 #include "ide-macros.h"
-#include "ide-omni-search-group.h"
-#include "ide-omni-search-display.h"
+
+#include "search/ide-omni-search-group.h"
+#include "search/ide-omni-search-display.h"
 
 struct _IdeOmniSearchDisplay
 {

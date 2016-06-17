@@ -20,15 +20,20 @@
 
 #include <glib/gi18n.h>
 
-#include "ide-dnd.h"
-#include "ide-editor-frame-actions.h"
-#include "ide-editor-frame-private.h"
-#include "ide-editor-frame.h"
-#include "ide-editor-map-bin.h"
-#include "ide-gtk.h"
-#include "ide-layout-stack.h"
-#include "ide-source-location.h"
-#include "ide-workbench.h"
+#include "ide-debug.h"
+
+#include "application/ide-application.h"
+#include "diagnostics/ide-source-location.h"
+#include "editor/ide-editor-frame-actions.h"
+#include "editor/ide-editor-frame-private.h"
+#include "editor/ide-editor-frame.h"
+#include "editor/ide-editor-map-bin.h"
+#include "editor/ide-editor-perspective.h"
+#include "history/ide-back-forward-list.h"
+#include "util/ide-dnd.h"
+#include "util/ide-gtk.h"
+#include "workbench/ide-layout-stack.h"
+#include "workbench/ide-workbench.h"
 
 #define MINIMAP_HIDE_DURATION 1000
 #define MINIMAP_SHOW_DURATION 250

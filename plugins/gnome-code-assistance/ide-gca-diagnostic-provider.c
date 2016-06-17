@@ -21,17 +21,10 @@
 #include <gca-diagnostics.h>
 #include <glib/gi18n.h>
 
-#include "ide-context.h"
-#include "ide-debug.h"
-#include "ide-diagnostics.h"
-#include "ide-file.h"
+#include "ide-internal.h"
+
 #include "ide-gca-diagnostic-provider.h"
 #include "ide-gca-service.h"
-#include "ide-internal.h"
-#include "ide-source-location.h"
-#include "ide-source-range.h"
-#include "ide-unsaved-file.h"
-#include "ide-unsaved-files.h"
 
 #include "gca-structs.h"
 

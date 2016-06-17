@@ -16,10 +16,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define G_LOG_DOMAIN "ide-editor-plugin"
+
 #include <libpeas/peas.h>
 
-#include "ide-editor-workbench-addin.h"
-#include "ide-workbench-addin.h"
+#include "editor/ide-editor-workbench-addin.h"
+#include "workbench/ide-workbench-addin.h"
 
 void
 ide_editor_register_types (PeasObjectModule *module)

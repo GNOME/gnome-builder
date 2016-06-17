@@ -19,7 +19,7 @@
 #ifndef IDE_PYTHON_INDENTER_H
 #define IDE_PYTHON_INDENTER_H
 
-#include "ide-indenter.h"
+#include <ide.h>
 
 G_BEGIN_DECLS
 

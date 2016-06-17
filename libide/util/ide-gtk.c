@@ -18,10 +18,11 @@
 
 #define G_LOG_DOMAIN "ide-gtk"
 
-#include "egg-animation.h"
+#include <egg-animation.h>
 
 #include "ide-debug.h"
-#include "ide-gtk.h"
+
+#include "util/ide-gtk.h"
 
 gboolean
 ide_widget_action (GtkWidget   *widget,

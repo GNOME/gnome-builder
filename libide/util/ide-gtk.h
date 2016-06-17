@@ -22,7 +22,8 @@
 #include <gtk/gtk.h>
 
 #include "ide-context.h"
-#include "ide-workbench.h"
+
+#include "workbench/ide-workbench.h"
 
 G_BEGIN_DECLS
 

@@ -18,13 +18,12 @@
 
 #define G_LOG_DOMAIN "ide-greeter-project-row"
 
+#include <egg-binding-group.h>
+#include <egg-date-time.h>
+#include <egg-pill-box.h>
 #include <glib/gi18n.h>
 
-#include "egg-binding-group.h"
-#include "egg-date-time.h"
-#include "egg-pill-box.h"
-
-#include "ide-greeter-project-row.h"
+#include "greeter/ide-greeter-project-row.h"
 
 struct _IdeGreeterProjectRow
 {

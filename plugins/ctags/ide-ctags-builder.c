@@ -18,21 +18,12 @@
 
 #define G_LOG_DOMAIN "ide-ctags-builder"
 
+#include <egg-counter.h>
 #include <glib/gi18n.h>
 #include <glib/gstdio.h>
+#include <ide.h>
 
-#include "egg-counter.h"
-
-#include "ide-buffer.h"
-#include "ide-buffer-manager.h"
-#include "ide-context.h"
 #include "ide-ctags-builder.h"
-#include "ide-debug.h"
-#include "ide-global.h"
-#include "ide-macros.h"
-#include "ide-project.h"
-#include "ide-thread-pool.h"
-#include "ide-vcs.h"
 
 #define BUILD_CTAGS_DELAY_SECONDS 10
 

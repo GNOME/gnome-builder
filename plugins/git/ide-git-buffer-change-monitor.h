@@ -19,7 +19,7 @@
 #ifndef IDE_GIT_BUFFER_CHANGE_MONITOR_H
 #define IDE_GIT_BUFFER_CHANGE_MONITOR_H
 
-#include "ide-buffer-change-monitor.h"
+#include <ide.h>
 
 G_BEGIN_DECLS
 

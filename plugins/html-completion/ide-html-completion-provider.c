@@ -21,7 +21,6 @@
 #include <libpeas/peas.h>
 #include <string.h>
 
-#include "ide-completion-provider.h"
 #include "ide-html-completion-provider.h"
 
 #include "trie.h"

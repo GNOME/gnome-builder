@@ -21,10 +21,10 @@
 
 #include <clang-c/Index.h>
 #include <glib-object.h>
+#include <ide.h>
 #include <string.h>
 
 #include "ide-clang-completion-item.h"
-#include "ide-ref-ptr.h"
 
 G_BEGIN_DECLS
 

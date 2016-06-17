@@ -19,22 +19,14 @@
 #define G_LOG_DOMAIN "gb-clang-service"
 
 #include <clang-c/Index.h>
+#include <egg-counter.h>
+#include <egg-task-cache.h>
 #include <glib/gi18n.h>
-
-#include "egg-counter.h"
-#include "egg-task-cache.h"
+#include <ide.h>
 
 #include "ide-clang-highlighter.h"
-#include "ide-build-system.h"
 #include "ide-clang-private.h"
 #include "ide-clang-service.h"
-#include "ide-context.h"
-#include "ide-debug.h"
-#include "ide-file.h"
-#include "ide-highlight-index.h"
-#include "ide-thread-pool.h"
-#include "ide-unsaved-file.h"
-#include "ide-unsaved-files.h"
 
 #define DEFAULT_EVICTION_MSEC (60 * 1000)
 

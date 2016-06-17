@@ -16,13 +16,16 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#define G_LOG_DOMAIN "ide-search-box"
+#define G_LOG_DOMAIN "ide-omni-search-entry"
 
 #include <glib/gi18n.h>
 
 #include "ide-macros.h"
-#include "ide-omni-search-entry.h"
-#include "ide-omni-search-display.h"
+
+#include "search/ide-omni-search-entry.h"
+#include "search/ide-omni-search-display.h"
+#include "search/ide-search-result.h"
+#include "util/ide-gtk.h"
 
 #define SHORT_DELAY_TIMEOUT_MSEC 20
 #define LONG_DELAY_TIMEOUT_MSEC  50

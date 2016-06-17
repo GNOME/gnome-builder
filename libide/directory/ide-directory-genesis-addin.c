@@ -16,13 +16,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define G_LOG_DOMAIN "ide-directory-genesis-addin"
+
 #include <glib/gi18n.h>
 #include <libpeas/peas.h>
 
-#include "ide-directory-genesis-addin.h"
-#include "ide-genesis-addin.h"
-#include "ide-gtk.h"
-#include "ide-workbench.h"
+#include "directory/ide-directory-genesis-addin.h"
+#include "genesis/ide-genesis-addin.h"
+#include "util/ide-gtk.h"
+#include "workbench/ide-workbench.h"
 
 struct _IdeDirectoryGenesisAddin
 {

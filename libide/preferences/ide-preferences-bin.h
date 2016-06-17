@@ -21,7 +21,7 @@
 
 #include <gtk/gtk.h>
 
-#include "ide-pattern-spec.h"
+#include "search/ide-pattern-spec.h"
 
 G_BEGIN_DECLS
 

@@ -19,9 +19,9 @@
 #ifndef IDE_CTAGS_HIGHLIGHTER_H
 #define IDE_CTAGS_HIGHLIGHTER_H
 
+#include <ide.h>
+
 #include "ide-ctags-index.h"
-#include "ide-highlighter.h"
-#include "ide-object.h"
 
 G_BEGIN_DECLS
 

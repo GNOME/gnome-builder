@@ -19,7 +19,7 @@
 #ifndef IDE_CLANG_SYMBOL_NODE_H
 #define IDE_CLANG_SYMBOL_NODE_H
 
-#include "ide-symbol-node.h"
+#include <ide.h>
 
 G_BEGIN_DECLS
 

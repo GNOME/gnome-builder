@@ -18,19 +18,11 @@
 
 #define G_LOG_DOMAIN "ide-gettext-diagnostic-provider"
 
+#include <egg-task-cache.h>
 #include <glib/gi18n.h>
 #include <stdlib.h>
 
-#include "egg-task-cache.h"
-
-#include "ide-context.h"
-#include "ide-diagnostic.h"
-#include "ide-diagnostics.h"
-#include "ide-file.h"
 #include "ide-gettext-diagnostic-provider.h"
-#include "ide-source-location.h"
-#include "ide-unsaved-file.h"
-#include "ide-unsaved-files.h"
 
 struct _IdeGettextDiagnostics
 {

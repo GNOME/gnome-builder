@@ -19,30 +19,16 @@
 #define G_LOG_DOMAIN "clang-translation-unit"
 
 #include <clang-c/Index.h>
+#include <egg-counter.h>
 #include <glib/gi18n.h>
+#include <ide.h>
 
-#include "egg-counter.h"
-
-#include "ide-context.h"
 #include "ide-clang-completion-item.h"
 #include "ide-clang-completion-item-private.h"
 #include "ide-clang-private.h"
 #include "ide-clang-symbol-tree.h"
 #include "ide-clang-translation-unit.h"
-#include "ide-debug.h"
-#include "ide-diagnostic.h"
-#include "ide-diagnostics.h"
-#include "ide-file.h"
 #include "ide-internal.h"
-#include "ide-project.h"
-#include "ide-ref-ptr.h"
-#include "ide-source-location.h"
-#include "ide-source-range.h"
-#include "ide-symbol.h"
-#include "ide-thread-pool.h"
-#include "ide-unsaved-file.h"
-#include "ide-unsaved-files.h"
-#include "ide-vcs.h"
 
 struct _IdeClangTranslationUnit
 {

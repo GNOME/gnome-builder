@@ -23,16 +23,16 @@
 #include "gconstructor.h"
 #include "ide.h"
 
-#include "ide-file-settings.h"
-#include "ide-gsettings-file-settings.h"
-#include "ide-modelines-file-settings.h"
+#include "files/ide-file-settings.h"
+#include "gsettings/ide-gsettings-file-settings.h"
+#include "modelines/ide-modelines-file-settings.h"
 
 #ifdef ENABLE_EDITORCONFIG
-# include "ide-editorconfig-file-settings.h"
+# include "editorconfig/ide-editorconfig-file-settings.h"
 #endif
 
 #ifdef ENABLE_PYTHON_SCRIPTING
-# include "ide-pygobject-script.h"
+# include "pygobject/ide-pygobject-script.h"
 #endif
 
 static gboolean     programNameRead;

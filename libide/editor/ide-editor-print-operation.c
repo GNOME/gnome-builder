@@ -20,16 +20,15 @@
 
 #include <glib/gi18n.h>
 #include <gtksourceview/gtksource.h>
-#include <ide.h>
 
 #include "ide-editor-print-operation.h"
 #include "ide-editor-view.h"
 
 struct _IdeEditorPrintOperation
 {
-  GtkPrintOperation parent_instance;
+  GtkPrintOperation         parent_instance;
 
-  IdeSourceView *view;
+  IdeSourceView            *view;
   GtkSourcePrintCompositor *compositor;
 };
 

@@ -23,10 +23,8 @@
 #include <gtksourceview/gtksource.h>
 #include <ide.h>
 
-#include "ide-gtk.h"
-#include "ide-editor-frame.h"
-#include "ide-editor-frame-private.h"
-#include "ide-editor-view-private.h"
+#include "editor/ide-editor-frame-private.h"
+#include "editor/ide-editor-view-private.h"
 
 #include "gb-vim.h"
 

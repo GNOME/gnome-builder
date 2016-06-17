@@ -448,11 +448,6 @@ PLUGIN_CFLAGS="$PLUGIN_CFLAGS -I\$(top_srcdir)/contrib/rg"
 PLUGIN_CFLAGS="$PLUGIN_CFLAGS -I\$(top_srcdir)/contrib/search"
 PLUGIN_CFLAGS="$PLUGIN_CFLAGS -I\$(top_srcdir)/contrib/xml"
 PLUGIN_CFLAGS="$PLUGIN_CFLAGS -I\$(top_srcdir)/libide"
-PLUGIN_CFLAGS="$PLUGIN_CFLAGS -I\$(top_srcdir)/libide/editor"
-PLUGIN_CFLAGS="$PLUGIN_CFLAGS -I\$(top_srcdir)/libide/genesis"
-PLUGIN_CFLAGS="$PLUGIN_CFLAGS -I\$(top_srcdir)/libide/greeter"
-PLUGIN_CFLAGS="$PLUGIN_CFLAGS -I\$(top_srcdir)/libide/preferences"
-PLUGIN_CFLAGS="$PLUGIN_CFLAGS -I\$(top_srcdir)/libide/util"
 PLUGIN_CFLAGS="$PLUGIN_CFLAGS $LIBIDE_CFLAGS"
 PLUGIN_CFLAGS="$PLUGIN_CFLAGS $DEBUG_CFLAGS"
 PLUGIN_CFLAGS="$PLUGIN_CFLAGS $OPTIMIZE_CFLAGS"
@@ -497,8 +492,8 @@ AC_CONFIG_FILES([
 	contrib/tmpl/tmpl-debug.h
 	contrib/xml/Makefile
 
-	libide/ide-debug.h
 	libide/Makefile
+	libide/ide-debug.h
 
 	plugins/Makefile
 

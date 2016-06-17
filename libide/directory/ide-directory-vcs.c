@@ -16,11 +16,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define G_LOG_DOMAIN "ide-directory-vcs"
+
 #include <glib/gi18n.h>
 
 #include "ide-context.h"
-#include "ide-directory-vcs.h"
-#include "ide-project.h"
+
+#include "directory/ide-directory-vcs.h"
+#include "projects/ide-project.h"
 
 struct _IdeDirectoryVcs
 {

@@ -21,8 +21,8 @@
 
 #include <gtk/gtk.h>
 
-#include "ide-buffer.h"
-#include "ide-source-view.h"
+#include "buffers/ide-buffer.h"
+#include "sourceview/ide-source-view.h"
 
 G_BEGIN_DECLS
 

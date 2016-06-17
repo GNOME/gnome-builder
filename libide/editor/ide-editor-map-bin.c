@@ -16,11 +16,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define G_LOG_DOMAIN "ide-editor-map-bin"
+
 #include <glib/gi18n.h>
-#include <ide.h>
 #include <pango/pangofc-fontmap.h>
 
-#include "ide-editor-map-bin.h"
+#include "ide-macros.h"
+
+#include "editor/ide-editor-map-bin.h"
+#include "sourceview/ide-source-map.h"
 
 struct _IdeEditorMapBin
 {
@@ -103,7 +107,7 @@ ide_editor_map_bin_size_allocate (GtkWidget     *widget,
 
 static void
 ide_editor_map_bin_add (GtkContainer *container,
-                       GtkWidget    *child)
+                        GtkWidget    *child)
 {
   IdeEditorMapBin *self = (IdeEditorMapBin *)container;
 
@@ -130,7 +134,7 @@ ide_editor_map_bin_add (GtkContainer *container,
 
 static void
 ide_editor_map_bin_remove (GtkContainer *container,
-                          GtkWidget    *child)
+                           GtkWidget    *child)
 {
   IdeEditorMapBin *self = (IdeEditorMapBin *)container;
 
@@ -155,9 +159,9 @@ ide_editor_map_bin_finalize (GObject *object)
 
 static void
 ide_editor_map_bin_get_property (GObject    *object,
-                                guint       prop_id,
-                                GValue     *value,
-                                GParamSpec *pspec)
+                                 guint       prop_id,
+                                 GValue     *value,
+                                 GParamSpec *pspec)
 {
   IdeEditorMapBin *self = IDE_EDITOR_MAP_BIN (object);
 
@@ -174,9 +178,9 @@ ide_editor_map_bin_get_property (GObject    *object,
 
 static void
 ide_editor_map_bin_set_property (GObject      *object,
-                                guint         prop_id,
-                                const GValue *value,
-                                GParamSpec   *pspec)
+                                 guint         prop_id,
+                                 const GValue *value,
+                                 GParamSpec   *pspec)
 {
   IdeEditorMapBin *self = IDE_EDITOR_MAP_BIN (object);
 

@@ -20,10 +20,7 @@
 #define IDE_CLANG_TRANSLATION_UNIT_H
 
 #include <gtk/gtk.h>
-
-#include "ide-object.h"
-#include "ide-highlight-index.h"
-#include "ide-symbol-tree.h"
+#include <ide.h>
 
 G_BEGIN_DECLS
 

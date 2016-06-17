@@ -19,7 +19,7 @@
 #ifndef IDE_C_INDENTER_H
 #define IDE_C_INDENTER_H
 
-#include "ide-indenter.h"
+#include <ide.h>
 
 G_BEGIN_DECLS
 

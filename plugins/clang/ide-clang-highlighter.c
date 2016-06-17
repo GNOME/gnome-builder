@@ -21,9 +21,6 @@
 #include "ide-clang-highlighter.h"
 #include "ide-clang-service.h"
 #include "ide-clang-translation-unit.h"
-#include "ide-context.h"
-#include "ide-debug.h"
-#include "ide-highlight-engine.h"
 
 struct _IdeClangHighlighter
 {

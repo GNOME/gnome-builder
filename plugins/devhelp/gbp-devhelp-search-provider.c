@@ -21,7 +21,6 @@
 #include <ctype.h>
 #include <devhelp/devhelp.h>
 #include <glib/gi18n.h>
-#include <ide.h>
 #include <libpeas/peas.h>
 
 #include "gbp-devhelp-panel.h"

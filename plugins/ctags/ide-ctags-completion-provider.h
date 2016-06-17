@@ -19,7 +19,8 @@
 #ifndef IDE_CTAGS_COMPLETION_PROVIDER_H
 #define IDE_CTAGS_COMPLETION_PROVIDER_H
 
-#include "ide-completion-provider.h"
+#include <ide.h>
+
 #include "ide-ctags-index.h"
 
 G_BEGIN_DECLS

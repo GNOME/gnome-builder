@@ -19,7 +19,7 @@
 #ifndef IDE_GENESIS_PERSPECTIVE_H
 #define IDE_GENESIS_PERSPECTIVE_H
 
-#include "ide-perspective.h"
+#include "workbench/ide-perspective.h"
 
 G_BEGIN_DECLS
 

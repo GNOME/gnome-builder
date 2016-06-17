@@ -19,12 +19,13 @@
 #ifndef IDE_EDITOR_FRAME_PRIVATE_H
 #define IDE_EDITOR_FRAME_PRIVATE_H
 
+#include <gd-tagged-entry.h>
 #include <gtk/gtk.h>
-#include <ide.h>
+#include <nautilus-floating-bar.h>
 
-#include "ide-editor-map-bin.h"
-#include "gd-tagged-entry.h"
-#include "nautilus-floating-bar.h"
+#include "editor/ide-editor-map-bin.h"
+#include "sourceview/ide-source-map.h"
+#include "sourceview/ide-source-view.h"
 
 G_BEGIN_DECLS
 

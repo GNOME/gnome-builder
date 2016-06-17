@@ -21,11 +21,19 @@
 #include <glib/gi18n.h>
 #include <string.h>
 
-#include "ide-editor-frame-private.h"
-#include "ide-editor-print-operation.h"
-#include "ide-editor-view-actions.h"
-#include "ide-editor-view-private.h"
-#include "ide-gtk.h"
+#include "buffers/ide-buffer.h"
+#include "buffers/ide-buffer-manager.h"
+#include "files/ide-file.h"
+#include "files/ide-file-settings.h"
+#include "editor/ide-editor-frame-private.h"
+#include "editor/ide-editor-print-operation.h"
+#include "editor/ide-editor-view-actions.h"
+#include "editor/ide-editor-view-private.h"
+#include "editor/ide-editor-view.h"
+#include "projects/ide-project.h"
+#include "util/ide-gtk.h"
+#include "util/ide-progress.h"
+#include "vcs/ide-vcs.h"
 
 static void
 ide_editor_view_actions_source_view_notify (IdeSourceView *source_view,

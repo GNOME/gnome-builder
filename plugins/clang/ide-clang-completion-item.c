@@ -23,10 +23,6 @@
 
 #include "ide-clang-completion-item.h"
 #include "ide-clang-completion-item-private.h"
-#include "ide-debug.h"
-#include "ide-ref-ptr.h"
-#include "ide-source-snippet.h"
-#include "ide-source-snippet-chunk.h"
 
 static void completion_proposal_iface_init (GtkSourceCompletionProposalIface *);
 

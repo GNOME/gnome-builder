@@ -20,8 +20,7 @@
 #define IDE_CLANG_COMPLETION_ITEM_H
 
 #include <gtksourceview/gtksourcecompletionproposal.h>
-
-#include "ide-source-snippet.h"
+#include <ide.h>
 
 G_BEGIN_DECLS
 

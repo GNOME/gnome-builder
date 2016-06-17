@@ -16,15 +16,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <egg-signal-group.h>
 #include <glib/gi18n.h>
 
-#include "egg-signal-group.h"
-
 #include "ide-xml-highlighter.h"
-#include "ide-context.h"
-#include "ide-buffer.h"
 #include "ide-xml.h"
-#include "ide-highlight-engine.h"
 
 #define HIGHLIGH_TIMEOUT_MSEC    35
 #define XML_TAG_MATCH_STYLE_NAME "xml:tag-match"

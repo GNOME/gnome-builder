@@ -19,7 +19,7 @@
 #ifndef GBP_DEVHELP_SEARCH_PROVIDER_H
 #define GBP_DEVHELP_SEARCH_PROVIDER_H
 
-#include "ide-search-provider.h"
+#include <ide.h>
 
 G_BEGIN_DECLS
 

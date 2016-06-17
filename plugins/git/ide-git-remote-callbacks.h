@@ -20,8 +20,7 @@
 #define IDE_GIT_REMOTE_CALLBACKS_H
 
 #include <libgit2-glib/ggit.h>
-
-#include "ide-progress.h"
+#include <ide.h>
 
 G_BEGIN_DECLS
 

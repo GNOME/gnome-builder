@@ -19,7 +19,7 @@
 #ifndef IDE_DIRECTORY_VCS_H
 #define IDE_DIRECTORY_VCS_H
 
-#include "ide-vcs.h"
+#include "vcs/ide-vcs.h"
 
 G_BEGIN_DECLS
 

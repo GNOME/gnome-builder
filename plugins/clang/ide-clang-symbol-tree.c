@@ -16,13 +16,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define G_LOG_DOMAIN "ide-clang-symbol-tree"
+
 #include <clang-c/Index.h>
 #include <glib/gi18n.h>
 
 #include "ide-clang-private.h"
 #include "ide-clang-symbol-node.h"
 #include "ide-clang-symbol-tree.h"
-#include "ide-ref-ptr.h"
 
 struct _IdeClangSymbolTree
 {

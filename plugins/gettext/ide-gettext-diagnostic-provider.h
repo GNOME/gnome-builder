@@ -19,14 +19,14 @@
 #ifndef IDE_GETTEXT_DIAGNOSTIC_PROVIDER_H
 #define IDE_GETTEXT_DIAGNOSTIC_PROVIDER_H
 
-#include "ide-diagnostic-provider.h"
+#include <ide.h>
 
 G_BEGIN_DECLS
 
 #define IDE_TYPE_GETTEXT_DIAGNOSTICS (ide_gettext_diagnostics_get_type ())
-G_DECLARE_FINAL_TYPE (IdeGettextDiagnostics, ide_gettext_diagnostics, IDE, GETTEXT_DIAGNOSTICS, GObject)
-
 #define IDE_TYPE_GETTEXT_DIAGNOSTIC_PROVIDER (ide_gettext_diagnostic_provider_get_type ())
+
+G_DECLARE_FINAL_TYPE (IdeGettextDiagnostics, ide_gettext_diagnostics, IDE, GETTEXT_DIAGNOSTICS, GObject)
 G_DECLARE_FINAL_TYPE (IdeGettextDiagnosticProvider, ide_gettext_diagnostic_provider, IDE, GETTEXT_DIAGNOSTIC_PROVIDER, IdeObject)
 
 G_END_DECLS

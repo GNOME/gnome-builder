@@ -21,6 +21,7 @@
 
 #include "gbp-build-configuration-view.h"
 
+#include "ide-environment-editor.h"
 #include "ide-internal.h"
 
 struct _GbpBuildConfigurationView

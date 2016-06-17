@@ -19,7 +19,7 @@
 #ifndef GBP_DEVHELP_SEARCH_RESULT_H
 #define GBP_DEVHELP_SEARCH_RESULT_H
 
-#include "ide-search-result.h"
+#include <ide.h>
 
 G_BEGIN_DECLS
 

@@ -19,7 +19,7 @@
 #ifndef IDE_MINGW_DEVICE_H
 #define IDE_MINGW_DEVICE_H
 
-#include "ide-device.h"
+#include <ide.h>
 
 G_BEGIN_DECLS
 

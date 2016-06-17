@@ -19,7 +19,7 @@
 #ifndef IDE_EDITORCONFIG_FILE_SETTINGS_H
 #define IDE_EDITORCONFIG_FILE_SETTINGS_H
 
-#include "ide-file-settings.h"
+#include "files/ide-file-settings.h"
 
 G_BEGIN_DECLS
 

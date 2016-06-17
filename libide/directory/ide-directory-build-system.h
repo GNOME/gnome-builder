@@ -19,7 +19,7 @@
 #ifndef IDE_DIRECTORY_BUILD_SYSTEM_H
 #define IDE_DIRECTORY_BUILD_SYSTEM_H
 
-#include "ide-build-system.h"
+#include "buildsystem/ide-build-system.h"
 
 G_BEGIN_DECLS
 

@@ -22,15 +22,9 @@
 #include <glib/gi18n.h>
 #include <libgit2-glib/ggit.h>
 
-#include "ide-async-helper.h"
-#include "ide-context.h"
-#include "ide-debug.h"
 #include "ide-git-buffer-change-monitor.h"
 #include "ide-git-vcs.h"
 #include "ide-git-vcs-config.h"
-#include "ide-project.h"
-#include "ide-project-file.h"
-#include "ide-project-files.h"
 
 #define DEFAULT_CHANGED_TIMEOUT_SECS 1
 

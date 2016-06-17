@@ -27,6 +27,10 @@ libbuild_tools_plugin_la_SOURCES = \
 	gbp-build-tool.h \
 	gbp-build-workbench-addin.c \
 	gbp-build-workbench-addin.h \
+	ide-environment-editor-row.c \
+	ide-environment-editor-row.h \
+	ide-environment-editor.c \
+	ide-environment-editor.h \
 	$(NULL)
 
 nodist_libbuild_tools_plugin_la_SOURCES = \

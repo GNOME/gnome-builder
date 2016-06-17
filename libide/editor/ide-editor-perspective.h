@@ -21,9 +21,9 @@
 
 #include <gtk/gtk.h>
 
-#include "ide-layout.h"
-#include "ide-perspective.h"
-#include "ide-source-location.h"
+#include "diagnostics/ide-source-location.h"
+#include "workbench/ide-layout.h"
+#include "workbench/ide-perspective.h"
 
 G_BEGIN_DECLS
 

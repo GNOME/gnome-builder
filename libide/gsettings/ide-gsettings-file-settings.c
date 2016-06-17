@@ -18,16 +18,16 @@
 
 #define G_LOG_DOMAIN "ide-gsettings-file-settings"
 
+#include <egg-signal-group.h>
 #include <glib/gi18n.h>
-
-#include "egg-signal-group.h"
 
 #include "ide-context.h"
 #include "ide-debug.h"
-#include "ide-file.h"
-#include "ide-gsettings-file-settings.h"
-#include "ide-language-defaults.h"
-#include "ide-settings.h"
+
+#include "files/ide-file.h"
+#include "gsettings/ide-gsettings-file-settings.h"
+#include "gsettings/ide-language-defaults.h"
+#include "util/ide-settings.h"
 
 struct _IdeGsettingsFileSettings
 {

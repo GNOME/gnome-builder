@@ -19,7 +19,7 @@
 #ifndef IDE_AUTOTOOLS_BUILD_SYSTEM_H
 #define IDE_AUTOTOOLS_BUILD_SYSTEM_H
 
-#include "ide-build-system.h"
+#include <ide.h>
 
 G_BEGIN_DECLS
 

@@ -16,15 +16,16 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define G_LOG_DOMAIN "ide-ctags-symbol-resolver"
+
 #include <errno.h>
 #include <glib/gi18n.h>
+
+#include "ide-internal.h"
 
 #include "ide-ctags-service.h"
 #include "ide-ctags-symbol-resolver.h"
 #include "ide-ctags-util.h"
-#include "ide-internal.h"
-#include "ide-line-reader.h"
-#include "ide-symbol.h"
 
 struct _IdeCtagsSymbolResolver
 {

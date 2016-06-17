@@ -20,8 +20,7 @@
 #define IDE_AUTOTOOLS_BUILD_TASK_H
 
 #include <gio/gio.h>
-
-#include "ide-build-result.h"
+#include <ide.h>
 
 G_BEGIN_DECLS
 

@@ -20,8 +20,7 @@
 #define IDE_HTML_COMPLETION_PROVIDER_H
 
 #include <gtksourceview/gtksource.h>
-
-#include "ide-object.h"
+#include <ide.h>
 
 G_BEGIN_DECLS
 

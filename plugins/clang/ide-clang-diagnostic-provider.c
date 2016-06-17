@@ -23,9 +23,6 @@
 #include "ide-clang-diagnostic-provider.h"
 #include "ide-clang-service.h"
 #include "ide-clang-translation-unit.h"
-#include "ide-context.h"
-#include "ide-diagnostics.h"
-#include "ide-file.h"
 
 struct _IdeClangDiagnosticProvider
 {

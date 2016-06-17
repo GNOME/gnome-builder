@@ -20,7 +20,8 @@
 #define IDE_OMNI_SEARCH_ENTRY_H
 
 #include <gtk/gtk.h>
-#include <ide.h>
+
+#include "ide-search-engine.h"
 
 G_BEGIN_DECLS
 

@@ -19,7 +19,6 @@
 #define G_LOG_DOMAIN "gb-vim-command-provider"
 
 #include <ide.h>
-#include "ide-gtk.h"
 
 #include "gb-command-vim.h"
 #include "gb-command-vim-provider.h"

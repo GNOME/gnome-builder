@@ -19,9 +19,9 @@
 #include <glib.h>
 #include <glib/gi18n.h>
 #include <gtksourceview/gtksource.h>
-
 #include <ide.h>
-#include "ide-text-iter.h"
+
+#include "sourceview/ide-text-iter.h"
 
 #include "gbp-comment-code-view-addin.h"
 

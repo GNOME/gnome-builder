@@ -20,9 +20,7 @@
 #define IDE_PYTHON_FORMAT_PROVIDER_H
 
 #include <gtksourceview/gtksourcecompletionprovider.h>
-
-#include "ide-completion-provider.h"
-#include "ide-object.h"
+#include <ide.h>
 
 G_BEGIN_DECLS
 

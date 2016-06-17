@@ -19,8 +19,8 @@
 #ifndef IDE_PREFERENCES_GROUP_PRIVATE_H
 #define IDE_PREFERENCES_GROUP_PRIVATE_H
 
-#include "ide-pattern-spec.h"
-#include "ide-preferences-group.h"
+#include "preferences/ide-preferences-group.h"
+#include "search/ide-pattern-spec.h"
 
 G_BEGIN_DECLS
 

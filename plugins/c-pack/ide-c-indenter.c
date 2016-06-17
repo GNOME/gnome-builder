@@ -23,8 +23,6 @@
 
 #include "c-parse-helper.h"
 #include "ide-c-indenter.h"
-#include "ide-debug.h"
-#include "ide-source-view.h"
 
 #define ITER_INIT_LINE_START(iter, other) \
   gtk_text_buffer_get_iter_at_line( \

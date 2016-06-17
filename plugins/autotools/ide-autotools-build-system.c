@@ -18,32 +18,19 @@
 
 #define G_LOG_DOMAIN "ide-autotools-build-system"
 
-#ifdef HAVE_CONFIG_H
-# include "config.h"
-#endif
+#include "config.h"
 
+#include <egg-counter.h>
+#include <egg-task-cache.h>
 #include <glib/gi18n.h>
 #include <gio/gio.h>
 #include <gtksourceview/gtksource.h>
-
-#include "egg-counter.h"
-#include "egg-task-cache.h"
+#include <ide.h>
+#include <ide-internal.h>
 
 #include "ide-autotools-build-system.h"
 #include "ide-autotools-builder.h"
-#include "ide-buffer-manager.h"
-#include "ide-configuration.h"
-#include "ide-configuration-manager.h"
-#include "ide-context.h"
-#include "ide-debug.h"
-#include "ide-device.h"
-#include "ide-device-manager.h"
-#include "ide-file.h"
-#include "ide-internal.h"
 #include "ide-makecache.h"
-#include "ide-runtime.h"
-#include "ide-runtime-manager.h"
-#include "ide-tags-builder.h"
 
 #define MAKECACHE_KEY "makecache"
 #define DEFAULT_MAKECACHE_TTL 0

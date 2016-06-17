@@ -21,8 +21,8 @@
 #include <glib/gi18n.h>
 #include <gtksourceview/gtksource.h>
 
-#include "ide-editor-tweak-widget.h"
-#include "ide-gtk.h"
+#include "editor/ide-editor-tweak-widget.h"
+#include "util/ide-gtk.h"
 
 struct _IdeEditorTweakWidget
 {

@@ -22,20 +22,21 @@
 #include <libpeas/peas.h>
 
 #include "ide-macros.h"
-#include "ide-pattern-spec.h"
-#include "ide-perspective.h"
-#include "ide-preferences.h"
-#include "ide-preferences-addin.h"
-#include "ide-preferences-builtin.h"
-#include "ide-preferences-file-chooser-button.h"
-#include "ide-preferences-font-button.h"
-#include "ide-preferences-group.h"
-#include "ide-preferences-page.h"
-#include "ide-preferences-page-private.h"
-#include "ide-preferences-perspective.h"
-#include "ide-preferences-spin-button.h"
-#include "ide-preferences-switch.h"
-#include "ide-workbench-header-bar.h"
+
+#include "search/ide-pattern-spec.h"
+#include "workbench/ide-perspective.h"
+#include "preferences/ide-preferences.h"
+#include "preferences/ide-preferences-addin.h"
+#include "preferences/ide-preferences-builtin.h"
+#include "preferences/ide-preferences-file-chooser-button.h"
+#include "preferences/ide-preferences-font-button.h"
+#include "preferences/ide-preferences-group.h"
+#include "preferences/ide-preferences-page.h"
+#include "preferences/ide-preferences-page-private.h"
+#include "preferences/ide-preferences-perspective.h"
+#include "preferences/ide-preferences-spin-button.h"
+#include "preferences/ide-preferences-switch.h"
+#include "workbench/ide-workbench-header-bar.h"
 
 struct _IdePreferencesPerspective
 {

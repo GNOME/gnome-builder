@@ -19,7 +19,7 @@
 #ifndef IDE_AUTOTOOLS_PROJECT_MINER_H
 #define IDE_AUTOTOOLS_PROJECT_MINER_H
 
-#include "ide-project-miner.h"
+#include <ide.h>
 
 G_BEGIN_DECLS
 

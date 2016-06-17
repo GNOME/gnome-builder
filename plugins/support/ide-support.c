@@ -16,12 +16,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define G_LOG_DOMAIN "ide-support"
+
+#include <egg-counter.h>
 #include <gtk/gtk.h>
+#include <ide.h>
 #include <string.h>
 
-#include "egg-counter.h"
-
-#include "ide-application.h"
 #include "ide-support.h"
 
 static gchar *

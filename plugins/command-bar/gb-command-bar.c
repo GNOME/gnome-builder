@@ -27,9 +27,6 @@
 #include "gb-command-manager.h"
 #include "gb-command-vim-provider.h"
 
-#include "ide-workbench.h"
-#include "ide-workbench-addin.h"
-
 struct _GbCommandBar
 {
   GtkRevealer        parent_instance;

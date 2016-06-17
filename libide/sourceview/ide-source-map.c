@@ -1,0 +1,342 @@
+/* ide-source-map.c
+ *
+ * Copyright (C) 2015 Christian Hergert <christian@hergert.me>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+#define G_LOG_DOMAIN "ide-source-map"
+
+#include <egg-signal-group.h>
+#include <glib/gi18n.h>
+
+#include "buffers/ide-buffer.h"
+
+#include "ide-line-change-gutter-renderer.h"
+#include "ide-source-map.h"
+#include "ide-source-view.h"
+
+#define CONCEAL_TIMEOUT 2000
+
+struct _IdeSourceMap
+{
+  GtkSourceMap               parent_instance;
+
+  EggSignalGroup            *view_signals;
+  EggSignalGroup            *buffer_signals;
+  GtkSourceGutterRenderer   *line_renderer;
+  guint                      delayed_conceal_timeout;
+  guint                      show_map : 1;
+};
+
+G_DEFINE_TYPE (IdeSourceMap, ide_source_map, GTK_SOURCE_TYPE_MAP)
+
+
+enum {
+  SHOW_MAP,
+  HIDE_MAP,
+  LAST_SIGNAL
+};
+
+static guint signals [LAST_SIGNAL];
+
+static gboolean
+ide_source_map_do_conceal (gpointer data)
+{
+  IdeSourceMap *self = data;
+
+  g_assert (IDE_IS_SOURCE_MAP (self));
+
+  self->delayed_conceal_timeout = 0;
+
+  if (self->show_map == TRUE)
+    {
+      self->show_map = FALSE;
+      g_signal_emit (self, signals [HIDE_MAP], 0);
+    }
+
+  return G_SOURCE_REMOVE;
+}
+
+static gboolean
+ide_source_map__enter_notify_event (IdeSourceMap     *self,
+                                    GdkEventCrossing *event,
+                                    GtkWidget        *widget)
+{
+  g_assert (IDE_IS_SOURCE_MAP (self));
+  g_assert (event != NULL);
+  g_assert (GTK_IS_WIDGET (widget));
+
+  if (self->show_map == FALSE)
+    {
+      self->show_map = TRUE;
+      g_signal_emit (self, signals [SHOW_MAP], 0);
+    }
+
+  return GDK_EVENT_PROPAGATE;
+}
+
+static void
+ide_source_map_show_map_and_queue_fade (IdeSourceMap *self)
+{
+  g_assert (IDE_IS_SOURCE_MAP (self));
+
+  if (self->delayed_conceal_timeout != 0)
+    g_source_remove (self->delayed_conceal_timeout);
+
+  self->delayed_conceal_timeout = g_timeout_add (CONCEAL_TIMEOUT,
+                                                 ide_source_map_do_conceal,
+                                                 self);
+
+  if (self->show_map == FALSE)
+    {
+      self->show_map = TRUE;
+      g_signal_emit (self, signals [SHOW_MAP], 0);
+    }
+}
+
+static gboolean
+ide_source_map__leave_notify_event (IdeSourceMap     *self,
+                                    GdkEventCrossing *event,
+                                    GtkWidget        *widget)
+{
+  g_assert (IDE_IS_SOURCE_MAP (self));
+  g_assert (event != NULL);
+  g_assert (GTK_IS_WIDGET (widget));
+
+  ide_source_map_show_map_and_queue_fade (self);
+
+  return GDK_EVENT_PROPAGATE;
+}
+
+static gboolean
+ide_source_map__motion_notify_event (IdeSourceMap   *self,
+                                     GdkEventMotion *motion,
+                                     GtkWidget      *widget)
+{
+  g_assert (IDE_IS_SOURCE_MAP (self));
+  g_assert (motion != NULL);
+  g_assert (GTK_IS_WIDGET (widget));
+
+  ide_source_map_show_map_and_queue_fade (self);
+
+  return GDK_EVENT_PROPAGATE;
+}
+
+static gboolean
+ide_source_map__scroll_event (IdeSourceMap   *self,
+                              GdkEventScroll *scroll,
+                              GtkWidget      *widget)
+{
+  g_assert (IDE_IS_SOURCE_MAP (self));
+  g_assert (scroll != NULL);
+  g_assert (GTK_IS_WIDGET (widget));
+
+  ide_source_map_show_map_and_queue_fade (self);
+
+  return GDK_EVENT_PROPAGATE;
+}
+
+static void
+ide_source_map__buffer_line_flags_changed (IdeSourceMap *self,
+                                           IdeBuffer    *buffer)
+{
+  g_assert (IDE_IS_SOURCE_MAP (self));
+  g_assert (IDE_IS_BUFFER (buffer));
+
+  gtk_source_gutter_renderer_queue_draw (self->line_renderer);
+}
+
+static void
+ide_source_map__view_notify_buffer (IdeSourceMap  *self,
+                                    GParamSpec    *pspec,
+                                    GtkSourceView *view)
+{
+  GtkTextBuffer *buffer;
+
+  g_assert (IDE_IS_SOURCE_MAP (self));
+  g_assert (GTK_SOURCE_IS_VIEW (view));
+
+  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
+  if (IDE_IS_BUFFER (buffer))
+    egg_signal_group_set_target (self->buffer_signals, buffer);
+}
+
+static gboolean
+shrink_font (GBinding     *binding,
+             const GValue *value,
+             GValue       *to_value,
+             gpointer      user_data)
+{
+  PangoFontDescription *font_desc;
+
+  g_assert (G_VALUE_HOLDS (value, PANGO_TYPE_FONT_DESCRIPTION));
+
+  if ((font_desc = g_value_dup_boxed (value)))
+    {
+      pango_font_description_set_size (font_desc, 1 * PANGO_SCALE);
+      g_value_take_boxed (to_value, font_desc);
+    }
+
+  return TRUE;
+}
+
+static void
+ide_source_map__view_changed (IdeSourceMap *self,
+                              GParamSpec   *psepct,
+                              gpointer      data)
+{
+  GtkSourceView *view;
+
+  g_return_if_fail (IDE_IS_SOURCE_MAP (self));
+
+  view = gtk_source_map_get_view (GTK_SOURCE_MAP (self));
+
+  g_object_bind_property_full (view, "font-desc", self, "font-desc", G_BINDING_SYNC_CREATE,
+                               shrink_font, NULL, NULL, NULL);
+
+  egg_signal_group_set_target (self->view_signals, view);
+}
+
+static void
+ide_source_map_destroy (GtkWidget *widget)
+{
+  IdeSourceMap *self = (IdeSourceMap *)widget;
+
+  if (self->delayed_conceal_timeout)
+    {
+      g_source_remove (self->delayed_conceal_timeout);
+      self->delayed_conceal_timeout = 0;
+    }
+
+  self->line_renderer = NULL;
+
+  g_clear_object (&self->view_signals);
+  g_clear_object (&self->buffer_signals);
+
+  GTK_WIDGET_CLASS (ide_source_map_parent_class)->destroy (widget);
+}
+
+
+static void
+ide_source_map_class_init (IdeSourceMapClass *klass)
+{
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+
+  widget_class->destroy = ide_source_map_destroy;
+
+  signals [HIDE_MAP] =
+    g_signal_new ("hide-map",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                  0,
+                  NULL, NULL,
+                  NULL,
+                  G_TYPE_NONE,
+                  0);
+
+  signals [SHOW_MAP] =
+    g_signal_new ("show-map",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                  0,
+                  NULL, NULL,
+                  NULL,
+                  G_TYPE_NONE,
+                  0);
+}
+
+static void
+ide_source_map_init (IdeSourceMap *self)
+{
+  GtkSourceGutter *gutter;
+
+  /* Buffer */
+  self->buffer_signals = egg_signal_group_new (IDE_TYPE_BUFFER);
+  egg_signal_group_connect_object (self->buffer_signals,
+                                   "line-flags-changed",
+                                   G_CALLBACK (ide_source_map__buffer_line_flags_changed),
+                                   self,
+                                   G_CONNECT_SWAPPED);
+
+  /* View */
+  self->view_signals = egg_signal_group_new (GTK_SOURCE_TYPE_VIEW);
+
+  egg_signal_group_connect_object (self->view_signals,
+                                   "notify::buffer",
+                                   G_CALLBACK (ide_source_map__view_notify_buffer),
+                                   self,
+                                   G_CONNECT_SWAPPED);
+
+  egg_signal_group_connect_object (self->view_signals,
+                                   "enter-notify-event",
+                                   G_CALLBACK (ide_source_map__enter_notify_event),
+                                   self,
+                                   G_CONNECT_SWAPPED);
+
+  egg_signal_group_connect_object (self->view_signals,
+                                   "leave-notify-event",
+                                   G_CALLBACK (ide_source_map__leave_notify_event),
+                                   self,
+                                   G_CONNECT_SWAPPED);
+
+  egg_signal_group_connect_object (self->view_signals,
+                                   "motion-notify-event",
+                                   G_CALLBACK (ide_source_map__motion_notify_event),
+                                   self,
+                                   G_CONNECT_SWAPPED);
+
+  egg_signal_group_connect_object (self->view_signals,
+                                   "scroll-event",
+                                   G_CALLBACK (ide_source_map__scroll_event),
+                                   self,
+                                   G_CONNECT_SWAPPED);
+
+  g_signal_connect_object (self,
+                           "notify::view",
+                           G_CALLBACK (ide_source_map__view_changed),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  gutter = gtk_source_view_get_gutter (GTK_SOURCE_VIEW (self), GTK_TEXT_WINDOW_LEFT);
+  self->line_renderer = g_object_new (IDE_TYPE_LINE_CHANGE_GUTTER_RENDERER,
+                                      "size", 2,
+                                      "visible", TRUE,
+                                      NULL);
+  gtk_source_gutter_insert (gutter, self->line_renderer, 0);
+
+  g_signal_connect_object (self,
+                           "enter-notify-event",
+                           G_CALLBACK (ide_source_map__enter_notify_event),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  g_signal_connect_object (self,
+                           "leave-notify-event",
+                           G_CALLBACK (ide_source_map__leave_notify_event),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  g_signal_connect_object (self,
+                           "motion-notify-event",
+                           G_CALLBACK (ide_source_map__motion_notify_event),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  g_signal_connect_object (self,
+                           "scroll-event",
+                           G_CALLBACK (ide_source_map__scroll_event),
+                           self,
+                           G_CONNECT_SWAPPED);
+}

@@ -19,7 +19,7 @@
 #ifndef IDE_PYGOBJECT_SCRIPT_H
 #define IDE_PYGOBJECT_SCRIPT_H
 
-#include "ide-script.h"
+#include "scripting/ide-script.h"
 
 G_BEGIN_DECLS
 

@@ -16,13 +16,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <egg-animation.h>
 #include <glib/gi18n.h>
+#include <ide.h>
 
-#include "egg-animation.h"
-#include "ide-debug.h"
 #include "ide-git-remote-callbacks.h"
-#include "ide-macros.h"
-#include "ide-progress.h"
 
 #define ANIMATION_DURATION_MSEC 250
 

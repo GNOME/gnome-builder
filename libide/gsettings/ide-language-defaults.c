@@ -21,9 +21,10 @@
 #include <errno.h>
 #include <glib/gi18n.h>
 
-#include "ide-debug.h"
 #include "ide-global.h"
-#include "ide-language-defaults.h"
+#include "ide-debug.h"
+
+#include "gsettings/ide-language-defaults.h"
 
 #define SCHEMA_ID "org.gnome.builder.editor.language"
 #define PATH_BASE "/org/gnome/builder/editor/language/"

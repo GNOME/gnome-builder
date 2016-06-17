@@ -20,7 +20,6 @@
 #define IDE_CLANG_SERVICE_H
 
 #include "ide-clang-translation-unit.h"
-#include "ide-service.h"
 
 G_BEGIN_DECLS
 

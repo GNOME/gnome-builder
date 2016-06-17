@@ -22,7 +22,6 @@
 #include <gtksourceview/gtksource.h>
 #include <string.h>
 
-#include "ide-debug.h"
 #include "ide-xml-indenter.h"
 
 struct _IdeXmlIndenter

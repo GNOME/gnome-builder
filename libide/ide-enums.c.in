@@ -1,21 +1,20 @@
 /*** BEGIN file-header ***/
-#ifdef HAVE_CONFIG_H
-# include "config.h"
-#endif
+
+#include "config.h"
 
 #include "ide-enums.h"
 
-#include "ide-buffer.h"
-#include "ide-build-result.h"
-#include "ide-diagnostic.h"
-#include "ide-doap.h"
-#include "ide-highlighter.h"
-#include "ide-indent-style.h"
-#include "ide-layout-stack-split.h"
-#include "ide-source-view.h"
-#include "ide-symbol.h"
-#include "ide-thread-pool.h"
-#include "ide-vcs-config.h"
+#include "buffers/ide-buffer.h"
+#include "buildsystem/ide-build-result.h"
+#include "diagnostics/ide-diagnostic.h"
+#include "doap/ide-doap.h"
+#include "files/ide-indent-style.h"
+#include "highlighting/ide-highlighter.h"
+#include "sourceview/ide-source-view.h"
+#include "symbols/ide-symbol.h"
+#include "threading/ide-thread-pool.h"
+#include "vcs/ide-vcs-config.h"
+#include "workbench/ide-layout-stack-split.h"
 
 /*** END file-header ***/
 

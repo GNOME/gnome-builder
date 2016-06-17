@@ -21,7 +21,7 @@
 
 #include <gtk/gtk.h>
 
-#include "ide-recent-projects.h"
+#include "projects/ide-recent-projects.h"
 
 G_BEGIN_DECLS
 

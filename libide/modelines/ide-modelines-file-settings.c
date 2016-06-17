@@ -20,12 +20,12 @@
 
 #include <glib/gi18n.h>
 
-#include "ide-buffer.h"
-#include "ide-buffer-manager.h"
 #include "ide-context.h"
-#include "ide-modelines-file-settings.h"
 
-#include "modeline-parser.h"
+#include "buffers/ide-buffer-manager.h"
+#include "buffers/ide-buffer.h"
+#include "modelines/ide-modelines-file-settings.h"
+#include "modelines/modeline-parser.h"
 
 struct _IdeModelinesFileSettings
 {

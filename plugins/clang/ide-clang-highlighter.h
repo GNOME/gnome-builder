@@ -19,7 +19,7 @@
 #ifndef IDE_CLANG_HIGHLIGHTER_H
 #define IDE_CLANG_HIGHLIGHTER_H
 
-#include "ide-highlighter.h"
+#include <ide.h>
 
 G_BEGIN_DECLS
 

@@ -19,9 +19,9 @@
 #ifndef IDE_EDITOR_VIEW_H
 #define IDE_EDITOR_VIEW_H
 
-#include "ide-buffer.h"
-#include "ide-source-view.h"
-#include "ide-layout-view.h"
+#include "buffers/ide-buffer.h"
+#include "sourceview/ide-source-view.h"
+#include "workbench/ide-layout-view.h"
 
 G_BEGIN_DECLS
 

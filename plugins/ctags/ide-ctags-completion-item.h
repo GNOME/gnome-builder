@@ -20,8 +20,8 @@
 #define IDE_CTAGS_COMPLETION_ITEM_H
 
 #include <gtksourceview/gtksource.h>
+#include <ide.h>
 
-#include "ide-completion-item.h"
 #include "ide-ctags-index.h"
 #include "ide-ctags-completion-provider.h"
 

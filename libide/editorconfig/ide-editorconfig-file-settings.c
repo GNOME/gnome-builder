@@ -21,9 +21,10 @@
 #include <editorconfig-glib.h>
 #include <glib/gi18n.h>
 
-#include "ide-editorconfig-file-settings.h"
 #include "ide-debug.h"
-#include "ide-file.h"
+
+#include "editorconfig/ide-editorconfig-file-settings.h"
+#include "files/ide-file.h"
 
 struct _IdeEditorconfigFileSettings
 {

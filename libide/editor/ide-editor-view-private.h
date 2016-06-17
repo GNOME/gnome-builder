@@ -19,16 +19,15 @@
 #ifndef IDE_EDITOR_VIEW_PRIVATE_H
 #define IDE_EDITOR_VIEW_PRIVATE_H
 
+#include <egg-simple-label.h>
+#include <egg-simple-popover.h>
 #include <libpeas/peas.h>
 #include <gtk/gtk.h>
 
-#include "egg-simple-label.h"
-#include "egg-simple-popover.h"
-
-#include "ide-buffer.h"
-#include "ide-editor-frame.h"
-#include "ide-editor-tweak-widget.h"
-#include "ide-layout-view.h"
+#include "buffers/ide-buffer.h"
+#include "editor/ide-editor-frame.h"
+#include "editor/ide-editor-tweak-widget.h"
+#include "workbench/ide-layout-view.h"
 
 G_BEGIN_DECLS
 

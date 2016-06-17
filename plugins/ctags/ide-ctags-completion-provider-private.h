@@ -20,7 +20,6 @@
 #define IDE_CTAGS_COMPLETION_PROVIDER_PRIVATE_H
 
 #include "ide-ctags-completion-provider.h"
-#include "ide-completion-results.h"
 
 G_BEGIN_DECLS
 

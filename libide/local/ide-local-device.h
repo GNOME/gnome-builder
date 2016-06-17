@@ -19,14 +19,13 @@
 #ifndef IDE_LOCAL_DEVICE_H
 #define IDE_LOCAL_DEVICE_H
 
-#include "ide-device.h"
+#include "devices/ide-device.h"
 
 G_BEGIN_DECLS
 
 #define IDE_TYPE_LOCAL_DEVICE (ide_local_device_get_type())
 
-G_DECLARE_DERIVABLE_TYPE (IdeLocalDevice, ide_local_device, IDE, LOCAL_DEVICE,
-                          IdeDevice)
+G_DECLARE_DERIVABLE_TYPE (IdeLocalDevice, ide_local_device, IDE, LOCAL_DEVICE, IdeDevice)
 
 struct _IdeLocalDeviceClass
 {

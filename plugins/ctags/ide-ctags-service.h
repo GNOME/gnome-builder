@@ -20,11 +20,10 @@
 #define IDE_CTAGS_SERVICE_H
 
 #include <gtksourceview/gtksource.h>
+#include <ide.h>
 
 #include "ide-ctags-completion-provider.h"
 #include "ide-ctags-highlighter.h"
-#include "ide-service.h"
-#include "ide-highlighter.h"
 
 G_BEGIN_DECLS
 

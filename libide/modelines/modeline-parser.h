@@ -24,7 +24,7 @@
 #include <glib.h>
 #include <gtksourceview/gtksource.h>
 
-#include "ide-file-settings.h"
+#include "files/ide-file-settings.h"
 
 G_BEGIN_DECLS
 

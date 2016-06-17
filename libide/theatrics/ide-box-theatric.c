@@ -16,13 +16,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#define G_LOG_DOMAIN "theatrics"
+#define G_LOG_DOMAIN "ide-box-theatric"
 
+#include <egg-animation.h>
 #include <glib/gi18n.h>
 
-#include "egg-animation.h"
-#include "ide-box-theatric.h"
-#include "ide-cairo.h"
+#include "theatrics/ide-box-theatric.h"
+#include "util/ide-cairo.h"
 
 struct _IdeBoxTheatric
 {

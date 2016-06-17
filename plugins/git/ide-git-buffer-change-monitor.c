@@ -18,16 +18,11 @@
 
 #define G_LOG_DOMAIN "ide-git-buffer-change-monitor"
 
+#include <egg-counter.h>
+#include <egg-signal-group.h>
 #include <glib/gi18n.h>
 #include <libgit2-glib/ggit.h>
 
-#include "egg-counter.h"
-#include "egg-signal-group.h"
-
-#include "ide-buffer.h"
-#include "ide-context.h"
-#include "ide-debug.h"
-#include "ide-file.h"
 #include "ide-git-buffer-change-monitor.h"
 #include "ide-git-vcs.h"
 

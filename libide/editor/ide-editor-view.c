@@ -18,18 +18,20 @@
 
 #define G_LOG_DOMAIN "ide-editor-view"
 
+#include <egg-simple-popover.h>
 #include <glib/gi18n.h>
 #include <glib/gprintf.h>
 
-#include "egg-simple-popover.h"
-
-#include "ide-editor-frame-private.h"
-#include "ide-editor-view-actions.h"
-#include "ide-editor-view-addin.h"
-#include "ide-editor-view.h"
-#include "ide-editor-view-addin-private.h"
-#include "ide-editor-view-private.h"
+#include "ide-debug.h"
 #include "ide-macros.h"
+
+#include "editor/ide-editor-frame-private.h"
+#include "editor/ide-editor-view-actions.h"
+#include "editor/ide-editor-view-addin.h"
+#include "editor/ide-editor-view.h"
+#include "editor/ide-editor-view-addin-private.h"
+#include "editor/ide-editor-view-private.h"
+#include "workbench/ide-workbench.h"
 
 G_DEFINE_TYPE (IdeEditorView, ide_editor_view, IDE_TYPE_LAYOUT_VIEW)
 

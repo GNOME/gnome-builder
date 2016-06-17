@@ -18,15 +18,13 @@
 
 #define G_LOG_DOMAIN "ide-ctags-index"
 
+#include <egg-counter.h>
 #include <glib/gi18n.h>
+#include <ide.h>
 #include <stdlib.h>
 #include <string.h>
 
-#include "egg-counter.h"
-
 #include "ide-ctags-index.h"
-#include "ide-debug.h"
-#include "ide-line-reader.h"
 
 struct _IdeCtagsIndex
 {

@@ -19,7 +19,7 @@
 #ifndef IDE_AUTOTOOLS_BUILDER_H
 #define IDE_AUTOTOOLS_BUILDER_H
 
-#include "ide-builder.h"
+#include <ide.h>
 
 G_BEGIN_DECLS
 

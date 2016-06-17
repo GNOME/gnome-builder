@@ -19,15 +19,13 @@
 #ifndef GB_FILE_SEARCH_RESULT_H
 #define GB_FILE_SEARCH_RESULT_H
 
-#include "ide-search-result.h"
+#include <ide.h>
 
 G_BEGIN_DECLS
 
 #define GB_TYPE_FILE_SEARCH_RESULT (gb_file_search_result_get_type())
 
-G_DECLARE_FINAL_TYPE (GbFileSearchResult, gb_file_search_result,
-                      GB, FILE_SEARCH_RESULT,
-                      IdeSearchResult)
+G_DECLARE_FINAL_TYPE (GbFileSearchResult, gb_file_search_result, GB, FILE_SEARCH_RESULT, IdeSearchResult)
 
 G_END_DECLS
 

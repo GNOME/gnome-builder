@@ -18,11 +18,9 @@
 
 #define G_LOG_DOMAIN "ide-ctags-completion-item"
 
+#include <egg-counter.h>
 #include <glib/gi18n.h>
 
-#include "egg-counter.h"
-
-#include "ide-completion-item.h"
 #include "ide-ctags-completion-item.h"
 #include "ide-ctags-completion-provider.h"
 #include "ide-ctags-completion-provider-private.h"

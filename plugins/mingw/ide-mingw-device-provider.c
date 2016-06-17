@@ -20,7 +20,6 @@
 
 #include <glib/gi18n.h>
 
-#include "ide-context.h"
 #include "ide-mingw-device.h"
 #include "ide-mingw-device-provider.h"
 

@@ -19,7 +19,7 @@
 #ifndef IDE_GCA_DIAGNOSTIC_PROVIDER_H
 #define IDE_GCA_DIAGNOSTIC_PROVIDER_H
 
-#include "ide-diagnostic-provider.h"
+#include <ide.h>
 
 G_BEGIN_DECLS
 

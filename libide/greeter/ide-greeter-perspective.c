@@ -18,21 +18,20 @@
 
 #define G_LOG_DOMAIN "ide-greeter-perspective"
 
+#include <egg-search-bar.h>
+#include <egg-signal-group.h>
+#include <egg-state-machine.h>
 #include <glib/gi18n.h>
 
-#include "egg-search-bar.h"
-#include "egg-signal-group.h"
-#include "egg-state-machine.h"
-
-#include "ide-application.h"
-#include "ide-greeter-perspective.h"
-#include "ide-greeter-project-row.h"
-#include "ide-gtk.h"
+#include "application/ide-application.h"
+#include "greeter/ide-greeter-perspective.h"
+#include "greeter/ide-greeter-project-row.h"
 #include "ide-macros.h"
-#include "ide-pattern-spec.h"
-#include "ide-perspective.h"
-#include "ide-workbench.h"
-#include "ide-workbench-private.h"
+#include "search/ide-pattern-spec.h"
+#include "util/ide-gtk.h"
+#include "workbench/ide-perspective.h"
+#include "workbench/ide-workbench-private.h"
+#include "workbench/ide-workbench.h"
 
 struct _IdeGreeterPerspective
 {
