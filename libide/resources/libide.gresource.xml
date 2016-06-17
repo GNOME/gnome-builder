@@ -50,31 +50,31 @@
   </gresource>
 
   <gresource prefix="/org/gnome/builder/ui">
-    <file compressed="true" alias="ide-editor-perspective.ui">../../data/ui/ide-editor-perspective.ui</file>
-    <file compressed="true" alias="ide-editor-frame.ui">../../data/ui/ide-editor-frame.ui</file>
-    <file compressed="true" alias="ide-editor-tweak-widget.ui">../../data/ui/ide-editor-tweak-widget.ui</file>
-    <file compressed="true" alias="ide-editor-view.ui">../../data/ui/ide-editor-view.ui</file>
-    <file compressed="true" alias="ide-genesis-perspective.ui">../../data/ui/ide-genesis-perspective.ui</file>
-    <file compressed="true" alias="ide-greeter-perspective.ui">../../data/ui/ide-greeter-perspective.ui</file>
-    <file compressed="true" alias="ide-greeter-project-row.ui">../../data/ui/ide-greeter-project-row.ui</file>
-    <file compressed="true" alias="ide-layout-tab.ui">../../data/ui/ide-layout-tab.ui</file>
-    <file compressed="true" alias="ide-layout-tab-bar.ui">../../data/ui/ide-layout-tab-bar.ui</file>
-    <file compressed="true" alias="ide-layout-pane.ui">../../data/ui/ide-layout-pane.ui</file>
-    <file compressed="true" alias="ide-layout-stack.ui">../../data/ui/ide-layout-stack.ui</file>
-    <file compressed="true" alias="ide-omni-search-group.ui">../../data/ui/ide-omni-search-group.ui</file>
-    <file compressed="true" alias="ide-omni-search-row.ui">../../data/ui/ide-omni-search-row.ui</file>
-    <file compressed="true" alias="ide-preferences-entry.ui">../../data/ui/ide-preferences-entry.ui</file>
-    <file compressed="true" alias="ide-preferences-file-chooser-button.ui">../../data/ui/ide-preferences-file-chooser-button.ui</file>
-    <file compressed="true" alias="ide-preferences-font-button.ui">../../data/ui/ide-preferences-font-button.ui</file>
-    <file compressed="true" alias="ide-preferences-group.ui">../../data/ui/ide-preferences-group.ui</file>
-    <file compressed="true" alias="ide-preferences-language-row.ui">../../data/ui/ide-preferences-language-row.ui</file>
-    <file compressed="true" alias="ide-preferences-page.ui">../../data/ui/ide-preferences-page.ui</file>
-    <file compressed="true" alias="ide-preferences-perspective.ui">../../data/ui/ide-preferences-perspective.ui</file>
-    <file compressed="true" alias="ide-preferences-spin-button.ui">../../data/ui/ide-preferences-spin-button.ui</file>
-    <file compressed="true" alias="ide-preferences-switch.ui">../../data/ui/ide-preferences-switch.ui</file>
-    <file compressed="true" alias="ide-shortcuts-window.ui">../../data/ui/ide-shortcuts-window.ui</file>
-    <file compressed="true" alias="ide-workbench-header-bar.ui">../../data/ui/ide-workbench-header-bar.ui</file>
-    <file compressed="true" alias="ide-workbench.ui">../../data/ui/ide-workbench.ui</file>
+    <file compressed="true" alias="ide-editor-perspective.ui">../editor/ide-editor-perspective.ui</file>
+    <file compressed="true" alias="ide-editor-frame.ui">../editor/ide-editor-frame.ui</file>
+    <file compressed="true" alias="ide-editor-tweak-widget.ui">../editor/ide-editor-tweak-widget.ui</file>
+    <file compressed="true" alias="ide-editor-view.ui">../editor/ide-editor-view.ui</file>
+    <file compressed="true" alias="ide-genesis-perspective.ui">../genesis/ide-genesis-perspective.ui</file>
+    <file compressed="true" alias="ide-greeter-perspective.ui">../greeter/ide-greeter-perspective.ui</file>
+    <file compressed="true" alias="ide-greeter-project-row.ui">../greeter/ide-greeter-project-row.ui</file>
+    <file compressed="true" alias="ide-layout-tab.ui">../workbench/ide-layout-tab.ui</file>
+    <file compressed="true" alias="ide-layout-tab-bar.ui">../workbench/ide-layout-tab-bar.ui</file>
+    <file compressed="true" alias="ide-layout-pane.ui">../workbench/ide-layout-pane.ui</file>
+    <file compressed="true" alias="ide-layout-stack.ui">../workbench/ide-layout-stack.ui</file>
+    <file compressed="true" alias="ide-omni-search-group.ui">../search/ide-omni-search-group.ui</file>
+    <file compressed="true" alias="ide-omni-search-row.ui">../search/ide-omni-search-row.ui</file>
+    <file compressed="true" alias="ide-preferences-entry.ui">../preferences/ide-preferences-entry.ui</file>
+    <file compressed="true" alias="ide-preferences-file-chooser-button.ui">../preferences/ide-preferences-file-chooser-button.ui</file>
+    <file compressed="true" alias="ide-preferences-font-button.ui">../preferences/ide-preferences-font-button.ui</file>
+    <file compressed="true" alias="ide-preferences-group.ui">../preferences/ide-preferences-group.ui</file>
+    <file compressed="true" alias="ide-preferences-language-row.ui">../preferences/ide-preferences-language-row.ui</file>
+    <file compressed="true" alias="ide-preferences-page.ui">../preferences/ide-preferences-page.ui</file>
+    <file compressed="true" alias="ide-preferences-perspective.ui">../preferences/ide-preferences-perspective.ui</file>
+    <file compressed="true" alias="ide-preferences-spin-button.ui">../preferences/ide-preferences-spin-button.ui</file>
+    <file compressed="true" alias="ide-preferences-switch.ui">../preferences/ide-preferences-switch.ui</file>
+    <file compressed="true" alias="ide-shortcuts-window.ui">../keybindings/ide-shortcuts-window.ui</file>
+    <file compressed="true" alias="ide-workbench-header-bar.ui">../workbench/ide-workbench-header-bar.ui</file>
+    <file compressed="true" alias="ide-workbench.ui">../workbench/ide-workbench.ui</file>
   </gresource>
 
   <gresource prefix="/org/gnome/builder/plugins/editor">
