@@ -24,59 +24,56 @@ data/org.gnome.Builder.desktop.in.in
 [type: gettext/glade]data/gtk/menus.ui
 data/style-schemes/builder-dark.xml
 data/style-schemes/builder.xml
-[type: gettext/glade]data/ui/ide-editor-frame.ui
-[type: gettext/glade]data/ui/ide-editor-perspective.ui
-[type: gettext/glade]data/ui/ide-editor-tweak-widget.ui
-[type: gettext/glade]data/ui/ide-editor-view.ui
-[type: gettext/glade]data/ui/ide-genesis-perspective.ui
-[type: gettext/glade]data/ui/ide-greeter-perspective.ui
-[type: gettext/glade]data/ui/ide-layout-tab-bar.ui
-[type: gettext/glade]data/ui/ide-layout-tab.ui
-[type: gettext/glade]data/ui/ide-preferences-font-button.ui
-[type: gettext/glade]data/ui/ide-preferences-perspective.ui
-[type: gettext/glade]data/ui/ide-shortcuts-window.ui
-[type: gettext/glade]data/ui/ide-workbench-header-bar.ui
+libide/application/ide-application-actions.c
+libide/application/ide-application.c
+libide/application/ide-application-command-line.c
+libide/buffers/ide-buffer.c
+libide/buffers/ide-buffer-manager.c
+libide/buildsystem/ide-builder.c
+libide/buildsystem/ide-build-result.c
+libide/buildsystem/ide-build-system.c
+libide/buildsystem/ide-configuration-manager.c
+libide/devices/ide-device-manager.c
 libide/directory/ide-directory-genesis-addin.c
 libide/editorconfig/ide-editorconfig-file-settings.c
 libide/editor/ide-editor-frame.c
+[type: gettext/glade]libide/editor/ide-editor-frame.ui
 libide/editor/ide-editor-perspective.c
+[type: gettext/glade]libide/editor/ide-editor-perspective.ui
+[type: gettext/glade]libide/editor/ide-editor-tweak-widget.ui
 libide/editor/ide-editor-view-actions.c
 libide/editor/ide-editor-view.c
-libide/genesis/ide-genesis-perspective.c
+[type: gettext/glade]libide/editor/ide-editor-view.ui
+[type: gettext/glade]libide/genesis/ide-genesis-perspective.ui
 libide/greeter/ide-greeter-perspective.c
+[type: gettext/glade]libide/greeter/ide-greeter-perspective.ui
 libide/gsettings/ide-language-defaults.c
-libide/ide-application-actions.c
-libide/ide-application.c
-libide/ide-application-command-line.c
-libide/ide-buffer.c
-libide/ide-buffer-manager.c
-libide/ide-builder.c
-libide/ide-build-result.c
-libide/ide-build-system.c
 libide/ide.c
-libide/ide-configuration-manager.c
 libide/ide-context.c
-libide/ide-device-manager.c
-libide/ide-environment-editor.c
-libide/ide-layout-view.c
 libide/ide-object.c
-libide/ide-project.c
-libide/ide-recent-projects.c
-libide/ide-runtime-manager.c
-libide/ide-script.c
-libide/ide-source-snippet.c
-libide/ide-source-snippet-completion-provider.c
-libide/ide-source-snippet-parser.c
-libide/ide-source-snippets-manager.c
-libide/ide-source-view.c
-libide/ide-uri.c
-libide/ide-workbench-actions.c
-libide/ide-workbench.c
+[type: gettext/glade]libide/keybindings/ide-shortcuts-window.ui
 libide/preferences/ide-preferences-builtin.c
+[type: gettext/glade]libide/preferences/ide-preferences-font-button.ui
 libide/preferences/ide-preferences-perspective.c
+[type: gettext/glade]libide/preferences/ide-preferences-perspective.ui
+libide/projects/ide-project.c
+libide/projects/ide-recent-projects.c
 libide/pygobject/ide-pygobject-script.c
+libide/runtimes/ide-runtime-manager.c
+libide/scripting/ide-script.c
 libide/search/ide-omni-search-display.c
+libide/snippets/ide-source-snippet.c
+libide/snippets/ide-source-snippet-completion-provider.c
+libide/snippets/ide-source-snippets-manager.c
+libide/sourceview/ide-source-view.c
 libide/util/ide-file-manager.c
+libide/util/ide-uri.c
+[type: gettext/glade]libide/workbench/ide-layout-tab-bar.ui
+[type: gettext/glade]libide/workbench/ide-layout-tab.ui
+libide/workbench/ide-layout-view.c
+libide/workbench/ide-workbench-actions.c
+libide/workbench/ide-workbench.c
+[type: gettext/glade]libide/workbench/ide-workbench-header-bar.ui
 plugins/autotools/ide-autotools-builder.c
 plugins/autotools/ide-autotools-build-system.c
 plugins/autotools/ide-autotools-build-task.c
@@ -88,7 +85,7 @@ plugins/build-tools/gbp-build-panel.c
 plugins/build-tools/gbp-build-panel-row.c
 [type: gettext/glade]plugins/build-tools/gbp-build-panel.ui
 plugins/build-tools/gbp-build-tool.c
-plugins/build-tools/gbp-build-workbench-addin.c
+plugins/build-tools/ide-environment-editor.c
 plugins/clang/ide-clang-preferences-addin.c
 plugins/clang/ide-clang-service.c
 plugins/clang/ide-clang-symbol-node.c
@@ -105,11 +102,9 @@ plugins/create-project/gbp-create-project-widget.c
 [type: gettext/glade]plugins/create-project/gbp-create-project-widget.ui
 plugins/devhelp/gbp-devhelp-panel.c
 plugins/devhelp/gbp-devhelp-search-provider.c
-plugins/devhelp/gbp-devhelp-workbench-addin.c
 plugins/file-search/gb-file-search-provider.c
 [type: gettext/glade]plugins/fpaste/fpaste_plugin/gtk/menus.ui
 plugins/fpaste/fpaste_plugin/__init__.py
-plugins/gettext/ide-gettext-diagnostic-provider.c
 plugins/git/ide-git-buffer-change-monitor.c
 plugins/git/ide-git-clone-widget.c
 [type: gettext/glade]plugins/git/ide-git-clone-widget.ui
@@ -119,6 +114,7 @@ plugins/git/ide-git-remote-callbacks.c
 plugins/gnome-code-assistance/ide-gca-diagnostic-provider.c
 plugins/gnome-code-assistance/ide-gca-preferences-addin.c
 plugins/gnome-code-assistance/ide-gca-service.c
+plugins/hello-cpp/hellocppapplicationaddin.cc
 [type: gettext/glade]plugins/html-preview/html_preview_plugin/gtk/menus.ui
 plugins/jedi/jedi_plugin.py
 plugins/mingw/ide-mingw-device-provider.c
@@ -132,13 +128,10 @@ plugins/project-tree/gb-rename-file-popover.c
 plugins/python-pack/ide-python-format-provider.c
 [type: gettext/glade]plugins/support/gtk/menus.ui
 plugins/support/ide-support-application-addin.c
-plugins/symbol-tree/symbol-tree.c
 plugins/symbol-tree/symbol-tree-panel.c
-plugins/sysmon/gb-sysmon-addin.c
 [type: gettext/glade]plugins/sysmon/gb-sysmon-panel.ui
 plugins/terminal/gb-terminal-view-actions.c
 plugins/terminal/gb-terminal-workbench-addin.c
 [type: gettext/glade]plugins/terminal/gtk/menus.ui
 plugins/todo/todo_plugin/__init__.py
 plugins/vala-pack/ide-vala-preferences-addin.vala
-plugins/hello-cpp/hellocppapplicationaddin.cc
