@@ -84,6 +84,7 @@ create_configuration_row (gpointer item,
   gtk_container_add (GTK_CONTAINER (row), box);
 
   label = g_object_new (GTK_TYPE_LABEL,
+                        "hexpand", TRUE,
                         "ellipsize", PANGO_ELLIPSIZE_MIDDLE,
                         "visible", TRUE,
                         "xalign", 0.0f,
@@ -94,19 +95,13 @@ create_configuration_row (gpointer item,
   gtk_container_add (GTK_CONTAINER (box), label);
 
   image = g_object_new (GTK_TYPE_IMAGE,
-                        "icon-name", "object-select-symbolic",
+                        "icon-name", "radio-checked-symbolic",
                         "xpad", 6,
                         NULL);
   g_object_bind_property_full (manager, "current", image, "visible",
                                G_BINDING_SYNC_CREATE,
                                map_pointer_to, NULL, configuration, NULL);
   gtk_container_add (GTK_CONTAINER (box), image);
-
-  label = g_object_new (GTK_TYPE_LABEL,
-                        "hexpand", TRUE,
-                        "visible", TRUE,
-                        NULL);
-  gtk_container_add (GTK_CONTAINER (box), label);
 
   return row;
 }
