@@ -18,7 +18,7 @@
 
 #include <ide.h>
 
-#include "ide-application-tests.h"
+#include "application/ide-application-tests.h"
 
 static void
 test_new_async_cb1 (GObject      *object,

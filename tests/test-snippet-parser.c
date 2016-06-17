@@ -1,7 +1,7 @@
 #include <ide.h>
 #include <stdlib.h>
 
-#include "ide-source-snippet-parser.h"
+#include "snippets/ide-source-snippet-parser.h"
 
 gint
 main (gint   argc,

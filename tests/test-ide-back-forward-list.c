@@ -20,7 +20,7 @@
 #include <stdlib.h>
 #include <ide.h>
 
-#include "ide-application-tests.h"
+#include "application/ide-application-tests.h"
 
 typedef struct
 {

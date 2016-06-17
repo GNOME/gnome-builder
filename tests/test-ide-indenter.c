@@ -16,12 +16,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <libpeas/peas.h>
 #include <ide.h>
-#include "util/ide-gdk.h"
+#include <libpeas/peas.h>
 #include <string.h>
 
-#include "ide-application-tests.h"
+#include "application/ide-application-tests.h"
+#include "util/ide-gdk.h"
 
 typedef void (*IndentTestFunc) (IdeContext *context,
                                 GtkWidget  *widget);

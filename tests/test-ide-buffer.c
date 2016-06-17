@@ -22,7 +22,7 @@
 #include <glib/gstdio.h>
 #include <ide.h>
 
-#include "ide-application-tests.h"
+#include "application/ide-application-tests.h"
 
 static void
 flags_changed_cb (IdeBuffer *buffer,

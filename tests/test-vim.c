@@ -19,7 +19,7 @@
 #include <ide.h>
 #include <string.h>
 
-#include "ide-application-tests.h"
+#include "application/ide-application-tests.h"
 #include "util/ide-gdk.h"
 
 typedef void (*VimTestFunc) (IdeContext *context,
