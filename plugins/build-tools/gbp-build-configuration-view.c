@@ -364,6 +364,8 @@ gbp_build_configuration_view_class_init (GbpBuildConfigurationViewClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GbpBuildConfigurationView, environment_editor);
   gtk_widget_class_bind_template_child (widget_class, GbpBuildConfigurationView, prefix_entry);
   gtk_widget_class_bind_template_child (widget_class, GbpBuildConfigurationView, runtime_list_box);
+
+  g_type_ensure (IDE_TYPE_ENVIRONMENT_EDITOR);
 }
 
 static void
