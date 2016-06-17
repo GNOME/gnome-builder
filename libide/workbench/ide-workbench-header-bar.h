@@ -30,6 +30,15 @@ G_DECLARE_DERIVABLE_TYPE (IdeWorkbenchHeaderBar, ide_workbench_header_bar, IDE, 
 struct _IdeWorkbenchHeaderBarClass
 {
   GtkHeaderBarClass parent;
+
+  gpointer _reserved1;
+  gpointer _reserved2;
+  gpointer _reserved3;
+  gpointer _reserved4;
+  gpointer _reserved5;
+  gpointer _reserved6;
+  gpointer _reserved7;
+  gpointer _reserved8;
 };
 
 GtkWidget *ide_workbench_header_bar_new          (void);
