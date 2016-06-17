@@ -859,6 +859,7 @@ gb_vim_do_search_and_replace (GtkTextBuffer *buffer,
   GtkTextIter tmp2;
   GtkTextIter match_begin;
   GtkTextIter match_end;
+  gboolean has_wrapped = FALSE;
   GError *error = NULL;
 
   g_assert (search_text);
@@ -885,25 +886,21 @@ gb_vim_do_search_and_replace (GtkTextBuffer *buffer,
   gtk_source_search_settings_set_search_text (search_settings, search_text);
   gtk_source_search_settings_set_case_sensitive (search_settings, TRUE);
 
-  while (gtk_source_search_context_forward (search_context, begin, &match_begin, &match_end))
+  while (gtk_source_search_context_forward2 (search_context,
+                                             begin,
+                                             &match_begin,
+                                             &match_end,
+                                             &has_wrapped) && !has_wrapped)
     {
       if (is_global || gb_vim_match_is_selected (buffer, &match_begin, &match_end))
         {
-          GtkTextMark *mark2;
-
-          mark2 = gtk_text_buffer_create_mark (buffer, NULL, &match_end, FALSE);
-
-          if (!gtk_source_search_context_replace (search_context, &match_begin, &match_end,
-                                                  replace_text, -1, &error))
+          if (!gtk_source_search_context_replace2 (search_context, &match_begin, &match_end,
+                                                   replace_text, -1, &error))
             {
               g_warning ("%s", error->message);
               g_clear_error (&error);
-              gtk_text_buffer_delete_mark (buffer, mark2);
               break;
             }
-
-          gtk_text_buffer_get_iter_at_mark (buffer, &match_end, mark2);
-          gtk_text_buffer_delete_mark (buffer, mark2);
         }
 
       *begin = match_end;
