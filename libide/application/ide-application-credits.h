@@ -108,6 +108,7 @@ static const gchar *ide_application_credits_authors[] = {
   "Pedro Albuquerque",
   "Pete Travis",
   "Philip Withnall",
+  "Pooja Dhannawat",
   "Piotr Drąg",
   "Ray Strode",
   "Roberto Majadas",
