@@ -54,7 +54,6 @@
     <file compressed="true" alias="ide-editor-frame.ui">../../data/ui/ide-editor-frame.ui</file>
     <file compressed="true" alias="ide-editor-tweak-widget.ui">../../data/ui/ide-editor-tweak-widget.ui</file>
     <file compressed="true" alias="ide-editor-view.ui">../../data/ui/ide-editor-view.ui</file>
-    <file compressed="true" alias="ide-environment-editor-row.ui">../../data/ui/ide-environment-editor-row.ui</file>
     <file compressed="true" alias="ide-genesis-perspective.ui">../../data/ui/ide-genesis-perspective.ui</file>
     <file compressed="true" alias="ide-greeter-perspective.ui">../../data/ui/ide-greeter-perspective.ui</file>
     <file compressed="true" alias="ide-greeter-project-row.ui">../../data/ui/ide-greeter-project-row.ui</file>
