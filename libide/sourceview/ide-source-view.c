@@ -1045,6 +1045,7 @@ ide_source_view__search_settings_notify_search_text (IdeSourceView           *se
       GtkTextIter match_begin;
       GtkTextIter match_end;
       gboolean search_succeeded;
+      gboolean has_wrapped;
 
       buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
       gtk_text_buffer_get_iter_at_mark (buffer, &begin_iter, priv->rubberband_insert_mark);
@@ -1053,13 +1054,19 @@ ide_source_view__search_settings_notify_search_text (IdeSourceView           *se
         {
         case GTK_DIR_LEFT:
         case GTK_DIR_UP:
-          search_succeeded = gtk_source_search_context_backward (priv->search_context, &begin_iter,
-                                                                 &match_begin, &match_end);
+          search_succeeded = gtk_source_search_context_backward2 (priv->search_context,
+                                                                  &begin_iter,
+                                                                  &match_begin,
+                                                                  &match_end,
+                                                                  &has_wrapped);
           break;
         case GTK_DIR_RIGHT:
         case GTK_DIR_DOWN:
-          search_succeeded = gtk_source_search_context_forward (priv->search_context, &begin_iter,
-                                                                &match_begin, &match_end);
+          search_succeeded = gtk_source_search_context_forward2 (priv->search_context,
+                                                                 &begin_iter,
+                                                                 &match_begin,
+                                                                 &match_end,
+                                                                 &has_wrapped);
           break;
         case GTK_DIR_TAB_FORWARD:
         case GTK_DIR_TAB_BACKWARD:
@@ -3463,6 +3470,7 @@ ide_source_view__search_forward_cb (GObject      *object,
   GtkTextMark *insert;
   GtkTextIter begin;
   GtkTextIter end;
+  gboolean has_wrapped;
   g_autoptr(SearchMovement) mv = user_data;
   g_autoptr(GError) error = NULL;
 
@@ -3475,7 +3483,12 @@ ide_source_view__search_forward_cb (GObject      *object,
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (mv->self));
   insert = gtk_text_buffer_get_insert (buffer);
 
-  if (!gtk_source_search_context_forward_finish (search_context, result, &begin, &end, &error))
+  if (!gtk_source_search_context_forward_finish2 (search_context,
+                                                  result,
+                                                  &begin,
+                                                  &end,
+                                                  &has_wrapped,
+                                                  &error))
     {
       /*
        * If we didn't find a match, scroll back to the position when the search
@@ -3531,6 +3544,7 @@ ide_source_view__search_backward_cb (GObject      *object,
   GtkTextMark *insert;
   GtkTextIter begin;
   GtkTextIter end;
+  gboolean has_wrapped;
   g_autoptr(SearchMovement) mv = user_data;
   g_autoptr(GError) error = NULL;
 
@@ -3543,7 +3557,12 @@ ide_source_view__search_backward_cb (GObject      *object,
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (mv->self));
   insert = gtk_text_buffer_get_insert (buffer);
 
-  if (!gtk_source_search_context_backward_finish (search_context, result, &begin, &end, &error))
+  if (!gtk_source_search_context_backward_finish2 (search_context,
+                                                   result,
+                                                   &begin,
+                                                   &end,
+                                                   &has_wrapped,
+                                                   &error))
     {
       /*
        * If we didn't find a match, scroll back to the position when the search
@@ -4489,7 +4508,8 @@ add_matches (GtkTextView            *text_view,
   GtkTextIter new_begin;
   GtkTextIter match_begin;
   GtkTextIter match_end;
-  guint count = 0;
+  gboolean has_wrapped;
+  guint count = 1;
 
   g_assert (GTK_IS_TEXT_VIEW (text_view));
   g_assert (region);
@@ -4497,10 +4517,11 @@ add_matches (GtkTextView            *text_view,
   g_assert (begin);
   g_assert (end);
 
-  if (!gtk_source_search_context_forward (search_context,
-                                          begin,
-                                          &first_begin,
-                                          &match_end))
+  if (!gtk_source_search_context_forward2 (search_context,
+                                           begin,
+                                           &first_begin,
+                                           &match_end,
+                                           &has_wrapped))
     return 0;
 
   add_match (text_view, region, &first_begin, &match_end);
@@ -4509,10 +4530,11 @@ add_matches (GtkTextView            *text_view,
     {
       gtk_text_iter_assign (&new_begin, &match_end);
 
-      if (gtk_source_search_context_forward (search_context,
-                                             &new_begin,
-                                             &match_begin,
-                                             &match_end) &&
+      if (gtk_source_search_context_forward2 (search_context,
+                                              &new_begin,
+                                              &match_begin,
+                                              &match_end,
+                                              &has_wrapped) &&
           (gtk_text_iter_compare (&match_begin, end) < 0) &&
           (gtk_text_iter_compare (&first_begin, &match_begin) != 0))
         {
