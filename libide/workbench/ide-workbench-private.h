@@ -21,8 +21,9 @@
 
 #include <libpeas/peas.h>
 
-#include "ide-perspective.h"
-#include "ide-workbench.h"
+#include "workbench/ide-perspective.h"
+#include "workbench/ide-workbench.h"
+#include "workbench/ide-workbench-header-bar.h"
 
 G_BEGIN_DECLS
 
@@ -35,15 +36,14 @@ struct _IdeWorkbench
   IdeContext                *context;
   GCancellable              *cancellable;
   PeasExtensionSet          *addins;
+  /*
+   * This does not contain all perspectives, just those
+   * that should be visible via the perspective selector.
+   */
+  GListStore                *perspectives;
 
-  IdePerspective            *perspective;
-
-  GtkStack                  *top_stack;
-  GtkStack                  *titlebar_stack;
+  IdeWorkbenchHeaderBar     *header_bar;
   GtkStack                  *perspectives_stack;
-  GtkStackSwitcher          *perspectives_stack_switcher;
-  GtkPopover                *perspectives_popover;
-
   GtkSizeGroup              *header_size_group;
 
   GObject                   *selection_owner;

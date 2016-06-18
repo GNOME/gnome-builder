@@ -387,7 +387,7 @@ gbp_build_perspective_get_icon_name (IdePerspective *perspective)
 static gchar *
 gbp_build_perspective_get_title (IdePerspective *perspective)
 {
-  return g_strdup ("Build Configuration");
+  return g_strdup ("Build Preferences");
 }
 
 static gchar *

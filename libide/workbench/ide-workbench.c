@@ -34,6 +34,7 @@
 #include "workbench/ide-layout.h"
 #include "workbench/ide-workbench-addin.h"
 #include "workbench/ide-workbench-header-bar.h"
+#include "workbench/ide-workbench-header-bar-private.h"
 #include "workbench/ide-workbench-private.h"
 #include "workbench/ide-workbench.h"
 
@@ -64,62 +65,31 @@ ide_workbench_notify_visible_child (IdeWorkbench *self,
                                     GParamSpec   *pspec,
                                     GtkStack     *stack)
 {
+  GActionGroup *actions = NULL;
   IdePerspective *perspective;
 
   g_assert (IDE_IS_WORKBENCH (self));
   g_assert (GTK_IS_STACK (stack));
 
   perspective = IDE_PERSPECTIVE (gtk_stack_get_visible_child (stack));
-
   if (perspective != NULL)
-    {
-      GActionGroup *actions;
-      gchar *id;
+    actions = ide_perspective_get_actions (perspective);
 
-      id = ide_perspective_get_id (perspective);
-      gtk_stack_set_visible_child_name (self->titlebar_stack, id);
+  gtk_widget_insert_action_group (GTK_WIDGET (self), "perspective", actions);
 
-      actions = ide_perspective_get_actions (perspective);
-      gtk_widget_insert_action_group (GTK_WIDGET (self), "perspective", actions);
-
-      g_clear_object (&actions);
-      g_free (id);
-    }
+  g_clear_object (&actions);
 }
 
 static gint
 ide_workbench_compare_perspective (gconstpointer a,
-                                   gconstpointer b)
+                                   gconstpointer b,
+                                   gpointer      data_unused)
 {
   IdePerspective *perspective_a = (IdePerspective *)a;
   IdePerspective *perspective_b = (IdePerspective *)b;
 
   return (ide_perspective_get_priority (perspective_a) -
           ide_perspective_get_priority (perspective_b));
-}
-
-static void
-ide_workbench_resort_perspectives (IdeWorkbench *self)
-{
-  GList *children;
-  const GList *iter;
-  gint i = 0;
-
-  g_assert (IDE_IS_WORKBENCH (self));
-
-  children = gtk_container_get_children (GTK_CONTAINER (self->perspectives_stack));
-  children = g_list_sort (children, ide_workbench_compare_perspective);
-
-  for (iter = children; iter; iter = iter->next, i++)
-    {
-      GtkWidget *child = iter->data;
-
-      gtk_container_child_set (GTK_CONTAINER (self->perspectives_stack), child,
-                               "position", i,
-                               NULL);
-    }
-
-  g_list_free (children);
 }
 
 static void
@@ -236,9 +206,9 @@ ide_workbench_finalize (GObject *object)
 {
   IdeWorkbench *self = (IdeWorkbench *)object;
 
-  ide_clear_weak_pointer (&self->perspective);
   g_clear_object (&self->context);
   g_clear_object (&self->cancellable);
+  g_clear_object (&self->perspectives);
 
   G_OBJECT_CLASS (ide_workbench_parent_class)->finalize (object);
 }
@@ -396,17 +366,19 @@ ide_workbench_class_init (IdeWorkbenchClass *klass)
 
   gtk_widget_class_set_css_name (widget_class, "workbench");
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/ui/ide-workbench.ui");
+  gtk_widget_class_bind_template_child (widget_class, IdeWorkbench, header_bar);
   gtk_widget_class_bind_template_child (widget_class, IdeWorkbench, header_size_group);
   gtk_widget_class_bind_template_child (widget_class, IdeWorkbench, perspectives_stack);
-  gtk_widget_class_bind_template_child (widget_class, IdeWorkbench, perspectives_stack_switcher);
-  gtk_widget_class_bind_template_child (widget_class, IdeWorkbench, titlebar_stack);
-  gtk_widget_class_bind_template_child (widget_class, IdeWorkbench, top_stack);
 }
 
 static void
 ide_workbench_init (IdeWorkbench *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
+
+  self->perspectives = g_list_store_new (IDE_TYPE_PERSPECTIVE);
+  _ide_workbench_header_bar_set_perspectives (self->header_bar,
+                                              G_LIST_MODEL (self->perspectives));
 
   ide_workbench_add_perspective (self,
                                  g_object_new (IDE_TYPE_GREETER_PERSPECTIVE,
@@ -618,7 +590,7 @@ ide_workbench_set_context (IdeWorkbench *self,
    */
   if (g_settings_get_boolean (settings, "restore-previous-files"))
     {
-      duration = gtk_stack_get_transition_duration (self->top_stack);
+      duration = gtk_stack_get_transition_duration (self->perspectives_stack);
       g_timeout_add (STABLIZE_DELAY_MSEC + duration, restore_in_timeout, g_object_ref (context));
     }
 }
@@ -630,8 +602,6 @@ ide_workbench_add_perspective (IdeWorkbench   *self,
   g_autofree gchar *icon_name = NULL;
   g_autofree gchar *id = NULL;
   g_autofree gchar *title = NULL;
-  GtkStack *stack;
-  GtkWidget *titlebar;
 
   g_assert (IDE_IS_WORKBENCH (self));
   g_assert (IDE_IS_PERSPECTIVE (perspective));
@@ -640,14 +610,7 @@ ide_workbench_add_perspective (IdeWorkbench   *self,
   title = ide_perspective_get_title (perspective);
   icon_name = ide_perspective_get_icon_name (perspective);
 
-  if (ide_perspective_is_early (perspective))
-    stack = self->top_stack;
-  else
-    stack = self->perspectives_stack;
-
-  gtk_widget_set_hexpand (GTK_WIDGET (perspective), TRUE);
-
-  gtk_container_add_with_properties (GTK_CONTAINER (stack),
+  gtk_container_add_with_properties (GTK_CONTAINER (self->perspectives_stack),
                                      GTK_WIDGET (perspective),
                                      "icon-name", icon_name,
                                      "name", id,
@@ -655,36 +618,52 @@ ide_workbench_add_perspective (IdeWorkbench   *self,
                                      "title", title,
                                      NULL);
 
-  titlebar = ide_perspective_get_titlebar (perspective);
-  if (titlebar == NULL)
-    titlebar = g_object_new (IDE_TYPE_WORKBENCH_HEADER_BAR,
-                             "visible", TRUE,
-                             NULL);
+  if (!IDE_IS_GREETER_PERSPECTIVE (perspective) &&
+      !IDE_IS_GENESIS_PERSPECTIVE (perspective))
+    {
+      guint position = 0;
 
-  gtk_container_add_with_properties (GTK_CONTAINER (self->titlebar_stack), titlebar,
-                                     "name", id,
-                                     NULL);
+      gtk_container_child_get (GTK_CONTAINER (self->perspectives_stack),
+                               GTK_WIDGET (perspective),
+                               "position", &position,
+                               NULL);
 
-  ide_workbench_resort_perspectives (self);
+      g_list_store_append (self->perspectives, perspective);
+      g_list_store_sort (self->perspectives,
+                         ide_workbench_compare_perspective,
+                         NULL);
+    }
 }
 
 void
 ide_workbench_remove_perspective (IdeWorkbench   *self,
                                   IdePerspective *perspective)
 {
-  const gchar *id;
-  GtkWidget *titlebar;
+  guint n_items;
+  guint i;
 
   g_assert (IDE_IS_WORKBENCH (self));
   g_assert (IDE_IS_PERSPECTIVE (perspective));
   g_assert (gtk_widget_get_parent (GTK_WIDGET (perspective)) ==
             GTK_WIDGET (self->perspectives_stack));
 
-  id = ide_perspective_get_id (perspective);
-  titlebar = gtk_stack_get_child_by_name (self->titlebar_stack, id);
+  n_items = g_list_model_get_n_items (G_LIST_MODEL (self->perspectives));
 
-  gtk_container_remove (GTK_CONTAINER (self->titlebar_stack), titlebar);
-  gtk_container_remove (GTK_CONTAINER (self->perspectives_stack), GTK_WIDGET (perspective));
+  for (i = 0; i < n_items; i++)
+    {
+      g_autoptr(IdePerspective) item = NULL;
+
+      item = g_list_model_get_item (G_LIST_MODEL (self->perspectives), i);
+
+      if (item == perspective)
+        {
+          g_list_store_remove (self->perspectives, i);
+          break;
+        }
+    }
+
+  gtk_container_remove (GTK_CONTAINER (self->perspectives_stack),
+                        GTK_WIDGET (perspective));
 }
 
 /**
@@ -705,8 +684,6 @@ ide_workbench_get_perspective_by_name (IdeWorkbench *self,
   g_return_val_if_fail (name != NULL, NULL);
 
   ret = gtk_stack_get_child_by_name (self->perspectives_stack, name);
-  if (ret == NULL)
-    ret = gtk_stack_get_child_by_name (self->top_stack, name);
 
   return IDE_PERSPECTIVE (ret);
 }
@@ -722,18 +699,16 @@ ide_workbench_get_perspective_by_name (IdeWorkbench *self,
 IdePerspective *
 ide_workbench_get_visible_perspective (IdeWorkbench *self)
 {
-  GtkWidget *visible_child;
+  GtkWidget *ret;
 
   g_return_val_if_fail (IDE_IS_WORKBENCH (self), NULL);
 
-  visible_child = gtk_stack_get_visible_child (self->top_stack);
+  ret = gtk_stack_get_visible_child (self->perspectives_stack);
 
-  if (IDE_IS_PERSPECTIVE (visible_child))
-    return IDE_PERSPECTIVE (visible_child);
-
-  return IDE_PERSPECTIVE (gtk_stack_get_visible_child (self->perspectives_stack));
+  return IDE_PERSPECTIVE (ret);
 }
 
+#if 0
 static gboolean
 remove_early_perspectives (gpointer data)
 {
@@ -750,6 +725,7 @@ remove_early_perspectives (gpointer data)
 
   return G_SOURCE_REMOVE;
 }
+#endif
 
 static void
 ide_workbench_notify_perspective_set (PeasExtensionSet *set,
@@ -758,55 +734,46 @@ ide_workbench_notify_perspective_set (PeasExtensionSet *set,
                                       gpointer          user_data)
 {
   IdeWorkbenchAddin *addin = (IdeWorkbenchAddin *)exten;
-  IdeWorkbench *self = user_data;
+  IdePerspective *perspective = user_data;
 
-  g_assert (IDE_IS_WORKBENCH (self));
   g_assert (PEAS_IS_EXTENSION_SET (set));
   g_assert (plugin_info != NULL);
   g_assert (IDE_IS_WORKBENCH_ADDIN (addin));
+  g_assert (IDE_IS_PERSPECTIVE (perspective));
 
-  ide_workbench_addin_perspective_set (addin, self->perspective);
+  ide_workbench_addin_perspective_set (addin, perspective);
 }
 
 void
 ide_workbench_set_visible_perspective (IdeWorkbench   *self,
                                        IdePerspective *perspective)
 {
-  GActionGroup *actions;
-  GtkStack *stack;
-  gchar *id;
+  g_autofree gchar *id = NULL;
+  GActionGroup *actions = NULL;
+  const gchar *current_id;
 
   g_return_if_fail (IDE_IS_WORKBENCH (self));
   g_return_if_fail (IDE_IS_PERSPECTIVE (perspective));
 
-  stack = GTK_STACK (gtk_widget_get_ancestor (GTK_WIDGET (perspective), GTK_TYPE_STACK));
-
+  current_id = gtk_stack_get_visible_child_name (self->perspectives_stack);
   id = ide_perspective_get_id (perspective);
 
-  if (!ide_str_equal0 (gtk_stack_get_visible_child_name (stack), id))
-    {
-      gtk_stack_set_visible_child_name (stack, id);
-      gtk_stack_set_visible_child_name (self->titlebar_stack, id);
-    }
-
-  g_free (id);
+  if (!ide_str_equal0 (current_id, id))
+    gtk_stack_set_visible_child_name (self->perspectives_stack, id);
 
   actions = ide_perspective_get_actions (perspective);
   gtk_widget_insert_action_group (GTK_WIDGET (self), "perspective", actions);
 
-  if ((stack == self->perspectives_stack) &&
-      !ide_str_equal0 (gtk_stack_get_visible_child_name (self->top_stack), "perspectives"))
-    {
-      gtk_stack_set_visible_child_name (self->top_stack, "perspectives");
-      g_timeout_add (1000 + gtk_stack_get_transition_duration (self->top_stack),
-                     remove_early_perspectives,
-                     g_object_ref (self));
-    }
+  /* TODO: Possibly remove some perspectives */
 
-  if (self->addins != NULL && self->perspective != NULL)
+  _ide_workbench_header_bar_set_perspective (self->header_bar, perspective);
+
+  if (self->addins != NULL)
     peas_extension_set_foreach (self->addins,
                                 ide_workbench_notify_perspective_set,
-                                self);
+                                perspective);
+
+  g_clear_object (&actions);
 }
 
 const gchar *
@@ -844,6 +811,7 @@ ide_workbench_set_visible_perspective_name (IdeWorkbench *self,
   g_return_if_fail (name != NULL);
 
   perspective = ide_workbench_get_perspective_by_name (self, name);
+
   if (perspective != NULL)
     ide_workbench_set_visible_perspective (self, perspective);
 }

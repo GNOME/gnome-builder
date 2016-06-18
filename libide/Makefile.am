@@ -296,6 +296,7 @@ libide_1_0_la_public_sources =                            \
 	workbench/ide-layout.c                            \
 	workbench/ide-perspective.c                       \
 	workbench/ide-workbench-addin.c                   \
+	workbench/ide-workbench-header-bar-private.h      \
 	workbench/ide-workbench-header-bar.c              \
 	workbench/ide-workbench-open.c                    \
 	workbench/ide-workbench.c                         \

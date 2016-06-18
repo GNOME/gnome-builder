@@ -143,6 +143,8 @@ ide_perspective_get_icon_name (IdePerspective *self)
  * internal name, such as "editor" which should not be translated. Internally, the
  * default implementation of this method will return the name of the instances #GType.
  *
+ * The identifier must be alpha-numeric only (a-z A-Z 0-9).
+ *
  * This value should be unique per workspace.
  *
  * Returns: (nullable): A string identifier for the perspective.
@@ -150,9 +152,15 @@ ide_perspective_get_icon_name (IdePerspective *self)
 gchar *
 ide_perspective_get_id (IdePerspective *self)
 {
+  gchar *ret;
+
   g_return_val_if_fail (IDE_IS_PERSPECTIVE (self), NULL);
 
-  return IDE_PERSPECTIVE_GET_IFACE (self)->get_id (self);
+  ret = IDE_PERSPECTIVE_GET_IFACE (self)->get_id (self);
+
+  g_return_val_if_fail (g_str_is_ascii (ret), NULL);
+
+  return ret;
 }
 
 /**
