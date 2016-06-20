@@ -296,7 +296,6 @@ libide_1_0_la_public_sources =                            \
 	workbench/ide-layout.c                            \
 	workbench/ide-perspective.c                       \
 	workbench/ide-workbench-addin.c                   \
-	workbench/ide-workbench-header-bar-private.h      \
 	workbench/ide-workbench-header-bar.c              \
 	workbench/ide-workbench-open.c                    \
 	workbench/ide-workbench.c                         \
@@ -411,8 +410,8 @@ libide_1_0_la_SOURCES =                                   \
 	workbench/ide-layout-tab-bar.h                    \
 	workbench/ide-layout-tab.c                        \
 	workbench/ide-layout-tab.h                        \
-	workbench/ide-perspective-switcher.c              \
-	workbench/ide-perspective-switcher.h              \
+	workbench/ide-perspective-menu-button.c           \
+	workbench/ide-perspective-menu-button.h           \
 	workbench/ide-workbench-actions.c                 \
 	workbench/ide-workbench-private.h                 \
 	workers/ide-worker-manager.c                      \

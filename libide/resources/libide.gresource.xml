@@ -63,6 +63,7 @@
     <file compressed="true" alias="ide-layout-stack.ui">../workbench/ide-layout-stack.ui</file>
     <file compressed="true" alias="ide-omni-search-group.ui">../search/ide-omni-search-group.ui</file>
     <file compressed="true" alias="ide-omni-search-row.ui">../search/ide-omni-search-row.ui</file>
+    <file compressed="true" alias="ide-perspective-menu-button.ui">../workbench/ide-perspective-menu-button.ui</file>
     <file compressed="true" alias="ide-preferences-entry.ui">../preferences/ide-preferences-entry.ui</file>
     <file compressed="true" alias="ide-preferences-file-chooser-button.ui">../preferences/ide-preferences-file-chooser-button.ui</file>
     <file compressed="true" alias="ide-preferences-font-button.ui">../preferences/ide-preferences-font-button.ui</file>

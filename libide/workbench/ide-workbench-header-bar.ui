@@ -1,52 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <object class="GtkPopover" id="perspectives_popover">
-    <property name="width-request">250</property>
-    <style>
-      <class name="perspectives-selector"/>
-    </style>
-    <child>
-      <object class="GtkListBox" id="perspectives_list_box">
-        <property name="visible">true</property>
-      </object>
-    </child>
-  </object>
   <!-- interface-requires gtk+ 3.21 -->
   <template class="IdeWorkbenchHeaderBar" parent="GtkHeaderBar">
     <property name="show-close-button">true</property>
-    <child>
-      <object class="GtkMenuButton" id="perspectives_menu_button">
-        <property name="popover">perspectives_popover</property>
-        <property name="visible">true</property>
-        <style>
-          <class name="image-button"/>
-        </style>
-        <child>
-          <object class="GtkBox">
-            <property name="margin-end">8</property>
-            <property name="margin-start">8</property>
-            <property name="spacing">12</property>
-            <property name="visible">true</property>
-            <child>
-              <object class="GtkImage" id="perspectives_menu_button_image">
-                <property name="icon-name">builder-editor-symbolic</property>
-                <property name="visible">true</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkImage">
-                <property name="icon-name">pan-down-symbolic</property>
-                <property name="visible">true</property>
-              </object>
-            </child>
-          </object>
-        </child>
-      </object>
-      <packing>
-        <property name="pack-type">start</property>
-        <property name="position">0</property>
-      </packing>
-    </child>
     <child>
       <object class="EggPriorityBox" id="left_box">
         <property name="hexpand">true</property>

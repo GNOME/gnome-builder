@@ -34,7 +34,6 @@
 #include "workbench/ide-layout.h"
 #include "workbench/ide-workbench-addin.h"
 #include "workbench/ide-workbench-header-bar.h"
-#include "workbench/ide-workbench-header-bar-private.h"
 #include "workbench/ide-workbench-private.h"
 #include "workbench/ide-workbench.h"
 
@@ -377,8 +376,6 @@ ide_workbench_init (IdeWorkbench *self)
   gtk_widget_init_template (GTK_WIDGET (self));
 
   self->perspectives = g_list_store_new (IDE_TYPE_PERSPECTIVE);
-  _ide_workbench_header_bar_set_perspectives (self->header_bar,
-                                              G_LIST_MODEL (self->perspectives));
 
   ide_workbench_add_perspective (self,
                                  g_object_new (IDE_TYPE_GREETER_PERSPECTIVE,
@@ -765,8 +762,6 @@ ide_workbench_set_visible_perspective (IdeWorkbench   *self,
   gtk_widget_insert_action_group (GTK_WIDGET (self), "perspective", actions);
 
   /* TODO: Possibly remove some perspectives */
-
-  _ide_workbench_header_bar_set_perspective (self->header_bar, perspective);
 
   if (self->addins != NULL)
     peas_extension_set_foreach (self->addins,

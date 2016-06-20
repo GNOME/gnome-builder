@@ -1,6 +1,6 @@
-/* ide-perspective-switcher.c
+/* ide-perspective-menu-button.h
  *
- * Copyright (C) 2016 Christian Hergert <christian@hergert.me>
+ * Copyright (C) 2016 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,24 +16,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "ide-perspective-switcher.h"
+#ifndef IDE_PERSPECTIVE_MENU_BUTTON_H
+#define IDE_PERSPECTIVE_MENU_BUTTON_H
 
-struct _IdePerspectiveSwitcher
-{
-  GtkStackSwitcher parent_instance;
-};
+#include <gtk/gtk.h>
 
-G_DEFINE_TYPE (IdePerspectiveSwitcher, ide_perspective_switcher, GTK_TYPE_STACK_SWITCHER)
+G_BEGIN_DECLS
 
-static void
-ide_perspective_switcher_class_init (IdePerspectiveSwitcherClass *klass)
-{
-  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+G_DECLARE_FINAL_TYPE (IdePerspectiveMenuButton, ide_perspective_menu_button, IDE, PERSPECTIVE_MENU_BUTTON, GtkMenuButton)
 
-  gtk_widget_class_set_css_name (widget_class, "perspectiveswitcher");
-}
+GtkWidget *ide_perspective_menu_button_get_stack (IdePerspectiveMenuButton *self);
+void       ide_perspective_menu_button_set_stack (IdePerspectiveMenuButton *self,
+                                                  GtkWidget                *stack);
 
-static void
-ide_perspective_switcher_init (IdePerspectiveSwitcher *self)
-{
-}
+G_END_DECLS
+
+#endif /* IDE_PERSPECTIVE_MENU_BUTTON_H */

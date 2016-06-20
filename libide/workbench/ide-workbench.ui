@@ -5,6 +5,19 @@
     <child type="titlebar">
       <object class="IdeWorkbenchHeaderBar" id="header_bar">
         <property name="visible">true</property>
+        <child internal-child="left">
+          <object class="EggPriorityBox">
+            <child>
+              <object class="IdePerspectiveMenuButton">
+                <property name="stack">perspectives_stack</property>
+                <property name="visible">true</property>
+              </object>
+              <packing>
+                <property name="priority">-100000</property>
+              </packing>
+            </child>
+          </object>
+        </child>
       </object>
     </child>
     <child>
