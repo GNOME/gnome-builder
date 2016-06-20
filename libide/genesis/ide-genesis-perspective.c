@@ -387,7 +387,7 @@ ide_genesis_perspective_get_actions (IdePerspective *perspective)
 
   g_assert (G_IS_ACTION_GROUP (self->actions));
 
-  return self->actions;
+  return g_object_ref (self->actions);
 }
 
 static void
