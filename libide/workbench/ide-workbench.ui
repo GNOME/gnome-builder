@@ -8,9 +8,9 @@
         <child internal-child="left">
           <object class="EggPriorityBox">
             <child>
-              <object class="IdePerspectiveMenuButton">
+              <object class="IdePerspectiveMenuButton" id="perspective_menu_button">
                 <property name="stack">perspectives_stack</property>
-                <property name="visible">true</property>
+                <property name="visible">false</property>
               </object>
               <packing>
                 <property name="priority">-100000</property>

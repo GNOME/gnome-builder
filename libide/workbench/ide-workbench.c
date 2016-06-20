@@ -367,6 +367,7 @@ ide_workbench_class_init (IdeWorkbenchClass *klass)
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/ui/ide-workbench.ui");
   gtk_widget_class_bind_template_child (widget_class, IdeWorkbench, header_bar);
   gtk_widget_class_bind_template_child (widget_class, IdeWorkbench, header_size_group);
+  gtk_widget_class_bind_template_child (widget_class, IdeWorkbench, perspective_menu_button);
   gtk_widget_class_bind_template_child (widget_class, IdeWorkbench, perspectives_stack);
 }
 
@@ -762,6 +763,9 @@ ide_workbench_set_visible_perspective (IdeWorkbench   *self,
   gtk_widget_insert_action_group (GTK_WIDGET (self), "perspective", actions);
 
   /* TODO: Possibly remove some perspectives */
+
+  gtk_widget_set_visible (GTK_WIDGET (self->perspective_menu_button),
+                          !ide_perspective_is_early (perspective));
 
   if (self->addins != NULL)
     peas_extension_set_foreach (self->addins,
