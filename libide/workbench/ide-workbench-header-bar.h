@@ -43,6 +43,14 @@ struct _IdeWorkbenchHeaderBarClass
 
 GtkWidget *ide_workbench_header_bar_new          (void);
 void       ide_workbench_header_bar_focus_search (IdeWorkbenchHeaderBar *self);
+void       ide_workbench_header_bar_insert_left  (IdeWorkbenchHeaderBar *self,
+                                                  GtkWidget             *widget,
+                                                  GtkPackType            pack_type,
+                                                  gint                   priority);
+void       ide_workbench_header_bar_insert_right (IdeWorkbenchHeaderBar *self,
+                                                  GtkWidget             *widget,
+                                                  GtkPackType            pack_type,
+                                                  gint                   priority);
 
 G_END_DECLS
 

@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-workbench-header-bar"
 
+#include <egg-priority-box.h>
+
 #include "application/ide-application.h"
 #include "util/ide-gtk.h"
 #include "workbench/ide-perspective.h"
@@ -27,11 +29,13 @@
 
 typedef struct
 {
-  GtkMenuButton *menu_button;
-  GtkListBox    *perspectives_list_box;
-  GtkMenuButton *perspectives_menu_button;
-  GtkImage      *perspectives_menu_button_image;
-  GtkPopover    *perspectives_popover;
+  GtkMenuButton  *menu_button;
+  GtkListBox     *perspectives_list_box;
+  GtkMenuButton  *perspectives_menu_button;
+  GtkImage       *perspectives_menu_button_image;
+  GtkPopover     *perspectives_popover;
+  EggPriorityBox *right_box;
+  EggPriorityBox *left_box;
 } IdeWorkbenchHeaderBarPrivate;
 
 G_DEFINE_TYPE_WITH_PRIVATE (IdeWorkbenchHeaderBar, ide_workbench_header_bar, GTK_TYPE_HEADER_BAR)
@@ -79,6 +83,8 @@ ide_workbench_header_bar_class_init (IdeWorkbenchHeaderBarClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, IdeWorkbenchHeaderBar, perspectives_menu_button);
   gtk_widget_class_bind_template_child_private (widget_class, IdeWorkbenchHeaderBar, perspectives_menu_button_image);
   gtk_widget_class_bind_template_child_private (widget_class, IdeWorkbenchHeaderBar, perspectives_popover);
+  gtk_widget_class_bind_template_child_private (widget_class, IdeWorkbenchHeaderBar, left_box);
+  gtk_widget_class_bind_template_child_private (widget_class, IdeWorkbenchHeaderBar, right_box);
 }
 
 static void
@@ -194,4 +200,40 @@ _ide_workbench_header_bar_set_perspective (IdeWorkbenchHeaderBar *self,
   g_object_set (priv->perspectives_menu_button_image,
                 "icon-name", icon_name,
                 NULL);
+}
+
+void
+ide_workbench_header_bar_insert_left (IdeWorkbenchHeaderBar *self,
+                                      GtkWidget             *widget,
+                                      GtkPackType            pack_type,
+                                      gint                   priority)
+{
+  IdeWorkbenchHeaderBarPrivate *priv = ide_workbench_header_bar_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_WORKBENCH_HEADER_BAR (self));
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (pack_type == GTK_PACK_START || pack_type == GTK_PACK_END);
+
+  gtk_container_add_with_properties (GTK_CONTAINER (priv->left_box), widget,
+                                     "pack-type", pack_type,
+                                     "priority", priority,
+                                     NULL);
+}
+
+void
+ide_workbench_header_bar_insert_right (IdeWorkbenchHeaderBar *self,
+                                       GtkWidget             *widget,
+                                       GtkPackType            pack_type,
+                                       gint                   priority)
+{
+  IdeWorkbenchHeaderBarPrivate *priv = ide_workbench_header_bar_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_WORKBENCH_HEADER_BAR (self));
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (pack_type == GTK_PACK_START || pack_type == GTK_PACK_END);
+
+  gtk_container_add_with_properties (GTK_CONTAINER (priv->right_box), widget,
+                                     "pack-type", pack_type,
+                                     "priority", priority,
+                                     NULL);
 }

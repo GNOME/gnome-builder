@@ -47,6 +47,16 @@
         <property name="position">0</property>
       </packing>
     </child>
+    <child>
+      <object class="EggPriorityBox" id="left_box">
+        <property name="hexpand">true</property>
+        <property name="visible">true</property>
+      </object>
+      <packing>
+        <property name="pack-type">start</property>
+        <property name="position">1</property>
+      </packing>
+    </child>
     <child type="title">
       <object class="IdeOmniSearchEntry" id="search_entry">
         <property name="tooltip-text" translatable="yes">Search for files. Shortcut: Ctrl + .</property>
@@ -74,6 +84,16 @@
       <packing>
         <property name="pack-type">end</property>
         <property name="position">0</property>
+      </packing>
+    </child>
+    <child>
+      <object class="EggPriorityBox" id="right_box">
+        <property name="hexpand">true</property>
+        <property name="visible">true</property>
+      </object>
+      <packing>
+        <property name="pack-type">end</property>
+        <property name="position">1</property>
       </packing>
     </child>
   </template>

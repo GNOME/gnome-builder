@@ -20,6 +20,7 @@ headers_DATA = \
 	egg-heap.h \
 	egg-menu-manager.h \
 	egg-pill-box.h \
+	egg-priority-box.h \
 	egg-private.h \
 	egg-search-bar.h \
 	egg-settings-flag-action.h \
@@ -49,6 +50,7 @@ libegg_private_la_SOURCES = \
 	egg-heap.c \
 	egg-menu-manager.c \
 	egg-pill-box.c \
+	egg-priority-box.c \
 	egg-search-bar.c \
 	egg-settings-flag-action.c \
 	egg-settings-sandwich.c \
