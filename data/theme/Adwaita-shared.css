@@ -145,3 +145,8 @@ popover.perspectives-selector list row image {
   min-width: 16px;
   margin-right: 12px;
 }
+
+
+omnibar entry {
+  background-color: @theme_bg_color;
+}
