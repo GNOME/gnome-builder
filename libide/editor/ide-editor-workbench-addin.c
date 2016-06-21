@@ -29,15 +29,20 @@
 #include "editor/ide-editor-perspective.h"
 #include "editor/ide-editor-workbench-addin.h"
 #include "util/ide-gtk.h"
+#include "util/ide-gtk.h"
 #include "workbench/ide-workbench.h"
 #include "workbench/ide-workbench-header-bar.h"
 
 struct _IdeEditorWorkbenchAddin
 {
   GObject               parent_instance;
+
+  IdeWorkbench         *workbench;
+
   PnlDockManager       *manager;
   IdeEditorPerspective *perspective;
-  IdeWorkbench         *workbench;
+
+  GtkWidget            *new_document_button;
 };
 
 typedef struct
@@ -74,7 +79,7 @@ ide_editor_workbench_addin_load (IdeWorkbenchAddin *addin,
                                  IdeWorkbench      *workbench)
 {
   IdeEditorWorkbenchAddin *self = (IdeEditorWorkbenchAddin *)addin;
-  IdeWorkbenchHeaderBar *titlebar;
+  IdeWorkbenchHeaderBar *header;
 
   g_assert (IDE_IS_EDITOR_WORKBENCH_ADDIN (self));
   g_assert (IDE_IS_WORKBENCH (workbench));
@@ -83,14 +88,28 @@ ide_editor_workbench_addin_load (IdeWorkbenchAddin *addin,
 
   self->manager = pnl_dock_manager_new ();
 
+  header = IDE_WORKBENCH_HEADER_BAR (gtk_window_get_titlebar (GTK_WINDOW (workbench)));
+
+  self->new_document_button = g_object_new (GTK_TYPE_BUTTON,
+                                            "action-name", "perspective.new-file",
+                                            "child", g_object_new (GTK_TYPE_IMAGE,
+                                                                   "visible", TRUE,
+                                                                   "icon-name", "document-new-symbolic",
+                                                                   NULL),
+                                            NULL);
+  ide_widget_add_style_class (self->new_document_button, "image-button");
+
+  ide_workbench_header_bar_insert_left (header,
+                                        self->new_document_button,
+                                        GTK_PACK_START,
+                                        0);
+
   self->perspective = g_object_new (IDE_TYPE_EDITOR_PERSPECTIVE,
                                     "manager", self->manager,
                                     "visible", TRUE,
                                     NULL);
-  ide_workbench_add_perspective (workbench, IDE_PERSPECTIVE (self->perspective));
 
-  titlebar = IDE_WORKBENCH_HEADER_BAR (ide_perspective_get_titlebar (IDE_PERSPECTIVE (self->perspective)));
-  ide_workbench_header_bar_focus_search (titlebar);
+  ide_workbench_add_perspective (workbench, IDE_PERSPECTIVE (self->perspective));
 }
 
 static void
@@ -102,6 +121,8 @@ ide_editor_workbench_addin_unload (IdeWorkbenchAddin *addin,
 
   g_assert (IDE_IS_EDITOR_WORKBENCH_ADDIN (self));
   g_assert (IDE_IS_WORKBENCH (workbench));
+
+  gtk_widget_destroy (self->new_document_button);
 
   perspective = IDE_PERSPECTIVE (self->perspective);
   self->perspective = NULL;
@@ -290,6 +311,18 @@ ide_editor_workbench_addin_get_id (IdeWorkbenchAddin *addin)
 }
 
 static void
+ide_editor_workbench_addin_perspective_set (IdeWorkbenchAddin *addin,
+                                            IdePerspective    *perspective)
+{
+  IdeEditorWorkbenchAddin *self = (IdeEditorWorkbenchAddin *)addin;
+
+  g_assert (IDE_IS_EDITOR_WORKBENCH_ADDIN (self));
+
+  gtk_widget_set_visible (self->new_document_button,
+                          IDE_IS_EDITOR_PERSPECTIVE (perspective));
+}
+
+static void
 ide_workbench_addin_iface_init (IdeWorkbenchAddinInterface *iface)
 {
   iface->can_open = ide_editor_workbench_addin_can_open;
@@ -298,4 +331,5 @@ ide_workbench_addin_iface_init (IdeWorkbenchAddinInterface *iface)
   iface->open_async = ide_editor_workbench_addin_open_async;
   iface->open_finish = ide_editor_workbench_addin_open_finish;
   iface->unload = ide_editor_workbench_addin_unload;
+  iface->perspective_set = ide_editor_workbench_addin_perspective_set;
 }
