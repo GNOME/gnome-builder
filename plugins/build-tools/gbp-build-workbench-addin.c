@@ -16,9 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <egg-binding-group.h>
 #include <glib/gi18n.h>
-
-#include "egg-binding-group.h"
 
 #include "gbp-build-log-panel.h"
 #include "gbp-build-panel.h"
@@ -33,6 +32,7 @@ struct _GbpBuildWorkbenchAddin
   GbpBuildPanel      *panel;
   IdeWorkbench       *workbench;
   GbpBuildLogPanel   *build_log_panel;
+  GtkWidget          *run_button;
 
   /* Owned */
   EggBindingGroup    *bindings;
@@ -245,6 +245,7 @@ gbp_build_workbench_addin_load (IdeWorkbenchAddin *addin,
 {
   IdeConfigurationManager *configuration_manager;
   GbpBuildWorkbenchAddin *self = (GbpBuildWorkbenchAddin *)addin;
+  IdeWorkbenchHeaderBar *header;
   IdeConfiguration *configuration;
   IdePerspective *editor;
   IdeContext *context;
@@ -277,6 +278,22 @@ gbp_build_workbench_addin_load (IdeWorkbenchAddin *addin,
                                   G_ACTION_GROUP (self->actions));
 
   g_object_bind_property (self, "result", self->panel, "result", 0);
+
+  header = IDE_WORKBENCH_HEADER_BAR (gtk_window_get_titlebar (GTK_WINDOW (workbench)));
+
+  self->run_button = g_object_new (GTK_TYPE_BUTTON,
+                                   "child", g_object_new (GTK_TYPE_IMAGE,
+                                                          "icon-name", "media-playback-start-symbolic",
+                                                          "visible", TRUE,
+                                                          NULL),
+                                   "visible", TRUE,
+                                   NULL);
+  ide_widget_add_style_class (self->run_button, "image-button");
+
+  ide_workbench_header_bar_insert_right (header,
+                                         self->run_button,
+                                         GTK_PACK_START,
+                                         0);
 
   build_perspective = g_object_new (GBP_TYPE_BUILD_PERSPECTIVE,
                                     "configuration-manager", configuration_manager,
@@ -393,8 +410,27 @@ gbp_build_workbench_addin_init (GbpBuildWorkbenchAddin *self)
 }
 
 static void
+gbp_build_workbench_addin_perpsective_set (IdeWorkbenchAddin *addin,
+                                           IdePerspective    *perspective)
+{
+  GbpBuildWorkbenchAddin *self = (GbpBuildWorkbenchAddin *)addin;
+
+  g_assert (GBP_IS_BUILD_WORKBENCH_ADDIN (self));
+
+  if (IDE_IS_EDITOR_PERSPECTIVE (perspective))
+    {
+      gtk_widget_show (self->run_button);
+    }
+  else
+    {
+      gtk_widget_hide (self->run_button);
+    }
+}
+
+static void
 workbench_addin_iface_init (IdeWorkbenchAddinInterface *iface)
 {
   iface->load = gbp_build_workbench_addin_load;
   iface->unload = gbp_build_workbench_addin_unload;
+  iface->perspective_set = gbp_build_workbench_addin_perpsective_set;
 }
