@@ -15,9 +15,9 @@
     <child>
       <object class="GtkBox">
         <property name="orientation">horizontal</property>
-        <property name="margin-end">8</property>
-        <property name="margin-start">8</property>
-        <property name="spacing">12</property>
+        <property name="margin-end">6</property>
+        <property name="margin-start">6</property>
+        <property name="spacing">8</property>
         <property name="visible">true</property>
         <style>
           <class name="image-button"/>
