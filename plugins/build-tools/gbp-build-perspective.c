@@ -53,7 +53,11 @@ map_pointer_to (GBinding     *binding,
                 GValue       *to_value,
                 gpointer      user_data)
 {
-  g_value_set_boolean (to_value, (user_data == g_value_get_object (from_value)));
+  if (user_data == g_value_get_object (from_value))
+    g_value_set_static_string (to_value, "radio-checked-symbolic");
+  else
+    g_value_set_static_string (to_value, "radio-symbolic");
+
   return TRUE;
 }
 
@@ -83,6 +87,16 @@ create_configuration_row (gpointer item,
                       NULL);
   gtk_container_add (GTK_CONTAINER (row), box);
 
+  image = g_object_new (GTK_TYPE_IMAGE,
+                        "icon-name", "radio-symbolic",
+                        "visible", TRUE,
+                        "xpad", 6,
+                        NULL);
+  g_object_bind_property_full (manager, "current", image, "icon-name",
+                               G_BINDING_SYNC_CREATE,
+                               map_pointer_to, NULL, configuration, NULL);
+  gtk_container_add (GTK_CONTAINER (box), image);
+
   label = g_object_new (GTK_TYPE_LABEL,
                         "hexpand", TRUE,
                         "ellipsize", PANGO_ELLIPSIZE_MIDDLE,
@@ -94,14 +108,6 @@ create_configuration_row (gpointer item,
                           G_BINDING_SYNC_CREATE);
   gtk_container_add (GTK_CONTAINER (box), label);
 
-  image = g_object_new (GTK_TYPE_IMAGE,
-                        "icon-name", "radio-checked-symbolic",
-                        "xpad", 6,
-                        NULL);
-  g_object_bind_property_full (manager, "current", image, "visible",
-                               G_BINDING_SYNC_CREATE,
-                               map_pointer_to, NULL, configuration, NULL);
-  gtk_container_add (GTK_CONTAINER (box), image);
 
   return row;
 }
