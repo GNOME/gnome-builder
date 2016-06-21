@@ -34,10 +34,19 @@ class JhbuildRuntime(Ide.Runtime):
     def __init__(self, *args, **kwargs):
         Ide.Runtime.__init__(self, *args, **kwargs)
 
+    def get_jhbuild_path(self):
+        # Wayland session doesn't have ~/.local/
+        path = os.path.expanduser('~/.local/bin/jhbuild')
+        if os.path.exists(path):
+            return path
+        else:
+            # Rely on search path
+            return 'jhbuild'
+
     def do_create_launcher(self):
         try:
             launcher = Ide.Runtime.do_create_launcher(self)
-            launcher.push_argv('jhbuild')
+            launcher.push_argv(self.get_jhbuild_path())
             launcher.push_argv('run')
             return launcher
         except GLib.Error:
