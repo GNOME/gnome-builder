@@ -359,7 +359,7 @@ static void
 ide_omni_search_entry_init (IdeOmniSearchEntry *self)
 {
   g_object_set (self,
-                "max-width-chars", 50,
+                "max-width-chars", 30,
                 "primary-icon-name", "edit-find-symbolic",
                 "primary-icon-activatable", FALSE,
                 "primary-icon-sensitive", FALSE,
@@ -369,7 +369,7 @@ ide_omni_search_entry_init (IdeOmniSearchEntry *self)
                                 "modal", FALSE,
                                 "position", GTK_POS_BOTTOM,
                                 "relative-to", self,
-                                "width-request", 500,
+                                "width-request", 400,
                                 NULL);
 
   g_signal_connect_object (self->popover,
