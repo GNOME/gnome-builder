@@ -15,9 +15,18 @@
       </packing>
     </child>
     <child type="title">
-      <object class="IdeOmniBar" id="bar">
-        <property name="valign">center</property>
+      <object class="EggPriorityBox" id="center_box">
+        <property name="spacing">6</property>
         <property name="visible">true</property>
+        <!--
+          We might need separate children for center-right and center-left
+        -->
+        <child type="center">
+          <object class="IdeOmniBar" id="bar">
+            <property name="valign">center</property>
+            <property name="visible">true</property>
+          </object>
+        </child>
       </object>
     </child>
     <child>
