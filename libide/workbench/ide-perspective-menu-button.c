@@ -22,6 +22,7 @@
 
 #include "workbench/ide-perspective.h"
 #include "workbench/ide-perspective-menu-button.h"
+#include "workbench/ide-workbench.h"
 
 struct _IdePerspectiveMenuButton
 {
@@ -254,16 +255,25 @@ ide_perspective_menu_button_row_activated (IdePerspectiveMenuButton *self,
                                            GtkListBox               *list_box)
 {
   const gchar *id;
+  GtkWidget *workbench;
 
   g_assert (IDE_IS_PERSPECTIVE_MENU_BUTTON (self));
   g_assert (GTK_IS_LIST_BOX_ROW (row));
   g_assert (GTK_IS_LIST_BOX (list_box));
 
+  workbench = gtk_widget_get_ancestor (GTK_WIDGET (self), IDE_TYPE_WORKBENCH);
   id = g_object_get_data (G_OBJECT (row), "IDE_PERSPECTIVE_ID");
 
-  if (id != NULL && GTK_IS_STACK (self->stack))
+  /*
+   * We use the workbench to set the perspective name rather than the stack
+   * so that it can have a simpler implementation of handling changes between
+   * perspectives. Otherwise, we have to be much more careful about
+   * re-entrancy issues.
+   */
+
+  if (id != NULL && IDE_IS_WORKBENCH (workbench))
     {
-      gtk_stack_set_visible_child_name (GTK_STACK (self->stack), id);
+      ide_workbench_set_visible_perspective_name (IDE_WORKBENCH (workbench), id);
       gtk_widget_hide (GTK_WIDGET (self->popover));
     }
 }
