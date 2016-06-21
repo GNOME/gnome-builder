@@ -37,7 +37,6 @@ struct _IdeLayoutTabBar
   IdeLayoutTab  *tab;
   GtkWidget     *tab_expander;
   GtkMenuButton *views_list_button;
-  GtkButton     *views_add_button;
   GtkStack      *stack;
   GtkListBox    *views_list_box;
   GtkPopover    *views_list_popover;
@@ -393,7 +392,6 @@ ide_tab_layout_bar_class_init (IdeLayoutTabBarClass *klass)
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/ui/ide-layout-tab-bar.ui");
   gtk_widget_class_bind_template_child (widget_class, IdeLayoutTabBar, tab);
   gtk_widget_class_bind_template_child (widget_class, IdeLayoutTabBar, tab_expander);
-  gtk_widget_class_bind_template_child (widget_class, IdeLayoutTabBar, views_add_button);
   gtk_widget_class_bind_template_child (widget_class, IdeLayoutTabBar, views_list_button);
   gtk_widget_class_bind_template_child (widget_class, IdeLayoutTabBar, views_list_box);
   gtk_widget_class_bind_template_child (widget_class, IdeLayoutTabBar, views_list_popover);
