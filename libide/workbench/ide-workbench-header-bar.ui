@@ -6,6 +6,7 @@
     <child>
       <object class="EggPriorityBox" id="left_box">
         <property name="hexpand">true</property>
+        <property name="spacing">30</property>
         <property name="visible">true</property>
       </object>
       <packing>
