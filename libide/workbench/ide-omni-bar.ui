@@ -30,6 +30,12 @@
     </child>
     <child>
       <object class="GtkButton" id="button">
+        <!--
+          action-name is sort of a layer violation, since it requires
+          knowledge of the build plugin. But until we figure out
+          a good way to make this extensible, just put it here.
+        -->
+        <property name="action-name">build-tools.build</property>
         <property name="focus-on-click">false</property>
         <property name="visible">true</property>
         <style>
