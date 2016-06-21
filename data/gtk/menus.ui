@@ -73,7 +73,7 @@
     </section>
     <section id="gear-menu-open-section">
       <item>
-        <attribute name="label" translatable="yes">_Open File</attribute>
+        <attribute name="label" translatable="yes">_Open File…</attribute>
         <attribute name="action">win.open-with-dialog</attribute>
       </item>
     </section>
