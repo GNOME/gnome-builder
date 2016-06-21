@@ -42,6 +42,8 @@ void          ide_widget_set_context_handler (gpointer                 widget,
                                               IdeWidgetContextHandler  handler);
 void          ide_widget_hide_with_fade      (GtkWidget               *widget);
 void          ide_widget_show_with_fade      (GtkWidget               *widget);
+void          ide_widget_add_style_class     (GtkWidget               *widget,
+                                              const gchar             *class_name);
 IdeWorkbench *ide_widget_get_workbench       (GtkWidget               *widget);
 gpointer      ide_widget_find_child_typed    (GtkWidget               *widget,
                                               GType                    type);
