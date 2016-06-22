@@ -46,11 +46,6 @@ typedef struct _IdeConfigurationManager        IdeConfigurationManager;
 
 typedef struct _IdeContext                     IdeContext;
 
-typedef struct _IdeDebugger                    IdeDebugger;
-typedef struct _IdeDebuggerInterface           IdeDebuggerInterface;
-
-typedef struct _IdeDeployer                    IdeDeployer;
-
 typedef struct _IdeDevice                      IdeDevice;
 typedef struct _IdeDeviceManager               IdeDeviceManager;
 typedef struct _IdeDeviceProvider              IdeDeviceProvider;
@@ -66,12 +61,6 @@ typedef struct _IdeDiagnosticProvider          IdeDiagnosticProvider;
 typedef struct _IdeEnvironment                 IdeEnvironment;
 typedef struct _IdeEnvironmentVariable         IdeEnvironmentVariable;
 
-typedef struct _IdeExecuter                    IdeExecuter;
-typedef struct _IdeExecuterInterface           IdeExecuterInterface;
-
-typedef struct _IdeExecutable                  IdeExecutable;
-typedef struct _IdeExecutableInterface         IdeExecutableInterface;
-
 typedef struct _IdeFile                        IdeFile;
 
 typedef struct _IdeFileSettings                IdeFileSettings;
@@ -82,12 +71,7 @@ typedef struct _IdeHighlighter                 IdeHighlighter;
 
 typedef struct _IdeIndenter                    IdeIndenter;
 
-typedef struct _IdeLanguage                    IdeLanguage;
-
 typedef struct _IdeObject                      IdeObject;
-
-typedef struct _IdeProcess                     IdeProcess;
-typedef struct _IdeProcessInterface            IdeProcessInterface;
 
 typedef struct _IdeProgress                    IdeProgress;
 
@@ -98,9 +82,6 @@ typedef struct _IdeProjectItem                 IdeProjectItem;
 typedef struct _IdeProjectFile                 IdeProjectFile;
 
 typedef struct _IdeProjectFiles                IdeProjectFiles;
-
-typedef struct _IdeRefactory                   IdeRefactory;
-typedef struct _IdeRefactoryInterface          IdeRefactoryInterface;
 
 typedef struct _IdeRuntime                     IdeRuntime;
 typedef struct _IdeRuntimeManager              IdeRuntimeManager;
@@ -140,15 +121,6 @@ typedef struct _IdeSymbol                      IdeSymbol;
 
 typedef struct _IdeSymbolResolver              IdeSymbolResolver;
 typedef struct _IdeSymbolResolverInterface     IdeSymbolResolverInterface;
-
-typedef struct _IdeTarget                      IdeTarget;
-typedef struct _IdeTargetInterface             IdeTargetInterface;
-
-typedef struct _IdeTestCase                    IdeTestCase;
-typedef struct _IdeTestCaseInterface           IdeTestCaseInterface;
-
-typedef struct _IdeTestSuite                   IdeTestSuite;
-typedef struct _IdeTestSuiteInterface          IdeTestSuiteInterface;
 
 typedef struct _IdeUnsavedFiles                IdeUnsavedFiles;
 
