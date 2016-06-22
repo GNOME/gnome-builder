@@ -197,18 +197,23 @@ ide_git_vcs_load_monitor (IdeGitVcs  *self,
 
   if (self->monitor == NULL)
     {
+      const GFileMonitorFlags flags = G_FILE_MONITOR_SEND_MOVED | G_FILE_MONITOR_WATCH_HARD_LINKS;
       g_autoptr(GFile) location = NULL;
       g_autoptr(GFileMonitor) monitor = NULL;
       g_autoptr(GFile) heads_dir = NULL;
-      GFileMonitorFlags flags = G_FILE_MONITOR_WATCH_MOUNTS;
+      GError *local_error = NULL;
 
       location = ggit_repository_get_location (self->repository);
       heads_dir = g_file_get_child (location, "refs/heads");
-      monitor = g_file_monitor (heads_dir, flags, NULL, error);
+      monitor = g_file_monitor (heads_dir, flags, NULL, &local_error);
 
-      ret = !!monitor;
-
-      if (monitor)
+      if (monitor == NULL)
+        {
+          g_warning ("%s", local_error->message);
+          g_propagate_error (error, local_error);
+          ret = FALSE;
+        }
+      else
         {
           IDE_TRACE_MSG ("Git index monitor registered.");
           g_signal_connect_object (monitor,
