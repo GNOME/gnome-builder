@@ -208,3 +208,21 @@ ide_vcs_get_config (IdeVcs *self)
 
   return  ret;
 }
+
+/**
+ * ide_vcs_get_branch_name:
+ *
+ * Retrieves the name of the branch in the current working directory.
+ *
+ * Returns: (transfer full): A string containing the branch name.
+ */
+gchar *
+ide_vcs_get_branch_name (IdeVcs *self)
+{
+  g_return_val_if_fail (IDE_IS_VCS (self), NULL);
+
+  if (IDE_VCS_GET_IFACE (self)->get_branch_name)
+    return IDE_VCS_GET_IFACE (self)->get_branch_name (self);
+
+  return g_strdup ("primary");
+}

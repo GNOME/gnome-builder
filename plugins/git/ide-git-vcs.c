@@ -346,6 +346,26 @@ ide_git_vcs_is_ignored (IdeVcs  *vcs,
   return ret;
 }
 
+static gchar *
+ide_git_vcs_get_branch_name (IdeVcs *vcs)
+{
+  IdeGitVcs *self = (IdeGitVcs *)vcs;
+  GgitRef *ref;
+  gchar *ret = NULL;
+
+  g_assert (IDE_IS_GIT_VCS (self));
+
+  ref = ggit_repository_get_head (self->repository, NULL);
+
+  if (ref != NULL)
+    {
+      ret = g_strdup (ggit_ref_get_shorthand (ref));
+      g_object_unref (ref);
+    }
+
+  return ret;
+}
+
 static void
 ide_git_vcs_dispose (GObject *object)
 {
@@ -401,6 +421,7 @@ ide_git_vcs_init_iface (IdeVcsInterface *iface)
   iface->get_buffer_change_monitor = ide_git_vcs_get_buffer_change_monitor;
   iface->is_ignored = ide_git_vcs_is_ignored;
   iface->get_config = ide_git_vcs_get_config;
+  iface->get_branch_name = ide_git_vcs_get_branch_name;
 }
 
 static void
