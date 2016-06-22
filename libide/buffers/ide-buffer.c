@@ -561,7 +561,7 @@ ide_buffer__diagnostician_diagnose_cb (GObject      *object,
   if (!priv->has_done_diagnostics_once)
     {
       priv->has_done_diagnostics_once = TRUE;
-      ide_highlight_engine_rebuild (priv->highlight_engine);
+      ide_buffer_rehighlight (self);
     }
 }
 
@@ -2380,6 +2380,10 @@ ide_buffer_rehighlight (IdeBuffer *self)
   IDE_ENTRY;
 
   g_return_if_fail (IDE_IS_BUFFER (self));
+
+  /* In case we are disposing */
+  if (priv->highlight_engine == NULL)
+    return;
 
   if (gtk_source_buffer_get_highlight_syntax (GTK_SOURCE_BUFFER (self)))
     {
