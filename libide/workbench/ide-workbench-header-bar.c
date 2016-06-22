@@ -30,6 +30,8 @@ typedef struct
 {
   GtkMenuButton  *menu_button;
   EggPriorityBox *center_box;
+  EggPriorityBox *center_right_box;
+  EggPriorityBox *center_left_box;
   EggPriorityBox *right_box;
   EggPriorityBox *left_box;
 } IdeWorkbenchHeaderBarPrivate;
@@ -53,6 +55,8 @@ ide_workbench_header_bar_class_init (IdeWorkbenchHeaderBarClass *klass)
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/ui/ide-workbench-header-bar.ui");
   gtk_widget_class_bind_template_child_private (widget_class, IdeWorkbenchHeaderBar, center_box);
+  gtk_widget_class_bind_template_child_private (widget_class, IdeWorkbenchHeaderBar, center_right_box);
+  gtk_widget_class_bind_template_child_private (widget_class, IdeWorkbenchHeaderBar, center_left_box);
   gtk_widget_class_bind_template_child_private (widget_class, IdeWorkbenchHeaderBar, menu_button);
   gtk_widget_class_bind_template_child_private (widget_class, IdeWorkbenchHeaderBar, left_box);
   gtk_widget_class_bind_template_child_private (widget_class, IdeWorkbenchHeaderBar, right_box);
@@ -100,12 +104,12 @@ ide_workbench_header_bar_insert_left (IdeWorkbenchHeaderBar *self,
   /*
    * NOTE: Because GtkHeaderBar does not currently support hexpand, we
    *       need to check the pack_type requested and possibly insert it
-   *       into our custom center-child (with opposite pack_type).
+   *       into our custom center-child.
    */
 
   if (pack_type == GTK_PACK_END)
-    gtk_container_add_with_properties (GTK_CONTAINER (priv->center_box), widget,
-                                       "pack-type", GTK_PACK_START,
+    gtk_container_add_with_properties (GTK_CONTAINER (priv->center_left_box), widget,
+                                       "pack-type", pack_type,
                                        "priority", priority,
                                        NULL);
   else
@@ -130,12 +134,12 @@ ide_workbench_header_bar_insert_right (IdeWorkbenchHeaderBar *self,
   /*
    * NOTE: Because GtkHeaderBar does not currently support hexpand, we
    *       need to check the pack_type requested and possibly insert it
-   *       into our custom center-child (with opposite pack_type).
+   *       into our custom center-child.
    */
 
   if (pack_type == GTK_PACK_START)
-    gtk_container_add_with_properties (GTK_CONTAINER (priv->center_box), widget,
-                                       "pack-type", GTK_PACK_END,
+    gtk_container_add_with_properties (GTK_CONTAINER (priv->center_right_box), widget,
+                                       "pack-type", pack_type,
                                        "priority", priority,
                                        NULL);
   else

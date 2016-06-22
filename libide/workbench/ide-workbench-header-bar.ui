@@ -15,17 +15,35 @@
       </packing>
     </child>
     <child type="title">
-      <object class="EggPriorityBox" id="center_box">
+      <object class="GtkBox" id="center_box">
         <property name="spacing">6</property>
         <property name="visible">true</property>
-        <!--
-          We might need separate children for center-right and center-left
-        -->
-        <child type="center">
-          <object class="IdeOmniBar" id="bar">
-            <property name="valign">center</property>
+        <child>
+          <object class="EggPriorityBox" id="center_left_box">
+            <property name="halign">end</property>
             <property name="visible">true</property>
           </object>
+          <packing>
+            <property name="pack-type">start</property>
+            <property name="fill">true</property>
+            <property name="expand">true</property>
+          </packing>
+        </child>
+        <child type="center">
+          <object class="IdeOmniBar" id="bar">
+            <property name="visible">true</property>
+          </object>
+        </child>
+        <child>
+          <object class="EggPriorityBox" id="center_right_box">
+            <property name="halign">start</property>
+            <property name="visible">true</property>
+          </object>
+          <packing>
+            <property name="pack-type">end</property>
+            <property name="fill">true</property>
+            <property name="expand">true</property>
+          </packing>
         </child>
       </object>
     </child>
@@ -72,4 +90,12 @@
       </packing>
     </child>
   </template>
+  <object class="GtkSizeGroup">
+    <property name="mode">GTK_SIZE_GROUP_HORIZONTAL</property>
+    <widgets>
+      <!-- This is required due to bug https://bugzilla.gnome.org/show_bug.cgi?id=767932 -->
+      <widget name="center_right_box"/>
+      <widget name="center_left_box"/>
+    </widgets>
+  </object>
 </interface>
