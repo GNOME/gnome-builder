@@ -40,6 +40,7 @@ gboolean      ide_widget_action_with_string  (GtkWidget               *widget,
                                               const gchar             *param);
 void          ide_widget_set_context_handler (gpointer                 widget,
                                               IdeWidgetContextHandler  handler);
+IdeContext   *ide_widget_get_context         (GtkWidget               *widget);
 void          ide_widget_hide_with_fade      (GtkWidget               *widget);
 void          ide_widget_show_with_fade      (GtkWidget               *widget);
 void          ide_widget_add_style_class     (GtkWidget               *widget,

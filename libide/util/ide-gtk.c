@@ -113,15 +113,17 @@ ide_widget_notify_context (GtkWidget  *toplevel,
                            GtkWidget  *widget)
 {
   IdeWidgetContextHandler handler;
-  IdeContext *context = NULL;
+  g_autoptr(IdeContext) context = NULL;
 
   handler = g_object_get_data (G_OBJECT (widget), "IDE_CONTEXT_HANDLER");
-  if (!handler)
+  if (handler == NULL)
     return;
 
-  g_object_get (toplevel, "context", &context, NULL);
+  g_object_get (toplevel,
+                "context", &context,
+                NULL);
+
   handler (widget, context);
-  g_clear_object (&context);
 }
 
 static void
@@ -414,4 +416,24 @@ ide_widget_add_style_class (GtkWidget   *widget,
   g_return_if_fail (class_name != NULL);
 
   gtk_style_context_add_class (gtk_widget_get_style_context (widget), class_name);
+}
+
+/**
+ * ide_widget_get_context: (skip)
+ *
+ * Returns: (nullable) (transfer none): An #IdeContext or %NULL.
+ */
+IdeContext *
+ide_widget_get_context (GtkWidget *widget)
+{
+  IdeWorkbench *workbench;
+
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
+
+  workbench = ide_widget_get_workbench (widget);
+
+  if (workbench == NULL)
+    return NULL;
+
+  return ide_workbench_get_context (workbench);
 }
