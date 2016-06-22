@@ -151,6 +151,22 @@ ide_git_vcs_load (IdeGitVcs  *self,
   return repository;
 }
 
+static void
+handle_reload_from_changed_timeout (GObject      *object,
+                                    GAsyncResult *result,
+                                    gpointer      user_data)
+{
+  IdeGitVcs *self = (IdeGitVcs *)object;
+  g_autoptr(GError) error = NULL;
+
+  g_assert (IDE_IS_GIT_VCS (self));
+  g_assert (G_IS_ASYNC_RESULT (result));
+
+  /* Call finish() so that "changed" is emitted */
+  if (!ide_git_vcs_reload_finish (self, result, &error))
+    g_warning ("%s", error->message);
+}
+
 static gboolean
 ide_git_vcs__changed_timeout_cb (gpointer user_data)
 {
@@ -161,7 +177,11 @@ ide_git_vcs__changed_timeout_cb (gpointer user_data)
   g_assert (IDE_IS_GIT_VCS (self));
 
   self->changed_timeout = 0;
-  ide_git_vcs_reload_async (self, NULL, NULL, NULL);
+
+  ide_git_vcs_reload_async (self,
+                            NULL,
+                            handle_reload_from_changed_timeout,
+                            NULL);
 
   IDE_RETURN (G_SOURCE_REMOVE);
 }
@@ -239,6 +259,8 @@ ide_git_vcs_reload_worker (GTask        *task,
   g_autoptr(GgitRepository) repository2 = NULL;
   GError *error = NULL;
 
+  IDE_ENTRY;
+
   g_assert (G_IS_TASK (task));
   g_assert (IDE_IS_GIT_VCS (self));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
@@ -247,7 +269,7 @@ ide_git_vcs_reload_worker (GTask        *task,
       !(repository2 = ide_git_vcs_load (self, &error)))
     {
       g_task_return_error (task, error);
-      return;
+      IDE_EXIT;
     }
 
   g_set_object (&self->repository, repository1);
@@ -256,7 +278,7 @@ ide_git_vcs_reload_worker (GTask        *task,
   if (!ide_git_vcs_load_monitor (self, &error))
     {
       g_task_return_error (task, error);
-      return;
+      IDE_EXIT;
     }
 
   g_task_return_boolean (task, TRUE);
