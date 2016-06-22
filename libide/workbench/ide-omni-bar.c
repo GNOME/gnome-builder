@@ -16,58 +16,84 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "ide-omni-bar.h"
+#define G_LOG_DOMAIN "ide-omni-bar"
+
+#include "ide-context.h"
+#include "ide-debug.h"
+
+#include "projects/ide-project.h"
+#include "util/ide-gtk.h"
+#include "vcs/ide-vcs.h"
+#include "workbench/ide-omni-bar.h"
 
 struct _IdeOmniBar
 {
-  GtkBox parent_instance;
+  GtkBox    parent_instance;
+
+  GtkLabel *branch_label;
+  GtkLabel *project_label;
 };
 
 G_DEFINE_TYPE (IdeOmniBar, ide_omni_bar, GTK_TYPE_BOX)
 
-enum {
-  PROP_0,
-  N_PROPS
-};
+static void
+ide_omni_bar_update (IdeOmniBar *self)
+{
+  g_autofree gchar *branch_name = NULL;
+  const gchar *project_name = NULL;
+  IdeContext *context;
 
-static GParamSpec *properties [N_PROPS];
+  g_assert (IDE_IS_OMNI_BAR (self));
+
+  context = ide_widget_get_context (GTK_WIDGET (self));
+
+  if (IDE_IS_CONTEXT (context))
+    {
+      IdeProject *project;
+      IdeVcs *vcs;
+
+      project = ide_context_get_project (context);
+      project_name = ide_project_get_name (project);
+
+      vcs = ide_context_get_vcs (context);
+      branch_name = ide_vcs_get_branch_name (vcs);
+    }
+
+  gtk_label_set_label (self->project_label, project_name);
+  gtk_label_set_label (self->branch_label, branch_name);
+}
+
+static void
+ide_omni_bar_context_set (GtkWidget  *widget,
+                          IdeContext *context)
+{
+  IdeOmniBar *self = (IdeOmniBar *)widget;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_OMNI_BAR (self));
+  g_assert (!context || IDE_IS_CONTEXT (context));
+
+  ide_omni_bar_update (self);
+
+  if (context != NULL)
+    {
+      IdeVcs *vcs = ide_context_get_vcs (context);
+
+      g_signal_connect_object (vcs,
+                               "changed",
+                               G_CALLBACK (ide_omni_bar_update),
+                               self,
+                               G_CONNECT_SWAPPED);
+    }
+
+  IDE_EXIT;
+}
 
 static void
 ide_omni_bar_finalize (GObject *object)
 {
-  IdeOmniBar *self = (IdeOmniBar *)object;
-
   G_OBJECT_CLASS (ide_omni_bar_parent_class)->finalize (object);
-}
-
-static void
-ide_omni_bar_get_property (GObject    *object,
-                           guint       prop_id,
-                           GValue     *value,
-                           GParamSpec *pspec)
-{
-  IdeOmniBar *self = IDE_OMNI_BAR (object);
-
-  switch (prop_id)
-    {
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-    }
-}
-
-static void
-ide_omni_bar_set_property (GObject      *object,
-                           guint         prop_id,
-                           const GValue *value,
-                           GParamSpec   *pspec)
-{
-  IdeOmniBar *self = IDE_OMNI_BAR (object);
-
-  switch (prop_id)
-    {
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-    }
 }
 
 static void
@@ -77,17 +103,19 @@ ide_omni_bar_class_init (IdeOmniBarClass *klass)
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   object_class->finalize = ide_omni_bar_finalize;
-  object_class->get_property = ide_omni_bar_get_property;
-  object_class->set_property = ide_omni_bar_set_property;
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/ui/ide-omni-bar.ui");
   gtk_widget_class_set_css_name (widget_class, "omnibar");
+  gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, branch_label);
+  gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, project_label);
 }
 
 static void
 ide_omni_bar_init (IdeOmniBar *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
+
+  ide_widget_set_context_handler (self, ide_omni_bar_context_set);
 }
 
 GtkWidget *
