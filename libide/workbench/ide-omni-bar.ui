@@ -53,12 +53,18 @@
                 <property name="visible">true</property>
                 <property name="ellipsize">end</property>
               </object>
+              <packing>
+                <property name="name">config</property>
+              </packing>
             </child>
             <child>
               <object class="GtkLabel" id="build_result_mode_label">
                 <property name="visible">true</property>
                 <property name="ellipsize">end</property>
               </object>
+              <packing>
+                <property name="name">build</property>
+              </packing>
             </child>
           </object>
           <packing>

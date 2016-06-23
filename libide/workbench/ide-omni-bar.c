@@ -29,11 +29,16 @@
 #include "vcs/ide-vcs.h"
 #include "workbench/ide-omni-bar.h"
 
+#define LOOPER_INTERVAL_SECONDS 5
+
 struct _IdeOmniBar
 {
   GtkBox          parent_instance;
 
   EggSignalGroup *build_result_signals;
+  GSource        *looper_source;
+
+  guint           seen_count;
 
   GtkLabel       *branch_label;
   GtkLabel       *project_label;
@@ -167,6 +172,70 @@ ide_omni_bar_build_result_diagnostic (IdeOmniBar     *self,
 }
 
 static void
+ide_omni_bar_next_message (IdeOmniBar *self)
+{
+  IdeBuildResult *build_result;
+  const gchar *name;
+
+  g_assert (IDE_IS_OMNI_BAR (self));
+
+  build_result = ide_omni_bar_get_build_result (self);
+  name = gtk_stack_get_visible_child_name (self->message_stack);
+
+  /*
+   * TODO: This isn't the cleanest way to do this.
+   *       We need to come up with a strategy for moving between these
+   *       in a way that has a "check" function to determine if we can
+   *       toggle to the next child.
+   */
+
+  if (g_strcmp0 (name, "config") == 0)
+    {
+      /* Only rotate to build result if we have one and we haven't
+       * flapped too many times.
+       */
+      if (build_result != NULL && self->seen_count < 2)
+        gtk_stack_set_visible_child_name (self->message_stack, "build");
+    }
+  else if (!ide_build_result_get_running (build_result))
+    {
+      self->seen_count++;
+      gtk_stack_set_visible_child_name (self->message_stack, "config");
+    }
+}
+
+static gboolean
+ide_omni_bar_looper_cb (gpointer user_data)
+{
+  IdeOmniBar *self = user_data;
+
+  g_assert (IDE_IS_OMNI_BAR (self));
+
+  ide_omni_bar_next_message (self);
+
+  return G_SOURCE_CONTINUE;
+}
+
+static void
+ide_omni_bar_constructed (GObject *object)
+{
+  IdeOmniBar *self = (IdeOmniBar *)object;
+
+  g_assert (IDE_IS_OMNI_BAR (self));
+
+  G_OBJECT_CLASS (ide_omni_bar_parent_class)->constructed (object);
+
+  /*
+   * Start our looper, to loop through available messages.
+   * We will release this in destroy.
+   */
+  self->looper_source = g_timeout_source_new_seconds (LOOPER_INTERVAL_SECONDS);
+  g_source_set_callback (self->looper_source, ide_omni_bar_looper_cb, self, NULL);
+  g_source_set_name (self->looper_source, "[ide] omnibar message looper");
+  g_source_attach (self->looper_source, NULL);
+}
+
+static void
 ide_omni_bar_finalize (GObject *object)
 {
   IdeOmniBar *self = (IdeOmniBar *)object;
@@ -177,12 +246,27 @@ ide_omni_bar_finalize (GObject *object)
 }
 
 static void
+ide_omni_bar_destroy (GtkWidget *widget)
+{
+  IdeOmniBar *self = (IdeOmniBar *)widget;
+
+  g_assert (IDE_IS_OMNI_BAR (self));
+
+  g_clear_pointer (&self->looper_source, g_source_destroy);
+
+  GTK_WIDGET_CLASS (ide_omni_bar_parent_class)->destroy (widget);
+}
+
+static void
 ide_omni_bar_class_init (IdeOmniBarClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
+  object_class->constructed = ide_omni_bar_constructed;
   object_class->finalize = ide_omni_bar_finalize;
+
+  widget_class->destroy = ide_omni_bar_destroy;
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/ui/ide-omni-bar.ui");
   gtk_widget_class_set_css_name (widget_class, "omnibar");
@@ -252,4 +336,7 @@ ide_omni_bar_set_build_result (IdeOmniBar     *self,
 
   gtk_widget_hide (GTK_WIDGET (self->build_result_diagnostics_image));
   egg_signal_group_set_target (self->build_result_signals, build_result);
+
+  self->seen_count = 0;
+  gtk_stack_set_visible_child_name (self->message_stack, "build");
 }
