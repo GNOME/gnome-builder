@@ -708,6 +708,13 @@ ide_build_result_emit_diagnostic (IdeBuildResult *self,
   g_return_if_fail (IDE_IS_BUILD_RESULT (self));
   g_return_if_fail (diagnostic != NULL);
 
+  /* Emit immediately if we are in the primary thread. */
+  if G_LIKELY (g_main_context_get_thread_default () == g_main_context_default ())
+    {
+      g_signal_emit (self, signals [DIAGNOSTIC], 0, diagnostic);
+      return;
+    }
+
   pair = g_slice_alloc0 (sizeof *pair);
   pair->result = g_object_ref (self);
   pair->diagnostic = ide_diagnostic_ref (diagnostic);
