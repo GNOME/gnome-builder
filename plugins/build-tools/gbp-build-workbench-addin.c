@@ -58,12 +58,20 @@ static void
 gbp_build_workbench_addin_set_result (GbpBuildWorkbenchAddin *self,
                                       IdeBuildResult         *result)
 {
+  IdeWorkbenchHeaderBar *headerbar;
+  IdeOmniBar *omnibar;
+
   g_return_if_fail (GBP_IS_BUILD_WORKBENCH_ADDIN (self));
   g_return_if_fail (!result || IDE_IS_BUILD_RESULT (result));
+  g_return_if_fail (self->workbench != NULL);
+
+  headerbar = ide_workbench_get_headerbar (self->workbench);
+  omnibar = ide_workbench_header_bar_get_omni_bar (headerbar);
 
   if (g_set_object (&self->result, result))
     {
       egg_binding_group_set_source (self->bindings, result);
+      ide_omni_bar_set_build_result (omnibar, result);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_RESULT]);
     }
 }
