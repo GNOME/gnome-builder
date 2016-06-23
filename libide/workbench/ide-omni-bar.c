@@ -37,10 +37,12 @@ struct _IdeOmniBar
 
   EggSignalGroup *build_result_signals;
   GSource        *looper_source;
+  GtkGesture     *gesture;
 
   guint           seen_count;
 
   GtkLabel       *branch_label;
+  GtkEventBox    *event_box;
   GtkLabel       *project_label;
   GtkLabel       *build_result_mode_label;
   GtkImage       *build_result_diagnostics_image;
@@ -237,6 +239,35 @@ ide_omni_bar_constructed (GObject *object)
 }
 
 static void
+multipress_pressed_cb (GtkGestureMultiPress *gesture,
+                       guint                 n_press,
+                       gdouble               x,
+                       gdouble               y,
+                       IdeOmniBar           *self)
+{
+  g_assert (IDE_IS_OMNI_BAR (self));
+
+  gtk_widget_show (GTK_WIDGET (self->popover));
+  gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
+}
+
+static void
+event_box_realize (GtkWidget  *event_box,
+                   IdeOmniBar *self)
+{
+  GdkWindow *window;
+  GdkCursor *cursor;
+
+  g_assert (GTK_IS_EVENT_BOX (event_box));
+  g_assert (IDE_IS_OMNI_BAR (self));
+
+  window = gtk_widget_get_window (event_box);
+  cursor = gdk_cursor_new_from_name (gdk_window_get_display (window), "pointer");
+  gdk_window_set_cursor (window, cursor);
+  g_clear_object (&cursor);
+}
+
+static void
 ide_omni_bar_finalize (GObject *object)
 {
   IdeOmniBar *self = (IdeOmniBar *)object;
@@ -254,6 +285,7 @@ ide_omni_bar_destroy (GtkWidget *widget)
   g_assert (IDE_IS_OMNI_BAR (self));
 
   g_clear_pointer (&self->looper_source, g_source_destroy);
+  g_clear_object (&self->gesture);
 
   GTK_WIDGET_CLASS (ide_omni_bar_parent_class)->destroy (widget);
 }
@@ -277,6 +309,7 @@ ide_omni_bar_class_init (IdeOmniBarClass *klass)
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, build_result_diagnostics_image);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, build_result_mode_label);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, config_name_label);
+  gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, event_box);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, message_stack);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, popover);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, project_label);
@@ -286,6 +319,16 @@ static void
 ide_omni_bar_init (IdeOmniBar *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
+
+  gtk_widget_add_events (GTK_WIDGET (self->event_box), GDK_BUTTON_PRESS_MASK);
+
+  g_signal_connect_after (self->event_box,
+                          "realize",
+                          G_CALLBACK (event_box_realize),
+                          self);
+
+  self->gesture = gtk_gesture_multi_press_new (GTK_WIDGET (self->event_box));
+  g_signal_connect (self->gesture, "pressed", G_CALLBACK (multipress_pressed_cb), self);
 
   self->build_result_signals = egg_signal_group_new (IDE_TYPE_BUILD_RESULT);
 
