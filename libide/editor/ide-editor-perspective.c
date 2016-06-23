@@ -402,11 +402,19 @@ ide_editor_perspective_class_init (IdeEditorPerspectiveClass *klass)
 static void
 ide_editor_perspective_init (IdeEditorPerspective *self)
 {
-  GActionGroup *actions;
+  static const gchar *proxy_actions[] = {
+    "bottom-visible",
+    "left-visible",
+    "right-visible",
+    NULL
+  };
   static const GActionEntry entries[] = {
     { "new-file", new_file_activate },
     { "global-search", global_search_activate },
   };
+
+  GActionGroup *actions;
+  guint i;
 
   self->buffer_manager_signals = egg_signal_group_new (IDE_TYPE_BUFFER_MANAGER);
 
@@ -434,7 +442,14 @@ ide_editor_perspective_init (IdeEditorPerspective *self)
                                    G_N_ELEMENTS (entries), self);
 
   actions = gtk_widget_get_action_group (GTK_WIDGET (self), "dockbin");
-  gtk_widget_insert_action_group (GTK_WIDGET (self->titlebar), "dockbin", actions);
+
+  for (i = 0; proxy_actions[i]; i++)
+    {
+      GAction *action;
+
+      action = g_action_map_lookup_action (G_ACTION_MAP (actions), proxy_actions[i]);
+      g_action_map_add_action (G_ACTION_MAP (self->actions), action);
+    }
 
   ide_editor_perspective_restore_panel_state (self);
 
