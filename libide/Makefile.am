@@ -412,6 +412,8 @@ libide_1_0_la_SOURCES =                                   \
 	workbench/ide-layout-tab-bar.h                    \
 	workbench/ide-layout-tab.c                        \
 	workbench/ide-layout-tab.h                        \
+	workbench/ide-omni-bar-row.c                      \
+	workbench/ide-omni-bar-row.h                      \
 	workbench/ide-perspective-menu-button.c           \
 	workbench/ide-perspective-menu-button.h           \
 	workbench/ide-workbench-actions.c                 \

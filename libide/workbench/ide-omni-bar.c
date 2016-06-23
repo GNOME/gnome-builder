@@ -25,10 +25,12 @@
 
 #include "buildsystem/ide-build-result.h"
 #include "buildsystem/ide-configuration.h"
+#include "buildsystem/ide-configuration-manager.h"
 #include "projects/ide-project.h"
 #include "util/ide-gtk.h"
 #include "vcs/ide-vcs.h"
 #include "workbench/ide-omni-bar.h"
+#include "workbench/ide-omni-bar-row.h"
 
 #define LOOPER_INTERVAL_SECONDS 5
 
@@ -66,27 +68,13 @@ create_configuration_row (gpointer item,
                           gpointer user_data)
 {
   IdeConfiguration *configuration = item;
-  IdeOmniBar *self = user_data;
-  GtkListBoxRow *row;
-  GtkLabel *label;
 
   g_assert (IDE_IS_CONFIGURATION (configuration));
-  g_assert (IDE_IS_OMNI_BAR (self));
 
-  row = g_object_new (GTK_TYPE_LIST_BOX_ROW,
-                      "visible", TRUE,
-                      NULL);
-
-  label = g_object_new (GTK_TYPE_LABEL,
-                        "xalign", 0.0f,
-                        "visible", TRUE,
-                        NULL);
-  g_object_bind_property (configuration, "display-name",
-                          label, "label",
-                          G_BINDING_SYNC_CREATE);
-  gtk_container_add (GTK_CONTAINER (row), GTK_WIDGET (label));
-
-  return GTK_WIDGET (row);
+  return g_object_new (IDE_TYPE_OMNI_BAR_ROW,
+                       "item", configuration,
+                       "visible", TRUE,
+                       NULL);
 }
 
 static void
@@ -115,6 +103,56 @@ ide_omni_bar_update (IdeOmniBar *self)
   gtk_label_set_label (self->project_label, project_name);
   gtk_label_set_label (self->branch_label, branch_name);
   gtk_label_set_label (self->popover_branch_label, branch_name);
+}
+
+static void
+ide_omni_bar_select_current_config (GtkWidget *widget,
+                                    gpointer   user_data)
+{
+  IdeConfiguration *current = user_data;
+  IdeOmniBarRow *row = (IdeOmniBarRow *)widget;
+
+  g_assert (IDE_IS_OMNI_BAR_ROW (row));
+  g_assert (IDE_IS_CONFIGURATION (current));
+
+  ide_omni_bar_row_set_active (row, (current == ide_omni_bar_row_get_item (row)));
+}
+
+static void
+ide_omni_bar_current_changed (IdeOmniBar              *self,
+                              GParamSpec              *pspec,
+                              IdeConfigurationManager *config_manager)
+{
+  IdeConfiguration *current;
+
+  g_assert (IDE_IS_OMNI_BAR (self));
+  g_assert (IDE_IS_CONFIGURATION_MANAGER (config_manager));
+
+  current = ide_configuration_manager_get_current (config_manager);
+
+  gtk_container_foreach (GTK_CONTAINER (self->popover_configuration_list_box),
+                         ide_omni_bar_select_current_config,
+                         current);
+}
+
+static void
+ide_omni_bar_row_activated (IdeOmniBar    *self,
+                            IdeOmniBarRow *row,
+                            GtkListBox    *list_box)
+{
+  IdeConfiguration *config;
+  IdeConfigurationManager *config_manager;
+  IdeContext *context;
+
+  g_assert (IDE_IS_OMNI_BAR (self));
+  g_assert (IDE_IS_OMNI_BAR_ROW (row));
+  g_assert (GTK_IS_LIST_BOX (list_box));
+
+  context = ide_widget_get_context (GTK_WIDGET (self));
+  config_manager = ide_context_get_configuration_manager (context);
+  config = ide_omni_bar_row_get_item (row);
+
+  ide_configuration_manager_set_current (config_manager, config);
 }
 
 static void
@@ -167,6 +205,14 @@ ide_omni_bar_context_set (GtkWidget  *widget,
                                create_configuration_row,
                                self,
                                NULL);
+
+      g_signal_connect_object (configs,
+                               "notify::current",
+                               G_CALLBACK (ide_omni_bar_current_changed),
+                               self,
+                               G_CONNECT_SWAPPED);
+
+      ide_omni_bar_current_changed (self, NULL, configs);
     }
 
   IDE_EXIT;
@@ -417,6 +463,12 @@ ide_omni_bar_init (IdeOmniBar *self)
                                    G_CALLBACK (ide_omni_bar_build_result_diagnostic),
                                    self,
                                    G_CONNECT_SWAPPED);
+
+  g_signal_connect_object (self->popover_configuration_list_box,
+                           "row-activated",
+                           G_CALLBACK (ide_omni_bar_row_activated),
+                           self,
+                           G_CONNECT_SWAPPED);
 
   ide_widget_set_context_handler (self, ide_omni_bar_context_set);
 }

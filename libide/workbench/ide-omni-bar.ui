@@ -210,6 +210,7 @@
                 <property name="visible">true</property>
                 <child>
                   <object class="GtkListBox" id="popover_configuration_list_box">
+                    <property name="selection-mode">none</property>
                     <property name="visible">true</property>
                   </object>
                 </child>
