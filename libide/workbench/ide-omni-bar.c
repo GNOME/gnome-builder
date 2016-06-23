@@ -48,6 +48,7 @@ struct _IdeOmniBar
   GtkImage       *build_button_image;
   GtkLabel       *config_name_label;
   GtkStack       *message_stack;
+  GtkPopover     *popover;
 };
 
 G_DEFINE_TYPE (IdeOmniBar, ide_omni_bar, GTK_TYPE_BOX)
@@ -277,6 +278,7 @@ ide_omni_bar_class_init (IdeOmniBarClass *klass)
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, build_result_mode_label);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, config_name_label);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, message_stack);
+  gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, popover);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, project_label);
 }
 
