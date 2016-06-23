@@ -25,6 +25,7 @@
 
 #include "util/ide-uri.h"
 #include "workbench/ide-perspective.h"
+#include "workbench/ide-workbench-header-bar.h"
 
 G_BEGIN_DECLS
 
@@ -96,6 +97,8 @@ void            ide_workbench_set_fullscreen               (IdeWorkbench        
 void            ide_workbench_views_foreach                (IdeWorkbench           *self,
                                                             GtkCallback             callback,
                                                             gpointer                user_data);
+IdeWorkbenchHeaderBar *
+                ide_workbench_get_headerbar                (IdeWorkbench           *self);
 
 G_END_DECLS
 

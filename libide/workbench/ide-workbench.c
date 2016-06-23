@@ -850,3 +850,19 @@ ide_workbench_focus (IdeWorkbench *self,
   ide_workbench_show_parents (widget);
   gtk_widget_grab_focus (widget);
 }
+
+/**
+ * ide_workbench_get_headerbar:
+ *
+ * Helper that is equivalent to calling gtk_window_get_titlebar() and casting
+ * to an #IdeWorkbenchHeaderBar. This is convenience for plugins.
+ *
+ * Returns: (transfer none): An #IdeWorkbenchHeaderBar.
+ */
+IdeWorkbenchHeaderBar *
+ide_workbench_get_headerbar (IdeWorkbench *self)
+{
+  g_return_val_if_fail (IDE_IS_WORKBENCH (self), NULL);
+
+  return self->header_bar;
+}
