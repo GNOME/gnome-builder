@@ -132,15 +132,22 @@ ide_omni_bar_context_set (GtkWidget  *widget,
     {
       IdeConfigurationManager *configs;
       g_autofree gchar *path = NULL;
+      g_autoptr(GFile) home = NULL;
       GFile *workdir;
       IdeVcs *vcs;
 
       configs = ide_context_get_configuration_manager (context);
       vcs = ide_context_get_vcs (context);
       workdir = ide_vcs_get_working_directory (vcs);
+      home = g_file_new_for_path (g_get_home_dir ());
 
-      /* TODO: Convert to relative path (or remote uri) */
-      path = g_file_get_path (workdir);
+      if (g_file_has_prefix (workdir, home))
+        path = g_file_get_relative_path (home, workdir);
+      else if (g_file_is_native (workdir))
+        path = g_file_get_path (workdir);
+      else
+        path = g_file_get_uri (workdir);
+
       gtk_label_set_label (self->popover_project_label, path);
 
       g_signal_connect_object (vcs,
