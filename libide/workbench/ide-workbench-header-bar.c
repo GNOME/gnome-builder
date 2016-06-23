@@ -177,6 +177,11 @@ buildable_iface_init (GtkBuildableIface *iface)
   iface->get_internal_child = ide_workbench_header_bar_get_internal_child;
 }
 
+/**
+ * ide_workbench_header_bar_get_omni_bar:
+ *
+ * Returns: (transfer none): An #IdeOmniBar.
+ */
 IdeOmniBar *
 ide_workbench_header_bar_get_omni_bar (IdeWorkbenchHeaderBar *self)
 {
