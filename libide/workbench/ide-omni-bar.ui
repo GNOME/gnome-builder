@@ -212,6 +212,80 @@
             </child>
           </object>
         </child>
+        <child>
+          <object class="GtkBox">
+            <property name="spacing">12</property>
+            <property name="visible">true</property>
+            <child>
+              <object class="GtkBox">
+                <property name="orientation">vertical</property>
+                <property name="visible">true</property>
+                <child>
+                  <object class="GtkLabel" id="popover_build_label">
+                    <property name="label">Last build</property>
+                    <property name="visible">true</property>
+                    <property name="xalign">0.0</property>
+                    <attributes>
+                      <attribute name="weight" value="bold"/>
+                    </attributes>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="popover_last_build_time_label">
+                    <property name="label">Friday June 3rd, 11:49</property>
+                    <property name="visible">true</property>
+                    <property name="xalign">0.0</property>
+                    <attributes>
+                      <attribute name="scale" value="0.8333"/>
+                    </attributes>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="popover_build_running_time_label">
+                <property name="label">0:32</property>
+              </object>
+              <packing>
+                <property name="position">1</property>
+                <property name="pack-type">start</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="popover_build_status">
+                <property name="label">Failed</property>
+              </object>
+              <packing>
+                <property name="position">2</property>
+                <property name="pack-type">end</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="popover_view_output_button">
+                <property name="label" translatable="yes">View Output</property>
+                <property name="visible">true</property>
+              </object>
+              <packing>
+                <property name="position">1</property>
+                <property name="pack-type">end</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="popover_build_cancel_button">
+                <property name="action-name">build-tools.cancel-build</property>
+                <property name="label" translatable="yes">_Cancel</property>
+                <property name="use-underline">true</property>
+                <style>
+                  <class name="destructive-action"/>
+                </style>
+              </object>
+              <packing>
+                <property name="position">0</property>
+                <property name="pack-type">end</property>
+              </packing>
+            </child>
+          </object>
+        </child>
       </object>
     </child>
   </object>
