@@ -461,6 +461,17 @@ ide_configuration_manager_get_configuration (IdeConfigurationManager *self,
 }
 
 static void
+ide_configuration_manager_notify_display_name (IdeConfigurationManager *self,
+                                               GParamSpec              *pspec,
+                                               IdeConfiguration        *configuration)
+{
+  g_assert (IDE_IS_CONFIGURATION_MANAGER (self));
+  g_assert (IDE_IS_CONFIGURATION (configuration));
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CURRENT_DISPLAY_NAME]);
+}
+
+static void
 ide_configuration_manager_finalize (GObject *object)
 {
   IdeConfigurationManager *self = (IdeConfigurationManager *)object;
@@ -468,7 +479,14 @@ ide_configuration_manager_finalize (GObject *object)
   ide_clear_source (&self->writeback_handler);
   g_clear_pointer (&self->configurations, g_ptr_array_unref);
   g_clear_pointer (&self->key_file, g_key_file_free);
-  g_clear_object (&self->current);
+
+  if (self->current != NULL)
+    {
+      g_signal_handlers_disconnect_by_func (self->current,
+                                            G_CALLBACK (ide_configuration_manager_notify_display_name),
+                                            self);
+      g_clear_object (&self->current);
+    }
 
   G_OBJECT_CLASS (ide_configuration_manager_parent_class)->finalize (object);
 }
@@ -657,8 +675,26 @@ ide_configuration_manager_set_current (IdeConfigurationManager *self,
   g_return_if_fail (IDE_IS_CONFIGURATION_MANAGER (self));
   g_return_if_fail (!current || IDE_IS_CONFIGURATION (current));
 
-  if (g_set_object (&self->current, current))
+  if (self->current != current)
     {
+      if (self->current != NULL)
+        {
+          g_signal_handlers_disconnect_by_func (self->current,
+                                                G_CALLBACK (ide_configuration_manager_notify_display_name),
+                                                self);
+          g_clear_object (&self->current);
+        }
+
+      if (current != NULL)
+        {
+          self->current = g_object_ref (current);
+          g_signal_connect_object (current,
+                                   "notify::display-name",
+                                   G_CALLBACK (ide_configuration_manager_notify_display_name),
+                                   self,
+                                   G_CONNECT_SWAPPED);
+        }
+
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CURRENT]);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CURRENT_DISPLAY_NAME]);
     }
