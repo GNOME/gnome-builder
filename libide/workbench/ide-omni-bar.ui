@@ -43,9 +43,23 @@
           </packing>
         </child>
         <child>
-          <object class="GtkLabel" id="build_result_mode_label">
+          <object class="GtkStack" id="message_stack">
+            <property name="homogeneous">false</property>
+            <property name="transition-type">slide-left</property>
+            <property name="transition-duration">500</property>
             <property name="visible">true</property>
-            <property name="ellipsize">end</property>
+            <child>
+              <object class="GtkLabel" id="config_name_label">
+                <property name="visible">true</property>
+                <property name="ellipsize">end</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="build_result_mode_label">
+                <property name="visible">true</property>
+                <property name="ellipsize">end</property>
+              </object>
+            </child>
           </object>
           <packing>
             <property name="pack-type">end</property>

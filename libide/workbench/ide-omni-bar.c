@@ -41,6 +41,8 @@ struct _IdeOmniBar
   GtkImage       *build_result_diagnostics_image;
   GtkButton      *build_button;
   GtkImage       *build_button_image;
+  GtkLabel       *config_name_label;
+  GtkStack       *message_stack;
 };
 
 G_DEFINE_TYPE (IdeOmniBar, ide_omni_bar, GTK_TYPE_BOX)
@@ -88,12 +90,17 @@ ide_omni_bar_context_set (GtkWidget  *widget,
   if (context != NULL)
     {
       IdeVcs *vcs = ide_context_get_vcs (context);
+      IdeConfigurationManager *configs = ide_context_get_configuration_manager (context);
 
       g_signal_connect_object (vcs,
                                "changed",
                                G_CALLBACK (ide_omni_bar_update),
                                self,
                                G_CONNECT_SWAPPED);
+
+      g_object_bind_property (configs, "current-display-name",
+                              self->config_name_label, "label",
+                              G_BINDING_SYNC_CREATE);
     }
 
   IDE_EXIT;
@@ -132,6 +139,9 @@ ide_omni_bar_build_result_notify_running (IdeOmniBar     *self,
       g_object_set (self->build_button,
                     "action-name", "build-tools.cancel-build",
                     NULL);
+
+      gtk_stack_set_visible_child (self->message_stack,
+                                   GTK_WIDGET (self->build_result_mode_label));
     }
   else
     {
@@ -181,6 +191,8 @@ ide_omni_bar_class_init (IdeOmniBarClass *klass)
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, build_button_image);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, build_result_diagnostics_image);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, build_result_mode_label);
+  gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, config_name_label);
+  gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, message_stack);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, project_label);
 }
 
