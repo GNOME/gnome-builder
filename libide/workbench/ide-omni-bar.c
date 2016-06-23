@@ -24,6 +24,7 @@
 #include "ide-debug.h"
 
 #include "buildsystem/ide-build-result.h"
+#include "buildsystem/ide-configuration.h"
 #include "projects/ide-project.h"
 #include "util/ide-gtk.h"
 #include "vcs/ide-vcs.h"
@@ -52,10 +53,39 @@ struct _IdeOmniBar
   GtkStack       *message_stack;
   GtkPopover     *popover;
   GtkLabel       *popover_branch_label;
+  GtkListBox     *popover_configuration_list_box;
   GtkLabel       *popover_project_label;
 };
 
 G_DEFINE_TYPE (IdeOmniBar, ide_omni_bar, GTK_TYPE_BOX)
+
+static GtkWidget *
+create_configuration_row (gpointer item,
+                          gpointer user_data)
+{
+  IdeConfiguration *configuration = item;
+  IdeOmniBar *self = user_data;
+  GtkListBoxRow *row;
+  GtkLabel *label;
+
+  g_assert (IDE_IS_CONFIGURATION (configuration));
+  g_assert (IDE_IS_OMNI_BAR (self));
+
+  row = g_object_new (GTK_TYPE_LIST_BOX_ROW,
+                      "visible", TRUE,
+                      NULL);
+
+  label = g_object_new (GTK_TYPE_LABEL,
+                        "xalign", 0.0f,
+                        "visible", TRUE,
+                        NULL);
+  g_object_bind_property (configuration, "display-name",
+                          label, "label",
+                          G_BINDING_SYNC_CREATE);
+  gtk_container_add (GTK_CONTAINER (row), GTK_WIDGET (label));
+
+  return GTK_WIDGET (row);
+}
 
 static void
 ide_omni_bar_update (IdeOmniBar *self)
@@ -122,6 +152,12 @@ ide_omni_bar_context_set (GtkWidget  *widget,
       g_object_bind_property (configs, "current-display-name",
                               self->config_name_label, "label",
                               G_BINDING_SYNC_CREATE);
+
+      gtk_list_box_bind_model (self->popover_configuration_list_box,
+                               G_LIST_MODEL (configs),
+                               create_configuration_row,
+                               self,
+                               NULL);
     }
 
   IDE_EXIT;
@@ -325,9 +361,10 @@ ide_omni_bar_class_init (IdeOmniBarClass *klass)
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, event_box);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, message_stack);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, popover);
-  gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, project_label);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, popover_branch_label);
+  gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, popover_configuration_list_box);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, popover_project_label);
+  gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, project_label);
 }
 
 static void

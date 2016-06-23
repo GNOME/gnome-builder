@@ -150,3 +150,10 @@ popover.perspectives-selector list row image {
 omnibar entry {
   background-color: @theme_bg_color;
 }
+
+popover.omnibar list row {
+  border-bottom: 1px solid alpha(@borders, 0.4);
+}
+popover.omnibar list row:last-child {
+  border-bottom: none;
+}

@@ -120,6 +120,9 @@
     <property name="relative-to">event_box</property>
     <property name="position">bottom</property>
     <property name="width-request">400</property>
+    <style>
+      <class name="omnibar"/>
+    </style>
     <child>
       <object class="GtkBox">
         <property name="orientation">vertical</property>
@@ -202,9 +205,11 @@
             <child>
               <object class="GtkScrolledWindow">
                 <property name="shadow-type">in</property>
+                <property name="max-content-height">200</property>
+                <property name="max-content-width">500</property>
                 <property name="visible">true</property>
                 <child>
-                  <object class="GtkListBox">
+                  <object class="GtkListBox" id="popover_configuration_list_box">
                     <property name="visible">true</property>
                   </object>
                 </child>
