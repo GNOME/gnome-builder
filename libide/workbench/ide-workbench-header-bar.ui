@@ -30,7 +30,7 @@
           </packing>
         </child>
         <child type="center">
-          <object class="IdeOmniBar" id="bar">
+          <object class="IdeOmniBar" id="omni_bar">
             <property name="visible">true</property>
           </object>
         </child>

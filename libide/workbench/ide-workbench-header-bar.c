@@ -34,6 +34,7 @@ typedef struct
   EggPriorityBox *center_left_box;
   EggPriorityBox *right_box;
   EggPriorityBox *left_box;
+  IdeOmniBar     *omni_bar;
 } IdeWorkbenchHeaderBarPrivate;
 
 static void buildable_iface_init (GtkBuildableIface *iface);
@@ -57,8 +58,9 @@ ide_workbench_header_bar_class_init (IdeWorkbenchHeaderBarClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, IdeWorkbenchHeaderBar, center_box);
   gtk_widget_class_bind_template_child_private (widget_class, IdeWorkbenchHeaderBar, center_right_box);
   gtk_widget_class_bind_template_child_private (widget_class, IdeWorkbenchHeaderBar, center_left_box);
-  gtk_widget_class_bind_template_child_private (widget_class, IdeWorkbenchHeaderBar, menu_button);
   gtk_widget_class_bind_template_child_private (widget_class, IdeWorkbenchHeaderBar, left_box);
+  gtk_widget_class_bind_template_child_private (widget_class, IdeWorkbenchHeaderBar, menu_button);
+  gtk_widget_class_bind_template_child_private (widget_class, IdeWorkbenchHeaderBar, omni_bar);
   gtk_widget_class_bind_template_child_private (widget_class, IdeWorkbenchHeaderBar, right_box);
 }
 
@@ -173,4 +175,14 @@ static void
 buildable_iface_init (GtkBuildableIface *iface)
 {
   iface->get_internal_child = ide_workbench_header_bar_get_internal_child;
+}
+
+IdeOmniBar *
+ide_workbench_header_bar_get_omni_bar (IdeWorkbenchHeaderBar *self)
+{
+  IdeWorkbenchHeaderBarPrivate *priv = ide_workbench_header_bar_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_WORKBENCH_HEADER_BAR (self), NULL);
+
+  return priv->omni_bar;
 }

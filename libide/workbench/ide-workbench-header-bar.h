@@ -21,6 +21,8 @@
 
 #include <gtk/gtk.h>
 
+#include "ide-omni-bar.h"
+
 G_BEGIN_DECLS
 
 #define IDE_TYPE_WORKBENCH_HEADER_BAR (ide_workbench_header_bar_get_type())
@@ -41,16 +43,17 @@ struct _IdeWorkbenchHeaderBarClass
   gpointer _reserved8;
 };
 
-GtkWidget *ide_workbench_header_bar_new          (void);
-void       ide_workbench_header_bar_focus_search (IdeWorkbenchHeaderBar *self);
-void       ide_workbench_header_bar_insert_left  (IdeWorkbenchHeaderBar *self,
-                                                  GtkWidget             *widget,
-                                                  GtkPackType            pack_type,
-                                                  gint                   priority);
-void       ide_workbench_header_bar_insert_right (IdeWorkbenchHeaderBar *self,
-                                                  GtkWidget             *widget,
-                                                  GtkPackType            pack_type,
-                                                  gint                   priority);
+GtkWidget  *ide_workbench_header_bar_new          (void);
+IdeOmniBar *ide_workbench_header_bar_get_omni_bar (IdeWorkbenchHeaderBar *self);
+void        ide_workbench_header_bar_focus_search (IdeWorkbenchHeaderBar *self);
+void        ide_workbench_header_bar_insert_left  (IdeWorkbenchHeaderBar *self,
+                                                   GtkWidget             *widget,
+                                                   GtkPackType            pack_type,
+                                                   gint                   priority);
+void        ide_workbench_header_bar_insert_right (IdeWorkbenchHeaderBar *self,
+                                                   GtkWidget             *widget,
+                                                   GtkPackType            pack_type,
+                                                   gint                   priority);
 
 G_END_DECLS
 
