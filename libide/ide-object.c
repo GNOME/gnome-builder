@@ -607,6 +607,16 @@ ide_object_notify_in_main (gpointer    instance,
   g_return_if_fail (G_IS_OBJECT (instance));
   g_return_if_fail (pspec != NULL);
 
+  /*
+   * Short circuit if we can notify immediately without the round trip
+   * to the main loop.
+   */
+  if G_LIKELY (g_main_context_get_thread_default () == g_main_context_default ())
+    {
+      g_object_notify_by_pspec (instance, pspec);
+      return;
+    }
+
   notify = g_slice_alloc0 (sizeof *notify);
   notify->object = g_object_ref (instance);
   notify->pspec = g_param_spec_ref (pspec);
