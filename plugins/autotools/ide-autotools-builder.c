@@ -46,15 +46,15 @@ ide_autotools_builder_build_cb (GObject      *object,
   if (!ide_autotools_build_task_execute_finish (build_result, result, &error))
     {
       if (g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
-        ide_build_result_set_mode (IDE_BUILD_RESULT (build_result), _("Cancelled"));
+        ide_build_result_set_mode (IDE_BUILD_RESULT (build_result), _("Build cancelled"));
       else
-        ide_build_result_set_mode (IDE_BUILD_RESULT (build_result), _("Failed"));
+        ide_build_result_set_mode (IDE_BUILD_RESULT (build_result), _("Build failed"));
 
       g_task_return_error (task, error);
       return;
     }
 
-  ide_build_result_set_mode (IDE_BUILD_RESULT (build_result), _("Success"));
+  ide_build_result_set_mode (IDE_BUILD_RESULT (build_result), _("Build successful"));
 
   g_task_return_pointer (task, g_object_ref (build_result), g_object_unref);
 }
