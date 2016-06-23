@@ -53,6 +53,8 @@ struct _IdeOmniBar
   GtkStack       *message_stack;
   GtkPopover     *popover;
   GtkLabel       *popover_branch_label;
+  GtkButton      *popover_build_cancel_button;
+  GtkLabel       *popover_build_status;
   GtkListBox     *popover_configuration_list_box;
   GtkLabel       *popover_project_label;
 };
@@ -184,6 +186,7 @@ ide_omni_bar_build_result_notify_mode (IdeOmniBar     *self,
   mode = ide_build_result_get_mode (result);
 
   gtk_label_set_label (self->build_result_mode_label, mode);
+  gtk_label_set_label (self->popover_build_status, mode);
 }
 
 static void
@@ -206,6 +209,9 @@ ide_omni_bar_build_result_notify_running (IdeOmniBar     *self,
 
       gtk_stack_set_visible_child (self->message_stack,
                                    GTK_WIDGET (self->build_result_mode_label));
+
+      gtk_widget_show (GTK_WIDGET (self->popover_build_cancel_button));
+      gtk_widget_hide (GTK_WIDGET (self->popover_build_status));
     }
   else
     {
@@ -215,6 +221,9 @@ ide_omni_bar_build_result_notify_running (IdeOmniBar     *self,
       g_object_set (self->build_button,
                     "action-name", "build-tools.build",
                     NULL);
+
+      gtk_widget_hide (GTK_WIDGET (self->popover_build_cancel_button));
+      gtk_widget_show (GTK_WIDGET (self->popover_build_status));
     }
 }
 
@@ -369,6 +378,8 @@ ide_omni_bar_class_init (IdeOmniBarClass *klass)
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, message_stack);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, popover);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, popover_branch_label);
+  gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, popover_build_cancel_button);
+  gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, popover_build_status);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, popover_configuration_list_box);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, popover_project_label);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, project_label);
