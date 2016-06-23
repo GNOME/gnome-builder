@@ -51,6 +51,8 @@ struct _IdeOmniBar
   GtkLabel       *config_name_label;
   GtkStack       *message_stack;
   GtkPopover     *popover;
+  GtkLabel       *popover_branch_label;
+  GtkLabel       *popover_project_label;
 };
 
 G_DEFINE_TYPE (IdeOmniBar, ide_omni_bar, GTK_TYPE_BOX)
@@ -80,6 +82,7 @@ ide_omni_bar_update (IdeOmniBar *self)
 
   gtk_label_set_label (self->project_label, project_name);
   gtk_label_set_label (self->branch_label, branch_name);
+  gtk_label_set_label (self->popover_branch_label, branch_name);
 }
 
 static void
@@ -97,8 +100,18 @@ ide_omni_bar_context_set (GtkWidget  *widget,
 
   if (context != NULL)
     {
-      IdeVcs *vcs = ide_context_get_vcs (context);
-      IdeConfigurationManager *configs = ide_context_get_configuration_manager (context);
+      IdeConfigurationManager *configs;
+      g_autofree gchar *path = NULL;
+      GFile *workdir;
+      IdeVcs *vcs;
+
+      configs = ide_context_get_configuration_manager (context);
+      vcs = ide_context_get_vcs (context);
+      workdir = ide_vcs_get_working_directory (vcs);
+
+      /* TODO: Convert to relative path (or remote uri) */
+      path = g_file_get_path (workdir);
+      gtk_label_set_label (self->popover_project_label, path);
 
       g_signal_connect_object (vcs,
                                "changed",
@@ -313,6 +326,8 @@ ide_omni_bar_class_init (IdeOmniBarClass *klass)
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, message_stack);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, popover);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, project_label);
+  gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, popover_branch_label);
+  gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, popover_project_label);
 }
 
 static void

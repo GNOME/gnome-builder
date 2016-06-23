@@ -15,6 +15,8 @@
               <object class="GtkBox">
                 <property name="hexpand">true</property>
                 <property name="visible">true</property>
+                <property name="margin-end">3</property>
+                <property name="margin-start">3</property>
                 <property name="spacing">6</property>
                 <child>
                   <object class="GtkLabel" id="project_label">
@@ -114,20 +116,25 @@
     </widgets>
   </object>
   <object class="GtkPopover" id="popover">
-    <property name="border-width">20</property>
+    <property name="border-width">24</property>
     <property name="relative-to">event_box</property>
     <property name="position">bottom</property>
+    <property name="width-request">400</property>
     <child>
       <object class="GtkBox">
-        <property name="spacing">12</property>
+        <property name="orientation">vertical</property>
+        <property name="spacing">20</property>
         <property name="visible">true</property>
         <child>
           <object class="GtkGrid">
+            <property name="column-spacing">20</property>
+            <property name="row-spacing">10</property>
             <property name="visible">true</property>
             <child>
               <object class="GtkLabel">
                 <property name="label" translatable="yes">Project</property>
                 <property name="visible">true</property>
+                <property name="xalign">0.0</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -140,6 +147,8 @@
               <object class="GtkLabel" id="popover_project_label">
                 <property name="hexpand">true</property>
                 <property name="visible">true</property>
+                <property name="xalign">0.0</property>
+                <property name="ellipsize">start</property>
               </object>
               <packing>
                 <property name="left-attach">1</property>
@@ -149,6 +158,7 @@
               <object class="GtkLabel">
                 <property name="label" translatable="yes">Branch</property>
                 <property name="visible">true</property>
+                <property name="xalign">0.0</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -165,11 +175,40 @@
               <object class="GtkLabel" id="popover_branch_label">
                 <property name="hexpand">true</property>
                 <property name="visible">true</property>
+                <property name="xalign">0.0</property>
               </object>
               <packing>
                 <property name="left-attach">1</property>
                 <property name="top-attach">1</property>
               </packing>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox">
+            <property name="orientation">vertical</property>
+            <property name="spacing">10</property>
+            <property name="visible">true</property>
+            <child>
+              <object class="GtkLabel">
+                <property name="label" translatable="yes">Build Profile</property>
+                <property name="visible">true</property>
+                <property name="xalign">0.0</property>
+                <attributes>
+                  <attribute name="weight" value="bold"/>
+                </attributes>
+              </object>
+            </child>
+            <child>
+              <object class="GtkScrolledWindow">
+                <property name="shadow-type">in</property>
+                <property name="visible">true</property>
+                <child>
+                  <object class="GtkListBox">
+                    <property name="visible">true</property>
+                  </object>
+                </child>
+              </object>
             </child>
           </object>
         </child>
