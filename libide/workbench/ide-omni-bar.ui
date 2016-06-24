@@ -98,6 +98,7 @@
         <child>
           <object class="GtkImage" id="build_button_image">
             <property name="icon-name">system-run-symbolic</property>
+            <property name="tooltip-text" translatable="yes">Build project</property>
             <property name="visible">true</property>
           </object>
         </child>
