@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-omni-bar-row"
 
+#include <glib/gi18n.h>
+
 #include "devices/ide-device.h"
 #include "runtimes/ide-runtime.h"
 #include "workbench/ide-omni-bar-row.h"
@@ -64,6 +66,7 @@ on_runtime_changed (IdeOmniBarRow    *self,
                     GParamSpec       *pspec,
                     IdeConfiguration *config)
 {
+  g_autofree gchar *freeme = NULL;
   const gchar *display_name = NULL;
   IdeRuntime *runtime;
 
@@ -72,6 +75,11 @@ on_runtime_changed (IdeOmniBarRow    *self,
 
   if (NULL != (runtime = ide_configuration_get_runtime (config)))
     display_name = ide_runtime_get_display_name (runtime);
+  else
+    display_name = freeme = g_strdup_printf ("%s (%s)",
+                                             ide_configuration_get_runtime_id (config),
+                                             /* Translators, missing means we could not locate the runtime */
+                                             _("missing"));
 
   gtk_label_set_label (self->runtime_title, display_name);
 }
