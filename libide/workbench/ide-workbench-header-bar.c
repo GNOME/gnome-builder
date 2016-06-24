@@ -21,6 +21,7 @@
 #include <egg-priority-box.h>
 
 #include "application/ide-application.h"
+#include "search/ide-omni-search-entry.h"
 #include "util/ide-gtk.h"
 #include "workbench/ide-perspective.h"
 #include "workbench/ide-workbench.h"
@@ -28,13 +29,14 @@
 
 typedef struct
 {
-  GtkMenuButton  *menu_button;
-  EggPriorityBox *center_box;
-  EggPriorityBox *center_right_box;
-  EggPriorityBox *center_left_box;
-  EggPriorityBox *right_box;
-  EggPriorityBox *left_box;
-  IdeOmniBar     *omni_bar;
+  GtkMenuButton      *menu_button;
+  EggPriorityBox     *center_box;
+  EggPriorityBox     *center_right_box;
+  EggPriorityBox     *center_left_box;
+  EggPriorityBox     *right_box;
+  EggPriorityBox     *left_box;
+  IdeOmniBar         *omni_bar;
+  IdeOmniSearchEntry *search_entry;
 } IdeWorkbenchHeaderBarPrivate;
 
 static void buildable_iface_init (GtkBuildableIface *iface);
@@ -56,12 +58,13 @@ ide_workbench_header_bar_class_init (IdeWorkbenchHeaderBarClass *klass)
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/ui/ide-workbench-header-bar.ui");
   gtk_widget_class_bind_template_child_private (widget_class, IdeWorkbenchHeaderBar, center_box);
-  gtk_widget_class_bind_template_child_private (widget_class, IdeWorkbenchHeaderBar, center_right_box);
   gtk_widget_class_bind_template_child_private (widget_class, IdeWorkbenchHeaderBar, center_left_box);
+  gtk_widget_class_bind_template_child_private (widget_class, IdeWorkbenchHeaderBar, center_right_box);
   gtk_widget_class_bind_template_child_private (widget_class, IdeWorkbenchHeaderBar, left_box);
   gtk_widget_class_bind_template_child_private (widget_class, IdeWorkbenchHeaderBar, menu_button);
   gtk_widget_class_bind_template_child_private (widget_class, IdeWorkbenchHeaderBar, omni_bar);
   gtk_widget_class_bind_template_child_private (widget_class, IdeWorkbenchHeaderBar, right_box);
+  gtk_widget_class_bind_template_child_private (widget_class, IdeWorkbenchHeaderBar, search_entry);
 }
 
 static void
@@ -82,13 +85,11 @@ ide_workbench_header_bar_init (IdeWorkbenchHeaderBar *self)
 void
 ide_workbench_header_bar_focus_search (IdeWorkbenchHeaderBar *self)
 {
-  GtkWidget *entry;
+  IdeWorkbenchHeaderBarPrivate *priv = ide_workbench_header_bar_get_instance_private (self);
 
   g_return_if_fail (IDE_IS_WORKBENCH_HEADER_BAR (self));
 
-  entry = gtk_header_bar_get_custom_title (GTK_HEADER_BAR (self));
-  if (GTK_IS_ENTRY (entry))
-    gtk_widget_grab_focus (GTK_WIDGET (entry));
+  gtk_widget_grab_focus (GTK_WIDGET (priv->search_entry));
 }
 
 void

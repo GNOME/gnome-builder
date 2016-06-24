@@ -24,8 +24,9 @@
 
 #include "application/ide-application.h"
 #include "buffers/ide-buffer-manager.h"
-#include "workbench/ide-workbench-private.h"
 #include "workbench/ide-workbench.h"
+#include "workbench/ide-workbench-header-bar.h"
+#include "workbench/ide-workbench-private.h"
 
 static void
 ide_workbench_actions_open_with_dialog_cb (GObject      *object,
@@ -179,11 +180,25 @@ ide_workbench_actions_opacity (GSimpleAction *action,
   gtk_widget_set_opacity (GTK_WIDGET (workbench), opacity);
 }
 
+static void
+ide_workbench_actions_global_search (GSimpleAction *action,
+                                     GVariant      *variant,
+                                     gpointer       user_data)
+{
+  IdeWorkbench *self = user_data;
+
+  g_assert (G_IS_SIMPLE_ACTION (action));
+  g_assert (IDE_IS_WORKBENCH (self));
+
+  ide_workbench_header_bar_focus_search (self->header_bar);
+}
+
 void
 ide_workbench_actions_init (IdeWorkbench *self)
 {
   GPropertyAction *action;
   const GActionEntry actions[] = {
+    { "global-search", ide_workbench_actions_global_search },
     { "opacity", NULL, "i", "100", ide_workbench_actions_opacity },
     { "open-with-dialog", ide_workbench_actions_open_with_dialog },
     { "save-all", ide_workbench_actions_save_all },
