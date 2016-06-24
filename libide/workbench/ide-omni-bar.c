@@ -220,6 +220,46 @@ ide_omni_bar_context_set (GtkWidget  *widget,
   IDE_EXIT;
 }
 
+static gboolean
+event_box_enter_notify (IdeOmniBar  *self,
+                        GdkEvent    *event,
+                        GtkEventBox *event_box)
+{
+  GtkStyleContext *style_context;
+  GtkStateFlags state_flags;
+
+  g_assert (IDE_IS_OMNI_BAR (self));
+  g_assert (event != NULL);
+  g_assert (GTK_IS_EVENT_BOX (event_box));
+
+  style_context = gtk_widget_get_style_context (GTK_WIDGET (self));
+  state_flags = gtk_style_context_get_state (style_context);
+
+  gtk_style_context_set_state (style_context, state_flags | GTK_STATE_FLAG_PRELIGHT);
+
+  return GDK_EVENT_PROPAGATE;
+}
+
+static gboolean
+event_box_leave_notify (IdeOmniBar  *self,
+                        GdkEvent    *event,
+                        GtkEventBox *event_box)
+{
+  GtkStyleContext *style_context;
+  GtkStateFlags state_flags;
+
+  g_assert (IDE_IS_OMNI_BAR (self));
+  g_assert (event != NULL);
+  g_assert (GTK_IS_EVENT_BOX (event_box));
+
+  style_context = gtk_widget_get_style_context (GTK_WIDGET (self));
+  state_flags = gtk_style_context_get_state (style_context);
+
+  gtk_style_context_set_state (style_context, state_flags & ~GTK_STATE_FLAG_PRELIGHT);
+
+  return GDK_EVENT_PROPAGATE;
+}
+
 static void
 ide_omni_bar_build_result_notify_mode (IdeOmniBar     *self,
                                        GParamSpec     *pspec,
@@ -393,22 +433,6 @@ multipress_pressed_cb (GtkGestureMultiPress *gesture,
 }
 
 static void
-event_box_realize (GtkWidget  *event_box,
-                   IdeOmniBar *self)
-{
-  GdkWindow *window;
-  GdkCursor *cursor;
-
-  g_assert (GTK_IS_EVENT_BOX (event_box));
-  g_assert (IDE_IS_OMNI_BAR (self));
-
-  window = gtk_widget_get_window (event_box);
-  cursor = gdk_cursor_new_from_name (gdk_window_get_display (window), "pointer");
-  gdk_window_set_cursor (window, cursor);
-  g_clear_object (&cursor);
-}
-
-static void
 ide_omni_bar_finalize (GObject *object)
 {
   IdeOmniBar *self = (IdeOmniBar *)object;
@@ -470,10 +494,16 @@ ide_omni_bar_init (IdeOmniBar *self)
 
   gtk_widget_add_events (GTK_WIDGET (self->event_box), GDK_BUTTON_PRESS_MASK);
 
-  g_signal_connect_after (self->event_box,
-                          "realize",
-                          G_CALLBACK (event_box_realize),
-                          self);
+  g_signal_connect_object (self->event_box,
+                           "enter-notify-event",
+                           G_CALLBACK (event_box_enter_notify),
+                           self,
+                           G_CONNECT_SWAPPED);
+  g_signal_connect_object (self->event_box,
+                           "leave-notify-event",
+                           G_CALLBACK (event_box_leave_notify),
+                           self,
+                           G_CONNECT_SWAPPED);
 
   self->gesture = gtk_gesture_multi_press_new (GTK_WIDGET (self->event_box));
   g_signal_connect (self->gesture, "pressed", G_CALLBACK (multipress_pressed_cb), self);
