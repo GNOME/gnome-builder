@@ -565,6 +565,9 @@ void
 ide_omni_bar_set_build_result (IdeOmniBar     *self,
                                IdeBuildResult *build_result)
 {
+  g_autoptr(GDateTime) now = NULL;
+  g_autofree gchar *nowstr = NULL;
+
   g_return_if_fail (IDE_IS_OMNI_BAR (self));
   g_return_if_fail (!build_result || IDE_IS_BUILD_RESULT (build_result));
 
@@ -572,5 +575,10 @@ ide_omni_bar_set_build_result (IdeOmniBar     *self,
   egg_signal_group_set_target (self->build_result_signals, build_result);
 
   self->seen_count = 0;
+
   gtk_stack_set_visible_child_name (self->message_stack, "build");
+
+  now = g_date_time_new_now_local ();
+  nowstr = g_date_time_format (now, "%A %B %e, %X");
+  gtk_label_set_label (self->popover_last_build_time_label, nowstr);
 }
