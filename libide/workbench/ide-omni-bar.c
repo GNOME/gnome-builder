@@ -56,8 +56,10 @@ struct _IdeOmniBar
   GtkPopover     *popover;
   GtkLabel       *popover_branch_label;
   GtkButton      *popover_build_cancel_button;
+  GtkLabel       *popover_build_running_time_label;
   GtkLabel       *popover_build_status;
   GtkListBox     *popover_configuration_list_box;
+  GtkLabel       *popover_last_build_time_label;
   GtkLabel       *popover_project_label;
 };
 
@@ -236,6 +238,30 @@ ide_omni_bar_build_result_notify_mode (IdeOmniBar     *self,
 }
 
 static void
+ide_omni_bar_build_result_notify_running_time (IdeOmniBar     *self,
+                                               GParamSpec     *pspec,
+                                               IdeBuildResult *result)
+{
+  g_autofree gchar *text = NULL;
+  GTimeSpan span;
+  guint hours;
+  guint minutes;
+  guint seconds;
+
+  g_assert (IDE_IS_OMNI_BAR (self));
+  g_assert (IDE_IS_BUILD_RESULT (result));
+
+  span = ide_build_result_get_running_time (result);
+
+  hours = span / G_TIME_SPAN_HOUR;
+  minutes = (span % G_TIME_SPAN_HOUR) / G_TIME_SPAN_MINUTE;
+  seconds = (span % G_TIME_SPAN_MINUTE) / G_TIME_SPAN_SECOND;
+
+  text = g_strdup_printf ("%02u:%02u:%02u", hours, minutes, seconds);
+  gtk_label_set_label (self->popover_build_running_time_label, text);
+}
+
+static void
 ide_omni_bar_build_result_notify_running (IdeOmniBar     *self,
                                           GParamSpec     *pspec,
                                           IdeBuildResult *result)
@@ -258,6 +284,8 @@ ide_omni_bar_build_result_notify_running (IdeOmniBar     *self,
 
       gtk_widget_show (GTK_WIDGET (self->popover_build_cancel_button));
       gtk_widget_hide (GTK_WIDGET (self->popover_build_status));
+      gtk_widget_hide (GTK_WIDGET (self->popover_last_build_time_label));
+      gtk_widget_show (GTK_WIDGET (self->popover_build_running_time_label));
     }
   else
     {
@@ -270,6 +298,8 @@ ide_omni_bar_build_result_notify_running (IdeOmniBar     *self,
 
       gtk_widget_hide (GTK_WIDGET (self->popover_build_cancel_button));
       gtk_widget_show (GTK_WIDGET (self->popover_build_status));
+      gtk_widget_show (GTK_WIDGET (self->popover_last_build_time_label));
+      gtk_widget_hide (GTK_WIDGET (self->popover_build_running_time_label));
     }
 }
 
@@ -425,8 +455,10 @@ ide_omni_bar_class_init (IdeOmniBarClass *klass)
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, popover);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, popover_branch_label);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, popover_build_cancel_button);
+  gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, popover_build_running_time_label);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, popover_build_status);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, popover_configuration_list_box);
+  gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, popover_last_build_time_label);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, popover_project_label);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, project_label);
 }
@@ -456,6 +488,11 @@ ide_omni_bar_init (IdeOmniBar *self)
   egg_signal_group_connect_object (self->build_result_signals,
                                    "notify::running",
                                    G_CALLBACK (ide_omni_bar_build_result_notify_running),
+                                   self,
+                                   G_CONNECT_SWAPPED);
+  egg_signal_group_connect_object (self->build_result_signals,
+                                   "notify::running-time",
+                                   G_CALLBACK (ide_omni_bar_build_result_notify_running_time),
                                    self,
                                    G_CONNECT_SWAPPED);
   egg_signal_group_connect_object (self->build_result_signals,

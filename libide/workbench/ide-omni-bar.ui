@@ -225,6 +225,7 @@
             <child>
               <object class="GtkBox">
                 <property name="orientation">vertical</property>
+                <property name="valign">center</property>
                 <property name="visible">true</property>
                 <child>
                   <object class="GtkLabel" id="popover_build_label">
@@ -250,7 +251,8 @@
             </child>
             <child>
               <object class="GtkLabel" id="popover_build_running_time_label">
-                <property name="label">0:32</property>
+                <property name="margin-end">8</property>
+                <property name="margin-start">8</property>
               </object>
               <packing>
                 <property name="position">1</property>
@@ -259,7 +261,8 @@
             </child>
             <child>
               <object class="GtkLabel" id="popover_build_status">
-                <property name="label">Failed</property>
+                <property name="margin-end">8</property>
+                <property name="margin-start">8</property>
               </object>
               <packing>
                 <property name="position">2</property>
