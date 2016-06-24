@@ -51,6 +51,7 @@ typedef struct
 
   GTimer           *timer;
   gchar            *mode;
+  GSource          *running_time_source;
 
   guint             running : 1;
 } IdeBuildResultPrivate;
@@ -68,6 +69,7 @@ enum {
   PROP_0,
   PROP_MODE,
   PROP_RUNNING,
+  PROP_RUNNING_TIME,
   LAST_PROP
 };
 
@@ -476,6 +478,8 @@ ide_build_result_finalize (GObject *object)
   IdeBuildResult *self = (IdeBuildResult *)object;
   IdeBuildResultPrivate *priv = ide_build_result_get_instance_private (self);
 
+  g_clear_pointer (&priv->running_time_source, g_source_destroy);
+
   g_clear_object (&priv->addins);
 
   g_clear_object (&priv->stderr_reader);
@@ -504,12 +508,16 @@ ide_build_result_get_property (GObject    *object,
 
   switch (prop_id)
     {
+    case PROP_MODE:
+      g_value_take_string (value, ide_build_result_get_mode (self));
+      break;
+
     case PROP_RUNNING:
       g_value_set_boolean (value, ide_build_result_get_running (self));
       break;
 
-    case PROP_MODE:
-      g_value_take_string (value, ide_build_result_get_mode (self));
+    case PROP_RUNNING_TIME:
+      g_value_set_int64 (value, ide_build_result_get_running_time (self));
       break;
 
     default:
@@ -527,12 +535,12 @@ ide_build_result_set_property (GObject      *object,
 
   switch (prop_id)
     {
-    case PROP_RUNNING:
-      ide_build_result_set_running (self, g_value_get_boolean (value));
-      break;
-
     case PROP_MODE:
       ide_build_result_set_mode (self, g_value_get_string (value));
+      break;
+
+    case PROP_RUNNING:
+      ide_build_result_set_running (self, g_value_get_boolean (value));
       break;
 
     default:
@@ -563,6 +571,15 @@ ide_build_result_class_init (IdeBuildResultClass *klass)
                           "If the build process is still running.",
                           FALSE,
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY));
+
+  properties [PROP_RUNNING_TIME] =
+    g_param_spec_int64 ("running-time",
+                        "Running Time",
+                        "Duration of the build operation",
+                        0,
+                        G_MAXINT64,
+                        0,
+                        (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY));
 
   g_object_class_install_properties (object_class, LAST_PROP, properties);
 
@@ -654,6 +671,18 @@ ide_build_result_get_running (IdeBuildResult *self)
   return priv->running;
 }
 
+static gboolean
+ide_build_result_do_notify_running_time (gpointer user_data)
+{
+  IdeBuildResult *self = user_data;
+
+  g_assert (IDE_IS_BUILD_RESULT (self));
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_RUNNING_TIME]);
+
+  return G_SOURCE_CONTINUE;
+}
+
 void
 ide_build_result_set_running (IdeBuildResult *self,
                               gboolean        running)
@@ -668,9 +697,24 @@ ide_build_result_set_running (IdeBuildResult *self,
   if (priv->running != running)
     {
       priv->running = running;
+
       if (!running)
-        g_timer_stop (priv->timer);
+        {
+          g_timer_stop (priv->timer);
+          g_clear_pointer (&priv->running_time_source, g_source_destroy);
+        }
+      else
+        {
+          priv->running_time_source = g_timeout_source_new_seconds (1);
+          g_source_set_name (priv->running_time_source, "[ide] build result running-time notify");
+          g_source_set_callback (priv->running_time_source,
+                                 ide_build_result_do_notify_running_time,
+                                 self, NULL);
+          g_source_attach (priv->running_time_source, NULL);
+        }
+
       ide_object_notify_in_main (self, properties [PROP_RUNNING]);
+      ide_object_notify_in_main (self, properties [PROP_RUNNING_TIME]);
     }
   g_mutex_unlock (&priv->mutex);
 }
