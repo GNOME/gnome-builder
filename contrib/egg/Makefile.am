@@ -19,6 +19,7 @@ headers_DATA = \
 	egg-entry-box.h \
 	egg-frame-source.h \
 	egg-heap.h \
+	egg-list-box.h \
 	egg-menu-manager.h \
 	egg-pill-box.h \
 	egg-priority-box.h \
@@ -50,6 +51,7 @@ libegg_private_la_SOURCES = \
 	egg-entry-box.c \
 	egg-frame-source.c \
 	egg-heap.c \
+	egg-list-box.c \
 	egg-menu-manager.c \
 	egg-pill-box.c \
 	egg-priority-box.c \
