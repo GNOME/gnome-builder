@@ -230,7 +230,6 @@
                 <child>
                   <object class="GtkLabel" id="popover_build_label">
                     <property name="label">Last build</property>
-                    <property name="visible">true</property>
                     <property name="xalign">0.0</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
@@ -239,8 +238,6 @@
                 </child>
                 <child>
                   <object class="GtkLabel" id="popover_last_build_time_label">
-                    <property name="label">Friday June 3rd, 11:49</property>
-                    <property name="visible">true</property>
                     <property name="xalign">0.0</property>
                     <attributes>
                       <attribute name="scale" value="0.8333"/>
