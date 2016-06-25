@@ -38,7 +38,6 @@ struct _IdeEditorPerspective
   IdeLayout              parent_instance;
 
   IdeLayoutGrid         *grid;
-  IdeWorkbenchHeaderBar *titlebar;
   GSimpleActionGroup    *actions;
 
   EggSignalGroup        *buffer_manager_signals;
@@ -272,18 +271,6 @@ ide_editor_perspective_notify_focus_buffer (IdeEditorPerspective *self,
 }
 
 static void
-global_search_activate (GSimpleAction *action,
-                        GVariant      *param,
-                        gpointer       user_data)
-{
-  IdeEditorPerspective *self = user_data;
-
-  g_assert (IDE_IS_EDITOR_PERSPECTIVE (self));
-
-  ide_workbench_header_bar_focus_search (self->titlebar);
-}
-
-static void
 new_file_activate (GSimpleAction *action,
                    GVariant      *param,
                    gpointer       user_data)
@@ -376,7 +363,6 @@ ide_editor_perspective_class_init (IdeEditorPerspectiveClass *klass)
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/ui/ide-editor-perspective.ui");
   gtk_widget_class_bind_template_child (widget_class, IdeEditorPerspective, actions);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorPerspective, grid);
-  gtk_widget_class_bind_template_child (widget_class, IdeEditorPerspective, titlebar);
 
   signals[VIEW_ADDED] =
     g_signal_new ("view-added",
@@ -410,7 +396,6 @@ ide_editor_perspective_init (IdeEditorPerspective *self)
   };
   static const GActionEntry entries[] = {
     { "new-file", new_file_activate },
-    { "global-search", global_search_activate },
   };
 
   GActionGroup *actions;
@@ -461,12 +446,6 @@ static gchar *
 ide_editor_perspective_get_title (IdePerspective *perspective)
 {
   return g_strdup (_("Editor"));
-}
-
-static GtkWidget *
-ide_editor_perspective_get_titlebar (IdePerspective *perspective)
-{
-  return GTK_WIDGET (IDE_EDITOR_PERSPECTIVE (perspective)->titlebar);
 }
 
 static gchar *
@@ -523,7 +502,6 @@ ide_perspective_iface_init (IdePerspectiveInterface *iface)
   iface->get_icon_name = ide_editor_perspective_get_icon_name;
   iface->get_id = ide_editor_perspective_get_id;
   iface->get_title = ide_editor_perspective_get_title;
-  iface->get_titlebar = ide_editor_perspective_get_titlebar;
   iface->views_foreach = ide_editor_perspective_views_foreach;
 }
 
