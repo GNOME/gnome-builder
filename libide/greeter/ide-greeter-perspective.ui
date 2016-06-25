@@ -8,19 +8,6 @@
         <property name="expand">true</property>
         <property name="visible">true</property>
         <child>
-          <object class="EggSearchBar">
-            <property name="visible">true</property>
-            <property name="vexpand">false</property>
-            <property name="search-mode-enabled" bind-source="search_button" bind-property="active" bind-flags="bidirectional"/>
-            <child internal-child="entry">
-              <object class="GtkSearchEntry" id="search_entry">
-                <property name="placeholder-text"></property>
-                <property name="width-chars">45</property>
-              </object>
-            </child>
-          </object>
-        </child>
-        <child>
           <object class="GtkStack" id="stack">
             <property name="expand">true</property>
             <property name="visible">true</property>
@@ -56,6 +43,13 @@
                             <property name="spacing">32</property>
                             <property name="visible">true</property>
                             <property name="max-width-request">550</property>
+                            <child>
+                              <object class="GtkSearchEntry" id="search_entry">
+                                <property name="width-chars">45</property>
+                                <property name="halign">center</property>
+                                <property name="visible">true</property>
+                              </object>
+                            </child>
                             <child>
                               <object class="GtkBox" id="my_projects_container">
                                 <property name="orientation">vertical</property>
@@ -235,25 +229,6 @@
       </packing>
     </child>
     <child>
-      <object class="GtkToggleButton" id="search_button">
-        <property name="tooltip-text" translatable="yes">Search for projects</property>
-        <property name="visible">true</property>
-        <style>
-          <class name="image-button"/>
-        </style>
-        <child>
-          <object class="GtkImage">
-            <property name="icon-name">edit-find-symbolic</property>
-            <property name="visible">true</property>
-          </object>
-        </child>
-      </object>
-      <packing>
-        <property name="position">2</property>
-        <property name="pack-type">end</property>
-      </packing>
-    </child>
-    <child>
       <object class="GtkToggleButton" id="selection_button">
         <property name="tooltip-text" translatable="yes">Select projects for removal</property>
         <property name="action-name">perspective.state</property>
@@ -315,6 +290,9 @@
         <object id="other_projects_container">
           <property name="visible">true</property>
         </object>
+        <object id="search_entry">
+          <property name="visible">true</property>
+        </object>
       </state>
       <state name="selection">
         <object id="titlebar">
@@ -339,6 +317,9 @@
           <property name="visible">false</property>
         </object>
         <object id="other_projects_container">
+          <property name="visible">false</property>
+        </object>
+        <object id="search_entry">
           <property name="visible">false</property>
         </object>
       </state>
