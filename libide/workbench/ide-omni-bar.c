@@ -56,27 +56,69 @@ struct _IdeOmniBar
   GtkPopover     *popover;
   GtkLabel       *popover_branch_label;
   GtkButton      *popover_build_cancel_button;
+  GtkLabel       *popover_build_label;
   GtkLabel       *popover_build_running_time_label;
   GtkLabel       *popover_build_status;
   GtkListBox     *popover_configuration_list_box;
   GtkLabel       *popover_last_build_time_label;
+  GtkButton      *popover_view_output_button;
   GtkLabel       *popover_project_label;
 };
 
 G_DEFINE_TYPE (IdeOmniBar, ide_omni_bar, GTK_TYPE_BOX)
+
+static void
+on_configure_row (IdeOmniBar    *self,
+                  IdeOmniBarRow *row)
+{
+  IdeConfiguration *config;
+  const gchar *id;
+
+  g_assert (IDE_IS_OMNI_BAR (self));
+  g_assert (IDE_IS_OMNI_BAR_ROW (row));
+
+  config = ide_omni_bar_row_get_item (row);
+  id = ide_configuration_get_id (config);
+
+  /*
+   * TODO: This can be removed once GtkPopover can activate actions
+   *       that are resolved via the GtkPopover:relative-to property,
+   *       or it gets a proper parent that is not the toplevel.
+   *
+   *       https://bugzilla.gnome.org/show_bug.cgi?id=768023
+   */
+
+  ide_widget_action (GTK_WIDGET (self),
+                     "build-tools",
+                     "configure",
+                     g_variant_new_string (id));
+
+  gtk_widget_hide (GTK_WIDGET (self->popover));
+}
 
 static GtkWidget *
 create_configuration_row (gpointer item,
                           gpointer user_data)
 {
   IdeConfiguration *configuration = item;
+  IdeOmniBar *self = user_data;
+  GtkWidget *ret;
 
   g_assert (IDE_IS_CONFIGURATION (configuration));
+  g_assert (IDE_IS_OMNI_BAR (self));
 
-  return g_object_new (IDE_TYPE_OMNI_BAR_ROW,
-                       "item", configuration,
-                       "visible", TRUE,
-                       NULL);
+  ret = g_object_new (IDE_TYPE_OMNI_BAR_ROW,
+                      "item", configuration,
+                      "visible", TRUE,
+                      NULL);
+
+  g_signal_connect_object (ret,
+                           "configure",
+                           G_CALLBACK (on_configure_row),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  return ret;
 }
 
 static void
@@ -337,6 +379,7 @@ ide_omni_bar_build_result_notify_running (IdeOmniBar     *self,
                     NULL);
 
       gtk_widget_hide (GTK_WIDGET (self->popover_build_cancel_button));
+      gtk_widget_show (GTK_WIDGET (self->popover_build_label));
       gtk_widget_show (GTK_WIDGET (self->popover_build_status));
       gtk_widget_show (GTK_WIDGET (self->popover_last_build_time_label));
       gtk_widget_hide (GTK_WIDGET (self->popover_build_running_time_label));
@@ -479,11 +522,13 @@ ide_omni_bar_class_init (IdeOmniBarClass *klass)
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, popover);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, popover_branch_label);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, popover_build_cancel_button);
+  gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, popover_build_label);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, popover_build_running_time_label);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, popover_build_status);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, popover_configuration_list_box);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, popover_last_build_time_label);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, popover_project_label);
+  gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, popover_view_output_button);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, project_label);
 }
 
@@ -581,4 +626,6 @@ ide_omni_bar_set_build_result (IdeOmniBar     *self,
   now = g_date_time_new_now_local ();
   nowstr = g_date_time_format (now, "%A %B %e, %X");
   gtk_label_set_label (self->popover_last_build_time_label, nowstr);
+
+  gtk_widget_show (GTK_WIDGET (self->popover_view_output_button));
 }
