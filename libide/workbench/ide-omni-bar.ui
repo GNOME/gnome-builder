@@ -6,7 +6,7 @@
     </style>
     <child type="center">
       <object class="EggEntryBox" id="frame">
-        <property name="max-width-chars">55</property>
+        <property name="max-width-chars">50</property>
         <property name="visible">true</property>
         <child>
           <object class="GtkEventBox" id="event_box">
