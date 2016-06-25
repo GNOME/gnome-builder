@@ -28,6 +28,7 @@
               <object class="GtkButton" id="button">
                 <property name="halign">end</property>
                 <property name="hexpand">true</property>
+                <property name="tooltip-text" translatable="yes">Edit build configuration</property>
                 <style>
                   <class name="image-button"/>
                   <class name="flat"/>
