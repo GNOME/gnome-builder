@@ -270,7 +270,6 @@
             <child>
               <object class="GtkButton" id="popover_view_output_button">
                 <property name="label" translatable="yes">View Output</property>
-                <property name="visible">true</property>
               </object>
               <packing>
                 <property name="position">1</property>
