@@ -12,21 +12,6 @@ eggsearchbar:backdrop box.search-bar {
 }
 
 
-perspectiveswitcher {
-  background: #f4f4f4;
-}
-perspectiveswitcher button {
-  color: #bebebe;
-}
-perspectiveswitcher button:checked,
-perspectiveswitcher button:checked:hover {
-  color: #2e3436;
-}
-perspectiveswitcher button:hover {
-  color: mix(#bebebe, #2e3436, 0.3);
-}
-
-
 pillbox {
   background-color: #e1e1e1;
   border-radius: 3px;
