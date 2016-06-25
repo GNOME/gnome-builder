@@ -10,6 +10,7 @@
         <property name="visible">true</property>
         <child>
           <object class="GtkEventBox" id="event_box">
+            <property name="above-child">true</property>
             <property name="visible">true</property>
             <child>
               <object class="GtkBox">
