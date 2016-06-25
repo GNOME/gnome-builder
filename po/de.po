@@ -12,9 +12,9 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-05-26 12:26+0200\n"
-"PO-Revision-Date: 2016-05-26 12:27+0200\n"
-"Last-Translator: Mario Blättermann <mario.blaettermann@gmail.com>\n"
+"POT-Creation-Date: 2016-06-04 20:55+0000\n"
+"PO-Revision-Date: 2016-06-06 20:16+0200\n"
+"Last-Translator: Christian Kirbach <christian.kirbach@gmail.com>\n"
 "Language-Team: Deutsch <gnome-de@gnome.org>\n"
 "Language: de_DE\n"
 "MIME-Version: 1.0\n"
@@ -127,6 +127,8 @@ msgid ""
 "You can rely on predictable releases of Builder with each new release of "
 "GNOME every six months."
 msgstr ""
+"Sie können sich alle sechs Monate auf planmäßige Freigaben von Builder "
+"mit jeder neuen Freigabe von GNOME verlassen."
 
 #: ../data/org.gnome.Builder.appdata.xml.in.h:5
 msgid "Features:"
@@ -189,15 +191,16 @@ msgid "Build;Develop;"
 msgstr "Erstellen;Entwickeln;IDE;"
 
 #: ../data/gsettings/org.gnome.builder.build.gschema.xml.in.h:1
-#, fuzzy
 msgid "Build Parallelism"
-msgstr "Erstellungs-Worker"
+msgstr "Parallelisierung beim Erstellen"
 
 #: ../data/gsettings/org.gnome.builder.build.gschema.xml.in.h:2
 msgid ""
 "Number of workers to use when performing builds. -1 for sensible default. 0 "
 "for number of CPU."
 msgstr ""
+"Anzahl der Arbeits-Threads beim Erstellen. »-1« steht für eine sinnvolle "
+"Vorgabe. »0« steht für die Anzahl an CPUs."
 
 #: ../data/gsettings/org.gnome.builder.code-insight.gschema.xml.in.h:1
 msgid "Suggest Snippet Completion"
@@ -233,8 +236,8 @@ msgid ""
 "If enabled, words within the current document will be available for auto-"
 "completion."
 msgstr ""
-"Wenn aktiviert, werden Wörter im aktuellen Dokument für die automatische "
-"Vervollständigung vorgeschlagen."
+"Legt fest, ob Wörter im aktuellen Dokument für die automatische "
+"Vervollständigung vorgeschlagen werden."
 
 #: ../data/gsettings/org.gnome.builder.code-insight.gschema.xml.in.h:9
 msgid "Enable semantic highlighting"
@@ -245,16 +248,16 @@ msgid ""
 "If enabled, additional highlighting will be provided in supported languages "
 "based on information extracted from the source code."
 msgstr ""
+"Legt fest, ob zusätzliche Hervorhebung für unterstützte Sprachen geleistet "
+"wird, basierend auf aus dem Quellcode gewonnen Informationen."
 
 #: ../data/gsettings/org.gnome.builder.code-insight.gschema.xml.in.h:11
-#, fuzzy
 msgid "Path to ctags executable"
-msgstr "autogen.sh ist nicht ausführbar."
+msgstr "Pfad zum Programm »ctags«"
 
 #: ../data/gsettings/org.gnome.builder.code-insight.gschema.xml.in.h:12
-#, fuzzy
 msgid "The path to the ctags executable on the system."
-msgstr "Das darzustellende Ergebnis für den Eintrag."
+msgstr "Der Pfad zum Programm »ctags« auf dem System."
 
 #: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:1
 msgid "Restore last position"
@@ -273,6 +276,8 @@ msgid ""
 "If enabled, the editor will show line additions and changes next to the "
 "source code."
 msgstr ""
+"Legt fest, ob der Editor neue Zeilen und Änderungen neben dem Quellcode "
+"anzeigt."
 
 #: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:5
 #: ../data/ui/ide-editor-tweak-widget.ui.h:4
@@ -280,16 +285,16 @@ msgid "Highlight current line"
 msgstr "Aktuelle Zeile hervorheben"
 
 #: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:6
-#, fuzzy
 msgid "If enabled, the editor will highlight the line containing the cursor."
-msgstr "Hervorheben der Zeile in der sich die Eingabemarke befindet."
+msgstr ""
+"Legt fest, ob der Editor die Zeile hervorhebt, in der sich die Eingabemarke "
+"befindet."
 
 #: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:7
 msgid "Highlight matching brackets"
 msgstr "Zusammengehörige Klammern hervorheben"
 
 #: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:8
-#, fuzzy
 msgid "If enabled, the editor will highlight matching brackets."
 msgstr "Legt fest, ob übereinstimmende Klammern automatisch gesetzt werden."
 
@@ -299,7 +304,7 @@ msgstr "Zeilennummern anzeigen"
 
 #: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:10
 msgid "If enabled, the editor will show line numbers."
-msgstr ""
+msgstr "Legt fest, ob der Editor Zeilennummern anzeigt."
 
 #: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:11
 #: ../data/ui/ide-editor-tweak-widget.ui.h:6
@@ -308,7 +313,6 @@ msgid "Smart Backspace"
 msgstr "Intelligente Löschtaste"
 
 #: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:12
-#, fuzzy
 msgid ""
 "Backspace will remove additional spaces to keep you aligned to the "
 "indentation size."
@@ -322,10 +326,10 @@ msgid "Smart Home and End"
 msgstr "Intelligentes Pos1/Ende"
 
 #: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:14
-#, fuzzy
 msgid "Whether or not Home moves to first non-space character."
 msgstr ""
-"Pos1 bewegt die Eingabemarke zum ersten Zeichen, das kein Leerzeichen ist."
+"Legt fest, ob »Pos1« die Eingabemarke zum ersten Zeichen bewegt, das kein "
+"Leerzeichen ist."
 
 #: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:15
 msgid "Show grid lines"
@@ -333,29 +337,32 @@ msgstr "Gitterlinien anzeigen"
 
 #: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:16
 msgid "If enabled, the editor will show grid lines in the document."
-msgstr ""
+msgstr "Legt fest, ob der Editor Gitterlinien im Dokument anzeigt."
 
 #: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:17
 #: ../libide/preferences/ide-preferences-builtin.c:150
 msgid "Show overview map"
-msgstr "Übersichtskarte anzeigen"
+msgstr "Code-Übersicht anzeigen"
 
 #: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:18
-#, fuzzy
 msgid ""
 "If enabled, Builder will display an overview map of the source file next to "
 "the editor."
-msgstr "Eine Übersichtskarte neben dem Quellcode-Editor anzeigen."
+msgstr ""
+"Legt fest, ob Builder eine Übersicht des Quellcodes neben dem Editor "
+"anzeigt."
 
 #: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:19
 msgid "Automatically Hide Overview Map"
-msgstr "Übersichtskarte automatisch verbergen"
+msgstr "Übersicht automatisch verbergen"
 
 #: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:20
 msgid ""
 "If enabled, Builder will automatically hide the overview map when mouse "
 "focus leaves the editor, or a timeout occurs."
 msgstr ""
+"Legt fest, ob Builder automatisch die Übersicht verbirgt, sobald der "
+"Mauszeiger den Editor verlässt oder nach einem Zeitablauf."
 
 #: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:21
 msgid "Draw Spaces"
@@ -383,7 +390,7 @@ msgstr "Eingeschaltet"
 #: ../data/gsettings/org.gnome.builder.extension-type.gschema.xml.in.h:2
 #, fuzzy
 msgid "If the type within the extension is enabled."
-msgstr "Der Name der auszuführenden Aktion."
+msgstr "Legt fest, ob der Typ in der Erweiterung aktiviert ist."
 
 #: ../data/gsettings/org.gnome.builder.gschema.xml.in.h:1
 msgid "Window size"
@@ -431,9 +438,8 @@ msgid "Projects directory"
 msgstr "Projekteordner"
 
 #: ../data/gsettings/org.gnome.builder.gschema.xml.in.h:12
-#, fuzzy
 msgid "Directory for all builder projects"
-msgstr "Ein Platz für alle Ihre Projekte"
+msgstr "Ordner für alle Builder-Projekte"
 
 #: ../data/gsettings/org.gnome.builder.gschema.xml.in.h:13
 msgid "Restore Previous Files"
@@ -441,12 +447,11 @@ msgstr "Vorige Dateien wiederherstellen"
 
 #: ../data/gsettings/org.gnome.builder.gschema.xml.in.h:14
 msgid "Restore previously opened files when loading a project."
-msgstr ""
+msgstr "Zuvor geöffnete Dateien beim Laden eines Projekts wiederherstellen."
 
 #: ../data/gsettings/org.gnome.builder.plugin.gschema.xml.in.h:2
-#, fuzzy
 msgid "If the plugin should be enabled"
-msgstr "Legt fest, ob die aktuelle Zeile hervorgehoben werden soll."
+msgstr "Legt fest, ob das Plugin aktiviert werden soll."
 
 #: ../data/gsettings/org.gnome.builder.project-tree.gschema.xml.in.h:1
 msgid "Show Project Sidebar"
@@ -455,6 +460,7 @@ msgstr "Projekt-Seitenleiste anzeigen"
 #: ../data/gsettings/org.gnome.builder.project-tree.gschema.xml.in.h:2
 msgid "If enabled, the sidebar will be visible in the editor workspace."
 msgstr ""
+"Legt fest, ob die Seitenleiste sichtbar in der Arbeitsfläche des Editors ist."
 
 #: ../data/gsettings/org.gnome.builder.project-tree.gschema.xml.in.h:3
 #: ../plugins/project-tree/gtk/menus.ui.h:15
@@ -463,7 +469,7 @@ msgstr "Symbole anzeigen"
 
 #: ../data/gsettings/org.gnome.builder.project-tree.gschema.xml.in.h:4
 msgid "If enabled, the project tree will display icons next to each item."
-msgstr ""
+msgstr "Legt fest, ob der Projektbaum Symbole neben jedem Objekt anzeigt."
 
 #: ../data/gsettings/org.gnome.builder.project-tree.gschema.xml.in.h:5
 #: ../plugins/project-tree/gtk/menus.ui.h:16
@@ -481,7 +487,7 @@ msgstr "Linke Leiste anzeigen"
 
 #: ../data/gsettings/org.gnome.builder.workbench.gschema.xml.in.h:2
 msgid "If enabled, the left panel will be displayed."
-msgstr ""
+msgstr "Legt fest, ob die linke Leiste angezeigt wird."
 
 #: ../data/gsettings/org.gnome.builder.workbench.gschema.xml.in.h:3
 msgid "Left Panel Position"
@@ -498,7 +504,7 @@ msgstr "Rechte Leiste anzeigen"
 
 #: ../data/gsettings/org.gnome.builder.workbench.gschema.xml.in.h:6
 msgid "If enabled, the right panel will be displayed."
-msgstr ""
+msgstr "Legt fest, ob die rechte Leiste angezeigt wird."
 
 #: ../data/gsettings/org.gnome.builder.workbench.gschema.xml.in.h:7
 msgid "Right Panel Position"
@@ -514,7 +520,7 @@ msgstr "Untere Leiste anzeigen"
 
 #: ../data/gsettings/org.gnome.builder.workbench.gschema.xml.in.h:10
 msgid "If enabled, the bottom panel will be displayed."
-msgstr ""
+msgstr "Legt fest, ob die untere Leiste angezeigt wird."
 
 #: ../data/gsettings/org.gnome.builder.workbench.gschema.xml.in.h:11
 msgid "Bottom Panel Position"
@@ -1965,14 +1971,12 @@ msgid "A place for all your projects"
 msgstr "Ein Platz für alle Ihre Projekte"
 
 #: ../libide/preferences/ide-preferences-builtin.c:313
-#, fuzzy
 msgid "Restore previously opened files"
-msgstr "Zum vorherigen Fehler in der Datei wechseln"
+msgstr "Zuvor geöffnete Dateien öffnen"
 
 #: ../libide/preferences/ide-preferences-builtin.c:313
-#, fuzzy
 msgid "Open previously opened files when loading a project"
-msgstr "Das Präfix für die Installation des Projekts"
+msgstr "Zuvor geöffnete Dateien beim Laden eines Projekts öffnen."
 
 #: ../libide/preferences/ide-preferences-builtin.c:315
 msgid "Project Discovery"
@@ -2456,7 +2460,7 @@ msgstr "Ungültiger Syntaxunterbefehl: %s"
 msgid "Invalid search and replace request"
 msgstr "Ungültige Suchen-und-Ersetzen-Anfrage"
 
-#: ../plugins/command-bar/gb-vim.c:1145
+#: ../plugins/command-bar/gb-vim.c:1146
 #, c-format
 msgid "Not a command: %s"
 msgstr "Kein Befehl: %s"
@@ -2544,7 +2548,7 @@ msgstr "Die Zielsprache (falls unterstützt)"
 
 #: ../plugins/create-project/gbp-create-project-tool.c:142
 msgid "The version control to use or \"none\" to disable"
-msgstr ""
+msgstr "Die zu verwendende Versionskontrolle oder »keine« zum Abschalten."
 
 #: ../plugins/create-project/gbp-create-project-tool.c:143
 msgid "git"
@@ -2592,7 +2596,7 @@ msgstr "Sprache"
 
 #: ../plugins/create-project/gbp-create-project-widget.ui.h:4
 msgid "License"
-msgstr ""
+msgstr "Lizenz"
 
 #: ../plugins/create-project/gbp-create-project-widget.ui.h:5
 msgid "Versioning"
@@ -2600,31 +2604,32 @@ msgstr "Versionierung"
 
 #: ../plugins/create-project/gbp-create-project-widget.ui.h:6
 msgid "No license"
-msgstr ""
+msgstr "Keine Lizenz"
 
 #: ../plugins/create-project/gbp-create-project-widget.ui.h:7
 msgid "AGPL version 3 or later"
-msgstr ""
+msgstr "AGPL Version 3 oder neuer"
 
 #: ../plugins/create-project/gbp-create-project-widget.ui.h:8
 msgid "GPL version 3 or later"
-msgstr ""
+msgstr "GPL Version 3 oder neuer"
 
 #: ../plugins/create-project/gbp-create-project-widget.ui.h:9
 msgid "GPL version 2 or later"
-msgstr ""
+msgstr "GPL Version 2 oder neuer"
 
 #: ../plugins/create-project/gbp-create-project-widget.ui.h:10
 msgid "LGPL version 3 or later"
-msgstr ""
+msgstr "LGPL Version 3 oder neuer"
 
 #: ../plugins/create-project/gbp-create-project-widget.ui.h:11
 msgid "LGPL version 2.1 or later"
-msgstr ""
+msgstr "LGPL Version 2.1 oder neuer"
 
+# Lizenzmodellname
 #: ../plugins/create-project/gbp-create-project-widget.ui.h:12
 msgid "MIT/X11"
-msgstr ""
+msgstr "MIT/X11"
 
 #: ../plugins/create-project/gbp-create-project-widget.ui.h:13
 msgid "Pattern"
@@ -2709,6 +2714,8 @@ msgstr "Quellcodezuordnung"
 msgid ""
 "Builder failed to provide appropriate credentials when cloning repository."
 msgstr ""
+"Builder konnte keine angemessene Legitimierung beim Klonen eines "
+"Softwarebestands liefern."
 
 #: ../plugins/gnome-code-assistance/ide-gca-diagnostic-provider.c:375
 msgid "Code assistance requires a local file."
@@ -2782,9 +2789,8 @@ msgid "Project"
 msgstr "Projekt"
 
 #: ../plugins/project-tree/gb-project-tree-builder.c:207
-#, fuzzy
 msgid "Empty"
-msgstr "_Leere Datei"
+msgstr "Leer"
 
 #: ../plugins/project-tree/gb-rename-file-popover.c:79
 #, c-format
