@@ -26,19 +26,20 @@
 
 struct _GbpBuildWorkbenchAddin
 {
-  GObject             parent_instance;
+  GObject              parent_instance;
 
   /* Unowned */
-  GbpBuildPanel      *panel;
-  IdeWorkbench       *workbench;
-  GbpBuildLogPanel   *build_log_panel;
-  GtkWidget          *run_button;
+  GbpBuildPanel       *panel;
+  IdeWorkbench        *workbench;
+  GbpBuildLogPanel    *build_log_panel;
+  GtkWidget           *run_button;
+  GbpBuildPerspective *build_perspective;
 
   /* Owned */
-  EggBindingGroup    *bindings;
-  IdeBuildResult     *result;
-  GSimpleActionGroup *actions;
-  GCancellable       *cancellable;
+  EggBindingGroup     *bindings;
+  IdeBuildResult      *result;
+  GSimpleActionGroup  *actions;
+  GCancellable        *cancellable;
 };
 
 static void workbench_addin_iface_init (IdeWorkbenchAddinInterface *iface);
@@ -240,11 +241,38 @@ gbp_build_workbench_addin_cancel (GSimpleAction *action,
     g_cancellable_cancel (self->cancellable);
 }
 
+static void
+gbp_build_workbench_addin_configure (GSimpleAction *action,
+                                     GVariant      *param,
+                                     gpointer       user_data)
+{
+  GbpBuildWorkbenchAddin *self = user_data;
+  IdeConfigurationManager *config_manager;
+  IdeConfiguration *config;
+  IdeContext *context;
+  const gchar *id;
+
+  g_assert (GBP_IS_BUILD_WORKBENCH_ADDIN (self));
+  g_assert (g_variant_is_of_type (param, G_VARIANT_TYPE_STRING));
+
+  ide_workbench_set_visible_perspective (self->workbench,
+                                         IDE_PERSPECTIVE (self->build_perspective));
+
+  context = ide_workbench_get_context (self->workbench);
+  config_manager = ide_context_get_configuration_manager (context);
+  id = g_variant_get_string (param, NULL);
+  config = ide_configuration_manager_get_configuration (config_manager, id);
+
+  if (config != NULL)
+    gbp_build_perspective_set_configuration (self->build_perspective, config);
+}
+
 static const GActionEntry actions[] = {
   { "build", gbp_build_workbench_addin_build },
   { "rebuild", gbp_build_workbench_addin_rebuild },
   { "clean", gbp_build_workbench_addin_clean },
   { "cancel-build", gbp_build_workbench_addin_cancel },
+  { "configure", gbp_build_workbench_addin_configure, "s" },
 };
 
 static void
@@ -257,7 +285,6 @@ gbp_build_workbench_addin_load (IdeWorkbenchAddin *addin,
   IdeConfiguration *configuration;
   IdePerspective *editor;
   IdeContext *context;
-  GtkWidget *build_perspective;
   GtkWidget *pane;
 
   g_assert (IDE_IS_WORKBENCH_ADDIN (addin));
@@ -303,12 +330,12 @@ gbp_build_workbench_addin_load (IdeWorkbenchAddin *addin,
                                          GTK_PACK_START,
                                          0);
 
-  build_perspective = g_object_new (GBP_TYPE_BUILD_PERSPECTIVE,
-                                    "configuration-manager", configuration_manager,
-                                    "configuration", configuration,
-                                    "visible", TRUE,
-                                    NULL);
-  ide_workbench_add_perspective (workbench, IDE_PERSPECTIVE (build_perspective));
+  self->build_perspective = g_object_new (GBP_TYPE_BUILD_PERSPECTIVE,
+                                          "configuration-manager", configuration_manager,
+                                          "configuration", configuration,
+                                          "visible", TRUE,
+                                          NULL);
+  ide_workbench_add_perspective (workbench, IDE_PERSPECTIVE (self->build_perspective));
 }
 
 static void
