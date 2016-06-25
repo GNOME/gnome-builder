@@ -178,3 +178,19 @@ preferences stacksidebar list {
 preferences stacksidebar list separator {
   background-color: transparent;
 }
+
+
+buildperspective list.sidebar row:selected button:hover {
+  border-color: transparent;
+  box-shadow: none;
+  background: transparent;
+  color: @theme_selected_fg_color;
+  opacity: 1;
+}
+buildperspective list.sidebar row:selected button,
+buildperspective list.sidebar row:selected button:active {
+  opacity: 0.8;
+}
+buildperspective list.sidebar {
+  border-right: 1px solid alpha(@borders, 0.55);
+}

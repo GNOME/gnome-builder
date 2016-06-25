@@ -25,11 +25,15 @@ struct _GbpBuildConfigurationRow
   IdeConfiguration *configuration;
 
   GtkLabel         *label;
-  GtkImage         *check_image;
+  GtkImage         *radio;
+  GtkButton        *delete;
+  GtkButton        *duplicate;
+  GtkStack         *controls;
 };
 
 enum {
   PROP_0,
+  PROP_ACTIVE,
   PROP_CONFIGURATION,
   PROP_SELECTED,
   LAST_PROP
@@ -46,9 +50,10 @@ gbp_build_configuration_row_set_configuration (GbpBuildConfigurationRow *self,
   g_assert (GBP_IS_BUILD_CONFIGURATION_ROW (self));
   g_assert (IDE_IS_CONFIGURATION (configuration));
 
-  g_set_object (&self->configuration, configuration);
-
-  g_object_bind_property (configuration, "display-name", self->label, "label", G_BINDING_SYNC_CREATE);
+  if (g_set_object (&self->configuration, configuration))
+    g_object_bind_property (configuration, "display-name",
+                            self->label, "label",
+                            G_BINDING_SYNC_CREATE);
 }
 
 static void
@@ -75,10 +80,6 @@ gbp_build_configuration_row_get_property (GObject    *object,
       g_value_set_object (value, gbp_build_configuration_row_get_configuration (self));
       break;
 
-    case PROP_SELECTED:
-      g_value_set_boolean (value, gtk_widget_get_visible (GTK_WIDGET (self->check_image)));
-      break;
-
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -98,8 +99,22 @@ gbp_build_configuration_row_set_property (GObject      *object,
       gbp_build_configuration_row_set_configuration (self, g_value_get_object (value));
       break;
 
+    case PROP_ACTIVE:
+      if (g_value_get_boolean (value))
+        g_object_set (self->radio,
+                      "icon-name", "radio-checked-symbolic",
+                      NULL);
+      else
+        g_object_set (self->radio,
+                      "icon-name", "radio-symbolic",
+                      NULL);
+      break;
+
     case PROP_SELECTED:
-      gtk_widget_set_visible (GTK_WIDGET (self->check_image), g_value_get_boolean (value));
+      if (g_value_get_boolean (value))
+        gtk_stack_set_visible_child_name (self->controls, "controls");
+      else
+        gtk_stack_set_visible_child_name (self->controls, "empty");
       break;
 
     default:
@@ -124,18 +139,28 @@ gbp_build_configuration_row_class_init (GbpBuildConfigurationRowClass *klass)
                          IDE_TYPE_CONFIGURATION,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
+  properties [PROP_ACTIVE] =
+    g_param_spec_boolean ("active",
+                          "Active",
+                          "If the row is the active configuration",
+                          FALSE,
+                          (G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
+
   properties [PROP_SELECTED] =
     g_param_spec_boolean ("selected",
                           "Selected",
                           "If the row is selected",
                           FALSE,
-                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+                          (G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, LAST_PROP, properties);
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/plugins/build-tools-plugin/gbp-build-configuration-row.ui");
-  gtk_widget_class_bind_template_child (widget_class, GbpBuildConfigurationRow, check_image);
   gtk_widget_class_bind_template_child (widget_class, GbpBuildConfigurationRow, label);
+  gtk_widget_class_bind_template_child (widget_class, GbpBuildConfigurationRow, duplicate);
+  gtk_widget_class_bind_template_child (widget_class, GbpBuildConfigurationRow, delete);
+  gtk_widget_class_bind_template_child (widget_class, GbpBuildConfigurationRow, radio);
+  gtk_widget_class_bind_template_child (widget_class, GbpBuildConfigurationRow, controls);
 }
 
 static void

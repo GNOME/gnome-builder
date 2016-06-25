@@ -120,54 +120,6 @@
       </object>
     </child>
     <child>
-      <object class="GtkFrame">
-        <property name="visible">true</property>
-        <child>
-          <object class="GtkListBox">
-            <property name="selection-mode">none</property>
-            <property name="visible">true</property>
-            <child>
-              <object class="GtkListBoxRow">
-                <property name="visible">true</property>
-                <child>
-                  <object class="GtkBox">
-                    <property name="spacing">12</property>
-                    <property name="orientation">horizontal</property>
-                    <property name="visible">true</property>
-                    <child>
-                      <object class="GtkButton">
-                        <property name="action-name">perspective.duplicate-configuration</property>
-                        <property name="label" translatable="yes">Duplicate Configuration</property>
-                        <property name="valign">center</property>
-                        <property name="visible">true</property>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkLabel">
-                        <property name="hexpand">true</property>
-                        <property name="visible">true</property>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkButton">
-                        <property name="action-name">perspective.delete-configuration</property>
-                        <property name="label" translatable="yes">Delete Configuration</property>
-                        <property name="valign">center</property>
-                        <property name="visible">true</property>
-                        <style>
-                          <class name="destructive-action"/>
-                        </style>
-                      </object>
-                    </child>
-                  </object>
-                </child>
-              </object>
-            </child>
-          </object>
-        </child>
-      </object>
-    </child>
-    <child>
       <object class="GtkBox">
         <property name="orientation">vertical</property>
         <property name="spacing">12</property>

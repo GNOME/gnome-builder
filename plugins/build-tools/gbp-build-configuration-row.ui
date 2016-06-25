@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <template class="GbpBuildConfigurationRow" parent="GtkListBoxRow">
     <child>
@@ -5,15 +6,8 @@
         <property name="orientation">horizontal</property>
         <property name="visible">true</property>
         <child>
-          <object class="GtkLabel" id="label">
-            <property name="valign">baseline</property>
-            <property name="visible">true</property>
-            <property name="xalign">0.0</property>
-          </object>
-        </child>
-        <child>
-          <object class="GtkImage" id="check_image">
-            <property name="icon-name">object-select-symbolic</property>
+          <object class="GtkImage" id="radio">
+            <property name="icon-name">radio-symbolic</property>
             <property name="margin-end">6</property>
             <property name="margin-start">6</property>
             <property name="valign">baseline</property>
@@ -21,10 +15,65 @@
           </object>
         </child>
         <child>
-          <object class="GtkLabel" id="spacer">
+          <object class="GtkLabel" id="label">
             <property name="hexpand">true</property>
-            <property name="valign">baseline</property>
+            <property name="ellipsize">middle</property>
             <property name="visible">true</property>
+            <property name="xalign">0.0</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkStack" id="controls">
+            <property name="homogeneous">true</property>
+            <property name="visible">true</property>
+            <child>
+              <object class="GtkLabel">
+                <property name="visible">true</property>
+              </object>
+              <packing>
+                <property name="name">empty</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkBox">
+                <property name="visible">true</property>
+                <child>
+                  <object class="GtkButton" id="duplicate">
+                    <property name="action-name">perspective.duplicate-configuration</property>
+                    <property name="tooltip-text" translatable="yes">Duplicate the configuration</property>
+                    <property name="visible">true</property>
+                    <style>
+                      <class name="flat"/>
+                    </style>
+                    <child>
+                      <object class="GtkImage">
+                        <property name="icon-name">edit-copy-symbolic</property>
+                        <property name="visible">true</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkButton" id="delete">
+                    <property name="action-name">perspective.delete-configuration</property>
+                    <property name="tooltip-text" translatable="yes">Delete the configuration</property>
+                    <property name="visible">true</property>
+                    <style>
+                      <class name="flat"/>
+                    </style>
+                    <child>
+                      <object class="GtkImage">
+                        <property name="icon-name">user-trash-symbolic</property>
+                        <property name="visible">true</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="name">controls</property>
+              </packing>
+            </child>
           </object>
         </child>
       </object>

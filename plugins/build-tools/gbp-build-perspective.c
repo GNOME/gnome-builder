@@ -18,6 +18,7 @@
 
 #include <glib/gi18n.h>
 
+#include "gbp-build-configuration-row.h"
 #include "gbp-build-configuration-view.h"
 #include "gbp-build-perspective.h"
 
@@ -53,12 +54,46 @@ map_pointer_to (GBinding     *binding,
                 GValue       *to_value,
                 gpointer      user_data)
 {
-  if (user_data == g_value_get_object (from_value))
-    g_value_set_static_string (to_value, "radio-checked-symbolic");
-  else
-    g_value_set_static_string (to_value, "radio-symbolic");
-
+  g_value_set_boolean (to_value, user_data == g_value_get_object (from_value));
   return TRUE;
+}
+
+static void
+select_first_row (GtkWidget *widget,
+                  gpointer   user_data)
+{
+  gboolean *selected = user_data;
+
+  g_assert (GBP_IS_BUILD_CONFIGURATION_ROW (widget));
+  g_assert (selected != NULL);
+
+  if (*selected == FALSE)
+    {
+      *selected = TRUE;
+      gtk_list_box_select_row (GTK_LIST_BOX (gtk_widget_get_parent (widget)),
+                               GTK_LIST_BOX_ROW (widget));
+    }
+}
+
+static gboolean
+update_selection_in_main (gpointer data)
+{
+  g_autoptr(GtkListBox) list_box = data;
+  gboolean selected = FALSE;
+
+  g_assert (GTK_IS_LIST_BOX (list_box));
+
+  if (!gtk_widget_in_destruction (GTK_WIDGET (list_box)))
+    {
+      if (NULL == gtk_list_box_get_selected_row (list_box))
+        {
+          gtk_container_foreach (GTK_CONTAINER (list_box),
+                                 select_first_row,
+                                 &selected);
+        }
+    }
+
+  return G_SOURCE_REMOVE;
 }
 
 static GtkWidget *
@@ -67,49 +102,21 @@ create_configuration_row (gpointer item,
 {
   IdeConfigurationManager *manager = user_data;
   IdeConfiguration *configuration = item;
-  GtkWidget *row;
-  GtkWidget *box;
-  GtkWidget *label;
-  GtkWidget *image;
+  GtkWidget *ret;
 
   g_assert (IDE_IS_CONFIGURATION (configuration));
   g_assert (IDE_IS_CONFIGURATION_MANAGER (manager));
 
-  row = g_object_new (GTK_TYPE_LIST_BOX_ROW,
+  ret = g_object_new (GBP_TYPE_BUILD_CONFIGURATION_ROW,
+                      "configuration", configuration,
                       "visible", TRUE,
                       NULL);
-  g_object_set_data_full (G_OBJECT (row), "IDE_CONFIGURATION",
-                          g_object_ref (configuration), g_object_unref);
 
-  box = g_object_new (GTK_TYPE_BOX,
-                      "orientation", GTK_ORIENTATION_HORIZONTAL,
-                      "visible", TRUE,
-                      NULL);
-  gtk_container_add (GTK_CONTAINER (row), box);
-
-  image = g_object_new (GTK_TYPE_IMAGE,
-                        "icon-name", "radio-symbolic",
-                        "visible", TRUE,
-                        "xpad", 6,
-                        NULL);
-  g_object_bind_property_full (manager, "current", image, "icon-name",
+  g_object_bind_property_full (manager, "current", ret, "active",
                                G_BINDING_SYNC_CREATE,
                                map_pointer_to, NULL, configuration, NULL);
-  gtk_container_add (GTK_CONTAINER (box), image);
 
-  label = g_object_new (GTK_TYPE_LABEL,
-                        "hexpand", TRUE,
-                        "ellipsize", PANGO_ELLIPSIZE_MIDDLE,
-                        "visible", TRUE,
-                        "xalign", 0.0f,
-                        NULL);
-  g_object_bind_property (configuration, "display-name",
-                          label, "label",
-                          G_BINDING_SYNC_CREATE);
-  gtk_container_add (GTK_CONTAINER (box), label);
-
-
-  return row;
+  return ret;
 }
 
 static void
@@ -125,40 +132,70 @@ gbp_build_perspective_set_configuration_manager (GbpBuildPerspective     *self,
                            create_configuration_row,
                            g_object_ref (manager),
                            g_object_unref);
+
+  update_selection_in_main (g_object_ref (self->list_box));
 }
 
 static void
-gbp_build_perspective_row_selected (GbpBuildPerspective *self,
-                                    GtkListBoxRow       *row,
-                                    GtkListBox          *list_box)
+update_selected_state (GtkWidget *widget,
+                       gpointer   user_data)
+{
+  GbpBuildConfigurationRow *row = (GbpBuildConfigurationRow *)widget;
+  IdeConfiguration *selected = user_data;
+  IdeConfiguration *config;
+
+  g_assert (GBP_IS_BUILD_CONFIGURATION_ROW (row));
+  g_assert (IDE_IS_CONFIGURATION (selected));
+
+  config = gbp_build_configuration_row_get_configuration (row);
+
+  g_object_set (row,
+                "selected", (config == selected),
+                NULL);
+}
+
+static void
+gbp_build_perspective_row_selected (GbpBuildPerspective      *self,
+                                    GbpBuildConfigurationRow *row,
+                                    GtkListBox               *list_box)
 {
   g_assert (GBP_IS_BUILD_PERSPECTIVE (self));
-  g_assert (!row || GTK_IS_LIST_BOX_ROW (row));
+  g_assert (!row || GBP_IS_BUILD_CONFIGURATION_ROW (row));
   g_assert (GTK_IS_LIST_BOX (list_box));
 
   if (row != NULL)
     {
       IdeConfiguration *configuration;
 
-      configuration = g_object_get_data (G_OBJECT (row), "IDE_CONFIGURATION");
+      configuration = gbp_build_configuration_row_get_configuration (row);
       g_set_object (&self->configuration, configuration);
       gbp_build_configuration_view_set_configuration (self->view, configuration);
+
+      gtk_container_foreach (GTK_CONTAINER (list_box),
+                             update_selected_state,
+                             configuration);
+    }
+  else
+    {
+      /* Possibly wait for a new row to be added (the new default config)
+       * and select it in the main loop.
+       */
+      g_timeout_add (0, update_selection_in_main, g_object_ref (list_box));
     }
 }
 
 static void
-gbp_build_perspective_row_activated (GbpBuildPerspective *self,
-                                     GtkListBoxRow       *row,
-                                     GtkListBox          *list_box)
+gbp_build_perspective_row_activated (GbpBuildPerspective      *self,
+                                     GbpBuildConfigurationRow *row,
+                                     GtkListBox               *list_box)
 {
   IdeConfiguration *configuration;
 
   g_assert (GBP_IS_BUILD_PERSPECTIVE (self));
-  g_assert (GTK_IS_LIST_BOX_ROW (row));
+  g_assert (GBP_IS_BUILD_CONFIGURATION_ROW (row));
   g_assert (GTK_IS_LIST_BOX (list_box));
 
-
-  configuration = g_object_get_data (G_OBJECT (row), "IDE_CONFIGURATION");
+  configuration = gbp_build_configuration_row_get_configuration (row);
   ide_configuration_manager_set_current (self->configuration_manager, configuration);
 }
 
