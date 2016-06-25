@@ -7,10 +7,26 @@
         <property name="orientation">horizontal</property>
         <property name="visible">true</property>
         <child>
-          <object class="GtkStackSidebar" id="page_stack_sidebar">
-            <property name="stack">page_stack</property>
+          <object class="GtkBox">
+            <property name="orientation">vertical</property>
             <property name="visible">true</property>
-            <property name="width-request">200</property>
+            <child>
+              <object class="GtkSearchEntry" id="search_entry">
+                <property name="placeholder-text" translatable="yes">Search Preferences</property>
+                <property name="visible">true</property>
+                <style>
+                  <class name="preferences-search"/>
+                </style>
+              </object>
+            </child>
+            <child>
+              <object class="GtkStackSidebar" id="page_stack_sidebar">
+                <property name="stack">page_stack</property>
+                <property name="visible">true</property>
+                <property name="vexpand">true</property>
+                <property name="width-request">200</property>
+              </object>
+            </child>
           </object>
         </child>
         <child>
@@ -37,31 +53,4 @@
       </object>
     </child>
   </template>
-  <object class="IdeWorkbenchHeaderBar" id="titlebar">
-    <property name="visible">true</property>
-    <child>
-      <object class="GtkButton" id="back_button">
-        <property name="action-name">perspective.go-back</property>
-        <style>
-          <class name="image-button"/>
-        </style>
-        <child>
-          <object class="GtkImage">
-            <property name="icon-name">go-previous-symbolic</property>
-            <property name="visible">true</property>
-          </object>
-        </child>
-      </object>
-    </child>
-    <child type="title">
-      <object class="GtkSearchEntry" id="search_entry">
-        <property name="tooltip-text" translatable="yes">Search through preferences</property>
-        <property name="hexpand">true</property>
-        <property name="margin-end">6</property>
-        <property name="margin-start">6</property>
-        <property name="max-width-chars">50</property>
-        <property name="visible">true</property>
-      </object>
-    </child>
-  </object>
 </interface>

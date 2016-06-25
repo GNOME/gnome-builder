@@ -55,7 +55,6 @@ struct _IdePreferencesPerspective
   GtkSearchEntry        *search_entry;
   GtkStack              *subpage_stack;
   GtkStack              *top_stack;
-  IdeWorkbenchHeaderBar *titlebar;
 };
 
 static void ide_preferences_iface_init (IdePreferencesInterface *iface);
@@ -160,7 +159,7 @@ ide_preferences_perspective_notify_visible_child (IdePreferencesPerspective *sel
   g_assert (IDE_IS_PREFERENCES_PERSPECTIVE (self));
 
   gtk_stack_set_visible_child (self->top_stack, GTK_WIDGET (self->page_stack));
-  gtk_widget_hide (GTK_WIDGET (self->back_button));
+  //gtk_widget_hide (GTK_WIDGET (self->back_button));
 }
 
 static void
@@ -214,12 +213,11 @@ ide_preferences_perspective_class_init (IdePreferencesPerspectiveClass *klass)
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/ui/ide-preferences-perspective.ui");
   gtk_widget_class_set_css_name (widget_class, "preferences");
-  gtk_widget_class_bind_template_child (widget_class, IdePreferencesPerspective, back_button);
+  //gtk_widget_class_bind_template_child (widget_class, IdePreferencesPerspective, back_button);
   gtk_widget_class_bind_template_child (widget_class, IdePreferencesPerspective, page_stack_sidebar);
   gtk_widget_class_bind_template_child (widget_class, IdePreferencesPerspective, page_stack);
   gtk_widget_class_bind_template_child (widget_class, IdePreferencesPerspective, search_entry);
   gtk_widget_class_bind_template_child (widget_class, IdePreferencesPerspective, subpage_stack);
-  gtk_widget_class_bind_template_child (widget_class, IdePreferencesPerspective, titlebar);
   gtk_widget_class_bind_template_child (widget_class, IdePreferencesPerspective, top_stack);
 }
 
@@ -233,19 +231,7 @@ go_back_activate (GSimpleAction *action,
   g_assert (IDE_IS_PREFERENCES_PERSPECTIVE (self));
 
   gtk_stack_set_visible_child (self->top_stack, GTK_WIDGET (self->page_stack));
-  gtk_widget_hide (GTK_WIDGET (self->back_button));
-}
-
-static void
-global_search_activate (GSimpleAction *action,
-                        GVariant      *parameter,
-                        gpointer       user_data)
-{
-  IdePreferencesPerspective *self = user_data;
-
-  g_assert (IDE_IS_PREFERENCES_PERSPECTIVE (self));
-
-  gtk_widget_grab_focus (GTK_WIDGET (self->search_entry));
+  //gtk_widget_hide (GTK_WIDGET (self->back_button));
 }
 
 static void
@@ -266,7 +252,6 @@ ide_preferences_perspective_init (IdePreferencesPerspective *self)
 {
   static const GActionEntry entries[] = {
     { "go-back", go_back_activate },
-    { "global-search", global_search_activate },
   };
 
   gtk_widget_init_template (GTK_WIDGET (self));
@@ -853,12 +838,12 @@ ide_preferences_perspective_set_page (IdePreferences *preferences,
       _ide_preferences_page_set_map (IDE_PREFERENCES_PAGE (page), map);
       gtk_stack_set_visible_child (self->subpage_stack, page);
       gtk_stack_set_visible_child (self->top_stack, GTK_WIDGET (self->subpage_stack));
-      gtk_widget_set_visible (GTK_WIDGET (self->back_button), TRUE);
+      //gtk_widget_set_visible (GTK_WIDGET (self->back_button), TRUE);
       return;
     }
 
   gtk_stack_set_visible_child (self->page_stack, page);
-  gtk_widget_set_visible (GTK_WIDGET (self->back_button), FALSE);
+  //gtk_widget_set_visible (GTK_WIDGET (self->back_button), FALSE);
 }
 
 static GtkWidget *
@@ -907,12 +892,6 @@ ide_preferences_perspective_get_icon_name (IdePerspective *perspective)
   return g_strdup ("preferences-system-symbolic");
 }
 
-static GtkWidget *
-ide_preferences_perspective_get_titlebar (IdePerspective *perspective)
-{
-  return GTK_WIDGET (IDE_PREFERENCES_PERSPECTIVE (perspective)->titlebar);
-}
-
 static GActionGroup *
 ide_preferences_perspective_get_actions (IdePerspective *perspective)
 {
@@ -935,7 +914,6 @@ ide_perspective_iface_init (IdePerspectiveInterface *iface)
   iface->get_id = ide_preferences_perspective_get_id;
   iface->get_icon_name = ide_preferences_perspective_get_icon_name;
   iface->get_title = ide_preferences_perspective_get_title;
-  iface->get_titlebar = ide_preferences_perspective_get_titlebar;
   iface->get_actions = ide_preferences_perspective_get_actions;
   iface->get_priority = ide_preferences_perspective_get_priority;
 }

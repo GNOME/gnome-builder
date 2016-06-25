@@ -163,3 +163,18 @@ popover.omnibar list row {
 popover.omnibar list row:last-child {
   border-bottom: none;
 }
+
+
+entry.preferences-search {
+  border: none;
+  border-right: 1px solid alpha(@borders, 0.55);
+  border-bottom: 1px solid alpha(@borders, 0.55);
+  border-radius: 0;
+}
+preferences stacksidebar list {
+  background-color: @content_view_bg;
+  border-right: 1px solid alpha(@borders, 0.55);
+}
+preferences stacksidebar list separator {
+  background-color: transparent;
+}
