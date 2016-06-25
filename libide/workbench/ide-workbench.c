@@ -603,6 +603,7 @@ ide_workbench_add_perspective (IdeWorkbench   *self,
   g_autofree gchar *icon_name = NULL;
   g_autofree gchar *id = NULL;
   g_autofree gchar *title = NULL;
+  GtkWidget *titlebar;
 
   g_assert (IDE_IS_WORKBENCH (self));
   g_assert (IDE_IS_PERSPECTIVE (perspective));
@@ -610,6 +611,7 @@ ide_workbench_add_perspective (IdeWorkbench   *self,
   id = ide_perspective_get_id (perspective);
   title = ide_perspective_get_title (perspective);
   icon_name = ide_perspective_get_icon_name (perspective);
+  titlebar = ide_perspective_get_titlebar (perspective);
 
   gtk_container_add_with_properties (GTK_CONTAINER (self->perspectives_stack),
                                      GTK_WIDGET (perspective),
@@ -618,6 +620,11 @@ ide_workbench_add_perspective (IdeWorkbench   *self,
                                      "needs-attention", FALSE,
                                      "title", title,
                                      NULL);
+
+  if (titlebar != NULL)
+    gtk_container_add_with_properties (GTK_CONTAINER (self->header_stack), titlebar,
+                                       "name", id,
+                                       NULL);
 
   if (!IDE_IS_GREETER_PERSPECTIVE (perspective) &&
       !IDE_IS_GENESIS_PERSPECTIVE (perspective))
@@ -752,6 +759,7 @@ ide_workbench_set_visible_perspective (IdeWorkbench   *self,
   g_autofree gchar *id = NULL;
   GActionGroup *actions = NULL;
   const gchar *current_id;
+  GtkWidget *titlebar;
 
   g_return_if_fail (IDE_IS_WORKBENCH (self));
   g_return_if_fail (IDE_IS_PERSPECTIVE (perspective));
@@ -761,6 +769,13 @@ ide_workbench_set_visible_perspective (IdeWorkbench   *self,
 
   if (!ide_str_equal0 (current_id, id))
     gtk_stack_set_visible_child_name (self->perspectives_stack, id);
+
+  titlebar = gtk_stack_get_child_by_name (self->header_stack, id);
+
+  if (titlebar != NULL)
+    gtk_stack_set_visible_child (self->header_stack, titlebar);
+  else
+    gtk_stack_set_visible_child (self->header_stack, GTK_WIDGET (self->header_bar));
 
   actions = ide_perspective_get_actions (perspective);
   gtk_widget_insert_action_group (GTK_WIDGET (self), "perspective", actions);
