@@ -44,9 +44,15 @@ enum {
   N_PROPS
 };
 
+enum {
+  CONFIGURE,
+  N_SIGNALS
+};
+
 G_DEFINE_TYPE (IdeOmniBarRow, ide_omni_bar_row, GTK_TYPE_LIST_BOX_ROW)
 
 static GParamSpec *properties [N_PROPS];
+static guint signals [N_SIGNALS];
 
 /**
  * ide_omni_bar_row_get_item:
@@ -132,6 +138,16 @@ ide_omni_bar_row_set_item (IdeOmniBarRow    *self,
 }
 
 static void
+on_configure_clicked (IdeOmniBarRow *self,
+                      GtkButton     *button)
+{
+  g_assert (IDE_IS_OMNI_BAR_ROW (self));
+  g_assert (GTK_IS_BUTTON (button));
+
+  g_signal_emit (self, signals [CONFIGURE], 0);
+}
+
+static void
 ide_omni_bar_row_finalize (GObject *object)
 {
   IdeOmniBarRow *self = (IdeOmniBarRow *)object;
@@ -198,6 +214,11 @@ ide_omni_bar_row_class_init (IdeOmniBarRowClass *klass)
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 
+  signals [CONFIGURE] = g_signal_new ("configure",
+                                      G_TYPE_FROM_CLASS (klass),
+                                      G_SIGNAL_RUN_LAST,
+                                      0, NULL, NULL, NULL, G_TYPE_NONE, 0);
+
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/ui/ide-omni-bar-row.ui");
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBarRow, button);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBarRow, checked);
@@ -211,6 +232,12 @@ static void
 ide_omni_bar_row_init (IdeOmniBarRow *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
+
+  g_signal_connect_object (self->button,
+                           "clicked",
+                           G_CALLBACK (on_configure_clicked),
+                           self,
+                           G_CONNECT_SWAPPED);
 }
 
 GtkWidget *
