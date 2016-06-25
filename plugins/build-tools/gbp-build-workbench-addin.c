@@ -314,7 +314,7 @@ gbp_build_workbench_addin_load (IdeWorkbenchAddin *addin,
 
   g_object_bind_property (self, "result", self->panel, "result", 0);
 
-  header = IDE_WORKBENCH_HEADER_BAR (gtk_window_get_titlebar (GTK_WINDOW (workbench)));
+  header = ide_workbench_get_headerbar (workbench);
 
   self->run_button = g_object_new (GTK_TYPE_BUTTON,
                                    "child", g_object_new (GTK_TYPE_IMAGE,

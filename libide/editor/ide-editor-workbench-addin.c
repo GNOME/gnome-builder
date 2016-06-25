@@ -88,7 +88,7 @@ ide_editor_workbench_addin_load (IdeWorkbenchAddin *addin,
 
   self->manager = pnl_dock_manager_new ();
 
-  header = IDE_WORKBENCH_HEADER_BAR (gtk_window_get_titlebar (GTK_WINDOW (workbench)));
+  header = ide_workbench_get_headerbar (workbench);
 
   self->new_document_button = g_object_new (GTK_TYPE_BUTTON,
                                             "action-name", "perspective.new-file",
