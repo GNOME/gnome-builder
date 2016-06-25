@@ -43,6 +43,7 @@ struct _IdeWorkbench
    */
   GListStore                *perspectives;
 
+  GtkStack                  *header_stack;
   IdeWorkbenchHeaderBar     *header_bar;
   IdePerspectiveMenuButton  *perspective_menu_button;
   GtkStack                  *perspectives_stack;
