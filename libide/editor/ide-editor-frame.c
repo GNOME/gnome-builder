@@ -610,7 +610,7 @@ ide_editor_frame_get_show_map (IdeEditorFrame *self)
 
 static void
 ide_editor_frame_set_show_map (IdeEditorFrame *self,
-                              gboolean       show_map)
+                               gboolean        show_map)
 {
   g_assert (IDE_IS_EDITOR_FRAME (self));
 
@@ -642,6 +642,11 @@ ide_editor_frame_set_show_map (IdeEditorFrame *self,
                              GTK_WIDGET (self->source_map));
           g_signal_emit_by_name (self->source_map, "show-map");
         }
+
+      /* Hide scrollbars when map is enabled. */
+      g_object_set (self->scrolled_window,
+                    "vscrollbar-policy", show_map ? GTK_POLICY_EXTERNAL : GTK_POLICY_AUTOMATIC,
+                    NULL);
 
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SHOW_MAP]);
     }
