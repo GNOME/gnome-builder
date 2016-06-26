@@ -624,7 +624,7 @@ ide_omni_bar_set_build_result (IdeOmniBar     *self,
   gtk_stack_set_visible_child_name (self->message_stack, "build");
 
   now = g_date_time_new_now_local ();
-  nowstr = g_date_time_format (now, "%A %B %e, %X");
+  nowstr = g_date_time_format (now, "%a %B %e, %X");
   gtk_label_set_label (self->popover_last_build_time_label, nowstr);
 
   gtk_widget_show (GTK_WIDGET (self->popover_view_output_button));
