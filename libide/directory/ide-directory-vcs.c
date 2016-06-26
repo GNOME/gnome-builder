@@ -193,10 +193,17 @@ ide_directory_vcs_get_priority (IdeVcs *vcs)
   return G_MAXINT;
 }
 
+static gchar *
+ide_directory_vcs_get_branch_name (IdeVcs *vcs)
+{
+  return g_strdup (_("unversioned"));
+}
+
 static void
 vcs_iface_init (IdeVcsInterface *iface)
 {
   iface->get_working_directory = ide_directory_vcs_get_working_directory;
   iface->is_ignored = ide_directory_vcs_is_ignored;
   iface->get_priority = ide_directory_vcs_get_priority;
+  iface->get_branch_name = ide_directory_vcs_get_branch_name;
 }

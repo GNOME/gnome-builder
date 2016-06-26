@@ -362,6 +362,11 @@ ide_git_vcs_get_branch_name (IdeVcs *vcs)
       ret = g_strdup (ggit_ref_get_shorthand (ref));
       g_object_unref (ref);
     }
+  else
+    {
+      /* initial commit, no branch name yet */
+      ret = g_strdup ("master");
+    }
 
   return ret;
 }
