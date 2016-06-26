@@ -270,6 +270,7 @@
             </child>
             <child>
               <object class="GtkButton" id="popover_view_output_button">
+                <property name="action-name">build-tools.view-output</property>
                 <property name="label" translatable="yes">View Output</property>
               </object>
               <packing>

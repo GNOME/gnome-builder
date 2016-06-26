@@ -242,6 +242,19 @@ gbp_build_workbench_addin_cancel (GSimpleAction *action,
 }
 
 static void
+gbp_build_workbench_addin_view_output (GSimpleAction *action,
+                                       GVariant      *param,
+                                       gpointer       user_data)
+{
+  GbpBuildWorkbenchAddin *self = user_data;
+
+  g_assert (G_IS_SIMPLE_ACTION (action));
+  g_assert (GBP_IS_BUILD_WORKBENCH_ADDIN (self));
+
+  ide_workbench_focus (self->workbench, GTK_WIDGET (self->build_log_panel));
+}
+
+static void
 gbp_build_workbench_addin_configure (GSimpleAction *action,
                                      GVariant      *param,
                                      gpointer       user_data)
@@ -273,6 +286,7 @@ static const GActionEntry actions[] = {
   { "clean", gbp_build_workbench_addin_clean },
   { "cancel-build", gbp_build_workbench_addin_cancel },
   { "configure", gbp_build_workbench_addin_configure, "s" },
+  { "view-output", gbp_build_workbench_addin_view_output },
 };
 
 static void
