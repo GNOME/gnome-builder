@@ -476,10 +476,33 @@ multipress_pressed_cb (GtkGestureMultiPress *gesture,
                        gdouble               y,
                        IdeOmniBar           *self)
 {
+  GtkStyleContext *style_context;
+  GtkStateFlags state_flags;
+
   g_assert (IDE_IS_OMNI_BAR (self));
 
   gtk_widget_show (GTK_WIDGET (self->popover));
+
+  style_context = gtk_widget_get_style_context (GTK_WIDGET (self));
+  state_flags = gtk_style_context_get_state (style_context);
+  gtk_style_context_set_state (style_context, state_flags | GTK_STATE_FLAG_ACTIVE);
+
   gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
+}
+
+static void
+ide_omni_bar_popover_closed (IdeOmniBar *self,
+                             GtkPopover *popover)
+{
+  GtkStyleContext *style_context;
+  GtkStateFlags state_flags;
+
+  g_assert (IDE_IS_OMNI_BAR (self));
+  g_assert (GTK_IS_POPOVER (popover));
+
+  style_context = gtk_widget_get_style_context (GTK_WIDGET (self));
+  state_flags = gtk_style_context_get_state (style_context);
+  gtk_style_context_set_state (style_context, state_flags & ~GTK_STATE_FLAG_ACTIVE);
 }
 
 static void
@@ -553,6 +576,12 @@ ide_omni_bar_init (IdeOmniBar *self)
   g_signal_connect_object (self->event_box,
                            "leave-notify-event",
                            G_CALLBACK (event_box_leave_notify),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  g_signal_connect_object (self->popover,
+                           "closed",
+                           G_CALLBACK (ide_omni_bar_popover_closed),
                            self,
                            G_CONNECT_SWAPPED);
 
