@@ -5,45 +5,6 @@
         <property name="visible">true</property>
         <property name="orientation">vertical</property>
         <child>
-          <object class="GtkBox">
-            <property name="visible">true</property>
-            <property name="margin-end">12</property>
-            <property name="margin-start">12</property>
-            <property name="margin-bottom">12</property>
-            <property name="halign">end</property>
-            <property name="hexpand">true</property>
-            <property name="spacing">6</property>
-            <property name="homogeneous">true</property>
-            <child>
-              <object class="GtkButton">
-                <property name="action-name">build-tools.build</property>
-                <property name="label" translatable="yes">_Build</property>
-                <property name="use-underline">true</property>
-                <property name="visible">true</property>
-                <style>
-                  <class name="suggested-action"/>
-                </style>
-              </object>
-            </child>
-            <child>
-              <object class="GtkButton">
-                <property name="action-name">build-tools.rebuild</property>
-                <property name="label" translatable="yes">_Rebuild</property>
-                <property name="use-underline">true</property>
-                <property name="visible">true</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkButton">
-                <property name="action-name">build-tools.clean</property>
-                <property name="label" translatable="yes">_Clean</property>
-                <property name="use-underline">true</property>
-                <property name="visible">true</property>
-              </object>
-            </child>
-          </object>
-        </child>
-        <child>
           <object class="GtkSeparator">
             <property name="orientation">horizontal</property>
             <property name="visible">true</property>
@@ -162,48 +123,6 @@
                       <packing>
                         <property name="left-attach">1</property>
                         <property name="top-attach">3</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkBox">
-                        <property name="visible">true</property>
-                        <property name="margin-top">6</property>
-                        <property name="hexpand">true</property>
-                        <property name="halign">end</property>
-                        <property name="spacing">6</property>
-                        <property name="homogeneous">true</property>
-                        <child>
-                          <object class="GtkButton">
-                            <property name="action-name">build-tools.cancel-build</property>
-                            <property name="label" translatable="yes">Cancel</property>
-                            <property name="use-underline">true</property>
-                            <property name="visible">true</property>
-                            <style>
-                              <class name="destructive-action"/>
-                            </style>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkButton">
-                            <property name="action-name">build-tools.deploy</property>
-                            <property name="label" translatable="yes">Deploy</property>
-                            <property name="use-underline">true</property>
-                            <property name="visible">false</property>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkButton">
-                            <property name="action-name">build-tools.export</property>
-                            <property name="label" translatable="yes">Export</property>
-                            <property name="use-underline">true</property>
-                            <property name="visible">false</property>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">4</property>
-                        <property name="width">2</property>
                       </packing>
                     </child>
                   </object>
