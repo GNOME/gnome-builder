@@ -18,6 +18,7 @@
 
 #define G_LOG_DOMAIN "ide-omni-bar"
 
+#include <glib/gi18n.h>
 #include <egg-signal-group.h>
 
 #include "ide-context.h"
@@ -56,9 +57,8 @@ struct _IdeOmniBar
   GtkPopover     *popover;
   GtkLabel       *popover_branch_label;
   GtkButton      *popover_build_cancel_button;
-  GtkLabel       *popover_build_label;
+  GtkLabel       *popover_build_mode_label;
   GtkLabel       *popover_build_running_time_label;
-  GtkLabel       *popover_build_status;
   GtkListBox     *popover_configuration_list_box;
   GtkLabel       *popover_last_build_time_label;
   GtkButton      *popover_view_output_button;
@@ -316,7 +316,11 @@ ide_omni_bar_build_result_notify_mode (IdeOmniBar     *self,
   mode = ide_build_result_get_mode (result);
 
   gtk_label_set_label (self->build_result_mode_label, mode);
-  gtk_label_set_label (self->popover_build_status, mode);
+
+  if (ide_build_result_get_running (result))
+    gtk_label_set_label (self->popover_build_mode_label, mode);
+  else
+    gtk_label_set_label (self->popover_build_mode_label, _("Last Build"));
 }
 
 static void
@@ -364,9 +368,10 @@ ide_omni_bar_build_result_notify_running (IdeOmniBar     *self,
       gtk_stack_set_visible_child (self->message_stack,
                                    GTK_WIDGET (self->build_result_mode_label));
 
-      gtk_widget_show (GTK_WIDGET (self->popover_build_cancel_button));
-      gtk_widget_hide (GTK_WIDGET (self->popover_build_status));
       gtk_widget_hide (GTK_WIDGET (self->popover_last_build_time_label));
+
+      gtk_widget_show (GTK_WIDGET (self->popover_build_cancel_button));
+      gtk_widget_show (GTK_WIDGET (self->popover_build_mode_label));
       gtk_widget_show (GTK_WIDGET (self->popover_build_running_time_label));
     }
   else
@@ -378,11 +383,13 @@ ide_omni_bar_build_result_notify_running (IdeOmniBar     *self,
                     "action-name", "build-tools.build",
                     NULL);
 
+      gtk_label_set_label (self->popover_build_mode_label, _("Last Build"));
+
       gtk_widget_hide (GTK_WIDGET (self->popover_build_cancel_button));
-      gtk_widget_show (GTK_WIDGET (self->popover_build_label));
-      gtk_widget_show (GTK_WIDGET (self->popover_build_status));
-      gtk_widget_show (GTK_WIDGET (self->popover_last_build_time_label));
       gtk_widget_hide (GTK_WIDGET (self->popover_build_running_time_label));
+
+      gtk_widget_show (GTK_WIDGET (self->popover_build_mode_label));
+      gtk_widget_show (GTK_WIDGET (self->popover_last_build_time_label));
     }
 }
 
@@ -522,9 +529,8 @@ ide_omni_bar_class_init (IdeOmniBarClass *klass)
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, popover);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, popover_branch_label);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, popover_build_cancel_button);
-  gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, popover_build_label);
+  gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, popover_build_mode_label);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, popover_build_running_time_label);
-  gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, popover_build_status);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, popover_configuration_list_box);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, popover_last_build_time_label);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, popover_project_label);

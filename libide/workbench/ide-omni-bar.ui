@@ -230,8 +230,7 @@
                 <property name="valign">center</property>
                 <property name="visible">true</property>
                 <child>
-                  <object class="GtkLabel" id="popover_build_label">
-                    <property name="label">Last build</property>
+                  <object class="GtkLabel" id="popover_build_mode_label">
                     <property name="xalign">0.0</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
@@ -250,22 +249,13 @@
             </child>
             <child>
               <object class="GtkLabel" id="popover_build_running_time_label">
+                <property name="xalign">1.0</property>
                 <property name="margin-end">8</property>
                 <property name="margin-start">8</property>
               </object>
               <packing>
                 <property name="position">1</property>
                 <property name="pack-type">start</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="popover_build_status">
-                <property name="margin-end">8</property>
-                <property name="margin-start">8</property>
-              </object>
-              <packing>
-                <property name="position">2</property>
-                <property name="pack-type">end</property>
               </packing>
             </child>
             <child>
