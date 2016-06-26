@@ -178,13 +178,18 @@ gbp_build_workbench_addin_do_build (GbpBuildWorkbenchAddin *self,
                                      gbp_build_workbench_addin_save_all_cb,
                                      state);
 
-  /* Ensure the build output is visible */
-  /* XXX: we might want to find a way to add a "hold" on the panel
-   *      visibility so that it can be hidden after a timeout.
+  /*
+   * No need to focus the build output, since the user can show that
+   * from the omnibar relatively quickly. We just need to make sure
+   * it is visible should they choose to view it.
    */
   gtk_widget_show (GTK_WIDGET (self->build_log_panel));
-  ide_workbench_focus (workbench, GTK_WIDGET (self->build_log_panel));
-  ide_workbench_focus (workbench, GTK_WIDGET (self->panel));
+
+  /*
+   * There is also no need to show the build result panel immediately.
+   * We can display the panel when a diagnostic has been discovered.
+   * Otherwise, it doesn't provide any additional information.
+   */
 }
 
 static void
