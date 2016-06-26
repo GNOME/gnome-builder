@@ -22,7 +22,6 @@
 #include "egg-binding-group.h"
 #include "egg-signal-group.h"
 
-#include "gbp-build-configuration-row.h"
 #include "gbp-build-panel.h"
 #include "gbp-build-panel-row.h"
 
@@ -34,17 +33,12 @@ struct _GbpBuildPanel
   EggSignalGroup   *signals;
   EggBindingGroup  *bindings;
 
-  GtkListBox       *configurations;
-  GtkLabel         *configuration_label;
-  GtkPopover       *configuration_popover;
   GtkListBox       *diagnostics;
   GtkLabel         *errors_label;
   GtkLabel         *running_time_label;
   GtkRevealer      *status_revealer;
   GtkLabel         *status_label;
   GtkLabel         *warnings_label;
-
-  guint             running_time_source;
 
   guint             error_count;
   guint             warning_count;
@@ -54,71 +48,11 @@ G_DEFINE_TYPE (GbpBuildPanel, gbp_build_panel, PNL_TYPE_DOCK_WIDGET)
 
 enum {
   PROP_0,
-  PROP_CONFIGURATION_MANAGER,
   PROP_RESULT,
   LAST_PROP
 };
 
 static GParamSpec *properties [LAST_PROP];
-
-static gboolean
-map_current_to_bool (GBinding     *binding,
-                     const GValue *from_value,
-                     GValue       *to_value,
-                     gpointer      user_data)
-{
-  IdeConfiguration *configuration = user_data;
-  IdeConfiguration *current;
-
-  g_assert (IDE_IS_CONFIGURATION (configuration));
-
-  current = g_value_get_object (from_value);
-  g_value_set_boolean (to_value, (configuration == current));
-
-  return TRUE;
-}
-
-static GtkWidget *
-create_configuration_row (gpointer item,
-                          gpointer user_data)
-{
-  IdeConfiguration *configuration = item;
-  IdeConfigurationManager *manager = user_data;
-  GtkWidget *ret;
-
-  g_assert (IDE_IS_CONFIGURATION (configuration));
-  g_assert (IDE_IS_CONFIGURATION_MANAGER (manager));
-
-  ret = g_object_new (GBP_TYPE_BUILD_CONFIGURATION_ROW,
-                      "configuration", configuration,
-                      "visible", TRUE,
-                      NULL);
-
-  g_object_bind_property_full (manager, "current", ret, "selected",
-                               G_BINDING_SYNC_CREATE,
-                               map_current_to_bool, NULL,
-                               g_object_ref (configuration), g_object_unref);
-
-  return ret;
-}
-
-static void
-gbp_build_panel_set_configuration_manager (GbpBuildPanel           *self,
-                                           IdeConfigurationManager *configuration_manager)
-{
-  g_assert (GBP_IS_BUILD_PANEL (self));
-  g_assert (IDE_IS_CONFIGURATION_MANAGER (configuration_manager));
-
-  gtk_list_box_bind_model (self->configurations,
-                           G_LIST_MODEL (configuration_manager),
-                           create_configuration_row,
-                           g_object_ref (configuration_manager),
-                           g_object_unref);
-
-  g_object_bind_property (configuration_manager, "current-display-name",
-                          self->configuration_label, "label",
-                          G_BINDING_SYNC_CREATE);
-}
 
 void
 gbp_build_panel_add_error (GbpBuildPanel *self,
@@ -166,7 +100,7 @@ gbp_build_panel_diagnostic (GbpBuildPanel  *self,
   gtk_container_add (GTK_CONTAINER (self->diagnostics), row);
 }
 
-static gboolean
+static void
 gbp_build_panel_update_running_time (GbpBuildPanel *self)
 {
   g_assert (GBP_IS_BUILD_PANEL (self));
@@ -189,8 +123,10 @@ gbp_build_panel_update_running_time (GbpBuildPanel *self)
       gtk_label_set_label (self->running_time_label, text);
       g_free (text);
     }
-
-  return G_SOURCE_CONTINUE;
+  else
+    {
+      gtk_label_set_label (self->running_time_label, NULL);
+    }
 }
 
 static void
@@ -211,13 +147,6 @@ gbp_build_panel_connect (GbpBuildPanel  *self,
   egg_signal_group_set_target (self->signals, result);
   egg_binding_group_set_source (self->bindings, result);
 
-  if (ide_build_result_get_running (result))
-    {
-      gtk_label_set_label (self->running_time_label, NULL);
-      self->running_time_source =
-        g_timeout_add_seconds (1, (GSourceFunc)gbp_build_panel_update_running_time, self);
-    }
-
   gtk_revealer_set_reveal_child (self->status_revealer, TRUE);
 }
 
@@ -230,7 +159,6 @@ gbp_build_panel_disconnect (GbpBuildPanel *self)
 
   egg_signal_group_set_target (self->signals, NULL);
   egg_binding_group_set_source (self->bindings, NULL);
-  ide_clear_source (&self->running_time_source);
   g_clear_object (&self->result);
 }
 
@@ -263,33 +191,18 @@ gbp_build_panel_notify_running (GbpBuildPanel  *self,
   g_assert (GBP_IS_BUILD_PANEL (self));
   g_assert (IDE_IS_BUILD_RESULT (result));
 
-  if (!ide_build_result_get_running (result))
-    ide_clear_source (&self->running_time_source);
-
   gbp_build_panel_update_running_time (self);
 }
 
 static void
-gbp_build_panel_configuration_activated (GbpBuildPanel *self,
-                                         GtkListBoxRow *row,
-                                         GtkListBox    *list_box)
+gbp_build_panel_notify_running_time (GbpBuildPanel  *self,
+                                     GParamSpec     *pspec,
+                                     IdeBuildResult *result)
 {
-  IdeConfigurationManager *manager;
-  IdeConfiguration *config;
-  IdeWorkbench *workbench;
-  IdeContext *context;
-
   g_assert (GBP_IS_BUILD_PANEL (self));
-  g_assert (GTK_IS_LIST_BOX_ROW (row));
-  g_assert (GTK_IS_LIST_BOX (list_box));
+  g_assert (IDE_IS_BUILD_RESULT (result));
 
-  workbench = ide_widget_get_workbench (GTK_WIDGET (self));
-  context = ide_workbench_get_context (workbench);
-  manager = ide_context_get_configuration_manager (context);
-  config = gbp_build_configuration_row_get_configuration (GBP_BUILD_CONFIGURATION_ROW (row));
-  ide_configuration_manager_set_current (manager, config);
-
-  gtk_widget_hide (GTK_WIDGET (self->configuration_popover));
+  gbp_build_panel_update_running_time (self);
 }
 
 static void
@@ -367,10 +280,6 @@ gbp_build_panel_set_property (GObject      *object,
 
   switch (prop_id)
     {
-    case PROP_CONFIGURATION_MANAGER:
-      gbp_build_panel_set_configuration_manager (self, g_value_get_object (value));
-      break;
-
     case PROP_RESULT:
       gbp_build_panel_set_result (self, g_value_get_object (value));
       break;
@@ -391,13 +300,6 @@ gbp_build_panel_class_init (GbpBuildPanelClass *klass)
 
   widget_class->destroy = gbp_build_panel_destroy;
 
-  properties [PROP_CONFIGURATION_MANAGER] =
-    g_param_spec_object ("configuration-manager",
-                         "Configuration Manager",
-                         "Configuration Manager",
-                         IDE_TYPE_CONFIGURATION_MANAGER,
-                         (G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
-
   properties [PROP_RESULT] =
     g_param_spec_object ("result",
                          "Result",
@@ -409,9 +311,6 @@ gbp_build_panel_class_init (GbpBuildPanelClass *klass)
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/plugins/build-tools-plugin/gbp-build-panel.ui");
   gtk_widget_class_set_css_name (widget_class, "buildpanel");
-  gtk_widget_class_bind_template_child (widget_class, GbpBuildPanel, configurations);
-  gtk_widget_class_bind_template_child (widget_class, GbpBuildPanel, configuration_label);
-  gtk_widget_class_bind_template_child (widget_class, GbpBuildPanel, configuration_popover);
   gtk_widget_class_bind_template_child (widget_class, GbpBuildPanel, diagnostics);
   gtk_widget_class_bind_template_child (widget_class, GbpBuildPanel, errors_label);
   gtk_widget_class_bind_template_child (widget_class, GbpBuildPanel, running_time_label);
@@ -441,11 +340,11 @@ gbp_build_panel_init (GbpBuildPanel *self)
                                    self,
                                    G_CONNECT_SWAPPED);
 
-  g_signal_connect_object (self->configurations,
-                           "row-activated",
-                           G_CALLBACK (gbp_build_panel_configuration_activated),
-                           self,
-                           G_CONNECT_SWAPPED);
+  egg_signal_group_connect_object (self->signals,
+                                   "notify::running-time",
+                                   G_CALLBACK (gbp_build_panel_notify_running_time),
+                                   self,
+                                   G_CONNECT_SWAPPED);
 
   g_signal_connect_object (self->diagnostics,
                            "row-activated",

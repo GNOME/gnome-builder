@@ -300,7 +300,6 @@ gbp_build_workbench_addin_load (IdeWorkbenchAddin *addin,
   editor = ide_workbench_get_perspective_by_name (workbench, "editor");
   pane = pnl_dock_bin_get_right_edge (PNL_DOCK_BIN (editor));
   self->panel = g_object_new (GBP_TYPE_BUILD_PANEL,
-                              "configuration-manager", configuration_manager,
                               "visible", TRUE,
                               NULL);
   gtk_container_add (GTK_CONTAINER (pane), GTK_WIDGET (self->panel));
