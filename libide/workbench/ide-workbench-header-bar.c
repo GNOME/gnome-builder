@@ -30,7 +30,6 @@
 typedef struct
 {
   GtkMenuButton      *menu_button;
-  EggPriorityBox     *center_box;
   EggPriorityBox     *right_box;
   EggPriorityBox     *left_box;
   IdeOmniBar         *omni_bar;
@@ -55,7 +54,6 @@ ide_workbench_header_bar_class_init (IdeWorkbenchHeaderBarClass *klass)
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/ui/ide-workbench-header-bar.ui");
-  gtk_widget_class_bind_template_child_private (widget_class, IdeWorkbenchHeaderBar, center_box);
   gtk_widget_class_bind_template_child_private (widget_class, IdeWorkbenchHeaderBar, left_box);
   gtk_widget_class_bind_template_child_private (widget_class, IdeWorkbenchHeaderBar, menu_button);
   gtk_widget_class_bind_template_child_private (widget_class, IdeWorkbenchHeaderBar, omni_bar);
