@@ -35,6 +35,7 @@ libide/buildsystem/ide-build-system.c
 libide/buildsystem/ide-configuration-manager.c
 libide/devices/ide-device-manager.c
 libide/directory/ide-directory-genesis-addin.c
+libide/directory/ide-directory-vcs.c
 libide/editorconfig/ide-editorconfig-file-settings.c
 libide/editor/ide-editor-frame.c
 [type: gettext/glade]libide/editor/ide-editor-frame.ui
@@ -71,6 +72,10 @@ libide/util/ide-uri.c
 [type: gettext/glade]libide/workbench/ide-layout-tab-bar.ui
 [type: gettext/glade]libide/workbench/ide-layout-tab.ui
 libide/workbench/ide-layout-view.c
+libide/workbench/ide-omni-bar-row.c
+[type: gettext/glade]libide/workbench/ide-omni-bar-row.ui
+libide/workbench/ide-omni-bar.c
+[type: gettext/glade]libide/workbench/ide-omni-bar.ui
 libide/workbench/ide-workbench-actions.c
 libide/workbench/ide-workbench.c
 [type: gettext/glade]libide/workbench/ide-workbench-header-bar.ui
@@ -79,6 +84,7 @@ plugins/autotools/ide-autotools-build-system.c
 plugins/autotools/ide-autotools-build-task.c
 plugins/autotools/ide-makecache.c
 plugins/autotools-templates/autotools_templates/__init__.py
+[type: gettext/glade]plugins/build-tools/gbp-build-configuration-row.ui
 [type: gettext/glade]plugins/build-tools/gbp-build-configuration-view.ui
 plugins/build-tools/gbp-build-log-panel.c
 plugins/build-tools/gbp-build-panel.c
