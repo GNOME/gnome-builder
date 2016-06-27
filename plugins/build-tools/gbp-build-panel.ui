@@ -143,6 +143,7 @@
             <property name="visible">true</property>
             <child>
               <object class="GtkListBox" id="diagnostics">
+                <property name="selection-mode">none</property>
                 <property name="visible">true</property>
               </object>
             </child>
