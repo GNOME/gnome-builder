@@ -54,6 +54,7 @@ typedef struct
   GSource          *running_time_source;
 
   guint             running : 1;
+  guint             failed : 1;
 } IdeBuildResultPrivate;
 
 typedef struct
@@ -67,6 +68,7 @@ G_DEFINE_TYPE_WITH_PRIVATE (IdeBuildResult, ide_build_result, IDE_TYPE_OBJECT)
 
 enum {
   PROP_0,
+  PROP_FAILED,
   PROP_MODE,
   PROP_RUNNING,
   PROP_RUNNING_TIME,
@@ -508,6 +510,10 @@ ide_build_result_get_property (GObject    *object,
 
   switch (prop_id)
     {
+    case PROP_FAILED:
+      g_value_set_boolean (value, ide_build_result_get_failed (self));
+      break;
+
     case PROP_MODE:
       g_value_take_string (value, ide_build_result_get_mode (self));
       break;
@@ -535,6 +541,10 @@ ide_build_result_set_property (GObject      *object,
 
   switch (prop_id)
     {
+    case PROP_FAILED:
+      ide_build_result_set_failed (self, g_value_get_boolean (value));
+      break;
+
     case PROP_MODE:
       ide_build_result_set_mode (self, g_value_get_string (value));
       break;
@@ -557,6 +567,13 @@ ide_build_result_class_init (IdeBuildResultClass *klass)
   object_class->finalize = ide_build_result_finalize;
   object_class->get_property = ide_build_result_get_property;
   object_class->set_property = ide_build_result_set_property;
+
+  properties [PROP_FAILED] =
+    g_param_spec_boolean ("failed",
+                          "Failed",
+                          "Failed",
+                          FALSE,
+                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY));
 
   properties [PROP_MODE] =
     g_param_spec_string ("mode",
@@ -764,4 +781,37 @@ ide_build_result_emit_diagnostic (IdeBuildResult *self,
   pair->diagnostic = ide_diagnostic_ref (diagnostic);
 
   g_timeout_add (0, ide_build_result_emit_diagnostic_cb, pair);
+}
+
+void
+ide_build_result_set_failed (IdeBuildResult *self,
+                             gboolean        failed)
+{
+  IdeBuildResultPrivate *priv = ide_build_result_get_instance_private (self);
+  gboolean notify = FALSE;
+
+  g_return_if_fail (IDE_IS_BUILD_RESULT (self));
+
+  failed = !!failed;
+
+  g_mutex_lock (&priv->mutex);
+  if (failed != priv->failed)
+    {
+      priv->failed = failed;
+      notify = TRUE;
+    }
+  g_mutex_unlock (&priv->mutex);
+
+  if (notify)
+    ide_object_notify_in_main (self, properties [PROP_FAILED]);
+}
+
+gboolean
+ide_build_result_get_failed (IdeBuildResult *self)
+{
+  IdeBuildResultPrivate *priv = ide_build_result_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_BUILD_RESULT (self), FALSE);
+
+  return priv->failed;
 }

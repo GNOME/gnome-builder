@@ -56,6 +56,9 @@ GTimeSpan      ide_build_result_get_running_time  (IdeBuildResult *self);
 gboolean       ide_build_result_get_running       (IdeBuildResult *self);
 void           ide_build_result_set_running       (IdeBuildResult *self,
                                                    gboolean        running);
+gboolean       ide_build_result_get_failed        (IdeBuildResult *self);
+void           ide_build_result_set_failed        (IdeBuildResult *self,
+                                                   gboolean        failed);
 void           ide_build_result_emit_diagnostic   (IdeBuildResult *self,
                                                    IdeDiagnostic  *diagnostic);
 gchar         *ide_build_result_get_mode          (IdeBuildResult *self);
