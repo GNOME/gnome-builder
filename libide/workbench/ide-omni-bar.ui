@@ -120,119 +120,92 @@
     </widgets>
   </object>
   <object class="GtkPopover" id="popover">
-    <property name="border-width">24</property>
     <property name="relative-to">event_box</property>
     <property name="position">bottom</property>
-    <property name="width-request">425</property>
+    <property name="width-request">450</property>
     <style>
-      <class name="omnibar"/>
+      <class name="messagepopover"/>
     </style>
     <child>
       <object class="GtkBox">
         <property name="orientation">vertical</property>
-        <property name="spacing">20</property>
         <property name="visible">true</property>
-        <child>
-          <object class="GtkGrid">
-            <property name="column-spacing">20</property>
-            <property name="row-spacing">10</property>
-            <property name="visible">true</property>
-            <child>
-              <object class="GtkLabel">
-                <property name="label" translatable="yes">Project</property>
-                <property name="visible">true</property>
-                <property name="xalign">0.0</property>
-                <attributes>
-                  <attribute name="weight" value="bold"/>
-                </attributes>
-                <style>
-                  <class name="dim-label"/>
-                </style>
-              </object>
-            </child>
-            <child>
-              <object class="GtkLabel" id="popover_project_label">
-                <property name="hexpand">true</property>
-                <property name="visible">true</property>
-                <property name="xalign">0.0</property>
-                <property name="ellipsize">start</property>
-              </object>
-              <packing>
-                <property name="left-attach">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel">
-                <property name="label" translatable="yes">Branch</property>
-                <property name="visible">true</property>
-                <property name="xalign">0.0</property>
-                <attributes>
-                  <attribute name="weight" value="bold"/>
-                </attributes>
-                <style>
-                  <class name="dim-label"/>
-                </style>
-              </object>
-              <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="popover_branch_label">
-                <property name="hexpand">true</property>
-                <property name="visible">true</property>
-                <property name="xalign">0.0</property>
-              </object>
-              <packing>
-                <property name="left-attach">1</property>
-                <property name="top-attach">1</property>
-              </packing>
-            </child>
-          </object>
-        </child>
         <child>
           <object class="GtkBox">
             <property name="orientation">vertical</property>
-            <property name="spacing">10</property>
+            <property name="spacing">20</property>
             <property name="visible">true</property>
+            <style>
+              <class name="popover-content-area"/>
+            </style>
             <child>
-              <object class="GtkLabel">
-                <property name="label" translatable="yes">Build Profile</property>
-                <property name="visible">true</property>
-                <property name="xalign">0.0</property>
-                <attributes>
-                  <attribute name="weight" value="bold"/>
-                </attributes>
-              </object>
-            </child>
-            <child>
-              <object class="GtkScrolledWindow">
-                <property name="shadow-type">in</property>
-                <property name="max-content-height">200</property>
-                <property name="max-content-width">500</property>
+              <object class="GtkGrid">
+                <property name="column-spacing">20</property>
+                <property name="row-spacing">10</property>
                 <property name="visible">true</property>
                 <child>
-                  <object class="GtkListBox" id="popover_configuration_list_box">
-                    <property name="selection-mode">none</property>
+                  <object class="GtkLabel">
+                    <property name="label" translatable="yes">Project</property>
                     <property name="visible">true</property>
+                    <property name="xalign">0.0</property>
+                    <attributes>
+                      <attribute name="weight" value="bold"/>
+                    </attributes>
+                    <style>
+                      <class name="dim-label"/>
+                    </style>
                   </object>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="popover_project_label">
+                    <property name="hexpand">true</property>
+                    <property name="visible">true</property>
+                    <property name="xalign">0.0</property>
+                    <property name="ellipsize">start</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="label" translatable="yes">Branch</property>
+                    <property name="visible">true</property>
+                    <property name="xalign">0.0</property>
+                    <attributes>
+                      <attribute name="weight" value="bold"/>
+                    </attributes>
+                    <style>
+                      <class name="dim-label"/>
+                    </style>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="popover_branch_label">
+                    <property name="hexpand">true</property>
+                    <property name="visible">true</property>
+                    <property name="xalign">0.0</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">1</property>
+                  </packing>
                 </child>
               </object>
             </child>
-          </object>
-        </child>
-        <child>
-          <object class="GtkBox">
-            <property name="spacing">12</property>
-            <property name="visible">true</property>
             <child>
               <object class="GtkBox">
                 <property name="orientation">vertical</property>
-                <property name="valign">center</property>
+                <property name="spacing">10</property>
                 <property name="visible">true</property>
                 <child>
-                  <object class="GtkLabel" id="popover_build_mode_label">
+                  <object class="GtkLabel">
+                    <property name="label" translatable="yes">Build Profile</property>
+                    <property name="visible">true</property>
                     <property name="xalign">0.0</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
@@ -240,64 +213,137 @@
                   </object>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="popover_last_build_time_label">
-                    <property name="xalign">0.0</property>
-                    <attributes>
-                      <attribute name="scale" value="0.8333"/>
-                    </attributes>
+                  <object class="GtkScrolledWindow">
+                    <property name="shadow-type">in</property>
+                    <property name="max-content-height">200</property>
+                    <property name="max-content-width">500</property>
+                    <property name="visible">true</property>
+                    <child>
+                      <object class="GtkListBox" id="popover_configuration_list_box">
+                        <property name="selection-mode">none</property>
+                        <property name="visible">true</property>
+                      </object>
+                    </child>
                   </object>
                 </child>
               </object>
             </child>
             <child>
-              <object class="GtkLabel" id="popover_build_running_time_label">
-                <property name="xalign">1.0</property>
-                <property name="margin-end">8</property>
-                <property name="margin-start">8</property>
+              <object class="GtkBox">
+                <property name="spacing">12</property>
+                <property name="visible">true</property>
+                <child>
+                  <object class="GtkBox">
+                    <property name="orientation">vertical</property>
+                    <property name="valign">center</property>
+                    <property name="visible">true</property>
+                    <child>
+                      <object class="GtkLabel" id="popover_build_mode_label">
+                        <property name="xalign">0.0</property>
+                        <attributes>
+                          <attribute name="weight" value="bold"/>
+                        </attributes>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="popover_last_build_time_label">
+                        <property name="xalign">0.0</property>
+                        <attributes>
+                          <attribute name="scale" value="0.8333"/>
+                        </attributes>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="popover_build_running_time_label">
+                    <property name="xalign">1.0</property>
+                    <property name="margin-end">8</property>
+                    <property name="margin-start">8</property>
+                  </object>
+                  <packing>
+                    <property name="position">1</property>
+                    <property name="pack-type">start</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="popover_failed_label">
+                    <property name="label" translatable="yes">Failed</property>
+                    <property name="xalign">1.0</property>
+                    <property name="margin-end">8</property>
+                    <property name="margin-start">8</property>
+                    <attributes>
+                      <attribute name="weight" value="bold"/>
+                      <attribute name="foreground" value="red"/>
+                    </attributes>
+                  </object>
+                  <packing>
+                    <property name="position">2</property>
+                    <property name="pack-type">end</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="popover_view_output_button">
+                    <property name="action-name">build-tools.view-output</property>
+                    <property name="label" translatable="yes">View Output</property>
+                  </object>
+                  <packing>
+                    <property name="position">1</property>
+                    <property name="pack-type">end</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="popover_build_cancel_button">
+                    <property name="action-name">build-tools.cancel-build</property>
+                    <property name="label" translatable="yes">_Cancel</property>
+                    <property name="use-underline">true</property>
+                    <style>
+                      <class name="destructive-action"/>
+                    </style>
+                  </object>
+                  <packing>
+                    <property name="position">0</property>
+                    <property name="pack-type">end</property>
+                  </packing>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox">
+            <property name="visible">true</property>
+            <style>
+              <class name="popover-action-area"/>
+            </style>
+            <child>
+              <object class="GtkButton">
+                <property name="action-name">build-tools.build</property>
+                <property name="label" translatable="yes">Build</property>
+                <property name="visible">true</property>
               </object>
               <packing>
-                <property name="position">1</property>
-                <property name="pack-type">start</property>
+                <property name="expand">true</property>
               </packing>
             </child>
             <child>
-              <object class="GtkLabel" id="popover_failed_label">
-                <property name="label" translatable="yes">Failed</property>
-                <property name="xalign">1.0</property>
-                <property name="margin-end">8</property>
-                <property name="margin-start">8</property>
-                <attributes>
-                  <attribute name="weight" value="bold"/>
-                  <attribute name="foreground" value="red"/>
-                </attributes>
+              <object class="GtkButton">
+                <property name="action-name">build-tools.rebuild</property>
+                <property name="label" translatable="yes">Rebuild</property>
+                <property name="visible">true</property>
               </object>
               <packing>
-                <property name="position">2</property>
-                <property name="pack-type">end</property>
+                <property name="expand">true</property>
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="popover_view_output_button">
-                <property name="action-name">build-tools.view-output</property>
-                <property name="label" translatable="yes">View Output</property>
+              <object class="GtkButton">
+                <property name="action-name">build-tools.clean</property>
+                <property name="label" translatable="yes">Clean</property>
+                <property name="visible">true</property>
               </object>
               <packing>
-                <property name="position">1</property>
-                <property name="pack-type">end</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="popover_build_cancel_button">
-                <property name="action-name">build-tools.cancel-build</property>
-                <property name="label" translatable="yes">_Cancel</property>
-                <property name="use-underline">true</property>
-                <style>
-                  <class name="destructive-action"/>
-                </style>
-              </object>
-              <packing>
-                <property name="position">0</property>
-                <property name="pack-type">end</property>
+                <property name="expand">true</property>
               </packing>
             </child>
           </object>

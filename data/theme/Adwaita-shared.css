@@ -181,17 +181,32 @@ preferences stacksidebar list separator {
 }
 
 
-buildperspective list.sidebar row:selected button:hover {
-  border-color: transparent;
-  box-shadow: none;
-  background: transparent;
-  color: @theme_selected_fg_color;
-  opacity: 1;
+popover.messagepopover.background {
+  border-bottom-left-radius: 9px;
+  border-bottom-right-radius: 9px;
+  padding: 0;
 }
-buildperspective list.sidebar row:selected button,
-buildperspective list.sidebar row:selected button:active {
-  opacity: 0.8;
+
+popover.messagepopover .popover-action-area button {
+  padding: 7px 14px;;
+  border-radius: 0;
+  border-left-style: solid;
+  border-right-style: none;
+  border-bottom-style: none;
 }
-buildperspective list.sidebar {
-  border-right: 1px solid alpha(@borders, 0.55);
+
+popover.messagepopover .popover-action-area button:first-child {
+  border-left-style: none;
+  border-bottom-left-radius: 7px;
+  -gtk-outline-bottom-left-radius: 5px;
+}
+
+popover.messagepopover .popover-action-area button:last-child {
+  border-right-style: none;
+  border-bottom-right-radius: 7px;
+  -gtk-outline-bottom-right-radius: 5px;
+}
+
+popover.messagepopover .popover-content-area {
+  margin: 24px;
 }
