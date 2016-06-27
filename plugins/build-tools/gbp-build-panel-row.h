@@ -29,6 +29,8 @@ G_BEGIN_DECLS
 G_DECLARE_FINAL_TYPE (GbpBuildPanelRow, gbp_build_panel_row, GBP, BUILD_PANEL_ROW, GtkListBoxRow)
 
 IdeDiagnostic *gbp_build_panel_row_get_diagnostic (GbpBuildPanelRow *self);
+gint           gbp_build_panel_row_compare        (gconstpointer     a,
+                                                   gconstpointer     b);
 
 G_END_DECLS
 

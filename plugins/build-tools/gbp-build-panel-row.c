@@ -41,6 +41,16 @@ enum {
 
 static GParamSpec *properties [LAST_PROP];
 
+gint
+gbp_build_panel_row_compare (gconstpointer a,
+                             gconstpointer b)
+{
+  const GbpBuildPanelRow *rowa = a;
+  const GbpBuildPanelRow *rowb = b;
+
+  return ide_diagnostic_compare (rowa->diagnostic, rowb->diagnostic);
+}
+
 static void
 gbp_build_panel_row_set_diagnostic (GbpBuildPanelRow *self,
                                     IdeDiagnostic    *diagnostic)

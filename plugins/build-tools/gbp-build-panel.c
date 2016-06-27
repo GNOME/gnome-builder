@@ -98,6 +98,8 @@ gbp_build_panel_diagnostic (GbpBuildPanel  *self,
                       "visible", TRUE,
                       NULL);
   gtk_container_add (GTK_CONTAINER (self->diagnostics), row);
+  gtk_list_box_invalidate_sort (self->diagnostics);
+  gtk_list_box_invalidate_headers (self->diagnostics);
 }
 
 static void
@@ -237,6 +239,65 @@ gbp_build_panel_diagnostic_activated (GbpBuildPanel *self,
   ide_workbench_open_uri_async (workbench, uri, "editor", flags, NULL, NULL, NULL);
 }
 
+static gchar *
+get_severity_title (IdeDiagnosticSeverity severity)
+{
+  switch ((int)severity)
+    {
+    case IDE_DIAGNOSTIC_ERROR:
+      return _("Errors");
+
+    case IDE_DIAGNOSTIC_WARNING:
+      return _("Warnings");
+
+    case IDE_DIAGNOSTIC_NOTE:
+      return _("Notes");
+
+    default:
+      return NULL;
+    }
+}
+
+static void
+update_header_func (GtkListBoxRow *row,
+                    GtkListBoxRow *before,
+                    gpointer       user_data)
+{
+  IdeDiagnostic *diag;
+  IdeDiagnostic *last = NULL;
+  IdeDiagnosticSeverity severitya = 0;
+  IdeDiagnosticSeverity severityb = 0;
+
+  g_assert (GTK_IS_LIST_BOX_ROW (row));
+  g_assert (!before || GTK_IS_LIST_BOX_ROW (before));
+
+  diag = gbp_build_panel_row_get_diagnostic (GBP_BUILD_PANEL_ROW (row));
+  severitya = ide_diagnostic_get_severity (diag);
+
+  if (before != NULL)
+    {
+      last = gbp_build_panel_row_get_diagnostic (GBP_BUILD_PANEL_ROW (before));
+      severityb = ide_diagnostic_get_severity (last);
+    }
+
+  if (last == NULL || severitya != severityb)
+    {
+      const gchar *str = get_severity_title (severitya);
+
+      if (str != NULL)
+        {
+          GtkWidget *widget;
+
+          widget = g_object_new (GTK_TYPE_LABEL,
+                                 "label", str,
+                                 "visible", TRUE,
+                                 "xalign", 0.0f,
+                                 NULL);
+          gtk_list_box_row_set_header (row, widget);
+        }
+    }
+}
+
 static void
 gbp_build_panel_destroy (GtkWidget *widget)
 {
@@ -345,6 +406,11 @@ gbp_build_panel_init (GbpBuildPanel *self)
                                    G_CALLBACK (gbp_build_panel_notify_running_time),
                                    self,
                                    G_CONNECT_SWAPPED);
+
+  gtk_list_box_set_sort_func (self->diagnostics,
+                              (GtkListBoxSortFunc)gbp_build_panel_row_compare,
+                              NULL, NULL);
+  gtk_list_box_set_header_func (self->diagnostics, update_header_func, NULL, NULL);
 
   g_signal_connect_object (self->diagnostics,
                            "row-activated",
