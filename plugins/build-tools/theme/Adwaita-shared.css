@@ -33,11 +33,6 @@ buildpanel list row label.file {
   opacity: 0.5;
 }
 
-/*
-buildpanel list row image {
-  opacity: 0.5;
-}
-*/
 
 buildpanel box.build-status {
   background: shade(@theme_bg_color, 0.96);
@@ -75,4 +70,11 @@ configurationview list row entry {
 /* hrmm, we can use this to get row separators */
 configurationview treeview {
   border-bottom: 1px solid alpha(@borders, 0.4);
+}
+
+
+buildpanel list > label {
+  font-weight: bold;
+  opacity: 0.55;
+  margin: 6px 10px 0px 10px;
 }
