@@ -581,6 +581,7 @@ ide_autotools_build_task_execute_finish (IdeAutotoolsBuildTask  *self,
   GTask *task = (GTask *)result;
   WorkerState *state;
   guint sequence;
+  gboolean ret;
 
   g_return_val_if_fail (IDE_IS_AUTOTOOLS_BUILD_TASK (self), FALSE);
   g_return_val_if_fail (G_IS_TASK (task), FALSE);
@@ -591,7 +592,13 @@ ide_autotools_build_task_execute_finish (IdeAutotoolsBuildTask  *self,
   if ((state != NULL) &&  (state->sequence == sequence))
     ide_configuration_set_dirty (self->configuration, FALSE);
 
-  return g_task_propagate_boolean (task, error);
+  ret = g_task_propagate_boolean (task, error);
+
+  /* Mark the task as failed */
+  if (ret == FALSE)
+    ide_build_result_set_failed (IDE_BUILD_RESULT (self), TRUE);
+
+  return ret;
 }
 
 static gboolean
