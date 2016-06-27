@@ -22,6 +22,7 @@
 
 #include "ide-debug.h"
 
+#include "editor/ide-editor-perspective.h"
 #include "genesis/ide-genesis-perspective.h"
 #include "greeter/ide-greeter-perspective.h"
 #include "ide-macros.h"
@@ -752,6 +753,30 @@ ide_workbench_notify_perspective_set (PeasExtensionSet *set,
   ide_workbench_addin_perspective_set (addin, perspective);
 }
 
+static void
+do_remove_early_perspectives (GtkWidget *widget,
+                              gpointer   user_data)
+{
+  if (IDE_IS_GREETER_PERSPECTIVE (widget) ||
+      IDE_IS_GENESIS_PERSPECTIVE (widget))
+    gtk_widget_destroy (widget);
+}
+
+static void
+remove_early_perspectives (IdeWorkbench *self)
+{
+  g_assert (IDE_IS_WORKBENCH (self));
+
+  if (self->early_perspectives_removed)
+    return;
+
+  gtk_container_foreach (GTK_CONTAINER (self->perspectives_stack),
+                         do_remove_early_perspectives,
+                         NULL);
+
+  self->early_perspectives_removed = TRUE;
+}
+
 void
 ide_workbench_set_visible_perspective (IdeWorkbench   *self,
                                        IdePerspective *perspective)
@@ -780,7 +805,12 @@ ide_workbench_set_visible_perspective (IdeWorkbench   *self,
   actions = ide_perspective_get_actions (perspective);
   gtk_widget_insert_action_group (GTK_WIDGET (self), "perspective", actions);
 
-  /* TODO: Possibly remove some perspectives */
+  /*
+   * If we are transitioning to the editor the first time, we can
+   * remove the early perspectives (greeter, genesis, etc).
+   */
+  if (IDE_IS_EDITOR_PERSPECTIVE (perspective))
+    remove_early_perspectives (self);
 
   gtk_widget_set_visible (GTK_WIDGET (self->perspective_menu_button),
                           !ide_perspective_is_early (perspective));
