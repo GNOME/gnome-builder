@@ -190,3 +190,24 @@ ide_source_location_get_uri (IdeSourceLocation *self)
 
   return ret;
 }
+
+gint
+ide_source_location_compare (const IdeSourceLocation *a,
+                             const IdeSourceLocation *b)
+{
+  gint ret;
+
+  g_assert (a != NULL);
+  g_assert (b != NULL);
+
+  if (a->file && b->file)
+    {
+      if (0 != (ret = ide_file_compare (a->file, b->file)))
+        return ret;
+    }
+
+  if (0 != (ret = (gint)a->line - (gint)b->line))
+    return ret;
+
+  return (gint)a->line_offset - (gint)b->line_offset;
+}

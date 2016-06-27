@@ -322,3 +322,24 @@ ide_diagnostic_get_fixit (IdeDiagnostic *self,
 
   return g_ptr_array_index (self->fixits, index);
 }
+
+gint
+ide_diagnostic_compare (const IdeDiagnostic *a,
+                        const IdeDiagnostic *b)
+{
+  gint ret;
+
+  g_assert (a != NULL);
+  g_assert (b != NULL);
+
+  if (0 != (ret = (gint)a->severity - (gint)b->severity))
+    return ret;
+
+  if (a->location && b->location)
+    {
+      if (0 != (ret = ide_source_location_compare (a->location, b->location)))
+        return ret;
+    }
+
+  return g_strcmp0 (a->text, b->text);
+}

@@ -28,17 +28,19 @@ G_BEGIN_DECLS
 #define IDE_TYPE_SOURCE_LOCATION (ide_source_location_get_type())
 
 GType              ide_source_location_get_type        (void);
-IdeSourceLocation *ide_source_location_ref             (IdeSourceLocation *self);
-void               ide_source_location_unref           (IdeSourceLocation *self);
-IdeSourceLocation *ide_source_location_new             (IdeFile           *file,
-                                                        guint              line,
-                                                        guint              line_offset,
-                                                        guint              offset);
-guint              ide_source_location_get_line        (IdeSourceLocation *self);
-guint              ide_source_location_get_line_offset (IdeSourceLocation *self);
-guint              ide_source_location_get_offset      (IdeSourceLocation *self);
-IdeFile           *ide_source_location_get_file        (IdeSourceLocation *self);
-IdeUri            *ide_source_location_get_uri         (IdeSourceLocation *self);
+IdeSourceLocation *ide_source_location_ref             (IdeSourceLocation       *self);
+void               ide_source_location_unref           (IdeSourceLocation       *self);
+IdeSourceLocation *ide_source_location_new             (IdeFile                 *file,
+                                                        guint                    line,
+                                                        guint                    line_offset,
+                                                        guint                    offset);
+guint              ide_source_location_get_line        (IdeSourceLocation       *self);
+guint              ide_source_location_get_line_offset (IdeSourceLocation       *self);
+guint              ide_source_location_get_offset      (IdeSourceLocation       *self);
+IdeFile           *ide_source_location_get_file        (IdeSourceLocation       *self);
+IdeUri            *ide_source_location_get_uri         (IdeSourceLocation       *self);
+gint               ide_source_location_compare         (const IdeSourceLocation *a,
+                                                        const IdeSourceLocation *b);
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (IdeSourceLocation, ide_source_location_unref)
 

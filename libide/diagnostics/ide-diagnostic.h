@@ -58,6 +58,8 @@ void                   ide_diagnostic_take_fixit           (IdeDiagnostic       
                                                             IdeFixit              *fixit);
 void                   ide_diagnostic_take_range           (IdeDiagnostic         *self,
                                                             IdeSourceRange        *range);
+gint                   ide_diagnostic_compare              (const IdeDiagnostic   *a,
+                                                            const IdeDiagnostic   *b);
 
 const gchar           *ide_diagnostic_severity_to_string   (IdeDiagnosticSeverity severity);
 

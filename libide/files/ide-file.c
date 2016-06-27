@@ -689,3 +689,19 @@ ide_file_new_for_path (IdeContext  *context,
 
   return ret;
 }
+
+gint
+ide_file_compare (const IdeFile *a,
+                  const IdeFile *b)
+{
+  g_autofree gchar *filea = NULL;
+  g_autofree gchar *fileb = NULL;
+
+  g_assert (a != NULL);
+  g_assert (b != NULL);
+
+  filea = g_file_get_uri (a->file);
+  fileb = g_file_get_uri (b->file);
+
+  return g_strcmp0 (filea, fileb);
+}

@@ -55,6 +55,8 @@ void               ide_file_find_other_async     (IdeFile              *self,
 IdeFile           *ide_file_find_other_finish    (IdeFile              *self,
                                                   GAsyncResult         *result,
                                                   GError              **error);
+gint               ide_file_compare              (const IdeFile        *a,
+                                                  const IdeFile        *b);
 
 
 G_END_DECLS
