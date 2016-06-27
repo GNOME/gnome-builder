@@ -84,6 +84,9 @@
               </object>
             </child>
           </object>
+          <packing>
+            <property name="expand">true</property>
+          </packing>
         </child>
       </object>
     </child>
