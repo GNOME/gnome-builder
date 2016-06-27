@@ -15,38 +15,8 @@
       </packing>
     </child>
     <child type="title">
-      <object class="GtkBox" id="center_box">
-        <property name="spacing">6</property>
+      <object class="IdeOmniBar" id="omni_bar">
         <property name="visible">true</property>
-        <child>
-          <object class="EggPriorityBox" id="center_left_box">
-            <property name="halign">end</property>
-            <property name="margin-start">30</property>
-            <property name="visible">true</property>
-          </object>
-          <packing>
-            <property name="pack-type">start</property>
-            <property name="fill">true</property>
-            <property name="expand">true</property>
-          </packing>
-        </child>
-        <child type="center">
-          <object class="IdeOmniBar" id="omni_bar">
-            <property name="visible">true</property>
-          </object>
-        </child>
-        <child>
-          <object class="EggPriorityBox" id="center_right_box">
-            <property name="halign">start</property>
-            <property name="margin-end">30</property>
-            <property name="visible">true</property>
-          </object>
-          <packing>
-            <property name="pack-type">end</property>
-            <property name="fill">true</property>
-            <property name="expand">true</property>
-          </packing>
-        </child>
       </object>
     </child>
     <child>
@@ -76,7 +46,7 @@
         </child>
         <child>
           <object class="IdeOmniSearchEntry" id="search_entry">
-            <property name="hexpand">true</property>
+            <property name="max-width-chars">25</property>
             <property name="placeholder-text" translatable="yes">Press Ctrl+. to search</property>
             <property name="visible">true</property>
           </object>
@@ -92,12 +62,4 @@
       </packing>
     </child>
   </template>
-  <object class="GtkSizeGroup">
-    <property name="mode">GTK_SIZE_GROUP_HORIZONTAL</property>
-    <widgets>
-      <!-- This is required due to bug https://bugzilla.gnome.org/show_bug.cgi?id=767932 -->
-      <widget name="center_right_box"/>
-      <widget name="center_left_box"/>
-    </widgets>
-  </object>
 </interface>

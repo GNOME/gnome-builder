@@ -31,8 +31,6 @@ typedef struct
 {
   GtkMenuButton      *menu_button;
   EggPriorityBox     *center_box;
-  EggPriorityBox     *center_right_box;
-  EggPriorityBox     *center_left_box;
   EggPriorityBox     *right_box;
   EggPriorityBox     *left_box;
   IdeOmniBar         *omni_bar;
@@ -58,8 +56,6 @@ ide_workbench_header_bar_class_init (IdeWorkbenchHeaderBarClass *klass)
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/ui/ide-workbench-header-bar.ui");
   gtk_widget_class_bind_template_child_private (widget_class, IdeWorkbenchHeaderBar, center_box);
-  gtk_widget_class_bind_template_child_private (widget_class, IdeWorkbenchHeaderBar, center_left_box);
-  gtk_widget_class_bind_template_child_private (widget_class, IdeWorkbenchHeaderBar, center_right_box);
   gtk_widget_class_bind_template_child_private (widget_class, IdeWorkbenchHeaderBar, left_box);
   gtk_widget_class_bind_template_child_private (widget_class, IdeWorkbenchHeaderBar, menu_button);
   gtk_widget_class_bind_template_child_private (widget_class, IdeWorkbenchHeaderBar, omni_bar);
@@ -104,22 +100,10 @@ ide_workbench_header_bar_insert_left (IdeWorkbenchHeaderBar *self,
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (pack_type == GTK_PACK_START || pack_type == GTK_PACK_END);
 
-  /*
-   * NOTE: Because GtkHeaderBar does not currently support hexpand, we
-   *       need to check the pack_type requested and possibly insert it
-   *       into our custom center-child.
-   */
-
-  if (pack_type == GTK_PACK_END)
-    gtk_container_add_with_properties (GTK_CONTAINER (priv->center_left_box), widget,
-                                       "pack-type", pack_type,
-                                       "priority", priority,
-                                       NULL);
-  else
-    gtk_container_add_with_properties (GTK_CONTAINER (priv->left_box), widget,
-                                       "pack-type", pack_type,
-                                       "priority", priority,
-                                       NULL);
+  gtk_container_add_with_properties (GTK_CONTAINER (priv->left_box), widget,
+                                     "pack-type", pack_type,
+                                     "priority", priority,
+                                     NULL);
 }
 
 void
@@ -134,22 +118,10 @@ ide_workbench_header_bar_insert_right (IdeWorkbenchHeaderBar *self,
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (pack_type == GTK_PACK_START || pack_type == GTK_PACK_END);
 
-  /*
-   * NOTE: Because GtkHeaderBar does not currently support hexpand, we
-   *       need to check the pack_type requested and possibly insert it
-   *       into our custom center-child.
-   */
-
-  if (pack_type == GTK_PACK_START)
-    gtk_container_add_with_properties (GTK_CONTAINER (priv->center_right_box), widget,
-                                       "pack-type", pack_type,
-                                       "priority", priority,
-                                       NULL);
-  else
-    gtk_container_add_with_properties (GTK_CONTAINER (priv->right_box), widget,
-                                       "pack-type", pack_type,
-                                       "priority", priority,
-                                       NULL);
+  gtk_container_add_with_properties (GTK_CONTAINER (priv->right_box), widget,
+                                     "pack-type", pack_type,
+                                     "priority", priority,
+                                     NULL);
 }
 
 static GObject *
