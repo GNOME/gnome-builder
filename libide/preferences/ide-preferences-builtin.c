@@ -29,6 +29,7 @@
 #include "preferences/ide-preferences-entry.h"
 #include "preferences/ide-preferences-language-row.h"
 #include "preferences/ide-preferences-spin-button.h"
+#include "vcs/ide-vcs-config.h"
 
 static void
 ide_preferences_builtin_register_plugins (IdePreferences *preferences)
@@ -320,6 +321,132 @@ ide_preferences_builtin_register_projects (IdePreferences *preferences)
   ide_preferences_add_switch (preferences, "projects", "discovery", "org.gnome.builder", "enable-project-miners", NULL, NULL, _("Discover projects on my computer"), _("Scan your computer for existing projects"), NULL, 0);
 }
 
+static void
+author_changed_cb (IdePreferencesEntry *entry,
+                   const gchar         *text,
+                   IdeVcsConfig        *conf)
+{
+  GValue value = G_VALUE_INIT;
+
+  g_assert (IDE_IS_PREFERENCES_ENTRY (entry));
+  g_assert (text != NULL);
+  g_assert (IDE_IS_VCS_CONFIG (conf));
+
+  g_value_init (&value, G_TYPE_STRING);
+  g_value_set_string (&value, text);
+
+  ide_vcs_config_set_config (conf, IDE_VCS_CONFIG_FULL_NAME, &value);
+
+  g_value_unset (&value);
+}
+
+static void
+email_changed_cb (IdePreferencesEntry *entry,
+                  const gchar         *text,
+                  IdeVcsConfig        *conf)
+{
+  GValue value = G_VALUE_INIT;
+
+  g_assert (IDE_IS_PREFERENCES_ENTRY (entry));
+  g_assert (text != NULL);
+  g_assert (IDE_IS_VCS_CONFIG (conf));
+
+  g_value_init (&value, G_TYPE_STRING);
+  g_value_set_string (&value, text);
+
+  ide_vcs_config_set_config (conf, IDE_VCS_CONFIG_EMAIL, &value);
+
+  g_value_unset (&value);
+}
+
+static void
+vcs_configs_foreach_cb (PeasExtensionSet *set,
+                        PeasPluginInfo   *plugin_info,
+                        PeasExtension    *exten,
+                        gpointer          user_data)
+{
+  IdePreferences *preferences = user_data;
+  IdeVcsConfig *conf = (IdeVcsConfig *)exten;
+  GValue value = G_VALUE_INIT;
+  GtkWidget *fullname;
+  GtkWidget *email;
+  GtkSizeGroup *size_group;
+  g_autofree gchar *key = NULL;
+  g_autofree gchar *author_name = NULL;
+  g_autofree gchar *author_email = NULL;
+  const gchar *name;
+  const gchar *id;
+
+  g_assert (PEAS_IS_EXTENSION_SET (set));
+  g_assert (IDE_IS_PREFERENCES (preferences));
+  g_assert (IDE_IS_VCS_CONFIG (conf));
+
+  name = peas_plugin_info_get_name (plugin_info);
+  id = peas_plugin_info_get_module_name (plugin_info);
+  key = g_strdup_printf ("%s-config", id);
+
+  g_object_set_data_full (G_OBJECT (preferences), key, g_object_ref (conf), g_object_unref);
+
+  g_value_init (&value, G_TYPE_STRING);
+
+  ide_vcs_config_get_config (conf, IDE_VCS_CONFIG_FULL_NAME, &value);
+  author_name = g_strdup (g_value_get_string (&value));
+
+  g_value_reset (&value);
+
+  ide_vcs_config_get_config (conf, IDE_VCS_CONFIG_EMAIL, &value);
+  author_email = g_strdup (g_value_get_string (&value));
+
+  g_value_unset (&value);
+
+  fullname = g_object_new (IDE_TYPE_PREFERENCES_ENTRY,
+                           "text", ide_str_empty0 (author_name) ? "" : author_name,
+                           "title", "Author",
+                           "visible", TRUE,
+                           NULL);
+
+  g_signal_connect_object (fullname,
+                           "changed",
+                           G_CALLBACK (author_changed_cb),
+                           conf,
+                           0);
+
+  email = g_object_new (IDE_TYPE_PREFERENCES_ENTRY,
+                        "text", ide_str_empty0 (author_email) ? "" : author_email,
+                        "title", "Email",
+                        "visible", TRUE,
+                        NULL);
+
+  g_signal_connect_object (email,
+                           "changed",
+                           G_CALLBACK (email_changed_cb),
+                           conf,
+                           0);
+
+  ide_preferences_add_list_group (preferences, "vcs", id, name, 0);
+  ide_preferences_add_custom (preferences, "vcs", id, fullname, NULL, 0);
+  ide_preferences_add_custom (preferences, "vcs", id, email, NULL, 0);
+
+  size_group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
+  gtk_size_group_add_widget (size_group, ide_preferences_entry_get_title_widget (IDE_PREFERENCES_ENTRY (fullname)));
+  gtk_size_group_add_widget (size_group, ide_preferences_entry_get_title_widget (IDE_PREFERENCES_ENTRY (email)));
+  g_clear_object (&size_group);
+}
+
+static void
+ide_preferences_builtin_register_vcs (IdePreferences *preferences)
+{
+  PeasEngine *engine;
+  PeasExtensionSet *extensions;
+
+  ide_preferences_add_page (preferences, "vcs", _("Version Control"), 600);
+
+  engine = peas_engine_get_default ();
+  extensions = peas_extension_set_new (engine, IDE_TYPE_VCS_CONFIG, NULL);
+  peas_extension_set_foreach (extensions, vcs_configs_foreach_cb, preferences);
+  g_clear_object (&extensions);
+}
+
 void
 _ide_preferences_builtin_register (IdePreferences *preferences)
 {
@@ -332,4 +459,5 @@ _ide_preferences_builtin_register (IdePreferences *preferences)
   ide_preferences_builtin_register_plugins (preferences);
   ide_preferences_builtin_register_build (preferences);
   ide_preferences_builtin_register_projects (preferences);
+  ide_preferences_builtin_register_vcs (preferences);
 }

@@ -17,8 +17,6 @@ libgit_plugin_la_SOURCES = \
 	ide-git-genesis-addin.c \
 	ide-git-genesis-addin.h \
 	ide-git-plugin.c \
-	ide-git-preferences-addin.c \
-	ide-git-preferences-addin.h \
 	ide-git-remote-callbacks.c \
 	ide-git-remote-callbacks.h \
 	ide-git-vcs.c \

@@ -20,7 +20,6 @@
 #include <ide.h>
 
 #include "ide-git-genesis-addin.h"
-#include "ide-git-preferences-addin.h"
 #include "ide-git-vcs.h"
 #include "ide-git-vcs-config.h"
 #include "ide-git-vcs-initializer.h"
@@ -64,9 +63,6 @@ peas_register_types (PeasObjectModule *module)
       peas_object_module_register_extension_type (module,
                                                   IDE_TYPE_VCS_INITIALIZER,
                                                   IDE_TYPE_GIT_VCS_INITIALIZER);
-      peas_object_module_register_extension_type (module,
-                                                  IDE_TYPE_PREFERENCES_ADDIN,
-                                                  IDE_TYPE_GIT_PREFERENCES_ADDIN);
       peas_object_module_register_extension_type (module,
                                                   IDE_TYPE_GENESIS_ADDIN,
                                                   IDE_TYPE_GIT_GENESIS_ADDIN);
