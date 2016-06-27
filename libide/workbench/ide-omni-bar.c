@@ -60,6 +60,7 @@ struct _IdeOmniBar
   GtkLabel       *popover_build_mode_label;
   GtkLabel       *popover_build_running_time_label;
   GtkListBox     *popover_configuration_list_box;
+  GtkLabel       *popover_failed_label;
   GtkLabel       *popover_last_build_time_label;
   GtkButton      *popover_view_output_button;
   GtkLabel       *popover_project_label;
@@ -324,6 +325,22 @@ ide_omni_bar_build_result_notify_mode (IdeOmniBar     *self,
 }
 
 static void
+ide_omni_bar_build_result_notify_failed (IdeOmniBar     *self,
+                                         GParamSpec     *pspec,
+                                         IdeBuildResult *result)
+{
+  gboolean failed;
+
+  g_assert (IDE_IS_OMNI_BAR (self));
+  g_assert (pspec != NULL);
+  g_assert (IDE_IS_BUILD_RESULT (result));
+
+  failed = ide_build_result_get_failed (result);
+
+  gtk_widget_set_visible (GTK_WIDGET (self->popover_failed_label), failed);
+}
+
+static void
 ide_omni_bar_build_result_notify_running_time (IdeOmniBar     *self,
                                                GParamSpec     *pspec,
                                                IdeBuildResult *result)
@@ -555,6 +572,7 @@ ide_omni_bar_class_init (IdeOmniBarClass *klass)
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, popover_build_mode_label);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, popover_build_running_time_label);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, popover_configuration_list_box);
+  gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, popover_failed_label);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, popover_last_build_time_label);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, popover_project_label);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, popover_view_output_button);
@@ -590,6 +608,11 @@ ide_omni_bar_init (IdeOmniBar *self)
 
   self->build_result_signals = egg_signal_group_new (IDE_TYPE_BUILD_RESULT);
 
+  egg_signal_group_connect_object (self->build_result_signals,
+                                   "notify::failed",
+                                   G_CALLBACK (ide_omni_bar_build_result_notify_failed),
+                                   self,
+                                   G_CONNECT_SWAPPED);
   egg_signal_group_connect_object (self->build_result_signals,
                                    "notify::mode",
                                    G_CALLBACK (ide_omni_bar_build_result_notify_mode),
@@ -647,6 +670,7 @@ ide_omni_bar_set_build_result (IdeOmniBar     *self,
 {
   g_autoptr(GDateTime) now = NULL;
   g_autofree gchar *nowstr = NULL;
+  gboolean failed = FALSE;
 
   g_return_if_fail (IDE_IS_OMNI_BAR (self));
   g_return_if_fail (!build_result || IDE_IS_BUILD_RESULT (build_result));
@@ -663,4 +687,8 @@ ide_omni_bar_set_build_result (IdeOmniBar     *self,
   gtk_label_set_label (self->popover_last_build_time_label, nowstr);
 
   gtk_widget_show (GTK_WIDGET (self->popover_view_output_button));
+
+  if (build_result)
+    failed = ide_build_result_get_failed (build_result);
+  gtk_widget_set_visible (GTK_WIDGET (self->popover_failed_label), failed);
 }
