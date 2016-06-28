@@ -458,6 +458,12 @@ gbp_build_perspective_get_actions (IdePerspective *perspective)
   return g_object_ref (self->actions);
 }
 
+static gchar *
+gbp_build_perspective_get_accelerator (IdePerspective *perspective)
+{
+  return g_strdup ("<alt>comma");
+}
+
 static void
 perspective_iface_init (IdePerspectiveInterface *iface)
 {
@@ -466,4 +472,5 @@ perspective_iface_init (IdePerspectiveInterface *iface)
   iface->get_title = gbp_build_perspective_get_title;
   iface->get_id = gbp_build_perspective_get_id;
   iface->get_priority = gbp_build_perspective_get_priority;
+  iface->get_accelerator = gbp_build_perspective_get_accelerator;
 }
