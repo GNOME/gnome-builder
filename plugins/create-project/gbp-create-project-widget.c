@@ -17,10 +17,10 @@
  */
 
 #include <glib/gi18n.h>
+#include <ide.h>
 #include <libpeas/peas.h>
 #include <stdlib.h>
 
-#include "ide-macros.h"
 #include "gbp-create-project-template-icon.h"
 #include "gbp-create-project-widget.h"
 
@@ -272,38 +272,22 @@ vcs_initializers_foreach_cb (PeasExtensionSet *set,
 static gchar *
 gbp_create_project_widget_get_directory (GbpCreateProjectWidget *self)
 {
-  const gchar *text;
-
   g_assert (GBP_IS_CREATE_PROJECT_WIDGET (self));
 
-  text = gtk_entry_get_text (self->project_location_entry);
-
-  if (*text == '~')
-    return g_build_filename (g_get_home_dir (),
-                             &text[1],
-                             NULL);
-
-  return g_strdup (text);
+  return ide_path_expand (gtk_entry_get_text (self->project_location_entry));
 }
 
 static void
 gbp_create_project_widget_set_directory (GbpCreateProjectWidget *self,
                                          const gchar            *filename)
 {
-  g_autofree gchar *freeme = NULL;
+  g_autofree gchar *collapsed = NULL;
 
   g_assert (GBP_IS_CREATE_PROJECT_WIDGET (self));
 
-  if (filename == NULL)
-    filename = g_get_home_dir ();
+  collapsed = ide_path_collapse (filename);
 
-  if (g_str_has_prefix (filename, g_get_home_dir ()))
-    {
-      freeme = g_build_filename ("~", filename + strlen (g_get_home_dir ()), NULL);
-      filename = freeme;
-    }
-
-  gtk_entry_set_text (self->project_location_entry, filename);
+  gtk_entry_set_text (self->project_location_entry, collapsed);
 }
 
 static void
@@ -478,24 +462,13 @@ gbp_create_project_widget_init (GbpCreateProjectWidget *self)
 {
   g_autoptr(GSettings) settings = NULL;
   g_autofree gchar *path = NULL;
-  g_autofree char *projects_dir = NULL;
 
   gtk_widget_init_template (GTK_WIDGET (self));
 
   settings = g_settings_new ("org.gnome.builder");
+
   path = g_settings_get_string (settings, "projects-directory");
-
-  if (!ide_str_empty0 (path))
-    {
-      g_autofree gchar *adjusted = NULL;
-
-      if (!g_path_is_absolute (path))
-        projects_dir = g_build_filename (g_get_home_dir (), path, NULL);
-      else
-        projects_dir = g_steal_pointer (&path);
-
-      gbp_create_project_widget_set_directory (self, projects_dir);
-    }
+  gbp_create_project_widget_set_directory (self, path);
 
   gtk_flow_box_set_filter_func (self->project_template_chooser,
                                 gbp_create_project_widget_flow_box_filter,
