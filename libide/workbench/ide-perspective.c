@@ -300,3 +300,22 @@ ide_perspective_is_early (IdePerspective *self)
     return IDE_PERSPECTIVE_GET_IFACE (self)->is_early (self);
   return FALSE;
 }
+
+/**
+ * ide_perspective_get_accelerator:
+ *
+ * Gets the accelerator to use to jump to the perspective. The workbench will
+ * register this accelerator on behalf of the perspective.
+ *
+ * Returns: (nullable) (transfer full): A newly allocated string or %NULL.
+ */
+gchar *
+ide_perspective_get_accelerator (IdePerspective *self)
+{
+  g_return_val_if_fail (IDE_IS_PERSPECTIVE (self), NULL);
+
+  if (IDE_PERSPECTIVE_GET_IFACE (self)->get_accelerator)
+   return IDE_PERSPECTIVE_GET_IFACE (self)->get_accelerator (self);
+
+  return NULL;
+}
