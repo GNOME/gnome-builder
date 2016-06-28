@@ -21,11 +21,12 @@
 #include <glib/gi18n.h>
 
 #include "ide-debug.h"
+#include "ide-macros.h"
 
+#include "application/ide-application.h"
 #include "editor/ide-editor-perspective.h"
 #include "genesis/ide-genesis-perspective.h"
 #include "greeter/ide-greeter-perspective.h"
-#include "ide-macros.h"
 #include "preferences/ide-preferences-perspective.h"
 #include "util/ide-gtk.h"
 #include "util/ide-window-settings.h"
@@ -601,6 +602,7 @@ void
 ide_workbench_add_perspective (IdeWorkbench   *self,
                                IdePerspective *perspective)
 {
+  g_autofree gchar *accel= NULL;
   g_autofree gchar *icon_name = NULL;
   g_autofree gchar *id = NULL;
   g_autofree gchar *title = NULL;
@@ -641,6 +643,19 @@ ide_workbench_add_perspective (IdeWorkbench   *self,
       g_list_store_sort (self->perspectives,
                          ide_workbench_compare_perspective,
                          NULL);
+    }
+
+  accel = ide_perspective_get_accelerator (perspective);
+
+  if (accel != NULL)
+    {
+      const gchar *accel_map[] = { accel, NULL };
+      g_autofree gchar *action_name = NULL;
+
+      action_name = g_strdup_printf ("win.perspective('%s')", id);
+      gtk_application_set_accels_for_action (GTK_APPLICATION (IDE_APPLICATION_DEFAULT),
+                                             action_name, accel_map);
+
     }
 }
 
