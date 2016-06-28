@@ -30,14 +30,11 @@ struct _GbpCreateProjectWidget
 
   GtkEntry             *project_name_entry;
   GtkEntry             *project_location_entry;
-  GtkFileChooserButton *project_location_button;
+  GtkButton            *project_location_button;
   GtkComboBoxText      *project_language_chooser;
   GtkFlowBox           *project_template_chooser;
-  GtkFileChooserDialog *select_folder_dialog;
   GtkComboBoxText      *versioning_chooser;
   GtkComboBoxText      *license_chooser;
-
-  guint                 auto_update : 1;
 };
 
 enum {
@@ -109,20 +106,6 @@ validate_name (const gchar *name)
 }
 
 static void
-gbp_create_project_widget_location_changed (GbpCreateProjectWidget *self,
-                                            GtkEntry               *entry)
-{
-  g_assert (GBP_IS_CREATE_PROJECT_WIDGET (self));
-  g_assert (GTK_IS_ENTRY (entry));
-
-  self->auto_update = FALSE;
-
-  g_signal_handlers_disconnect_by_func (self->project_location_entry,
-                                        gbp_create_project_widget_location_changed,
-                                        self);
-}
-
-static void
 gbp_create_project_widget_name_changed (GbpCreateProjectWidget *self,
                                         GtkEntry               *entry)
 {
@@ -151,19 +134,6 @@ gbp_create_project_widget_name_changed (GbpCreateProjectWidget *self,
                     NULL);
 
       project_dir = g_ascii_strdown (g_strdelimit (project_name, " ", '-'), -1);
-    }
-
-  if (self->auto_update)
-    {
-      g_signal_handlers_block_by_func (self->project_location_entry,
-                                       gbp_create_project_widget_location_changed,
-                                       self);
-
-      gtk_entry_set_text (self->project_location_entry, project_dir);
-
-      g_signal_handlers_unblock_by_func (self->project_location_entry,
-                                         gbp_create_project_widget_location_changed,
-                                         self);
     }
 
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_IS_READY]);
@@ -299,6 +269,96 @@ vcs_initializers_foreach_cb (PeasExtensionSet *set,
   gtk_combo_box_text_append (self->versioning_chooser, id, title);
 }
 
+static gchar *
+gbp_create_project_widget_get_directory (GbpCreateProjectWidget *self)
+{
+  const gchar *text;
+
+  g_assert (GBP_IS_CREATE_PROJECT_WIDGET (self));
+
+  text = gtk_entry_get_text (self->project_location_entry);
+
+  if (*text == '~')
+    return g_build_filename (g_get_home_dir (),
+                             &text[1],
+                             NULL);
+
+  return g_strdup (text);
+}
+
+static void
+gbp_create_project_widget_set_directory (GbpCreateProjectWidget *self,
+                                         const gchar            *filename)
+{
+  g_autofree gchar *freeme = NULL;
+
+  g_assert (GBP_IS_CREATE_PROJECT_WIDGET (self));
+
+  if (filename == NULL)
+    filename = g_get_home_dir ();
+
+  if (g_str_has_prefix (filename, g_get_home_dir ()))
+    {
+      freeme = g_build_filename ("~", filename + strlen (g_get_home_dir ()), NULL);
+      filename = freeme;
+    }
+
+  gtk_entry_set_text (self->project_location_entry, filename);
+}
+
+static void
+on_dialog_response (GbpCreateProjectWidget *self,
+                    gint                    response_id,
+                    GtkFileChooserDialog   *dialog)
+{
+  g_assert (GBP_IS_CREATE_PROJECT_WIDGET (self));
+  g_assert (GTK_IS_FILE_CHOOSER_DIALOG (dialog));
+
+  if (response_id == GTK_RESPONSE_OK)
+    {
+      g_autofree gchar *path = NULL;
+
+      path = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
+      gbp_create_project_widget_set_directory (self, path);
+    }
+
+  gtk_widget_destroy (GTK_WIDGET (dialog));
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_IS_READY]);
+}
+
+static void
+gbp_create_project_widget_browse_clicked (GbpCreateProjectWidget *self,
+                                          GtkButton              *button)
+{
+  g_autofree gchar *path = NULL;
+  GtkWidget *dialog;
+  GtkWidget *toplevel;
+
+  g_assert (GBP_IS_CREATE_PROJECT_WIDGET (self));
+  g_assert (GTK_IS_BUTTON (button));
+
+  path = gbp_create_project_widget_get_directory (self);
+  toplevel = gtk_widget_get_toplevel (GTK_WIDGET (self));
+  dialog = gtk_file_chooser_dialog_new (_("Select Project Directory"),
+                                        GTK_WINDOW (toplevel),
+                                        GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
+                                        _("Cancel"), GTK_RESPONSE_CANCEL,
+                                        _("Select"), GTK_RESPONSE_OK,
+                                        NULL);
+  gtk_file_chooser_set_filename (GTK_FILE_CHOOSER (dialog), path);
+  gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
+  gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
+
+  g_signal_connect_object (dialog,
+                           "response",
+                           G_CALLBACK (on_dialog_response),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  gtk_window_present (GTK_WINDOW (dialog));
+}
+
 static void
 gbp_create_project_widget_constructed (GObject *object)
 {
@@ -324,8 +384,6 @@ gbp_create_project_widget_constructed (GObject *object)
   gtk_combo_box_set_active (GTK_COMBO_BOX (self->project_language_chooser), 0);
   gtk_combo_box_set_active (GTK_COMBO_BOX (self->versioning_chooser), 0);
   gtk_combo_box_set_active_id (GTK_COMBO_BOX (self->license_chooser), "gpl_3");
-
-  self->auto_update = TRUE;
 }
 
 static void
@@ -363,16 +421,6 @@ gbp_create_project_widget_is_ready (GbpCreateProjectWidget *self)
   g_list_free (selected_template);
 
   return TRUE;
-}
-
-static void
-make_dialog_modal (GbpCreateProjectWidget *self,
-                   GtkFileChooserDialog   *dialog)
-{
-  g_assert (GBP_IS_CREATE_PROJECT_WIDGET (self));
-  g_assert (GTK_IS_FILE_CHOOSER_DIALOG (dialog));
-
-  gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
 }
 
 static void
@@ -421,7 +469,6 @@ gbp_create_project_widget_class_init (GbpCreateProjectWidgetClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GbpCreateProjectWidget, project_location_entry);
   gtk_widget_class_bind_template_child (widget_class, GbpCreateProjectWidget, project_language_chooser);
   gtk_widget_class_bind_template_child (widget_class, GbpCreateProjectWidget, project_template_chooser);
-  gtk_widget_class_bind_template_child (widget_class, GbpCreateProjectWidget, select_folder_dialog);
   gtk_widget_class_bind_template_child (widget_class, GbpCreateProjectWidget, versioning_chooser);
   gtk_widget_class_bind_template_child (widget_class, GbpCreateProjectWidget, license_chooser);
 }
@@ -440,13 +487,14 @@ gbp_create_project_widget_init (GbpCreateProjectWidget *self)
 
   if (!ide_str_empty0 (path))
     {
+      g_autofree gchar *adjusted = NULL;
+
       if (!g_path_is_absolute (path))
         projects_dir = g_build_filename (g_get_home_dir (), path, NULL);
       else
         projects_dir = g_steal_pointer (&path);
 
-      gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (self->project_location_button),
-                                           projects_dir);
+      gbp_create_project_widget_set_directory (self, projects_dir);
     }
 
   gtk_flow_box_set_filter_func (self->project_template_chooser,
@@ -460,9 +508,9 @@ gbp_create_project_widget_init (GbpCreateProjectWidget *self)
                            self,
                            G_CONNECT_SWAPPED);
 
-  g_signal_connect_object (self->project_location_entry,
-                           "changed",
-                           G_CALLBACK (gbp_create_project_widget_location_changed),
+  g_signal_connect_object (self->project_location_button,
+                           "clicked",
+                           G_CALLBACK (gbp_create_project_widget_browse_clicked),
                            self,
                            G_CONNECT_SWAPPED);
 
@@ -477,18 +525,6 @@ gbp_create_project_widget_init (GbpCreateProjectWidget *self)
                            G_CALLBACK (gbp_create_project_widget_template_selected),
                            self,
                            G_CONNECT_SWAPPED);
-
-  g_signal_connect_object (self->select_folder_dialog,
-                           "show",
-                           G_CALLBACK (make_dialog_modal),
-                           self,
-                           G_CONNECT_SWAPPED);
-
-  gtk_dialog_add_buttons (GTK_DIALOG (self->select_folder_dialog),
-                          _("Select"), GTK_RESPONSE_OK,
-                          _("Cancel"), GTK_RESPONSE_CANCEL,
-                          NULL);
-  gtk_dialog_set_default_response (GTK_DIALOG (self->select_folder_dialog), GTK_RESPONSE_OK);
 }
 
 static void
@@ -612,7 +648,6 @@ gbp_create_project_widget_create_async (GbpCreateProjectWidget *self,
   PeasEngine *engine;
   PeasPluginInfo *plugin_info;
   const gchar *text;
-  const gchar *child_name;
   const gchar *license_id;
   const gchar *vcs_id;
   const gchar *author_name;
@@ -640,13 +675,8 @@ gbp_create_project_widget_create_async (GbpCreateProjectWidget *self,
                        g_strdup ("name"),
                        g_variant_ref_sink (g_variant_new_string (g_strdelimit (name, " ", '-'))));
 
-  child_name = gtk_entry_get_text (self->project_location_entry);
-  location = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (self->project_location_button));
-
-  if (!ide_str_empty0 (child_name))
-    path = g_build_filename (location, child_name, NULL);
-  else
-    path = g_steal_pointer (&location);
+  location = gbp_create_project_widget_get_directory (self);
+  path = g_build_filename (location, name, NULL);
 
   g_hash_table_insert (params,
                        g_strdup ("path"),

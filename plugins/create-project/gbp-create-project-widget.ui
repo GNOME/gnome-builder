@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <object class="GtkFileChooserDialog" id="select_folder_dialog">
-    <property name="action">select-folder</property>
-    <property name="local-only">true</property>
-  </object>
   <template class="GbpCreateProjectWidget" parent="GtkBin">
     <child>
       <object class="GtkScrolledWindow">
@@ -24,7 +20,7 @@
                 <child>
                   <object class="GtkBox">
                     <property name="orientation">vertical</property>
-                    <property name="expand">true</property>
+                    <property name="vexpand">true</property>
                     <property name="halign">end</property>
                     <property name="spacing">24</property>
                     <property name="visible">true</property>
@@ -35,6 +31,7 @@
                           <object class="GtkLabel" id="project_name_label">
                             <property name="label" translatable="yes">Project Name</property>
                             <property name="halign">end</property>
+                            <property name="hexpand">true</property>
                             <property name="valign">start</property>
                             <property name="visible">true</property>
                             <attributes>
@@ -49,9 +46,9 @@
                     </child>
                     <child>
                       <object class="GtkLabel" id="row2_1">
-                        <property name="label" translatable="yes">Location</property>
-                        <property name="expand">true</property>
+                        <property name="label" translatable="yes">Project Location</property>
                         <property name="halign">end</property>
+                        <property name="hexpand">true</property>
                         <property name="visible">true</property>
                         <attributes>
                           <attribute name="weight" value="bold"/>
@@ -146,20 +143,16 @@
                         <property name="visible">true</property>
                         <style>
                           <class name="linked"/>
-                          <class name="linked-on-right"/>
                         </style>
                         <child>
-                          <object class="GtkFileChooserButton" id="project_location_button">
-                            <property name="action">select-folder</property>
-                            <property name="dialog">select_folder_dialog</property>
-                            <property name="local-only">true</property>
+                          <object class="GtkEntry" id="project_location_entry">
                             <property name="expand">true</property>
                             <property name="visible">true</property>
                           </object>
                         </child>
                         <child>
-                          <object class="GtkEntry" id="project_location_entry">
-                            <property name="expand">true</property>
+                          <object class="GtkButton" id="project_location_button">
+                            <property name="label" translatable="yes">Browse…</property>
                             <property name="visible">true</property>
                           </object>
                         </child>
