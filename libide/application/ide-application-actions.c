@@ -318,7 +318,6 @@ ide_application_actions_init (IdeApplication *self)
   static const gchar *left[] = { "F9", NULL };
   static const gchar *right[] = { "<shift>F9", NULL };
   static const gchar *bottom[] = { "<control>F9", NULL };
-  static const gchar *preferences[] = { "<control>comma", NULL };
   static const gchar *global_search[] = { "<control>period", NULL };
   static const gchar *new_file[] = { "<control>n", NULL };
   static const gchar *shortcuts[] = { "<control>F1", "<control><shift>question", NULL };
@@ -333,7 +332,6 @@ ide_application_actions_init (IdeApplication *self)
    * FIXME: Once we get a new shortcuts engine, port these to that.
    */
   gtk_application_set_accels_for_action (GTK_APPLICATION (self), "app.help", help);
-  gtk_application_set_accels_for_action (GTK_APPLICATION (self), "app.preferences", preferences);
   gtk_application_set_accels_for_action (GTK_APPLICATION (self), "app.shortcuts", shortcuts);
   gtk_application_set_accels_for_action (GTK_APPLICATION (self), "dockbin.bottom-visible", bottom);
   gtk_application_set_accels_for_action (GTK_APPLICATION (self), "dockbin.left-visible", left);

@@ -908,6 +908,12 @@ ide_preferences_perspective_get_priority (IdePerspective *perspective)
   return IDE_PREFERENCES_PERSPECTIVE_PRIORITY;
 }
 
+static gchar *
+ide_preferences_perspective_get_accelerator (IdePerspective *perspective)
+{
+  return g_strdup ("<ctrl>comma");
+}
+
 static void
 ide_perspective_iface_init (IdePerspectiveInterface *iface)
 {
@@ -916,4 +922,5 @@ ide_perspective_iface_init (IdePerspectiveInterface *iface)
   iface->get_title = ide_preferences_perspective_get_title;
   iface->get_actions = ide_preferences_perspective_get_actions;
   iface->get_priority = ide_preferences_perspective_get_priority;
+  iface->get_accelerator = ide_preferences_perspective_get_accelerator;
 }
