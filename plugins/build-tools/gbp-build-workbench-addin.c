@@ -334,12 +334,13 @@ gbp_build_workbench_addin_load (IdeWorkbenchAddin *addin,
 
   header = ide_workbench_get_headerbar (workbench);
 
+  /* XXX: Button is hidden until we add run support */
   self->run_button = g_object_new (GTK_TYPE_BUTTON,
                                    "child", g_object_new (GTK_TYPE_IMAGE,
                                                           "icon-name", "media-playback-start-symbolic",
                                                           "visible", TRUE,
                                                           NULL),
-                                   "visible", TRUE,
+                                   "visible", FALSE,
                                    NULL);
   ide_widget_add_style_class (self->run_button, "image-button");
 
@@ -470,6 +471,8 @@ gbp_build_workbench_addin_perpsective_set (IdeWorkbenchAddin *addin,
 
   g_assert (GBP_IS_BUILD_WORKBENCH_ADDIN (self));
 
+  /* XXX: Hidden until we add run support */
+#if 0
   if (IDE_IS_EDITOR_PERSPECTIVE (perspective))
     {
       gtk_widget_show (self->run_button);
@@ -478,6 +481,7 @@ gbp_build_workbench_addin_perpsective_set (IdeWorkbenchAddin *addin,
     {
       gtk_widget_hide (self->run_button);
     }
+#endif
 }
 
 static void
