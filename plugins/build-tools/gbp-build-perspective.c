@@ -393,11 +393,14 @@ find_configuration_row (GtkWidget *widget,
     IdeConfiguration *config;
     GtkWidget        *row;
   } *lookup = data;
+  GbpBuildConfigurationRow *row = (GbpBuildConfigurationRow *)widget;
+
+  g_assert (GBP_IS_BUILD_CONFIGURATION_ROW (row));
 
   if (lookup->row != NULL)
     return;
 
-  if (lookup->config == g_object_get_data (G_OBJECT (widget), "IDE_CONFIGURATION"))
+  if (lookup->config == gbp_build_configuration_row_get_configuration (row))
     lookup->row = widget;
 }
 
