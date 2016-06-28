@@ -36,4 +36,7 @@
       </object>
     </child>
   </template>
+  <object class="GtkSizeGroup" id="accel_size_group">
+    <property name="mode">horizontal</property>
+  </object>
 </interface>

@@ -20,6 +20,7 @@
 
 #include "ide-macros.h"
 
+#include "util/ide-gtk.h"
 #include "workbench/ide-perspective.h"
 #include "workbench/ide-perspective-menu-button.h"
 #include "workbench/ide-workbench.h"
@@ -32,6 +33,7 @@ struct _IdePerspectiveMenuButton
   GtkWidget     *stack;
 
   /* Template children */
+  GtkSizeGroup  *accel_size_group;
   GtkListBox    *list_box;
   GtkPopover    *popover;
   GtkImage      *image;
@@ -48,15 +50,18 @@ static GParamSpec *properties [N_PROPS];
 G_DEFINE_TYPE (IdePerspectiveMenuButton, ide_perspective_menu_button, GTK_TYPE_MENU_BUTTON)
 
 static GtkWidget *
-ide_perspective_menu_button_create_row (IdePerspective *perspective)
+ide_perspective_menu_button_create_row (IdePerspectiveMenuButton *self,
+                                        IdePerspective           *perspective)
 {
   g_autofree gchar *title = NULL;
   g_autofree gchar *icon_name = NULL;
+  g_autofree gchar *accel = NULL;
   GtkListBoxRow *row;
   GtkLabel *label;
   GtkImage *image;
   GtkBox *box;
 
+  g_assert (IDE_IS_PERSPECTIVE_MENU_BUTTON (self));
   g_assert (IDE_IS_PERSPECTIVE (perspective));
 
   title = ide_perspective_get_title (perspective);
@@ -97,6 +102,29 @@ ide_perspective_menu_button_create_row (IdePerspective *perspective)
                         NULL);
   gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (label));
 
+  accel = ide_perspective_get_accelerator (perspective);
+
+  if (accel != NULL)
+    {
+      g_autofree gchar *xaccel = NULL;
+      guint accel_key = 0;
+      GdkModifierType accel_mod = 0;
+
+      gtk_accelerator_parse (accel, &accel_key, &accel_mod);
+      xaccel = gtk_accelerator_get_label (accel_key, accel_mod);
+      label = g_object_new (GTK_TYPE_LABEL,
+                            "label", xaccel,
+                            "margin-start", 20,
+                            "visible", TRUE,
+                            "xalign", 0.0f,
+                            NULL);
+      ide_widget_add_style_class (GTK_WIDGET (label), "dim-label");
+      gtk_container_add_with_properties (GTK_CONTAINER (box), GTK_WIDGET (label),
+                                         "pack-type", GTK_PACK_END,
+                                         NULL);
+      gtk_size_group_add_widget (self->accel_size_group, GTK_WIDGET (label));
+    }
+
   return GTK_WIDGET (row);
 }
 
@@ -110,7 +138,7 @@ ide_perspective_menu_button_do_add_child (GtkWidget *widget,
   g_assert (GTK_IS_WIDGET (widget));
   g_assert (IDE_IS_PERSPECTIVE_MENU_BUTTON (self));
 
-  row = ide_perspective_menu_button_create_row (IDE_PERSPECTIVE (widget));
+  row = ide_perspective_menu_button_create_row (self, IDE_PERSPECTIVE (widget));
   gtk_container_add (GTK_CONTAINER (self->list_box), row);
   gtk_list_box_invalidate_sort (self->list_box);
 }
@@ -349,6 +377,7 @@ ide_perspective_menu_button_class_init (IdePerspectiveMenuButtonClass *klass)
   g_object_class_install_properties (object_class, N_PROPS, properties);
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/ui/ide-perspective-menu-button.ui");
+  gtk_widget_class_bind_template_child (widget_class, IdePerspectiveMenuButton, accel_size_group);
   gtk_widget_class_bind_template_child (widget_class, IdePerspectiveMenuButton, image);
   gtk_widget_class_bind_template_child (widget_class, IdePerspectiveMenuButton, list_box);
   gtk_widget_class_bind_template_child (widget_class, IdePerspectiveMenuButton, popover);
