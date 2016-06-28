@@ -115,7 +115,6 @@ plugins/git/ide-git-buffer-change-monitor.c
 plugins/git/ide-git-clone-widget.c
 [type: gettext/glade]plugins/git/ide-git-clone-widget.ui
 plugins/git/ide-git-genesis-addin.c
-plugins/git/ide-git-preferences-addin.c
 plugins/git/ide-git-remote-callbacks.c
 plugins/gnome-code-assistance/ide-gca-diagnostic-provider.c
 plugins/gnome-code-assistance/ide-gca-preferences-addin.c
