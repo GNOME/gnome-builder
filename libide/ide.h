@@ -122,6 +122,7 @@ G_BEGIN_DECLS
 #include "util/ide-gtk.h"
 #include "util/ide-line-reader.h"
 #include "util/ide-list-inline.h"
+#include "util/ide-posix.h"
 #include "util/ide-progress.h"
 #include "util/ide-ref-ptr.h"
 #include "util/ide-uri.h"
