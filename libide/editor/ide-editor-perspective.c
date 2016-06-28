@@ -494,6 +494,12 @@ ide_editor_perspective_agree_to_shutdown (IdePerspective *perspective)
   return TRUE;
 }
 
+static gchar *
+ide_editor_perspective_get_accelerator (IdePerspective *perspective)
+{
+  return g_strdup ("<alt>1");
+}
+
 static void
 ide_perspective_iface_init (IdePerspectiveInterface *iface)
 {
@@ -503,6 +509,7 @@ ide_perspective_iface_init (IdePerspectiveInterface *iface)
   iface->get_id = ide_editor_perspective_get_id;
   iface->get_title = ide_editor_perspective_get_title;
   iface->views_foreach = ide_editor_perspective_views_foreach;
+  iface->get_accelerator = ide_editor_perspective_get_accelerator;
 }
 
 static void
