@@ -34,12 +34,6 @@
                             <property name="hexpand">true</property>
                             <property name="valign">start</property>
                             <property name="visible">true</property>
-                            <attributes>
-                              <attribute name="weight" value="bold"/>
-                            </attributes>
-                            <style>
-                              <class name="dim-label"/>
-                            </style>
                           </object>
                         </child>
                       </object>
@@ -50,12 +44,6 @@
                         <property name="halign">end</property>
                         <property name="hexpand">true</property>
                         <property name="visible">true</property>
-                        <attributes>
-                          <attribute name="weight" value="bold"/>
-                        </attributes>
-                        <style>
-                          <class name="dim-label"/>
-                        </style>
                       </object>
                     </child>
                     <child>
@@ -64,12 +52,6 @@
                         <property name="expand">true</property>
                         <property name="halign">end</property>
                         <property name="visible">true</property>
-                        <attributes>
-                          <attribute name="weight" value="bold"/>
-                        </attributes>
-                        <style>
-                          <class name="dim-label"/>
-                        </style>
                       </object>
                     </child>
                     <child>
@@ -78,12 +60,6 @@
                         <property name="expand">true</property>
                         <property name="halign">end</property>
                         <property name="visible">true</property>
-                        <attributes>
-                          <attribute name="weight" value="bold"/>
-                        </attributes>
-                        <style>
-                          <class name="dim-label"/>
-                        </style>
                       </object>
                     </child>
                     <child>
@@ -92,12 +68,6 @@
                         <property name="expand">true</property>
                         <property name="halign">end</property>
                         <property name="visible">true</property>
-                        <attributes>
-                          <attribute name="weight" value="bold"/>
-                        </attributes>
-                        <style>
-                          <class name="dim-label"/>
-                        </style>
                       </object>
                     </child>
                   </object>
