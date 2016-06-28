@@ -169,7 +169,7 @@
                 <property name="visible">true</property>
                 <child>
                   <object class="GtkLabel">
-                    <property name="label" translatable="yes">Pattern</property>
+                    <property name="label" translatable="yes">Template</property>
                     <property name="visible">true</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
