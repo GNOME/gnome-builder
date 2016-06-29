@@ -41,10 +41,9 @@ typedef struct
 
   GtkBox        *vbox;
   GtkBox        *hbox;
+  GtkRevealer   *revealer;
 
-  guint          n_in_hbox;
   guint          has_more : 1;
-  guint          show_more : 1;
 } EggRadioBoxPrivate;
 
 static void buildable_iface_init (GtkBuildableIface *iface);
@@ -86,19 +85,7 @@ egg_radio_box_get_show_more (EggRadioBox *self)
 
   g_return_val_if_fail (EGG_IS_RADIO_BOX (self), FALSE);
 
-  return priv->show_more;
-}
-
-static void
-show_first_item (GtkWidget *widget,
-                 gpointer   user_data)
-{
-  gboolean *toggled = user_data;
-
-  if (*toggled == TRUE)
-    gtk_widget_hide (widget);
-  else
-    *toggled = TRUE;
+  return gtk_revealer_get_reveal_child (priv->revealer);
 }
 
 static void
@@ -106,18 +93,10 @@ egg_radio_box_set_show_more (EggRadioBox *self,
                              gboolean     show_more)
 {
   EggRadioBoxPrivate *priv = egg_radio_box_get_instance_private (self);
-  gboolean toggled = FALSE;
 
   g_return_if_fail (EGG_IS_RADIO_BOX (self));
 
-  if (show_more)
-    gtk_widget_show_all (GTK_WIDGET (priv->vbox));
-  else
-    gtk_container_foreach (GTK_CONTAINER (priv->vbox),
-                           show_first_item,
-                           &toggled);
-
-  priv->show_more = !!show_more;
+  gtk_revealer_set_reveal_child (priv->revealer, show_more);
 }
 
 static void
@@ -236,6 +215,7 @@ egg_radio_box_init (EggRadioBox *self)
   EggRadioBoxPrivate *priv = egg_radio_box_get_instance_private (self);
   g_autoptr(GSimpleActionGroup) group = g_simple_action_group_new ();
   g_autoptr(GPropertyAction) action = NULL;
+  GtkWidget *vbox;
 
   /* GPropertyAction doesn't like NULL strings */
   priv->active_id = g_strdup ("");
@@ -243,12 +223,32 @@ egg_radio_box_init (EggRadioBox *self)
   priv->items = g_array_new (FALSE, FALSE, sizeof (EggRadioBoxItem));
   g_array_set_clear_func (priv->items, (GDestroyNotify)egg_radio_box_item_clear);
 
+  vbox = g_object_new (GTK_TYPE_BOX,
+                       "orientation", GTK_ORIENTATION_VERTICAL,
+                       "visible", TRUE,
+                       NULL);
+  gtk_container_add (GTK_CONTAINER (self), GTK_WIDGET (vbox));
+
+  priv->hbox = g_object_new (GTK_TYPE_BOX,
+                             "orientation", GTK_ORIENTATION_HORIZONTAL,
+                             "visible", TRUE,
+                             NULL);
+  gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (priv->hbox)), "linked");
+  gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (priv->hbox));
+
+  priv->revealer = g_object_new (GTK_TYPE_REVEALER,
+                                 "reveal-child", FALSE,
+                                 "visible", TRUE,
+                                 NULL);
+  gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (priv->revealer));
+
   priv->vbox = g_object_new (GTK_TYPE_BOX,
                              "orientation", GTK_ORIENTATION_VERTICAL,
+                             "margin-top", 12,
                              "spacing", 12,
                              "visible", TRUE,
                              NULL);
-  gtk_container_add (GTK_CONTAINER (self), GTK_WIDGET (priv->vbox));
+  gtk_container_add (GTK_CONTAINER (priv->revealer), GTK_WIDGET (priv->vbox));
 
   action = g_property_action_new ("active", self, "active-id");
   g_action_map_add_action (G_ACTION_MAP (group), G_ACTION (action));
@@ -279,13 +279,15 @@ egg_radio_box_add_item (EggRadioBox *self,
 
   g_array_append_val (priv->items, item);
 
-  if (priv->n_in_hbox % N_PER_ROW == 0)
+  if (priv->items->len > 0 && (priv->items->len % N_PER_ROW) == 0)
     {
-      priv->n_in_hbox = 0;
-      priv->has_more = priv->hbox != NULL;
+      gboolean show_more = egg_radio_box_get_show_more (self);
+      gboolean visible = !priv->has_more || show_more;
+
+      priv->has_more = priv->items->len > N_PER_ROW;
       priv->hbox = g_object_new (GTK_TYPE_BOX,
                                  "orientation", GTK_ORIENTATION_HORIZONTAL,
-                                 "visible", !priv->has_more || priv->show_more,
+                                 "visible", visible,
                                  NULL);
       gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (priv->hbox)), "linked");
       gtk_container_add (GTK_CONTAINER (priv->vbox), GTK_WIDGET (priv->hbox));
@@ -294,8 +296,6 @@ egg_radio_box_add_item (EggRadioBox *self,
   gtk_container_add_with_properties (GTK_CONTAINER (priv->hbox), GTK_WIDGET (item.button),
                                      "expand", TRUE,
                                      NULL);
-
-  priv->n_in_hbox++;
 
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_HAS_MORE]);
 
