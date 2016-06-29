@@ -18,16 +18,29 @@
         <child>
           <object class="GtkBox">
             <property name="orientation">vertical</property>
-            <property name="expand">true</property>
             <property name="spacing">12</property>
             <property name="visible">true</property>
             <child>
               <object class="GtkImage">
-                <property name="valign">center</property>
+                <property name="valign">end</property>
                 <property name="vexpand">true</property>
-                <property name="icon-name">builder-vcs-git</property>
-                <property name="pixel-size">192</property>
+                <property name="icon-name">document-save-symbolic</property>
+                <property name="pixel-size">128</property>
                 <property name="visible">true</property>
+                <property name="margin">12</property>
+                <style>
+                  <class name="dim-label"/>
+                </style>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="label" translatable="yes">Use Git to create a local copy of a remotely hosted project.</property>
+                <property name="margin-bottom">24</property>
+                <property name="visible">true</property>
+                <style>
+                  <class name="dim-label"/>
+                </style>
               </object>
             </child>
             <child type="center">
@@ -96,30 +109,18 @@
                     <property name="visible">true</property>
                     <child>
                       <object class="GtkLabel" id="clone_uri_label">
-                        <property name="label" translatable="yes">Repository</property>
+                        <property name="label" translatable="yes">Repository URL</property>
                         <property name="valign">baseline</property>
                         <property name="visible">true</property>
                         <property name="xalign">1.0</property>
-                        <attributes>
-                          <attribute name="weight" value="bold"/>
-                        </attributes>
-                        <style>
-                          <class name="dim-label"/>
-                        </style>
                       </object>
                     </child>
                     <child>
                       <object class="GtkLabel" id="clone_location_label">
-                        <property name="label" translatable="yes">Location</property>
+                        <property name="label" translatable="yes">Project Destination</property>
                         <property name="valign">baseline</property>
                         <property name="visible">true</property>
                         <property name="xalign">1.0</property>
-                        <attributes>
-                          <attribute name="weight" value="bold"/>
-                        </attributes>
-                        <style>
-                          <class name="dim-label"/>
-                        </style>
                       </object>
                     </child>
                   </object>
