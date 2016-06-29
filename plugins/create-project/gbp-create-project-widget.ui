@@ -75,7 +75,7 @@
                     </child>
                     <child>
                       <object class="GtkLabel" id="row5_1">
-                        <property name="label" translatable="yes">Versioning</property>
+                        <property name="label" translatable="yes">Version Control</property>
                         <property name="expand">true</property>
                         <property name="halign">end</property>
                         <property name="visible">true</property>
@@ -162,9 +162,31 @@
                       </object>
                     </child>
                     <child>
-                      <object class="GtkComboBoxText" id="versioning_chooser">
-                        <property name="expand">true</property>
+                      <object class="GtkBox" id="versioning_box">
+                        <property name="orientation">horizontal</property>
                         <property name="visible">true</property>
+                        <child>
+                          <object class="GtkSwitch" id="versioning_switch">
+                            <property name="active">true</property>
+                            <property name="halign">start</property>
+                            <property name="visible">true</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkLabel">
+                            <property name="label" translatable="yes">Uses the Git version control system</property>
+                            <property name="visible">true</property>
+                            <style>
+                              <class name="dim-label"/>
+                            </style>
+                            <attributes>
+                              <attribute name="scale" value="0.833333"/>
+                            </attributes>
+                          </object>
+                          <packing>
+                            <property name="pack-type">end</property>
+                          </packing>
+                        </child>
                       </object>
                     </child>
                   </object>
@@ -237,7 +259,7 @@
                 <property name="visible">true</property>
                 <child>
                   <object class="GtkLabel">
-                    <property name="label" translatable="yes">Template</property>
+                    <property name="label" translatable="yes">Select a Template</property>
                     <property name="visible">true</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
@@ -315,7 +337,7 @@
     <property name="mode">vertical</property>
     <widgets>
       <widget name="row5_1"/>
-      <widget name="versioning_chooser"/>
+      <widget name="versioning_box"/>
       <widget name="spacer5"/>
     </widgets>
   </object>

@@ -34,7 +34,7 @@ struct _GbpCreateProjectWidget
   GtkButton            *project_location_button;
   EggRadioBox          *project_language_chooser;
   GtkFlowBox           *project_template_chooser;
-  GtkComboBoxText      *versioning_chooser;
+  GtkSwitch            *versioning_switch;
   EggRadioBox          *license_chooser;
 };
 
@@ -250,27 +250,6 @@ template_providers_foreach_cb (PeasExtensionSet *set,
   g_list_free_full (templates, g_object_unref);
 }
 
-static void
-vcs_initializers_foreach_cb (PeasExtensionSet *set,
-                             PeasPluginInfo   *plugin_info,
-                             PeasExtension    *exten,
-                             gpointer          user_data)
-{
-  GbpCreateProjectWidget *self = user_data;
-  IdeVcsInitializer *initializer = (IdeVcsInitializer *)exten;
-  g_autofree gchar *title = NULL;
-  g_autofree gchar *id = NULL;
-
-  g_assert (PEAS_IS_EXTENSION_SET (set));
-  g_assert (GBP_IS_CREATE_PROJECT_WIDGET (self));
-  g_assert (IDE_IS_VCS_INITIALIZER (initializer));
-
-  title = ide_vcs_initializer_get_title (initializer);
-  id = g_strdup (peas_plugin_info_get_module_name (plugin_info));
-
-  gtk_combo_box_text_append (self->versioning_chooser, id, title);
-}
-
 static gchar *
 gbp_create_project_widget_get_directory (GbpCreateProjectWidget *self)
 {
@@ -359,15 +338,8 @@ gbp_create_project_widget_constructed (GObject *object)
   peas_extension_set_foreach (extensions, template_providers_foreach_cb, self);
   g_clear_object (&extensions);
 
-  /* Load version control backends */
-  extensions = peas_extension_set_new (engine, IDE_TYPE_VCS_INITIALIZER, NULL);
-  peas_extension_set_foreach (extensions, vcs_initializers_foreach_cb, self);
-  g_clear_object (&extensions);
-  gtk_combo_box_text_append (self->versioning_chooser, NULL, _("Without version control"));
-
   G_OBJECT_CLASS (gbp_create_project_widget_parent_class)->constructed (object);
 
-  gtk_combo_box_set_active (GTK_COMBO_BOX (self->versioning_chooser), 0);
   egg_radio_box_set_active_id (self->project_language_chooser, "C");
 }
 
@@ -454,7 +426,7 @@ gbp_create_project_widget_class_init (GbpCreateProjectWidgetClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GbpCreateProjectWidget, project_location_entry);
   gtk_widget_class_bind_template_child (widget_class, GbpCreateProjectWidget, project_language_chooser);
   gtk_widget_class_bind_template_child (widget_class, GbpCreateProjectWidget, project_template_chooser);
-  gtk_widget_class_bind_template_child (widget_class, GbpCreateProjectWidget, versioning_chooser);
+  gtk_widget_class_bind_template_child (widget_class, GbpCreateProjectWidget, versioning_switch);
   gtk_widget_class_bind_template_child (widget_class, GbpCreateProjectWidget, license_chooser);
 }
 
@@ -548,7 +520,14 @@ extract_cb (GObject      *object,
   PeasPluginInfo *plugin_info;
   GFile *project_file;
   GError *error = NULL;
-  const gchar *vcs_id;
+
+  /* To keep the UI simple, we only support git from
+   * the creation today. However, at the time of writing
+   * that is our only supported VCS anyway. If you'd like to
+   * add support for an additional VCS, we need to redesign
+   * this part of the UI.
+   */
+  const gchar *vcs_id = "git-plugin";
 
   g_assert (IDE_IS_PROJECT_TEMPLATE (template));
   g_assert (G_IS_ASYNC_RESULT (result));
@@ -566,9 +545,7 @@ extract_cb (GObject      *object,
   project_file = g_task_get_task_data (task);
   g_assert (G_IS_FILE (project_file));
 
-  vcs_id = gtk_combo_box_get_active_id (GTK_COMBO_BOX (self->versioning_chooser));
-
-  if (vcs_id == NULL)
+  if (!gtk_switch_get_active (self->versioning_switch))
     {
       workbench = ide_widget_get_workbench (GTK_WIDGET (self));
       ide_workbench_open_project_async (workbench, project_file, NULL, NULL, NULL);
@@ -623,7 +600,7 @@ gbp_create_project_widget_create_async (GbpCreateProjectWidget *self,
   PeasEngine *engine;
   PeasPluginInfo *plugin_info;
   const gchar *text;
-  const gchar *vcs_id;
+  const gchar *vcs_id = "git-plugin";
   const gchar *author_name;
   GList *selected_box_child;
 
@@ -680,9 +657,7 @@ gbp_create_project_widget_create_async (GbpCreateProjectWidget *self,
                            g_variant_ref_sink (g_variant_new_string (license_short_path)));
     }
 
-  vcs_id = gtk_combo_box_get_active_id (GTK_COMBO_BOX (self->versioning_chooser));
-
-  if (vcs_id != NULL)
+  if (gtk_switch_get_active (self->versioning_switch))
     {
       engine = peas_engine_get_default ();
       plugin_info = peas_engine_get_plugin_info (engine, vcs_id);
