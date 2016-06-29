@@ -8,7 +8,7 @@
           <object class="GtkBox">
             <property name="orientation">vertical</property>
             <property name="expand">true</property>
-            <property name="margin-top">96</property>
+            <property name="margin-top">72</property>
             <property name="margin-start">64</property>
             <property name="margin-end">64</property>
             <property name="margin-bottom">64</property>
