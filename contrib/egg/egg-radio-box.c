@@ -279,16 +279,20 @@ egg_radio_box_add_item (EggRadioBox *self,
 {
   EggRadioBoxPrivate *priv = egg_radio_box_get_instance_private (self);
   EggRadioBoxItem item = { 0 };
+  g_autofree gchar *active_id = NULL;
 
   g_return_if_fail (EGG_IS_RADIO_BOX (self));
   g_return_if_fail (id != NULL);
   g_return_if_fail (text != NULL);
+
+  active_id = egg_radio_box_get_active_id (self);
 
   item.id = g_strdup (id);
   item.text = g_strdup (text);
   item.button = g_object_new (GTK_TYPE_TOGGLE_BUTTON,
                               "action-name", "radiobox.active",
                               "action-target", g_variant_new_string (id),
+                              "active", (g_strcmp0 (id, active_id) == 0),
                               "label", text,
                               "visible", TRUE,
                               NULL);
@@ -314,6 +318,12 @@ egg_radio_box_add_item (EggRadioBox *self,
   priv->n_in_hbox++;
 
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_HAS_MORE]);
+
+  /* If this is the first item and no active id has been set,
+   * then go ahead and set the active item to this one.
+   */
+  if (priv->items->len == 1 && (!active_id || !*active_id))
+    egg_radio_box_set_active_id (self, id);
 }
 
 void
