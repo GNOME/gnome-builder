@@ -8,7 +8,11 @@
           <object class="GtkBox">
             <property name="orientation">vertical</property>
             <property name="expand">true</property>
-            <property name="border-width">32</property>
+            <property name="margin-top">96</property>
+            <property name="margin-start">64</property>
+            <property name="margin-end">64</property>
+            <property name="margin-bottom">64</property>
+            <property name="valign">start</property>
             <property name="visible">true</property>
             <child>
               <object class="GtkBox">
@@ -55,11 +59,18 @@
                       </object>
                     </child>
                     <child>
-                      <object class="GtkLabel" id="row4_1">
-                        <property name="label" translatable="yes">License</property>
-                        <property name="expand">true</property>
-                        <property name="halign">end</property>
+                      <object class="GtkBox" id="row4_1">
+                        <property name="orientation">vertical</property>
                         <property name="visible">true</property>
+                        <child>
+                          <object class="GtkLabel" id="license_label">
+                            <property name="label" translatable="yes">License</property>
+                            <property name="expand">true</property>
+                            <property name="halign">end</property>
+                            <property name="valign">start</property>
+                            <property name="visible">true</property>
+                          </object>
+                        </child>
                       </object>
                     </child>
                     <child>
@@ -135,17 +146,18 @@
                       </object>
                     </child>
                     <child>
-                      <object class="GtkComboBoxText" id="license_chooser">
+                      <object class="EggRadioBox" id="license_chooser">
+                        <property name="active-id">gpl_3</property>
                         <property name="expand">true</property>
                         <property name="visible">true</property>
                         <items>
-                          <item id="none" translatable="yes">No license</item>
-                          <item id="agpl_3" translatable="yes">AGPL version 3 or later</item>
-                          <item id="gpl_3" translatable="yes">GPL version 3 or later</item>
-                          <item id="gpl_2" translatable="yes">GPL version 2 or later</item>
-                          <item id="lgpl_3" translatable="yes">LGPL version 3 or later</item>
-                          <item id="lgpl_2_1" translatable="yes">LGPL version 2.1 or later</item>
+                          <item id="gpl_3" translatable="yes">GPLv3+</item>
+                          <item id="lgpl_3" translatable="yes">LGPLv3+</item>
+                          <item id="agpl_3" translatable="yes">AGPLv3+</item>
                           <item id="mit_x11" translatable="yes">MIT/X11</item>
+                          <item id="gpl_2" translatable="yes">GPLv2+</item>
+                          <item id="lgpl_2_1" translatable="yes">LGPLv2.1+</item>
+                          <item id="none" translatable="yes">No license</item>
                         </items>
                       </object>
                     </child>
@@ -156,6 +168,60 @@
                       </object>
                     </child>
                   </object>
+                </child>
+                <child>
+                  <object class="GtkBox">
+                    <property name="spacing">24</property>
+                    <property name="halign">start</property>
+                    <property name="orientation">vertical</property>
+                    <property name="visible">true</property>
+                    <child>
+                      <object class="GtkLabel" id="spacer1">
+                        <property name="visible">true</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="spacer2">
+                        <property name="visible">true</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="spacer3">
+                        <property name="visible">true</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkBox" id="spacer4">
+                        <property name="visible">true</property>
+                        <child>
+                          <object class="GtkToggleButton" id="license_more">
+                            <property name="active" bind-source="license_chooser" bind-property="show-more" bind-flags="bidirectional"/>
+                            <property name="sensitive" bind-source="license_chooser" bind-property="has-more"/>
+                            <property name="valign">start</property>
+                            <property name="visible">true</property>
+                            <style>
+                              <class name="image-button"/>
+                            </style>
+                            <child>
+                              <object class="GtkImage">
+                                <property name="icon-name">view-more-symbolic</property>
+                                <property name="visible">true</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="spacer5">
+                        <property name="visible">true</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">true</property>
+                    <property name="pack-type">end</property>
+                  </packing>
                 </child>
               </object>
             </child>
@@ -202,6 +268,7 @@
     <widgets>
       <widget name="row1_1"/>
       <widget name="row1_2"/>
+      <widget name="spacer1"/>
     </widgets>
   </object>
   <object class="GtkSizeGroup">
@@ -216,6 +283,7 @@
     <widgets>
       <widget name="row2_1"/>
       <widget name="row2_2"/>
+      <widget name="spacer2"/>
     </widgets>
   </object>
   <object class="GtkSizeGroup">
@@ -223,6 +291,7 @@
     <widgets>
       <widget name="row3_1"/>
       <widget name="project_language_chooser"/>
+      <widget name="spacer3"/>
     </widgets>
   </object>
   <object class="GtkSizeGroup">
@@ -230,6 +299,14 @@
     <widgets>
       <widget name="row4_1"/>
       <widget name="license_chooser"/>
+      <widget name="spacer4"/>
+    </widgets>
+  </object>
+  <object class="GtkSizeGroup">
+    <property name="mode">vertical</property>
+    <widgets>
+      <widget name="license_label"/>
+      <widget name="license_more"/>
     </widgets>
   </object>
   <object class="GtkSizeGroup">
@@ -237,6 +314,7 @@
     <widgets>
       <widget name="row5_1"/>
       <widget name="versioning_chooser"/>
+      <widget name="spacer5"/>
     </widgets>
   </object>
 </interface>

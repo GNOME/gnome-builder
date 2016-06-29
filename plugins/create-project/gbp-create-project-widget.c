@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <egg-radio-box.h>
 #include <glib/gi18n.h>
 #include <ide.h>
 #include <libpeas/peas.h>
@@ -34,7 +35,7 @@ struct _GbpCreateProjectWidget
   GtkComboBoxText      *project_language_chooser;
   GtkFlowBox           *project_template_chooser;
   GtkComboBoxText      *versioning_chooser;
-  GtkComboBoxText      *license_chooser;
+  EggRadioBox          *license_chooser;
 };
 
 enum {
@@ -367,7 +368,6 @@ gbp_create_project_widget_constructed (GObject *object)
 
   gtk_combo_box_set_active (GTK_COMBO_BOX (self->project_language_chooser), 0);
   gtk_combo_box_set_active (GTK_COMBO_BOX (self->versioning_chooser), 0);
-  gtk_combo_box_set_active_id (GTK_COMBO_BOX (self->license_chooser), "gpl_3");
 }
 
 static void
@@ -660,7 +660,7 @@ gbp_create_project_widget_create_async (GbpCreateProjectWidget *self,
                        g_strdup ("language"),
                        g_variant_ref_sink (g_variant_new_string (language)));
 
-  license_id = gtk_combo_box_get_active_id (GTK_COMBO_BOX (self->license_chooser));
+  license_id = egg_radio_box_get_active_id (EGG_RADIO_BOX (self->license_chooser));
 
   if (!g_str_equal (license_id, "none"))
     {
