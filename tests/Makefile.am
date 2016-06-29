@@ -204,6 +204,12 @@ test_egg_state_machine_CFLAGS = $(egg_cflags)
 test_egg_state_machine_LDADD = $(egg_libs)
 
 
+TESTS += test-egg-radio-box
+test_egg_radio_box_SOURCES = test-egg-radio-box.c
+test_egg_radio_box_CFLAGS = $(egg_cflags)
+test_egg_radio_box_LDADD = $(egg_libs)
+
+
 TESTS += test-egg-cache
 test_egg_cache_SOURCES = test-egg-cache.c
 test_egg_cache_CFLAGS = $(egg_cflags)
