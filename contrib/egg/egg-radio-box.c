@@ -61,7 +61,13 @@ enum {
   N_PROPS
 };
 
+enum {
+  CHANGED,
+  N_SIGNALS
+};
+
 static GParamSpec *properties [N_PROPS];
+static guint signals [N_SIGNALS];
 
 static gboolean
 egg_radio_box_get_has_more (EggRadioBox *self)
@@ -231,6 +237,11 @@ egg_radio_box_class_init (EggRadioBoxClass *klass)
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 
+  signals [CHANGED] =
+    g_signal_new ("changed", G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  0, NULL, NULL, NULL, G_TYPE_NONE, 0);
+
   gtk_widget_class_set_css_name (widget_class, "radiobox");
 }
 
@@ -315,6 +326,8 @@ egg_radio_box_set_active_id (EggRadioBox *self,
   g_return_if_fail (id != NULL);
 
   g_simple_action_set_state (priv->active_action, g_variant_new_string (id));
+
+  g_signal_emit (self, signals [CHANGED], 0);
 }
 
 gchar *
