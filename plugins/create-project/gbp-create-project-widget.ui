@@ -140,7 +140,7 @@
                       </object>
                     </child>
                     <child>
-                      <object class="GtkComboBoxText" id="project_language_chooser">
+                      <object class="EggRadioBox" id="project_language_chooser">
                         <property name="expand">true</property>
                         <property name="visible">true</property>
                       </object>

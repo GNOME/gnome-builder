@@ -32,7 +32,7 @@ struct _GbpCreateProjectWidget
   GtkEntry             *project_name_entry;
   GtkEntry             *project_location_entry;
   GtkButton            *project_location_button;
-  GtkComboBoxText      *project_language_chooser;
+  EggRadioBox          *project_language_chooser;
   GtkFlowBox           *project_template_chooser;
   GtkComboBoxText      *versioning_chooser;
   EggRadioBox          *license_chooser;
@@ -88,7 +88,7 @@ gbp_create_project_widget_add_languages (GbpCreateProjectWidget *self,
   keys = (const gchar **)g_hash_table_get_keys_as_array (languages, &len);
   qsort (keys, len, sizeof (gchar *), sort_by_name);
   for (i = 0; keys [i]; i++)
-    gtk_combo_box_text_append (self->project_language_chooser, NULL, keys [i]);
+    egg_radio_box_add_item (self->project_language_chooser, keys [i], keys [i]);
   g_free (keys);
 }
 
@@ -147,14 +147,14 @@ gbp_create_project_widget_flow_box_filter (GtkFlowBoxChild *template_container,
   GbpCreateProjectWidget *self = object;
   GbpCreateProjectTemplateIcon *template_icon;
   IdeProjectTemplate *template;
-  g_autofree gchar *language = NULL;
+  const gchar *language = NULL;
   g_auto(GStrv) template_languages = NULL;
   gint i;
 
   g_assert (GTK_IS_FLOW_BOX_CHILD (template_container));
   g_assert (GBP_IS_CREATE_PROJECT_WIDGET (self));
 
-  language = gtk_combo_box_text_get_active_text (self->project_language_chooser);
+  language = egg_radio_box_get_active_id (self->project_language_chooser);
 
   if (ide_str_empty0 (language))
     return TRUE;
@@ -179,9 +179,10 @@ gbp_create_project_widget_flow_box_filter (GtkFlowBoxChild *template_container,
 
 static void
 gbp_create_project_widget_language_changed (GbpCreateProjectWidget *self,
-                                            GtkComboBox            *language_chooser)
+                                            EggRadioBox            *language_chooser)
 {
   g_assert (GBP_IS_CREATE_PROJECT_WIDGET (self));
+  g_assert (EGG_IS_RADIO_BOX (language_chooser));
 
   gtk_flow_box_invalidate_filter (self->project_template_chooser);
 
@@ -366,8 +367,8 @@ gbp_create_project_widget_constructed (GObject *object)
 
   G_OBJECT_CLASS (gbp_create_project_widget_parent_class)->constructed (object);
 
-  gtk_combo_box_set_active (GTK_COMBO_BOX (self->project_language_chooser), 0);
   gtk_combo_box_set_active (GTK_COMBO_BOX (self->versioning_chooser), 0);
+  egg_radio_box_set_active_id (self->project_language_chooser, "C");
 }
 
 static void
@@ -381,7 +382,7 @@ gbp_create_project_widget_is_ready (GbpCreateProjectWidget *self)
 {
   const gchar *text;
   g_autofree gchar *project_name = NULL;
-  g_autofree gchar *language = NULL;
+  const gchar *language = NULL;
   GList *selected_template = NULL;
 
   g_assert (GBP_IS_CREATE_PROJECT_WIDGET (self));
@@ -392,7 +393,7 @@ gbp_create_project_widget_is_ready (GbpCreateProjectWidget *self)
   if (ide_str_empty0 (project_name) || !validate_name (project_name))
     return FALSE;
 
-  language = gtk_combo_box_text_get_active_text (self->project_language_chooser);
+  language = egg_radio_box_get_active_id (self->project_language_chooser);
 
   if (ide_str_empty0 (language))
     return FALSE;
@@ -615,13 +616,13 @@ gbp_create_project_widget_create_async (GbpCreateProjectWidget *self,
   g_autofree gchar *name = NULL;
   g_autofree gchar *location = NULL;
   g_autofree gchar *path = NULL;
-  g_autofree gchar *language = NULL;
+  const gchar *language = NULL;
+  const gchar *license_id = NULL;
   GtkFlowBoxChild *template_container;
   GbpCreateProjectTemplateIcon *template_icon;
   PeasEngine *engine;
   PeasPluginInfo *plugin_info;
   const gchar *text;
-  const gchar *license_id;
   const gchar *vcs_id;
   const gchar *author_name;
   GList *selected_box_child;
@@ -655,7 +656,7 @@ gbp_create_project_widget_create_async (GbpCreateProjectWidget *self,
                        g_strdup ("path"),
                        g_variant_ref_sink (g_variant_new_string (path)));
 
-  language = gtk_combo_box_text_get_active_text (self->project_language_chooser);
+  language = egg_radio_box_get_active_id (self->project_language_chooser);
   g_hash_table_insert (params,
                        g_strdup ("language"),
                        g_variant_ref_sink (g_variant_new_string (language)));
