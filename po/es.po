@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-06-28 22:14+0000\n"
-"PO-Revision-Date: 2016-06-29 10:09+0200\n"
+"POT-Creation-Date: 2016-06-29 09:49+0000\n"
+"PO-Revision-Date: 2016-06-29 13:28+0200\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Español; Castellano <gnome-es-list@gnome.org>\n"
 "Language: \n"
@@ -985,7 +985,7 @@ msgstr "Guardar documento"
 #: ../libide/editor/ide-editor-view-actions.c:316
 #: ../libide/editor/ide-editor-view-actions.c:447
 #: ../libide/workbench/ide-workbench-actions.c:69
-#: ../plugins/create-project/gbp-create-project-widget.c:330
+#: ../plugins/create-project/gbp-create-project-widget.c:331
 #: ../plugins/terminal/gb-terminal-view-actions.c:305
 msgid "Cancel"
 msgstr "Cancelar"
@@ -2619,16 +2619,15 @@ msgstr "Especifique un nombre de proyecto.\n"
 msgid "Please specify a project template with --template=\n"
 msgstr "Especifique una plantilla para el proyecto con --template=\n"
 
-#: ../plugins/create-project/gbp-create-project-widget.c:327
-#| msgid "Projects Directory"
+#: ../plugins/create-project/gbp-create-project-widget.c:328
 msgid "Select Project Directory"
 msgstr "Seleccionar la carpeta de proyectos"
 
-#: ../plugins/create-project/gbp-create-project-widget.c:331
+#: ../plugins/create-project/gbp-create-project-widget.c:332
 msgid "Select"
 msgstr "Seleccionar"
 
-#: ../plugins/create-project/gbp-create-project-widget.c:364
+#: ../plugins/create-project/gbp-create-project-widget.c:365
 msgid "Without version control"
 msgstr "Sin control de versiones"
 
@@ -2637,12 +2636,10 @@ msgid "A failure occurred while initializing version control"
 msgstr "Ocurrió un error al inicializar el control de versiones"
 
 #: ../plugins/create-project/gbp-create-project-widget.ui.h:1
-#| msgid "Project"
 msgid "Project Name"
 msgstr "Nombre del proyecto"
 
 #: ../plugins/create-project/gbp-create-project-widget.ui.h:2
-#| msgid "Location"
 msgid "Project Location"
 msgstr "Ubicación del proyecto"
 
@@ -2671,32 +2668,32 @@ msgid "Browse…"
 msgstr "Explorar…"
 
 #: ../plugins/create-project/gbp-create-project-widget.ui.h:8
-msgid "No license"
-msgstr "Sin licencia"
+msgid "GPLv3+"
+msgstr "GPLv3+"
 
 #: ../plugins/create-project/gbp-create-project-widget.ui.h:9
-msgid "AGPL version 3 or later"
-msgstr "AGPL versión 3 o superior"
+msgid "LGPLv3+"
+msgstr "LGPLv3+"
 
 #: ../plugins/create-project/gbp-create-project-widget.ui.h:10
-msgid "GPL version 3 or later"
-msgstr "GPL versión 3 o superior"
+msgid "AGPLv3+"
+msgstr "AGPLv3+"
 
 #: ../plugins/create-project/gbp-create-project-widget.ui.h:11
-msgid "GPL version 2 or later"
-msgstr "GPL versión 2 o superior"
-
-#: ../plugins/create-project/gbp-create-project-widget.ui.h:12
-msgid "LGPL version 3 or later"
-msgstr "LGPL versión 3 o superior"
-
-#: ../plugins/create-project/gbp-create-project-widget.ui.h:13
-msgid "LGPL version 2.1 or later"
-msgstr "LGPL versión 2.1 o superior"
-
-#: ../plugins/create-project/gbp-create-project-widget.ui.h:14
 msgid "MIT/X11"
 msgstr "MIT/X11"
+
+#: ../plugins/create-project/gbp-create-project-widget.ui.h:12
+msgid "GPLv2+"
+msgstr "GPLv2+"
+
+#: ../plugins/create-project/gbp-create-project-widget.ui.h:13
+msgid "LGPLv2.1+"
+msgstr "LGPLv2.1+"
+
+#: ../plugins/create-project/gbp-create-project-widget.ui.h:14
+msgid "No license"
+msgstr "Sin licencia"
 
 #: ../plugins/create-project/gbp-create-project-widget.ui.h:15
 msgid "Template"
@@ -2970,6 +2967,21 @@ msgstr "Mostrar errores y advertencias proporcionadas por Vala"
 #: ../plugins/vala-pack/ide-vala-preferences-addin.vala:36
 msgid "vala diagnostics warnings errors"
 msgstr "diagnósticos de alertas y errores de Vala"
+
+#~ msgid "AGPL version 3 or later"
+#~ msgstr "AGPL versión 3 o superior"
+
+#~ msgid "GPL version 3 or later"
+#~ msgstr "GPL versión 3 o superior"
+
+#~ msgid "GPL version 2 or later"
+#~ msgstr "GPL versión 2 o superior"
+
+#~ msgid "LGPL version 3 or later"
+#~ msgstr "LGPL versión 3 o superior"
+
+#~ msgid "LGPL version 2.1 or later"
+#~ msgstr "LGPL versión 2.1 o superior"
 
 #~ msgid "Pattern"
 #~ msgstr "Patrón"
