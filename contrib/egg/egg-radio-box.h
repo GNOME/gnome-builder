@@ -41,7 +41,7 @@ GtkWidget   *egg_radio_box_new           (void);
 void         egg_radio_box_add_item      (EggRadioBox *self,
                                           const gchar *id,
                                           const gchar *text);
-gchar       *egg_radio_box_get_active_id (EggRadioBox *self);
+const gchar *egg_radio_box_get_active_id (EggRadioBox *self);
 void         egg_radio_box_set_active_id (EggRadioBox *self,
                                           const gchar *id);
 

@@ -37,7 +37,7 @@ typedef struct
 typedef struct
 {
   GArray        *items;
-  GSimpleAction *active_action;
+  gchar         *active_id;
 
   GtkBox        *vbox;
   GtkBox        *hbox;
@@ -128,28 +128,13 @@ egg_radio_box_item_clear (EggRadioBoxItem *item)
 }
 
 static void
-egg_radio_box_active_action (GSimpleAction *action,
-                             GVariant      *variant,
-                             gpointer       user_data)
-{
-  EggRadioBox *self = user_data;
-
-  g_assert (G_IS_SIMPLE_ACTION (action));
-  g_assert (variant != NULL);
-  g_assert (g_variant_is_of_type (variant, G_VARIANT_TYPE_STRING));
-  g_assert (EGG_IS_RADIO_BOX (self));
-
-  egg_radio_box_set_active_id (self, g_variant_get_string (variant, NULL));
-}
-
-static void
 egg_radio_box_finalize (GObject *object)
 {
   EggRadioBox *self = (EggRadioBox *)object;
   EggRadioBoxPrivate *priv = egg_radio_box_get_instance_private (self);
 
   g_clear_pointer (&priv->items, g_array_unref);
-  g_clear_object (&priv->active_action);
+  g_clear_pointer (&priv->active_id, g_free);
 
   G_OBJECT_CLASS (egg_radio_box_parent_class)->finalize (object);
 }
@@ -165,7 +150,7 @@ egg_radio_box_get_property (GObject    *object,
   switch (prop_id)
     {
     case PROP_ACTIVE_ID:
-      g_value_take_string (value, egg_radio_box_get_active_id (self));
+      g_value_set_string (value, egg_radio_box_get_active_id (self));
       break;
 
     case PROP_HAS_MORE:
@@ -250,6 +235,10 @@ egg_radio_box_init (EggRadioBox *self)
 {
   EggRadioBoxPrivate *priv = egg_radio_box_get_instance_private (self);
   g_autoptr(GSimpleActionGroup) group = g_simple_action_group_new ();
+  g_autoptr(GPropertyAction) action = NULL;
+
+  /* GPropertyAction doesn't like NULL strings */
+  priv->active_id = g_strdup ("");
 
   priv->items = g_array_new (FALSE, FALSE, sizeof (EggRadioBoxItem));
   g_array_set_clear_func (priv->items, (GDestroyNotify)egg_radio_box_item_clear);
@@ -261,14 +250,8 @@ egg_radio_box_init (EggRadioBox *self)
                              NULL);
   gtk_container_add (GTK_CONTAINER (self), GTK_WIDGET (priv->vbox));
 
-  priv->active_action = g_simple_action_new_stateful ("active",
-                                                      G_VARIANT_TYPE_STRING,
-                                                      g_variant_new_string (""));
-  g_signal_connect (priv->active_action,
-                    "change-state",
-                    G_CALLBACK (egg_radio_box_active_action),
-                    self);
-  g_action_map_add_action (G_ACTION_MAP (group), G_ACTION (priv->active_action));
+  action = g_property_action_new ("active", self, "active-id");
+  g_action_map_add_action (G_ACTION_MAP (group), G_ACTION (action));
   gtk_widget_insert_action_group (GTK_WIDGET (self), "radiobox", G_ACTION_GROUP (group));
 }
 
@@ -279,20 +262,17 @@ egg_radio_box_add_item (EggRadioBox *self,
 {
   EggRadioBoxPrivate *priv = egg_radio_box_get_instance_private (self);
   EggRadioBoxItem item = { 0 };
-  g_autofree gchar *active_id = NULL;
 
   g_return_if_fail (EGG_IS_RADIO_BOX (self));
   g_return_if_fail (id != NULL);
   g_return_if_fail (text != NULL);
 
-  active_id = egg_radio_box_get_active_id (self);
-
   item.id = g_strdup (id);
   item.text = g_strdup (text);
   item.button = g_object_new (GTK_TYPE_TOGGLE_BUTTON,
+                              "active", (g_strcmp0 (id, priv->active_id) == 0),
                               "action-name", "radiobox.active",
                               "action-target", g_variant_new_string (id),
-                              "active", (g_strcmp0 (id, active_id) == 0),
                               "label", text,
                               "visible", TRUE,
                               NULL);
@@ -322,7 +302,7 @@ egg_radio_box_add_item (EggRadioBox *self,
   /* If this is the first item and no active id has been set,
    * then go ahead and set the active item to this one.
    */
-  if (priv->items->len == 1 && (!active_id || !*active_id))
+  if (priv->items->len == 1 && (!priv->active_id || !*priv->active_id))
     egg_radio_box_set_active_id (self, id);
 }
 
@@ -333,27 +313,27 @@ egg_radio_box_set_active_id (EggRadioBox *self,
   EggRadioBoxPrivate *priv = egg_radio_box_get_instance_private (self);
 
   g_return_if_fail (EGG_IS_RADIO_BOX (self));
-  g_return_if_fail (id != NULL);
 
-  g_simple_action_set_state (priv->active_action, g_variant_new_string (id));
+  if (id == NULL)
+    id = "";
 
-  g_signal_emit (self, signals [CHANGED], 0);
+  if (g_strcmp0 (id, priv->active_id) != 0)
+    {
+      g_free (priv->active_id);
+      priv->active_id = g_strdup (id);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ACTIVE_ID]);
+      g_signal_emit (self, signals [CHANGED], 0);
+    }
 }
 
-gchar *
+const gchar *
 egg_radio_box_get_active_id (EggRadioBox *self)
 {
   EggRadioBoxPrivate *priv = egg_radio_box_get_instance_private (self);
-  g_autoptr(GVariant) state = NULL;
 
   g_return_val_if_fail (EGG_IS_RADIO_BOX (self), NULL);
 
-  state = g_action_get_state (G_ACTION (priv->active_action));
-
-  if (state != NULL)
-    return g_variant_dup_string (state, NULL);
-
-  return NULL;
+  return priv->active_id;
 }
 
 GtkWidget *
