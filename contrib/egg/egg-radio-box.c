@@ -262,10 +262,13 @@ egg_radio_box_add_item (EggRadioBox *self,
 {
   EggRadioBoxPrivate *priv = egg_radio_box_get_instance_private (self);
   EggRadioBoxItem item = { 0 };
+  guint precount;
 
   g_return_if_fail (EGG_IS_RADIO_BOX (self));
   g_return_if_fail (id != NULL);
   g_return_if_fail (text != NULL);
+
+  precount = priv->items->len;
 
   item.id = g_strdup (id);
   item.text = g_strdup (text);
@@ -279,7 +282,7 @@ egg_radio_box_add_item (EggRadioBox *self,
 
   g_array_append_val (priv->items, item);
 
-  if (priv->items->len > 0 && (priv->items->len % N_PER_ROW) == 0)
+  if (precount > 0 && (precount % N_PER_ROW) == 0)
     {
       gboolean show_more = egg_radio_box_get_show_more (self);
       gboolean visible = !priv->has_more || show_more;
