@@ -18,15 +18,19 @@
 
 #define G_LOG_DOMAIN "ide-greeter-perspective"
 
+#include <egg-priority-box.h>
 #include <egg-search-bar.h>
 #include <egg-signal-group.h>
 #include <egg-state-machine.h>
 #include <glib/gi18n.h>
+#include <libpeas/peas.h>
+
+#include "ide-macros.h"
 
 #include "application/ide-application.h"
+#include "genesis/ide-genesis-addin.h"
 #include "greeter/ide-greeter-perspective.h"
 #include "greeter/ide-greeter-project-row.h"
-#include "ide-macros.h"
 #include "search/ide-pattern-spec.h"
 #include "util/ide-gtk.h"
 #include "workbench/ide-perspective.h"
@@ -41,18 +45,30 @@ struct _IdeGreeterPerspective
   IdeRecentProjects    *recent_projects;
   IdePatternSpec       *pattern_spec;
   GActionMap           *actions;
+  PeasExtensionSet     *genesis_set;
+
+  GBinding             *ready_binding;
 
   GtkStack             *stack;
+  GtkStack             *top_stack;
+  GtkButton            *genesis_continue_button;
+  GtkLabel             *genesis_title;
+  GtkStack             *genesis_stack;
+  GtkInfoBar           *info_bar;
+  GtkLabel             *info_bar_label;
+  GtkRevealer          *info_bar_revealer;
   GtkViewport          *viewport;
   GtkWidget            *titlebar;
   GtkBox               *my_projects_container;
   GtkListBox           *my_projects_list_box;
+  GtkButton            *open_button;
   GtkBox               *other_projects_container;
   GtkListBox           *other_projects_list_box;
   GtkButton            *remove_button;
   GtkSearchEntry       *search_entry;
   EggStateMachine      *state_machine;
   GtkScrolledWindow    *scrolled_window;
+  EggPriorityBox       *genesis_buttons;
 
   gint                  selected_count;
 };
@@ -575,6 +591,378 @@ delete_selected_rows (GSimpleAction *action,
 }
 
 static void
+ide_greeter_perspective_dialog_response (IdeGreeterPerspective *self,
+                                         gint                   response_id,
+                                         GtkFileChooserDialog  *dialog)
+{
+  g_assert (IDE_IS_GREETER_PERSPECTIVE (self));
+  g_assert (GTK_IS_FILE_CHOOSER_DIALOG (dialog));
+
+  if (response_id == GTK_RESPONSE_OK)
+    {
+      IdeWorkbench *workbench;
+
+      if (NULL != (workbench = ide_widget_get_workbench (GTK_WIDGET (self))))
+        {
+          g_autoptr(GFile) project_file = NULL;
+
+          gtk_widget_set_sensitive (GTK_WIDGET (self), FALSE);
+          gtk_widget_set_sensitive (GTK_WIDGET (self->titlebar), FALSE);
+
+          project_file = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (dialog));
+          ide_workbench_open_project_async (workbench, project_file, NULL, NULL, NULL);
+        }
+    }
+
+  gtk_widget_destroy (GTK_WIDGET (dialog));
+}
+
+static void
+ide_greeter_perspective_open_clicked (IdeGreeterPerspective *self,
+                                      GtkButton             *open_button)
+{
+  GtkFileChooserDialog *dialog;
+  GtkWidget *toplevel;
+  PeasEngine *engine;
+  const GList *list;
+
+  g_assert (IDE_IS_GREETER_PERSPECTIVE (self));
+  g_assert (GTK_IS_BUTTON (open_button));
+
+  engine = peas_engine_get_default ();
+  list = peas_engine_get_plugin_list (engine);
+
+  toplevel = gtk_widget_get_toplevel (GTK_WIDGET (self));
+  if (!GTK_IS_WINDOW (toplevel))
+    toplevel = NULL;
+
+  dialog = g_object_new (GTK_TYPE_FILE_CHOOSER_DIALOG,
+                         "action", GTK_FILE_CHOOSER_ACTION_OPEN,
+                         "transient-for", toplevel,
+                         "modal", TRUE,
+                         "title", _("Open Project"),
+                         "visible", TRUE,
+                         NULL);
+  gtk_dialog_add_buttons (GTK_DIALOG (dialog),
+                          _("Cancel"), GTK_RESPONSE_CANCEL,
+                          _("Open"), GTK_RESPONSE_OK,
+                          NULL);
+  gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
+
+  for (; list != NULL; list = list->next)
+    {
+      PeasPluginInfo *plugin_info = list->data;
+      GtkFileFilter *filter;
+      const gchar *pattern;
+      const gchar *content_type;
+      const gchar *name;
+      gchar **patterns;
+      gchar **content_types;
+      gint i;
+
+      if (!peas_plugin_info_is_loaded (plugin_info))
+        continue;
+
+      name = peas_plugin_info_get_external_data (plugin_info, "X-Project-File-Filter-Name");
+      if (name == NULL)
+        continue;
+
+      pattern = peas_plugin_info_get_external_data (plugin_info, "X-Project-File-Filter-Pattern");
+      content_type = peas_plugin_info_get_external_data (plugin_info, "X-Project-File-Filter-Content-Type");
+
+      if (pattern == NULL && content_type == NULL)
+        continue;
+
+      patterns = g_strsplit (pattern ?: "", ",", 0);
+      content_types = g_strsplit (content_type ?: "", ",", 0);
+
+      filter = gtk_file_filter_new ();
+
+      gtk_file_filter_set_name (filter, name);
+
+      for (i = 0; patterns [i] != NULL; i++)
+        {
+          if (*patterns [i])
+            gtk_file_filter_add_pattern (filter, patterns [i]);
+        }
+
+      for (i = 0; content_types [i] != NULL; i++)
+        {
+          if (*content_types [i])
+            gtk_file_filter_add_mime_type (filter, content_types [i]);
+        }
+
+      gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (dialog), filter);
+
+      g_strfreev (patterns);
+      g_strfreev (content_types);
+    }
+
+  g_signal_connect_object (dialog,
+                           "response",
+                           G_CALLBACK (ide_greeter_perspective_dialog_response),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  gtk_window_present (GTK_WINDOW (dialog));
+}
+
+static void
+genesis_button_clicked (IdeGreeterPerspective *self,
+                        GtkButton             *button)
+{
+  const gchar *name;
+
+  g_assert (IDE_IS_GREETER_PERSPECTIVE (self));
+  g_assert (GTK_IS_BUTTON (button));
+
+  name = gtk_widget_get_name (GTK_WIDGET (button));
+  gtk_stack_set_visible_child_name (self->genesis_stack, name);
+  egg_state_machine_set_state (self->state_machine, "genesis");
+}
+
+static void
+ide_greeter_perspective_genesis_added (PeasExtensionSet *set,
+                                       PeasPluginInfo   *plugin_info,
+                                       PeasExtension    *exten,
+                                       gpointer          user_data)
+{
+  IdeGreeterPerspective *self = user_data;
+  IdeGenesisAddin *addin = (IdeGenesisAddin *)exten;
+  g_autofree gchar *title = NULL;
+  GtkWidget *button;
+  GtkWidget *child;
+  gint priority;
+
+  g_assert (PEAS_IS_EXTENSION_SET (set));
+  g_assert (plugin_info != NULL);
+  g_assert (IDE_IS_GENESIS_ADDIN (addin));
+  g_assert (IDE_IS_GREETER_PERSPECTIVE (self));
+
+  priority = ide_genesis_addin_get_priority (addin);
+  title = ide_genesis_addin_get_label (addin);
+
+  button = g_object_new (GTK_TYPE_BUTTON,
+                         "name", G_OBJECT_TYPE_NAME (addin),
+                         "label", title,
+                         "visible", TRUE,
+                         NULL);
+  g_signal_connect_object (button,
+                           "clicked",
+                           G_CALLBACK (genesis_button_clicked),
+                           self,
+                           G_CONNECT_SWAPPED);
+  gtk_container_add_with_properties (GTK_CONTAINER (self->genesis_buttons), GTK_WIDGET (button),
+                                     "pack-type", GTK_PACK_START,
+                                     "priority", priority,
+                                     NULL);
+
+  child = ide_genesis_addin_get_widget (addin);
+  gtk_container_add_with_properties (GTK_CONTAINER (self->genesis_stack), child,
+                                     "name", G_OBJECT_TYPE_NAME (addin),
+                                     NULL);
+}
+
+static void
+ide_greeter_perspective_genesis_removed (PeasExtensionSet *set,
+                                         PeasPluginInfo   *plugin_info,
+                                         PeasExtension    *exten,
+                                         gpointer          user_data)
+{
+  IdeGreeterPerspective *self = user_data;
+  IdeGenesisAddin *addin = (IdeGenesisAddin *)exten;
+  const gchar *type_name;
+  GList *list;
+  GList *iter;
+
+  g_assert (PEAS_IS_EXTENSION_SET (set));
+  g_assert (plugin_info != NULL);
+  g_assert (IDE_IS_GENESIS_ADDIN (addin));
+  g_assert (IDE_IS_GREETER_PERSPECTIVE (self));
+
+  type_name = G_OBJECT_TYPE_NAME (addin);
+  list = gtk_container_get_children (GTK_CONTAINER (self->genesis_buttons));
+
+  for (iter = list; iter != NULL; iter = iter->next)
+    {
+      GtkWidget *widget = iter->data;
+      const gchar *name = gtk_widget_get_name (widget);
+
+      if (g_strcmp0 (name, type_name) == 0)
+        gtk_widget_destroy (widget);
+    }
+
+  g_list_free (list);
+}
+
+static void
+ide_greeter_perspective_load_genesis_addins (IdeGreeterPerspective *self)
+{
+  g_assert (IDE_IS_GREETER_PERSPECTIVE (self));
+
+  self->genesis_set = peas_extension_set_new (peas_engine_get_default (),
+                                              IDE_TYPE_GENESIS_ADDIN,
+                                              NULL);
+
+  g_signal_connect_object (self->genesis_set,
+                           "extension-added",
+                           G_CALLBACK (ide_greeter_perspective_genesis_added),
+                           self,
+                           0);
+
+  g_signal_connect_object (self->genesis_set,
+                           "extension-removed",
+                           G_CALLBACK (ide_greeter_perspective_genesis_removed),
+                           self,
+                           0);
+
+  peas_extension_set_foreach (self->genesis_set,
+                              ide_greeter_perspective_genesis_added,
+                              self);
+}
+
+static void
+ide_greeter_perspective_run_cb (GObject      *object,
+                                GAsyncResult *result,
+                                gpointer      user_data)
+{
+  g_autoptr(IdeGreeterPerspective) self = user_data;
+  IdeGenesisAddin *addin = (IdeGenesisAddin *)object;
+  g_autoptr(GError) error = NULL;
+
+  g_assert (IDE_IS_GREETER_PERSPECTIVE (self));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_GENESIS_ADDIN (addin));
+
+  if (!ide_genesis_addin_run_finish (addin, result, &error))
+    {
+      g_strstrip (error->message);
+      gtk_label_set_label (self->info_bar_label, error->message);
+      gtk_revealer_set_reveal_child (self->info_bar_revealer, TRUE);
+    }
+
+  /* Update continue button sensitivity */
+  g_object_notify (G_OBJECT (addin), "is-ready");
+}
+
+static void
+run_genesis_addin (PeasExtensionSet *set,
+                   PeasPluginInfo   *plugin_info,
+                   PeasExtension    *exten,
+                   gpointer          user_data)
+{
+  IdeGenesisAddin *addin = (IdeGenesisAddin *)exten;
+  struct {
+    IdeGreeterPerspective *self;
+    const gchar *name;
+  } *state = user_data;
+
+  g_assert (PEAS_IS_EXTENSION_SET (set));
+  g_assert (IDE_IS_GREETER_PERSPECTIVE (state->self));
+  g_assert (state->name != NULL);
+  g_assert (IDE_IS_GENESIS_ADDIN (addin));
+
+  if (g_strcmp0 (state->name, G_OBJECT_TYPE_NAME (addin)) == 0)
+    {
+      ide_genesis_addin_run_async (addin,
+                                   NULL,
+                                   ide_greeter_perspective_run_cb,
+                                   g_object_ref (state->self));
+    }
+}
+
+static void
+ide_greeter_perspective_genesis_continue_clicked (IdeGreeterPerspective *self,
+                                                  GtkButton             *button)
+{
+  struct {
+    IdeGreeterPerspective *self;
+    const gchar *name;
+  } state = { 0 };
+
+  g_assert (IDE_IS_GREETER_PERSPECTIVE (self));
+  g_assert (GTK_IS_BUTTON (button));
+
+  state.self = self;
+  state.name = gtk_stack_get_visible_child_name (self->genesis_stack);
+
+  peas_extension_set_foreach (self->genesis_set, run_genesis_addin, &state);
+}
+
+static void
+update_title_for_matching_addin (PeasExtensionSet *set,
+                                 PeasPluginInfo   *plugin_info,
+                                 PeasExtension    *exten,
+                                 gpointer          user_data)
+{
+  struct {
+    IdeGreeterPerspective *self;
+    const gchar *name;
+  } *state = user_data;
+  IdeGenesisAddin *addin = (IdeGenesisAddin *)exten;
+
+  g_assert (PEAS_IS_EXTENSION_SET (set));
+  g_assert (IDE_IS_GREETER_PERSPECTIVE (state->self));
+  g_assert (state->name != NULL);
+  g_assert (IDE_IS_GENESIS_ADDIN (addin));
+
+  if (g_strcmp0 (state->name, G_OBJECT_TYPE_NAME (addin)) == 0)
+    {
+      g_autofree gchar *title = ide_genesis_addin_get_title (addin);
+      g_autofree gchar *next = ide_genesis_addin_get_next_label (addin);
+      GBinding *binding = state->self->ready_binding;
+
+      if (binding != NULL)
+        {
+          ide_clear_weak_pointer (&state->self->ready_binding);
+          g_binding_unbind (binding);
+        }
+
+      binding = g_object_bind_property (addin,
+                                        "is-ready",
+                                        state->self->genesis_continue_button,
+                                        "sensitive",
+                                        G_BINDING_SYNC_CREATE);
+      ide_set_weak_pointer (&state->self->ready_binding, binding);
+
+      gtk_label_set_label (state->self->genesis_title, title);
+      gtk_button_set_label (state->self->genesis_continue_button, next);
+    }
+}
+
+static void
+ide_greeter_perspective_genesis_changed (IdeGreeterPerspective *self,
+                                         GParamSpec            *pspec,
+                                         GtkStack              *stack)
+{
+  struct {
+    IdeGreeterPerspective *self;
+    const gchar *name;
+  } state = { 0 };
+
+  g_assert (GTK_IS_STACK (stack));
+  g_assert (IDE_IS_GREETER_PERSPECTIVE (self));
+
+  state.self = self;
+  state.name = gtk_stack_get_visible_child_name (self->genesis_stack);
+
+  peas_extension_set_foreach (self->genesis_set,
+                              update_title_for_matching_addin,
+                              &state);
+}
+
+static void
+ide_greeter_perspective_info_bar_response (IdeGreeterPerspective *self,
+                                           gint                   response_id,
+                                           GtkInfoBar            *info_bar)
+{
+  g_assert (IDE_IS_GREETER_PERSPECTIVE (self));
+  g_assert (GTK_IS_INFO_BAR (info_bar));
+
+  gtk_revealer_set_reveal_child (self->info_bar_revealer, FALSE);
+}
+
+static void
 ide_greeter_perspective_constructed (GObject *object)
 {
   IdeGreeterPerspective *self = (IdeGreeterPerspective *)object;
@@ -584,6 +972,8 @@ ide_greeter_perspective_constructed (GObject *object)
 
   recent_projects = ide_application_get_recent_projects (IDE_APPLICATION_DEFAULT);
   ide_greeter_perspective_set_recent_projects (self, recent_projects);
+
+  ide_greeter_perspective_load_genesis_addins (self);
 }
 
 static void
@@ -591,6 +981,7 @@ ide_greeter_perspective_finalize (GObject *object)
 {
   IdeGreeterPerspective *self = (IdeGreeterPerspective *)object;
 
+  ide_clear_weak_pointer (&self->ready_binding);
   g_clear_pointer (&self->pattern_spec, ide_pattern_spec_unref);
   g_clear_object (&self->signal_group);
   g_clear_object (&self->recent_projects);
@@ -658,16 +1049,25 @@ ide_greeter_perspective_class_init (IdeGreeterPerspectiveClass *klass)
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/ui/ide-greeter-perspective.ui");
   gtk_widget_class_set_css_name (widget_class, "greeter");
-  gtk_widget_class_bind_template_child (widget_class, IdeGreeterPerspective, titlebar);
+  gtk_widget_class_bind_template_child (widget_class, IdeGreeterPerspective, genesis_buttons);
+  gtk_widget_class_bind_template_child (widget_class, IdeGreeterPerspective, genesis_continue_button);
+  gtk_widget_class_bind_template_child (widget_class, IdeGreeterPerspective, genesis_stack);
+  gtk_widget_class_bind_template_child (widget_class, IdeGreeterPerspective, genesis_title);
+  gtk_widget_class_bind_template_child (widget_class, IdeGreeterPerspective, info_bar);
+  gtk_widget_class_bind_template_child (widget_class, IdeGreeterPerspective, info_bar_label);
+  gtk_widget_class_bind_template_child (widget_class, IdeGreeterPerspective, info_bar_revealer);
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterPerspective, my_projects_container);
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterPerspective, my_projects_list_box);
+  gtk_widget_class_bind_template_child (widget_class, IdeGreeterPerspective, open_button);
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterPerspective, other_projects_container);
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterPerspective, other_projects_list_box);
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterPerspective, remove_button);
-  gtk_widget_class_bind_template_child (widget_class, IdeGreeterPerspective, search_entry);
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterPerspective, scrolled_window);
+  gtk_widget_class_bind_template_child (widget_class, IdeGreeterPerspective, search_entry);
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterPerspective, stack);
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterPerspective, state_machine);
+  gtk_widget_class_bind_template_child (widget_class, IdeGreeterPerspective, titlebar);
+  gtk_widget_class_bind_template_child (widget_class, IdeGreeterPerspective, top_stack);
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterPerspective, viewport);
 }
 
@@ -721,6 +1121,30 @@ ide_greeter_perspective_init (IdeGreeterPerspective *self)
   g_signal_connect_object (self->other_projects_list_box,
                            "keynav-failed",
                            G_CALLBACK (ide_greeter_perspective__keynav_failed),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  g_signal_connect_object (self->top_stack,
+                           "notify::visible-child",
+                           G_CALLBACK (ide_greeter_perspective_genesis_changed),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  g_signal_connect_object (self->genesis_continue_button,
+                           "clicked",
+                           G_CALLBACK (ide_greeter_perspective_genesis_continue_clicked),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  g_signal_connect_object (self->open_button,
+                           "clicked",
+                           G_CALLBACK (ide_greeter_perspective_open_clicked),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  g_signal_connect_object (self->info_bar,
+                           "response",
+                           G_CALLBACK (ide_greeter_perspective_info_bar_response),
                            self,
                            G_CONNECT_SWAPPED);
 

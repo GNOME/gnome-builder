@@ -5,144 +5,183 @@
     <child>
       <object class="GtkBox">
         <property name="orientation">vertical</property>
-        <property name="expand">true</property>
         <property name="visible">true</property>
         <child>
-          <object class="GtkStack" id="stack">
-            <property name="expand">true</property>
+          <object class="GtkRevealer" id="info_bar_revealer">
+            <property name="reveal-child">false</property>
+            <property name="transition-type">slide-down</property>
             <property name="visible">true</property>
             <child>
-              <object class="EggEmptyState">
-                <property name="icon-name">builder-symbolic</property>
-                <property name="subtitle" translatable="yes" comments="the action:// link is used to jump to the new-project view">Why not &lt;a href="action://app.new-project"&gt;create a new project&lt;/a&gt;?</property>
-                <property name="title" translatable="yes">No projects found</property>
+              <object class="GtkInfoBar" id="info_bar">
+                <property name="message-type">error</property>
+                <property name="show-close-button">true</property>
                 <property name="visible">true</property>
+                <child internal-child="content_area">
+                  <object class="GtkBox">
+                    <child>
+                      <object class="GtkLabel" id="info_bar_label">
+                        <property name="hexpand">true</property>
+                        <property name="label">Failure</property>
+                        <property name="visible">true</property>
+                        <property name="wrap">true</property>
+                        <property name="xalign">0</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
               </object>
-              <packing>
-                <property name="name">empty-state</property>
-              </packing>
             </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkStack" id="top_stack">
+            <property name="visible">true</property>
+            <property name="transition-type">crossfade</property>
             <child>
               <object class="GtkBox">
                 <property name="orientation">vertical</property>
+                <property name="expand">true</property>
                 <property name="visible">true</property>
                 <child>
-                  <object class="GtkScrolledWindow" id="scrolled_window">
+                  <object class="GtkStack" id="stack">
+                    <property name="expand">true</property>
                     <property name="visible">true</property>
                     <child>
-                      <object class="GtkViewport" id="viewport">
-                        <property name="expand">true</property>
+                      <object class="EggEmptyState">
+                        <property name="icon-name">builder-symbolic</property>
+                        <property name="subtitle" translatable="yes" comments="the action:// link is used to jump to the new-project view">Why not &lt;a href="action://app.new-project"&gt;create a new project&lt;/a&gt;?</property>
+                        <property name="title" translatable="yes">No projects found</property>
+                        <property name="visible">true</property>
+                      </object>
+                      <packing>
+                        <property name="name">empty-state</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkBox">
+                        <property name="orientation">vertical</property>
                         <property name="visible">true</property>
                         <child>
-                          <object class="EggBox">
-                            <property name="halign">center</property>
-                            <property name="hexpand">false</property>
-                            <property name="margin-bottom">32</property>
-                            <property name="margin-top">32</property>
-                            <property name="orientation">vertical</property>
-                            <property name="spacing">32</property>
+                          <object class="GtkScrolledWindow" id="scrolled_window">
                             <property name="visible">true</property>
-                            <property name="max-width-request">550</property>
                             <child>
-                              <object class="GtkSearchEntry" id="search_entry">
-                                <property name="width-chars">45</property>
-                                <property name="halign">center</property>
-                                <property name="visible">true</property>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkBox" id="my_projects_container">
-                                <property name="orientation">vertical</property>
-                                <property name="spacing">6</property>
+                              <object class="GtkViewport" id="viewport">
+                                <property name="expand">true</property>
                                 <property name="visible">true</property>
                                 <child>
-                                  <object class="GtkBox">
-                                    <property name="visible">true</property>
-                                    <child>
-                                      <object class="GtkLabel" id="my_projects_label">
-                                        <property name="label" translatable="yes">Recent Projects</property>
-                                        <property name="visible">true</property>
-                                        <property name="xalign">0.0</property>
-                                        <property name="hexpand">true</property>
-                                        <style>
-                                          <class name="dim-label"/>
-                                        </style>
-                                        <attributes>
-                                          <attribute name="weight" value="bold"/>
-                                        </attributes>
-                                      </object>
-                                    </child>
-                                    <child>
-                                      <object class="GtkLabel">
-                                        <property name="visible">true</property>
-                                        <property name="label" translatable="yes">Updated</property>
-                                        <property name="margin-end">10</property>
-                                        <property name="halign">end</property>
-                                        <style>
-                                          <class name="dim-label"/>
-                                        </style>
-                                      </object>
-                                    </child>
-                                  </object>
-                                </child>
-                                <child>
-                                  <object class="GtkFrame">
+                                  <object class="EggBox">
                                     <property name="halign">center</property>
+                                    <property name="hexpand">false</property>
+                                    <property name="margin-bottom">32</property>
+                                    <property name="margin-top">32</property>
+                                    <property name="orientation">vertical</property>
+                                    <property name="spacing">32</property>
                                     <property name="visible">true</property>
-                                    <property name="width-request">550</property>
+                                    <property name="max-width-request">550</property>
                                     <child>
-                                      <object class="GtkListBox" id="my_projects_list_box">
+                                      <object class="GtkSearchEntry" id="search_entry">
+                                        <property name="width-chars">45</property>
+                                        <property name="halign">center</property>
                                         <property name="visible">true</property>
-                                        <property name="selection-mode">none</property>
-                                      </object>
-                                    </child>
-                                  </object>
-                                </child>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkBox" id="other_projects_container">
-                                <property name="orientation">vertical</property>
-                                <property name="spacing">6</property>
-                                <property name="visible">true</property>
-                                <child>
-                                  <object class="GtkBox">
-                                    <property name="visible">true</property>
-                                    <child>
-                                      <object class="GtkLabel" id="other_projects_label">
-                                        <property name="label" translatable="yes">Other Projects</property>
-                                        <property name="visible">true</property>
-                                        <property name="xalign">0.0</property>
-                                        <property name="hexpand">true</property>
-                                        <style>
-                                          <class name="dim-label"/>
-                                        </style>
-                                        <attributes>
-                                          <attribute name="weight" value="bold"/>
-                                        </attributes>
                                       </object>
                                     </child>
                                     <child>
-                                      <object class="GtkLabel">
+                                      <object class="GtkBox" id="my_projects_container">
+                                        <property name="orientation">vertical</property>
+                                        <property name="spacing">6</property>
                                         <property name="visible">true</property>
-                                        <property name="label" translatable="yes">Updated</property>
-                                        <property name="margin-end">10</property>
-                                        <property name="halign">end</property>
-                                        <style>
-                                          <class name="dim-label"/>
-                                        </style>
+                                        <child>
+                                          <object class="GtkBox">
+                                            <property name="visible">true</property>
+                                            <child>
+                                              <object class="GtkLabel" id="my_projects_label">
+                                                <property name="label" translatable="yes">Recent Projects</property>
+                                                <property name="visible">true</property>
+                                                <property name="xalign">0.0</property>
+                                                <property name="hexpand">true</property>
+                                                <style>
+                                                  <class name="dim-label"/>
+                                                </style>
+                                                <attributes>
+                                                  <attribute name="weight" value="bold"/>
+                                                </attributes>
+                                              </object>
+                                            </child>
+                                            <child>
+                                              <object class="GtkLabel">
+                                                <property name="visible">true</property>
+                                                <property name="label" translatable="yes">Updated</property>
+                                                <property name="margin-end">10</property>
+                                                <property name="halign">end</property>
+                                                <style>
+                                                  <class name="dim-label"/>
+                                                </style>
+                                              </object>
+                                            </child>
+                                          </object>
+                                        </child>
+                                        <child>
+                                          <object class="GtkFrame">
+                                            <property name="halign">center</property>
+                                            <property name="visible">true</property>
+                                            <property name="width-request">550</property>
+                                            <child>
+                                              <object class="GtkListBox" id="my_projects_list_box">
+                                                <property name="visible">true</property>
+                                                <property name="selection-mode">none</property>
+                                              </object>
+                                            </child>
+                                          </object>
+                                        </child>
                                       </object>
                                     </child>
-                                  </object>
-                                </child>
-                                <child>
-                                  <object class="GtkFrame">
-                                    <property name="halign">center</property>
-                                    <property name="visible">true</property>
                                     <child>
-                                      <object class="GtkListBox" id="other_projects_list_box">
+                                      <object class="GtkBox" id="other_projects_container">
+                                        <property name="orientation">vertical</property>
+                                        <property name="spacing">6</property>
                                         <property name="visible">true</property>
-                                        <property name="selection-mode">none</property>
+                                        <child>
+                                          <object class="GtkBox">
+                                            <property name="visible">true</property>
+                                            <child>
+                                              <object class="GtkLabel" id="other_projects_label">
+                                                <property name="label" translatable="yes">Other Projects</property>
+                                                <property name="visible">true</property>
+                                                <property name="xalign">0.0</property>
+                                                <property name="hexpand">true</property>
+                                                <style>
+                                                  <class name="dim-label"/>
+                                                </style>
+                                                <attributes>
+                                                  <attribute name="weight" value="bold"/>
+                                                </attributes>
+                                              </object>
+                                            </child>
+                                            <child>
+                                              <object class="GtkLabel">
+                                                <property name="visible">true</property>
+                                                <property name="label" translatable="yes">Updated</property>
+                                                <property name="margin-end">10</property>
+                                                <property name="halign">end</property>
+                                                <style>
+                                                  <class name="dim-label"/>
+                                                </style>
+                                              </object>
+                                            </child>
+                                          </object>
+                                        </child>
+                                        <child>
+                                          <object class="GtkFrame">
+                                            <property name="halign">center</property>
+                                            <property name="visible">true</property>
+                                            <child>
+                                              <object class="GtkListBox" id="other_projects_list_box">
+                                                <property name="visible">true</property>
+                                                <property name="selection-mode">none</property>
+                                              </object>
+                                            </child>
+                                          </object>
+                                        </child>
                                       </object>
                                     </child>
                                   </object>
@@ -150,74 +189,85 @@
                               </object>
                             </child>
                           </object>
+                          <packing>
+                            <property name="expand">true</property>
+                            <property name="fill">true</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkActionBar" id="action_bar">
+                            <property name="visible">false</property>
+                            <child>
+                              <object class="GtkButton" id="remove_button">
+                                <property name="action-name">perspective.delete-selected-rows</property>
+                                <property name="label" translatable="yes">_Remove</property>
+                                <property name="use-underline">true</property>
+                                <property name="visible">true</property>
+                                <property name="sensitive">false</property>
+                                <style>
+                                  <class name="destructive-action"/>
+                                </style>
+                              </object>
+                            </child>
+                          </object>
                         </child>
                       </object>
+                      <packing>
+                        <property name="name">projects</property>
+                      </packing>
                     </child>
-                  </object>
-                  <packing>
-                    <property name="expand">true</property>
-                    <property name="fill">true</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkActionBar" id="action_bar">
-                    <property name="visible">false</property>
                     <child>
-                      <object class="GtkButton" id="remove_button">
-                        <property name="action-name">perspective.delete-selected-rows</property>
-                        <property name="label" translatable="yes">_Remove</property>
-                        <property name="use-underline">true</property>
+                      <object class="GtkFrame">
                         <property name="visible">true</property>
-                        <property name="sensitive">false</property>
-                        <style>
-                          <class name="destructive-action"/>
-                        </style>
+                        <child>
+                          <object class="GtkListBox">
+                            <property name="halign">center</property>
+                            <property name="valign">center</property>
+                            <property name="visible">true</property>
+                            <child>
+                              <object class="GtkListBoxRow">
+                                <property name="visible">true</property>
+                                <child>
+                                  <object class="GtkLabel">
+                                    <property name="label">Create from existing project</property>
+                                    <property name="visible">true</property>
+                                    <property name="xalign">0.0</property>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkListBoxRow">
+                                <property name="visible">true</property>
+                                <child>
+                                  <object class="GtkLabel">
+                                    <property name="label">Create a new project</property>
+                                    <property name="visible">true</property>
+                                    <property name="xalign">0.0</property>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
                       </object>
+                      <packing>
+                        <property name="name">assistants</property>
+                      </packing>
                     </child>
                   </object>
                 </child>
               </object>
               <packing>
-                <property name="name">projects</property>
+                <property name="name">greeter</property>
               </packing>
             </child>
             <child>
-              <object class="GtkFrame">
+              <object class="GtkStack" id="genesis_stack">
                 <property name="visible">true</property>
-                <child>
-                  <object class="GtkListBox">
-                    <property name="halign">center</property>
-                    <property name="valign">center</property>
-                    <property name="visible">true</property>
-                    <child>
-                      <object class="GtkListBoxRow">
-                        <property name="visible">true</property>
-                        <child>
-                          <object class="GtkLabel">
-                            <property name="label">Create from existing project</property>
-                            <property name="visible">true</property>
-                            <property name="xalign">0.0</property>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkListBoxRow">
-                        <property name="visible">true</property>
-                        <child>
-                          <object class="GtkLabel">
-                            <property name="label">Create a new project</property>
-                            <property name="visible">true</property>
-                            <property name="xalign">0.0</property>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                  </object>
-                </child>
               </object>
               <packing>
-                <property name="name">assistants</property>
+                <property name="name">genesis</property>
               </packing>
             </child>
           </object>
@@ -243,23 +293,40 @@
             <property name="label" translatable="yes">Click an item to select</property>
           </object>
         </child>
+        <child>
+          <object class="GtkLabel" id="genesis_title">
+            <property name="visible">true</property>
+          </object>
+        </child>
       </object>
     </child>
     <child>
-      <object class="GtkButton" id="new_button">
-        <property name="tooltip-text" translatable="yes">Create a new project</property>
-        <property name="action-name">win.perspective</property>
-        <property name="action-target">'genesis'</property>
-        <property name="visible">true</property>
-        <property name="label" translatable="yes">_New</property>
+      <object class="GtkButton" id="genesis_cancel_button">
+        <property name="action-name">perspective.state</property>
+        <property name="action-target">'browse'</property>
+        <property name="label" translatable="yes">_Cancel</property>
         <property name="use-underline">true</property>
-        <style>
-          <class name="text-button"/>
-        </style>
+        <property name="visible">true</property>
+      </object>
+    </child>
+    <child>
+      <object class="EggPriorityBox" id="genesis_buttons">
+        <property name="homogeneous">true</property>
+        <property name="spacing">6</property>
+        <property name="visible">true</property>
+        <child>
+          <object class="GtkButton" id="open_button">
+            <property name="label" translatable="yes">Open…</property>
+            <property name="visible">true</property>
+          </object>
+          <packing>
+            <property name="priority">0</property>
+          </packing>
+        </child>
       </object>
       <packing>
-        <property name="position">0</property>
         <property name="pack-type">start</property>
+        <property name="position">0</property>
       </packing>
     </child>
     <child>
@@ -298,6 +365,17 @@
         <property name="pack-type">end</property>
       </packing>
     </child>
+    <child>
+      <object class="GtkButton" id="genesis_continue_button">
+        <style>
+          <class name="suggested-action"/>
+        </style>
+      </object>
+      <packing>
+        <property name="position">0</property>
+        <property name="pack-type">end</property>
+      </packing>
+    </child>
   </object>
   <object class="EggStateMachine" id="state_machine">
     <property name="state">browse</property>
@@ -315,7 +393,7 @@
         <object id="selection_button">
           <property name="visible">true</property>
         </object>
-        <object id="new_button">
+        <object id="genesis_buttons">
           <property name="visible">true</property>
         </object>
         <object id="action_bar">
@@ -326,6 +404,15 @@
         </object>
         <object id="search_entry">
           <property name="visible">true</property>
+        </object>
+        <object id="genesis_cancel_button">
+          <property name="visible">false</property>
+        </object>
+        <object id="genesis_continue_button">
+          <property name="visible">false</property>
+        </object>
+        <object id="top_stack">
+          <property name="visible-child-name">greeter</property>
         </object>
       </state>
       <state name="selection">
@@ -347,7 +434,7 @@
         <object id="selection_button">
           <property name="visible">false</property>
         </object>
-        <object id="new_button">
+        <object id="genesis_buttons">
           <property name="visible">false</property>
         </object>
         <object id="other_projects_container">
@@ -355,6 +442,44 @@
         </object>
         <object id="search_entry">
           <property name="visible">false</property>
+        </object>
+        <object id="genesis_cancel_button">
+          <property name="visible">false</property>
+        </object>
+        <object id="genesis_continue_button">
+          <property name="visible">false</property>
+        </object>
+        <object id="top_stack">
+          <property name="visible-child-name">greeter</property>
+        </object>
+      </state>
+      <state name="genesis">
+        <object id="titlebar">
+          <property name="show-close-button">false</property>
+        </object>
+        <object id="action_bar">
+          <property name="visible">false</property>
+        </object>
+        <object id="title_stack">
+          <property name="visible-child">genesis_title</property>
+        </object>
+        <object id="cancel_button">
+          <property name="visible">false</property>
+        </object>
+        <object id="selection_button">
+          <property name="visible">false</property>
+        </object>
+        <object id="genesis_buttons">
+          <property name="visible">false</property>
+        </object>
+        <object id="genesis_cancel_button">
+          <property name="visible">true</property>
+        </object>
+        <object id="genesis_continue_button">
+          <property name="visible">true</property>
+        </object>
+        <object id="top_stack">
+          <property name="visible-child-name">genesis</property>
         </object>
       </state>
     </states>
