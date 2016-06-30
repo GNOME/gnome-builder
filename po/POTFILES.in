@@ -35,7 +35,6 @@ libide/buildsystem/ide-build-result.c
 libide/buildsystem/ide-build-system.c
 libide/buildsystem/ide-configuration-manager.c
 libide/devices/ide-device-manager.c
-libide/directory/ide-directory-genesis-addin.c
 libide/directory/ide-directory-vcs.c
 libide/editorconfig/ide-editorconfig-file-settings.c
 libide/editor/ide-editor-frame.c
@@ -46,7 +45,6 @@ libide/editor/ide-editor-perspective.c
 libide/editor/ide-editor-view-actions.c
 libide/editor/ide-editor-view.c
 [type: gettext/glade]libide/editor/ide-editor-view.ui
-[type: gettext/glade]libide/genesis/ide-genesis-perspective.ui
 libide/greeter/ide-greeter-perspective.c
 [type: gettext/glade]libide/greeter/ide-greeter-perspective.ui
 libide/gsettings/ide-language-defaults.c
