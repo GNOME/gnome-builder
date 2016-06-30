@@ -62,6 +62,7 @@
                       <object class="GtkEntry" id="clone_uri_entry">
                         <property name="hexpand">true</property>
                         <property name="width-chars">35</property>
+                        <property name="max-width-chars">50</property>
                         <property name="placeholder-text" translatable="yes">user@host:repository.git</property>
                         <property name="tooltip-text" translatable="yes">Enter the URL of your project's source code repository</property>
                         <property name="valign">baseline</property>
@@ -69,31 +70,12 @@
                       </object>
                     </child>
                     <child>
-                      <object class="GtkBox">
+                      <object class="EggFileChooserEntry" id="clone_location_entry">
+                        <property name="hexpand">true</property>
                         <property name="visible">true</property>
-                        <style>
-                          <class name="linked"/>
-                          <class name="linked-on-right"/>
-                        </style>
-                        <child>
-                          <object class="GtkFileChooserButton" id="clone_location_button">
-                            <property name="action">select-folder</property>
-                            <property name="hexpand">true</property>
-                            <property name="local-only">true</property>
-                            <property name="spacing">6</property>
-                            <property name="valign">baseline</property>
-                            <property name="visible">true</property>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkEntry" id="clone_location_entry">
-                            <property name="hexpand">true</property>
-                            <property name="placeholder-text" translatable="yes">Directory</property>
-                            <property name="tooltip-text" translatable="yes">Enter the name of the directory to create</property>
-                            <property name="valign">baseline</property>
-                            <property name="visible">true</property>
-                          </object>
-                        </child>
+                        <property name="valign">baseline</property>
+                        <property name="action">select-folder</property>
+                        <property name="title" translatable="yes">Select Project Directory</property>
                       </object>
                     </child>
                   </object>
@@ -178,7 +160,6 @@
     <property name="mode">vertical</property>
     <widgets>
       <widget name="clone_location_label"/>
-      <widget name="clone_location_button"/>
       <widget name="clone_spinner"/>
       <widget name="clone_uri_label"/>
       <widget name="clone_uri_entry"/>

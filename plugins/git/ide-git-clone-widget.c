@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <egg-file-chooser-entry.h>
 #include <glib/gi18n.h>
 #include <libgit2-glib/ggit.h>
 #include <ide.h>
@@ -32,8 +33,9 @@ struct _IdeGitCloneWidget
 {
   GtkBin                parent_instance;
 
-  GtkFileChooserButton *clone_location_button;
-  GtkEntry             *clone_location_entry;
+  gchar                *child_name;
+
+  EggFileChooserEntry  *clone_location_entry;
   GtkEntry             *clone_uri_entry;
   GtkLabel             *clone_error_label;
   GtkProgressBar       *clone_progress;
@@ -117,10 +119,16 @@ ide_git_clone_widget_uri_changed (IdeGitCloneWidget *self,
       if (path != NULL)
         {
           name = g_path_get_basename (path);
+
           if (g_str_has_suffix (name, ".git"))
             *(strrchr (name, '.')) = '\0';
+
           if (!g_str_equal (name, "/"))
-            gtk_entry_set_text (self->clone_location_entry, name);
+            {
+              g_free (self->child_name);
+              self->child_name = g_steal_pointer (&name);
+            }
+
           g_free (name);
         }
 
@@ -144,6 +152,10 @@ ide_git_clone_widget_uri_changed (IdeGitCloneWidget *self,
 static void
 ide_git_clone_widget_finalize (GObject *object)
 {
+  IdeGitCloneWidget *self = (IdeGitCloneWidget *)object;
+
+  g_clear_pointer (&self->child_name, g_free);
+
   G_OBJECT_CLASS (ide_git_clone_widget_parent_class)->finalize (object);
 }
 
@@ -186,7 +198,6 @@ ide_git_clone_widget_class_init (IdeGitCloneWidgetClass *klass)
   gtk_widget_class_set_css_name (widget_class, "gitclonewidget");
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/plugins/git-plugin/ide-git-clone-widget.ui");
   gtk_widget_class_bind_template_child (widget_class, IdeGitCloneWidget, clone_error_label);
-  gtk_widget_class_bind_template_child (widget_class, IdeGitCloneWidget, clone_location_button);
   gtk_widget_class_bind_template_child (widget_class, IdeGitCloneWidget, clone_location_entry);
   gtk_widget_class_bind_template_child (widget_class, IdeGitCloneWidget, clone_progress);
   gtk_widget_class_bind_template_child (widget_class, IdeGitCloneWidget, clone_spinner);
@@ -197,6 +208,7 @@ static void
 ide_git_clone_widget_init (IdeGitCloneWidget *self)
 {
   g_autoptr(GSettings) settings = NULL;
+  g_autoptr(GFile) file = NULL;
   g_autofree gchar *path = NULL;
   g_autofree gchar *projects_dir = NULL;
 
@@ -205,16 +217,16 @@ ide_git_clone_widget_init (IdeGitCloneWidget *self)
   settings = g_settings_new ("org.gnome.builder");
   path = g_settings_get_string (settings, "projects-directory");
 
-  if (!ide_str_empty0 (path))
-    {
-      if (!g_path_is_absolute (path))
-        projects_dir = g_build_filename (g_get_home_dir (), path, NULL);
-      else
-        projects_dir = g_steal_pointer (&path);
+  if (ide_str_empty0 (path))
+    path = g_build_filename (g_get_home_dir (), "Projects", NULL);
 
-      gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (self->clone_location_button),
-                                       projects_dir);
-    }
+  if (!g_path_is_absolute (path))
+    projects_dir = g_build_filename (g_get_home_dir (), path, NULL);
+  else
+    projects_dir = g_steal_pointer (&path);
+
+  file = g_file_new_for_path (projects_dir);
+  egg_file_chooser_entry_set_file (self->clone_location_entry, file);
 
   g_signal_connect_object (self->clone_uri_entry,
                            "changed",
@@ -351,11 +363,9 @@ ide_git_clone_widget_clone_async (IdeGitCloneWidget   *self,
 {
   g_autoptr(GTask) task = NULL;
   g_autoptr(GFile) location = NULL;
-  g_autoptr(GFile) child = NULL;
   g_autoptr(IdeVcsUri) uri = NULL;
   CloneRequest *req;
   const gchar *uristr;
-  const gchar *child_name;
 
   g_return_if_fail (IDE_IS_GIT_CLONE_WIDGET (self));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
@@ -365,8 +375,7 @@ ide_git_clone_widget_clone_async (IdeGitCloneWidget   *self,
   gtk_label_set_label (self->clone_error_label, NULL);
 
   uristr = gtk_entry_get_text (self->clone_uri_entry);
-  child_name = gtk_entry_get_text (self->clone_location_entry);
-  location = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (self->clone_location_button));
+  location = egg_file_chooser_entry_get_file (EGG_FILE_CHOOSER_ENTRY (self->clone_location_entry));
 
   uri = ide_vcs_uri_new (uristr);
 
@@ -379,9 +388,10 @@ ide_git_clone_widget_clone_async (IdeGitCloneWidget   *self,
       return;
     }
 
-  if (child_name != NULL)
+  if (self->child_name)
     {
-      child = g_file_get_child (location, child_name);
+      g_autoptr(GFile) child = g_file_get_child (location, self->child_name);
+
       req = clone_request_new (uri, child);
     }
   else
@@ -391,7 +401,6 @@ ide_git_clone_widget_clone_async (IdeGitCloneWidget   *self,
 
   gtk_spinner_start (self->clone_spinner);
 
-  gtk_widget_set_sensitive (GTK_WIDGET (self->clone_location_button), FALSE);
   gtk_widget_set_sensitive (GTK_WIDGET (self->clone_location_entry), FALSE);
   gtk_widget_set_sensitive (GTK_WIDGET (self->clone_uri_entry), FALSE);
 
@@ -409,7 +418,6 @@ ide_git_clone_widget_clone_finish (IdeGitCloneWidget  *self,
 
   gtk_spinner_stop (self->clone_spinner);
 
-  gtk_widget_set_sensitive (GTK_WIDGET (self->clone_location_button), TRUE);
   gtk_widget_set_sensitive (GTK_WIDGET (self->clone_location_entry), TRUE);
   gtk_widget_set_sensitive (GTK_WIDGET (self->clone_uri_entry), TRUE);
 
