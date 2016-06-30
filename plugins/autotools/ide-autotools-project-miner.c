@@ -319,13 +319,24 @@ ide_autotools_project_miner_mine_async (IdeProjectMiner     *miner,
   IdeAutotoolsProjectMiner *self = (IdeAutotoolsProjectMiner *)miner;
   g_autoptr(GTask) task = NULL;
   g_autoptr(GFile) directory = NULL;
+  g_autoptr(GSettings) settings = NULL;
+  g_autofree gchar *projects_dir = NULL;
+  g_autofree gchar *path = NULL;
 
   g_assert (IDE_IS_AUTOTOOLS_PROJECT_MINER (self));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = g_task_new (miner, cancellable, callback, user_data);
 
-  directory = g_file_new_for_path (g_get_home_dir ());
+  /*
+   * Get the projects directory from GSettings.
+   * We use this to avoid checking the entire home directory.
+   * This defaults to "~/Projects" but the user can override.
+   */
+  settings = g_settings_new ("org.gnome.builder");
+  projects_dir = g_settings_get_string (settings, "projects-directory");
+  path = ide_path_expand (projects_dir);
+  directory = g_file_new_for_path (path);
 
   if (self->root_directory)
     g_task_set_task_data (task, g_object_ref (self->root_directory), g_object_unref);
