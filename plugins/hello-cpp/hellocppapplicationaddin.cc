@@ -45,7 +45,7 @@ HelloCppApplicationAddin::HelloCppApplicationAddin(GObject *gobj)
   con = application->signal_shutdown().connect([this] {
       auto stop = steady_clock::now();
       auto elapsed_seconds = duration_cast<seconds>(stop - start).count();
-      g_print (_("Wow! You've spent with Builder %d seconds!"), elapsed_seconds);
+      g_print (_("Wow! You've spent with Builder %d seconds!\n"), elapsed_seconds);
     });
 
   start = std::chrono::steady_clock::now();
