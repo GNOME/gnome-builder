@@ -16,6 +16,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define G_LOG_DOMAIN "gbp-create-project-widget"
+
+#include <egg-file-chooser-entry.h>
 #include <egg-radio-box.h>
 #include <glib/gi18n.h>
 #include <ide.h>
@@ -30,8 +33,7 @@ struct _GbpCreateProjectWidget
   GtkBin                parent;
 
   GtkEntry             *project_name_entry;
-  GtkEntry             *project_location_entry;
-  GtkButton            *project_location_button;
+  EggFileChooserEntry  *project_location_entry;
   EggRadioBox          *project_language_chooser;
   GtkFlowBox           *project_template_chooser;
   GtkSwitch            *versioning_switch;
@@ -250,78 +252,27 @@ template_providers_foreach_cb (PeasExtensionSet *set,
   g_list_free_full (templates, g_object_unref);
 }
 
-static gchar *
+static GFile *
 gbp_create_project_widget_get_directory (GbpCreateProjectWidget *self)
 {
   g_assert (GBP_IS_CREATE_PROJECT_WIDGET (self));
 
-  return ide_path_expand (gtk_entry_get_text (self->project_location_entry));
+  return egg_file_chooser_entry_get_file (self->project_location_entry);
 }
 
 static void
 gbp_create_project_widget_set_directory (GbpCreateProjectWidget *self,
-                                         const gchar            *filename)
+                                         const gchar            *path)
 {
-  g_autofree gchar *collapsed = NULL;
+  g_autofree gchar *resolved = NULL;
+  g_autoptr(GFile) file = NULL;
 
   g_assert (GBP_IS_CREATE_PROJECT_WIDGET (self));
 
-  collapsed = ide_path_collapse (filename);
+  resolved = ide_path_expand (path);
+  file = g_file_new_for_path (resolved);
 
-  gtk_entry_set_text (self->project_location_entry, collapsed);
-}
-
-static void
-on_dialog_response (GbpCreateProjectWidget *self,
-                    gint                    response_id,
-                    GtkFileChooserDialog   *dialog)
-{
-  g_assert (GBP_IS_CREATE_PROJECT_WIDGET (self));
-  g_assert (GTK_IS_FILE_CHOOSER_DIALOG (dialog));
-
-  if (response_id == GTK_RESPONSE_OK)
-    {
-      g_autofree gchar *path = NULL;
-
-      path = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
-      gbp_create_project_widget_set_directory (self, path);
-    }
-
-  gtk_widget_destroy (GTK_WIDGET (dialog));
-
-  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_IS_READY]);
-}
-
-static void
-gbp_create_project_widget_browse_clicked (GbpCreateProjectWidget *self,
-                                          GtkButton              *button)
-{
-  g_autofree gchar *path = NULL;
-  GtkWidget *dialog;
-  GtkWidget *toplevel;
-
-  g_assert (GBP_IS_CREATE_PROJECT_WIDGET (self));
-  g_assert (GTK_IS_BUTTON (button));
-
-  path = gbp_create_project_widget_get_directory (self);
-  toplevel = gtk_widget_get_toplevel (GTK_WIDGET (self));
-  dialog = gtk_file_chooser_dialog_new (_("Select Project Directory"),
-                                        GTK_WINDOW (toplevel),
-                                        GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
-                                        _("Cancel"), GTK_RESPONSE_CANCEL,
-                                        _("Select"), GTK_RESPONSE_OK,
-                                        NULL);
-  gtk_file_chooser_set_filename (GTK_FILE_CHOOSER (dialog), path);
-  gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
-  gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
-
-  g_signal_connect_object (dialog,
-                           "response",
-                           G_CALLBACK (on_dialog_response),
-                           self,
-                           G_CONNECT_SWAPPED);
-
-  gtk_window_present (GTK_WINDOW (dialog));
+  egg_file_chooser_entry_set_file (self->project_location_entry, file);
 }
 
 static void
@@ -422,7 +373,6 @@ gbp_create_project_widget_class_init (GbpCreateProjectWidgetClass *klass)
   gtk_widget_class_set_template_from_resource (widget_class,
                                                "/org/gnome/builder/plugins/create-project-plugin/gbp-create-project-widget.ui");
   gtk_widget_class_bind_template_child (widget_class, GbpCreateProjectWidget, project_name_entry);
-  gtk_widget_class_bind_template_child (widget_class, GbpCreateProjectWidget, project_location_button);
   gtk_widget_class_bind_template_child (widget_class, GbpCreateProjectWidget, project_location_entry);
   gtk_widget_class_bind_template_child (widget_class, GbpCreateProjectWidget, project_language_chooser);
   gtk_widget_class_bind_template_child (widget_class, GbpCreateProjectWidget, project_template_chooser);
@@ -451,12 +401,6 @@ gbp_create_project_widget_init (GbpCreateProjectWidget *self)
   g_signal_connect_object (self->project_name_entry,
                            "changed",
                            G_CALLBACK (gbp_create_project_widget_name_changed),
-                           self,
-                           G_CONNECT_SWAPPED);
-
-  g_signal_connect_object (self->project_location_button,
-                           "clicked",
-                           G_CALLBACK (gbp_create_project_widget_browse_clicked),
                            self,
                            G_CONNECT_SWAPPED);
 
@@ -591,8 +535,9 @@ gbp_create_project_widget_create_async (GbpCreateProjectWidget *self,
   g_autoptr(IdeVcsConfig) vcs_conf = NULL;
   GValue str = G_VALUE_INIT;
   g_autofree gchar *name = NULL;
-  g_autofree gchar *location = NULL;
   g_autofree gchar *path = NULL;
+  g_autoptr(GFile) location = NULL;
+  g_autoptr(GFile) child = NULL;
   const gchar *language = NULL;
   const gchar *license_id = NULL;
   GtkFlowBoxChild *template_container;
@@ -627,7 +572,8 @@ gbp_create_project_widget_create_async (GbpCreateProjectWidget *self,
                        g_variant_ref_sink (g_variant_new_string (g_strdelimit (name, " ", '-'))));
 
   location = gbp_create_project_widget_get_directory (self);
-  path = g_build_filename (location, name, NULL);
+  child = g_file_get_child (location, name);
+  path = g_file_get_path (child);
 
   g_hash_table_insert (params,
                        g_strdup ("path"),

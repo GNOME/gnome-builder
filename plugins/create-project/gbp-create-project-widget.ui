@@ -122,18 +122,11 @@
                       <object class="GtkBox" id="row2_2">
                         <property name="expand">true</property>
                         <property name="visible">true</property>
-                        <style>
-                          <class name="linked"/>
-                        </style>
                         <child>
-                          <object class="GtkEntry" id="project_location_entry">
-                            <property name="expand">true</property>
-                            <property name="visible">true</property>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkButton" id="project_location_button">
-                            <property name="label" translatable="yes">Browse…</property>
+                          <object class="EggFileChooserEntry" id="project_location_entry">
+                            <property name="action">select-folder</property>
+                            <property name="title" translatable="yes">Select Project Directory</property>
+                            <property name="hexpand">true</property>
                             <property name="visible">true</property>
                           </object>
                         </child>
