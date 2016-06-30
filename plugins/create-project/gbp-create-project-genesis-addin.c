@@ -155,7 +155,7 @@ gbp_create_project_genesis_addin_get_icon_name (IdeGenesisAddin *addin)
 static gchar *
 gbp_create_project_genesis_addin_get_title (IdeGenesisAddin *addin)
 {
-  return g_strdup (_("From a project template"));
+  return g_strdup (_("New Project"));
 }
 
 static void
@@ -211,6 +211,24 @@ gbp_create_project_genesis_addin_run_finish (IdeGenesisAddin  *addin,
   return g_task_propagate_boolean (G_TASK (result), error);
 }
 
+static gint
+gbp_create_project_genesis_addin_get_priority (IdeGenesisAddin *addin)
+{
+  return -100;
+}
+
+static gchar *
+gbp_create_project_genesis_addin_get_label (IdeGenesisAddin *addin)
+{
+  return g_strdup (_("New…"));
+}
+
+static gchar *
+gbp_create_project_genesis_addin_get_next_label (IdeGenesisAddin *addin)
+{
+  return g_strdup (_("Create"));
+}
+
 static void
 genesis_addin_iface_init (IdeGenesisAddinInterface *iface)
 {
@@ -219,4 +237,7 @@ genesis_addin_iface_init (IdeGenesisAddinInterface *iface)
   iface->get_widget = gbp_create_project_genesis_addin_get_widget;
   iface->run_async = gbp_create_project_genesis_addin_run_async;
   iface->run_finish = gbp_create_project_genesis_addin_run_finish;
+  iface->get_priority = gbp_create_project_genesis_addin_get_priority;
+  iface->get_label = gbp_create_project_genesis_addin_get_label;
+  iface->get_next_label = gbp_create_project_genesis_addin_get_next_label;
 }
