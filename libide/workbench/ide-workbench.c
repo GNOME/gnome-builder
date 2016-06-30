@@ -807,9 +807,25 @@ ide_workbench_set_visible_perspective (IdeWorkbench   *self,
   GActionGroup *actions = NULL;
   const gchar *current_id;
   GtkWidget *titlebar;
+  guint restore_duration = 0;
 
   g_return_if_fail (IDE_IS_WORKBENCH (self));
   g_return_if_fail (IDE_IS_PERSPECTIVE (perspective));
+
+  /*
+   * If we can detect that this is the first transition to the editor,
+   * and that our window is not yet displayed, we can avoid the transition
+   * duration altogether. This is handy when first opening a window with
+   * a project loaded, as used by self->disable_greeter.
+   */
+  if (self->disable_greeter &&
+      IDE_IS_EDITOR_PERSPECTIVE (perspective) &&
+      !self->did_initial_editor_transition)
+    {
+      self->did_initial_editor_transition = TRUE;
+      restore_duration = gtk_stack_get_transition_duration (self->perspectives_stack);
+      gtk_stack_set_transition_duration (self->perspectives_stack, 0);
+    }
 
   current_id = gtk_stack_get_visible_child_name (self->perspectives_stack);
   id = ide_perspective_get_id (perspective);
@@ -843,6 +859,9 @@ ide_workbench_set_visible_perspective (IdeWorkbench   *self,
                                 perspective);
 
   g_clear_object (&actions);
+
+  if (restore_duration != 0)
+    gtk_stack_set_transition_duration (self->perspectives_stack, restore_duration);
 }
 
 const gchar *

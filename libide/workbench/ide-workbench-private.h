@@ -35,6 +35,7 @@ struct _IdeWorkbench
   guint                      unloading : 1;
   guint                      disable_greeter : 1;
   guint                      early_perspectives_removed : 1;
+  guint                      did_initial_editor_transition : 1;
 
   IdeContext                *context;
   GCancellable              *cancellable;
