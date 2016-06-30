@@ -81,3 +81,36 @@ ide_genesis_addin_run_finish (IdeGenesisAddin  *self,
 
   return IDE_GENESIS_ADDIN_GET_IFACE (self)->run_finish (self, result, error);
 }
+
+gint
+ide_genesis_addin_get_priority (IdeGenesisAddin *self)
+{
+  g_return_val_if_fail (IDE_IS_GENESIS_ADDIN (self), 0);
+
+  if (IDE_GENESIS_ADDIN_GET_IFACE (self)->get_priority)
+    return IDE_GENESIS_ADDIN_GET_IFACE (self)->get_priority (self);
+
+  return 0;
+}
+
+gchar *
+ide_genesis_addin_get_label (IdeGenesisAddin *self)
+{
+  g_return_val_if_fail (IDE_IS_GENESIS_ADDIN (self), NULL);
+
+  if (IDE_GENESIS_ADDIN_GET_IFACE (self)->get_label)
+    return IDE_GENESIS_ADDIN_GET_IFACE (self)->get_label (self);
+
+  return NULL;
+}
+
+gchar *
+ide_genesis_addin_get_next_label (IdeGenesisAddin *self)
+{
+  g_return_val_if_fail (IDE_IS_GENESIS_ADDIN (self), NULL);
+
+  if (IDE_GENESIS_ADDIN_GET_IFACE (self)->get_next_label)
+    return IDE_GENESIS_ADDIN_GET_IFACE (self)->get_next_label (self);
+
+  return NULL;
+}
