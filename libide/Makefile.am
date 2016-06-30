@@ -49,7 +49,6 @@ libide_1_0_la_public_headers =                            \
 	diagnostics/ide-source-location.h                 \
 	diagnostics/ide-source-range.h                    \
 	directory/ide-directory-build-system.h            \
-	directory/ide-directory-genesis-addin.h           \
 	directory/ide-directory-vcs.h                     \
 	doap/ide-doap-person.h                            \
 	doap/ide-doap.h                                   \
@@ -190,7 +189,6 @@ libide_1_0_la_public_sources =                            \
 	diagnostics/ide-source-location.c                 \
 	diagnostics/ide-source-range.c                    \
 	directory/ide-directory-build-system.c            \
-	directory/ide-directory-genesis-addin.c           \
 	directory/ide-directory-plugin.c                  \
 	directory/ide-directory-vcs.c                     \
 	doap/ide-doap-person.c                            \
