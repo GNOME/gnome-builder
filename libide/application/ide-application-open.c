@@ -117,9 +117,21 @@ ide_application_open_project_cb (GObject      *object,
   g_ptr_array_remove_index (state->files, state->files->len - 1);
 
   if (!ide_workbench_open_project_finish (workbench, result, &error))
-    g_warning ("%s", error->message);
+    {
+      g_warning ("%s", error->message);
+      gtk_widget_destroy (GTK_WIDGET (workbench));
+    }
   else
-    ide_workbench_open_files_async (workbench, &file, 1, state->hint, 0, NULL, NULL, NULL);
+    {
+      ide_workbench_open_files_async (workbench,
+                                      &file, 1,
+                                      state->hint,
+                                      0,
+                                      g_task_get_cancellable (task),
+                                      NULL,
+                                      NULL);
+      gtk_window_present (GTK_WINDOW (workbench));
+    }
 
   ide_application_open_tick (task);
 }
@@ -184,6 +196,7 @@ ide_application_open_tick (GTask *task)
 
   workbench = g_object_new (IDE_TYPE_WORKBENCH,
                             "application", self,
+                            "disable-greeter", TRUE,
                             NULL);
 
   ide_workbench_open_project_async (workbench,
@@ -191,8 +204,6 @@ ide_application_open_tick (GTask *task)
                                     cancellable,
                                     ide_application_open_project_cb,
                                     g_object_ref (task));
-
-  gtk_window_present (GTK_WINDOW (workbench));
 }
 
 void
