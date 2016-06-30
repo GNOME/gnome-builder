@@ -77,7 +77,7 @@
                                     <property name="orientation">vertical</property>
                                     <property name="spacing">32</property>
                                     <property name="visible">true</property>
-                                    <property name="max-width-request">550</property>
+                                    <property name="max-width-request">600</property>
                                     <child>
                                       <object class="GtkSearchEntry" id="search_entry">
                                         <property name="width-chars">45</property>
@@ -124,7 +124,7 @@
                                           <object class="GtkFrame">
                                             <property name="halign">center</property>
                                             <property name="visible">true</property>
-                                            <property name="width-request">550</property>
+                                            <property name="width-request">600</property>
                                             <child>
                                               <object class="GtkListBox" id="my_projects_list_box">
                                                 <property name="visible">true</property>
