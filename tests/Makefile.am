@@ -210,6 +210,12 @@ test_egg_radio_box_CFLAGS = $(egg_cflags)
 test_egg_radio_box_LDADD = $(egg_libs)
 
 
+TESTS += test-egg-file-chooser-entry
+test_egg_file_chooser_entry_SOURCES = test-egg-file-chooser-entry.c
+test_egg_file_chooser_entry_CFLAGS = $(egg_cflags)
+test_egg_file_chooser_entry_LDADD = $(egg_libs)
+
+
 TESTS += test-egg-cache
 test_egg_cache_SOURCES = test-egg-cache.c
 test_egg_cache_CFLAGS = $(egg_cflags)
