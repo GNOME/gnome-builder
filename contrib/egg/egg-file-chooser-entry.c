@@ -97,8 +97,11 @@ egg_file_chooser_entry_sync_to_dialog (EggFileChooserEntry *self)
   switch (priv->action)
     {
     case GTK_FILE_CHOOSER_ACTION_OPEN:
-    case GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER:
       gtk_button_set_label (GTK_BUTTON (default_widget), _("Open"));
+      break;
+
+    case GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER:
+      gtk_button_set_label (GTK_BUTTON (default_widget), _("Select"));
       break;
 
     case GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER:
