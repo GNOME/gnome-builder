@@ -45,6 +45,7 @@ G_DEFINE_TYPE (IdeWorkbench, ide_workbench, GTK_TYPE_APPLICATION_WINDOW)
 enum {
   PROP_0,
   PROP_CONTEXT,
+  PROP_DISABLE_GREETER,
   PROP_VISIBLE_PERSPECTIVE,
   PROP_VISIBLE_PERSPECTIVE_NAME,
   LAST_PROP
@@ -198,6 +199,21 @@ ide_workbench_constructed (GObject *object)
 
   gtk_application_window_set_show_menubar (GTK_APPLICATION_WINDOW (self), FALSE);
 
+  ide_workbench_add_perspective (self,
+                                 g_object_new (IDE_TYPE_PREFERENCES_PERSPECTIVE,
+                                               "visible", TRUE,
+                                               NULL));
+
+  if (self->disable_greeter == FALSE)
+    {
+      ide_workbench_add_perspective (self,
+                                     g_object_new (IDE_TYPE_GREETER_PERSPECTIVE,
+                                                   "visible", TRUE,
+                                                   NULL));
+
+      ide_workbench_set_visible_perspective_name (self, "greeter");
+    }
+
   ide_workbench_actions_init (self);
 }
 
@@ -227,6 +243,10 @@ ide_workbench_get_property (GObject    *object,
       g_value_set_object (value, ide_workbench_get_context (self));
       break;
 
+    case PROP_DISABLE_GREETER:
+      g_value_set_boolean (value, self->disable_greeter);
+      break;
+
     case PROP_VISIBLE_PERSPECTIVE:
       g_value_set_object (value, ide_workbench_get_visible_perspective (self));
       break;
@@ -250,6 +270,10 @@ ide_workbench_set_property (GObject      *object,
 
   switch (prop_id)
     {
+    case PROP_DISABLE_GREETER:
+      self->disable_greeter = g_value_get_boolean (value);
+      break;
+
     case PROP_VISIBLE_PERSPECTIVE:
       ide_workbench_set_visible_perspective (self, g_value_get_object (value));
       break;
@@ -311,6 +335,22 @@ ide_workbench_class_init (IdeWorkbenchClass *klass)
                          "visible-Perspective",
                          IDE_TYPE_PERSPECTIVE,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+
+  /**
+   * IdeWorkbench:disable-greeter:
+   *
+   * This property is used internall by Builder to avoid creating the
+   * greeter when opening a new workspace that is only for loading a
+   * project.
+   *
+   * This should not be used by application plugins.
+   */
+  properties [PROP_DISABLE_GREETER] =
+    g_param_spec_boolean ("disable-greeter",
+                          "Disable Greeter",
+                          "If the greeter should be disabled when creating the workbench",
+                          FALSE,
+                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
   /**
    * IdeWorkbench:visible-perspective-name:
@@ -380,15 +420,6 @@ ide_workbench_init (IdeWorkbench *self)
 
   self->perspectives = g_list_store_new (IDE_TYPE_PERSPECTIVE);
 
-  ide_workbench_add_perspective (self,
-                                 g_object_new (IDE_TYPE_GREETER_PERSPECTIVE,
-                                               "visible", TRUE,
-                                               NULL));
-  ide_workbench_add_perspective (self,
-                                 g_object_new (IDE_TYPE_PREFERENCES_PERSPECTIVE,
-                                               "visible", TRUE,
-                                               NULL));
-
   ide_window_settings_register (GTK_WINDOW (self));
 
   g_signal_connect_object (self->perspectives_stack,
@@ -396,8 +427,6 @@ ide_workbench_init (IdeWorkbench *self)
                            G_CALLBACK (ide_workbench_notify_visible_child),
                            self,
                            G_CONNECT_SWAPPED);
-
-  ide_workbench_set_visible_perspective_name (self, "greeter");
 }
 
 static void
@@ -539,7 +568,7 @@ ide_workbench_set_context (IdeWorkbench *self,
 {
   g_autoptr(GSettings) settings = NULL;
   IdeProject *project;
-  guint duration;
+  guint delay_msec = STABLIZE_DELAY_MSEC;
 
   g_return_if_fail (IDE_IS_WORKBENCH (self));
   g_return_if_fail (IDE_IS_CONTEXT (context));
@@ -578,7 +607,9 @@ ide_workbench_set_context (IdeWorkbench *self,
    * just a bit of time to stablize allocations and sizing before
    * transitioning to the editor.
    */
-  g_timeout_add (STABLIZE_DELAY_MSEC, stablize_cb, g_object_ref (self));
+  if (self->disable_greeter)
+    delay_msec = 0;
+  g_timeout_add (delay_msec, stablize_cb, g_object_ref (self));
 
   /*
    * When restoring, previous buffers may get loaded. This causes new
@@ -588,8 +619,10 @@ ide_workbench_set_context (IdeWorkbench *self,
    */
   if (g_settings_get_boolean (settings, "restore-previous-files"))
     {
+      guint duration;
+
       duration = gtk_stack_get_transition_duration (self->perspectives_stack);
-      g_timeout_add (STABLIZE_DELAY_MSEC + duration, restore_in_timeout, g_object_ref (context));
+      g_timeout_add (delay_msec + duration, restore_in_timeout, g_object_ref (context));
     }
 }
 
