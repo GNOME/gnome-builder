@@ -29,7 +29,6 @@
                     <property name="valign">baseline</property>
                     <property name="xalign">0.0</property>
                     <attributes>
-                      <attribute name="scale" value="1.2"/>
                       <attribute name="weight" value="bold"/>
                     </attributes>
                   </object>
@@ -40,9 +39,6 @@
                     <property name="hexpand">true</property>
                     <property name="valign">baseline</property>
                     <property name="xalign">1.0</property>
-                    <attributes>
-                      <attribute name="scale" value="0.833333"/>
-                    </attributes>
                     <style>
                       <class name="dim-label"/>
                     </style>
@@ -74,9 +70,6 @@
                     <style>
                       <class name="dim-label"/>
                     </style>
-                    <attributes>
-                      <attribute name="scale" value="0.833333"/>
-                    </attributes>
                   </object>
                 </child>
                 <child>
