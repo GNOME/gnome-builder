@@ -90,7 +90,7 @@ ide_git_genesis_addin_get_icon_name (IdeGenesisAddin *addin)
 static gchar *
 ide_git_genesis_addin_get_title (IdeGenesisAddin *addin)
 {
-  return g_strdup (_("From an existing project in a Git repository"));
+  return g_strdup (_("Clone Project"));
 }
 
 static void
@@ -172,6 +172,24 @@ ide_git_genesis_addin_run_finish (IdeGenesisAddin  *addin,
   return g_task_propagate_boolean (G_TASK (result), error);
 }
 
+static gint
+ide_git_genesis_addin_get_priority (IdeGenesisAddin *addin)
+{
+  return 100;
+}
+
+static gchar *
+ide_git_genesis_addin_get_label (IdeGenesisAddin *addin)
+{
+  return g_strdup (_("Clone…"));
+}
+
+static gchar *
+ide_git_genesis_addin_get_next_label (IdeGenesisAddin *addin)
+{
+  return g_strdup (_("Clone"));
+}
+
 static void
 genesis_addin_iface_init (IdeGenesisAddinInterface *iface)
 {
@@ -180,4 +198,7 @@ genesis_addin_iface_init (IdeGenesisAddinInterface *iface)
   iface->get_widget = ide_git_genesis_addin_get_widget;
   iface->run_async = ide_git_genesis_addin_run_async;
   iface->run_finish = ide_git_genesis_addin_run_finish;
+  iface->get_priority = ide_git_genesis_addin_get_priority;
+  iface->get_label = ide_git_genesis_addin_get_label;
+  iface->get_next_label = ide_git_genesis_addin_get_next_label;
 }
