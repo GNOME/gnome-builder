@@ -437,7 +437,10 @@ ide_application_local_command_line (GApplication   *application,
         }
 
       if (files->len > 0)
-        g_application_open (G_APPLICATION (self), (GFile **)files->pdata, files->len, "");
+        {
+          g_application_open (application, (GFile **)files->pdata, files->len, "");
+          goto cleanup;
+        }
     }
 
   if (gapplication_service)
