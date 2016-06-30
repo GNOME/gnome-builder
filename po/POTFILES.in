@@ -2,6 +2,7 @@
 # Please keep this file sorted alphabetically.
 contrib/egg/egg-animation.c
 contrib/egg/egg-date-time.c
+contrib/egg/egg-file-chooser-entry.c
 contrib/egg/egg-search-bar.c
 contrib/pnl/pnl-animation.c
 contrib/search/trie.c
