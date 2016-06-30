@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-06-29 09:49+0000\n"
-"PO-Revision-Date: 2016-06-29 13:28+0200\n"
+"POT-Creation-Date: 2016-06-30 02:39+0000\n"
+"PO-Revision-Date: 2016-06-30 09:42+0200\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Español; Castellano <gnome-es-list@gnome.org>\n"
 "Language: \n"
@@ -66,6 +66,40 @@ msgid "About %u year ago"
 msgid_plural "About %u years ago"
 msgstr[0] "Hace %u año aproximadamente"
 msgstr[1] "Hace %u años aproximadamente"
+
+#: ../contrib/egg/egg-file-chooser-entry.c:100
+#: ../contrib/egg/egg-file-chooser-entry.c:489
+#: ../libide/workbench/ide-workbench-actions.c:70
+msgid "Open"
+msgstr "Abrir"
+
+#: ../contrib/egg/egg-file-chooser-entry.c:104
+msgid "Select"
+msgstr "Seleccionar"
+
+#: ../contrib/egg/egg-file-chooser-entry.c:108
+#| msgid "_Create"
+msgid "Create"
+msgstr "Crear"
+
+#: ../contrib/egg/egg-file-chooser-entry.c:112
+#: ../libide/editor/ide-editor-view-actions.c:317
+#: ../libide/editor/ide-editor-view-actions.c:448
+#: ../plugins/terminal/gb-terminal-view-actions.c:306
+msgid "Save"
+msgstr "Guardar"
+
+#: ../contrib/egg/egg-file-chooser-entry.c:455
+msgid "Browse…"
+msgstr "Explorar…"
+
+#: ../contrib/egg/egg-file-chooser-entry.c:488
+#: ../libide/editor/ide-editor-view-actions.c:316
+#: ../libide/editor/ide-editor-view-actions.c:447
+#: ../libide/workbench/ide-workbench-actions.c:69
+#: ../plugins/terminal/gb-terminal-view-actions.c:305
+msgid "Cancel"
+msgstr "Cancelar"
 
 #: ../contrib/egg/egg-search-bar.c:378
 msgid "Search"
@@ -982,20 +1016,6 @@ msgstr "8"
 msgid "Save Document"
 msgstr "Guardar documento"
 
-#: ../libide/editor/ide-editor-view-actions.c:316
-#: ../libide/editor/ide-editor-view-actions.c:447
-#: ../libide/workbench/ide-workbench-actions.c:69
-#: ../plugins/create-project/gbp-create-project-widget.c:331
-#: ../plugins/terminal/gb-terminal-view-actions.c:305
-msgid "Cancel"
-msgstr "Cancelar"
-
-#: ../libide/editor/ide-editor-view-actions.c:317
-#: ../libide/editor/ide-editor-view-actions.c:448
-#: ../plugins/terminal/gb-terminal-view-actions.c:306
-msgid "Save"
-msgstr "Guardar"
-
 #: ../libide/editor/ide-editor-view-actions.c:436
 msgid "Save Document As"
 msgstr "Guardar documento como"
@@ -1836,6 +1856,7 @@ msgid "Scan your computer for existing projects"
 msgstr "Buscar proyectos existentes en su equipo"
 
 #: ../libide/preferences/ide-preferences-builtin.c:442
+#: ../plugins/create-project/gbp-create-project-widget.ui.h:5
 msgid "Version Control"
 msgstr "Control de versiones"
 
@@ -2088,10 +2109,6 @@ msgstr "Limpiar"
 #: ../libide/workbench/ide-workbench-actions.c:66
 msgid "Open File"
 msgstr "Abrir archivo"
-
-#: ../libide/workbench/ide-workbench-actions.c:70
-msgid "Open"
-msgstr "Abrir"
 
 #: ../libide/workbench/ide-workbench.c:534
 #, c-format
@@ -2619,19 +2636,7 @@ msgstr "Especifique un nombre de proyecto.\n"
 msgid "Please specify a project template with --template=\n"
 msgstr "Especifique una plantilla para el proyecto con --template=\n"
 
-#: ../plugins/create-project/gbp-create-project-widget.c:328
-msgid "Select Project Directory"
-msgstr "Seleccionar la carpeta de proyectos"
-
-#: ../plugins/create-project/gbp-create-project-widget.c:332
-msgid "Select"
-msgstr "Seleccionar"
-
-#: ../plugins/create-project/gbp-create-project-widget.c:365
-msgid "Without version control"
-msgstr "Sin control de versiones"
-
-#: ../plugins/create-project/gbp-create-project-widget.c:601
+#: ../plugins/create-project/gbp-create-project-widget.c:523
 msgid "A failure occurred while initializing version control"
 msgstr "Ocurrió un error al inicializar el control de versiones"
 
@@ -2651,10 +2656,6 @@ msgstr "Idioma"
 msgid "License"
 msgstr "Licencia"
 
-#: ../plugins/create-project/gbp-create-project-widget.ui.h:5
-msgid "Versioning"
-msgstr "Versionado"
-
 #: ../plugins/create-project/gbp-create-project-widget.ui.h:6
 msgid ""
 "Unique name that is used for your project's folder and other technical "
@@ -2664,8 +2665,9 @@ msgstr ""
 "Debe estar en minúsculas y sin espacios."
 
 #: ../plugins/create-project/gbp-create-project-widget.ui.h:7
-msgid "Browse…"
-msgstr "Explorar…"
+#: ../plugins/git/ide-git-clone-widget.ui.h:4
+msgid "Select Project Directory"
+msgstr "Seleccionar la carpeta de proyectos"
 
 #: ../plugins/create-project/gbp-create-project-widget.ui.h:8
 msgid "GPLv3+"
@@ -2696,8 +2698,14 @@ msgid "No license"
 msgstr "Sin licencia"
 
 #: ../plugins/create-project/gbp-create-project-widget.ui.h:15
-msgid "Template"
-msgstr "Plantilla"
+#| msgid "Without version control"
+msgid "Uses the Git version control system"
+msgstr "Usa Git como sistema de control de versiones"
+
+#: ../plugins/create-project/gbp-create-project-widget.ui.h:16
+#| msgid "Select a Project"
+msgid "Select a Template"
+msgstr "Seleccionar una plantilla"
 
 #: ../plugins/devhelp/gbp-devhelp-panel.c:194
 #: ../plugins/devhelp/gbp-devhelp-search-provider.c:127
@@ -2737,34 +2745,32 @@ msgstr "El archivo no está bajo el control de la carpeta de trabajo de git."
 msgid "The requested file does not exist within the git index."
 msgstr "El archivo solicitado no existe dentro del índice de git."
 
-#: ../plugins/git/ide-git-clone-widget.c:133
-#: ../plugins/git/ide-git-clone-widget.c:378
+#: ../plugins/git/ide-git-clone-widget.c:141
+#: ../plugins/git/ide-git-clone-widget.c:387
 msgid "A valid Git URL is required"
 msgstr "Se necesita un URL de Git válido"
 
 #: ../plugins/git/ide-git-clone-widget.ui.h:1
+msgid "Use Git to create a local copy of a remotely hosted project."
+msgstr "Usar Git para crear una copia local del proyecto alojado en remoto."
+
+#: ../plugins/git/ide-git-clone-widget.ui.h:2
 msgid "user@host:repository.git"
 msgstr "usuario@equipo:repositorio.git"
 
-#: ../plugins/git/ide-git-clone-widget.ui.h:2
+#: ../plugins/git/ide-git-clone-widget.ui.h:3
 msgid "Enter the URL of your project's source code repository"
 msgstr "Introduzca el URL del repositorio de código fuente de su proyecto"
 
-#: ../plugins/git/ide-git-clone-widget.ui.h:3
-msgid "Directory"
-msgstr "Carpeta"
-
-#: ../plugins/git/ide-git-clone-widget.ui.h:4
-msgid "Enter the name of the directory to create"
-msgstr "Introduzca el nombre de la carpeta que crear"
-
 #: ../plugins/git/ide-git-clone-widget.ui.h:5
-msgid "Repository"
-msgstr "Repositorio"
+#| msgid "Repository"
+msgid "Repository URL"
+msgstr "URL del repositorio"
 
 #: ../plugins/git/ide-git-clone-widget.ui.h:6
-msgid "Location"
-msgstr "Ubicación"
+#| msgid "Project Location"
+msgid "Project Destination"
+msgstr "Destino del proyecto"
 
 #: ../plugins/git/ide-git-genesis-addin.c:93
 msgid "From an existing project in a Git repository"
@@ -2967,6 +2973,21 @@ msgstr "Mostrar errores y advertencias proporcionadas por Vala"
 #: ../plugins/vala-pack/ide-vala-preferences-addin.vala:36
 msgid "vala diagnostics warnings errors"
 msgstr "diagnósticos de alertas y errores de Vala"
+
+#~ msgid "Versioning"
+#~ msgstr "Versionado"
+
+#~ msgid "Template"
+#~ msgstr "Plantilla"
+
+#~ msgid "Directory"
+#~ msgstr "Carpeta"
+
+#~ msgid "Enter the name of the directory to create"
+#~ msgstr "Introduzca el nombre de la carpeta que crear"
+
+#~ msgid "Location"
+#~ msgstr "Ubicación"
 
 #~ msgid "AGPL version 3 or later"
 #~ msgstr "AGPL versión 3 o superior"
