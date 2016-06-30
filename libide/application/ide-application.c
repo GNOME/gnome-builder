@@ -716,6 +716,14 @@ ide_application_open_project (IdeApplication *self,
   g_return_val_if_fail (IDE_IS_APPLICATION (self), FALSE);
   g_return_val_if_fail (G_IS_FILE (file), FALSE);
 
+  /*
+   * TODO: I don't like how this works. We should move this to
+   *       be async anyway and possibly share it with the open
+   *       file async code. Additionally, it has a race condition
+   *       for situations where the context was not loaded
+   *       immediately (and that will always happen).
+   */
+
   if (!g_file_query_exists (file, NULL))
     return FALSE;
 
@@ -744,7 +752,7 @@ ide_application_open_project (IdeApplication *self,
 
   gtk_window_present (GTK_WINDOW (workbench));
 
-  if (ide_workbench_get_context(workbench) != NULL)
+  if (ide_workbench_get_context (workbench) != NULL)
     return TRUE;
   else
     return FALSE;
