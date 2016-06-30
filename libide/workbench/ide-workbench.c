@@ -568,7 +568,9 @@ ide_workbench_set_context (IdeWorkbench *self,
 {
   g_autoptr(GSettings) settings = NULL;
   IdeProject *project;
-  guint delay_msec = STABLIZE_DELAY_MSEC;
+  guint delay_msec;
+
+  IDE_ENTRY;
 
   g_return_if_fail (IDE_IS_WORKBENCH (self));
   g_return_if_fail (IDE_IS_CONTEXT (context));
@@ -607,8 +609,7 @@ ide_workbench_set_context (IdeWorkbench *self,
    * just a bit of time to stablize allocations and sizing before
    * transitioning to the editor.
    */
-  if (self->disable_greeter)
-    delay_msec = 0;
+  delay_msec = self->disable_greeter ? 0 : STABLIZE_DELAY_MSEC;
   g_timeout_add (delay_msec, stablize_cb, g_object_ref (self));
 
   /*
@@ -619,11 +620,14 @@ ide_workbench_set_context (IdeWorkbench *self,
    */
   if (g_settings_get_boolean (settings, "restore-previous-files"))
     {
-      guint duration;
+      guint duration = 0;
 
-      duration = gtk_stack_get_transition_duration (self->perspectives_stack);
+      if (!self->disable_greeter)
+        duration = gtk_stack_get_transition_duration (self->perspectives_stack);
       g_timeout_add (delay_msec + duration, restore_in_timeout, g_object_ref (context));
     }
+
+  IDE_EXIT;
 }
 
 void
