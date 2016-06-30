@@ -261,7 +261,7 @@ ide_layout_grid_stack_empty (IdeLayoutGrid  *self,
 
   if (g_list_length (stacks) == 1)
     {
-      ide_widget_action (GTK_WIDGET (self), "perspective", "global-search", NULL);
+      ide_widget_action (GTK_WIDGET (self), "win", "global-search", NULL);
       g_signal_emit (self, signals [EMPTY], 0);
       goto cleanup;
     }

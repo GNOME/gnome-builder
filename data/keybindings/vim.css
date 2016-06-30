@@ -2365,7 +2365,7 @@ bind "KP_Multiply" { "save-insert-mark" ()
 
 @binding-set builder-vim-workbench
 {
-  bind "<ctrl>period" { "action" ("perspective", "global-search", "") };
+  bind "<ctrl>period" { "action" ("win", "global-search", "") };
 }
 
 /*
