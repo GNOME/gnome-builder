@@ -164,6 +164,7 @@ libide_1_0_la_public_sources =                            \
 	application/ide-application-addin.c               \
 	application/ide-application-tool.c                \
 	application/ide-application.c                     \
+	application/ide-application-open.c                \
 	buffers/ide-buffer-change-monitor.c               \
 	buffers/ide-buffer-manager.c                      \
 	buffers/ide-buffer.c                              \

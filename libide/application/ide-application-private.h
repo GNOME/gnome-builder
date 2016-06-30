@@ -75,6 +75,16 @@ gboolean ide_application_local_command_line         (GApplication          *appl
                                                      gint                  *exit_status) G_GNUC_INTERNAL;
 void     ide_application_run_tests                  (IdeApplication        *self);
 gboolean ide_application_get_disable_theme_tracking (IdeApplication        *self) G_GNUC_INTERNAL;
+void     ide_application_open_async                 (IdeApplication        *self,
+                                                     GFile                **files,
+                                                     gint                   n_files,
+                                                     const gchar           *hint,
+                                                     GCancellable          *cancellable,
+                                                     GAsyncReadyCallback    callback,
+                                                     gpointer               user_data);
+gboolean ide_application_open_finish                (IdeApplication        *self,
+                                                     GAsyncResult          *reuslt,
+                                                     GError               **error);
 
 G_END_DECLS
 

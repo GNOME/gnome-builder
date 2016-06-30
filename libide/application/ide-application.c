@@ -396,6 +396,13 @@ ide_application_open (GApplication  *application,
 {
   g_assert (IDE_IS_APPLICATION (application));
 
+  ide_application_open_async (IDE_APPLICATION (application),
+                              files,
+                              n_files,
+                              hint,
+                              NULL,
+                              NULL,
+                              NULL);
 }
 
 static void
