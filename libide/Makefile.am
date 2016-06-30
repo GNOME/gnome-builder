@@ -60,7 +60,6 @@ libide_1_0_la_public_headers =                            \
 	files/ide-file.h                                  \
 	files/ide-indent-style.h                          \
 	genesis/ide-genesis-addin.h                       \
-	genesis/ide-genesis-perspective.h                 \
 	highlighting/ide-highlight-engine.h               \
 	highlighting/ide-highlight-index.h                \
 	highlighting/ide-highlighter.h                    \
@@ -200,7 +199,6 @@ libide_1_0_la_public_sources =                            \
 	files/ide-file-settings.defs                      \
 	files/ide-file.c                                  \
 	genesis/ide-genesis-addin.c                       \
-	genesis/ide-genesis-perspective.c                 \
 	highlighting/ide-highlight-engine.c               \
 	highlighting/ide-highlight-index.c                \
 	highlighting/ide-highlighter.c                    \

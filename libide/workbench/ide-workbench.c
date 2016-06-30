@@ -25,7 +25,6 @@
 
 #include "application/ide-application.h"
 #include "editor/ide-editor-perspective.h"
-#include "genesis/ide-genesis-perspective.h"
 #include "greeter/ide-greeter-perspective.h"
 #include "preferences/ide-preferences-perspective.h"
 #include "util/ide-gtk.h"
@@ -386,10 +385,6 @@ ide_workbench_init (IdeWorkbench *self)
                                                "visible", TRUE,
                                                NULL));
   ide_workbench_add_perspective (self,
-                                 g_object_new (IDE_TYPE_GENESIS_PERSPECTIVE,
-                                               "visible", TRUE,
-                                               NULL));
-  ide_workbench_add_perspective (self,
                                  g_object_new (IDE_TYPE_PREFERENCES_PERSPECTIVE,
                                                "visible", TRUE,
                                                NULL));
@@ -629,8 +624,7 @@ ide_workbench_add_perspective (IdeWorkbench   *self,
                                        "name", id,
                                        NULL);
 
-  if (!IDE_IS_GREETER_PERSPECTIVE (perspective) &&
-      !IDE_IS_GENESIS_PERSPECTIVE (perspective))
+  if (!IDE_IS_GREETER_PERSPECTIVE (perspective))
     {
       guint position = 0;
 
@@ -732,25 +726,6 @@ ide_workbench_get_visible_perspective (IdeWorkbench *self)
   return IDE_PERSPECTIVE (ret);
 }
 
-#if 0
-static gboolean
-remove_early_perspectives (gpointer data)
-{
-  g_autoptr(IdeWorkbench) self = data;
-  GtkWidget *widget;
-
-  g_assert (IDE_IS_WORKBENCH (self));
-
-  widget = gtk_stack_get_child_by_name (self->top_stack, "greeter");
-  gtk_widget_destroy (widget);
-
-  widget = gtk_stack_get_child_by_name (self->top_stack, "genesis");
-  gtk_widget_destroy (widget);
-
-  return G_SOURCE_REMOVE;
-}
-#endif
-
 static void
 ide_workbench_notify_perspective_set (PeasExtensionSet *set,
                                       PeasPluginInfo   *plugin_info,
@@ -772,8 +747,7 @@ static void
 do_remove_early_perspectives (GtkWidget *widget,
                               gpointer   user_data)
 {
-  if (IDE_IS_GREETER_PERSPECTIVE (widget) ||
-      IDE_IS_GENESIS_PERSPECTIVE (widget))
+  if (IDE_IS_GREETER_PERSPECTIVE (widget))
     gtk_widget_destroy (widget);
 }
 
@@ -822,7 +796,7 @@ ide_workbench_set_visible_perspective (IdeWorkbench   *self,
 
   /*
    * If we are transitioning to the editor the first time, we can
-   * remove the early perspectives (greeter, genesis, etc).
+   * remove the early perspectives (greeter, etc).
    */
   if (IDE_IS_EDITOR_PERSPECTIVE (perspective))
     remove_early_perspectives (self);
