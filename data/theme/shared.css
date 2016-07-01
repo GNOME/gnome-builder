@@ -13,9 +13,39 @@ frame.gb-search-frame {
   border-right-width: 1px;
   border-bottom-width: 1px;
   border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
 }
 frame.gb-search-frame border {
   border: none;
+}
+
+/* styling for the search frame close button */
+frame.gb-search-frame > box > grid:first-child > button.close:disabled,
+frame.gb-search-frame > box > grid:first-child > button.close {
+  background: none;
+  border: none;
+  box-shadow: none;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+frame.gb-search-frame > box > grid:first-child > button.close image {
+  color: @theme_fg_color;
+  opacity: 0.3;
+  margin: 2px;
+  border: 1px solid transparent;
+  border-radius: 3px;
+}
+frame.gb-search-frame > box > grid:first-child > button.close:hover image {
+  opacity: .75;
+  transition-duration: 250ms;
+  border: 1px solid @borders;
+}
+frame.gb-search-frame > box > grid:first-child > button.close:active image {
+  opacity: .8;
+  background-image: linear-gradient(shade(@theme_bg_color, 0.9), @theme_bg_color);
+}
+frame.gb-search-frame > box > grid:first-child > button.close:backdrop image {
+  opacity: .1;
 }
 
 /* styling for NautilusFloatingBar */

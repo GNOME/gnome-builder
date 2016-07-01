@@ -222,18 +222,6 @@
   <menu id="ide-editor-frame-search-menu">
     <section id="ide-editor-frame-search-menu-settings-section">
       <item>
-        <attribute name="label" translatable="yes">_Match Case</attribute>
-        <attribute name="action">search-entry.change-case-sensitive</attribute>
-      </item>
-      <item>
-        <attribute name="label" translatable="yes">Match _Entire Word Only</attribute>
-        <attribute name="action">search-entry.change-word-boundaries</attribute>
-      </item>
-      <item>
-        <attribute name="label" translatable="yes">Match as _Regular Expression</attribute>
-        <attribute name="action">search-entry.change-regex-enabled</attribute>
-      </item>
-      <item>
         <attribute name="label" translatable="yes">_Wrap Around</attribute>
         <attribute name="action">search-entry.change-wrap-around</attribute>
       </item>
