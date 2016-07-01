@@ -193,17 +193,23 @@ void
 gb_command_bar_hide (GbCommandBar *self)
 {
   GtkWidget *focus;
+  gboolean had_focus;
 
   g_return_if_fail (GB_IS_COMMAND_BAR (self));
 
+  had_focus = gtk_widget_is_focus (GTK_WIDGET (self->entry));
+
   gtk_revealer_set_reveal_child (GTK_REVEALER (self), FALSE);
 
-  if (self->last_focus)
-    focus = find_alternate_focus (self->last_focus);
-  else
-    focus = GTK_WIDGET (self->workbench);
+  if (had_focus)
+  {
+    if (self->last_focus)
+      focus = find_alternate_focus (self->last_focus);
+    else
+      focus = GTK_WIDGET (self->workbench);
 
-  gtk_widget_grab_focus (focus);
+    gtk_widget_grab_focus (focus);
+  }
 }
 
 static void
