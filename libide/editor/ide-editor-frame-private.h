@@ -41,7 +41,12 @@ struct _IdeEditorFrame
   GtkLabel            *overwrite_label;
   GtkScrolledWindow   *scrolled_window;
   GtkRevealer         *search_revealer;
+  GtkFrame            *search_frame;
   GdTaggedEntry       *search_entry;
+  GtkSearchEntry      *replace_entry;
+  GtkButton           *replace_button;
+  GtkButton           *replace_all_button;
+  GtkGrid             *search_options;
   GdTaggedEntryTag    *search_entry_tag;
   IdeSourceView       *source_view;
   IdeEditorMapBin      *source_map_container;

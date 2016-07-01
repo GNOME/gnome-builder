@@ -373,6 +373,37 @@ search_text_transform_from (GBinding     *binding,
   return TRUE;
 }
 
+static void
+ide_editor_frame_add_search_actions (IdeEditorFrame *self,
+                                     GActionGroup   *group)
+{
+  GPropertyAction *prop_action;
+  GtkSourceSearchContext *search_context;
+  GtkSourceSearchSettings *search_settings;
+
+  g_assert (IDE_IS_EDITOR_FRAME (self));
+  g_assert (G_IS_ACTION_GROUP (group));
+
+  search_context = ide_source_view_get_search_context (self->source_view);
+  search_settings = gtk_source_search_context_get_settings (search_context);
+
+  prop_action = g_property_action_new ("change-case-sensitive", search_settings, "case-sensitive");
+  g_action_map_add_action (G_ACTION_MAP (group), G_ACTION (prop_action));
+  g_object_unref (prop_action);
+
+  prop_action = g_property_action_new ("change-word-boundaries", search_settings, "at-word-boundaries");
+  g_action_map_add_action (G_ACTION_MAP (group), G_ACTION (prop_action));
+  g_object_unref (prop_action);
+
+  prop_action = g_property_action_new ("change-regex-enabled", search_settings, "regex-enabled");
+  g_action_map_add_action (G_ACTION_MAP (group), G_ACTION (prop_action));
+  g_object_unref (prop_action);
+
+  prop_action = g_property_action_new ("change-wrap-around", search_settings, "wrap-around");
+  g_action_map_add_action (G_ACTION_MAP (group), G_ACTION (prop_action));
+  g_object_unref (prop_action);
+}
+
 void
 ide_editor_frame_set_document (IdeEditorFrame *self,
                                IdeBuffer      *buffer)
@@ -416,6 +447,12 @@ ide_editor_frame_set_document (IdeEditorFrame *self,
                            G_CALLBACK (ide_editor_frame_on_search_occurrences_notify),
                            self,
                            G_CONNECT_SWAPPED);
+
+  /*
+   * Add search option property actions
+   */
+  group = gtk_widget_get_action_group (GTK_WIDGET (self->search_frame), "search-entry");
+  ide_editor_frame_add_search_actions (self, group);
 }
 
 static gboolean
@@ -504,33 +541,13 @@ ide_editor_frame__search_key_press_event (IdeEditorFrame *self,
                                          GdkEventKey   *event,
                                          GdTaggedEntry *entry)
 {
-  GtkTextBuffer *buffer;
-
   g_assert (IDE_IS_EDITOR_FRAME (self));
   g_assert (GD_IS_TAGGED_ENTRY (entry));
 
   switch (event->keyval)
     {
     case GDK_KEY_Escape:
-      /* stash the search string for later */
-      g_free (self->previous_search_string);
-      g_object_get (self->search_entry, "text", &self->previous_search_string, NULL);
-
-      /* clear the highlights in the source view */
-      ide_source_view_clear_search (self->source_view);
-
-      /* disable rubberbanding and ensure insert mark is on screen */
-      buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self->source_view));
-      ide_source_view_set_rubberband_search (self->source_view, FALSE);
-      ide_source_view_scroll_mark_onscreen (self->source_view,
-                                            gtk_text_buffer_get_insert (buffer),
-                                            TRUE,
-                                            0.5,
-                                            0.5);
-
-      /* finally we can focus the source view */
-      gtk_widget_grab_focus (GTK_WIDGET (self->source_view));
-
+      ide_widget_action (GTK_WIDGET (self->search_frame), "search-entry", "exit-search", NULL);
       return GDK_EVENT_STOP;
 
     case GDK_KEY_KP_Enter:
@@ -697,37 +714,6 @@ ide_editor_frame__source_view_populate_popup (IdeEditorFrame *self,
 }
 
 static void
-ide_editor_frame_add_search_actions (IdeEditorFrame *self,
-                                     GActionGroup   *group)
-{
-  GPropertyAction *prop_action;
-  GtkSourceSearchContext *search_context;
-  GtkSourceSearchSettings *search_settings;
-
-  g_assert (IDE_IS_EDITOR_FRAME (self));
-  g_assert (G_IS_ACTION_GROUP (group));
-
-  search_context = ide_source_view_get_search_context (self->source_view);
-  search_settings = gtk_source_search_context_get_settings (search_context);
-
-  prop_action = g_property_action_new ("change-case-sensitive", search_settings, "case-sensitive");
-  g_action_map_add_action (G_ACTION_MAP (group), G_ACTION (prop_action));
-  g_object_unref (prop_action);
-
-  prop_action = g_property_action_new ("change-word-boundaries", search_settings, "at-word-boundaries");
-  g_action_map_add_action (G_ACTION_MAP (group), G_ACTION (prop_action));
-  g_object_unref (prop_action);
-
-  prop_action = g_property_action_new ("change-regex-enabled", search_settings, "regex-enabled");
-  g_action_map_add_action (G_ACTION_MAP (group), G_ACTION (prop_action));
-  g_object_unref (prop_action);
-
-  prop_action = g_property_action_new ("change-wrap-around", search_settings, "wrap-around");
-  g_action_map_add_action (G_ACTION_MAP (group), G_ACTION (prop_action));
-  g_object_unref (prop_action);
-}
-
-static void
 ide_editor_frame__search_populate_popup (IdeEditorFrame *self,
                                          GtkWidget      *popup,
                                          GdTaggedEntry  *entry)
@@ -746,8 +732,7 @@ ide_editor_frame__search_populate_popup (IdeEditorFrame *self,
       gboolean clipboard_contains_text;
       gboolean entry_has_selection;
 
-      group = gtk_widget_get_action_group (GTK_WIDGET (entry), "search-entry");
-      ide_editor_frame_add_search_actions (self, group);
+      group = gtk_widget_get_action_group (GTK_WIDGET (self->search_frame), "search-entry");
 
       menu = ide_application_get_menu_by_id (IDE_APPLICATION_DEFAULT, "ide-editor-frame-search-menu");
       gtk_menu_shell_bind_model (GTK_MENU_SHELL (popup), G_MENU_MODEL (menu), NULL, TRUE);
@@ -983,7 +968,12 @@ ide_editor_frame_class_init (IdeEditorFrameClass *klass)
   gtk_widget_class_bind_template_child (widget_class, IdeEditorFrame, mode_name_label);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorFrame, overwrite_label);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorFrame, scrolled_window);
+  gtk_widget_class_bind_template_child (widget_class, IdeEditorFrame, search_frame);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorFrame, search_entry);
+  gtk_widget_class_bind_template_child (widget_class, IdeEditorFrame, replace_entry);
+  gtk_widget_class_bind_template_child (widget_class, IdeEditorFrame, replace_button);
+  gtk_widget_class_bind_template_child (widget_class, IdeEditorFrame, replace_all_button);
+  gtk_widget_class_bind_template_child (widget_class, IdeEditorFrame, search_options);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorFrame, search_revealer);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorFrame, source_map_container);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorFrame, source_overlay);

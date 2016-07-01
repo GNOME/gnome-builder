@@ -20,6 +20,7 @@
 
 #include "ide-editor-frame-actions.h"
 #include "ide-editor-frame-private.h"
+#include "util/ide-gtk.h"
 
 static void
 ide_editor_frame_actions_find (GSimpleAction *action,
@@ -176,6 +177,162 @@ ide_editor_frame_actions_select_all (GSimpleAction *action,
   gtk_editable_select_region (GTK_EDITABLE (self->search_entry), 0, -1);
 }
 
+static void
+ide_editor_frame_actions_toggle_search_replace (GSimpleAction *action,
+                                                GVariant      *state,
+                                                gpointer       user_data)
+{
+  IdeEditorFrame *self = user_data;
+  gboolean visible;
+
+  g_assert (IDE_IS_EDITOR_FRAME (self));
+
+  visible = !gtk_widget_get_visible (GTK_WIDGET (self->replace_entry));
+
+  gtk_widget_set_visible (GTK_WIDGET (self->replace_entry), visible);
+  gtk_widget_set_visible (GTK_WIDGET (self->replace_button), visible);
+  gtk_widget_set_visible (GTK_WIDGET (self->replace_all_button), visible);
+}
+
+static void
+ide_editor_frame_actions_toggle_search_options (GSimpleAction *action,
+                                                GVariant      *state,
+                                                gpointer       user_data)
+{
+  IdeEditorFrame *self = user_data;
+  gboolean visible;
+
+  g_assert (IDE_IS_EDITOR_FRAME (self));
+
+  visible = !gtk_widget_get_visible (GTK_WIDGET (self->search_options));
+
+  gtk_widget_set_visible (GTK_WIDGET (self->search_options), visible);
+}
+
+static void
+ide_editor_frame_actions_exit_search (GSimpleAction *action,
+                                      GVariant      *state,
+                                      gpointer       user_data)
+{
+  IdeEditorFrame *self = user_data;
+  GtkTextBuffer *buffer;
+
+  g_assert (IDE_IS_EDITOR_FRAME (self));
+
+  /* stash the search string for later */
+  g_free (self->previous_search_string);
+  g_object_get (self->search_entry, "text", &self->previous_search_string, NULL);
+
+  /* clear the highlights in the source view */
+  ide_source_view_clear_search (self->source_view);
+
+  /* disable rubberbanding and ensure insert mark is on screen */
+  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self->source_view));
+  ide_source_view_set_rubberband_search (self->source_view, FALSE);
+  ide_source_view_scroll_mark_onscreen (self->source_view,
+                                        gtk_text_buffer_get_insert (buffer),
+                                        TRUE,
+                                        0.5,
+                                        0.5);
+
+  /* finally we can focus the source view */
+  gtk_widget_grab_focus (GTK_WIDGET (self->source_view));
+}
+
+static void
+ide_editor_frame_actions_replace (GSimpleAction *action,
+                                  GVariant      *state,
+                                  gpointer       user_data)
+{
+  IdeEditorFrame *self = user_data;
+  GtkSourceSearchContext *search_context;
+  GtkSourceSearchSettings *search_settings;
+  const gchar *replace_text;
+  gchar *unescaped_replace_text;
+  const gchar *search_text;
+  GError *error = NULL;
+  GtkTextIter start;
+  GtkTextIter end;
+  GtkTextBuffer *buffer;
+  gint occurrence_position;
+
+  g_assert (IDE_IS_EDITOR_FRAME (self));
+
+  search_context = ide_source_view_get_search_context (self->source_view);
+  g_assert (search_context != NULL);
+  search_settings = gtk_source_search_context_get_settings (search_context);
+  search_text = gtk_source_search_settings_get_search_text (search_settings);
+  replace_text = gtk_entry_get_text (GTK_ENTRY (self->replace_entry));
+
+  if (ide_str_empty0 (search_text) || replace_text == NULL)
+    return;
+
+  unescaped_replace_text = gtk_source_utils_unescape_search_text (replace_text);
+
+  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self->source_view));
+  gtk_text_buffer_get_selection_bounds (buffer, &start, &end);
+  occurrence_position = gtk_source_search_context_get_occurrence_position (search_context, &start, &end);
+
+  if (occurrence_position > 0)
+    {
+      gtk_source_search_context_replace2 (search_context, &start, &end, unescaped_replace_text, -1, &error);
+
+      if (error != NULL)
+        {
+          g_warning ("%s", error->message);
+          g_clear_error (&error);
+        }
+
+      ide_widget_action (GTK_WIDGET (self), "frame", "next-search-result", NULL);
+    }
+
+  g_free (unescaped_replace_text);
+}
+
+static void
+ide_editor_frame_actions_replace_all (GSimpleAction *action,
+                                      GVariant      *state,
+                                      gpointer       user_data)
+{
+  IdeEditorFrame *self = user_data;
+  GtkSourceSearchContext *search_context;
+  GtkSourceSearchSettings *search_settings;
+  const gchar *replace_text;
+  gchar *unescaped_replace_text;
+  const gchar *search_text;
+  GError *error = NULL;
+  GtkSourceCompletion *completion;
+
+  g_assert (IDE_IS_EDITOR_FRAME (self));
+
+  search_context = ide_source_view_get_search_context (self->source_view);
+  g_assert (search_context != NULL);
+  search_settings = gtk_source_search_context_get_settings (search_context);
+  search_text = gtk_source_search_settings_get_search_text (search_settings);
+  replace_text = gtk_entry_get_text (GTK_ENTRY (self->replace_entry));
+
+  if (ide_str_empty0 (search_text) || replace_text == NULL)
+    return;
+
+  /* Temporarily disabling auto completion makes replace more efficient. */
+  completion = gtk_source_view_get_completion (GTK_SOURCE_VIEW (self->source_view));
+  gtk_source_completion_block_interactive (completion);
+
+  unescaped_replace_text = gtk_source_utils_unescape_search_text (replace_text);
+
+  gtk_source_search_context_replace_all (search_context, unescaped_replace_text, -1, &error);
+
+  gtk_source_completion_unblock_interactive (completion);
+
+  if (error != NULL)
+    {
+      g_warning ("%s", error->message);
+      g_clear_error (&error);
+    }
+
+  g_free (unescaped_replace_text);
+}
+
 static const GActionEntry IdeEditorFrameActions[] = {
   { "find", ide_editor_frame_actions_find, "i" },
   { "next-search-result", ide_editor_frame_actions_next_search_result },
@@ -188,6 +345,11 @@ static const GActionEntry IdeEditorFrameSearchActions[] = {
   { "paste-clipboard", ide_editor_frame_actions_paste_clipboard, },
   { "delete-selection", ide_editor_frame_actions_delete_selection, },
   { "select-all", ide_editor_frame_actions_select_all },
+  { "toggle-search-replace", NULL, "b", "false", ide_editor_frame_actions_toggle_search_replace },
+  { "toggle-search-options", NULL, "b", "false", ide_editor_frame_actions_toggle_search_options },
+  { "exit-search", ide_editor_frame_actions_exit_search },
+  { "replace", ide_editor_frame_actions_replace },
+  { "replace-all", ide_editor_frame_actions_replace_all },
 };
 
 void
@@ -206,6 +368,7 @@ ide_editor_frame_actions_init (IdeEditorFrame *self)
   group = g_simple_action_group_new ();
   g_action_map_add_action_entries (G_ACTION_MAP (group), IdeEditorFrameSearchActions,
                                    G_N_ELEMENTS (IdeEditorFrameSearchActions), self);
-  gtk_widget_insert_action_group (GTK_WIDGET (self->search_entry), "search-entry", G_ACTION_GROUP (group));
+  gtk_widget_insert_action_group (GTK_WIDGET (self->search_frame), "search-entry", G_ACTION_GROUP (group));
+
   g_object_unref (group);
 }
