@@ -55,6 +55,7 @@ struct _IdeEditorFrame
 
   gulong               cursor_moved_handler;
 
+  guint                pending_replace_confirm;
   guint                auto_hide_map : 1;
   guint                show_ruler : 1;
 };

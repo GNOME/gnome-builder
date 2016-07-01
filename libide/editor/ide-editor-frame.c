@@ -448,6 +448,25 @@ on_search_text_changed (IdeEditorFrame          *self,
                                ide_str_empty0 (search_text) ? FALSE : TRUE);
 }
 
+static void
+search_revealer_on_child_revealed_changed (IdeEditorFrame *self,
+                                           GParamSpec     *pspec,
+                                           GtkRevealer    *search_revealer)
+{
+  g_assert (IDE_IS_EDITOR_FRAME (self));
+  g_assert (GTK_IS_REVEALER (search_revealer));
+
+  if (self->pending_replace_confirm == 0 ||
+      !gtk_revealer_get_child_revealed (search_revealer))
+    return;
+
+  ide_widget_action (GTK_WIDGET (self), "frame", "next-search-result", NULL);
+
+  self->pending_replace_confirm--;
+
+  gtk_widget_grab_focus (GTK_WIDGET (self->replace_button));
+}
+
 void
 ide_editor_frame_set_document (IdeEditorFrame *self,
                                IdeBuffer      *buffer)
@@ -508,6 +527,14 @@ ide_editor_frame_set_document (IdeEditorFrame *self,
   g_signal_connect_object (search_settings,
                            "notify::search-text",
                            G_CALLBACK (on_search_text_changed),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  /* Setup a callback so the replace-confirm action can work properly. */
+  self->pending_replace_confirm = 0;
+  g_signal_connect_object (self->search_revealer,
+                           "notify::child-revealed",
+                           G_CALLBACK (search_revealer_on_child_revealed_changed),
                            self,
                            G_CONNECT_SWAPPED);
 }

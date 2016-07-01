@@ -1021,6 +1021,7 @@ gb_vim_command_search (GtkWidget      *active_widget,
   gchar *search_text = NULL;
   gchar *replace_text = NULL;
   gunichar separator;
+  gboolean confirm_replace = FALSE;
 
   g_assert (GTK_IS_WIDGET (active_widget));
   g_assert (g_str_has_prefix (command, "%s") || g_str_has_prefix (command, "s"));
@@ -1090,6 +1091,10 @@ gb_vim_command_search (GtkWidget      *active_widget,
         {
           switch (*command)
             {
+            case 'c':
+              confirm_replace = TRUE;
+              break;
+
             case 'g':
               break;
 
@@ -1102,6 +1107,23 @@ gb_vim_command_search (GtkWidget      *active_widget,
 
   search_text = g_strndup (search_begin, search_end - search_begin);
   replace_text = g_strndup (replace_begin, replace_end - replace_begin);
+
+  if (confirm_replace)
+    {
+      GVariant *variant;
+      GVariantBuilder builder;
+
+      g_variant_builder_init (&builder, G_VARIANT_TYPE_STRING_ARRAY);
+      g_variant_builder_add (&builder, "s", search_text);
+      g_variant_builder_add (&builder, "s", replace_text);
+      variant = g_variant_builder_end (&builder);
+
+      ide_widget_action (GTK_WIDGET (IDE_EDITOR_VIEW (active_widget)->frame1),
+                         "frame",
+                         "replace-confirm",
+                         variant);
+      return TRUE;
+    }
 
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (source_view));
 

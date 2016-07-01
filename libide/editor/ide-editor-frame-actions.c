@@ -357,10 +357,45 @@ ide_editor_frame_actions_replace_all (GSimpleAction *action,
   g_free (unescaped_replace_text);
 }
 
+static void
+ide_editor_frame_actions_replace_confirm (GSimpleAction *action,
+                                          GVariant      *state,
+                                          gpointer       user_data)
+{
+  IdeEditorFrame *self = user_data;
+  g_autofree const gchar **strv = NULL;
+  gsize array_length;
+
+  g_assert (IDE_IS_EDITOR_FRAME (self));
+  g_assert (state != NULL);
+  g_assert (g_variant_is_of_type (state, G_VARIANT_TYPE_STRING_ARRAY));
+
+  strv = g_variant_get_strv (state, &array_length);
+  g_assert (array_length >= 2);
+
+  gtk_entry_set_text (GTK_ENTRY (self->search_entry), strv[0]);
+  gtk_entry_set_text (GTK_ENTRY (self->replace_entry), strv[1]);
+
+  gtk_widget_show (GTK_WIDGET (self->replace_entry));
+  gtk_widget_show (GTK_WIDGET (self->replace_button));
+  gtk_widget_show (GTK_WIDGET (self->replace_all_button));
+
+  /* increment pending_replace_confirm so that search_revealer_on_child_revealed_changed
+   * will know to go to the next search result (the occurrence only stays selected after
+   * search_entry has been mapped).
+   */
+  self->pending_replace_confirm++;
+
+  gtk_revealer_set_reveal_child (self->search_revealer, TRUE);
+
+  gtk_widget_grab_focus (GTK_WIDGET (self->search_entry));
+}
+
 static const GActionEntry IdeEditorFrameActions[] = {
   { "find", ide_editor_frame_actions_find, "i" },
   { "next-search-result", ide_editor_frame_actions_next_search_result },
   { "previous-search-result", ide_editor_frame_actions_previous_search_result },
+  { "replace-confirm", ide_editor_frame_actions_replace_confirm, "as" },
 };
 
 static const GActionEntry IdeEditorFrameSearchActions[] = {
