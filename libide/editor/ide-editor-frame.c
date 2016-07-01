@@ -404,6 +404,50 @@ ide_editor_frame_add_search_actions (IdeEditorFrame *self,
   g_object_unref (prop_action);
 }
 
+static void
+on_buffer_has_selection_changed (IdeEditorFrame *self,
+                                 GParamSpec     *pspec,
+                                 IdeBuffer      *buffer)
+{
+  g_assert (IDE_IS_EDITOR_FRAME (self));
+  g_assert (IDE_IS_BUFFER (buffer));
+
+  if (!gtk_text_buffer_get_has_selection (GTK_TEXT_BUFFER (buffer)))
+    {
+      GActionGroup *group;
+      GAction *replace_action;
+
+      group = gtk_widget_get_action_group (GTK_WIDGET (self->search_frame), "search-entry");
+      replace_action = g_action_map_lookup_action (G_ACTION_MAP (group), "replace");
+      g_simple_action_set_enabled (G_SIMPLE_ACTION (replace_action), FALSE);
+    }
+}
+
+static void
+on_search_text_changed (IdeEditorFrame          *self,
+                        GParamSpec              *pspec,
+                        GtkSourceSearchSettings *search_settings)
+{
+  GActionGroup *group;
+  GAction *replace_action;
+  GAction *replace_all_action;
+  const gchar *search_text;
+
+  g_assert (IDE_IS_EDITOR_FRAME (self));
+  g_assert (GTK_SOURCE_IS_SEARCH_SETTINGS (search_settings));
+
+  group = gtk_widget_get_action_group (GTK_WIDGET (self->search_frame), "search-entry");
+  replace_action = g_action_map_lookup_action (G_ACTION_MAP (group), "replace");
+  replace_all_action = g_action_map_lookup_action (G_ACTION_MAP (group), "replace-all");
+
+  g_simple_action_set_enabled (G_SIMPLE_ACTION (replace_action), FALSE);
+
+  search_text = gtk_source_search_settings_get_search_text (search_settings);
+
+  g_simple_action_set_enabled (G_SIMPLE_ACTION (replace_all_action),
+                               ide_str_empty0 (search_text) ? FALSE : TRUE);
+}
+
 void
 ide_editor_frame_set_document (IdeEditorFrame *self,
                                IdeBuffer      *buffer)
@@ -412,6 +456,7 @@ ide_editor_frame_set_document (IdeEditorFrame *self,
   GtkSourceSearchSettings *search_settings;
   GtkTextMark *mark;
   GtkTextIter iter;
+  GActionGroup *group;
 
   g_return_if_fail (IDE_IS_EDITOR_FRAME (self));
   g_return_if_fail (IDE_IS_BUFFER (buffer));
@@ -421,6 +466,12 @@ ide_editor_frame_set_document (IdeEditorFrame *self,
   g_signal_connect_object (buffer,
                            "notify::busy",
                            G_CALLBACK (ide_editor_frame_update_ruler),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  g_signal_connect_object (buffer,
+                           "notify::has-selection",
+                           G_CALLBACK (on_buffer_has_selection_changed),
                            self,
                            G_CONNECT_SWAPPED);
 
@@ -453,6 +504,12 @@ ide_editor_frame_set_document (IdeEditorFrame *self,
    */
   group = gtk_widget_get_action_group (GTK_WIDGET (self->search_frame), "search-entry");
   ide_editor_frame_add_search_actions (self, group);
+
+  g_signal_connect_object (search_settings,
+                           "notify::search-text",
+                           G_CALLBACK (on_search_text_changed),
+                           self,
+                           G_CONNECT_SWAPPED);
 }
 
 static gboolean
