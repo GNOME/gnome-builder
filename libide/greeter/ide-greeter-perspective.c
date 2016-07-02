@@ -621,6 +621,28 @@ ide_greeter_perspective_dialog_response (IdeGreeterPerspective *self,
 }
 
 static void
+ide_greeter_perspective_dialog_notify_filter (IdeGreeterPerspective *self,
+                                              GParamSpec            *pspec,
+                                              GtkFileChooserDialog  *dialog)
+{
+  GtkFileFilter *filter;
+  GtkFileChooserAction action;
+
+  g_assert (IDE_IS_GREETER_PERSPECTIVE (self));
+  g_assert (pspec != NULL);
+  g_assert (GTK_IS_FILE_CHOOSER_DIALOG (dialog));
+
+  filter = gtk_file_chooser_get_filter (GTK_FILE_CHOOSER (dialog));
+
+  if (filter && g_object_get_data (G_OBJECT (filter), "IS_DIRECTORY"))
+    action = GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER;
+  else
+    action = GTK_FILE_CHOOSER_ACTION_OPEN;
+
+  gtk_file_chooser_set_action (GTK_FILE_CHOOSER (dialog), action);
+}
+
+static void
 ide_greeter_perspective_open_clicked (IdeGreeterPerspective *self,
                                       GtkButton             *open_button)
 {
@@ -651,6 +673,12 @@ ide_greeter_perspective_open_clicked (IdeGreeterPerspective *self,
                           _("Open"), GTK_RESPONSE_OK,
                           NULL);
   gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
+
+  g_signal_connect_object (dialog,
+                           "notify::filter",
+                           G_CALLBACK (ide_greeter_perspective_dialog_notify_filter),
+                           self,
+                           G_CONNECT_SWAPPED);
 
   for (; list != NULL; list = list->next)
     {
@@ -692,7 +720,16 @@ ide_greeter_perspective_open_clicked (IdeGreeterPerspective *self,
       for (i = 0; content_types [i] != NULL; i++)
         {
           if (*content_types [i])
-            gtk_file_filter_add_mime_type (filter, content_types [i]);
+            {
+              gtk_file_filter_add_mime_type (filter, content_types [i]);
+
+              /* Helper so we can change the file chooser action to OPEN_DIRECTORY,
+               * otherwise the user won't be able to choose a directory, it will
+               * instead dive into the directory.
+               */
+              if (g_strcmp0 (content_types [i], "inode/directory") == 0)
+                g_object_set_data (G_OBJECT (filter), "IS_DIRECTORY", GINT_TO_POINTER (1));
+            }
         }
 
       gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (dialog), filter);
