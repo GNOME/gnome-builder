@@ -533,15 +533,19 @@ again:
    */
   if (!is_dir)
     {
-      GtkTreePath *path;
-
       selected = ide_tree_node_get_parent (selected);
-      ide_tree_node_select (selected);
-      path = ide_tree_node_get_path (selected);
-      gtk_tree_view_scroll_to_cell (GTK_TREE_VIEW (self), path, NULL, FALSE, 0, 0);
-      gtk_tree_path_free (path);
 
-      goto again;
+      if (!ide_tree_node_is_root (selected))
+        {
+          GtkTreePath *path;
+
+          ide_tree_node_select (selected);
+          path = ide_tree_node_get_path (selected);
+          gtk_tree_view_scroll_to_cell (GTK_TREE_VIEW (self), path, NULL, FALSE, 0, 0);
+          gtk_tree_path_free (path);
+
+          goto again;
+        }
     }
 
   if ((self->expanded_in_new = !ide_tree_node_get_expanded (selected)))
