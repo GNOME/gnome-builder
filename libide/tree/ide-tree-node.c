@@ -31,9 +31,9 @@ struct _IdeTreeNode
   GInitiallyUnowned  parent_instance;
 
   GObject           *item;
-  IdeTreeNode        *parent;
+  IdeTreeNode       *parent;
   gchar             *text;
-  IdeTree            *tree;
+  IdeTree           *tree;
   GQuark             icon_name;
   guint              use_markup : 1;
   guint              needs_build : 1;
@@ -452,7 +452,7 @@ ide_tree_node_collapse (IdeTreeNode *node)
 }
 
 void
-ide_tree_node_select (IdeTreeNode  *node)
+ide_tree_node_select (IdeTreeNode *node)
 {
   IdeTree *tree;
   GtkTreePath *path;
@@ -468,8 +468,8 @@ ide_tree_node_select (IdeTreeNode  *node)
 }
 
 void
-ide_tree_node_get_area (IdeTreeNode   *node,
-                       GdkRectangle *area)
+ide_tree_node_get_area (IdeTreeNode  *node,
+                        GdkRectangle *area)
 {
   IdeTree *tree;
   GtkTreeViewColumn *column;
