@@ -44,7 +44,7 @@
                 </child>
                 <child>
                   <object class="GtkImage" id="build_result_diagnostics_image">
-                    <property name="icon-name">dialog-warning</property>
+                    <property name="icon-name">dialog-warning-symbolic</property>
                   </object>
                   <packing>
                     <property name="pack-type">end</property>
