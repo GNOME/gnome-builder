@@ -20,7 +20,7 @@
 #define IDE_BUFFER_MANAGER_H
 
 #include <gtk/gtk.h>
-#include <gtksourceview/completion-providers/words/gtksourcecompletionwords.h>
+#include <gtksourceview/gtksource.h>
 
 #include "ide-object.h"
 

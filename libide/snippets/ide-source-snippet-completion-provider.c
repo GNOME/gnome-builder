@@ -17,7 +17,7 @@
  */
 
 #include <glib/gi18n.h>
-#include <gtksourceview/gtksourcecompletionitem.h>
+#include <gtksourceview/gtksource.h>
 
 #include "ide-source-snippet-completion-item.h"
 #include "ide-source-snippet-completion-provider.h"

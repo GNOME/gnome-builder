@@ -19,7 +19,7 @@
 #ifndef IDE_SOURCE_SNIPPETS_MANAGER_H
 #define IDE_SOURCE_SNIPPETS_MANAGER_H
 
-#include <gtksourceview/gtksourcelanguage.h>
+#include <gtksourceview/gtksource.h>
 
 #include "ide-object.h"
 

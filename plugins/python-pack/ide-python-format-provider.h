@@ -19,7 +19,7 @@
 #ifndef IDE_PYTHON_FORMAT_PROVIDER_H
 #define IDE_PYTHON_FORMAT_PROVIDER_H
 
-#include <gtksourceview/gtksourcecompletionprovider.h>
+#include <gtksourceview/gtksource.h>
 #include <ide.h>
 
 G_BEGIN_DECLS

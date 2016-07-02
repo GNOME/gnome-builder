@@ -19,7 +19,7 @@
 #ifndef IDE_SOURCE_SNIPPET_COMPLETION_PROVIDER_H
 #define IDE_SOURCE_SNIPPET_COMPLETION_PROVIDER_H
 
-#include <gtksourceview/gtksourcecompletionprovider.h>
+#include <gtksourceview/gtksource.h>
 
 #include "snippets/ide-source-snippets.h"
 #include "sourceview/ide-source-view.h"

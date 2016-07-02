@@ -19,7 +19,7 @@
 #ifndef IDE_CLANG_COMPLETION_ITEM_H
 #define IDE_CLANG_COMPLETION_ITEM_H
 
-#include <gtksourceview/gtksourcecompletionproposal.h>
+#include <gtksourceview/gtksource.h>
 #include <ide.h>
 
 G_BEGIN_DECLS

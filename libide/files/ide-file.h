@@ -19,7 +19,7 @@
 #ifndef IDE_FILE_H
 #define IDE_FILE_H
 
-#include <gtksourceview/gtksourcelanguage.h>
+#include <gtksourceview/gtksource.h>
 
 #include "ide-object.h"
 

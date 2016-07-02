@@ -20,7 +20,7 @@
 #define IDE_CLANG_COMPLETION_PROVIDER_H
 
 #include <glib-object.h>
-#include <gtksourceview/gtksourcecompletionprovider.h>
+#include <gtksourceview/gtksource.h>
 #include <ide.h>
 
 G_BEGIN_DECLS

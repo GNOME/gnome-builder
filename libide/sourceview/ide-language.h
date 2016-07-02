@@ -19,7 +19,7 @@
 #ifndef IDE_LANGUAGE_H
 #define IDE_LANGUAGE_H
 
-#include <gtksourceview/gtksourcelanguage.h>
+#include <gtksourceview/gtksource.h>
 
 G_BEGIN_DECLS
 
