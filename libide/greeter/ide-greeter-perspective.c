@@ -444,18 +444,21 @@ ide_greeter_perspective_open_project_cb (GObject      *object,
     {
       GtkWidget *dialog;
 
-      dialog = gtk_message_dialog_new (NULL,
+      dialog = gtk_message_dialog_new (GTK_WINDOW (workbench),
                                        GTK_DIALOG_USE_HEADER_BAR,
                                        GTK_MESSAGE_ERROR,
                                        GTK_BUTTONS_CLOSE,
                                        _("Failed to load the project"));
+
       g_object_set (dialog,
+                    "modal", TRUE,
                     "secondary-text", error->message,
                     NULL);
 
-      gtk_dialog_run (GTK_DIALOG (dialog));
-      gtk_widget_destroy (dialog);
-      gtk_widget_destroy (GTK_WIDGET (workbench));
+      g_signal_connect (dialog, "response", G_CALLBACK (gtk_widget_destroy), NULL);
+      g_signal_connect_swapped (dialog, "response", G_CALLBACK (gtk_widget_destroy), workbench);
+
+      gtk_window_present (GTK_WINDOW (dialog));
     }
 }
 
