@@ -30,6 +30,7 @@ void            ide_tree_node_insert_sorted         (IdeTreeNode            *nod
                                                      IdeTreeNode            *child,
                                                      IdeTreeNodeCompareFunc  compare_func,
                                                      gpointer                user_data);
+gboolean        ide_tree_node_is_root               (IdeTreeNode            *node);
 const gchar    *ide_tree_node_get_icon_name         (IdeTreeNode            *node);
 GObject        *ide_tree_node_get_item              (IdeTreeNode            *node);
 IdeTreeNode    *ide_tree_node_get_parent            (IdeTreeNode            *node);

@@ -976,3 +976,11 @@ ide_tree_node_set_use_dim_label (IdeTreeNode *self,
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_USE_DIM_LABEL]);
     }
 }
+
+gboolean
+ide_tree_node_is_root (IdeTreeNode *node)
+{
+  g_return_val_if_fail (IDE_IS_TREE_NODE (node), FALSE);
+
+  return node->parent == NULL;
+}
