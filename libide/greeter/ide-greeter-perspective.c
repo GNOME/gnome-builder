@@ -1017,6 +1017,17 @@ ide_greeter_perspective_constructed (GObject *object)
 }
 
 static void
+ide_greeter_perspective_destroy (GtkWidget *widget)
+{
+  IdeGreeterPerspective *self = (IdeGreeterPerspective *)widget;
+
+  if (self->titlebar != NULL)
+    gtk_widget_destroy (GTK_WIDGET (self->titlebar));
+
+  GTK_WIDGET_CLASS (ide_greeter_perspective_parent_class)->destroy (widget);
+}
+
+static void
 ide_greeter_perspective_finalize (GObject *object)
 {
   IdeGreeterPerspective *self = (IdeGreeterPerspective *)object;
@@ -1078,6 +1089,8 @@ ide_greeter_perspective_class_init (IdeGreeterPerspectiveClass *klass)
   object_class->get_property = ide_greeter_perspective_get_property;
   object_class->set_property = ide_greeter_perspective_set_property;
 
+  widget_class->destroy = ide_greeter_perspective_destroy;
+
   properties [PROP_RECENT_PROJECTS] =
     g_param_spec_object ("recent-projects",
                          "Recent Projects",
@@ -1127,6 +1140,12 @@ ide_greeter_perspective_init (IdeGreeterPerspective *self)
                                    G_CONNECT_SWAPPED);
 
   gtk_widget_init_template (GTK_WIDGET (self));
+
+  g_signal_connect_object (self->titlebar,
+                           "destroy",
+                           G_CALLBACK (gtk_widget_destroyed),
+                           &self->titlebar,
+                           0);
 
   g_signal_connect_object (self->search_entry,
                            "activate",
