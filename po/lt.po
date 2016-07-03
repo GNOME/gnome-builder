@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-05-13 12:43+0000\n"
-"PO-Revision-Date: 2016-05-13 23:17+0300\n"
+"POT-Creation-Date: 2016-06-28 22:18+0000\n"
+"PO-Revision-Date: 2016-07-03 17:07+0300\n"
 "Last-Translator: Aurimas Černius <aurisc4@gmail.com>\n"
 "Language-Team: Lietuvių <gnome-lt@lists.akl.lt>\n"
 "Language: lt\n"
@@ -1231,7 +1231,7 @@ msgstr "Įrašyti dokumentą"
 #: ../libide/editor/ide-editor-view-actions.c:438
 #: ../libide/ide-workbench-actions.c:67
 #: ../plugins/build-tools/gbp-build-panel.ui.h:8
-#: ../plugins/create-project/gbp-create-project-widget.c:486
+#: ../plugins/create-project/gbp-create-project-widget.c:489
 #: ../plugins/terminal/gb-terminal-view-actions.c:305
 msgid "Cancel"
 msgstr "Atsisakyti"
@@ -1451,7 +1451,7 @@ msgstr "Paskirties failas turi būti projekto medžio viduje."
 msgid "File must be within the project tree."
 msgstr "Failas turi būti projekto medžio viduje."
 
-#: ../libide/ide-recent-projects.c:383
+#: ../libide/ide-recent-projects.c:396
 #, c-format
 msgid "%s() may only be executed once"
 msgstr "%s() galima vykdyti tik kartą"
@@ -2082,19 +2082,19 @@ msgstr "Išvaloma…"
 msgid "Invalid makefile provided, ignoring."
 msgstr "Pateiktas netinkamas Make failas, nepaisoma."
 
-#: ../plugins/autotools-templates/autotools_templates/__init__.py:200
+#: ../plugins/autotools-templates/autotools_templates/__init__.py:243
 msgid "Shared Library"
 msgstr "Bendro naudojimo biblioteka"
 
-#: ../plugins/autotools-templates/autotools_templates/__init__.py:202
+#: ../plugins/autotools-templates/autotools_templates/__init__.py:245
 msgid "Create a new autotools project with a shared library"
 msgstr "Sukurti naują autotools projektą su bendro naudojimo biblioteka"
 
-#: ../plugins/autotools-templates/autotools_templates/__init__.py:223
+#: ../plugins/autotools-templates/autotools_templates/__init__.py:266
 msgid "Empty Project"
 msgstr "Tuščias projektas"
 
-#: ../plugins/autotools-templates/autotools_templates/__init__.py:226
+#: ../plugins/autotools-templates/autotools_templates/__init__.py:269
 msgid "Create a new empty autotools project"
 msgstr "Sukurti naują tuščią autotools projektą"
 
@@ -2377,7 +2377,7 @@ msgstr "clang_codeCompleteAt() veikia tik su vietiniais failais"
 msgid "Command not found: %s"
 msgstr "Komanda nerasta: %s"
 
-#: ../plugins/command-bar/gb-command-bar.c:603
+#: ../plugins/command-bar/gb-command-bar.c:609
 msgid "Use the entry below to execute a command"
 msgstr "Naudokite žemiau esantį įvedimo lauką komandos vykdymui"
 
@@ -2431,7 +2431,7 @@ msgstr "Netinkama :syntax po-komanda: %s"
 msgid "Invalid search and replace request"
 msgstr "Netinkama paieškos ir keitimo užklausa"
 
-#: ../plugins/command-bar/gb-vim.c:1145
+#: ../plugins/command-bar/gb-vim.c:1146
 #, c-format
 msgid "Not a command: %s"
 msgstr "Nėra komanda: %s"
@@ -2521,7 +2521,6 @@ msgid "The version control to use or \"none\" to disable"
 msgstr "Naudotina versijavimo sistema arba „none“ išjungimui"
 
 #: ../plugins/create-project/gbp-create-project-tool.c:143
-#| msgid "Git"
 msgid "git"
 msgstr "git"
 
@@ -2544,17 +2543,15 @@ msgstr "Nurodykite projekto pavadinimą.\n"
 msgid "Please specify a project template with --template=\n"
 msgstr "Nurodykite projekto šabloną naudodami --template=\n"
 
-#: ../plugins/create-project/gbp-create-project-widget.c:319
-#| msgid "Version Control"
+#: ../plugins/create-project/gbp-create-project-widget.c:320
 msgid "Without version control"
 msgstr "Be versijavimo"
 
-#: ../plugins/create-project/gbp-create-project-widget.c:485
-#| msgid "_Select"
+#: ../plugins/create-project/gbp-create-project-widget.c:488
 msgid "Select"
 msgstr "Pasirinkite"
 
-#: ../plugins/create-project/gbp-create-project-widget.c:589
+#: ../plugins/create-project/gbp-create-project-widget.c:592
 msgid "A failure occurred while initializing version control"
 msgstr "Kilo klaida inicijuojant versijavimo sistemą"
 
@@ -2568,11 +2565,42 @@ msgid "Language"
 msgstr "Kalba"
 
 #: ../plugins/create-project/gbp-create-project-widget.ui.h:4
-#| msgid "Version Control"
+msgid "License"
+msgstr "Licencija"
+
+#: ../plugins/create-project/gbp-create-project-widget.ui.h:5
 msgid "Versioning"
 msgstr "Versijavimas"
 
-#: ../plugins/create-project/gbp-create-project-widget.ui.h:5
+#: ../plugins/create-project/gbp-create-project-widget.ui.h:6
+msgid "No license"
+msgstr "Nėra licencijos"
+
+#: ../plugins/create-project/gbp-create-project-widget.ui.h:7
+msgid "AGPL version 3 or later"
+msgstr "AGPL versija 3 ar vėlesnė"
+
+#: ../plugins/create-project/gbp-create-project-widget.ui.h:8
+msgid "GPL version 3 or later"
+msgstr "GPL versija 3 ar vėlesnė"
+
+#: ../plugins/create-project/gbp-create-project-widget.ui.h:9
+msgid "GPL version 2 or later"
+msgstr "GPL versija 2 ar vėlesnė"
+
+#: ../plugins/create-project/gbp-create-project-widget.ui.h:10
+msgid "LGPL version 3 or later"
+msgstr "LGPL versija 3 ar vėlesnė"
+
+#: ../plugins/create-project/gbp-create-project-widget.ui.h:11
+msgid "LGPL version 2.1 or later"
+msgstr "LGPL versija 2.1 ar vėlesnė"
+
+#: ../plugins/create-project/gbp-create-project-widget.ui.h:12
+msgid "MIT/X11"
+msgstr "MIT/X11"
+
+#: ../plugins/create-project/gbp-create-project-widget.ui.h:13
 msgid "Pattern"
 msgstr "Šablonas"
 
@@ -2725,7 +2753,6 @@ msgid "Project"
 msgstr "Projektas"
 
 #: ../plugins/project-tree/gb-project-tree-builder.c:207
-#| msgid "_Empty File"
 msgid "Empty"
 msgstr "Tuščia"
 
