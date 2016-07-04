@@ -516,6 +516,7 @@ c_indenter_indent (IdeCIndenter  *c,
 {
   GtkTextIter cur;
   GtkTextIter match_begin;
+  GtkTextIter copy;
   gunichar ch;
   GString *str;
   gchar *ret = NULL;
@@ -637,17 +638,16 @@ c_indenter_indent (IdeCIndenter  *c,
     }
 
   /*
-   * Maybe we are in a conditional.
-   *
-   * TODO: This technically isn't right since it is perfectly reasonable to
-   * end a line on a ) but not be done with the entire conditional.
+   * Maybe we are in a conditional if there's an unmatched (.
    */
-  if ((ch != ')') && backward_find_matching_char (iter, ')'))
+  copy = *iter;
+  if (backward_find_matching_char (&copy, ')') &&
+     ((ch != ')') || ((ch == ')') && backward_find_matching_char (&copy, ')'))))
     {
       guint offset;
 
-      offset = GET_LINE_OFFSET (iter);
-      build_indent (c, offset + 1, iter, str);
+      offset = GET_LINE_OFFSET (&copy);
+      build_indent (c, offset + 1, &copy, str);
       IDE_GOTO (cleanup);
     }
 
@@ -657,8 +657,6 @@ c_indenter_indent (IdeCIndenter  *c,
    */
   if (ch == '}')
     {
-      GtkTextIter copy;
-
       gtk_text_iter_assign (&copy, iter);
 
       if (gtk_text_iter_forward_char (iter))
@@ -683,8 +681,6 @@ c_indenter_indent (IdeCIndenter  *c,
    */
   if (ch == ')')
     {
-      GtkTextIter copy;
-
       gtk_text_iter_assign (&copy, iter);
 
       if (backward_find_matching_char (iter, ')') &&
