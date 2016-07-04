@@ -749,10 +749,20 @@ gb_vim_command_bnext (GtkWidget      *active_widget,
                       const gchar    *options,
                       GError        **error)
 {
+  IdeWorkbench *workbench;
+  IdeContext *context;
+  IdeBufferManager *bufmgr;
+  guint n_buffers;
+
   g_assert (GTK_IS_WIDGET (active_widget));
 
-  // TODO: check for an open buffer ?
-  ide_widget_action (GTK_WIDGET (active_widget), "view-stack", "next-view", NULL);
+  workbench = ide_widget_get_workbench (GTK_WIDGET (active_widget));
+  context = ide_workbench_get_context (workbench);
+  bufmgr = ide_context_get_buffer_manager (context);
+  n_buffers = ide_buffer_manager_get_n_buffers (bufmgr);
+
+  if (n_buffers > 0)
+    ide_widget_action (GTK_WIDGET (active_widget), "view-stack", "next-view", NULL);
 
   return TRUE;
 }
@@ -763,10 +773,20 @@ gb_vim_command_bprevious (GtkWidget      *active_widget,
                           const gchar    *options,
                           GError        **error)
 {
+  IdeWorkbench *workbench;
+  IdeContext *context;
+  IdeBufferManager *bufmgr;
+  guint n_buffers;
+
   g_assert (GTK_IS_WIDGET (active_widget));
 
-  // TODO: check for an open buffer ?
-  ide_widget_action (GTK_WIDGET (active_widget), "view-stack", "previous-view", NULL);
+  workbench = ide_widget_get_workbench (GTK_WIDGET (active_widget));
+  context = ide_workbench_get_context (workbench);
+  bufmgr = ide_context_get_buffer_manager (context);
+  n_buffers = ide_buffer_manager_get_n_buffers (bufmgr);
+
+  if (n_buffers > 0)
+    ide_widget_action (GTK_WIDGET (active_widget), "view-stack", "previous-view", NULL);
 
   return TRUE;
 }
