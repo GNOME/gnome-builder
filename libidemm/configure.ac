@@ -1,5 +1,5 @@
 m4_define([gtkmm_required_version], [3.19.12])
-m4_define([glibmm_required_version], [2.48.0])
+m4_define([glibmm_required_version], [2.49.1])
 
 AC_SUBST([IDEMM_SO_VERSION], [0:0:0])
 

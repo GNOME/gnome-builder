@@ -49,10 +49,7 @@ public:
   _WRAP_METHOD(Glib::ustring get_keybindings_mode() const, ide_application_get_keybindings_mode)
   _WRAP_METHOD(Glib::RefPtr<Gio::Menu> get_menu_by_id(const Glib::ustring& id), ide_application_get_menu_by_id)
   _WRAP_METHOD(Glib::RefPtr<Ide::RecentProjects> get_recent_projects(), ide_application_get_recent_projects)
-
-// TODO: remove the conversion when bug #764547 is fixed
-#m4 _CONVERSION(`GDBusProxy*',`Glib::RefPtr<Gio::DBus::Proxy>',`Glib::wrap($3)')
-_WRAP_METHOD(Glib::RefPtr<Gio::DBus::Proxy> get_worker_finish(const Glib::RefPtr<Gio::AsyncResult>& result), ide_application_get_worker_finish, errthrow)
+  _WRAP_METHOD(Glib::RefPtr<Gio::DBus::Proxy> get_worker_finish(const Glib::RefPtr<Gio::AsyncResult>& result), ide_application_get_worker_finish, errthrow)
 
   void get_worker_async(const Glib::ustring& plugin_name, const Gio::SlotAsyncReady& slot, const Glib::RefPtr<Gio::Cancellable>& cancellable);
   void get_worker_async(const Glib::ustring& plugin_name, const Gio::SlotAsyncReady& slot);
