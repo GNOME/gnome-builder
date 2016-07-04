@@ -140,7 +140,7 @@ ide_context_get_recent_manager (IdeContext *self)
  * Retrieves the global back forward list for the #IdeContext.
  *
  * Consumers of this should branch the #IdeBackForwardList and merge them
- * when there document stack is closed.
+ * when their document stack is closed.
  *
  * See ide_back_forward_list_branch() and ide_back_forward_list_merge() for
  * more information.
