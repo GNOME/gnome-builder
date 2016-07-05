@@ -204,13 +204,13 @@ test_egg_state_machine_CFLAGS = $(egg_cflags)
 test_egg_state_machine_LDADD = $(egg_libs)
 
 
-TESTS += test-egg-radio-box
+misc_programs += test-egg-radio-box
 test_egg_radio_box_SOURCES = test-egg-radio-box.c
 test_egg_radio_box_CFLAGS = $(egg_cflags)
 test_egg_radio_box_LDADD = $(egg_libs)
 
 
-TESTS += test-egg-file-chooser-entry
+misc_programs += test-egg-file-chooser-entry
 test_egg_file_chooser_entry_SOURCES = test-egg-file-chooser-entry.c
 test_egg_file_chooser_entry_CFLAGS = $(egg_cflags)
 test_egg_file_chooser_entry_LDADD = $(egg_libs)
