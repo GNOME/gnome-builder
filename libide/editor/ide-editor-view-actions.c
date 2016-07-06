@@ -710,7 +710,6 @@ ide_editor_view_actions_init (IdeEditorView *self)
   g_action_map_add_action_entries (G_ACTION_MAP (group), IdeEditorViewActions,
                                    G_N_ELEMENTS (IdeEditorViewActions), self);
   gtk_widget_insert_action_group (GTK_WIDGET (self), "view", G_ACTION_GROUP (group));
-  gtk_widget_insert_action_group (GTK_WIDGET (self->tweak_widget), "view", G_ACTION_GROUP (group));
 
 #define WATCH_PROPERTY(name) \
   G_STMT_START { \
