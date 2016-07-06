@@ -45,34 +45,34 @@ struct _IdeSubprocessLauncherClass
                                 GError                **error);
 };
 
-IdeSubprocessLauncher *ide_subprocess_launcher_new                 (GSubprocessFlags       flags);
-const gchar           *ide_subprocess_launcher_get_cwd             (IdeSubprocessLauncher *self);
-void                   ide_subprocess_launcher_set_cwd             (IdeSubprocessLauncher *self,
-                                                                    const gchar           *cwd);
-GSubprocessFlags       ide_subprocess_launcher_get_flags           (IdeSubprocessLauncher *self);
-void                   ide_subprocess_launcher_set_flags           (IdeSubprocessLauncher *self,
-                                                                    GSubprocessFlags       flags);
-const gchar * const   *ide_subprocess_launcher_get_environ         (IdeSubprocessLauncher *self);
-void                   ide_subprocess_launcher_set_environ         (IdeSubprocessLauncher *self,
-                                                                    const gchar * const   *environ_);
-void                   ide_subprocess_launcher_setenv              (IdeSubprocessLauncher *self,
-                                                                    const gchar           *key,
-                                                                    const gchar           *value,
-                                                                    gboolean               replace);
-void                   ide_subprocess_launcher_overlay_environment (IdeSubprocessLauncher *self,
-                                                                    IdeEnvironment        *environment);
-void                   ide_subprocess_launcher_push_args           (IdeSubprocessLauncher *self,
-                                                                    const gchar * const   *args);
-void                   ide_subprocess_launcher_push_argv           (IdeSubprocessLauncher *self,
-                                                                    const gchar           *argv);
-gchar                 *ide_subprocess_launcher_pop_argv            (IdeSubprocessLauncher *self) G_GNUC_WARN_UNUSED_RESULT;
-GSubprocess           *ide_subprocess_launcher_spawn_sync          (IdeSubprocessLauncher *self,
-                                                                    GCancellable          *cancellable,
+IdeSubprocessLauncher *ide_subprocess_launcher_new                 (GSubprocessFlags        flags);
+const gchar           *ide_subprocess_launcher_get_cwd             (IdeSubprocessLauncher  *self);
+void                   ide_subprocess_launcher_set_cwd             (IdeSubprocessLauncher  *self,
+                                                                    const gchar            *cwd);
+GSubprocessFlags       ide_subprocess_launcher_get_flags           (IdeSubprocessLauncher  *self);
+void                   ide_subprocess_launcher_set_flags           (IdeSubprocessLauncher  *self,
+                                                                    GSubprocessFlags        flags);
+const gchar * const   *ide_subprocess_launcher_get_environ         (IdeSubprocessLauncher  *self);
+void                   ide_subprocess_launcher_set_environ         (IdeSubprocessLauncher  *self,
+                                                                    const gchar * const    *environ_);
+void                   ide_subprocess_launcher_setenv              (IdeSubprocessLauncher  *self,
+                                                                    const gchar            *key,
+                                                                    const gchar            *value,
+                                                                    gboolean                replace);
+void                   ide_subprocess_launcher_overlay_environment (IdeSubprocessLauncher  *self,
+                                                                    IdeEnvironment         *environment);
+void                   ide_subprocess_launcher_push_args           (IdeSubprocessLauncher  *self,
+                                                                    const gchar * const    *args);
+void                   ide_subprocess_launcher_push_argv           (IdeSubprocessLauncher  *self,
+                                                                    const gchar            *argv);
+gchar                 *ide_subprocess_launcher_pop_argv            (IdeSubprocessLauncher  *self) G_GNUC_WARN_UNUSED_RESULT;
+GSubprocess           *ide_subprocess_launcher_spawn_sync          (IdeSubprocessLauncher  *self,
+                                                                    GCancellable           *cancellable,
                                                                     GError                **error);
-void                   ide_subprocess_launcher_spawn_async         (IdeSubprocessLauncher *self,
-                                                                    GCancellable          *cancellable,
-                                                                    GAsyncReadyCallback    callback,
-                                                                    gpointer               user_data);
+void                   ide_subprocess_launcher_spawn_async         (IdeSubprocessLauncher  *self,
+                                                                    GCancellable           *cancellable,
+                                                                    GAsyncReadyCallback     callback,
+                                                                    gpointer                user_data);
 GSubprocess           *ide_subprocess_launcher_spawn_finish        (IdeSubprocessLauncher  *self,
                                                                     GAsyncResult           *result,
                                                                     GError                **error);
