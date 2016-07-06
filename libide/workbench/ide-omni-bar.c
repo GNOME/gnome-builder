@@ -200,6 +200,27 @@ ide_omni_bar_row_activated (IdeOmniBar    *self,
   ide_configuration_manager_set_current (config_manager, config);
 }
 
+static gboolean
+add_target_prefix_transform (GBinding     *binding,
+                             const GValue *from_value,
+                             GValue       *to_value,
+                             gpointer      user_data)
+{
+  g_assert (G_IS_BINDING (binding));
+  g_assert (from_value != NULL);
+  g_assert (G_VALUE_HOLDS_STRING (from_value));
+  g_assert (to_value != NULL);
+
+  g_value_init (to_value, G_TYPE_STRING);
+  g_value_take_string (to_value,
+                       g_strdup_printf ("%s: %s",
+                                        /* Translators: "Target" is providing context to the selected build configuration */
+                                        _("Target"),
+                                        g_value_get_string (from_value)));
+
+  return TRUE;
+}
+
 static void
 ide_omni_bar_context_set (GtkWidget  *widget,
                           IdeContext *context)
@@ -241,9 +262,11 @@ ide_omni_bar_context_set (GtkWidget  *widget,
                                self,
                                G_CONNECT_SWAPPED);
 
-      g_object_bind_property (configs, "current-display-name",
-                              self->config_name_label, "label",
-                              G_BINDING_SYNC_CREATE);
+      g_object_bind_property_full (configs, "current-display-name",
+                                   self->config_name_label, "label",
+                                   G_BINDING_SYNC_CREATE,
+                                   add_target_prefix_transform,
+                                   NULL, NULL, NULL);
 
       gtk_list_box_bind_model (self->popover_configuration_list_box,
                                G_LIST_MODEL (configs),
