@@ -44,7 +44,22 @@ ide_widget_action (GtkWidget   *widget,
   while ((group == NULL) && (widget != NULL))
     {
       group = gtk_widget_get_action_group (widget, prefix);
-      widget = gtk_widget_get_parent (widget);
+
+      if G_UNLIKELY (GTK_IS_POPOVER (widget))
+        {
+          GtkWidget *relative_to;
+
+          relative_to = gtk_popover_get_relative_to (GTK_POPOVER (widget));
+
+          if (relative_to != NULL)
+            widget = relative_to;
+          else
+            widget = gtk_widget_get_parent (widget);
+        }
+      else
+        {
+          widget = gtk_widget_get_parent (widget);
+        }
     }
 
   if (!group && g_str_equal (prefix, "win") && G_IS_ACTION_GROUP (toplevel))
