@@ -425,7 +425,7 @@ ide_configuration_manager_add_default (IdeConfigurationManager *self)
   context = ide_object_get_context (IDE_OBJECT (self));
 
   config = ide_configuration_new (context, "default", "local", "host");
-  ide_configuration_set_display_name (config, _("Default Configuration"));
+  ide_configuration_set_display_name (config, _("Default"));
   ide_configuration_manager_add (self, config);
 
   if (self->configurations->len == 1)
