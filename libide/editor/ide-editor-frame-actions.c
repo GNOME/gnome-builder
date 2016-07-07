@@ -299,7 +299,14 @@ ide_editor_frame_actions_replace (GSimpleAction *action,
 
   if (occurrence_position > 0)
     {
+      /* Temporarily disable updating the search position label to prevent flickering */
+      g_signal_handler_block (buffer, self->cursor_moved_handler);
+
       gtk_source_search_context_replace2 (search_context, &start, &end, unescaped_replace_text, -1, &error);
+
+      /* Re-enable updating the search position label. The next-search-result action
+       * below will cause it to update. */
+      g_signal_handler_unblock (buffer, self->cursor_moved_handler);
 
       if (error != NULL)
         {
