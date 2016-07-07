@@ -1141,11 +1141,10 @@ ide_greeter_perspective_init (IdeGreeterPerspective *self)
 
   gtk_widget_init_template (GTK_WIDGET (self));
 
-  g_signal_connect_object (self->titlebar,
-                           "destroy",
-                           G_CALLBACK (gtk_widget_destroyed),
-                           &self->titlebar,
-                           0);
+  g_signal_connect (self->titlebar,
+                    "destroy",
+                    G_CALLBACK (gtk_widget_destroyed),
+                    &self->titlebar);
 
   g_signal_connect_object (self->search_entry,
                            "activate",
