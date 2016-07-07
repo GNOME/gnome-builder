@@ -103,6 +103,9 @@
                                     <property name="can_focus">false</property>
                                     <property name="valign">center</property>
                                     <property name="width_request">124</property>
+                                    <style>
+                                      <class name="linked"/>
+                                    </style>
                                     <child>
                                       <object class="GtkButton">
                                         <property name="action-name">frame.previous-search-result</property>
