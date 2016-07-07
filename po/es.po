@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-06-30 21:22+0000\n"
-"PO-Revision-Date: 2016-07-01 09:21+0200\n"
+"POT-Creation-Date: 2016-07-07 03:14+0000\n"
+"PO-Revision-Date: 2016-07-07 10:01+0200\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Español; Castellano <gnome-es-list@gnome.org>\n"
 "Language: \n"
@@ -69,7 +69,7 @@ msgstr[1] "Hace %u años aproximadamente"
 
 #: ../contrib/egg/egg-file-chooser-entry.c:100
 #: ../contrib/egg/egg-file-chooser-entry.c:489
-#: ../libide/greeter/ide-greeter-perspective.c:648
+#: ../libide/greeter/ide-greeter-perspective.c:673
 #: ../libide/workbench/ide-workbench-actions.c:70
 msgid "Open"
 msgstr "Abrir"
@@ -97,7 +97,7 @@ msgstr "Explorar…"
 #: ../contrib/egg/egg-file-chooser-entry.c:488
 #: ../libide/editor/ide-editor-view-actions.c:316
 #: ../libide/editor/ide-editor-view-actions.c:447
-#: ../libide/greeter/ide-greeter-perspective.c:647
+#: ../libide/greeter/ide-greeter-perspective.c:672
 #: ../libide/workbench/ide-workbench-actions.c:69
 #: ../plugins/terminal/gb-terminal-view-actions.c:305
 msgid "Cancel"
@@ -718,66 +718,54 @@ msgid "Reset"
 msgstr "Reiniciar"
 
 #: ../data/gtk/menus.ui.h:38
-msgid "_Match Case"
-msgstr "Coincidir con _mayúsculas y minúsculas"
-
-#: ../data/gtk/menus.ui.h:39
-msgid "Match _Entire Word Only"
-msgstr "Coincidir sólo con la palabra compl_eta"
-
-#: ../data/gtk/menus.ui.h:40
-msgid "Match as _Regular Expression"
-msgstr "Coincidir como expresión _regular"
-
-#: ../data/gtk/menus.ui.h:41
 msgid "_Wrap Around"
 msgstr "_Volver al principio"
 
-#: ../data/gtk/menus.ui.h:42
+#: ../data/gtk/menus.ui.h:39
 msgid "Cu_t"
 msgstr "C_ortar"
 
-#: ../data/gtk/menus.ui.h:43
+#: ../data/gtk/menus.ui.h:40
 msgid "Split"
 msgstr "Dividir"
 
-#: ../data/gtk/menus.ui.h:44
+#: ../data/gtk/menus.ui.h:41
 msgid "Split Left"
 msgstr "Dividir por la izquierda"
 
-#: ../data/gtk/menus.ui.h:45
+#: ../data/gtk/menus.ui.h:42
 msgid "Split Right"
 msgstr "Dividir por la derecha"
 
-#: ../data/gtk/menus.ui.h:46
+#: ../data/gtk/menus.ui.h:43
 msgid "Split Down"
 msgstr "Dividir por abajo"
 
-#: ../data/gtk/menus.ui.h:47
+#: ../data/gtk/menus.ui.h:44
 msgid "Move"
 msgstr "Mover"
 
-#: ../data/gtk/menus.ui.h:48
+#: ../data/gtk/menus.ui.h:45
 msgid "Move Left"
 msgstr "Mover a la izquierda"
 
-#: ../data/gtk/menus.ui.h:49
+#: ../data/gtk/menus.ui.h:46
 msgid "Move Right"
 msgstr "Mover a la derecha"
 
-#: ../data/gtk/menus.ui.h:50
+#: ../data/gtk/menus.ui.h:47
 msgid "_Save"
 msgstr "_Guardar"
 
-#: ../data/gtk/menus.ui.h:51
+#: ../data/gtk/menus.ui.h:48
 msgid "_Save As"
 msgstr "Guardar _como"
 
-#: ../data/gtk/menus.ui.h:52
+#: ../data/gtk/menus.ui.h:49
 msgid "_Print"
 msgstr "Im_primir"
 
-#: ../data/gtk/menus.ui.h:53
+#: ../data/gtk/menus.ui.h:50
 msgid "_Close"
 msgstr "_Cerrar"
 
@@ -913,8 +901,10 @@ msgid "%s() is not supported on %s build system."
 msgstr "%s() no está soportado en el sistema de construcción %s."
 
 #: ../libide/buildsystem/ide-configuration-manager.c:428
-msgid "Default Configuration"
-msgstr "Configuración predeterminada"
+#: ../libide/preferences/ide-preferences-builtin.c:261
+#: ../libide/preferences/ide-preferences-builtin.c:279
+msgid "Default"
+msgstr "Predeterminado"
 
 #: ../libide/devices/ide-device-manager.c:147
 #, c-format
@@ -939,7 +929,7 @@ msgstr "Línea %u, Columna %u"
 msgid "%u of %u"
 msgstr "%u de %u"
 
-#: ../libide/editor/ide-editor-frame.c:691
+#: ../libide/editor/ide-editor-frame.c:792
 #: ../plugins/project-tree/gtk/menus.ui.h:1
 msgid "Re_veal in Project Tree"
 msgstr "_Mostrar en el árbol del proyectos"
@@ -948,6 +938,38 @@ msgstr "_Mostrar en el árbol del proyectos"
 #: ../libide/editor/ide-editor-frame.ui.h:2
 msgid "OVR"
 msgstr "OVR"
+
+#: ../libide/editor/ide-editor-frame.ui.h:3
+msgid "Replace"
+msgstr "Reemplazar"
+
+#: ../libide/editor/ide-editor-frame.ui.h:4
+msgid "Replace All"
+msgstr "Reemplazar todo"
+
+#: ../libide/editor/ide-editor-frame.ui.h:5
+msgid "Switch between Search and Search-and-Replace"
+msgstr "Cambiar entre Buscar y Buscar y reemplazar"
+
+#: ../libide/editor/ide-editor-frame.ui.h:6
+msgid "Show or hide search options such as case sensitivity"
+msgstr ""
+"Mostrar u ocultar las opciones de búsqueda, como la sensibilidad a "
+"mayúsculas y minúsculas"
+
+#: ../libide/editor/ide-editor-frame.ui.h:7
+#| msgid "Match as _Regular Expression"
+msgid "Regular expressions"
+msgstr "Expresiones regulares"
+
+#: ../libide/editor/ide-editor-frame.ui.h:8
+msgid "Case sensitive"
+msgstr "Sensible a mayúsculas y minúsculas"
+
+#: ../libide/editor/ide-editor-frame.ui.h:9
+#| msgid "Match _Entire Word Only"
+msgid "Match whole word only"
+msgstr "Coincidir sólo con la palabra completa"
 
 #: ../libide/editor/ide-editor-perspective.c:448
 #: ../libide/preferences/ide-preferences-builtin.c:110
@@ -1062,8 +1084,7 @@ msgstr "Ir"
 msgid "Failed to load the project"
 msgstr "Falló al cargar el proyecto"
 
-#: ../libide/greeter/ide-greeter-perspective.c:643
-#| msgid "_Open Project"
+#: ../libide/greeter/ide-greeter-perspective.c:668
 msgid "Open Project"
 msgstr "Abrir proyecto"
 
@@ -1102,7 +1123,6 @@ msgid "Click an item to select"
 msgstr "Pulse en un elemento para seleccionarlo"
 
 #: ../libide/greeter/ide-greeter-perspective.ui.h:11
-#| msgid "Open"
 msgid "Open…"
 msgstr "Abrir…"
 
@@ -1785,11 +1805,6 @@ msgstr "Sangrar automáticamente"
 msgid "Indent source code as you type"
 msgstr "Sangrar el código fuente a medida que escribe"
 
-#: ../libide/preferences/ide-preferences-builtin.c:261
-#: ../libide/preferences/ide-preferences-builtin.c:279
-msgid "Default"
-msgstr "Predeterminado"
-
 #: ../libide/preferences/ide-preferences-builtin.c:266
 #: ../libide/preferences/ide-preferences-builtin.c:284
 msgid "Number of CPU"
@@ -2059,8 +2074,13 @@ msgstr "Dispositivo"
 msgid "Runtime"
 msgstr "Tiempo de ejecución"
 
-#: ../libide/workbench/ide-omni-bar.c:324
-#: ../libide/workbench/ide-omni-bar.c:403
+#. Translators: "Target" is providing context to the selected build configuration
+#: ../libide/workbench/ide-omni-bar.c:218
+msgid "Target"
+msgstr "Objetivo"
+
+#: ../libide/workbench/ide-omni-bar.c:347
+#: ../libide/workbench/ide-omni-bar.c:426
 msgid "Last Build"
 msgstr "Última construcción"
 
@@ -2456,12 +2476,12 @@ msgstr "anónimo"
 msgid "clang_codeCompleteAt() only works on local files"
 msgstr "clang_codeCompleteAt() solo funciona con archivos locales"
 
-#: ../plugins/command-bar/gb-command-bar.c:296
+#: ../plugins/command-bar/gb-command-bar.c:302
 #, c-format
 msgid "Command not found: %s"
 msgstr "Comando no encontrado: %s"
 
-#: ../plugins/command-bar/gb-command-bar.c:606
+#: ../plugins/command-bar/gb-command-bar.c:612
 msgid "Use the entry below to execute a command"
 msgstr "Use la siguiente entrada para ejecutar un comando"
 
@@ -2510,12 +2530,12 @@ msgstr "Falló al buscar la carpeta de trabajo"
 msgid "Invalid :syntax subcommand: %s"
 msgstr "Subcomando :syntax no válido: %s"
 
-#: ../plugins/command-bar/gb-vim.c:1109
+#: ../plugins/command-bar/gb-vim.c:1151
 #, c-format
 msgid "Invalid search and replace request"
 msgstr "Solicitud de buscar y reemplazar no válida"
 
-#: ../plugins/command-bar/gb-vim.c:1215
+#: ../plugins/command-bar/gb-vim.c:1257
 #, c-format
 msgid "Not a command: %s"
 msgstr "No es un comando: %s"
@@ -2764,7 +2784,6 @@ msgid "Project Destination"
 msgstr "Destino del proyecto"
 
 #: ../plugins/git/ide-git-genesis-addin.c:93
-#| msgid "New Project"
 msgid "Clone Project"
 msgstr "Clonar proyecto"
 
@@ -2807,7 +2826,6 @@ msgstr "No se ha especificado ningún lenguaje"
 
 #: ../plugins/hello-cpp/hellocppapplicationaddin.cc:48
 #, c-format
-#| msgid "Wow! You've spent with Builder %d seconds!"
 msgid "Wow! You've spent with Builder %d seconds!\n"
 msgstr "Ha invertido %d segundos en Builder.\n"
 
@@ -2978,6 +2996,12 @@ msgstr "Mostrar errores y advertencias proporcionadas por Vala"
 #: ../plugins/vala-pack/ide-vala-preferences-addin.vala:36
 msgid "vala diagnostics warnings errors"
 msgstr "diagnósticos de alertas y errores de Vala"
+
+#~ msgid "_Match Case"
+#~ msgstr "Coincidir con _mayúsculas y minúsculas"
+
+#~ msgid "Default Configuration"
+#~ msgstr "Configuración predeterminada"
 
 #~ msgid "From an existing project on this computer"
 #~ msgstr "Desde un proyecto existente en este equipo"
@@ -4084,9 +4108,6 @@ msgstr "diagnósticos de alertas y errores de Vala"
 
 #~ msgid "The animation mode"
 #~ msgstr "El modo de la animación"
-
-#~ msgid "Target"
-#~ msgstr "Objetivo"
 
 #~ msgid "The target of the animation"
 #~ msgstr "El objetivo de la animación"
