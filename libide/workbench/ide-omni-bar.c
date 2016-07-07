@@ -211,7 +211,6 @@ add_target_prefix_transform (GBinding     *binding,
   g_assert (G_VALUE_HOLDS_STRING (from_value));
   g_assert (to_value != NULL);
 
-  g_value_init (to_value, G_TYPE_STRING);
   g_value_take_string (to_value,
                        g_strdup_printf ("%s: %s",
                                         /* Translators: "Target" is providing context to the selected build configuration */
