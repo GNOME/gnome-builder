@@ -1,6 +1,7 @@
 lib_LTLIBRARIES = lib{{name}}-@API_VERSION@.la
 
 lib{{name_}}_@API_VERSION@_la_SOURCES = \
+	{{name}}-namespace.vala \
 	{{name}}.vala \
 	$(NULL)
 
