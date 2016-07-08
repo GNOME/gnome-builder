@@ -147,6 +147,7 @@ typedef struct
 
   GdkRGBA                      bubble_color1;
   GdkRGBA                      bubble_color2;
+  GdkRGBA                      search_shadow_rgba;
   GdkRGBA                      snippet_area_background_rgba;
 
   guint                        font_scale;
@@ -967,9 +968,11 @@ ide_source_view__buffer_notify_style_scheme_cb (IdeSourceView *self,
 {
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
   GtkSourceStyleScheme *scheme = NULL;
-  GtkSourceStyle *style = NULL;
+  GtkSourceStyle *search_match_style = NULL;
+  GtkSourceStyle *search_shadow_style = NULL;
   GtkSourceStyle *snippet_area_style = NULL;
   g_autofree gchar *snippet_background = NULL;
+  g_autofree gchar *search_shadow_background = NULL;
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
   g_assert (IDE_IS_BUFFER (buffer));
@@ -977,16 +980,17 @@ ide_source_view__buffer_notify_style_scheme_cb (IdeSourceView *self,
   scheme = gtk_source_buffer_get_style_scheme (GTK_SOURCE_BUFFER (buffer));
   if (scheme)
     {
-      style = gtk_source_style_scheme_get_style (scheme, "search-match");
+      search_match_style = gtk_source_style_scheme_get_style (scheme, "search-match");
+      search_shadow_style = gtk_source_style_scheme_get_style (scheme, "search-shadow");
       snippet_area_style = gtk_source_style_scheme_get_style (scheme, "snippet::area");
     }
 
-  if (style)
+  if (search_match_style)
     {
       g_autofree gchar *background = NULL;
       GdkRGBA color;
 
-      g_object_get (style, "background", &background, NULL);
+      g_object_get (search_match_style, "background", &background, NULL);
       gdk_rgba_parse (&color, background);
       ide_rgba_shade (&color, &priv->bubble_color1, 0.8);
       ide_rgba_shade (&color, &priv->bubble_color2, 1.1);
@@ -995,6 +999,17 @@ ide_source_view__buffer_notify_style_scheme_cb (IdeSourceView *self,
     {
       gdk_rgba_parse (&priv->bubble_color1, "#edd400");
       gdk_rgba_parse (&priv->bubble_color2, "#fce94f");
+    }
+
+  if (search_shadow_style)
+    g_object_get (search_shadow_style, "background", &search_shadow_background, NULL);
+
+  if (search_shadow_background)
+    gdk_rgba_parse (&priv->search_shadow_rgba, search_shadow_background);
+  else
+    {
+      gdk_rgba_parse (&priv->search_shadow_rgba, "#000000");
+      priv->search_shadow_rgba.alpha = 0.2;
     }
 
   if (snippet_area_style)
@@ -4595,18 +4610,6 @@ add_matches (GtkTextView            *text_view,
   return count;
 }
 
-static void
-get_shadow_color (IdeSourceView *self,
-                  GdkRGBA       *rgba)
-{
-  /* todo: get from style scheme */
-
-  rgba->red = 0;
-  rgba->green = 0;
-  rgba->blue = 0;
-  rgba->alpha = 0.2;
-}
-
 void
 ide_source_view_draw_search_bubbles (IdeSourceView *self,
                                      cairo_t       *cr)
@@ -4651,11 +4654,8 @@ ide_source_view_draw_search_bubbles (IdeSourceView *self,
   if (priv->show_search_shadow &&
       ((count > 0) || gtk_source_search_context_get_occurrences_count (priv->search_context) > 0))
     {
-      GdkRGBA shadow;
-
       gdk_cairo_region (cr, clip_region);
-      get_shadow_color (self, &shadow);
-      gdk_cairo_set_source_rgba (cr, &shadow);
+      gdk_cairo_set_source_rgba (cr, &priv->search_shadow_rgba);
       cairo_fill (cr);
     }
 
@@ -4727,7 +4727,6 @@ ide_source_view_real_draw (GtkWidget *widget,
       (gtk_source_search_context_get_occurrences_count (priv->search_context) > 0))
     {
       GdkWindow *window;
-      GdkRGBA shadow;
       GdkRectangle rect;
 
       window = gtk_text_view_get_window (text_view, GTK_TEXT_WINDOW_LEFT);
@@ -4738,8 +4737,7 @@ ide_source_view_real_draw (GtkWidget *widget,
 
       cairo_save (cr);
       gdk_cairo_rectangle (cr, &rect);
-      get_shadow_color (self, &shadow);
-      gdk_cairo_set_source_rgba (cr, &shadow);
+      gdk_cairo_set_source_rgba (cr, &priv->search_shadow_rgba);
       cairo_fill (cr);
       cairo_restore (cr);
     }

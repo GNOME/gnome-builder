@@ -104,6 +104,9 @@
   <!-- Search Matching -->
   <style name="search-match"                foreground="white" background="pink1"/>
 
+  <!-- Search Shadow -->
+  <style name="search-shadow"               background="#rgba(0,0,0,0.2)"/>
+
   <style name="c:comment"                   foreground="#8b9eab"/>
   <style name="c:preprocessor"              foreground="#8194a6" bold="false"/>
   <style name="c:boolean"                   foreground="#0077aa"/>

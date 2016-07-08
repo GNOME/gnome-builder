@@ -93,6 +93,9 @@
   <!-- Search Matching -->
   <style name="search-match"                foreground="aluminium1" background="chameleon3"/>
 
+  <!-- Search Shadow -->
+  <style name="search-shadow"               background="#rgba(0,0,0,0.4)"/>
+
   <!-- Comments -->
   <style name="def:comment"                 foreground="aluminium4"/>
   <style name="def:shebang"                 foreground="aluminium4" bold="true"/>
