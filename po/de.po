@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-06-04 20:55+0000\n"
-"PO-Revision-Date: 2016-06-06 20:16+0200\n"
+"POT-Creation-Date: 2016-06-25 19:19+0000\n"
+"PO-Revision-Date: 2016-06-26 11:22+0200\n"
 "Last-Translator: Christian Kirbach <christian.kirbach@gmail.com>\n"
 "Language-Team: Deutsch <gnome-de@gnome.org>\n"
 "Language: de_DE\n"
@@ -121,14 +121,19 @@ msgid ""
 "as GTK+, GLib, and GNOME APIs with features that any developer will "
 "appreciate, like syntax highlighting and snippets."
 msgstr ""
+"Builder ist eine fortlaufend weiterentwickelte integrierte "
+"Entwicklungsumgebung für GNOME. Es beherrscht mitgelieferte Unterstützung "
+"für wesentliche Technologien von GNOME wie beispielsweise GTK+, GLib, und "
+"GNOME APIs mit Funktionen, die alle Entwickler schätzen, wie "
+"Syntaxhervorhebung und Textschnipsel."
 
 #: ../data/org.gnome.Builder.appdata.xml.in.h:4
 msgid ""
 "You can rely on predictable releases of Builder with each new release of "
 "GNOME every six months."
 msgstr ""
-"Sie können sich alle sechs Monate auf planmäßige Freigaben von Builder "
-"mit jeder neuen Freigabe von GNOME verlassen."
+"Sie können sich alle sechs Monate auf planmäßige Freigaben von Builder mit "
+"jeder neuen Freigabe von GNOME verlassen."
 
 #: ../data/org.gnome.Builder.appdata.xml.in.h:5
 msgid "Features:"
@@ -349,8 +354,7 @@ msgid ""
 "If enabled, Builder will display an overview map of the source file next to "
 "the editor."
 msgstr ""
-"Legt fest, ob Builder eine Übersicht des Quellcodes neben dem Editor "
-"anzeigt."
+"Legt fest, ob Builder eine Übersicht des Quellcodes neben dem Editor anzeigt."
 
 #: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:19
 msgid "Automatically Hide Overview Map"
@@ -370,7 +374,7 @@ msgstr "Leerzeichen kennzeichnen"
 
 #: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:22
 msgid "The various types of space to draw in the editor."
-msgstr ""
+msgstr "Die verschiedenen Leerzeichen, die im Editor dargestellt werden."
 
 #: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:23
 #: ../libide/preferences/ide-preferences-builtin.c:139
@@ -378,9 +382,9 @@ msgid "Overscroll"
 msgstr "Überrollen"
 
 #: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:24
-#, fuzzy
 msgid "The number of lines to scroll beyond the end of the buffer."
-msgstr "Dem Editor erlauben, über das Ende des Puffers hinaus zu rollen"
+msgstr ""
+"Die Anzahl der Zeilen, die über das Ende des Puffers hinaus zu blättern sind."
 
 #: ../data/gsettings/org.gnome.builder.extension-type.gschema.xml.in.h:1
 #: ../data/gsettings/org.gnome.builder.plugin.gschema.xml.in.h:1
@@ -388,7 +392,6 @@ msgid "Enabled"
 msgstr "Eingeschaltet"
 
 #: ../data/gsettings/org.gnome.builder.extension-type.gschema.xml.in.h:2
-#, fuzzy
 msgid "If the type within the extension is enabled."
 msgstr "Legt fest, ob der Typ in der Erweiterung aktiviert ist."
 
@@ -480,6 +483,8 @@ msgstr "Ignorierte Dateien anzeigen"
 msgid ""
 "If enabled, the project tree will display files that are ignored by the VCS."
 msgstr ""
+"Legt fest, ob der Projektbaum Dateien anzeigt, die vom "
+"Versionskontrollsystem ignoriert werden."
 
 #: ../data/gsettings/org.gnome.builder.workbench.gschema.xml.in.h:1
 msgid "Show Left Panel"
@@ -2406,7 +2411,7 @@ msgstr "clang_codeCompleteAt() funktioniert nur mit lokalen Dateien."
 msgid "Command not found: %s"
 msgstr "Befehl nicht gefunden: %s"
 
-#: ../plugins/command-bar/gb-command-bar.c:603
+#: ../plugins/command-bar/gb-command-bar.c:609
 msgid "Use the entry below to execute a command"
 msgstr "Zum Ausführen eines Befehls den Eintrag unten verwenden"
 
