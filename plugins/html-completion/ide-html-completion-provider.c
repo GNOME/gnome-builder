@@ -120,7 +120,14 @@ in_element (const GtkTextIter *iter)
       if (ch == '>')
         return FALSE;
       else if (ch == '<')
-        return TRUE;
+        {
+          GtkTextIter end = copy;
+
+          if (gtk_text_iter_forward_char (&end) && '?' == gtk_text_iter_get_char (&end))
+            return FALSE;
+
+          return TRUE;
+        }
     }
 
   return FALSE;
