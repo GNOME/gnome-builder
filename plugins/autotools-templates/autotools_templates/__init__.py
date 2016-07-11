@@ -143,7 +143,7 @@ class AutotoolsTemplate(Ide.TemplateBase, Ide.ProjectTemplate):
         scope.get('enable_i18n').assign_boolean(True)
         scope.get('enable_gtk_doc').assign_boolean(False)
         scope.get('enable_gobject_introspection').assign_boolean(True)
-        scope.get('enable_vapi').assign_boolean(True)
+        scope.get('enable_vapi').assign_boolean(self.language == 'c')
         scope.get('enable_vala').assign_boolean(self.language == 'vala')
         scope.get('translation_copyright').assign_string('Translation copyright holder')
         scope.get('language').assign_string(self.language)
