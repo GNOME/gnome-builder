@@ -19,6 +19,7 @@
 
   <category rdf:resource="http://api.gnome.org/doap-extensions#apps" />
   <programming-language>C</programming-language>
+  <programming-language>C++</programming-language>
   <programming-language>Python</programming-language>
   <programming-language>Vala</programming-language>
 
