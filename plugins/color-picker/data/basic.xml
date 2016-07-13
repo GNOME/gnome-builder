@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+Copyright (C) 2016 sebastien lafargue <slafargue@gnome.org>
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<palette id="basic" _name="Basic">
+
+  <color name="color_hex6"           value="#808080"/>
+  <color name="color_hex3"           value="#1aF"/>
+  <color name="color_rgb"            value="rgb(100, 200, 50)"/>
+  <color name="color_rgb_percent"    value="rgb(10%, 50%, 70%)"/>
+  <color name="color_rgba"           value="rgba(0, 10, 70, 1)"/>
+  <color name="color_rgba_percent"   value="rgba(10%, 50%, 40%, 0.5)"/>
+  <color name="color_hsl"            value="hsl(100, 100%, 50%)"/>
+  <color name="color_hsla"           value="hsla(400, 50%, 40%, 0.5)"/>
+  <color name="color_named"          value="aliceblue"/>
+
+</palette>

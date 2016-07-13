@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk+" version="3.16"/>
+  <object class="GtkBox" id="preview">
+    <property name="name">colorpicker_palette_preview</property>
+    <property name="expand">true</property>
+    <property name="halign">fill</property>
+    <property name="orientation">vertical</property>
+    <property name="spacing">12</property>
+    <property name="visible">true</property>
+    <child>
+      <object class="GtkLabel" id="preview_title">
+        <property name="name">colorpicker_preview_title</property>
+        <property name="visible">true</property>
+        <property name="ellipsize">middle</property>
+        <property name="hexpand">true</property>
+        <property name="halign">center</property>
+      </object>
+    </child>
+    <child>
+      <object class="GstylePaletteWidget" id="preview_palette_widget">
+        <property name="visible">1</property>
+        <property name="expand">true</property>
+      </object>
+    </child>
+  </object>
+  <object class="GtkBox" id="preview_placeholder">
+    <property name="expand">true</property>
+    <property name="orientation">vertical</property>
+    <property name="spacing">12</property>
+    <property name="visible">true</property>
+    <child>
+      <object class="GtkImage">
+        <property name="icon-name">applications-graphics-symbolic</property>
+        <property name="pixel-size">128</property>
+        <property name="visible">true</property>
+        <style>
+          <class name="dim-label"/>
+        </style>
+      </object>
+    </child>
+    <child>
+      <object class="GtkLabel">
+        <property name="label" translatable="yes">No selected palettes</property>
+        <property name="visible">true</property>
+        <style>
+          <class name="dim-label"/>
+        </style>
+        <attributes>
+          <attribute name="scale" value="2.0"/>
+          <attribute name="weight" value="bold"/>
+        </attributes>
+      </object>
+    </child>
+    <child>
+      <object class="GtkLabel">
+        <property name="label" translatable="yes">Select a palette file</property>
+        <property name="wrap">true</property>
+        <property name="visible">true</property>
+        <style>
+          <class name="dim-label"/>
+        </style>
+      </object>
+    </child>
+  </object>
+</interface>
+

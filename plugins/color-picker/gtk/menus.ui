@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<interface>
+  <menu id="ide-source-view-popup-menu">
+    <section id="ide-source-view-popup-menu-colorpicker-section">
+      <attribute name="after">ide-source-view-popup-menu-zoom-section</attribute>
+      <item>
+        <attribute name="label" translatable="yes">Color picker activated</attribute>
+        <attribute name="action">view.activate-color-picker</attribute>
+      </item>
+    </section>
+  </menu>
+</interface>

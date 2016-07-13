@@ -1,0 +1,2 @@
+save-palette
+load-palette

@@ -1,0 +1,635 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.20.0 -->
+<interface>
+  <requires lib="gtk+" version="3.20"/>
+  <object class="GtkBox" id="components_page">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="margin">6</property>
+    <property name="orientation">vertical</property>
+    <child>
+      <object class="GtkLabel">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes">Color components</property>
+        <attributes>
+          <attribute name="weight" value="bold"/>
+        </attributes>
+        <style>
+          <class name="cp-prefs-title"/>
+        </style>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkLabel">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="halign">start</property>
+        <property name="label" translatable="yes">Visibility :</property>
+        <style>
+          <class name="cp-prefs-grouptitle"/>
+        </style>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkLabel">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="margin_top">6</property>
+        <property name="margin_bottom">6</property>
+        <property name="label" translatable="yes">Select the colorspaces for which you want to see sliders in the panel.</property>
+        <property name="justify">fill</property>
+        <property name="wrap">True</property>
+        <style>
+          <class name="cp-prefs-resume"/>
+          <class name="dim-label"/>
+        </style>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GbColorPickerPrefsList">
+        <property name="visible">True</property>
+        <child>
+          <object class="IdePreferencesSwitch" id="hsv_switch">
+            <property name="visible">True</property>
+            <property name="key">hsv-visible</property>
+            <property name="is-radio">True</property>
+            <property name="schema-id">org.gnome.builder.plugins.color_picker_plugin.components</property>
+            <property name="target">""</property>
+            <property name="title">HSV</property>
+            <property name="subtitle">Hue Saturation Value</property>
+            <style>
+              <class name="cp-prefs-switch"/>
+            </style>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+          </packing>
+        </child>
+        <child>
+          <object class="IdePreferencesSwitch" id="lab_switch">
+            <property name="visible">True</property>
+            <property name="key">lab-visible</property>
+            <property name="is-radio">True</property>
+            <property name="schema-id">org.gnome.builder.plugins.color_picker_plugin.components</property>
+            <property name="target">""</property>
+            <property name="title">L*a*b*</property>
+            <property name="subtitle">CIE L*a*b* 1976</property>
+            <style>
+              <class name="cp-prefs-switch"/>
+            </style>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+          </packing>
+        </child>
+        <child>
+          <object class="IdePreferencesSwitch" id="rgb_switch">
+            <property name="visible">True</property>
+            <property name="key">rgb-visible</property>
+            <property name="is-radio">True</property>
+            <property name="schema-id">org.gnome.builder.plugins.color_picker_plugin.components</property>
+            <property name="target">""</property>
+            <property name="title">RGB</property>
+            <property name="subtitle">Red Green Blue</property>
+            <style>
+              <class name="cp-prefs-switch"/>
+            </style>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="GtkLabel">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="halign">start</property>
+        <property name="label" translatable="yes">Units :</property>
+        <style>
+          <class name="cp-prefs-grouptitle"/>
+        </style>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkLabel">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="margin_top">6</property>
+        <property name="margin_bottom">6</property>
+        <property name="label" translatable="yes">Select the type of unit you want to use for RGB components and strings in the panel.</property>
+        <property name="justify">fill</property>
+        <property name="wrap">True</property>
+        <style>
+          <class name="cp-prefs-resume"/>
+          <class name="dim-label"/>
+        </style>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GbColorPickerPrefsList">
+        <property name="visible">True</property>
+        <child>
+          <object class="IdePreferencesSwitch" id="unit_switch">
+            <property name="visible">True</property>
+            <property name="key">rgb-unit</property>
+            <property name="is-radio">True</property>
+            <property name="schema-id">org.gnome.builder.plugins.color_picker_plugin.components</property>
+            <property name="target">"value"</property>
+            <property name="title">Value</property>
+            <style>
+              <class name="cp-prefs-switch"/>
+            </style>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+          </packing>
+        </child>
+        <child>
+          <object class="IdePreferencesSwitch" id="percent_switch">
+            <property name="visible">True</property>
+            <property name="key">rgb-unit</property>
+            <property name="is-radio">True</property>
+            <property name="schema-id">org.gnome.builder.plugins.color_picker_plugin.components</property>
+            <property name="target">"percent"</property>
+            <property name="title">Percent</property>
+            <style>
+              <class name="cp-prefs-switch"/>
+            </style>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+  </object>
+  <object class="GtkBox" id="colorstrings_page">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="margin">6</property>
+    <property name="orientation">vertical</property>
+    <child>
+      <object class="GtkLabel">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes">Color strings</property>
+        <attributes>
+          <attribute name="weight" value="bold"/>
+        </attributes>
+        <style>
+          <class name="cp-prefs-title"/>
+        </style>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkLabel">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="halign">start</property>
+        <property name="label" translatable="yes">Visibility :</property>
+        <style>
+          <class name="cp-prefs-grouptitle"/>
+        </style>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkLabel">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="margin_top">6</property>
+        <property name="margin_bottom">6</property>
+        <property name="label" translatable="yes">Select the color strings you want to see in the panel.</property>
+        <property name="justify">fill</property>
+        <property name="wrap">True</property>
+        <style>
+          <class name="cp-prefs-resume"/>
+          <class name="dim-label"/>
+        </style>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GbColorPickerPrefsList">
+        <property name="visible">True</property>
+        <child>
+          <object class="IdePreferencesSwitch">
+            <property name="visible">True</property>
+            <property name="key">strings-visible</property>
+            <property name="is-radio">True</property>
+            <property name="schema-id">org.gnome.builder.plugins.color_picker_plugin</property>
+            <property name="target">"hex3"</property>
+            <property name="title">HEX3</property>
+            <style>
+              <class name="cp-prefs-switch"/>
+            </style>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+          </packing>
+        </child>
+        <child>
+          <object class="IdePreferencesSwitch">
+            <property name="visible">True</property>
+            <property name="key">strings-visible</property>
+            <property name="is-radio">True</property>
+            <property name="schema-id">org.gnome.builder.plugins.color_picker_plugin</property>
+            <property name="target">"hex6"</property>
+            <property name="title">HEX6</property>
+            <style>
+              <class name="cp-prefs-switch"/>
+            </style>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+          </packing>
+        </child>
+        <child>
+          <object class="IdePreferencesSwitch">
+            <property name="visible">True</property>
+            <property name="key">strings-visible</property>
+            <property name="is-radio">True</property>
+            <property name="schema-id">org.gnome.builder.plugins.color_picker_plugin</property>
+            <property name="target">"rgb"</property>
+            <property name="title">RGB</property>
+            <style>
+              <class name="cp-prefs-switch"/>
+            </style>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+          </packing>
+        </child>
+        <child>
+          <object class="IdePreferencesSwitch">
+            <property name="visible">True</property>
+            <property name="key">strings-visible</property>
+            <property name="is-radio">True</property>
+            <property name="schema-id">org.gnome.builder.plugins.color_picker_plugin</property>
+            <property name="target">"rgba"</property>
+            <property name="title">RGBA</property>
+            <style>
+              <class name="cp-prefs-switch"/>
+            </style>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+          </packing>
+        </child>
+        <child>
+          <object class="IdePreferencesSwitch">
+            <property name="visible">True</property>
+            <property name="key">strings-visible</property>
+            <property name="is-radio">True</property>
+            <property name="schema-id">org.gnome.builder.plugins.color_picker_plugin</property>
+            <property name="target">"hsl"</property>
+            <property name="title">HSL</property>
+            <style>
+              <class name="cp-prefs-switch"/>
+            </style>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+          </packing>
+        </child>
+        <child>
+          <object class="IdePreferencesSwitch">
+            <property name="visible">True</property>
+            <property name="key">strings-visible</property>
+            <property name="is-radio">True</property>
+            <property name="schema-id">org.gnome.builder.plugins.color_picker_plugin</property>
+            <property name="target">"hsla"</property>
+            <property name="title">HSLA</property>
+            <style>
+              <class name="cp-prefs-switch"/>
+            </style>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+  </object>
+  <object class="GtkBox" id="palettes_page">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="margin">6</property>
+    <property name="orientation">vertical</property>
+    <child>
+      <object class="GtkLabel">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes">Palettes options</property>
+        <attributes>
+          <attribute name="weight" value="bold"/>
+        </attributes>
+        <style>
+          <class name="cp-prefs-title"/>
+        </style>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkLabel">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="halign">start</property>
+        <property name="label" translatable="yes">Palette view mode :</property>
+        <style>
+          <class name="cp-prefs-grouptitle"/>
+        </style>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkBox">
+        <property name="homogeneous">True</property>
+        <property name="visible">1</property>
+        <child>
+          <object class="GtkBox">
+            <property name="visible">1</property>
+            <property name="halign">center</property>
+            <property name="orientation">vertical</property>
+            <child>
+              <object class="GtkLabel">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">List</property>
+                <style>
+                  <class name="cp-prefs-grouptitle"/>
+                </style>
+              </object>
+            </child>
+            <child>
+              <object class="GtkToggleButton" id="viewmode_list_button">
+                <property name="name">viewmode_list_button</property>
+                <property name="action-name">gstyle-palettes-prefs.view-mode</property>
+                <property name="action-target">"list"</property>
+                <property name="visible">1</property>
+                <property name="can_focus">1</property>
+                <property name="receives_default">1</property>
+                <style>
+                  <class name="flat"/>
+                </style>
+                <child>
+                  <object class="GtkImage">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="icon-name">builder-colorpicker-viewmode-list</property>
+                    <property name="pixel-size">48</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox">
+            <property name="visible">1</property>
+            <property name="halign">center</property>
+            <property name="orientation">vertical</property>
+            <child>
+              <object class="GtkLabel">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">Swatchs</property>
+                <style>
+                  <class name="cp-prefs-grouptitle"/>
+                </style>
+              </object>
+            </child>
+            <child>
+              <object class="GtkToggleButton" id="viewmode_swatchs_button">
+                <property name="name">viewmode_swatchs_button</property>
+                <property name="action-name">gstyle-palettes-prefs.view-mode</property>
+                <property name="action-target">"swatchs"</property>
+                <property name="visible">1</property>
+                <property name="can_focus">1</property>
+                <property name="receives_default">1</property>
+                <style>
+                  <class name="flat"/>
+                </style>
+                <child>
+                  <object class="GtkImage">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="icon-name">builder-colorpicker-viewmode-swatchs</property>
+                    <property name="pixel-size">48</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
+  <object class="GtkBox" id="paletteslist_page">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="margin">6</property>
+    <property name="orientation">vertical</property>
+    <child>
+      <object class="GtkLabel">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes">Palette selection</property>
+        <attributes>
+          <attribute name="weight" value="bold"/>
+        </attributes>
+        <style>
+          <class name="cp-prefs-title"/>
+        </style>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkBox">
+        <property name="homogeneous">True</property>
+        <property name="visible">1</property>
+        <child>
+          <object class="GtkBox">
+            <property name="visible">1</property>
+            <property name="halign">center</property>
+            <property name="orientation">vertical</property>
+            <child>
+              <object class="GtkLabel">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">Load</property>
+                <style>
+                  <class name="cp-prefs-grouptitle"/>
+                </style>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton" id="load_palette_button">
+                <property name="name">load_palette_button</property>
+                <property name="visible">1</property>
+                <property name="can_focus">1</property>
+                <property name="receives_default">1</property>
+                <style>
+                  <class name="flat"/>
+                </style>
+                <child>
+                  <object class="GtkImage">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="icon-name">builder-colorpicker-load-palette</property>
+                    <property name="pixel-size">48</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox">
+            <property name="visible">1</property>
+            <property name="halign">center</property>
+            <property name="orientation">vertical</property>
+            <child>
+              <object class="GtkLabel">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">Save</property>
+                <style>
+                  <class name="cp-prefs-grouptitle"/>
+                </style>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton" id="save_palette_button">
+                <property name="name">save_palette_button</property>
+                <property name="visible">1</property>
+                <property name="can_focus">1</property>
+                <property name="receives_default">1</property>
+                <style>
+                  <class name="flat"/>
+                </style>
+                <child>
+                  <object class="GtkImage">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="icon-name">builder-colorpicker-save-palette</property>
+                    <property name="pixel-size">48</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="GtkLabel">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="margin_top">6</property>
+        <property name="margin_bottom">6</property>
+        <property name="label" translatable="yes">Select the palette you want to see in the panel or close one.</property>
+        <property name="justify">fill</property>
+        <property name="wrap">True</property>
+        <style>
+          <class name="cp-prefs-resume"/>
+          <class name="dim-label"/>
+        </style>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GbColorPickerPrefsPaletteList" id="palettes_box">
+        <property name="visible">True</property>
+      </object>
+    </child>
+  </object>
+  <object class="GtkBox" id="palettes_placeholder">
+    <property name="expand">true</property>
+    <property name="halign">center</property>
+    <property name="margin">6</property>
+    <property name="spacing">12</property>
+    <property name="visible">true</property>
+    <child>
+      <object class="GtkImage">
+        <property name="icon-name">applications-graphics-symbolic</property>
+        <property name="pixel-size">32</property>
+        <property name="visible">true</property>
+        <style>
+          <class name="dim-label"/>
+        </style>
+      </object>
+    </child>
+    <child>
+      <object class="GtkLabel">
+        <property name="label" translatable="yes">No loaded palettes</property>
+        <property name="halign">center</property>
+        <property name="hexpand">True</property>
+        <property name="visible">true</property>
+        <style>
+          <class name="dim-label"/>
+        </style>
+        <attributes>
+          <attribute name="scale" value="1.0"/>
+          <attribute name="weight" value="bold"/>
+        </attributes>
+      </object>
+    </child>
+  </object>
+</interface>

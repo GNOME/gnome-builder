@@ -1,0 +1,326 @@
+/*
+ * Panel
+ */
+
+gstylecolorpanel {
+  font-size: 12px;
+}
+
+gstylecolorpanel > box {
+  border: solid alpha(@borders, 0.75);
+  border-width: 1px 0px 0px 0px;
+}
+
+#search_strings_popover gstylecolorwidget label,
+gstylecolorpanel gstylecolorwidget label,
+#colorpicker_preview_widget gstylecolorwidget label {
+  padding: 12px;
+}
+
+/* Buttons and Toggles - remove default style */
+gstylecolorpanel button.toggle,
+gstylecolorpanel #components_menu_button,
+gstylecolorpanel #strings_menu_button,
+gstylecolorpanel #components_controls,
+gstylecolorpanel #strings_controls,
+gstylecolorpanel #palette_controls {
+  background-image: none;
+  background: none;
+  outline-offset: -3px;
+  transition-duration: 200ms;
+  transition-timing-function: ease;
+}
+
+/* Reveal bars */
+gstylecolorpanel button.reveal-bar,
+gstylecolorpanel #components_controls,
+gstylecolorpanel #strings_controls,
+gstylecolorpanel #palette_controls {
+  margin: 0px;
+  padding: 0px;
+  background-color: @content_view_bg;
+  border: solid alpha(@borders, 0.75);
+  border-width: 0px 0px 1px 0px;
+  border-radius: 0px;
+}
+
+gstylecolorpanel button.reveal-bar label,
+gstylecolorpanel #components_controls label,
+gstylecolorpanel #strings_controls label,
+gstylecolorpanel #palette_controls label {
+  padding: 0px 10px;
+}
+
+gstylecolorpanel button.reveal-bar:checked {
+  box-shadow: 2px 1px 2px 0px alpha(@borders, 0.8);
+}
+
+/* Reveal bars reveal buttons */
+gstylecolorpanel #components_controls > button,
+gstylecolorpanel #strings_controls > button,
+gstylecolorpanel #palette_controls > button {
+  border:none;
+  padding: 0px;
+}
+
+gstylecolorpanel #components_menu_button,
+gstylecolorpanel #strings_menu_button {
+  min-width: 24px;
+  min-height: 24px;
+  }
+
+/* Components toggles */
+gstylecolorpanel #scale_box button.toggle
+{
+  background-color: @theme_base_color;
+  margin: 3px;
+  padding: 0px 6px;
+  border: solid 1px alpha(@borders, 0.75);
+  border-width: 2px;
+  border-radius: 0px;
+}
+
+gstylecolorpanel #scale_box button.toggle:checked {
+  background-color: @theme_bg_color;
+  border: solid 2px @theme_selected_bg_color;
+  box-shadow: inset 1px 1px 1px 0px alpha(@borders, 0.8);
+}
+
+/*
+ * Editor
+ */
+
+gstylecolorpanel #editor_grid
+{
+  margin: 3px;
+}
+
+gstylecolorpanel #swatchs_box gstylecolorwidget
+{
+  margin: 3px;
+}
+
+/* Picker Button */
+gstylecolorpanel #picker_button {
+  margin: 0px;
+  padding: 3px;
+}
+
+/* GstyleColorPlane */
+gstylecolorpanel gstylecolorplane,
+gstylecolorpanel gstylecolorscale contents {
+  border: solid 1px @theme_base_color;
+}
+
+/*
+ * Color Strings
+ */
+
+gstylecolorpanel #search_color_entry {
+  min-height: 24px;
+  border-radius: 0px;
+}
+
+gstylecolorpanel #string_grid {
+  margin: 6px 12px;
+}
+
+gstylecolorpanel label.selectable {
+  background-color: alpha(@theme_base_color, 0.8);
+  margin: 1px 0px 1px 6px;
+  padding: 0px 6px;
+}
+
+/*
+ * Color Components
+ */
+
+gstylecolorpanel #scale_box grid {
+  margin: 0px;
+  padding: 6px;
+}
+
+/* Components unit icon */
+gstylecolorpanel #scale_box spinbutton entry image {
+  padding: 0px;
+  -gtk-icon-transform: scale(0.7) translateX(6px);
+  -gtk-icon-shadow: 0 0 @theme_base_color;
+}
+gstylecolorpanel #scale_box spinbutton entry image:backdrop {
+ -gtk-icon-shadow: none;
+}
+
+gstylecolorpanel #scale_box spinbutton undershoot.right {
+  border: none;
+}
+
+/* Components Spin Buttons */
+gstylecolorpanel #scale_box spinbutton {
+  margin: 3px;
+  min-height: 26px;
+  border-radius: 0px;
+}
+
+gstylecolorpanel #scale_box spinbutton button {
+  padding: 3px;
+  -gtk-icon-transform: scale(0.8);
+}
+
+gstylecolorpanel #scale_box spinbutton entry {
+  min-height: 10px;
+  padding: 0px 0px 0px 3px;;
+}
+
+/* Components color scale */
+gstylecolorpanel gstylecolorscale {
+  margin: 3px;
+}
+
+/*
+ * Color Widget (swatchs)
+ */
+gstylecolorwidget label {
+  padding: 10px;
+}
+
+/*
+ * Prefs pages
+ */
+gstyleslidein > stack {
+  background-color: @theme_bg_color;
+  border: solid alpha(@borders, 0.2);
+  border-width: 0px 1px 0px 0px;
+}
+
+gstylecolorpanel #components_prefs_button:checked,
+gstylecolorpanel #color_strings_prefs_button:checked,
+gstylecolorpanel #palettes_prefs_button:checked,
+gstylecolorpanel #palettes_list_prefs_button:checked {
+  color: alpha(@theme_selected_bg_color, 0.9);
+}
+
+gstyleslidein label.cp-prefs-grouptitle {
+  margin: 12px 0px 6px 0px;
+}
+
+gstyleslidein label.cp-prefs-resume {
+  background-color: @insensitive_bg_color;
+  border: 1px solid alpha(@borders, 0.4);
+  margin: 0px 0px 6px 0px;
+  padding: 12px;
+}
+
+gstyleslidein gbcolorpickerprefslist,
+gstyleslidein gbcolorpickerprefspalettelist {
+  border: 1px solid @borders;
+  background-color: @theme_base_color;
+}
+
+gstyleslidein gbcolorpickerprefslist row,
+gstyleslidein gbcolorpickerprefspalettelist row {
+  border-bottom: 1px solid alpha(@borders, 0.2);
+  padding: 10px;
+}
+
+gstyleslidein gbcolorpickerprefslist row:last-child,
+gstyleslidein gbcolorpickerprefspalettelist row:last-child {
+  border-bottom: none;
+}
+
+gstyleslidein gbcolorpickerprefslist button ,
+gstyleslidein gbcolorpickerprefspalettelist button {
+  background: none;
+  box-shadow: none;
+}
+
+gstyleslidein gbcolorpickerprefspalettelist > button {
+  border-width: 0px 0px 1px 0px;
+  border-color: alpha(@borders, 0.2);
+}
+
+gstyleslidein gbcolorpickerprefslist row button,
+gstyleslidein gbcolorpickerprefspalettelist row button {
+  border: solid 2px alpha (@theme_selected_bg_color, 0);
+}
+
+gstyleslidein gbcolorpickerprefslist row button:hover,
+gstyleslidein gbcolorpickerprefspalettelist row button:hover {
+  background: none;
+  box-shadow: none;
+  border: solid 2px @theme_selected_bg_color;
+}
+
+gstyleslidein #load_palette_button,
+gstyleslidein #save_palette_button {
+  background: none;
+  border: none;
+  outline-offset: 0px;
+  padding: 6px;
+}
+
+/*
+ * Palettes
+ */
+
+gstylecolorpanel gstylepalettewidget list {
+  background: none;
+  margin: 4px 3px;
+}
+
+gstylecolorpanel gstylepalettewidget flowbox {
+  background: none;
+  margin: 2px;
+}
+
+gstylecolorpanel gstylepalettewidget stack {
+  background: @theme_unfocused_bg_color;
+  box-shadow: 1px 1px 3px alpha(@borders, 0.4) inset;
+  margin: 0px 3px 3px 3px;
+}
+
+gstylecolorpanel gstylepalettewidget > box > scrolledwindow {
+  border:  solid @borders;
+  border-width: 0px 1px 1px 1px;
+}
+
+gstylecolorpanel gstylepalettewidget gstylecolorwidget {
+  border: solid 1px alpha(@borders, 0.8);
+}
+
+/*
+ * FileChooserDialog preview
+ */
+
+#colorpicker_preview_title {
+  padding: 16px;
+}
+
+#colorpicker_preview_widget {
+  padding: 12px;
+  min-width: 400px;
+}
+
+/*
+ * Search color entry popover
+ */
+
+#search_strings_popover {
+  padding: 0px;
+}
+
+#search_strings_popover gstylecolorwidget {
+  border: solid 1px alpha(@borders, 0.8);
+}
+
+#search_strings_popover list {
+  background: none;
+  margin: 0px;
+}
+
+#search_strings_popover row {
+  padding: 2px;
+}
+
+#search_strings_popover scrolledwindow {
+  margin: 3px;
+}

@@ -102,6 +102,13 @@ plugins/clang/ide-clang-preferences-addin.c
 plugins/clang/ide-clang-service.c
 plugins/clang/ide-clang-symbol-node.c
 plugins/clang/ide-clang-translation-unit.c
+plugins/color-picker/color_picker_plugin/__init__.py
+plugins/color-picker/color_picker_plugin/io.py
+plugins/color-picker/color_picker_plugin/ui.py
+plugins/color-picker/color_picker_plugin/data/basic.xml
+[type: gettext/glade]plugins/color-picker/color_picker_plugin/gtk/color-picker.ui
+[type: gettext/glade]plugins/color-picker/color_picker_plugin/gtk/color-picker-preview.ui
+[type: gettext/glade]plugins/color-picker/color_picker_plugin/gtk/menus.ui
 plugins/command-bar/gb-command-bar.c
 plugins/command-bar/gb-vim.c
 [type: gettext/glade]plugins/comment-code/gtk/menus.ui
