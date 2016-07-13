@@ -1,0 +1,15 @@
+color-scale-slider-horizontal
+color-scale-slider-horizontal-hover
+color-scale-slider-horizontal-active
+color-scale-slider-horizontal-insensitive
+color-scale-slider-horizontal-backdrop
+color-scale-slider-horizontal-backdrop-insensitive
+color-scale-slider-vertical
+color-scale-slider-vertical-hover
+color-scale-slider-vertical-active
+color-scale-slider-vertical-insensitive
+color-scale-slider-vertical-backdrop
+color-scale-slider-vertical-backdrop-insensitive
+gstyle-picker
+unit-percent
+unit-degree

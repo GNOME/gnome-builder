@@ -6,6 +6,7 @@ SUBDIRS = \
 	pnl \
 	rg \
 	search \
+	gstyle \
 	tmpl \
 	xml \
 	$(NULL)

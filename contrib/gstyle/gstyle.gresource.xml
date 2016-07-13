@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+  <gresource prefix="/org/gnome/libgstyle">
+    <file compressed="true" alias="ui/gstyle-color-panel.ui">ui/gstyle-color-panel.ui</file>
+    <file compressed="true" alias="ui/gstyle-palette-widget.ui">ui/gstyle-palette-widget.ui</file>
+
+    <file compressed="true" alias="theme/gstyle.css">theme/gstyle.css</file>
+
+    <file preprocess='to-pixdata' alias="colorscale/color-scale-slider-horizontal.png">assets/color-scale-slider-horizontal.png</file>
+    <file preprocess='to-pixdata' alias="colorscale/color-scale-slider-horizontal-hover.png">assets/color-scale-slider-horizontal-hover.png</file>
+    <file preprocess='to-pixdata' alias="colorscale/color-scale-slider-horizontal-active.png">assets/color-scale-slider-horizontal-active.png</file>
+    <file preprocess='to-pixdata' alias="colorscale/color-scale-slider-horizontal-insensitive.png">assets/color-scale-slider-horizontal-insensitive.png</file>
+    <file preprocess='to-pixdata' alias="colorscale/color-scale-slider-horizontal-backdrop.png">assets/color-scale-slider-horizontal-backdrop.png</file>
+    <file preprocess='to-pixdata' alias="colorscale/color-scale-slider-horizontal-backdrop-insensitive.png">assets/color-scale-slider-horizontal-backdrop-insensitive.png</file>
+    <file preprocess='to-pixdata' alias="colorscale/color-scale-slider-vertical.png">assets/color-scale-slider-vertical.png</file>
+    <file preprocess='to-pixdata' alias="colorscale/color-scale-slider-vertical-hover.png">assets/color-scale-slider-vertical-hover.png</file>
+    <file preprocess='to-pixdata' alias="colorscale/color-scale-slider-vertical-active.png">assets/color-scale-slider-vertical-active.png</file>
+    <file preprocess='to-pixdata' alias="colorscale/color-scale-slider-vertical-insensitive.png">assets/color-scale-slider-vertical-insensitive.png</file>
+    <file preprocess='to-pixdata' alias="colorscale/color-scale-slider-vertical-backdrop.png">assets/color-scale-slider-vertical-backdrop.png</file>
+    <file preprocess='to-pixdata' alias="colorscale/color-scale-slider-vertical-backdrop-insensitive.png">assets/color-scale-slider-vertical-backdrop-insensitive.png</file>
+
+    <file preprocess='to-pixdata' alias="colorscale/color-scale-slider-horizontal@2.png">assets/color-scale-slider-horizontal@2.png</file>
+    <file preprocess='to-pixdata' alias="colorscale/color-scale-slider-horizontal-hover@2.png">assets/color-scale-slider-horizontal-hover@2.png</file>
+    <file preprocess='to-pixdata' alias="colorscale/color-scale-slider-horizontal-active@2.png">assets/color-scale-slider-horizontal-active@2.png</file>
+    <file preprocess='to-pixdata' alias="colorscale/color-scale-slider-horizontal-insensitive@2.png">assets/color-scale-slider-horizontal-insensitive@2.png</file>
+    <file preprocess='to-pixdata' alias="colorscale/color-scale-slider-horizontal-backdrop@2.png">assets/color-scale-slider-horizontal-backdrop@2.png</file>
+    <file preprocess='to-pixdata' alias="colorscale/color-scale-slider-horizontal-backdrop-insensitive@2.png">assets/color-scale-slider-horizontal-backdrop-insensitive@2.png</file>
+    <file preprocess='to-pixdata' alias="colorscale/color-scale-slider-vertical@2.png">assets/color-scale-slider-vertical@2.png</file>
+    <file preprocess='to-pixdata' alias="colorscale/color-scale-slider-vertical-hover@2.png">assets/color-scale-slider-vertical-hover@2.png</file>
+    <file preprocess='to-pixdata' alias="colorscale/color-scale-slider-vertical-active@2.png">assets/color-scale-slider-vertical-active@2.png</file>
+    <file preprocess='to-pixdata' alias="colorscale/color-scale-slider-vertical-insensitive@2.png">assets/color-scale-slider-vertical-insensitive@2.png</file>
+    <file preprocess='to-pixdata' alias="colorscale/color-scale-slider-vertical-backdrop@2.png">assets/color-scale-slider-vertical-backdrop@2.png</file>
+    <file preprocess='to-pixdata' alias="colorscale/color-scale-slider-vertical-backdrop-insensitive@2.png">assets/color-scale-slider-vertical-backdrop-insensitive@2.png</file>
+
+    <file alias="icons/scalable/actions/eyedropper-symbolic.svg">assets/eyedropper-symbolic.svg</file>
+
+    <file alias="icons/unit-percent-symbolic.svg">assets/unit-percent-symbolic.svg</file>
+    <file alias="icons/unit-degree-symbolic.svg">assets/unit-degree-symbolic.svg</file>
+  </gresource>
+</gresources>

@@ -198,6 +198,9 @@ PKG_CHECK_MODULES(EGG,      [glib-2.0 >= glib_required_version
 PKG_CHECK_MODULES(GD,       [gtk+-3.0 >= gtk_required_version])
 PKG_CHECK_MODULES(GEDIT,    [glib-2.0 >= glib_required_version
                              gtk+-3.0 >= gtk_required_version])
+PKG_CHECK_MODULES(GSTYLE,   [glib-2.0 >= glib_required_version
+                             gtk+-3.0 >= gtk_required_version
+                             gtksourceview-3.0 >= gtksourceview_required_version])
 PKG_CHECK_MODULES(ICONS,    [gio-2.0 >= glib_required_version])
 PKG_CHECK_MODULES(LIBIDE,   [gio-2.0 >= glib_required_version
                              gio-unix-2.0 >= glib_required_version
@@ -443,6 +446,7 @@ PLUGIN_CFLAGS="$PLUGIN_CFLAGS -I\$(top_builddir)/contrib/pnl"
 PLUGIN_CFLAGS="$PLUGIN_CFLAGS -I\$(top_builddir)/libide"
 PLUGIN_CFLAGS="$PLUGIN_CFLAGS -I\$(top_srcdir)/contrib/egg"
 PLUGIN_CFLAGS="$PLUGIN_CFLAGS -I\$(top_srcdir)/contrib/gd"
+PLUGIN_CFLAGS="$PLUGIN_CFLAGS -I\$(top_srcdir)/contrib/gstyle"
 PLUGIN_CFLAGS="$PLUGIN_CFLAGS -I\$(top_srcdir)/contrib/nautilus"
 PLUGIN_CFLAGS="$PLUGIN_CFLAGS -I\$(top_srcdir)/contrib/pnl"
 PLUGIN_CFLAGS="$PLUGIN_CFLAGS -I\$(top_srcdir)/contrib/rg"
@@ -464,6 +468,7 @@ PLUGIN_VALAFLAGS="$PLUGIN_VALAFLAGS --target-glib=2.44"
 PLUGIN_VALAFLAGS="$PLUGIN_VALAFLAGS --thread"
 PLUGIN_VALAFLAGS="$PLUGIN_VALAFLAGS --vapidir \$(top_builddir)/libide"
 PLUGIN_VALAFLAGS="$PLUGIN_VALAFLAGS --vapidir \$(top_builddir)/contrib/egg"
+PLUGIN_VALAFLAGS="$PLUGIN_VALAFLAGS --vapidir \$(top_builddir)/contrib/gstyle"
 PLUGIN_VALAFLAGS="$PLUGIN_VALAFLAGS --vapidir \$(top_builddir)/contrib/pnl"
 PLUGIN_VALAFLAGS="$PLUGIN_VALAFLAGS --vapidir \$(top_builddir)/contrib/tmpl"
 PLUGIN_VALAFLAGS="$PLUGIN_VALAFLAGS --pkg libide-1.0"
@@ -483,6 +488,8 @@ AC_CONFIG_FILES([
 	contrib/Makefile
 	contrib/egg/Makefile
 	contrib/gd/Makefile
+	contrib/gstyle/Makefile
+	contrib/gstyle/tests/Makefile
 	contrib/libeditorconfig/Makefile
 	contrib/nautilus/Makefile
 	contrib/pnl/Makefile

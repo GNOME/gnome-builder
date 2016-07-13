@@ -1,0 +1,120 @@
+/* GstyleColorScale */
+
+gstylecolorscale {
+  padding: 12px;
+  background-clip: content-box;
+}
+
+gstylecolorscale highlight {
+  border: none;
+  padding: 0px;
+  margin: 0px;
+  background: transparent;
+}
+
+gstylecolorscale trough {
+  padding: 0px;
+  margin: 0px;
+  background: transparent;
+  border: none;
+  border-radius: 0px;
+  outline-offset: 6px;
+  -gtk-outline-radius: 0px;
+}
+
+gstylecolorscale contents {
+  border: solid white 1px;
+  padding: 0px;
+  margin: 0px;
+  background: transparent;
+}
+
+gstylecolorscale.horizontal contents{
+  min-height: 20px;
+}
+
+gstylecolorscale.vertical contents{
+  min-width: 20px;
+}
+
+gstylecolorscale.horizontal slider {
+  padding: 0px;
+  margin: -12px;
+  min-width: 0px;
+  min-height: 44px;
+  border: none;
+  box-shadow: none;
+  background-position: center;
+  background-size: auto 28px;
+  background-repeat: no-repeat;
+}
+
+gstylecolorscale.vertical slider {
+  padding: 0px;
+  margin: -12px;
+  min-width: 44px;
+  min-height: 0px;
+  border: none;
+  box-shadow: none;
+  background-position: center;
+  background-size: 28px auto;
+  background-repeat: no-repeat;
+}
+
+gstylecolorscale.horizontal slider {
+  background-image: -gtk-scaled(url("resource:///org/gnome/libgstyle/colorscale/color-scale-slider-vertical.png"), url("resource:///org/gnome/libgstyle/colorscale/color-scale-slider-vertical@2.png"));
+}
+gstylecolorscale.horizontal slider:backdrop {
+  background-image: -gtk-scaled(url("resource:///org/gnome/libgstyle/colorscale/color-scale-slider-vertical-backdrop.png"), url("resource:///org/gnome/libgstyle/colorscale/color-scale-slider-vertical-backdrop@2.png"));
+}
+gstylecolorscale.horizontal slider:hover {
+  background-image: -gtk-scaled(url("resource:///org/gnome/libgstyle/colorscale/color-scale-slider-vertical-hover.png"), url("resource:///org/gnome/libgstyle/colorscale/color-scale-slider-vertical-hover@2.png"));
+}
+gstylecolorscale.horizontal slider:disabled {
+  background-image: -gtk-scaled(url("resource:///org/gnome/libgstyle/colorscale/color-scale-slider-vertical-insensitive.png"), url("resource:///org/gnome/libgstyle/colorscale/color-scale-slider-vertical-insensitive@2.png"));
+}
+gstylecolorscale.horizontal slider:backdrop:disabled {
+  background-image: -gtk-scaled(url("resource:///org/gnome/libgstyle/colorscale/color-scale-slider-vertical-backdrop-insensitive.png"), url("resource:///org/gnome/libgstyle/colorscale/color-scale-slider-vertical-backdrop-insensitive@2.png"));
+}
+gstylecolorscale.horizontal slider:active {
+  background-image: -gtk-scaled(url("resource:///org/gnome/libgstyle/colorscale/color-scale-slider-vertical-active.png"), url("resource:///org/gnome/libgstyle/colorscale/color-scale-slider-vertical-active@2.png"));
+}
+
+gstylecolorscale.vertical slider {
+  background-image: -gtk-scaled(url("resource:///org/gnome/libgstyle/colorscale/color-scale-slider-horizontal.png"), url("resource:///org/gnome/libgstyle/colorscale/color-scale-slider-horizontal@2.png"));
+}
+gstylecolorscale.vertical slider:backdrop {
+  background-image: -gtk-scaled(url("resource:///org/gnome/libgstyle/colorscale/color-scale-slider-horizontal-backdrop.png"), url("resource:///org/gnome/libgstyle/colorscale/color-scale-slider-horizontal-backdrop@2.png"));
+}
+gstylecolorscale.vertical slider:hover {
+  background-image: -gtk-scaled(url("resource:///org/gnome/libgstyle/colorscale/color-scale-slider-horizontal-hover.png"), url("resource:///org/gnome/libgstyle/colorscale/color-scale-slider-horizontal-hover@2.png"));
+}
+gstylecolorscale.vertical slider:disabled {
+  background-image: -gtk-scaled(url("resource:///org/gnome/libgstyle/colorscale/color-scale-slider-horizontal-insensitive.png"), url("resource:///org/gnome/libgstyle/colorscale/color-scale-slider-horizontal-insensitive@2.png"));
+}
+gstylecolorscale.vertical slider:backdrop:disabled {
+  background-image: -gtk-scaled(url("resource:///org/gnome/libgstyle/colorscale/color-scale-slider-horizontal-backdrop-insensitive.png"), url("resource:///org/gnome/libgstyle/colorscale/color-scale-slider-horizontal-backdrop-insensitive@2.png"));
+}
+gstylecolorscale.vertical slider:active {
+  background-image: -gtk-scaled(url("resource:///org/gnome/libgstyle/colorscale/color-scale-slider-horizontal-active.png"), url("resource:///org/gnome/libgstyle/colorscale/color-scale-slider-horizontal-active@2.png"));
+}
+
+/* GstyleColorWidget */
+
+gstylecolorwidget label {
+  padding: 12px;
+}
+
+gstylecolorwidget {
+  background-color: white;
+}
+
+/* GstyleColorPanel */
+
+gstylecolorpanel revealer button.toggle {
+  margin: 6px;
+}
+
+gstyleslidein.shade {
+  color: rgba(77, 78, 83, 0.8);
+}

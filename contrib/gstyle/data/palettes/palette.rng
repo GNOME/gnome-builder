@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+Copyright (C) 2016 sebastien lafargue <slafargue@gnome.org>
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<grammar xmlns="http://relaxng.org/ns/structure/1.0"
+         datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
+         ns="">
+
+<define name="color_hex6">
+  <attribute name="value">
+    <data type="string">
+      <param name="pattern">#([0-9a-fA-F]+){6}</param>
+    </data>
+  </attribute>
+</define>
+
+<define name="color_hex3">
+  <attribute name="value">
+    <data type="string">
+      <param name="pattern">#([0-9a-fA-F]+){3}</param>
+    </data>
+  </attribute>
+</define>
+
+<define name="color_rgb">
+  <attribute name="value">
+    <data type="string">
+      <param name="pattern">rgb\((\s*[0-9]*\.?[0-9]+\s*,){2}\s*[0-9]*\.?[0-9]+\s*\)</param>
+    </data>
+  </attribute>
+</define>
+
+<define name="color_rgb_percent">
+  <attribute name="value">
+    <data type="string">
+      <param name="pattern">rgb\((\s*[0-9]*\.?[0-9]+%\s*,){2}\s*[0-9]*\.?[0-9]+%\s*\)</param>
+    </data>
+  </attribute>
+</define>
+
+<define name="color_rgba">
+  <attribute name="value">
+    <data type="string">
+      <param name="pattern">rgba\((\s*[0-9]*\.?[0-9]+\s*,){3}\s*[0-9]*\.?[0-9]+\s*\)</param>
+    </data>
+  </attribute>
+</define>
+
+<define name="color_rgba_percent">
+  <attribute name="value">
+    <data type="string">
+      <param name="pattern">rgba\((\s*[0-9]*\.?[0-9]+%\s*,){3}\s*[0-9]*\.?[0-9]+\s*\)</param>
+    </data>
+  </attribute>
+
+</define>
+  <define name="color_hsl">
+  <attribute name="value">
+    <data type="string">
+      <param name="pattern">hsl\(\s*[0-9]*\.?[0-9]+\s*(,\s*[0-9]*\.?[0-9]+%\s*){2}\)</param>
+    </data>
+  </attribute>
+</define>
+
+<define name="color_hsla">
+  <attribute name="value">
+    <data type="string">
+      <param name="pattern">hsla\(\s*[0-9]*\.?[0-9]+\s*(,\s*[0-9]*\.?[0-9]+%\s*){2},\s*[0-9]*\.?[0-9]+\s*\)</param>
+    </data>
+  </attribute>
+</define>
+
+<!-- TODO: add named colors list to the pattern -->
+<define name="color_named">
+  <attribute name="value">
+    <data type="string">
+      <param name="pattern">[a-zA-Z]+</param>
+    </data>
+  </attribute>
+</define>
+
+<start>
+  <element name="palette">
+    <attribute name="id">
+      <data type="string">
+        <param name="pattern">[a-zA-Z0-9_]+</param>
+      </data>
+    </attribute>
+    <choice>
+      <attribute name="name"/>
+      <attribute name="_name"/>
+    </choice>
+    <optional>
+      <oneOrMore>
+          <element name="color">
+            <attribute name="name">
+              <data type="string">
+                <param name="pattern">[a-zA-Z0-9_]+</param>
+              </data>
+            </attribute>
+            <choice>
+              <ref name="color_hex6"/>
+              <ref name="color_hex3"/>
+              <ref name="color_rgb"/>
+              <ref name="color_rgb_percent"/>
+              <ref name="color_rgba"/>
+              <ref name="color_rgba_percent"/>
+              <ref name="color_hsl"/>
+              <ref name="color_hsla"/>
+              <ref name="color_named"/>
+            </choice>
+          </element>
+      </oneOrMore>
+    </optional>
+  </element>
+</start>
+
+</grammar>
+
