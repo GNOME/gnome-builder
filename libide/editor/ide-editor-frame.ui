@@ -49,7 +49,6 @@
                     <property name="halign">end</property>
                     <property name="valign">start</property>
                     <property name="visible">true</property>
-                    <property name="width-request">300</property>
                     <child>
                       <object class="GtkFrame" id="search_frame">
                         <property name="visible">true</property>
@@ -73,7 +72,8 @@
                                     <property name="visible">true</property>
                                     <property name="tag-close-visible">false</property>
                                     <property name="can_focus">true</property>
-                                    <property name="width-request">340</property>
+                                    <property name="width-chars">20</property>
+                                    <property name="max-width-chars">30</property>
                                     <property name="primary_icon_name">edit-find-symbolic</property>
                                     <property name="primary_icon_activatable">false</property>
                                     <property name="primary_icon_sensitive">false</property>
@@ -87,7 +87,8 @@
                                   <object class="GtkSearchEntry" id="replace_entry">
                                     <property name="visible">false</property>
                                     <property name="can_focus">true</property>
-                                    <property name="width-request">340</property>
+                                    <property name="width-chars">20</property>
+                                    <property name="max-width-chars">30</property>
                                     <property name="primary_icon_name">edit-find-replace-symbolic</property>
                                     <property name="primary_icon_activatable">false</property>
                                     <property name="primary_icon_sensitive">false</property>
@@ -99,21 +100,19 @@
                                 </child>
                                 <child>
                                   <object class="GtkBox">
+                                    <property name="homogeneous">true</property>
                                     <property name="visible">true</property>
                                     <property name="can_focus">false</property>
                                     <property name="valign">center</property>
-                                    <property name="width_request">124</property>
                                     <style>
                                       <class name="linked"/>
                                     </style>
                                     <child>
                                       <object class="GtkButton">
                                         <property name="action-name">frame.previous-search-result</property>
-                                        <property name="width_request">62</property>
                                         <property name="visible">true</property>
                                         <property name="can_focus">false</property>
                                         <property name="receives_default">true</property>
-                                        <property name="valign">center</property>
                                         <child>
                                           <object class="GtkImage">
                                             <property name="visible">true</property>
@@ -131,12 +130,10 @@
                                     </child>
                                     <child>
                                       <object class="GtkButton">
-                                        <property name="width_request">62</property>
                                         <property name="action-name">frame.next-search-result</property>
                                         <property name="visible">true</property>
                                         <property name="can_focus">false</property>
                                         <property name="receives_default">true</property>
-                                        <property name="valign">center</property>
                                         <child>
                                           <object class="GtkImage">
                                             <property name="visible">true</property>
@@ -161,7 +158,6 @@
                                 <child>
                                   <object class="GtkButton" id="replace_button">
                                     <property name="label" translatable="yes">Replace</property>
-                                    <property name="width_request">124</property>
                                     <property name="action-name">search-entry.replace</property>
                                     <property name="visible">false</property>
                                     <property name="can_focus">true</property>
@@ -175,7 +171,6 @@
                                 <child>
                                   <object class="GtkButton" id="replace_all_button">
                                     <property name="label" translatable="yes">Replace All</property>
-                                    <property name="width_request">124</property>
                                     <property name="action-name">search-entry.replace-all</property>
                                     <property name="visible">false</property>
                                     <property name="can_focus">true</property>
@@ -188,7 +183,7 @@
                                 </child>
                                 <child>
                                   <object class="GtkBox">
-                                    <property name="width_request">124</property>
+                                    <property name="homogeneous">true</property>
                                     <property name="visible">true</property>
                                     <property name="can_focus">false</property>
                                     <property name="valign">center</property>
@@ -197,12 +192,9 @@
                                         <property name="action-name">search-entry.toggle-search-replace</property>
                                         <property name="action-target">true</property>
                                         <property name="tooltip-text" translatable="yes">Switch between Search and Search-and-Replace</property>
-                                        <property name="width_request">60</property>
                                         <property name="visible">true</property>
                                         <property name="can_focus">true</property>
                                         <property name="receives_default">true</property>
-                                        <property name="halign">center</property>
-                                        <property name="valign">center</property>
                                         <property name="margin_right">4</property>
                                         <property name="image_position">right</property>
                                         <child>
@@ -224,12 +216,9 @@
                                         <property name="action-name">search-entry.toggle-search-options</property>
                                         <property name="action-target">true</property>
                                         <property name="tooltip-text" translatable="yes">Show or hide search options such as case sensitivity</property>
-                                        <property name="width_request">60</property>
                                         <property name="visible">true</property>
                                         <property name="can_focus">true</property>
                                         <property name="receives_default">true</property>
-                                        <property name="halign">center</property>
-                                        <property name="valign">center</property>
                                         <child>
                                           <object class="GtkImage">
                                             <property name="visible">true</property>
