@@ -270,7 +270,12 @@ dnd_highlight_set_from_cursor (GstylePaletteWidget *self,
 
   g_assert (GSTYLE_IS_PALETTE_WIDGET (self));
 
-  if (x != -1 && y != -1 && dnd_get_index_from_cursor (self, x, y, &info))
+  if (x == -1 || y == -1)
+    {
+      highlight = FALSE;
+      info.index = -1;
+    }
+  else if (dnd_get_index_from_cursor (self, x, y, &info))
     {
       gtk_widget_get_allocation (GTK_WIDGET (info.child), &alloc);
       if (self->view_mode == GSTYLE_PALETTE_WIDGET_VIEW_MODE_LIST)
@@ -303,8 +308,8 @@ dnd_highlight_set_from_cursor (GstylePaletteWidget *self,
     }
   else
     {
-      highlight = FALSE;
-      info.index = -1;
+      info.index = gstyle_palette_get_len (self->selected_palette);
+      highlight = TRUE;
     }
 
   if (self->dnd_draw_highlight != highlight || self->dnd_child_index != info.index)
