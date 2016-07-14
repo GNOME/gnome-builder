@@ -93,8 +93,6 @@ ide_editor_frame_actions_next_search_result (GSimpleAction *action,
                                             gpointer       user_data)
 {
   IdeEditorFrame *self = user_data;
-  GActionGroup *group;
-  GAction *replace_action;
 
   g_assert (IDE_IS_EDITOR_FRAME (self));
 
@@ -102,11 +100,6 @@ ide_editor_frame_actions_next_search_result (GSimpleAction *action,
 
   IDE_SOURCE_VIEW_GET_CLASS (self->source_view)->move_search
     (self->source_view, GTK_DIR_DOWN, FALSE, TRUE, TRUE, FALSE, -1);
-
-  group = gtk_widget_get_action_group (GTK_WIDGET (self->search_frame), "search-entry");
-  replace_action = g_action_map_lookup_action (G_ACTION_MAP (group), "replace");
-
-  g_simple_action_set_enabled (G_SIMPLE_ACTION (replace_action), TRUE);
 }
 
 static void
@@ -115,8 +108,6 @@ ide_editor_frame_actions_previous_search_result (GSimpleAction *action,
                                                 gpointer       user_data)
 {
   IdeEditorFrame *self = user_data;
-  GActionGroup *group;
-  GAction *replace_action;
 
   g_assert (IDE_IS_EDITOR_FRAME (self));
 
@@ -124,11 +115,6 @@ ide_editor_frame_actions_previous_search_result (GSimpleAction *action,
 
   IDE_SOURCE_VIEW_GET_CLASS (self->source_view)->move_search
     (self->source_view, GTK_DIR_UP, FALSE, TRUE, TRUE, FALSE, -1);
-
-  group = gtk_widget_get_action_group (GTK_WIDGET (self->search_frame), "search-entry");
-  replace_action = g_action_map_lookup_action (G_ACTION_MAP (group), "replace");
-
-  g_simple_action_set_enabled (G_SIMPLE_ACTION (replace_action), TRUE);
 }
 
 static void

@@ -57,6 +57,62 @@ enum {
 static GParamSpec *properties [LAST_PROP];
 
 static void
+update_replace_actions_sensitivity (IdeEditorFrame *self)
+{
+  GtkSourceSearchContext *search_context;
+  GtkSourceSearchSettings *search_settings;
+  GtkTextBuffer *buffer;
+  GtkTextIter start;
+  GtkTextIter end;
+  const gchar *search_text;
+  const gchar *replace_text;
+  gint pos;
+  gint count;
+  gboolean enable_replace;
+  gboolean enable_replace_all;
+  gboolean replace_regex_valid;
+  g_autoptr(GError) regex_error = NULL;
+  g_autoptr(GError) replace_regex_error = NULL;
+  GActionGroup *group;
+  GAction *replace_action;
+  GAction *replace_all_action;
+
+  g_assert (IDE_IS_EDITOR_FRAME (self));
+
+  search_context = ide_source_view_get_search_context (self->source_view);
+  search_settings = gtk_source_search_context_get_settings (search_context);
+  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self->source_view));
+  gtk_text_buffer_get_selection_bounds (GTK_TEXT_BUFFER (buffer), &start, &end);
+  replace_text = gtk_entry_get_text (GTK_ENTRY (self->replace_entry));
+
+  /* Gather enough info to determine if Replace or Replace All would make sense */
+  search_text = gtk_entry_get_text (GTK_ENTRY (self->search_entry));
+  pos = gtk_source_search_context_get_occurrence_position (search_context, &start, &end);
+  count = gtk_source_search_context_get_occurrences_count (search_context);
+  regex_error = gtk_source_search_context_get_regex_error (search_context);
+  replace_regex_valid = gtk_source_search_settings_get_regex_enabled (search_settings) ?
+                        g_regex_check_replacement (replace_text, NULL, &replace_regex_error) :
+                        TRUE;
+
+  enable_replace = (!ide_str_empty0 (search_text) &&
+                    regex_error == NULL &&
+                    replace_regex_valid &&
+                    pos > 0);
+
+  enable_replace_all = (!ide_str_empty0 (search_text) &&
+                        regex_error == NULL &&
+                        replace_regex_valid &&
+                        count > 0);
+
+  group = gtk_widget_get_action_group (GTK_WIDGET (self->search_frame), "search-entry");
+  replace_action = g_action_map_lookup_action (G_ACTION_MAP (group), "replace");
+  replace_all_action = g_action_map_lookup_action (G_ACTION_MAP (group), "replace-all");
+
+  g_simple_action_set_enabled (G_SIMPLE_ACTION (replace_action), enable_replace);
+  g_simple_action_set_enabled (G_SIMPLE_ACTION (replace_all_action), enable_replace_all);
+}
+
+static void
 ide_editor_frame_update_ruler (IdeEditorFrame *self)
 {
   const gchar *mode_display_name;
@@ -265,6 +321,8 @@ ide_editor_frame_on_search_occurrences_notify (IdeEditorFrame          *self,
   g_assert (GTK_SOURCE_IS_SEARCH_CONTEXT (search_context));
 
   ide_editor_frame_update_search_position_label (self);
+
+  update_replace_actions_sensitivity (self);
 }
 
 static void
@@ -272,11 +330,22 @@ on_cursor_moved (IdeBuffer         *buffer,
                  const GtkTextIter *location,
                  IdeEditorFrame    *self)
 {
+  GtkSourceSearchContext *search_context;
+  gint count;
+
   g_assert (IDE_IS_EDITOR_FRAME (self));
   g_assert (IDE_IS_BUFFER (buffer));
 
-  ide_editor_frame_update_ruler (self);
-  ide_editor_frame_update_search_position_label (self);
+  search_context = ide_source_view_get_search_context (self->source_view);
+  count = gtk_source_search_context_get_occurrences_count (search_context);
+
+  /* This prevents flickering when the search is briefly invalidated */
+  if (count != -1)
+    {
+      ide_editor_frame_update_ruler (self);
+      ide_editor_frame_update_search_position_label (self);
+      update_replace_actions_sensitivity (self);
+    }
 }
 
 /**
@@ -405,47 +474,25 @@ ide_editor_frame_add_search_actions (IdeEditorFrame *self,
 }
 
 static void
-on_buffer_has_selection_changed (IdeEditorFrame *self,
-                                 GParamSpec     *pspec,
-                                 IdeBuffer      *buffer)
-{
-  g_assert (IDE_IS_EDITOR_FRAME (self));
-  g_assert (IDE_IS_BUFFER (buffer));
-
-  if (!gtk_text_buffer_get_has_selection (GTK_TEXT_BUFFER (buffer)))
-    {
-      GActionGroup *group;
-      GAction *replace_action;
-
-      group = gtk_widget_get_action_group (GTK_WIDGET (self->search_frame), "search-entry");
-      replace_action = g_action_map_lookup_action (G_ACTION_MAP (group), "replace");
-      g_simple_action_set_enabled (G_SIMPLE_ACTION (replace_action), FALSE);
-    }
-}
-
-static void
 on_search_text_changed (IdeEditorFrame          *self,
                         GParamSpec              *pspec,
                         GtkSourceSearchSettings *search_settings)
 {
-  GActionGroup *group;
-  GAction *replace_action;
-  GAction *replace_all_action;
-  const gchar *search_text;
-
   g_assert (IDE_IS_EDITOR_FRAME (self));
   g_assert (GTK_SOURCE_IS_SEARCH_SETTINGS (search_settings));
 
-  group = gtk_widget_get_action_group (GTK_WIDGET (self->search_frame), "search-entry");
-  replace_action = g_action_map_lookup_action (G_ACTION_MAP (group), "replace");
-  replace_all_action = g_action_map_lookup_action (G_ACTION_MAP (group), "replace-all");
+  update_replace_actions_sensitivity (self);
+}
 
-  g_simple_action_set_enabled (G_SIMPLE_ACTION (replace_action), FALSE);
+static void
+on_replace_text_changed (IdeEditorFrame *self,
+                         GParamSpec     *pspec,
+                         GtkSearchEntry *replace_entry)
+{
+  g_assert (IDE_IS_EDITOR_FRAME (self));
+  g_assert (GTK_IS_SEARCH_ENTRY (replace_entry));
 
-  search_text = gtk_source_search_settings_get_search_text (search_settings);
-
-  g_simple_action_set_enabled (G_SIMPLE_ACTION (replace_all_action),
-                               ide_str_empty0 (search_text) ? FALSE : TRUE);
+  update_replace_actions_sensitivity (self);
 }
 
 static void
@@ -488,12 +535,6 @@ ide_editor_frame_set_document (IdeEditorFrame *self,
                            self,
                            G_CONNECT_SWAPPED);
 
-  g_signal_connect_object (buffer,
-                           "notify::has-selection",
-                           G_CALLBACK (on_buffer_has_selection_changed),
-                           self,
-                           G_CONNECT_SWAPPED);
-
   self->cursor_moved_handler =
     g_signal_connect (buffer,
                       "cursor-moved",
@@ -527,6 +568,12 @@ ide_editor_frame_set_document (IdeEditorFrame *self,
   g_signal_connect_object (search_settings,
                            "notify::search-text",
                            G_CALLBACK (on_search_text_changed),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  g_signal_connect_object (self->replace_entry,
+                           "notify::text",
+                           G_CALLBACK (on_replace_text_changed),
                            self,
                            G_CONNECT_SWAPPED);
 
