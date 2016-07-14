@@ -21,6 +21,7 @@
       <object class="GstylePaletteWidget" id="preview_palette_widget">
         <property name="visible">1</property>
         <property name="expand">true</property>
+        <property name="dnd-lock">all</property>
       </object>
     </child>
   </object>
