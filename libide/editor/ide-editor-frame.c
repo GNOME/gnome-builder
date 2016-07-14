@@ -348,6 +348,36 @@ on_cursor_moved (IdeBuffer         *buffer,
     }
 }
 
+static void
+on_regex_error_changed (IdeEditorFrame         *self,
+                        GParamSpec             *pspec,
+                        GtkSourceSearchContext *search_context)
+{
+  g_autoptr(GError) error = NULL;
+  PangoAttrList *attrs;
+
+  g_assert (IDE_IS_EDITOR_FRAME (self));
+  g_assert (GTK_SOURCE_IS_SEARCH_CONTEXT (search_context));
+
+  /*
+   * If the regular expression is invalid, add a white squiggly underline;
+   * otherwise remove it.
+   */
+  attrs = pango_attr_list_new ();
+  error = gtk_source_search_context_get_regex_error (search_context);
+
+  if (error != NULL)
+    {
+      pango_attr_list_insert (attrs, pango_attr_underline_new (PANGO_UNDERLINE_ERROR));
+      pango_attr_list_insert (attrs, pango_attr_underline_color_new (65535, 65535, 65535));
+    }
+
+  gtk_entry_set_attributes (GTK_ENTRY (self->search_entry), attrs);
+  pango_attr_list_unref (attrs);
+
+  update_replace_actions_sensitivity (self);
+}
+
 /**
  * ide_editor_frame_get_source_view:
  *
@@ -485,6 +515,53 @@ on_search_text_changed (IdeEditorFrame          *self,
 }
 
 static void
+check_replace_text (IdeEditorFrame *self)
+{
+  GtkSourceSearchContext *search_context;
+  GtkSourceSearchSettings *search_settings;
+  g_autoptr(GError) error = NULL;
+  PangoAttrList *attrs;
+
+  g_assert (IDE_IS_EDITOR_FRAME (self));
+
+  search_context = ide_source_view_get_search_context (self->source_view);
+  search_settings = gtk_source_search_context_get_settings (search_context);
+
+  attrs = pango_attr_list_new ();
+
+  /*
+   * If the replace expression is invalid, add a white squiggly underline;
+   * otherwise remove it.
+   */
+  if (gtk_source_search_settings_get_regex_enabled (search_settings))
+    {
+      const gchar *replace_text;
+
+      replace_text = gtk_entry_get_text (GTK_ENTRY (self->replace_entry));
+
+      if (!g_regex_check_replacement (replace_text, NULL, &error))
+        {
+          pango_attr_list_insert (attrs, pango_attr_underline_new (PANGO_UNDERLINE_ERROR));
+          pango_attr_list_insert (attrs, pango_attr_underline_color_new (65535, 65535, 65535));
+        }
+    }
+
+  gtk_entry_set_attributes (GTK_ENTRY (self->replace_entry), attrs);
+  pango_attr_list_unref (attrs);
+}
+
+static void
+on_regex_enabled_changed (IdeEditorFrame          *self,
+                          GParamSpec              *pspec,
+                          GtkSourceSearchSettings *search_settings)
+{
+  g_assert (IDE_IS_EDITOR_FRAME (self));
+  g_assert (GTK_SOURCE_IS_SEARCH_SETTINGS (search_settings));
+
+  check_replace_text (self);
+}
+
+static void
 on_replace_text_changed (IdeEditorFrame *self,
                          GParamSpec     *pspec,
                          GtkSearchEntry *replace_entry)
@@ -492,6 +569,7 @@ on_replace_text_changed (IdeEditorFrame *self,
   g_assert (IDE_IS_EDITOR_FRAME (self));
   g_assert (GTK_IS_SEARCH_ENTRY (replace_entry));
 
+  check_replace_text (self);
   update_replace_actions_sensitivity (self);
 }
 
@@ -559,6 +637,12 @@ ide_editor_frame_set_document (IdeEditorFrame *self,
                            self,
                            G_CONNECT_SWAPPED);
 
+  g_signal_connect_object (search_context,
+                           "notify::regex-error",
+                           G_CALLBACK (on_regex_error_changed),
+                           self,
+                           G_CONNECT_SWAPPED);
+
   /*
    * Add search option property actions
    */
@@ -568,6 +652,12 @@ ide_editor_frame_set_document (IdeEditorFrame *self,
   g_signal_connect_object (search_settings,
                            "notify::search-text",
                            G_CALLBACK (on_search_text_changed),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  g_signal_connect_object (search_settings,
+                           "notify::regex-enabled",
+                           G_CALLBACK (on_regex_enabled_changed),
                            self,
                            G_CONNECT_SWAPPED);
 
