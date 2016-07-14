@@ -49,6 +49,7 @@ struct _GstyleColorWidget
   gboolean                       is_on_drag;
 
   GtkGesture                    *drag_gesture;
+  GtkGesture                    *multipress_gesture;
 
   GstylePaletteWidgetViewMode    container_view_mode;
   GstyleColorWidgetDndLockFlags  dnd_lock : 4;
@@ -113,6 +114,70 @@ is_in_drop_zone (GstyleColorWidget *self,
   return (start_limit < dest_ref && dest_ref < stop_limit);
 }
 
+static GstylePaletteWidgetDndLockFlags
+get_palette_widget_dnd_lock (GstyleColorWidget *self)
+{
+  GtkWidget *palette_widget;
+
+  g_assert (GSTYLE_IS_COLOR_WIDGET (self));
+
+  palette_widget = gtk_widget_get_ancestor (GTK_WIDGET (self), GSTYLE_TYPE_PALETTE_WIDGET);
+  if (palette_widget != NULL)
+    return gstyle_palette_widget_get_dnd_lock (GSTYLE_PALETTE_WIDGET (palette_widget));
+  else
+    return GSTYLE_PALETTE_WIDGET_DND_LOCK_FLAGS_NONE;
+}
+
+static void
+gstyle_color_widget_drag_gesture_update (GtkGestureDrag    *gesture,
+                                         gdouble            offset_x,
+                                         gdouble            offset_y,
+                                         GstyleColorWidget *self)
+{
+  GdkDragContext *context;
+  GdkEventSequence *sequence;
+  const GdkEvent *event;
+  gdouble start_x, start_y;
+  GtkAllocation allocation;
+  GstylePaletteWidgetDndLockFlags dnd_lock;
+  gint button;
+
+  g_assert (GTK_IS_GESTURE (gesture));
+  g_assert (GSTYLE_IS_COLOR_WIDGET (self));
+
+  dnd_lock = get_palette_widget_dnd_lock (self);
+  if ((dnd_lock & GSTYLE_PALETTE_WIDGET_DND_LOCK_FLAGS_DRAG) != 0)
+    return;
+
+  button = gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (gesture));
+  if (!gtk_drag_check_threshold (GTK_WIDGET (self), 0, 0, offset_x, offset_y) ||
+      button != GDK_BUTTON_PRIMARY)
+    return;
+
+  gtk_widget_get_allocation (GTK_WIDGET (self), &allocation);
+  self->dnd_color_widget = gstyle_color_widget_copy (self);
+  self->dnd_window = gtk_window_new (GTK_WINDOW_POPUP);
+
+  gtk_widget_set_size_request (self->dnd_window, allocation.width, allocation.height);
+  gtk_window_set_screen (GTK_WINDOW (self->dnd_window), gtk_widget_get_screen (GTK_WIDGET (self)));
+
+  gtk_container_add (GTK_CONTAINER (self->dnd_window), GTK_WIDGET (self->dnd_color_widget));
+  gtk_widget_show_all (self->dnd_window);
+  gtk_widget_set_opacity (self->dnd_window, GSTYLE_COLOR_WIDGET_DRAG_ICON_OPACITY);
+
+  sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
+  gtk_gesture_drag_get_start_point (GTK_GESTURE_DRAG (gesture), &start_x, &start_y);
+  event = gtk_gesture_get_last_event (GTK_GESTURE (gesture), sequence);
+  context = gtk_drag_begin_with_coordinates (GTK_WIDGET (self),
+                                             self->target_list,
+                                             GDK_ACTION_COPY,
+                                             button,
+                                             (GdkEvent*)event,
+                                             start_x, start_y);
+
+  gtk_drag_set_icon_widget (context, self->dnd_window, 0, 0);
+}
+
 static gboolean
 gstyle_color_widget_on_drag_motion (GtkWidget      *widget,
                                     GdkDragContext *context,
@@ -121,16 +186,24 @@ gstyle_color_widget_on_drag_motion (GtkWidget      *widget,
                                     guint           time)
 {
   GstyleColorWidget *self = (GstyleColorWidget *)widget;
+  GstylePaletteWidgetDndLockFlags dnd_lock;
   GdkAtom target;
 
   g_assert (GSTYLE_IS_COLOR_WIDGET (self));
   g_assert (GDK_IS_DRAG_CONTEXT (context));
 
   target = gtk_drag_dest_find_target (widget, context, NULL);
+  dnd_lock = get_palette_widget_dnd_lock (self);
+  if ((dnd_lock & GSTYLE_PALETTE_WIDGET_DND_LOCK_FLAGS_DRAG) != 0)
+    {
+      gdk_drag_status (context, 0, time);
+      return FALSE;
+    }
 
   if ((target == gdk_atom_intern_static_string ("GSTYLE_COLOR_WIDGET") ||
        target == gdk_atom_intern_static_string ("application/x-color") ||
        gtk_targets_include_text (&target, 1)) &&
+      (dnd_lock & GSTYLE_PALETTE_WIDGET_DND_LOCK_FLAGS_DROP) == 0 &&
       is_in_drop_zone (self, x, y))
     {
       gtk_drag_highlight (widget);
@@ -291,30 +364,6 @@ failed:
   gtk_drag_finish (context, FALSE, FALSE, time);
 }
 
-static void
-gstyle_color_widget_on_drag_begin (GtkWidget      *widget,
-                                   GdkDragContext *context)
-{
-  GstyleColorWidget *self = (GstyleColorWidget *)widget;
-  GtkAllocation allocation;
-
-  g_assert (GSTYLE_IS_COLOR_WIDGET (self));
-  g_assert (GDK_IS_DRAG_CONTEXT (context));
-
-  gtk_widget_get_allocation (GTK_WIDGET (widget), &allocation);
-  self->dnd_color_widget = gstyle_color_widget_copy (GSTYLE_COLOR_WIDGET (widget));
-  self->dnd_window = gtk_window_new (GTK_WINDOW_POPUP);
-
-  gtk_widget_set_size_request (self->dnd_window, allocation.width, allocation.height);
-  gtk_window_set_screen (GTK_WINDOW (self->dnd_window), gtk_widget_get_screen (widget));
-
-  gtk_container_add (GTK_CONTAINER (self->dnd_window), GTK_WIDGET (self->dnd_color_widget));
-  gtk_widget_show_all (self->dnd_window);
-  gtk_widget_set_opacity (self->dnd_window, GSTYLE_COLOR_WIDGET_DRAG_ICON_OPACITY);
-
-  gtk_drag_set_icon_widget (context, self->dnd_window, 0, 0);
-}
-
 /* The multi-press gesture used by the flowbox to select a child
  * forbid us to use dnd so we need to catch it here and select yourself
  * the child
@@ -330,7 +379,6 @@ gstyle_color_widget_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
   GtkWidget *child;
 
   gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
-
   child = gtk_widget_get_parent (GTK_WIDGET (self));
   if (child != NULL)
     {
@@ -1019,6 +1067,9 @@ gstyle_color_widget_finalize (GObject *object)
   if (self->color)
     gstyle_color_widget_disconnect_color (self);
 
+  g_clear_object (&self->multipress_gesture);
+  g_clear_object (&self->drag_gesture);
+
   g_clear_object (&self->dnd_window);
   g_clear_object (&self->color);
   g_clear_object (&self->default_provider);
@@ -1116,7 +1167,6 @@ gstyle_color_widget_class_init (GstyleColorWidgetClass *klass)
   widget_class->hierarchy_changed = gstyle_color_widget_hierarchy_changed;
   widget_class->draw = gstyle_color_widget_draw;
 
-  widget_class->drag_begin = gstyle_color_widget_on_drag_begin;
   widget_class->drag_end = gstyle_color_widget_on_drag_end;
   widget_class->drag_failed = gstyle_color_widget_on_drag_failed;
   widget_class->drag_data_get = gstyle_color_widget_on_drag_data_get;
@@ -1207,23 +1257,22 @@ gstyle_color_widget_init (GstyleColorWidget *self)
   self->target_list = gtk_target_list_new (dnd_targets, G_N_ELEMENTS (dnd_targets));
   gtk_target_list_add_text_targets (self->target_list, 0);
 
-  gtk_drag_source_set (widget, GDK_BUTTON1_MASK, NULL, 0, GDK_ACTION_COPY);
-  gtk_drag_source_set_target_list (widget, self->target_list);
-
   gtk_drag_dest_set (widget, 0, NULL, 0, GDK_ACTION_COPY);
   gtk_drag_dest_set_target_list (widget, self->target_list);
   gtk_drag_dest_set_track_motion (GTK_WIDGET (self), TRUE);
 
   update_container_parent_informations (self);
 
-  self->drag_gesture = gtk_gesture_multi_press_new (widget);
-  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (self->drag_gesture),
-                                 GDK_BUTTON_PRIMARY);
-  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (self->drag_gesture),
+  self->multipress_gesture = gtk_gesture_multi_press_new (widget);
+  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (self->multipress_gesture), GDK_BUTTON_PRIMARY);
+  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (self->multipress_gesture),
                                               GTK_PHASE_BUBBLE);
-
-  g_signal_connect (self->drag_gesture, "pressed",
+  g_signal_connect (self->multipress_gesture, "pressed",
                     G_CALLBACK (gstyle_color_widget_multipress_gesture_pressed), widget);
+
+  self->drag_gesture = gtk_gesture_drag_new (GTK_WIDGET (self));
+  g_signal_connect (self->drag_gesture, "drag-update",
+                    G_CALLBACK (gstyle_color_widget_drag_gesture_update), self);
 }
 
 GType

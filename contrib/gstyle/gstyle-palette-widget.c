@@ -38,33 +38,34 @@
 
 struct _GstylePaletteWidget
 {
-  GtkBin                       parent_instance;
+  GtkBin                           parent_instance;
 
-  GstyleCssProvider           *default_provider;
-  GListStore                  *palettes;
-  GstylePalette               *selected_palette;
+  GstyleCssProvider               *default_provider;
+  GListStore                      *palettes;
+  GstylePalette                   *selected_palette;
 
-  GtkWidget                   *placeholder_box;
-  GtkWidget                   *placeholder;
-  GtkStack                    *view_stack;
-  GtkWidget                   *listbox;
-  GtkWidget                   *flowbox;
+  GtkWidget                       *placeholder_box;
+  GtkWidget                       *placeholder;
+  GtkStack                        *view_stack;
+  GtkWidget                       *listbox;
+  GtkWidget                       *flowbox;
 
-  GstyleColor                 *dnd_color;
-  gint                         dnd_child_index;
-  GdkPoint                     dnd_last_pos;
-  guint                        dnd_last_time;
-  gdouble                      dnd_speed;
-  gboolean                     is_on_drag;
+  GstyleColor                     *dnd_color;
+  gint                             dnd_child_index;
+  GdkPoint                         dnd_last_pos;
+  guint                            dnd_last_time;
+  gdouble                          dnd_speed;
+  gboolean                         is_on_drag;
 
-  GstylePaletteWidgetViewMode  view_mode;
-  GstylePaletteWidgetSortMode  sort_mode;
+  GstylePaletteWidgetViewMode      view_mode;
+  GstylePaletteWidgetSortMode      sort_mode;
 
-  guint                        current_has_load : 1;
-  guint                        current_has_save : 1;
+  GstylePaletteWidgetDndLockFlags  dnd_lock : 2;
+  guint                            current_has_load : 1;
+  guint                            current_has_save : 1;
 
-  guint                        dnd_draw_highlight : 1;
-  guint                        is_dnd_at_end : 1;
+  guint                            dnd_draw_highlight : 1;
+  guint                            is_dnd_at_end : 1;
 };
 
 G_DEFINE_TYPE (GstylePaletteWidget, gstyle_palette_widget, GTK_TYPE_BIN)
@@ -76,6 +77,7 @@ static guint unsaved_palette_count = 0;
 
 enum {
   PROP_0,
+  PROP_DND_LOCK,
   PROP_PLACEHOLDER,
   PROP_SELECTED_PALETTE_ID,
   PROP_VIEW_MODE,
@@ -340,7 +342,8 @@ gstyle_palette_widget_on_drag_motion (GtkWidget      *widget,
   g_assert (GDK_IS_DRAG_CONTEXT (context));
 
   target = gtk_drag_dest_find_target (widget, context, NULL);
-  if (target != gdk_atom_intern_static_string ("GSTYLE_COLOR_WIDGET"))
+  if (target != gdk_atom_intern_static_string ("GSTYLE_COLOR_WIDGET") ||
+      (self->dnd_lock & GSTYLE_PALETTE_WIDGET_DND_LOCK_FLAGS_DROP) != 0)
     {
       dnd_highlight_set_from_cursor (self, -1, -1);
       gdk_drag_status (context, 0, time);
@@ -385,14 +388,15 @@ gstyle_palette_widget_on_drag_drop (GtkWidget        *widget,
   g_assert (GDK_IS_DRAG_CONTEXT (context));
 
   target = gtk_drag_dest_find_target (widget, context, NULL);
-  if (target == gdk_atom_intern_static_string ("GSTYLE_COLOR_WIDGET"))
+  if (target != gdk_atom_intern_static_string ("GSTYLE_COLOR_WIDGET") ||
+      (self->dnd_lock & GSTYLE_PALETTE_WIDGET_DND_LOCK_FLAGS_DROP) != 0)
     {
-      gtk_drag_get_data (widget, context, target, time);
-      return TRUE;
+      dnd_highlight_set_from_cursor (self, -1, -1);
+      return FALSE;
     }
 
-  dnd_highlight_set_from_cursor (self, -1, -1);
-  return FALSE;
+  gtk_drag_get_data (widget, context, target, time);
+  return TRUE;
 }
 
 static void
@@ -1042,6 +1046,44 @@ gstyle_palette_widget_get_view_mode (GstylePaletteWidget *self)
 }
 
 /**
+ * gstyle_palette_widget_set_dnd_lock:
+ * @self: A #GstylePaletteWidget
+ * @flags: One or more #GstylePaletteWidgetDndLockFlags
+ *
+ * Sets the dnd lock flags of the palette widget.
+ *
+ */
+void
+gstyle_palette_widget_set_dnd_lock (GstylePaletteWidget             *self,
+                                    GstylePaletteWidgetDndLockFlags  flags)
+{
+  g_return_if_fail (GSTYLE_IS_PALETTE_WIDGET (self));
+
+  if (self->dnd_lock != flags)
+  {
+    self->dnd_lock = flags;
+    g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_DND_LOCK]);
+  }
+}
+
+/**
+ * gstyle_palette_widget_get_dnd_lock:
+ * @self: A #GstylePaletteWidget
+ *
+ * Get the dnd lock flags of the palette widget.
+ *
+ * Returns: The #GstylePaletteWidgetDndLockFlags.
+ *
+ */
+GstylePaletteWidgetDndLockFlags
+gstyle_palette_widget_get_dnd_lock (GstylePaletteWidget *self)
+{
+  g_return_val_if_fail (GSTYLE_IS_PALETTE_WIDGET (self), GSTYLE_PALETTE_WIDGET_DND_LOCK_FLAGS_NONE);
+
+  return self->dnd_lock;
+}
+
+/**
  * gstyle_palette_widget_set_sort_mode:
  * @self: A #GstylePaletteWidget
  * @mode: A #GstylePaletteWidgetViewMode
@@ -1200,6 +1242,10 @@ gstyle_palette_widget_get_property (GObject    *object,
 
   switch (prop_id)
     {
+    case PROP_DND_LOCK:
+      g_value_set_flags (value, gstyle_palette_widget_get_dnd_lock(self));
+      break;
+
     case PROP_PLACEHOLDER:
       g_value_set_object (value, gstyle_palette_widget_get_placeholder (self));
       break;
@@ -1231,6 +1277,10 @@ gstyle_palette_widget_set_property (GObject      *object,
 
   switch (prop_id)
     {
+    case PROP_DND_LOCK:
+      gstyle_palette_widget_set_dnd_lock (self, g_value_get_flags (value));
+      break;
+
     case PROP_PLACEHOLDER:
       gstyle_palette_widget_set_placeholder (self, g_value_get_object (value));
       break;
@@ -1273,6 +1323,14 @@ gstyle_palette_widget_class_init (GstylePaletteWidgetClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GstylePaletteWidget, placeholder_box);
   gtk_widget_class_bind_template_child (widget_class, GstylePaletteWidget, listbox);
   gtk_widget_class_bind_template_child (widget_class, GstylePaletteWidget, flowbox);
+
+  properties [PROP_DND_LOCK] =
+    g_param_spec_flags ("dnd-lock",
+                        "dnd-lock",
+                        "Dnd lockability",
+                        GSTYLE_TYPE_PALETTE_WIDGET_DND_LOCK_FLAGS,
+                        GSTYLE_PALETTE_WIDGET_DND_LOCK_FLAGS_NONE,
+                        (G_PARAM_CONSTRUCT | G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_PLACEHOLDER] =
     g_param_spec_object ("placeholder",
@@ -1451,4 +1509,27 @@ gstyle_palette_widget_sort_mode_get_type (void)
     }
 
   return sort_mode_type_id;
+}
+
+GType
+gstyle_palette_widget_dnd_lock_flags_get_type (void)
+{
+  static GType type_id;
+  static const GFlagsValue values[] = {
+    { GSTYLE_PALETTE_WIDGET_DND_LOCK_FLAGS_NONE,  "GSTYLE_PALETTE_WIDGET_DND_LOCK_FLAGS_NONE",  "none" },
+    { GSTYLE_PALETTE_WIDGET_DND_LOCK_FLAGS_DRAG,  "GSTYLE_PALETTE_WIDGET_DND_LOCK_FLAGS_DRAG",  "drag" },
+    { GSTYLE_PALETTE_WIDGET_DND_LOCK_FLAGS_DROP,  "GSTYLE_PALETTE_WIDGET_DND_LOCK_FLAGS_DROP",  "drop" },
+    { GSTYLE_PALETTE_WIDGET_DND_LOCK_FLAGS_ALL,   "GSTYLE_PALETTE_WIDGET_DND_LOCK_FLAGS_ALL",   "all" },
+    { 0 }
+  };
+
+  if (g_once_init_enter (&type_id))
+    {
+      GType _type_id;
+
+      _type_id = g_flags_register_static ("GstylePaletteWidgetDndLockFlags", values);
+      g_once_init_leave (&type_id, _type_id);
+    }
+
+  return type_id;
 }
