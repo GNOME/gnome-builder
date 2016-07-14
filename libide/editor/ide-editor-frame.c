@@ -664,6 +664,40 @@ ide_editor_frame__search_key_press_event (IdeEditorFrame *self,
 }
 
 static gboolean
+ide_editor_frame__replace_key_press_event (IdeEditorFrame *self,
+                                           GdkEventKey    *event,
+                                           GtkSearchEntry *entry)
+{
+  g_assert (IDE_IS_EDITOR_FRAME (self));
+  g_assert (GTK_IS_SEARCH_ENTRY (entry));
+
+  switch (event->keyval)
+    {
+    case GDK_KEY_Escape:
+      ide_widget_action (GTK_WIDGET (self->search_frame), "search-entry", "exit-search", NULL);
+      return GDK_EVENT_STOP;
+
+    case GDK_KEY_KP_Enter:
+    case GDK_KEY_Return:
+      ide_widget_action (GTK_WIDGET (self->search_frame), "search-entry", "replace", NULL);
+      return GDK_EVENT_STOP;
+
+    case GDK_KEY_Down:
+      ide_widget_action (GTK_WIDGET (self), "frame", "next-search-result", NULL);
+      return GDK_EVENT_STOP;
+
+    case GDK_KEY_Up:
+      ide_widget_action (GTK_WIDGET (self), "frame", "previous-search-result", NULL);
+      return GDK_EVENT_STOP;
+
+    default:
+      break;
+    }
+
+  return GDK_EVENT_PROPAGATE;
+}
+
+static gboolean
 ide_editor_frame__source_view_focus_in_event (IdeEditorFrame *self,
                                              GdkEventKey   *event,
                                              IdeSourceView *source_view)
@@ -878,6 +912,12 @@ ide_editor_frame_constructed (GObject *object)
   g_signal_connect_object (self->search_entry,
                            "key-press-event",
                            G_CALLBACK (ide_editor_frame__search_key_press_event),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  g_signal_connect_object (self->replace_entry,
+                           "key-press-event",
+                           G_CALLBACK (ide_editor_frame__replace_key_press_event),
                            self,
                            G_CONNECT_SWAPPED);
 
