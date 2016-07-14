@@ -90,6 +90,9 @@ typedef struct
   Component               comp [N_GSTYLE_COLOR_COMPONENT];
   GstyleColorComponent    ref_comp;
   GstyleColorUnit         preferred_unit;
+  gdouble                 hue_backup;
+
+  guint                   hue_backup_set : 1;
 } GstyleColorPlanePrivate;
 
 G_DEFINE_TYPE_WITH_PRIVATE (GstyleColorPlane, gstyle_color_plane, GTK_TYPE_DRAWING_AREA)
@@ -844,6 +847,7 @@ update_adjustments (GstyleColorPlane     *self,
 {
   GstyleColorPlanePrivate *priv = gstyle_color_plane_get_instance_private (self);
   gdouble hue, saturation, value;
+  gdouble current_hue;
   GstyleCielab lab;
   ColorSpaceId color_space;
   GdkRGBA rgba = {0};
@@ -872,8 +876,25 @@ update_adjustments (GstyleColorPlane     *self,
 
       if (color_space != COLOR_SPACE_HSV)
         {
+          current_hue = priv->comp [GSTYLE_COLOR_COMPONENT_HSV_H].val;
           gstyle_color_convert_xyz_to_hsv (xyz, &hue, &saturation, &value);
-          priv->comp [GSTYLE_COLOR_COMPONENT_HSV_H].val = hue * priv->comp [GSTYLE_COLOR_COMPONENT_HSV_H].factor;
+          if (saturation > 1e-6)
+            {
+              if (priv->hue_backup_set)
+                {
+                  priv->comp [GSTYLE_COLOR_COMPONENT_HSV_H].val = priv->hue_backup;
+                  priv->hue_backup_set = FALSE;
+                }
+              else
+                priv->comp [GSTYLE_COLOR_COMPONENT_HSV_H].val = hue * priv->comp [GSTYLE_COLOR_COMPONENT_HSV_H].factor;
+            }
+          else if (!priv->hue_backup_set)
+            {
+              priv->hue_backup = current_hue;
+              priv->hue_backup_set = TRUE;
+              priv->comp [GSTYLE_COLOR_COMPONENT_HSV_H].val = hue;
+            }
+
           priv->comp [GSTYLE_COLOR_COMPONENT_HSV_S].val = saturation * priv->comp [GSTYLE_COLOR_COMPONENT_HSV_S].factor;
           priv->comp [GSTYLE_COLOR_COMPONENT_HSV_V].val = value * priv->comp [GSTYLE_COLOR_COMPONENT_HSV_V].factor;
         }
