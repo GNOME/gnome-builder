@@ -1,3 +1,0 @@
-source gnome-builder.def
-
-CONFIGURE[gnome-builder]="--enable-tracing --enable-debug"
