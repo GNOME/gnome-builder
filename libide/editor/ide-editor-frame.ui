@@ -380,4 +380,11 @@
       </object>
     </child>
   </template>
+  <object class="GtkSizeGroup">
+    <property name="mode">GTK_SIZE_GROUP_HORIZONTAL</property>
+    <widgets>
+      <widget name="replace_button"/>
+      <widget name="replace_all_button"/>
+    </widgets>
+  </object>
 </interface>
