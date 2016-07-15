@@ -17,8 +17,10 @@
  */
 
 #include <gdk/gdk.h>
+#include "glib/gi18n.h"
 
 #include <ide.h>
+#include "gstyle-rename-popover.h"
 
 #include "gb-color-picker-prefs-palette-row.h"
 
@@ -26,12 +28,10 @@ struct _GbColorPickerPrefsPaletteRow
 {
   IdePreferencesBin  parent_instance;
 
-  GtkEntry          *palette_name;
-  GtkButton         *button;
+  GtkLabel          *palette_name;
   GtkImage          *image;
   GtkWidget         *event_box;
   gchar             *palette_id;
-  gchar             *backup_name;
 
   gulong             handler;
 
@@ -123,31 +123,64 @@ gb_color_picker_prefs_palette_row_activate (GbColorPickerPrefsPaletteRow *self)
 }
 
 static void
-gb_color_picker_prefs_palette_row_edit (GbColorPickerPrefsPaletteRow *self)
-{
-  g_assert (GB_IS_COLOR_PICKER_PREFS_PALETTE_ROW (self));
-
-  gtk_entry_grab_focus_without_selecting (self->palette_name);
-  gtk_editable_set_position (GTK_EDITABLE (self->palette_name), -1);
-}
-
-static void
 gb_color_picker_prefs_palette_row_set_edit (GbColorPickerPrefsPaletteRow *self,
                                             gboolean                      is_editing)
 {
-  GtkWidget *parent;
+  g_assert (GB_IS_COLOR_PICKER_PREFS_PALETTE_ROW (self));
+
+  if (is_editing && !self->is_editing)
+    g_signal_emit_by_name (self, "edit");
+
+  self->is_editing = is_editing;
+}
+
+static void
+contextual_popover_closed_cb (GbColorPickerPrefsPaletteRow *self,
+                              GtkWidget                    *popover)
+{
+  g_assert (GB_IS_COLOR_PICKER_PREFS_PALETTE_ROW (self));
+  g_assert (GTK_IS_WIDGET (popover));
+
+  gtk_widget_destroy (popover);
+
+  gb_color_picker_prefs_palette_row_set_edit (self, FALSE);
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_IS_EDITING]);
+}
+
+static void
+rename_popover_entry_renamed_cb (GbColorPickerPrefsPaletteRow *self,
+                                 const gchar                  *name)
+{
+  const gchar *id;
 
   g_assert (GB_IS_COLOR_PICKER_PREFS_PALETTE_ROW (self));
 
-  if (is_editing)
-    g_signal_emit_by_name (self, "edit");
-  else
-    {
-      parent = gtk_widget_get_parent (GTK_WIDGET (self));
-      gtk_widget_grab_focus (parent);
-    }
+  gtk_label_set_text (self->palette_name, name);
+  id = g_variant_get_string (self->target, NULL);
+  g_signal_emit_by_name (self, "name-changed",
+                         id,
+                         gtk_label_get_text (self->palette_name));
+}
 
-  self->is_editing = is_editing;
+static void
+gb_color_picker_prefs_palette_row_edit (GbColorPickerPrefsPaletteRow *self)
+{
+  GtkWidget *popover;
+  const gchar *name;
+
+  g_assert (GB_IS_COLOR_PICKER_PREFS_PALETTE_ROW (self));
+
+  name = gtk_label_get_text (self->palette_name);
+  popover = g_object_new (GSTYLE_TYPE_RENAME_POPOVER,
+                          "label", _("Palette name"),
+                          "name", name,
+                          "message", _("Enter a new name for the palette"),
+                          NULL);
+
+  gtk_popover_set_relative_to (GTK_POPOVER (popover), GTK_WIDGET (self));
+  g_signal_connect_swapped (popover, "closed", G_CALLBACK (contextual_popover_closed_cb), self);
+  g_signal_connect_swapped (popover, "renamed", G_CALLBACK (rename_popover_entry_renamed_cb), self);
+  gtk_widget_show (popover);
 }
 
 static void
@@ -187,12 +220,28 @@ gb_color_picker_prefs_palette_row_disconnect (IdePreferencesBin *bin,
 }
 
 static void
-gb_color_picker_prefs_list_row_button_clicked_cb (GbColorPickerPrefsPaletteRow *self,
-                                                  GtkButton                    *button)
+popover_button_rename_clicked_cb (GbColorPickerPrefsPaletteRow *self,
+                                  GdkEvent                     *event,
+                                  GtkButton                    *button)
+{
+  g_assert (GB_IS_COLOR_PICKER_PREFS_PALETTE_ROW (self));
+  g_assert (GTK_IS_BUTTON (button));
+
+  self->is_editing = TRUE;
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_IS_EDITING]);
+
+  g_signal_emit_by_name (self, "edit");
+}
+
+static void
+popover_button_remove_clicked_cb (GbColorPickerPrefsPaletteRow *self,
+                                  GdkEvent                     *event,
+                                  GtkButton                    *button)
 {
   const gchar *id;
 
   g_assert (GB_IS_COLOR_PICKER_PREFS_PALETTE_ROW (self));
+  g_assert (event != NULL);
   g_assert (GTK_IS_BUTTON (button));
 
   id = g_variant_get_string (self->target, NULL);
@@ -200,72 +249,40 @@ gb_color_picker_prefs_list_row_button_clicked_cb (GbColorPickerPrefsPaletteRow *
 }
 
 static gboolean
-palette_name_activate_cb (GbColorPickerPrefsPaletteRow *self,
-                          GtkEntry                     *palette_name)
-{
-  GtkWidget *parent;
-  const gchar *id;
-
-  g_assert (GB_IS_COLOR_PICKER_PREFS_PALETTE_ROW (self));
-  g_assert (GTK_IS_ENTRY (palette_name));
-
-  g_clear_pointer (&self->backup_name, g_free);
-  self->backup_name = g_strdup (gtk_entry_get_text (self->palette_name));
-  id = g_variant_get_string (self->target, NULL);
-  g_signal_emit_by_name (self, "name-changed",
-                         id,
-                         self->backup_name );
-
-  parent = gtk_widget_get_parent (GTK_WIDGET (self));
-  g_assert (GTK_IS_LIST_BOX_ROW (parent));
-  gtk_widget_grab_focus (GTK_WIDGET (parent));
-
-  return GDK_EVENT_STOP;
-}
-
-static gboolean
 event_box_button_pressed_cb (GbColorPickerPrefsPaletteRow *self,
                              GdkEventButton               *event,
                              GtkEventBox                  *event_box)
 {
+  GtkWidget *popover;
+  GtkBuilder *builder;
+  GtkWidget *button_rename;
+  GtkWidget *button_remove;
+
   g_assert (GB_IS_COLOR_PICKER_PREFS_PALETTE_ROW (self));
   g_assert (event != NULL);
   g_assert (GTK_IS_EVENT_BOX (event_box));
 
   if (event->type == GDK_BUTTON_PRESS && event->button == GDK_BUTTON_SECONDARY)
     {
-      g_signal_emit_by_name (self, "edit");
+      builder = gtk_builder_new_from_resource ("/org/gnome/builder/plugins/color-picker-plugin/gtk/color-picker-palette-menu.ui");
+      popover = GTK_WIDGET (gtk_builder_get_object (builder, "popover"));
+      button_rename = GTK_WIDGET (gtk_builder_get_object (builder, "button_rename"));
+      g_signal_connect_object (button_rename, "button-release-event",
+                               G_CALLBACK (popover_button_rename_clicked_cb), self, G_CONNECT_SWAPPED);
+
+      button_remove = GTK_WIDGET (gtk_builder_get_object (builder, "button_remove"));
+      g_signal_connect_object (button_remove, "button-release-event",
+                               G_CALLBACK (popover_button_remove_clicked_cb), self, G_CONNECT_SWAPPED);
+
+      gtk_popover_set_relative_to (GTK_POPOVER (popover), GTK_WIDGET (self));
+      g_signal_connect_swapped (popover, "closed", G_CALLBACK (contextual_popover_closed_cb), self);
+      gtk_widget_show (popover);
+      g_object_unref (builder);
+
       return GDK_EVENT_STOP;
     }
 
   return GDK_EVENT_PROPAGATE;
-}
-
-static void
-palette_name_has_focus_cb (GbColorPickerPrefsPaletteRow *self,
-                           GParamSpec                   *pspec,
-                           GtkEntry                     *palette_name)
-{
-  g_assert (GB_IS_COLOR_PICKER_PREFS_PALETTE_ROW (self));
-  g_assert (pspec != NULL);
-  g_assert (GTK_IS_ENTRY (palette_name));
-
-  self->is_editing = gtk_widget_has_focus (GTK_WIDGET (self->palette_name));
-  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_IS_EDITING]);
-
-  if (!self->is_editing)
-    {
-      if (g_strcmp0 (self->backup_name, gtk_entry_get_text (self->palette_name)) != 0)
-        {
-          gtk_entry_set_text (self->palette_name, self->backup_name);
-          g_clear_pointer (&self->backup_name, g_free);
-        }
-    }
-  else
-    {
-      g_clear_pointer (&self->backup_name, g_free);
-      self->backup_name = g_strdup (gtk_entry_get_text (self->palette_name));
-    }
 }
 
 static void
@@ -278,16 +295,16 @@ gb_color_picker_prefs_palette_row_set_palette_name (GbColorPickerPrefsPaletteRow
 
   if (ide_str_empty0 (new_text))
     {
-      gtk_entry_set_text (self->palette_name, "No name");
+      gtk_label_set_text (self->palette_name, "No name");
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_PALETTE_NAME]);
 
       return;
     }
 
-  text = gtk_entry_get_text (self->palette_name);
+  text = gtk_label_get_text (self->palette_name);
   if (g_strcmp0 (text, new_text) != 0)
     {
-      gtk_entry_set_text (self->palette_name, new_text);
+      gtk_label_set_text (self->palette_name, new_text);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_PALETTE_NAME]);
     }
 }
@@ -309,7 +326,6 @@ gb_color_picker_prefs_palette_row_finalize (GObject *object)
   g_clear_pointer (&self->key, g_free);
   g_clear_pointer (&self->target, g_variant_unref);
   g_clear_pointer (&self->palette_id, g_free);
-  g_clear_pointer (&self->backup_name, g_free);
 
   G_OBJECT_CLASS (gb_color_picker_prefs_palette_row_parent_class)->finalize (object);
 }
@@ -337,7 +353,7 @@ gb_color_picker_prefs_palette_row_get_property (GObject    *object,
       break;
 
     case PROP_PALETTE_NAME:
-      g_value_set_string (value, gtk_entry_get_text (self->palette_name));
+      g_value_set_string (value, gtk_label_get_text (self->palette_name));
       break;
 
     default:
@@ -461,7 +477,6 @@ gb_color_picker_prefs_palette_row_class_init (GbColorPickerPrefsPaletteRowClass 
   gtk_widget_class_bind_template_child (widget_class, GbColorPickerPrefsPaletteRow, image);
   gtk_widget_class_bind_template_child (widget_class, GbColorPickerPrefsPaletteRow, event_box);
   gtk_widget_class_bind_template_child (widget_class, GbColorPickerPrefsPaletteRow, palette_name);
-  gtk_widget_class_bind_template_child (widget_class, GbColorPickerPrefsPaletteRow, button);
 }
 
 static void
@@ -473,14 +488,4 @@ gb_color_picker_prefs_palette_row_init (GbColorPickerPrefsPaletteRow *self)
   g_signal_connect_swapped (self->event_box, "button-press-event",
                             G_CALLBACK (event_box_button_pressed_cb),
                             self);
-
-  g_signal_connect_swapped (self->palette_name, "activate",
-                            G_CALLBACK (palette_name_activate_cb),
-                            self);
-
-  g_signal_connect_swapped (self->palette_name, "notify::has-focus",
-                            G_CALLBACK (palette_name_has_focus_cb),
-                            self);
-
-  g_signal_connect_swapped (self->button, "clicked", G_CALLBACK (gb_color_picker_prefs_list_row_button_clicked_cb), self);
 }

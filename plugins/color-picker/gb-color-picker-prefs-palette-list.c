@@ -110,19 +110,6 @@ gb_picker_prefs_palette_list_key_pressed_cb (GbColorPickerPrefsPaletteList *self
             }
         }
     }
-  else if (GTK_IS_ENTRY (focused_widget))
-    {
-       if (gtk_widget_is_ancestor (focused_widget, GTK_WIDGET (list_box)) &&
-           is_editing &&
-           event->keyval == GDK_KEY_Escape)
-        {
-          row_child = gtk_widget_get_ancestor (focused_widget, GTK_TYPE_LIST_BOX_ROW);
-          if (row_child != NULL)
-            gtk_widget_grab_focus (row_child);
-        }
-
-      return GDK_EVENT_STOP;
-    }
 
   return GDK_EVENT_PROPAGATE;
 }
