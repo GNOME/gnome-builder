@@ -6,7 +6,7 @@ name=Builder (Debug)
 config-opts=--enable-tracing --enable-debug --enable-tests
 prefix=/app
 device=local
-runtime=xdg-app:org.gnome.Sdk/master/x86_64
+runtime=flatpak:org.gnome.Sdk/master/x86_64
 
 
 [debug.environment]
@@ -17,7 +17,7 @@ name=Builder (Release)
 config-opts=--enable-debug=minimum --enable-gtk-doc
 prefix=/app
 device=local
-runtime=xdg-app:org.gnome.Sdk/master/x86_64
+runtime=flatpak:org.gnome.Sdk/master/x86_64
 
 
 
