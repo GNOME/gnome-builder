@@ -3,12 +3,12 @@ SUBDIRS = hicolor
 icondir = $(datadir)/icons
 
 nobase_icon_DATA = \
-	hicolor/256x256/apps/builder.png \
-	hicolor/512x512/apps/builder.png \
-	hicolor/16x16/apps/builder.png \
-	hicolor/32x32/apps/builder.png \
-	hicolor/48x48/apps/builder.png \
-	hicolor/24x24/apps/builder.png \
+	hicolor/256x256/apps/org.gnome.Builder.png \
+	hicolor/512x512/apps/org.gnome.Builder.png \
+	hicolor/16x16/apps/org.gnome.Builder.png \
+	hicolor/32x32/apps/org.gnome.Builder.png \
+	hicolor/48x48/apps/org.gnome.Builder.png \
+	hicolor/24x24/apps/org.gnome.Builder.png \
 	hicolor/scalable/apps/builder-symbolic.svg \
 	$(NULL)
 
