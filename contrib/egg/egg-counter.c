@@ -274,7 +274,7 @@ _egg_counter_arena_init_remote (EggCounterArena *arena,
   void *mem = NULL;
   guint ncpu;
   guint n_counters;
-  int i;
+  guint i;
   int fd = -1;
 
   g_assert (arena != NULL);
