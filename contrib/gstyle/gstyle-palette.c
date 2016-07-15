@@ -351,7 +351,7 @@ gstyle_palette_remove (GstylePalette  *self,
   GPtrArray *array;
 
   g_return_val_if_fail (GSTYLE_IS_PALETTE (self), FALSE);
-  g_return_val_if_fail (GSTYLE_IS_COLOR (self), FALSE);
+  g_return_val_if_fail (GSTYLE_IS_COLOR (color), FALSE);
 
   array = self->colors;
   for (gint i = 0; i < array->len; ++i)
