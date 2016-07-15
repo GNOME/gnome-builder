@@ -22,6 +22,7 @@
 #include <string.h>
 #include <gdk/gdk.h>
 
+#include "gstyle-color-widget-actions.h"
 #include "gstyle-css-provider.h"
 #include "gstyle-palette-widget.h"
 #include "gstyle-private.h"
@@ -1273,6 +1274,8 @@ gstyle_color_widget_init (GstyleColorWidget *self)
   self->drag_gesture = gtk_gesture_drag_new (GTK_WIDGET (self));
   g_signal_connect (self->drag_gesture, "drag-update",
                     G_CALLBACK (gstyle_color_widget_drag_gesture_update), self);
+
+  gstyle_color_widget_actions_init (self);
 }
 
 GType

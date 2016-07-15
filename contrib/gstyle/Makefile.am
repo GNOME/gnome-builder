@@ -24,6 +24,7 @@ headers_DATA =                        \
 	gstyle-color-predefined.h     \
 	gstyle-color-scale.h          \
 	gstyle-color-widget.h         \
+	gstyle-color-widget-actions.h \
 	gstyle-colorlexer.h           \
 	gstyle-css-provider.h         \
 	gstyle-eyedropper.h           \
@@ -53,6 +54,7 @@ libgstyle_private_la_SOURCES =        \
 	gstyle-color-plane.c          \
 	gstyle-color-scale.c          \
 	gstyle-color-widget.c         \
+	gstyle-color-widget-actions.c \
 	gstyle-colorlexer.c           \
 	gstyle-css-provider.c         \
 	gstyle-eyedropper.c           \
