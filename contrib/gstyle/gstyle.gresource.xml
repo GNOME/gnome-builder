@@ -3,6 +3,7 @@
   <gresource prefix="/org/gnome/libgstyle">
     <file compressed="true" alias="ui/gstyle-color-panel.ui">ui/gstyle-color-panel.ui</file>
     <file compressed="true" alias="ui/gstyle-palette-widget.ui">ui/gstyle-palette-widget.ui</file>
+    <file compressed="true" alias="ui/gstyle-color-widget.ui">ui/gstyle-color-widget.ui</file>
     <file compressed="true" alias="ui/gstyle-rename-popover.ui">ui/gstyle-rename-popover.ui</file>
 
     <file compressed="true" alias="theme/gstyle.css">theme/gstyle.css</file>

@@ -21,6 +21,7 @@
 #include <cairo.h>
 #include <string.h>
 #include <gdk/gdk.h>
+#include <glib/gi18n.h>
 
 #include "gstyle-color-widget-actions.h"
 #include "gstyle-css-provider.h"
@@ -365,6 +366,46 @@ failed:
   gtk_drag_finish (context, FALSE, FALSE, time);
 }
 
+static void
+contextual_popover_closed_cb (GstyleColorWidget *self,
+                              GtkWidget         *popover)
+{
+  g_assert (GSTYLE_IS_COLOR_WIDGET (self));
+  g_assert (GTK_IS_WIDGET (popover));
+
+  gtk_widget_destroy (popover);
+}
+
+static void
+popover_button_rename_clicked_cb (GstyleColorWidget *self,
+                                  GdkEvent          *event,
+                                  GtkButton         *button)
+{
+  GActionGroup *group;
+
+  g_assert (GSTYLE_IS_COLOR_WIDGET (self));
+  g_assert (GTK_IS_BUTTON (button));
+
+  group = gtk_widget_get_action_group (GTK_WIDGET (self), "gstyle-color-widget-menu");
+  if (group != NULL)
+    g_action_group_activate_action (group, "rename", NULL);
+}
+
+static void
+popover_button_remove_clicked_cb (GstyleColorWidget *self,
+                                  GdkEvent          *event,
+                                  GtkButton         *button)
+{
+  GActionGroup *group;
+
+  g_assert (GSTYLE_IS_COLOR_WIDGET (self));
+  g_assert (GTK_IS_BUTTON (button));
+
+  group = gtk_widget_get_action_group (GTK_WIDGET (self), "gstyle-color-widget-menu");
+  if (group != NULL)
+    g_action_group_activate_action (group, "remove", NULL);
+}
+
 /* The multi-press gesture used by the flowbox to select a child
  * forbid us to use dnd so we need to catch it here and select yourself
  * the child
@@ -378,10 +419,17 @@ gstyle_color_widget_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
 {
   GtkWidget *container;
   GtkWidget *child;
+  GtkWidget *popover;
+  GtkBuilder *builder;
+  GtkWidget *button_rename;
+  GtkWidget *button_remove;
+  gint button;
 
+  button = gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (gesture));
   gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
+
   child = gtk_widget_get_parent (GTK_WIDGET (self));
-  if (child != NULL)
+  if (child != NULL && button == GDK_BUTTON_PRIMARY)
     {
       if (GTK_IS_LIST_BOX_ROW (child))
         {
@@ -389,6 +437,7 @@ gstyle_color_widget_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
           if (container != NULL && GTK_IS_LIST_BOX (container))
             {
               gtk_list_box_select_row (GTK_LIST_BOX (container), GTK_LIST_BOX_ROW (child));
+              gtk_widget_grab_focus (GTK_WIDGET (self));
               if (n_press == 2)
                 g_signal_emit_by_name (container, "row-activated", child);
             }
@@ -399,10 +448,29 @@ gstyle_color_widget_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
           if (container != NULL && GTK_IS_FLOW_BOX (container))
             {
               gtk_flow_box_select_child (GTK_FLOW_BOX (container), GTK_FLOW_BOX_CHILD (child));
+              gtk_widget_grab_focus (GTK_WIDGET (self));
               if (n_press == 2)
                 g_signal_emit_by_name (container, "child-activated", child);
             }
         }
+    }
+
+  if (button == GDK_BUTTON_SECONDARY)
+    {
+      builder = gtk_builder_new_from_resource ("/org/gnome/libgstyle/ui/gstyle-color-widget.ui");
+      popover = GTK_WIDGET (gtk_builder_get_object (builder, "popover"));
+      button_rename = GTK_WIDGET (gtk_builder_get_object (builder, "button_rename"));
+      g_signal_connect_object (button_rename, "button-release-event",
+                               G_CALLBACK (popover_button_rename_clicked_cb), self, G_CONNECT_SWAPPED);
+
+      button_remove = GTK_WIDGET (gtk_builder_get_object (builder, "button_remove"));
+      g_signal_connect_object (button_remove, "button-release-event",
+                               G_CALLBACK (popover_button_remove_clicked_cb), self, G_CONNECT_SWAPPED);
+
+      gtk_popover_set_relative_to (GTK_POPOVER (popover), GTK_WIDGET (self));
+      g_signal_connect_swapped (popover, "closed", G_CALLBACK (contextual_popover_closed_cb), self);
+      gtk_widget_show (popover);
+      g_object_unref (builder);
     }
 }
 
@@ -1026,6 +1094,32 @@ gstyle_color_widget_hierarchy_changed (GtkWidget *widget,
   update_container_parent_informations (self);
 }
 
+static gboolean
+gstyle_color_widget_key_pressed_cb (GstyleColorWidget *self,
+                                    GdkEventKey       *event)
+{
+  GtkWidget *ancestor;
+  GActionGroup *group;
+
+  g_assert (GSTYLE_IS_COLOR_WIDGET (self));
+  g_assert (event != NULL);
+
+  if (event->type != GDK_KEY_PRESS)
+    return GDK_EVENT_PROPAGATE;
+
+  ancestor = gtk_widget_get_ancestor (GTK_WIDGET (self), GSTYLE_TYPE_PALETTE_WIDGET);
+  if (event->keyval == GDK_KEY_F2 && ancestor != NULL)
+    {
+      group = gtk_widget_get_action_group (GTK_WIDGET (self), "gstyle-color-widget-menu");
+      if (group != NULL)
+        g_action_group_activate_action (group, "rename", NULL);
+
+      return GDK_EVENT_STOP;
+    }
+
+  return GDK_EVENT_PROPAGATE;
+}
+
 static void
 gstyle_color_widget_realize (GtkWidget *widget)
 {
@@ -1220,16 +1314,18 @@ gstyle_color_widget_class_init (GstyleColorWidgetClass *klass)
   gtk_widget_class_set_css_name (widget_class, "gstylecolorwidget");
 }
 
+
+
+static const GtkTargetEntry dnd_targets [] = {
+  {"GSTYLE_COLOR_WIDGET", GTK_TARGET_SAME_APP, 0},
+  {"application/x-color", 0, 0},
+};
+
 static void
 gstyle_color_widget_init (GstyleColorWidget *self)
 {
   GtkStyleContext *context;
   GtkWidget *widget = GTK_WIDGET (self);
-
-  static const GtkTargetEntry dnd_targets [] = {
-    {"GSTYLE_COLOR_WIDGET", GTK_TARGET_SAME_APP, 0},
-    {"application/x-color", 0, 0},
-  };
 
   gtk_widget_set_has_window (GTK_WIDGET (self), TRUE);
 
@@ -1265,7 +1361,7 @@ gstyle_color_widget_init (GstyleColorWidget *self)
   update_container_parent_informations (self);
 
   self->multipress_gesture = gtk_gesture_multi_press_new (widget);
-  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (self->multipress_gesture), GDK_BUTTON_PRIMARY);
+  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (self->multipress_gesture), 0);
   gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (self->multipress_gesture),
                                               GTK_PHASE_BUBBLE);
   g_signal_connect (self->multipress_gesture, "pressed",
@@ -1275,7 +1371,12 @@ gstyle_color_widget_init (GstyleColorWidget *self)
   g_signal_connect (self->drag_gesture, "drag-update",
                     G_CALLBACK (gstyle_color_widget_drag_gesture_update), self);
 
+  g_signal_connect_swapped (self, "key-press-event",
+                            G_CALLBACK (gstyle_color_widget_key_pressed_cb),
+                            self);
+
   gstyle_color_widget_actions_init (self);
+  gtk_widget_set_can_focus (GTK_WIDGET (self), TRUE);
 }
 
 GType
