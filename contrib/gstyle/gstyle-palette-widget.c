@@ -342,23 +342,33 @@ gstyle_palette_widget_on_drag_motion (GtkWidget      *widget,
 {
   GstylePaletteWidget *self = GSTYLE_PALETTE_WIDGET (widget);
   GdkAtom target;
+  GdkDragAction drag_action;
 
   g_assert (GSTYLE_IS_PALETTE_WIDGET (self));
   g_assert (GDK_IS_DRAG_CONTEXT (context));
 
   target = gtk_drag_dest_find_target (widget, context, NULL);
-  if (target != gdk_atom_intern_static_string ("GSTYLE_COLOR_WIDGET") ||
-      (self->dnd_lock & GSTYLE_PALETTE_WIDGET_DND_LOCK_FLAGS_DROP) != 0)
+  if (target == gdk_atom_intern_static_string ("GSTYLE_COLOR_WIDGET") &&
+      (self->dnd_lock & GSTYLE_PALETTE_WIDGET_DND_LOCK_FLAGS_DROP) == 0)
     {
-      dnd_highlight_set_from_cursor (self, -1, -1);
-      gdk_drag_status (context, 0, time);
-      return FALSE;
+      drag_action = gdk_drag_context_get_actions (context);
+      if (drag_action & GDK_ACTION_MOVE)
+        {
+          dnd_highlight_set_from_cursor (self, x, y);
+          gdk_drag_status (context, GDK_ACTION_MOVE, time);
+          return TRUE;
+        }
+      else if (drag_action & GDK_ACTION_COPY)
+        {
+          dnd_highlight_set_from_cursor (self, x, y);
+          gdk_drag_status (context, GDK_ACTION_COPY, time);
+          return TRUE;
+        }
     }
 
-  dnd_highlight_set_from_cursor (self, x, y);
-  gdk_drag_status (context, GDK_ACTION_COPY, time);
-
-  return TRUE;
+  dnd_highlight_set_from_cursor (self, -1, -1);
+  gdk_drag_status (context, 0, time);
+  return FALSE;
 }
 
 static void
@@ -416,6 +426,7 @@ gstyle_palette_widget_on_drag_data_received (GtkWidget        *widget,
   GstylePaletteWidget *self = GSTYLE_PALETTE_WIDGET (widget);
   GstyleColor **src_color;
   GstyleColor *color;
+  gboolean delete;
 
   g_assert (GSTYLE_IS_PALETTE_WIDGET (self));
   g_assert (GDK_IS_DRAG_CONTEXT (context));
@@ -431,7 +442,8 @@ gstyle_palette_widget_on_drag_data_received (GtkWidget        *widget,
                                    NULL);
 
       g_object_unref (color);
-      gtk_drag_finish (context, TRUE, FALSE, time);
+      delete = (gdk_drag_context_get_selected_action (context) == GDK_ACTION_MOVE);
+      gtk_drag_finish (context, TRUE, delete, time);
     }
   else
     gtk_drag_finish (context, FALSE, FALSE, time);

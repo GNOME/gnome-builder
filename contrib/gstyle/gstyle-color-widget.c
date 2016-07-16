@@ -142,6 +142,8 @@ gstyle_color_widget_drag_gesture_update (GtkGestureDrag    *gesture,
   gdouble start_x, start_y;
   GtkAllocation allocation;
   GstylePaletteWidgetDndLockFlags dnd_lock;
+  GtkWidget *container;
+  GdkDragAction drag_action;
   gint button;
 
   g_assert (GTK_IS_GESTURE (gesture));
@@ -170,9 +172,16 @@ gstyle_color_widget_drag_gesture_update (GtkGestureDrag    *gesture,
   sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
   gtk_gesture_drag_get_start_point (GTK_GESTURE_DRAG (gesture), &start_x, &start_y);
   event = gtk_gesture_get_last_event (GTK_GESTURE (gesture), sequence);
+
+  container = gtk_widget_get_ancestor (GTK_WIDGET (self), GSTYLE_TYPE_PALETTE_WIDGET);
+  if (container != NULL && GSTYLE_IS_PALETTE_WIDGET (container))
+    drag_action = (GDK_ACTION_MOVE | GDK_ACTION_COPY);
+  else
+    drag_action = GDK_ACTION_COPY;
+
   context = gtk_drag_begin_with_coordinates (GTK_WIDGET (self),
                                              self->target_list,
-                                             GDK_ACTION_COPY,
+                                             drag_action,
                                              button,
                                              (GdkEvent*)event,
                                              start_x, start_y);
@@ -190,6 +199,7 @@ gstyle_color_widget_on_drag_motion (GtkWidget      *widget,
   GstyleColorWidget *self = (GstyleColorWidget *)widget;
   GstylePaletteWidgetDndLockFlags dnd_lock;
   GdkAtom target;
+  GdkDragAction drag_action;
 
   g_assert (GSTYLE_IS_COLOR_WIDGET (self));
   g_assert (GDK_IS_DRAG_CONTEXT (context));
@@ -209,8 +219,13 @@ gstyle_color_widget_on_drag_motion (GtkWidget      *widget,
       is_in_drop_zone (self, x, y))
     {
       gtk_drag_highlight (widget);
-      gdk_drag_status (context, GDK_ACTION_COPY, time);
-      return TRUE;
+
+      drag_action = gdk_drag_context_get_actions (context);
+      if (drag_action | GDK_ACTION_COPY)
+        {
+          gdk_drag_status (context, GDK_ACTION_COPY, time);
+          return TRUE;
+        }
     }
 
   gdk_drag_status (context, 0, time);
@@ -254,6 +269,21 @@ gstyle_color_widget_on_drag_drop (GtkWidget        *widget,
     }
 
   return FALSE;
+}
+
+static void
+gstyle_color_widget_on_drag_data_delete (GtkWidget      *widget,
+                                         GdkDragContext *context)
+{
+  GstyleColorWidget *self = (GstyleColorWidget *)widget;
+  GActionGroup *group;
+
+  g_assert (GSTYLE_IS_COLOR_WIDGET (self));
+  g_assert (GDK_IS_DRAG_CONTEXT (context));
+
+  group = gtk_widget_get_action_group (GTK_WIDGET (self), "gstyle-color-widget-menu");
+  if (group != NULL)
+    g_action_group_activate_action (group, "remove", NULL);
 }
 
 static void
@@ -1265,6 +1295,7 @@ gstyle_color_widget_class_init (GstyleColorWidgetClass *klass)
   widget_class->drag_end = gstyle_color_widget_on_drag_end;
   widget_class->drag_failed = gstyle_color_widget_on_drag_failed;
   widget_class->drag_data_get = gstyle_color_widget_on_drag_data_get;
+  widget_class->drag_data_delete = gstyle_color_widget_on_drag_data_delete;
 
   widget_class->drag_motion = gstyle_color_widget_on_drag_motion;
   widget_class->drag_leave = gstyle_color_widget_on_drag_leave;
@@ -1354,7 +1385,7 @@ gstyle_color_widget_init (GstyleColorWidget *self)
   self->target_list = gtk_target_list_new (dnd_targets, G_N_ELEMENTS (dnd_targets));
   gtk_target_list_add_text_targets (self->target_list, 0);
 
-  gtk_drag_dest_set (widget, 0, NULL, 0, GDK_ACTION_COPY);
+  gtk_drag_dest_set (widget, 0, NULL, 0, GDK_ACTION_MOVE);
   gtk_drag_dest_set_target_list (widget, self->target_list);
   gtk_drag_dest_set_track_motion (GTK_WIDGET (self), TRUE);
 
