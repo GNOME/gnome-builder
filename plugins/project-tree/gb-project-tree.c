@@ -149,7 +149,8 @@ gb_project_tree_vcs_changed (GbProjectTree *self,
 
   ide_tree_rebuild (IDE_TREE (self));
 
-  gb_project_tree_reveal (self, file);
+  if (file != NULL)
+    gb_project_tree_reveal (self, file);
 }
 
 void
