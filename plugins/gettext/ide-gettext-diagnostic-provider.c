@@ -26,21 +26,41 @@
 
 struct _IdeGettextDiagnostics
 {
-  GObject parent_instance;
+  GObject         parent_instance;
   IdeDiagnostics *diagnostics;
-  guint64 sequence;
+  guint64         sequence;
 };
 
+struct _IdeGettextDiagnosticProvider
+{
+  IdeObject     parent_instance;
+  EggTaskCache *diagnostics_cache;
+};
+
+typedef struct
+{
+  IdeFile *file;
+  IdeUnsavedFile *unsaved_file;
+} TranslationUnit;
+
+static void diagnostic_provider_iface_init (IdeDiagnosticProviderInterface *iface);
+
 G_DEFINE_TYPE (IdeGettextDiagnostics, ide_gettext_diagnostics, G_TYPE_OBJECT)
+G_DEFINE_TYPE_EXTENDED (IdeGettextDiagnosticProvider,
+                        ide_gettext_diagnostic_provider,
+                        IDE_TYPE_OBJECT,
+                        0,
+                        G_IMPLEMENT_INTERFACE (IDE_TYPE_DIAGNOSTIC_PROVIDER,
+                                               diagnostic_provider_iface_init))
 
 enum {
   PROP_0,
   PROP_DIAGNOSTICS,
   PROP_SEQUENCE,
-  LAST_PROP
+  N_PROPS
 };
 
-static GParamSpec *properties [LAST_PROP];
+static GParamSpec *properties [N_PROPS];
 
 static void
 ide_gettext_diagnostics_set_property (GObject      *object,
@@ -100,34 +120,13 @@ ide_gettext_diagnostics_class_init (IdeGettextDiagnosticsClass *klass)
                          0,
                          (G_PARAM_CONSTRUCT_ONLY | G_PARAM_WRITABLE));
 
-  g_object_class_install_properties (object_class, LAST_PROP, properties);
+  g_object_class_install_properties (object_class, N_PROPS, properties);
 }
 
 static void
 ide_gettext_diagnostics_init (IdeGettextDiagnostics *self)
 {
 }
-
-struct _IdeGettextDiagnosticProvider
-{
-  IdeObject     parent_instance;
-  EggTaskCache *diagnostics_cache;
-};
-
-static void diagnostic_provider_iface_init (IdeDiagnosticProviderInterface *iface);
-
-G_DEFINE_TYPE_EXTENDED (IdeGettextDiagnosticProvider,
-                        ide_gettext_diagnostic_provider,
-                        IDE_TYPE_OBJECT,
-                        0,
-                        G_IMPLEMENT_INTERFACE (IDE_TYPE_DIAGNOSTIC_PROVIDER,
-                                               diagnostic_provider_iface_init))
-
-typedef struct
-{
-  IdeFile *file;
-  IdeUnsavedFile *unsaved_file;
-} TranslationUnit;
 
 static void
 translation_unit_free (TranslationUnit *unit)
@@ -147,16 +146,22 @@ get_unsaved_file (IdeGettextDiagnosticProvider *self,
   IdeUnsavedFiles *unsaved_files;
   IdeContext *context;
   g_autoptr(GPtrArray) array = NULL;
-  guint index;
+  guint i;
 
   context = ide_object_get_context (IDE_OBJECT (self));
   unsaved_files = ide_context_get_unsaved_files (context);
   array = ide_unsaved_files_to_array (unsaved_files);
 
-  for (index = 0; index < array->len; index++)
+  for (i = 0; i < array->len; i++)
     {
-      IdeUnsavedFile *unsaved_file = g_ptr_array_index (array, index);
-      if (g_file_equal (ide_unsaved_file_get_file (unsaved_file), ide_file_get_file (file)))
+      IdeUnsavedFile *unsaved_file = g_ptr_array_index (array, i);
+      GFile *ufile = ide_unsaved_file_get_file (unsaved_file);
+      GFile *ifile = ide_file_get_file (file);
+
+      g_assert (G_IS_FILE (ufile));
+      g_assert (G_IS_FILE (ifile));
+
+      if (g_file_equal (ufile, ifile))
         return ide_unsaved_file_ref (unsaved_file);
     }
 
@@ -200,14 +205,17 @@ ide_gettext_diagnostic_provider_diagnose_async (IdeDiagnosticProvider *provider,
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, ide_gettext_diagnostic_provider_diagnose_async);
 
-  unsaved_file = get_unsaved_file (self, file);
-
-  if ((cached = egg_task_cache_peek (self->diagnostics_cache, file)) &&
-      (cached->sequence >= ide_unsaved_file_get_sequence (unsaved_file)))
+  if (NULL != (cached = egg_task_cache_peek (self->diagnostics_cache, file)))
     {
-      g_task_return_pointer (task, g_object_ref (cached), g_object_unref);
-      return;
+      unsaved_file = get_unsaved_file (self, file);
+
+      if (unsaved_file == NULL || (cached->sequence >= ide_unsaved_file_get_sequence (unsaved_file)))
+        {
+          g_task_return_pointer (task, g_object_ref (cached), g_object_unref);
+          return;
+        }
     }
 
   egg_task_cache_get_async (self->diagnostics_cache,
@@ -215,7 +223,7 @@ ide_gettext_diagnostic_provider_diagnose_async (IdeDiagnosticProvider *provider,
                             TRUE,
                             cancellable,
                             get_diagnostics_cb,
-                            g_object_ref (task));
+                            g_steal_pointer (&task));
 }
 
 static IdeDiagnostics *
@@ -261,20 +269,27 @@ ide_gettext_diagnostic_provider_class_init (IdeGettextDiagnosticProviderClass *k
 }
 
 static void
-subprocess_wait_cb (GObject      *source_object,
+subprocess_wait_cb (GObject      *object,
                     GAsyncResult *res,
                     gpointer      user_data)
 {
-  GSubprocess *subprocess = G_SUBPROCESS (source_object);
+  GSubprocess *subprocess = (GSubprocess *)object;
   g_autoptr(GTask) task = user_data;
   g_autoptr(IdeDiagnostics) local_diags = NULL;
-  TranslationUnit *unit = g_task_get_task_data (task);
-  GPtrArray *array = NULL;
-  IdeGettextDiagnostics *diags;
-  GInputStream *stderr_input;
-  GDataInputStream *stderr_data_input;
   g_autofree gchar *input_prefix = NULL;
+  g_autoptr(GPtrArray) array = NULL;
+  g_autoptr(GDataInputStream) stderr_data_input = NULL;
+  g_autoptr(GInputStream) stderr_input = NULL;
+  g_autoptr(IdeGettextDiagnostics) diags = NULL;
+  TranslationUnit *unit;
   GError *error = NULL;
+
+  g_assert (G_IS_SUBPROCESS (subprocess));
+  g_assert (G_IS_TASK (task));
+
+  unit = g_task_get_task_data (task);
+
+  g_assert (unit != NULL);
 
   if (!g_subprocess_wait_finish (subprocess, res, &error))
     {
@@ -288,8 +303,6 @@ subprocess_wait_cb (GObject      *source_object,
 
   stderr_input = g_subprocess_get_stderr_pipe (subprocess);
   stderr_data_input = g_data_input_stream_new (stderr_input);
-  g_clear_object (&stderr_input);
-
   input_prefix = g_strdup_printf ("%s:", ide_unsaved_file_get_temp_path (unit->unsaved_file));
 
   for (;;)
@@ -327,12 +340,12 @@ subprocess_wait_cb (GObject      *source_object,
     }
 
  out:
-  local_diags = ide_diagnostics_new (array);
+  local_diags = ide_diagnostics_new (g_steal_pointer (&array));
   diags = g_object_new (IDE_TYPE_GETTEXT_DIAGNOSTICS,
                         "diagnostics", local_diags,
                         "sequence", ide_unsaved_file_get_sequence (unit->unsaved_file),
                         NULL);
-  g_task_return_pointer (task, diags, g_object_unref);
+  g_task_return_pointer (task, g_steal_pointer (&diags), g_object_unref);
 }
 
 static const gchar *
