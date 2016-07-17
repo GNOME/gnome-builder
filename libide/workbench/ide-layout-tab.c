@@ -73,6 +73,11 @@ ide_layout_tab_connect (IdeLayoutTab *self)
   if (controls != NULL)
     gtk_container_add (GTK_CONTAINER (self->controls_container), controls);
 
+  g_signal_connect (self->view,
+                    "destroy",
+                    G_CALLBACK (gtk_widget_destroyed),
+                    &self->view);
+
   gtk_widget_set_visible (self->close_button, TRUE);
 }
 
@@ -91,6 +96,10 @@ static void
 ide_layout_tab_disconnect (IdeLayoutTab *self)
 {
   g_assert (IDE_IS_LAYOUT_TAB (self));
+
+  g_signal_handlers_disconnect_by_func (self->view,
+                                        G_CALLBACK (gtk_widget_destroyed),
+                                        &self->view);
 
   gtk_container_foreach (GTK_CONTAINER (self->controls_container),
                          ide_layout_tab_remove_control,
