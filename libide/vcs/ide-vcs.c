@@ -43,6 +43,20 @@ ide_vcs_default_init (IdeVcsInterface *iface)
                                                             IDE_TYPE_CONTEXT,
                                                             (G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS)));
 
+  g_object_interface_install_property (iface,
+                                       g_param_spec_string ("branch-name",
+                                                            "Branch Name",
+                                                            "The current name of the branch",
+                                                            NULL,
+                                                            (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS)));
+
+  g_object_interface_install_property (iface,
+                                       g_param_spec_object ("working-directory",
+                                                            "Working Directory",
+                                                            "The working directory for the VCS",
+                                                            G_TYPE_FILE,
+                                                            (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS)));
+
   /**
    * IdeVcs::changed:
    *

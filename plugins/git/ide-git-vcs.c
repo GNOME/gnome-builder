@@ -62,7 +62,11 @@ G_DEFINE_TYPE_EXTENDED (IdeGitVcs, ide_git_vcs, IDE_TYPE_OBJECT, 0,
 enum {
   PROP_0,
   PROP_REPOSITORY,
-  LAST_PROP
+  LAST_PROP,
+
+  /* Override properties */
+  PROP_BRANCH_NAME,
+  PROP_WORKING_DIRECTORY,
 };
 
 enum {
@@ -372,6 +376,16 @@ ide_git_vcs_get_branch_name (IdeVcs *vcs)
 }
 
 static void
+ide_git_vcs_real_reloaded (IdeGitVcs      *self,
+                           GgitRepository *repository)
+{
+  g_assert (IDE_IS_GIT_VCS (self));
+  g_assert (GGIT_IS_REPOSITORY (repository));
+
+  g_object_notify (G_OBJECT (self), "branch-name");
+}
+
+static void
 ide_git_vcs_dispose (GObject *object)
 {
   IdeGitVcs *self = (IdeGitVcs *)object;
@@ -410,8 +424,16 @@ ide_git_vcs_get_property (GObject    *object,
 
   switch (prop_id)
     {
+    case PROP_BRANCH_NAME:
+      g_value_set_string (value, ide_git_vcs_get_branch_name (IDE_VCS (self)));
+      break;
+
     case PROP_REPOSITORY:
       g_value_set_object (value, ide_git_vcs_get_repository (self));
+      break;
+
+    case PROP_WORKING_DIRECTORY:
+      g_value_set_object (value, ide_git_vcs_get_working_directory (IDE_VCS (self)));
       break;
 
     default:
@@ -436,6 +458,9 @@ ide_git_vcs_class_init (IdeGitVcsClass *klass)
 
   object_class->dispose = ide_git_vcs_dispose;
   object_class->get_property = ide_git_vcs_get_property;
+
+  g_object_class_override_property (object_class, PROP_BRANCH_NAME, "branch-name");
+  g_object_class_override_property (object_class, PROP_WORKING_DIRECTORY, "working-directory");
 
   /**
    * IdeGitVcs:repository:
@@ -469,14 +494,13 @@ ide_git_vcs_class_init (IdeGitVcsClass *klass)
    * be used directly except in very specific situations. The gutter change renderer uses this
    * instance in a threaded manner.
    */
-  signals [RELOADED] = g_signal_new ("reloaded",
-                                      G_TYPE_FROM_CLASS (klass),
-                                      G_SIGNAL_RUN_LAST,
-                                      0,
-                                      NULL, NULL, NULL,
-                                      G_TYPE_NONE,
-                                      1,
-                                      GGIT_TYPE_REPOSITORY);
+  signals [RELOADED] =
+    g_signal_new_class_handler ("reloaded",
+                                G_TYPE_FROM_CLASS (klass),
+                                G_SIGNAL_RUN_LAST,
+                                G_CALLBACK (ide_git_vcs_real_reloaded),
+                                NULL, NULL, NULL,
+                                G_TYPE_NONE, 1, GGIT_TYPE_REPOSITORY);
 }
 
 static void

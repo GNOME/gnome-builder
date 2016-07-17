@@ -40,6 +40,21 @@ G_DEFINE_TYPE_EXTENDED (IdeDirectoryVcs, ide_directory_vcs, IDE_TYPE_OBJECT, 0,
                         G_IMPLEMENT_INTERFACE (IDE_TYPE_VCS, vcs_iface_init)
                         G_IMPLEMENT_INTERFACE (G_TYPE_ASYNC_INITABLE, async_initable_iface_init))
 
+enum {
+  PROP_0,
+  N_PROPS,
+
+  /* Override Properties */
+  PROP_BRANCH_NAME,
+  PROP_WORKING_DIRECTORY,
+};
+
+static gchar *
+ide_directory_vcs_get_branch_name (IdeVcs *vcs)
+{
+  return g_strdup (_("unversioned"));
+}
+
 static GFile *
 ide_directory_vcs_get_working_directory (IdeVcs *vcs)
 {
@@ -94,11 +109,38 @@ ide_directory_vcs_dispose (GObject *object)
 }
 
 static void
+ide_directory_vcs_get_property (GObject    *object,
+                                guint       prop_id,
+                                GValue     *value,
+                                GParamSpec *pspec)
+{
+  IdeDirectoryVcs *self = IDE_DIRECTORY_VCS (object);
+
+  switch (prop_id)
+    {
+    case PROP_BRANCH_NAME:
+      g_value_take_string (value, ide_directory_vcs_get_branch_name (IDE_VCS (self)));
+      break;
+
+    case PROP_WORKING_DIRECTORY:
+      g_value_set_object (value, ide_directory_vcs_get_working_directory (IDE_VCS (self)));
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    }
+}
+
+static void
 ide_directory_vcs_class_init (IdeDirectoryVcsClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   object_class->dispose = ide_directory_vcs_dispose;
+  object_class->get_property = ide_directory_vcs_get_property;
+
+  g_object_class_override_property (object_class, PROP_BRANCH_NAME, "branch-name");
+  g_object_class_override_property (object_class, PROP_WORKING_DIRECTORY, "working-directory");
 }
 
 static void
@@ -191,12 +233,6 @@ static gint
 ide_directory_vcs_get_priority (IdeVcs *vcs)
 {
   return G_MAXINT;
-}
-
-static gchar *
-ide_directory_vcs_get_branch_name (IdeVcs *vcs)
-{
-  return g_strdup (_("unversioned"));
 }
 
 static void
