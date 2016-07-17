@@ -368,6 +368,22 @@ gstyle_eyedropper_pointer_pressed_cb (GstyleEyedropper *self,
   return GDK_EVENT_PROPAGATE;
 }
 
+static void
+decrease_zoom_factor (GstyleEyedropper *self)
+{
+  g_assert (GSTYLE_IS_EYEDROPPER (self));
+
+  self->zoom_factor = CLAMP (self->zoom_factor - 0.5, MIN_ZOOM_FACTOR, MAX_ZOOM_FACTOR);
+}
+
+static void
+increase_zoom_factor (GstyleEyedropper *self)
+{
+  g_assert (GSTYLE_IS_EYEDROPPER (self));
+
+  self->zoom_factor = CLAMP (self->zoom_factor + 0.5, MIN_ZOOM_FACTOR, MAX_ZOOM_FACTOR);
+}
+
 static gboolean
 gstyle_eyedropper_pointer_wheel_cb (GstyleEyedropper *self,
                                     GdkEventScroll   *event,
@@ -381,9 +397,9 @@ gstyle_eyedropper_pointer_wheel_cb (GstyleEyedropper *self,
   if (event->type == GDK_SCROLL)
     {
       if (event->direction == GDK_SCROLL_UP)
-        self->zoom_factor = CLAMP (self->zoom_factor + 0.5, MIN_ZOOM_FACTOR, MAX_ZOOM_FACTOR);
+        increase_zoom_factor (self);
       else if (event->direction == GDK_SCROLL_DOWN)
-        self->zoom_factor = CLAMP (self->zoom_factor - 0.5, MIN_ZOOM_FACTOR, MAX_ZOOM_FACTOR);
+        decrease_zoom_factor (self);
       else
         return GDK_EVENT_PROPAGATE;
     }
@@ -437,6 +453,16 @@ gstyle_eyedropper_key_pressed_cb (GstyleEyedropper *self,
     case GDK_KEY_Right:
     case GDK_KEY_KP_Right:
       dx = (state == GDK_MOD1_MASK) ? CURSOR_ALT_STEP : 1;
+      break;
+
+    case GDK_KEY_Page_Up:
+    case GDK_KEY_KP_Page_Up:
+      increase_zoom_factor (self);
+      break;
+
+    case GDK_KEY_Page_Down:
+    case GDK_KEY_KP_Page_Down:
+      decrease_zoom_factor (self);
       break;
 
     default:
