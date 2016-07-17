@@ -262,4 +262,4 @@ class TodoPanel(Pnl.DockWidget):
         uri.set_fragment('L%u' % max(1, item.props.line - 1))
 
         workbench = self.get_ancestor(Ide.Workbench)
-        workbench.open_uri_async(uri, 'editor', None, None, None)
+        workbench.open_uri_async(uri, 'editor', 0, None, None, None)
