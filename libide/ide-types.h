@@ -83,6 +83,7 @@ typedef struct _IdeProjectFile                 IdeProjectFile;
 
 typedef struct _IdeProjectFiles                IdeProjectFiles;
 
+typedef struct _IdeRunManager                  IdeRunManager;
 typedef struct _IdeRuntime                     IdeRuntime;
 typedef struct _IdeRuntimeManager              IdeRuntimeManager;
 typedef struct _IdeRuntimeProvider             IdeRuntimeProvider;

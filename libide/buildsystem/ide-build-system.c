@@ -129,9 +129,42 @@ ide_build_system_real_get_builder (IdeBuildSystem    *self,
 }
 
 static void
+ide_build_system_real_get_build_targets_async (IdeBuildSystem      *self,
+                                               GCancellable        *cancellable,
+                                               GAsyncReadyCallback  callback,
+                                               gpointer             user_data)
+{
+  g_autoptr(GTask) task = NULL;
+
+  g_assert (IDE_IS_BUILD_SYSTEM (self));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, ide_build_system_real_get_build_targets_async);
+  g_task_return_pointer (task, g_ptr_array_new (), (GDestroyNotify)g_ptr_array_unref);
+}
+
+static GPtrArray *
+ide_build_system_real_get_build_targets_finish (IdeBuildSystem  *self,
+                                                GAsyncResult    *result,
+                                                GError         **error)
+{
+  GTask *task = (GTask *)result;
+
+  g_assert (IDE_IS_BUILD_SYSTEM (self));
+  g_assert (G_IS_TASK (task));
+  g_assert (g_task_is_valid (task, self));
+  g_assert (g_task_get_source_tag (task) ==  ide_build_system_real_get_build_targets_async);
+
+  return g_task_propagate_pointer (task, error);
+}
+
+static void
 ide_build_system_default_init (IdeBuildSystemInterface *iface)
 {
   iface->get_builder = ide_build_system_real_get_builder;
+  iface->get_build_targets_async = ide_build_system_real_get_build_targets_async;
+  iface->get_build_targets_finish = ide_build_system_real_get_build_targets_finish;
 
   properties [PROP_PROJECT_FILE] =
     g_param_spec_object ("project-file",
@@ -242,3 +275,31 @@ ide_build_system_get_builder (IdeBuildSystem    *system,
   return IDE_BUILD_SYSTEM_GET_IFACE (system)->get_builder (system, configuration, error);
 }
 
+void
+ide_build_system_get_build_targets_async (IdeBuildSystem      *self,
+                                          GCancellable        *cancellable,
+                                          GAsyncReadyCallback  callback,
+                                          gpointer             user_data)
+{
+  g_return_if_fail (IDE_IS_BUILD_SYSTEM (self));
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  IDE_BUILD_SYSTEM_GET_IFACE (self)->get_build_targets_async (self, cancellable, callback, user_data);
+}
+
+/**
+ * ide_build_system_get_build_targets_finish:
+ *
+ * Returns: (transfer container) (element-type Ide.BuildTarget): An array of build targets
+ *   or %NULL upon failure and @error is set.
+ */
+GPtrArray *
+ide_build_system_get_build_targets_finish (IdeBuildSystem  *self,
+                                           GAsyncResult    *result,
+                                           GError         **error)
+{
+  g_return_val_if_fail (IDE_IS_BUILD_SYSTEM (self), NULL);
+  g_return_val_if_fail (G_IS_ASYNC_RESULT (result), NULL);
+
+  return IDE_BUILD_SYSTEM_GET_IFACE (self)->get_build_targets_finish (self, result, error);
+}

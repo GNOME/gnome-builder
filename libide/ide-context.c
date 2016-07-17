@@ -31,6 +31,7 @@
 #include "buffers/ide-buffer.h"
 #include "buffers/ide-unsaved-file.h"
 #include "buffers/ide-unsaved-files.h"
+#include "buildsystem/ide-build-manager.h"
 #include "buildsystem/ide-build-system.h"
 #include "buildsystem/ide-configuration-manager.h"
 #include "devices/ide-device-manager.h"
@@ -59,6 +60,7 @@ struct _IdeContext
 
   IdeBackForwardList       *back_forward_list;
   IdeBufferManager         *buffer_manager;
+  IdeBuildManager          *build_manager;
   IdeBuildSystem           *build_system;
   IdeConfigurationManager  *configuration_manager;
   IdeDeviceManager         *device_manager;
@@ -170,6 +172,19 @@ ide_context_get_buffer_manager (IdeContext *self)
   g_return_val_if_fail (IDE_IS_CONTEXT (self), NULL);
 
   return self->buffer_manager;
+}
+
+/**
+ * ide_context_get_build_manager:
+ *
+ * Returns: (transfer none): An #IdeBuildManager.
+ */
+IdeBuildManager *
+ide_context_get_build_manager (IdeContext *self)
+{
+  g_return_val_if_fail (IDE_IS_CONTEXT (self), NULL);
+
+  return self->build_manager;
 }
 
 /**
@@ -810,6 +825,10 @@ ide_context_init (IdeContext *self)
   self->buffer_manager = g_object_new (IDE_TYPE_BUFFER_MANAGER,
                                        "context", self,
                                        NULL);
+
+  self->build_manager = g_object_new (IDE_TYPE_BUILD_MANAGER,
+                                      "context", self,
+                                      NULL);
 
   self->device_manager = g_object_new (IDE_TYPE_DEVICE_MANAGER,
                                        "context", self,

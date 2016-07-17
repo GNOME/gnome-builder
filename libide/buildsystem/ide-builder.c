@@ -221,3 +221,42 @@ static void
 ide_builder_init (IdeBuilder *self)
 {
 }
+
+void
+ide_builder_install_async (IdeBuilder           *self,
+                           IdeBuildResult      **result,
+                           GCancellable         *cancellable,
+                           GAsyncReadyCallback   callback,
+                           gpointer              user_data)
+{
+  g_return_if_fail (IDE_IS_BUILDER (self));
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  if (result != NULL)
+    *result = NULL;
+
+  IDE_BUILDER_GET_CLASS (self)->install_async (self, result, cancellable, callback, user_data);
+}
+
+/**
+ * ide_builder_install_finish:
+ *
+ * Completes an asynchronous call to ide_builder_install_async().
+ *
+ * Returns: (transfer none): An #IdeBuildResult.
+ */
+IdeBuildResult *
+ide_builder_install_finish (IdeBuilder    *self,
+                            GAsyncResult  *result,
+                            GError       **error)
+{
+  IdeBuildResult *ret;
+
+  g_return_val_if_fail (IDE_IS_BUILDER (self), NULL);
+
+  ret = IDE_BUILDER_GET_CLASS (self)->install_finish (self, result, error);
+
+  g_return_val_if_fail (!ret || IDE_IS_BUILD_RESULT (ret), NULL);
+
+  return ret;
+}

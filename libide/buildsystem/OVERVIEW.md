@@ -40,3 +40,9 @@ GListModel to make writing environment editors easier.
 ## ide-environment-variable.c
 
 A single variable within the environment.
+
+## ide-build-manager.c
+
+The BuildManager provides a convenient place to manage a single build process
+for the context. Many build systems do not allow concurrent builds, so this
+is a good way to ensure that two plugins do not race to use the build system.
