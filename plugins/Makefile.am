@@ -2,11 +2,11 @@ SUBDIRS = \
 	autotools \
 	autotools-templates \
 	build-tools \
+	c-pack \
 	clang \
 	command-bar \
-	contributing \
-	c-pack \
 	comment-code \
+	contributing \
 	create-project \
 	ctags \
 	devhelp \
@@ -22,9 +22,9 @@ SUBDIRS = \
 	html-preview \
 	jedi \
 	jhbuild \
+	mingw \
 	project-tree \
 	python-gi-imports-completion \
-	mingw \
 	python-pack \
 	support \
 	symbol-tree \
