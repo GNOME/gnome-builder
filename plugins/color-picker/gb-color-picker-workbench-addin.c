@@ -407,10 +407,11 @@ setup_view_cb (GtkWidget                   *widget,
 
   g_action_map_add_action (G_ACTION_MAP (group), G_ACTION (menu_action));
   set_menu_action_state (self, view, FALSE);
-  g_signal_connect_swapped (menu_action,
-                            "activate",
-                            G_CALLBACK (activate_color_picker_action_cb),
-                            self);
+  g_signal_connect_object (menu_action,
+                           "activate",
+                           G_CALLBACK (activate_color_picker_action_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
 }
 
 static void
@@ -483,18 +484,21 @@ gb_color_picker_workbench_addin_load (IdeWorkbenchAddin *addin,
   ide_perspective_views_foreach (IDE_PERSPECTIVE (self->editor), (GtkCallback)setup_view_cb, self);
   self->active_view = ide_layout_get_active_view (IDE_LAYOUT (self->editor));
 
-  g_signal_connect_swapped (self->editor,
-                            "view-added",
-                            G_CALLBACK (view_added_cb),
-                            self);
-  g_signal_connect_swapped (self->editor,
-                            "view-removed",
-                            G_CALLBACK (view_removed_cb),
-                            self);
-  g_signal_connect_swapped (IDE_LAYOUT (self->editor),
-                            "notify::active-view",
-                            G_CALLBACK (active_view_changed_cb),
-                            self);
+  g_signal_connect_object (self->editor,
+                           "view-added",
+                           G_CALLBACK (view_added_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+  g_signal_connect_object (self->editor,
+                           "view-removed",
+                           G_CALLBACK (view_removed_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+  g_signal_connect_object (IDE_LAYOUT (self->editor),
+                           "notify::active-view",
+                           G_CALLBACK (active_view_changed_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
 }
 
 static void
