@@ -407,3 +407,14 @@ ide_runtime_prepare_configuration (IdeRuntime       *self,
 
   IDE_RUNTIME_GET_CLASS (self)->prepare_configuration (self, configuration);
 }
+
+GQuark
+ide_runtime_error_quark (void)
+{
+  static GQuark quark = 0;
+
+  if G_UNLIKELY (quark == 0)
+    quark = g_quark_from_static_string ("ide_runtime_error_quark");
+
+  return quark;
+}

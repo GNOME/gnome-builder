@@ -27,7 +27,13 @@
 
 G_BEGIN_DECLS
 
+typedef enum
+{
+  IDE_RUNTIME_ERROR_NO_SUCH_RUNTIME = 1,
+} IdeRuntimeError;
+
 #define IDE_TYPE_RUNTIME (ide_runtime_get_type())
+#define IDE_RUNTIME_ERROR (ide_runtime_error_quark())
 
 G_DECLARE_DERIVABLE_TYPE (IdeRuntime, ide_runtime, IDE, RUNTIME, IdeObject)
 
