@@ -24,7 +24,13 @@
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_DEVICE (ide_device_get_type())
+typedef enum
+{
+  IDE_DEVICE_ERROR_NO_SUCH_DEVICE = 1,
+} IdeDeviceError;
+
+#define IDE_TYPE_DEVICE  (ide_device_get_type())
+#define IDE_DEVICE_ERROR (ide_device_error_quark())
 
 G_DECLARE_DERIVABLE_TYPE (IdeDevice, ide_device, IDE, DEVICE, IdeObject)
 
@@ -37,12 +43,13 @@ struct _IdeDeviceClass
                                          IdeConfiguration *configuration);
 };
 
-const gchar *ide_device_get_display_name      (IdeDevice   *self);
-void         ide_device_set_display_name      (IdeDevice   *self,
-                                               const gchar *display_name);
-const gchar *ide_device_get_id                (IdeDevice   *self);
-void         ide_device_set_id                (IdeDevice   *self,
-                                               const gchar *id);
+GQuark       ide_device_error_quark           (void) G_GNUC_CONST;
+const gchar *ide_device_get_display_name      (IdeDevice        *self);
+void         ide_device_set_display_name      (IdeDevice        *self,
+                                               const gchar      *display_name);
+const gchar *ide_device_get_id                (IdeDevice        *self);
+void         ide_device_set_id                (IdeDevice        *self,
+                                               const gchar      *id);
 const gchar *ide_device_get_system_type       (IdeDevice        *self);
 void         ide_device_prepare_configuration (IdeDevice        *self,
                                                IdeConfiguration *configuration);

@@ -250,3 +250,14 @@ ide_device_prepare_configuration (IdeDevice        *self,
   if (IDE_DEVICE_GET_CLASS (self)->prepare_configuration)
     IDE_DEVICE_GET_CLASS (self)->prepare_configuration (self, configuration);
 }
+
+GQuark
+ide_device_error_quark (void)
+{
+  static GQuark quark = 0;
+
+  if G_UNLIKELY (quark == 0)
+    quark = g_quark_from_static_string ("ide_device_error_quark");
+
+  return quark;
+}
