@@ -29,7 +29,8 @@ G_BEGIN_DECLS
 G_DECLARE_FINAL_TYPE (IdeAutotoolsBuildTask, ide_autotools_build_task, IDE, AUTOTOOLS_BUILD_TASK, IdeBuildResult)
 
 GFile    *ide_autotools_build_task_get_directory  (IdeAutotoolsBuildTask  *self);
-void      ide_autotools_build_task_add_target     (IdeAutotoolsBuildTask  *self);
+void      ide_autotools_build_task_add_target     (IdeAutotoolsBuildTask  *self,
+                                                   const gchar            *target);
 void      ide_autotools_build_task_execute_async  (IdeAutotoolsBuildTask  *self,
                                                    IdeBuilderBuildFlags    flags,
                                                    GCancellable           *cancellable,

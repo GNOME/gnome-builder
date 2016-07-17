@@ -35,16 +35,18 @@
 #include <unistd.h>
 #include <ide.h>
 
+#include "ide-autotools-build-target.h"
 #include "ide-makecache.h"
 #include "ide-makecache-target.h"
 
-#define FAKE_CC    "__LIBIDE_FAKE_CC__"
-#define FAKE_CXX   "__LIBIDE_FAKE_CXX__"
-#define FAKE_VALAC "__LIBIDE_FAKE_VALAC__"
+#define FAKE_CC      "__LIBIDE_FAKE_CC__"
+#define FAKE_CXX     "__LIBIDE_FAKE_CXX__"
+#define FAKE_VALAC   "__LIBIDE_FAKE_VALAC__"
+#define PRINT_VARS   "include Makefile\nprint-%: ; @echo $* = $($*)\n"
 
 struct _IdeMakecache
 {
-  IdeObject    parent_instance;
+  IdeObject     parent_instance;
 
   GFile        *makefile;
   GFile        *parent;
@@ -52,6 +54,7 @@ struct _IdeMakecache
   GMappedFile  *mapped;
   EggTaskCache *file_targets_cache;
   EggTaskCache *file_flags_cache;
+  GPtrArray    *build_targets;
 };
 
 typedef struct
@@ -1391,6 +1394,7 @@ ide_makecache_finalize (GObject *object)
   g_clear_object (&self->file_targets_cache);
   g_clear_object (&self->file_flags_cache);
   g_clear_pointer (&self->llvm_flags, g_free);
+  g_clear_pointer (&self->build_targets, g_ptr_array_unref);
 
   G_OBJECT_CLASS (ide_makecache_parent_class)->finalize (object);
 
@@ -1706,4 +1710,383 @@ ide_makecache_get_file_flags_finish (IdeMakecache  *self,
   ret = g_task_propagate_pointer (task, error);
 
   IDE_RETURN (ret);
+}
+
+static gboolean
+_find_make_directories (IdeMakecache  *self,
+                        GFile         *dir,
+                        GPtrArray     *ret,
+                        GCancellable  *cancellable,
+                        GError       **error)
+{
+  g_autoptr(GFileEnumerator) enumerator = NULL;
+  g_autoptr(GPtrArray) dirs = NULL;
+  gboolean has_makefile = FALSE;
+  gboolean has_makefile_am = FALSE;
+  GError *local_error = NULL;
+  gpointer infoptr;
+  guint i;
+
+  g_assert (IDE_IS_MAKECACHE (self));
+  g_assert (G_IS_FILE (dir));
+  g_assert (ret != NULL);
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  enumerator = g_file_enumerate_children (dir,
+                                          G_FILE_ATTRIBUTE_STANDARD_NAME","
+                                          G_FILE_ATTRIBUTE_STANDARD_TYPE,
+                                          G_FILE_QUERY_INFO_NONE,
+                                          cancellable,
+                                          error);
+
+  dirs = g_ptr_array_new_with_free_func (g_object_unref);
+
+  while (NULL != (infoptr = g_file_enumerator_next_file (enumerator, cancellable, &local_error)))
+    {
+      g_autoptr(GFileInfo) info = infoptr;
+      const gchar *name;
+      GFileType type;
+
+      name = g_file_info_get_name (info);
+      type = g_file_info_get_file_type (info);
+
+      if (g_strcmp0 (name, "Makefile") == 0)
+        has_makefile = TRUE;
+      if (g_strcmp0 (name, "Makefile.am") == 0)
+        has_makefile_am = TRUE;
+      else if (type == G_FILE_TYPE_DIRECTORY)
+        g_ptr_array_add (dirs, g_file_get_child (dir, name));
+    }
+
+  if (local_error != NULL)
+    {
+      g_propagate_error (error, local_error);
+      return FALSE;
+    }
+
+  if (has_makefile && has_makefile_am)
+    g_ptr_array_add (ret, g_object_ref (dir));
+
+  if (!g_file_enumerator_close (enumerator, cancellable, error))
+    return FALSE;
+
+  for (i = 0; i < dirs->len; i++)
+    {
+      GFile *item = g_ptr_array_index (dirs, i);
+
+      if (!_find_make_directories (self, item, ret, cancellable, error))
+        return FALSE;
+    }
+
+  return TRUE;
+}
+
+static GPtrArray *
+find_make_directories (IdeMakecache  *self,
+                       GFile         *root,
+                       GCancellable  *cancellable,
+                       GError       **error)
+{
+  g_autoptr(GPtrArray) ret = NULL;
+
+  g_assert (IDE_IS_MAKECACHE (self));
+  g_assert (G_IS_FILE (root));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  /*
+   * TODO: Make this work for builddir != srcdir.
+   */
+
+  ret = g_ptr_array_new_with_free_func (g_object_unref);
+
+  if (!_find_make_directories (self, root, ret, cancellable, error))
+    return NULL;
+
+  if (ret->len == 0)
+    {
+      g_set_error (error,
+                   G_IO_ERROR,
+                   G_IO_ERROR_NOT_FOUND,
+                   "No targets were found");
+      return NULL;
+    }
+
+  return g_steal_pointer (&ret);
+}
+
+static GFile *
+find_install_dir (const gchar *key,
+                  GHashTable  *dirs)
+{
+  g_auto(GStrv) parts = g_strsplit (key, "_", 2);
+  g_autofree gchar *lookup = g_strdup_printf ("%sdir", parts[0]);
+  const gchar *path = g_hash_table_lookup (dirs, lookup);
+
+  if (path != NULL)
+    return g_file_new_for_path (path);
+
+  return NULL;
+}
+
+static void
+ide_makecache_get_build_targets_worker (GTask        *task,
+                                        gpointer      source_object,
+                                        gpointer      task_data,
+                                        GCancellable *cancellable)
+{
+  IdeMakecache *self = source_object;
+  g_autoptr(IdeSubprocessLauncher) launcher = NULL;
+  g_autoptr(GPtrArray) makedirs = NULL;
+  g_autoptr(GPtrArray) targets = NULL;
+  g_autofree gchar *stdout_buf = NULL;
+  IdeConfigurationManager *configmgr;
+  IdeConfiguration *config;
+  const gchar *make_name = "make";
+  IdeContext *context;
+  IdeRuntime *runtime;
+  IdeVcs *vcs;
+  GFile *workdir;
+  GError *error = NULL;
+  gchar *line;
+  gsize line_len;
+  IdeLineReader reader;
+
+  IDE_ENTRY;
+
+  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_MAKECACHE (self));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  /*
+   * This works by performing a dry run using the fake install path.  We then
+   * extract things that are installed into locations that look like they could
+   * be binaries. It's not foolproof, but generally gets the job done.
+   *
+   * We don't pass the tasks #GCancellable into many operations because we
+   * don't want the operation to fail. This is because we cache the results of
+   * this function and want them to be available for future access.
+   */
+
+  context = ide_object_get_context (IDE_OBJECT (self));
+  configmgr = ide_context_get_configuration_manager (context);
+  config = ide_configuration_manager_get_current (configmgr);
+  runtime = ide_configuration_get_runtime (config);
+  vcs = ide_context_get_vcs (context);
+  workdir = ide_vcs_get_working_directory (vcs);
+
+  if (runtime != NULL)
+    launcher = ide_runtime_create_launcher (runtime, NULL);
+
+  if (launcher == NULL)
+    {
+      g_autofree gchar *path = NULL;
+      path = g_file_get_path (workdir);
+
+      launcher = ide_subprocess_launcher_new (0);
+      ide_subprocess_launcher_set_cwd (launcher, path);
+    }
+
+  ide_subprocess_launcher_set_flags (launcher,
+                                     (G_SUBPROCESS_FLAGS_STDIN_PIPE |
+                                      G_SUBPROCESS_FLAGS_STDOUT_PIPE));
+
+  /* Default to "make" in runtimes other than the host, since we cannot
+   * rely on our configure-time check for the path there. This isn't totally
+   * correct, since we could be in jhbuild.
+   *
+   * TODO: We might want to rely on the runtime to discover basic utilities
+   *       like GNU Make.
+   */
+  if (g_strcmp0 (ide_configuration_get_runtime_id (config), "host") == 0)
+    make_name = GNU_MAKE_NAME;
+
+  ide_subprocess_launcher_push_argv (launcher, make_name);
+  ide_subprocess_launcher_push_argv (launcher, "-f");
+  ide_subprocess_launcher_push_argv (launcher, "-");
+  ide_subprocess_launcher_push_argv (launcher, "print-bindir");
+  ide_subprocess_launcher_push_argv (launcher, "print-libexecdir");
+  ide_subprocess_launcher_push_argv (launcher, "print-bin_PROGRAMS");
+  ide_subprocess_launcher_push_argv (launcher, "print-noinst_PROGRAMS");
+  ide_subprocess_launcher_push_argv (launcher, "print-libexec_PROGRAMS");
+
+  /*
+   * We need to extract the common automake targets from each of the
+   * directories that we know there is a standalone Makefile within.
+   */
+
+  makedirs = find_make_directories (self, workdir, cancellable, &error);
+
+  if (makedirs == NULL)
+    {
+      g_task_return_error (task, error);
+      IDE_GOTO (failure);
+    }
+
+  /*
+   * We need to extract various programs/libraries/targets from each of
+   * our make directories containing a Makefile.am (translated into a Makefile
+   * so that we can know what targets are available. With that knowledge, we
+   * can build our targets list and cache it for later.
+   */
+
+  targets = g_ptr_array_new_with_free_func (g_object_unref);
+
+  for (guint j = 0; j < makedirs->len; j++)
+    {
+      g_autoptr(GSubprocess) subprocess = NULL;
+      g_autoptr(GHashTable) amdirs = NULL;
+      g_autofree gchar *path = NULL;
+      GFile *makedir;
+
+      /*
+       * Make sure we are running within the directory containing the
+       * Makefile.am that we care about.
+       */
+      makedir = g_ptr_array_index (makedirs, j);
+      path = g_file_get_path (makedir);
+      ide_subprocess_launcher_set_cwd (launcher, path);
+
+      /*
+       * Spawn make, waiting for our stdin input which will add our debug
+       * printf target.
+       */
+      if (NULL == (subprocess = ide_subprocess_launcher_spawn_sync (launcher, NULL, &error)))
+        {
+          g_task_return_error (task, error);
+          IDE_GOTO (failure);
+        }
+
+      /*
+       * Write our helper target that will include the Makefile and then print
+       * debug variables we care about.
+       */
+      if (!g_subprocess_communicate_utf8 (subprocess, PRINT_VARS, NULL, &stdout_buf, NULL, &error))
+        {
+          g_task_return_error (task, error);
+          IDE_GOTO (failure);
+        }
+
+      amdirs = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_free);
+
+      /*
+       * Read through the output from make, and parse the installation targets
+       * that we care about.
+       */
+      ide_line_reader_init (&reader, stdout_buf, -1);
+
+      while (NULL != (line = ide_line_reader_next (&reader, &line_len)))
+        {
+          g_auto(GStrv) parts = NULL;
+          g_auto(GStrv) names = NULL;
+          const gchar *key;
+
+          line [line_len] = '\0';
+
+          parts = g_strsplit (line, "=", 2);
+
+          if (!parts[0] || !parts[1])
+            continue;
+
+          g_strstrip (parts [0]);
+          g_strstrip (parts [1]);
+
+          key = parts [0];
+
+          if (g_str_has_suffix (key, "dir"))
+            {
+              g_hash_table_insert (amdirs, g_strdup (key), g_strdup (parts [1]));
+              continue;
+            }
+
+          names = g_strsplit (parts [1], " ", 0);
+
+          for (guint i = 0; names [i]; i++)
+            {
+              g_autoptr(IdeBuildTarget) target = NULL;
+              g_autoptr(GFile) installdir = NULL;
+              const gchar *name = names [i];
+
+              installdir = find_install_dir (key, amdirs);
+
+              target = g_object_new (IDE_TYPE_AUTOTOOLS_BUILD_TARGET,
+                                     "build-directory", makedir,
+                                     "context", context,
+                                     "install-directory", installdir,
+                                     "name", name,
+                                     NULL);
+
+              g_ptr_array_add (targets, g_steal_pointer (&target));
+            }
+        }
+    }
+
+  g_task_return_pointer (task, g_steal_pointer (&targets), (GDestroyNotify)g_ptr_array_unref);
+
+failure:
+  IDE_EXIT;
+}
+
+void
+ide_makecache_get_build_targets_async (IdeMakecache        *self,
+                                       GCancellable        *cancellable,
+                                       GAsyncReadyCallback  callback,
+                                       gpointer             user_data)
+{
+  g_autoptr(GTask) task = NULL;
+  GPtrArray *ret;
+  guint i;
+
+  g_return_if_fail (IDE_IS_MAKECACHE (self));
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, ide_makecache_get_build_targets_async);
+  g_task_set_check_cancellable (task, FALSE);
+
+  if (self->build_targets == NULL)
+    {
+      g_task_run_in_thread (task, ide_makecache_get_build_targets_worker);
+      return;
+    }
+
+  ret = g_ptr_array_new_with_free_func (g_object_unref);
+
+  for (i = 0; i < self->build_targets->len; i++)
+    {
+      IdeBuildTarget *target = g_ptr_array_index (self->build_targets, i);
+
+      g_ptr_array_add (ret, g_object_ref (target));
+    }
+
+  g_task_return_pointer (task, ret, (GDestroyNotify)g_ptr_array_unref);
+}
+
+GPtrArray *
+ide_makecache_get_build_targets_finish (IdeMakecache  *self,
+                                        GAsyncResult  *result,
+                                        GError       **error)
+{
+  GPtrArray *ret;
+
+  g_return_val_if_fail (IDE_IS_MAKECACHE (self), NULL);
+  g_return_val_if_fail (G_IS_TASK (result), NULL);
+
+  ret = g_task_propagate_pointer (G_TASK (result), error);
+
+  /*
+   * Save a copy of all the build targets for future lookups.
+   */
+  if (ret != NULL && self->build_targets == NULL)
+    {
+      self->build_targets = g_ptr_array_new_with_free_func (g_object_unref);
+
+      for (guint i = 0; i < ret->len; i++)
+        {
+          IdeBuildTarget *item = g_ptr_array_index (ret, i);
+
+          g_ptr_array_add (self->build_targets, g_object_ref (item));
+        }
+    }
+
+  return ret;
 }

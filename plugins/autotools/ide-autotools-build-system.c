@@ -546,6 +546,94 @@ ide_autotools_build_system_constructed (GObject *object)
                            G_CONNECT_SWAPPED);
 }
 
+static void
+ide_autotools_build_system_get_build_targets_cb2 (GObject      *object,
+                                                  GAsyncResult *result,
+                                                  gpointer      user_data)
+{
+  IdeMakecache *makecache = (IdeMakecache *)object;
+  g_autoptr(GTask) task = user_data;
+  GPtrArray *ret;
+  GError *error = NULL;
+
+  g_assert (IDE_IS_MAKECACHE (makecache));
+  g_assert (G_IS_TASK (task));
+
+  ret = ide_makecache_get_build_targets_finish (makecache, result, &error);
+
+  if (ret == NULL)
+    {
+      g_task_return_error (task, error);
+      return;
+    }
+
+  g_task_return_pointer (task, ret, (GDestroyNotify)g_ptr_array_unref);
+}
+
+static void
+ide_autotools_build_system_get_build_targets_cb (GObject      *object,
+                                                 GAsyncResult *result,
+                                                 gpointer      user_data)
+{
+  IdeAutotoolsBuildSystem *self = (IdeAutotoolsBuildSystem *)object;
+  g_autoptr(IdeMakecache) makecache = NULL;
+  g_autoptr(GTask) task = user_data;
+  GError *error = NULL;
+
+  g_assert (IDE_IS_AUTOTOOLS_BUILD_SYSTEM (self));
+  g_assert (G_IS_TASK (task));
+
+  makecache = ide_autotools_build_system_get_makecache_finish (self, result, &error);
+
+  if (makecache == NULL)
+    {
+      g_task_return_error (task, error);
+      return;
+    }
+
+  ide_makecache_get_build_targets_async (makecache,
+                                         g_task_get_cancellable (task),
+                                         ide_autotools_build_system_get_build_targets_cb2,
+                                         g_object_ref (task));
+}
+
+static void
+ide_autotools_build_system_get_build_targets_async (IdeBuildSystem      *build_system,
+                                                    GCancellable        *cancellable,
+                                                    GAsyncReadyCallback  callback,
+                                                    gpointer             user_data)
+{
+  IdeAutotoolsBuildSystem *self = (IdeAutotoolsBuildSystem *)build_system;
+  g_autoptr(GTask) task = NULL;
+
+  g_assert (IDE_IS_AUTOTOOLS_BUILD_SYSTEM (self));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, ide_autotools_build_system_get_build_targets_async);
+
+  ide_autotools_build_system_get_makecache_async (self,
+                                                  cancellable,
+                                                  ide_autotools_build_system_get_build_targets_cb,
+                                                  g_object_ref (task));
+}
+
+static GPtrArray *
+ide_autotools_build_system_get_build_targets_finish (IdeBuildSystem  *build_system,
+                                                     GAsyncResult    *result,
+                                                     GError         **error)
+{
+  IdeAutotoolsBuildSystem *self = (IdeAutotoolsBuildSystem *)build_system;
+  GTask *task = (GTask *)result;
+
+  g_assert (IDE_IS_AUTOTOOLS_BUILD_SYSTEM (self));
+  g_assert (G_IS_TASK (task));
+  g_assert (g_task_is_valid (task, self));
+  g_assert (g_task_get_source_tag (task) == ide_autotools_build_system_get_build_targets_async);
+
+  return g_task_propagate_pointer (task, error);
+}
+
 static gint
 ide_autotools_build_system_get_priority (IdeBuildSystem *system)
 {
@@ -614,6 +702,8 @@ build_system_iface_init (IdeBuildSystemInterface *iface)
   iface->get_builder = ide_autotools_build_system_get_builder;
   iface->get_build_flags_async = ide_autotools_build_system_get_build_flags_async;
   iface->get_build_flags_finish = ide_autotools_build_system_get_build_flags_finish;
+  iface->get_build_targets_async = ide_autotools_build_system_get_build_targets_async;
+  iface->get_build_targets_finish = ide_autotools_build_system_get_build_targets_finish;
 }
 
 static void

@@ -41,8 +41,6 @@ ide_autotools_builder_build_cb (GObject      *object,
   g_return_if_fail (IDE_IS_AUTOTOOLS_BUILD_TASK (build_result));
   g_return_if_fail (G_IS_TASK (task));
 
-  ide_build_result_set_running (IDE_BUILD_RESULT (build_result), FALSE);
-
   if (!ide_autotools_build_task_execute_finish (build_result, result, &error))
     {
       if (g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
@@ -162,7 +160,7 @@ ide_autotools_builder_build_async (IdeBuilder           *builder,
                                "running", TRUE,
                                NULL);
 
-  if (result)
+  if (result != NULL)
     *result = g_object_ref (build_result);
 
   ide_autotools_build_task_execute_async (build_result,
@@ -186,12 +184,97 @@ ide_autotools_builder_build_finish (IdeBuilder    *builder,
 }
 
 static void
+ide_autotools_builder_install_cb (GObject      *object,
+                                  GAsyncResult *result,
+                                  gpointer      user_data)
+{
+  IdeAutotoolsBuildTask *build_task = (IdeAutotoolsBuildTask *)object;
+  g_autoptr(GTask) task = user_data;
+  GError *error = NULL;
+
+  g_assert (IDE_IS_AUTOTOOLS_BUILD_TASK (build_task));
+  g_assert (G_IS_TASK (task));
+
+  if (!ide_autotools_build_task_execute_finish (build_task, result, &error))
+    {
+      if (g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+        ide_build_result_set_mode (IDE_BUILD_RESULT (build_task), _("Install cancelled"));
+      else
+        ide_build_result_set_mode (IDE_BUILD_RESULT (build_task), _("Install failed"));
+
+      g_task_return_error (task, error);
+      return;
+    }
+
+  ide_build_result_set_mode (IDE_BUILD_RESULT (build_task), _("Install successful"));
+
+  g_task_return_pointer (task, g_object_ref (build_task), g_object_unref);
+}
+
+static void
+ide_autotools_builder_install_async (IdeBuilder           *builder,
+                                     IdeBuildResult      **result,
+                                     GCancellable         *cancellable,
+                                     GAsyncReadyCallback   callback,
+                                     gpointer              user_data)
+{
+  IdeAutotoolsBuilder *self = (IdeAutotoolsBuilder *)builder;
+  g_autoptr(IdeAutotoolsBuildTask) build_result = NULL;
+  g_autoptr(GTask) task = NULL;
+  g_autoptr(GFile) directory = NULL;
+  IdeConfiguration *configuration;
+  IdeContext *context;
+
+  g_return_if_fail (IDE_IS_AUTOTOOLS_BUILDER (builder));
+  g_return_if_fail (IDE_IS_AUTOTOOLS_BUILDER (self));
+
+  task = g_task_new (self, cancellable, callback, user_data);
+
+  context = ide_object_get_context (IDE_OBJECT (builder));
+  configuration = ide_builder_get_configuration (IDE_BUILDER (self));
+  directory = ide_autotools_builder_get_build_directory (self);
+  build_result = g_object_new (IDE_TYPE_AUTOTOOLS_BUILD_TASK,
+                               "context", context,
+                               "configuration", configuration,
+                               "directory", directory,
+                               "mode", _("Building…"),
+                               "running", TRUE,
+                               NULL);
+
+  ide_autotools_build_task_add_target (build_result, "install");
+
+  if (result != NULL)
+    *result = g_object_ref (build_result);
+
+  ide_autotools_build_task_execute_async (build_result,
+                                          IDE_BUILDER_BUILD_FLAGS_NONE,
+                                          cancellable,
+                                          ide_autotools_builder_install_cb,
+                                          g_object_ref (task));
+}
+
+static IdeBuildResult *
+ide_autotools_builder_install_finish (IdeBuilder    *builder,
+                                      GAsyncResult  *result,
+                                      GError       **error)
+{
+  GTask *task = (GTask *)result;
+
+  g_return_val_if_fail (IDE_IS_AUTOTOOLS_BUILDER (builder), FALSE);
+  g_return_val_if_fail (G_IS_TASK (task), FALSE);
+
+  return g_task_propagate_pointer (task, error);
+}
+
+static void
 ide_autotools_builder_class_init (IdeAutotoolsBuilderClass *klass)
 {
   IdeBuilderClass *builder_class = IDE_BUILDER_CLASS (klass);
 
   builder_class->build_async = ide_autotools_builder_build_async;
   builder_class->build_finish = ide_autotools_builder_build_finish;
+  builder_class->install_async = ide_autotools_builder_install_async;
+  builder_class->install_finish = ide_autotools_builder_install_finish;
 }
 
 static void

@@ -217,6 +217,7 @@ ide_autotools_build_task_finalize (GObject *object)
 
   g_clear_object (&self->directory);
   g_clear_object (&self->configuration);
+  g_clear_pointer (&self->extra_targets, g_ptr_array_unref);
 
   G_OBJECT_CLASS (ide_autotools_build_task_parent_class)->finalize (object);
 }
@@ -394,8 +395,9 @@ gen_configure_argv (IdeAutotoolsBuildTask *self,
 }
 
 static WorkerState *
-worker_state_new (IdeAutotoolsBuildTask *self,
-                  IdeBuilderBuildFlags   flags)
+worker_state_new (IdeAutotoolsBuildTask  *self,
+                  IdeBuilderBuildFlags    flags,
+                  GError                **error)
 {
   g_autofree gchar *name = NULL;
   IdeContext *context;
@@ -415,6 +417,28 @@ worker_state_new (IdeAutotoolsBuildTask *self,
 
   device = ide_configuration_get_device (self->configuration);
   runtime = ide_configuration_get_runtime (self->configuration);
+
+  if (device == NULL)
+    {
+      g_set_error (error,
+                   IDE_DEVICE_ERROR,
+                   IDE_DEVICE_ERROR_NO_SUCH_DEVICE,
+                   "%s “%s”",
+                   _("Failed to locate device"),
+                   ide_configuration_get_device_id (self->configuration));
+      return NULL;
+    }
+
+  if (runtime == NULL)
+    {
+      g_set_error (error,
+                   IDE_RUNTIME_ERROR,
+                   IDE_RUNTIME_ERROR_NO_SUCH_RUNTIME,
+                   "%s “%s”",
+                   _("Failed to locate runtime"),
+                   ide_configuration_get_runtime_id (self->configuration));
+      return NULL;
+    }
 
   name = g_file_get_basename (project_file);
 
@@ -455,6 +479,16 @@ worker_state_new (IdeAutotoolsBuildTask *self,
 
   if (FLAG_UNSET (flags, IDE_BUILDER_BUILD_FLAGS_NO_BUILD))
     g_ptr_array_add (make_targets, g_strdup ("all"));
+
+  if (self->extra_targets != NULL)
+    {
+      for (guint i = 0; i < self->extra_targets->len; i++)
+        {
+          const gchar *target = g_ptr_array_index (self->extra_targets, i);
+
+          g_ptr_array_add (make_targets, g_strdup (target));
+        }
+    }
 
   g_ptr_array_add (make_targets, NULL);
 
@@ -543,25 +577,34 @@ ide_autotools_build_task_execute_async (IdeAutotoolsBuildTask *self,
 {
   g_autoptr(GTask) task = NULL;
   WorkerState *state;
+  GError *error = NULL;
 
   g_return_if_fail (IDE_IS_AUTOTOOLS_BUILD_TASK (self));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
+  task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, ide_autotools_build_task_execute_async);
+
   if (self->executed)
     {
-      g_task_report_new_error (self, callback, user_data,
-                               ide_autotools_build_task_execute_async,
+      g_task_return_new_error (task,
                                G_IO_ERROR,
                                G_IO_ERROR_FAILED,
-                               _("Cannot execute build task more than once."));
+                               "%s",
+                               _("Cannot execute build task more than once"));
       return;
     }
 
   self->executed = TRUE;
 
-  state = worker_state_new (self, flags);
+  state = worker_state_new (self, flags, &error);
 
-  task = g_task_new (self, cancellable, callback, user_data);
+  if (state == NULL)
+    {
+      g_task_return_error (task, error);
+      return;
+    }
+
   g_task_set_task_data (task, state, worker_state_free);
 
   /*
@@ -597,6 +640,8 @@ ide_autotools_build_task_execute_finish (IdeAutotoolsBuildTask  *self,
   /* Mark the task as failed */
   if (ret == FALSE)
     ide_build_result_set_failed (IDE_BUILD_RESULT (self), TRUE);
+
+  ide_build_result_set_running (IDE_BUILD_RESULT (self), FALSE);
 
   return ret;
 }
@@ -951,4 +996,17 @@ apply_environment (IdeAutotoolsBuildTask *self,
 
   environment = ide_configuration_get_environment (self->configuration);
   ide_subprocess_launcher_overlay_environment (launcher, environment);
+}
+
+void
+ide_autotools_build_task_add_target (IdeAutotoolsBuildTask *self,
+                                     const gchar           *target)
+{
+  g_return_if_fail (IDE_IS_AUTOTOOLS_BUILD_TASK (self));
+  g_return_if_fail (target != NULL);
+
+  if (self->extra_targets == NULL)
+    self->extra_targets = g_ptr_array_new_with_free_func (g_free);
+
+  g_ptr_array_add (self->extra_targets, g_strdup (target));
 }

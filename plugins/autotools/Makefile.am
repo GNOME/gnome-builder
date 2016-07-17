@@ -10,6 +10,8 @@ libautotools_plugin_la_SOURCES = \
 	ide-autotools-builder.h \
 	ide-autotools-build-system.c \
 	ide-autotools-build-system.h \
+	ide-autotools-build-target.c \
+	ide-autotools-build-target.h \
 	ide-autotools-build-task.c \
 	ide-autotools-build-task.h \
 	ide-autotools-project-miner.c \
