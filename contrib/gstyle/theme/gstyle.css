@@ -118,3 +118,11 @@ gstylecolorpanel revealer button.toggle {
 gstyleslidein.shade {
   color: rgba(77, 78, 83, 0.8);
 }
+
+#gstyleeyedropper {
+  border: solid alpha(@borders, 0.75) 1px;
+}
+
+#gstyleeyedropper > box {
+  margin: 6px;
+}
