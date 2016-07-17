@@ -42,9 +42,9 @@
 #define ZOOM_AREA_SPOT_X -20
 #define ZOOM_AREA_SPOT_Y -20
 
-#define DEFAULT_ZOOM_FACTOR 2
+#define DEFAULT_ZOOM_FACTOR 5
 #define MIN_ZOOM_FACTOR 1
-#define MAX_ZOOM_FACTOR 20
+#define MAX_ZOOM_FACTOR MAX (ZOOM_AREA_WIDTH, ZOOM_AREA_HEIGHT) / 2
 
 #define CURSOR_ALT_STEP 10
 
@@ -371,17 +371,23 @@ gstyle_eyedropper_pointer_pressed_cb (GstyleEyedropper *self,
 static void
 decrease_zoom_factor (GstyleEyedropper *self)
 {
+  gdouble factor;
+
   g_assert (GSTYLE_IS_EYEDROPPER (self));
 
-  self->zoom_factor = CLAMP (self->zoom_factor - 0.5, MIN_ZOOM_FACTOR, MAX_ZOOM_FACTOR);
+  factor = (self->zoom_factor * self->zoom_factor) / 100;
+  self->zoom_factor = CLAMP (self->zoom_factor - factor, MIN_ZOOM_FACTOR, MAX_ZOOM_FACTOR);
 }
 
 static void
 increase_zoom_factor (GstyleEyedropper *self)
 {
+  gdouble factor;
+
   g_assert (GSTYLE_IS_EYEDROPPER (self));
 
-  self->zoom_factor = CLAMP (self->zoom_factor + 0.5, MIN_ZOOM_FACTOR, MAX_ZOOM_FACTOR);
+  factor = (self->zoom_factor * self->zoom_factor) / 100;
+  self->zoom_factor = CLAMP (self->zoom_factor + factor, MIN_ZOOM_FACTOR, MAX_ZOOM_FACTOR);
 }
 
 static gboolean
