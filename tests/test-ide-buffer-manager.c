@@ -122,7 +122,6 @@ test_buffer_manager_basic_cb1 (GObject      *object,
   IdeProject *project;
   g_autofree gchar *path = NULL;
   GError *error = NULL;
-  IdeWorkbenchOpenFlags flags;
 
   context = ide_context_new_finish (result, &error);
   g_assert_no_error (error);
@@ -136,12 +135,11 @@ test_buffer_manager_basic_cb1 (GObject      *object,
 
   path = g_build_filename (g_get_current_dir (), TEST_DATA_DIR, "project1", "configure.ac", NULL);
   file = ide_project_get_file_for_path (project, path);
-  flags = WORKBENCH_OPEN_FLAGS_NONE;
 
   ide_buffer_manager_load_file_async (buffer_manager,
                                       file,
                                       FALSE,
-                                      flags,
+                                      IDE_WORKBENCH_OPEN_FLAGS_NONE,
                                       &progress,
                                       g_task_get_cancellable (task),
                                       test_buffer_manager_basic_cb2,

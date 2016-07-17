@@ -172,7 +172,6 @@ navigate_to_cb (IdeLayoutStack     *self,
 {
   IdeWorkbench *workbench;
   IdeUri *uri;
-  IdeWorkbenchOpenFlags flags;
 
   g_assert (IDE_IS_LAYOUT_STACK (self));
   g_assert (IDE_IS_BACK_FORWARD_ITEM (item));
@@ -180,8 +179,7 @@ navigate_to_cb (IdeLayoutStack     *self,
 
   uri = ide_back_forward_item_get_uri (item);
   workbench = ide_widget_get_workbench (GTK_WIDGET (self));
-  flags = WORKBENCH_OPEN_FLAGS_NONE;
-  ide_workbench_open_uri_async (workbench, uri, NULL, flags, NULL, NULL, NULL);
+  ide_workbench_open_uri_async (workbench, uri, NULL, IDE_WORKBENCH_OPEN_FLAGS_NONE, NULL, NULL, NULL);
 }
 
 static void

@@ -31,8 +31,8 @@ G_BEGIN_DECLS
 
 typedef enum
 {
-  WORKBENCH_OPEN_FLAGS_NONE = 0,
-  WORKBENCH_OPEN_FLAGS_BG = 1
+  IDE_WORKBENCH_OPEN_FLAGS_NONE       = 0,
+  IDE_WORKBENCH_OPEN_FLAGS_BACKGROUND = 1 << 0,
 } IdeWorkbenchOpenFlags;
 
 #define IDE_TYPE_WORKBENCH (ide_workbench_get_type())

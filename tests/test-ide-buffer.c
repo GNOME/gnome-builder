@@ -86,7 +86,6 @@ test_buffer_basic_cb1 (GObject      *object,
   IdeBufferManager *manager;
   IdeProject *project;
   GError *error = NULL;
-  IdeWorkbenchOpenFlags flags;
 
   IDE_ENTRY;
 
@@ -98,12 +97,11 @@ test_buffer_basic_cb1 (GObject      *object,
   manager = ide_context_get_buffer_manager (context);
   project = ide_context_get_project (context);
   file = ide_project_get_file_for_path (project, "test-ide-buffer.tmp");
-  flags = WORKBENCH_OPEN_FLAGS_NONE;
 
   ide_buffer_manager_load_file_async (manager,
                                       file,
                                       FALSE,
-                                      flags,
+                                      IDE_WORKBENCH_OPEN_FLAGS_NONE,
                                       NULL,
                                       g_task_get_cancellable (task),
                                       test_buffer_basic_cb2,

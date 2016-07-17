@@ -447,7 +447,6 @@ gb_vim_command_edit (GtkWidget      *active_widget,
   IdeVcs *vcs;
   GFile *workdir;
   GFile *file = NULL;
-  IdeWorkbenchOpenFlags flags;
 
   g_assert (GTK_IS_WIDGET (active_widget));
 
@@ -474,8 +473,7 @@ gb_vim_command_edit (GtkWidget      *active_widget,
   else
     file = g_file_get_child (workdir, options);
 
-  flags = WORKBENCH_OPEN_FLAGS_NONE;
-  ide_workbench_open_files_async (workbench, &file, 1, "editor", flags, NULL, NULL, NULL);
+  ide_workbench_open_files_async (workbench, &file, 1, "editor", IDE_WORKBENCH_OPEN_FLAGS_NONE, NULL, NULL, NULL);
 
   g_clear_object (&file);
 
@@ -569,7 +567,6 @@ gb_vim_command_vsplit (GtkWidget      *active_widget,
   gchar *file_path;
   SplitCallbackData *split_callback_data;
   GVariant *variant;
-  IdeWorkbenchOpenFlags flags;
 
   g_assert (GTK_IS_WIDGET (active_widget));
 
@@ -606,9 +603,7 @@ gb_vim_command_vsplit (GtkWidget      *active_widget,
       split_callback_data->active_widget = g_object_ref (active_widget);
       split_callback_data->file_path = file_path;
 
-      flags = WORKBENCH_OPEN_FLAGS_BG;
-
-      ide_workbench_open_files_async (workbench, &file, 1, "editor", flags, NULL, gb_vim_command_vsplit_cb, split_callback_data);
+      ide_workbench_open_files_async (workbench, &file, 1, "editor", IDE_WORKBENCH_OPEN_FLAGS_BACKGROUND, NULL, gb_vim_command_vsplit_cb, split_callback_data);
 
       g_clear_object (&file);
     }

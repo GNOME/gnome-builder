@@ -225,7 +225,7 @@ ide_editor_workbench_addin_open_cb (GObject      *object,
         }
     }
 
-  if (self->perspective != NULL && !(open_file_task_data->flags & WORKBENCH_OPEN_FLAGS_BG))
+  if (self->perspective != NULL && !(open_file_task_data->flags & IDE_WORKBENCH_OPEN_FLAGS_BACKGROUND))
     ide_editor_perspective_focus_buffer_in_current_stack (self->perspective, buffer);
 
   g_task_return_boolean (task, TRUE);

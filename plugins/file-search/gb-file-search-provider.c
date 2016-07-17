@@ -226,16 +226,21 @@ gb_file_search_provider_activate (IdeSearchProvider *provider,
       IdeContext *context;
       IdeVcs *vcs;
       GFile *workdir;
-      IdeWorkbenchOpenFlags flags;
 
       context = ide_workbench_get_context (IDE_WORKBENCH (toplevel));
       vcs = ide_context_get_vcs (context);
       workdir = ide_vcs_get_working_directory (vcs);
       g_object_get (result, "path", &path, NULL);
       file = g_file_get_child (workdir, path);
-      flags = WORKBENCH_OPEN_FLAGS_NONE;
 
-      ide_workbench_open_files_async (IDE_WORKBENCH (toplevel), &file, 1, NULL, flags, NULL, NULL, NULL);
+      ide_workbench_open_files_async (IDE_WORKBENCH (toplevel),
+                                      &file,
+                                      1,
+                                      NULL,
+                                      IDE_WORKBENCH_OPEN_FLAGS_NONE,
+                                      NULL,
+                                      NULL,
+                                      NULL);
     }
 }
 

@@ -599,7 +599,6 @@ ide_editor_perspective_focus_location_full (IdeEditorPerspective *self,
       IdeBufferManager *bufmgr;
       IdeWorkbench *workbench;
       IdeContext *context;
-      IdeWorkbenchOpenFlags flags;
 
       workbench = ide_widget_get_workbench (GTK_WIDGET (self));
       context = ide_workbench_get_context (workbench);
@@ -609,12 +608,10 @@ ide_editor_perspective_focus_location_full (IdeEditorPerspective *self,
       state->self = g_object_ref (self);
       state->location = ide_source_location_ref (location);
 
-      flags = WORKBENCH_OPEN_FLAGS_NONE;
-
       ide_buffer_manager_load_file_async (bufmgr,
                                           lookup.file,
                                           FALSE,
-                                          flags,
+                                          IDE_WORKBENCH_OPEN_FLAGS_NONE,
                                           NULL,
                                           NULL,
                                           ide_editor_perspective_focus_location_cb,

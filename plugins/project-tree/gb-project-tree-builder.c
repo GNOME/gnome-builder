@@ -329,7 +329,6 @@ gb_project_tree_builder_node_activated (IdeTreeBuilder *builder,
       GtkWidget *workbench;
       IdeTree *tree;
       GFile *file;
-      IdeWorkbenchOpenFlags flags;
 
       if (gb_project_file_get_is_directory (GB_PROJECT_FILE (item)))
         goto failure;
@@ -343,8 +342,14 @@ gb_project_tree_builder_node_activated (IdeTreeBuilder *builder,
         goto failure;
 
       workbench = gtk_widget_get_ancestor (GTK_WIDGET (tree), IDE_TYPE_WORKBENCH);
-      flags = WORKBENCH_OPEN_FLAGS_NONE;
-      ide_workbench_open_files_async (IDE_WORKBENCH (workbench), &file, 1, NULL, flags, NULL, NULL, NULL);
+      ide_workbench_open_files_async (IDE_WORKBENCH (workbench),
+                                      &file,
+                                      1,
+                                      NULL,
+                                      IDE_WORKBENCH_OPEN_FLAGS_NONE,
+                                      NULL,
+                                      NULL,
+                                      NULL);
 
       return TRUE;
     }

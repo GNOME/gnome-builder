@@ -651,7 +651,7 @@ ide_buffer_manager__load_file_query_info_cb (GObject      *object,
       _ide_buffer_set_mtime (state->buffer, &tv);
     }
 
-  create_new_view = (state->flags & WORKBENCH_OPEN_FLAGS_BG) ? FALSE : state->is_new;
+  create_new_view = (state->flags & IDE_WORKBENCH_OPEN_FLAGS_BACKGROUND) ? FALSE : state->is_new;
   g_signal_emit (self, signals [LOAD_BUFFER], 0, state->buffer, create_new_view);
 
   gtk_source_file_loader_load_async (state->loader,
@@ -766,7 +766,7 @@ ide_buffer_manager_load_file_async (IdeBufferManager     *self,
                                   "fraction", 1.0,
                                   NULL);
       g_task_return_pointer (task, g_object_ref (buffer), g_object_unref);
-      if (!(flags & WORKBENCH_OPEN_FLAGS_BG))
+      if (!(flags & IDE_WORKBENCH_OPEN_FLAGS_BACKGROUND))
         ide_buffer_manager_set_focus_buffer (self, buffer);
       IDE_EXIT;
     }
