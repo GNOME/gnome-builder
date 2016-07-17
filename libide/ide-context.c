@@ -42,6 +42,7 @@
 #include "projects/ide-project-item.h"
 #include "projects/ide-project.h"
 #include "projects/ide-recent-projects.h"
+#include "runner/ide-run-manager.h"
 #include "runtimes/ide-runtime-manager.h"
 #include "scripting/ide-script-manager.h"
 #include "search/ide-search-engine.h"
@@ -66,6 +67,7 @@ struct _IdeContext
   IdeDeviceManager         *device_manager;
   IdeDoap                  *doap;
   GtkRecentManager         *recent_manager;
+  IdeRunManager            *run_manager;
   IdeRuntimeManager        *runtime_manager;
   IdeScriptManager         *script_manager;
   IdeSearchEngine          *search_engine;
@@ -841,6 +843,10 @@ ide_context_init (IdeContext *self)
   self->project = g_object_new (IDE_TYPE_PROJECT,
                                 "context", self,
                                 NULL);
+
+  self->run_manager = g_object_new (IDE_TYPE_RUN_MANAGER,
+                                    "context", self,
+                                    NULL);
 
   self->runtime_manager = g_object_new (IDE_TYPE_RUNTIME_MANAGER,
                                         "context", self,
@@ -2170,4 +2176,22 @@ ide_context_warning (IdeContext  *self,
    */
   g_logv ("Ide", G_LOG_LEVEL_WARNING, format, args);
   va_end (args);
+}
+
+/**
+ * ide_context_get_run_manager:
+ *
+ * Gets the #IdeRunManager for the context. This manager object simplifies
+ * the process of running an #IdeBuildTarget from the build system. Primarily,
+ * it enforces that only a single target may be run at a time, since that is
+ * what the UI will expect.
+ *
+ * Returns: (transfer none): An #IdeRunManager.
+ */
+IdeRunManager *
+ide_context_get_run_manager (IdeContext *self)
+{
+  g_return_val_if_fail (IDE_IS_CONTEXT (self), NULL);
+
+  return self->run_manager;
 }

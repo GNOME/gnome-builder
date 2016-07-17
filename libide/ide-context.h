@@ -39,6 +39,7 @@ IdeConfigurationManager  *ide_context_get_configuration_manager (IdeContext     
 IdeDeviceManager         *ide_context_get_device_manager        (IdeContext           *self);
 IdeProject               *ide_context_get_project               (IdeContext           *self);
 GtkRecentManager         *ide_context_get_recent_manager        (IdeContext           *self);
+IdeRunManager            *ide_context_get_run_manager           (IdeContext           *self);
 IdeRuntimeManager        *ide_context_get_runtime_manager       (IdeContext           *self);
 IdeScriptManager         *ide_context_get_script_manager        (IdeContext           *self);
 IdeSearchEngine          *ide_context_get_search_engine         (IdeContext           *self);

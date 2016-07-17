@@ -169,12 +169,48 @@ ide_runtime_real_prepare_configuration (IdeRuntime       *self,
   ide_configuration_set_prefix (configuration, install_path);
 }
 
+static IdeRunner *
+ide_runtime_real_create_runner (IdeRuntime     *self,
+                                IdeBuildTarget *build_target)
+{
+  g_autofree gchar *name = NULL;
+  g_autofree gchar *binpath = NULL;
+  g_autoptr(GFile) installdir = NULL;
+  g_autoptr(GFile) bin = NULL;
+  IdeContext *context;
+  IdeRunner *runner;
+
+  g_assert (IDE_IS_RUNTIME (self));
+  g_assert (IDE_IS_BUILD_TARGET (build_target));
+
+  context = ide_object_get_context (IDE_OBJECT (self));
+
+  g_assert (IDE_IS_CONTEXT (context));
+
+  runner = ide_runner_new (context);
+
+  g_assert (IDE_IS_RUNNER (runner));
+
+  g_object_get (build_target,
+                "install-directory", &installdir,
+                "name", &name,
+                NULL);
+
+  bin = g_file_get_child (installdir, name);
+  binpath = g_file_get_path (bin);
+
+  ide_runner_append_argv (runner, binpath);
+
+  return runner;
+}
+
 static void
 ide_runtime_finalize (GObject *object)
 {
   IdeRuntime *self = (IdeRuntime *)object;
   IdeRuntimePrivate *priv = ide_runtime_get_instance_private (self);
 
+  g_clear_pointer (&priv->id, g_free);
   g_clear_pointer (&priv->display_name, g_free);
 
   G_OBJECT_CLASS (ide_runtime_parent_class)->finalize (object);
@@ -240,6 +276,7 @@ ide_runtime_class_init (IdeRuntimeClass *klass)
   klass->postbuild_async = ide_runtime_real_postbuild_async;
   klass->postbuild_finish = ide_runtime_real_postbuild_finish;
   klass->create_launcher = ide_runtime_real_create_launcher;
+  klass->create_runner = ide_runtime_real_create_runner;
   klass->contains_program_in_path = ide_runtime_real_contains_program_in_path;
   klass->prepare_configuration = ide_runtime_real_prepare_configuration;
 
@@ -324,6 +361,10 @@ ide_runtime_new (IdeContext  *context,
                  const gchar *id,
                  const gchar *display_name)
 {
+  g_return_val_if_fail (IDE_IS_CONTEXT (context), NULL);
+  g_return_val_if_fail (id != NULL, NULL);
+  g_return_val_if_fail (display_name != NULL, NULL);
+
   return g_object_new (IDE_TYPE_RUNTIME,
                        "context", context,
                        "id", id,
@@ -406,6 +447,26 @@ ide_runtime_prepare_configuration (IdeRuntime       *self,
   g_return_if_fail (IDE_IS_CONFIGURATION (configuration));
 
   IDE_RUNTIME_GET_CLASS (self)->prepare_configuration (self, configuration);
+}
+
+/**
+ * ide_runtime_create_runner:
+ *
+ * Creates a new runner that can be used to execute the build target within
+ * the runtime. This should be used to implement such features as "run target"
+ * or "run unit test" inside the target runtime.
+ *
+ * Returns: (transfer full) (nullable): An #IdeRunner if successful, otherwise
+ *   %NULL and @error is set.
+ */
+IdeRunner *
+ide_runtime_create_runner (IdeRuntime     *self,
+                           IdeBuildTarget *build_target)
+{
+  g_return_val_if_fail (IDE_IS_RUNTIME (self), NULL);
+  g_return_val_if_fail (IDE_IS_BUILD_TARGET (build_target), NULL);
+
+  return IDE_RUNTIME_GET_CLASS (self)->create_runner (self, build_target);
 }
 
 GQuark

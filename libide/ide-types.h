@@ -36,10 +36,10 @@ typedef struct _IdeBufferChangeMonitor         IdeBufferChangeMonitor;
 typedef struct _IdeBufferManager               IdeBufferManager;
 
 typedef struct _IdeBuilder                     IdeBuilder;
-
+typedef struct _IdeBuildManager                IdeBuildManager;
 typedef struct _IdeBuildResult                 IdeBuildResult;
-
 typedef struct _IdeBuildSystem                 IdeBuildSystem;
+typedef struct _IdeBuildTarget                 IdeBuildTarget;
 
 typedef struct _IdeConfiguration               IdeConfiguration;
 typedef struct _IdeConfigurationManager        IdeConfigurationManager;

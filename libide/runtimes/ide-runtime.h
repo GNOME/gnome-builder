@@ -23,6 +23,8 @@
 
 #include "ide-object.h"
 
+#include "buildsystem/ide-build-target.h"
+#include "runner/ide-runner.h"
 #include "workers/ide-subprocess-launcher.h"
 
 G_BEGIN_DECLS
@@ -62,8 +64,28 @@ struct _IdeRuntimeClass
                                                       GError              **error);
   void                   (*prepare_configuration)    (IdeRuntime           *self,
                                                       IdeConfiguration     *configuration);
+  IdeRunner             *(*create_runner)            (IdeRuntime           *self,
+                                                      IdeBuildTarget       *build_target);
+
+  gpointer _reserved1;
+  gpointer _reserved2;
+  gpointer _reserved3;
+  gpointer _reserved4;
+  gpointer _reserved5;
+  gpointer _reserved6;
+  gpointer _reserved7;
+  gpointer _reserved8;
+  gpointer _reserved9;
+  gpointer _reserved10;
+  gpointer _reserved11;
+  gpointer _reserved12;
+  gpointer _reserved13;
+  gpointer _reserved14;
+  gpointer _reserved15;
+  gpointer _reserved16;
 };
 
+GQuark                 ide_runtime_error_quark              (void) G_GNUC_CONST;
 void                   ide_runtime_prebuild_async           (IdeRuntime           *self,
                                                              GCancellable         *cancellable,
                                                              GAsyncReadyCallback   callback,
@@ -83,6 +105,8 @@ gboolean               ide_runtime_contains_program_in_path (IdeRuntime         
                                                              GCancellable         *cancellable);
 IdeSubprocessLauncher *ide_runtime_create_launcher          (IdeRuntime           *self,
                                                              GError              **error);
+IdeRunner             *ide_runtime_create_runner            (IdeRuntime           *self,
+                                                             IdeBuildTarget       *build_target);
 void                   ide_runtime_prepare_configuration    (IdeRuntime           *self,
                                                              IdeConfiguration     *configuration);
 IdeRuntime            *ide_runtime_new                      (IdeContext           *context,
