@@ -46,6 +46,8 @@
 #define MIN_ZOOM_FACTOR 1
 #define MAX_ZOOM_FACTOR 20
 
+#define CURSOR_ALT_STEP 10
+
 struct _GstyleEyedropper
 {
   GtkWindow          parent_instance;
@@ -397,20 +399,55 @@ gstyle_eyedropper_key_pressed_cb (GstyleEyedropper *self,
                                   GdkEventKey      *event,
                                   GtkWindow        *window)
 {
+  GdkSeat *seat;
+  GdkDevice *pointer;
+  GdkDevice *keyboard;
+  gint x, y;
+  gint dx = 0;
+  gint dy = 0;
+  gint state;
+
   g_assert (GSTYLE_IS_EYEDROPPER (self));
   g_assert (event != NULL);
   g_assert (GTK_IS_WINDOW (window));
 
-  /* TODO: handle cursor and picker trigger keys */
+  state = (event->state & gtk_accelerator_get_default_mod_mask () & GDK_MOD1_MASK);
   switch (event->keyval)
     {
     case GDK_KEY_Escape:
       release_grab (self);
+      return GDK_EVENT_STOP;
+      break;
+
+    case GDK_KEY_Up:
+    case GDK_KEY_KP_Up:
+      dy = (state == GDK_MOD1_MASK) ? -CURSOR_ALT_STEP : -1;
+      break;
+
+    case GDK_KEY_Down:
+    case GDK_KEY_KP_Down:
+      dy = (state == GDK_MOD1_MASK) ? CURSOR_ALT_STEP : 1;
+      break;
+
+    case GDK_KEY_Left:
+    case GDK_KEY_KP_Left:
+      dx = (state == GDK_MOD1_MASK) ? -CURSOR_ALT_STEP : -1;
+      break;
+
+    case GDK_KEY_Right:
+    case GDK_KEY_KP_Right:
+      dx = (state == GDK_MOD1_MASK) ? CURSOR_ALT_STEP : 1;
       break;
 
     default:
-      break;
+      return GDK_EVENT_PROPAGATE;
     }
+
+  keyboard = gdk_event_get_device ((GdkEvent *)event);
+  seat = gdk_device_get_seat (keyboard);
+  pointer = gdk_seat_get_pointer (seat);
+  gdk_device_get_position (pointer, NULL, &x, &y);
+  gdk_device_warp (pointer, self->screen, x + dx, y + dy);
 
   return GDK_EVENT_STOP;
 }
