@@ -567,6 +567,7 @@ ide_workbench_set_context (IdeWorkbench *self,
                            IdeContext   *context)
 {
   g_autoptr(GSettings) settings = NULL;
+  IdeBuildManager *build_manager;
   IdeProject *project;
   guint delay_msec;
 
@@ -585,6 +586,11 @@ ide_workbench_set_context (IdeWorkbench *self,
                                self, "title",
                                G_BINDING_SYNC_CREATE,
                                transform_title, NULL, NULL, NULL);
+
+  build_manager = ide_context_get_build_manager (context);
+  gtk_widget_insert_action_group (GTK_WIDGET (self),
+                                  "build-manager",
+                                  G_ACTION_GROUP (build_manager));
 
   self->addins = peas_extension_set_new (peas_engine_get_default (),
                                          IDE_TYPE_WORKBENCH_ADDIN,

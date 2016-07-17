@@ -36,10 +36,8 @@ struct _GbpBuildWorkbenchAddin
   GbpBuildPerspective *build_perspective;
 
   /* Owned */
-  EggBindingGroup     *bindings;
   IdeBuildResult      *result;
   GSimpleActionGroup  *actions;
-  GCancellable        *cancellable;
 };
 
 static void workbench_addin_iface_init (IdeWorkbenchAddinInterface *iface);
@@ -59,191 +57,16 @@ static void
 gbp_build_workbench_addin_set_result (GbpBuildWorkbenchAddin *self,
                                       IdeBuildResult         *result)
 {
-  IdeWorkbenchHeaderBar *headerbar;
-  IdeOmniBar *omnibar;
-
   g_return_if_fail (GBP_IS_BUILD_WORKBENCH_ADDIN (self));
   g_return_if_fail (!result || IDE_IS_BUILD_RESULT (result));
   g_return_if_fail (self->workbench != NULL);
 
-  headerbar = ide_workbench_get_headerbar (self->workbench);
-  omnibar = ide_workbench_header_bar_get_omni_bar (headerbar);
-
   if (g_set_object (&self->result, result))
     {
-      egg_binding_group_set_source (self->bindings, result);
-      ide_omni_bar_set_build_result (omnibar, result);
+      gbp_build_log_panel_set_result (self->build_log_panel, result);
+      gtk_widget_show (GTK_WIDGET (self->build_log_panel));
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_RESULT]);
     }
-}
-
-static void
-gbp_build_workbench_addin_build_cb (GObject      *object,
-                                    GAsyncResult *result,
-                                    gpointer      user_data)
-{
-  IdeBuilder *builder = (IdeBuilder *)object;
-  g_autoptr(GbpBuildWorkbenchAddin) self = user_data;
-  g_autoptr(IdeBuildResult) build_result = NULL;
-  g_autoptr(GError) error = NULL;
-
-  g_assert (IDE_IS_BUILDER (builder));
-  g_assert (GBP_IS_BUILD_WORKBENCH_ADDIN (self));
-
-  build_result = ide_builder_build_finish (builder, result, &error);
-
-  if (error != NULL && !g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
-    g_message ("%s", error->message);
-}
-
-static void
-gbp_build_workbench_addin_save_all_cb (GObject      *object,
-                                       GAsyncResult *result,
-                                       gpointer      user_data)
-{
-  IdeBufferManager *bufmgr = (IdeBufferManager *)object;
-  g_autoptr(IdeBuildResult) build_result = NULL;
-  struct {
-    GbpBuildWorkbenchAddin *self;
-    IdeBuilder *builder;
-    IdeBuilderBuildFlags flags;
-  } *state = user_data;
-
-  g_assert (IDE_IS_BUFFER_MANAGER (bufmgr));
-  g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (GBP_IS_BUILD_WORKBENCH_ADDIN (state->self));
-
-  ide_buffer_manager_save_all_finish (bufmgr, result, NULL);
-
-  ide_builder_build_async (state->builder,
-                           state->flags,
-                           &build_result,
-                           state->self->cancellable,
-                           gbp_build_workbench_addin_build_cb,
-                           g_object_ref (state->self));
-
-  gbp_build_workbench_addin_set_result (state->self, build_result);
-  gbp_build_log_panel_set_result (state->self->build_log_panel, build_result);
-
-  g_object_unref (state->self);
-  g_object_unref (state->builder);
-  g_slice_free1 (sizeof *state, state);
-}
-
-static void
-gbp_build_workbench_addin_do_build (GbpBuildWorkbenchAddin *self,
-                                    IdeBuilderBuildFlags    flags)
-{
-  g_autoptr(IdeBuilder) builder = NULL;
-  g_autoptr(GError) error = NULL;
-  IdeConfigurationManager *config_manager;
-  IdeConfiguration *configuration;
-  IdeBuildSystem *build_system;
-  IdeWorkbench *workbench;
-  IdeContext *context;
-  struct {
-    GbpBuildWorkbenchAddin *self;
-    IdeBuilder *builder;
-    IdeBuilderBuildFlags flags;
-  } *state;
-
-  g_assert (GBP_IS_BUILD_WORKBENCH_ADDIN (self));
-
-  gbp_build_workbench_addin_set_result (self, NULL);
-
-  workbench = ide_widget_get_workbench (GTK_WIDGET (self->panel));
-  context = ide_workbench_get_context (workbench);
-  build_system = ide_context_get_build_system (context);
-  config_manager = ide_context_get_configuration_manager (context);
-  configuration = ide_configuration_manager_get_current (config_manager);
-
-  builder = ide_build_system_get_builder (build_system, configuration, &error);
-
-  if (error != NULL)
-    {
-      gbp_build_panel_add_error (self->panel, error->message);
-      return;
-    }
-
-  g_clear_object (&self->cancellable);
-  self->cancellable = g_cancellable_new ();
-
-  state = g_slice_alloc0 (sizeof *state);
-  state->self = g_object_ref (self);
-  state->builder = g_object_ref (builder);
-  state->flags = flags;
-
-  ide_buffer_manager_save_all_async (ide_context_get_buffer_manager (context),
-                                     self->cancellable,
-                                     gbp_build_workbench_addin_save_all_cb,
-                                     state);
-
-  /*
-   * No need to focus the build output, since the user can show that
-   * from the omnibar relatively quickly. We just need to make sure
-   * it is visible should they choose to view it.
-   */
-  gtk_widget_show (GTK_WIDGET (self->build_log_panel));
-
-  /*
-   * There is also no need to show the build result panel immediately.
-   * We can display the panel when a diagnostic has been discovered.
-   * Otherwise, it doesn't provide any additional information.
-   */
-}
-
-static void
-gbp_build_workbench_addin_build (GSimpleAction *action,
-                                 GVariant      *param,
-                                 gpointer       user_data)
-{
-  GbpBuildWorkbenchAddin *self = user_data;
-
-  g_assert (G_IS_SIMPLE_ACTION (action));
-  g_assert (GBP_IS_BUILD_WORKBENCH_ADDIN (self));
-
-  gbp_build_workbench_addin_do_build (self, 0);
-}
-
-static void
-gbp_build_workbench_addin_rebuild (GSimpleAction *action,
-                                   GVariant      *param,
-                                   gpointer       user_data)
-{
-  GbpBuildWorkbenchAddin *self = user_data;
-
-  g_assert (G_IS_SIMPLE_ACTION (action));
-  g_assert (GBP_IS_BUILD_WORKBENCH_ADDIN (self));
-
-  gbp_build_workbench_addin_do_build (self, IDE_BUILDER_BUILD_FLAGS_FORCE_CLEAN);
-}
-
-static void
-gbp_build_workbench_addin_clean (GSimpleAction *action,
-                                 GVariant      *param,
-                                 gpointer       user_data)
-{
-  GbpBuildWorkbenchAddin *self = user_data;
-
-  g_assert (G_IS_SIMPLE_ACTION (action));
-  g_assert (GBP_IS_BUILD_WORKBENCH_ADDIN (self));
-
-  gbp_build_workbench_addin_do_build (self,
-                                      (IDE_BUILDER_BUILD_FLAGS_FORCE_CLEAN |
-                                       IDE_BUILDER_BUILD_FLAGS_NO_BUILD));
-}
-
-static void
-gbp_build_workbench_addin_cancel (GSimpleAction *action,
-                                  GVariant      *param,
-                                  gpointer       user_data)
-{
-  GbpBuildWorkbenchAddin *self = user_data;
-
-  g_assert (GBP_IS_BUILD_WORKBENCH_ADDIN (self));
-
-  if (self->cancellable)
-    g_cancellable_cancel (self->cancellable);
 }
 
 static void
@@ -285,11 +108,7 @@ gbp_build_workbench_addin_configure (GSimpleAction *action,
     gbp_build_perspective_set_configuration (self->build_perspective, config);
 }
 
-static const GActionEntry actions[] = {
-  { "build", gbp_build_workbench_addin_build },
-  { "rebuild", gbp_build_workbench_addin_rebuild },
-  { "clean", gbp_build_workbench_addin_clean },
-  { "cancel-build", gbp_build_workbench_addin_cancel },
+static const GActionEntry actions_entries[] = {
   { "configure", gbp_build_workbench_addin_configure, "s" },
   { "view-output", gbp_build_workbench_addin_view_output },
 };
@@ -300,8 +119,8 @@ gbp_build_workbench_addin_load (IdeWorkbenchAddin *addin,
 {
   IdeConfigurationManager *configuration_manager;
   GbpBuildWorkbenchAddin *self = (GbpBuildWorkbenchAddin *)addin;
-  IdeWorkbenchHeaderBar *header;
   IdeConfiguration *configuration;
+  IdeBuildManager *build_manager;
   IdePerspective *editor;
   IdeContext *context;
   GtkWidget *pane;
@@ -313,6 +132,15 @@ gbp_build_workbench_addin_load (IdeWorkbenchAddin *addin,
   self->workbench = workbench;
 
   context = ide_workbench_get_context (workbench);
+
+  build_manager = ide_context_get_build_manager (context);
+
+  g_signal_connect_object (build_manager,
+                           "build-started",
+                           G_CALLBACK (gbp_build_workbench_addin_set_result),
+                           self,
+                           G_CONNECT_SWAPPED);
+
   configuration_manager = ide_context_get_configuration_manager (context);
   configuration = ide_configuration_manager_get_current (configuration_manager);
 
@@ -332,23 +160,6 @@ gbp_build_workbench_addin_load (IdeWorkbenchAddin *addin,
 
   g_object_bind_property (self, "result", self->panel, "result", 0);
 
-  header = ide_workbench_get_headerbar (workbench);
-
-  /* XXX: Button is hidden until we add run support */
-  self->run_button = g_object_new (GTK_TYPE_BUTTON,
-                                   "child", g_object_new (GTK_TYPE_IMAGE,
-                                                          "icon-name", "media-playback-start-symbolic",
-                                                          "visible", TRUE,
-                                                          NULL),
-                                   "visible", FALSE,
-                                   NULL);
-  ide_widget_add_style_class (self->run_button, "image-button");
-
-  ide_workbench_header_bar_insert_right (header,
-                                         self->run_button,
-                                         GTK_PACK_START,
-                                         0);
-
   self->build_perspective = g_object_new (GBP_TYPE_BUILD_PERSPECTIVE,
                                           "configuration-manager", configuration_manager,
                                           "configuration", configuration,
@@ -366,11 +177,6 @@ gbp_build_workbench_addin_unload (IdeWorkbenchAddin *addin,
   g_assert (IDE_IS_WORKBENCH_ADDIN (addin));
   g_assert (GBP_IS_BUILD_WORKBENCH_ADDIN (self));
   g_assert (IDE_IS_WORKBENCH (workbench));
-
-  if (self->cancellable)
-    g_cancellable_cancel (self->cancellable);
-
-  g_clear_object (&self->cancellable);
 
   gtk_widget_insert_action_group (GTK_WIDGET (workbench), "build-tools", NULL);
 
@@ -402,10 +208,8 @@ gbp_build_workbench_addin_finalize (GObject *object)
 {
   GbpBuildWorkbenchAddin *self = (GbpBuildWorkbenchAddin *)object;
 
-  g_clear_object (&self->bindings);
   g_clear_object (&self->actions);
   g_clear_object (&self->result);
-  g_clear_object (&self->cancellable);
 
   G_OBJECT_CLASS (gbp_build_workbench_addin_parent_class)->finalize (object);
 }
@@ -431,57 +235,12 @@ gbp_build_workbench_addin_class_init (GbpBuildWorkbenchAddinClass *klass)
 static void
 gbp_build_workbench_addin_init (GbpBuildWorkbenchAddin *self)
 {
-  gint i;
-  static const struct {
-    const gchar   *property;
-    const gchar   *action;
-    GBindingFlags  flags;
-  } bindings[] = {
-    { "running", "build", G_BINDING_INVERT_BOOLEAN },
-    { "running", "rebuild", G_BINDING_INVERT_BOOLEAN },
-    { "running", "clean", G_BINDING_INVERT_BOOLEAN },
-    { "running", "cancel-build", 0 },
-    { NULL }
-  };
-
   self->actions = g_simple_action_group_new ();
+
   g_action_map_add_action_entries (G_ACTION_MAP (self->actions),
-                                   actions, G_N_ELEMENTS (actions),
+                                   actions_entries,
+                                   G_N_ELEMENTS (actions_entries),
                                    self);
-
-  self->bindings = egg_binding_group_new ();
-
-  for (i = 0; bindings [i].property; i++)
-    {
-      GActionMap *map = G_ACTION_MAP (self->actions);
-      GAction *action;
-
-      action = g_action_map_lookup_action (map, bindings [i].action);
-      egg_binding_group_bind (self->bindings, bindings [i].property,
-                              action, "enabled",
-                              G_BINDING_SYNC_CREATE | bindings [i].flags);
-    }
-}
-
-static void
-gbp_build_workbench_addin_perpsective_set (IdeWorkbenchAddin *addin,
-                                           IdePerspective    *perspective)
-{
-  GbpBuildWorkbenchAddin *self = (GbpBuildWorkbenchAddin *)addin;
-
-  g_assert (GBP_IS_BUILD_WORKBENCH_ADDIN (self));
-
-  /* XXX: Hidden until we add run support */
-#if 0
-  if (IDE_IS_EDITOR_PERSPECTIVE (perspective))
-    {
-      gtk_widget_show (self->run_button);
-    }
-  else
-    {
-      gtk_widget_hide (self->run_button);
-    }
-#endif
 }
 
 static void
@@ -489,5 +248,4 @@ workbench_addin_iface_init (IdeWorkbenchAddinInterface *iface)
 {
   iface->load = gbp_build_workbench_addin_load;
   iface->unload = gbp_build_workbench_addin_unload;
-  iface->perspective_set = gbp_build_workbench_addin_perpsective_set;
 }
