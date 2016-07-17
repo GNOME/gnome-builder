@@ -339,5 +339,5 @@ ide_application_actions_init (IdeApplication *self)
   gtk_application_set_accels_for_action (GTK_APPLICATION (self), "perspective.new-file", new_file);
   gtk_application_set_accels_for_action (GTK_APPLICATION (self), "win.global-search", global_search);
   gtk_application_set_accels_for_action (GTK_APPLICATION (self), "win.show-command-bar", command_bar);
-  gtk_application_set_accels_for_action (GTK_APPLICATION (self), "build-tools.build", build);
+  gtk_application_set_accels_for_action (GTK_APPLICATION (self), "build-manager.build", build);
 }
