@@ -100,7 +100,10 @@ class JhbuildRuntimeProvider(GObject.Object, Ide.RuntimeProvider):
 
     def do_load(self, manager):
         if self._is_jhbuild_installed():
-            runtime = JhbuildRuntime(id="jhbuild", display_name="JHBuild")
+            context = manager.get_context()
+            runtime = JhbuildRuntime(context=context,
+                                     id="jhbuild",
+                                     display_name="JHBuild")
             manager.add(runtime)
             self.runtimes.append(runtime)
 
