@@ -28,35 +28,31 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (EggBindingGroup, egg_binding_group, EGG, BINDING_GROUP, GObject)
 
-EggBindingGroup *
-          egg_binding_group_new        (void);
-
-GObject  *egg_binding_group_get_source (EggBindingGroup       *self);
-void      egg_binding_group_set_source (EggBindingGroup       *self,
-                                        gpointer               source);
-
-void      egg_binding_group_bind       (EggBindingGroup       *self,
-                                        const gchar           *source_property,
-                                        gpointer               target,
-                                        const gchar           *target_property,
-                                        GBindingFlags          flags);
-void      egg_binding_group_bind_full  (EggBindingGroup       *self,
-                                        const gchar           *source_property,
-                                        gpointer               target,
-                                        const gchar           *target_property,
-                                        GBindingFlags          flags,
-                                        GBindingTransformFunc  transform_to,
-                                        GBindingTransformFunc  transform_from,
-                                        gpointer               user_data,
-                                        GDestroyNotify         user_data_destroy);
-void           egg_binding_group_bind_with_closures
-                                       (EggBindingGroup       *self,
-                                        const gchar           *source_property,
-                                        gpointer               target,
-                                        const gchar           *target_property,
-                                        GBindingFlags          flags,
-                                        GClosure              *transform_to,
-                                        GClosure              *transform_from);
+EggBindingGroup *egg_binding_group_new                (void);
+GObject         *egg_binding_group_get_source         (EggBindingGroup       *self);
+void             egg_binding_group_set_source         (EggBindingGroup       *self,
+                                                       gpointer               source);
+void             egg_binding_group_bind               (EggBindingGroup       *self,
+                                                       const gchar           *source_property,
+                                                       gpointer               target,
+                                                       const gchar           *target_property,
+                                                       GBindingFlags          flags);
+void             egg_binding_group_bind_full          (EggBindingGroup       *self,
+                                                       const gchar           *source_property,
+                                                       gpointer               target,
+                                                       const gchar           *target_property,
+                                                       GBindingFlags          flags,
+                                                       GBindingTransformFunc  transform_to,
+                                                       GBindingTransformFunc  transform_from,
+                                                       gpointer               user_data,
+                                                       GDestroyNotify         user_data_destroy);
+void             egg_binding_group_bind_with_closures (EggBindingGroup       *self,
+                                                       const gchar           *source_property,
+                                                       gpointer               target,
+                                                       const gchar           *target_property,
+                                                       GBindingFlags          flags,
+                                                       GClosure              *transform_to,
+                                                       GClosure              *transform_from);
 
 G_END_DECLS
 
