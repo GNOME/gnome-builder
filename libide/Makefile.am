@@ -535,10 +535,12 @@ endif
 glib_enum_headers =                        \
 	buffers/ide-buffer.h               \
 	buildsystem/ide-build-result.h     \
+	devices/ide-device.h               \
 	diagnostics/ide-diagnostic.h       \
 	doap/ide-doap.h                    \
 	files/ide-indent-style.h           \
 	highlighting/ide-highlighter.h     \
+	runtimes/ide-runtime.h             \
 	sourceview/ide-source-view.h       \
 	symbols/ide-symbol.h               \
 	threading/ide-thread-pool.h        \

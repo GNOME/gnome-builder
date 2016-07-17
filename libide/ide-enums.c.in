@@ -6,10 +6,12 @@
 
 #include "buffers/ide-buffer.h"
 #include "buildsystem/ide-build-result.h"
+#include "devices/ide-device.h"
 #include "diagnostics/ide-diagnostic.h"
 #include "doap/ide-doap.h"
 #include "files/ide-indent-style.h"
 #include "highlighting/ide-highlighter.h"
+#include "runtimes/ide-runtime.h"
 #include "sourceview/ide-source-view.h"
 #include "symbols/ide-symbol.h"
 #include "threading/ide-thread-pool.h"
