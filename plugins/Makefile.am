@@ -26,6 +26,7 @@ SUBDIRS = \
 	project-tree \
 	python-gi-imports-completion \
 	python-pack \
+	run-tools \
 	support \
 	symbol-tree \
 	sysmon \
