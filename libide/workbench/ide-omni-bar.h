@@ -29,10 +29,7 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeOmniBar, ide_omni_bar, IDE, OMNI_BAR, GtkBox)
 
-GtkWidget      *ide_omni_bar_new              (void);
-IdeBuildResult *ide_omni_bar_get_build_result (IdeOmniBar     *self);
-void            ide_omni_bar_set_build_result (IdeOmniBar     *self,
-                                               IdeBuildResult *build_result);
+GtkWidget *ide_omni_bar_new (void);
 
 G_END_DECLS
 
