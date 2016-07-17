@@ -10,8 +10,6 @@ contrib/tmpl/tmpl-parser.c
 contrib/tmpl/tmpl-template.c
 contrib/tmpl/tmpl-template-locator.c
 contrib/xml/xml-reader.c
-data/org.gnome.Builder.appdata.xml.in
-data/org.gnome.Builder.desktop.in.in
 [type: gettext/gsettings]data/gsettings/org.gnome.builder.build.gschema.xml.in
 [type: gettext/gsettings]data/gsettings/org.gnome.builder.code-insight.gschema.xml.in
 [type: gettext/gsettings]data/gsettings/org.gnome.builder.editor.gschema.xml.in
@@ -23,6 +21,8 @@ data/org.gnome.Builder.desktop.in.in
 [type: gettext/gsettings]data/gsettings/org.gnome.builder.terminal.gschema.xml.in
 [type: gettext/gsettings]data/gsettings/org.gnome.builder.workbench.gschema.xml.in
 [type: gettext/glade]data/gtk/menus.ui
+data/org.gnome.Builder.appdata.xml.in
+data/org.gnome.Builder.desktop.in.in
 data/style-schemes/builder-dark.xml
 data/style-schemes/builder.xml
 libide/application/ide-application-actions.c
@@ -31,6 +31,7 @@ libide/application/ide-application-command-line.c
 libide/buffers/ide-buffer.c
 libide/buffers/ide-buffer-manager.c
 libide/buildsystem/ide-builder.c
+libide/buildsystem/ide-build-manager.c
 libide/buildsystem/ide-build-result.c
 libide/buildsystem/ide-build-system.c
 libide/buildsystem/ide-configuration-manager.c
@@ -59,6 +60,8 @@ libide/preferences/ide-preferences-perspective.c
 libide/projects/ide-project.c
 libide/projects/ide-recent-projects.c
 libide/pygobject/ide-pygobject-script.c
+libide/runner/ide-run-manager.c
+libide/runner/ide-runner.c
 libide/runtimes/ide-runtime-manager.c
 libide/scripting/ide-script.c
 libide/search/ide-omni-search-display.c
@@ -71,9 +74,9 @@ libide/util/ide-uri.c
 [type: gettext/glade]libide/workbench/ide-layout-tab-bar.ui
 [type: gettext/glade]libide/workbench/ide-layout-tab.ui
 libide/workbench/ide-layout-view.c
+libide/workbench/ide-omni-bar.c
 libide/workbench/ide-omni-bar-row.c
 [type: gettext/glade]libide/workbench/ide-omni-bar-row.ui
-libide/workbench/ide-omni-bar.c
 [type: gettext/glade]libide/workbench/ide-omni-bar.ui
 libide/workbench/ide-workbench-actions.c
 libide/workbench/ide-workbench.c
@@ -130,6 +133,7 @@ plugins/project-tree/gb-rename-file-popover.c
 [type: gettext/glade]plugins/project-tree/gb-rename-file-popover.ui
 [type: gettext/glade]plugins/project-tree/gtk/menus.ui
 plugins/python-pack/ide-python-format-provider.c
+plugins/run-tools/gbp-run-workbench-addin.c
 [type: gettext/glade]plugins/support/gtk/menus.ui
 plugins/support/ide-support-application-addin.c
 plugins/symbol-tree/symbol-tree-panel.c
