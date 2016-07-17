@@ -20,6 +20,7 @@
 
 #include <glib/gi18n.h>
 
+#include "ide-debug.h"
 #include "ide-internal.h"
 
 #include "diagnostics/ide-diagnostic-provider.h"
@@ -99,16 +100,21 @@ diagnose_cb (GObject      *object,
 
   ret = ide_diagnostic_provider_diagnose_finish (provider, result, &error);
 
-  if (!ret)
-    goto maybe_complete;
+  if (ret == NULL)
+    {
+      if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+        g_warning ("%s", error->message);
+      goto maybe_complete;
+    }
 
   ide_diagnostics_merge (state->diagnostics, ret);
   ide_diagnostics_unref (ret);
 
 maybe_complete:
-  if (state->total == 1 && error != NULL)
-    g_task_return_error (task, g_error_copy (error));
-  else if (state->active == 0)
+  IDE_TRACE_MSG ("%d of %d diagnostic providers active",
+                 state->active, state->total);
+
+  if (state->active == 0)
     g_task_return_pointer (task,
                            g_steal_pointer (&state->diagnostics),
                            (GDestroyNotify)ide_diagnostics_unref);
