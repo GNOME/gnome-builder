@@ -21,9 +21,11 @@
 #include <glib/gi18n.h>
 #include <libpeas/peas.h>
 
-#include "ide-runtime.h"
-#include "ide-runtime-manager.h"
-#include "ide-runtime-provider.h"
+#include "ide-context.h"
+
+#include "runtimes/ide-runtime.h"
+#include "runtimes/ide-runtime-manager.h"
+#include "runtimes/ide-runtime-provider.h"
 
 struct _IdeRuntimeManager
 {
@@ -78,6 +80,8 @@ ide_runtime_manager_constructed (GObject *object)
   G_OBJECT_CLASS (ide_runtime_manager_parent_class)->constructed (object);
 
   context = ide_object_get_context (IDE_OBJECT (self));
+
+  g_assert (IDE_IS_CONTEXT (context));
 
   self->extensions = peas_extension_set_new (peas_engine_get_default (),
                                              IDE_TYPE_RUNTIME_PROVIDER,
