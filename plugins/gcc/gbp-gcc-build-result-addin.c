@@ -100,10 +100,15 @@ create_diagnostic (GbpGccBuildResultAddin *self,
   g_assert (GBP_IS_GCC_BUILD_RESULT_ADDIN (self));
   g_assert (match_info != NULL);
 
+  message = g_match_info_fetch_named (match_info, "message");
+
+  /* Ignore _FORTIFY_SOURCE warnings which require optimization */
+  if (message != NULL && (strncmp (message, "#warning _FORTIFY_SOURCE requires compiling with optimization", 61) == 0))
+    return NULL;
+
   filename = g_match_info_fetch_named (match_info, "filename");
   line = g_match_info_fetch_named (match_info, "line");
   column = g_match_info_fetch_named (match_info, "column");
-  message = g_match_info_fetch_named (match_info, "message");
   level = g_match_info_fetch_named (match_info, "level");
 
   parsed.line = g_ascii_strtoll (line, NULL, 10);
