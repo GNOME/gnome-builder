@@ -485,8 +485,7 @@ grab_released_cb (GstyleColorPanel *self)
 {
   g_assert (GSTYLE_IS_COLOR_PANEL (self));
 
-  /* FIX: release the eyedropper here cause a Segfault  */
-  //g_clear_object (&self->eyedropper);
+  g_clear_object (&self->eyedropper);
 }
 
 static void
@@ -501,20 +500,22 @@ picker_button_clicked_cb (GstyleColorPanel *self,
   event = gtk_get_current_event ();
   g_assert (event != NULL);
 
-  self->eyedropper = g_object_new (GSTYLE_TYPE_EYEDROPPER,
-                                   "source-event", event,
-                                   NULL);
+  self->eyedropper = g_object_ref_sink (g_object_new (GSTYLE_TYPE_EYEDROPPER,
+                                        "source-event", event,
+                                        NULL));
   gdk_event_free (event);
 
-  g_signal_connect_swapped (self->eyedropper,
-                            "color-picked",
-                            G_CALLBACK (color_picked_cb),
-                            self);
+  g_signal_connect_object (self->eyedropper,
+                           "color-picked",
+                           G_CALLBACK (color_picked_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
 
-  g_signal_connect_swapped (self->eyedropper,
-                            "grab-released",
-                            G_CALLBACK (grab_released_cb),
-                            self);
+  g_signal_connect_object (self->eyedropper,
+                           "grab-released",
+                           G_CALLBACK (grab_released_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
 }
 
 static void
@@ -1125,6 +1126,7 @@ gstyle_color_panel_dispose (GObject *object)
   g_clear_object (&self->default_provider);
   g_clear_object (&self->degree_icon);
   g_clear_object (&self->percent_icon);
+  g_clear_object (&self->eyedropper);
   gstyle_color_panel_set_prefs_pages (self, NULL, NULL, NULL, NULL);
 
   G_OBJECT_CLASS (gstyle_color_panel_parent_class)->dispose (object);
