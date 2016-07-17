@@ -42,9 +42,11 @@
 #define ZOOM_AREA_SPOT_X -20
 #define ZOOM_AREA_SPOT_Y -20
 
-#define DEFAULT_ZOOM_FACTOR 5
-#define MIN_ZOOM_FACTOR 1
-#define MAX_ZOOM_FACTOR MAX (ZOOM_AREA_WIDTH, ZOOM_AREA_HEIGHT) / 2
+#define DEFAULT_ZOOM_FACTOR 5.0
+#define MIN_ZOOM_FACTOR 1.0
+#define MAX_ZOOM_FACTOR MAX (ZOOM_AREA_WIDTH, ZOOM_AREA_HEIGHT) / 2.0
+
+#define RETICLE_DIAMETER 10
 
 #define CURSOR_ALT_STEP 10
 
@@ -71,6 +73,10 @@ struct _GstyleEyedropper
   gulong             screen_size_changed_handler_id;
 
   gdouble            zoom_factor;
+  gint               offset_x;
+  gint               offset_y;
+  gint               pixbuf_offset_x;
+  gint               pixbuf_offset_y;
   gint               screen_width;
   gint               screen_height;
 
@@ -259,6 +265,8 @@ gstyle_eyedropper_draw_zoom_area (GstyleEyedropper *self,
 {
   GdkWindow *window;
   GdkPixbuf *root_pixbuf;
+  gint dst_width;
+  gint dst_height;
   gint src_width;
   gint src_height;
   gint start_x;
@@ -266,9 +274,19 @@ gstyle_eyedropper_draw_zoom_area (GstyleEyedropper *self,
 
   g_assert (GSTYLE_IS_EYEDROPPER (self));
 
-  src_width = ZOOM_AREA_WIDTH / self->zoom_factor;
-  src_height = ZOOM_AREA_HEIGHT / self->zoom_factor;
-  window = gdk_screen_get_root_window (self->screen);
+  src_width = ceil (ZOOM_AREA_WIDTH / self->zoom_factor);
+  if (src_width % 2 == 0)
+    src_width += 1;
+
+  src_height = ceil (ZOOM_AREA_HEIGHT / self->zoom_factor);
+  if (src_height % 2 == 0)
+    src_height += 1;
+
+  dst_width = src_width * ceil (self->zoom_factor);
+  dst_height = src_height * ceil (self->zoom_factor);
+
+  self->pixbuf_offset_x = (dst_width - ZOOM_AREA_WIDTH) / 2;
+  self->pixbuf_offset_y = (dst_height - ZOOM_AREA_HEIGHT) / 2;
 
   start_x = MAX (cursor_x - src_width / 2, 0);
   if (start_x + src_width > self->screen_width)
@@ -278,9 +296,16 @@ gstyle_eyedropper_draw_zoom_area (GstyleEyedropper *self,
   if (start_y + src_height > self->screen_height)
     start_y = self->screen_height - src_height;
 
+  window = gdk_screen_get_root_window (self->screen);
   root_pixbuf = gdk_pixbuf_get_from_window (window, start_x, start_y, src_width, src_height);
+  self->offset_x = (cursor_x - start_x + 0.5) * ceil (self->zoom_factor) - self->pixbuf_offset_x;
+  self->offset_y = (cursor_y - start_y + 0.5) * ceil (self->zoom_factor) - self->pixbuf_offset_y;
+
   g_clear_object (&self->pixbuf);
-  self->pixbuf = gdk_pixbuf_scale_simple (root_pixbuf, ZOOM_AREA_WIDTH, ZOOM_AREA_HEIGHT, GDK_INTERP_NEAREST);
+  self->pixbuf = gdk_pixbuf_scale_simple (root_pixbuf,
+                                          dst_width,
+                                          dst_height,
+                                          GDK_INTERP_NEAREST);
   g_object_unref (root_pixbuf);
 
   gtk_widget_queue_draw (self->zoom_area);
@@ -371,23 +396,17 @@ gstyle_eyedropper_pointer_pressed_cb (GstyleEyedropper *self,
 static void
 decrease_zoom_factor (GstyleEyedropper *self)
 {
-  gdouble factor;
-
   g_assert (GSTYLE_IS_EYEDROPPER (self));
 
-  factor = (self->zoom_factor * self->zoom_factor) / 100;
-  self->zoom_factor = CLAMP (self->zoom_factor - factor, MIN_ZOOM_FACTOR, MAX_ZOOM_FACTOR);
+  self->zoom_factor = CLAMP (self->zoom_factor - 1, MIN_ZOOM_FACTOR, MAX_ZOOM_FACTOR);
 }
 
 static void
 increase_zoom_factor (GstyleEyedropper *self)
 {
-  gdouble factor;
-
   g_assert (GSTYLE_IS_EYEDROPPER (self));
 
-  factor = (self->zoom_factor * self->zoom_factor) / 100;
-  self->zoom_factor = CLAMP (self->zoom_factor + factor, MIN_ZOOM_FACTOR, MAX_ZOOM_FACTOR);
+  self->zoom_factor = CLAMP (self->zoom_factor + 1, MIN_ZOOM_FACTOR, MAX_ZOOM_FACTOR);
 }
 
 static gboolean
@@ -517,6 +536,28 @@ gstyle_eyedropper_screen_size_changed_cb (GstyleEyedropper *self,
   gstyle_eyedropper_draw_zoom_area (self, x, y);
 }
 
+static void
+draw_zoom_area_cursor (GstyleEyedropper *self,
+                       cairo_t          *cr)
+{
+  GdkDevice *pointer;
+  gint x;
+  gint y;
+
+  g_assert (GSTYLE_IS_EYEDROPPER (self));
+
+  pointer = gdk_seat_get_pointer (self->seat);
+  gdk_device_get_position (pointer, NULL, &x, &y);
+
+  cairo_set_source_rgb(cr, 0, 0, 0);
+  cairo_set_line_width(cr, 1.0);
+  cairo_arc (cr, self->offset_x, self->offset_y, RETICLE_DIAMETER, 0, 2 * M_PI);
+  cairo_stroke (cr);
+  cairo_set_source_rgb(cr, 1.0, 1.0, 1.0);
+  cairo_arc (cr, self->offset_x, self->offset_y, RETICLE_DIAMETER - 1, 0, 2 * M_PI);
+  cairo_stroke (cr);
+}
+
 static gint
 gstyle_eyedropper_zoom_area_draw_cb (GstyleEyedropper *self,
                                      cairo_t          *cr,
@@ -526,8 +567,10 @@ gstyle_eyedropper_zoom_area_draw_cb (GstyleEyedropper *self,
 
   if (self->pixbuf != NULL)
     {
-      gdk_cairo_set_source_pixbuf (cr, self->pixbuf, 0, 0);
+      gdk_cairo_set_source_pixbuf (cr, self->pixbuf, -self->pixbuf_offset_x, -self->pixbuf_offset_y);
       cairo_paint (cr);
+
+      draw_zoom_area_cursor (self, cr);
     }
 
   return TRUE;
