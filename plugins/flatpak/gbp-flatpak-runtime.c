@@ -54,7 +54,7 @@ get_build_directory (GbpFlatpakRuntime *self)
                            "gnome-builder",
                            "builds",
                            ide_project_get_name (project),
-                           "flatpak-app",
+                           "flatpak",
                            ide_runtime_get_id (IDE_RUNTIME (self)),
                            NULL);
 }
@@ -121,7 +121,7 @@ gbp_flatpak_runtime_prebuild_worker (GTask        *task,
 
   launcher = g_subprocess_launcher_new (G_SUBPROCESS_FLAGS_NONE);
   subprocess = g_subprocess_launcher_spawn (launcher, &error,
-                                            "flatpak-app",
+                                            "flatpak",
                                             "build-init",
                                             build_path,
                                             /* XXX: Fake name, probably okay, but
@@ -181,7 +181,7 @@ gbp_flatpak_runtime_create_launcher (IdeRuntime  *runtime,
     {
       g_autofree gchar *build_path = get_build_directory (self);
 
-      ide_subprocess_launcher_push_argv (ret, "flatpak-app");
+      ide_subprocess_launcher_push_argv (ret, "flatpak");
       ide_subprocess_launcher_push_argv (ret, "build");
       ide_subprocess_launcher_push_argv (ret, build_path);
     }
