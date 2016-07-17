@@ -100,6 +100,7 @@
               <object class="GtkLabel" id="runtime_title">
                 <property name="visible">true</property>
                 <property name="hexpand">true</property>
+                <property name="use-markup">true</property>
                 <property name="xalign">0.0</property>
                 <attributes>
                   <attribute name="scale" value=".7"/>
