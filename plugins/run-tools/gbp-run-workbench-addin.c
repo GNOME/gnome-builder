@@ -231,6 +231,7 @@ gbp_run_workbench_addin_load (IdeWorkbenchAddin *addin,
                                                 "icon-name", "media-playback-start-symbolic",
                                                 "visible", TRUE,
                                                 NULL),
+                         "tooltip-text", _("Run project"),
                          NULL);
   g_object_bind_property (run_manager, "busy", button, "visible", G_BINDING_SYNC_CREATE | G_BINDING_INVERT_BOOLEAN);
   ide_widget_add_style_class (button, "image-button");
