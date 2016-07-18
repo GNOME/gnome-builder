@@ -187,6 +187,7 @@
                                     <property name="visible">true</property>
                                     <property name="can_focus">false</property>
                                     <property name="valign">center</property>
+                                    <property name="spacing">8</property>
                                     <child>
                                       <object class="GtkToggleButton">
                                         <property name="action-name">search-entry.toggle-search-replace</property>
@@ -195,7 +196,6 @@
                                         <property name="visible">true</property>
                                         <property name="can_focus">true</property>
                                         <property name="receives_default">true</property>
-                                        <property name="margin_right">4</property>
                                         <property name="image_position">right</property>
                                         <child>
                                           <object class="GtkImage">
