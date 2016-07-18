@@ -190,7 +190,7 @@ init_dock (GbColorPickerWorkbenchAddin *self)
   g_assert (GB_IS_COLOR_PICKER_WORKBENCH_ADDIN (self));
 
   self->dock = g_object_new (PNL_TYPE_DOCK_WIDGET,
-                             "title", _("Color Picker"),
+                             "title", _("Colors"),
                              "expand", TRUE,
                              "visible", TRUE,
                              NULL);
