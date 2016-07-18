@@ -4,12 +4,12 @@ contrib/egg/egg-animation.c
 contrib/egg/egg-date-time.c
 contrib/egg/egg-file-chooser-entry.c
 contrib/egg/egg-search-bar.c
-contrib/gstyle/gstyle-palette.c
+contrib/gstyle/data/palettes/basic.xml
 contrib/gstyle/gstyle-color-panel.c
 contrib/gstyle/gstyle-color-plane.c
-contrib/gstyle/gstyle-palette-widget.c
-contrib/gstyle/data/palettes/basic.xml
 contrib/gstyle/gstyle-color-widget-actions.c
+contrib/gstyle/gstyle-palette.c
+contrib/gstyle/gstyle-palette-widget.c
 [type: gettext/glade]contrib/gstyle/tests/data/gstyle-color-editor.ui
 contrib/gstyle/tests/data/palette.xml
 [type: gettext/glade]contrib/gstyle/ui/gstyle-color-panel.ui
@@ -110,13 +110,13 @@ plugins/clang/ide-clang-service.c
 plugins/clang/ide-clang-symbol-node.c
 plugins/clang/ide-clang-translation-unit.c
 plugins/color-picker/data/basic.xml
-plugins/color-picker/gb-color-picker-prefs-palette-row.c
 plugins/color-picker/gb-color-picker-prefs.c
+plugins/color-picker/gb-color-picker-prefs-palette-row.c
 plugins/color-picker/gb-color-picker-workbench-addin.c
 [type: gettext/glade]plugins/color-picker/gtk/color-picker-palette-menu.ui
-plugins/color-picker/gtk/color-picker-prefs.ui
-[type: gettext/glade]plugins/color-picker/gtk/color-picker.ui
+[type: gettext/glade]plugins/color-picker/gtk/color-picker-prefs.ui
 [type: gettext/glade]plugins/color-picker/gtk/color-picker-preview.ui
+[type: gettext/glade]plugins/color-picker/gtk/color-picker.ui
 [type: gettext/glade]plugins/color-picker/gtk/menus.ui
 plugins/command-bar/gb-command-bar.c
 plugins/command-bar/gb-vim.c
