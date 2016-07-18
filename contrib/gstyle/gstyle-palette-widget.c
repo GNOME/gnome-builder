@@ -216,6 +216,7 @@ dnd_get_index_from_cursor (GstylePaletteWidget *self,
                            CursorInfo          *info)
 {
   GtkBin *bin_child;
+  GtkAllocation alloc;
   gint len;
 
   g_assert (GSTYLE_IS_PALETTE_WIDGET (self));
@@ -227,9 +228,19 @@ dnd_get_index_from_cursor (GstylePaletteWidget *self,
       bin_child = GTK_BIN (gtk_list_box_get_row_at_y (GTK_LIST_BOX (self->listbox), info->dest_y));
       if (bin_child == NULL)
         {
+          /* No child mean we are at list start or at list end */
           len = gstyle_palette_get_len (self->selected_palette);
           if (len == 0)
             return FALSE;
+
+          bin_child = GTK_BIN (gtk_list_box_get_row_at_index (GTK_LIST_BOX (self->listbox), 0));
+          gtk_widget_get_allocated_size (GTK_WIDGET (bin_child), &alloc, NULL);
+          if (info->dest_y < alloc.y)
+            {
+              info->index = 0;
+              info->child = GSTYLE_COLOR_WIDGET (gtk_bin_get_child (GTK_BIN (bin_child)));
+              return TRUE;
+            }
 
           bin_child = GTK_BIN (gtk_list_box_get_row_at_index (GTK_LIST_BOX (self->listbox), len - 1));
         }
@@ -286,8 +297,13 @@ dnd_highlight_set_from_cursor (GstylePaletteWidget *self,
           start = alloc.y;
           size = alloc.height;
 
+          if (dest_ref > (start + size * 0.80))
+            info.index += 1;
+          else if (dest_ref > (start + size * 0.20))
+            info.index = -1;
+
           len = gstyle_palette_get_len (self->selected_palette);
-          self->is_dnd_at_end = (info.index == (len - 1));
+          self->is_dnd_at_end = (info.index == len);
         }
       else
         {
@@ -295,14 +311,14 @@ dnd_highlight_set_from_cursor (GstylePaletteWidget *self,
           start = alloc.x;
           size = alloc.width;
 
+          if (dest_ref > (start + size * 0.80))
+            info.index += 1;
+          else if (dest_ref > (start + size * 0.20))
+            info.index = -1;
+
           /* Check if we in the rightmost column */
           self->is_dnd_at_end = ((info.index + 1)% info.nb_col == 0);
         }
-
-      if (dest_ref > (start + size * 0.80))
-        info.index += 1;
-      else if (dest_ref > (start + size * 0.20))
-        info.index = -1;
 
       highlight = TRUE;
     }
@@ -1159,6 +1175,7 @@ listbox_draw_cb (GtkWidget           *listbox,
                  GstylePaletteWidget *self)
 {
   GtkStyleContext *style_context;
+  GstylePalette *selected_palette;
   GtkListBoxRow *bin_child;
   GtkAllocation alloc;
   gint y;
@@ -1171,19 +1188,28 @@ listbox_draw_cb (GtkWidget           *listbox,
       style_context = gtk_widget_get_style_context (GTK_WIDGET (self));
       gtk_style_context_add_class (style_context, GTK_STYLE_CLASS_DND);
 
-      if (self->is_dnd_at_end)
+      selected_palette = gstyle_palette_widget_get_selected_palette (self);
+      if (selected_palette == NULL || gstyle_palette_get_len (selected_palette) == 0)
         {
-          bin_child = gtk_list_box_get_row_at_index (GTK_LIST_BOX (self->listbox), self->dnd_child_index - 1);
-          gtk_widget_get_allocation (GTK_WIDGET (bin_child), &alloc);
-          y = alloc.y + alloc.height - 2;
+          gtk_widget_get_allocation (listbox, &alloc);
+          y = 2;
         }
       else
         {
-          bin_child = gtk_list_box_get_row_at_index (GTK_LIST_BOX (self->listbox), self->dnd_child_index);
-          gtk_widget_get_allocation (GTK_WIDGET (bin_child), &alloc);
-          y = alloc.y - 2;
-          if (y < 0)
-            y = 0;
+          if (self->is_dnd_at_end)
+            {
+              bin_child = gtk_list_box_get_row_at_index (GTK_LIST_BOX (self->listbox), self->dnd_child_index - 1);
+              gtk_widget_get_allocation (GTK_WIDGET (bin_child), &alloc);
+              y = alloc.y + alloc.height - 2;
+            }
+          else
+            {
+              bin_child = gtk_list_box_get_row_at_index (GTK_LIST_BOX (self->listbox), self->dnd_child_index);
+              gtk_widget_get_allocation (GTK_WIDGET (bin_child), &alloc);
+              y = alloc.y - 2;
+              if (y < 0)
+                y = 0;
+            }
         }
 
       gtk_render_background (style_context, cr, alloc.x, y, alloc.width, 4);
