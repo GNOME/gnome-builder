@@ -179,11 +179,10 @@ gstyle_rename_popover_set_name (GstyleRenamePopover *self,
                                 const gchar         *name)
 {
   g_assert (GSTYLE_IS_RENAME_POPOVER (self));
-  g_assert (name != NULL);
 
   if (g_strcmp0 (gtk_entry_get_text (self->entry), name) != 0)
     {
-      if (gstyle_str_empty0 (name))
+      if (name == NULL || gstyle_str_empty0 (name))
         gtk_entry_set_text (self->entry, "");
       else
         gtk_entry_set_text (self->entry, name);
