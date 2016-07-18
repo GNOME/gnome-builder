@@ -76,6 +76,9 @@ G_DEFINE_TYPE (GstylePaletteWidget, gstyle_palette_widget, GTK_TYPE_BIN)
 
 #define GSTYLE_COLOR_FUZZY_SEARCH_MAX_LEN 20
 
+#define GSTYLE_COLOR_WIDGET_SWATCH_WIDTH 64
+#define GSTYLE_COLOR_WIDGET_SWATCH_HEIGHT 64
+
 static guint unsaved_palette_count = 0;
 
 enum {
@@ -256,8 +259,26 @@ dnd_get_index_from_cursor (GstylePaletteWidget *self,
       gtk_widget_translate_coordinates (GTK_WIDGET (self), self->flowbox, x, y, &info->dest_x, &info->dest_y);
       bin_child = GTK_BIN (flowbox_get_child_at_xy (self, info->dest_x, info->dest_y, &info->index, &info->nb_col));
       if (bin_child == NULL)
-        return FALSE;
+        {
+          len = gstyle_palette_get_len (self->selected_palette);
+          if (len == 0)
+            return FALSE;
 
+          bin_child = GTK_BIN (gtk_flow_box_get_child_at_index (GTK_FLOW_BOX (self->flowbox), 0));
+          gtk_widget_get_allocated_size (GTK_WIDGET (bin_child), &alloc, NULL);
+          if (info->dest_x < alloc.x && info->dest_y < alloc.y + alloc.height)
+            {
+              info->index = 0;
+              info->child = GSTYLE_COLOR_WIDGET (gtk_bin_get_child (GTK_BIN (bin_child)));
+              return TRUE;
+            }
+
+          bin_child = GTK_BIN (gtk_flow_box_get_child_at_index (GTK_FLOW_BOX (self->flowbox), len - 1));
+          gtk_widget_get_allocated_size (GTK_WIDGET (bin_child), &alloc, NULL);
+          info->dest_x = alloc.x + alloc.width;
+        }
+
+      info->index = gtk_flow_box_child_get_index (GTK_FLOW_BOX_CHILD (bin_child));
       info->child = GSTYLE_COLOR_WIDGET (gtk_bin_get_child (GTK_BIN (bin_child)));
     }
 
@@ -276,9 +297,6 @@ dnd_highlight_set_from_cursor (GstylePaletteWidget *self,
 {
   GtkAllocation alloc;
   CursorInfo info;
-  gint dest_ref;
-  gint start;
-  gint size;
   gboolean highlight;
   gboolean redraw = FALSE;
 
@@ -296,13 +314,9 @@ dnd_highlight_set_from_cursor (GstylePaletteWidget *self,
         {
           gint len;
 
-          dest_ref = info.dest_y;
-          start = alloc.y;
-          size = alloc.height;
-
-          if (dest_ref > (start + size * 0.80))
+          if (info.dest_y > (alloc.y + alloc.height * 0.80))
             info.index += 1;
-          else if (dest_ref > (start + size * 0.20))
+          else if (info.dest_y > (alloc.y + alloc.height * 0.20))
             info.index = -1;
 
           len = gstyle_palette_get_len (self->selected_palette);
@@ -310,23 +324,20 @@ dnd_highlight_set_from_cursor (GstylePaletteWidget *self,
         }
       else
         {
-          dest_ref = info.dest_x;
-          start = alloc.x;
-          size = alloc.width;
-
-          if (dest_ref > (start + size * 0.80))
-            info.index += 1;
-          else if (dest_ref > (start + size * 0.20))
-            info.index = -1;
-
           /* Check if we in the rightmost column */
-          self->is_dnd_at_end = ((info.index + 1)% info.nb_col == 0);
+          self->is_dnd_at_end = ((info.index + 1) % info.nb_col == 0 && info.index != 0);
+
+          if (info.dest_x > (alloc.x + alloc.width * 0.80))
+            info.index += 1;
+          else if (info.dest_x > (alloc.x + alloc.width * 0.20))
+            info.index = -1;
         }
 
       highlight = TRUE;
     }
   else
     {
+      self->is_dnd_at_end = FALSE;
       info.index = gstyle_palette_get_len (self->selected_palette);
       highlight = TRUE;
     }
@@ -704,8 +715,8 @@ create_palette_flow_item (gpointer item,
                          "fallback-name-kind", GSTYLE_COLOR_KIND_RGB_HEX6,
                          "fallback-name-visible", TRUE,
                          "tooltip-text", tooltip,
-                         "width-request", 64,
-                         "height-request", 64,
+                         "width-request", GSTYLE_COLOR_WIDGET_SWATCH_WIDTH,
+                         "height-request", GSTYLE_COLOR_WIDGET_SWATCH_HEIGHT,
                          NULL);
 
   return swatch;
@@ -1330,25 +1341,42 @@ flowbox_draw_cb (GtkWidget           *flowbox,
   g_assert (GSTYLE_IS_PALETTE_WIDGET (self));
   g_assert (GTK_IS_FLOW_BOX (flowbox));
 
-  if (self->dnd_draw_highlight && self->dnd_child_index != -1)
+  if (self->dnd_draw_highlight)
     {
       style_context = gtk_widget_get_style_context (GTK_WIDGET (self));
       gtk_style_context_add_class (style_context, GTK_STYLE_CLASS_DND);
 
-      len = gstyle_palette_get_len (self->selected_palette);
-      if (self->dnd_child_index == len || self->is_dnd_at_end)
+      if (self->dnd_child_index != -1)
         {
-          bin_child = gtk_flow_box_get_child_at_index (GTK_FLOW_BOX (self->flowbox), self->dnd_child_index - 1);
-          gtk_widget_get_allocation (GTK_WIDGET (bin_child), &alloc);
-          x = alloc.x + alloc.width - 2;
+          len = gstyle_palette_get_len (self->selected_palette);
+          if (len == 0)
+            {
+              gtk_widget_get_allocation (flowbox, &alloc);
+              gtk_render_background (style_context, cr, 0, 0, alloc.width, 4);
+              gtk_render_frame (style_context, cr, 0, 0, alloc.width, 4);
+
+              return FALSE;
+            }
+          else if (self->dnd_child_index == len || self->is_dnd_at_end)
+            {
+              bin_child = gtk_flow_box_get_child_at_index (GTK_FLOW_BOX (self->flowbox), self->dnd_child_index - 1);
+              gtk_widget_get_allocation (GTK_WIDGET (bin_child), &alloc);
+              x = alloc.x + alloc.width - 2;
+            }
+          else
+            {
+              bin_child = gtk_flow_box_get_child_at_index (GTK_FLOW_BOX (self->flowbox), self->dnd_child_index);
+              gtk_widget_get_allocation (GTK_WIDGET (bin_child), &alloc);
+              x = alloc.x - 2;
+              if (x < 0)
+                x = 0;
+            }
         }
       else
         {
-          bin_child = gtk_flow_box_get_child_at_index (GTK_FLOW_BOX (self->flowbox), self->dnd_child_index);
-          gtk_widget_get_allocation (GTK_WIDGET (bin_child), &alloc);
-          x = alloc.x - 2;
-          if (x < 0)
-            x = 0;
+          alloc.y = 0;
+          alloc.height = GSTYLE_COLOR_WIDGET_SWATCH_HEIGHT;
+          alloc.x = 2;
         }
 
       gtk_render_background (style_context, cr, x, alloc.y, 4, alloc.height);
