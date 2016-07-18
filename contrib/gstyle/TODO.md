@@ -23,6 +23,10 @@
   - including the gtksourceview style scheme : filter the unneeded part but keep it for save it again.
 - allow scroll when drag at the end of list (both list or flow mode).
 
+### Palette widget :
+- add a placeholder when showing an empty palette
+ (should react to dnd)
+
 ### CSS parser :
 - add color functions parsing:
   - darker, lighter, mix, alpha.
@@ -42,7 +46,6 @@
 - dnd-lock: a lock-symbolic lock icon.
 
 ### Slidein :
-- add optional right click to close the slidein (property).
 - is it possible to not close the slidein when dragging the paned border to extend the panel ?
 
 ### Color plane :
@@ -56,5 +59,4 @@
 ## FIXES :
 
 ### Theme :
-- add a dark theme.
 - add backdrop state.

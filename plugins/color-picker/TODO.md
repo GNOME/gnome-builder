@@ -4,7 +4,6 @@
 
 ### Palettes :
 - use need attention symbol in changed palettes.
-- edit colorwidget names in palettes
 - show ID and number of colors (tooltip ?)
 
 ### Save and load palettes dialogs :
@@ -21,9 +20,7 @@
 - add a way to choose a reference format to insert in the view ( label as a radio ? ).
 
 ### search list :
-- re-sort the list starting by the searched prefix.
-- add palettes and current file colors to the list:
-  an UI could be toggle buttons at the search list top.
+- add current file colors to the list.
 
 ### Prefs :
 - separate color components and color strings unit choices.
@@ -43,5 +40,8 @@
 - add some scrolledwindow to the pages :
   done for the palette list but there's a size problem somewhere since
   the addition of max-content-* to GtkScrolledWindow.
+
+- when adding new palettes, the bottom list border sometimes disappears.
+( css problem ?)
 
 - focus paths.
