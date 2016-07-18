@@ -143,10 +143,13 @@ static IdeUnsavedFile *
 get_unsaved_file (IdeGettextDiagnosticProvider *self,
                   IdeFile                      *file)
 {
+  g_autoptr(GPtrArray) array = NULL;
   IdeUnsavedFiles *unsaved_files;
   IdeContext *context;
-  g_autoptr(GPtrArray) array = NULL;
   guint i;
+
+  g_assert (IDE_IS_GETTEXT_DIAGNOSTIC_PROVIDER (self));
+  g_assert (IDE_IS_FILE (file));
 
   context = ide_object_get_context (IDE_OBJECT (self));
   unsaved_files = ide_context_get_unsaved_files (context);
@@ -274,9 +277,9 @@ subprocess_wait_cb (GObject      *object,
                     gpointer      user_data)
 {
   GSubprocess *subprocess = (GSubprocess *)object;
-  g_autoptr(GTask) task = user_data;
-  g_autoptr(IdeDiagnostics) local_diags = NULL;
   g_autofree gchar *input_prefix = NULL;
+  g_autoptr(IdeDiagnostics) local_diags = NULL;
+  g_autoptr(GTask) task = user_data;
   g_autoptr(GPtrArray) array = NULL;
   g_autoptr(GDataInputStream) stderr_data_input = NULL;
   g_autoptr(GInputStream) stderr_input = NULL;
@@ -387,22 +390,53 @@ populate_cache (EggTaskCache  *cache,
                 GTask         *task,
                 gpointer       user_data)
 {
-  IdeFile *file = (IdeFile *)key;
   IdeGettextDiagnosticProvider *self = user_data;
-  g_autoptr(IdeUnsavedFile) unsaved_file = get_unsaved_file (self, file);
-  GtkSourceLanguage *language = ide_file_get_language (file);
-  const gchar *language_id = gtk_source_language_get_id (language);
+  g_autoptr(IdeUnsavedFile) unsaved_file = NULL;
   g_autoptr(GSubprocess) subprocess = NULL;
+  GtkSourceLanguage *language;
+  const gchar *language_id;
+  const gchar *xgettext_lang;
+  const gchar *temp_path;
   TranslationUnit *unit;
+  IdeFile *file = (IdeFile *)key;
+  GCancellable *cancellable;
   GError *error = NULL;
 
-  if (!ide_unsaved_file_persist (unsaved_file,
-                                 g_task_get_cancellable (task),
-                                 &error))
+  g_assert (EGG_IS_TASK_CACHE (cache));
+  g_assert (IDE_IS_FILE (file));
+  g_assert (IDE_IS_GETTEXT_DIAGNOSTIC_PROVIDER (self));
+
+  cancellable = g_task_get_cancellable (task);
+
+  if (NULL == (unsaved_file = get_unsaved_file (self, file)))
+    {
+      g_task_return_new_error (task,
+                               G_IO_ERROR,
+                               G_IO_ERROR_NOT_FOUND,
+                               "Failed to locate file contents");
+      return;
+    }
+
+  if (NULL == (language = ide_file_get_language (file)) ||
+      NULL == (language_id = gtk_source_language_get_id (language)) ||
+      NULL == (xgettext_lang = id_to_xgettext_language (language_id)))
+    {
+      g_task_return_new_error (task,
+                               G_IO_ERROR,
+                               G_IO_ERROR_NOT_SUPPORTED,
+                               "Failed to determine language type");
+      return;
+    }
+
+  if (!ide_unsaved_file_persist (unsaved_file, cancellable, &error))
     {
       g_task_return_error (task, error);
       return;
     }
+
+  temp_path = ide_unsaved_file_get_temp_path (unsaved_file);
+
+  g_assert (temp_path != NULL);
 
   subprocess = g_subprocess_new (G_SUBPROCESS_FLAGS_STDIN_PIPE
                                  | G_SUBPROCESS_FLAGS_STDOUT_PIPE
@@ -414,11 +448,12 @@ populate_cache (EggTaskCache  *cache,
                                  "--check=space-ellipsis",
                                  "-k_",
                                  "-kN_",
-                                 "-L", id_to_xgettext_language (language_id),
+                                 "-L", xgettext_lang,
                                  "-o" "-",
-                                 ide_unsaved_file_get_temp_path (unsaved_file),
+                                 temp_path,
                                  NULL);
-  if (!subprocess)
+
+  if (subprocess == NULL)
     {
       g_task_return_error (task, error);
       return;
@@ -427,12 +462,12 @@ populate_cache (EggTaskCache  *cache,
   unit = g_slice_new0 (TranslationUnit);
   unit->file = g_object_ref (file);
   unit->unsaved_file = ide_unsaved_file_ref (unsaved_file);
-  g_task_set_task_data (task, unit, (GDestroyNotify) translation_unit_free);
+  g_task_set_task_data (task, unit, (GDestroyNotify)translation_unit_free);
 
   g_subprocess_wait_async (subprocess,
-                           g_task_get_cancellable (task),
+                           cancellable,
                            subprocess_wait_cb,
-                           task);
+                           g_object_ref (task));
 }
 
 static void
