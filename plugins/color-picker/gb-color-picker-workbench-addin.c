@@ -430,20 +430,20 @@ static void
 view_removed_cb (GbColorPickerWorkbenchAddin *self,
                  GtkWidget                   *widget)
 {
-  IdeEditorView *view = (IdeEditorView *)widget;
+  IdeLayoutView *view = (IdeLayoutView *)widget;
   ViewState *view_state;
 
   g_assert (GB_IS_COLOR_PICKER_WORKBENCH_ADDIN (self));
-  g_assert (IDE_IS_EDITOR_VIEW (view));
+  g_assert (IDE_IS_LAYOUT_VIEW (view));
 
-  if (!IDE_IS_EDITOR_VIEW (widget))
+  if (!IDE_IS_EDITOR_VIEW (view))
     return;
 
   view_state = g_hash_table_lookup (self->views, view);
   if (view != NULL && view_state->state)
     {
-      view_clear (self, view, FALSE);
-      view_remove_dock (self, view);
+      view_clear (self, IDE_EDITOR_VIEW (view), FALSE);
+      view_remove_dock (self, IDE_EDITOR_VIEW (view));
     }
 
   g_hash_table_remove (self->views, view);
