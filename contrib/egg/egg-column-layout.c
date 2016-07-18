@@ -36,7 +36,7 @@ typedef struct
 
 #define COLUMN_WIDTH_DEFAULT   500
 #define COLUMN_SPACING_DEFAULT 24
-#define ROW_SPACING_DEFAULT    12
+#define ROW_SPACING_DEFAULT    24
 
 G_DEFINE_TYPE_WITH_PRIVATE (EggColumnLayout, egg_column_layout, GTK_TYPE_CONTAINER)
 
