@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-07-07 03:14+0000\n"
-"PO-Revision-Date: 2016-07-07 10:01+0200\n"
+"POT-Creation-Date: 2016-07-18 00:21+0000\n"
+"PO-Revision-Date: 2016-07-18 14:41+0200\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Español; Castellano <gnome-es-list@gnome.org>\n"
 "Language: es\n"
@@ -71,6 +71,7 @@ msgstr[1] "Hace %u años aproximadamente"
 #: ../contrib/egg/egg-file-chooser-entry.c:489
 #: ../libide/greeter/ide-greeter-perspective.c:673
 #: ../libide/workbench/ide-workbench-actions.c:70
+#: ../plugins/color-picker/gb-color-picker-prefs.c:172
 msgid "Open"
 msgstr "Abrir"
 
@@ -86,6 +87,7 @@ msgstr "Crear"
 #: ../contrib/egg/egg-file-chooser-entry.c:112
 #: ../libide/editor/ide-editor-view-actions.c:317
 #: ../libide/editor/ide-editor-view-actions.c:448
+#: ../plugins/color-picker/gb-color-picker-prefs.c:199
 #: ../plugins/terminal/gb-terminal-view-actions.c:306
 msgid "Save"
 msgstr "Guardar"
@@ -99,6 +101,8 @@ msgstr "Explorar…"
 #: ../libide/editor/ide-editor-view-actions.c:447
 #: ../libide/greeter/ide-greeter-perspective.c:672
 #: ../libide/workbench/ide-workbench-actions.c:69
+#: ../plugins/color-picker/gb-color-picker-prefs.c:176
+#: ../plugins/color-picker/gb-color-picker-prefs.c:203
 #: ../plugins/terminal/gb-terminal-view-actions.c:305
 msgid "Cancel"
 msgstr "Cancelar"
@@ -106,6 +110,214 @@ msgstr "Cancelar"
 #: ../contrib/egg/egg-search-bar.c:378
 msgid "Search"
 msgstr "Buscar"
+
+#: ../contrib/gstyle/gstyle-palette.c:474
+#: ../contrib/gstyle/gstyle-palette.c:540
+#, c-format
+#| msgid "Failed to parse integer from \"%s\""
+msgid "failed to parse line %i\n"
+msgstr "Falló al analizar la línea %i\n"
+
+#: ../contrib/gstyle/gstyle-palette.c:595
+#, c-format
+msgid "%s : palette is empty\n"
+msgstr "%s: la paleta está vacía\n"
+
+#: ../contrib/gstyle/gstyle-palette.c:699
+#, c-format
+msgid "%s : failed to parse\n"
+msgstr "%s: falló al analizar\n"
+
+#: ../contrib/gstyle/gstyle-palette.c:707
+#, c-format
+#| msgid "Failed to diagnose: %s\n"
+msgid "Unable to open %s\n"
+msgstr "No se puede abrir %s\n"
+
+#: ../contrib/gstyle/gstyle-palette.c:745
+#, c-format
+#| msgid "Symbol resolver is not supported."
+msgid "%s : This file format is not supported\n"
+msgstr "%s: este formato de archivo no está soportado\n"
+
+#: ../contrib/gstyle/gstyle-palette.c:833
+#, c-format
+#| msgid "Failed to diagnose: %s\n"
+msgid "Unable to save %s\n"
+msgstr "No se puede guardar %s\n"
+
+#: ../contrib/gstyle/gstyle-color-panel.c:822
+msgid "Palette: "
+msgstr "Paleta:"
+
+#: ../contrib/gstyle/gstyle-color-panel.c:824
+msgid "Palette"
+msgstr "Paleta"
+
+#: ../contrib/gstyle/gstyle-color-plane.c:1600
+msgid "Color Plane"
+msgstr "Plano de color"
+
+#: ../contrib/gstyle/gstyle-palette-widget.c:859
+#, c-format
+#| msgid "unsaved document %u"
+msgid "Unsaved palette %u"
+msgstr "Paleta %u sin guardar"
+
+#: ../contrib/gstyle/data/palettes/basic.xml.h:1
+#: ../contrib/gstyle/tests/data/palette.xml.h:1
+#: ../plugins/color-picker/data/basic.xml.h:1
+msgid "Basic"
+msgstr "Básico"
+
+#: ../contrib/gstyle/gstyle-color-widget-actions.c:66
+msgid "Color name"
+msgstr "Nombre del color"
+
+#: ../contrib/gstyle/gstyle-color-widget-actions.c:68
+#| msgid "Enter the name of the directory to create"
+msgid "Enter a new name for the color"
+msgstr "Introduzca un nombre nuevo para el color"
+
+#: ../contrib/gstyle/tests/data/gstyle-color-editor.ui.h:1
+msgid "Hue"
+msgstr "Tono"
+
+#: ../contrib/gstyle/tests/data/gstyle-color-editor.ui.h:2
+#| msgid "Duration"
+msgid "Saturation"
+msgstr "Saturación"
+
+#: ../contrib/gstyle/tests/data/gstyle-color-editor.ui.h:3
+msgid "Value"
+msgstr "Valor"
+
+#: ../contrib/gstyle/tests/data/gstyle-color-editor.ui.h:4
+msgid "Cielab l"
+msgstr "Cielab l"
+
+#: ../contrib/gstyle/tests/data/gstyle-color-editor.ui.h:5
+msgid "Cielab a"
+msgstr "Cielab a"
+
+#: ../contrib/gstyle/tests/data/gstyle-color-editor.ui.h:6
+msgid "Cielab b"
+msgstr "Cielab b"
+
+#: ../contrib/gstyle/tests/data/gstyle-color-editor.ui.h:7
+#| msgid "_Redo"
+msgid "Red"
+msgstr "Rojo"
+
+#: ../contrib/gstyle/tests/data/gstyle-color-editor.ui.h:8
+msgid "Green"
+msgstr "Verde"
+
+#: ../contrib/gstyle/tests/data/gstyle-color-editor.ui.h:9
+msgid "Blue"
+msgstr "Azul"
+
+#: ../contrib/gstyle/ui/gstyle-color-panel.ui.h:1
+msgid "Color Components"
+msgstr "Componentes del color"
+
+#: ../contrib/gstyle/ui/gstyle-color-panel.ui.h:2
+msgid "H"
+msgstr "H"
+
+#: ../contrib/gstyle/ui/gstyle-color-panel.ui.h:3
+msgid "S"
+msgstr "S"
+
+#: ../contrib/gstyle/ui/gstyle-color-panel.ui.h:4
+msgid "V"
+msgstr "V"
+
+#: ../contrib/gstyle/ui/gstyle-color-panel.ui.h:5
+msgid "L*"
+msgstr "L*"
+
+#: ../contrib/gstyle/ui/gstyle-color-panel.ui.h:6
+msgid "a*"
+msgstr "a*"
+
+#: ../contrib/gstyle/ui/gstyle-color-panel.ui.h:7
+msgid "b*"
+msgstr "b*"
+
+#: ../contrib/gstyle/ui/gstyle-color-panel.ui.h:8
+msgid "R"
+msgstr "R"
+
+#: ../contrib/gstyle/ui/gstyle-color-panel.ui.h:9
+#| msgid "Go"
+msgid "G"
+msgstr "G"
+
+#: ../contrib/gstyle/ui/gstyle-color-panel.ui.h:10
+msgid "B"
+msgstr "B"
+
+#: ../contrib/gstyle/ui/gstyle-color-panel.ui.h:11
+#| msgid "Format Strings"
+msgid "Color strings"
+msgstr "Cadenas de color"
+
+#: ../contrib/gstyle/ui/gstyle-color-panel.ui.h:12
+msgid "HEX3"
+msgstr "HEX3"
+
+#: ../contrib/gstyle/ui/gstyle-color-panel.ui.h:13
+msgid "HEX6"
+msgstr "HEX6"
+
+#: ../contrib/gstyle/ui/gstyle-color-panel.ui.h:14
+msgid "RGB"
+msgstr "RGB"
+
+#: ../contrib/gstyle/ui/gstyle-color-panel.ui.h:15
+msgid "RGBA"
+msgstr "RGBA"
+
+#: ../contrib/gstyle/ui/gstyle-color-panel.ui.h:16
+msgid "HSL"
+msgstr "HSL"
+
+#: ../contrib/gstyle/ui/gstyle-color-panel.ui.h:17
+msgid "HSLA"
+msgstr "HSLA"
+
+#: ../contrib/gstyle/ui/gstyle-color-panel.ui.h:18
+msgid "Palettes"
+msgstr "Paletas"
+
+#: ../contrib/gstyle/ui/gstyle-color-panel.ui.h:19
+#: ../plugins/color-picker/gtk/color-picker.ui.h:1
+#| msgid "No open files"
+msgid "No open palettes"
+msgstr "No hay paletas abiertas"
+
+#: ../contrib/gstyle/ui/gstyle-color-panel.ui.h:20
+msgid "Load or generate a palette by using the preferences"
+msgstr "Cargar o generar una paleta usando las preferencias"
+
+#: ../contrib/gstyle/ui/gstyle-color-widget.ui.h:1
+#: ../plugins/color-picker/gtk/color-picker-palette-menu.ui.h:1
+#| msgid "_Rename"
+msgid "Rename"
+msgstr "Renombrar"
+
+#: ../contrib/gstyle/ui/gstyle-color-widget.ui.h:2
+#: ../plugins/color-picker/gtk/color-picker-palette-menu.ui.h:2
+#| msgid "_Remove"
+msgid "Remove"
+msgstr "Quitar"
+
+#: ../contrib/gstyle/ui/gstyle-rename-popover.ui.h:1
+#: ../plugins/project-tree/gb-rename-file-popover.ui.h:2
+#: ../plugins/project-tree/gtk/menus.ui.h:10
+msgid "_Rename"
+msgstr "_Renombrar"
 
 #: ../contrib/search/trie.c:790
 #, c-format
@@ -136,99 +348,6 @@ msgstr "Falló al buscar la plantilla «%s»"
 #, c-format
 msgid "Could not parse XML from stream"
 msgstr "No se pudo analizar el XML del flujo"
-
-#: ../data/org.gnome.Builder.appdata.xml.in.h:1
-#: ../data/org.gnome.Builder.desktop.in.in.h:1
-#: ../data/style-schemes/builder.xml.h:1
-#: ../libide/application/ide-application.c:462
-#: ../libide/preferences/ide-preferences-builtin.c:127
-#: ../libide/workbench/ide-workbench.c:560
-msgid "Builder"
-msgstr "Builder"
-
-#: ../data/org.gnome.Builder.appdata.xml.in.h:2
-#: ../libide/application/ide-application-actions.c:115
-msgid "An IDE for GNOME"
-msgstr "Un EID para GNOME"
-
-#: ../data/org.gnome.Builder.appdata.xml.in.h:3
-msgid ""
-"Builder is an actively developed Integrated Development Environment for "
-"GNOME. It combines integrated support for essential GNOME technologies such "
-"as GTK+, GLib, and GNOME APIs with features that any developer will "
-"appreciate, like syntax highlighting and snippets."
-msgstr ""
-"Builder es un entorno de desarrollo integrado para GNOME gestionado "
-"activamente. Combina soporte integrado para las tecnologías esenciales de "
-"GNOME, tales como GTK+, GLib y las API de GNOME con características que "
-"cualquier desarrollador apreciará, como el resaltado de sintaxis y los "
-"fragmentos."
-
-#: ../data/org.gnome.Builder.appdata.xml.in.h:4
-msgid ""
-"You can rely on predictable releases of Builder with each new release of "
-"GNOME every six months."
-msgstr ""
-"Puede apoyarse en las publicaciones previstas de Builder con cada nueva "
-"versión de GNOME cada seis meses."
-
-#: ../data/org.gnome.Builder.appdata.xml.in.h:5
-msgid "Features:"
-msgstr "Características:"
-
-#: ../data/org.gnome.Builder.appdata.xml.in.h:6
-msgid "Built in syntax highlighting for many languages"
-msgstr "Resaltado de sintaxis integrado para muchos lenguajes"
-
-#: ../data/org.gnome.Builder.appdata.xml.in.h:7
-msgid "Side-by-side code editors"
-msgstr "Editores de código de lado a lado"
-
-#: ../data/org.gnome.Builder.appdata.xml.in.h:8
-msgid "Integration with Git"
-msgstr "Integración con Git"
-
-#: ../data/org.gnome.Builder.appdata.xml.in.h:9
-msgid "Integration with Autotools"
-msgstr "Integración con Autotools"
-
-#: ../data/org.gnome.Builder.appdata.xml.in.h:10
-msgid "Clang based auto-completion, semantic highlighting, and diagnostics"
-msgstr ""
-"Completado automático basado en Clang, resaltado semántico y diagnósticos"
-
-#: ../data/org.gnome.Builder.appdata.xml.in.h:11
-msgid "Python based auto-completion, semantic highlighting, and diagnostics"
-msgstr ""
-"Completado automático basado en Python, resaltado semántico y diagnósticos"
-
-#: ../data/org.gnome.Builder.appdata.xml.in.h:12
-msgid "Vala based auto-completion and diagnostics"
-msgstr "Completado automático basado en Vala y diagnósticos"
-
-#: ../data/org.gnome.Builder.appdata.xml.in.h:13
-msgid "Auto indentation support for C, Python, Vala, and XML"
-msgstr "Soporte de sangrado automático para C, Python, Vala y XML"
-
-#: ../data/org.gnome.Builder.appdata.xml.in.h:14
-msgid "HTML/Markdown live preview"
-msgstr "Vista previa en directo del marcado/HTML"
-
-#: ../data/org.gnome.Builder.appdata.xml.in.h:15
-msgid "Optional Vim-style editing"
-msgstr "Edición estilo Vim opcional"
-
-#: ../data/org.gnome.Builder.appdata.xml.in.h:16
-msgid "Preview support for building with Xdg-App runtimes"
-msgstr "Soporte de vista previa para la construcción con rutinas de Xdg-App"
-
-#: ../data/org.gnome.Builder.desktop.in.in.h:2
-msgid "Build software for GNOME"
-msgstr "Construir software para GNOME"
-
-#: ../data/org.gnome.Builder.desktop.in.in.h:3
-msgid "Build;Develop;"
-msgstr "Construir;Desarrollar;"
 
 #: ../data/gsettings/org.gnome.builder.build.gschema.xml.in.h:1
 msgid "Build Parallelism"
@@ -665,109 +784,207 @@ msgstr "_Pegar"
 msgid "_Delete"
 msgstr "_Eliminar"
 
-#: ../data/gtk/menus.ui.h:25 ../plugins/terminal/gtk/menus.ui.h:4
+#: ../data/gtk/menus.ui.h:25
+#: ../libide/preferences/ide-preferences-builtin.c:173
+msgid "Highlighting"
+msgstr "Resaltado"
+
+#: ../data/gtk/menus.ui.h:26 ../plugins/terminal/gtk/menus.ui.h:4
 msgid "Selection"
 msgstr "Selección"
 
-#: ../data/gtk/menus.ui.h:26 ../plugins/terminal/gtk/menus.ui.h:5
+#: ../data/gtk/menus.ui.h:27 ../plugins/terminal/gtk/menus.ui.h:5
 msgid "Select _All"
 msgstr "Seleccionar _todo"
 
-#: ../data/gtk/menus.ui.h:27 ../plugins/terminal/gtk/menus.ui.h:6
+#: ../data/gtk/menus.ui.h:28 ../plugins/terminal/gtk/menus.ui.h:6
 msgid "Select _None"
 msgstr "No seleccionar _nada"
 
-#: ../data/gtk/menus.ui.h:28
+#: ../data/gtk/menus.ui.h:29
 msgid "All _Upper Case"
 msgstr "Todo en _mayúsculas"
 
-#: ../data/gtk/menus.ui.h:29
+#: ../data/gtk/menus.ui.h:30
 msgid "All _Lower Case"
 msgstr "Todo en mi_núsculas"
 
-#: ../data/gtk/menus.ui.h:30
+#: ../data/gtk/menus.ui.h:31
 msgid "_Invert Case"
 msgstr "_Insertar mayúsculas y minúsculas"
 
-#: ../data/gtk/menus.ui.h:31
+#: ../data/gtk/menus.ui.h:32
 msgid "_Title Case"
 msgstr "Mayúsculas y minúsculas del _título"
 
-#: ../data/gtk/menus.ui.h:32
+#: ../data/gtk/menus.ui.h:33
 msgid "Join Lines"
 msgstr "Unir líneas"
 
-#: ../data/gtk/menus.ui.h:33
+#: ../data/gtk/menus.ui.h:34
 msgid "Sort Lines"
 msgstr "Ordenar líneas"
 
-#: ../data/gtk/menus.ui.h:34
+#: ../data/gtk/menus.ui.h:35
 msgid "Zoom"
 msgstr "Ampliación"
 
-#: ../data/gtk/menus.ui.h:35
+#: ../data/gtk/menus.ui.h:36
 msgid "Zoom _In"
 msgstr "_Ampliar"
 
-#: ../data/gtk/menus.ui.h:36
+#: ../data/gtk/menus.ui.h:37
 msgid "Zoom _Out"
 msgstr "_Reducir"
 
-#: ../data/gtk/menus.ui.h:37
+#: ../data/gtk/menus.ui.h:38
 msgid "Reset"
 msgstr "Reiniciar"
 
-#: ../data/gtk/menus.ui.h:38
+#: ../data/gtk/menus.ui.h:39
 msgid "_Wrap Around"
 msgstr "_Volver al principio"
 
-#: ../data/gtk/menus.ui.h:39
+#: ../data/gtk/menus.ui.h:40
 msgid "Cu_t"
 msgstr "C_ortar"
 
-#: ../data/gtk/menus.ui.h:40
+#: ../data/gtk/menus.ui.h:41
 msgid "Split"
 msgstr "Dividir"
 
-#: ../data/gtk/menus.ui.h:41
+#: ../data/gtk/menus.ui.h:42
 msgid "Split Left"
 msgstr "Dividir por la izquierda"
 
-#: ../data/gtk/menus.ui.h:42
+#: ../data/gtk/menus.ui.h:43
 msgid "Split Right"
 msgstr "Dividir por la derecha"
 
-#: ../data/gtk/menus.ui.h:43
+#: ../data/gtk/menus.ui.h:44
 msgid "Split Down"
 msgstr "Dividir por abajo"
 
-#: ../data/gtk/menus.ui.h:44
+#: ../data/gtk/menus.ui.h:45
 msgid "Move"
 msgstr "Mover"
 
-#: ../data/gtk/menus.ui.h:45
+#: ../data/gtk/menus.ui.h:46
 msgid "Move Left"
 msgstr "Mover a la izquierda"
 
-#: ../data/gtk/menus.ui.h:46
+#: ../data/gtk/menus.ui.h:47
 msgid "Move Right"
 msgstr "Mover a la derecha"
 
-#: ../data/gtk/menus.ui.h:47
+#: ../data/gtk/menus.ui.h:48
 msgid "_Save"
 msgstr "_Guardar"
 
-#: ../data/gtk/menus.ui.h:48
+#: ../data/gtk/menus.ui.h:49
 msgid "_Save As"
 msgstr "Guardar _como"
 
-#: ../data/gtk/menus.ui.h:49
+#: ../data/gtk/menus.ui.h:50
 msgid "_Print"
 msgstr "Im_primir"
 
-#: ../data/gtk/menus.ui.h:50
+#: ../data/gtk/menus.ui.h:51
 msgid "_Close"
 msgstr "_Cerrar"
+
+#: ../data/org.gnome.Builder.appdata.xml.in.h:1
+#: ../data/org.gnome.Builder.desktop.in.in.h:1
+#: ../data/style-schemes/builder.xml.h:1
+#: ../libide/application/ide-application.c:462
+#: ../libide/preferences/ide-preferences-builtin.c:127
+#: ../libide/workbench/ide-workbench.c:560
+msgid "Builder"
+msgstr "Builder"
+
+#: ../data/org.gnome.Builder.appdata.xml.in.h:2
+#: ../libide/application/ide-application-actions.c:115
+msgid "An IDE for GNOME"
+msgstr "Un EID para GNOME"
+
+#: ../data/org.gnome.Builder.appdata.xml.in.h:3
+msgid ""
+"Builder is an actively developed Integrated Development Environment for "
+"GNOME. It combines integrated support for essential GNOME technologies such "
+"as GTK+, GLib, and GNOME APIs with features that any developer will "
+"appreciate, like syntax highlighting and snippets."
+msgstr ""
+"Builder es un entorno de desarrollo integrado para GNOME gestionado "
+"activamente. Combina soporte integrado para las tecnologías esenciales de "
+"GNOME, tales como GTK+, GLib y las API de GNOME con características que "
+"cualquier desarrollador apreciará, como el resaltado de sintaxis y los "
+"fragmentos."
+
+#: ../data/org.gnome.Builder.appdata.xml.in.h:4
+msgid ""
+"You can rely on predictable releases of Builder with each new release of "
+"GNOME every six months."
+msgstr ""
+"Puede apoyarse en las publicaciones previstas de Builder con cada nueva "
+"versión de GNOME cada seis meses."
+
+#: ../data/org.gnome.Builder.appdata.xml.in.h:5
+msgid "Features:"
+msgstr "Características:"
+
+#: ../data/org.gnome.Builder.appdata.xml.in.h:6
+msgid "Built in syntax highlighting for many languages"
+msgstr "Resaltado de sintaxis integrado para muchos lenguajes"
+
+#: ../data/org.gnome.Builder.appdata.xml.in.h:7
+msgid "Side-by-side code editors"
+msgstr "Editores de código de lado a lado"
+
+#: ../data/org.gnome.Builder.appdata.xml.in.h:8
+msgid "Integration with Git"
+msgstr "Integración con Git"
+
+#: ../data/org.gnome.Builder.appdata.xml.in.h:9
+msgid "Integration with Autotools"
+msgstr "Integración con Autotools"
+
+#: ../data/org.gnome.Builder.appdata.xml.in.h:10
+msgid "Clang based auto-completion, semantic highlighting, and diagnostics"
+msgstr ""
+"Completado automático basado en Clang, resaltado semántico y diagnósticos"
+
+#: ../data/org.gnome.Builder.appdata.xml.in.h:11
+msgid "Python based auto-completion, semantic highlighting, and diagnostics"
+msgstr ""
+"Completado automático basado en Python, resaltado semántico y diagnósticos"
+
+#: ../data/org.gnome.Builder.appdata.xml.in.h:12
+msgid "Vala based auto-completion and diagnostics"
+msgstr "Completado automático basado en Vala y diagnósticos"
+
+#: ../data/org.gnome.Builder.appdata.xml.in.h:13
+msgid "Auto indentation support for C, Python, Vala, and XML"
+msgstr "Soporte de sangrado automático para C, Python, Vala y XML"
+
+#: ../data/org.gnome.Builder.appdata.xml.in.h:14
+msgid "HTML/Markdown live preview"
+msgstr "Vista previa en directo del marcado/HTML"
+
+#: ../data/org.gnome.Builder.appdata.xml.in.h:15
+msgid "Optional Vim-style editing"
+msgstr "Edición estilo Vim opcional"
+
+#: ../data/org.gnome.Builder.appdata.xml.in.h:16
+msgid "Preview support for building with Xdg-App runtimes"
+msgstr "Soporte de vista previa para la construcción con rutinas de Xdg-App"
+
+#: ../data/org.gnome.Builder.desktop.in.in.h:2
+msgid "Build software for GNOME"
+msgstr "Construir software para GNOME"
+
+#: ../data/org.gnome.Builder.desktop.in.in.h:3
+msgid "Build;Develop;"
+msgstr "Construir;Desarrollar;"
 
 #: ../data/style-schemes/builder-dark.xml.h:1
 msgid "Builder Dark"
@@ -887,6 +1104,15 @@ msgstr "Falló al guardar el búfer, ignorando reclamación."
 msgid "%s does not support building"
 msgstr "%s no soporta la construcción"
 
+#: ../libide/buildsystem/ide-build-manager.c:478
+#| msgid "An unload request is already pending"
+msgid "A build is already in progress"
+msgstr "Ya hay una construcción en proceso"
+
+#: ../libide/buildsystem/ide-build-manager.c:771
+msgid "Ready"
+msgstr "Preparado"
+
 #: ../libide/buildsystem/ide-build-result.c:249
 msgid "Failed to open stderr stream."
 msgstr "Falló al abrir el flujo de error estándar."
@@ -911,7 +1137,7 @@ msgstr "Predeterminado"
 msgid "The device \"%s\" could not be found."
 msgstr "No se pudo encontrar el dispositivo «%s»."
 
-#: ../libide/directory/ide-directory-vcs.c:199
+#: ../libide/directory/ide-directory-vcs.c:55
 msgid "unversioned"
 msgstr "sin versionar"
 
@@ -919,17 +1145,17 @@ msgstr "sin versionar"
 msgid "No file was provided."
 msgstr "No se ha proporcionado ningún archivo."
 
-#: ../libide/editor/ide-editor-frame.c:82
+#: ../libide/editor/ide-editor-frame.c:138
 #, c-format
 msgid "Line %u, Column %u"
 msgstr "Línea %u, Columna %u"
 
-#: ../libide/editor/ide-editor-frame.c:254
+#: ../libide/editor/ide-editor-frame.c:310
 #, c-format
 msgid "%u of %u"
 msgstr "%u de %u"
 
-#: ../libide/editor/ide-editor-frame.c:792
+#: ../libide/editor/ide-editor-frame.c:963
 #: ../plugins/project-tree/gtk/menus.ui.h:1
 msgid "Re_veal in Project Tree"
 msgstr "_Mostrar en el árbol del proyectos"
@@ -958,7 +1184,6 @@ msgstr ""
 "mayúsculas y minúsculas"
 
 #: ../libide/editor/ide-editor-frame.ui.h:7
-#| msgid "Match as _Regular Expression"
 msgid "Regular expressions"
 msgstr "Expresiones regulares"
 
@@ -967,7 +1192,6 @@ msgid "Case sensitive"
 msgstr "Sensible a mayúsculas y minúsculas"
 
 #: ../libide/editor/ide-editor-frame.ui.h:9
-#| msgid "Match _Entire Word Only"
 msgid "Match whole word only"
 msgstr "Coincidir sólo con la palabra completa"
 
@@ -1052,7 +1276,7 @@ msgstr "Indique un número entre 1 y %u"
 
 #: ../libide/editor/ide-editor-view.ui.h:2
 #: ../libide/greeter/ide-greeter-perspective.ui.h:10
-#: ../libide/workbench/ide-omni-bar.ui.h:7
+#: ../libide/workbench/ide-omni-bar.ui.h:9
 msgid "_Cancel"
 msgstr "_Cancelar"
 
@@ -1159,11 +1383,11 @@ msgstr "Falló al inicializar los parámetros predeterminados."
 msgid "You must call %s() before using libide."
 msgstr "Debe llamar a %s() antes de usar libide"
 
-#: ../libide/ide-context.c:1838
+#: ../libide/ide-context.c:1863
 msgid "An unload request is already pending"
 msgstr "Ya hay una solicitud de descarga pendiente"
 
-#: ../libide/ide-context.c:1957
+#: ../libide/ide-context.c:1982
 msgid "Context has already been restored."
 msgstr "Ya se ha restaurado el contexto."
 
@@ -1675,10 +1899,6 @@ msgstr "Sólo al principio"
 msgid "Code Insight"
 msgstr "Percepción del código"
 
-#: ../libide/preferences/ide-preferences-builtin.c:173
-msgid "Highlighting"
-msgstr "Resaltado"
-
 #: ../libide/preferences/ide-preferences-builtin.c:174
 msgid "Semantic Highlighting"
 msgstr "Resaltado semántico"
@@ -1811,8 +2031,8 @@ msgid "Number of CPU"
 msgstr "Número de CPU"
 
 #: ../libide/preferences/ide-preferences-builtin.c:299
-#: ../libide/workbench/ide-omni-bar.ui.h:8
-#: ../plugins/build-tools/gbp-build-panel.c:388
+#: ../libide/workbench/ide-omni-bar.ui.h:10
+#: ../plugins/build-tools/gbp-build-panel.c:386
 msgid "Build"
 msgstr "Construir"
 
@@ -1908,7 +2128,21 @@ msgstr "El script debe encontrarse en el sistema de archivos local."
 msgid "The script \"%s\" is not a PyGObject file."
 msgstr "El script «%s» no es un archivo de PyGObject"
 
-#: ../libide/runtimes/ide-runtime-manager.c:100
+#: ../libide/runner/ide-run-manager.c:128
+msgid "Cannot run target, another target is running"
+msgstr "No se puede ejecutar el objetivo, ya ha otro objetivo en ejecución"
+
+#: ../libide/runner/ide-run-manager.c:209
+#: ../plugins/autotools/ide-autotools-build-task.c:438
+#| msgid "Failed to locate runtime \"%s\""
+msgid "Failed to locate runtime"
+msgstr "Falló al buscar la rutina"
+
+#: ../libide/runner/ide-runner.c:123
+msgid "Process quit unexpectedly"
+msgstr "El proceso ha terminado de manera inesperada"
+
+#: ../libide/runtimes/ide-runtime-manager.c:104
 msgid "Host operating system"
 msgstr "Sistema operativo del equipo"
 
@@ -1939,17 +2173,17 @@ msgstr "Falló al abrir la carpeta: %s"
 msgid "Failed to load file: %s: %s"
 msgstr "Falló al cargar el archivo: %s: %s"
 
-#: ../libide/sourceview/ide-source-view.c:5112
+#: ../libide/sourceview/ide-source-view.c:5110
 #, c-format
 msgid "Insert “%s”"
 msgstr "Insertar «%s»"
 
-#: ../libide/sourceview/ide-source-view.c:5114
+#: ../libide/sourceview/ide-source-view.c:5112
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "Reemplazar «%s» con «%s»"
 
-#: ../libide/sourceview/ide-source-view.c:5228
+#: ../libide/sourceview/ide-source-view.c:5226
 msgid "Apply Fix-It"
 msgstr "Aplicar corrección"
 
@@ -2055,6 +2289,11 @@ msgstr "Cerrar el documento actual"
 msgid "untitled document"
 msgstr "documento sin título"
 
+#. Translators: "Target" is providing context to the selected build configuration
+#: ../libide/workbench/ide-omni-bar.c:365
+msgid "Target"
+msgstr "Objetivo"
+
 #. Translators, missing means we could not locate the runtime
 #: ../libide/workbench/ide-omni-bar-row.c:88
 msgid "missing"
@@ -2074,46 +2313,46 @@ msgstr "Dispositivo"
 msgid "Runtime"
 msgstr "Tiempo de ejecución"
 
-#. Translators: "Target" is providing context to the selected build configuration
-#: ../libide/workbench/ide-omni-bar.c:218
-msgid "Target"
-msgstr "Objetivo"
-
-#: ../libide/workbench/ide-omni-bar.c:347
-#: ../libide/workbench/ide-omni-bar.c:426
-msgid "Last Build"
-msgstr "Última construcción"
-
 #: ../libide/workbench/ide-omni-bar.ui.h:1
 msgid "Build project (Ctrl+F7)"
 msgstr "Construir el proyecto (Ctrl+F7)"
 
 #: ../libide/workbench/ide-omni-bar.ui.h:2
+#| msgid "Cancel"
+msgid "Cancel build"
+msgstr "Cancelar instalación"
+
+#: ../libide/workbench/ide-omni-bar.ui.h:3
 #: ../plugins/project-tree/gb-project-tree-addin.c:105
 msgid "Project"
 msgstr "Proyecto"
 
-#: ../libide/workbench/ide-omni-bar.ui.h:3
+#: ../libide/workbench/ide-omni-bar.ui.h:4
 msgid "Branch"
 msgstr "Rama"
 
-#: ../libide/workbench/ide-omni-bar.ui.h:4
+#: ../libide/workbench/ide-omni-bar.ui.h:5
 msgid "Build Profile"
 msgstr "Construir perfil"
 
-#: ../libide/workbench/ide-omni-bar.ui.h:5
+#: ../libide/workbench/ide-omni-bar.ui.h:6
+#| msgid "Last Build"
+msgid "Last build"
+msgstr "Última construcción"
+
+#: ../libide/workbench/ide-omni-bar.ui.h:7
 msgid "Failed"
 msgstr "Falló"
 
-#: ../libide/workbench/ide-omni-bar.ui.h:6
+#: ../libide/workbench/ide-omni-bar.ui.h:8
 msgid "View Output"
 msgstr "Ver salida"
 
-#: ../libide/workbench/ide-omni-bar.ui.h:9
+#: ../libide/workbench/ide-omni-bar.ui.h:11
 msgid "Rebuild"
 msgstr "Volver a construir"
 
-#: ../libide/workbench/ide-omni-bar.ui.h:10
+#: ../libide/workbench/ide-omni-bar.ui.h:12
 msgid "Clean"
 msgstr "Limpiar"
 
@@ -2134,22 +2373,38 @@ msgstr "Mostrar el menú del banco de trabajo"
 msgid "Press Ctrl+. to search"
 msgstr "Pulse Ctrl+. para buscar"
 
-#: ../plugins/autotools/ide-autotools-builder.c:49
+#: ../plugins/autotools/ide-autotools-builder.c:47
 msgid "Build cancelled"
 msgstr "Construcción cancelada"
 
-#: ../plugins/autotools/ide-autotools-builder.c:51
+#: ../plugins/autotools/ide-autotools-builder.c:49
 msgid "Build failed"
 msgstr "Fallo al construir"
 
-#: ../plugins/autotools/ide-autotools-builder.c:57
+#: ../plugins/autotools/ide-autotools-builder.c:55
 msgid "Build successful"
 msgstr "Construcción correcta"
 
-#: ../plugins/autotools/ide-autotools-builder.c:161
-#: ../plugins/autotools/ide-autotools-build-task.c:920
+#: ../plugins/autotools/ide-autotools-builder.c:159
+#: ../plugins/autotools/ide-autotools-builder.c:240
+#: ../plugins/autotools/ide-autotools-build-task.c:965
 msgid "Building…"
 msgstr "Construyendo…"
+
+#: ../plugins/autotools/ide-autotools-builder.c:201
+#| msgid "Build cancelled"
+msgid "Install cancelled"
+msgstr "Instalación cancelada"
+
+#: ../plugins/autotools/ide-autotools-builder.c:203
+#| msgid "Build failed"
+msgid "Install failed"
+msgstr "Fallo al instalar"
+
+#: ../plugins/autotools/ide-autotools-builder.c:209
+#| msgid "Build successful"
+msgid "Install successful"
+msgstr "Instalación correcta"
 
 #: ../plugins/autotools/ide-autotools-build-system.c:170
 msgid "Failed to locate configure.ac"
@@ -2159,46 +2414,52 @@ msgstr "Falló al buscar configure.ac"
 msgid "Directory must be on a locally mounted filesystem."
 msgstr "La carpeta debe estar en un sistema de archivos local."
 
-#: ../plugins/autotools/ide-autotools-build-task.c:556
-msgid "Cannot execute build task more than once."
-msgstr "No es posible ejecutar la tarea de construcción más de una vez."
+#: ../plugins/autotools/ide-autotools-build-task.c:427
+#| msgid "Failed to locate device \"%s\""
+msgid "Failed to locate device"
+msgstr "Falló al buscar el dispositivo"
 
-#: ../plugins/autotools/ide-autotools-build-task.c:690
+#: ../plugins/autotools/ide-autotools-build-task.c:594
+#| msgid "Cannot execute build task more than once."
+msgid "Cannot execute build task more than once"
+msgstr "No se puede ejecutar la tarea de construcción más de una vez"
+
+#: ../plugins/autotools/ide-autotools-build-task.c:735
 msgid "Failed to create build directory."
 msgstr "Falló al crear la carpeta de construcción."
 
-#: ../plugins/autotools/ide-autotools-build-task.c:699
+#: ../plugins/autotools/ide-autotools-build-task.c:744
 #, c-format
 msgid "'%s' is not a directory."
 msgstr "«%s» no es una carpeta."
 
-#: ../plugins/autotools/ide-autotools-build-task.c:738
+#: ../plugins/autotools/ide-autotools-build-task.c:783
 #, c-format
 msgid "autogen.sh is missing from project directory (%s)."
 msgstr "autogen.sh no se encuentra en la carpeta del proyecto (%s)."
 
-#: ../plugins/autotools/ide-autotools-build-task.c:748
+#: ../plugins/autotools/ide-autotools-build-task.c:793
 msgid "autogen.sh is not executable."
 msgstr "autogen.sh no es ejecutable."
 
-#: ../plugins/autotools/ide-autotools-build-task.c:752
+#: ../plugins/autotools/ide-autotools-build-task.c:797
 msgid "Running autogen…"
 msgstr "Ejecutando autogen…"
 
-#: ../plugins/autotools/ide-autotools-build-task.c:786
+#: ../plugins/autotools/ide-autotools-build-task.c:831
 #, c-format
 msgid "autogen.sh failed to create configure (%s)"
 msgstr "autogen.sh falló al crear configure (%s)"
 
-#: ../plugins/autotools/ide-autotools-build-task.c:821
+#: ../plugins/autotools/ide-autotools-build-task.c:866
 msgid "Running configure…"
 msgstr "Ejecutando configure…"
 
-#: ../plugins/autotools/ide-autotools-build-task.c:918
+#: ../plugins/autotools/ide-autotools-build-task.c:963
 msgid "Cleaning…"
 msgstr "Limpiando…"
 
-#: ../plugins/autotools/ide-makecache.c:1124
+#: ../plugins/autotools/ide-makecache.c:1127
 msgid "Invalid makefile provided, ignoring."
 msgstr "Se ha proporcionado un Makefile no válido, ignorando."
 
@@ -2272,15 +2533,15 @@ msgid_plural "%d errors"
 msgstr[0] "%d error"
 msgstr[1] "%d errores"
 
-#: ../plugins/build-tools/gbp-build-panel.c:248
+#: ../plugins/build-tools/gbp-build-panel.c:246
 msgid "Errors"
 msgstr "Errores"
 
-#: ../plugins/build-tools/gbp-build-panel.c:251
+#: ../plugins/build-tools/gbp-build-panel.c:249
 msgid "Warnings"
 msgstr "Advertencias"
 
-#: ../plugins/build-tools/gbp-build-panel.c:254
+#: ../plugins/build-tools/gbp-build-panel.c:252
 msgid "Notes"
 msgstr "Notas"
 
@@ -2476,6 +2737,62 @@ msgstr "anónimo"
 msgid "clang_codeCompleteAt() only works on local files"
 msgstr "clang_codeCompleteAt() solo funciona con archivos locales"
 
+#: ../plugins/color-picker/gb-color-picker-prefs-palette-row.c:175
+msgid "Palette name"
+msgstr "Nombre de la paleta"
+
+#: ../plugins/color-picker/gb-color-picker-prefs-palette-row.c:177
+#| msgid "Enter the name of the directory to create"
+msgid "Enter a new name for the palette"
+msgstr "Introduzca un nombre nuevo para la paleta"
+
+#: ../plugins/color-picker/gb-color-picker-prefs.c:169
+msgid "Load palette"
+msgstr "Cargar paleta"
+
+#: ../plugins/color-picker/gb-color-picker-prefs.c:196
+msgid "Save palette"
+msgstr "Guardar paleta"
+
+#: ../plugins/color-picker/gb-color-picker-prefs.c:592
+msgid "All files"
+msgstr "Todos los archivos"
+
+#: ../plugins/color-picker/gb-color-picker-prefs.c:596
+msgid "All supported palettes formats"
+msgstr "Todos los formatos de paletas soportados"
+
+#: ../plugins/color-picker/gb-color-picker-prefs.c:601
+msgid "Gimp palette"
+msgstr "Paleta de Gimp"
+
+#: ../plugins/color-picker/gb-color-picker-prefs.c:605
+msgid "Gnome-builder palette"
+msgstr "Paleta de gnome-builder"
+
+#: ../plugins/color-picker/gb-color-picker-workbench-addin.c:193
+msgid "Colors"
+msgstr "Colores"
+
+#: ../plugins/color-picker/gtk/color-picker.ui.h:2
+msgid "Try loading or generating a palette by using the menu"
+msgstr "Intentar cargar o generar una planeta usando el menú"
+
+#: ../plugins/color-picker/gtk/color-picker-preview.ui.h:1
+#| msgctxt "shortcut window"
+#| msgid "Join selected lines"
+msgid "No selected palettes"
+msgstr "No hay paletas seleccionadas"
+
+#: ../plugins/color-picker/gtk/color-picker-preview.ui.h:2
+#| msgid "Select a Template"
+msgid "Select a palette file"
+msgstr "Seleccionar un archivo de paleta"
+
+#: ../plugins/color-picker/gtk/menus.ui.h:1
+msgid "Enable color picker"
+msgstr "Activar selector de color"
+
 #: ../plugins/command-bar/gb-command-bar.c:302
 #, c-format
 msgid "Command not found: %s"
@@ -2520,22 +2837,22 @@ msgstr "Opción desconocida: %s"
 msgid "Cannot find colorscheme '%s'"
 msgstr "No se puede encontrar el esquema de color «%s»"
 
-#: ../plugins/command-bar/gb-vim.c:468 ../plugins/command-bar/gb-vim.c:594
+#: ../plugins/command-bar/gb-vim.c:467 ../plugins/command-bar/gb-vim.c:591
 #, c-format
 msgid "Failed to locate working directory"
 msgstr "Falló al buscar la carpeta de trabajo"
 
-#: ../plugins/command-bar/gb-vim.c:712
+#: ../plugins/command-bar/gb-vim.c:707
 #, c-format
 msgid "Invalid :syntax subcommand: %s"
 msgstr "Subcomando :syntax no válido: %s"
 
-#: ../plugins/command-bar/gb-vim.c:1151
+#: ../plugins/command-bar/gb-vim.c:1146
 #, c-format
 msgid "Invalid search and replace request"
 msgstr "Solicitud de buscar y reemplazar no válida"
 
-#: ../plugins/command-bar/gb-vim.c:1257
+#: ../plugins/command-bar/gb-vim.c:1252
 #, c-format
 msgid "Not a command: %s"
 msgstr "No es un comando: %s"
@@ -2882,11 +3199,6 @@ msgstr "Vacío"
 msgid "Rename %s"
 msgstr "Renombrar %s"
 
-#: ../plugins/project-tree/gb-rename-file-popover.ui.h:2
-#: ../plugins/project-tree/gtk/menus.ui.h:10
-msgid "_Rename"
-msgstr "_Renombrar"
-
 #: ../plugins/project-tree/gtk/menus.ui.h:2
 msgid "_New"
 msgstr "_Nuevo"
@@ -2946,6 +3258,11 @@ msgstr "_Contraer todos los nodos"
 #: ../plugins/project-tree/gtk/menus.ui.h:19
 msgid "_Refresh"
 msgstr "_Actualizar"
+
+#: ../plugins/run-tools/gbp-run-workbench-addin.c:135
+#| msgid "Failed to create build directory."
+msgid "Failed to locate build target"
+msgstr "Falló al buscar el objetivo de construcción"
 
 #: ../plugins/support/gtk/menus.ui.h:1
 msgid "Generate Support Log"
@@ -3026,9 +3343,6 @@ msgstr "diagnósticos de alertas y errores de Vala"
 
 #~ msgid "Directory"
 #~ msgstr "Carpeta"
-
-#~ msgid "Enter the name of the directory to create"
-#~ msgstr "Introduzca el nombre de la carpeta que crear"
 
 #~ msgid "Location"
 #~ msgstr "Ubicación"
@@ -3152,9 +3466,6 @@ msgstr "diagnósticos de alertas y errores de Vala"
 
 #~ msgid "- List devices found on the system."
 #~ msgstr "- Listar los dispositivos encontrados en el sistema."
-
-#~ msgid "Failed to diagnose: %s\n"
-#~ msgstr "Falló al diagnossticar: %s\n"
 
 #~ msgid "No such file in project: %s\n"
 #~ msgstr "No existe el archivo en el proyecto: %s\n"
@@ -3741,9 +4052,6 @@ msgstr "diagnósticos de alertas y errores de Vala"
 #~ msgstr ""
 #~ "La clave de datos externa que comparar con la información del complemento."
 
-#~ msgid "Value"
-#~ msgstr "Valor"
-
 #~ msgid "The external data value to match from plugin info."
 #~ msgstr ""
 #~ "El valor de los datos externos que comparar con la información del "
@@ -4093,9 +4401,6 @@ msgstr "diagnósticos de alertas y errores de Vala"
 
 #~ msgid "Flags"
 #~ msgstr "Opciones"
-
-#~ msgid "Duration"
-#~ msgstr "Duración"
 
 #~ msgid "The duration of the animation"
 #~ msgstr "La duración de la animación."
@@ -4477,9 +4782,6 @@ msgstr "diagnósticos de alertas y errores de Vala"
 
 #~ msgid "The position of the pane."
 #~ msgstr "La posición del panel."
-
-#~ msgid "Symbol resolver is not supported."
-#~ msgstr "El resolutor de símbolos no está soportado."
 
 #~ msgid "C"
 #~ msgstr "C"
