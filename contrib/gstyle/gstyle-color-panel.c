@@ -637,7 +637,7 @@ static void
 search_color_entry_changed_cb (GstyleColorPanel *self,
                                GtkSearchEntry   *entry)
 {
-  GPtrArray *ar, *ar_palette;;
+  GPtrArray *ar, *ar_palette;
   GstyleColor *color;
   const gchar *str;
   GList *children;
