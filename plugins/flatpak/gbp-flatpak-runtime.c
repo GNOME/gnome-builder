@@ -94,6 +94,7 @@ gbp_flatpak_runtime_prebuild_worker (GTask        *task,
   g_autoptr(GSubprocess) subprocess = NULL;
   g_autoptr(GFile) parent = NULL;
   GError *error = NULL;
+  GPtrArray *args;
 
   g_assert (G_IS_TASK (task));
   g_assert (GBP_IS_FLATPAK_RUNTIME (self));
@@ -120,19 +121,32 @@ gbp_flatpak_runtime_prebuild_worker (GTask        *task,
     }
 
   launcher = g_subprocess_launcher_new (G_SUBPROCESS_FLAGS_NONE);
-  subprocess = g_subprocess_launcher_spawn (launcher, &error,
-                                            "flatpak",
-                                            "build-init",
-                                            build_path,
-                                            /* XXX: Fake name, probably okay, but
-                                             * can be proper once we get IdeConfiguration
-                                             * in place.
-                                             */
-                                            "org.gnome.Builder.FlatpakApp.Build",
-                                            self->sdk,
-                                            self->platform,
-                                            self->branch,
-                                            NULL);
+  args = g_ptr_array_new ();
+  g_ptr_array_add (args, "flatpak");
+  g_ptr_array_add (args, "build-init");
+  g_ptr_array_add (args, build_path);
+  /* XXX: Fake name, probably okay, but can be proper once we get
+   * IdeConfiguration in place.
+   */
+  g_ptr_array_add (args, "org.gnome.Builder.FlatpakApp.Build");
+  g_ptr_array_add (args, self->sdk);
+  g_ptr_array_add (args, self->platform);
+  g_ptr_array_add (args, self->branch);
+  g_ptr_array_add (args, NULL);
+
+#ifdef IDE_ENABLE_TRACE
+  {
+    g_autofree gchar *str = NULL;
+    str = g_strjoinv (" ", (gchar **)args->pdata);
+    IDE_TRACE_MSG ("Launching '%s'", str);
+  }
+#endif
+
+  subprocess = g_subprocess_launcher_spawnv (launcher,
+                                             (const gchar * const *)args->pdata,
+                                             &error);
+
+  g_ptr_array_free (args, TRUE);
 
   g_task_return_boolean (task, TRUE);
 }

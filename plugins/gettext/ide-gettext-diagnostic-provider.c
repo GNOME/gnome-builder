@@ -401,6 +401,7 @@ populate_cache (EggTaskCache  *cache,
   IdeFile *file = (IdeFile *)key;
   GCancellable *cancellable;
   GError *error = NULL;
+  GPtrArray *args;
 
   g_assert (EGG_IS_TASK_CACHE (cache));
   g_assert (IDE_IS_FILE (file));
@@ -438,20 +439,35 @@ populate_cache (EggTaskCache  *cache,
 
   g_assert (temp_path != NULL);
 
-  subprocess = g_subprocess_new (G_SUBPROCESS_FLAGS_STDIN_PIPE
-                                 | G_SUBPROCESS_FLAGS_STDOUT_PIPE
-                                 | G_SUBPROCESS_FLAGS_STDERR_PIPE,
-                                 &error,
-                                 "xgettext",
-                                 "--check=ellipsis-unicode",
-                                 "--check=quote-unicode",
-                                 "--check=space-ellipsis",
-                                 "-k_",
-                                 "-kN_",
-                                 "-L", xgettext_lang,
-                                 "-o" "-",
-                                 temp_path,
-                                 NULL);
+  args = g_ptr_array_new ();
+  g_ptr_array_add (args, "xgettext");
+  g_ptr_array_add (args, "--check=ellipsis-unicode");
+  g_ptr_array_add (args, "--check=quote-unicode");
+  g_ptr_array_add (args, "--check=space-ellipsis");
+  g_ptr_array_add (args, "-k_");
+  g_ptr_array_add (args, "-kN_");
+  g_ptr_array_add (args, "-L");
+  g_ptr_array_add (args, xgettext_lang);
+  g_ptr_array_add (args, "-o");
+  g_ptr_array_add (args, "-");
+  g_ptr_array_add (args, temp_path);
+  g_ptr_array_add (args, NULL);
+
+#ifdef IDE_ENABLE_TRACE
+  {
+    g_autofree gchar *str = NULL;
+    str = g_strjoinv (" ", (gchar **)args->pdata);
+    IDE_TRACE_MSG ("Launching '%s'", str);
+  }
+#endif
+
+  subprocess = g_subprocess_newv ((const gchar * const *)args->pdata,
+                                  G_SUBPROCESS_FLAGS_STDIN_PIPE
+                                  | G_SUBPROCESS_FLAGS_STDOUT_PIPE
+                                  | G_SUBPROCESS_FLAGS_STDERR_PIPE,
+                                  &error);
+
+  g_ptr_array_free (args, TRUE);
 
   if (subprocess == NULL)
     {

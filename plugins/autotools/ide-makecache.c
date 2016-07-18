@@ -518,6 +518,7 @@ ide_makecache_new_worker (GTask        *task,
   g_autoptr(GSubprocessLauncher) launcher = NULL;
   g_autoptr(GSubprocess) subprocess = NULL;
   GError *error = NULL;
+  GPtrArray *args;
   int fdcopy;
   int fd;
 
@@ -611,9 +612,28 @@ ide_makecache_new_worker (GTask        *task,
    * Spawn `make -p -n -s` in the directory containing our makefile.
    */
   launcher = g_subprocess_launcher_new (G_SUBPROCESS_FLAGS_NONE);
+  args = g_ptr_array_new ();
+  g_ptr_array_add (args, GNU_MAKE_NAME);
+  g_ptr_array_add (args, "-p");
+  g_ptr_array_add (args, "-n");
+  g_ptr_array_add (args, "-s");
+  g_ptr_array_add (args, NULL);
   g_subprocess_launcher_set_cwd (launcher, workdir);
   g_subprocess_launcher_take_stdout_fd (launcher, fdcopy);
-  subprocess = g_subprocess_launcher_spawn (launcher, &error, GNU_MAKE_NAME, "-p", "-n", "-s", NULL);
+
+#ifdef IDE_ENABLE_TRACE
+  {
+    g_autofree gchar *str = NULL;
+    str = g_strjoinv (" ", (gchar **)args->pdata);
+    IDE_TRACE_MSG ("workdir=%s Launching '%s'", workdir, str);
+  }
+#endif
+
+  subprocess = g_subprocess_launcher_spawnv (launcher,
+                                             (const gchar * const *)args->pdata,
+                                             &error);
+
+  g_ptr_array_free (args, TRUE);
   fdcopy = -1;
 
   if (!subprocess)

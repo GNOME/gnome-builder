@@ -118,6 +118,7 @@ ide_worker_process_respawn (IdeWorkerProcess *self)
   g_autofree gchar *dbus_address = NULL;
   g_autoptr(GString) verbosearg = NULL;
   GError *error = NULL;
+  GPtrArray *args;
   gint verbosity;
   gint i;
 
@@ -135,12 +136,26 @@ ide_worker_process_respawn (IdeWorkerProcess *self)
     g_string_append_c (verbosearg, 'v');
 
   launcher = g_subprocess_launcher_new (G_SUBPROCESS_FLAGS_NONE);
-  subprocess = g_subprocess_launcher_spawn (launcher, &error,
-                                            self->argv0,  /* gnome-builder */
-                                            type,         /* --type= */
-                                            dbus_address, /* --dbus-addres= */
-                                            verbosity > 0 ? verbosearg->str : NULL,
-                                            NULL);
+  args = g_ptr_array_new ();
+  g_ptr_array_add (args, self->argv0); /* gnome-builder */
+  g_ptr_array_add (args, type); /* --type= */
+  g_ptr_array_add (args, dbus_address); /* --dbus-address= */
+  g_ptr_array_add (args, verbosity > 0 ? verbosearg->str : NULL);
+  g_ptr_array_add (args, NULL);
+
+#ifdef IDE_ENABLE_TRACE
+  {
+    g_autofree gchar *str = NULL;
+    str = g_strjoinv (" ", (gchar **)args->pdata);
+    IDE_TRACE_MSG ("Launching '%s'", str);
+  }
+#endif
+
+  subprocess = g_subprocess_launcher_spawnv (launcher,
+                                             (const gchar * const *)args->pdata,
+                                             &error);
+
+  g_ptr_array_free (args, TRUE);
 
   if (subprocess == NULL)
     {
