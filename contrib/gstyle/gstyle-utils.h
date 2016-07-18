@@ -24,22 +24,26 @@
 #include <gtk/gtk.h>
 #include <gdk/gdk.h>
 
+#include "gstyle-color.h"
+
 G_BEGIN_DECLS
 
-gboolean              gstyle_str_empty0                  (const gchar     *str);
-gboolean              gstyle_utf8_is_spaces              (const gchar     *str);
-void                  draw_cairo_round_box               (cairo_t         *cr,
-                                                          GdkRectangle     rect,
-                                                          gint             tl_radius,
-                                                          gint             tr_radius,
-                                                          gint             bl_radius,
-                                                          gint             br_radius);
-void                  gstyle_utils_get_rect_resized_box  (GdkRectangle     src_rect,
-                                                          GdkRectangle    *dst_rect,
-                                                          GtkBorder       *offset);
-cairo_pattern_t      *gstyle_utils_get_checkered_pattern (void);
-void                  gstyle_utils_get_contrasted_rgba   (GdkRGBA          rgba,
-                                                          GdkRGBA         *dst_rgba);
+gboolean              gstyle_str_empty0                         (const gchar     *str);
+gboolean              gstyle_utf8_is_spaces                     (const gchar     *str);
+void                  draw_cairo_round_box                      (cairo_t         *cr,
+                                                                 GdkRectangle     rect,
+                                                                 gint             tl_radius,
+                                                                 gint             tr_radius,
+                                                                 gint             bl_radius,
+                                                                 gint             br_radius);
+void                  gstyle_utils_get_rect_resized_box         (GdkRectangle     src_rect,
+                                                                 GdkRectangle    *dst_rect,
+                                                                 GtkBorder       *offset);
+cairo_pattern_t      *gstyle_utils_get_checkered_pattern        (void);
+void                  gstyle_utils_get_contrasted_rgba          (GdkRGBA          rgba,
+                                                                 GdkRGBA         *dst_rgba);
+gboolean              gstyle_utils_is_array_contains_same_color (GPtrArray       *ar,
+                                                                 GstyleColor     *color);
 
 static inline guint32
 pack_rgba24 (GdkRGBA *rgba)

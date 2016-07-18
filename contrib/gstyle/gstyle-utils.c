@@ -170,3 +170,27 @@ gstyle_utils_get_contrasted_rgba (GdkRGBA  rgba,
 
   rgba.alpha = 1.0;
 }
+
+gboolean
+gstyle_utils_is_array_contains_same_color (GPtrArray   *ar,
+                                           GstyleColor *color)
+{
+  GstyleColor *tmp_color;
+  GdkRGBA color_rgba;
+  GdkRGBA tmp_rgba;
+
+  g_return_val_if_fail (GSTYLE_IS_COLOR (color), FALSE);
+  g_return_val_if_fail (ar != NULL, FALSE);
+
+  gstyle_color_fill_rgba (color, &color_rgba);
+
+  for (gint i = 0; i < ar->len; ++i)
+    {
+      tmp_color = g_ptr_array_index (ar, i);
+      gstyle_color_fill_rgba (tmp_color, &tmp_rgba);
+      if (gdk_rgba_equal (&color_rgba, &tmp_rgba))
+        return TRUE;
+    }
+
+  return FALSE;
+}

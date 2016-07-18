@@ -63,6 +63,8 @@ GType                            gstyle_palette_widget_sort_mode_get_type       
 
 gboolean                         gstyle_palette_widget_add                       (GstylePaletteWidget             *self,
                                                                                   GstylePalette                   *palette);
+GPtrArray                       *gstyle_palette_widget_fuzzy_parse_color_string  (GstylePaletteWidget             *self,
+                                                                                  const gchar                     *color_string);
 GstylePaletteWidgetDndLockFlags  gstyle_palette_widget_get_dnd_lock              (GstylePaletteWidget             *self);
 GList                           *gstyle_palette_widget_get_list                  (GstylePaletteWidget             *self);
 gint                             gstyle_palette_widget_get_n_palettes            (GstylePaletteWidget             *self);

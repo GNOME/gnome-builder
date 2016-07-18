@@ -599,6 +599,25 @@ component_toggled_cb (GstyleColorPanel *self,
     }
 }
 
+static gint
+search_strings_list_sort_func (GtkListBoxRow *row1,
+                               GtkListBoxRow *row2,
+                               gpointer       user_data)
+{
+  GstyleColorWidget *cw1;
+  GstyleColorWidget *cw2;
+  const gchar *name1;
+  const gchar *name2;
+
+  cw1 = GSTYLE_COLOR_WIDGET (gtk_bin_get_child (GTK_BIN (row1)));
+  name1 = gstyle_color_get_name (gstyle_color_widget_get_color (cw1));
+
+  cw2 = GSTYLE_COLOR_WIDGET (gtk_bin_get_child (GTK_BIN (row2)));
+  name2 = gstyle_color_get_name (gstyle_color_widget_get_color (cw2));
+
+  return g_strcmp0 (name1, name2);
+}
+
 static void
 search_list_add_color (GstyleColorPanel *self,
                        GstyleColor      *color)
@@ -618,11 +637,12 @@ static void
 search_color_entry_changed_cb (GstyleColorPanel *self,
                                GtkSearchEntry   *entry)
 {
-  g_autoptr (GPtrArray) ar = NULL;
+  GPtrArray *ar, *ar_palette;;
   GstyleColor *color;
   const gchar *str;
   GList *children;
   GList *l;
+  gint sum = 0;
 
   g_assert (GSTYLE_IS_COLOR_PANEL (self));
   g_assert (GTK_IS_SEARCH_ENTRY (entry));
@@ -650,13 +670,28 @@ search_color_entry_changed_cb (GstyleColorPanel *self,
   else
     {
       ar = gstyle_color_fuzzy_parse_color_string (str);
+      sum += ar->len;
       for (gint i = 0; i < ar->len; ++i)
         {
           color = g_ptr_array_index (ar, i);
           search_list_add_color (self, color);
         }
 
-      gtk_widget_set_visible (self->search_strings_popover, (ar->len > 0));
+      ar_palette = gstyle_palette_widget_fuzzy_parse_color_string (self->palette_widget, str);
+      if (ar_palette != NULL && ar_palette->len > 0)
+        {
+          sum += ar_palette->len;
+          for (gint i = 0; i < ar_palette->len; ++i)
+            {
+              color = g_ptr_array_index (ar_palette, i);
+              if (ar == NULL || !gstyle_utils_is_array_contains_same_color (ar, color))
+                search_list_add_color (self, color);
+            }
+        }
+
+      g_ptr_array_unref (ar);
+      g_ptr_array_unref (ar_palette);
+      gtk_widget_set_visible (self->search_strings_popover, (sum > 0));
     }
 }
 
@@ -1414,6 +1449,11 @@ gstyle_color_panel_init (GstyleColorPanel *self)
   self->percent_icon = get_percent_icon (self);
 
   self->preferred_unit = GSTYLE_COLOR_UNIT_VALUE;
+
+  gtk_list_box_set_sort_func (GTK_LIST_BOX (self->search_strings_list),
+                              search_strings_list_sort_func,
+                              self,
+                              NULL);
   setup_ui (self);
 }
 

@@ -19,6 +19,7 @@
 #define G_LOG_DOMAIN "gstyle-palette-widget"
 
 #include <cairo/cairo.h>
+#include <fuzzy.h>
 #include <glib/gi18n.h>
 #include <gdk/gdk.h>
 #include <math.h>
@@ -72,6 +73,8 @@ G_DEFINE_TYPE (GstylePaletteWidget, gstyle_palette_widget, GTK_TYPE_BIN)
 
 #define GSTYLE_DND_SPEED_THRESHOLD 50
 #define DND_INDEX_START (G_MININT)
+
+#define GSTYLE_COLOR_FUZZY_SEARCH_MAX_LEN 20
 
 static guint unsaved_palette_count = 0;
 
@@ -465,6 +468,100 @@ gstyle_palette_widget_on_drag_data_received (GtkWidget        *widget,
     gtk_drag_finish (context, FALSE, FALSE, time);
 
   dnd_highlight_set_from_cursor (self, -1, -1);
+}
+
+static GPtrArray *
+fuzzy_search_lookup (GstylePaletteWidget *self,
+                     Fuzzy               *fuzzy,
+                     const gchar         *key)
+{
+  g_autoptr (GArray) results = NULL;
+  GPtrArray *ar = NULL;
+  FuzzyMatch *match;
+
+  g_assert (GSTYLE_IS_PALETTE_WIDGET (self));
+  g_assert (fuzzy != NULL);
+
+  results = fuzzy_match (fuzzy, key, 1);
+  if (ar!= NULL && ar->len > 0)
+    {
+      match = &g_array_index (results, FuzzyMatch, 0);
+      if (g_strcmp0 (match->key, key))
+        ar = match->value;
+    }
+
+  return ar;
+}
+
+/**
+ * gstyle_palette_widget_fuzzy_parse_color_string:
+ * @color_string: color name to search for
+ *
+ * Returns: (transfer full) (element-type GstyleColor): A #GPtrArray of #GstyleColor for a fuzzy search.
+ */
+GPtrArray *
+gstyle_palette_widget_fuzzy_parse_color_string (GstylePaletteWidget *self,
+                                                const gchar         *color_string)
+{
+  g_autoptr (GArray) fuzzy_results = NULL;
+  Fuzzy *fuzzy;
+  GPtrArray *results;
+  GPtrArray *ar, *ar_list;
+  FuzzyMatch *match;
+  GstylePalette *palette;
+  GstyleColor *color, *new_color;
+  const gchar *name;
+  gint nb_palettes;
+  gint nb_colors;
+  gint len;
+
+  g_return_val_if_fail (GSTYLE_IS_PALETTE_WIDGET (self), NULL);
+
+  fuzzy = fuzzy_new (TRUE);
+  ar_list = g_ptr_array_new_with_free_func ((GDestroyNotify)g_ptr_array_unref);
+  nb_palettes = gstyle_palette_widget_get_n_palettes (self);
+  if (nb_palettes == 0)
+    return NULL;
+
+  for (gint n = 0; n < nb_palettes; ++n)
+    {
+      palette = gstyle_palette_widget_get_palette_at_index (self, n);
+      nb_colors = gstyle_palette_get_len (palette);
+      for (gint i = 0; i < nb_colors; ++i)
+        {
+          color = (GstyleColor *)gstyle_palette_get_color_at_index (palette, i);
+          name = gstyle_color_get_name (color);
+          ar = fuzzy_search_lookup (self, fuzzy, name);
+          if (ar == NULL)
+            {
+              ar = g_ptr_array_new ();
+              g_ptr_array_add (ar_list, ar);
+              fuzzy_insert (fuzzy, name, ar);
+              g_ptr_array_add (ar, color);
+            }
+          else if (!gstyle_utils_is_array_contains_same_color (ar, color))
+            g_ptr_array_add (ar, color);
+        }
+    }
+
+  results = g_ptr_array_new_with_free_func (g_object_unref);
+  fuzzy_results = fuzzy_match (fuzzy, color_string, GSTYLE_COLOR_FUZZY_SEARCH_MAX_LEN);
+  len = MIN (GSTYLE_COLOR_FUZZY_SEARCH_MAX_LEN, fuzzy_results->len);
+  for (gint n = 0; n < len; ++n)
+    {
+      match = &g_array_index (fuzzy_results, FuzzyMatch, n);
+      ar = match->value;
+      for (gint i = 0; i < ar->len; ++i)
+        {
+          color = g_ptr_array_index (ar, i);
+          new_color = gstyle_color_copy (color);
+          g_ptr_array_add (results, new_color);
+        }
+    }
+
+  fuzzy_unref (fuzzy);
+  g_ptr_array_free (ar_list, TRUE);
+  return results;
 }
 
 /**
