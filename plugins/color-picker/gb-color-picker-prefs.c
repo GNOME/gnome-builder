@@ -598,11 +598,11 @@ gb_color_picker_prefs_init (GbColorPickerPrefs *self)
   gtk_file_filter_add_pattern (self->gstyle_files_filter, "*.xml");
 
   self->gpl_files_filter = g_object_ref_sink (gtk_file_filter_new ());
-  gtk_file_filter_set_name (self->gpl_files_filter, _("Gimp palette"));
+  gtk_file_filter_set_name (self->gpl_files_filter, _("GIMP palette"));
   gtk_file_filter_add_pattern (self->gpl_files_filter, "*.gpl");
 
   self->builder_files_filter = g_object_ref_sink (gtk_file_filter_new ());
-  gtk_file_filter_set_name (self->builder_files_filter, _("Gnome-builder palette"));
+  gtk_file_filter_set_name (self->builder_files_filter, _("GNOME Builder palette"));
   gtk_file_filter_add_pattern (self->builder_files_filter, "*.xml");
 
   g_signal_connect_swapped (self->load_palette_button, "clicked", G_CALLBACK (load_palette_button_clicked_cb), self);

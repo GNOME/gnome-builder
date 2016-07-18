@@ -29,7 +29,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="halign">start</property>
-        <property name="label" translatable="yes">Visibility :</property>
+        <property name="label" translatable="yes">Visibility:</property>
         <style>
           <class name="cp-prefs-grouptitle"/>
         </style>
@@ -45,7 +45,7 @@
         <property name="can_focus">False</property>
         <property name="margin_top">6</property>
         <property name="margin_bottom">6</property>
-        <property name="label" translatable="yes">Select the colorspaces for which you want to see sliders in the panel.</property>
+        <property name="label" translatable="yes">Select the color spaces for which you want to see sliders in the panel.</property>
         <property name="justify">fill</property>
         <property name="wrap">True</property>
         <style>
@@ -122,7 +122,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="halign">start</property>
-        <property name="label" translatable="yes">Units :</property>
+        <property name="label" translatable="yes">Units:</property>
         <style>
           <class name="cp-prefs-grouptitle"/>
         </style>
@@ -218,7 +218,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="halign">start</property>
-        <property name="label" translatable="yes">Visibility :</property>
+        <property name="label" translatable="yes">Visibility:</property>
         <style>
           <class name="cp-prefs-grouptitle"/>
         </style>
@@ -382,7 +382,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="halign">start</property>
-        <property name="label" translatable="yes">Palette view mode :</property>
+        <property name="label" translatable="yes">Palette view mode:</property>
         <style>
           <class name="cp-prefs-grouptitle"/>
         </style>
@@ -443,7 +443,7 @@
               <object class="GtkLabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Swatchs</property>
+                <property name="label" translatable="yes">Swatches</property>
                 <style>
                   <class name="cp-prefs-grouptitle"/>
                 </style>

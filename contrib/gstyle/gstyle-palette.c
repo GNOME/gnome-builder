@@ -592,7 +592,7 @@ gstyle_palette_new_from_gpl (GFile         *file,
       g_autofree gchar *uri = g_file_get_uri (file);
 
       g_set_error (&tmp_error, GSTYLE_PALETTE_ERROR, GSTYLE_PALETTE_ERROR_EMPTY,
-                   _("%s : palette is empty\n"), uri);
+                   _("%s: palette is empty\n"), uri);
     }
 
   if (tmp_error != NULL)
@@ -696,7 +696,7 @@ gstyle_palette_new_from_xml (GFile         *file,
         {
           g_clear_object (&palette);
           g_set_error (&tmp_error, GSTYLE_PALETTE_ERROR, GSTYLE_PALETTE_ERROR_PARSE,
-                       _("%s : failed to parse\n"), uri);
+                       _("%s: failed to parse\n"), uri);
         }
 
       xmlTextReaderClose(reader);
@@ -742,7 +742,7 @@ gstyle_palette_new_from_file (GFile         *file,
     palette = gstyle_palette_new_from_gpl (file, cancellable, &tmp_error);
   else
     g_set_error (&tmp_error, GSTYLE_PALETTE_ERROR, GSTYLE_PALETTE_ERROR_FORMAT,
-                 _("%s : This file format is not supported\n"), uri);
+                 _("%s: This file format is not supported\n"), uri);
 
   /* TODO: check for duplicated color names */
 
