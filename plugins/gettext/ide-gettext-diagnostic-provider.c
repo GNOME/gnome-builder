@@ -282,7 +282,7 @@ subprocess_wait_cb (GObject      *object,
   g_autoptr(GTask) task = user_data;
   g_autoptr(GPtrArray) array = NULL;
   g_autoptr(GDataInputStream) stderr_data_input = NULL;
-  g_autoptr(GInputStream) stderr_input = NULL;
+  GInputStream *stderr_input = NULL;
   g_autoptr(IdeGettextDiagnostics) diags = NULL;
   TranslationUnit *unit;
   GError *error = NULL;
