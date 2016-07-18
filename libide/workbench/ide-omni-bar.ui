@@ -97,7 +97,7 @@
         <property name="visible">true</property>
         <child>
           <object class="GtkImage">
-            <property name="icon-name">system-run-symbolic</property>
+            <property name="icon-name">builder-build-symbolic</property>
             <property name="tooltip-text" translatable="yes">Build project (Ctrl+F7)</property>
             <property name="visible">true</property>
           </object>
