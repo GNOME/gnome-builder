@@ -8,6 +8,13 @@ contrib/gstyle/gstyle-palette.c
 contrib/gstyle/gstyle-color-panel.c
 contrib/gstyle/gstyle-color-plane.c
 contrib/gstyle/gstyle-palette-widget.c
+contrib/gstyle/data/palettes/basic.xml
+contrib/gstyle/gstyle-color-widget-actions.c
+[type: gettext/glade]contrib/gstyle/tests/data/gstyle-color-editor.ui
+contrib/gstyle/tests/data/palette.xml
+[type: gettext/glade]contrib/gstyle/ui/gstyle-color-panel.ui
+[type: gettext/glade]contrib/gstyle/ui/gstyle-color-widget.ui
+[type: gettext/glade]contrib/gstyle/ui/gstyle-rename-popover.ui
 contrib/pnl/pnl-animation.c
 contrib/search/trie.c
 contrib/tmpl/tmpl-parser.c
@@ -102,12 +109,15 @@ plugins/clang/ide-clang-preferences-addin.c
 plugins/clang/ide-clang-service.c
 plugins/clang/ide-clang-symbol-node.c
 plugins/clang/ide-clang-translation-unit.c
+plugins/color-picker/data/basic.xml
+plugins/color-picker/gb-color-picker-prefs-palette-row.c
 plugins/color-picker/gb-color-picker-prefs.c
 plugins/color-picker/gb-color-picker-workbench-addin.c
-plugins/color-picker/color_picker_plugin/data/basic.xml
-[type: gettext/glade]plugins/color-picker/color_picker_plugin/gtk/color-picker.ui
-[type: gettext/glade]plugins/color-picker/color_picker_plugin/gtk/color-picker-preview.ui
-[type: gettext/glade]plugins/color-picker/color_picker_plugin/gtk/menus.ui
+[type: gettext/glade]plugins/color-picker/gtk/color-picker-palette-menu.ui
+plugins/color-picker/gtk/color-picker-prefs.ui
+[type: gettext/glade]plugins/color-picker/gtk/color-picker.ui
+[type: gettext/glade]plugins/color-picker/gtk/color-picker-preview.ui
+[type: gettext/glade]plugins/color-picker/gtk/menus.ui
 plugins/command-bar/gb-command-bar.c
 plugins/command-bar/gb-vim.c
 [type: gettext/glade]plugins/comment-code/gtk/menus.ui
