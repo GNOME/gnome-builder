@@ -134,8 +134,6 @@ gstyle_revealer_set_reveal_child (GstyleRevealer *self,
 
   if (reveal)
     {
-      gtk_widget_get_allocated_size (GTK_WIDGET (self), &allocation, NULL);
-
       self->src_offset = self->offset;
       self->dst_offset = 1.0;
     }
@@ -146,7 +144,10 @@ gstyle_revealer_set_reveal_child (GstyleRevealer *self,
     }
 
   if (GSTYLE_IS_PALETTE_WIDGET (child))
-    self->max_height = allocation.height;
+    {
+      gtk_widget_get_allocated_size (GTK_WIDGET (self), &allocation, NULL);
+      self->max_height = allocation.height;
+    }
   else
     self->max_height = G_MAXINT;
 

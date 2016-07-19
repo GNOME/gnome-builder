@@ -934,7 +934,7 @@ update_cursor (GstyleColorPlane *self,
   GstyleColorPlanePrivate *priv = gstyle_color_plane_get_instance_private (self);
   gint left_spacing;
   gint top_spacing;
-  GstyleXYZ xyz;
+  GstyleXYZ xyz = {0};
 
   g_assert (GSTYLE_IS_COLOR_PLANE (self));
 
@@ -1199,7 +1199,7 @@ gstyle_color_plane_set_rgba (GstyleColorPlane *self,
                              const GdkRGBA    *rgba)
 {
   GstyleColorPlanePrivate *priv;
-  GstyleXYZ xyz;
+  GstyleXYZ xyz = {0};
 
   g_return_if_fail (GSTYLE_IS_COLOR_PLANE (self));
   g_return_if_fail (rgba != NULL);
@@ -1419,6 +1419,7 @@ gstyle_color_plane_set_property (GObject      *object,
         rgba_p = &rgba;
 
       gstyle_color_plane_set_rgba (self, rgba_p);
+      break;
 
     case PROP_XYZ:
       xyz_p = (GstyleXYZ *)g_value_get_boxed (value);

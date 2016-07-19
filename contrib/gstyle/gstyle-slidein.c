@@ -641,12 +641,10 @@ event_window_button_press_event_cb (GstyleSlidein *self,
                                     GstyleSlidein *unused)
 {
   GdkEventButton *button_event = (GdkEventButton *)event;
-  GtkAllocation alloc;
   GtkAllocation child_alloc;
   gboolean is_in_slide;
   GtkWidget *src_widget;
   gint dest_x, dest_y;
-  gint x1, y1;
 
   g_assert (GSTYLE_IS_SLIDEIN (self));
 
@@ -656,10 +654,7 @@ event_window_button_press_event_cb (GstyleSlidein *self,
                                     &dest_x, &dest_y);
 
   gtk_widget_get_allocated_size (self->overlay_child, &child_alloc, NULL);
-  x1 = alloc.x + child_alloc.width;
-  y1 = alloc.y + child_alloc.height;
-
-  is_in_slide = (alloc.x <= dest_x && dest_x <= x1 && alloc.y <= dest_y && dest_y <= y1);
+  is_in_slide = (0 <= dest_x && dest_x <= child_alloc.width && 0 <= dest_y && dest_y <= child_alloc.height);
   if (!is_in_slide)
     {
       gtk_grab_remove (GTK_WIDGET (self));
@@ -676,7 +671,7 @@ gstyle_slidein_remove (GtkContainer *container,
                        GtkWidget    *widget)
 {
   GstyleSlidein *self = (GstyleSlidein *)container;
-  gboolean was_visible;
+  gboolean was_visible = FALSE;
 
   g_assert (GSTYLE_IS_SLIDEIN (self));
 

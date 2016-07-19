@@ -197,7 +197,9 @@ update_hsv_saturation_color_ramp (GstyleColorPanel *self,
                                   GstyleColorScale *scale,
                                   GdkRGBA          *rgba)
 {
-  gdouble hue, saturation, value;
+  gdouble hue = 0.0;
+  gdouble saturation = 0.0;
+  gdouble value = 0.0;
   guint32 *data;
   GdkRGBA dst_rgba = {0};
 
@@ -220,7 +222,9 @@ update_hsv_value_color_ramp (GstyleColorPanel *self,
                              GstyleColorScale *scale,
                              GdkRGBA          *rgba)
 {
-  gdouble hue, saturation, value;
+  gdouble hue = 0.0;
+  gdouble saturation = 0.0;
+  gdouble value = 0.0;
   guint32 *data;
   GdkRGBA dst_rgba = {0};
 
@@ -670,11 +674,14 @@ search_color_entry_changed_cb (GstyleColorPanel *self,
   else
     {
       ar = gstyle_color_fuzzy_parse_color_string (str);
-      sum += ar->len;
-      for (gint i = 0; i < ar->len; ++i)
+      if (ar != NULL)
         {
-          color = g_ptr_array_index (ar, i);
-          search_list_add_color (self, color);
+          sum += ar->len;
+          for (gint i = 0; i < ar->len; ++i)
+            {
+              color = g_ptr_array_index (ar, i);
+              search_list_add_color (self, color);
+            }
         }
 
       ar_palette = gstyle_palette_widget_fuzzy_parse_color_string (self->palette_widget, str);

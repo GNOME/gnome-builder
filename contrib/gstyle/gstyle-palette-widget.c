@@ -494,7 +494,7 @@ fuzzy_search_lookup (GstylePaletteWidget *self,
   g_assert (fuzzy != NULL);
 
   results = fuzzy_match (fuzzy, key, 1);
-  if (ar!= NULL && ar->len > 0)
+  if (results!= NULL && results->len > 0)
     {
       match = &g_array_index (results, FuzzyMatch, 0);
       if (g_strcmp0 (match->key, key))
@@ -1336,7 +1336,7 @@ flowbox_draw_cb (GtkWidget           *flowbox,
   GtkFlowBoxChild *bin_child;
   GtkAllocation alloc;
   gint len;
-  gint x;
+  gint x = 0;
 
   g_assert (GSTYLE_IS_PALETTE_WIDGET (self));
   g_assert (GTK_IS_FLOW_BOX (flowbox));

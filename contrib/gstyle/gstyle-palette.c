@@ -872,14 +872,16 @@ gstyle_palette_set_id (GstylePalette *self,
 
   g_return_if_fail (GSTYLE_IS_PALETTE (self));
 
-  g_free (self->id);
   if (gstyle_str_empty0 (id))
     {
       num_id = g_get_real_time ();
       self->id = g_strdup_printf ("gb-cp-%lu", num_id);
     }
   else if (g_strcmp0 (self->id, id) != 0)
-    self->id = g_strdup (id);
+    {
+      g_free (self->id);
+      self->id = g_strdup (id);
+    }
 }
 
 /**
