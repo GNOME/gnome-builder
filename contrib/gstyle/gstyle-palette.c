@@ -21,6 +21,7 @@
 #include <glib/gi18n.h>
 #include <string.h>
 
+#include "gstyle-color-item.h"
 #include "gstyle-private.h"
 #include "gstyle-palette.h"
 
@@ -41,6 +42,8 @@ struct _GstylePalette
 };
 
 static void gstyle_palette_list_model_iface_init (GListModelInterface *iface);
+
+static guint generated_count = 0;
 
 G_DEFINE_QUARK (gstyle_palette_error, gstyle_palette_error)
 
@@ -749,6 +752,75 @@ gstyle_palette_new_from_file (GFile         *file,
   if (tmp_error)
     g_propagate_error (error, tmp_error);
 
+  return palette;
+}
+
+/**
+ * gstyle_palette_new_from_buffer:
+ * @buffer: a #GtkTextBUffer
+ * @begin: (nullable): a begin #GtkTextIter
+ * @end: (nullable): a end #GtkTextIter
+ * @cancellable: A #GCancellable
+ * @error: (nullable): a #GError location or %NULL
+ *
+ * Create a new #GstylePalette from a text buffer.
+ * if @begin is %NULL, the buffer start iter is used.
+ * if @end is %NULL, the buffer end is used.
+ *
+ * Returns: A #GstylePalette or %NULL if an error occur.
+ */
+GstylePalette *
+gstyle_palette_new_from_buffer (GtkTextBuffer  *buffer,
+                                GtkTextIter    *begin,
+                                GtkTextIter    *end,
+                                GCancellable   *cancellable,
+                                GError        **error)
+{
+  g_autofree gchar *text = NULL;
+  GstylePalette *palette = NULL;
+  g_autofree gchar *name = NULL;
+  GtkTextIter real_begin, real_end;
+  GtkTextIter buffer_begin, buffer_end;
+  GstyleColorItem *item;
+  GstyleColor *color;
+  GPtrArray *items;
+  GError *tmp_error = NULL;
+
+  g_return_val_if_fail (GTK_IS_TEXT_BUFFER (buffer), NULL);
+  g_return_val_if_fail (begin == NULL || gtk_text_iter_get_buffer (begin) == buffer, NULL);
+  g_return_val_if_fail (end == NULL || gtk_text_iter_get_buffer (end) == buffer, NULL);
+
+  gtk_text_buffer_get_bounds (buffer, &buffer_begin, &buffer_end);
+  real_begin = (begin == NULL) ? buffer_begin : *begin;
+  real_end = (end == NULL) ? buffer_end : *end;
+
+  text = gtk_text_buffer_get_slice (buffer, &real_begin, &real_end, FALSE);
+  items = gstyle_color_parse (text);
+  if (items == NULL)
+    {
+      g_set_error (error, GSTYLE_PALETTE_ERROR, GSTYLE_PALETTE_ERROR_PARSE,
+                   _("failed to parse\n"));
+      return NULL;
+    }
+
+  if (items->len > 0)
+    {
+      name = g_strdup_printf ("%s %i", _("Generated"), ++generated_count);
+      palette = g_object_new (GSTYLE_TYPE_PALETTE,
+                              "id", NULL,
+                              "name", name,
+                              "file", NULL,
+                              NULL);
+
+      for (gint i = 0; i < items->len; ++i)
+        {
+          item = g_ptr_array_index (items, i);
+          color = (GstyleColor *)gstyle_color_item_get_color (item);
+          gstyle_palette_add (palette, color, &tmp_error);
+        }
+    }
+
+  g_ptr_array_free (items, TRUE);
   return palette;
 }
 

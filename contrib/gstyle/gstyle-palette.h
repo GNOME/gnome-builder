@@ -21,6 +21,7 @@
 
 #include <glib-object.h>
 #include <gio/gio.h>
+#include <gtk/gtk.h>
 
 #include <libxml/xmlreader.h>
 #include <libxml/parser.h>
@@ -48,6 +49,11 @@ typedef enum
 GQuark              gstyle_palette_error_quark           (void);
 
 GstylePalette      *gstyle_palette_new                   (void);
+GstylePalette      *gstyle_palette_new_from_buffer       (GtkTextBuffer  *buffer,
+                                                          GtkTextIter    *begin,
+                                                          GtkTextIter    *end,
+                                                          GCancellable   *cancellable,
+                                                          GError        **error);
 GstylePalette      *gstyle_palette_new_from_file         (GFile          *file,
                                                           GCancellable   *cancellable,
                                                           GError        **error);
