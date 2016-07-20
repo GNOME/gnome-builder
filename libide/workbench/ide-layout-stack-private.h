@@ -19,6 +19,7 @@
 #ifndef IDE_LAYOUT_STACK_PRIVATE_H
 #define IDE_LAYOUT_STACK_PRIVATE_H
 
+#include <libpeas/peas.h>
 #include <gtk/gtk.h>
 
 #include "ide-context.h"
@@ -33,6 +34,7 @@ struct _IdeLayoutStack
   GtkBin              parent_instance;
 
   GSimpleActionGroup *actions;
+  PeasExtensionSet   *addins;
   GList              *focus_history;
   IdeBackForwardList *back_forward_list;
   GtkGesture         *swipe_gesture;

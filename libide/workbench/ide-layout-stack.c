@@ -29,10 +29,11 @@
 #include "history/ide-back-forward-item.h"
 #include "util/ide-gtk.h"
 #include "workbench/ide-layout-grid.h"
+#include "workbench/ide-layout-stack.h"
 #include "workbench/ide-layout-stack-actions.h"
+#include "workbench/ide-layout-stack-addin.h"
 #include "workbench/ide-layout-stack-private.h"
 #include "workbench/ide-layout-stack-split.h"
-#include "workbench/ide-layout-stack.h"
 #include "workbench/ide-layout-tab-bar.h"
 #include "workbench/ide-layout-view.h"
 #include "workbench/ide-workbench.h"
@@ -53,6 +54,99 @@ enum {
 
 static GParamSpec *properties [LAST_PROP];
 static guint       signals [LAST_SIGNAL];
+
+static void
+ide_layout_stack_propagate_active_view (PeasExtensionSet *extension_set,
+                                        PeasPluginInfo   *plugin_info,
+                                        PeasExtension    *exten,
+                                        gpointer          user_data)
+{
+  IdeLayoutStackAddin *addin = (IdeLayoutStackAddin *)exten;
+  IdeLayoutStack *self = user_data;
+
+  g_assert (PEAS_IS_EXTENSION_SET (extension_set));
+  g_assert (plugin_info != NULL);
+  g_assert (IDE_IS_LAYOUT_STACK_ADDIN (addin));
+  g_assert (IDE_IS_LAYOUT_STACK (self));
+
+  ide_layout_stack_addin_set_view (addin, IDE_LAYOUT_VIEW (self->active_view));
+}
+
+static void
+ide_layout_stack_extension_added (PeasExtensionSet *extension_set,
+                                  PeasPluginInfo   *plugin_info,
+                                  PeasExtension    *exten,
+                                  gpointer          user_data)
+{
+  IdeLayoutStackAddin *addin = (IdeLayoutStackAddin *)exten;
+  IdeLayoutStack *self = user_data;
+
+  g_assert (IDE_IS_LAYOUT_STACK (self));
+  g_assert (PEAS_IS_EXTENSION_SET (extension_set));
+  g_assert (plugin_info != NULL);
+  g_assert (IDE_IS_LAYOUT_STACK_ADDIN (addin));
+
+  ide_layout_stack_addin_load (addin, self);
+
+  /* Apply the current view immediately if possible */
+  if (IDE_IS_LAYOUT_VIEW (self->active_view))
+    ide_layout_stack_addin_set_view (addin, IDE_LAYOUT_VIEW (self->active_view));
+}
+
+static void
+ide_layout_stack_extension_removed (PeasExtensionSet *extension_set,
+                                    PeasPluginInfo   *plugin_info,
+                                    PeasExtension    *exten,
+                                    gpointer          user_data)
+{
+  IdeLayoutStackAddin *addin = (IdeLayoutStackAddin *)exten;
+  IdeLayoutStack *self = user_data;
+
+  g_assert (IDE_IS_LAYOUT_STACK (self));
+  g_assert (PEAS_IS_EXTENSION_SET (extension_set));
+  g_assert (plugin_info != NULL);
+  g_assert (IDE_IS_LAYOUT_STACK_ADDIN (addin));
+
+  /* Try to be symmetrical and unset the view first */
+  if (IDE_IS_LAYOUT_VIEW (self->active_view))
+    ide_layout_stack_addin_set_view (addin, NULL);
+
+  ide_layout_stack_addin_unload (addin, self);
+}
+
+static void
+ide_layout_stack_load_addins (IdeLayoutStack *self)
+{
+  PeasEngine *engine;
+
+  g_assert (IDE_IS_LAYOUT_STACK (self));
+
+  engine = peas_engine_get_default ();
+
+  self->addins = peas_extension_set_new (engine,
+                                         IDE_TYPE_LAYOUT_STACK_ADDIN,
+                                         NULL);
+
+  g_signal_connect (self->addins,
+                    "extension-added",
+                    G_CALLBACK (ide_layout_stack_extension_added),
+                    self);
+  g_signal_connect (self->addins,
+                    "extension-removed",
+                    G_CALLBACK (ide_layout_stack_extension_removed),
+                    self);
+
+  peas_extension_set_foreach (self->addins,
+                              ide_layout_stack_extension_added,
+                              self);
+}
+
+static void
+ide_layout_stack_unload_addins (IdeLayoutStack *self)
+{
+  g_assert (IDE_IS_LAYOUT_STACK (self));
+
+}
 
 void
 ide_layout_stack_add (GtkContainer *container,
@@ -312,6 +406,8 @@ ide_layout_stack_destroy (GtkWidget *widget)
 {
   IdeLayoutStack *self = (IdeLayoutStack *)widget;
 
+  ide_layout_stack_unload_addins (self);
+
   self->destroyed = TRUE;
 
   GTK_WIDGET_CLASS (ide_layout_stack_parent_class)->destroy (widget);
@@ -331,6 +427,8 @@ ide_layout_stack_constructed (GObject *object)
                            G_CONNECT_SWAPPED);
 
   _ide_layout_stack_actions_init (self);
+
+  ide_layout_stack_load_addins (self);
 }
 
 static void
@@ -538,6 +636,11 @@ ide_layout_stack_set_active_view (IdeLayoutStack *self,
         }
 
       ide_layout_tab_bar_set_view (self->tab_bar, active_view);
+
+      if (self->addins != NULL)
+        peas_extension_set_foreach (self->addins,
+                                    ide_layout_stack_propagate_active_view,
+                                    self);
 
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ACTIVE_VIEW]);
     }

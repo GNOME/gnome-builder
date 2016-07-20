@@ -154,6 +154,7 @@ libide_1_0_la_public_headers =                            \
 	workbench/ide-layout-pane.h                       \
 	workbench/ide-layout-stack-split.h                \
 	workbench/ide-layout-stack.h                      \
+	workbench/ide-layout-stack-addin.h                \
 	workbench/ide-layout-view.h                       \
 	workbench/ide-layout.h                            \
 	workbench/ide-omni-bar.h                          \
@@ -300,6 +301,7 @@ libide_1_0_la_public_sources =                            \
 	workbench/ide-layout-grid.c                       \
 	workbench/ide-layout-pane.c                       \
 	workbench/ide-layout-stack.c                      \
+	workbench/ide-layout-stack-addin.c                \
 	workbench/ide-layout-view.c                       \
 	workbench/ide-layout.c                            \
 	workbench/ide-omni-bar.c                          \
