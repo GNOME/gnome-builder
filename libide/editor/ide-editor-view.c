@@ -185,10 +185,12 @@ ide_editor_view__buffer_changed_on_volume (IdeEditorView *self,
     }
 }
 
-static const gchar *
+static gchar *
 ide_editor_view_get_special_title (IdeLayoutView *view)
 {
-  return ((IdeEditorView *)view)->title;
+  g_assert (IDE_IS_EDITOR_VIEW (view));
+
+  return g_strdup (IDE_EDITOR_VIEW (view)->title);
 }
 
 static void
@@ -634,7 +636,7 @@ ide_editor_view_hierarchy_changed (GtkWidget *widget,
     ide_editor_view_load_addins (self);
 }
 
-static const gchar *
+static gchar *
 ide_editor_view_get_title (IdeLayoutView *view)
 {
   IdeEditorView *self = (IdeEditorView *)view;
@@ -642,7 +644,7 @@ ide_editor_view_get_title (IdeLayoutView *view)
   g_assert (IDE_IS_EDITOR_VIEW (self));
 
   if (self->document)
-    return ide_buffer_get_title (self->document);
+    return g_strdup (ide_buffer_get_title (self->document));
 
   return NULL;
 }

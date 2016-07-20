@@ -37,8 +37,8 @@ struct _IdeLayoutViewClass
   gboolean       (*get_can_preview)       (IdeLayoutView             *self);
   gboolean       (*get_can_split)         (IdeLayoutView             *self);
   gboolean       (*get_modified)          (IdeLayoutView             *self);
-  const gchar   *(*get_title)             (IdeLayoutView             *self);
-  const gchar   *(*get_special_title)     (IdeLayoutView             *self);
+  gchar         *(*get_title)             (IdeLayoutView             *self);
+  gchar         *(*get_special_title)     (IdeLayoutView             *self);
   IdeLayoutView *(*create_split)          (IdeLayoutView             *self,
                                            GFile                     *file);
   void           (*set_split_view)        (IdeLayoutView             *self,
@@ -64,8 +64,8 @@ IdeLayoutView *ide_layout_view_create_split          (IdeLayoutView             
                                                       GFile                     *file);
 gboolean       ide_layout_view_get_can_preview       (IdeLayoutView             *self);
 gboolean       ide_layout_view_get_can_split         (IdeLayoutView             *self);
-const gchar   *ide_layout_view_get_title             (IdeLayoutView             *self);
-const gchar   *ide_layout_view_get_special_title     (IdeLayoutView             *self);
+gchar         *ide_layout_view_get_title             (IdeLayoutView             *self);
+gchar         *ide_layout_view_get_special_title     (IdeLayoutView             *self);
 gboolean       ide_layout_view_get_modified          (IdeLayoutView             *self);
 void           ide_layout_view_set_split_view        (IdeLayoutView             *self,
                                                       gboolean                   split_view);

@@ -114,17 +114,15 @@ ide_layout_view_set_split_view (IdeLayoutView   *self,
     IDE_LAYOUT_VIEW_GET_CLASS (self)->set_split_view (self, split_view);
 }
 
+gchar *
+ide_layout_view_get_title (IdeLayoutView *self)
 {
   g_return_val_if_fail (IDE_IS_LAYOUT_VIEW (self), NULL);
 
-
-/* XXX: Make non-const */
-const gchar *
-ide_layout_view_get_title (IdeLayoutView *self)
   if (IDE_LAYOUT_VIEW_GET_CLASS (self)->get_title)
     return IDE_LAYOUT_VIEW_GET_CLASS (self)->get_title (self);
 
-  return _("untitled document");
+  return g_strdup (_("untitled document"));
 }
 
 void
@@ -196,11 +194,11 @@ ide_layout_view_get_property (GObject    *object,
       break;
 
     case PROP_SPECIAL_TITLE:
-      g_value_set_string (value, ide_layout_view_get_special_title (self));
+      g_value_take_string (value, ide_layout_view_get_special_title (self));
       break;
 
     case PROP_TITLE:
-      g_value_set_string (value, ide_layout_view_get_title (self));
+      g_value_take_string (value, ide_layout_view_get_title (self));
       break;
 
     default:
@@ -238,9 +236,11 @@ ide_layout_view_class_init (IdeLayoutViewClass *klass)
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   /*
-   * XXX:
+   * TODO:
    *
-   * This property should be removed after 3.18 when path bar lands.
+   * This property should be removed once we move to path bar.  It's purpose is
+   * to allow us to special format filenames which may not be needed by other
+   * views such as terminal/devhelp/etc.
    */
   properties [PROP_SPECIAL_TITLE] =
     g_param_spec_string ("special-title",
@@ -258,17 +258,17 @@ ide_layout_view_init (IdeLayoutView *self)
 }
 
 /*
- * XXX:
+ * TODO:
  *
  * This function is a hack in place for 3.18 until we get the path bar
  * which will provide a better view of file paths. It should be removed
  * after 3.18 when path bar lands. Also remove the "special-title"
  * property.
  */
-const gchar *
+gchar *
 ide_layout_view_get_special_title (IdeLayoutView *self)
 {
-  const gchar *ret = NULL;
+  gchar *ret = NULL;
 
   g_return_val_if_fail (IDE_IS_LAYOUT_VIEW (self), NULL);
 

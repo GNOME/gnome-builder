@@ -50,14 +50,14 @@ gbp_devhelp_view_set_uri (GbpDevhelpView *self,
   webkit_web_view_load_uri (self->web_view1, uri);
 }
 
-static const gchar *
+static gchar *
 gbp_devhelp_view_get_title (IdeLayoutView *view)
 {
   GbpDevhelpView *self = (GbpDevhelpView *)view;
 
   g_assert (GBP_IS_DEVHELP_VIEW (view));
 
-  return webkit_web_view_get_title (self->web_view1);
+  return g_strdup (webkit_web_view_get_title (self->web_view1));
 }
 
 static void

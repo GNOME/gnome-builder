@@ -268,10 +268,10 @@ notification_received_cb (VteTerminal    *terminal,
     }
 }
 
-static const gchar *
+static gchar *
 gb_terminal_get_title (IdeLayoutView *view)
 {
-  const gchar *title;
+  const gchar *title = NULL;
   GbTerminalView *self = (GbTerminalView *)view;
 
   g_assert (GB_IS_TERMINAL_VIEW (self));
@@ -281,7 +281,7 @@ gb_terminal_get_title (IdeLayoutView *view)
   else
     title = vte_terminal_get_window_title (self->terminal_top);
 
-  return title;
+  return g_strdup (title);
 }
 
 static gboolean
