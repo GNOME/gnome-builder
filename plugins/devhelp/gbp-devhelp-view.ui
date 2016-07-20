@@ -2,14 +2,6 @@
 <interface>
   <!-- interface-requires gtk+ 3.18 -->
   <template class="GbpDevhelpView" parent="IdeLayoutView">
-    <child internal-child="controls">
-      <object class="GtkBox">
-        <property name="visible">true</property>
-        <style>
-          <class name="linked"/>
-        </style>
-      </object>
-    </child>
     <child>
       <object class="GtkPaned" id="paned">
         <property name="expand">true</property>

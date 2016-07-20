@@ -66,7 +66,6 @@ gboolean       ide_layout_view_get_can_preview       (IdeLayoutView             
 gboolean       ide_layout_view_get_can_split         (IdeLayoutView             *self);
 const gchar   *ide_layout_view_get_title             (IdeLayoutView             *self);
 const gchar   *ide_layout_view_get_special_title     (IdeLayoutView             *self);
-GtkWidget     *ide_layout_view_get_controls          (IdeLayoutView             *self);
 gboolean       ide_layout_view_get_modified          (IdeLayoutView             *self);
 void           ide_layout_view_set_split_view        (IdeLayoutView             *self,
                                                       gboolean                   split_view);

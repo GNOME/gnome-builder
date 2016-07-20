@@ -23,16 +23,7 @@
 #include "application/ide-application.h"
 #include "workbench/ide-layout-view.h"
 
-typedef struct
-{
-  GtkBox *controls;
-} IdeLayoutViewPrivate;
-
-static void buildable_iface_init (GtkBuildableIface *iface);
-
-G_DEFINE_TYPE_WITH_CODE (IdeLayoutView, ide_layout_view, GTK_TYPE_BOX,
-                         G_ADD_PRIVATE (IdeLayoutView)
-                         G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE, buildable_iface_init))
+G_DEFINE_TYPE (IdeLayoutView, ide_layout_view, GTK_TYPE_BOX)
 
 enum {
   PROP_0,
@@ -123,28 +114,13 @@ ide_layout_view_set_split_view (IdeLayoutView   *self,
     IDE_LAYOUT_VIEW_GET_CLASS (self)->set_split_view (self, split_view);
 }
 
-/**
- * ide_layout_view_get_controls:
- * @self: A #IdeLayoutView.
- *
- * Gets the controls for the view.
- *
- * Returns: (transfer none) (nullable): A #GtkWidget.
- */
-GtkWidget *
-ide_layout_view_get_controls (IdeLayoutView *self)
 {
-  IdeLayoutViewPrivate *priv = ide_layout_view_get_instance_private (self);
-
   g_return_val_if_fail (IDE_IS_LAYOUT_VIEW (self), NULL);
 
-  return GTK_WIDGET (priv->controls);
-}
 
 /* XXX: Make non-const */
 const gchar *
 ide_layout_view_get_title (IdeLayoutView *self)
-{
   if (IDE_LAYOUT_VIEW_GET_CLASS (self)->get_title)
     return IDE_LAYOUT_VIEW_GET_CLASS (self)->get_title (self);
 
@@ -202,17 +178,6 @@ ide_layout_view_notify (GObject    *object,
 }
 
 static void
-ide_layout_view_destroy (GtkWidget *widget)
-{
-  IdeLayoutView *self = (IdeLayoutView *)widget;
-  IdeLayoutViewPrivate *priv = ide_layout_view_get_instance_private (self);
-
-  g_clear_object (&priv->controls);
-
-  GTK_WIDGET_CLASS (ide_layout_view_parent_class)->destroy (widget);
-}
-
-static void
 ide_layout_view_get_property (GObject    *object,
                               guint       prop_id,
                               GValue     *value,
@@ -247,12 +212,9 @@ static void
 ide_layout_view_class_init (IdeLayoutViewClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   object_class->get_property = ide_layout_view_get_property;
   object_class->notify = ide_layout_view_notify;
-
-  widget_class->destroy = ide_layout_view_destroy;
 
   properties [PROP_CAN_SPLIT] =
     g_param_spec_boolean ("can-split",
@@ -293,36 +255,6 @@ ide_layout_view_class_init (IdeLayoutViewClass *klass)
 static void
 ide_layout_view_init (IdeLayoutView *self)
 {
-  IdeLayoutViewPrivate *priv = ide_layout_view_get_instance_private (self);
-  GtkBox *controls;
-
-  controls = g_object_new (GTK_TYPE_BOX,
-                           "orientation", GTK_ORIENTATION_HORIZONTAL,
-                           "visible", TRUE,
-                           NULL);
-  priv->controls = g_object_ref_sink (controls);
-}
-
-static GObject *
-ide_layout_view_get_internal_child (GtkBuildable *buildable,
-                                    GtkBuilder   *builder,
-                                    const gchar  *childname)
-{
-  IdeLayoutView *self = (IdeLayoutView *)buildable;
-  IdeLayoutViewPrivate *priv = ide_layout_view_get_instance_private (self);
-
-  g_assert (IDE_IS_LAYOUT_VIEW (self));
-
-  if (g_strcmp0 (childname, "controls") == 0)
-    return G_OBJECT (priv->controls);
-
-  return NULL;
-}
-
-static void
-buildable_iface_init (GtkBuildableIface *iface)
-{
-  iface->get_internal_child = ide_layout_view_get_internal_child;
 }
 
 /*
