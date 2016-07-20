@@ -18,6 +18,7 @@
 
     <file compressed="true" alias="icons/scalable/actions/builder-colorpicker-load-palette.svg">icons/palette/load-palette.svg</file>
     <file compressed="true" alias="icons/scalable/actions/builder-colorpicker-save-palette.svg">icons/palette/save-palette.svg</file>
+    <file compressed="true" alias="icons/scalable/actions/builder-colorpicker-palette-from-document.svg">icons/palette/palette-from-document.svg</file>
     <file compressed="true" alias="icons/scalable/actions/builder-colorpicker-viewmode-list.svg">icons/viewmode/viewmode-list.svg</file>
     <file compressed="true" alias="icons/scalable/actions/builder-colorpicker-viewmode-swatchs.svg">icons/viewmode/viewmode-swatchs.svg</file>
   </gresource>

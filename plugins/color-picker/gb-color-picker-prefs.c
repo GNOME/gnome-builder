@@ -46,6 +46,7 @@ struct _GbColorPickerPrefs
 
   GtkWidget                      *load_palette_button;
   GtkWidget                      *save_palette_button;
+  GtkWidget                      *generate_palette_button;
   GtkWidget                      *preview;
   GtkWidget                      *preview_placeholder;
   GtkWidget                      *preview_title;
@@ -323,6 +324,28 @@ save_palette_button_clicked_cb (GbColorPickerPrefs *self,
   dialog = create_file_save_dialog (self, selected_palette);
   g_signal_connect_object (dialog, "response", G_CALLBACK (palette_save_dialog_cb), self, G_CONNECT_SWAPPED);
   gtk_widget_show (dialog);
+}
+
+static void
+generate_palette_button_clicked_cb (GbColorPickerPrefs *self,
+                                    GtkButton          *button)
+{
+  IdeEditorView *view;
+  GtkTextBuffer *buffer;
+  GstylePalette *palette;
+
+  g_assert (GB_IS_COLOR_PICKER_PREFS (self));
+  g_assert (GTK_IS_BUTTON (button));
+
+  view = IDE_EDITOR_VIEW (self->addin->active_view);
+  buffer = GTK_TEXT_BUFFER (ide_editor_view_get_document (view));
+
+  palette = gstyle_palette_new_from_buffer (buffer, NULL, NULL, NULL, NULL);
+  if (palette != NULL)
+    {
+      gstyle_palette_widget_add (self->palette_widget, palette);
+      g_object_unref (palette);
+    }
 }
 
 static void
@@ -605,7 +628,13 @@ gb_color_picker_prefs_init (GbColorPickerPrefs *self)
                            self, G_CONNECT_SWAPPED);
 
   self->load_palette_button = GTK_WIDGET (gtk_builder_get_object (builder, "load_palette_button"));
+  g_signal_connect_swapped (self->load_palette_button, "clicked", G_CALLBACK (load_palette_button_clicked_cb), self);
+
   self->save_palette_button = GTK_WIDGET (gtk_builder_get_object (builder, "save_palette_button"));
+  g_signal_connect_swapped (self->save_palette_button, "clicked", G_CALLBACK (save_palette_button_clicked_cb), self);
+
+  self->generate_palette_button = GTK_WIDGET (gtk_builder_get_object (builder, "generate_palette_button"));
+  g_signal_connect_swapped (self->generate_palette_button, "clicked", G_CALLBACK (generate_palette_button_clicked_cb), self);
 
   self->all_files_filter = g_object_ref_sink (gtk_file_filter_new ());
   gtk_file_filter_set_name (self->all_files_filter, _("All files"));
@@ -623,9 +652,6 @@ gb_color_picker_prefs_init (GbColorPickerPrefs *self)
   self->builder_files_filter = g_object_ref_sink (gtk_file_filter_new ());
   gtk_file_filter_set_name (self->builder_files_filter, _("GNOME Builder palette"));
   gtk_file_filter_add_pattern (self->builder_files_filter, "*.xml");
-
-  g_signal_connect_swapped (self->load_palette_button, "clicked", G_CALLBACK (load_palette_button_clicked_cb), self);
-  g_signal_connect_swapped (self->save_palette_button, "clicked", G_CALLBACK (save_palette_button_clicked_cb), self);
 
   self->components_page = GTK_WIDGET (gtk_builder_get_object (builder, "components_page"));
   g_object_ref_sink (self->components_page);

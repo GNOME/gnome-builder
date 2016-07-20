@@ -5,8 +5,8 @@ import subprocess
 import shutil
 
 INKSCAPE = "/usr/bin/inkscape"
-SVG_SRC = "assets-symbolic.svg"
-TXT_SRC = "assets-symbolic.txt"
+SVG_SRC = "assets.svg"
+TXT_SRC = "assets.txt"
 
 CWD = os.getcwd()
 

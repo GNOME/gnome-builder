@@ -484,7 +484,7 @@
       <object class="GtkLabel">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Palette selection</property>
+        <property name="label" translatable="yes">Palette management</property>
         <attributes>
           <attribute name="weight" value="bold"/>
         </attributes>
@@ -499,32 +499,24 @@
     </child>
     <child>
       <object class="GtkBox">
-        <property name="homogeneous">True</property>
+        <property name="orientation">vertical</property>
         <property name="visible">1</property>
+        <property name="margin-top">12</property>
         <child>
-          <object class="GtkBox">
+          <object class="GtkButton" id="load_palette_button">
+            <property name="name">load_palette_button</property>
             <property name="visible">1</property>
-            <property name="halign">center</property>
-            <property name="orientation">vertical</property>
+            <property name="can_focus">1</property>
+            <property name="receives_default">1</property>
+            <style>
+              <class name="flat"/>
+            </style>
             <child>
-              <object class="GtkLabel">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Load</property>
-                <style>
-                  <class name="cp-prefs-grouptitle"/>
-                </style>
-              </object>
-            </child>
-            <child>
-              <object class="GtkButton" id="load_palette_button">
-                <property name="name">load_palette_button</property>
+              <object class="GtkBox">
                 <property name="visible">1</property>
-                <property name="can_focus">1</property>
-                <property name="receives_default">1</property>
-                <style>
-                  <class name="flat"/>
-                </style>
+                <property name="spacing">6</property>
+                <property name="halign">start</property>
+                <property name="orientation">horizontal</property>
                 <child>
                   <object class="GtkImage">
                     <property name="visible">True</property>
@@ -533,40 +525,88 @@
                     <property name="pixel-size">48</property>
                   </object>
                 </child>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes">Load</property>
+                    <style>
+                      <class name="cp-prefs-grouptitle"/>
+                    </style>
+                  </object>
+                </child>
               </object>
             </child>
           </object>
         </child>
         <child>
-          <object class="GtkBox">
+          <object class="GtkButton" id="save_palette_button">
+            <property name="name">save_palette_button</property>
             <property name="visible">1</property>
-            <property name="halign">center</property>
-            <property name="orientation">vertical</property>
+            <property name="can_focus">1</property>
+            <property name="receives_default">1</property>
+            <style>
+              <class name="flat"/>
+            </style>
             <child>
-              <object class="GtkLabel">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Save</property>
-                <style>
-                  <class name="cp-prefs-grouptitle"/>
-                </style>
-              </object>
-            </child>
-            <child>
-              <object class="GtkButton" id="save_palette_button">
-                <property name="name">save_palette_button</property>
+              <object class="GtkBox">
                 <property name="visible">1</property>
-                <property name="can_focus">1</property>
-                <property name="receives_default">1</property>
-                <style>
-                  <class name="flat"/>
-                </style>
+                <property name="spacing">6</property>
+                <property name="halign">start</property>
+                <property name="orientation">horizontal</property>
                 <child>
                   <object class="GtkImage">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="icon-name">builder-colorpicker-save-palette</property>
                     <property name="pixel-size">48</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes">Save</property>
+                    <style>
+                      <class name="cp-prefs-grouptitle"/>
+                    </style>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkButton" id="generate_palette_button">
+            <property name="name">generate_palette_button</property>
+            <property name="visible">1</property>
+            <property name="can_focus">1</property>
+            <property name="receives_default">1</property>
+            <style>
+              <class name="flat"/>
+            </style>
+            <child>
+              <object class="GtkBox">
+                <property name="visible">1</property>
+                <property name="spacing">6</property>
+                <property name="halign">start</property>
+                <property name="orientation">horizontal</property>
+                <child>
+                  <object class="GtkImage">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="icon-name">builder-colorpicker-palette-from-document</property>
+                    <property name="pixel-size">48</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes">From current document</property>
+                    <style>
+                      <class name="cp-prefs-grouptitle"/>
+                    </style>
                   </object>
                 </child>
               </object>

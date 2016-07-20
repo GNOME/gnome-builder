@@ -251,11 +251,19 @@ gstyleslidein gbcolorpickerprefspalettelist row button:hover {
 }
 
 gstyleslidein #load_palette_button,
-gstyleslidein #save_palette_button {
+gstyleslidein #save_palette_button,
+gstyleslidein #generate_palette_button {
   background: none;
   border: none;
   outline-offset: 0px;
   padding: 6px;
+}
+
+gstyleslidein #load_palette_button:hover,
+gstyleslidein #save_palette_button:hover,
+gstyleslidein #generate_palette_button:hover {
+  background-color: @insensitive_bg_color;
+  box-shadow: none;
 }
 
 /*
