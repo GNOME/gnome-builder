@@ -40,5 +40,10 @@
       <summary>Color strings visibility</summary>
       <description>The visible color strings.</description>
     </key>
+    <key name="filter" type="s">
+      <default>"none"</default>
+      <summary>color filter</summary>
+      <description>The filter used on the color scales and color plane.</description>
+    </key>
   </schema>
 </schemalist>

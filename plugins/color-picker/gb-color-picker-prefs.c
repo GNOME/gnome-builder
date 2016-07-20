@@ -436,6 +436,10 @@ gb_color_picker_prefs_bind_settings (GbColorPickerPrefs *self)
   g_settings_bind (self->plugin_settings,"strings-visible",
                    self->panel, "strings-visible",
                    G_SETTINGS_BIND_GET);
+
+  g_settings_bind (self->plugin_settings,"filter",
+                   self->panel, "filter",
+                   G_SETTINGS_BIND_GET);
 }
 
 static void
@@ -449,6 +453,7 @@ gb_color_picker_prefs_unbind_settings (GbColorPickerPrefs *self)
   g_settings_unbind (self->panel, "rgb-visible");
   g_settings_unbind (self->panel, "rgb-unit");
   g_settings_unbind (self->panel, "string-visible");
+  g_settings_unbind (self->panel, "filter");
 }
 
 void
