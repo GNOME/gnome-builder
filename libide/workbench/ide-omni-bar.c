@@ -753,6 +753,12 @@ ide_omni_bar_init (IdeOmniBar *self)
 
   egg_binding_group_bind (self->vcs_bindings,
                           "branch-name",
+                          self->branch_label,
+                          "label",
+                          G_BINDING_SYNC_CREATE);
+
+  egg_binding_group_bind (self->vcs_bindings,
+                          "branch-name",
                           self->popover_branch_label,
                           "label",
                           G_BINDING_SYNC_CREATE);
