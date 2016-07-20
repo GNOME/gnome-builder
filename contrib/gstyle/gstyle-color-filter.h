@@ -24,7 +24,17 @@
 
 G_BEGIN_DECLS
 
-typedef void (*GstyleColorFilter)(GdkRGBA *rgba, GdkRGBA *filter_rgba, gpointer user_data);
+typedef void (*GstyleColorFilterFunc)(GdkRGBA *rgba, GdkRGBA *filter_rgba, gpointer user_data);
+
+#define GSTYLE_TYPE_COLOR_FILTER (gstyle_color_filter_get_type())
+
+typedef enum
+{
+  GSTYLE_COLOR_FILTER_NONE,
+  GSTYLE_COLOR_FILTER_WEBSAFE
+} GstyleColorFilter;
+
+GType          gstyle_color_filter_get_type       (void);
 
 void           gstyle_color_filter_websafe        (GdkRGBA          *rgba,
                                                    GdkRGBA          *filter_rgba,

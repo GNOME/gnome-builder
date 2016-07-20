@@ -59,29 +59,29 @@ struct _GstyleColorPlaneClass
   GtkDrawingAreaClass parent;
 };
 
-GType                gstyle_color_plane_mode_get_type                 (void);
+GType                  gstyle_color_plane_mode_get_type                 (void);
 
-GstyleColorPlane    *gstyle_color_plane_new                           (void);
-GtkAdjustment       *gstyle_color_plane_get_component_adjustment      (GstyleColorPlane       *self,
-                                                                       GstyleColorComponent    comp);
-GstyleColorFilter    gstyle_color_plane_get_filter                    (GstyleColorPlane       *self);
-void                 gstyle_color_plane_get_filtered_rgba             (GstyleColorPlane       *self,
-                                                                       GdkRGBA                *rgba);
-void                 gstyle_color_plane_get_rgba                      (GstyleColorPlane       *self,
-                                                                       GdkRGBA                *rgba);
-void                 gstyle_color_plane_get_xyz                       (GstyleColorPlane       *self,
-                                                                       GstyleXYZ              *xyz);
-void                 gstyle_color_plane_set_filter                    (GstyleColorPlane       *self,
-                                                                       GstyleColorFilter       filter_cb,
-                                                                       gpointer                user_data);
-void                 gstyle_color_plane_set_mode                      (GstyleColorPlane       *self,
-                                                                       GstyleColorPlaneMode    mode);
-void                 gstyle_color_plane_set_preferred_unit            (GstyleColorPlane       *self,
-                                                                       GstyleColorUnit         preferred_unit);
-void                 gstyle_color_plane_set_rgba                      (GstyleColorPlane       *self,
-                                                                       const GdkRGBA          *rgba);
-void                 gstyle_color_plane_set_xyz                       (GstyleColorPlane       *self,
-                                                                       const GstyleXYZ        *xyz);
+GstyleColorPlane      *gstyle_color_plane_new                           (void);
+GtkAdjustment         *gstyle_color_plane_get_component_adjustment      (GstyleColorPlane       *self,
+                                                                         GstyleColorComponent    comp);
+GstyleColorFilterFunc  gstyle_color_plane_get_filter_func               (GstyleColorPlane       *self);
+void                   gstyle_color_plane_get_filtered_rgba             (GstyleColorPlane       *self,
+                                                                         GdkRGBA                *rgba);
+void                   gstyle_color_plane_get_rgba                      (GstyleColorPlane       *self,
+                                                                         GdkRGBA                *rgba);
+void                   gstyle_color_plane_get_xyz                       (GstyleColorPlane       *self,
+                                                                         GstyleXYZ              *xyz);
+void                   gstyle_color_plane_set_filter_func               (GstyleColorPlane       *self,
+                                                                         GstyleColorFilterFunc   filter_cb,
+                                                                         gpointer                user_data);
+void                   gstyle_color_plane_set_mode                      (GstyleColorPlane       *self,
+                                                                         GstyleColorPlaneMode    mode);
+void                   gstyle_color_plane_set_preferred_unit            (GstyleColorPlane       *self,
+                                                                         GstyleColorUnit         preferred_unit);
+void                   gstyle_color_plane_set_rgba                      (GstyleColorPlane       *self,
+                                                                         const GdkRGBA          *rgba);
+void                   gstyle_color_plane_set_xyz                       (GstyleColorPlane       *self,
+                                                                         const GstyleXYZ        *xyz);
 
 G_END_DECLS
 

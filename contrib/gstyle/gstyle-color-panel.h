@@ -22,6 +22,7 @@
 #include <glib-object.h>
 #include <gtk/gtk.h>
 
+#include "gstyle-color-filter.h"
 #include "gstyle-palette.h"
 #include "gstyle-palette-widget.h"
 #include "gstyle-xyz.h"

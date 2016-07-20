@@ -32,6 +32,7 @@
 #include "gstyle-color-widget.h"
 #include "gstyle-css-provider.h"
 #include "gstyle-eyedropper.h"
+#include "gstyle-color-filter.h"
 #include "gstyle-palette-widget.h"
 #include "gstyle-revealer.h"
 #include "gstyle-slidein.h"

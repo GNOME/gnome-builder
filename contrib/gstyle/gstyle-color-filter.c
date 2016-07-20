@@ -40,3 +40,24 @@ gstyle_color_filter_websafe (GdkRGBA  *rgba,
   filter_rgba->blue  = TO_WEB_COLOR (rgba->blue);
   filter_rgba->alpha = rgba->alpha;
 }
+
+GType
+gstyle_color_filter_get_type (void)
+{
+  static GType filter_type_id;
+  static const GEnumValue values[] = {
+    { GSTYLE_COLOR_FILTER_NONE,    "GSTYLE_COLOR_FILTER_NONE",    "none" },
+    { GSTYLE_COLOR_FILTER_WEBSAFE, "GSTYLE_COLOR_FILTER_WEBSAFE", "websafe" },
+    { 0 }
+  };
+
+  if (g_once_init_enter (&filter_type_id))
+    {
+      GType _type_id;
+
+      _type_id = g_enum_register_static ("GstyleColorFilter", values);
+      g_once_init_leave (&filter_type_id, _type_id);
+    }
+
+  return filter_type_id;
+}

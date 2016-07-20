@@ -49,29 +49,29 @@ G_DECLARE_FINAL_TYPE (GstyleColorScale, gstyle_color_scale, GSTYLE, COLOR_SCALE,
 
 GType                   gstyle_color_scale_kind_get_type               (void);
 
-GstyleColorScale       *gstyle_color_scale_new                         (GtkAdjustment        *adjustment);
-gint                    gstyle_color_scale_add_rgba_color_stop         (GstyleColorScale     *self,
-                                                                        gdouble               offset,
-                                                                        GdkRGBA              *rgba);
-gint                    gstyle_color_scale_add_color_stop              (GstyleColorScale     *self,
-                                                                        gdouble               offset,
-                                                                        gdouble               red,
-                                                                        gdouble               green,
-                                                                        gdouble               blue,
-                                                                        gdouble               alpha);
-void                    gstyle_color_scale_clear_color_stops           (GstyleColorScale     *self);
-GstyleColorFilter       gstyle_color_scale_get_filter                  (GstyleColorScale     *self);
-GstyleColorScaleKind    gstyle_color_scale_get_kind                    (GstyleColorScale     *self);
+GstyleColorScale       *gstyle_color_scale_new                         (GtkAdjustment         *adjustment);
+gint                    gstyle_color_scale_add_rgba_color_stop         (GstyleColorScale      *self,
+                                                                        gdouble                offset,
+                                                                        GdkRGBA               *rgba);
+gint                    gstyle_color_scale_add_color_stop              (GstyleColorScale      *self,
+                                                                        gdouble                offset,
+                                                                        gdouble                red,
+                                                                        gdouble                green,
+                                                                        gdouble                blue,
+                                                                        gdouble                alpha);
+void                    gstyle_color_scale_clear_color_stops           (GstyleColorScale      *self);
+GstyleColorFilterFunc   gstyle_color_scale_get_filter_func             (GstyleColorScale      *self);
+GstyleColorScaleKind    gstyle_color_scale_get_kind                    (GstyleColorScale      *self);
 
-gboolean                gstyle_color_scale_remove_color_stop           (GstyleColorScale     *self,
-                                                                        gint                  id);
-void                    gstyle_color_scale_set_custom_data             (GstyleColorScale     *self,
-                                                                        guint32              *data);
-void                    gstyle_color_scale_set_filter                  (GstyleColorScale     *self,
-                                                                        GstyleColorFilter     filter_cb,
-                                                                        gpointer              user_data);
-void                    gstyle_color_scale_set_kind                    (GstyleColorScale     *self,
-                                                                        GstyleColorScaleKind  kind);
+gboolean                gstyle_color_scale_remove_color_stop           (GstyleColorScale      *self,
+                                                                        gint                   id);
+void                    gstyle_color_scale_set_custom_data             (GstyleColorScale      *self,
+                                                                        guint32               *data);
+void                    gstyle_color_scale_set_filter_func             (GstyleColorScale      *self,
+                                                                        GstyleColorFilterFunc  filter_cb,
+                                                                        gpointer               user_data);
+void                    gstyle_color_scale_set_kind                    (GstyleColorScale      *self,
+                                                                        GstyleColorScaleKind   kind);
 
 G_END_DECLS
 

@@ -38,23 +38,23 @@ typedef struct _ColorStop
 
 struct _GstyleColorScale
 {
-  GtkScale              parent_instance;
+  GtkScale               parent_instance;
 
-  GstyleCssProvider    *default_provider;
+  GstyleCssProvider     *default_provider;
 
-  GstyleColorFilter     filter;
-  gpointer              filter_user_data;
+  GstyleColorFilterFunc  filter;
+  gpointer               filter_user_data;
 
-  GtkGesture           *long_press_gesture;
-  GstyleColorScaleKind  kind;
-  GSequence            *custom_color_stops;
-  cairo_pattern_t      *pattern;
-  cairo_pattern_t      *checkered_pattern;
+  GtkGesture            *long_press_gesture;
+  GstyleColorScaleKind   kind;
+  GSequence             *custom_color_stops;
+  cairo_pattern_t       *pattern;
+  cairo_pattern_t       *checkered_pattern;
 
-  cairo_surface_t      *data_surface;
-  guint32              *data_raw;
-  guint32              *data_raw_filtered;
-  gint                  data_stride;
+  cairo_surface_t       *data_surface;
+  guint32               *data_raw;
+  guint32               *data_raw_filtered;
+  gint                   data_stride;
 };
 
 G_DEFINE_TYPE (GstyleColorScale, gstyle_color_scale, GTK_TYPE_SCALE)
@@ -100,17 +100,17 @@ filter_data (GstyleColorScale *self)
 }
 
 /**
- * gstyle_color_scale_get_filter: (skip):
+ * gstyle_color_scale_get_filter_func: (skip):
  * @self: A #GstyleColorScale
  *
  * Get a pointer to the current filter function or %NULL
  * if no filter is actually set.
  *
- * Returns: (nullable): A GstyleColorFilter function pointer.
+ * Returns: (nullable): A GstyleColorFilterFunc function pointer.
  *
  */
-GstyleColorFilter
-gstyle_color_scale_get_filter (GstyleColorScale *self)
+GstyleColorFilterFunc
+gstyle_color_scale_get_filter_func (GstyleColorScale *self)
 {
   g_return_val_if_fail (GSTYLE_IS_COLOR_SCALE (self), NULL);
 
@@ -120,9 +120,9 @@ gstyle_color_scale_get_filter (GstyleColorScale *self)
 /* TODO: do a copy of orignal data so that we can remove or change the filter
  * keeping the original datas */
 /**
- * gstyle_color_scale_set_filter:
+ * gstyle_color_scale_set_filter_func:
  * @self: A #GstyleColorScale
- * @filter_cb: (scope notified) (nullable): A GstyleColorFilter filter function or
+ * @filter_cb: (scope notified) (nullable): A GstyleColorFilterFunc filter function or
  *   %NULL to unset the current filter. In this case, user_data is ignored.
  * @user_data: (closure) (nullable): user data to pass when calling the filter function
  *
@@ -133,9 +133,9 @@ gstyle_color_scale_get_filter (GstyleColorScale *self)
  *
  */
 void
-gstyle_color_scale_set_filter (GstyleColorScale  *self,
-                               GstyleColorFilter  filter_cb,
-                               gpointer           user_data)
+gstyle_color_scale_set_filter_func (GstyleColorScale      *self,
+                                    GstyleColorFilterFunc  filter_cb,
+                                    gpointer               user_data)
 {
   g_return_if_fail (GSTYLE_IS_COLOR_SCALE (self));
 

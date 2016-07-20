@@ -84,7 +84,7 @@ typedef struct
   gdouble                 cursor_y;
 
   ComputeData             data;
-  GstyleColorFilter       filter;
+  GstyleColorFilterFunc   filter;
   gpointer                filter_user_data;
 
   Component               comp [N_GSTYLE_COLOR_COMPONENT];
@@ -382,17 +382,17 @@ gstyle_color_plane_set_preferred_unit (GstyleColorPlane *self,
 }
 
 /**
- * gstyle_color_plane_get_filter: (skip):
+ * gstyle_color_plane_get_filter_func: (skip):
  * @self: A #GstyleColorPlane
  *
  * Get a pointer to the current filter function or %NULL
  * if no filter is actually set.
  *
- * Returns: (nullable): A GstyleColorFilter function pointer.
+ * Returns: (nullable): A GstyleColorFilterFunc function pointer.
  *
  */
-GstyleColorFilter
-gstyle_color_plane_get_filter (GstyleColorPlane *self)
+GstyleColorFilterFunc
+gstyle_color_plane_get_filter_func (GstyleColorPlane *self)
 {
   GstyleColorPlanePrivate *priv = gstyle_color_plane_get_instance_private (self);
 
@@ -402,9 +402,9 @@ gstyle_color_plane_get_filter (GstyleColorPlane *self)
 }
 
 /**
- * gstyle_color_plane_set_filter:
+ * gstyle_color_plane_set_filter_func:
  * @self: A #GstyleColorPlane
- * @filter_cb: (scope notified) (nullable): A GstyleColorFilter filter function or
+ * @filter_cb: (scope notified) (nullable): A GstyleColorFilterFunc filter function or
  *   %NULL to unset the current filter. In this case, user_data is ignored
  * @user_data: (closure) (nullable): user data to pass when calling the filter function
  *
@@ -412,9 +412,9 @@ gstyle_color_plane_get_filter (GstyleColorPlane *self)
  *
  */
 void
-gstyle_color_plane_set_filter (GstyleColorPlane  *self,
-                               GstyleColorFilter  filter_cb,
-                               gpointer           user_data)
+gstyle_color_plane_set_filter_func (GstyleColorPlane      *self,
+                                    GstyleColorFilterFunc  filter_cb,
+                                    gpointer               user_data)
 {
   GstyleColorPlanePrivate *priv = gstyle_color_plane_get_instance_private (self);
 
