@@ -97,24 +97,6 @@ ide_editor_view_navigate_to (IdeLayoutView     *view,
 }
 
 static gboolean
-language_to_string (GBinding     *binding,
-                    const GValue *from_value,
-                    GValue       *to_value,
-                    gpointer      user_data)
-{
-  GtkSourceLanguage *language;
-
-  language = g_value_get_object (from_value);
-
-  if (language != NULL)
-    g_value_set_string (to_value, gtk_source_language_get_name (language));
-  else
-    g_value_set_string (to_value, _("Plain Text"));
-
-  return TRUE;
-}
-
-static gboolean
 ide_editor_view_get_modified (IdeLayoutView *view)
 {
   IdeEditorView *self = (IdeEditorView *)view;
@@ -288,53 +270,6 @@ ide_editor_view__buffer_notify_language (IdeEditorView *self,
 }
 
 static void
-ide_editor_view__buffer_cursor_moved (IdeEditorView     *self,
-                                      const GtkTextIter *iter,
-                                      GtkTextBuffer     *buffer)
-{
-  GtkTextIter bounds;
-  GtkTextMark *mark;
-  gchar str[32];
-  guint line;
-  gint column;
-  gint column2;
-
-  g_assert (IDE_IS_EDITOR_VIEW (self));
-  g_assert (iter != NULL);
-  g_assert (IDE_IS_BUFFER (buffer));
-
-  ide_source_view_get_visual_position (self->frame1->source_view, &line, (guint *)&column);
-
-  mark = gtk_text_buffer_get_selection_bound (buffer);
-  gtk_text_buffer_get_iter_at_mark (buffer, &bounds, mark);
-
-  g_snprintf (str, sizeof str, "%d", line + 1);
-  egg_simple_label_set_label (self->line_label, str);
-
-  g_snprintf (str, sizeof str, "%d", column + 1);
-  egg_simple_label_set_label (self->column_label, str);
-
-  if (!gtk_widget_has_focus (GTK_WIDGET (self->frame1->source_view)) ||
-      gtk_text_iter_equal (&bounds, iter) ||
-      (gtk_text_iter_get_line (iter) != gtk_text_iter_get_line (&bounds)))
-    {
-      gtk_widget_set_visible (GTK_WIDGET (self->range_label), FALSE);
-      return;
-    }
-
-  /* We have a selection that is on the same line.
-   * Lets give some detail as to how long the selection is.
-   */
-  column2 = gtk_source_view_get_visual_column (
-      GTK_SOURCE_VIEW (self->frame1->source_view),
-      &bounds);
-
-  g_snprintf (str, sizeof str, "%d", ABS (column2 - column));
-  gtk_label_set_label (self->range_label, str);
-  gtk_widget_set_visible (GTK_WIDGET (self->range_label), TRUE);
-}
-
-static void
 ide_editor_view_set_document (IdeEditorView *self,
                               IdeBuffer     *document)
 {
@@ -355,16 +290,6 @@ ide_editor_view_set_document (IdeEditorView *self,
       g_settings_bind (self->settings, "highlight-matching-brackets",
                        document, "highlight-matching-brackets",
                        G_SETTINGS_BIND_GET);
-
-      g_signal_connect_object (document,
-                               "cursor-moved",
-                               G_CALLBACK (ide_editor_view__buffer_cursor_moved),
-                               self,
-                               G_CONNECT_SWAPPED);
-
-      g_object_bind_property_full (document, "language", self->tweak_button,
-                                   "label", G_BINDING_SYNC_CREATE,
-                                   language_to_string, NULL, NULL, NULL);
 
       g_signal_connect_object (document,
                                "modified-changed",
@@ -391,10 +316,6 @@ ide_editor_view_set_document (IdeEditorView *self,
                                G_CONNECT_SWAPPED);
 
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_DOCUMENT]);
-
-      g_object_bind_property (document, "has-diagnostics",
-                              self->warning_button, "visible",
-                              G_BINDING_SYNC_CREATE);
 
       ide_editor_view__buffer_notify_language (self, NULL, document);
       ide_editor_view__buffer_notify_title (self, NULL, IDE_BUFFER (document));
@@ -604,97 +525,6 @@ ide_editor_view_get_preferred_height (GtkWidget *widget,
 }
 
 static void
-ide_editor_view_goto_line_activate (IdeEditorView    *self,
-                                    const gchar      *text,
-                                    EggSimplePopover *popover)
-{
-  gint64 value;
-
-  g_assert (IDE_IS_EDITOR_VIEW (self));
-  g_assert (EGG_IS_SIMPLE_POPOVER (popover));
-
-  if (!ide_str_empty0 (text))
-    {
-      value = g_ascii_strtoll (text, NULL, 10);
-
-      if ((value > 0) && (value < G_MAXINT))
-        {
-          GtkTextIter iter;
-          GtkTextBuffer *buffer = GTK_TEXT_BUFFER (self->document);
-
-          gtk_widget_grab_focus (GTK_WIDGET (self->frame1->source_view));
-          gtk_text_buffer_get_iter_at_line (buffer, &iter, value - 1);
-          gtk_text_buffer_select_range (buffer, &iter, &iter);
-          ide_source_view_scroll_to_iter (self->frame1->source_view,
-                                          &iter, 0.25, TRUE, 1.0, 0.5, TRUE);
-        }
-    }
-}
-
-static gboolean
-ide_editor_view_goto_line_insert_text (IdeEditorView    *self,
-                                       guint             position,
-                                       const gchar      *chars,
-                                       guint             n_chars,
-                                       EggSimplePopover *popover)
-{
-  g_assert (IDE_IS_EDITOR_VIEW (self));
-  g_assert (EGG_IS_SIMPLE_POPOVER (popover));
-  g_assert (chars != NULL);
-
-  for (; *chars; chars = g_utf8_next_char (chars))
-    {
-      if (!g_unichar_isdigit (g_utf8_get_char (chars)))
-        return GDK_EVENT_STOP;
-    }
-
-  return GDK_EVENT_PROPAGATE;
-}
-
-static void
-ide_editor_view_goto_line_changed (IdeEditorView    *self,
-                                   EggSimplePopover *popover)
-{
-  gchar *message;
-  const gchar *text;
-  GtkTextIter begin;
-  GtkTextIter end;
-
-  g_assert (IDE_IS_EDITOR_VIEW (self));
-  g_assert (EGG_IS_SIMPLE_POPOVER (popover));
-
-  text = egg_simple_popover_get_text (popover);
-
-  gtk_text_buffer_get_bounds (GTK_TEXT_BUFFER (self->document), &begin, &end);
-
-  if (!ide_str_empty0 (text))
-    {
-      gint64 value;
-
-      value = g_ascii_strtoll (text, NULL, 10);
-
-      if (value > 0)
-        {
-          if (value <= gtk_text_iter_get_line (&end) + 1)
-            {
-              egg_simple_popover_set_message (popover, NULL);
-              egg_simple_popover_set_ready (popover, TRUE);
-              return;
-            }
-
-        }
-    }
-
-  /* translators: the user selected a number outside the value range for the document. */
-  message = g_strdup_printf (_("Provide a number between 1 and %u"),
-                             gtk_text_iter_get_line (&end) + 1);
-  egg_simple_popover_set_message (popover, message);
-  egg_simple_popover_set_ready (popover, FALSE);
-
-  g_free (message);
-}
-
-static void
 ide_editor_view__extension_added (PeasExtensionSet *set,
                                   PeasPluginInfo   *info,
                                   PeasExtension    *exten,
@@ -741,20 +571,6 @@ ide_editor_view__extension_removed (PeasExtensionSet *set,
   g_assert (IDE_IS_EDITOR_VIEW (self));
 
   ide_editor_view_addin_unload (addin, self);
-}
-
-static void
-ide_editor_view_warning_button_clicked (IdeEditorView *self,
-                                        GtkButton     *button)
-{
-  IdeEditorFrame *frame;
-
-  g_assert (IDE_IS_EDITOR_VIEW (self));
-  g_assert (GTK_IS_BUTTON (button));
-
-  frame = ide_editor_view_get_last_focused (self);
-  gtk_widget_grab_focus (GTK_WIDGET (frame));
-  g_signal_emit_by_name (frame->source_view, "move-error", GTK_DIR_DOWN);
 }
 
 static void
@@ -978,19 +794,11 @@ ide_editor_view_class_init (IdeEditorViewClass *klass)
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/ui/ide-editor-view.ui");
 
-  gtk_widget_class_bind_template_child (widget_class, IdeEditorView, column_label);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorView, frame1);
-  gtk_widget_class_bind_template_child (widget_class, IdeEditorView, goto_line_button);
-  gtk_widget_class_bind_template_child (widget_class, IdeEditorView, goto_line_popover);
-  gtk_widget_class_bind_template_child (widget_class, IdeEditorView, line_label);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorView, modified_cancel_button);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorView, modified_revealer);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorView, paned);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorView, progress_bar);
-  gtk_widget_class_bind_template_child (widget_class, IdeEditorView, range_label);
-  gtk_widget_class_bind_template_child (widget_class, IdeEditorView, tweak_button);
-  gtk_widget_class_bind_template_child (widget_class, IdeEditorView, tweak_widget);
-  gtk_widget_class_bind_template_child (widget_class, IdeEditorView, warning_button);
 
   g_type_ensure (IDE_TYPE_EDITOR_FRAME);
   g_type_ensure (IDE_TYPE_EDITOR_TWEAK_WIDGET);
@@ -1031,30 +839,6 @@ ide_editor_view_init (IdeEditorView *self)
   g_signal_connect_object (self->frame1->source_view,
                            "focus-in-event",
                            G_CALLBACK (ide_editor_view__focus_in_event),
-                           self,
-                           G_CONNECT_SWAPPED);
-
-  g_signal_connect_object (self->goto_line_popover,
-                           "activate",
-                           G_CALLBACK (ide_editor_view_goto_line_activate),
-                           self,
-                           G_CONNECT_SWAPPED);
-
-  g_signal_connect_object (self->goto_line_popover,
-                           "insert-text",
-                           G_CALLBACK (ide_editor_view_goto_line_insert_text),
-                           self,
-                           G_CONNECT_SWAPPED);
-
-  g_signal_connect_object (self->goto_line_popover,
-                           "changed",
-                           G_CALLBACK (ide_editor_view_goto_line_changed),
-                           self,
-                           G_CONNECT_SWAPPED);
-
-  g_signal_connect_object (self->warning_button,
-                           "clicked",
-                           G_CALLBACK (ide_editor_view_warning_button_clicked),
                            self,
                            G_CONNECT_SWAPPED);
 }

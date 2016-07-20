@@ -40,9 +40,6 @@ struct _IdeEditorView
   GSettings            *settings;
   gchar                *title;
 
-  EggSimpleLabel       *line_label;
-  EggSimpleLabel       *column_label;
-  GtkLabel             *range_label;
   IdeEditorFrame       *frame1;
   IdeEditorFrame       *frame2;
   IdeEditorFrame       *last_focused_frame;
@@ -50,12 +47,6 @@ struct _IdeEditorView
   GtkRevealer          *modified_revealer;
   GtkPaned             *paned;
   GtkProgressBar       *progress_bar;
-  GtkMenuButton        *tweak_button;
-  GtkPopover           *tweak_popover;
-  IdeEditorTweakWidget *tweak_widget;
-  GtkMenuButton        *goto_line_button;
-  EggSimplePopover     *goto_line_popover;
-  GtkButton            *warning_button;
 };
 
 G_END_DECLS

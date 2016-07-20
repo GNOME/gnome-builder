@@ -50,8 +50,9 @@
   </gresource>
 
   <gresource prefix="/org/gnome/builder/ui">
-    <file compressed="true" alias="ide-editor-perspective.ui">../editor/ide-editor-perspective.ui</file>
     <file compressed="true" alias="ide-editor-frame.ui">../editor/ide-editor-frame.ui</file>
+    <file compressed="true" alias="ide-editor-layout-stack-controls.ui">../editor/ide-editor-layout-stack-controls.ui</file>
+    <file compressed="true" alias="ide-editor-perspective.ui">../editor/ide-editor-perspective.ui</file>
     <file compressed="true" alias="ide-editor-tweak-widget.ui">../editor/ide-editor-tweak-widget.ui</file>
     <file compressed="true" alias="ide-editor-view.ui">../editor/ide-editor-view.ui</file>
     <file compressed="true" alias="ide-greeter-perspective.ui">../greeter/ide-greeter-perspective.ui</file>

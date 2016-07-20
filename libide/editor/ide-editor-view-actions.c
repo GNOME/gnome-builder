@@ -674,7 +674,8 @@ ide_editor_view_actions_goto_line (GSimpleAction *action,
 
   g_assert (IDE_IS_EDITOR_VIEW (self));
 
-  gtk_widget_activate (GTK_WIDGET (self->goto_line_button));
+  /* TODO: Reimplement goto as action from layoutstack */
+  //gtk_widget_activate (GTK_WIDGET (self->goto_line_button));
 }
 
 static GActionEntry IdeEditorViewActions[] = {
