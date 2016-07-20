@@ -453,6 +453,7 @@ gstyle_color_widget_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
   GtkBuilder *builder;
   GtkWidget *button_rename;
   GtkWidget *button_remove;
+  GtkWidget *ancestor;
   gint button;
 
   button = gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (gesture));
@@ -487,20 +488,24 @@ gstyle_color_widget_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
 
   if (button == GDK_BUTTON_SECONDARY)
     {
-      builder = gtk_builder_new_from_resource ("/org/gnome/libgstyle/ui/gstyle-color-widget.ui");
-      popover = GTK_WIDGET (gtk_builder_get_object (builder, "popover"));
-      button_rename = GTK_WIDGET (gtk_builder_get_object (builder, "button_rename"));
-      g_signal_connect_object (button_rename, "button-release-event",
-                               G_CALLBACK (popover_button_rename_clicked_cb), self, G_CONNECT_SWAPPED);
+      ancestor = gtk_widget_get_ancestor (GTK_WIDGET (self), GSTYLE_TYPE_PALETTE_WIDGET);
+      if (ancestor != NULL)
+        {
+          builder = gtk_builder_new_from_resource ("/org/gnome/libgstyle/ui/gstyle-color-widget.ui");
+          popover = GTK_WIDGET (gtk_builder_get_object (builder, "popover"));
+          button_rename = GTK_WIDGET (gtk_builder_get_object (builder, "button_rename"));
+          g_signal_connect_object (button_rename, "button-release-event",
+                                   G_CALLBACK (popover_button_rename_clicked_cb), self, G_CONNECT_SWAPPED);
 
-      button_remove = GTK_WIDGET (gtk_builder_get_object (builder, "button_remove"));
-      g_signal_connect_object (button_remove, "button-release-event",
-                               G_CALLBACK (popover_button_remove_clicked_cb), self, G_CONNECT_SWAPPED);
+          button_remove = GTK_WIDGET (gtk_builder_get_object (builder, "button_remove"));
+          g_signal_connect_object (button_remove, "button-release-event",
+                                   G_CALLBACK (popover_button_remove_clicked_cb), self, G_CONNECT_SWAPPED);
 
-      gtk_popover_set_relative_to (GTK_POPOVER (popover), GTK_WIDGET (self));
-      g_signal_connect_swapped (popover, "closed", G_CALLBACK (contextual_popover_closed_cb), self);
-      gtk_widget_show (popover);
-      g_object_unref (builder);
+          gtk_popover_set_relative_to (GTK_POPOVER (popover), GTK_WIDGET (self));
+          g_signal_connect_swapped (popover, "closed", G_CALLBACK (contextual_popover_closed_cb), self);
+          gtk_widget_show (popover);
+          g_object_unref (builder);
+        }
     }
 }
 
