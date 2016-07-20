@@ -49,7 +49,14 @@ struct _IdeLayoutViewClass
                                            IdeSourceLocation         *location);
   gboolean       (*agree_to_close)        (IdeLayoutView             *self);
 
-  gpointer padding[8];
+  gpointer _reserved1;
+  gpointer _reserved2;
+  gpointer _reserved3;
+  gpointer _reserved4;
+  gpointer _reserved5;
+  gpointer _reserved6;
+  gpointer _reserved7;
+  gpointer _reserved8;
 };
 
 gboolean       ide_layout_view_agree_to_close        (IdeLayoutView             *self);
