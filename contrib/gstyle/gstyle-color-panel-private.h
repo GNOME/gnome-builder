@@ -135,6 +135,7 @@ struct _GstyleColorPanel
   ColorComp                            components [N_GSTYLE_COLOR_COMPONENT];
   GstyleColorComponent                 current_comp;
   GstyleColorUnit                      preferred_unit;
+  GstyleColorFilter                    filter;
 
   GstyleSlidein                       *prefs_slidein;
   GtkStack                            *prefs_stack;

@@ -64,6 +64,7 @@ static GstyleColorPlaneMode component_to_plane_mode [N_GSTYLE_COLOR_COMPONENT] =
 
 enum {
   PROP_0,
+  PROP_FILTER,
   PROP_HSV_VISIBLE,
   PROP_LAB_VISIBLE,
   PROP_RGB_VISIBLE,
@@ -82,6 +83,59 @@ enum {
 };
 
 static guint signals [LAST_SIGNAL];
+
+/**
+ * gstyle_color_panel_get_filter:
+ * @self: A #GstyleColorPanel.
+ *
+ * Get the current color filter.
+ *
+ */
+GstyleColorFilter
+gstyle_color_panel_get_filter (GstyleColorPanel *self)
+{
+  g_return_val_if_fail (GSTYLE_IS_COLOR_PANEL (self), GSTYLE_COLOR_FILTER_NONE);
+
+  return self->filter;
+}
+
+/**
+ * gstyle_color_panel_set_filter:
+ * @self: A #GstyleColorPanel
+ * @filter: A #GstyleColorFilter
+ *
+ * Set the color filter to use.
+ *
+ */
+void
+gstyle_color_panel_set_filter (GstyleColorPanel  *self,
+                               GstyleColorFilter  filter)
+{
+  GstyleColorFilterFunc filter_func;
+
+  g_return_if_fail (GSTYLE_IS_COLOR_PANEL (self));
+
+  self->filter = filter;
+
+  switch (filter)
+    {
+    case GSTYLE_COLOR_FILTER_NONE:
+      filter_func = NULL;
+      break;
+
+    case GSTYLE_COLOR_FILTER_WEBSAFE:
+      filter_func = gstyle_color_filter_websafe;
+      break;
+
+    default:
+      g_assert_not_reached ();
+    }
+
+  gstyle_color_plane_set_filter_func (self->color_plane, filter_func, NULL);
+  gstyle_color_scale_set_filter_func (self->ref_scale, filter_func, NULL);
+  for (gint i = 0; i < N_GSTYLE_COLOR_COMPONENT; ++i)
+    gstyle_color_scale_set_filter_func (self->components [i].scale, filter_func, NULL);
+}
 
 /**
  * gstyle_color_panel_get_rgba:
@@ -1186,9 +1240,14 @@ gstyle_color_panel_get_property (GObject    *object,
 
   switch (prop_id)
     {
+    case PROP_FILTER:
+      g_value_set_enum (value, gstyle_color_panel_get_filter (self));
+      break;
+
     case PROP_HSV_VISIBLE:
       g_value_set_boolean (value, gtk_widget_get_visible (self->hsv_grid));
       break;
+
     case PROP_LAB_VISIBLE:
       g_value_set_boolean (value, gtk_widget_get_visible (self->lab_grid));
       break;
@@ -1232,6 +1291,10 @@ gstyle_color_panel_set_property (GObject      *object,
 
   switch (prop_id)
     {
+    case PROP_FILTER:
+      gstyle_color_panel_set_filter (self, g_value_get_enum (value));
+      break;
+
     case PROP_HSV_VISIBLE:
       gtk_widget_set_visible (self->hsv_grid, g_value_get_boolean (value));
       break;
@@ -1354,6 +1417,14 @@ gstyle_color_panel_class_init (GstyleColorPanelClass *klass)
     }
 
   gtk_widget_class_set_css_name (widget_class, "gstylecolorpanel");
+
+  properties [PROP_FILTER] =
+    g_param_spec_enum ("filter",
+                       "filter",
+                       "Filer used to act on color scales and plane",
+                       GSTYLE_TYPE_COLOR_FILTER,
+                       GSTYLE_COLOR_FILTER_NONE,
+                       (G_PARAM_CONSTRUCT | G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_RGBA] =
     g_param_spec_boxed ("rgba",

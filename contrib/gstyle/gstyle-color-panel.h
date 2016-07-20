@@ -57,9 +57,12 @@ GType                       gstyle_color_panel_prefs_get_type                   
 GType                       gstyle_color_panel_strings_visible_flags_get_type    (void);
 
 GstyleColorPanel           *gstyle_color_panel_new                         (void);
+GstyleColorFilter           gstyle_color_panel_get_filter                  (GstyleColorPanel    *self);
 GstylePaletteWidget        *gstyle_color_panel_get_palette_widget          (GstyleColorPanel    *self);
 void                        gstyle_color_panel_get_rgba                    (GstyleColorPanel    *self,
                                                                             GdkRGBA             *rgba);
+void                        gstyle_color_panel_set_filter                  (GstyleColorPanel    *self,
+                                                                            GstyleColorFilter    filter);
 void                        gstyle_color_panel_set_rgba                    (GstyleColorPanel    *self,
                                                                             const GdkRGBA       *rgba);
 void                        gstyle_color_panel_get_xyz                     (GstyleColorPanel    *self,
