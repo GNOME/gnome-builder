@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
   <gresource prefix="/org/gnome/builder/plugins/build-tools-plugin">
-    <file compressed="true">gtk/menus.ui</file>
     <file compressed="true">theme/Adwaita.css</file>
     <file compressed="true">theme/Adwaita-dark.css</file>
     <file compressed="true">theme/Adwaita-shared.css</file>
