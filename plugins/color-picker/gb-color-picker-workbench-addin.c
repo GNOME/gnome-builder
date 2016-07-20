@@ -303,7 +303,7 @@ view_remove_dock (GbColorPickerWorkbenchAddin *self,
     remove_dock (self);
   else
     {
-      //gtk_widget_set_sensitive (GTK_WIDGET (self->dock), FALSE);
+      /* TODO: use insensitive panel state */
       gtk_widget_set_opacity (GTK_WIDGET (self->dock), 0.2);
     }
 }
@@ -449,8 +449,8 @@ active_view_changed_cb (GbColorPickerWorkbenchAddin *self,
       state = get_menu_action_state (self, IDE_EDITOR_VIEW (self->active_view));
       if (self->dock != NULL && self->dock_count > 0)
         {
+          /* TODO: use insensitive panel state */
           gtk_widget_set_opacity (GTK_WIDGET (self->dock), state ? 1 : 0.2);
-          //gtk_widget_set_sensitive (GTK_WIDGET (self->dock), state);
         }
     }
 }
