@@ -51,6 +51,8 @@ libide/directory/ide-directory-vcs.c
 libide/editorconfig/ide-editorconfig-file-settings.c
 libide/editor/ide-editor-frame.c
 [type: gettext/glade]libide/editor/ide-editor-frame.ui
+libide/editor/ide-editor-layout-stack-controls.c
+[type: gettext/glade]libide/editor/ide-editor-layout-stack-controls.ui
 libide/editor/ide-editor-perspective.c
 [type: gettext/glade]libide/editor/ide-editor-perspective.ui
 [type: gettext/glade]libide/editor/ide-editor-tweak-widget.ui
