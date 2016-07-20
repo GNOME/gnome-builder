@@ -415,7 +415,7 @@ ide_gca_diagnostic_provider_diagnose_async (IdeDiagnosticProvider *provider,
   GtkSourceLanguage *language;
   IdeContext *context;
   IdeUnsavedFiles *files;
-  const gchar *language_id;
+  const gchar *language_id = NULL;
   GFile *gfile;
 
   IDE_ENTRY;
@@ -425,9 +425,11 @@ ide_gca_diagnostic_provider_diagnose_async (IdeDiagnosticProvider *provider,
   task = g_task_new (self, cancellable, callback, user_data);
 
   language = ide_file_get_language (file);
-  language_id = gtk_source_language_get_id (language);
 
-  if (!language_id)
+  if (language != NULL)
+    language_id = gtk_source_language_get_id (language);
+
+  if (language_id == NULL)
     {
       g_task_return_new_error (task,
                                G_IO_ERROR,
