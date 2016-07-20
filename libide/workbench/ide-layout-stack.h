@@ -30,6 +30,9 @@ G_DECLARE_FINAL_TYPE (IdeLayoutStack, ide_layout_stack, IDE, LAYOUT_STACK, GtkBi
 GtkWidget  *ide_layout_stack_new             (void);
 void        ide_layout_stack_remove          (IdeLayoutStack    *self,
                                               GtkWidget         *view);
+void        ide_layout_stack_add_control     (IdeLayoutStack    *self,
+                                              GtkWidget         *control,
+                                              gint               priority);
 GtkWidget  *ide_layout_stack_get_active_view (IdeLayoutStack    *self);
 void        ide_layout_stack_set_active_view (IdeLayoutStack    *self,
                                               GtkWidget         *active_view);

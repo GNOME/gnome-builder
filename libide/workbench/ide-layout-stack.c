@@ -34,7 +34,10 @@
 #include "workbench/ide-layout-stack-addin.h"
 #include "workbench/ide-layout-stack-private.h"
 #include "workbench/ide-layout-stack-split.h"
+#include "workbench/ide-layout-tab.h"
+#include "workbench/ide-layout-tab-private.h"
 #include "workbench/ide-layout-tab-bar.h"
+#include "workbench/ide-layout-tab-bar-private.h"
 #include "workbench/ide-layout-view.h"
 #include "workbench/ide-workbench.h"
 
@@ -659,4 +662,21 @@ ide_layout_stack_foreach_view (IdeLayoutStack *self,
   g_return_if_fail (callback != NULL);
 
   gtk_container_foreach (GTK_CONTAINER (self->stack), callback, user_data);
+}
+
+void
+ide_layout_stack_add_control (IdeLayoutStack *self,
+                              GtkWidget      *widget,
+                              gint            priority)
+{
+  GtkContainer *container;
+
+  g_return_if_fail (IDE_IS_LAYOUT_STACK (self));
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  container = GTK_CONTAINER (self->tab_bar->tab->controls_container);
+
+  gtk_container_add_with_properties (container, widget,
+                                     "priority", priority,
+                                     NULL);
 }

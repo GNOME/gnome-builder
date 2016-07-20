@@ -21,26 +21,11 @@
 #include "util/ide-gtk.h"
 #include "workbench/ide-layout-stack.h"
 #include "workbench/ide-layout-tab-bar.h"
+#include "workbench/ide-layout-tab-bar-private.h"
 #include "workbench/ide-layout-tab.h"
 #include "workbench/ide-layout-view.h"
 #include "workbench/ide-workbench-private.h"
 #include "workbench/ide-workbench.h"
-
-struct _IdeLayoutTabBar
-{
-  GtkEventBox    parent_instance;
-
-  gulong         set_focus_handler;
-
-  guint          child_count;
-
-  IdeLayoutTab  *tab;
-  GtkWidget     *tab_expander;
-  GtkMenuButton *views_list_button;
-  GtkStack      *stack;
-  GtkListBox    *views_list_box;
-  GtkPopover    *views_list_popover;
-};
 
 G_DEFINE_TYPE (IdeLayoutTabBar, ide_tab_layout_bar, GTK_TYPE_EVENT_BOX)
 

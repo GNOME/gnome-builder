@@ -18,28 +18,14 @@
 
 #define G_LOG_DOMAIN "ide-layout-tab"
 
+#include <egg-priority-box.h>
+
 #include "ide-macros.h"
 
 #include "application/ide-application.h"
 #include "workbench/ide-layout-view.h"
 #include "workbench/ide-layout-tab.h"
-
-struct _IdeLayoutTab
-{
-  GtkEventBox    parent_instance;
-
-  IdeLayoutView *view;
-  GBinding      *modified_binding;
-  GBinding      *title_binding;
-
-  GtkWidget     *backward_button;
-  GtkWidget     *controls_container;
-  GtkWidget     *close_button;
-  GtkWidget     *forward_button;
-  GtkWidget     *modified_label;
-  GtkWidget     *title_menu_button;
-  GtkWidget     *title_label;
-};
+#include "workbench/ide-layout-tab-private.h"
 
 G_DEFINE_TYPE (IdeLayoutTab, ide_layout_tab, GTK_TYPE_EVENT_BOX)
 
@@ -54,7 +40,6 @@ static GParamSpec *properties [LAST_PROP];
 static void
 ide_layout_tab_connect (IdeLayoutTab *self)
 {
-  GtkWidget *controls;
   GBinding *binding;
 
   g_assert (IDE_IS_LAYOUT_TAB (self));
@@ -69,27 +54,12 @@ ide_layout_tab_connect (IdeLayoutTab *self)
                                     G_BINDING_SYNC_CREATE);
   ide_set_weak_pointer (&self->modified_binding, binding);
 
-  controls = ide_layout_view_get_controls (self->view);
-  if (controls != NULL)
-    gtk_container_add (GTK_CONTAINER (self->controls_container), controls);
-
   g_signal_connect (self->view,
                     "destroy",
                     G_CALLBACK (gtk_widget_destroyed),
                     &self->view);
 
   gtk_widget_set_visible (self->close_button, TRUE);
-}
-
-static void
-ide_layout_tab_remove_control (GtkWidget *widget,
-                               gpointer   user_data)
-{
-  IdeLayoutTab *self = user_data;
-
-  g_assert (IDE_IS_LAYOUT_TAB (self));
-
-  gtk_container_remove (GTK_CONTAINER (self->controls_container), widget);
 }
 
 static void
@@ -100,10 +70,6 @@ ide_layout_tab_disconnect (IdeLayoutTab *self)
   g_signal_handlers_disconnect_by_func (self->view,
                                         G_CALLBACK (gtk_widget_destroyed),
                                         &self->view);
-
-  gtk_container_foreach (GTK_CONTAINER (self->controls_container),
-                         ide_layout_tab_remove_control,
-                         self);
 
   if (self->title_binding)
     {
@@ -263,6 +229,8 @@ ide_layout_tab_class_init (IdeLayoutTabClass *klass)
   gtk_widget_class_bind_template_child (widget_class, IdeLayoutTab, modified_label);
   gtk_widget_class_bind_template_child (widget_class, IdeLayoutTab, title_label);
   gtk_widget_class_bind_template_child (widget_class, IdeLayoutTab, title_menu_button);
+
+  g_type_ensure (EGG_TYPE_PRIORITY_BOX);
 }
 
 static void
