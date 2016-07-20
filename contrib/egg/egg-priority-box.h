@@ -23,6 +23,8 @@
 
 G_BEGIN_DECLS
 
+#define EGG_TYPE_PRIORITY_BOX (egg_priority_box_get_type())
+
 G_DECLARE_DERIVABLE_TYPE (EggPriorityBox, egg_priority_box, EGG, PRIORITY_BOX, GtkBox)
 
 struct _EggPriorityBoxClass
