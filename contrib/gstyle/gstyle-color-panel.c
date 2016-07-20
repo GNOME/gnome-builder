@@ -99,6 +99,77 @@ gstyle_color_panel_get_filter (GstyleColorPanel *self)
   return self->filter;
 }
 
+static void
+update_color_strings (GstyleColorPanel *self,
+                      GstyleColor      *color)
+{
+  gchar *str;
+  g_autofree gchar *str_rgb = NULL;
+  g_autofree gchar *str_rgba = NULL;
+  const gchar *label;
+
+  str = gstyle_color_to_string (color, GSTYLE_COLOR_KIND_RGB_HEX3);
+  label = gtk_label_get_label (self->res_hex3_label);
+  if (g_strcmp0 (str, label) != 0)
+    gtk_label_set_label (self->res_hex3_label, str);
+  g_free (str);
+
+  str = gstyle_color_to_string (color, GSTYLE_COLOR_KIND_RGB_HEX6);
+  label = gtk_label_get_label (self->res_hex6_label);
+  if (g_strcmp0 (str, label) != 0)
+    gtk_label_set_label (self->res_hex6_label, str);
+  g_free (str);
+
+  if (self->preferred_unit == GSTYLE_COLOR_UNIT_PERCENT)
+    {
+      str_rgb = gstyle_color_to_string (color, GSTYLE_COLOR_KIND_RGB_PERCENT);
+      str_rgba = gstyle_color_to_string (color, GSTYLE_COLOR_KIND_RGBA_PERCENT);
+    }
+  else if (self->preferred_unit == GSTYLE_COLOR_UNIT_VALUE)
+    {
+      str_rgb = gstyle_color_to_string (color, GSTYLE_COLOR_KIND_RGB);
+      str_rgba = gstyle_color_to_string (color, GSTYLE_COLOR_KIND_RGBA);
+    }
+  else
+    g_assert_not_reached ();
+
+  label = gtk_label_get_label (self->res_rgb_label);
+  if (g_strcmp0 (str_rgb, label) != 0)
+    gtk_label_set_label (self->res_rgb_label, str_rgb);
+
+  label = gtk_label_get_label (self->res_rgba_label);
+  if (g_strcmp0 (str_rgba, label) != 0)
+    gtk_label_set_label (self->res_rgba_label, str_rgba);
+
+  str = gstyle_color_to_string (color, GSTYLE_COLOR_KIND_HSL);
+  label = gtk_label_get_label (self->res_hsl_label);
+  if (g_strcmp0 (str, label) != 0)
+    gtk_label_set_label (self->res_hsl_label, str);
+  g_free (str);
+
+  str = gstyle_color_to_string (color, GSTYLE_COLOR_KIND_HSLA);
+  label = gtk_label_get_label (self->res_hsla_label);
+  if (g_strcmp0 (str, label) != 0)
+    gtk_label_set_label (self->res_hsla_label, str);
+  g_free (str);
+}
+
+static void
+adj_alpha_value_changed_cb (GstyleColorPanel *self,
+                            GtkAdjustment    *adj)
+{
+  gdouble alpha;
+
+  g_assert (GSTYLE_IS_COLOR_PANEL (self));
+
+  alpha = gtk_adjustment_get_value (self->adj_alpha) / 100.0;
+  gstyle_color_set_alpha (self->old_color, alpha);
+  update_color_strings (self, gstyle_color_widget_get_filtered_color (self->old_swatch));
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_RGBA]);
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_XYZ]);
+}
+
 /**
  * gstyle_color_panel_set_filter:
  * @self: A #GstyleColorPanel
@@ -131,10 +202,14 @@ gstyle_color_panel_set_filter (GstyleColorPanel  *self,
       g_assert_not_reached ();
     }
 
+  gstyle_color_widget_set_filter_func (self->new_swatch, filter_func, NULL);
+  gstyle_color_widget_set_filter_func (self->old_swatch, filter_func, NULL);
   gstyle_color_plane_set_filter_func (self->color_plane, filter_func, NULL);
   gstyle_color_scale_set_filter_func (self->ref_scale, filter_func, NULL);
   for (gint i = 0; i < N_GSTYLE_COLOR_COMPONENT; ++i)
     gstyle_color_scale_set_filter_func (self->components [i].scale, filter_func, NULL);
+
+  adj_alpha_value_changed_cb (self, self->adj_alpha);
 }
 
 /**
@@ -475,61 +550,6 @@ update_ref_color_ramp (GstyleColorPanel *self,
 }
 
 static void
-update_color_strings (GstyleColorPanel *self,
-                      GstyleColor      *color)
-{
-  gchar *str;
-  g_autofree gchar *str_rgb = NULL;
-  g_autofree gchar *str_rgba = NULL;
-  const gchar *label;
-
-  str = gstyle_color_to_string (color, GSTYLE_COLOR_KIND_RGB_HEX3);
-  label = gtk_label_get_label (self->res_hex3_label);
-  if (g_strcmp0 (str, label) != 0)
-    gtk_label_set_label (self->res_hex3_label, str);
-  g_free (str);
-
-  str = gstyle_color_to_string (color, GSTYLE_COLOR_KIND_RGB_HEX6);
-  label = gtk_label_get_label (self->res_hex6_label);
-  if (g_strcmp0 (str, label) != 0)
-    gtk_label_set_label (self->res_hex6_label, str);
-  g_free (str);
-
-  if (self->preferred_unit == GSTYLE_COLOR_UNIT_PERCENT)
-    {
-      str_rgb = gstyle_color_to_string (color, GSTYLE_COLOR_KIND_RGB_PERCENT);
-      str_rgba = gstyle_color_to_string (color, GSTYLE_COLOR_KIND_RGBA_PERCENT);
-    }
-  else if (self->preferred_unit == GSTYLE_COLOR_UNIT_VALUE)
-    {
-      str_rgb = gstyle_color_to_string (color, GSTYLE_COLOR_KIND_RGB);
-      str_rgba = gstyle_color_to_string (color, GSTYLE_COLOR_KIND_RGBA);
-    }
-  else
-    g_assert_not_reached ();
-
-  label = gtk_label_get_label (self->res_rgb_label);
-  if (g_strcmp0 (str_rgb, label) != 0)
-    gtk_label_set_label (self->res_rgb_label, str_rgb);
-
-  label = gtk_label_get_label (self->res_rgba_label);
-  if (g_strcmp0 (str_rgba, label) != 0)
-    gtk_label_set_label (self->res_rgba_label, str_rgba);
-
-  str = gstyle_color_to_string (color, GSTYLE_COLOR_KIND_HSL);
-  label = gtk_label_get_label (self->res_hsl_label);
-  if (g_strcmp0 (str, label) != 0)
-    gtk_label_set_label (self->res_hsl_label, str);
-  g_free (str);
-
-  str = gstyle_color_to_string (color, GSTYLE_COLOR_KIND_HSLA);
-  label = gtk_label_get_label (self->res_hsla_label);
-  if (g_strcmp0 (str, label) != 0)
-    gtk_label_set_label (self->res_hsla_label, str);
-  g_free (str);
-}
-
-static void
 color_picked_cb (GstyleColorPanel *self,
                  GdkRGBA          *rgba)
 {
@@ -603,7 +623,7 @@ update_sub_panels (GstyleColorPanel *self,
 
   rgba.alpha = gtk_adjustment_get_value (self->adj_alpha) / 100.0;
   gstyle_color_set_rgba (self->old_color, &rgba);
-  update_color_strings (self, self->old_color);
+  update_color_strings (self, gstyle_color_widget_get_filtered_color (self->old_swatch));
 
   rgba.alpha = 1.0;
   /* TODO: compare with old value and update only when needed */
@@ -756,22 +776,6 @@ search_color_entry_changed_cb (GstyleColorPanel *self,
     }
 }
 
-static void
-adj_alpha_value_changed_cb (GstyleColorPanel *self,
-                            GtkAdjustment    *adj)
-{
-  gdouble alpha;
-
-  g_assert (GSTYLE_IS_COLOR_PANEL (self));
-
-  alpha = gtk_adjustment_get_value (self->adj_alpha) / 100.0;
-  gstyle_color_set_alpha (self->old_color, alpha);
-  update_color_strings (self, self->old_color);
-
-  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_RGBA]);
-  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_XYZ]);
-}
-
 static GIcon *
 get_degree_icon (GstyleColorPanel *self)
 {
@@ -819,7 +823,6 @@ set_preferred_unit (GstyleColorPanel *self,
         g_assert_not_reached ();
 
       gstyle_color_plane_set_preferred_unit (self->color_plane, preferred_unit);
-      //update_color_strings (self, self->old_color);
 
       gtk_entry_set_icon_from_gicon (GTK_ENTRY (self->components [GSTYLE_COLOR_COMPONENT_RGB_RED].spin),
                                      GTK_ENTRY_ICON_SECONDARY, icon);
