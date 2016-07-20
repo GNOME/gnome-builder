@@ -980,7 +980,7 @@ gstyle_palette_widget_add (GstylePaletteWidget *self,
   palette_name = gstyle_palette_get_name (palette);
   if (gstyle_str_empty0 (palette_name))
     {
-      name = g_strdup_printf (_("Unsaved palette %u"), unsaved_palette_count++);
+      name = g_strdup_printf (_("Unsaved palette %u"), ++unsaved_palette_count);
       gstyle_palette_set_name (palette, name);
       g_free (name);
     }
