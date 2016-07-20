@@ -23,6 +23,7 @@
 #include <gtk/gtk.h>
 
 #include "gstyle-color.h"
+#include "gstyle-color-filter.h"
 
 G_BEGIN_DECLS
 
@@ -48,22 +49,27 @@ G_DECLARE_FINAL_TYPE (GstyleColorWidget, gstyle_color_widget, GSTYLE, COLOR_WIDG
 GType                  gstyle_color_widget_dnd_lock_flags_get_type   (void);
 
 GstyleColorWidget     *gstyle_color_widget_new                       (void);
-GstyleColorWidget     *gstyle_color_widget_copy                      (GstyleColorWidget *self);
-GstyleColorWidget     *gstyle_color_widget_new_with_color            (GstyleColor       *color);
+GstyleColorWidget     *gstyle_color_widget_copy                      (GstyleColorWidget      *self);
+GstyleColorWidget     *gstyle_color_widget_new_with_color            (GstyleColor            *color);
 
-gboolean               gstyle_color_widget_get_name_visible          (GstyleColorWidget *self);
-gboolean               gstyle_color_widget_get_fallback_name_visible (GstyleColorWidget *self);
-GstyleColorKind        gstyle_color_widget_get_fallback_name_kind    (GstyleColorWidget *self);
-GstyleColor           *gstyle_color_widget_get_color                 (GstyleColorWidget *self);
+gboolean               gstyle_color_widget_get_name_visible          (GstyleColorWidget      *self);
+gboolean               gstyle_color_widget_get_fallback_name_visible (GstyleColorWidget      *self);
+GstyleColorKind        gstyle_color_widget_get_fallback_name_kind    (GstyleColorWidget      *self);
+GstyleColor           *gstyle_color_widget_get_color                 (GstyleColorWidget      *self);
+GstyleColor           *gstyle_color_widget_get_filtered_color        (GstyleColorWidget      *self);
+GstyleColorFilterFunc  gstyle_color_widget_get_filter_func           (GstyleColorWidget      *self);
 
-void                   gstyle_color_widget_set_fallback_name_visible (GstyleColorWidget *self,
-                                                                      gboolean           visible);
-void                   gstyle_color_widget_set_fallback_name_kind    (GstyleColorWidget *self,
-                                                                      GstyleColorKind    kind);
-void                   gstyle_color_widget_set_name_visible          (GstyleColorWidget *self,
-                                                                      gboolean           visible);
-void                   gstyle_color_widget_set_color                 (GstyleColorWidget *self,
-                                                                      GstyleColor       *color);
+void                   gstyle_color_widget_set_fallback_name_visible (GstyleColorWidget      *self,
+                                                                      gboolean                visible);
+void                   gstyle_color_widget_set_fallback_name_kind    (GstyleColorWidget      *self,
+                                                                      GstyleColorKind         kind);
+void                   gstyle_color_widget_set_name_visible          (GstyleColorWidget      *self,
+                                                                      gboolean                visible);
+void                   gstyle_color_widget_set_color                 (GstyleColorWidget      *self,
+                                                                      GstyleColor            *color);
+void                   gstyle_color_widget_set_filter_func           (GstyleColorWidget      *self,
+                                                                      GstyleColorFilterFunc   filter_func,
+                                                                      gpointer                user_data);
 
 G_END_DECLS
 

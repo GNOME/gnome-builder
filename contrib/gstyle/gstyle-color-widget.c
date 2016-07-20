@@ -38,7 +38,10 @@ struct _GstyleColorWidget
 
   GtkLabel                      *label;
   GstyleColor                   *color;
+  GstyleColor                   *filtered_color;
   GstyleColorKind                fallback_name_kind;
+  GstyleColorFilterFunc          filter_func;
+  gpointer                       filter_user_data;
 
   GtkBorder                      cached_margin;
   GtkBorder                      cached_border;
@@ -160,6 +163,10 @@ gstyle_color_widget_drag_gesture_update (GtkGestureDrag    *gesture,
 
   gtk_widget_get_allocation (GTK_WIDGET (self), &allocation);
   self->dnd_color_widget = gstyle_color_widget_copy (self);
+
+  if (self->filter_func != NULL && GSTYLE_IS_COLOR (self->filtered_color))
+    gstyle_color_widget_set_color (self->dnd_color_widget, self->filtered_color);
+
   self->dnd_window = gtk_window_new (GTK_WINDOW_POPUP);
 
   gtk_widget_set_size_request (self->dnd_window, allocation.width, allocation.height);
@@ -518,17 +525,23 @@ gstyle_color_widget_on_drag_data_get (GtkWidget        *widget,
 {
   GstyleColorWidget *self = (GstyleColorWidget *)widget;
   GdkAtom target = gtk_selection_data_get_target (data);
+  GstyleColor *color;
   guint16 data_rgba[4];
   GdkRGBA rgba;
 
   g_assert (GSTYLE_IS_COLOR_WIDGET (self));
   g_assert (GDK_IS_DRAG_CONTEXT (context));
 
+  if (self->filter_func != NULL && GSTYLE_IS_COLOR (self->filtered_color))
+    color = self->filtered_color;
+  else
+    color = self->color;
+
   if (target == gdk_atom_intern_static_string ("GSTYLE_COLOR_WIDGET"))
-    gtk_selection_data_set (data, target, 8, (void*)&self->color, sizeof (gpointer));
+    gtk_selection_data_set (data, target, 8, (void*)&color, sizeof (gpointer));
   else if (target == gdk_atom_intern_static_string ("application/x-color"))
     {
-      gstyle_color_fill_rgba (self->color, &rgba);
+      gstyle_color_fill_rgba (color, &rgba);
       data_rgba[0] = (guint16) (rgba.red * 65535);
       data_rgba[1] = (guint16) (rgba.green * 65535);
       data_rgba[2] = (guint16) (rgba.blue * 65535);
@@ -540,9 +553,9 @@ gstyle_color_widget_on_drag_data_get (GtkWidget        *widget,
     {
       g_autofree gchar *name = NULL;
 
-      name = gstyle_color_to_string (self->color, GSTYLE_COLOR_KIND_ORIGINAL);
+      name = gstyle_color_to_string (color, GSTYLE_COLOR_KIND_ORIGINAL);
       if (name == NULL)
-        name = gstyle_color_to_string (self->color, GSTYLE_COLOR_KIND_RGB_HEX6);
+        name = gstyle_color_to_string (color, GSTYLE_COLOR_KIND_RGB_HEX6);
 
       gtk_selection_data_set_text (data, name, -1);
     }
@@ -709,6 +722,8 @@ gstyle_color_widget_draw (GtkWidget *widget,
                             NULL);
 
       gstyle_color_fill_rgba (self->color, &bg_color);
+      if (self->filter_func != NULL)
+        self->filter_func (&bg_color, &bg_color, self->filter_user_data);
 
       cairo_new_path (cr);
       draw_cairo_round_box (cr, border_box, radius, radius, radius, radius);
@@ -760,7 +775,11 @@ update_label_visibility (GstyleColorWidget *self)
 
   if (self->is_name_visible)
     {
-      color_name = gstyle_color_get_name (self->color);
+      if (self->filter_func != NULL && GSTYLE_IS_COLOR (self->filtered_color))
+        color_name = gstyle_color_get_name (self->filtered_color);
+      else
+        color_name = gstyle_color_get_name (self->color);
+
       if (color_name != NULL)
         {
           gtk_label_set_text (self->label, color_name);
@@ -773,7 +792,11 @@ update_label_visibility (GstyleColorWidget *self)
 
   if (self->is_fallback_name_visible)
     {
-      fallback_name = gstyle_color_to_string (self->color, self->fallback_name_kind);
+      if (self->filter_func != NULL && GSTYLE_IS_COLOR (self->filtered_color))
+        fallback_name = gstyle_color_to_string (self->filtered_color, self->fallback_name_kind);
+      else
+        fallback_name = gstyle_color_to_string (self->color, self->fallback_name_kind);
+
       gtk_label_set_text (self->label, fallback_name);
       if (!gtk_widget_is_visible (GTK_WIDGET (self->label)))
         gtk_widget_show (GTK_WIDGET (self->label));
@@ -817,12 +840,25 @@ gstyle_color_widget_rgba_notify_cb (GstyleColorWidget *self,
                                     GParamSpec        *pspec,
                                     GstyleColor       *color)
 {
+  GdkRGBA rgba;
+
   g_assert (GSTYLE_IS_COLOR_WIDGET (self));
   g_assert (G_IS_PARAM_SPEC (pspec));
   g_assert (GSTYLE_IS_COLOR (color));
 
+  if (self->filter_func != NULL && GSTYLE_IS_COLOR (self->filtered_color))
+    {
+      gstyle_color_fill_rgba (color, &rgba);
+      self->filter_func (&rgba, &rgba, self->filter_user_data);
+      gstyle_color_set_rgba (self->filtered_color, &rgba);
+    }
+
   update_label_visibility (self);
-  match_label_color (self, color);
+
+  if (self->filter_func != NULL && GSTYLE_IS_COLOR (self->filtered_color))
+    match_label_color (self, self->filtered_color);
+  else
+    match_label_color (self, color);
 
   gtk_widget_queue_draw (GTK_WIDGET (self));
 }
@@ -890,6 +926,68 @@ gstyle_color_widget_copy (GstyleColorWidget *self)
 }
 
 /**
+ * gstyle_color_widget_get_filter_func: (skip):
+ * @self: A #GstyleColorPlane
+ *
+ * Get a pointer to the current filter function or %NULL
+ * if no filter is actually set.
+ *
+ * Returns: (nullable): A GstyleColorFilterFunc function pointer.
+ *
+ */
+GstyleColorFilterFunc
+gstyle_color_widget_get_filter_func (GstyleColorWidget *self)
+{
+  g_return_val_if_fail (GSTYLE_IS_COLOR_WIDGET (self), NULL);
+
+  return self->filter_func;
+}
+
+/**
+ * gstyle_color_widget_set_filter_func:
+ * @self: A #GstyleColorPlane
+ * @filter_func: (scope notified) (nullable): A GstyleColorFilterFunc filter function or
+ *   %NULL to unset the current filter. In this case, user_data is ignored
+ * @user_data: (closure) (nullable): user data to pass when calling the filter function
+ *
+ * Set a filter to be used to change the color drawn.
+ *
+ */
+void
+gstyle_color_widget_set_filter_func (GstyleColorWidget    *self,
+                                    GstyleColorFilterFunc  filter_func,
+                                    gpointer               user_data)
+{
+  GdkRGBA rgba;
+  GdkRGBA filtered_rgba;
+
+  g_return_if_fail (GSTYLE_IS_COLOR_WIDGET (self));
+
+  self->filter_func = filter_func;
+  self->filter_user_data = (filter_func == NULL) ? NULL : user_data;
+
+  if (filter_func == NULL)
+    g_clear_object (&self->filtered_color);
+  else
+    {
+      gstyle_color_fill_rgba (self->color, &rgba);
+      self->filter_func (&rgba, &filtered_rgba, self->filter_user_data);
+
+      g_clear_object (&self->filtered_color);
+      self->filtered_color = gstyle_color_copy (self->color);
+      gstyle_color_set_rgba (self->filtered_color, &filtered_rgba);
+
+      if (!gdk_rgba_equal (&rgba, &filtered_rgba))
+        {
+          update_label_visibility (self);
+          g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_COLOR]);
+        }
+    }
+
+  gtk_widget_queue_draw (GTK_WIDGET (self));
+}
+
+/**
  * gstyle_color_widget_set_color:
  * @self: A #GstyleColorWidget
  * @color: (nullable): A #GstyleColor or %NULL
@@ -901,6 +999,8 @@ void
 gstyle_color_widget_set_color (GstyleColorWidget *self,
                                GstyleColor       *color)
 {
+  GdkRGBA rgba;
+
   g_return_if_fail (GSTYLE_IS_COLOR_WIDGET (self));
   g_return_if_fail (GSTYLE_IS_COLOR (color) || color == NULL);
 
@@ -915,6 +1015,15 @@ gstyle_color_widget_set_color (GstyleColorWidget *self,
       if (color != NULL)
         {
           self->color = g_object_ref (color);
+          if (self->filter_func != NULL)
+            {
+              gstyle_color_fill_rgba (color, &rgba);
+              self->filter_func (&rgba, &rgba, self->filter_user_data);
+
+              g_clear_object (&self->filtered_color);
+              self->filtered_color = gstyle_color_copy (color);
+              gstyle_color_set_rgba (self->filtered_color, &rgba);
+            }
 
           g_signal_connect_object (self->color,
                                    "notify::rgba",
@@ -928,7 +1037,10 @@ gstyle_color_widget_set_color (GstyleColorWidget *self,
                                    self,
                                    G_CONNECT_SWAPPED);
 
-          match_label_color (self, color);
+          if (self->filter_func != NULL && GSTYLE_IS_COLOR (self->filtered_color))
+            match_label_color (self, self->filtered_color);
+          else
+            match_label_color (self, color);
         }
 
       update_label_visibility (self);
@@ -1056,6 +1168,27 @@ gstyle_color_widget_get_color (GstyleColorWidget *self)
   g_return_val_if_fail (GSTYLE_IS_COLOR_WIDGET (self), NULL);
 
   return self->color;
+}
+
+/**
+ * gstyle_color_widget_get_filtered_color:
+ * @self: a #GstyleColorWidget
+ *
+ * If a #GstyleColorFilterFunc is set, Get the filtered #GstyleColor
+ * of the #GstyleColorWidget, otherwise, get the regular #GstyleColor.
+ *
+ * Returns: (transfer none): The affected #GstyleColor or filtered one.
+ *
+ */
+GstyleColor *
+gstyle_color_widget_get_filtered_color (GstyleColorWidget *self)
+{
+  g_return_val_if_fail (GSTYLE_IS_COLOR_WIDGET (self), NULL);
+
+  if (self->filter_func != NULL)
+    return self->filtered_color;
+  else
+    return self->color;
 }
 
 /**
@@ -1202,6 +1335,7 @@ gstyle_color_widget_finalize (GObject *object)
 
   g_clear_object (&self->dnd_window);
   g_clear_object (&self->color);
+  g_clear_object (&self->filtered_color);
   g_clear_object (&self->default_provider);
   cairo_pattern_destroy (self->checkered_pattern);
   gtk_target_list_unref (self->target_list);
