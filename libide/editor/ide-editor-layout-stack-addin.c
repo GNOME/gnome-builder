@@ -50,10 +50,26 @@ ide_editor_layout_stack_addin_init (IdeEditorLayoutStackAddin *self)
 }
 
 static void
+goto_line_activate (GSimpleAction *action,
+                    GVariant      *param,
+                    gpointer       user_data)
+{
+  IdeEditorLayoutStackAddin *self = user_data;
+
+  g_assert (IDE_IS_EDITOR_LAYOUT_STACK_ADDIN (self));
+
+  gtk_widget_activate (GTK_WIDGET (self->controls->goto_line_button));
+}
+
+static void
 ide_editor_layout_stack_addin_load (IdeLayoutStackAddin *addin,
                                     IdeLayoutStack      *stack)
 {
   IdeEditorLayoutStackAddin *self = (IdeEditorLayoutStackAddin *)addin;
+  g_autoptr(GSimpleActionGroup) group = NULL;
+  static const GActionEntry entries[] = {
+    { "goto-line", goto_line_activate },
+  };
 
   g_assert (IDE_IS_EDITOR_LAYOUT_STACK_ADDIN (self));
   g_assert (IDE_IS_LAYOUT_STACK (stack));
@@ -64,6 +80,10 @@ ide_editor_layout_stack_addin_load (IdeLayoutStackAddin *addin,
                     G_CALLBACK (gtk_widget_destroyed),
                     &self->controls);
   ide_layout_stack_add_control (stack, GTK_WIDGET (self->controls), 0);
+
+  group = g_simple_action_group_new ();
+  g_action_map_add_action_entries (G_ACTION_MAP (group), entries, G_N_ELEMENTS (entries), self);
+  gtk_widget_insert_action_group (GTK_WIDGET (stack), "editor-controls", G_ACTION_GROUP (group));
 }
 
 static void

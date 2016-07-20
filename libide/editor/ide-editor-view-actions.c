@@ -665,24 +665,10 @@ ide_editor_view_actions_print (GSimpleAction *action,
   handle_print_result (self, GTK_PRINT_OPERATION (operation), result);
 }
 
-static void
-ide_editor_view_actions_goto_line (GSimpleAction *action,
-                                   GVariant      *param,
-                                   gpointer       user_data)
-{
-  IdeEditorView *self = user_data;
-
-  g_assert (IDE_IS_EDITOR_VIEW (self));
-
-  /* TODO: Reimplement goto as action from layoutstack */
-  //gtk_widget_activate (GTK_WIDGET (self->goto_line_button));
-}
-
 static GActionEntry IdeEditorViewActions[] = {
   { "auto-indent", NULL, NULL, "false", ide_editor_view_actions_auto_indent },
   { "close", ide_editor_view_actions_close },
   { "find-other-file", ide_editor_view_actions_find_other_file },
-  { "goto-line", ide_editor_view_actions_goto_line },
   { "highlight-current-line", NULL, NULL, "false", ide_editor_view_actions_highlight_current_line },
   { "language", NULL, "s", "''", ide_editor_view_actions_language },
   { "reload-buffer", ide_editor_view_actions_reload_buffer },

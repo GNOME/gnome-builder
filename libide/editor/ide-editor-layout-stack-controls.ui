@@ -25,7 +25,7 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuButton">
+      <object class="GtkMenuButton" id="goto_line_button">
         <property name="popover">goto_line_popover</property>
         <property name="focus-on-click">false</property>
         <property name="tooltip-text" translatable="yes">Go to line number</property>

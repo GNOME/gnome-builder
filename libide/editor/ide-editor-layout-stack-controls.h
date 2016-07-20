@@ -20,7 +20,14 @@
 #define IDE_EDITOR_LAYOUT_STACK_CONTROLS_H
 
 #include <gtk/gtk.h>
+#include <egg-binding-group.h>
+#include <egg-signal-group.h>
+#include <egg-simple-label.h>
+#include <egg-simple-popover.h>
 
+#include "editor/ide-editor-frame.h"
+#include "editor/ide-editor-tweak-widget.h"
+#include "editor/ide-editor-view.h"
 #include "editor/ide-editor-view.h"
 
 G_BEGIN_DECLS
@@ -28,6 +35,24 @@ G_BEGIN_DECLS
 #define IDE_TYPE_EDITOR_LAYOUT_STACK_CONTROLS (ide_editor_layout_stack_controls_get_type())
 
 G_DECLARE_FINAL_TYPE (IdeEditorLayoutStackControls, ide_editor_layout_stack_controls, IDE, EDITOR_LAYOUT_STACK_CONTROLS, GtkBox)
+
+struct _IdeEditorLayoutStackControls
+{
+  GtkBox                parent_instance;
+
+  IdeEditorView        *view;
+  EggBindingGroup      *document_bindings;
+  EggSignalGroup       *document_signals;
+
+  EggSimplePopover     *goto_line_popover;
+  GtkMenuButton        *goto_line_button;
+  GtkButton            *warning_button;
+  EggSimpleLabel       *line_label;
+  EggSimpleLabel       *column_label;
+  GtkLabel             *range_label;
+  GtkMenuButton        *tweak_button;
+  IdeEditorTweakWidget *tweak_widget;
+};
 
 void ide_editor_layout_stack_controls_set_view (IdeEditorLayoutStackControls *self,
                                                 IdeEditorView                *view);

@@ -18,34 +18,11 @@
 
 #define G_LOG_DOMAIN "ide-editor-layout-stack-controls"
 
-#include <egg-binding-group.h>
-#include <egg-signal-group.h>
-#include <egg-simple-popover.h>
 #include <glib/gi18n.h>
 
-#include "editor/ide-editor-frame.h"
 #include "editor/ide-editor-frame-private.h"
 #include "editor/ide-editor-layout-stack-controls.h"
-#include "editor/ide-editor-tweak-widget.h"
-#include "editor/ide-editor-view.h"
 #include "editor/ide-editor-view-private.h"
-
-struct _IdeEditorLayoutStackControls
-{
-  GtkBox                parent_instance;
-
-  IdeEditorView        *view;
-  EggBindingGroup      *document_bindings;
-  EggSignalGroup       *document_signals;
-
-  EggSimplePopover     *goto_line_popover;
-  GtkButton            *warning_button;
-  EggSimpleLabel       *line_label;
-  EggSimpleLabel       *column_label;
-  GtkLabel             *range_label;
-  GtkMenuButton        *tweak_button;
-  IdeEditorTweakWidget *tweak_widget;
-};
 
 G_DEFINE_TYPE (IdeEditorLayoutStackControls, ide_editor_layout_stack_controls, GTK_TYPE_BOX)
 
@@ -260,6 +237,7 @@ ide_editor_layout_stack_controls_class_init (IdeEditorLayoutStackControlsClass *
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/ui/ide-editor-layout-stack-controls.ui");
   gtk_widget_class_bind_template_child (widget_class, IdeEditorLayoutStackControls, column_label);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorLayoutStackControls, goto_line_popover);
+  gtk_widget_class_bind_template_child (widget_class, IdeEditorLayoutStackControls, goto_line_button);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorLayoutStackControls, line_label);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorLayoutStackControls, range_label);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorLayoutStackControls, warning_button);
