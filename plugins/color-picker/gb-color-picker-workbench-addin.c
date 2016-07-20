@@ -30,28 +30,13 @@
 #include "gb-color-picker-prefs.h"
 
 #include "gb-color-picker-workbench-addin.h"
+#include "gb-color-picker-workbench-addin-private.h"
 
 typedef struct __ViewState
 {
   gboolean                      state;
   GbColorPickerDocumentMonitor *monitor;
 } ViewState;
-
-struct _GbColorPickerWorkbenchAddin
-{
-  GObject                parent_instance;
-
-  GHashTable            *views;
-  IdeWorkbench          *workbench;
-  IdeEditorPerspective  *editor;
-  GtkWidget             *active_view;
-  GtkWidget             *dock;
-  GtkWidget             *color_panel;
-  GbColorPickerPrefs    *prefs;
-
-  guint                  dock_count;
-  guint                  monitor_count;
-};
 
 static void workbench_addin_iface_init (IdeWorkbenchAddinInterface *iface);
 
@@ -200,6 +185,7 @@ init_dock (GbColorPickerWorkbenchAddin *self)
 
   self->prefs = g_object_new (GB_TYPE_COLOR_PICKER_PREFS,
                               "panel", self->color_panel,
+                              "addin", self,
                               NULL);
 
   init_palettes (self);
