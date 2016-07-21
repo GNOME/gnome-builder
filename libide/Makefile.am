@@ -423,8 +423,10 @@ libide_1_0_la_SOURCES =                                   \
 	workbench/ide-layout-stack-private.h              \
 	workbench/ide-layout-tab-bar.c                    \
 	workbench/ide-layout-tab-bar.h                    \
+	workbench/ide-layout-tab-bar-private.h            \
 	workbench/ide-layout-tab.c                        \
 	workbench/ide-layout-tab.h                        \
+	workbench/ide-layout-tab-private.h                \
 	workbench/ide-omni-bar-row.c                      \
 	workbench/ide-omni-bar-row.h                      \
 	workbench/ide-perspective-menu-button.c           \

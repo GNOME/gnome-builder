@@ -62,6 +62,8 @@ gsettings_SCHEMAS =                                                         \
 
 @GSETTINGS_RULES@
 
+EXTRA_DIST += $(gsettings_SCHEMAS)
+
 endif
 
 -include $(top_srcdir)/git.mk
