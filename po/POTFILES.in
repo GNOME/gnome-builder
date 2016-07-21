@@ -110,6 +110,7 @@ plugins/clang/ide-clang-translation-unit.c
 plugins/color-picker/gb-color-picker-prefs.c
 plugins/color-picker/gb-color-picker-prefs-palette-row.c
 plugins/color-picker/gb-color-picker-workbench-addin.c
+plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml
 plugins/color-picker/gtk/color-picker-palette-menu.ui
 plugins/color-picker/gtk/color-picker-prefs.ui
 plugins/color-picker/gtk/color-picker-preview.ui
@@ -138,6 +139,7 @@ plugins/git/ide-git-remote-callbacks.c
 plugins/gnome-code-assistance/ide-gca-diagnostic-provider.c
 plugins/gnome-code-assistance/ide-gca-preferences-addin.c
 plugins/gnome-code-assistance/ide-gca-service.c
+plugins/gnome-code-assistance/org.gnome.builder.gnome-code-assistance.gschema.xml
 plugins/hello-cpp/hellocppapplicationaddin.cc
 plugins/html-preview/html_preview_plugin/gtk/menus.ui
 plugins/jedi/jedi_plugin.py
