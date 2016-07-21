@@ -4,14 +4,12 @@ contrib/egg/egg-animation.c
 contrib/egg/egg-date-time.c
 contrib/egg/egg-file-chooser-entry.c
 contrib/egg/egg-search-bar.c
-contrib/gstyle/data/palettes/basic.xml
 contrib/gstyle/gstyle-color-panel.c
 contrib/gstyle/gstyle-color-plane.c
 contrib/gstyle/gstyle-color-widget-actions.c
 contrib/gstyle/gstyle-palette.c
 contrib/gstyle/gstyle-palette-widget.c
 contrib/gstyle/tests/data/gstyle-color-editor.ui
-contrib/gstyle/tests/data/palette.xml
 contrib/gstyle/ui/gstyle-color-panel.ui
 contrib/gstyle/ui/gstyle-color-widget.ui
 contrib/gstyle/ui/gstyle-rename-popover.ui
@@ -34,8 +32,6 @@ data/gsettings/org.gnome.builder.workbench.gschema.xml.in
 data/gtk/menus.ui
 data/org.gnome.Builder.appdata.xml.in
 data/org.gnome.Builder.desktop.in.in
-data/style-schemes/builder-dark.xml
-data/style-schemes/builder.xml
 libide/application/ide-application-actions.c
 libide/application/ide-application.c
 libide/application/ide-application-command-line.c
@@ -111,7 +107,6 @@ plugins/clang/ide-clang-preferences-addin.c
 plugins/clang/ide-clang-service.c
 plugins/clang/ide-clang-symbol-node.c
 plugins/clang/ide-clang-translation-unit.c
-plugins/color-picker/data/basic.xml
 plugins/color-picker/gb-color-picker-prefs.c
 plugins/color-picker/gb-color-picker-prefs-palette-row.c
 plugins/color-picker/gb-color-picker-workbench-addin.c
