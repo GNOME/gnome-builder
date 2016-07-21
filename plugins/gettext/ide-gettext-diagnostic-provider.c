@@ -447,10 +447,10 @@ populate_cache (EggTaskCache  *cache,
   g_ptr_array_add (args, "-k_");
   g_ptr_array_add (args, "-kN_");
   g_ptr_array_add (args, "-L");
-  g_ptr_array_add (args, xgettext_lang);
+  g_ptr_array_add (args, (gchar *)xgettext_lang);
   g_ptr_array_add (args, "-o");
   g_ptr_array_add (args, "-");
-  g_ptr_array_add (args, temp_path);
+  g_ptr_array_add (args, (gchar *)temp_path);
   g_ptr_array_add (args, NULL);
 
 #ifdef IDE_ENABLE_TRACE
