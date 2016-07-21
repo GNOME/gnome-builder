@@ -515,17 +515,7 @@ AC_CONFIG_FILES([
 	data/template-glib-1.0.pc
 	data/org.gnome.Builder.desktop.in
 
-	data/gsettings/org.gnome.builder.build.gschema.xml
 	data/gsettings/org.gnome.builder.code-insight.gschema.xml
-	data/gsettings/org.gnome.builder.editor.gschema.xml
-	data/gsettings/org.gnome.builder.editor.language.gschema.xml
-	data/gsettings/org.gnome.builder.extension-type.gschema.xml
-	data/gsettings/org.gnome.builder.gschema.xml
-	data/gsettings/org.gnome.builder.plugin.gschema.xml
-	data/gsettings/org.gnome.builder.project-tree.gschema.xml
-	data/gsettings/org.gnome.builder.terminal.gschema.xml
-	data/gsettings/org.gnome.builder.workbench.gschema.xml
-
 	doc/Makefile
 	doc/examples/Makefile
 	doc/examples/scripts/Makefile

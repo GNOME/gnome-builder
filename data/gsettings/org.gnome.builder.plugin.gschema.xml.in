@@ -1,9 +1,0 @@
-<schemalist>
-  <schema id="org.gnome.builder.plugin" gettext-domain="gnome-builder">
-    <key name="enabled" type="b">
-      <default>true</default>
-      <summary>Enabled</summary>
-      <description>If the plugin should be enabled</description>
-    </key>
-  </schema>
-</schemalist>
