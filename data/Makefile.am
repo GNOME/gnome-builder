@@ -1,17 +1,21 @@
 SUBDIRS = gsettings icons style-schemes fonts .
 
 @APPSTREAM_XML_RULES@
-@INTLTOOL_XML_RULE@
 
 appstream_in_files = org.gnome.Builder.appdata.xml.in
 appstream_XML = $(appstream_in_files:.xml.in=.xml)
+
+%.appdata.xml: %.appdata.xml.in
+	$(AM_V_GEN)$(MSGFMT) --xml --template $< -d $(top_srcdir)/po -o $@
 
 # Desktop launcher and description file.
 desktopdir = $(datadir)/applications
 desktop_in_in_files = org.gnome.Builder.desktop.in.in
 desktop_in_files = org.gnome.Builder.desktop.in
 desktop_DATA = $(desktop_in_files:.desktop.in=.desktop)
-@INTLTOOL_DESKTOP_RULE@
+
+%.desktop: %.desktop.in
+	$(AM_V_GEN)$(MSGFMT) --desktop --template $< -d $(top_srcdir)/po -o $@
 
 # D-Bus service file.
 servicedir = $(datadir)/dbus-1/services

@@ -1,5 +1,7 @@
 *.gmo
+*.po~
 Makefile.in.in
+Makevars.template
 POTFILES
 gnome-builder.pot
 stamp-it

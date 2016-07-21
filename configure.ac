@@ -55,12 +55,11 @@ AM_MAINTAINER_MODE([enable])
 dnl ***********************************************************************
 dnl Internationalization
 dnl ***********************************************************************
-AX_REQUIRE_DEFINED([IT_PROG_INTLTOOL])
-IT_PROG_INTLTOOL([0.50.1])
 GETTEXT_PACKAGE=AC_PACKAGE_TARNAME
 AC_DEFINE_UNQUOTED([GETTEXT_PACKAGE], ["$GETTEXT_PACKAGE"], [GETTEXT package name])
 AC_SUBST(GETTEXT_PACKAGE)
-AM_GLIB_GNU_GETTEXT
+AM_GNU_GETTEXT_VERSION([0.19.7])
+AM_GNU_GETTEXT([external])
 
 
 dnl ***********************************************************************

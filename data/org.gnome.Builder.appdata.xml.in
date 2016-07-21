@@ -4,33 +4,33 @@
   <id>org.gnome.Builder.desktop</id>
   <metadata_license>CC0</metadata_license>
   <project_license>GPL-3.0+ and GPL-2.0+ and LGPL-3.0+ and LGPL-2.0+ and MIT</project_license>
-  <_name>Builder</_name>
-  <_summary>An IDE for GNOME</_summary>
+  <name>Builder</name>
+  <summary>An IDE for GNOME</summary>
 
   <description>
-    <_p>
+    <p>
       Builder is an actively developed Integrated Development Environment for
       GNOME. It combines integrated support for essential GNOME technologies
       such as GTK+, GLib, and GNOME APIs with features that any developer will
       appreciate, like syntax highlighting and snippets.
-    </_p>
-    <_p>
+    </p>
+    <p>
       You can rely on predictable releases of Builder with each new release of
       GNOME every six months.
-    </_p>
-    <_p>Features:</_p>
+    </p>
+    <p>Features:</p>
     <ul>
-      <_li>Built in syntax highlighting for many languages</_li>
-      <_li>Side-by-side code editors</_li>
-      <_li>Integration with Git</_li>
-      <_li>Integration with Autotools</_li>
-      <_li>Clang based auto-completion, semantic highlighting, and diagnostics</_li>
-      <_li>Python based auto-completion, semantic highlighting, and diagnostics</_li>
-      <_li>Vala based auto-completion and diagnostics</_li>
-      <_li>Auto indentation support for C, Python, Vala, and XML</_li>
-      <_li>HTML/Markdown live preview</_li>
-      <_li>Optional Vim-style editing</_li>
-      <_li>Preview support for building with Xdg-App runtimes</_li>
+      <li>Built in syntax highlighting for many languages</li>
+      <li>Side-by-side code editors</li>
+      <li>Integration with Git</li>
+      <li>Integration with Autotools</li>
+      <li>Clang based auto-completion, semantic highlighting, and diagnostics</li>
+      <li>Python based auto-completion, semantic highlighting, and diagnostics</li>
+      <li>Vala based auto-completion and diagnostics</li>
+      <li>Auto indentation support for C, Python, Vala, and XML</li>
+      <li>HTML/Markdown live preview</li>
+      <li>Optional Vim-style editing</li>
+      <li>Preview support for building with Xdg-App runtimes</li>
     </ul>
   </description>
 

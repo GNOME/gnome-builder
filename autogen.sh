@@ -18,8 +18,6 @@ touch ChangeLog
 touch INSTALL
 
 aclocal --install -I build/autotools || exit 1
-glib-gettextize --force --copy || exit 1
-intltoolize --force --copy --automake || exit 1
 gtkdocize || exit 1
 
 if command -v mm-common-prepare 2>/dev/null; then

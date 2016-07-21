@@ -2,22 +2,9 @@ SUBDIRS = . build contrib data libide src libidemm plugins tools po tests doc he
 
 ACLOCAL_AMFLAGS = -I build/autotools
 
-INTLTOOL_FILES = \
-	intltool-extract.in \
-	intltool-merge.in \
-	intltool-update.in \
-	$(NULL)
-
 EXTRA_DIST = \
-	$(INTLTOOL_FILES) \
 	AUTHORS \
 	$(NULL)
-
-DISTCLEANFILES = \
-	intltool-extract \
-	intltool-merge \
-	intltool-update \
-	po/.intltool-merge-cache
 
 # --disable-gtk-doc until future notice
 DISTCHECK_CONFIGURE_FLAGS = \
@@ -39,6 +26,7 @@ GITIGNOREFILES = \
 	gtk-doc.m4 \
 	gtk-doc.make \
 	INSTALL \
+	ABOUT-NLS \
 	$(NULL)
 
 AUTHORS:
