@@ -34,7 +34,6 @@ headers_DATA = \
 	egg-simple-label.h \
 	egg-simple-popover.h \
 	egg-slider.h \
-	egg-state-machine-action.h \
 	egg-state-machine-buildable.h \
 	egg-state-machine.h \
 	egg-task-cache.h \
@@ -68,7 +67,6 @@ libegg_private_la_SOURCES = \
 	egg-simple-label.c \
 	egg-simple-popover.c \
 	egg-slider.c \
-	egg-state-machine-action.c \
 	egg-state-machine-buildable.c \
 	egg-state-machine.c \
 	egg-task-cache.c \

@@ -460,6 +460,7 @@ states_parser_start_element (GMarkupParseContext  *context,
   else if (g_strcmp0 (element_name, "property") == 0)
     {
       const gchar *name = NULL;
+      const gchar *translatable = NULL;
       const gchar *bind_source = NULL;
       const gchar *bind_property = NULL;
       const gchar *bind_flags_str = NULL;
@@ -470,11 +471,23 @@ states_parser_start_element (GMarkupParseContext  *context,
 
       if (!g_markup_collect_attributes (element_name, attribute_names, attribute_values, error,
                                         G_MARKUP_COLLECT_STRING, "name", &name,
+                                        G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "translatable", &translatable,
                                         G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "bind-source", &bind_source,
                                         G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "bind-property", &bind_property,
                                         G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "bind-flags", &bind_flags_str,
                                         G_MARKUP_COLLECT_INVALID))
         return;
+
+      if (name != NULL)
+        {
+          if (g_strcmp0 (translatable, "yes") == 0)
+            {
+              const gchar *domain;
+
+              domain = gtk_builder_get_translation_domain (parser_data->builder);
+              name = dgettext (domain, name);
+            }
+        }
 
       if ((bind_flags_str != NULL) && !flags_from_string (G_TYPE_BINDING_FLAGS, bind_flags_str, &bind_flags, error))
         return;

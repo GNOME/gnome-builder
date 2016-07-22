@@ -29,7 +29,6 @@ G_BEGIN_DECLS
 #include "egg-search-bar.h"
 #include "egg-settings-sandwich.h"
 #include "egg-signal-group.h"
-#include "egg-state-machine-action.h"
 #include "egg-state-machine-buildable.h"
 #include "egg-state-machine.h"
 #include "egg-task-cache.h"

@@ -25,7 +25,6 @@
 #include "egg-signal-group.h"
 
 #include "egg-state-machine.h"
-#include "egg-state-machine-action.h"
 #include "egg-state-machine-buildable.h"
 
 G_DEFINE_QUARK (egg_state_machine_error, egg_state_machine_error)
@@ -532,7 +531,7 @@ egg_state_machine_create_action (EggStateMachine *self,
   g_return_val_if_fail (EGG_IS_STATE_MACHINE (self), NULL);
   g_return_val_if_fail (name != NULL, NULL);
 
-  return egg_state_machine_action_new (self, name);
+  return G_ACTION (g_property_action_new (name, self, "state"));
 }
 
 void
