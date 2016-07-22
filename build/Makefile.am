@@ -3,6 +3,7 @@ SUBDIRS = autotools
 GITIGNOREFILES = \
 	compile \
 	config.guess \
+	config.rpath \
 	config.sub \
 	depcomp \
 	install-sh \

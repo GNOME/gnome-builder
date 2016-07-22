@@ -5,3 +5,4 @@ Makevars.template
 POTFILES
 gnome-builder.pot
 stamp-it
+stamp-po
