@@ -86,9 +86,9 @@ endif
 
 check_PROGRAMS = $(TESTS) $(misc_programs)
 
-EXTRA_DIST +=            \
-	data/palette.gpl \
-	data/palette.xml \
+EXTRA_DIST +=                   \
+	data/palette.gpl        \
+	data/palette.gstyle.xml \
 	$(NULL)
 
 -include $(top_srcdir)/git.mk

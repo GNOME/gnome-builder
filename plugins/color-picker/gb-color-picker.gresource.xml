@@ -13,7 +13,7 @@
     <file>gtk/color-picker-palette-menu.ui</file>
     <file>gtk/menus.ui</file>
 
-    <file>data/basic.xml</file>
+    <file>data/basic.gstyle.xml</file>
     <file>data/svg.gpl</file>
 
     <file compressed="true" alias="icons/scalable/actions/builder-colorpicker-load-palette.svg">icons/palette/load-palette.svg</file>

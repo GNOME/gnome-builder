@@ -83,7 +83,7 @@ init_palettes (GbColorPickerWorkbenchAddin *self)
   g_assert (GB_IS_COLOR_PICKER_WORKBENCH_ADDIN (self));
 
   palette_widget = gstyle_color_panel_get_palette_widget (GSTYLE_COLOR_PANEL (self->color_panel));
-  add_palette (self, palette_widget, "resource:///org/gnome/builder/plugins/color-picker-plugin/data/basic.xml");
+  add_palette (self, palette_widget, "resource:///org/gnome/builder/plugins/color-picker-plugin/data/basic.gstyle.xml");
   palette = add_palette (self, palette_widget, "resource:///org/gnome/builder/plugins/color-picker-plugin/data/svg.gpl");
 
   gstyle_color_panel_show_palette (GSTYLE_COLOR_PANEL (self->color_panel), palette);

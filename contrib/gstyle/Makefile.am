@@ -8,6 +8,11 @@ SUBDIRS = . tests
 pkglibdir = $(libdir)/gnome-builder
 pkglib_LTLIBRARIES = libgstyle-private.la
 
+#gettextitsdir = $(datadir)/gettext/its
+EXTRA_DIST +=                     \
+	data/its/gstyle.its       \
+	data/its/gstyle.loc
+
 headersdir = $(includedir)/gnome-builder-@VERSION@/gstyle
 headers_DATA =                        \
 	gstyle-animation.h            \

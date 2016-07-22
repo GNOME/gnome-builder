@@ -9,7 +9,7 @@ if [ $1 ]; then
   files=$@
 else
   cd ./data/palettes
-  files=*.xml
+  files=*.gstyle.xml
 fi
 
 for file in $files; do

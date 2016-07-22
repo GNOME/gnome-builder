@@ -38,6 +38,7 @@ struct _GstylePalette
   GHashTable *color_names;
   gchar      *id;
   gchar      *name;
+  gchar      *gettext_domain;
   GFile      *file;
 };
 
@@ -57,6 +58,7 @@ enum {
   PROP_FILE,
   PROP_COLORS,
   PROP_LEN,
+  PROP_DOMAIN,
   N_PROPS
 };
 
@@ -90,20 +92,27 @@ static GParamSpec *properties [N_PROPS];
 static gboolean
 gstyle_palette_xml_get_header (xmlTextReaderPtr   reader,
                                gchar            **id,
-                               gchar            **name)
+                               gchar            **name,
+                               gchar            **domain)
 {
   g_assert (reader != NULL);
   g_assert (id != NULL);
   g_assert (name != NULL);
+  g_assert (domain != NULL);
 
-  *id = *name = NULL;
+  *id = *name = *domain = NULL;
   if (xmlTextReaderRead(reader) == 1 &&
       xmlTextReaderNodeType (reader) == XML_READER_TYPE_ELEMENT &&
       !g_strcmp0 (XML_TO_CHAR (xmlTextReaderConstName (reader)), "palette") &&
       xmlTextReaderDepth (reader) == 0)
     {
       *id = strdup_and_xmlfree (xmlTextReaderGetAttribute (reader, CHAR_TO_XML ("id")));
-      *name = strdup_and_xmlfree (xmlTextReaderGetAttribute (reader, CHAR_TO_XML ("_name")));
+      *name = strdup_and_xmlfree (xmlTextReaderGetAttribute (reader, CHAR_TO_XML ("name")));
+      if (*name == NULL)
+        {
+          *name = strdup_and_xmlfree (xmlTextReaderGetAttribute (reader, CHAR_TO_XML ("_name")));
+          *domain = strdup_and_xmlfree (xmlTextReaderGetAttribute (reader, CHAR_TO_XML ("gettext-domain")));
+        }
       if (gstyle_str_empty0 (*id) || gstyle_utf8_is_spaces (*id))
         {
           g_warning ("Palette '%s'has an empty or NULL id\n", *name);
@@ -658,14 +667,16 @@ gstyle_palette_new_from_xml (GFile         *file,
       GstyleColor *color;
       g_autofree gchar *id = NULL;
       g_autofree gchar *name = NULL;
+      g_autofree gchar *domain = NULL;
 
       xmlTextReaderSetErrorHandler (reader, gstyle_palette_error_cb, NULL);
 
       if (xmlTextReaderRead(reader) &&
-          gstyle_palette_xml_get_header (reader, &id, &name))
+          gstyle_palette_xml_get_header (reader, &id, &name, &domain))
         {
           palette = g_object_new (GSTYLE_TYPE_PALETTE,
                                   "id", id,
+                                  "domain", domain,
                                   "name", name,
                                   "file", file,
                                   NULL);
@@ -873,7 +884,13 @@ gstyle_palette_save_to_xml (GstylePalette  *self,
   id = gstyle_palette_get_id (self);
   name = gstyle_palette_get_name (self);
   xmlNewProp (palette_node, CHAR_TO_XML ("id"), CHAR_TO_XML (id));
-  xmlNewProp (palette_node, CHAR_TO_XML ("_name"), CHAR_TO_XML (name));
+  if (self->gettext_domain)
+    {
+      xmlNewProp (palette_node, CHAR_TO_XML ("_name"), CHAR_TO_XML (name));
+      xmlNewProp (palette_node, CHAR_TO_XML ("gettext-domain"), CHAR_TO_XML (self->gettext_domain));
+    }
+  else
+    xmlNewProp (palette_node, CHAR_TO_XML ("name"), CHAR_TO_XML (name));
 
   n_colors = gstyle_palette_get_len (self);
   for (gint i = 0; i < n_colors; ++i)
@@ -969,7 +986,10 @@ gstyle_palette_get_name (GstylePalette *self)
 {
   g_return_val_if_fail (GSTYLE_IS_PALETTE (self), NULL);
 
-  return self->name;
+  if (self->gettext_domain)
+    return g_dgettext (self->gettext_domain, self->name);
+  else
+    return self->name;
 }
 
 /**
@@ -1039,6 +1059,7 @@ gstyle_palette_finalize (GObject *object)
 
   g_free (self->name);
   g_free (self->id);
+  g_free (self->gettext_domain);
   g_clear_object (&self->file);
 
   G_OBJECT_CLASS (gstyle_palette_parent_class)->finalize (object);
@@ -1059,7 +1080,11 @@ gstyle_palette_get_property (GObject    *object,
       break;
 
     case PROP_NAME:
-      g_value_set_string (value, self->name);
+      g_value_set_string (value, gstyle_palette_get_name (self));
+      break;
+
+    case PROP_DOMAIN:
+      g_value_set_string (value, self->gettext_domain);
       break;
 
     case PROP_FILE:
@@ -1096,6 +1121,12 @@ gstyle_palette_set_property (GObject      *object,
 
     case PROP_NAME:
       gstyle_palette_set_name (self, g_value_get_string (value));
+      break;
+
+    case PROP_DOMAIN:
+      g_free (self->gettext_domain);
+      self->gettext_domain = g_value_dup_string (value);
+      bind_textdomain_codeset (self->gettext_domain, "UTF-8");
       break;
 
     case PROP_FILE:
@@ -1170,6 +1201,13 @@ gstyle_palette_class_init (GstylePaletteClass *klass)
                          "The palette name.",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_DOMAIN] =
+    g_param_spec_string ("domain",
+                         "Gettext domain",
+                         "The Gettext domain the file uses.",
+                         NULL,
+                         (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_FILE] =
     g_param_spec_object ("file",

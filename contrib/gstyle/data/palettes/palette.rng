@@ -106,6 +106,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
       <attribute name="_name"/>
     </choice>
     <optional>
+      <attribute name="gettext-domain"/>
+    </optional>
+    <optional>
       <oneOrMore>
           <element name="color">
             <attribute name="name">

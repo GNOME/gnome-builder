@@ -58,7 +58,7 @@ dnl ***********************************************************************
 GETTEXT_PACKAGE=AC_PACKAGE_TARNAME
 AC_DEFINE_UNQUOTED([GETTEXT_PACKAGE], ["$GETTEXT_PACKAGE"], [GETTEXT package name])
 AC_SUBST(GETTEXT_PACKAGE)
-AM_GNU_GETTEXT_VERSION([0.19.7])
+AM_GNU_GETTEXT_VERSION([0.19.8])
 AM_GNU_GETTEXT([external])
 
 

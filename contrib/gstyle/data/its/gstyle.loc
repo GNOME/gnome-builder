@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<locatingRules>
+  <locatingRule name="GStyle" pattern="*.gstyle.xml">
+    <documentRule localName="palette" target="gstyle.its"/>
+  </locatingRule>
+</locatingRules>
