@@ -721,9 +721,10 @@ gstyle_color_widget_draw (GtkWidget *widget,
                             "border-radius", &radius,
                             NULL);
 
-      gstyle_color_fill_rgba (self->color, &bg_color);
-      if (self->filter_func != NULL)
-        self->filter_func (&bg_color, &bg_color, self->filter_user_data);
+      if (self->filter_func != NULL && GSTYLE_IS_COLOR (self->filtered_color))
+        gstyle_color_fill_rgba (self->filtered_color, &bg_color);
+      else
+        gstyle_color_fill_rgba (self->color, &bg_color);
 
       cairo_new_path (cr);
       draw_cairo_round_box (cr, border_box, radius, radius, radius, radius);
@@ -967,7 +968,11 @@ gstyle_color_widget_set_filter_func (GstyleColorWidget    *self,
   self->filter_user_data = (filter_func == NULL) ? NULL : user_data;
 
   if (filter_func == NULL)
-    g_clear_object (&self->filtered_color);
+    {
+      g_clear_object (&self->filtered_color);
+      match_label_color (self, self->color);
+      update_label_visibility (self);
+    }
   else
     {
       gstyle_color_fill_rgba (self->color, &rgba);
@@ -982,6 +987,8 @@ gstyle_color_widget_set_filter_func (GstyleColorWidget    *self,
           update_label_visibility (self);
           g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_COLOR]);
         }
+
+      match_label_color (self, self->filtered_color);
     }
 
   gtk_widget_queue_draw (GTK_WIDGET (self));
