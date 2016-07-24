@@ -5,7 +5,6 @@
   <object class="GtkBox" id="components_page">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="margin">6</property>
     <property name="orientation">vertical</property>
     <child>
       <object class="GtkLabel">
@@ -30,58 +29,24 @@
         <property name="hscrollbar-policy">never</property>
         <property name="vexpand">True</property>
         <child>
-          <object class="GtkBox">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="orientation">vertical</property>
+          <object class="GtkViewport" id="list_viewport">
+            <property name="expand">False</property>
+            <property name="margin">6</property>
+            <property name="valign">start</property>
+            <property name="visible">true</property>
             <child>
-              <object class="GtkLabel">
+              <object class="GtkBox">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="halign">start</property>
-                <property name="label" translatable="yes">Visibility:</property>
-                <style>
-                  <class name="cp-prefs-grouptitle"/>
-                </style>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="margin_top">6</property>
-                <property name="margin_bottom">6</property>
-                <property name="label" translatable="yes">Select the color spaces for which you want to see sliders in the panel.</property>
-                <property name="justify">fill</property>
-                <property name="wrap">True</property>
-                <style>
-                  <class name="cp-prefs-resume"/>
-                  <class name="dim-label"/>
-                </style>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GbColorPickerPrefsList">
-                <property name="visible">True</property>
+                <property name="orientation">vertical</property>
                 <child>
-                  <object class="IdePreferencesSwitch" id="hsv_switch">
+                  <object class="GtkLabel">
                     <property name="visible">True</property>
-                    <property name="key">hsv-visible</property>
-                    <property name="is-radio">True</property>
-                    <property name="schema-id">org.gnome.builder.plugins.color_picker_plugin.components</property>
-                    <property name="target">""</property>
-                    <property name="title">HSV</property>
-                    <property name="subtitle">Hue Saturation Value</property>
+                    <property name="can_focus">False</property>
+                    <property name="halign">start</property>
+                    <property name="label" translatable="yes">Visibility:</property>
                     <style>
-                      <class name="cp-prefs-switch"/>
+                      <class name="cp-prefs-grouptitle"/>
                     </style>
                   </object>
                   <packing>
@@ -90,16 +55,17 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="IdePreferencesSwitch" id="lab_switch">
+                  <object class="GtkLabel">
                     <property name="visible">True</property>
-                    <property name="key">lab-visible</property>
-                    <property name="is-radio">True</property>
-                    <property name="schema-id">org.gnome.builder.plugins.color_picker_plugin.components</property>
-                    <property name="target">""</property>
-                    <property name="title">L*a*b*</property>
-                    <property name="subtitle">CIE L*a*b* 1976</property>
+                    <property name="can_focus">False</property>
+                    <property name="margin_top">6</property>
+                    <property name="margin_bottom">6</property>
+                    <property name="label" translatable="yes">Select the color spaces for which you want to see sliders in the panel.</property>
+                    <property name="justify">fill</property>
+                    <property name="wrap">True</property>
                     <style>
-                      <class name="cp-prefs-switch"/>
+                      <class name="cp-prefs-resume"/>
+                      <class name="dim-label"/>
                     </style>
                   </object>
                   <packing>
@@ -108,145 +74,72 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="IdePreferencesSwitch" id="rgb_switch">
+                  <object class="GbColorPickerPrefsList">
                     <property name="visible">True</property>
-                    <property name="key">rgb-visible</property>
-                    <property name="is-radio">True</property>
-                    <property name="schema-id">org.gnome.builder.plugins.color_picker_plugin.components</property>
-                    <property name="target">""</property>
-                    <property name="title">RGB</property>
-                    <property name="subtitle">Red Green Blue</property>
-                    <style>
-                      <class name="cp-prefs-switch"/>
-                    </style>
+                    <child>
+                      <object class="IdePreferencesSwitch" id="hsv_switch">
+                        <property name="visible">True</property>
+                        <property name="key">hsv-visible</property>
+                        <property name="is-radio">True</property>
+                        <property name="schema-id">org.gnome.builder.plugins.color_picker_plugin.components</property>
+                        <property name="target">""</property>
+                        <property name="title">HSV</property>
+                        <property name="subtitle">Hue Saturation Value</property>
+                        <style>
+                          <class name="cp-prefs-switch"/>
+                        </style>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="IdePreferencesSwitch" id="lab_switch">
+                        <property name="visible">True</property>
+                        <property name="key">lab-visible</property>
+                        <property name="is-radio">True</property>
+                        <property name="schema-id">org.gnome.builder.plugins.color_picker_plugin.components</property>
+                        <property name="target">""</property>
+                        <property name="title">L*a*b*</property>
+                        <property name="subtitle">CIE L*a*b* 1976</property>
+                        <style>
+                          <class name="cp-prefs-switch"/>
+                        </style>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="IdePreferencesSwitch" id="rgb_switch">
+                        <property name="visible">True</property>
+                        <property name="key">rgb-visible</property>
+                        <property name="is-radio">True</property>
+                        <property name="schema-id">org.gnome.builder.plugins.color_picker_plugin.components</property>
+                        <property name="target">""</property>
+                        <property name="title">RGB</property>
+                        <property name="subtitle">Red Green Blue</property>
+                        <style>
+                          <class name="cp-prefs-switch"/>
+                        </style>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                      </packing>
+                    </child>
                   </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                  </packing>
-                </child>
-              </object>
-            </child>
-            <child>
-              <object class="GtkLabel">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="halign">start</property>
-                <property name="label" translatable="yes">Units:</property>
-                <style>
-                  <class name="cp-prefs-grouptitle"/>
-                </style>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="margin_top">6</property>
-                <property name="margin_bottom">6</property>
-                <property name="label" translatable="yes">Select the type of unit you want to use for RGB components and strings in the panel.</property>
-                <property name="justify">fill</property>
-                <property name="wrap">True</property>
-                <style>
-                  <class name="cp-prefs-resume"/>
-                  <class name="dim-label"/>
-                </style>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GbColorPickerPrefsList">
-                <property name="visible">True</property>
-                <child>
-                  <object class="IdePreferencesSwitch" id="unit_switch">
-                    <property name="visible">True</property>
-                    <property name="key">rgb-unit</property>
-                    <property name="is-radio">True</property>
-                    <property name="schema-id">org.gnome.builder.plugins.color_picker_plugin.components</property>
-                    <property name="target">"value"</property>
-                    <property name="title">Value</property>
-                    <style>
-                      <class name="cp-prefs-switch"/>
-                    </style>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                  </packing>
                 </child>
                 <child>
-                  <object class="IdePreferencesSwitch" id="percent_switch">
+                  <object class="GtkLabel">
                     <property name="visible">True</property>
-                    <property name="key">rgb-unit</property>
-                    <property name="is-radio">True</property>
-                    <property name="schema-id">org.gnome.builder.plugins.color_picker_plugin.components</property>
-                    <property name="target">"percent"</property>
-                    <property name="title">Percent</property>
+                    <property name="can_focus">False</property>
+                    <property name="halign">start</property>
+                    <property name="label" translatable="yes">Units:</property>
                     <style>
-                      <class name="cp-prefs-switch"/>
-                    </style>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                  </packing>
-                </child>
-              </object>
-            </child>
-            <child>
-              <object class="GtkLabel">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="halign">start</property>
-                <property name="label" translatable="yes">Filters:</property>
-                <style>
-                  <class name="cp-prefs-grouptitle"/>
-                </style>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="margin_top">6</property>
-                <property name="margin_bottom">6</property>
-                <property name="label" translatable="yes">Select a filter that act on the colors or 'None'.</property>
-                <property name="justify">fill</property>
-                <property name="wrap">True</property>
-                <style>
-                  <class name="cp-prefs-resume"/>
-                  <class name="dim-label"/>
-                </style>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GbColorPickerPrefsList">
-                <property name="visible">True</property>
-                <child>
-                  <object class="IdePreferencesSwitch" id="none-filter_switch">
-                    <property name="visible">True</property>
-                    <property name="key">filter</property>
-                    <property name="is-radio">True</property>
-                    <property name="schema-id">org.gnome.builder.plugins.color_picker_plugin</property>
-                    <property name="target">"none"</property>
-                    <property name="title">None</property>
-                    <style>
-                      <class name="cp-prefs-switch"/>
+                      <class name="cp-prefs-grouptitle"/>
                     </style>
                   </object>
                   <packing>
@@ -255,15 +148,17 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="IdePreferencesSwitch" id="achromatopsia_filter_switch">
+                  <object class="GtkLabel">
                     <property name="visible">True</property>
-                    <property name="key">filter</property>
-                    <property name="is-radio">True</property>
-                    <property name="schema-id">org.gnome.builder.plugins.color_picker_plugin</property>
-                    <property name="target">"achromatopsia"</property>
-                    <property name="title">Achromatopsia (monochromacy)</property>
+                    <property name="can_focus">False</property>
+                    <property name="margin_top">6</property>
+                    <property name="margin_bottom">6</property>
+                    <property name="label" translatable="yes">Select the type of unit you want to use for RGB components and strings in the panel.</property>
+                    <property name="justify">fill</property>
+                    <property name="wrap">True</property>
                     <style>
-                      <class name="cp-prefs-switch"/>
+                      <class name="cp-prefs-resume"/>
+                      <class name="dim-label"/>
                     </style>
                   </object>
                   <packing>
@@ -272,15 +167,52 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="IdePreferencesSwitch" id="achromatomaly_filter_switch">
+                  <object class="GbColorPickerPrefsList">
                     <property name="visible">True</property>
-                    <property name="key">filter</property>
-                    <property name="is-radio">True</property>
-                    <property name="schema-id">org.gnome.builder.plugins.color_picker_plugin</property>
-                    <property name="target">"achromatomaly"</property>
-                    <property name="title">Achromatomaly (blue cone monochromacy)</property>
+                    <child>
+                      <object class="IdePreferencesSwitch" id="unit_switch">
+                        <property name="visible">True</property>
+                        <property name="key">rgb-unit</property>
+                        <property name="is-radio">True</property>
+                        <property name="schema-id">org.gnome.builder.plugins.color_picker_plugin.components</property>
+                        <property name="target">"value"</property>
+                        <property name="title">Value</property>
+                        <style>
+                          <class name="cp-prefs-switch"/>
+                        </style>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="IdePreferencesSwitch" id="percent_switch">
+                        <property name="visible">True</property>
+                        <property name="key">rgb-unit</property>
+                        <property name="is-radio">True</property>
+                        <property name="schema-id">org.gnome.builder.plugins.color_picker_plugin.components</property>
+                        <property name="target">"percent"</property>
+                        <property name="title">Percent</property>
+                        <style>
+                          <class name="cp-prefs-switch"/>
+                        </style>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                      </packing>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="halign">start</property>
+                    <property name="label" translatable="yes">Filters:</property>
                     <style>
-                      <class name="cp-prefs-switch"/>
+                      <class name="cp-prefs-grouptitle"/>
                     </style>
                   </object>
                   <packing>
@@ -289,15 +221,17 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="IdePreferencesSwitch" id="deuteranopia_filter_switch">
+                  <object class="GtkLabel">
                     <property name="visible">True</property>
-                    <property name="key">filter</property>
-                    <property name="is-radio">True</property>
-                    <property name="schema-id">org.gnome.builder.plugins.color_picker_plugin</property>
-                    <property name="target">"deuteranopia"</property>
-                    <property name="title">Deuteranopia (green-blind)</property>
+                    <property name="can_focus">False</property>
+                    <property name="margin_top">6</property>
+                    <property name="margin_bottom">6</property>
+                    <property name="label" translatable="yes">Select a filter that act on the colors or 'None'.</property>
+                    <property name="justify">fill</property>
+                    <property name="wrap">True</property>
                     <style>
-                      <class name="cp-prefs-switch"/>
+                      <class name="cp-prefs-resume"/>
+                      <class name="dim-label"/>
                     </style>
                   </object>
                   <packing>
@@ -306,106 +240,179 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="IdePreferencesSwitch" id="deuteranomaly_filter_switch">
+                  <object class="GbColorPickerPrefsList">
                     <property name="visible">True</property>
-                    <property name="key">filter</property>
-                    <property name="is-radio">True</property>
-                    <property name="schema-id">org.gnome.builder.plugins.color_picker_plugin</property>
-                    <property name="target">"deuteranomaly"</property>
-                    <property name="title">Deuteranomaly (green-weak)</property>
-                    <style>
-                      <class name="cp-prefs-switch"/>
-                    </style>
+                    <child>
+                      <object class="IdePreferencesSwitch" id="none-filter_switch">
+                        <property name="visible">True</property>
+                        <property name="key">filter</property>
+                        <property name="is-radio">True</property>
+                        <property name="schema-id">org.gnome.builder.plugins.color_picker_plugin</property>
+                        <property name="target">"none"</property>
+                        <property name="title">None</property>
+                        <style>
+                          <class name="cp-prefs-switch"/>
+                        </style>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="IdePreferencesSwitch" id="achromatopsia_filter_switch">
+                        <property name="visible">True</property>
+                        <property name="key">filter</property>
+                        <property name="is-radio">True</property>
+                        <property name="schema-id">org.gnome.builder.plugins.color_picker_plugin</property>
+                        <property name="target">"achromatopsia"</property>
+                        <property name="title">Achromatopsia (monochromacy)</property>
+                        <style>
+                          <class name="cp-prefs-switch"/>
+                        </style>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="IdePreferencesSwitch" id="achromatomaly_filter_switch">
+                        <property name="visible">True</property>
+                        <property name="key">filter</property>
+                        <property name="is-radio">True</property>
+                        <property name="schema-id">org.gnome.builder.plugins.color_picker_plugin</property>
+                        <property name="target">"achromatomaly"</property>
+                        <property name="title">Achromatomaly (blue cone monochromacy)</property>
+                        <style>
+                          <class name="cp-prefs-switch"/>
+                        </style>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="IdePreferencesSwitch" id="deuteranopia_filter_switch">
+                        <property name="visible">True</property>
+                        <property name="key">filter</property>
+                        <property name="is-radio">True</property>
+                        <property name="schema-id">org.gnome.builder.plugins.color_picker_plugin</property>
+                        <property name="target">"deuteranopia"</property>
+                        <property name="title">Deuteranopia (green-blind)</property>
+                        <style>
+                          <class name="cp-prefs-switch"/>
+                        </style>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="IdePreferencesSwitch" id="deuteranomaly_filter_switch">
+                        <property name="visible">True</property>
+                        <property name="key">filter</property>
+                        <property name="is-radio">True</property>
+                        <property name="schema-id">org.gnome.builder.plugins.color_picker_plugin</property>
+                        <property name="target">"deuteranomaly"</property>
+                        <property name="title">Deuteranomaly (green-weak)</property>
+                        <style>
+                          <class name="cp-prefs-switch"/>
+                        </style>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="IdePreferencesSwitch" id="protanopia_filter_switch">
+                        <property name="visible">True</property>
+                        <property name="key">filter</property>
+                        <property name="is-radio">True</property>
+                        <property name="schema-id">org.gnome.builder.plugins.color_picker_plugin</property>
+                        <property name="target">"protanopia"</property>
+                        <property name="title">Protanopia (red-blind)</property>
+                        <style>
+                          <class name="cp-prefs-switch"/>
+                        </style>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="IdePreferencesSwitch" id="protanomaly_filter_switch">
+                        <property name="visible">True</property>
+                        <property name="key">filter</property>
+                        <property name="is-radio">True</property>
+                        <property name="schema-id">org.gnome.builder.plugins.color_picker_plugin</property>
+                        <property name="target">"protanomaly"</property>
+                        <property name="title">Protanomaly (red-weak)</property>
+                        <style>
+                          <class name="cp-prefs-switch"/>
+                        </style>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="IdePreferencesSwitch" id="tritanopia_filter_switch">
+                        <property name="visible">True</property>
+                        <property name="key">filter</property>
+                        <property name="is-radio">True</property>
+                        <property name="schema-id">org.gnome.builder.plugins.color_picker_plugin</property>
+                        <property name="target">"tritanopia"</property>
+                        <property name="title">Ttritanopia (blue-blind)</property>
+                        <style>
+                          <class name="cp-prefs-switch"/>
+                        </style>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="IdePreferencesSwitch" id="tritanomaly_filter_switch">
+                        <property name="visible">True</property>
+                        <property name="key">filter</property>
+                        <property name="is-radio">True</property>
+                        <property name="schema-id">org.gnome.builder.plugins.color_picker_plugin</property>
+                        <property name="target">"tritanomaly"</property>
+                        <property name="title">Ttritanomaly (blue-weak)</property>
+                        <style>
+                          <class name="cp-prefs-switch"/>
+                        </style>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="IdePreferencesSwitch" id="websafe_filter_switch">
+                        <property name="visible">True</property>
+                        <property name="key">filter</property>
+                        <property name="is-radio">True</property>
+                        <property name="schema-id">org.gnome.builder.plugins.color_picker_plugin</property>
+                        <property name="target">"websafe"</property>
+                        <property name="title">Websafe</property>
+                        <style>
+                          <class name="cp-prefs-switch"/>
+                        </style>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                      </packing>
+                    </child>
                   </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="IdePreferencesSwitch" id="protanopia_filter_switch">
-                    <property name="visible">True</property>
-                    <property name="key">filter</property>
-                    <property name="is-radio">True</property>
-                    <property name="schema-id">org.gnome.builder.plugins.color_picker_plugin</property>
-                    <property name="target">"protanopia"</property>
-                    <property name="title">Protanopia (red-blind)</property>
-                    <style>
-                      <class name="cp-prefs-switch"/>
-                    </style>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="IdePreferencesSwitch" id="protanomaly_filter_switch">
-                    <property name="visible">True</property>
-                    <property name="key">filter</property>
-                    <property name="is-radio">True</property>
-                    <property name="schema-id">org.gnome.builder.plugins.color_picker_plugin</property>
-                    <property name="target">"protanomaly"</property>
-                    <property name="title">Protanomaly (red-weak)</property>
-                    <style>
-                      <class name="cp-prefs-switch"/>
-                    </style>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="IdePreferencesSwitch" id="tritanopia_filter_switch">
-                    <property name="visible">True</property>
-                    <property name="key">filter</property>
-                    <property name="is-radio">True</property>
-                    <property name="schema-id">org.gnome.builder.plugins.color_picker_plugin</property>
-                    <property name="target">"tritanopia"</property>
-                    <property name="title">Ttritanopia (blue-blind)</property>
-                    <style>
-                      <class name="cp-prefs-switch"/>
-                    </style>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="IdePreferencesSwitch" id="tritanomaly_filter_switch">
-                    <property name="visible">True</property>
-                    <property name="key">filter</property>
-                    <property name="is-radio">True</property>
-                    <property name="schema-id">org.gnome.builder.plugins.color_picker_plugin</property>
-                    <property name="target">"tritanomaly"</property>
-                    <property name="title">Ttritanomaly (blue-weak)</property>
-                    <style>
-                      <class name="cp-prefs-switch"/>
-                    </style>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="IdePreferencesSwitch" id="websafe_filter_switch">
-                    <property name="visible">True</property>
-                    <property name="key">filter</property>
-                    <property name="is-radio">True</property>
-                    <property name="schema-id">org.gnome.builder.plugins.color_picker_plugin</property>
-                    <property name="target">"websafe"</property>
-                    <property name="title">Websafe</property>
-                    <style>
-                      <class name="cp-prefs-switch"/>
-                    </style>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                  </packing>
                 </child>
               </object>
             </child>
