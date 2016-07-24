@@ -4,12 +4,14 @@ contrib/egg/egg-animation.c
 contrib/egg/egg-date-time.c
 contrib/egg/egg-file-chooser-entry.c
 contrib/egg/egg-search-bar.c
+contrib/gstyle/data/palettes/basic.gstyle.xml
 contrib/gstyle/gstyle-color-panel.c
 contrib/gstyle/gstyle-color-plane.c
 contrib/gstyle/gstyle-color-widget-actions.c
 contrib/gstyle/gstyle-palette.c
 contrib/gstyle/gstyle-palette-widget.c
 contrib/gstyle/tests/data/gstyle-color-editor.ui
+contrib/gstyle/tests/data/palette.gstyle.xml
 contrib/gstyle/ui/gstyle-color-panel.ui
 contrib/gstyle/ui/gstyle-color-widget.ui
 contrib/gstyle/ui/gstyle-rename-popover.ui
