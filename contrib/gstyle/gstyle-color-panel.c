@@ -194,6 +194,38 @@ gstyle_color_panel_set_filter (GstyleColorPanel  *self,
       filter_func = NULL;
       break;
 
+    case GSTYLE_COLOR_FILTER_ACHROMATOPSIA:
+      filter_func = gstyle_color_filter_achromatopsia;
+      break;
+
+    case GSTYLE_COLOR_FILTER_ACHROMATOMALY:
+      filter_func = gstyle_color_filter_achromatomaly;
+      break;
+
+    case GSTYLE_COLOR_FILTER_DEUTERANOPIA:
+      filter_func = gstyle_color_filter_deuteranopia;
+      break;
+
+    case GSTYLE_COLOR_FILTER_DEUTERANOMALY:
+      filter_func = gstyle_color_filter_deuteranomaly;
+      break;
+
+    case GSTYLE_COLOR_FILTER_PROTANOPIA:
+      filter_func = gstyle_color_filter_protanopia;
+      break;
+
+    case GSTYLE_COLOR_FILTER_PROTANOMALY:
+      filter_func = gstyle_color_filter_protanomaly;
+      break;
+
+    case GSTYLE_COLOR_FILTER_TRITANOPIA:
+      filter_func = gstyle_color_filter_tritanopia;
+      break;
+
+    case GSTYLE_COLOR_FILTER_TRITANOMALY:
+      filter_func = gstyle_color_filter_tritanomaly;
+      break;
+
     case GSTYLE_COLOR_FILTER_WEBSAFE:
       filter_func = gstyle_color_filter_websafe;
       break;
