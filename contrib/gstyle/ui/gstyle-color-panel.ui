@@ -908,7 +908,6 @@
           <object class="GtkStack" id="prefs_stack">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="interpolate_size">True</property>
           </object>
         </child>
       </object>
