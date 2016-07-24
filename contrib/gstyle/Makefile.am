@@ -33,7 +33,7 @@ headers_DATA =                        \
 	gstyle-palette-widget.h       \
 	gstyle-private.h              \
 	gstyle-rename-popover.h       \
-	gstyle-revealer.c             \
+	gstyle-revealer.h             \
 	gstyle-slidein.h              \
 	gstyle-types.h                \
 	gstyle-utils.h                \
@@ -62,7 +62,7 @@ libgstyle_private_la_SOURCES =        \
 	gstyle-palette.c              \
 	gstyle-palette-widget.c       \
 	gstyle-rename-popover.c       \
-	gstyle-revealer.h             \
+	gstyle-revealer.c             \
 	gstyle-slidein.c              \
 	gstyle-utils.c                \
 	gstyle-xyz.c                  \
