@@ -835,7 +835,20 @@ gstyle_slidein_get_preferred_width (GtkWidget *widget,
   if (self->interpolate_size ||
       (self->overlay_child != NULL && gtk_widget_get_visible (self->overlay_child)))
     {
-      gtk_widget_get_preferred_width (self->overlay_child, &min_width_slide_based, &nat_width_slide_based);
+      if (gtk_widget_get_request_mode (self->overlay_child) == GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT)
+        {
+          gint min_height;
+          gint nat_height;
+
+          gtk_widget_get_preferred_width (self->overlay_child, &min_height, &nat_height);
+          GTK_WIDGET_GET_CLASS(self->overlay_child)->get_preferred_width_for_height (self->overlay_child,
+                                                                                     min_height,
+                                                                                     &min_width_slide_based,
+                                                                                     &nat_width_slide_based);
+        }
+      else
+        gtk_widget_get_preferred_width (self->overlay_child, &min_width_slide_based, &nat_width_slide_based);
+
       if (get_orientation (self) == GTK_ORIENTATION_HORIZONTAL)
         {
           if (!self->interpolate_size)
@@ -886,7 +899,20 @@ gstyle_slidein_get_preferred_height (GtkWidget *widget,
   if (self->interpolate_size ||
       (self->overlay_child != NULL && gtk_widget_get_visible (self->overlay_child)))
     {
-      gtk_widget_get_preferred_height (self->overlay_child, &min_height_slide_based, &nat_height_slide_based);
+      if (gtk_widget_get_request_mode (self->overlay_child) == GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH)
+        {
+          gint min_width;
+          gint nat_width;
+
+          gtk_widget_get_preferred_width (self->overlay_child, &min_width, &nat_width);
+          GTK_WIDGET_GET_CLASS(self->overlay_child)->get_preferred_height_for_width (self->overlay_child,
+                                                                                     min_width,
+                                                                                     &min_height_slide_based,
+                                                                                     &nat_height_slide_based);
+        }
+      else
+        gtk_widget_get_preferred_height (self->overlay_child, &min_height_slide_based, &nat_height_slide_based);
+
       if (get_orientation (self) == GTK_ORIENTATION_VERTICAL)
         {
           if (!self->interpolate_size)
