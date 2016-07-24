@@ -11,12 +11,6 @@ gstylecolorpanel > box {
   border-width: 1px 0px 0px 0px;
 }
 
-#search_strings_popover gstylecolorwidget label,
-gstylecolorpanel gstylecolorwidget label,
-#colorpicker_preview_widget gstylecolorwidget label {
-  padding: 12px;
-}
-
 /* Buttons and Toggles - remove default style */
 gstylecolorpanel button.toggle,
 gstylecolorpanel #components_menu_button,

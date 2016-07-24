@@ -3,7 +3,7 @@
   <gresource prefix="/org/gnome/builder/plugins/color-picker-plugin">
     <file>theme/Adwaita.css</file>
     <file>theme/Adwaita-dark.css</file>
-    <file>theme/Adwaita-shared.css</file>
+    <file>theme/shared.css</file>
 
     <file>gtk/color-picker.ui</file>
     <file>gtk/color-picker-prefs.ui</file>
