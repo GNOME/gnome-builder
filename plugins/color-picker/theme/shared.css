@@ -217,8 +217,16 @@ gstyleslidein gbcolorpickerprefspalettelist row {
 }
 
 gstyleslidein gbcolorpickerprefslist preferencesbin > box,
-gstyleslidein gbcolorpickerprefspalettelist preferencesbin > box {
-  padding: 10px;
+gstyleslidein gbcolorpickerprefspalettelist colorpickerpaletterow > box {
+  padding: 10px 10px 10px 13px;
+}
+
+colorpickerpaletterow.needs-attention > box {
+  background-image: -gtk-gradient(radial, center center, 0, center center, 0.5, to(#4a90d9), to(transparent)),
+                    -gtk-gradient(radial, center center, 0, center center, 0.5, to(rgba(255, 255, 255, 0.76923)), to(transparent));
+  background-size: 6px 6px, 6px 6px;
+  background-repeat: no-repeat;
+  background-position: 3px center;
 }
 
 gstyleslidein gbcolorpickerprefslist row:last-child,

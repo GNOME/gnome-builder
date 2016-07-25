@@ -41,6 +41,7 @@ struct _GbColorPickerPrefsPaletteRow
 
   guint              updating : 1;
   guint              is_editing : 1;
+  guint              needs_attention : 1;
 };
 
 G_DEFINE_TYPE (GbColorPickerPrefsPaletteRow, gb_color_picker_prefs_palette_row, IDE_TYPE_PREFERENCES_BIN)
@@ -48,6 +49,7 @@ G_DEFINE_TYPE (GbColorPickerPrefsPaletteRow, gb_color_picker_prefs_palette_row, 
 enum {
   PROP_0,
   PROP_KEY,
+  PROP_NEEDS_ATTENTION,
   PROP_IS_EDITING,
   PROP_TARGET,
   PROP_PALETTE_NAME,
@@ -309,6 +311,35 @@ gb_color_picker_prefs_palette_row_set_palette_name (GbColorPickerPrefsPaletteRow
     }
 }
 
+void
+gb_color_picker_prefs_palette_row_set_needs_attention (GbColorPickerPrefsPaletteRow *self,
+                                                       gboolean                      needs_attention)
+{
+  GtkStyleContext *context;
+
+  g_return_if_fail (GB_IS_COLOR_PICKER_PREFS_PALETTE_ROW (self));
+
+  if (self->needs_attention != needs_attention)
+    {
+      context = gtk_widget_get_style_context (GTK_WIDGET (self));
+      self->needs_attention = needs_attention;
+      if (needs_attention)
+        gtk_style_context_add_class (context, GTK_STYLE_CLASS_NEEDS_ATTENTION);
+      else
+       gtk_style_context_remove_class (context, GTK_STYLE_CLASS_NEEDS_ATTENTION);
+
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_NEEDS_ATTENTION]);
+    }
+}
+
+gboolean
+gb_color_picker_prefs_palette_row_get_needs_attention (GbColorPickerPrefsPaletteRow *self)
+{
+  g_return_val_if_fail (GB_IS_COLOR_PICKER_PREFS_PALETTE_ROW (self), FALSE);
+
+  return self->needs_attention;
+}
+
 GbColorPickerPrefsPaletteRow *
 gb_color_picker_prefs_palette_row_new (void)
 {
@@ -344,6 +375,10 @@ gb_color_picker_prefs_palette_row_get_property (GObject    *object,
       g_value_set_string (value, self->key);
       break;
 
+    case PROP_NEEDS_ATTENTION:
+      g_value_set_boolean (value, gb_color_picker_prefs_palette_row_get_needs_attention (self));
+      break;
+
     case PROP_IS_EDITING:
       g_value_set_boolean (value, self->is_editing);
       break;
@@ -373,6 +408,10 @@ gb_color_picker_prefs_palette_row_set_property (GObject      *object,
     {
     case PROP_KEY:
       self->key = g_value_dup_string (value);
+      break;
+
+    case PROP_NEEDS_ATTENTION:
+      gb_color_picker_prefs_palette_row_set_needs_attention (self, g_value_get_boolean (value));
       break;
 
     case PROP_IS_EDITING:
@@ -428,12 +467,19 @@ gb_color_picker_prefs_palette_row_class_init (GbColorPickerPrefsPaletteRowClass 
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
+  properties[PROP_NEEDS_ATTENTION] =
+    g_param_spec_boolean ("needs-attention",
+                          "Needs Attention",
+                          "Whether this row needs attention",
+                         FALSE,
+                         (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
+
   properties [PROP_PALETTE_NAME] =
     g_param_spec_string ("palette-name",
                          "Palette name",
                          "Palette name",
                          NULL,
-                         (G_PARAM_READWRITE |G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
+                         (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   signals [ACTIVATED] =
     g_signal_new_class_handler ("activated",
@@ -477,6 +523,8 @@ gb_color_picker_prefs_palette_row_class_init (GbColorPickerPrefsPaletteRowClass 
   gtk_widget_class_bind_template_child (widget_class, GbColorPickerPrefsPaletteRow, image);
   gtk_widget_class_bind_template_child (widget_class, GbColorPickerPrefsPaletteRow, event_box);
   gtk_widget_class_bind_template_child (widget_class, GbColorPickerPrefsPaletteRow, palette_name);
+
+  gtk_widget_class_set_css_name (widget_class, "colorpickerpaletterow");
 }
 
 static void

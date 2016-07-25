@@ -28,7 +28,10 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (GbColorPickerPrefsPaletteRow, gb_color_picker_prefs_palette_row, GB, COLOR_PICKER_PREFS_PALETTE_ROW, IdePreferencesBin)
 
-GbColorPickerPrefsPaletteRow *gb_color_picker_prefs_palette_row_new (void);
+gboolean                           gb_color_picker_prefs_palette_row_get_needs_attention    (GbColorPickerPrefsPaletteRow    *self);
+void                               gb_color_picker_prefs_palette_row_set_needs_attention    (GbColorPickerPrefsPaletteRow    *self,
+                                                                                             gboolean                         needs_attention);
+GbColorPickerPrefsPaletteRow      *gb_color_picker_prefs_palette_row_new                    (void);
 
 G_END_DECLS
 
