@@ -213,6 +213,11 @@ gstyleslidein gbcolorpickerprefspalettelist {
 gstyleslidein gbcolorpickerprefslist row,
 gstyleslidein gbcolorpickerprefspalettelist row {
   border-bottom: 1px solid alpha(@borders, 0.2);
+  padding: 0px;
+}
+
+gstyleslidein gbcolorpickerprefslist preferencesbin > box,
+gstyleslidein gbcolorpickerprefspalettelist preferencesbin > box {
   padding: 10px;
 }
 
