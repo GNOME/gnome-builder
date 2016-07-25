@@ -10,16 +10,16 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-05-11 09:17+0000\n"
-"PO-Revision-Date: 2016-05-12 11:41+0200\n"
-"Last-Translator: Gabor Kelemen <kelemeng at gnome dot hu>\n"
+"POT-Creation-Date: 2016-07-21 23:21+0000\n"
+"PO-Revision-Date: 2016-07-25 14:13+0200\n"
+"Last-Translator: Meskó Balázs <meskobalazs@gmail.com>\n"
 "Language-Team: Hungarian <openscope at gmail dot com>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 1.5\n"
+"X-Generator: Poedit 1.8.8\n"
 
 #: ../contrib/egg/egg-animation.c:726 ../contrib/pnl/pnl-animation.c:701
 #, c-format
@@ -1152,29 +1152,21 @@ msgid "Jump to definition of symbol"
 msgstr "Ugrás szimbólumdefinícióra"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:45
-#| msgctxt "shortcut window"
-#| msgid "Move sectionport up within the file"
 msgctxt "shortcut window"
 msgid "Move viewport up within the file"
 msgstr "Nézőpont mozgatása felfelé a fájlban"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:46
-#| msgctxt "shortcut window"
-#| msgid "Move sectionport down within the file"
 msgctxt "shortcut window"
 msgid "Move viewport down within the file"
 msgstr "Nézőpont mozgatása lefelé a fájlban"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:47
-#| msgctxt "shortcut window"
-#| msgid "Move sectionport to end of file"
 msgctxt "shortcut window"
 msgid "Move viewport to end of file"
 msgstr "Nézőpont mozgatása a fájl végére"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:48
-#| msgctxt "shortcut window"
-#| msgid "Move sectionport to beginning of file"
 msgctxt "shortcut window"
 msgid "Move viewport to beginning of file"
 msgstr "Nézőpont mozgatása a fájl elejére"
@@ -1249,7 +1241,7 @@ msgstr "Dokumentum mentése"
 #: ../libide/editor/ide-editor-view-actions.c:438
 #: ../libide/ide-workbench-actions.c:67
 #: ../plugins/build-tools/gbp-build-panel.ui.h:8
-#: ../plugins/create-project/gbp-create-project-widget.c:451
+#: ../plugins/create-project/gbp-create-project-widget.c:489
 #: ../plugins/terminal/gb-terminal-view-actions.c:305
 msgid "Cancel"
 msgstr "Mégse"
@@ -1375,24 +1367,24 @@ msgstr "Adja meg a D-Bus címet"
 msgid "No such worker"
 msgstr "Nincs ilyen építő"
 
-#: ../libide/ide-buffer.c:2341
+#: ../libide/ide-buffer.c:2381
 msgid "The current language lacks a symbol resolver."
 msgstr "Az aktuális nyelvhez nem tartozik szimbólumfeloldó"
 
-#: ../libide/ide-buffer-manager.c:612
+#: ../libide/ide-buffer-manager.c:622
 msgid "File too large to be opened."
 msgstr "A fájl túl nagy a megnyitáshoz."
 
-#: ../libide/ide-buffer-manager.c:1461
+#: ../libide/ide-buffer-manager.c:1468
 msgid "Words"
 msgstr "Szavak"
 
-#: ../libide/ide-buffer-manager.c:1673
+#: ../libide/ide-buffer-manager.c:1680
 #, c-format
 msgid "unsaved document %u"
 msgstr "mentetlen dokumentum %u"
 
-#: ../libide/ide-buffer-manager.c:1707
+#: ../libide/ide-buffer-manager.c:1714
 msgid "Failed to save buffer, ignoring reclamation."
 msgstr "Nem sikerült a puffer mentése, a helyreállítás figyelmen kívül hagyva."
 
@@ -1469,7 +1461,7 @@ msgstr "A célfájlnak a projektfán belül kell lennie."
 msgid "File must be within the project tree."
 msgstr "A fájlnak a projektfán belül kell lennie."
 
-#: ../libide/ide-recent-projects.c:383
+#: ../libide/ide-recent-projects.c:396
 #, c-format
 msgid "%s() may only be executed once"
 msgstr "A(z) %s() csak egyszer hajtható végre"
@@ -1502,17 +1494,17 @@ msgstr "A(z) „%s” könyvtár megnyitása meghiúsult"
 msgid "Failed to load file: %s: %s"
 msgstr "Nem sikerült a(z) „%s” fájlt megnyitni: %s"
 
-#: ../libide/ide-source-view.c:5034
+#: ../libide/ide-source-view.c:5007
 #, c-format
 msgid "Insert “%s”"
 msgstr "„%s” beszúrása"
 
-#: ../libide/ide-source-view.c:5036
+#: ../libide/ide-source-view.c:5009
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "A(z) „%s” cseréje ezzel: „%s”"
 
-#: ../libide/ide-source-view.c:5150
+#: ../libide/ide-source-view.c:5123
 msgid "Apply Fix-It"
 msgstr "Javítás érvényesítése"
 
@@ -1960,13 +1952,10 @@ msgid "A place for all your projects"
 msgstr "Az összes projektjének helye"
 
 #: ../libide/preferences/ide-preferences-builtin.c:313
-#| msgctxt "shortcut window"
-#| msgid "Move to previous error in file"
 msgid "Restore previously opened files"
 msgstr "Korábban megnyitott fájlok visszaállítása"
 
 #: ../libide/preferences/ide-preferences-builtin.c:313
-#| msgid "The prefix to use when installing the project"
 msgid "Open previously opened files when loading a project"
 msgstr "Korábban megnyitott fájlok megnyitása projekt betöltésekor"
 
@@ -2100,23 +2089,23 @@ msgstr "A Configure futtatása…"
 msgid "Cleaning…"
 msgstr "Takarítás…"
 
-#: ../plugins/autotools/ide-makecache.c:1123
+#: ../plugins/autotools/ide-makecache.c:1124
 msgid "Invalid makefile provided, ignoring."
 msgstr "A megadott makefile érvénytelen, figyelmen kívül hagyva."
 
-#: ../plugins/autotools-templates/autotools_templates/__init__.py:200
+#: ../plugins/autotools-templates/autotools_templates/__init__.py:243
 msgid "Shared Library"
 msgstr "Megosztott könyvtár"
 
-#: ../plugins/autotools-templates/autotools_templates/__init__.py:202
+#: ../plugins/autotools-templates/autotools_templates/__init__.py:245
 msgid "Create a new autotools project with a shared library"
 msgstr "Új autotools projekt létrehozása egy megosztott könyvtárral"
 
-#: ../plugins/autotools-templates/autotools_templates/__init__.py:223
+#: ../plugins/autotools-templates/autotools_templates/__init__.py:267
 msgid "Empty Project"
 msgstr "Üres projekt"
 
-#: ../plugins/autotools-templates/autotools_templates/__init__.py:226
+#: ../plugins/autotools-templates/autotools_templates/__init__.py:270
 msgid "Create a new empty autotools project"
 msgstr "Új üres autotools projekt létrehozása"
 
@@ -2399,7 +2388,7 @@ msgstr "A clang_codeCompleteAt() csak helyi fájlokon működik"
 msgid "Command not found: %s"
 msgstr "A parancs nem található: %s"
 
-#: ../plugins/command-bar/gb-command-bar.c:603
+#: ../plugins/command-bar/gb-command-bar.c:609
 msgid "Use the entry below to execute a command"
 msgstr "Használja a lenti bemeneti mezőt a parancsok végrehajtásához"
 
@@ -2453,7 +2442,7 @@ msgstr "Érvénytelen :syntax parancsrészlet: %s"
 msgid "Invalid search and replace request"
 msgstr "Érvénytelen keresés és csere kérés"
 
-#: ../plugins/command-bar/gb-vim.c:1145
+#: ../plugins/command-bar/gb-vim.c:1146
 #, c-format
 msgid "Not a command: %s"
 msgstr "Nem parancs: %s"
@@ -2542,7 +2531,6 @@ msgid "The version control to use or \"none\" to disable"
 msgstr "A használandó verziókövetés, vagy „nincs” a letiltáshoz"
 
 #: ../plugins/create-project/gbp-create-project-tool.c:143
-#| msgid "Git"
 msgid "git"
 msgstr "git"
 
@@ -2567,17 +2555,15 @@ msgstr "Adjon meg egy projektnevet.\n"
 msgid "Please specify a project template with --template=\n"
 msgstr "Adjon meg egy projektsablont a --template= kapcsolóval\n"
 
-#: ../plugins/create-project/gbp-create-project-widget.c:291
-#| msgid "Version Control"
+#: ../plugins/create-project/gbp-create-project-widget.c:320
 msgid "Without version control"
 msgstr "Verziókövetés nélkül"
 
-#: ../plugins/create-project/gbp-create-project-widget.c:450
-#| msgid "_Select"
+#: ../plugins/create-project/gbp-create-project-widget.c:488
 msgid "Select"
 msgstr "Kiválasztás"
 
-#: ../plugins/create-project/gbp-create-project-widget.c:554
+#: ../plugins/create-project/gbp-create-project-widget.c:592
 msgid "A failure occurred while initializing version control"
 msgstr "Hiba történt a verziókövetés előkészítésekor"
 
@@ -2591,11 +2577,42 @@ msgid "Language"
 msgstr "Nyelv"
 
 #: ../plugins/create-project/gbp-create-project-widget.ui.h:4
-#| msgid "Version Control"
+msgid "License"
+msgstr "Licenc"
+
+#: ../plugins/create-project/gbp-create-project-widget.ui.h:5
 msgid "Versioning"
 msgstr "Verziókövetés"
 
-#: ../plugins/create-project/gbp-create-project-widget.ui.h:5
+#: ../plugins/create-project/gbp-create-project-widget.ui.h:6
+msgid "No license"
+msgstr "Nincs licenc"
+
+#: ../plugins/create-project/gbp-create-project-widget.ui.h:7
+msgid "AGPL version 3 or later"
+msgstr "AGPLv3 vagy újabb verzió"
+
+#: ../plugins/create-project/gbp-create-project-widget.ui.h:8
+msgid "GPL version 3 or later"
+msgstr "GPLv3 vagy újabb verzió"
+
+#: ../plugins/create-project/gbp-create-project-widget.ui.h:9
+msgid "GPL version 2 or later"
+msgstr "GPLv2 vagy újabb verzió"
+
+#: ../plugins/create-project/gbp-create-project-widget.ui.h:10
+msgid "LGPL version 3 or later"
+msgstr "LGPLv3 vagy újabb verzió"
+
+#: ../plugins/create-project/gbp-create-project-widget.ui.h:11
+msgid "LGPL version 2.1 or later"
+msgstr "LGPLv2.1 vagy újabb verzió"
+
+#: ../plugins/create-project/gbp-create-project-widget.ui.h:12
+msgid "MIT/X11"
+msgstr "MIT/X11"
+
+#: ../plugins/create-project/gbp-create-project-widget.ui.h:13
 msgid "Pattern"
 msgstr "Minta"
 
@@ -2750,7 +2767,6 @@ msgid "Project"
 msgstr "Projekt"
 
 #: ../plugins/project-tree/gb-project-tree-builder.c:207
-#| msgid "_Empty File"
 msgid "Empty"
 msgstr "Üres"
 
@@ -2825,11 +2841,11 @@ msgstr ""
 "A támogatási naplófájl kiírásra került ide: „%s”. Kérjük csatolja ezt a "
 "fájlt a hibabejelentéséhez vagy támogatási kéréséhez."
 
-#: ../plugins/symbol-tree/symbol-tree-panel.c:240
+#: ../plugins/symbol-tree/symbol-tree-panel.c:267
 msgid "Current language does not support symbol resolvers"
 msgstr "Az aktuális nyelv nem támogatja a szimbólumfeloldókat"
 
-#: ../plugins/symbol-tree/symbol-tree-panel.c:336
+#: ../plugins/symbol-tree/symbol-tree-panel.c:365
 msgid "Symbols"
 msgstr "Szimbólumok"
 
@@ -2845,7 +2861,7 @@ msgstr "Terminál tartalmának mentése más néven"
 msgid "_New Terminal"
 msgstr "Új _terminál"
 
-#: ../plugins/todo/todo_plugin/__init__.py:180
+#: ../plugins/todo/todo_plugin/__init__.py:181
 msgid "Todo"
 msgstr "Tennivalók"
 
@@ -3025,9 +3041,6 @@ msgstr "vala diagnosztika figyelmeztetések hibák"
 
 #~ msgid "Switch to source or header"
 #~ msgstr "Váltás a forrás és a fejlécállomány között"
-
-#~ msgid "Go to line"
-#~ msgstr "Ugrás sorra"
 
 #~ msgid "Attempt to load a GJS script with no filename."
 #~ msgstr "Kísérlet fájlnév nélküli GJS parancsfájl betöltésére."
