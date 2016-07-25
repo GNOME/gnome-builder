@@ -65,6 +65,11 @@ test_gstyle_color_widget_SOURCES = test-gstyle-color-widget.c
 test_gstyle_color_widget_CFLAGS = $(tests_cflags)
 test_gstyle_color_widget_LDADD = $(tests_libs)
 
+misc_programs += test-gstyle-filter
+test_gstyle_filter_SOURCES = test-gstyle-filter.c
+test_gstyle_filter_CFLAGS = $(tests_cflags)
+test_gstyle_filter_LDADD = $(tests_libs)
+
 misc_programs += test-gstyle-palette
 test_gstyle_palette_SOURCES = test-gstyle-palette.c
 test_gstyle_palette_CFLAGS = $(tests_cflags)

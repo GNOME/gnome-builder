@@ -271,7 +271,7 @@
       </packing>
     </child>
   </object>
-   <object class="GtkListStore" id="mode_store">
+  <object class="GtkListStore" id="mode_store">
     <columns>
       <column type="GstyleColorPlaneMode"/>
       <column type="gchararray"/>
