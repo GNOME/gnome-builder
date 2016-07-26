@@ -396,6 +396,8 @@ create_palette_list_item (gpointer item,
 
   g_signal_connect_object (row, "closed", G_CALLBACK (gb_color_picker_prefs_row_closed_cb), self, G_CONNECT_SWAPPED);
   g_signal_connect_object (row, "name-changed", G_CALLBACK (gb_color_picker_prefs_row_name_changed_cb), self, G_CONNECT_SWAPPED);
+  g_object_bind_property (palette, "changed", row, "needs-attention", G_BINDING_DEFAULT);
+  gstyle_palette_set_changed (palette, FALSE);
 
   return row;
 }
