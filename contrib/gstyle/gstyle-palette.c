@@ -40,6 +40,8 @@ struct _GstylePalette
   gchar      *name;
   gchar      *gettext_domain;
   GFile      *file;
+
+  guint       changed : 1;
 };
 
 static void gstyle_palette_list_model_iface_init (GListModelInterface *iface);
@@ -53,6 +55,7 @@ G_DEFINE_TYPE_WITH_CODE (GstylePalette, gstyle_palette, G_TYPE_OBJECT,
 
 enum {
   PROP_0,
+  PROP_CHANGED,
   PROP_ID,
   PROP_NAME,
   PROP_FILE,
@@ -274,6 +277,7 @@ gstyle_palette_add_at_index (GstylePalette  *self,
       g_object_ref (color);
       g_ptr_array_insert (self->colors, position, color);
       add_color_to_names_sets (self, color);
+      gstyle_palette_set_changed (self, TRUE);
 
       position = (position == -1) ? self->colors->len - 1 : position;
       g_list_model_items_changed (G_LIST_MODEL (self), position, 0, 1);
@@ -334,6 +338,7 @@ gstyle_palette_remove_at_index (GstylePalette  *self,
       remove_color_to_names_sets (self, color);
       g_ptr_array_remove_index (self->colors, position);
       g_list_model_items_changed (G_LIST_MODEL (self), position, 1, 0);
+      gstyle_palette_set_changed (self, TRUE);
 
       return TRUE;
     }
@@ -373,6 +378,7 @@ gstyle_palette_remove (GstylePalette  *self,
           remove_color_to_names_sets (self, color);
           g_ptr_array_remove_index (array, i);
           g_list_model_items_changed (G_LIST_MODEL (self), i, 1, 0);
+          gstyle_palette_set_changed (self, TRUE);
 
           return TRUE;
         }
@@ -763,6 +769,7 @@ gstyle_palette_new_from_file (GFile         *file,
   if (tmp_error)
     g_propagate_error (error, tmp_error);
 
+  gstyle_palette_set_changed (palette, FALSE);
   return palette;
 }
 
@@ -924,7 +931,29 @@ gstyle_palette_save_to_xml (GstylePalette  *self,
       return FALSE;
     }
   else
-    return TRUE;
+    {
+      gstyle_palette_set_changed (self, FALSE);
+      return TRUE;
+    }
+}
+
+/**
+ * gstyle_palette_set_changed:
+ * @self: a #GstylePalette
+ * @changed: changed state
+ *
+ */
+void
+gstyle_palette_set_changed (GstylePalette *self,
+                            gboolean       changed)
+{
+  g_return_if_fail (GSTYLE_IS_PALETTE (self));
+
+  if (self->changed != changed)
+    {
+      self->changed = changed;
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CHANGED]);
+    }
 }
 
 /**
@@ -944,6 +973,7 @@ gstyle_palette_set_name (GstylePalette *self,
       g_free (self->name);
       self->name = g_strdup (name);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_NAME]);
+      gstyle_palette_set_changed (self, TRUE);
     }
 }
 
@@ -965,12 +995,30 @@ gstyle_palette_set_id (GstylePalette *self,
     {
       num_id = g_get_real_time ();
       self->id = g_strdup_printf ("gb-cp-%lu", num_id);
+      gstyle_palette_set_changed (self, TRUE);
     }
   else if (g_strcmp0 (self->id, id) != 0)
     {
       g_free (self->id);
       self->id = g_strdup (id);
+      gstyle_palette_set_changed (self, TRUE);
     }
+}
+
+/**
+ * gstyle_palette_get_changed:
+ * @self: a #GstylePalette
+ *
+ * Return the changed state of the palette.
+ *
+ * Returns: Changed state.
+ */
+gboolean
+gstyle_palette_get_changed (GstylePalette *self)
+{
+  g_return_val_if_fail (GSTYLE_IS_PALETTE (self), FALSE);
+
+    return self->changed;
 }
 
 /**
@@ -1075,6 +1123,10 @@ gstyle_palette_get_property (GObject    *object,
 
   switch (prop_id)
     {
+    case PROP_CHANGED:
+      g_value_set_boolean (value, gstyle_palette_get_changed (self));
+      break;
+
     case PROP_ID:
       g_value_set_string (value, self->id);
       break;
@@ -1115,6 +1167,10 @@ gstyle_palette_set_property (GObject      *object,
 
   switch (prop_id)
     {
+    case PROP_CHANGED:
+      gstyle_palette_set_changed (self, g_value_get_boolean (value));
+      break;
+
     case PROP_ID:
       gstyle_palette_set_id (self, g_value_get_string (value));
       break;
@@ -1187,6 +1243,13 @@ gstyle_palette_class_init (GstylePaletteClass *klass)
   object_class->finalize = gstyle_palette_finalize;
   object_class->get_property = gstyle_palette_get_property;
   object_class->set_property = gstyle_palette_set_property;
+
+  properties [PROP_CHANGED] =
+    g_param_spec_boolean ("changed",
+                          "Changed",
+                          "Changed",
+                          FALSE,
+                          (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_ID] =
     g_param_spec_string ("id",

@@ -64,6 +64,7 @@ gboolean            gstyle_palette_add_at_index          (GstylePalette  *self,
                                                           GstyleColor    *color,
                                                           gint            position,
                                                           GError        **error);
+gboolean            gstyle_palette_get_changed           (GstylePalette  *self);
 GPtrArray          *gstyle_palette_get_colors            (GstylePalette  *self);
 const GstyleColor  *gstyle_palette_get_color_at_index    (GstylePalette  *self,
                                                           guint           index);
@@ -82,6 +83,8 @@ gboolean            gstyle_palette_remove_at_index       (GstylePalette  *self,
 gboolean            gstyle_palette_save_to_xml           (GstylePalette  *self,
                                                           GFile          *file,
                                                           GError        **error);
+void                gstyle_palette_set_changed           (GstylePalette  *self,
+                                                          gboolean        changed);
 void                gstyle_palette_set_name              (GstylePalette  *self,
                                                           const gchar    *name);
 void                gstyle_palette_set_id                (GstylePalette  *self,
