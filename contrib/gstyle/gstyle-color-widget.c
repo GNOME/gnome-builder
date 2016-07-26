@@ -340,6 +340,8 @@ gstyle_color_widget_on_drag_data_received (GtkWidget        *widget,
                                            guint             time)
 {
   GstyleColorWidget *self = GSTYLE_COLOR_WIDGET (widget);
+  GtkWidget *ancestor;
+  GstylePalette *selected_palette;
   GstyleColor * const *src_color;
   g_autofree gchar *color_string = NULL;
   GstyleColorKind kind;
@@ -354,10 +356,14 @@ gstyle_color_widget_on_drag_data_received (GtkWidget        *widget,
   target = gtk_selection_data_get_target (data);
   if (target == gdk_atom_intern_static_string ("GSTYLE_COLOR_WIDGET"))
     {
-      /* TODO: check if the color widget is coming from a PaletteWidget container */
       src_color = (void*)gtk_selection_data_get_data (data);
       if (*src_color != self->color)
-        dnd_color_fill (self, *src_color, self->color);
+        {
+          dnd_color_fill (self, *src_color, self->color);
+          if (NULL != (ancestor = gtk_widget_get_ancestor (widget, GSTYLE_TYPE_PALETTE_WIDGET)) &&
+              NULL != (selected_palette = gstyle_palette_widget_get_selected_palette (GSTYLE_PALETTE_WIDGET (ancestor))))
+            gstyle_palette_set_changed (selected_palette, TRUE);
+        }
 
       gtk_drag_finish (context, TRUE, FALSE, time);
 
