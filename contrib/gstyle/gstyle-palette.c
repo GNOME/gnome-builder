@@ -769,7 +769,9 @@ gstyle_palette_new_from_file (GFile         *file,
   if (tmp_error)
     g_propagate_error (error, tmp_error);
 
-  gstyle_palette_set_changed (palette, FALSE);
+  if (palette != NULL)
+    gstyle_palette_set_changed (palette, FALSE);
+
   return palette;
 }
 

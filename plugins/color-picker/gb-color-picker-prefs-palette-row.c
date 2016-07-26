@@ -31,6 +31,7 @@ struct _GbColorPickerPrefsPaletteRow
   GtkLabel          *palette_name;
   GtkImage          *image;
   GtkWidget         *event_box;
+  GtkWidget         *popover_menu;
   gchar             *palette_id;
 
   gulong             handler;
@@ -231,6 +232,7 @@ popover_button_rename_clicked_cb (GbColorPickerPrefsPaletteRow *self,
 
   self->is_editing = TRUE;
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_IS_EDITING]);
+  gtk_widget_hide (self->popover_menu);
 
   g_signal_emit_by_name (self, "edit");
 }
@@ -248,6 +250,7 @@ popover_button_remove_clicked_cb (GbColorPickerPrefsPaletteRow *self,
 
   id = g_variant_get_string (self->target, NULL);
   g_signal_emit_by_name (self, "closed", id);
+  gtk_widget_hide (self->popover_menu);
 }
 
 static gboolean
@@ -255,32 +258,13 @@ event_box_button_pressed_cb (GbColorPickerPrefsPaletteRow *self,
                              GdkEventButton               *event,
                              GtkEventBox                  *event_box)
 {
-  GtkWidget *popover;
-  GtkBuilder *builder;
-  GtkWidget *button_rename;
-  GtkWidget *button_remove;
-
   g_assert (GB_IS_COLOR_PICKER_PREFS_PALETTE_ROW (self));
   g_assert (event != NULL);
   g_assert (GTK_IS_EVENT_BOX (event_box));
 
   if (event->type == GDK_BUTTON_PRESS && event->button == GDK_BUTTON_SECONDARY)
     {
-      builder = gtk_builder_new_from_resource ("/org/gnome/builder/plugins/color-picker-plugin/gtk/color-picker-palette-menu.ui");
-      popover = GTK_WIDGET (gtk_builder_get_object (builder, "popover"));
-      button_rename = GTK_WIDGET (gtk_builder_get_object (builder, "button_rename"));
-      g_signal_connect_object (button_rename, "button-release-event",
-                               G_CALLBACK (popover_button_rename_clicked_cb), self, G_CONNECT_SWAPPED);
-
-      button_remove = GTK_WIDGET (gtk_builder_get_object (builder, "button_remove"));
-      g_signal_connect_object (button_remove, "button-release-event",
-                               G_CALLBACK (popover_button_remove_clicked_cb), self, G_CONNECT_SWAPPED);
-
-      gtk_popover_set_relative_to (GTK_POPOVER (popover), GTK_WIDGET (self));
-      g_signal_connect_swapped (popover, "closed", G_CALLBACK (contextual_popover_closed_cb), self);
-      gtk_widget_show (popover);
-      g_object_unref (builder);
-
+      gtk_widget_show (self->popover_menu);
       return GDK_EVENT_STOP;
     }
 
@@ -357,6 +341,7 @@ gb_color_picker_prefs_palette_row_finalize (GObject *object)
   g_clear_pointer (&self->key, g_free);
   g_clear_pointer (&self->target, g_variant_unref);
   g_clear_pointer (&self->palette_id, g_free);
+  g_clear_object (&self->popover_menu);
 
   G_OBJECT_CLASS (gb_color_picker_prefs_palette_row_parent_class)->finalize (object);
 }
@@ -530,10 +515,28 @@ gb_color_picker_prefs_palette_row_class_init (GbColorPickerPrefsPaletteRowClass 
 static void
 gb_color_picker_prefs_palette_row_init (GbColorPickerPrefsPaletteRow *self)
 {
+  GtkBuilder *builder;
+  GtkWidget *button_rename;
+  GtkWidget *button_remove;
+
   gtk_widget_init_template (GTK_WIDGET (self));
   gtk_widget_add_events (self->event_box, GDK_KEY_PRESS_MASK);
 
   g_signal_connect_swapped (self->event_box, "button-press-event",
                             G_CALLBACK (event_box_button_pressed_cb),
                             self);
+
+  builder = gtk_builder_new_from_resource ("/org/gnome/builder/plugins/color-picker-plugin/gtk/color-picker-palette-menu.ui");
+  self->popover_menu = GTK_WIDGET (g_object_ref_sink (gtk_builder_get_object (builder, "popover")));
+  button_rename = GTK_WIDGET (gtk_builder_get_object (builder, "button_rename"));
+  g_signal_connect_object (button_rename, "button-release-event",
+                           G_CALLBACK (popover_button_rename_clicked_cb), self, G_CONNECT_SWAPPED);
+
+  button_remove = GTK_WIDGET (gtk_builder_get_object (builder, "button_remove"));
+  g_signal_connect_object (button_remove, "button-release-event",
+                           G_CALLBACK (popover_button_remove_clicked_cb), self, G_CONNECT_SWAPPED);
+
+  gtk_popover_set_relative_to (GTK_POPOVER (self->popover_menu), GTK_WIDGET (self));
+
+  g_object_unref (builder);
 }

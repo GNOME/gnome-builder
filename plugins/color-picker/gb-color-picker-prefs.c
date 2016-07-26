@@ -73,6 +73,39 @@ enum
 
 static GParamSpec *properties [N_PROPS];
 
+static GtkDialog *
+create_palette_close_dialog (GbColorPickerPrefs *self,
+                             GstylePalette      *palette)
+{
+  GtkWindow *toplevel;
+  GtkDialog *dialog;
+  g_autofree gchar *text;
+  const gchar *palette_name;
+
+  g_assert (GB_IS_COLOR_PICKER_PREFS (self));
+  g_assert (GSTYLE_IS_PALETTE (palette));
+
+  toplevel = GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (self->panel)));
+  palette_name = gstyle_palette_get_name (palette);
+  text = g_strdup_printf ("Save changes to palette “%s” before closing ?", palette_name);
+  dialog = g_object_new (GTK_TYPE_MESSAGE_DIALOG,
+                         "text", text,
+                         "message-type", GTK_MESSAGE_QUESTION,
+                         NULL);
+
+  gtk_dialog_add_buttons (dialog,
+                          _("Close without Saving"), GTK_RESPONSE_CLOSE,
+                          _("Cancel"), GTK_RESPONSE_CANCEL,
+                          _("Save As…"), GTK_RESPONSE_YES,
+                          NULL);
+
+  gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
+  gtk_window_set_transient_for (GTK_WINDOW (dialog), toplevel);
+  gtk_window_set_attached_to (GTK_WINDOW (dialog), GTK_WIDGET (toplevel));
+
+  return dialog;
+}
+
 GtkWidget *
 gb_color_picker_prefs_get_page (GbColorPickerPrefs    *self,
                                 GstyleColorPanelPrefs  prefs_type)
@@ -349,12 +382,57 @@ generate_palette_button_clicked_cb (GbColorPickerPrefs *self,
 }
 
 static void
+palette_close_dialog_cb (GbColorPickerPrefs *self,
+                         gint                response_id,
+                         GtkDialog          *dialog)
+{
+  GstylePalette *palette;
+  GtkWidget *save_dialog;
+
+  g_assert (GB_IS_COLOR_PICKER_PREFS (self));
+  g_assert (GTK_IS_DIALOG (dialog));
+
+  palette = g_object_get_data (G_OBJECT (dialog), "palette");
+  g_assert (GSTYLE_IS_PALETTE (palette));
+
+  if (response_id == GTK_RESPONSE_YES)
+    {
+      gtk_widget_destroy (GTK_WIDGET (dialog));
+
+      save_dialog = create_file_save_dialog (self, palette);
+      g_signal_connect_object (save_dialog, "response", G_CALLBACK (palette_save_dialog_cb), self, G_CONNECT_SWAPPED);
+      gtk_widget_show (save_dialog);
+
+      return;
+    }
+  else if (response_id == GTK_RESPONSE_CLOSE)
+    gstyle_palette_widget_remove (self->palette_widget, palette);
+
+  gtk_widget_destroy (GTK_WIDGET (dialog));
+}
+
+static void
 gb_color_picker_prefs_row_closed_cb (GbColorPickerPrefs *self,
                                      const gchar        *palette_id)
 {
+  GstylePalette *palette;
+  GtkDialog *dialog;
+
   g_assert (GB_IS_COLOR_PICKER_PREFS (self));
 
-  gstyle_palette_widget_remove_by_id (self->palette_widget, palette_id);
+  if (NULL != (palette = gstyle_palette_widget_get_palette_by_id (self->palette_widget, palette_id)))
+    {
+      if (gstyle_palette_get_changed (palette))
+        {
+          dialog = create_palette_close_dialog (self, palette);
+          g_object_set_data (G_OBJECT (dialog), "palette", palette);
+          g_signal_connect_object (dialog, "response", G_CALLBACK (palette_close_dialog_cb), self, G_CONNECT_SWAPPED);
+          gtk_widget_show (GTK_WIDGET (dialog));
+        }
+      else
+        gstyle_palette_widget_remove_by_id (self->palette_widget, palette_id);
+
+    }
 }
 
 static void
