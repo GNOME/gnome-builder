@@ -5,19 +5,19 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gnome-builder master\n"
+"Project-Id-Version: gnome-builder gnome-3.20\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-05-14 16:08+0000\n"
-"PO-Revision-Date: 2016-05-15 23:02+0200\n"
+"POT-Creation-Date: 2016-06-22 21:06+0000\n"
+"PO-Revision-Date: 2016-07-31 14:11+0200\n"
 "Last-Translator: Marek Černocký <marek@manet.cz>\n"
-"Language-Team: Czech <gnome-cs-list@gnome.org>\n"
+"Language-Team: čeština <gnome-cs-list@gnome.org>>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Poedit 1.8.7.1\n"
+"X-Generator: Gtranslator 2.91.7\n"
 
 #: ../contrib/egg/egg-animation.c:726 ../contrib/pnl/pnl-animation.c:701
 #, c-format
@@ -137,11 +137,11 @@ msgstr "Funkce:"
 
 #: ../data/org.gnome.Builder.appdata.xml.in.h:6
 msgid "Built in syntax highlighting for many languages"
-msgstr ""
+msgstr "Vestavěné zvýrazňování syntaxe pro řadu jazyků"
 
 #: ../data/org.gnome.Builder.appdata.xml.in.h:7
 msgid "Side-by-side code editors"
-msgstr ""
+msgstr "Více editorů kódu vedle sebe"
 
 #: ../data/org.gnome.Builder.appdata.xml.in.h:8
 msgid "Integration with Git"
@@ -154,18 +154,22 @@ msgstr "Integrace s Autotools"
 #: ../data/org.gnome.Builder.appdata.xml.in.h:10
 msgid "Clang based auto-completion, semantic highlighting, and diagnostics"
 msgstr ""
+"Automatické dokončování, zvýrazňování sémantiky a diagnostika překladačem "
+"Clang"
 
 #: ../data/org.gnome.Builder.appdata.xml.in.h:11
 msgid "Python based auto-completion, semantic highlighting, and diagnostics"
 msgstr ""
+"Automatické dokončování, zvýrazňování sémantiky a diagnostika interpretem "
+"Python"
 
 #: ../data/org.gnome.Builder.appdata.xml.in.h:12
 msgid "Vala based auto-completion and diagnostics"
-msgstr ""
+msgstr "Automatické dokončování a diagnostika překladačem Vala"
 
 #: ../data/org.gnome.Builder.appdata.xml.in.h:13
 msgid "Auto indentation support for C, Python, Vala, and XML"
-msgstr ""
+msgstr "Podpora automatického odsazování pro C, Python, Vala a XML"
 
 #: ../data/org.gnome.Builder.appdata.xml.in.h:14
 msgid "HTML/Markdown live preview"
@@ -177,49 +181,43 @@ msgstr "Volitelné editování ve stylu Vim"
 
 #: ../data/org.gnome.Builder.appdata.xml.in.h:16
 msgid "Preview support for building with Xdg-App runtimes"
-msgstr ""
+msgstr "Podpora náhledu pro sestavování pomocí běhového prostředí Xdg-App"
 
 #: ../data/org.gnome.Builder.desktop.in.in.h:2
 msgid "Build software for GNOME"
-msgstr ""
+msgstr "Sestavujte software pro GNOME"
 
 #: ../data/org.gnome.Builder.desktop.in.in.h:3
 msgid "Build;Develop;"
-msgstr ""
+msgstr "sestavit;sestavení;vývoj;"
 
 #: ../data/gsettings/org.gnome.builder.build.gschema.xml.in.h:1
-#, fuzzy
-#| msgid "Build Workers"
 msgid "Build Parallelism"
-msgstr "Sestavovací procesy"
+msgstr "Souběžné sestavování"
 
 #: ../data/gsettings/org.gnome.builder.build.gschema.xml.in.h:2
 msgid ""
 "Number of workers to use when performing builds. -1 for sensible default. 0 "
 "for number of CPU."
 msgstr ""
+"Počet procesů použitých pri sestavování. -1 pro vhodný výchozí. 0 pro "
+"celkový počet procesorových jader."
 
 #: ../data/gsettings/org.gnome.builder.code-insight.gschema.xml.in.h:1
-#, fuzzy
-#| msgid "Suggest Python completions"
 msgid "Suggest Snippet Completion"
-msgstr "Navrhovat dokončování pro Python"
+msgstr "Navrhovat dokončování úryvků"
 
 #: ../data/gsettings/org.gnome.builder.code-insight.gschema.xml.in.h:2
 msgid "Allow snippets to be inserted into the document."
-msgstr ""
+msgstr "Umožnit vkládání úryvků do dokumentu."
 
 #: ../data/gsettings/org.gnome.builder.code-insight.gschema.xml.in.h:3
-#, fuzzy
-#| msgid "Suggest completions using Clang (Experimental)"
 msgid "Clang based autocompletion (Experimental)"
-msgstr "Navrhovat dokončení slov pomocí Clang (experimentální)"
+msgstr "Automatické dokončování překladačem Clang (experimentální)"
 
 #: ../data/gsettings/org.gnome.builder.code-insight.gschema.xml.in.h:4
-#, fuzzy
-#| msgid "Use Clang to suggest completions for C and C++ languages"
 msgid "Use Clang for autocompletion in the C and C++ languages."
-msgstr "Používat Clang pro návrhy dokončování v jazycích C a C++"
+msgstr "Používat Clang pro automatické dokončování v jazycích C a C++"
 
 #: ../data/gsettings/org.gnome.builder.code-insight.gschema.xml.in.h:5
 msgid "Ctags based autocompletion"
@@ -238,50 +236,48 @@ msgid ""
 "If enabled, words within the current document will be available for auto-"
 "completion."
 msgstr ""
+"Když je zapnuto, budou slova z aktuálního dokumentu k dispozici v nabídce "
+"automatickém dokončování."
 
 #: ../data/gsettings/org.gnome.builder.code-insight.gschema.xml.in.h:9
-#, fuzzy
-#| msgid "Semantic Highlighting"
 msgid "Enable semantic highlighting"
-msgstr "Zvýrazňování sémantiky"
+msgstr "Povolit zvýrazňování sémantiky"
 
 #: ../data/gsettings/org.gnome.builder.code-insight.gschema.xml.in.h:10
 msgid ""
 "If enabled, additional highlighting will be provided in supported languages "
 "based on information extracted from the source code."
 msgstr ""
+"Když je zapnuto, bude u podporovaných jazyků navíc poskytnuto zvýrazňování "
+"vycházející z informací získaných ze zdrojového kódu."
 
 #: ../data/gsettings/org.gnome.builder.code-insight.gschema.xml.in.h:11
-#, fuzzy
-#| msgid "autogen.sh is not executable."
 msgid "Path to ctags executable"
-msgstr "Skript autogen.sh není spustitelný."
+msgstr "Cesta ke spustitelnému souboru ctags"
 
 #: ../data/gsettings/org.gnome.builder.code-insight.gschema.xml.in.h:12
 msgid "The path to the ctags executable on the system."
-msgstr ""
+msgstr "Cesta v systému ke spustitelnému souboru ctags."
 
 #: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:1
-#, fuzzy
-#| msgid "Restore cursor position"
 msgid "Restore last position"
-msgstr "Obnovovat umístění kurzoru"
+msgstr "Obnovovat poslední pozici"
 
 #: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:2
 msgid "Jump to the last position when reopening a file"
-msgstr ""
+msgstr "Při opětovném otevření souboru skočit na poslední pozici."
 
 #: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:3
-#, fuzzy
-#| msgid "Show Ignored Files"
 msgid "Show modified lines"
-msgstr "Zobrazovat ignorované soubory"
+msgstr "Zobrazovat změněné řádky"
 
 #: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:4
 msgid ""
 "If enabled, the editor will show line additions and changes next to the "
 "source code."
 msgstr ""
+"Když je zapnuto, bude editor po straně zdrojového kódu zobrazovat, jestli "
+"byl řádek přidán nebo změněn."
 
 #: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:5
 #: ../data/ui/ide-editor-tweak-widget.ui.h:4
@@ -290,27 +286,23 @@ msgstr "Zvýrazňovat aktuální řádek"
 
 #: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:6
 msgid "If enabled, the editor will highlight the line containing the cursor."
-msgstr ""
+msgstr "Když je zapnuto, bude editor zvýrazňovat řádek obsahující kurzor."
 
 #: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:7
-#, fuzzy
-#| msgid "Matching brackets"
 msgid "Highlight matching brackets"
-msgstr "Odpovídající závorky"
+msgstr "Zvýrazňovat související závorky"
 
 #: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:8
 msgid "If enabled, the editor will highlight matching brackets."
-msgstr ""
+msgstr "Když je zapnuto, bude editor zvýrazňovat závorky, které si odpovídají."
 
 #: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:9
-#, fuzzy
-#| msgid "Go to line number"
 msgid "Show line numbers"
-msgstr "Přejít na řádek číslo"
+msgstr "Zobrazovat čísla řádků"
 
 #: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:10
 msgid "If enabled, the editor will show line numbers."
-msgstr ""
+msgstr "Když je zapnuto, bude editor zobrazovat čísla řádků."
 
 #: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:11
 #: ../data/ui/ide-editor-tweak-widget.ui.h:6
@@ -319,16 +311,12 @@ msgid "Smart Backspace"
 msgstr "Chytrý Backaspace"
 
 #: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:12
-#, fuzzy
-#| msgid ""
-#| "Backspace will remove extra space to keep you aligned with your "
-#| "indentation"
 msgid ""
 "Backspace will remove additional spaces to keep you aligned to the "
 "indentation size."
 msgstr ""
-"Backspace bude odstraňovat nadbytečnou mezeru, aby zůstalo zachováno "
-"zarovnání podle vašeho odsazení."
+"Backspace bude odstraňovat nadbytečné mezery, aby zůstalo zachováno "
+"zarovnání podle velikosti odsazení."
 
 #: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:13
 #: ../libide/preferences/ide-preferences-builtin.c:127
@@ -336,20 +324,17 @@ msgid "Smart Home and End"
 msgstr "Chytrý Home a End"
 
 #: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:14
-#, fuzzy
-#| msgid "Home moves to first non-whitespace character"
 msgid "Whether or not Home moves to first non-space character."
-msgstr "Klávesa Home přesouvá na první nebílý znak"
+msgstr "Jestli má nebo nemá klávesa Home přesouvat na první nebílý znak."
 
 #: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:15
-#, fuzzy
-#| msgid "Show Ignored Files"
 msgid "Show grid lines"
-msgstr "Zobrazovat ignorované soubory"
+msgstr "Zobrazovat mřížku"
 
 #: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:16
 msgid "If enabled, the editor will show grid lines in the document."
 msgstr ""
+"Když je zapnuto, bude editor v dokumentu na pozadí řádků zobrazovat mřížku."
 
 #: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:17
 #: ../libide/preferences/ide-preferences-builtin.c:150
@@ -361,10 +346,10 @@ msgid ""
 "If enabled, Builder will display an overview map of the source file next to "
 "the editor."
 msgstr ""
+"Když je zapnuto, bude Builder vedle editoru zobrazovat přehledovou mapu "
+"souboru se zdrojovým kódem."
 
 #: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:19
-#, fuzzy
-#| msgid "Automatically hide overview map"
 msgid "Automatically Hide Overview Map"
 msgstr "Automaticky skrývat přehledovou mapu"
 
@@ -373,16 +358,17 @@ msgid ""
 "If enabled, Builder will automatically hide the overview map when mouse "
 "focus leaves the editor, or a timeout occurs."
 msgstr ""
+"Když je zapnuto, bude Builder automaticky skrývat přehledovou mapu v "
+"situaci, kdy zaměření myši opustí editor nebo uplyne časový limit."
 
 #: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:21
-#, fuzzy
-#| msgid "Spaces"
 msgid "Draw Spaces"
-msgstr "Mezery"
+msgstr "Vykreslovat bílé znaky"
 
 #: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:22
 msgid "The various types of space to draw in the editor."
 msgstr ""
+"Různé typy bílých znaků, které se mají v editoru viditelně vykreslovat."
 
 #: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:23
 #: ../libide/preferences/ide-preferences-builtin.c:139
@@ -390,10 +376,8 @@ msgid "Overscroll"
 msgstr "Posun mimo"
 
 #: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:24
-#, fuzzy
-#| msgid "Allow the editor to scroll past the end of the buffer"
 msgid "The number of lines to scroll beyond the end of the buffer."
-msgstr "Umožňuje editoru posun za konec textu"
+msgstr "Počet řádků, o které je možné se posunout za konec textu."
 
 #: ../data/gsettings/org.gnome.builder.extension-type.gschema.xml.in.h:1
 #: ../data/gsettings/org.gnome.builder.plugin.gschema.xml.in.h:1
@@ -402,7 +386,7 @@ msgstr "Povoleno"
 
 #: ../data/gsettings/org.gnome.builder.extension-type.gschema.xml.in.h:2
 msgid "If the type within the extension is enabled."
-msgstr ""
+msgstr "Jestli jde o typ, pro který je rozšíření povolené."
 
 #: ../data/gsettings/org.gnome.builder.gschema.xml.in.h:1
 msgid "Window size"
@@ -413,10 +397,8 @@ msgid "Window size (width and height)."
 msgstr "Velikost okna (šířka a výška)."
 
 #: ../data/gsettings/org.gnome.builder.gschema.xml.in.h:3
-#, fuzzy
-#| msgid "Right margin position"
 msgid "Window position"
-msgstr "Pozice pravého okraje"
+msgstr "Pozice okna"
 
 #: ../data/gsettings/org.gnome.builder.gschema.xml.in.h:4
 msgid "Window position (x and y)."
@@ -436,32 +418,24 @@ msgstr "Noční režim"
 
 #: ../data/gsettings/org.gnome.builder.gschema.xml.in.h:8
 msgid "Prefer dark application chrome."
-msgstr ""
+msgstr "Upřednostňovat tmavý vzhled aplikace."
 
 #: ../data/gsettings/org.gnome.builder.gschema.xml.in.h:9
-#, fuzzy
-#| msgid "Clean the project"
 msgid "Mine projects"
-msgstr "Vyčistit projekt"
+msgstr "Dolovat projekty"
 
 #: ../data/gsettings/org.gnome.builder.gschema.xml.in.h:10
-#, fuzzy
-#| msgid "Search for projects"
 msgid "Search directories for projects."
-msgstr "Vyhledat projekty"
+msgstr "Vyhledávat ve složkách projekty."
 
 #: ../data/gsettings/org.gnome.builder.gschema.xml.in.h:11
 #: ../libide/preferences/ide-preferences-builtin.c:312
-#, fuzzy
-#| msgid "Projects Directory"
 msgid "Projects directory"
 msgstr "Složka s projekty"
 
 #: ../data/gsettings/org.gnome.builder.gschema.xml.in.h:12
-#, fuzzy
-#| msgid "A place for all your projects"
 msgid "Directory for all builder projects"
-msgstr "Místo pro všechny vaše projekty"
+msgstr "Složka pro všechny projekty z Builderu."
 
 #: ../data/gsettings/org.gnome.builder.gschema.xml.in.h:13
 msgid "Restore Previous Files"
@@ -469,11 +443,11 @@ msgstr "Obnovit předchozí soubory"
 
 #: ../data/gsettings/org.gnome.builder.gschema.xml.in.h:14
 msgid "Restore previously opened files when loading a project."
-msgstr ""
+msgstr "Při načítání projektu opět otevřít původně otevřené soubory."
 
 #: ../data/gsettings/org.gnome.builder.plugin.gschema.xml.in.h:2
 msgid "If the plugin should be enabled"
-msgstr ""
+msgstr "Jestli má být zásuvný modul povolen"
 
 #: ../data/gsettings/org.gnome.builder.project-tree.gschema.xml.in.h:1
 msgid "Show Project Sidebar"
@@ -482,6 +456,7 @@ msgstr "Zobrazit boční panel projektu."
 #: ../data/gsettings/org.gnome.builder.project-tree.gschema.xml.in.h:2
 msgid "If enabled, the sidebar will be visible in the editor workspace."
 msgstr ""
+"Když je zapnuto, bude v pracovní oblasti editoru viditelný postranní panel."
 
 #: ../data/gsettings/org.gnome.builder.project-tree.gschema.xml.in.h:3
 #: ../plugins/project-tree/gtk/menus.ui.h:15
@@ -491,6 +466,7 @@ msgstr "Zobrazovat ikony"
 #: ../data/gsettings/org.gnome.builder.project-tree.gschema.xml.in.h:4
 msgid "If enabled, the project tree will display icons next to each item."
 msgstr ""
+"Když je zapnuto, bude projektový strom vedle každé položky zobrazovat ikonu."
 
 #: ../data/gsettings/org.gnome.builder.project-tree.gschema.xml.in.h:5
 #: ../plugins/project-tree/gtk/menus.ui.h:16
@@ -501,58 +477,48 @@ msgstr "Zobrazovat ignorované soubory"
 msgid ""
 "If enabled, the project tree will display files that are ignored by the VCS."
 msgstr ""
+"Když je zapnuto, bude projektový strom zobrazovat soubory, které jsou "
+"ignorovány systémem pro správu verzí."
 
 #: ../data/gsettings/org.gnome.builder.workbench.gschema.xml.in.h:1
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Toggle left panel"
 msgid "Show Left Panel"
-msgstr "Přepnout levý panel"
+msgstr "Zobrazovat levý panel"
 
 #: ../data/gsettings/org.gnome.builder.workbench.gschema.xml.in.h:2
 msgid "If enabled, the left panel will be displayed."
-msgstr "Když je tato možnost aktivní, tak bude zobrazen levý panel."
+msgstr "Když je zapnuto, tak bude zobrazen levý panel."
 
 #: ../data/gsettings/org.gnome.builder.workbench.gschema.xml.in.h:3
-#, fuzzy
-#| msgid "Right margin position"
 msgid "Left Panel Position"
-msgstr "Pozice pravého okraje"
+msgstr "Šířka levého panelu"
 
 #: ../data/gsettings/org.gnome.builder.workbench.gschema.xml.in.h:4
 msgid "The width in pixel units of the left panel."
 msgstr "Šířka levého panelu v pixelech."
 
 #: ../data/gsettings/org.gnome.builder.workbench.gschema.xml.in.h:5
-#, fuzzy
-#| msgid "Show right margin"
 msgid "Show Right Panel"
-msgstr "Zobrazovat pravý okraj"
+msgstr "Zobrazovat pravý panel"
 
 #: ../data/gsettings/org.gnome.builder.workbench.gschema.xml.in.h:6
 msgid "If enabled, the right panel will be displayed."
-msgstr "Když je tato možnost aktivní, tak bude zobrazen pravý panel."
+msgstr "Když je zapnuto tak bude zobrazen pravý panel."
 
 #: ../data/gsettings/org.gnome.builder.workbench.gschema.xml.in.h:7
-#, fuzzy
-#| msgid "Right margin position"
 msgid "Right Panel Position"
-msgstr "Pozice pravého okraje"
+msgstr "Šířka pravého panelu"
 
 #: ../data/gsettings/org.gnome.builder.workbench.gschema.xml.in.h:8
 msgid "The width in pixel units of the right panel."
 msgstr "Šířka pravého panelu v pixelech."
 
 #: ../data/gsettings/org.gnome.builder.workbench.gschema.xml.in.h:9
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Toggle bottom panel"
 msgid "Show Bottom Panel"
-msgstr "Přepnout spodní panel"
+msgstr "Zobrazovat spodní panel"
 
 #: ../data/gsettings/org.gnome.builder.workbench.gschema.xml.in.h:10
 msgid "If enabled, the bottom panel will be displayed."
-msgstr "Když je tato možnost aktivní, tak bude zobrazen spodní panel."
+msgstr "Když je zapnuto, tak bude zobrazen spodní panel."
 
 #: ../data/gsettings/org.gnome.builder.workbench.gschema.xml.in.h:11
 msgid "Bottom Panel Position"
@@ -1181,36 +1147,24 @@ msgid "Jump to definition of symbol"
 msgstr "Přesunout se na definici symbolu"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:45
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Move sectionport up within the file"
 msgctxt "shortcut window"
 msgid "Move viewport up within the file"
 msgstr "Posunout se výše pohledem na soubor"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:46
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Move sectionport down within the file"
 msgctxt "shortcut window"
 msgid "Move viewport down within the file"
 msgstr "Posunout se níže pohledem na soubor"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:47
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Move sectionport to end of file"
 msgctxt "shortcut window"
 msgid "Move viewport to end of file"
-msgstr "Posunout se pohledem na konec souboru"
+msgstr "Posunout se na konec pohledem na soubor"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:48
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Move sectionport to beginning of file"
 msgctxt "shortcut window"
 msgid "Move viewport to beginning of file"
-msgstr "Posunout se pohledem na začátek souboru"
+msgstr "Posunout se na začátek pohledem na souboru"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:49
 msgctxt "shortcut window"
@@ -1452,7 +1406,7 @@ msgstr "Před použitím libide musíte zavolat %s()."
 
 #: ../libide/ide-configuration-manager.c:427
 msgid "Default Configuration"
-msgstr "Výchozí nastavení"
+msgstr "Výchozí konfigurace"
 
 #: ../libide/ide-context.c:1837
 msgid "An unload request is already pending"
@@ -1615,10 +1569,9 @@ msgid "Open"
 msgstr "Otevřít"
 
 #: ../libide/ide-workbench.c:560
-#, fuzzy, c-format
-#| msgid "Builder"
+#, c-format
 msgid "%s - Builder"
-msgstr "Builder"
+msgstr "%s – Builder"
 
 #: ../libide/preferences/ide-preferences-builtin.c:41
 msgid "Extensions"
@@ -1698,7 +1651,7 @@ msgstr "Emacs"
 
 #: ../libide/preferences/ide-preferences-builtin.c:123
 msgid "Emulates the Emacs text editor"
-msgstr "Emuluje textový editor Emacs"
+msgstr "Emulovat textový editor Emacs"
 
 #: ../libide/preferences/ide-preferences-builtin.c:124
 msgid "Vim"
@@ -1706,7 +1659,7 @@ msgstr "Vim"
 
 #: ../libide/preferences/ide-preferences-builtin.c:124
 msgid "Emulates the Vim text editor"
-msgstr "Emuluje textový editor Vim"
+msgstr "Emulovat textový editor Vim"
 
 #: ../libide/preferences/ide-preferences-builtin.c:126
 msgid "Movement"
@@ -1995,17 +1948,12 @@ msgid "A place for all your projects"
 msgstr "Místo pro všechny vaše projekty"
 
 #: ../libide/preferences/ide-preferences-builtin.c:313
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Move to previous error in file"
 msgid "Restore previously opened files"
-msgstr "Přesunout se v souboru na předchozí chybu"
+msgstr "Obnovovat naposledy otevřené soubory"
 
 #: ../libide/preferences/ide-preferences-builtin.c:313
-#, fuzzy
-#| msgid "The prefix to use when installing the project"
 msgid "Open previously opened files when loading a project"
-msgstr "Prefix, který se má použít při instalaci projektu"
+msgstr "Po načtení projektu otevřít naposledy otevřené soubory"
 
 #: ../libide/preferences/ide-preferences-builtin.c:315
 msgid "Project Discovery"
@@ -2141,25 +2089,21 @@ msgstr "Čistí se…"
 msgid "Invalid makefile provided, ignoring."
 msgstr "Poskytnut neplatný Makefile, ignoruje se."
 
-#: ../plugins/autotools-templates/autotools_templates/__init__.py:241
+#: ../plugins/autotools-templates/autotools_templates/__init__.py:243
 msgid "Shared Library"
 msgstr "Sdílená knihovna"
 
-#: ../plugins/autotools-templates/autotools_templates/__init__.py:243
+#: ../plugins/autotools-templates/autotools_templates/__init__.py:245
 msgid "Create a new autotools project with a shared library"
 msgstr "Vytvořit nový projekt se sdílenou knihovnou používající autotools"
 
-#: ../plugins/autotools-templates/autotools_templates/__init__.py:264
-#, fuzzy
-#| msgid "Project"
+#: ../plugins/autotools-templates/autotools_templates/__init__.py:266
 msgid "Empty Project"
-msgstr "Projekt"
+msgstr "Prázdný projekt"
 
-#: ../plugins/autotools-templates/autotools_templates/__init__.py:267
-#, fuzzy
-#| msgid "Create a new project"
+#: ../plugins/autotools-templates/autotools_templates/__init__.py:269
 msgid "Create a new empty autotools project"
-msgstr "Vytvořit nový projekt"
+msgstr "Vytvořit nový prázdný projekt s autotools"
 
 #: ../plugins/build-tools/gbp-build-configuration-view.ui.h:2
 msgid "The name of the build configuration"
@@ -2440,7 +2384,7 @@ msgstr "clang_codeCompleteAt() funguje jen na místních souborech"
 msgid "Command not found: %s"
 msgstr "Příkaz nebyl nalezen: %s"
 
-#: ../plugins/command-bar/gb-command-bar.c:603
+#: ../plugins/command-bar/gb-command-bar.c:609
 msgid "Use the entry below to execute a command"
 msgstr "Použijte pole níže k provedení příkazu"
 
@@ -2494,7 +2438,7 @@ msgstr "Neplatná syntax podřízeného příkazu: %s"
 msgid "Invalid search and replace request"
 msgstr "Neplatný požadavek na hledání a nahrazování"
 
-#: ../plugins/command-bar/gb-vim.c:1145
+#: ../plugins/command-bar/gb-vim.c:1146
 #, c-format
 msgid "Not a command: %s"
 msgstr "Nejedná se o příkaz: %s"
@@ -2608,16 +2552,13 @@ msgid "Please specify a project template with --template=\n"
 msgstr "Zadejte prosím šablonu projektu pomocí --template=\n"
 
 #: ../plugins/create-project/gbp-create-project-widget.c:320
-#, fuzzy
-#| msgid "Version Control"
 msgid "Without version control"
-msgstr "Systém správy verzí"
+msgstr "Bez správy verzí"
 
 #: ../plugins/create-project/gbp-create-project-widget.c:488
-#, fuzzy
 #| msgid "_Select"
 msgid "Select"
-msgstr "_Vybrat"
+msgstr "Vybrat"
 
 #: ../plugins/create-project/gbp-create-project-widget.c:592
 msgid "A failure occurred while initializing version control"
@@ -2637,10 +2578,9 @@ msgid "License"
 msgstr "Licence"
 
 #: ../plugins/create-project/gbp-create-project-widget.ui.h:5
-#, fuzzy
 #| msgid "Version Control"
 msgid "Versioning"
-msgstr "Systém správy verzí"
+msgstr "Správa verzí"
 
 #: ../plugins/create-project/gbp-create-project-widget.ui.h:6
 msgid "No license"
@@ -2823,10 +2763,8 @@ msgid "Project"
 msgstr "Projekt"
 
 #: ../plugins/project-tree/gb-project-tree-builder.c:207
-#, fuzzy
-#| msgid "_Empty File"
 msgid "Empty"
-msgstr "_Prázdný soubor"
+msgstr "Prázdný"
 
 #: ../plugins/project-tree/gb-rename-file-popover.c:79
 #, c-format
