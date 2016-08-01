@@ -18,7 +18,7 @@ dnl Initialize autoconf
 dnl ***********************************************************************
 AC_INIT([{{name}}],[package_version],[bug_report_url])
 AC_CONFIG_HEADERS([config.h])
-{{if template != "empty"}}
+{{if template == "shared-library"}}
 AC_CONFIG_SRCDIR([data/{{name}}.pc.in])
 {{else}}
 AC_CONFIG_SRCDIR([NEWS])

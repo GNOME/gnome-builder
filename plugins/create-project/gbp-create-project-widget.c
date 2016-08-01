@@ -605,6 +605,10 @@ gbp_create_project_widget_create_async (GbpCreateProjectWidget *self,
 
   if (gtk_switch_get_active (self->versioning_switch))
     {
+      g_hash_table_insert (params,
+                           g_strdup ("versioning"),
+                           g_variant_ref_sink (g_variant_new_string ("git")));
+
       engine = peas_engine_get_default ();
       plugin_info = peas_engine_get_plugin_info (engine, vcs_id);
 

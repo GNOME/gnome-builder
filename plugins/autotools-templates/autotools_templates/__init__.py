@@ -43,7 +43,7 @@ def get_module_data_path(name):
 
 class LibraryTemplateProvider(GObject.Object, Ide.TemplateProvider):
     def do_get_project_templates(self):
-        return [LibraryProjectTemplate(), EmptyProjectTemplate()]
+        return [LibraryProjectTemplate(), EmptyProjectTemplate(), GnomeProjectTemplate()]
 
 class AutotoolsTemplateLocator(Template.TemplateLocator):
     license = None
@@ -115,6 +115,10 @@ class AutotoolsTemplate(Ide.TemplateBase, Ide.ProjectTemplate):
                                          self.language))
             return
 
+        self.versioning = ''
+        if 'versioning' in params:
+            self.versioning = params['versioning'].get_string()
+
         if 'author' in params:
             author_name = params['author'].get_string()
         else:
@@ -129,6 +133,7 @@ class AutotoolsTemplate(Ide.TemplateBase, Ide.ProjectTemplate):
         prefix = name if not name.endswith('-glib') else name[:-5]
         PREFIX = prefix.upper().replace('-','_')
         prefix_ = prefix.lower().replace('-','_')
+        PreFix = ''.join([word.capitalize() for word in prefix.lower().split('-')])
 
         scope.get('name').assign_string(name)
         scope.get('name_').assign_string(name.lower().replace('-','_'))
@@ -136,10 +141,12 @@ class AutotoolsTemplate(Ide.TemplateBase, Ide.ProjectTemplate):
 
         scope.get('prefix').assign_string(prefix)
         scope.get('Prefix').assign_string(prefix.capitalize())
+        scope.get('PreFix').assign_string(PreFix)
         scope.get('prefix_').assign_string(prefix_)
         scope.get('PREFIX').assign_string(PREFIX)
 
-        scope.get('packages').assign_string("gio-2.0 >= 2.42")
+        scope.get('project_path').assign_string(directory.get_path())
+        scope.get('packages').assign_string(self.get_packages())
         scope.get('major_version').assign_string('0')
         scope.get('minor_version').assign_string('1')
         scope.get('micro_version').assign_string('0')
@@ -160,6 +167,7 @@ class AutotoolsTemplate(Ide.TemplateBase, Ide.ProjectTemplate):
         expands = {
             'name': name,
             'prefix': prefix,
+            'PreFix': PreFix,
         }
 
         files = {
@@ -243,6 +251,9 @@ class AutotoolsTemplate(Ide.TemplateBase, Ide.ProjectTemplate):
     def prepare_file_modes(self, modes):
         pass
 
+    def get_packages(self):
+        pass
+
 class LibraryProjectTemplate(AutotoolsTemplate):
     def __init__(self):
         super().__init__(
@@ -252,6 +263,9 @@ class LibraryProjectTemplate(AutotoolsTemplate):
             _("Create a new autotools project with a shared library"),
             ['C', 'C++', 'Vala']
          )
+
+    def get_packages(self):
+        return "gio-2.0 >= 2.42"
 
     def prepare_files(self, files):
         files['resources/data/package.pc.in'] = 'data/%(name)s.pc.in'
@@ -277,6 +291,40 @@ class EmptyProjectTemplate(AutotoolsTemplate):
             ['C', 'C++', 'Vala']
          )
 
+    def get_packages(self):
+        return "gio-2.0 >= 2.42"
+
     def prepare_files(self, files):
         files['resources/src/Makefile.empty'] = 'src/Makefile.am'
+
+class GnomeProjectTemplate(AutotoolsTemplate):
+    def __init__(self):
+        super().__init__(
+            'gnome-app',
+            _("GNOME Application"),
+            'pattern-gnome',
+            _("Create a new flatpak-ready GNOME application"),
+            ['C', 'C++', 'Vala']
+         )
+
+    def get_packages(self):
+        if self.language == "c" or self.language == "vala":
+            return "gio-2.0 >= 2.42 gtk+-3.0 >= 3.20"
+        elif self.language == "c++":
+            return "giomm-2.4 >= 2.42 gtkmm-3.0 >= 3.20"
+        else:
+            return ""
+
+    def prepare_files(self, files):
+        files['resources/src/Makefile.gnome-app'] = 'src/Makefile.am'
+
+        if self.versioning == 'git':
+            files['resources/ManifestTemplate.flatpak.json'] = 'org.gnome.%(PreFix)s.flatpak.json'
+
+        if self.language == 'c':
+            files['resources/src/main.c'] = 'src/main.c'
+        elif self.language == 'c++':
+            files['resources/src/main.cpp'] = 'src/main.cpp'
+        elif self.language == 'vala':
+            files['resources/src/main.vala'] = 'src/main.vala'
 
