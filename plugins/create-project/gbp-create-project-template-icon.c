@@ -65,6 +65,7 @@ gbp_create_project_template_icon_set_property (GObject      *object,
   GbpCreateProjectTemplateIcon *self = GBP_CREATE_PROJECT_TEMPLATE_ICON (object);
   g_autofree gchar *icon_name = NULL;
   g_autofree gchar *name = NULL;
+  g_autofree gchar *description = NULL;
 
   switch (prop_id)
     {
@@ -73,11 +74,14 @@ gbp_create_project_template_icon_set_property (GObject      *object,
 
       icon_name = ide_project_template_get_icon_name (self->template);
       name = ide_project_template_get_name (self->template);
+      description = ide_project_template_get_description (self->template);
 
       g_object_set (self->template_icon,
                     "icon-name", icon_name,
                     NULL);
       gtk_label_set_text (self->template_name, name);
+      if (!ide_str_empty0 (description))
+        gtk_widget_set_tooltip_text (GTK_WIDGET (self), description);
       break;
 
     default:
