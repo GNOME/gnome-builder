@@ -63,8 +63,8 @@ gbp_create_project_template_icon_set_property (GObject      *object,
                                                GParamSpec   *pspec)
 {
   GbpCreateProjectTemplateIcon *self = GBP_CREATE_PROJECT_TEMPLATE_ICON (object);
-  g_autofree gchar *icon_name;
-  g_autofree gchar *name;
+  g_autofree gchar *icon_name = NULL;
+  g_autofree gchar *name = NULL;
 
   switch (prop_id)
     {
