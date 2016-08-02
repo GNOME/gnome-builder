@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-07-21 23:25+0000\n"
+"POT-Creation-Date: 2016-08-01 06:45+0000\n"
 "PO-Revision-Date: 2016-07-22 11:43+0200\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Español; Castellano <gnome-es-list@gnome.org>\n"
@@ -71,7 +71,7 @@ msgstr[1] "Hace %u años aproximadamente"
 #: contrib/egg/egg-file-chooser-entry.c:489
 #: libide/greeter/ide-greeter-perspective.c:673
 #: libide/workbench/ide-workbench-actions.c:70
-#: plugins/color-picker/gb-color-picker-prefs.c:177
+#: plugins/color-picker/gb-color-picker-prefs.c:210
 msgid "Open"
 msgstr "Abrir"
 
@@ -87,8 +87,8 @@ msgstr "Crear"
 #: contrib/egg/egg-file-chooser-entry.c:112
 #: libide/editor/ide-editor-view-actions.c:317
 #: libide/editor/ide-editor-view-actions.c:448
-#: plugins/color-picker/gb-color-picker-prefs.c:204
-#: plugins/color-picker/gtk/color-picker-prefs.ui:642
+#: plugins/color-picker/gb-color-picker-prefs.c:237
+#: plugins/color-picker/gtk/color-picker-prefs.ui:799
 #: plugins/terminal/gb-terminal-view-actions.c:306
 msgid "Save"
 msgstr "Guardar"
@@ -102,8 +102,9 @@ msgstr "Explorar…"
 #: libide/editor/ide-editor-view-actions.c:447
 #: libide/greeter/ide-greeter-perspective.c:672
 #: libide/workbench/ide-workbench-actions.c:69
-#: plugins/color-picker/gb-color-picker-prefs.c:181
-#: plugins/color-picker/gb-color-picker-prefs.c:208
+#: plugins/color-picker/gb-color-picker-prefs.c:98
+#: plugins/color-picker/gb-color-picker-prefs.c:214
+#: plugins/color-picker/gb-color-picker-prefs.c:241
 #: plugins/terminal/gb-terminal-view-actions.c:305
 msgid "Cancel"
 msgstr "Cancelar"
@@ -112,11 +113,11 @@ msgstr "Cancelar"
 msgid "Search"
 msgstr "Buscar"
 
-#: contrib/gstyle/gstyle-color-panel.c:921
+#: contrib/gstyle/gstyle-color-panel.c:953
 msgid "Palette: "
 msgstr "Paleta:"
 
-#: contrib/gstyle/gstyle-color-panel.c:923
+#: contrib/gstyle/gstyle-color-panel.c:955
 msgid "Palette"
 msgstr "Paleta"
 
@@ -132,40 +133,40 @@ msgstr "Nombre del color"
 msgid "Enter a new name for the color"
 msgstr "Introduzca un nombre nuevo para el color"
 
-#: contrib/gstyle/gstyle-palette.c:477 contrib/gstyle/gstyle-palette.c:543
+#: contrib/gstyle/gstyle-palette.c:492 contrib/gstyle/gstyle-palette.c:558
 #, c-format
 msgid "failed to parse line %i\n"
 msgstr "Falló al analizar la línea %i\n"
 
-#: contrib/gstyle/gstyle-palette.c:598
+#: contrib/gstyle/gstyle-palette.c:613
 #, c-format
 msgid "%s: palette is empty\n"
 msgstr "%s: la paleta está vacía\n"
 
-#: contrib/gstyle/gstyle-palette.c:702
+#: contrib/gstyle/gstyle-palette.c:719
 #, c-format
 msgid "%s: failed to parse\n"
 msgstr "%s: falló al analizar\n"
 
-#: contrib/gstyle/gstyle-palette.c:710
+#: contrib/gstyle/gstyle-palette.c:727
 #, c-format
 msgid "Unable to open %s\n"
 msgstr "No se puede abrir %s\n"
 
-#: contrib/gstyle/gstyle-palette.c:748
+#: contrib/gstyle/gstyle-palette.c:765
 #, c-format
 msgid "%s: This file format is not supported\n"
 msgstr "%s: este formato de archivo no está soportado\n"
 
-#: contrib/gstyle/gstyle-palette.c:802
+#: contrib/gstyle/gstyle-palette.c:822
 msgid "failed to parse\n"
 msgstr "falló al analizar\n"
 
-#: contrib/gstyle/gstyle-palette.c:808
+#: contrib/gstyle/gstyle-palette.c:828
 msgid "Generated"
 msgstr "Generado"
 
-#: contrib/gstyle/gstyle-palette.c:905
+#: contrib/gstyle/gstyle-palette.c:931
 #, c-format
 msgid "Unable to save %s\n"
 msgstr "No se puede guardar %s\n"
@@ -252,7 +253,7 @@ msgid "B"
 msgstr "B"
 
 #: contrib/gstyle/ui/gstyle-color-panel.ui:573
-#: plugins/color-picker/gtk/color-picker-prefs.ui:276
+#: plugins/color-picker/gtk/color-picker-prefs.ui:433
 msgid "Color strings"
 msgstr "Cadenas de color"
 
@@ -284,12 +285,12 @@ msgstr "HSLA"
 msgid "Palettes"
 msgstr "Paletas"
 
-#: contrib/gstyle/ui/gstyle-color-panel.ui:947
+#: contrib/gstyle/ui/gstyle-color-panel.ui:946
 #: plugins/color-picker/gtk/color-picker.ui:48
 msgid "No open palettes"
 msgstr "No hay paletas abiertas"
 
-#: contrib/gstyle/ui/gstyle-color-panel.ui:960
+#: contrib/gstyle/ui/gstyle-color-panel.ui:959
 msgid "Load or generate a palette using the preferences"
 msgstr "Cargar o generar una paleta usando las preferencias"
 
@@ -743,13 +744,11 @@ msgstr "_Rehacer"
 msgid "C_ut"
 msgstr "C_ortar"
 
-#: data/gtk/menus.ui:139 data/gtk/menus.ui:240
-#: plugins/terminal/gtk/menus.ui:16
+#: data/gtk/menus.ui:139 data/gtk/menus.ui:240 plugins/terminal/gtk/menus.ui:16
 msgid "_Copy"
 msgstr "_Copiar"
 
-#: data/gtk/menus.ui:143 data/gtk/menus.ui:244
-#: plugins/terminal/gtk/menus.ui:20
+#: data/gtk/menus.ui:143 data/gtk/menus.ui:244 plugins/terminal/gtk/menus.ui:20
 msgid "_Paste"
 msgstr "_Pegar"
 
@@ -765,8 +764,7 @@ msgstr "Resaltado"
 msgid "Selection"
 msgstr "Selección"
 
-#: data/gtk/menus.ui:160 data/gtk/menus.ui:254
-#: plugins/terminal/gtk/menus.ui:28
+#: data/gtk/menus.ui:160 data/gtk/menus.ui:254 plugins/terminal/gtk/menus.ui:28
 msgid "Select _All"
 msgstr "Seleccionar _todo"
 
@@ -2108,7 +2106,7 @@ msgstr "El script debe encontrarse en el sistema de archivos local."
 #: libide/pygobject/ide-pygobject-script.c:274
 #, c-format
 msgid "The script \"%s\" is not a PyGObject file."
-msgstr "El script «%s» no es un archivo de PyGObject"
+msgstr "El script «%s» no es un archivo de PyGObject."
 
 #: libide/runner/ide-run-manager.c:128
 msgid "Cannot run target, another target is running"
@@ -2130,7 +2128,7 @@ msgstr "Sistema operativo del equipo"
 #: libide/scripting/ide-script.c:205
 #, c-format
 msgid "%s has not implemented GAsyncInitable."
-msgstr "%s no tiene GAsyncInitable implementado"
+msgstr "%s no tiene GAsyncInitable implementado."
 
 #: libide/search/ide-omni-search-display.c:271
 msgid "Cannot add provider more than once."
@@ -2707,35 +2705,45 @@ msgstr "anónimo"
 msgid "clang_codeCompleteAt() only works on local files"
 msgstr "clang_codeCompleteAt() solo funciona con archivos locales"
 
-#: plugins/color-picker/gb-color-picker-prefs.c:174
+#: plugins/color-picker/gb-color-picker-prefs.c:97
+msgid "Close without Saving"
+msgstr ""
+
+#: plugins/color-picker/gb-color-picker-prefs.c:99
+#, fuzzy
+#| msgid "_Save As"
+msgid "Save As…"
+msgstr "Guardar _como"
+
+#: plugins/color-picker/gb-color-picker-prefs.c:207
 msgid "Load palette"
 msgstr "Cargar paleta"
 
-#: plugins/color-picker/gb-color-picker-prefs.c:201
+#: plugins/color-picker/gb-color-picker-prefs.c:234
 msgid "Save palette"
 msgstr "Guardar paleta"
 
-#: plugins/color-picker/gb-color-picker-prefs.c:645
+#: plugins/color-picker/gb-color-picker-prefs.c:725
 msgid "All files"
 msgstr "Todos los archivos"
 
-#: plugins/color-picker/gb-color-picker-prefs.c:649
+#: plugins/color-picker/gb-color-picker-prefs.c:729
 msgid "All supported palettes formats"
 msgstr "Todos los formatos de paletas soportados"
 
-#: plugins/color-picker/gb-color-picker-prefs.c:654
+#: plugins/color-picker/gb-color-picker-prefs.c:734
 msgid "GIMP palette"
 msgstr "Paleta de Gimp"
 
-#: plugins/color-picker/gb-color-picker-prefs.c:658
+#: plugins/color-picker/gb-color-picker-prefs.c:738
 msgid "GNOME Builder palette"
 msgstr "Paleta de GNOME Builder"
 
-#: plugins/color-picker/gb-color-picker-prefs-palette-row.c:175
+#: plugins/color-picker/gb-color-picker-prefs-palette-row.c:178
 msgid "Palette name"
 msgstr "Nombre de la paleta"
 
-#: plugins/color-picker/gb-color-picker-prefs-palette-row.c:177
+#: plugins/color-picker/gb-color-picker-prefs-palette-row.c:180
 msgid "Enter a new name for the palette"
 msgstr "Introduzca un nombre nuevo para la paleta"
 
@@ -2746,22 +2754,18 @@ msgstr "Colores"
 #: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:13
 #: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:18
 #: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:23
-#| msgid "Visibility:"
 msgid "hsv visibility"
 msgstr "visibilidad hsv"
 
 #: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:14
-#| msgid "If the document is read only."
 msgid "If the HSV components are visible."
 msgstr "Si los componentes HSV son visibles."
 
 #: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:19
-#| msgid "If the document is read only."
 msgid "If the LAB components are visible."
 msgstr "Si los componentes LAB son visibles."
 
 #: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:24
-#| msgid "If the document is read only."
 msgid "If the RGB components are visible."
 msgstr "Si los componentes RGB son visibles."
 
@@ -2770,14 +2774,10 @@ msgid "rgb unit"
 msgstr "unidad rgb"
 
 #: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:29
-#| msgid ""
-#| "Select the type of unit you want to use for RGB components and strings in "
-#| "the panel."
 msgid "The unit use by RGb component and strings."
 msgstr "La unidad usada por componentes RGB y cadenas."
 
 #: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:35
-#| msgid "Select a palette file"
 msgid "Selected palette id"
 msgstr "ID de la paleta seleccionada"
 
@@ -2786,17 +2786,14 @@ msgid "The selected palette id amongst the loaded ones."
 msgstr "El ID de la paleta seleccionada entre las cargadas."
 
 #: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:40
-#| msgid "Color strings"
 msgid "Color strings visibility"
 msgstr "Visibilidad de las cadenas de color"
 
 #: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:41
-#| msgid "Color strings"
 msgid "The visible color strings."
 msgstr "Las cadenas de color visibles."
 
 #: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:45
-#| msgid "Color Plane"
 msgid "color filter"
 msgstr "filtro de color"
 
@@ -2804,26 +2801,26 @@ msgstr "filtro de color"
 msgid "The filter used on the color scales and color plane."
 msgstr "El filtro usado en las escalas de color y el plano de color."
 
-#: plugins/color-picker/gtk/color-picker-prefs.ui:14
+#: plugins/color-picker/gtk/color-picker-prefs.ui:13
 msgid "Color components"
 msgstr "Componentes del color"
 
-#: plugins/color-picker/gtk/color-picker-prefs.ui:32
-#: plugins/color-picker/gtk/color-picker-prefs.ui:294
+#: plugins/color-picker/gtk/color-picker-prefs.ui:47
+#: plugins/color-picker/gtk/color-picker-prefs.ui:451
 msgid "Visibility:"
 msgstr "Visibilidad:"
 
-#: plugins/color-picker/gtk/color-picker-prefs.ui:48
+#: plugins/color-picker/gtk/color-picker-prefs.ui:63
 msgid "Select the color spaces for which you want to see sliders in the panel."
 msgstr ""
 "Seleccione los espacios de color para los que quiere ver deslizadores en el "
 "panel."
 
-#: plugins/color-picker/gtk/color-picker-prefs.ui:125
+#: plugins/color-picker/gtk/color-picker-prefs.ui:140
 msgid "Units:"
 msgstr "Unidades:"
 
-#: plugins/color-picker/gtk/color-picker-prefs.ui:141
+#: plugins/color-picker/gtk/color-picker-prefs.ui:156
 msgid ""
 "Select the type of unit you want to use for RGB components and strings in "
 "the panel."
@@ -2831,52 +2828,51 @@ msgstr ""
 "Seleccione el tipo de unidad que quiere usar para componentes RGB y cadenas "
 "en el panel."
 
-#: plugins/color-picker/gtk/color-picker-prefs.ui:198
+#: plugins/color-picker/gtk/color-picker-prefs.ui:213
 msgid "Filters:"
 msgstr "Filtros:"
 
-#: plugins/color-picker/gtk/color-picker-prefs.ui:214
-#| msgid "Select the palette you want to see in the panel or close one."
+#: plugins/color-picker/gtk/color-picker-prefs.ui:229
 msgid "Select a filter that act on the colors or 'None'."
 msgstr "Seleccione un filtro que actúe sobre los colores o «Ninguno»."
 
-#: plugins/color-picker/gtk/color-picker-prefs.ui:310
+#: plugins/color-picker/gtk/color-picker-prefs.ui:467
 msgid "Select the color strings you want to see in the panel."
 msgstr "Seleccione las cadenas de color que quiere ver en el panel."
 
-#: plugins/color-picker/gtk/color-picker-prefs.ui:440
+#: plugins/color-picker/gtk/color-picker-prefs.ui:597
 msgid "Palettes options"
 msgstr "Opciones de las paletas"
 
-#: plugins/color-picker/gtk/color-picker-prefs.ui:458
+#: plugins/color-picker/gtk/color-picker-prefs.ui:615
 msgid "Palette view mode:"
 msgstr "Modo de vista de la paleta:"
 
-#: plugins/color-picker/gtk/color-picker-prefs.ui:481
+#: plugins/color-picker/gtk/color-picker-prefs.ui:638
 msgid "List"
 msgstr "Lista"
 
-#: plugins/color-picker/gtk/color-picker-prefs.ui:519
+#: plugins/color-picker/gtk/color-picker-prefs.ui:676
 msgid "Swatches"
 msgstr "Muestras"
 
-#: plugins/color-picker/gtk/color-picker-prefs.ui:560
+#: plugins/color-picker/gtk/color-picker-prefs.ui:717
 msgid "Palette management"
 msgstr "Gestión de las paletas"
 
-#: plugins/color-picker/gtk/color-picker-prefs.ui:605
+#: plugins/color-picker/gtk/color-picker-prefs.ui:762
 msgid "Load"
 msgstr "Cargar"
 
-#: plugins/color-picker/gtk/color-picker-prefs.ui:679
+#: plugins/color-picker/gtk/color-picker-prefs.ui:836
 msgid "From current document"
 msgstr "Desde el documento actual"
 
-#: plugins/color-picker/gtk/color-picker-prefs.ui:697
+#: plugins/color-picker/gtk/color-picker-prefs.ui:854
 msgid "Select the palette you want to see in the panel or close one."
 msgstr "Seleccione la paleta que quiere ver en el panel o cierre una."
 
-#: plugins/color-picker/gtk/color-picker-prefs.ui:734
+#: plugins/color-picker/gtk/color-picker-prefs.ui:891
 msgid "No loaded palettes"
 msgstr "No hay paletas cargadas"
 
@@ -3233,12 +3229,10 @@ msgid "No language specified"
 msgstr "No se ha especificado ningún lenguaje"
 
 #: plugins/gnome-code-assistance/org.gnome.builder.gnome-code-assistance.gschema.xml:5
-#| msgid "Pylint"
 msgid "Enable Pylint"
 msgstr "Activar Pylint"
 
 #: plugins/gnome-code-assistance/org.gnome.builder.gnome-code-assistance.gschema.xml:6
-#| msgid "Enable the use of pylint, which may execute code in your project"
 msgid ""
 "Enable the use of pylint to find additional diagnostics in python programs. "
 "This may result in the execution of code in your project."
