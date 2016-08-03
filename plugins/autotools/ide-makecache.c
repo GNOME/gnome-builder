@@ -1742,7 +1742,6 @@ _find_make_directories (IdeMakecache  *self,
   g_autoptr(GFileEnumerator) enumerator = NULL;
   g_autoptr(GPtrArray) dirs = NULL;
   gboolean has_makefile = FALSE;
-  gboolean has_makefile_am = FALSE;
   GError *local_error = NULL;
   gpointer infoptr;
   guint i;
@@ -1772,8 +1771,6 @@ _find_make_directories (IdeMakecache  *self,
 
       if (g_strcmp0 (name, "Makefile") == 0)
         has_makefile = TRUE;
-      if (g_strcmp0 (name, "Makefile.am") == 0)
-        has_makefile_am = TRUE;
       else if (type == G_FILE_TYPE_DIRECTORY)
         g_ptr_array_add (dirs, g_file_get_child (dir, name));
     }
@@ -1784,7 +1781,7 @@ _find_make_directories (IdeMakecache  *self,
       return FALSE;
     }
 
-  if (has_makefile && has_makefile_am)
+  if (has_makefile)
     g_ptr_array_add (ret, g_object_ref (dir));
 
   if (!g_file_enumerator_close (enumerator, cancellable, error))
@@ -1803,23 +1800,19 @@ _find_make_directories (IdeMakecache  *self,
 
 static GPtrArray *
 find_make_directories (IdeMakecache  *self,
-                       GFile         *root,
+                       GFile         *build_dir,
                        GCancellable  *cancellable,
                        GError       **error)
 {
   g_autoptr(GPtrArray) ret = NULL;
 
   g_assert (IDE_IS_MAKECACHE (self));
-  g_assert (G_IS_FILE (root));
+  g_assert (G_IS_FILE (build_dir));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
-
-  /*
-   * TODO: Make this work for builddir != srcdir.
-   */
 
   ret = g_ptr_array_new_with_free_func (g_object_unref);
 
-  if (!_find_make_directories (self, root, ret, cancellable, error))
+  if (!_find_make_directories (self, build_dir, ret, cancellable, error))
     return NULL;
 
   if (ret->len == 0)
@@ -1864,8 +1857,7 @@ ide_makecache_get_build_targets_worker (GTask        *task,
   const gchar *make_name = "make";
   IdeContext *context;
   IdeRuntime *runtime;
-  IdeVcs *vcs;
-  GFile *workdir;
+  GFile *build_dir = task_data;
   GError *error = NULL;
   gchar *line;
   gsize line_len;
@@ -1891,8 +1883,6 @@ ide_makecache_get_build_targets_worker (GTask        *task,
   configmgr = ide_context_get_configuration_manager (context);
   config = ide_configuration_manager_get_current (configmgr);
   runtime = ide_configuration_get_runtime (config);
-  vcs = ide_context_get_vcs (context);
-  workdir = ide_vcs_get_working_directory (vcs);
 
   if (runtime != NULL)
     launcher = ide_runtime_create_launcher (runtime, NULL);
@@ -1900,7 +1890,7 @@ ide_makecache_get_build_targets_worker (GTask        *task,
   if (launcher == NULL)
     {
       g_autofree gchar *path = NULL;
-      path = g_file_get_path (workdir);
+      path = g_file_get_path (build_dir);
 
       launcher = ide_subprocess_launcher_new (0);
       ide_subprocess_launcher_set_cwd (launcher, path);
@@ -1934,7 +1924,7 @@ ide_makecache_get_build_targets_worker (GTask        *task,
    * directories that we know there is a standalone Makefile within.
    */
 
-  makedirs = find_make_directories (self, workdir, cancellable, &error);
+  makedirs = find_make_directories (self, build_dir, cancellable, &error);
 
   if (makedirs == NULL)
     {
@@ -1944,9 +1934,8 @@ ide_makecache_get_build_targets_worker (GTask        *task,
 
   /*
    * We need to extract various programs/libraries/targets from each of
-   * our make directories containing a Makefile.am (translated into a Makefile
-   * so that we can know what targets are available. With that knowledge, we
-   * can build our targets list and cache it for later.
+   * our make directories containing an automake-generated Makefile. With
+   * that knowledge, we can build our targets list and cache it for later.
    */
 
   targets = g_ptr_array_new_with_free_func (g_object_unref);
@@ -1960,7 +1949,7 @@ ide_makecache_get_build_targets_worker (GTask        *task,
 
       /*
        * Make sure we are running within the directory containing the
-       * Makefile.am that we care about.
+       * Makefile that we care about.
        */
       makedir = g_ptr_array_index (makedirs, j);
       path = g_file_get_path (makedir);
@@ -2048,6 +2037,7 @@ failure:
 
 void
 ide_makecache_get_build_targets_async (IdeMakecache        *self,
+                                       GFile               *build_dir,
                                        GCancellable        *cancellable,
                                        GAsyncReadyCallback  callback,
                                        gpointer             user_data)
@@ -2060,6 +2050,7 @@ ide_makecache_get_build_targets_async (IdeMakecache        *self,
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_task_data (task, g_object_ref (build_dir), g_object_unref);
   g_task_set_source_tag (task, ide_makecache_get_build_targets_async);
   g_task_set_check_cancellable (task, FALSE);
 

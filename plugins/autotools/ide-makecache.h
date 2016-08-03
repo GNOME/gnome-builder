@@ -54,6 +54,7 @@ GPtrArray           *ide_makecache_get_file_targets_finish  (IdeMakecache       
                                                              GAsyncResult         *result,
                                                              GError              **error);
 void                 ide_makecache_get_build_targets_async  (IdeMakecache         *self,
+                                                             GFile                *build_dir,
                                                              GCancellable         *cancellable,
                                                              GAsyncReadyCallback   callback,
                                                              gpointer              user_data);

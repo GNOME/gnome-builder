@@ -576,6 +576,11 @@ ide_autotools_build_system_get_build_targets_cb (GObject      *object,
                                                  gpointer      user_data)
 {
   IdeAutotoolsBuildSystem *self = (IdeAutotoolsBuildSystem *)object;
+  IdeContext *context;
+  IdeVcs *vcs;
+  g_autoptr(IdeConfiguration) configuration = NULL;
+  g_autoptr(IdeBuilder) builder = NULL;
+  g_autoptr(GFile) build_dir = NULL;
   g_autoptr(IdeMakecache) makecache = NULL;
   g_autoptr(GTask) task = user_data;
   GError *error = NULL;
@@ -591,7 +596,21 @@ ide_autotools_build_system_get_build_targets_cb (GObject      *object,
       return;
     }
 
+  context = ide_object_get_context (IDE_OBJECT (self));
+  configuration = ide_configuration_new (context, "autotools-bootstrap", "local", "host");
+  builder = ide_autotools_build_system_get_builder (IDE_BUILD_SYSTEM (self), configuration, &error);
+  if (builder)
+    {
+      build_dir = ide_autotools_builder_get_build_directory (IDE_AUTOTOOLS_BUILDER (builder));
+    }
+  else
+    {
+      vcs = ide_context_get_vcs (context);
+      build_dir = ide_vcs_get_working_directory (vcs);
+    }
+
   ide_makecache_get_build_targets_async (makecache,
+                                         build_dir,
                                          g_task_get_cancellable (task),
                                          ide_autotools_build_system_get_build_targets_cb2,
                                          g_object_ref (task));
