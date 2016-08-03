@@ -7,9 +7,16 @@ EXTRA_DIST = \
 	ax_append_flag.m4 \
 	ax_check_compile_flag.m4 \
 	ax_check_link_flag.m4 \
+	ax_compiler_vendor.m4 \
+	ax_cxx_compile_stdcxx.m4 \
+	ax_cxx_compile_stdcxx_11.m4 \
 	ax_require_defined.m4 \
+	gb_enable_rdtscp.m4 \
 	introspection.m4 \
 	pkg.m4 \
+	vala.m4 \
+	vapigen.m4 \
+	yelp.m4 \
 	tap-test \
 	$(NULL)
 
