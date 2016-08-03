@@ -29,6 +29,9 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeGreeterPerspective, ide_greeter_perspective, IDE, GREETER_PERSPECTIVE, GtkBin)
 
+void ide_greeter_perspective_show_genesis_view (IdeGreeterPerspective *self,
+                                                const gchar *genesis_addin_name);
+
 G_END_DECLS
 
 #endif /* IDE_GREETER_PERSPECTIVE_H */

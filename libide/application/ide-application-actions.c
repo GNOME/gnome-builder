@@ -30,6 +30,7 @@
 #include "application/ide-application-private.h"
 #include "keybindings/ide-shortcuts-window.h"
 #include "workbench/ide-workbench.h"
+#include "greeter/ide-greeter-perspective.h"
 
 static void
 ide_application_actions_preferences (GSimpleAction *action,
@@ -180,6 +181,7 @@ ide_application_actions_new_project (GSimpleAction *action,
 {
   IdeApplication *self = user_data;
   IdeWorkbench *workbench = NULL;
+  IdePerspective *greeter;
   const GList *list;
 
   g_assert (IDE_IS_APPLICATION (self));
@@ -207,7 +209,13 @@ ide_application_actions_new_project (GSimpleAction *action,
                                 NULL);
     }
 
-  ide_workbench_set_visible_perspective_name (workbench, "genesis");
+  greeter = ide_workbench_get_perspective_by_name (workbench, "greeter");
+
+  if (greeter)
+    {
+      ide_greeter_perspective_show_genesis_view (IDE_GREETER_PERSPECTIVE (greeter),
+                                                 "GbpCreateProjectGenesisAddin");
+    }
 
   gtk_window_present (GTK_WINDOW (workbench));
 }

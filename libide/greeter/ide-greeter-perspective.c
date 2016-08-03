@@ -747,6 +747,16 @@ ide_greeter_perspective_open_clicked (IdeGreeterPerspective *self,
   gtk_window_present (GTK_WINDOW (dialog));
 }
 
+void
+ide_greeter_perspective_show_genesis_view (IdeGreeterPerspective *self,
+                                           const gchar           *genesis_addin_name)
+{
+  g_assert (IDE_IS_GREETER_PERSPECTIVE (self));
+
+  gtk_stack_set_visible_child_name (self->genesis_stack, genesis_addin_name);
+  egg_state_machine_set_state (self->state_machine, "genesis");
+}
+
 static void
 genesis_button_clicked (IdeGreeterPerspective *self,
                         GtkButton             *button)
@@ -757,8 +767,7 @@ genesis_button_clicked (IdeGreeterPerspective *self,
   g_assert (GTK_IS_BUTTON (button));
 
   name = gtk_widget_get_name (GTK_WIDGET (button));
-  gtk_stack_set_visible_child_name (self->genesis_stack, name);
-  egg_state_machine_set_state (self->state_machine, "genesis");
+  ide_greeter_perspective_show_genesis_view (self, name);
 }
 
 static void
