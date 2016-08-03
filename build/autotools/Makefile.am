@@ -13,22 +13,10 @@ EXTRA_DIST = \
 	tap-test \
 	$(NULL)
 
+# We want to ignore all m4 files except a few
+# we explicitly keep in repo
 GITIGNOREFILES = \
-	glib-2.0.m4 \
-	glib-gettext.m4 \
-	gsettings.m4 \
-	gtk-doc.m4 \
-	intltool.m4 \
-	libtool.m4 \
-	ltoptions.m4 \
-	ltsugar.m4 \
-	ltversion.m4 \
-	lt~obsolete.m4 \
-	nls.m4 \
-	mm-common.m4 \
-	mm-doc.m4 \
-	mm-module.m4 \
-	mm-pkg.m4 \
+	$(filter-out $(EXTRA_DIST),$(wildcard *.m4)) \
 	$(NULL)
 
 -include $(top_srcdir)/git.mk
