@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-08-01 06:45+0000\n"
-"PO-Revision-Date: 2016-07-22 11:43+0200\n"
+"POT-Creation-Date: 2016-08-02 19:31+0000\n"
+"PO-Revision-Date: 2016-08-03 13:56+0200\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Español; Castellano <gnome-es-list@gnome.org>\n"
 "Language: es\n"
@@ -744,11 +744,13 @@ msgstr "_Rehacer"
 msgid "C_ut"
 msgstr "C_ortar"
 
-#: data/gtk/menus.ui:139 data/gtk/menus.ui:240 plugins/terminal/gtk/menus.ui:16
+#: data/gtk/menus.ui:139 data/gtk/menus.ui:240
+#: plugins/terminal/gtk/menus.ui:16
 msgid "_Copy"
 msgstr "_Copiar"
 
-#: data/gtk/menus.ui:143 data/gtk/menus.ui:244 plugins/terminal/gtk/menus.ui:20
+#: data/gtk/menus.ui:143 data/gtk/menus.ui:244
+#: plugins/terminal/gtk/menus.ui:20
 msgid "_Paste"
 msgstr "_Pegar"
 
@@ -764,7 +766,8 @@ msgstr "Resaltado"
 msgid "Selection"
 msgstr "Selección"
 
-#: data/gtk/menus.ui:160 data/gtk/menus.ui:254 plugins/terminal/gtk/menus.ui:28
+#: data/gtk/menus.ui:160 data/gtk/menus.ui:254
+#: plugins/terminal/gtk/menus.ui:28
 msgid "Select _All"
 msgstr "Seleccionar _todo"
 
@@ -2707,13 +2710,12 @@ msgstr "clang_codeCompleteAt() solo funciona con archivos locales"
 
 #: plugins/color-picker/gb-color-picker-prefs.c:97
 msgid "Close without Saving"
-msgstr ""
+msgstr "Cerrar sin guardar"
 
 #: plugins/color-picker/gb-color-picker-prefs.c:99
-#, fuzzy
 #| msgid "_Save As"
 msgid "Save As…"
-msgstr "Guardar _como"
+msgstr "Guardar como…"
 
 #: plugins/color-picker/gb-color-picker-prefs.c:207
 msgid "Load palette"
