@@ -115,7 +115,7 @@ AX_CXX_COMPILE_STDCXX_11([noext], [mandatory])
 dnl ***********************************************************************
 dnl Check for required packages
 dnl ***********************************************************************
-PKG_CHECK_MODULES({{NAME}}, [{{packages}}])
+PKG_CHECK_MODULES({{PREFIX}}, [{{packages}}])
 
 
 dnl ***********************************************************************
