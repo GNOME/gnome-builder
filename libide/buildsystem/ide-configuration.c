@@ -238,7 +238,7 @@ ide_configuration_get_property (GObject    *object,
       break;
 
     case PROP_RUNTIME_ID:
-      g_value_set_object (value, ide_configuration_get_runtime (self));
+      g_value_set_string (value, ide_configuration_get_runtime_id (self));
       break;
 
     default:
