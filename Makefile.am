@@ -58,7 +58,7 @@ dist-hook:
 
 .PHONY: AUTHORS
 
-RUNTIME_TYPELIB_PATH = libide:contrib/egg:contrib/pnl:contrib/tmpl:$(GI_TYPELIB_PATH)
+RUNTIME_TYPELIB_PATH = $(top_builddir)/libide:$(top_builddir)/contrib/egg:$(top_builddir)/contrib/pnl:$(top_builddr)/contrib/tmpl:$(GI_TYPELIB_PATH)
 
 run:
 	PEAS_DEBUG=1 \
