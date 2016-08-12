@@ -295,6 +295,7 @@ m4_include([plugins/gcc/configure.ac])
 m4_include([plugins/gettext/configure.ac])
 m4_include([plugins/git/configure.ac])
 m4_include([plugins/gnome-code-assistance/configure.ac])
+m4_include([plugins/gobject-templates/configure.ac])
 m4_include([plugins/hello-cpp/configure.ac])
 m4_include([plugins/html-completion/configure.ac])
 m4_include([plugins/html-preview/configure.ac])
@@ -451,6 +452,7 @@ PLUGIN_CFLAGS="$PLUGIN_CFLAGS -I\$(top_srcdir)/contrib/nautilus"
 PLUGIN_CFLAGS="$PLUGIN_CFLAGS -I\$(top_srcdir)/contrib/pnl"
 PLUGIN_CFLAGS="$PLUGIN_CFLAGS -I\$(top_srcdir)/contrib/rg"
 PLUGIN_CFLAGS="$PLUGIN_CFLAGS -I\$(top_srcdir)/contrib/search"
+PLUGIN_CFLAGS="$PLUGIN_CFLAGS -I\$(top_srcdir)/contrib/tmpl"
 PLUGIN_CFLAGS="$PLUGIN_CFLAGS -I\$(top_srcdir)/contrib/xml"
 PLUGIN_CFLAGS="$PLUGIN_CFLAGS -I\$(top_srcdir)/libide"
 PLUGIN_CFLAGS="$PLUGIN_CFLAGS $LIBIDE_CFLAGS"
@@ -609,5 +611,6 @@ echo ""
 echo " Templates"
 echo ""
 echo "  Autotools ............................ : ${enable_autotools_templates}"
+echo "  GObject .............................. : ${enable_gobject_templates}"
 echo ""
 

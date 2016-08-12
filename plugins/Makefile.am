@@ -18,6 +18,7 @@ SUBDIRS = \
 	gettext \
 	git \
 	gnome-code-assistance \
+	gobject-templates \
 	hello-cpp \
 	html-completion \
 	html-preview \

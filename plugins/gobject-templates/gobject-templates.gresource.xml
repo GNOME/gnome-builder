@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+  <gresource prefix="/org/gnome/builder/plugins/gobject-templates">
+    <!-- Autoload resources -->
+    <file compressed="true">gtk/menus.ui</file>
+
+    <!-- UI Files -->
+    <file compressed="true">gbp-gobject-dialog.ui</file>
+    <file compressed="true">gbp-gobject-property-editor.ui</file>
+    <file compressed="true">gbp-gobject-signal-editor.ui</file>
+    <file compressed="true">gbp-gobject-spec-editor.ui</file>
+
+    <!-- C Templates -->
+    <file compressed="true">gobject.c.tmpl</file>
+    <file compressed="true">gobject.h.tmpl</file>
+  </gresource>
+</gresources>

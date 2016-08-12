@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <menu id="gb-project-tree-popup-menu">
+    <section id="gb-project-tree-new-section">
+      <submenu id="gb-project-tree-new-section-submenu">
+        <section id="gb-project-tree-new-gobject-section">
+          <attribute name="after">gb-project-tree-new-empty-file-section</attribute>
+          <item>
+            <attribute name="label" translatable="yes">Class</attribute>
+            <attribute name="action">gobject-templates.new-gobject</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="yes">Interface</attribute>
+            <attribute name="action">gobject-templates.new-ginterface</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="yes">Widget</attribute>
+            <attribute name="action">gobject-templates.new-gtkwidget</attribute>
+          </item>
+        </section>
+      </submenu>
+    </section>
+  </menu>
+</interface>

@@ -1,0 +1,877 @@
+#define G_LOG_DOMAIN "{{file_prefix}}"
+
+#include "{{file_prefix}}.h"
+
+{{if spec.final}}
+struct _{{Name}}
+{
+  {{Parent}} parent_instance;
+};
+{{end}}
+
+typedef struct
+{
+{{for prop in spec.properties}}
+{{if false}}
+{{else if prop.kind == "string"}}
+  gchar *{{prop.cname}};
+{{else if prop.kind == "int"}}
+  gint {{prop.cname}};
+{{else if prop.kind == "int64"}}
+  gint64 {{prop.cname}};
+{{else if prop.kind == "long"}}
+  glong {{prop.cname}};
+{{else if prop.kind == "uint"}}
+  guint {{prop.cname}};
+{{else if prop.kind == "uint64"}}
+  guint64 {{prop.cname}};
+{{else if prop.kind == "ulong"}}
+  gulong {{prop.cname}};
+{{else if prop.kind == "float"}}
+  gfloat {{prop.cname}};
+{{else if prop.kind == "double"}}
+  gdouble {{prop.cname}};
+{{else if prop.kind == "pointer"}}
+  {{prop.ctype}} {{prop.cname}};
+{{else if prop.kind == "boolean"}}
+  gboolean {{prop.cname}};
+{{else if prop.kind == "char"}}
+  gchar {{prop.cname}};
+{{else if prop.kind == "unichar"}}
+  gunichar {{prop.cname}};
+{{else if prop.kind == "enum"}}
+  {{prop.ctype}} {{prop.cname}};
+{{else if prop.kind == "flags"}}
+  {{prop.ctype}} {{prop.cname}};
+{{else if prop.kind == "boxed"}}
+  {{prop.ctype}} *{{prop.cname}};
+{{else if prop.kind == "variant"}}
+  GVariant *{{prop.cname}};
+{{else if prop.kind == "object"}}
+  {{prop.ctype}} *{{prop.cname}};
+{{end}}
+{{end}}
+} {{Name}}Private;
+
+G_DEFINE_TYPE_WITH_PRIVATE ({{Name}}, {{name}}, {{PARENT_TYPE}})
+
+{{if spec.properties.get_n_items() != 0}}
+enum {
+  PROP_0,
+{{for prop in spec.properties}}
+  PROP_{{prop.cname.upper()}},
+{{end}}
+  N_PROPS
+};
+
+static GParamSpec *properties [N_PROPS];
+
+static void
+{{name}}_get_property (GObject    *object,
+{{name.space()}}               guint       prop_id,
+{{name.space()}}               GValue     *value,
+{{name.space()}}               GParamSpec *pspec)
+{
+  {{Name}} *self = ({{Name}} *)object;
+
+  switch (prop_id)
+    {
+{{for prop in spec.properties}}
+    case PROP_{{prop.cname.upper()}}:
+{{if false}}
+{{else if prop.kind == "string"}}
+      g_value_set_string (value, {{name}}_get_{{prop.cname}} (self));
+{{else if prop.kind == "int"}}
+      g_value_set_int (value, {{name}}_get_{{prop.cname}} (self));
+{{else if prop.kind == "int64"}}
+      g_value_set_int64 (value, {{name}}_get_{{prop.cname}} (self));
+{{else if prop.kind == "long"}}
+      g_value_set_long (value, {{name}}_get_{{prop.cname}} (self));
+{{else if prop.kind == "uint"}}
+      g_value_set_uint (value, {{name}}_get_{{prop.cname}} (self));
+{{else if prop.kind == "uint64"}}
+      g_value_set_uint64 (value, {{name}}_get_{{prop.cname}} (self));
+{{else if prop.kind == "ulong"}}
+      g_value_set_ulong (value, {{name}}_get_{{prop.cname}} (self));
+{{else if prop.kind == "float"}}
+      g_value_set_float (value, {{name}}_get_{{prop.cname}} (self));
+{{else if prop.kind == "double"}}
+      g_value_set_double (value, {{name}}_get_{{prop.cname}} (self));
+{{else if prop.kind == "pointer"}}
+      g_value_set_pointer (value, {{name}}_get_{{prop.cname}} (self));
+{{else if prop.kind == "boolean"}}
+      g_value_set_boolean (value, {{name}}_get_{{prop.cname}} (self));
+{{else if prop.kind == "char"}}
+      g_value_set_char (value, {{name}}_get_{{prop.cname}} (self));
+{{else if prop.kind == "unichar"}}
+      g_value_set_unichar (value, {{name}}_get_{{prop.cname}} (self));
+{{else if prop.kind == "enum"}}
+      g_value_set_enum (value, {{name}}_get_{{prop.cname}} (self));
+{{else if prop.kind == "flags"}}
+      g_value_set_flags (value, {{name}}_get_{{prop.cname}} (self));
+{{else if prop.kind == "boxed"}}
+      g_value_set_boxed (value, {{name}}_get_{{prop.cname}} (self));
+{{else if prop.kind == "variant"}}
+      g_value_set_variant (value, {{name}}_get_{{prop.cname}} (self));
+{{else if prop.kind == "object"}}
+      g_value_set_object (value, {{name}}_get_{{prop.cname}} (self));
+{{end}}
+      break;
+
+{{end}}
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+static void
+{{name}}_set_property (GObject      *object,
+{{name.space()}}               guint         prop_id,
+{{name.space()}}               const GValue *value,
+{{name.space()}}               GParamSpec   *pspec)
+{
+  {{Name}} *self = ({{Name}} *)object;
+
+  switch (prop_id)
+    {
+{{for prop in spec.properties}}
+    case PROP_{{prop.cname.upper()}}:
+      {{name}}_set_{{prop.cname}} (self, g_value_get_{{prop.kind.nick()}} (value));
+      break;
+{{end}}
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+{{end}}
+static void
+{{name}}_finalize (GObject *object)
+{
+  {{Name}} *self = ({{Name}} *)object;
+  {{Name}}Private *priv = {{name}}_get_instance_private (self);
+
+{{for prop in spec.properties}}
+{{if false}}
+{{else if prop.kind == "string"}}
+  g_clear_pointer (&priv->{{prop.cname}}, g_free);
+{{else if prop.kind == "boxed"}}
+  if (priv->{{prop.cname}} != NULL)
+    {
+      g_boxed_free ({{prop.gtype}}, priv->{{prop.cname}});
+      priv->{{prop.cname}} = NULL;
+    }
+{{else if prop.kind == "object"}}
+  g_clear_object (&priv->{{prop.cname}});
+{{else if prop.kind == "variant"}}
+  g_clear_pointer (&priv->{{prop.cname}}, g_variant_unref);
+{{else if prop.kind == "pointer"}}
+  priv->{{prop.cname}} = NULL;
+{{end}}
+{{end}}
+
+  G_OBJECT_CLASS ({{name}}_parent_class)->finalize (object);
+}
+
+static void
+{{name}}_class_init ({{Name}}Class *klass)
+{
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+  object_class->finalize = {{name}}_finalize;
+{{if spec.properties.get_n_items() != 0}}
+  object_class->get_property = {{name}}_get_property;
+  object_class->set_property = {{name}}_set_property;
+{{end}}
+
+{{for prop in spec.properties}}
+  /**
+   * {{Name}}:{{prop.name}}:
+   *
+   * The "{{prop.name}}" property.
+   */
+  properties [PROP_{{prop.cname.upper()}}] =
+    g_param_spec_{{prop.kind.nick()}} ("{{prop.name}}",
+                 {{prop.kind.nick().space()}}  "{{prop.cname.title()}}",
+                 {{prop.kind.nick().space()}}  "{{prop.cname.title()}}",
+{{if false}}
+{{else if prop.kind == "string"}}
+                 {{prop.kind.nick().space()}}  {{prop.default}},
+{{else if prop.kind == "int"}}
+                 {{prop.kind.nick().space()}}  {{prop.minimum}},
+                 {{prop.kind.nick().space()}}  {{prop.maximum}},
+                 {{prop.kind.nick().space()}}  {{prop.default}},
+{{else if prop.kind == "int64"}}
+                 {{prop.kind.nick().space()}}  {{prop.minimum}},
+                 {{prop.kind.nick().space()}}  {{prop.maximum}},
+                 {{prop.kind.nick().space()}}  {{prop.default}},
+{{else if prop.kind == "long"}}
+                 {{prop.kind.nick().space()}}  {{prop.minimum}},
+                 {{prop.kind.nick().space()}}  {{prop.maximum}},
+                 {{prop.kind.nick().space()}}  {{prop.default}},
+{{else if prop.kind == "uint"}}
+                 {{prop.kind.nick().space()}}  {{prop.minimum}},
+                 {{prop.kind.nick().space()}}  {{prop.maximum}},
+                 {{prop.kind.nick().space()}}  {{prop.default}},
+{{else if prop.kind == "uint64"}}
+                 {{prop.kind.nick().space()}}  {{prop.minimum}},
+                 {{prop.kind.nick().space()}}  {{prop.maximum}},
+                 {{prop.kind.nick().space()}}  {{prop.default}},
+{{else if prop.kind == "ulong"}}
+                 {{prop.kind.nick().space()}}  {{prop.minimum}},
+                 {{prop.kind.nick().space()}}  {{prop.maximum}},
+                 {{prop.kind.nick().space()}}  {{prop.default}},
+{{else if prop.kind == "float"}}
+                 {{prop.kind.nick().space()}}  {{prop.minimum}},
+                 {{prop.kind.nick().space()}}  {{prop.maximum}},
+                 {{prop.kind.nick().space()}}  {{prop.default}},
+{{else if prop.kind == "double"}}
+                 {{prop.kind.nick().space()}}  {{prop.minimum}},
+                 {{prop.kind.nick().space()}}  {{prop.maximum}},
+                 {{prop.kind.nick().space()}}  {{prop.default}},
+{{else if prop.kind == "pointer"}}
+{{else if prop.kind == "boolean"}}
+                 {{prop.kind.nick().space()}}  {{prop.default}},
+{{else if prop.kind == "char"}}
+                 {{prop.kind.nick().space()}}  {{prop.minimum}},
+                 {{prop.kind.nick().space()}}  {{prop.maximum}},
+                 {{prop.kind.nick().space()}}  {{prop.default}},
+{{else if prop.kind == "unichar"}}
+                 {{prop.kind.nick().space()}}  {{prop.minimum}},
+                 {{prop.kind.nick().space()}}  {{prop.maximum}},
+                 {{prop.kind.nick().space()}}  {{prop.default}},
+{{else if prop.kind == "enum"}}
+                 {{prop.kind.nick().space()}}  {{prop.gtype}},
+                 {{prop.kind.nick().space()}}  {{prop.default}},
+{{else if prop.kind == "flags"}}
+                 {{prop.kind.nick().space()}}  {{prop.gtype}},
+                 {{prop.kind.nick().space()}}  {{prop.default}},
+{{else if prop.kind == "boxed"}}
+                 {{prop.kind.nick().space()}}  {{prop.gtype}},
+{{else if prop.kind == "variant"}}
+                 {{prop.kind.nick().space()}}  G_VARIANT_TYPE_ANY,
+                 {{prop.kind.nick().space()}}  NULL,
+{{else if prop.kind == "object"}}
+                 {{prop.kind.nick().space()}}  {{prop.gtype}},
+{{end}}
+                 {{prop.kind.nick().space()}}  (G_PARAM_STATIC_STRINGS |
+                 {{prop.kind.nick().space()}}   G_PARAM_EXPLICIT_NOTIFY |
+{{if prop.construct_only}}
+                 {{prop.kind.nick().space()}}   G_PARAM_CONSTRUCT_ONLY |
+{{end}}
+{{if prop.readable && prop.writable}}
+                 {{prop.kind.nick().space()}}   G_PARAM_READWRITE));
+{{else if prop.readable}}
+                 {{prop.kind.nick().space()}}   G_PARAM_READABLE));
+{{else if prop.writable}}
+                 {{prop.kind.nick().space()}}   G_PARAM_WRITABLE));
+{{end}}
+{{end}}
+{{if spec.properties.get_n_items() != 0}}
+
+  g_object_class_install_properties (object_class, N_PROPS, properties);
+{{end}}
+}
+
+static void
+{{name}}_init ({{Name}} *self)
+{
+}
+
+/**
+ * {{name}}_new:
+ *
+ * Creates a new instance of #{{Name}}.
+ *
+ * Returns: The newly created instance.
+ */
+{{Name}} *
+{{name}}_new (void)
+{
+  return g_object_new ({{NAMESPACE}}_TYPE_{{CLASS}}, NULL);
+}
+{{for prop in spec.properties}}
+{{if false}}
+{{else if prop.kind == "string"}}
+{{if prop.readable}}
+
+/**
+ * {{name}}_get_{{prop.cname}}:
+ * @self: A #{{Name}}
+ *
+ * Gets the "{{prop.name}}" property.
+ *
+ * Returns: A string containing the "{{prop.name}}" property.
+ */
+const gchar *
+{{name}}_get_{{prop.cname}} ({{Name}} *self)
+{
+  {{Name}}Private *priv = {{name}}_get_instance_private (self);
+
+  g_return_val_if_fail ({{NAMESPACE}}_IS_{{CLASS}} (self), NULL);
+
+  return priv->{{prop.cname}};
+}
+{{end}}
+{{if prop.writable}}
+
+/**
+ * {{name}}_get_{{prop.cname}}:
+ * @self: A #{{Name}}
+ * @{{prop.cname}}: A string or %NULL.
+ *
+ * Sets the "{{prop.name}}" property.
+ */
+void
+{{name}}_set_{{prop.cname}} ({{Name}} *self, const gchar *{{prop.cname}})
+{
+  {{Name}}Private *priv = {{name}}_get_instance_private (self);
+
+  g_return_if_fail ({{NAMESPACE}}_IS_{{CLASS}} (self));
+
+  if (g_strcmp0 ({{prop.cname}}, priv->{{prop.cname}}) != 0)
+    {
+      g_free (priv->{{prop.cname}});
+      priv->{{prop.cname}} = g_strdup ({{prop.cname}});
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_{{prop.cname.upper()}}]);
+    }
+}
+{{end}}
+{{else if prop.kind == "int"}}
+{{if prop.readable}}
+
+gint
+{{name}}_get_{{prop.cname}} ({{Name}} *self)
+{
+  {{Name}}Private *priv = {{name}}_get_instance_private (self);
+
+  g_return_val_if_fail ({{NAMESPACE}}_IS_{{CLASS}} (self), 0);
+
+  return priv->{{prop.cname}};
+}
+{{end}}
+{{if prop.writable}}
+
+void
+{{name}}_set_{{prop.cname}} ({{Name}} *self, gint {{prop.cname}})
+{
+  {{Name}}Private *priv = {{name}}_get_instance_private (self);
+
+  g_return_if_fail ({{NAMESPACE}}_IS_{{CLASS}} (self));
+
+  if (priv->{{prop.cname}} != {{prop.cname}})
+    {
+      priv->{{prop.cname}} = {{prop.cname}};
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_{{prop.cname.upper()}}]);
+    }
+}
+{{end}}
+{{else if prop.kind == "int64"}}
+{{if prop.readable}}
+
+gint64
+{{name}}_get_{{prop.cname}} ({{Name}} *self)
+{
+  {{Name}}Private *priv = {{name}}_get_instance_private (self);
+
+  g_return_val_if_fail ({{NAMESPACE}}_IS_{{CLASS}} (self), 0);
+
+  return priv->{{prop.cname}};
+}
+{{end}}
+{{if prop.writable}}
+
+void
+{{name}}_set_{{prop.cname}} ({{Name}} *self, gint64 {{prop.cname}})
+{
+  {{Name}}Private *priv = {{name}}_get_instance_private (self);
+
+  g_return_if_fail ({{NAMESPACE}}_IS_{{CLASS}} (self));
+
+  if (priv->{{prop.cname}} != {{prop.cname}})
+    {
+      priv->{{prop.cname}} = {{prop.cname}};
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_{{prop.cname.upper()}}]);
+    }
+}
+{{end}}
+{{else if prop.kind == "long"}}
+{{if prop.readable}}
+
+glong
+{{name}}_get_{{prop.cname}} ({{Name}} *self)
+{
+  {{Name}}Private *priv = {{name}}_get_instance_private (self);
+
+  g_return_val_if_fail ({{NAMESPACE}}_IS_{{CLASS}} (self), 0);
+
+  return priv->{{prop.cname}};
+}
+{{end}}
+{{if prop.writable}}
+
+void
+{{name}}_set_{{prop.cname}} ({{Name}} *self, glong {{prop.cname}})
+{
+  {{Name}}Private *priv = {{name}}_get_instance_private (self);
+
+  g_return_if_fail ({{NAMESPACE}}_IS_{{CLASS}} (self));
+
+  if (priv->{{prop.cname}} != {{prop.cname}})
+    {
+      priv->{{prop.cname}} = {{prop.cname}};
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_{{prop.cname.upper()}}]);
+    }
+}
+{{end}}
+{{else if prop.kind == "uint"}}
+{{if prop.readable}}
+
+guint
+{{name}}_get_{{prop.cname}} ({{Name}} *self)
+{
+  {{Name}}Private *priv = {{name}}_get_instance_private (self);
+
+  g_return_val_if_fail ({{NAMESPACE}}_IS_{{CLASS}} (self), 0);
+
+  return priv->{{prop.cname}};
+}
+{{end}}
+{{if prop.writable}}
+
+void
+{{name}}_set_{{prop.cname}} ({{Name}} *self, guint {{prop.cname}})
+{
+  {{Name}}Private *priv = {{name}}_get_instance_private (self);
+
+  g_return_if_fail ({{NAMESPACE}}_IS_{{CLASS}} (self));
+
+  if (priv->{{prop.cname}} != {{prop.cname}})
+    {
+      priv->{{prop.cname}} = {{prop.cname}};
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_{{prop.cname.upper()}}]);
+    }
+}
+{{end}}
+{{else if prop.kind == "uint64"}}
+{{if prop.readable}}
+
+guint64
+{{name}}_get_{{prop.cname}} ({{Name}} *self)
+{
+  {{Name}}Private *priv = {{name}}_get_instance_private (self);
+
+  g_return_val_if_fail ({{NAMESPACE}}_IS_{{CLASS}} (self), 0);
+
+  return priv->{{prop.cname}};
+}
+{{end}}
+{{if prop.writable}}
+
+void
+{{name}}_set_{{prop.cname}} ({{Name}} *self, guint64 {{prop.cname}})
+{
+  {{Name}}Private *priv = {{name}}_get_instance_private (self);
+
+  g_return_if_fail ({{NAMESPACE}}_IS_{{CLASS}} (self));
+
+  if (priv->{{prop.cname}} != {{prop.cname}})
+    {
+      priv->{{prop.cname}} = {{prop.cname}};
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_{{prop.cname.upper()}}]);
+    }
+}
+{{end}}
+{{else if prop.kind == "ulong"}}
+{{if prop.readable}}
+
+gulong
+{{name}}_get_{{prop.cname}} ({{Name}} *self)
+{
+  {{Name}}Private *priv = {{name}}_get_instance_private (self);
+
+  g_return_val_if_fail ({{NAMESPACE}}_IS_{{CLASS}} (self), 0);
+
+  return priv->{{prop.cname}};
+}
+{{end}}
+{{if prop.writable}}
+
+void
+{{name}}_set_{{prop.cname}} ({{Name}} *self, gulong {{prop.cname}})
+{
+  {{Name}}Private *priv = {{name}}_get_instance_private (self);
+
+  g_return_if_fail ({{NAMESPACE}}_IS_{{CLASS}} (self));
+
+  if (priv->{{prop.cname}} != {{prop.cname}})
+    {
+      priv->{{prop.cname}} = {{prop.cname}};
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_{{prop.cname.upper()}}]);
+    }
+}
+{{end}}
+{{else if prop.kind == "float"}}
+{{if prop.readable}}
+
+gfloat
+{{name}}_get_{{prop.cname}} ({{Name}} *self)
+{
+  {{Name}}Private *priv = {{name}}_get_instance_private (self);
+
+  g_return_val_if_fail ({{NAMESPACE}}_IS_{{CLASS}} (self), 0.0f);
+
+  return priv->{{prop.cname}};
+}
+{{end}}
+{{if prop.writable}}
+
+void
+{{name}}_set_{{prop.cname}} ({{Name}} *self, gfloat {{prop.cname}})
+{
+  {{Name}}Private *priv = {{name}}_get_instance_private (self);
+
+  g_return_if_fail ({{NAMESPACE}}_IS_{{CLASS}} (self));
+
+  if (priv->{{prop.cname}} != {{prop.cname}})
+    {
+      priv->{{prop.cname}} = {{prop.cname}};
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_{{prop.cname.upper()}}]);
+    }
+}
+{{end}}
+{{else if prop.kind == "double"}}
+{{if prop.readable}}
+
+gdouble
+{{name}}_get_{{prop.cname}} ({{Name}} *self)
+{
+  {{Name}}Private *priv = {{name}}_get_instance_private (self);
+
+  g_return_val_if_fail ({{NAMESPACE}}_IS_{{CLASS}} (self), 0.0);
+
+  return priv->{{prop.cname}};
+}
+{{end}}
+{{if prop.writable}}
+
+void
+{{name}}_set_{{prop.cname}} ({{Name}} *self, gdouble {{prop.cname}})
+{
+  {{Name}}Private *priv = {{name}}_get_instance_private (self);
+
+  g_return_if_fail ({{NAMESPACE}}_IS_{{CLASS}} (self));
+
+  if (priv->{{prop.cname}} != {{prop.cname}})
+    {
+      priv->{{prop.cname}} = {{prop.cname}};
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_{{prop.cname.upper()}}]);
+    }
+}
+{{end}}
+{{else if prop.kind == "pointer"}}
+{{if prop.readable}}
+
+/**
+ * {{name}}_get_{{prop.cname}}:
+ * @self: A #{{Name}}
+ *
+ * Returns: (transfer none) (nullable):
+ */
+{{prop.ctype}}
+{{name}}_get_{{prop.cname}} ({{Name}} *self)
+{
+  {{Name}}Private *priv = {{name}}_get_instance_private (self);
+
+  g_return_val_if_fail ({{NAMESPACE}}_IS_{{CLASS}} (self), 0);
+
+  return priv->{{prop.cname}};
+}
+{{end}}
+{{if prop.writable}}
+
+void
+{{name}}_set_{{prop.cname}} ({{Name}} *self, {{prop.ctype}} {{prop.cname}})
+{
+  {{Name}}Private *priv = {{name}}_get_instance_private (self);
+
+  g_return_if_fail ({{NAMESPACE}}_IS_{{CLASS}} (self));
+
+  if (priv->{{prop.cname}} != {{prop.cname}})
+    {
+      priv->{{prop.cname}} = {{prop.cname}};
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_{{prop.cname.upper()}}]);
+    }
+}
+{{end}}
+{{else if prop.kind == "boolean"}}
+{{if prop.readable}}
+
+gboolean
+{{name}}_get_{{prop.cname}} ({{Name}} *self)
+{
+  {{Name}}Private *priv = {{name}}_get_instance_private (self);
+
+  g_return_val_if_fail ({{NAMESPACE}}_IS_{{CLASS}} (self), 0);
+
+  return priv->{{prop.cname}};
+}
+{{end}}
+{{if prop.writable}}
+
+void
+{{name}}_set_{{prop.cname}} ({{Name}} *self, gboolean {{prop.cname}})
+{
+  {{Name}}Private *priv = {{name}}_get_instance_private (self);
+
+  g_return_if_fail ({{NAMESPACE}}_IS_{{CLASS}} (self));
+
+  {{prop.cname}} = !!{{prop.cname}};
+
+  if (priv->{{prop.cname}} != {{prop.cname}})
+    {
+      priv->{{prop.cname}} = {{prop.cname}};
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_{{prop.cname.upper()}}]);
+    }
+}
+{{end}}
+{{else if prop.kind == "char"}}
+{{if prop.readable}}
+
+gchar
+{{name}}_get_{{prop.cname}} ({{Name}} *self)
+{
+  {{Name}}Private *priv = {{name}}_get_instance_private (self);
+
+  g_return_val_if_fail ({{NAMESPACE}}_IS_{{CLASS}} (self), 0);
+
+  return priv->{{prop.cname}};
+}
+{{end}}
+{{if prop.writable}}
+
+void
+{{name}}_set_{{prop.cname}} ({{Name}} *self, gchar {{prop.cname}})
+{
+  {{Name}}Private *priv = {{name}}_get_instance_private (self);
+
+  g_return_if_fail ({{NAMESPACE}}_IS_{{CLASS}} (self));
+
+  if (priv->{{prop.cname}} != {{prop.cname}})
+    {
+      priv->{{prop.cname}} = {{prop.cname}};
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_{{prop.cname.upper()}}]);
+    }
+}
+{{end}}
+{{else if prop.kind == "unichar"}}
+{{if prop.readable}}
+
+gunichar
+{{name}}_get_{{prop.cname}} ({{Name}} *self)
+{
+  {{Name}}Private *priv = {{name}}_get_instance_private (self);
+
+  g_return_val_if_fail ({{NAMESPACE}}_IS_{{CLASS}} (self), 0);
+
+  return priv->{{prop.cname}};
+}
+{{end}}
+{{if prop.writable}}
+
+void
+{{name}}_set_{{prop.cname}} ({{Name}} *self, gunichar {{prop.cname}})
+{
+  {{Name}}Private *priv = {{name}}_get_instance_private (self);
+
+  g_return_if_fail ({{NAMESPACE}}_IS_{{CLASS}} (self));
+
+  if (priv->{{prop.cname}} != {{prop.cname}})
+    {
+      priv->{{prop.cname}} = {{prop.cname}};
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_{{prop.cname.upper()}}]);
+    }
+}
+{{end}}
+{{else if prop.kind == "enum"}}
+{{if prop.readable}}
+
+{{prop.ctype}}
+{{name}}_get_{{prop.cname}} ({{Name}} *self)
+{
+  {{Name}}Private *priv = {{name}}_get_instance_private (self);
+
+  g_return_val_if_fail ({{NAMESPACE}}_IS_{{CLASS}} (self), 0);
+
+  return priv->{{prop.cname}};
+}
+{{end}}
+{{if prop.writable}}
+
+void
+{{name}}_set_{{prop.cname}} ({{Name}} *self, {{prop.ctype}} {{prop.cname}})
+{
+  {{Name}}Private *priv = {{name}}_get_instance_private (self);
+
+  g_return_if_fail ({{NAMESPACE}}_IS_{{CLASS}} (self));
+
+  if (priv->{{prop.cname}} != {{prop.cname}})
+    {
+      priv->{{prop.cname}} = {{prop.cname}};
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_{{prop.cname.upper()}}]);
+    }
+}
+{{end}}
+{{else if prop.kind == "flags"}}
+{{if prop.readable}}
+
+{{prop.ctype}}
+{{name}}_get_{{prop.cname}} ({{Name}} *self)
+{
+  {{Name}}Private *priv = {{name}}_get_instance_private (self);
+
+  g_return_val_if_fail ({{NAMESPACE}}_IS_{{CLASS}} (self), 0);
+
+  return priv->{{prop.cname}};
+}
+{{end}}
+{{if prop.writable}}
+
+void
+{{name}}_set_{{prop.cname}} ({{Name}} *self, {{prop.ctype}} {{prop.cname}})
+{
+  {{Name}}Private *priv = {{name}}_get_instance_private (self);
+
+  g_return_if_fail ({{NAMESPACE}}_IS_{{CLASS}} (self));
+
+  if (priv->{{prop.cname}} != {{prop.cname}})
+    {
+      priv->{{prop.cname}} = {{prop.cname}};
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_{{prop.cname.upper()}}]);
+    }
+}
+{{end}}
+{{else if prop.kind == "boxed"}}
+{{if prop.readable}}
+
+/**
+ * {{name}}_get_{{prop.cname}}:
+ * @self: A #{{Name}}
+ *
+ * Returns: (transfer none) (nullable): A #{{prop.ctype}} or %NULL.
+ */
+{{prop.ctype}} *
+{{name}}_get_{{prop.cname}} ({{Name}} *self)
+{
+  {{Name}}Private *priv = {{name}}_get_instance_private (self);
+
+  g_return_val_if_fail ({{NAMESPACE}}_IS_{{CLASS}} (self), NULL);
+
+  return priv->{{prop.cname}};
+}
+{{end}}
+{{if prop.writable}}
+
+void
+{{name}}_set_{{prop.cname}} ({{Name}} *self, {{prop.ctype}} *{{prop.cname}})
+{
+  {{Name}}Private *priv = {{name}}_get_instance_private (self);
+
+  g_return_if_fail ({{NAMESPACE}}_IS_{{CLASS}} (self));
+
+  if ({{prop.cname}} != priv->{{prop.cname}})
+    {
+      if (priv->{{prop.cname}} != NULL)
+        {
+          g_boxed_free ({{prop.gtype}}, priv->{{prop.cname}});
+          priv->{{prop.cname}} = NULL;
+        }
+
+      if ({{prop.cname}} != NULL)
+        priv->{{prop.cname}} = g_boxed_copy ({{prop.gtype}}, {{prop.cname}});
+
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_{{prop.cname.upper()}}]);
+    }
+}
+{{end}}
+{{else if prop.kind == "variant"}}
+{{if prop.readable}}
+
+/**
+ * {{name}}_get_{{prop.cname}}:
+ * @self: A #{{Name}}
+ *
+ * Returns: (transfer none) (nullable):
+ */
+GVariant *
+{{name}}_get_{{prop.cname}} ({{Name}} *self)
+{
+  {{Name}}Private *priv = {{name}}_get_instance_private (self);
+
+  g_return_val_if_fail ({{NAMESPACE}}_IS_{{CLASS}} (self), NULL);
+
+  return priv->{{prop.cname}};
+}
+{{end}}
+{{if prop.writable}}
+
+void
+{{name}}_set_{{prop.cname}} ({{Name}} *self, GVariant *{{prop.cname}})
+{
+  {{Name}}Private *priv = {{name}}_get_instance_private (self);
+
+  g_return_if_fail ({{NAMESPACE}}_IS_{{CLASS}} (self));
+
+  if ({{prop.cname}} != priv->{{prop.cname}})
+    {
+      g_clear_pointer (&priv->{{prop.cname}}, g_variant_unref);
+      priv->{{prop.cname}} = {{prop.cname}} ? g_variant_ref ({{prop.cname}}) : NULL;
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_{{prop.cname.upper()}}]);
+    }
+}
+{{end}}
+{{else if prop.kind == "object"}}
+{{if prop.readable}}
+
+/**
+ * {{name}}_get_{{prop.cname}}:
+ * @self: A #{{Name}}
+ *
+ * Returns: (transfer none) (nullable): A #{{prop.ctype}} or %NULL.
+ */
+{{prop.ctype}} *
+{{name}}_get_{{prop.cname}} ({{Name}} *self)
+{
+  {{Name}}Private *priv = {{name}}_get_instance_private (self);
+
+  g_return_val_if_fail ({{NAMESPACE}}_IS_{{CLASS}} (self), NULL);
+
+  return priv->{{prop.cname}};
+}
+{{end}}
+{{if prop.writable}}
+
+/**
+ * {{name}}_set_{{prop.cname}}:
+ * @self: A #{{Name}}
+ * @{{prop.cname}}: A #{{prop.ctype}}
+ *
+ * Sets the "{{prop.name}}" property.
+ */
+void
+{{name}}_set_{{prop.cname}} ({{Name}} *self, {{prop.ctype}} *{{prop.cname}})
+{
+  {{Name}}Private *priv = {{name}}_get_instance_private (self);
+
+  g_return_if_fail ({{NAMESPACE}}_IS_{{CLASS}} (self));
+
+  if (g_set_object (&priv->{{prop.cname}}, {{prop.cname}}))
+    g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_{{prop.cname.upper()}}]);
+}
+{{end}}
+{{end}}
+{{end}}
+

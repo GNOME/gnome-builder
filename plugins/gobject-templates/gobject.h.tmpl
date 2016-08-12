@@ -1,0 +1,84 @@
+#ifndef {{NAME}}_H
+#define {{NAME}}_H
+
+#include <glib-object.h>
+
+G_BEGIN_DECLS
+
+#define {{NAMESPACE}}_TYPE_{{CLASS}} ({{name}}_get_type())
+
+{{if spec.final}}
+G_DECLARE_FINAL_TYPE ({{Name}}, {{name}}, {{NAMESPACE}}, {{CLASS}}, {{Parent}})
+{{else}}
+G_DECLARE_DERIVABLE_TYPE ({{Name}}, {{name}}, {{NAMESPACE}}, {{CLASS}}, {{Parent}})
+
+struct _{{Name}}Class
+{
+  {{Parent}}Class parent_class;
+};
+{{end}}
+
+{{Name}} *{{name}}_new (void);
+{{for prop in spec.properties}}
+
+{{if false}}
+{{else if prop.kind == "string"}}
+const gchar *{{name}}_get_{{prop.cname}} ({{Name}} *self);
+void {{name}}_set_{{prop.cname}} ({{Name}} *self, const gchar *{{prop.cname}});
+{{else if prop.kind == "int"}}
+gint {{name}}_get_{{prop.cname}} ({{Name}} *self);
+void {{name}}_set_{{prop.cname}} ({{Name}} *self, gint {{prop.cname}});
+{{else if prop.kind == "int64"}}
+gint64 {{name}}_get_{{prop.cname}} ({{Name}} *self);
+void {{name}}_set_{{prop.cname}} ({{Name}} *self, gint64 {{prop.cname}});
+{{else if prop.kind == "long"}}
+glong {{name}}_get_{{prop.cname}} ({{Name}} *self);
+void {{name}}_set_{{prop.cname}} ({{Name}} *self, glong {{prop.cname}});
+{{else if prop.kind == "uint"}}
+guint {{name}}_get_{{prop.cname}} ({{Name}} *self);
+void {{name}}_set_{{prop.cname}} ({{Name}} *self, guint {{prop.cname}});
+{{else if prop.kind == "uint64"}}
+guint64 {{name}}_get_{{prop.cname}} ({{Name}} *self);
+void {{name}}_set_{{prop.cname}} ({{Name}} *self, guint64 {{prop.cname}});
+{{else if prop.kind == "ulong"}}
+gulong {{name}}_get_{{prop.cname}} ({{Name}} *self);
+void {{name}}_set_{{prop.cname}} ({{Name}} *self, gulong {{prop.cname}});
+{{else if prop.kind == "float"}}
+gfloat {{name}}_get_{{prop.cname}} ({{Name}} *self);
+void {{name}}_set_{{prop.cname}} ({{Name}} *self, gfloat {{prop.cname}});
+{{else if prop.kind == "double"}}
+gdouble {{name}}_get_{{prop.cname}} ({{Name}} *self);
+void {{name}}_set_{{prop.cname}} ({{Name}} *self, gdouble {{prop.cname}});
+{{else if prop.kind == "pointer"}}
+gpointer {{name}}_get_{{prop.cname}} ({{Name}} *self);
+void {{name}}_set_{{prop.cname}} ({{Name}} *self, gpointer {{prop.cname}});
+{{else if prop.kind == "boolean"}}
+gboolean {{name}}_get_{{prop.cname}} ({{Name}} *self);
+void {{name}}_set_{{prop.cname}} ({{Name}} *self, gboolean {{prop.cname}});
+{{else if prop.kind == "char"}}
+gchar {{name}}_get_{{prop.cname}} ({{Name}} *self);
+void {{name}}_set_{{prop.cname}} ({{Name}} *self, gchar {{prop.cname}});
+{{else if prop.kind == "unichar"}}
+gunichar {{name}}_get_{{prop.cname}} ({{Name}} *self);
+void {{name}}_set_{{prop.cname}} ({{Name}} *self, gunichar {{prop.cname}});
+{{else if prop.kind == "enum"}}
+{{prop.ctype}} {{name}}_get_{{prop.cname}} ({{Name}} *self);
+void {{name}}_set_{{prop.cname}} ({{Name}} *self, {{prop.ctype}} {{prop.cname}});
+{{else if prop.kind == "flags"}}
+{{prop.ctype}} {{name}}_get_{{prop.cname}} ({{Name}} *self);
+void {{name}}_set_{{prop.cname}} ({{Name}} *self, {{prop.ctype}} {{prop.cname}});
+{{else if prop.kind == "boxed"}}
+{{prop.ctype}} *{{name}}_get_{{prop.cname}} ({{Name}} *self);
+void {{name}}_set_{{prop.cname}} ({{Name}} *self, {{prop.ctype}} *{{prop.cname}});
+{{else if prop.kind == "variant"}}
+GVariant *{{name}}_get_{{prop.cname}} ({{Name}} *self);
+void {{name}}_set_{{prop.cname}} ({{Name}} *self, GVariant *{{prop.cname}});
+{{else if prop.kind == "object"}}
+{{prop.ctype}} *{{name}}_get_{{prop.cname}} ({{Name}} *self);
+void {{name}}_set_{{prop.cname}} ({{Name}} *self, {{prop.ctype}} *{{prop.cname}});
+{{end}}
+{{end}}
+
+G_END_DECLS
+
+#endif /* {{NAME}}_H */

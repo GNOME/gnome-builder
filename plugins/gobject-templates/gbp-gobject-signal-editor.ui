@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="GbpGobjectSignalEditor" parent="GtkBin">
+    <child>
+      <object class="GtkBox">
+        <property name="orientation">vertical</property>
+        <property name="border-width">24</property>
+        <property name="visible">true</property>
+
+        <!-- Name -->
+        <child>
+          <object class="GtkBox">
+            <property name="orientation">horizontal</property>
+            <property name="spacing">12</property>
+            <property name="visible">true</property>
+            <child>
+              <object class="GtkLabel" id="label1">
+                <property name="label" translatable="yes">Name</property>
+                <property name="xalign">1.0</property>
+                <property name="hexpand">true</property>
+                <property name="visible">true</property>
+              </object>
+            </child>
+            <child type="center">
+              <object class="GtkEntry" id="name_entry">
+                <property name="width-chars">25</property>
+                <property name="visible">true</property>
+              </object>
+            </child>
+          </object>
+        </child>
+
+        <!-- Name Description Text -->
+        <child>
+          <object class="GtkBox">
+            <property name="orientation">horizontal</property>
+            <property name="margin-top">6</property>
+            <property name="visible">true</property>
+            <child type="center">
+              <object class="GtkLabel" id="name_help_label">
+                <property name="label" translatable="yes">Unique name that should only contain alpha characters or - such as “activate” or “items-changed”.</property>
+                <property name="wrap">true</property>
+                <property name="visible">true</property>
+                <property name="xalign">0.0</property>
+                <property name="max-width-chars">25</property>
+                <style>
+                  <class name="dim-label"/>
+                </style>
+                <attributes>
+                  <attribute name="scale" value="0.833333"/>
+                </attributes>
+              </object>
+            </child>
+          </object>
+        </child>
+
+        <!-- Returns -->
+        <child>
+          <object class="GtkBox">
+            <property name="orientation">horizontal</property>
+            <property name="margin-top">24</property>
+            <property name="spacing">12</property>
+            <property name="visible">true</property>
+            <child>
+              <object class="GtkLabel" id="label2">
+                <property name="label" translatable="yes">Returns</property>
+                <property name="xalign">1.0</property>
+                <property name="hexpand">true</property>
+                <property name="visible">true</property>
+              </object>
+            </child>
+            <child type="center">
+              <object class="GtkEntry" id="returns_entry">
+                <property name="width-chars">25</property>
+                <property name="visible">true</property>
+              </object>
+            </child>
+          </object>
+        </child>
+
+      </object>
+    </child>
+  </template>
+
+  <object class="GtkSizeGroup">
+    <property name="mode">horizontal</property>
+    <widgets>
+      <widget name="name_entry"/>
+      <widget name="name_help_label"/>
+      <widget name="returns_entry"/>
+    </widgets>
+  </object>
+
+  <object class="GtkSizeGroup">
+    <property name="mode">horizontal</property>
+    <widgets>
+      <widget name="label1"/>
+      <widget name="label2"/>
+    </widgets>
+  </object>
+</interface>

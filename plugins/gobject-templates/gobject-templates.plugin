@@ -1,0 +1,9 @@
+[Plugin]
+Module=gobject-templates
+Name=GObject Templates
+Description=Create new GObjects using templates
+Authors=Christian Hergert <christian@hergert.me>
+Copyright=Copyright © 2015 Christian Hergert
+Depends=project-tree-plugin
+Hidden=true
+Builtin=true

@@ -1,0 +1,724 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="GbpGobjectPropertyEditor" parent="GtkBin">
+    <child>
+      <object class="GtkBox">
+        <property name="orientation">vertical</property>
+        <property name="visible">true</property>
+
+        <!-- Name -->
+        <child>
+          <object class="GtkBox">
+            <property name="orientation">horizontal</property>
+            <property name="spacing">12</property>
+            <property name="visible">true</property>
+            <child>
+              <object class="GtkLabel" id="label1">
+                <property name="label" translatable="yes">Name</property>
+                <property name="xalign">1.0</property>
+                <property name="hexpand">true</property>
+                <property name="visible">true</property>
+              </object>
+            </child>
+            <child type="center">
+              <object class="GtkEntry" id="name_entry">
+                <property name="width-chars">25</property>
+                <property name="visible">true</property>
+              </object>
+            </child>
+          </object>
+        </child>
+
+        <!-- Name Description Text -->
+        <child>
+          <object class="GtkBox">
+            <property name="orientation">horizontal</property>
+            <property name="margin-top">6</property>
+            <property name="spacing">12</property>
+            <property name="visible">true</property>
+            <child>
+              <object class="GtkLabel" id="name_align_label">
+                <property name="hexpand">true</property>
+                <property name="visible">true</property>
+                <property name="xalign">1.0</property>
+              </object>
+            </child>
+            <child type="center">
+              <object class="GtkLabel" id="name_help_label">
+                <property name="label" translatable="yes">Unique name that should only contain alpha characters or - such as “name” or “item-type”.</property>
+                <property name="xalign">0.0</property>
+                <property name="wrap">true</property>
+                <property name="visible">true</property>
+                <property name="max-width-chars">25</property>
+                <style>
+                  <class name="dim-label"/>
+                </style>
+                <attributes>
+                  <attribute name="scale" value="0.833333"/>
+                </attributes>
+              </object>
+            </child>
+          </object>
+        </child>
+
+        <!-- Type -->
+        <child>
+          <object class="GtkBox">
+            <property name="orientation">horizontal</property>
+            <property name="spacing">12</property>
+            <property name="margin-top">18</property>
+            <property name="visible">true</property>
+            <child>
+              <object class="GtkLabel" id="label2">
+                <property name="label" translatable="yes">Kind</property>
+                <property name="xalign">1.0</property>
+                <property name="hexpand">true</property>
+                <property name="visible">true</property>
+              </object>
+            </child>
+            <child type="center">
+              <object class="GtkComboBoxText" id="kind_combobox">
+                <property name="visible">true</property>
+                <items>
+                  <item translatable="yes" id="boolean">Boolean</item>
+                  <item translatable="yes" id="boxed">Boxed</item>
+                  <item translatable="yes" id="char">Character</item>
+                  <item translatable="yes" id="double">Double</item>
+                  <item translatable="yes" id="enum">Enum</item>
+                  <item translatable="yes" id="flags">Flags</item>
+                  <item translatable="yes" id="float">Float</item>
+                  <item translatable="yes" id="int">Signed Integer</item>
+                  <item translatable="yes" id="int64">Signed 64-bit Integer</item>
+                  <item translatable="yes" id="long">Signed Long</item>
+                  <item translatable="yes" id="object">Object</item>
+                  <item translatable="yes" id="pointer">Pointer</item>
+                  <item translatable="yes" id="string">String</item>
+                  <item translatable="yes" id="uint">Unsinged Integer</item>
+                  <item translatable="yes" id="uint64">Unsigned 64-bit Integer</item>
+                  <item translatable="yes" id="ulong">Unsigned Long</item>
+                  <item translatable="yes" id="unichar">Unicode Character</item>
+                  <item translatable="yes" id="variant">Variant</item>
+                </items>
+              </object>
+            </child>
+          </object>
+        </child>
+
+        <!-- Type -->
+        <child>
+          <object class="GtkBox" id="ctype_box">
+            <property name="orientation">horizontal</property>
+            <property name="spacing">12</property>
+            <property name="margin-top">18</property>
+            <property name="visible">true</property>
+            <child>
+              <object class="GtkLabel" id="label9">
+                <property name="label" translatable="yes">Type</property>
+                <property name="xalign">1.0</property>
+                <property name="hexpand">true</property>
+                <property name="visible">true</property>
+              </object>
+            </child>
+            <child type="center">
+              <object class="GtkEntry" id="ctype_entry">
+                <property name="visible">true</property>
+              </object>
+            </child>
+          </object>
+        </child>
+
+        <!-- Default -->
+        <child>
+          <object class="GtkBox" id="default_box">
+            <property name="orientation">horizontal</property>
+            <property name="spacing">12</property>
+            <property name="margin-top">18</property>
+            <property name="visible">true</property>
+            <child>
+              <object class="GtkLabel" id="label3">
+                <property name="label" translatable="yes">Default</property>
+                <property name="xalign">1.0</property>
+                <property name="hexpand">true</property>
+                <property name="visible">true</property>
+              </object>
+            </child>
+            <child type="center">
+              <object class="GtkEntry" id="default_entry">
+                <property name="visible">true</property>
+              </object>
+            </child>
+          </object>
+        </child>
+
+        <!-- Minimum -->
+        <child>
+          <object class="GtkBox" id="min_box">
+            <property name="orientation">horizontal</property>
+            <property name="spacing">12</property>
+            <property name="margin-top">12</property>
+            <property name="visible">true</property>
+            <child>
+              <object class="GtkLabel" id="label4">
+                <property name="label" translatable="yes">Minimum</property>
+                <property name="xalign">1.0</property>
+                <property name="hexpand">true</property>
+                <property name="visible">true</property>
+              </object>
+            </child>
+            <child type="center">
+              <object class="GtkEntry" id="min_entry">
+                <property name="visible">true</property>
+              </object>
+            </child>
+          </object>
+        </child>
+
+        <!-- Maximum -->
+        <child>
+          <object class="GtkBox" id="max_box">
+            <property name="orientation">horizontal</property>
+            <property name="spacing">12</property>
+            <property name="margin-top">12</property>
+            <property name="visible">true</property>
+            <child>
+              <object class="GtkLabel" id="label5">
+                <property name="label" translatable="yes">Maximum</property>
+                <property name="xalign">1.0</property>
+                <property name="hexpand">true</property>
+                <property name="visible">true</property>
+              </object>
+            </child>
+            <child type="center">
+              <object class="GtkEntry" id="max_entry">
+                <property name="visible">true</property>
+              </object>
+            </child>
+          </object>
+        </child>
+
+        <!-- Read -->
+        <child>
+          <object class="GtkBox">
+            <property name="orientation">horizontal</property>
+            <property name="spacing">12</property>
+            <property name="visible">true</property>
+            <property name="margin-top">18</property>
+            <child>
+              <object class="GtkLabel" id="label6">
+                <property name="label" translatable="yes">Readable</property>
+                <property name="xalign">1.0</property>
+                <property name="hexpand">true</property>
+                <property name="visible">true</property>
+              </object>
+            </child>
+            <child type="center">
+              <object class="GtkBox" id="readable_container">
+                <property name="visible">true</property>
+                <child>
+                  <object class="GtkSwitch" id="readable_switch">
+                    <property name="active">true</property>
+                    <property name="halign">start</property>
+                    <property name="valign">center</property>
+                    <property name="visible">true</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+
+        <!-- Write -->
+        <child>
+          <object class="GtkBox">
+            <property name="orientation">horizontal</property>
+            <property name="spacing">12</property>
+            <property name="visible">true</property>
+            <property name="margin-top">6</property>
+            <child>
+              <object class="GtkLabel" id="label7">
+                <property name="label" translatable="yes">Writable</property>
+                <property name="xalign">1.0</property>
+                <property name="hexpand">true</property>
+                <property name="visible">true</property>
+              </object>
+            </child>
+            <child type="center">
+              <object class="GtkBox" id="writable_container">
+                <property name="visible">true</property>
+                <child>
+                  <object class="GtkSwitch" id="writable_switch">
+                    <property name="active">true</property>
+                    <property name="halign">start</property>
+                    <property name="valign">center</property>
+                    <property name="visible">true</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+
+        <!-- Construct Only -->
+        <child>
+          <object class="GtkBox">
+            <property name="orientation">horizontal</property>
+            <property name="spacing">12</property>
+            <property name="visible">true</property>
+            <property name="margin-top">6</property>
+            <child>
+              <object class="GtkLabel" id="label8">
+                <property name="label" translatable="yes">Construct Only</property>
+                <property name="xalign">1.0</property>
+                <property name="hexpand">true</property>
+                <property name="visible">true</property>
+              </object>
+            </child>
+            <child type="center">
+              <object class="GtkBox" id="construct_only_container">
+                <property name="visible">true</property>
+                <child>
+                  <object class="GtkSwitch" id="construct_only_switch">
+                    <property name="active">true</property>
+                    <property name="halign">start</property>
+                    <property name="valign">center</property>
+                    <property name="visible">true</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+
+      </object>
+    </child>
+  </template>
+
+  <object class="GtkSizeGroup">
+    <property name="mode">horizontal</property>
+    <widgets>
+      <widget name="name_entry"/>
+      <widget name="name_help_label"/>
+      <widget name="kind_combobox"/>
+      <widget name="max_entry"/>
+      <widget name="min_entry"/>
+      <widget name="default_entry"/>
+      <widget name="readable_container"/>
+      <widget name="writable_container"/>
+      <widget name="construct_only_container"/>
+      <widget name="ctype_entry"/>
+    </widgets>
+  </object>
+
+  <object class="GtkSizeGroup">
+    <property name="mode">horizontal</property>
+    <widgets>
+      <widget name="label1"/>
+      <widget name="label2"/>
+      <widget name="label3"/>
+      <widget name="label4"/>
+      <widget name="label5"/>
+      <widget name="label6"/>
+      <widget name="label7"/>
+      <widget name="label8"/>
+      <widget name="label9"/>
+      <widget name="name_align_label"/>
+    </widgets>
+  </object>
+
+  <object class="EggStateMachine" id="kind_state">
+    <states>
+
+      <state name="boolean">
+        <object id="default_box">
+          <property name="visible">true</property>
+        </object>
+        <object id="default_entry">
+          <property name="text">FALSE</property>
+        </object>
+        <object id="max_box">
+          <property name="visible">false</property>
+        </object>
+        <object id="min_box">
+          <property name="visible">false</property>
+        </object>
+        <object id="ctype_box">
+          <property name="visible">false</property>
+        </object>
+      </state>
+
+      <state name="boxed">
+        <object id="default_box">
+          <property name="visible">false</property>
+        </object>
+        <object id="max_box">
+          <property name="visible">false</property>
+        </object>
+        <object id="min_box">
+          <property name="visible">false</property>
+        </object>
+        <object id="ctype_box">
+          <property name="visible">true</property>
+        </object>
+        <object id="ctype_entry">
+          <property name="placeholder-text">MyBoxed</property>
+        </object>
+      </state>
+
+      <state name="char">
+        <object id="default_box">
+          <property name="visible">true</property>
+        </object>
+        <object id="default_entry">
+          <property name="text">0</property>
+        </object>
+        <object id="max_box">
+          <property name="visible">true</property>
+        </object>
+        <object id="max_entry">
+          <property name="text">G_MAXINT8</property>
+        </object>
+        <object id="min_box">
+          <property name="visible">true</property>
+        </object>
+        <object id="min_entry">
+          <property name="text">G_MININT8</property>
+        </object>
+        <object id="ctype_box">
+          <property name="visible">false</property>
+        </object>
+      </state>
+
+      <state name="double">
+        <object id="default_box">
+          <property name="visible">true</property>
+        </object>
+        <object id="default_entry">
+          <property name="text">0.0</property>
+        </object>
+        <object id="max_box">
+          <property name="visible">true</property>
+        </object>
+        <object id="max_entry">
+          <property name="text">G_MAXDOUBLE</property>
+        </object>
+        <object id="min_box">
+          <property name="visible">true</property>
+        </object>
+        <object id="min_entry">
+          <property name="text">-G_MINDOUBLE</property>
+        </object>
+        <object id="ctype_box">
+          <property name="visible">false</property>
+        </object>
+      </state>
+
+      <state name="enum">
+        <object id="default_box">
+          <property name="visible">true</property>
+        </object>
+        <object id="default_entry">
+          <property name="text">0</property>
+        </object>
+        <object id="max_box">
+          <property name="visible">false</property>
+        </object>
+        <object id="min_box">
+          <property name="visible">false</property>
+        </object>
+        <object id="ctype_box">
+          <property name="visible">true</property>
+        </object>
+        <object id="ctype_entry">
+          <property name="placeholder-text">MyEnum</property>
+        </object>
+      </state>
+
+      <state name="flags">
+        <object id="default_box">
+          <property name="visible">true</property>
+        </object>
+        <object id="default_entry">
+          <property name="text">0</property>
+        </object>
+        <object id="max_box">
+          <property name="visible">false</property>
+        </object>
+        <object id="min_box">
+          <property name="visible">false</property>
+        </object>
+        <object id="ctype_box">
+          <property name="visible">true</property>
+        </object>
+        <object id="ctype_entry">
+          <property name="placeholder-text">MyFlags</property>
+        </object>
+      </state>
+
+      <state name="float">
+        <object id="default_box">
+          <property name="visible">true</property>
+        </object>
+        <object id="default_entry">
+          <property name="text">0.0f</property>
+        </object>
+        <object id="max_box">
+          <property name="visible">true</property>
+        </object>
+        <object id="max_entry">
+          <property name="text">G_MAXFLOAT</property>
+        </object>
+        <object id="min_box">
+          <property name="visible">true</property>
+        </object>
+        <object id="min_entry">
+          <property name="text">-G_MAXFLOAT</property>
+        </object>
+        <object id="ctype_box">
+          <property name="visible">false</property>
+        </object>
+      </state>
+
+      <state name="int">
+        <object id="default_box">
+          <property name="visible">true</property>
+        </object>
+        <object id="default_entry">
+          <property name="text">0</property>
+        </object>
+        <object id="max_box">
+          <property name="visible">true</property>
+        </object>
+        <object id="max_entry">
+          <property name="text">G_MAXINT</property>
+        </object>
+        <object id="min_box">
+          <property name="visible">true</property>
+        </object>
+        <object id="min_entry">
+          <property name="text">G_MININT</property>
+        </object>
+        <object id="ctype_box">
+          <property name="visible">false</property>
+        </object>
+      </state>
+
+      <state name="int64">
+        <object id="default_box">
+          <property name="visible">true</property>
+        </object>
+        <object id="default_entry">
+          <property name="text">0</property>
+        </object>
+        <object id="max_box">
+          <property name="visible">true</property>
+        </object>
+        <object id="max_entry">
+          <property name="text">G_MAXINT64</property>
+        </object>
+        <object id="min_box">
+          <property name="visible">true</property>
+        </object>
+        <object id="min_entry">
+          <property name="text">G_MININT64</property>
+        </object>
+        <object id="ctype_box">
+          <property name="visible">false</property>
+        </object>
+      </state>
+
+      <state name="long">
+        <object id="default_box">
+          <property name="visible">true</property>
+        </object>
+        <object id="default_entry">
+          <property name="text">0</property>
+        </object>
+        <object id="max_box">
+          <property name="visible">true</property>
+        </object>
+        <object id="max_entry">
+          <property name="text">G_MAXLONG</property>
+        </object>
+        <object id="min_box">
+          <property name="visible">true</property>
+        </object>
+        <object id="min_entry">
+          <property name="text">G_MINLONG</property>
+        </object>
+        <object id="ctype_box">
+          <property name="visible">false</property>
+        </object>
+      </state>
+
+      <state name="object">
+        <object id="default_box">
+          <property name="visible">false</property>
+        </object>
+        <object id="max_box">
+          <property name="visible">false</property>
+        </object>
+        <object id="min_box">
+          <property name="visible">false</property>
+        </object>
+        <object id="ctype_box">
+          <property name="visible">true</property>
+        </object>
+        <object id="ctype_entry">
+          <property name="placeholder-text">MyObject</property>
+        </object>
+      </state>
+
+      <state name="pointer">
+        <object id="default_box">
+          <property name="visible">false</property>
+        </object>
+        <object id="max_box">
+          <property name="visible">false</property>
+        </object>
+        <object id="min_box">
+          <property name="visible">false</property>
+        </object>
+        <object id="ctype_box">
+          <property name="visible">true</property>
+        </object>
+        <object id="ctype_entry">
+          <property name="text">gpointer</property>
+          <property name="placeholder-text">MyPointerType</property>
+        </object>
+      </state>
+
+      <state name="string">
+        <object id="default_box">
+          <property name="visible">true</property>
+        </object>
+        <object id="default_entry">
+          <property name="text">NULL</property>
+        </object>
+        <object id="max_box">
+          <property name="visible">false</property>
+        </object>
+        <object id="min_box">
+          <property name="visible">false</property>
+        </object>
+        <object id="ctype_box">
+          <property name="visible">false</property>
+        </object>
+      </state>
+
+      <state name="uint">
+        <object id="default_box">
+          <property name="visible">true</property>
+        </object>
+        <object id="default_entry">
+          <property name="text">0</property>
+        </object>
+        <object id="max_box">
+          <property name="visible">true</property>
+        </object>
+        <object id="max_entry">
+          <property name="text">G_MAXUINT</property>
+        </object>
+        <object id="min_box">
+          <property name="visible">true</property>
+        </object>
+        <object id="min_entry">
+          <property name="text">0</property>
+        </object>
+        <object id="ctype_box">
+          <property name="visible">false</property>
+        </object>
+      </state>
+
+      <state name="uint64">
+        <object id="default_box">
+          <property name="visible">true</property>
+        </object>
+        <object id="default_entry">
+          <property name="text">0</property>
+        </object>
+        <object id="max_box">
+          <property name="visible">true</property>
+        </object>
+        <object id="max_entry">
+          <property name="text">G_MAXUINT64</property>
+        </object>
+        <object id="min_box">
+          <property name="visible">true</property>
+        </object>
+        <object id="min_entry">
+          <property name="text">0</property>
+        </object>
+        <object id="ctype_box">
+          <property name="visible">false</property>
+        </object>
+      </state>
+
+      <state name="ulong">
+        <object id="default_box">
+          <property name="visible">true</property>
+        </object>
+        <object id="default_entry">
+          <property name="text">0</property>
+        </object>
+        <object id="max_box">
+          <property name="visible">true</property>
+        </object>
+        <object id="max_entry">
+          <property name="text">G_MAXULONG</property>
+        </object>
+        <object id="min_box">
+          <property name="visible">true</property>
+        </object>
+        <object id="min_entry">
+          <property name="text">0</property>
+        </object>
+        <object id="ctype_box">
+          <property name="visible">false</property>
+        </object>
+      </state>
+
+      <state name="unichar">
+        <object id="default_box">
+          <property name="visible">true</property>
+        </object>
+        <object id="default_entry">
+          <property name="text">0</property>
+        </object>
+        <object id="max_box">
+          <property name="visible">true</property>
+        </object>
+        <object id="max_entry">
+          <property name="text">G_MAXUINT</property>
+        </object>
+        <object id="min_box">
+          <property name="visible">true</property>
+        </object>
+        <object id="min_entry">
+          <property name="text">0</property>
+        </object>
+        <object id="ctype_box">
+          <property name="visible">false</property>
+        </object>
+      </state>
+
+      <state name="variant">
+        <object id="default_box">
+          <property name="visible">true</property>
+        </object>
+        <object id="default_entry">
+          <property name="text">NULL</property>
+        </object>
+        <object id="max_box">
+          <property name="visible">false</property>
+        </object>
+        <object id="min_box">
+          <property name="visible">false</property>
+        </object>
+        <object id="ctype_box">
+          <property name="visible">false</property>
+        </object>
+      </state>
+
+    </states>
+  </object>
+</interface>

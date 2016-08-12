@@ -1,0 +1,351 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="GbpGobjectSpecEditor" parent="GtkBin">
+    <child>
+      <object class="GtkBox">
+        <property name="orientation">vertical</property>
+        <property name="visible">true</property>
+
+        <!-- Location -->
+        <child>
+          <object class="GtkBox">
+            <property name="orientation">horizontal</property>
+            <property name="spacing">10</property>
+            <property name="visible">true</property>
+            <child>
+              <object class="GtkLabel">
+                <property name="label" translatable="yes">Location</property>
+                <property name="halign">end</property>
+                <property name="hexpand">true</property>
+                <property name="visible">true</property>
+              </object>
+            </child>
+            <child type="center">
+              <object class="EggFileChooserEntry" id="location_entry">
+                <property name="action">select-folder</property>
+                <property name="visible">true</property>
+              </object>
+            </child>
+          </object>
+        </child>
+
+        <!-- Name -->
+        <child>
+          <object class="GtkBox">
+            <property name="orientation">horizontal</property>
+            <property name="margin-top">24</property>
+            <property name="spacing">10</property>
+            <property name="visible">true</property>
+            <child>
+              <object class="GtkLabel">
+                <property name="label" translatable="yes">Name</property>
+                <property name="halign">end</property>
+                <property name="hexpand">true</property>
+                <property name="visible">true</property>
+              </object>
+            </child>
+            <child type="center">
+              <object class="GtkEntry" id="name_entry">
+                <property name="sensitive" bind-source="details_revealer" bind-property="reveal-child" bind-flags="bidirectional|invert-boolean"/>
+                <property name="visible">true</property>
+                <property name="width-chars">40</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkToggleButton">
+                <property name="active" bind-source="details_revealer" bind-property="reveal-child" bind-flags="bidirectional">false</property>
+                <property name="focus-on-click">false</property>
+                <property name="halign">start</property>
+                <property name="hexpand">true</property>
+                <property name="visible">true</property>
+                <style>
+                  <class name="flat"/>
+                  <class name="image-button"/>
+                </style>
+                <child>
+                  <object class="GtkImage">
+                    <property name="icon-name">view-more-symbolic</property>
+                    <property name="visible">true</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="pack-type">end</property>
+              </packing>
+            </child>
+          </object>
+        </child>
+
+        <!-- Description of name entry -->
+        <child>
+          <object class="GtkBox">
+            <property name="orientation">horizontal</property>
+            <property name="spacing">10</property>
+            <property name="visible">true</property>
+            <property name="margin-top">6</property>
+            <child type="center">
+              <object class="GtkLabel" id="name_desc_label">
+                <property name="label" translatable="yes">Unique name for the class including the namespace such as “MyObject” or “MyWidget”.</property>
+                <property name="max-width-chars">40</property>
+                <property name="visible">true</property>
+                <property name="xalign">0.0</property>
+                <property name="wrap">true</property>
+                <style>
+                  <class name="dim-label"/>
+                </style>
+                <attributes>
+                  <attribute name="scale" value="0.833333"/>
+                </attributes>
+              </object>
+            </child>
+          </object>
+        </child>
+
+        <!-- Revealer for manual namespace/class entry -->
+        <child>
+          <object class="GtkRevealer" id="details_revealer">
+            <property name="reveal-child">false</property>
+            <property name="visible">true</property>
+            <child>
+              <object class="GtkBox">
+                <property name="orientation">vertical</property>
+                <property name="visible">true</property>
+
+                <!-- Namespace -->
+                <child>
+                  <object class="GtkBox">
+                    <property name="orientation">horizontal</property>
+                    <property name="spacing">10</property>
+                    <property name="visible">true</property>
+                    <property name="margin-top">24</property>
+                    <child>
+                      <object class="GtkLabel" id="namespace_label">
+                        <property name="label" translatable="yes">Namespace</property>
+                        <property name="halign">end</property>
+                        <property name="hexpand">true</property>
+                        <property name="visible">true</property>
+                      </object>
+                    </child>
+                    <child type="center">
+                      <object class="GtkEntry" id="namespace_entry">
+                        <property name="visible">true</property>
+                        <property name="width-chars">40</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+
+                <!-- Class -->
+                <child>
+                  <object class="GtkBox">
+                    <property name="orientation">horizontal</property>
+                    <property name="spacing">10</property>
+                    <property name="visible">true</property>
+                    <property name="margin-top">12</property>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="label" translatable="yes">Class</property>
+                        <property name="halign">end</property>
+                        <property name="hexpand">true</property>
+                        <property name="visible">true</property>
+                      </object>
+                    </child>
+                    <child type="center">
+                      <object class="GtkEntry" id="class_entry">
+                        <property name="visible">true</property>
+                        <property name="width-chars">40</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+
+                <!-- Parent Type -->
+                <child>
+                  <object class="GtkBox">
+                    <property name="orientation">horizontal</property>
+                    <property name="spacing">10</property>
+                    <property name="visible">true</property>
+                    <property name="margin-top">12</property>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="label" translatable="yes">Inherits</property>
+                        <property name="halign">end</property>
+                        <property name="hexpand">true</property>
+                        <property name="visible">true</property>
+                      </object>
+                    </child>
+                    <child type="center">
+                      <object class="GtkEntry" id="parent_entry">
+                        <property name="text">GObject</property>
+                        <property name="visible">true</property>
+                        <property name="width-chars">40</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+
+              </object>
+            </child>
+          </object>
+        </child>
+
+        <!-- Language -->
+        <child>
+          <object class="GtkBox">
+            <property name="orientation">horizontal</property>
+            <property name="spacing">10</property>
+            <property name="visible">true</property>
+            <property name="margin-top">24</property>
+            <child>
+              <object class="GtkLabel">
+                <property name="label" translatable="yes">Language</property>
+                <property name="halign">end</property>
+                <property name="hexpand">true</property>
+                <property name="visible">true</property>
+              </object>
+            </child>
+            <child type="center">
+              <object class="GtkBox" id="language_box">
+                <property name="orientation">horizontal</property>
+                <property name="homogeneous">true</property>
+                <property name="visible">true</property>
+                <style>
+                  <class name="linked"/>
+                </style>
+                <child>
+                  <object class="GtkRadioButton" id="lang_c">
+                    <property name="draw-indicator">false</property>
+                    <property name="group">lang_c</property>
+                    <property name="action-name">spec.language</property>
+                    <property name="action-target">'c'</property>
+                    <property name="hexpand">true</property>
+                    <property name="label" translatable="yes">C</property>
+                    <property name="visible">true</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkRadioButton" id="lang_cpp">
+                    <property name="draw-indicator">false</property>
+                    <property name="group">lang_c</property>
+                    <property name="action-name">spec.language</property>
+                    <property name="action-target">'cpp'</property>
+                    <property name="hexpand">true</property>
+                    <property name="label" translatable="yes">C++</property>
+                    <property name="visible">true</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkRadioButton" id="lang_python">
+                    <property name="draw-indicator">false</property>
+                    <property name="group">lang_c</property>
+                    <property name="action-name">spec.language</property>
+                    <property name="action-target">'python'</property>
+                    <property name="hexpand">true</property>
+                    <property name="label" translatable="yes">Python</property>
+                    <property name="visible">true</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkRadioButton" id="lang_vala">
+                    <property name="draw-indicator">false</property>
+                    <property name="group">lang_c</property>
+                    <property name="action-name">spec.language</property>
+                    <property name="action-target">'vala'</property>
+                    <property name="hexpand">true</property>
+                    <property name="label" translatable="yes">Vala</property>
+                    <property name="visible">true</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+
+        <!-- Write -->
+        <child>
+          <object class="GtkBox">
+            <property name="orientation">horizontal</property>
+            <property name="spacing">12</property>
+            <property name="visible">true</property>
+            <property name="margin-top">24</property>
+            <child>
+              <object class="GtkLabel" id="derive_label">
+                <property name="label" translatable="yes">Derivable</property>
+                <property name="xalign">1.0</property>
+                <property name="hexpand">true</property>
+                <property name="visible">true</property>
+              </object>
+            </child>
+            <child type="center">
+              <object class="GtkBox" id="derive_container">
+                <property name="visible">true</property>
+                <child>
+                  <object class="GtkSwitch" id="derive_switch">
+                    <property name="active">false</property>
+                    <property name="halign">start</property>
+                    <property name="valign">center</property>
+                    <property name="visible">true</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+
+      </object>
+    </child>
+  </template>
+
+  <!-- Sizing to keep the center column all the same -->
+  <object class="GtkSizeGroup">
+    <property name="mode">horizontal</property>
+    <widgets>
+      <widget name="language_box"/>
+      <widget name="location_entry"/>
+      <widget name="namespace_entry"/>
+      <widget name="name_desc_label"/>
+      <widget name="parent_entry"/>
+      <widget name="class_entry"/>
+      <widget name="derive_container"/>
+    </widgets>
+  </object>
+
+  <object class="EggStateMachine" id="language_state">
+    <property name="state">c</property>
+    <states>
+      <state name="c">
+        <object id="namespace_label">
+          <property name="label" translatable="yes">Namespace</property>
+        </object>
+        <object id="derive_switch">
+          <property name="sensitive">true</property>
+        </object>
+      </state>
+      <state name="cpp">
+        <object id="namespace_label">
+          <property name="label" translatable="yes">Namespace</property>
+        </object>
+        <object id="derive_switch">
+          <property name="sensitive">false</property>
+        </object>
+      </state>
+      <state name="python">
+        <object id="namespace_label">
+          <property name="label" translatable="yes">Package</property>
+        </object>
+        <object id="derive_switch">
+          <property name="sensitive">false</property>
+        </object>
+      </state>
+      <state name="vala">
+        <object id="namespace_label">
+          <property name="label" translatable="yes">Namespace</property>
+        </object>
+        <object id="derive_switch">
+          <property name="sensitive">false</property>
+        </object>
+      </state>
+    </states>
+  </object>
+
+</interface>

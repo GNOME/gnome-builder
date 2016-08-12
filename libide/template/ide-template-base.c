@@ -16,10 +16,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define G_LOG_DOMAIN "ide-template-base"
+
 #include <glib/gstdio.h>
 #include <errno.h>
 #include <string.h>
 
+#include "ide-debug.h"
 #include "ide-template-base.h"
 
 #define TIMEOUT_INTERVAL_MSEC 17
@@ -72,6 +75,8 @@ ide_template_base_mkdirs_worker (GTask        *task,
   GError *error = NULL;
   guint i;
 
+  IDE_ENTRY;
+
   g_assert (G_IS_TASK (task));
   g_assert (IDE_IS_TEMPLATE_BASE (self));
 
@@ -87,8 +92,8 @@ ide_template_base_mkdirs_worker (GTask        *task,
         {
           if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_EXISTS))
             {
-              g_task_return_error (task, error);
-              return;
+              g_task_return_error (task, g_steal_pointer (&error));
+              IDE_EXIT;
             }
 
           g_clear_error (&error);
@@ -96,6 +101,8 @@ ide_template_base_mkdirs_worker (GTask        *task,
     }
 
   g_task_return_boolean (task, TRUE);
+
+  IDE_EXIT;
 }
 
 static void
@@ -271,6 +278,8 @@ ide_template_base_parse_worker (GTask        *task,
   IdeTemplateBasePrivate *priv = ide_template_base_get_instance_private (self);
   guint i;
 
+  IDE_ENTRY;
+
   g_assert (G_IS_TASK (task));
   g_assert (IDE_IS_TEMPLATE_BASE (self));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
@@ -289,13 +298,15 @@ ide_template_base_parse_worker (GTask        *task,
       if (!tmpl_template_parse_file (template, fexp->file, cancellable, &error))
         {
           g_task_return_error (task, error);
-          return;
+          IDE_EXIT;
         }
 
       fexp->template = g_object_ref (template);
     }
 
   g_task_return_boolean (task, TRUE);
+
+  IDE_EXIT;
 }
 
 static void
@@ -336,6 +347,8 @@ ide_template_base_replace_cb (GObject      *object,
   FileExpansion *fexp = NULL;
   guint i;
 
+  IDE_ENTRY;
+
   g_assert (G_IS_FILE (file));
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (G_IS_TASK (task));
@@ -356,7 +369,8 @@ ide_template_base_replace_cb (GObject      *object,
         g_task_return_error (task, error);
       else
         g_error_free (error);
-      return;
+
+      IDE_EXIT;
     }
 
   /*
@@ -393,8 +407,13 @@ ide_template_base_replace_cb (GObject      *object,
   if (expansion->completed == expansion->files->len)
     {
       if (!g_task_get_completed (task))
-        g_task_return_boolean (task, TRUE);
+        {
+          g_task_return_boolean (task, TRUE);
+          IDE_TRACE_MSG ("Completing task");
+        }
     }
+
+  IDE_EXIT;
 }
 
 static gboolean
@@ -403,6 +422,8 @@ ide_template_base_expand (GTask *task)
   ExpansionTask *expansion;
   gint64 end;
   gint64 now;
+
+  IDE_ENTRY;
 
   g_assert (G_IS_TASK (task));
 
@@ -440,7 +461,7 @@ ide_template_base_expand (GTask *task)
       if (fexp->result == NULL)
         {
           g_task_return_error (task, error);
-          return G_SOURCE_REMOVE;
+          IDE_RETURN (G_SOURCE_REMOVE);
         }
 
       expansion->index++;
@@ -484,10 +505,10 @@ ide_template_base_expand (GTask *task)
                                          g_object_ref (task));
         }
 
-      return G_SOURCE_REMOVE;
+      IDE_RETURN (G_SOURCE_REMOVE);
     }
 
-  return G_SOURCE_CONTINUE;
+  IDE_RETURN (G_SOURCE_CONTINUE);
 }
 
 static void
@@ -499,12 +520,14 @@ ide_template_base_expand_parse_cb (GObject      *object,
   g_autoptr(GTask) task = user_data;
   GError *error = NULL;
 
+  IDE_ENTRY;
+
   g_assert (IDE_IS_TEMPLATE_BASE (self));
 
   if (!ide_template_base_parse_finish (self, result, &error))
     {
       g_task_return_error (task, error);
-      return;
+      IDE_EXIT;
     }
 
   g_timeout_add_full (G_PRIORITY_LOW,
@@ -512,6 +535,8 @@ ide_template_base_expand_parse_cb (GObject      *object,
                       (GSourceFunc)ide_template_base_expand,
                       g_object_ref (task),
                       g_object_unref);
+
+  IDE_EXIT;
 }
 
 static void
@@ -521,21 +546,25 @@ ide_template_base_expand_mkdirs_cb (GObject      *object,
 {
   IdeTemplateBase *self = (IdeTemplateBase *)object;
   g_autoptr(GTask) task = user_data;
-  GError *error = NULL;
+  g_autoptr(GError) error = NULL;
+
+  IDE_ENTRY;
 
   g_assert (IDE_IS_TEMPLATE_BASE (self));
   g_assert (G_IS_TASK (task));
 
   if (!ide_template_base_mkdirs_finish (self, result, &error))
     {
-      g_task_return_error (task, error);
-      return;
+      g_task_return_error (task, g_steal_pointer (&error));
+      IDE_EXIT;
     }
 
   ide_template_base_parse_async (self,
                                  g_task_get_cancellable (task),
                                  ide_template_base_expand_parse_cb,
                                  g_object_ref (task));
+
+  IDE_EXIT;
 }
 
 void
@@ -547,6 +576,8 @@ ide_template_base_expand_all_async (IdeTemplateBase     *self,
   IdeTemplateBasePrivate *priv = ide_template_base_get_instance_private (self);
   g_autoptr(GTask) task = NULL;
   ExpansionTask *task_data;
+
+  IDE_ENTRY;
 
   g_return_if_fail (IDE_IS_TEMPLATE_BASE (self));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
@@ -584,7 +615,7 @@ ide_template_base_expand_all_async (IdeTemplateBase     *self,
                                G_IO_ERROR_PENDING,
                                "%s() has already been called.",
                                G_STRFUNC);
-      return;
+      IDE_EXIT;
     }
 
   priv->has_expanded = TRUE;
@@ -596,13 +627,15 @@ ide_template_base_expand_all_async (IdeTemplateBase     *self,
   if (priv->files->len == 0)
     {
       g_task_return_boolean (task, TRUE);
-      return;
+      IDE_EXIT;
     }
 
   ide_template_base_mkdirs_async (self,
                                   cancellable,
                                   ide_template_base_expand_mkdirs_cb,
                                   g_object_ref (task));
+
+  IDE_EXIT;
 }
 
 gboolean
@@ -610,10 +643,16 @@ ide_template_base_expand_all_finish (IdeTemplateBase  *self,
                                      GAsyncResult     *result,
                                      GError          **error)
 {
+  gboolean ret;
+
+  IDE_ENTRY;
+
   g_return_val_if_fail (IDE_IS_TEMPLATE_BASE (self), FALSE);
   g_return_val_if_fail (G_IS_TASK (result), FALSE);
 
-  return g_task_propagate_boolean (G_TASK (result), error);
+  ret = g_task_propagate_boolean (G_TASK (result), error);
+
+  IDE_RETURN (ret);
 }
 
 static TmplScope *

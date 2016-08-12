@@ -83,6 +83,7 @@ tmpl_expr_destroy (TmplExpr *self)
     case TMPL_EXPR_USER_FN_CALL:
     case TMPL_EXPR_AND:
     case TMPL_EXPR_OR:
+    case TMPL_EXPR_INVERT_BOOLEAN:
       g_clear_pointer (&self->simple.left, tmpl_expr_unref);
       g_clear_pointer (&self->simple.right, tmpl_expr_unref);
       break;
@@ -205,6 +206,17 @@ tmpl_expr_new_simple (TmplExprType  type,
   ret = tmpl_expr_new (type);
   ret->left = left;
   ret->right = right;
+
+  return (TmplExpr *)ret;
+}
+
+TmplExpr *
+tmpl_expr_new_invert_boolean (TmplExpr *left)
+{
+  TmplExprSimple *ret;
+
+  ret = tmpl_expr_new (TMPL_EXPR_INVERT_BOOLEAN);
+  ret->left = left;
 
   return (TmplExpr *)ret;
 }

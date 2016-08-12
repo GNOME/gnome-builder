@@ -38,6 +38,7 @@ TmplExprParser *parser = yyextra;
 "," |
 "." |
 ";" |
+"!" |
 "(" |
 ")" { return yytext [0]; }
 

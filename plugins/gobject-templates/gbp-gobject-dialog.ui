@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="GbpGobjectDialog" parent="GtkAssistant">
+    <property name="default-width">825</property>
+    <property name="default-height">500</property>
+    <child>
+      <object class="GtkScrolledWindow" id="editor_page">
+        <property name="hscrollbar-policy">never</property>
+        <property name="visible">true</property>
+        <child>
+          <object class="GbpGobjectSpecEditor" id="editor">
+            <property name="border-width">36</property>
+            <property name="visible">true</property>
+          </object>
+        </child>
+      </object>
+      <packing>
+        <property name="has-padding">false</property>
+        <property name="page-type">content</property>
+        <property name="title" translatable="yes">New Class</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkBox">
+        <property name="orientation">horizontal</property>
+        <property name="border-width">36</property>
+        <property name="spacing">36</property>
+        <property name="visible">true</property>
+        <child>
+          <object class="GtkBox">
+            <property name="orientation">vertical</property>
+            <property name="visible">true</property>
+            <child>
+              <object class="GtkScrolledWindow">
+                <property name="hscrollbar-policy">never</property>
+                <property name="shadow-type">in</property>
+                <property name="visible">true</property>
+                <property name="width-request">275</property>
+                <property name="vexpand">true</property>
+                <child>
+                  <object class="GtkListBox" id="properties_list_box">
+                    <property name="visible">true</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkBox">
+                <property name="orientation">horizontal</property>
+                <property name="visible">true</property>
+                <style>
+                  <class name="inline-toolbar"/>
+                </style>
+                <child>
+                  <object class="GtkButton">
+                    <property name="action-name">dialog.add-property</property>
+                    <property name="visible">true</property>
+                    <property name="hexpand">false</property>
+                    <property name="halign">start</property>
+                    <style>
+                      <class name="image-button"/>
+                    </style>
+                    <child>
+                      <object class="GtkImage">
+                        <property name="icon-name">list-add-symbolic</property>
+                        <property name="visible">true</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkButton">
+                    <property name="action-name">dialog.remove-property</property>
+                    <property name="visible">true</property>
+                    <property name="hexpand">false</property>
+                    <property name="halign">start</property>
+                    <style>
+                      <class name="image-button"/>
+                    </style>
+                    <child>
+                      <object class="GtkImage">
+                        <property name="icon-name">list-remove-symbolic</property>
+                        <property name="visible">true</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox">
+            <property name="hexpand">true</property>
+            <property name="orientation">vertical</property>
+            <property name="visible">true</property>
+            <child>
+              <object class="GtkStack" id="property_stack">
+                <property name="visible">true</property>
+                <child>
+                  <object class="GtkBox">
+                    <property name="orientation">vertical</property>
+                    <property name="visible">true</property>
+                    <child>
+                      <object class="GtkButton" id="add_property_button">
+                        <property name="action-name">dialog.add-property</property>
+                        <property name="label" translatable="yes">Add Property</property>
+                        <property name="halign">center</property>
+                        <property name="valign">center</property>
+                        <property name="expand">true</property>
+                        <property name="visible">true</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="name">empty</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GbpGobjectPropertyEditor" id="property_editor">
+                    <property name="visible">true</property>
+                  </object>
+                  <packing>
+                    <property name="name">property</property>
+                  </packing>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+      <packing>
+        <property name="complete">true</property>
+        <property name="has-padding">false</property>
+        <property name="page-type">content</property>
+        <property name="title" translatable="yes">Properties</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkBox">
+        <property name="orientation">horizontal</property>
+        <property name="border-width">36</property>
+        <property name="spacing">36</property>
+        <property name="visible">true</property>
+        <child>
+          <object class="GtkBox">
+            <property name="orientation">vertical</property>
+            <property name="visible">true</property>
+            <child>
+              <object class="GtkScrolledWindow">
+                <property name="hscrollbar-policy">never</property>
+                <property name="shadow-type">in</property>
+                <property name="visible">true</property>
+                <property name="width-request">275</property>
+                <property name="vexpand">true</property>
+                <child>
+                  <object class="GtkListBox" id="signals_list_box">
+                    <property name="visible">true</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkBox">
+                <property name="orientation">horizontal</property>
+                <property name="visible">true</property>
+                <style>
+                  <class name="inline-toolbar"/>
+                </style>
+                <child>
+                  <object class="GtkButton">
+                    <property name="action-name">dialog.add-signal</property>
+                    <property name="visible">true</property>
+                    <property name="hexpand">false</property>
+                    <property name="halign">start</property>
+                    <style>
+                      <class name="image-button"/>
+                    </style>
+                    <child>
+                      <object class="GtkImage">
+                        <property name="icon-name">list-add-symbolic</property>
+                        <property name="visible">true</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkButton">
+                    <property name="action-name">dialog.remove-signal</property>
+                    <property name="visible">true</property>
+                    <property name="hexpand">false</property>
+                    <property name="halign">start</property>
+                    <style>
+                      <class name="image-button"/>
+                    </style>
+                    <child>
+                      <object class="GtkImage">
+                        <property name="icon-name">list-remove-symbolic</property>
+                        <property name="visible">true</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox">
+            <property name="hexpand">true</property>
+            <property name="orientation">vertical</property>
+            <property name="visible">true</property>
+            <child>
+              <object class="GtkStack" id="signal_stack">
+                <property name="visible">true</property>
+                <child>
+                  <object class="GtkBox">
+                    <property name="orientation">vertical</property>
+                    <property name="visible">true</property>
+                    <child>
+                      <object class="GtkButton" id="add_signal_button">
+                        <property name="action-name">dialog.add-signal</property>
+                        <property name="label" translatable="yes">Add Signal</property>
+                        <property name="halign">center</property>
+                        <property name="valign">center</property>
+                        <property name="expand">true</property>
+                        <property name="visible">true</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="name">empty</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GbpGobjectSignalEditor" id="signal_editor">
+                    <property name="visible">true</property>
+                  </object>
+                  <packing>
+                    <property name="name">signal</property>
+                  </packing>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+      <packing>
+        <property name="complete">true</property>
+        <property name="has-padding">false</property>
+        <property name="page-type">content</property>
+        <property name="title" translatable="yes">Signals</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkLabel">
+        <property name="label">Summary</property>
+        <property name="visible">true</property>
+      </object>
+      <packing>
+        <property name="complete">true</property>
+        <property name="has-padding">false</property>
+        <property name="page-type">summary</property>
+        <property name="title" translatable="yes">Summary</property>
+      </packing>
+    </child>
+  </template>
+</interface>

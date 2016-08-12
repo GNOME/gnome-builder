@@ -72,6 +72,7 @@ typedef enum
   TMPL_EXPR_REQUIRE,
   TMPL_EXPR_AND,
   TMPL_EXPR_OR,
+  TMPL_EXPR_INVERT_BOOLEAN,
 } TmplExprType;
 
 typedef enum

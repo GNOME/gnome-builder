@@ -117,6 +117,7 @@ G_BEGIN_DECLS
 #include "symbols/ide-symbol.h"
 #include "symbols/ide-tags-builder.h"
 #include "template/ide-project-template.h"
+#include "template/ide-template-base.h"
 #include "template/ide-template-provider.h"
 #include "threading/ide-thread-pool.h"
 #include "tree/ide-tree-builder.h"

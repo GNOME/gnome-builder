@@ -63,7 +63,10 @@ list_model_move_next (TmplIterator *iter)
   guint index = GPOINTER_TO_INT (iter->data1);
   guint n_items = GPOINTER_TO_INT (iter->data2);
 
-  if (++index < n_items)
+  index++;
+
+  /* We are 1 based indexing here */
+  if (index <= n_items)
     {
       iter->data1 = GINT_TO_POINTER (index);
       return TRUE;
@@ -79,14 +82,14 @@ list_model_get_value (TmplIterator *iter,
   guint index = GPOINTER_TO_INT (iter->data1);
   GObject *obj;
 
-  obj = g_list_model_get_item (iter->instance, index);
+  g_return_val_if_fail (index > 0, FALSE);
+
+  obj = g_list_model_get_item (iter->instance, index - 1);
+
+  g_value_init (value, g_list_model_get_item_type (iter->instance));
 
   if (obj != NULL)
-    g_value_init (value, G_OBJECT_TYPE (obj));
-  else
-    g_value_init (value, G_TYPE_OBJECT);
-
-  g_value_take_object (value, obj);
+    g_value_take_object (value, obj);
 
   return TRUE;
 }
@@ -113,7 +116,17 @@ tmpl_iterator_init (TmplIterator *iter,
       iter->move_next = list_model_move_next;
       iter->get_value = list_model_get_value;
       iter->destroy = NULL;
+
+      if (iter->instance != NULL)
+        {
+          guint n_items;
+
+          n_items = g_list_model_get_n_items (iter->instance);
+          iter->data1 = GUINT_TO_POINTER (iter->data1);
+          iter->data2 = GUINT_TO_POINTER (n_items);
+        }
     }
+
   /* TODO: More iter types */
 }
 

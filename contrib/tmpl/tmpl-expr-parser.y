@@ -175,6 +175,9 @@ exp: exp CMP exp {
   | NAME '(' ')' {
     $$ = tmpl_expr_new_user_fn_call ($1, NULL);
   }
+  | '!' exp {
+    $$ = tmpl_expr_new_invert_boolean ($2);
+  }
   | REQUIRE NAME {
     $$ = tmpl_expr_new_require ($2, NULL);
   }
