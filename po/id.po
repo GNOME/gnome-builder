@@ -5,11 +5,11 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gnome-builder master\n"
+"Project-Id-Version: gnome-builder gnome-builder-3-18\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2015-10-15 14:40+0000\n"
-"PO-Revision-Date: 2016-06-29 05:08+0700\n"
+"POT-Creation-Date: 2016-07-21 23:22+0000\n"
+"PO-Revision-Date: 2016-08-15 00:36+0700\n"
 "Last-Translator: Andika Triwidada <andika@gmail.com>\n"
 "Language-Team: Indonesian <gnome-l10n-id@googlegroups.com>\n"
 "Language: id\n"
@@ -46,7 +46,7 @@ msgstr "Cari"
 #: ../contrib/search/trie.c:790
 #, c-format
 msgid "Traversal order %u is not supported on Trie."
-msgstr ""
+msgstr "Urutan penelusuran %u tidak didukung pada Trie."
 
 #: ../contrib/xml/xml-reader.c:327
 #, c-format
@@ -476,6 +476,8 @@ msgstr "Pulihkan Posisi Kursor"
 msgid ""
 "Restore the insertion cursor to the last position when reopening a file."
 msgstr ""
+"Pulihkan kursor penyisipan ke posisi terakhir ketika membuka ulang sebuah "
+"berkas."
 
 #: ../data/ui/gb-preferences-page-editor.ui.h:20
 msgid "Scroll Offset"
@@ -499,7 +501,7 @@ msgstr "Gambar panah di atas karakter tab."
 
 #: ../data/ui/gb-preferences-page-editor.ui.h:25
 msgid "Draw a carriage return over newline characters."
-msgstr ""
+msgstr "Menggambar carriage return di atas karakter baris baru."
 
 #: ../data/ui/gb-preferences-page-editor.ui.h:26
 msgid "Draw indicators for non-breaking spaces."
@@ -528,7 +530,6 @@ msgstr "Surel"
 
 #: ../data/ui/gb-preferences-page-insight.ui.h:1
 #: ../data/ui/gb-preferences-window.ui.h:5
-#| msgid "Code Assistant"
 msgid "Code Insight"
 msgstr "Code Insight"
 
@@ -540,6 +541,7 @@ msgstr "Penyorotan Bahasa Semantik"
 msgid ""
 "Highlight additional syntax based upon information found in the document."
 msgstr ""
+"Sorot sintaks tambahan berdasarkan informasi yang ditemukan dalam dokumen."
 
 #: ../data/ui/gb-preferences-page-insight.ui.h:4
 msgid "Auto Completion"
@@ -605,7 +607,7 @@ msgstr "Emulasi Emacs"
 
 #: ../data/ui/gb-preferences-page-keybindings.ui.h:6
 msgid "Emulates familiar keybindings from the Emacs text editor."
-msgstr ""
+msgstr "Mengemulasi pengikatan tombol yang akrab dari penyunting teks Emacs."
 
 #: ../data/ui/gb-preferences-page-keybindings.ui.h:7
 msgid "Vim Emulation"
@@ -613,7 +615,7 @@ msgstr "Emulasi Vim"
 
 #: ../data/ui/gb-preferences-page-keybindings.ui.h:8
 msgid "Emulates familiar keybindings from the Vim text editor."
-msgstr ""
+msgstr "Mengemulasi pengikatan tombol yang akrab dari penyunting teks Vim."
 
 #: ../data/ui/gb-preferences-page-keybindings.ui.h:9
 msgid "Keyboard Movement"
@@ -625,13 +627,15 @@ msgstr "Home End Cerdas"
 
 #: ../data/ui/gb-preferences-page-keybindings.ui.h:11
 msgid "Home moves to first non-space character."
-msgstr ""
+msgstr "Home bergerak ke karakter bukan spasi pertama."
 
 #: ../data/ui/gb-preferences-page-keybindings.ui.h:13
 msgid ""
 "Backspace will remove extra spaces to keep you aligned with your indentation "
 "width."
 msgstr ""
+"Backspace akan menghapus spasi ekstra agar tetap rata dengan lebar indentasi "
+"Anda."
 
 #: ../data/ui/gb-preferences-page-language.ui.h:1
 #: ../data/ui/gb-preferences-window.ui.h:4
@@ -881,26 +885,20 @@ msgid "Jump to definition of symbol"
 msgstr "Pergi ke definisi simbol"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:50
-#, fuzzy
-#| msgid "The line within the file."
 msgid "Move viewport up within the file"
-msgstr "Baris di dalam berkas."
+msgstr "Naikkan viewport di dalam berkas"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:51
-#, fuzzy
-#| msgid "The line within the file."
 msgid "Move viewport down within the file"
-msgstr "Baris di dalam berkas."
+msgstr "Turunkan viewport di dalam berkas"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:52
-#, fuzzy
 msgid "Move viewport to end of file"
-msgstr "Pindah ke akhir dokumen"
+msgstr "Pindahkan viewport ke akhir berkas"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:53
-#, fuzzy
 msgid "Move viewport to beginning of file"
-msgstr "Pindah ke awal dokumen"
+msgstr "Pindahkan viewport ke awal berkas"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:54
 msgid "Move to matching bracket"
@@ -915,33 +913,28 @@ msgid "Select all"
 msgstr "Pilih semua"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:57
-#, fuzzy
 msgid "Unselect all"
-msgstr "Pilih Tak Satupun"
+msgstr "Pilih tak satupun"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:58
 msgid "Terminal Shortcuts"
 msgstr "Pintasan Terminal"
 
 #: ../data/ui/gb-view.ui.h:1
-#, fuzzy
 msgid "Split"
-msgstr "Pecah"
+msgstr "Belah"
 
 #: ../data/ui/gb-view.ui.h:2
-#, fuzzy
 msgid "Split Left"
-msgstr "Tilik pecahan di kiri"
+msgstr "Belah Kiri"
 
 #: ../data/ui/gb-view.ui.h:3
-#, fuzzy
 msgid "Split Right"
-msgstr "Tilik pecahan di kanan"
+msgstr "Belah Kanan"
 
 #: ../data/ui/gb-view.ui.h:4
-#, fuzzy
 msgid "Split Down"
-msgstr "_Pecah"
+msgstr "Belah Turun"
 
 #: ../data/ui/gb-view.ui.h:5
 msgid "Move"
@@ -1050,7 +1043,7 @@ msgstr "Berkas memuat UTF-8 yang tak valid"
 
 #: ../libide/ide-buffer.c:2071
 msgid "The current language lacks a symbol resolver."
-msgstr ""
+msgstr "Bahasa saat ini kekurangan pengurai simbol."
 
 #: ../libide/ide-buffer-manager.c:604
 msgid "File too large to be opened."
@@ -1118,26 +1111,21 @@ msgid "The device \"%s\" could not be found."
 msgstr "Perangkat \"%s\" tidak bisa ditemukan."
 
 #: ../libide/ide-object.c:288
-#, fuzzy, c-format
+#, c-format
 msgid "No implementations of extension point \"%s\"."
-msgstr ""
-"Ditemui ekstensi \"ext\" yang tak dapat diinterpretasi dalam ruang nama \"%s"
-"\""
+msgstr "Tidak ada implementasi titik ekstensi \"%s\"."
 
 #: ../libide/ide-object.c:380
-#, fuzzy
 msgid "Failed to locate build system plugin."
-msgstr "Konfigurasi 802.1X supplicant gagal"
+msgstr "Gagal mencari pengaya sistem build."
 
 #: ../libide/ide-object.c:467
-#, fuzzy
 msgid "No such extension point."
-msgstr "Titik"
+msgstr "Tidak ada titik ekstensi seperti itu."
 
 #: ../libide/ide-object.c:477
-#, fuzzy
 msgid "No implementations of extension point."
-msgstr "Titik"
+msgstr "Tidak ada implementasi titik ekstensi."
 
 #: ../libide/ide-project.c:463
 msgid "Destination file must be within the project tree."
@@ -1158,9 +1146,8 @@ msgid "%s has not implemented GAsyncInitable."
 msgstr "%s belum mengimplementasi GAsyncInitable."
 
 #: ../libide/ide-source-snippet.c:370
-#, fuzzy
 msgid "Chunk does not belong to snippet."
-msgstr "%s tidak termasuk dalam suatu set"
+msgstr "Penggalan bukan milik snippet."
 
 #: ../libide/ide-source-snippet-completion-provider.c:297
 msgid "Snippets"
@@ -1192,9 +1179,8 @@ msgid "Replace \"%s\" with \"%s\""
 msgstr "Gantikan \"%s\" dengan \"%s\""
 
 #: ../libide/ide-source-view.c:4854
-#, fuzzy
 msgid "Apply Fix-It"
-msgstr "Perbaiki?"
+msgstr "Terapkan Fix-It"
 
 #: ../libide/ide-source-view.c:4897
 msgid "Join Lines"
@@ -1213,9 +1199,9 @@ msgid "Attempt to load a PyGObject script with no filename."
 msgstr "Upaya memuat suatu skrip PyGObject tanpa nama berkas."
 
 #: ../libide/pygobject/ide-pygobject-script.c:274
-#, fuzzy, c-format
+#, c-format
 msgid "The script \"%s\" is not a PyGObject file."
-msgstr "Berkas skrip harus bisa dieksekusi."
+msgstr "Skrip \"%s\" bukan berkas PyGObject."
 
 #: ../plugins/autotools/ide-autotools-build-system.c:182
 msgid "Failed to locate configure.ac"
@@ -1253,18 +1239,16 @@ msgid "autogen.sh failed to create configure (%s)"
 msgstr "autogen.sh gagal membuat configure (%s)"
 
 #: ../plugins/autotools/ide-makecache.c:1006
-#, fuzzy
 msgid "Invalid makefile provided, ignoring."
-msgstr "Nama pengguna yang diberikan tak valid."
+msgstr "Makefile yang diberikan tak valid, diabaikan."
 
 #: ../plugins/clang/ide-clang-service.c:269
 msgid "Unknown failure"
 msgstr "Kegagalan yang tak dikenal"
 
 #: ../plugins/clang/ide-clang-service.c:273
-#, fuzzy
 msgid "Clang crashed"
-msgstr "OGDF crash."
+msgstr "Clang crash"
 
 #: ../plugins/clang/ide-clang-service.c:277
 msgid "Invalid arguments"
@@ -1331,9 +1315,9 @@ msgid "Failed to locate working directory"
 msgstr "Gagal menemukan direktori kerja"
 
 #: ../plugins/command-bar/gb-vim.c:547
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid :syntax subcommand: %s"
-msgstr "dekat \"%s\": galat sintaks"
+msgstr "Sub perintah :syntax tidak valid: %s"
 
 #: ../plugins/command-bar/gb-vim.c:874
 #, c-format
@@ -1352,9 +1336,8 @@ msgstr "Bukan suatu perintah penyunting: %s"
 
 #: ../plugins/c-pack/ide-c-format-provider.c:281
 #: ../plugins/python-pack/ide-python-format-provider.c:238
-#, fuzzy
 msgid "Format Strings"
-msgstr "Kalimat:"
+msgstr "Kalimat Format"
 
 #: ../plugins/devhelp/gb-devhelp-document.c:71
 #, c-format
@@ -1723,14 +1706,12 @@ msgid "Cannot convert '%s' into a valid NSURL."
 msgstr "Tidak bisa mengonversi '%s' ke suatu NSURL yang valid."
 
 #: ../src/util/gb-file-manager.c:157
-#, fuzzy
 msgid "Connecting to org.freedesktop.FileManager1 failed: "
-msgstr "menghubungi..."
+msgstr "Menghubungi org.freedesktop.FileManager1 gagal:"
 
 #: ../src/util/gb-file-manager.c:181
-#, fuzzy
 msgid "Calling ShowItems failed: "
-msgstr "Galat pemanggilan, kurang user_data."
+msgstr "Pemanggilan ShowItems gagal:"
 
 #: ../src/util/gb-glib.c:55
 msgid "Just now"
@@ -1888,23 +1869,21 @@ msgid "No such file in project: %s\n"
 msgstr "Tidak ada berkas seperti itu dalam projek: %s\n"
 
 #: ../tools/ide-list-diagnostics.c:284
-#, fuzzy
 msgid "- List diagnostics for a file."
-msgstr "Lihat daftar isi dengan rincian berkas"
+msgstr "- Menampilkan daftar diagnostik untuk suatu berkas."
 
 #: ../tools/ide-list-files.c:127 ../tools/ide-list-file-settings.c:207
 msgid "- List files found in project."
 msgstr "- Buat daftar berkas yang ditemukan dalam projek."
 
 #: ../tools/ide-list-file-settings.c:182
-#, fuzzy, c-format
+#, c-format
 msgid "No files provided to load settings for.\n"
-msgstr "Pemuat berkas untuk memuat berkas yang berbeda"
+msgstr "Tidak ada berkas yang diberikan untuk memuat pengaturan.\n"
 
 #: ../tools/ide-mine-projects.c:87
-#, fuzzy
 msgid "- discover projects"
-msgstr "Proyek"
+msgstr "- temukan projek"
 
 #: ../tools/ide-search.c:68
 #, c-format
