@@ -397,6 +397,21 @@ ide_git_buffer_change_monitor__buffer_changed_after_cb (IdeGitBufferChangeMonito
 }
 
 static void
+ide_git_buffer_change_monitor_reload (IdeBufferChangeMonitor *monitor)
+{
+  IdeGitBufferChangeMonitor *self = (IdeGitBufferChangeMonitor *)monitor;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_GIT_BUFFER_CHANGE_MONITOR (self));
+
+  g_clear_object (&self->cached_blob);
+  ide_git_buffer_change_monitor_recalculate (self);
+
+  IDE_EXIT;
+}
+
+static void
 ide_git_buffer_change_monitor__vcs_reloaded_cb (IdeGitBufferChangeMonitor *self,
                                                 GgitRepository            *new_repository,
                                                 IdeGitVcs                 *vcs)
@@ -408,10 +423,7 @@ ide_git_buffer_change_monitor__vcs_reloaded_cb (IdeGitBufferChangeMonitor *self,
 
   g_set_object (&self->repository, new_repository);
 
-  /* force reload of the git object on next calculation */
-  g_clear_object (&self->cached_blob);
-
-  ide_git_buffer_change_monitor_recalculate (self);
+  ide_buffer_change_monitor_reload (IDE_BUFFER_CHANGE_MONITOR (self));
 
   IDE_EXIT;
 }
@@ -709,6 +721,7 @@ ide_git_buffer_change_monitor_class_init (IdeGitBufferChangeMonitorClass *klass)
 
   parent_class->set_buffer = ide_git_buffer_change_monitor_set_buffer;
   parent_class->get_change = ide_git_buffer_change_monitor_get_change;
+  parent_class->reload = ide_git_buffer_change_monitor_reload;
 
   properties [PROP_REPOSITORY] =
     g_param_spec_object ("repository",

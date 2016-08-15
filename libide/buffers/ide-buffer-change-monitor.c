@@ -123,3 +123,12 @@ static void
 ide_buffer_change_monitor_init (IdeBufferChangeMonitor *self)
 {
 }
+
+void
+ide_buffer_change_monitor_reload (IdeBufferChangeMonitor *self)
+{
+  g_return_if_fail (IDE_IS_BUFFER_CHANGE_MONITOR (self));
+
+  if (IDE_BUFFER_CHANGE_MONITOR_GET_CLASS (self)->reload)
+    IDE_BUFFER_CHANGE_MONITOR_GET_CLASS (self)->reload (self);
+}
