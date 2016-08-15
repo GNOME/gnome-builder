@@ -1108,6 +1108,39 @@ ide_buffer_on_tag_added (IdeBuffer       *self,
 }
 
 static void
+ide_buffer_loaded (IdeBuffer *self)
+{
+  IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
+  GtkSourceLanguage *language;
+  GtkSourceLanguage *current;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_BUFFER (self));
+
+  /*
+   * It is possible our source language has changed since the buffer loaded (as loading
+   * contents provides us the opportunity to inspect file contents and get a more
+   * accurate content-type).
+   */
+  language = ide_file_get_language (priv->file);
+  current = gtk_source_buffer_get_language (GTK_SOURCE_BUFFER (self));
+  if (current != language)
+    gtk_source_buffer_set_language (GTK_SOURCE_BUFFER (self), language);
+
+  /*
+   * Force the views to reload language state.
+   */
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_FILE]);
+
+  /* Request the change monitor to reload now */
+  if (priv->change_monitor != NULL)
+    ide_buffer_change_monitor_reload (priv->change_monitor);
+
+  IDE_EXIT;
+}
+
+static void
 ide_buffer_constructed (GObject *object)
 {
   IdeBuffer *self = (IdeBuffer *)object;
@@ -1502,13 +1535,13 @@ ide_buffer_class_init (IdeBufferClass *klass)
    * This signal is emitted when the buffer manager has completed loading the file.
    */
   signals [LOADED] =
-    g_signal_new ("loaded",
-                  G_TYPE_FROM_CLASS (klass),
-                  G_SIGNAL_RUN_LAST,
-                  0,
-                  NULL, NULL, NULL,
-                  G_TYPE_NONE,
-                  0);
+    g_signal_new_class_handler ("loaded",
+                                G_TYPE_FROM_CLASS (klass),
+                                G_SIGNAL_RUN_LAST,
+                                G_CALLBACK (ide_buffer_loaded),
+                                NULL, NULL, NULL,
+                                G_TYPE_NONE,
+                                0);
 
   /**
    * IdeBuffer::destroy:
@@ -2128,6 +2161,8 @@ _ide_buffer_set_loading (IdeBuffer *self,
 {
   IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
 
+  IDE_ENTRY;
+
   g_return_if_fail (IDE_IS_BUFFER (self));
 
   loading = !!loading;
@@ -2136,34 +2171,11 @@ _ide_buffer_set_loading (IdeBuffer *self,
     {
       priv->loading = loading;
 
-      /*
-       * TODO: We probably want some sort of state rather than this boolean value.
-       *       But that can come later after we get plumbing hooked up.
-       */
-
       if (!priv->loading)
-        {
-          GtkSourceLanguage *language;
-          GtkSourceLanguage *current;
-
-          /*
-           * It is possible our source language has changed since the buffer loaded (as loading
-           * contents provides us the opportunity to inspect file contents and get a more
-           * accurate content-type).
-           */
-          language = ide_file_get_language (priv->file);
-          current = gtk_source_buffer_get_language (GTK_SOURCE_BUFFER (self));
-          if (current != language)
-            gtk_source_buffer_set_language (GTK_SOURCE_BUFFER (self), language);
-
-          /*
-           * Force the views to reload language state.
-           */
-          g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_FILE]);
-
-          g_signal_emit (self, signals [LOADED], 0);
-        }
+        g_signal_emit (self, signals [LOADED], 0);
     }
+
+  IDE_EXIT;
 }
 
 /**
