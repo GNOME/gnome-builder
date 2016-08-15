@@ -49,6 +49,15 @@ struct _IdeBufferClass
 
   void (*cursor_moved) (IdeBuffer         *self,
                         const GtkTextIter *location);
+
+  gpointer _reserved1;
+  gpointer _reserved2;
+  gpointer _reserved3;
+  gpointer _reserved4;
+  gpointer _reserved5;
+  gpointer _reserved6;
+  gpointer _reserved7;
+  gpointer _reserved8;
 };
 
 gboolean            ide_buffer_get_busy                      (IdeBuffer            *self);
