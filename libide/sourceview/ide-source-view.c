@@ -1465,6 +1465,44 @@ ide_source_view_reset_definition_highlight (IdeSourceView *self)
 }
 
 static void
+ide_source_view__buffer__notify_can_redo (IdeSourceView *self,
+                                          GParamSpec    *pspec,
+                                          IdeBuffer     *buffer)
+{
+  GActionGroup *group;
+  gboolean can_redo;
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+  g_assert (IDE_IS_BUFFER (buffer));
+
+  g_object_get (buffer,
+                "can-redo", &can_redo,
+                NULL);
+
+  group = gtk_widget_get_action_group (GTK_WIDGET (self), "sourceview");
+  egg_widget_action_group_set_action_enabled (EGG_WIDGET_ACTION_GROUP (group), "redo", can_redo);
+}
+
+static void
+ide_source_view__buffer__notify_can_undo (IdeSourceView *self,
+                                          GParamSpec    *pspec,
+                                          IdeBuffer     *buffer)
+{
+  GActionGroup *group;
+  gboolean can_undo;
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+  g_assert (IDE_IS_BUFFER (buffer));
+
+  g_object_get (buffer,
+                "can-undo", &can_undo,
+                NULL);
+
+  group = gtk_widget_get_action_group (GTK_WIDGET (self), "sourceview");
+  egg_widget_action_group_set_action_enabled (EGG_WIDGET_ACTION_GROUP (group), "undo", can_undo);
+}
+
+static void
 ide_source_view_bind_buffer (IdeSourceView  *self,
                              IdeBuffer      *buffer,
                              EggSignalGroup *group)
@@ -1474,7 +1512,6 @@ ide_source_view_bind_buffer (IdeSourceView  *self,
   GtkTextMark *insert;
   GtkTextIter iter;
   IdeContext *context;
-  GActionGroup *actions;
 
   IDE_ENTRY;
 
@@ -1560,21 +1597,13 @@ ide_source_view_bind_buffer (IdeSourceView  *self,
   ide_source_view__buffer_notify_file_cb (self, NULL, buffer);
   ide_source_view__buffer_notify_highlight_diagnostics_cb (self, NULL, buffer);
   ide_source_view__buffer_notify_style_scheme_cb (self, NULL, buffer);
+  ide_source_view__buffer__notify_can_redo (self, NULL, buffer);
+  ide_source_view__buffer__notify_can_undo (self, NULL, buffer);
   ide_source_view_reload_word_completion (self);
   ide_source_view_real_set_mode (self, NULL, IDE_SOURCE_VIEW_MODE_TYPE_PERMANENT);
 
   insert = gtk_text_buffer_get_insert (GTK_TEXT_BUFFER (buffer));
   ide_source_view_scroll_mark_onscreen (self, insert, TRUE, 0.5, 0.5);
-
-  actions = gtk_widget_get_action_group (GTK_WIDGET (self), "sourceview");
-
-  g_object_bind_property (buffer, "can-redo",
-                          g_action_map_lookup_action (G_ACTION_MAP (actions), "redo"), "enabled",
-                          G_BINDING_SYNC_CREATE);
-
-  g_object_bind_property (buffer, "can-undo",
-                          g_action_map_lookup_action (G_ACTION_MAP (actions), "undo"), "enabled",
-                          G_BINDING_SYNC_CREATE);
 
   IDE_EXIT;
 }
@@ -6668,6 +6697,16 @@ ide_source_view_init (IdeSourceView *self)
   egg_signal_group_connect_object (priv->buffer_signals,
                                    "line-flags-changed",
                                    G_CALLBACK (ide_source_view__buffer_line_flags_changed_cb),
+                                   self,
+                                   G_CONNECT_SWAPPED);
+  egg_signal_group_connect_object (priv->buffer_signals,
+                                   "notify::can-redo",
+                                   G_CALLBACK (ide_source_view__buffer__notify_can_redo),
+                                   self,
+                                   G_CONNECT_SWAPPED);
+  egg_signal_group_connect_object (priv->buffer_signals,
+                                   "notify::can-undo",
+                                   G_CALLBACK (ide_source_view__buffer__notify_can_undo),
                                    self,
                                    G_CONNECT_SWAPPED);
   egg_signal_group_connect_object (priv->buffer_signals,

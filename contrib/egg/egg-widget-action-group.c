@@ -16,9 +16,32 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define G_LOG_DOMAIN "egg-widget-action-group"
+
 #include <string.h>
 
 #include "egg-widget-action-group.h"
+
+struct _EggWidgetActionGroup
+{
+  GObject     parent_instance;
+  GtkWidget  *widget;
+  GHashTable *enabled;
+};
+
+static void action_group_iface_init (GActionGroupInterface *iface);
+
+G_DEFINE_TYPE_EXTENDED (EggWidgetActionGroup, egg_widget_action_group, G_TYPE_OBJECT, 0,
+                        G_IMPLEMENT_INTERFACE (G_TYPE_ACTION_GROUP, action_group_iface_init))
+
+enum {
+  PROP_0,
+  PROP_WIDGET,
+  N_PROPS
+};
+
+static GHashTable *cached_types;
+static GParamSpec *properties [N_PROPS];
 
 static gboolean
 supports_types (const GType *types,
@@ -59,10 +82,11 @@ supports_types (const GType *types,
   return TRUE;
 }
 
-static GVariantType *
+static const GVariantType *
 create_variant_type (const GType *types,
                      guint        n_types)
 {
+  const GVariantType *ret = NULL;
   GString *str;
   gint i;
 
@@ -128,15 +152,33 @@ create_variant_type (const GType *types,
 
   g_string_append_c (str, ')');
 
-  return (GVariantType *)g_string_free (str, (str->len == 2));
+  if (g_str_equal (str->str, "()"))
+    {
+      g_string_free (str, TRUE);
+      return NULL;
+    }
+
+  if (cached_types == NULL)
+    cached_types = g_hash_table_new (g_str_hash, g_str_equal);
+
+  ret = g_hash_table_lookup (cached_types, str->str);
+
+  if (ret == NULL)
+    {
+      gchar *type_str = g_string_free (str, FALSE);
+      g_hash_table_insert (cached_types, type_str, type_str);
+      ret = (const GVariantType *)type_str;
+    }
+
+  return ret;
 }
 
 static void
-egg_widget_action_group_activate (GSimpleAction *action,
-                                  GVariant      *params,
-                                  GtkWidget     *widget)
+do_activate (EggWidgetActionGroup *self,
+             GtkWidget            *widget,
+             GSignalQuery         *query,
+             GVariant             *params)
 {
-  const GSignalQuery *query;
   g_auto(GValue) return_value = G_VALUE_INIT;
   g_auto(GValue) instance = G_VALUE_INIT;
   GArray *ar;
@@ -144,18 +186,10 @@ egg_widget_action_group_activate (GSimpleAction *action,
   gsize n_children;
   gint i;
 
-  g_assert (G_IS_SIMPLE_ACTION (action));
+  g_assert (query != NULL);
   g_assert (GTK_IS_WIDGET (widget));
 
-  query = g_object_get_data (G_OBJECT (action), "EGG_SIGNAL_INFO");
-
-  if (query == NULL)
-    {
-      g_critical ("EGG_SIGNAL_INFO is missing, cannot emit signal.");
-      return;
-    }
-
-  if (params)
+  if (params != NULL)
     g_debug ("Activating %s with %s\n", query->signal_name, g_variant_print (params, TRUE));
 
   if (params == NULL && query->n_params != 0)
@@ -259,7 +293,7 @@ egg_widget_action_group_activate (GSimpleAction *action,
 #undef CONVERT_PARAM
     }
 
-  g_signal_emitv ((GValue *)ar->data, query->signal_id, 0, &return_value);
+  g_signal_emitv ((GValue *)(gpointer)ar->data, query->signal_id, 0, &return_value);
 
 skip_emit:
   /* ignore instance */
@@ -270,108 +304,340 @@ skip_emit:
 }
 
 static void
-query_free (gpointer data)
+egg_widget_action_group_set_widget (EggWidgetActionGroup *self,
+                                    GtkWidget            *widget)
 {
-  g_slice_free (GSignalQuery, data);
+  g_assert (EGG_IS_WIDGET_ACTION_GROUP (self));
+  g_assert (!widget || GTK_IS_WIDGET (widget));
+
+  if (widget != self->widget)
+    {
+      if (self->widget != NULL)
+        {
+          g_signal_handlers_disconnect_by_func (self->widget,
+                                                G_CALLBACK (gtk_widget_destroyed),
+                                                &self->widget);
+          self->widget = NULL;
+        }
+
+      if (widget != NULL)
+        {
+          self->widget = widget;
+          g_signal_connect (self->widget,
+                            "destroy",
+                            G_CALLBACK (gtk_widget_destroyed),
+                            &self->widget);
+        }
+
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_WIDGET]);
+    }
 }
 
-GAction *
-create_action (const GSignalQuery *query,
-               GtkWidget          *widget)
+static void
+egg_widget_action_group_finalize (GObject *object)
 {
-  GSimpleAction *action;
-  GVariantType *param_type;
-  GSignalQuery *query_copy;
+  EggWidgetActionGroup *self = (EggWidgetActionGroup *)object;
 
-  g_assert (query != NULL);
-  g_assert (query->signal_id != 0);
-  g_assert (GTK_IS_WIDGET (widget));
+  g_clear_pointer (&self->enabled, g_hash_table_unref);
 
-  param_type = create_variant_type (query->param_types, query->n_params);
-  action = g_simple_action_new (query->signal_name, param_type);
+  G_OBJECT_CLASS (egg_widget_action_group_parent_class)->finalize (object);
+}
 
-  /* Save signal info for marshalling upon callback */
-  query_copy = g_slice_new0 (GSignalQuery);
-  memcpy (query_copy, query, sizeof *query_copy);
-  g_object_set_data_full (G_OBJECT (action), "EGG_SIGNAL_INFO", query_copy, query_free);
+static void
+egg_widget_action_group_get_property (GObject    *object,
+                                      guint       prop_id,
+                                      GValue     *value,
+                                      GParamSpec *pspec)
+{
+  EggWidgetActionGroup *self = EGG_WIDGET_ACTION_GROUP (object);
 
-  /* connect our marshaller to the action */
-  g_signal_connect_object (action,
-                           "activate",
-                           G_CALLBACK (egg_widget_action_group_activate),
-                           widget,
-                           0);
+  switch (prop_id)
+    {
+    case PROP_WIDGET:
+      g_value_set_object (value, self->widget);
+      break;
 
-  g_free (param_type);
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    }
+}
 
-  return G_ACTION (action);
+static void
+egg_widget_action_group_set_property (GObject      *object,
+                                      guint         prop_id,
+                                      const GValue *value,
+                                      GParamSpec   *pspec)
+{
+  EggWidgetActionGroup *self = EGG_WIDGET_ACTION_GROUP (object);
+
+  switch (prop_id)
+    {
+    case PROP_WIDGET:
+      egg_widget_action_group_set_widget (self, g_value_get_object (value));
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    }
+}
+
+static void
+egg_widget_action_group_class_init (EggWidgetActionGroupClass *klass)
+{
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+  object_class->finalize = egg_widget_action_group_finalize;
+  object_class->get_property = egg_widget_action_group_get_property;
+  object_class->set_property = egg_widget_action_group_set_property;
+
+  properties [PROP_WIDGET] =
+    g_param_spec_object ("widget",
+                         "Widget",
+                         "Widget",
+                         GTK_TYPE_WIDGET,
+                         (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
+
+  g_object_class_install_properties (object_class, N_PROPS, properties);
+}
+
+static void
+egg_widget_action_group_init (EggWidgetActionGroup *self)
+{
+}
+
+static gboolean
+egg_widget_action_group_has_action (GActionGroup *group,
+                                    const gchar  *action_name)
+{
+  EggWidgetActionGroup *self = (EggWidgetActionGroup *)group;
+
+  g_assert (EGG_IS_WIDGET_ACTION_GROUP (self));
+  g_assert (action_name != NULL);
+
+  if (GTK_IS_WIDGET (self->widget))
+    return (0 != g_signal_lookup (action_name, G_OBJECT_TYPE (self->widget)));
+
+  return FALSE;
+}
+
+static gchar **
+egg_widget_action_group_list_actions (GActionGroup *group)
+{
+  EggWidgetActionGroup *self = (EggWidgetActionGroup *)group;
+  GPtrArray *ar;
+
+  g_assert (EGG_IS_WIDGET_ACTION_GROUP (self));
+
+  ar = g_ptr_array_new ();
+
+  if (GTK_IS_WIDGET (self->widget))
+    {
+      guint *signal_ids;
+      guint n_ids = 0;
+      guint i;
+
+      signal_ids = g_signal_list_ids (G_OBJECT_TYPE (group), &n_ids);
+
+      for (i = 0; i < n_ids; i++)
+        {
+          GSignalQuery query;
+
+          g_signal_query (signal_ids[i], &query);
+
+          if ((query.signal_flags & G_SIGNAL_ACTION) != 0)
+            g_ptr_array_add (ar, g_strdup (query.signal_name));
+        }
+    }
+
+  g_ptr_array_add (ar, NULL);
+
+  return (gchar **)g_ptr_array_free (ar, FALSE);
+}
+
+static gboolean
+egg_widget_action_group_get_action_enabled (GActionGroup *group,
+                                            const gchar  *action_name)
+{
+  EggWidgetActionGroup *self = (EggWidgetActionGroup *)group;
+
+  g_assert (EGG_IS_WIDGET_ACTION_GROUP (group));
+  g_assert (action_name != NULL);
+
+  if (self->enabled && g_hash_table_contains (self->enabled, action_name))
+    return GPOINTER_TO_INT (g_hash_table_lookup (self->enabled, action_name));
+
+  return TRUE;
+}
+
+const GVariantType *
+egg_widget_action_group_get_action_parameter_type (GActionGroup *group,
+                                                   const gchar  *action_name)
+{
+  EggWidgetActionGroup *self = (EggWidgetActionGroup *)group;
+  GSignalQuery query;
+  guint signal_id;
+
+  g_assert (EGG_IS_WIDGET_ACTION_GROUP (self));
+  g_assert (action_name != NULL);
+
+  if (!GTK_IS_WIDGET (self->widget))
+    return NULL;
+
+  signal_id = g_signal_lookup (action_name, G_OBJECT_TYPE (self->widget));
+  if (signal_id == 0)
+    return NULL;
+
+  g_signal_query (signal_id, &query);
+
+  if (!supports_types (query.param_types, query.n_params))
+    return NULL;
+
+  return create_variant_type (query.param_types, query.n_params);
+}
+
+const GVariantType *
+egg_widget_action_group_get_action_state_type (GActionGroup *group,
+                                               const gchar  *action_name)
+{
+  g_assert (EGG_IS_WIDGET_ACTION_GROUP (group));
+  g_assert (action_name != NULL);
+
+  return NULL;
+}
+
+static void
+egg_widget_action_group_activate_action (GActionGroup *group,
+                                         const gchar  *action_name,
+                                         GVariant     *params)
+{
+  EggWidgetActionGroup *self = (EggWidgetActionGroup *)group;
+
+  g_assert (EGG_IS_WIDGET_ACTION_GROUP (group));
+  g_assert (action_name != NULL);
+
+  if (GTK_IS_WIDGET (self->widget))
+    {
+      guint signal_id;
+
+      signal_id = g_signal_lookup (action_name, G_OBJECT_TYPE (self->widget));
+
+      if (signal_id != 0)
+        {
+          GSignalQuery query;
+
+          g_signal_query (signal_id, &query);
+
+          if (query.signal_flags & G_SIGNAL_ACTION)
+            {
+              do_activate (self, self->widget, &query, params);
+              return;
+            }
+        }
+    }
+
+  g_warning ("Failed to activate action %s due to missing widget or action",
+             action_name);
+}
+
+static gboolean
+egg_widget_action_group_query_action (GActionGroup        *group,
+                                      const gchar         *action_name,
+                                      gboolean            *enabled,
+                                      const GVariantType **parameter_type,
+                                      const GVariantType **state_type,
+                                      GVariant           **state_hint,
+                                      GVariant           **state)
+{
+  EggWidgetActionGroup *self = (EggWidgetActionGroup *)group;
+
+  g_assert (EGG_IS_WIDGET_ACTION_GROUP (group));
+
+  if (!GTK_IS_WIDGET (self->widget))
+    return FALSE;
+
+  if (!g_signal_lookup (action_name, G_OBJECT_TYPE (self->widget)))
+    return FALSE;
+
+  if (state_hint)
+    *state_hint = NULL;
+
+  if (state_type)
+    *state_type = NULL;
+
+  if (state)
+    *state = NULL;
+
+  if (parameter_type)
+    *parameter_type = egg_widget_action_group_get_action_parameter_type (group, action_name);
+
+  if (enabled)
+    *enabled = egg_widget_action_group_get_action_enabled (group, action_name);
+
+  return TRUE;
+}
+
+static void
+action_group_iface_init (GActionGroupInterface *iface)
+{
+  iface->has_action = egg_widget_action_group_has_action;
+  iface->list_actions = egg_widget_action_group_list_actions;
+  iface->get_action_enabled = egg_widget_action_group_get_action_enabled;
+  iface->get_action_parameter_type = egg_widget_action_group_get_action_parameter_type;
+  iface->get_action_state_type = egg_widget_action_group_get_action_state_type;
+  iface->activate_action = egg_widget_action_group_activate_action;
+  iface->query_action = egg_widget_action_group_query_action;
 }
 
 /**
  * egg_widget_action_group_new:
- * @widget: A #GtkWidget
  *
- * Creates a new #GActionGroup that can proxy signal actions
- * to @widget.
- *
- * Returns: (transfer full): A newly allocated #GActionGroup.
+ * Returns: (transfer full): An #EggWidgetActionGroup.
  */
 GActionGroup *
 egg_widget_action_group_new (GtkWidget *widget)
 {
-  GSimpleActionGroup *self;
-  GType type;
-  guint *signals;
-  guint n_signals = 0;
-  guint i;
-
-  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
-
-  self = g_simple_action_group_new ();
-
-  for (type = G_OBJECT_TYPE (widget);
-       type != G_TYPE_INITIALLY_UNOWNED;
-       type = g_type_parent (type))
-    {
-      signals = g_signal_list_ids (type, &n_signals);
-
-      for (i = 0; i < n_signals; i++)
-        {
-          GSignalQuery query;
-          GAction *action;
-
-          g_signal_query (signals [i], &query);
-
-          if ((query.signal_flags & G_SIGNAL_ACTION) == 0)
-            continue;
-
-          if (!supports_types (&query.return_type, 1))
-            continue;
-
-          if (!supports_types (query.param_types, query.n_params))
-            continue;
-
-          action = create_action (&query, widget);
-          g_action_map_add_action (G_ACTION_MAP (self), action);
-          g_object_unref (action);
-        }
-
-      g_free (signals);
-    }
-
-  return G_ACTION_GROUP (self);
+  return g_object_new (EGG_TYPE_WIDGET_ACTION_GROUP,
+                       "widget", widget,
+                       NULL);
 }
 
+/**
+ * egg_widget_action_group_attach:
+ * @widget: (type Gtk.Widget): A #GtkWidget
+ * @group_name: the group name to use for the action group
+ *
+ * Helper function to create an #EggWidgetActionGroup and attach
+ * it to @widget using the group name @group_name.
+ */
 void
-egg_widget_action_group_attach (gpointer     instance,
-                                const gchar *name)
+egg_widget_action_group_attach (gpointer     widget,
+                                const gchar *group_name)
 {
   GActionGroup *group;
 
-  g_return_if_fail (GTK_IS_WIDGET (instance));
-  g_return_if_fail (name != NULL);
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (group_name != NULL);
 
-  group = egg_widget_action_group_new (instance);
-  gtk_widget_insert_action_group (instance, name, group);
+  group = egg_widget_action_group_new (widget);
+  gtk_widget_insert_action_group (widget, group_name, group);
   g_object_unref (group);
+}
+
+void
+egg_widget_action_group_set_action_enabled (EggWidgetActionGroup *self,
+                                            const gchar          *action_name,
+                                            gboolean              enabled)
+{
+  g_return_if_fail (EGG_IS_WIDGET_ACTION_GROUP (self));
+  g_return_if_fail (action_name != NULL);
+
+  enabled = !!enabled;
+
+  if (self->enabled == NULL)
+    self->enabled = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
+
+  g_hash_table_insert (self->enabled, g_strdup (action_name), GINT_TO_POINTER (enabled));
+  g_action_group_action_enabled_changed (G_ACTION_GROUP (self), action_name, enabled);
+
+  g_debug ("Action %s %s", action_name, enabled ? "enabled" : "disabled");
 }

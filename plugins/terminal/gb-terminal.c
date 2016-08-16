@@ -80,7 +80,6 @@ popup_targets_received (GtkClipboard     *clipboard,
   if (gtk_widget_get_realized (GTK_WIDGET (terminal)))
     {
       GActionGroup *group;
-      GAction *action;
       gboolean clipboard_contains_text;
       gboolean have_selection;
 
@@ -95,10 +94,8 @@ popup_targets_received (GtkClipboard     *clipboard,
 
       group = gtk_widget_get_action_group (GTK_WIDGET (terminal), "terminal");
 
-      action = g_action_map_lookup_action (G_ACTION_MAP (group), "copy-clipboard");
-      g_simple_action_set_enabled (G_SIMPLE_ACTION (action), have_selection);
-      action = g_action_map_lookup_action (G_ACTION_MAP (group), "paste-clipboard");
-      g_simple_action_set_enabled (G_SIMPLE_ACTION (action), clipboard_contains_text);
+      egg_widget_action_group_set_action_enabled (EGG_WIDGET_ACTION_GROUP (group), "copy-clipboard", have_selection);
+      egg_widget_action_group_set_action_enabled (EGG_WIDGET_ACTION_GROUP (group), "paste-clipboard", clipboard_contains_text);
 
       gtk_style_context_add_class (gtk_widget_get_style_context (terminal->popup_menu), GTK_STYLE_CLASS_CONTEXT_MENU);
       gtk_menu_attach_to_widget (GTK_MENU (terminal->popup_menu), GTK_WIDGET (terminal), popup_menu_detach);

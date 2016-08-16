@@ -23,9 +23,16 @@
 
 G_BEGIN_DECLS
 
-GActionGroup *egg_widget_action_group_new          (GtkWidget   *widget);
-void          egg_widget_action_group_attach       (gpointer     instance,
-                                                    const gchar *source_view);
+#define EGG_TYPE_WIDGET_ACTION_GROUP (egg_widget_action_group_get_type())
+
+G_DECLARE_FINAL_TYPE (EggWidgetActionGroup, egg_widget_action_group, EGG, WIDGET_ACTION_GROUP, GObject)
+
+GActionGroup *egg_widget_action_group_new                (GtkWidget            *widget);
+void          egg_widget_action_group_attach             (gpointer              widget,
+                                                          const gchar          *group_name);
+void          egg_widget_action_group_set_action_enabled (EggWidgetActionGroup *self,
+                                                          const gchar          *action_name,
+                                                          gboolean              enabled);
 
 G_END_DECLS
 
