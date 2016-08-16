@@ -40,7 +40,7 @@ TESTS_ENVIRONMENT =                                 \
 
 LOG_COMPILER = $(top_srcdir)/build/autotools/tap-test
 
-misc_programs = test-gstyle-color
+misc_programs += test-gstyle-color
 test_gstyle_color_SOURCES = test-gstyle-color.c
 test_gstyle_color_CFLAGS = $(tests_cflags)
 test_gstyle_color_LDADD =  $(tests_libs)
