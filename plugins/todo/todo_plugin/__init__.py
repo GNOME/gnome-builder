@@ -59,12 +59,17 @@ class TodoWorkbenchAddin(GObject.Object, Ide.WorkbenchAddin):
 
         # Watch the buffer manager for file changes (to update)
         bufmgr = context.get_buffer_manager()
-        bufmgr.connect('buffer-saved', self.on_buffer_saved)
+        self.buffer_saved_handler = bufmgr.connect('buffer-saved', self.on_buffer_saved)
 
         # Mine the directory in a background thread
         self.mine(workdir)
 
     def do_unload(self, workbench):
+        context = workbench.get_context()
+
+        bufmgr = context.get_buffer_manager()
+        bufmgr.disconnect(self.buffer_saved_handler)
+
         self.panel.destroy()
         self.panel = None
 
