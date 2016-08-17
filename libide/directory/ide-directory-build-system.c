@@ -238,9 +238,16 @@ ide_directory_build_system_get_build_flags_finish (IdeBuildSystem  *build_system
   return g_task_propagate_pointer (task, error);
 }
 
+static gint
+ide_directory_build_system_get_priority (IdeBuildSystem *build_system)
+{
+  return 1000000;
+}
+
 static void
 build_system_init (IdeBuildSystemInterface *iface)
 {
   iface->get_build_flags_async = ide_directory_build_system_get_build_flags_async;
   iface->get_build_flags_finish = ide_directory_build_system_get_build_flags_finish;
+  iface->get_priority = ide_directory_build_system_get_priority;
 }
