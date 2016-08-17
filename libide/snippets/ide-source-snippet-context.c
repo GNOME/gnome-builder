@@ -160,6 +160,25 @@ filter_capitalize (const gchar *input)
 }
 
 static gchar *
+filter_decapitalize (const gchar *input)
+{
+  gunichar c;
+  GString *str;
+
+  c = g_utf8_get_char (input);
+
+  if (g_unichar_islower (c))
+    return g_strdup (input);
+
+  str = g_string_new (NULL);
+  input = g_utf8_next_char (input);
+  g_string_append_unichar (str, g_unichar_tolower (c));
+  g_string_append (str, input);
+
+  return g_string_free (str, FALSE);
+}
+
+static gchar *
 filter_html (const gchar *input)
 {
   gunichar c;
@@ -642,6 +661,7 @@ ide_source_snippet_context_class_init (IdeSourceSnippetContextClass *klass)
   g_hash_table_insert (filters, (gpointer) "lower", filter_lower);
   g_hash_table_insert (filters, (gpointer) "upper", filter_upper);
   g_hash_table_insert (filters, (gpointer) "capitalize", filter_capitalize);
+  g_hash_table_insert (filters, (gpointer) "decapitalize", filter_decapitalize);
   g_hash_table_insert (filters, (gpointer) "html", filter_html);
   g_hash_table_insert (filters, (gpointer) "camelize", filter_camelize);
   g_hash_table_insert (filters, (gpointer) "functify", filter_functify);
