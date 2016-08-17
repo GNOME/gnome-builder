@@ -320,10 +320,13 @@ ide_git_vcs_reload_finish (IdeGitVcs     *self,
 
   self->reloading = FALSE;
 
-  g_signal_emit (self, signals [RELOADED], 0, self->change_monitor_repository);
-  ide_vcs_emit_changed (IDE_VCS (self));
-
   ret = g_task_propagate_boolean (task, error);
+
+  if (ret)
+    {
+      g_signal_emit (self, signals [RELOADED], 0, self->change_monitor_repository);
+      ide_vcs_emit_changed (IDE_VCS (self));
+    }
 
   IDE_RETURN (ret);
 }
