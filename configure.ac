@@ -304,6 +304,7 @@ m4_include([plugins/html-completion/configure.ac])
 m4_include([plugins/html-preview/configure.ac])
 m4_include([plugins/jedi/configure.ac])
 m4_include([plugins/jhbuild/configure.ac])
+m4_include([plugins/meson/configure.ac])
 m4_include([plugins/mingw/configure.ac])
 m4_include([plugins/project-tree/configure.ac])
 m4_include([plugins/python-gi-imports-completion/configure.ac])
@@ -612,6 +613,7 @@ echo "  GNOME Code Assistance ................ : ${enable_gnome_code_assistance_
 echo "  HTML Autocompletion .................. : ${enable_html_completion_plugin}"
 echo "  HTML and Markdown Preview ............ : ${enable_html_preview_plugin}"
 echo "  JHBuild .............................. : ${enable_jhbuild_plugin}"
+echo "  Meson ................................ : ${enable_meson_plugin}"
 echo "  MinGW ................................ : ${enable_mingw_plugin}"
 echo "  Project Creation ..................... : ${enable_create_project_plugin}"
 echo "  Project Tree ......................... : ${enable_project_tree_plugin}"
