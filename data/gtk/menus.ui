@@ -34,9 +34,6 @@
         <attribute name="label" translatable="yes">_About</attribute>
         <attribute name="action">app.about</attribute>
       </item>
-    </section>
-    <section id="app-menu-placeholder-3"/>
-    <section id="app-menu-quit-section">
       <item>
         <attribute name="label" translatable="yes">_Quit</attribute>
         <attribute name="action">app.quit</attribute>
