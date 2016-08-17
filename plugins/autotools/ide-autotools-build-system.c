@@ -516,17 +516,39 @@ ide_autotools_build_system__buffer_saved_cb (IdeAutotoolsBuildSystem *self,
 }
 
 static void
+ide_autotools_build_system__config_changed_cb (IdeAutotoolsBuildSystem *self,
+                                               GParamSpec              *pspec,
+                                               IdeConfigurationManager *config_manager)
+{
+  g_assert (IDE_IS_AUTOTOOLS_BUILD_SYSTEM (self));
+  g_assert (IDE_IS_CONFIGURATION_MANAGER (config_manager));
+
+  egg_task_cache_evict (self->task_cache, MAKECACHE_KEY);
+}
+
+static void
 ide_autotools_build_system_constructed (GObject *object)
 {
   IdeAutotoolsBuildSystem *self = (IdeAutotoolsBuildSystem *)object;
+  IdeConfigurationManager *config_manager;
   IdeBufferManager *buffer_manager;
   IdeContext *context;
-
 
   G_OBJECT_CLASS (ide_autotools_build_system_parent_class)->constructed (object);
 
   context = ide_object_get_context (IDE_OBJECT (self));
   buffer_manager = ide_context_get_buffer_manager (context);
+  config_manager = ide_context_get_configuration_manager (context);
+
+  /*
+   * Track change of active configuration so that we invalidate our cached build
+   * targets (which might be out of date).
+   */
+  g_signal_connect_object (config_manager,
+                           "notify::current",
+                           G_CALLBACK (ide_autotools_build_system__config_changed_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
 
   /*
    * FIXME:
