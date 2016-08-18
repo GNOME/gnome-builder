@@ -8,10 +8,10 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-08-06 17:10+0000\n"
-"PO-Revision-Date: 2016-08-11 09:12+0200\n"
+"POT-Creation-Date: 2016-08-14 17:38+0000\n"
+"PO-Revision-Date: 2016-08-18 22:22+0200\n"
 "Last-Translator: Marek Černocký <marek@manet.cz>\n"
-"Language-Team: čeština <gnome-cs-list@gnome.org>>\n"
+"Language-Team: čeština <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -289,7 +289,7 @@ msgstr "Nejsou otevřené žádné palety"
 
 #: contrib/gstyle/ui/gstyle-color-panel.ui:959
 msgid "Load or generate a palette using the preferences"
-msgstr ""
+msgstr "Načtěte nebo vygenerujte paletu pomocí předvoleb"
 
 #: contrib/gstyle/ui/gstyle-color-widget.ui:13
 #: plugins/color-picker/gtk/color-picker-palette-menu.ui:13
@@ -2445,7 +2445,7 @@ msgstr "Aplikace GNOME"
 
 #: plugins/autotools-templates/autotools_templates/__init__.py:306
 msgid "Create a new flatpak-ready GNOME application"
-msgstr ""
+msgstr "Vytvořit novou aplikaci GNOME připravenou pro flatpak"
 
 #: plugins/build-tools/gbp-build-configuration-row.ui:43
 msgid "Duplicate the configuration"
@@ -2773,11 +2773,10 @@ msgid "The unit use by RGb component and strings."
 msgstr ""
 
 #: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:35
-#, fuzzy
 #| msgctxt "shortcut window"
 #| msgid "Select all"
 msgid "Selected palette id"
-msgstr "Vybrat vše"
+msgstr "ID vybrané palety"
 
 #: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:36
 msgid "The selected palette id amongst the loaded ones."
@@ -2852,11 +2851,11 @@ msgstr ""
 
 #: plugins/color-picker/gtk/color-picker-prefs.ui:717
 msgid "Palette management"
-msgstr ""
+msgstr "Správa palet"
 
 #: plugins/color-picker/gtk/color-picker-prefs.ui:762
 msgid "Load"
-msgstr ""
+msgstr "Načíst"
 
 #: plugins/color-picker/gtk/color-picker-prefs.ui:836
 msgid "From current document"
@@ -2875,19 +2874,18 @@ msgid "No selected palettes"
 msgstr "Nejsou vybrané žádné palety"
 
 #: plugins/color-picker/gtk/color-picker-preview.ui:58
-#, fuzzy
 #| msgctxt "shortcut window"
 #| msgid "Select all"
 msgid "Select a palette file"
-msgstr "Vybrat vše"
+msgstr "Vyberte soubor s paletou"
 
 #: plugins/color-picker/gtk/color-picker.ui:61
 msgid "Try loading or generating a palette using the menu"
-msgstr ""
+msgstr "Zkuste načíst nebo vygenerovat paletu pomocí nabídky"
 
 #: plugins/color-picker/gtk/menus.ui:7
 msgid "Enable color picker"
-msgstr ""
+msgstr "Povolit barevné kapátko"
 
 #: plugins/command-bar/gb-command-bar.c:302
 #, c-format
