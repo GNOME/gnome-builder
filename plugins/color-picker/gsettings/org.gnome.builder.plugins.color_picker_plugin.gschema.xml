@@ -15,12 +15,12 @@
     </key>
     <key name="lab-visible" type="b">
       <default>true</default>
-      <summary>hsv visibility</summary>
+      <summary>lab visibility</summary>
       <description>If the LAB components are visible.</description>
     </key>
     <key name="rgb-visible" type="b">
       <default>true</default>
-      <summary>hsv visibility</summary>
+      <summary>rgb visibility</summary>
       <description>If the RGB components are visible.</description>
     </key>
     <key name="rgb-unit" type="s">
