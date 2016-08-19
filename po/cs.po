@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-08-18 20:24+0000\n"
-"PO-Revision-Date: 2016-08-19 11:08+0200\n"
+"POT-Creation-Date: 2016-08-19 10:23+0000\n"
+"PO-Revision-Date: 2016-08-19 12:27+0200\n"
 "Last-Translator: Marek Černocký <marek@manet.cz>\n"
 "Language-Team: čeština <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
@@ -2059,7 +2059,6 @@ msgid "Preferences"
 msgstr "Předvolby"
 
 #: libide/preferences/ide-preferences-perspective.ui:15
-#| msgid "Search through preferences"
 msgid "Search Preferences"
 msgstr "hledat v předvolbách"
 
@@ -2746,18 +2745,24 @@ msgid "Colors"
 msgstr "Barvy"
 
 #: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:13
-#: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:18
-#: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:23
 msgid "hsv visibility"
-msgstr ""
+msgstr "viditelnost hsv"
 
 #: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:14
 msgid "If the HSV components are visible."
 msgstr "Zda jsou viditelné komponenty HSV."
 
+#: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:18
+msgid "lab visibility"
+msgstr "viditelnost lab"
+
 #: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:19
 msgid "If the LAB components are visible."
 msgstr "Zda jsou viditelné komponenty LAB."
+
+#: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:23
+msgid "rgb visibility"
+msgstr "viditelnost rgb"
 
 #: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:24
 msgid "If the RGB components are visible."
@@ -3082,7 +3087,6 @@ msgstr ""
 
 #: plugins/create-project/gbp-create-project-widget.ui:128
 #: plugins/git/ide-git-clone-widget.ui:78
-#| msgid "Projects directory"
 msgid "Select Project Directory"
 msgstr "Výběr složky projektu"
 
@@ -3177,7 +3181,6 @@ msgid "Repository URL"
 msgstr "Adresa URL repozitáře"
 
 #: plugins/git/ide-git-clone-widget.ui:102
-#| msgid "Project Discovery"
 msgid "Project Destination"
 msgstr "Cíl projektu"
 
@@ -3224,7 +3227,6 @@ msgid "Enable Pylint"
 msgstr "Povolit Pylint"
 
 #: plugins/gnome-code-assistance/org.gnome.builder.gnome-code-assistance.gschema.xml:6
-#| msgid "Enable the use of pylint, which may execute code in your project"
 msgid ""
 "Enable the use of pylint to find additional diagnostics in python programs. "
 "This may result in the execution of code in your project."
@@ -3233,9 +3235,12 @@ msgstr ""
 "jazyce Python. Důsledkem může být spouštění kódu vašeho projektu."
 
 #: plugins/hello-cpp/hellocppapplicationaddin.cc:48
-#, fuzzy, c-format
-msgid "Wow! You've spent with Builder %d seconds!\n"
-msgstr "Úžasné, strávili jste v Bilderu %d vteřin!\n"
+#, c-format
+msgid "Wow! You've spent with Builder %d second!\n"
+msgid_plural "Wow! You've spent with Builder %d seconds!\n"
+msgstr[0] "Úžasné, strávili jste v Bilderu %d vteřinu!\n"
+msgstr[1] "Úžasné, strávili jste v Bilderu %d vteřiny!\n"
+msgstr[2] "Úžasné, strávili jste v Bilderu %d vteřin!\n"
 
 #: plugins/html-preview/html_preview_plugin/gtk/menus.ui:6
 msgid "Preview as HTML"
@@ -3407,106 +3412,3 @@ msgstr "Zobrazovat chyby a varování poskytované pro jazyk Vala"
 #: plugins/vala-pack/ide-vala-preferences-addin.vala:36
 msgid "vala diagnostics warnings errors"
 msgstr "vala diagnostika varování chyba chyby"
-
-#~ msgid "_Print…"
-#~ msgstr "_Tisk…"
-
-#~ msgid "_Fullscreen"
-#~ msgstr "_Celá obrazovka"
-
-#~ msgid "_Close All"
-#~ msgstr "_Zavřít vše"
-
-#~ msgid "_Match Case"
-#~ msgstr "Rozlišovat velikost pís_men"
-
-#~ msgid "Builder Dark"
-#~ msgstr "Tmavý Builder"
-
-#~ msgid "Dark color scheme for Builder using the Tango color palette"
-#~ msgstr "Tmavé barevné schéma pro Builder používající barevnou paletu Tango"
-
-#~ msgid "The default color scheme for Builder"
-#~ msgstr "Výchozí barevné schéma pro Builder"
-
-#~ msgid "Default Configuration"
-#~ msgstr "Výchozí konfigurace"
-
-#~ msgid "From an existing project on this computer"
-#~ msgstr "Ze stávajícího projektu v tomto počítači"
-
-#~ msgid "Enable / Disable left panel. Shortcut: F9"
-#~ msgstr "Zapnout/vypnout levý panel. Klávesová zkratka: F9"
-
-#~ msgid "Enable / Disable bottom panel. Shortcut: Ctrl + F9"
-#~ msgstr "Zapnout/vypnout spodní panel. Klávesová zkratka: Ctrl + F9"
-
-#~ msgid "Enable / Disable right panel. Shortcut: Shift + F9"
-#~ msgstr "Zapnout/vypnout pravý panel. Klávesová zkratka: Shift + F9"
-
-#~ msgid "Co_ntinue"
-#~ msgstr "_Pokračovat"
-
-#~ msgid "Create a new project"
-#~ msgstr "Vytvořit nový projekt"
-
-#~ msgid "Search for projects"
-#~ msgstr "Vyhledat projekty"
-
-#~ msgid "Add a new empty file to your project"
-#~ msgstr "Přidat nový prázdný soubor do vašeho projektu"
-
-#~ msgid "Search for files. Shortcut: Ctrl + ."
-#~ msgstr "Hledat soubory. Klávesová zkratka: Ctrl + ."
-
-#~ msgid "Drops down a list of file operations"
-#~ msgstr "Rozbalit seznam souborových operací"
-
-#~ msgid "Success"
-#~ msgstr "Úspěšné"
-
-#~ msgid "Deploy"
-#~ msgstr "Nasadit"
-
-#~ msgid "Export"
-#~ msgstr "Export"
-
-#~ msgid "From a project template"
-#~ msgstr "Ze šablony projektu"
-
-#~| msgid "Version Control"
-#~ msgid "Versioning"
-#~ msgstr "Správa verzí"
-
-#~ msgid "AGPL version 3 or later"
-#~ msgstr "AGPL verze 3 a novější"
-
-#~ msgid "GPL version 3 or later"
-#~ msgstr "GPL verze 3 a novější"
-
-#~ msgid "GPL version 2 or later"
-#~ msgstr "GPL verze 2 a novější"
-
-#~ msgid "LGPL version 3 or later"
-#~ msgstr "LGPL verze 3 a novější"
-
-#~ msgid "LGPL version 2.1 or later"
-#~ msgstr "LGPL verze 2.1 a novější"
-
-#~ msgid "Pattern"
-#~ msgstr "Vzor"
-
-#~ msgid "Directory"
-#~ msgstr "Složka"
-
-#~ msgid "From an existing project in a Git repository"
-#~ msgstr "Ze stávajícího projektu v repozitáři Git"
-
-#~ msgid "Attribution"
-#~ msgstr "Autorství"
-
-#~ msgid "Files"
-#~ msgstr "Soubory"
-
-#~ msgid "File name must not contain subdirectories."
-#~ msgstr "Název souboru nesmí obsahovat podsložky."
