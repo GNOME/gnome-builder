@@ -110,7 +110,7 @@ class AutotoolsTemplate(Ide.TemplateBase, Ide.ProjectTemplate):
         if 'language' in params:
             self.language = params['language'].get_string().lower()
 
-        if self.language not in ('c', 'c++', 'vala'):
+        if self.language not in ('c', 'c++', 'vala', 'python'):
             task.return_error(GLib.Error("Language %s not supported" %
                                          self.language))
             return
@@ -135,8 +135,10 @@ class AutotoolsTemplate(Ide.TemplateBase, Ide.ProjectTemplate):
         prefix_ = prefix.lower().replace('-','_')
         PreFix = ''.join([word.capitalize() for word in prefix.lower().split('-')])
 
+        name_ = name.lower().replace('-','_')
+
         scope.get('name').assign_string(name)
-        scope.get('name_').assign_string(name.lower().replace('-','_'))
+        scope.get('name_').assign_string(name_)
         scope.get('NAME').assign_string(name.upper().replace('-','_'))
 
         scope.get('prefix').assign_string(prefix)
@@ -150,11 +152,12 @@ class AutotoolsTemplate(Ide.TemplateBase, Ide.ProjectTemplate):
         scope.get('major_version').assign_string('0')
         scope.get('minor_version').assign_string('1')
         scope.get('micro_version').assign_string('0')
-        scope.get('enable_c').assign_boolean(True)
+        scope.get('enable_c').assign_boolean(self.language in ('c', 'vala', 'c++'))
+        scope.get('enable_python').assign_boolean(self.language == 'python')
         scope.get('enable_cplusplus').assign_boolean(self.language == 'c++')
         scope.get('enable_i18n').assign_boolean(True)
         scope.get('enable_gtk_doc').assign_boolean(False)
-        scope.get('enable_gobject_introspection').assign_boolean(True)
+        scope.get('enable_gobject_introspection').assign_boolean(self.language in ('c', 'vala', 'c++'))
         scope.get('enable_vapi').assign_boolean(self.language == 'c')
         scope.get('enable_vala').assign_boolean(self.language == 'vala')
         scope.get('translation_copyright').assign_string('Translation copyright holder')
@@ -166,6 +169,7 @@ class AutotoolsTemplate(Ide.TemplateBase, Ide.ProjectTemplate):
 
         expands = {
             'name': name,
+            'name_': name_,
             'prefix': prefix,
             'PreFix': PreFix,
         }
@@ -304,7 +308,7 @@ class GnomeProjectTemplate(AutotoolsTemplate):
             _("GNOME Application"),
             'pattern-gnome',
             _("Create a new flatpak-ready GNOME application"),
-            ['C', 'C++', 'Vala']
+            ['C', 'C++', 'Vala', 'Python']
          )
 
     def get_packages(self):
@@ -316,7 +320,11 @@ class GnomeProjectTemplate(AutotoolsTemplate):
             return ""
 
     def prepare_files(self, files):
-        files['resources/src/Makefile.gnome-app'] = 'src/Makefile.am'
+        if self.language in ('c', 'c++', 'vala'):
+            files['resources/src/Makefile.gnome-app'] = 'src/Makefile.am'
+        elif self.language == 'python':
+            files['resources/bin/Makefile.gnome-app'] = 'bin/Makefile.am'
+            files['resources/src/Makefile.gnome-app-python'] = '%(name_)s/Makefile.am'
 
         if self.versioning == 'git':
             files['resources/ManifestTemplate.flatpak.json'] = 'org.gnome.%(PreFix)s.flatpak.json'
@@ -327,4 +335,7 @@ class GnomeProjectTemplate(AutotoolsTemplate):
             files['resources/src/main.cpp'] = 'src/main.cpp'
         elif self.language == 'vala':
             files['resources/src/main.vala'] = 'src/main.vala'
+        elif self.language == 'python':
+            files['resources/src/__main__.py'] = '%(name_)s/__main__.py'
+            files['resources/bin/wrapper.py'] = 'bin/%(name)s.in'
 

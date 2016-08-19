@@ -1,4 +1,4 @@
-SUBDIRS = data src{{if enable_i18n}} po{{end}}
+SUBDIRS = data{{if enable_c}} src{{end}}{{if enable_python}} {{name_}} bin{{end}}{{if enable_i18n}} po{{end}}
 
 EXTRA_DIST = AUTHORS
 
@@ -18,6 +18,24 @@ AUTHORS:
 # Generate the ChangeLog.
 @GENERATE_CHANGELOG_RULES@
 dist-hook: dist-ChangeLog
+
+{{if enable_python}}
+pycheck_dirs = bin {{name_}}
+
+check-local:
+	@echo "  CHECK  Pyflakes" $(pycheck_dirs)
+	@if type pyflakes >/dev/null 2>&1; then \
+		(cd $(abs_top_srcdir) && pyflakes $(pycheck_dirs) ); \
+	else echo "skipped, pyflakes not installed"; \
+	fi
+	@if test -z "$$SKIP_PEP8"; then \
+		echo "  CHECK  PEP8"; \
+		if type pep8 >/dev/null 2>&1; then \
+			(cd $(abs_top_srcdir) && pep8 --ignore=E501,E123,E124,E402,E731 --repeat --show-source $(pycheck_dirs) ); \
+		else echo "skipped, pep8 not installed"; \
+		fi; \
+	fi
+{{end}}
 
 GITIGNOREFILES = \
 	**/*.swp \

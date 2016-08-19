@@ -70,11 +70,14 @@ AM_GNU_GETTEXT([external])
 dnl ***********************************************************************
 dnl Check for required programs
 dnl ***********************************************************************
+{{if enable_c}}
 AC_PROG_CC
+{{end}}
 {{if enable_cplusplus}}
 AC_PROG_CXX
 {{end}}
 AC_PROG_INSTALL
+AC_PROG_SED
 AC_PATH_PROG([GLIB_GENMARSHAL],[glib-genmarshal])
 AC_PATH_PROG([GLIB_MKENUMS],[glib-mkenums])
 AC_PATH_PROG([GLIB_COMPILE_RESOURCES],[glib-compile-resources])
@@ -89,9 +92,11 @@ AM_PROG_VALAC([0.32])
 {{if enable_vapi}}
 VAPIGEN_CHECK
 {{end}}
+{{if enable_c}}
 
 
 AX_COMPILER_FLAGS
+{{end}}
 
 
 {{if enable_c}}
@@ -112,6 +117,15 @@ AX_CXX_COMPILE_STDCXX_11([noext], [mandatory])
 
 
 {{end}}
+{{if enable_python}}
+dnl ***********************************************************************
+dnl Check for required Python
+dnl ***********************************************************************
+AM_PATH_PYTHON([3.3])
+
+
+{{end}}
+{{if enable_c}}
 dnl ***********************************************************************
 dnl Check for required packages
 dnl ***********************************************************************
@@ -125,13 +139,20 @@ LT_PREREQ([2.2])
 LT_INIT
 
 
+{{end}}
 dnl ***********************************************************************
 dnl Process .in Files
 dnl ***********************************************************************
 AC_CONFIG_FILES([
 	Makefile
 
+{{if enable_c}}
 	src/Makefile
+{{end}}
+{{if enable_python}}
+	bin/Makefile
+	{{name_}}/Makefile
+{{end}}
 {{if template == "shared-library"}}
 {{if language != "vala"}}
 	src/{{prefix}}-version.h

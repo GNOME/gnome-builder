@@ -18,6 +18,8 @@ nobase_resource_DATA = \
 	autotools_templates/resources/data/Makefile.am \
 	autotools_templates/resources/data/package.pc.in \
 	autotools_templates/resources/git.mk \
+	autotools_templates/resources/bin/Makefile.gnome-app \
+	autotools_templates/resources/bin/wrapper.py \
 	autotools_templates/resources/m4/Makefile.am \
 	autotools_templates/resources/m4/appstream-xml.m4 \
 	autotools_templates/resources/m4/ax_append_compile_flags.m4 \
@@ -39,11 +41,13 @@ nobase_resource_DATA = \
 	autotools_templates/resources/po/LINGUAS \
 	autotools_templates/resources/po/Makevars \
 	autotools_templates/resources/po/POTFILES.in \
+	autotools_templates/resources/src/__main__.py \
 	autotools_templates/resources/src/main.c \
 	autotools_templates/resources/src/main.cpp \
 	autotools_templates/resources/src/main.vala \
 	autotools_templates/resources/src/Makefile.empty \
 	autotools_templates/resources/src/Makefile.gnome-app \
+	autotools_templates/resources/src/Makefile.gnome-app-python \
 	autotools_templates/resources/src/Makefile.shared-library-c \
 	autotools_templates/resources/src/Makefile.shared-library-vala \
 	autotools_templates/resources/src/package-version.h.in \
