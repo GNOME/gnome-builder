@@ -1918,6 +1918,7 @@ ide_makecache_get_build_targets_worker (GTask        *task,
   ide_subprocess_launcher_push_argv (launcher, "print-bin_PROGRAMS");
   ide_subprocess_launcher_push_argv (launcher, "print-noinst_PROGRAMS");
   ide_subprocess_launcher_push_argv (launcher, "print-libexec_PROGRAMS");
+  ide_subprocess_launcher_push_argv (launcher, "print-bin_SCRIPTS");
 
   /*
    * We need to extract the common automake targets from each of the
