@@ -179,6 +179,7 @@ ide_runtime_real_create_runner (IdeRuntime     *self,
   g_autoptr(GFile) bin = NULL;
   IdeContext *context;
   IdeRunner *runner;
+  gchar *slash;
 
   g_assert (IDE_IS_RUNTIME (self));
   g_assert (IDE_IS_BUILD_TARGET (build_target));
@@ -195,6 +196,14 @@ ide_runtime_real_create_runner (IdeRuntime     *self,
                 "install-directory", &installdir,
                 "name", &name,
                 NULL);
+
+  /* Targets might be relative in autotools */
+  if ((slash = strrchr (name, '/')))
+    {
+      gchar *tmp = g_strdup (slash + 1);
+      g_free (name);
+      name = tmp;
+    }
 
   bin = g_file_get_child (installdir, name);
   binpath = g_file_get_path (bin);
