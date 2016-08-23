@@ -5,4 +5,4 @@ Description=Provides integration with gnome-code-assistance
 Authors=Christian Hergert <christian@hergert.me>
 Copyright=Copyright © 2015 Christian Hergert
 Builtin=true
-X-Diagnostic-Provider-Languages=css,html,js,json,python,python3,ruby,sh,xml
+X-Diagnostic-Provider-Languages=css,html,js,json,python,python3,ruby,scss,sh,xml
