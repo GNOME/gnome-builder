@@ -1,8 +1,7 @@
 m4_define(sysprof_required_version, [3.20.1])
 
 PKG_CHECK_MODULES(SYSPROF,
-                  [sysprof-2 >= sysprof_required_version
-                   sysprof-ui-2 >= sysprof_required_version],
+                  [sysprof-ui-2 >= sysprof_required_version],
                   [have_sysprof_ui=yes],
                   [have_sysprof_ui=no])
 
