@@ -33,6 +33,7 @@ typedef struct
 {
   PeasExtensionSet *addins;
   GQueue argv;
+  IdeEnvironment *env;
 } IdeRunnerPrivate;
 
 typedef struct
@@ -44,6 +45,7 @@ typedef struct
 enum {
   PROP_0,
   PROP_ARGV,
+  PROP_ENV,
   N_PROPS
 };
 
@@ -149,6 +151,7 @@ ide_runner_real_run_async (IdeRunner           *self,
   g_autoptr(GTask) task = NULL;
   g_autoptr(IdeSubprocessLauncher) launcher = NULL;
   g_autoptr(GSubprocess) subprocess = NULL;
+  g_auto(GStrv) environ = NULL;
   const gchar *identifier;
   GError *error = NULL;
 
@@ -161,6 +164,10 @@ ide_runner_real_run_async (IdeRunner           *self,
   g_task_set_source_tag (task, ide_runner_real_run_async);
 
   launcher = ide_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDOUT_PIPE);
+
+  environ = g_get_environ (); /* We still rely on many system vars like DISPLAY */
+  ide_subprocess_launcher_set_environ (launcher, (const gchar * const *)environ);
+  ide_subprocess_launcher_overlay_environment (launcher, priv->env);
 
   for (GList *iter = priv->argv.head; iter != NULL; iter = iter->next)
     ide_subprocess_launcher_push_argv (launcher, iter->data);
@@ -272,6 +279,7 @@ ide_runner_finalize (GObject *object)
 
   g_queue_foreach (&priv->argv, (GFunc)g_free, NULL);
   g_queue_clear (&priv->argv);
+  g_clear_object (&priv->env);
 
   G_OBJECT_CLASS (ide_runner_parent_class)->finalize (object);
 }
@@ -288,6 +296,10 @@ ide_runner_get_property (GObject    *object,
     {
     case PROP_ARGV:
       g_value_take_boxed (value, ide_runner_get_argv (self));
+      break;
+
+    case PROP_ENV:
+      g_value_set_object (value, ide_runner_get_environment (self));
       break;
 
     default:
@@ -334,6 +346,13 @@ ide_runner_class_init (IdeRunnerClass *klass)
                         G_TYPE_STRV,
                         (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
+  properties [PROP_ENV] =
+    g_param_spec_object ("environment",
+                         "Environment",
+                         "The environment variables for the command",
+                         IDE_TYPE_ENVIRONMENT,
+                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+
   g_object_class_install_properties (object_class, N_PROPS, properties);
 
   signals [EXITED] =
@@ -366,6 +385,7 @@ ide_runner_init (IdeRunner *self)
   IdeRunnerPrivate *priv = ide_runner_get_instance_private (self);
 
   g_queue_init (&priv->argv);
+  priv->env = ide_environment_new ();
 }
 
 /**
@@ -434,6 +454,21 @@ ide_runner_set_argv (IdeRunner           *self,
     }
 
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ARGV]);
+}
+
+/**
+ * ide_runner_get_environment:
+ *
+ * Returns: (transfer none): The #IdeEnvironment the process launched uses.
+ */
+IdeEnvironment *
+ide_runner_get_environment (IdeRunner *self)
+{
+  IdeRunnerPrivate *priv = ide_runner_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_RUNNER (self), NULL);
+
+  return priv->env;
 }
 
 /**

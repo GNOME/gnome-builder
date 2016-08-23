@@ -22,6 +22,7 @@
 #include <gio/gio.h>
 
 #include "ide-object.h"
+#include "buildsystem/ide-environment.h"
 
 G_BEGIN_DECLS
 
@@ -62,6 +63,7 @@ void            ide_runner_append_argv  (IdeRunner            *self,
 gchar         **ide_runner_get_argv     (IdeRunner            *self);
 void            ide_runner_set_argv     (IdeRunner            *self,
                                          const gchar * const  *argv);
+IdeEnvironment *ide_runner_get_environment(IdeRunner          *self);
 GInputStream   *ide_runner_get_stdin    (IdeRunner            *self);
 GOutputStream  *ide_runner_get_stdout   (IdeRunner            *self);
 GOutputStream  *ide_runner_get_stderr   (IdeRunner            *self);
