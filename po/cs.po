@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-08-19 10:23+0000\n"
-"PO-Revision-Date: 2016-08-19 12:27+0200\n"
+"POT-Creation-Date: 2016-08-23 11:12+0000\n"
+"PO-Revision-Date: 2016-08-23 13:17+0200\n"
 "Last-Translator: Marek Černocký <marek@manet.cz>\n"
 "Language-Team: čeština <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
@@ -69,6 +69,7 @@ msgstr[2] "Před %u roky"
 #: libide/greeter/ide-greeter-perspective.c:673
 #: libide/workbench/ide-workbench-actions.c:70
 #: plugins/color-picker/gb-color-picker-prefs.c:210
+#: plugins/sysprof/gbp-sysprof-workbench-addin.c:254
 msgid "Open"
 msgstr "Otevřít"
 
@@ -102,6 +103,7 @@ msgstr "Procházet…"
 #: plugins/color-picker/gb-color-picker-prefs.c:98
 #: plugins/color-picker/gb-color-picker-prefs.c:214
 #: plugins/color-picker/gb-color-picker-prefs.c:241
+#: plugins/sysprof/gbp-sysprof-workbench-addin.c:255
 #: plugins/terminal/gb-terminal-view-actions.c:305
 msgid "Cancel"
 msgstr "Zrušit"
@@ -2092,16 +2094,21 @@ msgstr "Skript se musí nacházet na místním souborovém systému."
 msgid "The script \"%s\" is not a PyGObject file."
 msgstr "Skript „%s“ není soubor PyGObject."
 
-#: libide/runner/ide-run-manager.c:128
+#: libide/runner/ide-run-manager.c:171
+#| msgid "Runtime"
+msgid "Run"
+msgstr "Spustit"
+
+#: libide/runner/ide-run-manager.c:200
 msgid "Cannot run target, another target is running"
 msgstr "Nelze spustit cíl, jiný cíl právě běží"
 
-#: libide/runner/ide-run-manager.c:209
+#: libide/runner/ide-run-manager.c:287
 #: plugins/autotools/ide-autotools-build-task.c:438
 msgid "Failed to locate runtime"
 msgstr "Selhalo vyhledání běhového prostředí"
 
-#: libide/runner/ide-runner.c:123
+#: libide/runner/ide-runner.c:129
 msgid "Process quit unexpectedly"
 msgstr "Proces se neočekávaně ukončil"
 
@@ -2328,11 +2335,11 @@ msgstr "Otevření souboru"
 msgid "%s - Builder"
 msgstr "%s – Builder"
 
-#: libide/workbench/ide-workbench-header-bar.ui:29
+#: libide/workbench/ide-workbench-header-bar.ui:38
 msgid "Show workbench menu"
 msgstr "Zobrazovat nabídku pracovních nástrojů"
 
-#: libide/workbench/ide-workbench-header-bar.ui:50
+#: libide/workbench/ide-workbench-header-bar.ui:59
 msgid "Press Ctrl+. to search"
 msgstr "Zmáčknutím Ctrl+. můžete hledat"
 
@@ -3355,14 +3362,6 @@ msgstr "S_balit všechny uzly"
 msgid "_Refresh"
 msgstr "_Aktualizovat"
 
-#: plugins/run-tools/gbp-run-workbench-addin.c:135
-msgid "Failed to locate build target"
-msgstr "Selhalo vyhledání cíle pro sestavení"
-
-#: plugins/run-tools/gbp-run-workbench-addin.c:234
-msgid "Run project"
-msgstr "Spustit projekt"
-
 #: plugins/support/gtk/menus.ui:7
 msgid "Generate Support Log"
 msgstr "Vygenerovat záznam pro podporu"
@@ -3388,6 +3387,35 @@ msgstr "Symboly"
 msgid "System Monitor"
 msgstr "Sledování systému"
 
+#: plugins/sysprof/gbp-sysprof-perspective.c:65
+#| msgid "Build Profile"
+msgid "Profiler"
+msgstr "Profiler"
+
+#: plugins/sysprof/gbp-sysprof-workbench-addin.c:251
+#| msgid "Open File"
+msgid "Open Profile"
+msgstr "Otevření záznamu profilování"
+
+#: plugins/sysprof/gbp-sysprof-workbench-addin.c:259
+msgid "Sysprof Capture (*.syscap)"
+msgstr "Záznam ze Sysprof (*.syscap)"
+
+#: plugins/sysprof/gbp-sysprof-workbench-addin.c:265
+#| msgid "All files"
+msgid "All Files"
+msgstr "Všechny soubory"
+
+#: plugins/sysprof/gbp-sysprof-workbench-addin.c:352
+#| msgid "Build Profile"
+msgid "Profile"
+msgstr "Profilovat"
+
+#: plugins/sysprof/gtk/menus.ui:6
+#| msgid "_Open File…"
+msgid "Open Profile…"
+msgstr "Otevřít záznam profilování…"
+
 #: plugins/terminal/gb-terminal-view-actions.c:297
 msgid "Save Terminal Content As"
 msgstr "Uložení obsahu terminálu jako"
@@ -3412,3 +3440,9 @@ msgstr "Zobrazovat chyby a varování poskytované pro jazyk Vala"
 #: plugins/vala-pack/ide-vala-preferences-addin.vala:36
 msgid "vala diagnostics warnings errors"
 msgstr "vala diagnostika varování chyba chyby"
+
+#~ msgid "Failed to locate build target"
+#~ msgstr "Selhalo vyhledání cíle pro sestavení"
+
+#~ msgid "Run project"
+#~ msgstr "Spustit projekt"
