@@ -532,6 +532,7 @@ ide_run_manager_add_handler (IdeRunManager  *self,
   IdeRunHandlerInfo *info;
   g_autofree gchar *action_name = NULL;
   const gchar *accels[] = { accel, NULL };
+  GApplication *app;
 
   g_return_if_fail (IDE_IS_RUN_MANAGER (self));
   g_return_if_fail (id != NULL);
@@ -546,11 +547,11 @@ ide_run_manager_add_handler (IdeRunManager  *self,
   info->handler_data = user_data;
   info->handler_data_destroy = user_data_destroy;
 
+  app = g_application_get_default ();
   action_name = g_strdup_printf ("run-manager.run-with-handler('%s')", id);
 
-  gtk_application_set_accels_for_action (GTK_APPLICATION (g_application_get_default()),
-                                         action_name,
-                                         accels);
+  if (accel != NULL && app != NULL)
+    gtk_application_set_accels_for_action (GTK_APPLICATION (app), action_name, accels);
 
   self->handlers = g_list_append (self->handlers, info);
 
