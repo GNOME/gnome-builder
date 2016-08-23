@@ -73,9 +73,9 @@ libide/preferences/ide-preferences-perspective.ui
 libide/projects/ide-project.c
 libide/projects/ide-recent-projects.c
 libide/pygobject/ide-pygobject-script.c
+libide/runner/ide-run-button.c
 libide/runner/ide-run-manager.c
 libide/runner/ide-runner.c
-libide/runner/ide-run-button.c
 libide/runtimes/ide-runtime-manager.c
 libide/scripting/ide-script.c
 libide/search/ide-omni-search-display.c
@@ -162,6 +162,9 @@ plugins/support/gtk/menus.ui
 plugins/support/ide-support-application-addin.c
 plugins/symbol-tree/symbol-tree-panel.c
 plugins/sysmon/gb-sysmon-panel.ui
+plugins/sysprof/gbp-sysprof-perspective.c
+plugins/sysprof/gbp-sysprof-workbench-addin.c
+plugins/sysprof/gtk/menus.ui
 plugins/terminal/gb-terminal-view-actions.c
 plugins/terminal/gb-terminal-workbench-addin.c
 plugins/terminal/gtk/menus.ui
