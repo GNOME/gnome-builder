@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-08-20 19:03+0000\n"
-"PO-Revision-Date: 2016-08-22 12:04+0200\n"
+"POT-Creation-Date: 2016-08-23 08:48+0000\n"
+"PO-Revision-Date: 2016-08-23 12:55+0200\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Español; Castellano <gnome-es-list@gnome.org>\n"
 "Language: es\n"
@@ -72,6 +72,7 @@ msgstr[1] "Hace %u años aproximadamente"
 #: libide/greeter/ide-greeter-perspective.c:673
 #: libide/workbench/ide-workbench-actions.c:70
 #: plugins/color-picker/gb-color-picker-prefs.c:210
+#: plugins/sysprof/gbp-sysprof-workbench-addin.c:254
 msgid "Open"
 msgstr "Abrir"
 
@@ -105,6 +106,7 @@ msgstr "Explorar…"
 #: plugins/color-picker/gb-color-picker-prefs.c:98
 #: plugins/color-picker/gb-color-picker-prefs.c:214
 #: plugins/color-picker/gb-color-picker-prefs.c:241
+#: plugins/sysprof/gbp-sysprof-workbench-addin.c:255
 #: plugins/terminal/gb-terminal-view-actions.c:305
 msgid "Cancel"
 msgstr "Cancelar"
@@ -2111,16 +2113,21 @@ msgstr "El script debe encontrarse en el sistema de archivos local."
 msgid "The script \"%s\" is not a PyGObject file."
 msgstr "El script «%s» no es un archivo de PyGObject."
 
-#: libide/runner/ide-run-manager.c:128
+#: libide/runner/ide-run-manager.c:171
+#| msgid "Runtime"
+msgid "Run"
+msgstr "Ejecutar"
+
+#: libide/runner/ide-run-manager.c:200
 msgid "Cannot run target, another target is running"
 msgstr "No se puede ejecutar el objetivo, ya ha otro objetivo en ejecución"
 
-#: libide/runner/ide-run-manager.c:209
+#: libide/runner/ide-run-manager.c:287
 #: plugins/autotools/ide-autotools-build-task.c:438
 msgid "Failed to locate runtime"
 msgstr "Falló al buscar la rutina"
 
-#: libide/runner/ide-runner.c:123
+#: libide/runner/ide-runner.c:129
 msgid "Process quit unexpectedly"
 msgstr "El proceso ha terminado de manera inesperada"
 
@@ -2345,11 +2352,11 @@ msgstr "Abrir archivo"
 msgid "%s - Builder"
 msgstr "%s - Constructor"
 
-#: libide/workbench/ide-workbench-header-bar.ui:29
+#: libide/workbench/ide-workbench-header-bar.ui:38
 msgid "Show workbench menu"
 msgstr "Mostrar el menú del banco de trabajo"
 
-#: libide/workbench/ide-workbench-header-bar.ui:50
+#: libide/workbench/ide-workbench-header-bar.ui:59
 msgid "Press Ctrl+. to search"
 msgstr "Pulse Ctrl+. para buscar"
 
@@ -2769,7 +2776,6 @@ msgid "If the HSV components are visible."
 msgstr "Si los componentes HSV son visibles."
 
 #: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:18
-#| msgid "hsv visibility"
 msgid "lab visibility"
 msgstr "visibilidad lab"
 
@@ -2778,7 +2784,6 @@ msgid "If the LAB components are visible."
 msgstr "Si los componentes LAB son visibles."
 
 #: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:23
-#| msgid "hsv visibility"
 msgid "rgb visibility"
 msgstr "visibilidad rgb"
 
@@ -3259,7 +3264,6 @@ msgstr ""
 
 #: plugins/hello-cpp/hellocppapplicationaddin.cc:48
 #, c-format
-#| msgid "Wow! You've spent with Builder %d seconds!\n"
 msgid "Wow! You've spent with Builder %d second!\n"
 msgid_plural "Wow! You've spent with Builder %d seconds!\n"
 msgstr[0] "Ha invertido %d segundo en Builder.\n"
@@ -3378,14 +3382,6 @@ msgstr "_Contraer todos los nodos"
 msgid "_Refresh"
 msgstr "_Actualizar"
 
-#: plugins/run-tools/gbp-run-workbench-addin.c:135
-msgid "Failed to locate build target"
-msgstr "Falló al buscar el objetivo de construcción"
-
-#: plugins/run-tools/gbp-run-workbench-addin.c:234
-msgid "Run project"
-msgstr "Ejecutar proyecto"
-
 #: plugins/support/gtk/menus.ui:7
 msgid "Generate Support Log"
 msgstr "Generar registro de soporte"
@@ -3411,6 +3407,35 @@ msgstr "Símbolos"
 msgid "System Monitor"
 msgstr "Monitor del sistema"
 
+#: plugins/sysprof/gbp-sysprof-perspective.c:65
+#| msgid "Build Profile"
+msgid "Profiler"
+msgstr "Perfilador"
+
+#: plugins/sysprof/gbp-sysprof-workbench-addin.c:251
+#| msgid "Open File"
+msgid "Open Profile"
+msgstr "Abrir perfil"
+
+#: plugins/sysprof/gbp-sysprof-workbench-addin.c:259
+msgid "Sysprof Capture (*.syscap)"
+msgstr "Capturar de sysprof (*.syscap)"
+
+#: plugins/sysprof/gbp-sysprof-workbench-addin.c:265
+#| msgid "All files"
+msgid "All Files"
+msgstr "Todos los archivos"
+
+#: plugins/sysprof/gbp-sysprof-workbench-addin.c:352
+#| msgid "Build Profile"
+msgid "Profile"
+msgstr "Perfil"
+
+#: plugins/sysprof/gtk/menus.ui:6
+#| msgid "_Open File…"
+msgid "Open Profile…"
+msgstr "Abrir perfil…"
+
 #: plugins/terminal/gb-terminal-view-actions.c:297
 msgid "Save Terminal Content As"
 msgstr "Guardar contenido de la terminal como"
@@ -3435,6 +3460,12 @@ msgstr "Mostrar errores y advertencias proporcionadas por Vala"
 #: plugins/vala-pack/ide-vala-preferences-addin.vala:36
 msgid "vala diagnostics warnings errors"
 msgstr "diagnósticos de alertas y errores de Vala"
+
+#~ msgid "Failed to locate build target"
+#~ msgstr "Falló al buscar el objetivo de construcción"
+
+#~ msgid "Run project"
+#~ msgstr "Ejecutar proyecto"
 
 #~ msgid "Basic"
 #~ msgstr "Básico"
