@@ -1,3 +1,40 @@
+===============
+Version 3.21.90
+===============
+
+Lots of new features have landed since we started down the road to 3.22.
+Some of them are enumerated below.
+ 
+ • New search and replace implementation
+ • New build bar which provides an overview of the build config,
+   VCS branch, and other important messages.
+ • A new sysprof-based profiler
+ • Perspectives have been revamped and we've removed the sidebar as we
+   mentioned would happen before 3.20.
+ • Improved project templates
+ • Support for configuration of version control systems
+ • ‘ide’ has been renamed to ‘gnome-builder-cli’
+ • New build icon
+ • Vim improvements
+ • New color picker plugin
+ • Autotools plugin can now extract various build targets
+ • New greeter design including revamped git clone, file-chooser, and
+   template wizard.
+
+Thank you to all of our contributors!
+
+  Akshaya Kakkilaya, Alexandre Franke, Allan Day, Anders Jonsson, Andika
+  Triwidada, Aurimas Černius, Balázs Meskó, Baurzhan Muftakhidinov, Carlos
+  Soriano, Christian Hergert, Christian Kirbach, Cédric Valmary, Daniel
+  Espinosa, Daniel Mustieles, Debarshi Ray, Enrico Nicoletto, Fangwen Yu,
+  Florian Müllner, František Zatloukal, Garrett Regier, Georges Basile
+  Stavracas Neto, Giovanni Campagna, Gábor Kelemen, Jeremy Bicha,
+  Marc-Antoine Perennou, Marcin Kolny, Marek Cernocky, Marek Černocký,
+  Mario Blättermann, Matthew Leeds, Michael Catanzaro, Muhammet Kara,
+  Patrick Griffis, Piotr Drąg, Rafael Fontenelle, Raunaq Abhyankar,
+  Sebastien Lafargue, Tiago Santos, Ting-Wei Lan
+
+
 ==============
 Version 3.21.1
 ==============
