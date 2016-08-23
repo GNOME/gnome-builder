@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-08-23 02:27+0000\n"
-"PO-Revision-Date: 2016-08-22 22:55+0200\n"
+"POT-Creation-Date: 2016-08-23 10:05+0000\n"
+"PO-Revision-Date: 2016-08-23 12:11+0200\n"
 "Last-Translator: Meskó Balázs <meskobalazs@gmail.com>\n"
 "Language-Team: Hungarian <openscope at gmail dot com>\n"
 "Language: hu\n"
@@ -70,6 +70,7 @@ msgstr[1] "Körülbelül %u éve"
 #: libide/greeter/ide-greeter-perspective.c:673
 #: libide/workbench/ide-workbench-actions.c:70
 #: plugins/color-picker/gb-color-picker-prefs.c:210
+#: plugins/sysprof/gbp-sysprof-workbench-addin.c:254
 msgid "Open"
 msgstr "Megnyitás"
 
@@ -103,6 +104,7 @@ msgstr "Tallózás…"
 #: plugins/color-picker/gb-color-picker-prefs.c:98
 #: plugins/color-picker/gb-color-picker-prefs.c:214
 #: plugins/color-picker/gb-color-picker-prefs.c:241
+#: plugins/sysprof/gbp-sysprof-workbench-addin.c:255
 #: plugins/terminal/gb-terminal-view-actions.c:305
 msgid "Cancel"
 msgstr "Mégse"
@@ -2101,10 +2103,8 @@ msgid "The script \"%s\" is not a PyGObject file."
 msgstr "A(z) „%s” nem egy PyGObject parancsfájl."
 
 #: libide/runner/ide-run-manager.c:171
-#, fuzzy
-#| msgid "Runtime"
 msgid "Run"
-msgstr "Futtatókörnyezet"
+msgstr "Futtatás"
 
 #: libide/runner/ide-run-manager.c:200
 msgid "Cannot run target, another target is running"
@@ -2844,7 +2844,8 @@ msgstr "Szűrők:"
 
 #: plugins/color-picker/gtk/color-picker-prefs.ui:229
 msgid "Select a filter that act on the colors or 'None'."
-msgstr "Válassza ki a színekre alkalmazandó szűrőt, vagy a „Nincs” lehetőséget."
+msgstr ""
+"Válassza ki a színekre alkalmazandó szűrőt, vagy a „Nincs” lehetőséget."
 
 #: plugins/color-picker/gtk/color-picker-prefs.ui:467
 msgid "Select the color strings you want to see in the panel."
@@ -3395,6 +3396,30 @@ msgstr "Szimbólumok"
 #: plugins/sysmon/gb-sysmon-panel.ui:5
 msgid "System Monitor"
 msgstr "Rendszerfigyelő"
+
+#: plugins/sysprof/gbp-sysprof-perspective.c:65
+msgid "Profiler"
+msgstr "Profilozó"
+
+#: plugins/sysprof/gbp-sysprof-workbench-addin.c:251
+msgid "Open Profile"
+msgstr "Profil megnyitása"
+
+#: plugins/sysprof/gbp-sysprof-workbench-addin.c:259
+msgid "Sysprof Capture (*.syscap)"
+msgstr "Sysprof rögzítés (*.syscap)"
+
+#: plugins/sysprof/gbp-sysprof-workbench-addin.c:265
+msgid "All Files"
+msgstr "Minden fájl"
+
+#: plugins/sysprof/gbp-sysprof-workbench-addin.c:352
+msgid "Profile"
+msgstr "Profil"
+
+#: plugins/sysprof/gtk/menus.ui:6
+msgid "Open Profile…"
+msgstr "Profil megnyitása…"
 
 #: plugins/terminal/gb-terminal-view-actions.c:297
 msgid "Save Terminal Content As"
