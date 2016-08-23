@@ -75,7 +75,7 @@ libide/projects/ide-recent-projects.c
 libide/pygobject/ide-pygobject-script.c
 libide/runner/ide-run-manager.c
 libide/runner/ide-runner.c
-libide/runtimes/ide-run-button.c
+libide/runner/ide-run-button.c
 libide/runtimes/ide-runtime-manager.c
 libide/scripting/ide-script.c
 libide/search/ide-omni-search-display.c
