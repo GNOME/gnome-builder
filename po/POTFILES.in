@@ -75,6 +75,7 @@ libide/projects/ide-recent-projects.c
 libide/pygobject/ide-pygobject-script.c
 libide/runner/ide-run-manager.c
 libide/runner/ide-runner.c
+libide/runtimes/ide-run-button.c
 libide/runtimes/ide-runtime-manager.c
 libide/scripting/ide-script.c
 libide/search/ide-omni-search-display.c
@@ -157,7 +158,6 @@ plugins/project-tree/gb-rename-file-popover.c
 plugins/project-tree/gb-rename-file-popover.ui
 plugins/project-tree/gtk/menus.ui
 plugins/python-pack/ide-python-format-provider.c
-plugins/run-tools/gbp-run-workbench-addin.c
 plugins/support/gtk/menus.ui
 plugins/support/ide-support-application-addin.c
 plugins/symbol-tree/symbol-tree-panel.c
