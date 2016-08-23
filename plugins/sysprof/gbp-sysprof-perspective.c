@@ -31,63 +31,15 @@ struct _GbpSysprofPerspective
   SpCallgraphView *callgraph_view;
 };
 
-enum {
-  PROP_0,
-  N_PROPS
-};
-
 static void perspective_iface_init (IdePerspectiveInterface *iface);
 
 G_DEFINE_TYPE_EXTENDED (GbpSysprofPerspective, gbp_sysprof_perspective, GTK_TYPE_BIN, 0,
                         G_IMPLEMENT_INTERFACE (IDE_TYPE_PERSPECTIVE, perspective_iface_init))
 
-static GParamSpec *properties [N_PROPS];
-
-static void
-gbp_sysprof_perspective_finalize (GObject *object)
-{
-  G_OBJECT_CLASS (gbp_sysprof_perspective_parent_class)->finalize (object);
-}
-
-static void
-gbp_sysprof_perspective_get_property (GObject    *object,
-                                      guint       prop_id,
-                                      GValue     *value,
-                                      GParamSpec *pspec)
-{
-  GbpSysprofPerspective *self = GBP_SYSPROF_PERSPECTIVE (object);
-
-  switch (prop_id)
-    {
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-    }
-}
-
-static void
-gbp_sysprof_perspective_set_property (GObject      *object,
-                                      guint         prop_id,
-                                      const GValue *value,
-                                      GParamSpec   *pspec)
-{
-  GbpSysprofPerspective *self = GBP_SYSPROF_PERSPECTIVE (object);
-
-  switch (prop_id)
-    {
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-    }
-}
-
 static void
 gbp_sysprof_perspective_class_init (GbpSysprofPerspectiveClass *klass)
 {
-  GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
-
-  object_class->finalize = gbp_sysprof_perspective_finalize;
-  object_class->get_property = gbp_sysprof_perspective_get_property;
-  object_class->set_property = gbp_sysprof_perspective_set_property;
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/plugins/sysprof-plugin/gbp-sysprof-perspective.ui");
   gtk_widget_class_bind_template_child (widget_class, GbpSysprofPerspective, callgraph_view);
