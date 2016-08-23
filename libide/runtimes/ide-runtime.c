@@ -175,10 +175,14 @@ ide_runtime_real_create_runner (IdeRuntime     *self,
 {
   g_autofree gchar *name = NULL;
   g_autofree gchar *binpath = NULL;
+  g_autofree gchar *schemadir = NULL;
+  g_autofree gchar *parentpath = NULL;
   g_autoptr(GFile) installdir = NULL;
+  g_autoptr(GFile) parentdir = NULL;
   g_autoptr(GFile) bin = NULL;
   IdeContext *context;
   IdeRunner *runner;
+  IdeEnvironment *env;
   gchar *slash;
 
   g_assert (IDE_IS_RUNTIME (self));
@@ -203,6 +207,18 @@ ide_runtime_real_create_runner (IdeRuntime     *self,
       gchar *tmp = g_strdup (slash + 1);
       g_free (name);
       name = tmp;
+    }
+
+  /* GSettings requires an env var for non-standard dirs */
+  parentdir = g_file_get_parent (installdir);
+  if (parentdir)
+    {
+      parentpath = g_file_get_path (parentdir);
+      schemadir = g_build_filename (parentpath, "share",
+                                "glib-2.0", "schemas", NULL);
+
+      env = ide_runner_get_environment (runner);
+      ide_environment_setenv (env, "GSETTINGS_SCHEMA_DIR", schemadir);
     }
 
   bin = g_file_get_child (installdir, name);
