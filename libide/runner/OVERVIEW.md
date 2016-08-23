@@ -87,3 +87,14 @@ So it might need to do something like:
 
   runner.prepend_argv('sysprof-spawner')
 
+
+## RunHandlers
+
+Because we want one runner at a time, and different plugins might implement
+different runners (debugger, profiler, basic run support), we register
+a run handler.
+
+When ide_run_manager_run_async() is called, the run handler will be called
+and it can adjust things as necessary.
+
+

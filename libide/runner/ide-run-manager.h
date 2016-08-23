@@ -21,22 +21,50 @@
 
 #include "ide-object.h"
 
+#include "buildsystem/ide-build-target.h"
+#include "runner/ide-runner.h"
+
 G_BEGIN_DECLS
 
 #define IDE_TYPE_RUN_MANAGER (ide_run_manager_get_type())
 
 G_DECLARE_FINAL_TYPE (IdeRunManager, ide_run_manager, IDE, RUN_MANAGER, IdeObject)
 
-void     ide_run_manager_cancel     (IdeRunManager        *self);
-gboolean ide_run_manager_get_busy   (IdeRunManager        *self);
-void     ide_run_manager_run_async  (IdeRunManager        *self,
-                                     IdeBuildTarget       *build_target,
-                                     GCancellable         *cancellable,
-                                     GAsyncReadyCallback   callback,
-                                     gpointer              user_data);
-gboolean ide_run_manager_run_finish (IdeRunManager        *self,
-                                     GAsyncResult         *result,
-                                     GError              **error);
+typedef void (*IdeRunHandler) (IdeRunManager *self,
+                               IdeRunner     *runner,
+                               gpointer       user_data);
+
+IdeBuildTarget *ide_run_manager_get_build_target               (IdeRunManager        *self);
+void            ide_run_manager_cancel                         (IdeRunManager        *self);
+gboolean        ide_run_manager_get_busy                       (IdeRunManager        *self);
+const gchar    *ide_run_manager_get_handler                    (IdeRunManager        *self);
+void            ide_run_manager_set_handler                    (IdeRunManager        *self,
+                                                                const gchar          *id);
+void            ide_run_manager_add_handler                    (IdeRunManager        *self,
+                                                                const gchar          *id,
+                                                                const gchar          *title,
+                                                                const gchar          *icon_name,
+                                                                const gchar          *accel,
+                                                                IdeRunHandler         run_handler,
+                                                                gpointer              user_data,
+                                                                GDestroyNotify        user_data_destroy);
+void            ide_run_manager_remove_handler                 (IdeRunManager        *self,
+                                                                const gchar          *id);
+void            ide_run_manager_run_async                      (IdeRunManager        *self,
+                                                                IdeBuildTarget       *build_target,
+                                                                GCancellable         *cancellable,
+                                                                GAsyncReadyCallback   callback,
+                                                                gpointer              user_data);
+gboolean        ide_run_manager_run_finish                     (IdeRunManager        *self,
+                                                                GAsyncResult         *result,
+                                                                GError              **error);
+void            ide_run_manager_discover_default_target_async  (IdeRunManager        *self,
+                                                                GCancellable         *cancellable,
+                                                                GAsyncReadyCallback   callback,
+                                                                gpointer              user_data);
+IdeBuildTarget *ide_run_manager_discover_default_target_finish (IdeRunManager        *self,
+                                                                GAsyncResult        *result,
+                                                                GError              **error);
 
 G_END_DECLS
 

@@ -377,6 +377,7 @@ libide_1_0_la_SOURCES =                                   \
 	preferences/ide-preferences-page-private.h        \
 	preferences/ide-preferences-perspective.c         \
 	preferences/ide-preferences-perspective.h         \
+	runner/ide-run-manager-private.h                  \
 	search/ide-search-reducer.c                       \
 	snippets/ide-source-snippet-completion-item.c     \
 	snippets/ide-source-snippet-completion-item.h     \
