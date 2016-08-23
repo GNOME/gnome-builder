@@ -94,15 +94,23 @@ ide_gca_service_get_bus (IdeGcaService  *self,
 static const gchar *
 remap_language (const gchar *lang_id)
 {
-  if (!lang_id)
+  static GHashTable *remap;
+
+  if (lang_id == NULL)
     return NULL;
 
-  if (g_str_equal (lang_id, "chdr") ||
-      g_str_equal (lang_id, "objc") ||
-      g_str_equal (lang_id, "cpp"))
-    return "c";
+  if (remap == NULL)
+    {
+      remap = g_hash_table_new (g_str_hash, g_str_equal);
+#define ADD_REMAP(key,val) g_hash_table_insert (remap, (gchar *)key, (gchar *)val)
+      ADD_REMAP ("chdr", "c");
+      ADD_REMAP ("cpp", "c");
+      ADD_REMAP ("objc", "c");
+      ADD_REMAP ("scss", "css");
+#undef ADD_REMAP
+    }
 
-  return lang_id;
+  return g_hash_table_lookup (remap, lang_id);
 }
 
 static void
