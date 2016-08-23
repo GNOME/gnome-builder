@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="GbpSysprofPerspective" parent="GtkBin">
+    <child>
+      <object class="GtkStack">
+        <property name="visible">true</property>
+        <child>
+          <object class="SpCallgraphView" id="callgraph_view">
+            <property name="visible">true</property>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

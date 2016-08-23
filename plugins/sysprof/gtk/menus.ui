@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<interface>
+  <menu id="gear-menu">
+    <section id="gear-menu-open-section">
+      <item>
+        <attribute name="label" translatable="yes">Open Profile…</attribute>
+        <attribute name="action">profiler.open-profile</attribute>
+      </item>
+    </section>
+  </menu>
+</interface>

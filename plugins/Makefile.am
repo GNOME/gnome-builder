@@ -31,6 +31,7 @@ SUBDIRS = \
 	support \
 	symbol-tree \
 	sysmon \
+	sysprof \
 	terminal \
 	todo \
 	vala-pack \

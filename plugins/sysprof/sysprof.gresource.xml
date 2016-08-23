@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+  <gresource prefix="/org/gnome/builder/plugins/sysprof-plugin">
+    <file>gtk/menus.ui</file>
+    <file>gbp-sysprof-perspective.ui</file>
+  </gresource>
+</gresources>

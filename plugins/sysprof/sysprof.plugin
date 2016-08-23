@@ -1,0 +1,7 @@
+[Plugin]
+Module=sysprof-plugin
+Name=Sysprof
+Description=Integration with the Sysprof system profiler
+Authors=Christian Hergert <christian@hergert.me>
+Copyright=Copyright © 2016 Christian Hergert
+Builtin=true

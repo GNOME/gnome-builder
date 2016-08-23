@@ -308,6 +308,7 @@ m4_include([plugins/run-tools/configure.ac])
 m4_include([plugins/support/configure.ac])
 m4_include([plugins/symbol-tree/configure.ac])
 m4_include([plugins/sysmon/configure.ac])
+m4_include([plugins/sysprof/configure.ac])
 m4_include([plugins/todo/configure.ac])
 m4_include([plugins/terminal/configure.ac])
 m4_include([plugins/vala-pack/configure.ac])
@@ -595,6 +596,7 @@ echo "  Python Language Pack ................. : ${enable_python_pack_plugin}"
 echo "  Run Tools ............................ : ${enable_run_tools_plugin}"
 echo "  Support .............................. : ${enable_support_plugin}"
 echo "  System Monitor ....................... : ${enable_sysmon_plugin}"
+echo "  Sysprof System Profiler .............. : ${enable_sysprof_plugin}"
 echo "  Symbol Tree .......................... : ${enable_symbol_tree_plugin}"
 echo "  Todo ................................. : ${enable_todo_plugin}"
 echo "  Terminal ............................. : ${enable_terminal_plugin}"
