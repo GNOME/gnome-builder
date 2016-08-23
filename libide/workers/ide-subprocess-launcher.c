@@ -180,6 +180,11 @@ ide_subprocess_launcher_real_spawn_async (IdeSubprocessLauncher *self,
   g_assert (IDE_IS_SUBPROCESS_LAUNCHER (self));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
+  /*
+   * TODO: Adding threads here doesn't really make things any easier.
+   *       We should just spawn synchronously in the current thread.
+   */
+
   task = g_task_new (self, cancellable, callback, user_data);
   g_task_run_in_thread (task, ide_subprocess_launcher_spawn_worker);
 }
