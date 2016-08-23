@@ -61,93 +61,6 @@ failure:
   IDE_EXIT;
 }
 
-static IdeBuildTarget *
-find_best_target (GPtrArray *targets)
-{
-  IdeBuildTarget *ret = NULL;
-  guint i;
-
-  g_assert (targets != NULL);
-
-  for (i = 0; i < targets->len; i++)
-    {
-      IdeBuildTarget *target = g_ptr_array_index (targets, i);
-      g_autoptr(GFile) installdir = NULL;
-
-      installdir = ide_build_target_get_install_directory (target);
-
-      if (installdir == NULL)
-        continue;
-
-      if (ret == NULL)
-        ret = target;
-
-      /* TODO: Compare likelyhood of primary binary */
-    }
-
-  return ret;
-}
-
-static void
-gbp_run_workbench_addin_get_build_targets_cb (GObject      *object,
-                                              GAsyncResult *result,
-                                              gpointer      user_data)
-{
-  IdeBuildSystem *build_system = (IdeBuildSystem *)object;
-  GbpRunWorkbenchAddin *self;
-  g_autoptr(GPtrArray) targets = NULL;
-  g_autoptr(GTask) task = user_data;
-  IdeBuildTarget *best_match;
-  IdeRunManager *run_manager;
-  GCancellable *cancellable;
-  IdeContext *context;
-  GError *error = NULL;
-
-  IDE_ENTRY;
-
-  g_assert (IDE_IS_BUILD_SYSTEM (build_system));
-  g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (G_IS_TASK (task));
-
-  self = g_task_get_source_object (task);
-  cancellable = g_task_get_cancellable (task);
-
-  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
-  g_assert (GBP_IS_RUN_WORKBENCH_ADDIN (self));
-  g_assert (IDE_IS_WORKBENCH (self->workbench));
-
-  targets = ide_build_system_get_build_targets_finish (build_system, result, &error);
-
-  if (targets == NULL)
-    {
-      g_task_return_error (task, error);
-      IDE_EXIT;
-    }
-
-  best_match = find_best_target (targets);
-
-  if (best_match == NULL)
-    {
-      g_task_return_new_error (task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_FAILED,
-                               "%s",
-                               _("Failed to locate build target"));
-      IDE_EXIT;
-    }
-
-  context = ide_workbench_get_context (self->workbench);
-  run_manager = ide_context_get_run_manager (context);
-
-  ide_run_manager_run_async (run_manager,
-                             best_match,
-                             cancellable,
-                             gbp_run_workbench_addin_run_cb,
-                             g_steal_pointer (&task));
-
-  IDE_EXIT;
-}
-
 static void
 gbp_run_workbench_addin_run (GSimpleAction *action,
                              GVariant      *param,
@@ -155,7 +68,7 @@ gbp_run_workbench_addin_run (GSimpleAction *action,
 {
   GbpRunWorkbenchAddin *self = user_data;
   g_autoptr(GTask) task = NULL;
-  IdeBuildSystem *build_system;
+  IdeRunManager *run_manager;
   IdeContext *context;
 
   IDE_ENTRY;
@@ -164,15 +77,16 @@ gbp_run_workbench_addin_run (GSimpleAction *action,
   g_assert (GBP_IS_RUN_WORKBENCH_ADDIN (self));
 
   context = ide_workbench_get_context (self->workbench);
-  build_system = ide_context_get_build_system (context);
+  run_manager = ide_context_get_run_manager (context);
 
   task = g_task_new (self, NULL, NULL, NULL);
   g_task_set_source_tag (task, gbp_run_workbench_addin_run);
 
-  ide_build_system_get_build_targets_async (build_system,
-                                            NULL,
-                                            gbp_run_workbench_addin_get_build_targets_cb,
-                                            g_steal_pointer (&task));
+  ide_run_manager_run_async (run_manager,
+                             NULL,
+                             NULL,
+                             gbp_run_workbench_addin_run_cb,
+                             g_steal_pointer (&task));
 
   IDE_EXIT;
 }
@@ -205,10 +119,8 @@ gbp_run_workbench_addin_load (IdeWorkbenchAddin *addin,
 {
   GbpRunWorkbenchAddin *self = (GbpRunWorkbenchAddin *)addin;
   g_autoptr(GSimpleActionGroup) group = NULL;
-  IdeWorkbenchHeaderBar *headerbar;
   IdeRunManager *run_manager;
   IdeContext *context;
-  GtkWidget *button;
   static const GActionEntry entries[] = {
     { "run", gbp_run_workbench_addin_run },
     { "stop", gbp_run_workbench_addin_stop },
@@ -221,33 +133,6 @@ gbp_run_workbench_addin_load (IdeWorkbenchAddin *addin,
 
   context = ide_workbench_get_context (workbench);
   run_manager = ide_context_get_run_manager (context);
-
-  headerbar = ide_workbench_get_headerbar (workbench);
-
-  button = g_object_new (GTK_TYPE_BUTTON,
-                         "action-name", "run-tools.run",
-                         "focus-on-click", FALSE,
-                         "child", g_object_new (GTK_TYPE_IMAGE,
-                                                "icon-name", "media-playback-start-symbolic",
-                                                "visible", TRUE,
-                                                NULL),
-                         "tooltip-text", _("Run project"),
-                         NULL);
-  g_object_bind_property (run_manager, "busy", button, "visible", G_BINDING_SYNC_CREATE | G_BINDING_INVERT_BOOLEAN);
-  ide_widget_add_style_class (button, "image-button");
-  ide_workbench_header_bar_insert_right (headerbar, button, GTK_PACK_START, 0);
-
-  button = g_object_new (GTK_TYPE_BUTTON,
-                         "action-name", "run-tools.stop",
-                         "focus-on-click", FALSE,
-                         "child", g_object_new (GTK_TYPE_IMAGE,
-                                                "icon-name", "media-playback-stop-symbolic",
-                                                "visible", TRUE,
-                                                NULL),
-                         NULL);
-  g_object_bind_property (run_manager, "busy", button, "visible", G_BINDING_SYNC_CREATE);
-  ide_widget_add_style_class (button, "image-button");
-  ide_workbench_header_bar_insert_right (headerbar, button, GTK_PACK_START, 0);
 
   group = g_simple_action_group_new ();
   g_action_map_add_action_entries (G_ACTION_MAP (group), entries, G_N_ELEMENTS (entries), self);
