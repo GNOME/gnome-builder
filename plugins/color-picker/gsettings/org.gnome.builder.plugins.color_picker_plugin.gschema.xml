@@ -10,30 +10,30 @@
   <schema id="org.gnome.builder.plugins.color_picker_plugin.components" path="/org/gnome/builder/plugins/color_picker_plugin/components/" gettext-domain="gnome-builder">
     <key name="hsv-visible" type="b">
       <default>true</default>
-      <summary>hsv visibility</summary>
+      <summary>HSV visibility</summary>
       <description>If the HSV components are visible.</description>
     </key>
     <key name="lab-visible" type="b">
       <default>true</default>
-      <summary>lab visibility</summary>
+      <summary>LAB visibility</summary>
       <description>If the LAB components are visible.</description>
     </key>
     <key name="rgb-visible" type="b">
       <default>true</default>
-      <summary>rgb visibility</summary>
+      <summary>RGB visibility</summary>
       <description>If the RGB components are visible.</description>
     </key>
     <key name="rgb-unit" type="s">
       <default>"percent"</default>
-      <summary>rgb unit</summary>
-      <description>The unit use by RGb component and strings.</description>
+      <summary>RGB unit</summary>
+      <description>The unit used by RGB component and strings.</description>
     </key>
   </schema>
   <schema id="org.gnome.builder.plugins.color_picker_plugin" path="/org/gnome/builder/plugins/color_picker_plugin/" gettext-domain="gnome-builder">
     <key name="selected-palette-id" type="s">
       <default>""</default>
-      <summary>Selected palette id</summary>
-      <description>The selected palette id amongst the loaded ones.</description>
+      <summary>Selected palette ID</summary>
+      <description>The selected palette ID among the loaded ones.</description>
     </key>
     <key name="strings-visible" flags="org.gnome.builder.plugins.color_picker_plugin.StringsVisible">
       <default>['hex3', 'hex6', 'rgb', 'rgba', 'hsl', 'hsla']</default>
@@ -42,7 +42,7 @@
     </key>
     <key name="filter" type="s">
       <default>"none"</default>
-      <summary>color filter</summary>
+      <summary>Color filter</summary>
       <description>The filter used on the color scales and color plane.</description>
     </key>
   </schema>

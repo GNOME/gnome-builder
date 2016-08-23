@@ -28,7 +28,7 @@
     <key name="projects-directory" type="s">
       <default>"Projects"</default>
       <summary>Projects directory</summary>
-      <description>Directory for all builder projects</description>
+      <description>Directory for all Builder projects.</description>
     </key>
     <key name="restore-previous-files" type="b">
       <default>true</default>
