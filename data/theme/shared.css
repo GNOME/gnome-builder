@@ -231,3 +231,8 @@ textview border.left {
 treeview.dim-label {
   color: alpha(currentColor, 0.5);
 }
+
+
+button.run-arrow-button {
+  min-width: 12px;
+}

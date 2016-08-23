@@ -75,6 +75,7 @@
     <file compressed="true" alias="ide-preferences-perspective.ui">../preferences/ide-preferences-perspective.ui</file>
     <file compressed="true" alias="ide-preferences-spin-button.ui">../preferences/ide-preferences-spin-button.ui</file>
     <file compressed="true" alias="ide-preferences-switch.ui">../preferences/ide-preferences-switch.ui</file>
+    <file compressed="true" alias="ide-run-button.ui">../runner/ide-run-button.ui</file>
     <file compressed="true" alias="ide-shortcuts-window.ui">../keybindings/ide-shortcuts-window.ui</file>
     <file compressed="true" alias="ide-workbench-header-bar.ui">../workbench/ide-workbench-header-bar.ui</file>
     <file compressed="true" alias="ide-workbench.ui">../workbench/ide-workbench.ui</file>

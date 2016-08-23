@@ -89,6 +89,7 @@ libide_1_0_la_public_headers =                            \
 	projects/ide-project-miner.h                      \
 	projects/ide-project.h                            \
 	projects/ide-recent-projects.h                    \
+	runner/ide-run-button.h                           \
 	runner/ide-run-manager.h                          \
 	runner/ide-runner.h                               \
 	runner/ide-runner-addin.h                         \
@@ -240,6 +241,7 @@ libide_1_0_la_public_sources =                            \
 	projects/ide-project-miner.c                      \
 	projects/ide-project.c                            \
 	projects/ide-recent-projects.c                    \
+	runner/ide-run-button.c                           \
 	runner/ide-run-manager.c                          \
 	runner/ide-runner.c                               \
 	runner/ide-runner-addin.c                         \

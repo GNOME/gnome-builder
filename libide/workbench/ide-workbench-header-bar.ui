@@ -25,6 +25,15 @@
         <property name="spacing">30</property>
         <property name="visible">true</property>
         <child>
+          <object class="IdeRunButton">
+            <property name="visible">true</property>
+          </object>
+          <packing>
+            <property name="priority">0</property>
+            <property name="pack-type">start</property>
+          </packing>
+        </child>
+        <child>
           <object class="GtkMenuButton" id="menu_button">
             <property name="tooltip-text" translatable="yes">Show workbench menu</property>
             <property name="focus-on-click">false</property>
