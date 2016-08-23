@@ -996,7 +996,7 @@ gstyle_palette_set_id (GstylePalette *self,
   if (gstyle_str_empty0 (id))
     {
       num_id = g_get_real_time ();
-      self->id = g_strdup_printf ("gb-cp-%lu", num_id);
+      self->id = g_strdup_printf ("gb-cp-%"G_GINT64_FORMAT, num_id);
       gstyle_palette_set_changed (self, TRUE);
     }
   else if (g_strcmp0 (self->id, id) != 0)
