@@ -1,7 +1,10 @@
 m4_define(sysprof_required_version, [3.20.1])
 
-PKG_CHECK_MODULES(SYSPROF, [sysprof-2 >= sysprof_required_version
-			    sysprof-ui-2 >= sysprof_required_version])
+PKG_CHECK_MODULES(SYSPROF,
+                  [sysprof-2 >= sysprof_required_version
+                   sysprof-ui-2 >= sysprof_required_version],
+                  [have_sysprof_ui=yes],
+                  [have_sysprof_ui=no])
 
 # --enable-sysprof-plugin=yes/no
 AC_ARG_ENABLE([sysprof-plugin],
@@ -12,6 +15,10 @@ AC_ARG_ENABLE([sysprof-plugin],
 
 AS_IF([test x$enable_sysprof_plugin = xyes && test x$have_sysprof_ui = xno],[
        AC_MSG_ERROR([Failed to locate sysprof-ui dependencies. Try installing Sysprof with GTK support.])
+])
+
+AS_IF([test x$have_sysprof_ui = xno],[
+       enable_sysprof_plugin=no
 ])
 
 # for if ENABLE_SYSPROF_PLUGIN in Makefile.am
