@@ -47,6 +47,11 @@ enum {
   N_PROPS
 };
 
+enum {
+  SPAWNED,
+  N_SIGNALS
+};
+
 static void ide_runner_tick_posthook (GTask *task);
 static void ide_runner_tick_prehook  (GTask *task);
 static void ide_runner_tick_run      (GTask *task);
@@ -54,6 +59,7 @@ static void ide_runner_tick_run      (GTask *task);
 G_DEFINE_TYPE_WITH_PRIVATE (IdeRunner, ide_runner, IDE_TYPE_OBJECT)
 
 static GParamSpec *properties [N_PROPS];
+static guint signals [N_SIGNALS];
 
 static IdeRunnerAddin *
 pop_runner_addin (GSList **list)
@@ -135,6 +141,7 @@ ide_runner_real_run_async (IdeRunner           *self,
   g_autoptr(GTask) task = NULL;
   g_autoptr(IdeSubprocessLauncher) launcher = NULL;
   g_autoptr(GSubprocess) subprocess = NULL;
+  const gchar *identifier;
   GError *error = NULL;
 
   IDE_ENTRY;
@@ -161,6 +168,10 @@ ide_runner_real_run_async (IdeRunner           *self,
       g_task_return_error (task, error);
       IDE_GOTO (failure);
     }
+
+  identifier = g_subprocess_get_identifier (subprocess);
+
+  g_signal_emit (self, signals [SPAWNED], 0, identifier);
 
   g_subprocess_wait_async (subprocess,
                            cancellable,
@@ -316,6 +327,18 @@ ide_runner_class_init (IdeRunnerClass *klass)
                         (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
+
+  signals [SPAWNED] =
+    g_signal_new ("spawned",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  0,
+                  NULL,
+                  NULL,
+                  NULL,
+                  G_TYPE_NONE,
+                  1,
+                  G_TYPE_STRING);
 }
 
 static void
