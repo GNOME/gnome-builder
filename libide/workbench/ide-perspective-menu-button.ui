@@ -2,7 +2,7 @@
 <interface>
   <object class="GtkPopover" id="popover">
     <style>
-      <class name="perspectives-selector"/>
+      <class name="popover-selector"/>
     </style>
     <child>
       <object class="GtkListBox" id="list_box">
