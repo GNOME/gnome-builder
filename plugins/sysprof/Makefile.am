@@ -23,6 +23,7 @@ nodist_libsysprof_plugin_la_SOURCES = \
 
 libsysprof_plugin_la_CFLAGS = $(PLUGIN_CFLAGS) $(SYSPROF_CFLAGS)
 libsysprof_plugin_la_LIBADD = $(PLUGIN_LIBS) $(SYSPROF_LIBS)
+libsysprof_plugin_la_LDFLAGS = $(PLUGIN_LDFLAGS) $(SYSPROF_LDFLAGS)
 
 glib_resources_c = gbp-sysprof-resources.c
 glib_resources_h = gbp-sysprof-resources.h
