@@ -101,7 +101,7 @@ ide_project_create_id (IdeProject *self)
 {
   g_assert (IDE_IS_PROJECT (self));
 
-  return g_strdelimit (g_strdup (self->name), " /|<>", '-');
+  return g_strdelimit (g_strdup (self->name), " /|<>\n\t", '-');
 }
 
 const gchar *
