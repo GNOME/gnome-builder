@@ -441,7 +441,7 @@ ide_makecache_open_temp (IdeMakecache  *self,
 {
   IdeContext *context;
   IdeProject *project;
-  const gchar *project_name;
+  const gchar *project_id;
   g_autofree gchar *name = NULL;
   g_autofree gchar *path = NULL;
   g_autofree gchar *directory = NULL;
@@ -457,7 +457,7 @@ ide_makecache_open_temp (IdeMakecache  *self,
 
   context = ide_object_get_context (IDE_OBJECT (self));
   project = ide_context_get_project (context);
-  project_name = ide_project_get_name (project);
+  project_id = ide_project_get_id (project);
 
   directory = g_build_filename (g_get_user_cache_dir (),
                                 ide_get_program_name (),
@@ -476,7 +476,7 @@ ide_makecache_open_temp (IdeMakecache  *self,
     }
 
   now = time (NULL);
-  name = g_strdup_printf ("%s.makecache.tmp-%u", project_name, (guint)now);
+  name = g_strdup_printf ("%s.makecache.tmp-%u", project_id, (guint)now);
   path = g_build_filename (directory, name, NULL);
 
   g_debug ("Creating temporary makecache at \"%s\"", path);
@@ -508,7 +508,7 @@ ide_makecache_new_worker (GTask        *task,
   IdeMakecache *self = source_object;
   IdeContext *context;
   IdeProject *project;
-  const gchar *project_name;
+  const gchar *project_id;
   g_autofree gchar *name_used = NULL;
   g_autofree gchar *name = NULL;
   g_autofree gchar *cache_path = NULL;
@@ -549,8 +549,8 @@ ide_makecache_new_worker (GTask        *task,
 
   context = ide_object_get_context (IDE_OBJECT (self));
   project = ide_context_get_project (context);
-  project_name = ide_project_get_name (project);
-  name = g_strdup_printf ("%s.makecache", project_name);
+  project_id = ide_project_get_id (project);
+  name = g_strdup_printf ("%s.makecache", project_id);
   cache_path = g_build_filename (g_get_user_cache_dir (),
                                  ide_get_program_name (),
                                  "makecache",

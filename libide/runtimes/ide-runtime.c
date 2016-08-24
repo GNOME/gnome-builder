@@ -150,19 +150,19 @@ ide_runtime_real_prepare_configuration (IdeRuntime       *self,
   g_autofree gchar *install_path = NULL;
   IdeContext *context;
   IdeProject *project;
-  const gchar *project_name;
+  const gchar *project_id;
 
   g_assert (IDE_IS_RUNTIME (self));
   g_assert (IDE_IS_CONFIGURATION (configuration));
 
   context = ide_object_get_context (IDE_OBJECT (self));
   project = ide_context_get_project (context);
-  project_name = ide_project_get_name (project);
+  project_id = ide_project_get_id (project);
 
   install_path = g_build_filename (g_get_user_cache_dir (),
                                    "gnome-builder",
                                    "install",
-                                   project_name,
+                                   project_id,
                                    priv->id,
                                    NULL);
 

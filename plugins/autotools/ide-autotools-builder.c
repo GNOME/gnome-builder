@@ -73,7 +73,7 @@ ide_autotools_builder_get_build_directory (IdeAutotoolsBuilder *self)
   IdeProject *project;
   IdeDevice *device;
   const gchar *root_build_dir;
-  const gchar *project_name;
+  const gchar *project_id;
   const gchar *device_id;
   const gchar *system_type;
 
@@ -120,8 +120,8 @@ ide_autotools_builder_get_build_directory (IdeAutotoolsBuilder *self)
   project = ide_context_get_project (context);
   root_build_dir = ide_context_get_root_build_dir (context);
   system_type = ide_device_get_system_type (device);
-  project_name = ide_project_get_name (project);
-  path = g_build_filename (root_build_dir, project_name, device_id, system_type, NULL);
+  project_id = ide_project_get_id (project);
+  path = g_build_filename (root_build_dir, project_id, device_id, system_type, NULL);
 
   return g_file_new_for_path (path);
 }

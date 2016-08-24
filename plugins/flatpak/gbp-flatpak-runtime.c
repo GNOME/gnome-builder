@@ -53,7 +53,7 @@ get_build_directory (GbpFlatpakRuntime *self)
   return g_build_filename (g_get_user_cache_dir (),
                            "gnome-builder",
                            "builds",
-                           ide_project_get_name (project),
+                           ide_project_get_id (project),
                            "flatpak",
                            ide_runtime_get_id (IDE_RUNTIME (self)),
                            NULL);
