@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-08-23 08:48+0000\n"
-"PO-Revision-Date: 2016-08-23 12:55+0200\n"
+"POT-Creation-Date: 2016-08-23 18:42+0000\n"
+"PO-Revision-Date: 2016-08-24 10:11+0200\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Español; Castellano <gnome-es-list@gnome.org>\n"
 "Language: es\n"
@@ -582,8 +582,9 @@ msgid "Projects directory"
 msgstr "Carpeta de proyectos"
 
 #: data/gsettings/org.gnome.builder.gschema.xml:31
-msgid "Directory for all builder projects"
-msgstr "Carpeta para todos los proyectos de construcción"
+#| msgid "Directory for all builder projects"
+msgid "Directory for all Builder projects."
+msgstr "Carpeta para todos los proyectos de Builder."
 
 #: data/gsettings/org.gnome.builder.gschema.xml:35
 msgid "Restore Previous Files"
@@ -2114,7 +2115,6 @@ msgid "The script \"%s\" is not a PyGObject file."
 msgstr "El script «%s» no es un archivo de PyGObject."
 
 #: libide/runner/ide-run-manager.c:171
-#| msgid "Runtime"
 msgid "Run"
 msgstr "Ejecutar"
 
@@ -2768,44 +2768,51 @@ msgid "Colors"
 msgstr "Colores"
 
 #: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:13
-msgid "hsv visibility"
-msgstr "visibilidad hsv"
+#| msgid "Visibility:"
+msgid "HSV visibility"
+msgstr "Visibilidad HSV"
 
 #: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:14
 msgid "If the HSV components are visible."
 msgstr "Si los componentes HSV son visibles."
 
 #: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:18
-msgid "lab visibility"
-msgstr "visibilidad lab"
+#| msgid "hsv visibility"
+msgid "LAB visibility"
+msgstr "Visibilidad LAB"
 
 #: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:19
 msgid "If the LAB components are visible."
 msgstr "Si los componentes LAB son visibles."
 
 #: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:23
-msgid "rgb visibility"
-msgstr "visibilidad rgb"
+#| msgid "hsv visibility"
+msgid "RGB visibility"
+msgstr "Visibilidad RGB"
 
 #: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:24
 msgid "If the RGB components are visible."
 msgstr "Si los componentes RGB son visibles."
 
 #: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:28
-msgid "rgb unit"
-msgstr "unidad rgb"
+#| msgid "rgb unit"
+msgid "RGB unit"
+msgstr "Unidad rgb"
 
 #: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:29
-msgid "The unit use by RGb component and strings."
+#| msgid "The unit use by RGb component and strings."
+msgid "The unit used by RGB component and strings."
 msgstr "La unidad usada por componentes RGB y cadenas."
 
 #: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:35
-msgid "Selected palette id"
+#| msgid "Selected palette id"
+msgid "Selected palette ID"
 msgstr "ID de la paleta seleccionada"
 
 #: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:36
-msgid "The selected palette id amongst the loaded ones."
-msgstr "El ID de la paleta seleccionada entre las cargadas."
+#| msgid "The selected palette id amongst the loaded ones."
+msgid "The selected palette ID among the loaded ones."
+msgstr "El ID de la paleta seleccionada entre todas las cargadas."
 
 #: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:40
 msgid "Color strings visibility"
@@ -2816,8 +2823,9 @@ msgid "The visible color strings."
 msgstr "Las cadenas de color visibles."
 
 #: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:45
-msgid "color filter"
-msgstr "filtro de color"
+#| msgid "color filter"
+msgid "Color filter"
+msgstr "Filtro de color"
 
 #: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:46
 msgid "The filter used on the color scales and color plane."
@@ -3246,7 +3254,7 @@ msgstr "Activar el uso de pylint, que puede ejecutar código en su proyecto"
 msgid "pylint python lint code execute execution"
 msgstr "pylint python lint código ejecutar ejecución"
 
-#: plugins/gnome-code-assistance/ide-gca-service.c:168
+#: plugins/gnome-code-assistance/ide-gca-service.c:176
 msgid "No language specified"
 msgstr "No se ha especificado ningún lenguaje"
 
@@ -3255,8 +3263,11 @@ msgid "Enable Pylint"
 msgstr "Activar Pylint"
 
 #: plugins/gnome-code-assistance/org.gnome.builder.gnome-code-assistance.gschema.xml:6
+#| msgid ""
+#| "Enable the use of pylint to find additional diagnostics in python "
+#| "programs. This may result in the execution of code in your project."
 msgid ""
-"Enable the use of pylint to find additional diagnostics in python programs. "
+"Enable the use of pylint to find additional diagnostics in Python programs. "
 "This may result in the execution of code in your project."
 msgstr ""
 "Activar el uso de pylint, para buscar diagnósticos adicionales en programas "
@@ -3408,12 +3419,10 @@ msgid "System Monitor"
 msgstr "Monitor del sistema"
 
 #: plugins/sysprof/gbp-sysprof-perspective.c:65
-#| msgid "Build Profile"
 msgid "Profiler"
 msgstr "Perfilador"
 
 #: plugins/sysprof/gbp-sysprof-workbench-addin.c:251
-#| msgid "Open File"
 msgid "Open Profile"
 msgstr "Abrir perfil"
 
@@ -3422,17 +3431,14 @@ msgid "Sysprof Capture (*.syscap)"
 msgstr "Capturar de sysprof (*.syscap)"
 
 #: plugins/sysprof/gbp-sysprof-workbench-addin.c:265
-#| msgid "All files"
 msgid "All Files"
 msgstr "Todos los archivos"
 
 #: plugins/sysprof/gbp-sysprof-workbench-addin.c:352
-#| msgid "Build Profile"
 msgid "Profile"
 msgstr "Perfil"
 
 #: plugins/sysprof/gtk/menus.ui:6
-#| msgid "_Open File…"
 msgid "Open Profile…"
 msgstr "Abrir perfil…"
 
@@ -3460,6 +3466,12 @@ msgstr "Mostrar errores y advertencias proporcionadas por Vala"
 #: plugins/vala-pack/ide-vala-preferences-addin.vala:36
 msgid "vala diagnostics warnings errors"
 msgstr "diagnósticos de alertas y errores de Vala"
+
+#~ msgid "lab visibility"
+#~ msgstr "visibilidad lab"
+
+#~ msgid "rgb visibility"
+#~ msgstr "visibilidad rgb"
 
 #~ msgid "Failed to locate build target"
 #~ msgstr "Falló al buscar el objetivo de construcción"
