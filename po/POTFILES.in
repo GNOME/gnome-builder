@@ -133,7 +133,6 @@ plugins/create-project/gbp-create-project-tool.c
 plugins/create-project/gbp-create-project-widget.c
 plugins/create-project/gbp-create-project-widget.ui
 plugins/devhelp/gbp-devhelp-panel.c
-plugins/devhelp/gbp-devhelp-search-provider.c
 plugins/file-search/gb-file-search-provider.c
 plugins/fpaste/fpaste_plugin/gtk/menus.ui
 plugins/fpaste/fpaste_plugin/__init__.py
