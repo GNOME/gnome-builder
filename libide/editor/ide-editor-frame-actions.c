@@ -88,6 +88,20 @@ ide_editor_frame_actions_find (GSimpleAction *action,
 }
 
 static void
+ide_editor_frame_actions_search_replace (GSimpleAction *action,
+                                         GVariant      *variant,
+                                         gpointer       user_data)
+{
+  IdeEditorFrame *self = user_data;
+
+  g_assert (IDE_IS_EDITOR_FRAME (self));
+
+  gtk_widget_set_visible (GTK_WIDGET (self->replace_entry), TRUE);
+  gtk_widget_set_visible (GTK_WIDGET (self->replace_button), TRUE);
+  gtk_widget_set_visible (GTK_WIDGET (self->replace_all_button), TRUE);
+}
+
+static void
 ide_editor_frame_actions_next_search_result (GSimpleAction *action,
                                             GVariant      *variant,
                                             gpointer       user_data)
@@ -386,6 +400,7 @@ ide_editor_frame_actions_replace_confirm (GSimpleAction *action,
 
 static const GActionEntry IdeEditorFrameActions[] = {
   { "find", ide_editor_frame_actions_find, "i" },
+  { "search-replace", ide_editor_frame_actions_search_replace },
   { "next-search-result", ide_editor_frame_actions_next_search_result },
   { "previous-search-result", ide_editor_frame_actions_previous_search_result },
   { "replace-confirm", ide_editor_frame_actions_replace_confirm, "as" },

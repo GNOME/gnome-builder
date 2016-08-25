@@ -9,6 +9,8 @@
                   "clear-snippets" ()
                   "hide-completion" () };
   bind "<ctrl>f" { "action" ("frame", "find", "3") };
+  bind "<ctrl>h" { "action" ("frame", "find", "3")
+                   "action" ("frame", "search-replace", "") };
   bind "<ctrl>o" { "action" ("win", "open-with-dialog", "") };
   bind "<ctrl>s" { "action" ("view", "save", "") };
   bind "<ctrl><shift>s" { "action" ("view", "save-as", "") };
