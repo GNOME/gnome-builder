@@ -26,15 +26,24 @@
 
 struct _IdeBoxTheatric
 {
-  GObject      parent_instance;
+  GObject          parent_instance;
 
-  GtkWidget   *target;
-  GtkWidget   *toplevel;
-  GdkRectangle area;
-  GdkRectangle last_area;
-  GdkRGBA      background_rgba;
+  GtkWidget       *target;
+  GtkWidget       *toplevel;
 
-  guint        draw_handler;
+  GIcon           *icon;
+  cairo_surface_t *icon_surface;
+  guint            icon_surface_size;
+
+  GdkRectangle     area;
+  GdkRectangle     last_area;
+  GdkRGBA          background_rgba;
+  gdouble          alpha;
+
+  guint            draw_handler;
+
+  guint            background_set : 1;
+  guint            pixbuf_failed : 1;
 };
 
 enum {
@@ -42,6 +51,7 @@ enum {
   PROP_ALPHA,
   PROP_BACKGROUND,
   PROP_HEIGHT,
+  PROP_ICON,
   PROP_TARGET,
   PROP_WIDTH,
   PROP_X,
@@ -66,13 +76,15 @@ get_toplevel_rect (IdeBoxTheatric *theatric,
 }
 
 static gboolean
-on_toplevel_draw (GtkWidget     *widget,
-                  cairo_t       *cr,
-                  IdeBoxTheatric *theatric)
+on_toplevel_draw (GtkWidget      *widget,
+                  cairo_t        *cr,
+                  IdeBoxTheatric *self)
 {
   GdkRectangle area;
 
-  get_toplevel_rect (theatric, &area);
+  g_assert (IDE_IS_BOX_THEATRIC (self));
+
+  get_toplevel_rect (self, &area);
 
 #if 0
   g_print ("Drawing on %s at %d,%d %dx%d\n",
@@ -80,11 +92,66 @@ on_toplevel_draw (GtkWidget     *widget,
            area.x, area.y, area.width, area.height);
 #endif
 
-  ide_cairo_rounded_rectangle (cr, &area, 3, 3);
-  gdk_cairo_set_source_rgba (cr, &theatric->background_rgba);
-  cairo_fill (cr);
+  if (self->background_set)
+    {
+      GdkRGBA bg;
 
-  theatric->last_area = area;
+      bg = self->background_rgba;
+      bg.alpha = self->alpha;
+
+      ide_cairo_rounded_rectangle (cr, &area, 3, 3);
+      gdk_cairo_set_source_rgba (cr, &bg);
+      cairo_fill (cr);
+    }
+
+  /* Load an icon if necessary and cache the surface */
+  if (self->icon != NULL && self->icon_surface == NULL && !self->pixbuf_failed)
+    {
+      g_autoptr(GtkIconInfo) icon_info = NULL;
+      GtkIconTheme *icon_theme;
+      gint width;
+
+      width = area.width * 4;
+      icon_theme = gtk_icon_theme_get_default ();
+      icon_info = gtk_icon_theme_lookup_by_gicon (icon_theme,
+                                                  self->icon,
+                                                  width,
+                                                  GTK_ICON_LOOKUP_FORCE_SIZE);
+
+      if (icon_info != NULL)
+        {
+          GdkWindow *window = gtk_widget_get_window (widget);
+          g_autoptr(GdkPixbuf) pixbuf = NULL;
+          GtkStyleContext *context;
+
+          context = gtk_widget_get_style_context (self->target);
+          pixbuf = gtk_icon_info_load_symbolic_for_context (icon_info, context, NULL, NULL);
+
+          if (pixbuf != NULL)
+            {
+              self->icon_surface = gdk_cairo_surface_create_from_pixbuf (pixbuf, 0, window);
+              self->icon_surface_size = width;
+              self->pixbuf_failed = FALSE;
+            }
+          else
+            {
+              self->pixbuf_failed = TRUE;
+            }
+        }
+    }
+
+  if (self->icon_surface != NULL)
+    {
+      cairo_translate (cr, area.x, area.y);
+      cairo_rectangle (cr, 0, 0, area.width, area.height);
+      cairo_scale (cr,
+                   area.width / (gdouble)self->icon_surface_size,
+                   area.height / (gdouble)self->icon_surface_size);
+      cairo_set_source_surface (cr, self->icon_surface, 0, 0);
+      cairo_paint_with_alpha (cr, self->alpha);
+    }
+
+  self->last_area = area;
 
   return FALSE;
 }
@@ -137,6 +204,9 @@ ide_box_theatric_dispose (GObject *object)
       self->target = NULL;
     }
 
+  g_clear_pointer (&self->icon_surface, cairo_surface_destroy);
+  g_clear_object (&self->icon);
+
   G_OBJECT_CLASS (ide_box_theatric_parent_class)->dispose (object);
 }
 
@@ -151,7 +221,7 @@ ide_box_theatric_get_property (GObject    *object,
   switch (prop_id)
     {
     case PROP_ALPHA:
-      g_value_set_double (value, theatric->background_rgba.alpha);
+      g_value_set_double (value, theatric->alpha);
       break;
 
     case PROP_BACKGROUND:
@@ -161,6 +231,10 @@ ide_box_theatric_get_property (GObject    *object,
 
     case PROP_HEIGHT:
       g_value_set_int (value, theatric->area.height);
+      break;
+
+    case PROP_ICON:
+      g_value_set_object (value, theatric->icon);
       break;
 
     case PROP_TARGET:
@@ -195,21 +269,36 @@ ide_box_theatric_set_property (GObject      *object,
   switch (prop_id)
     {
     case PROP_ALPHA:
-      theatric->background_rgba.alpha = g_value_get_double (value);
+      theatric->alpha = g_value_get_double (value);
       break;
 
     case PROP_BACKGROUND:
       {
-        gdouble old_alpha = theatric->background_rgba.alpha;
+        const gchar *str = g_value_get_string (value);
 
-        gdk_rgba_parse (&theatric->background_rgba,
-                        g_value_get_string (value));
-        theatric->background_rgba.alpha = old_alpha;
+        if (str == NULL)
+          {
+            gdk_rgba_parse (&theatric->background_rgba, "#000000");
+            theatric->background_rgba.alpha = 0;
+            theatric->background_set = FALSE;
+          }
+        else
+          {
+            gdk_rgba_parse (&theatric->background_rgba, str);
+            theatric->background_set = TRUE;
+          }
       }
       break;
 
     case PROP_HEIGHT:
       theatric->area.height = g_value_get_int (value);
+      break;
+
+    case PROP_ICON:
+      g_clear_pointer (&theatric->icon_surface, cairo_surface_destroy);
+      g_clear_object (&theatric->icon);
+      theatric->icon = g_value_dup_object (value);
+      theatric->pixbuf_failed = FALSE;
       break;
 
     case PROP_TARGET:
@@ -278,6 +367,13 @@ ide_box_theatric_class_init (IdeBoxTheatricClass *klass)
                       G_MAXINT,
                       0,
                       (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_ICON] =
+    g_param_spec_object ("icon",
+                         "Icon",
+                         "The GIcon to render over the background",
+                         G_TYPE_ICON,
+                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   properties[PROP_TARGET] =
     g_param_spec_object ("target",
