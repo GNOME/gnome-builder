@@ -10,7 +10,7 @@
                   "hide-completion" () };
   bind "<ctrl>f" { "action" ("frame", "find", "3") };
   bind "<ctrl>h" { "action" ("frame", "find", "3")
-                   "action" ("frame", "search-replace", "") };
+                   "action" ("frame", "search-replace", "false") };
   bind "<ctrl>o" { "action" ("win", "open-with-dialog", "") };
   bind "<ctrl>s" { "action" ("view", "save", "") };
   bind "<ctrl><shift>s" { "action" ("view", "save-as", "") };
@@ -57,8 +57,16 @@
   bind "<ctrl><alt>i" { "reindent" () };
 }
 
+@binding-set search-entries {
+  bind "<ctrl>h" { "action" ("frame", "search-replace", "true") };
+}
+
 idesourceviewmode.default {
   -gtk-key-bindings: default-ide-source-view;
+}
+
+.gb-search-frame .search {
+  -gtk-key-bindings: search-entries;
 }
 
 treeview.project-tree {
