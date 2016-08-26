@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-08-23 20:38+0200\n"
-"PO-Revision-Date: 2016-08-23 20:39+0200\n"
+"POT-Creation-Date: 2016-08-26 13:56+0200\n"
+"PO-Revision-Date: 2016-08-26 13:58+0200\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <community-poland@mozilla.org>\n"
 "Language: pl\n"
@@ -1363,11 +1363,11 @@ msgstr "Zainicjowanie wartości domyślnych się nie powiodło."
 msgid "You must call %s() before using libide."
 msgstr "Należy wywołać funkcję %s() przed użyciem biblioteki libide."
 
-#: libide/ide-context.c:1863
+#: libide/ide-context.c:1870
 msgid "An unload request is already pending"
 msgstr "Żądanie usunięcia z pamięci jest już wykonywane"
 
-#: libide/ide-context.c:1982
+#: libide/ide-context.c:1989
 msgid "Context has already been restored."
 msgstr "Kontekst został już przywrócony."
 
@@ -2174,6 +2174,10 @@ msgstr "Zmień „%s” na „%s”"
 msgid "Apply Fix-It"
 msgstr "Zastosuj „Fix-It”"
 
+#: libide/transfers/ide-transfers-button.ui:33
+msgid "Clear _All"
+msgstr "Wy_czyść wszystko"
+
 #: libide/util/ide-file-manager.c:64
 msgid "File path is NULL"
 msgstr "Ścieżka pliku wynosi NULL"
@@ -2350,11 +2354,15 @@ msgstr "Otwarcie pliku"
 msgid "%s - Builder"
 msgstr "%s — Builder"
 
-#: libide/workbench/ide-workbench-header-bar.ui:38
+#: libide/workbench/ide-workbench-header-bar.ui:43
+msgid "Transfers"
+msgstr "Przesyłanie"
+
+#: libide/workbench/ide-workbench-header-bar.ui:50
 msgid "Show workbench menu"
 msgstr "Wyświetla menu główne"
 
-#: libide/workbench/ide-workbench-header-bar.ui:59
+#: libide/workbench/ide-workbench-header-bar.ui:73
 msgid "Press Ctrl+. to search"
 msgstr "Ctrl+. wyszukuje"
 
@@ -3154,7 +3162,6 @@ msgid "Select a Template"
 msgstr "Wybór szablonu"
 
 #: plugins/devhelp/gbp-devhelp-panel.c:194
-#: plugins/devhelp/gbp-devhelp-search-provider.c:127
 msgid "Documentation"
 msgstr "Dokumentacja"
 
@@ -3251,7 +3258,7 @@ msgstr "Użycie programu pylint, który może wykonywać kod w projekcie"
 msgid "pylint python lint code execute execution"
 msgstr "pylint python lint kod wykonaj wykonywanie"
 
-#: plugins/gnome-code-assistance/ide-gca-service.c:168
+#: plugins/gnome-code-assistance/ide-gca-service.c:176
 msgid "No language specified"
 msgstr "Nie podano żadnego języka"
 
