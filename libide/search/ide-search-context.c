@@ -20,6 +20,7 @@
 
 #include "ide-debug.h"
 
+#include "application/ide-application.h"
 #include "search/ide-search-context.h"
 #include "search/ide-search-provider.h"
 #include "search/ide-search-result.h"
@@ -59,6 +60,7 @@ void
 ide_search_context_provider_completed (IdeSearchContext  *self,
                                        IdeSearchProvider *provider)
 {
+  g_return_if_fail (IDE_IS_MAIN_THREAD ());
   g_return_if_fail (IDE_IS_SEARCH_CONTEXT (self));
   g_return_if_fail (IDE_IS_SEARCH_PROVIDER (provider));
   g_return_if_fail (g_list_find (self->providers, provider));
@@ -78,6 +80,7 @@ ide_search_context_provider_completed (IdeSearchContext  *self,
 const GList *
 ide_search_context_get_providers (IdeSearchContext *self)
 {
+  g_return_val_if_fail (IDE_IS_MAIN_THREAD (), NULL);
   g_return_val_if_fail (IDE_IS_SEARCH_CONTEXT (self), NULL);
 
   return self->providers;
@@ -88,6 +91,7 @@ ide_search_context_add_result (IdeSearchContext  *self,
                                IdeSearchProvider *provider,
                                IdeSearchResult   *result)
 {
+  g_return_if_fail (IDE_IS_MAIN_THREAD ());
   g_return_if_fail (IDE_IS_SEARCH_CONTEXT (self));
   g_return_if_fail (IDE_IS_SEARCH_PROVIDER (provider));
   g_return_if_fail (IDE_IS_SEARCH_RESULT (result));
@@ -100,6 +104,7 @@ ide_search_context_remove_result (IdeSearchContext  *self,
                                   IdeSearchProvider *provider,
                                   IdeSearchResult   *result)
 {
+  g_return_if_fail (IDE_IS_MAIN_THREAD ());
   g_return_if_fail (IDE_IS_SEARCH_CONTEXT (self));
   g_return_if_fail (IDE_IS_SEARCH_PROVIDER (provider));
   g_return_if_fail (IDE_IS_SEARCH_RESULT (result));
@@ -112,6 +117,7 @@ ide_search_context_set_provider_count (IdeSearchContext  *self,
                                        IdeSearchProvider *provider,
                                        guint64            count)
 {
+  g_return_if_fail (IDE_IS_MAIN_THREAD ());
   g_return_if_fail (IDE_IS_SEARCH_CONTEXT (self));
   g_return_if_fail (IDE_IS_SEARCH_PROVIDER (provider));
 
@@ -127,6 +133,7 @@ ide_search_context_execute (IdeSearchContext *self,
 
   IDE_ENTRY;
 
+  g_return_if_fail (IDE_IS_MAIN_THREAD ());
   g_return_if_fail (IDE_IS_SEARCH_CONTEXT (self));
   g_return_if_fail (!self->executed);
   g_return_if_fail (search_terms);
@@ -156,6 +163,7 @@ ide_search_context_execute (IdeSearchContext *self,
 void
 ide_search_context_cancel (IdeSearchContext *self)
 {
+  g_return_if_fail (IDE_IS_MAIN_THREAD ());
   g_return_if_fail (IDE_IS_SEARCH_CONTEXT (self));
 
   if (!g_cancellable_is_cancelled (self->cancellable))
@@ -167,6 +175,7 @@ _ide_search_context_add_provider (IdeSearchContext  *self,
                                   IdeSearchProvider *provider,
                                   gsize              max_results)
 {
+  g_return_if_fail (IDE_IS_MAIN_THREAD ());
   g_return_if_fail (IDE_IS_SEARCH_CONTEXT (self));
   g_return_if_fail (IDE_IS_SEARCH_PROVIDER (provider));
   g_return_if_fail (!self->executed);
