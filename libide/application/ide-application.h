@@ -27,6 +27,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_APPLICATION    (ide_application_get_type())
 #define IDE_APPLICATION_DEFAULT (IDE_APPLICATION (g_application_get_default()))
+#define IDE_IS_MAIN_THREAD()    (g_thread_self() == ide_application_get_main_thread())
 
 G_DECLARE_FINAL_TYPE (IdeApplication, ide_application, IDE, APPLICATION, GtkApplication)
 
@@ -38,6 +39,7 @@ typedef enum
   IDE_APPLICATION_MODE_TESTS,
 } IdeApplicationMode;
 
+GThread            *ide_application_get_main_thread      (void);
 IdeApplicationMode  ide_application_get_mode             (IdeApplication       *self);
 IdeApplication     *ide_application_new                  (void);
 GDateTime          *ide_application_get_started_at       (IdeApplication       *self);

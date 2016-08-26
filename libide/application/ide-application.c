@@ -49,6 +49,8 @@
 
 G_DEFINE_TYPE (IdeApplication, ide_application, GTK_TYPE_APPLICATION)
 
+static GThread *main_thread;
+
 static void
 ide_application_make_skeleton_dirs (IdeApplication *self)
 {
@@ -443,6 +445,8 @@ ide_application_class_init (IdeApplicationClass *klass)
   g_app_class->open = ide_application_open;
   g_app_class->startup = ide_application_startup;
   g_app_class->shutdown = ide_application_shutdown;
+
+  main_thread = g_thread_self ();
 }
 
 static void
@@ -756,4 +760,19 @@ ide_application_get_disable_theme_tracking (IdeApplication *self)
   g_return_val_if_fail (IDE_IS_APPLICATION (self), FALSE);
 
   return self->disable_theme_tracking;
+}
+
+/**
+ * ide_application_get_main_thread:
+ *
+ * This function returns the thread-id of the main thread for the applicaiton.
+ * This is only really useful to determine if you are in the main UI thread.
+ * This is used by IDE_IS_MAIN_THREAD for assertion checks.
+ *
+ * Returns: (transfer none): A #GThread
+ */
+GThread *
+ide_application_get_main_thread (void)
+{
+  return main_thread;
 }
