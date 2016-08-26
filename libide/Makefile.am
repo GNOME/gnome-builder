@@ -135,6 +135,12 @@ libide_1_0_la_public_headers =                            \
 	transfers/ide-transfer.h                          \
 	transfers/ide-transfer-manager.c                  \
 	transfers/ide-transfer-manager.h                  \
+	transfers/ide-transfer-row.c                      \
+	transfers/ide-transfer-row.h                      \
+	transfers/ide-transfers-button.c                  \
+	transfers/ide-transfers-button.h                  \
+	transfers/ide-transfers-progress-icon.c           \
+	transfers/ide-transfers-progress-icon.h           \
 	tree/ide-tree-builder.h                           \
 	tree/ide-tree-node.h                              \
 	tree/ide-tree-types.h                             \

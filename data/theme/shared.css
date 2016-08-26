@@ -86,7 +86,7 @@ frame.gb-search-frame > box > grid:first-child > button.close:backdrop image {
 popover list row {
   padding: 6px;
 }
-popover list row button {
+popover list row button:not(.circular) {
   background: transparent;
   border: none;
   box-shadow: none;
@@ -94,11 +94,11 @@ popover list row button {
   padding: 0;
   opacity: 0.25;
 }
-popover list row:selected button,
-popover list row:selected button:hover {
+popover list row:selected button:not(.circular),
+popover list row:selected button:hover:not(.circular) {
   color: @theme_selected_fg_color;
 }
-popover list row button:hover {
+popover list row button:hover:not(.circular) {
   opacity: 1;
 }
 

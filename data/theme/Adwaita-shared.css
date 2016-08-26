@@ -210,3 +210,17 @@ popover.messagepopover .popover-action-area button:last-child {
 popover.messagepopover .popover-content-area {
   margin: 24px;
 }
+
+
+popover.transfers list {
+  background-color: transparent;
+}
+popover.transfers list row {
+  border-top: 1px solid @borders;
+}
+popover.transfers list row:first-child {
+  border-top: none;
+}
+popover.transfers list row > box {
+  padding: 10px;
+}
