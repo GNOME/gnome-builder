@@ -135,8 +135,11 @@ ide_omni_search_group_remove_result (IdeOmniSearchGroup *self,
 
   row = g_object_get_qdata (G_OBJECT (result), quarkRow);
 
-  if (row)
-    gtk_container_remove (GTK_CONTAINER (self->rows), row);
+  if (IDE_IS_OMNI_SEARCH_ROW (row))
+    {
+      g_object_set_qdata (G_OBJECT (result), quarkRow, NULL);
+      gtk_widget_destroy (row);
+    }
 }
 
 void
