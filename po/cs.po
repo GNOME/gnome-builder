@@ -8,10 +8,10 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-08-23 18:42+0000\n"
-"PO-Revision-Date: 2016-08-24 14:06+0200\n"
+"POT-Creation-Date: 2016-08-26 02:55+0000\n"
+"PO-Revision-Date: 2016-08-26 11:58+0200\n"
 "Last-Translator: Marek Černocký <marek@manet.cz>\n"
-"Language-Team: čeština <gnome-cs-list@gnome.org>\n"
+"Language-Team: čeština <gnome-cs-list@gnome.org>>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1345,11 +1345,11 @@ msgstr "Selhala inicializace výchozích hodnot."
 msgid "You must call %s() before using libide."
 msgstr "Před použitím libide musíte zavolat %s()."
 
-#: libide/ide-context.c:1863
+#: libide/ide-context.c:1870
 msgid "An unload request is already pending"
 msgstr "Nějaký požadavek na odstranění z paměti již probíhá"
 
-#: libide/ide-context.c:1982
+#: libide/ide-context.c:1989
 msgid "Context has already been restored."
 msgstr "Kontext již byl obnoven."
 
@@ -2334,11 +2334,15 @@ msgstr "Otevření souboru"
 msgid "%s - Builder"
 msgstr "%s – Builder"
 
-#: libide/workbench/ide-workbench-header-bar.ui:38
+#: libide/workbench/ide-workbench-header-bar.ui:43
+msgid "Transfers"
+msgstr "Přenosy"
+
+#: libide/workbench/ide-workbench-header-bar.ui:50
 msgid "Show workbench menu"
 msgstr "Zobrazovat nabídku pracovních nástrojů"
 
-#: libide/workbench/ide-workbench-header-bar.ui:59
+#: libide/workbench/ide-workbench-header-bar.ui:73
 msgid "Press Ctrl+. to search"
 msgstr "Zmáčknutím Ctrl+. můžete hledat"
 
@@ -3133,7 +3137,6 @@ msgid "Select a Template"
 msgstr "Vyberte šablonu"
 
 #: plugins/devhelp/gbp-devhelp-panel.c:194
-#: plugins/devhelp/gbp-devhelp-search-provider.c:127
 msgid "Documentation"
 msgstr "Dokumentace"
 
