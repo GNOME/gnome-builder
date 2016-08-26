@@ -123,6 +123,8 @@ typedef struct _IdeSymbol                      IdeSymbol;
 typedef struct _IdeSymbolResolver              IdeSymbolResolver;
 typedef struct _IdeSymbolResolverInterface     IdeSymbolResolverInterface;
 
+typedef struct _IdeTransferManager             IdeTransferManager;
+
 typedef struct _IdeUnsavedFiles                IdeUnsavedFiles;
 
 typedef struct _IdeUnsavedFile                 IdeUnsavedFile;

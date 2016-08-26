@@ -1,0 +1,47 @@
+/* ide-transfer-manager.h
+ *
+ * Copyright (C) 2016 Christian Hergert <chergert@redhat.com>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+#ifndef IDE_TRANSFER_MANAGER_H
+#define IDE_TRANSFER_MANAGER_H
+
+#include "ide-object.h"
+
+#include "transfers/ide-transfer.h"
+
+G_BEGIN_DECLS
+
+#define IDE_TYPE_TRANSFER_MANAGER (ide_transfer_manager_get_type())
+
+G_DECLARE_FINAL_TYPE (IdeTransferManager, ide_transfer_manager, IDE, TRANSFER_MANAGER, IdeObject)
+
+gdouble  ide_transfer_manager_get_progress   (IdeTransferManager *self);
+gboolean ide_transfer_manager_get_has_active (IdeTransferManager *self);
+guint    ide_transfer_manager_get_max_active (IdeTransferManager *self);
+void     ide_transfer_manager_set_max_active (IdeTransferManager *self,
+                                              guint               max_active);
+void     ide_transfer_manager_cancel         (IdeTransferManager *self,
+                                              IdeTransfer        *transfer);
+void     ide_transfer_manager_cancel_all     (IdeTransferManager *self);
+void     ide_transfer_manager_clear          (IdeTransferManager *self);
+void     ide_transfer_manager_queue          (IdeTransferManager *self,
+                                              IdeTransfer        *transfer);
+
+G_END_DECLS
+
+#endif /* IDE_TRANSFER_MANAGER_H */
+
