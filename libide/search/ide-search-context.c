@@ -62,7 +62,6 @@ ide_search_context_provider_completed (IdeSearchContext  *self,
   g_return_if_fail (IDE_IS_SEARCH_CONTEXT (self));
   g_return_if_fail (IDE_IS_SEARCH_PROVIDER (provider));
   g_return_if_fail (g_list_find (self->providers, provider));
-  g_return_if_fail (g_main_context_get_thread_default () == g_main_context_default ());
 
   if (--self->in_progress == 0)
     g_signal_emit (self, signals [COMPLETED], 0);
@@ -92,7 +91,6 @@ ide_search_context_add_result (IdeSearchContext  *self,
   g_return_if_fail (IDE_IS_SEARCH_CONTEXT (self));
   g_return_if_fail (IDE_IS_SEARCH_PROVIDER (provider));
   g_return_if_fail (IDE_IS_SEARCH_RESULT (result));
-  g_return_if_fail (g_main_context_get_thread_default () == g_main_context_default ());
 
   g_signal_emit (self, signals [RESULT_ADDED], 0, provider, result);
 }
@@ -105,7 +103,6 @@ ide_search_context_remove_result (IdeSearchContext  *self,
   g_return_if_fail (IDE_IS_SEARCH_CONTEXT (self));
   g_return_if_fail (IDE_IS_SEARCH_PROVIDER (provider));
   g_return_if_fail (IDE_IS_SEARCH_RESULT (result));
-  g_return_if_fail (g_main_context_get_thread_default () == g_main_context_default ());
 
   g_signal_emit (self, signals [RESULT_REMOVED], 0, provider, result);
 }
@@ -117,7 +114,6 @@ ide_search_context_set_provider_count (IdeSearchContext  *self,
 {
   g_return_if_fail (IDE_IS_SEARCH_CONTEXT (self));
   g_return_if_fail (IDE_IS_SEARCH_PROVIDER (provider));
-  g_return_if_fail (g_main_context_get_thread_default () == g_main_context_default ());
 
   g_signal_emit (self, signals [COUNT_SET], 0, provider, count);
 }
@@ -134,7 +130,6 @@ ide_search_context_execute (IdeSearchContext *self,
   g_return_if_fail (IDE_IS_SEARCH_CONTEXT (self));
   g_return_if_fail (!self->executed);
   g_return_if_fail (search_terms);
-  g_return_if_fail (g_main_context_get_thread_default () == g_main_context_default ());
 
   self->executed = TRUE;
   self->in_progress = g_list_length (self->providers);
@@ -175,7 +170,6 @@ _ide_search_context_add_provider (IdeSearchContext  *self,
   g_return_if_fail (IDE_IS_SEARCH_CONTEXT (self));
   g_return_if_fail (IDE_IS_SEARCH_PROVIDER (provider));
   g_return_if_fail (!self->executed);
-  g_return_if_fail (g_main_context_get_thread_default () == g_main_context_default ());
 
   self->providers = g_list_append (self->providers, g_object_ref (provider));
 }
