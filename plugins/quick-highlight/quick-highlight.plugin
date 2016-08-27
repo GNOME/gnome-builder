@@ -1,0 +1,7 @@
+[Plugin]
+Module=quick-highlight-plugin
+Name=Quick Highlight
+Description=Highlights every occurrences of selected text
+Authors=Martin Blanchard <tchaik@gmx.com>
+Copyright=Copyright © 2016 Martin Blanchard
+Builtin=true
