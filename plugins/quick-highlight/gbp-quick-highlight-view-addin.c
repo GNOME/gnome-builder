@@ -38,8 +38,7 @@ G_DEFINE_TYPE_EXTENDED (GbpQuickHighlightViewAddin,
                         gbp_quick_highlight_view_addin,
                         G_TYPE_OBJECT,
                         0,
-                        G_IMPLEMENT_INTERFACE (IDE_TYPE_EDITOR_VIEW_ADDIN,
-                                               editor_view_addin_iface_init))
+                        G_IMPLEMENT_INTERFACE (IDE_TYPE_EDITOR_VIEW_ADDIN, editor_view_addin_iface_init))
 
 static void
 gbp_quick_highlight_view_addin_class_init (GbpQuickHighlightViewAddinClass *klass)
