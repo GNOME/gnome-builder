@@ -30,6 +30,9 @@ struct _GbpQuickHighlightViewAddin
 
   GtkSourceSearchContext  *search_context;
   GtkSourceSearchSettings *search_settings;
+
+  gulong                   notify_style_scheme_handler;
+  gulong                   mark_set_handler;
 };
 
 static void editor_view_addin_iface_init (IdeEditorViewAddinInterface *iface);
@@ -162,16 +165,19 @@ gbp_quick_highlight_view_addin_load (IdeEditorViewAddin *addin,
 
   gtk_source_search_context_set_match_style (self->search_context, style);
 
-  g_signal_connect_object (buffer,
-                           "notify::style-scheme",
-                           G_CALLBACK (gbp_quick_highlight_view_addin_change_style),
-                           self,
-                           G_CONNECT_AFTER);
-  g_signal_connect_object (buffer,
-                           "mark-set",
-                           G_CALLBACK (gbp_quick_highlight_view_addin_match),
-                           self,
-                           G_CONNECT_AFTER);
+  self->notify_style_scheme_handler =
+    g_signal_connect_object (buffer,
+                             "notify::style-scheme",
+                             G_CALLBACK (gbp_quick_highlight_view_addin_change_style),
+                             self,
+                             G_CONNECT_AFTER);
+
+  self->mark_set_handler =
+    g_signal_connect_object (buffer,
+                             "mark-set",
+                             G_CALLBACK (gbp_quick_highlight_view_addin_match),
+                             self,
+                             G_CONNECT_AFTER);
 }
 
 static void
@@ -187,12 +193,8 @@ gbp_quick_highlight_view_addin_unload (IdeEditorViewAddin *addin,
 
   buffer = GTK_SOURCE_BUFFER (ide_editor_view_get_document (view));
 
-  g_signal_handlers_disconnect_by_func (buffer,
-                                        G_CALLBACK (gbp_quick_highlight_view_addin_change_style),
-                                        self);
-  g_signal_handlers_disconnect_by_func (buffer,
-                                        G_CALLBACK (gbp_quick_highlight_view_addin_match),
-                                        self);
+  g_signal_handler_disconnect (buffer, self->notify_style_scheme_handler);
+  g_signal_handler_disconnect (buffer, self->mark_set_handler);
 
   g_clear_object (&self->search_settings);
   g_clear_object (&self->search_context);
