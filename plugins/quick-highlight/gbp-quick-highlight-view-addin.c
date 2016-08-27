@@ -156,7 +156,10 @@ gbp_quick_highlight_view_addin_load (IdeEditorViewAddin *addin,
                                        NULL);
 
   style_scheme = gtk_source_buffer_get_style_scheme (buffer);
-  style = gtk_source_style_scheme_get_style (style_scheme, "current-line");
+
+  style = gtk_source_style_scheme_get_style (style_scheme, "quick-highlight");
+  if (style == NULL)
+    style = gtk_source_style_scheme_get_style (style_scheme, "current-line");
 
   gtk_source_search_context_set_match_style (self->search_context, style);
 
