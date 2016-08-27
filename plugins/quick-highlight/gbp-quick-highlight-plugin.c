@@ -20,6 +20,7 @@
 #include <ide.h>
 
 #include "gbp-quick-highlight-view-addin.h"
+#include "gbp-quick-highlight-preferences.h"
 
 void
 peas_register_types (PeasObjectModule *module)
@@ -27,4 +28,7 @@ peas_register_types (PeasObjectModule *module)
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_EDITOR_VIEW_ADDIN,
                                               GBP_TYPE_QUICK_HIGHLIGHT_VIEW_ADDIN);
+  peas_object_module_register_extension_type (module,
+                                              IDE_TYPE_PREFERENCES_ADDIN,
+                                              GBP_TYPE_QUICK_HIGHLIGHT_PREFERENCES);
 }

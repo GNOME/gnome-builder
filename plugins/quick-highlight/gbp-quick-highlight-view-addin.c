@@ -30,9 +30,13 @@ struct _GbpQuickHighlightViewAddin
 
   GtkSourceSearchContext  *search_context;
   GtkSourceSearchSettings *search_settings;
+  GSettings               *settings;
 
   gulong                   notify_style_scheme_handler;
   gulong                   mark_set_handler;
+  gulong                   changed_enabled_handler;
+
+  guint                    enabled : 1;
 };
 
 static void editor_view_addin_iface_init (IdeEditorViewAddinInterface *iface);
@@ -131,6 +135,36 @@ gbp_quick_highlight_view_addin_match (GtkTextBuffer *buffer,
 }
 
 static void
+gbp_quick_highlight_view_addin_enabled_changed (GbpQuickHighlightViewAddin *self,
+                                                const gchar                *key,
+                                                GSettings                  *settings)
+{
+  IdeBuffer *buffer;
+  gboolean enabled;
+
+  g_assert (GBP_IS_QUICK_HIGHLIGHT_VIEW_ADDIN (self));
+  g_assert (G_IS_SETTINGS (settings));
+
+  buffer = ide_editor_view_get_document (self->editor_view);
+  enabled = g_settings_get_boolean (settings, "enabled");
+
+  if (!self->enabled && enabled)
+    {
+      g_signal_handler_unblock (buffer, self->notify_style_scheme_handler);
+      g_signal_handler_unblock (buffer, self->mark_set_handler);
+    }
+  else if (self->enabled && !enabled)
+    {
+      g_signal_handler_block (buffer, self->notify_style_scheme_handler);
+      g_signal_handler_block (buffer, self->mark_set_handler);
+      gtk_source_search_settings_set_search_text (self->search_settings, NULL);
+      gtk_source_search_context_set_highlight (self->search_context, FALSE);
+    }
+
+  self->enabled = enabled;
+}
+
+static void
 gbp_quick_highlight_view_addin_load (IdeEditorViewAddin *addin,
                                      IdeEditorView      *view)
 {
@@ -178,6 +212,19 @@ gbp_quick_highlight_view_addin_load (IdeEditorViewAddin *addin,
                              G_CALLBACK (gbp_quick_highlight_view_addin_match),
                              self,
                              G_CONNECT_AFTER);
+
+  /* Use conventions from IdeExtensionSetAdapter */
+  self->settings = g_settings_new_with_path ("org.gnome.builder.extension-type",
+                                             "/org/gnome/builder/extension-types/quick-highlight-plugin/GbpQuickHighlightViewAddin/");
+
+  self->changed_enabled_handler =
+    g_signal_connect_object (self->settings,
+                             "changed::enabled",
+                             G_CALLBACK (gbp_quick_highlight_view_addin_enabled_changed),
+                             self,
+                             G_CONNECT_SWAPPED);
+
+  self->enabled = TRUE;
 }
 
 static void
@@ -195,9 +242,11 @@ gbp_quick_highlight_view_addin_unload (IdeEditorViewAddin *addin,
 
   g_signal_handler_disconnect (buffer, self->notify_style_scheme_handler);
   g_signal_handler_disconnect (buffer, self->mark_set_handler);
+  g_signal_handler_disconnect (self->settings, self->changed_enabled_handler);
 
   g_clear_object (&self->search_settings);
   g_clear_object (&self->search_context);
+  g_clear_object (&self->settings);
 
   self->editor_view = NULL;
 }
