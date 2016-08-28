@@ -163,7 +163,7 @@ ide_transfers_button_update_visibility (IdeTransfersButton *self)
 {
   IdeTransferManager *transfer_manager;
   IdeContext *context;
-  gboolean visible;
+  gboolean visible = FALSE;
 
   IDE_ENTRY;
 
