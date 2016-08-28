@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-08-26 13:56+0200\n"
-"PO-Revision-Date: 2016-08-26 13:58+0200\n"
+"POT-Creation-Date: 2016-08-28 14:08+0200\n"
+"PO-Revision-Date: 2016-08-28 14:10+0200\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <community-poland@mozilla.org>\n"
 "Language: pl\n"
@@ -869,7 +869,7 @@ msgstr "Za_mknij"
 
 #: data/org.gnome.Builder.appdata.xml.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
-#: libide/application/ide-application.c:462
+#: libide/application/ide-application.c:466
 #: libide/preferences/ide-preferences-builtin.c:127
 #: libide/workbench/ide-workbench.c:560
 msgid "Builder"
@@ -3394,6 +3394,21 @@ msgstr "_Zwiń wszystkie węzły"
 #: plugins/project-tree/gtk/menus.ui:102
 msgid "_Refresh"
 msgstr "_Odśwież"
+
+#: plugins/quick-highlight/gbp-quick-highlight-preferences.c:48
+msgid "Words matching selection"
+msgstr "Słowa pasujące do zaznaczenia"
+
+#: plugins/quick-highlight/gbp-quick-highlight-preferences.c:49
+msgid "Highlight all occurrences of words matching the current selection"
+msgstr ""
+"Wyróżnianie wszystkich wystąpień słów pasujących do bieżącego zaznaczenia"
+
+#. Translators: the following are keywords used for searching to locate this preference
+#: plugins/quick-highlight/gbp-quick-highlight-preferences.c:51
+msgid "quick highlight words matching current selection"
+msgstr ""
+"szybkie wyróżnianie słów słowa wyrazów wyrazy pasujące bieżące zaznaczenie"
 
 #: plugins/support/gtk/menus.ui:7
 msgid "Generate Support Log"
