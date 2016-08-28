@@ -38,6 +38,8 @@ struct _GbpCreateProjectWidget
   GtkFlowBox           *project_template_chooser;
   GtkSwitch            *versioning_switch;
   EggRadioBox          *license_chooser;
+
+  guint                 invalid_directory : 1;
 };
 
 enum {
@@ -108,13 +110,30 @@ validate_name (const gchar *name)
   return TRUE;
 }
 
+static gboolean
+directory_exists (GbpCreateProjectWidget *self,
+                  const gchar            *name)
+{
+  g_autoptr(GFile) directory = NULL;
+  g_autoptr(GFile) child = NULL;
+
+  g_assert (GBP_IS_CREATE_PROJECT_WIDGET (self));
+  g_assert (name != NULL);
+
+  directory = egg_file_chooser_entry_get_file (self->project_location_entry);
+  child = g_file_get_child (directory, name);
+
+  self->invalid_directory = g_file_query_exists (child, NULL);
+
+  return self->invalid_directory;
+}
+
 static void
 gbp_create_project_widget_name_changed (GbpCreateProjectWidget *self,
                                         GtkEntry               *entry)
 {
   const gchar *text;
   g_autofree gchar *project_name = NULL;
-  g_autofree gchar *project_dir = NULL;
 
   g_assert (GBP_IS_CREATE_PROJECT_WIDGET (self));
   g_assert (GTK_IS_ENTRY (entry));
@@ -126,17 +145,22 @@ gbp_create_project_widget_name_changed (GbpCreateProjectWidget *self,
     {
       g_object_set (self->project_name_entry,
                     "secondary-icon-name", "dialog-warning-symbolic",
+                    "tooltip-text", _("Characters were used which might cause technical issues as a project name"),
                     NULL);
-
-      project_dir = g_strdup ("");
+    }
+  else if (directory_exists (self, project_name))
+    {
+      g_object_set (self->project_name_entry,
+                    "secondary-icon-name", "dialog-warning-symbolic",
+                    "tooltip-text", _("Directory already exists with that name"),
+                    NULL);
     }
   else
     {
       g_object_set (self->project_name_entry,
                     "secondary-icon-name", NULL,
+                    "tooltip-text", NULL,
                     NULL);
-
-      project_dir = g_ascii_strdown (g_strdelimit (project_name, " ", '-'), -1);
     }
 
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_IS_READY]);
@@ -309,6 +333,9 @@ gbp_create_project_widget_is_ready (GbpCreateProjectWidget *self)
   GList *selected_template = NULL;
 
   g_assert (GBP_IS_CREATE_PROJECT_WIDGET (self));
+
+  if (self->invalid_directory)
+    return FALSE;
 
   text = gtk_entry_get_text (self->project_name_entry);
   project_name = g_strstrip (g_strdup (text));
