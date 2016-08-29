@@ -825,6 +825,7 @@ gstyle_palette_new_from_buffer (GtkTextBuffer  *buffer,
 
   if (items->len > 0)
     {
+      /* To translators: always in singular form like in: generated palette number <generated_count> */
       name = g_strdup_printf ("%s %i", _("Generated"), ++generated_count);
       palette = g_object_new (GSTYLE_TYPE_PALETTE,
                               "id", NULL,
