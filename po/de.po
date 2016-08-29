@@ -12,9 +12,9 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-08-19 10:23+0000\n"
-"PO-Revision-Date: 2016-08-20 20:46+0200\n"
-"Last-Translator: Christian Kirbach <christian.kirbach@gmail.com>\n"
+"POT-Creation-Date: 2016-08-27 22:07+0000\n"
+"PO-Revision-Date: 2016-08-28 17:39+0200\n"
+"Last-Translator: Mario Blättermann <mario.blaettermann@gmail.com>\n"
 "Language-Team: Deutsch <gnome-de@gnome.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -72,6 +72,7 @@ msgstr[1] "Vor ungefähr %u Jahren"
 #: libide/greeter/ide-greeter-perspective.c:673
 #: libide/workbench/ide-workbench-actions.c:70
 #: plugins/color-picker/gb-color-picker-prefs.c:210
+#: plugins/sysprof/gbp-sysprof-workbench-addin.c:254
 msgid "Open"
 msgstr "Öffnen"
 
@@ -105,6 +106,7 @@ msgstr "Durchsuchen …"
 #: plugins/color-picker/gb-color-picker-prefs.c:98
 #: plugins/color-picker/gb-color-picker-prefs.c:214
 #: plugins/color-picker/gb-color-picker-prefs.c:241
+#: plugins/sysprof/gbp-sysprof-workbench-addin.c:255
 #: plugins/terminal/gb-terminal-view-actions.c:305
 msgid "Cancel"
 msgstr "Abbrechen"
@@ -591,8 +593,8 @@ msgid "Projects directory"
 msgstr "Projekteordner"
 
 #: data/gsettings/org.gnome.builder.gschema.xml:31
-msgid "Directory for all builder projects"
-msgstr "Ordner für alle Builder-Projekte"
+msgid "Directory for all Builder projects."
+msgstr "Ordner für alle Builder-Projekte."
 
 #: data/gsettings/org.gnome.builder.gschema.xml:35
 msgid "Restore Previous Files"
@@ -876,7 +878,7 @@ msgstr "_Schließen"
 
 #: data/org.gnome.Builder.appdata.xml.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
-#: libide/application/ide-application.c:462
+#: libide/application/ide-application.c:466
 #: libide/preferences/ide-preferences-builtin.c:127
 #: libide/workbench/ide-workbench.c:560
 msgid "Builder"
@@ -1367,11 +1369,11 @@ msgstr "Konnte Standardwerte nicht initialisieren."
 msgid "You must call %s() before using libide."
 msgstr "Sie müssen %s() aufrufen, bevor libide genutzt werden kann."
 
-#: libide/ide-context.c:1863
+#: libide/ide-context.c:1870
 msgid "An unload request is already pending"
 msgstr "Es steht bereits eine ungeladene Anfrage aus"
 
-#: libide/ide-context.c:1982
+#: libide/ide-context.c:1989
 msgid "Context has already been restored."
 msgstr "Der Kontext wurde bereits wiederhergestellt."
 
@@ -2130,17 +2132,21 @@ msgstr "Das Script muss im lokalen Dateisystem sein."
 msgid "The script \"%s\" is not a PyGObject file."
 msgstr "Das Script \"%s\" ist keine PyGObject-Datei"
 
-#: libide/runner/ide-run-manager.c:128
+#: libide/runner/ide-run-manager.c:171
+msgid "Run"
+msgstr "Ausführen"
+
+#: libide/runner/ide-run-manager.c:200
 msgid "Cannot run target, another target is running"
 msgstr ""
 "Ziel kann nicht ausgeführt werden, ein anderes Ziel wird bereits ausgeführt"
 
-#: libide/runner/ide-run-manager.c:209
+#: libide/runner/ide-run-manager.c:287
 #: plugins/autotools/ide-autotools-build-task.c:438
 msgid "Failed to locate runtime"
 msgstr "Laufzeit konnte nicht gefunden werden"
 
-#: libide/runner/ide-runner.c:123
+#: libide/runner/ide-runner.c:129
 msgid "Process quit unexpectedly"
 msgstr "Prozess wurde unerwartet beendet"
 
@@ -2188,6 +2194,10 @@ msgstr "»%s« durch »%s« ersetzen"
 #: libide/sourceview/ide-source-view.c:5255
 msgid "Apply Fix-It"
 msgstr "Fix-It anwenden"
+
+#: libide/transfers/ide-transfers-button.ui:33
+msgid "Clear _All"
+msgstr "A_lles aufräumen"
 
 #: libide/util/ide-file-manager.c:64
 msgid "File path is NULL"
@@ -2365,12 +2375,16 @@ msgstr "Datei öffnen"
 msgid "%s - Builder"
 msgstr "%s - Builder"
 
+#: libide/workbench/ide-workbench-header-bar.ui:43
+msgid "Transfers"
+msgstr "Übertragungen"
+
 # CHECK
-#: libide/workbench/ide-workbench-header-bar.ui:29
+#: libide/workbench/ide-workbench-header-bar.ui:50
 msgid "Show workbench menu"
 msgstr "Werkbank-Menü anzeigen"
 
-#: libide/workbench/ide-workbench-header-bar.ui:50
+#: libide/workbench/ide-workbench-header-bar.ui:73
 msgid "Press Ctrl+. to search"
 msgstr "Zum Suchen Strg+. drücken"
 
@@ -2782,7 +2796,7 @@ msgid "Colors"
 msgstr "Farben"
 
 #: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:13
-msgid "hsv visibility"
+msgid "HSV visibility"
 msgstr "HSV-Sichtbarkeit"
 
 #: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:14
@@ -2790,17 +2804,15 @@ msgid "If the HSV components are visible."
 msgstr "Zeigt an, ob die HSV-Komponenten sichtbar sind."
 
 #: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:18
-#, fuzzy
-#| msgid "hsv visibility"
-msgid "lab visibility"
-msgstr "HSV-Sichtbarkeit"
+msgid "LAB visibility"
+msgstr "LAB-Sichtbarkeit"
 
 #: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:19
 msgid "If the LAB components are visible."
 msgstr "Zeigt an, ob die LAB-Komponenten sichtbar sind."
 
 #: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:23
-msgid "rgb visibility"
+msgid "RGB visibility"
 msgstr "RGB-Sichtbarkeit"
 
 #: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:24
@@ -2808,19 +2820,19 @@ msgid "If the RGB components are visible."
 msgstr "Zeigt an, ob die RGB-Komponenten sichtbar sind."
 
 #: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:28
-msgid "rgb unit"
+msgid "RGB unit"
 msgstr "RGB-Einheit"
 
 #: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:29
-msgid "The unit use by RGb component and strings."
+msgid "The unit used by RGB component and strings."
 msgstr "Die von RGB-Komponenten und Zeichenketten verwendete Einheit."
 
 #: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:35
-msgid "Selected palette id"
+msgid "Selected palette ID"
 msgstr "Kennung der ausgewählten Palette"
 
 #: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:36
-msgid "The selected palette id amongst the loaded ones."
+msgid "The selected palette ID among the loaded ones."
 msgstr "Die Kennung der aus den geladenen Paletten ausgewählten Palette."
 
 #: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:40
@@ -2832,7 +2844,7 @@ msgid "The visible color strings."
 msgstr "Die sichtbaren Farbzeichenketten."
 
 #: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:45
-msgid "color filter"
+msgid "Color filter"
 msgstr "Farbfilter"
 
 #: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:46
@@ -3179,7 +3191,6 @@ msgid "Select a Template"
 msgstr "Wählen Sie eine Vorlage"
 
 #: plugins/devhelp/gbp-devhelp-panel.c:194
-#: plugins/devhelp/gbp-devhelp-search-provider.c:127
 msgid "Documentation"
 msgstr "Handbuch"
 
@@ -3277,7 +3288,7 @@ msgstr ""
 msgid "pylint python lint code execute execution"
 msgstr "pylint python lint code ausführen Ausführung"
 
-#: plugins/gnome-code-assistance/ide-gca-service.c:168
+#: plugins/gnome-code-assistance/ide-gca-service.c:176
 msgid "No language specified"
 msgstr "Keine Sprache angegeben"
 
@@ -3286,14 +3297,13 @@ msgid "Enable Pylint"
 msgstr "Pylint aktivieren"
 
 #: plugins/gnome-code-assistance/org.gnome.builder.gnome-code-assistance.gschema.xml:6
-#, fuzzy
-#| msgid "Enable the use of pylint, which may execute code in your project"
 msgid ""
-"Enable the use of pylint to find additional diagnostics in python programs. "
+"Enable the use of pylint to find additional diagnostics in Python programs. "
 "This may result in the execution of code in your project."
 msgstr ""
-"Nutzung von Pylint aktivieren, womit Code in Ihrem Projekt ausgeführt werden "
-"kann"
+"Nutzung von Pylint für zusätzliche Fehlerdiagnosen in Python-Programmen "
+"aktivieren. Das kann dazu führen, dass Code in Ihrem Projekt ausgeführt "
+"werden kann."
 
 #: plugins/hello-cpp/hellocppapplicationaddin.cc:48
 #, c-format
@@ -3415,13 +3425,18 @@ msgstr "Alle Knoten ein_klappen"
 msgid "_Refresh"
 msgstr "_Aktualisieren"
 
-#: plugins/run-tools/gbp-run-workbench-addin.c:135
-msgid "Failed to locate build target"
-msgstr "Erstellungsziel konnte nicht gefunden werden"
+#: plugins/quick-highlight/gbp-quick-highlight-preferences.c:48
+msgid "Words matching selection"
+msgstr "Wörter entsprechend der Auswahl"
 
-#: plugins/run-tools/gbp-run-workbench-addin.c:234
-msgid "Run project"
-msgstr "Projekt ausführen"
+#: plugins/quick-highlight/gbp-quick-highlight-preferences.c:49
+msgid "Highlight all occurrences of words matching the current selection"
+msgstr "Alle Vorkommen von Wörtern anhand der aktuellen Auswahl markieren"
+
+#. Translators: the following are keywords used for searching to locate this preference
+#: plugins/quick-highlight/gbp-quick-highlight-preferences.c:51
+msgid "quick highlight words matching current selection"
+msgstr "schnell hervorheben Hervorhebung Treffer aktuelle Auswahl"
 
 #: plugins/support/gtk/menus.ui:7
 msgid "Generate Support Log"
@@ -3448,6 +3463,32 @@ msgstr "Symbole"
 msgid "System Monitor"
 msgstr "Änderungsüberwachung"
 
+#: plugins/sysprof/gbp-sysprof-perspective.c:65
+#| msgid "Build Profile"
+msgid "Profiler"
+msgstr "Profiler"
+
+#: plugins/sysprof/gbp-sysprof-workbench-addin.c:251
+msgid "Open Profile"
+msgstr "Profil öffnen"
+
+#: plugins/sysprof/gbp-sysprof-workbench-addin.c:259
+msgid "Sysprof Capture (*.syscap)"
+msgstr "Sysprof-Aufzeichnung (*.syscap)"
+
+#: plugins/sysprof/gbp-sysprof-workbench-addin.c:265
+msgid "All Files"
+msgstr "Alle Dateien"
+
+#: plugins/sysprof/gbp-sysprof-workbench-addin.c:352
+#| msgid "Build Profile"
+msgid "Profile"
+msgstr "Profil"
+
+#: plugins/sysprof/gtk/menus.ui:6
+msgid "Open Profile…"
+msgstr "Profil öffnen …"
+
 #: plugins/terminal/gb-terminal-view-actions.c:297
 msgid "Save Terminal Content As"
 msgstr "Terminalinhalt speichern unter"
@@ -3472,6 +3513,20 @@ msgstr "Von Vala erzeugte Fehler und Warnungen anzeigen"
 #: plugins/vala-pack/ide-vala-preferences-addin.vala:36
 msgid "vala diagnostics warnings errors"
 msgstr "Vala Fehlerdiagnose Warnungen Fehler"
+
+#, fuzzy
+#~| msgid "hsv visibility"
+#~ msgid "lab visibility"
+#~ msgstr "HSV-Sichtbarkeit"
+
+#~ msgid "rgb visibility"
+#~ msgstr "RGB-Sichtbarkeit"
+
+#~ msgid "Failed to locate build target"
+#~ msgstr "Erstellungsziel konnte nicht gefunden werden"
+
+#~ msgid "Run project"
+#~ msgstr "Projekt ausführen"
 
 #~ msgid "_Print…"
 #~ msgstr "_Drucken …"
