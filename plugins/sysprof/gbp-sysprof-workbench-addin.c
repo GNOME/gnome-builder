@@ -349,7 +349,7 @@ gbp_sysprof_workbench_addin_load (IdeWorkbenchAddin *addin,
   run_manager = ide_context_get_run_manager (context);
   ide_run_manager_add_handler (run_manager,
                                "profiler",
-                               _("Profile"),
+                               _("Run with Profiler"),
                                "utilities-system-monitor-symbolic",
                                "<Control>F8",
                                profiler_run_handler,

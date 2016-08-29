@@ -80,7 +80,7 @@ gbp_sysprof_perspective_get_priority (IdePerspective *perspective)
 static gchar *
 gbp_sysprof_perspective_get_accelerator (IdePerspective *perspective)
 {
-  return g_strdup ("<Alt>2");
+  return g_strdup ("<Alt>3");
 }
 
 static void
