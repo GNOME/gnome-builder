@@ -48,6 +48,7 @@ enum {
 };
 
 enum {
+  EXITED,
   SPAWNED,
   N_SIGNALS
 };
@@ -98,10 +99,17 @@ ide_runner_run_wait_cb (GObject      *object,
   GSubprocess *subprocess = (GSubprocess *)object;
   g_autoptr(GTask) task = user_data;
   GError *error = NULL;
+  IdeRunner *self;
 
   IDE_ENTRY;
 
   g_assert (G_IS_SUBPROCESS (subprocess));
+
+  self = g_task_get_source_object (task);
+
+  g_assert (IDE_IS_RUNNER (self));
+
+  g_signal_emit (self, signals [EXITED], 0);
 
   if (!g_subprocess_wait_finish (subprocess, result, &error))
     {
@@ -327,6 +335,17 @@ ide_runner_class_init (IdeRunnerClass *klass)
                         (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
+
+  signals [EXITED] =
+    g_signal_new ("exited",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  0,
+                  NULL,
+                  NULL,
+                  NULL,
+                  G_TYPE_NONE,
+                  0);
 
   signals [SPAWNED] =
     g_signal_new ("spawned",
