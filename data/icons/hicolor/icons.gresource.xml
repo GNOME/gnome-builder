@@ -12,6 +12,14 @@
     <file compressed="true">scalable/actions/builder-view-bottom-pane-symbolic.svg</file>
     <file compressed="true">scalable/actions/builder-view-left-pane-symbolic.svg</file>
     <file compressed="true">scalable/actions/builder-view-right-pane-symbolic.svg</file>
+    <file compressed="true">scalable/actions/debug-continue-symbolic.svg</file>
+    <file compressed="true">scalable/actions/debug-execute-from-cursor-symbolic.svg</file>
+    <file compressed="true">scalable/actions/debug-execute-to-cursor-symbolic.svg</file>
+    <file compressed="true">scalable/actions/debug-step-in-symbolic.svg</file>
+    <file compressed="true">scalable/actions/debug-step-out-symbolic.svg</file>
+    <file compressed="true">scalable/actions/debug-step-over-symbolic.svg</file>
+    <file compressed="true">scalable/actions/gesture-two-finger-swipe-left.svg</file>
+    <file compressed="true">scalable/actions/gesture-two-finger-swipe-right.svg</file>
     <file compressed="true">scalable/actions/lang-class-symbolic.svg</file>
     <file compressed="true">scalable/actions/lang-define-symbolic.svg</file>
     <file compressed="true">scalable/actions/lang-enum-symbolic.svg</file>
@@ -25,8 +33,6 @@
     <file compressed="true">scalable/actions/lang-union-symbolic.svg</file>
     <file compressed="true">scalable/actions/lang-variable-symbolic.svg</file>
     <file compressed="true">scalable/actions/struct-field-symbolic.svg</file>
-    <file compressed="true">scalable/actions/gesture-two-finger-swipe-right.svg</file>
-    <file compressed="true">scalable/actions/gesture-two-finger-swipe-left.svg</file>
 
     <file compressed="true">scalable/apps/builder-symbolic.svg</file>
     <file compressed="true">scalable/apps/builder-editor-symbolic.svg</file>
