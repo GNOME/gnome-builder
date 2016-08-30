@@ -10,16 +10,16 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-08-23 10:05+0000\n"
-"PO-Revision-Date: 2016-08-23 12:11+0200\n"
-"Last-Translator: Meskó Balázs <meskobalazs@gmail.com>\n"
-"Language-Team: Hungarian <openscope at gmail dot com>\n"
+"POT-Creation-Date: 2016-08-29 20:35+0000\n"
+"PO-Revision-Date: 2016-08-30 15:15+0200\n"
+"Last-Translator: Gabor Kelemen <kelemeng at ubuntu dot com>\n"
+"Language-Team: Hungarian <openscope at googlegroups dot com>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.8.8\n"
+"X-Generator: Lokalize 1.5\n"
 
 #: contrib/egg/egg-animation.c:726 contrib/pnl/pnl-animation.c:701
 #, c-format
@@ -164,11 +164,12 @@ msgstr ""
 "nem sikerült feldolgozni\n"
 "\n"
 
-#: contrib/gstyle/gstyle-palette.c:828
+#. To translators: always in singular form like in: generated palette number <generated_count>
+#: contrib/gstyle/gstyle-palette.c:829
 msgid "Generated"
 msgstr "Előállított"
 
-#: contrib/gstyle/gstyle-palette.c:931
+#: contrib/gstyle/gstyle-palette.c:932
 #, c-format
 msgid "Unable to save %s\n"
 msgstr "A(z) %s nem menthető\n"
@@ -583,8 +584,8 @@ msgid "Projects directory"
 msgstr "Projektek mappa"
 
 #: data/gsettings/org.gnome.builder.gschema.xml:31
-msgid "Directory for all builder projects"
-msgstr "Az összes projekt helye"
+msgid "Directory for all Builder projects."
+msgstr "Az összes Építő projekt könyvtára."
 
 #: data/gsettings/org.gnome.builder.gschema.xml:35
 msgid "Restore Previous Files"
@@ -869,7 +870,7 @@ msgstr "_Bezárás"
 
 #: data/org.gnome.Builder.appdata.xml.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
-#: libide/application/ide-application.c:462
+#: libide/application/ide-application.c:466
 #: libide/preferences/ide-preferences-builtin.c:127
 #: libide/workbench/ide-workbench.c:560
 msgid "Builder"
@@ -1354,11 +1355,11 @@ msgstr "Az alapbeállítások előkészítése meghiúsult."
 msgid "You must call %s() before using libide."
 msgstr "A libide használata előtt meg kell hívni a(z) %s() függvényt."
 
-#: libide/ide-context.c:1863
+#: libide/ide-context.c:1870
 msgid "An unload request is already pending"
 msgstr "Egy lecsatolási kérés már várakozik"
 
-#: libide/ide-context.c:1982
+#: libide/ide-context.c:1989
 msgid "Context has already been restored."
 msgstr "A környezet már vissza lett állítva."
 
@@ -2164,6 +2165,10 @@ msgstr "A(z) „%s” cseréje ezzel: „%s”"
 msgid "Apply Fix-It"
 msgstr "Javítás érvényesítése"
 
+#: libide/transfers/ide-transfers-button.ui:33
+msgid "Clear _All"
+msgstr "Összes _törlése"
+
 #: libide/util/ide-file-manager.c:64
 msgid "File path is NULL"
 msgstr "A fájl útvonala NULL"
@@ -2340,11 +2345,15 @@ msgstr "Fájl megnyitása"
 msgid "%s - Builder"
 msgstr "%s – Építő"
 
-#: libide/workbench/ide-workbench-header-bar.ui:38
+#: libide/workbench/ide-workbench-header-bar.ui:43
+msgid "Transfers"
+msgstr "Átvitelek"
+
+#: libide/workbench/ide-workbench-header-bar.ui:50
 msgid "Show workbench menu"
 msgstr "A munkaterület-ablak megjelenítése"
 
-#: libide/workbench/ide-workbench-header-bar.ui:59
+#: libide/workbench/ide-workbench-header-bar.ui:73
 msgid "Press Ctrl+. to search"
 msgstr "Ctrl+. a kereséshez"
 
@@ -2757,43 +2766,43 @@ msgid "Colors"
 msgstr "Színek"
 
 #: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:13
-msgid "hsv visibility"
-msgstr "hsv láthatósága"
+msgid "HSV visibility"
+msgstr "HSV láthatóság"
 
 #: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:14
 msgid "If the HSV components are visible."
 msgstr "A HSV összetevők láthatóak-e."
 
 #: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:18
-msgid "lab visibility"
-msgstr "lab láthatósága"
+msgid "LAB visibility"
+msgstr "LAB láthatóság"
 
 #: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:19
 msgid "If the LAB components are visible."
 msgstr "A LAB összetevők láthatóak-e."
 
 #: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:23
-msgid "rgb visibility"
-msgstr "rgb láthatósága"
+msgid "RGB visibility"
+msgstr "RGB láthatóság"
 
 #: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:24
 msgid "If the RGB components are visible."
 msgstr "Az RGB összetevők láthatóak-e."
 
 #: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:28
-msgid "rgb unit"
-msgstr "rgb mértékegység"
+msgid "RGB unit"
+msgstr "RGB mértékegység"
 
 #: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:29
-msgid "The unit use by RGb component and strings."
+msgid "The unit used by RGB component and strings."
 msgstr "Az RGB összetevők és karakterláncok által használt mértékegység."
 
 #: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:35
-msgid "Selected palette id"
+msgid "Selected palette ID"
 msgstr "Kiválasztott palettaazonosító"
 
 #: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:36
-msgid "The selected palette id amongst the loaded ones."
+msgid "The selected palette ID among the loaded ones."
 msgstr "A kiválasztott palettaazonosító a betöltöttek között."
 
 #: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:40
@@ -2805,8 +2814,8 @@ msgid "The visible color strings."
 msgstr "A látható szín karakterláncok."
 
 #: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:45
-msgid "color filter"
-msgstr "szín szűrő"
+msgid "Color filter"
+msgstr "Szín szűrő"
 
 #: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:46
 msgid "The filter used on the color scales and color plane."
@@ -3073,7 +3082,18 @@ msgstr "Adjon meg egy projektnevet.\n"
 msgid "Please specify a project template with --template=\n"
 msgstr "Adjon meg egy projektsablont a --template= kapcsolóval\n"
 
-#: plugins/create-project/gbp-create-project-widget.c:523
+#: plugins/create-project/gbp-create-project-widget.c:148
+msgid ""
+"Characters were used which might cause technical issues as a project name"
+msgstr ""
+"Olyan karaktereket használt, amelyek technikai problémákat okozhatnak "
+"projektnévként"
+
+#: plugins/create-project/gbp-create-project-widget.c:155
+msgid "Directory already exists with that name"
+msgstr "Már létezik ilyen nevű könyvtár"
+
+#: plugins/create-project/gbp-create-project-widget.c:550
 msgid "A failure occurred while initializing version control"
 msgstr "Hiba történt a verziókövetés előkészítésekor"
 
@@ -3143,7 +3163,6 @@ msgid "Select a Template"
 msgstr "Válasszon egy sablont"
 
 #: plugins/devhelp/gbp-devhelp-panel.c:194
-#: plugins/devhelp/gbp-devhelp-search-provider.c:127
 msgid "Documentation"
 msgstr "Dokumentáció"
 
@@ -3236,7 +3255,7 @@ msgstr ""
 msgid "pylint python lint code execute execution"
 msgstr "pylint python lint kód végrehajtás"
 
-#: plugins/gnome-code-assistance/ide-gca-service.c:168
+#: plugins/gnome-code-assistance/ide-gca-service.c:176
 msgid "No language specified"
 msgstr "Nincs nyelv megadva"
 
@@ -3246,10 +3265,10 @@ msgstr "Pylint engedélyezése"
 
 #: plugins/gnome-code-assistance/org.gnome.builder.gnome-code-assistance.gschema.xml:6
 msgid ""
-"Enable the use of pylint to find additional diagnostics in python programs. "
+"Enable the use of pylint to find additional diagnostics in Python programs. "
 "This may result in the execution of code in your project."
 msgstr ""
-"A pylint használatának engedélyezése, a python programok további "
+"A pylint használatának engedélyezése, a Python programok további "
 "elemzéséhez. Ez további kódfuttatást jelenthet a projektjében."
 
 #: plugins/hello-cpp/hellocppapplicationaddin.cc:48
@@ -3372,6 +3391,19 @@ msgstr "Összes elem össze_csukása"
 msgid "_Refresh"
 msgstr "_Frissítés"
 
+#: plugins/quick-highlight/gbp-quick-highlight-preferences.c:48
+msgid "Words matching selection"
+msgstr "Kijelölésre illeszkedő szavak"
+
+#: plugins/quick-highlight/gbp-quick-highlight-preferences.c:49
+msgid "Highlight all occurrences of words matching the current selection"
+msgstr "Az aktuális kijelölésre illeszkedő összes szó kiemelése"
+
+#. Translators: the following are keywords used for searching to locate this preference
+#: plugins/quick-highlight/gbp-quick-highlight-preferences.c:51
+msgid "quick highlight words matching current selection"
+msgstr "az aktuális kijelölésre illeszkedő összes szó gyors kiemelése"
+
 #: plugins/support/gtk/menus.ui:7
 msgid "Generate Support Log"
 msgstr "Támogatási naplófájl készítése"
@@ -3414,8 +3446,8 @@ msgid "All Files"
 msgstr "Minden fájl"
 
 #: plugins/sysprof/gbp-sysprof-workbench-addin.c:352
-msgid "Profile"
-msgstr "Profil"
+msgid "Run with Profiler"
+msgstr "Futtatás profilozóval"
 
 #: plugins/sysprof/gtk/menus.ui:6
 msgid "Open Profile…"
@@ -3445,6 +3477,15 @@ msgstr "A Vala hibák és figyelmeztetések megjelenítése"
 #: plugins/vala-pack/ide-vala-preferences-addin.vala:36
 msgid "vala diagnostics warnings errors"
 msgstr "vala diagnosztika figyelmeztetések hibák"
+
+#~ msgid "lab visibility"
+#~ msgstr "lab láthatósága"
+
+#~ msgid "rgb visibility"
+#~ msgstr "rgb láthatósága"
+
+#~ msgid "Profile"
+#~ msgstr "Profil"
 
 #~ msgid "Failed to locate build target"
 #~ msgstr "Az összeállítási könyvtár megtalálása sikertelen."
