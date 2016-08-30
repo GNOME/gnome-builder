@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-08-28 14:08+0200\n"
-"PO-Revision-Date: 2016-08-28 14:10+0200\n"
+"POT-Creation-Date: 2016-08-30 13:37+0200\n"
+"PO-Revision-Date: 2016-08-30 13:40+0200\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <community-poland@mozilla.org>\n"
 "Language: pl\n"
@@ -163,11 +163,12 @@ msgstr "%s: nieobsługiwany format plików\n"
 msgid "failed to parse\n"
 msgstr "przetworzenie się nie powiodło\n"
 
-#: contrib/gstyle/gstyle-palette.c:828
+#. To translators: always in singular form like in: generated palette number <generated_count>
+#: contrib/gstyle/gstyle-palette.c:829
 msgid "Generated"
 msgstr "Utworzono"
 
-#: contrib/gstyle/gstyle-palette.c:931
+#: contrib/gstyle/gstyle-palette.c:932
 #, c-format
 msgid "Unable to save %s\n"
 msgstr "Nie można zapisać %s\n"
@@ -2114,11 +2115,11 @@ msgstr "Skrypt „%s” nie jest plikiem PyGObject."
 
 #: libide/runner/ide-run-manager.c:171
 msgid "Run"
-msgstr "Uruchom"
+msgstr "Wykonaj"
 
 #: libide/runner/ide-run-manager.c:200
 msgid "Cannot run target, another target is running"
-msgstr "Nie można uruchomić celu, inny jest uruchomiony"
+msgstr "Nie można wykonać celu, inny jest wykonywany"
 
 #: libide/runner/ide-run-manager.c:287
 #: plugins/autotools/ide-autotools-build-task.c:438
@@ -3092,7 +3093,17 @@ msgstr "Proszę podać nazwę projektu.\n"
 msgid "Please specify a project template with --template=\n"
 msgstr "Proszę podać szablon projektu za pomocą parametru „--template=”\n"
 
-#: plugins/create-project/gbp-create-project-widget.c:523
+#: plugins/create-project/gbp-create-project-widget.c:148
+msgid ""
+"Characters were used which might cause technical issues as a project name"
+msgstr ""
+"W nazwie projektu użyto znaków, które mogą powodować problemy techniczne"
+
+#: plugins/create-project/gbp-create-project-widget.c:155
+msgid "Directory already exists with that name"
+msgstr "Katalog o tej nazwie już istnieje"
+
+#: plugins/create-project/gbp-create-project-widget.c:550
 msgid "A failure occurred while initializing version control"
 msgstr "Wystąpiło niepowodzenie podczas inicjowania systemu kontroli wersji"
 
@@ -3452,8 +3463,8 @@ msgid "All Files"
 msgstr "Wszystkie pliki"
 
 #: plugins/sysprof/gbp-sysprof-workbench-addin.c:352
-msgid "Profile"
-msgstr "Profiluj"
+msgid "Run with Profiler"
+msgstr "Wykonaj za pomocą profilera"
 
 #: plugins/sysprof/gtk/menus.ui:6
 msgid "Open Profile…"
