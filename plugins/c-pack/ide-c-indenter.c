@@ -60,6 +60,30 @@ enum {
   COMMENT_C99
 };
 
+static inline guint
+get_post_scope_indent (IdeCIndenter *c)
+{
+  if (c->post_scope_indent == -1)
+    return c->indent_width;
+  return c->post_scope_indent;
+}
+
+static inline guint
+get_pre_scope_indent (IdeCIndenter *c)
+{
+  if (c->pre_scope_indent == -1)
+    return c->indent_width;
+  return c->pre_scope_indent;
+}
+
+static inline guint
+get_condition_indent (IdeCIndenter *c)
+{
+  if (c->condition_indent == -1)
+    return c->indent_width;
+  return c->condition_indent;
+}
+
 static inline void
 build_indent (IdeCIndenter *c,
               guint         line_offset,
@@ -630,7 +654,7 @@ c_indenter_indent (IdeCIndenter  *c,
            */
           if (backward_to_line_first_char (iter))
             offset = GET_LINE_OFFSET (iter);
-          offset += c->post_scope_indent;
+          offset += get_post_scope_indent (c);
         }
 
       build_indent (c, offset, iter, str);
@@ -682,7 +706,7 @@ c_indenter_indent (IdeCIndenter  *c,
           if (backward_find_matching_char (iter, '}'))
             {
               offset = GET_LINE_OFFSET (iter);
-              offset += c->post_scope_indent;
+              offset += get_post_scope_indent (c);
             }
 
           build_indent (c, offset, iter, str);
@@ -703,7 +727,7 @@ c_indenter_indent (IdeCIndenter  *c,
           backward_find_condition_keyword (iter))
         {
           guint offset = GET_LINE_OFFSET (iter);
-          build_indent (c, offset + c->condition_indent, iter, str);
+          build_indent (c, offset + get_condition_indent (c), iter, str);
           IDE_GOTO (cleanup);
         }
 
@@ -725,7 +749,7 @@ c_indenter_indent (IdeCIndenter  *c,
         backward_to_line_first_char (&match_begin);
 
       offset = GET_LINE_OFFSET (&match_begin);
-      build_indent (c, offset + c->pre_scope_indent, iter, str);
+      build_indent (c, offset + get_pre_scope_indent (c), iter, str);
       IDE_GOTO (cleanup);
     }
 
@@ -740,7 +764,7 @@ c_indenter_indent (IdeCIndenter  *c,
           guint offset;
 
           offset = GET_LINE_OFFSET (iter);
-          build_indent (c, offset + c->post_scope_indent, iter, str);
+          build_indent (c, offset + get_post_scope_indent (c), iter, str);
           IDE_GOTO (cleanup);
         }
       else
@@ -750,7 +774,7 @@ c_indenter_indent (IdeCIndenter  *c,
               guint offset;
 
               offset = GET_LINE_OFFSET (iter);
-              build_indent (c, offset + c->post_scope_indent, iter, str);
+              build_indent (c, offset + get_post_scope_indent (c), iter, str);
               IDE_GOTO (cleanup);
             }
         }
@@ -838,7 +862,7 @@ maybe_unindent_opening_brace (IdeCIndenter *c,
 
       offset = GET_LINE_OFFSET (&copy);
       str = g_string_new (NULL);
-      build_indent (c, offset + c->post_scope_indent + c->pre_scope_indent, &copy, str);
+      build_indent (c, offset + get_post_scope_indent(c) + get_pre_scope_indent (c), &copy, str);
       g_string_append_c (str, '{');
 
       if (ide_source_view_get_insert_matching_brace (IDE_SOURCE_VIEW (view)))
@@ -1430,9 +1454,9 @@ ide_c_indenter_class_finalize (IdeCIndenterClass *klass)
 static void
 ide_c_indenter_init (IdeCIndenter *self)
 {
-  self->condition_indent = 2;
-  self->pre_scope_indent = 2;
-  self->post_scope_indent = 2;
+  self->condition_indent = -1;
+  self->pre_scope_indent = -1;
+  self->post_scope_indent = -1;
   self->directive_indent = G_MININT;
   self->case_indent = 0;
 }
