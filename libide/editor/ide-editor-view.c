@@ -431,6 +431,38 @@ ide_editor_view__focus_in_event (IdeEditorView  *self,
 }
 
 static void
+addin_load_source_view (PeasExtensionSet *set,
+                        PeasPluginInfo   *plugin_info,
+                        PeasExtension    *exten,
+                        gpointer          user_data)
+{
+  IdeSourceView *source_view = user_data;
+
+  g_assert (PEAS_IS_EXTENSION_SET (set));
+  g_assert (plugin_info != NULL);
+  g_assert (IDE_IS_EDITOR_VIEW_ADDIN (exten));
+  g_assert (IDE_IS_SOURCE_VIEW (source_view));
+
+  ide_editor_view_addin_load_source_view (IDE_EDITOR_VIEW_ADDIN (exten), source_view);
+}
+
+static void
+addin_unload_source_view (PeasExtensionSet *set,
+                          PeasPluginInfo   *plugin_info,
+                          PeasExtension    *exten,
+                          gpointer          user_data)
+{
+  IdeSourceView *source_view = user_data;
+
+  g_assert (PEAS_IS_EXTENSION_SET (set));
+  g_assert (plugin_info != NULL);
+  g_assert (IDE_IS_EDITOR_VIEW_ADDIN (exten));
+  g_assert (IDE_IS_SOURCE_VIEW (source_view));
+
+  ide_editor_view_addin_unload_source_view (IDE_EDITOR_VIEW_ADDIN (exten), source_view);
+}
+
+static void
 ide_editor_view_set_split_view (IdeLayoutView *view,
                                 gboolean       split_view)
 {
@@ -467,11 +499,20 @@ ide_editor_view_set_split_view (IdeLayoutView *view,
                                          "shrink", FALSE,
                                          "resize", TRUE,
                                          NULL);
+
+      peas_extension_set_foreach (self->extensions,
+                                  addin_load_source_view,
+                                  self->frame2->source_view);
+
       gtk_widget_grab_focus (GTK_WIDGET (self->frame2));
     }
   else
     {
       GtkWidget *copy = GTK_WIDGET (self->frame2);
+
+      peas_extension_set_foreach (self->extensions,
+                                  addin_unload_source_view,
+                                  self->frame2->source_view);
 
       self->frame2 = NULL;
       gtk_container_remove (GTK_CONTAINER (self->paned), copy);
@@ -540,8 +581,15 @@ ide_editor_view__extension_added (PeasExtensionSet *set,
   g_assert (IDE_IS_EDITOR_VIEW_ADDIN (addin));
   g_assert (IDE_IS_EDITOR_VIEW (self));
 
+  /* Initialize the addin */
   ide_editor_view_addin_load (addin, self);
 
+  /* Allow the addin to track the source views */
+  ide_editor_view_addin_load_source_view (addin, self->frame1->source_view);
+  if (self->frame2)
+    ide_editor_view_addin_load_source_view (addin, self->frame2->source_view);
+
+  /* Notify the addin of the current language */
   if (self->document != NULL)
     {
       GtkSourceLanguage *language;
@@ -571,6 +619,12 @@ ide_editor_view__extension_removed (PeasExtensionSet *set,
   g_assert (info != NULL);
   g_assert (IDE_IS_EDITOR_VIEW_ADDIN (addin));
   g_assert (IDE_IS_EDITOR_VIEW (self));
+
+  if (self->frame2 && self->frame2->source_view)
+    ide_editor_view_addin_unload_source_view (addin, self->frame2->source_view);
+
+  if (self->frame1 && self->frame1->source_view)
+    ide_editor_view_addin_unload_source_view (addin, self->frame1->source_view);
 
   ide_editor_view_addin_unload (addin, self);
 }

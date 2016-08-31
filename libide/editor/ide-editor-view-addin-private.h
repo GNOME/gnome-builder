@@ -19,16 +19,21 @@
 #ifndef IDE_EDITOR_VIEW_ADDIN_PRIVATE_H
 #define IDE_EDITOR_VIEW_ADDIN_PRIVATE_H
 
-#include "ide-editor-view-addin.h"
+#include "editor/ide-editor-view-addin.h"
+#include "sourceview/ide-source-view.h"
 
 G_BEGIN_DECLS
 
-void ide_editor_view_addin_language_changed (IdeEditorViewAddin *self,
-                                            const gchar       *language_id);
-void ide_editor_view_addin_load             (IdeEditorViewAddin *self,
-                                            IdeEditorView      *view);
-void ide_editor_view_addin_unload           (IdeEditorViewAddin *self,
-                                            IdeEditorView      *view);
+void ide_editor_view_addin_language_changed   (IdeEditorViewAddin *self,
+                                               const gchar        *language_id);
+void ide_editor_view_addin_load               (IdeEditorViewAddin *self,
+                                               IdeEditorView      *view);
+void ide_editor_view_addin_unload             (IdeEditorViewAddin *self,
+                                               IdeEditorView      *view);
+void ide_editor_view_addin_load_source_view   (IdeEditorViewAddin *self,
+                                               IdeSourceView      *source_view);
+void ide_editor_view_addin_unload_source_view (IdeEditorViewAddin *self,
+                                               IdeSourceView      *source_view);
 G_END_DECLS
 
 #endif /* IDE_EDITOR_VIEW_ADDIN_PRIVATE_H */

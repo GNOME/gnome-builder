@@ -31,12 +31,16 @@ struct _IdeEditorViewAddinInterface
 {
   GTypeInterface parent;
 
-  void (*load)             (IdeEditorViewAddin *self,
-                            IdeEditorView      *view);
-  void (*unload)           (IdeEditorViewAddin *self,
-                            IdeEditorView      *view);
-  void (*language_changed) (IdeEditorViewAddin *self,
-                            const gchar       *language_id);
+  void (*load)               (IdeEditorViewAddin *self,
+                              IdeEditorView      *view);
+  void (*unload)             (IdeEditorViewAddin *self,
+                              IdeEditorView      *view);
+  void (*language_changed)   (IdeEditorViewAddin *self,
+                              const gchar        *language_id);
+  void (*load_source_view)   (IdeEditorViewAddin *self,
+                              IdeSourceView      *source_view);
+  void (*unload_source_view) (IdeEditorViewAddin *self,
+                              IdeSourceView      *source_view);
 };
 
 G_END_DECLS

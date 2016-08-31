@@ -21,44 +21,60 @@
 G_DEFINE_INTERFACE (IdeEditorViewAddin, ide_editor_view_addin, G_TYPE_OBJECT)
 
 static void
-dummy_vfunc (IdeEditorViewAddin *self,
-             IdeEditorView      *view)
-{
-}
-
-static void
 ide_editor_view_addin_default_init (IdeEditorViewAddinInterface *iface)
 {
-  iface->load = dummy_vfunc;
-  iface->unload = dummy_vfunc;
 }
 
 void
 ide_editor_view_addin_load (IdeEditorViewAddin *self,
-                           IdeEditorView      *view)
+                            IdeEditorView      *view)
 {
   g_return_if_fail (IDE_IS_EDITOR_VIEW_ADDIN (self));
   g_return_if_fail (IDE_IS_EDITOR_VIEW (view));
 
-  IDE_EDITOR_VIEW_ADDIN_GET_IFACE (self)->load (self, view);
+  if (IDE_EDITOR_VIEW_ADDIN_GET_IFACE (self)->load)
+    IDE_EDITOR_VIEW_ADDIN_GET_IFACE (self)->load (self, view);
 }
 
 void
 ide_editor_view_addin_unload (IdeEditorViewAddin *self,
-                             IdeEditorView      *view)
+                              IdeEditorView      *view)
 {
   g_return_if_fail (IDE_IS_EDITOR_VIEW_ADDIN (self));
   g_return_if_fail (IDE_IS_EDITOR_VIEW (view));
 
-  IDE_EDITOR_VIEW_ADDIN_GET_IFACE (self)->unload (self, view);
+  if (IDE_EDITOR_VIEW_ADDIN_GET_IFACE (self)->unload)
+    IDE_EDITOR_VIEW_ADDIN_GET_IFACE (self)->unload (self, view);
 }
 
 void
 ide_editor_view_addin_language_changed (IdeEditorViewAddin *self,
-                                       const gchar       *language_id)
+                                        const gchar        *language_id)
 {
   g_return_if_fail (IDE_IS_EDITOR_VIEW_ADDIN (self));
 
   if (IDE_EDITOR_VIEW_ADDIN_GET_IFACE (self)->language_changed)
     IDE_EDITOR_VIEW_ADDIN_GET_IFACE (self)->language_changed (self, language_id);
+}
+
+void
+ide_editor_view_addin_load_source_view (IdeEditorViewAddin *self,
+                                        IdeSourceView      *source_view)
+{
+  g_return_if_fail (IDE_IS_EDITOR_VIEW_ADDIN (self));
+  g_return_if_fail (IDE_IS_SOURCE_VIEW (source_view));
+
+  if (IDE_EDITOR_VIEW_ADDIN_GET_IFACE (self)->load_source_view)
+    IDE_EDITOR_VIEW_ADDIN_GET_IFACE (self)->load_source_view (self, source_view);
+}
+
+void
+ide_editor_view_addin_unload_source_view (IdeEditorViewAddin *self,
+                                          IdeSourceView      *source_view)
+{
+  g_return_if_fail (IDE_IS_EDITOR_VIEW_ADDIN (self));
+  g_return_if_fail (IDE_IS_SOURCE_VIEW (source_view));
+
+  if (IDE_EDITOR_VIEW_ADDIN_GET_IFACE (self)->unload_source_view)
+    IDE_EDITOR_VIEW_ADDIN_GET_IFACE (self)->unload_source_view (self, source_view);
 }
