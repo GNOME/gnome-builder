@@ -154,6 +154,8 @@ build_indent (IdeCIndenter *c,
       g_string_truncate (str, 0);
       g_string_append_len (str, translated->str, translated->len);
       g_string_free (translated, TRUE);
+
+      g_free (needle);
     }
 }
 
