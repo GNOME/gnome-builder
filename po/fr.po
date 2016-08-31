@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-08-30 19:47+0000\n"
+"POT-Creation-Date: 2016-08-31 20:13+0000\n"
 "PO-Revision-Date: 2016-03-28 06:29+0100\n"
 "Last-Translator: Laurent de Burlet <thevedeburlet@gmail.com>\n"
 "Language-Team: français <>\n"
@@ -75,17 +75,13 @@ msgid "Open"
 msgstr "Ouvrir"
 
 #: contrib/egg/egg-file-chooser-entry.c:104
-#, fuzzy
-#| msgid "_Select"
 msgid "Select"
-msgstr "_Sélectionner"
+msgstr "Sélectionner"
 
 #: contrib/egg/egg-file-chooser-entry.c:108
 #: plugins/create-project/gbp-create-project-genesis-addin.c:229
-#, fuzzy
-#| msgid "_Create"
 msgid "Create"
-msgstr "_Créer"
+msgstr "Créer"
 
 #: contrib/egg/egg-file-chooser-entry.c:112
 #: libide/editor/ide-editor-view-actions.c:317
@@ -98,7 +94,7 @@ msgstr "Enregistrer"
 
 #: contrib/egg/egg-file-chooser-entry.c:455
 msgid "Browse…"
-msgstr ""
+msgstr "Parcourir…"
 
 #: contrib/egg/egg-file-chooser-entry.c:488
 #: libide/editor/ide-editor-view-actions.c:316
@@ -119,11 +115,11 @@ msgstr "Recherche"
 
 #: contrib/gstyle/gstyle-color-panel.c:953
 msgid "Palette: "
-msgstr ""
+msgstr "Palette : "
 
 #: contrib/gstyle/gstyle-color-panel.c:955
 msgid "Palette"
-msgstr ""
+msgstr "Palette"
 
 #: contrib/gstyle/gstyle-color-plane.c:1601
 msgid "Color Plane"
@@ -131,27 +127,26 @@ msgstr ""
 
 #: contrib/gstyle/gstyle-color-widget-actions.c:66
 msgid "Color name"
-msgstr ""
+msgstr "Nom de la couleur"
 
 #: contrib/gstyle/gstyle-color-widget-actions.c:68
 msgid "Enter a new name for the color"
-msgstr ""
+msgstr "Saisissez un nouveau nom pour la couleur"
 
 #: contrib/gstyle/gstyle-palette.c:492 contrib/gstyle/gstyle-palette.c:558
-#, fuzzy, c-format
-#| msgid "Failed to parse integer from \"%s\""
+#, c-format
 msgid "failed to parse line %i\n"
-msgstr "Impossible d'analyser un entier depuis « %s »"
+msgstr "impossible d'analyser la ligne %i\n"
 
 #: contrib/gstyle/gstyle-palette.c:613
 #, c-format
 msgid "%s: palette is empty\n"
-msgstr ""
+msgstr "%s : la palette est vide\n"
 
 #: contrib/gstyle/gstyle-palette.c:719
 #, c-format
 msgid "%s: failed to parse\n"
-msgstr ""
+msgstr "%s : impossible d'analyser\n"
 
 #: contrib/gstyle/gstyle-palette.c:727
 #, fuzzy, c-format
@@ -166,14 +161,12 @@ msgstr ""
 
 #: contrib/gstyle/gstyle-palette.c:822
 msgid "failed to parse\n"
-msgstr ""
+msgstr "impossible d'analyser\n"
 
 #. To translators: always in singular form like in: generated palette number <generated_count>
 #: contrib/gstyle/gstyle-palette.c:829
-#, fuzzy
-#| msgid "General"
 msgid "Generated"
-msgstr "Général"
+msgstr "Généré"
 
 #: contrib/gstyle/gstyle-palette.c:932
 #, c-format
@@ -188,17 +181,15 @@ msgstr "document non enregistré %u"
 
 #: contrib/gstyle/tests/data/gstyle-color-editor.ui:64
 msgid "Hue"
-msgstr ""
+msgstr "Teinte"
 
 #: contrib/gstyle/tests/data/gstyle-color-editor.ui:75
-#, fuzzy
-#| msgid "Emulation"
 msgid "Saturation"
-msgstr "Émulation"
+msgstr "Saturation"
 
 #: contrib/gstyle/tests/data/gstyle-color-editor.ui:86
 msgid "Value"
-msgstr ""
+msgstr "Valeur"
 
 #: contrib/gstyle/tests/data/gstyle-color-editor.ui:97
 msgid "Cielab l"
@@ -213,34 +204,32 @@ msgid "Cielab b"
 msgstr ""
 
 #: contrib/gstyle/tests/data/gstyle-color-editor.ui:130
-#, fuzzy
-#| msgid "_Reload"
 msgid "Red"
-msgstr "_Recharger"
+msgstr "Rouge"
 
 #: contrib/gstyle/tests/data/gstyle-color-editor.ui:141
 msgid "Green"
-msgstr ""
+msgstr "Vert"
 
 #: contrib/gstyle/tests/data/gstyle-color-editor.ui:152
 msgid "Blue"
-msgstr ""
+msgstr "Bleu"
 
 #: contrib/gstyle/ui/gstyle-color-panel.ui:157
 msgid "Color Components"
-msgstr ""
+msgstr "Composantes de la couleur"
 
 #: contrib/gstyle/ui/gstyle-color-panel.ui:206
 msgid "H"
-msgstr ""
+msgstr "T"
 
 #: contrib/gstyle/ui/gstyle-color-panel.ui:216
 msgid "S"
-msgstr ""
+msgstr "S"
 
 #: contrib/gstyle/ui/gstyle-color-panel.ui:226
 msgid "V"
-msgstr ""
+msgstr "V"
 
 #: contrib/gstyle/ui/gstyle-color-panel.ui:322
 msgid "L*"
@@ -256,40 +245,36 @@ msgstr ""
 
 #: contrib/gstyle/ui/gstyle-color-panel.ui:441
 msgid "R"
-msgstr ""
+msgstr "R"
 
 #: contrib/gstyle/ui/gstyle-color-panel.ui:451
-#, fuzzy
-#| msgid "Go"
 msgid "G"
-msgstr "Aller à"
+msgstr "V"
 
 #: contrib/gstyle/ui/gstyle-color-panel.ui:461
 msgid "B"
-msgstr ""
+msgstr "B"
 
 #: contrib/gstyle/ui/gstyle-color-panel.ui:573
 #: plugins/color-picker/gtk/color-picker-prefs.ui:433
-#, fuzzy
-#| msgid "Format Strings"
 msgid "Color strings"
-msgstr "Chaîne de formatage"
+msgstr "Chaînes de couleur"
 
 #: contrib/gstyle/ui/gstyle-color-panel.ui:634
 msgid "HEX3"
-msgstr ""
+msgstr "HEX3"
 
 #: contrib/gstyle/ui/gstyle-color-panel.ui:645
 msgid "HEX6"
-msgstr ""
+msgstr "HEX6"
 
 #: contrib/gstyle/ui/gstyle-color-panel.ui:656
 msgid "RGB"
-msgstr ""
+msgstr "RVB"
 
 #: contrib/gstyle/ui/gstyle-color-panel.ui:667
 msgid "RGBA"
-msgstr ""
+msgstr "RVBA"
 
 #: contrib/gstyle/ui/gstyle-color-panel.ui:678
 msgid "HSL"
@@ -301,32 +286,26 @@ msgstr ""
 
 #: contrib/gstyle/ui/gstyle-color-panel.ui:818
 msgid "Palettes"
-msgstr ""
+msgstr "Palettes"
 
 #: contrib/gstyle/ui/gstyle-color-panel.ui:946
 #: plugins/color-picker/gtk/color-picker.ui:48
-#, fuzzy
-#| msgid "No open files"
 msgid "No open palettes"
-msgstr "Aucun fichier ouvert"
+msgstr "Aucune palette ouverte"
 
 #: contrib/gstyle/ui/gstyle-color-panel.ui:959
 msgid "Load or generate a palette using the preferences"
-msgstr ""
+msgstr "Charger ou générer une palette selon les préférences"
 
 #: contrib/gstyle/ui/gstyle-color-widget.ui:13
 #: plugins/color-picker/gtk/color-picker-palette-menu.ui:13
-#, fuzzy
-#| msgid "_Rename"
 msgid "Rename"
-msgstr "_Renommer"
+msgstr "Renommer"
 
 #: contrib/gstyle/ui/gstyle-color-widget.ui:19
 #: plugins/color-picker/gtk/color-picker-palette-menu.ui:19
-#, fuzzy
-#| msgid "_Remove"
 msgid "Remove"
-msgstr "_Retirer"
+msgstr "Retirer"
 
 #: contrib/gstyle/ui/gstyle-rename-popover.ui:35
 #: plugins/project-tree/gb-rename-file-popover.ui:35
@@ -362,10 +341,8 @@ msgid "Could not parse XML from stream"
 msgstr "Impossible d'analyser le XML depuis le flux"
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:6
-#, fuzzy
-#| msgid "Builder"
 msgid "Build Parallelism"
-msgstr "Builder"
+msgstr "Parallélisme de construction"
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:7
 msgid ""
@@ -374,38 +351,32 @@ msgid ""
 msgstr ""
 
 #: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:5
-#, fuzzy
-#| msgid "Suggest Python completions"
 msgid "Suggest Snippet Completion"
-msgstr "Suggérer la complétion Python"
+msgstr "Suggérer la complétion des extraits"
 
 #: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:6
 msgid "Allow snippets to be inserted into the document."
-msgstr ""
+msgstr "Permettre aux extraits d'être insérés dans le document."
 
 #: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:10
-#, fuzzy
-#| msgid "Suggest completions using Clang (Experimental)"
 msgid "Clang based autocompletion (Experimental)"
-msgstr "Suggérer la complétion à l'aide de Clang (expérimental)"
+msgstr "Complétion à l'aide de Clang (expérimental)"
 
 #: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:11
-#, fuzzy
-#| msgid "Use Clang to suggest completions for C and C++ languages"
 msgid "Use Clang for autocompletion in the C and C++ languages."
-msgstr "Utiliser Clang pour suggérer la complétion des langages C et C++"
+msgstr "Utiliser Clang pour la complétion automatique des langages C et C++"
 
 #: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:15
 msgid "Ctags based autocompletion"
-msgstr ""
+msgstr "Complétion à l'aide de Ctags"
 
 #: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:16
 msgid "Use Ctags for autocompletion."
-msgstr ""
+msgstr "Utiliser Ctags pour la complétion automatique."
 
 #: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:20
 msgid "Enable auto-completion of words in document"
-msgstr ""
+msgstr "Activer la complétion automatique des mots du document"
 
 #: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:21
 msgid ""
@@ -414,10 +385,8 @@ msgid ""
 msgstr ""
 
 #: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:25
-#, fuzzy
-#| msgid "Semantic Highlighting"
 msgid "Enable semantic highlighting"
-msgstr "Coloration sémantique"
+msgstr "Activer la coloration sémantique"
 
 #: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:26
 msgid ""
@@ -426,30 +395,24 @@ msgid ""
 msgstr ""
 
 #: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:30
-#, fuzzy
-#| msgid "autogen.sh is not executable."
 msgid "Path to ctags executable"
-msgstr "autogen.sh n'est pas exécutable."
+msgstr "Chemin vers l'exécutable ctags"
 
 #: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:31
 msgid "The path to the ctags executable on the system."
-msgstr ""
+msgstr "Le chemin vers l'exécutable ctags sur le système."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:24
-#, fuzzy
-#| msgid "Restore cursor position"
 msgid "Restore last position"
-msgstr "Restaurer la position du curseur"
+msgstr "Restaurer la dernière position"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:25
 msgid "Jump to the last position when reopening a file"
 msgstr ""
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:29
-#, fuzzy
-#| msgid "Show Ignored Files"
 msgid "Show modified lines"
-msgstr "Montrer les fichiers ignorés"
+msgstr "Montrer les lignes modifiées"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:30
 msgid ""
@@ -477,10 +440,8 @@ msgid "If enabled, the editor will highlight matching brackets."
 msgstr ""
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:44
-#, fuzzy
-#| msgid "Go to line number"
 msgid "Show line numbers"
-msgstr "Aller à la ligne numéro"
+msgstr "Afficher les numéros de lignes"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:45
 msgid "If enabled, the editor will show line numbers."
@@ -493,16 +454,12 @@ msgid "Smart Backspace"
 msgstr "Retours arrières intelligents"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:50
-#, fuzzy
-#| msgid ""
-#| "Backspace will remove extra space to keep you aligned with your "
-#| "indentation"
 msgid ""
 "Backspace will remove additional spaces to keep you aligned to the "
 "indentation size."
 msgstr ""
 "La touche Retour arrière effacera des espaces supplémentaires pour rester "
-"aligné avec votre indentation."
+"aligné avec votre taille d'indentation."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:54
 #: libide/preferences/ide-preferences-builtin.c:132
@@ -518,10 +475,8 @@ msgstr ""
 "espace."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:59
-#, fuzzy
-#| msgid "Show Ignored Files"
 msgid "Show grid lines"
-msgstr "Montrer les fichiers ignorés"
+msgstr "Afficher les lignes de la grille"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:60
 msgid "If enabled, the editor will show grid lines in the document."
@@ -539,8 +494,6 @@ msgid ""
 msgstr ""
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:79
-#, fuzzy
-#| msgid "Automatically hide overview map"
 msgid "Automatically Hide Overview Map"
 msgstr "Masquer automatiquement la vue d'ensemble"
 
@@ -551,14 +504,12 @@ msgid ""
 msgstr ""
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:84
-#, fuzzy
-#| msgid "Spaces"
 msgid "Draw Spaces"
-msgstr "Espaces"
+msgstr "Dessiner les espaces"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:85
 msgid "The various types of space to draw in the editor."
-msgstr ""
+msgstr "Les divers types d'espaces à dessiner dans l'éditeur."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:90
 #: libide/preferences/ide-preferences-builtin.c:144
@@ -566,15 +517,13 @@ msgid "Overscroll"
 msgstr "Surdéfilement"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:91
-#, fuzzy
-#| msgid "Allow the editor to scroll past the end of the buffer"
 msgid "The number of lines to scroll beyond the end of the buffer."
-msgstr "Permettre à l'éditeur de défiler au delà de la fin du tampon"
+msgstr "Le nombre de lignes pour le défilement au delà de la fin du tampon"
 
 #: data/gsettings/org.gnome.builder.extension-type.gschema.xml:5
 #: data/gsettings/org.gnome.builder.plugin.gschema.xml:5
 msgid "Enabled"
-msgstr ""
+msgstr "Activé"
 
 #: data/gsettings/org.gnome.builder.extension-type.gschema.xml:6
 msgid "If the type within the extension is enabled."
@@ -582,21 +531,19 @@ msgstr ""
 
 #: data/gsettings/org.gnome.builder.gschema.xml:5
 msgid "Window size"
-msgstr ""
+msgstr "Taille de la fenêtre"
 
 #: data/gsettings/org.gnome.builder.gschema.xml:6
 msgid "Window size (width and height)."
-msgstr ""
+msgstr "Taille de la fenêtre (largeur et hauteur)."
 
 #: data/gsettings/org.gnome.builder.gschema.xml:10
-#, fuzzy
-#| msgid "Right margin position"
 msgid "Window position"
-msgstr "Position de la marge de droite"
+msgstr "Position de la fenêtre"
 
 #: data/gsettings/org.gnome.builder.gschema.xml:11
 msgid "Window position (x and y)."
-msgstr ""
+msgstr "Position de la fenêtre (x et y)."
 
 #: data/gsettings/org.gnome.builder.gschema.xml:15
 msgid "Window maximized"
@@ -608,7 +555,7 @@ msgstr ""
 
 #: data/gsettings/org.gnome.builder.gschema.xml:20
 msgid "Night Mode"
-msgstr ""
+msgstr "Mode nuit"
 
 #: data/gsettings/org.gnome.builder.gschema.xml:21
 msgid "Prefer dark application chrome."
@@ -628,20 +575,16 @@ msgstr "Rechercher des projets"
 
 #: data/gsettings/org.gnome.builder.gschema.xml:30
 #: libide/preferences/ide-preferences-builtin.c:317
-#, fuzzy
-#| msgid "Directory"
 msgid "Projects directory"
 msgstr "Répertoire des projets"
 
 #: data/gsettings/org.gnome.builder.gschema.xml:31
-#, fuzzy
-#| msgid "Search for projects"
 msgid "Directory for all Builder projects."
-msgstr "Rechercher des projets"
+msgstr "Répertoire pour tous les projets Builder."
 
 #: data/gsettings/org.gnome.builder.gschema.xml:35
 msgid "Restore Previous Files"
-msgstr ""
+msgstr "Restaurer les fichiers précédents"
 
 #: data/gsettings/org.gnome.builder.gschema.xml:36
 msgid "Restore previously opened files when loading a project."
@@ -649,11 +592,11 @@ msgstr ""
 
 #: data/gsettings/org.gnome.builder.plugin.gschema.xml:6
 msgid "If the plugin should be enabled"
-msgstr ""
+msgstr "Indique si le greffon doit être activé"
 
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:5
 msgid "Show Project Sidebar"
-msgstr ""
+msgstr "Afficher la barre latérale de projet"
 
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:6
 msgid "If enabled, the sidebar will be visible in the editor workspace."
@@ -679,52 +622,40 @@ msgid ""
 msgstr ""
 
 #: data/gsettings/org.gnome.builder.workbench.gschema.xml:5
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Toggle left panel"
 msgid "Show Left Panel"
-msgstr "Basculer le panneau de gauche"
+msgstr "Afficher le panneau de gauche"
 
 #: data/gsettings/org.gnome.builder.workbench.gschema.xml:6
 msgid "If enabled, the left panel will be displayed."
 msgstr ""
 
 #: data/gsettings/org.gnome.builder.workbench.gschema.xml:11
-#, fuzzy
-#| msgid "Right margin position"
 msgid "Left Panel Position"
-msgstr "Position de la marge de droite"
+msgstr "Position du panneau de gauche"
 
 #: data/gsettings/org.gnome.builder.workbench.gschema.xml:12
 msgid "The width in pixel units of the left panel."
 msgstr ""
 
 #: data/gsettings/org.gnome.builder.workbench.gschema.xml:17
-#, fuzzy
-#| msgid "Show right margin"
 msgid "Show Right Panel"
-msgstr "Afficher la marge de droite"
+msgstr "Afficher le panneau de droite"
 
 #: data/gsettings/org.gnome.builder.workbench.gschema.xml:18
 msgid "If enabled, the right panel will be displayed."
 msgstr ""
 
 #: data/gsettings/org.gnome.builder.workbench.gschema.xml:23
-#, fuzzy
-#| msgid "Right margin position"
 msgid "Right Panel Position"
-msgstr "Position de la marge de droite"
+msgstr "Position du panneau de droite"
 
 #: data/gsettings/org.gnome.builder.workbench.gschema.xml:24
 msgid "The width in pixel units of the right panel."
 msgstr ""
 
 #: data/gsettings/org.gnome.builder.workbench.gschema.xml:29
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Toggle bottom panel"
 msgid "Show Bottom Panel"
-msgstr "Basculer le panneau du bas"
+msgstr "Afficher le panneau du bas"
 
 #: data/gsettings/org.gnome.builder.workbench.gschema.xml:30
 msgid "If enabled, the bottom panel will be displayed."
@@ -732,7 +663,7 @@ msgstr ""
 
 #: data/gsettings/org.gnome.builder.workbench.gschema.xml:35
 msgid "Bottom Panel Position"
-msgstr ""
+msgstr "Position du panneau du bas"
 
 #: data/gsettings/org.gnome.builder.workbench.gschema.xml:36
 msgid "The height in pixel units of the bottom panel."
@@ -767,34 +698,24 @@ msgid "_Quit"
 msgstr "_Quitter"
 
 #: data/gtk/menus.ui:48
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Toggle left panel"
 msgid "Show left panel"
-msgstr "Basculer le panneau de gauche"
+msgstr "Afficher le panneau de gauche"
 
 #: data/gtk/menus.ui:53
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Toggle bottom panel"
 msgid "Show bottom panel"
-msgstr "Basculer le panneau du bas"
+msgstr "Afficher le panneau du bas"
 
 #: data/gtk/menus.ui:58
-#, fuzzy
-#| msgid "Show right margin"
 msgid "Show right panel"
-msgstr "Afficher la marge de droite"
+msgstr "Afficher le panneau de droite"
 
 #: data/gtk/menus.ui:86
 msgid "_New File"
 msgstr "_Nouveau fichier"
 
 #: data/gtk/menus.ui:92
-#, fuzzy
-#| msgid "_Open File"
 msgid "_Open File…"
-msgstr "_Ouvrir un fichier"
+msgstr "_Ouvrir un fichier…"
 
 #: data/gtk/menus.ui:98
 msgid "Save _All"
@@ -841,9 +762,8 @@ msgid "Select _All"
 msgstr "_Tout sélectionner"
 
 #: data/gtk/menus.ui:162 plugins/terminal/gtk/menus.ui:33
-#, fuzzy
 msgid "Select _None"
-msgstr "Tout déselectionner"
+msgstr "Tout _déselectionner"
 
 #: data/gtk/menus.ui:168
 msgid "All _Upper Case"
@@ -1133,14 +1053,12 @@ msgid "%s does not support building"
 msgstr "%s ne prend pas en charge la construction"
 
 #: libide/buildsystem/ide-build-manager.c:478
-#, fuzzy
-#| msgid "An unload request is already pending"
 msgid "A build is already in progress"
-msgstr "Une requète de déchargement est déjà en attente"
+msgstr "Une construction est déjà en cours"
 
 #: libide/buildsystem/ide-build-manager.c:771
 msgid "Ready"
-msgstr ""
+msgstr "Prêt"
 
 #: libide/buildsystem/ide-build-result.c:249
 msgid "Failed to open stderr stream."
@@ -1159,7 +1077,7 @@ msgstr "%s() n'est pas supporté par la chaîne de construction %s."
 #: libide/preferences/ide-preferences-builtin.c:261
 #: libide/preferences/ide-preferences-builtin.c:279
 msgid "Default"
-msgstr ""
+msgstr "Défaut"
 
 #: libide/devices/ide-device-manager.c:147
 #, c-format
@@ -1343,10 +1261,8 @@ msgid "Failed to load the project"
 msgstr "Échec de chargement du projet"
 
 #: libide/greeter/ide-greeter-perspective.c:668
-#, fuzzy
-#| msgid "_Open Project"
 msgid "Open Project"
-msgstr "_Ouvrir un projet"
+msgstr "Ouvrir un projet"
 
 #. the action:// link is used to jump to the new-project view
 #: libide/greeter/ide-greeter-perspective.ui:52
@@ -1366,7 +1282,7 @@ msgstr "Projets récents"
 #: libide/greeter/ide-greeter-perspective.ui:113
 #: libide/greeter/ide-greeter-perspective.ui:163
 msgid "Updated"
-msgstr ""
+msgstr "Mis à jour"
 
 #: libide/greeter/ide-greeter-perspective.ui:148
 msgid "Other Projects"
@@ -1385,10 +1301,8 @@ msgid "Click an item to select"
 msgstr "Cliquer sur un élément pour le sélectionner"
 
 #: libide/greeter/ide-greeter-perspective.ui:320
-#, fuzzy
-#| msgid "Open"
 msgid "Open…"
-msgstr "Ouvrir"
+msgstr "Ouvrir…"
 
 #: libide/greeter/ide-greeter-perspective.ui:335
 msgid "Select projects for removal"
@@ -1550,12 +1464,9 @@ msgid "Close the document"
 msgstr "Fermer le document"
 
 #: libide/keybindings/ide-shortcuts-window.ui:149
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Switch to the next document"
 msgctxt "shortcut window"
 msgid "Show list of open documents"
-msgstr "Passer au document suivant"
+msgstr "Afficher la liste des documents ouverts"
 
 #: libide/keybindings/ide-shortcuts-window.ui:157
 msgctxt "shortcut window"
@@ -1788,8 +1699,6 @@ msgid "Font"
 msgstr "Police"
 
 #: libide/preferences/ide-preferences-builtin.c:110
-#, fuzzy
-#| msgid "editor font monospace"
 msgctxt "Keywords"
 msgid "editor font monospace"
 msgstr "éditeur police monospace chasse fixe"
@@ -1801,8 +1710,6 @@ msgid "Terminal"
 msgstr "Terminal"
 
 #: libide/preferences/ide-preferences-builtin.c:112
-#, fuzzy
-#| msgid "terminal font monospace"
 msgctxt "Keywords"
 msgid "terminal font monospace"
 msgstr "terminal police monospace chasse fixe"
@@ -1862,8 +1769,7 @@ msgstr "Restaurer la position du curseur"
 
 #: libide/preferences/ide-preferences-builtin.c:142
 msgid "Restore cursor position when a file is reopened"
-msgstr ""
-"Restaurer la position du curseur quand un fichier est ouvert à nouveau"
+msgstr "Restaurer la position du curseur quand un fichier est ouvert à nouveau"
 
 #: libide/preferences/ide-preferences-builtin.c:143
 msgid "Scroll Offset"
@@ -1916,8 +1822,7 @@ msgstr "Accolades correspondantes"
 
 #: libide/preferences/ide-preferences-builtin.c:152
 msgid "Highlight matching brackets based on cursor position"
-msgstr ""
-"Surligner les accolades correspondantes selon la position du curseur"
+msgstr "Surligner les accolades correspondantes selon la position du curseur"
 
 #: libide/preferences/ide-preferences-builtin.c:154
 msgid "Code Overview"
@@ -2124,17 +2029,12 @@ msgid "A place for all your projects"
 msgstr "Un emplacement pour tous vos projets"
 
 #: libide/preferences/ide-preferences-builtin.c:318
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Move to previous error in file"
 msgid "Restore previously opened files"
-msgstr "Aller à l'erreur précédente du fichier"
+msgstr "Restaurer les fichiers ouverts précédemment"
 
 #: libide/preferences/ide-preferences-builtin.c:318
-#, fuzzy
-#| msgid "The prefix to use when installing the project"
 msgid "Open previously opened files when loading a project"
-msgstr "Le préfixe à utiliser lors de l'installation du projet"
+msgstr "Ouvrer les fichiers ouverts précédemment lors du chargement d'un projet"
 
 #: libide/preferences/ide-preferences-builtin.c:320
 msgid "Project Discovery"
@@ -2162,8 +2062,6 @@ msgid "Preferences"
 msgstr "Préférences"
 
 #: libide/preferences/ide-preferences-perspective.ui:15
-#, fuzzy
-#| msgid "Search through preferences"
 msgid "Search Preferences"
 msgstr "Rechercher dans les préférences"
 
@@ -2214,7 +2112,7 @@ msgstr "Échec de la localisation de configure.ac"
 
 #: libide/runner/ide-runner.c:137
 msgid "Process quit unexpectedly"
-msgstr ""
+msgstr "Le processus a quitté de manière inattendue"
 
 #: libide/runtimes/ide-runtime-manager.c:104
 msgid "Host operating system"
@@ -2262,10 +2160,8 @@ msgid "Apply Fix-It"
 msgstr "Appliquer la correction automatique"
 
 #: libide/transfers/ide-transfers-button.ui:33
-#, fuzzy
-#| msgid "Select _All"
 msgid "Clear _All"
-msgstr "_Tout sélectionner"
+msgstr "Tout eff_acer"
 
 #: libide/util/ide-file-manager.c:64
 msgid "File path is NULL"
@@ -2373,18 +2269,16 @@ msgstr "document sans titre"
 #. Translators: "Target" is providing context to the selected build configuration
 #: libide/workbench/ide-omni-bar.c:365
 msgid "Target"
-msgstr ""
+msgstr "Cible"
 
 #. Translators, missing means we could not locate the runtime
 #: libide/workbench/ide-omni-bar-row.c:88
 msgid "missing"
-msgstr ""
+msgstr "manquant"
 
 #: libide/workbench/ide-omni-bar-row.ui:31
-#, fuzzy
-#| msgid "The name of the build configuration"
 msgid "Edit build configuration"
-msgstr "Le nom de la configuration de construction"
+msgstr "Modifier la configuration de construction"
 
 #: libide/workbench/ide-omni-bar-row.ui:54
 #: plugins/build-tools/gbp-build-configuration-view.ui:129
@@ -2401,10 +2295,8 @@ msgid "Build project (Ctrl+F7)"
 msgstr ""
 
 #: libide/workbench/ide-omni-bar.ui:119
-#, fuzzy
-#| msgid "Cancelled"
 msgid "Cancel build"
-msgstr "Annulé"
+msgstr "Annuler la construction"
 
 #: libide/workbench/ide-omni-bar.ui:163
 #: plugins/project-tree/gb-project-tree-addin.c:105
@@ -2413,33 +2305,27 @@ msgstr "Projet"
 
 #: libide/workbench/ide-omni-bar.ui:187
 msgid "Branch"
-msgstr ""
+msgstr "Branche"
 
 #: libide/workbench/ide-omni-bar.ui:222
-#, fuzzy
-#| msgid "Builder"
 msgid "Build Profile"
-msgstr "Builder"
+msgstr "Profil de construction"
 
 #: libide/workbench/ide-omni-bar.ui:266
 msgid "Last build"
-msgstr ""
+msgstr "Dernière construction"
 
 #: libide/workbench/ide-omni-bar.ui:316
 msgid "Failed"
 msgstr "Échec"
 
 #: libide/workbench/ide-omni-bar.ui:333
-#, fuzzy
-#| msgid "Build Output"
 msgid "View Output"
-msgstr "Sortie de la construction"
+msgstr "Voir la sortie"
 
 #: libide/workbench/ide-omni-bar.ui:380
-#, fuzzy
-#| msgid "_Rebuild"
 msgid "Rebuild"
-msgstr "_Reconstruire"
+msgstr "Reconstruire"
 
 #: libide/workbench/ide-omni-bar.ui:390
 msgid "Clean"
@@ -2450,40 +2336,33 @@ msgid "Open File"
 msgstr "Ouvrir le fichier"
 
 #: libide/workbench/ide-workbench.c:558
-#, fuzzy, c-format
-#| msgid "Builder"
+#, c-format
 msgid "%s - Builder"
-msgstr "Builder"
+msgstr "%s - Builder"
 
 #: libide/workbench/ide-workbench-header-bar.ui:43
 msgid "Transfers"
-msgstr ""
+msgstr "Transferts"
 
 #: libide/workbench/ide-workbench-header-bar.ui:50
 msgid "Show workbench menu"
-msgstr ""
+msgstr "Afficher le menu de l'espace de travail"
 
 #: libide/workbench/ide-workbench-header-bar.ui:73
 msgid "Press Ctrl+. to search"
-msgstr ""
+msgstr "Appuyez sur Ctrl+. pour rechercher"
 
 #: plugins/autotools/ide-autotools-builder.c:47
-#, fuzzy
-#| msgid "Cancelled"
 msgid "Build cancelled"
-msgstr "Annulé"
+msgstr "Construction annulée"
 
 #: plugins/autotools/ide-autotools-builder.c:49
-#, fuzzy
-#| msgid " Build Failure: %s\n"
 msgid "Build failed"
-msgstr " Échec de la construction : %s\n"
+msgstr "Échec de la construction"
 
 #: plugins/autotools/ide-autotools-builder.c:55
-#, fuzzy
-#| msgid " Build Successful\n"
 msgid "Build successful"
-msgstr " Construction terminée\n"
+msgstr "Construction réussie"
 
 #: plugins/autotools/ide-autotools-builder.c:159
 #: plugins/autotools/ide-autotools-builder.c:240
@@ -2492,22 +2371,16 @@ msgid "Building…"
 msgstr "Construction…"
 
 #: plugins/autotools/ide-autotools-builder.c:201
-#, fuzzy
-#| msgid "Cancelled"
 msgid "Install cancelled"
-msgstr "Annulé"
+msgstr "Installation annulée"
 
 #: plugins/autotools/ide-autotools-builder.c:203
-#, fuzzy
-#| msgid "Installation Prefix"
 msgid "Install failed"
-msgstr "Préfixe d'installation"
+msgstr "Échec de l'installation"
 
 #: plugins/autotools/ide-autotools-builder.c:209
-#, fuzzy
-#| msgid " Build Successful\n"
 msgid "Install successful"
-msgstr " Construction terminée\n"
+msgstr "Installation réussie"
 
 #: plugins/autotools/ide-autotools-build-system.c:170
 msgid "Failed to locate configure.ac"
@@ -2522,10 +2395,8 @@ msgid "Failed to locate device"
 msgstr "Échec de la localisation du périphérique"
 
 #: plugins/autotools/ide-autotools-build-task.c:594
-#, fuzzy
-#| msgid "Cannot execute build task more than once."
 msgid "Cannot execute build task more than once"
-msgstr "Impossible de lancer une tâche de construction plus d'une fois."
+msgstr "Impossible de lancer une tâche de construction plus d'une fois"
 
 #: plugins/autotools/ide-autotools-build-task.c:735
 msgid "Failed to create build directory."
@@ -2575,34 +2446,26 @@ msgid "Create a new autotools project with a shared library"
 msgstr "Créer un nouveau projet autotools avec une bibliothèque partagée"
 
 #: plugins/autotools-templates/autotools_templates/__init__.py:287
-#, fuzzy
-#| msgid "Project"
 msgid "Empty Project"
-msgstr "Projet"
+msgstr "Projet vide"
 
 #: plugins/autotools-templates/autotools_templates/__init__.py:290
-#, fuzzy
-#| msgid "Create a new project"
 msgid "Create a new empty autotools project"
-msgstr "Créer un nouveau projet"
+msgstr "Créer un nouveau projet autotools vide"
 
 #: plugins/autotools-templates/autotools_templates/__init__.py:304
 msgid "GNOME Application"
-msgstr ""
+msgstr "Application GNOME"
 
 #: plugins/autotools-templates/autotools_templates/__init__.py:306
 msgid "Create a new flatpak-ready GNOME application"
 msgstr ""
 
 #: plugins/build-tools/gbp-build-configuration-row.ui:43
-#, fuzzy
-#| msgid "Duplicate Configuration"
 msgid "Duplicate the configuration"
 msgstr "Dupliquer la configuration"
 
 #: plugins/build-tools/gbp-build-configuration-row.ui:59
-#, fuzzy
-#| msgid "Delete Configuration"
 msgid "Delete the configuration"
 msgstr "Supprimer la configuration"
 
@@ -2857,48 +2720,44 @@ msgid "Close without Saving"
 msgstr ""
 
 #: plugins/color-picker/gb-color-picker-prefs.c:99
-#, fuzzy
-#| msgid "_Save As"
 msgid "Save As…"
-msgstr "Enregistrer _sous"
+msgstr "Enregistrer _sous…"
 
 #: plugins/color-picker/gb-color-picker-prefs.c:207
 msgid "Load palette"
-msgstr ""
+msgstr "Charger une palette"
 
 #: plugins/color-picker/gb-color-picker-prefs.c:234
 msgid "Save palette"
-msgstr ""
+msgstr "Enregistrer la palette"
 
 #: plugins/color-picker/gb-color-picker-prefs.c:725
 msgid "All files"
-msgstr ""
+msgstr "Tous les fichiers"
 
 #: plugins/color-picker/gb-color-picker-prefs.c:729
 msgid "All supported palettes formats"
-msgstr ""
+msgstr "Tous les formats de palettes pris en charge"
 
 #: plugins/color-picker/gb-color-picker-prefs.c:734
 msgid "GIMP palette"
-msgstr ""
+msgstr "Palette GIMP"
 
 #: plugins/color-picker/gb-color-picker-prefs.c:738
-#, fuzzy
-#| msgid "GNOME Builder"
 msgid "GNOME Builder palette"
-msgstr "GNOME Builder"
+msgstr "Palette GNOME Builder"
 
 #: plugins/color-picker/gb-color-picker-prefs-palette-row.c:178
 msgid "Palette name"
-msgstr ""
+msgstr "Nome de la palette"
 
 #: plugins/color-picker/gb-color-picker-prefs-palette-row.c:180
 msgid "Enter a new name for the palette"
-msgstr ""
+msgstr "Saisissez un nouveau nom pour la palette"
 
 #: plugins/color-picker/gb-color-picker-workbench-addin.c:178
 msgid "Colors"
-msgstr ""
+msgstr "Couleurs"
 
 #: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:13
 msgid "HSV visibility"
@@ -2918,7 +2777,7 @@ msgstr ""
 
 #: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:23
 msgid "RGB visibility"
-msgstr ""
+msgstr "Visibilité RVB"
 
 #: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:24
 msgid "If the RGB components are visible."
@@ -2926,18 +2785,15 @@ msgstr ""
 
 #: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:28
 msgid "RGB unit"
-msgstr ""
+msgstr "Unité RVB"
 
 #: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:29
 msgid "The unit used by RGB component and strings."
 msgstr ""
 
 #: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:35
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Select all"
 msgid "Selected palette ID"
-msgstr "Tout sélectionner"
+msgstr "ID de la palette sélectionnée"
 
 #: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:36
 msgid "The selected palette ID among the loaded ones."
@@ -2953,7 +2809,7 @@ msgstr ""
 
 #: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:45
 msgid "Color filter"
-msgstr ""
+msgstr "Filtre de couleur"
 
 #: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:46
 msgid "The filter used on the color scales and color plane."
@@ -2966,7 +2822,7 @@ msgstr ""
 #: plugins/color-picker/gtk/color-picker-prefs.ui:47
 #: plugins/color-picker/gtk/color-picker-prefs.ui:451
 msgid "Visibility:"
-msgstr ""
+msgstr "Visibilité :"
 
 #: plugins/color-picker/gtk/color-picker-prefs.ui:63
 msgid "Select the color spaces for which you want to see sliders in the panel."
@@ -2974,7 +2830,7 @@ msgstr ""
 
 #: plugins/color-picker/gtk/color-picker-prefs.ui:140
 msgid "Units:"
-msgstr ""
+msgstr "Unités :"
 
 #: plugins/color-picker/gtk/color-picker-prefs.ui:156
 msgid ""
@@ -2984,7 +2840,7 @@ msgstr ""
 
 #: plugins/color-picker/gtk/color-picker-prefs.ui:213
 msgid "Filters:"
-msgstr ""
+msgstr "Filtres :"
 
 #: plugins/color-picker/gtk/color-picker-prefs.ui:229
 msgid "Select a filter that act on the colors or 'None'."
@@ -2996,7 +2852,7 @@ msgstr ""
 
 #: plugins/color-picker/gtk/color-picker-prefs.ui:597
 msgid "Palettes options"
-msgstr ""
+msgstr "Options des palettes :"
 
 #: plugins/color-picker/gtk/color-picker-prefs.ui:615
 msgid "Palette view mode:"
@@ -3004,7 +2860,7 @@ msgstr ""
 
 #: plugins/color-picker/gtk/color-picker-prefs.ui:638
 msgid "List"
-msgstr ""
+msgstr "Liste"
 
 #: plugins/color-picker/gtk/color-picker-prefs.ui:676
 msgid "Swatches"
@@ -3016,13 +2872,11 @@ msgstr ""
 
 #: plugins/color-picker/gtk/color-picker-prefs.ui:762
 msgid "Load"
-msgstr ""
+msgstr "Charger"
 
 #: plugins/color-picker/gtk/color-picker-prefs.ui:836
-#, fuzzy
-#| msgid "Close the current document"
 msgid "From current document"
-msgstr "Fermer le document en cours"
+msgstr "Depus le document en cours"
 
 #: plugins/color-picker/gtk/color-picker-prefs.ui:854
 msgid "Select the palette you want to see in the panel or close one."
@@ -3030,14 +2884,11 @@ msgstr ""
 
 #: plugins/color-picker/gtk/color-picker-prefs.ui:891
 msgid "No loaded palettes"
-msgstr ""
+msgstr "Aucune palette chargée"
 
 #: plugins/color-picker/gtk/color-picker-preview.ui:45
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Join selected lines"
 msgid "No selected palettes"
-msgstr "Joindre les lignes sélectionnées"
+msgstr "Aucune palette sélectionnée"
 
 #: plugins/color-picker/gtk/color-picker-preview.ui:58
 #, fuzzy
@@ -3220,24 +3071,20 @@ msgid "A failure occurred while initializing version control"
 msgstr ""
 
 #: plugins/create-project/gbp-create-project-widget.ui:36
-#, fuzzy
-#| msgid "Project"
 msgid "Project Name"
-msgstr "Projet"
+msgstr "Nom du projet"
 
 #: plugins/create-project/gbp-create-project-widget.ui:47
-#, fuzzy
-#| msgid "Location"
 msgid "Project Location"
-msgstr "Emplacement"
+msgstr "Emplacement du projet"
 
 #: plugins/create-project/gbp-create-project-widget.ui:55
 msgid "Language"
-msgstr ""
+msgstr "Langage"
 
 #: plugins/create-project/gbp-create-project-widget.ui:67
 msgid "License"
-msgstr ""
+msgstr "Licence"
 
 #: plugins/create-project/gbp-create-project-widget.ui:110
 msgid ""
@@ -3247,26 +3094,24 @@ msgstr ""
 
 #: plugins/create-project/gbp-create-project-widget.ui:128
 #: plugins/git/ide-git-clone-widget.ui:78
-#, fuzzy
-#| msgid "Directory"
 msgid "Select Project Directory"
-msgstr "Répertoire"
+msgstr "Sélectionner le répertoire du projet"
 
 #: plugins/create-project/gbp-create-project-widget.ui:147
 msgid "GPLv3+"
-msgstr ""
+msgstr "GPLv3+"
 
 #: plugins/create-project/gbp-create-project-widget.ui:148
 msgid "LGPLv3+"
-msgstr ""
+msgstr "LGPLv3+"
 
 #: plugins/create-project/gbp-create-project-widget.ui:149
 msgid "AGPLv3+"
-msgstr ""
+msgstr "AGPLv3+"
 
 #: plugins/create-project/gbp-create-project-widget.ui:150
 msgid "MIT/X11"
-msgstr ""
+msgstr "MIT/X11"
 
 #: plugins/create-project/gbp-create-project-widget.ui:151
 msgid "GPLv2+"
@@ -3274,21 +3119,19 @@ msgstr ""
 
 #: plugins/create-project/gbp-create-project-widget.ui:152
 msgid "LGPLv2.1+"
-msgstr ""
+msgstr "LGPLv2.1+"
 
 #: plugins/create-project/gbp-create-project-widget.ui:153
 msgid "No license"
-msgstr ""
+msgstr "Aucune licence"
 
 #: plugins/create-project/gbp-create-project-widget.ui:170
 msgid "Uses the Git version control system"
-msgstr ""
+msgstr "Utilise le système de contrôle de versions Git"
 
 #: plugins/create-project/gbp-create-project-widget.ui:255
-#, fuzzy
-#| msgid "Select a Project"
 msgid "Select a Template"
-msgstr "Sélectionner un projet"
+msgstr "Sélectionner un modèle"
 
 #: plugins/devhelp/gbp-devhelp-panel.c:194
 msgid "Documentation"
@@ -3340,30 +3183,24 @@ msgid "Enter the URL of your project's source code repository"
 msgstr "Saisissez l'URL du dépôt du code source de votre projet"
 
 #: plugins/git/ide-git-clone-widget.ui:94
-#, fuzzy
-#| msgid "Repository"
 msgid "Repository URL"
-msgstr "Dépôt"
+msgstr "URL du dépôt"
 
 #: plugins/git/ide-git-clone-widget.ui:102
-#, fuzzy
-#| msgid "Directory"
 msgid "Project Destination"
-msgstr "Répertoire"
+msgstr "Destination du projet"
 
 #: plugins/git/ide-git-genesis-addin.c:93
-#, fuzzy
-#| msgid "New Project"
 msgid "Clone Project"
-msgstr "Nouveau projet"
+msgstr "Cloner un projet"
 
 #: plugins/git/ide-git-genesis-addin.c:184
 msgid "Clone…"
-msgstr ""
+msgstr "Cloner…"
 
 #: plugins/git/ide-git-genesis-addin.c:190
 msgid "Clone"
-msgstr ""
+msgstr "Cloner"
 
 #: plugins/git/ide-git-remote-callbacks.c:174
 msgid ""
@@ -3392,10 +3229,8 @@ msgid "No language specified"
 msgstr "Pas de langage précisé"
 
 #: plugins/gnome-code-assistance/org.gnome.builder.gnome-code-assistance.gschema.xml:5
-#, fuzzy
-#| msgid "Pylint"
 msgid "Enable Pylint"
-msgstr "Pylint"
+msgstr "Activer Pylint"
 
 #: plugins/gnome-code-assistance/org.gnome.builder.gnome-code-assistance.gschema.xml:6
 msgid ""
@@ -3455,10 +3290,8 @@ msgid "_Create"
 msgstr "_Créer"
 
 #: plugins/project-tree/gb-project-tree-builder.c:207
-#, fuzzy
-#| msgid "_Empty File"
 msgid "Empty"
-msgstr "Fichier _vide"
+msgstr "Vide"
 
 #: plugins/project-tree/gb-rename-file-popover.c:79
 #, c-format
@@ -3565,33 +3398,27 @@ msgstr "Moniteur système"
 
 #: plugins/sysprof/gbp-sysprof-perspective.c:65
 msgid "Profiler"
-msgstr ""
+msgstr "Profileur"
 
 #: plugins/sysprof/gbp-sysprof-workbench-addin.c:251
-#, fuzzy
-#| msgid "Open File"
 msgid "Open Profile"
-msgstr "Ouvrir le fichier"
+msgstr "Ouvrir le profil"
 
 #: plugins/sysprof/gbp-sysprof-workbench-addin.c:259
 msgid "Sysprof Capture (*.syscap)"
 msgstr ""
 
 #: plugins/sysprof/gbp-sysprof-workbench-addin.c:265
-#, fuzzy
-#| msgid "Files"
 msgid "All Files"
-msgstr "Fichiers"
+msgstr "Tous les fichiers"
 
 #: plugins/sysprof/gbp-sysprof-workbench-addin.c:352
 msgid "Run with Profiler"
 msgstr ""
 
 #: plugins/sysprof/gtk/menus.ui:6
-#, fuzzy
-#| msgid "Open File"
 msgid "Open Profile…"
-msgstr "Ouvrir le fichier"
+msgstr "Ouvrir le profil…"
 
 #: plugins/terminal/gb-terminal-view-actions.c:297
 msgid "Save Terminal Content As"
