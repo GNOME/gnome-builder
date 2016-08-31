@@ -27,19 +27,10 @@
 struct _IdeXmlIndenter
 {
   IdeObject parent_class;
+  guint tab_width;
+  guint indent_width;
+  guint use_tabs : 1;
 };
-
-/*
- * TODO:
- *
- * This is very naive. But let's see if it gets the job done enough to not
- * be super annoying. Things like indent_width belong as fields in a private
- * structure.
- *
- * Anywho, if you want to own this module, go for it.
- */
-
-#define INDENT_WIDTH 2
 
 static void indenter_iface_init (IdeIndenterInterface *iface);
 
@@ -70,9 +61,9 @@ text_iter_peek_prev_char (const GtkTextIter *location)
 
 static void
 build_indent (IdeXmlIndenter *xml,
-              guint                    line_offset,
-              GtkTextIter             *matching_line,
-              GString                 *str)
+              guint           line_offset,
+              GtkTextIter    *matching_line,
+              GString        *str)
 {
   GtkTextIter iter;
   gunichar ch;
@@ -104,6 +95,32 @@ build_indent (IdeXmlIndenter *xml,
 
   while (str->len < line_offset)
     g_string_append_c (str, ' ');
+
+  if (xml->use_tabs)
+    {
+      GString *translated = g_string_new (NULL);
+      const gchar *pos = str->str;
+      const gchar *tab;
+      gchar *needle;
+
+      needle = g_malloc (xml->tab_width + 1);
+      memset (needle, ' ', xml->tab_width);
+      needle [xml->tab_width] = '\0';
+
+      while (NULL != (tab = strstr (pos, needle)))
+        {
+          g_string_append_len (translated, pos, tab - pos);
+          g_string_append_c (translated, '\t');
+          pos = tab + xml->tab_width;
+        }
+
+      if (*pos)
+        g_string_append (translated, pos);
+
+      g_string_truncate (str, 0);
+      g_string_append_len (str, translated->str, translated->len);
+      g_string_free (translated, TRUE);
+    }
 }
 
 static gboolean
@@ -175,8 +192,7 @@ static gchar *
 ide_xml_indenter_indent (IdeXmlIndenter *xml,
                          GtkTextIter    *begin,
                          GtkTextIter    *end,
-                         gint           *cursor_offset,
-                         guint           tab_width)
+                         gint           *cursor_offset)
 {
   GtkTextIter match_begin;
   GString *str;
@@ -191,7 +207,7 @@ ide_xml_indenter_indent (IdeXmlIndenter *xml,
   if (text_iter_backward_to_element_start (begin, &match_begin))
     {
       offset = gtk_text_iter_get_line_offset (&match_begin);
-      build_indent (xml, offset + INDENT_WIDTH, &match_begin, str);
+      build_indent (xml, offset + xml->indent_width, &match_begin, str);
 
       /*
        * If immediately after our cursor is a closing tag, we will move it to
@@ -224,8 +240,8 @@ cleanup:
 
 static gchar *
 ide_xml_indenter_maybe_unindent (IdeXmlIndenter *xml,
-                                            GtkTextIter             *begin,
-                                            GtkTextIter             *end)
+                                 GtkTextIter    *begin,
+                                 GtkTextIter    *end)
 {
   GtkTextIter tmp;
   gunichar ch;
@@ -253,9 +269,9 @@ ide_xml_indenter_maybe_unindent (IdeXmlIndenter *xml,
         }
       else
         {
-          gint count = INDENT_WIDTH;
+          gint count = xml->indent_width;
 
-          while (count)
+          while (count > 0)
             {
               if (!gtk_text_iter_backward_char (&tmp) ||
                   !(ch = gtk_text_iter_get_char (&tmp)) ||
@@ -392,6 +408,10 @@ ide_xml_indenter_format (IdeIndenter *indenter,
         tab_width = indent_width;
     }
 
+  xml->tab_width = tab_width;
+  xml->indent_width = (indent_width <= 0) ? tab_width : indent_width;
+  xml->use_tabs = !gtk_source_view_get_insert_spaces_instead_of_tabs (GTK_SOURCE_VIEW (view));
+
   /* do nothing if we are in a cdata section */
   if (text_iter_in_cdata (begin))
     return NULL;
@@ -401,16 +421,14 @@ ide_xml_indenter_format (IdeIndenter *indenter,
     case GDK_KEY_Return:
     case GDK_KEY_KP_Enter:
       if ((trigger->state & GDK_SHIFT_MASK) == 0)
-        return ide_xml_indenter_indent (xml, begin, end, cursor_offset,
-                                        tab_width);
+        return ide_xml_indenter_indent (xml, begin, end, cursor_offset);
       return NULL;
 
     case GDK_KEY_slash:
       return ide_xml_indenter_maybe_unindent (xml, begin, end);
 
     case GDK_KEY_greater:
-      return ide_xml_indenter_maybe_add_closing (xml, begin, end,
-                                                 cursor_offset);
+      return ide_xml_indenter_maybe_add_closing (xml, begin, end, cursor_offset);
 
     default:
       g_return_val_if_reached (NULL);
