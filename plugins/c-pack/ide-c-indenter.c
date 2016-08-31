@@ -43,6 +43,10 @@ struct _IdeCIndenter
   gint           directive_indent;
   gint           extra_label_indent;
   gint           case_indent;
+
+  guint          tab_width;
+  guint          indent_width;
+  guint          use_tabs : 1;
 };
 
 static void indenter_iface_init (IdeIndenterInterface *iface);
@@ -102,18 +106,30 @@ build_indent (IdeCIndenter *c,
   while (str->len < line_offset)
     g_string_append_c (str, ' ');
 
-  if (!gtk_source_view_get_insert_spaces_instead_of_tabs (view) && (str->len >= tab_width))
+  if (c->use_tabs)
     {
-      guint n_tabs = str->len / tab_width;
-      guint n_spaces = str->len % tab_width;
+      GString *translated = g_string_new (NULL);
+      const gchar *pos = str->str;
+      const gchar *tab;
+      gchar *needle;
+
+      needle = g_malloc (c->tab_width + 1);
+      memset (needle, ' ', c->tab_width);
+      needle [c->tab_width] = '\0';
+
+      while (NULL != (tab = strstr (pos, needle)))
+        {
+          g_string_append_len (translated, pos, tab - pos);
+          g_string_append_c (translated, '\t');
+          pos = tab + c->tab_width;
+        }
+
+      if (*pos)
+        g_string_append (translated, pos);
 
       g_string_truncate (str, 0);
-
-      for (i = 0; i < n_tabs; i++)
-        g_string_append (str, "\t");
-
-      for (i = 0; i < n_spaces; i++)
-        g_string_append (str, " ");
+      g_string_append_len (str, translated->str, translated->len);
+      g_string_free (translated, TRUE);
     }
 }
 
@@ -1278,6 +1294,8 @@ ide_c_indenter_format (IdeIndenter    *indenter,
   GtkTextIter begin_copy;
   gchar *ret = NULL;
   GtkTextBuffer *buffer;
+  guint tab_width = 2;
+  gint indent_width = -1;
 
   g_return_val_if_fail (IDE_IS_C_INDENTER (c), NULL);
   g_return_val_if_fail (IDE_IS_SOURCE_VIEW (view), NULL);
@@ -1285,6 +1303,18 @@ ide_c_indenter_format (IdeIndenter    *indenter,
   buffer = gtk_text_view_get_buffer (view);
 
   c->view = IDE_SOURCE_VIEW (view);
+
+  if (GTK_SOURCE_IS_VIEW (view))
+    {
+      tab_width = gtk_source_view_get_tab_width (GTK_SOURCE_VIEW (view));
+      indent_width = gtk_source_view_get_indent_width (GTK_SOURCE_VIEW (view));
+      if (indent_width != -1)
+        tab_width = indent_width;
+    }
+
+  c->tab_width = tab_width;
+  c->indent_width = (indent_width <= 0) ? tab_width : indent_width;
+  c->use_tabs = !gtk_source_view_get_insert_spaces_instead_of_tabs (GTK_SOURCE_VIEW (view));
 
   switch (event->keyval) {
   case GDK_KEY_Return:
