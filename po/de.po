@@ -12,9 +12,9 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-08-27 22:07+0000\n"
-"PO-Revision-Date: 2016-08-28 17:39+0200\n"
-"Last-Translator: Mario Blättermann <mario.blaettermann@gmail.com>\n"
+"POT-Creation-Date: 2016-08-30 19:01+0000\n"
+"PO-Revision-Date: 2016-08-31 11:50+0200\n"
+"Last-Translator: Wolfgang Stoeggl <c72578@yahoo.de>\n"
 "Language-Team: Deutsch <gnome-de@gnome.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -168,11 +168,12 @@ msgstr ""
 "Auswertung fehlgeschlagen\n"
 "\n"
 
-#: contrib/gstyle/gstyle-palette.c:828
+#. To translators: always in singular form like in: generated palette number <generated_count>
+#: contrib/gstyle/gstyle-palette.c:829
 msgid "Generated"
 msgstr "Erzeugt"
 
-#: contrib/gstyle/gstyle-palette.c:931
+#: contrib/gstyle/gstyle-palette.c:932
 #, c-format
 msgid "Unable to save %s\n"
 msgstr "%s kann nicht gespeichert werden\n"
@@ -606,7 +607,7 @@ msgstr "Zuvor geöffnete Dateien beim Laden eines Projekts wiederherstellen."
 
 #: data/gsettings/org.gnome.builder.plugin.gschema.xml:6
 msgid "If the plugin should be enabled"
-msgstr "Legt fest, ob das Plugin aktiviert werden soll."
+msgstr "Legt fest, ob die Erweiterung aktiviert werden soll"
 
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:5
 msgid "Show Project Sidebar"
@@ -3120,7 +3121,18 @@ msgstr "Bitte geben Sie einen Projektnamen an.\n"
 msgid "Please specify a project template with --template=\n"
 msgstr "Bitte geben Sie eine Projektvorlage mit --template= an\n"
 
-#: plugins/create-project/gbp-create-project-widget.c:523
+#: plugins/create-project/gbp-create-project-widget.c:148
+msgid ""
+"Characters were used which might cause technical issues as a project name"
+msgstr ""
+"Es wurden Zeichen verwendet, die technische Probleme in Projektnamen "
+"verursachen können"
+
+#: plugins/create-project/gbp-create-project-widget.c:155
+msgid "Directory already exists with that name"
+msgstr "Ordner mit diesem Namen existiert bereits"
+
+#: plugins/create-project/gbp-create-project-widget.c:550
 msgid "A failure occurred while initializing version control"
 msgstr "Beim Initialisieren der Versionskontrolle ist ein Fehler aufgetreten"
 
@@ -3464,7 +3476,6 @@ msgid "System Monitor"
 msgstr "Änderungsüberwachung"
 
 #: plugins/sysprof/gbp-sysprof-perspective.c:65
-#| msgid "Build Profile"
 msgid "Profiler"
 msgstr "Profiler"
 
@@ -3481,9 +3492,8 @@ msgid "All Files"
 msgstr "Alle Dateien"
 
 #: plugins/sysprof/gbp-sysprof-workbench-addin.c:352
-#| msgid "Build Profile"
-msgid "Profile"
-msgstr "Profil"
+msgid "Run with Profiler"
+msgstr "Mit Profiler ausführen"
 
 #: plugins/sysprof/gtk/menus.ui:6
 msgid "Open Profile…"
@@ -3513,6 +3523,10 @@ msgstr "Von Vala erzeugte Fehler und Warnungen anzeigen"
 #: plugins/vala-pack/ide-vala-preferences-addin.vala:36
 msgid "vala diagnostics warnings errors"
 msgstr "Vala Fehlerdiagnose Warnungen Fehler"
+
+#~| msgid "Build Profile"
+#~ msgid "Profile"
+#~ msgstr "Profil"
 
 #, fuzzy
 #~| msgid "hsv visibility"
