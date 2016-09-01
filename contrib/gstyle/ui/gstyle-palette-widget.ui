@@ -13,6 +13,8 @@
         <child>
           <object class="GtkScrolledWindow" id="list_scrolled_window">
             <property name="hscrollbar_policy">GTK_POLICY_NEVER</property>
+            <property name="propagate-natural-height">true</property>
+            <property name="propagate-natural-width">true</property>
             <property name="visible">true</property>
             <property name="expand">true</property>
             <child>
@@ -41,6 +43,8 @@
         <child>
           <object class="GtkScrolledWindow" id="flow_scrolled_window">
             <property name="hscrollbar_policy">GTK_POLICY_NEVER</property>
+            <property name="propagate-natural-height">true</property>
+            <property name="propagate-natural-width">true</property>
             <property name="visible">true</property>
             <property name="expand">true</property>
             <child>
@@ -93,6 +97,8 @@
         <property name="min-content-width">150</property>
         <property name="max-content-width">300</property>
         <property name="max-content-height">600</property>
+        <property name="propagate-natural-height">true</property>
+        <property name="propagate-natural-width">true</property>
         <property name="visible">true</property>
         <child>
           <object class="GtkListBox" id="palette_list">
