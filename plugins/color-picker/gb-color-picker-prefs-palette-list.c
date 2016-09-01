@@ -146,6 +146,7 @@ gb_color_picker_prefs_palette_list_init_ui (GbColorPickerPrefsPaletteList *self)
 
   scrolled_window = gtk_scrolled_window_new (NULL, NULL);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_window), GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
+  gtk_scrolled_window_set_propagate_natural_height(GTK_SCROLLED_WINDOW (scrolled_window), TRUE);
 
   self->list_box = GTK_LIST_BOX (gtk_list_box_new ());
   gtk_list_box_set_selection_mode (self->list_box, GTK_SELECTION_NONE);
