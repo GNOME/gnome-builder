@@ -232,6 +232,8 @@
                     <property name="shadow-type">in</property>
                     <property name="max-content-height">200</property>
                     <property name="max-content-width">500</property>
+                    <property name="propagate-natural-height">true</property>
+                    <property name="propagate-natural-width">true</property>
                     <property name="visible">true</property>
                     <child>
                       <object class="GtkListBox" id="popover_configuration_list_box">

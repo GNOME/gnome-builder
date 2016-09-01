@@ -28,6 +28,7 @@
                 <property name="expand">true</property>
                 <property name="shadow_type">in</property>
                 <property name="max-content-height">150</property>
+                <property name="propagate-natural-height">true</property>
                 <style>
                   <class name="gb-linked-scroller"/>
                 </style>

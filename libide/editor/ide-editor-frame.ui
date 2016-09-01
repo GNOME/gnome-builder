@@ -335,6 +335,8 @@
                   <object class="GtkScrolledWindow" id="scrolled_window">
                     <property name="expand">true</property>
                     <property name="visible">true</property>
+                    <property name="propagate-natural-height">true</property>
+                    <property name="propagate-natural-width">true</property>
                     <child>
                       <object class="IdeSourceView" id="source_view">
                         <property name="auto-indent">true</property>

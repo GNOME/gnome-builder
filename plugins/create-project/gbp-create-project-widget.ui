@@ -4,6 +4,8 @@
     <child>
       <object class="GtkScrolledWindow">
         <property name="visible">true</property>
+        <property name="propagate-natural-height">true</property>
+        <property name="propagate-natural-width">true</property>
         <child>
           <object class="GtkBox">
             <property name="orientation">vertical</property>
