@@ -7,7 +7,6 @@
 
     <file>gtk/color-picker.ui</file>
     <file>gtk/color-picker-prefs.ui</file>
-    <file>gtk/color-picker-prefs-palette-list.ui</file>
     <file>gtk/color-picker-preview.ui</file>
     <file>gtk/color-picker-palette-row.ui</file>
     <file>gtk/color-picker-palette-menu.ui</file>
