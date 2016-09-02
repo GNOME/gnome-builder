@@ -181,8 +181,8 @@ static gint
 cache_item_compare_evict_at (gconstpointer a,
                              gconstpointer b)
 {
-  const CacheItem *ci1 = a;
-  const CacheItem *ci2 = b;
+  const CacheItem **ci1 = (const CacheItem **)a;
+  const CacheItem **ci2 = (const CacheItem **)b;
   gint64 ret;
 
   /*
@@ -191,7 +191,7 @@ cache_item_compare_evict_at (gconstpointer a,
    * ensure we are within the 32-bit boundary.
    */
 
-  ret = ci2->evict_at - ci1->evict_at;
+  ret = (*ci2)->evict_at - (*ci1)->evict_at;
 
   if (ret < 0)
     return -1;
