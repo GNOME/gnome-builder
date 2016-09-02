@@ -42,6 +42,7 @@ struct _IdeConfiguration
   gchar          *id;
   gchar          *prefix;
   gchar          *runtime_id;
+  gchar          *app_id;
 
   IdeEnvironment *environment;
 
@@ -73,6 +74,7 @@ enum {
   PROP_PREFIX,
   PROP_RUNTIME,
   PROP_RUNTIME_ID,
+  PROP_APP_ID,
   N_PROPS
 };
 
@@ -246,6 +248,7 @@ ide_configuration_finalize (GObject *object)
   g_clear_pointer (&self->id, g_free);
   g_clear_pointer (&self->prefix, g_free);
   g_clear_pointer (&self->runtime_id, g_free);
+  g_clear_pointer (&self->app_id, g_free);
 
   G_OBJECT_CLASS (ide_configuration_parent_class)->finalize (object);
 }
@@ -302,6 +305,10 @@ ide_configuration_get_property (GObject    *object,
 
     case PROP_RUNTIME_ID:
       g_value_set_string (value, ide_configuration_get_runtime_id (self));
+      break;
+
+    case PROP_APP_ID:
+      g_value_set_string (value, ide_configuration_get_app_id (self));
       break;
 
     default:
@@ -361,6 +368,10 @@ ide_configuration_set_property (GObject      *object,
 
     case PROP_RUNTIME_ID:
       ide_configuration_set_runtime_id (self, g_value_get_string (value));
+      break;
+
+    case PROP_APP_ID:
+      ide_configuration_set_app_id (self, g_value_get_string (value));
       break;
 
     default:
@@ -462,6 +473,13 @@ ide_configuration_class_init (IdeConfigurationClass *klass)
                          "Runtime Id",
                          "The identifier of the runtime",
                          "host",
+                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_APP_ID] =
+    g_param_spec_string ("app-id",
+                         "App ID",
+                         "The application ID (such as org.gnome.Builder)",
+                         NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
@@ -579,6 +597,34 @@ ide_configuration_set_device (IdeConfiguration *self,
     device_id = ide_device_get_id (device);
 
   ide_configuration_set_device_id (self, device_id);
+}
+
+/**
+ * ide_configuration_get_app_id:
+ * @self: An #IdeConfiguration
+ *
+ * Gets the application ID for the configuration.
+ *
+ * Returns: (transfer none) (nullable): A string.
+ */
+const gchar *
+ide_configuration_get_app_id (IdeConfiguration *self)
+{
+  g_return_val_if_fail (IDE_IS_CONFIGURATION (self), NULL);
+
+  return self->app_id;
+}
+
+void
+ide_configuration_set_app_id (IdeConfiguration *self,
+                              const gchar      *app_id)
+{
+  g_return_if_fail (IDE_IS_CONFIGURATION (self));
+  g_return_if_fail (app_id != NULL);
+
+  g_free (self->app_id);
+
+  self->app_id = g_strdup (app_id);
 }
 
 const gchar *
