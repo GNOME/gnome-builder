@@ -1,4 +1,37 @@
 ===============
+Version 3.21.91
+===============
+
+Another incremental release as we work towards GNOME 3.22.
+
+ • Build system improvements (Andreas Henriksson, Kalev Lember)
+ • A new "Quick Highlight" plugin to highlight words matching the
+   current selection (Martin Blanchard)
+ • New snippets for GJS have been added (Philip Chimento)
+ • Incremental gstyle/colorpicker improvements (Sebastien Lafargue)
+ • A new "Transfers API" has landed but is not yet used by any
+   components. This will be useful for plugins that involve download
+   or upload operations, such as those to a physical device.
+ • SCSS files are mapped to CSS for gnome-code-assistance.
+ • Sysprof support is now automatically detected.
+ • The devhelp search provider has been removed as it was
+   better served via the Ctrl+Shift+F accelerator.
+ • Builder now prefers the project id (sanitized name) in more
+   places such as directory names which should improve building some
+   projects.
+ • The create-project workflow will now check to see if a directory
+   exists before progressing the workflow.
+ • The C, XML, and HTML indenters have been improved to respect the
+   language indentation settings for tab vs spaces and indent-width.
+
+And thanks to our translators!
+
+Alexandre Franke, Andika Triwidada, Balázs Meskó, Daniel Mustieles, Enrico
+Nicoletto, Gábor Kelemen, Marek Černocký, Mario Blättermann, Piotr Drąg,
+and Wolfgang Stöggl.
+
+
+===============
 Version 3.21.90
 ===============
 
