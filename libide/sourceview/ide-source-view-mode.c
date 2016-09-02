@@ -189,6 +189,7 @@ proxy_all_action_signals (GType type)
   GSignalQuery query;
 
   signals = g_signal_list_ids (type, &n_signals);
+
   for (i = 0; i < n_signals; i++)
     {
       g_signal_query (signals[i], &query);
@@ -207,6 +208,8 @@ proxy_all_action_signals (GType type)
                          (GType *)query.param_types);
         }
     }
+
+  g_free (signals);
 }
 
 const gchar *
