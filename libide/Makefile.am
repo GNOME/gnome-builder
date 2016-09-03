@@ -30,6 +30,8 @@ libide_1_0_la_public_headers =                            \
 	buffers/ide-buffer.h                              \
 	buffers/ide-unsaved-file.h                        \
 	buffers/ide-unsaved-files.h                       \
+	buildsystem/ide-build-command.h                   \
+	buildsystem/ide-build-command-queue.h             \
 	buildsystem/ide-build-manager.h                   \
 	buildsystem/ide-build-result-addin.h              \
 	buildsystem/ide-build-result.h                    \
@@ -187,6 +189,8 @@ libide_1_0_la_public_sources =                            \
 	buffers/ide-buffer.c                              \
 	buffers/ide-unsaved-file.c                        \
 	buffers/ide-unsaved-files.c                       \
+	buildsystem/ide-build-command.c                   \
+	buildsystem/ide-build-command-queue.c             \
 	buildsystem/ide-build-manager.c                   \
 	buildsystem/ide-build-result-addin.c              \
 	buildsystem/ide-build-result.c                    \
