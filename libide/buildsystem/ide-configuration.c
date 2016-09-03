@@ -21,7 +21,9 @@
 #include <string.h>
 
 #include "ide-context.h"
+#include "ide-internal.h"
 
+#include "buildsystem/ide-build-command-queue.h"
 #include "buildsystem/ide-configuration.h"
 #include "buildsystem/ide-environment.h"
 #include "devices/ide-device-manager.h"
@@ -41,6 +43,9 @@ struct _IdeConfiguration
   gchar          *runtime_id;
 
   IdeEnvironment *environment;
+
+  IdeBuildCommandQueue *prebuild;
+  IdeBuildCommandQueue *postbuild;
 
   gint            parallelism;
   guint           sequence;
@@ -176,6 +181,8 @@ ide_configuration_finalize (GObject *object)
   IdeConfiguration *self = (IdeConfiguration *)object;
 
   g_clear_object (&self->environment);
+  g_clear_object (&self->prebuild);
+  g_clear_object (&self->postbuild);
 
   g_clear_pointer (&self->config_opts, g_free);
   g_clear_pointer (&self->device_id, g_free);
@@ -848,4 +855,70 @@ ide_configuration_get_sequence (IdeConfiguration *self)
   g_return_val_if_fail (IDE_IS_CONFIGURATION (self), 0);
 
   return self->sequence;
+}
+
+/**
+ * ide_configuration_get_prebuild:
+ *
+ * Gets a queue of commands to be run before the standard build process of
+ * the configured build system. This can be useful for situations where the
+ * user wants to setup some custom commands to prepare their environment.
+ *
+ * Constrast this with ide_configuration_get_postbuild() which gets commands
+ * to be executed after the build system has completed.
+ *
+ * This function will always return a command queue. The command
+ * queue may contain zero or more commands to be executed.
+ *
+ * Returns: (transfer full): An #IdeBuildCommandQueue.
+ */
+IdeBuildCommandQueue *
+ide_configuration_get_prebuild (IdeConfiguration *self)
+{
+  g_return_val_if_fail (IDE_IS_CONFIGURATION (self), NULL);
+
+  if (self->prebuild != NULL)
+    return g_object_ref (self->prebuild);
+
+  return ide_build_command_queue_new ();
+}
+
+/**
+ * ide_configuration_get_postbuild:
+ *
+ * Gets a queue of commands to be run after the standard build process of
+ * the configured build system. This can be useful for situations where the
+ * user wants to modify something after the build completes.
+ *
+ * Constrast this with ide_configuration_get_prebuild() which gets commands
+ * to be executed before the build system has started.
+ *
+ * This function will always return a command queue. The command
+ * queue may contain zero or more commands to be executed.
+ *
+ * Returns: (transfer full): An #IdeBuildCommandQueue.
+ */
+IdeBuildCommandQueue *
+ide_configuration_get_postbuild (IdeConfiguration *self)
+{
+  g_return_val_if_fail (IDE_IS_CONFIGURATION (self), NULL);
+
+  if (self->postbuild != NULL)
+    return g_object_ref (self->postbuild);
+
+  return ide_build_command_queue_new ();
+}
+
+void
+_ide_configuration_set_prebuild (IdeConfiguration     *self,
+                                 IdeBuildCommandQueue *prebuild)
+{
+  g_set_object (&self->prebuild, prebuild);
+}
+
+void
+_ide_configuration_set_postbuild (IdeConfiguration     *self,
+                                  IdeBuildCommandQueue *postbuild)
+{
+  g_set_object (&self->postbuild, postbuild);
 }

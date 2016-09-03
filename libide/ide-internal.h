@@ -49,6 +49,10 @@ void                _ide_buffer_manager_reclaim             (IdeBufferManager   
                                                              IdeBuffer             *buffer);
 void                _ide_build_system_set_project_file      (IdeBuildSystem        *self,
                                                              GFile                 *project_file);
+void                _ide_configuration_set_prebuild         (IdeConfiguration      *self,
+                                                             IdeBuildCommandQueue  *prebuild);
+void                _ide_configuration_set_postbuild        (IdeConfiguration      *self,
+                                                             IdeBuildCommandQueue  *postbuild);
 gboolean            _ide_context_is_restoring               (IdeContext            *self);
 const gchar        *_ide_file_get_content_type              (IdeFile               *self);
 GtkSourceFile      *_ide_file_set_content_type              (IdeFile               *self,
