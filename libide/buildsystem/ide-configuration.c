@@ -832,6 +832,12 @@ ide_configuration_duplicate (IdeConfiguration *self)
 
   copy->environment = ide_environment_copy (self->environment);
 
+  if (self->prebuild)
+    copy->prebuild = ide_build_command_queue_copy (self->prebuild);
+
+  if (self->postbuild)
+    copy->postbuild = ide_build_command_queue_copy (self->postbuild);
+
   return copy;
 }
 
