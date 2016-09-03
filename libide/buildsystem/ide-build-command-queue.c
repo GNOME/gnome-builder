@@ -273,3 +273,27 @@ ide_build_command_queue_execute_finish (IdeBuildCommandQueue  *self,
 
   IDE_RETURN (ret);
 }
+
+/**
+ * ide_build_command_queue_copy:
+ *
+ * Returns: (transfer full): An #IdeBuildCommandQueue
+ */
+IdeBuildCommandQueue *
+ide_build_command_queue_copy (IdeBuildCommandQueue *self)
+{
+  IdeBuildCommandQueue *ret;
+
+  g_return_val_if_fail (IDE_IS_BUILD_COMMAND_QUEUE (self), NULL);
+
+  ret = g_object_new (IDE_TYPE_BUILD_COMMAND_QUEUE, NULL);
+
+  for (const GList *iter = self->queue.head; iter; iter = iter->next)
+    {
+      IdeBuildCommand *command = iter->data;
+
+      g_queue_push_tail (&ret->queue, ide_build_command_copy (command));
+    }
+
+  return ret;
+}

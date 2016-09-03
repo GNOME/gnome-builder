@@ -33,22 +33,23 @@ struct _IdeBuildCommandClass
 {
   GObjectClass parent_class;
 
-  gboolean  (*run)        (IdeBuildCommand     *self,
-                           IdeRuntime          *runtime,
-                           IdeEnvironment      *environment,
-                           IdeBuildResult      *build_result,
-                           GCancellable        *cancellable,
-                           GError             **error);
-  void      (*run_async)  (IdeBuildCommand     *self,
-                           IdeRuntime          *runtime,
-                           IdeEnvironment      *environment,
-                           IdeBuildResult      *build_result,
-                           GCancellable        *cancellable,
-                           GAsyncReadyCallback  callback,
-                           gpointer             user_data);
-  gboolean  (*run_finish) (IdeBuildCommand     *self,
-                           GAsyncResult        *result,
-                           GError             **error);
+  gboolean         (*run)        (IdeBuildCommand     *self,
+                                  IdeRuntime          *runtime,
+                                  IdeEnvironment      *environment,
+                                  IdeBuildResult      *build_result,
+                                  GCancellable        *cancellable,
+                                  GError             **error);
+  void             (*run_async)  (IdeBuildCommand     *self,
+                                  IdeRuntime          *runtime,
+                                  IdeEnvironment      *environment,
+                                  IdeBuildResult      *build_result,
+                                  GCancellable        *cancellable,
+                                  GAsyncReadyCallback  callback,
+                                  gpointer             user_data);
+  gboolean         (*run_finish) (IdeBuildCommand     *self,
+                                  GAsyncResult        *result,
+                                  GError             **error);
+  IdeBuildCommand *(*copy)       (IdeBuildCommand     *self);
 
   gpointer _reserved1;
   gpointer _reserved2;
@@ -80,6 +81,7 @@ void             ide_build_command_run_async        (IdeBuildCommand      *self,
 gboolean         ide_build_command_run_finish       (IdeBuildCommand      *self,
                                                      GAsyncResult         *result,
                                                      GError              **error);
+IdeBuildCommand *ide_build_command_copy             (IdeBuildCommand      *self);
 
 G_END_DECLS
 

@@ -46,6 +46,7 @@ void                  ide_build_command_queue_execute_async  (IdeBuildCommandQue
 gboolean              ide_build_command_queue_execute_finish (IdeBuildCommandQueue  *self,
                                                               GAsyncResult          *result,
                                                               GError               **error);
+IdeBuildCommandQueue *ide_build_command_queue_copy           (IdeBuildCommandQueue  *self);
 
 G_END_DECLS
 

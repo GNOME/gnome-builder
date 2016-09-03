@@ -220,6 +220,18 @@ ide_build_command_real_run_finish (IdeBuildCommand  *self,
   return g_task_propagate_boolean (G_TASK (result), error);
 }
 
+static IdeBuildCommand *
+ide_build_command_real_copy (IdeBuildCommand *self)
+{
+  IdeBuildCommandPrivate *priv = ide_build_command_get_instance_private (self);
+
+  g_assert (IDE_IS_BUILD_COMMAND (self));
+
+  return g_object_new (G_OBJECT_TYPE (self),
+                       "command-text", priv->command_text,
+                       NULL);
+}
+
 static void
 ide_build_command_finalize (GObject *object)
 {
@@ -278,6 +290,7 @@ ide_build_command_class_init (IdeBuildCommandClass *klass)
   object_class->get_property = ide_build_command_get_property;
   object_class->set_property = ide_build_command_set_property;
 
+  klass->copy = ide_build_command_real_copy;
   klass->run = ide_build_command_real_run;
   klass->run_async = ide_build_command_real_run_async;
   klass->run_finish = ide_build_command_real_run_finish;
@@ -373,4 +386,15 @@ ide_build_command_set_command_text (IdeBuildCommand *self,
       priv->command_text = g_strdup (command_text);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_COMMAND_TEXT]);
     }
+}
+
+/**
+ * ide_build_command_copy:
+ *
+ * Returns: (transfer full): An #IdeBuildCommand
+ */
+IdeBuildCommand *
+ide_build_command_copy (IdeBuildCommand *self)
+{
+  return IDE_BUILD_COMMAND_GET_CLASS (self)->copy (self);
 }
