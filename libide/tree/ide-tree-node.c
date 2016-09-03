@@ -786,7 +786,7 @@ ide_tree_node_show_popover_timeout_cb (gpointer data)
 
   gtk_popover_set_relative_to (popreq->popover, GTK_WIDGET (tree));
   gtk_popover_set_pointing_to (popreq->popover, &rect);
-  gtk_widget_show (GTK_WIDGET (popreq->popover));
+  gtk_popover_popup (popreq->popover);
 
 cleanup:
   g_object_unref (popreq->self);

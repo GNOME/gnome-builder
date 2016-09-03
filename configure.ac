@@ -182,7 +182,7 @@ AC_SUBST(BUGREPORT_URL)
 dnl ***********************************************************************
 dnl Check for Required Packages
 dnl ***********************************************************************
-m4_define([gtk_required_version], [3.21.1])
+m4_define([gtk_required_version], [3.21.5])
 m4_define([glib_required_version], [2.49.0])
 m4_define([gtksourceview_required_version], [3.21.2])
 m4_define([gobject_introspection_version], [1.48.0])

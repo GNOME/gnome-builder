@@ -63,7 +63,7 @@ ide_preferences_font_button_show (IdePreferencesFontButton *self)
   g_object_set (self->chooser, "font", font, NULL);
   g_free (font);
 
-  gtk_widget_show (GTK_WIDGET (self->popover));
+  gtk_popover_popup (self->popover);
 }
 
 static void
@@ -287,7 +287,7 @@ ide_preferences_font_button_clicked (IdePreferencesFontButton *self,
 
   g_object_get (self->chooser, "font", &font, NULL);
   g_settings_set_string (self->settings, self->key, font);
-  gtk_widget_hide (GTK_WIDGET (self->popover));
+  gtk_popover_popdown (self->popover);
 }
 
 static void
@@ -299,7 +299,7 @@ ide_preferences_font_button_font_activated (IdePreferencesFontButton *self,
   g_assert (GTK_IS_FONT_CHOOSER (chooser));
 
   g_settings_set_string (self->settings, self->key, font);
-  gtk_widget_hide (GTK_WIDGET (self->popover));
+  gtk_popover_popdown (self->popover);
 }
 
 static void

@@ -516,7 +516,7 @@ gstyle_color_widget_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
 
           gtk_popover_set_relative_to (GTK_POPOVER (popover), GTK_WIDGET (self));
           g_signal_connect_swapped (popover, "closed", G_CALLBACK (contextual_popover_closed_cb), self);
-          gtk_widget_show (popover);
+          gtk_popover_popup (GTK_POPOVER (popover));
           g_object_unref (builder);
         }
     }

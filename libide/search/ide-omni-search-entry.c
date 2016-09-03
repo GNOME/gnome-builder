@@ -117,7 +117,7 @@ ide_omni_search_entry_hide_popover (IdeOmniSearchEntry *self,
     }
 
   gtk_entry_set_text (GTK_ENTRY (self), "");
-  gtk_widget_hide (GTK_WIDGET (self->popover));
+  gtk_popover_popdown (self->popover);
 
   if (!leave_entry)
     {

@@ -172,7 +172,7 @@ egg_simple_popover_button_clicked (EggSimplePopover *self,
 
   text = gtk_entry_get_text (GTK_ENTRY (priv->entry));
   g_signal_emit (self, signals [ACTIVATE], 0, text);
-  gtk_widget_hide (GTK_WIDGET (self));
+  gtk_popover_popdown (GTK_POPOVER (self));
 }
 
 static void

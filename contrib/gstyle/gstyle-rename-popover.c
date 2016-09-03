@@ -96,7 +96,7 @@ entry_validation (GstyleRenamePopover *self)
     {
       g_signal_emit_by_name (self, "renamed", txt);
       g_signal_emit_by_name (self, "closed");
-      gtk_widget_hide (GTK_WIDGET (self));
+      gtk_popover_popdown (GTK_POPOVER (self));
     }
   else
     gtk_widget_set_sensitive (GTK_WIDGET (self->button), FALSE);

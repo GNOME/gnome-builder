@@ -525,7 +525,7 @@ multipress_pressed_cb (GtkGestureMultiPress *gesture,
 
   g_assert (IDE_IS_OMNI_BAR (self));
 
-  gtk_widget_show (GTK_WIDGET (self->popover));
+  gtk_popover_popup (self->popover);
 
   style_context = gtk_widget_get_style_context (GTK_WIDGET (self));
   state_flags = gtk_style_context_get_state (style_context);

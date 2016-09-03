@@ -207,7 +207,7 @@ ide_run_button_row_activated (IdeRunButton  *self,
       /* First change the run action to the selected handler. */
       run_manager = ide_context_get_run_manager (context);
       ide_run_manager_set_handler (run_manager, id);
-      gtk_widget_hide (GTK_WIDGET (self->popover));
+      gtk_popover_popdown (self->popover);
 
       /* Now run the action */
       ide_widget_action (GTK_WIDGET (self), "run-manager", "run-with-handler", g_variant_new_string (id));

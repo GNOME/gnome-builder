@@ -183,7 +183,7 @@ gb_color_picker_prefs_palette_row_edit (GbColorPickerPrefsPaletteRow *self)
   gtk_popover_set_relative_to (GTK_POPOVER (popover), GTK_WIDGET (self));
   g_signal_connect_swapped (popover, "closed", G_CALLBACK (contextual_popover_closed_cb), self);
   g_signal_connect_swapped (popover, "renamed", G_CALLBACK (rename_popover_entry_renamed_cb), self);
-  gtk_widget_show (popover);
+  gtk_popover_popup (GTK_POPOVER (popover));
 }
 
 static void
@@ -232,7 +232,7 @@ popover_button_rename_clicked_cb (GbColorPickerPrefsPaletteRow *self,
 
   self->is_editing = TRUE;
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_IS_EDITING]);
-  gtk_widget_hide (self->popover_menu);
+  gtk_popover_popdown (GTK_POPOVER (self->popover_menu));
 
   g_signal_emit_by_name (self, "edit");
 }
@@ -250,7 +250,7 @@ popover_button_remove_clicked_cb (GbColorPickerPrefsPaletteRow *self,
 
   id = g_variant_get_string (self->target, NULL);
   g_signal_emit_by_name (self, "closed", id);
-  gtk_widget_hide (self->popover_menu);
+  gtk_popover_popdown (GTK_POPOVER (self->popover_menu));
 }
 
 static gboolean
@@ -264,7 +264,7 @@ event_box_button_pressed_cb (GbColorPickerPrefsPaletteRow *self,
 
   if (event->type == GDK_BUTTON_PRESS && event->button == GDK_BUTTON_SECONDARY)
     {
-      gtk_widget_show (self->popover_menu);
+      gtk_popover_popup (GTK_POPOVER (self->popover_menu));
       return GDK_EVENT_STOP;
     }
 

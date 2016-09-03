@@ -302,7 +302,7 @@ ide_perspective_menu_button_row_activated (IdePerspectiveMenuButton *self,
   if (id != NULL && IDE_IS_WORKBENCH (workbench))
     {
       ide_workbench_set_visible_perspective_name (IDE_WORKBENCH (workbench), id);
-      gtk_widget_hide (GTK_WIDGET (self->popover));
+      gtk_popover_popdown (self->popover);
     }
 }
 

@@ -267,7 +267,7 @@ ide_transfers_button_clear (GSimpleAction *action,
 
   g_assert (G_IS_SIMPLE_ACTION (action));
 
-  gtk_widget_hide (GTK_WIDGET (self->popover));
+  gtk_popover_popdown (self->popover);
 
   if (NULL != (context = ide_widget_get_context (GTK_WIDGET (self))) &&
       NULL != (transfer_manager = ide_context_get_transfer_manager (context)))
