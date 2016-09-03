@@ -44,17 +44,19 @@ struct _IdeAutotoolsBuildTask
 
 typedef struct
 {
-  gchar       *directory_path;
-  gchar       *project_path;
-  gchar       *parallel;
-  gchar       *system_type;
-  gchar      **configure_argv;
-  gchar      **make_targets;
-  IdeRuntime  *runtime;
-  guint        sequence;
-  guint        require_autogen : 1;
-  guint        require_configure : 1;
-  guint        bootstrap_only : 1;
+  gchar                 *directory_path;
+  gchar                 *project_path;
+  gchar                 *parallel;
+  gchar                 *system_type;
+  gchar                **configure_argv;
+  gchar                **make_targets;
+  IdeRuntime            *runtime;
+  IdeBuildCommandQueue  *postbuild;
+  IdeEnvironment        *environment;
+  guint                  sequence;
+  guint                  require_autogen : 1;
+  guint                  require_configure : 1;
+  guint                  bootstrap_only : 1;
 } WorkerState;
 
 typedef gboolean (*WorkStep) (GTask                 *task,
@@ -455,6 +457,8 @@ worker_state_new (IdeAutotoolsBuildTask  *self,
   state->project_path = g_file_get_path (project_dir);
   state->system_type = g_strdup (ide_device_get_system_type (device));
   state->runtime = g_object_ref (runtime);
+  state->postbuild = ide_configuration_get_postbuild (self->configuration);
+  state->environment = ide_environment_copy (ide_configuration_get_environment (self->configuration));
 
   val32 = ide_configuration_get_parallelism (self->configuration);
 
@@ -519,6 +523,8 @@ worker_state_free (void *data)
   g_strfreev (state->configure_argv);
   g_strfreev (state->make_targets);
   g_clear_object (&state->runtime);
+  g_clear_object (&state->postbuild);
+  g_clear_object (&state->environment);
   g_slice_free (WorkerState, state);
 }
 
@@ -530,42 +536,103 @@ ide_autotools_build_task_execute_worker (GTask        *task,
 {
   IdeAutotoolsBuildTask *self = source_object;
   WorkerState *state = task_data;
-  guint i;
+  GError *error = NULL;
 
   g_return_if_fail (G_IS_TASK (task));
   g_return_if_fail (IDE_IS_AUTOTOOLS_BUILD_TASK (self));
   g_return_if_fail (state);
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  for (i = 0; workSteps [i]; i++)
+  for (guint i = 0; workSteps [i]; i++)
     {
       if (g_cancellable_is_cancelled (cancellable) ||
           !workSteps [i] (task, self, state, cancellable))
         return;
     }
 
-  g_task_return_boolean (task, TRUE);
+  if (!ide_build_command_queue_execute (state->postbuild,
+                                        state->runtime,
+                                        state->environment,
+                                        IDE_BUILD_RESULT (self),
+                                        cancellable,
+                                        &error))
+    g_task_return_error (task, error);
+  else
+    g_task_return_boolean (task, TRUE);
 }
 
 static void
-ide_autotools_build_task_prebuild_cb (GObject      *object,
-                                      GAsyncResult *result,
-                                      gpointer      user_data)
+ide_autotools_build_task_configuration_prebuild_cb (GObject      *object,
+                                                    GAsyncResult *result,
+                                                    gpointer      user_data)
 {
-  IdeRuntime *runtime = (IdeRuntime *)object;
+  IdeBuildCommandQueue *cmdq = (IdeBuildCommandQueue *)object;
   g_autoptr(GTask) task = user_data;
   GError *error = NULL;
 
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_BUILD_COMMAND_QUEUE (cmdq));
+  g_assert (G_IS_ASYNC_RESULT (result));
+
+  if (!ide_build_command_queue_execute_finish (cmdq, result, &error))
+    {
+      g_task_return_error (task, error);
+      IDE_EXIT;
+    }
+
+  g_task_run_in_thread (task, ide_autotools_build_task_execute_worker);
+
+  IDE_EXIT;
+}
+
+static void
+ide_autotools_build_task_runtime_prebuild_cb (GObject      *object,
+                                              GAsyncResult *result,
+                                              gpointer      user_data)
+{
+  IdeRuntime *runtime = (IdeRuntime *)object;
+  IdeAutotoolsBuildTask *self;
+  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeBuildCommandQueue) prebuild = NULL;
+  GCancellable *cancellable;
+  GError *error = NULL;
+
+  IDE_ENTRY;
+
   g_assert (IDE_IS_RUNTIME (runtime));
+  g_assert (G_IS_TASK (task));
   g_assert (G_IS_ASYNC_RESULT (result));
 
   if (!ide_runtime_prebuild_finish (runtime, result, &error))
     {
       g_task_return_error (task, error);
-      return;
+      IDE_EXIT;
     }
 
-  g_task_run_in_thread (task, ide_autotools_build_task_execute_worker);
+  /*
+   * Now that the runtime has prepared itself, we need to allow the
+   * configuration's prebuild commands to be executed.
+   */
+
+  self = g_task_get_source_object (task);
+  g_assert (IDE_IS_AUTOTOOLS_BUILD_TASK (self));
+
+  prebuild = ide_configuration_get_prebuild (self->configuration);
+  g_assert (IDE_IS_BUILD_COMMAND_QUEUE (prebuild));
+
+  cancellable = g_task_get_cancellable (task);
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  ide_build_command_queue_execute_async (prebuild,
+                                         runtime,
+                                         ide_configuration_get_environment (self->configuration),
+                                         IDE_BUILD_RESULT (self),
+                                         cancellable,
+                                         ide_autotools_build_task_configuration_prebuild_cb,
+                                         g_steal_pointer (&task));
+
+  IDE_EXIT;
 }
 
 void
@@ -579,8 +646,11 @@ ide_autotools_build_task_execute_async (IdeAutotoolsBuildTask *self,
   WorkerState *state;
   GError *error = NULL;
 
+  IDE_ENTRY;
+
   g_return_if_fail (IDE_IS_AUTOTOOLS_BUILD_TASK (self));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+  g_return_if_fail (callback != NULL);
 
   task = g_task_new (self, cancellable, callback, user_data);
   g_task_set_source_tag (task, ide_autotools_build_task_execute_async);
@@ -592,7 +662,7 @@ ide_autotools_build_task_execute_async (IdeAutotoolsBuildTask *self,
                                G_IO_ERROR_FAILED,
                                "%s",
                                _("Cannot execute build task more than once"));
-      return;
+      IDE_EXIT;
     }
 
   self->executed = TRUE;
@@ -602,18 +672,18 @@ ide_autotools_build_task_execute_async (IdeAutotoolsBuildTask *self,
   if (state == NULL)
     {
       g_task_return_error (task, error);
-      return;
+      IDE_EXIT;
     }
 
   g_task_set_task_data (task, state, worker_state_free);
 
-  /*
-   * Execute the pre-hook for the runtime before we start building.
-   */
+  /* Execute the pre-hook for the runtime before we start building. */
   ide_runtime_prebuild_async (state->runtime,
                               cancellable,
-                              ide_autotools_build_task_prebuild_cb,
-                              g_object_ref (task));
+                              ide_autotools_build_task_runtime_prebuild_cb,
+                              g_steal_pointer (&task));
+
+  IDE_EXIT;
 }
 
 gboolean
@@ -625,6 +695,8 @@ ide_autotools_build_task_execute_finish (IdeAutotoolsBuildTask  *self,
   WorkerState *state;
   guint sequence;
   gboolean ret;
+
+  IDE_ENTRY;
 
   g_return_val_if_fail (IDE_IS_AUTOTOOLS_BUILD_TASK (self), FALSE);
   g_return_val_if_fail (G_IS_TASK (task), FALSE);
@@ -643,7 +715,7 @@ ide_autotools_build_task_execute_finish (IdeAutotoolsBuildTask  *self,
 
   ide_build_result_set_running (IDE_BUILD_RESULT (self), FALSE);
 
-  return ret;
+  IDE_RETURN (ret);
 }
 
 static gboolean
