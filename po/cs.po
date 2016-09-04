@@ -8,10 +8,10 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-08-26 02:55+0000\n"
-"PO-Revision-Date: 2016-08-26 11:58+0200\n"
+"POT-Creation-Date: 2016-09-03 02:44+0000\n"
+"PO-Revision-Date: 2016-09-04 21:55+0200\n"
 "Last-Translator: Marek Černocký <marek@manet.cz>\n"
-"Language-Team: čeština <gnome-cs-list@gnome.org>>\n"
+"Language-Team: čeština <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -161,11 +161,12 @@ msgstr "%s: Tento formát souboru není podporován\n"
 msgid "failed to parse\n"
 msgstr "selhalo zpracování\n"
 
-#: contrib/gstyle/gstyle-palette.c:828
+#. To translators: always in singular form like in: generated palette number <generated_count>
+#: contrib/gstyle/gstyle-palette.c:829
 msgid "Generated"
 msgstr "Vygenerovaná"
 
-#: contrib/gstyle/gstyle-palette.c:931
+#: contrib/gstyle/gstyle-palette.c:932
 #, c-format
 msgid "Unable to save %s\n"
 msgstr "Nelze uložit %s\n"
@@ -425,7 +426,7 @@ msgstr ""
 "byl řádek přidán nebo změněn."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:34
-#: libide/editor/ide-editor-tweak-widget.ui:73
+#: libide/editor/ide-editor-tweak-widget.ui:74
 msgid "Highlight current line"
 msgstr "Zvýrazňovat aktuální řádek"
 
@@ -450,7 +451,7 @@ msgid "If enabled, the editor will show line numbers."
 msgstr "Když je zapnuto, bude editor zobrazovat čísla řádků."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:49
-#: libide/editor/ide-editor-tweak-widget.ui:90
+#: libide/editor/ide-editor-tweak-widget.ui:91
 #: libide/preferences/ide-preferences-builtin.c:133
 msgid "Smart Backspace"
 msgstr "Chytrý Backaspace"
@@ -863,7 +864,7 @@ msgstr "_Zavřít"
 
 #: data/org.gnome.Builder.appdata.xml.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
-#: libide/application/ide-application.c:462
+#: libide/application/ide-application.c:466
 #: libide/preferences/ide-preferences-builtin.c:127
 #: libide/workbench/ide-workbench.c:560
 msgid "Builder"
@@ -1084,7 +1085,7 @@ msgstr "Selhalo otevření datového proudu stdout."
 msgid "%s() is not supported on %s build system."
 msgstr "%s() není podporována v systému sestavení %s"
 
-#: libide/buildsystem/ide-configuration-manager.c:428
+#: libide/buildsystem/ide-configuration-manager.c:479
 #: libide/preferences/ide-preferences-builtin.c:261
 #: libide/preferences/ide-preferences-builtin.c:279
 msgid "Default"
@@ -1198,46 +1199,46 @@ msgstr "Zkuste otevřít soubor psaním do vyhledávacího pole nahoře"
 msgid "Search highlight mode…"
 msgstr "hledat režim zvýrazňování…"
 
-#: libide/editor/ide-editor-tweak-widget.ui:55
+#: libide/editor/ide-editor-tweak-widget.ui:56
 msgid "Display line numbers"
 msgstr "Zobrazovat čísla řádků"
 
-#: libide/editor/ide-editor-tweak-widget.ui:64
+#: libide/editor/ide-editor-tweak-widget.ui:65
 msgid "Display right margin"
 msgstr "Zobrazovat pravý okraj"
 
-#: libide/editor/ide-editor-tweak-widget.ui:82
+#: libide/editor/ide-editor-tweak-widget.ui:83
 msgid "Auto indent"
 msgstr "Automatické odsazování"
 
-#: libide/editor/ide-editor-tweak-widget.ui:98
+#: libide/editor/ide-editor-tweak-widget.ui:99
 #: libide/preferences/ide-preferences-builtin.c:248
 msgid "Indentation"
 msgstr "Odsazení"
 
-#: libide/editor/ide-editor-tweak-widget.ui:126
+#: libide/editor/ide-editor-tweak-widget.ui:127
 #: libide/preferences/ide-preferences-builtin.c:159
 msgid "Spaces"
 msgstr "Mezery"
 
-#: libide/editor/ide-editor-tweak-widget.ui:136
+#: libide/editor/ide-editor-tweak-widget.ui:137
 #: libide/preferences/ide-preferences-builtin.c:160
 msgid "Tabs"
 msgstr "Tabulátory"
 
-#: libide/editor/ide-editor-tweak-widget.ui:156
+#: libide/editor/ide-editor-tweak-widget.ui:157
 msgid "2"
 msgstr "2"
 
-#: libide/editor/ide-editor-tweak-widget.ui:166
+#: libide/editor/ide-editor-tweak-widget.ui:167
 msgid "3"
 msgstr "3"
 
-#: libide/editor/ide-editor-tweak-widget.ui:176
+#: libide/editor/ide-editor-tweak-widget.ui:177
 msgid "4"
 msgstr "4"
 
-#: libide/editor/ide-editor-tweak-widget.ui:186
+#: libide/editor/ide-editor-tweak-widget.ui:187
 msgid "8"
 msgstr "8"
 
@@ -1254,9 +1255,9 @@ msgid "_Reload"
 msgstr "_Znovu načíst"
 
 #: libide/editor/ide-editor-view.ui:31
-#: libide/greeter/ide-greeter-perspective.ui:308
-#: libide/greeter/ide-greeter-perspective.ui:356
-#: libide/workbench/ide-omni-bar.ui:344
+#: libide/greeter/ide-greeter-perspective.ui:310
+#: libide/greeter/ide-greeter-perspective.ui:358
+#: libide/workbench/ide-omni-bar.ui:346
 msgid "_Cancel"
 msgstr "_Zrušit"
 
@@ -1285,40 +1286,40 @@ msgstr "A co <a href=\"action://app.new-project\">vytvořit nový projekt</a>?"
 msgid "No projects found"
 msgstr "Nebyl nalezen žádný projekt"
 
-#: libide/greeter/ide-greeter-perspective.ui:98
+#: libide/greeter/ide-greeter-perspective.ui:100
 msgid "Recent Projects"
 msgstr "Nedávné projekty"
 
-#: libide/greeter/ide-greeter-perspective.ui:113
-#: libide/greeter/ide-greeter-perspective.ui:163
+#: libide/greeter/ide-greeter-perspective.ui:115
+#: libide/greeter/ide-greeter-perspective.ui:165
 msgid "Updated"
 msgstr "Aktualizováno"
 
-#: libide/greeter/ide-greeter-perspective.ui:148
+#: libide/greeter/ide-greeter-perspective.ui:150
 msgid "Other Projects"
 msgstr "Ostatní projekty"
 
-#: libide/greeter/ide-greeter-perspective.ui:204
+#: libide/greeter/ide-greeter-perspective.ui:206
 msgid "_Remove"
 msgstr "Odst_ranit"
 
-#: libide/greeter/ide-greeter-perspective.ui:288
+#: libide/greeter/ide-greeter-perspective.ui:290
 msgid "Select a Project"
 msgstr "Výběr projektu"
 
-#: libide/greeter/ide-greeter-perspective.ui:294
+#: libide/greeter/ide-greeter-perspective.ui:296
 msgid "Click an item to select"
 msgstr "Kliknutím vyberte položku"
 
-#: libide/greeter/ide-greeter-perspective.ui:320
+#: libide/greeter/ide-greeter-perspective.ui:322
 msgid "Open…"
 msgstr "Otevřít…"
 
-#: libide/greeter/ide-greeter-perspective.ui:335
+#: libide/greeter/ide-greeter-perspective.ui:337
 msgid "Select projects for removal"
 msgstr "Výběr projektů k odstranění"
 
-#: libide/greeter/ide-greeter-perspective.ui:355
+#: libide/greeter/ide-greeter-perspective.ui:357
 msgid "Return to project selection"
 msgstr "Vrátit se do výběru projektu"
 
@@ -1997,7 +1998,7 @@ msgid "Number of CPU"
 msgstr "Počet CPU"
 
 #: libide/preferences/ide-preferences-builtin.c:299
-#: libide/workbench/ide-omni-bar.ui:370
+#: libide/workbench/ide-omni-bar.ui:372
 #: plugins/build-tools/gbp-build-panel.c:386
 msgid "Build"
 msgstr "Sestavení"
@@ -2048,7 +2049,7 @@ msgid "Scan your computer for existing projects"
 msgstr "Procházet můj počítač a hledat v něm stávající projekty"
 
 #: libide/preferences/ide-preferences-builtin.c:442
-#: plugins/create-project/gbp-create-project-widget.ui:78
+#: plugins/create-project/gbp-create-project-widget.ui:80
 msgid "Version Control"
 msgstr "Systém správy verzí"
 
@@ -2103,11 +2104,11 @@ msgid "Cannot run target, another target is running"
 msgstr "Nelze spustit cíl, jiný cíl právě běží"
 
 #: libide/runner/ide-run-manager.c:287
-#: plugins/autotools/ide-autotools-build-task.c:438
+#: plugins/autotools/ide-autotools-build-task.c:440
 msgid "Failed to locate runtime"
 msgstr "Selhalo vyhledání běhového prostředí"
 
-#: libide/runner/ide-runner.c:129
+#: libide/runner/ide-runner.c:137
 msgid "Process quit unexpectedly"
 msgstr "Proces se neočekávaně ukončil"
 
@@ -2155,6 +2156,10 @@ msgstr "Nahradit „%s“ pomocí „%s“"
 #: libide/sourceview/ide-source-view.c:5255
 msgid "Apply Fix-It"
 msgstr "Použít opravu"
+
+#: libide/transfers/ide-transfers-button.ui:35
+msgid "Clear _All"
+msgstr "Sm_azat vše"
 
 #: libide/util/ide-file-manager.c:64
 msgid "File path is NULL"
@@ -2305,23 +2310,23 @@ msgstr "Větev"
 msgid "Build Profile"
 msgstr "Profil sestavení"
 
-#: libide/workbench/ide-omni-bar.ui:266
+#: libide/workbench/ide-omni-bar.ui:268
 msgid "Last build"
 msgstr "Poslední sestavení"
 
-#: libide/workbench/ide-omni-bar.ui:316
+#: libide/workbench/ide-omni-bar.ui:318
 msgid "Failed"
 msgstr "Selhalo"
 
-#: libide/workbench/ide-omni-bar.ui:333
+#: libide/workbench/ide-omni-bar.ui:335
 msgid "View Output"
 msgstr "Zobrazit výstup"
 
-#: libide/workbench/ide-omni-bar.ui:380
+#: libide/workbench/ide-omni-bar.ui:382
 msgid "Rebuild"
 msgstr "Znovu sestavit"
 
-#: libide/workbench/ide-omni-bar.ui:390
+#: libide/workbench/ide-omni-bar.ui:392
 msgid "Clean"
 msgstr "Vyčistit"
 
@@ -2360,7 +2365,7 @@ msgstr "Sestavení proběhlo úspěšně"
 
 #: plugins/autotools/ide-autotools-builder.c:159
 #: plugins/autotools/ide-autotools-builder.c:240
-#: plugins/autotools/ide-autotools-build-task.c:965
+#: plugins/autotools/ide-autotools-build-task.c:1037
 msgid "Building…"
 msgstr "Sestavuje se…"
 
@@ -2380,50 +2385,50 @@ msgstr "Instalace proběhla úspěšně"
 msgid "Failed to locate configure.ac"
 msgstr "Selhalo vyhledání souboru configure.ac"
 
-#: plugins/autotools/ide-autotools-build-task.c:177
+#: plugins/autotools/ide-autotools-build-task.c:179
 msgid "Directory must be on a locally mounted filesystem."
 msgstr "Složka musí být na místně připojeném souborovém systému."
 
-#: plugins/autotools/ide-autotools-build-task.c:427
+#: plugins/autotools/ide-autotools-build-task.c:429
 msgid "Failed to locate device"
 msgstr "Selhalo vyhledání zařízení"
 
-#: plugins/autotools/ide-autotools-build-task.c:594
+#: plugins/autotools/ide-autotools-build-task.c:664
 msgid "Cannot execute build task more than once"
 msgstr "Úlohu provádějící sestavení nelze spustic vícekrát než jednou"
 
-#: plugins/autotools/ide-autotools-build-task.c:735
+#: plugins/autotools/ide-autotools-build-task.c:807
 msgid "Failed to create build directory."
 msgstr "Selhalo vytvoření složky pro sestavení."
 
-#: plugins/autotools/ide-autotools-build-task.c:744
+#: plugins/autotools/ide-autotools-build-task.c:816
 #, c-format
 msgid "'%s' is not a directory."
 msgstr "„%s“ není složka."
 
-#: plugins/autotools/ide-autotools-build-task.c:783
+#: plugins/autotools/ide-autotools-build-task.c:855
 #, c-format
 msgid "autogen.sh is missing from project directory (%s)."
 msgstr "Ve složce projektu schází autogen.sh (%s)."
 
-#: plugins/autotools/ide-autotools-build-task.c:793
+#: plugins/autotools/ide-autotools-build-task.c:865
 msgid "autogen.sh is not executable."
 msgstr "Skript autogen.sh není spustitelný."
 
-#: plugins/autotools/ide-autotools-build-task.c:797
+#: plugins/autotools/ide-autotools-build-task.c:869
 msgid "Running autogen…"
 msgstr "Běží autogen…"
 
-#: plugins/autotools/ide-autotools-build-task.c:831
+#: plugins/autotools/ide-autotools-build-task.c:903
 #, c-format
 msgid "autogen.sh failed to create configure (%s)"
 msgstr "Skritp autogen.sh selhal při vytváření konfigurace (%s)"
 
-#: plugins/autotools/ide-autotools-build-task.c:866
+#: plugins/autotools/ide-autotools-build-task.c:938
 msgid "Running configure…"
 msgstr "Probíhá konfigurace…"
 
-#: plugins/autotools/ide-autotools-build-task.c:963
+#: plugins/autotools/ide-autotools-build-task.c:1035
 msgid "Cleaning…"
 msgstr "Čistí se…"
 
@@ -3067,27 +3072,36 @@ msgstr "Zadejte prosím název projektu.\n"
 msgid "Please specify a project template with --template=\n"
 msgstr "Zadejte prosím šablonu projektu pomocí --template=\n"
 
-#: plugins/create-project/gbp-create-project-widget.c:523
+#: plugins/create-project/gbp-create-project-widget.c:148
+msgid ""
+"Characters were used which might cause technical issues as a project name"
+msgstr "Použité znaky by mohly v názvu projektu způsobit technické problémy"
+
+#: plugins/create-project/gbp-create-project-widget.c:155
+msgid "Directory already exists with that name"
+msgstr "Složka s tímto názvem již existuje"
+
+#: plugins/create-project/gbp-create-project-widget.c:550
 msgid "A failure occurred while initializing version control"
 msgstr "Během inicializace systému správy verzí došlo k chybě"
 
-#: plugins/create-project/gbp-create-project-widget.ui:36
+#: plugins/create-project/gbp-create-project-widget.ui:38
 msgid "Project Name"
 msgstr "Název projektu"
 
-#: plugins/create-project/gbp-create-project-widget.ui:47
+#: plugins/create-project/gbp-create-project-widget.ui:49
 msgid "Project Location"
 msgstr "Umístění projektu"
 
-#: plugins/create-project/gbp-create-project-widget.ui:55
+#: plugins/create-project/gbp-create-project-widget.ui:57
 msgid "Language"
 msgstr "Jazyk"
 
-#: plugins/create-project/gbp-create-project-widget.ui:67
+#: plugins/create-project/gbp-create-project-widget.ui:69
 msgid "License"
 msgstr "Licence"
 
-#: plugins/create-project/gbp-create-project-widget.ui:110
+#: plugins/create-project/gbp-create-project-widget.ui:112
 msgid ""
 "Unique name that is used for your project's folder and other technical "
 "resources. Should be in lower case without spaces."
@@ -3095,44 +3109,44 @@ msgstr ""
 "Jedinečný název, který se použije pro složku s vaším projektem a další "
 "technické prostředky. Měl by se skládat jen z malých písmen bez mezer."
 
-#: plugins/create-project/gbp-create-project-widget.ui:128
+#: plugins/create-project/gbp-create-project-widget.ui:130
 #: plugins/git/ide-git-clone-widget.ui:78
 msgid "Select Project Directory"
 msgstr "Výběr složky projektu"
 
-#: plugins/create-project/gbp-create-project-widget.ui:147
+#: plugins/create-project/gbp-create-project-widget.ui:149
 msgid "GPLv3+"
 msgstr "GPLv3+"
 
-#: plugins/create-project/gbp-create-project-widget.ui:148
+#: plugins/create-project/gbp-create-project-widget.ui:150
 msgid "LGPLv3+"
 msgstr "LGPLv3+"
 
-#: plugins/create-project/gbp-create-project-widget.ui:149
+#: plugins/create-project/gbp-create-project-widget.ui:151
 msgid "AGPLv3+"
 msgstr "AGPLv3+"
 
-#: plugins/create-project/gbp-create-project-widget.ui:150
+#: plugins/create-project/gbp-create-project-widget.ui:152
 msgid "MIT/X11"
 msgstr "MIT/X11"
 
-#: plugins/create-project/gbp-create-project-widget.ui:151
+#: plugins/create-project/gbp-create-project-widget.ui:153
 msgid "GPLv2+"
 msgstr "GPLv2+"
 
-#: plugins/create-project/gbp-create-project-widget.ui:152
+#: plugins/create-project/gbp-create-project-widget.ui:154
 msgid "LGPLv2.1+"
 msgstr "LGPLv2.1+"
 
-#: plugins/create-project/gbp-create-project-widget.ui:153
+#: plugins/create-project/gbp-create-project-widget.ui:155
 msgid "No license"
 msgstr "Žádná licence"
 
-#: plugins/create-project/gbp-create-project-widget.ui:170
+#: plugins/create-project/gbp-create-project-widget.ui:172
 msgid "Uses the Git version control system"
 msgstr "Používá systém správy verzí Git"
 
-#: plugins/create-project/gbp-create-project-widget.ui:255
+#: plugins/create-project/gbp-create-project-widget.ui:257
 msgid "Select a Template"
 msgstr "Vyberte šablonu"
 
@@ -3364,6 +3378,19 @@ msgstr "S_balit všechny uzly"
 msgid "_Refresh"
 msgstr "_Aktualizovat"
 
+#: plugins/quick-highlight/gbp-quick-highlight-preferences.c:48
+msgid "Words matching selection"
+msgstr "Slova odpovídající výběru"
+
+#: plugins/quick-highlight/gbp-quick-highlight-preferences.c:49
+msgid "Highlight all occurrences of words matching the current selection"
+msgstr "Zvýrazňovat všechny výskyty slov odpovídajících aktuálnímu výběru"
+
+#. Translators: the following are keywords used for searching to locate this preference
+#: plugins/quick-highlight/gbp-quick-highlight-preferences.c:51
+msgid "quick highlight words matching current selection"
+msgstr "rychlé zvýraznění slova odpovídající vyhovující aktuálnímu výběru"
+
 #: plugins/support/gtk/menus.ui:7
 msgid "Generate Support Log"
 msgstr "Vygenerovat záznam pro podporu"
@@ -3406,8 +3433,9 @@ msgid "All Files"
 msgstr "Všechny soubory"
 
 #: plugins/sysprof/gbp-sysprof-workbench-addin.c:352
-msgid "Profile"
-msgstr "Profilovat"
+#| msgid "Build Profile"
+msgid "Run with Profiler"
+msgstr "Spustit s profilerem"
 
 #: plugins/sysprof/gtk/menus.ui:6
 msgid "Open Profile…"
@@ -3437,3 +3465,6 @@ msgstr "Zobrazovat chyby a varování poskytované pro jazyk Vala"
 #: plugins/vala-pack/ide-vala-preferences-addin.vala:36
 msgid "vala diagnostics warnings errors"
 msgstr "vala diagnostika varování chyba chyby"
+
+#~ msgid "Profile"
+#~ msgstr "Profilovat"
