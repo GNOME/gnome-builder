@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-05 12:05+0200\n"
+"POT-Creation-Date: 2016-09-07 23:00+0200\n"
 "PO-Revision-Date: 2016-09-05 13:16+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: Galician\n"
@@ -1210,7 +1210,7 @@ msgstr "Non se pode executar o obxectivo, xa hai outro en execución"
 msgid "Failed to locate runtime"
 msgstr "Produciuse un fallo ao localizar o runtime"
 
-#: ../libide/runner/ide-runner.c:137
+#: ../libide/runner/ide-runner.c:139
 msgid "Process quit unexpectedly"
 msgstr "O proceso saíu de forma non esperada"
 
@@ -1450,27 +1450,27 @@ msgstr "Limpando…"
 msgid "Invalid makefile provided, ignoring."
 msgstr "O ficheiro makefile fornecido non é válido, ignorándoo."
 
-#: ../plugins/autotools-templates/autotools_templates/__init__.py:261
+#: ../plugins/autotools-templates/autotools_templates/__init__.py:265
 msgid "Shared Library"
 msgstr "Biblioteca compartida"
 
-#: ../plugins/autotools-templates/autotools_templates/__init__.py:263
+#: ../plugins/autotools-templates/autotools_templates/__init__.py:267
 msgid "Create a new autotools project with a shared library"
 msgstr "Crea un novo proxecto autotools con unha biblioteca compartida"
 
-#: ../plugins/autotools-templates/autotools_templates/__init__.py:287
+#: ../plugins/autotools-templates/autotools_templates/__init__.py:291
 msgid "Empty Project"
 msgstr "Proxecto baleiro"
 
-#: ../plugins/autotools-templates/autotools_templates/__init__.py:290
+#: ../plugins/autotools-templates/autotools_templates/__init__.py:294
 msgid "Create a new empty autotools project"
 msgstr "Crear un novo proxecto de autotools baleiro"
 
-#: ../plugins/autotools-templates/autotools_templates/__init__.py:304
+#: ../plugins/autotools-templates/autotools_templates/__init__.py:308
 msgid "GNOME Application"
 msgstr "Aplicativo de GNOME"
 
-#: ../plugins/autotools-templates/autotools_templates/__init__.py:306
+#: ../plugins/autotools-templates/autotools_templates/__init__.py:310
 msgid "Create a new flatpak-ready GNOME application"
 msgstr "Crear un novo aplicativo de GNOME listo para flatpak"
 
