@@ -10,16 +10,16 @@ msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-09-06 21:15+0000\n"
-"PO-Revision-Date: 2016-09-06 22:52-0200\n"
-"Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
+"POT-Creation-Date: 2016-09-07 17:55+0000\n"
+"PO-Revision-Date: 2016-09-07 22:27-0300\n"
+"Last-Translator: Enrico Nicoletto <liverig@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <gnome-pt_br-list@gnome.org>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Virtaal 0.7.1\n"
+"X-Generator: Poedit 1.8.7\n"
 "X-Project-Style: gnome\n"
 
 #: contrib/egg/egg-animation.c:726 contrib/pnl/pnl-animation.c:701
@@ -216,6 +216,11 @@ msgstr "Verde"
 #: contrib/gstyle/tests/data/gstyle-color-editor.ui:152
 msgid "Blue"
 msgstr "Azul"
+
+#: contrib/gstyle/tests/data/palette.gstyle.xml:20
+#: plugins/color-picker/data/basic.gstyle.xml:20
+msgid "Basic"
+msgstr "Básica"
 
 #: contrib/gstyle/ui/gstyle-color-panel.ui:157
 msgid "Color Components"
@@ -972,13 +977,10 @@ msgid "Preview support for building with Xdg-App runtimes"
 msgstr "Suporte antecipado a compilação com runtimes do xdp-app"
 
 #: data/org.gnome.Builder.appdata.xml.in:42
-#| msgctxt "shortcut window"
-#| msgid "Global Search"
 msgid "Fast global search"
 msgstr "Pesquisa global rápida"
 
 #: data/org.gnome.Builder.appdata.xml.in:46
-#| msgid "From a project template"
 msgid "Integrated project tree"
 msgstr "Árvore de projeto integrada"
 
