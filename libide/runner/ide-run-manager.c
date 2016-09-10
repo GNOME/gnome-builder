@@ -865,7 +865,10 @@ ide_run_manager_activate_action (GActionGroup *group,
   if (FALSE) {}
   else if (g_strcmp0 (action_name, "run-with-handler") == 0)
     {
-      const gchar *handler = g_variant_get_string (parameter, NULL);
+      const gchar *handler = NULL;
+
+      if (parameter != NULL)
+        handler = g_variant_get_string (parameter, NULL);
 
       /* "" translates to current handler */
       if (handler && *handler)
