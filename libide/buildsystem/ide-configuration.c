@@ -21,6 +21,7 @@
 #include <string.h>
 
 #include "ide-context.h"
+#include "ide-debug.h"
 #include "ide-internal.h"
 
 #include "buildsystem/ide-build-command-queue.h"
@@ -82,6 +83,14 @@ static GParamSpec *properties [N_PROPS];
 static guint signals [LAST_SIGNAL];
 
 static void
+ide_configuration_emit_changed (IdeConfiguration *self)
+{
+  g_assert (IDE_IS_CONFIGURATION (self));
+
+  g_signal_emit (self, signals [CHANGED], 0);
+}
+
+static void
 ide_configuration_set_id (IdeConfiguration *self,
                           const gchar      *id)
 {
@@ -139,10 +148,14 @@ ide_configuration_environment_changed (IdeConfiguration *self,
                                        guint             removed,
                                        IdeEnvironment   *environment)
 {
+  IDE_ENTRY;
+
   g_assert (IDE_IS_CONFIGURATION (self));
   g_assert (IDE_IS_ENVIRONMENT (environment));
 
   ide_configuration_set_dirty (self, TRUE);
+
+  IDE_EXIT;
 }
 
 static void
@@ -727,7 +740,7 @@ ide_configuration_set_display_name (IdeConfiguration *self,
       g_free (self->display_name);
       self->display_name = g_strdup (display_name);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_DISPLAY_NAME]);
-      g_signal_emit (self, signals [CHANGED], 0);
+      ide_configuration_emit_changed (self);
     }
 }
 
@@ -754,11 +767,15 @@ ide_configuration_set_dirty (IdeConfiguration *self,
     }
 
   /*
-   * Always emit the changed signal so that the configuration manager
-   * can queue a writeback of the configuration.
+   * Emit the changed signal so that the configuration manager
+   * can queue a writeback of the configuration. If we are
+   * clearing the dirty bit, then we don't need to do this.
    */
-  self->sequence++;
-  g_signal_emit (self, signals [CHANGED], 0);
+  if (dirty)
+    {
+      self->sequence++;
+      ide_configuration_emit_changed (self);
+    }
 }
 
 /**
