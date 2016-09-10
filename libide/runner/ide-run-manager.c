@@ -840,7 +840,7 @@ ide_run_manager_activate_action (GActionGroup *group,
   g_assert (IDE_IS_RUN_MANAGER (self));
   g_assert (action_name != NULL);
 
-  if (g_variant_is_floating (parameter))
+  if (parameter != NULL && g_variant_is_floating (parameter))
     sunk = g_variant_ref_sink (parameter);
 
   if (FALSE) {}
