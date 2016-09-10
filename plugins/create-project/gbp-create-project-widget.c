@@ -99,9 +99,18 @@ gbp_create_project_widget_add_languages (GbpCreateProjectWidget *self,
 static gboolean
 validate_name (const gchar *name)
 {
+  if (name == NULL)
+    return FALSE;
+
+  if (g_unichar_isdigit (g_utf8_get_char (name)))
+    return FALSE;
+
   for (; *name; name = g_utf8_next_char (name))
     {
       gunichar ch = g_utf8_get_char (name);
+
+      if (g_unichar_isspace (ch))
+        return FALSE;
 
       if (ch == '/')
         return FALSE;
