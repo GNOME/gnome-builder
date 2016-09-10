@@ -55,7 +55,7 @@
  * To increment the counter in a function of your choice (but within the
  * same module), use EGG_COUNTER_ADD, EGG_COUNTER_INC, EGG_COUNTER_DEC.
  *
- *   EGG_COUNTER_ADD (Symbol);
+ *   EGG_COUNTER_INC (Symbol);
  *
  *
  * Architecture Support
