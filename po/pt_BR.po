@@ -10,16 +10,16 @@ msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-09-10 02:48+0000\n"
-"PO-Revision-Date: 2016-09-10 09:24-0200\n"
-"Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
+"POT-Creation-Date: 2016-09-10 16:45+0000\n"
+"PO-Revision-Date: 2016-09-10 15:30-0300\n"
+"Last-Translator: Enrico Nicoletto <liverig@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <gnome-pt_br-list@gnome.org>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Virtaal 0.7.1\n"
+"X-Generator: Poedit 1.8.7\n"
 "X-Project-Style: gnome\n"
 
 #: contrib/egg/egg-animation.c:726 contrib/pnl/pnl-animation.c:701
@@ -1420,37 +1420,37 @@ msgid "Editor Shortcuts"
 msgstr "Atalhos do editor"
 
 #: libide/keybindings/ide-shortcuts-window.ui:14
-#: libide/keybindings/ide-shortcuts-window.ui:396
+#: libide/keybindings/ide-shortcuts-window.ui:423
 msgctxt "shortcut window"
 msgid "General"
 msgstr "Geral"
 
 #: libide/keybindings/ide-shortcuts-window.ui:18
-#: libide/keybindings/ide-shortcuts-window.ui:400
+#: libide/keybindings/ide-shortcuts-window.ui:427
 msgctxt "shortcut window"
 msgid "Global Search"
 msgstr "Pesquisa global"
 
 #: libide/keybindings/ide-shortcuts-window.ui:25
-#: libide/keybindings/ide-shortcuts-window.ui:407
+#: libide/keybindings/ide-shortcuts-window.ui:434
 msgctxt "shortcut window"
 msgid "Preferences"
 msgstr "Preferências"
 
 #: libide/keybindings/ide-shortcuts-window.ui:32
-#: libide/keybindings/ide-shortcuts-window.ui:414
+#: libide/keybindings/ide-shortcuts-window.ui:441
 msgctxt "shortcut window"
 msgid "Command Bar"
 msgstr "Barra de comandos"
 
 #: libide/keybindings/ide-shortcuts-window.ui:39
-#: libide/keybindings/ide-shortcuts-window.ui:421
+#: libide/keybindings/ide-shortcuts-window.ui:448
 msgctxt "shortcut window"
 msgid "Terminal"
 msgstr "Terminal"
 
 #: libide/keybindings/ide-shortcuts-window.ui:46
-#: libide/keybindings/ide-shortcuts-window.ui:428
+#: libide/keybindings/ide-shortcuts-window.ui:455
 msgctxt "shortcut window"
 msgid "Keyboard Shortcuts"
 msgstr "Atalhos de teclado"
@@ -1548,13 +1548,13 @@ msgid "Clear highlight"
 msgstr "Limpar realce"
 
 #: libide/keybindings/ide-shortcuts-window.ui:191
-#: libide/keybindings/ide-shortcuts-window.ui:437
+#: libide/keybindings/ide-shortcuts-window.ui:464
 msgctxt "shortcut window"
 msgid "Copy and Paste"
 msgstr "Copiar e colar"
 
 #: libide/keybindings/ide-shortcuts-window.ui:196
-#: libide/keybindings/ide-shortcuts-window.ui:442
+#: libide/keybindings/ide-shortcuts-window.ui:469
 msgctxt "shortcut window"
 msgid "Copy selected text to clipboard"
 msgstr "Copiar o texto selecionado para a área de transferência"
@@ -1565,7 +1565,7 @@ msgid "Cut selected text to clipboard"
 msgstr "Colar o texto selecionado para a área de transferência"
 
 #: libide/keybindings/ide-shortcuts-window.ui:210
-#: libide/keybindings/ide-shortcuts-window.ui:449
+#: libide/keybindings/ide-shortcuts-window.ui:476
 msgctxt "shortcut window"
 msgid "Paste text from clipboard"
 msgstr "Colar o texto da área de transferência"
@@ -1695,7 +1695,27 @@ msgctxt "shortcut window"
 msgid "Unselect all"
 msgstr "Desmarcar tudo"
 
-#: libide/keybindings/ide-shortcuts-window.ui:392
+#: libide/keybindings/ide-shortcuts-window.ui:389
+msgctxt "shortcut window"
+msgid "Build and Run"
+msgstr "Compilar e executar"
+
+#: libide/keybindings/ide-shortcuts-window.ui:394
+msgctxt "shortcut window"
+msgid "Build"
+msgstr "Compilar"
+
+#: libide/keybindings/ide-shortcuts-window.ui:401
+msgctxt "shortcut window"
+msgid "Run"
+msgstr "Executar"
+
+#: libide/keybindings/ide-shortcuts-window.ui:408
+msgctxt "shortcut window"
+msgid "Profile"
+msgstr "Perfil"
+
+#: libide/keybindings/ide-shortcuts-window.ui:419
 msgctxt "shortcut window"
 msgid "Terminal Shortcuts"
 msgstr "Atalhos do Terminal"
@@ -2160,7 +2180,7 @@ msgstr "Falha ao localizar tempo de execução"
 msgid "Process quit unexpectedly"
 msgstr "O processo saiu inesperadamente"
 
-#: libide/runtimes/ide-runtime-manager.c:104
+#: libide/runtimes/ide-runtime-manager.c:105
 msgid "Host operating system"
 msgstr "Sistema operacional hospedeiro"
 
@@ -3149,9 +3169,6 @@ msgid "License"
 msgstr "Licença"
 
 #: plugins/create-project/gbp-create-project-widget.ui:112
-#| msgid ""
-#| "Unique name that is used for your project's folder and other technical "
-#| "resources. Should be in lower case without spaces."
 msgid ""
 "Unique name that is used for your project's folder and other technical "
 "resources. Should be in lower case without spaces and may not start with a "
@@ -3517,9 +3534,6 @@ msgstr "Mostra erros e avisos fornecidos pelo Vala"
 #: plugins/vala-pack/ide-vala-preferences-addin.vala:36
 msgid "vala diagnostics warnings errors"
 msgstr "vala diagnósticos avisos erros"
-
-#~ msgid "Profile"
-#~ msgstr "Perfil"
 
 #~ msgid "_Print…"
 #~ msgstr "Im_primir…"
