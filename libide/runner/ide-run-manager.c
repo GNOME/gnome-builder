@@ -830,6 +830,25 @@ finish:
 }
 
 static void
+ide_run_manager_run_action_cb (GObject      *object,
+                               GAsyncResult *result,
+                               gpointer      user_data)
+{
+  IdeRunManager *self = (IdeRunManager *)object;
+  IdeContext *context;
+  g_autoptr(GError) error = NULL;
+
+  g_assert (IDE_IS_RUN_MANAGER (self));
+  g_assert (G_IS_ASYNC_RESULT (result));
+
+  context = ide_object_get_context (IDE_OBJECT (self));
+
+  /* Propagate the error to the context */
+  if (!ide_run_manager_run_finish (self, result, &error))
+    ide_context_warning (context, "%s", error->message);
+}
+
+static void
 ide_run_manager_activate_action (GActionGroup *group,
                                  const gchar  *action_name,
                                  GVariant     *parameter)
@@ -852,11 +871,19 @@ ide_run_manager_activate_action (GActionGroup *group,
       if (handler && *handler)
         ide_run_manager_set_handler (self, handler);
 
-      ide_run_manager_run_async (self, NULL, NULL, NULL, NULL);
+      ide_run_manager_run_async (self,
+                                 NULL,
+                                 NULL,
+                                 ide_run_manager_run_action_cb,
+                                 NULL);
     }
   else if (g_strcmp0 (action_name, "run") == 0)
     {
-      ide_run_manager_run_async (self, NULL, NULL, NULL, NULL);
+      ide_run_manager_run_async (self,
+                                 NULL,
+                                 NULL,
+                                 ide_run_manager_run_action_cb,
+                                 NULL);
     }
   else if (g_strcmp0 (action_name, "stop") == 0)
     {
