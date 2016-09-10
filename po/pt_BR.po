@@ -10,16 +10,16 @@ msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-09-07 17:55+0000\n"
-"PO-Revision-Date: 2016-09-07 22:27-0300\n"
-"Last-Translator: Enrico Nicoletto <liverig@gmail.com>\n"
+"POT-Creation-Date: 2016-09-10 02:48+0000\n"
+"PO-Revision-Date: 2016-09-10 09:24-0200\n"
+"Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
 "Language-Team: Brazilian Portuguese <gnome-pt_br-list@gnome.org>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 1.8.7\n"
+"X-Generator: Virtaal 0.7.1\n"
 "X-Project-Style: gnome\n"
 
 #: contrib/egg/egg-animation.c:726 contrib/pnl/pnl-animation.c:701
@@ -1193,7 +1193,7 @@ msgstr "Diferenciar maiúsculas de minúsculas"
 
 #: libide/editor/ide-editor-frame.ui:309
 msgid "Match whole word only"
-msgstr "Coincidir apenas palavra inteira"
+msgstr "Corresponder apenas palavra inteira"
 
 #: libide/editor/ide-editor-layout-stack-controls.c:46
 msgid "Plain Text"
@@ -3117,18 +3117,18 @@ msgstr "Por favor, especifique um nome de projeto.\n"
 msgid "Please specify a project template with --template=\n"
 msgstr "Por favor, especifique um modelo de projeto com --template=\n"
 
-#: plugins/create-project/gbp-create-project-widget.c:148
+#: plugins/create-project/gbp-create-project-widget.c:157
 msgid ""
 "Characters were used which might cause technical issues as a project name"
 msgstr ""
 "Foram usados caracteres que podem causar problemas técnicos como nome de "
 "projeto"
 
-#: plugins/create-project/gbp-create-project-widget.c:155
+#: plugins/create-project/gbp-create-project-widget.c:164
 msgid "Directory already exists with that name"
 msgstr "O diretório já existe com aquele nome"
 
-#: plugins/create-project/gbp-create-project-widget.c:550
+#: plugins/create-project/gbp-create-project-widget.c:559
 msgid "A failure occurred while initializing version control"
 msgstr "Ocorreu uma falha ao inicializar o controle de versão"
 
@@ -3149,12 +3149,16 @@ msgid "License"
 msgstr "Licença"
 
 #: plugins/create-project/gbp-create-project-widget.ui:112
+#| msgid ""
+#| "Unique name that is used for your project's folder and other technical "
+#| "resources. Should be in lower case without spaces."
 msgid ""
 "Unique name that is used for your project's folder and other technical "
-"resources. Should be in lower case without spaces."
+"resources. Should be in lower case without spaces and may not start with a "
+"number."
 msgstr ""
 "Nome único que é usado para sua pasta de projeto e outros recursos técnicos. "
-"Deve estar em minúsculo e sem espaços."
+"Deve estar em minúsculo, sem espaços e não pode começar com um número."
 
 #: plugins/create-project/gbp-create-project-widget.ui:130
 #: plugins/git/ide-git-clone-widget.ui:78
