@@ -32,6 +32,7 @@ struct _IdeRuntimeManager
   IdeObject         parent_instance;
   PeasExtensionSet *extensions;
   GPtrArray        *runtimes;
+  guint             unloading : 1;
 };
 
 static void list_model_iface_init (GListModelInterface *iface);
@@ -109,6 +110,7 @@ _ide_runtime_manager_unload (IdeRuntimeManager *self)
 {
   g_return_if_fail (IDE_IS_RUNTIME_MANAGER (self));
 
+  self->unloading = TRUE;
   g_clear_object (&self->extensions);
 }
 
@@ -117,7 +119,7 @@ ide_runtime_manager_dispose (GObject *object)
 {
   IdeRuntimeManager *self = (IdeRuntimeManager *)object;
 
-  g_clear_object (&self->extensions);
+  _ide_runtime_manager_unload (self);
   g_clear_pointer (&self->runtimes, g_ptr_array_unref);
 
   G_OBJECT_CLASS (ide_runtime_manager_parent_class)->dispose (object);
@@ -192,12 +194,13 @@ void
 ide_runtime_manager_remove (IdeRuntimeManager *self,
                             IdeRuntime        *runtime)
 {
-  guint i;
-
   g_return_if_fail (IDE_IS_RUNTIME_MANAGER (self));
   g_return_if_fail (IDE_IS_RUNTIME (runtime));
 
-  for (i = 0; i < self->runtimes->len; i++)
+  if (self->unloading)
+    return;
+
+  for (guint i = 0; i < self->runtimes->len; i++)
     {
       IdeRuntime *item = g_ptr_array_index (self->runtimes, i);
 
