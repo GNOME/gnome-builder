@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-09-07 17:55+0000\n"
+"POT-Creation-Date: 2016-09-10 02:48+0000\n"
 "PO-Revision-Date: 2016-09-09 16:37+0200\n"
 "Last-Translator: Marek Černocký <marek@manet.cz>\n"
 "Language-Team: čeština <gnome-cs-list@gnome.org>\n"
@@ -954,13 +954,10 @@ msgid "Preview support for building with Xdg-App runtimes"
 msgstr "Podpora náhledu pro sestavování pomocí běhového prostředí Xdg-App"
 
 #: data/org.gnome.Builder.appdata.xml.in:42
-#| msgctxt "shortcut window"
-#| msgid "Global Search"
 msgid "Fast global search"
 msgstr "Rychlé globální hledání"
 
 #: data/org.gnome.Builder.appdata.xml.in:46
-#| msgid "Clean the project"
 msgid "Integrated project tree"
 msgstr "Integrovaný strom projektu"
 
@@ -3089,16 +3086,16 @@ msgstr "Zadejte prosím název projektu.\n"
 msgid "Please specify a project template with --template=\n"
 msgstr "Zadejte prosím šablonu projektu pomocí --template=\n"
 
-#: plugins/create-project/gbp-create-project-widget.c:148
+#: plugins/create-project/gbp-create-project-widget.c:157
 msgid ""
 "Characters were used which might cause technical issues as a project name"
 msgstr "Použité znaky by mohly v názvu projektu způsobit technické problémy"
 
-#: plugins/create-project/gbp-create-project-widget.c:155
+#: plugins/create-project/gbp-create-project-widget.c:164
 msgid "Directory already exists with that name"
 msgstr "Složka s tímto názvem již existuje"
 
-#: plugins/create-project/gbp-create-project-widget.c:550
+#: plugins/create-project/gbp-create-project-widget.c:559
 msgid "A failure occurred while initializing version control"
 msgstr "Během inicializace systému správy verzí došlo k chybě"
 
@@ -3121,10 +3118,12 @@ msgstr "Licence"
 #: plugins/create-project/gbp-create-project-widget.ui:112
 msgid ""
 "Unique name that is used for your project's folder and other technical "
-"resources. Should be in lower case without spaces."
+"resources. Should be in lower case without spaces and may not start with a "
+"number."
 msgstr ""
 "Jedinečný název, který se použije pro složku s vaším projektem a další "
-"technické prostředky. Měl by se skládat jen z malých písmen bez mezer."
+"technické prostředky. Měl by se skládat jen z malých písmen bez mezer a "
+"nesmí začínat číslicí."
 
 #: plugins/create-project/gbp-create-project-widget.ui:130
 #: plugins/git/ide-git-clone-widget.ui:78
@@ -3481,6 +3480,3 @@ msgstr "Zobrazovat chyby a varování poskytované pro jazyk Vala"
 #: plugins/vala-pack/ide-vala-preferences-addin.vala:36
 msgid "vala diagnostics warnings errors"
 msgstr "vala diagnostika varování chyba chyby"
-
-#~ msgid "Profile"
-#~ msgstr "Profilovat"
