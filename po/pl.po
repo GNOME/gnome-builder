@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-10 02:48+0000\n"
-"PO-Revision-Date: 2016-09-10 17:25+0200\n"
+"POT-Creation-Date: 2016-09-10 16:45+0000\n"
+"PO-Revision-Date: 2016-09-11 18:52+0200\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <community-poland@mozilla.org>\n"
 "Language: pl\n"
@@ -1391,37 +1391,37 @@ msgid "Editor Shortcuts"
 msgstr "Skróty edytora"
 
 #: libide/keybindings/ide-shortcuts-window.ui:14
-#: libide/keybindings/ide-shortcuts-window.ui:396
+#: libide/keybindings/ide-shortcuts-window.ui:423
 msgctxt "shortcut window"
 msgid "General"
 msgstr "Ogólne"
 
 #: libide/keybindings/ide-shortcuts-window.ui:18
-#: libide/keybindings/ide-shortcuts-window.ui:400
+#: libide/keybindings/ide-shortcuts-window.ui:427
 msgctxt "shortcut window"
 msgid "Global Search"
 msgstr "Globalne wyszukiwanie"
 
 #: libide/keybindings/ide-shortcuts-window.ui:25
-#: libide/keybindings/ide-shortcuts-window.ui:407
+#: libide/keybindings/ide-shortcuts-window.ui:434
 msgctxt "shortcut window"
 msgid "Preferences"
 msgstr "Preferencje"
 
 #: libide/keybindings/ide-shortcuts-window.ui:32
-#: libide/keybindings/ide-shortcuts-window.ui:414
+#: libide/keybindings/ide-shortcuts-window.ui:441
 msgctxt "shortcut window"
 msgid "Command Bar"
 msgstr "Pasek poleceń"
 
 #: libide/keybindings/ide-shortcuts-window.ui:39
-#: libide/keybindings/ide-shortcuts-window.ui:421
+#: libide/keybindings/ide-shortcuts-window.ui:448
 msgctxt "shortcut window"
 msgid "Terminal"
 msgstr "Terminal"
 
 #: libide/keybindings/ide-shortcuts-window.ui:46
-#: libide/keybindings/ide-shortcuts-window.ui:428
+#: libide/keybindings/ide-shortcuts-window.ui:455
 msgctxt "shortcut window"
 msgid "Keyboard Shortcuts"
 msgstr "Skróty klawiszowe"
@@ -1519,13 +1519,13 @@ msgid "Clear highlight"
 msgstr "Wyłączenie wyróżniania"
 
 #: libide/keybindings/ide-shortcuts-window.ui:191
-#: libide/keybindings/ide-shortcuts-window.ui:437
+#: libide/keybindings/ide-shortcuts-window.ui:464
 msgctxt "shortcut window"
 msgid "Copy and Paste"
 msgstr "Kopiowanie i wklejanie"
 
 #: libide/keybindings/ide-shortcuts-window.ui:196
-#: libide/keybindings/ide-shortcuts-window.ui:442
+#: libide/keybindings/ide-shortcuts-window.ui:469
 msgctxt "shortcut window"
 msgid "Copy selected text to clipboard"
 msgstr "Skopiowanie zaznaczonego tekstu do schowka"
@@ -1536,7 +1536,7 @@ msgid "Cut selected text to clipboard"
 msgstr "Wycięcie zaznaczonego tekstu do schowka"
 
 #: libide/keybindings/ide-shortcuts-window.ui:210
-#: libide/keybindings/ide-shortcuts-window.ui:449
+#: libide/keybindings/ide-shortcuts-window.ui:476
 msgctxt "shortcut window"
 msgid "Paste text from clipboard"
 msgstr "Wklejenie tekstu ze schowka"
@@ -1666,7 +1666,27 @@ msgctxt "shortcut window"
 msgid "Unselect all"
 msgstr "Odznaczenie wszystkiego"
 
-#: libide/keybindings/ide-shortcuts-window.ui:392
+#: libide/keybindings/ide-shortcuts-window.ui:389
+msgctxt "shortcut window"
+msgid "Build and Run"
+msgstr "Zbudowanie i wykonanie"
+
+#: libide/keybindings/ide-shortcuts-window.ui:394
+msgctxt "shortcut window"
+msgid "Build"
+msgstr "Zbudowanie"
+
+#: libide/keybindings/ide-shortcuts-window.ui:401
+msgctxt "shortcut window"
+msgid "Run"
+msgstr "Wykonanie"
+
+#: libide/keybindings/ide-shortcuts-window.ui:408
+msgctxt "shortcut window"
+msgid "Profile"
+msgstr "Profilowanie"
+
+#: libide/keybindings/ide-shortcuts-window.ui:419
 msgctxt "shortcut window"
 msgid "Terminal Shortcuts"
 msgstr "Skróty terminala"
@@ -2126,7 +2146,7 @@ msgstr "Ustalenie położenia środowiska wykonawczego się nie powiodło"
 msgid "Process quit unexpectedly"
 msgstr "Proces nieoczekiwanie zakończył działanie"
 
-#: libide/runtimes/ide-runtime-manager.c:104
+#: libide/runtimes/ide-runtime-manager.c:105
 msgid "Host operating system"
 msgstr "System operacyjny gospodarza"
 
