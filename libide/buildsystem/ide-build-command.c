@@ -24,7 +24,8 @@
 #include "buildsystem/ide-build-result.h"
 #include "buildsystem/ide-environment.h"
 #include "runtimes/ide-runtime.h"
-#include "workers/ide-subprocess-launcher.h"
+#include "subprocess/ide-subprocess.h"
+#include "subprocess/ide-subprocess-launcher.h"
 
 typedef struct
 {
@@ -46,17 +47,17 @@ ide_build_command_wait_cb (GObject      *object,
                            GAsyncResult *result,
                            gpointer      user_data)
 {
-  GSubprocess *subprocess = (GSubprocess *)object;
+  IdeSubprocess *subprocess = (IdeSubprocess *)object;
   g_autoptr(GTask) task = user_data;
   GError *error = NULL;
 
   IDE_ENTRY;
 
-  g_assert (G_IS_SUBPROCESS (subprocess));
+  g_assert (IDE_IS_SUBPROCESS (subprocess));
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (G_IS_TASK (task));
 
-  if (!g_subprocess_wait_finish (subprocess, result, &error))
+  if (!ide_subprocess_wait_finish (subprocess, result, &error))
     {
       g_task_return_error (task, error);
       IDE_EXIT;
@@ -121,7 +122,7 @@ ide_build_command_real_run (IdeBuildCommand  *self,
 {
   IdeBuildCommandPrivate *priv = ide_build_command_get_instance_private (self);
   g_autoptr(IdeSubprocessLauncher) launcher = NULL;
-  g_autoptr(GSubprocess) subprocess = NULL;
+  g_autoptr(IdeSubprocess) subprocess = NULL;
   gboolean ret;
 
   IDE_ENTRY;
@@ -147,7 +148,7 @@ ide_build_command_real_run (IdeBuildCommand  *self,
 
   ide_build_result_log_subprocess (build_result, subprocess);
 
-  ret = g_subprocess_wait (subprocess, cancellable, error);
+  ret = ide_subprocess_wait (subprocess, cancellable, error);
 
   IDE_RETURN (ret);
 }
@@ -163,7 +164,7 @@ ide_build_command_real_run_async (IdeBuildCommand     *self,
 {
   IdeBuildCommandPrivate *priv = ide_build_command_get_instance_private (self);
   g_autoptr(IdeSubprocessLauncher) launcher = NULL;
-  g_autoptr(GSubprocess) subprocess = NULL;
+  g_autoptr(IdeSubprocess) subprocess = NULL;
   g_autoptr(GTask) task = NULL;
   GError *error = NULL;
 
@@ -201,10 +202,10 @@ ide_build_command_real_run_async (IdeBuildCommand     *self,
 
   ide_build_result_log_subprocess (build_result, subprocess);
 
-  g_subprocess_wait_async (subprocess,
-                           cancellable,
-                           ide_build_command_wait_cb,
-                           g_steal_pointer (&task));
+  ide_subprocess_wait_async (subprocess,
+                             cancellable,
+                             ide_build_command_wait_cb,
+                             g_steal_pointer (&task));
 
   IDE_EXIT;
 }
@@ -214,10 +215,16 @@ ide_build_command_real_run_finish (IdeBuildCommand  *self,
                                    GAsyncResult     *result,
                                    GError          **error)
 {
+  gboolean ret;
+
+  IDE_ENTRY;
+
   g_assert (IDE_IS_BUILD_COMMAND (self));
   g_assert (G_IS_TASK (result));
 
-  return g_task_propagate_boolean (G_TASK (result), error);
+  ret = g_task_propagate_boolean (G_TASK (result), error);
+
+  IDE_RETURN (ret);
 }
 
 static IdeBuildCommand *

@@ -124,6 +124,8 @@ libide_1_0_la_public_headers =                            \
 	sourceview/ide-source-style-scheme.h              \
 	sourceview/ide-source-view-mode.h                 \
 	sourceview/ide-source-view.h                      \
+	subprocess/ide-subprocess.h                       \
+	subprocess/ide-subprocess-launcher.h              \
 	symbols/ide-symbol-node.h                         \
 	symbols/ide-symbol-resolver.h                     \
 	symbols/ide-symbol-tree.h                         \
@@ -175,7 +177,6 @@ libide_1_0_la_public_headers =                            \
 	workbench/ide-workbench-addin.h                   \
 	workbench/ide-workbench-header-bar.h              \
 	workbench/ide-workbench.h                         \
-	workers/ide-subprocess-launcher.h                 \
 	workers/ide-worker.h                              \
 	$(NULL)
 
@@ -287,6 +288,8 @@ libide_1_0_la_public_sources =                            \
 	sourceview/ide-source-style-scheme.c              \
 	sourceview/ide-source-view-mode.c                 \
 	sourceview/ide-source-view.c                      \
+	subprocess/ide-subprocess.c                       \
+	subprocess/ide-subprocess-launcher.c              \
 	symbols/ide-symbol-node.c                         \
 	symbols/ide-symbol-resolver.c                     \
 	symbols/ide-symbol-tree.c                         \
@@ -326,7 +329,6 @@ libide_1_0_la_public_sources =                            \
 	workbench/ide-workbench-header-bar.c              \
 	workbench/ide-workbench-open.c                    \
 	workbench/ide-workbench.c                         \
-	workers/ide-subprocess-launcher.c                 \
 	workers/ide-worker.c                              \
 	$(NULL)
 
@@ -416,6 +418,11 @@ libide_1_0_la_SOURCES =                                   \
 	sourceview/ide-text-iter.h                        \
 	sourceview/ide-text-util.c                        \
 	sourceview/ide-text-util.h                        \
+	subprocess/ide-breakout-subprocess.c              \
+	subprocess/ide-breakout-subprocess.h              \
+	subprocess/ide-breakout-subprocess-private.h      \
+	subprocess/ide-simple-subprocess.c                \
+	subprocess/ide-simple-subprocess.h                \
 	theatrics/ide-box-theatric.c                      \
 	theatrics/ide-box-theatric.h                      \
 	theming/ide-css-provider.c                        \

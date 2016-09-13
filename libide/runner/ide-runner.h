@@ -47,26 +47,31 @@ struct _IdeRunnerClass
                                 GError              **error);
 };
 
-IdeRunner      *ide_runner_new          (IdeContext           *context);
-void            ide_runner_force_quit   (IdeRunner            *self);
-void            ide_runner_run_async    (IdeRunner            *self,
-                                         GCancellable         *cancellable,
-                                         GAsyncReadyCallback   callback,
-                                         gpointer              user_data);
-gboolean        ide_runner_run_finish   (IdeRunner            *self,
-                                         GAsyncResult         *result,
-                                         GError              **error);
-void            ide_runner_prepend_argv (IdeRunner            *self,
-                                         const gchar          *param);
-void            ide_runner_append_argv  (IdeRunner            *self,
-                                         const gchar          *param);
-gchar         **ide_runner_get_argv     (IdeRunner            *self);
-void            ide_runner_set_argv     (IdeRunner            *self,
-                                         const gchar * const  *argv);
-IdeEnvironment *ide_runner_get_environment(IdeRunner          *self);
-GInputStream   *ide_runner_get_stdin    (IdeRunner            *self);
-GOutputStream  *ide_runner_get_stdout   (IdeRunner            *self);
-GOutputStream  *ide_runner_get_stderr   (IdeRunner            *self);
+IdeRunner      *ide_runner_new             (IdeContext           *context);
+void            ide_runner_force_quit      (IdeRunner            *self);
+IdeEnvironment *ide_runner_get_environment (IdeRunner            *self);
+void            ide_runner_run_async       (IdeRunner            *self,
+                                            GCancellable         *cancellable,
+                                            GAsyncReadyCallback   callback,
+                                            gpointer              user_data);
+gboolean        ide_runner_run_finish      (IdeRunner            *self,
+                                            GAsyncResult         *result,
+                                            GError              **error);
+void            ide_runner_set_flags       (IdeRunner            *self,
+                                            GSubprocessFlags      flags);
+void            ide_runner_prepend_argv    (IdeRunner            *self,
+                                            const gchar          *param);
+void            ide_runner_append_argv     (IdeRunner            *self,
+                                            const gchar          *param);
+gchar         **ide_runner_get_argv        (IdeRunner            *self);
+void            ide_runner_set_argv        (IdeRunner            *self,
+                                            const gchar * const  *argv);
+GInputStream   *ide_runner_get_stdin       (IdeRunner            *self);
+GOutputStream  *ide_runner_get_stdout      (IdeRunner            *self);
+GOutputStream  *ide_runner_get_stderr      (IdeRunner            *self);
+gboolean        ide_runner_get_run_on_host (IdeRunner            *self);
+void            ide_runner_set_run_on_host (IdeRunner            *self,
+                                            gboolean              run_on_host);
 
 G_END_DECLS
 

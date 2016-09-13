@@ -1943,7 +1943,7 @@ ide_makecache_get_build_targets_worker (GTask        *task,
 
   for (guint j = 0; j < makedirs->len; j++)
     {
-      g_autoptr(GSubprocess) subprocess = NULL;
+      g_autoptr(IdeSubprocess) subprocess = NULL;
       g_autoptr(GHashTable) amdirs = NULL;
       g_autofree gchar *path = NULL;
       GFile *makedir;
@@ -1970,7 +1970,7 @@ ide_makecache_get_build_targets_worker (GTask        *task,
        * Write our helper target that will include the Makefile and then print
        * debug variables we care about.
        */
-      if (!g_subprocess_communicate_utf8 (subprocess, PRINT_VARS, NULL, &stdout_buf, NULL, &error))
+      if (!ide_subprocess_communicate_utf8 (subprocess, PRINT_VARS, NULL, &stdout_buf, NULL, &error))
         {
           g_task_return_error (task, error);
           IDE_GOTO (failure);

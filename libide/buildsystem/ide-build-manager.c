@@ -530,6 +530,7 @@ ide_build_manager_build_cb (GObject      *object,
 
   if (build_result == NULL)
     {
+      IDE_TRACE_MSG ("%s", error->message);
       g_task_return_error (task, error);
       IDE_GOTO (failure);
     }

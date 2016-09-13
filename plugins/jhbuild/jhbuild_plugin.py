@@ -43,11 +43,27 @@ class JhbuildRuntime(Ide.Runtime):
             # Rely on search path
             return 'jhbuild'
 
+    def do_create_runner(self, build_target):
+        try:
+            installdir = build_target.props.install_directory
+            name = build_target.props.name
+            binpath = installdir.get_child(name).get_path()
+
+            # The runner uses a launcher from self.create_launcher(), so
+            # most of our settings should already be applied.
+            runner = Ide.Runner.new(self.get_context())
+            runner.append_argv(binpath)
+
+            return runner
+        except Exception as ex:
+            print(ex)
+
     def do_create_launcher(self):
         try:
             launcher = Ide.Runtime.do_create_launcher(self)
             launcher.push_argv(self.get_jhbuild_path())
             launcher.push_argv('run')
+            launcher.set_run_on_host(True)
             return launcher
         except GLib.Error:
             return None

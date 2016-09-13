@@ -29,6 +29,7 @@
 #include "buildsystem/ide-build-result-addin.h"
 #include "diagnostics/ide-source-location.h"
 #include "files/ide-file.h"
+#include "subprocess/ide-subprocess.h"
 
 #define POINTER_MARK(p)   GSIZE_TO_POINTER(GPOINTER_TO_SIZE(p)|1)
 #define POINTER_UNMARK(p) GSIZE_TO_POINTER(GPOINTER_TO_SIZE(p)&~(gsize)1)
@@ -351,27 +352,27 @@ ide_build_result_tail_into (IdeBuildResult    *self,
 
 void
 ide_build_result_log_subprocess (IdeBuildResult *self,
-                                 GSubprocess    *subprocess)
+                                 IdeSubprocess  *subprocess)
 {
   IdeBuildResultPrivate *priv = ide_build_result_get_instance_private (self);
   GInputStream *stdout_stream;
   GInputStream *stderr_stream;
 
   g_return_if_fail (IDE_IS_BUILD_RESULT (self));
-  g_return_if_fail (G_IS_SUBPROCESS (subprocess));
+  g_return_if_fail (IDE_IS_SUBPROCESS (subprocess));
 
   /* ensure lazily created streams are available */
   (void)ide_build_result_get_stderr_stream (self);
   (void)ide_build_result_get_stdout_stream (self);
 
-  stderr_stream = g_subprocess_get_stderr_pipe (subprocess);
+  stderr_stream = ide_subprocess_get_stderr_pipe (subprocess);
   if (stderr_stream)
     ide_build_result_tail_into (self,
                                 IDE_BUILD_RESULT_LOG_STDERR,
                                 stderr_stream,
                                 priv->stderr_writer);
 
-  stdout_stream = g_subprocess_get_stdout_pipe (subprocess);
+  stdout_stream = ide_subprocess_get_stdout_pipe (subprocess);
   if (stdout_stream)
     ide_build_result_tail_into (self,
                                 IDE_BUILD_RESULT_LOG_STDOUT,

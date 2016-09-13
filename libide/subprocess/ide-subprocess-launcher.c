@@ -28,7 +28,10 @@
 
 #include "buildsystem/ide-environment-variable.h"
 #include "buildsystem/ide-environment.h"
-#include "workers/ide-subprocess-launcher.h"
+#include "subprocess/ide-breakout-subprocess.h"
+#include "subprocess/ide-breakout-subprocess-private.h"
+#include "subprocess/ide-simple-subprocess.h"
+#include "subprocess/ide-subprocess-launcher.h"
 
 typedef struct
 {
@@ -37,15 +40,20 @@ typedef struct
   GPtrArray        *argv;
   gchar            *cwd;
   GPtrArray        *environ;
+
+  guint             run_on_host : 1;
+  guint             clear_env : 1;
 } IdeSubprocessLauncherPrivate;
 
 G_DEFINE_TYPE_WITH_PRIVATE (IdeSubprocessLauncher, ide_subprocess_launcher, G_TYPE_OBJECT)
 
 enum {
   PROP_0,
+  PROP_CLEAR_ENV,
   PROP_CWD,
   PROP_ENVIRON,
   PROP_FLAGS,
+  PROP_RUN_ON_HOST,
   N_PROPS
 };
 
@@ -95,12 +103,111 @@ ide_subprocess_launcher_kill_process_group (GCancellable *cancellable,
 #endif
 }
 
+static void
+ide_subprocess_launcher_kill_host_process (GCancellable  *cancellable,
+                                           IdeSubprocess *subprocess)
+{
+  g_assert (G_IS_CANCELLABLE (cancellable));
+  g_assert (IDE_IS_BREAKOUT_SUBPROCESS (subprocess));
+
+  g_signal_handlers_disconnect_by_func (cancellable,
+                                        G_CALLBACK (ide_subprocess_launcher_kill_host_process),
+                                        subprocess);
+
+  ide_subprocess_force_exit (subprocess);
+}
+
 IdeSubprocessLauncher *
 ide_subprocess_launcher_new (GSubprocessFlags flags)
 {
   return g_object_new (IDE_TYPE_SUBPROCESS_LAUNCHER,
                        "flags", flags,
                        NULL);
+}
+
+static gboolean
+should_use_breakout_process (IdeSubprocessLauncher *self)
+{
+  IdeSubprocessLauncherPrivate *priv = ide_subprocess_launcher_get_instance_private (self);
+  static gsize initialized;
+  static gboolean is_contained;
+
+  g_assert (IDE_IS_SUBPROCESS_LAUNCHER (self));
+
+  if (g_once_init_enter (&initialized))
+    {
+      g_autofree gchar *flatpak_info_path = NULL;
+
+      flatpak_info_path = g_build_filename (g_get_user_runtime_dir (),
+                                            "flatpak-info",
+                                            NULL);
+
+      if (g_file_test (flatpak_info_path, G_FILE_TEST_EXISTS))
+        is_contained = TRUE;
+
+      g_once_init_leave (&initialized, TRUE);
+    }
+
+  if (g_getenv ("IDE_USE_BREAKOUT_SUBPROCESS") != NULL)
+    return TRUE;
+
+  if (!priv->run_on_host)
+    return FALSE;
+
+  return is_contained;
+}
+
+static void
+ide_subprocess_launcher_spawn_host_worker (GTask        *task,
+                                           gpointer      source_object,
+                                           gpointer      task_data,
+                                           GCancellable *cancellable)
+{
+  IdeSubprocessLauncher *self = source_object;
+  IdeSubprocessLauncherPrivate *priv = ide_subprocess_launcher_get_instance_private (self);
+  g_autoptr(IdeSubprocess) process = NULL;
+  g_autoptr(GError) error = NULL;
+
+  IDE_ENTRY;
+
+  g_return_if_fail (IDE_IS_SUBPROCESS_LAUNCHER (self));
+
+#ifdef IDE_ENABLE_TRACE
+  {
+    g_autofree gchar *str = NULL;
+    g_autofree gchar *env = NULL;
+    str = g_strjoinv (" ", (gchar **)priv->argv->pdata);
+    env = g_strjoinv (" ", (gchar **)priv->environ->pdata);
+    IDE_TRACE_MSG ("Launching '%s' with environment %s", str, env);
+  }
+#endif
+
+  process = _ide_breakout_subprocess_new (priv->cwd,
+                                          (const gchar * const *)priv->argv->pdata,
+                                          (const gchar * const *)priv->environ->pdata,
+                                          priv->flags,
+                                          priv->clear_env,
+                                          cancellable,
+                                          &error);
+
+  if (process == NULL)
+    {
+      g_task_return_error (task, g_steal_pointer (&error));
+      IDE_EXIT;
+    }
+
+  if (cancellable != NULL)
+    {
+      g_signal_connect_object (cancellable,
+                               "cancelled",
+                               G_CALLBACK (ide_subprocess_launcher_kill_host_process),
+                               process,
+                               0);
+    }
+
+  g_task_return_pointer (task, g_steal_pointer (&process), g_object_unref);
+
+  IDE_EXIT;
 }
 
 static void
@@ -112,16 +219,19 @@ ide_subprocess_launcher_spawn_worker (GTask        *task,
   IdeSubprocessLauncher *self = source_object;
   IdeSubprocessLauncherPrivate *priv = ide_subprocess_launcher_get_instance_private (self);
   g_autoptr(GSubprocessLauncher) launcher = NULL;
-  GSubprocess *ret;
-  GError *error = NULL;
+  g_autoptr(GSubprocess) real = NULL;
+  g_autoptr(IdeSubprocess) wrapped = NULL;
+  g_autoptr(GError) error = NULL;
 
   g_return_if_fail (IDE_IS_SUBPROCESS_LAUNCHER (self));
 
 #ifdef IDE_ENABLE_TRACE
   {
     g_autofree gchar *str = NULL;
+    g_autofree gchar *env = NULL;
     str = g_strjoinv (" ", (gchar **)priv->argv->pdata);
-    IDE_TRACE_MSG ("Launching '%s'", str);
+    env = g_strjoinv (" ", (gchar **)priv->environ->pdata);
+    IDE_TRACE_MSG ("Launching '%s' with environment %s", str, env);
   }
 #endif
 
@@ -130,30 +240,31 @@ ide_subprocess_launcher_spawn_worker (GTask        *task,
   g_subprocess_launcher_set_cwd (launcher, priv->cwd);
   if (priv->environ->len > 1)
     g_subprocess_launcher_set_environ (launcher, (gchar **)priv->environ->pdata);
-  ret = g_subprocess_launcher_spawnv (launcher,
-                                      (const gchar * const *)priv->argv->pdata,
-                                      &error);
+  real = g_subprocess_launcher_spawnv (launcher,
+                                       (const gchar * const *)priv->argv->pdata,
+                                       &error);
 
-  if (ret == NULL)
+  if (real == NULL)
     {
-      g_task_return_error (task, error);
+      g_task_return_error (task, g_steal_pointer (&error));
       return;
     }
 
   if (cancellable != NULL)
     {
-      g_signal_connect_data (cancellable,
-                             "cancelled",
-                             G_CALLBACK (ide_subprocess_launcher_kill_process_group),
-                             g_object_ref (ret),
-                             (GClosureNotify)g_object_unref,
-                             0);
+      g_signal_connect_object (cancellable,
+                               "cancelled",
+                               G_CALLBACK (ide_subprocess_launcher_kill_process_group),
+                               real,
+                               0);
     }
 
-  g_task_return_pointer (task, ret, g_object_unref);
+  wrapped = ide_simple_subprocess_new (real);
+
+  g_task_return_pointer (task, g_steal_pointer (&wrapped), g_object_unref);
 }
 
-static GSubprocess *
+static IdeSubprocess *
 ide_subprocess_launcher_real_spawn_sync (IdeSubprocessLauncher  *self,
                                          GCancellable           *cancellable,
                                          GError                **error)
@@ -164,7 +275,12 @@ ide_subprocess_launcher_real_spawn_sync (IdeSubprocessLauncher  *self,
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = g_task_new (self, cancellable, NULL, NULL);
-  g_task_run_in_thread_sync (task, ide_subprocess_launcher_spawn_worker);
+  g_task_set_source_tag (task, ide_subprocess_launcher_real_spawn_sync);
+
+  if (should_use_breakout_process (self))
+    g_task_run_in_thread_sync (task, ide_subprocess_launcher_spawn_host_worker);
+  else
+    g_task_run_in_thread_sync (task, ide_subprocess_launcher_spawn_worker);
 
   return g_task_propagate_pointer (task, error);
 }
@@ -186,10 +302,15 @@ ide_subprocess_launcher_real_spawn_async (IdeSubprocessLauncher *self,
    */
 
   task = g_task_new (self, cancellable, callback, user_data);
-  g_task_run_in_thread (task, ide_subprocess_launcher_spawn_worker);
+  g_task_set_source_tag (task, ide_subprocess_launcher_real_spawn_async);
+
+  if (should_use_breakout_process (self))
+    g_task_run_in_thread (task, ide_subprocess_launcher_spawn_host_worker);
+  else
+    g_task_run_in_thread (task, ide_subprocess_launcher_spawn_worker);
 }
 
-static GSubprocess *
+static IdeSubprocess *
 ide_subprocess_launcher_real_spawn_finish (IdeSubprocessLauncher  *self,
                                            GAsyncResult           *result,
                                            GError                **error)
@@ -223,6 +344,10 @@ ide_subprocess_launcher_get_property (GObject    *object,
 
   switch (prop_id)
     {
+    case PROP_CLEAR_ENV:
+      g_value_set_boolean (value, ide_subprocess_launcher_get_clear_env (self));
+      break;
+
     case PROP_CWD:
       g_value_set_string (value, ide_subprocess_launcher_get_cwd (self));
       break;
@@ -233,6 +358,10 @@ ide_subprocess_launcher_get_property (GObject    *object,
 
     case PROP_ENVIRON:
       g_value_set_boxed (value, ide_subprocess_launcher_get_environ (self));
+      break;
+
+    case PROP_RUN_ON_HOST:
+      g_value_set_boolean (value, ide_subprocess_launcher_get_run_on_host (self));
       break;
 
     default:
@@ -250,6 +379,10 @@ ide_subprocess_launcher_set_property (GObject      *object,
 
   switch (prop_id)
     {
+    case PROP_CLEAR_ENV:
+      ide_subprocess_launcher_set_clear_env (self, g_value_get_boolean (value));
+      break;
+
     case PROP_CWD:
       ide_subprocess_launcher_set_cwd (self, g_value_get_string (value));
       break;
@@ -260,6 +393,10 @@ ide_subprocess_launcher_set_property (GObject      *object,
 
     case PROP_ENVIRON:
       ide_subprocess_launcher_set_environ (self, g_value_get_boxed (value));
+      break;
+
+    case PROP_RUN_ON_HOST:
+      ide_subprocess_launcher_set_run_on_host (self, g_value_get_boolean (value));
       break;
 
     default:
@@ -279,6 +416,13 @@ ide_subprocess_launcher_class_init (IdeSubprocessLauncherClass *klass)
   klass->spawn_sync = ide_subprocess_launcher_real_spawn_sync;
   klass->spawn_async = ide_subprocess_launcher_real_spawn_async;
   klass->spawn_finish = ide_subprocess_launcher_real_spawn_finish;
+
+  properties [PROP_CLEAR_ENV] =
+    g_param_spec_boolean ("clean-env",
+                          "Clear Environment",
+                          "If the environment should be cleared before setting environment variables.",
+                          FALSE,
+                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_CWD] =
     g_param_spec_string ("cwd",
@@ -301,6 +445,13 @@ ide_subprocess_launcher_class_init (IdeSubprocessLauncherClass *klass)
                         "Environ",
                         G_TYPE_STRV,
                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_RUN_ON_HOST] =
+    g_param_spec_boolean ("run-on-host",
+                          "Run on Host",
+                          "Run on Host",
+                          FALSE,
+                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 }
@@ -447,9 +598,9 @@ ide_subprocess_launcher_spawn_async (IdeSubprocessLauncher *self,
  *
  * Complete a request to asynchronously spawn a process.
  *
- * Returns: (transfer full): A #GSubprocess or %NULL upon error.
+ * Returns: (transfer full): A #IdeSubprocess or %NULL upon error.
  */
-GSubprocess *
+IdeSubprocess *
 ide_subprocess_launcher_spawn_finish (IdeSubprocessLauncher  *self,
                                       GAsyncResult           *result,
                                       GError                **error)
@@ -465,9 +616,9 @@ ide_subprocess_launcher_spawn_finish (IdeSubprocessLauncher  *self,
  *
  * Synchronously spawn a process using the internal state.
  *
- * Returns: (transfer full): A #GSubprocess or %NULL upon error.
+ * Returns: (transfer full): A #IdeSubprocess or %NULL upon error.
  */
-GSubprocess *
+IdeSubprocess *
 ide_subprocess_launcher_spawn_sync (IdeSubprocessLauncher  *self,
                                     GCancellable           *cancellable,
                                     GError                **error)
@@ -565,4 +716,74 @@ ide_subprocess_launcher_pop_argv (IdeSubprocessLauncher *self)
     }
 
   return ret;
+}
+
+/**
+ * ide_subprocess_launcher_get_run_on_host:
+ *
+ * Gets if the process should be executed on the host system. This might be
+ * useful for situations where running in a contained environment is not
+ * sufficient to perform the given task.
+ *
+ * Currently, only flatpak is supported for breaking out of the containment
+ * zone and requires the application was built with --allow=devel.
+ *
+ * Returns: %TRUE if the process should be executed outside the containment zone.
+ */
+gboolean
+ide_subprocess_launcher_get_run_on_host (IdeSubprocessLauncher *self)
+{
+  IdeSubprocessLauncherPrivate *priv = ide_subprocess_launcher_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_SUBPROCESS_LAUNCHER (self), FALSE);
+
+  return priv->run_on_host;
+}
+
+/**
+ * ide_subprocess_launcher_set_run_on_host:
+ *
+ * Sets the #IdeSubprocessLauncher:run-on-host property. See
+ * ide_subprocess_launcher_get_run_on_host() for more information.
+ */
+void
+ide_subprocess_launcher_set_run_on_host (IdeSubprocessLauncher *self,
+                                         gboolean               run_on_host)
+{
+  IdeSubprocessLauncherPrivate *priv = ide_subprocess_launcher_get_instance_private (self);
+
+  run_on_host = !!run_on_host;
+
+  if (priv->run_on_host != run_on_host)
+    {
+      priv->run_on_host = run_on_host;
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_RUN_ON_HOST]);
+    }
+}
+
+gboolean
+ide_subprocess_launcher_get_clear_env (IdeSubprocessLauncher *self)
+{
+  IdeSubprocessLauncherPrivate *priv = ide_subprocess_launcher_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_SUBPROCESS_LAUNCHER (self), FALSE);
+
+  return priv->clear_env;
+}
+
+void
+ide_subprocess_launcher_set_clear_env (IdeSubprocessLauncher *self,
+                                       gboolean               clear_env)
+{
+  IdeSubprocessLauncherPrivate *priv = ide_subprocess_launcher_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_SUBPROCESS_LAUNCHER (self));
+
+  clear_env = !!clear_env;
+
+  if (priv->clear_env != clear_env)
+    {
+      priv->clear_env = clear_env;
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CLEAR_ENV]);
+    }
 }

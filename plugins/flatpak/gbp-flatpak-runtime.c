@@ -61,11 +61,11 @@ get_build_directory (GbpFlatpakRuntime *self)
 
 static gboolean
 gbp_flatpak_runtime_contains_program_in_path (IdeRuntime   *runtime,
-                                          const gchar  *program,
-                                          GCancellable *cancellable)
+                                              const gchar  *program,
+                                              GCancellable *cancellable)
 {
   g_autoptr(IdeSubprocessLauncher) launcher = NULL;
-  g_autoptr(GSubprocess) subprocess = NULL;
+  g_autoptr(IdeSubprocess) subprocess = NULL;
 
   g_assert (IDE_IS_RUNTIME (runtime));
   g_assert (program != NULL);
@@ -78,14 +78,14 @@ gbp_flatpak_runtime_contains_program_in_path (IdeRuntime   *runtime,
 
   subprocess = ide_subprocess_launcher_spawn_sync (launcher, cancellable, NULL);
 
-  return (subprocess != NULL) && g_subprocess_wait_check (subprocess, cancellable, NULL);
+  return (subprocess != NULL) && ide_subprocess_wait_check (subprocess, cancellable, NULL);
 }
 
 static void
 gbp_flatpak_runtime_prebuild_worker (GTask        *task,
-                                 gpointer      source_object,
-                                 gpointer      task_data,
-                                 GCancellable *cancellable)
+                                     gpointer      source_object,
+                                     gpointer      task_data,
+                                     GCancellable *cancellable)
 {
   GbpFlatpakRuntime *self = source_object;
   g_autofree gchar *build_path = NULL;
@@ -153,9 +153,9 @@ gbp_flatpak_runtime_prebuild_worker (GTask        *task,
 
 static void
 gbp_flatpak_runtime_prebuild_async (IdeRuntime          *runtime,
-                                GCancellable        *cancellable,
-                                GAsyncReadyCallback  callback,
-                                gpointer             user_data)
+                                    GCancellable        *cancellable,
+                                    GAsyncReadyCallback  callback,
+                                    gpointer             user_data)
 {
   GbpFlatpakRuntime *self = (GbpFlatpakRuntime *)runtime;
   g_autoptr(GTask) task = NULL;
@@ -169,8 +169,8 @@ gbp_flatpak_runtime_prebuild_async (IdeRuntime          *runtime,
 
 static gboolean
 gbp_flatpak_runtime_prebuild_finish (IdeRuntime    *runtime,
-                                 GAsyncResult  *result,
-                                 GError       **error)
+                                     GAsyncResult  *result,
+                                     GError       **error)
 {
   GbpFlatpakRuntime *self = (GbpFlatpakRuntime *)runtime;
 
@@ -182,7 +182,7 @@ gbp_flatpak_runtime_prebuild_finish (IdeRuntime    *runtime,
 
 static IdeSubprocessLauncher *
 gbp_flatpak_runtime_create_launcher (IdeRuntime  *runtime,
-                                 GError     **error)
+                                     GError     **error)
 {
   IdeSubprocessLauncher *ret;
   GbpFlatpakRuntime *self = (GbpFlatpakRuntime *)runtime;
@@ -198,6 +198,8 @@ gbp_flatpak_runtime_create_launcher (IdeRuntime  *runtime,
       ide_subprocess_launcher_push_argv (ret, "flatpak");
       ide_subprocess_launcher_push_argv (ret, "build");
       ide_subprocess_launcher_push_argv (ret, build_path);
+
+      ide_subprocess_launcher_set_run_on_host (ret, TRUE);
     }
 
   return ret;
@@ -205,7 +207,7 @@ gbp_flatpak_runtime_create_launcher (IdeRuntime  *runtime,
 
 static void
 gbp_flatpak_runtime_prepare_configuration (IdeRuntime       *runtime,
-                                       IdeConfiguration *configuration)
+                                           IdeConfiguration *configuration)
 {
   g_assert (IDE_IS_RUNTIME (runtime));
   g_assert (IDE_IS_CONFIGURATION (configuration));
@@ -215,9 +217,9 @@ gbp_flatpak_runtime_prepare_configuration (IdeRuntime       *runtime,
 
 static void
 gbp_flatpak_runtime_get_property (GObject    *object,
-                              guint       prop_id,
-                              GValue     *value,
-                              GParamSpec *pspec)
+                                  guint       prop_id,
+                                  GValue     *value,
+                                  GParamSpec *pspec)
 {
   GbpFlatpakRuntime *self = GBP_FLATPAK_RUNTIME(object);
 
@@ -242,9 +244,9 @@ gbp_flatpak_runtime_get_property (GObject    *object,
 
 static void
 gbp_flatpak_runtime_set_property (GObject      *object,
-                              guint         prop_id,
-                              const GValue *value,
-                              GParamSpec   *pspec)
+                                  guint         prop_id,
+                                  const GValue *value,
+                                  GParamSpec   *pspec)
 {
   GbpFlatpakRuntime *self = GBP_FLATPAK_RUNTIME(object);
 

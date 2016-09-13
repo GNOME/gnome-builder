@@ -16,6 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define G_LOG_DOMAIN "ide-autotools-build-task"
+
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
@@ -75,30 +77,30 @@ enum {
   LAST_PROP
 };
 
-static GSubprocess *log_and_spawn     (IdeAutotoolsBuildTask  *self,
-                                       IdeSubprocessLauncher  *launcher,
-                                       GCancellable           *cancellable,
-                                       GError                **error,
-                                       const gchar            *argv0,
-                                       ...) G_GNUC_NULL_TERMINATED;
-static gboolean     step_mkdirs       (GTask                  *task,
-                                       IdeAutotoolsBuildTask  *self,
-                                       WorkerState            *state,
-                                       GCancellable           *cancellable);
-static gboolean     step_autogen      (GTask                  *task,
-                                       IdeAutotoolsBuildTask  *self,
-                                       WorkerState            *state,
-                                       GCancellable           *cancellable);
-static gboolean     step_configure    (GTask                  *task,
-                                       IdeAutotoolsBuildTask  *self,
-                                       WorkerState            *state,
-                                       GCancellable           *cancellable);
-static gboolean     step_make_all     (GTask                  *task,
-                                       IdeAutotoolsBuildTask  *self,
-                                       WorkerState            *state,
-                                       GCancellable           *cancellable);
-static void         apply_environment (IdeAutotoolsBuildTask  *self,
-                                       IdeSubprocessLauncher  *launcher);
+static IdeSubprocess *log_and_spawn     (IdeAutotoolsBuildTask  *self,
+                                         IdeSubprocessLauncher  *launcher,
+                                         GCancellable           *cancellable,
+                                         GError                **error,
+                                         const gchar            *argv0,
+                                         ...) G_GNUC_NULL_TERMINATED;
+static gboolean       step_mkdirs       (GTask                  *task,
+                                         IdeAutotoolsBuildTask  *self,
+                                         WorkerState            *state,
+                                         GCancellable           *cancellable);
+static gboolean       step_autogen      (GTask                  *task,
+                                         IdeAutotoolsBuildTask  *self,
+                                         WorkerState            *state,
+                                         GCancellable           *cancellable);
+static gboolean       step_configure    (GTask                  *task,
+                                         IdeAutotoolsBuildTask  *self,
+                                         WorkerState            *state,
+                                         GCancellable           *cancellable);
+static gboolean       step_make_all     (GTask                  *task,
+                                         IdeAutotoolsBuildTask  *self,
+                                         WorkerState            *state,
+                                         GCancellable           *cancellable);
+static void           apply_environment (IdeAutotoolsBuildTask  *self,
+                                         IdeSubprocessLauncher  *launcher);
 
 static GParamSpec *properties [LAST_PROP];
 static WorkStep workSteps [] = {
@@ -704,7 +706,7 @@ ide_autotools_build_task_execute_finish (IdeAutotoolsBuildTask  *self,
   state = g_task_get_task_data (G_TASK (task));
   sequence = ide_configuration_get_sequence (self->configuration);
 
-  if ((state != NULL) &&  (state->sequence == sequence))
+  if ((state != NULL) && (state->sequence == sequence))
     ide_configuration_set_dirty (self->configuration, FALSE);
 
   ret = g_task_propagate_boolean (task, error);
@@ -735,7 +737,7 @@ log_in_main (gpointer data)
   return G_SOURCE_REMOVE;
 }
 
-static GSubprocess *
+static IdeSubprocess *
 log_and_spawn (IdeAutotoolsBuildTask  *self,
                IdeSubprocessLauncher  *launcher,
                GCancellable           *cancellable,
@@ -743,7 +745,7 @@ log_and_spawn (IdeAutotoolsBuildTask  *self,
                const gchar           *argv0,
                ...)
 {
-  GSubprocess *ret;
+  IdeSubprocess *ret;
   struct {
     IdeBuildResult *result;
     gchar *message;
@@ -830,7 +832,7 @@ step_autogen (GTask                 *task,
   g_autofree gchar *autogen_sh_path = NULL;
   g_autofree gchar *configure_path = NULL;
   g_autoptr(IdeSubprocessLauncher) launcher = NULL;
-  g_autoptr(GSubprocess) process = NULL;
+  g_autoptr(IdeSubprocess) process = NULL;
   GError *error = NULL;
 
   g_assert (G_IS_TASK (task));
@@ -889,7 +891,7 @@ step_autogen (GTask                 *task,
 
   ide_build_result_log_subprocess (IDE_BUILD_RESULT (self), process);
 
-  if (!g_subprocess_wait_check (process, cancellable, &error))
+  if (!ide_subprocess_wait_check (process, cancellable, &error))
     {
       g_task_return_error (task, error);
       return FALSE;
@@ -915,7 +917,7 @@ step_configure (GTask                 *task,
                 GCancellable          *cancellable)
 {
   g_autoptr(IdeSubprocessLauncher) launcher = NULL;
-  g_autoptr(GSubprocess) process = NULL;
+  g_autoptr(IdeSubprocess) process = NULL;
   g_autofree gchar *makefile_path = NULL;
   g_autofree gchar *config_log = NULL;
   GError *error = NULL;
@@ -959,7 +961,7 @@ step_configure (GTask                 *task,
 
   ide_build_result_log_subprocess (IDE_BUILD_RESULT (self), process);
 
-  if (!g_subprocess_wait_check (process, cancellable, &error))
+  if (!ide_subprocess_wait_check (process, cancellable, &error))
     {
       g_task_return_error (task, error);
       return FALSE;
@@ -981,7 +983,7 @@ step_make_all  (GTask                 *task,
                 GCancellable          *cancellable)
 {
   g_autoptr(IdeSubprocessLauncher) launcher = NULL;
-  g_autoptr(GSubprocess) process = NULL;
+  g_autoptr(IdeSubprocess) process = NULL;
   const gchar * const *targets;
   const gchar *make = NULL;
   gchar *default_targets[] = { "all", NULL };
@@ -1047,7 +1049,7 @@ step_make_all  (GTask                 *task,
 
       ide_build_result_log_subprocess (IDE_BUILD_RESULT (self), process);
 
-      if (!g_subprocess_wait_check (process, cancellable, &error))
+      if (!ide_subprocess_wait_check (process, cancellable, &error))
         {
           g_task_return_error (task, error);
           return FALSE;

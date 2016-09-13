@@ -25,7 +25,7 @@
 
 #include "buildsystem/ide-build-target.h"
 #include "runner/ide-runner.h"
-#include "workers/ide-subprocess-launcher.h"
+#include "subprocess/ide-subprocess-launcher.h"
 
 G_BEGIN_DECLS
 

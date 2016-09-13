@@ -932,11 +932,11 @@ simple_make_command_cb (GObject      *object,
                         GAsyncResult *result,
                         gpointer      user_data)
 {
-  GSubprocess *subprocess = (GSubprocess *)object;
+  IdeSubprocess *subprocess = (IdeSubprocess *)object;
   g_autoptr(GTask) task = user_data;
   GError *error = NULL;
 
-  if (!g_subprocess_wait_check_finish (subprocess, result, &error))
+  if (!ide_subprocess_wait_check_finish (subprocess, result, &error))
     g_task_return_error (task, error);
   else
     g_task_return_boolean (task, TRUE);
@@ -949,7 +949,7 @@ simple_make_command (GFile            *directory,
                      IdeConfiguration *configuration)
 {
   g_autoptr(IdeSubprocessLauncher) launcher = NULL;
-  g_autoptr(GSubprocess) subprocess = NULL;
+  g_autoptr(IdeSubprocess) subprocess = NULL;
   GCancellable *cancellable;
   IdeRuntime *runtime;
   GError *error = NULL;
@@ -994,16 +994,21 @@ simple_make_command (GFile            *directory,
 
   ide_subprocess_launcher_push_argv (launcher, target);
 
+  g_task_set_return_on_cancel (task, FALSE);
+
+  if (g_task_return_error_if_cancelled (task))
+    return;
+
   if (NULL == (subprocess = ide_subprocess_launcher_spawn_sync (launcher, cancellable, &error)))
     {
       g_task_return_error (task, error);
       return;
     }
 
-  g_subprocess_wait_check_async (subprocess,
-                                 g_task_get_cancellable (task),
-                                 simple_make_command_cb,
-                                 g_object_ref (task));
+  ide_subprocess_wait_check_async (subprocess,
+                                   cancellable,
+                                   simple_make_command_cb,
+                                   g_steal_pointer (&task));
 }
 
 static void

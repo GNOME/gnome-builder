@@ -122,6 +122,9 @@ typedef struct _IdeSourceSnippets              IdeSourceSnippets;
 
 typedef struct _IdeSourceSnippetsManager       IdeSourceSnippetsManager;
 
+typedef struct _IdeSubprocess                  IdeSubprocess;
+typedef struct _IdeSubprocessLauncher          IdeSubprocessLauncher;
+
 typedef struct _IdeSymbol                      IdeSymbol;
 
 typedef struct _IdeSymbolResolver              IdeSymbolResolver;

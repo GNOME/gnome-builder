@@ -457,12 +457,16 @@ ide_configuration_manager_queue_writeback (IdeConfigurationManager *self)
 {
   g_assert (IDE_IS_CONFIGURATION_MANAGER (self));
 
+  IDE_ENTRY;
+
   if (self->writeback_handler != 0)
     g_source_remove (self->writeback_handler);
 
   self->writeback_handler = g_timeout_add_seconds (WRITEBACK_TIMEOUT_SECS,
                                                    ide_configuration_manager_do_writeback,
                                                    self);
+
+  IDE_EXIT;
 }
 
 static void

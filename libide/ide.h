@@ -115,6 +115,8 @@ G_BEGIN_DECLS
 #include "sourceview/ide-source-map.h"
 #include "sourceview/ide-source-style-scheme.h"
 #include "sourceview/ide-source-view.h"
+#include "subprocess/ide-subprocess.h"
+#include "subprocess/ide-subprocess-launcher.h"
 #include "symbols/ide-symbol-resolver.h"
 #include "symbols/ide-symbol.h"
 #include "symbols/ide-tags-builder.h"
@@ -148,7 +150,6 @@ G_BEGIN_DECLS
 #include "workbench/ide-workbench-addin.h"
 #include "workbench/ide-workbench-header-bar.h"
 #include "workbench/ide-workbench.h"
-#include "workers/ide-subprocess-launcher.h"
 
 #undef IDE_INSIDE
 

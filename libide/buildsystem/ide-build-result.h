@@ -60,7 +60,7 @@ struct _IdeBuildResultClass
 GInputStream  *ide_build_result_get_stdout_stream (IdeBuildResult *result);
 GInputStream  *ide_build_result_get_stderr_stream (IdeBuildResult *result);
 void           ide_build_result_log_subprocess    (IdeBuildResult *result,
-                                                   GSubprocess    *subprocess);
+                                                   IdeSubprocess  *subprocess);
 GTimeSpan      ide_build_result_get_running_time  (IdeBuildResult *self);
 gboolean       ide_build_result_get_running       (IdeBuildResult *self);
 void           ide_build_result_set_running       (IdeBuildResult *self,

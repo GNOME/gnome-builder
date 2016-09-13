@@ -33,16 +33,25 @@ struct _IdeSubprocessLauncherClass
 {
   GObjectClass parent_class;
 
-  GSubprocess *(*spawn_sync)   (IdeSubprocessLauncher  *self,
-                                GCancellable           *cancellable,
-                                GError                **error);
-  void         (*spawn_async)  (IdeSubprocessLauncher  *self,
-                                GCancellable           *cancellable,
-                                GAsyncReadyCallback     callback,
-                                gpointer                user_data);
-  GSubprocess *(*spawn_finish) (IdeSubprocessLauncher  *self,
-                                GAsyncResult           *result,
-                                GError                **error);
+  IdeSubprocess *(*spawn_sync)   (IdeSubprocessLauncher  *self,
+                                  GCancellable           *cancellable,
+                                  GError                **error);
+  void           (*spawn_async)  (IdeSubprocessLauncher  *self,
+                                  GCancellable           *cancellable,
+                                  GAsyncReadyCallback     callback,
+                                  gpointer                user_data);
+  IdeSubprocess *(*spawn_finish) (IdeSubprocessLauncher  *self,
+                                  GAsyncResult           *result,
+                                  GError                **error);
+
+  gpointer _reserved1;
+  gpointer _reserved2;
+  gpointer _reserved3;
+  gpointer _reserved4;
+  gpointer _reserved5;
+  gpointer _reserved6;
+  gpointer _reserved7;
+  gpointer _reserved8;
 };
 
 IdeSubprocessLauncher *ide_subprocess_launcher_new                 (GSubprocessFlags        flags);
@@ -52,6 +61,12 @@ void                   ide_subprocess_launcher_set_cwd             (IdeSubproces
 GSubprocessFlags       ide_subprocess_launcher_get_flags           (IdeSubprocessLauncher  *self);
 void                   ide_subprocess_launcher_set_flags           (IdeSubprocessLauncher  *self,
                                                                     GSubprocessFlags        flags);
+gboolean               ide_subprocess_launcher_get_run_on_host     (IdeSubprocessLauncher  *self);
+void                   ide_subprocess_launcher_set_run_on_host     (IdeSubprocessLauncher  *self,
+                                                                    gboolean                run_on_host);
+gboolean               ide_subprocess_launcher_get_clear_env       (IdeSubprocessLauncher  *self);
+void                   ide_subprocess_launcher_set_clear_env       (IdeSubprocessLauncher  *self,
+                                                                    gboolean                clear_env);
 const gchar * const   *ide_subprocess_launcher_get_environ         (IdeSubprocessLauncher  *self);
 void                   ide_subprocess_launcher_set_environ         (IdeSubprocessLauncher  *self,
                                                                     const gchar * const    *environ_);
@@ -66,14 +81,14 @@ void                   ide_subprocess_launcher_push_args           (IdeSubproces
 void                   ide_subprocess_launcher_push_argv           (IdeSubprocessLauncher  *self,
                                                                     const gchar            *argv);
 gchar                 *ide_subprocess_launcher_pop_argv            (IdeSubprocessLauncher  *self) G_GNUC_WARN_UNUSED_RESULT;
-GSubprocess           *ide_subprocess_launcher_spawn_sync          (IdeSubprocessLauncher  *self,
+IdeSubprocess         *ide_subprocess_launcher_spawn_sync          (IdeSubprocessLauncher  *self,
                                                                     GCancellable           *cancellable,
                                                                     GError                **error);
 void                   ide_subprocess_launcher_spawn_async         (IdeSubprocessLauncher  *self,
                                                                     GCancellable           *cancellable,
                                                                     GAsyncReadyCallback     callback,
                                                                     gpointer                user_data);
-GSubprocess           *ide_subprocess_launcher_spawn_finish        (IdeSubprocessLauncher  *self,
+IdeSubprocess         *ide_subprocess_launcher_spawn_finish        (IdeSubprocessLauncher  *self,
                                                                     GAsyncResult           *result,
                                                                     GError                **error);
 

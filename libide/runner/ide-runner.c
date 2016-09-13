@@ -27,13 +27,16 @@
 
 #include "runner/ide-runner.h"
 #include "runner/ide-runner-addin.h"
-#include "workers/ide-subprocess-launcher.h"
+#include "subprocess/ide-subprocess.h"
+#include "subprocess/ide-subprocess-launcher.h"
 
 typedef struct
 {
   PeasExtensionSet *addins;
   GQueue argv;
   IdeEnvironment *env;
+  GSubprocessFlags flags;
+  guint run_on_host : 1;
 } IdeRunnerPrivate;
 
 typedef struct
@@ -46,6 +49,7 @@ enum {
   PROP_0,
   PROP_ARGV,
   PROP_ENV,
+  PROP_RUN_ON_HOST,
   N_PROPS
 };
 
@@ -98,14 +102,16 @@ ide_runner_run_wait_cb (GObject      *object,
                         GAsyncResult *result,
                         gpointer      user_data)
 {
-  GSubprocess *subprocess = (GSubprocess *)object;
+  IdeSubprocess *subprocess = (IdeSubprocess *)object;
   g_autoptr(GTask) task = user_data;
   GError *error = NULL;
   IdeRunner *self;
 
   IDE_ENTRY;
 
-  g_assert (G_IS_SUBPROCESS (subprocess));
+  g_assert (IDE_IS_SUBPROCESS (subprocess));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (G_IS_TASK (task));
 
   self = g_task_get_source_object (task);
 
@@ -113,17 +119,17 @@ ide_runner_run_wait_cb (GObject      *object,
 
   g_signal_emit (self, signals [EXITED], 0);
 
-  if (!g_subprocess_wait_finish (subprocess, result, &error))
+  if (!ide_subprocess_wait_finish (subprocess, result, &error))
     {
       g_task_return_error (task, error);
       IDE_EXIT;
     }
 
-  if (g_subprocess_get_if_exited (subprocess))
+  if (ide_subprocess_get_if_exited (subprocess))
     {
       gint exit_code;
 
-      exit_code = g_subprocess_get_exit_status (subprocess);
+      exit_code = ide_subprocess_get_exit_status (subprocess);
 
       if (exit_code == EXIT_SUCCESS)
         {
@@ -150,7 +156,7 @@ ide_runner_real_run_async (IdeRunner           *self,
   IdeRunnerPrivate *priv = ide_runner_get_instance_private (self);
   g_autoptr(GTask) task = NULL;
   g_autoptr(IdeSubprocessLauncher) launcher = NULL;
-  g_autoptr(GSubprocess) subprocess = NULL;
+  g_autoptr(IdeSubprocess) subprocess = NULL;
   g_auto(GStrv) environ = NULL;
   const gchar *identifier;
   GError *error = NULL;
@@ -163,7 +169,10 @@ ide_runner_real_run_async (IdeRunner           *self,
   task = g_task_new (self, cancellable, callback, user_data);
   g_task_set_source_tag (task, ide_runner_real_run_async);
 
-  launcher = ide_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDOUT_PIPE);
+  launcher = ide_subprocess_launcher_new (priv->flags);
+
+  ide_subprocess_launcher_set_run_on_host (launcher, priv->run_on_host);
+  ide_subprocess_launcher_set_clear_env (launcher, FALSE);
 
   environ = g_get_environ (); /* We still rely on many system vars like DISPLAY */
   ide_subprocess_launcher_set_environ (launcher, (const gchar * const *)environ);
@@ -176,7 +185,7 @@ ide_runner_real_run_async (IdeRunner           *self,
 
   subprocess = ide_subprocess_launcher_spawn_sync (launcher, cancellable, &error);
 
-  g_assert (subprocess == NULL || G_IS_SUBPROCESS (subprocess));
+  g_assert (subprocess == NULL || IDE_IS_SUBPROCESS (subprocess));
 
   if (subprocess == NULL)
     {
@@ -184,14 +193,14 @@ ide_runner_real_run_async (IdeRunner           *self,
       IDE_GOTO (failure);
     }
 
-  identifier = g_subprocess_get_identifier (subprocess);
+  identifier = ide_subprocess_get_identifier (subprocess);
 
   g_signal_emit (self, signals [SPAWNED], 0, identifier);
 
-  g_subprocess_wait_async (subprocess,
-                           cancellable,
-                           ide_runner_run_wait_cb,
-                           g_steal_pointer (&task));
+  ide_subprocess_wait_async (subprocess,
+                             cancellable,
+                             ide_runner_run_wait_cb,
+                             g_steal_pointer (&task));
 
 failure:
   IDE_EXIT;
@@ -302,6 +311,10 @@ ide_runner_get_property (GObject    *object,
       g_value_set_object (value, ide_runner_get_environment (self));
       break;
 
+    case PROP_RUN_ON_HOST:
+      g_value_set_boolean (value, ide_runner_get_run_on_host (self));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -319,6 +332,10 @@ ide_runner_set_property (GObject      *object,
     {
     case PROP_ARGV:
       ide_runner_set_argv (self, g_value_get_boxed (value));
+      break;
+
+    case PROP_RUN_ON_HOST:
+      ide_runner_set_run_on_host (self, g_value_get_boolean (value));
       break;
 
     default:
@@ -353,6 +370,13 @@ ide_runner_class_init (IdeRunnerClass *klass)
                          IDE_TYPE_ENVIRONMENT,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
+  properties [PROP_RUN_ON_HOST] =
+    g_param_spec_boolean ("run-on-host",
+                          "Run on Host",
+                          "Run on Host",
+                          FALSE,
+                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+
   g_object_class_install_properties (object_class, N_PROPS, properties);
 
   signals [EXITED] =
@@ -386,6 +410,7 @@ ide_runner_init (IdeRunner *self)
 
   g_queue_init (&priv->argv);
   priv->env = ide_environment_new ();
+  priv->flags = 0;
 }
 
 /**
@@ -727,4 +752,40 @@ ide_runner_new (IdeContext *context)
   return g_object_new (IDE_TYPE_RUNNER,
                        "context", context,
                        NULL);
+}
+
+gboolean
+ide_runner_get_run_on_host (IdeRunner *self)
+{
+  IdeRunnerPrivate *priv = ide_runner_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_RUNNER (self), FALSE);
+
+  return priv->run_on_host;
+}
+
+void
+ide_runner_set_run_on_host (IdeRunner *self,
+                            gboolean   run_on_host)
+{
+  IdeRunnerPrivate *priv = ide_runner_get_instance_private (self);
+
+  run_on_host = !!run_on_host;
+
+  if (run_on_host != priv->run_on_host)
+    {
+      priv->run_on_host = run_on_host;
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_RUN_ON_HOST]);
+    }
+}
+
+void
+ide_runner_set_flags (IdeRunner        *self,
+                      GSubprocessFlags  flags)
+{
+  IdeRunnerPrivate *priv = ide_runner_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_RUNNER (self));
+
+  priv->flags = flags;
 }
