@@ -4488,11 +4488,8 @@ ide_source_view_real_sort (IdeSourceView *self,
 {
   GtkTextView *text_view = (GtkTextView *)self;
   GtkTextBuffer *buffer;
-  GtkTextMark *insert;
   GtkTextIter begin;
   GtkTextIter end;
-  GtkTextIter cursor;
-  guint cursor_offset;
   GtkSourceSortFlags sort_flags = GTK_SOURCE_SORT_FLAGS_NONE;
 
   g_assert (GTK_TEXT_VIEW (self));
@@ -4504,31 +4501,17 @@ ide_source_view_real_sort (IdeSourceView *self,
   if (gtk_text_iter_equal (&begin, &end))
     gtk_text_buffer_get_bounds (buffer, &begin, &end);
 
-  insert = gtk_text_buffer_get_insert (buffer);
-  gtk_text_buffer_get_iter_at_mark (buffer, &cursor, insert);
-  cursor_offset = gtk_text_iter_get_offset (&cursor);
-
-  gtk_text_iter_order (&begin, &end);
-  if (gtk_text_iter_starts_line (&end))
-    gtk_text_iter_backward_char (&end);
-
   if (!ignore_case)
     sort_flags |= GTK_SOURCE_SORT_FLAGS_CASE_SENSITIVE;
 
   if (reverse)
     sort_flags |= GTK_SOURCE_SORT_FLAGS_REVERSE_ORDER;
 
-  gtk_text_buffer_begin_user_action (buffer);
-
   gtk_source_buffer_sort_lines (GTK_SOURCE_BUFFER (buffer),
                                 &begin,
                                 &end,
                                 sort_flags,
                                 0);
-  gtk_text_buffer_get_iter_at_offset (buffer, &begin, cursor_offset);
-  gtk_text_buffer_select_range (buffer, &begin, &begin);
-
-  gtk_text_buffer_end_user_action (buffer);
 }
 
 static void
