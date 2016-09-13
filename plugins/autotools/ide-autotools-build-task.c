@@ -558,9 +558,13 @@ ide_autotools_build_task_execute_worker (GTask        *task,
                                         IDE_BUILD_RESULT (self),
                                         cancellable,
                                         &error))
-    g_task_return_error (task, error);
-  else
-    g_task_return_boolean (task, TRUE);
+    {
+      ide_build_result_log_stderr (IDE_BUILD_RESULT (self), "%s %s", _("Build Failed: "), error->message);
+      g_task_return_error (task, error);
+      return;
+    }
+
+  g_task_return_boolean (task, TRUE);
 }
 
 static void
@@ -570,6 +574,7 @@ ide_autotools_build_task_configuration_prebuild_cb (GObject      *object,
 {
   IdeBuildCommandQueue *cmdq = (IdeBuildCommandQueue *)object;
   g_autoptr(GTask) task = user_data;
+  IdeAutotoolsBuildTask *self;
   GError *error = NULL;
 
   IDE_ENTRY;
@@ -577,8 +582,12 @@ ide_autotools_build_task_configuration_prebuild_cb (GObject      *object,
   g_assert (IDE_IS_BUILD_COMMAND_QUEUE (cmdq));
   g_assert (G_IS_ASYNC_RESULT (result));
 
+  self = g_task_get_source_object (task);
+
   if (!ide_build_command_queue_execute_finish (cmdq, result, &error))
     {
+
+      ide_build_result_log_stderr (IDE_BUILD_RESULT (self), "%s %s", _("Build Failed: "), error->message);
       g_task_return_error (task, error);
       IDE_EXIT;
     }
@@ -745,6 +754,7 @@ log_and_spawn (IdeAutotoolsBuildTask  *self,
                const gchar           *argv0,
                ...)
 {
+  g_autoptr(GError) local_error = NULL;
   IdeSubprocess *ret;
   struct {
     IdeBuildResult *result;
@@ -776,7 +786,15 @@ log_and_spawn (IdeAutotoolsBuildTask  *self,
   pair->message = g_string_free (log, FALSE);
   g_timeout_add (0, log_in_main, pair);
 
-  ret = ide_subprocess_launcher_spawn_sync (launcher, cancellable, error);
+  ret = ide_subprocess_launcher_spawn_sync (launcher, cancellable, &local_error);
+
+  if (ret == NULL)
+    {
+      ide_build_result_log_stderr (IDE_BUILD_RESULT (self), "%s %s",
+                                   _("Build Failed: "),
+                                   local_error->message);
+      g_propagate_error (error, g_steal_pointer (&local_error));
+    }
 
   /* pop make args */
   for (; popcnt; popcnt--)
