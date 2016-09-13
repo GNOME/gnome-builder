@@ -461,6 +461,8 @@ ide_subprocess_launcher_init (IdeSubprocessLauncher *self)
 {
   IdeSubprocessLauncherPrivate *priv = ide_subprocess_launcher_get_instance_private (self);
 
+  priv->clear_env = TRUE;
+
   priv->environ = g_ptr_array_new_with_free_func (g_free);
   g_ptr_array_add (priv->environ, NULL);
 
