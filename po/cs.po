@@ -3426,7 +3426,7 @@ msgstr "Slova odpovídající výběru"
 
 #: plugins/quick-highlight/gbp-quick-highlight-preferences.c:49
 msgid "Highlight all occurrences of words matching the current selection"
-msgstr "Zvýrazňovat všechny výskyty slov odpovídajících aktuálnímu výběru"
+msgstr "Zvýrazňovat všechny výskyty slov shodující se s aktuálním výběrem"
 
 #. Translators: the following are keywords used for searching to locate this preference
 #: plugins/quick-highlight/gbp-quick-highlight-preferences.c:51
