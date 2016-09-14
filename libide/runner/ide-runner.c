@@ -171,13 +171,33 @@ ide_runner_real_run_async (IdeRunner           *self,
 
   launcher = ide_subprocess_launcher_new (priv->flags);
 
+  /*
+   * We want the runners to run on the host so that we aren't captive to
+   * our containing system (flatpak, jhbuild, etc).
+   */
   ide_subprocess_launcher_set_run_on_host (launcher, priv->run_on_host);
 
+  /*
+   * We don't want the environment cleared because we need access to
+   * things like DISPLAY, WAYLAND_DISPLAY, and DBUS_SESSION_BUS_ADDRESS.
+   */
+  ide_subprocess_launcher_set_clear_env (launcher, FALSE);
+
+  /*
+   * Overlay the environment provided.
+   */
   ide_subprocess_launcher_overlay_environment (launcher, priv->env);
 
+  /*
+   * Push all of our configured arguments in order.
+   */
   for (GList *iter = priv->argv.head; iter != NULL; iter = iter->next)
     ide_subprocess_launcher_push_argv (launcher, iter->data);
 
+  /*
+   * Set the working directory for the process.
+   * FIXME: Allow this to be configurable! Add IdeRunner::cwd.
+   */
   ide_subprocess_launcher_set_cwd (launcher, g_get_home_dir ());
 
   subprocess = ide_subprocess_launcher_spawn_sync (launcher, cancellable, &error);
