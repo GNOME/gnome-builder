@@ -34,6 +34,7 @@
 #include "ide-debug.h"
 #include "ide-macros.h"
 
+#include "application/ide-application.h"
 #include "subprocess/ide-breakout-subprocess.h"
 
 #ifndef FLATPAK_HOST_COMMAND_FLAGS_CLEAR_ENV
@@ -298,8 +299,10 @@ communicate_result_validate_utf8 (const char            *stream_name,
                                   GMemoryOutputStream   *buffer,
                                   GError               **error)
 {
+  IDE_ENTRY;
+
   if (return_location == NULL)
-    return TRUE;
+    IDE_RETURN (TRUE);
 
   if (buffer)
     {
@@ -312,13 +315,13 @@ communicate_result_validate_utf8 (const char            *stream_name,
                        "Invalid UTF-8 in child %s at offset %lu",
                        stream_name,
                        (unsigned long) (end - *return_location));
-          return FALSE;
+          IDE_RETURN (FALSE);
         }
     }
   else
     *return_location = NULL;
 
-  return TRUE;
+  IDE_RETURN (TRUE);
 }
 
 gboolean
@@ -331,6 +334,8 @@ ide_subprocess_communicate_utf8_finish (IdeSubprocess  *subprocess,
   gboolean ret = FALSE;
   CommunicateState *state;
 
+  IDE_ENTRY;
+
   g_return_val_if_fail (IDE_IS_BREAKOUT_SUBPROCESS (subprocess), FALSE);
   g_return_val_if_fail (g_task_is_valid (result, subprocess), FALSE);
   g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
@@ -339,20 +344,20 @@ ide_subprocess_communicate_utf8_finish (IdeSubprocess  *subprocess,
 
   state = g_task_get_task_data ((GTask*)result);
   if (!g_task_propagate_boolean ((GTask*)result, error))
-    goto out;
+    IDE_GOTO (out);
 
   if (!communicate_result_validate_utf8 ("stdout", stdout_buf, state->stdout_buf, error))
-    goto out;
+    IDE_GOTO (out);
 
   if (!communicate_result_validate_utf8 ("stderr", stderr_buf, state->stderr_buf, error))
-    goto out;
+    IDE_GOTO (out);
 
   ret = TRUE;
 
  out:
   g_object_unref (result);
 
-  return ret;
+  IDE_RETURN (ret);
 }
 
 static gboolean
@@ -368,6 +373,8 @@ ide_breakout_subprocess_communicate_utf8 (IdeSubprocess  *subprocess,
   g_autoptr(GBytes) stdin_bytes = NULL;
   size_t stdin_buf_len = 0;
   gboolean success;
+
+  IDE_ENTRY;
 
   g_return_val_if_fail (IDE_IS_BREAKOUT_SUBPROCESS (subprocess), FALSE);
   g_return_val_if_fail (stdin_buf == NULL || (self->flags & G_SUBPROCESS_FLAGS_STDIN_PIPE), FALSE);
@@ -388,7 +395,7 @@ ide_breakout_subprocess_communicate_utf8 (IdeSubprocess  *subprocess,
   ide_breakout_subprocess_sync_complete (&result);
   success = ide_subprocess_communicate_utf8_finish (subprocess, result, stdout_buf, stderr_buf, error);
 
-  return success;
+  IDE_RETURN (success);
 }
 
 static gboolean
@@ -501,8 +508,10 @@ ide_breakout_subprocess_force_exit (IdeSubprocess *subprocess)
 static void
 ide_breakout_subprocess_sync_setup (void)
 {
-  /* Leak ref until ide_breakout_subprocess_sync_complete() */
-  g_main_context_push_thread_default (g_main_context_new ());
+  if (IDE_IS_MAIN_THREAD ())
+    g_main_context_push_thread_default (g_main_context_ref (g_main_context_default ()));
+  else
+    g_main_context_push_thread_default (g_main_context_new ());
 }
 
 static void
@@ -517,10 +526,7 @@ ide_breakout_subprocess_sync_complete (GAsyncResult **result)
 
   while (*result == NULL)
     g_main_context_iteration (context, TRUE);
-
   g_main_context_pop_thread_default (context);
-
-  /* Unref pair for ide_breakout_subprocess_sync_setup() */
   g_main_context_unref (context);
 
   IDE_EXIT;
@@ -666,6 +672,8 @@ ide_breakout_subprocess_communicate_internal (IdeBreakoutSubprocess *subprocess,
   CommunicateState *state;
   g_autoptr(GTask) task = NULL;
 
+  IDE_ENTRY;
+
   g_assert (IDE_IS_BREAKOUT_SUBPROCESS (subprocess));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
@@ -721,7 +729,7 @@ ide_breakout_subprocess_communicate_internal (IdeBreakoutSubprocess *subprocess,
                              ide_subprocess_communicate_made_progress, g_object_ref (task));
   state->outstanding_ops++;
 
-  return state;
+  IDE_RETURN (state);
 }
 
 static void
@@ -751,6 +759,8 @@ ide_breakout_subprocess_communicate_finish (IdeSubprocess  *subprocess,
   GTask *task = (GTask *)result;
   gboolean success;
 
+  IDE_ENTRY;
+
   g_assert (IDE_IS_BREAKOUT_SUBPROCESS (self));
   g_assert (G_IS_TASK (task));
 
@@ -772,7 +782,7 @@ ide_breakout_subprocess_communicate_finish (IdeSubprocess  *subprocess,
 
   g_object_unref (task);
 
-  return success;
+  IDE_RETURN (success);
 }
 
 static gboolean
@@ -786,6 +796,9 @@ ide_breakout_subprocess_communicate (IdeSubprocess  *subprocess,
   IdeBreakoutSubprocess *self = (IdeBreakoutSubprocess *)subprocess;
   g_autoptr(GMainContext) main_context = g_main_context_new ();
   g_autoptr(GAsyncResult) result = NULL;
+  gboolean ret;
+
+  IDE_ENTRY;
 
   g_assert (IDE_IS_BREAKOUT_SUBPROCESS (self));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
@@ -799,7 +812,9 @@ ide_breakout_subprocess_communicate (IdeSubprocess  *subprocess,
                                                 &result);
   ide_breakout_subprocess_sync_complete (&result);
 
-  return ide_breakout_subprocess_communicate_finish (subprocess, result, stdout_buf, stderr_buf, error);
+  ret = ide_breakout_subprocess_communicate_finish (subprocess, result, stdout_buf, stderr_buf, error);
+
+  IDE_RETURN (ret);
 }
 
 static void
