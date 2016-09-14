@@ -242,8 +242,30 @@ ide_subprocess_launcher_spawn_worker (GTask        *task,
   launcher = g_subprocess_launcher_new (priv->flags);
   g_subprocess_launcher_set_child_setup (launcher, child_setup_func, NULL, NULL);
   g_subprocess_launcher_set_cwd (launcher, priv->cwd);
+
   if (priv->environ->len > 1)
-    g_subprocess_launcher_set_environ (launcher, (gchar **)priv->environ->pdata);
+    {
+      g_auto(GStrv) env = NULL;
+
+      if (!priv->clear_env)
+        env = g_strdupv (g_get_environ ());
+
+      for (guint i = 0; i < (priv->environ->len - 1); i++)
+        {
+          const gchar *pair = g_ptr_array_index (priv->environ, i);
+          const gchar *eq = strchr (pair, '=');
+          const gchar *val = eq ? eq + 1 : NULL;
+
+          if (pair && eq && val)
+            {
+              g_autofree gchar *key = g_strndup (pair, eq - pair);
+              env = g_environ_setenv (env, key, val, TRUE);
+            }
+        }
+
+      g_subprocess_launcher_set_environ (launcher, env);
+    }
+
   real = g_subprocess_launcher_spawnv (launcher,
                                        (const gchar * const *)priv->argv->pdata,
                                        &error);
