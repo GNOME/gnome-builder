@@ -172,7 +172,6 @@ ide_runner_real_run_async (IdeRunner           *self,
   launcher = ide_subprocess_launcher_new (priv->flags);
 
   ide_subprocess_launcher_set_run_on_host (launcher, priv->run_on_host);
-  ide_subprocess_launcher_set_clear_env (launcher, FALSE);
 
   environ = g_get_environ (); /* We still rely on many system vars like DISPLAY */
   ide_subprocess_launcher_set_environ (launcher, (const gchar * const *)environ);
