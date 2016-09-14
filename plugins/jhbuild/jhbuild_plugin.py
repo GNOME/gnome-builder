@@ -41,6 +41,11 @@ class JhbuildRuntime(Ide.Runtime):
             # Rely on search path
             return 'jhbuild'
 
+    def do_create_runner(self, build_target):
+        runner = Ide.Runtime.do_create_runner(self, build_target)
+        runner.set_run_on_host(True)
+        return runner
+
     def do_create_launcher(self):
         try:
             launcher = Ide.Runtime.do_create_launcher(self)
