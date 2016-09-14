@@ -178,7 +178,8 @@ ide_subprocess_launcher_spawn_host_worker (GTask        *task,
     g_autofree gchar *env = NULL;
     str = g_strjoinv (" ", (gchar **)priv->argv->pdata);
     env = g_strjoinv (" ", (gchar **)priv->environ->pdata);
-    IDE_TRACE_MSG ("Launching '%s' with environment %s", str, env);
+    IDE_TRACE_MSG ("Launching '%s' with environment %s %s parent environment",
+                   str, env, priv->clear_env ? "clearing" : "inheriting");
   }
 #endif
 
@@ -233,7 +234,8 @@ ide_subprocess_launcher_spawn_worker (GTask        *task,
     g_autofree gchar *env = NULL;
     str = g_strjoinv (" ", (gchar **)priv->argv->pdata);
     env = g_strjoinv (" ", (gchar **)priv->environ->pdata);
-    IDE_TRACE_MSG ("Launching '%s' with environment %s", str, env);
+    IDE_TRACE_MSG ("Launching '%s' with environment %s %s parent environment",
+                   str, env, priv->clear_env ? "clearing" : "inheriting");
   }
 #endif
 
