@@ -173,8 +173,6 @@ ide_runner_real_run_async (IdeRunner           *self,
 
   ide_subprocess_launcher_set_run_on_host (launcher, priv->run_on_host);
 
-  environ = g_get_environ (); /* We still rely on many system vars like DISPLAY */
-  ide_subprocess_launcher_set_environ (launcher, (const gchar * const *)environ);
   ide_subprocess_launcher_overlay_environment (launcher, priv->env);
 
   for (GList *iter = priv->argv.head; iter != NULL; iter = iter->next)
