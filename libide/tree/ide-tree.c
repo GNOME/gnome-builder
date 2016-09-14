@@ -467,8 +467,9 @@ pixbuf_func (GtkCellLayout   *cell_layout,
              GtkTreeIter     *iter,
              gpointer         data)
 {
-  const gchar *icon_name;
   IdeTreeNode *node;
+  GIcon *icon;
+  GIcon *old_icon;
 
   g_assert (GTK_IS_CELL_LAYOUT (cell_layout));
   g_assert (GTK_IS_CELL_RENDERER_PIXBUF (cell));
@@ -476,8 +477,12 @@ pixbuf_func (GtkCellLayout   *cell_layout,
   g_assert (iter != NULL);
 
   gtk_tree_model_get (tree_model, iter, 0, &node, -1);
-  icon_name = node ? ide_tree_node_get_icon_name (node) : NULL;
-  g_object_set (cell, "icon-name", icon_name, NULL);
+  icon = ide_tree_node_get_gicon (node);
+  g_object_get (cell, "gicon", &old_icon, NULL);
+  if (icon != old_icon)
+    g_object_set (cell, "gicon", icon, NULL);
+
+  g_clear_object (&old_icon);
   g_clear_object (&node);
 }
 

@@ -65,6 +65,16 @@ void            ide_tree_node_set_children_possible (IdeTreeNode            *sel
 gboolean        ide_tree_node_get_use_markup        (IdeTreeNode            *self);
 void            ide_tree_node_set_use_markup        (IdeTreeNode            *self,
                                                      gboolean                use_markup);
+GIcon          *ide_tree_node_get_gicon             (IdeTreeNode            *self);
+void            ide_tree_node_add_emblem            (IdeTreeNode            *node,
+                                                     const gchar            *emblem_name);
+void            ide_tree_node_remove_emblem         (IdeTreeNode            *node,
+                                                     const gchar            *emblem_name);
+void            ide_tree_node_clear_emblems         (IdeTreeNode            *node);
+gboolean        ide_tree_node_has_emblem            (IdeTreeNode            *node,
+                                                     const gchar            *emblem_name);
+void            ide_tree_node_set_emblems           (IdeTreeNode            *node,
+                                                     GList                  *emblems);
 gboolean        ide_tree_node_get_use_dim_label     (IdeTreeNode            *self);
 void            ide_tree_node_set_use_dim_label     (IdeTreeNode            *self,
                                                      gboolean                use_dim_label);
