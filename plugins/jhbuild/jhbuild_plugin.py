@@ -52,6 +52,7 @@ class JhbuildRuntime(Ide.Runtime):
             # The runner uses a launcher from self.create_launcher(), so
             # most of our settings should already be applied.
             runner = Ide.Runner.new(self.get_context())
+            runner.set_run_on_host(True)
             runner.append_argv(binpath)
 
             return runner
