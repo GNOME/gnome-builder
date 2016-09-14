@@ -223,6 +223,8 @@ ide_subprocess_launcher_spawn_worker (GTask        *task,
   g_autoptr(IdeSubprocess) wrapped = NULL;
   g_autoptr(GError) error = NULL;
 
+  IDE_ENTRY;
+
   g_return_if_fail (IDE_IS_SUBPROCESS_LAUNCHER (self));
 
 #ifdef IDE_ENABLE_TRACE
@@ -247,7 +249,7 @@ ide_subprocess_launcher_spawn_worker (GTask        *task,
   if (real == NULL)
     {
       g_task_return_error (task, g_steal_pointer (&error));
-      return;
+      IDE_EXIT;
     }
 
   if (cancellable != NULL)
@@ -262,6 +264,8 @@ ide_subprocess_launcher_spawn_worker (GTask        *task,
   wrapped = ide_simple_subprocess_new (real);
 
   g_task_return_pointer (task, g_steal_pointer (&wrapped), g_object_unref);
+
+  IDE_EXIT;
 }
 
 static IdeSubprocess *
