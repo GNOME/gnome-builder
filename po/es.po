@@ -5,15 +5,15 @@
 # Ian Hernandez <ihernandezs@openmailbox.org>, 2015.
 # 
 # 
-# Daniel Mustieles <daniel.mustieles@gmail.com>, 2015., 2016.
+# Daniel Mustieles <daniel.mustieles@gmail.com>, 2015., 2016.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-08-29 02:52+0000\n"
-"PO-Revision-Date: 2016-08-31 13:59+0200\n"
+"POT-Creation-Date: 2016-09-13 21:54+0000\n"
+"PO-Revision-Date: 2016-09-14 17:38+0200\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Español; Castellano <gnome-es-list@gnome.org>\n"
 "Language: es\n"
@@ -164,11 +164,12 @@ msgstr "%s: este formato de archivo no está soportado\n"
 msgid "failed to parse\n"
 msgstr "falló al analizar\n"
 
-#: contrib/gstyle/gstyle-palette.c:828
+#. To translators: always in singular form like in: generated palette number <generated_count>
+#: contrib/gstyle/gstyle-palette.c:829
 msgid "Generated"
 msgstr "Generado"
 
-#: contrib/gstyle/gstyle-palette.c:931
+#: contrib/gstyle/gstyle-palette.c:932
 #, c-format
 msgid "Unable to save %s\n"
 msgstr "No se puede guardar %s\n"
@@ -213,6 +214,11 @@ msgstr "Verde"
 #: contrib/gstyle/tests/data/gstyle-color-editor.ui:152
 msgid "Blue"
 msgstr "Azul"
+
+#: contrib/gstyle/tests/data/palette.gstyle.xml:20
+#: plugins/color-picker/data/basic.gstyle.xml:20
+msgid "Basic"
+msgstr "Básico"
 
 #: contrib/gstyle/ui/gstyle-color-panel.ui:157
 msgid "Color Components"
@@ -428,7 +434,7 @@ msgstr ""
 "al código fuente."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:34
-#: libide/editor/ide-editor-tweak-widget.ui:73
+#: libide/editor/ide-editor-tweak-widget.ui:74
 msgid "Highlight current line"
 msgstr "Resaltar la línea actual"
 
@@ -453,7 +459,7 @@ msgid "If enabled, the editor will show line numbers."
 msgstr "Si se activa, el editor mostrará los números de línea."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:49
-#: libide/editor/ide-editor-tweak-widget.ui:90
+#: libide/editor/ide-editor-tweak-widget.ui:91
 #: libide/preferences/ide-preferences-builtin.c:133
 msgid "Smart Backspace"
 msgstr "Retroceso inteligente"
@@ -912,6 +918,7 @@ msgid "Built in syntax highlighting for many languages"
 msgstr "Resaltado de sintaxis integrado para muchos lenguajes"
 
 #: data/org.gnome.Builder.appdata.xml.in:24
+#: data/org.gnome.Builder.appdata.xml.in:50
 msgid "Side-by-side code editors"
 msgstr "Editores de código de lado a lado"
 
@@ -952,6 +959,17 @@ msgstr "Edición estilo Vim opcional"
 #: data/org.gnome.Builder.appdata.xml.in:33
 msgid "Preview support for building with Xdg-App runtimes"
 msgstr "Soporte de vista previa para la construcción con rutinas de Xdg-App"
+
+#: data/org.gnome.Builder.appdata.xml.in:42
+#| msgctxt "shortcut window"
+#| msgid "Global Search"
+msgid "Fast global search"
+msgstr "Búsqueda global rápida"
+
+#: data/org.gnome.Builder.appdata.xml.in:46
+#| msgid "From a project template"
+msgid "Integrated project tree"
+msgstr "Árbol de proyecto integrado"
 
 #: data/org.gnome.Builder.desktop.in.in:4
 msgid "Build software for GNOME"
@@ -1076,15 +1094,15 @@ msgstr "%s no soporta la construcción"
 msgid "A build is already in progress"
 msgstr "Ya hay una construcción en proceso"
 
-#: libide/buildsystem/ide-build-manager.c:771
+#: libide/buildsystem/ide-build-manager.c:772
 msgid "Ready"
 msgstr "Preparado"
 
-#: libide/buildsystem/ide-build-result.c:249
+#: libide/buildsystem/ide-build-result.c:250
 msgid "Failed to open stderr stream."
 msgstr "Falló al abrir el flujo de error estándar."
 
-#: libide/buildsystem/ide-build-result.c:279
+#: libide/buildsystem/ide-build-result.c:280
 msgid "Failed to open stdout stream."
 msgstr "Falló al abrir el flujo de salida."
 
@@ -1093,7 +1111,7 @@ msgstr "Falló al abrir el flujo de salida."
 msgid "%s() is not supported on %s build system."
 msgstr "%s() no está soportado en el sistema de construcción %s."
 
-#: libide/buildsystem/ide-configuration-manager.c:428
+#: libide/buildsystem/ide-configuration-manager.c:483
 #: libide/preferences/ide-preferences-builtin.c:261
 #: libide/preferences/ide-preferences-builtin.c:279
 msgid "Default"
@@ -1207,46 +1225,46 @@ msgstr "Intente abrir el archivo escribiendo en la caja superior de búsqueda"
 msgid "Search highlight mode…"
 msgstr "Modo de resaltado de la búsqueda…"
 
-#: libide/editor/ide-editor-tweak-widget.ui:55
+#: libide/editor/ide-editor-tweak-widget.ui:56
 msgid "Display line numbers"
 msgstr "Mostrar números de línea"
 
-#: libide/editor/ide-editor-tweak-widget.ui:64
+#: libide/editor/ide-editor-tweak-widget.ui:65
 msgid "Display right margin"
 msgstr "Mostrar margen derecho"
 
-#: libide/editor/ide-editor-tweak-widget.ui:82
+#: libide/editor/ide-editor-tweak-widget.ui:83
 msgid "Auto indent"
 msgstr "Sangrado automático"
 
-#: libide/editor/ide-editor-tweak-widget.ui:98
+#: libide/editor/ide-editor-tweak-widget.ui:99
 #: libide/preferences/ide-preferences-builtin.c:248
 msgid "Indentation"
 msgstr "Sangrado"
 
-#: libide/editor/ide-editor-tweak-widget.ui:126
+#: libide/editor/ide-editor-tweak-widget.ui:127
 #: libide/preferences/ide-preferences-builtin.c:159
 msgid "Spaces"
 msgstr "Espacios"
 
-#: libide/editor/ide-editor-tweak-widget.ui:136
+#: libide/editor/ide-editor-tweak-widget.ui:137
 #: libide/preferences/ide-preferences-builtin.c:160
 msgid "Tabs"
 msgstr "Tabuladores"
 
-#: libide/editor/ide-editor-tweak-widget.ui:156
+#: libide/editor/ide-editor-tweak-widget.ui:157
 msgid "2"
 msgstr "2"
 
-#: libide/editor/ide-editor-tweak-widget.ui:166
+#: libide/editor/ide-editor-tweak-widget.ui:167
 msgid "3"
 msgstr "3"
 
-#: libide/editor/ide-editor-tweak-widget.ui:176
+#: libide/editor/ide-editor-tweak-widget.ui:177
 msgid "4"
 msgstr "4"
 
-#: libide/editor/ide-editor-tweak-widget.ui:186
+#: libide/editor/ide-editor-tweak-widget.ui:187
 msgid "8"
 msgstr "8"
 
@@ -1263,9 +1281,9 @@ msgid "_Reload"
 msgstr "_Recargar"
 
 #: libide/editor/ide-editor-view.ui:31
-#: libide/greeter/ide-greeter-perspective.ui:308
-#: libide/greeter/ide-greeter-perspective.ui:356
-#: libide/workbench/ide-omni-bar.ui:344
+#: libide/greeter/ide-greeter-perspective.ui:310
+#: libide/greeter/ide-greeter-perspective.ui:358
+#: libide/workbench/ide-omni-bar.ui:346
 msgid "_Cancel"
 msgstr "_Cancelar"
 
@@ -1295,40 +1313,40 @@ msgstr ""
 msgid "No projects found"
 msgstr "No se han encontrado proyectos"
 
-#: libide/greeter/ide-greeter-perspective.ui:98
+#: libide/greeter/ide-greeter-perspective.ui:100
 msgid "Recent Projects"
 msgstr "Proyectos recientes"
 
-#: libide/greeter/ide-greeter-perspective.ui:113
-#: libide/greeter/ide-greeter-perspective.ui:163
+#: libide/greeter/ide-greeter-perspective.ui:115
+#: libide/greeter/ide-greeter-perspective.ui:165
 msgid "Updated"
 msgstr "Actualizado"
 
-#: libide/greeter/ide-greeter-perspective.ui:148
+#: libide/greeter/ide-greeter-perspective.ui:150
 msgid "Other Projects"
 msgstr "Otros proyectos"
 
-#: libide/greeter/ide-greeter-perspective.ui:204
+#: libide/greeter/ide-greeter-perspective.ui:206
 msgid "_Remove"
 msgstr "_Eliminar"
 
-#: libide/greeter/ide-greeter-perspective.ui:288
+#: libide/greeter/ide-greeter-perspective.ui:290
 msgid "Select a Project"
 msgstr "Seleccionar un proyecto"
 
-#: libide/greeter/ide-greeter-perspective.ui:294
+#: libide/greeter/ide-greeter-perspective.ui:296
 msgid "Click an item to select"
 msgstr "Pulse en un elemento para seleccionarlo"
 
-#: libide/greeter/ide-greeter-perspective.ui:320
+#: libide/greeter/ide-greeter-perspective.ui:322
 msgid "Open…"
 msgstr "Abrir…"
 
-#: libide/greeter/ide-greeter-perspective.ui:335
+#: libide/greeter/ide-greeter-perspective.ui:337
 msgid "Select projects for removal"
 msgstr "Seleccionar proyectos para eliminar"
 
-#: libide/greeter/ide-greeter-perspective.ui:355
+#: libide/greeter/ide-greeter-perspective.ui:357
 msgid "Return to project selection"
 msgstr "Volver a la selección de proyectos"
 
@@ -1388,37 +1406,37 @@ msgid "Editor Shortcuts"
 msgstr "Editor de atajos"
 
 #: libide/keybindings/ide-shortcuts-window.ui:14
-#: libide/keybindings/ide-shortcuts-window.ui:396
+#: libide/keybindings/ide-shortcuts-window.ui:423
 msgctxt "shortcut window"
 msgid "General"
 msgstr "General"
 
 #: libide/keybindings/ide-shortcuts-window.ui:18
-#: libide/keybindings/ide-shortcuts-window.ui:400
+#: libide/keybindings/ide-shortcuts-window.ui:427
 msgctxt "shortcut window"
 msgid "Global Search"
 msgstr "Búsqueda global"
 
 #: libide/keybindings/ide-shortcuts-window.ui:25
-#: libide/keybindings/ide-shortcuts-window.ui:407
+#: libide/keybindings/ide-shortcuts-window.ui:434
 msgctxt "shortcut window"
 msgid "Preferences"
 msgstr "Preferencias"
 
 #: libide/keybindings/ide-shortcuts-window.ui:32
-#: libide/keybindings/ide-shortcuts-window.ui:414
+#: libide/keybindings/ide-shortcuts-window.ui:441
 msgctxt "shortcut window"
 msgid "Command Bar"
 msgstr "Barra de comandos"
 
 #: libide/keybindings/ide-shortcuts-window.ui:39
-#: libide/keybindings/ide-shortcuts-window.ui:421
+#: libide/keybindings/ide-shortcuts-window.ui:448
 msgctxt "shortcut window"
 msgid "Terminal"
 msgstr "Terminal"
 
 #: libide/keybindings/ide-shortcuts-window.ui:46
-#: libide/keybindings/ide-shortcuts-window.ui:428
+#: libide/keybindings/ide-shortcuts-window.ui:455
 msgctxt "shortcut window"
 msgid "Keyboard Shortcuts"
 msgstr "Atajos del teclado"
@@ -1516,13 +1534,13 @@ msgid "Clear highlight"
 msgstr "Limpiar resaltado"
 
 #: libide/keybindings/ide-shortcuts-window.ui:191
-#: libide/keybindings/ide-shortcuts-window.ui:437
+#: libide/keybindings/ide-shortcuts-window.ui:464
 msgctxt "shortcut window"
 msgid "Copy and Paste"
 msgstr "Copiar y pegar"
 
 #: libide/keybindings/ide-shortcuts-window.ui:196
-#: libide/keybindings/ide-shortcuts-window.ui:442
+#: libide/keybindings/ide-shortcuts-window.ui:469
 msgctxt "shortcut window"
 msgid "Copy selected text to clipboard"
 msgstr "Copiar el texto seleccionado al portapapeles"
@@ -1533,7 +1551,7 @@ msgid "Cut selected text to clipboard"
 msgstr "Cortar el texto seleccionado al portapapeles"
 
 #: libide/keybindings/ide-shortcuts-window.ui:210
-#: libide/keybindings/ide-shortcuts-window.ui:449
+#: libide/keybindings/ide-shortcuts-window.ui:476
 msgctxt "shortcut window"
 msgid "Paste text from clipboard"
 msgstr "Pegar texto del portapapeles"
@@ -1663,7 +1681,31 @@ msgctxt "shortcut window"
 msgid "Unselect all"
 msgstr "Deseleccionar todo"
 
-#: libide/keybindings/ide-shortcuts-window.ui:392
+#: libide/keybindings/ide-shortcuts-window.ui:389
+#| msgid "Build cancelled"
+msgctxt "shortcut window"
+msgid "Build and Run"
+msgstr "Construir y ejecutar"
+
+#: libide/keybindings/ide-shortcuts-window.ui:394
+#| msgid "Build"
+msgctxt "shortcut window"
+msgid "Build"
+msgstr "Construir"
+
+#: libide/keybindings/ide-shortcuts-window.ui:401
+#| msgid "Run"
+msgctxt "shortcut window"
+msgid "Run"
+msgstr "Ejecutar"
+
+#: libide/keybindings/ide-shortcuts-window.ui:408
+#| msgid "Profile"
+msgctxt "shortcut window"
+msgid "Profile"
+msgstr "Perfil"
+
+#: libide/keybindings/ide-shortcuts-window.ui:419
 msgctxt "shortcut window"
 msgid "Terminal Shortcuts"
 msgstr "Atajos de la terminal"
@@ -2016,7 +2058,7 @@ msgid "Number of CPU"
 msgstr "Número de CPU"
 
 #: libide/preferences/ide-preferences-builtin.c:299
-#: libide/workbench/ide-omni-bar.ui:370
+#: libide/workbench/ide-omni-bar.ui:372
 #: plugins/build-tools/gbp-build-panel.c:386
 msgid "Build"
 msgstr "Construir"
@@ -2067,7 +2109,7 @@ msgid "Scan your computer for existing projects"
 msgstr "Buscar proyectos existentes en su equipo"
 
 #: libide/preferences/ide-preferences-builtin.c:442
-#: plugins/create-project/gbp-create-project-widget.ui:78
+#: plugins/create-project/gbp-create-project-widget.ui:80
 msgid "Version Control"
 msgstr "Control de versiones"
 
@@ -2122,15 +2164,15 @@ msgid "Cannot run target, another target is running"
 msgstr "No se puede ejecutar el objetivo, ya ha otro objetivo en ejecución"
 
 #: libide/runner/ide-run-manager.c:287
-#: plugins/autotools/ide-autotools-build-task.c:438
+#: plugins/autotools/ide-autotools-build-task.c:442
 msgid "Failed to locate runtime"
 msgstr "Falló al buscar la rutina"
 
-#: libide/runner/ide-runner.c:129
+#: libide/runner/ide-runner.c:145
 msgid "Process quit unexpectedly"
 msgstr "El proceso ha terminado de manera inesperada"
 
-#: libide/runtimes/ide-runtime-manager.c:104
+#: libide/runtimes/ide-runtime-manager.c:105
 msgid "Host operating system"
 msgstr "Sistema operativo del equipo"
 
@@ -2175,8 +2217,7 @@ msgstr "Reemplazar «%s» con «%s»"
 msgid "Apply Fix-It"
 msgstr "Aplicar corrección"
 
-#: libide/transfers/ide-transfers-button.ui:33
-#| msgid "Select _All"
+#: libide/transfers/ide-transfers-button.ui:35
 msgid "Clear _All"
 msgstr "Limpiar _todo"
 
@@ -2327,23 +2368,23 @@ msgstr "Rama"
 msgid "Build Profile"
 msgstr "Construir perfil"
 
-#: libide/workbench/ide-omni-bar.ui:266
+#: libide/workbench/ide-omni-bar.ui:268
 msgid "Last build"
 msgstr "Última construcción"
 
-#: libide/workbench/ide-omni-bar.ui:316
+#: libide/workbench/ide-omni-bar.ui:318
 msgid "Failed"
 msgstr "Falló"
 
-#: libide/workbench/ide-omni-bar.ui:333
+#: libide/workbench/ide-omni-bar.ui:335
 msgid "View Output"
 msgstr "Ver salida"
 
-#: libide/workbench/ide-omni-bar.ui:380
+#: libide/workbench/ide-omni-bar.ui:382
 msgid "Rebuild"
 msgstr "Volver a construir"
 
-#: libide/workbench/ide-omni-bar.ui:390
+#: libide/workbench/ide-omni-bar.ui:392
 msgid "Clean"
 msgstr "Limpiar"
 
@@ -2382,7 +2423,7 @@ msgstr "Construcción correcta"
 
 #: plugins/autotools/ide-autotools-builder.c:159
 #: plugins/autotools/ide-autotools-builder.c:240
-#: plugins/autotools/ide-autotools-build-task.c:965
+#: plugins/autotools/ide-autotools-build-task.c:1057
 msgid "Building…"
 msgstr "Construyendo…"
 
@@ -2402,50 +2443,57 @@ msgstr "Instalación correcta"
 msgid "Failed to locate configure.ac"
 msgstr "Falló al buscar configure.ac"
 
-#: plugins/autotools/ide-autotools-build-task.c:177
+#: plugins/autotools/ide-autotools-build-task.c:181
 msgid "Directory must be on a locally mounted filesystem."
 msgstr "La carpeta debe estar en un sistema de archivos local."
 
-#: plugins/autotools/ide-autotools-build-task.c:427
+#: plugins/autotools/ide-autotools-build-task.c:431
 msgid "Failed to locate device"
 msgstr "Falló al buscar el dispositivo"
 
-#: plugins/autotools/ide-autotools-build-task.c:594
+#: plugins/autotools/ide-autotools-build-task.c:562
+#: plugins/autotools/ide-autotools-build-task.c:590
+#: plugins/autotools/ide-autotools-build-task.c:794
+#| msgid "Build failed"
+msgid "Build Failed: "
+msgstr "Fallo al construir:"
+
+#: plugins/autotools/ide-autotools-build-task.c:675
 msgid "Cannot execute build task more than once"
 msgstr "No se puede ejecutar la tarea de construcción más de una vez"
 
-#: plugins/autotools/ide-autotools-build-task.c:735
+#: plugins/autotools/ide-autotools-build-task.c:827
 msgid "Failed to create build directory."
 msgstr "Falló al crear la carpeta de construcción."
 
-#: plugins/autotools/ide-autotools-build-task.c:744
+#: plugins/autotools/ide-autotools-build-task.c:836
 #, c-format
 msgid "'%s' is not a directory."
 msgstr "«%s» no es una carpeta."
 
-#: plugins/autotools/ide-autotools-build-task.c:783
+#: plugins/autotools/ide-autotools-build-task.c:875
 #, c-format
 msgid "autogen.sh is missing from project directory (%s)."
 msgstr "autogen.sh no se encuentra en la carpeta del proyecto (%s)."
 
-#: plugins/autotools/ide-autotools-build-task.c:793
+#: plugins/autotools/ide-autotools-build-task.c:885
 msgid "autogen.sh is not executable."
 msgstr "autogen.sh no es ejecutable."
 
-#: plugins/autotools/ide-autotools-build-task.c:797
+#: plugins/autotools/ide-autotools-build-task.c:889
 msgid "Running autogen…"
 msgstr "Ejecutando autogen…"
 
-#: plugins/autotools/ide-autotools-build-task.c:831
+#: plugins/autotools/ide-autotools-build-task.c:923
 #, c-format
 msgid "autogen.sh failed to create configure (%s)"
 msgstr "autogen.sh falló al crear configure (%s)"
 
-#: plugins/autotools/ide-autotools-build-task.c:866
+#: plugins/autotools/ide-autotools-build-task.c:958
 msgid "Running configure…"
 msgstr "Ejecutando configure…"
 
-#: plugins/autotools/ide-autotools-build-task.c:963
+#: plugins/autotools/ide-autotools-build-task.c:1055
 msgid "Cleaning…"
 msgstr "Limpiando…"
 
@@ -2453,27 +2501,27 @@ msgstr "Limpiando…"
 msgid "Invalid makefile provided, ignoring."
 msgstr "Se ha proporcionado un Makefile no válido, ignorando."
 
-#: plugins/autotools-templates/autotools_templates/__init__.py:261
+#: plugins/autotools-templates/autotools_templates/__init__.py:265
 msgid "Shared Library"
 msgstr "Biblioteca compartida"
 
-#: plugins/autotools-templates/autotools_templates/__init__.py:263
+#: plugins/autotools-templates/autotools_templates/__init__.py:267
 msgid "Create a new autotools project with a shared library"
 msgstr "Crear un proyecto de autotools nuevo con una biblioteca compartida"
 
-#: plugins/autotools-templates/autotools_templates/__init__.py:287
+#: plugins/autotools-templates/autotools_templates/__init__.py:291
 msgid "Empty Project"
 msgstr "Proyecto vacío"
 
-#: plugins/autotools-templates/autotools_templates/__init__.py:290
+#: plugins/autotools-templates/autotools_templates/__init__.py:294
 msgid "Create a new empty autotools project"
 msgstr "Crear un nuevo proyecto de autotools vacío"
 
-#: plugins/autotools-templates/autotools_templates/__init__.py:304
+#: plugins/autotools-templates/autotools_templates/__init__.py:308
 msgid "GNOME Application"
 msgstr "Aplicación de GNOME"
 
-#: plugins/autotools-templates/autotools_templates/__init__.py:306
+#: plugins/autotools-templates/autotools_templates/__init__.py:310
 msgid "Create a new flatpak-ready GNOME application"
 msgstr "Crear una nueva aplicación de GNOME preparada para «flatpak»"
 
@@ -3089,83 +3137,87 @@ msgstr "Especifique un nombre de proyecto.\n"
 msgid "Please specify a project template with --template=\n"
 msgstr "Especifique una plantilla para el proyecto con --template=\n"
 
-#: plugins/create-project/gbp-create-project-widget.c:148
+#: plugins/create-project/gbp-create-project-widget.c:157
 msgid ""
 "Characters were used which might cause technical issues as a project name"
 msgstr ""
 "Caracteres usados que puede provocar problemas técnicos al usarse en el "
 "nombre del proyecto"
 
-#: plugins/create-project/gbp-create-project-widget.c:155
+#: plugins/create-project/gbp-create-project-widget.c:164
 msgid "Directory already exists with that name"
 msgstr "Ya existe una carpeta con ese nombre"
 
-#: plugins/create-project/gbp-create-project-widget.c:550
+#: plugins/create-project/gbp-create-project-widget.c:559
 msgid "A failure occurred while initializing version control"
 msgstr "Ocurrió un error al inicializar el control de versiones"
 
-#: plugins/create-project/gbp-create-project-widget.ui:36
+#: plugins/create-project/gbp-create-project-widget.ui:38
 msgid "Project Name"
 msgstr "Nombre del proyecto"
 
-#: plugins/create-project/gbp-create-project-widget.ui:47
+#: plugins/create-project/gbp-create-project-widget.ui:49
 msgid "Project Location"
 msgstr "Ubicación del proyecto"
 
-#: plugins/create-project/gbp-create-project-widget.ui:55
+#: plugins/create-project/gbp-create-project-widget.ui:57
 msgid "Language"
 msgstr "Idioma"
 
-#: plugins/create-project/gbp-create-project-widget.ui:67
+#: plugins/create-project/gbp-create-project-widget.ui:69
 msgid "License"
 msgstr "Licencia"
 
-#: plugins/create-project/gbp-create-project-widget.ui:110
+#: plugins/create-project/gbp-create-project-widget.ui:112
+#| msgid ""
+#| "Unique name that is used for your project's folder and other technical "
+#| "resources. Should be in lower case without spaces."
 msgid ""
 "Unique name that is used for your project's folder and other technical "
-"resources. Should be in lower case without spaces."
+"resources. Should be in lower case without spaces and may not start with a "
+"number."
 msgstr ""
-"Nombre único usado para la carpeta de us proyecto y otros recursos técnicos. "
-"Debe estar en minúsculas y sin espacios."
+"Nombre único usado para la carpeta de su proyecto y otros recursos técnicos. "
+"Debe estar en minúsculas y sin espacios, y no debe empezar por un número."
 
-#: plugins/create-project/gbp-create-project-widget.ui:128
+#: plugins/create-project/gbp-create-project-widget.ui:130
 #: plugins/git/ide-git-clone-widget.ui:78
 msgid "Select Project Directory"
 msgstr "Seleccionar la carpeta de proyectos"
 
-#: plugins/create-project/gbp-create-project-widget.ui:147
+#: plugins/create-project/gbp-create-project-widget.ui:149
 msgid "GPLv3+"
 msgstr "GPLv3+"
 
-#: plugins/create-project/gbp-create-project-widget.ui:148
+#: plugins/create-project/gbp-create-project-widget.ui:150
 msgid "LGPLv3+"
 msgstr "LGPLv3+"
 
-#: plugins/create-project/gbp-create-project-widget.ui:149
+#: plugins/create-project/gbp-create-project-widget.ui:151
 msgid "AGPLv3+"
 msgstr "AGPLv3+"
 
-#: plugins/create-project/gbp-create-project-widget.ui:150
+#: plugins/create-project/gbp-create-project-widget.ui:152
 msgid "MIT/X11"
 msgstr "MIT/X11"
 
-#: plugins/create-project/gbp-create-project-widget.ui:151
+#: plugins/create-project/gbp-create-project-widget.ui:153
 msgid "GPLv2+"
 msgstr "GPLv2+"
 
-#: plugins/create-project/gbp-create-project-widget.ui:152
+#: plugins/create-project/gbp-create-project-widget.ui:154
 msgid "LGPLv2.1+"
 msgstr "LGPLv2.1+"
 
-#: plugins/create-project/gbp-create-project-widget.ui:153
+#: plugins/create-project/gbp-create-project-widget.ui:155
 msgid "No license"
 msgstr "Sin licencia"
 
-#: plugins/create-project/gbp-create-project-widget.ui:170
+#: plugins/create-project/gbp-create-project-widget.ui:172
 msgid "Uses the Git version control system"
 msgstr "Usa Git como sistema de control de versiones"
 
-#: plugins/create-project/gbp-create-project-widget.ui:255
+#: plugins/create-project/gbp-create-project-widget.ui:257
 msgid "Select a Template"
 msgstr "Seleccionar una plantilla"
 
@@ -3457,7 +3509,6 @@ msgid "All Files"
 msgstr "Todos los archivos"
 
 #: plugins/sysprof/gbp-sysprof-workbench-addin.c:352
-#| msgid "Build Profile"
 msgid "Run with Profiler"
 msgstr "Ejecutar con el perfilador"
 
@@ -3490,9 +3541,6 @@ msgstr "Mostrar errores y advertencias proporcionadas por Vala"
 msgid "vala diagnostics warnings errors"
 msgstr "diagnósticos de alertas y errores de Vala"
 
-#~ msgid "Profile"
-#~ msgstr "Perfil"
-
 #~ msgid "lab visibility"
 #~ msgstr "visibilidad lab"
 
@@ -3504,9 +3552,6 @@ msgstr "diagnósticos de alertas y errores de Vala"
 
 #~ msgid "Run project"
 #~ msgstr "Ejecutar proyecto"
-
-#~ msgid "Basic"
-#~ msgstr "Básico"
 
 #~ msgid "_Print…"
 #~ msgstr "_Imprimir…"
@@ -3548,9 +3593,6 @@ msgstr "diagnósticos de alertas y errores de Vala"
 
 #~ msgid "Create a new project"
 #~ msgstr "Crear un nuevo proyecto"
-
-#~ msgid "From a project template"
-#~ msgstr "Desde una plantilla de proyecto"
 
 #~ msgid "From an existing project in a Git repository"
 #~ msgstr "Desde un proyecto existente en un repositorio Git"
