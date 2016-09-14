@@ -480,10 +480,9 @@ ide_breakout_subprocess_send_signal (IdeSubprocess *subprocess,
   IDE_ENTRY;
 
   g_assert (IDE_IS_BREAKOUT_SUBPROCESS (self));
-  g_assert (G_IS_DBUS_CONNECTION (self->connection));
 
   /* Signal delivery is not guaranteed, so we can drop this on the floor. */
-  if (self->client_has_exited)
+  if (self->client_has_exited || self->connection == NULL)
     IDE_EXIT;
 
   IDE_TRACE_MSG ("Sending signal %d to pid %u", signal_num, (guint)self->client_pid);
