@@ -520,15 +520,24 @@ static void
 ide_breakout_subprocess_sync_complete (IdeBreakoutSubprocess  *self,
                                        GAsyncResult          **result)
 {
+  g_autoptr(GMainContext) free_me = NULL;
+  GMainContext *main_context = NULL;
+
   IDE_ENTRY;
 
   g_assert (IDE_IS_BREAKOUT_SUBPROCESS (self));
-  g_assert (self->main_context != NULL);
   g_assert (result != NULL);
   g_assert (*result == NULL || G_IS_ASYNC_RESULT (*result));
 
+  if (NULL == (main_context = g_main_context_get_thread_default ()))
+    main_context = free_me = g_main_context_new ();
+
+  g_mutex_lock (&self->waiter_mutex);
+  self->main_context = g_main_context_ref (main_context);
+  g_mutex_unlock (&self->waiter_mutex);
+
   while (*result == NULL)
-    g_main_context_iteration (self->main_context, TRUE);
+    g_main_context_iteration (main_context, TRUE);
 
   IDE_EXIT;
 }
@@ -538,15 +547,22 @@ ide_breakout_subprocess_sync_done (GObject      *object,
                                    GAsyncResult *result,
                                    gpointer      user_data)
 {
+  IdeBreakoutSubprocess *self = (IdeBreakoutSubprocess *)object;
   GAsyncResult **ret = user_data;
 
   IDE_ENTRY;
 
+  g_assert (IDE_IS_BREAKOUT_SUBPROCESS (self));
   g_assert (ret != NULL);
   g_assert (*ret == NULL);
   g_assert (G_IS_ASYNC_RESULT (result));
 
   *ret = g_object_ref (result);
+
+  g_mutex_lock (&self->waiter_mutex);
+  if (self->main_context != NULL)
+    g_main_context_wakeup (self->main_context);
+  g_mutex_unlock (&self->waiter_mutex);
 
   IDE_EXIT;
 }
@@ -676,7 +692,6 @@ ide_breakout_subprocess_communicate_internal (IdeBreakoutSubprocess *subprocess,
   IDE_ENTRY;
 
   g_assert (IDE_IS_BREAKOUT_SUBPROCESS (subprocess));
-  g_assert (subprocess->main_context != NULL);
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = g_task_new (subprocess, cancellable, callback, user_data);
@@ -688,23 +703,12 @@ ide_breakout_subprocess_communicate_internal (IdeBreakoutSubprocess *subprocess,
   state->cancellable = g_cancellable_new ();
   state->add_nul = add_nul;
 
-  /*
-   * If we are running from another thread than we were spawned, then we need
-   * to iterate another main context than the context that will be completing
-   * the GDBusConnection signals.
-   */
-  if (g_thread_self () != subprocess->spawn_thread)
-    {
-      g_clear_pointer (&subprocess->main_context, g_main_context_unref);
-      subprocess->main_context = g_main_context_new ();
-    }
-
   if (cancellable)
     {
       state->cancellable_source = g_cancellable_source_new (cancellable);
       /* No ref held here, but we unref the source from state's free function */
       g_source_set_callback (state->cancellable_source, ide_subprocess_communicate_cancelled, state, NULL);
-      g_source_attach (state->cancellable_source, subprocess->main_context);
+      g_source_attach (state->cancellable_source, g_main_context_get_thread_default ());
     }
 
   if (subprocess->stdin_pipe)
@@ -807,7 +811,6 @@ ide_breakout_subprocess_communicate (IdeSubprocess  *subprocess,
                                      GError        **error)
 {
   IdeBreakoutSubprocess *self = (IdeBreakoutSubprocess *)subprocess;
-  g_autoptr(GMainContext) main_context = g_main_context_new ();
   g_autoptr(GAsyncResult) result = NULL;
   gboolean ret;
 
@@ -946,6 +949,18 @@ set_error_from_errno (GError **error)
                g_strerror (errno));
 }
 
+static gboolean
+complete_waiter_in_main (gpointer user_data)
+{
+  g_autoptr(GTask) task = user_data;
+
+  g_assert (G_IS_TASK (task));
+
+  g_task_return_boolean (task, TRUE);
+
+  return G_SOURCE_REMOVE;
+}
+
 static void
 ide_breakout_subprocess_complete_command_locked (IdeBreakoutSubprocess *self,
                                                  gint                   exit_status)
@@ -979,7 +994,8 @@ ide_breakout_subprocess_complete_command_locked (IdeBreakoutSubprocess *self,
     {
       g_autoptr(GTask) task = iter->data;
 
-      g_task_return_boolean (task, TRUE);
+      /* Avoid deadlocks while we are holding the mutex */
+      g_timeout_add (0, complete_waiter_in_main, g_steal_pointer (&task));
     }
 
   g_list_free (waiting);
@@ -1000,6 +1016,9 @@ ide_breakout_subprocess_complete_command_locked (IdeBreakoutSubprocess *self,
     g_input_stream_close (self->stderr_pipe, NULL, NULL);
 
   g_clear_object (&self->connection);
+
+  if (self->main_context != NULL)
+    g_main_context_wakeup (self->main_context);
 
   IDE_EXIT;
 }
@@ -1112,7 +1131,6 @@ ide_breakout_subprocess_initable_init (GInitable     *initable,
   g_autoptr(GUnixFDList) fd_list = g_unix_fd_list_new ();
   g_autoptr(GVariant) reply = NULL;
   g_autoptr(GVariant) params = NULL;
-  GMainContext *main_context;
   guint32 client_pid = 0;
   gint stdout_pair[2] = { -1, -1 };
   gint stderr_pair[2] = { -1, -1 };
@@ -1126,18 +1144,6 @@ ide_breakout_subprocess_initable_init (GInitable     *initable,
 
   g_assert (IDE_IS_BREAKOUT_SUBPROCESS (self));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
-
-  /*
-   * We need to know the GMainContext that the GDBusConnection will use because
-   * we have to pump it if we are doing ide_breakout_subprocess_communicate()
-   * from the same thread. If we communicate from another thread, we will just
-   * iterate another main context until we complete.
-   */
-  self->spawn_thread = g_thread_self ();
-  if (NULL == (main_context = g_main_context_get_thread_default ()))
-    self->main_context = g_main_context_ref (g_main_context_default ());
-  else
-    self->main_context = g_main_context_ref (main_context);
 
   /*
    * FIXME:
@@ -1164,6 +1170,7 @@ ide_breakout_subprocess_initable_init (GInitable     *initable,
                                             NULL,
                                             cancellable,
                                             error);
+
   if (self->connection == NULL)
     IDE_RETURN (FALSE);
 
