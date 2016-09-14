@@ -107,6 +107,19 @@ ide_runtime_real_create_launcher (IdeRuntime  *self,
 
   ret = ide_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDOUT_PIPE | G_SUBPROCESS_FLAGS_STDERR_PIPE);
 
+  if (ret != NULL)
+    {
+      ide_subprocess_launcher_set_run_on_host (ret, TRUE);
+      ide_subprocess_launcher_set_clear_env (ret, FALSE);
+    }
+  else
+    {
+      g_set_error (error,
+                   G_IO_ERROR,
+                   G_IO_ERROR_FAILED,
+                   "An unknown error ocurred");
+    }
+
   IDE_RETURN (ret);
 }
 
