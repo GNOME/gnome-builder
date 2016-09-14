@@ -59,6 +59,9 @@ gboolean        ide_runner_run_finish      (IdeRunner            *self,
                                             GError              **error);
 void            ide_runner_set_flags       (IdeRunner            *self,
                                             GSubprocessFlags      flags);
+gboolean        ide_runner_get_clear_env   (IdeRunner            *self);
+void            ide_runner_set_clear_env   (IdeRunner            *self,
+                                            gboolean              clear_env);
 void            ide_runner_prepend_argv    (IdeRunner            *self,
                                             const gchar          *param);
 void            ide_runner_append_argv     (IdeRunner            *self,

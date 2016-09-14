@@ -25,8 +25,11 @@
 #include "ide-context.h"
 #include "ide-debug.h"
 
+#include "buildsystem/ide-configuration.h"
+#include "buildsystem/ide-configuration-manager.h"
 #include "runner/ide-runner.h"
 #include "runner/ide-runner-addin.h"
+#include "runtimes/ide-runtime.h"
 #include "subprocess/ide-subprocess.h"
 #include "subprocess/ide-subprocess-launcher.h"
 
@@ -36,6 +39,7 @@ typedef struct
   GQueue argv;
   IdeEnvironment *env;
   GSubprocessFlags flags;
+  guint clear_env : 1;
   guint run_on_host : 1;
 } IdeRunnerPrivate;
 
@@ -48,6 +52,7 @@ typedef struct
 enum {
   PROP_0,
   PROP_ARGV,
+  PROP_CLEAR_ENV,
   PROP_ENV,
   PROP_RUN_ON_HOST,
   N_PROPS
@@ -158,7 +163,11 @@ ide_runner_real_run_async (IdeRunner           *self,
   g_autoptr(IdeSubprocessLauncher) launcher = NULL;
   g_autoptr(IdeSubprocess) subprocess = NULL;
   g_auto(GStrv) environ = NULL;
+  IdeConfigurationManager *config_manager;
+  IdeConfiguration *config;
   const gchar *identifier;
+  IdeContext *context;
+  IdeRuntime *runtime;
   GError *error = NULL;
 
   IDE_ENTRY;
@@ -169,7 +178,19 @@ ide_runner_real_run_async (IdeRunner           *self,
   task = g_task_new (self, cancellable, callback, user_data);
   g_task_set_source_tag (task, ide_runner_real_run_async);
 
-  launcher = ide_subprocess_launcher_new (priv->flags);
+  context = ide_object_get_context (IDE_OBJECT (self));
+  config_manager = ide_context_get_configuration_manager (context);
+  config = ide_configuration_manager_get_current (config_manager);
+  runtime = ide_configuration_get_runtime (config);
+
+
+  if (runtime != NULL)
+    launcher = ide_runtime_create_launcher (runtime, NULL);
+
+  if (launcher == NULL)
+    launcher = ide_subprocess_launcher_new (0);
+
+  ide_subprocess_launcher_set_flags (launcher, priv->flags);
 
   /*
    * We want the runners to run on the host so that we aren't captive to
@@ -181,7 +202,7 @@ ide_runner_real_run_async (IdeRunner           *self,
    * We don't want the environment cleared because we need access to
    * things like DISPLAY, WAYLAND_DISPLAY, and DBUS_SESSION_BUS_ADDRESS.
    */
-  ide_subprocess_launcher_set_clear_env (launcher, FALSE);
+  ide_subprocess_launcher_set_clear_env (launcher, priv->clear_env);
 
   /*
    * Overlay the environment provided.
@@ -324,6 +345,10 @@ ide_runner_get_property (GObject    *object,
       g_value_take_boxed (value, ide_runner_get_argv (self));
       break;
 
+    case PROP_CLEAR_ENV:
+      g_value_set_boolean (value, ide_runner_get_clear_env (self));
+      break;
+
     case PROP_ENV:
       g_value_set_object (value, ide_runner_get_environment (self));
       break;
@@ -349,6 +374,10 @@ ide_runner_set_property (GObject      *object,
     {
     case PROP_ARGV:
       ide_runner_set_argv (self, g_value_get_boxed (value));
+      break;
+
+    case PROP_CLEAR_ENV:
+      ide_runner_set_clear_env (self, g_value_get_boolean (value));
       break;
 
     case PROP_RUN_ON_HOST:
@@ -379,6 +408,13 @@ ide_runner_class_init (IdeRunnerClass *klass)
                         "The argument list for the command",
                         G_TYPE_STRV,
                         (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_CLEAR_ENV] =
+    g_param_spec_boolean ("clear-env",
+                          "Clear Env",
+                          "If the environment should be cleared before applying overrides",
+                          FALSE,
+                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_ENV] =
     g_param_spec_object ("environment",
@@ -805,4 +841,31 @@ ide_runner_set_flags (IdeRunner        *self,
   g_return_if_fail (IDE_IS_RUNNER (self));
 
   priv->flags = flags;
+}
+
+gboolean
+ide_runner_get_clear_env (IdeRunner *self)
+{
+  IdeRunnerPrivate *priv = ide_runner_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_RUNNER (self), FALSE);
+
+  return priv->clear_env;
+}
+
+void
+ide_runner_set_clear_env (IdeRunner *self,
+                          gboolean   clear_env)
+{
+  IdeRunnerPrivate *priv = ide_runner_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_RUNNER (self));
+
+  clear_env = !!clear_env;
+
+  if (clear_env != priv->clear_env)
+    {
+      priv->clear_env = clear_env;
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CLEAR_ENV]);
+    }
 }
