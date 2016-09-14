@@ -17,17 +17,15 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import gi
 import os
 
-import gi
 gi.require_version('Ide', '1.0')
 
-from gi.repository import (
-    GLib,
-    GObject,
-    Gio,
-    Ide,
-)
+from gi.repository import GLib
+from gi.repository import GObject
+from gi.repository import Gio
+from gi.repository import Ide
 
 class JhbuildRuntime(Ide.Runtime):
 
