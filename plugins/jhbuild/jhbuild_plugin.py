@@ -51,6 +51,7 @@ class JhbuildRuntime(Ide.Runtime):
             # most of our settings should already be applied.
             runner = Ide.Runner.new(self.get_context())
             runner.set_run_on_host(True)
+            runner.set_clear_env(False)
             runner.append_argv(binpath)
 
             return runner
@@ -63,6 +64,7 @@ class JhbuildRuntime(Ide.Runtime):
             launcher.push_argv(self.get_jhbuild_path())
             launcher.push_argv('run')
             launcher.set_run_on_host(True)
+            launcher.set_clear_env(True)
             return launcher
         except GLib.Error:
             return None
