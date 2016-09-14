@@ -701,6 +701,7 @@ ide_breakout_subprocess_communicate_internal (IdeBreakoutSubprocess *subprocess,
 
   state->cancellable = g_cancellable_new ();
   state->add_nul = add_nul;
+  state->outstanding_ops = 1;
 
   if (cancellable)
     {
@@ -743,7 +744,6 @@ ide_breakout_subprocess_communicate_internal (IdeBreakoutSubprocess *subprocess,
 
   ide_subprocess_wait_async (IDE_SUBPROCESS (subprocess), state->cancellable,
                              ide_subprocess_communicate_made_progress, g_object_ref (task));
-  state->outstanding_ops++;
 
   IDE_RETURN (state);
 }
