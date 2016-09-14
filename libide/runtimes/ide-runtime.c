@@ -19,6 +19,7 @@
 #define G_LOG_DOMAIN "ide-runtime"
 
 #include "ide-context.h"
+#include "ide-debug.h"
 
 #include "buildsystem/ide-builder.h"
 #include "buildsystem/ide-configuration.h"
@@ -100,12 +101,13 @@ ide_runtime_real_create_launcher (IdeRuntime  *self,
 {
   IdeSubprocessLauncher *ret;
 
-  g_assert (IDE_IS_RUNTIME (self));
+  IDE_ENTRY;
 
+  g_assert (IDE_IS_RUNTIME (self));
 
   ret = ide_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDOUT_PIPE | G_SUBPROCESS_FLAGS_STDERR_PIPE);
 
-  return ret;
+  IDE_RETURN (ret);
 }
 
 static gboolean
