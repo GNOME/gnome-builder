@@ -36,6 +36,7 @@
 
 #include "application/ide-application.h"
 #include "subprocess/ide-breakout-subprocess.h"
+#include "util/ide-glib.h"
 
 #ifndef FLATPAK_HOST_COMMAND_FLAGS_CLEAR_ENV
 # define FLATPAK_HOST_COMMAND_FLAGS_CLEAR_ENV (1 << 0)
@@ -259,7 +260,7 @@ ide_breakout_subprocess_wait_async (IdeSubprocess       *subprocess,
 
   if (self->client_has_exited)
     {
-      g_task_return_boolean (task, TRUE);
+      ide_g_task_return_boolean_from_main (task, TRUE);
       return;
     }
 
@@ -672,7 +673,7 @@ ide_subprocess_communicate_made_progress (GObject      *source_object,
     }
   else if (state->outstanding_ops == 0)
     {
-      g_task_return_boolean (task, TRUE);
+      ide_g_task_return_boolean_from_main (task, TRUE);
     }
 
   /* And drop the original ref */
@@ -950,18 +951,6 @@ set_error_from_errno (GError **error)
                g_strerror (errno));
 }
 
-static gboolean
-complete_waiter_in_main (gpointer user_data)
-{
-  g_autoptr(GTask) task = user_data;
-
-  g_assert (G_IS_TASK (task));
-
-  g_task_return_boolean (task, TRUE);
-
-  return G_SOURCE_REMOVE;
-}
-
 static void
 ide_breakout_subprocess_complete_command_locked (IdeBreakoutSubprocess *self,
                                                  gint                   exit_status)
@@ -995,8 +984,7 @@ ide_breakout_subprocess_complete_command_locked (IdeBreakoutSubprocess *self,
     {
       g_autoptr(GTask) task = iter->data;
 
-      /* Avoid deadlocks while we are holding the mutex */
-      g_timeout_add (0, complete_waiter_in_main, g_steal_pointer (&task));
+      ide_g_task_return_boolean_from_main (task, TRUE);
     }
 
   g_list_free (waiting);
