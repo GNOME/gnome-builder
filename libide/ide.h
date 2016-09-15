@@ -130,6 +130,7 @@ G_BEGIN_DECLS
 #include "tree/ide-tree-types.h"
 #include "tree/ide-tree.h"
 #include "util/ide-file-manager.h"
+#include "util/ide-glib.h"
 #include "util/ide-gtk.h"
 #include "util/ide-line-reader.h"
 #include "util/ide-list-inline.h"

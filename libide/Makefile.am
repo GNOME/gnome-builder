@@ -152,6 +152,7 @@ libide_1_0_la_public_headers =                            \
 	util/ide-cairo.h                                  \
 	util/ide-dnd.h                                    \
 	util/ide-file-manager.h                           \
+	util/ide-glib.h                                   \
 	util/ide-gtk.h                                    \
 	util/ide-line-reader.h                            \
 	util/ide-list-inline.h                            \
@@ -305,6 +306,7 @@ libide_1_0_la_public_sources =                            \
 	util/ide-cairo.c                                  \
 	util/ide-dnd.c                                    \
 	util/ide-file-manager.c                           \
+	util/ide-glib.c                                   \
 	util/ide-gtk.c                                    \
 	util/ide-line-reader.c                            \
 	util/ide-pango.c                                  \
