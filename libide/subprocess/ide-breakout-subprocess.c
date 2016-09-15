@@ -666,7 +666,7 @@ ide_subprocess_communicate_made_progress (GObject      *source_object,
         {
           state->reported_error = TRUE;
           g_cancellable_cancel (state->cancellable);
-          g_task_return_error (task, error);
+          ide_g_task_return_error_from_main (task, error);
         }
       else
         g_error_free (error);
