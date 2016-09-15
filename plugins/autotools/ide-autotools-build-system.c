@@ -1008,7 +1008,7 @@ simple_make_command (GFile            *directory,
   ide_subprocess_wait_check_async (subprocess,
                                    cancellable,
                                    simple_make_command_cb,
-                                   g_steal_pointer (&task));
+                                   g_object_ref (task));
 }
 
 static void
