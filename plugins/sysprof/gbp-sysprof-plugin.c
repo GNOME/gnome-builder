@@ -18,12 +18,15 @@
 
 #include <libpeas/peas.h>
 #include <ide.h>
+#include <sysprof.h>
 
 #include "gbp-sysprof-workbench-addin.h"
 
 void
 peas_register_types (PeasObjectModule *module)
 {
+  sp_clock_init ();
+
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_WORKBENCH_ADDIN,
                                               GBP_TYPE_SYSPROF_WORKBENCH_ADDIN);
