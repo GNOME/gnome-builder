@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-09-10 16:45+0000\n"
-"PO-Revision-Date: 2016-09-10 20:03+0200\n"
+"POT-Creation-Date: 2016-09-13 21:54+0000\n"
+"PO-Revision-Date: 2016-09-15 22:33+0200\n"
 "Last-Translator: Mario Blättermann <mario.blaettermann@gmail.com>\n"
 "Language-Team: Deutsch <gnome-de@gnome.org>\n"
 "Language: de\n"
@@ -1101,15 +1101,15 @@ msgstr "%s unterstützt keine Erstellung"
 msgid "A build is already in progress"
 msgstr "Eine Erstellung wird bereits ausgeführt"
 
-#: libide/buildsystem/ide-build-manager.c:771
+#: libide/buildsystem/ide-build-manager.c:772
 msgid "Ready"
 msgstr "Bereit"
 
-#: libide/buildsystem/ide-build-result.c:249
+#: libide/buildsystem/ide-build-result.c:250
 msgid "Failed to open stderr stream."
 msgstr "Stderr-Stream konnte nicht geöffnet werden."
 
-#: libide/buildsystem/ide-build-result.c:279
+#: libide/buildsystem/ide-build-result.c:280
 msgid "Failed to open stdout stream."
 msgstr "Stdout-Stream konnte nicht geöffnet werden."
 
@@ -1118,7 +1118,7 @@ msgstr "Stdout-Stream konnte nicht geöffnet werden."
 msgid "%s() is not supported on %s build system."
 msgstr "%s() wird vom Buildsystem %s nicht unterstützt."
 
-#: libide/buildsystem/ide-configuration-manager.c:479
+#: libide/buildsystem/ide-configuration-manager.c:483
 #: libide/preferences/ide-preferences-builtin.c:261
 #: libide/preferences/ide-preferences-builtin.c:279
 msgid "Default"
@@ -2177,11 +2177,11 @@ msgstr ""
 "Ziel kann nicht ausgeführt werden, ein anderes Ziel wird bereits ausgeführt"
 
 #: libide/runner/ide-run-manager.c:287
-#: plugins/autotools/ide-autotools-build-task.c:440
+#: plugins/autotools/ide-autotools-build-task.c:442
 msgid "Failed to locate runtime"
 msgstr "Laufzeit konnte nicht gefunden werden"
 
-#: libide/runner/ide-runner.c:139
+#: libide/runner/ide-runner.c:145
 msgid "Process quit unexpectedly"
 msgstr "Prozess wurde unerwartet beendet"
 
@@ -2437,7 +2437,7 @@ msgstr "Erstellung erfolgreich"
 
 #: plugins/autotools/ide-autotools-builder.c:159
 #: plugins/autotools/ide-autotools-builder.c:240
-#: plugins/autotools/ide-autotools-build-task.c:1037
+#: plugins/autotools/ide-autotools-build-task.c:1057
 msgid "Building…"
 msgstr "Erstellung …"
 
@@ -2457,51 +2457,57 @@ msgstr "Installation erfolgreich"
 msgid "Failed to locate configure.ac"
 msgstr "configure.ac konnte nicht gefunden werden"
 
-#: plugins/autotools/ide-autotools-build-task.c:179
+#: plugins/autotools/ide-autotools-build-task.c:181
 msgid "Directory must be on a locally mounted filesystem."
 msgstr ""
 "Der Ordner muss sich auf einem lokal eingehängten Dateisystem befinden."
 
-#: plugins/autotools/ide-autotools-build-task.c:429
+#: plugins/autotools/ide-autotools-build-task.c:431
 msgid "Failed to locate device"
 msgstr "Gerät konnte nicht gefunden werden"
 
-#: plugins/autotools/ide-autotools-build-task.c:664
+#: plugins/autotools/ide-autotools-build-task.c:562
+#: plugins/autotools/ide-autotools-build-task.c:590
+#: plugins/autotools/ide-autotools-build-task.c:794
+msgid "Build Failed: "
+msgstr "Erstellung fehlgeschlagen: "
+
+#: plugins/autotools/ide-autotools-build-task.c:675
 msgid "Cannot execute build task more than once"
 msgstr "Die Erstellungsaufgabe kann nicht mehr als einmal ausgeführt werden"
 
-#: plugins/autotools/ide-autotools-build-task.c:807
+#: plugins/autotools/ide-autotools-build-task.c:827
 msgid "Failed to create build directory."
 msgstr "Erstellungsordner konnte nicht angelegt werden."
 
-#: plugins/autotools/ide-autotools-build-task.c:816
+#: plugins/autotools/ide-autotools-build-task.c:836
 #, c-format
 msgid "'%s' is not a directory."
 msgstr "»%s« ist kein Ordner."
 
-#: plugins/autotools/ide-autotools-build-task.c:855
+#: plugins/autotools/ide-autotools-build-task.c:875
 #, c-format
 msgid "autogen.sh is missing from project directory (%s)."
 msgstr "autogen.sh konnte nicht im Projektordner (%s) gefunden werden."
 
-#: plugins/autotools/ide-autotools-build-task.c:865
+#: plugins/autotools/ide-autotools-build-task.c:885
 msgid "autogen.sh is not executable."
 msgstr "autogen.sh ist nicht ausführbar."
 
-#: plugins/autotools/ide-autotools-build-task.c:869
+#: plugins/autotools/ide-autotools-build-task.c:889
 msgid "Running autogen…"
 msgstr "Autogen wird ausgeführt …"
 
-#: plugins/autotools/ide-autotools-build-task.c:903
+#: plugins/autotools/ide-autotools-build-task.c:923
 #, c-format
 msgid "autogen.sh failed to create configure (%s)"
 msgstr "autogen.sh konnte configure (%s) nicht erstellen"
 
-#: plugins/autotools/ide-autotools-build-task.c:938
+#: plugins/autotools/ide-autotools-build-task.c:958
 msgid "Running configure…"
 msgstr "Configure wird ausgeführt …"
 
-#: plugins/autotools/ide-autotools-build-task.c:1035
+#: plugins/autotools/ide-autotools-build-task.c:1055
 msgid "Cleaning…"
 msgstr "Wird aufgeräumt …"
 
