@@ -1034,6 +1034,7 @@ ide_autotools_build_system_tags_build_async (IdeTagsBuilder      *builder,
   configuration = ide_configuration_manager_get_current (config_manager);
 
   task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, ide_autotools_build_system_tags_build_async);
   simple_make_command (file_or_directory, "ctags", task, configuration);
 }
 
