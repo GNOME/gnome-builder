@@ -27,6 +27,7 @@ typedef struct
   union {
     gboolean v_bool;
     gint v_int;
+    GError *v_error;
     struct {
       gpointer pointer;
       GDestroyNotify destroy;
@@ -51,9 +52,18 @@ do_return (gpointer user_data)
 
     case G_TYPE_POINTER:
       g_task_return_pointer (state->task, state->u.v_ptr.pointer, state->u.v_ptr.destroy);
+      state->u.v_ptr.pointer = NULL;
+      state->u.v_ptr.destroy = NULL;
       break;
 
     default:
+      if (state->type == G_TYPE_ERROR)
+        {
+          g_task_return_error (state->task, state->u.v_error);
+          state->u.v_error = NULL;
+          break;
+        }
+
       g_assert_not_reached ();
     }
 
@@ -134,6 +144,30 @@ ide_g_task_return_pointer_from_main (GTask          *task,
   state->task = g_object_ref (task);
   state->u.v_ptr.pointer = value;
   state->u.v_ptr.destroy = notify;
+
+  task_state_attach (state);
+}
+
+/**
+ * ide_g_task_return_error_from_main:
+ * @task: A #GTask
+ * @error: (transfer full): A #GError.
+ *
+ * Like g_task_return_error() but ensures we return to the main loop before
+ * dispatching the result.
+ */
+void
+ide_g_task_return_error_from_main (GTask  *task,
+                                   GError *error)
+{
+  TaskState *state;
+
+  g_return_if_fail (G_IS_TASK (task));
+
+  state = g_slice_new0 (TaskState);
+  state->type = G_TYPE_ERROR;
+  state->task = g_object_ref (task);
+  state->u.v_error = error;
 
   task_state_attach (state);
 }

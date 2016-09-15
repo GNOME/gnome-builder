@@ -30,6 +30,8 @@ void ide_g_task_return_int_from_main     (GTask          *task,
 void ide_g_task_return_pointer_from_main (GTask          *task,
                                           gpointer        value,
                                           GDestroyNotify  notify);
+void ide_g_task_return_error_from_main   (GTask          *task,
+                                          GError         *error);
 
 G_END_DECLS
 
