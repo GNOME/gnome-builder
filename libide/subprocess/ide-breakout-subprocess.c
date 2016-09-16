@@ -1022,15 +1022,6 @@ ide_breakout_subprocess_complete_command_locked (IdeBreakoutSubprocess *self,
   g_signal_handler_disconnect (self->connection, self->connection_closed_handler);
   self->connection_closed_handler = 0;
 
-  if (self->stdin_pipe && !g_output_stream_is_closed (self->stdin_pipe))
-    g_output_stream_close (self->stdin_pipe, NULL, NULL);
-
-  if (self->stdout_pipe && !g_input_stream_is_closed (self->stdout_pipe))
-    g_input_stream_close (self->stdout_pipe, NULL, NULL);
-
-  if (self->stderr_pipe && !g_input_stream_is_closed (self->stderr_pipe))
-    g_input_stream_close (self->stderr_pipe, NULL, NULL);
-
   g_clear_object (&self->connection);
 
   if (self->main_context != NULL)
