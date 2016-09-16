@@ -90,7 +90,9 @@ gb_terminal_view_discover_shell (GCancellable  *cancellable,
   command = g_strdup_printf ("sh -c 'cat /etc/passwd | grep ^%s: | cut -f 7 -d :'",
                              g_get_user_name ());
 
-  launcher = ide_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDOUT_PIPE);
+  launcher = ide_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDOUT_PIPE |
+                                          G_SUBPROCESS_FLAGS_STDIN_PIPE |
+                                          G_SUBPROCESS_FLAGS_STDERR_PIPE);
   ide_subprocess_launcher_set_run_on_host (launcher, TRUE);
   ide_subprocess_launcher_set_clear_env (launcher, FALSE);
   ide_subprocess_launcher_set_cwd (launcher, g_get_home_dir ());
