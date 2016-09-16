@@ -364,6 +364,9 @@ gb_terminal_get_title (IdeLayoutView *view)
   else
     title = vte_terminal_get_window_title (self->terminal_top);
 
+  if (title == NULL)
+    title = _("Untitled terminal");
+
   return g_strdup (title);
 }
 
