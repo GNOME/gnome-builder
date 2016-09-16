@@ -41,6 +41,7 @@ enum {
 };
 
 static GParamSpec *properties [LAST_PROP];
+static gchar *cached_shell;
 
 /* TODO: allow palette to come from gnome-terminal. */
 static const GdkRGBA solarized_palette[] =
@@ -71,6 +72,43 @@ static void gb_terminal_view_connect_terminal (GbTerminalView *self,
                                                VteTerminal    *terminal);
 static void gb_terminal_respawn               (GbTerminalView *self,
                                                VteTerminal    *terminal);
+
+static const gchar *
+gb_terminal_view_discover_shell (GCancellable  *cancellable,
+                                 GError       **error)
+{
+  g_autoptr(IdeSubprocessLauncher) launcher = NULL;
+  g_autoptr(IdeSubprocess) subprocess = NULL;
+  g_autofree gchar *command = NULL;
+  g_autofree gchar *stdout_buf = NULL;
+
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  if (cached_shell == NULL)
+    return cached_shell;
+
+  command = g_strdup_printf ("sh -c 'cat /etc/passwd | grep ^%s: | cut -f 7 -d :'",
+                             g_get_user_name ());
+
+  launcher = ide_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDOUT_PIPE);
+  ide_subprocess_launcher_set_run_on_host (launcher, TRUE);
+  ide_subprocess_launcher_set_clear_env (launcher, FALSE);
+  ide_subprocess_launcher_set_cwd (launcher, g_get_home_dir ());
+  ide_subprocess_launcher_push_argv (launcher, command);
+
+  subprocess = ide_subprocess_launcher_spawn_sync (launcher, cancellable, error);
+
+  if (subprocess == NULL)
+    return NULL;
+
+  if (!ide_subprocess_communicate_utf8 (subprocess, NULL, cancellable, &stdout_buf, NULL, error))
+    return NULL;
+
+  if (!ide_str_empty0 (stdout_buf) && stdout_buf[0] == '/')
+    cached_shell = g_steal_pointer (&stdout_buf);
+
+  return cached_shell;
+}
 
 static void
 gb_terminal_view_wait_cb (GObject      *object,
@@ -131,7 +169,7 @@ gb_terminal_respawn (GbTerminalView *self,
   g_autoptr(IdeSubprocess) subprocess = NULL;
   g_autoptr(IdeSubprocessLauncher) launcher = NULL;
   g_autofree gchar *workpath = NULL;
-  g_autofree gchar *shell = NULL;
+  const gchar *shell;
   GtkWidget *toplevel;
   GError *error = NULL;
   IdeContext *context;
@@ -164,8 +202,12 @@ gb_terminal_respawn (GbTerminalView *self,
   workdir = ide_vcs_get_working_directory (vcs);
   workpath = g_file_get_path (workdir);
 
-  args = g_ptr_array_new_with_free_func (g_free);
-  g_ptr_array_add (args, vte_get_user_shell ());
+  shell = gb_terminal_view_discover_shell (NULL, NULL);
+  if (shell == NULL)
+    shell = vte_get_user_shell ();
+
+  args = g_ptr_array_new ();
+  g_ptr_array_add (args, (gchar *)shell);
   g_ptr_array_add (args, NULL);
 
   pty = vte_terminal_pty_new_sync (terminal,
@@ -205,9 +247,7 @@ gb_terminal_respawn (GbTerminalView *self,
   ide_subprocess_launcher_take_stderr_fd (launcher, dup (tty_fd));
   ide_subprocess_launcher_setenv (launcher, "TERM", "xterm-256color", TRUE);
   ide_subprocess_launcher_setenv (launcher, "INSIDE_GNOME_BUILDER", PACKAGE_VERSION, TRUE);
-
-  if (shell != NULL)
-    ide_subprocess_launcher_setenv (launcher, "SHELL", shell, TRUE);
+  ide_subprocess_launcher_setenv (launcher, "SHELL", shell, TRUE);
 
   subprocess = ide_subprocess_launcher_spawn_sync (launcher, NULL, &error);
   if (subprocess == NULL)
