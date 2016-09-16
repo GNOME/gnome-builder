@@ -77,8 +77,6 @@ create_launcher (IdeBuildCommand  *self,
                  GError          **error)
 {
   g_autoptr(IdeSubprocessLauncher) launcher = NULL;
-  g_auto(GStrv) argv = NULL;
-  gint argc;
 
   g_assert (IDE_IS_BUILD_COMMAND (self));
   g_assert (IDE_IS_RUNTIME (runtime));
@@ -97,17 +95,15 @@ create_launcher (IdeBuildCommand  *self,
   if (NULL == (launcher = ide_runtime_create_launcher (runtime, error)))
     return NULL;
 
-  ide_subprocess_launcher_set_flags (launcher,
-                                     (G_SUBPROCESS_FLAGS_STDERR_PIPE | G_SUBPROCESS_FLAGS_STDOUT_PIPE));
+  ide_subprocess_launcher_set_flags (launcher, (G_SUBPROCESS_FLAGS_STDERR_PIPE | G_SUBPROCESS_FLAGS_STDOUT_PIPE));
   ide_subprocess_launcher_overlay_environment (launcher, environment);
 
   /* TODO: ide_subprocess_launcher_set_cwd (launcher, builddir); */
   /* TODO: set $BUILDDIR and $SRCDIR for scripts? */
 
-  if (!g_shell_parse_argv (command_text, &argc, &argv, error))
-    return NULL;
-
-  ide_subprocess_launcher_push_args (launcher, (const gchar * const *)argv);
+  ide_subprocess_launcher_push_argv (launcher, "sh");
+  ide_subprocess_launcher_push_argv (launcher, "-c");
+  ide_subprocess_launcher_push_argv (launcher, command_text);
 
   return g_steal_pointer (&launcher);
 }
