@@ -108,6 +108,10 @@ gbp_flatpak_runtime_provider_load_worker (GTask        *task,
 
       name = g_strdup (flatpak_ref_get_name (FLATPAK_REF (ref)));
 
+      /* Ignore runtimes like org.gnome.Platform.Locale */
+      if (name && g_str_has_suffix (name, ".Locale"))
+        continue;
+
       sanitize_name (name);
 
       arch = flatpak_ref_get_arch (FLATPAK_REF (ref));
