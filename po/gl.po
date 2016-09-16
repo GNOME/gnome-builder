@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-09-10 16:45+0000\n"
-"PO-Revision-Date: 2016-09-11 00:37+0200\n"
+"POT-Creation-Date: 2016-09-13 21:54+0000\n"
+"PO-Revision-Date: 2016-09-16 10:32+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: Galician\n"
 "Language: gl\n"
@@ -1080,15 +1080,15 @@ msgstr "%s non admite o compilado"
 msgid "A build is already in progress"
 msgstr "Xa hai unha construción en progreso."
 
-#: libide/buildsystem/ide-build-manager.c:771
+#: libide/buildsystem/ide-build-manager.c:772
 msgid "Ready"
 msgstr "Listo"
 
-#: libide/buildsystem/ide-build-result.c:249
+#: libide/buildsystem/ide-build-result.c:250
 msgid "Failed to open stderr stream."
 msgstr "Produciuse un fallo ao abrir o fluxo de erro estándar."
 
-#: libide/buildsystem/ide-build-result.c:279
+#: libide/buildsystem/ide-build-result.c:280
 msgid "Failed to open stdout stream."
 msgstr "Produciuse un fallo ao abrir o fluxo de saída."
 
@@ -1097,7 +1097,7 @@ msgstr "Produciuse un fallo ao abrir o fluxo de saída."
 msgid "%s() is not supported on %s build system."
 msgstr "%s() non está admitido no sistema de construción %s."
 
-#: libide/buildsystem/ide-configuration-manager.c:479
+#: libide/buildsystem/ide-configuration-manager.c:483
 #: libide/preferences/ide-preferences-builtin.c:261
 #: libide/preferences/ide-preferences-builtin.c:279
 msgid "Default"
@@ -1667,25 +1667,21 @@ msgid "Unselect all"
 msgstr "Deseleccionar todo"
 
 #: libide/keybindings/ide-shortcuts-window.ui:389
-#| msgid "Build cancelled"
 msgctxt "shortcut window"
 msgid "Build and Run"
 msgstr "Construír e executar"
 
 #: libide/keybindings/ide-shortcuts-window.ui:394
-#| msgid "Build"
 msgctxt "shortcut window"
 msgid "Build"
 msgstr "Construír"
 
 #: libide/keybindings/ide-shortcuts-window.ui:401
-#| msgid "Run"
 msgctxt "shortcut window"
 msgid "Run"
 msgstr "Executar"
 
 #: libide/keybindings/ide-shortcuts-window.ui:408
-#| msgid "Profiler"
 msgctxt "shortcut window"
 msgid "Profile"
 msgstr "Perfilador"
@@ -2147,11 +2143,11 @@ msgid "Cannot run target, another target is running"
 msgstr "Non se pode executar o obxectivo, xa hai outro en execución"
 
 #: libide/runner/ide-run-manager.c:287
-#: plugins/autotools/ide-autotools-build-task.c:440
+#: plugins/autotools/ide-autotools-build-task.c:442
 msgid "Failed to locate runtime"
 msgstr "Produciuse un fallo ao localizar o runtime"
 
-#: libide/runner/ide-runner.c:139
+#: libide/runner/ide-runner.c:145
 msgid "Process quit unexpectedly"
 msgstr "O proceso saíu de forma non esperada"
 
@@ -2407,7 +2403,7 @@ msgstr "Construción exitosa"
 
 #: plugins/autotools/ide-autotools-builder.c:159
 #: plugins/autotools/ide-autotools-builder.c:240
-#: plugins/autotools/ide-autotools-build-task.c:1037
+#: plugins/autotools/ide-autotools-build-task.c:1057
 msgid "Building…"
 msgstr "Construíndo…"
 
@@ -2427,50 +2423,57 @@ msgstr "Instalación exitosa"
 msgid "Failed to locate configure.ac"
 msgstr "Produciuse un fallo ao buscar o configure.ac"
 
-#: plugins/autotools/ide-autotools-build-task.c:179
+#: plugins/autotools/ide-autotools-build-task.c:181
 msgid "Directory must be on a locally mounted filesystem."
 msgstr "O cartafol debe estar nun sistema de ficheiros montado localmente."
 
-#: plugins/autotools/ide-autotools-build-task.c:429
+#: plugins/autotools/ide-autotools-build-task.c:431
 msgid "Failed to locate device"
 msgstr "Produciuse un fallo ao atopar o dispositivo"
 
-#: plugins/autotools/ide-autotools-build-task.c:664
+#: plugins/autotools/ide-autotools-build-task.c:562
+#: plugins/autotools/ide-autotools-build-task.c:590
+#: plugins/autotools/ide-autotools-build-task.c:794
+#| msgid "Build failed"
+msgid "Build Failed: "
+msgstr "Construción fallida:"
+
+#: plugins/autotools/ide-autotools-build-task.c:675
 msgid "Cannot execute build task more than once"
 msgstr "Non é posíbel executar a tarefa de construción máis dunha vez"
 
-#: plugins/autotools/ide-autotools-build-task.c:807
+#: plugins/autotools/ide-autotools-build-task.c:827
 msgid "Failed to create build directory."
 msgstr "Produciuse un fallo ao crear o cartafol de construción."
 
-#: plugins/autotools/ide-autotools-build-task.c:816
+#: plugins/autotools/ide-autotools-build-task.c:836
 #, c-format
 msgid "'%s' is not a directory."
 msgstr "«%s» non é un cartafol."
 
-#: plugins/autotools/ide-autotools-build-task.c:855
+#: plugins/autotools/ide-autotools-build-task.c:875
 #, c-format
 msgid "autogen.sh is missing from project directory (%s)."
 msgstr "Falta autogen.sh do cartafol do proxecto (%s)."
 
-#: plugins/autotools/ide-autotools-build-task.c:865
+#: plugins/autotools/ide-autotools-build-task.c:885
 msgid "autogen.sh is not executable."
 msgstr "augogen.sh non é un executábel."
 
-#: plugins/autotools/ide-autotools-build-task.c:869
+#: plugins/autotools/ide-autotools-build-task.c:889
 msgid "Running autogen…"
 msgstr "Executando autogen…"
 
-#: plugins/autotools/ide-autotools-build-task.c:903
+#: plugins/autotools/ide-autotools-build-task.c:923
 #, c-format
 msgid "autogen.sh failed to create configure (%s)"
 msgstr "autogen.sh fallou ao crear o configure (%s)"
 
-#: plugins/autotools/ide-autotools-build-task.c:938
+#: plugins/autotools/ide-autotools-build-task.c:958
 msgid "Running configure…"
 msgstr "Executando configure…"
 
-#: plugins/autotools/ide-autotools-build-task.c:1035
+#: plugins/autotools/ide-autotools-build-task.c:1055
 msgid "Cleaning…"
 msgstr "Limpando…"
 
@@ -3142,9 +3145,6 @@ msgid "License"
 msgstr "Licenza"
 
 #: plugins/create-project/gbp-create-project-widget.ui:112
-#| msgid ""
-#| "Unique name that is used for your project's folder and other technical "
-#| "resources. Should be in lower case without spaces."
 msgid ""
 "Unique name that is used for your project's folder and other technical "
 "resources. Should be in lower case without spaces and may not start with a "
