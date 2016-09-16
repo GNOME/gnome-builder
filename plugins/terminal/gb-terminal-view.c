@@ -118,6 +118,7 @@ gb_terminal_respawn (GbTerminalView *self,
   g_autoptr(IdeSubprocess) subprocess = NULL;
   g_autoptr(IdeSubprocessLauncher) launcher = NULL;
   g_autofree gchar *workpath = NULL;
+  g_autofree gchar *shell = NULL;
   GtkWidget *toplevel;
   GError *error = NULL;
   IdeContext *context;
@@ -178,6 +179,7 @@ gb_terminal_respawn (GbTerminalView *self,
   if (-1 == (tty_fd = open (name, O_RDWR | O_CLOEXEC)))
     IDE_GOTO (failure);
 
+  shell = vte_get_user_shell ();
 
   /* XXX: It would be nice to allow using the runtimes launcher */
   launcher = ide_subprocess_launcher_new (0);
@@ -190,6 +192,9 @@ gb_terminal_respawn (GbTerminalView *self,
   ide_subprocess_launcher_take_stderr_fd (launcher, dup (tty_fd));
   ide_subprocess_launcher_setenv (launcher, "TERM", "xterm-256color", TRUE);
   ide_subprocess_launcher_setenv (launcher, "INSIDE_GNOME_BUILDER", PACKAGE_VERSION, TRUE);
+
+  if (shell != NULL)
+    ide_subprocess_launcher_setenv (launcher, "SHELL", shell, TRUE);
 
   subprocess = ide_subprocess_launcher_spawn_sync (launcher, NULL, &error);
   if (subprocess == NULL)
