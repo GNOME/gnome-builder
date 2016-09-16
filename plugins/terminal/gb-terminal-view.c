@@ -94,9 +94,7 @@ gb_terminal_view_discover_shell (GCancellable  *cancellable,
   if (!g_shell_parse_argv (command, NULL, &argv, error))
     return NULL;
 
-  launcher = ide_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDOUT_PIPE |
-                                          G_SUBPROCESS_FLAGS_STDIN_PIPE |
-                                          G_SUBPROCESS_FLAGS_STDERR_PIPE);
+  launcher = ide_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDOUT_PIPE);
   ide_subprocess_launcher_set_run_on_host (launcher, TRUE);
   ide_subprocess_launcher_set_clear_env (launcher, FALSE);
   ide_subprocess_launcher_set_cwd (launcher, g_get_home_dir ());
