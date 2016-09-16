@@ -84,7 +84,7 @@ gb_terminal_view_discover_shell (GCancellable  *cancellable,
 
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  if (cached_shell == NULL)
+  if (cached_shell != NULL)
     return cached_shell;
 
   command = g_strdup_printf ("sh -c 'cat /etc/passwd | grep ^%s: | cut -f 7 -d :'",
