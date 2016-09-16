@@ -166,6 +166,7 @@ plugins/sysmon/gb-sysmon-panel.ui
 plugins/sysprof/gbp-sysprof-perspective.c
 plugins/sysprof/gbp-sysprof-workbench-addin.c
 plugins/sysprof/gtk/menus.ui
+plugins/terminal/gb-terminal-view.c
 plugins/terminal/gb-terminal-view-actions.c
 plugins/terminal/gb-terminal-workbench-addin.c
 plugins/terminal/gtk/menus.ui
