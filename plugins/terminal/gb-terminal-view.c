@@ -110,8 +110,12 @@ gb_terminal_view_discover_shell (GCancellable  *cancellable,
   if (!ide_subprocess_communicate_utf8 (subprocess, NULL, cancellable, &stdout_buf, NULL, error))
     return NULL;
 
-  if (!ide_str_empty0 (stdout_buf) && stdout_buf[0] == '/')
-    cached_shell = g_steal_pointer (&stdout_buf);
+  if (stdout_buf != NULL)
+    {
+      g_strstrip (stdout_buf);
+      if (stdout_buf[0] == '/')
+        cached_shell = g_steal_pointer (&stdout_buf);
+    }
 
   return cached_shell;
 }
