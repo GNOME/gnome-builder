@@ -911,36 +911,54 @@ sigint_handler (gpointer user_data)
 
 static void
 maybe_create_input_stream (GInputStream **ret,
-                           gint          *fdptr)
+                           gint          *fdptr,
+                           gboolean       needs_stream)
 {
   g_assert (ret != NULL);
   g_assert (*ret == NULL);
   g_assert (fdptr != NULL);
 
   /*
-   * Only create a stream if we aren't merging to stdio.
-   * We are also stealing the file-descriptor while doing so.
+   * Only create a stream if we aren't merging to stdio and the flags request
+   * that we need a stream.  We are also stealing the file-descriptor while
+   * doing so.
    */
-  if (*fdptr > 2)
-    *ret = g_unix_input_stream_new (*fdptr, TRUE);
+  if (needs_stream)
+    {
+      if (*fdptr > 2)
+        *ret = g_unix_input_stream_new (*fdptr, TRUE);
+    }
+  else if (*fdptr != -1)
+    {
+      close (*fdptr);
+    }
 
   *fdptr = -1;
 }
 
 static void
 maybe_create_output_stream (GOutputStream **ret,
-                            gint           *fdptr)
+                            gint           *fdptr,
+                            gboolean        needs_stream)
 {
   g_assert (ret != NULL);
   g_assert (*ret == NULL);
   g_assert (fdptr != NULL);
 
   /*
-   * Only create a stream if we aren't merging to stdio.
-   * We are also stealing the file-descriptor while doing so.
+   * Only create a stream if we aren't merging to stdio and the flags request
+   * that we need a stream.  We are also stealing the file-descriptor while
+   * doing so.
    */
-  if (*fdptr > 2)
-    *ret = g_unix_output_stream_new (*fdptr, TRUE);
+  if (needs_stream)
+    {
+      if (*fdptr > 2)
+        *ret = g_unix_output_stream_new (*fdptr, TRUE);
+    }
+  else if (*fdptr != -1)
+    {
+      close (*fdptr);
+    }
 
   *fdptr = -1;
 }
@@ -1176,8 +1194,15 @@ ide_breakout_subprocess_initable_init (GInitable     *initable,
    * Make sure we handle inherit STDIN, a new pipe (so that the application can
    * get the stdin stream), or simply redirect to /dev/null.
    */
-  if (self->flags & G_SUBPROCESS_FLAGS_STDIN_INHERIT)
+  if (self->stdin_fd != -1)
     {
+      self->flags &= ~G_SUBPROCESS_FLAGS_STDIN_PIPE;
+      stdin_pair[0] = self->stdin_fd;
+      self->stdin_fd = -1;
+    }
+  else if (self->flags & G_SUBPROCESS_FLAGS_STDIN_INHERIT)
+    {
+      self->flags &= ~G_SUBPROCESS_FLAGS_STDIN_PIPE;
       stdin_pair[0] = STDIN_FILENO;
     }
   else if (self->flags & G_SUBPROCESS_FLAGS_STDIN_PIPE)
@@ -1190,8 +1215,8 @@ ide_breakout_subprocess_initable_init (GInitable     *initable,
     }
   else
     {
+      self->flags &= ~G_SUBPROCESS_FLAGS_STDIN_PIPE;
       stdin_pair[0] = open ("/dev/null", O_CLOEXEC | O_RDWR, 0);
-
       if (stdin_pair[0] == -1)
         IDE_GOTO (cleanup_fds);
     }
@@ -1212,10 +1237,16 @@ ide_breakout_subprocess_initable_init (GInitable     *initable,
    * for the application to read. However, if silence was requested, redirect
    * to /dev/null.
    */
-  if (self->flags & G_SUBPROCESS_FLAGS_STDOUT_SILENCE)
+  if (self->stdout_fd != -1)
     {
+      self->flags &= ~G_SUBPROCESS_FLAGS_STDOUT_PIPE;
+      stdout_pair[1] = self->stdout_fd;
+      self->stdout_fd = -1;
+    }
+  else if (self->flags & G_SUBPROCESS_FLAGS_STDOUT_SILENCE)
+    {
+      self->flags &= ~G_SUBPROCESS_FLAGS_STDOUT_PIPE;
       stdout_pair[1] = open ("/dev/null", O_CLOEXEC | O_RDWR, 0);
-
       if (stdout_pair[1] == -1)
         IDE_GOTO (cleanup_fds);
     }
@@ -1229,6 +1260,7 @@ ide_breakout_subprocess_initable_init (GInitable     *initable,
     }
   else
     {
+      self->flags &= ~G_SUBPROCESS_FLAGS_STDOUT_PIPE;
       stdout_pair[1] = STDOUT_FILENO;
     }
 
@@ -1248,10 +1280,16 @@ ide_breakout_subprocess_initable_init (GInitable     *initable,
    * application requested to read from the subprocesses stderr, then we need
    * to create a pipe. Otherwose, merge stderr into our own stderr.
    */
-  if (self->flags & G_SUBPROCESS_FLAGS_STDERR_SILENCE)
+  if (self->stderr_fd != -1)
     {
+      self->flags &= ~G_SUBPROCESS_FLAGS_STDERR_PIPE;
+      stderr_pair[1] = self->stderr_fd;
+      self->stderr_fd = -1;
+    }
+  else if (self->flags & G_SUBPROCESS_FLAGS_STDERR_SILENCE)
+    {
+      self->flags &= ~G_SUBPROCESS_FLAGS_STDERR_PIPE;
       stderr_pair[1] = open ("/dev/null", O_CLOEXEC | O_RDWR, 0);
-
       if (stderr_pair[1] == -1)
         IDE_GOTO (cleanup_fds);
     }
@@ -1265,6 +1303,7 @@ ide_breakout_subprocess_initable_init (GInitable     *initable,
     }
   else
     {
+      self->flags &= ~G_SUBPROCESS_FLAGS_STDERR_PIPE;
       stderr_pair[1] = STDERR_FILENO;
     }
 
@@ -1288,9 +1327,9 @@ ide_breakout_subprocess_initable_init (GInitable     *initable,
   /*
    * Build streams for our application to use.
    */
-  maybe_create_output_stream (&self->stdin_pipe, &stdin_pair[1]);
-  maybe_create_input_stream (&self->stdout_pipe, &stdout_pair[0]);
-  maybe_create_input_stream (&self->stderr_pipe, &stderr_pair[0]);
+  maybe_create_output_stream (&self->stdin_pipe, &stdin_pair[1], !!(self->flags & G_SUBPROCESS_FLAGS_STDIN_PIPE));
+  maybe_create_input_stream (&self->stdout_pipe, &stdout_pair[0], !!(self->flags & G_SUBPROCESS_FLAGS_STDOUT_PIPE));
+  maybe_create_input_stream (&self->stderr_pipe, &stderr_pair[0], !!(self->flags & G_SUBPROCESS_FLAGS_STDERR_PIPE));
 
 
   /*
