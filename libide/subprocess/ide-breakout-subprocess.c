@@ -74,6 +74,10 @@ struct _IdeBreakoutSubprocess
 
   gchar *identifier;
 
+  gint stdin_fd;
+  gint stdout_fd;
+  gint stderr_fd;
+
   GOutputStream *stdin_pipe;
   GInputStream *stdout_pipe;
   GInputStream *stderr_pipe;
@@ -1491,6 +1495,15 @@ ide_breakout_subprocess_finalize (GObject *object)
   g_mutex_clear (&self->waiter_mutex);
   g_cond_clear (&self->waiter_cond);
 
+  if (self->stdin_fd != -1)
+    close (self->stdin_fd);
+
+  if (self->stdout_fd != -1)
+    close (self->stdout_fd);
+
+  if (self->stderr_fd != -1)
+    close (self->stderr_fd);
+
   G_OBJECT_CLASS (ide_breakout_subprocess_parent_class)->finalize (object);
 
   EGG_COUNTER_DEC (instances);
@@ -1609,6 +1622,10 @@ ide_breakout_subprocess_init (IdeBreakoutSubprocess *self)
 
   EGG_COUNTER_INC (instances);
 
+  self->stdin_fd = -1;
+  self->stdout_fd = -1;
+  self->stderr_fd = -1;
+
   g_mutex_init (&self->waiter_mutex);
   g_cond_init (&self->waiter_cond);
 
@@ -1621,6 +1638,9 @@ _ide_breakout_subprocess_new (const gchar          *cwd,
                               const gchar * const  *env,
                               GSubprocessFlags      flags,
                               gboolean              clear_env,
+                              gint                  stdin_fd,
+                              gint                  stdout_fd,
+                              gint                  stderr_fd,
                               GCancellable         *cancellable,
                               GError              **error)
 {
@@ -1637,6 +1657,9 @@ _ide_breakout_subprocess_new (const gchar          *cwd,
                       NULL);
 
   ret->clear_env = clear_env;
+  ret->stdin_fd = stdin_fd;
+  ret->stdout_fd = stdout_fd;
+  ret->stderr_fd = stderr_fd;
 
   if (!g_initable_init (G_INITABLE (ret), cancellable, error))
     return NULL;

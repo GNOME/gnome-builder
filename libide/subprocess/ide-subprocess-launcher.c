@@ -192,6 +192,9 @@ ide_subprocess_launcher_spawn_host_worker (GTask        *task,
                                           (const gchar * const *)priv->environ->pdata,
                                           priv->flags,
                                           priv->clear_env,
+                                          priv->stdin_fd,
+                                          priv->stdout_fd,
+                                          priv->stderr_fd,
                                           cancellable,
                                           &error);
 

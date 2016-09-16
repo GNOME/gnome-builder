@@ -28,6 +28,9 @@ IdeSubprocess *_ide_breakout_subprocess_new (const gchar          *cwd,
                                              const gchar * const  *env,
                                              GSubprocessFlags      flags,
                                              gboolean              clear_flags,
+                                             gint                  stdin_fd,
+                                             gint                  stdout_fd,
+                                             gint                  stderr_fd,
                                              GCancellable         *cancellable,
                                              GError              **error) G_GNUC_INTERNAL;
 
