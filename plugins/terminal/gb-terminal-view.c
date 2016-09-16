@@ -110,6 +110,19 @@ failure:
   IDE_EXIT;
 }
 
+static gboolean
+terminal_has_notification_signal (void)
+{
+  GQuark quark;
+  guint signal_id;
+
+  return g_signal_parse_name ("notification-received",
+                              VTE_TYPE_TERMINAL,
+                              &signal_id,
+                              &quark,
+                              FALSE);
+}
+
 static void
 gb_terminal_respawn (GbTerminalView *self,
                      VteTerminal    *terminal)
@@ -550,8 +563,6 @@ gb_terminal_view_connect_terminal (GbTerminalView *self,
                                    VteTerminal    *terminal)
 {
   GtkAdjustment *vadj;
-  GQuark quark;
-  guint signal_id;
 
   vadj = gtk_scrollable_get_vadjustment (GTK_SCROLLABLE (terminal));
 
@@ -578,11 +589,7 @@ gb_terminal_view_connect_terminal (GbTerminalView *self,
                            self,
                            0);
 
-  if (g_signal_parse_name ("notification-received",
-                           VTE_TYPE_TERMINAL,
-                           &signal_id,
-                           &quark,
-                           FALSE))
+  if (terminal_has_notification_signal ())
     {
       g_signal_connect_object (terminal,
                                "notification-received",
