@@ -73,22 +73,6 @@ static void gb_terminal_respawn               (GbTerminalView *self,
                                                VteTerminal    *terminal);
 
 static void
-fd_set_cloexec (int fd)
-{
-  int flags;
-
-  if (fd == -1)
-    return;
-
-  flags = fcntl (fd, F_GETFD, 0);
-
-  if (flags < 0)
-    return;
-
-  fcntl (fd, F_SETFD, flags | FD_CLOEXEC);
-}
-
-static void
 gb_terminal_view_wait_cb (GObject      *object,
                           GAsyncResult *result,
                           gpointer      user_data)
@@ -191,10 +175,9 @@ gb_terminal_respawn (GbTerminalView *self,
   if (ptsname_r (master_fd, name, sizeof name - 1) != 0)
     IDE_GOTO (failure);
 
-  if (-1 == (tty_fd = open (name, O_RDWR)))
+  if (-1 == (tty_fd = open (name, O_RDWR | O_CLOEXEC)))
     IDE_GOTO (failure);
 
-  fd_set_cloexec (tty_fd);
 
   /* XXX: It would be nice to allow using the runtimes launcher */
   launcher = ide_subprocess_launcher_new (0);
