@@ -16,6 +16,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
+
 #include <fcntl.h>
 #include <glib/gi18n.h>
 #include <ide.h>
@@ -202,6 +206,7 @@ gb_terminal_respawn (GbTerminalView *self,
   ide_subprocess_launcher_take_stdout_fd (launcher, dup (tty_fd));
   ide_subprocess_launcher_take_stderr_fd (launcher, dup (tty_fd));
   ide_subprocess_launcher_setenv (launcher, "TERM", "xterm-256color", TRUE);
+  ide_subprocess_launcher_setenv (launcher, "INSIDE_GNOME_BUILDER", PACKAGE_VERSION, TRUE);
 
   subprocess = ide_subprocess_launcher_spawn_sync (launcher, NULL, &error);
   if (subprocess == NULL)
