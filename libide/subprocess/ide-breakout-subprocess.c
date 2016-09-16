@@ -536,7 +536,12 @@ ide_breakout_subprocess_sync_complete (IdeBreakoutSubprocess  *self,
   g_assert (*result == NULL || G_IS_ASYNC_RESULT (*result));
 
   if (NULL == (main_context = g_main_context_get_thread_default ()))
-    main_context = free_me = g_main_context_new ();
+    {
+      if (IDE_IS_MAIN_THREAD ())
+        main_context = g_main_context_default ();
+      else
+        main_context = free_me = g_main_context_new ();
+    }
 
   g_mutex_lock (&self->waiter_mutex);
   self->main_context = g_main_context_ref (main_context);
