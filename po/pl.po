@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-13 21:54+0000\n"
-"PO-Revision-Date: 2016-09-14 02:39+0200\n"
+"POT-Creation-Date: 2016-09-16 18:28+0000\n"
+"PO-Revision-Date: 2016-09-16 20:33+0200\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <community-poland@mozilla.org>\n"
 "Language: pl\n"
@@ -2142,7 +2142,7 @@ msgstr "Nie można wykonać celu, inny jest wykonywany"
 msgid "Failed to locate runtime"
 msgstr "Ustalenie położenia środowiska wykonawczego się nie powiodło"
 
-#: libide/runner/ide-runner.c:145
+#: libide/runner/ide-runner.c:150
 msgid "Process quit unexpectedly"
 msgstr "Proces nieoczekiwanie zakończył działanie"
 
@@ -3476,6 +3476,10 @@ msgstr "Wykonaj za pomocą profilera"
 #: plugins/sysprof/gtk/menus.ui:6
 msgid "Open Profile…"
 msgstr "Otwórz profil…"
+
+#: plugins/terminal/gb-terminal-view.c:368
+msgid "Untitled terminal"
+msgstr "Terminal bez tytułu"
 
 #: plugins/terminal/gb-terminal-view-actions.c:297
 msgid "Save Terminal Content As"
