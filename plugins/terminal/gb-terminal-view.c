@@ -16,9 +16,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <fcntl.h>
 #include <glib/gi18n.h>
 #include <ide.h>
+#include <stdlib.h>
 #include <vte/vte.h>
+#include <unistd.h>
 
 #include "gb-terminal.h"
 #include "gb-terminal-view.h"
@@ -61,21 +64,84 @@ static const GdkRGBA solarized_palette[] =
 };
 
 static void gb_terminal_view_connect_terminal (GbTerminalView *self,
-                                               VteTerminal *terminal);
+                                               VteTerminal    *terminal);
+static void gb_terminal_respawn               (GbTerminalView *self,
+                                               VteTerminal    *terminal);
+
+static void
+fd_set_cloexec (int fd)
+{
+  int flags;
+
+  if (fd == -1)
+    return;
+
+  flags = fcntl (fd, F_GETFD, 0);
+
+  if (flags < 0)
+    return;
+
+  fcntl (fd, F_SETFD, flags | FD_CLOEXEC);
+}
+
+static void
+gb_terminal_view_wait_cb (GObject      *object,
+                          GAsyncResult *result,
+                          gpointer      user_data)
+{
+  IdeSubprocess *subprocess = (IdeSubprocess *)object;
+  VteTerminal *terminal = user_data;
+  GbTerminalView *self;
+  g_autoptr(GError) error = NULL;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_SUBPROCESS (subprocess));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (VTE_IS_TERMINAL (terminal));
+
+  if (!ide_subprocess_wait_finish (subprocess, result, &error))
+    {
+      g_warning ("%s", error->message);
+      IDE_GOTO (failure);
+    }
+
+  self = (GbTerminalView *)gtk_widget_get_ancestor (GTK_WIDGET (terminal), GB_TYPE_TERMINAL_VIEW);
+  if (self == NULL)
+    IDE_GOTO (failure);
+
+  if (!ide_widget_action (GTK_WIDGET (self), "view-stack", "close", NULL))
+    {
+      if (!gtk_widget_in_destruction (GTK_WIDGET (terminal)))
+        gb_terminal_respawn (self, terminal);
+    }
+
+failure:
+  g_clear_object (&terminal);
+
+  IDE_EXIT;
+}
 
 static void
 gb_terminal_respawn (GbTerminalView *self,
                      VteTerminal    *terminal)
 {
   g_autoptr(GPtrArray) args = NULL;
+  g_autoptr(IdeSubprocess) subprocess = NULL;
+  g_autoptr(IdeSubprocessLauncher) launcher = NULL;
   g_autofree gchar *workpath = NULL;
   GtkWidget *toplevel;
   GError *error = NULL;
   IdeContext *context;
   IdeVcs *vcs;
+  VtePty *pty = NULL;
   GFile *workdir;
-  GPid child_pid;
   gint64 now;
+  int master_fd = -1;
+  int tty_fd = -1;
+  char name[PATH_MAX + 1];
+
+  IDE_ENTRY;
 
   g_assert (GB_IS_TERMINAL_VIEW (self));
 
@@ -83,12 +149,12 @@ gb_terminal_respawn (GbTerminalView *self,
 
   toplevel = gtk_widget_get_toplevel (GTK_WIDGET (self));
   if (!IDE_IS_WORKBENCH (toplevel))
-    return;
+    IDE_EXIT;
 
   /* Prevent flapping */
   now = g_get_monotonic_time ();
   if ((now - self->last_respawn) < (G_USEC_PER_SEC / 10))
-    return;
+    IDE_EXIT;
   self->last_respawn = now;
 
   context = ide_workbench_get_context (IDE_WORKBENCH (toplevel));
@@ -100,41 +166,65 @@ gb_terminal_respawn (GbTerminalView *self,
   g_ptr_array_add (args, vte_get_user_shell ());
   g_ptr_array_add (args, NULL);
 
-  vte_terminal_spawn_sync (terminal,
-                           VTE_PTY_DEFAULT | VTE_PTY_NO_LASTLOG | VTE_PTY_NO_UTMP | VTE_PTY_NO_WTMP,
-                           workpath,
-                           (gchar **)args->pdata,
-                           NULL,
-                           G_SPAWN_DEFAULT,
-                           NULL,
-                           NULL,
-                           &child_pid,
-                           NULL,
-                           &error);
+  pty = vte_terminal_pty_new_sync (terminal,
+                                   VTE_PTY_DEFAULT | VTE_PTY_NO_LASTLOG | VTE_PTY_NO_UTMP | VTE_PTY_NO_WTMP,
+                                   NULL,
+                                   &error);
+  if (pty == NULL)
+    IDE_GOTO (failure);
+
+  vte_terminal_set_pty (terminal, pty);
+
+  if (-1 == (master_fd = vte_pty_get_fd (pty)))
+    IDE_GOTO (failure);
+
+  if (grantpt (master_fd) != 0)
+    IDE_GOTO (failure);
+
+  if (unlockpt (master_fd) != 0)
+    IDE_GOTO (failure);
+
+  if (ptsname_r (master_fd, name, sizeof name - 1) != 0)
+    IDE_GOTO (failure);
+
+  if (-1 == (tty_fd = open (name, O_RDWR)))
+    IDE_GOTO (failure);
+
+  fd_set_cloexec (tty_fd);
+
+  /* XXX: It would be nice to allow using the runtimes launcher */
+  launcher = ide_subprocess_launcher_new (0);
+  ide_subprocess_launcher_set_run_on_host (launcher, TRUE);
+  ide_subprocess_launcher_set_clear_env (launcher, FALSE);
+  ide_subprocess_launcher_set_cwd (launcher, workpath);
+  ide_subprocess_launcher_push_args (launcher, (const gchar * const *)args->pdata);
+  ide_subprocess_launcher_take_stdin_fd (launcher, dup (tty_fd));
+  ide_subprocess_launcher_take_stdout_fd (launcher, dup (tty_fd));
+  ide_subprocess_launcher_take_stderr_fd (launcher, dup (tty_fd));
+  ide_subprocess_launcher_setenv (launcher, "TERM", "xterm-256color", TRUE);
+
+  subprocess = ide_subprocess_launcher_spawn_sync (launcher, NULL, &error);
+  if (subprocess == NULL)
+    IDE_GOTO (failure);
+
+  ide_subprocess_wait_async (subprocess,
+                             NULL,
+                             gb_terminal_view_wait_cb,
+                             g_object_ref (terminal));
+
+failure:
+  if (tty_fd != -1)
+    close (tty_fd);
+
+  g_clear_object (&pty);
 
   if (error != NULL)
     {
       g_warning ("%s", error->message);
       g_clear_error (&error);
-      return;
     }
 
-  vte_terminal_watch_child (terminal, child_pid);
-}
-
-static void
-child_exited_cb (VteTerminal    *terminal,
-                 gint            exit_status,
-                 GbTerminalView *self)
-{
-  g_assert (VTE_IS_TERMINAL (terminal));
-  g_assert (GB_IS_TERMINAL_VIEW (self));
-
-  if (!ide_widget_action (GTK_WIDGET (self), "view-stack", "close", NULL))
-    {
-      if (!gtk_widget_in_destruction (GTK_WIDGET (terminal)))
-        gb_terminal_respawn (self, terminal);
-    }
+  IDE_EXIT;
 }
 
 static void
@@ -477,12 +567,6 @@ gb_terminal_view_connect_terminal (GbTerminalView *self,
   g_signal_connect_object (terminal,
                            "size-allocate",
                            G_CALLBACK (size_allocate_cb),
-                           self,
-                           0);
-
-  g_signal_connect_object (terminal,
-                           "child-exited",
-                           G_CALLBACK (child_exited_cb),
                            self,
                            0);
 
