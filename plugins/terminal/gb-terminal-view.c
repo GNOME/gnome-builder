@@ -212,9 +212,14 @@ gb_terminal_respawn (GbTerminalView *self,
   workdir = ide_vcs_get_working_directory (vcs);
   workpath = g_file_get_path (workdir);
 
-  shell = gb_terminal_view_discover_shell (NULL, NULL);
+  shell = gb_terminal_view_discover_shell (NULL, &error);
+
   if (shell == NULL)
-    shell = vte_get_user_shell ();
+    {
+      g_warning ("Failed to discover user shell: %s", error->message);
+      g_clear_error (&error);
+      shell = vte_get_user_shell ();
+    }
 
   args = g_ptr_array_new ();
   g_ptr_array_add (args, (gchar *)shell);
