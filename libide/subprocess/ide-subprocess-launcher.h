@@ -91,6 +91,12 @@ void                   ide_subprocess_launcher_spawn_async         (IdeSubproces
 IdeSubprocess         *ide_subprocess_launcher_spawn_finish        (IdeSubprocessLauncher  *self,
                                                                     GAsyncResult           *result,
                                                                     GError                **error);
+void                   ide_subprocess_launcher_take_stdin_fd       (IdeSubprocessLauncher  *self,
+                                                                    gint                    stdin_fd);
+void                   ide_subprocess_launcher_take_stdout_fd      (IdeSubprocessLauncher  *self,
+                                                                    gint                    stdout_fd);
+void                   ide_subprocess_launcher_take_stderr_fd      (IdeSubprocessLauncher  *self,
+                                                                    gint                    stderr_fd);
 
 G_END_DECLS
 

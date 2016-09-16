@@ -41,6 +41,10 @@ typedef struct
   gchar            *cwd;
   GPtrArray        *environ;
 
+  gint              stdin_fd;
+  gint              stdout_fd;
+  gint              stderr_fd;
+
   guint             run_on_host : 1;
   guint             clear_env : 1;
 } IdeSubprocessLauncherPrivate;
@@ -243,6 +247,24 @@ ide_subprocess_launcher_spawn_worker (GTask        *task,
   g_subprocess_launcher_set_child_setup (launcher, child_setup_func, NULL, NULL);
   g_subprocess_launcher_set_cwd (launcher, priv->cwd);
 
+  if (priv->stdin_fd)
+    {
+      g_subprocess_launcher_take_stdin_fd (launcher, priv->stdin_fd);
+      priv->stdin_fd = -1;
+    }
+
+  if (priv->stdout_fd)
+    {
+      g_subprocess_launcher_take_stdout_fd (launcher, priv->stdout_fd);
+      priv->stdout_fd = -1;
+    }
+
+  if (priv->stderr_fd)
+    {
+      g_subprocess_launcher_take_stderr_fd (launcher, priv->stderr_fd);
+      priv->stderr_fd = -1;
+    }
+
   if (priv->environ->len > 1)
     {
       g_auto(GStrv) env = NULL;
@@ -358,6 +380,15 @@ ide_subprocess_launcher_finalize (GObject *object)
   g_clear_pointer (&priv->argv, g_ptr_array_unref);
   g_clear_pointer (&priv->cwd, g_free);
   g_clear_pointer (&priv->environ, g_ptr_array_unref);
+
+  if (priv->stdin_fd != -1)
+    close (priv->stdin_fd);
+
+  if (priv->stdout_fd != -1)
+    close (priv->stdout_fd);
+
+  if (priv->stderr_fd != -1)
+    close (priv->stderr_fd);
 
   G_OBJECT_CLASS (ide_subprocess_launcher_parent_class)->finalize (object);
 }
@@ -490,6 +521,10 @@ ide_subprocess_launcher_init (IdeSubprocessLauncher *self)
   IdeSubprocessLauncherPrivate *priv = ide_subprocess_launcher_get_instance_private (self);
 
   priv->clear_env = TRUE;
+
+  priv->stdin_fd = -1;
+  priv->stdout_fd = -1;
+  priv->stderr_fd = -1;
 
   priv->environ = g_ptr_array_new_with_free_func (g_free);
   g_ptr_array_add (priv->environ, NULL);
@@ -815,5 +850,53 @@ ide_subprocess_launcher_set_clear_env (IdeSubprocessLauncher *self,
     {
       priv->clear_env = clear_env;
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CLEAR_ENV]);
+    }
+}
+
+void
+ide_subprocess_launcher_take_stdin_fd (IdeSubprocessLauncher *self,
+                                       gint                   stdin_fd)
+{
+  IdeSubprocessLauncherPrivate *priv = ide_subprocess_launcher_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_SUBPROCESS_LAUNCHER (self));
+
+  if (priv->stdin_fd != stdin_fd)
+    {
+      if (priv->stdin_fd != -1)
+        close (priv->stdin_fd);
+      priv->stdin_fd = stdin_fd;
+    }
+}
+
+void
+ide_subprocess_launcher_take_stdout_fd (IdeSubprocessLauncher *self,
+                                        gint                   stdout_fd)
+{
+  IdeSubprocessLauncherPrivate *priv = ide_subprocess_launcher_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_SUBPROCESS_LAUNCHER (self));
+
+  if (priv->stdout_fd != stdout_fd)
+    {
+      if (priv->stdout_fd != -1)
+        close (priv->stdout_fd);
+      priv->stdout_fd = stdout_fd;
+    }
+}
+
+void
+ide_subprocess_launcher_take_stderr_fd (IdeSubprocessLauncher *self,
+                                        gint                   stderr_fd)
+{
+  IdeSubprocessLauncherPrivate *priv = ide_subprocess_launcher_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_SUBPROCESS_LAUNCHER (self));
+
+  if (priv->stderr_fd != stderr_fd)
+    {
+      if (priv->stderr_fd != -1)
+        close (priv->stderr_fd);
+      priv->stderr_fd = stderr_fd;
     }
 }
