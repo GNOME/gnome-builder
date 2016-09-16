@@ -117,6 +117,12 @@ gb_terminal_view_discover_shell (GCancellable  *cancellable,
         cached_shell = g_steal_pointer (&stdout_buf);
     }
 
+  if (cached_shell == NULL)
+    g_set_error_literal (error,
+                         G_IO_ERROR,
+                         G_IO_ERROR_FAILED,
+                         "Unknown error when discovering user shell");
+
   return cached_shell;
 }
 
