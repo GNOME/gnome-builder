@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-09-10 16:45+0000\n"
-"PO-Revision-Date: 2016-09-12 20:59+0300\n"
+"POT-Creation-Date: 2016-09-16 18:28+0000\n"
+"PO-Revision-Date: 2016-09-17 14:14+0300\n"
 "Last-Translator: Aurimas Černius <aurisc4@gmail.com>\n"
 "Language-Team: Lietuvių <gnome-lt@lists.akl.lt>\n"
 "Language: lt\n"
@@ -948,13 +948,10 @@ msgid "Preview support for building with Xdg-App runtimes"
 msgstr "Parodomasis palaikymas Xdg-App vykdymo aplinkų kūrimui"
 
 #: data/org.gnome.Builder.appdata.xml.in:42
-#| msgctxt "shortcut window"
-#| msgid "Global Search"
 msgid "Fast global search"
 msgstr "Greita visuotinė paieška"
 
 #: data/org.gnome.Builder.appdata.xml.in:46
-#| msgid "From a project template"
 msgid "Integrated project tree"
 msgstr "Integruotas projekto medis"
 
@@ -1081,15 +1078,15 @@ msgstr "%s nepalaiko kūrimo"
 msgid "A build is already in progress"
 msgstr "Kūrimas jau yra vykdomas"
 
-#: libide/buildsystem/ide-build-manager.c:771
+#: libide/buildsystem/ide-build-manager.c:772
 msgid "Ready"
 msgstr "Pasiruošęs"
 
-#: libide/buildsystem/ide-build-result.c:249
+#: libide/buildsystem/ide-build-result.c:250
 msgid "Failed to open stderr stream."
 msgstr "Nepavyko atverti stderr srauto."
 
-#: libide/buildsystem/ide-build-result.c:279
+#: libide/buildsystem/ide-build-result.c:280
 msgid "Failed to open stdout stream."
 msgstr "Nepavyko atverti stdout srauto."
 
@@ -1098,7 +1095,7 @@ msgstr "Nepavyko atverti stdout srauto."
 msgid "%s() is not supported on %s build system."
 msgstr "%s() nėra palaikomas %s kūrimo sistemos."
 
-#: libide/buildsystem/ide-configuration-manager.c:479
+#: libide/buildsystem/ide-configuration-manager.c:483
 #: libide/preferences/ide-preferences-builtin.c:261
 #: libide/preferences/ide-preferences-builtin.c:279
 msgid "Default"
@@ -1665,25 +1662,21 @@ msgid "Unselect all"
 msgstr "Nežymėti nieko"
 
 #: libide/keybindings/ide-shortcuts-window.ui:389
-#| msgid "Build cancelled"
 msgctxt "shortcut window"
 msgid "Build and Run"
 msgstr "Kurti ir vykdyti"
 
 #: libide/keybindings/ide-shortcuts-window.ui:394
-#| msgid "Build"
 msgctxt "shortcut window"
 msgid "Build"
 msgstr "Kurti"
 
 #: libide/keybindings/ide-shortcuts-window.ui:401
-#| msgid "Run"
 msgctxt "shortcut window"
 msgid "Run"
 msgstr "Vykdyti"
 
 #: libide/keybindings/ide-shortcuts-window.ui:408
-#| msgid "Profiler"
 msgctxt "shortcut window"
 msgid "Profile"
 msgstr "Profiliuoti"
@@ -2138,11 +2131,11 @@ msgid "Cannot run target, another target is running"
 msgstr "Negalima vykdyti paskirties, jau vykdoma kita paskirtis"
 
 #: libide/runner/ide-run-manager.c:287
-#: plugins/autotools/ide-autotools-build-task.c:440
+#: plugins/autotools/ide-autotools-build-task.c:442
 msgid "Failed to locate runtime"
 msgstr "Nepavyko rasti vykdymo aplinkos"
 
-#: libide/runner/ide-runner.c:139
+#: libide/runner/ide-runner.c:150
 msgid "Process quit unexpectedly"
 msgstr "Procesas netikėtai baigėsi"
 
@@ -2397,7 +2390,7 @@ msgstr "Kūrimas sėkmingas"
 
 #: plugins/autotools/ide-autotools-builder.c:159
 #: plugins/autotools/ide-autotools-builder.c:240
-#: plugins/autotools/ide-autotools-build-task.c:1037
+#: plugins/autotools/ide-autotools-build-task.c:1057
 msgid "Building…"
 msgstr "Kuriama…"
 
@@ -2417,50 +2410,57 @@ msgstr "Diegimas sėkmingas"
 msgid "Failed to locate configure.ac"
 msgstr "Nepavyko rasti configure.ac"
 
-#: plugins/autotools/ide-autotools-build-task.c:179
+#: plugins/autotools/ide-autotools-build-task.c:181
 msgid "Directory must be on a locally mounted filesystem."
 msgstr "Katalogas turi būti vietoje prijungtoje failų sistemoje."
 
-#: plugins/autotools/ide-autotools-build-task.c:429
+#: plugins/autotools/ide-autotools-build-task.c:431
 msgid "Failed to locate device"
 msgstr "Nepavyko surasti įrenginio"
 
-#: plugins/autotools/ide-autotools-build-task.c:664
+#: plugins/autotools/ide-autotools-build-task.c:562
+#: plugins/autotools/ide-autotools-build-task.c:590
+#: plugins/autotools/ide-autotools-build-task.c:794
+#| msgid "Build failed"
+msgid "Build Failed: "
+msgstr "Kūrimas nepavyko: "
+
+#: plugins/autotools/ide-autotools-build-task.c:675
 msgid "Cannot execute build task more than once"
 msgstr "Negalima vykdyti kūrimo daugiau nei vieną kartą"
 
-#: plugins/autotools/ide-autotools-build-task.c:807
+#: plugins/autotools/ide-autotools-build-task.c:827
 msgid "Failed to create build directory."
 msgstr "Nepavyko sukurti kūrimo katalogo."
 
-#: plugins/autotools/ide-autotools-build-task.c:816
+#: plugins/autotools/ide-autotools-build-task.c:836
 #, c-format
 msgid "'%s' is not a directory."
 msgstr "„%s“ nėra katalogas."
 
-#: plugins/autotools/ide-autotools-build-task.c:855
+#: plugins/autotools/ide-autotools-build-task.c:875
 #, c-format
 msgid "autogen.sh is missing from project directory (%s)."
 msgstr "Projekto kataloge trūksta autogen.sh (%s)."
 
-#: plugins/autotools/ide-autotools-build-task.c:865
+#: plugins/autotools/ide-autotools-build-task.c:885
 msgid "autogen.sh is not executable."
 msgstr "autogen.sh nėra vykdomas failas."
 
-#: plugins/autotools/ide-autotools-build-task.c:869
+#: plugins/autotools/ide-autotools-build-task.c:889
 msgid "Running autogen…"
 msgstr "Vykdomas autogen…"
 
-#: plugins/autotools/ide-autotools-build-task.c:903
+#: plugins/autotools/ide-autotools-build-task.c:923
 #, c-format
 msgid "autogen.sh failed to create configure (%s)"
 msgstr "autogen.sh nepavyko sukurti configure (%s)"
 
-#: plugins/autotools/ide-autotools-build-task.c:938
+#: plugins/autotools/ide-autotools-build-task.c:958
 msgid "Running configure…"
 msgstr "Vykdomas configure…"
 
-#: plugins/autotools/ide-autotools-build-task.c:1035
+#: plugins/autotools/ide-autotools-build-task.c:1055
 msgid "Cleaning…"
 msgstr "Išvaloma…"
 
@@ -3136,9 +3136,6 @@ msgid "License"
 msgstr "Licencija"
 
 #: plugins/create-project/gbp-create-project-widget.ui:112
-#| msgid ""
-#| "Unique name that is used for your project's folder and other technical "
-#| "resources. Should be in lower case without spaces."
 msgid ""
 "Unique name that is used for your project's folder and other technical "
 "resources. Should be in lower case without spaces and may not start with a "
@@ -3479,6 +3476,11 @@ msgstr "Vykdyti su profiliatoriumi"
 #: plugins/sysprof/gtk/menus.ui:6
 msgid "Open Profile…"
 msgstr "Atverti profilį…"
+
+#: plugins/terminal/gb-terminal-view.c:368
+#| msgid "_New Terminal"
+msgid "Untitled terminal"
+msgstr "Nepavadintas terminalas"
 
 #: plugins/terminal/gb-terminal-view-actions.c:297
 msgid "Save Terminal Content As"
