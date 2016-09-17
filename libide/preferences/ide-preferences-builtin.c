@@ -27,6 +27,8 @@
 #include "application/ide-application-private.h"
 #include "preferences/ide-preferences-builtin.h"
 #include "preferences/ide-preferences-entry.h"
+#include "preferences/ide-preferences-group.h"
+#include "preferences/ide-preferences-group-private.h"
 #include "preferences/ide-preferences-language-row.h"
 #include "preferences/ide-preferences-spin-button.h"
 #include "vcs/ide-vcs-config.h"
@@ -191,12 +193,42 @@ ide_preferences_builtin_register_snippets (IdePreferences *preferences)
 }
 
 static void
+language_search_changed (GtkSearchEntry      *search,
+                         IdePreferencesGroup *group)
+{
+  g_autoptr(IdePatternSpec) spec = NULL;
+  const gchar *text;
+
+  g_assert (GTK_IS_SEARCH_ENTRY (search));
+  g_assert (IDE_IS_PREFERENCES_GROUP (group));
+
+  text = gtk_entry_get_text (GTK_ENTRY (search));
+
+  if (!ide_str_empty0 (text))
+    {
+      g_autofree gchar *folded = g_utf8_casefold (text, -1);
+
+      spec = ide_pattern_spec_new (folded);
+    }
+
+  /* FIXME:
+   *
+   * This is a bit of a leaky abstraction, but we can
+   * clean that up later. We need to get something out
+   * that is coherent for 3.22.
+   */
+
+  _ide_preferences_group_refilter (group, spec);
+}
+
+static void
 ide_preferences_builtin_register_languages (IdePreferences *preferences)
 {
   GtkSourceLanguageManager *manager;
   const gchar * const *language_ids;
   g_autoptr(GHashTable) sections = NULL;
   GtkSearchEntry *search;
+  GtkWidget *group = NULL;
 
   sections = g_hash_table_new (g_str_hash, g_str_equal);
 
@@ -217,23 +249,40 @@ ide_preferences_builtin_register_languages (IdePreferences *preferences)
 
   for (guint i = 0; language_ids [i]; i++)
     {
+      g_autofree gchar *keywords = NULL;
+      g_autofree gchar *folded = NULL;
       IdePreferencesLanguageRow *row;
       GtkSourceLanguage *language;
       const gchar *name;
+      const gchar *section;
 
       if (ide_str_equal0 (language_ids [i], "def"))
         continue;
 
       language = gtk_source_language_manager_get_language (manager, language_ids [i]);
       name = gtk_source_language_get_name (language);
+      section = gtk_source_language_get_section (language);
+
+      keywords = g_strdup_printf ("%s %s %s", name, section, language_ids [i]);
+      folded = g_utf8_casefold (keywords, -1);
 
       row = g_object_new (IDE_TYPE_PREFERENCES_LANGUAGE_ROW,
                           "id", language_ids [i],
+                          "keywords", folded,
                           "title", name,
                           "visible", TRUE,
                           NULL);
-      ide_preferences_add_custom (preferences, "languages", "languages", GTK_WIDGET (row), NULL, 0);
+      ide_preferences_add_custom (preferences, "languages", "languages", GTK_WIDGET (row), NULL, i);
+
+      if G_UNLIKELY (group == NULL)
+        group = gtk_widget_get_ancestor (GTK_WIDGET (row), IDE_TYPE_PREFERENCES_GROUP);
     }
+
+  g_signal_connect_object (search,
+                           "changed",
+                           G_CALLBACK (language_search_changed),
+                           group,
+                           0);
 
   ide_preferences_add_page (preferences, "languages.id", NULL, 0);
 
