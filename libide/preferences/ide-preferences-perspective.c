@@ -31,6 +31,7 @@
 #include "preferences/ide-preferences-file-chooser-button.h"
 #include "preferences/ide-preferences-font-button.h"
 #include "preferences/ide-preferences-group.h"
+#include "preferences/ide-preferences-group-private.h"
 #include "preferences/ide-preferences-page.h"
 #include "preferences/ide-preferences-page-private.h"
 #include "preferences/ide-preferences-perspective.h"
@@ -49,12 +50,10 @@ struct _IdePreferencesPerspective
   GSequence             *pages;
   GHashTable            *widgets;
 
-  GtkButton             *back_button;
   GtkStack              *page_stack;
   GtkStackSwitcher      *page_stack_sidebar;
   GtkSearchEntry        *search_entry;
   GtkStack              *subpage_stack;
-  GtkStack              *top_stack;
 };
 
 static void ide_preferences_iface_init (IdePreferencesInterface *iface);
@@ -156,10 +155,52 @@ ide_preferences_perspective_notify_visible_child (IdePreferencesPerspective *sel
                                                   GParamSpec                *pspec,
                                                   GtkStack                  *stack)
 {
+  IdePreferencesPage *page;
+  GHashTableIter iter;
+  gpointer value;
+
   g_assert (IDE_IS_PREFERENCES_PERSPECTIVE (self));
 
-  gtk_stack_set_visible_child (self->top_stack, GTK_WIDGET (self->page_stack));
-  //gtk_widget_hide (GTK_WIDGET (self->back_button));
+  /* Short circuit if we are destroying everything */
+  if (gtk_widget_in_destruction (GTK_WIDGET (self)))
+    return;
+
+  gtk_widget_hide (GTK_WIDGET (self->subpage_stack));
+
+  /*
+   * If there are any selections in list groups, re-select it to cause
+   * the subpage to potentially reappear.
+   */
+
+  if (NULL == (page = IDE_PREFERENCES_PAGE (gtk_stack_get_visible_child (stack))))
+    return;
+
+  g_hash_table_iter_init (&iter, page->groups_by_name);
+
+  while (g_hash_table_iter_next (&iter, NULL, &value))
+    {
+      IdePreferencesGroup *group = value;
+      GtkSelectionMode mode = GTK_SELECTION_NONE;
+
+      g_assert (IDE_IS_PREFERENCES_GROUP (group));
+
+      if (!group->is_list)
+        continue;
+
+      g_object_get (group, "mode", &mode, NULL);
+
+      if (mode == GTK_SELECTION_SINGLE)
+        {
+          GtkListBoxRow *selected;
+
+          selected = gtk_list_box_get_selected_row (group->list_box);
+
+          g_assert (!selected || GTK_IS_LIST_BOX_ROW (selected));
+
+          if (selected != NULL && gtk_widget_activate (GTK_WIDGET (selected)))
+            break;
+        }
+    }
 }
 
 static void
@@ -213,12 +254,10 @@ ide_preferences_perspective_class_init (IdePreferencesPerspectiveClass *klass)
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/ui/ide-preferences-perspective.ui");
   gtk_widget_class_set_css_name (widget_class, "preferences");
-  //gtk_widget_class_bind_template_child (widget_class, IdePreferencesPerspective, back_button);
-  gtk_widget_class_bind_template_child (widget_class, IdePreferencesPerspective, page_stack_sidebar);
   gtk_widget_class_bind_template_child (widget_class, IdePreferencesPerspective, page_stack);
+  gtk_widget_class_bind_template_child (widget_class, IdePreferencesPerspective, page_stack_sidebar);
   gtk_widget_class_bind_template_child (widget_class, IdePreferencesPerspective, search_entry);
   gtk_widget_class_bind_template_child (widget_class, IdePreferencesPerspective, subpage_stack);
-  gtk_widget_class_bind_template_child (widget_class, IdePreferencesPerspective, top_stack);
 }
 
 static void
@@ -230,8 +269,7 @@ go_back_activate (GSimpleAction *action,
 
   g_assert (IDE_IS_PREFERENCES_PERSPECTIVE (self));
 
-  gtk_stack_set_visible_child (self->top_stack, GTK_WIDGET (self->page_stack));
-  //gtk_widget_hide (GTK_WIDGET (self->back_button));
+  gtk_widget_hide (GTK_WIDGET (self->subpage_stack));
 }
 
 static void
@@ -274,8 +312,6 @@ ide_preferences_perspective_init (IdePreferencesPerspective *self)
   self->actions = G_ACTION_GROUP (g_simple_action_group_new ());
   g_action_map_add_action_entries (G_ACTION_MAP (self->actions),
                                    entries, G_N_ELEMENTS (entries), self);
-
-  gtk_stack_set_visible_child (self->top_stack, GTK_WIDGET (self->page_stack));
 }
 
 static GtkWidget *
@@ -839,13 +875,13 @@ ide_preferences_perspective_set_page (IdePreferences *preferences,
     {
       _ide_preferences_page_set_map (IDE_PREFERENCES_PAGE (page), map);
       gtk_stack_set_visible_child (self->subpage_stack, page);
-      gtk_stack_set_visible_child (self->top_stack, GTK_WIDGET (self->subpage_stack));
-      //gtk_widget_set_visible (GTK_WIDGET (self->back_button), TRUE);
-      return;
+      gtk_widget_show (GTK_WIDGET (self->subpage_stack));
     }
-
-  gtk_stack_set_visible_child (self->page_stack, page);
-  //gtk_widget_set_visible (GTK_WIDGET (self->back_button), FALSE);
+  else
+    {
+      gtk_stack_set_visible_child (self->page_stack, page);
+      gtk_widget_hide (GTK_WIDGET (self->subpage_stack));
+    }
 }
 
 static GtkWidget *
