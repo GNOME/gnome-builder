@@ -20,9 +20,18 @@
 #define IDE_PREFERENCES_PAGE_PRIVATE_H
 
 #include "preferences/ide-preferences-page.h"
+#include "preferences/ide-preferences-flow-box.h"
 #include "search/ide-pattern-spec.h"
 
 G_BEGIN_DECLS
+
+struct _IdePreferencesPage
+{
+  GtkBin                 parent_instance;
+  gint                   priority;
+  IdePreferencesFlowBox *box;
+  GHashTable            *groups_by_name;
+};
 
 void _ide_preferences_page_set_map  (IdePreferencesPage *self,
                                      GHashTable         *map);

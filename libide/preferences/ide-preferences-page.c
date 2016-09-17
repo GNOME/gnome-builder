@@ -18,21 +18,10 @@
 
 #include <glib/gi18n.h>
 
-#include "ide-preferences-flow-box.h"
 #include "ide-preferences-group.h"
 #include "ide-preferences-group-private.h"
 #include "ide-preferences-page.h"
 #include "ide-preferences-page-private.h"
-
-struct _IdePreferencesPage
-{
-  GtkBin                 parent_instance;
-
-  gint                   priority;
-
-  IdePreferencesFlowBox *box;
-  GHashTable            *groups_by_name;
-};
 
 enum {
   PROP_0,
