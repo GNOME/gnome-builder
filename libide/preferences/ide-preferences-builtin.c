@@ -86,11 +86,7 @@ ide_preferences_builtin_register_appearance (IdePreferences *preferences)
 
   ide_preferences_add_page (preferences, "appearance", _("Appearance"), 0);
 
-  ide_preferences_add_list_group (preferences, "appearance", "basic", _("Themes"), GTK_SELECTION_NONE, 0);
-  dark_mode = ide_preferences_add_switch (preferences, "appearance", "basic", "org.gnome.builder", "night-mode", NULL, NULL, _("Dark Theme"), _("Whether Builder should use a dark theme"), _("dark theme"), 0);
-  ide_preferences_add_switch (preferences, "appearance", "basic", "org.gnome.builder.editor", "show-grid-lines", NULL, NULL, _("Grid Pattern"), _("Display a grid pattern underneath source code"), NULL, 0);
-
-  ide_preferences_add_list_group (preferences, "appearance", "schemes", NULL, GTK_SELECTION_NONE, 100);
+  ide_preferences_add_list_group (preferences, "appearance", "schemes", _("Color Scheme"), GTK_SELECTION_NONE, 100);
 
   manager = gtk_source_style_scheme_manager_get_default ();
   scheme_ids = gtk_source_style_scheme_manager_get_scheme_ids (manager);
@@ -107,6 +103,10 @@ ide_preferences_builtin_register_appearance (IdePreferences *preferences)
 
       ide_preferences_add_radio (preferences, "appearance", "schemes", "org.gnome.builder.editor", "style-scheme-name", NULL, variant_str, title, NULL, title, i);
     }
+
+  ide_preferences_add_list_group (preferences, "appearance", "basic", _("Themes"), GTK_SELECTION_NONE, 0);
+  dark_mode = ide_preferences_add_switch (preferences, "appearance", "basic", "org.gnome.builder", "night-mode", NULL, NULL, _("Dark Theme"), _("Whether Builder should use a dark theme"), _("dark theme"), 0);
+  ide_preferences_add_switch (preferences, "appearance", "basic", "org.gnome.builder.editor", "show-grid-lines", NULL, NULL, _("Grid Pattern"), _("Display a grid pattern underneath source code"), NULL, 0);
 
   ide_preferences_add_list_group (preferences, "appearance", "font", _("Font"), GTK_SELECTION_NONE, 200);
   ide_preferences_add_font_button (preferences, "appearance", "font", "org.gnome.builder.editor", "font-name", _("Editor"), C_("Keywords", "editor font monospace"), 0);
@@ -237,6 +237,8 @@ ide_preferences_builtin_register_languages (IdePreferences *preferences)
   manager = gtk_source_language_manager_get_default ();
   language_ids = gtk_source_language_manager_get_language_ids (manager);
 
+  g_assert (language_ids != NULL && language_ids[0] != NULL);
+
   ide_preferences_add_group (preferences, "languages", "search", NULL, 0);
 
   search = g_object_new (GTK_TYPE_SEARCH_ENTRY,
@@ -277,6 +279,8 @@ ide_preferences_builtin_register_languages (IdePreferences *preferences)
       if G_UNLIKELY (group == NULL)
         group = gtk_widget_get_ancestor (GTK_WIDGET (row), IDE_TYPE_PREFERENCES_GROUP);
     }
+
+  g_assert (group != NULL);
 
   g_signal_connect_object (search,
                            "changed",
