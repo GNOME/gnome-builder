@@ -18,6 +18,7 @@
 
 #define G_LOG_DOMAIN "ide-preferences-builtin"
 
+#include <egg-column-layout.h>
 #include <glib/gi18n.h>
 #include <gtksourceview/gtksource.h>
 #include <libpeas/peas.h>
@@ -243,6 +244,7 @@ ide_preferences_builtin_register_languages (IdePreferences *preferences)
   g_autoptr(GHashTable) sections = NULL;
   GtkSearchEntry *search;
   GtkWidget *group = NULL;
+  GtkWidget *flow = NULL;
 
   sections = g_hash_table_new (g_str_hash, g_str_equal);
 
@@ -301,6 +303,12 @@ ide_preferences_builtin_register_languages (IdePreferences *preferences)
                            G_CALLBACK (language_search_changed),
                            group,
                            0);
+
+  flow = gtk_widget_get_ancestor (group, EGG_TYPE_COLUMN_LAYOUT);
+
+  g_assert (flow != NULL);
+
+  egg_column_layout_set_max_columns (EGG_COLUMN_LAYOUT (flow), 1);
 
   ide_preferences_add_page (preferences, "languages.id", NULL, 0);
 
