@@ -28,6 +28,7 @@ G_DEFINE_TYPE (IdePreferencesGroup, ide_preferences_group, GTK_TYPE_BIN)
 enum {
   PROP_0,
   PROP_IS_LIST,
+  PROP_MODE,
   PROP_PRIORITY,
   PROP_TITLE,
   LAST_PROP
@@ -128,6 +129,10 @@ ide_preferences_group_get_property (GObject    *object,
 
   switch (prop_id)
     {
+    case PROP_MODE:
+      g_value_set_enum (value, gtk_list_box_get_selection_mode (self->list_box));
+      break;
+
     case PROP_IS_LIST:
       g_value_set_boolean (value, self->is_list);
       break;
@@ -155,6 +160,10 @@ ide_preferences_group_set_property (GObject      *object,
 
   switch (prop_id)
     {
+    case PROP_MODE:
+      gtk_list_box_set_selection_mode (self->list_box, g_value_get_enum (value));
+      break;
+
     case PROP_IS_LIST:
       self->is_list = g_value_get_boolean (value);
       gtk_widget_set_visible (GTK_WIDGET (self->box), !self->is_list);
@@ -188,6 +197,14 @@ ide_preferences_group_class_init (IdePreferencesGroupClass *klass)
   widget_class->get_preferred_width = ide_preferences_group_get_preferred_width;
   widget_class->get_preferred_height_for_width = ide_preferences_group_get_preferred_height_for_width;
   widget_class->get_request_mode = ide_preferences_group_get_request_mode;
+
+  properties [PROP_MODE] =
+    g_param_spec_enum ("mode",
+                       NULL,
+                       NULL,
+                       GTK_TYPE_SELECTION_MODE,
+                       GTK_SELECTION_NONE,
+                       (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_IS_LIST] =
     g_param_spec_boolean ("is-list",
