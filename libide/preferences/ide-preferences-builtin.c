@@ -33,11 +33,27 @@
 #include "preferences/ide-preferences-spin-button.h"
 #include "vcs/ide-vcs-config.h"
 
+static gint
+sort_plugin_info (gconstpointer a,
+                  gconstpointer b)
+{
+  PeasPluginInfo *plugin_info_a = (PeasPluginInfo *)a;
+  PeasPluginInfo *plugin_info_b = (PeasPluginInfo *)b;
+  const gchar *name_a = peas_plugin_info_get_name (plugin_info_a);
+  const gchar *name_b = peas_plugin_info_get_name (plugin_info_b);
+
+  if (name_a == NULL || name_b == NULL)
+    return g_strcmp0 (name_a, name_b);
+
+  return g_utf8_collate (name_a, name_b);
+}
+
 static void
 ide_preferences_builtin_register_plugins (IdePreferences *preferences)
 {
   PeasEngine *engine;
   const GList *list;
+  GList *copy;
   guint i = 0;
 
   g_assert (IDE_IS_PREFERENCES (preferences));
@@ -46,33 +62,31 @@ ide_preferences_builtin_register_plugins (IdePreferences *preferences)
   list = peas_engine_get_plugin_list (engine);
 
   ide_preferences_add_page (preferences, "plugins", _("Extensions"), 700);
-  ide_preferences_add_list_group (preferences, "plugins", "installed", _("Installed Extensions"), GTK_SELECTION_NONE, 0);
-  ide_preferences_add_list_group (preferences, "plugins", "builtin", _("Bundled Extensions"), GTK_SELECTION_NONE, 100);
+  ide_preferences_add_list_group (preferences, "plugins", "plugins", _("Extensions"), GTK_SELECTION_NONE, 100);
 
-  for (; list; list = list->next, i++)
+  copy = g_list_sort (g_list_copy ((GList *)list), sort_plugin_info);
+
+  for (const GList *iter = copy; iter; iter = iter->next, i++)
     {
+      PeasPluginInfo *plugin_info = iter->data;
       g_autofree gchar *path = NULL;
-      PeasPluginInfo *plugin_info = list->data;
+      g_autofree gchar *keywords = NULL;
       const gchar *desc;
       const gchar *name;
-      const gchar *group;
 
       if (peas_plugin_info_is_hidden (plugin_info))
         continue;
 
       name = peas_plugin_info_get_name (plugin_info);
       desc = peas_plugin_info_get_description (plugin_info);
-
+      keywords = g_strdup_printf ("%s %s", name, desc);
       path = g_strdup_printf ("/org/gnome/builder/plugins/%s/",
                               peas_plugin_info_get_module_name (plugin_info));
 
-      if (peas_plugin_info_is_builtin (plugin_info))
-        group = "builtin";
-      else
-        group = "installed";
-
-      ide_preferences_add_switch (preferences, "plugins", group, "org.gnome.builder.plugin", "enabled", path, NULL, name, desc, NULL, i);
+      ide_preferences_add_switch (preferences, "plugins", "plugins", "org.gnome.builder.plugin", "enabled", path, NULL, name, desc, keywords, i);
     }
+
+  g_list_free (copy);
 }
 
 static void
