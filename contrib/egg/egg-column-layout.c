@@ -23,7 +23,6 @@ typedef struct
   GtkWidget      *widget;
   GtkAllocation   alloc;
   GtkRequisition  req;
-  GtkRequisition  min_req;
   gint            priority;
 } EggColumnLayoutChild;
 
@@ -70,16 +69,11 @@ egg_column_layout_layout (EggColumnLayout *self,
   gint n_columns = 0;
   gint border_width;
   gint column;
-  gint orig_height;
   guint i;
 
   g_assert (EGG_IS_COLUMN_LAYOUT (self));
   g_assert (width > 0);
   g_assert (tallest_column != NULL);
-
-#if 0
-  g_print ("width: %d  height: %d", width, height);
-#endif
 
   /*
    * We want to layout the children in a series of columns, but try to
@@ -107,42 +101,27 @@ egg_column_layout_layout (EggColumnLayout *self,
 
       child = &g_array_index (priv->children, EggColumnLayoutChild, i);
 
-      gtk_widget_get_preferred_height_for_width (child->widget,
-                                                 priv->column_width,
-                                                 &child->min_req.height,
-                                                 &child->req.height);
+      gtk_widget_get_preferred_height_for_width (child->widget, priv->column_width, NULL, &child->req.height);
 
-      /*
-       * If this is a huge scrolling list, then we will clamp the
-       * size we care about to 2/3 the screen size.
-       */
-
-      if (child->req.height > 1000)
-        total_height += 1000;
-      else
-        total_height += child->req.height;
+      if (i != 0)
+        total_height += priv->row_spacing;
+      total_height += child->req.height;
     }
-
-  if (priv->children->len > 0)
-    total_height += priv->row_spacing * (priv->children->len - 1);
 
   if (total_height <= height)
     n_columns = 1;
   else
     n_columns = MAX (1, (width - (border_width * 2)) / (priv->column_width + priv->column_spacing));
 
-  orig_height = (height != 0) ? (height - (border_width * 2)) : total_height / n_columns;
-
   for (column = 0, i = 0; column < n_columns; column++)
     {
       GtkAllocation alloc;
-      gint child_height;
       gint j = 0;
 
       alloc.x = border_width + (priv->column_width * column) + (column * priv->column_spacing);
       alloc.y = border_width;
       alloc.width = priv->column_width;
-      alloc.height = orig_height;
+      alloc.height = (height != 0) ? (height - (border_width * 2)) : total_height / n_columns;
 
       for (; i < priv->children->len; i++, j++)
         {
@@ -161,30 +140,13 @@ egg_column_layout_layout (EggColumnLayout *self,
            * If the child requisition is taller than the space we have left in
            * this column, we need to spill over to the next column.
            */
-          if (child->req.height > alloc.height)
-            {
-              /*
-               * But if there is enough to satisfy the min height for the group, and
-               * we have at least half the available height left, go ahead and keep
-               * making progress.
-               */
-              if (child->min_req.height < alloc.height && (alloc.height * 2 > orig_height))
-                {
-                  child_height = alloc.height;
-                  goto do_allocate;
-                }
-
-              break;
-            }
-
-          child_height = child->req.height;
-
-        do_allocate:
+          if ((j != 0) && (child->req.height > alloc.height) && (column < (n_columns - 1)))
+            break;
 
           child->alloc.x = alloc.x;
           child->alloc.y = alloc.y;
           child->alloc.width = priv->column_width;
-          child->alloc.height = child_height;
+          child->alloc.height = child->req.height;
 
 #if 0
           g_print ("Allocating child to: [%d] %d,%d %dx%d\n",
@@ -195,8 +157,8 @@ egg_column_layout_layout (EggColumnLayout *self,
                    child->alloc.height);
 #endif
 
-          alloc.y += child->alloc.height + priv->row_spacing;
-          alloc.height -= child->alloc.height + priv->row_spacing;
+          alloc.y += child->req.height + priv->row_spacing;
+          alloc.height -= child->req.height + priv->row_spacing;
 
           if (alloc.y > real_tallest_column)
             real_tallest_column = alloc.y;
