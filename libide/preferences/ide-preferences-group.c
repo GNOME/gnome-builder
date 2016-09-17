@@ -70,6 +70,21 @@ ide_preferences_group_row_activated (IdePreferencesGroup *self,
     gtk_widget_activate (child);
 }
 
+static void
+ide_preferences_group_row_selected (IdePreferencesGroup *self,
+                                    GtkListBoxRow       *row,
+                                    GtkListBox          *list_box)
+{
+  g_assert (IDE_IS_PREFERENCES_GROUP (self));
+  g_assert (!row || GTK_IS_LIST_BOX_ROW (row));
+  g_assert (GTK_IS_LIST_BOX (list_box));
+
+  if (gtk_list_box_get_selection_mode (list_box) == GTK_SELECTION_SINGLE &&
+      GTK_IS_LIST_BOX_ROW (row) &&
+      gtk_list_box_row_get_activatable (row))
+    ide_preferences_group_row_activated (self, row, list_box);
+}
+
 const gchar *
 ide_preferences_group_get_title (IdePreferencesGroup *self)
 {
@@ -249,6 +264,12 @@ ide_preferences_group_init (IdePreferencesGroup *self)
   g_signal_connect_object (self->list_box,
                            "row-activated",
                            G_CALLBACK (ide_preferences_group_row_activated),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  g_signal_connect_object (self->list_box,
+                           "row-selected",
+                           G_CALLBACK (ide_preferences_group_row_selected),
                            self,
                            G_CONNECT_SWAPPED);
 }
