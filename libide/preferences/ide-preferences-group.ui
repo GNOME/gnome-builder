@@ -34,9 +34,10 @@
               <object class="GtkFrame" id="list_box_frame">
                 <child>
                   <object class="EggScrolledWindow">
+                    <!-- propagate-natural-height on GtkScrolledWindow doesn't work for
+                         us because it doesn't seem to take into account HfW properly. -->
                     <property name="visible">true</property>
                     <property name="shadow-type">none</property>
-                    <property name="max-content-height">500</property>
                     <child>
                       <object class="GtkListBox" id="list_box">
                         <property name="selection-mode">none</property>
