@@ -43,11 +43,12 @@ struct _IdePreferencesInterface
                                 const gchar    *group_name,
                                 const gchar    *title,
                                 gint            priority);
-  void     (*add_list_group )  (IdePreferences *self,
-                                const gchar    *page_name,
-                                const gchar    *group_name,
-                                const gchar    *title,
-                                gint            priority);
+  void     (*add_list_group)   (IdePreferences   *self,
+                                const gchar      *page_name,
+                                const gchar      *group_name,
+                                const gchar      *title,
+                                GtkSelectionMode  mode,
+                                gint              priority);
   guint    (*add_radio)        (IdePreferences *self,
                                 const gchar    *page_name,
                                 const gchar    *group_name,
@@ -122,11 +123,12 @@ void     ide_preferences_add_group        (IdePreferences *self,
                                            const gchar    *group_name,
                                            const gchar    *title,
                                            gint            priority);
-void     ide_preferences_add_list_group   (IdePreferences *self,
-                                           const gchar    *page_name,
-                                           const gchar    *group_name,
-                                           const gchar    *title,
-                                           gint            priority);
+void     ide_preferences_add_list_group   (IdePreferences   *self,
+                                           const gchar      *page_name,
+                                           const gchar      *group_name,
+                                           const gchar      *title,
+                                           GtkSelectionMode  mode,
+                                           gint              priority);
 guint    ide_preferences_add_radio        (IdePreferences *self,
                                            const gchar    *page_name,
                                            const gchar    *group_name,

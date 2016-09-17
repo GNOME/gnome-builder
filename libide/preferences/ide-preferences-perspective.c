@@ -367,11 +367,12 @@ ide_preferences_perspective_add_group (IdePreferences *preferences,
 }
 
 static void
-ide_preferences_perspective_add_list_group  (IdePreferences *preferences,
-                                             const gchar    *page_name,
-                                             const gchar    *group_name,
-                                             const gchar    *title,
-                                             gint            priority)
+ide_preferences_perspective_add_list_group (IdePreferences   *preferences,
+                                            const gchar      *page_name,
+                                            const gchar      *group_name,
+                                            const gchar      *title,
+                                            GtkSelectionMode  mode,
+                                            gint              priority)
 {
   IdePreferencesPerspective *self = (IdePreferencesPerspective *)preferences;
   IdePreferencesGroup *group;
@@ -391,6 +392,7 @@ ide_preferences_perspective_add_list_group  (IdePreferences *preferences,
 
   group = g_object_new (IDE_TYPE_PREFERENCES_GROUP,
                         "is-list", TRUE,
+                        "mode", mode,
                         "name", group_name,
                         "priority", priority,
                         "title", title,

@@ -125,17 +125,18 @@ ide_preferences_add_custom (IdePreferences *self,
 }
 
 void
-ide_preferences_add_list_group  (IdePreferences *self,
-                                 const gchar    *page_name,
-                                 const gchar    *group_name,
-                                 const gchar    *title,
-                                 gint            priority)
+ide_preferences_add_list_group (IdePreferences   *self,
+                                const gchar      *page_name,
+                                const gchar      *group_name,
+                                const gchar      *title,
+                                GtkSelectionMode  mode,
+                                gint              priority)
 {
   g_return_if_fail (IDE_IS_PREFERENCES (self));
   g_return_if_fail (page_name != NULL);
   g_return_if_fail (group_name != NULL);
 
-  return IDE_PREFERENCES_GET_IFACE (self)->add_list_group  (self, page_name, group_name, title, priority);
+  return IDE_PREFERENCES_GET_IFACE (self)->add_list_group  (self, page_name, group_name, title, mode, priority);
 }
 
 guint ide_preferences_add_radio (IdePreferences *self,

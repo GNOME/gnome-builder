@@ -3508,6 +3508,7 @@
     '("const-gchar*" "page_name")
     '("const-gchar*" "group_name")
     '("const-gchar*" "title")
+    '("GtkSelectionMode" "mode")
     '("gint" "priority")
   )
 )
