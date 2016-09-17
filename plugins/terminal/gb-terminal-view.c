@@ -253,8 +253,6 @@ gb_terminal_respawn (GbTerminalView *self,
   if (-1 == (tty_fd = open (name, O_RDWR | O_CLOEXEC)))
     IDE_GOTO (failure);
 
-  shell = vte_get_user_shell ();
-
   /* XXX: It would be nice to allow using the runtimes launcher */
   launcher = ide_subprocess_launcher_new (0);
   ide_subprocess_launcher_set_run_on_host (launcher, TRUE);
