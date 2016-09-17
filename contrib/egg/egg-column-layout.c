@@ -32,6 +32,7 @@ typedef struct
   gint    column_width;
   gint    column_spacing;
   gint    row_spacing;
+  guint   max_columns;
 } EggColumnLayoutPrivate;
 
 #define COLUMN_WIDTH_DEFAULT   500
@@ -44,6 +45,7 @@ enum {
   PROP_0,
   PROP_COLUMN_WIDTH,
   PROP_COLUMN_SPACING,
+  PROP_MAX_COLUMNS,
   PROP_ROW_SPACING,
   LAST_PROP
 };
@@ -112,6 +114,9 @@ egg_column_layout_layout (EggColumnLayout *self,
     n_columns = 1;
   else
     n_columns = MAX (1, (width - (border_width * 2)) / (priv->column_width + priv->column_spacing));
+
+  if (priv->max_columns > 0)
+    n_columns = MIN (n_columns, priv->max_columns);
 
   for (column = 0, i = 0; column < n_columns; column++)
     {
@@ -483,6 +488,10 @@ egg_column_layout_get_property (GObject    *object,
       g_value_set_int (value, egg_column_layout_get_column_width (self));
       break;
 
+    case PROP_MAX_COLUMNS:
+      g_value_set_uint (value, egg_column_layout_get_max_columns (self));
+      break;
+
     case PROP_ROW_SPACING:
       g_value_set_int (value, egg_column_layout_get_row_spacing (self));
       break;
@@ -508,6 +517,10 @@ egg_column_layout_set_property (GObject      *object,
 
     case PROP_COLUMN_WIDTH:
       egg_column_layout_set_column_width (self, g_value_get_int (value));
+      break;
+
+    case PROP_MAX_COLUMNS:
+      egg_column_layout_set_max_columns (self, g_value_get_uint (value));
       break;
 
     case PROP_ROW_SPACING:
@@ -558,6 +571,15 @@ egg_column_layout_class_init (EggColumnLayoutClass *klass)
                       G_MAXINT,
                       COLUMN_WIDTH_DEFAULT,
                       (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_MAX_COLUMNS] =
+    g_param_spec_uint ("max-columns",
+                       "Max Columns",
+                       "Max Columns",
+                       0,
+                       G_MAXINT,
+                       0,
+                       (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_ROW_SPACING] =
     g_param_spec_int ("row-spacing",
@@ -611,4 +633,30 @@ GtkWidget *
 egg_column_layout_new (void)
 {
   return g_object_new (EGG_TYPE_COLUMN_LAYOUT, NULL);
+}
+
+guint
+egg_column_layout_get_max_columns (EggColumnLayout *self)
+{
+  EggColumnLayoutPrivate *priv = egg_column_layout_get_instance_private (self);
+
+  g_return_val_if_fail (EGG_IS_COLUMN_LAYOUT (self), 0);
+
+  return priv->max_columns;
+}
+
+void
+egg_column_layout_set_max_columns (EggColumnLayout *self,
+                                   guint            max_columns)
+{
+  EggColumnLayoutPrivate *priv = egg_column_layout_get_instance_private (self);
+
+  g_return_if_fail (EGG_IS_COLUMN_LAYOUT (self));
+
+  if (priv->max_columns != max_columns)
+    {
+      priv->max_columns = max_columns;
+      gtk_widget_queue_resize (GTK_WIDGET (self));
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_MAX_COLUMNS]);
+    }
 }

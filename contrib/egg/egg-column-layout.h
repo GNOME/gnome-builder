@@ -33,6 +33,9 @@ struct _EggColumnLayoutClass
 };
 
 GtkWidget *egg_column_layout_new                (void);
+guint      egg_column_layout_get_max_columns    (EggColumnLayout *self);
+void       egg_column_layout_set_max_columns    (EggColumnLayout *self,
+                                                 guint            max_columns);
 gint       egg_column_layout_get_column_width   (EggColumnLayout *self);
 void       egg_column_layout_set_column_width   (EggColumnLayout *self,
                                                  gint             column_width);
