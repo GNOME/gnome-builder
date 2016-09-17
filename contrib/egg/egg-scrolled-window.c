@@ -34,30 +34,45 @@ egg_scrolled_window_get_preferred_height_for_width (GtkWidget *widget,
                                                     gint      *nat_height)
 {
   EggScrolledWindow *self = (EggScrolledWindow *)widget;
+  gint border_width;
+  gint min_content_height;
+  gint max_content_height;
   GtkWidget *child;
 
   g_assert (EGG_IS_SCROLLED_WINDOW (self));
   g_assert (min_height != NULL);
   g_assert (nat_height != NULL);
 
-  GTK_WIDGET_CLASS (egg_scrolled_window_parent_class)->get_preferred_height_for_width (widget, width, min_height, nat_height);
+  min_content_height = gtk_scrolled_window_get_min_content_height (GTK_SCROLLED_WINDOW (self));
+  max_content_height = gtk_scrolled_window_get_max_content_height (GTK_SCROLLED_WINDOW (self));
+  border_width = gtk_container_get_border_width (GTK_CONTAINER (self));
+  child = gtk_bin_get_child (GTK_BIN (self));
 
-  if (NULL != (child = gtk_bin_get_child (GTK_BIN (self))))
+  if (child == NULL)
     {
-      gint child_min_height;
-      gint child_nat_height;
-      gint max_content_height;
-
-      max_content_height = gtk_scrolled_window_get_max_content_height (GTK_SCROLLED_WINDOW (self));
-
-      gtk_widget_get_preferred_height_for_width (child,
-                                                 width,
-                                                 &child_min_height,
-                                                 &child_nat_height);
-
-      if (child_nat_height > *nat_height)
-        *nat_height = MIN (max_content_height, child_nat_height);
+      *min_height = 0;
+      *nat_height = 0;
+      return;
     }
+
+  gtk_widget_get_preferred_height_for_width (child, width, min_height, nat_height);
+
+  if (min_content_height > 0)
+    *min_height = MAX (*min_height, min_content_height);
+  else
+    *min_height = 1;
+
+  if (max_content_height > 0)
+    *nat_height = MIN (*nat_height, max_content_height);
+
+  *min_height += border_width * 2;
+  *nat_height += border_width * 2;
+}
+
+static GtkSizeRequestMode
+egg_scrolled_window_get_request_mode (GtkWidget *widget)
+{
+  return GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH;
 }
 
 static void
@@ -66,6 +81,7 @@ egg_scrolled_window_class_init (EggScrolledWindowClass *klass)
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   widget_class->get_preferred_height_for_width = egg_scrolled_window_get_preferred_height_for_width;
+  widget_class->get_request_mode = egg_scrolled_window_get_request_mode;
 }
 
 static void
