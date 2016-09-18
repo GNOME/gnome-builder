@@ -211,6 +211,7 @@ egg_column_layout_get_preferred_width (GtkWidget *widget,
   EggColumnLayout *self = (EggColumnLayout *)widget;
   EggColumnLayoutPrivate *priv = egg_column_layout_get_instance_private (self);
   gint border_width;
+  gint n_columns = 3;
 
   g_assert (EGG_IS_COLUMN_LAYOUT (self));
   g_assert (min_width != NULL);
@@ -218,7 +219,16 @@ egg_column_layout_get_preferred_width (GtkWidget *widget,
 
   border_width = gtk_container_get_border_width (GTK_CONTAINER (self));
 
-  *nat_width = (priv->column_width * 3) + (priv->column_spacing * 2) + (border_width * 2);
+  /*
+   * By default we try to natural size up to 3 columns. Otherwise, we
+   * use the max_columns. It would be nice if we could deal with this
+   * in a better way, but that is going to take a bunch more solving.
+   */
+
+  if (priv->max_columns > 0)
+    n_columns = priv->max_columns;
+
+  *nat_width = (priv->column_width * n_columns) + (priv->column_spacing * (n_columns - 1)) + (border_width * 2);
   *min_width = priv->column_width + (border_width * 2);
 }
 
