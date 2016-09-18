@@ -65,6 +65,17 @@ egg_scrolled_window_get_preferred_height_for_width (GtkWidget *widget,
   if (max_content_height > 0)
     *nat_height = MIN (*nat_height, max_content_height);
 
+  *nat_height = MAX (*min_height, *nat_height);
+
+  /*
+   * Special case for our use. What we should probably do is have a "grow with child
+   * range" but still fill into larger space with vexpand.
+   *
+   * This tries to enfoce at least a 5x3 ratio for the content, for asthetic reasons.
+   */
+  if (*nat_height > width && *min_height < (width / 5 * 3))
+    *min_height = (width / 5 * 3);
+
   *min_height += border_width * 2;
   *nat_height += border_width * 2;
 }
