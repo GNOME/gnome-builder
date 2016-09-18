@@ -19,7 +19,7 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-09-18 18:54+0200\n"
-"PO-Revision-Date: 2016-09-18 18:51+0200\n"
+"PO-Revision-Date: 2016-09-18 18:57+0200\n"
 "Last-Translator: Ask Hjorth Larsen <asklarsen@gmail.com>\n"
 "Language-Team: Danish <dansk@dansk-gruppen.dk>\n"
 "Language: da\n"
@@ -815,9 +815,8 @@ msgid "terminal font monospace"
 msgstr "terminal skrifttype fastbredde"
 
 #: ../libide/preferences/ide-preferences-builtin.c:116
-#, fuzzy
 msgid "Color Scheme"
-msgstr "Farvenavn"
+msgstr "Farveskema"
 
 #: ../libide/preferences/ide-preferences-builtin.c:141
 msgid "Keyboard"
@@ -1051,9 +1050,8 @@ msgid "Programming Languages"
 msgstr "Programmeringssprog"
 
 #: ../libide/preferences/ide-preferences-builtin.c:261
-#, fuzzy
 msgid "Search languages…"
-msgstr "Søgehåndtering"
+msgstr "Sprogsøgning…"
 
 #: ../libide/preferences/ide-preferences-builtin.c:315
 #: ../libide/preferences/ide-preferences-builtin.c:376
@@ -2176,9 +2174,8 @@ msgid "Run with Profiler"
 msgstr "Kør med profilering"
 
 #: ../plugins/terminal/gb-terminal-view.c:438
-#, fuzzy
 msgid "Untitled terminal"
-msgstr "_Ny terminal"
+msgstr "Unavngivet terminal"
 
 #: ../plugins/terminal/gb-terminal-view-actions.c:297
 msgid "Save Terminal Content As"
