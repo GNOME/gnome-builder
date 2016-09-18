@@ -48,7 +48,7 @@
                     <property name="visible">true</property>
                     <child>
                       <object class="EggEmptyState">
-                        <property name="icon-name">builder-symbolic</property>
+                        <property name="icon-name">org.gnome.Builder-symbolic</property>
                         <property name="subtitle" translatable="yes" comments="the action:// link is used to jump to the new-project view">Why not &lt;a href="action://app.new-project"&gt;create a new project&lt;/a&gt;?</property>
                         <property name="title" translatable="yes">No projects found</property>
                         <property name="visible">true</property>

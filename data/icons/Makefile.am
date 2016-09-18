@@ -9,7 +9,7 @@ nobase_icon_DATA = \
 	hicolor/32x32/apps/org.gnome.Builder.png \
 	hicolor/48x48/apps/org.gnome.Builder.png \
 	hicolor/24x24/apps/org.gnome.Builder.png \
-	hicolor/scalable/apps/builder-symbolic.svg \
+	hicolor/symbolic/apps/org.gnome.Builder-symbolic.svg \
 	$(NULL)
 
 EXTRA_DIST = $(nobase_icon_DATA)
