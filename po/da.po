@@ -2200,6 +2200,10 @@ msgstr "Vis fejl og advarsler givet af Vala"
 msgid "vala diagnostics warnings errors"
 msgstr "vala diagnostik advarsler fejl"
 
+#: plugins/terminal/gtk/menus.ui:6
+msgid "_New Terminal"
+msgstr "_Ny terminal"
+
 #~ msgid "Hue"
 #~ msgstr "Farvetone"
 
