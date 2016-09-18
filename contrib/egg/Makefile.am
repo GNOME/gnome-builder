@@ -37,6 +37,7 @@ headers_DATA = \
 	egg-state-machine-buildable.h \
 	egg-state-machine.h \
 	egg-task-cache.h \
+	egg-three-grid.h \
 	egg-widget-action-group.h \
 	$(NULL)
 
@@ -70,6 +71,7 @@ libegg_private_la_SOURCES = \
 	egg-state-machine-buildable.c \
 	egg-state-machine.c \
 	egg-task-cache.c \
+	egg-three-grid.c \
 	egg-widget-action-group.c \
 	$(NULL)
 
