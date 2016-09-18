@@ -258,6 +258,7 @@ ide_preferences_builtin_register_languages (IdePreferences *preferences)
   ide_preferences_add_group (preferences, "languages", "search", NULL, 0);
 
   search = g_object_new (GTK_TYPE_SEARCH_ENTRY,
+                         /* translators: placeholder string for the entry used to filter the languages in Preferences/Programming languages */
                          "placeholder-text", _("Search languages…"),
                          "visible", TRUE,
                          NULL);
