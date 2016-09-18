@@ -19,7 +19,7 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-09-18 18:54+0200\n"
-"PO-Revision-Date: 2016-09-18 18:57+0200\n"
+"PO-Revision-Date: 2016-09-18 20:50+0200\n"
 "Last-Translator: Ask Hjorth Larsen <asklarsen@gmail.com>\n"
 "Language-Team: Danish <dansk@dansk-gruppen.dk>\n"
 "Language: da\n"
@@ -1049,6 +1049,7 @@ msgstr "Brug kodefragmenter til at forbedre taste-effektiviteten"
 msgid "Programming Languages"
 msgstr "Programmeringssprog"
 
+# I kildekoden forbindes denne med en funktion kaldet noget med "language_search", hvilket tyder på at det faktisk er noget med søgning *efter* sprog.  Men det er ikke helt klart for mig hvad det drejer sig om
 #: ../libide/preferences/ide-preferences-builtin.c:261
 msgid "Search languages…"
 msgstr "Sprogsøgning…"
