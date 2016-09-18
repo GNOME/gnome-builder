@@ -3,17 +3,9 @@
   <!-- interface-requires gtk+ 3.18 -->
   <template class="IdePreferencesPage" parent="GtkBin">
     <child>
-      <object class="GtkScrolledWindow">
-        <property name="hscrollbar-policy">never</property>
+      <object class="IdePreferencesFlowBox" id="box">
+        <property name="border-width">24</property>
         <property name="visible">true</property>
-        <property name="propagate-natural-height">true</property>
-        <property name="propagate-natural-width">true</property>
-        <child>
-          <object class="IdePreferencesFlowBox" id="box">
-            <property name="border-width">24</property>
-            <property name="visible">true</property>
-          </object>
-        </child>
       </object>
     </child>
   </template>
