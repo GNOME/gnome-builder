@@ -101,10 +101,19 @@ ide_preferences_builtin_register_appearance (IdePreferences *preferences)
 
   ide_preferences_add_page (preferences, "appearance", _("Appearance"), 0);
 
-  ide_preferences_add_list_group (preferences, "appearance", "schemes", _("Color Scheme"), GTK_SELECTION_NONE, 100);
+  ide_preferences_add_list_group (preferences, "appearance", "basic", _("Themes"), GTK_SELECTION_NONE, 0);
+  dark_mode = ide_preferences_add_switch (preferences, "appearance", "basic", "org.gnome.builder", "night-mode", NULL, NULL, _("Dark Theme"), _("Whether Builder should use a dark theme"), _("dark theme"), 0);
+  ide_preferences_add_switch (preferences, "appearance", "basic", "org.gnome.builder.editor", "show-grid-lines", NULL, NULL, _("Grid Pattern"), _("Display a grid pattern underneath source code"), NULL, 0);
+
+  ide_preferences_add_list_group (preferences, "appearance", "font", _("Font"), GTK_SELECTION_NONE, 10);
+  ide_preferences_add_font_button (preferences, "appearance", "font", "org.gnome.builder.editor", "font-name", _("Editor"), C_("Keywords", "editor font monospace"), 0);
+  /* XXX: This belongs in terminal addin */
+  ide_preferences_add_font_button (preferences, "appearance", "font", "org.gnome.builder.terminal", "font-name", _("Terminal"), C_("Keywords", "terminal font monospace"), 0);
 
   manager = gtk_source_style_scheme_manager_get_default ();
   scheme_ids = gtk_source_style_scheme_manager_get_scheme_ids (manager);
+
+  ide_preferences_add_list_group (preferences, "appearance", "schemes", _("Color Scheme"), GTK_SELECTION_NONE, 20);
 
   for (i = 0; scheme_ids [i]; i++)
     {
@@ -118,15 +127,6 @@ ide_preferences_builtin_register_appearance (IdePreferences *preferences)
 
       ide_preferences_add_radio (preferences, "appearance", "schemes", "org.gnome.builder.editor", "style-scheme-name", NULL, variant_str, title, NULL, title, i);
     }
-
-  ide_preferences_add_list_group (preferences, "appearance", "basic", _("Themes"), GTK_SELECTION_NONE, 0);
-  dark_mode = ide_preferences_add_switch (preferences, "appearance", "basic", "org.gnome.builder", "night-mode", NULL, NULL, _("Dark Theme"), _("Whether Builder should use a dark theme"), _("dark theme"), 0);
-  ide_preferences_add_switch (preferences, "appearance", "basic", "org.gnome.builder.editor", "show-grid-lines", NULL, NULL, _("Grid Pattern"), _("Display a grid pattern underneath source code"), NULL, 0);
-
-  ide_preferences_add_list_group (preferences, "appearance", "font", _("Font"), GTK_SELECTION_NONE, 200);
-  ide_preferences_add_font_button (preferences, "appearance", "font", "org.gnome.builder.editor", "font-name", _("Editor"), C_("Keywords", "editor font monospace"), 0);
-  /* XXX: This belongs in terminal addin */
-  ide_preferences_add_font_button (preferences, "appearance", "font", "org.gnome.builder.terminal", "font-name", _("Terminal"), C_("Keywords", "terminal font monospace"), 0);
 
   if (ide_application_get_disable_theme_tracking (IDE_APPLICATION_DEFAULT))
     {
