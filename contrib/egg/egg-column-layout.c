@@ -165,7 +165,7 @@ egg_column_layout_layout (EggColumnLayout *self,
            * If the child requisition is taller than the space we have left in
            * this column, we need to spill over to the next column.
            */
-          if ((j != 0) && (child->req.height > alloc.height) && (column < (n_columns - 1)))
+          if ((j != 0) && (child_height > alloc.height) && (column < (n_columns - 1)))
             break;
 
           child->alloc.x = alloc.x;
