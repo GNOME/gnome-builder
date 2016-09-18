@@ -132,7 +132,7 @@ egg_column_layout_layout (EggColumnLayout *self,
       alloc.width = priv->column_width;
       alloc.height = (height != 0) ? (height - (border_width * 2)) : total_height / n_columns;
 
-      for (; i < priv->children->len; i++, j++)
+      for (; i < priv->children->len; i++)
         {
           EggColumnLayoutChild *child;
           gint child_height;
@@ -187,6 +187,8 @@ egg_column_layout_layout (EggColumnLayout *self,
 
           if (alloc.y > real_tallest_column)
             real_tallest_column = alloc.y;
+
+          j++;
         }
     }
 
