@@ -23,6 +23,7 @@ typedef struct
   GtkWidget      *widget;
   GtkAllocation   alloc;
   GtkRequisition  req;
+  GtkRequisition  min_req;
   gint            priority;
 } EggColumnLayoutChild;
 
@@ -103,7 +104,10 @@ egg_column_layout_layout (EggColumnLayout *self,
 
       child = &g_array_index (priv->children, EggColumnLayoutChild, i);
 
-      gtk_widget_get_preferred_height_for_width (child->widget, priv->column_width, NULL, &child->req.height);
+      gtk_widget_get_preferred_height_for_width (child->widget,
+                                                 priv->column_width,
+                                                 &child->min_req.height,
+                                                 &child->req.height);
 
       if (i != 0)
         total_height += priv->row_spacing;
@@ -131,6 +135,7 @@ egg_column_layout_layout (EggColumnLayout *self,
       for (; i < priv->children->len; i++, j++)
         {
           EggColumnLayoutChild *child;
+          gint child_height;
 
           child = &g_array_index (priv->children, EggColumnLayoutChild, i);
 
@@ -142,6 +147,21 @@ egg_column_layout_layout (EggColumnLayout *self,
             continue;
 
           /*
+           * If we are discovering height, and this is the last item in the
+           * first column, and we only have one column, then we will just
+           * make this "vexpand".
+           */
+          if (priv->max_columns == 1 && i == priv->children->len - 1)
+            {
+              if (height == 0)
+                child_height = child->min_req.height;
+              else
+                child_height = alloc.height;
+            }
+          else
+            child_height = child->req.height;
+
+          /*
            * If the child requisition is taller than the space we have left in
            * this column, we need to spill over to the next column.
            */
@@ -151,7 +171,7 @@ egg_column_layout_layout (EggColumnLayout *self,
           child->alloc.x = alloc.x;
           child->alloc.y = alloc.y;
           child->alloc.width = priv->column_width;
-          child->alloc.height = child->req.height;
+          child->alloc.height = child_height;
 
 #if 0
           g_print ("Allocating child to: [%d] %d,%d %dx%d\n",
@@ -162,8 +182,8 @@ egg_column_layout_layout (EggColumnLayout *self,
                    child->alloc.height);
 #endif
 
-          alloc.y += child->req.height + priv->row_spacing;
-          alloc.height -= child->req.height + priv->row_spacing;
+          alloc.y += child_height + priv->row_spacing;
+          alloc.height -= child_height + priv->row_spacing;
 
           if (alloc.y > real_tallest_column)
             real_tallest_column = alloc.y;
