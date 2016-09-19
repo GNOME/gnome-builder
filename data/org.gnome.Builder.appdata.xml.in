@@ -30,7 +30,7 @@
       <li>Auto indentation support for C, Python, Vala, and XML</li>
       <li>HTML/Markdown live preview</li>
       <li>Optional Vim-style editing</li>
-      <li>Preview support for building with Xdg-App runtimes</li>
+      <li>Preview support for building with Flatpak runtimes</li>
     </ul>
   </description>
 
