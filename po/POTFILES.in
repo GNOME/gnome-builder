@@ -107,6 +107,7 @@ plugins/build-tools/gbp-build-log-panel.c
 plugins/build-tools/gbp-build-panel.c
 plugins/build-tools/gbp-build-panel-row.c
 plugins/build-tools/gbp-build-panel.ui
+plugins/build-tools/gbp-build-perspective.c
 plugins/build-tools/gbp-build-tool.c
 plugins/build-tools/ide-environment-editor.c
 plugins/clang/ide-clang-preferences-addin.c
