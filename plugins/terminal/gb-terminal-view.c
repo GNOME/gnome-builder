@@ -221,8 +221,14 @@ gb_terminal_respawn (GbTerminalView *self,
   if (shell == NULL)
     {
       g_warning ("Failed to discover user shell: %s", error->message);
+
+      /* We prefer bash in flatpak over sh */
+      if (ide_is_flatpak ())
+        shell = g_strdup ("/bin/bash");
+      else
+        shell = vte_get_user_shell ();
+
       g_clear_error (&error);
-      shell = vte_get_user_shell ();
     }
 
   args = g_ptr_array_new ();
