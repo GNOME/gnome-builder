@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-09-19 16:28+0000\n"
-"PO-Revision-Date: 2016-09-19 20:37+0200\n"
+"POT-Creation-Date: 2016-09-19 18:45+0000\n"
+"PO-Revision-Date: 2016-09-19 20:53+0200\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <community-poland@mozilla.org>\n"
 "Language: pl\n"
@@ -2598,6 +2598,10 @@ msgstr "Ostrzeżenia:"
 msgid "Errors:"
 msgstr "Błędy:"
 
+#: plugins/build-tools/gbp-build-perspective.c:436
+msgid "Build Preferences"
+msgstr "Preferencje budowania"
+
 #: plugins/build-tools/gbp-build-tool.c:102
 #: plugins/build-tools/gbp-build-tool.c:115
 msgid "========================\n"
@@ -3489,7 +3493,7 @@ msgstr "Wykonaj za pomocą profilera"
 msgid "Open Profile…"
 msgstr "Otwórz profil…"
 
-#: plugins/terminal/gb-terminal-view.c:438
+#: plugins/terminal/gb-terminal-view.c:444
 msgid "Untitled terminal"
 msgstr "Terminal bez tytułu"
 
