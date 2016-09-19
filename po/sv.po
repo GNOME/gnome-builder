@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-09-19 16:22+0000\n"
-"PO-Revision-Date: 2016-09-19 19:04+0200\n"
+"POT-Creation-Date: 2016-09-19 18:45+0000\n"
+"PO-Revision-Date: 2016-09-19 20:59+0200\n"
 "Last-Translator: Anders Jonsson <anders.jonsson@norsjovallen.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "Language: sv\n"
@@ -2603,6 +2603,10 @@ msgstr "Varningar:"
 msgid "Errors:"
 msgstr "Fel:"
 
+#: plugins/build-tools/gbp-build-perspective.c:436
+msgid "Build Preferences"
+msgstr "Bygginställningar"
+
 #: plugins/build-tools/gbp-build-tool.c:102
 #: plugins/build-tools/gbp-build-tool.c:115
 msgid "========================\n"
@@ -3500,7 +3504,7 @@ msgstr "Kör med profilerare"
 msgid "Open Profile…"
 msgstr "Öppna profil…"
 
-#: plugins/terminal/gb-terminal-view.c:438
+#: plugins/terminal/gb-terminal-view.c:444
 msgid "Untitled terminal"
 msgstr "Namnlös terminal"
 
