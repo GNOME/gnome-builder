@@ -17,9 +17,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-19 21:08+0200\n"
-"PO-Revision-Date: 2016-09-19 21:08+0200\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
+"builder&keywords=I18N+L10N&component=general\n"
+"POT-Creation-Date: 2016-09-19 18:45+0000\n"
+"PO-Revision-Date: 2016-09-19 21:26+0200\n"
 "Last-Translator: Ask Hjorth Larsen <asklarsen@gmail.com>\n"
 "Language-Team: Danish <dansk@dansk-gruppen.dk>\n"
 "Language: da\n"
@@ -28,203 +29,341 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: ../contrib/egg/egg-animation.c:726 ../contrib/pnl/pnl-animation.c:701
+#: contrib/egg/egg-animation.c:726 contrib/pnl/pnl-animation.c:701
 #, c-format
 msgid "Cannot locate property %s in class %s"
 msgstr "Kan ikke finde egenskaben %s i klassen %s"
 
-#: ../contrib/egg/egg-animation.c:1073 ../contrib/egg/egg-animation.c:1079
-#: ../contrib/pnl/pnl-animation.c:1053 ../contrib/pnl/pnl-animation.c:1059
+#: contrib/egg/egg-animation.c:1073 contrib/egg/egg-animation.c:1079
+#: contrib/pnl/pnl-animation.c:1053 contrib/pnl/pnl-animation.c:1059
 #, c-format
 msgid "Failed to find property %s in %s"
 msgstr "Kunne ikke finde egenskaben %s i %s"
 
-#: ../contrib/egg/egg-animation.c:1087 ../contrib/pnl/pnl-animation.c:1067
+#: contrib/egg/egg-animation.c:1087 contrib/pnl/pnl-animation.c:1067
 #, c-format
 msgid "Failed to find property %s in %s or parent %s"
 msgstr "Kunne ikke finde egenskaben %s i %s eller ophavselementet %s"
 
-#: ../contrib/egg/egg-animation.c:1097 ../contrib/pnl/pnl-animation.c:1077
+#: contrib/egg/egg-animation.c:1097 contrib/pnl/pnl-animation.c:1077
 #, c-format
 msgid "Failed to retrieve va_list value: %s"
 msgstr "Kunne ikke hente va_list-værdi: %s"
 
-#: ../contrib/egg/egg-date-time.c:55
+#: contrib/egg/egg-date-time.c:55
 msgid "Just now"
 msgstr "Lige nu"
 
-#: ../contrib/egg/egg-date-time.c:57
+#: contrib/egg/egg-date-time.c:57
 msgid "An hour ago"
 msgstr "En time siden"
 
-#: ../contrib/egg/egg-date-time.c:59
+#: contrib/egg/egg-date-time.c:59
 msgid "Yesterday"
 msgstr "I går"
 
-#: ../contrib/egg/egg-date-time.c:65
+#: contrib/egg/egg-date-time.c:65
 msgid "About a year ago"
 msgstr "Omkring et år siden"
 
-#: ../contrib/egg/egg-date-time.c:69
+#: contrib/egg/egg-date-time.c:69
 #, c-format
 msgid "About %u year ago"
 msgid_plural "About %u years ago"
 msgstr[0] "Omkring %u år siden"
 msgstr[1] "Omkring %u år siden"
 
-#: ../contrib/egg/egg-file-chooser-entry.c:100
-#: ../contrib/egg/egg-file-chooser-entry.c:489
-#: ../libide/greeter/ide-greeter-perspective.c:673
-#: ../libide/workbench/ide-workbench-actions.c:70
-#: ../plugins/color-picker/gb-color-picker-prefs.c:210
-#: ../plugins/sysprof/gbp-sysprof-workbench-addin.c:254
+#: contrib/egg/egg-file-chooser-entry.c:100
+#: contrib/egg/egg-file-chooser-entry.c:489
+#: libide/greeter/ide-greeter-perspective.c:673
+#: libide/workbench/ide-workbench-actions.c:70
+#: plugins/color-picker/gb-color-picker-prefs.c:210
+#: plugins/sysprof/gbp-sysprof-workbench-addin.c:254
 msgid "Open"
 msgstr "Åbn"
 
-#: ../contrib/egg/egg-file-chooser-entry.c:104
+#: contrib/egg/egg-file-chooser-entry.c:104
 msgid "Select"
 msgstr "Vælg"
 
-#: ../contrib/egg/egg-file-chooser-entry.c:108
-#: ../plugins/create-project/gbp-create-project-genesis-addin.c:229
+#: contrib/egg/egg-file-chooser-entry.c:108
+#: plugins/create-project/gbp-create-project-genesis-addin.c:229
 msgid "Create"
 msgstr "Opret"
 
-#: ../contrib/egg/egg-file-chooser-entry.c:112
-#: ../libide/editor/ide-editor-view-actions.c:317
-#: ../libide/editor/ide-editor-view-actions.c:448
-#: ../plugins/color-picker/gb-color-picker-prefs.c:237
-#: ../plugins/terminal/gb-terminal-view-actions.c:306
+#: contrib/egg/egg-file-chooser-entry.c:112
+#: libide/editor/ide-editor-view-actions.c:317
+#: libide/editor/ide-editor-view-actions.c:448
+#: plugins/color-picker/gb-color-picker-prefs.c:237
+#: plugins/color-picker/gtk/color-picker-prefs.ui:799
+#: plugins/terminal/gb-terminal-view-actions.c:306
 msgid "Save"
 msgstr "Gem"
 
-#: ../contrib/egg/egg-file-chooser-entry.c:455
+#: contrib/egg/egg-file-chooser-entry.c:455
 msgid "Browse…"
 msgstr "Gennemse…"
 
-#: ../contrib/egg/egg-file-chooser-entry.c:488
-#: ../libide/editor/ide-editor-view-actions.c:316
-#: ../libide/editor/ide-editor-view-actions.c:447
-#: ../libide/greeter/ide-greeter-perspective.c:672
-#: ../libide/workbench/ide-workbench-actions.c:69
-#: ../plugins/color-picker/gb-color-picker-prefs.c:98
-#: ../plugins/color-picker/gb-color-picker-prefs.c:214
-#: ../plugins/color-picker/gb-color-picker-prefs.c:241
-#: ../plugins/sysprof/gbp-sysprof-workbench-addin.c:255
-#: ../plugins/terminal/gb-terminal-view-actions.c:305
+#: contrib/egg/egg-file-chooser-entry.c:488
+#: libide/editor/ide-editor-view-actions.c:316
+#: libide/editor/ide-editor-view-actions.c:447
+#: libide/greeter/ide-greeter-perspective.c:672
+#: libide/workbench/ide-workbench-actions.c:69
+#: plugins/color-picker/gb-color-picker-prefs.c:98
+#: plugins/color-picker/gb-color-picker-prefs.c:214
+#: plugins/color-picker/gb-color-picker-prefs.c:241
+#: plugins/sysprof/gbp-sysprof-workbench-addin.c:255
+#: plugins/terminal/gb-terminal-view-actions.c:305
 msgid "Cancel"
 msgstr "Annullér"
 
-#: ../contrib/egg/egg-search-bar.c:378
+#: contrib/egg/egg-search-bar.c:378
 msgid "Search"
 msgstr "Søg"
 
-#: ../contrib/gstyle/gstyle-color-panel.c:953
+#: contrib/gstyle/gstyle-color-panel.c:953
 msgid "Palette: "
 msgstr "Palet: "
 
-#: ../contrib/gstyle/gstyle-color-panel.c:955
+#: contrib/gstyle/gstyle-color-panel.c:955
 msgid "Palette"
 msgstr "Palet"
 
-#: ../contrib/gstyle/gstyle-color-plane.c:1601
+#: contrib/gstyle/gstyle-color-plane.c:1601
 msgid "Color Plane"
 msgstr "Farveplan"
 
-#: ../contrib/gstyle/gstyle-color-widget-actions.c:66
+#: contrib/gstyle/gstyle-color-widget-actions.c:66
 msgid "Color name"
 msgstr "Farvenavn"
 
-#: ../contrib/gstyle/gstyle-color-widget-actions.c:68
+#: contrib/gstyle/gstyle-color-widget-actions.c:68
 msgid "Enter a new name for the color"
 msgstr "Indtast et nyt navn for farven"
 
-#: ../contrib/gstyle/gstyle-palette.c:492
-#: ../contrib/gstyle/gstyle-palette.c:558
+#: contrib/gstyle/gstyle-palette.c:492 contrib/gstyle/gstyle-palette.c:558
 #, c-format
 msgid "failed to parse line %i\n"
 msgstr "kunne ikke fortolke linjen %i\n"
 
-#: ../contrib/gstyle/gstyle-palette.c:613
+#: contrib/gstyle/gstyle-palette.c:613
 #, c-format
 msgid "%s: palette is empty\n"
 msgstr "%s: paletten er tom\n"
 
-#: ../contrib/gstyle/gstyle-palette.c:719
+#: contrib/gstyle/gstyle-palette.c:719
 #, c-format
 msgid "%s: failed to parse\n"
 msgstr "%s: kunne ikke fortolke\n"
 
-#: ../contrib/gstyle/gstyle-palette.c:727
+#: contrib/gstyle/gstyle-palette.c:727
 #, c-format
 msgid "Unable to open %s\n"
 msgstr "Kunne ikke åbne %s\n"
 
-#: ../contrib/gstyle/gstyle-palette.c:765
+#: contrib/gstyle/gstyle-palette.c:765
 #, c-format
 msgid "%s: This file format is not supported\n"
 msgstr "%s: Dette filformat understøttes ikke\n"
 
-#: ../contrib/gstyle/gstyle-palette.c:822
-#, c-format
+#: contrib/gstyle/gstyle-palette.c:822
 msgid "failed to parse\n"
 msgstr "kunne ikke fortolke\n"
 
 #. To translators: always in singular form like in: generated palette number <generated_count>
-#: ../contrib/gstyle/gstyle-palette.c:829
+#: contrib/gstyle/gstyle-palette.c:829
 msgid "Generated"
 msgstr "Genereret"
 
-#: ../contrib/gstyle/gstyle-palette.c:932
+#: contrib/gstyle/gstyle-palette.c:932
 #, c-format
 msgid "Unable to save %s\n"
 msgstr "Kan ikke gemme%s\n"
 
-#: ../contrib/gstyle/gstyle-palette-widget.c:983
+#: contrib/gstyle/gstyle-palette-widget.c:983
 #, c-format
 msgid "Unsaved palette %u"
 msgstr "Ugemt palet %u"
 
-#: ../contrib/gstyle/tests/data/palette.gstyle.xml.h:1
-#: ../plugins/color-picker/data/basic.gstyle.xml.h:1
+#: contrib/gstyle/tests/data/gstyle-color-editor.ui:64
+msgid "Hue"
+msgstr "Farvetone"
+
+#: contrib/gstyle/tests/data/gstyle-color-editor.ui:75
+msgid "Saturation"
+msgstr "Farvemætning"
+
+#: contrib/gstyle/tests/data/gstyle-color-editor.ui:86
+msgid "Value"
+msgstr "Værdi"
+
+# https://en.wikipedia.org/wiki/Lab_color_space
+# Ved ikke lige om der er nogen grund til at oversætte noget særligt mht. dette
+#: contrib/gstyle/tests/data/gstyle-color-editor.ui:97
+msgid "Cielab l"
+msgstr "Cielab l"
+
+#: contrib/gstyle/tests/data/gstyle-color-editor.ui:108
+msgid "Cielab a"
+msgstr "Cielab a"
+
+#: contrib/gstyle/tests/data/gstyle-color-editor.ui:119
+msgid "Cielab b"
+msgstr "Cielab b"
+
+#: contrib/gstyle/tests/data/gstyle-color-editor.ui:130
+msgid "Red"
+msgstr "Rød"
+
+#: contrib/gstyle/tests/data/gstyle-color-editor.ui:141
+msgid "Green"
+msgstr "Grøn"
+
+#: contrib/gstyle/tests/data/gstyle-color-editor.ui:152
+msgid "Blue"
+msgstr "Blå"
+
+#: contrib/gstyle/tests/data/palette.gstyle.xml:20
+#: plugins/color-picker/data/basic.gstyle.xml:20
 msgid "Basic"
 msgstr "Grundlæggende"
 
-#: ../contrib/search/trie.c:790
+#: contrib/gstyle/ui/gstyle-color-panel.ui:157
+msgid "Color Components"
+msgstr "Farvekomponenter"
+
+# Evt. F for farvetone.  Men ingen ved hvad dét betyder
+#: contrib/gstyle/ui/gstyle-color-panel.ui:206
+msgid "H"
+msgstr "H"
+
+# M for mætning?
+#: contrib/gstyle/ui/gstyle-color-panel.ui:216
+msgid "S"
+msgstr "S"
+
+#: contrib/gstyle/ui/gstyle-color-panel.ui:226
+msgid "V"
+msgstr "V"
+
+# lightness
+#: contrib/gstyle/ui/gstyle-color-panel.ui:322
+msgid "L*"
+msgstr "L*"
+
+#: contrib/gstyle/ui/gstyle-color-panel.ui:332
+msgid "a*"
+msgstr "a*"
+
+#: contrib/gstyle/ui/gstyle-color-panel.ui:342
+msgid "b*"
+msgstr "b*"
+
+# rød
+#: contrib/gstyle/ui/gstyle-color-panel.ui:441
+msgid "R"
+msgstr "R"
+
+# grøn
+#: contrib/gstyle/ui/gstyle-color-panel.ui:451
+msgid "G"
+msgstr "G"
+
+# blå
+#: contrib/gstyle/ui/gstyle-color-panel.ui:461
+msgid "B"
+msgstr "B"
+
+#: contrib/gstyle/ui/gstyle-color-panel.ui:573
+#: plugins/color-picker/gtk/color-picker-prefs.ui:433
+msgid "Color strings"
+msgstr "Farvestrenge"
+
+#: contrib/gstyle/ui/gstyle-color-panel.ui:634
+msgid "HEX3"
+msgstr "HEX3"
+
+#: contrib/gstyle/ui/gstyle-color-panel.ui:645
+msgid "HEX6"
+msgstr "HEX6"
+
+#: contrib/gstyle/ui/gstyle-color-panel.ui:656
+msgid "RGB"
+msgstr "RGB"
+
+#: contrib/gstyle/ui/gstyle-color-panel.ui:667
+msgid "RGBA"
+msgstr "RGBA"
+
+#: contrib/gstyle/ui/gstyle-color-panel.ui:678
+msgid "HSL"
+msgstr "HSL"
+
+#: contrib/gstyle/ui/gstyle-color-panel.ui:689
+msgid "HSLA"
+msgstr "HSLA"
+
+#: contrib/gstyle/ui/gstyle-color-panel.ui:818
+msgid "Palettes"
+msgstr "Paletter"
+
+#: contrib/gstyle/ui/gstyle-color-panel.ui:946
+#: plugins/color-picker/gtk/color-picker.ui:48
+msgid "No open palettes"
+msgstr "Ingen åbne paletter"
+
+#: contrib/gstyle/ui/gstyle-color-panel.ui:959
+msgid "Load or generate a palette using the preferences"
+msgstr "Indlæs eller generér en palet ifølge indstillingerne"
+
+#: contrib/gstyle/ui/gstyle-color-widget.ui:13
+#: plugins/color-picker/gtk/color-picker-palette-menu.ui:13
+msgid "Rename"
+msgstr "Omdøb"
+
+#: contrib/gstyle/ui/gstyle-color-widget.ui:19
+#: plugins/color-picker/gtk/color-picker-palette-menu.ui:19
+msgid "Remove"
+msgstr "Fjern"
+
+#: contrib/gstyle/ui/gstyle-rename-popover.ui:35
+#: plugins/project-tree/gb-rename-file-popover.ui:35
+#: plugins/project-tree/gtk/menus.ui:57
+msgid "_Rename"
+msgstr "_Omdøb"
+
+#: contrib/search/trie.c:790
 #, c-format
 msgid "Traversal order %u is not supported on Trie."
 msgstr "Gennemløbsrækkefølge %u er ikke understøttet på Trie."
 
-#: ../contrib/tmpl/tmpl-parser.c:199
+#: contrib/tmpl/tmpl-parser.c:199
 #, c-format
 msgid "%s() may only be called once"
 msgstr "%s() kan kun kaldes én gang"
 
-#: ../contrib/tmpl/tmpl-parser.c:211
-#, c-format
+#: contrib/tmpl/tmpl-parser.c:211
 msgid "Parser does not contain an input stream"
 msgstr "Fortolker indeholder ikke en input-strøm"
 
-#: ../contrib/tmpl/tmpl-template.c:451
-#, c-format
+#: contrib/tmpl/tmpl-template.c:451
 msgid "Must parse template before expanding"
 msgstr "Skal tolke skabelon før udvidelse"
 
-#: ../contrib/tmpl/tmpl-template-locator.c:105
+#: contrib/tmpl/tmpl-template-locator.c:105
 #, c-format
 msgid "Failed to locate template \"%s\""
 msgstr "Kunne ikke finde skabelon \"%s\""
 
-#: ../contrib/xml/xml-reader.c:327
-#, c-format
+#: contrib/xml/xml-reader.c:327
 msgid "Could not parse XML from stream"
 msgstr "Kunne ikke fortolke XML fra strøm"
 
-#: ../data/gsettings/org.gnome.builder.build.gschema.xml.h:1
+#: data/gsettings/org.gnome.builder.build.gschema.xml:6
 msgid "Build Parallelism"
 msgstr "Parallelkompilering"
 
-#: ../data/gsettings/org.gnome.builder.build.gschema.xml.h:2
+#: data/gsettings/org.gnome.builder.build.gschema.xml:7
 msgid ""
 "Number of workers to use when performing builds. -1 for sensible default. 0 "
 "for number of CPU."
@@ -232,19 +371,75 @@ msgstr ""
 "Antal arbejdere til at kompilere. -1 for rimelig standardværdi. 0 for "
 "antallet af cpu'er."
 
-#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.h:1
+#: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:5
+msgid "Suggest Snippet Completion"
+msgstr "Foreslå fuldførelse af tekststumper"
+
+#: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:6
+msgid "Allow snippets to be inserted into the document."
+msgstr "Tillad at der indsættes tekststumper i dokumentet."
+
+#: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:10
+msgid "Clang based autocompletion (Experimental)"
+msgstr "Clang-baseret autofuldførelse (eksperimentel)"
+
+#: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:11
+msgid "Use Clang for autocompletion in the C and C++ languages."
+msgstr "Brug Clang til at foreslå fuldførelse i sprogene C og C++."
+
+#: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:15
+msgid "Ctags based autocompletion"
+msgstr "Ctags-baseret autofuldførelse"
+
+#: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:16
+msgid "Use Ctags for autocompletion."
+msgstr "Brug Ctags til autofuldførelse."
+
+#: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:20
+msgid "Enable auto-completion of words in document"
+msgstr "Slå autofuldførelse til for ord i dokumentet"
+
+#: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:21
+msgid ""
+"If enabled, words within the current document will be available for auto-"
+"completion."
+msgstr ""
+"Hvis slået til, vil ord i det nuværende dokument kunne vælges til "
+"autofuldførelse."
+
+#: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:25
+msgid "Enable semantic highlighting"
+msgstr "Slå semantisk fremhævning til"
+
+#: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:26
+msgid ""
+"If enabled, additional highlighting will be provided in supported languages "
+"based on information extracted from the source code."
+msgstr ""
+"Hvis slået til, vil der blive anvendt yderligere fremhævning i understøttede "
+"sprog afhængigt af informationer fra kildekoden."
+
+#: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:30
+msgid "Path to ctags executable"
+msgstr "Sti til ctags' binærfil"
+
+#: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:31
+msgid "The path to the ctags executable on the system."
+msgstr "Stien til ctags' binærfil på systemet."
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:24
 msgid "Restore last position"
 msgstr "Gendan sidste position"
 
-#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.h:2
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:25
 msgid "Jump to the last position when reopening a file"
 msgstr "Hop til sidste position ved genåbning af fil"
 
-#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.h:3
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:29
 msgid "Show modified lines"
 msgstr "Vis ændrede linjer"
 
-#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.h:4
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:30
 msgid ""
 "If enabled, the editor will show line additions and changes next to the "
 "source code."
@@ -252,36 +447,38 @@ msgstr ""
 "Hvis slået til, vil redigeringen vise tilføjelser til linje og ændringer ved "
 "siden af kildekoden."
 
-#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.h:5
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:34
+#: libide/editor/ide-editor-tweak-widget.ui:74
 msgid "Highlight current line"
 msgstr "Fremhæv aktuel linje"
 
-#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.h:6
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:35
 msgid "If enabled, the editor will highlight the line containing the cursor."
 msgstr "Hvis slået til, vil redigeringen fremhæve linjen hvor markøren er."
 
-#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.h:7
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:39
 msgid "Highlight matching brackets"
 msgstr "Fremhæv modsvarende parenteser"
 
-#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.h:8
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:40
 msgid "If enabled, the editor will highlight matching brackets."
 msgstr "Hvis slået til, vil redigeringen fremhæve modsvarende parenteser."
 
-#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.h:9
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:44
 msgid "Show line numbers"
 msgstr "Vis linjenumre"
 
-#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.h:10
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:45
 msgid "If enabled, the editor will show line numbers."
 msgstr "Hvis slået til, vil redigeringen vise linjenumre."
 
-#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.h:11
-#: ../libide/preferences/ide-preferences-builtin.c:150
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:49
+#: libide/editor/ide-editor-tweak-widget.ui:91
+#: libide/preferences/ide-preferences-builtin.c:150
 msgid "Smart Backspace"
 msgstr "Smart tilbagetast"
 
-#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.h:12
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:50
 msgid ""
 "Backspace will remove additional spaces to keep you aligned to the "
 "indentation size."
@@ -289,29 +486,29 @@ msgstr ""
 "Tilbagetast sletter ekstra mellemrum for at holde det ligestillet med din "
 "indrykning."
 
-#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.h:13
-#: ../libide/preferences/ide-preferences-builtin.c:149
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:54
+#: libide/preferences/ide-preferences-builtin.c:149
 msgid "Smart Home and End"
 msgstr "Smart Home- og End-tast"
 
-#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.h:14
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:55
 msgid "Whether or not Home moves to first non-space character."
 msgstr "Om home-tasten flytter til første tegn, som ikke er et mellemrum."
 
-#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.h:15
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:59
 msgid "Show grid lines"
 msgstr "Vis gitterlinjer"
 
-#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.h:16
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:60
 msgid "If enabled, the editor will show grid lines in the document."
 msgstr "Hvis slået til, vil redigeringen vise gitterlinjer i dokumentet."
 
-#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.h:17
-#: ../libide/preferences/ide-preferences-builtin.c:172
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:74
+#: libide/preferences/ide-preferences-builtin.c:172
 msgid "Show overview map"
 msgstr "Vis oversigtskort"
 
-#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.h:18
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:75
 msgid ""
 "If enabled, Builder will display an overview map of the source file next to "
 "the editor."
@@ -319,11 +516,11 @@ msgstr ""
 "Hvis slået til, vil Builder vise et oversigtskort over kildefilen ved siden "
 "af redigeringen."
 
-#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.h:19
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:79
 msgid "Automatically Hide Overview Map"
 msgstr "Skjul oversigtskort automatisk"
 
-#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.h:20
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:80
 msgid ""
 "If enabled, Builder will automatically hide the overview map when mouse "
 "focus leaves the editor, or a timeout occurs."
@@ -331,197 +528,477 @@ msgstr ""
 "Hvis slået til, vil Builder automatisk skjule oversigtskortet når musefokus "
 "forlader redigeringen, eller når tiden løber ud."
 
-#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.h:21
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:84
 msgid "Draw Spaces"
 msgstr "Tegn mellemrum"
 
-#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.h:22
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:85
 msgid "The various types of space to draw in the editor."
 msgstr "De forskellige typer mellemrum som tegnes i redigeringen."
 
-#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.h:23
-#: ../libide/preferences/ide-preferences-builtin.c:161
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:90
+#: libide/preferences/ide-preferences-builtin.c:161
 msgid "Overscroll"
 msgstr "Overrulning"
 
-#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.h:24
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:91
 msgid "The number of lines to scroll beyond the end of the buffer."
 msgstr "Antallet af linjer, der skal rulles længere ned end bufferen."
 
-#: ../data/gsettings/org.gnome.builder.extension-type.gschema.xml.h:1
-#: ../data/gsettings/org.gnome.builder.plugin.gschema.xml.h:1
+#: data/gsettings/org.gnome.builder.extension-type.gschema.xml:5
+#: data/gsettings/org.gnome.builder.plugin.gschema.xml:5
 msgid "Enabled"
 msgstr "Slået til"
 
-#: ../data/gsettings/org.gnome.builder.extension-type.gschema.xml.h:2
+#: data/gsettings/org.gnome.builder.extension-type.gschema.xml:6
 msgid "If the type within the extension is enabled."
 msgstr "Om typen i udvidelsen er slået til."
 
-#: ../data/gsettings/org.gnome.builder.gschema.xml.h:1
+#: data/gsettings/org.gnome.builder.gschema.xml:5
 msgid "Window size"
 msgstr "Vinduesstørrelse"
 
-#: ../data/gsettings/org.gnome.builder.gschema.xml.h:2
+#: data/gsettings/org.gnome.builder.gschema.xml:6
 msgid "Window size (width and height)."
 msgstr "Vinduesstørrelse (bredde og højde)."
 
-#: ../data/gsettings/org.gnome.builder.gschema.xml.h:3
+#: data/gsettings/org.gnome.builder.gschema.xml:10
 msgid "Window position"
 msgstr "Vinduesposition"
 
-#: ../data/gsettings/org.gnome.builder.gschema.xml.h:4
+#: data/gsettings/org.gnome.builder.gschema.xml:11
 msgid "Window position (x and y)."
 msgstr "Vinduesposition (x og y)."
 
-#: ../data/gsettings/org.gnome.builder.gschema.xml.h:5
+#: data/gsettings/org.gnome.builder.gschema.xml:15
 msgid "Window maximized"
 msgstr "Vindue maksimeret"
 
-#: ../data/gsettings/org.gnome.builder.gschema.xml.h:6
+#: data/gsettings/org.gnome.builder.gschema.xml:16
 msgid "Window maximized state"
 msgstr "Maksimeringstilstand for vindue"
 
-#: ../data/gsettings/org.gnome.builder.gschema.xml.h:7
+#: data/gsettings/org.gnome.builder.gschema.xml:20
 msgid "Night Mode"
 msgstr "Nattilstand"
 
-#: ../data/gsettings/org.gnome.builder.gschema.xml.h:8
+#: data/gsettings/org.gnome.builder.gschema.xml:21
 msgid "Prefer dark application chrome."
 msgstr "Foretræk mørke farver som program-\"krom\"."
 
-#: ../data/gsettings/org.gnome.builder.gschema.xml.h:9
+#: data/gsettings/org.gnome.builder.gschema.xml:25
 msgid "Mine projects"
 msgstr "Mine projekter"
 
-#: ../data/gsettings/org.gnome.builder.gschema.xml.h:10
+#: data/gsettings/org.gnome.builder.gschema.xml:26
 msgid "Search directories for projects."
 msgstr "Søg efter projekter i mapper."
 
-#: ../data/gsettings/org.gnome.builder.gschema.xml.h:11
-#: ../libide/preferences/ide-preferences-builtin.c:393
+#: data/gsettings/org.gnome.builder.gschema.xml:30
+#: libide/preferences/ide-preferences-builtin.c:393
 msgid "Projects directory"
 msgstr "Projektmappe"
 
-#: ../data/gsettings/org.gnome.builder.gschema.xml.h:12
+#: data/gsettings/org.gnome.builder.gschema.xml:31
 msgid "Directory for all Builder projects."
 msgstr "Mappe til alle Builderprojekter."
 
-#: ../data/gsettings/org.gnome.builder.gschema.xml.h:13
+#: data/gsettings/org.gnome.builder.gschema.xml:35
 msgid "Restore Previous Files"
 msgstr "Gendan filer fra sidst"
 
-#: ../data/gsettings/org.gnome.builder.gschema.xml.h:14
+#: data/gsettings/org.gnome.builder.gschema.xml:36
 msgid "Restore previously opened files when loading a project."
 msgstr "Gendan filer som var åbnet sidst, når et projekt åbnes."
 
-#: ../data/gsettings/org.gnome.builder.plugin.gschema.xml.h:2
+#: data/gsettings/org.gnome.builder.plugin.gschema.xml:6
 msgid "If the plugin should be enabled"
 msgstr "Om udvidelsesmodulet skal være slået til"
 
-#: ../data/gsettings/org.gnome.builder.project-tree.gschema.xml.h:1
+#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:5
 msgid "Show Project Sidebar"
 msgstr "Vis projektsidebjælke"
 
-#: ../data/gsettings/org.gnome.builder.project-tree.gschema.xml.h:2
+#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:6
 msgid "If enabled, the sidebar will be visible in the editor workspace."
 msgstr ""
 "Hvis slået til, vil sidebjælken blive vist i redigeringens arbejdsområde."
 
-#: ../data/gsettings/org.gnome.builder.project-tree.gschema.xml.h:3
+#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:10
+#: plugins/project-tree/gtk/menus.ui:84
 msgid "Show Icons"
 msgstr "Vis ikoner"
 
-#: ../data/gsettings/org.gnome.builder.project-tree.gschema.xml.h:4
+#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:11
 msgid "If enabled, the project tree will display icons next to each item."
 msgstr ""
 "Hvis slået til, vil projekttræet vise ikoner ved siden af hvert element."
 
-#: ../data/gsettings/org.gnome.builder.project-tree.gschema.xml.h:5
+#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:15
+#: plugins/project-tree/gtk/menus.ui:88
 msgid "Show Ignored Files"
 msgstr "Vis ignorerede filer"
 
-#: ../data/gsettings/org.gnome.builder.project-tree.gschema.xml.h:6
+#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:16
 msgid ""
 "If enabled, the project tree will display files that are ignored by the VCS."
 msgstr ""
 "Hvis slået til, vil projekttræet vise filer som ignoreres af versionsstyring."
 
-#: ../data/gsettings/org.gnome.builder.workbench.gschema.xml.h:1
+#: data/gsettings/org.gnome.builder.workbench.gschema.xml:5
 msgid "Show Left Panel"
 msgstr "Vis venstre panel"
 
-#: ../data/gsettings/org.gnome.builder.workbench.gschema.xml.h:2
+#: data/gsettings/org.gnome.builder.workbench.gschema.xml:6
 msgid "If enabled, the left panel will be displayed."
 msgstr "Hvis slået til, vil venstre panel blive vist."
 
-#: ../data/gsettings/org.gnome.builder.workbench.gschema.xml.h:3
+#: data/gsettings/org.gnome.builder.workbench.gschema.xml:11
 msgid "Left Panel Position"
 msgstr "Placering af venstre panel"
 
-#: ../data/gsettings/org.gnome.builder.workbench.gschema.xml.h:4
+#: data/gsettings/org.gnome.builder.workbench.gschema.xml:12
 msgid "The width in pixel units of the left panel."
 msgstr "Bredden i pixel af venstre panel."
 
-#: ../data/gsettings/org.gnome.builder.workbench.gschema.xml.h:5
+#: data/gsettings/org.gnome.builder.workbench.gschema.xml:17
 msgid "Show Right Panel"
 msgstr "Vis højre panel"
 
-#: ../data/gsettings/org.gnome.builder.workbench.gschema.xml.h:6
+#: data/gsettings/org.gnome.builder.workbench.gschema.xml:18
 msgid "If enabled, the right panel will be displayed."
 msgstr "Hvis slået til, vil højre panel blive vist."
 
-#: ../data/gsettings/org.gnome.builder.workbench.gschema.xml.h:7
+#: data/gsettings/org.gnome.builder.workbench.gschema.xml:23
 msgid "Right Panel Position"
 msgstr "Placering af højre panel"
 
-#: ../data/gsettings/org.gnome.builder.workbench.gschema.xml.h:8
+#: data/gsettings/org.gnome.builder.workbench.gschema.xml:24
 msgid "The width in pixel units of the right panel."
 msgstr "Bredden i pixel af højre panel."
 
-#: ../data/gsettings/org.gnome.builder.workbench.gschema.xml.h:9
+#: data/gsettings/org.gnome.builder.workbench.gschema.xml:29
 msgid "Show Bottom Panel"
 msgstr "Vis bundpanel"
 
-#: ../data/gsettings/org.gnome.builder.workbench.gschema.xml.h:10
+#: data/gsettings/org.gnome.builder.workbench.gschema.xml:30
 msgid "If enabled, the bottom panel will be displayed."
 msgstr "Hvis slået til, vil bundpanelet blive vist."
 
-#: ../data/gsettings/org.gnome.builder.workbench.gschema.xml.h:11
+#: data/gsettings/org.gnome.builder.workbench.gschema.xml:35
 msgid "Bottom Panel Position"
 msgstr "Placering af bundpanel"
 
-#: ../data/gsettings/org.gnome.builder.workbench.gschema.xml.h:12
+#: data/gsettings/org.gnome.builder.workbench.gschema.xml:36
 msgid "The height in pixel units of the bottom panel."
 msgstr "Højden i pixel af bundpanelet."
 
-#: ../data/style-schemes/builder-dark.xml.h:1
-msgid "Builder Dark"
-msgstr "Builder mørk"
+#: data/gtk/menus.ui:7
+msgid "_New Project"
+msgstr "_Nyt projekt"
 
-#: ../data/style-schemes/builder-dark.xml.h:2
-msgid "Dark color scheme for Builder using the Tango color palette"
-msgstr "Mørkt farveskema til Builder, som bruger Tango-farvepaletten"
+#: data/gtk/menus.ui:11
+msgid "_Open Project"
+msgstr "_Åbn projekt"
 
-#: ../data/style-schemes/builder.xml.h:1
-#: ../libide/application/ide-application.c:466
-#: ../libide/preferences/ide-preferences-builtin.c:144
-#: ../libide/workbench/ide-workbench.c:560
+#: data/gtk/menus.ui:18
+msgid "_Preferences"
+msgstr "_Indstillinger"
+
+#: data/gtk/menus.ui:26
+msgid "Keyboard _Shortcuts"
+msgstr "_Genvejstaster"
+
+#: data/gtk/menus.ui:30
+msgid "_Help"
+msgstr "_Hjælp"
+
+#: data/gtk/menus.ui:34
+msgid "_About"
+msgstr "_Om"
+
+#: data/gtk/menus.ui:38
+msgid "_Quit"
+msgstr "_Afslut"
+
+#: data/gtk/menus.ui:48
+msgid "Show left panel"
+msgstr "Vis venstre panel"
+
+#: data/gtk/menus.ui:53
+msgid "Show bottom panel"
+msgstr "Vis bundpanel"
+
+#: data/gtk/menus.ui:58
+msgid "Show right panel"
+msgstr "Vis højre panel"
+
+#: data/gtk/menus.ui:86
+msgid "_New File"
+msgstr "_Ny fil"
+
+#: data/gtk/menus.ui:92
+msgid "_Open File…"
+msgstr "_Åbn fil…"
+
+#: data/gtk/menus.ui:98
+msgid "Save _All"
+msgstr "Gem _alle"
+
+#: data/gtk/menus.ui:115
+msgid "_Go to Definition"
+msgstr "_Gå til definition"
+
+#: data/gtk/menus.ui:121
+msgid "_Undo"
+msgstr "_Fortryd"
+
+#: data/gtk/menus.ui:125
+msgid "_Redo"
+msgstr "_Omgør"
+
+#: data/gtk/menus.ui:131
+msgid "C_ut"
+msgstr "K_lip"
+
+#: data/gtk/menus.ui:136 data/gtk/menus.ui:237 plugins/terminal/gtk/menus.ui:16
+msgid "_Copy"
+msgstr "_Kopiér"
+
+#: data/gtk/menus.ui:140 data/gtk/menus.ui:241 plugins/terminal/gtk/menus.ui:20
+msgid "_Paste"
+msgstr "_Indsæt"
+
+#: data/gtk/menus.ui:144 data/gtk/menus.ui:245
+msgid "_Delete"
+msgstr "_Slet"
+
+#: data/gtk/menus.ui:150 libide/preferences/ide-preferences-builtin.c:190
+msgid "Highlighting"
+msgstr "Fremhævning"
+
+#: data/gtk/menus.ui:155 plugins/terminal/gtk/menus.ui:26
+msgid "Selection"
+msgstr "Markering"
+
+#: data/gtk/menus.ui:157 data/gtk/menus.ui:251 plugins/terminal/gtk/menus.ui:28
+msgid "Select _All"
+msgstr "Markér _alt"
+
+#: data/gtk/menus.ui:162 plugins/terminal/gtk/menus.ui:33
+msgid "Select _None"
+msgstr "Markér _intet"
+
+#: data/gtk/menus.ui:168
+msgid "All _Upper Case"
+msgstr "Kun s_tore bogstaver"
+
+#: data/gtk/menus.ui:173
+msgid "All _Lower Case"
+msgstr "Kun s_må bogstaver"
+
+#: data/gtk/menus.ui:178
+msgid "_Invert Case"
+msgstr "_Omvend store/små bogstaver"
+
+#: data/gtk/menus.ui:183
+msgid "_Title Case"
+msgstr "_Stort begyndelsesbogstav"
+
+#: data/gtk/menus.ui:190
+msgid "Join Lines"
+msgstr "Slå linjer sammen"
+
+#: data/gtk/menus.ui:194
+msgid "Sort Lines"
+msgstr "Sortér linjer"
+
+#: data/gtk/menus.ui:203
+msgid "Zoom"
+msgstr "Zoom"
+
+#: data/gtk/menus.ui:205
+msgid "Zoom _In"
+msgstr "Zoom _ind"
+
+#: data/gtk/menus.ui:210
+msgid "Zoom _Out"
+msgstr "Zoom _ud"
+
+#: data/gtk/menus.ui:216
+msgid "Reset"
+msgstr "Nulstil"
+
+#: data/gtk/menus.ui:227
+msgid "_Wrap Around"
+msgstr "_Begynd forfra ved slut"
+
+#: data/gtk/menus.ui:233
+msgid "Cu_t"
+msgstr "_Klip"
+
+#: data/gtk/menus.ui:259
+msgid "Split"
+msgstr "Opdel"
+
+#: data/gtk/menus.ui:261
+msgid "Split Left"
+msgstr "Opdel til venstre"
+
+#: data/gtk/menus.ui:266
+msgid "Split Right"
+msgstr "Opdel til højre"
+
+#: data/gtk/menus.ui:271
+msgid "Split Down"
+msgstr "Opdel nede"
+
+#: data/gtk/menus.ui:278
+msgid "Move"
+msgstr "Flyt"
+
+#: data/gtk/menus.ui:280
+msgid "Move Left"
+msgstr "Flyt til venstre"
+
+#: data/gtk/menus.ui:285
+msgid "Move Right"
+msgstr "Flyt til højre"
+
+#: data/gtk/menus.ui:293
+msgid "_Save"
+msgstr "_Gem"
+
+#: data/gtk/menus.ui:297
+msgid "_Save As"
+msgstr "_Gem som"
+
+#: data/gtk/menus.ui:303
+msgid "_Print"
+msgstr "_Udskriv"
+
+#: data/gtk/menus.ui:309
+msgid "_Close"
+msgstr "_Luk"
+
+#: data/org.gnome.Builder.appdata.xml.in:7
+#: data/org.gnome.Builder.desktop.in.in:3
+#: libide/application/ide-application.c:466
+#: libide/preferences/ide-preferences-builtin.c:144
+#: libide/workbench/ide-workbench.c:560
 msgid "Builder"
 msgstr "Builder"
 
-#: ../data/style-schemes/builder.xml.h:2
-msgid "The default color scheme for Builder"
-msgstr "Standardfarveskemaet til Builder"
-
-#: ../libide/application/ide-application-actions.c:116
+#: data/org.gnome.Builder.appdata.xml.in:8
+#: libide/application/ide-application-actions.c:116
 msgid "An IDE for GNOME"
 msgstr "Et IDE til GNOME"
 
-#: ../libide/application/ide-application-actions.c:122
+#: data/org.gnome.Builder.appdata.xml.in:11
+msgid ""
+"Builder is an actively developed Integrated Development Environment for "
+"GNOME. It combines integrated support for essential GNOME technologies such "
+"as GTK+, GLib, and GNOME APIs with features that any developer will "
+"appreciate, like syntax highlighting and snippets."
+msgstr ""
+"Builder er et integreret udviklingsmiljø til GNOME som udvikles aktivt. "
+"Builder kombinerer integreret understøttelse af essentielle GNOME-"
+"teknologier såsom GTK+, Glib og GNOME-API'er med funktioner som udviklere "
+"vil have brug for såsom syntaksfremhævning og tekststumper."
+
+#: data/org.gnome.Builder.appdata.xml.in:17
+msgid ""
+"You can rely on predictable releases of Builder with each new release of "
+"GNOME every six months."
+msgstr ""
+"Du kan regne med at nye versioner af Builder udkommer jævnligt sammen med "
+"GNOME hver sjette måned."
+
+#: data/org.gnome.Builder.appdata.xml.in:21
+msgid "Features:"
+msgstr "Funktioner:"
+
+#: data/org.gnome.Builder.appdata.xml.in:23
+msgid "Built in syntax highlighting for many languages"
+msgstr "Indbygget syntaksfremhævning af mange sprog"
+
+# ?
+#: data/org.gnome.Builder.appdata.xml.in:24
+#: data/org.gnome.Builder.appdata.xml.in:52
+msgid "Side-by-side code editors"
+msgstr "Koderedigering side om side"
+
+#: data/org.gnome.Builder.appdata.xml.in:25
+msgid "Integration with Git"
+msgstr "Integration med Git"
+
+#: data/org.gnome.Builder.appdata.xml.in:26
+msgid "Integration with Autotools"
+msgstr "Integration med Autotools"
+
+#: data/org.gnome.Builder.appdata.xml.in:27
+msgid "Clang based auto-completion, semantic highlighting, and diagnostics"
+msgstr "Clang-baseret autofuldførelse, semantisk fremhævning og diagnostik"
+
+#: data/org.gnome.Builder.appdata.xml.in:28
+msgid "Python based auto-completion, semantic highlighting, and diagnostics"
+msgstr "Pythonbaseret autofuldførelse, semantisk fremhævning og diagnostik"
+
+#: data/org.gnome.Builder.appdata.xml.in:29
+msgid "Vala based auto-completion and diagnostics"
+msgstr "Vala-baseret autofuldførelse og diagnostik"
+
+#: data/org.gnome.Builder.appdata.xml.in:30
+msgid "Auto indentation support for C, Python, Vala, and XML"
+msgstr "Understøttelse for autoindrykning i C, Python, Vala og XML"
+
+#: data/org.gnome.Builder.appdata.xml.in:31
+msgid "HTML/Markdown live preview"
+msgstr "Forhåndsvisning af HTML/Markdown"
+
+#: data/org.gnome.Builder.appdata.xml.in:32
+msgid "Optional Vim-style editing"
+msgstr "Valgfri Vim-redigeringstilstand"
+
+#: data/org.gnome.Builder.appdata.xml.in:33
+msgid "An integrated software profiler for native applications"
+msgstr "Integreret softwareprofilering til platformsspecifikke programmer"
+
+#: data/org.gnome.Builder.appdata.xml.in:34
+msgid "Support for building with jhbuild"
+msgstr "Understøttelse for kompilering med jhbuild"
+
+#: data/org.gnome.Builder.appdata.xml.in:35
+msgid "Preview support for building with Flatpak runtimes"
+msgstr "Understøttelse for forhåndsvisning ved kompilering med Flatpak-runtime"
+
+#: data/org.gnome.Builder.appdata.xml.in:44
+msgid "Fast global search"
+msgstr "Hurtig global søgning"
+
+#: data/org.gnome.Builder.appdata.xml.in:48
+msgid "Integrated project tree"
+msgstr "Integreret projekttræ"
+
+#: data/org.gnome.Builder.desktop.in.in:4
+msgid "Build software for GNOME"
+msgstr "Kompileringssoftware til GNOME"
+
+#. Translators: Do NOT translate or transliterate this text (this is an icon file name)!
+#: data/org.gnome.Builder.desktop.in.in:7
+msgid "org.gnome.Builder"
+msgstr "org.gnome.Builder"
+
+#. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
+#: data/org.gnome.Builder.desktop.in.in:14
+msgid "Build;Develop;"
+msgstr "Byg;Kompilér;Kompiler;Udvikl;Udvikle;"
+
+#: libide/application/ide-application-actions.c:122
 msgid "GNOME Builder"
 msgstr "GNOME Builder"
 
-#: ../libide/application/ide-application-actions.c:124
+#: libide/application/ide-application-actions.c:124
 msgid "translator-credits"
 msgstr ""
 "Kris Thomsen\n"
@@ -531,488 +1008,955 @@ msgstr ""
 "Dansk-gruppen <dansk@dansk-gruppen.dk>\n"
 "Mere info: http://www.dansk-gruppen.dk"
 
-#: ../libide/application/ide-application-actions.c:127
+#: libide/application/ide-application-actions.c:127
 msgid "Learn more about GNOME Builder"
 msgstr "Mere om GNOME Builder"
 
-#: ../libide/application/ide-application-actions.c:131
+#: libide/application/ide-application-actions.c:131
 msgid "Funded By"
 msgstr "Finansieret af"
 
-#: ../libide/application/ide-application-command-line.c:102
+#: libide/application/ide-application-command-line.c:102
 msgid "Commands:"
 msgstr "Kommandoer:"
 
-#: ../libide/application/ide-application-command-line.c:186
+#: libide/application/ide-application-command-line.c:186
 msgid "List available subcommands"
 msgstr "Vis tilgængelige underkommandoer"
 
-#: ../libide/application/ide-application-command-line.c:193
+#: libide/application/ide-application-command-line.c:193
 msgid "Run Builder in standalone mode"
 msgstr "Kør Builder i selvstændig tilstand"
 
-#: ../libide/application/ide-application-command-line.c:200
+#: libide/application/ide-application-command-line.c:200
 msgid "Show the application's version"
 msgstr "Vis programversion"
 
-#: ../libide/application/ide-application-command-line.c:219
+#: libide/application/ide-application-command-line.c:219
 msgid "Increase verbosity, may be specified multiple times"
 msgstr "Udskriv flere detaljer. Kan angives flere gange"
 
-#: ../libide/application/ide-application-command-line.c:226
+#: libide/application/ide-application-command-line.c:226
 msgid "Enter GApplication Service mode"
 msgstr "Aktivér GApplication-tjenestetilstand"
 
-#: ../libide/application/ide-application-command-line.c:233
+#: libide/application/ide-application-command-line.c:233
 msgid "Opens the project specified by PATH"
 msgstr "Åbner projektet angivet ved STI"
 
-#: ../libide/application/ide-application-command-line.c:234
-#: ../plugins/build-tools/gbp-build-tool.c:301
+#: libide/application/ide-application-command-line.c:234
+#: plugins/build-tools/gbp-build-tool.c:301
 msgid "PATH"
 msgstr "STI"
 
-#: ../libide/application/ide-application-command-line.c:264
+#: libide/application/ide-application-command-line.c:264
 msgid "COMMAND"
 msgstr "KOMMANDO"
 
-#: ../libide/application/ide-application-command-line.c:335
+#: libide/application/ide-application-command-line.c:335
 msgid "No commands available"
 msgstr "Ingen kommandoer tilgængelige"
 
-#: ../libide/application/ide-application-command-line.c:365
+#: libide/application/ide-application-command-line.c:365
 msgid "Please provide a command"
 msgstr "Angiv venligst en kommando"
 
-#: ../libide/application/ide-application-command-line.c:375
+#: libide/application/ide-application-command-line.c:375
 msgid "No such tool"
 msgstr "Intet sådant værktøj"
 
-#: ../libide/application/ide-application-command-line.c:389
+#: libide/application/ide-application-command-line.c:389
 msgid "Please provide a worker type"
 msgstr "Angiv venligst en arbejdertype"
 
-#: ../libide/application/ide-application-command-line.c:396
+#: libide/application/ide-application-command-line.c:396
 msgid "Please provide a D-Bus address"
 msgstr "Angiv venligst en D-Bus-adresse"
 
-#: ../libide/application/ide-application-command-line.c:405
+#: libide/application/ide-application-command-line.c:405
 msgid "No such worker"
 msgstr "Ingen sådan arbejder"
 
-#: ../libide/buffers/ide-buffer.c:2473
+#: libide/buffers/ide-buffer.c:2473
 msgid "The current language lacks a symbol resolver."
 msgstr "Det nuværende sprog mangler en symbolgenkender."
 
-#: ../libide/buffers/ide-buffer-manager.c:633
+#: libide/buffers/ide-buffer-manager.c:633
 msgid "File too large to be opened."
 msgstr "Filen er for stor til at kunne åbnes."
 
-#: ../libide/buffers/ide-buffer-manager.c:1483
+#: libide/buffers/ide-buffer-manager.c:1483
 msgid "Words"
 msgstr "Ord"
 
-#: ../libide/buffers/ide-buffer-manager.c:1695
+#: libide/buffers/ide-buffer-manager.c:1695
 #, c-format
 msgid "unsaved document %u"
 msgstr "ugemt dokument %u"
 
-#: ../libide/buffers/ide-buffer-manager.c:1729
+#: libide/buffers/ide-buffer-manager.c:1729
 msgid "Failed to save buffer, ignoring reclamation."
 msgstr "Kunne ikke gemme buffer; ignorerer reklamation."
 
-#: ../libide/buildsystem/ide-builder.c:89
+#: libide/buildsystem/ide-builder.c:89
 #, c-format
 msgid "%s does not support building"
 msgstr "%s understøtter ikke kompilering"
 
-#: ../libide/buildsystem/ide-build-manager.c:478
+#: libide/buildsystem/ide-build-manager.c:478
 msgid "A build is already in progress"
 msgstr "Der er allerede en kompilering i gang"
 
-#: ../libide/buildsystem/ide-build-manager.c:772
+#: libide/buildsystem/ide-build-manager.c:772
 msgid "Ready"
 msgstr "Klar"
 
-#: ../libide/buildsystem/ide-build-result.c:250
+#: libide/buildsystem/ide-build-result.c:250
 msgid "Failed to open stderr stream."
 msgstr "Kunne ikke åbne stderr-strøm."
 
-#: ../libide/buildsystem/ide-build-result.c:280
+#: libide/buildsystem/ide-build-result.c:280
 msgid "Failed to open stdout stream."
 msgstr "Kunne ikke åbne stdout-strøm."
 
-#: ../libide/buildsystem/ide-build-system.c:125
+#: libide/buildsystem/ide-build-system.c:125
 #, c-format
 msgid "%s() is not supported on %s build system."
 msgstr "%s() understøtttes ikke på %s-kompileringssystemet."
 
-#: ../libide/buildsystem/ide-configuration-manager.c:483
-#: ../libide/preferences/ide-preferences-builtin.c:337
-#: ../libide/preferences/ide-preferences-builtin.c:355
+#: libide/buildsystem/ide-configuration-manager.c:483
+#: libide/preferences/ide-preferences-builtin.c:337
+#: libide/preferences/ide-preferences-builtin.c:355
 msgid "Default"
 msgstr "Standard"
 
-#: ../libide/devices/ide-device-manager.c:147
+#: libide/devices/ide-device-manager.c:147
 #, c-format
 msgid "The device \"%s\" could not be found."
 msgstr "Enheden \"%s\" kunne ikke findes."
 
-#: ../libide/directory/ide-directory-vcs.c:55
+#: libide/directory/ide-directory-vcs.c:55
 msgid "unversioned"
 msgstr "ikke under versionsstyring"
 
-#: ../libide/editorconfig/ide-editorconfig-file-settings.c:159
+#: libide/editorconfig/ide-editorconfig-file-settings.c:159
 msgid "No file was provided."
 msgstr "Der blev ikke givet nogen fil."
 
-#: ../libide/editor/ide-editor-frame.c:138
+#: libide/editor/ide-editor-frame.c:138
 #, c-format
 msgid "Line %u, Column %u"
 msgstr "Linje %u, kolonne %u"
 
-#: ../libide/editor/ide-editor-frame.c:310
+#: libide/editor/ide-editor-frame.c:310
 #, c-format
 msgid "%u of %u"
 msgstr "%u af %u"
 
-#: ../libide/editor/ide-editor-frame.c:963
+#: libide/editor/ide-editor-frame.c:963 plugins/project-tree/gtk/menus.ui:6
 msgid "Re_veal in Project Tree"
 msgstr "_Synliggør i projekttræ"
 
-#: ../libide/editor/ide-editor-layout-stack-controls.c:46
+# ?
+#. OVR indicates we are in overwite mode
+#: libide/editor/ide-editor-frame.ui:17
+msgid "OVR"
+msgstr "OVR"
+
+#: libide/editor/ide-editor-frame.ui:160
+msgid "Replace"
+msgstr "Erstat"
+
+#: libide/editor/ide-editor-frame.ui:173
+msgid "Replace All"
+msgstr "Erstat alle"
+
+#: libide/editor/ide-editor-frame.ui:195
+msgid "Switch between Search and Search-and-Replace"
+msgstr "Skift mellem søgning og søg-og-erstat"
+
+#: libide/editor/ide-editor-frame.ui:218
+msgid "Show or hide search options such as case sensitivity"
+msgstr "Vis eller skjul søgeindstillinger såsom versalfølsomhed"
+
+#: libide/editor/ide-editor-frame.ui:279
+msgid "Regular expressions"
+msgstr "Regulære udtryk"
+
+#: libide/editor/ide-editor-frame.ui:294
+msgid "Case sensitive"
+msgstr "Versalfølsom"
+
+#: libide/editor/ide-editor-frame.ui:309
+msgid "Match whole word only"
+msgstr "Match kun hele ord"
+
+#: libide/editor/ide-editor-layout-stack-controls.c:46
 msgid "Plain Text"
 msgstr "Almindelig tekst"
 
 #. translators: the user selected a number outside the value range for the document.
-#: ../libide/editor/ide-editor-layout-stack-controls.c:191
+#: libide/editor/ide-editor-layout-stack-controls.c:191
 #, c-format
 msgid "Provide a number between 1 and %u"
 msgstr "Angiv et tal mellem 1 og %u"
 
-#: ../libide/editor/ide-editor-perspective.c:448
-#: ../libide/preferences/ide-preferences-builtin.c:109
-#: ../libide/preferences/ide-preferences-builtin.c:156
+#: libide/editor/ide-editor-layout-stack-controls.ui:31
+msgid "Go to line number"
+msgstr "Gå til linjenummer"
+
+#: libide/editor/ide-editor-layout-stack-controls.ui:100
+msgid "Change editor settings and language"
+msgstr "Skift redigeringsindstillinger og sprog"
+
+#: libide/editor/ide-editor-layout-stack-controls.ui:114
+#: libide/editor/ide-editor-view.ui:100
+msgid "Go to Line"
+msgstr "Hop til linje"
+
+#: libide/editor/ide-editor-layout-stack-controls.ui:115
+#: libide/editor/ide-editor-view.ui:101
+msgid "Go"
+msgstr "Gå"
+
+#: libide/editor/ide-editor-perspective.c:448
+#: libide/preferences/ide-preferences-builtin.c:109
+#: libide/preferences/ide-preferences-builtin.c:156
 msgid "Editor"
 msgstr "Redigering"
 
-#: ../libide/editor/ide-editor-view-actions.c:310
+#: libide/editor/ide-editor-perspective.ui:27
+msgid "No open files"
+msgstr "Ingen åbne filer"
+
+#: libide/editor/ide-editor-perspective.ui:40
+msgid "Try opening a file by typing in the search box at the top"
+msgstr "Prøv at åbne en fil ved at skrive i søgeboksen i toppen"
+
+#: libide/editor/ide-editor-tweak-widget.ui:22
+msgid "Search highlight mode…"
+msgstr "Tilstand for søgefremhævning…"
+
+#: libide/editor/ide-editor-tweak-widget.ui:56
+msgid "Display line numbers"
+msgstr "Vis linjenumre"
+
+#: libide/editor/ide-editor-tweak-widget.ui:65
+msgid "Display right margin"
+msgstr "Vis højremargen"
+
+#: libide/editor/ide-editor-tweak-widget.ui:83
+msgid "Auto indent"
+msgstr "Automatisk indrykning"
+
+#: libide/editor/ide-editor-tweak-widget.ui:99
+#: libide/preferences/ide-preferences-builtin.c:324
+msgid "Indentation"
+msgstr "Indrykning"
+
+#: libide/editor/ide-editor-tweak-widget.ui:127
+#: libide/preferences/ide-preferences-builtin.c:176
+msgid "Spaces"
+msgstr "Mellemrum"
+
+#: libide/editor/ide-editor-tweak-widget.ui:137
+#: libide/preferences/ide-preferences-builtin.c:177
+msgid "Tabs"
+msgstr "Tabulatorer"
+
+#: libide/editor/ide-editor-tweak-widget.ui:157
+msgid "2"
+msgstr "2"
+
+#: libide/editor/ide-editor-tweak-widget.ui:167
+msgid "3"
+msgstr "3"
+
+#: libide/editor/ide-editor-tweak-widget.ui:177
+msgid "4"
+msgstr "4"
+
+#: libide/editor/ide-editor-tweak-widget.ui:187
+msgid "8"
+msgstr "8"
+
+#: libide/editor/ide-editor-view-actions.c:310
 msgid "Save Document"
 msgstr "Gem dokument"
 
-#: ../libide/editor/ide-editor-view-actions.c:436
+#: libide/editor/ide-editor-view-actions.c:436
 msgid "Save Document As"
 msgstr "Gem dokument som"
 
-#: ../libide/greeter/ide-greeter-perspective.c:451
+#: libide/editor/ide-editor-view.ui:23
+msgid "_Reload"
+msgstr "Gen_indlæs"
+
+#: libide/editor/ide-editor-view.ui:31
+#: libide/greeter/ide-greeter-perspective.ui:310
+#: libide/greeter/ide-greeter-perspective.ui:358
+#: libide/workbench/ide-omni-bar.ui:346
+msgid "_Cancel"
+msgstr "_Annullér"
+
+#: libide/editor/ide-editor-view.ui:44
+msgid ""
+"Builder has discovered that this file has been modified externally. Would "
+"you like to reload the file?"
+msgstr ""
+"Builder har opdaget, at denne fil er blevet ændret af et andet program. Vil "
+"du genindlæse filen?"
+
+#: libide/greeter/ide-greeter-perspective.c:451
 msgid "Failed to load the project"
 msgstr "Kunne ikke indlæse projektet"
 
-#: ../libide/greeter/ide-greeter-perspective.c:668
+#: libide/greeter/ide-greeter-perspective.c:668
 msgid "Open Project"
 msgstr "Åbn projekt"
 
-#: ../libide/gsettings/ide-language-defaults.c:178
+#. the action:// link is used to jump to the new-project view
+#: libide/greeter/ide-greeter-perspective.ui:52
+msgid "Why not <a href=\"action://app.new-project\">create a new project</a>?"
+msgstr ""
+"Hvorfor ikke <a href=\"action://app.new-project\">oprette et nyt projekt</a>?"
+
+#: libide/greeter/ide-greeter-perspective.ui:53
+msgid "No projects found"
+msgstr "Ingen projekter fundet"
+
+#: libide/greeter/ide-greeter-perspective.ui:100
+msgid "Recent Projects"
+msgstr "Seneste projekter"
+
+#: libide/greeter/ide-greeter-perspective.ui:115
+#: libide/greeter/ide-greeter-perspective.ui:165
+msgid "Updated"
+msgstr "Opdateret"
+
+#: libide/greeter/ide-greeter-perspective.ui:150
+msgid "Other Projects"
+msgstr "Andre projekter"
+
+#: libide/greeter/ide-greeter-perspective.ui:206
+msgid "_Remove"
+msgstr "_Fjern"
+
+#: libide/greeter/ide-greeter-perspective.ui:290
+msgid "Select a Project"
+msgstr "Vælg et projekt"
+
+#: libide/greeter/ide-greeter-perspective.ui:296
+msgid "Click an item to select"
+msgstr "Klik på et element for at vælge"
+
+#: libide/greeter/ide-greeter-perspective.ui:322
+msgid "Open…"
+msgstr "Åbn…"
+
+#: libide/greeter/ide-greeter-perspective.ui:337
+msgid "Select projects for removal"
+msgstr "Vælg projekter, der skal fjernes"
+
+#: libide/greeter/ide-greeter-perspective.ui:357
+msgid "Return to project selection"
+msgstr "Vend tilbage til projektvalg"
+
+#: libide/gsettings/ide-language-defaults.c:178
 #, c-format
 msgid "%s contained invalid ASCII"
 msgstr "%s indeholdt ugyldig ASCII"
 
-#: ../libide/gsettings/ide-language-defaults.c:193
+#: libide/gsettings/ide-language-defaults.c:193
 #, c-format
 msgid "Failed to parse integer from \"%s\""
 msgstr "Kunne ikke fortolke heltal fra \"%s\""
 
-#: ../libide/gsettings/ide-language-defaults.c:271
+#: libide/gsettings/ide-language-defaults.c:271
 msgid "language defaults missing version in [global] group."
 msgstr "standardopsætning for sprog mangler version i [global]-gruppen."
 
-#: ../libide/gsettings/ide-language-defaults.c:363
+#: libide/gsettings/ide-language-defaults.c:363
 msgid "Failed to initialize defaults."
 msgstr "Kunne ikke initialisere standardopsætning."
 
-#: ../libide/ide.c:62
+#: libide/ide.c:62
 #, c-format
 msgid "You must call %s() before using libide."
 msgstr "Du skal kalde %s() før du bruger libide."
 
 # ?
-#: ../libide/ide-context.c:1870
+#: libide/ide-context.c:1870
 msgid "An unload request is already pending"
 msgstr "Der venter allerede en forespørgsel om af-indlæsning"
 
-#: ../libide/ide-context.c:1989
+#: libide/ide-context.c:1989
 msgid "Context has already been restored."
 msgstr "Konteksten er allerede blevet gendannet."
 
-#: ../libide/ide-object.c:288
+#: libide/ide-object.c:288
 #, c-format
 msgid "No implementations of extension point \"%s\"."
 msgstr "Ingen implementering af udvidelsespunkt \"%s\"."
 
-#: ../libide/ide-object.c:380
+#: libide/ide-object.c:380
 msgid "Failed to locate build system plugin."
 msgstr "Kunne ikke finde udvidelsesmodul til kompileringssystem."
 
-#: ../libide/ide-object.c:467
+#: libide/ide-object.c:467
 msgid "No such extension point."
 msgstr "Intet sådant udvidelsespunkt."
 
-#: ../libide/ide-object.c:477
+#: libide/ide-object.c:477
 msgid "No implementations of extension point."
 msgstr "Ingen implementation af udvidelsespunkt."
 
-#: ../libide/preferences/ide-preferences-builtin.c:65
-#: ../libide/preferences/ide-preferences-builtin.c:66
+#: libide/keybindings/ide-shortcuts-window.ui:10
+msgctxt "shortcut window"
+msgid "Editor Shortcuts"
+msgstr "Redigeringsgenveje"
+
+#: libide/keybindings/ide-shortcuts-window.ui:14
+#: libide/keybindings/ide-shortcuts-window.ui:423
+msgctxt "shortcut window"
+msgid "General"
+msgstr "Generelt"
+
+#: libide/keybindings/ide-shortcuts-window.ui:18
+#: libide/keybindings/ide-shortcuts-window.ui:427
+msgctxt "shortcut window"
+msgid "Global Search"
+msgstr "Global søgning"
+
+#: libide/keybindings/ide-shortcuts-window.ui:25
+#: libide/keybindings/ide-shortcuts-window.ui:434
+msgctxt "shortcut window"
+msgid "Preferences"
+msgstr "Indstillinger"
+
+#: libide/keybindings/ide-shortcuts-window.ui:32
+#: libide/keybindings/ide-shortcuts-window.ui:441
+msgctxt "shortcut window"
+msgid "Command Bar"
+msgstr "Kommandobjælke"
+
+#: libide/keybindings/ide-shortcuts-window.ui:39
+#: libide/keybindings/ide-shortcuts-window.ui:448
+msgctxt "shortcut window"
+msgid "Terminal"
+msgstr "Terminal"
+
+#: libide/keybindings/ide-shortcuts-window.ui:46
+#: libide/keybindings/ide-shortcuts-window.ui:455
+msgctxt "shortcut window"
+msgid "Keyboard Shortcuts"
+msgstr "Genvejstaster"
+
+#: libide/keybindings/ide-shortcuts-window.ui:55
+msgctxt "shortcut window"
+msgid "Panels"
+msgstr "Paneler"
+
+#: libide/keybindings/ide-shortcuts-window.ui:59
+msgctxt "shortcut window"
+msgid "Toggle left panel"
+msgstr "Slå venstre panel til eller fra"
+
+#: libide/keybindings/ide-shortcuts-window.ui:66
+msgctxt "shortcut window"
+msgid "Toggle right panel"
+msgstr "Slå højre panel til eller fra"
+
+#: libide/keybindings/ide-shortcuts-window.ui:73
+msgctxt "shortcut window"
+msgid "Toggle bottom panel"
+msgstr "Slå bundpanel til eller fra"
+
+#: libide/keybindings/ide-shortcuts-window.ui:82
+msgctxt "shortcut window"
+msgid "Touchpad gestures"
+msgstr "Pegepladegestusser"
+
+#: libide/keybindings/ide-shortcuts-window.ui:87
+#: libide/keybindings/ide-shortcuts-window.ui:135
+msgctxt "shortcut window"
+msgid "Switch to the next document"
+msgstr "Skift til næste dokument"
+
+#: libide/keybindings/ide-shortcuts-window.ui:94
+#: libide/keybindings/ide-shortcuts-window.ui:142
+msgctxt "shortcut window"
+msgid "Switch to the previous document"
+msgstr "Skift til forrige dokument"
+
+#: libide/keybindings/ide-shortcuts-window.ui:102
+msgctxt "shortcut window"
+msgid "Files"
+msgstr "Filer"
+
+#: libide/keybindings/ide-shortcuts-window.ui:107
+msgctxt "shortcut window"
+msgid "Create new document"
+msgstr "Opret nyt dokument"
+
+#: libide/keybindings/ide-shortcuts-window.ui:114
+msgctxt "shortcut window"
+msgid "Open a document"
+msgstr "Åbn et dokument"
+
+#: libide/keybindings/ide-shortcuts-window.ui:121
+msgctxt "shortcut window"
+msgid "Save the document"
+msgstr "Gem dokumentet"
+
+#: libide/keybindings/ide-shortcuts-window.ui:128
+msgctxt "shortcut window"
+msgid "Close the document"
+msgstr "Luk dokumentet"
+
+#: libide/keybindings/ide-shortcuts-window.ui:149
+msgctxt "shortcut window"
+msgid "Show list of open documents"
+msgstr "Vis liste af åbne dokumenter"
+
+#: libide/keybindings/ide-shortcuts-window.ui:157
+msgctxt "shortcut window"
+msgid "Find and replace"
+msgstr "Søg og erstat"
+
+#: libide/keybindings/ide-shortcuts-window.ui:162
+msgctxt "shortcut window"
+msgid "Find"
+msgstr "Søg"
+
+#: libide/keybindings/ide-shortcuts-window.ui:169
+msgctxt "shortcut window"
+msgid "Find the next match"
+msgstr "Find næste"
+
+#: libide/keybindings/ide-shortcuts-window.ui:176
+msgctxt "shortcut window"
+msgid "Find the previous match"
+msgstr "Find forrige"
+
+#: libide/keybindings/ide-shortcuts-window.ui:183
+msgctxt "shortcut window"
+msgid "Clear highlight"
+msgstr "Ryd fremhævning"
+
+#: libide/keybindings/ide-shortcuts-window.ui:191
+#: libide/keybindings/ide-shortcuts-window.ui:464
+msgctxt "shortcut window"
+msgid "Copy and Paste"
+msgstr "Kopiér og indsæt"
+
+#: libide/keybindings/ide-shortcuts-window.ui:196
+#: libide/keybindings/ide-shortcuts-window.ui:469
+msgctxt "shortcut window"
+msgid "Copy selected text to clipboard"
+msgstr "Kopiér markeret tekst til udklipsholderen"
+
+#: libide/keybindings/ide-shortcuts-window.ui:203
+msgctxt "shortcut window"
+msgid "Cut selected text to clipboard"
+msgstr "Udklip markeret tekst til udklipsholderen"
+
+#: libide/keybindings/ide-shortcuts-window.ui:210
+#: libide/keybindings/ide-shortcuts-window.ui:476
+msgctxt "shortcut window"
+msgid "Paste text from clipboard"
+msgstr "Indsæt tekst fra udklipsholderen"
+
+#: libide/keybindings/ide-shortcuts-window.ui:217
+msgctxt "shortcut window"
+msgid "Duplicate current line or selection"
+msgstr "Duplikér nuværende linje eller markering"
+
+#: libide/keybindings/ide-shortcuts-window.ui:225
+msgctxt "shortcut window"
+msgid "Undo and Redo"
+msgstr "Fortryd og omgør"
+
+#: libide/keybindings/ide-shortcuts-window.ui:230
+msgctxt "shortcut window"
+msgid "Undo previous command"
+msgstr "Fortryd forrige kommando"
+
+#: libide/keybindings/ide-shortcuts-window.ui:237
+msgctxt "shortcut window"
+msgid "Redo previous command"
+msgstr "Omgør forrige kommando"
+
+#: libide/keybindings/ide-shortcuts-window.ui:245
+msgctxt "shortcut window"
+msgid "Editing"
+msgstr "Redigering"
+
+#: libide/keybindings/ide-shortcuts-window.ui:250
+msgctxt "shortcut window"
+msgid "Increment number at cursor"
+msgstr "Forøg tal ved markør med én"
+
+#: libide/keybindings/ide-shortcuts-window.ui:257
+msgctxt "shortcut window"
+msgid "Decrement number at cursor"
+msgstr "Formindsk tal ved markør med én"
+
+#: libide/keybindings/ide-shortcuts-window.ui:264
+msgctxt "shortcut window"
+msgid "Join selected lines"
+msgstr "Slå valgte linjer sammen"
+
+#: libide/keybindings/ide-shortcuts-window.ui:271
+msgctxt "shortcut window"
+msgid "Show completion window"
+msgstr "Vis fuldførelsesvindue"
+
+#: libide/keybindings/ide-shortcuts-window.ui:278
+msgctxt "shortcut window"
+msgid "Toggle overwrite"
+msgstr "Slå overskrivning til eller fra"
+
+#: libide/keybindings/ide-shortcuts-window.ui:285
+msgctxt "shortcut window"
+msgid "Reindent line"
+msgstr "Genindryk linje"
+
+#: libide/keybindings/ide-shortcuts-window.ui:293
+msgctxt "shortcut window"
+msgid "Navigation"
+msgstr "Navigation"
+
+#: libide/keybindings/ide-shortcuts-window.ui:298
+msgctxt "shortcut window"
+msgid "Move to next error in file"
+msgstr "Gå til næste fejl i filen"
+
+#: libide/keybindings/ide-shortcuts-window.ui:305
+msgctxt "shortcut window"
+msgid "Move to previous error in file"
+msgstr "Gå til forrige fejl i filen"
+
+#: libide/keybindings/ide-shortcuts-window.ui:312
+msgctxt "shortcut window"
+msgid "Move to previous edit location"
+msgstr "Gå til forrige redigeringssted"
+
+#: libide/keybindings/ide-shortcuts-window.ui:319
+msgctxt "shortcut window"
+msgid "Move to next edit location"
+msgstr "Gå til næste redigeringssted"
+
+#: libide/keybindings/ide-shortcuts-window.ui:326
+msgctxt "shortcut window"
+msgid "Jump to definition of symbol"
+msgstr "Hop til definition af symbol"
+
+#: libide/keybindings/ide-shortcuts-window.ui:333
+msgctxt "shortcut window"
+msgid "Move viewport up within the file"
+msgstr "Flyt visningsområde op inden i filen"
+
+#: libide/keybindings/ide-shortcuts-window.ui:340
+msgctxt "shortcut window"
+msgid "Move viewport down within the file"
+msgstr "Flyt visningsområde ned inden i filen"
+
+#: libide/keybindings/ide-shortcuts-window.ui:347
+msgctxt "shortcut window"
+msgid "Move viewport to end of file"
+msgstr "Flyt visningsområde til slutningen af filen"
+
+#: libide/keybindings/ide-shortcuts-window.ui:354
+msgctxt "shortcut window"
+msgid "Move viewport to beginning of file"
+msgstr "Flyt visningsområde til begyndelsen af filen"
+
+#: libide/keybindings/ide-shortcuts-window.ui:361
+msgctxt "shortcut window"
+msgid "Move to matching bracket"
+msgstr "Gå til modsvarende parentes"
+
+#: libide/keybindings/ide-shortcuts-window.ui:369
+msgctxt "shortcut window"
+msgid "Selections"
+msgstr "Markeringer"
+
+#: libide/keybindings/ide-shortcuts-window.ui:374
+msgctxt "shortcut window"
+msgid "Select all"
+msgstr "Markér alt"
+
+#: libide/keybindings/ide-shortcuts-window.ui:381
+msgctxt "shortcut window"
+msgid "Unselect all"
+msgstr "Fjern markering"
+
+#: libide/keybindings/ide-shortcuts-window.ui:389
+msgctxt "shortcut window"
+msgid "Build and Run"
+msgstr "Kompilér og kør"
+
+#: libide/keybindings/ide-shortcuts-window.ui:394
+msgctxt "shortcut window"
+msgid "Build"
+msgstr "Kompilér"
+
+#: libide/keybindings/ide-shortcuts-window.ui:401
+msgctxt "shortcut window"
+msgid "Run"
+msgstr "Kør"
+
+#: libide/keybindings/ide-shortcuts-window.ui:408
+msgctxt "shortcut window"
+msgid "Profile"
+msgstr "Profilering"
+
+#: libide/keybindings/ide-shortcuts-window.ui:419
+msgctxt "shortcut window"
+msgid "Terminal Shortcuts"
+msgstr "Terminalgenveje"
+
+#: libide/preferences/ide-preferences-builtin.c:65
+#: libide/preferences/ide-preferences-builtin.c:66
 msgid "Extensions"
 msgstr "Udvidelser"
 
-#: ../libide/preferences/ide-preferences-builtin.c:102
+#: libide/preferences/ide-preferences-builtin.c:102
 msgid "Appearance"
 msgstr "Udseende"
 
-#: ../libide/preferences/ide-preferences-builtin.c:104
+#: libide/preferences/ide-preferences-builtin.c:104
 msgid "Themes"
 msgstr "Temaer"
 
-#: ../libide/preferences/ide-preferences-builtin.c:105
+#: libide/preferences/ide-preferences-builtin.c:105
 msgid "Dark Theme"
 msgstr "Mørkt tema"
 
-#: ../libide/preferences/ide-preferences-builtin.c:105
+#: libide/preferences/ide-preferences-builtin.c:105
 msgid "Whether Builder should use a dark theme"
 msgstr "Om Builder skal bruge et mørkt tema"
 
-#: ../libide/preferences/ide-preferences-builtin.c:105
+#: libide/preferences/ide-preferences-builtin.c:105
 msgid "dark theme"
 msgstr "mørkt tema"
 
-#: ../libide/preferences/ide-preferences-builtin.c:106
+#: libide/preferences/ide-preferences-builtin.c:106
 msgid "Grid Pattern"
 msgstr "Gittermønster"
 
-#: ../libide/preferences/ide-preferences-builtin.c:106
+#: libide/preferences/ide-preferences-builtin.c:106
 msgid "Display a grid pattern underneath source code"
 msgstr "Vis et gittermønster under kildekoden"
 
-#: ../libide/preferences/ide-preferences-builtin.c:108
+#: libide/preferences/ide-preferences-builtin.c:108
 msgid "Font"
 msgstr "Skrifttype"
 
-#: ../libide/preferences/ide-preferences-builtin.c:109
+#: libide/preferences/ide-preferences-builtin.c:109
 msgctxt "Keywords"
 msgid "editor font monospace"
 msgstr "redigering skrifttype fastbredde"
 
 #. XXX: This belongs in terminal addin
-#: ../libide/preferences/ide-preferences-builtin.c:111
-#: ../plugins/terminal/gb-terminal-workbench-addin.c:90
+#: libide/preferences/ide-preferences-builtin.c:111
+#: plugins/terminal/gb-terminal-workbench-addin.c:90
 msgid "Terminal"
 msgstr "Terminal"
 
-#: ../libide/preferences/ide-preferences-builtin.c:111
+#: libide/preferences/ide-preferences-builtin.c:111
 msgctxt "Keywords"
 msgid "terminal font monospace"
 msgstr "terminal skrifttype fastbredde"
 
-#: ../libide/preferences/ide-preferences-builtin.c:116
+#: libide/preferences/ide-preferences-builtin.c:116
 msgid "Color Scheme"
 msgstr "Farveskema"
 
-#: ../libide/preferences/ide-preferences-builtin.c:141
+#: libide/preferences/ide-preferences-builtin.c:141
 msgid "Keyboard"
 msgstr "Tastatur"
 
-#: ../libide/preferences/ide-preferences-builtin.c:143
+#: libide/preferences/ide-preferences-builtin.c:143
 msgid "Emulation"
 msgstr "Emulering"
 
-#: ../libide/preferences/ide-preferences-builtin.c:144
+#: libide/preferences/ide-preferences-builtin.c:144
 msgid "Default keybinding mode which mimics gedit"
 msgstr "Standardgenvejstilstand, som minder om gedit"
 
-#: ../libide/preferences/ide-preferences-builtin.c:145
+#: libide/preferences/ide-preferences-builtin.c:145
 msgid "Emacs"
 msgstr "Emacs"
 
-#: ../libide/preferences/ide-preferences-builtin.c:145
+#: libide/preferences/ide-preferences-builtin.c:145
 msgid "Emulates the Emacs text editor"
 msgstr "Emulerer tekstredigeringen Emacs"
 
-#: ../libide/preferences/ide-preferences-builtin.c:146
+#: libide/preferences/ide-preferences-builtin.c:146
 msgid "Vim"
 msgstr "Vim"
 
-#: ../libide/preferences/ide-preferences-builtin.c:146
+#: libide/preferences/ide-preferences-builtin.c:146
 msgid "Emulates the Vim text editor"
 msgstr "Emulerer tekstredigeringen Vim"
 
-#: ../libide/preferences/ide-preferences-builtin.c:148
+#: libide/preferences/ide-preferences-builtin.c:148
 msgid "Movement"
 msgstr "Flytning"
 
-#: ../libide/preferences/ide-preferences-builtin.c:149
+#: libide/preferences/ide-preferences-builtin.c:149
 msgid "Home moves to first non-whitespace character"
 msgstr "Home-tasten flytter til første tegn, som ikke er et mellemrum"
 
-#: ../libide/preferences/ide-preferences-builtin.c:150
+#: libide/preferences/ide-preferences-builtin.c:150
 msgid ""
 "Backspace will remove extra space to keep you aligned with your indentation"
 msgstr ""
 "Tilbagetast sletter ekstra mellemrum for at holde det ligestillet med din "
 "indrykning"
 
-#: ../libide/preferences/ide-preferences-builtin.c:158
+#: libide/preferences/ide-preferences-builtin.c:158
 msgid "Cursor"
 msgstr "Markør"
 
-#: ../libide/preferences/ide-preferences-builtin.c:159
+#: libide/preferences/ide-preferences-builtin.c:159
 msgid "Restore cursor position"
 msgstr "Gendan markørplacering"
 
-#: ../libide/preferences/ide-preferences-builtin.c:159
+#: libide/preferences/ide-preferences-builtin.c:159
 msgid "Restore cursor position when a file is reopened"
 msgstr "Gendan markørplacering, når en fil genåbnes"
 
-#: ../libide/preferences/ide-preferences-builtin.c:160
+#: libide/preferences/ide-preferences-builtin.c:160
 msgid "Scroll Offset"
 msgstr "Rulleforskydning"
 
-#: ../libide/preferences/ide-preferences-builtin.c:160
+#: libide/preferences/ide-preferences-builtin.c:160
 msgid "Minimum number of lines to keep above and below the cursor"
 msgstr "Mindste antal linjer, som skal holdes over og under markøren"
 
-#: ../libide/preferences/ide-preferences-builtin.c:161
+#: libide/preferences/ide-preferences-builtin.c:161
 msgid "Allow the editor to scroll past the end of the buffer"
 msgstr "Tillad redigeringen at rulle længere ned end bufferen"
 
-#: ../libide/preferences/ide-preferences-builtin.c:163
+#: libide/preferences/ide-preferences-builtin.c:163
 msgid "Line Information"
 msgstr "Linjeinformation"
 
-#: ../libide/preferences/ide-preferences-builtin.c:164
+#: libide/preferences/ide-preferences-builtin.c:164
 msgid "Line numbers"
 msgstr "Linjenumre"
 
-#: ../libide/preferences/ide-preferences-builtin.c:164
+#: libide/preferences/ide-preferences-builtin.c:164
 msgid "Show line number at beginning of each line"
 msgstr "Vis linjenummer i starten af hver linje"
 
-#: ../libide/preferences/ide-preferences-builtin.c:165
+#: libide/preferences/ide-preferences-builtin.c:165
 msgid "Line changes"
 msgstr "Linjeændringer"
 
-#: ../libide/preferences/ide-preferences-builtin.c:165
+#: libide/preferences/ide-preferences-builtin.c:165
 msgid "Show if a line was added or modified next to line number"
 msgstr ""
 "Vis om en linje er blevet tilføjet eller redigeret ved siden af linjenummeret"
 
-#: ../libide/preferences/ide-preferences-builtin.c:167
+#: libide/preferences/ide-preferences-builtin.c:167
 msgid "Highlight"
 msgstr "Fremhæv"
 
-#: ../libide/preferences/ide-preferences-builtin.c:168
+#: libide/preferences/ide-preferences-builtin.c:168
 msgid "Current line"
 msgstr "Aktuel linje"
 
-#: ../libide/preferences/ide-preferences-builtin.c:168
+#: libide/preferences/ide-preferences-builtin.c:168
 msgid "Make current line stand out with highlights"
 msgstr "Få den aktuelle linje til at stå frem med fremhævninger"
 
-#: ../libide/preferences/ide-preferences-builtin.c:169
+#: libide/preferences/ide-preferences-builtin.c:169
 msgid "Matching brackets"
 msgstr "Modsvarende parenteser"
 
-#: ../libide/preferences/ide-preferences-builtin.c:169
+#: libide/preferences/ide-preferences-builtin.c:169
 msgid "Highlight matching brackets based on cursor position"
 msgstr "Fremhæv modsvarende parenteser baseret på markørplacering"
 
-#: ../libide/preferences/ide-preferences-builtin.c:171
+#: libide/preferences/ide-preferences-builtin.c:171
 msgid "Code Overview"
 msgstr "Kodeoversigt"
 
-#: ../libide/preferences/ide-preferences-builtin.c:172
+#: libide/preferences/ide-preferences-builtin.c:172
 msgid "A zoomed out view to enhance navigating source code"
 msgstr "Et overblik, som gør det nemmere at navigere i kildekode"
 
-#: ../libide/preferences/ide-preferences-builtin.c:173
+#: libide/preferences/ide-preferences-builtin.c:173
 msgid "Automatically hide overview map"
 msgstr "Skjul kodeoversigt automatisk"
 
-#: ../libide/preferences/ide-preferences-builtin.c:173
+#: libide/preferences/ide-preferences-builtin.c:173
 msgid "Automatically hide map when editor loses focus"
 msgstr "Skjul automatisk kodeoversigt når redigeringen mister fokus"
 
-#: ../libide/preferences/ide-preferences-builtin.c:175
+#: libide/preferences/ide-preferences-builtin.c:175
 msgid "Whitespace Characters"
 msgstr "Blanktegn"
 
-#: ../libide/preferences/ide-preferences-builtin.c:176
-msgid "Spaces"
-msgstr "Mellemrum"
-
-#: ../libide/preferences/ide-preferences-builtin.c:177
-msgid "Tabs"
-msgstr "Tabulatorer"
-
-#: ../libide/preferences/ide-preferences-builtin.c:178
+#: libide/preferences/ide-preferences-builtin.c:178
 msgid "New line and carriage return"
 msgstr "Linjeskift og vognretur"
 
-#: ../libide/preferences/ide-preferences-builtin.c:179
+#: libide/preferences/ide-preferences-builtin.c:179
 msgid "Non-breaking spaces"
 msgstr "Ikkeombrydende blanktegn"
 
-#: ../libide/preferences/ide-preferences-builtin.c:180
+#: libide/preferences/ide-preferences-builtin.c:180
 msgid "Spaces inside of text"
 msgstr "Mellemrum inde i tekst"
 
-#: ../libide/preferences/ide-preferences-builtin.c:181
+#: libide/preferences/ide-preferences-builtin.c:181
 msgid "Trailing Only"
 msgstr "Kun afsluttende"
 
-#: ../libide/preferences/ide-preferences-builtin.c:182
+#: libide/preferences/ide-preferences-builtin.c:182
 msgid "Leading Only"
 msgstr "Kun indledende"
 
 # ?
-#: ../libide/preferences/ide-preferences-builtin.c:188
+#: libide/preferences/ide-preferences-builtin.c:188
 msgid "Code Insight"
 msgstr "Kodeanalyse"
 
-#: ../libide/preferences/ide-preferences-builtin.c:190
-msgid "Highlighting"
-msgstr "Fremhævning"
-
-#: ../libide/preferences/ide-preferences-builtin.c:191
+#: libide/preferences/ide-preferences-builtin.c:191
 msgid "Semantic Highlighting"
 msgstr "Semantisk fremhævning"
 
-#: ../libide/preferences/ide-preferences-builtin.c:191
+#: libide/preferences/ide-preferences-builtin.c:191
 msgid ""
 "Use code insight to highlight additional information discovered in source "
 "file"
 msgstr ""
 "Brug kodeindsigt til at fremhæve yderligere information, fundet i kilde-fil"
 
-#: ../libide/preferences/ide-preferences-builtin.c:193
+#: libide/preferences/ide-preferences-builtin.c:193
 msgid "Completion"
 msgstr "Fuldførelse"
 
-#: ../libide/preferences/ide-preferences-builtin.c:194
+#: libide/preferences/ide-preferences-builtin.c:194
 msgid "Suggest words found in open files"
 msgstr "Foreslå ord fundet i åbne filer"
 
-#: ../libide/preferences/ide-preferences-builtin.c:194
+#: libide/preferences/ide-preferences-builtin.c:194
 msgid ""
 "Suggests completions as you type based on words found in any open document"
 msgstr ""
 "Foreslå fuldførelse mens du skriver, ud fra ord fundet i alle åbne dokumenter"
 
-#: ../libide/preferences/ide-preferences-builtin.c:195
+#: libide/preferences/ide-preferences-builtin.c:195
 msgid "Suggest completions using Ctags"
 msgstr "Foreslå fuldførelse ved brug af Ctags"
 
-#: ../libide/preferences/ide-preferences-builtin.c:195
+#: libide/preferences/ide-preferences-builtin.c:195
 msgid ""
 "Create and manages a Ctags database for completing class names, functions, "
 "and more"
@@ -1020,564 +1964,709 @@ msgstr ""
 "Opret og håndtér en Ctags-database til at afslutte klassenavne, funktioner "
 "osv."
 
-#: ../libide/preferences/ide-preferences-builtin.c:196
+#: libide/preferences/ide-preferences-builtin.c:196
 msgid "Suggest completions using Clang (Experimental)"
 msgstr "Foreslå fuldførelse ved brug af Clang (Eksperimentel)"
 
-#: ../libide/preferences/ide-preferences-builtin.c:196
+#: libide/preferences/ide-preferences-builtin.c:196
 msgid "Use Clang to suggest completions for C and C++ languages"
 msgstr "Brug Clang til at foreslå fuldførelse i sprogene C og C++"
 
-#: ../libide/preferences/ide-preferences-builtin.c:198
+#: libide/preferences/ide-preferences-builtin.c:198
 msgid "Diagnostics"
 msgstr "Diagnostik"
 
-#: ../libide/preferences/ide-preferences-builtin.c:204
-#: ../libide/snippets/ide-source-snippet-completion-provider.c:297
+#: libide/preferences/ide-preferences-builtin.c:204
+#: libide/snippets/ide-source-snippet-completion-provider.c:297
 msgid "Snippets"
 msgstr "Tekststumper"
 
-#: ../libide/preferences/ide-preferences-builtin.c:207
+#: libide/preferences/ide-preferences-builtin.c:207
 msgid "Code snippets"
 msgstr "Kodestumper"
 
-#: ../libide/preferences/ide-preferences-builtin.c:207
+#: libide/preferences/ide-preferences-builtin.c:207
 msgid "Use code fragments to increase typing efficiency"
 msgstr "Brug kodefragmenter til at forbedre taste-effektiviteten"
 
-#: ../libide/preferences/ide-preferences-builtin.c:251
+#: libide/preferences/ide-preferences-builtin.c:251
 msgid "Programming Languages"
 msgstr "Programmeringssprog"
 
 # Det er teksten som står med gråt i søgefeltet når man endnu ikke har skrevet noget i søgefeltet:
 # http://i.imgur.com/vxldgzS.png
 #. translators: placeholder string for the entry used to filter the languages in Preferences/Programming languages
-#: ../libide/preferences/ide-preferences-builtin.c:262
+#: libide/preferences/ide-preferences-builtin.c:262
 msgid "Search languages…"
 msgstr "Søg efter sprog…"
 
-#: ../libide/preferences/ide-preferences-builtin.c:316
-#: ../libide/preferences/ide-preferences-builtin.c:377
+#: libide/preferences/ide-preferences-builtin.c:316
+#: libide/preferences/ide-preferences-builtin.c:377
+#: plugins/build-tools/gbp-build-configuration-view.ui:11
 msgid "General"
 msgstr "Generelt"
 
-#: ../libide/preferences/ide-preferences-builtin.c:317
+#: libide/preferences/ide-preferences-builtin.c:317
 msgid "Trim trailing whitespace"
 msgstr "Fjern afsluttende blanktegn"
 
-#: ../libide/preferences/ide-preferences-builtin.c:317
+#: libide/preferences/ide-preferences-builtin.c:317
 msgid "Upon saving, trailing whitespace from modified lines will be trimmed."
 msgstr "Fjern afsluttende blanktegn fra ændrede linjer, når der gemmes."
 
-#: ../libide/preferences/ide-preferences-builtin.c:318
+#: libide/preferences/ide-preferences-builtin.c:318
 msgid "Overwrite Braces"
 msgstr "Overskriv parenteser"
 
-#: ../libide/preferences/ide-preferences-builtin.c:318
+#: libide/preferences/ide-preferences-builtin.c:318
 msgid "Overwrite closing braces"
 msgstr "Overskriv slutparenteser"
 
-#: ../libide/preferences/ide-preferences-builtin.c:320
+#: libide/preferences/ide-preferences-builtin.c:320
 msgid "Margins"
 msgstr "Margener"
 
-#: ../libide/preferences/ide-preferences-builtin.c:321
+#: libide/preferences/ide-preferences-builtin.c:321
 msgid "Show right margin"
 msgstr "Vis højremargen"
 
-#: ../libide/preferences/ide-preferences-builtin.c:322
+#: libide/preferences/ide-preferences-builtin.c:322
 msgid "Right margin position"
 msgstr "Placering af højremargen"
 
-#: ../libide/preferences/ide-preferences-builtin.c:322
+#: libide/preferences/ide-preferences-builtin.c:322
 msgid "Position in spaces for the right margin"
 msgstr "Placering, angivet i mellemrum, af højremargen"
 
-#: ../libide/preferences/ide-preferences-builtin.c:324
-msgid "Indentation"
-msgstr "Indrykning"
-
-#: ../libide/preferences/ide-preferences-builtin.c:325
+#: libide/preferences/ide-preferences-builtin.c:325
 msgid "Tab width"
 msgstr "Tabulatorbredde"
 
-#: ../libide/preferences/ide-preferences-builtin.c:325
+#: libide/preferences/ide-preferences-builtin.c:325
 msgid "Width of a tab character in spaces"
 msgstr "Bredden af tabulatortegn, angivet i mellemrum"
 
-#: ../libide/preferences/ide-preferences-builtin.c:326
+#: libide/preferences/ide-preferences-builtin.c:326
 msgid "Insert spaces instead of tabs"
 msgstr "Indsæt mellemrum i stedet for tabulatorer"
 
-#: ../libide/preferences/ide-preferences-builtin.c:326
+#: libide/preferences/ide-preferences-builtin.c:326
 msgid "Prefer spaces over use of tabs"
 msgstr "Foretræk mellemrum over tabulatorer"
 
-#: ../libide/preferences/ide-preferences-builtin.c:327
+#: libide/preferences/ide-preferences-builtin.c:327
 msgid "Automatically indent"
 msgstr "Automatisk indrykning"
 
-#: ../libide/preferences/ide-preferences-builtin.c:327
+#: libide/preferences/ide-preferences-builtin.c:327
 msgid "Indent source code as you type"
 msgstr "Indryk kildekode mens du skriver"
 
-#: ../libide/preferences/ide-preferences-builtin.c:342
-#: ../libide/preferences/ide-preferences-builtin.c:360
+#: libide/preferences/ide-preferences-builtin.c:342
+#: libide/preferences/ide-preferences-builtin.c:360
 msgid "Number of CPU"
 msgstr "Antal cpu'er"
 
-#: ../libide/preferences/ide-preferences-builtin.c:375
-#: ../plugins/build-tools/gbp-build-panel.c:386
+#: libide/preferences/ide-preferences-builtin.c:375
+#: libide/workbench/ide-omni-bar.ui:372
+#: plugins/build-tools/gbp-build-panel.c:386
 msgid "Build"
 msgstr "Kompilér"
 
-#: ../libide/preferences/ide-preferences-builtin.c:378
+#: libide/preferences/ide-preferences-builtin.c:378
 msgid "Build Workers"
 msgstr "Kompileringsarbejdere"
 
-#: ../libide/preferences/ide-preferences-builtin.c:378
+#: libide/preferences/ide-preferences-builtin.c:378
 msgid "Number of parallel build workers"
 msgstr "Antallet af parallelle kompileringsarbejdere"
 
-#: ../libide/preferences/ide-preferences-builtin.c:390
+#: libide/preferences/ide-preferences-builtin.c:390
 msgid "Projects"
 msgstr "Projekter"
 
-#: ../libide/preferences/ide-preferences-builtin.c:392
+#: libide/preferences/ide-preferences-builtin.c:392
 msgid "Workspace"
 msgstr "Arbejdsområde"
 
-#: ../libide/preferences/ide-preferences-builtin.c:393
+#: libide/preferences/ide-preferences-builtin.c:393
 msgid "A place for all your projects"
 msgstr "Et sted til alle dine projekter"
 
-#: ../libide/preferences/ide-preferences-builtin.c:394
+#: libide/preferences/ide-preferences-builtin.c:394
 msgid "Restore previously opened files"
 msgstr "Gendan tidligere åbne filer"
 
-#: ../libide/preferences/ide-preferences-builtin.c:394
+#: libide/preferences/ide-preferences-builtin.c:394
 msgid "Open previously opened files when loading a project"
 msgstr "Åbn filer som var åbnet tidligere ved indlæsning af et projekt"
 
-#: ../libide/preferences/ide-preferences-builtin.c:396
+#: libide/preferences/ide-preferences-builtin.c:396
 msgid "Project Discovery"
 msgstr "Find projekter"
 
-#: ../libide/preferences/ide-preferences-builtin.c:397
+#: libide/preferences/ide-preferences-builtin.c:397
 msgid "Discover projects on my computer"
 msgstr "Find projekter på din computer"
 
-#: ../libide/preferences/ide-preferences-builtin.c:397
+#: libide/preferences/ide-preferences-builtin.c:397
 msgid "Scan your computer for existing projects"
 msgstr "Skan din computer for eksisterende projekter"
 
-#: ../libide/preferences/ide-preferences-builtin.c:518
+#: libide/preferences/ide-preferences-builtin.c:518
+#: plugins/create-project/gbp-create-project-widget.ui:153
 msgid "Version Control"
 msgstr "Versionsstyring"
 
-#: ../libide/preferences/ide-preferences-perspective.c:924
+#: libide/preferences/ide-preferences-font-button.ui:57
+msgid "_Select"
+msgstr "_Markér"
+
+#: libide/preferences/ide-preferences-perspective.c:924
 msgid "Preferences"
 msgstr "Indstillinger"
 
-#: ../libide/projects/ide-project.c:527
+#: libide/preferences/ide-preferences-perspective.ui:15
+msgid "Search Preferences"
+msgstr "Søg i indstillinger"
+
+#: libide/projects/ide-project.c:527
 msgid "Destination file must be within the project tree."
 msgstr "Målfilen skal være i projekttræet."
 
-#: ../libide/projects/ide-project.c:662
+#: libide/projects/ide-project.c:662
 msgid "File must be within the project tree."
 msgstr "Filen skal være i projekttræet."
 
-#: ../libide/projects/ide-recent-projects.c:396
+#: libide/projects/ide-recent-projects.c:396
 #, c-format
 msgid "%s() may only be executed once"
 msgstr "%s() kan kun køres én gang"
 
-#: ../libide/pygobject/ide-pygobject-script.c:135
+#: libide/pygobject/ide-pygobject-script.c:135
 msgid "Attempt to load a PyGObject script with no filename."
 msgstr "Forsøg at indlæse et PyBObject-script uden filnavn."
 
-#: ../libide/pygobject/ide-pygobject-script.c:254
+#: libide/pygobject/ide-pygobject-script.c:254
 msgid "The filename for the script was not provided."
 msgstr "Der blev ikke givet noget filnavn for scriptet."
 
-#: ../libide/pygobject/ide-pygobject-script.c:265
+#: libide/pygobject/ide-pygobject-script.c:265
 msgid "The script must be on a local filesystem."
 msgstr "Scriptet skal være på et lokalt filsystem."
 
-#: ../libide/pygobject/ide-pygobject-script.c:274
+#: libide/pygobject/ide-pygobject-script.c:274
 #, c-format
 msgid "The script \"%s\" is not a PyGObject file."
 msgstr "Scriptet \"%s\" er ikke en PyGObject-fil."
 
-#: ../libide/runner/ide-run-manager.c:171
+#: libide/runner/ide-run-manager.c:171
 msgid "Run"
 msgstr "Kør"
 
-#: ../libide/runner/ide-run-manager.c:200
+#: libide/runner/ide-run-manager.c:200
 msgid "Cannot run target, another target is running"
 msgstr "Kan ikke køre mål, da der allerede kører et andet mål"
 
-#: ../libide/runner/ide-run-manager.c:287
-#: ../plugins/autotools/ide-autotools-build-task.c:442
+#: libide/runner/ide-run-manager.c:287
+#: plugins/autotools/ide-autotools-build-task.c:442
 msgid "Failed to locate runtime"
 msgstr "Kan ikke finde runtime"
 
-#: ../libide/runner/ide-runner.c:150
+#: libide/runner/ide-runner.c:150
 msgid "Process quit unexpectedly"
 msgstr "Processen afsluttede uventet"
 
-#: ../libide/runtimes/ide-runtime-manager.c:105
+#: libide/runtimes/ide-runtime-manager.c:105
 msgid "Host operating system"
 msgstr "Værtsoperativsystem"
 
-#: ../libide/scripting/ide-script.c:205
+#: libide/scripting/ide-script.c:205
 #, c-format
 msgid "%s has not implemented GAsyncInitable."
 msgstr "%s har ikke implementeret GAsyncInitable."
 
-#: ../libide/search/ide-omni-search-display.c:271
+#: libide/search/ide-omni-search-display.c:271
 msgid "Cannot add provider more than once."
 msgstr "Kan ikke tilføje udbyder mere end en gang."
 
-#: ../libide/search/ide-omni-search-display.c:347
+#: libide/search/ide-omni-search-display.c:347
 msgid "The provider could not be found."
 msgstr "Udbyderen kunne ikke findes."
 
-#: ../libide/snippets/ide-source-snippet.c:372
+#: libide/snippets/ide-source-snippet.c:372
 msgid "Chunk does not belong to snippet."
 msgstr "Uddraget hører ikke til tekststumpen."
 
-#: ../libide/snippets/ide-source-snippets-manager.c:96
+#: libide/snippets/ide-source-snippets-manager.c:96
 #, c-format
 msgid "Failed to open directory: %s"
 msgstr "Kunne ikke åbne mappe: %s"
 
-#: ../libide/snippets/ide-source-snippets-manager.c:109
+#: libide/snippets/ide-source-snippets-manager.c:109
 #, c-format
 msgid "Failed to load file: %s: %s"
 msgstr "Kunne ikke indlæse fil: %s: %s"
 
-#: ../libide/sourceview/ide-source-view.c:5139
+#: libide/sourceview/ide-source-view.c:5139
 #, c-format
 msgid "Insert “%s”"
 msgstr "Indsæt “%s”"
 
-#: ../libide/sourceview/ide-source-view.c:5141
+#: libide/sourceview/ide-source-view.c:5141
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "Erstat “%s” med “%s”"
 
-#: ../libide/sourceview/ide-source-view.c:5255
+#: libide/sourceview/ide-source-view.c:5255
 msgid "Apply Fix-It"
 msgstr "Anvend Fix-It"
 
-#: ../libide/util/ide-file-manager.c:64
+#: libide/transfers/ide-transfers-button.ui:35
+msgid "Clear _All"
+msgstr "Ryd _alt"
+
+#: libide/util/ide-file-manager.c:64
 msgid "File path is NULL"
 msgstr "Filsti er NULL"
 
-#: ../libide/util/ide-file-manager.c:73 ../libide/util/ide-file-manager.c:84
+#: libide/util/ide-file-manager.c:73 libide/util/ide-file-manager.c:84
 msgid "Error converting UTF-8 filename to wide char"
 msgstr "Fejl ved konvertering af UTF-8-filnavn til wide char"
 
-#: ../libide/util/ide-file-manager.c:92
+#: libide/util/ide-file-manager.c:92
 msgid "ILCreateFromPath() failed"
 msgstr "ILCreateFromPath() mislykkedes"
 
-#: ../libide/util/ide-file-manager.c:129
+#: libide/util/ide-file-manager.c:129
 #, c-format
 msgid "Cannot convert '%s' into a valid NSURL."
 msgstr "Kan ikke konvertere \"%s\" til en gyldig NSURL."
 
-#: ../libide/util/ide-file-manager.c:157
+#: libide/util/ide-file-manager.c:157
 msgid "Connecting to org.freedesktop.FileManager1 failed: "
 msgstr "Forbindelse til org.freedesktop.FileMManager1 mislykkedes: "
 
-#: ../libide/util/ide-file-manager.c:181
+#: libide/util/ide-file-manager.c:181
 msgid "Calling ShowItems failed: "
 msgstr "Kald til ShowItems mislykkeddes: "
 
-#: ../libide/util/ide-uri.c:181
+#: libide/util/ide-uri.c:181
 #, no-c-format
 msgid "Invalid %-encoding in URI"
 msgstr "Ugyldig %-kodning i URI"
 
-#: ../libide/util/ide-uri.c:219
+#: libide/util/ide-uri.c:219
 msgid "Non-UTF-8 characters in URI"
 msgstr "Ikke-UTF-8-tegn i URI"
 
-#: ../libide/util/ide-uri.c:366 ../libide/util/ide-uri.c:377
+#: libide/util/ide-uri.c:366 libide/util/ide-uri.c:377
 #, c-format
 msgid "Invalid IP literal '%s' in URI"
 msgstr "Ugyldigt IP-tegn \"%s\" i URI"
 
-#: ../libide/util/ide-uri.c:411
+#: libide/util/ide-uri.c:411
 #, c-format
 msgid "Invalid encoded IP literal '%s' in URI"
 msgstr "Ugyldigt kodet IP-tegn \"%s\" i URI"
 
-#: ../libide/util/ide-uri.c:420
+#: libide/util/ide-uri.c:420
 #, c-format
 msgid "Invalid non-ASCII hostname '%s' in URI"
 msgstr "Ugyldigt ikke-ASCII værtsnavn \"%s\" i URI"
 
-#: ../libide/util/ide-uri.c:434
+#: libide/util/ide-uri.c:434
 #, c-format
 msgid "Non-ASCII hostname '%s' forbidden in this URI"
 msgstr "Ikke-ASCII-værtsnavnet \"%s\" er forbudt i denne URI"
 
-#: ../libide/util/ide-uri.c:457
+#: libide/util/ide-uri.c:457
 #, c-format
 msgid "Could not parse port '%s' in URI"
 msgstr "Kunne ikke fortolke port \"%s\" i URI"
 
-#: ../libide/util/ide-uri.c:464
+#: libide/util/ide-uri.c:464
 #, c-format
 msgid "Port '%s' in URI is out of range"
 msgstr "Porten \"%s\" i URI'en er uden for interval"
 
-#: ../libide/util/ide-uri.c:590
+#: libide/util/ide-uri.c:590
 msgid "Base URI is not absolute"
 msgstr "Basis-URI er ikke absolut"
 
-#: ../libide/util/ide-uri.c:615
+#: libide/util/ide-uri.c:615
 msgid "URI is not absolute, and no base URI was provided"
 msgstr "URI er ikke absolut, og ingen basis-URI blev angivet"
 
-#: ../libide/util/ide-uri.c:660
+#: libide/util/ide-uri.c:660
 #, c-format
 msgid "Could not parse '%s' as absolute URI"
 msgstr "Kunne ikke fortolke \"%s\" som absolut URI"
 
-#: ../libide/util/ide-uri.c:1203
+#: libide/util/ide-uri.c:1203
 #, c-format
 msgid "URI '%s' has no host component"
 msgstr "URI'en \"%s\" har ingen værtskomponent"
 
-#: ../libide/workbench/ide-layout-view.c:125
+#: libide/workbench/ide-layout-tab-bar.ui:33
+msgid "List open files"
+msgstr "Vis åbne filer"
+
+#: libide/workbench/ide-layout-tab.ui:19
+msgid "Jump to previous location"
+msgstr "Gå til forrige placering"
+
+#: libide/workbench/ide-layout-tab.ui:33
+msgid "Jump to next location"
+msgstr "Gå til næste placering"
+
+#: libide/workbench/ide-layout-tab.ui:125
+msgid "Close the current document"
+msgstr "Luk det aktuelle dokument"
+
+#: libide/workbench/ide-layout-view.c:125
 msgid "untitled document"
 msgstr "unavngivet dokument"
 
 #. Translators: "Target" is providing context to the selected build configuration
-#: ../libide/workbench/ide-omni-bar.c:365
+#: libide/workbench/ide-omni-bar.c:365
 msgid "Target"
 msgstr "Mål"
 
 #. Translators, missing means we could not locate the runtime
-#: ../libide/workbench/ide-omni-bar-row.c:88
+#: libide/workbench/ide-omni-bar-row.c:88
 msgid "missing"
 msgstr "mangler"
 
-#: ../libide/workbench/ide-workbench-actions.c:66
+#: libide/workbench/ide-omni-bar-row.ui:31
+msgid "Edit build configuration"
+msgstr "Redigér kompileringskonfiguration"
+
+#: libide/workbench/ide-omni-bar-row.ui:54
+#: plugins/build-tools/gbp-build-configuration-view.ui:129
+msgid "Device"
+msgstr "Enhed"
+
+#: libide/workbench/ide-omni-bar-row.ui:85
+#: plugins/build-tools/gbp-build-configuration-view.ui:157
+msgid "Runtime"
+msgstr "Runtime"
+
+#: libide/workbench/ide-omni-bar.ui:101
+msgid "Build project (Ctrl+F7)"
+msgstr "Kompilér projektet (Ctrl+F7)"
+
+#: libide/workbench/ide-omni-bar.ui:119
+msgid "Cancel build"
+msgstr "Kompilering annulleret"
+
+#: libide/workbench/ide-omni-bar.ui:163
+#: plugins/project-tree/gb-project-tree-addin.c:105
+msgid "Project"
+msgstr "Projekt"
+
+#: libide/workbench/ide-omni-bar.ui:187
+msgid "Branch"
+msgstr "Gren"
+
+# ?
+#: libide/workbench/ide-omni-bar.ui:222
+msgid "Build Profile"
+msgstr "Kompileringsprofil"
+
+#: libide/workbench/ide-omni-bar.ui:268
+msgid "Last build"
+msgstr "Sidste kompilering"
+
+#: libide/workbench/ide-omni-bar.ui:318
+msgid "Failed"
+msgstr "Fejlet"
+
+#: libide/workbench/ide-omni-bar.ui:335
+msgid "View Output"
+msgstr "Vis output"
+
+#: libide/workbench/ide-omni-bar.ui:382
+msgid "Rebuild"
+msgstr "Genkompilér"
+
+#: libide/workbench/ide-omni-bar.ui:392
+msgid "Clean"
+msgstr "Ryd"
+
+#: libide/workbench/ide-workbench-actions.c:66
 msgid "Open File"
 msgstr "Åbn fil"
 
-#: ../libide/workbench/ide-workbench.c:558
+#: libide/workbench/ide-workbench.c:558
 #, c-format
 msgid "%s - Builder"
 msgstr "%s - Builder"
 
-#: ../plugins/autotools/ide-autotools-builder.c:47
+#: libide/workbench/ide-workbench-header-bar.ui:43
+msgid "Transfers"
+msgstr "Overførsler"
+
+#: libide/workbench/ide-workbench-header-bar.ui:50
+msgid "Show workbench menu"
+msgstr "Vis arbejdsbordsmenu"
+
+#: libide/workbench/ide-workbench-header-bar.ui:73
+msgid "Press Ctrl+. to search"
+msgstr "Tryk Ctrl+. for at søge"
+
+#: plugins/autotools/ide-autotools-builder.c:47
 msgid "Build cancelled"
 msgstr "Kompilering annulleret"
 
-#: ../plugins/autotools/ide-autotools-builder.c:49
+#: plugins/autotools/ide-autotools-builder.c:49
 msgid "Build failed"
 msgstr "Kompilering mislykkedes"
 
-#: ../plugins/autotools/ide-autotools-builder.c:55
+#: plugins/autotools/ide-autotools-builder.c:55
 msgid "Build successful"
 msgstr "Kompilering fuldført"
 
-#: ../plugins/autotools/ide-autotools-builder.c:159
-#: ../plugins/autotools/ide-autotools-builder.c:240
-#: ../plugins/autotools/ide-autotools-build-task.c:1057
+#: plugins/autotools/ide-autotools-builder.c:159
+#: plugins/autotools/ide-autotools-builder.c:240
+#: plugins/autotools/ide-autotools-build-task.c:1057
 msgid "Building…"
 msgstr "Kompilerer…"
 
-#: ../plugins/autotools/ide-autotools-builder.c:201
+#: plugins/autotools/ide-autotools-builder.c:201
 msgid "Install cancelled"
 msgstr "Installation annulleret"
 
-#: ../plugins/autotools/ide-autotools-builder.c:203
+#: plugins/autotools/ide-autotools-builder.c:203
 msgid "Install failed"
 msgstr "Installation mislykkedes"
 
-#: ../plugins/autotools/ide-autotools-builder.c:209
+#: plugins/autotools/ide-autotools-builder.c:209
 msgid "Install successful"
 msgstr "Installation fuldført"
 
-#: ../plugins/autotools/ide-autotools-build-system.c:170
+#: plugins/autotools/ide-autotools-build-system.c:170
 msgid "Failed to locate configure.ac"
 msgstr "Kunne ikke finde configure.ac"
 
-#: ../plugins/autotools/ide-autotools-build-task.c:181
+#: plugins/autotools/ide-autotools-build-task.c:181
 msgid "Directory must be on a locally mounted filesystem."
 msgstr "Mappen skal være på et lokalt monteret filsystem."
 
-#: ../plugins/autotools/ide-autotools-build-task.c:431
+#: plugins/autotools/ide-autotools-build-task.c:431
 msgid "Failed to locate device"
 msgstr "Kunne ikke finde enhed"
 
-#: ../plugins/autotools/ide-autotools-build-task.c:562
-#: ../plugins/autotools/ide-autotools-build-task.c:590
-#: ../plugins/autotools/ide-autotools-build-task.c:794
+#: plugins/autotools/ide-autotools-build-task.c:562
+#: plugins/autotools/ide-autotools-build-task.c:590
+#: plugins/autotools/ide-autotools-build-task.c:794
 msgid "Build Failed: "
 msgstr "Kompilering mislykkedes: "
 
-#: ../plugins/autotools/ide-autotools-build-task.c:675
+#: plugins/autotools/ide-autotools-build-task.c:675
 msgid "Cannot execute build task more than once"
 msgstr "Kan ikke køre kompileringsopgave mere end én gang"
 
-#: ../plugins/autotools/ide-autotools-build-task.c:827
+#: plugins/autotools/ide-autotools-build-task.c:827
 msgid "Failed to create build directory."
 msgstr "Kunne ikke åbne kompileringsmappe."
 
-#: ../plugins/autotools/ide-autotools-build-task.c:836
+#: plugins/autotools/ide-autotools-build-task.c:836
 #, c-format
 msgid "'%s' is not a directory."
 msgstr "\"%s\" er ikke en mappe."
 
-#: ../plugins/autotools/ide-autotools-build-task.c:875
+#: plugins/autotools/ide-autotools-build-task.c:875
 #, c-format
 msgid "autogen.sh is missing from project directory (%s)."
 msgstr "autogen.sh mangler fra projektmappen (%s)."
 
-#: ../plugins/autotools/ide-autotools-build-task.c:885
+#: plugins/autotools/ide-autotools-build-task.c:885
 msgid "autogen.sh is not executable."
 msgstr "autogen.sh er ikke eksekverbar."
 
-#: ../plugins/autotools/ide-autotools-build-task.c:889
+#: plugins/autotools/ide-autotools-build-task.c:889
 msgid "Running autogen…"
 msgstr "Kører autogen…"
 
-#: ../plugins/autotools/ide-autotools-build-task.c:923
+#: plugins/autotools/ide-autotools-build-task.c:923
 #, c-format
 msgid "autogen.sh failed to create configure (%s)"
 msgstr "autogen.sh kunne ikke oprette configure (%s)"
 
-#: ../plugins/autotools/ide-autotools-build-task.c:958
+#: plugins/autotools/ide-autotools-build-task.c:958
 msgid "Running configure…"
 msgstr "Kører konfiguration…"
 
-#: ../plugins/autotools/ide-autotools-build-task.c:1055
+#: plugins/autotools/ide-autotools-build-task.c:1055
 msgid "Cleaning…"
 msgstr "Rydder op…"
 
-#: ../plugins/autotools/ide-makecache.c:1147
+#: plugins/autotools/ide-makecache.c:1147
 msgid "Invalid makefile provided, ignoring."
 msgstr "Ugyldig makefil givet; ignorerer."
 
-#: ../plugins/autotools-templates/autotools_templates/__init__.py:265
+#: plugins/autotools-templates/autotools_templates/__init__.py:265
 msgid "Shared Library"
 msgstr "Delt programbibliotek"
 
-#: ../plugins/autotools-templates/autotools_templates/__init__.py:267
+#: plugins/autotools-templates/autotools_templates/__init__.py:267
 msgid "Create a new autotools project with a shared library"
 msgstr "Opret et nyt autotools-projekt med et delt programbibliotek"
 
-#: ../plugins/autotools-templates/autotools_templates/__init__.py:291
+#: plugins/autotools-templates/autotools_templates/__init__.py:291
 msgid "Empty Project"
 msgstr "Tomt projekt"
 
-#: ../plugins/autotools-templates/autotools_templates/__init__.py:294
+#: plugins/autotools-templates/autotools_templates/__init__.py:294
 msgid "Create a new empty autotools project"
 msgstr "Opret et nyt tomt autotools-projekt"
 
-#: ../plugins/autotools-templates/autotools_templates/__init__.py:308
+#: plugins/autotools-templates/autotools_templates/__init__.py:308
 msgid "GNOME Application"
 msgstr "GNOME-program"
 
-#: ../plugins/autotools-templates/autotools_templates/__init__.py:310
+#: plugins/autotools-templates/autotools_templates/__init__.py:310
 msgid "Create a new flatpak-ready GNOME application"
 msgstr "Opret et nyt flatpak-klart GNOME-program"
 
-#: ../plugins/build-tools/gbp-build-log-panel.c:254
+#: plugins/build-tools/gbp-build-configuration-row.ui:43
+msgid "Duplicate the configuration"
+msgstr "Duplikér konfigurationen"
+
+#: plugins/build-tools/gbp-build-configuration-row.ui:59
+msgid "Delete the configuration"
+msgstr "Slet konfigurationen"
+
+#: plugins/build-tools/gbp-build-configuration-view.ui:28
+msgid "The name of the build configuration"
+msgstr "Navnet på kompileringskonfigurationen"
+
+#: plugins/build-tools/gbp-build-configuration-view.ui:37
+msgid "Name"
+msgstr "Navn"
+
+#: plugins/build-tools/gbp-build-configuration-view.ui:58
+msgid "The prefix to use when installing the project"
+msgstr "Præfikset, som bruges når projektet installeres"
+
+#: plugins/build-tools/gbp-build-configuration-view.ui:67
+msgid "Installation Prefix"
+msgstr "Installationspræfiks"
+
+#: plugins/build-tools/gbp-build-configuration-view.ui:88
+msgid "Options to use when bootstrapping the project"
+msgstr "Indstillinger, som bruges når projektet bootstrappes"
+
+#: plugins/build-tools/gbp-build-configuration-view.ui:97
+msgid "Configure Options"
+msgstr "Konfigurationsindstillinger"
+
+#: plugins/build-tools/gbp-build-configuration-view.ui:185
+msgid "Environment"
+msgstr "Miljø"
+
+#: plugins/build-tools/gbp-build-log-panel.c:254
 msgid "Build Output"
 msgstr "Kompileringsoutput"
 
-#: ../plugins/build-tools/gbp-build-panel.c:84
+#: plugins/build-tools/gbp-build-panel.c:84
 #, c-format
 msgid "%d warning"
 msgid_plural "%d warnings"
 msgstr[0] "%d advarsel"
 msgstr[1] "%d advarsler"
 
-#: ../plugins/build-tools/gbp-build-panel.c:91
+#: plugins/build-tools/gbp-build-panel.c:91
 #, c-format
 msgid "%d error"
 msgid_plural "%d errors"
 msgstr[0] "%d fejl"
 msgstr[1] "%d fejl"
 
-#: ../plugins/build-tools/gbp-build-panel.c:246
+#: plugins/build-tools/gbp-build-panel.c:246
 msgid "Errors"
 msgstr "Fejl"
 
-#: ../plugins/build-tools/gbp-build-panel.c:249
+#: plugins/build-tools/gbp-build-panel.c:249
 msgid "Warnings"
 msgstr "Advarsler"
 
-#: ../plugins/build-tools/gbp-build-panel.c:252
+#: plugins/build-tools/gbp-build-panel.c:252
 msgid "Notes"
 msgstr "Noter"
 
-#: ../plugins/build-tools/gbp-build-panel-row.c:76
+#: plugins/build-tools/gbp-build-panel-row.c:76
 msgid "Unknown file"
 msgstr "Ukendt fil"
 
-#: ../plugins/build-tools/gbp-build-perspective.c:436
+#: plugins/build-tools/gbp-build-panel.ui:33
+msgid "Status:"
+msgstr "Status:"
+
+#: plugins/build-tools/gbp-build-panel.ui:58
+msgid "Running Time:"
+msgstr "Kørselstid:"
+
+#: plugins/build-tools/gbp-build-panel.ui:82
+msgid "Warnings:"
+msgstr "Advarsler:"
+
+#: plugins/build-tools/gbp-build-panel.ui:106
+msgid "Errors:"
+msgstr "Fejl:"
+
+#: plugins/build-tools/gbp-build-perspective.c:436
 msgid "Build Preferences"
 msgstr "Kompileringsindstillinger"
 
-#: ../plugins/build-tools/gbp-build-tool.c:102
-#: ../plugins/build-tools/gbp-build-tool.c:115
-#, c-format
+#: plugins/build-tools/gbp-build-tool.c:102
+#: plugins/build-tools/gbp-build-tool.c:115
 msgid "========================\n"
 msgstr "========================\n"
 
-#: ../plugins/build-tools/gbp-build-tool.c:103
+#: plugins/build-tools/gbp-build-tool.c:103
 #, c-format
 msgid "           Project Name: %s\n"
 msgstr "            Projektnavn: %s\n"
 
-#: ../plugins/build-tools/gbp-build-tool.c:104
+#: plugins/build-tools/gbp-build-tool.c:104
 #, c-format
 msgid " Version Control System: %s\n"
 msgstr "  Versionsstyringssystem: %s\n"
 
-#: ../plugins/build-tools/gbp-build-tool.c:105
+#: plugins/build-tools/gbp-build-tool.c:105
 #, c-format
 msgid "           Build System: %s\n"
 msgstr "     Kompileringssystem: %s\n"
 
-#: ../plugins/build-tools/gbp-build-tool.c:106
+#: plugins/build-tools/gbp-build-tool.c:106
 #, c-format
 msgid "    Build Date and Time: %s\n"
 msgstr "  Kompileringstidspunkt: %s\n"
 
-#: ../plugins/build-tools/gbp-build-tool.c:107
+#: plugins/build-tools/gbp-build-tool.c:107
 #, c-format
 msgid "    Building for Device: %s (%s)\n"
 msgstr "   Kompilerer for enhed: %s (%s)\n"
 
-#: ../plugins/build-tools/gbp-build-tool.c:112
+#: plugins/build-tools/gbp-build-tool.c:112
 #, c-format
 msgid "            Environment: %s\n"
 msgstr "            Miljø: %s\n"
 
 # ?
-#: ../plugins/build-tools/gbp-build-tool.c:142
-#: ../plugins/build-tools/gbp-build-tool.c:146
-#, c-format
+#: plugins/build-tools/gbp-build-tool.c:142
+#: plugins/build-tools/gbp-build-tool.c:146
 msgid "===============\n"
 msgstr "===============\n"
 
-#: ../plugins/build-tools/gbp-build-tool.c:143
+#: plugins/build-tools/gbp-build-tool.c:143
 #, c-format
 msgid " Build Failure: %s\n"
 msgstr " Kompileringsfejl: %s\n"
 
-#: ../plugins/build-tools/gbp-build-tool.c:144
+#: plugins/build-tools/gbp-build-tool.c:144
 msgid " Build ran for: %"
 msgstr " Kompilering kørte i: %"
 
@@ -1587,286 +2676,375 @@ msgstr " Kompilering kørte i: %"
 #. *       here too. It would be nice if we could say, go build this project,
 #. *       for this device, and then deploy.
 #.
-#: ../plugins/build-tools/gbp-build-tool.c:157
-#: ../plugins/build-tools/gbp-build-tool.c:161
-#, c-format
+#: plugins/build-tools/gbp-build-tool.c:157
+#: plugins/build-tools/gbp-build-tool.c:161
 msgid "=================\n"
 msgstr "=================\n"
 
-#: ../plugins/build-tools/gbp-build-tool.c:158
-#, c-format
+#: plugins/build-tools/gbp-build-tool.c:158
 msgid " Build Successful\n"
 msgstr " Kompilering fuldført\n"
 
-#: ../plugins/build-tools/gbp-build-tool.c:159
+#: plugins/build-tools/gbp-build-tool.c:159
 msgid "   Build ran for: %"
 msgstr "   Kompilering kørte i: %"
 
-#: ../plugins/build-tools/gbp-build-tool.c:212
+#: plugins/build-tools/gbp-build-tool.c:212
 #, c-format
 msgid "Failed to locate device \"%s\""
 msgstr "Kunne ikke finde enheden \"%s\""
 
-#: ../plugins/build-tools/gbp-build-tool.c:222
+#: plugins/build-tools/gbp-build-tool.c:222
 #, c-format
 msgid "Failed to locate runtime \"%s\""
 msgstr "Kunne ikke finde runtime \"%s\""
 
-#: ../plugins/build-tools/gbp-build-tool.c:286
+#: plugins/build-tools/gbp-build-tool.c:286
 msgid "Clean the project"
 msgstr "Ryd op i projektet"
 
-#: ../plugins/build-tools/gbp-build-tool.c:288
+#: plugins/build-tools/gbp-build-tool.c:288
 msgid "The ID of the device to build for"
 msgstr "Id på enheden, der kompileres for"
 
-#: ../plugins/build-tools/gbp-build-tool.c:289
+#: plugins/build-tools/gbp-build-tool.c:289
 msgid "local"
 msgstr "lokal"
 
-#: ../plugins/build-tools/gbp-build-tool.c:291
+#: plugins/build-tools/gbp-build-tool.c:291
 msgid "The runtime to use for building"
 msgstr "Runtimen, som bruges til kompilering"
 
-#: ../plugins/build-tools/gbp-build-tool.c:292
+#: plugins/build-tools/gbp-build-tool.c:292
 msgid "host"
 msgstr "vært"
 
-#: ../plugins/build-tools/gbp-build-tool.c:294
+#: plugins/build-tools/gbp-build-tool.c:294
 msgid "Number of workers to use when building"
 msgstr "Antallet af arbejdere, som bruges når der kompileres"
 
-#: ../plugins/build-tools/gbp-build-tool.c:295
+#: plugins/build-tools/gbp-build-tool.c:295
 msgid "N"
 msgstr "N"
 
-#: ../plugins/build-tools/gbp-build-tool.c:297
+#: plugins/build-tools/gbp-build-tool.c:297
 msgid "The configuration to use from .buildconfig"
 msgstr "Konfigurationen, som skal bruges, fra .buildconfig"
 
-#: ../plugins/build-tools/gbp-build-tool.c:298
+#: plugins/build-tools/gbp-build-tool.c:298
 msgid "CONFIG_ID"
 msgstr "CONFIG_ID"
 
-#: ../plugins/build-tools/gbp-build-tool.c:300
+#: plugins/build-tools/gbp-build-tool.c:300
 msgid "Path to project file, defaults to current directory"
 msgstr "Sti til projektfil; som udgangspunkt nuværende arbejdsmappe"
 
-#: ../plugins/build-tools/ide-environment-editor.c:65
+#: plugins/build-tools/ide-environment-editor.c:65
 msgid "New variable…"
 msgstr "Ny variabel…"
 
-#: ../plugins/clang/ide-clang-preferences-addin.c:62
+#: plugins/clang/ide-clang-preferences-addin.c:62
 msgid "Clang"
 msgstr "Clang"
 
-#: ../plugins/clang/ide-clang-preferences-addin.c:63
+#: plugins/clang/ide-clang-preferences-addin.c:63
 msgid "Show errors and warnings provided by Clang"
 msgstr "Vis fejl og advarsler givet af Clang"
 
 #. translators: keywords used when searching for preferences
-#: ../plugins/clang/ide-clang-preferences-addin.c:65
+#: plugins/clang/ide-clang-preferences-addin.c:65
 msgid "clang diagnostics warnings errors"
 msgstr "clang diagnostik advarsler fejl"
 
-#: ../plugins/clang/ide-clang-service.c:263
+#: plugins/clang/ide-clang-service.c:263
 msgid "Unknown failure"
 msgstr "Ukendt fejl"
 
-#: ../plugins/clang/ide-clang-service.c:267
+#: plugins/clang/ide-clang-service.c:267
 msgid "Clang crashed"
 msgstr "Clang brød ned"
 
-#: ../plugins/clang/ide-clang-service.c:271
+#: plugins/clang/ide-clang-service.c:271
 msgid "Invalid arguments"
 msgstr "Ugyldige argumenter"
 
-#: ../plugins/clang/ide-clang-service.c:275
+#: plugins/clang/ide-clang-service.c:275
 msgid "AST read error"
 msgstr "AST-læsefejl"
 
-#: ../plugins/clang/ide-clang-service.c:287
+#: plugins/clang/ide-clang-service.c:287
 #, c-format
 msgid "Failed to create translation unit: %s"
 msgstr "Kunne ikke oprette oversættelsesenhed: %s"
 
-#: ../plugins/clang/ide-clang-service.c:395
+#: plugins/clang/ide-clang-service.c:395
 msgid "File must be saved locally to parse."
 msgstr "Filen skal gemmes lokalt for at kunne fortolkes."
 
-#: ../plugins/clang/ide-clang-symbol-node.c:149
+#: plugins/clang/ide-clang-symbol-node.c:149
 msgid "anonymous"
 msgstr "anonym"
 
-#: ../plugins/clang/ide-clang-translation-unit.c:642
+#: plugins/clang/ide-clang-translation-unit.c:642
 msgid "clang_codeCompleteAt() only works on local files"
 msgstr "clang_codeCompleteAt() virker kun på lokale filer"
 
-#: ../plugins/color-picker/gb-color-picker-prefs.c:97
+#: plugins/color-picker/gb-color-picker-prefs.c:97
 msgid "Close without Saving"
 msgstr "Luk uden at gemme"
 
-#: ../plugins/color-picker/gb-color-picker-prefs.c:99
+#: plugins/color-picker/gb-color-picker-prefs.c:99
 msgid "Save As…"
 msgstr "Gem som…"
 
-#: ../plugins/color-picker/gb-color-picker-prefs.c:207
+#: plugins/color-picker/gb-color-picker-prefs.c:207
 msgid "Load palette"
 msgstr "Indlæs palet"
 
-#: ../plugins/color-picker/gb-color-picker-prefs.c:234
+#: plugins/color-picker/gb-color-picker-prefs.c:234
 msgid "Save palette"
 msgstr "Gem palet"
 
-#: ../plugins/color-picker/gb-color-picker-prefs.c:725
+#: plugins/color-picker/gb-color-picker-prefs.c:725
 msgid "All files"
 msgstr "Alle filer"
 
-#: ../plugins/color-picker/gb-color-picker-prefs.c:729
+#: plugins/color-picker/gb-color-picker-prefs.c:729
 msgid "All supported palettes formats"
 msgstr "Alle understøttede paletformater"
 
-#: ../plugins/color-picker/gb-color-picker-prefs.c:734
+#: plugins/color-picker/gb-color-picker-prefs.c:734
 msgid "GIMP palette"
 msgstr "GIMP-palet"
 
-#: ../plugins/color-picker/gb-color-picker-prefs.c:738
+#: plugins/color-picker/gb-color-picker-prefs.c:738
 msgid "GNOME Builder palette"
 msgstr "GNOME Builder-palet"
 
-#: ../plugins/color-picker/gb-color-picker-prefs-palette-row.c:178
+#: plugins/color-picker/gb-color-picker-prefs-palette-row.c:178
 msgid "Palette name"
 msgstr "Paletnavn"
 
-#: ../plugins/color-picker/gb-color-picker-prefs-palette-row.c:180
+#: plugins/color-picker/gb-color-picker-prefs-palette-row.c:180
 msgid "Enter a new name for the palette"
 msgstr "Indtast et nyt navn for paletten"
 
-#: ../plugins/color-picker/gb-color-picker-workbench-addin.c:178
+#: plugins/color-picker/gb-color-picker-workbench-addin.c:178
 msgid "Colors"
 msgstr "Farver"
 
-#: ../plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml.h:1
+#: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:13
 msgid "HSV visibility"
 msgstr "HSV-synlighed"
 
-#: ../plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml.h:2
+#: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:14
 msgid "If the HSV components are visible."
 msgstr "Om HSV-komponenterne er synlige."
 
-#: ../plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml.h:3
+#: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:18
 msgid "LAB visibility"
 msgstr "LAB-synlighed"
 
-#: ../plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml.h:4
+#: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:19
 msgid "If the LAB components are visible."
 msgstr "Om LAB-komponenterne er synlige."
 
-#: ../plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml.h:5
+#: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:23
 msgid "RGB visibility"
 msgstr "RGB-synlighed"
 
-#: ../plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml.h:6
+#: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:24
 msgid "If the RGB components are visible."
 msgstr "Om RBG-komponenterne er synlige."
 
-#: ../plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml.h:7
+#: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:28
 msgid "RGB unit"
 msgstr "RGB-enhed"
 
-#: ../plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml.h:8
+#: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:29
 msgid "The unit used by RGB component and strings."
 msgstr "Enheden som bruges af RGB-komponent og strenge."
 
-#: ../plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml.h:9
+#: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:35
 msgid "Selected palette ID"
 msgstr "Id for valgte palet"
 
-#: ../plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml.h:10
+#: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:36
 msgid "The selected palette ID among the loaded ones."
 msgstr "Det valgte palet-id blandt de indlæste."
 
-#: ../plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml.h:11
+#: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:40
 msgid "Color strings visibility"
 msgstr "Synlighed af farvestrenge"
 
-#: ../plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml.h:12
+#: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:41
 msgid "The visible color strings."
 msgstr "De synlige farvestrenge."
 
-#: ../plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml.h:13
+#: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:45
 msgid "Color filter"
 msgstr "Farvefilter"
 
-#: ../plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml.h:14
+#: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:46
 msgid "The filter used on the color scales and color plane."
 msgstr "Filteret som bruges på farveskalaer og farveplan."
 
-#: ../plugins/command-bar/gb-command-bar.c:302
+#: plugins/color-picker/gtk/color-picker-prefs.ui:13
+msgid "Color components"
+msgstr "Farvekomponenter"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:47
+#: plugins/color-picker/gtk/color-picker-prefs.ui:451
+msgid "Visibility:"
+msgstr "Synlighed:"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:63
+msgid "Select the color spaces for which you want to see sliders in the panel."
+msgstr "Vælg de farverum, der skal have skydere i panelet."
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:140
+msgid "Units:"
+msgstr "Enheder:"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:156
+msgid ""
+"Select the type of unit you want to use for RGB components and strings in "
+"the panel."
+msgstr ""
+"Vælg typen af enhed, du vil bruge til RGB-komponenter og strenge i panelet."
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:213
+msgid "Filters:"
+msgstr "Filtre:"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:229
+msgid "Select a filter that act on the colors or 'None'."
+msgstr "Vælg et filter, der virker på farverne, eller \"None\"."
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:467
+msgid "Select the color strings you want to see in the panel."
+msgstr "Vælg farvestrengene, du vil se i panelet."
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:597
+msgid "Palettes options"
+msgstr "Paletindstillinger"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:615
+msgid "Palette view mode:"
+msgstr "Paletvisningstilstand:"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:638
+msgid "List"
+msgstr "Liste"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:676
+msgid "Swatches"
+msgstr "Farveprøver"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:717
+msgid "Palette management"
+msgstr "Palethåndtering"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:762
+msgid "Load"
+msgstr "Indlæs"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:836
+msgid "From current document"
+msgstr "Fra nuværende dokument"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:854
+msgid "Select the palette you want to see in the panel or close one."
+msgstr "Vælg paletten, du vil have i panelet, eller luk en."
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:891
+msgid "No loaded palettes"
+msgstr "Ingen indlæste paletter"
+
+#: plugins/color-picker/gtk/color-picker-preview.ui:45
+msgid "No selected palettes"
+msgstr "Ingen valgte paletter"
+
+#: plugins/color-picker/gtk/color-picker-preview.ui:58
+msgid "Select a palette file"
+msgstr "Vælg en paletfil"
+
+#: plugins/color-picker/gtk/color-picker.ui:61
+msgid "Try loading or generating a palette using the menu"
+msgstr "Prøv at indlæse eller generere en palet ved brug af menuen"
+
+#: plugins/color-picker/gtk/menus.ui:7
+msgid "Enable color picker"
+msgstr "Slå farvevælger til"
+
+#: plugins/command-bar/gb-command-bar.c:302
 #, c-format
 msgid "Command not found: %s"
 msgstr "Kommando ikke fundet: %s"
 
-#: ../plugins/command-bar/gb-command-bar.c:612
+#: plugins/command-bar/gb-command-bar.c:612
 msgid "Use the entry below to execute a command"
 msgstr "Brug indtastningsfeltet nedenfor til at udføre en kommando"
 
-#: ../plugins/command-bar/gb-vim.c:90
-#, c-format
+#: plugins/command-bar/gb-vim.c:90
 msgid "Number required"
 msgstr "Tal påkrævet"
 
-#: ../plugins/command-bar/gb-vim.c:100
+#: plugins/command-bar/gb-vim.c:100
 #, c-format
 msgid "%s is invalid for %s"
 msgstr "%s er ugyldig for %s"
 
-#: ../plugins/command-bar/gb-vim.c:158
+#: plugins/command-bar/gb-vim.c:158
 #, c-format
 msgid "Cannot find language '%s'"
 msgstr "Kan ikke finde sproget \"%s\""
 
-#: ../plugins/command-bar/gb-vim.c:315
-#, c-format
+#: plugins/command-bar/gb-vim.c:315
 msgid "This command requires a GtkSourceView to be focused"
 msgstr "Denne kommando kræver at et GtkSourceView er i fokus"
 
-#: ../plugins/command-bar/gb-vim.c:326
-#, c-format
+#: plugins/command-bar/gb-vim.c:326
 msgid "This command requires a view to be focused"
 msgstr "Denne kommando kræver at en visning er i fokus"
 
-#: ../plugins/command-bar/gb-vim.c:383
+#: plugins/command-bar/gb-vim.c:383
 #, c-format
 msgid "Unknown option: %s"
 msgstr "Ukendt indstilling: %s"
 
-#: ../plugins/command-bar/gb-vim.c:426
+#: plugins/command-bar/gb-vim.c:426
 #, c-format
 msgid "Cannot find colorscheme '%s'"
 msgstr "Kan ikke finde farveskema \"%s\""
 
-#: ../plugins/command-bar/gb-vim.c:467 ../plugins/command-bar/gb-vim.c:591
-#, c-format
+#: plugins/command-bar/gb-vim.c:467 plugins/command-bar/gb-vim.c:591
 msgid "Failed to locate working directory"
 msgstr "Kunne ikke finde arbejdsmappe"
 
-#: ../plugins/command-bar/gb-vim.c:707
+#: plugins/command-bar/gb-vim.c:707
 #, c-format
 msgid "Invalid :syntax subcommand: %s"
 msgstr "Ugyldig :syntax-underkommando: %s"
 
-#: ../plugins/command-bar/gb-vim.c:1146
-#, c-format
+#: plugins/command-bar/gb-vim.c:1146
 msgid "Invalid search and replace request"
 msgstr "Ugyldig søg- og erstat-forespørgsel"
 
-#: ../plugins/command-bar/gb-vim.c:1252
+#: plugins/command-bar/gb-vim.c:1252
 #, c-format
 msgid "Not a command: %s"
 msgstr "Ikke en kommando: %s"
 
-#: ../plugins/contributing/contributing_plugin/helper.py:76
+#: plugins/comment-code/gtk/menus.ui:9
+msgid "Comment code"
+msgstr "Udkommentér kode"
+
+#: plugins/comment-code/gtk/menus.ui:14
+msgid "Uncomment code"
+msgstr "Afkommentér kode"
+
+#: plugins/contributing/contributing_plugin/helper.py:76
 #, python-format
 msgid ""
 "Usage:\n"
@@ -1875,11 +3053,11 @@ msgstr ""
 "Brug:\n"
 "  %(prgname) %(command) TILVALG\n"
 
-#: ../plugins/contributing/contributing_plugin/__init__.py:54
+#: plugins/contributing/contributing_plugin/__init__.py:54
 msgid "Missing project name"
 msgstr "Manglende projektnavn"
 
-#: ../plugins/contributing/contributing_plugin/__init__.py:68
+#: plugins/contributing/contributing_plugin/__init__.py:68
 msgid ""
 "Usage:\n"
 "  ide contribute PROJECT_NAME\n"
@@ -1911,156 +3089,240 @@ msgstr ""
 "  ide contribute gnome-maps\n"
 "\n"
 
-#: ../plugins/contributing/contributing_plugin/__init__.py:226
+#: plugins/contributing/contributing_plugin/__init__.py:226
 msgid "Username"
 msgstr "Brugernavn"
 
-#: ../plugins/c-pack/ide-c-format-provider.c:283
-#: ../plugins/python-pack/ide-python-format-provider.c:240
+#: plugins/c-pack/ide-c-format-provider.c:283
+#: plugins/python-pack/ide-python-format-provider.c:240
 msgid "Format Strings"
 msgstr "Formatstrenge"
 
-#: ../plugins/create-project/gbp-create-project-genesis-addin.c:158
+#: plugins/create-project/gbp-create-project-genesis-addin.c:158
 msgid "New Project"
 msgstr "Nyt projekt"
 
-#: ../plugins/create-project/gbp-create-project-genesis-addin.c:223
+#: plugins/create-project/gbp-create-project-genesis-addin.c:223
 msgid "New…"
 msgstr "Ny…"
 
-#: ../plugins/create-project/gbp-create-project-tool.c:136
+#: plugins/create-project/gbp-create-project-tool.c:136
 msgid "List available templates"
 msgstr "Vis tilgængelige skabeloner"
 
-#: ../plugins/create-project/gbp-create-project-tool.c:138
+#: plugins/create-project/gbp-create-project-tool.c:138
 msgid "Project template to generate"
 msgstr "Projektskabelon, som skal genereres"
 
-#: ../plugins/create-project/gbp-create-project-tool.c:140
+#: plugins/create-project/gbp-create-project-tool.c:140
 msgid "The target language (if supported)"
 msgstr "Målsproget (hvis understøttet)"
 
-#: ../plugins/create-project/gbp-create-project-tool.c:142
+#: plugins/create-project/gbp-create-project-tool.c:142
 msgid "The version control to use or \"none\" to disable"
 msgstr "Versionsstyring som skal bruges eller \"none\" for at slå dette fra"
 
-#: ../plugins/create-project/gbp-create-project-tool.c:143
+#: plugins/create-project/gbp-create-project-tool.c:143
 msgid "git"
 msgstr "git"
 
-#: ../plugins/create-project/gbp-create-project-tool.c:149
+#: plugins/create-project/gbp-create-project-tool.c:149
 msgid "create-project [OPTION...] PROJECT_NAME"
 msgstr "create-project [TILVALG...] PROJEKTNAVN"
 
-#: ../plugins/create-project/gbp-create-project-tool.c:198
-#, c-format
+#: plugins/create-project/gbp-create-project-tool.c:198
 msgid "Filename must be ASCII and may not contain : or ="
 msgstr "Filnavnet skal være ASCII og må hverken indeholde : eller ="
 
-#: ../plugins/create-project/gbp-create-project-tool.c:372
-#, c-format
+#: plugins/create-project/gbp-create-project-tool.c:372
 msgid "Please specify a project name.\n"
 msgstr "Angiv venligst et projektnavn.\n"
 
-#: ../plugins/create-project/gbp-create-project-tool.c:388
-#, c-format
+#: plugins/create-project/gbp-create-project-tool.c:388
 msgid "Please specify a project template with --template=\n"
 msgstr "Angiv venligst en projekt-skabelon med --template=\n"
 
-#: ../plugins/create-project/gbp-create-project-widget.c:157
+#: plugins/create-project/gbp-create-project-widget.c:157
 msgid ""
 "Characters were used which might cause technical issues as a project name"
 msgstr ""
 "Der blev brugt tegn som kan forårsage tekniske problemer i et projektnavn"
 
-#: ../plugins/create-project/gbp-create-project-widget.c:164
+#: plugins/create-project/gbp-create-project-widget.c:164
 msgid "Directory already exists with that name"
 msgstr "Der findes allerede en mappe med det navn"
 
-#: ../plugins/create-project/gbp-create-project-widget.c:559
+#: plugins/create-project/gbp-create-project-widget.c:559
 msgid "A failure occurred while initializing version control"
 msgstr "Der opstod en fejl ved klargøring af versionsstyring"
 
-#: ../plugins/devhelp/gbp-devhelp-panel.c:194
+#: plugins/create-project/gbp-create-project-widget.ui:28
+msgid "Project Name"
+msgstr "Projektnavn"
+
+#: plugins/create-project/gbp-create-project-widget.ui:55
+msgid ""
+"Unique name that is used for your project's folder and other technical "
+"resources. Should be in lower case without spaces and may not start with a "
+"number."
+msgstr ""
+"Unikt navn som bruges til dit projekts mappe og andre tekniske ressourcer. "
+"Skal være med små bogstaver uden mellemrum, og må ikke starte med et tal."
+
+#: plugins/create-project/gbp-create-project-widget.ui:74
+msgid "Project Location"
+msgstr "Projektsted"
+
+#: plugins/create-project/gbp-create-project-widget.ui:85
+#: plugins/git/ide-git-clone-widget.ui:78
+msgid "Select Project Directory"
+msgstr "Vælg projektmappe"
+
+#: plugins/create-project/gbp-create-project-widget.ui:98
+msgid "Language"
+msgstr "Sprog"
+
+#: plugins/create-project/gbp-create-project-widget.ui:120
+msgid "License"
+msgstr "Licens"
+
+#: plugins/create-project/gbp-create-project-widget.ui:135
+msgid "GPLv3+"
+msgstr "GPLv3+"
+
+#: plugins/create-project/gbp-create-project-widget.ui:136
+msgid "LGPLv3+"
+msgstr "LGPLv3+"
+
+#: plugins/create-project/gbp-create-project-widget.ui:137
+msgid "AGPLv3+"
+msgstr "AGPLv3+"
+
+#: plugins/create-project/gbp-create-project-widget.ui:138
+msgid "MIT/X11"
+msgstr "MIT/X11"
+
+#: plugins/create-project/gbp-create-project-widget.ui:139
+msgid "GPLv2+"
+msgstr "GPLv2+"
+
+#: plugins/create-project/gbp-create-project-widget.ui:140
+msgid "LGPLv2.1+"
+msgstr "LGPLv2.1+"
+
+#: plugins/create-project/gbp-create-project-widget.ui:141
+msgid "No license"
+msgstr "Ingen licens"
+
+#: plugins/create-project/gbp-create-project-widget.ui:174
+msgid "Uses the Git version control system"
+msgstr "Bruger versionsstyringssystemet Git"
+
+#: plugins/create-project/gbp-create-project-widget.ui:236
+msgid "Select a Template"
+msgstr "Vælg en skabelon"
+
+#: plugins/devhelp/gbp-devhelp-panel.c:194
 msgid "Documentation"
 msgstr "Dokumentation"
 
-#: ../plugins/file-search/gb-file-search-provider.c:44
+#: plugins/file-search/gb-file-search-provider.c:44
 msgid "Switch To"
 msgstr "Skift til"
 
-#: ../plugins/fpaste/fpaste_plugin/__init__.py:110
+#: plugins/fpaste/fpaste_plugin/gtk/menus.ui:9
+msgid "Send to Fpaste.org"
+msgstr "Send til Fpaste.org"
+
+#: plugins/fpaste/fpaste_plugin/__init__.py:110
 msgid "The following URL has been copied to the clipboard"
 msgstr "Følgende URL er blevet kopieret til udklipsholderen"
 
-#: ../plugins/git/ide-git-buffer-change-monitor.c:162
+#: plugins/git/ide-git-buffer-change-monitor.c:162
 msgid "Cannot provide diff, no backing file provided."
 msgstr "Kan ikke generere en diff; ingen støttefil givet."
 
-#: ../plugins/git/ide-git-buffer-change-monitor.c:546
-#, c-format
+#: plugins/git/ide-git-buffer-change-monitor.c:546
 msgid "Repository does not have a working directory."
 msgstr "Arkivet har ingen arbejdsmappe."
 
-#: ../plugins/git/ide-git-buffer-change-monitor.c:557
-#, c-format
+#: plugins/git/ide-git-buffer-change-monitor.c:557
 msgid "File is not under control of git working directory."
 msgstr "Filen er ikke under kontrol i git-arbejdsmappe."
 
-#: ../plugins/git/ide-git-buffer-change-monitor.c:623
-#, c-format
+#: plugins/git/ide-git-buffer-change-monitor.c:623
 msgid "The requested file does not exist within the git index."
 msgstr "Den forespurgte fil findes ikke i git-indekset."
 
-#: ../plugins/git/ide-git-clone-widget.c:141
-#: ../plugins/git/ide-git-clone-widget.c:387
+#: plugins/git/ide-git-clone-widget.c:141
+#: plugins/git/ide-git-clone-widget.c:387
 msgid "A valid Git URL is required"
 msgstr "Der kræves en gyldig Git-URL"
 
-#: ../plugins/git/ide-git-genesis-addin.c:93
+#: plugins/git/ide-git-clone-widget.ui:38
+msgid "Use Git to create a local copy of a remotely hosted project."
+msgstr ""
+"Brug Git til at oprette en lokal kopi af et projekt som udbydes andetsteds."
+
+#: plugins/git/ide-git-clone-widget.ui:66
+msgid "user@host:repository.git"
+msgstr "bruger@vært:arkiv.git"
+
+#: plugins/git/ide-git-clone-widget.ui:67
+msgid "Enter the URL of your project's source code repository"
+msgstr "Indtast URL'en for projektets kildekodearkiv"
+
+#: plugins/git/ide-git-clone-widget.ui:94
+msgid "Repository URL"
+msgstr "Arkiv-URL"
+
+#: plugins/git/ide-git-clone-widget.ui:102
+msgid "Project Destination"
+msgstr "Projektdestination"
+
+#: plugins/git/ide-git-genesis-addin.c:93
 msgid "Clone Project"
 msgstr "Klon projekt"
 
-#: ../plugins/git/ide-git-genesis-addin.c:184
+#: plugins/git/ide-git-genesis-addin.c:184
 msgid "Clone…"
 msgstr "Klon…"
 
-#: ../plugins/git/ide-git-genesis-addin.c:190
+#: plugins/git/ide-git-genesis-addin.c:190
 msgid "Clone"
 msgstr "Klon"
 
-#: ../plugins/git/ide-git-remote-callbacks.c:174
-#, c-format
+#: plugins/git/ide-git-remote-callbacks.c:174
 msgid ""
 "Builder failed to provide appropriate credentials when cloning repository."
 msgstr "Builder kunne ikke afgive passende akkreditiver ved kloning fra arkiv."
 
-#: ../plugins/gnome-code-assistance/ide-gca-diagnostic-provider.c:368
+#: plugins/gnome-code-assistance/ide-gca-diagnostic-provider.c:368
 msgid "Code assistance requires a local file."
 msgstr "Kodeassistance kræver en lokal fil."
 
-#: ../plugins/gnome-code-assistance/ide-gca-preferences-addin.c:62
+#: plugins/gnome-code-assistance/ide-gca-preferences-addin.c:62
 msgid "Pylint"
 msgstr "Pylint"
 
-#: ../plugins/gnome-code-assistance/ide-gca-preferences-addin.c:63
+#: plugins/gnome-code-assistance/ide-gca-preferences-addin.c:63
 msgid "Enable the use of pylint, which may execute code in your project"
 msgstr "Aktivér brugen af pylint, som muligvis vil afvikle kode i dit projekt"
 
 #. translators: these are keywords used to search for preferences
-#: ../plugins/gnome-code-assistance/ide-gca-preferences-addin.c:65
+#: plugins/gnome-code-assistance/ide-gca-preferences-addin.c:65
 msgid "pylint python lint code execute execution"
 msgstr "pylint python lint kode kør kørsel"
 
-#: ../plugins/gnome-code-assistance/ide-gca-service.c:176
+#: plugins/gnome-code-assistance/ide-gca-service.c:176
 msgid "No language specified"
 msgstr "Intet sprog angivet"
 
-#: ../plugins/gnome-code-assistance/org.gnome.builder.gnome-code-assistance.gschema.xml.h:1
+#: plugins/gnome-code-assistance/org.gnome.builder.gnome-code-assistance.gschema.xml:5
 msgid "Enable Pylint"
 msgstr "Aktivér Pylint"
 
-#: ../plugins/gnome-code-assistance/org.gnome.builder.gnome-code-assistance.gschema.xml.h:2
+#: plugins/gnome-code-assistance/org.gnome.builder.gnome-code-assistance.gschema.xml:6
 msgid ""
 "Enable the use of pylint to find additional diagnostics in Python programs. "
 "This may result in the execution of code in your project."
@@ -2068,50 +3330,56 @@ msgstr ""
 "Aktivér brugen af pylint, som yderligere diagnosticerer Pythonprogrammer. "
 "Dette vil muligvis afvikle kode i dit projekt."
 
-#: ../plugins/hello-cpp/hellocppapplicationaddin.cc:48
+#: plugins/hello-cpp/hellocppapplicationaddin.cc:48
 #, c-format
 msgid "Wow! You've spent with Builder %d second!\n"
 msgid_plural "Wow! You've spent with Builder %d seconds!\n"
 msgstr[0] "Wow! Du har brugt %d sekund med builder!\n"
 msgstr[1] "Wow! Du har brugt %d sekunder med builder!\n"
 
-#: ../plugins/jedi/jedi_plugin.py:731
+#: plugins/html-preview/html_preview_plugin/gtk/menus.ui:6
+msgid "Preview as HTML"
+msgstr "Forhåndsvis som HTML"
+
+#: plugins/jedi/jedi_plugin.py:731
 msgid "Suggest Python completions"
 msgstr "Foreslå Python-fuldførelse"
 
-#: ../plugins/jedi/jedi_plugin.py:732
+#: plugins/jedi/jedi_plugin.py:732
 msgid "Use Jedi to provide completions for the Python language"
 msgstr "Brug Jedi til fuldførelse i sproget Python"
 
-#: ../plugins/mingw/ide-mingw-device-provider.c:94
+#: plugins/mingw/ide-mingw-device-provider.c:94
 msgid "MinGW 64-bit"
 msgstr "MinGW 64-bit"
 
-#: ../plugins/mingw/ide-mingw-device-provider.c:106
+#: plugins/mingw/ide-mingw-device-provider.c:106
 msgid "MinGW 32-bit"
 msgstr "MinGW 32-bit"
 
-#: ../plugins/project-tree/gb-new-file-popover.c:123
-#: ../plugins/project-tree/gb-rename-file-popover.c:139
+#: plugins/project-tree/gb-new-file-popover.c:123
+#: plugins/project-tree/gb-rename-file-popover.c:139
 msgid "A folder with that name already exists."
 msgstr "Der findes allerede en mappe med det navn."
 
-#: ../plugins/project-tree/gb-new-file-popover.c:126
-#: ../plugins/project-tree/gb-rename-file-popover.c:142
+#: plugins/project-tree/gb-new-file-popover.c:126
+#: plugins/project-tree/gb-rename-file-popover.c:142
 msgid "A file with that name already exists."
 msgstr "Der findes allerede en fil med det navn."
 
-#: ../plugins/project-tree/gb-new-file-popover.c:348
+#: plugins/project-tree/gb-new-file-popover.c:348
+#: plugins/project-tree/gb-new-file-popover.ui:13
+#: plugins/project-tree/gb-rename-file-popover.ui:13
 msgid "File Name"
 msgstr "Filnavn"
 
-#: ../plugins/project-tree/gb-new-file-popover.c:350
+#: plugins/project-tree/gb-new-file-popover.c:350
 msgid "Folder Name"
 msgstr "Mappenavn"
 
-#: ../plugins/project-tree/gb-project-tree-addin.c:105
-msgid "Project"
-msgstr "Projekt"
+#: plugins/project-tree/gb-new-file-popover.ui:35
+msgid "_Create"
+msgstr "_Opret"
 
 # Fra koden, nogle linjer oppe:
 # /*
@@ -2119,30 +3387,94 @@ msgstr "Projekt"
 #    * notify the user that nothing was found.
 #    */
 # Dette tyder på at det er "tom" og ikke "tøm"
-#: ../plugins/project-tree/gb-project-tree-builder.c:207
+#: plugins/project-tree/gb-project-tree-builder.c:207
 msgid "Empty"
 msgstr "Tom"
 
-#: ../plugins/project-tree/gb-rename-file-popover.c:79
+#: plugins/project-tree/gb-rename-file-popover.c:79
 #, c-format
 msgid "Rename %s"
 msgstr "Omdøb %s"
 
-#: ../plugins/quick-highlight/gbp-quick-highlight-preferences.c:48
+#: plugins/project-tree/gtk/menus.ui:14
+msgid "_New"
+msgstr "_Ny"
+
+#: plugins/project-tree/gtk/menus.ui:17
+msgid "_Empty File"
+msgstr "_Tom fil"
+
+#: plugins/project-tree/gtk/menus.ui:23
+msgid "_New Folder"
+msgstr "_Ny mappe"
+
+#: plugins/project-tree/gtk/menus.ui:29
+msgid "_Open"
+msgstr "_Åbn"
+
+#: plugins/project-tree/gtk/menus.ui:34
+msgid "Open _With"
+msgstr "Åbn _med"
+
+#: plugins/project-tree/gtk/menus.ui:37
+msgid "Source Code Editor"
+msgstr "Kildekoderedigering"
+
+#: plugins/project-tree/gtk/menus.ui:47
+msgid "_Open Containing Folder"
+msgstr "_Åbn indeholdende mappe"
+
+#: plugins/project-tree/gtk/menus.ui:51
+msgid "_Open in Terminal"
+msgstr "_Åbn i terminal"
+
+#: plugins/project-tree/gtk/menus.ui:64
+msgid "Mo_ve to Trash"
+msgstr "_Flyt til papirkurv"
+
+#: plugins/project-tree/gtk/menus.ui:71
+msgid "_Build"
+msgstr "_Kompilér"
+
+#: plugins/project-tree/gtk/menus.ui:75
+msgid "_Rebuild"
+msgstr "_Genkompilér"
+
+#: plugins/project-tree/gtk/menus.ui:81
+msgid "Display Options"
+msgstr "Vis indstillinger"
+
+#: plugins/project-tree/gtk/menus.ui:92
+msgid "Sort Directories First"
+msgstr "Sortér mapper først"
+
+#: plugins/project-tree/gtk/menus.ui:98
+msgid "_Collapse All Nodes"
+msgstr "_Sammenfold alle knuder"
+
+#: plugins/project-tree/gtk/menus.ui:102
+msgid "_Refresh"
+msgstr "_Opdatér"
+
+#: plugins/quick-highlight/gbp-quick-highlight-preferences.c:48
 msgid "Words matching selection"
 msgstr "Ord som matcher markeringen"
 
-#: ../plugins/quick-highlight/gbp-quick-highlight-preferences.c:49
+#: plugins/quick-highlight/gbp-quick-highlight-preferences.c:49
 msgid "Highlight all occurrences of words matching the current selection"
 msgstr "Fremhæv alle forekomster af ord som matcher nuværende markering"
 
 # wtf?
 #. Translators: the following are keywords used for searching to locate this preference
-#: ../plugins/quick-highlight/gbp-quick-highlight-preferences.c:51
+#: plugins/quick-highlight/gbp-quick-highlight-preferences.c:51
 msgid "quick highlight words matching current selection"
 msgstr "hurtigfremhæv ord matcher nuværende markering"
 
-#: ../plugins/support/ide-support-application-addin.c:79
+#: plugins/support/gtk/menus.ui:7
+msgid "Generate Support Log"
+msgstr "Generér supportlog"
+
+#: plugins/support/ide-support-application-addin.c:79
 #, c-format
 msgid ""
 "The support log file has been written to '%s'. Please provide this file as "
@@ -2151,1088 +3483,80 @@ msgstr ""
 "Supportlog-filen er blevet skrevet til '%s'. Vedhæft venlist denne fil til "
 "din fejlrapport eller support-forespørgsel."
 
-#: ../plugins/symbol-tree/symbol-tree-panel.c:265
+#: plugins/symbol-tree/symbol-tree-panel.c:265
 msgid "Current language does not support symbol resolvers"
 msgstr "Nuværende sprog understøtter ikke symbolgenkendere"
 
-#: ../plugins/symbol-tree/symbol-tree-panel.c:365
+#: plugins/symbol-tree/symbol-tree-panel.c:365
 msgid "Symbols"
 msgstr "Symboler"
 
-#: ../plugins/sysprof/gbp-sysprof-perspective.c:65
+#: plugins/sysmon/gb-sysmon-panel.ui:5
+msgid "System Monitor"
+msgstr "Systemovervågning"
+
+#: plugins/sysprof/gbp-sysprof-perspective.c:65
 msgid "Profiler"
 msgstr "Profilering"
 
 # I dette tilfælde er det et profileringsmodul, så det er ikke en "profil" med brugerindstillinger osv.
-#: ../plugins/sysprof/gbp-sysprof-workbench-addin.c:251
+#: plugins/sysprof/gbp-sysprof-workbench-addin.c:251
 msgid "Open Profile"
 msgstr "Åbn profilering"
 
-#: ../plugins/sysprof/gbp-sysprof-workbench-addin.c:259
+#: plugins/sysprof/gbp-sysprof-workbench-addin.c:259
 msgid "Sysprof Capture (*.syscap)"
 msgstr "Sysprof-data (*.syscap)"
 
-#: ../plugins/sysprof/gbp-sysprof-workbench-addin.c:265
+#: plugins/sysprof/gbp-sysprof-workbench-addin.c:265
 msgid "All Files"
 msgstr "Alle filer"
 
-#: ../plugins/sysprof/gbp-sysprof-workbench-addin.c:352
+#: plugins/sysprof/gbp-sysprof-workbench-addin.c:352
 msgid "Run with Profiler"
 msgstr "Kør med profilering"
 
-#: ../plugins/terminal/gb-terminal-view.c:444
+#: plugins/sysprof/gtk/menus.ui:6
+msgid "Open Profile…"
+msgstr "Åbn profilering…"
+
+#: plugins/terminal/gb-terminal-view.c:444
 msgid "Untitled terminal"
 msgstr "Unavngivet terminal"
 
-#: ../plugins/terminal/gb-terminal-view-actions.c:297
+#: plugins/terminal/gb-terminal-view-actions.c:297
 msgid "Save Terminal Content As"
 msgstr "Gem indhold af terminal som"
 
-#: ../plugins/todo/todo_plugin/__init__.py:186
+#: plugins/terminal/gtk/menus.ui:6
+msgid "_New Terminal"
+msgstr "_Ny terminal"
+
+#: plugins/todo/todo_plugin/__init__.py:186
 msgid "Todo"
 msgstr "Todo"
 
-#: ../plugins/vala-pack/ide-vala-preferences-addin.vala:33
+#: plugins/vala-pack/ide-vala-preferences-addin.vala:33
 msgid "Vala"
 msgstr "Vala"
 
-#: ../plugins/vala-pack/ide-vala-preferences-addin.vala:34
+#: plugins/vala-pack/ide-vala-preferences-addin.vala:34
 msgid "Show errors and warnings provided by Vala"
 msgstr "Vis fejl og advarsler givet af Vala"
 
 #. translators: keywords used when searching for preferences
-#: ../plugins/vala-pack/ide-vala-preferences-addin.vala:36
+#: plugins/vala-pack/ide-vala-preferences-addin.vala:36
 msgid "vala diagnostics warnings errors"
 msgstr "vala diagnostik advarsler fejl"
 
-#~ msgid "Hue"
-#~ msgstr "Farvetone"
+#~ msgid "Builder Dark"
+#~ msgstr "Builder mørk"
 
-#~ msgid "Saturation"
-#~ msgstr "Farvemætning"
+#~ msgid "Dark color scheme for Builder using the Tango color palette"
+#~ msgstr "Mørkt farveskema til Builder, som bruger Tango-farvepaletten"
 
-#~ msgid "Value"
-#~ msgstr "Værdi"
-
-# https://en.wikipedia.org/wiki/Lab_color_space
-# Ved ikke lige om der er nogen grund til at oversætte noget særligt mht. dette
-#~ msgid "Cielab l"
-#~ msgstr "Cielab l"
-
-#~ msgid "Cielab a"
-#~ msgstr "Cielab a"
-
-#~ msgid "Cielab b"
-#~ msgstr "Cielab b"
-
-#~ msgid "Red"
-#~ msgstr "Rød"
-
-#~ msgid "Green"
-#~ msgstr "Grøn"
-
-#~ msgid "Blue"
-#~ msgstr "Blå"
-
-#~ msgid "Color Components"
-#~ msgstr "Farvekomponenter"
-
-# Evt. F for farvetone.  Men ingen ved hvad dét betyder
-#~ msgid "H"
-#~ msgstr "H"
-
-# M for mætning?
-#~ msgid "S"
-#~ msgstr "S"
-
-#~ msgid "V"
-#~ msgstr "V"
-
-# lightness
-#~ msgid "L*"
-#~ msgstr "L*"
-
-#~ msgid "a*"
-#~ msgstr "a*"
-
-#~ msgid "b*"
-#~ msgstr "b*"
-
-# rød
-#~ msgid "R"
-#~ msgstr "R"
-
-# grøn
-#~ msgid "G"
-#~ msgstr "G"
-
-# blå
-#~ msgid "B"
-#~ msgstr "B"
-
-#~ msgid "Color strings"
-#~ msgstr "Farvestrenge"
-
-#~ msgid "HEX3"
-#~ msgstr "HEX3"
-
-#~ msgid "HEX6"
-#~ msgstr "HEX6"
-
-#~ msgid "RGB"
-#~ msgstr "RGB"
-
-#~ msgid "RGBA"
-#~ msgstr "RGBA"
-
-#~ msgid "HSL"
-#~ msgstr "HSL"
-
-#~ msgid "HSLA"
-#~ msgstr "HSLA"
-
-#~ msgid "Palettes"
-#~ msgstr "Paletter"
-
-#~ msgid "No open palettes"
-#~ msgstr "Ingen åbne paletter"
-
-#~ msgid "Load or generate a palette using the preferences"
-#~ msgstr "Indlæs eller generér en palet ifølge indstillingerne"
-
-#~ msgid "Rename"
-#~ msgstr "Omdøb"
-
-#~ msgid "Remove"
-#~ msgstr "Fjern"
-
-#~ msgid "_Rename"
-#~ msgstr "_Omdøb"
-
-#~ msgid "Suggest Snippet Completion"
-#~ msgstr "Foreslå fuldførelse af tekststumper"
-
-#~ msgid "Allow snippets to be inserted into the document."
-#~ msgstr "Tillad at der indsættes tekststumper i dokumentet."
-
-#~ msgid "Clang based autocompletion (Experimental)"
-#~ msgstr "Clang-baseret autofuldførelse (eksperimentel)"
-
-#~ msgid "Use Clang for autocompletion in the C and C++ languages."
-#~ msgstr "Brug Clang til at foreslå fuldførelse i sprogene C og C++."
-
-#~ msgid "Ctags based autocompletion"
-#~ msgstr "Ctags-baseret autofuldførelse"
-
-#~ msgid "Use Ctags for autocompletion."
-#~ msgstr "Brug Ctags til autofuldførelse."
-
-#~ msgid "Enable auto-completion of words in document"
-#~ msgstr "Slå autofuldførelse til for ord i dokumentet"
-
-#~ msgid ""
-#~ "If enabled, words within the current document will be available for auto-"
-#~ "completion."
-#~ msgstr ""
-#~ "Hvis slået til, vil ord i det nuværende dokument kunne vælges til "
-#~ "autofuldførelse."
-
-#~ msgid "Enable semantic highlighting"
-#~ msgstr "Slå semantisk fremhævning til"
-
-#~ msgid ""
-#~ "If enabled, additional highlighting will be provided in supported "
-#~ "languages based on information extracted from the source code."
-#~ msgstr ""
-#~ "Hvis slået til, vil der blive anvendt yderligere fremhævning i "
-#~ "understøttede sprog afhængigt af informationer fra kildekoden."
-
-#~ msgid "Path to ctags executable"
-#~ msgstr "Sti til ctags' binærfil"
-
-#~ msgid "The path to the ctags executable on the system."
-#~ msgstr "Stien til ctags' binærfil på systemet."
-
-#~ msgid "_New Project"
-#~ msgstr "_Nyt projekt"
-
-#~ msgid "_Open Project"
-#~ msgstr "_Åbn projekt"
-
-#~ msgid "_Preferences"
-#~ msgstr "_Indstillinger"
-
-#~ msgid "Keyboard _Shortcuts"
-#~ msgstr "_Genvejstaster"
-
-#~ msgid "_Help"
-#~ msgstr "_Hjælp"
-
-#~ msgid "_About"
-#~ msgstr "_Om"
-
-#~ msgid "_Quit"
-#~ msgstr "_Afslut"
-
-#~ msgid "Show left panel"
-#~ msgstr "Vis venstre panel"
-
-#~ msgid "Show bottom panel"
-#~ msgstr "Vis bundpanel"
-
-#~ msgid "Show right panel"
-#~ msgstr "Vis højre panel"
-
-#~ msgid "_New File"
-#~ msgstr "_Ny fil"
-
-#~ msgid "_Open File…"
-#~ msgstr "_Åbn fil…"
-
-#~ msgid "Save _All"
-#~ msgstr "Gem _alle"
-
-#~ msgid "_Go to Definition"
-#~ msgstr "_Gå til definition"
-
-#~ msgid "_Undo"
-#~ msgstr "_Fortryd"
-
-#~ msgid "_Redo"
-#~ msgstr "_Omgør"
-
-#~ msgid "C_ut"
-#~ msgstr "K_lip"
-
-#~ msgid "_Copy"
-#~ msgstr "_Kopiér"
-
-#~ msgid "_Paste"
-#~ msgstr "_Indsæt"
-
-#~ msgid "_Delete"
-#~ msgstr "_Slet"
-
-#~ msgid "Selection"
-#~ msgstr "Markering"
-
-#~ msgid "Select _All"
-#~ msgstr "Markér _alt"
-
-#~ msgid "Select _None"
-#~ msgstr "Markér _intet"
-
-#~ msgid "All _Upper Case"
-#~ msgstr "Kun s_tore bogstaver"
-
-#~ msgid "All _Lower Case"
-#~ msgstr "Kun s_må bogstaver"
-
-#~ msgid "_Invert Case"
-#~ msgstr "_Omvend store/små bogstaver"
-
-#~ msgid "_Title Case"
-#~ msgstr "_Stort begyndelsesbogstav"
-
-#~ msgid "Join Lines"
-#~ msgstr "Slå linjer sammen"
-
-#~ msgid "Sort Lines"
-#~ msgstr "Sortér linjer"
-
-#~ msgid "Zoom"
-#~ msgstr "Zoom"
-
-#~ msgid "Zoom _In"
-#~ msgstr "Zoom _ind"
-
-#~ msgid "Zoom _Out"
-#~ msgstr "Zoom _ud"
-
-#~ msgid "Reset"
-#~ msgstr "Nulstil"
-
-#~ msgid "_Wrap Around"
-#~ msgstr "_Begynd forfra ved slut"
-
-#~ msgid "Cu_t"
-#~ msgstr "_Klip"
-
-#~ msgid "Split"
-#~ msgstr "Opdel"
-
-#~ msgid "Split Left"
-#~ msgstr "Opdel til venstre"
-
-#~ msgid "Split Right"
-#~ msgstr "Opdel til højre"
-
-#~ msgid "Split Down"
-#~ msgstr "Opdel nede"
-
-#~ msgid "Move"
-#~ msgstr "Flyt"
-
-#~ msgid "Move Left"
-#~ msgstr "Flyt til venstre"
-
-#~ msgid "Move Right"
-#~ msgstr "Flyt til højre"
-
-#~ msgid "_Save"
-#~ msgstr "_Gem"
-
-#~ msgid "_Save As"
-#~ msgstr "_Gem som"
-
-#~ msgid "_Print"
-#~ msgstr "_Udskriv"
-
-#~ msgid "_Close"
-#~ msgstr "_Luk"
-
-#~ msgid ""
-#~ "Builder is an actively developed Integrated Development Environment for "
-#~ "GNOME. It combines integrated support for essential GNOME technologies "
-#~ "such as GTK+, GLib, and GNOME APIs with features that any developer will "
-#~ "appreciate, like syntax highlighting and snippets."
-#~ msgstr ""
-#~ "Builder er et integreret udviklingsmiljø til GNOME som udvikles aktivt. "
-#~ "Builder kombinerer integreret understøttelse af essentielle GNOME-"
-#~ "teknologier såsom GTK+, Glib og GNOME-API'er med funktioner som udviklere "
-#~ "vil have brug for såsom syntaksfremhævning og tekststumper."
-
-#~ msgid ""
-#~ "You can rely on predictable releases of Builder with each new release of "
-#~ "GNOME every six months."
-#~ msgstr ""
-#~ "Du kan regne med at nye versioner af Builder udkommer jævnligt sammen med "
-#~ "GNOME hver sjette måned."
-
-#~ msgid "Features:"
-#~ msgstr "Funktioner:"
-
-#~ msgid "Built in syntax highlighting for many languages"
-#~ msgstr "Indbygget syntaksfremhævning af mange sprog"
-
-# ?
-#~ msgid "Side-by-side code editors"
-#~ msgstr "Koderedigering side om side"
-
-#~ msgid "Integration with Git"
-#~ msgstr "Integration med Git"
-
-#~ msgid "Integration with Autotools"
-#~ msgstr "Integration med Autotools"
-
-#~ msgid "Clang based auto-completion, semantic highlighting, and diagnostics"
-#~ msgstr "Clang-baseret autofuldførelse, semantisk fremhævning og diagnostik"
-
-#~ msgid "Python based auto-completion, semantic highlighting, and diagnostics"
-#~ msgstr "Pythonbaseret autofuldførelse, semantisk fremhævning og diagnostik"
-
-#~ msgid "Vala based auto-completion and diagnostics"
-#~ msgstr "Vala-baseret autofuldførelse og diagnostik"
-
-#~ msgid "Auto indentation support for C, Python, Vala, and XML"
-#~ msgstr "Understøttelse for autoindrykning i C, Python, Vala og XML"
-
-#~ msgid "HTML/Markdown live preview"
-#~ msgstr "Forhåndsvisning af HTML/Markdown"
-
-#~ msgid "Optional Vim-style editing"
-#~ msgstr "Valgfri Vim-redigeringstilstand"
-
-#~ msgid "An integrated software profiler for native applications"
-#~ msgstr "Integreret softwareprofilering til platformsspecifikke programmer"
-
-#~ msgid "Support for building with jhbuild"
-#~ msgstr "Understøttelse for kompilering med jhbuild"
-
-#~ msgid "Preview support for building with Flatpak runtimes"
-#~ msgstr ""
-#~ "Understøttelse for forhåndsvisning ved kompilering med Flatpak-runtime"
-
-#~ msgid "Fast global search"
-#~ msgstr "Hurtig global søgning"
-
-#~ msgid "Integrated project tree"
-#~ msgstr "Integreret projekttræ"
-
-#~ msgid "Build software for GNOME"
-#~ msgstr "Kompileringssoftware til GNOME"
-
-#~ msgid "org.gnome.Builder"
-#~ msgstr "org.gnome.Builder"
-
-#~ msgid "Build;Develop;"
-#~ msgstr "Byg;Kompilér;Kompiler;Udvikl;Udvikle;"
-
-# ?
-#~ msgid "OVR"
-#~ msgstr "OVR"
-
-#~ msgid "Replace"
-#~ msgstr "Erstat"
-
-#~ msgid "Replace All"
-#~ msgstr "Erstat alle"
-
-#~ msgid "Switch between Search and Search-and-Replace"
-#~ msgstr "Skift mellem søgning og søg-og-erstat"
-
-#~ msgid "Show or hide search options such as case sensitivity"
-#~ msgstr "Vis eller skjul søgeindstillinger såsom versalfølsomhed"
-
-#~ msgid "Regular expressions"
-#~ msgstr "Regulære udtryk"
-
-#~ msgid "Case sensitive"
-#~ msgstr "Versalfølsom"
-
-#~ msgid "Match whole word only"
-#~ msgstr "Match kun hele ord"
-
-#~ msgid "Go to line number"
-#~ msgstr "Gå til linjenummer"
-
-#~ msgid "Change editor settings and language"
-#~ msgstr "Skift redigeringsindstillinger og sprog"
-
-#~ msgid "Go to Line"
-#~ msgstr "Hop til linje"
-
-#~ msgid "Go"
-#~ msgstr "Gå"
-
-#~ msgid "No open files"
-#~ msgstr "Ingen åbne filer"
-
-#~ msgid "Try opening a file by typing in the search box at the top"
-#~ msgstr "Prøv at åbne en fil ved at skrive i søgeboksen i toppen"
-
-#~ msgid "Search highlight mode…"
-#~ msgstr "Tilstand for søgefremhævning…"
-
-#~ msgid "Display line numbers"
-#~ msgstr "Vis linjenumre"
-
-#~ msgid "Display right margin"
-#~ msgstr "Vis højremargen"
-
-#~ msgid "Auto indent"
-#~ msgstr "Automatisk indrykning"
-
-#~ msgid "2"
-#~ msgstr "2"
-
-#~ msgid "3"
-#~ msgstr "3"
-
-#~ msgid "4"
-#~ msgstr "4"
-
-#~ msgid "8"
-#~ msgstr "8"
-
-#~ msgid "_Reload"
-#~ msgstr "Gen_indlæs"
-
-#~ msgid "_Cancel"
-#~ msgstr "_Annullér"
-
-#~ msgid ""
-#~ "Builder has discovered that this file has been modified externally. Would "
-#~ "you like to reload the file?"
-#~ msgstr ""
-#~ "Builder har opdaget, at denne fil er blevet ændret af et andet program. "
-#~ "Vil du genindlæse filen?"
-
-#~ msgid ""
-#~ "Why not <a href=\"action://app.new-project\">create a new project</a>?"
-#~ msgstr ""
-#~ "Hvorfor ikke <a href=\"action://app.new-project\">oprette et nyt projekt</"
-#~ "a>?"
-
-#~ msgid "No projects found"
-#~ msgstr "Ingen projekter fundet"
-
-#~ msgid "Recent Projects"
-#~ msgstr "Seneste projekter"
-
-#~ msgid "Updated"
-#~ msgstr "Opdateret"
-
-#~ msgid "Other Projects"
-#~ msgstr "Andre projekter"
-
-#~ msgid "_Remove"
-#~ msgstr "_Fjern"
-
-#~ msgid "Select a Project"
-#~ msgstr "Vælg et projekt"
-
-#~ msgid "Click an item to select"
-#~ msgstr "Klik på et element for at vælge"
-
-#~ msgid "Open…"
-#~ msgstr "Åbn…"
-
-#~ msgid "Select projects for removal"
-#~ msgstr "Vælg projekter, der skal fjernes"
-
-#~ msgid "Return to project selection"
-#~ msgstr "Vend tilbage til projektvalg"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Editor Shortcuts"
-#~ msgstr "Redigeringsgenveje"
-
-#~ msgctxt "shortcut window"
-#~ msgid "General"
-#~ msgstr "Generelt"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Global Search"
-#~ msgstr "Global søgning"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Preferences"
-#~ msgstr "Indstillinger"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Command Bar"
-#~ msgstr "Kommandobjælke"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Terminal"
-#~ msgstr "Terminal"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Keyboard Shortcuts"
-#~ msgstr "Genvejstaster"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Panels"
-#~ msgstr "Paneler"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Toggle left panel"
-#~ msgstr "Slå venstre panel til eller fra"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Toggle right panel"
-#~ msgstr "Slå højre panel til eller fra"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Toggle bottom panel"
-#~ msgstr "Slå bundpanel til eller fra"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Touchpad gestures"
-#~ msgstr "Pegepladegestusser"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Switch to the next document"
-#~ msgstr "Skift til næste dokument"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Switch to the previous document"
-#~ msgstr "Skift til forrige dokument"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Files"
-#~ msgstr "Filer"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Create new document"
-#~ msgstr "Opret nyt dokument"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Open a document"
-#~ msgstr "Åbn et dokument"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Save the document"
-#~ msgstr "Gem dokumentet"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Close the document"
-#~ msgstr "Luk dokumentet"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Show list of open documents"
-#~ msgstr "Vis liste af åbne dokumenter"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Find and replace"
-#~ msgstr "Søg og erstat"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Find"
-#~ msgstr "Søg"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Find the next match"
-#~ msgstr "Find næste"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Find the previous match"
-#~ msgstr "Find forrige"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Clear highlight"
-#~ msgstr "Ryd fremhævning"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Copy and Paste"
-#~ msgstr "Kopiér og indsæt"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Copy selected text to clipboard"
-#~ msgstr "Kopiér markeret tekst til udklipsholderen"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Cut selected text to clipboard"
-#~ msgstr "Udklip markeret tekst til udklipsholderen"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Paste text from clipboard"
-#~ msgstr "Indsæt tekst fra udklipsholderen"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Duplicate current line or selection"
-#~ msgstr "Duplikér nuværende linje eller markering"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Undo and Redo"
-#~ msgstr "Fortryd og omgør"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Undo previous command"
-#~ msgstr "Fortryd forrige kommando"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Redo previous command"
-#~ msgstr "Omgør forrige kommando"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Editing"
-#~ msgstr "Redigering"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Increment number at cursor"
-#~ msgstr "Forøg tal ved markør med én"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Decrement number at cursor"
-#~ msgstr "Formindsk tal ved markør med én"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Join selected lines"
-#~ msgstr "Slå valgte linjer sammen"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Show completion window"
-#~ msgstr "Vis fuldførelsesvindue"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Toggle overwrite"
-#~ msgstr "Slå overskrivning til eller fra"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Reindent line"
-#~ msgstr "Genindryk linje"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Navigation"
-#~ msgstr "Navigation"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Move to next error in file"
-#~ msgstr "Gå til næste fejl i filen"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Move to previous error in file"
-#~ msgstr "Gå til forrige fejl i filen"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Move to previous edit location"
-#~ msgstr "Gå til forrige redigeringssted"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Move to next edit location"
-#~ msgstr "Gå til næste redigeringssted"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Jump to definition of symbol"
-#~ msgstr "Hop til definition af symbol"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Move viewport up within the file"
-#~ msgstr "Flyt visningsområde op inden i filen"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Move viewport down within the file"
-#~ msgstr "Flyt visningsområde ned inden i filen"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Move viewport to end of file"
-#~ msgstr "Flyt visningsområde til slutningen af filen"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Move viewport to beginning of file"
-#~ msgstr "Flyt visningsområde til begyndelsen af filen"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Move to matching bracket"
-#~ msgstr "Gå til modsvarende parentes"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Selections"
-#~ msgstr "Markeringer"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Select all"
-#~ msgstr "Markér alt"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Unselect all"
-#~ msgstr "Fjern markering"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Build and Run"
-#~ msgstr "Kompilér og kør"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Build"
-#~ msgstr "Kompilér"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Run"
-#~ msgstr "Kør"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Profile"
-#~ msgstr "Profilering"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Terminal Shortcuts"
-#~ msgstr "Terminalgenveje"
-
-#~ msgid "_Select"
-#~ msgstr "_Markér"
-
-#~ msgid "Search Preferences"
-#~ msgstr "Søg i indstillinger"
-
-#~ msgid "Clear _All"
-#~ msgstr "Ryd _alt"
-
-#~ msgid "List open files"
-#~ msgstr "Vis åbne filer"
-
-#~ msgid "Jump to previous location"
-#~ msgstr "Gå til forrige placering"
-
-#~ msgid "Jump to next location"
-#~ msgstr "Gå til næste placering"
-
-#~ msgid "Close the current document"
-#~ msgstr "Luk det aktuelle dokument"
-
-#~ msgid "Edit build configuration"
-#~ msgstr "Redigér kompileringskonfiguration"
-
-#~ msgid "Device"
-#~ msgstr "Enhed"
-
-#~ msgid "Runtime"
-#~ msgstr "Runtime"
-
-#~ msgid "Build project (Ctrl+F7)"
-#~ msgstr "Kompilér projektet (Ctrl+F7)"
-
-#~ msgid "Cancel build"
-#~ msgstr "Kompilering annulleret"
-
-#~ msgid "Branch"
-#~ msgstr "Gren"
-
-# ?
-#~ msgid "Build Profile"
-#~ msgstr "Kompileringsprofil"
-
-#~ msgid "Last build"
-#~ msgstr "Sidste kompilering"
-
-#~ msgid "Failed"
-#~ msgstr "Fejlet"
-
-#~ msgid "View Output"
-#~ msgstr "Vis output"
-
-#~ msgid "Rebuild"
-#~ msgstr "Genkompilér"
-
-#~ msgid "Clean"
-#~ msgstr "Ryd"
-
-#~ msgid "Transfers"
-#~ msgstr "Overførsler"
-
-#~ msgid "Show workbench menu"
-#~ msgstr "Vis arbejdsbordsmenu"
-
-#~ msgid "Press Ctrl+. to search"
-#~ msgstr "Tryk Ctrl+. for at søge"
-
-#~ msgid "Duplicate the configuration"
-#~ msgstr "Duplikér konfigurationen"
-
-#~ msgid "Delete the configuration"
-#~ msgstr "Slet konfigurationen"
-
-#~ msgid "The name of the build configuration"
-#~ msgstr "Navnet på kompileringskonfigurationen"
-
-#~ msgid "Name"
-#~ msgstr "Navn"
-
-#~ msgid "The prefix to use when installing the project"
-#~ msgstr "Præfikset, som bruges når projektet installeres"
-
-#~ msgid "Installation Prefix"
-#~ msgstr "Installationspræfiks"
-
-#~ msgid "Options to use when bootstrapping the project"
-#~ msgstr "Indstillinger, som bruges når projektet bootstrappes"
-
-#~ msgid "Configure Options"
-#~ msgstr "Konfigurationsindstillinger"
-
-#~ msgid "Environment"
-#~ msgstr "Miljø"
-
-#~ msgid "Status:"
-#~ msgstr "Status:"
-
-#~ msgid "Running Time:"
-#~ msgstr "Kørselstid:"
-
-#~ msgid "Warnings:"
-#~ msgstr "Advarsler:"
-
-#~ msgid "Errors:"
-#~ msgstr "Fejl:"
-
-#~ msgid "Color components"
-#~ msgstr "Farvekomponenter"
-
-#~ msgid "Visibility:"
-#~ msgstr "Synlighed:"
-
-#~ msgid ""
-#~ "Select the color spaces for which you want to see sliders in the panel."
-#~ msgstr "Vælg de farverum, der skal have skydere i panelet."
-
-#~ msgid "Units:"
-#~ msgstr "Enheder:"
-
-#~ msgid ""
-#~ "Select the type of unit you want to use for RGB components and strings in "
-#~ "the panel."
-#~ msgstr ""
-#~ "Vælg typen af enhed, du vil bruge til RGB-komponenter og strenge i "
-#~ "panelet."
-
-#~ msgid "Filters:"
-#~ msgstr "Filtre:"
-
-#~ msgid "Select a filter that act on the colors or 'None'."
-#~ msgstr "Vælg et filter, der virker på farverne, eller \"None\"."
-
-#~ msgid "Select the color strings you want to see in the panel."
-#~ msgstr "Vælg farvestrengene, du vil se i panelet."
-
-#~ msgid "Palettes options"
-#~ msgstr "Paletindstillinger"
-
-#~ msgid "Palette view mode:"
-#~ msgstr "Paletvisningstilstand:"
-
-#~ msgid "List"
-#~ msgstr "Liste"
-
-#~ msgid "Swatches"
-#~ msgstr "Farveprøver"
-
-#~ msgid "Palette management"
-#~ msgstr "Palethåndtering"
-
-#~ msgid "Load"
-#~ msgstr "Indlæs"
-
-#~ msgid "From current document"
-#~ msgstr "Fra nuværende dokument"
-
-#~ msgid "Select the palette you want to see in the panel or close one."
-#~ msgstr "Vælg paletten, du vil have i panelet, eller luk en."
-
-#~ msgid "No loaded palettes"
-#~ msgstr "Ingen indlæste paletter"
-
-#~ msgid "No selected palettes"
-#~ msgstr "Ingen valgte paletter"
-
-#~ msgid "Select a palette file"
-#~ msgstr "Vælg en paletfil"
-
-#~ msgid "Try loading or generating a palette using the menu"
-#~ msgstr "Prøv at indlæse eller generere en palet ved brug af menuen"
-
-#~ msgid "Enable color picker"
-#~ msgstr "Slå farvevælger til"
-
-#~ msgid "Comment code"
-#~ msgstr "Udkommentér kode"
-
-#~ msgid "Uncomment code"
-#~ msgstr "Afkommentér kode"
-
-#~ msgid "Project Name"
-#~ msgstr "Projektnavn"
-
-#~ msgid ""
-#~ "Unique name that is used for your project's folder and other technical "
-#~ "resources. Should be in lower case without spaces and may not start with "
-#~ "a number."
-#~ msgstr ""
-#~ "Unikt navn som bruges til dit projekts mappe og andre tekniske "
-#~ "ressourcer. Skal være med små bogstaver uden mellemrum, og må ikke starte "
-#~ "med et tal."
-
-#~ msgid "Project Location"
-#~ msgstr "Projektsted"
-
-#~ msgid "Select Project Directory"
-#~ msgstr "Vælg projektmappe"
-
-#~ msgid "Language"
-#~ msgstr "Sprog"
-
-#~ msgid "License"
-#~ msgstr "Licens"
-
-#~ msgid "GPLv3+"
-#~ msgstr "GPLv3+"
-
-#~ msgid "LGPLv3+"
-#~ msgstr "LGPLv3+"
-
-#~ msgid "AGPLv3+"
-#~ msgstr "AGPLv3+"
-
-#~ msgid "MIT/X11"
-#~ msgstr "MIT/X11"
-
-#~ msgid "GPLv2+"
-#~ msgstr "GPLv2+"
-
-#~ msgid "LGPLv2.1+"
-#~ msgstr "LGPLv2.1+"
-
-#~ msgid "No license"
-#~ msgstr "Ingen licens"
-
-#~ msgid "Uses the Git version control system"
-#~ msgstr "Bruger versionsstyringssystemet Git"
-
-#~ msgid "Select a Template"
-#~ msgstr "Vælg en skabelon"
-
-#~ msgid "Send to Fpaste.org"
-#~ msgstr "Send til Fpaste.org"
-
-#~ msgid "Use Git to create a local copy of a remotely hosted project."
-#~ msgstr ""
-#~ "Brug Git til at oprette en lokal kopi af et projekt som udbydes "
-#~ "andetsteds."
-
-#~ msgid "user@host:repository.git"
-#~ msgstr "bruger@vært:arkiv.git"
-
-#~ msgid "Enter the URL of your project's source code repository"
-#~ msgstr "Indtast URL'en for projektets kildekodearkiv"
-
-#~ msgid "Repository URL"
-#~ msgstr "Arkiv-URL"
-
-#~ msgid "Project Destination"
-#~ msgstr "Projektdestination"
-
-#~ msgid "Preview as HTML"
-#~ msgstr "Forhåndsvis som HTML"
-
-#~ msgid "_Create"
-#~ msgstr "_Opret"
-
-#~ msgid "_New"
-#~ msgstr "_Ny"
-
-#~ msgid "_Empty File"
-#~ msgstr "_Tom fil"
-
-#~ msgid "_New Folder"
-#~ msgstr "_Ny mappe"
-
-#~ msgid "_Open"
-#~ msgstr "_Åbn"
-
-#~ msgid "Open _With"
-#~ msgstr "Åbn _med"
-
-#~ msgid "Source Code Editor"
-#~ msgstr "Kildekoderedigering"
-
-#~ msgid "_Open Containing Folder"
-#~ msgstr "_Åbn indeholdende mappe"
-
-#~ msgid "_Open in Terminal"
-#~ msgstr "_Åbn i terminal"
-
-#~ msgid "Mo_ve to Trash"
-#~ msgstr "_Flyt til papirkurv"
-
-#~ msgid "_Build"
-#~ msgstr "_Kompilér"
-
-#~ msgid "_Rebuild"
-#~ msgstr "_Genkompilér"
-
-#~ msgid "Display Options"
-#~ msgstr "Vis indstillinger"
-
-#~ msgid "Sort Directories First"
-#~ msgstr "Sortér mapper først"
-
-#~ msgid "_Collapse All Nodes"
-#~ msgstr "_Sammenfold alle knuder"
-
-#~ msgid "_Refresh"
-#~ msgstr "_Opdatér"
-
-#~ msgid "Generate Support Log"
-#~ msgstr "Generér supportlog"
-
-#~ msgid "System Monitor"
-#~ msgstr "Systemovervågning"
-
-#~ msgid "Open Profile…"
-#~ msgstr "Åbn profilering…"
-
-#~ msgid "_New Terminal"
-#~ msgstr "_Ny terminal"
+#~ msgid "The default color scheme for Builder"
+#~ msgstr "Standardfarveskemaet til Builder"
 
 #~ msgid "Installed Extensions"
 #~ msgstr "Installerede udvidelser"
