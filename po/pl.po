@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-09-19 16:22+0000\n"
-"PO-Revision-Date: 2016-09-19 18:28+0200\n"
+"POT-Creation-Date: 2016-09-19 16:28+0000\n"
+"PO-Revision-Date: 2016-09-19 20:37+0200\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <community-poland@mozilla.org>\n"
 "Language: pl\n"
@@ -1114,7 +1114,7 @@ msgstr "Funkcja %s() nie jest obsługiwana w systemie budowania %s."
 #: libide/preferences/ide-preferences-builtin.c:337
 #: libide/preferences/ide-preferences-builtin.c:355
 msgid "Default"
-msgstr "Domyślna"
+msgstr "Domyślne"
 
 #: libide/devices/ide-device-manager.c:147
 #, c-format
