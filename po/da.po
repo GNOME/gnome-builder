@@ -18,8 +18,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-18 18:54+0200\n"
-"PO-Revision-Date: 2016-09-18 21:30+0200\n"
+"POT-Creation-Date: 2016-09-19 18:43+0200\n"
+"PO-Revision-Date: 2016-09-19 18:43+0200\n"
 "Last-Translator: Ask Hjorth Larsen <asklarsen@gmail.com>\n"
 "Language-Team: Danish <dansk@dansk-gruppen.dk>\n"
 "Language: da\n"
@@ -398,7 +398,7 @@ msgid "Search directories for projects."
 msgstr "Søg efter projekter i mapper."
 
 #: ../data/gsettings/org.gnome.builder.gschema.xml.h:11
-#: ../libide/preferences/ide-preferences-builtin.c:392
+#: ../libide/preferences/ide-preferences-builtin.c:393
 msgid "Projects directory"
 msgstr "Projektmappe"
 
@@ -648,8 +648,8 @@ msgid "%s() is not supported on %s build system."
 msgstr "%s() understøtttes ikke på %s-kompileringssystemet."
 
 #: ../libide/buildsystem/ide-configuration-manager.c:483
-#: ../libide/preferences/ide-preferences-builtin.c:336
-#: ../libide/preferences/ide-preferences-builtin.c:354
+#: ../libide/preferences/ide-preferences-builtin.c:337
+#: ../libide/preferences/ide-preferences-builtin.c:355
 msgid "Default"
 msgstr "Standard"
 
@@ -1051,126 +1051,127 @@ msgstr "Programmeringssprog"
 
 # Det er teksten som står med gråt i søgefeltet når man endnu ikke har skrevet noget i søgefeltet:
 # http://i.imgur.com/vxldgzS.png
-#: ../libide/preferences/ide-preferences-builtin.c:261
+#. translators: placeholder string for the entry used to filter the languages in Preferences/Programming languages
+#: ../libide/preferences/ide-preferences-builtin.c:262
 msgid "Search languages…"
 msgstr "Søg efter sprog…"
 
-#: ../libide/preferences/ide-preferences-builtin.c:315
-#: ../libide/preferences/ide-preferences-builtin.c:376
+#: ../libide/preferences/ide-preferences-builtin.c:316
+#: ../libide/preferences/ide-preferences-builtin.c:377
 msgid "General"
 msgstr "Generelt"
 
-#: ../libide/preferences/ide-preferences-builtin.c:316
+#: ../libide/preferences/ide-preferences-builtin.c:317
 msgid "Trim trailing whitespace"
 msgstr "Fjern afsluttende blanktegn"
 
-#: ../libide/preferences/ide-preferences-builtin.c:316
+#: ../libide/preferences/ide-preferences-builtin.c:317
 msgid "Upon saving, trailing whitespace from modified lines will be trimmed."
 msgstr "Fjern afsluttende blanktegn fra ændrede linjer, når der gemmes."
 
-#: ../libide/preferences/ide-preferences-builtin.c:317
+#: ../libide/preferences/ide-preferences-builtin.c:318
 msgid "Overwrite Braces"
 msgstr "Overskriv parenteser"
 
-#: ../libide/preferences/ide-preferences-builtin.c:317
+#: ../libide/preferences/ide-preferences-builtin.c:318
 msgid "Overwrite closing braces"
 msgstr "Overskriv slutparenteser"
 
-#: ../libide/preferences/ide-preferences-builtin.c:319
+#: ../libide/preferences/ide-preferences-builtin.c:320
 msgid "Margins"
 msgstr "Margener"
 
-#: ../libide/preferences/ide-preferences-builtin.c:320
+#: ../libide/preferences/ide-preferences-builtin.c:321
 msgid "Show right margin"
 msgstr "Vis højremargen"
 
-#: ../libide/preferences/ide-preferences-builtin.c:321
+#: ../libide/preferences/ide-preferences-builtin.c:322
 msgid "Right margin position"
 msgstr "Placering af højremargen"
 
-#: ../libide/preferences/ide-preferences-builtin.c:321
+#: ../libide/preferences/ide-preferences-builtin.c:322
 msgid "Position in spaces for the right margin"
 msgstr "Placering, angivet i mellemrum, af højremargen"
 
-#: ../libide/preferences/ide-preferences-builtin.c:323
+#: ../libide/preferences/ide-preferences-builtin.c:324
 msgid "Indentation"
 msgstr "Indrykning"
 
-#: ../libide/preferences/ide-preferences-builtin.c:324
+#: ../libide/preferences/ide-preferences-builtin.c:325
 msgid "Tab width"
 msgstr "Tabulatorbredde"
 
-#: ../libide/preferences/ide-preferences-builtin.c:324
+#: ../libide/preferences/ide-preferences-builtin.c:325
 msgid "Width of a tab character in spaces"
 msgstr "Bredden af tabulatortegn, angivet i mellemrum"
 
-#: ../libide/preferences/ide-preferences-builtin.c:325
+#: ../libide/preferences/ide-preferences-builtin.c:326
 msgid "Insert spaces instead of tabs"
 msgstr "Indsæt mellemrum i stedet for tabulatorer"
 
-#: ../libide/preferences/ide-preferences-builtin.c:325
+#: ../libide/preferences/ide-preferences-builtin.c:326
 msgid "Prefer spaces over use of tabs"
 msgstr "Foretræk mellemrum over tabulatorer"
 
-#: ../libide/preferences/ide-preferences-builtin.c:326
+#: ../libide/preferences/ide-preferences-builtin.c:327
 msgid "Automatically indent"
 msgstr "Automatisk indrykning"
 
-#: ../libide/preferences/ide-preferences-builtin.c:326
+#: ../libide/preferences/ide-preferences-builtin.c:327
 msgid "Indent source code as you type"
 msgstr "Indryk kildekode mens du skriver"
 
-#: ../libide/preferences/ide-preferences-builtin.c:341
-#: ../libide/preferences/ide-preferences-builtin.c:359
+#: ../libide/preferences/ide-preferences-builtin.c:342
+#: ../libide/preferences/ide-preferences-builtin.c:360
 msgid "Number of CPU"
 msgstr "Antal cpu'er"
 
-#: ../libide/preferences/ide-preferences-builtin.c:374
+#: ../libide/preferences/ide-preferences-builtin.c:375
 #: ../plugins/build-tools/gbp-build-panel.c:386
 msgid "Build"
 msgstr "Kompilér"
 
-#: ../libide/preferences/ide-preferences-builtin.c:377
+#: ../libide/preferences/ide-preferences-builtin.c:378
 msgid "Build Workers"
 msgstr "Kompileringsarbejdere"
 
-#: ../libide/preferences/ide-preferences-builtin.c:377
+#: ../libide/preferences/ide-preferences-builtin.c:378
 msgid "Number of parallel build workers"
 msgstr "Antallet af parallelle kompileringsarbejdere"
 
-#: ../libide/preferences/ide-preferences-builtin.c:389
+#: ../libide/preferences/ide-preferences-builtin.c:390
 msgid "Projects"
 msgstr "Projekter"
 
-#: ../libide/preferences/ide-preferences-builtin.c:391
+#: ../libide/preferences/ide-preferences-builtin.c:392
 msgid "Workspace"
 msgstr "Arbejdsområde"
 
-#: ../libide/preferences/ide-preferences-builtin.c:392
+#: ../libide/preferences/ide-preferences-builtin.c:393
 msgid "A place for all your projects"
 msgstr "Et sted til alle dine projekter"
 
-#: ../libide/preferences/ide-preferences-builtin.c:393
+#: ../libide/preferences/ide-preferences-builtin.c:394
 msgid "Restore previously opened files"
 msgstr "Gendan tidligere åbne filer"
 
-#: ../libide/preferences/ide-preferences-builtin.c:393
+#: ../libide/preferences/ide-preferences-builtin.c:394
 msgid "Open previously opened files when loading a project"
 msgstr "Åbn filer som var åbnet tidligere ved indlæsning af et projekt"
 
-#: ../libide/preferences/ide-preferences-builtin.c:395
+#: ../libide/preferences/ide-preferences-builtin.c:396
 msgid "Project Discovery"
 msgstr "Find projekter"
 
-#: ../libide/preferences/ide-preferences-builtin.c:396
+#: ../libide/preferences/ide-preferences-builtin.c:397
 msgid "Discover projects on my computer"
 msgstr "Find projekter på din computer"
 
-#: ../libide/preferences/ide-preferences-builtin.c:396
+#: ../libide/preferences/ide-preferences-builtin.c:397
 msgid "Scan your computer for existing projects"
 msgstr "Skan din computer for eksisterende projekter"
 
-#: ../libide/preferences/ide-preferences-builtin.c:517
+#: ../libide/preferences/ide-preferences-builtin.c:518
 msgid "Version Control"
 msgstr "Versionsstyring"
 
@@ -2200,10 +2201,6 @@ msgstr "Vis fejl og advarsler givet af Vala"
 msgid "vala diagnostics warnings errors"
 msgstr "vala diagnostik advarsler fejl"
 
-#: plugins/terminal/gtk/menus.ui:6
-msgid "_New Terminal"
-msgstr "_Ny terminal"
-
 #~ msgid "Hue"
 #~ msgstr "Farvetone"
 
@@ -2542,9 +2539,15 @@ msgstr "_Ny terminal"
 #~ msgid "Optional Vim-style editing"
 #~ msgstr "Valgfri Vim-redigeringstilstand"
 
-#~ msgid "Preview support for building with Xdg-App runtimes"
+#~ msgid "An integrated software profiler for native applications"
+#~ msgstr "Integreret softwareprofilering til platformsspecifikke programmer"
+
+#~ msgid "Support for building with jhbuild"
+#~ msgstr "Understøttelse for kompilering med jhbuild"
+
+#~ msgid "Preview support for building with Flatpak runtimes"
 #~ msgstr ""
-#~ "Understøttelse for forhåndsvisning ved kompilering med Xdg-App-runtime"
+#~ "Understøttelse for forhåndsvisning ved kompilering med Flatpak-runtime"
 
 #~ msgid "Fast global search"
 #~ msgstr "Hurtig global søgning"
@@ -2913,12 +2916,6 @@ msgstr "_Ny terminal"
 #~ msgid "Terminal Shortcuts"
 #~ msgstr "Terminalgenveje"
 
-#~ msgid "Installed Extensions"
-#~ msgstr "Installerede udvidelser"
-
-#~ msgid "Bundled Extensions"
-#~ msgstr "Pakkede udvidelser"
-
 #~ msgid "_Select"
 #~ msgstr "_Markér"
 
@@ -3102,15 +3099,6 @@ msgstr "_Ny terminal"
 #~ msgid "Project Name"
 #~ msgstr "Projektnavn"
 
-#~ msgid "Project Location"
-#~ msgstr "Projektsted"
-
-#~ msgid "Language"
-#~ msgstr "Sprog"
-
-#~ msgid "License"
-#~ msgstr "Licens"
-
 #~ msgid ""
 #~ "Unique name that is used for your project's folder and other technical "
 #~ "resources. Should be in lower case without spaces and may not start with "
@@ -3120,8 +3108,17 @@ msgstr "_Ny terminal"
 #~ "ressourcer. Skal være med små bogstaver uden mellemrum, og må ikke starte "
 #~ "med et tal."
 
+#~ msgid "Project Location"
+#~ msgstr "Projektsted"
+
 #~ msgid "Select Project Directory"
 #~ msgstr "Vælg projektmappe"
+
+#~ msgid "Language"
+#~ msgstr "Sprog"
+
+#~ msgid "License"
+#~ msgstr "Licens"
 
 #~ msgid "GPLv3+"
 #~ msgstr "GPLv3+"
@@ -3229,6 +3226,15 @@ msgstr "_Ny terminal"
 
 #~ msgid "Open Profile…"
 #~ msgstr "Åbn profilering…"
+
+#~ msgid "_New Terminal"
+#~ msgstr "_Ny terminal"
+
+#~ msgid "Installed Extensions"
+#~ msgstr "Installerede udvidelser"
+
+#~ msgid "Bundled Extensions"
+#~ msgstr "Pakkede udvidelser"
 
 #~ msgid "_Print…"
 #~ msgstr "_Udskriv…"
