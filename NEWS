@@ -1,3 +1,34 @@
+==============
+Version 3.22.0
+==============
+
+GNOME 3.22.0 is here and GNOME Builder is no different.
+
+Since 3.21.91, we've added a bunch of features to help Builder run better under
+Flatpak.
+
+ • Fixes improper invalidation of cache items like clang translation units.
+ • New transfers API for plugins.
+ • Support for prebuild/postbuild commands in .buildconfig.
+ • Run terminals on the host system when contained in Flatpak.
+ • Teach runtimes to run on the host system when necessary. Builder, when
+   running under Flatpak, can support using your host jhbuild now.
+ • Plugins can define if a process should run on the host with the
+   IdeSubprocessLauncher:run-on-host property.
+ • Various UI stablization fixes.
+ • Add Build and Run keybindings to Shortcut window (Ekta Nandwani)
+ • Fix running autotools targets with relative paths (Patrick Griffis)
+ • Fix running projects using GSettings (Patrick Griffis)
+ • Add Python Gnome project (Patrick Griffis)
+
+Thanks again to all of our translators!
+
+Alexandre Franke, Anders Jonsson, Andika Triwidada, Ask Hjorth Larsen, Aurimas
+Černius, Balázs Meskó, Balázs Úr, Baurzhan Muftakhidinov, Changwoo Ryu, Daniel
+Mustieles, David King, Enrico Nicoletto, Fran Dieguez, Gábor Kelemen, Marek
+Černocký, Mario Blättermann, Matej Urbančič, Muhammet Kara, Piotr Drąg, Rafael
+Fontenelle, Rūdolfs Mazurs
+
 ===============
 Version 3.21.91
 ===============
