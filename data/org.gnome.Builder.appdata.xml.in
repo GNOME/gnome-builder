@@ -36,19 +36,19 @@
 
   <screenshots>
     <screenshot type="default">
-      <image width="1600" height="900">https://git.gnome.org/browse/gnome-builder/plain/data/appdata/gnome-builder.png</image>
+      <image width="1920" height="1080">https://git.gnome.org/browse/gnome-builder/plain/data/appdata/gnome-builder.png</image>
     </screenshot>
     <screenshot type="default">
       <caption>Fast global search</caption>
-      <image width="1600" height="900">https://git.gnome.org/browse/gnome-builder/plain/data/appdata/global-search.png</image>
+      <image width="1920" height="1080">https://git.gnome.org/browse/gnome-builder/plain/data/appdata/global-search.png</image>
     </screenshot>
     <screenshot type="default">
       <caption>Integrated project tree</caption>
-      <image width="1600" height="900">https://git.gnome.org/browse/gnome-builder/plain/data/appdata/project-tree.png</image>
+      <image width="1920" height="1080">https://git.gnome.org/browse/gnome-builder/plain/data/appdata/project-tree.png</image>
     </screenshot>
     <screenshot type="default">
       <caption>Side-by-side code editors</caption>
-      <image width="1600" height="900">https://git.gnome.org/browse/gnome-builder/plain/data/appdata/split-view.png</image>
+      <image width="1920" height="1080">https://git.gnome.org/browse/gnome-builder/plain/data/appdata/split-view.png</image>
     </screenshot>
   </screenshots>
 
