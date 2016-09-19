@@ -18,8 +18,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-19 18:43+0200\n"
-"PO-Revision-Date: 2016-09-19 18:43+0200\n"
+"POT-Creation-Date: 2016-09-19 21:08+0200\n"
+"PO-Revision-Date: 2016-09-19 21:08+0200\n"
 "Last-Translator: Ask Hjorth Larsen <asklarsen@gmail.com>\n"
 "Language-Team: Danish <dansk@dansk-gruppen.dk>\n"
 "Language: da\n"
@@ -1525,6 +1525,10 @@ msgstr "Noter"
 msgid "Unknown file"
 msgstr "Ukendt fil"
 
+#: ../plugins/build-tools/gbp-build-perspective.c:436
+msgid "Build Preferences"
+msgstr "Kompileringsindstillinger"
+
 #: ../plugins/build-tools/gbp-build-tool.c:102
 #: ../plugins/build-tools/gbp-build-tool.c:115
 #, c-format
@@ -2176,7 +2180,7 @@ msgstr "Alle filer"
 msgid "Run with Profiler"
 msgstr "Kør med profilering"
 
-#: ../plugins/terminal/gb-terminal-view.c:438
+#: ../plugins/terminal/gb-terminal-view.c:444
 msgid "Untitled terminal"
 msgstr "Unavngivet terminal"
 
