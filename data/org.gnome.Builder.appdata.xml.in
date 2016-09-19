@@ -30,6 +30,8 @@
       <li>Auto indentation support for C, Python, Vala, and XML</li>
       <li>HTML/Markdown live preview</li>
       <li>Optional Vim-style editing</li>
+      <li>An integrated software profiler for native applications</li>
+      <li>Support for building with jhbuild</li>
       <li>Preview support for building with Flatpak runtimes</li>
     </ul>
   </description>
