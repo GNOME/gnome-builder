@@ -73,7 +73,7 @@ static void gb_terminal_view_connect_terminal (GbTerminalView *self,
 static void gb_terminal_respawn               (GbTerminalView *self,
                                                VteTerminal    *terminal);
 
-static const gchar *
+static gchar *
 gb_terminal_view_discover_shell (GCancellable  *cancellable,
                                  GError       **error)
 {
@@ -86,7 +86,7 @@ gb_terminal_view_discover_shell (GCancellable  *cancellable,
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   if (cached_shell != NULL)
-    return cached_shell;
+    return g_strdup (cached_shell);
 
   command = g_strdup_printf ("sh -c 'cat /etc/passwd | grep ^%s: | cut -f 7 -d :'",
                              g_get_user_name ());
@@ -121,7 +121,7 @@ gb_terminal_view_discover_shell (GCancellable  *cancellable,
                          G_IO_ERROR_FAILED,
                          "Unknown error when discovering user shell");
 
-  return cached_shell;
+  return g_strdup (cached_shell);
 }
 
 static void
@@ -183,7 +183,7 @@ gb_terminal_respawn (GbTerminalView *self,
   g_autoptr(IdeSubprocess) subprocess = NULL;
   g_autoptr(IdeSubprocessLauncher) launcher = NULL;
   g_autofree gchar *workpath = NULL;
-  const gchar *shell;
+  g_autofree gchar *shell = NULL;
   GtkWidget *toplevel;
   GError *error = NULL;
   IdeContext *context;
