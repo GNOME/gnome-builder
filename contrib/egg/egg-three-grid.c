@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#define G_LGO_DOMAIN "egg-three-grid"
+#define G_LOG_DOMAIN "egg-three-grid"
 
 #include <math.h>
 
