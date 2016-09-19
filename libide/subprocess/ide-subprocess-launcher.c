@@ -32,6 +32,7 @@
 #include "subprocess/ide-breakout-subprocess-private.h"
 #include "subprocess/ide-simple-subprocess.h"
 #include "subprocess/ide-subprocess-launcher.h"
+#include "util/ide-flatpak.h"
 
 typedef struct
 {
@@ -133,24 +134,8 @@ static gboolean
 should_use_breakout_process (IdeSubprocessLauncher *self)
 {
   IdeSubprocessLauncherPrivate *priv = ide_subprocess_launcher_get_instance_private (self);
-  static gsize initialized;
-  static gboolean is_contained;
 
   g_assert (IDE_IS_SUBPROCESS_LAUNCHER (self));
-
-  if (g_once_init_enter (&initialized))
-    {
-      g_autofree gchar *flatpak_info_path = NULL;
-
-      flatpak_info_path = g_build_filename (g_get_user_runtime_dir (),
-                                            "flatpak-info",
-                                            NULL);
-
-      if (g_file_test (flatpak_info_path, G_FILE_TEST_EXISTS))
-        is_contained = TRUE;
-
-      g_once_init_leave (&initialized, TRUE);
-    }
 
   if (g_getenv ("IDE_USE_BREAKOUT_SUBPROCESS") != NULL)
     return TRUE;
@@ -158,7 +143,7 @@ should_use_breakout_process (IdeSubprocessLauncher *self)
   if (!priv->run_on_host)
     return FALSE;
 
-  return is_contained;
+  return ide_is_flatpak ();
 }
 
 static void
