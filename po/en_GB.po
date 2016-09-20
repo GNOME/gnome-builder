@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-09-19 16:22+0000\n"
+"POT-Creation-Date: 2016-09-19 18:45+0000\n"
 "PO-Revision-Date: 2016-09-19 18:33+0200\n"
 "Last-Translator: David King <amigadave@amigadave.com>\n"
 "Language-Team: British English <en_GB@li.org>\n"
@@ -2580,6 +2580,10 @@ msgstr "Warnings:"
 msgid "Errors:"
 msgstr "Errors:"
 
+#: plugins/build-tools/gbp-build-perspective.c:436
+msgid "Build Preferences"
+msgstr "Build Preferences"
+
 #: plugins/build-tools/gbp-build-tool.c:102
 #: plugins/build-tools/gbp-build-tool.c:115
 msgid "========================\n"
@@ -3475,7 +3479,7 @@ msgstr "Run with Profiler"
 msgid "Open Profile…"
 msgstr "Open Profile…"
 
-#: plugins/terminal/gb-terminal-view.c:438
+#: plugins/terminal/gb-terminal-view.c:444
 msgid "Untitled terminal"
 msgstr "Untitled terminal"
 
