@@ -93,6 +93,7 @@ libegg_private_la_CFLAGS = \
 libegg_private_la_LIBADD = \
 	$(EGG_LIBS) \
 	$(SHM_LIB) \
+	$(LIBM) \
 	$(NULL)
 
 
