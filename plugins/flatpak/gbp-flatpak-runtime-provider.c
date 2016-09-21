@@ -92,6 +92,8 @@ gbp_flatpak_runtime_provider_load_worker (GTask        *task,
       IDE_EXIT;
     }
 
+  IDE_TRACE_MSG ("Found %u installation refs", ar->len);
+
   ret = g_ptr_array_new_with_free_func (g_object_unref);
 
   for (i = 0; i < ar->len; i++)
