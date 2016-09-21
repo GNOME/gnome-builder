@@ -16,6 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define G_LOG_DOMAIN "gbp-flatpak-runtime-provider"
+
 #include <string.h>
 #include <flatpak.h>
 
@@ -26,11 +28,11 @@
 
 struct _GbpFlatpakRuntimeProvider
 {
-  GObject             parent_instance;
-  IdeRuntimeManager  *manager;
+  GObject              parent_instance;
+  IdeRuntimeManager   *manager;
   FlatpakInstallation *installation;
-  GCancellable       *cancellable;
-  GPtrArray          *runtimes;
+  GCancellable        *cancellable;
+  GPtrArray           *runtimes;
 };
 
 static void runtime_provider_iface_init (IdeRuntimeProviderInterface *);
@@ -62,6 +64,8 @@ gbp_flatpak_runtime_provider_load_worker (GTask        *task,
   GError *error = NULL;
   guint i;
 
+  IDE_ENTRY;
+
   g_assert (G_IS_TASK (task));
   g_assert (GBP_IS_FLATPAK_RUNTIME_PROVIDER (self));
   g_assert (IDE_IS_RUNTIME_MANAGER (self->manager));
@@ -74,7 +78,7 @@ gbp_flatpak_runtime_provider_load_worker (GTask        *task,
   if (self->installation == NULL)
     {
       g_task_return_error (task, error);
-      return;
+      IDE_EXIT;
     }
 
   ar = flatpak_installation_list_installed_refs_by_kind (self->installation,
@@ -85,7 +89,7 @@ gbp_flatpak_runtime_provider_load_worker (GTask        *task,
   if (ar == NULL)
     {
       g_task_return_error (task, error);
-      return;
+      IDE_EXIT;
     }
 
   ret = g_ptr_array_new_with_free_func (g_object_unref);
@@ -105,6 +109,7 @@ gbp_flatpak_runtime_provider_load_worker (GTask        *task,
       gsize metadata_len;
 
       g_assert (FLATPAK_IS_INSTALLED_REF (ref));
+      g_assert (flatpak_ref_get_kind (FLATPAK_REF (ref)) == FLATPAK_REF_KIND_RUNTIME);
 
       name = g_strdup (flatpak_ref_get_name (FLATPAK_REF (ref)));
 
@@ -117,7 +122,7 @@ gbp_flatpak_runtime_provider_load_worker (GTask        *task,
       arch = flatpak_ref_get_arch (FLATPAK_REF (ref));
       branch = flatpak_ref_get_branch (FLATPAK_REF (ref));
 
-      id = g_strdup_printf ("flatpak-app:%s/%s/%s", name, branch, arch);
+      id = g_strdup_printf ("flatpak:%s/%s/%s", name, branch, arch);
 
       if (g_strcmp0 (host_type, arch) == 0)
         str = g_strdup_printf ("%s <b>%s</b>", name, branch);
@@ -160,6 +165,8 @@ gbp_flatpak_runtime_provider_load_worker (GTask        *task,
 
       sanitize_name (sdk);
 
+      IDE_TRACE_MSG ("Discovered flatpak runtime %s/%s/%s", name, branch, arch);
+
       g_ptr_array_add (ret,
                        g_object_new (GBP_TYPE_FLATPAK_RUNTIME,
                                      "branch", branch,
@@ -174,17 +181,21 @@ gbp_flatpak_runtime_provider_load_worker (GTask        *task,
   g_ptr_array_unref (ar);
 
   g_task_return_pointer (task, ret, (GDestroyNotify)g_ptr_array_unref);
+
+  IDE_EXIT;
 }
 
 static void
 gbp_flatpak_runtime_provider_load_cb (GObject      *object,
-                                  GAsyncResult *result,
-                                  gpointer      user_data)
+                                      GAsyncResult *result,
+                                      gpointer      user_data)
 {
   GbpFlatpakRuntimeProvider *self = (GbpFlatpakRuntimeProvider *)object;
   GPtrArray *ret;
   GError *error = NULL;
   guint i;
+
+  IDE_ENTRY;
 
   g_assert (GBP_IS_FLATPAK_RUNTIME_PROVIDER (self));
   g_assert (G_IS_TASK (result));
@@ -193,7 +204,7 @@ gbp_flatpak_runtime_provider_load_cb (GObject      *object,
     {
       g_warning ("%s", error->message);
       g_clear_error (&error);
-      return;
+      IDE_EXIT;
     }
 
   for (i = 0; i < ret->len; i++)
@@ -204,14 +215,18 @@ gbp_flatpak_runtime_provider_load_cb (GObject      *object,
     }
 
   self->runtimes = ret;
+
+  IDE_EXIT;
 }
 
 static void
 gbp_flatpak_runtime_provider_load (IdeRuntimeProvider *provider,
-                               IdeRuntimeManager  *manager)
+                                   IdeRuntimeManager  *manager)
 {
   GbpFlatpakRuntimeProvider *self = (GbpFlatpakRuntimeProvider *)provider;
   g_autoptr(GTask) task = NULL;
+
+  IDE_ENTRY;
 
   g_assert (GBP_IS_FLATPAK_RUNTIME_PROVIDER (self));
   g_assert (IDE_IS_RUNTIME_MANAGER (manager));
@@ -222,13 +237,17 @@ gbp_flatpak_runtime_provider_load (IdeRuntimeProvider *provider,
 
   task = g_task_new (self, self->cancellable, gbp_flatpak_runtime_provider_load_cb, NULL);
   g_task_run_in_thread (task, gbp_flatpak_runtime_provider_load_worker);
+
+  IDE_EXIT;
 }
 
 static void
 gbp_flatpak_runtime_provider_unload (IdeRuntimeProvider *provider,
-                                 IdeRuntimeManager  *manager)
+                                     IdeRuntimeManager  *manager)
 {
   GbpFlatpakRuntimeProvider *self = (GbpFlatpakRuntimeProvider *)provider;
+
+  IDE_ENTRY;
 
   g_assert (GBP_IS_FLATPAK_RUNTIME_PROVIDER (self));
   g_assert (IDE_IS_RUNTIME_MANAGER (manager));
@@ -252,6 +271,8 @@ gbp_flatpak_runtime_provider_unload (IdeRuntimeProvider *provider,
   g_clear_object (&self->installation);
 
   ide_clear_weak_pointer (&self->manager);
+
+  IDE_EXIT;
 }
 
 static void
