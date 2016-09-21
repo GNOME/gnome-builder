@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-09-19 16:22+0000\n"
-"PO-Revision-Date: 2016-09-19 20:18+0200\n"
+"POT-Creation-Date: 2016-09-21 13:06+0000\n"
+"PO-Revision-Date: 2016-09-21 17:12+0200\n"
 "Last-Translator: Meskó Balázs <meskobalazs@gmail.com>\n"
 "Language-Team: Hungarian <openscope at googlegroups dot com>\n"
 "Language: hu\n"
@@ -2604,6 +2604,10 @@ msgstr "Figyelmeztetések:"
 msgid "Errors:"
 msgstr "Hibák:"
 
+#: plugins/build-tools/gbp-build-perspective.c:436
+msgid "Build Preferences"
+msgstr "Összeállítási beállítások"
+
 #: plugins/build-tools/gbp-build-tool.c:102
 #: plugins/build-tools/gbp-build-tool.c:115
 msgid "========================\n"
@@ -3506,7 +3510,7 @@ msgstr "Futtatás profilozóval"
 msgid "Open Profile…"
 msgstr "Profil megnyitása…"
 
-#: plugins/terminal/gb-terminal-view.c:438
+#: plugins/terminal/gb-terminal-view.c:444
 msgid "Untitled terminal"
 msgstr "Névtelen terminál"
 
