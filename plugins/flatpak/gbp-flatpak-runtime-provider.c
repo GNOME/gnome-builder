@@ -188,6 +188,8 @@ gbp_flatpak_runtime_provider_load_worker (GTask        *task,
 {
   GbpFlatpakRuntimeProvider *self = source_object;
   g_autoptr(GPtrArray) ret = NULL;
+  g_autoptr(GFile) file = NULL;
+  g_autofree gchar *path = NULL;
   GError *error = NULL;
 
   IDE_ENTRY;
@@ -206,7 +208,10 @@ gbp_flatpak_runtime_provider_load_worker (GTask        *task,
 
   gbp_flatpak_runtime_provider_load_refs (self, self->system_installation, ret, cancellable, &error);
 
-  if (NULL == (self->user_installation = flatpak_installation_new_user (cancellable, &error)))
+  path = g_build_filename (g_get_home_dir (), ".local", "share", "flatpak", NULL);
+  file = g_file_new_for_path (path);
+
+  if (NULL == (self->user_installation = flatpak_installation_new_for_path (file, TRUE, cancellable, &error)))
     {
       g_task_return_error (task, error);
       IDE_EXIT;
