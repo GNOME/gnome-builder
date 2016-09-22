@@ -200,24 +200,22 @@ gbp_flatpak_runtime_provider_load_worker (GTask        *task,
 
   ret = g_ptr_array_new_with_free_func (g_object_unref);
 
-  if (NULL == (self->system_installation = flatpak_installation_new_system (cancellable, &error)))
+  if (NULL == (self->system_installation = flatpak_installation_new_system (cancellable, &error)) ||
+      !gbp_flatpak_runtime_provider_load_refs (self, self->system_installation, ret, cancellable, &error))
     {
-      g_task_return_error (task, error);
-      IDE_EXIT;
+      g_warning ("Failed to load system installation: %s", error->message);
+      g_clear_error (&error);
     }
-
-  gbp_flatpak_runtime_provider_load_refs (self, self->system_installation, ret, cancellable, &error);
 
   path = g_build_filename (g_get_home_dir (), ".local", "share", "flatpak", NULL);
   file = g_file_new_for_path (path);
 
-  if (NULL == (self->user_installation = flatpak_installation_new_for_path (file, TRUE, cancellable, &error)))
+  if (NULL == (self->user_installation = flatpak_installation_new_for_path (file, TRUE, cancellable, &error)) ||
+      !gbp_flatpak_runtime_provider_load_refs (self, self->user_installation, ret, cancellable, &error))
     {
-      g_task_return_error (task, error);
-      IDE_EXIT;
+      g_warning ("%s", error->message);
+      g_clear_error (&error);
     }
-
-  gbp_flatpak_runtime_provider_load_refs (self, self->user_installation, ret, cancellable, &error);
 
   g_task_return_pointer (task, g_steal_pointer (&ret), (GDestroyNotify)g_ptr_array_unref);
 
