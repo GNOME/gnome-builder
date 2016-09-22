@@ -30,7 +30,8 @@ struct _GbpFlatpakRuntimeProvider
 {
   GObject              parent_instance;
   IdeRuntimeManager   *manager;
-  FlatpakInstallation *installation;
+  FlatpakInstallation *user_installation;
+  FlatpakInstallation *system_installation;
   GCancellable        *cancellable;
   GPtrArray           *runtimes;
 };
@@ -50,53 +51,52 @@ sanitize_name (gchar *name)
     *tmp = '\0';
 }
 
-static void
-gbp_flatpak_runtime_provider_load_worker (GTask        *task,
-                                          gpointer      source_object,
-                                          gpointer      task_data,
-                                          GCancellable *cancellable)
+static gboolean
+contains_id (GPtrArray   *ar,
+             const gchar *id)
 {
-  GbpFlatpakRuntimeProvider *self = source_object;
-  g_autofree gchar *host_type = NULL;
+  g_assert (ar != NULL);
+  g_assert (id != NULL);
+
+  for (guint i = 0; i < ar->len; i++)
+    {
+      IdeRuntime *runtime = g_ptr_array_index (ar, i);
+
+      g_assert (IDE_IS_RUNTIME (runtime));
+
+      if (ide_str_equal0 (id, ide_runtime_get_id (runtime)))
+        return TRUE;
+    }
+
+  return FALSE;
+}
+
+static gboolean
+gbp_flatpak_runtime_provider_load_refs (GbpFlatpakRuntimeProvider  *self,
+                                        FlatpakInstallation        *installation,
+                                        GPtrArray                  *runtimes,
+                                        GCancellable               *cancellable,
+                                        GError                    **error)
+{
+  g_autofree gchar *host_type = ide_get_system_arch ();
+  g_autoptr(GPtrArray) ar = NULL;
   IdeContext *context;
-  GPtrArray *ret;
-  GPtrArray *ar;
-  GError *error = NULL;
-  guint i;
 
-  IDE_ENTRY;
-
-  g_assert (G_IS_TASK (task));
   g_assert (GBP_IS_FLATPAK_RUNTIME_PROVIDER (self));
-  g_assert (IDE_IS_RUNTIME_MANAGER (self->manager));
+  g_assert (FLATPAK_IS_INSTALLATION (installation));
 
   context = ide_object_get_context (IDE_OBJECT (self->manager));
-  host_type = ide_get_system_arch ();
-
-  self->installation = flatpak_installation_new_user (cancellable, &error);
-
-  if (self->installation == NULL)
-    {
-      g_task_return_error (task, error);
-      IDE_EXIT;
-    }
-
-  ar = flatpak_installation_list_installed_refs_by_kind (self->installation,
+  ar = flatpak_installation_list_installed_refs_by_kind (installation,
                                                          FLATPAK_REF_KIND_RUNTIME,
                                                          cancellable,
-                                                         &error);
+                                                         error);
 
   if (ar == NULL)
-    {
-      g_task_return_error (task, error);
-      IDE_EXIT;
-    }
+    return FALSE;
 
   IDE_TRACE_MSG ("Found %u installation refs", ar->len);
 
-  ret = g_ptr_array_new_with_free_func (g_object_unref);
-
-  for (i = 0; i < ar->len; i++)
+  for (guint i = 0; i < ar->len; i++)
     {
       FlatpakInstalledRef *ref = g_ptr_array_index (ar, i);
       g_autofree gchar *str = NULL;
@@ -109,6 +109,7 @@ gbp_flatpak_runtime_provider_load_worker (GTask        *task,
       g_autoptr(GKeyFile) key_file = NULL;
       const gchar *metadata_data;
       gsize metadata_len;
+      g_autoptr(GError) local_error = NULL;
 
       g_assert (FLATPAK_IS_INSTALLED_REF (ref));
       g_assert (flatpak_ref_get_kind (FLATPAK_REF (ref)) == FLATPAK_REF_KIND_RUNTIME);
@@ -126,18 +127,19 @@ gbp_flatpak_runtime_provider_load_worker (GTask        *task,
 
       id = g_strdup_printf ("flatpak:%s/%s/%s", name, branch, arch);
 
+      if (contains_id (runtimes, id))
+        continue;
+
       if (g_strcmp0 (host_type, arch) == 0)
         str = g_strdup_printf ("%s <b>%s</b>", name, branch);
       else
         str = g_strdup_printf ("%s <b>%s</b> <sup>%s</sup>", name, branch, arch);
 
-      metadata = flatpak_installed_ref_load_metadata (FLATPAK_INSTALLED_REF (ref),
-                                                      cancellable, &error);
+      metadata = flatpak_installed_ref_load_metadata (FLATPAK_INSTALLED_REF (ref), cancellable, &local_error);
 
       if (metadata == NULL)
         {
-          g_warning ("%s", error->message);
-          g_clear_error (&error);
+          g_warning ("%s", local_error->message);
           continue;
         }
 
@@ -145,20 +147,15 @@ gbp_flatpak_runtime_provider_load_worker (GTask        *task,
 
       key_file = g_key_file_new ();
 
-      if (!g_key_file_load_from_data (key_file, metadata_data, metadata_len, G_KEY_FILE_NONE, &error))
+      if (!g_key_file_load_from_data (key_file, metadata_data, metadata_len, G_KEY_FILE_NONE, &local_error))
         {
           /*
            * If this is not really a runtime, but something like a locale, then
            * the metadata file will not exist.
            */
-          if (g_error_matches (error, G_IO_ERROR, G_IO_ERROR_NOT_FOUND))
-            {
-              g_clear_error (&error);
-              continue;
-            }
+          if (!g_error_matches (local_error, G_IO_ERROR, G_IO_ERROR_NOT_FOUND))
+            g_warning ("%s", local_error->message);
 
-          g_warning ("%s", error->message);
-          g_clear_error (&error);
           continue;
         }
 
@@ -169,7 +166,7 @@ gbp_flatpak_runtime_provider_load_worker (GTask        *task,
 
       IDE_TRACE_MSG ("Discovered flatpak runtime %s/%s/%s", name, branch, arch);
 
-      g_ptr_array_add (ret,
+      g_ptr_array_add (runtimes,
                        g_object_new (GBP_TYPE_FLATPAK_RUNTIME,
                                      "branch", branch,
                                      "sdk", sdk,
@@ -180,9 +177,44 @@ gbp_flatpak_runtime_provider_load_worker (GTask        *task,
                                      NULL));
     }
 
-  g_ptr_array_unref (ar);
+  return TRUE;
+}
 
-  g_task_return_pointer (task, ret, (GDestroyNotify)g_ptr_array_unref);
+static void
+gbp_flatpak_runtime_provider_load_worker (GTask        *task,
+                                          gpointer      source_object,
+                                          gpointer      task_data,
+                                          GCancellable *cancellable)
+{
+  GbpFlatpakRuntimeProvider *self = source_object;
+  g_autoptr(GPtrArray) ret = NULL;
+  GError *error = NULL;
+
+  IDE_ENTRY;
+
+  g_assert (G_IS_TASK (task));
+  g_assert (GBP_IS_FLATPAK_RUNTIME_PROVIDER (self));
+  g_assert (IDE_IS_RUNTIME_MANAGER (self->manager));
+
+  ret = g_ptr_array_new_with_free_func (g_object_unref);
+
+  if (NULL == (self->system_installation = flatpak_installation_new_system (cancellable, &error)))
+    {
+      g_task_return_error (task, error);
+      IDE_EXIT;
+    }
+
+  gbp_flatpak_runtime_provider_load_refs (self, self->system_installation, ret, cancellable, &error);
+
+  if (NULL == (self->user_installation = flatpak_installation_new_user (cancellable, &error)))
+    {
+      g_task_return_error (task, error);
+      IDE_EXIT;
+    }
+
+  gbp_flatpak_runtime_provider_load_refs (self, self->user_installation, ret, cancellable, &error);
+
+  g_task_return_pointer (task, g_steal_pointer (&ret), (GDestroyNotify)g_ptr_array_unref);
 
   IDE_EXIT;
 }
@@ -270,7 +302,8 @@ gbp_flatpak_runtime_provider_unload (IdeRuntimeProvider *provider,
     g_cancellable_cancel (self->cancellable);
   g_clear_object (&self->cancellable);
 
-  g_clear_object (&self->installation);
+  g_clear_object (&self->system_installation);
+  g_clear_object (&self->user_installation);
 
   ide_clear_weak_pointer (&self->manager);
 
