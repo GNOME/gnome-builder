@@ -95,6 +95,7 @@ static const gchar *
 remap_language (const gchar *lang_id)
 {
   static GHashTable *remap;
+  gchar *remapped_lang_id;
 
   if (lang_id == NULL)
     return NULL;
@@ -110,7 +111,12 @@ remap_language (const gchar *lang_id)
 #undef ADD_REMAP
     }
 
-  return g_hash_table_lookup (remap, lang_id);
+  remapped_lang_id = g_hash_table_lookup (remap, lang_id);
+
+  if (remapped_lang_id == NULL)
+    return lang_id;
+  else
+    return remapped_lang_id;
 }
 
 static void
