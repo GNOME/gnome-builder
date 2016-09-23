@@ -85,6 +85,7 @@ libgstyle_private_la_CFLAGS =            \
 libgstyle_private_la_LIBADD =                       \
 	$(GSTYLE_LIBS)                              \
 	$(XML_LIBS)                                 \
+	$(LIBM)                                     \
 	$(top_builddir)/contrib/search/libsearch.la \
 	$(NULL)
 
