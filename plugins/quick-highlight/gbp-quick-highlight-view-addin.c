@@ -32,9 +32,15 @@ struct _GbpQuickHighlightViewAddin
   GtkSourceSearchSettings *search_settings;
   GSettings               *settings;
 
+  /* No reference, just for quick comparison */
+  GtkTextMark             *insert_mark;
+
   gulong                   notify_style_scheme_handler;
   gulong                   mark_set_handler;
   gulong                   changed_enabled_handler;
+  gulong                   delete_range_handler;
+
+  guint                    queued_update;
 
   guint                    enabled : 1;
 };
@@ -62,14 +68,13 @@ gbp_quick_highlight_view_addin_change_style (GtkSourceBuffer *buffer,
                                              GParamSpec      *pspec,
                                              gpointer         user_data)
 {
-  GbpQuickHighlightViewAddin *self;
+  GbpQuickHighlightViewAddin *self = user_data;
+  g_autofree gchar *text = NULL;
   GtkSourceStyleScheme *style_scheme;
   GtkSourceStyle *style;
-  gchar *text;
 
+  g_assert (GBP_IS_QUICK_HIGHLIGHT_VIEW_ADDIN (self));
   g_assert (GTK_SOURCE_IS_BUFFER (buffer));
-
-  self = GBP_QUICK_HIGHLIGHT_VIEW_ADDIN (user_data);
 
   text = g_strdup (gtk_source_search_settings_get_search_text (self->search_settings));
 
@@ -86,29 +91,19 @@ gbp_quick_highlight_view_addin_change_style (GtkSourceBuffer *buffer,
       gtk_source_search_settings_set_search_text (self->search_settings, text);
       gtk_source_search_context_set_highlight (self->search_context, TRUE);
     }
-
-  g_free (text);
 }
 
 static void
-gbp_quick_highlight_view_addin_match (GtkTextBuffer *buffer,
-                                      GtkTextIter   *location,
-                                      GtkTextMark   *mark,
-                                      gpointer       user_data)
+gbp_quick_highlight_view_addin_match (GbpQuickHighlightViewAddin *self)
 {
-  GbpQuickHighlightViewAddin *self;
-  GtkTextMark *insert_mark;
+  g_autofree gchar *text = NULL;
+  GtkTextBuffer *buffer;
   GtkTextIter begin;
   GtkTextIter end;
-  gchar *text;
 
-  g_assert (GTK_IS_TEXT_BUFFER (buffer));
+  g_assert (GBP_IS_QUICK_HIGHLIGHT_VIEW_ADDIN (self));
 
-  self = GBP_QUICK_HIGHLIGHT_VIEW_ADDIN (user_data);
-
-  insert_mark = gtk_text_buffer_get_insert (buffer);
-  if (insert_mark != mark)
-    return;
+  buffer = GTK_TEXT_BUFFER (ide_editor_view_get_document (self->editor_view));
 
   if (gtk_text_buffer_get_selection_bounds (buffer, &begin, &end))
     {
@@ -126,14 +121,72 @@ gbp_quick_highlight_view_addin_match (GtkTextBuffer *buffer,
           gtk_source_search_settings_set_search_text (self->search_settings, NULL);
           gtk_source_search_context_set_highlight (self->search_context, FALSE);
         }
-
-      g_free (text);
     }
   else
     {
       gtk_source_search_settings_set_search_text (self->search_settings, NULL);
       gtk_source_search_context_set_highlight (self->search_context, FALSE);
     }
+}
+
+
+static gboolean
+gbp_quick_highlight_view_addin_do_update (gpointer data)
+{
+  GbpQuickHighlightViewAddin *self = data;
+
+  g_assert (GBP_IS_QUICK_HIGHLIGHT_VIEW_ADDIN (self));
+
+  self->queued_update = 0;
+
+  gbp_quick_highlight_view_addin_match (self);
+
+  return G_SOURCE_REMOVE;
+}
+
+static void
+gbp_quick_highlight_view_addin_queue_update (GbpQuickHighlightViewAddin *self)
+{
+  g_assert (GBP_IS_QUICK_HIGHLIGHT_VIEW_ADDIN (self));
+
+  if (self->queued_update == 0)
+    {
+      self->queued_update =
+        gdk_threads_add_idle_full (G_PRIORITY_LOW,
+                                   gbp_quick_highlight_view_addin_do_update,
+                                   self,
+                                   NULL);
+    }
+}
+
+static void
+gbp_quick_highlight_view_addin_mark_set (GtkTextBuffer *buffer,
+                                         GtkTextIter   *location,
+                                         GtkTextMark   *mark,
+                                         gpointer       user_data)
+{
+  GbpQuickHighlightViewAddin *self = user_data;
+
+  g_assert (GBP_IS_QUICK_HIGHLIGHT_VIEW_ADDIN (self));
+
+  if G_LIKELY (mark != self->insert_mark)
+    return;
+
+  gbp_quick_highlight_view_addin_queue_update (self);
+}
+
+static void
+gbp_quick_highlight_view_addin_delete_range (GbpQuickHighlightViewAddin *self,
+                                             GtkTextIter                *begin,
+                                             GtkTextIter                *end,
+                                             GtkTextBuffer              *buffer)
+{
+  g_assert (GBP_IS_QUICK_HIGHLIGHT_VIEW_ADDIN (self));
+  g_assert (begin != NULL);
+  g_assert (end != NULL);
+  g_assert (GTK_IS_TEXT_BUFFER (buffer));
+
+  gbp_quick_highlight_view_addin_queue_update (self);
 }
 
 static void
@@ -184,6 +237,8 @@ gbp_quick_highlight_view_addin_load (IdeEditorViewAddin *addin,
 
   buffer = GTK_SOURCE_BUFFER (ide_editor_view_get_document (view));
 
+  self->insert_mark = gtk_text_buffer_get_insert (GTK_TEXT_BUFFER (buffer));
+
   self->search_settings = g_object_new (GTK_SOURCE_TYPE_SEARCH_SETTINGS,
                                         "search-text", NULL,
                                         NULL);
@@ -211,9 +266,16 @@ gbp_quick_highlight_view_addin_load (IdeEditorViewAddin *addin,
   self->mark_set_handler =
     g_signal_connect_object (buffer,
                              "mark-set",
-                             G_CALLBACK (gbp_quick_highlight_view_addin_match),
+                             G_CALLBACK (gbp_quick_highlight_view_addin_mark_set),
                              self,
                              G_CONNECT_AFTER);
+
+  self->delete_range_handler =
+    g_signal_connect_object (buffer,
+                             "delete-range",
+                             G_CALLBACK (gbp_quick_highlight_view_addin_delete_range),
+                             self,
+                             G_CONNECT_AFTER | G_CONNECT_SWAPPED);
 
   /* Use conventions from IdeExtensionSetAdapter */
   self->settings = g_settings_new_with_path ("org.gnome.builder.extension-type",
@@ -233,18 +295,19 @@ static void
 gbp_quick_highlight_view_addin_unload (IdeEditorViewAddin *addin,
                                        IdeEditorView      *view)
 {
-  GbpQuickHighlightViewAddin *self;
+  GbpQuickHighlightViewAddin *self = (GbpQuickHighlightViewAddin *)addin;
   GtkSourceBuffer *buffer;
 
-  g_assert (GBP_IS_QUICK_HIGHLIGHT_VIEW_ADDIN (addin));
-
-  self = GBP_QUICK_HIGHLIGHT_VIEW_ADDIN (addin);
+  g_assert (GBP_IS_QUICK_HIGHLIGHT_VIEW_ADDIN (self));
 
   buffer = GTK_SOURCE_BUFFER (ide_editor_view_get_document (view));
 
-  g_signal_handler_disconnect (buffer, self->notify_style_scheme_handler);
-  g_signal_handler_disconnect (buffer, self->mark_set_handler);
-  g_signal_handler_disconnect (self->settings, self->changed_enabled_handler);
+  ide_clear_source (&self->queued_update);
+
+  ide_clear_signal_handler (buffer, &self->notify_style_scheme_handler);
+  ide_clear_signal_handler (buffer, &self->mark_set_handler);
+  ide_clear_signal_handler (buffer, &self->changed_enabled_handler);
+  ide_clear_signal_handler (buffer, &self->delete_range_handler);
 
   g_clear_object (&self->search_settings);
   g_clear_object (&self->search_context);
