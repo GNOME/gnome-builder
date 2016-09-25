@@ -114,7 +114,9 @@ gbp_quick_highlight_view_addin_match (GtkTextBuffer *buffer,
     {
       text = gtk_text_buffer_get_text (buffer, &begin, &end, FALSE);
 
-      if (text != NULL && g_strstrip (text) != NULL)
+      g_strstrip (text);
+
+      if (text[0])
         {
           gtk_source_search_settings_set_search_text (self->search_settings, text);
           gtk_source_search_context_set_highlight (self->search_context, TRUE);
