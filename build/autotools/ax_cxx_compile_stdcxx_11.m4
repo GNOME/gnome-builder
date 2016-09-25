@@ -9,7 +9,8 @@
 # DESCRIPTION
 #
 #   Check for baseline language coverage in the compiler for the C++11
-#   standard; if necessary, add switches to CXX to enable support.
+#   standard; if necessary, add switches to CXX and CXXCPP to enable
+#   support.
 #
 #   This macro is a convenience alias for calling the AX_CXX_COMPILE_STDCXX
 #   macro with the version set to C++11.  The two optional arguments are
@@ -32,8 +33,7 @@
 #   and this notice are preserved. This file is offered as-is, without any
 #   warranty.
 
-#serial 15
+#serial 17
 
-include([ax_cxx_compile_stdcxx.m4])
-
+AX_REQUIRE_DEFINED([AX_CXX_COMPILE_STDCXX])
 AC_DEFUN([AX_CXX_COMPILE_STDCXX_11], [AX_CXX_COMPILE_STDCXX([11], [$1], [$2])])
