@@ -467,9 +467,9 @@ pixbuf_func (GtkCellLayout   *cell_layout,
              GtkTreeIter     *iter,
              gpointer         data)
 {
-  IdeTreeNode *node;
+  g_autoptr(IdeTreeNode) node = NULL;
+  g_autoptr(GIcon) old_icon = NULL;
   GIcon *icon;
-  GIcon *old_icon;
 
   g_assert (GTK_IS_CELL_LAYOUT (cell_layout));
   g_assert (GTK_IS_CELL_RENDERER_PIXBUF (cell));
@@ -481,9 +481,6 @@ pixbuf_func (GtkCellLayout   *cell_layout,
   g_object_get (cell, "gicon", &old_icon, NULL);
   if (icon != old_icon)
     g_object_set (cell, "gicon", icon, NULL);
-
-  g_clear_object (&old_icon);
-  g_clear_object (&node);
 }
 
 static void

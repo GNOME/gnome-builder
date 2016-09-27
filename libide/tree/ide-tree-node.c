@@ -35,7 +35,7 @@ struct _IdeTreeNode
   gchar             *text;
   IdeTree           *tree;
   GQuark             icon_name;
-  GIcon             *icon;
+  GIcon             *gicon;
   GList             *emblems;
   guint              use_markup : 1;
   guint              needs_build : 1;
@@ -57,7 +57,7 @@ enum {
   PROP_0,
   PROP_CHILDREN_POSSIBLE,
   PROP_ICON_NAME,
-  PROP_ICON,
+  PROP_GICON,
   PROP_ITEM,
   PROP_PARENT,
   PROP_TEXT,
@@ -273,36 +273,43 @@ ide_tree_node_get_parent (IdeTreeNode *node)
  * ide_tree_node_get_gicon:
  *
  * Fetch the GIcon, re-render if necessary
+ *
+ * Returns: (transfer none): An #GIcon or %NULL.
  */
 GIcon *
-ide_tree_node_get_gicon (IdeTreeNode *node)
+ide_tree_node_get_gicon (IdeTreeNode *self)
 {
   const gchar *icon_name;
-  GIcon *icon;
-  GList *element;
 
-  g_return_val_if_fail (IDE_IS_TREE_NODE (node), NULL);
+  g_return_val_if_fail (IDE_IS_TREE_NODE (self), NULL);
 
-  icon_name = node ? ide_tree_node_get_icon_name (node) : NULL;
-  if (!(node->icon) && icon_name)
+  icon_name = ide_tree_node_get_icon_name (self);
+
+  if G_UNLIKELY (self->gicon == NULL && icon_name != NULL)
     {
-      icon = g_themed_icon_new (icon_name);
-      node->icon = g_emblemed_icon_new (icon, NULL);
-      element = node->emblems;
-      while (element)
+      g_autoptr(GIcon) base = NULL;
+      g_autoptr(GIcon) icon = NULL;
+
+      base = g_themed_icon_new (icon_name);
+      icon = g_emblemed_icon_new (base, NULL);
+
+      for (GList *iter = self->emblems; iter != NULL; iter = iter->next)
         {
-          GIcon *emblem_icon = g_themed_icon_new (element->data);
-          GEmblem *emblem = g_emblem_new (emblem_icon);
-          g_emblemed_icon_add_emblem (node->icon, emblem);
-          g_object_unref (&emblem);
-          g_object_unref (&emblem_icon);
-          element = element->next;
+          const gchar *emblem_icon_name = iter->data;
+          g_autoptr(GIcon) emblem_base = NULL;
+          g_autoptr(GEmblem) emblem = NULL;
+
+          emblem_base = g_themed_icon_new (emblem_icon_name);
+          emblem = g_emblem_new (emblem_base);
+
+          g_emblemed_icon_add_emblem (G_EMBLEMED_ICON (icon), emblem);
         }
-      g_object_notify_by_pspec (G_OBJECT (node), properties [PROP_ICON]);
-      g_clear_object (&icon);
+
+      if (g_set_object (&self->gicon, icon))
+        g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_GICON]);
     }
 
-  return node->icon;
+  return self->gicon;
 }
 
 /**
@@ -340,88 +347,125 @@ ide_tree_node_set_icon_name (IdeTreeNode *node,
   if (value != node->icon_name)
     {
       node->icon_name = value;
-      g_clear_object (&node->icon);
+      g_clear_object (&node->gicon);
       g_object_notify_by_pspec (G_OBJECT (node), properties [PROP_ICON_NAME]);
+      g_object_notify_by_pspec (G_OBJECT (node), properties [PROP_GICON]);
     }
 }
 
+/**
+ * ide_tree_node_add_emblem:
+ * @self: An #IdeTreeNode
+ * @emblem_name: the icon-name of the emblem
+ *
+ * Adds an emplem to be rendered on top of the node.
+ *
+ * Use ide_tree_node_remove_emblem() to remove an emblem.
+ */
 void
-ide_tree_node_add_emblem (IdeTreeNode *node,
-                         const gchar *emblem_name)
+ide_tree_node_add_emblem (IdeTreeNode *self,
+                          const gchar *emblem)
 {
-  GList *elem;
-  GList *elem_tmp;
-  g_return_if_fail (IDE_IS_TREE_NODE (node));
+  g_return_if_fail (IDE_IS_TREE_NODE (self));
 
-  elem_tmp = node->emblems;
-  elem = elem_tmp;
-  while (elem_tmp != NULL)
+  for (GList *iter = self->emblems; iter != NULL; iter = iter->next)
     {
-      if (!g_strcmp0 (emblem_name, elem_tmp->data))
+      const gchar *iter_icon_name = iter->data;
+
+      if (g_strcmp0 (iter_icon_name, emblem) == 0)
         return;
-      elem = elem_tmp;
-      elem_tmp = elem_tmp->next;
     }
-  gchar *data = g_strdup (emblem_name);
-  if(!data)
-    return;
-  elem = g_list_append (elem, g_strdup(emblem_name));
-  if (!node->emblems)
-    node->emblems = elem;
 
-  g_clear_object (&node->icon);
-
+  self->emblems = g_list_prepend (self->emblems, g_strdup (emblem));
+  g_clear_object (&self->gicon);
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_GICON]);
 }
 
 void
-ide_tree_node_remove_emblem (IdeTreeNode *node,
-                            const gchar *emblem_name)
+ide_tree_node_remove_emblem (IdeTreeNode *self,
+                             const gchar *emblem_name)
 {
-  GList *elem;
-  g_return_if_fail (IDE_IS_TREE_NODE (node));
+  g_return_if_fail (IDE_IS_TREE_NODE (self));
 
-  elem = g_list_find_custom (node->emblems, emblem_name, g_strcmp0);
-  if (elem)
+  for (GList *iter = self->emblems; iter != NULL; iter = iter->next)
     {
-      g_free (elem->data);
-      node->emblems = g_list_remove (node->emblems, elem->data);
-      g_clear_object (&node->icon);
+      gchar *iter_icon_name = iter->data;
+
+      if (g_strcmp0 (iter_icon_name, emblem_name) == 0)
+        {
+          g_free (iter_icon_name);
+          self->emblems = g_list_delete_link (self->emblems, iter);
+          g_clear_object (&self->gicon);
+          g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_GICON]);
+          return;
+        }
     }
 }
 
+/**
+ * ide_tree_node_clear_emblems:
+ *
+ * Removes all emblems from @self.
+ */
 void
-ide_tree_node_clear_emblems (IdeTreeNode *node)
+ide_tree_node_clear_emblems (IdeTreeNode *self)
 {
-  g_return_if_fail (IDE_IS_TREE_NODE (node));
+  g_return_if_fail (IDE_IS_TREE_NODE (self));
 
-  g_list_free_full (node->emblems, g_free);
-  node->emblems = NULL;
-  g_clear_object (&node->icon);
+  g_list_free_full (self->emblems, g_free);
+  self->emblems = NULL;
+  g_clear_object (&self->gicon);
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_GICON]);
 }
 
+/**
+ * ide_tree_node_has_emblem:
+ * @self: An #IdeTreeNode
+ * @emblem_name: a string containing the emblem name
+ *
+ * Checks to see if @emblem_name has been added to the #IdeTreeNode.
+ *
+ * Returns: %TRUE if @emblem_name is used by @self
+ */
 gboolean
-ide_tree_node_has_emblem (IdeTreeNode *node,
-                         const gchar *emblem_name)
+ide_tree_node_has_emblem (IdeTreeNode *self,
+                          const gchar *emblem_name)
 {
-  g_return_val_if_fail (IDE_IS_TREE_NODE (node), FALSE);
+  g_return_val_if_fail (IDE_IS_TREE_NODE (self), FALSE);
 
-  return g_list_find_custom (node->emblems, emblem_name, g_strcmp0) != NULL;
+  for (GList *iter = self->emblems; iter != NULL; iter = iter->next)
+    {
+      const gchar *iter_icon_name = iter->data;
+
+      if (g_strcmp0 (iter_icon_name, emblem_name) == 0)
+        return TRUE;
+    }
+
+  return FALSE;
 }
 
 void
-ide_tree_node_set_emblems (IdeTreeNode *node,
-                          GList *emblems)
+ide_tree_node_set_emblems (IdeTreeNode         *self,
+                           const gchar * const *emblems)
 {
-  g_return_if_fail (IDE_IS_TREE_NODE (node));
-  g_return_if_fail (emblems);
+  g_return_if_fail (IDE_IS_TREE_NODE (self));
 
-  if (emblems != node->emblems)
+  if (self->emblems != NULL)
     {
-      if (node->emblems)
-        g_list_free_full (node->emblems, g_free);
-      node->emblems = g_list_copy_deep (emblems, (GCopyFunc) g_strdup, NULL);
-      g_clear_object (&node->icon);
+      g_list_free_full (self->emblems, g_free);
+      self->emblems = NULL;
     }
+
+  if (emblems != NULL)
+    {
+      guint len = g_strv_length ((gchar **)emblems);
+
+      for (guint i = len; i > 0; i--)
+        self->emblems = g_list_prepend (self->emblems, g_strdup (emblems[i-1]));
+    }
+
+  g_clear_object (&self->gicon);
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_GICON]);
 }
 
 /**
@@ -434,7 +478,7 @@ ide_tree_node_set_emblems (IdeTreeNode *node,
  */
 void
 ide_tree_node_set_item (IdeTreeNode *node,
-                       GObject    *item)
+                        GObject     *item)
 {
   g_return_if_fail (IDE_IS_TREE_NODE (node));
   g_return_if_fail (!item || G_IS_OBJECT (item));
@@ -445,7 +489,7 @@ ide_tree_node_set_item (IdeTreeNode *node,
 
 void
 _ide_tree_node_set_parent (IdeTreeNode *node,
-                          IdeTreeNode *parent)
+                           IdeTreeNode *parent)
 {
   g_return_if_fail (IDE_IS_TREE_NODE (node));
   g_return_if_fail (node->parent == NULL);
@@ -675,12 +719,12 @@ ide_tree_node_get_property (GObject    *object,
       g_value_set_string (value, g_quark_to_string (node->icon_name));
       break;
 
-    case PROP_ICON:
-      g_value_set_object (value, node->icon);
-      break;
-
     case PROP_ITEM:
       g_value_set_object (value, node->item);
+      break;
+
+    case PROP_GICON:
+      g_value_set_object (value, node->gicon);
       break;
 
     case PROP_PARENT:
@@ -790,13 +834,13 @@ ide_tree_node_class_init (IdeTreeNodeClass *klass)
                          NULL,
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
   /**
-   * IdeTreeNode:icon:
+   * IdeTreeNode:gicon:
    *
    * The cached GIcon to display.
    */
-  properties[PROP_ICON] =
-    g_param_spec_object ("icon",
-                         "Icon",
+  properties[PROP_GICON] =
+    g_param_spec_object ("gicon",
+                         "GIcon",
                          "The GIcon object",
                          G_TYPE_ICON,
                          G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
