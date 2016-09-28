@@ -83,7 +83,7 @@ ide_workbench_actions_open_with_dialog (GSimpleAction *action,
    */
   ret = gtk_native_dialog_run (GTK_NATIVE_DIALOG (native));
 
-  if (ret == GTK_RESPONSE_OK)
+  if (ret == GTK_RESPONSE_ACCEPT)
     {
       g_autoptr(GFile) file = NULL;
 
