@@ -240,6 +240,9 @@ open_profile_action (GSimpleAction *action,
   GbpSysprofWorkbenchAddin *self = user_data;
   GtkFileChooserNative *native;
   GtkFileFilter *filter;
+  IdeContext *context;
+  IdeVcs *vcs;
+  GFile *workdir;
   gint ret;
 
   g_assert (GBP_IS_SYSPROF_WORKBENCH_ADDIN (self));
@@ -248,11 +251,16 @@ open_profile_action (GSimpleAction *action,
 
   ide_workbench_set_visible_perspective (self->workbench, IDE_PERSPECTIVE (self->perspective));
 
+  context = ide_workbench_get_context (self->workbench);
+  vcs = ide_context_get_vcs (context);
+  workdir = ide_vcs_get_working_directory (vcs);
+
   native = gtk_file_chooser_native_new (_("Open Profile"),
                                         GTK_WINDOW (self->workbench),
                                         GTK_FILE_CHOOSER_ACTION_OPEN,
                                         _("Open"),
                                         _("Cancel"));
+  gtk_file_chooser_set_current_folder_file (GTK_FILE_CHOOSER (native), workdir, NULL);
 
   /* Add our filter for sysprof capture files.  */
   filter = gtk_file_filter_new ();
