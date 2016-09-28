@@ -24,6 +24,7 @@
 
 #include "application/ide-application.h"
 #include "buffers/ide-buffer-manager.h"
+#include "vcs/ide-vcs.h"
 #include "workbench/ide-workbench.h"
 #include "workbench/ide-workbench-header-bar.h"
 #include "workbench/ide-workbench-private.h"
@@ -55,34 +56,32 @@ ide_workbench_actions_open_with_dialog (GSimpleAction *action,
                                         gpointer       user_data)
 {
   IdeWorkbench *self = user_data;
-  GtkWidget *button;
-  GtkWidget *dialog;
+  GtkFileChooserNative *native;
+  IdeContext *context;
+  IdeVcs *vcs;
+  GFile *workdir;
   gint ret;
 
   IDE_ENTRY;
 
   g_assert (IDE_IS_WORKBENCH (self));
 
-  dialog = gtk_file_chooser_dialog_new (_("Open File"),
+  context = ide_workbench_get_context (self);
+  vcs = ide_context_get_vcs (context);
+  workdir = ide_vcs_get_working_directory (vcs);
+
+  native = gtk_file_chooser_native_new (_("Open File"),
                                         GTK_WINDOW (self),
                                         GTK_FILE_CHOOSER_ACTION_OPEN,
-                                        _("Cancel"), GTK_RESPONSE_CANCEL,
-                                        _("Open"), GTK_RESPONSE_OK,
-                                        NULL);
+                                        _("Open"),
+                                        _("Cancel"));
+  gtk_file_chooser_set_current_folder_file (GTK_FILE_CHOOSER (native), workdir, NULL);
+  gtk_file_chooser_set_local_only (GTK_FILE_CHOOSER (native), FALSE);
 
-  gtk_file_chooser_set_local_only (GTK_FILE_CHOOSER (dialog), FALSE);
-
-  button = gtk_dialog_get_widget_for_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
-  gtk_style_context_add_class (gtk_widget_get_style_context (button),
-                               GTK_STYLE_CLASS_SUGGESTED_ACTION);
-
-  /*
-   * TODO: Allow workbench addins to specify file filters?
-   *       Do we want to move this to a custom interface and use that
-   *       for file loading as well?
+  /* Unlike gtk_dialog_run(), this will handle processing
+   * various I/O events and so should be safe to use.
    */
-
-  ret = gtk_dialog_run (GTK_DIALOG (dialog));
+  ret = gtk_native_dialog_run (GTK_NATIVE_DIALOG (native));
 
   if (ret == GTK_RESPONSE_OK)
     {
@@ -90,7 +89,7 @@ ide_workbench_actions_open_with_dialog (GSimpleAction *action,
 
       IDE_PROBE;
 
-      file = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (dialog));
+      file = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (native));
       ide_workbench_open_files_async (self,
                                       &file,
                                       1,
@@ -101,7 +100,8 @@ ide_workbench_actions_open_with_dialog (GSimpleAction *action,
                                       NULL);
     }
 
-  gtk_widget_destroy (dialog);
+  gtk_native_dialog_hide (GTK_NATIVE_DIALOG (native));
+  gtk_native_dialog_destroy (GTK_NATIVE_DIALOG (native));
 
   IDE_EXIT;
 }
