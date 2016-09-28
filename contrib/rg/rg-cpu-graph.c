@@ -49,7 +49,7 @@ static gchar *colors[] = {
   "#75507b",
   "#ce5c00",
   "#c17d11",
-  "#ce5c00",
+  "#cc0000",
 };
 
 GtkWidget *
