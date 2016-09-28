@@ -42,7 +42,7 @@
   </menu>
   <menu id="gear-menu">
     <section id="gear-menu-layout-section">
-      <attribute name="id">juntion-section</attribute>
+      <attribute name="id">panel-section</attribute>
       <attribute name="display-hint">horizontal-buttons</attribute>
       <item>
         <attribute name="label" translatable="yes">Show left panel</attribute>
