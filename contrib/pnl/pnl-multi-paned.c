@@ -1533,6 +1533,20 @@ pnl_multi_paned_pan_gesture_drag_begin (PnlMultiPaned *self,
           priv->drag_begin = child;
           break;
         }
+    }
+
+  if (priv->drag_begin == NULL)
+    {
+      gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_DENIED);
+      return;
+    }
+
+  for (i = 0; i < priv->children->len; i++)
+    {
+      PnlMultiPanedChild *child = &g_array_index (priv->children, PnlMultiPanedChild, i);
+
+      if (child->handle == event->any.window)
+        break;
 
       /*
        * We want to make any child before the drag child "sticky" so that it
@@ -1547,12 +1561,6 @@ pnl_multi_paned_pan_gesture_drag_begin (PnlMultiPaned *self,
             ? child->alloc.width
             : child->alloc.height;
         }
-    }
-
-  if (priv->drag_begin == NULL)
-    {
-      gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_DENIED);
-      return;
     }
 
   if (IS_HORIZONTAL (priv->orientation))
