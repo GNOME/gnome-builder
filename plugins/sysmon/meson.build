@@ -1,0 +1,32 @@
+if get_option('with_sysmon')
+
+sysmon_resources = gnome.compile_resources(
+  'gb-sysmon-resources',
+  'gb-sysmon.gresource.xml',
+  c_name: 'gb_sysmon',
+)
+
+sysmon_sources = [
+  sysmon_resources[0],
+  sysmon_resources[1],
+  'gb-sysmon-panel.c',
+  'gb-sysmon-panel.h',
+  'gb-sysmon-addin.c',
+  'gb-sysmon-addin.h',
+]
+
+sysmon_deps = plugin_deps + [
+  librg_dep,
+]
+
+shared_module('sysmon', sysmon_sources,
+  dependencies: sysmon_deps,
+  link_args: plugin_link_args,
+  link_depends: plugin_link_deps,
+  install: true,
+  install_dir: plugindir,
+)
+
+install_data('sysmon.plugin', install_dir: plugindir)
+
+endif

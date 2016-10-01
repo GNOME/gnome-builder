@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-worker-manager"
 
+#include "config.h"
+
 #include <egg-counter.h>
 #include <gio/gio.h>
 #include <gio/gunixsocketaddress.h>

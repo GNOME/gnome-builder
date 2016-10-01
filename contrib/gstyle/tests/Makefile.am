@@ -4,7 +4,7 @@ gstyle_cflags =                              \
 	$(DEBUG_CFLAGS)                      \
 	$(GSTYLE_CFLAGS)                     \
 	-I$(top_srcdir)/contrib/gstyle       \
-	-DTEST_DATA_DIR="\"$(abs_builddir)/data\"" \
+	-DTEST_DATA_DIR="\"$(abs_srcdir)/data\"" \
 	$(NULL)
 
 gstyle_libs =                                               \

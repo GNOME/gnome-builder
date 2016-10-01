@@ -1,0 +1,6 @@
+{
+global:
+        gstyle_*;
+local:
+        *;
+};

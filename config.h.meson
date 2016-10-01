@@ -1,0 +1,49 @@
+/* Define to 1 if translation of program messages to the user's native
+   language is requested. */
+#mesondefine ENABLE_NLS
+
+/* GETTEXT package name */
+#mesondefine GETTEXT_PACKAGE
+
+/* Define if the GNU gettext() function is already present or preinstalled. */
+#mesondefine HAVE_GETTEXT
+
+/* Define to 1 if you have the `sched_getcpu' function. */
+#mesondefine HAVE_SCHED_GETCPU
+
+/* Name of package */
+#mesondefine PACKAGE
+
+/* Define to the address where bug reports for this package should be sent. */
+#mesondefine PACKAGE_BUGREPORT
+
+/* Define to the full name of this package. */
+#mesondefine PACKAGE_NAME
+
+/* Define to the full name and version of this package. */
+#mesondefine PACKAGE_STRING
+
+/* Define to the one symbol short name of this package. */
+#mesondefine PACKAGE_TARNAME
+
+/* Define to the home page for this package. */
+#mesondefine PACKAGE_URL
+
+/* Define to the version of this package. */
+#mesondefine PACKAGE_VERSION
+
+#mesondefine PACKAGE_DATADIR
+
+#mesondefine PACKAGE_LIBDIR
+
+#mesondefine PACKAGE_LIBEXECDIR
+
+#mesondefine PACKAGE_LOCALE_DIR
+
+/* Version number of package */
+#mesondefine VERSION
+
+#mesondefine SRCDIR
+
+#mesondefine BUILDDIR
+

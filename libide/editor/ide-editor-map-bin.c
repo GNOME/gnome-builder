@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-editor-map-bin"
 
+#include "config.h"
+
 #include <glib/gi18n.h>
 #include <pango/pangofc-fontmap.h>
 

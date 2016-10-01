@@ -1,0 +1,6 @@
+{
+global:
+        peas_register_types;
+local:
+        *;
+};

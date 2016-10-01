@@ -1,0 +1,6 @@
+{
+global:
+        rg_*;
+local:
+        *;
+};

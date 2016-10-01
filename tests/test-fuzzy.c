@@ -1,5 +1,5 @@
 #include <fuzzy.h>
-#include <ide-line-reader.h>
+#include <ide.h>
 #include <stdlib.h>
 #include <string.h>
 

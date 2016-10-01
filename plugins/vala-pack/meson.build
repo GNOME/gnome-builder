@@ -1,0 +1,100 @@
+if get_option('with_vala_pack')
+
+if not get_option('with_vapi')
+#  error('You must enable VAPI generation to build the Vala pack')
+endif
+
+add_languages('vala')
+
+libvala_options = [
+  ['libvala-0.36', ''],
+  ['libvala-0.34', ''],
+  ['libvala-0.32', ''],
+  ['libvala-0.30', '>=0.29.3'],
+
+]
+
+libvala_found = false
+foreach v: libvala_options
+  if not libvala_found or not libvala.found()
+    if v[1] != ''
+      libvala = dependency(v[0], version: v[1], required: false)
+    else
+      libvala = dependency(v[0], required: false)
+    endif
+    libvala_found = libvala.found()
+    libvala_version = v[0].split('-')[1]
+  endif
+endforeach
+
+if not libvala_found
+  error('Failed to find suitable libvala')
+endif
+
+# Check for deprecated symbol support
+vala_deprecated_symbol = cc.links('''
+  #include <vala.h>
+  vala_symbol_get_deprecated (NULL);
+''', dependencies: libvala)
+
+# Check for deprecated threading support
+vala_deprecated_threading = cc.links('''
+  #include <vala.h>
+  vala_code_context_set_thread (NULL, TRUE);
+''', dependencies: libvala)
+
+vala_extra_args = []
+if vala_deprecated_symbol
+  vala_extra_args += '--define=ENABLE_VALA_SYMBOL_GET_DEPRECATED'
+endif
+if vala_deprecated_threading
+  vala_extra_args += '--define=ENABLE_VALA_CODE_CONTEXT_SET_THREAD'
+endif
+
+vala_pack_sources = [
+  'config.vapi',
+  'ide-vala-service.vala',
+  'ide-vala-completion.vala',
+  'ide-vala-completion-item.vala',
+  'ide-vala-completion-provider.vala',
+  'ide-vala-diagnostics.vala',
+  'ide-vala-diagnostic-provider.vala',
+  'ide-vala-indenter.vala',
+  'ide-vala-index.vala',
+  'ide-vala-locator.vala',
+  'ide-vala-preferences-addin.vala',
+  'ide-vala-source-file.vala',
+  'ide-vala-symbol-resolver.vala',
+  'ide-vala-symbol-tree.vala',
+  'vala-pack-plugin.vala',
+]
+
+shared_module('vala-pack-plugin', vala_pack_sources,
+  dependencies: plugin_deps + [
+    libvala,
+    libide_vapi,
+  ],
+  vala_args: [
+    '--pkg=posix',
+    '--pkg=libpeas-1.0',
+    '--pkg=gtksourceview-3.0',
+    '--pkg=gio-2.0',
+    '--pkg=libvala-' + libvala_version,
+  ] + vala_extra_args,
+  c_args: [
+    '-DVALA_VERSION="@0@"'.format(libvala_version),
+    '-DLOG_DOMAIN="vala-pack-plugin"',
+    '-DGETTEXT_PACKAGE="gnome-builder"',
+    '-DPACKAGE_DATADIR="@0@"'.format(join_paths(get_option('prefix'),
+                                                get_option('datadir'),
+                                                'gnome-builder')),
+  ],
+  link_args: plugin_link_args,
+  link_depends: plugin_link_deps,
+  install: true,
+  install_dir: plugindir,
+)
+
+install_data('vala-pack.plugin', install_dir: plugindir)
+
+endif

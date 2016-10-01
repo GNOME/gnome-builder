@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-application"
 
+#include "config.h"
+
 #include <libpeas/peas.h>
 #include <girepository.h>
 
