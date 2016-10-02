@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-02-13 08:03+0000\n"
-"PO-Revision-Date: 2016-02-13 14:47+0100\n"
+"POT-Creation-Date: 2016-09-21 13:06+0000\n"
+"PO-Revision-Date: 2016-10-02 20:50+0200\n"
 "Last-Translator: Dušan Kazik <prescott66@gmail.com>\n"
 "Language-Team: slovenčina <>\n"
 "Language: sk\n"
@@ -17,46 +17,47 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 1 : (n>=2 && n<=4) ? 2 : 0;\n"
-"X-Generator: Poedit 1.8.7\n"
+"X-Generator: Poedit 1.8.9\n"
 
-#: ../contrib/egg/egg-animation.c:715
+#: contrib/egg/egg-animation.c:726 contrib/pnl/pnl-animation.c:701
 #, c-format
 msgid "Cannot locate property %s in class %s"
 msgstr "Nedá sa lokalizovať vlastnosť %s v triede %s"
 
-#: ../contrib/egg/egg-animation.c:1055 ../contrib/egg/egg-animation.c:1061
+#: contrib/egg/egg-animation.c:1073 contrib/egg/egg-animation.c:1079
+#: contrib/pnl/pnl-animation.c:1053 contrib/pnl/pnl-animation.c:1059
 #, c-format
 msgid "Failed to find property %s in %s"
 msgstr "Zlyhalo nájdenie vlastnosti %s v %s"
 
-#: ../contrib/egg/egg-animation.c:1069
+#: contrib/egg/egg-animation.c:1087 contrib/pnl/pnl-animation.c:1067
 #, c-format
 msgid "Failed to find property %s in %s or parent %s"
 msgstr "Zlyhalo nájdenie vlastnosti %s v %s alebo rodiča %s"
 
-#: ../contrib/egg/egg-animation.c:1079
+#: contrib/egg/egg-animation.c:1097 contrib/pnl/pnl-animation.c:1077
 #, c-format
 msgid "Failed to retrieve va_list value: %s"
 msgstr "Zlyhalo získanie hodnoty va_list: %s"
 
-#: ../contrib/egg/egg-date-time.c:55
+#: contrib/egg/egg-date-time.c:55
 msgid "Just now"
 msgstr "Práve teraz"
 
-#: ../contrib/egg/egg-date-time.c:57
+#: contrib/egg/egg-date-time.c:57
 msgid "An hour ago"
 msgstr "Pred hodinou"
 
-#: ../contrib/egg/egg-date-time.c:59
+#: contrib/egg/egg-date-time.c:59
 msgid "Yesterday"
 msgstr "Včera"
 
-#: ../contrib/egg/egg-date-time.c:65
+#: contrib/egg/egg-date-time.c:65
 msgid "About a year ago"
 msgstr "Pred rokom"
 
 # DK: https://bugzilla.gnome.org/show_bug.cgi?id=753665
-#: ../contrib/egg/egg-date-time.c:69
+#: contrib/egg/egg-date-time.c:69
 #, c-format
 msgid "About %u year ago"
 msgid_plural "About %u years ago"
@@ -64,305 +65,1329 @@ msgstr[0] "Pred %u rokmi"
 msgstr[1] "Pred %u rokom"
 msgstr[2] "Pred %u rokmi"
 
-#: ../contrib/egg/egg-search-bar.c:378
+#: contrib/egg/egg-file-chooser-entry.c:100
+#: contrib/egg/egg-file-chooser-entry.c:489
+#: libide/greeter/ide-greeter-perspective.c:673
+#: libide/workbench/ide-workbench-actions.c:70
+#: plugins/color-picker/gb-color-picker-prefs.c:210
+#: plugins/sysprof/gbp-sysprof-workbench-addin.c:254
+msgid "Open"
+msgstr "Otvoriť"
+
+#: contrib/egg/egg-file-chooser-entry.c:104
+#, fuzzy
+#| msgid "_Select"
+msgid "Select"
+msgstr "Vy_brať"
+
+#: contrib/egg/egg-file-chooser-entry.c:108
+#: plugins/create-project/gbp-create-project-genesis-addin.c:229
+#, fuzzy
+#| msgid "_Create"
+msgid "Create"
+msgstr "_Vytvoriť"
+
+#: contrib/egg/egg-file-chooser-entry.c:112
+#: libide/editor/ide-editor-view-actions.c:317
+#: libide/editor/ide-editor-view-actions.c:448
+#: plugins/color-picker/gb-color-picker-prefs.c:237
+#: plugins/color-picker/gtk/color-picker-prefs.ui:799
+#: plugins/terminal/gb-terminal-view-actions.c:306
+msgid "Save"
+msgstr "Uložiť"
+
+#: contrib/egg/egg-file-chooser-entry.c:455
+msgid "Browse…"
+msgstr ""
+
+#: contrib/egg/egg-file-chooser-entry.c:488
+#: libide/editor/ide-editor-view-actions.c:316
+#: libide/editor/ide-editor-view-actions.c:447
+#: libide/greeter/ide-greeter-perspective.c:672
+#: libide/workbench/ide-workbench-actions.c:69
+#: plugins/color-picker/gb-color-picker-prefs.c:98
+#: plugins/color-picker/gb-color-picker-prefs.c:214
+#: plugins/color-picker/gb-color-picker-prefs.c:241
+#: plugins/sysprof/gbp-sysprof-workbench-addin.c:255
+#: plugins/terminal/gb-terminal-view-actions.c:305
+msgid "Cancel"
+msgstr "Zrušiť"
+
+#: contrib/egg/egg-search-bar.c:378
 msgid "Search"
 msgstr "Vyhľadajte"
 
-#: ../contrib/search/trie.c:790
+#: contrib/gstyle/gstyle-color-panel.c:953
+msgid "Palette: "
+msgstr ""
+
+#: contrib/gstyle/gstyle-color-panel.c:955
+msgid "Palette"
+msgstr ""
+
+#: contrib/gstyle/gstyle-color-plane.c:1601
+msgid "Color Plane"
+msgstr "Farebná rovina"
+
+#: contrib/gstyle/gstyle-color-widget-actions.c:66
+msgid "Color name"
+msgstr "Názov farby"
+
+#: contrib/gstyle/gstyle-color-widget-actions.c:68
+msgid "Enter a new name for the color"
+msgstr "Zadajte nový názov farby"
+
+#: contrib/gstyle/gstyle-palette.c:492 contrib/gstyle/gstyle-palette.c:558
+#, fuzzy, c-format
+#| msgid "Failed to parse integer from \"%s\""
+msgid "failed to parse line %i\n"
+msgstr "Zlyhalo analyzovanie celého čísla z „%s“"
+
+#: contrib/gstyle/gstyle-palette.c:613
+#, c-format
+msgid "%s: palette is empty\n"
+msgstr "%s: Paleta je prázdna\n"
+
+#: contrib/gstyle/gstyle-palette.c:719
+#, fuzzy, c-format
+#| msgid "Failed to diagnose: %s\n"
+msgid "%s: failed to parse\n"
+msgstr "Zlyhala diagnostika: %s\n"
+
+#: contrib/gstyle/gstyle-palette.c:727
+#, c-format
+msgid "Unable to open %s\n"
+msgstr "Nie je možné otvoriť %s\n"
+
+#: contrib/gstyle/gstyle-palette.c:765
+#, c-format
+msgid "%s: This file format is not supported\n"
+msgstr "%s: Tento formát súborov nie je podporovaný\n"
+
+#: contrib/gstyle/gstyle-palette.c:822
+#, fuzzy
+#| msgid "Failed to diagnose: %s\n"
+msgid "failed to parse\n"
+msgstr "Zlyhala diagnostika: %s\n"
+
+#. To translators: always in singular form like in: generated palette number <generated_count>
+#: contrib/gstyle/gstyle-palette.c:829
+#, fuzzy
+#| msgid "General"
+msgid "Generated"
+msgstr "Všeobecné"
+
+#: contrib/gstyle/gstyle-palette.c:932
+#, fuzzy, c-format
+#| msgid "Failed to diagnose: %s\n"
+msgid "Unable to save %s\n"
+msgstr "Zlyhala diagnostika: %s\n"
+
+#: contrib/gstyle/gstyle-palette-widget.c:983
+#, fuzzy, c-format
+#| msgid "unsaved document %u"
+msgid "Unsaved palette %u"
+msgstr "neuložený dokument %u"
+
+#: contrib/gstyle/tests/data/gstyle-color-editor.ui:64
+msgid "Hue"
+msgstr "Odtieň"
+
+#: contrib/gstyle/tests/data/gstyle-color-editor.ui:75
+#, fuzzy
+#| msgid "Fraction"
+msgid "Saturation"
+msgstr "Zlomok"
+
+#: contrib/gstyle/tests/data/gstyle-color-editor.ui:86
+msgid "Value"
+msgstr "Hodnota"
+
+#: contrib/gstyle/tests/data/gstyle-color-editor.ui:97
+msgid "Cielab l"
+msgstr ""
+
+#: contrib/gstyle/tests/data/gstyle-color-editor.ui:108
+msgid "Cielab a"
+msgstr ""
+
+#: contrib/gstyle/tests/data/gstyle-color-editor.ui:119
+msgid "Cielab b"
+msgstr ""
+
+#: contrib/gstyle/tests/data/gstyle-color-editor.ui:130
+#, fuzzy
+#| msgid "_Redo"
+msgid "Red"
+msgstr "_Znovu vykonať"
+
+#: contrib/gstyle/tests/data/gstyle-color-editor.ui:141
+msgid "Green"
+msgstr ""
+
+#: contrib/gstyle/tests/data/gstyle-color-editor.ui:152
+msgid "Blue"
+msgstr ""
+
+#: contrib/gstyle/tests/data/palette.gstyle.xml:20
+#: plugins/color-picker/data/basic.gstyle.xml:20
+msgid "Basic"
+msgstr ""
+
+#: contrib/gstyle/ui/gstyle-color-panel.ui:157
+msgid "Color Components"
+msgstr ""
+
+#: contrib/gstyle/ui/gstyle-color-panel.ui:206
+msgid "H"
+msgstr ""
+
+#: contrib/gstyle/ui/gstyle-color-panel.ui:216
+msgid "S"
+msgstr ""
+
+#: contrib/gstyle/ui/gstyle-color-panel.ui:226
+msgid "V"
+msgstr ""
+
+#: contrib/gstyle/ui/gstyle-color-panel.ui:322
+msgid "L*"
+msgstr ""
+
+#: contrib/gstyle/ui/gstyle-color-panel.ui:332
+msgid "a*"
+msgstr ""
+
+#: contrib/gstyle/ui/gstyle-color-panel.ui:342
+msgid "b*"
+msgstr ""
+
+#: contrib/gstyle/ui/gstyle-color-panel.ui:441
+msgid "R"
+msgstr ""
+
+#: contrib/gstyle/ui/gstyle-color-panel.ui:451
+#, fuzzy
+#| msgid "Go"
+msgid "G"
+msgstr "Prejsť"
+
+#: contrib/gstyle/ui/gstyle-color-panel.ui:461
+msgid "B"
+msgstr ""
+
+#: contrib/gstyle/ui/gstyle-color-panel.ui:573
+#: plugins/color-picker/gtk/color-picker-prefs.ui:433
+#, fuzzy
+#| msgid "Format Strings"
+msgid "Color strings"
+msgstr "Formátovať reťazce"
+
+#: contrib/gstyle/ui/gstyle-color-panel.ui:634
+msgid "HEX3"
+msgstr ""
+
+#: contrib/gstyle/ui/gstyle-color-panel.ui:645
+msgid "HEX6"
+msgstr ""
+
+#: contrib/gstyle/ui/gstyle-color-panel.ui:656
+msgid "RGB"
+msgstr ""
+
+#: contrib/gstyle/ui/gstyle-color-panel.ui:667
+msgid "RGBA"
+msgstr ""
+
+#: contrib/gstyle/ui/gstyle-color-panel.ui:678
+msgid "HSL"
+msgstr ""
+
+#: contrib/gstyle/ui/gstyle-color-panel.ui:689
+msgid "HSLA"
+msgstr ""
+
+#: contrib/gstyle/ui/gstyle-color-panel.ui:818
+msgid "Palettes"
+msgstr ""
+
+#: contrib/gstyle/ui/gstyle-color-panel.ui:946
+#: plugins/color-picker/gtk/color-picker.ui:48
+msgid "No open palettes"
+msgstr ""
+
+#: contrib/gstyle/ui/gstyle-color-panel.ui:959
+msgid "Load or generate a palette using the preferences"
+msgstr ""
+
+#: contrib/gstyle/ui/gstyle-color-widget.ui:13
+#: plugins/color-picker/gtk/color-picker-palette-menu.ui:13
+#, fuzzy
+#| msgid "_Rename"
+msgid "Rename"
+msgstr "_Premenovať"
+
+#: contrib/gstyle/ui/gstyle-color-widget.ui:19
+#: plugins/color-picker/gtk/color-picker-palette-menu.ui:19
+#, fuzzy
+#| msgid "_Remove"
+msgid "Remove"
+msgstr "_Odstrániť"
+
+#: contrib/gstyle/ui/gstyle-rename-popover.ui:35
+#: plugins/project-tree/gb-rename-file-popover.ui:35
+#: plugins/project-tree/gtk/menus.ui:57
+msgid "_Rename"
+msgstr "_Premenovať"
+
+#: contrib/search/trie.c:790
 #, c-format
 msgid "Traversal order %u is not supported on Trie."
 msgstr "Radenie priechodu %u nie je v objekte Trie podporované."
 
-#: ../contrib/tmpl/tmpl-parser.c:199
+#: contrib/tmpl/tmpl-parser.c:199
 #, fuzzy, c-format
 #| msgid "%s() may only be executed once"
 msgid "%s() may only be called once"
 msgstr "%s() môže byť spustený iba raz"
 
-#: ../contrib/tmpl/tmpl-parser.c:211
-#, c-format
+#: contrib/tmpl/tmpl-parser.c:211
 msgid "Parser does not contain an input stream"
 msgstr ""
 
-#: ../contrib/tmpl/tmpl-template.c:451
-#, c-format
+#: contrib/tmpl/tmpl-template.c:451
 msgid "Must parse template before expanding"
 msgstr ""
 
-#: ../contrib/tmpl/tmpl-template-locator.c:105
+#: contrib/tmpl/tmpl-template-locator.c:105
 #, fuzzy, c-format
 #| msgid "Failed to parse integer from \"%s\""
 msgid "Failed to locate template \"%s\""
 msgstr "Zlyhalo analyzovanie celého čísla z „%s“"
 
-#: ../contrib/xml/xml-reader.c:327
-#, c-format
+#: contrib/xml/xml-reader.c:327
 msgid "Could not parse XML from stream"
 msgstr "Nepodarilo sa analyzovať XML z prúdu"
 
-#: ../data/gtk/menus.ui.h:1
-msgid "_New Project"
-msgstr "_Nový projekt"
-
-#: ../data/gtk/menus.ui.h:2
-msgid "_Open Project"
-msgstr "_Otvoriť projekt"
-
-#: ../data/gtk/menus.ui.h:3
-msgid "_Preferences"
-msgstr "Nas_tavenia"
-
-#: ../data/gtk/menus.ui.h:4
-msgid "Keyboard _Shortcuts"
-msgstr "Klávesové _skratky"
-
-#: ../data/gtk/menus.ui.h:5
-msgid "_Help"
-msgstr "_Pomocník"
-
-#: ../data/gtk/menus.ui.h:6
-msgid "_About"
-msgstr "_O progame"
-
-#: ../data/gtk/menus.ui.h:7
-msgid "_Quit"
-msgstr "_Ukončiť"
-
-#: ../data/gtk/menus.ui.h:8 ../data/ui/ide-editor-view.ui.h:1
-msgid "_Reload"
-msgstr "_Znovu načítať"
-
-#: ../data/gtk/menus.ui.h:9
-msgid "_Print…"
-msgstr "_Tlačiť…"
-
-#: ../data/gtk/menus.ui.h:10
-msgid "_Fullscreen"
-msgstr "Na _celú obrazovku"
-
-#: ../data/gtk/menus.ui.h:11
-msgid "_New File"
-msgstr "_Nový súbor"
-
-#: ../data/gtk/menus.ui.h:12
-msgid "_Open File"
-msgstr "_Otvoriť súbor"
-
-#: ../data/gtk/menus.ui.h:13
-msgid "Save _All"
-msgstr "Uložiť _všetko"
-
-#: ../data/gtk/menus.ui.h:14
-msgid "_Close All"
-msgstr "Za_vrieť všetky"
-
-#: ../data/gtk/menus.ui.h:15
-msgid "_Go to Definition"
-msgstr "_Prejsť na definíciu"
-
-#: ../data/gtk/menus.ui.h:16
-msgid "_Undo"
-msgstr "Vrátiť _späť"
-
-#: ../data/gtk/menus.ui.h:17
-msgid "_Redo"
-msgstr "_Znovu vykonať"
-
-#: ../data/gtk/menus.ui.h:18
-msgid "C_ut"
-msgstr "Vys_trihnúť"
-
-#: ../data/gtk/menus.ui.h:19
-msgid "_Copy"
-msgstr "_Kopírovať"
-
-#: ../data/gtk/menus.ui.h:20
-msgid "_Paste"
-msgstr "_Vložiť"
-
-#: ../data/gtk/menus.ui.h:21
-msgid "_Delete"
-msgstr "O_dstrániť"
-
-#: ../data/gtk/menus.ui.h:22
-msgid "Selection"
-msgstr "Výber"
-
-#: ../data/gtk/menus.ui.h:23
-msgid "Select _All"
-msgstr "Vybr_ať všetko"
-
-#: ../data/gtk/menus.ui.h:24
-msgid "Select _None"
-msgstr "Z_rušiť výber"
-
-#: ../data/gtk/menus.ui.h:25
-msgid "All _Upper Case"
-msgstr ""
-
-#: ../data/gtk/menus.ui.h:26
-msgid "All _Lower Case"
-msgstr ""
-
-#: ../data/gtk/menus.ui.h:27
-msgid "_Invert Case"
-msgstr "O_brátiť veľkosť písmen"
-
-#: ../data/gtk/menus.ui.h:28
-msgid "_Title Case"
-msgstr "Poč_iatočné písmená veľkým"
-
-#: ../data/gtk/menus.ui.h:29
-msgid "Join Lines"
-msgstr "Spojiť riadky"
-
-#: ../data/gtk/menus.ui.h:30
-msgid "Sort Lines"
-msgstr "Usporiadať riadky"
-
-#: ../data/gtk/menus.ui.h:31
-msgid "Zoom"
-msgstr ""
-
-#: ../data/gtk/menus.ui.h:32
-msgid "Zoom _In"
-msgstr "Z_väčšiť"
-
-#: ../data/gtk/menus.ui.h:33
-msgid "Zoom _Out"
-msgstr "Zme_nšiť"
-
-#: ../data/gtk/menus.ui.h:34
-msgid "Reset"
-msgstr ""
-
-#: ../data/gtk/menus.ui.h:35
-msgid "Split"
-msgstr "Rozdeliť"
-
-#: ../data/gtk/menus.ui.h:36
-msgid "Split Left"
-msgstr "Rozdeliť doľava"
-
-#: ../data/gtk/menus.ui.h:37
-msgid "Split Right"
-msgstr "Rozdeliť doprava"
-
-#: ../data/gtk/menus.ui.h:38
-msgid "Split Down"
-msgstr "Rozdeliť dolu"
-
-#: ../data/gtk/menus.ui.h:39
-msgid "Move"
-msgstr "Presunúť"
-
-#: ../data/gtk/menus.ui.h:40
-msgid "Move Left"
-msgstr "Presunúť doľava"
-
-#: ../data/gtk/menus.ui.h:41
-msgid "Move Right"
-msgstr "Presunúť doprava"
-
-#: ../data/gtk/menus.ui.h:42
-msgid "_Save"
-msgstr "_Uložiť"
-
-#: ../data/gtk/menus.ui.h:43
-msgid "_Save As"
-msgstr "U_ložiť ako"
-
-#: ../data/gtk/menus.ui.h:44
-msgid "_Print"
-msgstr "_Tlač"
-
-#: ../data/gtk/menus.ui.h:45
-msgid "_Close"
-msgstr "_Zavrieť"
-
-#: ../data/style-schemes/builder-dark.xml.h:1
-msgid "Builder Dark"
-msgstr "Tmavý Builder"
-
-#: ../data/style-schemes/builder-dark.xml.h:2
-msgid "Dark color scheme for Builder using the Tango color palette"
-msgstr "Tmavá farebná schéma programu Builder využívajúca farebnú paletu Tango"
-
-#: ../data/style-schemes/builder.xml.h:1 ../libide/ide-application.c:404
-#: ../libide/preferences/ide-preferences-builtin.c:113
-msgid "Builder"
+#: data/gsettings/org.gnome.builder.build.gschema.xml:6
+#, fuzzy
+#| msgid "Builder"
+msgid "Build Parallelism"
 msgstr "Builder"
 
-#: ../data/style-schemes/builder.xml.h:2
-msgid "The default color scheme for Builder"
-msgstr "Predvolená farebná schéma programu Builder"
+#: data/gsettings/org.gnome.builder.build.gschema.xml:7
+msgid ""
+"Number of workers to use when performing builds. -1 for sensible default. 0 "
+"for number of CPU."
+msgstr ""
 
-#. OVR indicates we are in overwite mode
-#: ../data/ui/ide-editor-frame.ui.h:2
-msgid "OVR"
-msgstr "CEZ"
+#: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:5
+msgid "Suggest Snippet Completion"
+msgstr "Navrhnúť doplnenie úryvku"
 
-#: ../data/ui/ide-editor-tweak-widget.ui.h:1
-msgid "Search highlight mode…"
-msgstr "Vyhľadajte režim zvýrazňovania…"
+#: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:6
+msgid "Allow snippets to be inserted into the document."
+msgstr "Umožní vkladanie úryvkov do dokumentu."
 
-#: ../data/ui/ide-editor-tweak-widget.ui.h:2
-msgid "Display line numbers"
-msgstr "Zobraziť čísla riadkov"
+#: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:10
+#, fuzzy
+#| msgid "Suggest Completions using Clang (Experimental)"
+msgid "Clang based autocompletion (Experimental)"
+msgstr "Navrhnúť doplnenia pomocou kompilátora Clang (experimentálne)"
 
-#: ../data/ui/ide-editor-tweak-widget.ui.h:3
-msgid "Display right margin"
-msgstr "Zobraziť pravý okraj"
+#: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:11
+#, fuzzy
+#| msgid "Use Clang for completions in the C and C++ languages."
+msgid "Use Clang for autocompletion in the C and C++ languages."
+msgstr "Použije sa kompilátor na doplnenie v jazykoch C a C++."
 
-#: ../data/ui/ide-editor-tweak-widget.ui.h:4
+#: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:15
+msgid "Ctags based autocompletion"
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:16
+#, fuzzy
+#| msgid "Use Ctags for completions in supported languages."
+msgid "Use Ctags for autocompletion."
+msgstr "Použijú sa značky Ctags na doplnenie v podporovaných jazykoch."
+
+#: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:20
+#, fuzzy
+#| msgid "word words auto completion suggest found document"
+msgid "Enable auto-completion of words in document"
+msgstr "slovo slová automatické dopĺňanie návrh nájsť dokument"
+
+#: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:21
+msgid ""
+"If enabled, words within the current document will be available for auto-"
+"completion."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:25
+#, fuzzy
+#| msgid "Semantic Language Highlighting"
+msgid "Enable semantic highlighting"
+msgstr "Sémantické zvýrazňovanie jazyka"
+
+#: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:26
+msgid ""
+"If enabled, additional highlighting will be provided in supported languages "
+"based on information extracted from the source code."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:30
+#, fuzzy
+#| msgid "autogen.sh is not executable."
+msgid "Path to ctags executable"
+msgstr "Súbor autogen.sh nie je spustiteľný."
+
+#: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:31
+msgid "The path to the ctags executable on the system."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:24
+#, fuzzy
+#| msgid "Restore Cursor Position"
+msgid "Restore last position"
+msgstr "Obnoviť pozíciu kurzora"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:25
+msgid "Jump to the last position when reopening a file"
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:29
+#, fuzzy
+#| msgid "show grid lines"
+msgid "Show modified lines"
+msgstr "zobraziť zobrazenie čiar čiary mriežky"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:30
+msgid ""
+"If enabled, the editor will show line additions and changes next to the "
+"source code."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:34
+#: libide/editor/ide-editor-tweak-widget.ui:74
 msgid "Highlight current line"
 msgstr "Zvýrazniť aktuálny riadok"
 
-#: ../data/ui/ide-editor-tweak-widget.ui.h:5
-msgid "Auto indent"
-msgstr "Automaticky odsadiť"
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:35
+#, fuzzy
+#| msgid "Highlight the line containing the cursor."
+msgid "If enabled, the editor will highlight the line containing the cursor."
+msgstr "Zvýrazní riadok, v ktorom sa nachádza kurzor."
 
-#: ../data/ui/ide-editor-tweak-widget.ui.h:6
-#: ../libide/preferences/ide-preferences-builtin.c:119
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:39
+#, fuzzy
+#| msgid "Move to matching bracket"
+msgid "Highlight matching brackets"
+msgstr "Presun na zodpovedajúce zátvorky"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:40
+msgid "If enabled, the editor will highlight matching brackets."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:44
+#, fuzzy
+#| msgid "line numbers"
+msgid "Show line numbers"
+msgstr "čísla riadkov"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:45
+msgid "If enabled, the editor will show line numbers."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:49
+#: libide/editor/ide-editor-tweak-widget.ui:91
+#: libide/preferences/ide-preferences-builtin.c:150
 msgid "Smart Backspace"
 msgstr "Inteligentný backspace"
 
-#: ../data/ui/ide-editor-tweak-widget.ui.h:7
-#: ../libide/preferences/ide-preferences-builtin.c:233
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:50
+#, fuzzy
+#| msgid ""
+#| "Backspace will remove extra spaces to keep you aligned with your "
+#| "indentation width."
+msgid ""
+"Backspace will remove additional spaces to keep you aligned to the "
+"indentation size."
+msgstr ""
+"Kláves Backspace odstráni medzery navyše, aby zachoval zarovnanie podľa "
+"vašej šírky odsadenia."
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:54
+#: libide/preferences/ide-preferences-builtin.c:149
+msgid "Smart Home and End"
+msgstr "Inteligentný Home a End"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:55
+#, fuzzy
+#| msgid "Home moves to first non-space character."
+msgid "Whether or not Home moves to first non-space character."
+msgstr ""
+"Kláves Home presunie kurzor na prvý znak, ktorý nie je reprezentovaný "
+"medzerou."
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:59
+#, fuzzy
+#| msgid "show grid lines"
+msgid "Show grid lines"
+msgstr "zobraziť zobrazenie čiar čiary mriežky"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:60
+msgid "If enabled, the editor will show grid lines in the document."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:74
+#: libide/preferences/ide-preferences-builtin.c:172
+#, fuzzy
+#| msgid "Overview Map"
+msgid "Show overview map"
+msgstr "Mapa s prehľadom"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:75
+#, fuzzy
+#| msgid "Display an overview map next to the source code editor."
+msgid ""
+"If enabled, Builder will display an overview map of the source file next to "
+"the editor."
+msgstr "Zobrazí mapu s prehľadom vedľa editoru zdrojového kódu."
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:79
+#, fuzzy
+#| msgid "Auto Hide Overview Map"
+msgid "Automatically Hide Overview Map"
+msgstr "Automaticky skryť mapu s prehľadom"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:80
+msgid ""
+"If enabled, Builder will automatically hide the overview map when mouse "
+"focus leaves the editor, or a timeout occurs."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:84
+msgid "Draw Spaces"
+msgstr "Vykresľovať medzery"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:85
+msgid "The various types of space to draw in the editor."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:90
+#: libide/preferences/ide-preferences-builtin.c:161
+msgid "Overscroll"
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:91
+#, fuzzy
+#| msgid "Minimal number of lines to keep above and below the cursor."
+msgid "The number of lines to scroll beyond the end of the buffer."
+msgstr "Minimálny počet riadkov na zachovanie nad a pod kurzorom."
+
+#: data/gsettings/org.gnome.builder.extension-type.gschema.xml:5
+#: data/gsettings/org.gnome.builder.plugin.gschema.xml:5
+#, fuzzy
+#| msgid "Table"
+msgid "Enabled"
+msgstr "Tabuľka"
+
+#: data/gsettings/org.gnome.builder.extension-type.gschema.xml:6
+msgid "If the type within the extension is enabled."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.gschema.xml:5
+msgid "Window size"
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.gschema.xml:6
+msgid "Window size (width and height)."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.gschema.xml:10
+#, fuzzy
+#| msgid "Position"
+msgid "Window position"
+msgstr "Pozícia"
+
+#: data/gsettings/org.gnome.builder.gschema.xml:11
+msgid "Window position (x and y)."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.gschema.xml:15
+msgid "Window maximized"
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.gschema.xml:16
+msgid "Window maximized state"
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.gschema.xml:20
+msgid "Night Mode"
+msgstr "Nočný režim"
+
+#: data/gsettings/org.gnome.builder.gschema.xml:21
+#, fuzzy
+#| msgid "Use dark colors for the application chrome."
+msgid "Prefer dark application chrome."
+msgstr "Použije tmavú tému pre rozhranie aplikácie."
+
+#: data/gsettings/org.gnome.builder.gschema.xml:25
+#, fuzzy
+#| msgid "- discover projects"
+msgid "Mine projects"
+msgstr "- preskúma projekty"
+
+#: data/gsettings/org.gnome.builder.gschema.xml:26
+#, fuzzy
+#| msgid "- discover projects"
+msgid "Search directories for projects."
+msgstr "- preskúma projekty"
+
+#: data/gsettings/org.gnome.builder.gschema.xml:30
+#: libide/preferences/ide-preferences-builtin.c:393
+#, fuzzy
+#| msgid "The project directory."
+msgid "Projects directory"
+msgstr "Adresár projektu."
+
+#: data/gsettings/org.gnome.builder.gschema.xml:31
+#, fuzzy
+#| msgid "The git repository for the project."
+msgid "Directory for all Builder projects."
+msgstr "Repozitár fit pre projekt."
+
+#: data/gsettings/org.gnome.builder.gschema.xml:35
+msgid "Restore Previous Files"
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.gschema.xml:36
+msgid "Restore previously opened files when loading a project."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.plugin.gschema.xml:6
+#, fuzzy
+#| msgid "If the pane should be revealed."
+msgid "If the plugin should be enabled"
+msgstr "Či má byť panel odhalený."
+
+#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:5
+#, fuzzy
+#| msgid "Project File"
+msgid "Show Project Sidebar"
+msgstr "Súbor pojektu"
+
+#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:6
+msgid "If enabled, the sidebar will be visible in the editor workspace."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:10
+#: plugins/project-tree/gtk/menus.ui:84
+msgid "Show Icons"
+msgstr "Zobraziť ikony"
+
+#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:11
+msgid "If enabled, the project tree will display icons next to each item."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:15
+#: plugins/project-tree/gtk/menus.ui:88
+msgid "Show Ignored Files"
+msgstr "Zobraziť ignorované súbory"
+
+#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:16
+msgid ""
+"If enabled, the project tree will display files that are ignored by the VCS."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.workbench.gschema.xml:5
+#, fuzzy
+#| msgid "Left Pane"
+msgid "Show Left Panel"
+msgstr "Ľavý panel"
+
+#: data/gsettings/org.gnome.builder.workbench.gschema.xml:6
+#, fuzzy
+#| msgid "If files ignored by the VCS should be displayed."
+msgid "If enabled, the left panel will be displayed."
+msgstr "Či majú byť zobrazené súbory ignorované VCS."
+
+#: data/gsettings/org.gnome.builder.workbench.gschema.xml:11
+#, fuzzy
+#| msgid "Left Pane"
+msgid "Left Panel Position"
+msgstr "Ľavý panel"
+
+#: data/gsettings/org.gnome.builder.workbench.gschema.xml:12
+#, fuzzy
+#| msgid "The position of the pane."
+msgid "The width in pixel units of the left panel."
+msgstr "Pozícia panela."
+
+#: data/gsettings/org.gnome.builder.workbench.gschema.xml:17
+#, fuzzy
+#| msgid "Right Pane"
+msgid "Show Right Panel"
+msgstr "Pravý panel"
+
+#: data/gsettings/org.gnome.builder.workbench.gschema.xml:18
+msgid "If enabled, the right panel will be displayed."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.workbench.gschema.xml:23
+#, fuzzy
+#| msgid "Right Pane"
+msgid "Right Panel Position"
+msgstr "Pravý panel"
+
+#: data/gsettings/org.gnome.builder.workbench.gschema.xml:24
+#, fuzzy
+#| msgid "The position of the pane."
+msgid "The width in pixel units of the right panel."
+msgstr "Pozícia panela."
+
+#: data/gsettings/org.gnome.builder.workbench.gschema.xml:29
+#, fuzzy
+#| msgid "Bottom Pane"
+msgid "Show Bottom Panel"
+msgstr "Dolný panel"
+
+#: data/gsettings/org.gnome.builder.workbench.gschema.xml:30
+msgid "If enabled, the bottom panel will be displayed."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.workbench.gschema.xml:35
+#, fuzzy
+#| msgid "Bottom Pane"
+msgid "Bottom Panel Position"
+msgstr "Dolný panel"
+
+#: data/gsettings/org.gnome.builder.workbench.gschema.xml:36
+msgid "The height in pixel units of the bottom panel."
+msgstr ""
+
+#: data/gtk/menus.ui:7
+msgid "_New Project"
+msgstr "_Nový projekt"
+
+#: data/gtk/menus.ui:11
+msgid "_Open Project"
+msgstr "_Otvoriť projekt"
+
+#: data/gtk/menus.ui:18
+msgid "_Preferences"
+msgstr "Nas_tavenia"
+
+#: data/gtk/menus.ui:26
+msgid "Keyboard _Shortcuts"
+msgstr "Klávesové _skratky"
+
+#: data/gtk/menus.ui:30
+msgid "_Help"
+msgstr "_Pomocník"
+
+#: data/gtk/menus.ui:34
+msgid "_About"
+msgstr "_O progame"
+
+#: data/gtk/menus.ui:38
+msgid "_Quit"
+msgstr "_Ukončiť"
+
+#: data/gtk/menus.ui:48
+#, fuzzy
+#| msgctxt "shortcut window"
+#| msgid "Toggle left panel"
+msgid "Show left panel"
+msgstr "Prepnutie ľavého panelu"
+
+#: data/gtk/menus.ui:53
+#, fuzzy
+#| msgctxt "shortcut window"
+#| msgid "Toggle bottom panel"
+msgid "Show bottom panel"
+msgstr "Prepnutie spodného panelu"
+
+#: data/gtk/menus.ui:58
+#, fuzzy
+#| msgid "Display right margin"
+msgid "Show right panel"
+msgstr "Zobraziť pravý okraj"
+
+#: data/gtk/menus.ui:86
+msgid "_New File"
+msgstr "_Nový súbor"
+
+#: data/gtk/menus.ui:92
+#, fuzzy
+#| msgid "_Open File"
+msgid "_Open File…"
+msgstr "_Otvoriť súbor"
+
+#: data/gtk/menus.ui:98
+msgid "Save _All"
+msgstr "Uložiť _všetko"
+
+#: data/gtk/menus.ui:115
+msgid "_Go to Definition"
+msgstr "_Prejsť na definíciu"
+
+#: data/gtk/menus.ui:121
+msgid "_Undo"
+msgstr "Vrátiť _späť"
+
+#: data/gtk/menus.ui:125
+msgid "_Redo"
+msgstr "_Znovu vykonať"
+
+#: data/gtk/menus.ui:131
+msgid "C_ut"
+msgstr "Vys_trihnúť"
+
+#: data/gtk/menus.ui:136 data/gtk/menus.ui:237 plugins/terminal/gtk/menus.ui:16
+msgid "_Copy"
+msgstr "_Kopírovať"
+
+#: data/gtk/menus.ui:140 data/gtk/menus.ui:241 plugins/terminal/gtk/menus.ui:20
+msgid "_Paste"
+msgstr "_Vložiť"
+
+#: data/gtk/menus.ui:144 data/gtk/menus.ui:245
+msgid "_Delete"
+msgstr "O_dstrániť"
+
+#: data/gtk/menus.ui:150 libide/preferences/ide-preferences-builtin.c:190
+msgid "Highlighting"
+msgstr "Zvýrazňovanie"
+
+#: data/gtk/menus.ui:155 plugins/terminal/gtk/menus.ui:26
+msgid "Selection"
+msgstr "Výber"
+
+#: data/gtk/menus.ui:157 data/gtk/menus.ui:251 plugins/terminal/gtk/menus.ui:28
+msgid "Select _All"
+msgstr "Vybr_ať všetko"
+
+#: data/gtk/menus.ui:162 plugins/terminal/gtk/menus.ui:33
+msgid "Select _None"
+msgstr "Z_rušiť výber"
+
+#: data/gtk/menus.ui:168
+msgid "All _Upper Case"
+msgstr ""
+
+#: data/gtk/menus.ui:173
+msgid "All _Lower Case"
+msgstr ""
+
+#: data/gtk/menus.ui:178
+msgid "_Invert Case"
+msgstr "O_brátiť veľkosť písmen"
+
+#: data/gtk/menus.ui:183
+msgid "_Title Case"
+msgstr "Poč_iatočné písmená veľkým"
+
+#: data/gtk/menus.ui:190
+msgid "Join Lines"
+msgstr "Spojiť riadky"
+
+#: data/gtk/menus.ui:194
+msgid "Sort Lines"
+msgstr "Usporiadať riadky"
+
+#: data/gtk/menus.ui:203
+msgid "Zoom"
+msgstr ""
+
+#: data/gtk/menus.ui:205
+msgid "Zoom _In"
+msgstr "Z_väčšiť"
+
+#: data/gtk/menus.ui:210
+msgid "Zoom _Out"
+msgstr "Zme_nšiť"
+
+#: data/gtk/menus.ui:216
+msgid "Reset"
+msgstr ""
+
+#: data/gtk/menus.ui:227
+msgid "_Wrap Around"
+msgstr ""
+
+#: data/gtk/menus.ui:233
+msgid "Cu_t"
+msgstr ""
+
+#: data/gtk/menus.ui:259
+msgid "Split"
+msgstr "Rozdeliť"
+
+#: data/gtk/menus.ui:261
+msgid "Split Left"
+msgstr "Rozdeliť doľava"
+
+#: data/gtk/menus.ui:266
+msgid "Split Right"
+msgstr "Rozdeliť doprava"
+
+#: data/gtk/menus.ui:271
+msgid "Split Down"
+msgstr "Rozdeliť dolu"
+
+#: data/gtk/menus.ui:278
+msgid "Move"
+msgstr "Presunúť"
+
+#: data/gtk/menus.ui:280
+msgid "Move Left"
+msgstr "Presunúť doľava"
+
+#: data/gtk/menus.ui:285
+msgid "Move Right"
+msgstr "Presunúť doprava"
+
+#: data/gtk/menus.ui:293
+msgid "_Save"
+msgstr "_Uložiť"
+
+#: data/gtk/menus.ui:297
+msgid "_Save As"
+msgstr "U_ložiť ako"
+
+#: data/gtk/menus.ui:303
+msgid "_Print"
+msgstr "_Tlač"
+
+#: data/gtk/menus.ui:309
+msgid "_Close"
+msgstr "_Zavrieť"
+
+#: data/org.gnome.Builder.appdata.xml.in:7
+#: data/org.gnome.Builder.desktop.in.in:3
+#: libide/application/ide-application.c:466
+#: libide/preferences/ide-preferences-builtin.c:144
+#: libide/workbench/ide-workbench.c:560
+msgid "Builder"
+msgstr "Builder"
+
+#: data/org.gnome.Builder.appdata.xml.in:8
+#: libide/application/ide-application-actions.c:116
+msgid "An IDE for GNOME"
+msgstr "Integrované prostredia IDE pre GNOME"
+
+#: data/org.gnome.Builder.appdata.xml.in:11
+msgid ""
+"Builder is an actively developed Integrated Development Environment for "
+"GNOME. It combines integrated support for essential GNOME technologies such "
+"as GTK+, GLib, and GNOME APIs with features that any developer will "
+"appreciate, like syntax highlighting and snippets."
+msgstr ""
+
+#: data/org.gnome.Builder.appdata.xml.in:17
+msgid ""
+"You can rely on predictable releases of Builder with each new release of "
+"GNOME every six months."
+msgstr ""
+
+#: data/org.gnome.Builder.appdata.xml.in:21
+msgid "Features:"
+msgstr ""
+
+#: data/org.gnome.Builder.appdata.xml.in:23
+msgid "Built in syntax highlighting for many languages"
+msgstr ""
+
+#: data/org.gnome.Builder.appdata.xml.in:24
+#: data/org.gnome.Builder.appdata.xml.in:52
+msgid "Side-by-side code editors"
+msgstr ""
+
+#: data/org.gnome.Builder.appdata.xml.in:25
+msgid "Integration with Git"
+msgstr ""
+
+#: data/org.gnome.Builder.appdata.xml.in:26
+msgid "Integration with Autotools"
+msgstr ""
+
+#: data/org.gnome.Builder.appdata.xml.in:27
+msgid "Clang based auto-completion, semantic highlighting, and diagnostics"
+msgstr ""
+
+#: data/org.gnome.Builder.appdata.xml.in:28
+msgid "Python based auto-completion, semantic highlighting, and diagnostics"
+msgstr ""
+
+#: data/org.gnome.Builder.appdata.xml.in:29
+msgid "Vala based auto-completion and diagnostics"
+msgstr ""
+
+#: data/org.gnome.Builder.appdata.xml.in:30
+msgid "Auto indentation support for C, Python, Vala, and XML"
+msgstr ""
+
+#: data/org.gnome.Builder.appdata.xml.in:31
+msgid "HTML/Markdown live preview"
+msgstr ""
+
+#: data/org.gnome.Builder.appdata.xml.in:32
+msgid "Optional Vim-style editing"
+msgstr ""
+
+#: data/org.gnome.Builder.appdata.xml.in:33
+msgid "An integrated software profiler for native applications"
+msgstr ""
+
+#: data/org.gnome.Builder.appdata.xml.in:34
+msgid "Support for building with jhbuild"
+msgstr ""
+
+#: data/org.gnome.Builder.appdata.xml.in:35
+msgid "Preview support for building with Flatpak runtimes"
+msgstr ""
+
+#: data/org.gnome.Builder.appdata.xml.in:44
+#, fuzzy
+#| msgctxt "shortcut window"
+#| msgid "Global Search"
+msgid "Fast global search"
+msgstr "Globálne vyhľadávanie"
+
+#: data/org.gnome.Builder.appdata.xml.in:48
+#, fuzzy
+#| msgid "Clean and rebuild the project."
+msgid "Integrated project tree"
+msgstr "Vyčistí a znovu zostaví projekt."
+
+#: data/org.gnome.Builder.desktop.in.in:4
+msgid "Build software for GNOME"
+msgstr ""
+
+#. Translators: Do NOT translate or transliterate this text (this is an icon file name)!
+#: data/org.gnome.Builder.desktop.in.in:7
+msgid "org.gnome.Builder"
+msgstr ""
+
+#. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
+#: data/org.gnome.Builder.desktop.in.in:14
+msgid "Build;Develop;"
+msgstr ""
+
+#: libide/application/ide-application-actions.c:122
+msgid "GNOME Builder"
+msgstr "GNOME Builder"
+
+#: libide/application/ide-application-actions.c:124
+msgid "translator-credits"
+msgstr "Dušan Kazik <prescott66@gmail.com>"
+
+#: libide/application/ide-application-actions.c:127
+msgid "Learn more about GNOME Builder"
+msgstr "Zistite viac o aplikácii GNOME Builder"
+
+#: libide/application/ide-application-actions.c:131
+msgid "Funded By"
+msgstr "Financovali"
+
+#: libide/application/ide-application-command-line.c:102
+msgid "Commands:"
+msgstr "Príkazy:"
+
+#: libide/application/ide-application-command-line.c:186
+msgid "List available subcommands"
+msgstr ""
+
+# cmd desc
+#: libide/application/ide-application-command-line.c:193
+msgid "Run Builder in standalone mode"
+msgstr "Spustí Builder v samostatnom režime"
+
+# cmd desc
+#: libide/application/ide-application-command-line.c:200
+msgid "Show the application's version"
+msgstr "Zobrazí verziu aplikácie"
+
+#: libide/application/ide-application-command-line.c:219
+#, fuzzy
+msgid "Increase verbosity, may be specified multiple times"
+msgstr "Zvýši rozsah výpisov. Nárast môže byť až niekoľkonásobný"
+
+#: libide/application/ide-application-command-line.c:226
+msgid "Enter GApplication Service mode"
+msgstr ""
+
+#: libide/application/ide-application-command-line.c:233
+msgid "Opens the project specified by PATH"
+msgstr ""
+
+#: libide/application/ide-application-command-line.c:234
+#: plugins/build-tools/gbp-build-tool.c:301
+msgid "PATH"
+msgstr "CESTA"
+
+#: libide/application/ide-application-command-line.c:264
+msgid "COMMAND"
+msgstr ""
+
+#: libide/application/ide-application-command-line.c:335
+msgid "No commands available"
+msgstr ""
+
+#: libide/application/ide-application-command-line.c:365
+msgid "Please provide a command"
+msgstr "Prosím, poskytnite príkaz"
+
+#: libide/application/ide-application-command-line.c:375
+msgid "No such tool"
+msgstr "Neexistuje nástroj"
+
+#: libide/application/ide-application-command-line.c:389
+msgid "Please provide a worker type"
+msgstr ""
+
+#: libide/application/ide-application-command-line.c:396
+#, fuzzy
+#| msgid "Please provide a command"
+msgid "Please provide a D-Bus address"
+msgstr "Prosím, poskytnite príkaz"
+
+#: libide/application/ide-application-command-line.c:405
+msgid "No such worker"
+msgstr ""
+
+#: libide/buffers/ide-buffer.c:2473
+msgid "The current language lacks a symbol resolver."
+msgstr "Aktuálnemu jazyku chýba rozpoznávanie symbolov."
+
+#: libide/buffers/ide-buffer-manager.c:633
+msgid "File too large to be opened."
+msgstr "Súbor je príliš veľký na otvorenie."
+
+#: libide/buffers/ide-buffer-manager.c:1483
+msgid "Words"
+msgstr "Slová"
+
+#: libide/buffers/ide-buffer-manager.c:1695
+#, c-format
+msgid "unsaved document %u"
+msgstr "neuložený dokument %u"
+
+#: libide/buffers/ide-buffer-manager.c:1729
+msgid "Failed to save buffer, ignoring reclamation."
+msgstr "Zlyhalo uloženie zásobníka. Ignoruje sa opätovné spracovanie."
+
+#: libide/buildsystem/ide-builder.c:89
+#, fuzzy, c-format
+#| msgid "Project build system does not support building"
+msgid "%s does not support building"
+msgstr "Systém zostavovania projektu nepodporuje zostavovanie"
+
+#: libide/buildsystem/ide-build-manager.c:478
+#, fuzzy
+#| msgid "An unload request is already pending"
+msgid "A build is already in progress"
+msgstr "Požiadavka na uvoľnenie už čaká na uskutočnenie."
+
+#: libide/buildsystem/ide-build-manager.c:772
+msgid "Ready"
+msgstr ""
+
+#: libide/buildsystem/ide-build-result.c:250
+msgid "Failed to open stderr stream."
+msgstr "Zlyhalo otvorenie prúdu stderr."
+
+#: libide/buildsystem/ide-build-result.c:280
+msgid "Failed to open stdout stream."
+msgstr "Zlyhalo otvorenie prúdu stdout."
+
+#: libide/buildsystem/ide-build-system.c:125
+#, c-format
+msgid "%s() is not supported on %s build system."
+msgstr "%s() nie je podporovaný v systéme zostavovania %s."
+
+#: libide/buildsystem/ide-configuration-manager.c:483
+#: libide/preferences/ide-preferences-builtin.c:337
+#: libide/preferences/ide-preferences-builtin.c:355
+msgid "Default"
+msgstr ""
+
+#: libide/devices/ide-device-manager.c:147
+#, c-format
+msgid "The device \"%s\" could not be found."
+msgstr "Zariadenie „%s“ sa nepodarilo nájsť."
+
+#: libide/directory/ide-directory-vcs.c:55
+msgid "unversioned"
+msgstr ""
+
+#: libide/editorconfig/ide-editorconfig-file-settings.c:159
+msgid "No file was provided."
+msgstr "Nebol poskytnutý žiadny súbor."
+
+#: libide/editor/ide-editor-frame.c:138
+#, c-format
+msgid "Line %u, Column %u"
+msgstr "Riadok %u, stĺpec %u"
+
+#: libide/editor/ide-editor-frame.c:310
+#, c-format
+msgid "%u of %u"
+msgstr "%u z %u"
+
+#: libide/editor/ide-editor-frame.c:963 plugins/project-tree/gtk/menus.ui:6
+msgid "Re_veal in Project Tree"
+msgstr "Od_haliť v strome projektu"
+
+#. OVR indicates we are in overwite mode
+#: libide/editor/ide-editor-frame.ui:17
+msgid "OVR"
+msgstr "CEZ"
+
+#: libide/editor/ide-editor-frame.ui:160
+msgid "Replace"
+msgstr ""
+
+#: libide/editor/ide-editor-frame.ui:173
+msgid "Replace All"
+msgstr ""
+
+#: libide/editor/ide-editor-frame.ui:195
+msgid "Switch between Search and Search-and-Replace"
+msgstr ""
+
+#: libide/editor/ide-editor-frame.ui:218
+msgid "Show or hide search options such as case sensitivity"
+msgstr ""
+
+#: libide/editor/ide-editor-frame.ui:279
+msgid "Regular expressions"
+msgstr ""
+
+#: libide/editor/ide-editor-frame.ui:294
+msgid "Case sensitive"
+msgstr ""
+
+#: libide/editor/ide-editor-frame.ui:309
+msgid "Match whole word only"
+msgstr ""
+
+#: libide/editor/ide-editor-layout-stack-controls.c:46
+msgid "Plain Text"
+msgstr "Obyčajný text"
+
+#. translators: the user selected a number outside the value range for the document.
+#: libide/editor/ide-editor-layout-stack-controls.c:191
+#, c-format
+msgid "Provide a number between 1 and %u"
+msgstr "Poskytnite číslo v rozpätí 1 a %u"
+
+#: libide/editor/ide-editor-layout-stack-controls.ui:31
+#, fuzzy
+#| msgid "Go to line"
+msgid "Go to line number"
+msgstr "Prejdenie na riadok"
+
+#: libide/editor/ide-editor-layout-stack-controls.ui:100
+#, fuzzy
+#| msgid "Use Clang for completions in the C and C++ languages."
+msgid "Change editor settings and language"
+msgstr "Použije sa kompilátor na doplnenie v jazykoch C a C++."
+
+#: libide/editor/ide-editor-layout-stack-controls.ui:114
+#: libide/editor/ide-editor-view.ui:100
+msgid "Go to Line"
+msgstr "Prejde na riadok"
+
+#: libide/editor/ide-editor-layout-stack-controls.ui:115
+#: libide/editor/ide-editor-view.ui:101
+msgid "Go"
+msgstr "Prejsť"
+
+#: libide/editor/ide-editor-perspective.c:448
+#: libide/preferences/ide-preferences-builtin.c:109
+#: libide/preferences/ide-preferences-builtin.c:156
+msgid "Editor"
+msgstr "Editor"
+
+#: libide/editor/ide-editor-perspective.ui:27
+#, fuzzy
+#| msgid "Show list of open files"
+msgid "No open files"
+msgstr "Zobrazenie zoznamu otvorených súborov"
+
+#: libide/editor/ide-editor-perspective.ui:40
+msgid "Try opening a file by typing in the search box at the top"
+msgstr ""
+
+#: libide/editor/ide-editor-tweak-widget.ui:22
+msgid "Search highlight mode…"
+msgstr "Vyhľadajte režim zvýrazňovania…"
+
+#: libide/editor/ide-editor-tweak-widget.ui:56
+msgid "Display line numbers"
+msgstr "Zobraziť čísla riadkov"
+
+#: libide/editor/ide-editor-tweak-widget.ui:65
+msgid "Display right margin"
+msgstr "Zobraziť pravý okraj"
+
+#: libide/editor/ide-editor-tweak-widget.ui:83
+msgid "Auto indent"
+msgstr "Automaticky odsadiť"
+
+#: libide/editor/ide-editor-tweak-widget.ui:99
+#: libide/preferences/ide-preferences-builtin.c:324
 msgid "Indentation"
 msgstr "Odsadzovanie"
 
-#: ../data/ui/ide-editor-tweak-widget.ui.h:8
-#: ../libide/preferences/ide-preferences-builtin.c:145
+#: libide/editor/ide-editor-tweak-widget.ui:127
+#: libide/preferences/ide-preferences-builtin.c:176
 msgid "Spaces"
 msgstr "Medzery"
 
-#: ../data/ui/ide-editor-tweak-widget.ui.h:9
-#: ../libide/preferences/ide-preferences-builtin.c:146
+#: libide/editor/ide-editor-tweak-widget.ui:137
+#: libide/preferences/ide-preferences-builtin.c:177
 msgid "Tabs"
 msgstr "Tabulátory"
 
-#: ../data/ui/ide-editor-tweak-widget.ui.h:10
+#: libide/editor/ide-editor-tweak-widget.ui:157
 msgid "2"
 msgstr "2"
 
-#: ../data/ui/ide-editor-tweak-widget.ui.h:11
+#: libide/editor/ide-editor-tweak-widget.ui:167
 msgid "3"
 msgstr "3"
 
-#: ../data/ui/ide-editor-tweak-widget.ui.h:12
+#: libide/editor/ide-editor-tweak-widget.ui:177
 msgid "4"
 msgstr "4"
 
-#: ../data/ui/ide-editor-tweak-widget.ui.h:13
+#: libide/editor/ide-editor-tweak-widget.ui:187
 msgid "8"
 msgstr "8"
 
-#: ../data/ui/ide-editor-view.ui.h:2 ../data/ui/ide-greeter-perspective.ui.h:7
+#: libide/editor/ide-editor-view-actions.c:310
+msgid "Save Document"
+msgstr "Uloženie dokumentu"
+
+#: libide/editor/ide-editor-view-actions.c:436
+msgid "Save Document As"
+msgstr "Uloženie dokumentu ako"
+
+#: libide/editor/ide-editor-view.ui:23
+msgid "_Reload"
+msgstr "_Znovu načítať"
+
+#: libide/editor/ide-editor-view.ui:31
+#: libide/greeter/ide-greeter-perspective.ui:310
+#: libide/greeter/ide-greeter-perspective.ui:358
+#: libide/workbench/ide-omni-bar.ui:346
 msgid "_Cancel"
 msgstr "_Zrušiť"
 
-#: ../data/ui/ide-editor-view.ui.h:3
+#: libide/editor/ide-editor-view.ui:44
 msgid ""
 "Builder has discovered that this file has been modified externally. Would "
 "you like to reload the file?"
@@ -370,780 +1395,536 @@ msgstr ""
 "Aplikácia Builder zistila, že tento súbor bol upravený externe. Chcete "
 "znovunačítať súbor?"
 
-#: ../data/ui/ide-editor-view.ui.h:4
-msgid "Go to Line"
-msgstr "Prejde na riadok"
-
-#: ../data/ui/ide-editor-view.ui.h:5
-msgid "Go"
-msgstr "Prejsť"
-
-#: ../data/ui/ide-genesis-perspective.ui.h:1
-msgid "New Project"
-msgstr "Nový projekt"
-
-#: ../data/ui/ide-genesis-perspective.ui.h:2
-msgid "Co_ntinue"
-msgstr "Pok_račovať"
-
-#: ../data/ui/ide-greeter-perspective.ui.h:1
-msgid "Recent Projects"
-msgstr "Nedávne projekty"
-
-#: ../data/ui/ide-greeter-perspective.ui.h:2
-msgid "Other Projects"
-msgstr "Ostatné projekty"
-
-#: ../data/ui/ide-greeter-perspective.ui.h:3
-msgid "_Remove"
-msgstr "_Odstrániť"
-
-#: ../data/ui/ide-greeter-perspective.ui.h:4
-msgid "Select a Project"
-msgstr "Výber projektu"
-
-#: ../data/ui/ide-greeter-perspective.ui.h:5
-msgid "Click an item to select"
-msgstr "Kliknutím na položku ju vyberiete"
-
-#: ../data/ui/ide-greeter-perspective.ui.h:6
-#: ../plugins/project-tree/gtk/menus.ui.h:2
-msgid "_New"
-msgstr "_Nový"
-
-#: ../data/ui/ide-preferences-font-button.ui.h:1
-msgid "_Select"
-msgstr "Vy_brať"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:1
-msgctxt "shortcut window"
-msgid "Editor Shortcuts"
-msgstr "Klávesové skratky editora"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:2
-msgctxt "shortcut window"
-msgid "General"
-msgstr "Všeobecné"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:3
-msgctxt "shortcut window"
-msgid "Global Search"
-msgstr "Globálne vyhľadávanie"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:4
-msgctxt "shortcut window"
-msgid "Preferences"
-msgstr "Nastavenia"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:5
-msgctxt "shortcut window"
-msgid "Command Bar"
-msgstr "Panel s príkazmi"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:6
-msgctxt "shortcut window"
-msgid "Terminal"
-msgstr "Terminál"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:7
-msgctxt "shortcut window"
-msgid "Keyboard Shortcuts"
-msgstr "Klávesové skratky"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:8
-msgctxt "shortcut window"
-msgid "Panels"
-msgstr "Panely"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:9
-msgctxt "shortcut window"
-msgid "Toggle left panel"
-msgstr "Prepnutie ľavého panelu"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:10
-msgctxt "shortcut window"
-msgid "Toggle right panel"
-msgstr "Prepnutie pravého panelu"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:11
-msgctxt "shortcut window"
-msgid "Toggle bottom panel"
-msgstr "Prepnutie spodného panelu"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:12
-msgctxt "shortcut window"
-msgid "Touchpad gestures"
-msgstr "Gestá na touchpade"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:13
-msgctxt "shortcut window"
-msgid "Switch to the next document"
-msgstr "Prepnutie na nasledujúci dokument"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:14
-msgctxt "shortcut window"
-msgid "Switch to the previous document"
-msgstr "Prepnutie na predchádzajúci dokument"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:15
-msgctxt "shortcut window"
-msgid "Files"
-msgstr "Súbory"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:16
-msgctxt "shortcut window"
-msgid "Create new document"
-msgstr "Vytvorenie nového dokumentu"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:17
-msgctxt "shortcut window"
-msgid "Open a document"
-msgstr "Otvorenie dokumentu"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:18
-msgctxt "shortcut window"
-msgid "Save the document"
-msgstr "Uloženie dokumentu"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:19
-msgctxt "shortcut window"
-msgid "Close the document"
-msgstr "Zavretie dokumentu"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:20
-msgctxt "shortcut window"
-msgid "Find and replace"
-msgstr "Nájdenie a nahradenie"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:21
-msgctxt "shortcut window"
-msgid "Find"
-msgstr "Nájdenie"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:22
-msgctxt "shortcut window"
-msgid "Find the next match"
-msgstr "Nájdenie nasledujúcej zhody"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:23
-msgctxt "shortcut window"
-msgid "Find the previous match"
-msgstr "Nájdenie predchádzajúcej zhody"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:24
-msgctxt "shortcut window"
-msgid "Clear highlight"
-msgstr "Vymazanie zvýraznenia"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:25
-msgctxt "shortcut window"
-msgid "Copy and Paste"
-msgstr "Kopírovanie a vkladanie"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:26
-msgctxt "shortcut window"
-msgid "Copy selected text to clipboard"
-msgstr "Skopírovanie vybratého textu do schránky"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:27
-msgctxt "shortcut window"
-msgid "Cut selected text to clipboard"
-msgstr "Vystrihnutie vybratého textu do schránky"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:28
-msgctxt "shortcut window"
-msgid "Paste text from clipboard"
-msgstr "Vloženie textu zo schránky"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:29
-msgctxt "shortcut window"
-msgid "Undo and Redo"
-msgstr "Vrátenie späť a zopakovanie"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:30
-msgctxt "shortcut window"
-msgid "Undo previous command"
-msgstr "Vrátenie späť predchádzajúceho príkazu"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:31
-msgctxt "shortcut window"
-msgid "Redo previous command"
-msgstr "Zopakovanie predchádzajúceho príkazu"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:32
-msgctxt "shortcut window"
-msgid "Editing"
-msgstr "Upravovanie"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:33
-msgctxt "shortcut window"
-msgid "Increment number at cursor"
-msgstr "Prirátanie čísla riadku v mieste kurzoru"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:34
-msgctxt "shortcut window"
-msgid "Decrement number at cursor"
-msgstr "Odrátanie čísla riadku v mieste kurzoru"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:35
-msgctxt "shortcut window"
-msgid "Join selected lines"
-msgstr "Spojenie vybratých riadkov"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:36
-msgctxt "shortcut window"
-msgid "Show completion window"
-msgstr "Zobrazenie okna s doplneniami"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:37
-msgctxt "shortcut window"
-msgid "Toggle overwrite"
-msgstr "Prepnutie prepisovania"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:38
-msgctxt "shortcut window"
-msgid "Reindent line"
-msgstr ""
-
-#: ../data/ui/ide-shortcuts-window.ui.h:39
-msgctxt "shortcut window"
-msgid "Navigation"
-msgstr "Navigácia"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:40
-msgctxt "shortcut window"
-msgid "Move to next error in file"
-msgstr "Presun na nasledujúcu chybu v súbore"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:41
-msgctxt "shortcut window"
-msgid "Move to previous error in file"
-msgstr "Presun na predchádzajúcu chybu v súbore"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:42
-msgctxt "shortcut window"
-msgid "Move to previous edit location"
-msgstr "Presun na predchádzajúce miesto úpravy"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:43
-msgctxt "shortcut window"
-msgid "Move to next edit location"
-msgstr "Presun na nasledujúce miesto úpravy"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:44
-msgctxt "shortcut window"
-msgid "Jump to definition of symbol"
-msgstr "Skok na definíciu symbolu"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:45
-msgctxt "shortcut window"
-msgid "Move sectionport up within the file"
-msgstr "Presun portu zobrazenia nahor v súbore"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:46
-msgctxt "shortcut window"
-msgid "Move sectionport down within the file"
-msgstr "Presun portu zobrazenia nadol v súbore"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:47
-msgctxt "shortcut window"
-msgid "Move sectionport to end of file"
-msgstr "Presun portu zobrazenia na koniec súboru"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:48
-msgctxt "shortcut window"
-msgid "Move sectionport to beginning of file"
-msgstr "Presun portu zobrazenia na začiatok súboru"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:49
-msgctxt "shortcut window"
-msgid "Move to matching bracket"
-msgstr "Presun na zodpovedajúce zátvorky"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:50
-msgctxt "shortcut window"
-msgid "Selections"
-msgstr "Výbery"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:51
-msgctxt "shortcut window"
-msgid "Select all"
-msgstr "Výber všetkého"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:52
-msgctxt "shortcut window"
-msgid "Unselect all"
-msgstr "Zrušenie výberu"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:53
-msgctxt "shortcut window"
-msgid "Terminal Shortcuts"
-msgstr "Klávesové skratky terminálu"
-
-#: ../libide/directory/ide-directory-genesis-addin.c:106
-msgid "From an existing project on this computer"
-msgstr "Z existujúceho projektu v tomto počítači"
-
-#: ../libide/editorconfig/ide-editorconfig-file-settings.c:153
-msgid "No file was provided."
-msgstr "Nebol poskytnutý žiadny súbor."
-
-#: ../libide/editor/ide-editor-frame.c:75
-#, c-format
-msgid "Line %u, Column %u"
-msgstr "Riadok %u, stĺpec %u"
-
-#: ../libide/editor/ide-editor-frame.c:244
-#, c-format
-msgid "%u of %u"
-msgstr "%u z %u"
-
-#: ../libide/editor/ide-editor-frame.c:643
-#: ../plugins/project-tree/gtk/menus.ui.h:1
-msgid "Re_veal in Project Tree"
-msgstr "Od_haliť v strome projektu"
-
-#: ../libide/editor/ide-editor-perspective.c:392
-#: ../libide/preferences/ide-preferences-builtin.c:102
-#: ../libide/preferences/ide-preferences-builtin.c:125
-msgid "Editor"
-msgstr "Editor"
-
-#: ../libide/editor/ide-editor-view-actions.c:301
-msgid "Save Document"
-msgstr "Uloženie dokumentu"
-
-#: ../libide/editor/ide-editor-view-actions.c:307
-#: ../libide/editor/ide-editor-view-actions.c:438
-#: ../libide/ide-workbench-actions.c:67
-#: ../plugins/build-tools/gbp-build-panel.ui.h:13
-#: ../plugins/terminal/gb-terminal-view-actions.c:305
-msgid "Cancel"
-msgstr "Zrušiť"
-
-#: ../libide/editor/ide-editor-view-actions.c:308
-#: ../libide/editor/ide-editor-view-actions.c:439
-#: ../plugins/terminal/gb-terminal-view-actions.c:306
-msgid "Save"
-msgstr "Uložiť"
-
-#: ../libide/editor/ide-editor-view-actions.c:427
-msgid "Save Document As"
-msgstr "Uloženie dokumentu ako"
-
-#: ../libide/editor/ide-editor-view.c:109
-msgid "Plain Text"
-msgstr "Obyčajný text"
-
-#. translators: the user selected a number outside the value range for the document.
-#: ../libide/editor/ide-editor-view.c:660
-#, c-format
-msgid "Provide a number between 1 and %u"
-msgstr "Poskytnite číslo v rozpätí 1 a %u"
-
-#: ../libide/genesis/ide-genesis-perspective.c:200
-#: ../libide/greeter/ide-greeter-perspective.c:429
+#: libide/greeter/ide-greeter-perspective.c:451
 msgid "Failed to load the project"
 msgstr "Zlyhalo načítanie projektu"
 
-#: ../libide/gsettings/ide-language-defaults.c:177
+#: libide/greeter/ide-greeter-perspective.c:668
+#, fuzzy
+#| msgid "_Open Project"
+msgid "Open Project"
+msgstr "_Otvoriť projekt"
+
+#. the action:// link is used to jump to the new-project view
+#: libide/greeter/ide-greeter-perspective.ui:52
+msgid "Why not <a href=\"action://app.new-project\">create a new project</a>?"
+msgstr ""
+
+#: libide/greeter/ide-greeter-perspective.ui:53
+msgid "No projects found"
+msgstr ""
+
+#: libide/greeter/ide-greeter-perspective.ui:100
+msgid "Recent Projects"
+msgstr "Nedávne projekty"
+
+#: libide/greeter/ide-greeter-perspective.ui:115
+#: libide/greeter/ide-greeter-perspective.ui:165
+msgid "Updated"
+msgstr ""
+
+#: libide/greeter/ide-greeter-perspective.ui:150
+msgid "Other Projects"
+msgstr "Ostatné projekty"
+
+#: libide/greeter/ide-greeter-perspective.ui:206
+msgid "_Remove"
+msgstr "_Odstrániť"
+
+#: libide/greeter/ide-greeter-perspective.ui:290
+msgid "Select a Project"
+msgstr "Výber projektu"
+
+#: libide/greeter/ide-greeter-perspective.ui:296
+msgid "Click an item to select"
+msgstr "Kliknutím na položku ju vyberiete"
+
+#: libide/greeter/ide-greeter-perspective.ui:322
+#, fuzzy
+#| msgid "Open"
+msgid "Open…"
+msgstr "Otvoriť"
+
+# dialog title
+#: libide/greeter/ide-greeter-perspective.ui:337
+#, fuzzy
+#| msgid "Select Project File"
+msgid "Select projects for removal"
+msgstr "Výber súboru projektu"
+
+#: libide/greeter/ide-greeter-perspective.ui:357
+#, fuzzy
+#| msgid "The project description."
+msgid "Return to project selection"
+msgstr "Popis projektu."
+
+#: libide/gsettings/ide-language-defaults.c:178
 #, c-format
 msgid "%s contained invalid ASCII"
 msgstr "Súbor %s obsahoval neplatné kódovanie ASCII"
 
-#: ../libide/gsettings/ide-language-defaults.c:192
+#: libide/gsettings/ide-language-defaults.c:193
 #, c-format
 msgid "Failed to parse integer from \"%s\""
 msgstr "Zlyhalo analyzovanie celého čísla z „%s“"
 
-#: ../libide/gsettings/ide-language-defaults.c:270
+#: libide/gsettings/ide-language-defaults.c:271
 msgid "language defaults missing version in [global] group."
 msgstr ""
 "V predvolených hodnotách jazyka chýba verzia v globálnej skupine [global]."
 
-#: ../libide/gsettings/ide-language-defaults.c:362
+#: libide/gsettings/ide-language-defaults.c:363
 msgid "Failed to initialize defaults."
 msgstr "Zlyhala inicializácia predvolených jazykov."
 
-#: ../libide/ide-application-actions.c:114
-msgid "An IDE for GNOME"
-msgstr "Integrované prostredia IDE pre GNOME"
-
-#: ../libide/ide-application-actions.c:120
-msgid "GNOME Builder"
-msgstr "GNOME Builder"
-
-#: ../libide/ide-application-actions.c:122
-msgid "translator-credits"
-msgstr "Dušan Kazik <prescott66@gmail.com>"
-
-#: ../libide/ide-application-actions.c:125
-msgid "Learn more about GNOME Builder"
-msgstr "Zistite viac o aplikácii GNOME Builder"
-
-#: ../libide/ide-application-actions.c:129
-msgid "Funded By"
-msgstr "Financovali"
-
-#: ../libide/ide-application-command-line.c:102
-msgid "Commands:"
-msgstr "Príkazy:"
-
-#: ../libide/ide-application-command-line.c:165
-msgid "List available subcommands"
-msgstr ""
-
-# cmd desc
-#: ../libide/ide-application-command-line.c:172
-msgid "Run Builder in standalone mode"
-msgstr "Spustí Builder v samostatnom režime"
-
-# cmd desc
-#: ../libide/ide-application-command-line.c:179
-msgid "Show the application's version"
-msgstr "Zobrazí verziu aplikácie"
-
-#: ../libide/ide-application-command-line.c:198
-#, fuzzy
-msgid "Increase verbosity, may be specified multiple times"
-msgstr "Zvýši rozsah výpisov. Nárast môže byť až niekoľkonásobný"
-
-#: ../libide/ide-application-command-line.c:228
-msgid "COMMAND"
-msgstr ""
-
-#: ../libide/ide-application-command-line.c:286
-msgid "No commands available"
-msgstr ""
-
-#: ../libide/ide-application-command-line.c:315
-msgid "Please provide a command"
-msgstr "Prosím, poskytnite príkaz"
-
-#: ../libide/ide-application-command-line.c:325
-msgid "No such tool"
-msgstr "Neexistuje nástroj"
-
-#: ../libide/ide-application-command-line.c:339
-msgid "Please provide a worker type"
-msgstr ""
-
-#: ../libide/ide-application-command-line.c:346
-#, fuzzy
-#| msgid "Please provide a command"
-msgid "Please provide a D-Bus address"
-msgstr "Prosím, poskytnite príkaz"
-
-#: ../libide/ide-application-command-line.c:355
-msgid "No such worker"
-msgstr ""
-
-#: ../libide/ide-buffer.c:2204
-msgid "The current language lacks a symbol resolver."
-msgstr "Aktuálnemu jazyku chýba rozpoznávanie symbolov."
-
-#: ../libide/ide-buffer-manager.c:612
-msgid "File too large to be opened."
-msgstr "Súbor je príliš veľký na otvorenie."
-
-#: ../libide/ide-buffer-manager.c:1456
-msgid "Words"
-msgstr "Slová"
-
-#: ../libide/ide-buffer-manager.c:1668
-#, c-format
-msgid "unsaved document %u"
-msgstr "neuložený dokument %u"
-
-#: ../libide/ide-buffer-manager.c:1702
-msgid "Failed to save buffer, ignoring reclamation."
-msgstr "Zlyhalo uloženie zásobníka. Ignoruje sa opätovné spracovanie."
-
-#: ../libide/ide-builder.c:55
-#, c-format
-msgid "%s does not implement build_async()"
-msgstr "%s neimplementuje funkciu build_async()"
-
-#: ../libide/ide-builder.c:61
-msgid "No implementation of build_async()"
-msgstr "Žiadna implementácia funkcie build_async()"
-
-#: ../libide/ide-build-result.c:217
-msgid "Failed to open stderr stream."
-msgstr "Zlyhalo otvorenie prúdu stderr."
-
-#: ../libide/ide-build-result.c:247
-msgid "Failed to open stdout stream."
-msgstr "Zlyhalo otvorenie prúdu stdout."
-
-#: ../libide/ide-build-system.c:232
-#, c-format
-msgid "%s() is not supported on %s build system."
-msgstr "%s() nie je podporovaný v systéme zostavovania %s."
-
-#: ../libide/ide.c:62
+#: libide/ide.c:62
 #, c-format
 msgid "You must call %s() before using libide."
 msgstr "Pred použitím knižnice libide musíte zavolať %s()."
 
-#: ../libide/ide-context.c:1665
+#: libide/ide-context.c:1870
 msgid "An unload request is already pending"
 msgstr "Požiadavka na uvoľnenie už čaká na uskutočnenie."
 
-#: ../libide/ide-context.c:1780
+#: libide/ide-context.c:1989
 msgid "Context has already been restored."
 msgstr "Kontext už bol obnovený."
 
-#: ../libide/ide-device-manager.c:144
-#, c-format
-msgid "The device \"%s\" could not be found."
-msgstr "Zariadenie „%s“ sa nepodarilo nájsť."
-
-#: ../libide/ide-layout-view.c:146
-msgid "untitled document"
-msgstr "dokument bez názvu"
-
-#: ../libide/ide-object.c:288
+#: libide/ide-object.c:288
 #, c-format
 msgid "No implementations of extension point \"%s\"."
 msgstr "Žiadna implementácia rozširujúceho bodu „%s“."
 
-#: ../libide/ide-object.c:380
+#: libide/ide-object.c:380
 msgid "Failed to locate build system plugin."
 msgstr "Zlyhalo lokalizovanie zásuvného modulu systému zostavovania."
 
-#: ../libide/ide-object.c:467
+#: libide/ide-object.c:467
 msgid "No such extension point."
 msgstr "Neexistuje bod rozšírenia."
 
-#: ../libide/ide-object.c:477
+#: libide/ide-object.c:477
 msgid "No implementations of extension point."
 msgstr "Žiadna implementácia rozširujúceho bodu."
 
-#: ../libide/ide-project.c:463
-msgid "Destination file must be within the project tree."
-msgstr "Cieľový súbor sa musí nachádzať v strome projektu."
+#: libide/keybindings/ide-shortcuts-window.ui:10
+msgctxt "shortcut window"
+msgid "Editor Shortcuts"
+msgstr "Klávesové skratky editora"
 
-#: ../libide/ide-project.c:593
-msgid "File must be within the project tree."
-msgstr "Súbor sa musí nachádzať v strome projektu."
+#: libide/keybindings/ide-shortcuts-window.ui:14
+#: libide/keybindings/ide-shortcuts-window.ui:423
+msgctxt "shortcut window"
+msgid "General"
+msgstr "Všeobecné"
 
-#: ../libide/ide-recent-projects.c:382
-#, c-format
-msgid "%s() may only be executed once"
-msgstr "%s() môže byť spustený iba raz"
+#: libide/keybindings/ide-shortcuts-window.ui:18
+#: libide/keybindings/ide-shortcuts-window.ui:427
+msgctxt "shortcut window"
+msgid "Global Search"
+msgstr "Globálne vyhľadávanie"
 
-#: ../libide/ide-script.c:205
-#, c-format
-msgid "%s has not implemented GAsyncInitable."
-msgstr "%s nemá implementovanú funkciu GAsyncInitable."
+#: libide/keybindings/ide-shortcuts-window.ui:25
+#: libide/keybindings/ide-shortcuts-window.ui:434
+msgctxt "shortcut window"
+msgid "Preferences"
+msgstr "Nastavenia"
 
-#: ../libide/ide-source-snippet.c:370
-msgid "Chunk does not belong to snippet."
-msgstr "Blok nepatrí k úryvku."
+#: libide/keybindings/ide-shortcuts-window.ui:32
+#: libide/keybindings/ide-shortcuts-window.ui:441
+msgctxt "shortcut window"
+msgid "Command Bar"
+msgstr "Panel s príkazmi"
 
-#: ../libide/ide-source-snippet-completion-provider.c:297
-#: ../libide/preferences/ide-preferences-builtin.c:173
-msgid "Snippets"
-msgstr "Úryvky"
+#: libide/keybindings/ide-shortcuts-window.ui:39
+#: libide/keybindings/ide-shortcuts-window.ui:448
+msgctxt "shortcut window"
+msgid "Terminal"
+msgstr "Terminál"
 
-#: ../libide/ide-source-snippet-parser.c:496
-#, c-format
-msgid "Invalid snippet at line %d: %s"
-msgstr "Neplatný úryvok na riadku %d: %s"
+#: libide/keybindings/ide-shortcuts-window.ui:46
+#: libide/keybindings/ide-shortcuts-window.ui:455
+msgctxt "shortcut window"
+msgid "Keyboard Shortcuts"
+msgstr "Klávesové skratky"
 
-#: ../libide/ide-source-snippets-manager.c:96
-#, c-format
-msgid "Failed to open directory: %s"
-msgstr "Zlyhalo otvorenie adresára: %s"
+#: libide/keybindings/ide-shortcuts-window.ui:55
+msgctxt "shortcut window"
+msgid "Panels"
+msgstr "Panely"
 
-#: ../libide/ide-source-snippets-manager.c:109
-#, c-format
-msgid "Failed to load file: %s: %s"
-msgstr "Zlyhalo načítanie súboru: %s: %s"
+#: libide/keybindings/ide-shortcuts-window.ui:59
+msgctxt "shortcut window"
+msgid "Toggle left panel"
+msgstr "Prepnutie ľavého panelu"
 
-#: ../libide/ide-source-view.c:4965
-#, c-format
-msgid "Insert \"%s\""
-msgstr "Vložiť „%s“"
+#: libide/keybindings/ide-shortcuts-window.ui:66
+msgctxt "shortcut window"
+msgid "Toggle right panel"
+msgstr "Prepnutie pravého panelu"
 
-#: ../libide/ide-source-view.c:4967
-#, c-format
-msgid "Replace \"%s\" with \"%s\""
-msgstr "Nahradiť „%s“ s „%s“"
+#: libide/keybindings/ide-shortcuts-window.ui:73
+msgctxt "shortcut window"
+msgid "Toggle bottom panel"
+msgstr "Prepnutie spodného panelu"
 
-#: ../libide/ide-source-view.c:5081
-msgid "Apply Fix-It"
-msgstr "Použiť opravu"
+#: libide/keybindings/ide-shortcuts-window.ui:82
+msgctxt "shortcut window"
+msgid "Touchpad gestures"
+msgstr "Gestá na touchpade"
 
-#: ../libide/ide-uri.c:181
-#, no-c-format
-msgid "Invalid %-encoding in URI"
-msgstr ""
+#: libide/keybindings/ide-shortcuts-window.ui:87
+#: libide/keybindings/ide-shortcuts-window.ui:135
+msgctxt "shortcut window"
+msgid "Switch to the next document"
+msgstr "Prepnutie na nasledujúci dokument"
 
-#: ../libide/ide-uri.c:219
-msgid "Non-UTF-8 characters in URI"
-msgstr ""
+#: libide/keybindings/ide-shortcuts-window.ui:94
+#: libide/keybindings/ide-shortcuts-window.ui:142
+msgctxt "shortcut window"
+msgid "Switch to the previous document"
+msgstr "Prepnutie na predchádzajúci dokument"
 
-#: ../libide/ide-uri.c:366 ../libide/ide-uri.c:377
-#, c-format
-msgid "Invalid IP literal '%s' in URI"
-msgstr ""
+#: libide/keybindings/ide-shortcuts-window.ui:102
+msgctxt "shortcut window"
+msgid "Files"
+msgstr "Súbory"
 
-#: ../libide/ide-uri.c:411
-#, c-format
-msgid "Invalid encoded IP literal '%s' in URI"
-msgstr ""
+#: libide/keybindings/ide-shortcuts-window.ui:107
+msgctxt "shortcut window"
+msgid "Create new document"
+msgstr "Vytvorenie nového dokumentu"
 
-#: ../libide/ide-uri.c:420
-#, c-format
-msgid "Invalid non-ASCII hostname '%s' in URI"
-msgstr ""
+#: libide/keybindings/ide-shortcuts-window.ui:114
+msgctxt "shortcut window"
+msgid "Open a document"
+msgstr "Otvorenie dokumentu"
 
-#: ../libide/ide-uri.c:435
-#, c-format
-msgid "Non-ASCII hostname '%s' forbidden in this URI"
-msgstr ""
+#: libide/keybindings/ide-shortcuts-window.ui:121
+msgctxt "shortcut window"
+msgid "Save the document"
+msgstr "Uloženie dokumentu"
 
-#: ../libide/ide-uri.c:457
-#, fuzzy, c-format
-#| msgid "Could not parse XML from stream"
-msgid "Could not parse port '%s' in URI"
-msgstr "Nepodarilo sa analyzovať XML z prúdu"
+#: libide/keybindings/ide-shortcuts-window.ui:128
+msgctxt "shortcut window"
+msgid "Close the document"
+msgstr "Zavretie dokumentu"
 
-#: ../libide/ide-uri.c:464
-#, c-format
-msgid "Port '%s' in URI is out of range"
-msgstr ""
-
-#: ../libide/ide-uri.c:590
-msgid "Base URI is not absolute"
-msgstr ""
-
-#: ../libide/ide-uri.c:617
-msgid "URI is not absolute, and no base URI was provided"
-msgstr ""
-
-#: ../libide/ide-uri.c:662
-#, fuzzy, c-format
-#| msgid "Could not parse XML from stream"
-msgid "Could not parse '%s' as absolute URI"
-msgstr "Nepodarilo sa analyzovať XML z prúdu"
-
-#: ../libide/ide-uri.c:1190
-#, c-format
-msgid "URI '%s' has no host component"
-msgstr ""
-
-#: ../libide/ide-workbench-actions.c:64
+#: libide/keybindings/ide-shortcuts-window.ui:149
 #, fuzzy
-#| msgid "Open _With"
-msgid "Open File"
-msgstr "Otvoriť _pomocou"
+#| msgid "Show list of open files"
+msgctxt "shortcut window"
+msgid "Show list of open documents"
+msgstr "Zobrazenie zoznamu otvorených súborov"
 
-#: ../libide/ide-workbench-actions.c:68
-msgid "Open"
-msgstr "Otvoriť"
+#: libide/keybindings/ide-shortcuts-window.ui:157
+msgctxt "shortcut window"
+msgid "Find and replace"
+msgstr "Nájdenie a nahradenie"
 
-#: ../libide/preferences/ide-preferences-builtin.c:40
+#: libide/keybindings/ide-shortcuts-window.ui:162
+msgctxt "shortcut window"
+msgid "Find"
+msgstr "Nájdenie"
+
+#: libide/keybindings/ide-shortcuts-window.ui:169
+msgctxt "shortcut window"
+msgid "Find the next match"
+msgstr "Nájdenie nasledujúcej zhody"
+
+#: libide/keybindings/ide-shortcuts-window.ui:176
+msgctxt "shortcut window"
+msgid "Find the previous match"
+msgstr "Nájdenie predchádzajúcej zhody"
+
+#: libide/keybindings/ide-shortcuts-window.ui:183
+msgctxt "shortcut window"
+msgid "Clear highlight"
+msgstr "Vymazanie zvýraznenia"
+
+#: libide/keybindings/ide-shortcuts-window.ui:191
+#: libide/keybindings/ide-shortcuts-window.ui:464
+msgctxt "shortcut window"
+msgid "Copy and Paste"
+msgstr "Kopírovanie a vkladanie"
+
+#: libide/keybindings/ide-shortcuts-window.ui:196
+#: libide/keybindings/ide-shortcuts-window.ui:469
+msgctxt "shortcut window"
+msgid "Copy selected text to clipboard"
+msgstr "Skopírovanie vybratého textu do schránky"
+
+#: libide/keybindings/ide-shortcuts-window.ui:203
+msgctxt "shortcut window"
+msgid "Cut selected text to clipboard"
+msgstr "Vystrihnutie vybratého textu do schránky"
+
+#: libide/keybindings/ide-shortcuts-window.ui:210
+#: libide/keybindings/ide-shortcuts-window.ui:476
+msgctxt "shortcut window"
+msgid "Paste text from clipboard"
+msgstr "Vloženie textu zo schránky"
+
+#: libide/keybindings/ide-shortcuts-window.ui:217
+msgctxt "shortcut window"
+msgid "Duplicate current line or selection"
+msgstr "Duplikovanie aktuálneho riadku alebo výberu"
+
+#: libide/keybindings/ide-shortcuts-window.ui:225
+msgctxt "shortcut window"
+msgid "Undo and Redo"
+msgstr "Vrátenie späť a zopakovanie"
+
+#: libide/keybindings/ide-shortcuts-window.ui:230
+msgctxt "shortcut window"
+msgid "Undo previous command"
+msgstr "Vrátenie späť predchádzajúceho príkazu"
+
+#: libide/keybindings/ide-shortcuts-window.ui:237
+msgctxt "shortcut window"
+msgid "Redo previous command"
+msgstr "Zopakovanie predchádzajúceho príkazu"
+
+#: libide/keybindings/ide-shortcuts-window.ui:245
+msgctxt "shortcut window"
+msgid "Editing"
+msgstr "Upravovanie"
+
+#: libide/keybindings/ide-shortcuts-window.ui:250
+msgctxt "shortcut window"
+msgid "Increment number at cursor"
+msgstr "Prirátanie čísla riadku v mieste kurzoru"
+
+#: libide/keybindings/ide-shortcuts-window.ui:257
+msgctxt "shortcut window"
+msgid "Decrement number at cursor"
+msgstr "Odrátanie čísla riadku v mieste kurzoru"
+
+#: libide/keybindings/ide-shortcuts-window.ui:264
+msgctxt "shortcut window"
+msgid "Join selected lines"
+msgstr "Spojenie vybratých riadkov"
+
+#: libide/keybindings/ide-shortcuts-window.ui:271
+msgctxt "shortcut window"
+msgid "Show completion window"
+msgstr "Zobrazenie okna s doplneniami"
+
+#: libide/keybindings/ide-shortcuts-window.ui:278
+msgctxt "shortcut window"
+msgid "Toggle overwrite"
+msgstr "Prepnutie prepisovania"
+
+#: libide/keybindings/ide-shortcuts-window.ui:285
+msgctxt "shortcut window"
+msgid "Reindent line"
+msgstr ""
+
+#: libide/keybindings/ide-shortcuts-window.ui:293
+msgctxt "shortcut window"
+msgid "Navigation"
+msgstr "Navigácia"
+
+#: libide/keybindings/ide-shortcuts-window.ui:298
+msgctxt "shortcut window"
+msgid "Move to next error in file"
+msgstr "Presun na nasledujúcu chybu v súbore"
+
+#: libide/keybindings/ide-shortcuts-window.ui:305
+msgctxt "shortcut window"
+msgid "Move to previous error in file"
+msgstr "Presun na predchádzajúcu chybu v súbore"
+
+#: libide/keybindings/ide-shortcuts-window.ui:312
+msgctxt "shortcut window"
+msgid "Move to previous edit location"
+msgstr "Presun na predchádzajúce miesto úpravy"
+
+#: libide/keybindings/ide-shortcuts-window.ui:319
+msgctxt "shortcut window"
+msgid "Move to next edit location"
+msgstr "Presun na nasledujúce miesto úpravy"
+
+#: libide/keybindings/ide-shortcuts-window.ui:326
+msgctxt "shortcut window"
+msgid "Jump to definition of symbol"
+msgstr "Skok na definíciu symbolu"
+
+#: libide/keybindings/ide-shortcuts-window.ui:333
+#, fuzzy
+#| msgctxt "shortcut window"
+#| msgid "Move sectionport up within the file"
+msgctxt "shortcut window"
+msgid "Move viewport up within the file"
+msgstr "Presun portu zobrazenia nahor v súbore"
+
+#: libide/keybindings/ide-shortcuts-window.ui:340
+#, fuzzy
+#| msgctxt "shortcut window"
+#| msgid "Move sectionport down within the file"
+msgctxt "shortcut window"
+msgid "Move viewport down within the file"
+msgstr "Presun portu zobrazenia nadol v súbore"
+
+#: libide/keybindings/ide-shortcuts-window.ui:347
+#, fuzzy
+#| msgctxt "shortcut window"
+#| msgid "Move sectionport to end of file"
+msgctxt "shortcut window"
+msgid "Move viewport to end of file"
+msgstr "Presun portu zobrazenia na koniec súboru"
+
+#: libide/keybindings/ide-shortcuts-window.ui:354
+#, fuzzy
+#| msgctxt "shortcut window"
+#| msgid "Move sectionport to beginning of file"
+msgctxt "shortcut window"
+msgid "Move viewport to beginning of file"
+msgstr "Presun portu zobrazenia na začiatok súboru"
+
+#: libide/keybindings/ide-shortcuts-window.ui:361
+msgctxt "shortcut window"
+msgid "Move to matching bracket"
+msgstr "Presun na zodpovedajúce zátvorky"
+
+#: libide/keybindings/ide-shortcuts-window.ui:369
+msgctxt "shortcut window"
+msgid "Selections"
+msgstr "Výbery"
+
+#: libide/keybindings/ide-shortcuts-window.ui:374
+msgctxt "shortcut window"
+msgid "Select all"
+msgstr "Výber všetkého"
+
+#: libide/keybindings/ide-shortcuts-window.ui:381
+msgctxt "shortcut window"
+msgid "Unselect all"
+msgstr "Zrušenie výberu"
+
+#: libide/keybindings/ide-shortcuts-window.ui:389
+#, fuzzy
+#| msgid "Build Failure"
+msgctxt "shortcut window"
+msgid "Build and Run"
+msgstr "Zlyhanie zostavenia"
+
+#: libide/keybindings/ide-shortcuts-window.ui:394
+#, fuzzy
+#| msgid "_Build"
+msgctxt "shortcut window"
+msgid "Build"
+msgstr "_Zostaviť"
+
+#: libide/keybindings/ide-shortcuts-window.ui:401
+msgctxt "shortcut window"
+msgid "Run"
+msgstr "Spustenie"
+
+#: libide/keybindings/ide-shortcuts-window.ui:408
+msgctxt "shortcut window"
+msgid "Profile"
+msgstr "Profil"
+
+#: libide/keybindings/ide-shortcuts-window.ui:419
+msgctxt "shortcut window"
+msgid "Terminal Shortcuts"
+msgstr "Klávesové skratky terminálu"
+
+#: libide/preferences/ide-preferences-builtin.c:65
+#: libide/preferences/ide-preferences-builtin.c:66
 msgid "Extensions"
 msgstr "Rozšírenia"
 
-#: ../libide/preferences/ide-preferences-builtin.c:41
-msgid "Installed Extensions"
-msgstr "Nainštalované rozšírenia"
-
-#: ../libide/preferences/ide-preferences-builtin.c:42
-#, fuzzy
-#| msgid "Extension"
-msgid "Bundled Extensions"
-msgstr "Rozšírenie"
-
-#: ../libide/preferences/ide-preferences-builtin.c:77
+#: libide/preferences/ide-preferences-builtin.c:102
 msgid "Appearance"
 msgstr ""
 
-#: ../libide/preferences/ide-preferences-builtin.c:79
+#: libide/preferences/ide-preferences-builtin.c:104
 msgid "Themes"
 msgstr "Témy"
 
-#: ../libide/preferences/ide-preferences-builtin.c:80
+#: libide/preferences/ide-preferences-builtin.c:105
 msgid "Dark Theme"
 msgstr "Tmavá téma"
 
-#: ../libide/preferences/ide-preferences-builtin.c:80
+#: libide/preferences/ide-preferences-builtin.c:105
 msgid "Whether Builder should use a dark theme"
 msgstr ""
 
-#: ../libide/preferences/ide-preferences-builtin.c:80
+#: libide/preferences/ide-preferences-builtin.c:105
 msgid "dark theme"
 msgstr ""
 
-#: ../libide/preferences/ide-preferences-builtin.c:81
+#: libide/preferences/ide-preferences-builtin.c:106
 msgid "Grid Pattern"
 msgstr "Mriežka"
 
-#: ../libide/preferences/ide-preferences-builtin.c:81
+#: libide/preferences/ide-preferences-builtin.c:106
 msgid "Display a grid pattern underneath source code"
 msgstr "Zobrazí mriežku pod zdrojovým kódom"
 
-#: ../libide/preferences/ide-preferences-builtin.c:101
+#: libide/preferences/ide-preferences-builtin.c:108
 msgid "Font"
 msgstr "Písmo"
 
-#: ../libide/preferences/ide-preferences-builtin.c:102
+#: libide/preferences/ide-preferences-builtin.c:109
 #, fuzzy
 #| msgid "font document editor monospace"
+msgctxt "Keywords"
 msgid "editor font monospace"
 msgstr "font písmo dokument editor monospace písmo pevná pevnou šírka šírkou"
 
 #. XXX: This belongs in terminal addin
-#: ../libide/preferences/ide-preferences-builtin.c:104
-#: ../plugins/terminal/gb-terminal-workbench-addin.c:99
+#: libide/preferences/ide-preferences-builtin.c:111
+#: plugins/terminal/gb-terminal-workbench-addin.c:90
 msgid "Terminal"
 msgstr "Terminál"
 
-#: ../libide/preferences/ide-preferences-builtin.c:104
+#: libide/preferences/ide-preferences-builtin.c:111
+#, fuzzy
+#| msgid "font document editor monospace"
+msgctxt "Keywords"
 msgid "terminal font monospace"
+msgstr "font písmo dokument editor monospace písmo pevná pevnou šírka šírkou"
+
+#: libide/preferences/ide-preferences-builtin.c:116
+msgid "Color Scheme"
 msgstr ""
 
-#: ../libide/preferences/ide-preferences-builtin.c:110
+#: libide/preferences/ide-preferences-builtin.c:141
 msgid "Keyboard"
 msgstr "Klávesnica"
 
-#: ../libide/preferences/ide-preferences-builtin.c:112
+#: libide/preferences/ide-preferences-builtin.c:143
 msgid "Emulation"
 msgstr "Emulácia"
 
-#: ../libide/preferences/ide-preferences-builtin.c:113
+#: libide/preferences/ide-preferences-builtin.c:144
 msgid "Default keybinding mode which mimics gedit"
 msgstr ""
 
-#: ../libide/preferences/ide-preferences-builtin.c:114
+#: libide/preferences/ide-preferences-builtin.c:145
 msgid "Emacs"
 msgstr ""
 
-#: ../libide/preferences/ide-preferences-builtin.c:114
+#: libide/preferences/ide-preferences-builtin.c:145
 msgid "Emulates the Emacs text editor"
 msgstr "Emuluje textový editor Emacs"
 
-#: ../libide/preferences/ide-preferences-builtin.c:115
+#: libide/preferences/ide-preferences-builtin.c:146
 msgid "Vim"
 msgstr ""
 
-#: ../libide/preferences/ide-preferences-builtin.c:115
+#: libide/preferences/ide-preferences-builtin.c:146
 msgid "Emulates the Vim text editor"
 msgstr "Emuluje textový editor Vim"
 
-#: ../libide/preferences/ide-preferences-builtin.c:117
+#: libide/preferences/ide-preferences-builtin.c:148
 msgid "Movement"
 msgstr "Pohyb"
 
-#: ../libide/preferences/ide-preferences-builtin.c:118
-msgid "Smart Home and End"
-msgstr "Inteligentný Home a End"
-
-#: ../libide/preferences/ide-preferences-builtin.c:118
+#: libide/preferences/ide-preferences-builtin.c:149
 #, fuzzy
 #| msgid "Home moves to first non-space character."
 msgid "Home moves to first non-whitespace character"
@@ -1151,7 +1932,7 @@ msgstr ""
 "Kláves Home presunie kurzor na prvý znak, ktorý nie je reprezentovaný "
 "medzerou."
 
-#: ../libide/preferences/ide-preferences-builtin.c:119
+#: libide/preferences/ide-preferences-builtin.c:150
 #, fuzzy
 #| msgid ""
 #| "Backspace will remove extra spaces to keep you aligned with your "
@@ -1162,17 +1943,17 @@ msgstr ""
 "Kláves Backspace odstráni medzery navyše, aby zachoval zarovnanie podľa "
 "vašej šírky odsadenia."
 
-#: ../libide/preferences/ide-preferences-builtin.c:127
+#: libide/preferences/ide-preferences-builtin.c:158
 msgid "Cursor"
 msgstr ""
 
-#: ../libide/preferences/ide-preferences-builtin.c:128
+#: libide/preferences/ide-preferences-builtin.c:159
 #, fuzzy
 #| msgid "Restore Cursor Position"
 msgid "Restore cursor position"
 msgstr "Obnoviť pozíciu kurzora"
 
-#: ../libide/preferences/ide-preferences-builtin.c:128
+#: libide/preferences/ide-preferences-builtin.c:159
 #, fuzzy
 #| msgid ""
 #| "Restore the insertion cursor to the last position when reopening a file."
@@ -1180,525 +1961,963 @@ msgid "Restore cursor position when a file is reopened"
 msgstr ""
 "Pri znovuotvorení súboru obnoví kurzor vkladania na jeho poslednú pozíciu."
 
-#: ../libide/preferences/ide-preferences-builtin.c:129
+#: libide/preferences/ide-preferences-builtin.c:160
 msgid "Scroll Offset"
 msgstr "Posun rolovania"
 
-#: ../libide/preferences/ide-preferences-builtin.c:129
+#: libide/preferences/ide-preferences-builtin.c:160
 #, fuzzy
 #| msgid "Minimal number of lines to keep above and below the cursor."
 msgid "Minimum number of lines to keep above and below the cursor"
 msgstr "Minimálny počet riadkov na zachovanie nad a pod kurzorom."
 
-#: ../libide/preferences/ide-preferences-builtin.c:130
-msgid "Overscroll"
-msgstr ""
-
-#: ../libide/preferences/ide-preferences-builtin.c:130
+#: libide/preferences/ide-preferences-builtin.c:161
 msgid "Allow the editor to scroll past the end of the buffer"
 msgstr ""
 
-#: ../libide/preferences/ide-preferences-builtin.c:132
+#: libide/preferences/ide-preferences-builtin.c:163
 #, fuzzy
 #| msgid "Project Information"
 msgid "Line Information"
 msgstr "Informácie o projekte"
 
-#: ../libide/preferences/ide-preferences-builtin.c:133
+#: libide/preferences/ide-preferences-builtin.c:164
 #, fuzzy
 #| msgid "line numbers"
 msgid "Line numbers"
 msgstr "čísla riadkov"
 
-#: ../libide/preferences/ide-preferences-builtin.c:133
+#: libide/preferences/ide-preferences-builtin.c:164
 #, fuzzy
 #| msgid "Move viewport to beginning of file"
 msgid "Show line number at beginning of each line"
 msgstr "Presun portu zobrazenia na začiatok súboru"
 
-#: ../libide/preferences/ide-preferences-builtin.c:134
+#: libide/preferences/ide-preferences-builtin.c:165
 msgid "Line changes"
 msgstr ""
 
-#: ../libide/preferences/ide-preferences-builtin.c:134
+#: libide/preferences/ide-preferences-builtin.c:165
 #, fuzzy
 #| msgid ""
 #| "Display whether a line has been added or modified next to the line number."
 msgid "Show if a line was added or modified next to line number"
 msgstr "Zobrazí vedľa čísla riadku, či bol riadok pridaný, alebo upravený."
 
-#: ../libide/preferences/ide-preferences-builtin.c:136
+#: libide/preferences/ide-preferences-builtin.c:167
 #, fuzzy
 #| msgid "Highlighter"
 msgid "Highlight"
 msgstr "Zvýrazňovač"
 
-#: ../libide/preferences/ide-preferences-builtin.c:137
+#: libide/preferences/ide-preferences-builtin.c:168
 #, fuzzy
 #| msgid "Current Item"
 msgid "Current line"
 msgstr "Aktuálna položka"
 
-#: ../libide/preferences/ide-preferences-builtin.c:137
+#: libide/preferences/ide-preferences-builtin.c:168
 msgid "Make current line stand out with highlights"
 msgstr ""
 
-#: ../libide/preferences/ide-preferences-builtin.c:138
+#: libide/preferences/ide-preferences-builtin.c:169
 #, fuzzy
 #| msgid "Move to matching bracket"
 msgid "Matching brackets"
 msgstr "Presun na zodpovedajúce zátvorky"
 
-#: ../libide/preferences/ide-preferences-builtin.c:138
+#: libide/preferences/ide-preferences-builtin.c:169
 #, fuzzy
 #| msgid "Highlight Matching Brackets"
 msgid "Highlight matching brackets based on cursor position"
 msgstr "Zvýrazniť zodpovedajúce zátvorky"
 
-#: ../libide/preferences/ide-preferences-builtin.c:140
+#: libide/preferences/ide-preferences-builtin.c:171
 #, fuzzy
 #| msgid "Auto Hide Overview Map"
 msgid "Code Overview"
 msgstr "Automaticky skryť mapu s prehľadom"
 
-#: ../libide/preferences/ide-preferences-builtin.c:141
-#, fuzzy
-#| msgid "Overview Map"
-msgid "Show overview map"
-msgstr "Mapa s prehľadom"
-
-#: ../libide/preferences/ide-preferences-builtin.c:141
+#: libide/preferences/ide-preferences-builtin.c:172
 msgid "A zoomed out view to enhance navigating source code"
 msgstr ""
 
-#: ../libide/preferences/ide-preferences-builtin.c:142
+#: libide/preferences/ide-preferences-builtin.c:173
 #, fuzzy
 #| msgid "Auto Hide Overview Map"
 msgid "Automatically hide overview map"
 msgstr "Automaticky skryť mapu s prehľadom"
 
-#: ../libide/preferences/ide-preferences-builtin.c:142
+#: libide/preferences/ide-preferences-builtin.c:173
 msgid "Automatically hide map when editor loses focus"
 msgstr ""
 
-#: ../libide/preferences/ide-preferences-builtin.c:144
+#: libide/preferences/ide-preferences-builtin.c:175
 msgid "Whitespace Characters"
 msgstr ""
 
-#: ../libide/preferences/ide-preferences-builtin.c:147
+#: libide/preferences/ide-preferences-builtin.c:178
 msgid "New line and carriage return"
 msgstr ""
 
-#: ../libide/preferences/ide-preferences-builtin.c:148
+#: libide/preferences/ide-preferences-builtin.c:179
 msgid "Non-breaking spaces"
 msgstr ""
 
-#: ../libide/preferences/ide-preferences-builtin.c:149
+#: libide/preferences/ide-preferences-builtin.c:180
 msgid "Spaces inside of text"
 msgstr ""
 
-#: ../libide/preferences/ide-preferences-builtin.c:150
+#: libide/preferences/ide-preferences-builtin.c:181
 msgid "Trailing Only"
 msgstr ""
 
-#: ../libide/preferences/ide-preferences-builtin.c:151
+#: libide/preferences/ide-preferences-builtin.c:182
 #, fuzzy
 #| msgid "Read Only"
 msgid "Leading Only"
 msgstr "Len na čítanie"
 
-#: ../libide/preferences/ide-preferences-builtin.c:157
+#: libide/preferences/ide-preferences-builtin.c:188
 msgid "Code Insight"
 msgstr "Nahliadnutie do kódu"
 
-#: ../libide/preferences/ide-preferences-builtin.c:159
-msgid "Highlighting"
-msgstr "Zvýrazňovanie"
-
-#: ../libide/preferences/ide-preferences-builtin.c:160
+#: libide/preferences/ide-preferences-builtin.c:191
 #, fuzzy
 #| msgid "Semantic Language Highlighting"
 msgid "Semantic Highlighting"
 msgstr "Sémantické zvýrazňovanie jazyka"
 
-#: ../libide/preferences/ide-preferences-builtin.c:160
+#: libide/preferences/ide-preferences-builtin.c:191
 msgid ""
 "Use code insight to highlight additional information discovered in source "
 "file"
 msgstr ""
 
-#: ../libide/preferences/ide-preferences-builtin.c:162
+#: libide/preferences/ide-preferences-builtin.c:193
 #, fuzzy
 #| msgid "Auto Completion"
 msgid "Completion"
 msgstr "Automatické dopĺňanie"
 
-#: ../libide/preferences/ide-preferences-builtin.c:163
+#: libide/preferences/ide-preferences-builtin.c:194
 #, fuzzy
 #| msgid "Suggest completion of words found within all open documents."
 msgid "Suggest words found in open files"
 msgstr "Navrhne doplnenia slov nájdených vo všetkých otvorených dokumentoch."
 
-#: ../libide/preferences/ide-preferences-builtin.c:163
+#: libide/preferences/ide-preferences-builtin.c:194
 #, fuzzy
 #| msgid "Suggest completion of words found within all open documents."
 msgid ""
 "Suggests completions as you type based on words found in any open document"
 msgstr "Navrhne doplnenia slov nájdených vo všetkých otvorených dokumentoch."
 
-#: ../libide/preferences/ide-preferences-builtin.c:164
+#: libide/preferences/ide-preferences-builtin.c:195
 #, fuzzy
 #| msgid "Suggest Completions using Ctags"
 msgid "Suggest completions using Ctags"
 msgstr "Navrhnúť doplnenia pomocou značiek Ctags"
 
-#: ../libide/preferences/ide-preferences-builtin.c:164
+#: libide/preferences/ide-preferences-builtin.c:195
 msgid ""
 "Create and manages a Ctags database for completing class names, functions, "
 "and more"
 msgstr ""
 
-#: ../libide/preferences/ide-preferences-builtin.c:165
+#: libide/preferences/ide-preferences-builtin.c:196
 #, fuzzy
 #| msgid "Suggest Completions using Clang (Experimental)"
 msgid "Suggest completions using Clang (Experimental)"
 msgstr "Navrhnúť doplnenia pomocou kompilátora Clang (experimentálne)"
 
-#: ../libide/preferences/ide-preferences-builtin.c:165
+#: libide/preferences/ide-preferences-builtin.c:196
 #, fuzzy
 #| msgid "Use Clang for completions in the C and C++ languages."
 msgid "Use Clang to suggest completions for C and C++ languages"
 msgstr "Použije sa kompilátor na doplnenie v jazykoch C a C++."
 
-#: ../libide/preferences/ide-preferences-builtin.c:167
+#: libide/preferences/ide-preferences-builtin.c:198
 #, fuzzy
 #| msgid "Highlight Diagnostics"
 msgid "Diagnostics"
 msgstr "Zvýrazniť diagnostiku"
 
-#: ../libide/preferences/ide-preferences-builtin.c:176
+#: libide/preferences/ide-preferences-builtin.c:204
+#: libide/snippets/ide-source-snippet-completion-provider.c:297
+msgid "Snippets"
+msgstr "Úryvky"
+
+#: libide/preferences/ide-preferences-builtin.c:207
 #, fuzzy
 #| msgid "Snippets"
 msgid "Code snippets"
 msgstr "Úryvky"
 
-#: ../libide/preferences/ide-preferences-builtin.c:176
+#: libide/preferences/ide-preferences-builtin.c:207
 msgid "Use code fragments to increase typing efficiency"
 msgstr ""
 
-#: ../libide/preferences/ide-preferences-builtin.c:190
+#: libide/preferences/ide-preferences-builtin.c:251
 msgid "Programming Languages"
 msgstr "Programovacie jazyky"
 
-#: ../libide/preferences/ide-preferences-builtin.c:227
+#. translators: placeholder string for the entry used to filter the languages in Preferences/Programming languages
+#: libide/preferences/ide-preferences-builtin.c:262
+#, fuzzy
+#| msgid "Search Preferences…"
+msgid "Search languages…"
+msgstr "Vyhľadajte nastavenia…"
+
+#: libide/preferences/ide-preferences-builtin.c:316
+#: libide/preferences/ide-preferences-builtin.c:377
+#: plugins/build-tools/gbp-build-configuration-view.ui:11
+msgid "General"
+msgstr "Všeobecné"
+
+#: libide/preferences/ide-preferences-builtin.c:317
 #, fuzzy
 #| msgid "Trim trailing whitespace when saving document"
 msgid "Trim trailing whitespace"
 msgstr "Vymazať medzeru na konci riadka pri uložení dokumentu"
 
-#: ../libide/preferences/ide-preferences-builtin.c:227
+#: libide/preferences/ide-preferences-builtin.c:317
 msgid "Upon saving, trailing whitespace from modified lines will be trimmed."
 msgstr ""
 
-#: ../libide/preferences/ide-preferences-builtin.c:229
+#: libide/preferences/ide-preferences-builtin.c:318
+msgid "Overwrite Braces"
+msgstr ""
+
+#: libide/preferences/ide-preferences-builtin.c:318
+msgid "Overwrite closing braces"
+msgstr ""
+
+#: libide/preferences/ide-preferences-builtin.c:320
 msgid "Margins"
 msgstr ""
 
-#: ../libide/preferences/ide-preferences-builtin.c:230
+#: libide/preferences/ide-preferences-builtin.c:321
 #, fuzzy
 #| msgid "Display right margin"
 msgid "Show right margin"
 msgstr "Zobraziť pravý okraj"
 
-#: ../libide/preferences/ide-preferences-builtin.c:231
+#: libide/preferences/ide-preferences-builtin.c:322
 msgid "Right margin position"
 msgstr ""
 
-#: ../libide/preferences/ide-preferences-builtin.c:231
+#: libide/preferences/ide-preferences-builtin.c:322
 msgid "Position in spaces for the right margin"
 msgstr ""
 
-#: ../libide/preferences/ide-preferences-builtin.c:234
+#: libide/preferences/ide-preferences-builtin.c:325
 msgid "Tab width"
 msgstr "Šírka tabulátora"
 
-#: ../libide/preferences/ide-preferences-builtin.c:234
+#: libide/preferences/ide-preferences-builtin.c:325
 msgid "Width of a tab character in spaces"
 msgstr ""
 
-#: ../libide/preferences/ide-preferences-builtin.c:235
+#: libide/preferences/ide-preferences-builtin.c:326
 #, fuzzy
 #| msgid "Insert _spaces instead of tabs"
 msgid "Insert spaces instead of tabs"
 msgstr "Vložiť _medzery namiesto tabulátorov"
 
-#: ../libide/preferences/ide-preferences-builtin.c:235
+#: libide/preferences/ide-preferences-builtin.c:326
 #, fuzzy
 #| msgid "Insert _spaces instead of tabs"
 msgid "Prefer spaces over use of tabs"
 msgstr "Vložiť _medzery namiesto tabulátorov"
 
-#: ../libide/preferences/ide-preferences-builtin.c:236
+#: libide/preferences/ide-preferences-builtin.c:327
 #, fuzzy
 #| msgid "Auto indent"
 msgid "Automatically indent"
 msgstr "Automaticky odsadiť"
 
-#: ../libide/preferences/ide-preferences-builtin.c:236
+#: libide/preferences/ide-preferences-builtin.c:327
 msgid "Indent source code as you type"
 msgstr ""
 
-#: ../libide/preferences/ide-preferences-builtin.c:242
-#: ../plugins/build-tools/gbp-build-workbench-addin.c:331
+#: libide/preferences/ide-preferences-builtin.c:342
+#: libide/preferences/ide-preferences-builtin.c:360
+msgid "Number of CPU"
+msgstr ""
+
+#: libide/preferences/ide-preferences-builtin.c:375
+#: libide/workbench/ide-omni-bar.ui:372
+#: plugins/build-tools/gbp-build-panel.c:386
 #, fuzzy
 #| msgid "_Build"
 msgid "Build"
 msgstr "_Zostaviť"
 
-#: ../libide/preferences/ide-preferences-builtin.c:244
-msgid "General"
-msgstr "Všeobecné"
-
-#: ../libide/preferences/ide-preferences-builtin.c:245
+#: libide/preferences/ide-preferences-builtin.c:378
 #, fuzzy
 #| msgid "Builder"
 msgid "Build Workers"
 msgstr "Builder"
 
-#: ../libide/preferences/ide-preferences-builtin.c:245
+#: libide/preferences/ide-preferences-builtin.c:378
 msgid "Number of parallel build workers"
 msgstr ""
 
-#: ../libide/preferences/ide-preferences-perspective.c:796
+#: libide/preferences/ide-preferences-builtin.c:390
+msgid "Projects"
+msgstr "Projekty"
+
+#: libide/preferences/ide-preferences-builtin.c:392
+msgid "Workspace"
+msgstr ""
+
+#: libide/preferences/ide-preferences-builtin.c:393
+msgid "A place for all your projects"
+msgstr ""
+
+#: libide/preferences/ide-preferences-builtin.c:394
+#, fuzzy
+#| msgctxt "shortcut window"
+#| msgid "Move to previous error in file"
+msgid "Restore previously opened files"
+msgstr "Presun na predchádzajúcu chybu v súbore"
+
+#: libide/preferences/ide-preferences-builtin.c:394
+msgid "Open previously opened files when loading a project"
+msgstr ""
+
+#: libide/preferences/ide-preferences-builtin.c:396
+#, fuzzy
+#| msgid "Project File"
+msgid "Project Discovery"
+msgstr "Súbor pojektu"
+
+#: libide/preferences/ide-preferences-builtin.c:397
+#, fuzzy
+#| msgid "From an existing project on this computer"
+msgid "Discover projects on my computer"
+msgstr "Z existujúceho projektu v tomto počítači"
+
+#: libide/preferences/ide-preferences-builtin.c:397
+msgid "Scan your computer for existing projects"
+msgstr ""
+
+#: libide/preferences/ide-preferences-builtin.c:518
+#: plugins/create-project/gbp-create-project-widget.ui:153
+msgid "Version Control"
+msgstr "Správa verzií"
+
+#: libide/preferences/ide-preferences-font-button.ui:57
+msgid "_Select"
+msgstr "Vy_brať"
+
+#: libide/preferences/ide-preferences-perspective.c:924
 msgid "Preferences"
 msgstr "Nastavenia"
 
-#: ../libide/pygobject/ide-pygobject-script.c:135
+#: libide/preferences/ide-preferences-perspective.ui:15
+#, fuzzy
+#| msgid "Search Preferences…"
+msgid "Search Preferences"
+msgstr "Vyhľadajte nastavenia…"
+
+#: libide/projects/ide-project.c:527
+msgid "Destination file must be within the project tree."
+msgstr "Cieľový súbor sa musí nachádzať v strome projektu."
+
+#: libide/projects/ide-project.c:662
+msgid "File must be within the project tree."
+msgstr "Súbor sa musí nachádzať v strome projektu."
+
+#: libide/projects/ide-recent-projects.c:396
+#, c-format
+msgid "%s() may only be executed once"
+msgstr "%s() môže byť spustený iba raz"
+
+#: libide/pygobject/ide-pygobject-script.c:135
 msgid "Attempt to load a PyGObject script with no filename."
 msgstr "Uskutočnil sa pokus o načítanie skriptu PyGObject bez názvu súboru."
 
-#: ../libide/pygobject/ide-pygobject-script.c:254
+#: libide/pygobject/ide-pygobject-script.c:254
 msgid "The filename for the script was not provided."
 msgstr "Nebol poskytnutý názov súbor pre skript."
 
-#: ../libide/pygobject/ide-pygobject-script.c:265
+#: libide/pygobject/ide-pygobject-script.c:265
 msgid "The script must be on a local filesystem."
 msgstr "Skript sa musí nachádzať v miestnom systéme súborov."
 
-#: ../libide/pygobject/ide-pygobject-script.c:274
+#: libide/pygobject/ide-pygobject-script.c:274
 #, c-format
 msgid "The script \"%s\" is not a PyGObject file."
 msgstr "Skript „%s“ nie je súborom PyGObject."
 
-#: ../libide/search/ide-omni-search-display.c:264
+#: libide/runner/ide-run-manager.c:171
+msgid "Run"
+msgstr ""
+
+#: libide/runner/ide-run-manager.c:200
+msgid "Cannot run target, another target is running"
+msgstr ""
+
+#: libide/runner/ide-run-manager.c:287
+#: plugins/autotools/ide-autotools-build-task.c:442
+#, fuzzy
+#| msgid "Failed to locate configure.ac"
+msgid "Failed to locate runtime"
+msgstr "Zlyhalo lokalizovanie súboru configure.ac"
+
+#: libide/runner/ide-runner.c:150
+msgid "Process quit unexpectedly"
+msgstr ""
+
+#: libide/runtimes/ide-runtime-manager.c:105
+msgid "Host operating system"
+msgstr ""
+
+#: libide/scripting/ide-script.c:205
+#, c-format
+msgid "%s has not implemented GAsyncInitable."
+msgstr "%s nemá implementovanú funkciu GAsyncInitable."
+
+#: libide/search/ide-omni-search-display.c:271
 msgid "Cannot add provider more than once."
 msgstr "Poskytovateľ sa nedá pridať viac ako raz."
 
-#: ../libide/search/ide-omni-search-display.c:340
+#: libide/search/ide-omni-search-display.c:347
 msgid "The provider could not be found."
 msgstr "Nepodarilo sa nájsť poskytovateľa."
 
-#: ../libide/util/ide-file-manager.c:64
+#: libide/snippets/ide-source-snippet.c:372
+msgid "Chunk does not belong to snippet."
+msgstr "Blok nepatrí k úryvku."
+
+#: libide/snippets/ide-source-snippets-manager.c:96
+#, c-format
+msgid "Failed to open directory: %s"
+msgstr "Zlyhalo otvorenie adresára: %s"
+
+#: libide/snippets/ide-source-snippets-manager.c:109
+#, c-format
+msgid "Failed to load file: %s: %s"
+msgstr "Zlyhalo načítanie súboru: %s: %s"
+
+#: libide/sourceview/ide-source-view.c:5139
+#, fuzzy, c-format
+#| msgid "Insert \"%s\""
+msgid "Insert “%s”"
+msgstr "Vložiť „%s“"
+
+#: libide/sourceview/ide-source-view.c:5141
+#, fuzzy, c-format
+#| msgid "Replace \"%s\" with \"%s\""
+msgid "Replace “%s” with “%s”"
+msgstr "Nahradiť „%s“ s „%s“"
+
+#: libide/sourceview/ide-source-view.c:5255
+msgid "Apply Fix-It"
+msgstr "Použiť opravu"
+
+#: libide/transfers/ide-transfers-button.ui:35
+#, fuzzy
+#| msgid "Select _All"
+msgid "Clear _All"
+msgstr "Vybr_ať všetko"
+
+#: libide/util/ide-file-manager.c:64
 msgid "File path is NULL"
 msgstr "Cesta k súboru je prázdna (NULL)"
 
-#: ../libide/util/ide-file-manager.c:73 ../libide/util/ide-file-manager.c:84
+#: libide/util/ide-file-manager.c:73 libide/util/ide-file-manager.c:84
 msgid "Error converting UTF-8 filename to wide char"
 msgstr ""
 "Chyba pri konvertovaní názvu súboru v kódovaní UTF-8 do znakov typu wide"
 
-#: ../libide/util/ide-file-manager.c:92
+#: libide/util/ide-file-manager.c:92
 msgid "ILCreateFromPath() failed"
 msgstr "Funkcia ILCreateFromPath() zlyhala"
 
-#: ../libide/util/ide-file-manager.c:129
+#: libide/util/ide-file-manager.c:129
 #, c-format
 msgid "Cannot convert '%s' into a valid NSURL."
 msgstr "Nedá sa skonvertovať „%s“ do platnej NSURL."
 
-#: ../libide/util/ide-file-manager.c:157
+#: libide/util/ide-file-manager.c:157
 msgid "Connecting to org.freedesktop.FileManager1 failed: "
 msgstr "Pripojenie k org.freedesktop.FileManager1 zlyhalo: "
 
-#: ../libide/util/ide-file-manager.c:181
+#: libide/util/ide-file-manager.c:181
 msgid "Calling ShowItems failed: "
 msgstr "Volanie funkcie ShowItems zlyhalo: "
 
-#: ../plugins/autotools/ide-autotools-builder.c:130
-msgid "Cancelled"
+#: libide/util/ide-uri.c:181
+#, no-c-format
+msgid "Invalid %-encoding in URI"
+msgstr ""
+
+#: libide/util/ide-uri.c:219
+msgid "Non-UTF-8 characters in URI"
+msgstr ""
+
+#: libide/util/ide-uri.c:366 libide/util/ide-uri.c:377
+#, c-format
+msgid "Invalid IP literal '%s' in URI"
+msgstr ""
+
+#: libide/util/ide-uri.c:411
+#, c-format
+msgid "Invalid encoded IP literal '%s' in URI"
+msgstr ""
+
+#: libide/util/ide-uri.c:420
+#, c-format
+msgid "Invalid non-ASCII hostname '%s' in URI"
+msgstr ""
+
+#: libide/util/ide-uri.c:434
+#, c-format
+msgid "Non-ASCII hostname '%s' forbidden in this URI"
+msgstr ""
+
+#: libide/util/ide-uri.c:457
+#, fuzzy, c-format
+#| msgid "Could not parse XML from stream"
+msgid "Could not parse port '%s' in URI"
+msgstr "Nepodarilo sa analyzovať XML z prúdu"
+
+#: libide/util/ide-uri.c:464
+#, c-format
+msgid "Port '%s' in URI is out of range"
+msgstr ""
+
+#: libide/util/ide-uri.c:590
+msgid "Base URI is not absolute"
+msgstr ""
+
+#: libide/util/ide-uri.c:615
+msgid "URI is not absolute, and no base URI was provided"
+msgstr ""
+
+#: libide/util/ide-uri.c:660
+#, fuzzy, c-format
+#| msgid "Could not parse XML from stream"
+msgid "Could not parse '%s' as absolute URI"
+msgstr "Nepodarilo sa analyzovať XML z prúdu"
+
+#: libide/util/ide-uri.c:1203
+#, c-format
+msgid "URI '%s' has no host component"
+msgstr ""
+
+#: libide/workbench/ide-layout-tab-bar.ui:33
+#, fuzzy
+#| msgid "Show list of open files"
+msgid "List open files"
+msgstr "Zobrazenie zoznamu otvorených súborov"
+
+#: libide/workbench/ide-layout-tab.ui:19
+#, fuzzy
+#| msgctxt "shortcut window"
+#| msgid "Move to previous edit location"
+msgid "Jump to previous location"
+msgstr "Presun na predchádzajúce miesto úpravy"
+
+#: libide/workbench/ide-layout-tab.ui:33
+#, fuzzy
+#| msgctxt "shortcut window"
+#| msgid "Move to next edit location"
+msgid "Jump to next location"
+msgstr "Presun na nasledujúce miesto úpravy"
+
+#: libide/workbench/ide-layout-tab.ui:125
+#, fuzzy
+#| msgctxt "shortcut window"
+#| msgid "Close the document"
+msgid "Close the current document"
+msgstr "Zavretie dokumentu"
+
+#: libide/workbench/ide-layout-view.c:125
+msgid "untitled document"
+msgstr "dokument bez názvu"
+
+#. Translators: "Target" is providing context to the selected build configuration
+#: libide/workbench/ide-omni-bar.c:365
+msgid "Target"
+msgstr ""
+
+#. Translators, missing means we could not locate the runtime
+#: libide/workbench/ide-omni-bar-row.c:88
+msgid "missing"
+msgstr ""
+
+#: libide/workbench/ide-omni-bar-row.ui:31
+msgid "Edit build configuration"
+msgstr ""
+
+#: libide/workbench/ide-omni-bar-row.ui:54
+#: plugins/build-tools/gbp-build-configuration-view.ui:129
+#, fuzzy
+#| msgid "Device:"
+msgid "Device"
+msgstr "Zariadenie:"
+
+#: libide/workbench/ide-omni-bar-row.ui:85
+#: plugins/build-tools/gbp-build-configuration-view.ui:157
+msgid "Runtime"
+msgstr ""
+
+#: libide/workbench/ide-omni-bar.ui:101
+#, fuzzy
+#| msgid "- Build the project."
+msgid "Build project (Ctrl+F7)"
+msgstr "- Zostaví projekt."
+
+#: libide/workbench/ide-omni-bar.ui:119
+#, fuzzy
+#| msgid "Cancelled"
+msgid "Cancel build"
 msgstr "Zrušené"
 
-#: ../plugins/autotools/ide-autotools-builder.c:132
+#: libide/workbench/ide-omni-bar.ui:163
+#: plugins/project-tree/gb-project-tree-addin.c:105
+msgid "Project"
+msgstr "Projekt"
+
+#: libide/workbench/ide-omni-bar.ui:187
+msgid "Branch"
+msgstr "Vetva"
+
+#: libide/workbench/ide-omni-bar.ui:222
+#, fuzzy
+#| msgid "Build Failure"
+msgid "Build Profile"
+msgstr "Zlyhanie zostavenia"
+
+#: libide/workbench/ide-omni-bar.ui:268
+msgid "Last build"
+msgstr "Posledné zostavenie"
+
+#: libide/workbench/ide-omni-bar.ui:318
 msgid "Failed"
 msgstr "Zlyhalo"
 
-#: ../plugins/autotools/ide-autotools-builder.c:138
-msgid "Success"
-msgstr "Úspech"
+#: libide/workbench/ide-omni-bar.ui:335
+#, fuzzy
+#| msgid "Build Output"
+msgid "View Output"
+msgstr "Výstup zostavenia"
 
-#: ../plugins/autotools/ide-autotools-builder.c:242
-#: ../plugins/autotools/ide-autotools-build-task.c:933
-#| msgid "Building"
+#: libide/workbench/ide-omni-bar.ui:382
+#, fuzzy
+#| msgid "_Rebuild"
+msgid "Rebuild"
+msgstr "_Znovu zostaviť"
+
+#: libide/workbench/ide-omni-bar.ui:392
+#, fuzzy
+#| msgid "_Clean"
+msgid "Clean"
+msgstr "Vyč_istiť"
+
+#: libide/workbench/ide-workbench-actions.c:66
+#, fuzzy
+#| msgid "Open _With"
+msgid "Open File"
+msgstr "Otvoriť _pomocou"
+
+#: libide/workbench/ide-workbench.c:558
+#, c-format
+msgid "%s - Builder"
+msgstr "%s - Builder"
+
+#: libide/workbench/ide-workbench-header-bar.ui:43
+msgid "Transfers"
+msgstr "Prenosy"
+
+#: libide/workbench/ide-workbench-header-bar.ui:50
+#, fuzzy
+#| msgid "The workbench window."
+msgid "Show workbench menu"
+msgstr "Okno s pracovným priestorom."
+
+#: libide/workbench/ide-workbench-header-bar.ui:73
+msgid "Press Ctrl+. to search"
+msgstr "Stlačením Ctrl+. vyhľadáte"
+
+#: plugins/autotools/ide-autotools-builder.c:47
+msgid "Build cancelled"
+msgstr "Zostavenie zrušené"
+
+#: plugins/autotools/ide-autotools-builder.c:49
+msgid "Build failed"
+msgstr "Zostavenie zlyhalo"
+
+#: plugins/autotools/ide-autotools-builder.c:55
+msgid "Build successful"
+msgstr "Zostavenie úspešné"
+
+#: plugins/autotools/ide-autotools-builder.c:159
+#: plugins/autotools/ide-autotools-builder.c:240
+#: plugins/autotools/ide-autotools-build-task.c:1057
 msgid "Building…"
 msgstr "Zostavovanie…"
 
-#: ../plugins/autotools/ide-autotools-build-system.c:182
+#: plugins/autotools/ide-autotools-builder.c:201
+msgid "Install cancelled"
+msgstr "Inštalácia zrušená"
+
+#: plugins/autotools/ide-autotools-builder.c:203
+msgid "Install failed"
+msgstr "Inštalácia zlyhala"
+
+#: plugins/autotools/ide-autotools-builder.c:209
+msgid "Install successful"
+msgstr "Inštalácia úspešná"
+
+#: plugins/autotools/ide-autotools-build-system.c:170
 msgid "Failed to locate configure.ac"
 msgstr "Zlyhalo lokalizovanie súboru configure.ac"
 
-#: ../plugins/autotools/ide-autotools-build-task.c:270
+#: plugins/autotools/ide-autotools-build-task.c:181
 msgid "Directory must be on a locally mounted filesystem."
 msgstr "Adresár sa musí nachádzať v miestne pripojenom systéme súborov."
 
-#: ../plugins/autotools/ide-autotools-build-task.c:649
-msgid "Cannot execute build task more than once."
-msgstr "Úloha zostavenia sa nedá spustiť viac ako raz."
+#: plugins/autotools/ide-autotools-build-task.c:431
+msgid "Failed to locate device"
+msgstr "Zlyhalo lokalizovanie zariadenia"
 
-#: ../plugins/autotools/ide-autotools-build-task.c:734
+#: plugins/autotools/ide-autotools-build-task.c:562
+#: plugins/autotools/ide-autotools-build-task.c:590
+#: plugins/autotools/ide-autotools-build-task.c:794
+msgid "Build Failed: "
+msgstr "Zostavenie zlyhalo:"
+
+#: plugins/autotools/ide-autotools-build-task.c:675
+msgid "Cannot execute build task more than once"
+msgstr "Úloha zostavenia sa nedá spustiť viac ako raz"
+
+#: plugins/autotools/ide-autotools-build-task.c:827
 msgid "Failed to create build directory."
 msgstr "Zlyhalo vytvorenie adresára pre zostavenie."
 
-#: ../plugins/autotools/ide-autotools-build-task.c:743
+#: plugins/autotools/ide-autotools-build-task.c:836
 #, c-format
 msgid "'%s' is not a directory."
 msgstr "„%s“ nie je adresárom."
 
-#: ../plugins/autotools/ide-autotools-build-task.c:782
+#: plugins/autotools/ide-autotools-build-task.c:875
 #, c-format
 msgid "autogen.sh is missing from project directory (%s)."
 msgstr "Súbor autogen.sh chýba v adresári projektu (%s)."
 
-#: ../plugins/autotools/ide-autotools-build-task.c:792
+#: plugins/autotools/ide-autotools-build-task.c:885
 msgid "autogen.sh is not executable."
 msgstr "Súbor autogen.sh nie je spustiteľný."
 
-#: ../plugins/autotools/ide-autotools-build-task.c:796
-msgid "Autogening…"
-msgstr "Automatické generovanie…"
+#: plugins/autotools/ide-autotools-build-task.c:889
+#, fuzzy
+#| msgid "Require Autogen"
+msgid "Running autogen…"
+msgstr "Vyžadovať automatické generovanie"
 
-#: ../plugins/autotools/ide-autotools-build-task.c:825
+#: plugins/autotools/ide-autotools-build-task.c:923
 #, c-format
 msgid "autogen.sh failed to create configure (%s)"
 msgstr "Súbor autogen.sh zlyhal pri tvorbe konfigurácie (%s)"
 
-#: ../plugins/autotools/ide-autotools-build-task.c:860
-#| msgid "Config"
-msgid "Configuring…"
-msgstr "Konfigurovanie…"
+#: plugins/autotools/ide-autotools-build-task.c:958
+#, fuzzy
+#| msgid "Require Configure"
+msgid "Running configure…"
+msgstr "Vyžadovať konfiguráciu"
 
-#: ../plugins/autotools/ide-autotools-build-task.c:931
+#: plugins/autotools/ide-autotools-build-task.c:1055
 msgid "Cleaning…"
 msgstr "Čistenie…"
 
-#: ../plugins/autotools/ide-makecache.c:1006
+#: plugins/autotools/ide-makecache.c:1147
 msgid "Invalid makefile provided, ignoring."
 msgstr "Bol poskytnutý neplatný súbor makefile. Ignoruje sa."
 
-#: ../plugins/build-tools/gbp-build-panel-row.c:68
+#: plugins/autotools-templates/autotools_templates/__init__.py:265
+msgid "Shared Library"
+msgstr "Zdieľaná knižnica"
+
+#: plugins/autotools-templates/autotools_templates/__init__.py:267
+msgid "Create a new autotools project with a shared library"
+msgstr ""
+
+#: plugins/autotools-templates/autotools_templates/__init__.py:291
+msgid "Empty Project"
+msgstr "Prázdny projekt"
+
+#: plugins/autotools-templates/autotools_templates/__init__.py:294
+msgid "Create a new empty autotools project"
+msgstr ""
+
+#: plugins/autotools-templates/autotools_templates/__init__.py:308
+msgid "GNOME Application"
+msgstr "Aplikácia prostredia GNOME"
+
+#: plugins/autotools-templates/autotools_templates/__init__.py:310
+msgid "Create a new flatpak-ready GNOME application"
+msgstr ""
+
+#: plugins/build-tools/gbp-build-configuration-row.ui:43
+msgid "Duplicate the configuration"
+msgstr ""
+
+#: plugins/build-tools/gbp-build-configuration-row.ui:59
+#, fuzzy
+#| msgid "Failed to locate configure.ac"
+msgid "Delete the configuration"
+msgstr "Zlyhalo lokalizovanie súboru configure.ac"
+
+#: plugins/build-tools/gbp-build-configuration-view.ui:28
+#, fuzzy
+#| msgid "The name of the action"
+msgid "The name of the build configuration"
+msgstr "Názov akcie"
+
+#: plugins/build-tools/gbp-build-configuration-view.ui:37
+msgid "Name"
+msgstr "Meno"
+
+#: plugins/build-tools/gbp-build-configuration-view.ui:58
+#, fuzzy
+#| msgid "The path within the project."
+msgid "The prefix to use when installing the project"
+msgstr "Cesta v projekte."
+
+#: plugins/build-tools/gbp-build-configuration-view.ui:67
+msgid "Installation Prefix"
+msgstr ""
+
+#: plugins/build-tools/gbp-build-configuration-view.ui:88
+msgid "Options to use when bootstrapping the project"
+msgstr ""
+
+#: plugins/build-tools/gbp-build-configuration-view.ui:97
+#, fuzzy
+#| msgid "Configuring…"
+msgid "Configure Options"
+msgstr "Konfigurovanie…"
+
+#: plugins/build-tools/gbp-build-configuration-view.ui:185
+msgid "Environment"
+msgstr ""
+
+#: plugins/build-tools/gbp-build-log-panel.c:254
+msgid "Build Output"
+msgstr "Výstup zostavenia"
+
+#: plugins/build-tools/gbp-build-panel.c:84
+#, fuzzy, c-format
+#| msgid "Warnings:"
+msgid "%d warning"
+msgid_plural "%d warnings"
+msgstr[0] "Upozornenia:"
+msgstr[1] "Upozornenia:"
+msgstr[2] "Upozornenia:"
+
+#: plugins/build-tools/gbp-build-panel.c:91
+#, fuzzy, c-format
+#| msgid "AST read error"
+msgid "%d error"
+msgid_plural "%d errors"
+msgstr[0] "Chyba pri čítaní AST"
+msgstr[1] "Chyba pri čítaní AST"
+msgstr[2] "Chyba pri čítaní AST"
+
+#: plugins/build-tools/gbp-build-panel.c:246
+#, fuzzy
+#| msgid "Errors:"
+msgid "Errors"
+msgstr "Chyby:"
+
+#: plugins/build-tools/gbp-build-panel.c:249
+#, fuzzy
+#| msgid "Warnings:"
+msgid "Warnings"
+msgstr "Upozornenia:"
+
+#: plugins/build-tools/gbp-build-panel.c:252
+msgid "Notes"
+msgstr ""
+
+#: plugins/build-tools/gbp-build-panel-row.c:76
 msgid "Unknown file"
 msgstr "Neznámy súbor"
 
-#: ../plugins/build-tools/gbp-build-panel.ui.h:1
-msgid "Device:"
-msgstr "Zariadenie:"
-
-#: ../plugins/build-tools/gbp-build-panel.ui.h:2
-msgid "Framework:"
-msgstr ""
-
-#: ../plugins/build-tools/gbp-build-panel.ui.h:3
-msgid "Packaging:"
-msgstr ""
-
-#: ../plugins/build-tools/gbp-build-panel.ui.h:4
-#: ../plugins/project-tree/gtk/menus.ui.h:12
-msgid "_Build"
-msgstr "_Zostaviť"
-
-#: ../plugins/build-tools/gbp-build-panel.ui.h:5
-#: ../plugins/project-tree/gtk/menus.ui.h:13
-msgid "_Rebuild"
-msgstr "_Znovu zostaviť"
-
-#: ../plugins/build-tools/gbp-build-panel.ui.h:6
-msgid "_Clean"
-msgstr "Vyč_istiť"
-
-#: ../plugins/build-tools/gbp-build-panel.ui.h:7
-msgid "framework"
-msgstr ""
-
-#: ../plugins/build-tools/gbp-build-panel.ui.h:8
-msgid "packaging"
-msgstr ""
-
-#: ../plugins/build-tools/gbp-build-panel.ui.h:9
+#: plugins/build-tools/gbp-build-panel.ui:33
 msgid "Status:"
 msgstr "Stav:"
 
-#: ../plugins/build-tools/gbp-build-panel.ui.h:10
+#: plugins/build-tools/gbp-build-panel.ui:58
 msgid "Running Time:"
 msgstr "Doba spustenia:"
 
-#: ../plugins/build-tools/gbp-build-panel.ui.h:11
+#: plugins/build-tools/gbp-build-panel.ui:82
 msgid "Warnings:"
 msgstr "Upozornenia:"
 
-#: ../plugins/build-tools/gbp-build-panel.ui.h:12
+#: plugins/build-tools/gbp-build-panel.ui:106
 msgid "Errors:"
 msgstr "Chyby:"
 
-#: ../plugins/build-tools/gbp-build-panel.ui.h:14
-msgid "Deploy"
-msgstr ""
+#: plugins/build-tools/gbp-build-perspective.c:436
+#, fuzzy
+#| msgid "Preferences"
+msgid "Build Preferences"
+msgstr "Nastavenia"
 
-#: ../plugins/build-tools/gbp-build-panel.ui.h:15
-msgid "Export"
-msgstr ""
-
-#: ../plugins/build-tools/gbp-build-tool.c:91
-#: ../plugins/build-tools/gbp-build-tool.c:97
-#, c-format
+#: plugins/build-tools/gbp-build-tool.c:102
+#: plugins/build-tools/gbp-build-tool.c:115
 msgid "========================\n"
 msgstr "========================\n"
 
-#: ../plugins/build-tools/gbp-build-tool.c:92
+#: plugins/build-tools/gbp-build-tool.c:103
 #, c-format
 msgid "           Project Name: %s\n"
 msgstr "           Názov projektu: %s\n"
 
-#: ../plugins/build-tools/gbp-build-tool.c:93
+#: plugins/build-tools/gbp-build-tool.c:104
 #, c-format
 msgid " Version Control System: %s\n"
 msgstr " Systém správy verzií: %s\n"
 
-#: ../plugins/build-tools/gbp-build-tool.c:94
+#: plugins/build-tools/gbp-build-tool.c:105
 #, c-format
 msgid "           Build System: %s\n"
 msgstr "           Systém zostavovania: %s\n"
 
-#: ../plugins/build-tools/gbp-build-tool.c:95
+#: plugins/build-tools/gbp-build-tool.c:106
 #, c-format
 msgid "    Build Date and Time: %s\n"
 msgstr "    Čas a dátum zostavenia: %s\n"
 
-#: ../plugins/build-tools/gbp-build-tool.c:96
+#: plugins/build-tools/gbp-build-tool.c:107
 #, c-format
 msgid "    Building for Device: %s (%s)\n"
 msgstr "    Zostavenie pre zariadenie: %s (%s)\n"
 
-#: ../plugins/build-tools/gbp-build-tool.c:124
-#: ../plugins/build-tools/gbp-build-tool.c:128
-#, c-format
+#: plugins/build-tools/gbp-build-tool.c:112
+#, fuzzy, c-format
+#| msgid "           Project Name: %s\n"
+msgid "            Environment: %s\n"
+msgstr "           Názov projektu: %s\n"
+
+#: plugins/build-tools/gbp-build-tool.c:142
+#: plugins/build-tools/gbp-build-tool.c:146
 msgid "===============\n"
 msgstr "===============\n"
 
-#: ../plugins/build-tools/gbp-build-tool.c:125
+#: plugins/build-tools/gbp-build-tool.c:143
 #, c-format
 msgid " Build Failure: %s\n"
 msgstr " Zlyhanie zostavenia: %s\n"
 
-#: ../plugins/build-tools/gbp-build-tool.c:126
+#: plugins/build-tools/gbp-build-tool.c:144
 msgid " Build ran for: %"
 msgstr " Zostavenie trvalo: %"
 
@@ -1707,160 +2926,413 @@ msgstr " Zostavenie trvalo: %"
 #. *       here too. It would be nice if we could say, go build this project,
 #. *       for this device, and then deploy.
 #.
-#: ../plugins/build-tools/gbp-build-tool.c:139
-#: ../plugins/build-tools/gbp-build-tool.c:143
-#, c-format
+#: plugins/build-tools/gbp-build-tool.c:157
+#: plugins/build-tools/gbp-build-tool.c:161
 msgid "=================\n"
 msgstr "=================\n"
 
-#: ../plugins/build-tools/gbp-build-tool.c:140
-#, c-format
+#: plugins/build-tools/gbp-build-tool.c:158
 msgid " Build Successful\n"
 msgstr " Zostavenie úspešné\n"
 
-#: ../plugins/build-tools/gbp-build-tool.c:141
+#: plugins/build-tools/gbp-build-tool.c:159
 msgid "   Build ran for: %"
 msgstr "   Zostavenie trvalo: %"
 
-#: ../plugins/build-tools/gbp-build-tool.c:191
+#: plugins/build-tools/gbp-build-tool.c:212
 #, c-format
 msgid "Failed to locate device \"%s\""
 msgstr "Zlyhalo lokalizovanie zariadenia „%s“"
 
-#: ../plugins/build-tools/gbp-build-tool.c:254
+#: plugins/build-tools/gbp-build-tool.c:222
+#, fuzzy, c-format
+#| msgid "Failed to parse integer from \"%s\""
+msgid "Failed to locate runtime \"%s\""
+msgstr "Zlyhalo analyzovanie celého čísla z „%s“"
+
+#: plugins/build-tools/gbp-build-tool.c:286
 #, fuzzy
 #| msgid "Clean and rebuild the project."
 msgid "Clean the project"
 msgstr "Vyčistí a znovu zostaví projekt."
 
-#: ../plugins/build-tools/gbp-build-tool.c:256
+#: plugins/build-tools/gbp-build-tool.c:288
 msgid "The ID of the device to build for"
 msgstr "ID zariadenia, pre ktoré sa má zostaviť"
 
-#: ../plugins/build-tools/gbp-build-tool.c:257
+#: plugins/build-tools/gbp-build-tool.c:289
 msgid "local"
 msgstr ""
 
-#: ../plugins/build-tools/gbp-build-tool.c:259
+#: plugins/build-tools/gbp-build-tool.c:291
+#, fuzzy
+#| msgid "The root directory to perform builds within."
+msgid "The runtime to use for building"
+msgstr "Koreňový adresár, v ktorom sa majú vykonávať zostavenia."
+
+#: plugins/build-tools/gbp-build-tool.c:292
+msgid "host"
+msgstr ""
+
+#: plugins/build-tools/gbp-build-tool.c:294
 msgid "Number of workers to use when building"
 msgstr ""
 
-#: ../plugins/build-tools/gbp-build-tool.c:260
+#: plugins/build-tools/gbp-build-tool.c:295
 msgid "N"
 msgstr "N"
 
-#: ../plugins/build-tools/gbp-build-tool.c:262
+#: plugins/build-tools/gbp-build-tool.c:297
+#, fuzzy
+#| msgid "The configuration for the build."
+msgid "The configuration to use from .buildconfig"
+msgstr "Konfigurácia pre zostavenie."
+
+#: plugins/build-tools/gbp-build-tool.c:298
+msgid "CONFIG_ID"
+msgstr ""
+
+#: plugins/build-tools/gbp-build-tool.c:300
 msgid "Path to project file, defaults to current directory"
 msgstr "Cesta k súboru projektu. Predvolene k aktuálnemu adresáru"
 
-#: ../plugins/build-tools/gbp-build-tool.c:263
-msgid "PATH"
-msgstr "CESTA"
+#: plugins/build-tools/ide-environment-editor.c:65
+msgid "New variable…"
+msgstr "Nová premenná…"
 
-#: ../plugins/build-tools/gbp-build-workbench-addin.c:337
-msgid "Build Output"
-msgstr "Výstup zostavenia"
+#: plugins/clang/ide-clang-preferences-addin.c:62
+msgid "Clang"
+msgstr "Clang"
 
-#: ../plugins/clang/ide-clang-service.c:269
+#: plugins/clang/ide-clang-preferences-addin.c:63
+msgid "Show errors and warnings provided by Clang"
+msgstr ""
+
+#. translators: keywords used when searching for preferences
+#: plugins/clang/ide-clang-preferences-addin.c:65
+#, fuzzy
+#| msgid "If diagnostic warnings and errors should be highlighted."
+msgid "clang diagnostics warnings errors"
+msgstr "Či majú byť zvýraznené upozornenia a chyby diagnostiky."
+
+#: plugins/clang/ide-clang-service.c:263
 msgid "Unknown failure"
 msgstr "Neznáme zlyhanie"
 
-#: ../plugins/clang/ide-clang-service.c:273
+#: plugins/clang/ide-clang-service.c:267
 msgid "Clang crashed"
 msgstr "Kompilátor Clang neočakávane skončil"
 
-#: ../plugins/clang/ide-clang-service.c:277
+#: plugins/clang/ide-clang-service.c:271
 msgid "Invalid arguments"
 msgstr "Neplatné parametre"
 
-#: ../plugins/clang/ide-clang-service.c:281
+#: plugins/clang/ide-clang-service.c:275
 msgid "AST read error"
 msgstr "Chyba pri čítaní AST"
 
-#: ../plugins/clang/ide-clang-service.c:293
+#: plugins/clang/ide-clang-service.c:287
 #, c-format
 msgid "Failed to create translation unit: %s"
 msgstr "Zlyhalo vytvorenie jednotky prekladu: %s"
 
-#: ../plugins/clang/ide-clang-service.c:402
+#: plugins/clang/ide-clang-service.c:395
 msgid "File must be saved locally to parse."
 msgstr "Súbor musí byť uložený miestne, aby ho bolo možné spracovať."
 
-#: ../plugins/clang/ide-clang-symbol-node.c:149
+#: plugins/clang/ide-clang-symbol-node.c:149
 msgid "anonymous"
 msgstr "anonymný"
 
-#: ../plugins/clang/ide-clang-translation-unit.c:656
+#: plugins/clang/ide-clang-translation-unit.c:642
 msgid "clang_codeCompleteAt() only works on local files"
 msgstr "Funkcia clang_codeCompleteAt() funguje iba na miestnych súboroch"
 
-#: ../plugins/command-bar/gb-command-bar.c:299
+#: plugins/color-picker/gb-color-picker-prefs.c:97
+msgid "Close without Saving"
+msgstr "Zavrieť bez uloženia"
+
+#: plugins/color-picker/gb-color-picker-prefs.c:99
+#, fuzzy
+#| msgid "_Save As"
+msgid "Save As…"
+msgstr "U_ložiť ako"
+
+#: plugins/color-picker/gb-color-picker-prefs.c:207
+msgid "Load palette"
+msgstr ""
+
+#: plugins/color-picker/gb-color-picker-prefs.c:234
+msgid "Save palette"
+msgstr ""
+
+#: plugins/color-picker/gb-color-picker-prefs.c:725
+msgid "All files"
+msgstr "Všetky súbory"
+
+#: plugins/color-picker/gb-color-picker-prefs.c:729
+msgid "All supported palettes formats"
+msgstr "Všetky podporované formáty paliet"
+
+#: plugins/color-picker/gb-color-picker-prefs.c:734
+msgid "GIMP palette"
+msgstr "Paleta programu GIMP"
+
+#: plugins/color-picker/gb-color-picker-prefs.c:738
+#, fuzzy
+#| msgid "GNOME Builder"
+msgid "GNOME Builder palette"
+msgstr "GNOME Builder"
+
+#: plugins/color-picker/gb-color-picker-prefs-palette-row.c:178
+msgid "Palette name"
+msgstr "Názov palety"
+
+#: plugins/color-picker/gb-color-picker-prefs-palette-row.c:180
+#, fuzzy
+#| msgid "The name of the action to execute."
+msgid "Enter a new name for the palette"
+msgstr "Názov akcie, ktorá sa má vykonať."
+
+#: plugins/color-picker/gb-color-picker-workbench-addin.c:178
+msgid "Colors"
+msgstr "Farby"
+
+#: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:13
+msgid "HSV visibility"
+msgstr "Viditeľnosť HSV"
+
+#: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:14
+#, fuzzy
+#| msgid "If the document is read only."
+msgid "If the HSV components are visible."
+msgstr "Či je dokument iba na čítanie."
+
+#: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:18
+msgid "LAB visibility"
+msgstr "Viditeľnosť LAB"
+
+#: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:19
+#, fuzzy
+#| msgid "If the document is read only."
+msgid "If the LAB components are visible."
+msgstr "Či je dokument iba na čítanie."
+
+#: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:23
+msgid "RGB visibility"
+msgstr "Viditeľnosť RGB"
+
+#: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:24
+#, fuzzy
+#| msgid "If the document is read only."
+msgid "If the RGB components are visible."
+msgstr "Či je dokument iba na čítanie."
+
+#: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:28
+msgid "RGB unit"
+msgstr "Jednotka RGB"
+
+#: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:29
+msgid "The unit used by RGB component and strings."
+msgstr ""
+
+#: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:35
+#, fuzzy
+#| msgctxt "shortcut window"
+#| msgid "Select all"
+msgid "Selected palette ID"
+msgstr "Výber všetkého"
+
+#: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:36
+msgid "The selected palette ID among the loaded ones."
+msgstr ""
+
+#: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:40
+#, fuzzy
+#| msgid "Tag close icon visibility"
+msgid "Color strings visibility"
+msgstr "Značka viditeľnosti ikony zavretia"
+
+#: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:41
+msgid "The visible color strings."
+msgstr ""
+
+#: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:45
+msgid "Color filter"
+msgstr "Farebný filter"
+
+#: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:46
+msgid "The filter used on the color scales and color plane."
+msgstr "Filter použitý na farebnú škálu a farebnú rovinu."
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:13
+msgid "Color components"
+msgstr ""
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:47
+#: plugins/color-picker/gtk/color-picker-prefs.ui:451
+msgid "Visibility:"
+msgstr "Viditeľnosť:"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:63
+msgid "Select the color spaces for which you want to see sliders in the panel."
+msgstr "Vyberte farebné priestory, pre ktoré chcete vidieť posuvníky v paneli."
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:140
+msgid "Units:"
+msgstr "Jednotky:"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:156
+msgid ""
+"Select the type of unit you want to use for RGB components and strings in "
+"the panel."
+msgstr ""
+"Vyberte typ jednotiek, ktoré chcete použiť pre súčasti RGB a reťazce v "
+"paneli."
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:213
+msgid "Filters:"
+msgstr "Filtre:"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:229
+msgid "Select a filter that act on the colors or 'None'."
+msgstr ""
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:467
+msgid "Select the color strings you want to see in the panel."
+msgstr ""
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:597
+msgid "Palettes options"
+msgstr ""
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:615
+msgid "Palette view mode:"
+msgstr ""
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:638
+msgid "List"
+msgstr ""
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:676
+msgid "Swatches"
+msgstr ""
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:717
+msgid "Palette management"
+msgstr ""
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:762
+msgid "Load"
+msgstr ""
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:836
+#, fuzzy
+#| msgid "untitled document"
+msgid "From current document"
+msgstr "dokument bez názvu"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:854
+msgid "Select the palette you want to see in the panel or close one."
+msgstr ""
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:891
+msgid "No loaded palettes"
+msgstr ""
+
+#: plugins/color-picker/gtk/color-picker-preview.ui:45
+#, fuzzy
+#| msgctxt "shortcut window"
+#| msgid "Join selected lines"
+msgid "No selected palettes"
+msgstr "Spojenie vybratých riadkov"
+
+# dialog title
+#: plugins/color-picker/gtk/color-picker-preview.ui:58
+#, fuzzy
+#| msgid "Select Project File"
+msgid "Select a palette file"
+msgstr "Výber súboru projektu"
+
+#: plugins/color-picker/gtk/color-picker.ui:61
+msgid "Try loading or generating a palette using the menu"
+msgstr ""
+
+#: plugins/color-picker/gtk/menus.ui:7
+msgid "Enable color picker"
+msgstr ""
+
+#: plugins/command-bar/gb-command-bar.c:302
 #, c-format
 msgid "Command not found: %s"
 msgstr "Príkaz nenájdený: %s"
 
-#: ../plugins/command-bar/gb-command-bar.c:603
+#: plugins/command-bar/gb-command-bar.c:612
 msgid "Use the entry below to execute a command"
 msgstr "Použite "
 
-#: ../plugins/command-bar/gb-vim.c:86
-#, c-format
+#: plugins/command-bar/gb-vim.c:90
 msgid "Number required"
 msgstr "Vyžaduje sa číslo"
 
-#: ../plugins/command-bar/gb-vim.c:96
+#: plugins/command-bar/gb-vim.c:100
 #, c-format
 msgid "%s is invalid for %s"
 msgstr "%s nie je platným pre %s"
 
-#: ../plugins/command-bar/gb-vim.c:154
+#: plugins/command-bar/gb-vim.c:158
 #, c-format
 msgid "Cannot find language '%s'"
 msgstr "Nedá sa nájsť jazyk „%s“"
 
-#: ../plugins/command-bar/gb-vim.c:311
-#, fuzzy, c-format
+#: plugins/command-bar/gb-vim.c:315
+#, fuzzy
 #| msgid "vim mode requires GtkSourceView"
 msgid "This command requires a GtkSourceView to be focused"
 msgstr "Režim vim vyžaduje GtkSourceView"
 
-#: ../plugins/command-bar/gb-vim.c:322
-#, c-format
+#: plugins/command-bar/gb-vim.c:326
 msgid "This command requires a view to be focused"
 msgstr ""
 
-#: ../plugins/command-bar/gb-vim.c:379
+#: plugins/command-bar/gb-vim.c:383
 #, c-format
 msgid "Unknown option: %s"
 msgstr "Neznáma voľba: %s"
 
-#: ../plugins/command-bar/gb-vim.c:422
+#: plugins/command-bar/gb-vim.c:426
 #, c-format
 msgid "Cannot find colorscheme '%s'"
 msgstr "Nedá sa nájsť farebná schéma „%s“"
 
-#: ../plugins/command-bar/gb-vim.c:463
-#, c-format
+#: plugins/command-bar/gb-vim.c:467 plugins/command-bar/gb-vim.c:591
 msgid "Failed to locate working directory"
 msgstr "Zlyhalo lokalizovanie pracovného adresára"
 
-#: ../plugins/command-bar/gb-vim.c:640
+#: plugins/command-bar/gb-vim.c:707
 #, c-format
 msgid "Invalid :syntax subcommand: %s"
 msgstr "Neplatný :podpríkaz syntaxe: %s"
 
-#: ../plugins/command-bar/gb-vim.c:1022
-#, c-format
+#: plugins/command-bar/gb-vim.c:1146
 msgid "Invalid search and replace request"
 msgstr "Nepaltná požiadavka na vyhľadanie a nahradenie"
 
-#: ../plugins/command-bar/gb-vim.c:1127
+#: plugins/command-bar/gb-vim.c:1252
 #, fuzzy, c-format
 #| msgid "Not an editor command: %s"
 msgid "Not a command: %s"
 msgstr "Nie je príkazom editora: %s"
 
-#: ../plugins/contributing/contributing_plugin/helper.py:76
+#: plugins/comment-code/gtk/menus.ui:9
+msgid "Comment code"
+msgstr ""
+
+#: plugins/comment-code/gtk/menus.ui:14
+msgid "Uncomment code"
+msgstr ""
+
+#: plugins/contributing/contributing_plugin/helper.py:76
 #, python-format
 msgid ""
 "Usage:\n"
@@ -1869,11 +3341,11 @@ msgstr ""
 "Použitie:\n"
 "  %(prgname) %(command) VOĽBY\n"
 
-#: ../plugins/contributing/contributing_plugin/__init__.py:54
+#: plugins/contributing/contributing_plugin/__init__.py:54
 msgid "Missing project name"
 msgstr "Chýba názov projektu"
 
-#: ../plugins/contributing/contributing_plugin/__init__.py:68
+#: plugins/contributing/contributing_plugin/__init__.py:68
 msgid ""
 "Usage:\n"
 "  ide contribute PROJECT_NAME\n"
@@ -1892,278 +3364,410 @@ msgid ""
 "\n"
 msgstr ""
 
-#: ../plugins/contributing/contributing_plugin/__init__.py:226
+#: plugins/contributing/contributing_plugin/__init__.py:226
 msgid "Username"
 msgstr "Používateľské meno"
 
-#: ../plugins/c-pack/ide-c-format-provider.c:281
-#: ../plugins/python-pack/ide-python-format-provider.c:238
+#: plugins/c-pack/ide-c-format-provider.c:283
+#: plugins/python-pack/ide-python-format-provider.c:240
 msgid "Format Strings"
 msgstr "Formátovať reťazce"
 
-#: ../plugins/create-project/gbp-create-project-tool.c:130
+#: plugins/create-project/gbp-create-project-genesis-addin.c:158
+msgid "New Project"
+msgstr "Nový projekt"
+
+#: plugins/create-project/gbp-create-project-genesis-addin.c:223
+msgid "New…"
+msgstr ""
+
+#: plugins/create-project/gbp-create-project-tool.c:136
 msgid "List available templates"
 msgstr ""
 
-#: ../plugins/create-project/gbp-create-project-tool.c:132
+#: plugins/create-project/gbp-create-project-tool.c:138
 msgid "Project template to generate"
 msgstr ""
 
-#: ../plugins/create-project/gbp-create-project-tool.c:138
+#: plugins/create-project/gbp-create-project-tool.c:140
+msgid "The target language (if supported)"
+msgstr ""
+
+#: plugins/create-project/gbp-create-project-tool.c:142
+msgid "The version control to use or \"none\" to disable"
+msgstr ""
+
+#: plugins/create-project/gbp-create-project-tool.c:143
+#, fuzzy
+#| msgid "Git"
+msgid "git"
+msgstr "Git"
+
+#: plugins/create-project/gbp-create-project-tool.c:149
 msgid "create-project [OPTION...] PROJECT_NAME"
 msgstr "create-project [VOĽBA...] NÁZOV_PROJEKTU"
 
-#: ../plugins/create-project/gbp-create-project-tool.c:187
-#, c-format
+#: plugins/create-project/gbp-create-project-tool.c:198
 msgid "Filename must be ASCII and may not contain : or ="
 msgstr ""
 "Názov súboru musí byť v kódovaní ASCII a nemôže obsahovať znak : alebo ="
 
-#: ../plugins/create-project/gbp-create-project-tool.c:291
-#, c-format
+#: plugins/create-project/gbp-create-project-tool.c:372
 msgid "Please specify a project name.\n"
 msgstr "Prosím, zadajte názov projektu.\n"
 
-#: ../plugins/create-project/gbp-create-project-tool.c:307
-#, c-format
+#: plugins/create-project/gbp-create-project-tool.c:388
 msgid "Please specify a project template with --template=\n"
 msgstr ""
 
-#: ../plugins/devhelp/gbp-devhelp-search-provider.c:128
-#: ../plugins/devhelp/gbp-devhelp-workbench-addin.c:90
+#: plugins/create-project/gbp-create-project-widget.c:157
+msgid ""
+"Characters were used which might cause technical issues as a project name"
+msgstr ""
+
+#: plugins/create-project/gbp-create-project-widget.c:164
+msgid "Directory already exists with that name"
+msgstr ""
+
+#: plugins/create-project/gbp-create-project-widget.c:559
+msgid "A failure occurred while initializing version control"
+msgstr ""
+
+#: plugins/create-project/gbp-create-project-widget.ui:28
+#, fuzzy
+#| msgid "Project File"
+msgid "Project Name"
+msgstr "Súbor pojektu"
+
+#: plugins/create-project/gbp-create-project-widget.ui:55
+msgid ""
+"Unique name that is used for your project's folder and other technical "
+"resources. Should be in lower case without spaces and may not start with a "
+"number."
+msgstr ""
+
+#: plugins/create-project/gbp-create-project-widget.ui:74
+#, fuzzy
+#| msgid "Location"
+msgid "Project Location"
+msgstr "Umiestnenie"
+
+# dialog title
+#: plugins/create-project/gbp-create-project-widget.ui:85
+#: plugins/git/ide-git-clone-widget.ui:78
+#, fuzzy
+#| msgid "Select Project File"
+msgid "Select Project Directory"
+msgstr "Výber súboru projektu"
+
+#: plugins/create-project/gbp-create-project-widget.ui:98
+msgid "Language"
+msgstr "Jazyk"
+
+#: plugins/create-project/gbp-create-project-widget.ui:120
+msgid "License"
+msgstr ""
+
+#: plugins/create-project/gbp-create-project-widget.ui:135
+msgid "GPLv3+"
+msgstr ""
+
+#: plugins/create-project/gbp-create-project-widget.ui:136
+msgid "LGPLv3+"
+msgstr ""
+
+#: plugins/create-project/gbp-create-project-widget.ui:137
+msgid "AGPLv3+"
+msgstr ""
+
+#: plugins/create-project/gbp-create-project-widget.ui:138
+msgid "MIT/X11"
+msgstr ""
+
+#: plugins/create-project/gbp-create-project-widget.ui:139
+msgid "GPLv2+"
+msgstr ""
+
+#: plugins/create-project/gbp-create-project-widget.ui:140
+msgid "LGPLv2.1+"
+msgstr ""
+
+#: plugins/create-project/gbp-create-project-widget.ui:141
+#, fuzzy
+#| msgid "Go to line"
+msgid "No license"
+msgstr "Prejdenie na riadok"
+
+#: plugins/create-project/gbp-create-project-widget.ui:174
+#, fuzzy
+#| msgid " Version Control System: %s\n"
+msgid "Uses the Git version control system"
+msgstr " Systém správy verzií: %s\n"
+
+#: plugins/create-project/gbp-create-project-widget.ui:236
+#, fuzzy
+#| msgid "Select a Project"
+msgid "Select a Template"
+msgstr "Výber projektu"
+
+#: plugins/devhelp/gbp-devhelp-panel.c:194
 msgid "Documentation"
 msgstr "Dokumentácia"
 
-#: ../plugins/file-search/gb-file-search-provider.c:44
+#: plugins/file-search/gb-file-search-provider.c:44
 msgid "Switch To"
 msgstr "Prepnúť na"
 
-#: ../plugins/fpaste/fpaste_plugin/gtk/menus.ui.h:1
+#: plugins/fpaste/fpaste_plugin/gtk/menus.ui:9
 msgid "Send to Fpaste.org"
 msgstr ""
 
-#: ../plugins/fpaste/fpaste_plugin/__init__.py:104
+#: plugins/fpaste/fpaste_plugin/__init__.py:110
 msgid "The following URL has been copied to the clipboard"
 msgstr ""
 
-#: ../plugins/git/ide-git-buffer-change-monitor.c:167
+#: plugins/git/ide-git-buffer-change-monitor.c:162
 msgid "Cannot provide diff, no backing file provided."
 msgstr "Nedá sa poskytnúť rozdiel, pretože nebol poskytnutý záložný súbor."
 
-#: ../plugins/git/ide-git-buffer-change-monitor.c:539
-#, c-format
+#: plugins/git/ide-git-buffer-change-monitor.c:546
 msgid "Repository does not have a working directory."
 msgstr "Repozitár neobsahuje pracovný adresár."
 
-#: ../plugins/git/ide-git-buffer-change-monitor.c:550
-#, c-format
+#: plugins/git/ide-git-buffer-change-monitor.c:557
 msgid "File is not under control of git working directory."
 msgstr "Súbor nie je pod kontrolou pracovného adresára git."
 
-#: ../plugins/git/ide-git-buffer-change-monitor.c:616
-#, c-format
+#: plugins/git/ide-git-buffer-change-monitor.c:623
 msgid "The requested file does not exist within the git index."
 msgstr "Požadovaný súbor neexistuje v indexe git."
 
-#: ../plugins/git/ide-git-clone-widget.c:131
+#: plugins/git/ide-git-clone-widget.c:141
+#: plugins/git/ide-git-clone-widget.c:387
 msgid "A valid Git URL is required"
 msgstr "Požaduje sa platná URL repozitára Git"
 
-#: ../plugins/git/ide-git-clone-widget.c:200
-msgid "Projects"
-msgstr "Projekty"
+#: plugins/git/ide-git-clone-widget.ui:38
+msgid "Use Git to create a local copy of a remotely hosted project."
+msgstr ""
 
-#: ../plugins/git/ide-git-clone-widget.ui.h:1
+#: plugins/git/ide-git-clone-widget.ui:66
 msgid "user@host:repository.git"
 msgstr "používateľ@hostiteľ:repozitár.git"
 
-#: ../plugins/git/ide-git-clone-widget.ui.h:2
+#: plugins/git/ide-git-clone-widget.ui:67
 #, fuzzy
 #| msgid "Enter the URL of your project's source code repository."
 msgid "Enter the URL of your project's source code repository"
 msgstr "Zadajte URL repozitára so zdrojovým kódom vášho projektu."
 
-#: ../plugins/git/ide-git-clone-widget.ui.h:3
-msgid "Directory"
-msgstr "Adresár"
-
-#: ../plugins/git/ide-git-clone-widget.ui.h:4
+#: plugins/git/ide-git-clone-widget.ui:94
 #, fuzzy
-#| msgid "The name of the action to execute."
-msgid "Enter the name of the directory to create"
-msgstr "Názov akcie, ktorá sa má vykonať."
-
-#: ../plugins/git/ide-git-clone-widget.ui.h:5
-msgid "Repository"
+#| msgid "Repository"
+msgid "Repository URL"
 msgstr "Repozitár"
 
-#: ../plugins/git/ide-git-clone-widget.ui.h:6
-msgid "Location"
-msgstr "Umiestnenie"
-
-#: ../plugins/git/ide-git-genesis-addin.c:93
+#: plugins/git/ide-git-clone-widget.ui:102
 #, fuzzy
-#| msgid "From existing project on this computer"
-msgid "From a existing project in a Git repository"
-msgstr "Z existujúceho projektu v tomto počítači"
+#| msgid "The project description."
+msgid "Project Destination"
+msgstr "Popis projektu."
 
-#: ../plugins/git/ide-git-preferences-addin.c:108
-msgid "Version Control"
-msgstr "Správa verzií"
-
-#: ../plugins/git/ide-git-preferences-addin.c:145
+#: plugins/git/ide-git-genesis-addin.c:93
 #, fuzzy
-#| msgid "Source Code Attribution"
-msgid "Attribution"
-msgstr "Autorstvo zdrojového kódu"
+#| msgid "New Project"
+msgid "Clone Project"
+msgstr "Nový projekt"
 
-#: ../plugins/gnome-code-assistance/ide-gca-diagnostic-provider.c:336
+#: plugins/git/ide-git-genesis-addin.c:184
+msgid "Clone…"
+msgstr ""
+
+#: plugins/git/ide-git-genesis-addin.c:190
+msgid "Clone"
+msgstr ""
+
+#: plugins/git/ide-git-remote-callbacks.c:174
+msgid ""
+"Builder failed to provide appropriate credentials when cloning repository."
+msgstr ""
+
+#: plugins/gnome-code-assistance/ide-gca-diagnostic-provider.c:368
 msgid "Code assistance requires a local file."
 msgstr "Asistencia kódu vyžaduje miestny súbor."
 
-#: ../plugins/gnome-code-assistance/ide-gca-service.c:168
+#: plugins/gnome-code-assistance/ide-gca-preferences-addin.c:62
+msgid "Pylint"
+msgstr ""
+
+#: plugins/gnome-code-assistance/ide-gca-preferences-addin.c:63
+msgid "Enable the use of pylint, which may execute code in your project"
+msgstr ""
+
+#. translators: these are keywords used to search for preferences
+#: plugins/gnome-code-assistance/ide-gca-preferences-addin.c:65
+msgid "pylint python lint code execute execution"
+msgstr ""
+
+#: plugins/gnome-code-assistance/ide-gca-service.c:176
 msgid "No language specified"
 msgstr "Nie je určený žiadny jazyk"
 
-#: ../plugins/html-preview/html_preview_plugin/gtk/menus.ui.h:1
+#: plugins/gnome-code-assistance/org.gnome.builder.gnome-code-assistance.gschema.xml:5
+msgid "Enable Pylint"
+msgstr ""
+
+#: plugins/gnome-code-assistance/org.gnome.builder.gnome-code-assistance.gschema.xml:6
+msgid ""
+"Enable the use of pylint to find additional diagnostics in Python programs. "
+"This may result in the execution of code in your project."
+msgstr ""
+
+#: plugins/hello-cpp/hellocppapplicationaddin.cc:48
+#, c-format
+msgid "Wow! You've spent with Builder %d second!\n"
+msgid_plural "Wow! You've spent with Builder %d seconds!\n"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: plugins/html-preview/html_preview_plugin/gtk/menus.ui:6
 msgid "Preview as HTML"
 msgstr "Ukážka v HTML"
 
-#: ../plugins/jedi/jedi_plugin.py:672
+#: plugins/jedi/jedi_plugin.py:731
 #, fuzzy
 #| msgid "Suggest Word Completion"
 msgid "Suggest Python completions"
 msgstr "Navrhnúť doplnenie slova"
 
-#: ../plugins/jedi/jedi_plugin.py:673
+#: plugins/jedi/jedi_plugin.py:732
 #, fuzzy
 #| msgid "Use Jedi for completions in the Python language."
 msgid "Use Jedi to provide completions for the Python language"
 msgstr "Použije sa nástroj Jedi na doplnenie v jazyku Python."
 
-#: ../plugins/library-template/library_template/__init__.py:52
-msgid "Shared Library"
-msgstr ""
-
-#: ../plugins/library-template/library_template/__init__.py:55
-msgid "Create a new autotools project with a shared library"
-msgstr ""
-
-#: ../plugins/mingw/ide-mingw-device-provider.c:95
+#: plugins/mingw/ide-mingw-device-provider.c:94
 msgid "MinGW 64-bit"
 msgstr "MinGW 64-bitový"
 
-#: ../plugins/mingw/ide-mingw-device-provider.c:107
+#: plugins/mingw/ide-mingw-device-provider.c:106
 msgid "MinGW 32-bit"
 msgstr "MinGW 32-bitový"
 
-#: ../plugins/project-tree/gb-new-file-popover.c:123
-#: ../plugins/project-tree/gb-rename-file-popover.c:141
+#: plugins/project-tree/gb-new-file-popover.c:123
+#: plugins/project-tree/gb-rename-file-popover.c:139
 msgid "A folder with that name already exists."
 msgstr "Priečinok s takým názvom už existuje."
 
-#: ../plugins/project-tree/gb-new-file-popover.c:126
-#: ../plugins/project-tree/gb-rename-file-popover.c:144
+#: plugins/project-tree/gb-new-file-popover.c:126
+#: plugins/project-tree/gb-rename-file-popover.c:142
 msgid "A file with that name already exists."
 msgstr "Súbor s takým názvom už existuje."
 
-#: ../plugins/project-tree/gb-new-file-popover.c:348
-#: ../plugins/project-tree/gb-new-file-popover.ui.h:1
-#: ../plugins/project-tree/gb-rename-file-popover.ui.h:1
+#: plugins/project-tree/gb-new-file-popover.c:348
+#: plugins/project-tree/gb-new-file-popover.ui:13
+#: plugins/project-tree/gb-rename-file-popover.ui:13
 msgid "File Name"
 msgstr "Názov súboru"
 
-#: ../plugins/project-tree/gb-new-file-popover.c:350
+#: plugins/project-tree/gb-new-file-popover.c:350
 msgid "Folder Name"
 msgstr "Názov priečinka"
 
-#: ../plugins/project-tree/gb-new-file-popover.ui.h:2
+#: plugins/project-tree/gb-new-file-popover.ui:35
 msgid "_Create"
 msgstr "_Vytvoriť"
 
-#: ../plugins/project-tree/gb-project-tree-addin.c:77
-msgid "Project"
-msgstr "Projekt"
+#: plugins/project-tree/gb-project-tree-builder.c:207
+#, fuzzy
+#| msgid "_Empty File"
+msgid "Empty"
+msgstr "Prázdny sú_bor"
 
-#: ../plugins/project-tree/gb-project-tree-builder.c:77
-msgid "Files"
-msgstr "Súbory"
-
-#: ../plugins/project-tree/gb-rename-file-popover.c:79
+#: plugins/project-tree/gb-rename-file-popover.c:79
 #, c-format
 msgid "Rename %s"
 msgstr "Premenovať %s"
 
-#: ../plugins/project-tree/gb-rename-file-popover.c:172
-msgid "File name must not contain subdirectories."
-msgstr "Názov súboru nesmie obsahovať podadresáre."
+#: plugins/project-tree/gtk/menus.ui:14
+msgid "_New"
+msgstr "_Nový"
 
-#: ../plugins/project-tree/gb-rename-file-popover.ui.h:2
-#: ../plugins/project-tree/gtk/menus.ui.h:10
-msgid "_Rename"
-msgstr "_Premenovať"
-
-#: ../plugins/project-tree/gtk/menus.ui.h:3
+#: plugins/project-tree/gtk/menus.ui:17
 msgid "_Empty File"
 msgstr "Prázdny sú_bor"
 
-#: ../plugins/project-tree/gtk/menus.ui.h:4
+#: plugins/project-tree/gtk/menus.ui:23
 msgid "_New Folder"
 msgstr "_Nový priečinok"
 
-#: ../plugins/project-tree/gtk/menus.ui.h:5
+#: plugins/project-tree/gtk/menus.ui:29
 msgid "_Open"
 msgstr "_Otvoriť"
 
-#: ../plugins/project-tree/gtk/menus.ui.h:6
+#: plugins/project-tree/gtk/menus.ui:34
 msgid "Open _With"
 msgstr "Otvoriť _pomocou"
 
-#: ../plugins/project-tree/gtk/menus.ui.h:7
+#: plugins/project-tree/gtk/menus.ui:37
 msgid "Source Code Editor"
 msgstr "Editor zdrojového kódu"
 
-#: ../plugins/project-tree/gtk/menus.ui.h:8
+#: plugins/project-tree/gtk/menus.ui:47
 msgid "_Open Containing Folder"
 msgstr "_Otvoriť priečinok s obsahom"
 
-#: ../plugins/project-tree/gtk/menus.ui.h:9
+#: plugins/project-tree/gtk/menus.ui:51
 msgid "_Open in Terminal"
 msgstr "_Otvoriť v termináli"
 
-#: ../plugins/project-tree/gtk/menus.ui.h:11
+#: plugins/project-tree/gtk/menus.ui:64
 msgid "Mo_ve to Trash"
 msgstr "Presunúť do _Koša"
 
-#: ../plugins/project-tree/gtk/menus.ui.h:14
+#: plugins/project-tree/gtk/menus.ui:71
+msgid "_Build"
+msgstr "_Zostaviť"
+
+#: plugins/project-tree/gtk/menus.ui:75
+msgid "_Rebuild"
+msgstr "_Znovu zostaviť"
+
+#: plugins/project-tree/gtk/menus.ui:81
 msgid "Display Options"
 msgstr "Voľby zobrazenia"
 
-#: ../plugins/project-tree/gtk/menus.ui.h:15
-msgid "Show Icons"
-msgstr "Zobraziť ikony"
-
-#: ../plugins/project-tree/gtk/menus.ui.h:16
-msgid "Show Ignored Files"
-msgstr "Zobraziť ignorované súbory"
-
-#: ../plugins/project-tree/gtk/menus.ui.h:17
+#: plugins/project-tree/gtk/menus.ui:92
 msgid "Sort Directories First"
 msgstr "Usporiadať adresáre ako prvé"
 
-#: ../plugins/project-tree/gtk/menus.ui.h:18
+#: plugins/project-tree/gtk/menus.ui:98
 msgid "_Collapse All Nodes"
 msgstr "Z_baliť všetky uzly"
 
-#: ../plugins/project-tree/gtk/menus.ui.h:19
+#: plugins/project-tree/gtk/menus.ui:102
 msgid "_Refresh"
 msgstr "_Obnoviť"
 
-#: ../plugins/support/gtk/menus.ui.h:1
+#: plugins/quick-highlight/gbp-quick-highlight-preferences.c:48
+msgid "Words matching selection"
+msgstr ""
+
+#: plugins/quick-highlight/gbp-quick-highlight-preferences.c:49
+msgid "Highlight all occurrences of words matching the current selection"
+msgstr ""
+
+#. Translators: the following are keywords used for searching to locate this preference
+#: plugins/quick-highlight/gbp-quick-highlight-preferences.c:51
+msgid "quick highlight words matching current selection"
+msgstr ""
+
+#: plugins/support/gtk/menus.ui:7
 msgid "Generate Support Log"
 msgstr "Generovať záznam pre podporu"
 
-#: ../plugins/support/ide-support-application-addin.c:79
+#: plugins/support/ide-support-application-addin.c:79
 #, c-format
 msgid ""
 "The support log file has been written to '%s'. Please provide this file as "
@@ -2172,43 +3776,141 @@ msgstr ""
 "Súbor záznamu pre podporu bol zapísaný do „%s“. Prosím, poskytnite tento "
 "súbor ako prílohu vo vašom hlásení o chybe alebo požiadavke o podporu."
 
-#: ../plugins/symbol-tree/symbol-tree.c:84
-msgid "Symbols"
-msgstr "Symboly"
-
-#: ../plugins/symbol-tree/symbol-tree-panel.c:239
+#: plugins/symbol-tree/symbol-tree-panel.c:265
 msgid "Current language does not support symbol resolvers"
 msgstr "Aktuálny jazyk nepodporuje rozpoznávanie symbolov"
 
-#: ../plugins/sysmon/gb-sysmon-addin.c:63
+#: plugins/symbol-tree/symbol-tree-panel.c:365
+msgid "Symbols"
+msgstr "Symboly"
+
+#: plugins/sysmon/gb-sysmon-panel.ui:5
 msgid "System Monitor"
 msgstr "Monitor systému"
 
-#: ../plugins/terminal/gb-terminal-view-actions.c:297
+#: plugins/sysprof/gbp-sysprof-perspective.c:65
+msgid "Profiler"
+msgstr ""
+
+#: plugins/sysprof/gbp-sysprof-workbench-addin.c:251
+#, fuzzy
+#| msgid "Open _With"
+msgid "Open Profile"
+msgstr "Otvoriť _pomocou"
+
+#: plugins/sysprof/gbp-sysprof-workbench-addin.c:259
+msgid "Sysprof Capture (*.syscap)"
+msgstr ""
+
+#: plugins/sysprof/gbp-sysprof-workbench-addin.c:265
+#, fuzzy
+#| msgid "Files"
+msgid "All Files"
+msgstr "Súbory"
+
+#: plugins/sysprof/gbp-sysprof-workbench-addin.c:352
+msgid "Run with Profiler"
+msgstr ""
+
+#: plugins/sysprof/gtk/menus.ui:6
+#, fuzzy
+#| msgid "Open _With"
+msgid "Open Profile…"
+msgstr "Otvoriť _pomocou"
+
+#: plugins/terminal/gb-terminal-view.c:444
+#, fuzzy
+#| msgid "_New Terminal"
+msgid "Untitled terminal"
+msgstr "_Nový terminál"
+
+#: plugins/terminal/gb-terminal-view-actions.c:297
 msgid "Save Terminal Content As"
 msgstr "Uloženie obsahu terminálu ako"
 
-#: ../plugins/terminal/gtk/menus.ui.h:1
+#: plugins/terminal/gtk/menus.ui:6
 msgid "_New Terminal"
 msgstr "_Nový terminál"
 
-#: ../plugins/todo/todo_plugin/__init__.py:60
+#: plugins/todo/todo_plugin/__init__.py:186
 msgid "Todo"
 msgstr "Úlohy"
 
-#: ../plugins/vala-pack/ide-vala-preferences-addin.vala:33
+#: plugins/vala-pack/ide-vala-preferences-addin.vala:33
 msgid "Vala"
 msgstr "Vala"
 
-#: ../plugins/vala-pack/ide-vala-preferences-addin.vala:34
+#: plugins/vala-pack/ide-vala-preferences-addin.vala:34
 msgid "Show errors and warnings provided by Vala"
 msgstr ""
 
-#: ../plugins/vala-pack/ide-vala-preferences-addin.vala:35
+#. translators: keywords used when searching for preferences
+#: plugins/vala-pack/ide-vala-preferences-addin.vala:36
 #, fuzzy
 #| msgid "If diagnostic warnings and errors should be highlighted."
 msgid "vala diagnostics warnings errors"
 msgstr "Či majú byť zvýraznené upozornenia a chyby diagnostiky."
+
+#~ msgid "_Print…"
+#~ msgstr "_Tlačiť…"
+
+#~ msgid "_Fullscreen"
+#~ msgstr "Na _celú obrazovku"
+
+#~ msgid "_Close All"
+#~ msgstr "Za_vrieť všetky"
+
+#~ msgid "Builder Dark"
+#~ msgstr "Tmavý Builder"
+
+#~ msgid "Dark color scheme for Builder using the Tango color palette"
+#~ msgstr ""
+#~ "Tmavá farebná schéma programu Builder využívajúca farebnú paletu Tango"
+
+#~ msgid "The default color scheme for Builder"
+#~ msgstr "Predvolená farebná schéma programu Builder"
+
+#~ msgid "Co_ntinue"
+#~ msgstr "Pok_račovať"
+
+#~ msgid "%s does not implement build_async()"
+#~ msgstr "%s neimplementuje funkciu build_async()"
+
+#~ msgid "No implementation of build_async()"
+#~ msgstr "Žiadna implementácia funkcie build_async()"
+
+#~ msgid "Invalid snippet at line %d: %s"
+#~ msgstr "Neplatný úryvok na riadku %d: %s"
+
+#~ msgid "Installed Extensions"
+#~ msgstr "Nainštalované rozšírenia"
+
+#, fuzzy
+#~| msgid "Extension"
+#~ msgid "Bundled Extensions"
+#~ msgstr "Rozšírenie"
+
+#~ msgid "Success"
+#~ msgstr "Úspech"
+
+#~ msgid "Autogening…"
+#~ msgstr "Automatické generovanie…"
+
+#~ msgid "Directory"
+#~ msgstr "Adresár"
+
+#, fuzzy
+#~| msgid "From existing project on this computer"
+#~ msgid "From a existing project in a Git repository"
+#~ msgstr "Z existujúceho projektu v tomto počítači"
+
+#, fuzzy
+#~| msgid "Source Code Attribution"
+#~ msgid "Attribution"
+#~ msgstr "Autorstvo zdrojového kódu"
+
+#~ msgid "File name must not contain subdirectories."
+#~ msgstr "Názov súboru nesmie obsahovať podadresáre."
 
 #~ msgid "_New Document"
 #~ msgstr "Nový _dokument"
@@ -2234,20 +3936,11 @@ msgstr "Či majú byť zvýraznené upozornenia a chyby diagnostiky."
 #~ msgid "From remote source code repository"
 #~ msgstr "Zo vzdialeného repozitára so zdrojovým kódom"
 
-#~ msgid "Name"
-#~ msgstr "Meno"
-
 #~ msgid "GNOME Version"
 #~ msgstr "Verzia prostredia GNOME"
 
-#~ msgid "Language"
-#~ msgstr "Jazyk"
-
 #~ msgid "Pattern"
 #~ msgstr "Vzor"
-
-#~ msgid "Git"
-#~ msgstr "Git"
 
 #~ msgid "Display Document Changes"
 #~ msgstr "Zobraziť zmeny v dokumente"
@@ -2261,26 +3954,17 @@ msgstr "Či majú byť zvýraznené upozornenia a chyby diagnostiky."
 #~ msgid "Highlight Current Line"
 #~ msgstr "Zvýrazniť aktuálny riadok"
 
-#~ msgid "Highlight the line containing the cursor."
-#~ msgstr "Zvýrazní riadok, v ktorom sa nachádza kurzor."
-
 #~ msgid "Whether or not matching brackets should be highlighted."
 #~ msgstr "Určuje, či majú byť zvýraznené zodpovedajúce zátvorky."
 
 #~ msgid "Display Overview Map"
 #~ msgstr "Zobraziť mapu s prehľadom"
 
-#~ msgid "Display an overview map next to the source code editor."
-#~ msgstr "Zobrazí mapu s prehľadom vedľa editoru zdrojového kódu."
-
 #~ msgid "Automatically hide the overview map during periods of inactivity."
 #~ msgstr "Automaticky skryje mapu s prehľadom počas doby nečinnosti."
 
 #~ msgid "Cursor Placement"
 #~ msgstr "Umiestnenie kurzora"
-
-#~ msgid "Draw Spaces"
-#~ msgstr "Vykresľovať medzery"
 
 #~ msgid "Draw a circle over space characters."
 #~ msgstr "Vykreslí kruh namiesto znakov reprezentovaných medzerou."
@@ -2292,15 +3976,6 @@ msgstr "Či majú byť zvýraznené upozornenia a chyby diagnostiky."
 #~ "Highlight additional syntax based upon information found in the document."
 #~ msgstr ""
 #~ "Zvýrazní dodatočný syntax založený na informáciách nájdených v dokumente."
-
-#~ msgid "Suggest Snippet Completion"
-#~ msgstr "Navrhnúť doplnenie úryvku"
-
-#~ msgid "Allow snippets to be inserted into the document."
-#~ msgstr "Umožní vkladanie úryvkov do dokumentu."
-
-#~ msgid "Use Ctags for completions in supported languages."
-#~ msgstr "Použijú sa značky Ctags na doplnenie v podporovaných jazykoch."
 
 #~ msgid "Suggest Completions using Jedi"
 #~ msgstr "Navrhnúť doplnenia pomocou nástroja Jedi"
@@ -2320,15 +3995,6 @@ msgstr "Či majú byť zvýraznené upozornenia a chyby diagnostiky."
 #~ msgid "Plugins"
 #~ msgstr "Zásuvné moduly"
 
-#~ msgid "Night Mode"
-#~ msgstr "Nočný režim"
-
-#~ msgid "Use dark colors for the application chrome."
-#~ msgstr "Použije tmavú tému pre rozhranie aplikácie."
-
-#~ msgid "Search Preferences…"
-#~ msgstr "Vyhľadajte nastavenia…"
-
 #~ msgid "Select Project"
 #~ msgstr "Výber projektu"
 
@@ -2341,14 +4007,8 @@ msgstr "Či majú byť zvýraznené upozornenia a chyby diagnostiky."
 #~ msgid "Two finger swipe left"
 #~ msgstr "Potiahnutím dvoch prstov doľava"
 
-#~ msgid "Show list of open files"
-#~ msgstr "Zobrazenie zoznamu otvorených súborov"
-
 #~ msgid "Switch to source or header"
 #~ msgstr "Prepnutie na zdrojový kód alebo hlavičku"
-
-#~ msgid "Go to line"
-#~ msgstr "Prejdenie na riadok"
 
 #~ msgid "Attempt to load a GJS script with no filename."
 #~ msgstr "Uskutočnil sa pokus o načítanie skriptu GJS bez názvu súboru."
@@ -2384,10 +4044,6 @@ msgstr "Či majú byť zvýraznené upozornenia a chyby diagnostiky."
 
 #~ msgid "Terminal (%s)"
 #~ msgstr "Terminál (%s)"
-
-# dialog title
-#~ msgid "Select Project File"
-#~ msgstr "Výber súboru projektu"
 
 #~ msgid "Clone Repository"
 #~ msgstr "Klonovanie repozitára"
@@ -2432,9 +4088,6 @@ msgstr "Či majú byť zvýraznené upozornenia a chyby diagnostiky."
 #~ msgstr ""
 #~ "git autor tvorca email mail pošta adresa autorstvo zdroj zdrojový kód"
 
-#~ msgid "word words auto completion suggest found document"
-#~ msgstr "slovo slová automatické dopĺňanie návrh nájsť dokument"
-
 #~ msgid "experimental clang autocompletion auto complete"
 #~ msgstr "experimentálne clang automatické dopĺňanie automaticky doplniť"
 
@@ -2467,9 +4120,6 @@ msgstr "Či majú byť zvýraznené upozornenia a chyby diagnostiky."
 #~ msgid "smart back backspace indent align"
 #~ msgstr "inteligentný chytrý backspace odsadenie zarovnanie"
 
-#~ msgid "show grid lines"
-#~ msgstr "zobraziť zobrazenie čiar čiary mriežky"
-
 #~ msgid "source style scheme source tango solarized builder syntax"
 #~ msgstr "zdroj zdrojový kód schéma tango solarizovaný builder syntax"
 
@@ -2489,15 +4139,6 @@ msgstr "Či majú byť zvýraznené upozornenia a chyby diagnostiky."
 #~ msgid "Open Document"
 #~ msgstr "Otvorenie dokumentu"
 
-#~ msgid "%s - Builder"
-#~ msgstr "%s - Builder"
-
-#~ msgid "Build Failure"
-#~ msgstr "Zlyhanie zostavenia"
-
-#~ msgid "Project build system does not support building"
-#~ msgstr "Systém zostavovania projektu nepodporuje zostavovanie"
-
 #~ msgid "Timed out while waiting for devices to settle.\n"
 #~ msgstr "Vypršal čas čakania na prípravu zariadení.\n"
 
@@ -2515,17 +4156,11 @@ msgstr "Či majú byť zvýraznené upozornenia a chyby diagnostiky."
 #~ msgid "Increase parallelism in the build."
 #~ msgstr "Zvýši paralelnosť v zostavení."
 
-#~ msgid "- Build the project."
-#~ msgstr "- Zostaví projekt."
-
 #~ msgid "- Get build flags for a project file"
 #~ msgstr "- Získa značky zostavenia pre súbor projektu"
 
 #~ msgid "- List devices found on the system."
 #~ msgstr "- Vypíše zariadenia nájdené v systéme."
-
-#~ msgid "Failed to diagnose: %s\n"
-#~ msgstr "Zlyhala diagnostika: %s\n"
 
 #~ msgid "No such file in project: %s\n"
 #~ msgstr "Súbor neexistuje v projekte: %s\n"
@@ -2540,9 +4175,6 @@ msgstr "Či majú byť zvýraznené upozornenia a chyby diagnostiky."
 #~ msgstr ""
 #~ "Neboli poskytnuté žiadne súbory, pre ktoré sa majú načítať nastavenia.\n"
 
-#~ msgid "- discover projects"
-#~ msgstr "- preskúma projekty"
-
 # DK: https://bugzilla.gnome.org/show_bug.cgi?id=754434
 #~ msgid "%s result\n"
 #~ msgid_plural "%s results\n"
@@ -2553,9 +4185,6 @@ msgstr "Či majú byť zvýraznené upozornenia a chyby diagnostiky."
 #~ msgid "PROJECT_FILE [SEARCH TERMS...]"
 #~ msgstr "SÚBOR_PROJEKTU [HĽADANÉ VÝRAZY...]"
 
-#~ msgid "Clang"
-#~ msgstr "Clang"
-
 #~ msgid "CTags"
 #~ msgstr "CTags"
 
@@ -2565,14 +4194,8 @@ msgstr "Či majú byť zvýraznené upozornenia a chyby diagnostiky."
 #~ msgid "%s (Preview)"
 #~ msgstr "%s (Ukážka)"
 
-#~ msgid "The name of the action"
-#~ msgstr "Názov akcie"
-
 #~ msgid "State Machine"
 #~ msgstr "Stav stroja"
-
-#~ msgid "Tag close icon visibility"
-#~ msgstr "Značka viditeľnosti ikony zavretia"
 
 #~ msgid "Whether the close button should be shown in tags."
 #~ msgstr "Určuje, či bude tlačidlo zavretia zobrazené v značkách."
@@ -2603,9 +4226,6 @@ msgstr "Či majú byť zvýraznené upozornenia a chyby diagnostiky."
 
 #~ msgid "Max Samples"
 #~ msgstr "Maximum snímkov"
-
-#~ msgid "Table"
-#~ msgstr "Tabuľka"
 
 #~ msgid "The data table for the graph."
 #~ msgstr "Tabuľka údajov pre graf."
@@ -2664,14 +4284,8 @@ msgstr "Či majú byť zvýraznené upozornenia a chyby diagnostiky."
 #~ msgid "The repository to use for calculating diffs."
 #~ msgstr "Repozitár použitý pre výpočet rozdielov."
 
-#~ msgid "Fraction"
-#~ msgstr "Zlomok"
-
 #~ msgid "A fraction containing the operation progress."
 #~ msgstr "Zlomok obsahujúci priebeh operácie."
-
-#~ msgid "The git repository for the project."
-#~ msgstr "Repozitár fit pre projekt."
 
 #~ msgid "Can Go Backward"
 #~ msgstr "Vie prejsť dozadu"
@@ -2726,9 +4340,6 @@ msgstr "Či majú byť zvýraznené upozornenia a chyby diagnostiky."
 #~ msgid "The currently focused buffer."
 #~ msgstr "Aktuálne zameraná vyrovnávacia pamäť."
 
-#~ msgid "Project File"
-#~ msgstr "Súbor pojektu"
-
 #~ msgid "The project file."
 #~ msgstr "Súbor s projektom."
 
@@ -2755,9 +4366,6 @@ msgstr "Či majú byť zvýraznené upozornenia a chyby diagnostiky."
 
 #~ msgid "Root Build Directory"
 #~ msgstr "Koreňový adresár zostavenia"
-
-#~ msgid "The root directory to perform builds within."
-#~ msgstr "Koreňový adresár, v ktorom sa majú vykonávať zostavenia."
 
 #~ msgid "Script Manager"
 #~ msgstr "Správca skriptov"
@@ -2807,9 +4415,6 @@ msgstr "Či majú byť zvýraznené upozornenia a chyby diagnostiky."
 #~ msgid "Key"
 #~ msgstr "Kľúč"
 
-#~ msgid "Value"
-#~ msgstr "Hodnota"
-
 #~ msgid "The path to the underlying file."
 #~ msgstr "Cesta k podliehajúcemu súboru."
 
@@ -2824,9 +4429,6 @@ msgstr "Či majú byť zvýraznené upozornenia a chyby diagnostiky."
 
 #~ msgid "Path"
 #~ msgstr "Cesta"
-
-#~ msgid "The path within the project."
-#~ msgstr "Cesta v projekte."
 
 #~ msgid "Temporary ID"
 #~ msgstr "ID dočasných súborov"
@@ -2884,12 +4486,6 @@ msgstr "Či majú byť zvýraznené upozornenia a chyby diagnostiky."
 
 #~ msgid "The path for the file within the project tree."
 #~ msgstr "Cesta súboru v strome projektu."
-
-#~ msgid "The project description."
-#~ msgstr "Popis projektu."
-
-#~ msgid "The project directory."
-#~ msgstr "Adresár projektu."
 
 #~ msgid "DOAP"
 #~ msgstr "DOAP"
@@ -2954,9 +4550,6 @@ msgstr "Či majú byť zvýraznené upozornenia a chyby diagnostiky."
 #~ msgid "y"
 #~ msgstr "y"
 
-#~ msgid "The configuration for the build."
-#~ msgstr "Konfigurácia pre zostavenie."
-
 #~ msgid "Tarball Name"
 #~ msgstr "Názov balíka tarball"
 
@@ -2966,14 +4559,8 @@ msgstr "Či majú byť zvýraznené upozornenia a chyby diagnostiky."
 #~ msgid "The path of the project file."
 #~ msgstr "Cesta súboru projektu."
 
-#~ msgid "Require Autogen"
-#~ msgstr "Vyžadovať automatické generovanie"
-
 #~ msgid "If autogen.sh should be forced to execute."
 #~ msgstr "Či ma byť vynútené spustenie skriptu autogen.sh."
-
-#~ msgid "Require Configure"
-#~ msgstr "Vyžadovať konfiguráciu"
 
 #~ msgid "If configure should be forced to execute."
 #~ msgstr "Či má byť vynútené spustenie konfigurácie."
@@ -3023,9 +4610,6 @@ msgstr "Či majú byť zvýraznené upozornenia a chyby diagnostiky."
 #~ msgid "The document for the VTE terminal view."
 #~ msgstr "Dokument pre zobrazenie terminálu VTE."
 
-#~ msgid "The workbench window."
-#~ msgstr "Okno s pracovným priestorom."
-
 #~ msgid "The project information for the row."
 #~ msgstr "Informácie o projekte pre riadok."
 
@@ -3037,9 +4621,6 @@ msgstr "Či majú byť zvýraznené upozornenia a chyby diagnostiky."
 
 #~ msgid "If the document has been modified from disk."
 #~ msgstr "Či bol dokument upravený na disku."
-
-#~ msgid "If the document is read only."
-#~ msgstr "Či je dokument iba na čítanie."
 
 #~ msgid "Auto Hide Map"
 #~ msgstr "Automaticky skryť mapu"
@@ -3061,9 +4642,6 @@ msgstr "Či majú byť zvýraznené upozornenia a chyby diagnostiky."
 
 #~ msgid "The project information to render."
 #~ msgstr "Informácie o projekte na vykreslenie."
-
-#~ msgid "Application"
-#~ msgstr "Aplikácia"
 
 #~ msgid "The name of the keybindings mode."
 #~ msgstr "Názov režimu klávesových skratiek."
@@ -3091,9 +4669,6 @@ msgstr "Či majú byť zvýraznené upozornenia a chyby diagnostiky."
 
 #~ msgid "Icon Name"
 #~ msgstr "Názov ikony"
-
-#~ msgid "If files ignored by the VCS should be displayed."
-#~ msgstr "Či majú byť zobrazené súbory ignorované VCS."
 
 #~ msgid "Max Content Height"
 #~ msgstr "Maximálna výška obsahu"
@@ -3158,20 +4733,8 @@ msgstr "Či majú byť zvýraznené upozornenia a chyby diagnostiky."
 #~ msgid "The IdeContext for the workbench."
 #~ msgstr "Kontext IdeContext pre pracovný priestor."
 
-#~ msgid "Position"
-#~ msgstr "Pozícia"
-
-#~ msgid "Left Pane"
-#~ msgstr "Ľavý panel"
-
 #~ msgid "The left workspace pane."
 #~ msgstr "Ľavý pracovný panel."
-
-#~ msgid "Right Pane"
-#~ msgstr "Pravý panel"
-
-#~ msgid "Bottom Pane"
-#~ msgstr "Dolný panel"
 
 #~ msgid "Content Pane"
 #~ msgstr "Panel s obsahom"
@@ -3181,9 +4744,3 @@ msgstr "Či majú byť zvýraznené upozornenia a chyby diagnostiky."
 
 #~ msgid "Reveal"
 #~ msgstr "Odhaliť"
-
-#~ msgid "If the pane should be revealed."
-#~ msgstr "Či má byť panel odhalený."
-
-#~ msgid "The position of the pane."
-#~ msgstr "Pozícia panela."
