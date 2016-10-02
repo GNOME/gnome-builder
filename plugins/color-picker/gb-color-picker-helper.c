@@ -156,7 +156,7 @@ gb_color_picker_helper_get_tag_at_iter (GtkTextIter  *cursor,
   GtkTextTag *tag;
   GSList *tags;
   const gchar *name;
-  g_autofree gchar *color_text = NULL;
+  gchar *color_text;
 
   g_assert (cursor != NULL);
   g_assert (current_color != NULL);
@@ -180,6 +180,7 @@ gb_color_picker_helper_get_tag_at_iter (GtkTextIter  *cursor,
                   buffer = gtk_text_iter_get_buffer (cursor);
                   color_text = gtk_text_buffer_get_text (buffer, begin, end, FALSE);
                   *current_color = gstyle_color_new_from_string (NULL, color_text);
+                  g_free (color_text);
                   if (*current_color != NULL)
                     {
                       g_slist_free (tags);
