@@ -1203,11 +1203,8 @@ ide_breakout_subprocess_initable_init (GInitable     *initable,
     }
   else if (self->flags & G_SUBPROCESS_FLAGS_STDIN_PIPE)
     {
-      if (pipe2 (stdin_pair, O_CLOEXEC) != 0)
-        {
-          set_error_from_errno (error);
-          IDE_GOTO (cleanup_fds);
-        }
+      if (!g_unix_open_pipe (stdin_pair, O_CLOEXEC, error))
+        IDE_GOTO (cleanup_fds);
     }
   else
     {
@@ -1248,11 +1245,8 @@ ide_breakout_subprocess_initable_init (GInitable     *initable,
     }
   else if (self->flags & G_SUBPROCESS_FLAGS_STDOUT_PIPE)
     {
-      if (pipe2 (stdout_pair, O_CLOEXEC) != 0)
-        {
-          set_error_from_errno (error);
-          IDE_GOTO (cleanup_fds);
-        }
+      if (!g_unix_open_pipe (stdout_pair, O_CLOEXEC, error))
+        IDE_GOTO (cleanup_fds);
     }
   else
     {
@@ -1291,11 +1285,8 @@ ide_breakout_subprocess_initable_init (GInitable     *initable,
     }
   else if (self->flags & G_SUBPROCESS_FLAGS_STDERR_PIPE)
     {
-      if (pipe2 (stderr_pair, O_CLOEXEC) != 0)
-        {
-          set_error_from_errno (error);
-          IDE_GOTO (cleanup_fds);
-        }
+      if (!g_unix_open_pipe (stderr_pair, O_CLOEXEC, error))
+        IDE_GOTO (cleanup_fds);
     }
   else
     {
