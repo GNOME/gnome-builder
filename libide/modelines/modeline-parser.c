@@ -420,7 +420,8 @@ parse_emacs_modeline (gchar           *s,
 			}
 		}
 		else if (strcmp (key->str, "indent-offset") == 0 ||
-		         strcmp (key->str, "c-basic-offset") == 0)
+		         strcmp (key->str, "c-basic-offset") == 0 ||
+		         strcmp (key->str, "js-indent-level") == 0)
 		{
 			intval = atoi (value->str);
 
