@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-04-04 07:19+0000\n"
-"PO-Revision-Date: 2016-04-10 21:53+0300\n"
+"POT-Creation-Date: 2016-10-06 10:59+0300\n"
+"PO-Revision-Date: 2016-10-06 11:06+0300\n"
 "Last-Translator: Tom Tryfonidis <tomtryf@gmail.com>\n"
 "Language-Team: Greek <team@lists.gnome.gr>\n"
 "Language: el\n"
@@ -17,392 +17,1278 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.8.7.1\n"
+"X-Generator: Poedit 1.8.9\n"
 
-#: ../contrib/egg/egg-animation.c:726 ../contrib/pnl/pnl-animation.c:701
+#: contrib/egg/egg-animation.c:726 contrib/pnl/pnl-animation.c:701
 #, c-format
 msgid "Cannot locate property %s in class %s"
 msgstr "Αδυναμία εντοπισμού ιδιότητας %s στην κλάση %s"
 
-#: ../contrib/egg/egg-animation.c:1073 ../contrib/egg/egg-animation.c:1079
-#: ../contrib/pnl/pnl-animation.c:1053 ../contrib/pnl/pnl-animation.c:1059
+#: contrib/egg/egg-animation.c:1073 contrib/egg/egg-animation.c:1079
+#: contrib/pnl/pnl-animation.c:1053 contrib/pnl/pnl-animation.c:1059
 #, c-format
 msgid "Failed to find property %s in %s"
 msgstr "Αποτυχία εύρεσης ιδιότητας %s στο %s"
 
-#: ../contrib/egg/egg-animation.c:1087 ../contrib/pnl/pnl-animation.c:1067
+#: contrib/egg/egg-animation.c:1087 contrib/pnl/pnl-animation.c:1067
 #, c-format
 msgid "Failed to find property %s in %s or parent %s"
 msgstr "Αποτυχία εύρεσης ιδιότητας %s στο %s ή στο γονικό %s"
 
-#: ../contrib/egg/egg-animation.c:1097 ../contrib/pnl/pnl-animation.c:1077
+#: contrib/egg/egg-animation.c:1097 contrib/pnl/pnl-animation.c:1077
 #, c-format
 msgid "Failed to retrieve va_list value: %s"
 msgstr "Αποτυχία ανάκτησης τιμής va_list: %s"
 
-#: ../contrib/egg/egg-date-time.c:55
+#: contrib/egg/egg-date-time.c:55
 msgid "Just now"
 msgstr "Τώρα"
 
-#: ../contrib/egg/egg-date-time.c:57
+#: contrib/egg/egg-date-time.c:57
 msgid "An hour ago"
 msgstr "Πριν μια ώρα"
 
-#: ../contrib/egg/egg-date-time.c:59
+#: contrib/egg/egg-date-time.c:59
 msgid "Yesterday"
 msgstr "Χθες"
 
-#: ../contrib/egg/egg-date-time.c:65
+#: contrib/egg/egg-date-time.c:65
 msgid "About a year ago"
 msgstr "Περίπου πριν ένα χρόνο"
 
-#: ../contrib/egg/egg-date-time.c:69
+#: contrib/egg/egg-date-time.c:69
 #, c-format
 msgid "About %u year ago"
 msgid_plural "About %u years ago"
 msgstr[0] "Περίπου πριν %u χρόνο"
 msgstr[1] "Περίπου πριν %u χρόνια"
 
-#: ../contrib/egg/egg-search-bar.c:378
+#: contrib/egg/egg-file-chooser-entry.c:100
+#: contrib/egg/egg-file-chooser-entry.c:489
+#: libide/greeter/ide-greeter-perspective.c:673
+#: libide/workbench/ide-workbench-actions.c:76
+#: plugins/color-picker/gb-color-picker-prefs.c:210
+#: plugins/sysprof/gbp-sysprof-workbench-addin.c:261
+msgid "Open"
+msgstr "Άνοιγμα"
+
+#: contrib/egg/egg-file-chooser-entry.c:104
+msgid "Select"
+msgstr "Επιλογή"
+
+#: contrib/egg/egg-file-chooser-entry.c:108
+#: plugins/create-project/gbp-create-project-genesis-addin.c:229
+msgid "Create"
+msgstr "Δημιουργία"
+
+#: contrib/egg/egg-file-chooser-entry.c:112
+#: libide/editor/ide-editor-view-actions.c:317
+#: libide/editor/ide-editor-view-actions.c:448
+#: plugins/color-picker/gb-color-picker-prefs.c:237
+#: plugins/color-picker/gtk/color-picker-prefs.ui:799
+#: plugins/terminal/gb-terminal-view-actions.c:306
+msgid "Save"
+msgstr "Αποθήκευση"
+
+#: contrib/egg/egg-file-chooser-entry.c:455
+msgid "Browse…"
+msgstr "Περιήγηση…"
+
+#: contrib/egg/egg-file-chooser-entry.c:488
+#: libide/editor/ide-editor-view-actions.c:316
+#: libide/editor/ide-editor-view-actions.c:447
+#: libide/greeter/ide-greeter-perspective.c:672
+#: libide/workbench/ide-workbench-actions.c:77
+#: plugins/color-picker/gb-color-picker-prefs.c:98
+#: plugins/color-picker/gb-color-picker-prefs.c:214
+#: plugins/color-picker/gb-color-picker-prefs.c:241
+#: plugins/sysprof/gbp-sysprof-workbench-addin.c:262
+#: plugins/terminal/gb-terminal-view-actions.c:305
+msgid "Cancel"
+msgstr "Aκύρωση"
+
+#: contrib/egg/egg-search-bar.c:378
 msgid "Search"
 msgstr "Αναζήτηση"
 
-#: ../contrib/search/trie.c:790
+#: contrib/gstyle/gstyle-color-panel.c:953
+msgid "Palette: "
+msgstr "Παλέτα:"
+
+#: contrib/gstyle/gstyle-color-panel.c:955
+msgid "Palette"
+msgstr "Παλέτα"
+
+#: contrib/gstyle/gstyle-color-plane.c:1601
+msgid "Color Plane"
+msgstr "Επίπεδο χρώματος"
+
+#: contrib/gstyle/gstyle-color-widget-actions.c:66
+msgid "Color name"
+msgstr "Όνομα χρώματος"
+
+#: contrib/gstyle/gstyle-color-widget-actions.c:68
+msgid "Enter a new name for the color"
+msgstr "Εισάγετε ένα νέο όνομα για το χρώμα"
+
+#: contrib/gstyle/gstyle-palette.c:492 contrib/gstyle/gstyle-palette.c:558
+#, c-format
+msgid "failed to parse line %i\n"
+msgstr "αποτυχία ανάλυσης γραμμής %i\n"
+
+#: contrib/gstyle/gstyle-palette.c:613
+#, c-format
+msgid "%s: palette is empty\n"
+msgstr "%s: η παλέτα είναι κενή\n"
+
+#: contrib/gstyle/gstyle-palette.c:719
+#, c-format
+msgid "%s: failed to parse\n"
+msgstr "%s: αποτυχία ανάλυσης\n"
+
+#: contrib/gstyle/gstyle-palette.c:727
+#, c-format
+msgid "Unable to open %s\n"
+msgstr "Αδύνατο το άνοιγμα του %s\n"
+
+#: contrib/gstyle/gstyle-palette.c:765
+#, c-format
+msgid "%s: This file format is not supported\n"
+msgstr "%s: Δεν υποστηρίζεται αυτή η μορφή αρχείου\n"
+
+#: contrib/gstyle/gstyle-palette.c:822
+msgid "failed to parse\n"
+msgstr "αποτυχία ανάλυσης\n"
+
+#. To translators: always in singular form like in: generated palette number <generated_count>
+#: contrib/gstyle/gstyle-palette.c:829
+msgid "Generated"
+msgstr "Δημιουργήθηκε"
+
+#: contrib/gstyle/gstyle-palette.c:932
+#, c-format
+msgid "Unable to save %s\n"
+msgstr "Αδύνατη η αποθήκευση του %s\n"
+
+#: contrib/gstyle/gstyle-palette-widget.c:983
+#, c-format
+msgid "Unsaved palette %u"
+msgstr "Μη αποθηκευμένη παλέτα %u"
+
+#: contrib/gstyle/tests/data/gstyle-color-editor.ui:64
+msgid "Hue"
+msgstr "Απόχρωση"
+
+#: contrib/gstyle/tests/data/gstyle-color-editor.ui:75
+msgid "Saturation"
+msgstr "Κορεσμός"
+
+#: contrib/gstyle/tests/data/gstyle-color-editor.ui:86
+msgid "Value"
+msgstr "Τιμή"
+
+#: contrib/gstyle/tests/data/gstyle-color-editor.ui:97
+msgid "Cielab l"
+msgstr "Cielab l"
+
+#: contrib/gstyle/tests/data/gstyle-color-editor.ui:108
+msgid "Cielab a"
+msgstr "Cielab a"
+
+#: contrib/gstyle/tests/data/gstyle-color-editor.ui:119
+msgid "Cielab b"
+msgstr "Cielab b"
+
+#: contrib/gstyle/tests/data/gstyle-color-editor.ui:130
+msgid "Red"
+msgstr "Κόκκινο"
+
+#: contrib/gstyle/tests/data/gstyle-color-editor.ui:141
+msgid "Green"
+msgstr "Πράσινο"
+
+#: contrib/gstyle/tests/data/gstyle-color-editor.ui:152
+msgid "Blue"
+msgstr "Μπλε"
+
+#: contrib/gstyle/tests/data/palette.gstyle.xml:20
+#: plugins/color-picker/data/basic.gstyle.xml:20
+msgid "Basic"
+msgstr "Βασικό"
+
+#: contrib/gstyle/ui/gstyle-color-panel.ui:157
+msgid "Color Components"
+msgstr "Συστατικά στοιχεία χρώματος"
+
+#: contrib/gstyle/ui/gstyle-color-panel.ui:206
+msgid "H"
+msgstr "H"
+
+#: contrib/gstyle/ui/gstyle-color-panel.ui:216
+msgid "S"
+msgstr "S"
+
+#: contrib/gstyle/ui/gstyle-color-panel.ui:226
+msgid "V"
+msgstr "V"
+
+#: contrib/gstyle/ui/gstyle-color-panel.ui:322
+msgid "L*"
+msgstr "L*"
+
+#: contrib/gstyle/ui/gstyle-color-panel.ui:332
+msgid "a*"
+msgstr "a*"
+
+#: contrib/gstyle/ui/gstyle-color-panel.ui:342
+msgid "b*"
+msgstr "b*"
+
+#: contrib/gstyle/ui/gstyle-color-panel.ui:441
+msgid "R"
+msgstr "R"
+
+#: contrib/gstyle/ui/gstyle-color-panel.ui:451
+msgid "G"
+msgstr "G"
+
+#: contrib/gstyle/ui/gstyle-color-panel.ui:461
+msgid "B"
+msgstr "B"
+
+#: contrib/gstyle/ui/gstyle-color-panel.ui:573
+#: plugins/color-picker/gtk/color-picker-prefs.ui:433
+msgid "Color strings"
+msgstr "Συμβολοσειρές χρώματος"
+
+#: contrib/gstyle/ui/gstyle-color-panel.ui:634
+msgid "HEX3"
+msgstr "HEX3"
+
+#: contrib/gstyle/ui/gstyle-color-panel.ui:645
+msgid "HEX6"
+msgstr "HEX6"
+
+#: contrib/gstyle/ui/gstyle-color-panel.ui:656
+msgid "RGB"
+msgstr "RGB"
+
+#: contrib/gstyle/ui/gstyle-color-panel.ui:667
+msgid "RGBA"
+msgstr "RGBA"
+
+#: contrib/gstyle/ui/gstyle-color-panel.ui:678
+msgid "HSL"
+msgstr "HSL"
+
+#: contrib/gstyle/ui/gstyle-color-panel.ui:689
+msgid "HSLA"
+msgstr "HSLA"
+
+#: contrib/gstyle/ui/gstyle-color-panel.ui:818
+msgid "Palettes"
+msgstr "Παλέτες"
+
+#: contrib/gstyle/ui/gstyle-color-panel.ui:946
+#: plugins/color-picker/gtk/color-picker.ui:48
+msgid "No open palettes"
+msgstr "Καμία ανοιχτή παλέτα"
+
+#: contrib/gstyle/ui/gstyle-color-panel.ui:959
+msgid "Load or generate a palette using the preferences"
+msgstr "Φόρτωση ή δημιουργία παλέτας χρησιμοποιώντας τις προτιμήσεις"
+
+#: contrib/gstyle/ui/gstyle-color-widget.ui:13
+#: plugins/color-picker/gtk/color-picker-palette-menu.ui:13
+msgid "Rename"
+msgstr "Μετονομασία"
+
+#: contrib/gstyle/ui/gstyle-color-widget.ui:19
+#: plugins/color-picker/gtk/color-picker-palette-menu.ui:19
+msgid "Remove"
+msgstr "Αφαίρεση"
+
+#: contrib/gstyle/ui/gstyle-rename-popover.ui:35
+#: plugins/project-tree/gb-rename-file-popover.ui:35
+#: plugins/project-tree/gtk/menus.ui:57
+msgid "_Rename"
+msgstr "Με_τονομασία"
+
+#: contrib/search/trie.c:790
 #, c-format
 msgid "Traversal order %u is not supported on Trie."
 msgstr "Η σειρά διέλευσης %u δεν υποστηρίζεται στο δέντρο."
 
-#: ../contrib/tmpl/tmpl-parser.c:199
+#: contrib/tmpl/tmpl-parser.c:199
 #, c-format
 msgid "%s() may only be called once"
 msgstr "Το %s() μπορεί να καλεσθεί μόνο μία φορά"
 
-#: ../contrib/tmpl/tmpl-parser.c:211
-#, c-format
+#: contrib/tmpl/tmpl-parser.c:211
 msgid "Parser does not contain an input stream"
 msgstr "Ο αναλυτής δεν περιέχει μια ροή εισόδου"
 
-#: ../contrib/tmpl/tmpl-template.c:451
-#, c-format
+#: contrib/tmpl/tmpl-template.c:451
 msgid "Must parse template before expanding"
 msgstr "Πρέπει να αναλυθεί το πρότυπο πρωτού επεκταθεί"
 
-#: ../contrib/tmpl/tmpl-template-locator.c:105
+#: contrib/tmpl/tmpl-template-locator.c:105
 #, c-format
 msgid "Failed to locate template \"%s\""
 msgstr "Αποτυχία εντοπισμού προτύπου \"%s\""
 
-#: ../contrib/xml/xml-reader.c:327
-#, c-format
+#: contrib/xml/xml-reader.c:327
 msgid "Could not parse XML from stream"
 msgstr "Αδυναμία ανάλυσης XML από την ροή"
 
-#: ../data/gtk/menus.ui.h:1
+#: data/gsettings/org.gnome.builder.build.gschema.xml:6
+msgid "Build Parallelism"
+msgstr "Παραλληλισμός δόμησης"
+
+#: data/gsettings/org.gnome.builder.build.gschema.xml:7
+msgid ""
+"Number of workers to use when performing builds. -1 for sensible default. 0 "
+"for number of CPU."
+msgstr ""
+"Ο αριθμός των εργατών που θα χρησιμοποιηθούν για τη δόμηση. -1 για την "
+"προεπιλεγμένη τιμή. 0 για τον αριθμό των CPU."
+
+#: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:5
+msgid "Suggest Snippet Completion"
+msgstr "Υποδείξεις συμπλήρωσης αποσπασμάτων"
+
+#: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:6
+msgid "Allow snippets to be inserted into the document."
+msgstr "Επιτρέπει αποσπάσματα κώδικα να εισαχθούν στο έγγραφο."
+
+#: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:10
+msgid "Clang based autocompletion (Experimental)"
+msgstr "Αυτόματη συμπλήρωση Clang (Πειραματικό)"
+
+#: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:11
+msgid "Use Clang for autocompletion in the C and C++ languages."
+msgstr "Χρήση Clang για αυτόματη συμπλήρωση στις γλώσσες C και C++."
+
+#: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:15
+msgid "Ctags based autocompletion"
+msgstr "Αυτόματη συμπλήρωση Ctags"
+
+#: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:16
+msgid "Use Ctags for autocompletion."
+msgstr "Χρησιμοποιήστε Ctags για αυτόματη συμπλήρωση."
+
+#: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:20
+msgid "Enable auto-completion of words in document"
+msgstr "Ενεργοποίηση αυτόματης συμπλήρωσης για τις λέξεις του εγγράφου"
+
+#: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:21
+msgid ""
+"If enabled, words within the current document will be available for auto-"
+"completion."
+msgstr ""
+"Αν είναι ενεργό, λέξεις στο τρέχον έγγραφο θα είναι διαθέσιμες για αυτόματη "
+"συμπλήρωση."
+
+#: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:25
+msgid "Enable semantic highlighting"
+msgstr "Ενεργοποίηση σημασιολογικής επισήμανσης"
+
+#: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:26
+msgid ""
+"If enabled, additional highlighting will be provided in supported languages "
+"based on information extracted from the source code."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:30
+msgid "Path to ctags executable"
+msgstr "Διαδρομή του εκτελέσιμου ctags "
+
+#: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:31
+msgid "The path to the ctags executable on the system."
+msgstr "Διαδρομή του εκτελέσιμου ctags στο σύστημα."
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:24
+msgid "Restore last position"
+msgstr "Επαναφορά τελευταίας θέσης"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:25
+#, fuzzy
+msgid "Jump to the last position when reopening a file"
+msgstr "Επαναφέρει τον δρομέα στην τελευταία θέση κατά το άνοιγμα του αρχείου"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:29
+msgid "Show modified lines"
+msgstr "Εμφάνιση τροποποιημένων γραμμών"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:30
+msgid ""
+"If enabled, the editor will show line additions and changes next to the "
+"source code."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:34
+#: libide/editor/ide-editor-tweak-widget.ui:74
+msgid "Highlight current line"
+msgstr "Επισήμανση τρέχουσας γραμμής"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:35
+msgid "If enabled, the editor will highlight the line containing the cursor."
+msgstr ""
+"Αν είναι ενεργό, ο επεξεργαστής θα επισημάνει τη γραμμή όπου βρίσκεται ο "
+"δρομέας"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:39
+msgid "Highlight matching brackets"
+msgstr "Επισήμανση αντίστοιχων παρενθέσεων"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:40
+msgid "If enabled, the editor will highlight matching brackets."
+msgstr ""
+"Αν είναι ενεργό, ο επεξεργαστής θα επισημάνει τις παρενθέσεις που ταιριάζουν."
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:44
+msgid "Show line numbers"
+msgstr "Εμφάνιση αρίθμησης των γραμμών"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:45
+msgid "If enabled, the editor will show line numbers."
+msgstr "Αν είναι ενεργό, ο επεξεργαστής θα εμφανίσει την αρίθμηση γραμμών."
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:49
+#: libide/editor/ide-editor-tweak-widget.ui:91
+#: libide/preferences/ide-preferences-builtin.c:150
+msgid "Smart Backspace"
+msgstr "Έξυπνο Backspace"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:50
+msgid ""
+"Backspace will remove additional spaces to keep you aligned to the "
+"indentation size."
+msgstr ""
+"Το Backspace θα αφαιρέσει τα επιπλέον κενά για να διατηρηθεί η στοίχιση με "
+"το μέγεθος εσοχής."
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:54
+#: libide/preferences/ide-preferences-builtin.c:149
+msgid "Smart Home and End"
+msgstr "Έξυπνα πλήκτρα Home/End"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:55
+#, fuzzy
+msgid "Whether or not Home moves to first non-space character."
+msgstr "Αν το πλήκτρο Home μετακινεί τον δρομέα στον πρώτο μη κενό χαρακτήρα."
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:59
+msgid "Show grid lines"
+msgstr "Εμφάνιση γραμμών πλέγματος"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:60
+msgid "If enabled, the editor will show grid lines in the document."
+msgstr ""
+"Αν είναι ενεργό, ο επεξεργαστής θα εμφανίσει τις γραμμές πλέγματος στο "
+"έγγραφο."
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:74
+#: libide/preferences/ide-preferences-builtin.c:172
+msgid "Show overview map"
+msgstr "Εμφάνιση του χάρτη επισκόπησης"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:75
+msgid ""
+"If enabled, Builder will display an overview map of the source file next to "
+"the editor."
+msgstr ""
+"Αν είναι ενεργό, ο Κατασκευαστής θα εμφανίσει έναν χάρτη επισκόπησης δίπλα "
+"από τον επεξεργαστή."
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:79
+msgid "Automatically Hide Overview Map"
+msgstr "Αυτόματη απόκρυψη του χάρτη επισκόπησης"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:80
+msgid ""
+"If enabled, Builder will automatically hide the overview map when mouse "
+"focus leaves the editor, or a timeout occurs."
+msgstr ""
+"Αν είναι ενεργό, ο Κατασκευαστής θα κρύψει αυτόματα τον χάρτη επισκόπησης "
+"όταν η εστίαση του ποντικιού αφήσει τον επεξεργαστή, ή όταν λήξει το χρονικό "
+"όριο."
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:84
+msgid "Draw Spaces"
+msgstr "Σχεδίαση διαστημάτων"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:85
+msgid "The various types of space to draw in the editor."
+msgstr "Οι διάφοροι τύποι διαστημάτων που θα σχεδιαστούν στον επεξεργαστή."
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:90
+#: libide/preferences/ide-preferences-builtin.c:161
+msgid "Overscroll"
+msgstr "Υπερκύλιση"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:91
+#, fuzzy
+msgid "The number of lines to scroll beyond the end of the buffer."
+msgstr "Επιτρέπει στον επεξεργαστή να κυλιθεί στο τέλος του αρχείου"
+
+#: data/gsettings/org.gnome.builder.extension-type.gschema.xml:5
+#: data/gsettings/org.gnome.builder.plugin.gschema.xml:5
+msgid "Enabled"
+msgstr "Ενεργοποιημένο"
+
+#: data/gsettings/org.gnome.builder.extension-type.gschema.xml:6
+msgid "If the type within the extension is enabled."
+msgstr "Αν ο τύπος μέσα στο πρόσθετο είναι ενεργοποιημένος."
+
+#: data/gsettings/org.gnome.builder.gschema.xml:5
+msgid "Window size"
+msgstr "Μεγέθος παραθύρου"
+
+#: data/gsettings/org.gnome.builder.gschema.xml:6
+msgid "Window size (width and height)."
+msgstr "Μέγεθος παραθύρου (πλάτος και ύψος)."
+
+#: data/gsettings/org.gnome.builder.gschema.xml:10
+msgid "Window position"
+msgstr "Θέση παραθύρου"
+
+#: data/gsettings/org.gnome.builder.gschema.xml:11
+msgid "Window position (x and y)."
+msgstr "Θέση παραθύρου (x και y)."
+
+#: data/gsettings/org.gnome.builder.gschema.xml:15
+msgid "Window maximized"
+msgstr "Μεγιστοποιημένο παράθυρο"
+
+#: data/gsettings/org.gnome.builder.gschema.xml:16
+msgid "Window maximized state"
+msgstr "Κατάσταση μεγιστοποιημένου παραθύρου"
+
+#: data/gsettings/org.gnome.builder.gschema.xml:20
+msgid "Night Mode"
+msgstr "Νυχτερινή λειτουργία"
+
+#: data/gsettings/org.gnome.builder.gschema.xml:21
+#, fuzzy
+msgid "Prefer dark application chrome."
+msgstr "Χρήση σκούρων χρωμάτων για την απεικόνιση της εφαρμογής"
+
+#: data/gsettings/org.gnome.builder.gschema.xml:25
+msgid "Mine projects"
+msgstr "Τα έργα μου"
+
+#: data/gsettings/org.gnome.builder.gschema.xml:26
+msgid "Search directories for projects."
+msgstr "Αναζήτηση σε καταλόγους για έργα."
+
+#: data/gsettings/org.gnome.builder.gschema.xml:30
+#: libide/preferences/ide-preferences-builtin.c:393
+msgid "Projects directory"
+msgstr "Κατάλογος έργων"
+
+#: data/gsettings/org.gnome.builder.gschema.xml:31
+msgid "Directory for all Builder projects."
+msgstr "Κατάλογος για όλα τα έργα του Κατασκευαστή."
+
+#: data/gsettings/org.gnome.builder.gschema.xml:35
+msgid "Restore Previous Files"
+msgstr "Επαναφορά προηγούμενων αρχείων"
+
+#: data/gsettings/org.gnome.builder.gschema.xml:36
+msgid "Restore previously opened files when loading a project."
+msgstr "Επαναφορά προηγούμενων ανοιχτών αρχείων κατά την φόρτωση του έργου."
+
+#: data/gsettings/org.gnome.builder.plugin.gschema.xml:6
+msgid "If the plugin should be enabled"
+msgstr "Αν θα ενεργοποιηθεί το πρόσθετο."
+
+#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:5
+msgid "Show Project Sidebar"
+msgstr "Εμφάνιση πλευρικής στήλης έργου"
+
+#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:6
+msgid "If enabled, the sidebar will be visible in the editor workspace."
+msgstr ""
+"Αν είναι ενεργό, η πλευρική στείλει θα είναι ορατή στον χώρο εργασίας του "
+"επεξεργαστή."
+
+#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:10
+#: plugins/project-tree/gtk/menus.ui:84
+msgid "Show Icons"
+msgstr "Εμφάνιση εικονιδίων"
+
+#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:11
+msgid "If enabled, the project tree will display icons next to each item."
+msgstr ""
+"Αν είναι ενεργό, το δέντρο του έργου θα προβάλει εικονίδια δίπλα σε κάθε "
+"αντικείμενο."
+
+#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:15
+#: plugins/project-tree/gtk/menus.ui:88
+msgid "Show Ignored Files"
+msgstr "Εμφάνιση αγνοημένων αρχείων"
+
+#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:16
+msgid ""
+"If enabled, the project tree will display files that are ignored by the VCS."
+msgstr ""
+"Αν είναι ενεργό, το δέντρο του έργου θα προβάλει αρχεία που παραβλέπονται "
+"από το σύστημα ελέγχου εκδόσεων (VCS)."
+
+#: data/gsettings/org.gnome.builder.workbench.gschema.xml:5
+msgid "Show Left Panel"
+msgstr "Εμφάνιση αριστερού πίνακα"
+
+#: data/gsettings/org.gnome.builder.workbench.gschema.xml:6
+msgid "If enabled, the left panel will be displayed."
+msgstr "Αν είναι ενεργό, θα εμφανίζεται ο αριστερός πίνακας."
+
+#: data/gsettings/org.gnome.builder.workbench.gschema.xml:11
+msgid "Left Panel Position"
+msgstr "Θέση αριστερού πίνακα"
+
+#: data/gsettings/org.gnome.builder.workbench.gschema.xml:12
+msgid "The width in pixel units of the left panel."
+msgstr "Το πλάτος σε εικονοστοιχεία του αριστερού πίνακα."
+
+#: data/gsettings/org.gnome.builder.workbench.gschema.xml:17
+msgid "Show Right Panel"
+msgstr "Εμφάνιση δεξιού πίνακα"
+
+#: data/gsettings/org.gnome.builder.workbench.gschema.xml:18
+msgid "If enabled, the right panel will be displayed."
+msgstr "Αν είναι ενεργό, θα εμφανίζεται ο δεξιός πίνακας."
+
+#: data/gsettings/org.gnome.builder.workbench.gschema.xml:23
+msgid "Right Panel Position"
+msgstr "Θέση δεξιού πίνακα"
+
+#: data/gsettings/org.gnome.builder.workbench.gschema.xml:24
+msgid "The width in pixel units of the right panel."
+msgstr "Το πλάτος σε εικονοστοιχεία του δεξιού πίνακα."
+
+#: data/gsettings/org.gnome.builder.workbench.gschema.xml:29
+msgid "Show Bottom Panel"
+msgstr "Εμφάνιση κάτω πίνακα"
+
+#: data/gsettings/org.gnome.builder.workbench.gschema.xml:30
+msgid "If enabled, the bottom panel will be displayed."
+msgstr "Αν είναι ενεργό, θα εμφανίζεται ο κάτω πίνακας."
+
+#: data/gsettings/org.gnome.builder.workbench.gschema.xml:35
+msgid "Bottom Panel Position"
+msgstr "Θέση κάτω πίνακα"
+
+#: data/gsettings/org.gnome.builder.workbench.gschema.xml:36
+msgid "The height in pixel units of the bottom panel."
+msgstr "Το πλάτος σε εικονοστοιχεία του κάτω πίνακα."
+
+#: data/gtk/menus.ui:7
 msgid "_New Project"
 msgstr "Νέο έργ_ο"
 
-#: ../data/gtk/menus.ui.h:2
+#: data/gtk/menus.ui:11
 msgid "_Open Project"
 msgstr "Άνοιγ_μα έργου"
 
-#: ../data/gtk/menus.ui.h:3
+#: data/gtk/menus.ui:18
 msgid "_Preferences"
 msgstr "Π_ροτιμήσεις"
 
-#: ../data/gtk/menus.ui.h:4
+#: data/gtk/menus.ui:26
 msgid "Keyboard _Shortcuts"
 msgstr "Συντομεύσεις _πληκτρολογίου"
 
-#: ../data/gtk/menus.ui.h:5
+#: data/gtk/menus.ui:30
 msgid "_Help"
 msgstr "_Βοήθεια"
 
-#: ../data/gtk/menus.ui.h:6
+#: data/gtk/menus.ui:34
 msgid "_About"
 msgstr "Π_ερί"
 
-#: ../data/gtk/menus.ui.h:7
+#: data/gtk/menus.ui:38
 msgid "_Quit"
 msgstr "Έ_ξοδος"
 
-#: ../data/gtk/menus.ui.h:8 ../data/ui/ide-editor-view.ui.h:1
-msgid "_Reload"
-msgstr "Α_νανέωση"
+#: data/gtk/menus.ui:48
+msgid "Show left panel"
+msgstr "Εμφάνιση αριστερού πίνακα"
 
-#: ../data/gtk/menus.ui.h:9
-msgid "_Print…"
-msgstr "_Εκτύπωση…"
+#: data/gtk/menus.ui:53
+msgid "Show bottom panel"
+msgstr "Εμφάνιση κάτω πίνακα"
 
-#: ../data/gtk/menus.ui.h:10
-msgid "_Fullscreen"
-msgstr "_Πλήρης οθόνη"
+#: data/gtk/menus.ui:58
+msgid "Show right panel"
+msgstr "Εμφάνιση δεξιού πίνακα"
 
-#: ../data/gtk/menus.ui.h:11
+#: data/gtk/menus.ui:86
 msgid "_New File"
 msgstr "_Νέο αρχείο"
 
-#: ../data/gtk/menus.ui.h:12
-msgid "_Open File"
-msgstr "Άν_οιγμα αρχείου"
+#: data/gtk/menus.ui:92
+msgid "_Open File…"
+msgstr "Άν_οιγμα αρχείου…"
 
-#: ../data/gtk/menus.ui.h:13
+#: data/gtk/menus.ui:98
 msgid "Save _All"
 msgstr "Αποθήκευση ό_λων"
 
-#: ../data/gtk/menus.ui.h:14
-msgid "_Close All"
-msgstr "_Κλείσιμο όλων"
-
-#: ../data/gtk/menus.ui.h:15
+#: data/gtk/menus.ui:115
 msgid "_Go to Definition"
 msgstr "Με_τάβαση στον ορισμό"
 
-#: ../data/gtk/menus.ui.h:16
+#: data/gtk/menus.ui:121
 msgid "_Undo"
 msgstr "_Αναίρεση"
 
-#: ../data/gtk/menus.ui.h:17
+#: data/gtk/menus.ui:125
 msgid "_Redo"
 msgstr "Ε_πανάληψη"
 
-#: ../data/gtk/menus.ui.h:18
+#: data/gtk/menus.ui:131
 msgid "C_ut"
 msgstr "Απο_κοπή"
 
-#: ../data/gtk/menus.ui.h:19 ../plugins/terminal/gtk/menus.ui.h:2
+#: data/gtk/menus.ui:136 data/gtk/menus.ui:237 plugins/terminal/gtk/menus.ui:16
 msgid "_Copy"
 msgstr "Αντιγρα_φή"
 
-#: ../data/gtk/menus.ui.h:20 ../plugins/terminal/gtk/menus.ui.h:3
+#: data/gtk/menus.ui:140 data/gtk/menus.ui:241 plugins/terminal/gtk/menus.ui:20
 msgid "_Paste"
 msgstr "_Επικόλληση"
 
-#: ../data/gtk/menus.ui.h:21
+#: data/gtk/menus.ui:144 data/gtk/menus.ui:245
 msgid "_Delete"
 msgstr "Δια_γραφή"
 
-#: ../data/gtk/menus.ui.h:22 ../plugins/terminal/gtk/menus.ui.h:4
+#: data/gtk/menus.ui:150 libide/preferences/ide-preferences-builtin.c:190
+msgid "Highlighting"
+msgstr "Επισήμανση"
+
+#: data/gtk/menus.ui:155 plugins/terminal/gtk/menus.ui:26
 msgid "Selection"
 msgstr "Επιλογή"
 
-#: ../data/gtk/menus.ui.h:23 ../plugins/terminal/gtk/menus.ui.h:5
+#: data/gtk/menus.ui:157 data/gtk/menus.ui:251 plugins/terminal/gtk/menus.ui:28
 msgid "Select _All"
 msgstr "Επι_λογή όλων"
 
-#: ../data/gtk/menus.ui.h:24 ../plugins/terminal/gtk/menus.ui.h:6
+#: data/gtk/menus.ui:162 plugins/terminal/gtk/menus.ui:33
 msgid "Select _None"
 msgstr "Επιλογή κα_νενός"
 
-#: ../data/gtk/menus.ui.h:25
+#: data/gtk/menus.ui:168
 msgid "All _Upper Case"
 msgstr "Όλα κεφα_λαία"
 
-#: ../data/gtk/menus.ui.h:26
+#: data/gtk/menus.ui:173
 msgid "All _Lower Case"
 msgstr "Όλα πε_ζά"
 
-#: ../data/gtk/menus.ui.h:27
+#: data/gtk/menus.ui:178
 msgid "_Invert Case"
 msgstr "Εν_αλλαγή πεζών κεφαλαίων"
 
-#: ../data/gtk/menus.ui.h:28
+#: data/gtk/menus.ui:183
 msgid "_Title Case"
 msgstr "Ε_ναλλαγή πεζών κεφαλαίων πρώτου χαρακτήρα"
 
-#: ../data/gtk/menus.ui.h:29
+#: data/gtk/menus.ui:190
 msgid "Join Lines"
 msgstr "Ένωση γραμμών"
 
-#: ../data/gtk/menus.ui.h:30
+#: data/gtk/menus.ui:194
 msgid "Sort Lines"
 msgstr "Ταξινόμηση γραμμών"
 
-#: ../data/gtk/menus.ui.h:31
+#: data/gtk/menus.ui:203
 msgid "Zoom"
 msgstr "Εστίαση"
 
-#: ../data/gtk/menus.ui.h:32
+#: data/gtk/menus.ui:205
 msgid "Zoom _In"
 msgstr "Μεγέ_θυνση"
 
-#: ../data/gtk/menus.ui.h:33
+#: data/gtk/menus.ui:210
 msgid "Zoom _Out"
 msgstr "Σμίκρ_υνση"
 
-#: ../data/gtk/menus.ui.h:34
+#: data/gtk/menus.ui:216
 msgid "Reset"
 msgstr "Επαναφορά"
 
-#: ../data/gtk/menus.ui.h:35
-msgid "_Match Case"
-msgstr "Ταίριασ_μα πεζών-κεφαλαίων"
-
-#: ../data/gtk/menus.ui.h:36
-msgid "Match _Entire Word Only"
-msgstr "Ταίριασμα ο_λόκληρης λέξης μόνο"
-
-#: ../data/gtk/menus.ui.h:37
-msgid "Match as _Regular Expression"
-msgstr "Ταίριασμα ως _κανονική έκφραση"
-
-#: ../data/gtk/menus.ui.h:38
+#: data/gtk/menus.ui:227
 msgid "_Wrap Around"
 msgstr "Αναδίπλωση _γύρω"
 
-#: ../data/gtk/menus.ui.h:39
+#: data/gtk/menus.ui:233
 msgid "Cu_t"
 msgstr "Αποκο_πή"
 
-#: ../data/gtk/menus.ui.h:40
+#: data/gtk/menus.ui:259
 msgid "Split"
 msgstr "Διαχωρισμός"
 
-#: ../data/gtk/menus.ui.h:41
+#: data/gtk/menus.ui:261
 msgid "Split Left"
 msgstr "Διαχωρισμός στα αριστερά"
 
-#: ../data/gtk/menus.ui.h:42
+#: data/gtk/menus.ui:266
 msgid "Split Right"
 msgstr "Διαχωρισμός στα δεξιά"
 
-#: ../data/gtk/menus.ui.h:43
+#: data/gtk/menus.ui:271
 msgid "Split Down"
 msgstr "Διαχωρισμός κάτω"
 
-#: ../data/gtk/menus.ui.h:44
+#: data/gtk/menus.ui:278
 msgid "Move"
 msgstr "Μετακίνηση"
 
-#: ../data/gtk/menus.ui.h:45
+#: data/gtk/menus.ui:280
 msgid "Move Left"
 msgstr "Μετακίνηση αριστερά"
 
-#: ../data/gtk/menus.ui.h:46
+#: data/gtk/menus.ui:285
 msgid "Move Right"
 msgstr "Μετακίνηση δεξιά"
 
-#: ../data/gtk/menus.ui.h:47
+#: data/gtk/menus.ui:293
 msgid "_Save"
 msgstr "Απ_οθήκευση"
 
-#: ../data/gtk/menus.ui.h:48
+#: data/gtk/menus.ui:297
 msgid "_Save As"
 msgstr "_Αποθήκευση ως"
 
-#: ../data/gtk/menus.ui.h:49
+#: data/gtk/menus.ui:303
 msgid "_Print"
 msgstr "Εκτύ_πωση"
 
-#: ../data/gtk/menus.ui.h:50
+#: data/gtk/menus.ui:309
 msgid "_Close"
 msgstr "Κλεί_σιμο"
 
-#: ../data/style-schemes/builder-dark.xml.h:1
-msgid "Builder Dark"
-msgstr "Σκοτεινό θέμα"
-
-#: ../data/style-schemes/builder-dark.xml.h:2
-msgid "Dark color scheme for Builder using the Tango color palette"
-msgstr ""
-"Σκοτεινό θέμα χρώματος για τον Κατασκεθαστή χρησιμοποιώντας την παλέτα "
-"χρώματος Tango"
-
-#: ../data/style-schemes/builder.xml.h:1 ../libide/ide-application.c:413
-#: ../libide/preferences/ide-preferences-builtin.c:113
+#: data/org.gnome.Builder.appdata.xml.in:7
+#: data/org.gnome.Builder.desktop.in.in:3
+#: libide/application/ide-application.c:466
+#: libide/preferences/ide-preferences-builtin.c:144
+#: libide/workbench/ide-workbench.c:560
 msgid "Builder"
 msgstr "Κατασκευαστής"
 
-#: ../data/style-schemes/builder.xml.h:2
-msgid "The default color scheme for Builder"
-msgstr "Το προεπιλεγμένο χρώμα θέματος του Κατασκευαστή"
+#: data/org.gnome.Builder.appdata.xml.in:8
+#: libide/application/ide-application-actions.c:116
+msgid "An IDE for GNOME"
+msgstr "Ένα IDE για το GNOME"
+
+#: data/org.gnome.Builder.appdata.xml.in:11
+msgid ""
+"Builder is an actively developed Integrated Development Environment for "
+"GNOME. It combines integrated support for essential GNOME technologies such "
+"as GTK+, GLib, and GNOME APIs with features that any developer will "
+"appreciate, like syntax highlighting and snippets."
+msgstr ""
+
+#: data/org.gnome.Builder.appdata.xml.in:17
+msgid ""
+"You can rely on predictable releases of Builder with each new release of "
+"GNOME every six months."
+msgstr ""
+
+#: data/org.gnome.Builder.appdata.xml.in:21
+msgid "Features:"
+msgstr "Χαρακτηριστικά:"
+
+#: data/org.gnome.Builder.appdata.xml.in:23
+msgid "Built in syntax highlighting for many languages"
+msgstr "Ενσωματωμένη επισήμανση σύνταξης για αρκετές γλώσσες"
+
+#: data/org.gnome.Builder.appdata.xml.in:24
+#: data/org.gnome.Builder.appdata.xml.in:52
+msgid "Side-by-side code editors"
+msgstr ""
+
+#: data/org.gnome.Builder.appdata.xml.in:25
+msgid "Integration with Git"
+msgstr "Ενσωμάτωση με Git"
+
+#: data/org.gnome.Builder.appdata.xml.in:26
+msgid "Integration with Autotools"
+msgstr "Ενσωμάτωση με Autotools"
+
+#: data/org.gnome.Builder.appdata.xml.in:27
+msgid "Clang based auto-completion, semantic highlighting, and diagnostics"
+msgstr ""
+"Αυτόματη συμπλήρωση, σημασιολογική επισήμανση και διαγνωστικά βασισμένα στο "
+"Clang"
+
+#: data/org.gnome.Builder.appdata.xml.in:28
+msgid "Python based auto-completion, semantic highlighting, and diagnostics"
+msgstr ""
+"Αυτόματη συμπλήρωση, σημασιολογική επισήμανση και διαγνωστικά βασισμένα στη "
+"Python"
+
+#: data/org.gnome.Builder.appdata.xml.in:29
+msgid "Vala based auto-completion and diagnostics"
+msgstr "Αυτόματη συμπλήρωση και διαγνωστικά βασισμένα στο Vala"
+
+#: data/org.gnome.Builder.appdata.xml.in:30
+msgid "Auto indentation support for C, Python, Vala, and XML"
+msgstr "Αυτόματη προσθήκη εσοχής για C, Python, Vala, και XML"
+
+#: data/org.gnome.Builder.appdata.xml.in:31
+msgid "HTML/Markdown live preview"
+msgstr "Ζωντανή προεπισκόπηση HTML/Markdown"
+
+#: data/org.gnome.Builder.appdata.xml.in:32
+msgid "Optional Vim-style editing"
+msgstr "Προαιρετικό στυλ επεξεργασίας με βάση το Vim"
+
+#: data/org.gnome.Builder.appdata.xml.in:33
+msgid "An integrated software profiler for native applications"
+msgstr ""
+
+#: data/org.gnome.Builder.appdata.xml.in:34
+msgid "Support for building with jhbuild"
+msgstr "Υποστήριξη για δόμηση με το jhbuild"
+
+#: data/org.gnome.Builder.appdata.xml.in:35
+msgid "Preview support for building with Flatpak runtimes"
+msgstr ""
+"Δοκιμαστική υποστήριξη για δόμηση με περιβάλλοντα εκτέλεσης του Flatpak"
+
+#: data/org.gnome.Builder.appdata.xml.in:44
+msgid "Fast global search"
+msgstr "Γρήγορη καθολική αναζήτηση"
+
+#: data/org.gnome.Builder.appdata.xml.in:48
+msgid "Integrated project tree"
+msgstr "Ενσωματωμένο δέντρο του έργου"
+
+#: data/org.gnome.Builder.desktop.in.in:4
+msgid "Build software for GNOME"
+msgstr "Αναπτύξτε λογισμικό για το GNOME"
+
+#. Translators: Do NOT translate or transliterate this text (this is an icon file name)!
+#: data/org.gnome.Builder.desktop.in.in:7
+msgid "org.gnome.Builder"
+msgstr "org.gnome.Builder"
+
+#. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
+#: data/org.gnome.Builder.desktop.in.in:14
+msgid "Build;Develop;"
+msgstr "Build;Develop;ανάπτυξη;δόμηση;"
+
+#: libide/application/ide-application-actions.c:122
+msgid "GNOME Builder"
+msgstr "Κατασκευαστής GNOME"
+
+#: libide/application/ide-application-actions.c:124
+msgid "translator-credits"
+msgstr ""
+"Ελληνική μεταφραστική ομάδα GNOME\n"
+" Θάνος Τρυφωνίδης <tomtryf@gnome.org>\n"
+"\n"
+"Για περισσότερες πληροφορίες, επισκεφθείτε τη σελίδα\n"
+"http://gnome.gr/"
+
+#: libide/application/ide-application-actions.c:127
+msgid "Learn more about GNOME Builder"
+msgstr "Μάθετε περισσότερα για το Κατασκευαστής GNOME"
+
+#: libide/application/ide-application-actions.c:131
+msgid "Funded By"
+msgstr "Χρηματοδοτήθηκε από"
+
+#: libide/application/ide-application-command-line.c:102
+msgid "Commands:"
+msgstr "Εντολές:"
+
+#: libide/application/ide-application-command-line.c:186
+msgid "List available subcommands"
+msgstr "Εμφάνιση διαθέσιμων υποεντολών"
+
+#: libide/application/ide-application-command-line.c:193
+msgid "Run Builder in standalone mode"
+msgstr "Εκτέλεση του Κατασκευαστή σε λειτουργία αυτόνομης εφαρμογής"
+
+#: libide/application/ide-application-command-line.c:200
+msgid "Show the application's version"
+msgstr "Εμφάνιση έκδοσης της εφαρμογής"
+
+#: libide/application/ide-application-command-line.c:219
+msgid "Increase verbosity, may be specified multiple times"
+msgstr "Αύξηση ορατότητας, μπορεί να έχει καθοριστεί αρκετές φορές."
+
+#: libide/application/ide-application-command-line.c:226
+msgid "Enter GApplication Service mode"
+msgstr "Εισαγωγή λειτουργίας υπηρεσίας GApplication"
+
+#: libide/application/ide-application-command-line.c:233
+msgid "Opens the project specified by PATH"
+msgstr "Άνοιγμα του έργου καθορισμένο από τη ΔΙΑΔΡΟΜΗ"
+
+#: libide/application/ide-application-command-line.c:234
+#: plugins/build-tools/gbp-build-tool.c:301
+msgid "PATH"
+msgstr "ΔΙΑΔΡΟΜΗ"
+
+#: libide/application/ide-application-command-line.c:264
+msgid "COMMAND"
+msgstr "ΕΝΤΟΛΗ"
+
+#: libide/application/ide-application-command-line.c:335
+msgid "No commands available"
+msgstr "Δεν υπάρχουν διαθέσιμες εντολές"
+
+#: libide/application/ide-application-command-line.c:365
+msgid "Please provide a command"
+msgstr "Παρακαλούμε δώστε μια εντολή"
+
+#: libide/application/ide-application-command-line.c:375
+msgid "No such tool"
+msgstr "Δεν υπάρχει τέτοιο εργαλείο"
+
+#: libide/application/ide-application-command-line.c:389
+msgid "Please provide a worker type"
+msgstr "Παρακαλούμε, ορίστε τύπο εργάτη"
+
+#: libide/application/ide-application-command-line.c:396
+msgid "Please provide a D-Bus address"
+msgstr "Παρακαλούμε, ορίστε μια διεύθυνση D-Bus"
+
+#: libide/application/ide-application-command-line.c:405
+msgid "No such worker"
+msgstr "Δεν υπάρχει τέτοιος τύπος εργάτη"
+
+#: libide/buffers/ide-buffer.c:2473
+msgid "The current language lacks a symbol resolver."
+msgstr "Η τρέχουσα γλώσσα στερείται από έναν αναλυτή συμβόλων."
+
+#: libide/buffers/ide-buffer-manager.c:633
+msgid "File too large to be opened."
+msgstr "Το αρχείο είναι μεγάλο για να ανοιχθεί."
+
+#: libide/buffers/ide-buffer-manager.c:1483
+msgid "Words"
+msgstr "Λέξεις"
+
+#: libide/buffers/ide-buffer-manager.c:1695
+#, c-format
+msgid "unsaved document %u"
+msgstr "Μη αποθηκευμένο έγγραφο %u"
+
+#: libide/buffers/ide-buffer-manager.c:1729
+msgid "Failed to save buffer, ignoring reclamation."
+msgstr "Αποτυχία αποθήκευσης της ενδιάμεσης μνήμης, αγνόηση επανάκτησης."
+
+#: libide/buildsystem/ide-builder.c:89
+#, c-format
+msgid "%s does not support building"
+msgstr "Το %s δεν υποστηρίζει δόμηση"
+
+#: libide/buildsystem/ide-build-manager.c:478
+msgid "A build is already in progress"
+msgstr "Μια διαδικασία δόμησης βρίσκεται ήδη σε εξέλιξη"
+
+#: libide/buildsystem/ide-build-manager.c:772
+msgid "Ready"
+msgstr "Έτοιμο"
+
+#: libide/buildsystem/ide-build-result.c:250
+msgid "Failed to open stderr stream."
+msgstr "Αποτυχία ανοίγματος τυπικής ροής σφαλμάτων."
+
+#: libide/buildsystem/ide-build-result.c:280
+msgid "Failed to open stdout stream."
+msgstr "Αποτυχία ανοίγματος τυπικής ροής ειξόδου."
+
+#: libide/buildsystem/ide-build-system.c:125
+#, c-format
+msgid "%s() is not supported on %s build system."
+msgstr "Δεν υποστηρίζεται το %s() στο σύστημα δόμησης %s."
+
+#: libide/buildsystem/ide-configuration-manager.c:483
+#: libide/preferences/ide-preferences-builtin.c:337
+#: libide/preferences/ide-preferences-builtin.c:355
+msgid "Default"
+msgstr "Προεπιλεγμένο"
+
+#: libide/devices/ide-device-manager.c:147
+#, c-format
+msgid "The device \"%s\" could not be found."
+msgstr "Η συσκευή \"%s\" δεν ήταν δυνατό να βρεθεί."
+
+#: libide/directory/ide-directory-vcs.c:55
+msgid "unversioned"
+msgstr "χωρίς έκδοση"
+
+#: libide/editorconfig/ide-editorconfig-file-settings.c:159
+msgid "No file was provided."
+msgstr "Δεν καθορίστηκε αρχείο."
+
+#: libide/editor/ide-editor-frame.c:138
+#, c-format
+msgid "Line %u, Column %u"
+msgstr "Γραμμή %u, Στήλη %u"
+
+#: libide/editor/ide-editor-frame.c:310
+#, c-format
+msgid "%u of %u"
+msgstr "%u από %u"
+
+#: libide/editor/ide-editor-frame.c:963 plugins/project-tree/gtk/menus.ui:6
+msgid "Re_veal in Project Tree"
+msgstr "Εμ_φάνιση στο δέντρο του έργου"
 
 #. OVR indicates we are in overwite mode
-#: ../data/ui/ide-editor-frame.ui.h:2
+#: libide/editor/ide-editor-frame.ui:17
 msgid "OVR"
 msgstr "ΑΝΤ"
 
-#: ../data/ui/ide-editor-perspective.ui.h:1
+#: libide/editor/ide-editor-frame.ui:160
+msgid "Replace"
+msgstr "Αντικατάσταση"
+
+#: libide/editor/ide-editor-frame.ui:173
+msgid "Replace All"
+msgstr "Αντικατάσταση όλων"
+
+#: libide/editor/ide-editor-frame.ui:195
+#, fuzzy
+msgid "Switch between Search and Search-and-Replace"
+msgstr "Εναλλαγή μεταξύ αναζήτησης και εύρεση και αντικατάσταση"
+
+#: libide/editor/ide-editor-frame.ui:218
+msgid "Show or hide search options such as case sensitivity"
+msgstr ""
+
+#: libide/editor/ide-editor-frame.ui:279
+msgid "Regular expressions"
+msgstr "Κανονικές εκφράσεις"
+
+#: libide/editor/ide-editor-frame.ui:294
+msgid "Case sensitive"
+msgstr "Διάκριση πεζών/κεφαλαίων"
+
+#: libide/editor/ide-editor-frame.ui:309
+msgid "Match whole word only"
+msgstr "Ταίριασμα μόνο ολόκληρης λέξης"
+
+#: libide/editor/ide-editor-layout-stack-controls.c:46
+msgid "Plain Text"
+msgstr "Απλό κειμένο"
+
+#. translators: the user selected a number outside the value range for the document.
+#: libide/editor/ide-editor-layout-stack-controls.c:191
+#, c-format
+msgid "Provide a number between 1 and %u"
+msgstr "Δώστε έναν αριθμό μεταξύ 1 και %u"
+
+#: libide/editor/ide-editor-layout-stack-controls.ui:31
+msgid "Go to line number"
+msgstr "Μετάβαση σε αριθμό γραμμής"
+
+#: libide/editor/ide-editor-layout-stack-controls.ui:100
+msgid "Change editor settings and language"
+msgstr "Αλλαγή ρυθμίσεων επεξεργαστή και γλώσσας"
+
+#: libide/editor/ide-editor-layout-stack-controls.ui:114
+#: libide/editor/ide-editor-view.ui:100
+msgid "Go to Line"
+msgstr "Μετάβαση στη γραμμή"
+
+#: libide/editor/ide-editor-layout-stack-controls.ui:115
+#: libide/editor/ide-editor-view.ui:101
+msgid "Go"
+msgstr "Μετάβαση"
+
+#: libide/editor/ide-editor-perspective.c:448
+#: libide/preferences/ide-preferences-builtin.c:109
+#: libide/preferences/ide-preferences-builtin.c:156
+msgid "Editor"
+msgstr "Επεξεργαστής"
+
+#: libide/editor/ide-editor-perspective.ui:27
 msgid "No open files"
 msgstr "Κανένα ανοιχτό αρχείο"
 
-#: ../data/ui/ide-editor-perspective.ui.h:2
+#: libide/editor/ide-editor-perspective.ui:40
 msgid "Try opening a file by typing in the search box at the top"
 msgstr ""
 "Ανοίξτε ένα αρχείο πληκτρολογώντας στο πλαίσιο αναζήτησης στο πάνω μέρος"
 
-#: ../data/ui/ide-editor-perspective.ui.h:3
-msgid "Enable / Disable left panel. Shortcut: F9"
-msgstr "Ενεργοποίηση / απενεργοποίηση αριστερού πίνακα. Συντόμευση: F9"
-
-#: ../data/ui/ide-editor-perspective.ui.h:4
-msgid "Enable / Disable bottom panel. Shortcut: Ctrl + F9"
-msgstr "Ενεργοποίηση / απενεργοποίηση κάτω πίνακα. Συντόμευση: Ctrl + F9"
-
-#: ../data/ui/ide-editor-perspective.ui.h:5
-msgid "Enable / Disable right panel. Shortcut: Shift + F9"
-msgstr "Ενεργοποίηση / απενεργοποίηση δεξιού πίνακα. Συντόμευση: Shift + F9"
-
-#: ../data/ui/ide-editor-tweak-widget.ui.h:1
+#: libide/editor/ide-editor-tweak-widget.ui:22
 msgid "Search highlight mode…"
 msgstr "Αναζήτηση σε λειτουργία επισήμανσης…"
 
-#: ../data/ui/ide-editor-tweak-widget.ui.h:2
+#: libide/editor/ide-editor-tweak-widget.ui:56
 msgid "Display line numbers"
 msgstr "Εμφάνιση αριθμών γραμμών"
 
-#: ../data/ui/ide-editor-tweak-widget.ui.h:3
+#: libide/editor/ide-editor-tweak-widget.ui:65
 msgid "Display right margin"
 msgstr "Προβολή δεξιού περιθωρίου"
 
-#: ../data/ui/ide-editor-tweak-widget.ui.h:4
-msgid "Highlight current line"
-msgstr "Επισήμανση τρέχουσας γραμμής"
-
-#: ../data/ui/ide-editor-tweak-widget.ui.h:5
+#: libide/editor/ide-editor-tweak-widget.ui:83
 msgid "Auto indent"
 msgstr "Αυτόματη εσοχή"
 
-#: ../data/ui/ide-editor-tweak-widget.ui.h:6
-#: ../libide/preferences/ide-preferences-builtin.c:119
-msgid "Smart Backspace"
-msgstr "Έξυπνο Backspace"
-
-#: ../data/ui/ide-editor-tweak-widget.ui.h:7
-#: ../libide/preferences/ide-preferences-builtin.c:234
+#: libide/editor/ide-editor-tweak-widget.ui:99
+#: libide/preferences/ide-preferences-builtin.c:324
 msgid "Indentation"
 msgstr "Εσοχή"
 
-#: ../data/ui/ide-editor-tweak-widget.ui.h:8
-#: ../libide/preferences/ide-preferences-builtin.c:145
+#: libide/editor/ide-editor-tweak-widget.ui:127
+#: libide/preferences/ide-preferences-builtin.c:176
 msgid "Spaces"
 msgstr "Διαστήματα"
 
-#: ../data/ui/ide-editor-tweak-widget.ui.h:9
-#: ../libide/preferences/ide-preferences-builtin.c:146
+#: libide/editor/ide-editor-tweak-widget.ui:137
+#: libide/preferences/ide-preferences-builtin.c:177
 msgid "Tabs"
 msgstr "Στηλοθέτες"
 
-#: ../data/ui/ide-editor-tweak-widget.ui.h:10
+#: libide/editor/ide-editor-tweak-widget.ui:157
 msgid "2"
 msgstr "2"
 
-#: ../data/ui/ide-editor-tweak-widget.ui.h:11
+#: libide/editor/ide-editor-tweak-widget.ui:167
 msgid "3"
 msgstr "3"
 
-#: ../data/ui/ide-editor-tweak-widget.ui.h:12
+#: libide/editor/ide-editor-tweak-widget.ui:177
 msgid "4"
 msgstr "4"
 
-#: ../data/ui/ide-editor-tweak-widget.ui.h:13
+#: libide/editor/ide-editor-tweak-widget.ui:187
 msgid "8"
 msgstr "8"
 
-#: ../data/ui/ide-editor-view.ui.h:2 ../data/ui/ide-greeter-perspective.ui.h:14
+#: libide/editor/ide-editor-view-actions.c:310
+msgid "Save Document"
+msgstr "Αποθήκευση εγγράφου"
+
+#: libide/editor/ide-editor-view-actions.c:436
+msgid "Save Document As"
+msgstr "Αποθήκευση εγγράφου ως"
+
+#: libide/editor/ide-editor-view.ui:23
+msgid "_Reload"
+msgstr "Α_νανέωση"
+
+#: libide/editor/ide-editor-view.ui:31
+#: libide/greeter/ide-greeter-perspective.ui:310
+#: libide/greeter/ide-greeter-perspective.ui:358
+#: libide/workbench/ide-omni-bar.ui:346
 msgid "_Cancel"
 msgstr "Ακύ_ρωση"
 
-#: ../data/ui/ide-editor-view.ui.h:3
+#: libide/editor/ide-editor-view.ui:44
 msgid ""
 "Builder has discovered that this file has been modified externally. Would "
 "you like to reload the file?"
@@ -410,997 +1296,634 @@ msgstr ""
 "Ο Κατασκευαστής εντόπισε πως αυτό το αρχείο τροποποιήθηκε από άλλη εφαρμογή. "
 "Θέλετε να ανανεώσετε το αρχείο;"
 
-#: ../data/ui/ide-editor-view.ui.h:4
-msgid "Go to line number"
-msgstr "Μετάβαση σε αριθμό γραμμής"
+#: libide/greeter/ide-greeter-perspective.c:451
+msgid "Failed to load the project"
+msgstr "Αποτυχία φόρτωσης του έργου"
 
-#: ../data/ui/ide-editor-view.ui.h:5
-msgid "Change editor settings and language"
-msgstr "Αλλαγή ρυθμίσεων επεξεργαστή και γλώσσας"
-
-#: ../data/ui/ide-editor-view.ui.h:6
-msgid "Go to Line"
-msgstr "Μετάβαση στη γραμμή"
-
-#: ../data/ui/ide-editor-view.ui.h:7
-msgid "Go"
-msgstr "Μετάβαση"
-
-#: ../data/ui/ide-genesis-perspective.ui.h:1
-msgid "New Project"
-msgstr "Νέο έργο"
-
-#: ../data/ui/ide-genesis-perspective.ui.h:2
-msgid "Co_ntinue"
-msgstr "Συ_νέχιση"
+#: libide/greeter/ide-greeter-perspective.c:668
+msgid "Open Project"
+msgstr "Άνοιγμα έργου"
 
 #. the action:// link is used to jump to the new-project view
-#: ../data/ui/ide-greeter-perspective.ui.h:2
+#: libide/greeter/ide-greeter-perspective.ui:52
 msgid "Why not <a href=\"action://app.new-project\">create a new project</a>?"
 msgstr ""
 "Γιατί δε <a href=\"action://app.new-project\">δημιουργείτε ένα έργο</a>;"
 
-#: ../data/ui/ide-greeter-perspective.ui.h:3
+#: libide/greeter/ide-greeter-perspective.ui:53
 msgid "No projects found"
 msgstr "Δεν βρέθηκαν έργα"
 
-#: ../data/ui/ide-greeter-perspective.ui.h:4
+#: libide/greeter/ide-greeter-perspective.ui:100
 msgid "Recent Projects"
 msgstr "Πρόσφατα έργα"
 
-#: ../data/ui/ide-greeter-perspective.ui.h:5
+#: libide/greeter/ide-greeter-perspective.ui:115
+#: libide/greeter/ide-greeter-perspective.ui:165
+msgid "Updated"
+msgstr "Ενημερώθηκε"
+
+#: libide/greeter/ide-greeter-perspective.ui:150
 msgid "Other Projects"
 msgstr "Άλλα έργα"
 
-#: ../data/ui/ide-greeter-perspective.ui.h:6
+#: libide/greeter/ide-greeter-perspective.ui:206
 msgid "_Remove"
 msgstr "Αφαί_ρεση"
 
-#: ../data/ui/ide-greeter-perspective.ui.h:7
+#: libide/greeter/ide-greeter-perspective.ui:290
 msgid "Select a Project"
 msgstr "Επιλογή έργου"
 
-#: ../data/ui/ide-greeter-perspective.ui.h:8
+#: libide/greeter/ide-greeter-perspective.ui:296
 msgid "Click an item to select"
 msgstr "Κάντε κλικ σε ένα αντικείμενο για να το επιλέξετε"
 
-#: ../data/ui/ide-greeter-perspective.ui.h:9
-msgid "Create a new project"
-msgstr "Δημιουργία νέου έργου"
+#: libide/greeter/ide-greeter-perspective.ui:322
+msgid "Open…"
+msgstr "Άνοιγμα…"
 
-#: ../data/ui/ide-greeter-perspective.ui.h:10
-#: ../plugins/project-tree/gtk/menus.ui.h:2
-msgid "_New"
-msgstr "_Νέο"
-
-#: ../data/ui/ide-greeter-perspective.ui.h:11
-msgid "Search for projects"
-msgstr "Αναζήτηση έργου"
-
-#: ../data/ui/ide-greeter-perspective.ui.h:12
+#: libide/greeter/ide-greeter-perspective.ui:337
 msgid "Select projects for removal"
 msgstr "Επιλογή έργων για αφαίρεση"
 
-#: ../data/ui/ide-greeter-perspective.ui.h:13
+#: libide/greeter/ide-greeter-perspective.ui:357
 msgid "Return to project selection"
 msgstr "Επιστροφή στην επιλογή έργου"
 
-#: ../data/ui/ide-layout-tab-bar.ui.h:1
-msgid "List open files"
-msgstr "Εμφάνιση ανοιχτών αρχείων"
-
-#: ../data/ui/ide-layout-tab-bar.ui.h:2
-msgid "Add a new empty file to your project"
-msgstr "Προσθήκη νέου κενού αρχείου στο έργο σας"
-
-#: ../data/ui/ide-layout-tab.ui.h:1
-msgid "Jump to previous location"
-msgstr "Μετάβαση στην προηγούμενη τοποθεσία"
-
-#: ../data/ui/ide-layout-tab.ui.h:2
-msgid "Jump to next location"
-msgstr "Μετάβαση στην επόμενη τοποθεσία"
-
-#: ../data/ui/ide-layout-tab.ui.h:3
-msgid "Close the current document"
-msgstr "Κλείσιμο του τρέχοντος εγγράφου"
-
-#: ../data/ui/ide-preferences-font-button.ui.h:1
-msgid "_Select"
-msgstr "Επι_λογή"
-
-#: ../data/ui/ide-preferences-perspective.ui.h:1
-msgid "Search through preferences"
-msgstr "Αναζήτηση στις προτιμήσεις"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:1
-msgctxt "shortcut window"
-msgid "Editor Shortcuts"
-msgstr "Συντομεύσεις επεξεργαστή"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:2
-msgctxt "shortcut window"
-msgid "General"
-msgstr "Γενικά"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:3
-msgctxt "shortcut window"
-msgid "Global Search"
-msgstr "Καθολική αναζήτηση"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:4
-msgctxt "shortcut window"
-msgid "Preferences"
-msgstr "Προτιμήσεις"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:5
-msgctxt "shortcut window"
-msgid "Command Bar"
-msgstr "Γραμμή εντολών"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:6
-msgctxt "shortcut window"
-msgid "Terminal"
-msgstr "Τερματικό"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:7
-msgctxt "shortcut window"
-msgid "Keyboard Shortcuts"
-msgstr "Συντομεύσεις πληκτρολογίου"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:8
-msgctxt "shortcut window"
-msgid "Panels"
-msgstr "Πίνακες"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:9
-msgctxt "shortcut window"
-msgid "Toggle left panel"
-msgstr "Εναλλαγή αριστερού πίνακα"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:10
-msgctxt "shortcut window"
-msgid "Toggle right panel"
-msgstr "Εναλλαγή δεξιού πίνακα"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:11
-msgctxt "shortcut window"
-msgid "Toggle bottom panel"
-msgstr "Εναλλαγή κάτω πίνακα"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:12
-msgctxt "shortcut window"
-msgid "Touchpad gestures"
-msgstr "Xειρονομίες πινακίδας αφής"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:13
-msgctxt "shortcut window"
-msgid "Switch to the next document"
-msgstr "Μετάβαση στο επόμενο έγγραφο"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:14
-msgctxt "shortcut window"
-msgid "Switch to the previous document"
-msgstr "Μετάβαση στο προηγούμενο έγγραφο"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:15
-msgctxt "shortcut window"
-msgid "Files"
-msgstr "Αρχεία"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:16
-msgctxt "shortcut window"
-msgid "Create new document"
-msgstr "Δημιουργία νέου εγγράφου"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:17
-msgctxt "shortcut window"
-msgid "Open a document"
-msgstr "Άνοιγμα εγγράφου"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:18
-msgctxt "shortcut window"
-msgid "Save the document"
-msgstr "Αποθήκευση εγγράφου"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:19
-msgctxt "shortcut window"
-msgid "Close the document"
-msgstr "Κλείσιμο εγγράφου"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:20
-msgctxt "shortcut window"
-msgid "Find and replace"
-msgstr "Εύρεση και αντικατάσταση"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:21
-msgctxt "shortcut window"
-msgid "Find"
-msgstr "Εύρεση"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:22
-msgctxt "shortcut window"
-msgid "Find the next match"
-msgstr "Εύρεση της επόμενης αντιστοιχίας"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:23
-msgctxt "shortcut window"
-msgid "Find the previous match"
-msgstr "Εύρεση της προηγούμενης αντιστοιχίας"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:24
-msgctxt "shortcut window"
-msgid "Clear highlight"
-msgstr "Καθαρισμός επισήμανσης"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:25
-msgctxt "shortcut window"
-msgid "Copy and Paste"
-msgstr "Αντιγραφή και επικόλληση"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:26
-msgctxt "shortcut window"
-msgid "Copy selected text to clipboard"
-msgstr "Αντιγραφή επιλεγμένου κειμένου στο πρόχειρο"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:27
-msgctxt "shortcut window"
-msgid "Cut selected text to clipboard"
-msgstr "Αποκοπή επιλεγμένου κειμένου στο πρόχειρο"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:28
-msgctxt "shortcut window"
-msgid "Paste text from clipboard"
-msgstr "Επικόλληση κειμένου από το πρόχειρο"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:29
-msgctxt "shortcut window"
-msgid "Undo and Redo"
-msgstr "Αναίρεση και επαναφορά"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:30
-msgctxt "shortcut window"
-msgid "Undo previous command"
-msgstr "Αναίρεση προηγούμενης εντολής"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:31
-msgctxt "shortcut window"
-msgid "Redo previous command"
-msgstr "Επανάληψη προηγούμενης εντολής"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:32
-msgctxt "shortcut window"
-msgid "Editing"
-msgstr "Επεξεργασία"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:33
-msgctxt "shortcut window"
-msgid "Increment number at cursor"
-msgstr "Αύξηση αριθμού στον δρομέα"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:34
-msgctxt "shortcut window"
-msgid "Decrement number at cursor"
-msgstr "Μείωση αριθμού στον δρομέα"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:35
-msgctxt "shortcut window"
-msgid "Join selected lines"
-msgstr "Ένωση των επιλεγμένων γραμμών"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:36
-msgctxt "shortcut window"
-msgid "Show completion window"
-msgstr "Εμφάνιση παραθύρου ολοκλήρωσης"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:37
-msgctxt "shortcut window"
-msgid "Toggle overwrite"
-msgstr "Εναλλαγή αντικατάστασης"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:38
-msgctxt "shortcut window"
-msgid "Reindent line"
-msgstr "Στυλ επανεσοχής"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:39
-msgctxt "shortcut window"
-msgid "Navigation"
-msgstr "Περιήγηση"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:40
-msgctxt "shortcut window"
-msgid "Move to next error in file"
-msgstr "Μετάβαση στο επόμενο σφάλμα του αρχείου"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:41
-msgctxt "shortcut window"
-msgid "Move to previous error in file"
-msgstr "Μετάβαση στο προηγούμενο σφάλμα του αρχείου"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:42
-msgctxt "shortcut window"
-msgid "Move to previous edit location"
-msgstr "Μετάβαση στην προηγούμενη τοποθεσία επεξεργασίας"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:43
-msgctxt "shortcut window"
-msgid "Move to next edit location"
-msgstr "Μετάβαση στην επόμενη τοποθεσία επεξεργασίας"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:44
-msgctxt "shortcut window"
-msgid "Jump to definition of symbol"
-msgstr "Μετάβαση στον ορισμό συμβόλου"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:45
-msgctxt "shortcut window"
-msgid "Move sectionport up within the file"
-msgstr "Μετακίνηση προβολής πάνω μέσα στο αρχείο"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:46
-msgctxt "shortcut window"
-msgid "Move sectionport down within the file"
-msgstr "Μετακίνηση προβολής κάτω μέσα στο αρχείο"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:47
-msgctxt "shortcut window"
-msgid "Move sectionport to end of file"
-msgstr "Μετακίνηση προβολής στο τέλος του αρχείου"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:48
-msgctxt "shortcut window"
-msgid "Move sectionport to beginning of file"
-msgstr "Μετακίνηση προβολής στην αρχή του αρχείου"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:49
-msgctxt "shortcut window"
-msgid "Move to matching bracket"
-msgstr "Μετάβαση στην αντίστοιχη αγκύλη"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:50
-msgctxt "shortcut window"
-msgid "Selections"
-msgstr "Επιλογές"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:51
-msgctxt "shortcut window"
-msgid "Select all"
-msgstr "Επιλογή όλων"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:52
-msgctxt "shortcut window"
-msgid "Unselect all"
-msgstr "Αποεπιλογή όλων"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:53
-msgctxt "shortcut window"
-msgid "Terminal Shortcuts"
-msgstr "Συντομεύσεις τερματικού"
-
-#: ../data/ui/ide-workbench-header-bar.ui.h:1
-msgid "Search for files. Shortcut: Ctrl + ."
-msgstr "Αναζήτηση αρχείων. Συντόμευση: Ctrl + ."
-
-#: ../data/ui/ide-workbench-header-bar.ui.h:2
-msgid "Drops down a list of file operations"
-msgstr "Αναπτύσσει μια λίστα με τις λειτουργίες του αρχείου"
-
-#: ../libide/directory/ide-directory-genesis-addin.c:106
-msgid "From an existing project on this computer"
-msgstr "Από υπάρχον έργο στον υπολογιστή"
-
-#: ../libide/editorconfig/ide-editorconfig-file-settings.c:153
-msgid "No file was provided."
-msgstr "Δεν καθορίστηκε αρχείο."
-
-#: ../libide/editor/ide-editor-frame.c:75
-#, c-format
-msgid "Line %u, Column %u"
-msgstr "Γραμμή %u, Στήλη %u"
-
-#: ../libide/editor/ide-editor-frame.c:244
-#, c-format
-msgid "%u of %u"
-msgstr "%u από %u"
-
-#: ../libide/editor/ide-editor-frame.c:672
-#: ../plugins/project-tree/gtk/menus.ui.h:1
-msgid "Re_veal in Project Tree"
-msgstr "Εμ_φάνιση στο δέντρο του έργου"
-
-#: ../libide/editor/ide-editor-perspective.c:444
-#: ../libide/preferences/ide-preferences-builtin.c:102
-#: ../libide/preferences/ide-preferences-builtin.c:125
-msgid "Editor"
-msgstr "Επεξεργαστής"
-
-#: ../libide/editor/ide-editor-view-actions.c:301
-msgid "Save Document"
-msgstr "Αποθήκευση εγγράφου"
-
-#: ../libide/editor/ide-editor-view-actions.c:307
-#: ../libide/editor/ide-editor-view-actions.c:438
-#: ../libide/ide-workbench-actions.c:67
-#: ../plugins/build-tools/gbp-build-panel.ui.h:8
-#: ../plugins/terminal/gb-terminal-view-actions.c:305
-msgid "Cancel"
-msgstr "Aκύρωση"
-
-#: ../libide/editor/ide-editor-view-actions.c:308
-#: ../libide/editor/ide-editor-view-actions.c:439
-#: ../plugins/terminal/gb-terminal-view-actions.c:306
-msgid "Save"
-msgstr "Αποθήκευση"
-
-#: ../libide/editor/ide-editor-view-actions.c:427
-msgid "Save Document As"
-msgstr "Αποθήκευση εγγράφου ως"
-
-#: ../libide/editor/ide-editor-view.c:109
-msgid "Plain Text"
-msgstr "Απλό κειμένο"
-
-#. translators: the user selected a number outside the value range for the document.
-#: ../libide/editor/ide-editor-view.c:660
-#, c-format
-msgid "Provide a number between 1 and %u"
-msgstr "Δώστε έναν αριθμό μεταξύ 1 και %u"
-
-#: ../libide/genesis/ide-genesis-perspective.c:200
-#: ../libide/greeter/ide-greeter-perspective.c:436
-msgid "Failed to load the project"
-msgstr "Αποτυχία φόρτωσης του έργου"
-
-#: ../libide/gsettings/ide-language-defaults.c:177
+#: libide/gsettings/ide-language-defaults.c:178
 #, c-format
 msgid "%s contained invalid ASCII"
 msgstr "Το %s περιέχει μη έγκυρο ASCII"
 
-#: ../libide/gsettings/ide-language-defaults.c:192
+#: libide/gsettings/ide-language-defaults.c:193
 #, c-format
 msgid "Failed to parse integer from \"%s\""
 msgstr "Αποτυχία ανάλυσης ακέραιου από το \"%s\""
 
-#: ../libide/gsettings/ide-language-defaults.c:270
+#: libide/gsettings/ide-language-defaults.c:271
 msgid "language defaults missing version in [global] group."
 msgstr ""
 "οι προεπιλογές της γλώσσας δεν περιέχουν την έκδοση στην ομάδα [global]."
 
-#: ../libide/gsettings/ide-language-defaults.c:362
+#: libide/gsettings/ide-language-defaults.c:363
 msgid "Failed to initialize defaults."
 msgstr "Αποτυχία αρχικοποίησης των προεπιλεγμένων."
 
-#: ../libide/ide-application-actions.c:114
-msgid "An IDE for GNOME"
-msgstr "Ένα IDE για το GNOME"
-
-#: ../libide/ide-application-actions.c:120
-msgid "GNOME Builder"
-msgstr "Κατασκευαστής GNOME"
-
-#: ../libide/ide-application-actions.c:122
-msgid "translator-credits"
-msgstr ""
-"Ελληνική μεταφραστική ομάδα GNOME\n"
-" Θάνος Τρυφωνίδης <tomtryf@gmail.com>\n"
-"\n"
-"Για περισσότερες πληροφορίες, επισκεφθείτε τη σελίδα\n"
-"http://gnome.gr/"
-
-#: ../libide/ide-application-actions.c:125
-msgid "Learn more about GNOME Builder"
-msgstr "Μάθετε περισσότερα για το Κατασκευαστής GNOME"
-
-#: ../libide/ide-application-actions.c:129
-msgid "Funded By"
-msgstr "Χρηματοδοτήθηκε από"
-
-#: ../libide/ide-application-command-line.c:102
-msgid "Commands:"
-msgstr "Εντολές:"
-
-#: ../libide/ide-application-command-line.c:186
-msgid "List available subcommands"
-msgstr "Εμφάνιση διαθέσιμων υποεντολών"
-
-#: ../libide/ide-application-command-line.c:193
-msgid "Run Builder in standalone mode"
-msgstr "Εκτέλεση του Κατασκευαστή σε λειτουργία αυτόνομης εφαρμογής"
-
-#: ../libide/ide-application-command-line.c:200
-msgid "Show the application's version"
-msgstr "Εμφάνιση έκδοσης της εφαρμογής"
-
-#: ../libide/ide-application-command-line.c:219
-msgid "Increase verbosity, may be specified multiple times"
-msgstr "Αύξηση ορατότητας, μπορεί να έχει καθοριστεί αρκετές φορές."
-
-#: ../libide/ide-application-command-line.c:226
-msgid "Enter GApplication Service mode"
-msgstr "Εισαγωγή λειτουργίας υπηρεσίας GApplication"
-
-#: ../libide/ide-application-command-line.c:233
-msgid "Opens the project specified by PATH"
-msgstr "Άνοιγμα του έργου καθορισμένο από τη ΔΙΑΔΡΟΜΗ"
-
-#: ../libide/ide-application-command-line.c:234
-#: ../plugins/build-tools/gbp-build-tool.c:301
-msgid "PATH"
-msgstr "ΔΙΑΔΡΟΜΗ"
-
-#: ../libide/ide-application-command-line.c:264
-msgid "COMMAND"
-msgstr "ΕΝΤΟΛΗ"
-
-#: ../libide/ide-application-command-line.c:335
-msgid "No commands available"
-msgstr "Δεν υπάρχουν διαθέσιμες εντολές"
-
-#: ../libide/ide-application-command-line.c:365
-msgid "Please provide a command"
-msgstr "Παρακαλούμε δώστε μια εντολή"
-
-#: ../libide/ide-application-command-line.c:375
-msgid "No such tool"
-msgstr "Δεν υπάρχει τέτοιο εργαλείο"
-
-#: ../libide/ide-application-command-line.c:389
-msgid "Please provide a worker type"
-msgstr "Παρακαλούμε, ορίστε τύπο εργάτη"
-
-#: ../libide/ide-application-command-line.c:396
-msgid "Please provide a D-Bus address"
-msgstr "Παρακαλούμε, ορίστε μια διεύθυνση D-Bus"
-
-#: ../libide/ide-application-command-line.c:405
-msgid "No such worker"
-msgstr "Δεν υπάρχει τέτοιος τύπος εργάτη"
-
-#: ../libide/ide-buffer.c:2298
-msgid "The current language lacks a symbol resolver."
-msgstr "Η τρέχουσα γλώσσα στερείται από έναν αναλυτή συμβόλων."
-
-#: ../libide/ide-buffer-manager.c:612
-msgid "File too large to be opened."
-msgstr "Το αρχείο είναι μεγάλο για να ανοιχθεί."
-
-#: ../libide/ide-buffer-manager.c:1461
-msgid "Words"
-msgstr "Λέξεις"
-
-#: ../libide/ide-buffer-manager.c:1673
-#, c-format
-msgid "unsaved document %u"
-msgstr "Μη αποθηκευμένο έγγραφο %u"
-
-#: ../libide/ide-buffer-manager.c:1707
-msgid "Failed to save buffer, ignoring reclamation."
-msgstr "Αποτυχία αποθήκευσης της ενδιάμεσης μνήμης, αγνόηση επανάκτησης."
-
-#: ../libide/ide-builder.c:89
-#, c-format
-msgid "%s does not support building"
-msgstr "Το %s δεν υποστηρίζει δόμηση"
-
-#: ../libide/ide-build-result.c:217
-msgid "Failed to open stderr stream."
-msgstr "Αποτυχία ανοίγματος τυπικής ροής σφαλμάτων."
-
-#: ../libide/ide-build-result.c:247
-msgid "Failed to open stdout stream."
-msgstr "Αποτυχία ανοίγματος τυπικής ροής ειξόδου."
-
-#: ../libide/ide-build-system.c:122
-#, c-format
-msgid "%s() is not supported on %s build system."
-msgstr "Δεν υποστηρίζεται το %s() στο σύστημα δόμησης %s."
-
-#: ../libide/ide.c:62
+#: libide/ide.c:62
 #, c-format
 msgid "You must call %s() before using libide."
 msgstr "Πρέπει να καλέσετε το %s() πρωτού χρησιμοποιήσετε το libide."
 
-#: ../libide/ide-configuration-manager.c:427
-msgid "Default Configuration"
-msgstr "Προεπιλεγμένη ρύθμιση"
-
-#: ../libide/ide-context.c:1828
+#: libide/ide-context.c:1870
 msgid "An unload request is already pending"
 msgstr "Ένα εκτελούμενο αίτημα είναι σε εκκρεμότητα"
 
-#: ../libide/ide-context.c:1943
+#: libide/ide-context.c:1989
 msgid "Context has already been restored."
 msgstr "Το περιεχόμενο έχει ήδη ανακτηθεί."
 
-#: ../libide/ide-device-manager.c:147
-#, c-format
-msgid "The device \"%s\" could not be found."
-msgstr "Η συσκευή \"%s\" δεν ήταν δυνατό να βρεθεί."
-
-#: ../libide/ide-environment-editor.c:65
-msgid "New variable…"
-msgstr "Νέα μεταβλητή…"
-
-#: ../libide/ide-layout-view.c:146
-msgid "untitled document"
-msgstr "Ανώνυμο έγγραφο"
-
-#: ../libide/ide-object.c:288
+#: libide/ide-object.c:288
 #, c-format
 msgid "No implementations of extension point \"%s\"."
 msgstr "Δεν υπάρχουν εφαρμογές του σημείου επέκτασης \"%s\"."
 
-#: ../libide/ide-object.c:380
+#: libide/ide-object.c:380
 msgid "Failed to locate build system plugin."
 msgstr "Αποτυχία εντοπισμού πρόσθετου για το σύστημα δόμησης"
 
-#: ../libide/ide-object.c:467
+#: libide/ide-object.c:467
 msgid "No such extension point."
 msgstr "Δεν υπάρχει τέτοιο σημείο επέκτασης.\t"
 
-#: ../libide/ide-object.c:477
+#: libide/ide-object.c:477
 msgid "No implementations of extension point."
 msgstr "Δεν υπάρχουν εφαρμογές του σημείου επέκτασης."
 
-#: ../libide/ide-project.c:463
-msgid "Destination file must be within the project tree."
-msgstr "Ο προορισμός πρέπει να είναι μέσα στο δέντρο του έργου."
+#: libide/keybindings/ide-shortcuts-window.ui:10
+msgctxt "shortcut window"
+msgid "Editor Shortcuts"
+msgstr "Συντομεύσεις επεξεργαστή"
 
-#: ../libide/ide-project.c:593
-msgid "File must be within the project tree."
-msgstr "Το αρχείο πρέπει να είναι μέσα στο δέντρο του έργου."
+#: libide/keybindings/ide-shortcuts-window.ui:14
+#: libide/keybindings/ide-shortcuts-window.ui:423
+msgctxt "shortcut window"
+msgid "General"
+msgstr "Γενικά"
 
-#: ../libide/ide-recent-projects.c:383
-#, c-format
-msgid "%s() may only be executed once"
-msgstr "Το %s() μπορεί να εκτελεστεί μόνο μία φορά"
+#: libide/keybindings/ide-shortcuts-window.ui:18
+#: libide/keybindings/ide-shortcuts-window.ui:427
+msgctxt "shortcut window"
+msgid "Global Search"
+msgstr "Καθολική αναζήτηση"
 
-#: ../libide/ide-runtime-manager.c:100
-msgid "Host operating system"
-msgstr "Λειτουργικό σύστημα"
+#: libide/keybindings/ide-shortcuts-window.ui:25
+#: libide/keybindings/ide-shortcuts-window.ui:434
+msgctxt "shortcut window"
+msgid "Preferences"
+msgstr "Προτιμήσεις"
 
-#: ../libide/ide-script.c:205
-#, c-format
-msgid "%s has not implemented GAsyncInitable."
-msgstr "Το %s δεν έχει υλοποιήσει GAsyncInitable."
+#: libide/keybindings/ide-shortcuts-window.ui:32
+#: libide/keybindings/ide-shortcuts-window.ui:441
+msgctxt "shortcut window"
+msgid "Command Bar"
+msgstr "Γραμμή εντολών"
 
-#: ../libide/ide-source-snippet.c:372
-msgid "Chunk does not belong to snippet."
-msgstr "Το κομμάτι κώδικα δεν ανήκει στο απόσπασμα."
+#: libide/keybindings/ide-shortcuts-window.ui:39
+#: libide/keybindings/ide-shortcuts-window.ui:448
+msgctxt "shortcut window"
+msgid "Terminal"
+msgstr "Τερματικό"
 
-#: ../libide/ide-source-snippet-completion-provider.c:297
-#: ../libide/preferences/ide-preferences-builtin.c:173
-msgid "Snippets"
-msgstr "Αποσπάσματα"
+#: libide/keybindings/ide-shortcuts-window.ui:46
+#: libide/keybindings/ide-shortcuts-window.ui:455
+msgctxt "shortcut window"
+msgid "Keyboard Shortcuts"
+msgstr "Συντομεύσεις πληκτρολογίου"
 
-#: ../libide/ide-source-snippets-manager.c:96
-#, c-format
-msgid "Failed to open directory: %s"
-msgstr "Αποτυχία ανοίγματος καταλόγου: %s"
+#: libide/keybindings/ide-shortcuts-window.ui:55
+msgctxt "shortcut window"
+msgid "Panels"
+msgstr "Πίνακες"
 
-#: ../libide/ide-source-snippets-manager.c:109
-#, c-format
-msgid "Failed to load file: %s: %s"
-msgstr "Αδυναμία φόρτωσης αρχείου: %s: %s"
+#: libide/keybindings/ide-shortcuts-window.ui:59
+msgctxt "shortcut window"
+msgid "Toggle left panel"
+msgstr "Εναλλαγή αριστερού πίνακα"
 
-#: ../libide/ide-source-view.c:4967
-#, c-format
-msgid "Insert “%s”"
-msgstr "Εισαγωγή “%s”"
+#: libide/keybindings/ide-shortcuts-window.ui:66
+msgctxt "shortcut window"
+msgid "Toggle right panel"
+msgstr "Εναλλαγή δεξιού πίνακα"
 
-#: ../libide/ide-source-view.c:4969
-#, c-format
-msgid "Replace “%s” with “%s”"
-msgstr "Αντικατάσταση \"%s\" με \"%s\""
+#: libide/keybindings/ide-shortcuts-window.ui:73
+msgctxt "shortcut window"
+msgid "Toggle bottom panel"
+msgstr "Εναλλαγή κάτω πίνακα"
 
-#: ../libide/ide-source-view.c:5083
-msgid "Apply Fix-It"
-msgstr "Εφαρμογή Fix-It"
+#: libide/keybindings/ide-shortcuts-window.ui:82
+msgctxt "shortcut window"
+msgid "Touchpad gestures"
+msgstr "Xειρονομίες πινακίδας αφής"
 
-#: ../libide/ide-uri.c:181
-#, no-c-format
-msgid "Invalid %-encoding in URI"
-msgstr "Άκυρη %-κωδικοποίηση στο URI"
+#: libide/keybindings/ide-shortcuts-window.ui:87
+#: libide/keybindings/ide-shortcuts-window.ui:135
+msgctxt "shortcut window"
+msgid "Switch to the next document"
+msgstr "Μετάβαση στο επόμενο έγγραφο"
 
-#: ../libide/ide-uri.c:219
-msgid "Non-UTF-8 characters in URI"
-msgstr "Μη UTF-8 χαρακτήρες στο URI"
+#: libide/keybindings/ide-shortcuts-window.ui:94
+#: libide/keybindings/ide-shortcuts-window.ui:142
+msgctxt "shortcut window"
+msgid "Switch to the previous document"
+msgstr "Μετάβαση στο προηγούμενο έγγραφο"
 
-#: ../libide/ide-uri.c:366 ../libide/ide-uri.c:377
-#, c-format
-msgid "Invalid IP literal '%s' in URI"
-msgstr "Άκυρη διεύθυνση IP '%s' στο URI"
+#: libide/keybindings/ide-shortcuts-window.ui:102
+msgctxt "shortcut window"
+msgid "Files"
+msgstr "Αρχεία"
 
-#: ../libide/ide-uri.c:411
-#, c-format
-msgid "Invalid encoded IP literal '%s' in URI"
-msgstr "Άκυρη κωδικοποιημένη διεύθυνση IP '%s' στο URI"
+#: libide/keybindings/ide-shortcuts-window.ui:107
+msgctxt "shortcut window"
+msgid "Create new document"
+msgstr "Δημιουργία νέου εγγράφου"
 
-#: ../libide/ide-uri.c:420
-#, c-format
-msgid "Invalid non-ASCII hostname '%s' in URI"
-msgstr "Άκυρο μη-ASCII όνομα κεντρικού υπολογιστή '%s' στο URI"
+#: libide/keybindings/ide-shortcuts-window.ui:114
+msgctxt "shortcut window"
+msgid "Open a document"
+msgstr "Άνοιγμα εγγράφου"
 
-#: ../libide/ide-uri.c:435
-#, c-format
-msgid "Non-ASCII hostname '%s' forbidden in this URI"
-msgstr ""
-"Το μη έγκυρο ASCII όνομα κεντρικού υπολογιστή '%s' απαγορεύτηκε σε αυτό το "
-"URI"
+#: libide/keybindings/ide-shortcuts-window.ui:121
+msgctxt "shortcut window"
+msgid "Save the document"
+msgstr "Αποθήκευση εγγράφου"
 
-#: ../libide/ide-uri.c:457
-#, c-format
-msgid "Could not parse port '%s' in URI"
-msgstr "Αδυναμία ανάλυσης θύρας '%s' στο URI"
+#: libide/keybindings/ide-shortcuts-window.ui:128
+msgctxt "shortcut window"
+msgid "Close the document"
+msgstr "Κλείσιμο εγγράφου"
 
-#: ../libide/ide-uri.c:464
-#, c-format
-msgid "Port '%s' in URI is out of range"
-msgstr "Η θύρα '%s' στο URI είναι εκτός εύρους"
+#: libide/keybindings/ide-shortcuts-window.ui:149
+msgctxt "shortcut window"
+msgid "Show list of open documents"
+msgstr "Εμφάνιση λίστας ανοιχτών αρχείων"
 
-#: ../libide/ide-uri.c:590
-msgid "Base URI is not absolute"
-msgstr "Το βασικό URI δεν είναι απόλυτο"
+#: libide/keybindings/ide-shortcuts-window.ui:157
+msgctxt "shortcut window"
+msgid "Find and replace"
+msgstr "Εύρεση και αντικατάσταση"
 
-#: ../libide/ide-uri.c:617
-msgid "URI is not absolute, and no base URI was provided"
-msgstr "Το URI δεν είναι απόλυτο, και δεν έχει δοθεί βασικό URI"
+#: libide/keybindings/ide-shortcuts-window.ui:162
+msgctxt "shortcut window"
+msgid "Find"
+msgstr "Εύρεση"
 
-#: ../libide/ide-uri.c:662
-#, c-format
-msgid "Could not parse '%s' as absolute URI"
-msgstr "Αδυναμία ανάλυσης του '%s' ως απόλυτο URI"
+#: libide/keybindings/ide-shortcuts-window.ui:169
+msgctxt "shortcut window"
+msgid "Find the next match"
+msgstr "Εύρεση της επόμενης αντιστοιχίας"
 
-#: ../libide/ide-uri.c:1190
-#, c-format
-msgid "URI '%s' has no host component"
-msgstr "Το URI '%s' δεν περιέχει κάνενα στοιχείο κεντρικού υπολογιστή"
+#: libide/keybindings/ide-shortcuts-window.ui:176
+msgctxt "shortcut window"
+msgid "Find the previous match"
+msgstr "Εύρεση της προηγούμενης αντιστοιχίας"
 
-#: ../libide/ide-workbench-actions.c:64
-msgid "Open File"
-msgstr "Άνοιγμα αρχείου"
+#: libide/keybindings/ide-shortcuts-window.ui:183
+msgctxt "shortcut window"
+msgid "Clear highlight"
+msgstr "Καθαρισμός επισήμανσης"
 
-#: ../libide/ide-workbench-actions.c:68
-msgid "Open"
-msgstr "Άνοιγμα"
+#: libide/keybindings/ide-shortcuts-window.ui:191
+#: libide/keybindings/ide-shortcuts-window.ui:464
+msgctxt "shortcut window"
+msgid "Copy and Paste"
+msgstr "Αντιγραφή και επικόλληση"
 
-#: ../libide/preferences/ide-preferences-builtin.c:40
+#: libide/keybindings/ide-shortcuts-window.ui:196
+#: libide/keybindings/ide-shortcuts-window.ui:469
+msgctxt "shortcut window"
+msgid "Copy selected text to clipboard"
+msgstr "Αντιγραφή επιλεγμένου κειμένου στο πρόχειρο"
+
+#: libide/keybindings/ide-shortcuts-window.ui:203
+msgctxt "shortcut window"
+msgid "Cut selected text to clipboard"
+msgstr "Αποκοπή επιλεγμένου κειμένου στο πρόχειρο"
+
+#: libide/keybindings/ide-shortcuts-window.ui:210
+#: libide/keybindings/ide-shortcuts-window.ui:476
+msgctxt "shortcut window"
+msgid "Paste text from clipboard"
+msgstr "Επικόλληση κειμένου από το πρόχειρο"
+
+#: libide/keybindings/ide-shortcuts-window.ui:217
+#, fuzzy
+msgctxt "shortcut window"
+msgid "Duplicate current line or selection"
+msgstr "Τρέχουσα επιλογή"
+
+#: libide/keybindings/ide-shortcuts-window.ui:225
+msgctxt "shortcut window"
+msgid "Undo and Redo"
+msgstr "Αναίρεση και επαναφορά"
+
+#: libide/keybindings/ide-shortcuts-window.ui:230
+msgctxt "shortcut window"
+msgid "Undo previous command"
+msgstr "Αναίρεση προηγούμενης εντολής"
+
+#: libide/keybindings/ide-shortcuts-window.ui:237
+msgctxt "shortcut window"
+msgid "Redo previous command"
+msgstr "Επανάληψη προηγούμενης εντολής"
+
+#: libide/keybindings/ide-shortcuts-window.ui:245
+msgctxt "shortcut window"
+msgid "Editing"
+msgstr "Επεξεργασία"
+
+#: libide/keybindings/ide-shortcuts-window.ui:250
+msgctxt "shortcut window"
+msgid "Increment number at cursor"
+msgstr "Αύξηση αριθμού στον δρομέα"
+
+#: libide/keybindings/ide-shortcuts-window.ui:257
+msgctxt "shortcut window"
+msgid "Decrement number at cursor"
+msgstr "Μείωση αριθμού στον δρομέα"
+
+#: libide/keybindings/ide-shortcuts-window.ui:264
+msgctxt "shortcut window"
+msgid "Join selected lines"
+msgstr "Ένωση των επιλεγμένων γραμμών"
+
+#: libide/keybindings/ide-shortcuts-window.ui:271
+msgctxt "shortcut window"
+msgid "Show completion window"
+msgstr "Εμφάνιση παραθύρου ολοκλήρωσης"
+
+#: libide/keybindings/ide-shortcuts-window.ui:278
+msgctxt "shortcut window"
+msgid "Toggle overwrite"
+msgstr "Εναλλαγή αντικατάστασης"
+
+#: libide/keybindings/ide-shortcuts-window.ui:285
+msgctxt "shortcut window"
+msgid "Reindent line"
+msgstr "Στυλ επανεσοχής"
+
+#: libide/keybindings/ide-shortcuts-window.ui:293
+msgctxt "shortcut window"
+msgid "Navigation"
+msgstr "Περιήγηση"
+
+#: libide/keybindings/ide-shortcuts-window.ui:298
+msgctxt "shortcut window"
+msgid "Move to next error in file"
+msgstr "Μετάβαση στο επόμενο σφάλμα του αρχείου"
+
+#: libide/keybindings/ide-shortcuts-window.ui:305
+msgctxt "shortcut window"
+msgid "Move to previous error in file"
+msgstr "Μετάβαση στο προηγούμενο σφάλμα του αρχείου"
+
+#: libide/keybindings/ide-shortcuts-window.ui:312
+msgctxt "shortcut window"
+msgid "Move to previous edit location"
+msgstr "Μετάβαση στην προηγούμενη τοποθεσία επεξεργασίας"
+
+#: libide/keybindings/ide-shortcuts-window.ui:319
+msgctxt "shortcut window"
+msgid "Move to next edit location"
+msgstr "Μετάβαση στην επόμενη τοποθεσία επεξεργασίας"
+
+#: libide/keybindings/ide-shortcuts-window.ui:326
+msgctxt "shortcut window"
+msgid "Jump to definition of symbol"
+msgstr "Μετάβαση στον ορισμό συμβόλου"
+
+#: libide/keybindings/ide-shortcuts-window.ui:333
+msgctxt "shortcut window"
+msgid "Move viewport up within the file"
+msgstr "Μετακίνηση προβολής πάνω μέσα στο αρχείο"
+
+#: libide/keybindings/ide-shortcuts-window.ui:340
+msgctxt "shortcut window"
+msgid "Move viewport down within the file"
+msgstr "Μετακίνηση προβολής κάτω μέσα στο αρχείο"
+
+#: libide/keybindings/ide-shortcuts-window.ui:347
+msgctxt "shortcut window"
+msgid "Move viewport to end of file"
+msgstr "Μετακίνηση προβολής στο τέλος του αρχείου"
+
+#: libide/keybindings/ide-shortcuts-window.ui:354
+msgctxt "shortcut window"
+msgid "Move viewport to beginning of file"
+msgstr "Μετακίνηση προβολής στην αρχή του αρχείου"
+
+#: libide/keybindings/ide-shortcuts-window.ui:361
+msgctxt "shortcut window"
+msgid "Move to matching bracket"
+msgstr "Μετάβαση στην αντίστοιχη αγκύλη"
+
+#: libide/keybindings/ide-shortcuts-window.ui:369
+msgctxt "shortcut window"
+msgid "Selections"
+msgstr "Επιλογές"
+
+#: libide/keybindings/ide-shortcuts-window.ui:374
+msgctxt "shortcut window"
+msgid "Select all"
+msgstr "Επιλογή όλων"
+
+#: libide/keybindings/ide-shortcuts-window.ui:381
+msgctxt "shortcut window"
+msgid "Unselect all"
+msgstr "Αποεπιλογή όλων"
+
+#: libide/keybindings/ide-shortcuts-window.ui:389
+msgctxt "shortcut window"
+msgid "Build and Run"
+msgstr "Δόμηση και εκτέλεση"
+
+#: libide/keybindings/ide-shortcuts-window.ui:394
+msgctxt "shortcut window"
+msgid "Build"
+msgstr "Δόμηση"
+
+#: libide/keybindings/ide-shortcuts-window.ui:401
+msgctxt "shortcut window"
+msgid "Run"
+msgstr "Εκτέλεση"
+
+#: libide/keybindings/ide-shortcuts-window.ui:408
+msgctxt "shortcut window"
+msgid "Profile"
+msgstr "Προφίλ"
+
+#: libide/keybindings/ide-shortcuts-window.ui:419
+msgctxt "shortcut window"
+msgid "Terminal Shortcuts"
+msgstr "Συντομεύσεις τερματικού"
+
+#: libide/preferences/ide-preferences-builtin.c:65
+#: libide/preferences/ide-preferences-builtin.c:66
 msgid "Extensions"
 msgstr "Επεκτάσεις"
 
-#: ../libide/preferences/ide-preferences-builtin.c:41
-msgid "Installed Extensions"
-msgstr "Εγκατεστημένες επεκτάσεις"
-
-#: ../libide/preferences/ide-preferences-builtin.c:42
-msgid "Bundled Extensions"
-msgstr "Ενσωματωμένες επεκτάσεις"
-
-#: ../libide/preferences/ide-preferences-builtin.c:77
+#: libide/preferences/ide-preferences-builtin.c:102
 msgid "Appearance"
 msgstr "Εμφάνιση"
 
-#: ../libide/preferences/ide-preferences-builtin.c:79
+#: libide/preferences/ide-preferences-builtin.c:104
 msgid "Themes"
 msgstr "Θέματα"
 
-#: ../libide/preferences/ide-preferences-builtin.c:80
+#: libide/preferences/ide-preferences-builtin.c:105
 msgid "Dark Theme"
 msgstr "Σκούρο θέμα"
 
-#: ../libide/preferences/ide-preferences-builtin.c:80
+#: libide/preferences/ide-preferences-builtin.c:105
 msgid "Whether Builder should use a dark theme"
 msgstr "Εάν ο Κατασκευαστής θα χρησιμοποιεί σκούρο θέμα"
 
-#: ../libide/preferences/ide-preferences-builtin.c:80
+#: libide/preferences/ide-preferences-builtin.c:105
 msgid "dark theme"
 msgstr "σκούρο θέμα"
 
-#: ../libide/preferences/ide-preferences-builtin.c:81
+#: libide/preferences/ide-preferences-builtin.c:106
 msgid "Grid Pattern"
 msgstr "Μοτίβο πλέγματος"
 
-#: ../libide/preferences/ide-preferences-builtin.c:81
+#: libide/preferences/ide-preferences-builtin.c:106
 msgid "Display a grid pattern underneath source code"
 msgstr "Εάν θα εμφανίζεται ένα μοτίβο πλέγματος πίσω από τον πηγαίο κώδικα"
 
-#: ../libide/preferences/ide-preferences-builtin.c:101
+#: libide/preferences/ide-preferences-builtin.c:108
 msgid "Font"
 msgstr "Γραμματοσειρά"
 
-#: ../libide/preferences/ide-preferences-builtin.c:102
+#: libide/preferences/ide-preferences-builtin.c:109
 msgctxt "Keywords"
 msgid "editor font monospace"
 msgstr "font editor monospace γραμματοσειρά επεξεργαστής"
 
 #. XXX: This belongs in terminal addin
-#: ../libide/preferences/ide-preferences-builtin.c:104
-#: ../plugins/terminal/gb-terminal-workbench-addin.c:90
+#: libide/preferences/ide-preferences-builtin.c:111
+#: plugins/terminal/gb-terminal-workbench-addin.c:90
 msgid "Terminal"
 msgstr "Τερματικό"
 
-#: ../libide/preferences/ide-preferences-builtin.c:104
+#: libide/preferences/ide-preferences-builtin.c:111
 msgctxt "Keywords"
 msgid "terminal font monospace"
 msgstr "terminal font monospace τερματικό γραμματοσειρά"
 
-#: ../libide/preferences/ide-preferences-builtin.c:110
+#: libide/preferences/ide-preferences-builtin.c:116
+msgid "Color Scheme"
+msgstr "Συνδυασμός χρωμάτων"
+
+#: libide/preferences/ide-preferences-builtin.c:141
 msgid "Keyboard"
 msgstr "Πληκτρολόγιο"
 
-#: ../libide/preferences/ide-preferences-builtin.c:112
+#: libide/preferences/ide-preferences-builtin.c:143
 msgid "Emulation"
 msgstr "Εξομοίωση"
 
-#: ../libide/preferences/ide-preferences-builtin.c:113
+#: libide/preferences/ide-preferences-builtin.c:144
 msgid "Default keybinding mode which mimics gedit"
 msgstr "Προεπιλεγμένη λειτουργία συνδυασμών πλήκτρων που μιμείται το gedit"
 
-#: ../libide/preferences/ide-preferences-builtin.c:114
+#: libide/preferences/ide-preferences-builtin.c:145
 msgid "Emacs"
 msgstr "Emacs"
 
-#: ../libide/preferences/ide-preferences-builtin.c:114
+#: libide/preferences/ide-preferences-builtin.c:145
 msgid "Emulates the Emacs text editor"
 msgstr "Εξομοιώνει τον επεξεργαστή κειμένου Emacs"
 
-#: ../libide/preferences/ide-preferences-builtin.c:115
+#: libide/preferences/ide-preferences-builtin.c:146
 msgid "Vim"
 msgstr "Vim"
 
-#: ../libide/preferences/ide-preferences-builtin.c:115
+#: libide/preferences/ide-preferences-builtin.c:146
 msgid "Emulates the Vim text editor"
 msgstr "Εξομοιώνει τον επεξεργαστή κειμένου Vim"
 
-#: ../libide/preferences/ide-preferences-builtin.c:117
+#: libide/preferences/ide-preferences-builtin.c:148
 msgid "Movement"
 msgstr "Κίνηση"
 
-#: ../libide/preferences/ide-preferences-builtin.c:118
-msgid "Smart Home and End"
-msgstr "Έξυπνα πλήκτρα Home/End"
-
-#: ../libide/preferences/ide-preferences-builtin.c:118
+#: libide/preferences/ide-preferences-builtin.c:149
 msgid "Home moves to first non-whitespace character"
 msgstr "Το πλήκτρο Home μετακινεί τον δρομέα στον πρώτο μη κενό χαρακτήρα"
 
-#: ../libide/preferences/ide-preferences-builtin.c:119
+#: libide/preferences/ide-preferences-builtin.c:150
 msgid ""
 "Backspace will remove extra space to keep you aligned with your indentation"
 msgstr ""
 "Το Backspace θα αφαιρέσει τα επιπλέον κενά για να διατηρηθεί η στοίχιση με "
 "το πλάτος εσοχής"
 
-#: ../libide/preferences/ide-preferences-builtin.c:127
+#: libide/preferences/ide-preferences-builtin.c:158
 msgid "Cursor"
 msgstr "Δρομέας"
 
-#: ../libide/preferences/ide-preferences-builtin.c:128
+#: libide/preferences/ide-preferences-builtin.c:159
 msgid "Restore cursor position"
 msgstr "Επαναφορά θέσης δρομέα"
 
-#: ../libide/preferences/ide-preferences-builtin.c:128
+#: libide/preferences/ide-preferences-builtin.c:159
 msgid "Restore cursor position when a file is reopened"
 msgstr "Επαναφέρει τον δρομέα στην τελευταία θέση κατά το άνοιγμα του αρχείου"
 
-#: ../libide/preferences/ide-preferences-builtin.c:129
+#: libide/preferences/ide-preferences-builtin.c:160
 msgid "Scroll Offset"
 msgstr "Μετατόπιση κύλισης"
 
-#: ../libide/preferences/ide-preferences-builtin.c:129
+#: libide/preferences/ide-preferences-builtin.c:160
 msgid "Minimum number of lines to keep above and below the cursor"
 msgstr ""
 "Ελάχιστος αριθμός γραμμών που θα διατηρηθούν πάνω και κάτω από τον δρομέα"
 
-#: ../libide/preferences/ide-preferences-builtin.c:130
-msgid "Overscroll"
-msgstr "Υπερκύλιση"
-
-#: ../libide/preferences/ide-preferences-builtin.c:130
+#: libide/preferences/ide-preferences-builtin.c:161
 msgid "Allow the editor to scroll past the end of the buffer"
 msgstr "Επιτρέπει στον επεξεργαστή να κυλιθεί στο τέλος του αρχείου"
 
-#: ../libide/preferences/ide-preferences-builtin.c:132
+#: libide/preferences/ide-preferences-builtin.c:163
 msgid "Line Information"
 msgstr "Πληροφορίες γραμμής"
 
-#: ../libide/preferences/ide-preferences-builtin.c:133
+#: libide/preferences/ide-preferences-builtin.c:164
 msgid "Line numbers"
 msgstr "Αριθμοί γραμμών"
 
-#: ../libide/preferences/ide-preferences-builtin.c:133
+#: libide/preferences/ide-preferences-builtin.c:164
 msgid "Show line number at beginning of each line"
 msgstr "Εμφανίζει έναν αριθμό στην αρχή της κάθε γραμμής"
 
-#: ../libide/preferences/ide-preferences-builtin.c:134
+#: libide/preferences/ide-preferences-builtin.c:165
 msgid "Line changes"
 msgstr "Αλλαγές γραμμής"
 
-#: ../libide/preferences/ide-preferences-builtin.c:134
+#: libide/preferences/ide-preferences-builtin.c:165
 msgid "Show if a line was added or modified next to line number"
 msgstr ""
 "Επισημαίνει τον αριθμό γραμμής, για το αν επεξεργάστηκε ή τροποποιήθηκε μια "
 "γραμμή"
 
-#: ../libide/preferences/ide-preferences-builtin.c:136
+#: libide/preferences/ide-preferences-builtin.c:167
 msgid "Highlight"
 msgstr "Επισήμανση"
 
-#: ../libide/preferences/ide-preferences-builtin.c:137
+#: libide/preferences/ide-preferences-builtin.c:168
 msgid "Current line"
 msgstr "Τρέχουσα γραμμή"
 
-#: ../libide/preferences/ide-preferences-builtin.c:137
+#: libide/preferences/ide-preferences-builtin.c:168
 msgid "Make current line stand out with highlights"
 msgstr "Επισημαίνει την τρέχουσα γραμμή"
 
-#: ../libide/preferences/ide-preferences-builtin.c:138
+#: libide/preferences/ide-preferences-builtin.c:169
 msgid "Matching brackets"
 msgstr "Αντιστοίχιση αγκυλών"
 
-#: ../libide/preferences/ide-preferences-builtin.c:138
+#: libide/preferences/ide-preferences-builtin.c:169
 msgid "Highlight matching brackets based on cursor position"
 msgstr "Επισημαίνει τις αγκύλες με βάση τη θέση του δρομέα"
 
-#: ../libide/preferences/ide-preferences-builtin.c:140
+#: libide/preferences/ide-preferences-builtin.c:171
 msgid "Code Overview"
 msgstr "Επισκόπηση κώδικα"
 
-#: ../libide/preferences/ide-preferences-builtin.c:141
-msgid "Show overview map"
-msgstr "Εμφάνιση του χάρτη επισκόπησης"
-
-#: ../libide/preferences/ide-preferences-builtin.c:141
+#: libide/preferences/ide-preferences-builtin.c:172
 msgid "A zoomed out view to enhance navigating source code"
 msgstr "Μια προβολή που σας βοηθά να περιηγηθείτε στον πηγαίο κώδικα"
 
-#: ../libide/preferences/ide-preferences-builtin.c:142
+#: libide/preferences/ide-preferences-builtin.c:173
 msgid "Automatically hide overview map"
 msgstr "Αυτόματη απόκρυψη του χάρτη επισκόπησης"
 
-#: ../libide/preferences/ide-preferences-builtin.c:142
+#: libide/preferences/ide-preferences-builtin.c:173
 msgid "Automatically hide map when editor loses focus"
 msgstr ""
 "Αποκρύπτει αυτόματα τον χάρτη όταν ο επεξεργαστής χάνει την εστίαση του"
 
-#: ../libide/preferences/ide-preferences-builtin.c:144
+#: libide/preferences/ide-preferences-builtin.c:175
 msgid "Whitespace Characters"
 msgstr "Χαρακτήρες κενού διαστήματος"
 
-#: ../libide/preferences/ide-preferences-builtin.c:147
+#: libide/preferences/ide-preferences-builtin.c:178
 msgid "New line and carriage return"
 msgstr "Νέα γραμμή και χαρακτήρας επιστροφής"
 
-#: ../libide/preferences/ide-preferences-builtin.c:148
+#: libide/preferences/ide-preferences-builtin.c:179
 msgid "Non-breaking spaces"
 msgstr "Μη διακοπτόμενα διαστήματα"
 
-#: ../libide/preferences/ide-preferences-builtin.c:149
+#: libide/preferences/ide-preferences-builtin.c:180
 msgid "Spaces inside of text"
 msgstr "Διαστήματα μέσα στο κείμενο"
 
-#: ../libide/preferences/ide-preferences-builtin.c:150
+#: libide/preferences/ide-preferences-builtin.c:181
 msgid "Trailing Only"
 msgstr "Τελικό διάστημα"
 
-#: ../libide/preferences/ide-preferences-builtin.c:151
+#: libide/preferences/ide-preferences-builtin.c:182
 msgid "Leading Only"
 msgstr "Αρχικό διάστημα"
 
-#: ../libide/preferences/ide-preferences-builtin.c:157
+#: libide/preferences/ide-preferences-builtin.c:188
 msgid "Code Insight"
 msgstr "Επιλογές κώδικα"
 
-#: ../libide/preferences/ide-preferences-builtin.c:159
-msgid "Highlighting"
-msgstr "Επισήμανση"
-
-#: ../libide/preferences/ide-preferences-builtin.c:160
+#: libide/preferences/ide-preferences-builtin.c:191
 msgid "Semantic Highlighting"
 msgstr "Σημασιολογική επισήμανση"
 
-#: ../libide/preferences/ide-preferences-builtin.c:160
+#: libide/preferences/ide-preferences-builtin.c:191
 msgid ""
 "Use code insight to highlight additional information discovered in source "
 "file"
@@ -1408,26 +1931,26 @@ msgstr ""
 "Χρησιμοποιεί τις επιλογές κώδικα για να επισημαίνει επιπρόσθετες πληροφορίες "
 "που βρέθηκαν στο πηγαίο αρχείο"
 
-#: ../libide/preferences/ide-preferences-builtin.c:162
+#: libide/preferences/ide-preferences-builtin.c:193
 msgid "Completion"
 msgstr "Συμπλήρωση"
 
-#: ../libide/preferences/ide-preferences-builtin.c:163
+#: libide/preferences/ide-preferences-builtin.c:194
 msgid "Suggest words found in open files"
 msgstr "Υποδείξεις λέξεων που βρίσκονται στα ανοιχτά αρχεία"
 
-#: ../libide/preferences/ide-preferences-builtin.c:163
+#: libide/preferences/ide-preferences-builtin.c:194
 msgid ""
 "Suggests completions as you type based on words found in any open document"
 msgstr ""
 "Προτείνει συμπληρώσεις για λέξεις που βρίσκονται σε οποιοδήποτε ανοιχτό "
 "έγγραφο"
 
-#: ../libide/preferences/ide-preferences-builtin.c:164
+#: libide/preferences/ide-preferences-builtin.c:195
 msgid "Suggest completions using Ctags"
 msgstr "Υποδείξεις συμπληρώσεων χρησιμοποιώντας Ctags"
 
-#: ../libide/preferences/ide-preferences-builtin.c:164
+#: libide/preferences/ide-preferences-builtin.c:195
 msgid ""
 "Create and manages a Ctags database for completing class names, functions, "
 "and more"
@@ -1435,413 +1958,712 @@ msgstr ""
 "Δημιουργεί και διαχειρίζεται μια βάση δεδομένων Ctags για τη συμπλήρωση "
 "ονομάτων κλάσεων, συναρτήσεων και περισσότερα."
 
-#: ../libide/preferences/ide-preferences-builtin.c:165
+#: libide/preferences/ide-preferences-builtin.c:196
 msgid "Suggest completions using Clang (Experimental)"
 msgstr "Υποδείξεις συμπληρώσεων χρησιμοποιώντας Clang (πειραματικό)"
 
-#: ../libide/preferences/ide-preferences-builtin.c:165
+#: libide/preferences/ide-preferences-builtin.c:196
 msgid "Use Clang to suggest completions for C and C++ languages"
 msgstr "Χρησιμοποιεί Clang για αυτόματη συμπλήρωση στις γλώσσες C και C++."
 
-#: ../libide/preferences/ide-preferences-builtin.c:167
+#: libide/preferences/ide-preferences-builtin.c:198
 msgid "Diagnostics"
 msgstr "Διαγνωστικά"
 
-#: ../libide/preferences/ide-preferences-builtin.c:176
+#: libide/preferences/ide-preferences-builtin.c:204
+#: libide/snippets/ide-source-snippet-completion-provider.c:297
+msgid "Snippets"
+msgstr "Αποσπάσματα"
+
+#: libide/preferences/ide-preferences-builtin.c:207
 msgid "Code snippets"
 msgstr "Αποσπάσματα κώδικα"
 
-#: ../libide/preferences/ide-preferences-builtin.c:176
+#: libide/preferences/ide-preferences-builtin.c:207
 msgid "Use code fragments to increase typing efficiency"
 msgstr ""
 "Χρησιμοποιεί αποσπάσματα κώδικα για αύξηση της αποδοτικότητάς στην "
 "πληκτρολόγηση"
 
-#: ../libide/preferences/ide-preferences-builtin.c:190
+#: libide/preferences/ide-preferences-builtin.c:251
 msgid "Programming Languages"
 msgstr "Γλώσσες προγραμματισμού"
 
-#: ../libide/preferences/ide-preferences-builtin.c:227
+#. translators: placeholder string for the entry used to filter the languages in Preferences/Programming languages
+#: libide/preferences/ide-preferences-builtin.c:262
+msgid "Search languages…"
+msgstr "Αναζήτηση γλωσσών…"
+
+#: libide/preferences/ide-preferences-builtin.c:316
+#: libide/preferences/ide-preferences-builtin.c:377
+#: plugins/build-tools/gbp-build-configuration-view.ui:11
+msgid "General"
+msgstr "Γενικά"
+
+#: libide/preferences/ide-preferences-builtin.c:317
 msgid "Trim trailing whitespace"
 msgstr "Περικοπή τελικών κενών διαστημάτων"
 
-#: ../libide/preferences/ide-preferences-builtin.c:227
+#: libide/preferences/ide-preferences-builtin.c:317
 msgid "Upon saving, trailing whitespace from modified lines will be trimmed."
 msgstr ""
 "Κατά την αποθήκευση, θα περικοπούν τα τελικά κενά διαστήματα από τις "
 "επεξεργασμένες γραμμές."
 
-#: ../libide/preferences/ide-preferences-builtin.c:228
+#: libide/preferences/ide-preferences-builtin.c:318
 msgid "Overwrite Braces"
 msgstr "Αντικατάσταση αγκίστρων"
 
-#: ../libide/preferences/ide-preferences-builtin.c:228
+#: libide/preferences/ide-preferences-builtin.c:318
 msgid "Overwrite closing braces"
 msgstr "Αντικαθιστά τα άγκιστρα κλεισίματος"
 
-#: ../libide/preferences/ide-preferences-builtin.c:230
+#: libide/preferences/ide-preferences-builtin.c:320
 msgid "Margins"
 msgstr "Περιθώρια"
 
-#: ../libide/preferences/ide-preferences-builtin.c:231
+#: libide/preferences/ide-preferences-builtin.c:321
 msgid "Show right margin"
 msgstr "Εμφάνιση δεξιού περιθωρίου"
 
-#: ../libide/preferences/ide-preferences-builtin.c:232
+#: libide/preferences/ide-preferences-builtin.c:322
 msgid "Right margin position"
 msgstr "Θέση δεξιού περιθωρίου"
 
-#: ../libide/preferences/ide-preferences-builtin.c:232
+#: libide/preferences/ide-preferences-builtin.c:322
 msgid "Position in spaces for the right margin"
 msgstr "Η θέση εκφρασμένο σε διαστήματα του δεξιού περιθωρίου"
 
-#: ../libide/preferences/ide-preferences-builtin.c:235
+#: libide/preferences/ide-preferences-builtin.c:325
 msgid "Tab width"
 msgstr "Πλάτος στηλοθέτη"
 
-#: ../libide/preferences/ide-preferences-builtin.c:235
+#: libide/preferences/ide-preferences-builtin.c:325
 msgid "Width of a tab character in spaces"
 msgstr "Το πλάτος ενός στηλοθέτη εκφρασμένο σε διαστήματα"
 
-#: ../libide/preferences/ide-preferences-builtin.c:236
+#: libide/preferences/ide-preferences-builtin.c:326
 msgid "Insert spaces instead of tabs"
 msgstr "Εισαγωγή κενών αντί για στηλοθέτες"
 
-#: ../libide/preferences/ide-preferences-builtin.c:236
+#: libide/preferences/ide-preferences-builtin.c:326
 msgid "Prefer spaces over use of tabs"
 msgstr "Χρήση κενών αντί αντιλοθετών"
 
-#: ../libide/preferences/ide-preferences-builtin.c:237
+#: libide/preferences/ide-preferences-builtin.c:327
 msgid "Automatically indent"
 msgstr "Αυτόματη εσοχή"
 
-#: ../libide/preferences/ide-preferences-builtin.c:237
+#: libide/preferences/ide-preferences-builtin.c:327
 msgid "Indent source code as you type"
 msgstr "Αυτόματη εσοχή του κώδικα κατά την πληκτρολόγηση"
 
-#: ../libide/preferences/ide-preferences-builtin.c:243
-#: ../plugins/build-tools/gbp-build-panel.c:426
+#: libide/preferences/ide-preferences-builtin.c:342
+#: libide/preferences/ide-preferences-builtin.c:360
+msgid "Number of CPU"
+msgstr "Αριθμός CPU"
+
+#: libide/preferences/ide-preferences-builtin.c:375
+#: libide/workbench/ide-omni-bar.ui:372
+#: plugins/build-tools/gbp-build-panel.c:386
 msgid "Build"
 msgstr "Δόμηση"
 
-#: ../libide/preferences/ide-preferences-builtin.c:245
-#: ../plugins/build-tools/gbp-build-configuration-view.ui.h:1
-msgid "General"
-msgstr "Γενικά"
-
-#: ../libide/preferences/ide-preferences-builtin.c:246
+#: libide/preferences/ide-preferences-builtin.c:378
 msgid "Build Workers"
 msgstr "Εργάτες δόμησης"
 
-#: ../libide/preferences/ide-preferences-builtin.c:246
+#: libide/preferences/ide-preferences-builtin.c:378
 msgid "Number of parallel build workers"
 msgstr "Αριθμός εργατών για παράλληλη δόμηση"
 
-#: ../libide/preferences/ide-preferences-builtin.c:252
+#: libide/preferences/ide-preferences-builtin.c:390
 msgid "Projects"
 msgstr "Έργα"
 
-#: ../libide/preferences/ide-preferences-builtin.c:254
+#: libide/preferences/ide-preferences-builtin.c:392
 msgid "Workspace"
 msgstr "Χώρος εργασίας"
 
-#: ../libide/preferences/ide-preferences-builtin.c:255
-msgid "Projects Directory"
-msgstr "Κατάλογος έργων"
-
-#: ../libide/preferences/ide-preferences-builtin.c:255
+#: libide/preferences/ide-preferences-builtin.c:393
 msgid "A place for all your projects"
 msgstr "Ένα μέρος για όλα σας τα έργα"
 
-#: ../libide/preferences/ide-preferences-builtin.c:257
+#: libide/preferences/ide-preferences-builtin.c:394
+msgid "Restore previously opened files"
+msgstr "Επαναφορά προηγούμενων ανοιχτών αρχείων"
+
+#: libide/preferences/ide-preferences-builtin.c:394
+msgid "Open previously opened files when loading a project"
+msgstr "Επαναφορά προηγούμενων ανοιχτών αρχείων κατά την φόρτωση του έργου"
+
+#: libide/preferences/ide-preferences-builtin.c:396
 msgid "Project Discovery"
 msgstr "Αναζήτηση έργων"
 
-#: ../libide/preferences/ide-preferences-builtin.c:258
+#: libide/preferences/ide-preferences-builtin.c:397
 msgid "Discover projects on my computer"
 msgstr "Εύρεση έργων στον υπολογιστή σας"
 
-#: ../libide/preferences/ide-preferences-builtin.c:258
+#: libide/preferences/ide-preferences-builtin.c:397
 msgid "Scan your computer for existing projects"
 msgstr "Σαρώνει τον υπολογιστή σας για υπάρχοντα έργα"
 
-#: ../libide/preferences/ide-preferences-perspective.c:888
+#: libide/preferences/ide-preferences-builtin.c:518
+#: plugins/create-project/gbp-create-project-widget.ui:153
+msgid "Version Control"
+msgstr "Έλεγχος εκδόσεων"
+
+#: libide/preferences/ide-preferences-font-button.ui:57
+msgid "_Select"
+msgstr "Επι_λογή"
+
+#: libide/preferences/ide-preferences-perspective.c:924
 msgid "Preferences"
 msgstr "Προτιμήσεις"
 
-#: ../libide/pygobject/ide-pygobject-script.c:135
+#: libide/preferences/ide-preferences-perspective.ui:15
+msgid "Search Preferences"
+msgstr "Προτιμήσεις αναζήτησης"
+
+#: libide/projects/ide-project.c:527
+msgid "Destination file must be within the project tree."
+msgstr "Ο προορισμός πρέπει να είναι μέσα στο δέντρο του έργου."
+
+#: libide/projects/ide-project.c:662
+msgid "File must be within the project tree."
+msgstr "Το αρχείο πρέπει να είναι μέσα στο δέντρο του έργου."
+
+#: libide/projects/ide-recent-projects.c:396
+#, c-format
+msgid "%s() may only be executed once"
+msgstr "Το %s() μπορεί να εκτελεστεί μόνο μία φορά"
+
+#: libide/pygobject/ide-pygobject-script.c:135
 msgid "Attempt to load a PyGObject script with no filename."
 msgstr "Προσπάθεια φόρτωσης σεναρίου εντολών PyGObject χωρίς όνομα αρχείου."
 
-#: ../libide/pygobject/ide-pygobject-script.c:254
+#: libide/pygobject/ide-pygobject-script.c:254
 msgid "The filename for the script was not provided."
 msgstr "Δεν δόθηκε ένα όνομα αρχείου για το σενάριο."
 
-#: ../libide/pygobject/ide-pygobject-script.c:265
+#: libide/pygobject/ide-pygobject-script.c:265
 msgid "The script must be on a local filesystem."
 msgstr "Το σενάριο πρέπει να είναι στο τοπικό σύστημα αρχείων."
 
-#: ../libide/pygobject/ide-pygobject-script.c:274
+#: libide/pygobject/ide-pygobject-script.c:274
 #, c-format
 msgid "The script \"%s\" is not a PyGObject file."
 msgstr "Το σενάριο \"%s\" δεν είναι ένα αρχείο PyGObject."
 
-#: ../libide/search/ide-omni-search-display.c:264
-msgid "Cannot add provider more than once."
-msgstr "Αδυναμία πρόσβασης παρόχου πάνω από μία φορά."
+#: libide/runner/ide-run-manager.c:171
+msgid "Run"
+msgstr "Εκτέλεση"
 
-#: ../libide/search/ide-omni-search-display.c:340
+#: libide/runner/ide-run-manager.c:200
+msgid "Cannot run target, another target is running"
+msgstr ""
+
+#: libide/runner/ide-run-manager.c:287
+#: plugins/autotools/ide-autotools-build-task.c:442
+msgid "Failed to locate runtime"
+msgstr "Αποτυχία εντοπισμού περιβάλλοντος εκτέλεσης"
+
+#: libide/runner/ide-runner.c:150
+msgid "Process quit unexpectedly"
+msgstr "Η διεργασία τερματίστηκε απρόσμενα"
+
+#: libide/runtimes/ide-runtime-manager.c:105
+msgid "Host operating system"
+msgstr "Λειτουργικό σύστημα"
+
+#: libide/scripting/ide-script.c:205
+#, c-format
+msgid "%s has not implemented GAsyncInitable."
+msgstr "Το %s δεν έχει υλοποιήσει GAsyncInitable."
+
+#: libide/search/ide-omni-search-display.c:271
+msgid "Cannot add provider more than once."
+msgstr "Αδυναμία προσθήκης παρόχου πάνω από μία φορά."
+
+#: libide/search/ide-omni-search-display.c:347
 msgid "The provider could not be found."
 msgstr "Αδυναμία εύρεσης παρόχου."
 
-#: ../libide/util/ide-file-manager.c:64
+#: libide/snippets/ide-source-snippet.c:372
+msgid "Chunk does not belong to snippet."
+msgstr "Το κομμάτι κώδικα δεν ανήκει στο απόσπασμα."
+
+#: libide/snippets/ide-source-snippets-manager.c:96
+#, c-format
+msgid "Failed to open directory: %s"
+msgstr "Αποτυχία ανοίγματος καταλόγου: %s"
+
+#: libide/snippets/ide-source-snippets-manager.c:109
+#, c-format
+msgid "Failed to load file: %s: %s"
+msgstr "Αδυναμία φόρτωσης αρχείου: %s: %s"
+
+#: libide/sourceview/ide-source-view.c:5139
+#, c-format
+msgid "Insert “%s”"
+msgstr "Εισαγωγή “%s”"
+
+#: libide/sourceview/ide-source-view.c:5141
+#, c-format
+msgid "Replace “%s” with “%s”"
+msgstr "Αντικατάσταση \"%s\" με \"%s\""
+
+#: libide/sourceview/ide-source-view.c:5255
+msgid "Apply Fix-It"
+msgstr "Εφαρμογή Fix-It"
+
+#: libide/transfers/ide-transfers-button.ui:35
+msgid "Clear _All"
+msgstr "Επιλογή όλ_ων"
+
+#: libide/util/ide-file-manager.c:64
 msgid "File path is NULL"
 msgstr "Η διαδρομή του αρχείου είναι NULL"
 
-#: ../libide/util/ide-file-manager.c:73 ../libide/util/ide-file-manager.c:84
+#: libide/util/ide-file-manager.c:73 libide/util/ide-file-manager.c:84
 msgid "Error converting UTF-8 filename to wide char"
 msgstr "Σφάλμα μετατροπής ονόματος αρχείου UTF-8 σε ευρύ χαρακτήρα (wchar)"
 
-#: ../libide/util/ide-file-manager.c:92
+#: libide/util/ide-file-manager.c:92
 msgid "ILCreateFromPath() failed"
 msgstr "Αποτυχία του ILCreateFromPath()"
 
-#: ../libide/util/ide-file-manager.c:129
+#: libide/util/ide-file-manager.c:129
 #, c-format
 msgid "Cannot convert '%s' into a valid NSURL."
 msgstr "Αδυναμία μετατροπής του '%s' σε ένα έγκυρο NSURL."
 
-#: ../libide/util/ide-file-manager.c:157
+#: libide/util/ide-file-manager.c:157
 msgid "Connecting to org.freedesktop.FileManager1 failed: "
-msgstr "Απέτυχε η σύνδεση στο org.freedesktop.FileManager1: "
+msgstr "Απέτυχε η σύνδεση στο org.freedesktop.FileManager1:"
 
-#: ../libide/util/ide-file-manager.c:181
+#: libide/util/ide-file-manager.c:181
 msgid "Calling ShowItems failed: "
-msgstr "Απέτυχε η κλήση του ShowItems: "
+msgstr "Απέτυχε η κλήση του ShowItems:"
 
-#: ../plugins/autotools/ide-autotools-builder.c:49
-msgid "Cancelled"
-msgstr "Ακυρώθηκε"
+#: libide/util/ide-uri.c:181
+#, no-c-format
+msgid "Invalid %-encoding in URI"
+msgstr "Άκυρη %-κωδικοποίηση στο URI"
 
-#: ../plugins/autotools/ide-autotools-builder.c:51
+#: libide/util/ide-uri.c:219
+msgid "Non-UTF-8 characters in URI"
+msgstr "Μη UTF-8 χαρακτήρες στο URI"
+
+#: libide/util/ide-uri.c:366 libide/util/ide-uri.c:377
+#, c-format
+msgid "Invalid IP literal '%s' in URI"
+msgstr "Άκυρη διεύθυνση IP '%s' στο URI"
+
+#: libide/util/ide-uri.c:411
+#, c-format
+msgid "Invalid encoded IP literal '%s' in URI"
+msgstr "Άκυρη κωδικοποιημένη διεύθυνση IP '%s' στο URI"
+
+#: libide/util/ide-uri.c:420
+#, c-format
+msgid "Invalid non-ASCII hostname '%s' in URI"
+msgstr "Άκυρο μη-ASCII όνομα κεντρικού υπολογιστή '%s' στο URI"
+
+#: libide/util/ide-uri.c:434
+#, c-format
+msgid "Non-ASCII hostname '%s' forbidden in this URI"
+msgstr ""
+"Το μη έγκυρο ASCII όνομα κεντρικού υπολογιστή '%s' απαγορεύτηκε σε αυτό το "
+"URI"
+
+#: libide/util/ide-uri.c:457
+#, c-format
+msgid "Could not parse port '%s' in URI"
+msgstr "Αδυναμία ανάλυσης θύρας '%s' στο URI"
+
+#: libide/util/ide-uri.c:464
+#, c-format
+msgid "Port '%s' in URI is out of range"
+msgstr "Η θύρα '%s' στο URI είναι εκτός εύρους"
+
+#: libide/util/ide-uri.c:590
+msgid "Base URI is not absolute"
+msgstr "Το βασικό URI δεν είναι απόλυτο"
+
+#: libide/util/ide-uri.c:615
+msgid "URI is not absolute, and no base URI was provided"
+msgstr "Το URI δεν είναι απόλυτο, και δεν έχει δοθεί βασικό URI"
+
+#: libide/util/ide-uri.c:660
+#, c-format
+msgid "Could not parse '%s' as absolute URI"
+msgstr "Αδυναμία ανάλυσης του '%s' ως απόλυτο URI"
+
+#: libide/util/ide-uri.c:1203
+#, c-format
+msgid "URI '%s' has no host component"
+msgstr "Το URI '%s' δεν περιέχει κάνενα στοιχείο κεντρικού υπολογιστή"
+
+#: libide/workbench/ide-layout-tab-bar.ui:33
+msgid "List open files"
+msgstr "Εμφάνιση ανοιχτών αρχείων"
+
+#: libide/workbench/ide-layout-tab.ui:19
+msgid "Jump to previous location"
+msgstr "Μετάβαση στην προηγούμενη τοποθεσία"
+
+#: libide/workbench/ide-layout-tab.ui:33
+msgid "Jump to next location"
+msgstr "Μετάβαση στην επόμενη τοποθεσία"
+
+#: libide/workbench/ide-layout-tab.ui:125
+msgid "Close the current document"
+msgstr "Κλείσιμο του τρέχοντος εγγράφου"
+
+#: libide/workbench/ide-layout-view.c:125
+msgid "untitled document"
+msgstr "Ανώνυμο έγγραφο"
+
+#. Translators: "Target" is providing context to the selected build configuration
+#: libide/workbench/ide-omni-bar.c:365
+msgid "Target"
+msgstr "Προορισμός"
+
+#. Translators, missing means we could not locate the runtime
+#: libide/workbench/ide-omni-bar-row.c:88
+msgid "missing"
+msgstr "λείπει"
+
+#: libide/workbench/ide-omni-bar-row.ui:31
+msgid "Edit build configuration"
+msgstr "Επεξεργασία ρυθμίσεων δόμησης"
+
+#: libide/workbench/ide-omni-bar-row.ui:54
+#: plugins/build-tools/gbp-build-configuration-view.ui:129
+msgid "Device"
+msgstr "Συσκευή"
+
+#: libide/workbench/ide-omni-bar-row.ui:85
+#: plugins/build-tools/gbp-build-configuration-view.ui:157
+msgid "Runtime"
+msgstr "Περιβάλλον εκτέλεσης"
+
+#: libide/workbench/ide-omni-bar.ui:101
+msgid "Build project (Ctrl+F7)"
+msgstr "Δόμηση έργου (Ctrl+F7)"
+
+#: libide/workbench/ide-omni-bar.ui:119
+msgid "Cancel build"
+msgstr "Ακύρωση δόμησης"
+
+#: libide/workbench/ide-omni-bar.ui:163
+#: plugins/project-tree/gb-project-tree-addin.c:105
+msgid "Project"
+msgstr "Έργο"
+
+#: libide/workbench/ide-omni-bar.ui:187
+msgid "Branch"
+msgstr "Κλάδος"
+
+#: libide/workbench/ide-omni-bar.ui:222
+msgid "Build Profile"
+msgstr "Δόμηση προφίλ"
+
+#: libide/workbench/ide-omni-bar.ui:268
+msgid "Last build"
+msgstr "Τελευταία δόμηση"
+
+#: libide/workbench/ide-omni-bar.ui:318
 msgid "Failed"
 msgstr "Απέτυχε"
 
-#: ../plugins/autotools/ide-autotools-builder.c:57
-msgid "Success"
-msgstr "Επιτυχία"
+#: libide/workbench/ide-omni-bar.ui:335
+msgid "View Output"
+msgstr "Εμφάνιση εξόδου"
 
-#: ../plugins/autotools/ide-autotools-builder.c:161
-#: ../plugins/autotools/ide-autotools-build-task.c:872
+#: libide/workbench/ide-omni-bar.ui:382
+msgid "Rebuild"
+msgstr "Αναδόμηση"
+
+#: libide/workbench/ide-omni-bar.ui:392
+msgid "Clean"
+msgstr "Καθαρό"
+
+#: libide/workbench/ide-workbench-actions.c:73
+msgid "Open File"
+msgstr "Άνοιγμα αρχείου"
+
+#: libide/workbench/ide-workbench.c:558
+#, c-format
+msgid "%s - Builder"
+msgstr "%s - Κατασκευαστής"
+
+#: libide/workbench/ide-workbench-header-bar.ui:43
+msgid "Transfers"
+msgstr "Μεταφορές"
+
+#: libide/workbench/ide-workbench-header-bar.ui:50
+msgid "Show workbench menu"
+msgstr "Εμφάνιση μενού χώρου εργασίας"
+
+#: libide/workbench/ide-workbench-header-bar.ui:73
+msgid "Press Ctrl+. to search"
+msgstr "Πατήστε Ctrl+. για αναζήτηση"
+
+#: plugins/autotools/ide-autotools-builder.c:47
+msgid "Build cancelled"
+msgstr "Ακυρώθηκε η δόμηση"
+
+#: plugins/autotools/ide-autotools-builder.c:49
+msgid "Build failed"
+msgstr "Απέτυχε η δόμηση"
+
+#: plugins/autotools/ide-autotools-builder.c:55
+msgid "Build successful"
+msgstr "Επιτυχής δόμηση"
+
+#: plugins/autotools/ide-autotools-builder.c:159
+#: plugins/autotools/ide-autotools-builder.c:240
+#: plugins/autotools/ide-autotools-build-task.c:1057
 msgid "Building…"
 msgstr "Δόμηση…"
 
-#: ../plugins/autotools/ide-autotools-build-system.c:183
+#: plugins/autotools/ide-autotools-builder.c:201
+msgid "Install cancelled"
+msgstr "Ακυρώθηκε η εγκατάσταση"
+
+#: plugins/autotools/ide-autotools-builder.c:203
+msgid "Install failed"
+msgstr "Απέτυχε η εγκατάσταση"
+
+#: plugins/autotools/ide-autotools-builder.c:209
+msgid "Install successful"
+msgstr "Επιτυχής εγκατάσταση"
+
+#: plugins/autotools/ide-autotools-build-system.c:170
 msgid "Failed to locate configure.ac"
 msgstr "Αποτυχία εντοπισμού του configure.ac"
 
-#: ../plugins/autotools/ide-autotools-build-task.c:174
+#: plugins/autotools/ide-autotools-build-task.c:181
 msgid "Directory must be on a locally mounted filesystem."
 msgstr ""
 "Ο κατάλογος πρέπει να είναι σε ένα τοπικά προσαρτημένο σύστημα αρχείων."
 
-#: ../plugins/autotools/ide-autotools-build-task.c:548
-msgid "Cannot execute build task more than once."
-msgstr "Αδυναμία εκτέλεσης εργασίας δόμησης πάνω από μία φορές."
+#: plugins/autotools/ide-autotools-build-task.c:431
+msgid "Failed to locate device"
+msgstr "Αποτυχία εντοπισμού συσκευής"
 
-#: ../plugins/autotools/ide-autotools-build-task.c:642
+#: plugins/autotools/ide-autotools-build-task.c:562
+#: plugins/autotools/ide-autotools-build-task.c:590
+#: plugins/autotools/ide-autotools-build-task.c:794
+msgid "Build Failed: "
+msgstr "Απέτυχε η δόμηση: "
+
+#: plugins/autotools/ide-autotools-build-task.c:675
+msgid "Cannot execute build task more than once"
+msgstr "Αδυναμία εκτέλεσης εργασίας δόμησης πάνω από μία φορά"
+
+#: plugins/autotools/ide-autotools-build-task.c:827
 msgid "Failed to create build directory."
 msgstr "Αποτυχία δημιουργίας του καταλόγου δόμησης."
 
-#: ../plugins/autotools/ide-autotools-build-task.c:651
+#: plugins/autotools/ide-autotools-build-task.c:836
 #, c-format
 msgid "'%s' is not a directory."
 msgstr "Το '%s' δεν είναι κατάλογος."
 
-#: ../plugins/autotools/ide-autotools-build-task.c:690
+#: plugins/autotools/ide-autotools-build-task.c:875
 #, c-format
 msgid "autogen.sh is missing from project directory (%s)."
 msgstr "Λείπει το autogen.sh από τον κατάλογο του έργου (%s)."
 
-#: ../plugins/autotools/ide-autotools-build-task.c:700
+#: plugins/autotools/ide-autotools-build-task.c:885
 msgid "autogen.sh is not executable."
 msgstr "Δεν είναι εκτελέσιμο το autogen.sh."
 
-#: ../plugins/autotools/ide-autotools-build-task.c:704
+#: plugins/autotools/ide-autotools-build-task.c:889
 msgid "Running autogen…"
 msgstr "Εκτελείται το autogen…"
 
-#: ../plugins/autotools/ide-autotools-build-task.c:738
+#: plugins/autotools/ide-autotools-build-task.c:923
 #, c-format
 msgid "autogen.sh failed to create configure (%s)"
 msgstr "Το autogen.sh απέτυχε να δημιουργήσει το αρχείο configure (%s)"
 
-#: ../plugins/autotools/ide-autotools-build-task.c:773
+#: plugins/autotools/ide-autotools-build-task.c:958
 msgid "Running configure…"
 msgstr "Εκτελείται το configure…"
 
-#: ../plugins/autotools/ide-autotools-build-task.c:870
+#: plugins/autotools/ide-autotools-build-task.c:1055
 msgid "Cleaning…"
 msgstr "Εκκαθάριση…"
 
-#: ../plugins/autotools/ide-makecache.c:1006
+#: plugins/autotools/ide-makecache.c:1147
 msgid "Invalid makefile provided, ignoring."
 msgstr "Δόθηκε μη έγκυρο αρχείο makefile, αγνόηση."
 
-#: ../plugins/build-tools/gbp-build-configuration-view.ui.h:2
+#: plugins/autotools-templates/autotools_templates/__init__.py:265
+msgid "Shared Library"
+msgstr "Κοινόχρηστη βιβλιοθήκη"
+
+#: plugins/autotools-templates/autotools_templates/__init__.py:267
+msgid "Create a new autotools project with a shared library"
+msgstr "Δημιουργία νέου έργου autotools με κοινόχρηστη βιβλιοθήκη"
+
+#: plugins/autotools-templates/autotools_templates/__init__.py:291
+msgid "Empty Project"
+msgstr "Κενό έργο"
+
+#: plugins/autotools-templates/autotools_templates/__init__.py:294
+msgid "Create a new empty autotools project"
+msgstr "Δημιουργία νέου έργου autotools"
+
+#: plugins/autotools-templates/autotools_templates/__init__.py:308
+msgid "GNOME Application"
+msgstr "Εφαρμογή GNOME"
+
+#: plugins/autotools-templates/autotools_templates/__init__.py:310
+msgid "Create a new flatpak-ready GNOME application"
+msgstr ""
+
+#: plugins/build-tools/gbp-build-configuration-row.ui:43
+msgid "Duplicate the configuration"
+msgstr "Δημιουργία διπλότυπου"
+
+#: plugins/build-tools/gbp-build-configuration-row.ui:59
+msgid "Delete the configuration"
+msgstr "Διαγραφή της ρύθμισης"
+
+#: plugins/build-tools/gbp-build-configuration-view.ui:28
 msgid "The name of the build configuration"
 msgstr "Το όνομα της ρύθμισης για τη δόμηση"
 
-#: ../plugins/build-tools/gbp-build-configuration-view.ui.h:3
-#: ../plugins/create-project/gbp-create-project-widget.ui.h:1
+#: plugins/build-tools/gbp-build-configuration-view.ui:37
 msgid "Name"
 msgstr "Όνομα"
 
-#: ../plugins/build-tools/gbp-build-configuration-view.ui.h:4
+#: plugins/build-tools/gbp-build-configuration-view.ui:58
 msgid "The prefix to use when installing the project"
 msgstr "Το πρόθεμα που θα χρησιμοποιηθεί κατά την εγκατάσταση του έργου"
 
-#: ../plugins/build-tools/gbp-build-configuration-view.ui.h:5
+#: plugins/build-tools/gbp-build-configuration-view.ui:67
 msgid "Installation Prefix"
 msgstr "Πρόθεμα εγκατάστασης"
 
-#: ../plugins/build-tools/gbp-build-configuration-view.ui.h:6
+#: plugins/build-tools/gbp-build-configuration-view.ui:88
 msgid "Options to use when bootstrapping the project"
 msgstr "Οι επιλογές που θα χρησιμοποιηθούν για τη δημιουργία του έργου"
 
-#: ../plugins/build-tools/gbp-build-configuration-view.ui.h:7
+#: plugins/build-tools/gbp-build-configuration-view.ui:97
 msgid "Configure Options"
 msgstr "Επιλογές Configure"
 
-#: ../plugins/build-tools/gbp-build-configuration-view.ui.h:8
-msgid "Duplicate Configuration"
-msgstr "Δημιουργία διπλότυπου"
-
-#: ../plugins/build-tools/gbp-build-configuration-view.ui.h:9
-msgid "Delete Configuration"
-msgstr "Διαγραφή ρύθμισης"
-
-#: ../plugins/build-tools/gbp-build-configuration-view.ui.h:10
-msgid "Device"
-msgstr "Συσκευή"
-
-#: ../plugins/build-tools/gbp-build-configuration-view.ui.h:11
-msgid "Runtime"
-msgstr "Περιβάλλον εκτέλεσης"
-
-#: ../plugins/build-tools/gbp-build-configuration-view.ui.h:12
+#: plugins/build-tools/gbp-build-configuration-view.ui:185
 msgid "Environment"
 msgstr "Περιβάλλον"
 
-#: ../plugins/build-tools/gbp-build-log-panel.c:249
+#: plugins/build-tools/gbp-build-log-panel.c:254
 msgid "Build Output"
 msgstr "Αποτέλεσμα δόμησης"
 
-#: ../plugins/build-tools/gbp-build-panel.c:150
+#: plugins/build-tools/gbp-build-panel.c:84
 #, c-format
 msgid "%d warning"
 msgid_plural "%d warnings"
 msgstr[0] "%d προειδοποίηση"
 msgstr[1] "%d προειδοποιήσεις"
 
-#: ../plugins/build-tools/gbp-build-panel.c:157
+#: plugins/build-tools/gbp-build-panel.c:91
 #, c-format
-#| msgid "AST read error"
 msgid "%d error"
 msgid_plural "%d errors"
 msgstr[0] "%d σφάλμα"
 msgstr[1] "%d σφάλματα"
 
-#: ../plugins/build-tools/gbp-build-panel-row.c:68
+#: plugins/build-tools/gbp-build-panel.c:246
+msgid "Errors"
+msgstr "Σφάλματα"
+
+#: plugins/build-tools/gbp-build-panel.c:249
+msgid "Warnings"
+msgstr "Προειδοποιήσεις"
+
+#: plugins/build-tools/gbp-build-panel.c:252
+msgid "Notes"
+msgstr "Σημειώσεις"
+
+#: plugins/build-tools/gbp-build-panel-row.c:76
 msgid "Unknown file"
 msgstr "Άγνωστος τύπος αρχείου"
 
-#: ../plugins/build-tools/gbp-build-panel.ui.h:1
-#: ../plugins/project-tree/gtk/menus.ui.h:12
-msgid "_Build"
-msgstr "Δόμ_ηση"
-
-#: ../plugins/build-tools/gbp-build-panel.ui.h:2
-#: ../plugins/project-tree/gtk/menus.ui.h:13
-msgid "_Rebuild"
-msgstr "Αναδόμη_ση"
-
-#: ../plugins/build-tools/gbp-build-panel.ui.h:3
-msgid "_Clean"
-msgstr "Καθα_ρισμός"
-
-#: ../plugins/build-tools/gbp-build-panel.ui.h:4
+#: plugins/build-tools/gbp-build-panel.ui:33
 msgid "Status:"
 msgstr "Κατάσταση:"
 
-#: ../plugins/build-tools/gbp-build-panel.ui.h:5
+#: plugins/build-tools/gbp-build-panel.ui:58
 msgid "Running Time:"
 msgstr "Διάρκεια εκτέλεσης:"
 
-#: ../plugins/build-tools/gbp-build-panel.ui.h:6
+#: plugins/build-tools/gbp-build-panel.ui:82
 msgid "Warnings:"
 msgstr "Προειδοποιήσεις:"
 
-#: ../plugins/build-tools/gbp-build-panel.ui.h:7
+#: plugins/build-tools/gbp-build-panel.ui:106
 msgid "Errors:"
 msgstr "Σφάλματα:"
 
-#: ../plugins/build-tools/gbp-build-panel.ui.h:9
-msgid "Deploy"
-msgstr "Εκτέλεση"
+#: plugins/build-tools/gbp-build-perspective.c:436
+msgid "Build Preferences"
+msgstr "Προτιμήσεις δόμησης"
 
-#: ../plugins/build-tools/gbp-build-panel.ui.h:10
-msgid "Export"
-msgstr "Εξαγωγή"
-
-#: ../plugins/build-tools/gbp-build-tool.c:102
-#: ../plugins/build-tools/gbp-build-tool.c:115
-#, c-format
+#: plugins/build-tools/gbp-build-tool.c:102
+#: plugins/build-tools/gbp-build-tool.c:115
 msgid "========================\n"
 msgstr "========================\n"
 
-#: ../plugins/build-tools/gbp-build-tool.c:103
+#: plugins/build-tools/gbp-build-tool.c:103
 #, c-format
 msgid "           Project Name: %s\n"
 msgstr "           Όνομα έργου: %s\n"
 
-#: ../plugins/build-tools/gbp-build-tool.c:104
+#: plugins/build-tools/gbp-build-tool.c:104
 #, c-format
 msgid " Version Control System: %s\n"
 msgstr " Σύστημα ελέγχου έκδοσης: %s\n"
 
-#: ../plugins/build-tools/gbp-build-tool.c:105
+#: plugins/build-tools/gbp-build-tool.c:105
 #, c-format
 msgid "           Build System: %s\n"
 msgstr "           Σύστημα δόμησης: %s\n"
 
-#: ../plugins/build-tools/gbp-build-tool.c:106
+#: plugins/build-tools/gbp-build-tool.c:106
 #, c-format
 msgid "    Build Date and Time: %s\n"
 msgstr "    Ημερομηνία και ώρα δόμησης: %s\n"
 
-#: ../plugins/build-tools/gbp-build-tool.c:107
+#: plugins/build-tools/gbp-build-tool.c:107
 #, c-format
 msgid "    Building for Device: %s (%s)\n"
 msgstr "    Δομείται για την συσκευή: %s (%s)\n"
 
-#: ../plugins/build-tools/gbp-build-tool.c:112
+#: plugins/build-tools/gbp-build-tool.c:112
 #, c-format
 msgid "            Environment: %s\n"
 msgstr "            Περιβάλλον: %s\n"
 
-#: ../plugins/build-tools/gbp-build-tool.c:142
-#: ../plugins/build-tools/gbp-build-tool.c:146
-#, c-format
+#: plugins/build-tools/gbp-build-tool.c:142
+#: plugins/build-tools/gbp-build-tool.c:146
 msgid "===============\n"
 msgstr "===============\n"
 
-#: ../plugins/build-tools/gbp-build-tool.c:143
+#: plugins/build-tools/gbp-build-tool.c:143
 #, c-format
 msgid " Build Failure: %s\n"
 msgstr " Αποτυχία δόμησης e: %s\n"
 
-#: ../plugins/build-tools/gbp-build-tool.c:144
+#: plugins/build-tools/gbp-build-tool.c:144
 msgid " Build ran for: %"
 msgstr " Η δόμηση εκτελέστηκε για: %"
 
@@ -1850,190 +2672,376 @@ msgstr " Η δόμηση εκτελέστηκε για: %"
 #. *       here too. It would be nice if we could say, go build this project,
 #. *       for this device, and then deploy.
 #.
-#: ../plugins/build-tools/gbp-build-tool.c:157
-#: ../plugins/build-tools/gbp-build-tool.c:161
-#, c-format
+#: plugins/build-tools/gbp-build-tool.c:157
+#: plugins/build-tools/gbp-build-tool.c:161
 msgid "=================\n"
 msgstr "=================\n"
 
-#: ../plugins/build-tools/gbp-build-tool.c:158
-#, c-format
+#: plugins/build-tools/gbp-build-tool.c:158
 msgid " Build Successful\n"
 msgstr "Επιτυχής δόμηση\n"
 
-#: ../plugins/build-tools/gbp-build-tool.c:159
+#: plugins/build-tools/gbp-build-tool.c:159
 msgid "   Build ran for: %"
 msgstr "    Η δόμηση εκτελέστηκε για: %"
 
-#: ../plugins/build-tools/gbp-build-tool.c:212
+#: plugins/build-tools/gbp-build-tool.c:212
 #, c-format
 msgid "Failed to locate device \"%s\""
 msgstr "Αποτυχία εντοπισμού συσκευής \"%s\""
 
-#: ../plugins/build-tools/gbp-build-tool.c:222
+#: plugins/build-tools/gbp-build-tool.c:222
 #, c-format
 msgid "Failed to locate runtime \"%s\""
 msgstr "Αποτυχία εντοπισμού περιβάλλοντος εκτέλεσης \"%s\""
 
-#: ../plugins/build-tools/gbp-build-tool.c:286
+#: plugins/build-tools/gbp-build-tool.c:286
 msgid "Clean the project"
 msgstr "Καθαρισμός του έργου"
 
-#: ../plugins/build-tools/gbp-build-tool.c:288
+#: plugins/build-tools/gbp-build-tool.c:288
 msgid "The ID of the device to build for"
 msgstr "Το αναγνωριστικό συσκευής όπου θα γίνει η δόμηση"
 
-#: ../plugins/build-tools/gbp-build-tool.c:289
+#: plugins/build-tools/gbp-build-tool.c:289
 msgid "local"
 msgstr "τοπικά"
 
-#: ../plugins/build-tools/gbp-build-tool.c:291
+#: plugins/build-tools/gbp-build-tool.c:291
 msgid "The runtime to use for building"
 msgstr "Το περιβάλλον εκτέλεσης που θα χρησιμοποιηθεί για τη δόμηση"
 
-#: ../plugins/build-tools/gbp-build-tool.c:292
+#: plugins/build-tools/gbp-build-tool.c:292
 msgid "host"
 msgstr "κεντρικός υπολογιστής"
 
-#: ../plugins/build-tools/gbp-build-tool.c:294
+#: plugins/build-tools/gbp-build-tool.c:294
 msgid "Number of workers to use when building"
 msgstr "Αριθμός εργατών που θα χρησιμοποιηθούν κατά τη δόμηση"
 
-#: ../plugins/build-tools/gbp-build-tool.c:295
+#: plugins/build-tools/gbp-build-tool.c:295
 msgid "N"
 msgstr "N"
 
-#: ../plugins/build-tools/gbp-build-tool.c:297
+#: plugins/build-tools/gbp-build-tool.c:297
 msgid "The configuration to use from .buildconfig"
 msgstr "Οι ρυθμίσεις που θα χρησιμοποιηθούν από το .buildconfig"
 
-#: ../plugins/build-tools/gbp-build-tool.c:298
+#: plugins/build-tools/gbp-build-tool.c:298
 msgid "CONFIG_ID"
 msgstr "CONFIG_ID"
 
-#: ../plugins/build-tools/gbp-build-tool.c:300
+#: plugins/build-tools/gbp-build-tool.c:300
 msgid "Path to project file, defaults to current directory"
 msgstr "Διαδρομή στο αρχείο του έργου, η προεπιλογή είναι ο τρέχων κατάλογος"
 
-#: ../plugins/clang/ide-clang-preferences-addin.c:62
+#: plugins/build-tools/ide-environment-editor.c:65
+msgid "New variable…"
+msgstr "Νέα μεταβλητή…"
+
+#: plugins/clang/ide-clang-preferences-addin.c:62
 msgid "Clang"
 msgstr "Clang"
 
-#: ../plugins/clang/ide-clang-preferences-addin.c:63
+#: plugins/clang/ide-clang-preferences-addin.c:63
 msgid "Show errors and warnings provided by Clang"
 msgstr "Εμφάνιση σφλαμάτων και προειδοποιήσεων από το Clang"
 
 #. translators: keywords used when searching for preferences
-#: ../plugins/clang/ide-clang-preferences-addin.c:65
+#: plugins/clang/ide-clang-preferences-addin.c:65
 msgid "clang diagnostics warnings errors"
 msgstr "clang diagnostics warnings errors διαγνωστικά προειδοποιήσεις σφάλματα"
 
-#: ../plugins/clang/ide-clang-service.c:269
+#: plugins/clang/ide-clang-service.c:263
 msgid "Unknown failure"
 msgstr "Άγνωστο σφάλμα "
 
-#: ../plugins/clang/ide-clang-service.c:273
+#: plugins/clang/ide-clang-service.c:267
 msgid "Clang crashed"
 msgstr "Κατέρρευσε το Clang"
 
-#: ../plugins/clang/ide-clang-service.c:277
+#: plugins/clang/ide-clang-service.c:271
 msgid "Invalid arguments"
 msgstr "Μη έγκυρα ορίσματα"
 
-#: ../plugins/clang/ide-clang-service.c:281
+#: plugins/clang/ide-clang-service.c:275
 msgid "AST read error"
 msgstr "Σφάλμα ανάγνωσης AST"
 
-#: ../plugins/clang/ide-clang-service.c:293
+#: plugins/clang/ide-clang-service.c:287
 #, c-format
 msgid "Failed to create translation unit: %s"
 msgstr "Αποτυχία δημιουργίας μονάδας μετάφρασης: %s"
 
-#: ../plugins/clang/ide-clang-service.c:401
+#: plugins/clang/ide-clang-service.c:395
 msgid "File must be saved locally to parse."
 msgstr "Το αρχείο πρέπει να αποθηκευτεί τοπικά για να αναλυθεί."
 
-#: ../plugins/clang/ide-clang-symbol-node.c:149
+#: plugins/clang/ide-clang-symbol-node.c:149
 msgid "anonymous"
 msgstr "ανώνυμο"
 
-#: ../plugins/clang/ide-clang-translation-unit.c:656
+#: plugins/clang/ide-clang-translation-unit.c:642
 msgid "clang_codeCompleteAt() only works on local files"
 msgstr "Το clang_codeCompleteAt() λειτουργεί μόνο σε τοπικά αρχεία"
 
-#: ../plugins/command-bar/gb-command-bar.c:299
+#: plugins/color-picker/gb-color-picker-prefs.c:97
+msgid "Close without Saving"
+msgstr "Έξοδος χωρίς αποθήκευση"
+
+#: plugins/color-picker/gb-color-picker-prefs.c:99
+msgid "Save As…"
+msgstr "Αποθήκευση ως…"
+
+#: plugins/color-picker/gb-color-picker-prefs.c:207
+msgid "Load palette"
+msgstr "Φόρτωση παλέτας"
+
+#: plugins/color-picker/gb-color-picker-prefs.c:234
+msgid "Save palette"
+msgstr "Αποθήκευση παλέτας"
+
+#: plugins/color-picker/gb-color-picker-prefs.c:725
+msgid "All files"
+msgstr "Όλα τα αρχεία"
+
+#: plugins/color-picker/gb-color-picker-prefs.c:729
+msgid "All supported palettes formats"
+msgstr "Όλες οι υποστηριζόμενες μορφές παλετών"
+
+#: plugins/color-picker/gb-color-picker-prefs.c:734
+msgid "GIMP palette"
+msgstr "Παλέτα GIMP"
+
+#: plugins/color-picker/gb-color-picker-prefs.c:738
+msgid "GNOME Builder palette"
+msgstr "Παλέτα GNOME Builder"
+
+#: plugins/color-picker/gb-color-picker-prefs-palette-row.c:178
+msgid "Palette name"
+msgstr "Όνομα παλέτας"
+
+#: plugins/color-picker/gb-color-picker-prefs-palette-row.c:180
+msgid "Enter a new name for the palette"
+msgstr "Εισάγετε όνομα για την παλέτα"
+
+#: plugins/color-picker/gb-color-picker-workbench-addin.c:178
+msgid "Colors"
+msgstr "Χρώματα"
+
+#: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:13
+msgid "HSV visibility"
+msgstr "Ορατότητα HSV"
+
+#: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:14
+msgid "If the HSV components are visible."
+msgstr "Αν τα στοιχεία HSV είναι ο ορατά."
+
+#: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:18
+msgid "LAB visibility"
+msgstr "Ορατότητα LAB"
+
+#: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:19
+msgid "If the LAB components are visible."
+msgstr "Αν τα στοιχεία LAB είναι ο ορατά."
+
+#: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:23
+msgid "RGB visibility"
+msgstr "Ορατότητα RGB"
+
+#: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:24
+msgid "If the RGB components are visible."
+msgstr "Αν τα στοιχεία RGB είναι ο ορατά."
+
+#: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:28
+msgid "RGB unit"
+msgstr "Μονάδα RGB"
+
+#: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:29
+msgid "The unit used by RGB component and strings."
+msgstr ""
+
+#: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:35
+msgid "Selected palette ID"
+msgstr "Επιλεγμένο ανωγνωριστικό παλέτας"
+
+#: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:36
+msgid "The selected palette ID among the loaded ones."
+msgstr "Τα επιλεγμένα αναγνωριστικά παλέτας μεταξύ των φορτωμένων."
+
+#: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:40
+msgid "Color strings visibility"
+msgstr "Ορατότητα συμβολοσειρών χρώματος"
+
+#: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:41
+msgid "The visible color strings."
+msgstr "Οι ορατές συμβολοσειρές χρώματος."
+
+#: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:45
+msgid "Color filter"
+msgstr "Φίλτρο χρώματος"
+
+#: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:46
+msgid "The filter used on the color scales and color plane."
+msgstr ""
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:13
+msgid "Color components"
+msgstr "Συστατικά στοιχεία χρώματος"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:47
+#: plugins/color-picker/gtk/color-picker-prefs.ui:451
+msgid "Visibility:"
+msgstr "Ορατότητα:"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:63
+msgid "Select the color spaces for which you want to see sliders in the panel."
+msgstr ""
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:140
+msgid "Units:"
+msgstr "Μονάδες:"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:156
+msgid ""
+"Select the type of unit you want to use for RGB components and strings in "
+"the panel."
+msgstr ""
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:213
+msgid "Filters:"
+msgstr "Φίλτρα:"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:229
+msgid "Select a filter that act on the colors or 'None'."
+msgstr ""
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:467
+#, fuzzy
+msgid "Select the color strings you want to see in the panel."
+msgstr "Επι_λέξτε τα έγγραφα που θέλετε να αποθηκεύσετε:"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:597
+msgid "Palettes options"
+msgstr "Επιλογές παλέτας"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:615
+#, fuzzy
+msgid "Palette view mode:"
+msgstr "Μέγεθος της παλέτας σε λειτουργία 8 bit"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:638
+msgid "List"
+msgstr "Λίστα"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:676
+msgid "Swatches"
+msgstr ""
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:717
+msgid "Palette management"
+msgstr "Διαχείριση παλετών"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:762
+msgid "Load"
+msgstr "Φόρτωση"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:836
+msgid "From current document"
+msgstr "Από το τρέχον έγγραφο"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:854
+msgid "Select the palette you want to see in the panel or close one."
+msgstr ""
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:891
+msgid "No loaded palettes"
+msgstr "Καμία φορτωμένη παλέτα"
+
+#: plugins/color-picker/gtk/color-picker-preview.ui:45
+msgid "No selected palettes"
+msgstr "Καμία επιλεγμένη παλέτα"
+
+#: plugins/color-picker/gtk/color-picker-preview.ui:58
+msgid "Select a palette file"
+msgstr "Επιλογή αρχείου παλέτας"
+
+#: plugins/color-picker/gtk/color-picker.ui:61
+msgid "Try loading or generating a palette using the menu"
+msgstr ""
+
+#: plugins/color-picker/gtk/menus.ui:7
+msgid "Enable color picker"
+msgstr "Ενεργοποίηση επιλογέα χρωμάτων"
+
+#: plugins/command-bar/gb-command-bar.c:302
 #, c-format
 msgid "Command not found: %s"
 msgstr "Δε βρέθηκε η εντολή: %s"
 
-#: ../plugins/command-bar/gb-command-bar.c:603
+#: plugins/command-bar/gb-command-bar.c:612
 msgid "Use the entry below to execute a command"
 msgstr "Χρησιμοποιήστε το παρακάτω πεδίο για να εκτελέστε μια εντολή."
 
-#: ../plugins/command-bar/gb-vim.c:86
-#, c-format
+#: plugins/command-bar/gb-vim.c:90
 msgid "Number required"
 msgstr "Απαιτείται αριθμός"
 
-#: ../plugins/command-bar/gb-vim.c:96
+#: plugins/command-bar/gb-vim.c:100
 #, c-format
 msgid "%s is invalid for %s"
 msgstr "Το %s είναι άκυρο για το %s"
 
-#: ../plugins/command-bar/gb-vim.c:154
+#: plugins/command-bar/gb-vim.c:158
 #, c-format
 msgid "Cannot find language '%s'"
 msgstr "Αδυναμία εύρεσης γλώσσας '%s'"
 
-#: ../plugins/command-bar/gb-vim.c:311
-#, c-format
+#: plugins/command-bar/gb-vim.c:315
 msgid "This command requires a GtkSourceView to be focused"
 msgstr "Αυτή η εντολή απαιτεί το GtkSourceView για να εστιαστεί"
 
-#: ../plugins/command-bar/gb-vim.c:322
-#, c-format
+#: plugins/command-bar/gb-vim.c:326
 msgid "This command requires a view to be focused"
 msgstr "Αυτή η εντολή απαιτεί μια προβολή για να εστιαστεί"
 
-#: ../plugins/command-bar/gb-vim.c:379
+#: plugins/command-bar/gb-vim.c:383
 #, c-format
 msgid "Unknown option: %s"
 msgstr "Άγνωστη επιλογή: %s"
 
-#: ../plugins/command-bar/gb-vim.c:422
+#: plugins/command-bar/gb-vim.c:426
 #, c-format
 msgid "Cannot find colorscheme '%s'"
 msgstr "Αδυναμία εύρεσης στυλ χρώματος '%s'"
 
-#: ../plugins/command-bar/gb-vim.c:463
-#, c-format
+#: plugins/command-bar/gb-vim.c:467 plugins/command-bar/gb-vim.c:591
 msgid "Failed to locate working directory"
 msgstr "Αποτυχία εντοπισμού λειτουργικού καταλόγου"
 
-#: ../plugins/command-bar/gb-vim.c:640
+#: plugins/command-bar/gb-vim.c:707
 #, c-format
 msgid "Invalid :syntax subcommand: %s"
 msgstr "Άκυρη σύνταξη υποεντολής: %s"
 
-#: ../plugins/command-bar/gb-vim.c:1022
-#, c-format
+#: plugins/command-bar/gb-vim.c:1146
 msgid "Invalid search and replace request"
 msgstr "Μη έγκυρο αίτημα αναζήτησης και αντικατάστασης"
 
-#: ../plugins/command-bar/gb-vim.c:1127
+#: plugins/command-bar/gb-vim.c:1252
 #, c-format
 msgid "Not a command: %s"
 msgstr "Δεν είναι εντολή: %s"
 
-#: ../plugins/comment-code/gtk/menus.ui.h:1
+#: plugins/comment-code/gtk/menus.ui:9
 msgid "Comment code"
 msgstr "Σχολιασμός κώδικα"
 
-#: ../plugins/comment-code/gtk/menus.ui.h:2
+#: plugins/comment-code/gtk/menus.ui:14
 msgid "Uncomment code"
 msgstr "Αποσχολιασμός κώδικα"
 
-#: ../plugins/contributing/contributing_plugin/helper.py:76
+#: plugins/contributing/contributing_plugin/helper.py:76
 #, python-format
 msgid ""
 "Usage:\n"
@@ -2042,11 +3050,11 @@ msgstr ""
 "Χρήση:\n"
 "  %(prgname) %(εντολή) ΕΠΙΛΟΓΕΣ\n"
 
-#: ../plugins/contributing/contributing_plugin/__init__.py:54
+#: plugins/contributing/contributing_plugin/__init__.py:54
 msgid "Missing project name"
 msgstr "Λείπει το όνομα του έργου"
 
-#: ../plugins/contributing/contributing_plugin/__init__.py:68
+#: plugins/contributing/contributing_plugin/__init__.py:68
 msgid ""
 "Usage:\n"
 "  ide contribute PROJECT_NAME\n"
@@ -2080,289 +3088,388 @@ msgstr ""
 "  ide contribute gnome-maps\n"
 "\n"
 
-#: ../plugins/contributing/contributing_plugin/__init__.py:226
+#: plugins/contributing/contributing_plugin/__init__.py:226
 msgid "Username"
 msgstr "Όνομα χρήστη"
 
-#: ../plugins/c-pack/ide-c-format-provider.c:281
-#: ../plugins/python-pack/ide-python-format-provider.c:238
+#: plugins/c-pack/ide-c-format-provider.c:283
+#: plugins/python-pack/ide-python-format-provider.c:240
 msgid "Format Strings"
 msgstr "Μορφοποίηση συμβολοσειρών"
 
-#: ../plugins/create-project/gbp-create-project-genesis-addin.c:158
-msgid "From a project template"
-msgstr "Από ένα πρότυπο έργου"
+#: plugins/create-project/gbp-create-project-genesis-addin.c:158
+msgid "New Project"
+msgstr "Νέο έργο"
 
-#: ../plugins/create-project/gbp-create-project-tool.c:130
+#: plugins/create-project/gbp-create-project-genesis-addin.c:223
+msgid "New…"
+msgstr "Νέο…"
+
+#: plugins/create-project/gbp-create-project-tool.c:136
 msgid "List available templates"
 msgstr "Εμφάνιση διαθέσιμων προτύπων"
 
-#: ../plugins/create-project/gbp-create-project-tool.c:132
+#: plugins/create-project/gbp-create-project-tool.c:138
 msgid "Project template to generate"
 msgstr "Το πρότυπο έργου που θα δημιουργηθεί"
 
-#: ../plugins/create-project/gbp-create-project-tool.c:138
+#: plugins/create-project/gbp-create-project-tool.c:140
+msgid "The target language (if supported)"
+msgstr "Η γλώσσα προορισμού (αν υποστηρίζεται)"
+
+#: plugins/create-project/gbp-create-project-tool.c:142
+msgid "The version control to use or \"none\" to disable"
+msgstr ""
+"Το σύστημα έλεγχου εκδόσεων που θα χρησιμοποιηθεί ή \"none\" για "
+"απενεργοποίηση"
+
+#: plugins/create-project/gbp-create-project-tool.c:143
+msgid "git"
+msgstr "git"
+
+#: plugins/create-project/gbp-create-project-tool.c:149
 msgid "create-project [OPTION...] PROJECT_NAME"
 msgstr "create-project [ΕΠΙΛΟΓΗ...] ΟΝΟΜΑ_ΕΡΓΟΥ"
 
-#: ../plugins/create-project/gbp-create-project-tool.c:187
-#, c-format
+#: plugins/create-project/gbp-create-project-tool.c:198
 msgid "Filename must be ASCII and may not contain : or ="
 msgstr "Το όνομα αρχείου πρέπει να είναι ASCII και να μην περιέχει : ή ="
 
-#: ../plugins/create-project/gbp-create-project-tool.c:291
-#, c-format
+#: plugins/create-project/gbp-create-project-tool.c:372
 msgid "Please specify a project name.\n"
 msgstr "Παρακαλούμε, καθορίστε ένα όνομα έργου.\n"
 
-#: ../plugins/create-project/gbp-create-project-tool.c:307
-#, c-format
+#: plugins/create-project/gbp-create-project-tool.c:388
 msgid "Please specify a project template with --template=\n"
 msgstr "Παρακαλούμε, καθορίστε ένα πρότυπο έργου με --template=\n"
 
-#: ../plugins/create-project/gbp-create-project-widget.ui.h:2
-#: ../plugins/git/ide-git-clone-widget.ui.h:6
-msgid "Location"
-msgstr "Τοποθεσία"
+#: plugins/create-project/gbp-create-project-widget.c:157
+msgid ""
+"Characters were used which might cause technical issues as a project name"
+msgstr ""
 
-#: ../plugins/create-project/gbp-create-project-widget.ui.h:3
+#: plugins/create-project/gbp-create-project-widget.c:164
+msgid "Directory already exists with that name"
+msgstr "Ένας κατάλογος με αυτό το όνομα υπάρχει ήδη"
+
+#: plugins/create-project/gbp-create-project-widget.c:559
+msgid "A failure occurred while initializing version control"
+msgstr ""
+"Προέκυψε ένα σφάλμα κατά την αρχικοποίηση του συστήματος ελέγχου εκδόσεων"
+
+#: plugins/create-project/gbp-create-project-widget.ui:28
+msgid "Project Name"
+msgstr "Όνομα έργου"
+
+#: plugins/create-project/gbp-create-project-widget.ui:55
+msgid ""
+"Unique name that is used for your project's folder and other technical "
+"resources. Should be in lower case without spaces and may not start with a "
+"number."
+msgstr ""
+
+#: plugins/create-project/gbp-create-project-widget.ui:74
+msgid "Project Location"
+msgstr "Θέση έργου"
+
+#: plugins/create-project/gbp-create-project-widget.ui:85
+#: plugins/git/ide-git-clone-widget.ui:78
+msgid "Select Project Directory"
+msgstr "Επιλογή καταλόγου έργου"
+
+#: plugins/create-project/gbp-create-project-widget.ui:98
 msgid "Language"
 msgstr "Γλώσσα"
 
-#: ../plugins/create-project/gbp-create-project-widget.ui.h:4
-msgid "Pattern"
-msgstr "Μοτίβο"
+#: plugins/create-project/gbp-create-project-widget.ui:120
+msgid "License"
+msgstr "Άδεια"
 
-#: ../plugins/devhelp/gbp-devhelp-panel.c:187
-#: ../plugins/devhelp/gbp-devhelp-search-provider.c:128
+#: plugins/create-project/gbp-create-project-widget.ui:135
+msgid "GPLv3+"
+msgstr "GPLv3+"
+
+#: plugins/create-project/gbp-create-project-widget.ui:136
+msgid "LGPLv3+"
+msgstr "LGPLv3+"
+
+#: plugins/create-project/gbp-create-project-widget.ui:137
+msgid "AGPLv3+"
+msgstr "AGPLv3+"
+
+#: plugins/create-project/gbp-create-project-widget.ui:138
+msgid "MIT/X11"
+msgstr "MIT/X11"
+
+#: plugins/create-project/gbp-create-project-widget.ui:139
+msgid "GPLv2+"
+msgstr "GPLv2+"
+
+#: plugins/create-project/gbp-create-project-widget.ui:140
+msgid "LGPLv2.1+"
+msgstr "LGPLv2.1+"
+
+#: plugins/create-project/gbp-create-project-widget.ui:141
+msgid "No license"
+msgstr "Χωρίς άδεια"
+
+#: plugins/create-project/gbp-create-project-widget.ui:174
+msgid "Uses the Git version control system"
+msgstr "Χρησιμοποιεί το σύστημα ελέγχου έκδοσης Git"
+
+#: plugins/create-project/gbp-create-project-widget.ui:236
+msgid "Select a Template"
+msgstr "Επιλογή προτύπου"
+
+#: plugins/devhelp/gbp-devhelp-panel.c:194
 msgid "Documentation"
 msgstr "Τεκμηρίωση"
 
-#: ../plugins/file-search/gb-file-search-provider.c:44
+#: plugins/file-search/gb-file-search-provider.c:44
 msgid "Switch To"
 msgstr "Αλλαγή σε"
 
-#: ../plugins/fpaste/fpaste_plugin/gtk/menus.ui.h:1
+#: plugins/fpaste/fpaste_plugin/gtk/menus.ui:9
 msgid "Send to Fpaste.org"
 msgstr "Αποστολή σε Fpaste.org"
 
-#: ../plugins/fpaste/fpaste_plugin/__init__.py:110
+#: plugins/fpaste/fpaste_plugin/__init__.py:110
 msgid "The following URL has been copied to the clipboard"
 msgstr "Η ακόλουθη διεύθυνση έχει αντιγραφεί στο πρόχειρο"
 
-#: ../plugins/git/ide-git-buffer-change-monitor.c:167
+#: plugins/git/ide-git-buffer-change-monitor.c:162
+#, fuzzy
 msgid "Cannot provide diff, no backing file provided."
 msgstr "Αδυναμία παροχής διαφορών, δεν καθορίστηκε αρχείο υποστήριξης."
 
-#: ../plugins/git/ide-git-buffer-change-monitor.c:539
-#, c-format
+#: plugins/git/ide-git-buffer-change-monitor.c:546
 msgid "Repository does not have a working directory."
 msgstr "Το αποθετήριο δεν έχει λειτουργικό κατάλογο."
 
-#: ../plugins/git/ide-git-buffer-change-monitor.c:550
-#, c-format
+#: plugins/git/ide-git-buffer-change-monitor.c:557
 msgid "File is not under control of git working directory."
 msgstr "Τα αρχεία δεν είναι υπό τον έλεγχο ενός λειτουργικού καταλόγου git."
 
-#: ../plugins/git/ide-git-buffer-change-monitor.c:616
-#, c-format
+#: plugins/git/ide-git-buffer-change-monitor.c:623
 msgid "The requested file does not exist within the git index."
 msgstr "Το αιτούμενο αρχείο δεν ανήκει μέσα στον κατάλογο του git."
 
-#: ../plugins/git/ide-git-clone-widget.c:132
+#: plugins/git/ide-git-clone-widget.c:141
+#: plugins/git/ide-git-clone-widget.c:387
 msgid "A valid Git URL is required"
 msgstr "Απαιτείται μια έγκυρη διεύθυνση Git"
 
-#: ../plugins/git/ide-git-clone-widget.ui.h:1
+#: plugins/git/ide-git-clone-widget.ui:38
+msgid "Use Git to create a local copy of a remotely hosted project."
+msgstr ""
+
+#: plugins/git/ide-git-clone-widget.ui:66
 msgid "user@host:repository.git"
 msgstr "user@host:repository.git"
 
-#: ../plugins/git/ide-git-clone-widget.ui.h:2
+#: plugins/git/ide-git-clone-widget.ui:67
 msgid "Enter the URL of your project's source code repository"
 msgstr "Πληκτρολογήστε τη διεύθυνση αποθετηρίου του έργου σας"
 
-#: ../plugins/git/ide-git-clone-widget.ui.h:3
-msgid "Directory"
-msgstr "Κατάλογος"
+#: plugins/git/ide-git-clone-widget.ui:94
+msgid "Repository URL"
+msgstr "Διεύθυνση αποθετηρίου"
 
-#: ../plugins/git/ide-git-clone-widget.ui.h:4
-msgid "Enter the name of the directory to create"
-msgstr "Πληκτρολογήστε το όνομα του καταλόγου για τη δημιουργία του"
+#: plugins/git/ide-git-clone-widget.ui:102
+msgid "Project Destination"
+msgstr "Προορισμός έργου"
 
-#: ../plugins/git/ide-git-clone-widget.ui.h:5
-msgid "Repository"
-msgstr "Αποθετήριο"
+#: plugins/git/ide-git-genesis-addin.c:93
+msgid "Clone Project"
+msgstr "Κλωνοποίηση έργου"
 
-#: ../plugins/git/ide-git-genesis-addin.c:93
-msgid "From an existing project in a Git repository"
-msgstr "Από υπάρχον έργο σε ένα αποθετήριο Git"
+#: plugins/git/ide-git-genesis-addin.c:184
+msgid "Clone…"
+msgstr "Κλωνοποίηση…"
 
-#: ../plugins/git/ide-git-preferences-addin.c:108
-msgid "Version Control"
-msgstr "Έλεγχος εκδόσεων"
+#: plugins/git/ide-git-genesis-addin.c:190
+msgid "Clone"
+msgstr "Κλωνοποίηση"
 
-#: ../plugins/git/ide-git-preferences-addin.c:145
-msgid "Attribution"
-msgstr "Απόδοση"
+#: plugins/git/ide-git-remote-callbacks.c:174
+msgid ""
+"Builder failed to provide appropriate credentials when cloning repository."
+msgstr ""
 
-#: ../plugins/gnome-code-assistance/ide-gca-diagnostic-provider.c:375
+#: plugins/gnome-code-assistance/ide-gca-diagnostic-provider.c:368
 msgid "Code assistance requires a local file."
 msgstr "Η βοήθεια κώδικα απαιτεί ένα τοπικό αρχείο."
 
-#: ../plugins/gnome-code-assistance/ide-gca-preferences-addin.c:62
+#: plugins/gnome-code-assistance/ide-gca-preferences-addin.c:62
 msgid "Pylint"
 msgstr "Pylint"
 
-#: ../plugins/gnome-code-assistance/ide-gca-preferences-addin.c:63
+#: plugins/gnome-code-assistance/ide-gca-preferences-addin.c:63
 msgid "Enable the use of pylint, which may execute code in your project"
 msgstr ""
 "Ενεργοποιεί τη χρήση του pylint, το οποίο μπορεί να εκτελέσει κώδικα στο "
 "έργο σας"
 
 #. translators: these are keywords used to search for preferences
-#: ../plugins/gnome-code-assistance/ide-gca-preferences-addin.c:65
+#: plugins/gnome-code-assistance/ide-gca-preferences-addin.c:65
 msgid "pylint python lint code execute execution"
 msgstr "pylint python lint code execute execution κώδικας εκτέλεση δόμηση"
 
-#: ../plugins/gnome-code-assistance/ide-gca-service.c:168
+#: plugins/gnome-code-assistance/ide-gca-service.c:182
 msgid "No language specified"
 msgstr "Δεν καθορίστηκε γλώσσα"
 
-#: ../plugins/html-preview/html_preview_plugin/gtk/menus.ui.h:1
+#: plugins/gnome-code-assistance/org.gnome.builder.gnome-code-assistance.gschema.xml:5
+msgid "Enable Pylint"
+msgstr "Ενεργοποίηση Pylint"
+
+#: plugins/gnome-code-assistance/org.gnome.builder.gnome-code-assistance.gschema.xml:6
+#, fuzzy
+msgid ""
+"Enable the use of pylint to find additional diagnostics in Python programs. "
+"This may result in the execution of code in your project."
+msgstr ""
+"Ενεργοποιεί τη χρήση του pylint, το οποίο μπορεί να εκτελέσει κώδικα στο "
+"έργο σας"
+
+#: plugins/hello-cpp/hellocppapplicationaddin.cc:48
+#, c-format
+msgid "Wow! You've spent with Builder %d second!\n"
+msgid_plural "Wow! You've spent with Builder %d seconds!\n"
+msgstr[0] ""
+msgstr[1] ""
+
+#: plugins/html-preview/html_preview_plugin/gtk/menus.ui:6
 msgid "Preview as HTML"
 msgstr "Προεπισκόπηση ως HTML"
 
-#: ../plugins/jedi/jedi_plugin.py:672
+#: plugins/jedi/jedi_plugin.py:731
 msgid "Suggest Python completions"
 msgstr "Υποδείξεις συμπληρώσεων Python"
 
-#: ../plugins/jedi/jedi_plugin.py:673
+#: plugins/jedi/jedi_plugin.py:732
 msgid "Use Jedi to provide completions for the Python language"
 msgstr "Χρησιμοποιεί Jedi για αυτόματη συμπλήρωση στη γλώσσα Python"
 
-#: ../plugins/library-template/library_template/__init__.py:52
-msgid "Shared Library"
-msgstr "Κοινόχρηστη βιβλιοθήκη"
-
-#: ../plugins/library-template/library_template/__init__.py:55
-msgid "Create a new autotools project with a shared library"
-msgstr "Δημιουργία νέου έργου autotools με κοινόχρηστη βιβλιοθήκη"
-
-#: ../plugins/mingw/ide-mingw-device-provider.c:95
+#: plugins/mingw/ide-mingw-device-provider.c:94
 msgid "MinGW 64-bit"
 msgstr "MinGW 64-bit"
 
-#: ../plugins/mingw/ide-mingw-device-provider.c:107
+#: plugins/mingw/ide-mingw-device-provider.c:106
 msgid "MinGW 32-bit"
 msgstr "MinGW 32-bit"
 
-#: ../plugins/project-tree/gb-new-file-popover.c:123
-#: ../plugins/project-tree/gb-rename-file-popover.c:141
+#: plugins/project-tree/gb-new-file-popover.c:123
+#: plugins/project-tree/gb-rename-file-popover.c:139
 msgid "A folder with that name already exists."
 msgstr "Υπάρχει ήδη ένας φάκελος με το ίδιο όνομα."
 
-#: ../plugins/project-tree/gb-new-file-popover.c:126
-#: ../plugins/project-tree/gb-rename-file-popover.c:144
+#: plugins/project-tree/gb-new-file-popover.c:126
+#: plugins/project-tree/gb-rename-file-popover.c:142
 msgid "A file with that name already exists."
 msgstr "Υπάρχει ήδη ένα αρχείο με το ίδιο όνομα."
 
-#: ../plugins/project-tree/gb-new-file-popover.c:348
-#: ../plugins/project-tree/gb-new-file-popover.ui.h:1
-#: ../plugins/project-tree/gb-rename-file-popover.ui.h:1
+#: plugins/project-tree/gb-new-file-popover.c:348
+#: plugins/project-tree/gb-new-file-popover.ui:13
+#: plugins/project-tree/gb-rename-file-popover.ui:13
 msgid "File Name"
 msgstr "Όνομα αρχείου"
 
-#: ../plugins/project-tree/gb-new-file-popover.c:350
+#: plugins/project-tree/gb-new-file-popover.c:350
 msgid "Folder Name"
 msgstr "Όνομα φακέλου"
 
-#: ../plugins/project-tree/gb-new-file-popover.ui.h:2
+#: plugins/project-tree/gb-new-file-popover.ui:35
 msgid "_Create"
 msgstr "_Δημιουργία"
 
-#: ../plugins/project-tree/gb-project-tree-addin.c:113
-msgid "Project"
-msgstr "Έργο"
+#: plugins/project-tree/gb-project-tree-builder.c:207
+msgid "Empty"
+msgstr "Κενό"
 
-#: ../plugins/project-tree/gb-project-tree-builder.c:77
-msgid "Files"
-msgstr "Αρχεία"
-
-#: ../plugins/project-tree/gb-rename-file-popover.c:79
+#: plugins/project-tree/gb-rename-file-popover.c:79
 #, c-format
 msgid "Rename %s"
-msgstr "Μετονομασίας %s"
+msgstr "Μετονομασία %s"
 
-#: ../plugins/project-tree/gb-rename-file-popover.c:172
-msgid "File name must not contain subdirectories."
-msgstr "Το όνομα αρχείου δεν πρέπει να περιέχει υποκαταλόγους."
+#: plugins/project-tree/gtk/menus.ui:14
+msgid "_New"
+msgstr "_Νέο"
 
-#: ../plugins/project-tree/gb-rename-file-popover.ui.h:2
-#: ../plugins/project-tree/gtk/menus.ui.h:10
-msgid "_Rename"
-msgstr "Με_τονομασία"
-
-#: ../plugins/project-tree/gtk/menus.ui.h:3
+#: plugins/project-tree/gtk/menus.ui:17
 msgid "_Empty File"
 msgstr "Κ_ενό αρχείο"
 
-#: ../plugins/project-tree/gtk/menus.ui.h:4
+#: plugins/project-tree/gtk/menus.ui:23
 msgid "_New Folder"
 msgstr "_Νέος φάκελος"
 
-#: ../plugins/project-tree/gtk/menus.ui.h:5
+#: plugins/project-tree/gtk/menus.ui:29
 msgid "_Open"
 msgstr "Άν_οιγμα"
 
-#: ../plugins/project-tree/gtk/menus.ui.h:6
+#: plugins/project-tree/gtk/menus.ui:34
 msgid "Open _With"
 msgstr "Άνοιγμα _με"
 
-#: ../plugins/project-tree/gtk/menus.ui.h:7
+#: plugins/project-tree/gtk/menus.ui:37
 msgid "Source Code Editor"
 msgstr "Επεξεργαστής πηγαίου κώδικα"
 
-#: ../plugins/project-tree/gtk/menus.ui.h:8
+#: plugins/project-tree/gtk/menus.ui:47
 msgid "_Open Containing Folder"
 msgstr "Ά_νοιγμα φακέλου που το περιέχει"
 
-#: ../plugins/project-tree/gtk/menus.ui.h:9
+#: plugins/project-tree/gtk/menus.ui:51
 msgid "_Open in Terminal"
 msgstr "Άνοι_γμα στο τερματικό"
 
-#: ../plugins/project-tree/gtk/menus.ui.h:11
+#: plugins/project-tree/gtk/menus.ui:64
 msgid "Mo_ve to Trash"
 msgstr "_Μετακίνηση στα απορρίμματα"
 
-#: ../plugins/project-tree/gtk/menus.ui.h:14
+#: plugins/project-tree/gtk/menus.ui:71
+msgid "_Build"
+msgstr "Δόμ_ηση"
+
+#: plugins/project-tree/gtk/menus.ui:75
+msgid "_Rebuild"
+msgstr "Αναδόμη_ση"
+
+#: plugins/project-tree/gtk/menus.ui:81
 msgid "Display Options"
 msgstr "Επιλογές εμφάνισης"
 
-#: ../plugins/project-tree/gtk/menus.ui.h:15
-msgid "Show Icons"
-msgstr "Εμφάνιση εικονιδίων"
-
-#: ../plugins/project-tree/gtk/menus.ui.h:16
-msgid "Show Ignored Files"
-msgstr "Εμφάνιση αγνοημένων αρχείων"
-
-#: ../plugins/project-tree/gtk/menus.ui.h:17
+#: plugins/project-tree/gtk/menus.ui:92
 msgid "Sort Directories First"
 msgstr "Ταξινόμηση καταλόγων πρώτα"
 
-#: ../plugins/project-tree/gtk/menus.ui.h:18
+#: plugins/project-tree/gtk/menus.ui:98
 msgid "_Collapse All Nodes"
 msgstr "_Σύμπτυξη όλων"
 
-#: ../plugins/project-tree/gtk/menus.ui.h:19
+#: plugins/project-tree/gtk/menus.ui:102
 msgid "_Refresh"
 msgstr "Ανα_νέωση"
 
-#: ../plugins/support/gtk/menus.ui.h:1
+#: plugins/quick-highlight/gbp-quick-highlight-preferences.c:48
+msgid "Words matching selection"
+msgstr ""
+
+#: plugins/quick-highlight/gbp-quick-highlight-preferences.c:49
+msgid "Highlight all occurrences of words matching the current selection"
+msgstr ""
+
+#. Translators: the following are keywords used for searching to locate this preference
+#: plugins/quick-highlight/gbp-quick-highlight-preferences.c:51
+msgid "quick highlight words matching current selection"
+msgstr ""
+
+#: plugins/support/gtk/menus.ui:7
 msgid "Generate Support Log"
 msgstr "Δημιουργία καταγραφής υποστήριξης"
 
-#: ../plugins/support/ide-support-application-addin.c:79
+#: plugins/support/ide-support-application-addin.c:79
 #, c-format
 msgid ""
 "The support log file has been written to '%s'. Please provide this file as "
@@ -2371,52 +3478,193 @@ msgstr ""
 "Η καταγραφή υποστήριξης εγγράφηκε στο '%s'. Παρακαλούμε επισυνάψτε το στην "
 "αναφορά σφάλματος ή στο αίτημα υποστήριξη σας."
 
-#: ../plugins/symbol-tree/symbol-tree-panel.c:239
+#: plugins/symbol-tree/symbol-tree-panel.c:265
 msgid "Current language does not support symbol resolvers"
 msgstr "Η τρέχουσα γλώσσα δεν υποστηρίζει αναλυτές συμβόλων"
 
-#: ../plugins/symbol-tree/symbol-tree-panel.c:335
+#: plugins/symbol-tree/symbol-tree-panel.c:365
 msgid "Symbols"
 msgstr "Σύμβολα"
 
-#: ../plugins/sysmon/gb-sysmon-panel.ui.h:1
+#: plugins/sysmon/gb-sysmon-panel.ui:5
 msgid "System Monitor"
 msgstr "Παρακολούθηση συστήματος"
 
-#: ../plugins/terminal/gb-terminal-view-actions.c:297
+#: plugins/sysprof/gbp-sysprof-perspective.c:65
+#, fuzzy
+msgid "Profiler"
+msgstr "Δόμηση προφίλ"
+
+#: plugins/sysprof/gbp-sysprof-workbench-addin.c:258
+msgid "Open Profile"
+msgstr "Άνοιγμα προφίλ"
+
+#: plugins/sysprof/gbp-sysprof-workbench-addin.c:267
+msgid "Sysprof Capture (*.syscap)"
+msgstr "Λήψη Sysprof (*.syscap)"
+
+#: plugins/sysprof/gbp-sysprof-workbench-addin.c:273
+msgid "All Files"
+msgstr "Όλα τα αρχεία"
+
+#: plugins/sysprof/gbp-sysprof-workbench-addin.c:360
+#, fuzzy
+msgid "Run with Profiler"
+msgstr "Δόμηση προφίλ"
+
+#: plugins/sysprof/gtk/menus.ui:6
+msgid "Open Profile…"
+msgstr "Άνοιγμα προφίλ…"
+
+#: plugins/terminal/gb-terminal-view.c:444
+msgid "Untitled terminal"
+msgstr ""
+
+#: plugins/terminal/gb-terminal-view-actions.c:297
 msgid "Save Terminal Content As"
 msgstr "Αποθήκευση περιεχομένου τερματικού ως"
 
-#: ../plugins/terminal/gtk/menus.ui.h:1
+#: plugins/terminal/gtk/menus.ui:6
 msgid "_New Terminal"
 msgstr "_Νέο τερματικό"
 
-#: ../plugins/todo/todo_plugin/__init__.py:180
+#: plugins/todo/todo_plugin/__init__.py:186
 msgid "Todo"
 msgstr "Εργασίες"
 
-#: ../plugins/vala-pack/ide-vala-preferences-addin.vala:33
+#: plugins/vala-pack/ide-vala-preferences-addin.vala:33
 msgid "Vala"
 msgstr "Vala"
 
-#: ../plugins/vala-pack/ide-vala-preferences-addin.vala:34
+#: plugins/vala-pack/ide-vala-preferences-addin.vala:34
 msgid "Show errors and warnings provided by Vala"
 msgstr "Εμφάνιση σφαλμάτων και προειδοποιήσεων από το Vala"
 
 #. translators: keywords used when searching for preferences
-#: ../plugins/vala-pack/ide-vala-preferences-addin.vala:36
+#: plugins/vala-pack/ide-vala-preferences-addin.vala:36
 msgid "vala diagnostics warnings errors"
 msgstr ""
 "vala diagnostics warnings errors διαγνωστικά σφάλματα προειδοποιήσεις σφάλμα"
+
+#~ msgid "Installed Extensions"
+#~ msgstr "Εγκατεστημένες επεκτάσεις"
+
+#~ msgid "Bundled Extensions"
+#~ msgstr "Ενσωματωμένες επεκτάσεις"
+
+#~ msgid "Failed to locate build target"
+#~ msgstr "Αποτυχία εντοπισμού προορισμού για το σύστημα δόμησης"
+
+#~ msgid "Run project"
+#~ msgstr "Εκτέλεση έργου"
+
+#~ msgid "_Print…"
+#~ msgstr "_Εκτύπωση…"
+
+#~ msgid "_Fullscreen"
+#~ msgstr "_Πλήρης οθόνη"
+
+#~ msgid "_Close All"
+#~ msgstr "_Κλείσιμο όλων"
+
+#~ msgid "_Match Case"
+#~ msgstr "Ταίριασ_μα πεζών-κεφαλαίων"
+
+#~ msgid "Builder Dark"
+#~ msgstr "Σκοτεινό θέμα"
+
+#~ msgid "Dark color scheme for Builder using the Tango color palette"
+#~ msgstr ""
+#~ "Σκοτεινό θέμα χρώματος για τον Κατασκεθαστή χρησιμοποιώντας την παλέτα "
+#~ "χρώματος Tango"
+
+#~ msgid "The default color scheme for Builder"
+#~ msgstr "Το προεπιλεγμένο χρώμα θέματος του Κατασκευαστή"
+
+#~ msgid "Enable / Disable left panel. Shortcut: F9"
+#~ msgstr "Ενεργοποίηση / απενεργοποίηση αριστερού πίνακα. Συντόμευση: F9"
+
+#~ msgid "Enable / Disable bottom panel. Shortcut: Ctrl + F9"
+#~ msgstr "Ενεργοποίηση / απενεργοποίηση κάτω πίνακα. Συντόμευση: Ctrl + F9"
+
+#~ msgid "Enable / Disable right panel. Shortcut: Shift + F9"
+#~ msgstr "Ενεργοποίηση / απενεργοποίηση δεξιού πίνακα. Συντόμευση: Shift + F9"
+
+#~ msgid "Co_ntinue"
+#~ msgstr "Συ_νέχιση"
+
+#~ msgid "Add a new empty file to your project"
+#~ msgstr "Προσθήκη νέου κενού αρχείου στο έργο σας"
+
+#~ msgid "Search through preferences"
+#~ msgstr "Αναζήτηση στις προτιμήσεις"
+
+#~ msgctxt "shortcut window"
+#~ msgid "Move sectionport up within the file"
+#~ msgstr "Μετακίνηση προβολής πάνω μέσα στο αρχείο"
+
+#~ msgctxt "shortcut window"
+#~ msgid "Move sectionport down within the file"
+#~ msgstr "Μετακίνηση προβολής κάτω μέσα στο αρχείο"
+
+#~ msgctxt "shortcut window"
+#~ msgid "Move sectionport to end of file"
+#~ msgstr "Μετακίνηση προβολής στο τέλος του αρχείου"
+
+#~ msgctxt "shortcut window"
+#~ msgid "Move sectionport to beginning of file"
+#~ msgstr "Μετακίνηση προβολής στην αρχή του αρχείου"
+
+#~ msgid "Search for files. Shortcut: Ctrl + ."
+#~ msgstr "Αναζήτηση αρχείων. Συντόμευση: Ctrl + ."
+
+#~ msgid "Drops down a list of file operations"
+#~ msgstr "Αναπτύσσει μια λίστα με τις λειτουργίες του αρχείου"
+
+#~ msgid "From an existing project on this computer"
+#~ msgstr "Από υπάρχον έργο στον υπολογιστή"
+
+#~ msgid "Default Configuration"
+#~ msgstr "Προεπιλεγμένη ρύθμιση"
+
+#~ msgid "Success"
+#~ msgstr "Επιτυχία"
+
+#~ msgid "Deploy"
+#~ msgstr "Εκτέλεση"
+
+#~ msgid "Export"
+#~ msgstr "Εξαγωγή"
+
+#~ msgid "From a project template"
+#~ msgstr "Από ένα πρότυπο έργου"
+
+#~ msgid "Location"
+#~ msgstr "Τοποθεσία"
+
+#~ msgid "Pattern"
+#~ msgstr "Μοτίβο"
+
+#~ msgid "Directory"
+#~ msgstr "Κατάλογος"
+
+#~ msgid "From an existing project in a Git repository"
+#~ msgstr "Από υπάρχον έργο σε ένα αποθετήριο Git"
+
+#~ msgid "Attribution"
+#~ msgstr "Απόδοση"
+
+#~ msgid "Files"
+#~ msgstr "Αρχεία"
+
+#~ msgid "File name must not contain subdirectories."
+#~ msgstr "Το όνομα αρχείου δεν πρέπει να περιέχει υποκαταλόγους."
 
 #~ msgid "Invalid snippet at line %d: %s"
 #~ msgstr "Μη έγκυρο απόσπασμα στη γραμμή %d: %s"
 
 #~ msgid "Editor Shortcuts"
 #~ msgstr "Συντομεύσεις επεξεργαστή"
-
-#~ msgid "Global Search"
-#~ msgstr "Καθολική αναζήτηση"
 
 #~ msgid "Command Bar"
 #~ msgstr "Γραμμή εντολών"
@@ -2427,14 +3675,8 @@ msgstr ""
 #~ msgid "Panels"
 #~ msgstr "Πίνακες"
 
-#~ msgid "Toggle left panel"
-#~ msgstr "Εναλλαγή αριστερού πίνακα"
-
 #~ msgid "Toggle right panel"
 #~ msgstr "Εναλλαγή δεξιού πίνακα"
-
-#~ msgid "Toggle bottom panel"
-#~ msgstr "Εναλλαγή κάτω πίνακα"
 
 #~ msgid "Touchpad gestures"
 #~ msgstr "Xειρονομίες πινακίδας αφής"
@@ -2502,9 +3744,6 @@ msgstr ""
 #~ msgid "Decrement number at cursor"
 #~ msgstr "Μείωση αριθμού στον δρομέα"
 
-#~ msgid "Join selected lines"
-#~ msgstr "Ένωση των επιλεγμένων γραμμών"
-
 #~ msgid "Show completion window"
 #~ msgstr "Εμφάνιση παραθύρου ολοκλήρωσης"
 
@@ -2519,9 +3758,6 @@ msgstr ""
 
 #~ msgid "Move to next error in file"
 #~ msgstr "Μετάβαση στο επόμενο σφάλμα του αρχείου"
-
-#~ msgid "Move to previous error in file"
-#~ msgstr "Μετάβαση στο προηγούμενο σφάλμα του αρχείου"
 
 #~ msgid "Move to previous edit location"
 #~ msgstr "Μετάβαση στην προηγούμενη τοποθεσία επεξεργασίας"
@@ -2553,9 +3789,6 @@ msgstr ""
 
 #~ msgid "Selections"
 #~ msgstr "Επιλογές"
-
-#~ msgid "Select all"
-#~ msgstr "Επιλογή όλων"
 
 #~ msgid "Unselect all"
 #~ msgstr "Αποεπιλογή όλων"
@@ -2652,9 +3885,6 @@ msgstr ""
 #~ msgid "- List devices found on the system."
 #~ msgstr "- Εμφάνιση των συσκευών που βρέθηκαν στο σύστημα."
 
-#~ msgid "Failed to diagnose: %s\n"
-#~ msgstr "Αποτυχία διάγνωσης: %s\n"
-
 #~ msgid "No such file in project: %s\n"
 #~ msgstr "Δεν υπάρχει τέτοιο αρχείο στο έργο: %s\n"
 
@@ -2666,9 +3896,6 @@ msgstr ""
 
 #~ msgid "No files provided to load settings for.\n"
 #~ msgstr "Δεν δόθηκαν αρχεία για την φόρτωση των ρυθμίσεων.\n"
-
-#~ msgid "- discover projects"
-#~ msgstr "- ανακάλυψη έργων"
 
 #~ msgid "%s result\n"
 #~ msgid_plural "%s results\n"
@@ -2689,9 +3916,6 @@ msgstr ""
 
 #~ msgid "GNOME Version"
 #~ msgstr "Έκδοση GNOME"
-
-#~ msgid "Git"
-#~ msgstr "Git"
 
 #~ msgid "Enter the URL of your project's source code repository."
 #~ msgstr "Πληκτρολογήστε τη διεύθυνση αποθετηρίου του έργου σας."
@@ -2774,9 +3998,6 @@ msgstr ""
 #~ msgid "Display Overview Map"
 #~ msgstr "Εμφάνιση χάρτη επισκόπησης"
 
-#~ msgid "Display an overview map next to the source code editor."
-#~ msgstr "Εμφανίζει έναν χάρτη επισκόπησης δίπλα από τον επεξεργαστή."
-
 #~ msgid "Auto Hide Overview Map"
 #~ msgstr "Αυτόματη απόκρυψη χάρτη επισκόπησης"
 
@@ -2789,17 +4010,9 @@ msgstr ""
 #~ msgid "Restore Cursor Position"
 #~ msgstr "Επαναφορά θέσης δρομέα"
 
-#~ msgid ""
-#~ "Restore the insertion cursor to the last position when reopening a file."
-#~ msgstr ""
-#~ "Επαναφέρει τον δρομέα στην τελευταία θέση κατά το άνοιγμα του αρχείου."
-
 #~ msgid "Minimal number of lines to keep above and below the cursor."
 #~ msgstr ""
 #~ "Ελάχιστος αριθμός γραμμών που θα διατηρηθούν πάνω και κάτω από τον δρομέα."
-
-#~ msgid "Draw Spaces"
-#~ msgstr "Σχεδίαση διαστημάτων"
 
 #~ msgid "Draw a circle over space characters"
 #~ msgstr "Σχεδίαση κύκλου πάνω από χαρακτήρες διαστήματος"
@@ -2836,12 +4049,6 @@ msgstr ""
 
 #~ msgid "Auto Completion"
 #~ msgstr "Αυτόματη συμπλήρωση"
-
-#~ msgid "Suggest Snippet Completion"
-#~ msgstr "Υποδείξεις συμπλήρωσης αποσπασμάτων"
-
-#~ msgid "Allow snippets to be inserted into the document."
-#~ msgstr "Επιτρέπει αποσπάσματα κώδικα να εισαχθούν στο έγγραφο."
 
 #~ msgid "Suggest Word Completion"
 #~ msgstr "Υποδείξεις συμπλήρωσης λέξεων"
@@ -2894,27 +4101,11 @@ msgstr ""
 #~ msgid "Smart Home End"
 #~ msgstr "Έξυπνα πλήκτρα Home/End"
 
-#~ msgid "Home moves to first non-space character."
-#~ msgstr "Το πλήκτρο Home μετακινεί τον δρομέα στον πρώτο μη κενό χαρακτήρα."
-
-#~ msgid ""
-#~ "Backspace will remove extra spaces to keep you aligned with your "
-#~ "indentation width."
-#~ msgstr ""
-#~ "Το Backspace θα αφαιρέσει τα επιπλέον κενά για να διατηρηθεί η στοίχιση "
-#~ "με το πλάτος εσοχής."
-
 #~ msgid "Plugins"
 #~ msgstr "Πρόσθετα"
 
 #~ msgid "Theme"
 #~ msgstr "Θέμα"
-
-#~ msgid "Night Mode"
-#~ msgstr "Νυχτερινή λειτουργία"
-
-#~ msgid "Use dark colors for the application chrome."
-#~ msgstr "Χρήση σκούρων χρωμάτων για την απεικόνιση της εφαρμογής"
 
 #~ msgid "Display Grid Pattern"
 #~ msgstr "Εμφάνιση μοτίβου πλέγματος"
@@ -2931,26 +4122,8 @@ msgstr ""
 #~ msgid "Two finger swipe left"
 #~ msgstr "Πέρασμα με δύο δάχτυλα αριστερά"
 
-#~ msgid "Show list of open files"
-#~ msgstr "Εμφάνιση λίστας ανοιχτών αρχείων"
-
 #~ msgid "Switch to source or header"
 #~ msgstr "Εναλλαγή στην πηγή ή κεφαλίδα."
-
-#~ msgid "Go to line"
-#~ msgstr "Μετάβαση στη γραμμή"
-
-#~ msgid "Move viewport up within the file"
-#~ msgstr "Μετακίνηση προβολής πάνω μέσα στο αρχείο"
-
-#~ msgid "Move viewport down within the file"
-#~ msgstr "Μετακίνηση προβολής κάτω μέσα στο αρχείο"
-
-#~ msgid "Move viewport to end of file"
-#~ msgstr "Μετακίνηση προβολής στο τέλος του αρχείου"
-
-#~ msgid "Move viewport to beginning of file"
-#~ msgstr "Μετακίνηση προβολής στην αρχή του αρχείου"
 
 #~ msgid "Print"
 #~ msgstr "Εκτύπωση"
@@ -3006,9 +4179,6 @@ msgstr ""
 #~| msgid "The type of newlines to use."
 #~ msgid "The type of plugin worker process to run."
 #~ msgstr "Ο τύπος νέας γραμμής που θα χρησιμοποιηθεί."
-
-#~ msgid "Select Project File"
-#~ msgstr "Επιλογή αρχείου έργου"
 
 #~ msgid "Clone Repository"
 #~ msgstr "Κλωνοποίηση αποθετηρίου"
@@ -3134,12 +4304,6 @@ msgstr ""
 #~ msgid "Open Document"
 #~ msgstr "Άνοιγμα εγγράφου"
 
-#~ msgid "%s - Builder"
-#~ msgstr "%s - Κατασκευαστής"
-
-#~ msgid "Build Failure"
-#~ msgstr "Αποτυχία δόμησης"
-
 #~ msgid "Project build system does not support building"
 #~ msgstr ""
 #~ "Το σύστημα δόμησης του έργου δεν υποστηρίζει την λειτουργία δόμησης."
@@ -3168,10 +4332,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "State Machine"
 #~ msgstr "Μηχάνημα"
-
-#, fuzzy
-#~ msgid "Tag close icon visibility"
-#~ msgstr "Η ετικέτα έχει ένα κουμπί κλεισίματος"
 
 #~ msgid "Whether the close button should be shown in tags."
 #~ msgstr "Αν το κουμπί κλεισίματος θα εμφανίζεται στις ετικέτες."
@@ -3329,9 +4489,6 @@ msgstr ""
 #~ msgstr ""
 #~ "Αν θα επισημαίνονται τα σφάλματα και οι προειδοποιήσεις των διαγνωστικών."
 
-#~ msgid "Read Only"
-#~ msgstr "Μόνο για ανάγνωση"
-
 #~ msgid "If the underlying file is read only."
 #~ msgstr "Αν το αρχείο είναι μόνο για ανάγνωση."
 
@@ -3368,9 +4525,6 @@ msgstr ""
 
 #~ msgid "The currently focused buffer."
 #~ msgstr "Η τρέχουσα εστιασμένη ενδιάμεση μνήμη."
-
-#~ msgid "Project File"
-#~ msgstr "Αρχείο έργου"
 
 #~ msgid "The project file."
 #~ msgstr "Το αρχείου του έργου."
@@ -3516,15 +4670,8 @@ msgstr ""
 #~ "   return type; \n"
 #~ "} \n"
 
-#, fuzzy
-#~ msgid "The GType of the extension interface."
-#~ msgstr "Τύπος GType της κλάσης"
-
 #~ msgid "Key"
 #~ msgstr "Κλειδί"
-
-#~ msgid "Value"
-#~ msgstr "Τιμή"
 
 #~ msgid "The path to the underlying file."
 #~ msgstr "Η διαδρομή του υποκείμενου αρχείου."
@@ -3796,10 +4943,6 @@ msgstr ""
 #~ msgstr "Έναυσμα"
 
 #, fuzzy
-#~ msgid "The language for the snippet."
-#~ msgstr "Απόσπασμα"
-
-#, fuzzy
 #~ msgid "The description for the snippet."
 #~ msgstr "Πειγραφή"
 
@@ -3966,9 +5109,6 @@ msgstr ""
 #~ msgid "Flags"
 #~ msgstr "Διακόπτες"
 
-#~ msgid "Duration"
-#~ msgstr "Διάρκεια"
-
 #~ msgid "The duration of the animation"
 #~ msgstr "Η διάρκεια των εφέ"
 
@@ -3981,9 +5121,6 @@ msgstr ""
 
 #~ msgid "The animation mode"
 #~ msgstr "Η λειτουργία εφέ"
-
-#~ msgid "Target"
-#~ msgstr "Προορισμός"
 
 #~ msgid "The target of the animation"
 #~ msgstr "Ο προορισμός των εφέ"
@@ -4166,13 +5303,6 @@ msgstr ""
 #~ msgid "The document for the VTE terminal view."
 #~ msgstr "Προβολή εγγράφου"
 
-#, fuzzy
-#~ msgid "The workbench window."
-#~ msgstr "Χώρος εργασίας"
-
-#~ msgid "Project Information"
-#~ msgstr "Πληροφορίες έργου"
-
 #~ msgid "The project information for the row."
 #~ msgstr "Οι πληροφορίες έργου για την γραμμή."
 
@@ -4190,9 +5320,6 @@ msgstr ""
 
 #~ msgid "The title of the document."
 #~ msgstr "Ο τίτλος του εγγράφου."
-
-#~ msgid "If the document is read only."
-#~ msgstr "Αν το έγγραφο είναι μόνο για ανάγνωση."
 
 #, fuzzy
 #~ msgid "Auto Hide Map"
@@ -4233,9 +5360,6 @@ msgstr ""
 
 #~ msgid "The document to view as HTML."
 #~ msgstr "Το έγγραφο που θα προβληθεί ως HTML."
-
-#~ msgid "Application"
-#~ msgstr "Εφαρμογή"
 
 #, fuzzy
 #~ msgid "The application to register keybindings for."
@@ -4476,10 +5600,6 @@ msgstr ""
 #~ msgstr "Όνομα του ορατού θυγατρικού"
 
 #, fuzzy
-#~ msgid "Left Pane"
-#~ msgstr "Αριστερό παράθυρο"
-
-#, fuzzy
 #~ msgid "The left workspace pane."
 #~ msgstr "Εναλλαγή στο χώρο εργασίας αριστερά"
 
@@ -4490,10 +5610,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "The right workspace pane."
 #~ msgstr "Εναλλαγή στο χώρο εργασίας δεξιά"
-
-#, fuzzy
-#~ msgid "Bottom Pane"
-#~ msgstr "Προσθέστε μια κονσόλα τερματικού στο κάτω παράθυρο"
 
 #, fuzzy
 #~ msgid "The bottom workspace pane."
@@ -4515,14 +5631,6 @@ msgstr ""
 #~ msgid "Reveal"
 #~ msgstr "Αποκάλυψη"
 
-#, fuzzy
-#~ msgid "If the pane should be revealed."
-#~ msgstr "Το πεδίο είναι ευαίσθητο και δεν μπορεί να αποκαλυφθεί"
-
-#, fuzzy
-#~ msgid "The position of the pane."
-#~ msgstr "Τοποθεσία οριζόντιου πλαισίου"
-
 #~ msgid "C"
 #~ msgstr "C"
 
@@ -4531,10 +5639,6 @@ msgstr ""
 
 #~ msgid "Failed to resolve symbol"
 #~ msgstr "Αποτυχία επίλυσης συμβόλου"
-
-#, fuzzy
-#~ msgid "Symbol resolver is not supported."
-#~ msgstr "Εσωτερικό σφάλμα επίλυσης διαμεσολαβητή."
 
 #~ msgid "Failed to create service of type \"%s\"."
 #~ msgstr "Αποτυχία δημιουργίας υπηρεσίας τύπου \"%s\"."
@@ -4580,54 +5684,11 @@ msgstr ""
 #~ msgid "No diagnostician for language \"%s\"\n"
 #~ msgstr "Σφάλμα κατά την ενεργοποίηση της γλώσσας %s: %s\n"
 
-#~ msgid "Restore last position"
-#~ msgstr "Επαναφορά τελευταίας θέσης"
-
-#~ msgid "Enable auto-completion of words in document"
-#~ msgstr "Ενεργοποίηση αυτόματης συμπλήρωσης για τις λέξεις του εγγράφου"
-
-#~ msgid "Show modified lines"
-#~ msgstr "Εμφάνιση τροποποιημένων γραμμών"
-
-#, fuzzy
-#~ msgid ""
-#~ "If enabled, the editor will highlight the line containing the cursor."
-#~ msgstr "Επισημαίνει τη γραμμή όπου βρίσκεται ο δρομέας"
-
-#~ msgid "Highlight matching brackets"
-#~ msgstr "Επισήμανση αντίστοιχων παρενθέσεων"
-
-#, fuzzy
-#~ msgid "If enabled, the editor will highlight matching brackets."
-#~ msgstr "Αν θα γίνεται επισήμανση αγκυλών που ταιριάζουν"
-
-#~ msgid "Show line numbers"
-#~ msgstr "Εμφάνιση αρίθμησης των γραμμών"
-
-#, fuzzy
-#~ msgid "If enabled, the editor will show line numbers."
-#~ msgstr "Αν θα εμφανίζονται οι αριθμοί τηλεφώνων στον επεξεργαστή"
-
-#~ msgid "Show grid lines"
-#~ msgstr "Εμφάνιση γραμμών πλέγματος"
-
-#~ msgid "The various types of space to draw in the editor."
-#~ msgstr "Οι διάφοροι τύποι διαστημάτων που θα σχεδιαστούν στον επεξεργαστή."
-
-#~ msgid "Clang based autocompletion"
-#~ msgstr "Αυτόματη συμπλήρωση Clang"
-
-#~ msgid "Use Clang for autocompletion in the C and C++ languages."
-#~ msgstr "Χρήση Clang για αυτόματη συμπλήρωση στις γλώσσες C και C++."
-
 #~ msgid "_View"
 #~ msgstr "Προ_βολή"
 
 #~ msgid "Display Side _Panel"
 #~ msgstr "Εμφάνιση πλευρικής στή_λης"
-
-#~ msgid "Build Project"
-#~ msgstr "Δόμηση έργου"
 
 #~ msgid "Rebuild Project"
 #~ msgstr "Αναδόμηση έργου"
@@ -4656,9 +5717,6 @@ msgstr ""
 
 #~ msgid "Author Email"
 #~ msgstr "Ηλεκτρονική διεύθυνση:"
-
-#~ msgid "Search Preferences"
-#~ msgstr "Προτιμήσεις αναζήτησης"
 
 #~ msgid "Language Settings"
 #~ msgstr "Ρυθμίσεις γλώσσας"
@@ -4715,12 +5773,6 @@ msgstr ""
 #~ msgid "Newline Type"
 #~ msgstr "Τύπος νέας γραμμής"
 
-#~ msgid "Right Margin Position"
-#~ msgstr "Θέση δεξιού περιθωρίου"
-
-#~ msgid "The position of the right margin guide."
-#~ msgstr "Η θέση οδηγού του δεξιού περιθωρίου."
-
 #~ msgid "Tab Width"
 #~ msgstr "Πλάτος στηλοθέτη"
 
@@ -4751,12 +5803,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "If smart Backspace should be used."
 #~ msgstr "smart back backspace indent align εσοχή στοίχιση"
-
-#~ msgid "The result to be visualized in the item."
-#~ msgstr "Το αποτέλεσμα θα αναπαρασταθεί στο αντικείμενο."
-
-#~ msgid "Show Project Tree"
-#~ msgstr "Εμφάνιση δένδρο έργου"
 
 #, fuzzy
 #~ msgid "Failed to locate uncrustify configuration."
@@ -4840,10 +5886,6 @@ msgstr ""
 
 #~ msgid "Show grid lines."
 #~ msgstr "Εμφάνιση γραμμών πλέγματος"
-
-#, fuzzy
-#~ msgid "Clang based autocompletion."
-#~ msgstr "Αυτόματη συμπλήρωση"
 
 #~ msgid "Save _As"
 #~ msgstr "Αποθήκευση _ως"
@@ -4960,10 +6002,6 @@ msgstr ""
 #~ msgstr "Συνδυασμοί πλήκτρων"
 
 #, fuzzy
-#~ msgid "The ide context for the project tree."
-#~ msgstr "Σχετικά με το δένδρο του έργου"
-
-#, fuzzy
 #~ msgid "Invalid :syntax subcommand : %s"
 #~ msgstr "Άκυρη σύνταξη DN"
 
@@ -5032,13 +6070,6 @@ msgstr ""
 #~ msgstr "Ερώτηση"
 
 #, fuzzy
-#~ msgid "Close _without Saving"
-#~ msgstr "_Κλείσιμο χωρίς αποθήκευση"
-
-#~ msgid "_Save As…"
-#~ msgstr "Απο_θήκευση ως…"
-
-#, fuzzy
 #~ msgid ""
 #~ "If you don't save, changes from the last minute will be permanently lost."
 #~ msgstr ""
@@ -5067,10 +6098,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Docum_ents with unsaved changes:"
 #~ msgstr "Έ_γγραφα με μη-αποθηκευμένες αλλαγές:"
-
-#, fuzzy
-#~ msgid "S_elect the documents you want to save:"
-#~ msgstr "Επι_λέξτε τα έγγραφα που θέλετε να αποθηκεύσετε:"
 
 #, fuzzy
 #~ msgid "If you don't save, all your changes will be permanently lost."
@@ -5229,16 +6256,8 @@ msgstr ""
 #~ msgstr "Αριθμοί γραμμών"
 
 #, fuzzy
-#~ msgid "Show Right Margin"
-#~ msgstr "Εμφάνιση δεξιού περιθωρίου"
-
-#, fuzzy
 #~ msgid "If we should show the right margin."
 #~ msgstr "Να εμφανίζεται _δεξιό περιθώριο στο:"
-
-#, fuzzy
-#~ msgid "Split Enabled"
-#~ msgstr "Δια_χωρισμός"
 
 #, fuzzy
 #~ msgid "If the view split is enabled."
