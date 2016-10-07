@@ -180,7 +180,7 @@ ide_subprocess_wait_check_finish (IdeSubprocess  *self,
   g_return_val_if_fail (G_IS_TASK (result), FALSE);
   g_return_val_if_fail (g_task_is_valid (G_TASK (result), self), FALSE);
 
-  return g_task_propagate_boolean (G_TASK (result), FALSE);
+  return g_task_propagate_boolean (G_TASK (result), error);
 }
 
 gboolean
