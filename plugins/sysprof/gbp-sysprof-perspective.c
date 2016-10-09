@@ -26,9 +26,10 @@
 
 struct _GbpSysprofPerspective
 {
-  GtkBin           parent_instance;
+  GtkBin            parent_instance;
 
-  SpCallgraphView *callgraph_view;
+  SpCallgraphView  *callgraph_view;
+  SpVisualizerView *visualizers;
 };
 
 static void perspective_iface_init (IdePerspectiveInterface *iface);
@@ -43,8 +44,12 @@ gbp_sysprof_perspective_class_init (GbpSysprofPerspectiveClass *klass)
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/plugins/sysprof-plugin/gbp-sysprof-perspective.ui");
   gtk_widget_class_bind_template_child (widget_class, GbpSysprofPerspective, callgraph_view);
+  gtk_widget_class_bind_template_child (widget_class, GbpSysprofPerspective, visualizers);
 
   g_type_ensure (SP_TYPE_CALLGRAPH_VIEW);
+  g_type_ensure (SP_TYPE_CPU_VISUALIZER_ROW);
+  g_type_ensure (SP_TYPE_EMPTY_STATE_VIEW);
+  g_type_ensure (SP_TYPE_VISUALIZER_VIEW);
 }
 
 static void
@@ -129,8 +134,8 @@ gbp_sysprof_perspective_set_reader (GbpSysprofPerspective *self,
     }
 
   profile = sp_callgraph_profile_new ();
-
   sp_profile_set_reader (profile, reader);
-
   sp_profile_generate (profile, NULL, generate_cb, g_object_ref (self));
+
+  sp_visualizer_view_set_reader (self->visualizers, reader);
 }

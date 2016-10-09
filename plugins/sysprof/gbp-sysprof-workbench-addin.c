@@ -112,6 +112,7 @@ profiler_run_handler (IdeRunManager *run_manager,
   GbpSysprofWorkbenchAddin *self = user_data;
   g_autoptr(SpSource) proc_source = NULL;
   g_autoptr(SpSource) perf_source = NULL;
+  g_autoptr(SpSource) hostinfo_source = NULL;
 
   g_assert (GBP_IS_SYSPROF_WORKBENCH_ADDIN (self));
   g_assert (IDE_IS_RUNNER (runner));
@@ -133,6 +134,9 @@ profiler_run_handler (IdeRunManager *run_manager,
 
   perf_source = sp_perf_source_new ();
   sp_profiler_add_source (self->profiler, perf_source);
+
+  hostinfo_source = sp_hostinfo_source_new ();
+  sp_profiler_add_source (self->profiler, hostinfo_source);
 
   /*
    * TODO:

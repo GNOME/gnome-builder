@@ -3,11 +3,44 @@
   <template class="GbpSysprofPerspective" parent="GtkBin">
     <child>
       <object class="GtkStack">
+        <property name="homogeneous">false</property>
         <property name="visible">true</property>
         <child>
-          <object class="SpCallgraphView" id="callgraph_view">
+          <object class="SpEmptyStateView">
             <property name="visible">true</property>
           </object>
+          <packing>
+            <property name="name">empty</property>
+          </packing>
+        </child>
+        <child>
+          <object class="PnlMultiPaned">
+            <property name="visible">true</property>
+            <child>
+              <object class="SpVisualizerView" id="visualizers">
+                <property name="visible">true</property>
+                <child type="visualizer">
+                  <object class="SpCpuVisualizerRow" id="cpu_visualizer">
+                    <property name="title" translatable="yes">CPU</property>
+                    <property name="height-request">75</property>
+                    <property name="selectable">false</property>
+                    <property name="y-lower">0.0</property>
+                    <property name="y-upper">100.0</property>
+                    <property name="visible">true</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="SpCallgraphView" id="callgraph_view">
+                <property name="vexpand">true</property>
+                <property name="visible">true</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="name">results</property>
+          </packing>
         </child>
       </object>
     </child>
