@@ -28,8 +28,10 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (GbpSysprofPerspective, gbp_sysprof_perspective, GBP, SYSPROF_PERSPECTIVE, GtkBin)
 
-void gbp_sysprof_perspective_set_reader (GbpSysprofPerspective *self,
-                                         SpCaptureReader       *reader);
+void gbp_sysprof_perspective_set_profiler (GbpSysprofPerspective *self,
+                                           SpProfiler            *profiler);
+void gbp_sysprof_perspective_set_reader   (GbpSysprofPerspective *self,
+                                           SpCaptureReader       *reader);
 
 G_END_DECLS
 

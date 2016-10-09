@@ -26,10 +26,12 @@
 
 struct _GbpSysprofPerspective
 {
-  GtkBin            parent_instance;
+  GtkBin                parent_instance;
 
-  SpCallgraphView  *callgraph_view;
-  SpVisualizerView *visualizers;
+  GtkStack             *stack;
+  SpCallgraphView      *callgraph_view;
+  SpVisualizerView     *visualizers;
+  SpRecordingStateView *recording_view;
 };
 
 static void perspective_iface_init (IdePerspectiveInterface *iface);
@@ -44,11 +46,14 @@ gbp_sysprof_perspective_class_init (GbpSysprofPerspectiveClass *klass)
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/plugins/sysprof-plugin/gbp-sysprof-perspective.ui");
   gtk_widget_class_bind_template_child (widget_class, GbpSysprofPerspective, callgraph_view);
+  gtk_widget_class_bind_template_child (widget_class, GbpSysprofPerspective, stack);
+  gtk_widget_class_bind_template_child (widget_class, GbpSysprofPerspective, recording_view);
   gtk_widget_class_bind_template_child (widget_class, GbpSysprofPerspective, visualizers);
 
   g_type_ensure (SP_TYPE_CALLGRAPH_VIEW);
   g_type_ensure (SP_TYPE_CPU_VISUALIZER_ROW);
   g_type_ensure (SP_TYPE_EMPTY_STATE_VIEW);
+  g_type_ensure (SP_TYPE_RECORDING_STATE_VIEW);
   g_type_ensure (SP_TYPE_VISUALIZER_VIEW);
 }
 
@@ -130,6 +135,8 @@ gbp_sysprof_perspective_set_reader (GbpSysprofPerspective *self,
   if (reader == NULL)
     {
       sp_callgraph_view_set_profile (self->callgraph_view, NULL);
+      sp_visualizer_view_set_reader (self->visualizers, NULL);
+      gtk_stack_set_visible_child_name (self->stack, "empty");
       return;
     }
 
@@ -138,4 +145,22 @@ gbp_sysprof_perspective_set_reader (GbpSysprofPerspective *self,
   sp_profile_generate (profile, NULL, generate_cb, g_object_ref (self));
 
   sp_visualizer_view_set_reader (self->visualizers, reader);
+
+  gtk_stack_set_visible_child_name (self->stack, "results");
+}
+
+void
+gbp_sysprof_perspective_set_profiler (GbpSysprofPerspective *self,
+                                      SpProfiler            *profiler)
+{
+  g_return_if_fail (GBP_IS_SYSPROF_PERSPECTIVE (self));
+  g_return_if_fail (!profiler || SP_IS_PROFILER (profiler));
+
+  sp_recording_state_view_set_profiler (self->recording_view, profiler);
+
+  if (profiler != NULL)
+    {
+      gtk_stack_set_visible_child_name (self->stack, "recording");
+      /* TODO: Wire up failure state */
+    }
 }

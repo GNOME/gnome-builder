@@ -160,6 +160,10 @@ profiler_run_handler (IdeRunManager *run_manager,
                            G_CALLBACK (profiler_stopped),
                            self,
                            G_CONNECT_SWAPPED);
+
+  gbp_sysprof_perspective_set_profiler (self->perspective, self->profiler);
+
+  ide_workbench_set_visible_perspective (self->workbench, IDE_PERSPECTIVE (self->perspective));
 }
 
 static void

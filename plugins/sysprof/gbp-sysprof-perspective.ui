@@ -2,15 +2,24 @@
 <interface>
   <template class="GbpSysprofPerspective" parent="GtkBin">
     <child>
-      <object class="GtkStack">
+      <object class="GtkStack" id="stack">
         <property name="homogeneous">false</property>
         <property name="visible">true</property>
         <child>
           <object class="SpEmptyStateView">
+            <property name="subtitle" translatable="yes">Select “Run with profiler” from the run menu to begin</property>
             <property name="visible">true</property>
           </object>
           <packing>
             <property name="name">empty</property>
+          </packing>
+        </child>
+        <child>
+          <object class="SpRecordingStateView" id="recording_view">
+            <property name="visible">true</property>
+          </object>
+          <packing>
+            <property name="name">recording</property>
           </packing>
         </child>
         <child>
