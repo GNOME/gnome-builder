@@ -1831,9 +1831,18 @@ static GFile *
 find_install_dir (const gchar *key,
                   GHashTable  *dirs)
 {
-  g_auto(GStrv) parts = g_strsplit (key, "_", 2);
-  g_autofree gchar *lookup = g_strdup_printf ("%sdir", parts[0]);
-  const gchar *path = g_hash_table_lookup (dirs, lookup);
+  g_auto(GStrv) parts = NULL;
+  g_autofree gchar *lookup = NULL;
+  const gchar *dirkey = NULL;
+  const gchar *path = NULL;
+
+  if (g_str_has_prefix (key, "nodist_"))
+    key += IDE_LITERAL_LENGTH ("nodist_");
+
+  parts = g_strsplit (key, "_", 2);
+  dirkey = parts[0];
+  lookup = g_strdup_printf ("%sdir", dirkey);
+  path = g_hash_table_lookup (dirs, lookup);
 
   if (path != NULL)
     return g_file_new_for_path (path);
@@ -1914,11 +1923,25 @@ ide_makecache_get_build_targets_worker (GTask        *task,
   ide_subprocess_launcher_push_argv (launcher, "-f");
   ide_subprocess_launcher_push_argv (launcher, "-");
   ide_subprocess_launcher_push_argv (launcher, "print-bindir");
-  ide_subprocess_launcher_push_argv (launcher, "print-libexecdir");
   ide_subprocess_launcher_push_argv (launcher, "print-bin_PROGRAMS");
-  ide_subprocess_launcher_push_argv (launcher, "print-noinst_PROGRAMS");
-  ide_subprocess_launcher_push_argv (launcher, "print-libexec_PROGRAMS");
   ide_subprocess_launcher_push_argv (launcher, "print-bin_SCRIPTS");
+  ide_subprocess_launcher_push_argv (launcher, "print-nodist_bin_SCRIPTS");
+
+  /*
+   * app_SCRIPTS is a GNOME'ism used by some GJS templates. We support it here
+   * mostly because figuring out the other crack (like $(LN_S) gapplication
+   * launch rules borders on insanity.
+   */
+  ide_subprocess_launcher_push_argv (launcher, "print-appdir");
+  ide_subprocess_launcher_push_argv (launcher, "print-app_SCRIPTS");
+  ide_subprocess_launcher_push_argv (launcher, "print-nodist_app_SCRIPTS");
+
+  /*
+   * Do these last so that other discoveries have higher priority.
+   */
+  ide_subprocess_launcher_push_argv (launcher, "print-libexecdir");
+  ide_subprocess_launcher_push_argv (launcher, "print-libexec_PROGRAMS");
+  ide_subprocess_launcher_push_argv (launcher, "print-noinst_PROGRAMS");
 
   /*
    * We need to extract the common automake targets from each of the
