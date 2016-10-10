@@ -433,6 +433,7 @@ egg_three_grid_size_allocate (GtkWidget     *widget,
   g_autofree GtkRequestedSize *rows = NULL;
   const GList *iter;
   GtkAllocation area;
+  GtkTextDirection dir;
   GList *values;
   guint i;
   guint n_rows;
@@ -451,6 +452,8 @@ egg_three_grid_size_allocate (GtkWidget     *widget,
 
   g_assert (EGG_IS_THREE_GRID (self));
   g_assert (allocation != NULL);
+
+  dir = gtk_widget_get_direction (widget);
 
   gtk_widget_set_allocation (widget, allocation);
 
@@ -540,7 +543,10 @@ egg_three_grid_size_allocate (GtkWidget     *widget,
       child_alloc.width = left;
       child_alloc.y = area.y;
       child_alloc.height = size->minimum_size;
-      egg_three_grid_size_allocate_children (self, EGG_THREE_GRID_COLUMN_LEFT, row_info->row, &child_alloc, baseline);
+      if (dir == GTK_TEXT_DIR_LTR)
+        egg_three_grid_size_allocate_children (self, EGG_THREE_GRID_COLUMN_LEFT, row_info->row, &child_alloc, baseline);
+      else
+        egg_three_grid_size_allocate_children (self, EGG_THREE_GRID_COLUMN_RIGHT, row_info->row, &child_alloc, baseline);
 
       child_alloc.x = area.x + left + priv->column_spacing;
       child_alloc.width = center;
@@ -552,7 +558,10 @@ egg_three_grid_size_allocate (GtkWidget     *widget,
       child_alloc.width = right;
       child_alloc.y = area.y;
       child_alloc.height = size->minimum_size;
-      egg_three_grid_size_allocate_children (self, EGG_THREE_GRID_COLUMN_RIGHT, row_info->row, &child_alloc, baseline);
+      if (dir == GTK_TEXT_DIR_LTR)
+        egg_three_grid_size_allocate_children (self, EGG_THREE_GRID_COLUMN_RIGHT, row_info->row, &child_alloc, baseline);
+      else
+        egg_three_grid_size_allocate_children (self, EGG_THREE_GRID_COLUMN_LEFT, row_info->row, &child_alloc, baseline);
 
       area.y += child_alloc.height + priv->row_spacing;
       area.height -= child_alloc.height + priv->row_spacing;
