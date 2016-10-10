@@ -412,6 +412,34 @@ ide_application_shutdown (GApplication *application)
 }
 
 static void
+ide_application_window_added (GtkApplication *application,
+                              GtkWindow      *window)
+{
+  IdeApplication *self = (IdeApplication *)application;
+
+  g_assert (IDE_IS_APPLICATION (self));
+  g_assert (GTK_IS_WINDOW (window));
+
+  GTK_APPLICATION_CLASS (ide_application_parent_class)->window_added (application, window);
+
+  ide_application_actions_update (self);
+}
+
+static void
+ide_application_window_removed (GtkApplication *application,
+                                GtkWindow      *window)
+{
+  IdeApplication *self = (IdeApplication *)application;
+
+  g_assert (IDE_IS_APPLICATION (self));
+  g_assert (GTK_IS_WINDOW (window));
+
+  GTK_APPLICATION_CLASS (ide_application_parent_class)->window_removed (application, window);
+
+  ide_application_actions_update (self);
+}
+
+static void
 ide_application_finalize (GObject *object)
 {
   IdeApplication *self = (IdeApplication *)object;
@@ -437,6 +465,7 @@ ide_application_class_init (IdeApplicationClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GApplicationClass *g_app_class = G_APPLICATION_CLASS (klass);
+  GtkApplicationClass *gtk_app_class = GTK_APPLICATION_CLASS (klass);
 
   object_class->finalize = ide_application_finalize;
 
@@ -445,6 +474,9 @@ ide_application_class_init (IdeApplicationClass *klass)
   g_app_class->open = ide_application_open;
   g_app_class->startup = ide_application_startup;
   g_app_class->shutdown = ide_application_shutdown;
+
+  gtk_app_class->window_added = ide_application_window_added;
+  gtk_app_class->window_removed = ide_application_window_removed;
 
   main_thread = g_thread_self ();
 }

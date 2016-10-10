@@ -348,4 +348,38 @@ ide_application_actions_init (IdeApplication *self)
   gtk_application_set_accels_for_action (GTK_APPLICATION (self), "win.global-search", global_search);
   gtk_application_set_accels_for_action (GTK_APPLICATION (self), "win.show-command-bar", command_bar);
   gtk_application_set_accels_for_action (GTK_APPLICATION (self), "build-manager.build", build);
+
+  ide_application_actions_update (self);
+}
+
+void
+ide_application_actions_update (IdeApplication *self)
+{
+  GList *windows;
+  GAction *action;
+  gboolean enabled;
+
+  g_assert (IDE_IS_APPLICATION (self));
+
+  /*
+   * We only enable the preferences action if we have a workbench open
+   * that is past the greeter.
+   */
+  action = g_action_map_lookup_action (G_ACTION_MAP (self), "preferences");
+  enabled = FALSE;
+  for (windows = gtk_application_get_windows (GTK_APPLICATION (self));
+       windows != NULL;
+       windows = windows->next)
+    {
+      GtkWindow *window = windows->data;
+
+      if (IDE_IS_WORKBENCH (window) &&
+          !ide_str_equal0 ("greeter",
+                           ide_workbench_get_visible_perspective_name (IDE_WORKBENCH (window))))
+        {
+          enabled = TRUE;
+          break;
+        }
+    }
+  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), enabled);
 }

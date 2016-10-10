@@ -23,7 +23,8 @@
 
 G_BEGIN_DECLS
 
-void ide_application_actions_init (IdeApplication *self);
+void ide_application_actions_init   (IdeApplication *self);
+void ide_application_actions_update (IdeApplication *self);
 
 G_END_DECLS
 

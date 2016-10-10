@@ -24,6 +24,7 @@
 #include "ide-macros.h"
 
 #include "application/ide-application.h"
+#include "application/ide-application-actions.h"
 #include "editor/ide-editor-perspective.h"
 #include "greeter/ide-greeter-perspective.h"
 #include "preferences/ide-preferences-perspective.h"
@@ -878,6 +879,11 @@ ide_workbench_set_visible_perspective (IdeWorkbench   *self,
 
   if (restore_duration != 0)
     gtk_stack_set_transition_duration (self->perspectives_stack, restore_duration);
+
+  /* Notify the application to possibly update actions such
+   * as the preferences state.
+   */
+  ide_application_actions_update (IDE_APPLICATION_DEFAULT);
 }
 
 const gchar *
