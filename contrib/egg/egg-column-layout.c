@@ -266,6 +266,22 @@ egg_column_layout_size_allocate (GtkWidget     *widget,
 
   egg_column_layout_layout (self, allocation->width, allocation->height, &tallest_column);
 
+  /*
+   * If we are on a RTL language, flip all our allocations around so
+   * we move from right to left. This is easier than adding all the
+   * complexity to directions during layout time.
+   */
+  if (GTK_TEXT_DIR_RTL == gtk_widget_get_direction (widget))
+    {
+      for (i = 0; i < priv->children->len; i++)
+        {
+          EggColumnLayoutChild *child;
+
+          child = &g_array_index (priv->children, EggColumnLayoutChild, i);
+          child->alloc.x = allocation->x + allocation->width - child->alloc.x - child->alloc.width;
+        }
+    }
+
   for (i = 0; i < priv->children->len; i++)
     {
       EggColumnLayoutChild *child;
