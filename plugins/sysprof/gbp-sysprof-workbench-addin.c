@@ -154,7 +154,13 @@ profiler_run_handler (IdeRunManager *run_manager,
 
   gtk_widget_hide (GTK_WIDGET (self->zoom_controls));
 
-  sp_profiler_set_whole_system (SP_PROFILER (self->profiler), FALSE);
+  /*
+   * Currently we require whole-system because otherwise we can get a situation
+   * where we only watch the spawning process (say jhbuild, flatpak, etc).
+   * Longer term we either need a way to follow-children and/or limit to a
+   * cgroup/process-group.
+   */
+  sp_profiler_set_whole_system (SP_PROFILER (self->profiler), TRUE);
 
   proc_source = sp_proc_source_new ();
   sp_profiler_add_source (self->profiler, proc_source);
