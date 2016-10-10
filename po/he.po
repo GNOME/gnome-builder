@@ -96,7 +96,7 @@ msgstr "שמירה"
 
 #: contrib/egg/egg-file-chooser-entry.c:455
 msgid "Browse…"
-msgstr "עיון..."
+msgstr "עיון…"
 
 #: contrib/egg/egg-file-chooser-entry.c:488
 #: libide/editor/ide-editor-view-actions.c:316
@@ -738,7 +738,7 @@ msgstr "קובץ _חדש"
 
 #: data/gtk/menus.ui:92
 msgid "_Open File…"
-msgstr "_פתיחת קובץ..."
+msgstr "_פתיחת קובץ…"
 
 #: data/gtk/menus.ui:98
 msgid "Save _All"
@@ -1349,7 +1349,7 @@ msgstr "יש ללחוץ על פריט לבחירה"
 
 #: libide/greeter/ide-greeter-perspective.ui:322
 msgid "Open…"
-msgstr "פתיחה..."
+msgstr "פתיחה…"
 
 #: libide/greeter/ide-greeter-perspective.ui:337
 msgid "Select projects for removal"
@@ -2002,7 +2002,7 @@ msgstr "שפות תכנות"
 #. translators: placeholder string for the entry used to filter the languages in Preferences/Programming languages
 #: libide/preferences/ide-preferences-builtin.c:262
 msgid "Search languages…"
-msgstr "חיפוש שפות..."
+msgstr "חיפוש שפות…"
 
 #: libide/preferences/ide-preferences-builtin.c:316
 #: libide/preferences/ide-preferences-builtin.c:377
@@ -2438,7 +2438,7 @@ msgstr " בנייה הצליחה"
 #: plugins/autotools/ide-autotools-builder.c:240
 #: plugins/autotools/ide-autotools-build-task.c:1057
 msgid "Building…"
-msgstr "בבנייה..."
+msgstr "בבנייה…"
 
 #: plugins/autotools/ide-autotools-builder.c:201
 msgid "Install cancelled"
@@ -2495,7 +2495,7 @@ msgstr "autogen.sh אינו בר־הרצה."
 
 #: plugins/autotools/ide-autotools-build-task.c:889
 msgid "Running autogen…"
-msgstr "מריץ autogen..."
+msgstr "מריץ autogen…"
 
 # שמות קבצים
 #: plugins/autotools/ide-autotools-build-task.c:923
@@ -2505,11 +2505,11 @@ msgstr "autogen.sh נכשל ביצירת configure (%s)"
 
 #: plugins/autotools/ide-autotools-build-task.c:958
 msgid "Running configure…"
-msgstr "מריץ configure..."
+msgstr "מריץ configure…"
 
 #: plugins/autotools/ide-autotools-build-task.c:1055
 msgid "Cleaning…"
-msgstr "מנקה..."
+msgstr "מנקה…"
 
 #: plugins/autotools/ide-makecache.c:1147
 msgid "Invalid makefile provided, ignoring."
@@ -2755,7 +2755,7 @@ msgstr "נתיב לקובץ מיזם, תיקייה נוכחית כבררת מח�
 
 #: plugins/build-tools/ide-environment-editor.c:65
 msgid "New variable…"
-msgstr "משתנה חדש..."
+msgstr "משתנה חדש…"
 
 #: plugins/clang/ide-clang-preferences-addin.c:62
 msgid "Clang"
@@ -3123,7 +3123,7 @@ msgstr "מיזם חדש"
 
 #: plugins/create-project/gbp-create-project-genesis-addin.c:223
 msgid "New…"
-msgstr "חדש..."
+msgstr "חדש…"
 
 #: plugins/create-project/gbp-create-project-tool.c:136
 msgid "List available templates"
@@ -3305,7 +3305,7 @@ msgstr "שיבוט מיזם"
 # שכפול
 #: plugins/git/ide-git-genesis-addin.c:184
 msgid "Clone…"
-msgstr "שיבוט..."
+msgstr "שיבוט…"
 
 #: plugins/git/ide-git-genesis-addin.c:190
 msgid "Clone"
