@@ -288,17 +288,26 @@
           <object class="GtkLabel" id="browse_title">
             <property name="visible">true</property>
             <property name="label" translatable="yes">Select a Project</property>
+            <attributes>
+              <attribute name="weight" value="bold"/>
+            </attributes>
           </object>
         </child>
         <child>
           <object class="GtkLabel" id="selection_title">
             <property name="visible">true</property>
             <property name="label" translatable="yes">Click an item to select</property>
+            <attributes>
+              <attribute name="weight" value="bold"/>
+            </attributes>
           </object>
         </child>
         <child>
           <object class="GtkLabel" id="genesis_title">
             <property name="visible">true</property>
+            <attributes>
+              <attribute name="weight" value="bold"/>
+            </attributes>
           </object>
         </child>
       </object>
