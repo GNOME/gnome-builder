@@ -30,6 +30,9 @@ struct _GbpSysprofPerspective
 
   GtkStack             *stack;
   SpCallgraphView      *callgraph_view;
+  GtkLabel             *info_bar_label;
+  GtkButton            *info_bar_close;
+  GtkRevealer          *info_bar_revealer;
   SpVisualizerView     *visualizers;
   SpRecordingStateView *recording_view;
   SpZoomManager        *zoom_manager;
@@ -41,12 +44,24 @@ G_DEFINE_TYPE_EXTENDED (GbpSysprofPerspective, gbp_sysprof_perspective, GTK_TYPE
                         G_IMPLEMENT_INTERFACE (IDE_TYPE_PERSPECTIVE, perspective_iface_init))
 
 static void
+hide_info_bar (GbpSysprofPerspective *self,
+               GtkButton             *button)
+{
+  g_assert (GBP_IS_SYSPROF_PERSPECTIVE (self));
+
+  gtk_revealer_set_reveal_child (self->info_bar_revealer, FALSE);
+}
+
+static void
 gbp_sysprof_perspective_class_init (GbpSysprofPerspectiveClass *klass)
 {
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/plugins/sysprof-plugin/gbp-sysprof-perspective.ui");
   gtk_widget_class_bind_template_child (widget_class, GbpSysprofPerspective, callgraph_view);
+  gtk_widget_class_bind_template_child (widget_class, GbpSysprofPerspective, info_bar_label);
+  gtk_widget_class_bind_template_child (widget_class, GbpSysprofPerspective, info_bar_close);
+  gtk_widget_class_bind_template_child (widget_class, GbpSysprofPerspective, info_bar_revealer);
   gtk_widget_class_bind_template_child (widget_class, GbpSysprofPerspective, stack);
   gtk_widget_class_bind_template_child (widget_class, GbpSysprofPerspective, recording_view);
   gtk_widget_class_bind_template_child (widget_class, GbpSysprofPerspective, visualizers);
@@ -55,6 +70,7 @@ gbp_sysprof_perspective_class_init (GbpSysprofPerspectiveClass *klass)
   g_type_ensure (SP_TYPE_CALLGRAPH_VIEW);
   g_type_ensure (SP_TYPE_CPU_VISUALIZER_ROW);
   g_type_ensure (SP_TYPE_EMPTY_STATE_VIEW);
+  g_type_ensure (SP_TYPE_FAILED_STATE_VIEW);
   g_type_ensure (SP_TYPE_RECORDING_STATE_VIEW);
   g_type_ensure (SP_TYPE_VISUALIZER_VIEW);
 }
@@ -63,6 +79,12 @@ static void
 gbp_sysprof_perspective_init (GbpSysprofPerspective *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
+
+  g_signal_connect_object (self->info_bar_close,
+                           "clicked",
+                           G_CALLBACK (hide_info_bar),
+                           self,
+                           G_CONNECT_SWAPPED);
 }
 
 static gchar *
@@ -126,6 +148,14 @@ generate_cb (GObject      *object,
   sp_callgraph_view_set_profile (self->callgraph_view, profile);
 }
 
+SpCaptureReader *
+gbp_sysprof_perspective_get_reader (GbpSysprofPerspective *self)
+{
+  g_return_val_if_fail (GBP_IS_SYSPROF_PERSPECTIVE (self), NULL);
+
+  return sp_visualizer_view_get_reader (self->visualizers);
+}
+
 void
 gbp_sysprof_perspective_set_reader (GbpSysprofPerspective *self,
                                     SpCaptureReader       *reader)
@@ -142,6 +172,10 @@ gbp_sysprof_perspective_set_reader (GbpSysprofPerspective *self,
       return;
     }
 
+  /* If we failed, ignore the (probably mostly empty) reader */
+  if (g_strcmp0 (gtk_stack_get_visible_child_name (self->stack), "failed") == 0)
+    return;
+
   profile = sp_callgraph_profile_new ();
   sp_profile_set_reader (profile, reader);
   sp_profile_generate (profile, NULL, generate_cb, g_object_ref (self));
@@ -149,6 +183,25 @@ gbp_sysprof_perspective_set_reader (GbpSysprofPerspective *self,
   sp_visualizer_view_set_reader (self->visualizers, reader);
 
   gtk_stack_set_visible_child_name (self->stack, "results");
+}
+
+static void
+gbp_sysprof_perspective_profiler_failed (GbpSysprofPerspective *self,
+                                         const GError          *error,
+                                         SpProfiler            *profiler)
+{
+  IDE_ENTRY;
+
+  g_assert (GBP_IS_SYSPROF_PERSPECTIVE (self));
+  g_assert (error != NULL);
+  g_assert (SP_IS_PROFILER (profiler));
+
+  gtk_stack_set_visible_child_name (self->stack, "failed");
+
+  gtk_label_set_label (self->info_bar_label, error->message);
+  gtk_revealer_set_reveal_child (self->info_bar_revealer, TRUE);
+
+  IDE_EXIT;
 }
 
 void
@@ -163,7 +216,12 @@ gbp_sysprof_perspective_set_profiler (GbpSysprofPerspective *self,
   if (profiler != NULL)
     {
       gtk_stack_set_visible_child_name (self->stack, "recording");
-      /* TODO: Wire up failure state */
+
+      g_signal_connect_object (profiler,
+                               "failed",
+                               G_CALLBACK (gbp_sysprof_perspective_profiler_failed),
+                               self,
+                               G_CONNECT_SWAPPED);
     }
 }
 

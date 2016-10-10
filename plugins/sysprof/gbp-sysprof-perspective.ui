@@ -2,55 +2,104 @@
 <interface>
   <template class="GbpSysprofPerspective" parent="GtkBin">
     <child>
-      <object class="GtkStack" id="stack">
-        <property name="homogeneous">false</property>
+      <object class="GtkBox">
+        <property name="orientation">vertical</property>
         <property name="visible">true</property>
         <child>
-          <object class="SpEmptyStateView">
-            <property name="subtitle" translatable="yes">Select “Run with profiler” from the run menu to begin</property>
+          <object class="GtkRevealer" id="info_bar_revealer">
             <property name="visible">true</property>
+            <property name="reveal-child">false</property>
+            <child>
+              <object class="GtkInfoBar" id="info_bar">
+                <property name="visible">true</property>
+                <child internal-child="content_area">
+                  <object class="GtkBox">
+                    <child>
+                      <object class="GtkLabel" id="info_bar_label">
+                        <property name="hexpand">true</property>
+                        <property name="label">Failure</property>
+                        <property name="visible">true</property>
+                        <property name="wrap">true</property>
+                        <property name="xalign">0</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="info_bar_close">
+                        <property name="label" translatable="yes">_Close</property>
+                        <property name="use-underline">true</property>
+                        <property name="visible">true</property>
+                        <property name="width-request">100</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <action-widgets>
+                  <action-widget response="0">info_bar_close</action-widget>
+                </action-widgets>
+              </object>
+            </child>
           </object>
-          <packing>
-            <property name="name">empty</property>
-          </packing>
         </child>
         <child>
-          <object class="SpRecordingStateView" id="recording_view">
-            <property name="visible">true</property>
-          </object>
-          <packing>
-            <property name="name">recording</property>
-          </packing>
-        </child>
-        <child>
-          <object class="PnlMultiPaned">
+          <object class="GtkStack" id="stack">
+            <property name="homogeneous">false</property>
             <property name="visible">true</property>
             <child>
-              <object class="SpVisualizerView" id="visualizers">
+              <object class="SpEmptyStateView">
+                <property name="subtitle" translatable="yes">Select “Run with profiler” from the run menu to begin</property>
                 <property name="visible">true</property>
-                <property name="zoom-manager">zoom_manager</property>
-                <child type="visualizer">
-                  <object class="SpCpuVisualizerRow" id="cpu_visualizer">
-                    <property name="title" translatable="yes">CPU</property>
-                    <property name="height-request">75</property>
-                    <property name="selectable">false</property>
-                    <property name="y-lower">0.0</property>
-                    <property name="y-upper">100.0</property>
+              </object>
+              <packing>
+                <property name="name">empty</property>
+              </packing>
+            </child>
+            <child>
+              <object class="SpRecordingStateView" id="recording_view">
+                <property name="visible">true</property>
+              </object>
+              <packing>
+                <property name="name">recording</property>
+              </packing>
+            </child>
+            <child>
+              <object class="SpFailedStateView" id="failed_view">
+                <property name="visible">true</property>
+              </object>
+              <packing>
+                <property name="name">failed</property>
+              </packing>
+            </child>
+            <child>
+              <object class="PnlMultiPaned">
+                <property name="visible">true</property>
+                <child>
+                  <object class="SpVisualizerView" id="visualizers">
+                    <property name="visible">true</property>
+                    <property name="zoom-manager">zoom_manager</property>
+                    <child type="visualizer">
+                      <object class="SpCpuVisualizerRow" id="cpu_visualizer">
+                        <property name="title" translatable="yes">CPU</property>
+                        <property name="height-request">75</property>
+                        <property name="selectable">false</property>
+                        <property name="y-lower">0.0</property>
+                        <property name="y-upper">100.0</property>
+                        <property name="visible">true</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="SpCallgraphView" id="callgraph_view">
+                    <property name="vexpand">true</property>
                     <property name="visible">true</property>
                   </object>
                 </child>
               </object>
-            </child>
-            <child>
-              <object class="SpCallgraphView" id="callgraph_view">
-                <property name="vexpand">true</property>
-                <property name="visible">true</property>
-              </object>
+              <packing>
+                <property name="name">results</property>
+              </packing>
             </child>
           </object>
-          <packing>
-            <property name="name">results</property>
-          </packing>
         </child>
       </object>
     </child>

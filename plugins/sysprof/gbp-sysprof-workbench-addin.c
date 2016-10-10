@@ -41,6 +41,21 @@ G_DEFINE_TYPE_EXTENDED (GbpSysprofWorkbenchAddin, gbp_sysprof_workbench_addin, G
                         G_IMPLEMENT_INTERFACE (IDE_TYPE_WORKBENCH_ADDIN, workbench_addin_iface_init))
 
 static void
+gbp_sysprof_workbench_addin_update_controls (GbpSysprofWorkbenchAddin *self)
+{
+  IdePerspective *perspective;
+  gboolean visible;
+
+  g_assert (GBP_IS_SYSPROF_WORKBENCH_ADDIN (self));
+
+  perspective = ide_workbench_get_visible_perspective (self->workbench);
+  visible = GBP_IS_SYSPROF_PERSPECTIVE (perspective) &&
+            !!gbp_sysprof_perspective_get_reader (GBP_SYSPROF_PERSPECTIVE (perspective));
+
+  gtk_widget_set_visible (GTK_WIDGET (self->zoom_controls), visible);
+}
+
+static void
 profiler_stopped (GbpSysprofWorkbenchAddin *self,
                   SpProfiler               *profiler)
 {
@@ -72,6 +87,8 @@ profiler_stopped (GbpSysprofWorkbenchAddin *self,
   gbp_sysprof_perspective_set_reader (self->perspective, reader);
 
   ide_workbench_set_visible_perspective_name (self->workbench, "profiler");
+
+  gbp_sysprof_workbench_addin_update_controls (self);
 
   IDE_EXIT;
 }
@@ -128,6 +145,14 @@ profiler_run_handler (IdeRunManager *run_manager,
     }
 
   self->profiler = sp_local_profiler_new ();
+
+  g_signal_connect_object (self->profiler,
+                           "stopped",
+                           G_CALLBACK (gbp_sysprof_workbench_addin_update_controls),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  gtk_widget_hide (GTK_WIDGET (self->zoom_controls));
 
   sp_profiler_set_whole_system (SP_PROFILER (self->profiler), FALSE);
 
@@ -191,6 +216,8 @@ gbp_sysprof_workbench_addin_open_cb (GObject      *object,
     }
 
   gbp_sysprof_perspective_set_reader (self->perspective, reader);
+
+  gbp_sysprof_workbench_addin_update_controls (self);
 }
 
 static void
@@ -484,14 +511,11 @@ gbp_sysprof_workbench_addin_perspective_set (IdeWorkbenchAddin *addin,
                                              IdePerspective    *perspective)
 {
   GbpSysprofWorkbenchAddin *self = (GbpSysprofWorkbenchAddin *)addin;
-  gboolean visible;
 
   g_assert (IDE_IS_WORKBENCH_ADDIN (addin));
   g_assert (IDE_IS_PERSPECTIVE (perspective));
 
-  visible = GBP_IS_SYSPROF_PERSPECTIVE (perspective);
-
-  gtk_widget_set_visible (GTK_WIDGET (self->zoom_controls), visible);
+  gbp_sysprof_workbench_addin_update_controls (self);
 }
 
 static void
