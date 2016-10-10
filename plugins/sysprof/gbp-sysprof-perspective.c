@@ -57,10 +57,10 @@ hide_info_bar (GbpSysprofPerspective *self,
 
 static void
 gbp_sysprof_perspective_selection_changed (GbpSysprofPerspective *self,
-                                           SpVisualizerSelection *selection)
+                                           SpSelection           *selection)
 {
   g_assert (GBP_IS_SYSPROF_PERSPECTIVE (self));
-  g_assert (SP_IS_VISUALIZER_SELECTION (selection));
+  g_assert (SP_IS_SELECTION (selection));
 
   gbp_sysprof_perspective_reload (self);
 }
@@ -104,7 +104,7 @@ gbp_sysprof_perspective_class_init (GbpSysprofPerspectiveClass *klass)
 static void
 gbp_sysprof_perspective_init (GbpSysprofPerspective *self)
 {
-  SpVisualizerSelection *selection;
+  SpSelection *selection;
 
   gtk_widget_init_template (GTK_WIDGET (self));
 
@@ -187,7 +187,7 @@ generate_cb (GObject      *object,
 static void
 gbp_sysprof_perspective_reload (GbpSysprofPerspective *self)
 {
-  SpVisualizerSelection *selection;
+  SpSelection *selection;
   g_autoptr(SpProfile) profile = NULL;
 
   g_assert (GBP_IS_SYSPROF_PERSPECTIVE (self));
@@ -226,7 +226,7 @@ gbp_sysprof_perspective_set_reader (GbpSysprofPerspective *self,
 
   if (reader != self->reader)
     {
-      SpVisualizerSelection *selection;
+      SpSelection *selection;
 
       if (self->reader != NULL)
         {
@@ -237,7 +237,7 @@ gbp_sysprof_perspective_set_reader (GbpSysprofPerspective *self,
         }
 
       selection = sp_visualizer_view_get_selection (self->visualizers);
-      sp_visualizer_selection_unselect_all (selection);
+      sp_selection_unselect_all (selection);
 
       if (reader != NULL)
         {
