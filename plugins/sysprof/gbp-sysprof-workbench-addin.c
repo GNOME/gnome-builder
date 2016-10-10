@@ -31,6 +31,8 @@ struct _GbpSysprofWorkbenchAddin
 
   GbpSysprofPerspective *perspective;
   IdeWorkbench          *workbench;
+
+  GtkBox                *zoom_controls;
 };
 
 static void workbench_addin_iface_init (IdeWorkbenchAddinInterface *iface);
@@ -344,13 +346,27 @@ run_manager_stopped (GbpSysprofWorkbenchAddin *self,
     sp_profiler_stop (self->profiler);
 }
 
+static gboolean
+zoom_level_to_string (GBinding     *binding,
+                      const GValue *from_value,
+                      GValue       *to_value,
+                      gpointer      user_data)
+{
+  gdouble level = g_value_get_double (from_value);
+  g_value_take_string (to_value, g_strdup_printf ("%d%%", (gint)(level * 100.0)));
+  return TRUE;
+}
+
 static void
 gbp_sysprof_workbench_addin_load (IdeWorkbenchAddin *addin,
                                   IdeWorkbench      *workbench)
 {
   GbpSysprofWorkbenchAddin *self = (GbpSysprofWorkbenchAddin *)addin;
+  IdeWorkbenchHeaderBar *header;
+  SpZoomManager *zoom_manager;
   IdeRunManager *run_manager;
   IdeContext *context;
+  GtkLabel *label;
 
   g_assert (GBP_IS_SYSPROF_WORKBENCH_ADDIN (self));
   g_assert (IDE_IS_WORKBENCH (workbench));
@@ -385,14 +401,57 @@ gbp_sysprof_workbench_addin_load (IdeWorkbenchAddin *addin,
                                     NULL);
   ide_workbench_add_perspective (workbench, IDE_PERSPECTIVE (self->perspective));
 
+  zoom_manager = gbp_sysprof_perspective_get_zoom_manager (self->perspective);
 
   /*
    * Add our actions to the workbench so they can be activated via the
    * headerbar or the perspective.
    */
-  gtk_widget_insert_action_group (GTK_WIDGET (workbench),
-                                  "profiler",
-                                  G_ACTION_GROUP (self->actions));
+  gtk_widget_insert_action_group (GTK_WIDGET (workbench), "profiler", G_ACTION_GROUP (self->actions));
+  gtk_widget_insert_action_group (GTK_WIDGET (workbench), "profiler-zoom", G_ACTION_GROUP (zoom_manager));
+
+  /*
+   * Add our buttons to the header.
+   */
+  header = ide_workbench_get_headerbar (workbench);
+  self->zoom_controls = g_object_new (GTK_TYPE_BOX,
+                                      "orientation", GTK_ORIENTATION_HORIZONTAL,
+                                      NULL);
+  ide_widget_add_style_class (GTK_WIDGET (self->zoom_controls), "linked");
+  gtk_container_add (GTK_CONTAINER (self->zoom_controls),
+                     g_object_new (GTK_TYPE_BUTTON,
+                                   "action-name", "profiler-zoom.zoom-out",
+                                   "can-focus", FALSE,
+                                   "child", g_object_new (GTK_TYPE_IMAGE,
+                                                          "icon-name", "zoom-out-symbolic",
+                                                          "visible", TRUE,
+                                                          NULL),
+                                   "visible", TRUE,
+                                   NULL));
+  label = g_object_new (GTK_TYPE_LABEL,
+                        "width-chars", 5,
+                        "visible", TRUE,
+                        NULL);
+  g_object_bind_property_full (zoom_manager, "zoom", label, "label", G_BINDING_SYNC_CREATE,
+                               zoom_level_to_string, NULL, NULL, NULL);
+  gtk_container_add (GTK_CONTAINER (self->zoom_controls),
+                     g_object_new (GTK_TYPE_BUTTON,
+                                   "action-name", "profiler-zoom.zoom-one",
+                                   "can-focus", FALSE,
+                                   "child", label,
+                                   "visible", TRUE,
+                                   NULL));
+  gtk_container_add (GTK_CONTAINER (self->zoom_controls),
+                     g_object_new (GTK_TYPE_BUTTON,
+                                   "action-name", "profiler-zoom.zoom-in",
+                                   "can-focus", FALSE,
+                                   "child", g_object_new (GTK_TYPE_IMAGE,
+                                                          "icon-name", "zoom-in-symbolic",
+                                                          "visible", TRUE,
+                                                          NULL),
+                                   "visible", TRUE,
+                                   NULL));
+  ide_workbench_header_bar_insert_left (header, GTK_WIDGET (self->zoom_controls), GTK_PACK_START, 100);
 }
 
 static void
@@ -413,8 +472,26 @@ gbp_sysprof_workbench_addin_unload (IdeWorkbenchAddin *addin,
 
   ide_workbench_remove_perspective (workbench, IDE_PERSPECTIVE (self->perspective));
 
+  gtk_widget_destroy (GTK_WIDGET (self->zoom_controls));
+
+  self->zoom_controls = NULL;
   self->perspective = NULL;
   self->workbench = NULL;
+}
+
+static void
+gbp_sysprof_workbench_addin_perspective_set (IdeWorkbenchAddin *addin,
+                                             IdePerspective    *perspective)
+{
+  GbpSysprofWorkbenchAddin *self = (GbpSysprofWorkbenchAddin *)addin;
+  gboolean visible;
+
+  g_assert (IDE_IS_WORKBENCH_ADDIN (addin));
+  g_assert (IDE_IS_PERSPECTIVE (perspective));
+
+  visible = GBP_IS_SYSPROF_PERSPECTIVE (perspective);
+
+  gtk_widget_set_visible (GTK_WIDGET (self->zoom_controls), visible);
 }
 
 static void
@@ -422,4 +499,5 @@ workbench_addin_iface_init (IdeWorkbenchAddinInterface *iface)
 {
   iface->load = gbp_sysprof_workbench_addin_load;
   iface->unload = gbp_sysprof_workbench_addin_unload;
+  iface->perspective_set = gbp_sysprof_workbench_addin_perspective_set;
 }

@@ -32,6 +32,7 @@ struct _GbpSysprofPerspective
   SpCallgraphView      *callgraph_view;
   SpVisualizerView     *visualizers;
   SpRecordingStateView *recording_view;
+  SpZoomManager        *zoom_manager;
 };
 
 static void perspective_iface_init (IdePerspectiveInterface *iface);
@@ -49,6 +50,7 @@ gbp_sysprof_perspective_class_init (GbpSysprofPerspectiveClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GbpSysprofPerspective, stack);
   gtk_widget_class_bind_template_child (widget_class, GbpSysprofPerspective, recording_view);
   gtk_widget_class_bind_template_child (widget_class, GbpSysprofPerspective, visualizers);
+  gtk_widget_class_bind_template_child (widget_class, GbpSysprofPerspective, zoom_manager);
 
   g_type_ensure (SP_TYPE_CALLGRAPH_VIEW);
   g_type_ensure (SP_TYPE_CPU_VISUALIZER_ROW);
@@ -163,4 +165,12 @@ gbp_sysprof_perspective_set_profiler (GbpSysprofPerspective *self,
       gtk_stack_set_visible_child_name (self->stack, "recording");
       /* TODO: Wire up failure state */
     }
+}
+
+SpZoomManager *
+gbp_sysprof_perspective_get_zoom_manager (GbpSysprofPerspective *self)
+{
+  g_return_val_if_fail (GBP_IS_SYSPROF_PERSPECTIVE (self), NULL);
+
+  return self->zoom_manager;
 }

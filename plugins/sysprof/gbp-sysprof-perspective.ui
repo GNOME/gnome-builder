@@ -28,6 +28,7 @@
             <child>
               <object class="SpVisualizerView" id="visualizers">
                 <property name="visible">true</property>
+                <property name="zoom-manager">zoom_manager</property>
                 <child type="visualizer">
                   <object class="SpCpuVisualizerRow" id="cpu_visualizer">
                     <property name="title" translatable="yes">CPU</property>
@@ -54,4 +55,6 @@
       </object>
     </child>
   </template>
+  <object class="SpZoomManager" id="zoom_manager">
+  </object>
 </interface>

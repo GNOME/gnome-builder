@@ -20,7 +20,7 @@
 #define GBP_SYSPROF_PERSPECTIVE_H
 
 #include <ide.h>
-#include <sysprof.h>
+#include <sysprof-ui.h>
 
 G_BEGIN_DECLS
 
@@ -28,10 +28,11 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (GbpSysprofPerspective, gbp_sysprof_perspective, GBP, SYSPROF_PERSPECTIVE, GtkBin)
 
-void gbp_sysprof_perspective_set_profiler (GbpSysprofPerspective *self,
-                                           SpProfiler            *profiler);
-void gbp_sysprof_perspective_set_reader   (GbpSysprofPerspective *self,
-                                           SpCaptureReader       *reader);
+SpZoomManager *gbp_sysprof_perspective_get_zoom_manager (GbpSysprofPerspective *self);
+void           gbp_sysprof_perspective_set_profiler     (GbpSysprofPerspective *self,
+                                                         SpProfiler            *profiler);
+void           gbp_sysprof_perspective_set_reader       (GbpSysprofPerspective *self,
+                                                         SpCaptureReader       *reader);
 
 G_END_DECLS
 
