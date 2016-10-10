@@ -11,7 +11,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder\n"
 "POT-Creation-Date: 2016-10-09 20:33+0300\n"
-"PO-Revision-Date: 2016-10-10 16:56+0300\n"
+"PO-Revision-Date: 2016-10-10 18:46+0300\n"
 "Last-Translator: Yosef Or Boczko <yoseforb@gnome.org>\n"
 "Language-Team: עברית <>\n"
 "Language: he\n"
@@ -83,7 +83,7 @@ msgstr "בחירה"
 #: contrib/egg/egg-file-chooser-entry.c:108
 #: plugins/create-project/gbp-create-project-genesis-addin.c:229
 msgid "Create"
-msgstr "י_צירה"
+msgstr "יצירה"
 
 #: contrib/egg/egg-file-chooser-entry.c:112
 #: libide/editor/ide-editor-view-actions.c:317
@@ -1747,7 +1747,7 @@ msgstr "הצגת תבנית רשת"
 
 #: libide/preferences/ide-preferences-builtin.c:106
 msgid "Display a grid pattern underneath source code"
-msgstr "הצגת תבנית רשת תחת קוד המקור."
+msgstr "הצגת תבנית רשת תחת קוד המקור"
 
 #: libide/preferences/ide-preferences-builtin.c:108
 msgid "Font"
@@ -1784,41 +1784,36 @@ msgstr "הדמיה"
 
 #: libide/preferences/ide-preferences-builtin.c:144
 msgid "Default keybinding mode which mimics gedit"
-msgstr ""
+msgstr "מצב הקלדה בברירת המחדל המדמה את gedit"
 
 #: libide/preferences/ide-preferences-builtin.c:145
 msgid "Emacs"
 msgstr "Emacs"
 
 #: libide/preferences/ide-preferences-builtin.c:145
-#, fuzzy
 msgid "Emulates the Emacs text editor"
-msgstr "מדמה קיצורי מקשים מוכרים מעורך הטקסט Emacs."
+msgstr "מדמה את עורך הטקסט Emacs"
 
 #: libide/preferences/ide-preferences-builtin.c:146
 msgid "Vim"
 msgstr "Vim"
 
 #: libide/preferences/ide-preferences-builtin.c:146
-#, fuzzy
 msgid "Emulates the Vim text editor"
-msgstr "מדמה קיצורי מקשים מוכרים מעורך הטקסט Vim."
+msgstr "מדמה את עורך הטקסט Vim"
 
 #: libide/preferences/ide-preferences-builtin.c:148
-#, fuzzy
 msgid "Movement"
-msgstr "העברה"
+msgstr "העברהתזוזה"
 
 #: libide/preferences/ide-preferences-builtin.c:149
-#, fuzzy
 msgid "Home moves to first non-whitespace character"
-msgstr "בית (Home) מעביר לתו הראשון שאינו רווח."
+msgstr "בית (Home) מעביר לתו הראשון שאינו רווח"
 
 #: libide/preferences/ide-preferences-builtin.c:150
-#, fuzzy
 msgid ""
 "Backspace will remove extra space to keep you aligned with your indentation"
-msgstr "‏Backspace ימחק רווחים מיותרים על מנת לשמור היישור עם רוחב ההזחה שלך."
+msgstr "‏Backspace ימחק רווחים מיותרים על מנת לשמור היישור עם רוחב ההזחה שלך"
 
 #: libide/preferences/ide-preferences-builtin.c:158
 msgid "Cursor"
@@ -1830,7 +1825,7 @@ msgstr "שחזור מיקום הסמן"
 
 #: libide/preferences/ide-preferences-builtin.c:159
 msgid "Restore cursor position when a file is reopened"
-msgstr "שחזור מיקום הסמן בעת פתיחת קובץ."
+msgstr "שחזור מיקום הסמן בעת פתיחת קובץ"
 
 #: libide/preferences/ide-preferences-builtin.c:160
 msgid "Scroll Offset"
@@ -1861,9 +1856,8 @@ msgid "Line changes"
 msgstr "שינויי שורות"
 
 #: libide/preferences/ide-preferences-builtin.c:165
-#, fuzzy
 msgid "Show if a line was added or modified next to line number"
-msgstr "הצגת סימן לצד מספר השורה המורה אם שורה נוספה או שונתה."
+msgstr "הצגת סימן לצד מספר השורה המורה אם שורה נוספה או שונתה"
 
 #: libide/preferences/ide-preferences-builtin.c:167
 msgid "Highlight"
@@ -1930,52 +1924,45 @@ msgid "Code Insight"
 msgstr "ניתוח קוד"
 
 #: libide/preferences/ide-preferences-builtin.c:191
-#, fuzzy
 msgid "Semantic Highlighting"
-msgstr "הדגשת שפה באופן סמנטי"
+msgstr "הדגשה תחבירית"
 
 #: libide/preferences/ide-preferences-builtin.c:191
 msgid ""
 "Use code insight to highlight additional information discovered in source "
 "file"
-msgstr ""
+msgstr "שימוש בבחינת הקוד להדגשת מידע נוסף שהתגלה בקובץ המקור"
 
 #: libide/preferences/ide-preferences-builtin.c:193
-#, fuzzy
 msgid "Completion"
-msgstr "השלמה אוטומטית"
+msgstr "השלמה"
 
 #: libide/preferences/ide-preferences-builtin.c:194
-#, fuzzy
 msgid "Suggest words found in open files"
-msgstr "הצעת השלמה של מילים הנמצאות בכל המסמכים הפתוחים."
+msgstr "הצעת מילים שנמצאו בקבצים הפתוחים"
 
 #: libide/preferences/ide-preferences-builtin.c:194
-#, fuzzy
 msgid ""
 "Suggests completions as you type based on words found in any open document"
-msgstr "הצעת השלמה של מילים הנמצאות בכל המסמכים הפתוחים."
+msgstr "הצגת השלמות בעת הקלדה בהתבסס על מילים שנמצאו באיזה מסמך פתוח"
 
 #: libide/preferences/ide-preferences-builtin.c:195
-#, fuzzy
 msgid "Suggest completions using Ctags"
-msgstr "הצעת השלמת מילים באמצעות Ctags"
+msgstr "הצעת השלמה באמצעות Ctags"
 
 #: libide/preferences/ide-preferences-builtin.c:195
 msgid ""
 "Create and manages a Ctags database for completing class names, functions, "
 "and more"
-msgstr ""
+msgstr "יצירה וניהול מסד נתוני Ctags עבור השלמת שמות מחלקה, פונקציות ועוד"
 
 #: libide/preferences/ide-preferences-builtin.c:196
-#, fuzzy
 msgid "Suggest completions using Clang (Experimental)"
-msgstr "הצעת השלמת מילים באמצעות Clang (ניסיוני)"
+msgstr "הצעת השלמה באמצעות Clang (ניסיוני)"
 
 #: libide/preferences/ide-preferences-builtin.c:196
-#, fuzzy
 msgid "Use Clang to suggest completions for C and C++ languages"
-msgstr "שימוש ב־Clang עבור השלמה אוטומטית בשפות C ו־C++‎."
+msgstr "שימוש ב־Clang עבור השלמה בשפות C ו־C++‎"
 
 #: libide/preferences/ide-preferences-builtin.c:198
 msgid "Diagnostics"
@@ -2022,7 +2009,6 @@ msgid "Overwrite Braces"
 msgstr "דריסת סוגרים"
 
 #: libide/preferences/ide-preferences-builtin.c:318
-#, fuzzy
 msgid "Overwrite closing braces"
 msgstr "דריסת סוגרים סוגרים"
 
@@ -2044,19 +2030,19 @@ msgstr "מיקום ברווחים עבור השוליים הימניים"
 
 #: libide/preferences/ide-preferences-builtin.c:325
 msgid "Tab width"
-msgstr "רוחב טבלר"
+msgstr "רוחב טאב"
 
 #: libide/preferences/ide-preferences-builtin.c:325
 msgid "Width of a tab character in spaces"
-msgstr "רוחב תו הטבלר ברווחים"
+msgstr "רוחב תו טאב ברווחים"
 
 #: libide/preferences/ide-preferences-builtin.c:326
 msgid "Insert spaces instead of tabs"
-msgstr "הכנסת רווחים במקום טבלרים."
+msgstr "הכנסת רווחים במקום טאבים"
 
 #: libide/preferences/ide-preferences-builtin.c:326
 msgid "Prefer spaces over use of tabs"
-msgstr "העדפת השימוש ברווחים על פני טבלרים"
+msgstr "העדפת השימוש ברווחים על פני טאבים"
 
 #: libide/preferences/ide-preferences-builtin.c:327
 msgid "Automatically indent"
@@ -2080,11 +2066,11 @@ msgstr "בנייה"
 # פועלי בניין
 #: libide/preferences/ide-preferences-builtin.c:378
 msgid "Build Workers"
-msgstr "פועלי בניין"
+msgstr "בנייה מקבילית"
 
 #: libide/preferences/ide-preferences-builtin.c:378
 msgid "Number of parallel build workers"
-msgstr "מספר פועלי בניין מקבילים"
+msgstr "מספר עיבודים מקבילים לבנייה"
 
 #: libide/preferences/ide-preferences-builtin.c:390
 msgid "Projects"
@@ -2097,7 +2083,7 @@ msgstr "מרחב עבודה"
 
 #: libide/preferences/ide-preferences-builtin.c:393
 msgid "A place for all your projects"
-msgstr "מקום עבור כל הפרוייקטים"
+msgstr "מקום עבור כל המיזמים"
 
 #: libide/preferences/ide-preferences-builtin.c:394
 msgid "Restore previously opened files"
@@ -2147,7 +2133,7 @@ msgstr "הקובץ חייב להיות בעץ המיזם."
 #: libide/projects/ide-recent-projects.c:396
 #, c-format
 msgid "%s() may only be executed once"
-msgstr "%s() ניתנת להפעלה פעם אחת בלבד"
+msgstr "‏%s() ניתנת להפעלה פעם אחת בלבד"
 
 #: libide/pygobject/ide-pygobject-script.c:135
 msgid "Attempt to load a PyGObject script with no filename."
@@ -2168,11 +2154,11 @@ msgstr "התסריט „%s” אינו קובץ PyGObject."
 
 #: libide/runner/ide-run-manager.c:171
 msgid "Run"
-msgstr "ריצה"
+msgstr "הרצה"
 
 #: libide/runner/ide-run-manager.c:200
 msgid "Cannot run target, another target is running"
-msgstr "לא ניתן להריץ את המטרה, מטרה נוספת בריצה."
+msgstr "לא ניתן להריץ את המטרה, מטרה נוספת בריצה"
 
 #: libide/runner/ide-run-manager.c:287
 #: plugins/autotools/ide-autotools-build-task.c:442
@@ -2235,7 +2221,7 @@ msgstr "שמירת ה_כל"
 
 #: libide/util/ide-file-manager.c:64
 msgid "File path is NULL"
-msgstr "נתיב הקובץ הוא אפס (NULL)"
+msgstr "נתיב הקובץ הוא NULL (ריק)"
 
 #: libide/util/ide-file-manager.c:73 libide/util/ide-file-manager.c:84
 msgid "Error converting UTF-8 filename to wide char"
@@ -2407,7 +2393,7 @@ msgstr "פתיחת קובץ"
 #: libide/workbench/ide-workbench.c:558
 #, c-format
 msgid "%s - Builder"
-msgstr "‏%s - ‏Builder"
+msgstr "‏%s – ‏Builder"
 
 #: libide/workbench/ide-workbench-header-bar.ui:43
 msgid "Transfers"
@@ -2415,11 +2401,11 @@ msgstr "העברות"
 
 #: libide/workbench/ide-workbench-header-bar.ui:50
 msgid "Show workbench menu"
-msgstr "חלון ספסל העבודה."
+msgstr "הצגת תפריט סביבת העבודה"
 
 #: libide/workbench/ide-workbench-header-bar.ui:73
 msgid "Press Ctrl+. to search"
-msgstr "יש ללחוץ Ctrl+. לחיפוש"
+msgstr "יש ללחוץ Ctrl+.‎ לחיפוש"
 
 #: plugins/autotools/ide-autotools-builder.c:47
 msgid "Build cancelled"
@@ -2466,13 +2452,12 @@ msgstr "איתור ההתקן נכשל."
 #: plugins/autotools/ide-autotools-build-task.c:562
 #: plugins/autotools/ide-autotools-build-task.c:590
 #: plugins/autotools/ide-autotools-build-task.c:794
-#, fuzzy
 msgid "Build Failed: "
-msgstr "בנייה נכשלה"
+msgstr "בנייה נכשלה:"
 
 #: plugins/autotools/ide-autotools-build-task.c:675
 msgid "Cannot execute build task more than once"
-msgstr "לא ניתן לבצע משימת בנייה יותר מפעם אחת."
+msgstr "לא ניתן לבצע משימת בנייה יותר מפעם אחת"
 
 #: plugins/autotools/ide-autotools-build-task.c:827
 msgid "Failed to create build directory."
@@ -2481,16 +2466,16 @@ msgstr "יצירת התיקייה build נכשלה"
 #: plugins/autotools/ide-autotools-build-task.c:836
 #, c-format
 msgid "'%s' is not a directory."
-msgstr "'%s' אינה תיקייה."
+msgstr "‏'%s' אינה תיקייה."
 
 #: plugins/autotools/ide-autotools-build-task.c:875
 #, c-format
 msgid "autogen.sh is missing from project directory (%s)."
-msgstr "autogen.sh חסר בתיקיית המיזם (%s)."
+msgstr "‏autogen.sh חסר בתיקיית המיזם (%s)."
 
 #: plugins/autotools/ide-autotools-build-task.c:885
 msgid "autogen.sh is not executable."
-msgstr "autogen.sh אינו בר־הרצה."
+msgstr "‏autogen.sh אינו בר הרצה."
 
 #: plugins/autotools/ide-autotools-build-task.c:889
 msgid "Running autogen…"
@@ -2500,7 +2485,7 @@ msgstr "מריץ autogen…"
 #: plugins/autotools/ide-autotools-build-task.c:923
 #, c-format
 msgid "autogen.sh failed to create configure (%s)"
-msgstr "autogen.sh נכשל ביצירת configure (%s)"
+msgstr "‏autogen.sh נכשל ביצירת configure ‏‏(%s)"
 
 #: plugins/autotools/ide-autotools-build-task.c:958
 msgid "Running configure…"
@@ -2516,11 +2501,11 @@ msgstr "סופק makefile לא תקף, מתעלם."
 
 #: plugins/autotools-templates/autotools_templates/__init__.py:265
 msgid "Shared Library"
-msgstr "ספריה משותפת"
+msgstr "ספרייה משותפת"
 
 #: plugins/autotools-templates/autotools_templates/__init__.py:267
 msgid "Create a new autotools project with a shared library"
-msgstr ""
+msgstr "יצירת מיזם autotools חדש עם ספרייה משותפת"
 
 #: plugins/autotools-templates/autotools_templates/__init__.py:291
 msgid "Empty Project"
@@ -2528,7 +2513,7 @@ msgstr "מיזם ריק"
 
 #: plugins/autotools-templates/autotools_templates/__init__.py:294
 msgid "Create a new empty autotools project"
-msgstr ""
+msgstr "יצירת מיזם autotools ריק"
 
 #: plugins/autotools-templates/autotools_templates/__init__.py:308
 msgid "GNOME Application"
@@ -2536,7 +2521,7 @@ msgstr "יישום GNOME"
 
 #: plugins/autotools-templates/autotools_templates/__init__.py:310
 msgid "Create a new flatpak-ready GNOME application"
-msgstr ""
+msgstr "יצירת יישם GNOME מוכן עם flatpak"
 
 #: plugins/build-tools/gbp-build-configuration-row.ui:43
 msgid "Duplicate the configuration"
@@ -2564,7 +2549,7 @@ msgstr "תחילית התקנה"
 
 #: plugins/build-tools/gbp-build-configuration-view.ui:88
 msgid "Options to use when bootstrapping the project"
-msgstr ""
+msgstr "אפשרויות לשימוש בעת אתחול המיזם"
 
 #: plugins/build-tools/gbp-build-configuration-view.ui:97
 msgid "Configure Options"
@@ -3184,7 +3169,7 @@ msgid ""
 "resources. Should be in lower case without spaces and may not start with a "
 "number."
 msgstr ""
-"שם ייחודי המשמש עבור תיקיית המיזם ומשאבים תכניים נוספים. עליו להיות באותיות "
+"שם ייחודי המשמש עבור תיקיית המיזם ומשאבים טכניים נוספים. עליו להיות באותיות "
 "קטנות ללא רווחים ואינו יכול להתחיל במספר."
 
 #: plugins/create-project/gbp-create-project-widget.ui:74
@@ -3455,11 +3440,11 @@ msgstr "בנייה מ_חדש"
 
 #: plugins/project-tree/gtk/menus.ui:81
 msgid "Display Options"
-msgstr "הצגת אפשרויות"
+msgstr "אפשרויות תצוגה"
 
 #: plugins/project-tree/gtk/menus.ui:92
 msgid "Sort Directories First"
-msgstr "סידור תיקיות קודם"
+msgstr "סידור תיקייות לפני קבצים"
 
 #: plugins/project-tree/gtk/menus.ui:98
 msgid "_Collapse All Nodes"
