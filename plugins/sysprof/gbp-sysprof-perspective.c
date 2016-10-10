@@ -28,6 +28,8 @@ struct _GbpSysprofPerspective
 {
   GtkBin                parent_instance;
 
+  SpCaptureReader      *reader;
+
   GtkStack             *stack;
   SpCallgraphView      *callgraph_view;
   GtkLabel             *info_bar_label;
@@ -38,7 +40,8 @@ struct _GbpSysprofPerspective
   SpZoomManager        *zoom_manager;
 };
 
-static void perspective_iface_init (IdePerspectiveInterface *iface);
+static void perspective_iface_init         (IdePerspectiveInterface *iface);
+static void gbp_sysprof_perspective_reload (GbpSysprofPerspective   *self);
 
 G_DEFINE_TYPE_EXTENDED (GbpSysprofPerspective, gbp_sysprof_perspective, GTK_TYPE_BIN, 0,
                         G_IMPLEMENT_INTERFACE (IDE_TYPE_PERSPECTIVE, perspective_iface_init))
@@ -53,9 +56,32 @@ hide_info_bar (GbpSysprofPerspective *self,
 }
 
 static void
+gbp_sysprof_perspective_selection_changed (GbpSysprofPerspective *self,
+                                           SpVisualizerSelection *selection)
+{
+  g_assert (GBP_IS_SYSPROF_PERSPECTIVE (self));
+  g_assert (SP_IS_VISUALIZER_SELECTION (selection));
+
+  gbp_sysprof_perspective_reload (self);
+}
+
+static void
+gbp_sysprof_perspective_finalize (GObject *object)
+{
+  GbpSysprofPerspective *self = (GbpSysprofPerspective *)object;
+
+  g_clear_pointer (&self->reader, sp_capture_reader_unref);
+
+  G_OBJECT_CLASS (gbp_sysprof_perspective_parent_class)->finalize (object);
+}
+
+static void
 gbp_sysprof_perspective_class_init (GbpSysprofPerspectiveClass *klass)
 {
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+  object_class->finalize = gbp_sysprof_perspective_finalize;
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/plugins/sysprof-plugin/gbp-sysprof-perspective.ui");
   gtk_widget_class_bind_template_child (widget_class, GbpSysprofPerspective, callgraph_view);
@@ -78,11 +104,21 @@ gbp_sysprof_perspective_class_init (GbpSysprofPerspectiveClass *klass)
 static void
 gbp_sysprof_perspective_init (GbpSysprofPerspective *self)
 {
+  SpVisualizerSelection *selection;
+
   gtk_widget_init_template (GTK_WIDGET (self));
 
   g_signal_connect_object (self->info_bar_close,
                            "clicked",
                            G_CALLBACK (hide_info_bar),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  selection = sp_visualizer_view_get_selection (self->visualizers);
+
+  g_signal_connect_object (selection,
+                           "changed",
+                           G_CALLBACK (gbp_sysprof_perspective_selection_changed),
                            self,
                            G_CONNECT_SWAPPED);
 }
@@ -148,6 +184,32 @@ generate_cb (GObject      *object,
   sp_callgraph_view_set_profile (self->callgraph_view, profile);
 }
 
+static void
+gbp_sysprof_perspective_reload (GbpSysprofPerspective *self)
+{
+  SpVisualizerSelection *selection;
+  g_autoptr(SpProfile) profile = NULL;
+
+  g_assert (GBP_IS_SYSPROF_PERSPECTIVE (self));
+
+  if (self->reader == NULL)
+    return;
+
+  /* If we failed, ignore the (probably mostly empty) reader */
+  if (g_strcmp0 (gtk_stack_get_visible_child_name (self->stack), "failed") == 0)
+    return;
+
+  selection = sp_visualizer_view_get_selection (self->visualizers);
+  profile = sp_callgraph_profile_new_with_selection (selection);
+
+  sp_profile_set_reader (profile, self->reader);
+  sp_profile_generate (profile, NULL, generate_cb, g_object_ref (self));
+
+  sp_visualizer_view_set_reader (self->visualizers, self->reader);
+
+  gtk_stack_set_visible_child_name (self->stack, "results");
+}
+
 SpCaptureReader *
 gbp_sysprof_perspective_get_reader (GbpSysprofPerspective *self)
 {
@@ -160,29 +222,29 @@ void
 gbp_sysprof_perspective_set_reader (GbpSysprofPerspective *self,
                                     SpCaptureReader       *reader)
 {
-  g_autoptr(SpProfile) profile = NULL;
-
   g_assert (GBP_IS_SYSPROF_PERSPECTIVE (self));
 
-  if (reader == NULL)
+  if (reader != self->reader)
     {
-      sp_callgraph_view_set_profile (self->callgraph_view, NULL);
-      sp_visualizer_view_set_reader (self->visualizers, NULL);
-      gtk_stack_set_visible_child_name (self->stack, "empty");
-      return;
+      SpVisualizerSelection *selection;
+
+      if (self->reader != NULL)
+        {
+          g_clear_pointer (&self->reader, sp_capture_reader_unref);
+          sp_callgraph_view_set_profile (self->callgraph_view, NULL);
+          sp_visualizer_view_set_reader (self->visualizers, NULL);
+          gtk_stack_set_visible_child_name (self->stack, "empty");
+        }
+
+      selection = sp_visualizer_view_get_selection (self->visualizers);
+      sp_visualizer_selection_unselect_all (selection);
+
+      if (reader != NULL)
+        {
+          self->reader = sp_capture_reader_ref (reader);
+          gbp_sysprof_perspective_reload (self);
+        }
     }
-
-  /* If we failed, ignore the (probably mostly empty) reader */
-  if (g_strcmp0 (gtk_stack_get_visible_child_name (self->stack), "failed") == 0)
-    return;
-
-  profile = sp_callgraph_profile_new ();
-  sp_profile_set_reader (profile, reader);
-  sp_profile_generate (profile, NULL, generate_cb, g_object_ref (self));
-
-  sp_visualizer_view_set_reader (self->visualizers, reader);
-
-  gtk_stack_set_visible_child_name (self->stack, "results");
 }
 
 static void
