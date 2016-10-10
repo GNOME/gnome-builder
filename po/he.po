@@ -2,8 +2,8 @@
 # Copyright (C) 2015 THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # יוֹסֵף אוֹר בּוֹצְ׳קוֹ <yoseforb@gnome.org>, 2015.
-# Yosef Or Boczko <yoseforb@gnome.org>, 2015.
 # Niv Baehr <bloop93@gmail.com>, 2016.
+# Yosef Or Boczko <yoseforb@gnome.org>, 2015, 2016.
 #
 msgid ""
 msgstr ""
@@ -11,14 +11,14 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder\n"
 "POT-Creation-Date: 2016-10-09 20:33+0300\n"
-"PO-Revision-Date: 2016-10-10 16:08+0300\n"
-"Last-Translator: Yosef Or Boczko <yoseforb@gmail.com>\n"
+"PO-Revision-Date: 2016-10-10 16:56+0300\n"
+"Last-Translator: Yosef Or Boczko <yoseforb@gnome.org>\n"
 "Language-Team: עברית <>\n"
 "Language: he\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n==1 ? 0 : n==2 ? 2 : 1;\n"
+"Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n>2||n==0) ? 1 : 2;\n"
 "X-Generator: Gtranslator 2.91.7\n"
 
 #: contrib/egg/egg-animation.c:726 contrib/pnl/pnl-animation.c:701
@@ -158,7 +158,7 @@ msgstr "לא ניתן לפתוח את %s\n"
 #: contrib/gstyle/gstyle-palette.c:765
 #, c-format
 msgid "%s: This file format is not supported\n"
-msgstr "%s: פורמט קובץ זה אינו נתמך\n"
+msgstr "‏%s: תבנית קובץ זה אינו נתמך\n"
 
 #: contrib/gstyle/gstyle-palette.c:822
 msgid "failed to parse\n"
@@ -337,7 +337,7 @@ msgstr "סדר מעבר %u אינו נתמך על Trie."
 #: contrib/tmpl/tmpl-parser.c:199
 #, c-format
 msgid "%s() may only be called once"
-msgstr "%s() ניתנת לקריאה פעם אחת בלבד"
+msgstr "‏%s()‎ ניתנת לקריאה פעם אחת בלבד"
 
 #: contrib/tmpl/tmpl-parser.c:211
 msgid "Parser does not contain an input stream"
@@ -359,15 +359,15 @@ msgstr "לא ניתן לנתח XML מערוץ"
 # פעולת בנייה במקביל, מקביליות בנייה
 #: data/gsettings/org.gnome.builder.build.gschema.xml:6
 msgid "Build Parallelism"
-msgstr "בנייה מקבילית"
+msgstr "Build Parallelism"
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:7
 msgid ""
 "Number of workers to use when performing builds. -1 for sensible default. 0 "
 "for number of CPU."
 msgstr ""
-"מספר הפועלים לשימוש בעת ביצוע בנייה. -1 עבור ברירת מחדל נבונה. 0 עבור מספר "
-"המעבדים."
+"Number of workers to use when performing builds. -1 for sensible default. 0 "
+"for number of CPU."
 
 #: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:5
 msgid "Suggest Snippet Completion"
@@ -375,70 +375,75 @@ msgstr "הצעת השלמת קטעי קוד"
 
 #: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:6
 msgid "Allow snippets to be inserted into the document."
-msgstr "מתן רשות להכנסת קטעי קוד לתוך המסמך."
+msgstr "Allow snippets to be inserted into the document."
 
 #: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:10
 msgid "Clang based autocompletion (Experimental)"
-msgstr "השלמה אוטומטית מבוססת Clang (נסיוני)"
+msgstr "Clang based autocompletion (Experimental)"
 
 #: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:11
 msgid "Use Clang for autocompletion in the C and C++ languages."
-msgstr "שימוש ב־Clang עבור השלמה אוטומטית בשפות C ו־C++‎."
+msgstr "Use Clang for autocompletion in the C and C++ languages."
 
 #: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:15
 msgid "Ctags based autocompletion"
-msgstr "השלמה אוטומטית מבוססת Ctags"
+msgstr "Ctags based autocompletion"
 
 #: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:16
 msgid "Use Ctags for autocompletion."
-msgstr "שימוש ב־Ctags עבור השלמה אוטומטית."
+msgstr "Use Ctags for autocompletion."
 
 #: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:20
 msgid "Enable auto-completion of words in document"
-msgstr "אפשור השלמה אוטומטית של מילים במסמך"
+msgstr "Enable auto-completion of words in document"
 
 #: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:21
 msgid ""
 "If enabled, words within the current document will be available for auto-"
 "completion."
-msgstr "אם פעיל, מילים במסמך הנוכחי יהיו זמינות להשלמה אוטומטית."
+msgstr ""
+"If enabled, words within the current document will be available for auto-"
+"completion."
 
 #: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:25
 msgid "Enable semantic highlighting"
-msgstr "הדגשת שפה באופן סמנטי"
+msgstr "Enable semantic highlighting"
 
 #: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:26
 msgid ""
 "If enabled, additional highlighting will be provided in supported languages "
 "based on information extracted from the source code."
 msgstr ""
-"אם פעיל, תסופק הדגשה נוספת בשפת הנתמכות המבוססת על מידע המחולץ מקוד המקור."
+"If enabled, additional highlighting will be provided in supported languages "
+"based on information extracted from the source code."
 
 #: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:30
 msgid "Path to ctags executable"
-msgstr "נתיב ליישום ctags."
+msgstr "Path to ctags executable"
 
 #: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:31
 msgid "The path to the ctags executable on the system."
-msgstr "הנתיב ליישום ctags במערכת."
+msgstr "The path to the ctags executable on the system."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:24
 msgid "Restore last position"
-msgstr "שחזור מצב אחרון"
+msgstr "Restore last position"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:25
 msgid "Jump to the last position when reopening a file"
-msgstr "קפיצה למצב האחרון בעת פתיחה מחדש של הקובץ"
+msgstr "Jump to the last position when reopening a file"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:29
 msgid "Show modified lines"
-msgstr "הצגת השורות שהשתנו"
+msgstr "Show modified lines"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:30
 msgid ""
 "If enabled, the editor will show line additions and changes next to the "
 "source code."
-msgstr "אם פעיל, העורך יציג שורות שנוספו ושינויים בסמוך לקוד המקור."
+msgstr ""
+"If enabled, the editor will show line additions and changes next to the "
+"source code."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:34
 #: libide/editor/ide-editor-tweak-widget.ui:74
@@ -447,26 +452,26 @@ msgstr "הדגשת השורה הנוכחית"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:35
 msgid "If enabled, the editor will highlight the line containing the cursor."
-msgstr "אם פעיל, העורך ידגיש את השורה המכילה את הסמן."
+msgstr "If enabled, the editor will highlight the line containing the cursor."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:39
 msgid "Highlight matching brackets"
-msgstr "הדגשת הסוגר התואם"
+msgstr "Highlight matching brackets"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:40
 msgid "If enabled, the editor will highlight matching brackets."
-msgstr "אם מאופשר, העורך ידגיש את הסוגר התואם."
+msgstr "If enabled, the editor will highlight matching brackets."
 
 # הערות:
 # הוספת הערה
 # vmd, 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:44
 msgid "Show line numbers"
-msgstr "הצגת מספרי שורות"
+msgstr "Show line numbers"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:45
 msgid "If enabled, the editor will show line numbers."
-msgstr "אם פעיל, העורך יציג מספרי שורות."
+msgstr "If enabled, the editor will show line numbers."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:49
 #: libide/editor/ide-editor-tweak-widget.ui:91
@@ -478,7 +483,9 @@ msgstr "מקש Backspace חכם"
 msgid ""
 "Backspace will remove additional spaces to keep you aligned to the "
 "indentation size."
-msgstr "מקש הֻ־Backspace יסיר רווחים נוספים על מנת לשמור על יישור לגודל ההזחה."
+msgstr ""
+"Backspace will remove additional spaces to keep you aligned to the "
+"indentation size."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:54
 #: libide/preferences/ide-preferences-builtin.c:149
@@ -487,15 +494,15 @@ msgstr "מקשי Home ו־End חכמים"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:55
 msgid "Whether or not Home moves to first non-space character."
-msgstr "האם על המקש Home לעבור לתו הראשון שאינו רווח."
+msgstr "Whether or not Home moves to first non-space character."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:59
 msgid "Show grid lines"
-msgstr "הצגת תבנית רשת"
+msgstr "Show grid lines"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:60
 msgid "If enabled, the editor will show grid lines in the document."
-msgstr "אם פעיל, העורך יציג את קווי תבנית הרשת במסמך."
+msgstr "If enabled, the editor will show grid lines in the document."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:74
 #: libide/preferences/ide-preferences-builtin.c:172
@@ -506,27 +513,29 @@ msgstr "הצגת מפת סקירה"
 msgid ""
 "If enabled, Builder will display an overview map of the source file next to "
 "the editor."
-msgstr "אם פעיל, Builder יציג מפת סקירה של קובץ המקור בסמוך לעורך."
+msgstr ""
+"If enabled, Builder will display an overview map of the source file next to "
+"the editor."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:79
 msgid "Automatically Hide Overview Map"
-msgstr "הסתרה אוטומטית של מפת הסקירה"
+msgstr "Automatically Hide Overview Map"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:80
 msgid ""
 "If enabled, Builder will automatically hide the overview map when mouse "
 "focus leaves the editor, or a timeout occurs."
 msgstr ""
-"אם פעיל, Builder יסתיר את מפת הסקירה באופן אוטומטי כאשר מוקד העכבר עוזב  את "
-"העורך, או שאירע פסק זמן."
+"If enabled, Builder will automatically hide the overview map when mouse "
+"focus leaves the editor, or a timeout occurs."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:84
 msgid "Draw Spaces"
-msgstr "ציור רווחים"
+msgstr "Draw Spaces"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:85
 msgid "The various types of space to draw in the editor."
-msgstr "סוגי הרווח השונים לציור בעורך."
+msgstr "The various types of space to draw in the editor."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:90
 #: libide/preferences/ide-preferences-builtin.c:161
@@ -535,7 +544,7 @@ msgstr "גלילת יתר"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:91
 msgid "The number of lines to scroll beyond the end of the buffer."
-msgstr "מספר השורות שיש לגלול מעבר לסוף החוצץ."
+msgstr "The number of lines to scroll beyond the end of the buffer."
 
 #: data/gsettings/org.gnome.builder.extension-type.gschema.xml:5
 #: data/gsettings/org.gnome.builder.plugin.gschema.xml:5
@@ -543,52 +552,50 @@ msgid "Enabled"
 msgstr "פעיל"
 
 #: data/gsettings/org.gnome.builder.extension-type.gschema.xml:6
-#, fuzzy
 msgid "If the type within the extension is enabled."
-msgstr "אם הסוג בתוך ההרחבה מאופשר."
+msgstr "If the type within the extension is enabled."
 
 #: data/gsettings/org.gnome.builder.gschema.xml:5
 msgid "Window size"
-msgstr "גודל חלון"
+msgstr "Window size"
 
 #: data/gsettings/org.gnome.builder.gschema.xml:6
 msgid "Window size (width and height)."
-msgstr "גודל חלון (רוחב וגובה)"
+msgstr "Window size (width and height)."
 
 #: data/gsettings/org.gnome.builder.gschema.xml:10
 msgid "Window position"
-msgstr "מיקום החלון"
+msgstr "Window position"
 
 #: data/gsettings/org.gnome.builder.gschema.xml:11
 msgid "Window position (x and y)."
-msgstr "מיקום החלון (x ו־y)"
+msgstr "Window position (x and y)."
 
 #: data/gsettings/org.gnome.builder.gschema.xml:15
 msgid "Window maximized"
-msgstr "חלון מוגדל"
+msgstr "Window maximized"
 
 #: data/gsettings/org.gnome.builder.gschema.xml:16
 msgid "Window maximized state"
-msgstr "מצב הגדלת חלון"
+msgstr "Window maximized state"
 
 #: data/gsettings/org.gnome.builder.gschema.xml:20
 msgid "Night Mode"
-msgstr "מצב לילה"
+msgstr "Night Mode"
 
 #: data/gsettings/org.gnome.builder.gschema.xml:21
-#, fuzzy
 msgid "Prefer dark application chrome."
-msgstr "שימוש בצבעים כהים עבור מעטפת היישום."
+msgstr "Prefer dark application chrome."
 
 # כריית מיזמים
 #: data/gsettings/org.gnome.builder.gschema.xml:25
 msgid "Mine projects"
-msgstr "גילוי מיזמים"
+msgstr "Mine projects"
 
 # חיפוש מיזמים בתיקיות.
 #: data/gsettings/org.gnome.builder.gschema.xml:26
 msgid "Search directories for projects."
-msgstr "חיפוש בתיקיות אחר מיזמים."
+msgstr "Search directories for projects."
 
 #: data/gsettings/org.gnome.builder.gschema.xml:30
 #: libide/preferences/ide-preferences-builtin.c:393
@@ -597,24 +604,23 @@ msgstr "תיקיית המיזמים"
 
 #: data/gsettings/org.gnome.builder.gschema.xml:31
 msgid "Directory for all Builder projects."
-msgstr "תיקייה עבור כל מיזמי Builder."
+msgstr "Directory for all Builder projects."
 
 #: data/gsettings/org.gnome.builder.gschema.xml:35
 msgid "Restore Previous Files"
-msgstr "שחזור קבצים קודמים"
+msgstr "Restore Previous Files"
 
 #: data/gsettings/org.gnome.builder.gschema.xml:36
 msgid "Restore previously opened files when loading a project."
-msgstr "שחזור הקבצים הפתוחים בעת טעינת מיזם."
+msgstr "Restore previously opened files when loading a project."
 
 #: data/gsettings/org.gnome.builder.plugin.gschema.xml:6
-#, fuzzy
 msgid "If the plugin should be enabled"
-msgstr "אם התוסף מאופשר"
+msgstr "If the plugin should be enabled"
 
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:5
 msgid "Show Project Sidebar"
-msgstr "הצגת סרגל הצד של המיזם"
+msgstr "Show Project Sidebar"
 
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:6
 msgid "If enabled, the sidebar will be visible in the editor workspace."
@@ -626,9 +632,8 @@ msgid "Show Icons"
 msgstr "הצגת צלמיות"
 
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:11
-#, fuzzy
 msgid "If enabled, the project tree will display icons next to each item."
-msgstr "If enabled, the sidebar will display icons next to each item."
+msgstr "If enabled, the project tree will display icons next to each item."
 
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:15
 #: plugins/project-tree/gtk/menus.ui:88
@@ -636,61 +641,58 @@ msgid "Show Ignored Files"
 msgstr "הצגת קבצים מועלמים"
 
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:16
-#, fuzzy
 msgid ""
 "If enabled, the project tree will display files that are ignored by the VCS."
-msgstr "If enabled, the sidebar will display icons next to each item."
+msgstr ""
+"If enabled, the project tree will display files that are ignored by the VCS."
 
 #: data/gsettings/org.gnome.builder.workbench.gschema.xml:5
 msgid "Show Left Panel"
-msgstr "הצגת הלוח השמאלי"
+msgstr "Show Left Panel"
 
 #: data/gsettings/org.gnome.builder.workbench.gschema.xml:6
-#, fuzzy
 msgid "If enabled, the left panel will be displayed."
-msgstr "If enabled, the sidebar will be visible in the editor workspace."
+msgstr "If enabled, the left panel will be displayed."
 
 #: data/gsettings/org.gnome.builder.workbench.gschema.xml:11
 msgid "Left Panel Position"
-msgstr "מיקום הלוח השמאלי"
+msgstr "Left Panel Position"
 
 #: data/gsettings/org.gnome.builder.workbench.gschema.xml:12
 msgid "The width in pixel units of the left panel."
-msgstr "רוחב הלוח השמאלי בפיקסלים."
+msgstr "The width in pixel units of the left panel."
 
 #: data/gsettings/org.gnome.builder.workbench.gschema.xml:17
 msgid "Show Right Panel"
-msgstr "הצגת הלוח הימני"
+msgstr "Show Right Panel"
 
 #: data/gsettings/org.gnome.builder.workbench.gschema.xml:18
-#, fuzzy
 msgid "If enabled, the right panel will be displayed."
-msgstr "If enabled, the sidebar will be visible in the editor workspace."
+msgstr "If enabled, the right panel will be displayed."
 
 #: data/gsettings/org.gnome.builder.workbench.gschema.xml:23
 msgid "Right Panel Position"
-msgstr "מיקום הלוח הימני"
+msgstr "Right Panel Position"
 
 #: data/gsettings/org.gnome.builder.workbench.gschema.xml:24
 msgid "The width in pixel units of the right panel."
-msgstr "רוחב הלוח הימני בפיקסלים."
+msgstr "The width in pixel units of the right panel."
 
 #: data/gsettings/org.gnome.builder.workbench.gschema.xml:29
 msgid "Show Bottom Panel"
-msgstr "הצגת הלוח התחתון"
+msgstr "Show Bottom Panel"
 
 #: data/gsettings/org.gnome.builder.workbench.gschema.xml:30
-#, fuzzy
 msgid "If enabled, the bottom panel will be displayed."
-msgstr "If enabled, the sidebar will be visible in the editor workspace."
+msgstr "If enabled, the bottom panel will be displayed."
 
 #: data/gsettings/org.gnome.builder.workbench.gschema.xml:35
 msgid "Bottom Panel Position"
-msgstr "מיקום הלוח התחתון"
+msgstr "Bottom Panel Position"
 
 #: data/gsettings/org.gnome.builder.workbench.gschema.xml:36
 msgid "The height in pixel units of the bottom panel."
-msgstr "גובה הלוח התחתון בפיקסלים."
+msgstr "The height in pixel units of the bottom panel."
 
 #: data/gtk/menus.ui:7
 msgid "_New Project"
@@ -706,7 +708,7 @@ msgstr "ה_עדפות"
 
 #: data/gtk/menus.ui:26
 msgid "Keyboard _Shortcuts"
-msgstr "_קיצורי מקלדת"
+msgstr "_צירופי מקשים"
 
 #: data/gtk/menus.ui:30
 msgid "_Help"
@@ -722,15 +724,15 @@ msgstr "_יציאה"
 
 #: data/gtk/menus.ui:48
 msgid "Show left panel"
-msgstr "הצגת הלוח משמאל"
+msgstr "הצגת הלוח שמשמאל"
 
 #: data/gtk/menus.ui:53
 msgid "Show bottom panel"
-msgstr "הצגת הלוח בתחתית"
+msgstr "הצגת הלוח שבתחתית"
 
 #: data/gtk/menus.ui:58
 msgid "Show right panel"
-msgstr "הצגת הלוח מימין"
+msgstr "הצגת הלוח שמימין"
 
 #: data/gtk/menus.ui:86
 msgid "_New File"
@@ -790,19 +792,19 @@ msgstr "_ניקוי בחירה"
 
 #: data/gtk/menus.ui:168
 msgid "All _Upper Case"
-msgstr "הכל לאותיות _רישיות"
+msgstr "הכול לאותיות _רישיות"
 
 #: data/gtk/menus.ui:173
 msgid "All _Lower Case"
-msgstr "הכל לאותיות _קטנות"
+msgstr "הכול לאותיות _קטנות"
 
 #: data/gtk/menus.ui:178
 msgid "_Invert Case"
-msgstr "_הפיכת רישיות"
+msgstr "ה_חלפה בין אותיות רישיות וקטנות"
 
 #: data/gtk/menus.ui:183
 msgid "_Title Case"
-msgstr "רישיות _כותרת"
+msgstr "_אות רישית בראש מילה"
 
 #: data/gtk/menus.ui:190
 msgid "Join Lines"
@@ -830,7 +832,7 @@ msgstr "איפוס"
 
 #: data/gtk/menus.ui:227
 msgid "_Wrap Around"
-msgstr ""
+msgstr "_גלישה מסביב"
 
 #: data/gtk/menus.ui:233
 msgid "Cu_t"
@@ -900,7 +902,7 @@ msgid ""
 "as GTK+, GLib, and GNOME APIs with features that any developer will "
 "appreciate, like syntax highlighting and snippets."
 msgstr ""
-"Builder היא סביבת פיתוח משולבת עבור GNOME בשלבי פיתוח פעיל. מאחדת תמיכה "
+"‏Builder היא סביבת פיתוח משולבת עבור GNOME בשלבי פיתוח פעיל. מאחדת תמיכה "
 "משולבת עבור טכנולוגיות GNOME חיוניות כגון GTK+, GLib וממשקי תכנות יישומים "
 "(API) של GNOME עם תכונות אותן יעריך כל מפתח, כמו הדגשת תחביר וקטעי קוד."
 
@@ -934,19 +936,19 @@ msgstr "שילוב עם Autotools"
 
 #: data/org.gnome.Builder.appdata.xml.in:27
 msgid "Clang based auto-completion, semantic highlighting, and diagnostics"
-msgstr ""
+msgstr "אבחנה, הדגשה תחבירית והשלמה אוטומטית מבוססי Clang"
 
 #: data/org.gnome.Builder.appdata.xml.in:28
 msgid "Python based auto-completion, semantic highlighting, and diagnostics"
-msgstr ""
+msgstr "אבחנה, הדגשה תחבירית והשלמה אוטומטית מבוססי Python"
 
 #: data/org.gnome.Builder.appdata.xml.in:29
 msgid "Vala based auto-completion and diagnostics"
-msgstr ""
+msgstr "אבחנה והשלמה אוטומטית מבוססי Vala"
 
 #: data/org.gnome.Builder.appdata.xml.in:30
 msgid "Auto indentation support for C, Python, Vala, and XML"
-msgstr ""
+msgstr "הזחה אוטומטית נמתכת עבור C, Python, Vala ו־XML"
 
 #: data/org.gnome.Builder.appdata.xml.in:31
 msgid "HTML/Markdown live preview"
@@ -954,7 +956,7 @@ msgstr "תצוגה מקדימה חיה של HTML/Markdown"
 
 #: data/org.gnome.Builder.appdata.xml.in:32
 msgid "Optional Vim-style editing"
-msgstr ""
+msgstr "אפשרות עריכה בסגנון Vim"
 
 #: data/org.gnome.Builder.appdata.xml.in:33
 msgid "An integrated software profiler for native applications"
@@ -962,11 +964,11 @@ msgstr ""
 
 #: data/org.gnome.Builder.appdata.xml.in:34
 msgid "Support for building with jhbuild"
-msgstr ""
+msgstr "תמיכה עבור בנייה עם jhbuild"
 
 #: data/org.gnome.Builder.appdata.xml.in:35
 msgid "Preview support for building with Flatpak runtimes"
-msgstr ""
+msgstr "תמיכה ראשונית עבור בנייה עם Flatpak בזמן ריצה"
 
 #: data/org.gnome.Builder.appdata.xml.in:44
 msgid "Fast global search"
@@ -983,12 +985,12 @@ msgstr "בניית תכנה עבור GNOME"
 #. Translators: Do NOT translate or transliterate this text (this is an icon file name)!
 #: data/org.gnome.Builder.desktop.in.in:7
 msgid "org.gnome.Builder"
-msgstr "org.gnome.Builder"
+msgstr ""
 
 #. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
 #: data/org.gnome.Builder.desktop.in.in:14
 msgid "Build;Develop;"
-msgstr ""
+msgstr "בנייה;פיתוח;סביבת עבודה משולבת;IDE;Builder;קוד;תכנות;"
 
 #: libide/application/ide-application-actions.c:122
 msgid "GNOME Builder"
@@ -1057,7 +1059,7 @@ msgstr "אין פקודות זמינות"
 
 #: libide/application/ide-application-command-line.c:365
 msgid "Please provide a command"
-msgstr ""
+msgstr "יש לספק פקודה"
 
 #: libide/application/ide-application-command-line.c:375
 msgid "No such tool"
@@ -1073,7 +1075,7 @@ msgstr ""
 
 #: libide/application/ide-application-command-line.c:405
 msgid "No such worker"
-msgstr "לא קיים פועל כזה"
+msgstr ""
 
 #: libide/buffers/ide-buffer.c:2473
 msgid "The current language lacks a symbol resolver."
@@ -1081,7 +1083,7 @@ msgstr "השפה הנוכחית חסרה מאחזר סמלים."
 
 #: libide/buffers/ide-buffer-manager.c:633
 msgid "File too large to be opened."
-msgstr "File too large to be opened."
+msgstr "הקובץ גדול מדי כך שלא ניתן לפתוח אותו."
 
 #: libide/buffers/ide-buffer-manager.c:1483
 msgid "Words"
@@ -1102,9 +1104,8 @@ msgid "%s does not support building"
 msgstr "המיזם %s אינו תומך בבנייה"
 
 #: libide/buildsystem/ide-build-manager.c:478
-#, fuzzy
 msgid "A build is already in progress"
-msgstr "בנייה כבר בתהליך"
+msgstr "כבר מתרחשת בנייה"
 
 #: libide/buildsystem/ide-build-manager.c:772
 msgid "Ready"
@@ -1121,13 +1122,13 @@ msgstr "Failed to open stdout stream."
 #: libide/buildsystem/ide-build-system.c:125
 #, c-format
 msgid "%s() is not supported on %s build system."
-msgstr "%s() אינו נתמך על מערכת הבנייה %s."
+msgstr "‏%s() אינו נתמך על מערכת הבנייה %s."
 
 #: libide/buildsystem/ide-configuration-manager.c:483
 #: libide/preferences/ide-preferences-builtin.c:337
 #: libide/preferences/ide-preferences-builtin.c:355
 msgid "Default"
-msgstr "בררת מחדל"
+msgstr "ברירת מחדל"
 
 #: libide/devices/ide-device-manager.c:147
 #, c-format
@@ -1215,7 +1216,6 @@ msgstr "מעבר לשורה"
 
 #: libide/editor/ide-editor-layout-stack-controls.ui:115
 #: libide/editor/ide-editor-view.ui:101
-#, fuzzy
 msgid "Go"
 msgstr "מעבר"
 
@@ -1231,7 +1231,7 @@ msgstr "אין קבצים פתוחים"
 
 #: libide/editor/ide-editor-perspective.ui:40
 msgid "Try opening a file by typing in the search box at the top"
-msgstr ""
+msgstr "יש לנסות לפתוח קובץ על ידי הזנה בתיבת החיפוש למעלה"
 
 #: libide/editor/ide-editor-tweak-widget.ui:22
 msgid "Search highlight mode…"
@@ -1262,7 +1262,7 @@ msgstr "רווחים"
 #: libide/editor/ide-editor-tweak-widget.ui:137
 #: libide/preferences/ide-preferences-builtin.c:177
 msgid "Tabs"
-msgstr "טבלרים"
+msgstr "טאב"
 
 #: libide/editor/ide-editor-tweak-widget.ui:157
 msgid "2"
@@ -1362,7 +1362,7 @@ msgstr "חזרה לבחירת מיזם"
 #: libide/gsettings/ide-language-defaults.c:178
 #, c-format
 msgid "%s contained invalid ASCII"
-msgstr "%s מכיל ASCII לא תקף"
+msgstr "‏%s מכיל תו ASCII לא תקף"
 
 #: libide/gsettings/ide-language-defaults.c:193
 #, c-format
@@ -1410,7 +1410,7 @@ msgstr "No implementations of extension point."
 #: libide/keybindings/ide-shortcuts-window.ui:10
 msgctxt "shortcut window"
 msgid "Editor Shortcuts"
-msgstr "קיצורי עורך"
+msgstr "צירופי מקשים לעורך"
 
 #: libide/keybindings/ide-shortcuts-window.ui:14
 #: libide/keybindings/ide-shortcuts-window.ui:423
@@ -1446,7 +1446,7 @@ msgstr "מסוף"
 #: libide/keybindings/ide-shortcuts-window.ui:455
 msgctxt "shortcut window"
 msgid "Keyboard Shortcuts"
-msgstr "קיצורי מקלדת"
+msgstr "צירופי מקשים"
 
 #: libide/keybindings/ide-shortcuts-window.ui:55
 msgctxt "shortcut window"
@@ -1456,17 +1456,17 @@ msgstr "לוחות"
 #: libide/keybindings/ide-shortcuts-window.ui:59
 msgctxt "shortcut window"
 msgid "Toggle left panel"
-msgstr "מתג לוח שמאלי"
+msgstr "הצגת לוח שמאלי"
 
 #: libide/keybindings/ide-shortcuts-window.ui:66
 msgctxt "shortcut window"
 msgid "Toggle right panel"
-msgstr "מתג לוח ימני"
+msgstr "הצגת לוח ימני"
 
 #: libide/keybindings/ide-shortcuts-window.ui:73
 msgctxt "shortcut window"
 msgid "Toggle bottom panel"
-msgstr "מתג לוח תחתון"
+msgstr "הצגת לוח תחתון"
 
 #: libide/keybindings/ide-shortcuts-window.ui:82
 msgctxt "shortcut window"
@@ -1583,7 +1583,7 @@ msgstr "ביטול פקודה קודמת"
 #: libide/keybindings/ide-shortcuts-window.ui:237
 msgctxt "shortcut window"
 msgid "Redo previous command"
-msgstr "ביצוע מחדש של פקודה קודמת"
+msgstr "ביצוע חוזר של פקודה קודמת"
 
 #: libide/keybindings/ide-shortcuts-window.ui:245
 msgctxt "shortcut window"
@@ -1593,17 +1593,17 @@ msgstr "עריכה"
 #: libide/keybindings/ide-shortcuts-window.ui:250
 msgctxt "shortcut window"
 msgid "Increment number at cursor"
-msgstr "הגדלת המספר בסמן"
+msgstr "הגדלת המספר תחת הסמן"
 
 #: libide/keybindings/ide-shortcuts-window.ui:257
 msgctxt "shortcut window"
 msgid "Decrement number at cursor"
-msgstr "הקטנת המספר בסמן"
+msgstr "הקטנת המספר תחת הסמן"
 
 #: libide/keybindings/ide-shortcuts-window.ui:264
 msgctxt "shortcut window"
 msgid "Join selected lines"
-msgstr "איחוד השורות שנבחרו"
+msgstr "צירוף השורות הנבחרות"
 
 #: libide/keybindings/ide-shortcuts-window.ui:271
 msgctxt "shortcut window"
@@ -1613,7 +1613,7 @@ msgstr "הצגת חלון השלמה"
 #: libide/keybindings/ide-shortcuts-window.ui:278
 msgctxt "shortcut window"
 msgid "Toggle overwrite"
-msgstr "מתג דריסה"
+msgstr "מצב דריסה"
 
 #: libide/keybindings/ide-shortcuts-window.ui:285
 msgctxt "shortcut window"
@@ -1687,7 +1687,6 @@ msgstr "בחירת הכל"
 
 # לא בטוח שמובן מזה שהבחירה תבוטל עבור הכל ולא רק שהפעולה „בחירת הכל” תבוטל 
 #: libide/keybindings/ide-shortcuts-window.ui:381
-#, fuzzy
 msgctxt "shortcut window"
 msgid "Unselect all"
 msgstr "ביטול בחירת הכל"
@@ -1715,7 +1714,7 @@ msgstr "פרופיל"
 #: libide/keybindings/ide-shortcuts-window.ui:419
 msgctxt "shortcut window"
 msgid "Terminal Shortcuts"
-msgstr "קיצורי מסוף"
+msgstr "צירופי מקשים למסוף"
 
 #: libide/preferences/ide-preferences-builtin.c:65
 #: libide/preferences/ide-preferences-builtin.c:66
@@ -1740,7 +1739,7 @@ msgstr "האם על Builder להשתמש בערכת נושא כהה"
 
 #: libide/preferences/ide-preferences-builtin.c:105
 msgid "dark theme"
-msgstr ""
+msgstr "ערכת נושא כהה"
 
 #: libide/preferences/ide-preferences-builtin.c:106
 msgid "Grid Pattern"
@@ -1757,7 +1756,7 @@ msgstr "גופן"
 #: libide/preferences/ide-preferences-builtin.c:109
 msgctxt "Keywords"
 msgid "editor font monospace"
-msgstr "גופן מסמך עורך רוחב קבוע"
+msgstr "גופן רוחב קבוע עורך"
 
 #. XXX: This belongs in terminal addin
 #: libide/preferences/ide-preferences-builtin.c:111
@@ -1768,7 +1767,7 @@ msgstr "מסוף"
 #: libide/preferences/ide-preferences-builtin.c:111
 msgctxt "Keywords"
 msgid "terminal font monospace"
-msgstr "terminal font monospace גופן רוחב קבוע מסוף פונט טרמינל אחיד"
+msgstr "גופן רוחב קבוע מסוף"
 
 #: libide/preferences/ide-preferences-builtin.c:116
 msgid "Color Scheme"
