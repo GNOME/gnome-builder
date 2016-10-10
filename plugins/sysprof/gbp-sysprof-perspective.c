@@ -223,6 +223,10 @@ gbp_sysprof_perspective_set_profiler (GbpSysprofPerspective *self,
                                self,
                                G_CONNECT_SWAPPED);
     }
+  else
+    {
+      gtk_stack_set_visible_child_name (self->stack, "empty");
+    }
 }
 
 SpZoomManager *

@@ -221,6 +221,7 @@ gbp_sysprof_workbench_addin_open_cb (GObject      *object,
       return;
     }
 
+  gbp_sysprof_perspective_set_profiler (self->perspective, NULL);
   gbp_sysprof_perspective_set_reader (self->perspective, reader);
 
   gbp_sysprof_workbench_addin_update_controls (self);
