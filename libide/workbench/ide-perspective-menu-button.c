@@ -114,11 +114,11 @@ ide_perspective_menu_button_create_row (IdePerspectiveMenuButton *self,
       xaccel = gtk_accelerator_get_label (accel_key, accel_mod);
       label = g_object_new (GTK_TYPE_LABEL,
                             "label", xaccel,
-                            "margin-start", 20,
                             "visible", TRUE,
                             "xalign", 0.0f,
                             NULL);
       ide_widget_add_style_class (GTK_WIDGET (label), "dim-label");
+      ide_widget_add_style_class (GTK_WIDGET (label), "accel");
       gtk_container_add_with_properties (GTK_CONTAINER (box), GTK_WIDGET (label),
                                          "pack-type", GTK_PACK_END,
                                          NULL);

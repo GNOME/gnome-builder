@@ -145,6 +145,18 @@ popover.popover-selector list row image {
   min-width: 16px;
   margin-right: 12px;
 }
+popover.popover-selector list row image:dir(rtl) {
+  margin-right: 0px;
+  margin-left: 12px;
+}
+popover.popover-selector list row .accel {
+  margin-left: 20px;
+  margin-right: 0;
+}
+popover.popover-selector list row .accel:dir(rtl) {
+  margin-left: 0;
+  margin-right: 20px;
+}
 
 
 omnibar entry {
