@@ -41,7 +41,6 @@ gi.require_version('GtkSource', '3.0')
 gi.require_version('Ide', '1.0')
 
 from collections import OrderedDict
-from gettext import gettext as _
 
 from gi.importer import DynamicImporter
 from gi.module import IntrospectionModule
@@ -56,6 +55,8 @@ from gi.repository import GtkSource
 from gi.repository import Ide
 from gi.types import GObjectMeta
 from gi.types import StructMeta
+
+_ = Ide.gettext
 
 gi_importer = DynamicImporter('gi.repository')
 

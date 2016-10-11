@@ -19,8 +19,6 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-from gettext import gettext as _
-
 import gi
 
 gi.require_version('Gdk', '3.0')
@@ -38,6 +36,8 @@ import json
 import threading
 import urllib.parse
 import urllib.request
+
+_ = Ide.gettext
 
 USER_AGENT = 'gnome-builder-fpaste/0.1'
 BASE_URL = 'https://paste.fedoraproject.org'

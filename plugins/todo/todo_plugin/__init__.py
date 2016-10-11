@@ -18,6 +18,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
+
 import gi
 
 gi.require_version('Ide', '1.0')
@@ -29,10 +30,11 @@ from gi.repository import GObject
 from gi.repository import Gtk
 from gi.repository import Pnl
 
-from gettext import gettext as _
 import re
 import subprocess
 import threading
+
+_ = Ide.gettext
 
 LINE1 = re.compile('(.*):(\d+):(.*)')
 LINE2 = re.compile('(.*)-(\d+)-(.*)')

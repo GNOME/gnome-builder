@@ -22,7 +22,6 @@
 import gi
 from getopt import getopt, GetoptError
 import getpass
-from gettext import gettext as _
 import os
 import sys
 import time
@@ -36,6 +35,8 @@ from gi.repository import GObject
 from gi.repository import Gio
 from gi.repository import Ggit
 from gi.repository import Ide
+
+_ = Ide.gettext
 
 class ContributeTool(helper.PyApplicationTool):
     location = None

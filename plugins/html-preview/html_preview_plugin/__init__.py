@@ -19,8 +19,6 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-from gettext import gettext as _
-
 import gi
 import os
 
@@ -35,6 +33,8 @@ from gi.repository import GObject
 from gi.repository import Ide
 from gi.repository import WebKit2
 from gi.repository import Peas
+
+_ = Ide.gettext
 
 class HtmlPreviewData(GObject.Object, Ide.ApplicationAddin):
     MARKDOWN_CSS = None

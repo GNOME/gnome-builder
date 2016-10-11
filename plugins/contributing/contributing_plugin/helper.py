@@ -23,13 +23,14 @@ import gi
 gi.require_version('Ide', '1.0')
 
 from getopt import getopt, GetoptError
-from gettext import gettext as _
 import shutil
 import sys
 
 from gi.repository import GObject
 from gi.repository import Gio
 from gi.repository import Ide
+
+_ = Ide.gettext
 
 class PyApplicationTool(GObject.Object, Ide.ApplicationTool):
     # Leftover args during parsing
