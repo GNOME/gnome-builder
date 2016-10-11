@@ -106,6 +106,7 @@ struct _IdeOmniBar
   GtkLabel       *branch_label;
   GtkEventBox    *event_box;
   GtkLabel       *project_label;
+  GtkBox         *branch_box;
   GtkLabel       *build_result_mode_label;
   GtkImage       *build_result_diagnostics_image;
   GtkButton      *build_button;
@@ -641,6 +642,7 @@ ide_omni_bar_class_init (IdeOmniBarClass *klass)
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/ui/ide-omni-bar.ui");
   gtk_widget_class_set_css_name (widget_class, "omnibar");
+  gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, branch_box);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, branch_label);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, build_button);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, build_result_diagnostics_image);
@@ -668,6 +670,8 @@ static void
 ide_omni_bar_init (IdeOmniBar *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
+
+  gtk_widget_set_direction (GTK_WIDGET (self->branch_box), GTK_TEXT_DIR_LTR);
 
   /*
    * IdeBuildManager bindings and signals.

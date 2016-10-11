@@ -19,27 +19,34 @@
                 <property name="margin-start">3</property>
                 <property name="spacing">6</property>
                 <child>
-                  <object class="GtkLabel" id="project_label">
-                    <property name="ellipsize">end</property>
+                  <object class="GtkBox" id="branch_box">
+                    <property name="orientation">horizontal</property>
+                    <property name="spacing">6</property>
                     <property name="visible">true</property>
-                    <attributes>
-                      <attribute name="weight" value="bold"/>
-                    </attributes>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkLabel">
-                    <property name="label">/</property>
-                    <property name="visible">true</property>
-                    <style>
-                      <class name="dim-label"/>
-                    </style>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="branch_label">
-                    <property name="ellipsize">end</property>
-                    <property name="visible">true</property>
+                    <child>
+                      <object class="GtkLabel" id="project_label">
+                        <property name="ellipsize">end</property>
+                        <property name="visible">true</property>
+                        <attributes>
+                          <attribute name="weight" value="bold"/>
+                        </attributes>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="label">/</property>
+                        <property name="visible">true</property>
+                        <style>
+                          <class name="dim-label"/>
+                        </style>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="branch_label">
+                        <property name="ellipsize">end</property>
+                        <property name="visible">true</property>
+                      </object>
+                    </child>
                   </object>
                 </child>
                 <child>
