@@ -1,4 +1,27 @@
 ==============
+Version 3.22.1
+==============
+
+Summary of changes since 3.22.0
+
+ • Lots of widget layout fixes for RTL languages such as Hebrew.
+ • Build system fixes (missing -lm on some platforms, fixes for pipe2
+   on macOS).
+ • Use “getent passwd” to get the current passwd when discovering
+   preferred user shell.
+ • Load both user and system installed flatpak runtimes.
+ • Add support for Sysprof Visualizers (requires Sysprof 3.22.1)
+ • Add empty, failed, and recording states for Sysprof plugin.
+ • Prefer GtkNativeFileChooser when applicable.
+ • Support for running some GJS projects using autotools. In particular
+   we try to discover the “GJS template” Makefile.am style.
+ • Fix gettext usage from Python plugins.
+ • The preferences perspective is now more tolerant of smaller screen
+   sizes such as 1280xH.
+ • Various UI polish.
+ • Lots of translation updates.
+
+==============
 Version 3.22.0
 ==============
 
