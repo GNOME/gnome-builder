@@ -19,8 +19,6 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-from gettext import gettext as _
-
 import gi
 import os
 
@@ -34,6 +32,8 @@ from gi.repository import GObject
 from gi.repository import GtkSource
 from gi.repository import Peas
 from gi.repository import Template
+
+_ = Ide.gettext
 
 def get_module_data_path(name):
     engine = Peas.Engine.get_default()
