@@ -165,6 +165,7 @@ plugins/support/ide-support-application-addin.c
 plugins/symbol-tree/symbol-tree-panel.c
 plugins/sysmon/gb-sysmon-panel.ui
 plugins/sysprof/gbp-sysprof-perspective.c
+plugins/sysprof/gbp-sysprof-perspective.ui
 plugins/sysprof/gbp-sysprof-workbench-addin.c
 plugins/sysprof/gtk/menus.ui
 plugins/terminal/gb-terminal-view.c
