@@ -4,7 +4,6 @@
   <template class="IdePreferencesPage" parent="GtkBin">
     <child>
       <object class="IdePreferencesFlowBox" id="box">
-        <property name="border-width">24</property>
         <property name="visible">true</property>
       </object>
     </child>

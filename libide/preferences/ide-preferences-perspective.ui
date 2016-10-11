@@ -39,6 +39,7 @@
                 <property name="visible">true</property>
                 <child>
                   <object class="GtkStack" id="page_stack">
+                    <property name="margin">24</property>
                     <property name="homogeneous">false</property>
                     <property name="transition-duration">333</property>
                     <property name="transition-type">crossfade</property>
@@ -51,6 +52,10 @@
                     <property name="visible">true</property>
                     <child>
                       <object class="GtkStack" id="subpage_stack">
+                        <property name="margin-start">0</property>
+                        <property name="margin-end">24</property>
+                        <property name="margin-top">24</property>
+                        <property name="margin-bottom">24</property>
                         <property name="halign">start</property>
                         <property name="hexpand">false</property>
                         <property name="homogeneous">false</property>
