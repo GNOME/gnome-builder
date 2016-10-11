@@ -50,6 +50,7 @@ struct _IdePreferencesPerspective
   GSequence             *pages;
   GHashTable            *widgets;
 
+  GtkScrolledWindow     *scroller;
   GtkStack              *page_stack;
   GtkStackSwitcher      *page_stack_sidebar;
   GtkSearchEntry        *search_entry;
@@ -256,6 +257,7 @@ ide_preferences_perspective_class_init (IdePreferencesPerspectiveClass *klass)
   gtk_widget_class_set_css_name (widget_class, "preferences");
   gtk_widget_class_bind_template_child (widget_class, IdePreferencesPerspective, page_stack);
   gtk_widget_class_bind_template_child (widget_class, IdePreferencesPerspective, page_stack_sidebar);
+  gtk_widget_class_bind_template_child (widget_class, IdePreferencesPerspective, scroller);
   gtk_widget_class_bind_template_child (widget_class, IdePreferencesPerspective, search_entry);
   gtk_widget_class_bind_template_child (widget_class, IdePreferencesPerspective, subpage_stack);
 }
@@ -286,6 +288,29 @@ ide_preferences_perspective_search_entry_changed (IdePreferencesPerspective *sel
 }
 
 static void
+ide_preferences_perspective_notify_subpage_stack_visible (IdePreferencesPerspective *self,
+                                                          GParamSpec                *pspec,
+                                                          GtkStack                  *subpage_stack)
+{
+  g_assert (IDE_IS_PREFERENCES_PERSPECTIVE (self));
+  g_assert (GTK_IS_STACK (subpage_stack));
+
+  /*
+   * Because the subpage stack can cause us to have a wider display than
+   * the screen has, we need to allow scrolling. This can happen because
+   * side-by-side we could be just a bit bigger than 1280px which is a
+   * fairly common laptop screen size (especially under HiDPI).
+   *
+   * https://bugzilla.gnome.org/show_bug.cgi?id=772700
+   */
+
+  if (gtk_widget_get_visible (GTK_WIDGET (subpage_stack)))
+    g_object_set (self->scroller, "hscrollbar-policy", GTK_POLICY_AUTOMATIC, NULL);
+  else
+    g_object_set (self->scroller, "hscrollbar-policy", GTK_POLICY_NEVER, NULL);
+}
+
+static void
 ide_preferences_perspective_init (IdePreferencesPerspective *self)
 {
   static const GActionEntry entries[] = {
@@ -303,6 +328,12 @@ ide_preferences_perspective_init (IdePreferencesPerspective *self)
   g_signal_connect_object (self->page_stack,
                            "notify::visible-child",
                            G_CALLBACK (ide_preferences_perspective_notify_visible_child),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  g_signal_connect_object (self->subpage_stack,
+                           "notify::visible",
+                           G_CALLBACK (ide_preferences_perspective_notify_subpage_stack_visible),
                            self,
                            G_CONNECT_SWAPPED);
 
