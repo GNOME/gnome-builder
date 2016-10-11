@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-glib"
 
+#include "config.h"
+
 #include "ide-glib.h"
 
 typedef struct
@@ -170,4 +172,12 @@ ide_g_task_return_error_from_main (GTask  *task,
   state->u.v_error = error;
 
   task_state_attach (state);
+}
+
+const gchar *
+ide_gettext (const gchar *message)
+{
+  if (message != NULL)
+    return g_dgettext (GETTEXT_PACKAGE, message);
+  return NULL;
 }
