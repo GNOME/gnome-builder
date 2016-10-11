@@ -348,8 +348,10 @@ egg_radio_box_new (void)
 typedef struct
 {
   EggRadioBox *self;
+  GtkBuilder  *builder;
   gchar       *id;
   GString     *text;
+  guint        translatable : 1;
 } ItemParserData;
 
 static void
@@ -378,6 +380,8 @@ item_parser_start_element (GMarkupParseContext  *context,
                                         G_MARKUP_COLLECT_STRING, "translatable", &translatable,
                                         G_MARKUP_COLLECT_INVALID))
         return;
+
+      parser_data->translatable = translatable != NULL && g_str_equal ("yes", translatable);
     }
 }
 
@@ -396,7 +400,19 @@ item_parser_end_element (GMarkupParseContext  *context,
   if (g_strcmp0 (element_name, "item") == 0)
     {
       if (parser_data->id && parser_data->text != NULL)
-        egg_radio_box_add_item (parser_data->self, parser_data->id, parser_data->text->str);
+        {
+          const gchar *str = parser_data->text->str;
+
+          if (parser_data->translatable && str != NULL)
+            {
+              const gchar *domain;
+
+              domain = gtk_builder_get_translation_domain (parser_data->builder);
+              str = g_dgettext (domain, str);
+            }
+
+          egg_radio_box_add_item (parser_data->self, parser_data->id, str);
+        }
     }
 }
 
@@ -445,6 +461,7 @@ egg_radio_box_custom_tag_start (GtkBuildable  *buildable,
 
       parser_data = g_slice_new0 (ItemParserData);
       parser_data->self = self;
+      parser_data->builder = builder;
 
       *parser = ItemParser;
       *data = parser_data;
