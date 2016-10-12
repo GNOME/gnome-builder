@@ -26,8 +26,8 @@
         <child>
           <object class="GtkLabel" id="font_size">
             <property name="visible">true</property>
-            <property name="width-chars">4</property>
-            <property name="xalign">1.0</property>
+            <property name="width-chars">2</property>
+            <property name="xalign">0.0</property>
             <style>
               <class name="dim-label"/>
             </style>

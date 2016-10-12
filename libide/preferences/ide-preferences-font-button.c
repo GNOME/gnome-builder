@@ -95,7 +95,7 @@ ide_preferences_font_button_changed (IdePreferencesFontButton *self,
       gchar *font_size;
 
       gtk_label_set_label (self->font_family, pango_font_description_get_family (font_desc));
-      font_size = g_strdup_printf ("%dpt", pango_font_description_get_size (font_desc) / PANGO_SCALE);
+      font_size = g_strdup_printf ("%d", pango_font_description_get_size (font_desc) / PANGO_SCALE);
       gtk_label_set_label (self->font_size, font_size);
       g_free (font_size);
     }
