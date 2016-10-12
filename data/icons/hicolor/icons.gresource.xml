@@ -34,6 +34,11 @@
     <file compressed="true">scalable/actions/lang-variable-symbolic.svg</file>
     <file compressed="true">scalable/actions/struct-field-symbolic.svg</file>
 
+    <file compressed="true" alias="scalable/actions/builder-move-right-symbolic-rtl.svg">scalable/actions/builder-move-left-symbolic.svg</file>
+    <file compressed="true" alias="scalable/actions/builder-move-left-symbolic-rtl.svg">scalable/actions/builder-move-right-symbolic.svg</file>
+    <file compressed="true" alias="scalable/actions/builder-split-tab-right-symbolic-rtl.svg">scalable/actions/builder-split-tab-left-symbolic.svg</file>
+    <file compressed="true" alias="scalable/actions/builder-split-tab-left-symbolic-rtl.svg">scalable/actions/builder-split-tab-right-symbolic.svg</file>
+
     <file compressed="true">scalable/apps/builder-documentation-symbolic.svg</file>
     <file compressed="true">scalable/apps/builder-editor-symbolic.svg</file>
 
