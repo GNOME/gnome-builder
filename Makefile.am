@@ -61,6 +61,7 @@ dist-hook:
 RUNTIME_TYPELIB_PATH = libide:contrib/egg:contrib/pnl:contrib/tmpl:$(GI_TYPELIB_PATH)
 
 run:
+	ASAN_OPTIONS=alloc_dealloc_mismatch=0 \
 	PEAS_DEBUG=1 \
 	GB_IN_TREE_PLUGINS=1 \
 	GB_IN_TREE_FONTS=1 \
@@ -83,6 +84,7 @@ strace:
 	$(LIBTOOL) --mode=execute strace -T src/gnome-builder -vvvv -s
 
 debug:
+	ASAN_OPTIONS=alloc_dealloc_mismatch=0 \
 	G_SLICE=always-malloc \
 	PEAS_DEBUG=1 \
 	GB_IN_TREE_PLUGINS=1 \
