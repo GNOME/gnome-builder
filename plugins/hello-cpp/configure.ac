@@ -9,7 +9,7 @@ AC_ARG_ENABLE([hello-cpp-plugin],
 AS_IF([test x$enable_hello_cpp_plugin != xno],[
    	AM_COND_IF([ENABLE_IDEMM], [have_idemm=yes], [have_idemm=no])
 
-	AS_IF([test x$enable_hello_cpp_plugin = xyes && x$have_idemm = xno],[
+	AS_IF([test x$enable_hello_cpp_plugin = xyes && test x$have_idemm = xno],[
 	       AC_MSG_ERROR([--enable-hello-cpp-plugin requires --enable-idemm=yes])
 	])
 
