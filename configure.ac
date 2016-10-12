@@ -440,6 +440,22 @@ AC_MSG_RESULT([$enable_profiling])
 
 
 dnl ***********************************************************************
+dnl GCC/Clang sanitizer support
+dnl ***********************************************************************
+AC_ARG_WITH([sanitizer],
+            [AS_HELP_STRING([--with-sanitizer=@<:@address/undefined/no@:>@],
+                            [Use specific GCC/Clang analyzer])],
+            [with_sanitizer=$withval],
+            [with_sanitizer=no])
+AS_IF([test "x$with_sanitizer" != "xno"],[
+	AX_CHECK_COMPILE_FLAG([-fsanitize=$withval],
+	                      [CFLAGS="$CFLAGS -fsanitize=$withval"
+			       CXXFLAGS="$CXXFLAGS -fsanitize=$withval"],
+	                      [AC_MSG_ERROR([-fsanitize=$withval is not supported])])
+])
+
+
+dnl ***********************************************************************
 dnl Setup common cflags and ldflags for plugins
 dnl ***********************************************************************
 PLUGIN_CFLAGS="$PLUGIN_CFLAGS -I\$(top_builddir)/contrib/egg"
@@ -556,6 +572,7 @@ echo "  Enable Profiling (-pg)................ : ${enable_profiling}"
 echo "  Build Test Suite ..................... : ${enable_tests}"
 echo "  Build API reference .................. : ${enable_gtk_doc}"
 echo "  Use cross-referencing in API docs .... : ${enable_doc_cross_references}"
+echo "  Sanitizer ............................ : ${with_sanitizer}"
 echo ""
 echo " Optional libraries"
 echo ""
