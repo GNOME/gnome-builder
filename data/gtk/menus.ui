@@ -44,6 +44,7 @@
     <section id="gear-menu-layout-section">
       <attribute name="id">panel-section</attribute>
       <attribute name="display-hint">horizontal-buttons</attribute>
+      <attribute name="text-direction">ltr</attribute>
       <item>
         <attribute name="label" translatable="yes">Show left panel</attribute>
         <attribute name="action">perspective.left-visible</attribute>
