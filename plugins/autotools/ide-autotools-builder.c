@@ -41,7 +41,7 @@ ide_autotools_builder_build_cb (GObject      *object,
   g_return_if_fail (IDE_IS_AUTOTOOLS_BUILD_TASK (build_result));
   g_return_if_fail (G_IS_TASK (task));
 
-  if (!ide_autotools_build_task_execute_finish (build_result, result, &error))
+  if (!ide_autotools_build_task_execute_with_postbuild_finish (build_result, result, &error))
     {
       if (g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
         ide_build_result_set_mode (IDE_BUILD_RESULT (build_result), _("Build cancelled"));
@@ -163,11 +163,11 @@ ide_autotools_builder_build_async (IdeBuilder           *builder,
   if (result != NULL)
     *result = g_object_ref (build_result);
 
-  ide_autotools_build_task_execute_async (build_result,
-                                          flags,
-                                          cancellable,
-                                          ide_autotools_builder_build_cb,
-                                          g_object_ref (task));
+  ide_autotools_build_task_execute_with_postbuild (build_result,
+                                                   flags,
+                                                   cancellable,
+                                                   ide_autotools_builder_build_cb,
+                                                   g_object_ref (task));
 }
 
 static IdeBuildResult *
@@ -195,7 +195,7 @@ ide_autotools_builder_install_cb (GObject      *object,
   g_assert (IDE_IS_AUTOTOOLS_BUILD_TASK (build_task));
   g_assert (G_IS_TASK (task));
 
-  if (!ide_autotools_build_task_execute_finish (build_task, result, &error))
+  if (!ide_autotools_build_task_execute_with_postbuild_finish (build_task, result, &error))
     {
       if (g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
         ide_build_result_set_mode (IDE_BUILD_RESULT (build_task), _("Install cancelled"));

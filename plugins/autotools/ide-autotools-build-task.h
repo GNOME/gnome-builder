@@ -39,6 +39,16 @@ void      ide_autotools_build_task_execute_async  (IdeAutotoolsBuildTask  *self,
 gboolean  ide_autotools_build_task_execute_finish (IdeAutotoolsBuildTask  *self,
                                                    GAsyncResult           *result,
                                                    GError                **error);
+void      ide_autotools_build_task_execute_with_postbuild
+                                                  (IdeAutotoolsBuildTask  *self,
+                                                   IdeBuilderBuildFlags    flags,
+                                                   GCancellable           *cancellable,
+                                                   GAsyncReadyCallback     callback,
+                                                   gpointer                user_data);
+gboolean  ide_autotools_build_task_execute_with_postbuild_finish
+                                                  (IdeAutotoolsBuildTask  *self,
+                                                   GAsyncResult           *result,
+                                                   GError                **error);
 
 G_END_DECLS
 

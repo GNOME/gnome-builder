@@ -729,6 +729,102 @@ ide_autotools_build_task_execute_finish (IdeAutotoolsBuildTask  *self,
   IDE_RETURN (ret);
 }
 
+static void
+ide_autotools_build_task_postbuild_runtime_cb (GObject      *object,
+                                               GAsyncResult *result,
+                                               gpointer      user_data)
+{
+  IdeRuntime *runtime = (IdeRuntime *)object;
+  g_autoptr(GTask) task = user_data;
+  g_autoptr(GError) error = NULL;
+
+  g_assert (IDE_IS_RUNTIME (runtime));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (G_IS_TASK (task));
+
+  if (!ide_runtime_postbuild_finish (runtime, result, &error))
+    {
+      g_task_return_error (task, g_steal_pointer (&error));
+      return;
+    }
+
+  g_task_return_boolean (task, TRUE);
+}
+
+static void
+ide_autotools_build_task_execute_with_postbuild_cb (GObject      *object,
+                                                    GAsyncResult *result,
+                                                    gpointer      user_data)
+{
+  IdeAutotoolsBuildTask *self = (IdeAutotoolsBuildTask *)object;
+  g_autoptr(GTask) task = user_data;
+  g_autoptr(GError) error = NULL;
+  IdeRuntime *runtime;
+  GCancellable *cancellable;
+
+  g_assert (IDE_IS_AUTOTOOLS_BUILD_TASK (self));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (G_IS_TASK (task));
+
+  if (!ide_autotools_build_task_execute_finish (self, result, &error))
+    {
+      g_task_return_error (task, g_steal_pointer (&error));
+      return;
+    }
+
+  runtime = ide_configuration_get_runtime (self->configuration);
+
+  if (runtime == NULL)
+    {
+      g_task_return_new_error (task,
+                               G_IO_ERROR,
+                               G_IO_ERROR_NOT_SUPPORTED,
+                               "%s",
+                               _("Failed to access runtime for postbuild"));
+      return;
+    }
+
+  cancellable = g_task_get_cancellable (task);
+
+  ide_runtime_postbuild_async (runtime,
+                               cancellable,
+                               ide_autotools_build_task_postbuild_runtime_cb,
+                               g_steal_pointer (&task));
+}
+
+void
+ide_autotools_build_task_execute_with_postbuild (IdeAutotoolsBuildTask *self,
+                                                 IdeBuilderBuildFlags   flags,
+                                                 GCancellable          *cancellable,
+                                                 GAsyncReadyCallback    callback,
+                                                 gpointer               user_data)
+{
+  g_autoptr(GTask) task = NULL;
+
+  g_return_if_fail (IDE_IS_AUTOTOOLS_BUILD_TASK (self));
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, ide_autotools_build_task_execute_with_postbuild);
+
+  ide_autotools_build_task_execute_async (self,
+                                          flags,
+                                          cancellable,
+                                          ide_autotools_build_task_execute_with_postbuild_cb,
+                                          g_steal_pointer (&task));
+}
+
+gboolean
+ide_autotools_build_task_execute_with_postbuild_finish (IdeAutotoolsBuildTask  *self,
+                                                        GAsyncResult           *result,
+                                                        GError                **error)
+{
+  g_return_val_if_fail (IDE_IS_AUTOTOOLS_BUILD_TASK (self), FALSE);
+  g_return_val_if_fail (G_IS_TASK (result), FALSE);
+
+  return g_task_propagate_boolean (G_TASK (result), error);
+}
+
 static gboolean
 log_in_main (gpointer data)
 {
