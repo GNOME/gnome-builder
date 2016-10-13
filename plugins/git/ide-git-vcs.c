@@ -128,6 +128,61 @@ ide_git_vcs_get_buffer_change_monitor (IdeVcs    *vcs,
                        NULL);
 }
 
+/*
+ * This is like ggit_repository_discover() but seems to work inside
+ * of the flatpak runtime. Something is preventing git_repository_discover()
+ * in libgit2 from working correctly, possibly the mount setup. Either
+ * way, until it's fixed we can use this.
+ */
+static GFile *
+ide_git_vcs_discover (IdeGitVcs  *self,
+                      GFile      *file,
+                      GError    **error)
+{
+  g_autofree gchar *name = NULL;
+  g_autoptr(GFile) parent = NULL;
+  g_autoptr(GFile) git = NULL;
+  g_autoptr(GFile) child = NULL;
+  GFile *ret;
+
+  g_assert (IDE_IS_GIT_VCS (self));
+  g_assert (G_IS_FILE (file));
+
+  if (!g_file_is_native (file))
+    {
+      g_set_error (error,
+                   G_IO_ERROR,
+                   G_IO_ERROR_NOT_SUPPORTED,
+                   "Only native file systems are supported for git.");
+      return NULL;
+    }
+
+  name = g_file_get_basename (file);
+
+  if (g_strcmp0 (name, ".git") == 0)
+    return g_object_ref (file);
+
+  child = g_file_get_child (file, ".git");
+
+  if (g_file_query_exists (child, NULL))
+    return g_object_ref (child);
+
+  parent = g_file_get_parent (file);
+
+  if (parent == NULL || g_file_equal (parent, file))
+    {
+      g_set_error (error,
+                   G_IO_ERROR,
+                   G_IO_ERROR_NOT_FOUND,
+                   "Failed to discover git directory");
+      return NULL;
+    }
+
+  ret = ide_git_vcs_discover (self, parent, error);
+
+  return ret;
+}
+
 static GgitRepository *
 ide_git_vcs_load (IdeGitVcs  *self,
                   GError    **error)
@@ -143,8 +198,14 @@ ide_git_vcs_load (IdeGitVcs  *self,
   context = ide_object_get_context (IDE_OBJECT (self));
   project_file = ide_context_get_project_file (context);
 
-  if (!(location = ggit_repository_discover (project_file, error)))
-    return NULL;
+  if (!(location = ide_git_vcs_discover (self, project_file, error)))
+    {
+      g_clear_error (error);
+
+      /* Fallback to libgit2(-glib) discovery */
+      if (!(location = ggit_repository_discover (project_file, error)))
+        return NULL;
+    }
 
   uri = g_file_get_uri (location);
   g_debug ("Discovered .git location at “%s”", uri);
