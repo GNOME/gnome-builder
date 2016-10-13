@@ -246,11 +246,11 @@ ide_autotools_builder_install_async (IdeBuilder           *builder,
   if (result != NULL)
     *result = g_object_ref (build_result);
 
-  ide_autotools_build_task_execute_async (build_result,
-                                          IDE_BUILDER_BUILD_FLAGS_NONE,
-                                          cancellable,
-                                          ide_autotools_builder_install_cb,
-                                          g_object_ref (task));
+  ide_autotools_build_task_execute_with_postbuild (build_result,
+                                                   IDE_BUILDER_BUILD_FLAGS_NONE,
+                                                   cancellable,
+                                                   ide_autotools_builder_install_cb,
+                                                   g_object_ref (task));
 }
 
 static IdeBuildResult *
