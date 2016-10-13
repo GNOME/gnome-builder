@@ -950,6 +950,7 @@ simple_make_command (GFile            *directory,
 {
   g_autoptr(IdeSubprocessLauncher) launcher = NULL;
   g_autoptr(IdeSubprocess) subprocess = NULL;
+  g_autofree gchar *cwd = NULL;
   GCancellable *cancellable;
   IdeRuntime *runtime;
   GError *error = NULL;
@@ -985,7 +986,8 @@ simple_make_command (GFile            *directory,
       return;
     }
 
-  ide_subprocess_launcher_set_cwd (launcher, g_file_get_path (directory));
+  cwd = g_file_get_path (directory);
+  ide_subprocess_launcher_set_cwd (launcher, cwd);
 
   if (ide_runtime_contains_program_in_path (runtime, "gmake", cancellable))
     ide_subprocess_launcher_push_argv (launcher, "gmake");
