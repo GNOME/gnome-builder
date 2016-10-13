@@ -216,11 +216,11 @@ gb_file_search_index_builder (GTask        *task,
                               GCancellable *cancellable)
 {
   GbFileSearchIndex *self = source_object;
+  g_autoptr(GTimer) timer = NULL;
   GFile *directory = task_data;
   IdeContext *context;
   IdeVcs *vcs;
   Fuzzy *fuzzy;
-  GTimer *timer;
   gdouble elapsed;
 
   g_assert (G_IS_TASK (task));
