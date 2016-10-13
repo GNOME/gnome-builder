@@ -300,6 +300,7 @@ ide_project_info_finalize (GObject *object)
 
   g_clear_pointer (&self->last_modified_at, g_date_time_unref);
   g_clear_pointer (&self->description, g_free);
+  g_clear_pointer (&self->languages, g_strfreev);
   g_clear_pointer (&self->name, g_free);
   g_clear_object (&self->directory);
   g_clear_object (&self->file);
