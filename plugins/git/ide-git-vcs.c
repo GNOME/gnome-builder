@@ -271,6 +271,7 @@ ide_git_vcs_reload_worker (GTask        *task,
   if (!(repository1 = ide_git_vcs_load (self, &error)) ||
       !(repository2 = ide_git_vcs_load (self, &error)))
     {
+      g_debug ("%s", error->message);
       g_task_return_error (task, error);
       IDE_EXIT;
     }
