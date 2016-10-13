@@ -182,9 +182,9 @@ ide_recent_projects_load_recent (IdeRecentProjects *self)
       g_autoptr(GFile) directory = NULL;
       g_autoptr(GPtrArray) languages = NULL;
       g_autoptr(IdeProjectInfo) project_info = NULL;
+      g_autofree gchar *name = NULL;
       const gchar *description;
       const gchar *uri = uris[z];
-      const gchar *name;
       time_t modified;
       gchar **groups;
       gsize len;
