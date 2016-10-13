@@ -638,6 +638,7 @@ ide_source_snippet_context_finalize (GObject *object)
 
   g_clear_pointer (&context->shared, (GDestroyNotify)g_hash_table_unref);
   g_clear_pointer (&context->variables, (GDestroyNotify)g_hash_table_unref);
+  g_clear_pointer (&context->line_prefix, g_free);
 
   G_OBJECT_CLASS (ide_source_snippet_context_parent_class)->finalize (object);
 }
