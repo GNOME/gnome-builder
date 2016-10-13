@@ -83,7 +83,7 @@ ide_source_snippet_parser_store (IdeSourceSnippetParser *parser)
   ide_source_snippet_parser_flush_chunk (parser);
   for (scope_iter = parser->scope; scope_iter; scope_iter = scope_iter->next)
     {
-      snippet = ide_source_snippet_new (parser->cur_name, g_strdup(scope_iter->data));
+      snippet = ide_source_snippet_new (parser->cur_name, scope_iter->data);
       ide_source_snippet_set_description (snippet, parser->cur_desc);
       ide_source_snippet_set_snippet_text (snippet, parser->snippet_text->str);
 
