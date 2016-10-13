@@ -433,7 +433,7 @@ ide_git_vcs_get_property (GObject    *object,
   switch (prop_id)
     {
     case PROP_BRANCH_NAME:
-      g_value_set_string (value, ide_git_vcs_get_branch_name (IDE_VCS (self)));
+      g_value_take_string (value, ide_git_vcs_get_branch_name (IDE_VCS (self)));
       break;
 
     case PROP_REPOSITORY:
