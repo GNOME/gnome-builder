@@ -86,7 +86,7 @@ ide_greeter_project_row_create_search_text (IdeGreeterProjectRow *self,
 
   if ((tmp = ide_project_info_get_name (project_info)))
     {
-      g_autofree gchar *downcase = g_utf8_strdown (g_strdup (tmp), -1);
+      g_autofree gchar *downcase = g_utf8_strdown (tmp, -1);
 
       g_string_append (str, tmp);
       g_string_append (str, " ");
