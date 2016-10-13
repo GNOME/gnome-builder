@@ -76,6 +76,10 @@ if ENABLE_VALA_SYMBOL_GET_DEPRECATED
 libvala_pack_plugin_la_VALAFLAGS += -D ENABLE_VALA_SYMBOL_GET_DEPRECATED
 endif
 
+if ENABLE_VALA_CODE_CONTEXT_SET_THREAD
+libvala_pack_plugin_la_VALAFLAGS += -D ENABLE_VALA_CODE_CONTEXT_SET_THREAD
+endif
+
 libvala_pack_plugin_la_CFLAGS = \
 	-DVALA_VERSION=\""$(VALA_VERSION)"\" \
 	-DPACKAGE_DATADIR=\""$(datadir)/gnome-builder"\" \

@@ -1,6 +1,10 @@
 VAPIGEN_CHECK
-PKG_CHECK_MODULES(VALA, [libvala-0.34],[have_libvala=yes],[have_libvala=no])
-VALA_VERSION=0.34
+PKG_CHECK_MODULES(VALA, [libvala-0.36],[have_libvala=yes],[have_libvala=no])
+VALA_VERSION=0.36
+AS_IF([test x$have_libvala = xno],[
+	PKG_CHECK_MODULES(VALA, [libvala-0.34],[have_libvala=yes],[have_libvala=no])
+	VALA_VERSION=0.34
+])
 AS_IF([test x$have_libvala = xno],[
 	PKG_CHECK_MODULES(VALA, [libvala-0.32],[have_libvala=yes],[have_libvala=no])
 	VALA_VERSION=0.32
@@ -29,6 +33,7 @@ AS_IF([test x$enable_vala_pack_plugin = xyes],[
 		AC_MSG_ERROR([Please install both the vala compiler and vapigen. vapigen may be part of your systems vala-tools package.])
 	])
 
+	# Check for deprecated symbol support
 	AS_IF([test x$have_libvala = xyes],[
 		cflags_save="${CFLAGS}"
 		libs_save="${LIBS}"
@@ -44,10 +49,30 @@ AS_IF([test x$enable_vala_pack_plugin = xyes],[
 		LIBS="${libs_save}"
 	])
 	AC_MSG_RESULT([$have_vala_symbol_get_deprecated])
+
+	# Check for deprecated threading support
+	AS_IF([test x$have_libvala = xyes],[
+		cflags_save="${CFLAGS}"
+		libs_save="${LIBS}"
+		CFLAGS="${CFLAGS} ${VALA_CFLAGS}"
+		LIBS="${LIBS} ${VALA_LIBS}"
+		AC_MSG_CHECKING([if vala CodeContext supports thread property])
+		AC_TRY_LINK([#include <vala.h>],[
+			vala_code_context_set_thread (NULL, TRUE);
+		],
+		[have_vala_code_context_set_thread=yes],
+		[have_vala_code_context_set_thread=no])
+		CFLAGS="${cflags_save}"
+		LIBS="${libs_save}"
+	])
+	AC_MSG_RESULT([$have_vala_code_context_set_thread])
 ])
 
 # for if ENABLE_VALA_SYMBOL_GET_DEPRECATED in .vala files
 AM_CONDITIONAL(ENABLE_VALA_SYMBOL_GET_DEPRECATED, test x$have_vala_symbol_get_deprecated = xyes)
+
+# for if ENABLE_VALA_CODE_CONTEXT_SET_THREAD in .vala files
+AM_CONDITIONAL(ENABLE_VALA_CODE_CONTEXT_SET_THREAD, test x$have_vala_code_context_set_thread = xyes)
 
 # for if ENABLE_VALA_PACK_PLUGIN in Makefile.am
 AM_CONDITIONAL(ENABLE_VALA_PACK_PLUGIN, test x$enable_vala_pack_plugin = xyes)
