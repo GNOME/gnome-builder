@@ -186,7 +186,7 @@ ide_recent_projects_load_recent (IdeRecentProjects *self)
       g_autofree gchar *description = NULL;
       const gchar *uri = uris[z];
       time_t modified;
-      gchar **groups;
+      g_auto(GStrv) groups = NULL;
       gsize len;
       gsize i;
 
