@@ -434,7 +434,7 @@ gb_command_gaction_provider_complete (GbCommandProvider *provider,
       GbGroup *gb_group = iter->data;
       GActionGroup *group = gb_group->group;
       gchar *prefix = gb_group->prefix;
-      gchar **names;
+      g_auto(GStrv) names = NULL;
       const gchar *command_name;
       guint i;
 
@@ -456,8 +456,6 @@ gb_command_gaction_provider_complete (GbCommandProvider *provider,
               g_action_group_get_action_enabled (group, names [i]))
             g_ptr_array_add (completions, g_strdup (names [i]));
         }
-
-      g_free (names);
     }
 
   g_list_free_full (groups, (GDestroyNotify)gb_group_free);
