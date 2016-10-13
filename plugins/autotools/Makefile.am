@@ -6,6 +6,8 @@ dist_plugin_DATA = autotools.plugin
 
 libautotools_plugin_la_SOURCES = \
 	autotools-plugin.c \
+	ide-autotools-application-addin.c \
+	ide-autotools-application-addin.h \
 	ide-autotools-builder.c \
 	ide-autotools-builder.h \
 	ide-autotools-build-system.c \

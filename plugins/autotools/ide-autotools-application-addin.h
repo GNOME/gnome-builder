@@ -1,6 +1,6 @@
-/* autotools-plugin.c
+/* ide-autotools-application-addin.h
  *
- * Copyright (C) 2015 Christian Hergert <christian@hergert.me>
+ * Copyright (C) 2016 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,17 +16,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <libpeas/peas.h>
+#ifndef IDE_AUTOTOOLS_APPLICATION_ADDIN_H
+#define IDE_AUTOTOOLS_APPLICATION_ADDIN_H
+
 #include <ide.h>
 
-#include "ide-autotools-application-addin.h"
-#include "ide-autotools-build-system.h"
-#include "ide-autotools-project-miner.h"
+G_BEGIN_DECLS
 
-void
-peas_register_types (PeasObjectModule *module)
-{
-  peas_object_module_register_extension_type (module, IDE_TYPE_APPLICATION_ADDIN, IDE_TYPE_AUTOTOOLS_APPLICATION_ADDIN);
-  peas_object_module_register_extension_type (module, IDE_TYPE_BUILD_SYSTEM, IDE_TYPE_AUTOTOOLS_BUILD_SYSTEM);
-  peas_object_module_register_extension_type (module, IDE_TYPE_PROJECT_MINER, IDE_TYPE_AUTOTOOLS_PROJECT_MINER);
-}
+#define IDE_TYPE_AUTOTOOLS_APPLICATION_ADDIN (ide_autotools_application_addin_get_type())
+
+G_DECLARE_FINAL_TYPE (IdeAutotoolsApplicationAddin, ide_autotools_application_addin, IDE, AUTOTOOLS_APPLICATION_ADDIN, GObject)
+
+G_END_DECLS
+
+#endif /* IDE_AUTOTOOLS_APPLICATION_ADDIN_H */
