@@ -368,12 +368,12 @@ ide_clang_service_get_translation_unit_worker (EggTaskCache  *cache,
                                                gpointer       user_data)
 {
   g_autoptr(GTask) real_task = NULL;
+  g_autofree gchar *path = NULL;
   IdeClangService *self = user_data;
   IdeUnsavedFiles *unsaved_files;
   IdeBuildSystem *build_system;
   ParseRequest *request;
   IdeContext *context;
-  const gchar *path;
   IdeFile *file = (IdeFile *)key;
   GFile *gfile;
 
@@ -402,7 +402,7 @@ ide_clang_service_get_translation_unit_worker (EggTaskCache  *cache,
    */
   request->file = ide_file_new (context, gfile);
   request->index = self->index;
-  request->source_filename = g_strdup (path);
+  request->source_filename = g_steal_pointer (&path);
   request->command_line_args = NULL;
   request->unsaved_files = ide_unsaved_files_to_array (unsaved_files);
   request->sequence = ide_unsaved_files_get_sequence (unsaved_files);
