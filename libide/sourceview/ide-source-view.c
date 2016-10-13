@@ -5575,6 +5575,12 @@ ide_source_view_finalize (GObject *object)
   g_clear_pointer (&priv->snippets, g_queue_free);
   g_clear_pointer (&priv->include_regex, g_regex_unref);
 
+  if (priv->command_str != NULL)
+    {
+      g_string_free (priv->command_str, TRUE);
+      priv->command_str = NULL;
+    }
+
   EGG_COUNTER_DEC (instances);
 
   G_OBJECT_CLASS (ide_source_view_parent_class)->finalize (object);
