@@ -498,7 +498,11 @@ ide_doap_parse_maintainer (IdeDoap   *self,
             {
               if (xml_reader_is_a_local (reader, "name"))
                 {
-                  ide_doap_person_set_name (person, xml_reader_read_string (reader));
+                  gchar *str;
+
+                  str = xml_reader_read_string (reader);
+                  ide_doap_person_set_name (person, str);
+                  g_free (str);
                 }
               else if (xml_reader_is_a_local (reader, "mbox"))
                 {
