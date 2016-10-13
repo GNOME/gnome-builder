@@ -946,14 +946,18 @@ ide_source_snippet_dispose (GObject *object)
 
   g_clear_object (&self->buffer);
   g_clear_object (&self->snippet_context);
-
-  g_free(self->language);
-  g_free(self->description);
 }
 
 static void
 ide_source_snippet_finalize (GObject *object)
 {
+  IdeSourceSnippet *self = (IdeSourceSnippet *)object;
+
+  g_clear_pointer (&self->language, g_free);
+  g_clear_pointer (&self->description, g_free);
+  g_clear_pointer (&self->trigger, g_free);
+  g_clear_pointer (&self->snippet_text, g_free);
+
   G_OBJECT_CLASS (ide_source_snippet_parent_class)->finalize (object);
 }
 
