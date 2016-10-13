@@ -256,7 +256,6 @@ ide_makecache_get_file_targets_searched (GMappedFile *mapped,
   g_autofree gchar *regexstr = NULL;
   g_autofree gchar *subdir = NULL;
   g_autoptr(GHashTable) found = NULL;
-  g_autoptr(GMatchInfo) match_info = NULL;
   g_autoptr(GPtrArray) targets = NULL;
   g_autoptr(GRegex) regex = NULL;
   const gchar *content;
@@ -306,6 +305,8 @@ ide_makecache_get_file_targets_searched (GMappedFile *mapped,
 
   while ((line = ide_line_reader_next (&rl, &line_len)))
     {
+      g_autoptr(GMatchInfo) match_info = NULL;
+
       /*
        * Keep track of "subdir = <dir>" changes so we know what directory
        * to launch make from.
