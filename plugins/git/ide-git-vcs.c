@@ -132,6 +132,7 @@ static GgitRepository *
 ide_git_vcs_load (IdeGitVcs  *self,
                   GError    **error)
 {
+  g_autofree gchar *uri = NULL;
   g_autoptr(GFile) location = NULL;
   GgitRepository *repository = NULL;
   IdeContext *context;
@@ -144,6 +145,9 @@ ide_git_vcs_load (IdeGitVcs  *self,
 
   if (!(location = ggit_repository_discover (project_file, error)))
     return NULL;
+
+  uri = g_file_get_uri (location);
+  g_debug ("Discovered .git location at “%s”", uri);
 
   if (!(repository = ggit_repository_open (location, error)))
     return NULL;
