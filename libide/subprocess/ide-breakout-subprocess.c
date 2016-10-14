@@ -167,7 +167,6 @@ enum {
   N_PROPS
 };
 
-static void              ide_breakout_subprocess_sync_setup           (void);
 static void              ide_breakout_subprocess_sync_complete        (IdeBreakoutSubprocess  *self,
                                                                        GAsyncResult          **result);
 static void              ide_breakout_subprocess_sync_done            (GObject                *object,
@@ -222,6 +221,25 @@ ide_breakout_subprocess_get_stdin_pipe (IdeSubprocess *subprocess)
   return self->stdin_pipe;
 }
 
+static void
+ide_breakout_subprocess_wait_cb (GObject      *object,
+                                 GAsyncResult *result,
+                                 gpointer      user_data)
+{
+  IdeBreakoutSubprocess *self = (IdeBreakoutSubprocess *)object;
+  gboolean *completed = user_data;
+
+  g_assert (IDE_IS_BREAKOUT_SUBPROCESS (self));
+  g_assert (completed != NULL);
+
+  ide_subprocess_wait_finish (IDE_SUBPROCESS (self), result, NULL);
+
+  *completed = TRUE;
+
+  if (self->main_context != NULL)
+    g_main_context_wakeup (self->main_context);
+}
+
 static gboolean
 ide_breakout_subprocess_wait (IdeSubprocess  *subprocess,
                               GCancellable   *cancellable,
@@ -233,12 +251,39 @@ ide_breakout_subprocess_wait (IdeSubprocess  *subprocess,
 
   g_object_ref (self);
 
-  /* Completion will broadcast upon completion */
   g_mutex_lock (&self->waiter_mutex);
+
   if (!self->client_has_exited)
-    g_cond_wait (&self->waiter_cond, &self->waiter_mutex);
+    {
+      g_autoptr(GMainContext) free_me = NULL;
+      GMainContext *main_context;
+      gboolean completed = FALSE;
+
+      if (NULL == (main_context = g_main_context_get_thread_default ()))
+        {
+          if (IDE_IS_MAIN_THREAD ())
+            main_context = g_main_context_default ();
+          else
+            main_context = free_me = g_main_context_new ();
+        }
+
+      self->main_context = g_main_context_ref (main_context);
+      g_mutex_unlock (&self->waiter_mutex);
+
+      ide_subprocess_wait_async (IDE_SUBPROCESS (self),
+                                 cancellable,
+                                 ide_breakout_subprocess_wait_cb,
+                                 &completed);
+
+      while (!completed)
+        g_main_context_iteration (main_context, TRUE);
+
+      goto cleanup;
+    }
+
   g_mutex_unlock (&self->waiter_mutex);
 
+cleanup:
   g_object_unref (self);
 
   return self->client_has_exited;
@@ -398,7 +443,6 @@ ide_breakout_subprocess_communicate_utf8 (IdeSubprocess  *subprocess,
     stdin_buf_len = strlen (stdin_buf);
   stdin_bytes = g_bytes_new (stdin_buf, stdin_buf_len);
 
-  ide_breakout_subprocess_sync_setup ();
   ide_breakout_subprocess_communicate_internal (self,
                                                 TRUE,
                                                 stdin_bytes,
@@ -515,11 +559,6 @@ ide_breakout_subprocess_force_exit (IdeSubprocess *subprocess)
   g_assert (IDE_IS_BREAKOUT_SUBPROCESS (self));
 
   ide_breakout_subprocess_send_signal (subprocess, SIGKILL);
-}
-
-static void
-ide_breakout_subprocess_sync_setup (void)
-{
 }
 
 static void
@@ -830,7 +869,6 @@ ide_breakout_subprocess_communicate (IdeSubprocess  *subprocess,
   g_assert (IDE_IS_BREAKOUT_SUBPROCESS (self));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  ide_breakout_subprocess_sync_setup ();
   ide_breakout_subprocess_communicate_internal (self,
                                                 FALSE,
                                                 stdin_buf,
