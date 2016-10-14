@@ -146,6 +146,9 @@ filter_capitalize (const gchar *input)
   gunichar c;
   GString *str;
 
+  if (!*input)
+    return g_strdup ("");
+
   c = g_utf8_get_char (input);
 
   if (g_unichar_isupper (c))
@@ -154,7 +157,8 @@ filter_capitalize (const gchar *input)
   str = g_string_new (NULL);
   input = g_utf8_next_char (input);
   g_string_append_unichar (str, g_unichar_toupper (c));
-  g_string_append (str, input);
+  if (*input)
+    g_string_append (str, input);
 
   return g_string_free (str, FALSE);
 }
@@ -473,7 +477,7 @@ scan_forward (const gchar  *input,
 
 gchar *
 ide_source_snippet_context_expand (IdeSourceSnippetContext *context,
-                                  const gchar            *input)
+                                   const gchar             *input)
 {
   const gchar *expand;
   gunichar c;
