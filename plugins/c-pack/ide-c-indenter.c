@@ -1079,7 +1079,7 @@ format_parameters (GtkTextIter *begin,
 
   for (iter = params; iter; iter = iter->next)
     {
-      gchar *param_str;
+      g_autofree gchar *param_str = NULL;
 
       if (iter != params)
         g_string_append (str, join_str);
