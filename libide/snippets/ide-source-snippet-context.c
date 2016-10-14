@@ -528,7 +528,7 @@ ide_source_snippet_context_expand (IdeSourceSnippetContext *context,
             {
               if (strchr (input, '|'))
                 {
-                  gchar *lkey;
+                  g_autofree gchar *lkey = NULL;
 
                   lkey = g_strndup (input, strchr (input, '|') - input);
                   expand = ide_source_snippet_context_get_variable (context, lkey);
