@@ -519,6 +519,8 @@ ide_build_result_finalize (GObject *object)
 
   g_clear_pointer (&priv->log_source, g_source_destroy);
 
+  g_clear_pointer (&priv->log_queue, g_async_queue_unref);
+
   g_mutex_clear (&priv->mutex);
 
   G_OBJECT_CLASS (ide_build_result_parent_class)->finalize (object);
