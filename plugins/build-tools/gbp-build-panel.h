@@ -30,8 +30,6 @@ G_DECLARE_FINAL_TYPE (GbpBuildPanel, gbp_build_panel, GBP, BUILD_PANEL, PnlDockW
 
 void gbp_build_panel_set_result (GbpBuildPanel  *self,
                                  IdeBuildResult *result);
-void gbp_build_panel_add_error  (GbpBuildPanel  *self,
-                                 const gchar    *message);
 
 G_END_DECLS
 

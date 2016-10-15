@@ -54,15 +54,6 @@ enum {
 
 static GParamSpec *properties [LAST_PROP];
 
-void
-gbp_build_panel_add_error (GbpBuildPanel *self,
-                           const gchar   *message)
-{
-  g_return_if_fail (GBP_IS_BUILD_PANEL (self));
-  g_return_if_fail (message != NULL);
-
-}
-
 static void
 gbp_build_panel_diagnostic (GbpBuildPanel  *self,
                             IdeDiagnostic  *diagnostic,
