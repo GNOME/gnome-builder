@@ -23,6 +23,7 @@
 #include <glib/gstdio.h>
 #include <libpeas/peas.h>
 
+#include "ide-debug.h"
 #include "ide-enums.h"
 
 #include "buildsystem/ide-build-result.h"
@@ -34,6 +35,7 @@
 #define POINTER_MARK(p)   GSIZE_TO_POINTER(GPOINTER_TO_SIZE(p)|1)
 #define POINTER_UNMARK(p) GSIZE_TO_POINTER(GPOINTER_TO_SIZE(p)&~(gsize)1)
 #define POINTER_MARKED(p) (GPOINTER_TO_SIZE(p)&1)
+#define DISPATCH_MAX      20
 
 typedef struct
 {
@@ -164,8 +166,18 @@ _ide_build_result_log (IdeBuildResult    *self,
       if G_UNLIKELY (log == IDE_BUILD_RESULT_LOG_STDERR)
         copied = POINTER_MARK (copied);
 
-      g_async_queue_push (priv->log_queue, copied);
+      /*
+       * Add the log entry to our queue to be dispatched in the main thread.
+       * However, we hold the async queue lock while updating the source ready
+       * time so we are synchronized with the main thread for setting the
+       * ready time. This is needed because the main thread may not dispatch
+       * all available items in a single dispatch (to avoid stalling the
+       * main loop).
+       */
+      g_async_queue_lock (priv->log_queue);
+      g_async_queue_push_unlocked (priv->log_queue, copied);
       g_source_set_ready_time (source, 0);
+      g_async_queue_unlock (priv->log_queue);
     }
   else
     {
@@ -419,17 +431,28 @@ emit_log_from_main (gpointer user_data)
   IdeBuildResultPrivate *priv = ide_build_result_get_instance_private (self);
   g_autoptr(GPtrArray) ar = g_ptr_array_new ();
   gpointer item;
-  guint i;
 
   g_assert (IDE_IS_BUILD_RESULT (self));
 
+  /*
+   * Pull up to DISPATCH_MAX items from the log queue. We have an upper
+   * bound here so that we don't stall the main loop. Additionally, we
+   * update the ready-time when we run out of items while holding the
+   * async queue lock to synchronize with the caller for further wakeups.
+   */
   g_async_queue_lock (priv->log_queue);
-  while (NULL != (item = g_async_queue_try_pop_unlocked (priv->log_queue)))
-    g_ptr_array_add (ar, item);
-  g_source_set_ready_time (priv->log_source, -1);
+  for (guint i = 0; i < DISPATCH_MAX; i++)
+    {
+      if (NULL == (item = g_async_queue_try_pop_unlocked (priv->log_queue)))
+        {
+          g_source_set_ready_time (priv->log_source, -1);
+          break;
+        }
+      g_ptr_array_add (ar, item);
+    }
   g_async_queue_unlock (priv->log_queue);
 
-  for (i = 0; i < ar->len; i++)
+  for (guint i = 0; i < ar->len; i++)
     {
       IdeBuildResultLog log = IDE_BUILD_RESULT_LOG_STDOUT;
       gchar *message;
@@ -767,6 +790,8 @@ ide_build_result_emit_diagnostic (IdeBuildResult *self,
     IdeDiagnostic  *diagnostic;
   } *pair;
 
+  IDE_ENTRY;
+
   g_return_if_fail (IDE_IS_BUILD_RESULT (self));
   g_return_if_fail (diagnostic != NULL);
 
@@ -782,6 +807,8 @@ ide_build_result_emit_diagnostic (IdeBuildResult *self,
   pair->diagnostic = ide_diagnostic_ref (diagnostic);
 
   g_timeout_add (0, ide_build_result_emit_diagnostic_cb, pair);
+
+  IDE_EXIT;
 }
 
 void
