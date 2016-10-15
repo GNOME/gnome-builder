@@ -258,7 +258,7 @@ ide_subprocess_launcher_spawn_worker (GTask        *task,
       g_auto(GStrv) env = NULL;
 
       if (!priv->clear_env)
-        env = g_strdupv (g_get_environ ());
+        env = g_get_environ ();
 
       for (guint i = 0; i < (priv->environ->len - 1); i++)
         {
