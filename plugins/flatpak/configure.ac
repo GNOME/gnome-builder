@@ -13,7 +13,7 @@ AS_IF([test "$enable_flatpak_plugin" != no],[
 	                  [have_flatpak=yes],
 	                  [have_flatpak=no])
 
-	AS_IF([test "$enable_flatpak_plugin" = "yes" && "$have_flatpak" = "no"],[
+       AS_IF([test "$enable_flatpak_plugin" = "yes" && test "$have_flatpak" = "no"],[
 	       AC_MSG_ERROR([--enable-flatpak-plugin requires flatpak >= flatpak_required_version])
 	])
 
