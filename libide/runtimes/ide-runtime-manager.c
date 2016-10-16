@@ -36,9 +36,11 @@ struct _IdeRuntimeManager
 };
 
 static void list_model_iface_init (GListModelInterface *iface);
+static void initable_iface_init   (GInitableIface      *iface);
 
 G_DEFINE_TYPE_EXTENDED (IdeRuntimeManager, ide_runtime_manager, IDE_TYPE_OBJECT, 0,
-                        G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL, list_model_iface_init))
+                        G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL, list_model_iface_init)
+                        G_IMPLEMENT_INTERFACE (G_TYPE_INITABLE, initable_iface_init))
 
 static void
 ide_runtime_manager_extension_added (PeasExtensionSet *set,
@@ -72,16 +74,16 @@ ide_runtime_manager_extension_removed (PeasExtensionSet *set,
   ide_runtime_provider_unload (provider, self);
 }
 
-static void
-ide_runtime_manager_constructed (GObject *object)
+static gboolean
+ide_runtime_manager_initable_init (GInitable     *initable,
+                                   GCancellable  *cancellable,
+                                   GError       **error)
 {
-  IdeRuntimeManager *self = (IdeRuntimeManager *)object;
+  IdeRuntimeManager *self = (IdeRuntimeManager *)initable;
   IdeContext *context;
 
-  G_OBJECT_CLASS (ide_runtime_manager_parent_class)->constructed (object);
-
+  g_assert (IDE_IS_RUNTIME_MANAGER (self));
   context = ide_object_get_context (IDE_OBJECT (self));
-
   g_assert (IDE_IS_CONTEXT (context));
 
   self->extensions = peas_extension_set_new (peas_engine_get_default (),
@@ -103,6 +105,14 @@ ide_runtime_manager_constructed (GObject *object)
                               self);
 
   ide_runtime_manager_add (self, ide_runtime_new (context, "host", _("Host operating system")));
+
+  return TRUE;
+}
+
+static void
+initable_iface_init (GInitableIface *iface)
+{
+  iface->init = ide_runtime_manager_initable_init;
 }
 
 void
@@ -130,7 +140,6 @@ ide_runtime_manager_class_init (IdeRuntimeManagerClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  object_class->constructed = ide_runtime_manager_constructed;
   object_class->dispose = ide_runtime_manager_dispose;
 }
 

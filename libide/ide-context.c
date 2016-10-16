@@ -1058,6 +1058,27 @@ ide_context_init_build_system (gpointer             source_object,
 }
 
 static void
+ide_context_init_runtimes (gpointer             source_object,
+                           GCancellable        *cancellable,
+                           GAsyncReadyCallback  callback,
+                           gpointer             user_data)
+{
+  IdeContext *self = source_object;
+  g_autoptr(GTask) task = NULL;
+  GError *error = NULL;
+
+  g_return_if_fail (IDE_IS_CONTEXT (self));
+
+  task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, ide_context_init_runtimes);
+
+  if (!g_initable_init (G_INITABLE (self->runtime_manager), cancellable, &error))
+    g_task_return_error (task, error);
+  else
+    g_task_return_boolean (task, TRUE);
+}
+
+static void
 ide_context_init_unsaved_files_cb (GObject      *object,
                                    GAsyncResult *result,
                                    gpointer      user_data)
@@ -1537,6 +1558,7 @@ ide_context_init_async (GAsyncInitable      *initable,
                         ide_context_init_unsaved_files,
                         ide_context_init_add_recent,
                         ide_context_init_search_engine,
+                        ide_context_init_runtimes,
                         ide_context_init_configuration_manager,
                         ide_context_init_loaded,
                         NULL);
