@@ -332,7 +332,8 @@ ide_diagnostic_compare (const IdeDiagnostic *a,
   g_assert (a != NULL);
   g_assert (b != NULL);
 
-  if (0 != (ret = (gint)a->severity - (gint)b->severity))
+  /* Severity is 0..N where N is more important. So reverse comparator. */
+  if (0 != (ret = (gint)b->severity - (gint)a->severity))
     return ret;
 
   if (a->location && b->location)
