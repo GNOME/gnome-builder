@@ -233,6 +233,7 @@ get_severity_title (IdeDiagnosticSeverity severity)
 {
   switch ((int)severity)
     {
+    case IDE_DIAGNOSTIC_FATAL:
     case IDE_DIAGNOSTIC_ERROR:
       return _("Errors");
 
