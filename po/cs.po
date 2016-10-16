@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-09-19 18:45+0000\n"
-"PO-Revision-Date: 2016-09-20 00:01+0200\n"
+"POT-Creation-Date: 2016-10-16 06:44+0000\n"
+"PO-Revision-Date: 2016-10-16 16:36+0200\n"
 "Last-Translator: Marek Černocký <marek@manet.cz>\n"
 "Language-Team: čeština <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
@@ -67,9 +67,9 @@ msgstr[2] "Před %u roky"
 #: contrib/egg/egg-file-chooser-entry.c:100
 #: contrib/egg/egg-file-chooser-entry.c:489
 #: libide/greeter/ide-greeter-perspective.c:673
-#: libide/workbench/ide-workbench-actions.c:70
+#: libide/workbench/ide-workbench-actions.c:76
 #: plugins/color-picker/gb-color-picker-prefs.c:210
-#: plugins/sysprof/gbp-sysprof-workbench-addin.c:254
+#: plugins/sysprof/gbp-sysprof-workbench-addin.c:305
 msgid "Open"
 msgstr "Otevřít"
 
@@ -99,11 +99,11 @@ msgstr "Procházet…"
 #: libide/editor/ide-editor-view-actions.c:316
 #: libide/editor/ide-editor-view-actions.c:447
 #: libide/greeter/ide-greeter-perspective.c:672
-#: libide/workbench/ide-workbench-actions.c:69
+#: libide/workbench/ide-workbench-actions.c:77
 #: plugins/color-picker/gb-color-picker-prefs.c:98
 #: plugins/color-picker/gb-color-picker-prefs.c:214
 #: plugins/color-picker/gb-color-picker-prefs.c:241
-#: plugins/sysprof/gbp-sysprof-workbench-addin.c:255
+#: plugins/sysprof/gbp-sysprof-workbench-addin.c:306
 #: plugins/terminal/gb-terminal-view-actions.c:305
 msgid "Cancel"
 msgstr "Zrušit"
@@ -707,171 +707,171 @@ msgstr "O _aplikaci"
 msgid "_Quit"
 msgstr "U_končit"
 
-#: data/gtk/menus.ui:48
+#: data/gtk/menus.ui:49
 msgid "Show left panel"
 msgstr "Zobrazovat levý panel"
 
-#: data/gtk/menus.ui:53
+#: data/gtk/menus.ui:54
 msgid "Show bottom panel"
 msgstr "Zobrazovat spodní panel"
 
-#: data/gtk/menus.ui:58
+#: data/gtk/menus.ui:59
 msgid "Show right panel"
 msgstr "Zobrazovat pravý panel"
 
-#: data/gtk/menus.ui:86
+#: data/gtk/menus.ui:87
 msgid "_New File"
 msgstr "_Nový soubor"
 
-#: data/gtk/menus.ui:92
+#: data/gtk/menus.ui:93
 msgid "_Open File…"
 msgstr "_Otevřít soubor…"
 
-#: data/gtk/menus.ui:98
+#: data/gtk/menus.ui:99
 msgid "Save _All"
 msgstr "Uložit _vše"
 
-#: data/gtk/menus.ui:115
+#: data/gtk/menus.ui:116
 msgid "_Go to Definition"
 msgstr "Pře_jít na definici"
 
-#: data/gtk/menus.ui:121
+#: data/gtk/menus.ui:122
 msgid "_Undo"
 msgstr "_Zpět"
 
-#: data/gtk/menus.ui:125
+#: data/gtk/menus.ui:126
 msgid "_Redo"
 msgstr "Z_novu"
 
-#: data/gtk/menus.ui:131
+#: data/gtk/menus.ui:132
 msgid "C_ut"
 msgstr "_Vyjmout"
 
-#: data/gtk/menus.ui:136 data/gtk/menus.ui:237 plugins/terminal/gtk/menus.ui:16
+#: data/gtk/menus.ui:137 data/gtk/menus.ui:238 plugins/terminal/gtk/menus.ui:16
 msgid "_Copy"
 msgstr "_Kopírovat"
 
-#: data/gtk/menus.ui:140 data/gtk/menus.ui:241 plugins/terminal/gtk/menus.ui:20
+#: data/gtk/menus.ui:141 data/gtk/menus.ui:242 plugins/terminal/gtk/menus.ui:20
 msgid "_Paste"
 msgstr "V_ložit"
 
-#: data/gtk/menus.ui:144 data/gtk/menus.ui:245
+#: data/gtk/menus.ui:145 data/gtk/menus.ui:246
 msgid "_Delete"
 msgstr "_Smazat"
 
-#: data/gtk/menus.ui:150 libide/preferences/ide-preferences-builtin.c:190
+#: data/gtk/menus.ui:151 libide/preferences/ide-preferences-builtin.c:190
 msgid "Highlighting"
 msgstr "Zvýrazňování"
 
-#: data/gtk/menus.ui:155 plugins/terminal/gtk/menus.ui:26
+#: data/gtk/menus.ui:156 plugins/terminal/gtk/menus.ui:26
 msgid "Selection"
 msgstr "Výběr"
 
-#: data/gtk/menus.ui:157 data/gtk/menus.ui:251 plugins/terminal/gtk/menus.ui:28
+#: data/gtk/menus.ui:158 data/gtk/menus.ui:252 plugins/terminal/gtk/menus.ui:28
 msgid "Select _All"
 msgstr "Vybrat vš_e"
 
-#: data/gtk/menus.ui:162 plugins/terminal/gtk/menus.ui:33
+#: data/gtk/menus.ui:163 plugins/terminal/gtk/menus.ui:33
 msgid "Select _None"
 msgstr "Z_rušit výběr"
 
-#: data/gtk/menus.ui:168
+#: data/gtk/menus.ui:169
 msgid "All _Upper Case"
 msgstr "Vše vel_kými písmeny"
 
-#: data/gtk/menus.ui:173
+#: data/gtk/menus.ui:174
 msgid "All _Lower Case"
 msgstr "Vše _malými písmeny"
 
-#: data/gtk/menus.ui:178
+#: data/gtk/menus.ui:179
 msgid "_Invert Case"
 msgstr "Obrát_it velikost písmen"
 
-#: data/gtk/menus.ui:183
+#: data/gtk/menus.ui:184
 msgid "_Title Case"
 msgstr "_První písmena velká"
 
-#: data/gtk/menus.ui:190
+#: data/gtk/menus.ui:191
 msgid "Join Lines"
 msgstr "Spojit řádky"
 
-#: data/gtk/menus.ui:194
+#: data/gtk/menus.ui:195
 msgid "Sort Lines"
 msgstr "Seřadit řádky"
 
-#: data/gtk/menus.ui:203
+#: data/gtk/menus.ui:204
 msgid "Zoom"
 msgstr "Přiblížení"
 
-#: data/gtk/menus.ui:205
+#: data/gtk/menus.ui:206
 msgid "Zoom _In"
 msgstr "Přiblíž_it"
 
-#: data/gtk/menus.ui:210
+#: data/gtk/menus.ui:211
 msgid "Zoom _Out"
 msgstr "_Oddálit"
 
-#: data/gtk/menus.ui:216
+#: data/gtk/menus.ui:217
 msgid "Reset"
 msgstr "Základní"
 
-#: data/gtk/menus.ui:227
+#: data/gtk/menus.ui:228
 msgid "_Wrap Around"
 msgstr "_Cyklicky přecházet přes okraj"
 
-#: data/gtk/menus.ui:233
+#: data/gtk/menus.ui:234
 msgid "Cu_t"
 msgstr "_Vyjmout"
 
-#: data/gtk/menus.ui:259
+#: data/gtk/menus.ui:260
 msgid "Split"
 msgstr "Rozdělit"
 
-#: data/gtk/menus.ui:261
+#: data/gtk/menus.ui:262
 msgid "Split Left"
 msgstr "Rozdělit doleva"
 
-#: data/gtk/menus.ui:266
+#: data/gtk/menus.ui:267
 msgid "Split Right"
 msgstr "Rozdělit doprava"
 
-#: data/gtk/menus.ui:271
+#: data/gtk/menus.ui:272
 msgid "Split Down"
 msgstr "Rozdělit dolů"
 
-#: data/gtk/menus.ui:278
+#: data/gtk/menus.ui:279
 msgid "Move"
 msgstr "Přesunout"
 
-#: data/gtk/menus.ui:280
+#: data/gtk/menus.ui:281
 msgid "Move Left"
 msgstr "Přesunout doleva"
 
-#: data/gtk/menus.ui:285
+#: data/gtk/menus.ui:286
 msgid "Move Right"
 msgstr "Přesunout doprava"
 
-#: data/gtk/menus.ui:293
+#: data/gtk/menus.ui:294
 msgid "_Save"
 msgstr "_Uložit"
 
-#: data/gtk/menus.ui:297
+#: data/gtk/menus.ui:298
 msgid "_Save As"
 msgstr "_Uložit jako"
 
-#: data/gtk/menus.ui:303
+#: data/gtk/menus.ui:304
 msgid "_Print"
 msgstr "_Tisk"
 
-#: data/gtk/menus.ui:309
+#: data/gtk/menus.ui:310 plugins/sysprof/gbp-sysprof-perspective.ui:28
 msgid "_Close"
 msgstr "_Zavřít"
 
 #: data/org.gnome.Builder.appdata.xml.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
-#: libide/application/ide-application.c:466
+#: libide/application/ide-application.c:498
 #: libide/preferences/ide-preferences-builtin.c:144
-#: libide/workbench/ide-workbench.c:560
+#: libide/workbench/ide-workbench.c:561
 msgid "Builder"
 msgstr "Builder"
 
@@ -1094,11 +1094,11 @@ msgstr "Sestavení již probíhá"
 msgid "Ready"
 msgstr "Připraveno"
 
-#: libide/buildsystem/ide-build-result.c:250
+#: libide/buildsystem/ide-build-result.c:262
 msgid "Failed to open stderr stream."
 msgstr "Selhalo otevření datového proudu stderr."
 
-#: libide/buildsystem/ide-build-result.c:280
+#: libide/buildsystem/ide-build-result.c:292
 msgid "Failed to open stdout stream."
 msgstr "Selhalo otevření datového proudu stdout."
 
@@ -1277,9 +1277,9 @@ msgid "_Reload"
 msgstr "_Znovu načíst"
 
 #: libide/editor/ide-editor-view.ui:31
-#: libide/greeter/ide-greeter-perspective.ui:310
-#: libide/greeter/ide-greeter-perspective.ui:358
-#: libide/workbench/ide-omni-bar.ui:346
+#: libide/greeter/ide-greeter-perspective.ui:319
+#: libide/greeter/ide-greeter-perspective.ui:367
+#: libide/workbench/ide-omni-bar.ui:353
 msgid "_Cancel"
 msgstr "_Zrušit"
 
@@ -1329,19 +1329,19 @@ msgstr "Odst_ranit"
 msgid "Select a Project"
 msgstr "Výběr projektu"
 
-#: libide/greeter/ide-greeter-perspective.ui:296
+#: libide/greeter/ide-greeter-perspective.ui:299
 msgid "Click an item to select"
 msgstr "Kliknutím vyberte položku"
 
-#: libide/greeter/ide-greeter-perspective.ui:322
+#: libide/greeter/ide-greeter-perspective.ui:331
 msgid "Open…"
 msgstr "Otevřít…"
 
-#: libide/greeter/ide-greeter-perspective.ui:337
+#: libide/greeter/ide-greeter-perspective.ui:346
 msgid "Select projects for removal"
 msgstr "Výběr projektů k odstranění"
 
-#: libide/greeter/ide-greeter-perspective.ui:357
+#: libide/greeter/ide-greeter-perspective.ui:366
 msgid "Return to project selection"
 msgstr "Vrátit se do výběru projektu"
 
@@ -2048,8 +2048,8 @@ msgid "Number of CPU"
 msgstr "Počet CPU"
 
 #: libide/preferences/ide-preferences-builtin.c:375
-#: libide/workbench/ide-omni-bar.ui:372
-#: plugins/build-tools/gbp-build-panel.c:386
+#: libide/workbench/ide-omni-bar.ui:379
+#: plugins/build-tools/gbp-build-panel.c:447
 msgid "Build"
 msgstr "Sestavení"
 
@@ -2102,7 +2102,7 @@ msgstr "Systém správy verzí"
 msgid "_Select"
 msgstr "_Vybrat"
 
-#: libide/preferences/ide-preferences-perspective.c:924
+#: libide/preferences/ide-preferences-perspective.c:955
 msgid "Preferences"
 msgstr "Předvolby"
 
@@ -2149,7 +2149,7 @@ msgid "Cannot run target, another target is running"
 msgstr "Nelze spustit cíl, jiný cíl právě běží"
 
 #: libide/runner/ide-run-manager.c:287
-#: plugins/autotools/ide-autotools-build-task.c:442
+#: plugins/autotools/ide-autotools-build-task.c:478
 msgid "Failed to locate runtime"
 msgstr "Selhalo vyhledání běhového prostředí"
 
@@ -2311,7 +2311,7 @@ msgid "untitled document"
 msgstr "nepojmenovaný dokument"
 
 #. Translators: "Target" is providing context to the selected build configuration
-#: libide/workbench/ide-omni-bar.c:365
+#: libide/workbench/ide-omni-bar.c:366
 msgid "Target"
 msgstr "Cíl"
 
@@ -2334,52 +2334,52 @@ msgstr "Zařízení"
 msgid "Runtime"
 msgstr "Běhové prostředí"
 
-#: libide/workbench/ide-omni-bar.ui:101
+#: libide/workbench/ide-omni-bar.ui:108
 msgid "Build project (Ctrl+F7)"
 msgstr "Sestavit projekt (Ctrl+F7)"
 
-#: libide/workbench/ide-omni-bar.ui:119
+#: libide/workbench/ide-omni-bar.ui:126
 msgid "Cancel build"
 msgstr "Zrušit sestavení"
 
-#: libide/workbench/ide-omni-bar.ui:163
+#: libide/workbench/ide-omni-bar.ui:170
 #: plugins/project-tree/gb-project-tree-addin.c:105
 msgid "Project"
 msgstr "Projekt"
 
-#: libide/workbench/ide-omni-bar.ui:187
+#: libide/workbench/ide-omni-bar.ui:194
 msgid "Branch"
 msgstr "Větev"
 
-#: libide/workbench/ide-omni-bar.ui:222
+#: libide/workbench/ide-omni-bar.ui:229
 msgid "Build Profile"
 msgstr "Profil sestavení"
 
-#: libide/workbench/ide-omni-bar.ui:268
+#: libide/workbench/ide-omni-bar.ui:275
 msgid "Last build"
 msgstr "Poslední sestavení"
 
-#: libide/workbench/ide-omni-bar.ui:318
+#: libide/workbench/ide-omni-bar.ui:325
 msgid "Failed"
 msgstr "Selhalo"
 
-#: libide/workbench/ide-omni-bar.ui:335
+#: libide/workbench/ide-omni-bar.ui:342
 msgid "View Output"
 msgstr "Zobrazit výstup"
 
-#: libide/workbench/ide-omni-bar.ui:382
+#: libide/workbench/ide-omni-bar.ui:389
 msgid "Rebuild"
 msgstr "Znovu sestavit"
 
-#: libide/workbench/ide-omni-bar.ui:392
+#: libide/workbench/ide-omni-bar.ui:399
 msgid "Clean"
 msgstr "Vyčistit"
 
-#: libide/workbench/ide-workbench-actions.c:66
+#: libide/workbench/ide-workbench-actions.c:73
 msgid "Open File"
 msgstr "Otevření souboru"
 
-#: libide/workbench/ide-workbench.c:558
+#: libide/workbench/ide-workbench.c:559
 #, c-format
 msgid "%s - Builder"
 msgstr "%s – Builder"
@@ -2409,20 +2409,20 @@ msgid "Build successful"
 msgstr "Sestavení proběhlo úspěšně"
 
 #: plugins/autotools/ide-autotools-builder.c:159
-#: plugins/autotools/ide-autotools-builder.c:240
-#: plugins/autotools/ide-autotools-build-task.c:1057
+#: plugins/autotools/ide-autotools-builder.c:241
+#: plugins/autotools/ide-autotools-build-task.c:1202
 msgid "Building…"
 msgstr "Sestavuje se…"
 
-#: plugins/autotools/ide-autotools-builder.c:201
+#: plugins/autotools/ide-autotools-builder.c:202
 msgid "Install cancelled"
 msgstr "Instalace byla zrušena"
 
-#: plugins/autotools/ide-autotools-builder.c:203
+#: plugins/autotools/ide-autotools-builder.c:204
 msgid "Install failed"
 msgstr "Instalace selhala"
 
-#: plugins/autotools/ide-autotools-builder.c:209
+#: plugins/autotools/ide-autotools-builder.c:210
 msgid "Install successful"
 msgstr "Instalace proběhla úspěšně"
 
@@ -2430,60 +2430,64 @@ msgstr "Instalace proběhla úspěšně"
 msgid "Failed to locate configure.ac"
 msgstr "Selhalo vyhledání souboru configure.ac"
 
-#: plugins/autotools/ide-autotools-build-task.c:181
+#: plugins/autotools/ide-autotools-build-task.c:200
 msgid "Directory must be on a locally mounted filesystem."
 msgstr "Složka musí být na místně připojeném souborovém systému."
 
-#: plugins/autotools/ide-autotools-build-task.c:431
+#: plugins/autotools/ide-autotools-build-task.c:467
 msgid "Failed to locate device"
 msgstr "Selhalo vyhledání zařízení"
 
-#: plugins/autotools/ide-autotools-build-task.c:562
-#: plugins/autotools/ide-autotools-build-task.c:590
-#: plugins/autotools/ide-autotools-build-task.c:794
+#: plugins/autotools/ide-autotools-build-task.c:598
+#: plugins/autotools/ide-autotools-build-task.c:626
+#: plugins/autotools/ide-autotools-build-task.c:939
 msgid "Build Failed: "
 msgstr "Sestavení selhalo: "
 
-#: plugins/autotools/ide-autotools-build-task.c:675
+#: plugins/autotools/ide-autotools-build-task.c:711
 msgid "Cannot execute build task more than once"
 msgstr "Úlohu provádějící sestavení nelze spustic vícekrát než jednou"
 
-#: plugins/autotools/ide-autotools-build-task.c:827
+#: plugins/autotools/ide-autotools-build-task.c:826
+msgid "Failed to access runtime for postbuild"
+msgstr "Selhalo přístup k běhového prostředí po sestavení"
+
+#: plugins/autotools/ide-autotools-build-task.c:972
 msgid "Failed to create build directory."
 msgstr "Selhalo vytvoření složky pro sestavení."
 
-#: plugins/autotools/ide-autotools-build-task.c:836
+#: plugins/autotools/ide-autotools-build-task.c:981
 #, c-format
 msgid "'%s' is not a directory."
 msgstr "„%s“ není složka."
 
-#: plugins/autotools/ide-autotools-build-task.c:875
+#: plugins/autotools/ide-autotools-build-task.c:1020
 #, c-format
 msgid "autogen.sh is missing from project directory (%s)."
 msgstr "Ve složce projektu schází autogen.sh (%s)."
 
-#: plugins/autotools/ide-autotools-build-task.c:885
+#: plugins/autotools/ide-autotools-build-task.c:1030
 msgid "autogen.sh is not executable."
 msgstr "Skript autogen.sh není spustitelný."
 
-#: plugins/autotools/ide-autotools-build-task.c:889
+#: plugins/autotools/ide-autotools-build-task.c:1034
 msgid "Running autogen…"
 msgstr "Běží autogen…"
 
-#: plugins/autotools/ide-autotools-build-task.c:923
+#: plugins/autotools/ide-autotools-build-task.c:1068
 #, c-format
 msgid "autogen.sh failed to create configure (%s)"
 msgstr "Skritp autogen.sh selhal při vytváření konfigurace (%s)"
 
-#: plugins/autotools/ide-autotools-build-task.c:958
+#: plugins/autotools/ide-autotools-build-task.c:1103
 msgid "Running configure…"
 msgstr "Probíhá konfigurace…"
 
-#: plugins/autotools/ide-autotools-build-task.c:1055
+#: plugins/autotools/ide-autotools-build-task.c:1200
 msgid "Cleaning…"
 msgstr "Čistí se…"
 
-#: plugins/autotools/ide-makecache.c:1147
+#: plugins/autotools/ide-makecache.c:1148
 msgid "Invalid makefile provided, ignoring."
 msgstr "Poskytnut neplatný Makefile, ignoruje se."
 
@@ -2551,7 +2555,7 @@ msgstr "Proměnné prostředí"
 msgid "Build Output"
 msgstr "Výpis ze sestavení"
 
-#: plugins/build-tools/gbp-build-panel.c:84
+#: plugins/build-tools/gbp-build-panel.c:82
 #, c-format
 msgid "%d warning"
 msgid_plural "%d warnings"
@@ -2566,22 +2570,6 @@ msgid_plural "%d errors"
 msgstr[0] "%d chyba"
 msgstr[1] "%d chyby"
 msgstr[2] "%d chyb"
-
-#: plugins/build-tools/gbp-build-panel.c:246
-msgid "Errors"
-msgstr "Chyby"
-
-#: plugins/build-tools/gbp-build-panel.c:249
-msgid "Warnings"
-msgstr "Varovnání"
-
-#: plugins/build-tools/gbp-build-panel.c:252
-msgid "Notes"
-msgstr "Poznámky"
-
-#: plugins/build-tools/gbp-build-panel-row.c:76
-msgid "Unknown file"
-msgstr "Neznámý soubor"
 
 #: plugins/build-tools/gbp-build-panel.ui:33
 msgid "Status:"
@@ -3026,7 +3014,7 @@ msgstr "Zakomentovat kód"
 msgid "Uncomment code"
 msgstr "Odkomentovat kód"
 
-#: plugins/contributing/contributing_plugin/helper.py:76
+#: plugins/contributing/contributing_plugin/helper.py:77
 #, python-format
 msgid ""
 "Usage:\n"
@@ -3035,11 +3023,11 @@ msgstr ""
 "Použití:\n"
 "  %(prgname) %(command) VOLBY\n"
 
-#: plugins/contributing/contributing_plugin/__init__.py:54
+#: plugins/contributing/contributing_plugin/__init__.py:55
 msgid "Missing project name"
 msgstr "Schází název projektu"
 
-#: plugins/contributing/contributing_plugin/__init__.py:68
+#: plugins/contributing/contributing_plugin/__init__.py:69
 msgid ""
 "Usage:\n"
 "  ide contribute PROJECT_NAME\n"
@@ -3073,7 +3061,7 @@ msgstr ""
 "  ide contribute gnome-maps\n"
 "\n"
 
-#: plugins/contributing/contributing_plugin/__init__.py:226
+#: plugins/contributing/contributing_plugin/__init__.py:227
 msgid "Username"
 msgstr "Uživatelské jméno"
 
@@ -3298,7 +3286,7 @@ msgstr "Povolit použití pylint, který může spouštět kód ve vašem projek
 msgid "pylint python lint code execute execution"
 msgstr "pylint python lint programový kód spustit spuštění provést provádění"
 
-#: plugins/gnome-code-assistance/ide-gca-service.c:176
+#: plugins/gnome-code-assistance/ide-gca-service.c:182
 msgid "No language specified"
 msgstr "Není určen žádný jazyk"
 
@@ -3326,11 +3314,11 @@ msgstr[2] "Úžasné, strávili jste v Bilderu %d vteřin!\n"
 msgid "Preview as HTML"
 msgstr "Náhled v podobě HTML"
 
-#: plugins/jedi/jedi_plugin.py:731
+#: plugins/jedi/jedi_plugin.py:732
 msgid "Suggest Python completions"
 msgstr "Navrhovat dokončování pro Python"
 
-#: plugins/jedi/jedi_plugin.py:732
+#: plugins/jedi/jedi_plugin.py:733
 msgid "Use Jedi to provide completions for the Python language"
 msgstr "Používat Jedi pro dokončování v jazyce Python."
 
@@ -3473,23 +3461,31 @@ msgstr "Symboly"
 msgid "System Monitor"
 msgstr "Sledování systému"
 
-#: plugins/sysprof/gbp-sysprof-perspective.c:65
+#: plugins/sysprof/gbp-sysprof-perspective.c:135
 msgid "Profiler"
 msgstr "Profiler"
 
-#: plugins/sysprof/gbp-sysprof-workbench-addin.c:251
+#: plugins/sysprof/gbp-sysprof-perspective.ui:49
+msgid "Select “Run with profiler” from the run menu to begin"
+msgstr "Začněte tím, v nabídce vyberete „Spustit s profilerem“"
+
+#: plugins/sysprof/gbp-sysprof-perspective.ui:81
+msgid "CPU"
+msgstr "Procesor"
+
+#: plugins/sysprof/gbp-sysprof-workbench-addin.c:302
 msgid "Open Profile"
 msgstr "Otevření záznamu profilování"
 
-#: plugins/sysprof/gbp-sysprof-workbench-addin.c:259
+#: plugins/sysprof/gbp-sysprof-workbench-addin.c:311
 msgid "Sysprof Capture (*.syscap)"
 msgstr "Záznam ze Sysprof (*.syscap)"
 
-#: plugins/sysprof/gbp-sysprof-workbench-addin.c:265
+#: plugins/sysprof/gbp-sysprof-workbench-addin.c:317
 msgid "All Files"
 msgstr "Všechny soubory"
 
-#: plugins/sysprof/gbp-sysprof-workbench-addin.c:352
+#: plugins/sysprof/gbp-sysprof-workbench-addin.c:418
 msgid "Run with Profiler"
 msgstr "Spustit s profilerem"
 
@@ -3509,7 +3505,7 @@ msgstr "Uložení obsahu terminálu jako"
 msgid "_New Terminal"
 msgstr "_Nový terminál"
 
-#: plugins/todo/todo_plugin/__init__.py:186
+#: plugins/todo/todo_plugin/__init__.py:188
 msgid "Todo"
 msgstr "Úkoly"
 
