@@ -27,21 +27,25 @@
 
 struct _GbpBuildPanel
 {
-  PnlDockWidget     parent_instance;
+  PnlDockWidget        parent_instance;
 
-  IdeBuildResult   *result;
-  EggSignalGroup   *signals;
-  EggBindingGroup  *bindings;
+  IdeBuildResult      *result;
+  EggSignalGroup      *signals;
+  EggBindingGroup     *bindings;
+  GHashTable          *diags_hash;
 
-  GtkListBox       *diagnostics;
-  GtkLabel         *errors_label;
-  GtkLabel         *running_time_label;
-  GtkRevealer      *status_revealer;
-  GtkLabel         *status_label;
-  GtkLabel         *warnings_label;
+  GtkListStore        *diagnostics_store;
+  GtkCellRendererText *diagnostics_text;
+  GtkTreeViewColumn   *diagnostics_column;
+  GtkTreeView         *diagnostics_tree_view;
+  GtkLabel            *errors_label;
+  GtkLabel            *running_time_label;
+  GtkRevealer         *status_revealer;
+  GtkLabel            *status_label;
+  GtkLabel            *warnings_label;
 
-  guint             error_count;
-  guint             warning_count;
+  guint                error_count;
+  guint                warning_count;
 };
 
 G_DEFINE_TYPE (GbpBuildPanel, gbp_build_panel, PNL_TYPE_DOCK_WIDGET)
@@ -60,8 +64,9 @@ gbp_build_panel_diagnostic (GbpBuildPanel  *self,
                             IdeBuildResult *result)
 {
   IdeDiagnosticSeverity severity;
-  GtkWidget *row;
-  gchar *str;
+  guint hash;
+
+  IDE_ENTRY;
 
   g_assert (GBP_IS_BUILD_PANEL (self));
   g_assert (diagnostic != NULL);
@@ -71,26 +76,68 @@ gbp_build_panel_diagnostic (GbpBuildPanel  *self,
 
   if (severity == IDE_DIAGNOSTIC_WARNING)
     {
+      g_autofree gchar *str = NULL;
+
       self->warning_count++;
+
       str = g_strdup_printf (ngettext ("%d warning", "%d warnings", self->warning_count), self->warning_count);
       gtk_label_set_label (self->warnings_label, str);
-      g_free (str);
     }
-  else if (severity == IDE_DIAGNOSTIC_ERROR)
+  else if (severity == IDE_DIAGNOSTIC_ERROR || severity == IDE_DIAGNOSTIC_FATAL)
     {
+      g_autofree gchar *str = NULL;
+
       self->error_count++;
+
       str = g_strdup_printf (ngettext ("%d error", "%d errors", self->error_count), self->error_count);
       gtk_label_set_label (self->errors_label, str);
-      g_free (str);
     }
 
-  row = g_object_new (GBP_TYPE_BUILD_PANEL_ROW,
-                      "diagnostic", diagnostic,
-                      "visible", TRUE,
-                      NULL);
-  gtk_container_add (GTK_CONTAINER (self->diagnostics), row);
-  gtk_list_box_invalidate_sort (self->diagnostics);
-  gtk_list_box_invalidate_headers (self->diagnostics);
+  hash = ide_diagnostic_hash (diagnostic);
+
+  if (g_hash_table_insert (self->diags_hash, GUINT_TO_POINTER (hash), NULL))
+    {
+      GtkTreeModel *model = GTK_TREE_MODEL (self->diagnostics_store);
+      GtkTreeIter iter;
+      gint left = 0;
+      gint right = gtk_tree_model_iter_n_children (model, NULL) - 1;
+      gint middle = 0;
+      gint cmpval = 1;
+
+      /* Binary search to locate the target position. */
+      while (left <= right)
+        {
+          g_autoptr(IdeDiagnostic) item = NULL;
+
+          middle = (left + right) / 2;
+
+          gtk_tree_model_iter_nth_child (model, &iter, NULL, middle);
+          gtk_tree_model_get (model, &iter, 0, &item, -1);
+
+          cmpval = ide_diagnostic_compare (item, diagnostic);
+
+          if (cmpval < 0)
+            left = middle + 1;
+          else if (cmpval > 0)
+            right = middle - 1;
+          else
+            break;
+        }
+
+      /* If we binary searched and middle was compared previous
+       * to our new diagnostic, advance one position.
+       */
+      if (cmpval < 0)
+        middle++;
+
+      gtk_list_store_insert (self->diagnostics_store, &iter, middle);
+      gtk_list_store_set (self->diagnostics_store, &iter,
+                          0, diagnostic,
+                          1, ide_diagnostic_get_text (diagnostic),
+                          -1);
+    }
+
+  IDE_EXIT;
 }
 
 static void
@@ -153,6 +200,8 @@ gbp_build_panel_disconnect (GbpBuildPanel *self)
   egg_signal_group_set_target (self->signals, NULL);
   egg_binding_group_set_source (self->bindings, NULL);
   g_clear_object (&self->result);
+  g_hash_table_remove_all (self->diags_hash);
+  gtk_list_store_clear (self->diagnostics_store);
 }
 
 void
@@ -169,10 +218,6 @@ gbp_build_panel_set_result (GbpBuildPanel  *self,
 
       if (result)
         gbp_build_panel_connect (self, result);
-
-      gtk_container_foreach (GTK_CONTAINER (self->diagnostics),
-                             (GtkCallback)gtk_widget_destroy,
-                             NULL);
     }
 }
 
@@ -199,93 +244,110 @@ gbp_build_panel_notify_running_time (GbpBuildPanel  *self,
 }
 
 static void
-gbp_build_panel_diagnostic_activated (GbpBuildPanel *self,
-                                      GtkListBoxRow *row,
-                                      GtkListBox    *list_box)
+gbp_build_panel_diagnostic_activated (GbpBuildPanel     *self,
+                                      GtkTreePath       *path,
+                                      GtkTreeViewColumn *colun,
+                                      GtkTreeView       *tree_view)
 {
   g_autoptr(IdeUri) uri = NULL;
-  IdeDiagnostic *diagnostic;
   IdeSourceLocation *loc;
+  IdeDiagnostic *diagnostic = NULL;
   IdeWorkbench *workbench;
+  GtkTreeModel *model;
+  GtkTreeIter iter;
+
+  IDE_ENTRY;
 
   g_assert (GBP_IS_BUILD_PANEL (self));
-  g_assert (GTK_IS_LIST_BOX_ROW (row));
-  g_assert (GTK_IS_LIST_BOX (list_box));
+  g_assert (path != NULL);
+  g_assert (GTK_IS_TREE_VIEW_COLUMN (colun));
+  g_assert (GTK_IS_TREE_VIEW (tree_view));
 
-  diagnostic = gbp_build_panel_row_get_diagnostic (GBP_BUILD_PANEL_ROW (row));
+  model = gtk_tree_view_get_model (tree_view);
+  if (!gtk_tree_model_get_iter (model, &iter, path))
+    IDE_EXIT;
+
+  gtk_tree_model_get (model, &iter, 0, &diagnostic, -1);
   if (diagnostic == NULL)
-    return;
+    IDE_EXIT;
 
   loc = ide_diagnostic_get_location (diagnostic);
   if (loc == NULL)
-    return;
+    IDE_EXIT;
 
   uri = ide_source_location_get_uri (loc);
   if (uri == NULL)
-    return;
+    IDE_EXIT;
 
   workbench = ide_widget_get_workbench (GTK_WIDGET (self));
-  ide_workbench_open_uri_async (workbench, uri, "editor", IDE_WORKBENCH_OPEN_FLAGS_NONE, NULL, NULL, NULL);
-}
 
-static gchar *
-get_severity_title (IdeDiagnosticSeverity severity)
-{
-  switch ((int)severity)
-    {
-    case IDE_DIAGNOSTIC_FATAL:
-    case IDE_DIAGNOSTIC_ERROR:
-      return _("Errors");
+  ide_workbench_open_uri_async (workbench,
+                                uri,
+                                "editor",
+                                IDE_WORKBENCH_OPEN_FLAGS_NONE,
+                                NULL,
+                                NULL,
+                                NULL);
 
-    case IDE_DIAGNOSTIC_WARNING:
-      return _("Warnings");
-
-    case IDE_DIAGNOSTIC_NOTE:
-      return _("Notes");
-
-    default:
-      return NULL;
-    }
+  IDE_EXIT;
 }
 
 static void
-update_header_func (GtkListBoxRow *row,
-                    GtkListBoxRow *before,
-                    gpointer       user_data)
+gbp_build_panel_text_func (GtkCellLayout   *layout,
+                           GtkCellRenderer *renderer,
+                           GtkTreeModel    *model,
+                           GtkTreeIter     *iter,
+                           gpointer         user_data)
 {
-  IdeDiagnostic *diag;
-  IdeDiagnostic *last = NULL;
-  IdeDiagnosticSeverity severitya = 0;
-  IdeDiagnosticSeverity severityb = 0;
+  g_autoptr(IdeDiagnostic) diagnostic = NULL;
 
-  g_assert (GTK_IS_LIST_BOX_ROW (row));
-  g_assert (!before || GTK_IS_LIST_BOX_ROW (before));
+  gtk_tree_model_get (model, iter, 0, &diagnostic, -1);
 
-  diag = gbp_build_panel_row_get_diagnostic (GBP_BUILD_PANEL_ROW (row));
-  severitya = ide_diagnostic_get_severity (diag);
-
-  if (before != NULL)
+  if (diagnostic != NULL)
     {
-      last = gbp_build_panel_row_get_diagnostic (GBP_BUILD_PANEL_ROW (before));
-      severityb = ide_diagnostic_get_severity (last);
-    }
+      GString *str;
+      const gchar *text;
+      g_autofree gchar *name = NULL;
+      IdeSourceLocation *location;
+      GFile *gfile = NULL;
+      guint line = 0;
+      guint column = 0;
 
-  if (last == NULL || severitya != severityb)
-    {
-      const gchar *str = get_severity_title (severitya);
+      location = ide_diagnostic_get_location (diagnostic);
 
-      if (str != NULL)
+      if (location != NULL)
         {
-          GtkWidget *widget;
+          IdeFile *file;
 
-          widget = g_object_new (GTK_TYPE_LABEL,
-                                 "label", str,
-                                 "visible", TRUE,
-                                 "xalign", 0.0f,
-                                 NULL);
-          gtk_list_box_row_set_header (row, widget);
+          if (NULL != (file = ide_source_location_get_file (location)))
+            {
+              if (NULL != (gfile = ide_file_get_file (file)))
+                {
+                  name = g_file_get_basename (gfile);
+                  line = ide_source_location_get_line (location);
+                  column = ide_source_location_get_line_offset (location);
+                }
+            }
+
         }
+
+      str = g_string_new (NULL);
+
+      if (name != NULL)
+        g_string_append_printf (str, "<b>%s:%u:%u</b>\n",
+                                name, line + 1, column + 1);
+
+      text = ide_diagnostic_get_text (diagnostic);
+
+      if (text != NULL)
+        g_string_append (str, text);
+
+      g_object_set (renderer, "markup", str->str, NULL);
+
+      g_string_free (str, TRUE);
     }
+  else
+    g_object_set (renderer, "text", NULL, NULL);
 }
 
 static void
@@ -298,6 +360,7 @@ gbp_build_panel_destroy (GtkWidget *widget)
 
   g_clear_object (&self->bindings);
   g_clear_object (&self->signals);
+  g_clear_pointer (&self->diags_hash, g_hash_table_unref);
 
   GTK_WIDGET_CLASS (gbp_build_panel_parent_class)->destroy (widget);
 }
@@ -362,18 +425,25 @@ gbp_build_panel_class_init (GbpBuildPanelClass *klass)
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/plugins/build-tools-plugin/gbp-build-panel.ui");
   gtk_widget_class_set_css_name (widget_class, "buildpanel");
-  gtk_widget_class_bind_template_child (widget_class, GbpBuildPanel, diagnostics);
+  gtk_widget_class_bind_template_child (widget_class, GbpBuildPanel, diagnostics_column);
+  gtk_widget_class_bind_template_child (widget_class, GbpBuildPanel, diagnostics_store);
+  gtk_widget_class_bind_template_child (widget_class, GbpBuildPanel, diagnostics_text);
+  gtk_widget_class_bind_template_child (widget_class, GbpBuildPanel, diagnostics_tree_view);
   gtk_widget_class_bind_template_child (widget_class, GbpBuildPanel, errors_label);
   gtk_widget_class_bind_template_child (widget_class, GbpBuildPanel, running_time_label);
   gtk_widget_class_bind_template_child (widget_class, GbpBuildPanel, status_label);
   gtk_widget_class_bind_template_child (widget_class, GbpBuildPanel, status_revealer);
   gtk_widget_class_bind_template_child (widget_class, GbpBuildPanel, warnings_label);
+
+  g_type_ensure (IDE_TYPE_DIAGNOSTIC);
 }
 
 static void
 gbp_build_panel_init (GbpBuildPanel *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
+
+  self->diags_hash = g_hash_table_new (NULL, NULL);
 
   g_object_set (self, "title", _("Build"), NULL);
 
@@ -397,16 +467,17 @@ gbp_build_panel_init (GbpBuildPanel *self)
                                    self,
                                    G_CONNECT_SWAPPED);
 
-  gtk_list_box_set_sort_func (self->diagnostics,
-                              (GtkListBoxSortFunc)gbp_build_panel_row_compare,
-                              NULL, NULL);
-  gtk_list_box_set_header_func (self->diagnostics, update_header_func, NULL, NULL);
-
-  g_signal_connect_object (self->diagnostics,
+  g_signal_connect_object (self->diagnostics_tree_view,
                            "row-activated",
                            G_CALLBACK (gbp_build_panel_diagnostic_activated),
                            self,
                            G_CONNECT_SWAPPED);
+
+  gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (self->diagnostics_column),
+                                      GTK_CELL_RENDERER (self->diagnostics_text),
+                                      gbp_build_panel_text_func,
+                                      self, NULL);
+
 
   self->bindings = egg_binding_group_new ();
 

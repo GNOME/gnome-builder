@@ -71,6 +71,7 @@ configurationview list row entry {
 
 
 /* hrmm, we can use this to get row separators */
+buildpanel treeview,
 configurationview treeview {
   border-bottom: 1px solid alpha(@borders, 0.4);
 }
