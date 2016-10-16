@@ -764,7 +764,7 @@ ide_run_manager_discover_default_target_async (IdeRunManager       *self,
 /**
  * ide_run_manager_discover_default_target_finish:
  *
- * Returns: (transfer none): An #IdeBuildTarget if successful; otherwise %NULL
+ * Returns: (transfer full): An #IdeBuildTarget if successful; otherwise %NULL
  *   and @error is set.
  */
 IdeBuildTarget *
