@@ -205,9 +205,19 @@ ide_source_location_compare (const IdeSourceLocation *a,
       if (0 != (ret = ide_file_compare (a->file, b->file)))
         return ret;
     }
+  else if (a->file)
+    return -1;
+  else if (b->file)
+    return 1;
 
   if (0 != (ret = (gint)a->line - (gint)b->line))
     return ret;
 
   return (gint)a->line_offset - (gint)b->line_offset;
+}
+
+guint
+ide_source_location_hash (IdeSourceLocation *self)
+{
+  return ide_file_hash (self->file) ^ g_int_hash (&self->line) ^ g_int_hash (&self->line_offset);
 }

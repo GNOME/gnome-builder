@@ -41,6 +41,7 @@ IdeFile           *ide_source_location_get_file        (IdeSourceLocation       
 IdeUri            *ide_source_location_get_uri         (IdeSourceLocation       *self);
 gint               ide_source_location_compare         (const IdeSourceLocation *a,
                                                         const IdeSourceLocation *b);
+guint              ide_source_location_hash            (IdeSourceLocation       *self);
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (IdeSourceLocation, ide_source_location_unref)
 
