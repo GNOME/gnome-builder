@@ -37,7 +37,27 @@ struct _IdeDiagnostic
   IdeSourceLocation     *location;
   GPtrArray             *fixits;
   GPtrArray             *ranges;
+  guint                  hash;
 };
+
+guint
+ide_diagnostic_hash (IdeDiagnostic *self)
+{
+  guint hash = self->hash;
+
+  if (hash == 0)
+    {
+      hash ^= g_str_hash (self->text ?: "");
+      if (self->location)
+        hash ^= ide_source_location_hash (self->location);
+      if (self->fixits)
+        hash ^= g_int_hash (&self->fixits->len);
+      if (self->ranges)
+        hash ^= g_int_hash (&self->ranges->len);
+    }
+
+  return hash;
+}
 
 IdeDiagnostic *
 ide_diagnostic_ref (IdeDiagnostic *self)

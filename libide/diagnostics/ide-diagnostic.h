@@ -60,6 +60,8 @@ void                   ide_diagnostic_take_range           (IdeDiagnostic       
                                                             IdeSourceRange        *range);
 gint                   ide_diagnostic_compare              (const IdeDiagnostic   *a,
                                                             const IdeDiagnostic   *b);
+guint                  ide_diagnostic_hash                 (IdeDiagnostic         *self);
+
 
 const gchar           *ide_diagnostic_severity_to_string   (IdeDiagnosticSeverity severity);
 
