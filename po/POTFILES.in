@@ -105,7 +105,6 @@ plugins/build-tools/gbp-build-configuration-row.ui
 plugins/build-tools/gbp-build-configuration-view.ui
 plugins/build-tools/gbp-build-log-panel.c
 plugins/build-tools/gbp-build-panel.c
-plugins/build-tools/gbp-build-panel-row.c
 plugins/build-tools/gbp-build-panel.ui
 plugins/build-tools/gbp-build-perspective.c
 plugins/build-tools/gbp-build-tool.c
