@@ -35,6 +35,8 @@ typedef void (*IdeRunHandler) (IdeRunManager *self,
                                gpointer       user_data);
 
 IdeBuildTarget *ide_run_manager_get_build_target               (IdeRunManager        *self);
+void            ide_run_manager_set_build_target               (IdeRunManager        *self,
+                                                                IdeBuildTarget       *build_target);
 void            ide_run_manager_cancel                         (IdeRunManager        *self);
 gboolean        ide_run_manager_get_busy                       (IdeRunManager        *self);
 const gchar    *ide_run_manager_get_handler                    (IdeRunManager        *self);
