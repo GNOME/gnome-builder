@@ -23,7 +23,6 @@
 #include "egg-signal-group.h"
 
 #include "gbp-build-panel.h"
-#include "gbp-build-panel-row.h"
 
 struct _GbpBuildPanel
 {

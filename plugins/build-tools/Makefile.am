@@ -18,8 +18,6 @@ libbuild_tools_plugin_la_SOURCES = \
 	gbp-build-log-panel.h \
 	gbp-build-panel.c \
 	gbp-build-panel.h \
-	gbp-build-panel-row.c \
-	gbp-build-panel-row.h \
 	gbp-build-perspective.c \
 	gbp-build-perspective.h \
 	gbp-build-plugin.c \
