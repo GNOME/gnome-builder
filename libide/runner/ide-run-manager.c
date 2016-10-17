@@ -348,7 +348,7 @@ ide_run_manager_run_discover_cb (GObject      *object,
 
   g_task_set_task_data (task, g_steal_pointer (&build_target), g_object_unref);
 
-  do_run_async (self, g_steal_pointer (&task));
+  do_run_async (self, task);
 }
 
 static void
