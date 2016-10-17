@@ -1,5 +1,7 @@
 SUBDIRS = autotools
 
+EXTRA_DIST = asan.supp
+
 GITIGNOREFILES = \
 	compile \
 	config.guess \
