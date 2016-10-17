@@ -357,7 +357,7 @@ gb_file_search_index_insert (GbFileSearchIndex *self,
   g_return_if_fail (relative_path != NULL);
   g_return_if_fail (self->fuzzy != NULL);
 
-  fuzzy_insert (self->fuzzy, g_strdup (relative_path), NULL);
+  fuzzy_insert (self->fuzzy, relative_path, NULL);
 }
 
 void
