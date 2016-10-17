@@ -640,7 +640,10 @@ ide_build_result_class_init (IdeBuildResultClass *klass)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (IdeBuildResultClass, log),
                   NULL, NULL, NULL,
-                  G_TYPE_NONE, 2, IDE_TYPE_BUILD_RESULT_LOG, G_TYPE_STRING);
+                  G_TYPE_NONE,
+                  2,
+                  IDE_TYPE_BUILD_RESULT_LOG,
+                  G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE);
 }
 
 static void
