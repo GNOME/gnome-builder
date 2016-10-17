@@ -5578,6 +5578,7 @@ ide_source_view_finalize (GObject *object)
   g_clear_pointer (&priv->selections, g_queue_free);
   g_clear_pointer (&priv->snippets, g_queue_free);
   g_clear_pointer (&priv->include_regex, g_regex_unref);
+  g_clear_pointer (&priv->saved_search_text, g_free);
 
   EGG_COUNTER_DEC (instances);
 
