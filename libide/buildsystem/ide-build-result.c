@@ -504,6 +504,8 @@ ide_build_result_finalize (GObject *object)
   IdeBuildResult *self = (IdeBuildResult *)object;
   IdeBuildResultPrivate *priv = ide_build_result_get_instance_private (self);
 
+  IDE_ENTRY;
+
   g_clear_pointer (&priv->running_time_source, g_source_destroy);
 
   g_clear_object (&priv->addins);
@@ -524,6 +526,8 @@ ide_build_result_finalize (GObject *object)
   g_mutex_clear (&priv->mutex);
 
   G_OBJECT_CLASS (ide_build_result_parent_class)->finalize (object);
+
+  IDE_EXIT;
 }
 
 static void
