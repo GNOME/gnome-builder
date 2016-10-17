@@ -1175,10 +1175,10 @@ str_maybe_label (const gchar *str)
 static gboolean
 line_is_label (const GtkTextIter *line)
 {
+  g_auto(GStrv) parts = NULL;
+  g_autofree gchar *text = NULL;
   GtkTextIter begin;
   GtkTextIter end;
-  gchar *text;
-  gchar **parts;
   guint i;
   guint count = 0;
 
@@ -1214,9 +1214,6 @@ line_is_label (const GtkTextIter *line)
       if (str_maybe_label (parts [i]))
         count++;
     }
-
-  g_free (text);
-  g_strfreev (parts);
 
   return (count == 1);
 }
