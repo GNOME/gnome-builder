@@ -109,7 +109,7 @@ ide_file_create_language (IdeFile *self)
   GtkSourceLanguageManager *manager;
   GtkSourceLanguage *srclang;
   g_autofree gchar *content_type = NULL;
-  const gchar *filename;
+  g_autofree gchar *filename = NULL;
   gboolean uncertain = FALSE;
 
   g_assert (IDE_IS_FILE (self));
