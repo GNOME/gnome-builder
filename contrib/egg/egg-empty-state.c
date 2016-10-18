@@ -38,6 +38,7 @@ G_DEFINE_TYPE_WITH_PRIVATE (EggEmptyState, egg_empty_state, GTK_TYPE_BIN)
 enum {
   PROP_0,
   PROP_ICON_NAME,
+  PROP_PIXEL_SIZE,
   PROP_RESOURCE,
   PROP_SUBTITLE,
   PROP_TITLE,
@@ -145,11 +146,16 @@ egg_empty_state_get_property (GObject    *object,
                               GParamSpec *pspec)
 {
   EggEmptyState *self = EGG_EMPTY_STATE (object);
+  EggEmptyStatePrivate *priv = egg_empty_state_get_instance_private (self);
 
   switch (prop_id)
     {
     case PROP_ICON_NAME:
       g_value_set_string (value, egg_empty_state_get_icon_name (self));
+      break;
+
+    case PROP_PIXEL_SIZE:
+      g_value_set_int (value, gtk_image_get_pixel_size (priv->image));
       break;
 
     case PROP_SUBTITLE:
@@ -172,11 +178,16 @@ egg_empty_state_set_property (GObject      *object,
                               GParamSpec   *pspec)
 {
   EggEmptyState *self = EGG_EMPTY_STATE (object);
+  EggEmptyStatePrivate *priv = egg_empty_state_get_instance_private (self);
 
   switch (prop_id)
     {
     case PROP_ICON_NAME:
       egg_empty_state_set_icon_name (self, g_value_get_string (value));
+      break;
+
+    case PROP_PIXEL_SIZE:
+      gtk_image_set_pixel_size (priv->image, g_value_get_int (value));
       break;
 
     case PROP_RESOURCE:
@@ -211,6 +222,15 @@ egg_empty_state_class_init (EggEmptyStateClass *klass)
                          "The name of the icon to display",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_PIXEL_SIZE] =
+    g_param_spec_int ("pixel-size",
+                      "Pixel Size",
+                      "Pixel Size",
+                      0,
+                      G_MAXINT,
+                      128,
+                      (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_RESOURCE] =
     g_param_spec_string ("resource",
