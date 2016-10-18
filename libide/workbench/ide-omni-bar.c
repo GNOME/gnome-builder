@@ -82,7 +82,7 @@ struct _IdeOmniBar
   EggSignalGroup *config_manager_signals;
 
   /*
-   * THis manages the bindings we need for the IdeVcs such as the
+   * This manages the bindings we need for the IdeVcs such as the
    * current branch name.
    */
   EggBindingGroup *vcs_bindings;
@@ -93,7 +93,7 @@ struct _IdeOmniBar
   IdeBuildResult *build_result;
 
   /*
-   * This tracks the number of times we have show the current build
+   * This tracks the number of times we have shown the current build
    * message while looping between the various messages. After our
    * SETTLE_MESSAGE_COUNT has been reached, we stop flapping between
    * messages.
