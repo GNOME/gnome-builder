@@ -318,6 +318,7 @@ egg_empty_state_set_subtitle (EggEmptyState *self,
   if (g_strcmp0 (subtitle, egg_empty_state_get_subtitle (self)) != 0)
     {
       gtk_label_set_label (priv->subtitle, subtitle);
+      gtk_widget_set_visible (GTK_WIDGET (priv->subtitle), subtitle && *subtitle);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SUBTITLE]);
     }
 }
@@ -343,6 +344,7 @@ egg_empty_state_set_title (EggEmptyState *self,
   if (g_strcmp0 (title, egg_empty_state_get_title (self)) != 0)
     {
       gtk_label_set_label (priv->title, title);
+      gtk_widget_set_visible (GTK_WIDGET (priv->title), title && *title);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_TITLE]);
     }
 }

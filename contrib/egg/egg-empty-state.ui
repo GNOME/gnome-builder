@@ -18,7 +18,6 @@
         </child>
         <child>
           <object class="GtkLabel" id="title">
-            <property name="visible">true</property>
             <style>
               <class name="dim-label"/>
             </style>
@@ -30,7 +29,6 @@
         </child>
         <child>
           <object class="GtkLabel" id="subtitle">
-            <property name="visible">true</property>
             <property name="track-visited-links">false</property>
             <property name="use-markup">true</property>
             <property name="wrap">true</property>
