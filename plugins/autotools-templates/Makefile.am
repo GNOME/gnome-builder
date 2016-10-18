@@ -10,7 +10,7 @@ resourcedir = $(datadir)/gnome-builder/plugins/
 nobase_resource_DATA = \
 	autotools_templates/resources/CONTRIBUTING.md \
 	autotools_templates/resources/Makefile.am \
-	autotools_templates/resources/ManifestTemplate.flatpak.json \
+	autotools_templates/resources/FlatpakManifestTemplate.json \
 	autotools_templates/resources/NEWS \
 	autotools_templates/resources/README.md \
 	autotools_templates/resources/autogen.sh \

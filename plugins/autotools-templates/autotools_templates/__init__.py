@@ -327,7 +327,7 @@ class GnomeProjectTemplate(AutotoolsTemplate):
             files['resources/src/Makefile.gnome-app-python'] = '%(name_)s/Makefile.am'
 
         if self.versioning == 'git':
-            files['resources/ManifestTemplate.flatpak.json'] = 'org.gnome.%(PreFix)s.flatpak.json'
+            files['resources/FlatpakManifestTemplate.json'] = 'org.gnome.%(PreFix)s.json'
 
         if self.language == 'c':
             files['resources/src/main.c'] = 'src/main.c'
