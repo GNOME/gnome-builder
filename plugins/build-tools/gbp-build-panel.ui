@@ -138,33 +138,51 @@
           </object>
         </child>
         <child>
-          <object class="GtkScrolledWindow">
-            <property name="hscrollbar-policy">never</property>
-            <property name="vexpand">true</property>
+          <object class="GtkStack" id="stack">
             <property name="visible">true</property>
             <child>
-              <object class="GtkTreeView" id="diagnostics_tree_view">
-                <property name="activate-on-single-click">true</property>
-                <property name="tooltip-column">1</property>
-                <property name="model">diagnostics_store</property>
-                <property name="headers-visible">false</property>
+              <object class="EggEmptyState">
+                <property name="icon-name">builder-build-symbolic</property>
+                <property name="subtitle" translatable="yes" comments="the action:// link is used to execute a build">&lt;a href="action://build-manager.build"&gt;Build your project&lt;/a&gt; to show diagnostics here</property>
+                <property name="visible">true</property>
+              </object>
+              <packing>
+                <property name="name">empty-state</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkScrolledWindow">
+                <property name="hscrollbar-policy">never</property>
+                <property name="vexpand">true</property>
                 <property name="visible">true</property>
                 <child>
-                  <object class="GtkTreeViewColumn" id="diagnostics_column">
-                    <property name="expand">true</property>
+                  <object class="GtkTreeView" id="diagnostics_tree_view">
+                    <property name="activate-on-single-click">true</property>
+                    <property name="tooltip-column">1</property>
+                    <property name="model">diagnostics_store</property>
+                    <property name="headers-visible">false</property>
+                    <property name="visible">true</property>
                     <child>
-                      <object class="GtkCellRendererText" id="diagnostics_text">
-                        <property name="yalign">0.0</property>
-                        <property name="xalign">0.0</property>
-                        <property name="ypad">6</property>
-                        <property name="width-chars">0</property>
-                        <property name="ellipsize">end</property>
-                        <property name="wrap-mode">word-char</property>
+                      <object class="GtkTreeViewColumn" id="diagnostics_column">
+                        <property name="expand">true</property>
+                        <child>
+                          <object class="GtkCellRendererText" id="diagnostics_text">
+                            <property name="yalign">0.0</property>
+                            <property name="xalign">0.0</property>
+                            <property name="ypad">6</property>
+                            <property name="width-chars">0</property>
+                            <property name="ellipsize">end</property>
+                            <property name="wrap-mode">word-char</property>
+                          </object>
+                        </child>
                       </object>
                     </child>
                   </object>
                 </child>
               </object>
+              <packing>
+                <property name="name">diagnostics</property>
+              </packing>
             </child>
           </object>
         </child>

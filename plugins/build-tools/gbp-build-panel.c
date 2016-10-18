@@ -39,6 +39,7 @@ struct _GbpBuildPanel
   GtkTreeView         *diagnostics_tree_view;
   GtkLabel            *errors_label;
   GtkLabel            *running_time_label;
+  GtkStack            *stack;
   GtkRevealer         *status_revealer;
   GtkLabel            *status_label;
   GtkLabel            *warnings_label;
@@ -187,6 +188,8 @@ gbp_build_panel_connect (GbpBuildPanel  *self,
   egg_binding_group_set_source (self->bindings, result);
 
   gtk_revealer_set_reveal_child (self->status_revealer, TRUE);
+
+  gtk_stack_set_visible_child_name (self->stack, "diagnostics");
 }
 
 static void
@@ -201,6 +204,7 @@ gbp_build_panel_disconnect (GbpBuildPanel *self)
   g_clear_object (&self->result);
   g_hash_table_remove_all (self->diags_hash);
   gtk_list_store_clear (self->diagnostics_store);
+  gtk_stack_set_visible_child_name (self->stack, "empty-state");
 }
 
 void
@@ -430,6 +434,7 @@ gbp_build_panel_class_init (GbpBuildPanelClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GbpBuildPanel, diagnostics_tree_view);
   gtk_widget_class_bind_template_child (widget_class, GbpBuildPanel, errors_label);
   gtk_widget_class_bind_template_child (widget_class, GbpBuildPanel, running_time_label);
+  gtk_widget_class_bind_template_child (widget_class, GbpBuildPanel, stack);
   gtk_widget_class_bind_template_child (widget_class, GbpBuildPanel, status_label);
   gtk_widget_class_bind_template_child (widget_class, GbpBuildPanel, status_revealer);
   gtk_widget_class_bind_template_child (widget_class, GbpBuildPanel, warnings_label);
