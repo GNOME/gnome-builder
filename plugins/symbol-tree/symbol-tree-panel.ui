@@ -14,16 +14,37 @@
           </object>
         </child>
         <child>
-          <object class="GtkScrolledWindow">
-            <property name="expand">true</property>
+          <object class="GtkStack" id="stack">
             <property name="visible">true</property>
             <child>
-              <object class="IdeTree" id="tree">
-                <property name="activate-on-single-click">true</property>
-                <property name="headers-visible">false</property>
-                <property name="show-icons">true</property>
+              <object class="EggEmptyState">
+                <property name="border-width">12</property>
+                <property name="pixel-size">64</property>
+                <property name="icon-name">lang-function-symbolic</property>
+                <property name="title" translatable="yes">No symbols</property>
+                <property name="subtitle" translatable="yes">Open a file to see symbols within the file</property>
                 <property name="visible">true</property>
               </object>
+              <packing>
+                <property name="name">empty-state</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkScrolledWindow">
+                <property name="expand">true</property>
+                <property name="visible">true</property>
+                <child>
+                  <object class="IdeTree" id="tree">
+                    <property name="activate-on-single-click">true</property>
+                    <property name="headers-visible">false</property>
+                    <property name="show-icons">true</property>
+                    <property name="visible">true</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="name">symbols</property>
+              </packing>
             </child>
           </object>
         </child>

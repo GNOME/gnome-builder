@@ -38,9 +38,11 @@ struct _SymbolTreePanel
 
   GCancellable   *cancellable;
   EggTaskCache   *symbols_cache;
-  IdeTree        *tree;
-  GtkSearchEntry *search_entry;
   GHashTable     *destroy_connected;
+
+  GtkSearchEntry *search_entry;
+  GtkStack       *stack;
+  IdeTree        *tree;
 
   IdeBuffer      *last_document;
   gsize           last_change_count;
@@ -84,6 +86,7 @@ get_cached_symbol_tree_cb (GObject      *object,
       if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_NOT_SUPPORTED) &&
           !g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
         g_warning ("%s", error->message);
+      gtk_stack_set_visible_child_name (self->stack, "empty-state");
       return;
     }
 
@@ -110,6 +113,8 @@ get_cached_symbol_tree_cb (GObject      *object,
         }
       while (gtk_tree_model_iter_next (model, &iter));
     }
+
+  gtk_stack_set_visible_child_name (self->stack, "symbols");
 
   IDE_EXIT;
 }
@@ -202,6 +207,10 @@ refresh_tree (SymbolTreePanel *self)
                                     self->cancellable,
                                     get_cached_symbol_tree_cb,
                                     g_object_ref (self));
+        }
+      else
+        {
+          gtk_stack_set_visible_child_name (self->stack, "empty-state");
         }
     }
 }
@@ -336,6 +345,7 @@ symbol_tree_panel_class_init (SymbolTreePanelClass *klass)
   gtk_widget_class_set_css_name (widget_class, "symboltreepanel");
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/plugins/symbol-tree/symbol-tree-panel.ui");
   gtk_widget_class_bind_template_child (widget_class, SymbolTreePanel, tree);
+  gtk_widget_class_bind_template_child (widget_class, SymbolTreePanel, stack);
   gtk_widget_class_bind_template_child (widget_class, SymbolTreePanel, search_entry);
 }
 
