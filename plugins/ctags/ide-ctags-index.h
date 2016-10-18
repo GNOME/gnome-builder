@@ -55,34 +55,33 @@ typedef struct
   guint8                  padding[3];
 } IdeCtagsIndexEntry;
 
-IdeCtagsIndex            *ide_ctags_index_new           (GFile                *file,
-                                                         const gchar          *path_root,
-                                                         guint64               mtime);
-void                      ide_ctags_index_load_async    (IdeCtagsIndex        *self,
-                                                         GFile                *file,
-                                                         GCancellable         *cancellable,
-                                                         GAsyncReadyCallback   callback,
-                                                         gpointer              user_data);
-gboolean                  ide_ctags_index_load_finish   (IdeCtagsIndex        *index,
-                                                         GAsyncResult         *result,
-                                                         GError              **error);
-gchar                    *ide_ctags_index_resolve_path  (IdeCtagsIndex        *self,
-                                                         const gchar          *path);
-GFile                    *ide_ctags_index_get_file      (IdeCtagsIndex        *self);
-gsize                     ide_ctags_index_get_size      (IdeCtagsIndex        *self);
-const gchar              *ide_ctags_index_get_path_root (IdeCtagsIndex        *self);
-const IdeCtagsIndexEntry *ide_ctags_index_lookup        (IdeCtagsIndex        *self,
-                                                         const gchar          *keyword,
-                                                         gsize                *length);
-const IdeCtagsIndexEntry *ide_ctags_index_lookup_prefix (IdeCtagsIndex        *self,
-                                                         const gchar          *keyword,
-                                                         gsize                *length);
-guint64                   ide_ctags_index_get_mtime     (IdeCtagsIndex        *self);
-
-gint                ide_ctags_index_entry_compare (gconstpointer             a,
-                                                   gconstpointer             b);
-IdeCtagsIndexEntry *ide_ctags_index_entry_copy    (const IdeCtagsIndexEntry *entry);
-void                ide_ctags_index_entry_free    (IdeCtagsIndexEntry       *entry);
+IdeCtagsIndex            *ide_ctags_index_new           (GFile                    *file,
+                                                         const gchar              *path_root,
+                                                         guint64                   mtime);
+void                      ide_ctags_index_load_async    (IdeCtagsIndex            *self,
+                                                         GFile                    *file,
+                                                         GCancellable             *cancellable,
+                                                         GAsyncReadyCallback       callback,
+                                                         gpointer                  user_data);
+gboolean                  ide_ctags_index_load_finish   (IdeCtagsIndex            *index,
+                                                         GAsyncResult             *result,
+                                                         GError                  **error);
+gchar                    *ide_ctags_index_resolve_path  (IdeCtagsIndex            *self,
+                                                         const gchar              *path);
+GFile                    *ide_ctags_index_get_file      (IdeCtagsIndex            *self);
+gsize                     ide_ctags_index_get_size      (IdeCtagsIndex            *self);
+const gchar              *ide_ctags_index_get_path_root (IdeCtagsIndex            *self);
+const IdeCtagsIndexEntry *ide_ctags_index_lookup        (IdeCtagsIndex            *self,
+                                                         const gchar              *keyword,
+                                                         gsize                    *length);
+const IdeCtagsIndexEntry *ide_ctags_index_lookup_prefix (IdeCtagsIndex            *self,
+                                                         const gchar              *keyword,
+                                                         gsize                    *length);
+guint64                   ide_ctags_index_get_mtime     (IdeCtagsIndex            *self);
+gint                      ide_ctags_index_entry_compare (gconstpointer             a,
+                                                         gconstpointer             b);
+IdeCtagsIndexEntry       *ide_ctags_index_entry_copy    (const IdeCtagsIndexEntry *entry);
+void                      ide_ctags_index_entry_free    (IdeCtagsIndexEntry       *entry);
 
 G_END_DECLS
 
