@@ -143,6 +143,7 @@
             <child>
               <object class="EggEmptyState">
                 <property name="icon-name">builder-build-symbolic</property>
+                <property name="pixel-size">64</property>
                 <property name="subtitle" translatable="yes" comments="the action:// link is used to execute a build">&lt;a href="action://build-manager.build"&gt;Build your project&lt;/a&gt; to show diagnostics here</property>
                 <property name="visible">true</property>
               </object>
