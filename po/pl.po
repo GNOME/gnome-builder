@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-10-18 01:52+0000\n"
-"PO-Revision-Date: 2016-10-18 03:55+0200\n"
+"POT-Creation-Date: 2016-10-18 03:05+0000\n"
+"PO-Revision-Date: 2016-10-18 16:00+0200\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <community-poland@mozilla.org>\n"
 "Language: pl\n"
@@ -3480,9 +3480,14 @@ msgstr "Monitor systemu"
 msgid "Profiler"
 msgstr "Profiler"
 
+#. the action:// link is used to run the project
 #: plugins/sysprof/gbp-sysprof-perspective.ui:49
-msgid "Select “Run with profiler” from the run menu to begin"
-msgstr "Wybranie „Wykonaj za pomocą profilera” z menu wykonywania rozpocznie"
+msgid ""
+"Select <a href=\"action://run-manager.run-with-handler::profiler\">Run with "
+"profiler</a> from the run menu to begin"
+msgstr ""
+"Wybranie <a href=\"action://run-manager.run-with-handler::profiler\">Wykonaj "
+"za pomocą profilera</a> z menu wykonywania rozpocznie"
 
 #: plugins/sysprof/gbp-sysprof-perspective.ui:81
 msgid "CPU"
