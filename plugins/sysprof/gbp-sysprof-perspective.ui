@@ -46,7 +46,7 @@
             <property name="visible">true</property>
             <child>
               <object class="SpEmptyStateView">
-                <property name="subtitle" translatable="yes">Select “Run with profiler” from the run menu to begin</property>
+                <property name="subtitle" translatable="yes" comments="the action:// link is used to run the project">Select &lt;a href="action://run-manager.run-with-handler::profiler"&gt;Run with profiler&lt;/a&gt; from the run menu to begin</property>
                 <property name="visible">true</property>
               </object>
               <packing>
