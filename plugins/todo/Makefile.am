@@ -8,6 +8,8 @@ dist_plugin_DATA = todo.plugin
 moduledir = $(libdir)/gnome-builder/plugins/todo_plugin
 dist_module_DATA = todo_plugin/__init__.py
 
+TAGS_FILES = $(dist_module_DATA)
+
 endif
 
 -include $(top_srcdir)/git.mk
