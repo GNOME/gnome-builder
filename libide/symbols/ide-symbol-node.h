@@ -35,6 +35,15 @@ struct _IdeSymbolNodeClass
   IdeObjectClass parent;
 
   IdeSourceLocation *(*get_location) (IdeSymbolNode *self);
+
+  gpointer _reserved1;
+  gpointer _reserved2;
+  gpointer _reserved3;
+  gpointer _reserved4;
+  gpointer _reserved5;
+  gpointer _reserved6;
+  gpointer _reserved7;
+  gpointer _reserved8;
 };
 
 IdeSymbolKind      ide_symbol_node_get_kind     (IdeSymbolNode *self);
