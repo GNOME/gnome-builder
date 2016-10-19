@@ -34,7 +34,13 @@ struct _IdeSymbolNodeClass
 {
   IdeObjectClass parent;
 
-  IdeSourceLocation *(*get_location) (IdeSymbolNode *self);
+  void               (*get_location_async)  (IdeSymbolNode        *self,
+                                             GCancellable         *cancellable,
+                                             GAsyncReadyCallback   callback,
+                                             gpointer              user_data);
+  IdeSourceLocation *(*get_location_finish) (IdeSymbolNode        *self,
+                                             GAsyncResult         *result,
+                                             GError             **error);
 
   gpointer _reserved1;
   gpointer _reserved2;
@@ -46,10 +52,16 @@ struct _IdeSymbolNodeClass
   gpointer _reserved8;
 };
 
-IdeSymbolKind      ide_symbol_node_get_kind     (IdeSymbolNode *self);
-IdeSymbolFlags     ide_symbol_node_get_flags    (IdeSymbolNode *self);
-const gchar       *ide_symbol_node_get_name     (IdeSymbolNode *self);
-IdeSourceLocation *ide_symbol_node_get_location (IdeSymbolNode *self);
+IdeSymbolKind      ide_symbol_node_get_kind            (IdeSymbolNode        *self);
+IdeSymbolFlags     ide_symbol_node_get_flags           (IdeSymbolNode        *self);
+const gchar       *ide_symbol_node_get_name            (IdeSymbolNode        *self);
+void              ide_symbol_node_get_location_async   (IdeSymbolNode        *self,
+                                                        GCancellable         *cancellable,
+                                                        GAsyncReadyCallback   callback,
+                                                        gpointer              user_data);
+IdeSourceLocation *ide_symbol_node_get_location_finish (IdeSymbolNode        *self,
+                                                         GAsyncResult        *result,
+                                                         GError             **error);
 
 G_END_DECLS
 

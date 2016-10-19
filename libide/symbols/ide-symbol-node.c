@@ -41,10 +41,28 @@ enum {
 
 static GParamSpec *properties [LAST_PROP];
 
-static IdeSourceLocation *
-ide_symbol_node_real_get_location (IdeSymbolNode *self)
+static void
+ide_symbol_node_real_get_location_async (IdeSymbolNode       *self,
+                                         GCancellable        *cancellable,
+                                         GAsyncReadyCallback  callback,
+                                         gpointer             user_data)
 {
-  return NULL;
+  g_autoptr(GTask) task = NULL;
+
+  task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, ide_symbol_node_get_location_async);
+  g_task_return_new_error (task,
+                           G_IO_ERROR,
+                           G_IO_ERROR_NOT_SUPPORTED,
+                           "Unsupported operation on symbol node");
+}
+
+static IdeSourceLocation *
+ide_symbol_node_real_get_location_finish (IdeSymbolNode  *self,
+                                          GAsyncResult   *result,
+                                          GError        **error)
+{
+  return g_task_propagate_pointer (G_TASK (result), error);
 }
 
 static void
@@ -119,7 +137,8 @@ ide_symbol_node_class_init (IdeSymbolNodeClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  klass->get_location = ide_symbol_node_real_get_location;
+  klass->get_location_async = ide_symbol_node_real_get_location_async;
+  klass->get_location_finish = ide_symbol_node_real_get_location_finish;
 
   object_class->finalize = ide_symbol_node_finalize;
   object_class->get_property = ide_symbol_node_get_property;
@@ -186,17 +205,32 @@ ide_symbol_node_get_kind (IdeSymbolNode *self)
   return priv->kind;
 }
 
+void
+ide_symbol_node_get_location_async (IdeSymbolNode       *self,
+                                    GCancellable        *cancellable,
+                                    GAsyncReadyCallback  callback,
+                                    gpointer             user_data)
+{
+  g_return_if_fail (IDE_IS_SYMBOL_NODE (self));
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  IDE_SYMBOL_NODE_GET_CLASS (self)->get_location_async (self, cancellable, callback, user_data);
+}
+
 /**
- * ide_symbol_node_get_location:
+ * ide_symbol_node_get_location_finish:
  *
- * Gets the location for the symbol node.
+ * Completes the request to gets the location for the symbol node.
  *
  * Returns: (transfer full) (nullable): An #IdeSourceLocation or %NULL.
  */
 IdeSourceLocation *
-ide_symbol_node_get_location (IdeSymbolNode *self)
+ide_symbol_node_get_location_finish (IdeSymbolNode  *self,
+                                     GAsyncResult   *result,
+                                     GError        **error)
 {
   g_return_val_if_fail (IDE_IS_SYMBOL_NODE (self), NULL);
+  g_return_val_if_fail (G_IS_ASYNC_RESULT (result), NULL);
 
-  return IDE_SYMBOL_NODE_GET_CLASS (self)->get_location (self);
+  return IDE_SYMBOL_NODE_GET_CLASS (self)->get_location_finish (self, result, error);
 }

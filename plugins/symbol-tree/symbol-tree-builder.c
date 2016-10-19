@@ -16,6 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define G_LOG_DOMAIN "symbol-tree-builder"
+
 #include <glib/gi18n.h>
 #include <ide.h>
 
@@ -123,21 +125,51 @@ symbol_tree_builder_build_node (IdeTreeBuilder *builder,
     }
 }
 
+static void
+symbol_tree_builder_get_location_cb (GObject      *object,
+                                     GAsyncResult *result,
+                                     gpointer      user_data)
+{
+  IdeSymbolNode *node = (IdeSymbolNode *)object;
+  g_autoptr(SymbolTreeBuilder) self = user_data;
+  g_autoptr(IdeSourceLocation) location = NULL;
+  g_autoptr(GError) error = NULL;
+  IdePerspective *editor;
+  IdeWorkbench *workbench;
+  IdeTree *tree;
+
+  IDE_ENTRY;
+
+  g_assert (SYMBOL_IS_TREE_BUILDER (self));
+
+  location = ide_symbol_node_get_location_finish (node, result, &error);
+
+  if (location == NULL)
+    {
+      if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+        g_warning ("%s", error->message);
+      IDE_EXIT;
+    }
+
+  tree = ide_tree_builder_get_tree (IDE_TREE_BUILDER (self));
+  workbench = ide_widget_get_workbench (GTK_WIDGET (tree));
+  editor = ide_workbench_get_perspective_by_name (workbench, "editor");
+
+  ide_editor_perspective_focus_location (IDE_EDITOR_PERSPECTIVE (editor), location);
+
+  IDE_EXIT;
+}
+
 static gboolean
 symbol_tree_builder_node_activated (IdeTreeBuilder *builder,
                                     IdeTreeNode    *node)
 {
   SymbolTreeBuilder *self = (SymbolTreeBuilder *)builder;
-  IdePerspective *editor;
-  IdeWorkbench *workbench;
-  IdeTree *tree;
   GObject *item;
 
-  g_assert (SYMBOL_IS_TREE_BUILDER (self));
+  IDE_ENTRY;
 
-  tree = ide_tree_builder_get_tree (builder);
-  workbench = ide_widget_get_workbench (GTK_WIDGET (tree));
-  editor = ide_workbench_get_perspective_by_name (workbench, "editor");
+  g_assert (SYMBOL_IS_TREE_BUILDER (self));
 
   item = ide_tree_node_get_item (node);
 
@@ -145,18 +177,17 @@ symbol_tree_builder_node_activated (IdeTreeBuilder *builder,
     {
       g_autoptr(IdeSourceLocation) location = NULL;
 
-      location = ide_symbol_node_get_location (IDE_SYMBOL_NODE (item));
+      ide_symbol_node_get_location_async (IDE_SYMBOL_NODE (item),
+                                          NULL,
+                                          symbol_tree_builder_get_location_cb,
+                                          g_object_ref (self));
 
-      if (location != NULL)
-        {
-          ide_editor_perspective_focus_location (IDE_EDITOR_PERSPECTIVE (editor), location);
-          return TRUE;
-        }
+      IDE_RETURN (TRUE);
     }
 
   g_warning ("IdeSymbolNode did not create a source location");
 
-  return FALSE;
+  IDE_RETURN (FALSE);
 }
 
 static void

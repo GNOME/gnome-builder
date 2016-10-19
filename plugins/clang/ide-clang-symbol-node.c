@@ -164,8 +164,11 @@ _ide_clang_symbol_node_get_cursor (IdeClangSymbolNode *self)
   return self->cursor;
 }
 
-static IdeSourceLocation *
-ide_clang_symbol_node_get_location (IdeSymbolNode *symbol_node)
+static void
+ide_clang_symbol_node_get_location_async (IdeSymbolNode       *symbol_node,
+                                          GCancellable        *cancellable,
+                                          GAsyncReadyCallback  callback,
+                                          gpointer             user_data)
 {
   IdeClangSymbolNode *self = (IdeClangSymbolNode *)symbol_node;
   IdeSourceLocation *ret;
@@ -178,8 +181,12 @@ ide_clang_symbol_node_get_location (IdeSymbolNode *symbol_node)
   IdeFile *ifile;
   guint line = 0;
   guint line_offset = 0;
+  g_autoptr(GTask) task = NULL;
 
-  g_return_val_if_fail (IDE_IS_CLANG_SYMBOL_NODE (self), NULL);
+  g_return_if_fail (IDE_IS_CLANG_SYMBOL_NODE (self));
+
+  task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, ide_clang_symbol_node_get_location_async);
 
   cxloc = clang_getCursorLocation (self->cursor);
   clang_getFileLocation (cxloc, &file, &line, &line_offset, NULL);
@@ -203,7 +210,18 @@ ide_clang_symbol_node_get_location (IdeSymbolNode *symbol_node)
   g_clear_object (&gfile);
   clang_disposeString (cxfilename);
 
-  return ret;
+  g_task_return_pointer (task, ret, (GDestroyNotify)ide_source_location_unref);
+}
+
+static IdeSourceLocation *
+ide_clang_symbol_node_get_location_finish (IdeSymbolNode  *symbol_node,
+                                           GAsyncResult   *result,
+                                           GError        **error)
+{
+  g_return_val_if_fail (IDE_IS_CLANG_SYMBOL_NODE (symbol_node), NULL);
+  g_return_val_if_fail (G_IS_TASK (result), NULL);
+
+  return g_task_propagate_pointer (G_TASK (result), error);
 }
 
 static void
@@ -211,7 +229,8 @@ ide_clang_symbol_node_class_init (IdeClangSymbolNodeClass *klass)
 {
   IdeSymbolNodeClass *node_class = IDE_SYMBOL_NODE_CLASS (klass);
 
-  node_class->get_location = ide_clang_symbol_node_get_location;
+  node_class->get_location_async = ide_clang_symbol_node_get_location_async;
+  node_class->get_location_finish = ide_clang_symbol_node_get_location_finish;
 }
 
 static void

@@ -29,56 +29,62 @@ struct _IdeCtagsSymbolNode
   GPtrArray                *children;
 };
 
-typedef struct
-{
-  IdeSourceLocation *loc;
-  gboolean done;
-} Completion;
-
 G_DEFINE_TYPE (IdeCtagsSymbolNode, ide_ctags_symbol_node, IDE_TYPE_SYMBOL_NODE)
 
 static void
-handle_location_cb (GObject      *object,
-                    GAsyncResult *result,
-                    gpointer      user_data)
+ide_ctags_symbol_node_get_location_cb (GObject      *object,
+                                       GAsyncResult *result,
+                                       gpointer      user_data)
 {
   IdeCtagsSymbolResolver *resolver = (IdeCtagsSymbolResolver *)object;
-  Completion *comp = user_data;
+  g_autoptr(IdeSourceLocation) location = NULL;
+  g_autoptr(GTask) task = user_data;
   g_autoptr(GError) error = NULL;
 
   g_assert (IDE_IS_CTAGS_SYMBOL_RESOLVER (resolver));
-  g_assert (comp != NULL);
-  g_assert (comp->loc == NULL);
-  g_assert (comp->done == FALSE);
+  g_assert (G_IS_TASK (task));
 
-  comp->loc = ide_ctags_symbol_resolver_get_location_finish (resolver, result, &error);
-  comp->done = TRUE;
+  location = ide_ctags_symbol_resolver_get_location_finish (resolver, result, &error);
 
-  if (error != NULL)
-    g_warning ("%s", error->message);
+  if (location == NULL)
+    g_task_return_error (task, g_steal_pointer (&error));
+  else
+    g_task_return_pointer (task,
+                           g_steal_pointer (&location),
+                           (GDestroyNotify)ide_source_location_unref);
 }
 
-static IdeSourceLocation *
-ide_ctags_symbol_node_get_location (IdeSymbolNode *node)
+static void
+ide_ctags_symbol_node_get_location_async (IdeSymbolNode       *node,
+                                          GCancellable        *cancellable,
+                                          GAsyncReadyCallback  callback,
+                                          gpointer             user_data)
 {
   IdeCtagsSymbolNode *self = (IdeCtagsSymbolNode *)node;
-  Completion comp = { 0 };
+  g_autoptr(GTask) task = NULL;
 
-  g_return_val_if_fail (IDE_IS_CTAGS_SYMBOL_NODE (self), NULL);
+  g_return_if_fail (IDE_IS_CTAGS_SYMBOL_NODE (self));
+
+  task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, ide_ctags_symbol_node_get_location_async);
 
   ide_ctags_symbol_resolver_get_location_async (self->resolver,
                                                 self->index,
                                                 self->entry,
                                                 NULL,
-                                                handle_location_cb,
-                                                &comp);
+                                                ide_ctags_symbol_node_get_location_cb,
+                                                g_steal_pointer (&task));
+}
 
-  /* XXX: FIXME: TODO: ULTRA: Hack until we add async get_location() API */
+static IdeSourceLocation *
+ide_ctags_symbol_node_get_location_finish (IdeSymbolNode  *node,
+                                           GAsyncResult   *result,
+                                           GError        **error)
+{
+  g_return_val_if_fail (IDE_IS_CTAGS_SYMBOL_NODE (node), NULL);
+  g_return_val_if_fail (G_IS_TASK (result), NULL);
 
-  while (!comp.done)
-    gtk_main_iteration ();
-
-  return comp.loc;
+  return g_task_propagate_pointer (G_TASK (result), error);
 }
 
 static void
@@ -101,7 +107,8 @@ ide_ctags_symbol_node_class_init (IdeCtagsSymbolNodeClass *klass)
 
   object_class->finalize = ide_ctags_symbol_node_finalize;
 
-  symbol_node_class->get_location = ide_ctags_symbol_node_get_location;
+  symbol_node_class->get_location_async = ide_ctags_symbol_node_get_location_async;
+  symbol_node_class->get_location_finish = ide_ctags_symbol_node_get_location_finish;
 }
 
 static void

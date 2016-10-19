@@ -142,7 +142,7 @@ namespace Ide
 				this.kind = Ide.SymbolKind.FIELD;
 		}
 
-		public override Ide.SourceLocation? get_location ()
+		public override async Ide.SourceLocation? get_location_async (GLib.Cancellable? cancellable)
 		{
 			var source_reference = this.node.source_reference;
 			var file = (source_reference.file as Ide.ValaSourceFile).file;
