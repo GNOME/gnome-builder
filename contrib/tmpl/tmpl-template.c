@@ -300,7 +300,7 @@ tmpl_template_expand_visitor (TmplNode *node,
   g_assert (TMPL_IS_NODE (node));
   g_assert (state != NULL);
 
-/* Short cirtcuit if an error occurred */
+  /* Short cirtcuit if an error occurred */
   if (state->result == FALSE)
     return;
 
@@ -395,6 +395,9 @@ tmpl_template_expand_visitor (TmplNode *node,
               TMPL_CLEAR_VALUE (&value);
 
               tmpl_node_visit_children (node, tmpl_template_expand_visitor, state);
+
+              if (state->result == FALSE)
+                break;
             }
 
           state->scope = old_scope;
@@ -477,6 +480,8 @@ tmpl_template_expand (TmplTemplate  *self,
   if (local_scope != NULL)
     tmpl_scope_unref (local_scope);
 
+  g_assert (state.result == TRUE || (state.error == NULL || *state.error != NULL));
+
   return state.result;
 }
 
@@ -509,6 +514,13 @@ tmpl_template_expand_string (TmplTemplate  *self,
 
     {
       g_object_unref (stream);
+
+      if (error != NULL && *error == NULL)
+        g_set_error (error,
+                     G_IO_ERROR,
+                     G_IO_ERROR_UNKNOWN,
+                     "An unknown error occurred while expanding the template");
+
       return NULL;
     }
 

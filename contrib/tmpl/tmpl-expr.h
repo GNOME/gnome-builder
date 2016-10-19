@@ -36,6 +36,7 @@ gboolean  tmpl_expr_eval              (TmplExpr         *expr,
                                        GValue           *return_value,
                                        GError          **error);
 TmplExpr *tmpl_expr_new_boolean       (gboolean          value);
+TmplExpr *tmpl_expr_new_invert_boolean(TmplExpr         *left);
 TmplExpr *tmpl_expr_new_getattr       (TmplExpr         *left,
                                        const gchar      *attr);
 TmplExpr *tmpl_expr_new_setattr       (TmplExpr         *left,

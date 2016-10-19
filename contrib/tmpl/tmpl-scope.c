@@ -133,7 +133,8 @@ tmpl_scope_get_full (TmplScope   *self,
       if (parent->resolver)
         {
           if (parent->resolver (parent, name, &symbol, parent->resolver_data) && symbol)
-            goto save_symbol;
+            tmpl_scope_set (self, name, symbol);
+          return symbol;
         }
     }
 
@@ -141,18 +142,8 @@ tmpl_scope_get_full (TmplScope   *self,
     {
       /* Define the symbol in this scope */
       symbol = tmpl_symbol_new ();
-      goto save_symbol;
+      tmpl_scope_set (self, name, symbol);
     }
-
-  return symbol;
-
-save_symbol:
-  if (self->symbols == NULL)
-    self->symbols = g_hash_table_new_full (g_str_hash,
-                                           g_str_equal,
-                                           g_free,
-                                           (GDestroyNotify)tmpl_symbol_unref);
-  g_hash_table_insert (self->symbols, g_strdup (name), symbol);
 
   return symbol;
 }
@@ -169,6 +160,81 @@ tmpl_scope_get (TmplScope   *self,
                 const gchar *name)
 {
   return tmpl_scope_get_full (self, name, TRUE);
+}
+
+/**
+ * tmpl_scope_set:
+ *
+ * If the symbol already exists, it will be overwritten.
+ *
+ * Parameter: (transfer none): #t
+ */
+void
+tmpl_scope_set (TmplScope   *self,
+                const gchar *name,
+                TmplSymbol  *symbol)
+{
+  if (self->symbols == NULL)
+    self->symbols = g_hash_table_new_full (g_str_hash,
+                                           g_str_equal,
+                                           g_free,
+                                           (GDestroyNotify) tmpl_symbol_unref);
+  g_hash_table_insert (self->symbols, g_strdup (name), symbol);
+}
+
+/**
+ * tmpl_scope_set_value:
+ */
+void
+tmpl_scope_set_value (TmplScope     *self,
+                       const gchar  *name,
+                       const GValue *symbol)
+{
+  tmpl_symbol_assign_value (tmpl_scope_get_full (self, name, TRUE), symbol);
+}
+
+/**
+ * tmpl_scope_set_boolean:
+ */
+void
+tmpl_scope_set_boolean (TmplScope  *self,
+                       const gchar *name,
+                       gboolean    symbol)
+{
+  tmpl_symbol_assign_boolean (tmpl_scope_get_full (self, name, TRUE), symbol);
+}
+
+/**
+ * tmpl_scope_set_double:
+ */
+void
+tmpl_scope_set_double (TmplScope   *self,
+                       const gchar *name,
+                       gdouble     symbol)
+{
+  tmpl_symbol_assign_double (tmpl_scope_get_full (self, name, TRUE), symbol);
+}
+
+/**
+ * tmpl_scope_set_object:
+ */
+void
+tmpl_scope_set_object (TmplScope   *self,
+                       const gchar *name,
+                       gpointer    symbol)
+{
+  tmpl_symbol_assign_object (tmpl_scope_get_full (self, name, TRUE), symbol);
+}
+
+/**
+ * tmpl_scope_set_string:
+ */
+void
+tmpl_scope_set_string (TmplScope   *self,
+                       const gchar *name,
+                       const gchar *symbol)
+{
+  tmpl_symbol_assign_string (tmpl_scope_get_full (self, name, TRUE), symbol);
 }
 
 /**
