@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-10-18 00:04+0000\n"
-"PO-Revision-Date: 2016-10-17 22:06-0200\n"
+"POT-Creation-Date: 2016-10-18 03:05+0000\n"
+"PO-Revision-Date: 2016-10-18 22:18-0200\n"
 "Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
 "Language-Team: Brazilian Portuguese <gnome-pt_br-list@gnome.org>\n"
 "Language: pt_BR\n"
@@ -2618,7 +2618,7 @@ msgid "Errors:"
 msgstr "Erro:"
 
 #. the action:// link is used to execute a build
-#: plugins/build-tools/gbp-build-panel.ui:146
+#: plugins/build-tools/gbp-build-panel.ui:147
 msgid ""
 "<a href=\"action://build-manager.build\">Build your project</a> to show "
 "diagnostics here"
@@ -3492,13 +3492,23 @@ msgstr ""
 "O arquivo de log de suporte foi escrito em \"%s\". Por favor, forneça esse "
 "arquivo como um anexo em seu relatório de erro ou requisição de suporte."
 
-#: plugins/symbol-tree/symbol-tree-panel.c:265
+#: plugins/symbol-tree/symbol-tree-panel.c:274
 msgid "Current language does not support symbol resolvers"
 msgstr "A linguagem atual não possui suporte a resolvedores de símbolos"
 
-#: plugins/symbol-tree/symbol-tree-panel.c:365
+#: plugins/symbol-tree/symbol-tree-panel.c:375
 msgid "Symbols"
 msgstr "Símbolos"
+
+#: plugins/symbol-tree/symbol-tree-panel.ui:24
+#| msgid "Symbols"
+msgid "No symbols"
+msgstr "Nenhum símbolo"
+
+#: plugins/symbol-tree/symbol-tree-panel.ui:25
+#| msgid "The line number within the file."
+msgid "Open a file to see symbols within the file"
+msgstr "Abrir um arquivo para ver o símbolos dentro o arquivo"
 
 #: plugins/sysmon/gb-sysmon-panel.ui:5
 msgid "System Monitor"
@@ -3508,11 +3518,15 @@ msgstr "Monitor do sistema"
 msgid "Profiler"
 msgstr "Perfilador"
 
+#. the action:// link is used to run the project
 #: plugins/sysprof/gbp-sysprof-perspective.ui:49
-msgid "Select “Run with profiler” from the run menu to begin"
+#| msgid "Select “Run with profiler” from the run menu to begin"
+msgid ""
+"Select <a href=\"action://run-manager.run-with-handler::profiler\">Run with "
+"profiler</a> from the run menu to begin"
 msgstr ""
-"Selecione \"Executar com perfilador\" a partir do menu de execução para "
-"iniciar"
+"Selecione <a href=\"action://run-manager.run-with-handler::profiler\">"
+"Executar com perfilador</a> a partir do menu de execução para iniciar"
 
 #: plugins/sysprof/gbp-sysprof-perspective.ui:81
 msgid "CPU"
@@ -4328,9 +4342,6 @@ msgstr "vala diagnósticos avisos erros"
 
 #~ msgid "The file that is being edited."
 #~ msgstr "O arquivo que está sendo editado."
-
-#~ msgid "The line number within the file."
-#~ msgstr "O número da linha dentro do arquivo."
 
 #~ msgid "The language to change the settings for."
 #~ msgstr "A linguagem para a qual devem ser alteradas as configurações."
