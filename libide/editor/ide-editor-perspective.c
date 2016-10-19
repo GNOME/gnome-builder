@@ -586,6 +586,12 @@ ide_editor_perspective_focus_location_full (IdeEditorPerspective *self,
   lookup.file = ide_source_location_get_file (location);
   lookup.view = NULL;
 
+  if (lookup.file == NULL)
+    {
+      g_warning ("IdeSourceLocation does not contain a file");
+      return;
+    }
+
   ide_perspective_views_foreach (IDE_PERSPECTIVE (self),
                                  ide_editor_perspective_find_source_location,
                                  &lookup);
