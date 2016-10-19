@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-10-18 03:05+0000\n"
-"PO-Revision-Date: 2016-10-18 16:00+0200\n"
+"POT-Creation-Date: 2016-10-19 06:29+0000\n"
+"PO-Revision-Date: 2016-10-19 16:54+0200\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <community-poland@mozilla.org>\n"
 "Language: pl\n"
@@ -2588,8 +2588,12 @@ msgstr "Ostrzeżenia:"
 msgid "Errors:"
 msgstr "Błędy:"
 
+#: plugins/build-tools/gbp-build-panel.ui:149
+msgid "No Diagnostics"
+msgstr "Brak diagnostyki"
+
 #. the action:// link is used to execute a build
-#: plugins/build-tools/gbp-build-panel.ui:147
+#: plugins/build-tools/gbp-build-panel.ui:150
 msgid ""
 "<a href=\"action://build-manager.build\">Build your project</a> to show "
 "diagnostics here"
@@ -3464,11 +3468,11 @@ msgstr "Obecny język nie obsługuje mechanizmów rozwiązywania symboli"
 msgid "Symbols"
 msgstr "Symbole"
 
-#: plugins/symbol-tree/symbol-tree-panel.ui:24
+#: plugins/symbol-tree/symbol-tree-panel.ui:25
 msgid "No symbols"
 msgstr "Brak symboli"
 
-#: plugins/symbol-tree/symbol-tree-panel.ui:25
+#: plugins/symbol-tree/symbol-tree-panel.ui:26
 msgid "Open a file to see symbols within the file"
 msgstr "Otwarcie pliku wyświetli zawarte w nim symbole"
 
