@@ -126,6 +126,7 @@ libide_1_0_la_public_headers =                            \
 	sourceview/ide-source-view.h                      \
 	subprocess/ide-subprocess.h                       \
 	subprocess/ide-subprocess-launcher.h              \
+	subprocess/ide-subprocess-supervisor.h            \
 	symbols/ide-symbol-node.h                         \
 	symbols/ide-symbol-resolver.h                     \
 	symbols/ide-symbol-tree.h                         \
@@ -292,6 +293,7 @@ libide_1_0_la_public_sources =                            \
 	sourceview/ide-source-view.c                      \
 	subprocess/ide-subprocess.c                       \
 	subprocess/ide-subprocess-launcher.c              \
+	subprocess/ide-subprocess-supervisor.c            \
 	symbols/ide-symbol-node.c                         \
 	symbols/ide-symbol-resolver.c                     \
 	symbols/ide-symbol-tree.c                         \
