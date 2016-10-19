@@ -142,9 +142,13 @@
             <property name="visible">true</property>
             <child>
               <object class="EggEmptyState">
+                <property name="border-width">12</property>
                 <property name="icon-name">builder-build-symbolic</property>
+                <property name="margin-top">12</property>
                 <property name="pixel-size">64</property>
+                <property name="title" translatable="yes">No Diagnostics</property>
                 <property name="subtitle" translatable="yes" comments="the action:// link is used to execute a build">&lt;a href="action://build-manager.build"&gt;Build your project&lt;/a&gt; to show diagnostics here</property>
+                <property name="valign">start</property>
                 <property name="visible">true</property>
               </object>
               <packing>
