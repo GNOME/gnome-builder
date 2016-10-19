@@ -174,12 +174,11 @@ ide_ctags_index_parse_line (gchar              *line,
       break;
     }
 
-  /* parse key/value pairs like enum:foo8 */
-  while ((iter = forward_to_tab (iter)) &&
-         (iter = forward_to_nontab_and_zero (iter)))
-    {
-      /* TODO: */
-    }
+  /* Store a pointer to the beginning of the key/val pairs */
+  if (NULL != (iter = forward_to_tab (iter)))
+    entry->keyval = iter;
+  else
+    entry->keyval = NULL;
 
   return TRUE;
 }
@@ -638,4 +637,43 @@ ide_ctags_index_get_mtime (IdeCtagsIndex *self)
   g_return_val_if_fail (IDE_IS_CTAGS_INDEX (self), 0);
 
   return self->mtime;
+}
+
+/**
+ * ide_ctags_index_find_with_path:
+ * @self: A #IdeCtagsIndex
+ * @relative_path: A path relative to the indexes base_path.
+ *
+ * This will return a GPtrArray of #IdeCtagsIndex pointers. These
+ * pointers are const and should not be modified or freed.
+ *
+ * The container is owned by the caller and should be freed by the
+ * caller with g_ptr_array_unref().
+ *
+ * Note that this function is not indexed, and therefore is O(n)
+ * running time with `n` is the number of items in the index.
+ *
+ * Returns: (transfer container) (element-type Ide.CtagsIndexEntry): An array
+ *   of items matching the relative path.
+ */
+GPtrArray *
+ide_ctags_index_find_with_path (IdeCtagsIndex *self,
+                                const gchar   *relative_path)
+{
+  GPtrArray *ar;
+
+  g_return_val_if_fail (IDE_IS_CTAGS_INDEX (self), NULL);
+  g_return_val_if_fail (relative_path != NULL, NULL);
+
+  ar = g_ptr_array_new ();
+
+  for (guint i = 0; i < self->index->len; i++)
+    {
+      IdeCtagsIndexEntry *entry = &g_array_index (self->index, IdeCtagsIndexEntry, i);
+
+      if (g_str_equal (entry->path, relative_path))
+        g_ptr_array_add (ar, entry);
+    }
+
+  return ar;
 }

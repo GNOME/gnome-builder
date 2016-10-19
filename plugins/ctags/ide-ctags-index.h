@@ -20,8 +20,7 @@
 #define IDE_CTAGS_INDEX_H
 
 #include <gio/gio.h>
-
-#include "ide-object.h"
+#include <ide.h>
 
 G_BEGIN_DECLS
 
@@ -51,6 +50,7 @@ typedef struct
   const gchar            *name;
   const gchar            *path;
   const gchar            *pattern;
+  const gchar            *keyval;
   IdeCtagsIndexEntryKind  kind : 8;
   guint8                  padding[3];
 } IdeCtagsIndexEntry;
@@ -66,6 +66,8 @@ void                      ide_ctags_index_load_async    (IdeCtagsIndex          
 gboolean                  ide_ctags_index_load_finish   (IdeCtagsIndex            *index,
                                                          GAsyncResult             *result,
                                                          GError                  **error);
+GPtrArray                *ide_ctags_index_find_with_path(IdeCtagsIndex           *self,
+                                                         const gchar             *relative_path);
 gchar                    *ide_ctags_index_resolve_path  (IdeCtagsIndex            *self,
                                                          const gchar              *path);
 GFile                    *ide_ctags_index_get_file      (IdeCtagsIndex            *self);
@@ -82,6 +84,44 @@ gint                      ide_ctags_index_entry_compare (gconstpointer          
                                                          gconstpointer             b);
 IdeCtagsIndexEntry       *ide_ctags_index_entry_copy    (const IdeCtagsIndexEntry *entry);
 void                      ide_ctags_index_entry_free    (IdeCtagsIndexEntry       *entry);
+
+static inline IdeSymbolKind
+ide_ctags_index_entry_kind_to_symbol_kind (IdeCtagsIndexEntryKind kind)
+{
+  switch (kind)
+    {
+    case IDE_CTAGS_INDEX_ENTRY_TYPEDEF:
+    case IDE_CTAGS_INDEX_ENTRY_PROTOTYPE:
+      /* bit of an impedenece mismatch */
+    case IDE_CTAGS_INDEX_ENTRY_CLASS_NAME:
+      return IDE_SYMBOL_CLASS;
+
+    case IDE_CTAGS_INDEX_ENTRY_ENUMERATOR:
+      return IDE_SYMBOL_ENUM;
+
+    case IDE_CTAGS_INDEX_ENTRY_ENUMERATION_NAME:
+      return IDE_SYMBOL_ENUM_VALUE;
+
+    case IDE_CTAGS_INDEX_ENTRY_FUNCTION:
+    case IDE_CTAGS_INDEX_ENTRY_MEMBER:
+      return IDE_SYMBOL_FUNCTION;
+
+    case IDE_CTAGS_INDEX_ENTRY_STRUCTURE:
+      return IDE_SYMBOL_STRUCT;
+
+    case IDE_CTAGS_INDEX_ENTRY_UNION:
+      return IDE_SYMBOL_UNION;
+
+    case IDE_CTAGS_INDEX_ENTRY_VARIABLE:
+      return IDE_SYMBOL_VARIABLE;
+
+    case IDE_CTAGS_INDEX_ENTRY_ANCHOR:
+    case IDE_CTAGS_INDEX_ENTRY_DEFINE:
+    case IDE_CTAGS_INDEX_ENTRY_FILE_NAME:
+    default:
+      return IDE_SYMBOL_NONE;
+    }
+}
 
 G_END_DECLS
 

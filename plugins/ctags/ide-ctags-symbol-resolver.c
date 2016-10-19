@@ -20,11 +20,12 @@
 
 #include <errno.h>
 #include <glib/gi18n.h>
-
-#include "ide-internal.h"
+#include <ide.h>
 
 #include "ide-ctags-service.h"
+#include "ide-ctags-symbol-node.h"
 #include "ide-ctags-symbol-resolver.h"
+#include "ide-ctags-symbol-tree.h"
 #include "ide-ctags-util.h"
 
 struct _IdeCtagsSymbolResolver
@@ -65,46 +66,6 @@ lookup_symbol_free (gpointer data)
   g_slice_free (LookupSymbol, lookup);
 }
 
-static IdeSymbolKind
-transform_kind (IdeCtagsIndexEntryKind kind)
-{
-  switch (kind)
-    {
-    case IDE_CTAGS_INDEX_ENTRY_TYPEDEF:
-    case IDE_CTAGS_INDEX_ENTRY_PROTOTYPE:
-      /* bit of an impedenece mismatch */
-    case IDE_CTAGS_INDEX_ENTRY_CLASS_NAME:
-      return IDE_SYMBOL_CLASS;
-
-    case IDE_CTAGS_INDEX_ENTRY_ENUMERATOR:
-      return IDE_SYMBOL_ENUM;
-
-    case IDE_CTAGS_INDEX_ENTRY_ENUMERATION_NAME:
-      return IDE_SYMBOL_ENUM_VALUE;
-
-    case IDE_CTAGS_INDEX_ENTRY_FUNCTION:
-      return IDE_SYMBOL_FUNCTION;
-
-    case IDE_CTAGS_INDEX_ENTRY_MEMBER:
-      return IDE_SYMBOL_FIELD;
-
-    case IDE_CTAGS_INDEX_ENTRY_STRUCTURE:
-      return IDE_SYMBOL_STRUCT;
-
-    case IDE_CTAGS_INDEX_ENTRY_UNION:
-      return IDE_SYMBOL_UNION;
-
-    case IDE_CTAGS_INDEX_ENTRY_VARIABLE:
-      return IDE_SYMBOL_VARIABLE;
-
-    case IDE_CTAGS_INDEX_ENTRY_ANCHOR:
-    case IDE_CTAGS_INDEX_ENTRY_DEFINE:
-    case IDE_CTAGS_INDEX_ENTRY_FILE_NAME:
-    default:
-      return IDE_SYMBOL_NONE;
-    }
-}
-
 static IdeSymbol *
 create_symbol (IdeCtagsSymbolResolver   *self,
                const IdeCtagsIndexEntry *entry,
@@ -125,7 +86,7 @@ create_symbol (IdeCtagsSymbolResolver   *self,
                        NULL);
   loc = ide_source_location_new (file, line, line_offset, offset);
 
-  return ide_symbol_new (entry->name, transform_kind (entry->kind), 0, loc, loc, loc);
+  return ide_symbol_new (entry->name, ide_ctags_index_entry_kind_to_symbol_kind (entry->kind), 0, loc, loc, loc);
 
 }
 
@@ -447,6 +408,210 @@ ide_ctags_symbol_resolver_lookup_symbol_finish (IdeSymbolResolver  *resolver,
   return g_task_propagate_pointer (task, error);
 }
 
+typedef struct
+{
+  GPtrArray *indexes;
+  GFile *file;
+} TreeResolverState;
+
+static void
+tree_resolver_state_free (gpointer data)
+{
+  TreeResolverState *state = data;
+
+  if (state != NULL)
+    {
+      g_clear_pointer (&state->indexes, g_ptr_array_unref);
+      g_clear_object (&state->file);
+      g_slice_free (TreeResolverState, state);
+    }
+}
+
+static gboolean
+maybe_attach_to_parent (IdeCtagsSymbolNode       *node,
+                        const IdeCtagsIndexEntry *entry,
+                        GHashTable               *parents)
+{
+  g_assert (IDE_IS_CTAGS_SYMBOL_NODE (node));
+  g_assert (parents != NULL);
+
+  if (entry->keyval != NULL)
+    {
+      g_auto(GStrv) parts = g_strsplit (entry->keyval, "\t", 0);
+
+      for (guint i = 0; parts[i] != NULL; i++)
+        {
+          IdeCtagsSymbolNode *parent;
+
+          if (NULL != (parent = g_hash_table_lookup (parents, parts[i])))
+            {
+              ide_ctags_symbol_node_take_child (parent, node);
+              return TRUE;
+            }
+        }
+    }
+
+  return FALSE;
+}
+
+static gchar *
+make_parent_key (const IdeCtagsIndexEntry *entry)
+{
+  switch (entry->kind)
+    {
+    case IDE_CTAGS_INDEX_ENTRY_CLASS_NAME:
+      return g_strdup_printf ("class:%s", entry->name);
+
+    case IDE_CTAGS_INDEX_ENTRY_UNION:
+      return g_strdup_printf ("union:%s", entry->name);
+
+    case IDE_CTAGS_INDEX_ENTRY_STRUCTURE:
+      return g_strdup_printf ("struct:%s", entry->name);
+
+    case IDE_CTAGS_INDEX_ENTRY_FUNCTION:
+    case IDE_CTAGS_INDEX_ENTRY_MEMBER:
+      {
+        const gchar *colon;
+
+        /*
+         * If there is a keyval (like class:foo, then we strip the
+         * key, and make a key like type:parent.name.
+         */
+        if (entry->keyval && NULL != (colon = strchr (entry->keyval, ':')))
+          return g_strdup_printf ("function:%s.%s", colon + 1, entry->name);
+        return g_strdup_printf ("function:%s", entry->name);
+      }
+
+    case IDE_CTAGS_INDEX_ENTRY_ENUMERATION_NAME:
+      return g_strdup_printf ("enum:%s", entry->name);
+
+    case IDE_CTAGS_INDEX_ENTRY_VARIABLE:
+    case IDE_CTAGS_INDEX_ENTRY_PROTOTYPE:
+    case IDE_CTAGS_INDEX_ENTRY_DEFINE:
+    case IDE_CTAGS_INDEX_ENTRY_TYPEDEF:
+    case IDE_CTAGS_INDEX_ENTRY_FILE_NAME:
+    case IDE_CTAGS_INDEX_ENTRY_ANCHOR:
+    case IDE_CTAGS_INDEX_ENTRY_ENUMERATOR:
+    default:
+      break;
+    }
+
+  return NULL;
+}
+
+static void
+ide_ctags_symbol_resolver_get_symbol_tree_worker (GTask        *task,
+                                                  gpointer      source_object,
+                                                  gpointer      task_data,
+                                                  GCancellable *cancellable)
+{
+  IdeCtagsSymbolResolver *self = source_object;
+  TreeResolverState *state = task_data;
+  g_autoptr(GPtrArray) ar = NULL;
+  g_autoptr(GFile) parent = NULL;
+  g_autofree gchar *parent_path = NULL;
+
+  g_assert (IDE_IS_CTAGS_SYMBOL_RESOLVER (self));
+  g_assert (G_IS_TASK (task));
+  g_assert (state != NULL);
+  g_assert (G_IS_FILE (state->file));
+  g_assert (state->indexes != NULL);
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  parent = g_file_get_parent (state->file);
+  parent_path = g_file_get_path (parent);
+
+  /*
+   * Ctags does not give us enough information to create a tree, so our
+   * symbols will not have a hierarchy.
+   */
+  ar = g_ptr_array_new_with_free_func (g_object_unref);
+
+  for (guint i = 0; i < state->indexes->len; i++)
+    {
+      IdeCtagsIndex *index = g_ptr_array_index (state->indexes, i);
+      const gchar *base_path = ide_ctags_index_get_path_root (index);
+      g_autoptr(GFile) base_dir = NULL;
+      g_autoptr(GPtrArray) entries = NULL;
+      g_autofree gchar *relative_path = NULL;
+      g_autoptr(GHashTable) keymap = NULL;
+      g_autoptr(GPtrArray) tmp = NULL;
+
+      if (!g_str_has_prefix (parent_path, base_path))
+        continue;
+
+      base_dir = g_file_new_for_path (base_path);
+      relative_path = g_file_get_relative_path (base_dir, state->file);
+
+      /* Shouldn't happen, but be safe */
+      if G_UNLIKELY (relative_path == NULL)
+        continue;
+
+      /* We use keymap to find the parent for things like class:Foo */
+      keymap = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
+      entries = ide_ctags_index_find_with_path (index, relative_path);
+      tmp = g_ptr_array_new ();
+
+      /*
+       * We have to build the items in two steps incase the parent for
+       * an item comes after the child. Once we have the parent names
+       * inflated into the hashtable, we can resolve them and build the
+       * final tree.
+       */
+
+      for (guint j = 0; j < entries->len; j++)
+        {
+          const IdeCtagsIndexEntry *entry = g_ptr_array_index (entries, j);
+          g_autoptr(IdeCtagsSymbolNode) node = NULL;
+
+          switch (entry->kind)
+            {
+            case IDE_CTAGS_INDEX_ENTRY_CLASS_NAME:
+            case IDE_CTAGS_INDEX_ENTRY_UNION:
+            case IDE_CTAGS_INDEX_ENTRY_STRUCTURE:
+            case IDE_CTAGS_INDEX_ENTRY_TYPEDEF:
+            case IDE_CTAGS_INDEX_ENTRY_MEMBER:
+            case IDE_CTAGS_INDEX_ENTRY_FUNCTION:
+            case IDE_CTAGS_INDEX_ENTRY_VARIABLE:
+            case IDE_CTAGS_INDEX_ENTRY_PROTOTYPE:
+            case IDE_CTAGS_INDEX_ENTRY_DEFINE:
+            case IDE_CTAGS_INDEX_ENTRY_ENUMERATION_NAME:
+              node = ide_ctags_symbol_node_new (self, index, entry);
+              break;
+
+            case IDE_CTAGS_INDEX_ENTRY_FILE_NAME:
+            case IDE_CTAGS_INDEX_ENTRY_ANCHOR:
+            case IDE_CTAGS_INDEX_ENTRY_ENUMERATOR:
+            default:
+              break;
+            }
+
+          if (node != NULL)
+            {
+              gchar *key = make_parent_key (entry);
+              if (key != NULL)
+                g_hash_table_insert (keymap, key, node);
+              g_ptr_array_add (tmp, g_steal_pointer (&node));
+            }
+        }
+
+      /*
+       * Now go resolve parents and build the tree.
+       */
+
+      for (guint j = 0; j < tmp->len; j++)
+        {
+          IdeCtagsSymbolNode *node = g_ptr_array_index (tmp, j);
+          const IdeCtagsIndexEntry *entry = ide_ctags_symbol_node_get_entry (node);
+
+          if (!maybe_attach_to_parent (node, entry, keymap))
+            g_ptr_array_add (ar, node);
+        }
+    }
+
+  g_task_return_pointer (task, ide_ctags_symbol_tree_new (g_steal_pointer (&ar)), g_object_unref);
+}
+
 static void
 ide_ctags_symbol_resolver_get_symbol_tree_async (IdeSymbolResolver   *resolver,
                                                  GFile               *file,
@@ -455,21 +620,53 @@ ide_ctags_symbol_resolver_get_symbol_tree_async (IdeSymbolResolver   *resolver,
                                                  gpointer             user_data)
 {
   IdeCtagsSymbolResolver *self = (IdeCtagsSymbolResolver *)resolver;
+  TreeResolverState *state;
   g_autoptr(GTask) task = NULL;
+  g_autoptr(GPtrArray) indexes = NULL;
+  IdeCtagsService *service;
+  IdeContext *context;
+
+  IDE_ENTRY;
 
   g_assert (IDE_IS_CTAGS_SYMBOL_RESOLVER (self));
   g_assert (G_IS_FILE (file));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
+  context = ide_object_get_context (IDE_OBJECT (self));
+  service = ide_context_get_service_typed (context, IDE_TYPE_CTAGS_SERVICE);
+  indexes = ide_ctags_service_get_indexes (service);
+
+  if (indexes == NULL || indexes->len == 0)
+    {
+      g_task_return_new_error (task,
+                               G_IO_ERROR,
+                               G_IO_ERROR_NOT_SUPPORTED,
+                               "No ctags indexes are loaded");
+      return;
+    }
+
+  state = g_slice_new0 (TreeResolverState);
+  state->file = g_object_ref (file);
+  state->indexes = g_ptr_array_new_with_free_func (g_object_unref);
+
   /*
-   * FIXME: I think the symbol tree should be a separate interface.
+   * We make a copy of the indexes so that we can access them in a thread.
+   * The container is not mutable, but the indexes are thread safe in that
+   * they don't do mutation after creation.
    */
+  for (guint i = 0; i < indexes->len; i++)
+    {
+      IdeCtagsIndex *index = g_ptr_array_index (indexes, i);
+
+      g_ptr_array_add (state->indexes, g_object_ref (index));
+    }
 
   task = g_task_new (self, cancellable, callback, user_data);
-  g_task_return_new_error (task,
-                           G_IO_ERROR,
-                           G_IO_ERROR_NOT_SUPPORTED,
-                           "CTags symbol resolver does not support symbol tree.");
+  g_task_set_task_data (task, state, tree_resolver_state_free);
+  g_task_set_source_tag (task, ide_ctags_symbol_resolver_get_symbol_tree_async);
+  g_task_run_in_thread (task, ide_ctags_symbol_resolver_get_symbol_tree_worker);
+
+  IDE_EXIT;
 }
 
 static IdeSymbolTree *
@@ -477,12 +674,10 @@ ide_ctags_symbol_resolver_get_symbol_tree_finish (IdeSymbolResolver  *resolver,
                                                   GAsyncResult       *result,
                                                   GError            **error)
 {
-  GTask *task = (GTask *)result;
-
   g_assert (IDE_IS_CTAGS_SYMBOL_RESOLVER (resolver));
-  g_assert (G_IS_TASK (task));
+  g_assert (G_IS_TASK (result));
 
-  return g_task_propagate_pointer (task, error);
+  return g_task_propagate_pointer (G_TASK (result), error);
 }
 
 static void
@@ -513,4 +708,114 @@ void
 _ide_ctags_symbol_resolver_register_type (GTypeModule *module)
 {
   ide_ctags_symbol_resolver_register_type (module);
+}
+
+void
+ide_ctags_symbol_resolver_get_location_async (IdeCtagsSymbolResolver   *self,
+                                              IdeCtagsIndex            *index,
+                                              const IdeCtagsIndexEntry *entry,
+                                              GCancellable             *cancellable,
+                                              GAsyncReadyCallback       callback,
+                                              gpointer                  user_data)
+{
+  g_autoptr(GTask) task = NULL;
+  g_autoptr(GFile) other_file = NULL;
+  IdeBuffer *other_buffer = NULL;
+  IdeCtagsIndexEntry *copy;
+  IdeBufferManager *bufmgr;
+  LookupSymbol *lookup;
+  IdeContext *context;
+
+  IDE_ENTRY;
+
+  g_return_if_fail (IDE_IS_CTAGS_SYMBOL_RESOLVER (self));
+  g_return_if_fail (entry != NULL);
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  context = ide_object_get_context (IDE_OBJECT (self));
+  bufmgr = ide_context_get_buffer_manager (context);
+
+  task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, ide_ctags_symbol_resolver_get_location_async);
+
+  if (is_linenum (entry->pattern))
+    {
+      g_autoptr(IdeSymbol) symbol = NULL;
+      gint64 parsed;
+
+      parsed = g_ascii_strtoll (entry->pattern, NULL, 10);
+
+      if (((parsed == 0) && (errno == ERANGE)) || (parsed > G_MAXINT) || (parsed < 0))
+        goto not_a_number;
+
+      symbol = create_symbol (self, entry, parsed, 0, 0);
+      g_task_return_pointer (task, symbol, (GDestroyNotify)ide_symbol_unref);
+
+      IDE_EXIT;
+    }
+
+not_a_number:
+
+  if (!is_regex (entry->pattern))
+    {
+      g_task_return_new_error (task,
+                               G_IO_ERROR,
+                               G_IO_ERROR_NOT_SUPPORTED,
+                               "Failed to decode jump in ctag entry");
+      IDE_EXIT;
+    }
+
+  /*
+   * Adjust the filename in our copy to be the full path.
+   * Sort of grabbing at internals here, but hey, we are
+   * our own plugin.
+   */
+  copy = ide_ctags_index_entry_copy (entry);
+  g_free ((gchar *)copy->path);
+  copy->path = ide_ctags_index_resolve_path (index, entry->path);
+
+  lookup = g_slice_new0 (LookupSymbol);
+  lookup->entry = copy;
+
+  other_file = g_file_new_for_path (copy->path);
+
+  if (NULL != (other_buffer = ide_buffer_manager_find_buffer (bufmgr, other_file)))
+    {
+      GtkTextIter begin, end;
+
+      gtk_text_buffer_get_bounds (GTK_TEXT_BUFFER (other_buffer), &begin, &end);
+      lookup->buffer_text = gtk_text_iter_get_slice (&begin, &end);
+    }
+
+  g_task_set_task_data (task, lookup, lookup_symbol_free);
+  g_task_run_in_thread (task, regex_worker);
+
+  IDE_EXIT;
+}
+
+IdeSourceLocation *
+ide_ctags_symbol_resolver_get_location_finish (IdeCtagsSymbolResolver  *self,
+                                               GAsyncResult            *result,
+                                               GError                 **error)
+{
+  g_autoptr(IdeSymbol) symbol = NULL;
+  IdeSourceLocation *ret = NULL;
+
+  g_return_val_if_fail (IDE_IS_CTAGS_SYMBOL_RESOLVER (self), NULL);
+  g_return_val_if_fail (G_IS_TASK (result), NULL);
+
+  symbol = g_task_propagate_pointer (G_TASK (result), error);
+
+  if (symbol != NULL)
+    {
+      if (NULL != (ret = ide_symbol_get_declaration_location (symbol)))
+        ide_source_location_ref (ret);
+      else
+        g_set_error (error,
+                     G_IO_ERROR,
+                     G_IO_ERROR_NOT_FOUND,
+                     "Failed to locate symbol location");
+    }
+
+  return ret;
 }

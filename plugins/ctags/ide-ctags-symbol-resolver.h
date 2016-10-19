@@ -27,6 +27,16 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeCtagsSymbolResolver, ide_ctags_symbol_resolver, IDE, CTAGS_SYMBOL_RESOLVER, IdeObject)
 
+void               ide_ctags_symbol_resolver_get_location_async  (IdeCtagsSymbolResolver   *self,
+                                                                  IdeCtagsIndex            *index,
+                                                                  const IdeCtagsIndexEntry *entry,
+                                                                  GCancellable             *cancellable,
+                                                                  GAsyncReadyCallback       callback,
+                                                                  gpointer                  user_data);
+IdeSourceLocation *ide_ctags_symbol_resolver_get_location_finish (IdeCtagsSymbolResolver   *self,
+                                                                  GAsyncResult             *result,
+                                                                  GError                  **error);
+
 G_END_DECLS
 
 #endif /* IDE_CTAGS_SYMBOL_RESOLVER_H */
