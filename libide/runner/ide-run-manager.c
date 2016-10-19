@@ -61,6 +61,7 @@ enum {
 };
 
 enum {
+  RUN,
   STOPPED,
   N_SIGNALS
 };
@@ -176,6 +177,27 @@ ide_run_manager_class_init (IdeRunManagerClass *klass)
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
+
+  /**
+   * IdeRunManager::run:
+   * @self: An #IdeRunManager
+   * @runner: An #IdeRunner
+   *
+   * This signal is emitted right before ide_runner_run_async() is called
+   * on an #IdeRunner. It can be used by plugins to tweak things right
+   * before the runner is executed.
+   */
+  signals [RUN] =
+    g_signal_new ("run",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  0,
+                  NULL,
+                  NULL,
+                  NULL,
+                  G_TYPE_NONE,
+                  1,
+                  IDE_TYPE_RUNNER);
 
   /**
    * IdeRunManager::stopped:
@@ -316,6 +338,8 @@ do_run_async (IdeRunManager *self,
    */
   if (self->handler != NULL && self->handler->handler != NULL)
     self->handler->handler (self, runner, self->handler->handler_data);
+
+  g_signal_emit (self, signals [RUN], 0, runner);
 
   ide_runner_run_async (runner,
                         cancellable,
