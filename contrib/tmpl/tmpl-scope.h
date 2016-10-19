@@ -43,21 +43,24 @@ TmplSymbol *tmpl_scope_get             (TmplScope         *self,
 void        tmpl_scope_set             (TmplScope         *self,
                                         const gchar       *name,
                                         TmplSymbol        *symbol);
+void        tmpl_scope_take            (TmplScope         *self,
+                                        const gchar       *name,
+                                        TmplSymbol        *symbol);
 void        tmpl_scope_set_value       (TmplScope         *self,
                                         const gchar       *name,
-                                        const GValue      *symbol);
+                                        const GValue      *value);
 void        tmpl_scope_set_boolean     (TmplScope         *self,
                                         const gchar       *name,
-                                        gboolean          symbol);
+                                        gboolean          value);
 void        tmpl_scope_set_double      (TmplScope         *self,
                                         const gchar       *name,
-                                        gdouble           symbol);
+                                        gdouble           value);
 void        tmpl_scope_set_string      (TmplScope         *self,
                                         const gchar       *name,
-                                        const gchar       *symbol);
+                                        const gchar       *value);
 void        tmpl_scope_set_object      (TmplScope         *self,
                                         const gchar       *name,
-                                        gpointer          symbol);
+                                        gpointer           value);
 void        tmpl_scope_set_resolver    (TmplScope         *self,
                                         TmplScopeResolver  resolver,
                                         gpointer           user_data,

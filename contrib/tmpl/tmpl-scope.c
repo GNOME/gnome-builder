@@ -130,11 +130,14 @@ tmpl_scope_get_full (TmplScope   *self,
   /* Call our resolver helper to locate the symbol */
   for (parent = self; parent != NULL; parent = parent->parent)
     {
-      if (parent->resolver)
+      if (parent->resolver != NULL)
         {
           if (parent->resolver (parent, name, &symbol, parent->resolver_data) && symbol)
-            tmpl_scope_set (self, name, symbol);
-          return symbol;
+            {
+              /* Pass ownership to our scope, and return a weak ref */
+              tmpl_scope_take (self, name, symbol);
+              return symbol;
+            }
         }
     }
 
@@ -142,7 +145,7 @@ tmpl_scope_get_full (TmplScope   *self,
     {
       /* Define the symbol in this scope */
       symbol = tmpl_symbol_new ();
-      tmpl_scope_set (self, name, symbol);
+      tmpl_scope_take (self, name, symbol);
     }
 
   return symbol;
@@ -163,78 +166,157 @@ tmpl_scope_get (TmplScope   *self,
 }
 
 /**
+ * tmpl_scope_take:
+ * @self: A #TmplScope
+ * @name: The name of the symbol
+ * @symbol: (nullable) (transfer full): A #TmplSymbol or %NULL
+ *
+ * Sets the symbol named @name to @symbol in @scope.
+ *
+ * This differs from tmpl_scope_set() in that it takes ownership
+ * of @symbol.
+ */
+void
+tmpl_scope_take (TmplScope   *self,
+                 const gchar *name,
+                 TmplSymbol  *symbol)
+{
+  g_return_if_fail (self != NULL);
+  g_return_if_fail (name != NULL);
+
+  if G_UNLIKELY (symbol == NULL)
+    {
+      if G_LIKELY (self->symbols != NULL)
+        g_hash_table_remove (self->symbols, name);
+      return;
+    }
+
+  if (self->symbols == NULL)
+    self->symbols = g_hash_table_new_full (g_str_hash,
+                                           g_str_equal,
+                                           g_free,
+                                           (GDestroyNotify) tmpl_symbol_unref);
+
+  g_hash_table_insert (self->symbols, g_strdup (name), symbol);
+}
+
+/**
  * tmpl_scope_set:
+ * @self: A #TmplScope
+ * @name: the name of the symbol
+ * @symbol: (nullable) (transfer none): An #TmplSymbol or %NULL.
  *
  * If the symbol already exists, it will be overwritten.
  *
- * Parameter: (transfer none): #t
+ * If @symbol is %NULL, the symbol will be removed from scope.
  */
 void
 tmpl_scope_set (TmplScope   *self,
                 const gchar *name,
                 TmplSymbol  *symbol)
 {
-  if (self->symbols == NULL)
-    self->symbols = g_hash_table_new_full (g_str_hash,
-                                           g_str_equal,
-                                           g_free,
-                                           (GDestroyNotify) tmpl_symbol_unref);
-  g_hash_table_insert (self->symbols, g_strdup (name), symbol);
+  g_return_if_fail (self != NULL);
+
+  if (symbol != NULL)
+    tmpl_symbol_ref (symbol);
+
+  tmpl_scope_take (self, name, symbol);
 }
 
 /**
  * tmpl_scope_set_value:
+ * @self: A #TmplScope
+ * @name: a name for the symbol
+ * @value: (nullable): A #GValue or %NULL
+ *
+ * Sets the contents of the symbol named @name to the value @value.
  */
 void
-tmpl_scope_set_value (TmplScope     *self,
-                       const gchar  *name,
-                       const GValue *symbol)
+tmpl_scope_set_value (TmplScope    *self,
+                      const gchar  *name,
+                      const GValue *value)
 {
-  tmpl_symbol_assign_value (tmpl_scope_get_full (self, name, TRUE), symbol);
+  g_return_if_fail (self != NULL);
+  g_return_if_fail (name != NULL);
+
+  tmpl_symbol_assign_value (tmpl_scope_get_full (self, name, TRUE), value);
 }
 
 /**
  * tmpl_scope_set_boolean:
+ * @self: A #TmplScope
+ * @name: a name for the symbol
+ * @value: a #gboolean
+ *
+ * Sets the value of the symbol named @name to a gboolean value of @value.
  */
 void
-tmpl_scope_set_boolean (TmplScope  *self,
-                       const gchar *name,
-                       gboolean    symbol)
+tmpl_scope_set_boolean (TmplScope   *self,
+                        const gchar *name,
+                        gboolean     value)
 {
-  tmpl_symbol_assign_boolean (tmpl_scope_get_full (self, name, TRUE), symbol);
+  g_return_if_fail (self != NULL);
+  g_return_if_fail (name != NULL);
+
+  tmpl_symbol_assign_boolean (tmpl_scope_get_full (self, name, TRUE), value);
 }
 
 /**
  * tmpl_scope_set_double:
+ * @self: A #TmplScope
+ * @name: a name for the symbol
+ * @value: a #gdouble
+ *
+ * Sets the value of the symbol named @name to a gdouble value of @value.
  */
 void
 tmpl_scope_set_double (TmplScope   *self,
                        const gchar *name,
-                       gdouble     symbol)
+                       gdouble      value)
 {
-  tmpl_symbol_assign_double (tmpl_scope_get_full (self, name, TRUE), symbol);
+  g_return_if_fail (self != NULL);
+  g_return_if_fail (name != NULL);
+
+  tmpl_symbol_assign_double (tmpl_scope_get_full (self, name, TRUE), value);
 }
 
 /**
  * tmpl_scope_set_object:
+ * @self: A #TmplScope
+ * @name: a name for the symbol
+ * @value: (type GObject.Object) (nullable): a #GObject or %NULL.
+ *
+ * Sets the value of the symbol named @name to the object @value.
  */
 void
 tmpl_scope_set_object (TmplScope   *self,
                        const gchar *name,
-                       gpointer    symbol)
+                       gpointer     value)
 {
-  tmpl_symbol_assign_object (tmpl_scope_get_full (self, name, TRUE), symbol);
+  g_return_if_fail (self != NULL);
+  g_return_if_fail (name != NULL);
+  g_return_if_fail (!value || G_IS_OBJECT (value));
+
+  tmpl_symbol_assign_object (tmpl_scope_get_full (self, name, TRUE), value);
 }
 
 /**
  * tmpl_scope_set_string:
+ * @self: A #TmplScope
+ * @name: a name for the symbol
+ * @value: (nullable): A string or %NULL.
+ *
+ * Sets the value of the symbol named @name to a string matching @value.
  */
 void
 tmpl_scope_set_string (TmplScope   *self,
                        const gchar *name,
-                       const gchar *symbol)
+                       const gchar *value)
 {
-  tmpl_symbol_assign_string (tmpl_scope_get_full (self, name, TRUE), symbol);
+  g_return_if_fail (self != NULL);
+  g_return_if_fail (name != NULL);
+
+  tmpl_symbol_assign_string (tmpl_scope_get_full (self, name, TRUE), value);
 }
 
 /**
@@ -248,6 +330,9 @@ TmplSymbol *
 tmpl_scope_peek (TmplScope   *self,
                  const gchar *name)
 {
+  g_return_val_if_fail (self != NULL, NULL);
+  g_return_val_if_fail (name != NULL, NULL);
+
   return tmpl_scope_get_full (self, name, FALSE);
 }
 
