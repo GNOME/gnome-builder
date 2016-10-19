@@ -62,6 +62,7 @@ symbol_tree_builder_build_node (IdeTreeBuilder *builder,
       const gchar *icon_name = NULL;
       IdeTreeNode *child;
       IdeSymbolKind kind;
+      gboolean has_children;
 
       symbol = ide_symbol_tree_get_nth_child (symbol_tree, parent, i);
       name = ide_symbol_node_get_name (symbol);
@@ -110,7 +111,10 @@ symbol_tree_builder_build_node (IdeTreeBuilder *builder,
           break;
         }
 
+      has_children = !!ide_symbol_tree_get_n_children (symbol_tree, symbol);
+
       child = g_object_new (IDE_TYPE_TREE_NODE,
+                            "children-possible", has_children,
                             "text", name,
                             "icon-name", icon_name,
                             "item", symbol,
