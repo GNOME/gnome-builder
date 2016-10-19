@@ -41,6 +41,12 @@ enum {
 
 static GParamSpec *properties [LAST_PROP];
 
+static IdeSourceLocation *
+ide_symbol_node_real_get_location (IdeSymbolNode *self)
+{
+  return NULL;
+}
+
 static void
 ide_symbol_node_finalize (GObject *object)
 {
@@ -112,6 +118,8 @@ static void
 ide_symbol_node_class_init (IdeSymbolNodeClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+  klass->get_location = ide_symbol_node_real_get_location;
 
   object_class->finalize = ide_symbol_node_finalize;
   object_class->get_property = ide_symbol_node_get_property;
