@@ -632,6 +632,9 @@ ide_ctags_symbol_resolver_get_symbol_tree_async (IdeSymbolResolver   *resolver,
   g_assert (G_IS_FILE (file));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
+  task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, ide_ctags_symbol_resolver_get_symbol_tree_async);
+
   context = ide_object_get_context (IDE_OBJECT (self));
   service = ide_context_get_service_typed (context, IDE_TYPE_CTAGS_SERVICE);
   indexes = ide_ctags_service_get_indexes (service);
@@ -661,9 +664,7 @@ ide_ctags_symbol_resolver_get_symbol_tree_async (IdeSymbolResolver   *resolver,
       g_ptr_array_add (state->indexes, g_object_ref (index));
     }
 
-  task = g_task_new (self, cancellable, callback, user_data);
   g_task_set_task_data (task, state, tree_resolver_state_free);
-  g_task_set_source_tag (task, ide_ctags_symbol_resolver_get_symbol_tree_async);
   g_task_run_in_thread (task, ide_ctags_symbol_resolver_get_symbol_tree_worker);
 
   IDE_EXIT;
