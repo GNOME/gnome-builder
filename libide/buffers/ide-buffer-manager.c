@@ -107,6 +107,7 @@ enum {
 
   LOAD_BUFFER,
   BUFFER_LOADED,
+  BUFFER_UNLOADED,
 
   BUFFER_FOCUS_ENTER,
   BUFFER_FOCUS_LEAVE,
@@ -413,6 +414,12 @@ ide_buffer_manager_remove_buffer (IdeBufferManager *self,
   g_signal_handlers_disconnect_by_func (buffer,
                                         G_CALLBACK (ide_buffer_manager_buffer_changed),
                                         self);
+
+  /*
+   * Notify anything that needs a pointer to the buffer to cleanup,
+   * such as language server clients.
+   */
+  g_signal_emit (self, signals [BUFFER_UNLOADED], 0, buffer);
 
   /* Try hard to ensure the buffer releases any objects held.
    * That way, if for some reason the buffer does get leaked
@@ -1470,6 +1477,21 @@ ide_buffer_manager_class_init (IdeBufferManagerClass *klass)
                                                 G_TYPE_NONE,
                                                 1,
                                                 IDE_TYPE_BUFFER);
+
+  /**
+   * IdeBufferManager::buffer-unloaded:
+   * @self: An #IdeBufferManager
+   * @buffer: An #IdeBuffer
+   *
+   * This signal is emitted when the buffer is unloaded. This allows consumers to access the
+   * buffer before the items-changed signal is emitted for which it is too late to get
+   * a pointer to the buffer.
+   */
+  signals [BUFFER_UNLOADED] = g_signal_new ("buffer-unloaded",
+                                            G_TYPE_FROM_CLASS (klass),
+                                            G_SIGNAL_RUN_LAST,
+                                            0, NULL, NULL, NULL,
+                                            G_TYPE_NONE, 1, IDE_TYPE_BUFFER);
 }
 
 static void
