@@ -31,6 +31,7 @@ typedef struct
 G_DEFINE_TYPE_WITH_PRIVATE (IdeSubprocessSupervisor, ide_subprocess_supervisor, G_TYPE_OBJECT)
 
 enum {
+  SPAWNED,
   SUPERVISE,
   UNSUPERVISE,
   N_SIGNALS
@@ -109,6 +110,13 @@ ide_subprocess_supervisor_class_init (IdeSubprocessSupervisorClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   object_class->finalize = ide_subprocess_supervisor_finalize;
+
+  signals [SPAWNED] =
+    g_signal_new_class_handler ("spawned",
+                                G_TYPE_FROM_CLASS (klass),
+                                G_SIGNAL_RUN_LAST,
+                                NULL, NULL, NULL, NULL,
+                                G_TYPE_NONE, 1, G_TYPE_SUBPROCESS);
 
   signals [SUPERVISE] =
     g_signal_new_class_handler ("supervise",
@@ -260,9 +268,13 @@ ide_subprocess_supervisor_set_subprocess (IdeSubprocessSupervisor *self,
 
   if (g_set_object (&priv->subprocess, subprocess))
     {
-      ide_subprocess_wait_async (priv->subprocess,
-                                 NULL,
-                                 ide_subprocess_supervisor_wait_cb,
-                                 g_object_ref (self));
+      if (subprocess != NULL)
+        {
+          g_signal_emit (self, signals [SPAWNED], 0, subprocess);
+          ide_subprocess_wait_async (priv->subprocess,
+                                     NULL,
+                                     ide_subprocess_supervisor_wait_cb,
+                                     g_object_ref (self));
+        }
     }
 }
