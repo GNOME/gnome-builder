@@ -20,6 +20,7 @@
 
 #include <egg-signal-group.h>
 #include <jsonrpc-glib.h>
+#include <unistd.h>
 
 #include "ide-context.h"
 #include "ide-debug.h"
@@ -27,15 +28,24 @@
 #include "buffers/ide-buffer.h"
 #include "buffers/ide-buffer-manager.h"
 #include "langserv/ide-langserv-client.h"
+#include "projects/ide-project.h"
+#include "vcs/ide-vcs.h"
 
 typedef struct
 {
   EggSignalGroup *buffer_manager_signals;
+  EggSignalGroup *project_signals;
   JsonrpcClient  *rpc_client;
   GIOStream      *io_stream;
 } IdeLangservClientPrivate;
 
 G_DEFINE_TYPE_WITH_PRIVATE (IdeLangservClient, ide_langserv_client, IDE_TYPE_OBJECT)
+
+enum {
+  FILE_CHANGE_TYPE_CREATED = 1,
+  FILE_CHANGE_TYPE_CHANGED = 2,
+  FILE_CHANGE_TYPE_DELETED = 3,
+};
 
 enum {
   PROP_0,
@@ -45,48 +55,26 @@ enum {
 
 static GParamSpec *properties [N_PROPS];
 
-static JsonNode *
-create_text_document (IdeBuffer *buffer)
-{
-  g_autoptr(JsonNode) ret = NULL;
-  g_autoptr(JsonObject) text_document = NULL;
-  g_autofree gchar *uri = NULL;
-  IdeFile *file;
-  GFile *gfile;
-
-  g_assert (IDE_IS_BUFFER (buffer));
-
-  file = ide_buffer_get_file (buffer);
-  gfile = ide_file_get_file (file);
-  uri = g_file_get_uri (gfile);
-
-  text_document = json_object_new ();
-  json_object_set_string_member (text_document, "uri", uri);
-
-  ret = json_node_new (JSON_NODE_OBJECT);
-  json_node_set_object (ret, g_steal_pointer (&text_document));
-
-  return g_steal_pointer (&ret);
-}
-
 static void
 ide_langserv_client_buffer_loaded (IdeLangservClient *self,
                                    IdeBuffer         *buffer,
                                    IdeBufferManager  *buffer_manager)
 {
   IdeLangservClientPrivate *priv = ide_langserv_client_get_instance_private (self);
-  g_autoptr(JsonObject) object = NULL;
   g_autoptr(JsonNode) params = NULL;
+  g_autofree gchar *uri = NULL;
 
   g_assert (IDE_IS_LANGSERV_CLIENT (self));
   g_assert (IDE_IS_BUFFER (buffer));
   g_assert (IDE_IS_BUFFER_MANAGER (buffer_manager));
 
-  object = json_object_new ();
-  json_object_set_member (object, "textDocument", create_text_document (buffer));
+  uri = ide_buffer_get_uri (buffer);
 
-  params = json_node_new (JSON_NODE_OBJECT);
-  json_node_set_object (params, g_steal_pointer (&object));
+  params = JCON_NEW (
+    "textDocument", "{",
+      "uri", JCON_STRING (uri),
+    "}"
+  );
 
   jsonrpc_client_notification_async (priv->rpc_client, "textDocument/didOpen", params, NULL, NULL, NULL);
 }
@@ -97,18 +85,20 @@ ide_langserv_client_buffer_unloaded (IdeLangservClient *self,
                                      IdeBufferManager  *buffer_manager)
 {
   IdeLangservClientPrivate *priv = ide_langserv_client_get_instance_private (self);
-  g_autoptr(JsonObject) object = NULL;
   g_autoptr(JsonNode) params = NULL;
+  g_autofree gchar *uri = NULL;
 
   g_assert (IDE_IS_LANGSERV_CLIENT (self));
   g_assert (IDE_IS_BUFFER (buffer));
   g_assert (IDE_IS_BUFFER_MANAGER (buffer_manager));
 
-  object = json_object_new ();
-  json_object_set_member (object, "textDocument", create_text_document (buffer));
+  uri = ide_buffer_get_uri (buffer);
 
-  params = json_node_new (JSON_NODE_OBJECT);
-  json_node_set_object (params, g_steal_pointer (&object));
+  params = JCON_NEW (
+    "textDocument", "{",
+      "uri", JCON_STRING (uri),
+    "}"
+  );
 
   jsonrpc_client_notification_async (priv->rpc_client, "textDocument/didClose", params, NULL, NULL, NULL);
 }
@@ -148,6 +138,76 @@ ide_langserv_client_buffer_manager_unbind (IdeLangservClient *self,
 }
 
 static void
+ide_langserv_client_project_file_trashed (IdeLangservClient *self,
+                                          GFile             *file,
+                                          IdeProject        *project)
+{
+  IdeLangservClientPrivate *priv = ide_langserv_client_get_instance_private (self);
+  g_autoptr(JsonNode) params = NULL;
+  g_autofree gchar *uri = NULL;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_LANGSERV_CLIENT (self));
+  g_assert (G_IS_FILE (file));
+  g_assert (IDE_IS_PROJECT (project));
+
+  uri = g_file_get_uri (file);
+
+  params = JCON_NEW (
+    "changes", "["
+      "{",
+        "uri", JCON_STRING (uri),
+        "type", JCON_INT (FILE_CHANGE_TYPE_DELETED),
+      "}",
+    "]"
+  );
+
+  jsonrpc_client_notification_async (priv->rpc_client, "workspace/didChangeWatchedFiles", params, NULL, NULL, NULL);
+
+  IDE_EXIT;
+}
+
+static void
+ide_langserv_client_project_file_renamed (IdeLangservClient *self,
+                                          GFile             *src,
+                                          GFile             *dst,
+                                          IdeProject        *project)
+{
+  IdeLangservClientPrivate *priv = ide_langserv_client_get_instance_private (self);
+  g_autoptr(JsonNode) params = NULL;
+  g_autofree gchar *src_uri = NULL;
+  g_autofree gchar *dst_uri = NULL;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_LANGSERV_CLIENT (self));
+  g_assert (G_IS_FILE (src));
+  g_assert (G_IS_FILE (dst));
+  g_assert (IDE_IS_PROJECT (project));
+
+  src_uri = g_file_get_uri (src);
+  dst_uri = g_file_get_uri (dst);
+
+  params = JCON_NEW (
+    "changes", "["
+      "{",
+        "uri", JCON_STRING (src_uri),
+        "type", JCON_INT (FILE_CHANGE_TYPE_DELETED),
+      "}",
+      "{",
+        "uri", JCON_STRING (dst_uri),
+        "type", JCON_INT (FILE_CHANGE_TYPE_CREATED),
+      "}",
+    "]"
+  );
+
+  jsonrpc_client_notification_async (priv->rpc_client, "workspace/didChangeWatchedFiles", params, NULL, NULL, NULL);
+
+  IDE_EXIT;
+}
+
+static void
 ide_langserv_client_finalize (GObject *object)
 {
   IdeLangservClient *self = (IdeLangservClient *)object;
@@ -155,6 +215,7 @@ ide_langserv_client_finalize (GObject *object)
 
   g_clear_object (&priv->rpc_client);
   g_clear_object (&priv->buffer_manager_signals);
+  g_clear_object (&priv->project_signals);
 
   G_OBJECT_CLASS (ide_langserv_client_parent_class)->finalize (object);
 }
@@ -230,7 +291,6 @@ ide_langserv_client_init (IdeLangservClient *self)
                                    G_CALLBACK (ide_langserv_client_buffer_loaded),
                                    self,
                                    G_CONNECT_SWAPPED);
-
   egg_signal_group_connect_object (priv->buffer_manager_signals,
                                    "buffer-unloaded",
                                    G_CALLBACK (ide_langserv_client_buffer_unloaded),
@@ -242,12 +302,24 @@ ide_langserv_client_init (IdeLangservClient *self)
                            G_CALLBACK (ide_langserv_client_buffer_manager_bind),
                            self,
                            G_CONNECT_SWAPPED);
-
   g_signal_connect_object (priv->buffer_manager_signals,
                            "unbind",
                            G_CALLBACK (ide_langserv_client_buffer_manager_unbind),
                            self,
                            G_CONNECT_SWAPPED);
+
+  priv->project_signals = egg_signal_group_new (IDE_TYPE_PROJECT);
+
+  egg_signal_group_connect_object (priv->project_signals,
+                                   "file-trashed",
+                                   G_CALLBACK (ide_langserv_client_project_file_trashed),
+                                   self,
+                                   G_CONNECT_SWAPPED);
+  egg_signal_group_connect_object (priv->project_signals,
+                                   "file-renamed",
+                                   G_CALLBACK (ide_langserv_client_project_file_renamed),
+                                   self,
+                                   G_CONNECT_SWAPPED);
 }
 
 static void
@@ -268,6 +340,30 @@ ide_langserv_client_notification (IdeLangservClient *self,
   IDE_EXIT;
 }
 
+static void
+ide_langserv_client_initialize_cb (GObject      *object,
+                                   GAsyncResult *result,
+                                   gpointer      user_data)
+{
+  JsonrpcClient *rpc_client = (JsonrpcClient *)object;
+  g_autoptr(IdeLangservClient) self = user_data;
+  g_autoptr(JsonNode) reply = NULL;
+  g_autoptr(GError) error = NULL;
+
+  g_assert (JSONRPC_IS_CLIENT (rpc_client));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_LANGSERV_CLIENT (self));
+
+  if (!jsonrpc_client_call_finish (rpc_client, result, &reply, &error))
+    {
+      g_warning ("Failed to initialize language server: %s", error->message);
+      ide_langserv_client_stop (self);
+      return;
+    }
+
+  /* TODO: Check for server capabilities */
+}
+
 IdeLangservClient *
 ide_langserv_client_new (IdeContext *context,
                          GIOStream  *io_stream)
@@ -284,7 +380,13 @@ void
 ide_langserv_client_start (IdeLangservClient *self)
 {
   IdeLangservClientPrivate *priv = ide_langserv_client_get_instance_private (self);
+  g_autoptr(JsonNode) params = NULL;
+  g_autofree gchar *root_path = NULL;
+  IdeBufferManager *buffer_manager;
   IdeContext *context;
+  IdeProject *project;
+  IdeVcs *vcs;
+  GFile *workdir;
 
   IDE_ENTRY;
 
@@ -292,32 +394,47 @@ ide_langserv_client_start (IdeLangservClient *self)
 
   context = ide_object_get_context (IDE_OBJECT (self));
 
-  if (G_IS_IO_STREAM (priv->io_stream) && IDE_IS_CONTEXT (context))
-    {
-      IdeBufferManager *buffer_manager = NULL;
-
-      priv->rpc_client = jsonrpc_client_new (priv->io_stream);
-
-      g_signal_connect_object (priv->rpc_client,
-                               "notification",
-                               G_CALLBACK (ide_langserv_client_notification),
-                               self,
-                               G_CONNECT_SWAPPED);
-
-      /*
-       * The first thing we need to do is initialize the client with information
-       * about our project. So that we will perform asynchronously here. It will
-       * also start our read loop.
-       */
-
-      buffer_manager = ide_context_get_buffer_manager (context);
-      egg_signal_group_set_target (priv->buffer_manager_signals, buffer_manager);
-    }
-  else
+  if (!G_IS_IO_STREAM (priv->io_stream) || !IDE_IS_CONTEXT (context))
     {
       g_warning ("Cannot start %s due to misconfiguration.",
                  G_OBJECT_TYPE_NAME (self));
+      return;
     }
+
+  priv->rpc_client = jsonrpc_client_new (priv->io_stream);
+
+  g_signal_connect_object (priv->rpc_client,
+                           "notification",
+                           G_CALLBACK (ide_langserv_client_notification),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+
+  buffer_manager = ide_context_get_buffer_manager (context);
+  egg_signal_group_set_target (priv->buffer_manager_signals, buffer_manager);
+
+  project = ide_context_get_project (context);
+  egg_signal_group_set_target (priv->project_signals, project);
+
+  vcs = ide_context_get_vcs (context);
+  workdir = ide_vcs_get_working_directory (vcs);
+  root_path = g_file_get_path (workdir);
+
+  /*
+   * The first thing we need to do is initialize the client with information
+   * about our project. So that we will perform asynchronously here. It will
+   * also start our read loop.
+   */
+
+  params = JCON_NEW (
+    "processId", JCON_INT (getpid ()),
+    "rootPath", JCON_STRING (root_path),
+    "capabilities", "{", "}"
+  );
+
+  jsonrpc_client_call_async (priv->rpc_client, "initialize", params, NULL,
+                             ide_langserv_client_initialize_cb,
+                             g_object_ref (self));
 
   IDE_EXIT;
 }
