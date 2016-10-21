@@ -74,6 +74,7 @@ gboolean            ide_buffer_get_read_only                 (IdeBuffer         
 gboolean            ide_buffer_get_highlight_diagnostics     (IdeBuffer            *self);
 const gchar        *ide_buffer_get_style_scheme_name         (IdeBuffer            *self);
 const gchar        *ide_buffer_get_title                     (IdeBuffer            *self);
+gchar              *ide_buffer_get_uri                       (IdeBuffer            *self);
 void                ide_buffer_set_file                      (IdeBuffer            *self,
                                                               IdeFile              *file);
 void                ide_buffer_set_highlight_diagnostics     (IdeBuffer            *self,

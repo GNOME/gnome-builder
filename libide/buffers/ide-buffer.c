@@ -2694,3 +2694,17 @@ ide_buffer_get_change_count (IdeBuffer *self)
 
   return priv->change_count;
 }
+
+gchar *
+ide_buffer_get_uri (IdeBuffer *self)
+{
+  IdeFile *file;
+  GFile *gfile;
+
+  g_return_val_if_fail (IDE_IS_BUFFER (self), NULL);
+
+  file = ide_buffer_get_file (self);
+  gfile = ide_file_get_file (file);
+
+  return g_file_get_uri (gfile);
+}
