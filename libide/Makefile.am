@@ -640,7 +640,7 @@ introspection_sources =                 \
 	$(NULL)
 
 Ide-1.0.gir: libide-1.0.la
-Ide_1_0_gir_INCLUDES = Gio-2.0 GtkSource-3.0 Peas-1.0
+Ide_1_0_gir_INCLUDES = Gio-2.0 GtkSource-3.0 Peas-1.0 Json-1.0
 Ide_1_0_gir_CFLAGS = $(libide_1_0_la_CFLAGS)
 Ide_1_0_gir_LIBS =                                           \
 	libide-1.0.la                                        \

@@ -19,6 +19,8 @@
 #ifndef IDE_LANGSERV_CLIENT_H
 #define IDE_LANGSERV_CLIENT_H
 
+#include <json-glib/json-glib.h>
+
 #include "ide-object.h"
 
 G_BEGIN_DECLS
@@ -31,6 +33,10 @@ struct _IdeLangservClientClass
 {
   IdeObjectClass parent_class;
 
+  void (*notification) (IdeLangservClient *self,
+                        const gchar       *method,
+                        JsonNode          *params);
+
   gpointer _reserved1;
   gpointer _reserved2;
   gpointer _reserved3;
@@ -41,10 +47,20 @@ struct _IdeLangservClientClass
   gpointer _reserved8;
 };
 
-IdeLangservClient *ide_langserv_client_new          (IdeContext        *context,
-                                                     GIOStream         *io_stream);
-void               ide_langserv_client_start        (IdeLangservClient *self);
-void               ide_langserv_client_stop         (IdeLangservClient *self);
+IdeLangservClient *ide_langserv_client_new         (IdeContext           *context,
+                                                    GIOStream            *io_stream);
+void               ide_langserv_client_start       (IdeLangservClient    *self);
+void               ide_langserv_client_stop        (IdeLangservClient    *self);
+void               ide_langserv_client_call_async  (IdeLangservClient    *self,
+                                                    const gchar          *method,
+                                                    JsonNode             *params,
+                                                    GCancellable         *cancellable,
+                                                    GAsyncReadyCallback   callback,
+                                                    gpointer              user_data);
+gboolean           ide_langserv_client_call_finish (IdeLangservClient    *self,
+                                                    GAsyncResult         *result,
+                                                    JsonNode            **return_value,
+                                                    GError              **error);
 
 G_END_DECLS
 

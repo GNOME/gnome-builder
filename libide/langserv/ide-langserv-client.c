@@ -18,6 +18,7 @@
 
 #define G_LOG_DOMAIN "ide-langserv-client"
 
+#include <egg-counter.h>
 #include <egg-signal-group.h>
 #include <jsonrpc-glib.h>
 #include <unistd.h>
@@ -27,6 +28,8 @@
 
 #include "buffers/ide-buffer.h"
 #include "buffers/ide-buffer-manager.h"
+#include "diagnostics/ide-diagnostic.h"
+#include "diagnostics/ide-diagnostics.h"
 #include "langserv/ide-langserv-client.h"
 #include "projects/ide-project.h"
 #include "vcs/ide-vcs.h"
@@ -37,6 +40,7 @@ typedef struct
   EggSignalGroup *project_signals;
   JsonrpcClient  *rpc_client;
   GIOStream      *io_stream;
+  GHashTable     *diagnostics_by_uri;
 } IdeLangservClientPrivate;
 
 G_DEFINE_TYPE_WITH_PRIVATE (IdeLangservClient, ide_langserv_client, IDE_TYPE_OBJECT)
@@ -53,7 +57,13 @@ enum {
   N_PROPS
 };
 
+enum {
+  NOTIFICATION,
+  N_SIGNALS
+};
+
 static GParamSpec *properties [N_PROPS];
+static guint signals [N_SIGNALS];
 
 static void
 ide_langserv_client_buffer_loaded (IdeLangservClient *self,
@@ -208,11 +218,85 @@ ide_langserv_client_project_file_renamed (IdeLangservClient *self,
 }
 
 static void
+ide_langserv_client_text_document_publish_diagnostics (IdeLangservClient *self,
+                                                       JsonNode          *params)
+{
+  const gchar *uri = NULL;
+  JsonArray *diagnostics = NULL;
+  gboolean success;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_LANGSERV_CLIENT (self));
+  g_assert (params != NULL);
+
+  success = JCON_EXTRACT (params,
+    "uri", JCONE_STRING (uri),
+    "diagnostics", JCONE_ARRAY (diagnostics)
+  );
+
+  if (!success)
+    IDE_EXIT;
+
+  IDE_TRACE_MSG ("Diagnostics received for %s", uri);
+
+  IDE_EXIT;
+}
+
+static void
+ide_langserv_client_real_notification (IdeLangservClient *self,
+                                       const gchar       *method,
+                                       JsonNode          *params)
+{
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_LANGSERV_CLIENT (self));
+  g_assert (method != NULL);
+  g_assert (params != NULL);
+
+  if (g_str_equal (method, "textDocument/publishDiagnostics"))
+    ide_langserv_client_text_document_publish_diagnostics (self, params);
+
+  IDE_EXIT;
+}
+
+static void
+ide_langserv_client_notification (IdeLangservClient *self,
+                                  const gchar       *method,
+                                  JsonNode          *params,
+                                  JsonrpcClient     *rpc_client)
+{
+  GQuark detail;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_LANGSERV_CLIENT (self));
+  g_assert (method != NULL);
+  g_assert (params != NULL);
+  g_assert (rpc_client != NULL);
+
+  IDE_TRACE_MSG ("Notification: %s", method);
+
+  /*
+   * To avoid leaking quarks we do not create a quark for the string unless
+   * it already exists. This should be fine in practice because we only need
+   * the quark if there is a caller that has registered for it. And the callers
+   * registering for it will necessarily create the quark.
+   */
+  detail = g_quark_try_string (method);
+
+  g_signal_emit (self, signals [NOTIFICATION], detail, method, params);
+
+  IDE_EXIT;
+}
+
+static void
 ide_langserv_client_finalize (GObject *object)
 {
   IdeLangservClient *self = (IdeLangservClient *)object;
   IdeLangservClientPrivate *priv = ide_langserv_client_get_instance_private (self);
 
+  g_clear_pointer (&priv->diagnostics_by_uri, g_hash_table_unref);
   g_clear_object (&priv->rpc_client);
   g_clear_object (&priv->buffer_manager_signals);
   g_clear_object (&priv->project_signals);
@@ -269,6 +353,8 @@ ide_langserv_client_class_init (IdeLangservClientClass *klass)
   object_class->get_property = ide_langserv_client_get_property;
   object_class->set_property = ide_langserv_client_set_property;
 
+  klass->notification = ide_langserv_client_real_notification;
+
   properties [PROP_IO_STREAM] =
     g_param_spec_object ("io-stream",
                          "IO Stream",
@@ -277,12 +363,28 @@ ide_langserv_client_class_init (IdeLangservClientClass *klass)
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
+
+  signals [NOTIFICATION] =
+    g_signal_new ("notification",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST | G_SIGNAL_DETAILED,
+                  G_STRUCT_OFFSET (IdeLangservClientClass, notification),
+                  NULL, NULL, NULL,
+                  G_TYPE_NONE,
+                  2,
+                  G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE,
+                  JSON_TYPE_NODE);
 }
 
 static void
 ide_langserv_client_init (IdeLangservClient *self)
 {
   IdeLangservClientPrivate *priv = ide_langserv_client_get_instance_private (self);
+
+  priv->diagnostics_by_uri = g_hash_table_new_full (g_str_hash,
+                                                    g_str_equal,
+                                                    g_free,
+                                                    (GDestroyNotify)ide_diagnostics_unref);
 
   priv->buffer_manager_signals = egg_signal_group_new (IDE_TYPE_BUFFER_MANAGER);
 
@@ -320,24 +422,6 @@ ide_langserv_client_init (IdeLangservClient *self)
                                    G_CALLBACK (ide_langserv_client_project_file_renamed),
                                    self,
                                    G_CONNECT_SWAPPED);
-}
-
-static void
-ide_langserv_client_notification (IdeLangservClient *self,
-                                  const gchar       *method,
-                                  JsonNode          *params,
-                                  JsonrpcClient     *rpc_client)
-{
-  IDE_ENTRY;
-
-  g_assert (IDE_IS_LANGSERV_CLIENT (self));
-  g_assert (method != NULL);
-  g_assert (params != NULL);
-  g_assert (rpc_client != NULL);
-
-  IDE_TRACE_MSG ("Notification: %s", method);
-
-  IDE_EXIT;
 }
 
 static void
@@ -455,4 +539,88 @@ ide_langserv_client_stop (IdeLangservClient *self)
     }
 
   IDE_EXIT;
+}
+
+static void
+ide_langserv_client_call_cb (GObject      *object,
+                             GAsyncResult *result,
+                             gpointer      user_data)
+{
+  JsonrpcClient *client = (JsonrpcClient *)object;
+  g_autoptr(JsonNode) return_value = NULL;
+  g_autoptr(GError) error = NULL;
+  g_autoptr(GTask) task = user_data;
+
+  IDE_ENTRY;
+
+  g_assert (JSONRPC_IS_CLIENT (client));
+  g_assert (G_IS_ASYNC_RESULT (result));
+
+  if (!jsonrpc_client_call_finish (client, result, &return_value, &error))
+    {
+      g_task_return_error (task, error);
+      return;
+    }
+
+  g_task_return_pointer (task, g_steal_pointer (&return_value), (GDestroyNotify)json_node_unref);
+
+  IDE_EXIT;
+}
+
+void
+ide_langserv_client_call_async (IdeLangservClient   *self,
+                                const gchar         *method,
+                                JsonNode            *params,
+                                GCancellable        *cancellable,
+                                GAsyncReadyCallback  callback,
+                                gpointer             user_data)
+{
+  IdeLangservClientPrivate *priv = ide_langserv_client_get_instance_private (self);
+  g_autoptr(GTask) task = NULL;
+
+  IDE_ENTRY;
+
+  task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, ide_langserv_client_call_async);
+
+  if (priv->rpc_client == NULL)
+    {
+      g_task_return_new_error (task,
+                               G_IO_ERROR,
+                               G_IO_ERROR_NOT_CONNECTED,
+                               "No connection to language server");
+      IDE_EXIT;
+    }
+
+  jsonrpc_client_call_async (priv->rpc_client,
+                             method,
+                             params,
+                             cancellable,
+                             ide_langserv_client_call_cb,
+                             g_steal_pointer (&task));
+
+  IDE_EXIT;
+}
+
+gboolean
+ide_langserv_client_call_finish (IdeLangservClient  *self,
+                                 GAsyncResult       *result,
+                                 JsonNode          **return_value,
+                                 GError            **error)
+{
+  g_autoptr(JsonNode) local_return_value = NULL;
+  gboolean ret;
+
+  IDE_ENTRY;
+
+  g_return_val_if_fail (IDE_IS_LANGSERV_CLIENT (self), FALSE);
+  g_return_val_if_fail (G_IS_TASK (result), FALSE);
+
+  local_return_value = g_task_propagate_pointer (G_TASK (result), error);
+  ret = local_return_value != NULL;
+
+  if (return_value != NULL)
+    *return_value = g_steal_pointer (&local_return_value);
+
+  IDE_RETURN (ret);
 }
