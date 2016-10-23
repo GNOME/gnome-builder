@@ -573,6 +573,44 @@
 
 @binding-set builder-vim-source-view-normal-c
 {
+  bind "1" { "append-to-count" (1)
+             "set-mode" ("vim-c-with-count", transient) };
+  bind "2" { "append-to-count" (2)
+             "set-mode" ("vim-c-with-count", transient) };
+  bind "3" { "append-to-count" (3)
+             "set-mode" ("vim-c-with-count", transient) };
+  bind "4" { "append-to-count" (4)
+             "set-mode" ("vim-c-with-count", transient) };
+  bind "5" { "append-to-count" (5)
+             "set-mode" ("vim-c-with-count", transient) };
+  bind "6" { "append-to-count" (6)
+             "set-mode" ("vim-c-with-count", transient) };
+  bind "7" { "append-to-count" (7)
+             "set-mode" ("vim-c-with-count", transient) };
+  bind "8" { "append-to-count" (8)
+             "set-mode" ("vim-c-with-count", transient) };
+  bind "9" { "append-to-count" (9)
+             "set-mode" ("vim-c-with-count", transient) };
+
+  bind "KP_1" { "append-to-count" (1)
+                "set-mode" ("vim-c-with-count", transient) };
+  bind "KP_2" { "append-to-count" (2)
+                "set-mode" ("vim-c-with-count", transient) };
+  bind "KP_3" { "append-to-count" (3)
+                "set-mode" ("vim-c-with-count", transient) };
+  bind "KP_4" { "append-to-count" (4)
+                "set-mode" ("vim-c-with-count", transient) };
+  bind "KP_5" { "append-to-count" (5)
+                "set-mode" ("vim-c-with-count", transient) };
+  bind "KP_6" { "append-to-count" (6)
+                "set-mode" ("vim-c-with-count", transient) };
+  bind "KP_7" { "append-to-count" (7)
+                "set-mode" ("vim-c-with-count", transient) };
+  bind "KP_8" { "append-to-count" (8)
+                "set-mode" ("vim-c-with-count", transient) };
+  bind "KP_9" { "append-to-count" (9)
+                "set-mode" ("vim-c-with-count", transient) };
+
   bind "i" { "set-mode" ("vim-normal-c-i", transient) };
 
   bind "a" { "set-mode" ("vim-normal-c-a", transient) };
@@ -587,6 +625,55 @@
              "movement" (next-word-end, 1, 0, 1)
              "copy-clipboard" ()
              "delete-selection" () };
+
+  bind "l" { "begin-macro" ()
+             "movement" (next-char, 1, 1, 1)
+             "copy-clipboard" ()
+             "delete-selection" ()
+             "set-mode" ("vim-insert", permanent) };
+  bind "h" { "begin-macro" ()
+             "movement" (previous-char, 1, 1, 1)
+             "copy-clipboard" ()
+             "delete-selection" ()
+             "set-mode" ("vim-insert", permanent) };
+  bind "k" { "begin-macro" ()
+             "movement" (last-char, 0, 0, 0)
+             "movement" (previous-line, 1, 0, 1)
+             "movement" (first-char, 1, 1, 0)
+             "copy-clipboard" ()
+             "delete-selection" ()
+             "set-mode" ("vim-insert", permanent) };
+  bind "j" { "begin-macro" ()
+             "movement" (first-char, 0, 1, 0)
+             "movement" (next-line, 1, 0, 1)
+             "movement" (last-char, 1, 0, 0)
+             "copy-clipboard" ()
+             "delete-selection" ()
+             "set-mode" ("vim-insert", permanent) };
+  bind "Right" { "begin-macro" ()
+                 "movement" (next-char, 1, 1, 1)
+                 "copy-clipboard" ()
+                 "delete-selection" ()
+                 "set-mode" ("vim-insert", permanent) };
+  bind "Left" { "begin-macro" ()
+                "movement" (previous-char, 1, 1, 1)
+                "copy-clipboard" ()
+                "delete-selection" ()
+                "set-mode" ("vim-insert", permanent) };
+  bind "Up" { "begin-macro" ()
+              "movement" (last-char, 0, 0, 0)
+              "movement" (previous-line, 1, 0, 1)
+              "movement" (first-char, 1, 1, 0)
+              "copy-clipboard" ()
+              "delete-selection" ()
+              "set-mode" ("vim-insert", permanent) };
+  bind "Down" { "begin-macro" ()
+                "movement" (first-char, 0, 1, 0)
+                "movement" (next-line, 1, 0, 1)
+                "movement" (last-char, 1, 0, 0)
+                "copy-clipboard" ()
+                "delete-selection" ()
+                "set-mode" ("vim-insert", permanent) };
 
   bind "0" { "begin-macro" ()
              "set-mode" ("vim-insert", permanent)
@@ -738,6 +825,14 @@
                      "copy-clipboard" ()
                      "selection-theatric" (shrink)
                      "delete-selection" () };
+}
+
+@binding-set builder-vim-source-view-c-with-count
+{
+  bind "0" { "append-to-count" (0)
+             "set-mode" ("vim-c-with-count", transient) };
+  bind "KP_0" { "append-to-count" (0)
+                "set-mode" ("vim-c-with-count", transient) };
 }
 
 @binding-set builder-vim-source-view-normal-c-i
@@ -2417,6 +2512,16 @@ idesourceviewmode.vim-normal-c {
   -IdeSourceViewMode-block-cursor: true;
 
   -gtk-key-bindings: builder-vim-source-view,
+                     builder-vim-source-view-normal-c;
+}
+
+idesourceviewmode.vim-c-with-count {
+  -IdeSourceViewMode-suppress-unbound: true;
+  -IdeSourceViewMode-block-cursor: true;
+  -IdeSourceViewMode-default-mode: "vim-normal-c";
+
+  -gtk-key-bindings: builder-vim-source-view,
+                     builder-vim-source-view-c-with-count,
                      builder-vim-source-view-normal-c;
 }
 
