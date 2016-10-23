@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-10-18 03:05+0000\n"
-"PO-Revision-Date: 2016-10-18 09:26+0200\n"
+"POT-Creation-Date: 2016-10-19 06:29+0000\n"
+"PO-Revision-Date: 2016-10-23 08:20+0200\n"
 "Last-Translator: Marek Černocký <marek@manet.cz>\n"
 "Language-Team: čeština <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
@@ -2587,8 +2587,12 @@ msgstr "Varovnání:"
 msgid "Errors:"
 msgstr "Chyby:"
 
+#: plugins/build-tools/gbp-build-panel.ui:149
+msgid "No Diagnostics"
+msgstr "Bez diagnostik"
+
 #. the action:// link is used to execute a build
-#: plugins/build-tools/gbp-build-panel.ui:147
+#: plugins/build-tools/gbp-build-panel.ui:150
 msgid ""
 "<a href=\"action://build-manager.build\">Build your project</a> to show "
 "diagnostics here"
@@ -3466,11 +3470,11 @@ msgstr "Aktuální jazyk nepodporuje rozpoznávání symbolů"
 msgid "Symbols"
 msgstr "Symboly"
 
-#: plugins/symbol-tree/symbol-tree-panel.ui:24
+#: plugins/symbol-tree/symbol-tree-panel.ui:25
 msgid "No symbols"
 msgstr "Bez symbolů"
 
-#: plugins/symbol-tree/symbol-tree-panel.ui:25
+#: plugins/symbol-tree/symbol-tree-panel.ui:26
 msgid "Open a file to see symbols within the file"
 msgstr "Otevřít soubor, abyste viděli jeho symboly"
 
@@ -3543,3 +3547,4 @@ msgstr "Zobrazovat chyby a varování poskytované pro jazyk Vala"
 #: plugins/vala-pack/ide-vala-preferences-addin.vala:36
 msgid "vala diagnostics warnings errors"
 msgstr "vala diagnostika varování chyba chyby"
+
