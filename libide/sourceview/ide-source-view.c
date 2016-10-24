@@ -1808,7 +1808,7 @@ ide_source_view_maybe_insert_match (IdeSourceView *self,
   GtkTextIter prev_iter;
   GtkTextIter next_iter;
   gunichar next_ch = 0;
-  gchar ch = 0;
+  gchar ch[2] = { 0 };
 
   /*
    * TODO: I think we should put this into a base class for auto
@@ -1846,19 +1846,19 @@ ide_source_view_maybe_insert_match (IdeSourceView *self,
   switch (event->keyval)
     {
     case GDK_KEY_braceleft:
-      ch = '}';
+      ch[0] = '}';
       break;
 
     case GDK_KEY_parenleft:
-      ch = ')';
+      ch[0] = ')';
       break;
 
     case GDK_KEY_bracketleft:
-      ch = ']';
+      ch[0] = ']';
       break;
 
     case GDK_KEY_quotedbl:
-      ch = '"';
+      ch[0] = '"';
       break;
 
 #if 0
@@ -1899,7 +1899,7 @@ ide_source_view_maybe_insert_match (IdeSourceView *self,
        * even number on this line. However, if it was the first quote on
        * the line, we still need to include a second.
        */
-      if (ch == '"')
+      if (ch[0] == '"')
         {
           guint count;
 
@@ -1908,7 +1908,7 @@ ide_source_view_maybe_insert_match (IdeSourceView *self,
             return FALSE;
         }
 
-      gtk_text_buffer_insert_at_cursor (buffer, &ch, 1);
+      gtk_text_buffer_insert_at_cursor (buffer, ch, 1);
       gtk_text_buffer_get_iter_at_mark (buffer, &iter, insert);
       gtk_text_iter_backward_char (&iter);
       gtk_text_buffer_select_range (buffer, &iter, &iter);
