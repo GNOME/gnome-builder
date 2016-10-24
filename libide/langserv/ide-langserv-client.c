@@ -127,6 +127,120 @@ ide_langserv_client_buffer_saved (IdeLangservClient *self,
   IDE_EXIT;
 }
 
+/*
+ * TODO: This should all be delayed and buffered so we coalesce multiple
+ *       events into a single dispatch.
+ */
+
+static void
+ide_langserv_client_buffer_insert_text (IdeLangservClient *self,
+                                        GtkTextIter       *location,
+                                        const gchar       *new_text,
+                                        gint               len,
+                                        IdeBuffer         *buffer)
+{
+  g_autoptr(JsonNode) params = NULL;
+  g_autofree gchar *uri = NULL;
+  gint line;
+  gint column;
+  gint version;
+
+  g_assert (IDE_IS_LANGSERV_CLIENT (self));
+  g_assert (location != NULL);
+  g_assert (IDE_IS_BUFFER (buffer));
+
+  uri = ide_buffer_get_uri (buffer);
+  version = (gint)ide_buffer_get_change_count (buffer);
+
+  line = gtk_text_iter_get_line (location);
+  column = gtk_text_iter_get_line_offset (location);
+
+  params = JCON_NEW (
+    "textDocument", "{",
+      "uri", JCON_STRING (uri),
+      "version", JCON_INT (version),
+    "}",
+    "contentChanges", "[",
+      "{",
+        "range", "{",
+          "start", "{",
+            "line", JCON_INT (line),
+            "character", JCON_INT (column),
+          "}",
+          "end", "{",
+            "line", JCON_INT (line),
+            "character", JCON_INT (column),
+          "}",
+        "}",
+        "rangeLength", JCON_INT (0),
+        "text", JCON_STRING (new_text),
+      "}",
+    "]");
+
+  ide_langserv_client_notification_async (self, "textDocument/didChange",
+                                          g_steal_pointer (&params),
+                                          NULL, NULL, NULL);
+}
+
+static void
+ide_langserv_client_buffer_delete_range (IdeLangservClient *self,
+                                         GtkTextIter       *begin_iter,
+                                         GtkTextIter       *end_iter,
+                                         IdeBuffer         *buffer)
+{
+
+  g_autoptr(JsonNode) params = NULL;
+  g_autofree gchar *uri = NULL;
+  struct {
+    gint line;
+    gint column;
+  } begin, end;
+  gint version;
+  gint length;
+
+  g_assert (IDE_IS_LANGSERV_CLIENT (self));
+  g_assert (begin_iter != NULL);
+  g_assert (end_iter != NULL);
+  g_assert (IDE_IS_BUFFER (buffer));
+
+  uri = ide_buffer_get_uri (buffer);
+  version = (gint)ide_buffer_get_change_count (buffer);
+
+  begin.line = gtk_text_iter_get_line (begin_iter);
+  begin.column = gtk_text_iter_get_line_offset (begin_iter);
+
+  end.line = gtk_text_iter_get_line (end_iter);
+  end.column = gtk_text_iter_get_line_offset (end_iter);
+
+  length = gtk_text_iter_get_offset (end_iter) - gtk_text_iter_get_offset (begin_iter);
+
+  params = JCON_NEW (
+    "textDocument", "{",
+      "uri", JCON_STRING (uri),
+      "version", JCON_INT (version),
+    "}",
+    "contentChanges", "[",
+      "{",
+        "range", "{",
+          "start", "{",
+            "line", JCON_INT (begin.line),
+            "character", JCON_INT (begin.column),
+          "}",
+          "end", "{",
+            "line", JCON_INT (end.line),
+            "character", JCON_INT (end.column),
+          "}",
+        "}",
+        "rangeLength", JCON_INT (length),
+        "text", "",
+      "}",
+    "]");
+
+  ide_langserv_client_notification_async (self, "textDocument/didChange",
+                                          g_steal_pointer (&params),
+                                          NULL, NULL, NULL);
+}
+
 static void
 ide_langserv_client_buffer_loaded (IdeLangservClient *self,
                                    IdeBuffer         *buffer,
@@ -141,6 +255,18 @@ ide_langserv_client_buffer_loaded (IdeLangservClient *self,
   g_assert (IDE_IS_LANGSERV_CLIENT (self));
   g_assert (IDE_IS_BUFFER (buffer));
   g_assert (IDE_IS_BUFFER_MANAGER (buffer_manager));
+
+  g_signal_connect_object (buffer,
+                           "insert-text",
+                           G_CALLBACK (ide_langserv_client_buffer_insert_text),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  g_signal_connect_object (buffer,
+                           "delete-range",
+                           G_CALLBACK (ide_langserv_client_buffer_delete_range),
+                           self,
+                           G_CONNECT_SWAPPED);
 
   uri = ide_buffer_get_uri (buffer);
 
